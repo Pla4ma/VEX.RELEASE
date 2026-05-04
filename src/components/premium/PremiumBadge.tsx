@@ -1,0 +1,302 @@
+/**
+ * PremiumBadge
+ *
+ * Visual indicator that a user has Premium status.
+ * Shows a "P" badge similar to prestige badges but for Premium.
+ *
+ * Used in:
+ * - Profile name display
+ * - Leaderboards
+ * - Feed posts
+ * - Squad member lists
+ * - Duel opponent display
+ *
+ * Dependencies: shared/monetization/use-revenuecat.ts
+ */
+
+import React from 'react';
+import { StyleSheet, View, type ViewStyle } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+  withSequence,
+  withDelay,
+} from 'react-native-reanimated';
+
+import { Text } from '../primitives/Text';
+import { useTheme } from '../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
+
+// ============================================================================
+// Types
+// ============================================================================
+
+export interface PremiumBadgeProps {
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'subtle' | 'animated';
+  style?: ViewStyle;
+  showGlow?: boolean;
+}
+
+// ============================================================================
+// Component
+// ============================================================================
+
+export function PremiumBadge({
+  size = 'md',
+  variant = 'default',
+  style,
+  showGlow = false,
+}: PremiumBadgeProps): JSX.Element {
+  const { theme } = useTheme();
+
+  // Animation values
+  const scale = useSharedValue(1);
+  const glowOpacity = useSharedValue(0);
+
+  React.useEffect(() => {
+    if (variant === 'animated' || showGlow) {
+      // Subtle pulse animation
+      scale.value = withRepeat(
+        withSequence(
+          withTiming(1.05, { duration: 1000 }),
+          withTiming(1, { duration: 1000 })
+        ),
+        -1, // Infinite
+        true // Reverse
+      );
+
+      // Glow effect
+      glowOpacity.value = withRepeat(
+        withSequence(
+          withDelay(500, withTiming(0.6, { duration: 800 })),
+          withTiming(0, { duration: 800 })
+        ),
+        -1,
+        true
+      );
+    }
+  }, [variant, showGlow, scale, glowOpacity]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  const glowStyle = useAnimatedStyle(() => ({
+    opacity: glowOpacity.value,
+  }));
+
+  // Size configurations
+  const sizeConfig = {
+    sm: { badge: 16, font: 10, glow: 24 },
+    md: { badge: 20, font: 12, glow: 32 },
+    lg: { badge: 28, font: 16, glow: 44 },
+  };
+
+  const config = sizeConfig[size];
+
+  // Variant configurations
+  const variantConfig = {
+    default: {
+      backgroundColor: (theme.colors.primary as any)[500],
+      borderColor: (theme.colors.primary as any)[400],
+      textColor: '#FFFFFF',
+    },
+    subtle: {
+      backgroundColor: (theme.colors.primary as any)[100],
+      borderColor: (theme.colors.primary as any)[200],
+      textColor: (theme.colors.primary as any)[700],
+    },
+    animated: {
+      backgroundColor: (theme.colors.primary as any)[500],
+      borderColor: (theme.colors.warning as any)?.light || theme.colors.warning.light,
+      textColor: '#FFFFFF',
+    },
+  };
+
+  const vConfig = variantConfig[variant];
+
+  const Wrapper = variant === 'animated' ? Animated.View : View;
+  const GlowWrapper = variant === 'animated' || showGlow ? Animated.View : View;
+
+  return (
+    <View style={[styles.container, style]}>
+      {/* Glow effect */}
+      {(variant === 'animated' || showGlow) && (
+        <GlowWrapper
+          style={[
+            styles.glow,
+            {
+              width: config.glow,
+              height: config.glow,
+              borderRadius: config.glow / 2,
+              backgroundColor: (theme.colors.primary as any)[400],
+            },
+            glowStyle,
+          ]}
+        />
+      )}
+
+      {/* Badge */}
+      <Wrapper
+        style={[
+          styles.badge,
+          {
+            width: config.badge,
+            height: config.badge,
+            borderRadius: config.badge / 2,
+            backgroundColor: vConfig.backgroundColor,
+            borderColor: vConfig.borderColor,
+          },
+          variant === 'animated' && animatedStyle,
+        ]}
+      >
+        <Text
+          style={[
+            styles.text,
+            {
+              fontSize: config.font,
+              color: vConfig.textColor,
+            },
+          ]}
+        >
+          P
+        </Text>
+      </Wrapper>
+    </View>
+  );
+}
+
+// ============================================================================
+// Premium Supporter Achievement Badge
+// ============================================================================
+
+export interface SupporterBadgeProps {
+  size?: 'sm' | 'md' | 'lg';
+  style?: ViewStyle;
+}
+
+export function SupporterBadge({ size = 'md', style }: SupporterBadgeProps): JSX.Element {
+  const { theme } = useTheme();
+
+  const sizeConfig = {
+    sm: { badge: 18, font: 9, icon: 10 },
+    md: { badge: 24, font: 11, icon: 14 },
+    lg: { badge: 32, font: 14, icon: 18 },
+  };
+
+  const config = sizeConfig[size];
+
+  return (
+    <View
+      style={[
+        styles.supporterBadge,
+        {
+          width: config.badge,
+          height: config.badge,
+          borderRadius: config.badge / 2,
+          backgroundColor: (theme.colors.warning as any)?.DEFAULT || theme.colors.warning.DEFAULT,
+          borderColor: (theme.colors.warning as any)?.light || theme.colors.warning.light,
+        },
+        style,
+      ]}
+    >
+      <Text style={[styles.supporterIcon, { fontSize: config.icon }]}>⭐</Text>
+    </View>
+  );
+}
+
+// ============================================================================
+// Premium XP Bonus Indicator
+// ============================================================================
+
+export interface PremiumXpBonusProps {
+  bonus?: number;
+  style?: ViewStyle;
+}
+
+export function PremiumXpBonus({ bonus = 0.1, style }: PremiumXpBonusProps): JSX.Element {
+  const { theme } = useTheme();
+
+  const bonusPercent = Math.round(bonus * 100);
+
+  return (
+    <View
+      style={[
+        styles.xpBonusContainer,
+        {
+          backgroundColor: (theme.colors.primary as any)[100],
+          borderColor: (theme.colors.primary as any)[300],
+        },
+        style,
+      ]}
+    >
+      <Text style={[styles.xpBonusIcon, { color: (theme.colors.primary as any)[500] }]}>✨</Text>
+      <Text style={[styles.xpBonusText, { color: (theme.colors.primary as any)[700] }]}>
+        +{bonusPercent}% XP
+      </Text>
+    </View>
+  );
+}
+
+// ============================================================================
+// Styles
+// ============================================================================
+
+const styles = createSheet({
+  container: {
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  glow: {
+    position: 'absolute',
+  },
+  badge: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  text: {
+    fontWeight: '800',
+    letterSpacing: -0.5,
+  },
+  supporterBadge: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  supporterIcon: {
+    fontWeight: '700',
+  },
+  xpBonusContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  xpBonusIcon: {
+    fontSize: 12,
+  },
+  xpBonusText: {
+    fontSize: 12,
+    fontWeight: '700',
+  },
+});
+
+export default PremiumBadge;

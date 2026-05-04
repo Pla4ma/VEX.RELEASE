@@ -1,0 +1,66 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "out": "docs/api",
+  "theme": "default",
+  "tsconfig": "./tsconfig.json",
+  "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/__tests__/**",
+    "**/__mocks__/**",
+    "**/node_modules/**"
+  ],
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "hideGenerator": true,
+  "readme": "README.md",
+  "name": "VEX App API Documentation",
+  "includeVersion": true,
+  "sort": ["source-order"],
+  "kindSortOrder": [
+    "Document",
+    "Project",
+    "Module",
+    "Namespace",
+    "Enum",
+    "EnumMember",
+    "Variable",
+    "Function",
+    "Class",
+    "Interface",
+    "Constructor",
+    "Property",
+    "Method",
+    "CallSignature",
+    "IndexSignature",
+    "ConstructorSignature",
+    "Parameter",
+    "TypeLiteral",
+    "TypeParameter",
+    "Accessor",
+    "GetSignature",
+    "SetSignature",
+    "TypeAlias",
+    "Reference"
+  ],
+  "navigation": {
+    "includeCategories": true,
+    "includeGroups": true
+  },
+  "categoryOrder": [
+    "Domain",
+    "Services",
+    "Components",
+    "Hooks",
+    "Utilities",
+    "Other"
+  ],
+  "categorizeByGroup": true,
+  "searchInComments": true,
+  "searchInDocuments": true,
+  "plugin": ["typedoc-plugin-markdown"],
+  "markdownItOptions": {
+    "html": true
+  }
+}

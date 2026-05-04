@@ -1,0 +1,1 @@
+export { spectacleService } from './index';

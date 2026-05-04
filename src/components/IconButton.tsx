@@ -1,0 +1,85 @@
+/**
+ * IconButton Component
+ *
+ * Button with icon-only display for compact actions.
+ */
+
+import React from 'react';
+import {
+  Pressable,
+  type ViewStyle,
+  type PressableProps,
+} from 'react-native';
+import { Text } from './primitives';
+import { createSheet } from '@/shared/ui/create-sheet';
+
+export interface IconButtonProps extends PressableProps {
+  /** Icon to display (emoji or text character) */
+  icon: string;
+  /** Button size variant */
+  size?: 'sm' | 'md' | 'lg';
+  /** Button variant */
+  variant?: 'default' | 'primary' | 'ghost';
+  /** Custom styles */
+  style?: ViewStyle;
+}
+
+const SIZE_MAP = {
+  sm: 32,
+  md: 40,
+  lg: 48,
+};
+
+const ICON_SIZE_MAP = {
+  sm: 16,
+  md: 20,
+  lg: 24,
+};
+
+export const IconButton: React.FC<IconButtonProps> = ({
+  icon,
+  size = 'md',
+  variant = 'default',
+  style,
+  ...props
+}) => {
+  const buttonSize = SIZE_MAP[size];
+  const iconSize = ICON_SIZE_MAP[size];
+
+  const buttonStyle = [
+    styles.button,
+    { width: buttonSize, height: buttonSize },
+    variant === 'primary' && styles.primary,
+    variant === 'ghost' && styles.ghost,
+    style,
+  ];
+
+  return (
+    <Pressable style={({ pressed }) => [...buttonStyle, pressed && { opacity: 0.7 }]} {...props}
+      accessibilityLabel="Interactive control"
+      accessibilityRole="button"
+      accessibilityHint="Activates this control">
+      <Text style={[styles.icon, { fontSize: iconSize }]}>{icon}</Text>
+    </Pressable>
+  );
+};
+
+const styles = createSheet({
+  button: {
+    borderRadius: 8,
+    backgroundColor: '#f1f5f9',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  primary: {
+    backgroundColor: '#6366f1',
+  },
+  ghost: {
+    backgroundColor: 'transparent',
+  },
+  icon: {
+    textAlign: 'center',
+  },
+});
+
+export default IconButton;

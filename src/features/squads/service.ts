@@ -1,0 +1,701 @@
+/**
+ * Squads Service - Part 1
+ *
+ * Business logic for squad management.
+ */
+
+import { getSupabaseClient } from '../../config/supabase';
+import { eventBus } from '../../events';
+
+import * as repository from './repository';
+import {
+  CreateSquadInputSchema,
+  UpdateSquadInputSchema,
+  InviteToSquadInputSchema,
+  RespondToInviteInputSchema,
+  JoinSquadInputSchema,
+  LeaveSquadInputSchema,
+  KickMemberInputSchema,
+  UpdateMemberRoleInputSchema,
+  StartSquadSessionInputSchema,
+  type Squad,
+  type SquadSummary,
+  type SquadMember,
+  type SquadMemberDetail,
+  type SquadInvite,
+  type SquadInviteDetail,
+  type SquadJoinRequest,
+  type SquadSession,
+  type SquadSynergy,
+  type SquadActivity,
+  type SquadRole,
+  type SquadPermission,
+  type SynergyActivityType,
+  type CreateSquadInput,
+  type UpdateSquadInput,
+  type InviteToSquadInput,
+  type RespondToInviteInput,
+  type JoinSquadInput,
+  type LeaveSquadInput,
+  type KickMemberInput,
+  type UpdateMemberRoleInput,
+  type StartSquadSessionInput,
+  type SquadError,
+} from './schemas';
+
+// Constants
+const MAX_SQUAD_MEMBERS = 50;
+const DEFAULT_SQUAD_SIZE = 10;
+const SYNERGY_POINTS_PER_LEVEL = [0, 100, 250, 500, 1000, 1750, 2750, 4000, 5500, 7250, 9250];
+
+const ROLE_HIERARCHY: SquadRole[] = ['FOUNDER', 'ADMIN', 'MODERATOR', 'MEMBER', 'GUEST'];
+
+const ROLE_PERMISSIONS: Record<SquadRole, SquadPermission[]> = {
+  FOUNDER: ['VIEW_SQUAD', 'INVITE_MEMBERS', 'KICK_MEMBERS', 'MANAGE_ROLES', 'EDIT_SQUAD', 'DELETE_SQUAD', 'START_SESSION', 'MANAGE_CHALLENGE', 'MANAGE_BOSS', 'VIEW_ANALYTICS', 'PIN_MESSAGES', 'MODERATE_CHAT', 'USE_SYERGY_BOOST'],
+  ADMIN: ['VIEW_SQUAD', 'INVITE_MEMBERS', 'KICK_MEMBERS', 'MANAGE_ROLES', 'EDIT_SQUAD', 'START_SESSION', 'MANAGE_CHALLENGE', 'MANAGE_BOSS', 'VIEW_ANALYTICS', 'PIN_MESSAGES', 'MODERATE_CHAT', 'USE_SYERGY_BOOST'],
+  MODERATOR: ['VIEW_SQUAD', 'INVITE_MEMBERS', 'KICK_MEMBERS', 'START_SESSION', 'PIN_MESSAGES', 'MODERATE_CHAT', 'USE_SYERGY_BOOST'],
+  MEMBER: ['VIEW_SQUAD', 'START_SESSION', 'USE_SYERGY_BOOST'],
+  GUEST: ['VIEW_SQUAD'],
+};
+
+type InviteLookupRow = {
+  id: string;
+  squad_id: string;
+  invited_by: string;
+  role_offered: SquadRole | null;
+  expires_at: number;
+};
+
+type JoinRequestLookupRow = {
+  id: string;
+};
+
+function createError(code: SquadError['code'], message: string, context: Record<string, unknown> = {}): Error {
+  const error = new Error(message) as Error & { code: string; context: Record<string, unknown> };
+  error.code = code;
+  error.context = context;
+  return error;
+}
+
+export function getRolePermissions(role: SquadRole): SquadPermission[] {
+  return ROLE_PERMISSIONS[role] || [];
+}
+
+export function hasPermission(member: SquadMember | null | undefined, permission: SquadPermission): boolean {
+  if (!member) {return false;}
+  return getRolePermissions(member.role).includes(permission);
+}
+
+export function canManageRole(memberRole: SquadRole, targetRole: SquadRole): boolean {
+  return ROLE_HIERARCHY.indexOf(memberRole) < ROLE_HIERARCHY.indexOf(targetRole);
+}
+
+// Squad CRUD
+export async function createSquad(userId: string, input: CreateSquadInput): Promise<Squad> {
+  const validated = CreateSquadInputSchema.parse(input);
+  const existingSquad = await repository.checkDuplicateMembership(userId);
+  if (existingSquad) {throw createError('DUPLICATE_MEMBERSHIP', 'User is already a member of another squad', { existingSquadId: existingSquad.id });}
+
+  const squad = await repository.createSquad({
+    name: validated.name,
+    description: validated.description,
+    avatarUrl: validated.avatarUrl,
+    bannerUrl: null,
+    maxMembers: validated.maxMembers,
+    isPublic: validated.isPublic,
+    joinRequirements: validated.joinRequirements,
+    activeChallengeId: null,
+    activeBossId: null,
+    bossHealthRemaining: null,
+    createdBy: userId,
+  });
+  await repository.addSquadMember(squad.id, userId, 'FOUNDER');
+  await initializeSquadSynergy(squad.id);
+  eventBus.publish('squad:created', { squadId: squad.id, userId, name: squad.name });
+  await logSquadActivity(squad.id, userId, 'MEMBER_JOINED', `${userId} created the squad`);
+  return squad;
+}
+
+export async function updateSquad(squadId: string, userId: string, input: UpdateSquadInput): Promise<Squad> {
+  const validated = UpdateSquadInputSchema.parse(input);
+  const member = await repository.fetchSquadMember(squadId, userId);
+  if (!hasPermission(member, 'EDIT_SQUAD')) {throw createError('INSUFFICIENT_PERMISSIONS', 'Insufficient permissions', { squadId, userId });}
+  const updated = await repository.updateSquad(squadId, {
+    name: validated.name ?? undefined,
+    description: validated.description,
+    avatarUrl: validated.avatarUrl,
+    bannerUrl: validated.bannerUrl,
+    isPublic: validated.isPublic ?? undefined,
+    joinRequirements: validated.joinRequirements ?? undefined,
+    maxMembers: validated.maxMembers ?? undefined,
+  });
+  eventBus.publish('squad:updated', { squadId, userId, updates: validated });
+  await logSquadActivity(squadId, userId, 'SETTINGS_CHANGED', 'Squad settings updated');
+  return updated;
+}
+
+export async function deleteSquad(squadId: string, userId: string): Promise<void> {
+  const member = await repository.fetchSquadMember(squadId, userId);
+  if (member?.role !== 'FOUNDER') {throw createError('INSUFFICIENT_PERMISSIONS', 'Only founder can delete squad', { squadId, userId });}
+  await repository.deleteSquad(squadId);
+  eventBus.publish('squad:deleted', { squadId, userId });
+}
+
+// Membership
+export async function inviteToSquad(input: InviteToSquadInput & { invitedBy: string }): Promise<SquadInvite> {
+  const validated = InviteToSquadInputSchema.parse(input);
+  const member = await repository.fetchSquadMember(validated.squadId, input.invitedBy);
+  if (!hasPermission(member, 'INVITE_MEMBERS')) {throw createError('INSUFFICIENT_PERMISSIONS', 'Cannot invite', { squadId: validated.squadId });}
+
+  const squad = await repository.fetchSquadById(validated.squadId);
+  if (!squad) {throw createError('SQUAD_NOT_FOUND', 'Squad not found', { squadId: validated.squadId });}
+  if (squad.memberCount >= squad.maxMembers) {throw createError('SQUAD_FULL', 'Squad is full', { squadId: validated.squadId });}
+  if (input.invitedBy === validated.invitedUserId) {throw createError('CANNOT_INVITE_SELF', 'Cannot invite yourself', { squadId: validated.squadId });}
+
+  const existingInvite = await repository.checkExistingInvite(validated.squadId, validated.invitedUserId);
+  if (existingInvite) {throw createError('INVITE_ALREADY_USED', 'Pending invite exists', { existingInviteId: existingInvite.id });}
+
+  const existingMember = await repository.fetchSquadMember(validated.squadId, validated.invitedUserId);
+  if (existingMember?.isActive) {throw createError('ALREADY_MEMBER', 'Already a member', { squadId: validated.squadId });}
+  if (!canManageRole(member!.role, validated.roleOffered)) {throw createError('INVALID_ROLE_HIERARCHY', 'Cannot offer higher role', { yourRole: member!.role, offeredRole: validated.roleOffered });}
+
+  const invite = await repository.createSquadInvite({
+    squadId: validated.squadId,
+    invitedBy: input.invitedBy,
+    invitedUserId: validated.invitedUserId,
+    roleOffered: validated.roleOffered,
+    message: validated.message,
+    expiresAt: Date.now() + (validated.expiresInHours * 60 * 60 * 1000),
+  });
+
+  eventBus.publish('notification:send', { userId: validated.invitedUserId, type: 'SQUAD_INVITE', title: 'Squad Invitation', body: `You've been invited to join ${squad.name}`, data: { inviteId: invite.id, squadId: squad.id, squadName: squad.name } });
+  await logSquadActivity(validated.squadId, input.invitedBy, 'INVITE_SENT', `Invited user ${validated.invitedUserId}`);
+  return invite;
+}
+
+export async function respondToInvite(userId: string, input: RespondToInviteInput): Promise<Squad | null> {
+  const validated = RespondToInviteInputSchema.parse(input);
+  const invite = await repository.fetchSquadInviteById(validated.inviteId);
+  if (!invite) {throw createError('INVITE_NOT_FOUND', 'Invite not found', { inviteId: validated.inviteId });}
+  if (invite.invitedUserId !== userId) {throw createError('INSUFFICIENT_PERMISSIONS', 'Invite not for this user', { inviteId: validated.inviteId });}
+  if (invite.status !== 'PENDING') {throw createError('INVITE_ALREADY_USED', `Invite already ${invite.status.toLowerCase()}`, { status: invite.status });}
+  if (invite.expiresAt < Date.now()) { await repository.updateSquadInviteStatus(validated.inviteId, 'EXPIRED'); throw createError('INVITE_EXPIRED', 'Invite expired', { inviteId: validated.inviteId }); }
+
+  if (validated.accept) {
+    const squad = await repository.fetchSquadById(invite.squadId);
+    if (!squad) {throw createError('SQUAD_NOT_FOUND', 'Squad no longer exists', { squadId: invite.squadId });}
+    if (squad.memberCount >= squad.maxMembers) {throw createError('SQUAD_FULL', 'Squad is full', { squadId: invite.squadId });}
+    const existingMembership = await repository.checkDuplicateMembership(userId);
+    if (existingMembership) { await repository.updateSquadInviteStatus(validated.inviteId, 'DECLINED'); throw createError('DUPLICATE_MEMBERSHIP', 'Already in another squad', { existingSquadId: existingMembership.id }); }
+
+    await repository.addSquadMember(invite.squadId, userId, invite.roleOffered, invite.invitedBy);
+    await repository.updateSquadInviteStatus(validated.inviteId, 'ACCEPTED');
+    await updateSquadMemberCount(invite.squadId);
+    await addSynergyPoints(invite.squadId, invite.invitedBy, 10, 'INVITE_ACCEPTED');
+    eventBus.publish('squad:member_joined', { squadId: invite.squadId, userId, role: invite.roleOffered });
+    await logSquadActivity(invite.squadId, userId, 'MEMBER_JOINED', 'Joined via invite');
+    return squad;
+  } else { await repository.updateSquadInviteStatus(validated.inviteId, 'DECLINED'); return null; }
+}
+
+export async function leaveSquad(userId: string, input: LeaveSquadInput): Promise<void> {
+  const validated = LeaveSquadInputSchema.parse(input);
+  const member = await repository.fetchSquadMember(validated.squadId, userId);
+  if (!member) {throw createError('NOT_MEMBER', 'Not a member', { squadId: validated.squadId, userId });}
+  if (member.role === 'FOUNDER') {
+    if (!validated.newFounderId) {throw createError('FOUNDER_TRANSFER_REQUIRED', 'Must transfer ownership', { squadId: validated.squadId });}
+    const newFounder = await repository.fetchSquadMember(validated.squadId, validated.newFounderId);
+    if (!newFounder?.isActive) {throw createError('USER_NOT_FOUND', 'New founder not active', { newFounderId: validated.newFounderId });}
+    await repository.transferFounderRole(validated.squadId, validated.newFounderId);
+    await repository.updateSquadMemberRole(validated.squadId, validated.newFounderId, 'FOUNDER');
+  }
+  await repository.removeSquadMember(validated.squadId, userId);
+  await updateSquadMemberCount(validated.squadId);
+  eventBus.publish('squad:member_left', { squadId: validated.squadId, userId, wasFounder: member.role === 'FOUNDER' });
+  await logSquadActivity(validated.squadId, userId, 'MEMBER_LEFT', 'Left the squad');
+}
+
+export async function kickMember(adminUserId: string, input: KickMemberInput): Promise<void> {
+  const validated = KickMemberInputSchema.parse(input);
+  const admin = await repository.fetchSquadMember(validated.squadId, adminUserId);
+  if (!hasPermission(admin, 'KICK_MEMBERS')) {throw createError('INSUFFICIENT_PERMISSIONS', 'Cannot kick', { squadId: validated.squadId });}
+  const targetMember = await repository.fetchSquadMember(validated.squadId, validated.memberUserId);
+  if (!targetMember?.isActive) {throw createError('NOT_MEMBER', 'Target not a member', { squadId: validated.squadId });}
+  if (targetMember.role === 'FOUNDER') {throw createError('CANNOT_KICK_FOUNDER', 'Cannot kick founder', { squadId: validated.squadId });}
+  if (!canManageRole(admin!.role, targetMember.role)) {throw createError('INSUFFICIENT_PERMISSIONS', 'Cannot kick higher rank', { yourRole: admin!.role, targetRole: targetMember.role });}
+
+  await repository.removeSquadMember(validated.squadId, validated.memberUserId);
+  await updateSquadMemberCount(validated.squadId);
+  eventBus.publish('squad:member_kicked', { squadId: validated.squadId, userId: validated.memberUserId, kickedBy: adminUserId, reason: validated.reason });
+  eventBus.publish('notification:send', { userId: validated.memberUserId, type: 'SQUAD_KICKED', title: 'Removed from Squad', body: 'You have been removed', data: { squadId: validated.squadId } });
+  await logSquadActivity(validated.squadId, adminUserId, 'MEMBER_KICKED', `Kicked ${validated.memberUserId}`);
+}
+
+export async function updateMemberRole(adminUserId: string, input: UpdateMemberRoleInput): Promise<void> {
+  const validated = UpdateMemberRoleInputSchema.parse(input);
+  const admin = await repository.fetchSquadMember(validated.squadId, adminUserId);
+  if (!hasPermission(admin, 'MANAGE_ROLES')) {throw createError('INSUFFICIENT_PERMISSIONS', 'Cannot manage roles', { squadId: validated.squadId });}
+  const targetMember = await repository.fetchSquadMember(validated.squadId, validated.memberUserId);
+  if (!targetMember?.isActive) {throw createError('NOT_MEMBER', 'Target not a member', { squadId: validated.squadId });}
+  if (targetMember.role === 'FOUNDER' && validated.newRole !== 'FOUNDER') {throw createError('CANNOT_KICK_FOUNDER', 'Use transfer for founder', { squadId: validated.squadId });}
+  if (validated.newRole === 'FOUNDER') {throw createError('INVALID_ROLE_HIERARCHY', 'Use transferFounderRole', { squadId: validated.squadId });}
+  if (!canManageRole(admin!.role, validated.newRole)) {throw createError('INVALID_ROLE_HIERARCHY', 'Cannot assign higher role', { yourRole: admin!.role });}
+  if (!canManageRole(admin!.role, targetMember.role)) {throw createError('INSUFFICIENT_PERMISSIONS', 'Cannot modify higher rank', { yourRole: admin!.role });}
+
+  await repository.updateSquadMemberRole(validated.squadId, validated.memberUserId, validated.newRole);
+  eventBus.publish('squad:role_changed', { squadId: validated.squadId, userId: validated.memberUserId, newRole: validated.newRole, changedBy: adminUserId });
+  await logSquadActivity(validated.squadId, adminUserId, 'ROLE_CHANGED', `Changed ${validated.memberUserId} role to ${validated.newRole}`);
+}
+
+// Helper functions
+async function updateSquadMemberCount(squadId: string): Promise<void> {
+  const members = await repository.fetchSquadMembers(squadId);
+  await repository.updateSquadStats(squadId, { memberCount: members.length });
+}
+
+async function initializeSquadSynergy(squadId: string): Promise<void> {
+  const { error } = await getSupabaseClient().from('squad_synergy').insert({ squad_id: squadId, level: 1, current_points: 0, points_to_next_level: 100, focus_multiplier_bonus: 0, daily_points: 0, daily_points_cap: 100, last_reset_at: Date.now() });
+  if (error) {throw new Error(`Failed to initialize synergy: ${error.message}`);}
+}
+
+async function addSynergyPoints(
+  squadId: string,
+  userId: string,
+  points: number,
+  type: SynergyActivityType
+): Promise<void> {
+  const synergy = await repository.fetchSquadSynergy(squadId);
+  if (!synergy) {return;}
+  const newPoints = Math.min(synergy.dailyPoints + points, synergy.dailyPointsCap);
+  const totalPoints = synergy.currentPoints + newPoints;
+  let newLevel = synergy.level;
+  let pointsToNext = synergy.pointsToNextLevel;
+  if (totalPoints >= synergy.pointsToNextLevel && synergy.level < 10) {
+    newLevel = Math.min(synergy.level + 1, 10);
+    pointsToNext = SYNERGY_POINTS_PER_LEVEL[newLevel] || synergy.pointsToNextLevel * 1.5;
+    eventBus.publish('squad:synergy_level_up', { squadId, newLevel, userId });
+  }
+  const multiplierBonus = (newLevel - 1) * 0.05;
+  await repository.updateSquadSynergy(squadId, {
+    level: newLevel,
+    currentPoints: totalPoints,
+    pointsToNextLevel: pointsToNext,
+    focusMultiplierBonus: multiplierBonus,
+    dailyPoints: newPoints,
+  });
+  await repository.addSynergyActivity({ squadId, userId, type, points, description: `Earned ${points} synergy points` });
+}
+
+async function logSquadActivity(
+  squadId: string,
+  userId: string,
+  type: SquadActivity['type'],
+  content: string
+): Promise<void> {
+  await repository.createSquadActivity({ squadId, userId, type, content, metadata: null });
+}
+
+// Query functions
+export async function getSquadById(squadId: string): Promise<Squad | null> { return repository.fetchSquadById(squadId); }
+export async function getSquadMembers(squadId: string): Promise<SquadMemberDetail[]> { return repository.fetchSquadMembers(squadId); }
+export async function getSquadMember(squadId: string, userId: string): Promise<SquadMember | null> { return repository.fetchSquadMember(squadId, userId); }
+export async function getUserSquads(userId: string): Promise<SquadSummary[]> { return repository.fetchSquadsForUser(userId); }
+export async function getSquadWeeklyStats(squadId: string) { return repository.fetchSquadWeeklyStats(squadId); }
+export async function getPublicSquads(options?: { limit?: number; offset?: number; search?: string }): Promise<SquadSummary[]> { return repository.fetchPublicSquads(options); }
+export async function getSquadInvitesForUser(userId: string): Promise<SquadInviteDetail[]> { return repository.fetchSquadInvitesForUser(userId); }
+
+// Join squad via invite code
+export async function joinSquadWithCode(userId: string, joinCode: string): Promise<Squad> {
+  const supabase = getSupabaseClient();
+  const { data: invite, error } = await supabase
+    .from('squad_invites')
+    .select('*')
+    .eq('join_code', joinCode)
+    .eq('status', 'PENDING')
+    .single<InviteLookupRow>();
+
+  if (error) {
+    throw createError('INVITE_NOT_FOUND', error.message, { joinCode });
+  }
+
+  if (!invite) {throw createError('INVITE_NOT_FOUND', 'Invalid or expired invite code', { joinCode });}
+  if (invite.expires_at < Date.now()) {
+    const { error: updateError } = await supabase
+      .from('squad_invites')
+      .update({ status: 'EXPIRED' })
+      .eq('id', invite.id);
+    if (updateError) {
+      throw createError('UNKNOWN_ERROR', updateError.message, { inviteId: invite.id });
+    }
+    throw createError('INVITE_EXPIRED', 'Invite code expired', { expiresAt: invite.expires_at });
+  }
+
+  const squad = await repository.fetchSquadById(invite.squad_id);
+  if (!squad) {throw createError('SQUAD_NOT_FOUND', 'Squad no longer exists', { squadId: invite.squad_id });}
+  if (squad.memberCount >= squad.maxMembers) {throw createError('SQUAD_FULL', 'Squad is full', { squadId: invite.squad_id });}
+
+  const existingMembership = await repository.checkDuplicateMembership(userId);
+  if (existingMembership) {throw createError('ALREADY_MEMBER', 'Already in another squad', { existingSquadId: existingMembership.id });}
+
+  await repository.addSquadMember(invite.squad_id, userId, invite.role_offered || 'MEMBER', invite.invited_by);
+  const { error: acceptError } = await supabase
+    .from('squad_invites')
+    .update({ status: 'ACCEPTED' })
+    .eq('id', invite.id);
+  if (acceptError) {
+    throw createError('UNKNOWN_ERROR', acceptError.message, { inviteId: invite.id });
+  }
+  await updateSquadMemberCount(invite.squad_id);
+
+  eventBus.publish('squad:member_joined', { squadId: invite.squad_id, userId, role: invite.role_offered || 'MEMBER' });
+  await logSquadActivity(invite.squad_id, userId, 'MEMBER_JOINED', 'Joined via invite code');
+  return squad;
+}
+
+// Request to join a squad
+export async function requestToJoinSquad(userId: string, squadId: string, message?: string): Promise<void> {
+  const supabase = getSupabaseClient();
+  const squad = await repository.fetchSquadById(squadId);
+  if (!squad) {throw createError('SQUAD_NOT_FOUND', 'Squad not found', { squadId });}
+  if (!squad.isPublic) {throw createError('INSUFFICIENT_PERMISSIONS', 'Squad is private', { squadId });}
+  if (squad.memberCount >= squad.maxMembers) {throw createError('SQUAD_FULL', 'Squad is full', { squadId });}
+
+  const existingMember = await repository.fetchSquadMember(squadId, userId);
+  if (existingMember?.isActive) {throw createError('ALREADY_MEMBER', 'Already a member', { squadId });}
+
+  const { data: existingRequest, error: existingRequestError } = await supabase
+    .from('squad_join_requests')
+    .select('id')
+    .eq('squad_id', squadId)
+    .eq('user_id', userId)
+    .eq('status', 'PENDING')
+    .single<JoinRequestLookupRow>();
+
+  if (existingRequestError && existingRequestError.code !== 'PGRST116') {
+    throw createError('UNKNOWN_ERROR', existingRequestError.message, { squadId, userId });
+  }
+
+  if (existingRequest) {throw createError('ALREADY_MEMBER', 'Join request already pending', { squadId });}
+
+  const { error: insertError } = await supabase.from('squad_join_requests').insert({
+    squad_id: squadId,
+    user_id: userId,
+    message: message || '',
+    status: 'PENDING',
+    created_at: Date.now(),
+  });
+
+  if (insertError) {
+    throw createError('UNKNOWN_ERROR', insertError.message, { squadId, userId });
+  }
+
+}
+
+export async function startSquadSession(userId: string, input: StartSquadSessionInput): Promise<SquadSession> {
+  const validated = StartSquadSessionInputSchema.parse(input);
+  const member = await repository.fetchSquadMember(validated.squadId, userId);
+  if (!hasPermission(member, 'START_SESSION')) {throw createError('INSUFFICIENT_PERMISSIONS', 'Cannot start session', { squadId: validated.squadId });}
+  const session = await repository.createSquadSession({
+    squadId: validated.squadId,
+    name: validated.name,
+    description: validated.description,
+    duration: validated.duration,
+    category: validated.category,
+    endsAt: null,
+    participants: [],
+    maxParticipants: validated.maxParticipants,
+  });
+  await repository.addSquadSessionParticipant(session.id, userId, null);
+  eventBus.publish('squad:session_started', { squadId: validated.squadId, sessionId: session.id, startedBy: userId });
+  await logSquadActivity(validated.squadId, userId, 'SESSION_STARTED', `Started session: ${validated.name}`);
+  return session;
+}
+
+// ============================================================================
+// Squad Streak System (Phase 4B.1)
+// ============================================================================
+
+/**
+ * Extended squad member info for streak tracking
+ */
+export interface SquadMemberWithStreakInfo extends SquadMember {
+  name: string;
+  todayStatus: 'done' | 'pending' | 'focusing';
+  lastSessionAt: number;
+  timezone?: string;
+}
+
+export interface SquadStreakState {
+  currentStreak: number;
+  lastCompletedDate: number | null;
+  memberCompletionStatus: Record<string, boolean>; // userId -> completed today
+  xpMultiplier: number;
+}
+
+const STREAK_XP_MULTIPLIER_PER_7_DAYS = 0.1;
+const MAX_STREAK_MULTIPLIER = 0.5; // 0.5x max (at 35+ days)
+const QUALIFYING_SESSION_MINUTES = 15;
+
+/**
+ * Calculate squad XP multiplier based on streak days
+ * 0.1x per 7 days, max 0.5x
+ */
+export function calculateSquadStreakMultiplier(streakDays: number): number {
+  const multiplier = Math.floor(streakDays / 7) * STREAK_XP_MULTIPLIER_PER_7_DAYS;
+  return Math.min(multiplier, MAX_STREAK_MULTIPLIER);
+}
+
+/**
+ * Check if all squad members completed a qualifying session today
+ */
+export function checkSquadStreakEligibility(
+  memberStatuses: SquadMemberWithStreakInfo['todayStatus'][]
+): boolean {
+  if (memberStatuses.length === 0) {return false;}
+
+  // All members must have completed at least one qualifying session
+  return memberStatuses.every(status =>
+    status === 'done' || status === 'focusing'
+  );
+}
+
+/**
+ * Update squad streak after a member completes a session
+ * Returns new streak state
+ */
+export function updateSquadStreak(
+  currentState: SquadStreakState,
+  memberId: string,
+  sessionDuration: number
+): SquadStreakState {
+  const now = Date.now();
+  const today = new Date(now).setHours(0, 0, 0, 0);
+
+  // Check if this is a new day
+  const lastDate = currentState.lastCompletedDate;
+  const isNewDay = !lastDate || new Date(lastDate).setHours(0, 0, 0, 0) < today;
+
+  // Reset daily completion status if new day
+  let memberStatus = isNewDay
+    ? { [memberId]: true }
+    : { ...currentState.memberCompletionStatus, [memberId]: true };
+
+  // Calculate new streak
+  let newStreak = currentState.currentStreak;
+
+  if (isNewDay) {
+    // Check if yesterday was complete (streak continues)
+    const yesterdayComplete = lastDate &&
+      new Date(lastDate).setHours(0, 0, 0, 0) === today - 24 * 60 * 60 * 1000 &&
+      Object.values(currentState.memberCompletionStatus).every(Boolean);
+
+    if (yesterdayComplete) {
+      newStreak += 1; // Continue streak
+    } else if (!lastDate || new Date(lastDate).setHours(0, 0, 0, 0) < today - 24 * 60 * 60 * 1000) {
+      newStreak = 1; // Start new streak
+    }
+  }
+
+  const xpMultiplier = calculateSquadStreakMultiplier(newStreak);
+
+  return {
+    currentStreak: newStreak,
+    lastCompletedDate: today,
+    memberCompletionStatus: memberStatus,
+    xpMultiplier,
+  };
+}
+
+/**
+ * Break squad streak (when any member misses a day)
+ */
+export function breakSquadStreak(squadId: string): SquadStreakState {
+  eventBus.publish('analytics:track', {
+    event: 'squad_streak_broken',
+    properties: { squadId },
+  });
+
+  return {
+    currentStreak: 0,
+    lastCompletedDate: null,
+    memberCompletionStatus: {},
+    xpMultiplier: 0,
+  };
+}
+
+/**
+ * Get streak status message for UI
+ */
+export function getSquadStreakMessage(streakDays: number): {
+  title: string;
+  subtitle: string;
+  emoji: string;
+} {
+  if (streakDays === 0) {
+    return {
+      title: 'Start a Squad Streak',
+      subtitle: 'Everyone needs to focus today!',
+      emoji: '🔥',
+    };
+  }
+
+  if (streakDays < 7) {
+    return {
+      title: `${streakDays}-Day Squad Streak`,
+      subtitle: 'Keep it going! All members focused today.',
+      emoji: '🔥',
+    };
+  }
+
+  if (streakDays < 14) {
+    return {
+      title: `${streakDays}-Day Streak!`,
+      subtitle: `+${(calculateSquadStreakMultiplier(streakDays) * 100).toFixed(0)}% XP bonus active`,
+      emoji: '🔥',
+    };
+  }
+
+  if (streakDays < 30) {
+    return {
+      title: `${streakDays}-Day Legendary Streak`,
+      subtitle: `+${(calculateSquadStreakMultiplier(streakDays) * 100).toFixed(0)}% XP for the whole squad!`,
+      emoji: '🔥',
+    };
+  }
+
+  return {
+    title: `${streakDays}-Day UNSTOPPABLE`,
+    subtitle: 'Maximum XP bonus! Your squad is elite.',
+    emoji: '👑',
+  };
+}
+
+// ============================================================================
+// Squad At-Risk Notifications (Phase 4B.2)
+// ============================================================================
+
+const RISK_CHECK_HOUR = 20; // 8 PM
+const MIN_SQUAD_STREAK_FOR_RISK = 3;
+
+export interface AtRiskMember {
+  userId: string;
+  name: string;
+  hoursSinceLastSession: number;
+  timezone: string;
+}
+
+/**
+ * Check if squad streak is at risk
+ * Returns at-risk members if streak >= 3 days and it's after 8 PM their time
+ */
+export function checkSquadStreakRisk(
+  squadStreak: number,
+  members: SquadMemberWithStreakInfo[],
+  currentHour: number = new Date().getHours()
+): AtRiskMember[] {
+  // Only check if streak is worth protecting (>= 3 days)
+  if (squadStreak < MIN_SQUAD_STREAK_FOR_RISK) {return [];}
+
+  // Only check after 8 PM
+  if (currentHour < RISK_CHECK_HOUR) {return [];}
+
+  const atRiskMembers: AtRiskMember[] = [];
+
+  for (const member of members) {
+    // Skip members who already completed today
+    if (member.todayStatus === 'done' || member.todayStatus === 'focusing') {continue;}
+
+    // Calculate hours since last session
+    const lastSessionTime = member.lastSessionAt || member.lastActiveAt || 0;
+    const hoursSince = Math.floor((Date.now() - lastSessionTime) / (1000 * 60 * 60));
+
+    // If more than 24 hours since last session, they're at risk
+    if (hoursSince >= 24) {
+      atRiskMembers.push({
+        userId: member.userId,
+        name: member.name,
+        hoursSinceLastSession: hoursSince,
+        timezone: member.timezone || 'UTC',
+      });
+    }
+  }
+
+  return atRiskMembers;
+}
+
+/**
+ * Generate at-risk notification for squad members
+ */
+export function generateSquadRiskNotification(
+  atRiskMember: AtRiskMember,
+  squadStreak: number,
+  squadName: string
+): {
+  title: string;
+  body: string;
+  action: { label: string; action: 'nudge' };
+} {
+  return {
+    title: `${squadName} Streak at Risk!`,
+    body: `${atRiskMember.name} hasn't focused today — your ${squadStreak}-day squad streak is at risk! Give them a nudge?`,
+    action: {
+      label: '⚡ Nudge',
+      action: 'nudge',
+    },
+  };
+}
+
+/**
+ * Generate nudge message for at-risk member
+ */
+export function generateNudgeMessage(
+  nudgerName: string,
+  squadName: string,
+  squadStreak: number
+): string {
+  return `${nudgerName} from ${squadName} nudged you! Your squad's ${squadStreak}-day streak depends on you. Start a quick session?`;
+}
+
+/**
+ * Check and send risk notifications for all squads
+ * Should be called periodically (e.g., every hour)
+ */
+export async function processSquadRiskNotifications(): Promise<{
+  notificationsSent: number;
+  atRiskSquads: string[];
+}> {
+  const currentHour = new Date().getHours();
+
+  // Only process between 8 PM and 11 PM
+  if (currentHour < RISK_CHECK_HOUR || currentHour > 23) {
+    return { notificationsSent: 0, atRiskSquads: [] };
+  }
+
+  const squads: Array<{ id: string; name: string; streak: number; members: SquadMemberWithStreakInfo[] }> = [];
+  const atRiskSquads: string[] = [];
+  let notificationsSent = 0;
+
+  for (const squad of squads) {
+    const atRiskMembers = checkSquadStreakRisk(squad.streak, squad.members, currentHour);
+    if (atRiskMembers.length === 0) {continue;}
+
+    atRiskSquads.push(squad.id);
+
+    for (const member of squad.members) {
+      if (atRiskMembers.some((atRisk) => atRisk.userId === member.userId)) {continue;}
+
+      const notification = generateSquadRiskNotification(atRiskMembers[0], squad.streak, squad.name);
+      eventBus.publish('notification:send', {
+        userId: member.userId,
+        type: 'SQUAD_STREAK_AT_RISK',
+        title: notification.title,
+        body: notification.body,
+        priority: 'high',
+        data: { squadId: squad.id, atRiskUserId: atRiskMembers[0].userId },
+      });
+      notificationsSent += 1;
+    }
+  }
+
+  return { notificationsSent, atRiskSquads };
+}

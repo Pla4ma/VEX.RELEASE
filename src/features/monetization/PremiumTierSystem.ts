@@ -1,0 +1,566 @@
+/**
+ * Premium Tier System
+ *
+ * Phase 4.1 - Paywall Strategy Redesign
+ * Value-first premium with clear Free vs Premium tiers
+ * Feature gating that feels fair, not frustrating
+ *
+ * Dependencies:
+ * - Monetization (purchase tracking)
+ * - Content Study (study plan limits)
+ * - Boss (advanced boss features)
+ * - Streaks (insurance system)
+ * - AI Coach (personality selection)
+ */
+
+import { eventBus } from '../../events';
+
+// ============================================================================
+// Tier Definitions
+// ============================================================================
+
+export type SubscriptionTier = 'FREE' | 'PREMIUM';
+
+export interface TierFeatures {
+  // Study Plans
+  maxActiveStudyPlans: number;
+  advancedStudyAI: boolean;
+  studyAnalytics: boolean;
+  priorityAIGeneration: boolean;
+
+  // Boss Battles
+  bossBounties: boolean;
+  squadBosses: boolean;
+  bossPhaseEffects: boolean;
+  primeTimeWindows: boolean;
+
+  // Streaks
+  streakInsuranceMonthly: number;
+  advancedStreakAnalytics: boolean;
+
+  // AI Coach
+  personalitySelection: boolean;
+  advancedInterventions: boolean;
+
+  // Social
+  maxSquads: number;
+  squadAnalytics: boolean;
+
+  // Cosmetics
+  exclusiveCosmetics: boolean;
+  premiumAvatarFrames: boolean;
+  bossThemes: boolean;
+
+  // General
+  earlyAccess: boolean;
+  betaFeatures: boolean;
+  premiumSupport: boolean;
+}
+
+export interface TierDefinition {
+  id: SubscriptionTier;
+  name: string;
+  description: string;
+  monthlyPrice: number | null;
+  yearlyPrice: number | null;
+  trialDays: number;
+  features: TierFeatures;
+  highlightedFeatures: string[];
+}
+
+// Free Tier Definition
+export const FREE_TIER: TierDefinition = {
+  id: 'FREE',
+  name: 'Free',
+  description: 'Focus on what matters with essential features',
+  monthlyPrice: null,
+  yearlyPrice: null,
+  trialDays: 0,
+  features: {
+    // Study Plans - 1 active only
+    maxActiveStudyPlans: 1,
+    advancedStudyAI: false,
+    studyAnalytics: false,
+    priorityAIGeneration: false,
+
+    // Boss Battles - Basic only
+    bossBounties: false,
+    squadBosses: false,
+    bossPhaseEffects: true, // Visual only, no gameplay advantage
+    primeTimeWindows: true, // Visible but no bonus (or reduced)
+
+    // Streaks - Standard
+    streakInsuranceMonthly: 0,
+    advancedStreakAnalytics: false,
+
+    // AI Coach - Basic only
+    personalitySelection: false,
+    advancedInterventions: false,
+
+    // Social
+    maxSquads: 3,
+    squadAnalytics: false,
+
+    // Cosmetics - Earned only
+    exclusiveCosmetics: false,
+    premiumAvatarFrames: false,
+    bossThemes: false,
+
+    // General
+    earlyAccess: false,
+    betaFeatures: false,
+    premiumSupport: false,
+  },
+  highlightedFeatures: [
+    'Unlimited focus sessions',
+    '1 active study plan',
+    'Basic boss battles',
+    'Standard streaks',
+    'Up to 3 squads',
+  ],
+};
+
+// Premium Tier Definition
+export const PREMIUM_TIER: TierDefinition = {
+  id: 'PREMIUM',
+  name: 'Premium',
+  description: 'Supercharge your focus with unlimited everything',
+  monthlyPrice: 9.99,
+  yearlyPrice: 59.99,
+  trialDays: 7,
+  features: {
+    // Study Plans - Unlimited
+    maxActiveStudyPlans: Infinity,
+    advancedStudyAI: true,
+    studyAnalytics: true,
+    priorityAIGeneration: true,
+
+    // Boss Battles - Advanced
+    bossBounties: true,
+    squadBosses: true,
+    bossPhaseEffects: true,
+    primeTimeWindows: true,
+
+    // Streaks - Protected
+    streakInsuranceMonthly: 1,
+    advancedStreakAnalytics: true,
+
+    // AI Coach - Personal
+    personalitySelection: true,
+    advancedInterventions: true,
+
+    // Social - Unlimited
+    maxSquads: Infinity,
+    squadAnalytics: true,
+
+    // Cosmetics - Exclusive
+    exclusiveCosmetics: true,
+    premiumAvatarFrames: true,
+    bossThemes: true,
+
+    // General - VIP
+    earlyAccess: true,
+    betaFeatures: true,
+    premiumSupport: true,
+  },
+  highlightedFeatures: [
+    'Unlimited study plans',
+    'Advanced AI study assistant',
+    'Boss bounties & squad battles',
+    'Monthly streak insurance',
+    'Choose your coach personality',
+    'Exclusive cosmetics & themes',
+    'Priority AI generation',
+    'Early access to new features',
+  ],
+};
+
+export const TIER_DEFINITIONS: Record<SubscriptionTier, TierDefinition> = {
+  FREE: FREE_TIER,
+  PREMIUM: PREMIUM_TIER,
+};
+
+// ============================================================================
+// Feature Gating
+// ============================================================================
+
+export interface FeatureGate {
+  feature: keyof TierFeatures;
+  tier: SubscriptionTier;
+  requiresPremium: boolean;
+  paywallContext: PaywallContextType;
+  fallbackMessage: string;
+}
+
+export type PaywallContextType =
+  | 'STUDY_PLAN_LIMIT'
+  | 'BOSS_BOUNTY'
+  | 'STREAK_INSURANCE'
+  | 'PERSONALITY_SELECT'
+  | 'ANALYTICS_REQUEST'
+  | 'SQUAD_LIMIT'
+  | 'EXCLUSIVE_COSMETIC'
+  | 'ADVANCED_AI'
+  | 'BETA_FEATURE';
+
+// Feature gate definitions
+export const FEATURE_GATES: FeatureGate[] = [
+  {
+    feature: 'maxActiveStudyPlans',
+    tier: 'PREMIUM',
+    requiresPremium: true,
+    paywallContext: 'STUDY_PLAN_LIMIT',
+    fallbackMessage: 'Free users can have 1 active study plan. Upgrade for unlimited.',
+  },
+  {
+    feature: 'advancedStudyAI',
+    tier: 'PREMIUM',
+    requiresPremium: true,
+    paywallContext: 'ADVANCED_AI',
+    fallbackMessage: 'Advanced AI features require Premium.',
+  },
+  {
+    feature: 'studyAnalytics',
+    tier: 'PREMIUM',
+    requiresPremium: true,
+    paywallContext: 'ANALYTICS_REQUEST',
+    fallbackMessage: 'Detailed analytics are a Premium feature.',
+  },
+  {
+    feature: 'bossBounties',
+    tier: 'PREMIUM',
+    requiresPremium: true,
+    paywallContext: 'BOSS_BOUNTY',
+    fallbackMessage: 'Boss bounties are available with Premium.',
+  },
+  {
+    feature: 'squadBosses',
+    tier: 'PREMIUM',
+    requiresPremium: true,
+    paywallContext: 'BOSS_BOUNTY',
+    fallbackMessage: 'Squad boss battles require Premium.',
+  },
+  {
+    feature: 'streakInsuranceMonthly',
+    tier: 'PREMIUM',
+    requiresPremium: true,
+    paywallContext: 'STREAK_INSURANCE',
+    fallbackMessage: 'Monthly streak insurance is included with Premium.',
+  },
+  {
+    feature: 'personalitySelection',
+    tier: 'PREMIUM',
+    requiresPremium: true,
+    paywallContext: 'PERSONALITY_SELECT',
+    fallbackMessage: 'Choose your coach personality with Premium.',
+  },
+  {
+    feature: 'maxSquads',
+    tier: 'PREMIUM',
+    requiresPremium: true,
+    paywallContext: 'SQUAD_LIMIT',
+    fallbackMessage: 'Free users can join up to 3 squads. Upgrade for unlimited.',
+  },
+  {
+    feature: 'exclusiveCosmetics',
+    tier: 'PREMIUM',
+    requiresPremium: true,
+    paywallContext: 'EXCLUSIVE_COSMETIC',
+    fallbackMessage: 'This cosmetic is exclusive to Premium members.',
+  },
+  {
+    feature: 'betaFeatures',
+    tier: 'PREMIUM',
+    requiresPremium: true,
+    paywallContext: 'BETA_FEATURE',
+    fallbackMessage: 'Beta features are available to Premium users.',
+  },
+];
+
+// ============================================================================
+// Feature Access Checks
+// ============================================================================
+
+/**
+ * Check if user has access to a feature
+ */
+export function hasFeatureAccess(
+  userTier: SubscriptionTier,
+  feature: keyof TierFeatures
+): boolean {
+  const tierDef = TIER_DEFINITIONS[userTier];
+  const featureValue = tierDef.features[feature];
+
+  // Numeric features (maxActiveStudyPlans, maxSquads, streakInsuranceMonthly)
+  if (typeof featureValue === 'number') {
+    return featureValue > 0;
+  }
+
+  // Boolean features
+  return featureValue === true;
+}
+
+/**
+ * Check if user can create another study plan
+ */
+export function canCreateStudyPlan(
+  userTier: SubscriptionTier,
+  currentPlanCount: number
+): boolean {
+  const maxPlans = TIER_DEFINITIONS[userTier].features.maxActiveStudyPlans;
+  return currentPlanCount < maxPlans;
+}
+
+/**
+ * Check if user can join another squad
+ */
+export function canJoinSquad(
+  userTier: SubscriptionTier,
+  currentSquadCount: number
+): boolean {
+  const maxSquads = TIER_DEFINITIONS[userTier].features.maxSquads;
+  return currentSquadCount < maxSquads;
+}
+
+/**
+ * Get remaining study plan slots
+ */
+export function getRemainingStudyPlanSlots(
+  userTier: SubscriptionTier,
+  currentPlanCount: number
+): number {
+  const maxPlans = TIER_DEFINITIONS[userTier].features.maxActiveStudyPlans;
+  if (maxPlans === Infinity) {return Infinity;}
+  return Math.max(0, maxPlans - currentPlanCount);
+}
+
+/**
+ * Get feature gate for a specific feature
+ */
+export function getFeatureGate(feature: keyof TierFeatures): FeatureGate | null {
+  return FEATURE_GATES.find((g) => g.feature === feature) || null;
+}
+
+/**
+ * Should show paywall for this feature?
+ */
+export function shouldShowPaywall(
+  userTier: SubscriptionTier,
+  feature: keyof TierFeatures
+): { show: boolean; context: PaywallContextType | null } {
+  if (userTier === 'PREMIUM') {
+    return { show: false, context: null };
+  }
+
+  const hasAccess = hasFeatureAccess(userTier, feature);
+  if (hasAccess) {
+    return { show: false, context: null };
+  }
+
+  const gate = getFeatureGate(feature);
+  return {
+    show: true,
+    context: gate?.paywallContext || null,
+  };
+}
+
+// ============================================================================
+// Paywall Context Generation
+// ============================================================================
+
+export interface PaywallContextData {
+  type: PaywallContextType;
+  title: string;
+  headline: string;
+  subtext: string;
+  benefit1: string;
+  benefit2: string;
+  statText: string;
+  ctaText: string;
+  secondaryCtaText: string;
+}
+
+export const PAYWALL_CONTEXTS: Record<PaywallContextType, PaywallContextData> = {
+  STUDY_PLAN_LIMIT: {
+    type: 'STUDY_PLAN_LIMIT',
+    title: 'Study Plan Limit Reached',
+    headline: 'Study 3x Faster with Unlimited Plans',
+    subtext: 'Free users can have 1 active study plan. Upgrade to create unlimited plans and organize all your subjects.',
+    benefit1: '✓ Create unlimited study plans',
+    benefit2: '✓ AI generates plans for any topic',
+    statText: 'Premium users complete 78% more study plans',
+    ctaText: 'Start Free Trial',
+    secondaryCtaText: 'Maybe Later',
+  },
+  BOSS_BOUNTY: {
+    type: 'BOSS_BOUNTY',
+    title: 'Boss Bounties',
+    headline: 'Deal Double Damage with Boss Bounties',
+    subtext: 'Place bounties on bosses to earn 2x loot and show them who\'s boss. Squad members can stack bounties for massive bonuses.',
+    benefit1: '✓ 2x loot drop chance on bounty hits',
+    benefit2: '✓ Stack up to 4 bounties (8x loot!)',
+    statText: 'Bounty hunters defeat bosses 40% faster',
+    ctaText: 'Unlock Bounties',
+    secondaryCtaText: 'Continue Free',
+  },
+  STREAK_INSURANCE: {
+    type: 'STREAK_INSURANCE',
+    title: 'Streak Protected',
+    headline: 'Your Streak is Safe',
+    subtext: 'Premium includes monthly streak insurance. Use it when life gets busy and maintain your momentum.',
+    benefit1: '✓ 1 free streak insurance per month',
+    benefit2: '✓ Additional insurance earnable anytime',
+    statText: 'Protected streaks lead to 3x longer streaks on average',
+    ctaText: 'Protect My Streak',
+    secondaryCtaText: 'I\'ll Risk It',
+  },
+  PERSONALITY_SELECT: {
+    type: 'PERSONALITY_SELECT',
+    title: 'Choose Your Coach',
+    headline: 'Find the Perfect Coach for You',
+    subtext: 'Premium unlocks all 4 coach personalities. Switch between Mentor, Trainer, Peer, and Professor anytime.',
+    benefit1: '✓ 4 unique coach personalities',
+    benefit2: '✓ Switch personalities anytime',
+    statText: 'Users with preferred coach are 65% more engaged',
+    ctaText: 'Choose My Coach',
+    secondaryCtaText: 'Keep Default',
+  },
+  ANALYTICS_REQUEST: {
+    type: 'ANALYTICS_REQUEST',
+    title: 'Study Analytics',
+    headline: 'Understand Your Learning Patterns',
+    subtext: 'Premium unlocks detailed study analytics. See your progress over time, identify weak areas, and optimize your study sessions.',
+    benefit1: '✓ Detailed progress breakdowns',
+    benefit2: '✓ Study habit insights',
+    statText: 'Analytics users improve 45% faster',
+    ctaText: 'See My Analytics',
+    secondaryCtaText: 'Skip for Now',
+  },
+  SQUAD_LIMIT: {
+    type: 'SQUAD_LIMIT',
+    title: 'Squad Limit Reached',
+    headline: 'Join Unlimited Squads',
+    subtext: 'You\'ve reached the 3 squad limit for free users. Upgrade to join as many squads as you want for maximum accountability.',
+    benefit1: '✓ Join unlimited squads',
+    benefit2: '✓ Squad analytics & insights',
+    statText: 'Users in 4+ squads have 2x better retention',
+    ctaText: 'Join More Squads',
+    secondaryCtaText: 'Stay at 3',
+  },
+  EXCLUSIVE_COSMETIC: {
+    type: 'EXCLUSIVE_COSMETIC',
+    title: 'Exclusive Cosmetic',
+    headline: 'Stand Out with Premium Cosmetics',
+    subtext: 'This cosmetic is exclusive to Premium members. Unlock unique avatar frames, boss themes, and visual effects.',
+    benefit1: '✓ Exclusive cosmetics not available in shop',
+    benefit2: '✓ New cosmetics added monthly',
+    statText: 'Premium members show off their style daily',
+    ctaText: 'Get Premium',
+    secondaryCtaText: 'Browse Free Items',
+  },
+  ADVANCED_AI: {
+    type: 'ADVANCED_AI',
+    title: 'Advanced AI',
+    headline: 'Supercharge Your Study Plans',
+    subtext: 'Premium unlocks advanced AI features: priority generation, deeper topic analysis, and personalized study strategies.',
+    benefit1: '✓ Priority AI generation (faster)',
+    benefit2: '✓ Advanced topic analysis',
+    statText: 'Advanced AI creates 50% more effective plans',
+    ctaText: 'Unlock Advanced AI',
+    secondaryCtaText: 'Continue with Basic',
+  },
+  BETA_FEATURE: {
+    type: 'BETA_FEATURE',
+    title: 'Beta Feature',
+    headline: 'Early Access to New Features',
+    subtext: 'Premium members get early access to beta features. Try new functionality before everyone else and shape the future of the app.',
+    benefit1: '✓ Access beta features first',
+    benefit2: '✓ Provide feedback to shape development',
+    statText: 'Beta users love shaping the future',
+    ctaText: 'Join Premium Beta',
+    secondaryCtaText: 'Wait for Release',
+  },
+};
+
+/**
+ * Get paywall context data
+ */
+export function getPaywallContext(type: PaywallContextType): PaywallContextData {
+  return PAYWALL_CONTEXTS[type];
+}
+
+// ============================================================================
+// Subscription Management
+// ============================================================================
+
+export interface UserSubscription {
+  userId: string;
+  tier: SubscriptionTier;
+  startedAt: number;
+  expiresAt: number | null;
+  isTrial: boolean;
+  trialEndsAt: number | null;
+  autoRenew: boolean;
+  platform: 'ios' | 'android' | 'web';
+}
+
+const subscriptionStore = new Map<string, UserSubscription>();
+
+/**
+ * Set user subscription
+ */
+export function setUserSubscription(subscription: UserSubscription): void {
+  subscriptionStore.set(subscription.userId, subscription);
+
+  eventBus.publish('subscription:changed', {
+    userId: subscription.userId,
+    tier: subscription.tier,
+    isTrial: subscription.isTrial,
+  });
+}
+
+/**
+ * Get user subscription
+ */
+export function getUserSubscription(userId: string): UserSubscription | null {
+  return subscriptionStore.get(userId) || null;
+}
+
+/**
+ * Get user tier
+ */
+export function getUserTier(userId: string): SubscriptionTier {
+  const sub = subscriptionStore.get(userId);
+  return sub?.tier || 'FREE';
+}
+
+/**
+ * Check if user is premium
+ */
+export function isPremium(userId: string): boolean {
+  return getUserTier(userId) === 'PREMIUM';
+}
+
+/**
+ * Check if user is in trial
+ */
+export function isInTrial(userId: string): boolean {
+  const sub = subscriptionStore.get(userId);
+  if (!sub) {return false;}
+  if (!sub.isTrial || !sub.trialEndsAt) {return false;}
+  return Date.now() < sub.trialEndsAt;
+}
+
+/**
+ * Calculate trial days remaining
+ */
+export function getTrialDaysRemaining(userId: string): number {
+  const sub = subscriptionStore.get(userId);
+  if (!sub?.trialEndsAt) {return 0;}
+  const msRemaining = sub.trialEndsAt - Date.now();
+  return Math.max(0, Math.ceil(msRemaining / (1000 * 60 * 60 * 24)));
+}
+
+// ============================================================================
+// Exports (types already exported above)
+// ============================================================================

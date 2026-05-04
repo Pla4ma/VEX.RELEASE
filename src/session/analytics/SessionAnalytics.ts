@@ -1,0 +1,424 @@
+/**
+ * Session Analytics
+ *
+ * Comprehensive analytics tracking for session events.
+ * Tracks user engagement, completion rates, patterns, and trends.
+ */
+
+import { eventBus } from '../../events';
+import { capture } from '../../shared/analytics/analytics-service';
+import { SessionEvents, ProgressionEvents } from '../../shared/analytics/analytics-events';
+import type {
+  SessionSummary,
+  SessionHistoryEntry,
+  SessionConfig,
+  InterruptionRecord,
+  AntiCheatFlag,
+  RecoveryRecord,
+} from '../types';
+import { createDebugger } from '../../utils/debug';
+
+const debug = createDebugger('session:analytics');
+
+// ============================================================================
+// Analytics Event Types
+// ============================================================================
+
+interface SessionAnalyticsEvent {
+  eventName: string;
+  userId: string;
+  sessionId?: string;
+  timestamp: number;
+  properties: Record<string, unknown>;
+}
+
+interface EngagementMetrics {
+  totalSessions: number;
+  completedSessions: number;
+  abandonedSessions: number;
+  completionRate: number;
+  avgSessionDuration: number;
+  totalFocusTime: number;
+}
+
+interface PatternMetrics {
+  bestTimeOfDay: number; // Hour (0-23)
+  bestDayOfWeek: number; // Day (0-6)
+  avgInterruptionsPerSession: number;
+  recoverySuccessRate: number;
+  avgFocusQuality: number;
+}
+
+// ============================================================================
+// Session Analytics Service
+// ============================================================================
+
+export class SessionAnalytics {
+  private userId: string | null = null;
+  private eventQueue: SessionAnalyticsEvent[] = [];
+  private metrics: EngagementMetrics | null = null;
+  private patterns: PatternMetrics | null = null;
+
+  setUserId(userId: string): void {
+    this.userId = userId;
+    this.setupEventListeners();
+  }
+
+  // ============================================================================
+  // Event Tracking
+  // ============================================================================
+
+  private setupEventListeners(): void {
+    if (!this.userId) {return;}
+
+    // Session lifecycle events with proper PostHog analytics
+    eventBus.subscribe('session:created', (data) => {
+      if (!data) {return;}
+      this.track('session_created', {
+        sessionId: data.sessionId,
+        userId: data.userId,
+        config: data.config,
+        timestamp: data.timestamp,
+      });
+    });
+
+    eventBus.subscribe('session:started', (data) => {
+      if (!data) {return;}
+      // Track session started with PostHog
+      capture(SessionEvents.SESSION_STARTED, {
+        session_id: data.sessionId,
+        user_id: (data as any).userId,
+        session_type: (data as any).config?.mode || 'focus',
+        started_at: data.startedAt,
+      });
+      this.track('session_started', {
+        sessionId: data.sessionId,
+        startedAt: data.startedAt,
+        phase: data.phase,
+      });
+    });
+
+    eventBus.subscribe('session:completed', (data) => {
+      if (!data) {return;}
+      const durationSeconds = data.duration || (data as any).summary?.effectiveDuration || 0;
+      const completionPercentage = (data as any).summary?.completionPercentage || 100;
+      // Track session completed with PostHog
+      capture(SessionEvents.SESSION_COMPLETED, {
+        session_id: data.sessionId,
+        user_id: data.userId,
+        duration_seconds: durationSeconds,
+        completion_percentage: completionPercentage,
+        session_type: (data as any).summary?.sessionType || 'focus',
+        xp_earned: (data as any).summary?.xpEarned || 0,
+        coins_earned: (data as any).summary?.coinsEarned || 0,
+      });
+      this.track('session_completed', {
+        sessionId: data.sessionId,
+        userId: data.userId,
+        summary: data.summary,
+        duration: data.duration,
+      });
+    });
+
+    eventBus.subscribe('session:abandoned', (data) => {
+      if (!data) {return;}
+      const elapsedSeconds = data.elapsedTime || 0;
+      // Calculate completion percentage if not provided
+      const totalDuration = (data as any).totalDuration || (data as any).config?.duration || 0;
+      const completionPercentage = totalDuration > 0
+        ? Math.round((elapsedSeconds / totalDuration) * 100)
+        : 0;
+      // Track session abandoned with PostHog
+      capture(SessionEvents.SESSION_ABANDONED, {
+        session_id: data.sessionId,
+        user_id: data.userId,
+        reason: data.reason || 'unknown',
+        elapsed_seconds: elapsedSeconds,
+        completion_percentage: completionPercentage,
+        purity_score: (data as any).purityScore || 0,
+      });
+      this.track('session_abandoned', {
+        sessionId: data.sessionId,
+        userId: data.userId,
+        reason: data.reason,
+        elapsedTime: data.elapsedTime,
+        abandonedAt: data.abandonedAt,
+      });
+    });
+
+    eventBus.subscribe('session:interruption', (data) => {
+      if (!data) {return;}
+      this.track('session_interrupted', {
+        sessionId: data.sessionId,
+        userId: data.userId,
+        interruption: data.interruption,
+      });
+    });
+
+    eventBus.subscribe('session:recovery:successful', (data) => {
+      if (!data) {return;}
+      this.track('session_recovered', {
+        sessionId: data.sessionId,
+        userId: data.userId,
+        recoveredAt: data.recoveredAt,
+        recoveredTime: data.recoveredTime,
+      });
+    });
+
+    // Anti-cheat events
+    eventBus.subscribe('session:anticheat:flag', (data) => {
+      if (!data) {return;}
+      this.track('anti_cheat_flag', {
+        sessionId: data.sessionId,
+        userId: data.userId,
+        flag: data.flag,
+      });
+    });
+
+    // Progress events
+    eventBus.subscribe('session:phase:changed', (data) => {
+      if (!data) {return;}
+      this.track('phase_transition', {
+        sessionId: data.sessionId,
+        previousPhase: data.previousPhase,
+        newPhase: data.newPhase,
+        timestamp: data.timestamp,
+      });
+    });
+
+    eventBus.subscribe('session:tick', (data) => {
+      if (!data) {return;}
+      this.track('session_tick', {
+        sessionId: data.sessionId,
+        elapsed: data.elapsed,
+        remaining: data.remaining,
+        percentage: data.percentage,
+        phase: data.phase,
+      });
+    });
+
+    // Reward events
+    eventBus.subscribe('session:rewards:granted', (data) => {
+      if (!data) {return;}
+      this.track('rewards_earned', {
+        sessionId: data.sessionId,
+        userId: data.userId,
+        rewards: data.rewards,
+        timestamp: data.timestamp,
+      });
+    });
+
+    // Error events
+    eventBus.subscribe('session:failed', (data) => {
+      if (!data) {return;}
+      this.track('session_error', {
+        sessionId: data.sessionId,
+        userId: data.userId,
+        error: data.error,
+        canRecover: data.canRecover,
+      });
+    });
+
+    eventBus.subscribe('session:sync:failed', (data) => {
+      if (!data) {return;}
+      this.track('sync_failure', {
+        sessionId: data.sessionId,
+        userId: data.userId,
+        error: data.error,
+        willRetry: data.willRetry,
+      });
+    });
+  }
+
+  private track(eventName: string, properties: Record<string, unknown>): void {
+    if (!this.userId) {return;}
+
+    const event: SessionAnalyticsEvent = {
+      eventName,
+      userId: this.userId,
+      sessionId: properties.sessionId as string,
+      timestamp: Date.now(),
+      properties,
+    };
+
+    this.eventQueue.push(event);
+
+    // Flush if queue is getting large
+    if (this.eventQueue.length >= 50) {
+      this.flush();
+    }
+
+    // Also emit to global analytics
+    eventBus.publish('analytics:track', {
+      event: eventName,
+      properties: { ...properties, userId: this.userId },
+    });
+  }
+
+  // ============================================================================
+  // Batch Analytics Methods
+  // ============================================================================
+
+  async calculateEngagementMetrics(history: SessionHistoryEntry[]): Promise<EngagementMetrics> {
+    const totalSessions = history.length;
+    const completedSessions = history.filter(h => h.status === 'COMPLETED').length;
+    const abandonedSessions = history.filter(h => h.status === 'ABANDONED').length;
+
+    const totalFocusTime = history.reduce((acc, h) => {
+      return acc + (h.summary?.effectiveDuration || 0);
+    }, 0);
+
+    const avgSessionDuration = totalSessions > 0
+      ? totalFocusTime / totalSessions
+      : 0;
+
+    this.metrics = {
+      totalSessions,
+      completedSessions,
+      abandonedSessions,
+      completionRate: totalSessions > 0 ? (completedSessions / totalSessions) * 100 : 0,
+      avgSessionDuration,
+      totalFocusTime,
+    };
+
+    return this.metrics;
+  }
+
+  async calculatePatternMetrics(
+    history: SessionHistoryEntry[],
+    recoveries: RecoveryRecord[]
+  ): Promise<PatternMetrics> {
+    // Find best time of day
+    const hourCounts = new Array(24).fill(0);
+    history.forEach(h => {
+      const hour = new Date(h.startedAt).getHours();
+      if (h.status === 'COMPLETED') {
+        hourCounts[hour]++;
+      }
+    });
+    const bestTimeOfDay = hourCounts.indexOf(Math.max(...hourCounts));
+
+    // Find best day of week
+    const dayCounts = new Array(7).fill(0);
+    history.forEach(h => {
+      const day = new Date(h.startedAt).getDay();
+      if (h.status === 'COMPLETED') {
+        dayCounts[day]++;
+      }
+    });
+    const bestDayOfWeek = dayCounts.indexOf(Math.max(...dayCounts));
+
+    // Calculate avg interruptions
+    const avgInterruptionsPerSession = history.length > 0
+      ? history.reduce((acc, h) => acc + (h.summary?.interruptions || 0), 0) / history.length
+      : 0;
+
+    // Recovery success rate
+    const recoverySuccessRate = recoveries.length > 0
+      ? (recoveries.filter(r => r.successful).length / recoveries.length) * 100
+      : 0;
+
+    // Average focus quality
+    const avgFocusQuality = history.length > 0
+      ? history.reduce((acc, h) => acc + (h.summary?.focusQuality || 0), 0) / history.length
+      : 0;
+
+    this.patterns = {
+      bestTimeOfDay,
+      bestDayOfWeek,
+      avgInterruptionsPerSession,
+      recoverySuccessRate,
+      avgFocusQuality,
+    };
+
+    return this.patterns;
+  }
+
+  // ============================================================================
+  // Real-time Analytics
+  // ============================================================================
+
+  trackMilestone(sessionId: string, milestone: string, data: Record<string, unknown>): void {
+    this.track(`milestone_${milestone}`, {
+      sessionId,
+      ...data,
+    });
+  }
+
+  trackAntiCheatIncident(flag: AntiCheatFlag): void {
+    this.track('anti_cheat_incident', {
+      sessionId: flag.sessionId,
+      type: flag.type,
+      severity: flag.severity,
+      actionTaken: flag.actionTaken,
+      score: flag.score,
+    });
+  }
+
+  trackInterruptionImpact(interruption: InterruptionRecord): void {
+    this.track('interruption_impact', {
+      sessionId: interruption.sessionId,
+      type: interruption.type,
+      severity: interruption.severity,
+      timeLost: interruption.impact.timeLost,
+      scoreImpact: interruption.impact.scoreImpact,
+      autoRecovered: interruption.autoRecovered,
+    });
+  }
+
+  // ============================================================================
+  // Funnel Analytics
+  // ============================================================================
+
+  trackFunnelStep(step: string, sessionId: string, success: boolean, duration?: number): void {
+    this.track('funnel_step', {
+      step,
+      sessionId,
+      success,
+      duration,
+      timestamp: Date.now(),
+    });
+  }
+
+  // ============================================================================
+  // Flush and Cleanup
+  // ============================================================================
+
+  flush(): void {
+    if (this.eventQueue.length === 0) {return;}
+
+    // In a real implementation, this would send to analytics backend
+    const events = [...this.eventQueue];
+    this.eventQueue = [];
+
+    // In real implementation, send to analytics backend
+    debug.info('[Analytics Batch]', { userId: this.userId, events, timestamp: Date.now() });
+  }
+
+  getQueuedEvents(): SessionAnalyticsEvent[] {
+    return [...this.eventQueue];
+  }
+
+  getMetrics(): EngagementMetrics | null {
+    return this.metrics;
+  }
+
+  getPatterns(): PatternMetrics | null {
+    return this.patterns;
+  }
+}
+
+// ============================================================================
+// Singleton Instance
+// ============================================================================
+
+let sessionAnalytics: SessionAnalytics | null = null;
+
+export function getSessionAnalytics(): SessionAnalytics {
+  if (!sessionAnalytics) {
+    sessionAnalytics = new SessionAnalytics();
+  }
+  return sessionAnalytics;
+}
+
+export default SessionAnalytics;

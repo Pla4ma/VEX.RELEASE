@@ -1,0 +1,60 @@
+import type { CurrentRival } from './schemas';
+import { getDaysRemainingInWeek, getWeekStart } from './service';
+
+const GHOSTS = [
+  {
+    id: '00000000-0000-4000-8000-000000000101',
+    name: 'Alex K.',
+    seed: 0.94,
+  },
+  {
+    id: '00000000-0000-4000-8000-000000000102',
+    name: 'Jordan M.',
+    seed: 1.03,
+  },
+  {
+    id: '00000000-0000-4000-8000-000000000103',
+    name: 'Sam P.',
+    seed: 1.08,
+  },
+] as const;
+
+function getDailyVariance(index: number): number {
+  const day = Math.floor(Date.now() / 86_400_000);
+  return ((day + index * 7) % 21 - 10) / 100;
+}
+
+export function buildGhostRivals(input: {
+  avgSessionDuration: number;
+  level: number;
+  realRivalCount: number;
+  sessionsPerWeek: number;
+  userId: string;
+  weeklyFocusMinutes: number;
+}): CurrentRival[] {
+  const targetCount = Math.max(0, 3 - input.realRivalCount);
+  const baseline = Math.max(90, input.weeklyFocusMinutes || input.sessionsPerWeek * input.avgSessionDuration);
+  const weekStart = getWeekStart();
+
+  return GHOSTS.slice(0, targetCount).map((ghost, index) => {
+    const theirs = Math.round(baseline * (ghost.seed + getDailyVariance(index)));
+    return {
+      daysRemaining: getDaysRemainingInWeek(),
+      isGhost: true,
+      profile: {
+        avgSessionDuration: 25 + input.level + index * 3,
+        level: Math.max(1, input.level + index),
+        name: ghost.name,
+        sessionsPerWeek: Math.max(3, Math.round(theirs / 35)),
+        userId: ghost.id,
+      },
+      relationshipId: ghost.id,
+      weekStart,
+      weeklyScore: {
+        lastUpdated: Date.now(),
+        mine: baseline,
+        theirs,
+      },
+    };
+  });
+}

@@ -1,0 +1,41 @@
+{
+  "name": "VEX App",
+  "slug": "vex-app",
+  "version": "1.0.0",
+  "orientation": "portrait",
+  "userInterfaceStyle": "dark",
+  "sdkVersion": "54.0.0",
+  "platforms": [
+    "ios",
+    "android",
+    "web"
+  ],
+  "ios": {
+    "supportsTablet": true,
+    "bundleIdentifier": "com.vex.app"
+  },
+  "android": {
+    "package": "com.vex.app"
+  },
+  "web": {
+    "bundler": "metro",
+    "output": "single"
+  },
+  "plugins": [
+    "expo-secure-store",
+    [
+      "expo-notifications",
+      {
+        "defaultChannel": "coach-notifications"
+      }
+    ],
+    [
+      "@sentry/react-native/expo",
+      {
+        "url": "https://sentry.io/",
+        "project": "vexx",
+        "organization": "nueroflow"
+      }
+    ]
+  ]
+}

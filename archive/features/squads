@@ -1,0 +1,74 @@
+import {
+  RecordSquadWarDamageInputSchema,
+  SquadWarSchema,
+} from './schemas';
+import { SquadAnalytics } from './analytics';
+import {
+  getActiveSquadWar,
+  recordWarDamage,
+  subscribeToSquadWar,
+} from './squad-war-repository';
+import type { SquadWar } from './squad-war-types';
+
+export async function loadActiveSquadWar(squadId: string): Promise<SquadWar | null> {
+  const war = await getActiveSquadWar(squadId);
+
+  if (!war) {
+    return null;
+  }
+
+  const validatedWar: SquadWar = war;
+  SquadWarSchema.parse(validatedWar);
+  SquadAnalytics.squadWarViewed(
+    validatedWar.squadId,
+    validatedWar.id,
+    validatedWar.bossName,
+    validatedWar.members.length
+  );
+
+  return validatedWar as SquadWar;
+}
+
+export function watchActiveSquadWar(
+  squadId: string,
+  onWar: (war: SquadWar) => void,
+  onError?: (error: Error) => void
+): () => void {
+  return subscribeToSquadWar(squadId, (war) => {
+    try {
+      const validatedWar: SquadWar = war;
+      SquadWarSchema.parse(validatedWar);
+      onWar(validatedWar);
+    } catch (error) {
+      onError?.(error instanceof Error ? error : new Error(String(error)));
+    }
+  });
+}
+
+export async function submitSquadWarDamage(
+  input: {
+    squadId: string;
+    userId: string;
+    damage: number;
+    sessionId: string;
+  }
+): Promise<void> {
+  const validatedInput: {
+    squadId: string;
+    userId: string;
+    damage: number;
+    sessionId: string;
+  } = {
+    ...input,
+    damage: Math.max(0, Math.floor(input.damage)),
+  };
+  RecordSquadWarDamageInputSchema.parse(validatedInput);
+
+  await recordWarDamage(validatedInput);
+  SquadAnalytics.squadWarDamageRecorded(
+    validatedInput.squadId,
+    validatedInput.userId,
+    validatedInput.damage,
+    validatedInput.sessionId
+  );
+}
