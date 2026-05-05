@@ -20,6 +20,7 @@ import { z } from 'zod';
 import * as Sentry from '@sentry/react-native';
 import { spendCurrency } from '../economy/spending-service';
 import { eventBus } from '../../events';
+import { featureFlags } from '../../feature-flags/FeatureFlagEngine';
 
 // ============================================================================
 // Constants
@@ -89,6 +90,10 @@ export interface PlaceBountyResult {
   stackCount: number;
   lootMultiplier: number;
   error: { code: string; message: string } | null;
+}
+
+function isBossBountyEnabled(): boolean {
+  return featureFlags.isEnabled('boss_bounty_system');
 }
 
 // ============================================================================
@@ -164,6 +169,17 @@ export function getBountyStatus(
   input: GetBountyStatusInput
 ): BountyStatus {
   const validated = GetBountyStatusInputSchema.parse(input);
+  if (!isBossBountyEnabled()) {
+    return {
+      hasActiveBounty: false,
+      bountyCount: 0,
+      totalLootMultiplier: 1,
+      expiresAt: null,
+      hoursRemaining: 0,
+      canPlaceBounty: false,
+      maxStackReached: false,
+    };
+  }
   const now = Date.now();
 
   const allBounties = loadBounties(validated.encounterId);
@@ -215,6 +231,18 @@ export async function placeBounty(
   input: PlaceBountyInput
 ): Promise<PlaceBountyResult> {
   const validated = PlaceBountyInputSchema.parse(input);
+  if (!isBossBountyEnabled()) {
+    return {
+      success: false,
+      bountyId: null,
+      stackCount: 0,
+      lootMultiplier: 1,
+      error: {
+        code: 'FEATURE_DISABLED',
+        message: 'Boss bounties are disabled',
+      },
+    };
+  }
   const now = Date.now();
 
   // Check current status
@@ -342,6 +370,9 @@ export function consumeBountiesOnDamage(
   encounterId: string,
   damageDealt: number
 ): { lootMultiplier: number; consumedCount: number; consumedBountyIds: string[] } {
+  if (!isBossBountyEnabled()) {
+    return { lootMultiplier: 1, consumedCount: 0, consumedBountyIds: [] };
+  }
   const now = Date.now();
   const allBounties = loadBounties(encounterId);
 
@@ -394,6 +425,9 @@ export function consumeBountiesOnDamage(
  * Used for UI display (squad members can see stacked bounties)
  */
 export function getActiveBounties(encounterId: string): BossBounty[] {
+  if (!isBossBountyEnabled()) {
+    return [];
+  }
   const now = Date.now();
   const allBounties = loadBounties(encounterId);
 
@@ -409,6 +443,9 @@ export function userHasActiveBounty(
   encounterId: string,
   userId: string
 ): boolean {
+  if (!isBossBountyEnabled()) {
+    return false;
+  }
   const now = Date.now();
   const allBounties = loadBounties(encounterId);
 

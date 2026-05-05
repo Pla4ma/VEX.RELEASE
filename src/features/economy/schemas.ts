@@ -9,7 +9,7 @@ import { z } from 'zod';
 // Currency Schemas
 // ============================================================================
 
-export const CurrencyTypeSchema = z.enum(['COINS', 'GEMS', 'FOCUS_POINTS']);
+export const CurrencyTypeSchema = z.enum(['COINS', 'GEMS', 'FOCUS_POINTS', 'SEASONAL']);
 
 export const CurrencyAmountSchema = z.object({
   currency: CurrencyTypeSchema,
@@ -26,6 +26,7 @@ export const WalletSchema = z.object({
   coins: z.number().int().min(0).default(0),
   gems: z.number().int().min(0).default(0),
   focusPoints: z.number().int().min(0).default(0),
+  seasonal: z.record(z.number().int().min(0)).default({}),
   totalCoinsEarned: z.number().int().min(0).default(0),
   totalCoinsSpent: z.number().int().min(0).default(0),
   totalGemsEarned: z.number().int().min(0).default(0),
@@ -38,6 +39,7 @@ export const WalletSummarySchema = z.object({
   coins: z.number().int().min(0),
   gems: z.number().int().min(0),
   focusPoints: z.number().int().min(0),
+  seasonal: z.record(z.number().int().min(0)).default({}),
 }).strict();
 
 // ============================================================================
@@ -64,6 +66,7 @@ export const TransactionSourceSchema = z.enum([
   'SQUAD',
   'DAILY_LOGIN',
   'ACHIEVEMENT',
+  'FOCUS_POINTS',
   'PROMOTION',
   'REFUND',
 ]);

@@ -26,6 +26,9 @@
 import { z } from 'zod';
 import { featureFlags } from '../../feature-flags/FeatureFlagEngine';
 import { eventBus } from '../../events';
+import { createDebugger } from '../../utils/debug';
+
+const debug = createDebugger('weekly-raid-system');
 
 // ============================================================================
 // Raid Types & Schemas
@@ -199,7 +202,7 @@ export class WeeklyRaidSystem {
    */
   start(): void {
     if (!WeeklyRaidSystem.isEnabled()) {
-      console.log('[WeeklyRaidSystem] Disabled via feature flag');
+      debug.info('Disabled via feature flag');
       return;
     }
 
@@ -211,7 +214,7 @@ export class WeeklyRaidSystem {
     // Initial check
     this.checkRaidSchedule();
 
-    console.log('[WeeklyRaidSystem] Started');
+    debug.info('Started');
   }
 
   /**

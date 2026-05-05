@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Squad Synergy Service - DEPRECATED
  *
@@ -22,9 +21,12 @@
 import { getSupabaseClient } from '../../../config/supabase';
 import { eventBus } from '../../../events';
 import { featureFlags } from '../../../feature-flags/FeatureFlagEngine';
+import { createDebugger } from '../../../utils/debug';
 import * as repository from '../repository';
 import { SYNERGY_POINTS_PER_LEVEL } from './constants';
 import type { SynergyActivityType, SquadSynergy } from '../schemas';
+
+const debug = createDebugger('squad-synergy-deprecated');
 
 /**
  * @deprecated Use SquadEnergyService instead (Phase 3)
@@ -33,7 +35,7 @@ import type { SynergyActivityType, SquadSynergy } from '../schemas';
 export async function initializeSquadSynergy(squadId: string): Promise<void> {
   // Check if legacy system is still enabled
   if (!featureFlags.isEnabled('legacy_squad_synergy')) {
-    console.log('[DEPRECATED] Squad synergy disabled. Use SquadEnergyService.');
+    debug.info('Squad synergy disabled. Use SquadEnergyService.');
     return;
   }
 
@@ -52,7 +54,7 @@ export async function initializeSquadSynergy(squadId: string): Promise<void> {
     });
 
   if (error) {
-    console.warn('[DEPRECATED] Failed to initialize synergy:', error.message);
+    debug.warn('Failed to initialize synergy: %s', error.message);
   }
 }
 
@@ -69,12 +71,16 @@ export async function addSynergyPoints(
   // Check if legacy system is still enabled
   if (!featureFlags.isEnabled('legacy_squad_synergy')) {
     // Forward to new energy system when available
-    console.log('[DEPRECATED] Synergy points redirected to energy system:', { squadId, points });
-    eventBus.publish('squad:energy_contribution', {
+    debug.info('Synergy points redirected to energy system: %s %d', squadId, points);
+    eventBus.publish('squad:activity', {
       squadId,
       userId,
-      amount: points,
-      source: type,
+      activityType: 'ENERGY_CONTRIBUTION',
+      data: {
+        amount: points,
+        source: type,
+        legacy: true,
+      },
     });
     return;
   }
@@ -96,8 +102,15 @@ export async function addSynergyPoints(
     eventBus.publish('squad:synergy_level_up', { squadId, newLevel, userId });
 
     // Also emit new energy event for migration
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (eventBus as any).publish('squad:energy_level_up', { squadId, newLevel, userId, legacy: true });
+    eventBus.publish('squad:activity', {
+      squadId,
+      userId,
+      activityType: 'ENERGY_LEVEL_UP',
+      data: {
+        newLevel,
+        legacy: true,
+      },
+    });
   }
 
   const multiplierBonus = (newLevel - 1) * 0.05;

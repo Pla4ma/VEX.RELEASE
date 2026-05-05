@@ -18,10 +18,8 @@ export * as aiCoach from './ai-coach';
 // Note: archived features removed - see /archive for old code
 
 // Additional Features
-export * as neuroplasticity from './neuroplasticity';
 export * as notifications from './notifications';
 export * as sessionCompletion from './session-completion';
 export * as sessionStart from './session-start';
 export * as sessionStory from './session-story';
 export * as shop from './shop';
-export * as themes from './themes';

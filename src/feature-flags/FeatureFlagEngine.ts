@@ -73,8 +73,8 @@ export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
   },
   {
     key: 'squad_wars_enabled',
-    defaultValue: true,
-    rolloutPercentage: 100,
+    defaultValue: false,
+    rolloutPercentage: 0,
   },
   {
     key: 'battle_pass_season_2',
@@ -151,8 +151,8 @@ export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
   },
   {
     key: 'squad_tournaments',
-    defaultValue: true,
-    rolloutPercentage: 100,
+    defaultValue: false,
+    rolloutPercentage: 0,
     description: 'Enable weekly squad vs squad tournaments',
   },
   // Phase 4: Economy
@@ -176,8 +176,8 @@ export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
   },
   {
     key: 'trading_system',
-    defaultValue: true,
-    rolloutPercentage: 100,
+    defaultValue: false,
+    rolloutPercentage: 0,
     description: 'Enable item trading between users',
   },
   // Phase 5: Retention
@@ -195,9 +195,21 @@ export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
   },
   {
     key: 'weekly_boss_raids',
-    defaultValue: true,
-    rolloutPercentage: 100,
+    defaultValue: false,
+    rolloutPercentage: 0,
     description: 'Enable weekend epic boss raids for squad collaboration',
+  },
+  {
+    key: 'boss_bounty_system',
+    defaultValue: false,
+    rolloutPercentage: 0,
+    description: 'DISABLED: Boss bounty loot multiplier system until economy risk is resolved',
+  },
+  {
+    key: 'squad_boss_system',
+    defaultValue: false,
+    rolloutPercentage: 0,
+    description: 'DISABLED: Squad boss subsystem until squads are simplified',
   },
   // Phase 6: AI Coach
   {

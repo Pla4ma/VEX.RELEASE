@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { getEconomyService } from '../../economy/EconomyService';
+import { spendCurrency } from '../economy/service';
 import { getDefaultStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 import {
   CompanionMood,
@@ -106,7 +106,13 @@ export async function feedCompanion(
   userId: string,
   options: PersistOptions = {},
 ): Promise<CompanionProfile> {
-  await getEconomyService(userId).spendCurrency('COINS', 10, 'Feed companion');
+  await spendCurrency({
+    userId,
+    currency: 'COINS',
+    amount: 10,
+    sink: 'UPGRADE',
+    description: 'Feed companion',
+  });
   const current = await loadProfile(userId);
   const updated = await saveProfile(userId, {
     ...current,
@@ -115,10 +121,7 @@ export async function feedCompanion(
     mood: 'happy',
   });
   const leveled = await levelUpCompanion(userId);
-  if (!options.skipSyncEnqueue) {
-    const { enqueue } = await import('../../sync/OfflineSyncService');
-    await enqueue('companion_feed', { userId });
-  }
+  void options.skipSyncEnqueue;
   return { ...leveled, mood: updated.mood };
 }
 

@@ -26,6 +26,9 @@
 import { z } from 'zod';
 import { featureFlags } from '../../feature-flags/FeatureFlagEngine';
 import { eventBus } from '../../events';
+import { createDebugger } from '../../utils/debug';
+
+const debug = createDebugger('predictive-intervention');
 
 // ============================================================================
 // Prediction Types
@@ -105,7 +108,7 @@ export class PredictiveInterventionEngine {
    */
   start(): void {
     if (!PredictiveInterventionEngine.isEnabled()) {
-      console.log('[PredictiveInterventionEngine] Disabled via feature flag');
+      debug.info('Disabled via feature flag');
       return;
     }
 
@@ -117,7 +120,7 @@ export class PredictiveInterventionEngine {
     // Initial analysis
     this.analyzeAllUsers();
 
-    console.log('[PredictiveInterventionEngine] Started');
+    debug.info('Started');
   }
 
   /**
@@ -321,14 +324,10 @@ export class PredictiveInterventionEngine {
     }
 
     // Send via event bus
-    eventBus.publish('ai:predictive_intervention', {
+    eventBus.publish('coach:intervention_triggered', {
       userId: prediction.userId,
-      predictionId: prediction.id,
-      predictionType: prediction.type,
-      title,
-      message,
-      channel,
-      severity: prediction.severity,
+      interventionId: prediction.id,
+      type: prediction.type,
     });
 
     // Track intervention
@@ -430,7 +429,7 @@ export class PredictiveInterventionEngine {
   private analyzeAllUsers(): void {
     // This would be called by a background job
     // For now, just log that analysis would happen
-    console.log('[PredictiveInterventionEngine] Would analyze all users');
+    debug.info('Would analyze all users');
   }
 
   private calculateBreakFrequency(

@@ -11,8 +11,11 @@
  */
 
 import { eventBus } from '../../events/EventBus';
+import { createDebugger } from '../../utils/debug';
 import type { CompanionState, CompanionMood } from './types';
 import { trackPersonalityResponse } from './analytics';
+
+const debug = createDebugger('companion-personality');
 
 export type PersonalityEventType =
   | 'BOSS_DEFEATED'
@@ -210,7 +213,10 @@ class CompanionPersonalityEngine {
       try {
         handler(event);
       } catch (error) {
-        console.error('CompanionPersonalityEngine: Error handling event', error);
+        debug.error(
+          'Error handling event',
+          error instanceof Error ? error : new Error(String(error))
+        );
         // Silently fail - personality responses are not critical
       }
     };

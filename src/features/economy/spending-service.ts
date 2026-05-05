@@ -48,6 +48,9 @@ export async function spendCurrency(input: SpendCurrencyInput): Promise<{
     case 'GEMS':
       newBalance = wallet.gems - validated.amount;
       break;
+    case 'FOCUS_POINTS':
+      newBalance = wallet.focusPoints - validated.amount;
+      break;
     case 'SEASONAL':
       const seasonId = Object.entries(wallet.seasonal).find(
         ([, balance]) => balance >= validated.amount
@@ -65,6 +68,9 @@ export async function spendCurrency(input: SpendCurrencyInput): Promise<{
     case 'GEMS':
       updateData.gems = newBalance;
       updateData.totalGemsSpent = wallet.totalGemsSpent + validated.amount;
+      break;
+    case 'FOCUS_POINTS':
+      updateData.focusPoints = newBalance;
       break;
     case 'SEASONAL':
       const seasonId = Object.entries(wallet.seasonal).find(
@@ -84,6 +90,7 @@ export async function spendCurrency(input: SpendCurrencyInput): Promise<{
     amount: validated.amount,
     balanceBefore: validated.currency === 'COINS' ? wallet.coins :
                     validated.currency === 'GEMS' ? wallet.gems :
+                    validated.currency === 'FOCUS_POINTS' ? wallet.focusPoints :
                     (wallet.seasonal[Object.entries(wallet.seasonal).find(
                       ([, balance]) => balance >= validated.amount
                     )?.[0] ?? 'current'] ?? 0),

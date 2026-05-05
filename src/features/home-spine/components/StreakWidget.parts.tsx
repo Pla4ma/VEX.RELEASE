@@ -11,8 +11,8 @@ import Animated, {
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import type { ActiveWager } from '../../economy/StreakWagerService';
 import type { StreakWidgetProps } from './StreakWidget';
+import type { ActiveStreakWager } from './streak-widget-types';
 
 export function StreakWidgetSkeleton(): JSX.Element {
   const { theme } = useTheme();
@@ -131,7 +131,7 @@ export function WagerSection({
   onWagerPress,
 }: {
   currentDays: number;
-  activeWager?: ActiveWager | null;
+  activeWager?: ActiveStreakWager | null;
   onWagerPress?: () => void;
 }): JSX.Element | null {
   const { theme } = useTheme();

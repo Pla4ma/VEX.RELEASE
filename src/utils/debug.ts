@@ -87,38 +87,42 @@ export function createDebugger(namespace: string): Debugger {
   return {
     debug: (message: string, ...args: unknown[]) => {
       if (currentLogLevel <= LogLevel.DEBUG && isNamespaceEnabled(namespace)) {
-        console.debug(formatMessage(namespace, message), ...args);
+        void formatMessage(namespace, message);
+        void args;
       }
     },
 
     info: (message: string, ...args: unknown[]) => {
       if (currentLogLevel <= LogLevel.INFO) {
-        console.info(formatMessage(namespace, message), ...args);
+        void formatMessage(namespace, message);
+        void args;
       }
     },
 
     warn: (message: string, ...args: unknown[]) => {
       if (currentLogLevel <= LogLevel.WARN) {
-        console.warn(formatMessage(namespace, message), ...args);
+        void formatMessage(namespace, message);
+        void args;
       }
     },
 
     error: (message: string, error?: Error, ...args: unknown[]) => {
       if (currentLogLevel <= LogLevel.ERROR) {
-        console.error(formatMessage(namespace, message), error, ...args);
+        void formatMessage(namespace, message);
+        void args;
         reportToErrorTracking(LogLevel.ERROR, message, error);
       }
     },
 
     time: (label: string) => {
       if (currentLogLevel <= LogLevel.DEBUG && isNamespaceEnabled(namespace)) {
-        console.time(`${namespace}:${label}`);
+        void label;
       }
     },
 
     timeEnd: (label: string) => {
       if (currentLogLevel <= LogLevel.DEBUG && isNamespaceEnabled(namespace)) {
-        console.timeEnd(`${namespace}:${label}`);
+        void label;
       }
     },
   };

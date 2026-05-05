@@ -11,3 +11,8 @@ export {
   useCoachHomeRecommendation,
   type UseCoachRecommendationReturn,
 } from './useCoachRecommendation';
+export {
+  useCreateRecommendation,
+  useUpdateRecommendationStatus,
+  type SessionRecommendation,
+} from './useRecommendationMutations';

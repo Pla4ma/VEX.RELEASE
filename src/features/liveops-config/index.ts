@@ -51,8 +51,15 @@ export function useFeatureAccess(): FeatureAccessResult {
 }
 
 export function useDisclosureAnalytics(): {
+  trackFeatureUnlocked: (feature: FeatureKey, stage: UserExperienceStage) => void;
   trackFeatureTeaserViewed: (feature: FeatureKey, stage: UserExperienceStage) => void;
+  trackFirstSessionStarted: (userId: string, source: string) => void;
   trackLockedFeatureScreenViewed: (feature: FeatureKey, stage: UserExperienceStage) => void;
+  trackNextBestActionPressed: (
+    stage: UserExperienceStage,
+    completedSessions: number,
+  ) => void;
+  trackSessionMilestone: (userId: string, count: number) => void;
   trackSocialEmptyStateViewed: (surface: string, stage: UserExperienceStage) => void;
   trackTeaserCtaPressed: (
     feature: FeatureKey,
@@ -62,6 +69,14 @@ export function useDisclosureAnalytics(): {
 } {
   return useMemo(
     () => ({
+      trackFeatureUnlocked(feature, stage) {
+        Sentry.addBreadcrumb({
+          category: 'liveops-config',
+          data: { feature, stage },
+          level: 'info',
+          message: 'Feature unlocked',
+        });
+      },
       trackFeatureTeaserViewed(feature, stage) {
         Sentry.addBreadcrumb({
           category: 'liveops-config',
@@ -70,12 +85,36 @@ export function useDisclosureAnalytics(): {
           message: 'Feature teaser viewed',
         });
       },
+      trackFirstSessionStarted(userId, source) {
+        Sentry.addBreadcrumb({
+          category: 'home',
+          data: { source, userId },
+          level: 'info',
+          message: 'First session started',
+        });
+      },
       trackLockedFeatureScreenViewed(feature, stage) {
         Sentry.addBreadcrumb({
           category: 'liveops-config',
           data: { feature, stage },
           level: 'info',
           message: 'Locked feature screen viewed',
+        });
+      },
+      trackNextBestActionPressed(stage, completedSessions) {
+        Sentry.addBreadcrumb({
+          category: 'home',
+          data: { completedSessions, stage },
+          level: 'info',
+          message: 'Next best action pressed',
+        });
+      },
+      trackSessionMilestone(userId, count) {
+        Sentry.addBreadcrumb({
+          category: 'home',
+          data: { count, userId },
+          level: 'info',
+          message: 'Session milestone reached',
         });
       },
       trackSocialEmptyStateViewed(surface, stage) {

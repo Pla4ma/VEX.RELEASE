@@ -7,6 +7,7 @@
  */
 
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import * as Sentry from '@sentry/react-native';
 import { getAdaptiveDifficultySuggestion, shouldShowSuggestion } from '../service/adaptiveDifficulty';
 import { getDifficultyPreference, saveDifficultyPreference, updateCurrentDifficulty } from '../repository';
 import {
@@ -114,7 +115,9 @@ export function useAdaptiveDifficulty(
 
       localStorage.setItem(STORAGE_KEY_PREFIX + userId, now.toString());
     } catch (error) {
-      console.error('Failed to persist dismissal:', error);
+      Sentry.captureException(error, {
+        tags: { feature: 'session-start', operation: 'persist-difficulty-dismissal' },
+      });
     }
   }, [userId, suggestion]);
 
@@ -149,7 +152,9 @@ export function useAdaptiveDifficulty(
         });
       }
     } catch (error) {
-      console.error('Failed to accept suggestion:', error);
+      Sentry.captureException(error, {
+        tags: { feature: 'session-start', operation: 'accept-difficulty-suggestion' },
+      });
     } finally {
       setIsLoading(false);
     }

@@ -13,14 +13,14 @@
 import type { BehaviorProfile } from '../types';
 import { createDebugger } from '@/utils/debug';
 
-// TODO: Content-study feature not implemented - using minimal type stub
 type ActiveStudyPlan = {
-  id: string;
+  id?: string;
   title: string;
-  progress: number;
-  nextSession: string | null;
+  progress?: number;
+  nextSession?: string | null;
   totalTasks?: number;
   completedTasks?: number;
+  contentId?: string;
   generationId?: string;
 };
 
@@ -436,7 +436,7 @@ function generateStudyPlanMessage(
   persona: CoachPersona
 ): { headline: string; subtext: string; coachMessage: string } {
   const plan = ctx.activeStudyPlan!;
-  const remaining = plan.totalTasks - plan.completedTasks;
+  const remaining = (plan.totalTasks ?? 0) - (plan.completedTasks ?? 0);
 
   switch (persona.id) {
     case 'mentor':
@@ -796,7 +796,10 @@ export class CoachRecommendationService {
           return recommendation;
         }
       } catch (error) {
-        console.error(`[CoachRecommendationService] Rule ${rule.name} failed`, error);
+        debug.error(
+          `Rule ${rule.name} failed`,
+          error instanceof Error ? error : new Error(String(error))
+        );
       }
     }
 

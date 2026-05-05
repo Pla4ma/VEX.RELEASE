@@ -251,7 +251,10 @@ class PersistenceService {
       // Validate with schema
       const parsed = config.schema.safeParse(item.data);
       if (!parsed.success) {
-        console.error(`Invalid data for key ${config.key}:`, parsed.error);
+        Sentry.captureException(parsed.error, {
+          tags: { feature: 'persistence', operation: 'validate' },
+          extra: { key: config.key },
+        });
         return null;
       }
 
@@ -260,7 +263,10 @@ class PersistenceService {
 
       return parsed.data;
     } catch (error) {
-      console.error(`Failed to get ${config.key}:`, error);
+      Sentry.captureException(error, {
+        tags: { feature: 'persistence', operation: 'get' },
+        extra: { key: config.key },
+      });
       return null;
     }
   }
@@ -285,7 +291,10 @@ class PersistenceService {
       await provider.setItem(config.key, item);
       this.cache.set(config.key, data);
     } catch (error) {
-      console.error(`Failed to save ${config.key}:`, error);
+      Sentry.captureException(error, {
+        tags: { feature: 'persistence', operation: 'set' },
+        extra: { key: config.key },
+      });
       throw error;
     }
   }

@@ -5,8 +5,11 @@
  */
 
 import { eventBus } from '../../events';
+import { createDebugger } from '../../utils/debug';
 import * as repository from './repository';
 import type { Streak, RiskLevel } from './schemas';
+
+const debug = createDebugger('streak-risk-monitor');
 
 // ============================================================================
 // Constants
@@ -153,7 +156,10 @@ export async function checkAllStreaksAtRisk(): Promise<StreakRiskStatus[]> {
         riskStatuses.push(calculateStreakRisk(streak));
       }
     } catch (error) {
-      console.error(`Failed to check streak risk for user ${userId}:`, error);
+      debug.error(
+        `Failed to check streak risk for user ${userId}`,
+        error instanceof Error ? error : new Error(String(error))
+      );
     }
   }
 

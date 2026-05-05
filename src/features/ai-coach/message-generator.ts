@@ -633,6 +633,7 @@ export async function generatePerformanceSummary(
   const averageQuality = summaries.length > 0
     ? summaries.reduce((sum, summary) => sum + summary.focusQuality, 0) / summaries.length
     : 0;
+  const xpEarned = summaries.reduce((sum, item) => sum + (item.xpEarned ?? 0), 0);
 
   const summary = {
     period,
@@ -640,13 +641,13 @@ export async function generatePerformanceSummary(
     totalFocusTime: stats.totalFocusTime,
     averageQuality,
     streakDays: stats.currentStreak,
-    xpEarned: summaries.reduce((sum, item) => sum + item.xpEarned, 0),
+    xpEarned,
     coachMessage: await generateAISummaryMessage(userId, period, {
       sessionCount: stats.completedSessions,
       totalFocusMinutes: Math.round(stats.totalFocusTime / 60),
       averageQuality,
       streakDays: stats.currentStreak,
-      xpEarned: summaries.reduce((sum, item) => sum + item.xpEarned, 0),
+      xpEarned,
       challengesCompleted: 0,
     }, state.currentState),
   };

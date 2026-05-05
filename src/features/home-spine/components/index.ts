@@ -29,10 +29,3 @@ export { AtRiskBanner, type AtRiskBannerProps } from './AtRiskBanner';
 export { ComebackQuestCard, type ComebackQuestCardProps } from './ComebackQuestCard';
 export { GraceUsesIndicator, type GraceUsesIndicatorProps } from './GraceUsesIndicator';
 export { StreakFreezeButton, type StreakFreezeButtonProps } from './StreakFreezeButton';
-
-// Phase 11.2 - Power Hour
-export {
-  PowerHourBanner,
-  PowerHourPostEventCard,
-  type PowerHourBannerProps,
-} from './PowerHourBanner';

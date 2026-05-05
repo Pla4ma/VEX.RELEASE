@@ -9,6 +9,7 @@
  */
 
 import { eventBus } from '../../events';
+import * as Sentry from '@sentry/react-native';
 import { FocusIdentityService } from './FocusIdentityEngine';
 import * as analytics from './analytics';
 import { spectacleService } from '../spectacle';
@@ -278,8 +279,9 @@ async function maybeTriggerMonthlyReport(
       });
     }
   } catch (error) {
-    // Silently fail - monthly report is not critical
-    console.warn('Failed to trigger monthly report:', error);
+    Sentry.captureException(error, {
+      tags: { feature: 'focus-identity', operation: 'trigger-monthly-report' },
+    });
   }
 }
 

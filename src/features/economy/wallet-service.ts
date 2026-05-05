@@ -72,6 +72,8 @@ export async function getBalance(userId: string, currency: CurrencyType): Promis
       return wallet.coins;
     case 'GEMS':
       return wallet.gems;
+    case 'FOCUS_POINTS':
+      return wallet.focusPoints;
     case 'SEASONAL':
       return Object.values(wallet.seasonal).reduce((a, b) => a + b, 0);
   }
@@ -86,6 +88,8 @@ export function hasEnoughBalance(wallet: Wallet, currency: CurrencyType, amount:
       return wallet.coins >= amount;
     case 'GEMS':
       return wallet.gems >= amount;
+    case 'FOCUS_POINTS':
+      return wallet.focusPoints >= amount;
     case 'SEASONAL':
       return Object.values(wallet.seasonal).some(balance => balance >= amount);
   }
@@ -156,6 +160,9 @@ export async function addCurrency(input: AddCurrencyInput): Promise<{
     case 'GEMS':
       newBalance = wallet.gems + finalAmount;
       break;
+    case 'FOCUS_POINTS':
+      newBalance = wallet.focusPoints + finalAmount;
+      break;
     case 'SEASONAL':
       const seasonId = (validated.metadata?.seasonId as string) ?? 'current';
       newBalance = (wallet.seasonal[seasonId] ?? 0) + finalAmount;
@@ -171,6 +178,9 @@ export async function addCurrency(input: AddCurrencyInput): Promise<{
     case 'GEMS':
       updateData.gems = newBalance;
       updateData.totalGemsEarned = wallet.totalGemsEarned + finalAmount;
+      break;
+    case 'FOCUS_POINTS':
+      updateData.focusPoints = newBalance;
       break;
     case 'SEASONAL':
       const seasonId = (validated.metadata?.seasonId as string) ?? 'current';
@@ -188,6 +198,7 @@ export async function addCurrency(input: AddCurrencyInput): Promise<{
     amount: finalAmount,
     balanceBefore: validated.currency === 'COINS' ? wallet.coins :
                     validated.currency === 'GEMS' ? wallet.gems :
+                    validated.currency === 'FOCUS_POINTS' ? wallet.focusPoints :
                     (wallet.seasonal[(validated.metadata?.seasonId as string) ?? 'current'] ?? 0),
     balanceAfter: newBalance,
     source: validated.source,

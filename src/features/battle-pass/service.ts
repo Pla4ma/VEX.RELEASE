@@ -5,7 +5,7 @@
 
 import * as repository from './repository';
 import { eventBus } from '../../events';
-import { getEconomyService } from '../../economy/EconomyService';
+import { addCurrency, spendCurrency } from '../economy/service';
 import type {
   BattlePass,
   BattlePassTier,
@@ -214,7 +214,6 @@ export async function purchasePremium(input: PurchasePremiumInput): Promise<Prem
   }
 
   const gemsDeducted = paymentMethod === 'GEMS' ? battlePass.premiumPriceGems : 0;
-  const economy = getEconomyService(userId);
   let gemsSpent = false;
   let premiumGranted = false;
   let retroactive: RetroactiveClaimResult = {
@@ -225,12 +224,14 @@ export async function purchasePremium(input: PurchasePremiumInput): Promise<Prem
 
   try {
     if (gemsDeducted > 0) {
-      await economy.spendCurrency(
-        'GEMS',
-        gemsDeducted,
-        `Battle pass premium upgrade: ${seasonId}`,
-        { seasonId, source: 'BATTLE_PASS_PREMIUM_PURCHASE' }
-      );
+      await spendCurrency({
+        userId,
+        currency: 'GEMS',
+        amount: gemsDeducted,
+        sink: 'UPGRADE',
+        description: `Battle pass premium upgrade: ${seasonId}`,
+        metadata: { seasonId, source: 'BATTLE_PASS_PREMIUM_PURCHASE' },
+      });
       gemsSpent = true;
     }
 
@@ -261,9 +262,16 @@ export async function purchasePremium(input: PurchasePremiumInput): Promise<Prem
 
     if (gemsSpent) {
       try {
-        await economy.addCurrency('GEMS', gemsDeducted, 'BATTLE_PASS_PREMIUM_REFUND', {
-          seasonId,
-          source: 'BATTLE_PASS_PREMIUM_PURCHASE_ROLLBACK',
+        await addCurrency({
+          userId,
+          currency: 'GEMS',
+          amount: gemsDeducted,
+          source: 'REFUND',
+          description: 'Battle pass premium refund',
+          metadata: {
+            seasonId,
+            source: 'BATTLE_PASS_PREMIUM_PURCHASE_ROLLBACK',
+          },
         });
       } catch (rollbackError) {
         rollbackErrors.push(

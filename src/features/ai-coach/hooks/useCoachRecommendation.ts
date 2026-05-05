@@ -7,6 +7,7 @@
  */
 
 import { useMemo, useCallback, useRef, useState, useEffect } from 'react';
+import * as Sentry from '@sentry/react-native';
 import { useActiveStudyPlan } from '../../content-study/hooks/useActiveStudyPlan';
 import { useStreakSummary } from '../../streaks/hooks';
 import { useProgressionSummary } from '../../progression/hooks';
@@ -22,6 +23,16 @@ import {
   type RecommendationContext,
   convertToHomeRecommendation,
 } from '../services/CoachRecommendationService';
+
+function getLastSessionAt(stats: unknown): number {
+  if (stats && typeof stats === 'object' && 'lastSessionAt' in stats) {
+    const value = Reflect.get(stats, 'lastSessionAt');
+    if (typeof value === 'number') {
+      return value;
+    }
+  }
+  return Date.now() - 7 * 24 * 60 * 60 * 1000;
+}
 
 export interface UseCoachRecommendationReturn {
   recommendation: CoachRecommendation | null;
@@ -60,7 +71,7 @@ export function useCoachRecommendation(): UseCoachRecommendationReturn {
       return;
     }
 
-    async function fetchCoachState() {
+    async function fetchCoachState(): Promise<void> {
       try {
         const state = await getOrCreateCoachState(userId);
         setCoachPersonaId(state.personaId || 'mentor');
@@ -69,7 +80,9 @@ export function useCoachRecommendation(): UseCoachRecommendationReturn {
         const profile = await buildBehaviorProfile(userId);
         setBehaviorProfile(profile);
       } catch (error) {
-        console.error('[useCoachRecommendation] Failed to fetch coach state:', error);
+        Sentry.captureException(error, {
+          tags: { feature: 'ai-coach', operation: 'fetch-coach-recommendation-state' },
+        });
       }
     }
 
@@ -82,7 +95,7 @@ export function useCoachRecommendation(): UseCoachRecommendationReturn {
     }
 
     // Calculate days since last session
-    const lastSessionAt = (stats as any)?.lastSessionAt || Date.now() - (7 * 24 * 60 * 60 * 1000); // Default to 7 days ago
+    const lastSessionAt = getLastSessionAt(stats);
     const daysSinceLastSession = (Date.now() - lastSessionAt) / (1000 * 60 * 60 * 24);
 
     // Calculate study plan progress
@@ -127,7 +140,7 @@ export function useCoachRecommendation(): UseCoachRecommendationReturn {
         : null,
       totalSessions: stats?.totalSessions ?? 0,
       currentLevel: progression?.level ?? 1,
-      lastSessionTimestamp: (stats as any)?.lastSessionAt,
+      lastSessionTimestamp: lastSessionAt,
       daysSinceLastSession,
       behaviorProfile,
       coachPersonaId,

@@ -6,6 +6,7 @@
  */
 
 import { z } from 'zod';
+import * as Sentry from '@sentry/react-native';
 import { getSupabaseClient } from '../../config/supabase';
 import type { DifficultyPreference, SessionDifficulty } from './schemas';
 
@@ -59,7 +60,9 @@ export async function getDifficultyPreference(
       timesAccepted: data.times_accepted,
     };
   } catch (error) {
-    console.error('Failed to get difficulty preference:', error);
+    Sentry.captureException(error, {
+      tags: { feature: 'session-start', operation: 'get-difficulty-preference' },
+    });
     return null;
   }
 }
@@ -88,7 +91,9 @@ export async function saveDifficultyPreference(
       throw new RepositoryError('saveDifficultyPreference', error);
     }
   } catch (error) {
-    console.error('Failed to save difficulty preference:', error);
+    Sentry.captureException(error, {
+      tags: { feature: 'session-start', operation: 'save-difficulty-preference' },
+    });
     throw error;
   }
 }
@@ -115,7 +120,9 @@ export async function updateCurrentDifficulty(
       throw new RepositoryError('updateCurrentDifficulty', error);
     }
   } catch (error) {
-    console.error('Failed to update difficulty:', error);
+    Sentry.captureException(error, {
+      tags: { feature: 'session-start', operation: 'update-current-difficulty' },
+    });
     throw error;
   }
 }

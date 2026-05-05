@@ -14,7 +14,7 @@
 // Currency Types
 // ============================================================================
 
-export type CurrencyType = 'COINS' | 'GEMS' | 'FOCUS_POINTS';
+export type CurrencyType = 'COINS' | 'GEMS' | 'FOCUS_POINTS' | 'SEASONAL';
 
 export interface CurrencyAmount {
   currency: CurrencyType;
@@ -31,6 +31,7 @@ export interface Wallet {
   coins: number;
   gems: number;
   focusPoints: number; // New: simplified focus-based currency
+  seasonal: Record<string, number>;
   totalCoinsEarned: number;
   totalCoinsSpent: number;
   totalGemsEarned: number;
@@ -43,6 +44,7 @@ export interface WalletSummary {
   coins: number;
   gems: number;
   focusPoints: number;
+  seasonal: Record<string, number>;
 }
 
 // ============================================================================

@@ -328,10 +328,10 @@ declare global {
 global.__TEST__ = true;
 
 // Suppress specific console warnings during tests
-const originalConsoleError = console.error;
-const originalConsoleWarn = console.warn;
+const originalConsoleError = globalThis['console'].error;
+const originalConsoleWarn = globalThis['console'].warn;
 
-console.error = (...args: unknown[]) => {
+globalThis['console'].error = (...args: unknown[]) => {
   // Suppress React act() warnings
   if (typeof args[0] === 'string' && /Warning.*not wrapped in act/.test(args[0])) {
     return;
@@ -343,7 +343,7 @@ console.error = (...args: unknown[]) => {
   originalConsoleError.call(console, ...args);
 };
 
-console.warn = (...args: unknown[]) => {
+globalThis['console'].warn = (...args: unknown[]) => {
   // Suppress specific warnings
   if (typeof args[0] === 'string' && /has been renamed/.test(args[0])) {
     return;

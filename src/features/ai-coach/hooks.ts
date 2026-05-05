@@ -6,3 +6,8 @@
  */
 
 export * from './hooks';
+export {
+  useCreateRecommendation,
+  useUpdateRecommendationStatus,
+  type SessionRecommendation,
+} from './hooks/useRecommendationMutations';

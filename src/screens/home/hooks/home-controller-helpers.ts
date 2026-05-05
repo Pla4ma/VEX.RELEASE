@@ -13,10 +13,10 @@ export function getFocusedMinutesForToday(entry: SessionHistoryEntry): number {
 }
 
 export function getNextUnlockFeature(
-  features: Record<FeatureKey, { isUnlocked: boolean; isVisible: boolean; priority: number }>,
+  features: Record<FeatureKey, { isUnlocked: boolean; isVisible: boolean; priority?: number }>,
 ): FeatureKey | null {
   const match = (Object.entries(features) as Array<[FeatureKey, (typeof features)[FeatureKey]]>)
-    .sort((a, b) => a[1].priority - b[1].priority)
+    .sort((a, b) => (a[1].priority ?? 0) - (b[1].priority ?? 0))
     .find(([, value]) => !value.isUnlocked && value.isVisible);
 
   return match?.[0] ?? null;

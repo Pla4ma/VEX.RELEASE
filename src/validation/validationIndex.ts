@@ -188,7 +188,6 @@ export class ValidationEngine {
       if (options.security) {
         // Security validation disabled temporarily - SecurityConfig not implemented
         results.security = { isValid: true, errors: [], warnings: [] };
-      }
         allErrors.push(...results.security.errors);
         allWarnings.push(...results.security.warnings);
       }
@@ -203,7 +202,7 @@ export class ValidationEngine {
         results.performance = { isValid: true, errors: [], warnings: [] };
       }
 
-    } catch (error) {
+    } catch (error: unknown) {
       allErrors.push(`Validation engine error: ${error}`);
     }
 
@@ -211,7 +210,7 @@ export class ValidationEngine {
       isValid: allErrors.length === 0,
       errors: allErrors,
       warnings: allWarnings,
-      results,
+      ...results,
     };
   }
 

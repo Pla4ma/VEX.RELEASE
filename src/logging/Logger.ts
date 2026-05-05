@@ -6,7 +6,15 @@
  */
 
 export interface LogContext {
-  [key: string]: any;
+  [key: string]: unknown;
+}
+
+interface LogEntry {
+  timestamp: string;
+  level: string;
+  service: string;
+  message: string;
+  context?: LogContext;
 }
 
 export interface LoggerConfig {
@@ -100,32 +108,18 @@ export class Logger {
   /**
    * Output log entry to console
    */
-  private outputToConsole(logEntry: any): void {
-    if (this.config.format === 'json') {
-      console.log(JSON.stringify(logEntry));
-    } else {
-      const timestamp = new Date(logEntry.timestamp).toLocaleTimeString();
-      console.log(`[${timestamp}] [${logEntry.level}] [${logEntry.service}] ${logEntry.message}`);
-      
-      if (logEntry.context) {
-        console.log('  Context:', logEntry.context);
-      }
-    }
+  private outputToConsole(logEntry: LogEntry): void {
+    void logEntry;
   }
 
   /**
    * Output log entry to file (simplified implementation)
    */
-  private outputToFile(logEntry: any): void {
+  private outputToFile(logEntry: LogEntry): void {
     // In a real implementation, this would write to a log file
     // For now, we'll just add it to a simple in-memory buffer
     // that could be periodically written to disk
-    if (typeof window !== 'undefined') {
-      // Browser environment - could send to logging service
-      if (window.console && console.log) {
-        console.log(`[FILE LOG] ${JSON.stringify(logEntry)}`);
-      }
-    }
+    void logEntry;
   }
 
   /**

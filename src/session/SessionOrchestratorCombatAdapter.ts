@@ -18,6 +18,9 @@ import type { RealTimeBossEncounter, CombatEvent } from '../features/boss-realti
 import { featureFlags } from '../feature-flags/FeatureFlagEngine';
 import { eventBus } from '../events';
 import { getAnalyticsService } from '../analytics/AnalyticsService';
+import { createDebugger } from '../utils/debug';
+
+const debug = createDebugger('combat-adapter');
 
 interface CombatAdapterConfig {
   userId: string;
@@ -69,7 +72,7 @@ export class SessionCombatAdapter {
    */
   initialize(): RealTimeBossEncounter | null {
     if (!SessionCombatAdapter.isEnabled()) {
-      console.log('[CombatAdapter] Real-time combat disabled via feature flag');
+      debug.info('Real-time combat disabled via feature flag');
       return null;
     }
 
@@ -100,11 +103,12 @@ export class SessionCombatAdapter {
       maxHealth: this.encounter.maxHealth,
     });
 
-    console.log('[CombatAdapter] Initialized boss combat:', {
-      boss: this.config.bossName,
-      health: this.encounter.maxHealth,
-      sessionId: this.config.sessionId,
-    });
+    debug.info(
+      'Initialized boss combat: %s %d %s',
+      this.config.bossName,
+      this.encounter.maxHealth,
+      this.config.sessionId
+    );
 
     return this.encounter;
   }
@@ -124,7 +128,7 @@ export class SessionCombatAdapter {
       this.tick();
     }, this.config.tickIntervalMs || 3000);
 
-    console.log('[CombatAdapter] Combat tick loop started');
+    debug.info('Combat tick loop started');
   }
 
   /**
@@ -142,7 +146,7 @@ export class SessionCombatAdapter {
       this.eventUnsubscribe = null;
     }
 
-    console.log('[CombatAdapter] Combat tick loop stopped');
+    debug.info('Combat tick loop stopped');
   }
 
   /**
@@ -177,7 +181,7 @@ export class SessionCombatAdapter {
 
     // Log significant events
     if (result.bossDefeated) {
-      console.log('[CombatAdapter] BOSS DEFEATED!');
+      debug.info('Boss defeated');
       this.handleBossDefeat();
     }
 
@@ -201,7 +205,7 @@ export class SessionCombatAdapter {
    */
   pause(): void {
     this.isPaused = true;
-    console.log('[CombatAdapter] Combat paused');
+    debug.info('Combat paused');
   }
 
   /**
@@ -210,7 +214,7 @@ export class SessionCombatAdapter {
   resume(): void {
     this.isPaused = false;
     this.lastTickTime = Date.now(); // Reset tick time to avoid jump
-    console.log('[CombatAdapter] Combat resumed');
+    debug.info('Combat resumed');
   }
 
   /**

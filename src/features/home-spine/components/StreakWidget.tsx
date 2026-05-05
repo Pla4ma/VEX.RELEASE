@@ -6,7 +6,6 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { AnimatedCounter } from '../../../shared/ui/components/AnimatedCounter';
-import type { ActiveWager } from '../../economy/StreakWagerService';
 import { StreakInsuranceCard } from '../../economy/components/StreakInsuranceCard';
 import type { InsuranceStatus } from '../../economy/StreakInsurance';
 import {
@@ -16,6 +15,7 @@ import {
   StreakWidgetSkeleton,
   WagerSection,
 } from './StreakWidget.parts';
+import type { ActiveStreakWager } from './streak-widget-types';
 
 export interface StreakWidgetProps {
   currentDays: number;
@@ -27,7 +27,7 @@ export interface StreakWidgetProps {
   isLoading?: boolean;
   userId?: string;
   onWagerPress?: () => void;
-  activeWager?: ActiveWager | null;
+  activeWager?: ActiveStreakWager | null;
   /** Streak Insurance - Phase 3 */
   insuranceStatus?: InsuranceStatus | null;
   insuranceIsLoading?: boolean;

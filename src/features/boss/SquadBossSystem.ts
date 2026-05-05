@@ -16,6 +16,7 @@
  */
 
 import { eventBus } from '../../events';
+import { featureFlags } from '../../feature-flags/FeatureFlagEngine';
 
 // ============================================================================
 // Types
@@ -90,6 +91,12 @@ export const SQUAD_BOSS_DURATION_MULTIPLIER = 1.5; // 50% longer duration
 export const MVP_BONUS_MULTIPLIER = 1.5; // MVP gets 50% more rewards
 export const PARTICIPATION_THRESHOLD = 0.05; // Must deal at least 5% damage to get rewards
 
+function assertSquadBossEnabled(): void {
+  if (!featureFlags.isEnabled('squad_boss_system')) {
+    throw new Error('Squad boss system is disabled');
+  }
+}
+
 // ============================================================================
 // Squad Boss Creation
 // ============================================================================
@@ -112,6 +119,7 @@ export function createSquadBossEncounter(
   baseDuration: number,
   members: Array<{ userId: string; userName: string; avatarUrl: string | null }>
 ): SquadBossEncounter {
+  assertSquadBossEnabled();
   const scaledHealth = calculateSquadBossHealth(baseHealth, members.length);
   const scaledDuration = baseDuration * SQUAD_BOSS_DURATION_MULTIPLIER;
 
