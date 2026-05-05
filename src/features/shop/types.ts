@@ -223,6 +223,11 @@ export interface DisplayConfig {
   spacing: SpacingConfig;
 }
 
+export interface ThemeCustomization {
+  colors?: Record<string, string>;
+  fonts?: Record<string, string>;
+}
+
 export interface DisplayTheme {
   mode: 'light' | 'dark' | 'auto';
   style: 'minimal' | 'modern' | 'classic' | 'playful';
@@ -349,6 +354,12 @@ export interface RotationConfig {
   interval: number; // in minutes
   random: boolean;
   max_items: number;
+}
+
+export interface ProductFilter {
+  field: string;
+  operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'in';
+  value: unknown;
 }
 
 export interface SelectionCriteria {

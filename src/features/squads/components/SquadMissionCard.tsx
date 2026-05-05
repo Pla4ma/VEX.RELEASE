@@ -4,7 +4,7 @@ import { ScrollView, View } from 'react-native';
 import { Text } from '../../../components/primitives/Text';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { useTheme } from '../../../theme';
-import { useSquadMissions } from '../competitive-hooks';
+import { useSquadMissions } from '../hooks';
 
 type SquadMissionCardProps = { squadId?: string };
 

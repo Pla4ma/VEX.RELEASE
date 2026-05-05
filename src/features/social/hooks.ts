@@ -8,14 +8,8 @@ import {
 } from '@tanstack/react-query';
 
 import { getSupabaseClient } from '../../config/supabase';
-import {
-  type SocialPost,
-  getFeed,
-  getPost,
-  getReactionCounts,
-  getSquadFeed,
-  reactToPost,
-} from '../../social/SocialService';
+import type { SocialPost } from './types';
+import { getFeed, getPost, getReactionCounts, getSquadFeed, reactToPost } from './repository';
 
 type FeedPage = { items: SocialPost[]; nextCursor: number | null };
 type FeedCache = InfiniteData<FeedPage, number | null>;

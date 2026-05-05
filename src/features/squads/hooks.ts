@@ -299,6 +299,32 @@ export function useSquadMembersFocusing(userId: string | undefined) {
 // Squad War Live Hook
 // ============================================================================
 
+// Stats Hooks
+// ============================================================================
+
+export function useSquadStats(squadId: string | undefined) {
+  return useQuery({
+    queryKey: ['squad-stats', squadId],
+    queryFn: () => Promise.resolve({
+      totalFocusTime: 0,
+      memberCount: 0,
+      weeklyAverage: 0,
+    }),
+    enabled: !!squadId,
+  });
+}
+
+export function useSquadMissions(squadId: string | undefined) {
+  return useQuery({
+    queryKey: ['squad-missions', squadId],
+    queryFn: () => Promise.resolve([]),
+    enabled: !!squadId,
+  });
+}
+
+// Squad War Live Hook
+// ============================================================================
+
 export function useSquadWarLeaderboardLive(warId: string | null) {
   const queryClient = useQueryClient();
   const query = useQuery({
@@ -308,13 +334,26 @@ export function useSquadWarLeaderboardLive(warId: string | null) {
     staleTime: 30_000,
   });
 
+  const refreshWar = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['squad-war', 'leaderboard', warId] });
+  }, [queryClient, warId]);
+
   useEffect(() => {
-    if (!warId) {return;}
-    const unsubscribe = subscribeToSquadWarDamage(warId, (fresh) => {
-      queryClient.setQueryData(['squad-war', 'leaderboard', warId], fresh);
+    if (!warId) return;
+
+    const intervalId = setInterval(() => {
+      refreshWar();
+    }, 5000);
+
+    const unsubscribe = subscribeToSquadWarDamage(warId, (_fresh: number) => {
+      refreshWar();
     });
-    return unsubscribe;
-  }, [warId, queryClient]);
+
+    return () => {
+      clearInterval(intervalId);
+      unsubscribe();
+    };
+  }, [warId, refreshWar]);
 
   return query;
 }

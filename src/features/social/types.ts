@@ -54,6 +54,8 @@ export interface FriendActivity {
 // Activity Feed
 // ============================================================================
 
+export type SocialPost = ActivityFeedItem;
+
 export interface ActivityFeedItem {
   id: string;
   userId: string;

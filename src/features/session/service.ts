@@ -121,8 +121,8 @@ export function getModeCoachConfig(mode: SessionMode): {
   const config = ACTIVE_SESSION_CONFIG[mode] ?? ACTIVE_SESSION_CONFIG[SessionMode.FLOW];
 
   return {
-    enabled: config.coachEnabled,
-    cooldownSeconds: config.coachCooldownSeconds,
+    enabled: config?.coachEnabled ?? true,
+    cooldownSeconds: config?.coachCooldownSeconds ?? 300,
     globalCooldownRemaining: 0,
   };
 }

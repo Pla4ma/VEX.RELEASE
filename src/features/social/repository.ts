@@ -226,6 +226,112 @@ export async function getMessages(
   }));
 }
 
+export async function getPost(postId: string): Promise<ActivityFeedItem | null> {
+  const { data, error } = await supabase
+    .from('activity_feed')
+    .select('*')
+    .eq('id', postId)
+    .single();
+
+  if (error || !data) return null;
+
+  return {
+    id: data.id,
+    userId: data.user_id,
+    actorId: data.actor_id,
+    actorName: data.actor_name,
+    actorAvatar: data.actor_avatar,
+    type: data.type,
+    action: data.action,
+    timestamp: new Date(data.timestamp).getTime(),
+    visibility: data.visibility,
+    metadata: data.metadata,
+    likes: data.likes || 0,
+    comments: data.comments || 0,
+  };
+}
+
+export async function getReactionCounts(postId: string): Promise<Record<string, number>> {
+  const { data, error } = await supabase
+    .from('feed_reactions')
+    .select('reaction_type')
+    .eq('feed_item_id', postId);
+
+  if (error || !data) return {};
+
+  const counts: Record<string, number> = {};
+  data.forEach((row) => {
+    counts[row.reaction_type] = (counts[row.reaction_type] || 0) + 1;
+  });
+
+  return counts;
+}
+
+export async function getSquadFeed(squadId: string, limit: number = 20): Promise<ActivityFeedItem[]> {
+  const { data, error } = await supabase
+    .from('activity_feed')
+    .select('*')
+    .eq('squad_id', squadId)
+    .order('timestamp', { ascending: false })
+    .limit(limit);
+
+  if (error || !data) return [];
+
+  return data.map((row) => ({
+    id: row.id,
+    userId: row.user_id,
+    actorId: row.actor_id,
+    actorName: row.actor_name,
+    actorAvatar: row.actor_avatar,
+    type: row.type,
+    action: row.action,
+    timestamp: new Date(row.timestamp).getTime(),
+    visibility: row.visibility,
+    metadata: row.metadata,
+    likes: row.likes || 0,
+    comments: row.comments || 0,
+  }));
+}
+
+export async function reactToPost(
+  postId: string,
+  userId: string,
+  reaction: 'fire' | 'strong' | 'clap' | 'mind_blown'
+): Promise<void> {
+  await supabase.from('feed_reactions').upsert({
+    feed_item_id: postId,
+    user_id: userId,
+    reaction_type: reaction,
+    created_at: new Date().toISOString(),
+  });
+}
+
+export async function getFeed(userId: string, limit: number = 20): Promise<ActivityFeedItem[]> {
+  const { data, error } = await supabase
+    .from('activity_feed')
+    .select('*')
+    .eq('user_id', userId)
+    .order('timestamp', { ascending: false })
+    .limit(limit);
+
+  if (error || !data) return [];
+
+  return data.map((row) => ({
+    id: row.id,
+    userId: row.user_id,
+    actorId: row.actor_id,
+    actorName: row.actor_name,
+    actorAvatar: row.actor_avatar,
+    type: row.type,
+    action: row.action,
+    timestamp: new Date(row.timestamp).getTime(),
+    visibility: row.visibility,
+    metadata: row.metadata,
+    likes: row.likes || 0,
+    comments: row.comments || 0,
+  }));
+}
+
 export async function saveConversation(conversation: Conversation): Promise<void> {
   await supabase.from('conversations').insert({
     id: conversation.id,

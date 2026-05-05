@@ -180,10 +180,10 @@ export function SquadWarHUD({ squadId }: SquadWarHUDProps) {
         setIsRealtimeDegraded(false);
         setIsLoading(false);
       },
-      (subscriptionError) => {
-        if (!isMounted) {return;}
+      (error: Error) => {
+        if (!isMounted) return;
         setIsRealtimeDegraded(true);
-        SquadAnalytics.squadWarRealtimeDegraded(squadId, subscriptionError.message);
+        SquadAnalytics.squadWarRealtimeDegraded(squadId, error.message);
       }
     );
 

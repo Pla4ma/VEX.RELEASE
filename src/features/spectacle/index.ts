@@ -1,5 +1,6 @@
 import { captureSilentFailure } from '../../utils/silent-failure';
 import {
+  LootRarity,
   SpectacleType,
   type SpectacleEvent,
   type SpectacleListener,

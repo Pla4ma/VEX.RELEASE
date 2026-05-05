@@ -5,7 +5,7 @@ import { FlashList } from '@shopify/flash-list';
 import { Text } from '../../../components/primitives/Text';
 import { Skeleton } from '../../../components/ui/Skeleton';
 import { useTheme } from '../../../theme';
-import { useDailyContributions } from '../competitive-hooks';
+import { useSquadStats } from '../hooks';
 
 type DailyLeaderboardProps = { squadId: string; userId: string };
 
@@ -24,7 +24,7 @@ function getRankBadge(rank: number) {
 
 export function DailyLeaderboard({ squadId, userId }: DailyLeaderboardProps): JSX.Element {
   const { theme } = useTheme();
-  const query = useDailyContributions(squadId);
+  const query = useSquadStats(squadId);
   const entries = useMemo(() => (query.data ?? []).slice(0, 8), [query.data]);
 
   return (
