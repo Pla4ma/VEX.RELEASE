@@ -36,7 +36,7 @@ describe('capitalize', () => {
     expect(capitalize('a')).toBe('A');
   });
 
-  it('does not change the rest of the string', () => {
+  it('does not lowercase the rest of the string', () => {
     expect(capitalize('hELLO')).toBe('HELLO');
   });
 });

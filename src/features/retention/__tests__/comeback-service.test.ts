@@ -235,11 +235,14 @@ describe('calculateReEngagementProbability', () => {
   });
 });
 
+let _userIdCounter = 0;
+const uniqueUserId = (prefix: string) => `${prefix}-${++_userIdCounter}`;
+
 describe('saveComebackQuest / getActiveComebackQuest', () => {
-  const userId = 'comeback-user-' + Date.now();
+  const userId = uniqueUserId('comeback-user');
 
   it('returns null when no quest saved', async () => {
-    const result = await getActiveComebackQuest('no-such-user-' + Date.now());
+    const result = await getActiveComebackQuest(uniqueUserId('no-such-user'));
     expect(result).toBeNull();
   });
 
@@ -252,7 +255,7 @@ describe('saveComebackQuest / getActiveComebackQuest', () => {
   });
 
   it('marks quest as expired when expiresAt is in the past', async () => {
-    const userId2 = 'expired-quest-user-' + Date.now();
+    const userId2 = uniqueUserId('expired-quest-user');
     const quest: ComebackQuest = {
       ...generateComebackQuest(userId2, BASE_CONTEXT),
       expiresAt: Date.now() - 1000, // already expired
@@ -265,7 +268,7 @@ describe('saveComebackQuest / getActiveComebackQuest', () => {
 
 describe('completeComebackQuest', () => {
   it('completes an active quest', async () => {
-    const userId = 'complete-user-' + Date.now();
+    const userId = uniqueUserId('complete-user');
     const quest = generateComebackQuest(userId, BASE_CONTEXT);
     await saveComebackQuest(quest);
 
@@ -275,7 +278,7 @@ describe('completeComebackQuest', () => {
   });
 
   it('returns null when quest id does not match', async () => {
-    const userId = 'no-match-user-' + Date.now();
+    const userId = uniqueUserId('no-match-user');
     const quest = generateComebackQuest(userId, BASE_CONTEXT);
     await saveComebackQuest(quest);
 
@@ -284,7 +287,7 @@ describe('completeComebackQuest', () => {
   });
 
   it('returns null when no quest exists for user', async () => {
-    const result = await completeComebackQuest('ghost-user', 'any-id');
+    const result = await completeComebackQuest(uniqueUserId('ghost-user'), 'any-id');
     expect(result).toBeNull();
   });
 });

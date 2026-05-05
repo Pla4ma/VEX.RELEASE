@@ -165,6 +165,41 @@ describe('updateAchievementProgress', () => {
     expect(updateData?.progress).toBe(9);
     expect(updateData?.isUnlocked).toBe(false);
   });
+
+  it('unlocks a CUMULATIVE achievement when threshold is exactly reached', async () => {
+    // 'session-10' requires cumulative SESSION_COMPLETE >= 10, starting at progress 9
+    const currentProgress = mockUserAchievement({
+      achievementId: 'session-10',
+      progress: 9,
+      isUnlocked: false,
+    });
+    mockedRepository.getUserAchievement.mockImplementation(
+      async (_userId, achievementId) => {
+        if (achievementId === 'session-10') return currentProgress as any;
+        return null;
+      }
+    );
+    mockedRepository.updateAchievementProgress.mockImplementation(
+      async (_userId, achievementId, data) => ({
+        ...mockUserAchievement({ achievementId }),
+        ...data,
+      } as any)
+    );
+
+    await service.updateAchievementProgress('user-1', 'SESSION_COMPLETE', 1);
+
+    const call = (mockedRepository.updateAchievementProgress as jest.Mock).mock.calls.find(
+      ([, id]) => id === 'session-10'
+    );
+    const updateData = call?.[2] as { progress: number; isUnlocked: boolean } | undefined;
+    expect(updateData?.progress).toBe(10);
+    expect(updateData?.isUnlocked).toBe(true);
+
+    expect(mockedEventBus.publish).toHaveBeenCalledWith(
+      'achievement:unlocked',
+      expect.objectContaining({ userId: 'user-1', achievementId: 'session-10' })
+    );
+  });
 });
 
 describe('getAllAchievementsWithProgress', () => {

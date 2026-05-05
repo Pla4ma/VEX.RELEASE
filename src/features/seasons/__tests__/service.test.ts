@@ -163,6 +163,12 @@ describe('addSeasonXP', () => {
     expect(result.newTier).toBe(1);
     expect(result.tiersGained).toBe(1);
     expect(result.totalSeasonXp).toBe(100);
+
+    expect(mockedRepository.updateUserSeasonProgress).toHaveBeenCalledWith(
+      'user-1',
+      'season-1',
+      expect.objectContaining({ currentTier: 1, totalSeasonXp: 100 })
+    );
   });
 
   it('emits tier_unlocked events for each tier gained', async () => {
