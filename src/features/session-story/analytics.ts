@@ -1,6 +1,6 @@
 /**
  * Session Story Feature Analytics
- * 
+ *
  * Comprehensive analytics tracking for narrative generation, storytelling, and session chronicles features.
  */
 
@@ -610,7 +610,7 @@ export function trackWorldStateChanged(
     change,
     causes,
     effects,
-    player_impact,
+    playerImpact,
   });
 }
 

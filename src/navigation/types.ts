@@ -224,7 +224,7 @@ export interface MainStackParams {
   Mastery: undefined;
   Vault: undefined;
   Leaderboard: { period?: 'DAILY' | 'WEEKLY' | 'MONTHLY'; scope?: 'GLOBAL' | 'FRIENDS' } | undefined;
-  PostSessionStory: { sessionId: string; summary: unknown };
+  PostSessionStory: { sessionId: string; focusScore: number; purityScore: number };
 }
 
 /**

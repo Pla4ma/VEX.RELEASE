@@ -255,7 +255,7 @@ export class SessionCombatAdapter {
    * Check if boss was defeated
    */
   isBossDefeated(): boolean {
-    if (!this.encounter) return false;
+    if (!this.encounter) {return false;}
     return this.encounter.currentHealth <= 0;
   }
 
@@ -263,7 +263,7 @@ export class SessionCombatAdapter {
    * Get current health percentage
    */
   getHealthPercent(): number {
-    if (!this.encounter) return 100;
+    if (!this.encounter) {return 100;}
     return (this.encounter.currentHealth / this.encounter.maxHealth) * 100;
   }
 
@@ -340,7 +340,7 @@ export class SessionCombatAdapter {
    */
   private handleBossDefeat(): void {
     const rewards = this.getFinalRewards();
-    if (!rewards) return;
+    if (!rewards) {return;}
 
     // Emit defeat event with rewards
     eventBus.publish('session:boss_defeated', {

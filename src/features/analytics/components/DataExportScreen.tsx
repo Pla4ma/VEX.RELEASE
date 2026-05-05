@@ -1,7 +1,7 @@
 import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pressable,Switch,Alert,Modal}from'react-native'; import{useExportAnalytics,useExportJobs}from'../hooks'; import{ExportProgress}from'./ExportProgress'; import{ErrorBoundary}from'../../../errors/ErrorBoundary'; import{SkeletonList}from'../../../shared/ui/primitives/Skeleton'; import{useFadeIn}from'../../../shared/ui/hooks/useReanimated'; import{createSheet}from'@/shared/ui/create-sheet'; interface DataExportScreenProps{userId:string;onClose?:()=>void}type ExportFormat='json'|'csv';type DataCategory='sessions'|'analytics'|'achievements'|'settings'|'all';const CATEGORIES:Array<{key:DataCategory;label:string;icon:string;description:string}> = [{key:'all',label:'Everything',icon:'\uD83D\uDCE6',description:'All your data in one export'},{key:'sessions',label:'Sessions',icon:'\uD83D\uDCC5',description:'Session history and stats'},{key:'analytics',label:'Analytics',icon:'\uD83D\uDCCA',description:'Charts, trends, and insights'},{key:'achievements',label:'Achievements',icon:'\uD83C\uDFC6',description:'Badges and milestones'},{key:'settings',label:'Settings',icon:'\u2699\uFE0F',description:'Preferences and configuration'}]; const FORMATS:Array<{key:ExportFormat;label:string;icon:string;description:string}> = [{key:'json',label:'JSON',icon:'\uD83D\uDCC4',description:'Machine-readable, great for backups'},{key:'csv',label:'CSV',icon:'\uD83D\uDCD1',description:'Spreadsheet format, easy to analyze'}]; export function DataExportScreen({userId,onClose}:DataExportScreenProps){const[selectedCategory,setSelectedCategory] = useState<DataCategory>('all'); const[selectedFormat,setSelectedFormat] = useState<ExportFormat>('json'); const[includeMetadata,setIncludeMetadata] = useState(true); const[showConfirmModal,setShowConfirmModal] = useState(false); const fadeStyle = useFadeIn(300); const{data:exportJobs,isLoading:jobsLoading} = useExportJobs(userId); const exportMutation = useExportAnalytics(userId); const handleExport = useCallback(()=>{setShowConfirmModal(true);},[]); const confirmExport = useCallback(async()=>{setShowConfirmModal(false); try{await exportMutation.mutateAsync({format:selectedFormat,dataTypes:[selectedCategory],dateRange:{start:Date.now() - 30 * 24 * 60 * 60 * 1000,end:Date.now()}}); Alert.alert('Export Started',"Your data export has been queued. You'll be notified when it's ready.",[{text:'OK'}]);}catch(error){Alert.alert('Export Failed','Unable to start export. Please try again.',[{text:'OK'}]);}},[exportMutation,selectedFormat,selectedCategory,includeMetadata]); const handleDownload = useCallback((jobId:string)=>{Alert.alert('Download',`Downloading export ${jobId}...`);},[]); const handleDeleteExport = useCallback((jobId:string)=>{Alert.alert('Delete Export','Are you sure you want to delete this export? This cannot be undone.',[{text:'Cancel',style:'cancel'},{text:'Delete',style:'destructive',onPress:()=>{Alert.alert('Deleted','Export has been deleted.');}}]);},[]); return<View style={styles.container}>
       {}
       <View style={styles.header}>
-        <Pressable onPress={onClose}style={({pressed})=>[styles.closeButton,pressed&&{opacity:0.8}]}
+        <Pressable onPress={onClose}style={({pressed})=>[styles.closeButton,pressed && {opacity:0.8}]}
   accessibilityLabel="Close button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -26,7 +26,7 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>What to Export</Text>
             <View style={styles.optionsGrid}>
-              {CATEGORIES.map(category=><Pressable key={category.key}style={({pressed})=>[styles.optionCard,selectedCategory === category.key && styles.optionCardSelected,pressed&&{opacity:0.8}]}onPress={()=>setSelectedCategory(category.key)}
+              {CATEGORIES.map(category=><Pressable key={category.key}style={({pressed})=>[styles.optionCard,selectedCategory === category.key && styles.optionCardSelected,pressed && {opacity:0.8}]}onPress={()=>setSelectedCategory(category.key)}
   accessibilityLabel={`${category.label} category button`}
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -46,7 +46,7 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Export Format</Text>
             <View style={styles.formatRow}>
-              {FORMATS.map(format=><Pressable key={format.key}style={({pressed})=>[styles.formatCard,selectedFormat === format.key && styles.formatCardSelected,pressed&&{opacity:0.8}]}onPress={()=>setSelectedFormat(format.key)}
+              {FORMATS.map(format=><Pressable key={format.key}style={({pressed})=>[styles.formatCard,selectedFormat === format.key && styles.formatCardSelected,pressed && {opacity:0.8}]}onPress={()=>setSelectedFormat(format.key)}
   accessibilityLabel={`${format.label} format button`}
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -93,7 +93,7 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
           </View>
 
           {}
-          <Pressable style={({pressed})=>[styles.exportButton,pressed&&{opacity:0.8}]}onPress={handleExport}disabled={exportMutation.isPending}
+          <Pressable style={({pressed})=>[styles.exportButton,pressed && {opacity:0.8}]}onPress={handleExport}disabled={exportMutation.isPending}
   accessibilityLabel="Start Export button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -117,7 +117,7 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
               These actions cannot be undone. Please be certain.
             </Text>
 
-            <Pressable style={({pressed})=>[styles.dangerButton,pressed&&{opacity:0.8}]}onPress={()=>{Alert.alert('Delete All Data?','This will permanently delete all your data including sessions, achievements, and progress. This action cannot be undone.',[{text:'Cancel',style:'cancel'},{text:'Delete My Data',style:'destructive',onPress:()=>{Alert.alert('Final Confirmation','Are you absolutely sure? Type "DELETE" to confirm.',[{text:'Cancel',style:'cancel'},{text:'Delete Forever',style:'destructive'}]);}}]);}}
+            <Pressable style={({pressed})=>[styles.dangerButton,pressed && {opacity:0.8}]}onPress={()=>{Alert.alert('Delete All Data?','This will permanently delete all your data including sessions, achievements, and progress. This action cannot be undone.',[{text:'Cancel',style:'cancel'},{text:'Delete My Data',style:'destructive',onPress:()=>{Alert.alert('Final Confirmation','Are you absolutely sure? Type "DELETE" to confirm.',[{text:'Cancel',style:'cancel'},{text:'Delete Forever',style:'destructive'}]);}}]);}}
   accessibilityLabel="Delete All My Data button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -137,13 +137,13 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
               as a {selectedFormat.toUpperCase()} file. This may take a few minutes.
             </Text>
             <View style={styles.modalButtons}>
-              <Pressable style={({pressed})=>[styles.modalButtonSecondary,pressed&&{opacity:0.8}]}onPress={()=>setShowConfirmModal(false)}
+              <Pressable style={({pressed})=>[styles.modalButtonSecondary,pressed && {opacity:0.8}]}onPress={()=>setShowConfirmModal(false)}
   accessibilityLabel="Cancel button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
                 <Text style={styles.modalButtonSecondaryText}>Cancel</Text>
               </Pressable>
-              <Pressable style={({pressed})=>[styles.modalButtonPrimary,pressed&&{opacity:0.8}]}onPress={confirmExport}
+              <Pressable style={({pressed})=>[styles.modalButtonPrimary,pressed && {opacity:0.8}]}onPress={confirmExport}
   accessibilityLabel="Confirm Export button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">

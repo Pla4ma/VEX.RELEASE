@@ -59,7 +59,7 @@ export const PostSessionStoryScreen: React.FC<PostSessionStoryScreenProps> = ({
   }, []);
 
   const triggerHaptic = useCallback((pattern: StoryBeat['hapticPattern']) => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     switch (pattern) {
       case 'LIGHT': haptics.impact('light'); break;
       case 'MEDIUM': haptics.impact('medium'); break;
@@ -70,15 +70,15 @@ export const PostSessionStoryScreen: React.FC<PostSessionStoryScreenProps> = ({
   }, [isReducedMotion]);
 
   useEffect(() => {
-    if (phase !== 'beats' || currentBeatIndex < 0) return;
+    if (phase !== 'beats' || currentBeatIndex < 0) {return;}
     if (currentBeatIndex >= story.totalBeats) {
       setPhase('outro');
       return;
     }
     const beat = story.beats[currentBeatIndex];
-    if (beat.hapticPattern !== 'NONE') triggerHaptic(beat.hapticPattern);
+    if (beat.hapticPattern !== 'NONE') {triggerHaptic(beat.hapticPattern);}
     setViewedBeats(prev => new Set([...prev, currentBeatIndex]));
-    if (!autoAdvance) return;
+    if (!autoAdvance) {return;}
     const timer = setTimeout(() => setCurrentBeatIndex(prev => prev + 1), beat.durationMs);
     return () => clearTimeout(timer);
   }, [currentBeatIndex, phase, autoAdvance, story, triggerHaptic]);
@@ -92,8 +92,8 @@ export const PostSessionStoryScreen: React.FC<PostSessionStoryScreenProps> = ({
   }, [phase]);
 
   const handleNext = useCallback(() => {
-    if (phase === 'beats') setCurrentBeatIndex(prev => prev + 1);
-    else onComplete();
+    if (phase === 'beats') {setCurrentBeatIndex(prev => prev + 1);}
+    else {onComplete();}
   }, [phase, onComplete]);
 
   const handleSkip = useCallback(() => onSkip(), [onSkip]);

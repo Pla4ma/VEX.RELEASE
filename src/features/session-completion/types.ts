@@ -1,6 +1,6 @@
 /**
  * Session Completion Feature Types
- * 
+ *
  * Types for session completion tracking, rewards, and post-session experiences.
  */
 
@@ -22,7 +22,7 @@ export interface SessionCompletion {
   analytics: CompletionAnalytics;
 }
 
-export type CompletionType = 
+export type CompletionType =
   | 'success'
   | 'failure'
   | 'timeout'
@@ -30,7 +30,7 @@ export type CompletionType =
   | 'emergency'
   | 'interruption';
 
-export type CompletionStatus = 
+export type CompletionStatus =
   | 'processing'
   | 'completed'
   | 'failed'
@@ -64,7 +64,7 @@ export interface CategoryPerformance {
   details: CategoryDetails;
 }
 
-export type PerformanceCategory = 
+export type PerformanceCategory =
   | 'accuracy'
   | 'speed'
   | 'efficiency'
@@ -105,7 +105,7 @@ export interface PerformanceComparison {
   interpretation: string;
 }
 
-export type ComparisonType = 
+export type ComparisonType =
   | 'personal_best'
   | 'personal_average'
   | 'peer_average'
@@ -113,7 +113,7 @@ export type ComparisonType =
   | 'goal_target'
   | 'milestone';
 
-export type ComparisonTarget = 
+export type ComparisonTarget =
   | 'self'
   | 'peers'
   | 'global'
@@ -130,7 +130,7 @@ export interface PerformanceHighlight {
   shareable: boolean;
 }
 
-export type HighlightType = 
+export type HighlightType =
   | 'personal_best'
   | 'milestone_achieved'
   | 'streak_extended'
@@ -176,7 +176,7 @@ export interface CompletionReward {
   metadata: RewardMetadata;
 }
 
-export type RewardType = 
+export type RewardType =
   | 'experience_points'
   | 'currency'
   | 'skill_points'
@@ -188,7 +188,7 @@ export type RewardType =
   | 'boost'
   | 'consumable';
 
-export type RewardSource = 
+export type RewardSource =
   | 'completion'
   | 'performance'
   | 'milestone'
@@ -257,7 +257,7 @@ export interface ProgressUpdate {
   context: string;
 }
 
-export type ProgressType = 
+export type ProgressType =
   | 'skill_level'
   | 'experience'
   | 'streak'
@@ -352,7 +352,7 @@ export interface Emotion {
   duration: number; // in seconds
 }
 
-export type EmotionType = 
+export type EmotionType =
   | 'joy'
   | 'excitement'
   | 'pride'
@@ -388,7 +388,7 @@ export interface ShareableContent {
   customizations: ShareableCustomization[];
 }
 
-export type ShareableType = 
+export type ShareableType =
   | 'achievement'
   | 'performance'
   | 'milestone'
@@ -409,7 +409,7 @@ export interface ShareableData {
   highlights: string[];
 }
 
-export type SocialPlatform = 
+export type SocialPlatform =
   | 'twitter'
   | 'facebook'
   | 'instagram'
@@ -429,7 +429,7 @@ export interface ShareableTemplate {
   branding: TemplateBranding;
 }
 
-export type TemplateLayout = 
+export type TemplateLayout =
   | 'centered'
   | 'left_aligned'
   | 'right_aligned'
@@ -545,7 +545,7 @@ export interface CompletionInsight {
   evidence: EvidenceData[];
 }
 
-export type InsightType = 
+export type InsightType =
   | 'strength'
   | 'weakness'
   | 'opportunity'
@@ -571,7 +571,7 @@ export interface CompletionPrediction {
   actions: PredictionAction[];
 }
 
-export type PredictionType = 
+export type PredictionType =
   | 'next_session_score'
   | 'churn_probability'
   | 'achievement_timeline'
@@ -605,7 +605,7 @@ export interface CompletionBenchmark {
   comparison: BenchmarkComparison;
 }
 
-export type BenchmarkType = 
+export type BenchmarkType =
   | 'personal_best'
   | 'peer_average'
   | 'global_average'

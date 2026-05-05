@@ -65,7 +65,7 @@ export async function createRepairQuest(
 
   const now = Date.now();
   const targetRestoreDays = Math.floor(previousStreak * REPAIR_QUEST_CONFIG.restoredStreakPercentage);
-  
+
   const quest: StreakRepairQuest = {
     id: crypto.randomUUID(),
     userId,
@@ -117,7 +117,7 @@ export async function recordRepairQuestSession(
   restoredToDays: number;
 }> {
   const quest = await repository.fetchActiveRepairQuest(userId);
-  
+
   if (!quest || quest.status !== 'ACTIVE') {
     return {
       questUpdated: false,
@@ -141,7 +141,7 @@ export async function recordRepairQuestSession(
   // Validate session quality (must be good enough)
   const minDuration = 10 * 60; // 10 minutes
   const minQuality = 60; // Slightly higher than normal
-  
+
   if (sessionDuration < minDuration || qualityScore < minQuality) {
     // Session doesn't count toward repair
     return {
@@ -165,7 +165,7 @@ export async function recordRepairQuestSession(
   // Update quest progress
   const updatedSessions = [...quest.sessionIds, sessionId];
   const sessionsCompleted = updatedSessions.length;
-  
+
   await repository.updateRepairQuest(userId, quest.id, {
     sessionsCompleted,
     sessionIds: updatedSessions,
@@ -260,10 +260,10 @@ export async function getRepairQuestStatus(userId: string): Promise<RepairQuestS
 
   if (!quest) {
     // Check if user just broke a streak and can start a quest
-    const canStart = streak !== null && 
-                     streak.currentDays === 0 && 
+    const canStart = streak !== null &&
+                     streak.currentDays === 0 &&
                      streak.longestDays >= REPAIR_QUEST_CONFIG.minPreviousStreak;
-    
+
     return {
       hasActiveQuest: false,
       quest: null,
@@ -271,7 +271,7 @@ export async function getRepairQuestStatus(userId: string): Promise<RepairQuestS
       hoursRemaining: 0,
       canStartQuest: canStart,
       previousStreak: streak?.longestDays || 0,
-      potentialRestoreDays: canStart 
+      potentialRestoreDays: canStart
         ? Math.floor((streak?.longestDays || 0) * REPAIR_QUEST_CONFIG.restoredStreakPercentage)
         : 0,
     };

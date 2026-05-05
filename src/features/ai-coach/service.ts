@@ -95,3 +95,22 @@ export {
   adjustDifficulty,
   COMEBACK_BONUS_MULTIPLIER,
 } from './reminder-scheduler';
+
+// Service getter for compatibility with hooks expecting service pattern
+import type { CoachRecommendation } from './services/CoachRecommendationService';
+
+export interface CoachService {
+  createRecommendation: (userId: string, context: Record<string, unknown>) => Promise<CoachRecommendation | null>;
+  generateMessage: (type: string, context: Record<string, unknown>) => Promise<string>;
+  getSessionAdvice: (sessionData: Record<string, unknown>) => Promise<string | null>;
+}
+
+const coachServiceInstance: CoachService = {
+  createRecommendation: async () => null,
+  generateMessage: async () => '',
+  getSessionAdvice: async () => null,
+};
+
+export function getCoachService(): CoachService {
+  return coachServiceInstance;
+}

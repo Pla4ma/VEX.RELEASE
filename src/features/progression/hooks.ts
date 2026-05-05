@@ -121,14 +121,14 @@ export function useAddXp() {
 export function usePrestige() {
   const queryClient = useQueryClient();
 
-  return useMutation<LevelState, Error, PrestigeInput>({
+  return useMutation<void, Error, PrestigeInput>({
     mutationFn: async (input) => {
       const validated = PrestigeInputSchema.parse(input);
       const progressionService = getProgressionService(validated.userId);
       if (!progressionService.canPrestige()) {
         throw new Error('Prestige is not available');
       }
-      return progressionService.prestige();
+      await progressionService.prestige();
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({

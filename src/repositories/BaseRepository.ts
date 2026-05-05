@@ -1,6 +1,6 @@
 /**
  * Base Repository
- * 
+ *
  * Abstract base class for all repositories providing common CRUD operations,
  * error handling, caching, and data access patterns.
  */
@@ -85,7 +85,7 @@ export abstract class BaseRepository<T> {
 
       // Fetch from database
       const data = await this.findInDatabase(id, queryOptions);
-      
+
       // Cache the result
       if (this.options.useCache && data) {
         await this.cacheManager.set(cacheKey, data, this.options.cacheTTL);
@@ -101,7 +101,7 @@ export abstract class BaseRepository<T> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('findById', 'error', { id, error: error.message, executionTime });
-      
+
       return {
         error: error as Error,
         metadata: { executionTime },
@@ -131,7 +131,7 @@ export abstract class BaseRepository<T> {
 
       // Fetch from database
       const result = await this.findManyInDatabase(queryOptions);
-      
+
       // Cache the result
       if (this.options.useCache && result.data) {
         await this.cacheManager.set(cacheKey, result.data, this.options.cacheTTL);
@@ -152,7 +152,7 @@ export abstract class BaseRepository<T> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('findMany', 'error', { error: error.message, executionTime });
-      
+
       return {
         error: error as Error,
         metadata: { executionTime },
@@ -172,7 +172,7 @@ export abstract class BaseRepository<T> {
 
       // Create in database
       const data = await this.createInDatabase(entity);
-      
+
       // Clear relevant cache
       if (this.options.useCache) {
         await this.clearCachePattern('findMany');
@@ -188,7 +188,7 @@ export abstract class BaseRepository<T> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('create', 'error', { error: error.message, executionTime });
-      
+
       return {
         error: error as Error,
         metadata: { executionTime },
@@ -208,7 +208,7 @@ export abstract class BaseRepository<T> {
 
       // Update in database
       const data = await this.updateInDatabase(id, updates);
-      
+
       // Clear cache
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', id));
@@ -225,7 +225,7 @@ export abstract class BaseRepository<T> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('update', 'error', { id, error: error.message, executionTime });
-      
+
       return {
         error: error as Error,
         metadata: { executionTime },
@@ -242,7 +242,7 @@ export abstract class BaseRepository<T> {
     try {
       // Delete from database
       const success = await this.deleteInDatabase(id);
-      
+
       // Clear cache
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', id));
@@ -259,7 +259,7 @@ export abstract class BaseRepository<T> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('delete', 'error', { id, error: error.message, executionTime });
-      
+
       return {
         error: error as Error,
         metadata: { executionTime },
@@ -289,7 +289,7 @@ export abstract class BaseRepository<T> {
 
       // Count in database
       const count = await this.countInDatabase(filters);
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, count, this.options.cacheTTL);
@@ -305,7 +305,7 @@ export abstract class BaseRepository<T> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('count', 'error', { error: error.message, executionTime });
-      
+
       return {
         error: error as Error,
         metadata: { executionTime },
@@ -335,7 +335,7 @@ export abstract class BaseRepository<T> {
 
       // Check in database
       const exists = await this.existsInDatabase(id);
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, exists, this.options.cacheTTL);
@@ -351,7 +351,7 @@ export abstract class BaseRepository<T> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('exists', 'error', { id, error: error.message, executionTime });
-      
+
       return {
         error: error as Error,
         metadata: { executionTime },
@@ -367,7 +367,7 @@ export abstract class BaseRepository<T> {
 
     try {
       const result = await this.dbConnection.query(query, params);
-      
+
       const executionTime = Date.now() - startTime;
       this.logOperation('executeQuery', 'success', { query, executionTime });
 
@@ -378,7 +378,7 @@ export abstract class BaseRepository<T> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('executeQuery', 'error', { query, error: error.message, executionTime });
-      
+
       return {
         error: error as Error,
         metadata: { executionTime },
@@ -406,7 +406,7 @@ export abstract class BaseRepository<T> {
     if (!this.cacheManager.clearPattern) {
       return;
     }
-    
+
     try {
       await this.cacheManager.clearPattern(`${this.constructor.name}:${pattern}:*`);
     } catch (error) {
@@ -452,12 +452,12 @@ export abstract class BaseRepository<T> {
         return await operation();
       } catch (error) {
         lastError = error as Error;
-        
+
         if (attempt === this.options.retryAttempts) {
-          this.logOperation(operationName, 'error', { 
-            error: lastError.message, 
+          this.logOperation(operationName, 'error', {
+            error: lastError.message,
             attempts: attempt,
-            finalAttempt: true 
+            finalAttempt: true,
           });
           throw lastError;
         }
@@ -465,11 +465,11 @@ export abstract class BaseRepository<T> {
         // Wait before retry (exponential backoff)
         const delay = Math.min(1000 * Math.pow(2, attempt - 1), 10000);
         await new Promise(resolve => setTimeout(resolve, delay));
-        
-        this.logOperation(operationName, 'retry', { 
-          error: lastError.message, 
+
+        this.logOperation(operationName, 'retry', {
+          error: lastError.message,
           attempt,
-          delay 
+          delay,
         });
       }
     }
@@ -483,7 +483,7 @@ export abstract class BaseRepository<T> {
   ): Promise<R> {
     return Promise.race([
       operation(),
-      new Promise<never>((_, reject) => 
+      new Promise<never>((_, reject) =>
         setTimeout(() => reject(new Error('Operation timeout')), timeoutMs)
       ),
     ]);
@@ -512,7 +512,7 @@ export abstract class BaseRepository<T> {
     try {
       // Test database connection
       await this.dbConnection.ping();
-      
+
       // Test cache connection
       if (this.options.useCache) {
         await this.cacheManager.ping();
@@ -528,7 +528,7 @@ export abstract class BaseRepository<T> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('healthCheck', 'error', { error: error.message, executionTime });
-      
+
       return {
         error: error as Error,
         metadata: { executionTime },

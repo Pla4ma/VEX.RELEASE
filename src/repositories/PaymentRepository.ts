@@ -1,6 +1,6 @@
 /**
  * Payment Repository
- * 
+ *
  * Repository for payment data management including payment processing,
  * transaction handling, refunds, and payment method management.
  */
@@ -728,7 +728,7 @@ export class PaymentRepository extends BaseRepository<Payment> {
   protected async findInDatabase(id: string, _options?: any): Promise<Payment | null> {
     const query = 'SELECT * FROM payments WHERE id = $1';
     const result = await this.dbConnection.query(query, [id]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -793,7 +793,7 @@ export class PaymentRepository extends BaseRepository<Payment> {
 
   protected async createInDatabase(entity: Partial<Payment>): Promise<Payment> {
     const paymentData = entity as PaymentCreateData;
-    
+
     const query = `
       INSERT INTO payments (
         order_id, customer_id, amount, currency, status, payment_method,
@@ -820,7 +820,7 @@ export class PaymentRepository extends BaseRepository<Payment> {
 
   protected async updateInDatabase(id: string, updates: Partial<Payment>): Promise<Payment | null> {
     const updateData = updates as PaymentUpdateData;
-    
+
     const setClause: string[] = [];
     const params: any[] = [];
     let paramIndex = 1;
@@ -854,7 +854,7 @@ export class PaymentRepository extends BaseRepository<Payment> {
       return this.findById(id);
     }
 
-    setClause.push(`updated_at = CURRENT_TIMESTAMP`);
+    setClause.push('updated_at = CURRENT_TIMESTAMP');
     params.push(id);
 
     const query = `
@@ -865,7 +865,7 @@ export class PaymentRepository extends BaseRepository<Payment> {
     `;
 
     const result = await this.dbConnection.query(query, params);
-    
+
     if (result.rows.length === 0) {
       return null;
     }

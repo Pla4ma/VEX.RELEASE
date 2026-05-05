@@ -11,7 +11,7 @@ import {
 import { fetchActiveEncounter, fetchBossTemplate } from '../boss/repository';
 import { fetchStreak } from '../streaks/repository';
 import { fetchActiveChallengeDetails } from '../challenges/repository';
-import { getCurrentRival, fetchRivalBaselineStats } from '../rivals/repository';
+// import { getCurrentRival, fetchRivalBaselineStats } from '../rivals/repository';
 import { fetchWallet } from '../economy/repository';
 
 /*
@@ -250,13 +250,11 @@ export async function buildSessionStake(
     bossEncounter,
     streak,
     challenges,
-    rival,
     wallet,
   ] = await Promise.all([
     fetchActiveEncounter(userId).catch(() => null),
     fetchStreak(userId).catch(() => null),
     fetchActiveChallengeDetails(userId).catch(() => []),
-    getCurrentRival(userId, Date.now()).catch(() => null),
     fetchWallet(userId).catch(() => null),
   ]);
 
@@ -270,20 +268,7 @@ export async function buildSessionStake(
     ? await fetchBossTemplate(bossEncounter.bossId).catch(() => null)
     : null;
 
-  // Get rival baseline stats for gap calculation
-  let userGapMinutes = 0;
-  let willOvertake = false;
-  if (rival) {
-    const baseline = await fetchRivalBaselineStats(userId).catch(() => null);
-    const rivalBaseline = await fetchRivalBaselineStats(
-      rival.challengerId === userId ? rival.challengedId : rival.challengerId
-    ).catch(() => null);
-
-    if (baseline && rivalBaseline) {
-      userGapMinutes = rivalBaseline.weeklyFocusMinutes - baseline.weeklyFocusMinutes;
-      willOvertake = userGapMinutes < 0 && durationSeconds / 60 > Math.abs(userGapMinutes);
-    }
-  }
+  // TODO: Re-implement rival gap calculation when rivals repository is available
 
   // Build stake
   const stake = {
@@ -312,7 +297,7 @@ export async function buildSessionStake(
       insuranceCost: 100,
     },
 
-    challenges: challenges.map(c => ({
+    challenges: challenges.map((c: any) => ({
       id: c.challenge.id,
       title: c.challenge.title,
       progressBefore: c.userChallenge.currentValue ?? 0,
@@ -330,12 +315,7 @@ export async function buildSessionStake(
       reward: `${c.xpReward} XP`,
     })),
 
-    rival: rival ? {
-      id: rival.id,
-      name: 'Rival', // Would be fetched from profiles
-      userGapMinutes,
-      willOvertake,
-    } : undefined,
+    rival: undefined, // TODO: Re-implement when rivals repository is available
 
     wallet: wallet ?? { coins: 0, gems: 0 },
     wagers: calculateWagerOptions(wallet, streak, bossEncounter ? { bountyAvailable: bossEncounter.status === 'ACTIVE' } : null),

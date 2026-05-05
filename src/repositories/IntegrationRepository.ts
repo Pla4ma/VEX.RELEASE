@@ -1,6 +1,6 @@
 /**
  * Integration Repository
- * 
+ *
  * Repository for third-party integration management including API integrations,
  * webhook management, synchronization, and integration monitoring.
  */
@@ -366,7 +366,7 @@ export class IntegrationRepository extends BaseRepository<Integration> {
       const testResult = await this.performConnectionTest(integration);
 
       // Log the test
-      await this.logIntegrationEvent(integrationId, LogType.HEALTH_CHECK, LogLevel.INFO, 
+      await this.logIntegrationEvent(integrationId, LogType.HEALTH_CHECK, LogLevel.INFO,
         testResult.success ? 'Connection test successful' : 'Connection test failed',
         { responseTime: testResult.responseTime, error: testResult.error },
         testResult.success
@@ -405,7 +405,7 @@ export class IntegrationRepository extends BaseRepository<Integration> {
       `;
 
       const result = await this.dbConnection.query(query, [status, integrationId]);
-      
+
       if (result.rows.length === 0) {
         throw new Error('Integration not found');
       }
@@ -684,11 +684,11 @@ export class IntegrationRepository extends BaseRepository<Integration> {
   }> {
     // Simulate connection test
     const startTime = Date.now();
-    
+
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 500));
-      
+
       const responseTime = Date.now() - startTime;
       const success = Math.random() > 0.1; // 90% success rate
 
@@ -752,7 +752,7 @@ export class IntegrationRepository extends BaseRepository<Integration> {
 
   private calculateNextSync(frequency: SyncFrequency): Date {
     const now = new Date();
-    
+
     switch (frequency) {
       case SyncFrequency.REAL_TIME:
         return new Date(now.getTime() + 60000); // 1 minute
@@ -804,7 +804,7 @@ export class IntegrationRepository extends BaseRepository<Integration> {
   protected async findInDatabase(id: string, _options?: any): Promise<Integration | null> {
     const query = 'SELECT * FROM integrations WHERE id = $1';
     const result = await this.dbConnection.query(query, [id]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -874,7 +874,7 @@ export class IntegrationRepository extends BaseRepository<Integration> {
 
   protected async createInDatabase(entity: Partial<Integration>): Promise<Integration> {
     const integrationData = entity as IntegrationCreateData;
-    
+
     const query = `
       INSERT INTO integrations (
         name, type, provider, version, status, configuration, credentials,
@@ -909,7 +909,7 @@ export class IntegrationRepository extends BaseRepository<Integration> {
 
   protected async updateInDatabase(id: string, updates: Partial<Integration>): Promise<Integration | null> {
     const updateData = updates as IntegrationUpdateData;
-    
+
     const setClause: string[] = [];
     const params: any[] = [];
     let paramIndex = 1;
@@ -931,7 +931,7 @@ export class IntegrationRepository extends BaseRepository<Integration> {
       return this.findById(id);
     }
 
-    setClause.push(`updated_at = CURRENT_TIMESTAMP`);
+    setClause.push('updated_at = CURRENT_TIMESTAMP');
     params.push(id);
 
     const query = `
@@ -942,7 +942,7 @@ export class IntegrationRepository extends BaseRepository<Integration> {
     `;
 
     const result = await this.dbConnection.query(query, params);
-    
+
     if (result.rows.length === 0) {
       return null;
     }

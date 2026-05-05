@@ -191,8 +191,7 @@ export const MasteryService = {
           totalPoints: totalMasteryPoints,
           unlockedFeatures,
           timestamp: Date.now(),
-        },
-        { priority: 'high' }
+        }
       );
     }
 
@@ -223,8 +222,7 @@ export const MasteryService = {
           totalPoints: newTotalPoints,
           unlockedFeatures,
           timestamp: Date.now(),
-        },
-        { priority: 'high' }
+        }
       );
     }
 

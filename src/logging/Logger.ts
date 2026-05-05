@@ -1,6 +1,6 @@
 /**
  * Logger Module
- * 
+ *
  * Centralized logging utility for all service modules.
  * Provides structured logging with different log levels and context.
  */
@@ -34,7 +34,7 @@ export class Logger {
       level: config.level || 'info',
       enableConsole: config.enableConsole !== false,
       enableFile: config.enableFile || false,
-      format: config.format || 'json'
+      format: config.format || 'json',
     };
   }
 
@@ -80,7 +80,7 @@ export class Logger {
       level: level.toUpperCase(),
       service: this.serviceName,
       message,
-      ...(context && { context })
+      ...(context && { context }),
     };
 
     // Output to console if enabled
@@ -101,7 +101,7 @@ export class Logger {
     const levels = ['debug', 'info', 'warn', 'error'];
     const currentLevelIndex = levels.indexOf(this.config.level || 'info');
     const messageLevelIndex = levels.indexOf(level);
-    
+
     return messageLevelIndex >= currentLevelIndex;
   }
 
@@ -127,14 +127,14 @@ export class Logger {
    */
   child(additionalContext: LogContext): Logger {
     const childLogger = new Logger(this.serviceName, this.config);
-    
+
     // Override the log method to add the additional context
     const originalLog = childLogger.log.bind(childLogger);
     childLogger.log = (level: string, message: string, context?: LogContext) => {
       const mergedContext = { ...additionalContext, ...context };
       originalLog(level, message, mergedContext);
     };
-    
+
     return childLogger;
   }
 

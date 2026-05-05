@@ -193,7 +193,7 @@ export function openChest(chest: Chest): {
     const amount = Math.floor(
       Math.random() * (guaranteed.maxAmount - guaranteed.minAmount + 1)
     ) + guaranteed.minAmount;
-    
+
     rewards.push({
       type: guaranteed.type as ChestReward['type'],
       amount,
@@ -201,8 +201,8 @@ export function openChest(chest: Chest): {
       dropChance: 1.0,
     });
 
-    if (guaranteed.type === 'COINS') totalCoins += amount;
-    if (guaranteed.type === 'GEMS') totalGems += amount;
+    if (guaranteed.type === 'COINS') {totalCoins += amount;}
+    if (guaranteed.type === 'GEMS') {totalGems += amount;}
   }
 
   // Roll bonus rewards
@@ -215,15 +215,15 @@ export function openChest(chest: Chest): {
       cumulativeWeight += entry.weight;
       if (roll <= cumulativeWeight) {
         const reward = { ...entry.reward };
-        
+
         // Amount variation (+/- 20%)
         const variation = 0.8 + Math.random() * 0.4;
         reward.amount = Math.floor(reward.amount * variation);
 
         rewards.push(reward);
 
-        if (reward.type === 'COINS') totalCoins += reward.amount;
-        if (reward.type === 'GEMS') totalGems += reward.amount;
+        if (reward.type === 'COINS') {totalCoins += reward.amount;}
+        if (reward.type === 'GEMS') {totalGems += reward.amount;}
 
         // Track best reward
         const rarityValue = { COMMON: 1, UNCOMMON: 2, RARE: 3, EPIC: 4, LEGENDARY: 5 };
@@ -266,8 +266,8 @@ export function openChest(chest: Chest): {
 }
 
 function formatHighlight(bestReward: ChestReward | null): string {
-  if (!bestReward) return 'Standard rewards';
-  
+  if (!bestReward) {return 'Standard rewards';}
+
   const rarityEmojis: Record<string, string> = {
     COMMON: '⚪',
     UNCOMMON: '🟢',
@@ -381,7 +381,7 @@ export function formatChestOpeningSequence(
   revealType: 'slide' | 'pop' | 'spin';
 }> {
   const revealTypes: Array<'slide' | 'pop' | 'spin'> = ['slide', 'pop', 'spin', 'slide', 'pop'];
-  
+
   return rewards.map((reward, index) => ({
     delay: index * 800, // 800ms between each reveal
     reward,

@@ -60,7 +60,7 @@ describe('ActiveCombatSystem', () => {
   describe('executeCombatAbility', () => {
     it('Focus Strike ability deals correct base damage', () => {
       const result = executeCombatAbility(mockEncounter, 'focus_strike', 0);
-      
+
       expect(result.success).toBe(true);
       expect(result.damageDealt).toBe(15); // Base damage
       expect(result.energyConsumed).toBe(20);
@@ -107,7 +107,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = executeCombatAbility(encounterWithCooldown, 'focus_strike', 0, now);
-      
+
       expect(result.success).toBe(false);
       expect(result.message).toBe('Ability on cooldown');
     });
@@ -119,7 +119,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = executeCombatAbility(lowEnergyEncounter, 'focus_strike', 0);
-      
+
       expect(result.success).toBe(false);
       expect(result.message).toBe('Not enough Focus Energy!');
     });
@@ -131,7 +131,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = executeCombatAbility(enragedEncounter, 'focus_strike', 0);
-      
+
       // Base 15 * 1.5 multiplier = 22.5, floored to 22
       expect(result.damageDealt).toBe(22);
       expect(result.newPhase).toBe('ENRAGED');
@@ -144,7 +144,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = executeCombatAbility(encounter, 'focus_strike', 0);
-      
+
       expect(result.newPhase).toBe('AGITATED');
     });
 
@@ -155,7 +155,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = executeCombatAbility(encounter, 'focus_strike', 0);
-      
+
       expect(result.newPhase).toBe('ENRAGED');
     });
 
@@ -166,7 +166,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = executeCombatAbility(encounter, 'focus_strike', 0);
-      
+
       expect(result.newPhase).toBe('DESPERATE');
     });
 
@@ -178,7 +178,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = executeCombatAbility(encounterWithRecentAction, 'focus_strike', 0, now);
-      
+
       expect(result.comboBonus).toBe(0.2); // 20% combo bonus
     });
 
@@ -190,7 +190,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = executeCombatAbility(encounterWithOldAction, 'focus_strike', 0, now);
-      
+
       expect(result.comboBonus).toBe(0);
     });
   });
@@ -249,7 +249,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = resolveAttackPattern(encounter, true, false);
-      
+
       expect(result.dodged).toBe(true);
       expect(result.hit).toBe(false);
     });
@@ -262,7 +262,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = resolveAttackPattern(encounter, false, false);
-      
+
       expect(result.dodged).toBe(false);
       expect(result.hit).toBe(true);
       expect(result.damageTaken).toBe(15);
@@ -276,7 +276,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = resolveAttackPattern(encounter, false, true);
-      
+
       expect(result.dodged).toBe(true);
     });
 
@@ -288,7 +288,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = resolveAttackPattern(encounter, false, false);
-      
+
       expect(result.hit).toBe(false);
       expect(result.dodged).toBe(false);
     });
@@ -302,7 +302,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = checkEncounterEnd(encounter);
-      
+
       expect(result.ended).toBe(true);
       expect(result.victory).toBe(true);
       expect(result.reason).toBe('DEFEATED');
@@ -317,7 +317,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = checkEncounterEnd(encounter);
-      
+
       expect(result.ended).toBe(true);
       expect(result.victory).toBe(false);
       expect(result.reason).toBe('TIMED_OUT');
@@ -330,7 +330,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = checkEncounterEnd(encounter);
-      
+
       expect(result.ended).toBe(true);
       expect(result.victory).toBe(false);
       expect(result.reason).toBe('ABANDONED');
@@ -338,7 +338,7 @@ describe('ActiveCombatSystem', () => {
 
     it('returns active when encounter ongoing', () => {
       const result = checkEncounterEnd(mockEncounter);
-      
+
       expect(result.ended).toBe(false);
       expect(result.victory).toBe(false);
       expect(result.reason).toBe('ACTIVE');
@@ -352,7 +352,7 @@ describe('ActiveCombatSystem', () => {
       };
 
       const result = checkEncounterEnd(encounter);
-      
+
       const gemReward = result.rewards.find(r => r.type === 'GEMS');
       expect(gemReward).toEqual({ type: 'GEMS', amount: 10 });
     });

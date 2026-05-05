@@ -128,7 +128,7 @@ export function calculateReadingProgress(
   currentPage: number,
   totalPages: number
 ): number {
-  if (!totalPages || totalPages <= 0) return 0;
+  if (!totalPages || totalPages <= 0) {return 0;}
   return Math.min(100, Math.round((currentPage / totalPages) * 100));
 }
 
@@ -139,9 +139,9 @@ export function calculateReadingSpeed(
   pagesRead: number,
   timeSpentSeconds: number
 ): number {
-  if (!timeSpentSeconds || timeSpentSeconds <= 0) return 0;
+  if (!timeSpentSeconds || timeSpentSeconds <= 0) {return 0;}
   const hours = timeSpentSeconds / 3600;
-  if (hours <= 0) return 0;
+  if (hours <= 0) {return 0;}
   return Math.round(pagesRead / hours * 10) / 10;
 }
 

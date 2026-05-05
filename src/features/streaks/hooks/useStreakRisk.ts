@@ -50,25 +50,25 @@ interface UseStreakRiskReturn {
   flameHealthPercent: number;
   isAtRisk: boolean;
   isCritical: boolean;
-  
+
   // Streak Data
   currentStreak: number;
-  
+
   // Loading States
   isLoading: boolean;
   isChecking: boolean;
   isRefreshing: boolean;
-  
+
   // Error States
   error: Error | null;
-  
+
   // Actions
   checkRisk: () => Promise<void>;
   refresh: () => Promise<void>;
-  
+
   // Retry
   retry: () => void;
-  
+
   // UI Helpers
   flameColor: string;
   urgencyLabel: string;
@@ -82,9 +82,9 @@ interface UseStreakRiskReturn {
 // ============================================================================
 
 function getFlameColor(healthPercent: number): string {
-  if (healthPercent > 75) return '#4CAF50'; // Green - healthy
-  if (healthPercent > 50) return '#FF9800'; // Orange - warning
-  if (healthPercent > 25) return '#FF5722'; // Deep orange - danger
+  if (healthPercent > 75) {return '#4CAF50';} // Green - healthy
+  if (healthPercent > 50) {return '#FF9800';} // Orange - warning
+  if (healthPercent > 25) {return '#FF5722';} // Deep orange - danger
   return '#F44336'; // Red - critical
 }
 
@@ -108,7 +108,7 @@ export function useStreakRisk(): UseStreakRiskReturn {
   const queryClient = useQueryClient();
   const { track } = useAnalytics();
   const userId = (user as any)?.id;
-  
+
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const [isChecking, setIsChecking] = useState(false);
 
@@ -124,14 +124,14 @@ export function useStreakRisk(): UseStreakRiskReturn {
   } = useQuery({
     queryKey: QUERY_KEYS.streak(userId || ''),
     queryFn: async () => {
-      if (!userId) return null;
-      
+      if (!userId) {return null;}
+
       const result = await fetchStreakEnhanced(userId);
-      
+
       if (result.error) {
         throw result.error;
       }
-      
+
       return result.data;
     },
     enabled: !!userId,
@@ -147,16 +147,16 @@ export function useStreakRisk(): UseStreakRiskReturn {
   } = useQuery({
     queryKey: QUERY_KEYS.riskStatus(userId || ''),
     queryFn: async () => {
-      if (!userId) return null;
-      
+      if (!userId) {return null;}
+
       const result = await fetchRiskStatusEnhanced(userId);
-      
+
       if (result.error) {
         throw result.error;
       }
-      
-      if (!result.data) return null;
-      
+
+      if (!result.data) {return null;}
+
       return StreakRiskStatusSchema.parse(result.data);
     },
     enabled: !!userId,
@@ -169,11 +169,11 @@ export function useStreakRisk(): UseStreakRiskReturn {
   // ============================================================================
 
   const riskStatus = (() => {
-    if (!streakData) return cachedRiskStatus || null;
-    
+    if (!streakData) {return cachedRiskStatus || null;}
+
     // Calculate fresh risk status from streak data
     const freshRisk = calculateStreakRisk(streakData);
-    
+
     // Merge with cached notifications sent
     if (cachedRiskStatus) {
       return {
@@ -181,7 +181,7 @@ export function useStreakRisk(): UseStreakRiskReturn {
         notificationsSent: cachedRiskStatus.notificationsSent,
       };
     }
-    
+
     return freshRisk;
   })();
 
@@ -191,28 +191,28 @@ export function useStreakRisk(): UseStreakRiskReturn {
 
   const checkRiskMutation = useMutation({
     mutationFn: async () => {
-      if (!userId || !streakData) return null;
-      
+      if (!userId || !streakData) {return null;}
+
       setIsChecking(true);
-      
+
       try {
         // Calculate current risk
         const currentRisk = calculateStreakRisk(streakData);
-        
+
         // Check and send notifications if needed
         await checkAndSendRiskNotifications(userId);
-        
+
         // Persist risk status
         const saveResult = await (saveRiskStatusEnhanced as any)({
           ...currentRisk,
           lastUpdated: currentRisk.lastUpdated || Date.now(),
           notificationsSent: cachedRiskStatus?.notificationsSent || [],
         });
-        
+
         if (saveResult.error) {
           throw saveResult.error;
         }
-        
+
         // Track analytics
         if (currentRisk.isAtRisk) {
           track('streak_risk_detected', {
@@ -221,7 +221,7 @@ export function useStreakRisk(): UseStreakRiskReturn {
             streakDays: currentRisk.currentDays,
           });
         }
-        
+
         return currentRisk;
       } finally {
         setIsChecking(false);
@@ -244,16 +244,16 @@ export function useStreakRisk(): UseStreakRiskReturn {
   // ============================================================================
 
   useEffect(() => {
-    if (!userId) return;
-    
+    if (!userId) {return;}
+
     // Initial check
     checkRiskMutation.mutate();
-    
+
     // Set up interval for periodic checks
     intervalRef.current = setInterval(() => {
       checkRiskMutation.mutate();
     }, RISK_CHECK_INTERVAL);
-    
+
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -266,16 +266,16 @@ export function useStreakRisk(): UseStreakRiskReturn {
   // ============================================================================
 
   useEffect(() => {
-    if (!userId) return;
-    
+    if (!userId) {return;}
+
     const handleStreakUpdated = () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.streak(userId) });
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.riskStatus(userId) });
     };
-    
+
     eventBus.subscribe('streak:updated', handleStreakUpdated);
     eventBus.subscribe('streak:session_completed', handleStreakUpdated);
-    
+
     return () => {
       eventBus.unsubscribe('streak:updated', handleStreakUpdated);
       eventBus.unsubscribe('streak:session_completed', handleStreakUpdated);
@@ -326,25 +326,25 @@ export function useStreakRisk(): UseStreakRiskReturn {
     flameHealthPercent: riskStatus?.flameHealthPercent ?? 100,
     isAtRisk: riskStatus?.isAtRisk ?? false,
     isCritical: riskStatus?.isCritical ?? false,
-    
+
     // Streak Data
     currentStreak: streakData?.currentDays ?? 0,
-    
+
     // Loading States
     isLoading,
     isChecking,
     isRefreshing,
-    
+
     // Error States
     error,
-    
+
     // Actions
     checkRisk,
     refresh,
-    
+
     // Retry
     retry,
-    
+
     // UI Helpers
     flameColor,
     urgencyLabel,
@@ -364,7 +364,7 @@ export function useFlameHealth(): {
   isAtRisk: boolean;
 } {
   const { flameHealthPercent, flameColor, isAtRisk } = useStreakRisk();
-  
+
   return {
     healthPercent: flameHealthPercent,
     color: flameColor,

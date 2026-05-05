@@ -1,6 +1,6 @@
 /**
  * Session Start Feature Events
- * 
+ *
  * Event definitions for session initialization, preparation, and setup features.
  */
 
@@ -540,7 +540,7 @@ export interface SessionStartPerformanceReportEvent extends BaseSessionStartEven
 }
 
 // Union Type for All Session Start Events
-export type SessionStartEventType = 
+export type SessionStartEventType =
   | SessionInitiatedEvent
   | SessionPreparationStartedEvent
   | SessionPreparationCompletedEvent
@@ -565,7 +565,7 @@ export type SessionStartEventType =
 export function createSessionInitiatedEvent(
   userId: string,
   sessionId: string,
-  initiationType: string,
+  initiationType: 'manual' | 'auto' | 'scheduled' | 'triggered',
   trigger: any,
   intent: any,
   context: any
@@ -590,7 +590,7 @@ export function createSessionInitiatedEvent(
 export function createSessionPreparationStartedEvent(
   userId: string,
   sessionId: string,
-  preparationType: string,
+  preparationType: 'standard' | 'quick' | 'comprehensive' | 'custom',
   preparationSteps: any[],
   environment: any,
   user: any
@@ -614,9 +614,9 @@ export function createSessionPreparationStartedEvent(
 export function createSessionReadinessAssessedEvent(
   userId: string,
   sessionId: string,
-  assessmentType: string,
+  assessmentType: 'comprehensive' | 'quick' | 'targeted',
   readinessScore: number,
-  readinessLevel: string,
+  readinessLevel: 'low' | 'medium' | 'high' | 'optimal',
   factors: any[],
   trends: any,
   recommendations: any
@@ -642,7 +642,7 @@ export function createSessionReadinessAssessedEvent(
 export function createSessionGoalsSetEvent(
   userId: string,
   sessionId: string,
-  goalType: string,
+  goalType: 'primary' | 'secondary' | 'stretch' | 'maintenance',
   goals: any[],
   alignment: any,
   planning: any
@@ -666,9 +666,9 @@ export function createSessionGoalsSetEvent(
 export function createSessionMoodAssessedEvent(
   userId: string,
   sessionId: string,
-  assessmentType: string,
+  assessmentType: 'self_report' | 'behavioral' | 'physiological' | 'comprehensive',
   moodProfile: any,
-  moodState: string,
+  moodState: 'optimal' | 'good' | 'neutral' | 'suboptimal' | 'poor',
   influences: any,
   recommendations: any
 ): SessionMoodAssessedEvent {
@@ -692,7 +692,7 @@ export function createSessionMoodAssessedEvent(
 export function createSessionContextEstablishedEvent(
   userId: string,
   sessionId: string,
-  contextType: string,
+  contextType: 'personal' | 'environmental' | 'social' | 'temporal' | 'situational',
   contextData: any,
   adaptations: any
 ): SessionContextEstablishedEvent {
@@ -738,12 +738,12 @@ export function validateSessionStartEvent(event: SessionStartEventType): boolean
     return false;
   }
 
-  if (!event.type || !event.data || !event.metadata) {
+  if (!event.data || !event.metadata) {
     return false;
   }
 
-  // Add specific validation for each event type
-  switch (event.type) {
+  // Add specific validation for each event type using discriminated union
+  switch ((event as any).type) {
     case 'session_initiated':
       return validateSessionInitiatedEvent(event as SessionInitiatedEvent);
     case 'session_preparation_started':

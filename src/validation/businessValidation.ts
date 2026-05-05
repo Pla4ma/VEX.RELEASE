@@ -1,6 +1,6 @@
 /**
  * Business Validation Layer
- * 
+ *
  * Comprehensive validation for business logic, rules, constraints,
  * and domain-specific requirements across different business contexts.
  */
@@ -142,7 +142,7 @@ export const validateECommerceOrder = (order: any, context: BusinessContext): Bu
   // Business hours validation
   const now = new Date();
   const hour = now.getHours();
-  
+
   if (order.shippingMethod === 'overnight' && (hour < 9 || hour > 17)) {
     warnings.push('Overnight shipping ordered outside business hours');
     recommendations.push('Order may be processed next business day');
@@ -323,7 +323,7 @@ export const validateHealthcareAppointment = (appointment: any, context: Busines
 
     // Advance booking validation
     const daysUntilAppointment = Math.ceil((appointmentDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-    
+
     if (daysUntilAppointment > 90) {
       warnings.push('Appointment booked far in advance');
     }
@@ -442,7 +442,7 @@ export const validateRealEstateListing = (listing: any, context: BusinessContext
     // Price per square foot validation
     if (listing.squareFeet && listing.squareFeet > 0) {
       const pricePerSqFt = listing.price / listing.squareFeet;
-      
+
       if (listing.propertyType === 'residential') {
         if (pricePerSqFt < 50) {
           warnings.push('Price per square foot seems low for residential property');
@@ -471,7 +471,7 @@ export const validateRealEstateListing = (listing: any, context: BusinessContext
   // Year built validation
   if (listing.yearBuilt) {
     const currentYear = new Date().getFullYear();
-    
+
     if (listing.yearBuilt > currentYear) {
       errors.push('Year built cannot be in the future');
     }
@@ -528,7 +528,7 @@ export const validateRealEstateListing = (listing: any, context: BusinessContext
   // Market analysis
   if (listing.price && listing.squareFeet) {
     const pricePerSqFt = listing.price / listing.squareFeet;
-    
+
     // Regional market comparison (simplified)
     if (context.region === 'urban' && listing.propertyType === 'residential') {
       if (pricePerSqFt < 200) {
@@ -605,7 +605,7 @@ export const validateEducationEnrollment = (enrollment: any, context: BusinessCo
 
       // Prerequisite validation
       if (course.prerequisites && enrollment.studentInfo.completedCourses) {
-        const hasPrerequisites = course.prerequisites.every((prereq: string) => 
+        const hasPrerequisites = course.prerequisites.every((prereq: string) =>
           enrollment.studentInfo.completedCourses.includes(prereq)
         );
 
@@ -709,7 +709,7 @@ export const validateBusinessRules = (
   for (const rule of rules) {
     try {
       const isValid = rule.validator(data, context);
-      
+
       if (!isValid) {
         switch (rule.severity) {
           case 'error':

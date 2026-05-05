@@ -113,3 +113,16 @@ export type OnboardingState = z.infer<typeof OnboardingStateSchema>;
 export type GoalOption = z.infer<typeof GoalOptionSchema>;
 export type DurationOption = z.infer<typeof DurationOptionSchema>;
 export type TooltipState = z.infer<typeof TooltipStateSchema>;
+
+// Type alias for backward compatibility
+export type OnboardingGoal = FocusGoal;
+
+/**
+ * Onboarding goals constant for UI
+ */
+export const ONBOARDING_GOALS: Array<{ id: FocusGoal; label: string; description: string }> = [
+  { id: 'WORK', label: 'Work', description: 'Focus on professional tasks' },
+  { id: 'STUDY', label: 'Study', description: 'Learn and absorb new information' },
+  { id: 'CREATIVE', label: 'Creative', description: 'Create, design, or build something' },
+  { id: 'PERSONAL', label: 'Personal', description: 'Personal growth and organization' },
+];

@@ -91,7 +91,7 @@ export async function saveStakesSession(
         .single();
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
     return { data: (StakesSessionRecordSchema as any).parse(data), error: null };
   } catch (error) {
     captureSilentFailure(error, { feature: 'sessions', operation: 'save', type: 'REPOSITORY_ERROR' as any });
@@ -116,7 +116,7 @@ export async function fetchUserStakesHistory(
         .limit(limit);
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
     return {
       data: (data || []).map((row) => (StakesSessionRecordSchema as any).parse(row)),
       error: null,
@@ -182,7 +182,7 @@ export async function updateStakesPreference(
         .single();
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
     return {
       data: (UserStakesPreferenceSchema as any).parse(data),
       error: null,
@@ -211,7 +211,7 @@ export async function fetchStakesStats(
         .rpc('get_stakes_stats', { p_user_id: userId });
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
     return { data, error: null };
   } catch (error) {
     captureSilentFailure(error, { feature: 'sessions', operation: 'fetchStats', type: 'REPOSITORY_ERROR' as any });

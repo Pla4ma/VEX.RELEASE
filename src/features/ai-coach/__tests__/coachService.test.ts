@@ -27,7 +27,7 @@ describe('CoachService', () => {
   beforeEach(() => {
     coachService = getCoachService();
     coachService.setUserId('test-user-id');
-    
+
     mockContext = {
       sessionId: 'test-session-id',
       userId: 'test-user-id',
@@ -45,7 +45,7 @@ describe('CoachService', () => {
   describe('detectStudyStuck', () => {
     test('should not detect stuck when user is making progress', async () => {
       const result = await coachService.detectStudyStuck(mockContext);
-      
+
       expect(result.detected).toBe(false);
       expect(result.severity).toBe('LOW');
     });
@@ -60,7 +60,7 @@ describe('CoachService', () => {
       };
 
       const result = await coachService.detectStudyStuck(stuckContext);
-      
+
       expect(result.detected).toBe(true);
       expect(result.severity).toBe('HIGH');
       expect(result.intervention.type).toBe('study_stuck');
@@ -79,7 +79,7 @@ describe('CoachService', () => {
       };
 
       const result = await coachService.detectStudyStuck(lowFocusContext);
-      
+
       expect(result.detected).toBe(true);
       expect(result.severity).toBe('MEDIUM');
     });
@@ -92,7 +92,7 @@ describe('CoachService', () => {
       };
 
       const result = await coachService.detectStudyStuck(stuckContext);
-      
+
       if (result.detected) {
         expect(result.intervention.message).toContain('stuck');
         expect(result.intervention.actions).toContain('summarize_progress');
@@ -104,7 +104,7 @@ describe('CoachService', () => {
   describe('detectDistraction', () => {
     test('should not detect distraction when focus is good', async () => {
       const result = await coachService.detectDistraction(mockContext);
-      
+
       expect(result.detected).toBe(false);
     });
 
@@ -120,7 +120,7 @@ describe('CoachService', () => {
       };
 
       const result = await coachService.detectDistraction(distractedContext);
-      
+
       expect(result.detected).toBe(true);
       expect(result.intervention.type).toBe('distraction_detected');
       expect(result.intervention.actions).toContain('refocus_techniques');
@@ -135,7 +135,7 @@ describe('CoachService', () => {
       };
 
       const result = await coachService.detectDistraction(droppingFocusContext);
-      
+
       expect(result.detected).toBe(true);
       expect(result.severity).toBe('MEDIUM');
     });
@@ -150,7 +150,7 @@ describe('CoachService', () => {
       };
 
       const result = await coachService.detectDistraction(distractedContext);
-      
+
       if (result.detected) {
         expect(result.intervention.message).toContain('distracted');
         expect(result.intervention.actions).toContain('refocus_techniques');
@@ -168,7 +168,7 @@ describe('CoachService', () => {
       };
 
       const result = await coachService.detectOptimalBreak(earlySessionContext);
-      
+
       expect(result.detected).toBe(false);
     });
 
@@ -181,7 +181,7 @@ describe('CoachService', () => {
       };
 
       const result = await coachService.detectOptimalBreak(longWorkContext);
-      
+
       expect(result.detected).toBe(true);
       expect(result.intervention.type).toBe('optimal_break');
       expect(result.intervention.actions).toContain('take_break');
@@ -196,7 +196,7 @@ describe('CoachService', () => {
       };
 
       const result = await coachService.detectOptimalBreak(decliningFocusContext);
-      
+
       expect(result.detected).toBe(true);
       expect(result.severity).toBe('MEDIUM');
     });
@@ -210,7 +210,7 @@ describe('CoachService', () => {
       };
 
       const result = await coachService.detectOptimalBreak(completionContext);
-      
+
       expect(result.detected).toBe(true);
       if (result.detected) {
         expect(result.intervention.actions).toContain('consolidate_learning');
@@ -221,7 +221,7 @@ describe('CoachService', () => {
   describe('getSessionAdvice', () => {
     test('should provide advice for active session', async () => {
       const advice = await coachService.getSessionAdvice(mockContext);
-      
+
       expect(advice).toBeDefined();
       expect(advice.sessionId).toBe(mockContext.sessionId);
       expect(advice.recommendations).toBeDefined();
@@ -235,8 +235,8 @@ describe('CoachService', () => {
       };
 
       const advice = await coachService.getSessionAdvice(lowFocusContext);
-      
-      expect(advice.recommendations.some(r => 
+
+      expect(advice.recommendations.some(r =>
         r.type === 'focus_improvement'
       )).toBe(true);
     });
@@ -250,8 +250,8 @@ describe('CoachService', () => {
       };
 
       const advice = await coachService.getSessionAdvice(goodProgressContext);
-      
-      expect(advice.recommendations.some(r => 
+
+      expect(advice.recommendations.some(r =>
         r.type === 'encouragement'
       )).toBe(true);
     });
@@ -260,7 +260,7 @@ describe('CoachService', () => {
   describe('Error Handling', () => {
     test('should handle missing context gracefully', async () => {
       const result = await coachService.detectStudyStuck({} as InterventionContext);
-      
+
       expect(result.detected).toBe(false);
       expect(result.severity).toBe('LOW');
     });
@@ -273,7 +273,7 @@ describe('CoachService', () => {
       };
 
       const result = await coachService.detectStudyStuck(invalidContext);
-      
+
       expect(result.detected).toBe(false);
     });
   });
@@ -281,12 +281,12 @@ describe('CoachService', () => {
   describe('Performance', () => {
     test('should complete detection quickly', async () => {
       const startTime = Date.now();
-      
+
       await coachService.detectStudyStuck(mockContext);
-      
+
       const endTime = Date.now();
       const duration = endTime - startTime;
-      
+
       expect(duration).toBeLessThan(100); // Should complete in under 100ms
     });
 
@@ -298,7 +298,7 @@ describe('CoachService', () => {
       ];
 
       const results = await Promise.all(promises);
-      
+
       expect(results).toHaveLength(3);
       expect(results.every(r => r !== undefined)).toBe(true);
     });

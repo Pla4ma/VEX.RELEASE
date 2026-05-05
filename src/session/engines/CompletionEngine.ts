@@ -8,7 +8,7 @@
  * - Failure recovery
  */
 
-import type { SessionState, SessionSummary, SessionConfig, SessionStatus, ScoreCalculation, DamageCalculation, FocusQualityMetrics } from '../types';
+import type { SessionState, SessionSummary, SessionConfig, SessionStatus, FocusQualityMetrics } from '../types';
 import { resolveSessionMode } from '../modes';
 import type { ScoringEngine } from './ScoringEngine';
 import { createDebugger } from '../../utils/debug';

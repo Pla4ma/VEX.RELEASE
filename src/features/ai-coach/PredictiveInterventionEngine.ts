@@ -182,14 +182,14 @@ export class PredictiveInterventionEngine {
     const firstHalf = last30Days.slice(0, 15).filter(s => s.completed).length;
     const secondHalf = last30Days.slice(15).filter(s => s.completed).length;
     let last30DaysTrend: 'up' | 'stable' | 'down' = 'stable';
-    if (secondHalf > firstHalf * 1.2) last30DaysTrend = 'up';
-    else if (secondHalf < firstHalf * 0.8) last30DaysTrend = 'down';
+    if (secondHalf > firstHalf * 1.2) {last30DaysTrend = 'up';}
+    else if (secondHalf < firstHalf * 0.8) {last30DaysTrend = 'down';}
 
     // Determine pattern type
     let patternType: BehavioralPattern['patternType'] = 'consistent';
-    if (completionRate < 0.5) patternType = 'inconsistent';
-    else if (last30DaysTrend === 'down') patternType = 'declining';
-    else if (last30DaysTrend === 'up') patternType = 'improving';
+    if (completionRate < 0.5) {patternType = 'inconsistent';}
+    else if (last30DaysTrend === 'down') {patternType = 'declining';}
+    else if (last30DaysTrend === 'up') {patternType = 'improving';}
 
     // Average duration
     const avgDuration = last30Days.length > 0
@@ -220,7 +220,7 @@ export class PredictiveInterventionEngine {
     lastSessionDate: string | null,
     hoursSinceLastSession: number
   ): RiskPrediction[] {
-    if (!PredictiveInterventionEngine.isEnabled()) return [];
+    if (!PredictiveInterventionEngine.isEnabled()) {return [];}
 
     const predictions: RiskPrediction[] = [];
     const now = Date.now();
@@ -301,7 +301,7 @@ export class PredictiveInterventionEngine {
     prediction: RiskPrediction,
     channel: 'push' | 'in_app' | 'coach_message'
   ): Promise<boolean> {
-    if (!PredictiveInterventionEngine.isEnabled()) return false;
+    if (!PredictiveInterventionEngine.isEnabled()) {return false;}
 
     let message = '';
     let title = '';
@@ -444,7 +444,7 @@ export class PredictiveInterventionEngine {
         currentStreak++;
         maxStreak = Math.max(maxStreak, currentStreak);
       } else {
-        if (currentStreak > 3) breaks++;
+        if (currentStreak > 3) {breaks++;}
         currentStreak = 0;
       }
     }
@@ -492,9 +492,9 @@ export class PredictiveInterventionEngine {
     }
 
     // Determine severity
-    if (hoursSinceLastSession > 40) severity = 'critical';
-    else if (hoursSinceLastSession > 30) severity = 'high';
-    else if (hoursSinceLastSession > 24) severity = 'medium';
+    if (hoursSinceLastSession > 40) {severity = 'critical';}
+    else if (hoursSinceLastSession > 30) {severity = 'high';}
+    else if (hoursSinceLastSession > 24) {severity = 'medium';}
 
     const action = hoursSinceLastSession > 30
       ? 'Complete a session in the next 6 hours to save your streak!'
@@ -660,7 +660,7 @@ export class PredictiveInterventionEngine {
     // Low damage when participating
     const participatingWeeks = last4Weeks.filter(week => week.participated);
     const avgDamage = participatingWeeks.reduce((sum, week) => sum + week.damage, 0) / (participatingWeeks.length || 1);
-    
+
     if (avgDamage < 1000) {
       evidence.push('Low contribution when participating in raids');
       confidence += 0.2;
@@ -704,7 +704,7 @@ export class PredictiveInterventionEngine {
     const evidence: string[] = [];
     let confidence = 0;
 
-    const last7Days = eventHistory.filter(event => 
+    const last7Days = eventHistory.filter(event =>
       (Date.now() - event.timestamp) < 7 * 24 * 60 * 60 * 1000
     );
 
@@ -718,17 +718,17 @@ export class PredictiveInterventionEngine {
     // Check for specific event type patterns
     const morningEvents = last7Days.filter(event => event.eventType.includes('MORNING'));
     const missedMorningEvents = morningEvents.filter(event => !event.participated).length;
-    
+
     if (morningEvents.length >= 2 && missedMorningEvents === morningEvents.length) {
       evidence.push('Consistently missing Morning Rally events');
       confidence += 0.3;
     }
 
     // Low reward accumulation
-    const totalRewards = last7Days.reduce((sum, event) => 
+    const totalRewards = last7Days.reduce((sum, event) =>
       sum + Object.values(event.rewards).reduce((rSum, reward) => rSum + reward, 0), 0
     );
-    
+
     if (totalRewards < 100) {
       evidence.push('Low bonus reward accumulation');
       confidence += 0.2;

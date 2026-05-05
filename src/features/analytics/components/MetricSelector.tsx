@@ -84,7 +84,7 @@ export function MetricSelector({
             <Text style={styles.placeholder}>Select metrics...</Text>
           ) : (
             <Text style={styles.selectedChipText}>
-              {selected.length} selected: {selected.map(metric => 
+              {selected.length} selected: {selected.map(metric =>
                 AVAILABLE_METRICS.find(m => m.value === metric)?.label || metric
               ).join(', ')}
             </Text>

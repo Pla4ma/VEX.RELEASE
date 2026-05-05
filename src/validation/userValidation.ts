@@ -1,6 +1,6 @@
 /**
  * User Validation Layer
- * 
+ *
  * Comprehensive validation for user-related data including authentication,
  * profile information, permissions, and user management operations.
  */
@@ -399,12 +399,12 @@ export const validateUserProfile = (data: UserProfileData): UserValidationResult
   if (data.avatar) {
     try {
       new URL(data.avatar);
-      
+
       const validImageFormats = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
-      const hasValidFormat = validImageFormats.some(format => 
+      const hasValidFormat = validImageFormats.some(format =>
         data.avatar!.toLowerCase().includes(format)
       );
-      
+
       if (!hasValidFormat) {
         allWarnings.push('Avatar URL may not be a valid image format');
       }
@@ -478,7 +478,7 @@ export const validateUserId = (userId: string): UserValidationResult => {
   // Check for valid UUID format or custom ID format
   const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   const customIdRegex = /^[a-zA-Z0-9_-]+$/;
-  
+
   if (!uuidRegex.test(userId) && !customIdRegex.test(userId)) {
     warnings.push('User ID format is unusual');
   }

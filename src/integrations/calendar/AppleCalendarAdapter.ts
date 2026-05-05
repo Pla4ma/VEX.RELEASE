@@ -197,7 +197,7 @@ export class AppleCalendarAdapter {
   private mergeBusySlots(
     slots: Array<{ start: Date; end: Date }>
   ): Array<{ start: Date; end: Date }> {
-    if (slots.length === 0) return [];
+    if (slots.length === 0) {return [];}
 
     const merged: Array<{ start: Date; end: Date }> = [slots[0]];
 

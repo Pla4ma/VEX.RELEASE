@@ -150,7 +150,7 @@ export function calculateCurrentRewardDay(
   }
 
   const timeSinceLastClaim = now - lastClaimedAt;
-  
+
   // Check if streak is broken (> 48 hours since last claim)
   if (timeSinceLastClaim > STREAK_WINDOW_MS) {
     return { day: 1, streakAtRisk: false, hoursRemaining: 48 };
@@ -163,7 +163,7 @@ export function calculateCurrentRewardDay(
 
   // Calculate next day (1-7 cycle)
   const nextDay = Math.min(7, currentStreak + 1);
-  
+
   return { day: nextDay, streakAtRisk, hoursRemaining };
 }
 
@@ -268,7 +268,7 @@ export async function claimDailyReward(
       state.currentStreak,
       state.lastClaimedAt
     );
-    
+
     const rewardDay = buildDailyRewardDay(
       day,
       isPremium,
@@ -347,7 +347,7 @@ export async function claimDailyReward(
 
 export function getRewardPreview(day: number, isPremium: boolean): string {
   const config = REWARD_LADDER[day - 1];
-  if (!config) return '';
+  if (!config) {return '';}
 
   const freeTotal = config.freeRewards.reduce((sum, r) => sum + r.amount, 0);
   const premiumTotal = config.premiumRewards.reduce((sum, r) => sum + r.amount, 0);
@@ -370,10 +370,10 @@ export function formatDailyRewardUI(state: UserDailyRewardsState): {
   );
 
   const config = REWARD_LADDER[day - 1];
-  
+
   let urgency: 'NONE' | 'LOW' | 'HIGH' = 'NONE';
-  if (streakAtRisk) urgency = 'HIGH';
-  else if (state.currentStreak > 0) urgency = 'LOW';
+  if (streakAtRisk) {urgency = 'HIGH';}
+  else if (state.currentStreak > 0) {urgency = 'LOW';}
 
   return {
     title: `Day ${day} Reward`,
@@ -401,10 +401,10 @@ export async function processExpiredDailyStreaks(
   const now = Date.now();
 
   for (const user of users) {
-    if (!user.lastClaimedAt) continue;
+    if (!user.lastClaimedAt) {continue;}
 
     const timeSinceLastClaim = now - user.lastClaimedAt;
-    
+
     if (timeSinceLastClaim > STREAK_WINDOW_MS && user.currentStreak > 0) {
       // Streak expired - reset to day 1
       await repository.resetStreak(user.userId);

@@ -79,7 +79,7 @@ export async function createChest(
         .single();
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
     return { data: ChestSchema.parse(data), error: null };
   } catch (error) {
     captureSilentFailure(error, { feature: 'rewards', operation: 'create', type: 'data' });
@@ -114,7 +114,7 @@ export async function openChest(
         .single();
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
     return { data: ChestSchema.parse(data), error: null };
   } catch (error) {
     captureSilentFailure(error, { feature: 'rewards', operation: 'open', type: 'data' });
@@ -140,7 +140,7 @@ export async function fetchUserChests(
       return await query.order('created_at', { ascending: false });
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
     return {
       data: (data || []).map((row) => ChestSchema.parse(row)),
       error: null,
@@ -199,7 +199,7 @@ export async function createMysteryMultiplier(
         .single();
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
     return { data: MysteryMultiplierSchema.parse(data), error: null };
   } catch (error) {
     captureSilentFailure(error, { feature: 'rewards', operation: 'createMultiplier', type: 'data' });
@@ -218,7 +218,7 @@ export async function markMultiplierUsed(
         .eq('id', multiplierId);
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
     return { success: true, error: null };
   } catch (error) {
     captureSilentFailure(error, { feature: 'rewards', operation: 'markUsed', type: 'data' });
@@ -275,7 +275,7 @@ export async function fetchChestAnalytics(
         .rpc('get_chest_analytics', { p_user_id: userId });
     });
 
-    if (error) throw error;
+    if (error) {throw error;}
     return { data, error: null };
   } catch (error) {
     captureSilentFailure(error, { feature: 'rewards', operation: 'analytics', type: 'data' });

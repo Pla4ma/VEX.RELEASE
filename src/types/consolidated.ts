@@ -1,6 +1,6 @@
 /**
  * Consolidated Type Definitions
- * 
+ *
  * Centralized type definitions to eliminate duplicates across the codebase.
  * All session, boss, and combat-related types unified here.
  */
@@ -13,7 +13,7 @@ import { z } from 'zod';
 
 export const SessionStatusSchema = z.enum([
   'PREPARING',
-  'STARTING', 
+  'STARTING',
   'ACTIVE',
   'PAUSED',
   'BACKGROUNDED',
@@ -25,17 +25,17 @@ export const SessionStatusSchema = z.enum([
   'ABANDONED',
   'FAILED',
   'RECOVERING',
-  'CONFLICT'
+  'CONFLICT',
 ]);
 
 export type SessionStatus = z.infer<typeof SessionStatusSchema>;
 
 export const SessionPhaseSchema = z.enum([
   'FOCUS',
-  'SHORT_BREAK', 
+  'SHORT_BREAK',
   'LONG_BREAK',
   'PREPARATION',
-  'REVIEW'
+  'REVIEW',
 ]);
 
 export type SessionPhase = z.infer<typeof SessionPhaseSchema>;
@@ -66,7 +66,7 @@ export interface SessionState {
   status: SessionStatus;
   phase: SessionPhase;
   config: SessionConfig;
-  
+
   // Timing
   remainingTime: number;
   totalDuration: number;
@@ -75,17 +75,17 @@ export interface SessionState {
   pausedTime: number;
   totalPausedTime: number;
   totalBackgroundTime: number;
-  
+
   // Intervals
   currentInterval: number;
   totalIntervals: number;
   intervalsCompleted: number;
-  
+
   // Interruptions
   interruptions: number;
   pauses: number;
   backgroundTime: number;
-  
+
   // Scoring
   baseScore: number;
   timeBonus: number;
@@ -94,12 +94,12 @@ export interface SessionState {
   completionPercentage: number;
   damagePoints: number;
   penaltyMultiplier: number;
-  
+
   // Recovery
   recoveryAttempts: number;
   maxRecoveryAttempts: number;
   canRecover: boolean;
-  
+
   // State tracking
   conflictStatus: 'NONE' | 'DETECTED' | 'RESOLVED';
   storageStatus: 'HEALTHY' | 'CORRUPTED' | 'MISSING';
@@ -108,7 +108,7 @@ export interface SessionState {
   osVersion: string;
   antiCheatStatus: 'CLEAN' | 'SUSPICIOUS' | 'FLAGGED';
   antiCheatFlags: string[];
-  
+
   // Timestamps
   createdAt: number;
   updatedAt: number;
@@ -116,7 +116,7 @@ export interface SessionState {
   pausedAt?: number;
   resumedAt?: number;
   completedAt?: number;
-  
+
   // Dirty flag for persistence
   isDirty: boolean;
 }
@@ -133,10 +133,10 @@ export type BossPhase = z.infer<typeof BossPhaseSchema>;
 
 export const BossAttackPatternSchema = z.enum([
   'DISTRACTION_WAVE',
-  'PROCRASTINATION_BEAM', 
+  'PROCRASTINATION_BEAM',
   'NOTIFICATION_BLAST',
   'SOCIAL_MEDIA_TRAP',
-  'MULTITASKING_TEMPEST'
+  'MULTITASKING_TEMPEST',
 ]);
 
 export type BossAttackPattern = z.infer<typeof BossAttackPatternSchema>;
@@ -161,41 +161,41 @@ export interface BossEncounter {
   bossId: string;
   bossName: string;
   bossAvatarUrl: string | null;
-  
+
   // Health
   bossMaxHealth: number;
   bossCurrentHealth: number;
   percentHealthRemaining: number;
-  
+
   // Combat State
   currentPhase: BossPhase;
   currentAttackPattern: BossAttackPattern | null;
   attackPatternStartedAt: number | null;
   attackPatternDurationMs: number;
-  
+
   // User Resources
   userMaxFocusEnergy: number;
   userCurrentFocusEnergy: number;
   userFocusEnergyRegenRate: number;
-  
+
   // Abilities & Cooldowns
   availableAbilities: CombatAbility[];
   abilityCooldowns: Record<string, number>;
-  
+
   // Timers
   encounterStartedAt: number;
   expiresAt: number;
   lastUserActionAt: number | null;
-  
+
   // Session Tracking
   sessionCount: number;
   totalDamageDealt: number;
   attacksDodged: number;
   attacksHit: number;
-  
+
   // Status
   status: 'ACTIVE' | 'VICTORY' | 'DEFEAT' | 'TIMED_OUT';
-  
+
   // Tier
   tier: BossTier;
 }
@@ -246,37 +246,37 @@ export interface ActiveEncounter {
   bossId: string;
   bossName: string;
   bossAvatarUrl: string | null;
-  
+
   // Health
   bossMaxHealth: number;
   bossCurrentHealth: number;
-  
+
   // Combat State
   currentPhase: BossPhase;
   currentAttackPattern: BossAttackPattern | null;
   attackPatternStartedAt: number | null;
   attackPatternDurationMs: number;
-  
+
   // User Resources
   userMaxFocusEnergy: number;
   userCurrentFocusEnergy: number;
   userFocusEnergyRegenRate: number;
-  
+
   // Abilities & Cooldowns
   availableAbilities: CombatAbility[];
   abilityCooldowns: Record<string, number>;
-  
+
   // Timers
   encounterStartedAt: number;
   expiresAt: number;
   lastUserActionAt: number | null;
-  
+
   // Session Tracking
   sessionCount: number;
   totalDamageDealt: number;
   attacksDodged: number;
   attacksHit: number;
-  
+
   status: 'ACTIVE' | 'VICTORY' | 'DEFEAT' | 'TIMED_OUT';
 }
 

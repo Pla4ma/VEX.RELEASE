@@ -109,11 +109,11 @@ export function calculateStreakRisk(streak: Streak, now: number = Date.now()): S
 
 export async function checkAndSendRiskNotifications(userId: string): Promise<void> {
   const streak = await repository.fetchStreak(userId);
-  if (!streak || streak.currentDays === 0) return;
+  if (!streak || streak.currentDays === 0) {return;}
 
   const riskStatus = calculateStreakRisk(streak);
-  
-  if (!riskStatus.isAtRisk) return;
+
+  if (!riskStatus.isAtRisk) {return;}
 
   // Check which notification thresholds should trigger
   for (const threshold of NOTIFICATION_THRESHOLDS) {
@@ -177,10 +177,10 @@ export async function processStreakBreaks(): Promise<string[]> {
 
   for (const userId of activeUsers) {
     const streak = await repository.fetchStreak(userId);
-    if (!streak || !streak.lastQualifyingSessionAt) continue;
+    if (!streak || !streak.lastQualifyingSessionAt) {continue;}
 
     const deadline = streak.lastQualifyingSessionAt + 24 * 60 * 60 * 1000;
-    
+
     if (now > deadline) {
       // Streak has expired - break it
       await breakStreakInternal(userId, streak);
@@ -193,7 +193,7 @@ export async function processStreakBreaks(): Promise<string[]> {
 
 async function breakStreakInternal(userId: string, streak: Streak): Promise<void> {
   const brokenDays = streak.currentDays;
-  
+
   // Update streak record
   await repository.updateStreak(userId, {
     currentDays: 0,

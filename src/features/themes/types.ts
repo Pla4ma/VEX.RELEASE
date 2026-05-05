@@ -1,6 +1,6 @@
 /**
  * Themes Feature Types
- * 
+ *
  * Types for UI themes, visual customization, and user experience personalization.
  */
 
@@ -22,7 +22,7 @@ export interface Theme {
   updated_at: Date;
 }
 
-export type ThemeType = 
+export type ThemeType =
   | 'light'
   | 'dark'
   | 'auto'
@@ -32,7 +32,7 @@ export type ThemeType =
   | 'accessibility'
   | 'brand';
 
-export type ThemeCategory = 
+export type ThemeCategory =
   | 'default'
   | 'minimal'
   | 'modern'
@@ -44,7 +44,7 @@ export type ThemeCategory =
   | 'seasonal'
   | 'brand';
 
-export type ThemeStatus = 
+export type ThemeStatus =
   | 'active'
   | 'inactive'
   | 'draft'
@@ -60,7 +60,7 @@ export interface ThemeConfiguration {
   compatibility: CompatibilityConfig;
 }
 
-export type ThemeMode = 
+export type ThemeMode =
   | 'light'
   | 'dark'
   | 'auto'
@@ -88,7 +88,7 @@ export interface SwitchCondition {
   operator: string;
 }
 
-export type ConditionType = 
+export type ConditionType =
   | 'time'
   | 'location'
   | 'battery'
@@ -103,7 +103,7 @@ export interface TransitionConfig {
   type: TransitionType;
 }
 
-export type TransitionType = 
+export type TransitionType =
   | 'fade'
   | 'slide'
   | 'dissolve'
@@ -125,7 +125,7 @@ export interface ColorBlindSupport {
   adjustments: ColorAdjustment[];
 }
 
-export type ColorBlindType = 
+export type ColorBlindType =
   | 'protanopia'
   | 'deuteranopia'
   | 'tritanopia'
@@ -174,7 +174,7 @@ export interface PlatformSupport {
   alternatives: string[];
 }
 
-export type PlatformType = 
+export type PlatformType =
   | 'ios'
   | 'android'
   | 'web'
@@ -343,7 +343,7 @@ export interface FontFamily {
   loading: FontLoading;
 }
 
-export type FontCategory = 
+export type FontCategory =
   | 'serif'
   | 'sans_serif'
   | 'monospace'
@@ -357,13 +357,13 @@ export interface FontLoading {
   fallback_display: FallbackDisplay;
 }
 
-export type LoadingStrategy = 
+export type LoadingStrategy =
   | 'block'
   | 'swap'
   | 'fallback'
   | 'optional';
 
-export type FallbackDisplay = 
+export type FallbackDisplay =
   | 'block'
   | 'swap'
   | 'fallback'
@@ -428,13 +428,13 @@ export interface TextStyle {
   usage: string[];
 }
 
-export type TextTransform = 
+export type TextTransform =
   | 'none'
   | 'capitalize'
   | 'uppercase'
   | 'lowercase';
 
-export type TextDecoration = 
+export type TextDecoration =
   | 'none'
   | 'underline'
   | 'overline'
@@ -981,13 +981,13 @@ export interface FormVariant {
   field_style: string;
 }
 
-export type FormLayout = 
+export type FormLayout =
   | 'vertical'
   | 'horizontal'
   | 'inline'
   | 'grid';
 
-export type LabelPosition = 
+export type LabelPosition =
   | 'top'
   | 'left'
   | 'right'
@@ -1300,7 +1300,7 @@ export interface ThemeLicense {
   redistribution: boolean;
 }
 
-export type LicenseType = 
+export type LicenseType =
   | 'mit'
   | 'apache'
   | 'gpl'
@@ -1366,14 +1366,14 @@ export interface ThemeIssue {
   platform?: string;
 }
 
-export type IssueType = 
+export type IssueType =
   | 'visual'
   | 'performance'
   | 'accessibility'
   | 'compatibility'
   | 'usability';
 
-export type IssueSeverity = 
+export type IssueSeverity =
   | 'low'
   | 'medium'
   | 'high'
@@ -1387,7 +1387,7 @@ export interface ThemeTrend {
   significance: 'low' | 'medium' | 'high';
 }
 
-export type TrendPeriod = 
+export type TrendPeriod =
   | 'hourly'
   | 'daily'
   | 'weekly'

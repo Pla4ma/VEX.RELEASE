@@ -160,7 +160,7 @@ describe('Phase 5: Retention Systems', () => {
 
     it('should apply damage and track contributions', () => {
       const encounter = system.getOrCreateRaid('squad-1', 5);
-      if (!encounter) return;
+      if (!encounter) {return;}
 
       const result = system.contributeDamage(
         'squad-1',
@@ -177,7 +177,7 @@ describe('Phase 5: Retention Systems', () => {
 
     it('should detect boss defeat when health reaches 0', () => {
       const encounter = system.getOrCreateRaid('squad-1', 2);
-      if (!encounter) return;
+      if (!encounter) {return;}
 
       // Deal enough damage to defeat
       const damage = encounter.maxHealth;

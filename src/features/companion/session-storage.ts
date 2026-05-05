@@ -125,8 +125,9 @@ export async function loadCompanionGrowth(userId: string, sessionId: string): Pr
 
 export function getMoodForSessionSummary(summary: SessionSummary): CompanionMood {
   const purity = summary.focusPurityScore ?? summary.focusQuality ?? 0;
-  if (summary.finalScore >= 95 || purity >= 95) {return 'ECSTATIC';}
-  if (summary.finalScore >= 70 || purity >= 70) {return 'CONTENT';}
+  const finalScore = summary.finalScore ?? 0;
+  if (finalScore >= 95 || purity >= 95) {return 'ECSTATIC';}
+  if (finalScore >= 70 || purity >= 70) {return 'CONTENT';}
   return 'SLEEPY';
 }
 

@@ -1,6 +1,6 @@
 /**
  * Notifications Feature Events
- * 
+ *
  * Event definitions for notification management, delivery, and user preferences.
  */
 
@@ -623,7 +623,7 @@ export interface NotificationUserFeedbackEvent extends BaseNotificationEvent {
 }
 
 // Union Type for All Notification Events
-export type NotificationEventType = 
+export type NotificationEventType =
   | NotificationSentEvent
   | NotificationDeliveredEvent
   | NotificationReadEvent
@@ -691,7 +691,7 @@ export function createNotificationSentEvent(
 export function createNotificationDeliveredEvent(
   userId: string,
   notificationId: string,
-  channel: string,
+  channel: 'push' | 'email' | 'sms' | 'in_app' | 'webhook',
   deliveryTime: Date,
   latency: number,
   provider: string,
@@ -724,7 +724,7 @@ export function createNotificationReadEvent(
   notificationId: string,
   readAt: Date,
   readTimeframe: number,
-  readMethod: string,
+  readMethod: 'click' | 'mark_read' | 'auto_read',
   readContext: any
 ): NotificationReadEvent {
   return {
@@ -778,7 +778,7 @@ export function createNotificationClickedEvent(
 export function createNotificationFailedEvent(
   userId: string,
   notificationId: string,
-  channel: string,
+  channel: 'push' | 'email' | 'sms' | 'in_app' | 'webhook',
   failureReason: string,
   errorCode: string,
   errorDetails: string,
@@ -813,7 +813,7 @@ export function createNotificationPreferencesUpdatedEvent(
   userId: string,
   preferences: any,
   updatedFields: string[],
-  updatedBy: string
+  updatedBy: 'user' | 'system' | 'admin'
 ): NotificationPreferencesUpdatedEvent {
   return {
     id: generateEventId(),

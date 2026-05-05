@@ -43,7 +43,7 @@ export class SmartScheduler {
     const gaps: CalendarGap[] = [];
 
     for (const slot of freeSlots) {
-      if (slot.duration < minDuration) continue;
+      if (slot.duration < minDuration) {continue;}
 
       const quality = this.scoreGapQuality(slot);
       const reason = this.generateGapReason(slot, quality);
@@ -61,7 +61,7 @@ export class SmartScheduler {
     gaps.sort((a, b) => {
       const qualityScore = { EXCELLENT: 4, GOOD: 3, FAIR: 2, POOR: 1 };
       const qualityDiff = qualityScore[b.quality] - qualityScore[a.quality];
-      if (qualityDiff !== 0) return qualityDiff;
+      if (qualityDiff !== 0) {return qualityDiff;}
       return b.duration - a.duration;
     });
 
@@ -106,9 +106,9 @@ export class SmartScheduler {
       score += 2;
     }
 
-    if (score >= 6) return 'EXCELLENT';
-    if (score >= 4) return 'GOOD';
-    if (score >= 2) return 'FAIR';
+    if (score >= 6) {return 'EXCELLENT';}
+    if (score >= 4) {return 'GOOD';}
+    if (score >= 2) {return 'FAIR';}
     return 'POOR';
   }
 
@@ -228,7 +228,7 @@ export class SmartScheduler {
       quality: number;
     }>
   ): void {
-    if (completedSessions.length === 0) return;
+    if (completedSessions.length === 0) {return;}
 
     // Calculate average session duration
     const totalDuration = completedSessions.reduce((sum, s) => sum + s.duration, 0);
@@ -238,7 +238,7 @@ export class SmartScheduler {
     const hourQuality: Record<number, number[]> = {};
     completedSessions.forEach(session => {
       const hour = session.startTime.getHours();
-      if (!hourQuality[hour]) hourQuality[hour] = [];
+      if (!hourQuality[hour]) {hourQuality[hour] = [];}
       hourQuality[hour].push(session.quality);
     });
 

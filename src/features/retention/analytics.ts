@@ -1,6 +1,6 @@
 /**
  * Retention Feature Analytics
- * 
+ *
  * Comprehensive analytics tracking for user retention, engagement, and churn prevention features.
  */
 
@@ -385,7 +385,7 @@ export function trackChurnPredictionUpdated(
     prediction_date: new Date().toISOString(),
     churn_probability: churnProbability,
     churn_timeframe: churnTimeframe,
-    risk_factors,
+    riskFactors,
     confidence,
     model,
     version,
@@ -585,7 +585,7 @@ export function trackUserMilestoneReached(
     reached_at: reachedAt.toISOString(),
     progress,
     rewards,
-    next_milestone,
+    nextMilestone,
   });
 }
 

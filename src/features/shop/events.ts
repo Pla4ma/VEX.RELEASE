@@ -1,6 +1,6 @@
 /**
  * Shop Feature Events
- * 
+ *
  * Event definitions for in-game shop, virtual economy, and marketplace features.
  */
 
@@ -648,7 +648,7 @@ export interface ShopSystemErrorEvent extends BaseShopEvent {
 }
 
 // Union Type for All Shop Events
-export type ShopEventType = 
+export type ShopEventType =
   | ShopVisitedEvent
   | ShopViewedEvent
   | ShopLeftEvent

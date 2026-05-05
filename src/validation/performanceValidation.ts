@@ -1,6 +1,6 @@
 /**
  * Performance Validation Layer
- * 
+ *
  * Comprehensive validation for performance metrics, resource usage,
  * response times, and system efficiency with optimization recommendations.
  */
@@ -566,7 +566,7 @@ export const validatePerformance = (
   };
 
   let overallLevel: 'excellent' | 'good' | 'fair' | 'poor' = 'excellent';
-  
+
   if (levelCounts.poor > 0) {
     overallLevel = 'poor';
   } else if (levelCounts.fair > 2) {

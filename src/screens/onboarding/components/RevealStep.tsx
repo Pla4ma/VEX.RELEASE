@@ -6,7 +6,7 @@ import { ProgressBar } from '../../../components/ProgressBar';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import { ONBOARDING_GOALS } from '../../../onboarding';
+import { ONBOARDING_GOALS } from '../../../features/onboarding';
 import { styles } from '../styles';
 
 const FIRST_LEVEL_XP = 100;

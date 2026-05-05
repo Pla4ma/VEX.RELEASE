@@ -1,4 +1,37 @@
-import type { SessionMode, SessionStatus } from './schemas';
+import type { SessionMode, SessionStatus, SessionPhase } from './schemas';
+
+// Re-export types for backward compatibility
+export type { SessionMode, SessionStatus, SessionPhase };
+
+export interface SessionState {
+  id: string;
+  userId: string;
+  status: SessionStatus;
+  phase: SessionPhase;
+  mode: SessionMode;
+  startedAt: number;
+  expectedDurationSeconds: number;
+  elapsedSeconds: number;
+  technique?: string;
+  targetDuration?: number;
+  metadata?: Record<string, unknown>;
+}
+
+export interface SessionConfig {
+  mode: SessionMode;
+  duration: number;
+  technique?: string;
+  allowPauses?: boolean;
+  metadata?: Record<string, unknown>;
+}
+
+export interface FocusTechnique {
+  id: string;
+  name: string;
+  description: string;
+  defaultDuration: number;
+  config: Record<string, unknown>;
+}
 
 export interface ActiveSessionConfig {
   mode: SessionMode;

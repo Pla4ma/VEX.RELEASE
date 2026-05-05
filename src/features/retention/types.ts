@@ -1,6 +1,6 @@
 /**
  * Retention Feature Types
- * 
+ *
  * Types for user retention, engagement, and churn prevention features.
  */
 
@@ -53,7 +53,7 @@ export interface RetentionStrategy {
   updatedAt: Date;
 }
 
-export type StrategyType = 
+export type StrategyType =
   | 'reactivation'
   | 'engagement'
   | 'onboarding'
@@ -126,7 +126,7 @@ export interface StrategyTrigger {
   cooldown: number; // in hours
 }
 
-export type TriggerType = 
+export type TriggerType =
   | 'user_inactivity'
   | 'declining_engagement'
   | 'churn_risk_increase'
@@ -159,7 +159,7 @@ export interface StrategyAction {
   conditions?: ActionCondition[];
 }
 
-export type ActionType = 
+export type ActionType =
   | 'notification'
   | 'email'
   | 'push'
@@ -259,7 +259,7 @@ export interface StrategyMetrics {
   roi: number;
 }
 
-export type StrategyStatus = 
+export type StrategyStatus =
   | 'draft'
   | 'active'
   | 'paused'
@@ -297,7 +297,7 @@ export interface RetentionRecommendation {
   evidence: string[];
 }
 
-export type RecommendationType = 
+export type RecommendationType =
   | 'intervention'
   | 'incentive'
   | 'feature_recommendation'
@@ -320,7 +320,7 @@ export interface CohortAnalysis {
   insights: CohortInsight[];
 }
 
-export type CohortType = 
+export type CohortType =
   | 'registration'
   | 'first_purchase'
   | 'feature_adoption'
@@ -384,6 +384,13 @@ export interface RetentionOverview {
   trend: 'improving' | 'stable' | 'declining';
 }
 
+export interface SegmentComparison {
+  baseline: number;
+  current: number;
+  change: number;
+  percentile: number;
+}
+
 export interface SegmentPerformance {
   segment: UserSegment;
   metrics: RetentionMetrics;
@@ -411,7 +418,7 @@ export interface RetentionAlert {
   resolvedAt?: Date;
 }
 
-export type AlertType = 
+export type AlertType =
   | 'churn_spike'
   | 'engagement_drop'
   | 'segment_decline'
@@ -435,7 +442,7 @@ export interface RetentionExperiment {
   completedAt?: Date;
 }
 
-export type ExperimentType = 
+export type ExperimentType =
   | 'notification_timing'
   | 'content_personalization'
   | 'reward_mechanics'
@@ -470,7 +477,7 @@ export interface ExperimentMetrics {
   guardrails: string[];
 }
 
-export type ExperimentStatus = 
+export type ExperimentStatus =
   | 'draft'
   | 'running'
   | 'paused'

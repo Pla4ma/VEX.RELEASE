@@ -1,6 +1,6 @@
 /**
  * User Repository
- * 
+ *
  * Repository for user data management including CRUD operations,
  * authentication, profile management, and user relationships.
  */
@@ -113,13 +113,13 @@ export class UserRepository extends BaseRepository<User> {
       // Query database
       const query = 'SELECT * FROM users WHERE email = $1 AND is_active = true';
       const result = await this.dbConnection.query(query, [email]);
-      
+
       if (result.rows.length === 0) {
         return null;
       }
 
       const user = this.mapRowToUser(result.rows[0]);
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, user, this.options.cacheTTL);
@@ -154,13 +154,13 @@ export class UserRepository extends BaseRepository<User> {
       // Query database
       const query = 'SELECT * FROM users WHERE username = $1 AND is_active = true';
       const result = await this.dbConnection.query(query, [username]);
-      
+
       if (result.rows.length === 0) {
         return null;
       }
 
       const user = this.mapRowToUser(result.rows[0]);
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, user, this.options.cacheTTL);
@@ -184,7 +184,7 @@ export class UserRepository extends BaseRepository<User> {
     try {
       const query = 'UPDATE users SET last_login_at = CURRENT_TIMESTAMP WHERE id = $1';
       await this.dbConnection.query(query, [userId]);
-      
+
       // Clear cache for this user
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', userId));
@@ -196,7 +196,7 @@ export class UserRepository extends BaseRepository<User> {
       this.logOperation('updateLastLogin', 'success', { userId, executionTime });
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logOperation('updateLastLogin', 'error', { userId, error: error.message, executionTime });
+      this.logOperation('updateLastLogin', 'error', { userId, error: error instanceof Error ? error.message : String(error), executionTime });
       throw error;
     }
   }
@@ -208,7 +208,7 @@ export class UserRepository extends BaseRepository<User> {
     try {
       const query = 'UPDATE users SET password_hash = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2';
       await this.dbConnection.query(query, [hashedPassword, userId]);
-      
+
       // Clear cache for this user
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', userId));
@@ -232,7 +232,7 @@ export class UserRepository extends BaseRepository<User> {
     try {
       const query = 'UPDATE users SET is_verified = true, updated_at = CURRENT_TIMESTAMP WHERE id = $1';
       await this.dbConnection.query(query, [userId]);
-      
+
       // Clear cache for this user
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', userId));
@@ -244,7 +244,7 @@ export class UserRepository extends BaseRepository<User> {
       this.logOperation('verifyUser', 'success', { userId, executionTime });
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logOperation('verifyUser', 'error', { userId, error: error.message, executionTime });
+      this.logOperation('verifyUser', 'error', { userId, error: error instanceof Error ? error.message : String(error), executionTime });
       throw error;
     }
   }
@@ -256,7 +256,7 @@ export class UserRepository extends BaseRepository<User> {
     try {
       const query = 'UPDATE users SET is_active = false, updated_at = CURRENT_TIMESTAMP WHERE id = $1';
       await this.dbConnection.query(query, [userId]);
-      
+
       // Clear cache for this user
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', userId));
@@ -269,7 +269,7 @@ export class UserRepository extends BaseRepository<User> {
       this.logOperation('deactivateUser', 'success', { userId, executionTime });
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logOperation('deactivateUser', 'error', { userId, error: error.message, executionTime });
+      this.logOperation('deactivateUser', 'error', { userId, error: error instanceof Error ? error.message : String(error), executionTime });
       throw error;
     }
   }
@@ -282,7 +282,7 @@ export class UserRepository extends BaseRepository<User> {
       // Check if role already exists
       const checkQuery = 'SELECT 1 FROM user_roles WHERE user_id = $1 AND role = $2';
       const checkResult = await this.dbConnection.query(checkQuery, [userId, role]);
-      
+
       if (checkResult.rows.length > 0) {
         return; // Role already exists
       }
@@ -290,7 +290,7 @@ export class UserRepository extends BaseRepository<User> {
       // Add role
       const query = 'INSERT INTO user_roles (user_id, role, created_at) VALUES ($1, $2, CURRENT_TIMESTAMP)';
       await this.dbConnection.query(query, [userId, role]);
-      
+
       // Clear cache for this user
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', userId));
@@ -302,7 +302,7 @@ export class UserRepository extends BaseRepository<User> {
       this.logOperation('addRole', 'success', { userId, role, executionTime });
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logOperation('addRole', 'error', { userId, role, error: error.message, executionTime });
+      this.logOperation('addRole', 'error', { userId, role, error: error instanceof Error ? error.message : String(error), executionTime });
       throw error;
     }
   }
@@ -314,7 +314,7 @@ export class UserRepository extends BaseRepository<User> {
     try {
       const query = 'DELETE FROM user_roles WHERE user_id = $1 AND role = $2';
       await this.dbConnection.query(query, [userId, role]);
-      
+
       // Clear cache for this user
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', userId));
@@ -326,7 +326,7 @@ export class UserRepository extends BaseRepository<User> {
       this.logOperation('removeRole', 'success', { userId, role, executionTime });
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logOperation('removeRole', 'error', { userId, role, error: error.message, executionTime });
+      this.logOperation('removeRole', 'error', { userId, role, error: error instanceof Error ? error.message : String(error), executionTime });
       throw error;
     }
   }
@@ -394,8 +394,8 @@ export class UserRepository extends BaseRepository<User> {
       query += ' GROUP BY u.id ORDER BY u.created_at DESC LIMIT 50';
 
       const result = await this.dbConnection.query(query, params);
-      const users = result.rows.map(row => this.mapRowToUser(row));
-      
+      const users = result.rows.map((row: any) => this.mapRowToUser(row));
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, users, this.options.cacheTTL);
@@ -407,7 +407,7 @@ export class UserRepository extends BaseRepository<User> {
       return users;
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logOperation('searchUsers', 'error', { searchTerm, error: error.message, executionTime });
+      this.logOperation('searchUsers', 'error', { searchTerm, error: error instanceof Error ? error.message : String(error), executionTime });
       throw error;
     }
   }
@@ -443,7 +443,7 @@ export class UserRepository extends BaseRepository<User> {
 
       const result = await this.dbConnection.query(query);
       const stats = result.rows[0];
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, stats, this.options.cacheTTL);
@@ -455,7 +455,7 @@ export class UserRepository extends BaseRepository<User> {
       return stats;
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logOperation('getUserStats', 'error', { error: error.message, executionTime });
+      this.logOperation('getUserStats', 'error', { error: error instanceof Error ? error.message : String(error), executionTime });
       throw error;
     }
   }
@@ -464,7 +464,7 @@ export class UserRepository extends BaseRepository<User> {
   protected async findInDatabase(id: string, options?: any): Promise<User | null> {
     const query = 'SELECT * FROM users WHERE id = $1 AND is_active = true';
     const result = await this.dbConnection.query(query, [id]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -513,7 +513,7 @@ export class UserRepository extends BaseRepository<User> {
     }
 
     const result = await this.dbConnection.query(query, params);
-    const users = result.rows.map(row => this.mapRowToUser(row));
+    const users = result.rows.map((row: any) => this.mapRowToUser(row));
 
     // Get total count
     const countQuery = 'SELECT COUNT(*) as count FROM users WHERE is_active = true';
@@ -529,7 +529,7 @@ export class UserRepository extends BaseRepository<User> {
 
   protected async createInDatabase(entity: Partial<User>): Promise<User> {
     const createData = entity as UserCreateData;
-    
+
     const query = `
       INSERT INTO users (
         email, username, first_name, last_name, phone, date_of_birth, 
@@ -559,7 +559,7 @@ export class UserRepository extends BaseRepository<User> {
 
   protected async updateInDatabase(id: string, updates: Partial<User>): Promise<User | null> {
     const updateData = updates as UserUpdateData;
-    
+
     const setClause: string[] = [];
     const params: any[] = [];
     let paramIndex = 1;
@@ -623,7 +623,7 @@ export class UserRepository extends BaseRepository<User> {
       return this.findById(id);
     }
 
-    setClause.push(`updated_at = CURRENT_TIMESTAMP`);
+    setClause.push('updated_at = CURRENT_TIMESTAMP');
     params.push(id);
 
     const query = `
@@ -634,7 +634,7 @@ export class UserRepository extends BaseRepository<User> {
     `;
 
     const result = await this.dbConnection.query(query, params);
-    
+
     if (result.rows.length === 0) {
       return null;
     }

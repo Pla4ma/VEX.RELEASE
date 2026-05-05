@@ -1,6 +1,6 @@
 /**
  * Themes Feature Analytics
- * 
+ *
  * Comprehensive analytics tracking for UI themes, visual customization, and user experience personalization features.
  */
 

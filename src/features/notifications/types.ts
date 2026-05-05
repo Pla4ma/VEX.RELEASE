@@ -1,6 +1,6 @@
 /**
  * Notifications Feature Types
- * 
+ *
  * Types for notification management, delivery, and user preferences.
  */
 
@@ -23,7 +23,7 @@ export interface Notification {
   metadata: NotificationMetadata;
 }
 
-export type NotificationType = 
+export type NotificationType =
   | 'session_reminder'
   | 'achievement_unlocked'
   | 'challenge_update'
@@ -39,7 +39,7 @@ export type NotificationType =
   | 'billing'
   | 'custom';
 
-export type NotificationCategory = 
+export type NotificationCategory =
   | 'productivity'
   | 'social'
   | 'gamification'
@@ -55,7 +55,7 @@ export type NotificationPriority = 'low' | 'medium' | 'high' | 'urgent' | 'criti
 
 export type NotificationChannel = 'in_app' | 'push' | 'email' | 'sms' | 'webhook';
 
-export type NotificationStatus = 
+export type NotificationStatus =
   | 'pending'
   | 'scheduled'
   | 'sending'
@@ -265,7 +265,7 @@ export interface CampaignBudget {
   currency?: string;
 }
 
-export type CampaignStatus = 
+export type CampaignStatus =
   | 'draft'
   | 'scheduled'
   | 'running'
@@ -328,7 +328,7 @@ export interface NotificationDelivery {
   metadata: DeliveryMetadata;
 }
 
-export type DeliveryStatus = 
+export type DeliveryStatus =
   | 'pending'
   | 'processing'
   | 'sent'

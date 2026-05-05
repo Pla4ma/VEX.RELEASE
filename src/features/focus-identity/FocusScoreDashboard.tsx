@@ -104,7 +104,7 @@ export const FocusScoreDashboard: React.FC<FocusScoreDashboardProps> = ({
             {scoreChange !== 0 && (
               <View style={[
                 styles.changeBadge,
-                { backgroundColor: scoreChange > 0 ? '#10B981' : '#EF4444' }
+                { backgroundColor: scoreChange > 0 ? '#10B981' : '#EF4444' },
               ]}>
                 <Text style={styles.changeText}>
                   {scoreChange > 0 ? '+' : ''}{scoreChange}
@@ -130,7 +130,7 @@ export const FocusScoreDashboard: React.FC<FocusScoreDashboardProps> = ({
               {
                 width: `${gaugePercent}%`,
                 backgroundColor: band.color,
-              }
+              },
             ]} />
           </View>
           <View style={styles.gaugeLabels}>
@@ -216,7 +216,7 @@ const FactorRadar: React.FC<{ factors: FocusScoreFactors }> = ({ factors }) => {
           <View style={styles.factorBarContainer}>
             <View style={[
               styles.factorBar,
-              { width: `${item.value}%`, opacity: 0.7 + (item.weight / 100) }
+              { width: `${item.value}%`, opacity: 0.7 + (item.weight / 100) },
             ]} />
           </View>
           <Text style={styles.factorValue}>{item.value}</Text>

@@ -74,11 +74,11 @@ export const CURRENT_SEASON = {
 function generateTierRewards(maxTier: number) {
   const rewards = [];
   let xpRequired = 1000; // Base XP for tier 1
-  
+
   for (let tier = 1; tier <= maxTier; tier++) {
     // Scale XP required
     xpRequired = Math.floor(xpRequired * 1.05); // 5% increase per tier
-    
+
     // Free rewards (every tier)
     const freeReward = {
       type: (tier % 5 === 0 ? 'CHEST' : 'COINS') as 'COINS' | 'GEMS' | 'XP_BOOST' | 'STREAK_SHIELD' | 'CHEST' | 'COSMETIC' | 'TITLE',
@@ -86,7 +86,7 @@ function generateTierRewards(maxTier: number) {
       cosmeticId: null,
       titleId: null,
     };
-    
+
     // Premium rewards (better, plus exclusive cosmetics/titles at milestones)
     let premiumReward;
     if (tier === 1) {
@@ -102,7 +102,7 @@ function generateTierRewards(maxTier: number) {
     } else {
       premiumReward = { type: 'COINS' as const, amount: 100 + tier * 20, cosmeticId: null, titleId: null };
     }
-    
+
     rewards.push({
       tier,
       freeReward,
@@ -110,7 +110,7 @@ function generateTierRewards(maxTier: number) {
       xpRequired,
     });
   }
-  
+
   return rewards;
 }
 
@@ -143,18 +143,18 @@ export function addXpToBattlePass(
   // Apply XP boost if premium
   const xpMultiplier = userBattlePass.hasPremium ? 1.5 : 1.0;
   const totalXpAdded = Math.floor(baseXp * xpMultiplier);
-  
+
   let currentTier = userBattlePass.currentTier;
   let currentTierXp = userBattlePass.currentTierXp + totalXpAdded;
   const rewardsUnlocked: BattlePassReward[] = [];
-  
+
   // Check for tier ups
   while (currentTier < CURRENT_SEASON.maxTier) {
     const nextTierConfig = TIER_REWARDS[currentTier]; // Array is 0-indexed, tiers are 1-indexed
-    if (!nextTierConfig) break;
-    
+    if (!nextTierConfig) {break;}
+
     const xpNeeded = nextTierConfig.xpRequired;
-    
+
     if (currentTierXp >= xpNeeded) {
       currentTierXp -= xpNeeded;
       currentTier++;
@@ -163,7 +163,7 @@ export function addXpToBattlePass(
       break;
     }
   }
-  
+
   return {
     tiersGained: currentTier - userBattlePass.currentTier,
     newTier: currentTier,
@@ -186,17 +186,17 @@ export function canClaimTierReward(
   if (tier > userBattlePass.currentTier) {
     return { canClaim: false, reason: 'Tier not yet reached' };
   }
-  
+
   // Check if already claimed
   if (userBattlePass.claimedRewards.includes(tier)) {
     return { canClaim: false, reason: 'Reward already claimed' };
   }
-  
+
   // Check premium for premium track
   if (track === 'PREMIUM' && !userBattlePass.hasPremium) {
     return { canClaim: false, reason: 'Premium required' };
   }
-  
+
   return { canClaim: true };
 }
 
@@ -219,7 +219,7 @@ export function claimTierReward(
       error: canClaim.reason,
     };
   }
-  
+
   const tierConfig = TIER_REWARDS[tier - 1];
   if (!tierConfig) {
     return {
@@ -229,14 +229,14 @@ export function claimTierReward(
       error: 'Invalid tier',
     };
   }
-  
+
   const reward = track === 'FREE' ? tierConfig.freeReward : tierConfig.premiumReward;
-  
+
   const updatedBattlePass: UserBattlePass = {
     ...userBattlePass,
     claimedRewards: [...userBattlePass.claimedRewards, tier],
   };
-  
+
   // Publish event
   eventBus.publish('battle_pass:reward_claimed', {
     userId: userBattlePass.userId,
@@ -245,7 +245,7 @@ export function claimTierReward(
     rewardType: reward.type,
     timestamp: Date.now(),
   });
-  
+
   return {
     success: true,
     reward: {
@@ -269,7 +269,7 @@ export function canPurchasePremium(
   if (userBattlePass.hasPremium) {
     return { canPurchase: false, reason: 'Already have Premium', price: 0 };
   }
-  
+
   if (userGems < CURRENT_SEASON.premiumPriceGems) {
     return {
       canPurchase: false,
@@ -277,12 +277,12 @@ export function canPurchasePremium(
       price: CURRENT_SEASON.premiumPriceGems,
     };
   }
-  
+
   // Check if season expired
   if (Date.now() > CURRENT_SEASON.endDate) {
     return { canPurchase: false, reason: 'Season ended', price: 0 };
   }
-  
+
   return { canPurchase: true, price: CURRENT_SEASON.premiumPriceGems };
 }
 
@@ -304,7 +304,7 @@ export function purchasePremium(
       error: check.reason,
     };
   }
-  
+
   // Grant Premium
   const updatedBattlePass: UserBattlePass = {
     ...userBattlePass,
@@ -312,7 +312,7 @@ export function purchasePremium(
     premiumPurchasedAt: Date.now(),
     xpBoostMultiplier: 1.5,
   };
-  
+
   // Calculate retroactive rewards for already-reached tiers
   const retroactiveRewards: BattlePassReward[] = [];
   for (let tier = 1; tier <= userBattlePass.currentTier; tier++) {
@@ -323,7 +323,7 @@ export function purchasePremium(
       }
     }
   }
-  
+
   // Publish event
   eventBus.publish('battle_pass:premium_purchased', {
     userId: userBattlePass.userId,
@@ -331,13 +331,13 @@ export function purchasePremium(
     price: check.price,
     timestamp: Date.now(),
   });
-  
+
   Sentry.addBreadcrumb({
     category: 'battle_pass',
     message: 'Premium purchased',
     data: { userId: userBattlePass.userId, tier: userBattlePass.currentTier },
   });
-  
+
   return {
     success: true,
     updatedBattlePass,
@@ -364,17 +364,17 @@ export function getBattlePassProgress(
   const nextTierConfig = TIER_REWARDS[userBattlePass.currentTier];
   const xpToNextTier = nextTierConfig ? nextTierConfig.xpRequired : 0;
   const xpInCurrentTier = userBattlePass.currentTierXp;
-  const tierProgressPercent = xpToNextTier > 0 
-    ? Math.floor((xpInCurrentTier / xpToNextTier) * 100) 
+  const tierProgressPercent = xpToNextTier > 0
+    ? Math.floor((xpInCurrentTier / xpToNextTier) * 100)
     : 100;
-  
+
   const msRemaining = CURRENT_SEASON.endDate - Date.now();
   const daysRemaining = Math.max(0, Math.floor(msRemaining / (24 * 60 * 60 * 1000)));
-  
+
   // Count claimable rewards
   let claimableFree = 0;
   let claimablePremium = 0;
-  
+
   for (let tier = 1; tier <= userBattlePass.currentTier; tier++) {
     if (!userBattlePass.claimedRewards.includes(tier)) {
       claimableFree++;
@@ -383,7 +383,7 @@ export function getBattlePassProgress(
       }
     }
   }
-  
+
   return {
     currentTier: userBattlePass.currentTier,
     maxTier: CURRENT_SEASON.maxTier,
@@ -406,24 +406,24 @@ export function formatRewardPreview(reward: { type: string; amount: number }): s
     COSMETIC: '👕',
     TITLE: '🏆',
   };
-  
+
   return `${icons[reward.type] || '🎁'} ${reward.amount} ${reward.type.toLowerCase()}`;
 }
 
 export function getSeasonEndCountdown(): string {
   const msRemaining = CURRENT_SEASON.endDate - Date.now();
-  
+
   if (msRemaining <= 0) {
     return 'Season ended!';
   }
-  
+
   const days = Math.floor(msRemaining / (24 * 60 * 60 * 1000));
   const hours = Math.floor((msRemaining % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-  
+
   if (days > 7) {
     return `${days} days remaining`;
   }
-  
+
   return `⏰ ${days}d ${hours}h left!`;
 }
 
@@ -440,14 +440,14 @@ export async function processSeasonEnd(
   }
 ): Promise<{ archived: number; unclaimedRewardsDistributed: number }> {
   const now = Date.now();
-  
+
   if (now < CURRENT_SEASON.endDate) {
     return { archived: 0, unclaimedRewardsDistributed: 0 };
   }
-  
+
   try {
     const activePasses = await repository.fetchAllActivePasses();
-    
+
     // Auto-claim all unclaimed rewards
     let unclaimedCount = 0;
     for (const pass of activePasses) {
@@ -461,18 +461,18 @@ export async function processSeasonEnd(
         }
       }
     }
-    
+
     // Archive and start new season
     await repository.archiveSeason(CURRENT_SEASON.id, activePasses);
     await repository.resetUserPasses();
-    
+
     eventBus.publish('battle_pass:season_ended', {
       seasonId: CURRENT_SEASON.id,
       userId: 'system', // System event
       finalTier: Math.max(...activePasses.map(p => p.currentTier)),
       timestamp: Date.now(),
     });
-    
+
     return {
       archived: activePasses.length,
       unclaimedRewardsDistributed: unclaimedCount,

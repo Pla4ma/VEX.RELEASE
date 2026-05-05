@@ -188,7 +188,7 @@ const PhaseTips: React.FC<{ phase: BossPhase }> = ({ phase }) => {
     ],
   };
 
-  const phaseTips = tips[phase] || tips['PHASE_1'];
+  const phaseTips = tips[phase] || tips.PHASE_1;
 
   return (
     <View>

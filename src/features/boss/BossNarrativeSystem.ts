@@ -86,7 +86,7 @@ export const BOSS_NARRATIVE_ARCS: Record<string, BossNarrativeArc> = {
     ],
     taunts: [
       "I'll deal with it tomorrow...",
-      "Just five more minutes...",
+      'Just five more minutes...',
       "The deadline isn't until next week!",
     ],
     theme: 'fire',
@@ -113,9 +113,9 @@ export const BOSS_NARRATIVE_ARCS: Record<string, BossNarrativeArc> = {
       },
     ],
     taunts: [
-      "Did you see that notification?",
-      "Your phone is calling to you...",
-      "Just a quick scroll through social media...",
+      'Did you see that notification?',
+      'Your phone is calling to you...',
+      'Just a quick scroll through social media...',
     ],
     theme: 'shadow',
   },
@@ -131,7 +131,7 @@ export function getBossNarrativeArc(bossId: string): BossNarrativeArc | null {
 
 export function determineBossPhase(bossId: string, healthPercent: number): BossPhase {
   const arc = getBossNarrativeArc(bossId);
-  if (!arc) return 'PHASE_1';
+  if (!arc) {return 'PHASE_1';}
 
   // Find the phase based on health threshold
   for (let i = arc.phases.length - 1; i >= 0; i--) {
@@ -148,10 +148,10 @@ export function calculateHealthPercent(remaining: number, max: number): number {
 
 export function getPhaseNarrative(bossId: string, phase: BossPhase): PhaseNarrative | null {
   const arc = getBossNarrativeArc(bossId);
-  if (!arc) return null;
+  if (!arc) {return null;}
 
   const phaseData = arc.phases.find((p) => p.phase === phase);
-  if (!phaseData) return null;
+  if (!phaseData) {return null;}
 
   return {
     title: phaseData.title,
@@ -162,7 +162,7 @@ export function getPhaseNarrative(bossId: string, phase: BossPhase): PhaseNarrat
 
 export function getRandomTaunt(bossId: string): string | null {
   const arc = getBossNarrativeArc(bossId);
-  if (!arc || arc.taunts.length === 0) return null;
+  if (!arc || arc.taunts.length === 0) {return null;}
 
   const index = Math.floor(Math.random() * arc.taunts.length);
   return arc.taunts[index];
@@ -175,7 +175,7 @@ export function getCurrentVisualTheme(bossId: string): VisualTheme {
 
 export function getCurrentMusicMood(bossId: string, phase: BossPhase): MusicMood {
   const arc = getBossNarrativeArc(bossId);
-  if (!arc) return 'tense';
+  if (!arc) {return 'tense';}
 
   const phaseData = arc.phases.find((p) => p.phase === phase);
   return phaseData?.musicMood ?? 'tense';
@@ -183,7 +183,7 @@ export function getCurrentMusicMood(bossId: string, phase: BossPhase): MusicMood
 
 export function getPhaseEffects(bossId: string, phase: BossPhase): PhaseEffects {
   const arc = getBossNarrativeArc(bossId);
-  if (!arc) return { visual: [], audio: [], haptic: false };
+  if (!arc) {return { visual: [], audio: [], haptic: false };}
 
   const phaseData = arc.phases.find((p) => p.phase === phase);
   return phaseData?.effects ?? { visual: [], audio: [], haptic: false };
@@ -235,7 +235,7 @@ export function clearPhaseState(bossId: string): void {
 
 export function getBossStory(bossId: string): string {
   const arc = getBossNarrativeArc(bossId);
-  if (!arc) return '';
+  if (!arc) {return '';}
 
   return `${arc.bossName} - A formidable foe that tests your focus and determination.`;
 }

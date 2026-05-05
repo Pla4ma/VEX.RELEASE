@@ -285,7 +285,7 @@ export class CalendarSyncService {
   private mergeBusySlots(
     slots: Array<{ start: Date; end: Date }>
   ): Array<{ start: Date; end: Date }> {
-    if (slots.length === 0) return [];
+    if (slots.length === 0) {return [];}
 
     // Sort by start time
     slots.sort((a, b) => a.start.getTime() - b.start.getTime());

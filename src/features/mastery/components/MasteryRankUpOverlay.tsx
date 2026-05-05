@@ -117,7 +117,7 @@ export function MasteryRankUpOverlay(): JSX.Element | null {
                     <Text variant="caption" color="text.tertiary" textAlign="center" fontWeight="600">
                       UNLOCKED
                     </Text>
-                    {unlockedFeatures.map((feature, index) => (
+                    {unlockedFeatures.map((feature: string, index: number) => (
                       <Box key={index} flexDirection="row" alignItems="center" gap="sm">
                         <Text fontSize={14}>✨</Text>
                         <Text variant="bodySmall" color="success.DEFAULT">

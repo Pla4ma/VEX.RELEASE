@@ -1,6 +1,6 @@
 /**
  * Backup Repository
- * 
+ *
  * Repository for backup management including data backups, restoration,
  * backup scheduling, and backup analytics.
  */
@@ -971,7 +971,7 @@ export class BackupRepository extends BaseRepository<Backup> {
       return this.findById(id);
     }
 
-    setClause.push(`updated_at = CURRENT_TIMESTAMP`);
+    setClause.push('updated_at = CURRENT_TIMESTAMP');
     params.push(id);
 
     const query = `

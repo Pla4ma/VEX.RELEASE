@@ -436,7 +436,7 @@ export function CoachScreen(): JSX.Element {
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
-};
+}
 
 // ============================================================================
 // Helper Functions

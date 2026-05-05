@@ -1,6 +1,6 @@
 /**
  * Order Repository
- * 
+ *
  * Repository for order data management including CRUD operations,
  * order processing, payment handling, and order status tracking.
  */
@@ -189,13 +189,13 @@ export class OrderRepository extends BaseRepository<Order> {
       // Query database
       const query = 'SELECT * FROM orders WHERE order_number = $1';
       const result = await this.dbConnection.query(query, [orderNumber]);
-      
+
       if (result.rows.length === 0) {
         return null;
       }
 
       const order = await this.mapRowToOrder(result.rows[0]);
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, order, this.options.cacheTTL);
@@ -232,18 +232,18 @@ export class OrderRepository extends BaseRepository<Order> {
       const params: any[] = [customerId];
 
       if (options.limit) {
-        query += ` LIMIT $2`;
+        query += ' LIMIT $2';
         params.push(options.limit);
 
         if (options.offset) {
-          query += ` OFFSET $3`;
+          query += ' OFFSET $3';
           params.push(options.offset);
         }
       }
 
       const result = await this.dbConnection.query(query, params);
       const orders = await Promise.all(result.rows.map(row => this.mapRowToOrder(row)));
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, orders, this.options.cacheTTL);
@@ -272,7 +272,7 @@ export class OrderRepository extends BaseRepository<Order> {
       `;
 
       await this.dbConnection.query(query, [status, notes, orderId]);
-      
+
       // Clear cache
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', orderId));
@@ -301,7 +301,7 @@ export class OrderRepository extends BaseRepository<Order> {
       `;
 
       await this.dbConnection.query(query, [status, orderId]);
-      
+
       // Store transaction if provided
       if (transactionId) {
         const transactionQuery = `
@@ -310,7 +310,7 @@ export class OrderRepository extends BaseRepository<Order> {
         `;
         await this.dbConnection.query(transactionQuery, [orderId, transactionId, status]);
       }
-      
+
       // Clear cache
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', orderId));
@@ -339,7 +339,7 @@ export class OrderRepository extends BaseRepository<Order> {
       `;
 
       await this.dbConnection.query(query, [status, orderId]);
-      
+
       // Store tracking number if provided
       if (trackingNumber) {
         const trackingQuery = `
@@ -352,7 +352,7 @@ export class OrderRepository extends BaseRepository<Order> {
         `;
         await this.dbConnection.query(trackingQuery, [orderId, trackingNumber, status]);
       }
-      
+
       // Clear cache
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', orderId));
@@ -381,17 +381,17 @@ export class OrderRepository extends BaseRepository<Order> {
       `;
 
       const result = await this.dbConnection.query(query, [
-        OrderStatus.CANCELLED, 
-        reason, 
-        orderId, 
-        OrderStatus.DELIVERED, 
-        OrderStatus.REFUNDED
+        OrderStatus.CANCELLED,
+        reason,
+        orderId,
+        OrderStatus.DELIVERED,
+        OrderStatus.REFUNDED,
       ]);
-      
+
       if (result.rowCount === 0) {
         throw new Error('Order cannot be cancelled');
       }
-      
+
       // Clear cache
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', orderId));
@@ -500,7 +500,7 @@ export class OrderRepository extends BaseRepository<Order> {
         ordersByPaymentStatus,
         recentOrders: parseInt(basicStats.recent_orders, 10),
       };
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, stats, this.options.cacheTTL);
@@ -540,7 +540,7 @@ export class OrderRepository extends BaseRepository<Order> {
 
       const result = await this.dbConnection.query(query, [OrderStatus.PENDING, PaymentStatus.PENDING]);
       const orders = await Promise.all(result.rows.map(row => this.mapRowToOrder(row)));
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, orders, this.options.cacheTTL);
@@ -561,7 +561,7 @@ export class OrderRepository extends BaseRepository<Order> {
   protected async findInDatabase(id: string, _options?: any): Promise<Order | null> {
     const query = 'SELECT * FROM orders WHERE id = $1';
     const result = await this.dbConnection.query(query, [id]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -679,10 +679,10 @@ export class OrderRepository extends BaseRepository<Order> {
 
   protected async createInDatabase(entity: Partial<Order>): Promise<Order> {
     const createData = entity as OrderCreateData;
-    
+
     // Generate order number
     const orderNumber = await this.generateOrderNumber();
-    
+
     // Calculate totals
     const subtotal = createData.items.reduce((sum, item) => sum + (item.quantity * item.unitPrice), 0);
     const taxAmount = subtotal * 0.1; // 10% tax (simplified)
@@ -733,7 +733,7 @@ export class OrderRepository extends BaseRepository<Order> {
 
   protected async updateInDatabase(id: string, updates: Partial<Order>): Promise<Order | null> {
     const updateData = updates as OrderUpdateData;
-    
+
     const setClause: string[] = [];
     const params: any[] = [];
     let paramIndex = 1;
@@ -773,7 +773,7 @@ export class OrderRepository extends BaseRepository<Order> {
       return this.findById(id);
     }
 
-    setClause.push(`updated_at = CURRENT_TIMESTAMP`);
+    setClause.push('updated_at = CURRENT_TIMESTAMP');
     params.push(id);
 
     const query = `
@@ -784,7 +784,7 @@ export class OrderRepository extends BaseRepository<Order> {
     `;
 
     const result = await this.dbConnection.query(query, params);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -913,15 +913,15 @@ export class OrderRepository extends BaseRepository<Order> {
   private async generateOrderNumber(): Promise<string> {
     const prefix = 'ORD';
     const date = new Date();
-    const dateStr = date.getFullYear().toString() + 
-                   (date.getMonth() + 1).toString().padStart(2, '0') + 
+    const dateStr = date.getFullYear().toString() +
+                   (date.getMonth() + 1).toString().padStart(2, '0') +
                    date.getDate().toString().padStart(2, '0');
-    
+
     // Get sequence number
     const sequenceQuery = 'SELECT nextval(\'order_number_seq\') as sequence';
     const result = await this.dbConnection.query(sequenceQuery);
     const sequence = parseInt(result.rows[0].sequence, 10);
-    
+
     return `${prefix}${dateStr}${sequence.toString().padStart(6, '0')}`;
   }
 
@@ -935,12 +935,12 @@ export class OrderRepository extends BaseRepository<Order> {
   }
 
   private isValidAddress(address: Address): boolean {
-    return !!(address.firstName && 
-             address.lastName && 
-             address.address1 && 
-             address.city && 
-             address.state && 
-             address.postalCode && 
+    return !!(address.firstName &&
+             address.lastName &&
+             address.address1 &&
+             address.city &&
+             address.state &&
+             address.postalCode &&
              address.country);
   }
 }

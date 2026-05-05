@@ -3,7 +3,7 @@ import React,{useState,useCallback,useMemo}from'react'; import{View,Text,ScrollV
       <Text style={styles.balanceAmount}>{amount.toLocaleString()}</Text>
       <Text style={styles.balanceType}>{type}</Text>
       {subtitle && <Text style={styles.balanceSubtitle}>{subtitle}</Text>}
-    </View>;}interface TransactionItemProps{transaction:WalletTransaction}const SOURCE_ICONS:Record<TransactionSource,string> = {SESSION:'\u23F1\uFE0F',STREAK:'\uD83D\uDD25',BOSS:'\uD83D\uDC79',LEVEL_UP:'\u2B06\uFE0F',SHOP:'\uD83D\uDED2',REWARD:'\uD83C\uDF81',CRAFTING:'\uD83D\uDD27',SQUAD:'\uD83D\uDC65',DAILY_LOGIN:'\uD83D\uDCC5',ACHIEVEMENT:'\uD83C\uDFC6',PROMOTION:'\uD83D\uDCE2',REFUND:'\u21A9\uFE0F'}; function TransactionItem({transaction}:TransactionItemProps){const isEarn = transaction.type === 'EARN' || transaction.type === 'GIFT_RECEIVE' || transaction.type === 'REFUND'; const icon = SOURCE_ICONS[transaction.source] ?? '\uD83D\uDCB0'; const formatDate = (timestamp:number)=>{const date = new Date(timestamp); return date.toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}; return<View style={styles.transactionItem}>
+    </View>;}interface TransactionItemProps{transaction:WalletTransaction}const SOURCE_ICONS:Record<TransactionSource,string> = {SESSION:'\u23F1\uFE0F',STREAK:'\uD83D\uDD25',BOSS:'\uD83D\uDC79',LEVEL_UP:'\u2B06\uFE0F',SHOP:'\uD83D\uDED2',REWARD:'\uD83C\uDF81',CRAFTING:'\uD83D\uDD27',SQUAD:'\uD83D\uDC65',DAILY_LOGIN:'\uD83D\uDCC5',ACHIEVEMENT:'\uD83C\uDFC6',FOCUS_POINTS:'\uD83C\uDFAF',PROMOTION:'\uD83D\uDCE2',REFUND:'\u21A9\uFE0F'}; function TransactionItem({transaction}:TransactionItemProps){const isEarn = transaction.type === 'EARN' || transaction.type === 'GIFT_RECEIVE' || transaction.type === 'REFUND'; const icon = SOURCE_ICONS[transaction.source] ?? '\uD83D\uDCB0'; const formatDate = (timestamp:number)=>{const date = new Date(timestamp); return date.toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}; return<View style={styles.transactionItem}>
       <View style={[styles.transactionIcon,{backgroundColor:isEarn ? '#10B98120' : '#EF444420'}]}>
         <Text>{icon}</Text>
       </View>
@@ -46,7 +46,7 @@ import React,{useState,useCallback,useMemo}from'react'; import{View,Text,ScrollV
       <Text style={styles.emptySubtitle}>
         Complete sessions, make purchases, or earn rewards to see your transaction history here.
       </Text>
-      <Pressable onPress={onRefresh}style={({pressed})=>[styles.refreshButton,pressed&&{opacity:0.8}]}
+      <Pressable onPress={onRefresh}style={({pressed})=>[styles.refreshButton,pressed && {opacity:0.8}]}
   accessibilityLabel="Refresh button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -56,7 +56,7 @@ import React,{useState,useCallback,useMemo}from'react'; import{View,Text,ScrollV
       <Text style={styles.errorIcon}>⚠️</Text>
       <Text style={styles.errorTitle}>Failed to Load Wallet</Text>
       <Text style={styles.errorSubtitle}>{error.message}</Text>
-      <Pressable onPress={onRetry}style={({pressed})=>[styles.retryButton,pressed&&{opacity:0.8}]}
+      <Pressable onPress={onRetry}style={({pressed})=>[styles.retryButton,pressed && {opacity:0.8}]}
   accessibilityLabel="Try Again button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -101,7 +101,7 @@ import React,{useState,useCallback,useMemo}from'react'; import{View,Text,ScrollV
 
         {}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}style={styles.filterBar}contentContainerStyle={styles.filterContent}>
-          {FILTERS.map(filter=><Pressable key={filter.key}onPress={()=>setSelectedFilter(filter.key)}style={({pressed})=>[styles.filterChip,selectedFilter === filter.key && styles.filterChipActive,pressed&&{opacity:0.8}]}
+          {FILTERS.map(filter=><Pressable key={filter.key}onPress={()=>setSelectedFilter(filter.key)}style={({pressed})=>[styles.filterChip,selectedFilter === filter.key && styles.filterChipActive,pressed && {opacity:0.8}]}
   accessibilityLabel="Interactive control"
   accessibilityRole="button"
   accessibilityHint="Activates this control">

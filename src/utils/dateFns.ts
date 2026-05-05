@@ -1,6 +1,6 @@
 /**
  * Date-fns Mock Implementation
- * 
+ *
  * Mock implementation of date-fns functions to resolve missing dependency
  */
 
@@ -122,7 +122,7 @@ export const differenceInSeconds = (dateLeft: Date, dateRight: Date): number => 
 export const formatDistanceToNow = (date: Date): string => {
   const now = new Date();
   const diffInSeconds = differenceInSeconds(now, date);
-  
+
   if (diffInSeconds < 60) {
     return 'less than a minute ago';
   } else if (diffInSeconds < 3600) {

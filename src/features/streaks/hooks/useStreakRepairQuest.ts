@@ -44,30 +44,30 @@ interface UseStreakRepairQuestReturn {
   // Data
   quest: any | null;
   status: any | null;
-  
+
   // Loading States
   isLoading: boolean;
   isStatusLoading: boolean;
   isCreating: boolean;
   isRecordingSession: boolean;
-  
+
   // Error States
   error: Error | null;
   statusError: Error | null;
   createError: Error | null;
   recordError: Error | null;
-  
+
   // Actions
   createQuest: (previousStreak: number) => Promise<void>;
   recordSession: (sessionId: string, duration: number, qualityScore: number) => Promise<boolean>;
   refetch: () => Promise<void>;
   refetchStatus: () => Promise<void>;
-  
+
   // Retry
   retry: () => void;
   retryCreate: () => void;
   retryRecord: () => void;
-  
+
   // UI States
   isEmpty: boolean;
   canStartQuest: boolean;
@@ -97,19 +97,19 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
   } = useQuery({
     queryKey: QUERY_KEYS.repairQuest(userId || ''),
     queryFn: async () => {
-      if (!userId) return null;
-      
+      if (!userId) {return null;}
+
       try {
         const result = await (fetchActiveRepairQuestEnhanced as any)(userId);
-        
+
         if (result.error) {
           throw result.error;
         }
-        
+
         if (!result.data) {
           return null;
         }
-        
+
         // Validate with Zod
         return z.any().parse(result.data);
       } catch (err) {
@@ -134,8 +134,8 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
   } = useQuery({
     queryKey: QUERY_KEYS.repairQuestStatus(userId || ''),
     queryFn: async () => {
-      if (!userId) return null;
-      
+      if (!userId) {return null;}
+
       try {
         const statusData = await (getRepairQuestStatus as any)(userId);
         return z.any().parse(statusData);
@@ -158,28 +158,28 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
 
   const createQuestMutation = useOfflineAwareMutation(
     async (previousStreak: number) => {
-      if (!userId) throw new Error('User not authenticated');
-      
+      if (!userId) {throw new Error('User not authenticated');}
+
       const quest = await (createRepairQuest as any)(userId, previousStreak);
-      if (!quest) throw new Error('Failed to create repair quest');
-      
+      if (!quest) {throw new Error('Failed to create repair quest');}
+
       // Persist to database
       const result = await (saveRepairQuestEnhanced as any)(quest);
-      if (result.error) throw result.error;
-      
+      if (result.error) {throw result.error;}
+
       return quest;
     },
     {
       onSuccess: (data: any) => {
         queryClient.setQueryData(QUERY_KEYS.repairQuest(userId || ''), data);
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.repairQuestStatus(userId || '') });
-        
+
         (track as any)('streak_repair_quest_created', {
           questId: (data as any).id,
           previousStreak: (data as any).previousStreak,
           targetRestoreDays: (data as any).targetRestoreDays,
         });
-        
+
         (eventBus as any).publish('streak:repair_quest_created', {
           userId: userId || '',
           questId: (data as any).id,
@@ -205,10 +205,10 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
       duration: number;
       qualityScore: number;
     }) => {
-      if (!userId) throw new Error('User not authenticated');
-      
+      if (!userId) {throw new Error('User not authenticated');}
+
       const result = await (recordRepairQuestSession as any)(userId, sessionId, duration, qualityScore);
-      
+
       if ((result as any).questCompleted && (result as any).quest) {
         // Update quest in database
         const updateResult = await (updateRepairQuestEnhanced as any)((result as any).quest.id, {
@@ -217,10 +217,10 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
           sessionIds: (result as any).quest.sessionIds,
           completedAt: Date.now(),
         });
-        
-        if (updateResult.error) throw updateResult.error;
+
+        if (updateResult.error) {throw updateResult.error;}
       }
-      
+
       return result;
     },
     {
@@ -228,7 +228,7 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
         // Invalidate queries to refetch fresh data
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.repairQuest(userId || '') });
         queryClient.invalidateQueries({ queryKey: QUERY_KEYS.repairQuestStatus(userId || '') });
-        
+
         if ((data as any).questCompleted) {
           (track as any)('streak_repair_quest_completed', {
             restoredToDays: (data as any).restoredToDays,
@@ -305,30 +305,30 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
     // Data
     quest,
     status,
-    
+
     // Loading States
     isLoading,
     isStatusLoading,
     isCreating: createQuestMutation.isPending,
     isRecordingSession: recordSessionMutation.isPending,
-    
+
     // Error States
     error: error as Error | null,
     statusError: statusError as Error | null,
     createError: createQuestMutation.error as Error | null,
     recordError: recordSessionMutation.error as Error | null,
-    
+
     // Actions
     createQuest,
     recordSession,
     refetch,
     refetchStatus,
-    
+
     // Retry
     retry,
     retryCreate,
     retryRecord,
-    
+
     // UI States
     isEmpty,
     canStartQuest,
@@ -356,7 +356,7 @@ export function useRepairQuestStatus(): Pick<
   } = useQuery({
     queryKey: QUERY_KEYS.repairQuestStatus(userId || ''),
     queryFn: async () => {
-      if (!userId) return null;
+      if (!userId) {return null;}
       const statusData = await (getRepairQuestStatus as any)(userId);
       return z.any().parse(statusData);
     },

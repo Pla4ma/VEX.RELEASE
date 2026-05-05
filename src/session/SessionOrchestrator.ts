@@ -121,7 +121,11 @@ export class SessionOrchestrator {
       }
     }
   }
-  async startSession(countdownSeconds: number = 3): Promise<void> {
+  async startSession(config?: number | SessionConfig, countdownSeconds: number = 3): Promise<SessionState> {
+    // Handle config object passed from hook
+    if (config && typeof config === 'object') {
+      await this.createSession(config);
+    }
     if (!this.session) {
       throw new Error('No active session');
     }
@@ -157,13 +161,22 @@ export class SessionOrchestrator {
     await this.saveSessionState();
     this.eventEmitter.emitSessionStarted(this.session.phase);
     debug.info('Session started: %s', this.session.id);
+    const session = this.getSession();
+    if (!session) {
+      throw new Error('Failed to get session state');
+    }
+    return session;
   }
-  async pauseSession(reason?: string): Promise<void> {
+  async pauseSession(reason?: string): Promise<SessionState> {
     if (!this.session || !this.timerEngine) {
       throw new Error('No active session');
     }
     if (this.session.status !== 'ACTIVE') {
-      return;
+      const session = this.getSession();
+      if (!session) {
+        throw new Error('Failed to get session state');
+      }
+      return session;
     }
     this.session.status = 'PAUSED';
     this.session.pausedAt = Date.now();
@@ -176,13 +189,22 @@ export class SessionOrchestrator {
     this.eventEmitter.emitSessionPaused(reason);
     this.recordInterruption('USER_PAUSE', 'MINOR');
     debug.info('Session paused: %s', this.session.id);
+    const session = this.getSession();
+    if (!session) {
+      throw new Error('Failed to get session state');
+    }
+    return session;
   }
-  async resumeSession(): Promise<void> {
+  async resumeSession(): Promise<SessionState> {
     if (!this.session || !this.timerEngine) {
       throw new Error('No active session');
     }
     if (this.session.status !== 'PAUSED') {
-      return;
+      const session = this.getSession();
+      if (!session) {
+        throw new Error('Failed to get session state');
+      }
+      return session;
     }
     const now = Date.now();
     const pausedDuration = now - (this.session.pausedAt || now);
@@ -199,6 +221,11 @@ export class SessionOrchestrator {
       this.session.id,
       pausedDuration,
     );
+    const session = this.getSession();
+    if (!session) {
+      throw new Error('Failed to get session state');
+    }
+    return session;
   }
   async backgroundSession(): Promise<void> {
     if (!this.session || !this.timerEngine) {
@@ -304,7 +331,7 @@ export class SessionOrchestrator {
       { secondsRemaining },
     );
   }
-  private async startBreak(): Promise<void> {
+  async startBreak(): Promise<void> {
     if (!this.session) {return;}
     const isLongBreak =
       (this.session.currentInterval || 0) % this.session.config.longBreakInterval ===
@@ -387,6 +414,17 @@ export class SessionOrchestrator {
     await this.completeSessionInternal();
     const session = this.session;
     return this.buildSessionSummary();
+  }
+  async endSession(_reason?: string): Promise<SessionState> {
+    if (!this.session) {
+      throw new Error('No active session');
+    }
+    await this.completeSessionInternal();
+    const session = this.getSession();
+    if (!session) {
+      throw new Error('Failed to get session state');
+    }
+    return session;
   }
   private async completeSessionInternal(): Promise<void> {
     if (!this.session) {return;}
@@ -654,6 +692,9 @@ export class SessionOrchestrator {
   getSession(): SessionState | null {
     return this.session ? { ...this.session } : null;
   }
+  getSessionState(): SessionState | null {
+    return this.getSession();
+  }
   getTimerState() {
     return this.timerEngine?.getState() || null;
   }
@@ -702,6 +743,52 @@ export class SessionOrchestrator {
     this.isActive = false;
     this.session = null;
     debug.info('SessionOrchestrator destroyed');
+  }
+
+  // Stub methods for compatibility with useStudySession hook
+  endBreak(): void {
+    debug.info('endBreak called - not implemented');
+  }
+
+  updateFocusQuality(_quality: number): void {
+    debug.info('updateFocusQuality called - not implemented');
+  }
+
+  logInterruption(_type: string, _details?: Record<string, unknown>): void {
+    debug.info('logInterruption called - not implemented');
+  }
+
+  logRecovery(_type: string, _details?: Record<string, unknown>): void {
+    debug.info('logRecovery called - not implemented');
+  }
+
+  addDocument(_documentId: string): void {
+    debug.info('addDocument called - not implemented');
+  }
+
+  removeDocument(_documentId: string): void {
+    debug.info('removeDocument called - not implemented');
+  }
+
+  // Additional methods needed by useStudySession hook
+  getSessionHistory(_limit: number): SessionState[] {
+    debug.info('getSessionHistory called - returning empty array');
+    return [];
+  }
+
+  getSessionStats(): any {
+    debug.info('getSessionStats called - returning empty stats');
+    return {
+      totalSessions: 0,
+      totalDuration: 0,
+      averageDuration: 0,
+      completionRate: 0,
+    };
+  }
+
+  getActiveSession(): SessionState | null {
+    debug.info('getActiveSession called');
+    return this.getSession();
   }
 }
 export {

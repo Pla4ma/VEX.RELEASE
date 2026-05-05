@@ -84,16 +84,16 @@ export function addTowerBlock(
   totalBonuses: FocusTower['totalBonuses'];
 } {
   const tierConfig = TIER_CONFIG[tower.currentTier - 1];
-  
+
   // Determine if special block (milestone or quality)
   const isMilestone = MILESTONE_BLOCKS.includes(tower.totalBlocks + 1);
   const isHighQuality = sessionQuality >= 90;
   const isSpecial = isMilestone || isHighQuality;
-  
+
   // Calculate bonus value
   let bonusValue = tierConfig.bonusPerBlock;
-  if (isHighQuality) bonusValue *= 1.5; // 50% bonus for quality sessions
-  
+  if (isHighQuality) {bonusValue *= 1.5;} // 50% bonus for quality sessions
+
   // Create block
   const newBlock: TowerBlock = {
     id: crypto.randomUUID(),
@@ -105,20 +105,20 @@ export function addTowerBlock(
     bonusValue: Math.round(bonusValue * 10) / 10,
     isSpecial,
   };
-  
+
   // Update tower state
   const newBlocksThisTier = tower.blocksThisTier + 1;
   const tierUp = newBlocksThisTier >= tierConfig.maxBlocks;
   const newTier = tierUp ? tower.currentTier + 1 : tower.currentTier;
   const newBlocksThisTierAfter = tierUp ? 0 : newBlocksThisTier;
   const newTotalBlocks = tower.totalBlocks + 1;
-  
+
   // Calculate milestone
   const milestoneReached = isMilestone ? newTotalBlocks : null;
-  
+
   // Calculate total bonuses
   const totalBonuses = calculateTotalBonuses(tower, newBlock);
-  
+
   // Track achievements
   const newAchievements = [...tower.achievementsUnlocked];
   if (milestoneReached && milestoneReached === 100) {
@@ -127,7 +127,7 @@ export function addTowerBlock(
   if (newTier > tower.currentTier) {
     newAchievements.push(`tower_tier_${newTier}`);
   }
-  
+
   const updatedTower: FocusTower = {
     ...tower,
     currentTier: newTier,
@@ -139,7 +139,7 @@ export function addTowerBlock(
     totalBonuses,
     achievementsUnlocked: newAchievements,
   };
-  
+
   // Publish events
   eventBus.publish('focus_tower:block_added', {
     userId: tower.userId,
@@ -148,7 +148,7 @@ export function addTowerBlock(
     tierUp,
     milestoneReached: milestoneReached || undefined,
   });
-  
+
   if (tierUp) {
     eventBus.publish('focus_tower:tier_up', {
       userId: tower.userId,
@@ -156,7 +156,7 @@ export function addTowerBlock(
       tierName: TIER_CONFIG[newTier - 1]?.name || 'Unknown',
     });
   }
-  
+
   if (milestoneReached) {
     eventBus.publish('focus_tower:milestone', {
       userId: tower.userId,
@@ -164,7 +164,7 @@ export function addTowerBlock(
       totalBlocks: newTotalBlocks,
     });
   }
-  
+
   return {
     updatedTower,
     newBlock,
@@ -176,7 +176,7 @@ export function addTowerBlock(
 
 function calculateTotalBonuses(tower: FocusTower, newBlock: TowerBlock): FocusTower['totalBonuses'] {
   const bonuses = { ...tower.totalBonuses };
-  
+
   switch (newBlock.bonusType) {
     case 'XP_BOOST':
       bonuses.xpBoostPercent += newBlock.bonusValue;
@@ -194,7 +194,7 @@ function calculateTotalBonuses(tower: FocusTower, newBlock: TowerBlock): FocusTo
       bonuses.focusDurationBonus += newBlock.bonusValue;
       break;
   }
-  
+
   return bonuses;
 }
 
@@ -211,7 +211,7 @@ export function calculateTowerChurnRisk(tower: FocusTower, daysInactive: number)
   // Tower decay starts after 3 days of inactivity
   const decayStartDays = 3;
   const criticalDecayDays = 7;
-  
+
   if (daysInactive < decayStartDays) {
     return {
       riskLevel: 'NONE',
@@ -220,7 +220,7 @@ export function calculateTowerChurnRisk(tower: FocusTower, daysInactive: number)
       wouldLose: '',
     };
   }
-  
+
   if (daysInactive < criticalDecayDays) {
     const daysToCritical = criticalDecayDays - daysInactive;
     return {
@@ -230,13 +230,13 @@ export function calculateTowerChurnRisk(tower: FocusTower, daysInactive: number)
       wouldLose: 'Recent progress bonus',
     };
   }
-  
+
   // Critical - tower starts losing blocks
   const blocksLost = Math.min(
     Math.floor((daysInactive - criticalDecayDays) / 2),
     Math.floor(tower.totalBlocks * 0.1) // Max 10% loss
   );
-  
+
   return {
     riskLevel: 'CRITICAL',
     daysUntilDecay: 0,
@@ -257,7 +257,7 @@ export function applyTowerDecay(tower: FocusTower, daysInactive: number): {
   restoreCost: number; // Gems to restore
 } {
   const decayStartDays = 7;
-  
+
   if (daysInactive < decayStartDays) {
     return {
       updatedTower: tower,
@@ -267,21 +267,21 @@ export function applyTowerDecay(tower: FocusTower, daysInactive: number): {
       restoreCost: 0,
     };
   }
-  
+
   // Calculate blocks to lose (1 block per 2 days after threshold)
   const blocksLost = Math.min(
     Math.floor((daysInactive - decayStartDays) / 2),
     Math.max(1, Math.floor(tower.totalBlocks * 0.05)) // Min 1, max 5% per decay cycle
   );
-  
+
   // Remove last N blocks
   const newTotalBlocks = Math.max(0, tower.totalBlocks - blocksLost);
   const newHeight = Math.max(0, tower.totalHeight - blocksLost * 0.8);
-  
+
   // Recalculate bonuses (simplified - in real implementation, track block history)
   const decayFactor = newTotalBlocks / tower.totalBlocks;
   const bonusesLost: Partial<FocusTower['totalBonuses']> = {};
-  
+
   const updatedTower: FocusTower = {
     ...tower,
     totalBlocks: newTotalBlocks,
@@ -294,16 +294,16 @@ export function applyTowerDecay(tower: FocusTower, daysInactive: number): {
       focusDurationBonus: Math.floor(tower.totalBonuses.focusDurationBonus * decayFactor * 10) / 10,
     },
   };
-  
+
   const restoreCost = blocksLost * 25; // 25 gems per block to restore
-  
+
   // Publish event
   eventBus.publish('focus_tower:decay', {
     userId: tower.userId,
     daysInactive,
     decayAmount: blocksLost,
   });
-  
+
   return {
     updatedTower,
     blocksLost,
@@ -329,7 +329,7 @@ export function restoreTowerBlocks(
 } {
   const maxRestorable = Math.min(blocksToRestore, tower.totalBlocks); // Can't restore more than current
   const cost = maxRestorable * 25;
-  
+
   if (gemsSpent < cost) {
     return {
       success: false,
@@ -338,7 +338,7 @@ export function restoreTowerBlocks(
       error: `Need ${cost} gems to restore ${maxRestorable} blocks`,
     };
   }
-  
+
   // In a real implementation, we'd need the block history to restore exact bonuses
   // For now, approximate the restoration
   const restoredBonuses = {
@@ -348,20 +348,20 @@ export function restoreTowerBlocks(
     bossDamageBonus: tower.totalBonuses.bossDamageBonus + maxRestorable * 3,
     focusDurationBonus: tower.totalBonuses.focusDurationBonus + maxRestorable * 5,
   };
-  
+
   const updatedTower: FocusTower = {
     ...tower,
     totalBlocks: tower.totalBlocks + maxRestorable,
     totalHeight: tower.totalHeight + maxRestorable,
     totalBonuses: restoredBonuses,
   };
-  
+
   (eventBus as any).publish('focus_tower:restored', {
     userId: tower.userId,
     blocksRestored: maxRestorable,
     gemsSpent: cost,
   });
-  
+
   return {
     success: true,
     updatedTower,
@@ -382,11 +382,11 @@ export function getTowerDisplay(tower: FocusTower): {
   totalBonusesText: string;
 } {
   const tierConfig = TIER_CONFIG[tower.currentTier - 1] || TIER_CONFIG[TIER_CONFIG.length - 1];
-  
+
   // Find next milestone
   const nextMilestone = MILESTONE_BLOCKS.find((m) => m > tower.totalBlocks) || 1000;
   const progressToMilestone = Math.floor((tower.totalBlocks % nextMilestone) / nextMilestone * 100);
-  
+
   // Format bonuses
   const bonuses = [];
   if (tower.totalBonuses.xpBoostPercent > 0) {
@@ -398,7 +398,7 @@ export function getTowerDisplay(tower: FocusTower): {
   if (tower.totalBonuses.bossDamageBonus > 0) {
     bonuses.push(`+${tower.totalBonuses.bossDamageBonus}% boss damage`);
   }
-  
+
   return {
     height: `${Math.floor(tower.totalHeight)}m`,
     tierName: tierConfig.name,
@@ -415,7 +415,7 @@ export function formatTowerBlockVisual(block: TowerBlock): {
   glow: boolean;
 } {
   const tierConfig = TIER_CONFIG[block.tier - 1];
-  
+
   return {
     icon: block.isSpecial ? '⭐' : '🧱',
     color: tierConfig?.color || '#757575',
@@ -433,14 +433,14 @@ export function getTowerHeightComparison(tower: FocusTower): string {
     { blocks: 500, label: 'Cloud City' },
     { blocks: 1000, label: 'Space Station' },
   ];
-  
+
   const current = heights.findLast((h) => tower.totalBlocks >= h.blocks) || heights[0];
   const next = heights.find((h) => tower.totalBlocks < h.blocks);
-  
+
   if (!next) {
     return `🏆 ${current.label} - Maximum Height!`;
   }
-  
+
   const remaining = next.blocks - tower.totalBlocks;
   return `🏗️ ${current.label} → ${next.label} (${remaining} blocks to go)`;
 }

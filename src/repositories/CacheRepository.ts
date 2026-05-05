@@ -1,6 +1,6 @@
 /**
  * Cache Repository
- * 
+ *
  * Repository for cache management including cache operations,
  * invalidation strategies, performance monitoring, and cache analytics.
  */
@@ -173,14 +173,14 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
     try {
       // Try to get from cache manager first
       const value = await this.cacheManager.get(key);
-      
+
       if (value !== null) {
         // Update access statistics
         await this.updateAccessStats(key);
-        
+
         const executionTime = Date.now() - startTime;
         this.logOperation('get', 'success', { key, hit: true, executionTime });
-        
+
         // Log operation for analytics
         await this.logCacheOperation({
           operation: CacheOperationType.GET,
@@ -197,11 +197,11 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
       // Check database for cache entry
       const query = 'SELECT * FROM cache_entries WHERE key = $1 AND (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP)';
       const result = await this.dbConnection.query(query, [key]);
-      
+
       if (result.rows.length === 0) {
         const executionTime = Date.now() - startTime;
         this.logOperation('get', 'success', { key, hit: false, executionTime });
-        
+
         // Log operation for analytics
         await this.logCacheOperation({
           operation: CacheOperationType.GET,
@@ -216,10 +216,10 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
       }
 
       const cacheEntry = this.mapRowToCacheEntry(result.rows[0]);
-      
+
       // Restore to cache manager
       await this.cacheManager.set(key, cacheEntry, this.calculateRemainingTTL(cacheEntry));
-      
+
       const executionTime = Date.now() - startTime;
       this.logOperation('get', 'success', { key, hit: false, restored: true, executionTime });
 
@@ -227,7 +227,7 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('get', 'error', { key, error: (error as Error).message, executionTime });
-      
+
       // Log operation for analytics
       await this.logCacheOperation({
         operation: CacheOperationType.GET,
@@ -324,7 +324,7 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('set', 'error', { key, error: (error as Error).message, executionTime });
-      
+
       // Log operation for analytics
       await this.logCacheOperation({
         operation: CacheOperationType.SET,
@@ -370,7 +370,7 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('delete', 'error', { key, error: (error as Error).message, executionTime });
-      
+
       // Log operation for analytics
       await this.logCacheOperation({
         operation: CacheOperationType.DELETE,
@@ -396,7 +396,7 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
       if (pattern) {
         // Clear entries matching pattern
         const keys = await this.cacheManager.getKeys(pattern);
-        
+
         for (const key of keys) {
           await this.cacheManager.delete(key);
         }
@@ -407,7 +407,7 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
       } else {
         // Clear all entries
         await this.cacheManager.clear();
-        
+
         const query = 'DELETE FROM cache_entries';
         const result = await this.dbConnection.query(query);
         deletedCount = result.rowCount;
@@ -430,7 +430,7 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
     } catch (error) {
       const executionTime = Date.now() - startTime;
       this.logOperation('clear', 'error', { pattern, error: (error as Error).message, executionTime });
-      
+
       // Log operation for analytics
       await this.logCacheOperation({
         operation: CacheOperationType.CLEAR,
@@ -457,9 +457,9 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
         WHERE tags && $1 AND (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP)
       `;
       const result = await this.dbConnection.query(query, [tags]);
-      
+
       const keys = result.rows.map(row => row.key);
-      
+
       // Delete from cache manager
       for (const key of keys) {
         await this.cacheManager.delete(key);
@@ -630,7 +630,7 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
   protected async findInDatabase(id: string, _options?: any): Promise<CacheEntry | null> {
     const query = 'SELECT * FROM cache_entries WHERE key = $1 AND (expires_at IS NULL OR expires_at > CURRENT_TIMESTAMP)';
     const result = await this.dbConnection.query(query, [id]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -677,7 +677,7 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
 
   protected async createInDatabase(entity: Partial<CacheEntry>): Promise<CacheEntry> {
     const cacheEntry = entity as CacheEntry;
-    
+
     const query = `
       INSERT INTO cache_entries (
         key, value, ttl, created_at, expires_at, access_count, 
@@ -705,7 +705,7 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
 
   protected async updateInDatabase(id: string, updates: Partial<CacheEntry>): Promise<CacheEntry | null> {
     const updateData = updates;
-    
+
     const setClause: string[] = [];
     const params: any[] = [];
     let paramIndex = 1;
@@ -733,7 +733,7 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
       return this.findById(id);
     }
 
-    setClause.push(`updated_at = CURRENT_TIMESTAMP`);
+    setClause.push('updated_at = CURRENT_TIMESTAMP');
     params.push(id);
 
     const query = `
@@ -744,7 +744,7 @@ export class CacheRepository extends BaseRepository<CacheEntry> {
     `;
 
     const result = await this.dbConnection.query(query, params);
-    
+
     if (result.rows.length === 0) {
       return null;
     }

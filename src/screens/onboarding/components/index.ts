@@ -19,7 +19,6 @@ export {
   type CoachPersona,
 } from './OnboardingChoosePersona';
 export { OnboardingPermissions } from './OnboardingPermissions';
-export { OnboardingBossIntro } from './OnboardingBossIntro';
 export { RevealStep } from './RevealStep';
 export { GoalStep } from './GoalStep';
 export { StarterStep } from './StarterStep';

@@ -169,7 +169,7 @@ export function getOrCreateUserCollection(
   if (existing) {
     return existing;
   }
-  
+
   return UserCollectionSchema.parse({
     userId,
     setId,
@@ -202,20 +202,20 @@ export function acquireCollectionItem(
       progress: userCollection.progress,
     };
   }
-  
+
   // Find item in set
   const item = collectionSet.items.find((i) => i.id === itemId);
   if (!item) {
     throw new Error(`Item ${itemId} not found in set ${collectionSet.id}`);
   }
-  
+
   // Add to acquired items
   const newItemsAcquired = [...userCollection.itemsAcquired, itemId];
   const totalItems = collectionSet.items.length;
   const newProgress = Math.floor((newItemsAcquired.length / totalItems) * 100);
   const wasCompleted = userCollection.completed;
   const nowCompleted = newItemsAcquired.length === totalItems;
-  
+
   const updatedCollection: UserCollection = {
     ...userCollection,
     itemsAcquired: newItemsAcquired,
@@ -226,7 +226,7 @@ export function acquireCollectionItem(
       ? userCollection.completionCount + 1
       : userCollection.completionCount,
   };
-  
+
   // Publish events
   eventBus.publish('collection:item_acquired', {
     userId: userCollection.userId,
@@ -236,7 +236,7 @@ export function acquireCollectionItem(
     rarity: item.rarity,
     isNew: true,
   });
-  
+
   if (nowCompleted && !wasCompleted) {
     eventBus.publish('collection:completed', {
       userId: userCollection.userId,
@@ -244,7 +244,7 @@ export function acquireCollectionItem(
       rewards: collectionSet.completionBonus,
     });
   }
-  
+
   return {
     updatedCollection,
     isNew: true,
@@ -274,7 +274,7 @@ export function getCollectionProgress(
     (item) => !userCollection.itemsAcquired.includes(item.id)
   );
   const progressPercent = Math.floor((acquiredItems / totalItems) * 100);
-  
+
   // Estimate completion based on rarity of missing items
   let estimatedDays = 0;
   for (const item of missingItems) {
@@ -296,14 +296,14 @@ export function getCollectionProgress(
         break;
     }
   }
-  
+
   const nextItem = missingItems.length > 0
     ? missingItems.sort((a, b) => {
         const rarityOrder = { COMMON: 0, UNCOMMON: 1, RARE: 2, EPIC: 3, LEGENDARY: 4 };
         return rarityOrder[a.rarity] - rarityOrder[b.rarity];
       })[0]
     : null;
-  
+
   return {
     totalItems,
     acquiredItems,
@@ -341,7 +341,7 @@ export function claimCompletionBonus(
       error: 'Collection not yet completed',
     };
   }
-  
+
   if (userCollection.bonusClaimed) {
     return {
       success: false,
@@ -350,19 +350,19 @@ export function claimCompletionBonus(
       error: 'Bonus already claimed',
     };
   }
-  
+
   const updatedCollection: UserCollection = {
     ...userCollection,
     bonusClaimed: true,
   };
-  
+
   // Publish bonus claim
   eventBus.publish('collection:bonus_claimed', {
     userId: userCollection.userId,
     setId: collectionSet.id,
     bonusId: `${collectionSet.id}-bonus`,
   });
-  
+
   return {
     success: true,
     bonus: collectionSet.completionBonus,
@@ -390,14 +390,14 @@ export function formatCollectionCard(
   const filled = Math.floor(progress / 10);
   const empty = 10 - filled;
   const progressBar = '█'.repeat(filled) + '░'.repeat(empty) + ` ${progress}%`;
-  
+
   const difficultyColors: Record<string, string> = {
     EASY: '#4CAF50',
     MEDIUM: '#FF9800',
     HARD: '#F44336',
     EXTREME: '#9C27B0',
   };
-  
+
   const themeEmojis: Record<string, string> = {
     starter: '🌱',
     streaks: '🔥',
@@ -405,9 +405,9 @@ export function formatCollectionCard(
     cosmetics: '👗',
     secret: '🔮',
   };
-  
+
   const missingCount = collectionSet.items.length - userCollection.itemsAcquired.length;
-  
+
   return {
     title: collectionSet.hidden && !userCollection.completed ? '???' : collectionSet.name,
     subtitle: collectionSet.hidden && progress < 25
@@ -440,7 +440,7 @@ export function getRarityDisplay(rarity: CollectionItem['rarity']): {
     EPIC: { color: '#9C27B0', bgColor: '#F3E5F5', label: 'Epic', stars: '★★★★' },
     LEGENDARY: { color: '#FF9800', bgColor: '#FFF3E0', label: 'Legendary', stars: '★★★★★' },
   };
-  
+
   return displays[rarity] || displays.COMMON;
 }
 
@@ -452,11 +452,11 @@ export function getDiscoveryHint(
   collectionSet: CollectionSet,
   currentProgress: number
 ): string | null {
-  if (!collectionSet.hidden) return null;
-  if (currentProgress === 0) return null; // Completely hidden
-  if (currentProgress < 25) return '🔮 A mysterious collection exists...';
-  if (currentProgress < 50) return '🧩 You\'ve found some pieces of a puzzle...';
-  if (currentProgress < 75) return '🔍 The picture is becoming clearer...';
+  if (!collectionSet.hidden) {return null;}
+  if (currentProgress === 0) {return null;} // Completely hidden
+  if (currentProgress < 25) {return '🔮 A mysterious collection exists...';}
+  if (currentProgress < 50) {return '🧩 You\'ve found some pieces of a puzzle...';}
+  if (currentProgress < 75) {return '🔍 The picture is becoming clearer...';}
   return '🔐 Almost there! The secret will soon be revealed!';
 }
 

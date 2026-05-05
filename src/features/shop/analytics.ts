@@ -1,6 +1,6 @@
 /**
  * Shop Feature Analytics
- * 
+ *
  * Comprehensive analytics tracking for in-game shop, virtual economy, and marketplace features.
  */
 

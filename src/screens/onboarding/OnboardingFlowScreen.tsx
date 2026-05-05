@@ -5,7 +5,7 @@ import * as Sentry from '@sentry/react-native';
 
 import { useDisclosureAnalytics } from '../../features/liveops-config';
 import type { ExtendedRootStackParams } from '../../navigation/types';
-import { ONBOARDING_GOALS, useOnboardingStore, type OnboardingGoal } from '../../onboarding';
+import { ONBOARDING_GOALS, useOnboardingStore, type OnboardingGoal } from '../../features/onboarding';
 import { useSessionHistory } from '../../session/hooks/useSession';
 import { useAuthStore } from '../../store';
 import { useSessionUIStore } from '../../store/session-state';

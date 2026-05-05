@@ -1,6 +1,6 @@
 /**
  * Audit Repository
- * 
+ *
  * Repository for audit trail management including audit logging,
  * compliance tracking, security monitoring, and audit reporting.
  */
@@ -689,7 +689,7 @@ export class AuditRepository extends BaseRepository<AuditLog> {
   private async evaluateComplianceRule(rule: ComplianceRule, auditLog: AuditLog): Promise<boolean> {
     for (const condition of rule.conditions) {
       const fieldValue = this.getFieldValue(auditLog, condition.field);
-      
+
       let conditionMet = false;
       switch (condition.operator) {
         case 'equals':
@@ -798,7 +798,7 @@ export class AuditRepository extends BaseRepository<AuditLog> {
   protected async findInDatabase(id: string, _options?: any): Promise<AuditLog | null> {
     const query = 'SELECT * FROM audit_logs WHERE id = $1';
     const result = await this.dbConnection.query(query, [id]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -863,7 +863,7 @@ export class AuditRepository extends BaseRepository<AuditLog> {
 
   protected async createInDatabase(entity: Partial<AuditLog>): Promise<AuditLog> {
     const auditLog = entity as Omit<AuditLog, 'id' | 'timestamp'>;
-    
+
     const query = `
       INSERT INTO audit_logs (
         entity_type, entity_id, action, user_id, session_id, ip_address,

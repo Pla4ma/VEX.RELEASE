@@ -1,6 +1,6 @@
 /**
  * Authentication Validation Layer
- * 
+ *
  * Comprehensive validation for authentication-related operations including login,
   * session management, token validation, and security checks.
  */
@@ -208,10 +208,10 @@ export const validateToken = (token: TokenData): AuthValidationResult => {
       try {
         // Check header
         JSON.parse(atob(jwtParts[0]));
-        
+
         // Check payload
         const payload = JSON.parse(atob(jwtParts[1]));
-        
+
         if (!payload.exp) {
           warnings.push('Token has no expiration claim');
         } else {
@@ -540,7 +540,7 @@ export const validateIPAddress = (ip: string, context: 'login' | 'api' | 'admin'
 
   // IPv4 validation
   const ipv4Regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-  
+
   // IPv6 validation (simplified)
   const ipv6Regex = /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
 

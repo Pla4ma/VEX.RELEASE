@@ -6,7 +6,7 @@ export interface ShopEventDefinitions {
   'shop:purchase': {
     userId: string;
     itemId: string;
-    price: { currency: 'COINS' | 'GEMS' | 'SEASONAL'; amount: number };
+    price: { currency: 'COINS' | 'GEMS' | 'SEASONAL' | 'FOCUS_POINTS'; amount: number };
   };
   'shop:item_purchased': {
     userId: string;

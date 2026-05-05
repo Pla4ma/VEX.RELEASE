@@ -1,6 +1,6 @@
 /**
  * Retention Feature Events
- * 
+ *
  * Event definitions for user retention, engagement, and churn prevention features.
  */
 
@@ -584,7 +584,7 @@ export interface RetentionSystemErrorEvent extends BaseRetentionEvent {
 }
 
 // Union Type for All Retention Events
-export type RetentionEventType = 
+export type RetentionEventType =
   | UserActiveEvent
   | UserInactiveEvent
   | UserChurnRiskChangedEvent
@@ -609,7 +609,7 @@ export type RetentionEventType =
 // Event Factory Functions
 export function createUserActiveEvent(
   userId: string,
-  activityType: string,
+  activityType: 'session_start' | 'feature_use' | 'social_interaction' | 'achievement' | 'purchase',
   activityDetails: any,
   sessionId: string,
   sessionDuration: number,
@@ -639,7 +639,7 @@ export function createUserChurnRiskChangedEvent(
   userId: string,
   previousRisk: number,
   currentRisk: number,
-  riskLevel: string,
+  riskLevel: 'low' | 'medium' | 'high' | 'critical',
   contributingFactors: any[],
   prediction: any,
   recommendedActions: any[]
@@ -710,6 +710,7 @@ export function createChurnPredictionUpdatedEvent(
     userId,
     timestamp: new Date(),
     data: {
+      userId,
       predictionId,
       predictionDate: new Date(),
       churnProbability,
@@ -727,7 +728,7 @@ export function createChurnPredictionUpdatedEvent(
 export function createRetentionInterventionTriggeredEvent(
   userId: string,
   interventionId: string,
-  interventionType: string,
+  interventionType: 'reactivation' | 'engagement' | 'incentive' | 'support' | 'education',
   triggerReason: string,
   triggerCondition: any,
   intervention: any

@@ -1,6 +1,6 @@
 /**
  * Notification Repository
- * 
+ *
  * Repository for notification data management including CRUD operations,
  * notification delivery, preferences, and notification history.
  */
@@ -241,7 +241,7 @@ export class NotificationRepository extends BaseRepository<Notification> {
   protected async findInDatabase(id: string, _options?: any): Promise<Notification | null> {
     const query = 'SELECT * FROM notifications WHERE id = $1';
     const result = await this.dbConnection.query(query, [id]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -279,7 +279,7 @@ export class NotificationRepository extends BaseRepository<Notification> {
       return result.data || null;
     }
 
-    setClause.push(`updated_at = CURRENT_TIMESTAMP`);
+    setClause.push('updated_at = CURRENT_TIMESTAMP');
     params.push(id);
 
     const query = `

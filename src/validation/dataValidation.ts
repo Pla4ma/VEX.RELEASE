@@ -1,6 +1,6 @@
 /**
  * Data Validation Layer
- * 
+ *
  * Comprehensive validation for various data types including strings, numbers,
  * dates, arrays, objects, and complex data structures with type safety.
  */
@@ -534,7 +534,7 @@ export const validateURL = (url: string): DataValidationResult => {
 
   try {
     const parsedURL = new URL(url);
-    
+
     // Protocol validation
     const allowedProtocols = ['http:', 'https:', 'ftp:', 'ftps:'];
     if (!allowedProtocols.includes(parsedURL.protocol)) {
@@ -608,7 +608,7 @@ export const validateJSON = (json: string, schema?: any): DataValidationResult =
 
   try {
     sanitizedData = JSON.parse(json);
-    
+
     // Schema validation (basic)
     if (schema) {
       if (typeof schema === 'object' && schema.type) {
@@ -708,17 +708,17 @@ export const validateCreditCard = (cardNumber: string): DataValidationResult => 
   // Luhn algorithm validation
   let sum = 0;
   let isEven = false;
-  
+
   for (let i = cleanCard.length - 1; i >= 0; i--) {
     let digit = parseInt(cleanCard[i], 10);
-    
+
     if (isEven) {
       digit *= 2;
       if (digit > 9) {
         digit -= 9;
       }
     }
-    
+
     sum += digit;
     isEven = !isEven;
   }

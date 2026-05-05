@@ -6,7 +6,11 @@ export type ProgressionServiceState = {
   level: number;
   totalXp: number;
   xp: number;
+  progressPercent: number;
+  xpToNextLevel: number;
 };
+
+export type LevelState = ProgressionServiceState;
 
 export type ProgressionService = {
   addXP: (
@@ -15,6 +19,8 @@ export type ProgressionService = {
     options?: { metadata?: Record<string, unknown>; sessionId?: string }
   ) => Promise<void>;
   getState: () => ProgressionServiceState;
+  canPrestige: () => boolean;
+  prestige: () => Promise<void>;
 };
 
 const DEFAULT_STATE: ProgressionServiceState = {
@@ -22,6 +28,8 @@ const DEFAULT_STATE: ProgressionServiceState = {
   level: 1,
   totalXp: 0,
   xp: 0,
+  progressPercent: 0,
+  xpToNextLevel: 100,
 };
 
 function normalizeXpSource(source: string): XpSource {
@@ -48,6 +56,18 @@ export function getProgressionService(userId?: string): ProgressionService {
     },
     getState(): ProgressionServiceState {
       return DEFAULT_STATE;
+    },
+    canPrestige(): boolean {
+      return DEFAULT_STATE.level >= 10; // Basic prestige requirement
+    },
+    async prestige(): Promise<void> {
+      if (!this.canPrestige()) {
+        throw new Error('Cannot prestige: requirements not met');
+      }
+      // Reset progression with prestige benefits
+      DEFAULT_STATE.level = 1;
+      DEFAULT_STATE.totalXp = 0;
+      DEFAULT_STATE.xp = 0;
     },
   };
 }

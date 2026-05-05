@@ -250,9 +250,9 @@ export function useDailyLoginReward(userId: string | undefined) {
   const query = useQuery({
     queryKey: dailyLoginKeys.byUser(userId || ''),
     queryFn: async (): Promise<UserDailyRewardsState | null> => {
-      if (!userId) return null;
+      if (!userId) {return null;}
       const { data, error } = await fetchDailyRewardsState(userId);
-      if (error) throw error;
+      if (error) {throw error;}
       return data;
     },
     enabled: !!userId,
@@ -261,11 +261,11 @@ export function useDailyLoginReward(userId: string | undefined) {
 
   const claimMutation = useMutation({
     mutationFn: async (): Promise<void> => {
-      if (!userId || !query.data) throw new Error('User ID required');
-      
+      if (!userId || !query.data) {throw new Error('User ID required');}
+
       const dayNumber = query.data.last_claimed_day + 1;
-      if (dayNumber > 7) dayNumber === 1;
-      
+      if (dayNumber > 7) {dayNumber === 1;}
+
       // Determine reward based on day
       const rewardMap: Record<number, { type: 'COINS' | 'GEMS' | 'XP_BOOST' | 'STREAK_SHIELD' | 'CHEST'; amount: number }> = {
         1: { type: 'COINS', amount: 100 },
@@ -276,9 +276,9 @@ export function useDailyLoginReward(userId: string | undefined) {
         6: { type: 'GEMS', amount: 25 },
         7: { type: 'CHEST', amount: 1 },
       };
-      
+
       const reward = rewardMap[dayNumber];
-      
+
       const claim = {
         id: crypto.randomUUID(),
         user_id: userId,
@@ -289,13 +289,13 @@ export function useDailyLoginReward(userId: string | undefined) {
         claimed_at: Date.now(),
         streak_at_claim: query.data.current_streak + 1,
       };
-      
+
       const { error } = await saveDailyRewardClaim(claim as any);
-      if (error) throw error;
-      
+      if (error) {throw error;}
+
       // Track analytics
       trackDailyLoginClaimed(userId, dayNumber, reward.type, reward.amount, query.data.current_streak + 1);
-      
+
       // Emit event for integration
       (eventBus as any).publish('rewards:daily_login_claimed', {
         userId,
@@ -311,7 +311,7 @@ export function useDailyLoginReward(userId: string | undefined) {
 
   const canClaim = query.data?.can_claim_today ?? false;
   const dayNumber = query.data?.last_claimed_day ?? 0;
-  
+
   // Build current reward
   const nextDay = dayNumber >= 7 ? 1 : dayNumber + 1;
   const rewardMap: Record<number, { type: 'COINS' | 'GEMS' | 'XP_BOOST' | 'STREAK_SHIELD' | 'CHEST'; amount: number; label: string; icon: string }> = {
@@ -323,7 +323,7 @@ export function useDailyLoginReward(userId: string | undefined) {
     6: { type: 'GEMS', amount: 25, label: '25 Gems', icon: '💎' },
     7: { type: 'CHEST', amount: 1, label: 'Premium Chest', icon: '🎁' },
   };
-  
+
   const currentReward: DailyLoginReward | null = canClaim ? {
     dayNumber: nextDay,
     ...rewardMap[nextDay],

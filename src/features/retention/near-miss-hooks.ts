@@ -119,22 +119,22 @@ export function shouldTriggerIntervention(
   switch (trigger) {
     case 'SESSION_ABANDON_80_PERCENT':
       return (context.sessionProgress || 0) >= 80 && (context.sessionProgress || 0) < 100;
-    
+
     case 'STREAK_ABOUT_TO_BREAK':
       return (context.streakHoursRemaining || 999) <= 0.5; // 30 minutes or less
-    
+
     case 'APP_BACKGROUND_LONG':
       return (context.minutesBackgrounded || 0) > 5 && (context.minutesBackgrounded || 0) < 60;
-    
+
     case 'CHALLENGE_ABANDON':
       return (context.challengeProgress || 0) >= 80 && (context.challengeProgress || 0) < 100;
-    
+
     case 'BOSS_FLEE_WARNING':
       return (context.bossFleeHours || 999) <= 2;
-    
+
     case 'DAILY_REWARD_MISSED':
       return (context.daysSinceLastLogin || 0) === 1;
-    
+
     default:
       return false;
   }
@@ -158,19 +158,19 @@ export function generateIntervention(
   const hoursSinceLastIntervention = personalization.lastInterventionTime
     ? (Date.now() - personalization.lastInterventionTime) / (1000 * 60 * 60)
     : 999;
-  
+
   if (hoursSinceLastIntervention < 1) {
     return null; // Too soon
   }
-  
+
   const templates = INTERVENTION_TEMPLATES[trigger];
   if (!templates || templates.length === 0) {
     return null;
   }
-  
+
   // Select template (could use ML to optimize, random for now)
   const template = templates[Math.floor(Math.random() * templates.length)];
-  
+
   // Personalize content
   const personalizedContent = {
     headline: template.headline,
@@ -178,7 +178,7 @@ export function generateIntervention(
     primaryAction: template.primaryAction,
     incentive: template.incentive as any,
   };
-  
+
   return (NearMissInterventionSchema as any).parse({
     id: crypto.randomUUID(),
     userId,
@@ -198,19 +198,19 @@ function personalizeMessage(template: string, personalization: {
   sessionCount?: number;
 }): string {
   let message = template;
-  
+
   if (personalization.userName) {
     message = message.replace('{{name}}', personalization.userName);
   }
-  
+
   if (personalization.streakDays) {
     message = message.replace('{{streak}}', personalization.streakDays.toString());
   }
-  
+
   if (personalization.sessionCount) {
     message = message.replace('{{sessions}}', personalization.sessionCount.toString());
   }
-  
+
   return message;
 }
 
@@ -220,20 +220,20 @@ function personalizeMessage(template: string, personalization: {
 
 export function showIntervention(intervention: any): any {
   const shown = { ...intervention, shown: true };
-  
+
   (eventBus as any).publish('near_miss:shown', {
     userId: intervention.userId,
     trigger: intervention.trigger,
     interventionId: intervention.id,
     urgency: intervention.urgency,
   });
-  
+
   Sentry.addBreadcrumb({
     category: 'near_miss',
     message: `Intervention shown: ${intervention.trigger}`,
     data: { userId: intervention.userId, trigger: intervention.trigger },
   });
-  
+
   return shown;
 }
 
@@ -249,19 +249,19 @@ export function resolveIntervention(
     actedUpon: action === 'PRIMARY' || action === 'SECONDARY',
     dismissed: action === 'DISMISS',
   };
-  
+
   // Grant incentive if primary action taken
   let rewardGranted: { type: string; amount: number } | undefined;
   if (action === 'PRIMARY' && intervention.content.incentive) {
     rewardGranted = intervention.content.incentive;
-    
+
     (eventBus as any).publish('near_miss:incentive_claimed', {
       userId: intervention.userId,
       interventionId: intervention.id,
       incentive: intervention.content.incentive,
     });
   }
-  
+
   // Track effectiveness
   (eventBus as any).publish('near_miss:resolved', {
     userId: intervention.userId,
@@ -269,7 +269,7 @@ export function resolveIntervention(
     action,
     success: action === 'PRIMARY',
   });
-  
+
   return { updatedIntervention: updated, rewardGranted };
 }
 
@@ -289,16 +289,16 @@ export function checkSessionAbandonment(
   progressPercent: number;
 } {
   const progressPercent = Math.floor((elapsedSeconds / totalSeconds) * 100);
-  
+
   if (!isAbandoning || progressPercent < 80) {
     return { shouldIntervene: false, intervention: null, progressPercent };
   }
-  
+
   // User is abandoning at 80%+ - this is a near miss!
   const intervention = generateIntervention(userId, 'SESSION_ABANDON_80_PERCENT', {
     sessionCount: 1, // Could be fetched from user stats
   });
-  
+
   return {
     shouldIntervene: true,
     intervention,
@@ -320,16 +320,16 @@ export function checkStreakEmergency(
   minutesRemaining: number;
 } {
   const minutesRemaining = Math.floor(streakHoursRemaining * 60);
-  
+
   if (streakHoursRemaining > 0.5) { // More than 30 minutes
     return { isEmergency: false, intervention: null, minutesRemaining };
   }
-  
+
   // CRITICAL: Streak expires in 30 minutes or less
   const intervention = generateIntervention(userId, 'STREAK_ABOUT_TO_BREAK', {
     streakDays: currentStreakDays,
   });
-  
+
   return {
     isEmergency: true,
     intervention,
@@ -353,7 +353,7 @@ export function checkBackgroundReturn(
   if (!wasInSession || minutesBackgrounded < 5 || minutesBackgrounded > 60) {
     return { shouldReward: false, xpBonusMultiplier: 1, message: '' };
   }
-  
+
   // User returned after briefly leaving
   return {
     shouldReward: true,
@@ -380,7 +380,7 @@ export function trackInterventionEffectiveness(
       timeToAction: Date.now() - intervention.triggeredAt,
     },
   });
-  
+
   // Could send to analytics service for ML optimization
   (eventBus as any).publish('near_miss:analytics', {
     interventionId: intervention.id,
@@ -401,7 +401,7 @@ export async function processNearMissOpportunities(
 ): Promise<{ streakInterventions: number; sessionInterventions: number }> {
   let streakInterventions = 0;
   let sessionInterventions = 0;
-  
+
   // Process at-risk streaks
   const atRiskStreaks = await repository.fetchUsersWithAtRiskStreaks();
   for (const user of atRiskStreaks) {

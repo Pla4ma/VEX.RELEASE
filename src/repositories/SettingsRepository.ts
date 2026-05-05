@@ -1,6 +1,6 @@
 /**
  * Settings Repository
- * 
+ *
  * Repository for application settings management including system settings,
  * user preferences, configuration management, and settings validation.
  */
@@ -189,13 +189,13 @@ export class SettingsRepository extends BaseRepository<Setting> {
 
       const query = 'SELECT * FROM settings WHERE key = $1';
       const result = await this.dbConnection.query(query, [key]);
-      
+
       if (result.rows.length === 0) {
         return null;
       }
 
       const setting = this.mapRowToSetting(result.rows[0]);
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, setting, this.options.cacheTTL);
@@ -350,13 +350,13 @@ export class SettingsRepository extends BaseRepository<Setting> {
 
       const query = 'SELECT * FROM user_settings WHERE user_id = $1 AND setting_key = $2';
       const result = await this.dbConnection.query(query, [userId, settingKey]);
-      
+
       if (result.rows.length === 0) {
         return null;
       }
 
       const userSetting = this.mapRowToUserSetting(result.rows[0]);
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, userSetting, this.options.cacheTTL);
@@ -546,7 +546,7 @@ export class SettingsRepository extends BaseRepository<Setting> {
       // Get template
       const templateQuery = 'SELECT * FROM setting_templates WHERE id = $1 AND is_active = true';
       const templateResult = await this.dbConnection.query(templateQuery, [templateId]);
-      
+
       if (templateResult.rows.length === 0) {
         throw new Error('Template not found or inactive');
       }
@@ -715,7 +715,7 @@ export class SettingsRepository extends BaseRepository<Setting> {
   protected async findInDatabase(id: string, _options?: any): Promise<Setting | null> {
     const query = 'SELECT * FROM settings WHERE id = $1';
     const result = await this.dbConnection.query(query, [id]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -814,7 +814,7 @@ export class SettingsRepository extends BaseRepository<Setting> {
 
   protected async createInDatabase(entity: Partial<Setting>): Promise<Setting> {
     const settingData = entity as SettingCreateData;
-    
+
     const query = `
       INSERT INTO settings (
         key, value, type, category, description, is_required, is_public,
@@ -848,7 +848,7 @@ export class SettingsRepository extends BaseRepository<Setting> {
 
   protected async updateInDatabase(id: string, updates: Partial<Setting>): Promise<Setting | null> {
     const updateData = updates as SettingUpdateData;
-    
+
     const setClause: string[] = [];
     const params: any[] = [];
     let paramIndex = 1;
@@ -882,7 +882,7 @@ export class SettingsRepository extends BaseRepository<Setting> {
       return this.findById(id);
     }
 
-    setClause.push(`updated_at = CURRENT_TIMESTAMP`);
+    setClause.push('updated_at = CURRENT_TIMESTAMP');
     params.push(id);
 
     const query = `
@@ -893,7 +893,7 @@ export class SettingsRepository extends BaseRepository<Setting> {
     `;
 
     const result = await this.dbConnection.query(query, params);
-    
+
     if (result.rows.length === 0) {
       return null;
     }

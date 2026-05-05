@@ -1,6 +1,6 @@
 /**
  * Session Start Feature Types
- * 
+ *
  * Types for session initialization, preparation, and startup experiences.
  */
 
@@ -49,7 +49,7 @@ export interface SessionStart {
   experience: StartExperience;
 }
 
-export type StartType = 
+export type StartType =
   | 'manual'
   | 'scheduled'
   | 'auto'
@@ -59,7 +59,7 @@ export type StartType =
   | 'social'
   | 'guided';
 
-export type StartStatus = 
+export type StartStatus =
   | 'initializing'
   | 'preparing'
   | 'ready'
@@ -87,7 +87,7 @@ export interface WarmupSession {
   effectiveness: number; // 0-100
 }
 
-export type WarmupType = 
+export type WarmupType =
   | 'mental'
   | 'physical'
   | 'technical'
@@ -134,7 +134,7 @@ export interface SetupStep {
   duration: number; // in seconds
 }
 
-export type SetupStepType = 
+export type SetupStepType =
   | 'account_check'
   | 'equipment_setup'
   | 'environment_check'
@@ -154,7 +154,7 @@ export interface CalibrationSession {
   accuracy: number; // 0-100
 }
 
-export type CalibrationType = 
+export type CalibrationType =
   | 'input'
   | 'output'
   | 'biometric'
@@ -198,7 +198,7 @@ export interface OrientationSession {
   understanding: number; // 0-100
 }
 
-export type OrientationType = 
+export type OrientationType =
   | 'tutorial'
   | 'overview'
   | 'controls'
@@ -241,7 +241,7 @@ export interface BriefingSession {
   completed: boolean;
 }
 
-export type BriefingType = 
+export type BriefingType =
   | 'mission'
   | 'goals'
   | 'strategy'
@@ -348,7 +348,7 @@ export interface EmotionState {
   arousal: number; // 0-100
 }
 
-export type EmotionType = 
+export type EmotionType =
   | 'excited'
   | 'calm'
   | 'focused'
@@ -400,7 +400,7 @@ export interface BriefingStrategy {
   contingencies: StrategyContingency[];
 }
 
-export type StrategyApproach = 
+export type StrategyApproach =
   | 'conservative'
   | 'balanced'
   | 'aggressive'
@@ -439,7 +439,7 @@ export interface BriefingTip {
   personalized: boolean;
 }
 
-export type TipCategory = 
+export type TipCategory =
   | 'performance'
   | 'strategy'
   | 'mindset'
@@ -465,7 +465,7 @@ export interface EquipmentItem {
   lastChecked?: Date;
 }
 
-export type EquipmentType = 
+export type EquipmentType =
   | 'hardware'
   | 'software'
   | 'peripheral'
@@ -541,7 +541,7 @@ export interface PostureCheck {
   exercises: PostureExercise[];
 }
 
-export type PostureState = 
+export type PostureState =
   | 'excellent'
   | 'good'
   | 'fair'
@@ -606,7 +606,7 @@ export interface SessionConfiguration {
   social: SocialConfig;
 }
 
-export type SessionMode = 
+export type SessionMode =
   | 'focus'
   | 'learning'
   | 'practice'
@@ -616,7 +616,7 @@ export type SessionMode =
   | 'relaxation'
   | 'custom';
 
-export type DifficultyLevel = 
+export type DifficultyLevel =
   | 'beginner'
   | 'easy'
   | 'medium'
@@ -684,7 +684,7 @@ export interface SessionGoal {
   milestones: GoalMilestone[];
 }
 
-export type GoalType = 
+export type GoalType =
   | 'performance'
   | 'learning'
   | 'completion'
@@ -695,7 +695,7 @@ export type GoalType =
   | 'social'
   | 'custom';
 
-export type GoalPriority = 
+export type GoalPriority =
   | 'low'
   | 'medium'
   | 'high'
@@ -743,7 +743,7 @@ export interface MoodAssessment {
   recommendations: string[];
 }
 
-export type AssessmentMethod = 
+export type AssessmentMethod =
   | 'self_report'
   | 'behavioral'
   | 'physiological'
@@ -758,7 +758,7 @@ export interface MoodStrategy {
   instructions: string[];
 }
 
-export type StrategyType = 
+export type StrategyType =
   | 'breathing'
   | 'visualization'
   | 'music'
@@ -798,7 +798,7 @@ export interface ReadinessScore {
   lastUpdated: Date;
 }
 
-export type ReadinessLevel = 
+export type ReadinessLevel =
   | 'not_ready'
   | 'minimal'
   | 'moderate'
@@ -814,7 +814,7 @@ export interface ReadinessDimension {
   factors: string[];
 }
 
-export type ReadinessDimensionType = 
+export type ReadinessDimensionType =
   | 'physical'
   | 'mental'
   | 'emotional'
@@ -822,7 +822,7 @@ export type ReadinessDimensionType =
   | 'environmental'
   | 'social';
 
-export type DimensionStatus = 
+export type DimensionStatus =
   | 'excellent'
   | 'good'
   | 'fair'
@@ -846,20 +846,20 @@ export interface ReadinessRecommendation {
   type: RecommendationType;
 }
 
-export type RecommendationPriority = 
+export type RecommendationPriority =
   | 'low'
   | 'medium'
   | 'high'
   | 'urgent';
 
-export type EffortLevel = 
+export type EffortLevel =
   | 'minimal'
   | 'low'
   | 'medium'
   | 'high'
   | 'significant';
 
-export type RecommendationType = 
+export type RecommendationType =
   | 'preparation'
   | 'adjustment'
   | 'intervention'
@@ -875,7 +875,7 @@ export interface ReadinessClearance {
   validUntil: Date;
 }
 
-export type ClearanceLevel = 
+export type ClearanceLevel =
   | 'no_go'
   | 'conditional'
   | 'full'

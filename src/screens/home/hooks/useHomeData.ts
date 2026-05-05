@@ -186,7 +186,7 @@ export function useHomeData() {
 
   // Daily Dungeon data from master orchestrator
   const dailyDungeon = useMemo(() => {
-    if (!controller.userId) return null;
+    if (!controller.userId) {return null;}
     // Access master orchestrator through controller or create mock data for now
     return {
       dungeon: {

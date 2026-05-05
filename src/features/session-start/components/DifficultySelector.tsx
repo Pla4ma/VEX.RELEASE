@@ -81,7 +81,7 @@ export function DifficultySelector({
   const haptics = useHaptics();
 
   const handleSelect = (difficulty: SessionDifficulty) => {
-    if (disabled) return;
+    if (disabled) {return;}
     haptics.light();
 
     // Track analytics

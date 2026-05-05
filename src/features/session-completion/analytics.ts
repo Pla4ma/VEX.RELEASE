@@ -1,6 +1,6 @@
 /**
  * Session Completion Feature Analytics
- * 
+ *
  * Comprehensive analytics tracking for session completion, rewards, achievements, and post-session analytics.
  */
 
@@ -553,12 +553,12 @@ export function trackSessionFeedbackSubmitted(
   rating?: number,
   comment?: string,
   sentiment?: 'positive' | 'neutral' | 'negative',
-  context: {
+  context?: {
     device: string;
     location?: string;
     sessionState: string;
   },
-  followUp: {
+  followUp?: {
     requested: boolean;
     contactMethod?: string;
     availability?: string;
@@ -575,7 +575,7 @@ export function trackSessionFeedbackSubmitted(
     comment,
     sentiment,
     context,
-    follow_up,
+    followUp,
   });
 }
 

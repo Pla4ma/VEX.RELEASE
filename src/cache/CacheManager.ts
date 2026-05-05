@@ -1,6 +1,6 @@
 /**
  * Cache Manager
- * 
+ *
  * Provides caching functionality for the application.
  */
 
@@ -18,13 +18,13 @@ export class CacheManager {
     this.cache.set(key, {
       value,
       timestamp: Date.now(),
-      ttl: ttl || this.defaultTTL
+      ttl: ttl || this.defaultTTL,
     });
   }
 
   get<T>(key: string): T | null {
     const entry = this.cache.get(key);
-    if (!entry) return null;
+    if (!entry) {return null;}
 
     if (entry.ttl && Date.now() - entry.timestamp > entry.ttl) {
       this.cache.delete(key);
@@ -44,7 +44,7 @@ export class CacheManager {
 
   has(key: string): boolean {
     const entry = this.cache.get(key);
-    if (!entry) return false;
+    if (!entry) {return false;}
 
     if (entry.ttl && Date.now() - entry.timestamp > entry.ttl) {
       this.cache.delete(key);

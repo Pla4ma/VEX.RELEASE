@@ -1,6 +1,6 @@
 /**
  * Themes Feature Events
- * 
+ *
  * Event definitions for UI themes, visual customization, and user experience personalization features.
  */
 
@@ -535,7 +535,7 @@ export interface ThemeCompatibilityIssueEvent extends BaseThemeEvent {
 }
 
 // Union Type for All Theme Events
-export type ThemeEventType = 
+export type ThemeEventType =
   | ThemeAppliedEvent
   | ThemePreviewedEvent
   | ThemeSwitchedEvent

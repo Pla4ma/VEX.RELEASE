@@ -20,7 +20,7 @@ describe('Session Stakes System', () => {
   describe('Difficulty Selection', () => {
     it('should return correct stakes for CASUAL difficulty', () => {
       const stakes = getStakesForDifficulty('CASUAL');
-      
+
       expect(stakes.difficulty).toBe('CASUAL');
       expect(stakes.xpMultiplier).toBe(0.5);
       expect(stakes.maxPauses).toBe(999); // Infinity mapped to large number
@@ -30,7 +30,7 @@ describe('Session Stakes System', () => {
 
     it('should return correct stakes for FOCUSED difficulty', () => {
       const stakes = getStakesForDifficulty('FOCUSED');
-      
+
       expect(stakes.difficulty).toBe('FOCUSED');
       expect(stakes.xpMultiplier).toBe(1.0);
       expect(stakes.maxPauses).toBe(2);
@@ -40,7 +40,7 @@ describe('Session Stakes System', () => {
 
     it('should return correct stakes for DEEP_WORK difficulty', () => {
       const stakes = getStakesForDifficulty('DEEP_WORK');
-      
+
       expect(stakes.difficulty).toBe('DEEP_WORK');
       expect(stakes.xpMultiplier).toBe(1.5);
       expect(stakes.maxPauses).toBe(0);
@@ -262,9 +262,9 @@ describe('Session Stakes System', () => {
   // ============================================================================
   describe('UI Display Helpers', () => {
     it('should return correct display for CASUAL', () => {
-      const { label, description, icon, color, riskLevel } = 
+      const { label, description, icon, color, riskLevel } =
         require('../session-stakes').getDifficultyDisplay('CASUAL');
-      
+
       expect(label).toBe('Casual');
       expect(icon).toBe('🌱');
       expect(color).toBe('#4CAF50');
@@ -272,9 +272,9 @@ describe('Session Stakes System', () => {
     });
 
     it('should return correct display for FOCUSED', () => {
-      const { label, description, icon, color, riskLevel } = 
+      const { label, description, icon, color, riskLevel } =
         require('../session-stakes').getDifficultyDisplay('FOCUSED');
-      
+
       expect(label).toBe('Focused');
       expect(icon).toBe('🔥');
       expect(color).toBe('#FF9800');
@@ -282,9 +282,9 @@ describe('Session Stakes System', () => {
     });
 
     it('should return correct display for DEEP_WORK', () => {
-      const { label, description, icon, color, riskLevel } = 
+      const { label, description, icon, color, riskLevel } =
         require('../session-stakes').getDifficultyDisplay('DEEP_WORK');
-      
+
       expect(label).toBe('Deep Work');
       expect(icon).toBe('⚡');
       expect(color).toBe('#9C27B0');

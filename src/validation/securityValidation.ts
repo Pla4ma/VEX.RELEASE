@@ -1,6 +1,6 @@
 /**
  * Security Validation Layer
- * 
+ *
  * Comprehensive security validation for input sanitization, XSS prevention,
  * SQL injection detection, CSRF protection, and other security threats.
  */
@@ -91,7 +91,7 @@ export const validateXSS = (input: string, config: SecurityConfig): SecurityVali
   // Check for suspicious URL schemes
   const urlSchemes = ['javascript:', 'vbscript:', 'data:', 'file:', 'ftp:'];
   const lowerInput = input.toLowerCase();
-  
+
   for (const scheme of urlSchemes) {
     if (lowerInput.includes(scheme)) {
       errors.push(`Suspicious URL scheme detected: ${scheme}`);
@@ -312,7 +312,7 @@ export const sanitizeInput = (input: string, config: SecurityConfig): SecurityVa
   if (config.enableInputSanitization) {
     const tagPattern = /<[^>]*>/g;
     const tagMatches = input.match(tagPattern);
-    
+
     if (tagMatches) {
       warnings.push(`HTML tags detected and removed: ${tagMatches.length} tags`);
       sanitizedInput = sanitizedInput.replace(tagPattern, '');
@@ -322,7 +322,7 @@ export const sanitizeInput = (input: string, config: SecurityConfig): SecurityVa
     if (config.allowedTags && config.allowedTags.length > 0) {
       const allowedTagPattern = new RegExp(`<(?!\\/?(${config.allowedTags.join('|')})\\b)[^>]*>`, 'gi');
       const disallowedMatches = sanitizedInput.match(allowedTagPattern);
-      
+
       if (disallowedMatches) {
         warnings.push(`Disallowed HTML tags removed: ${disallowedMatches.length} tags`);
         sanitizedInput = sanitizedInput.replace(allowedTagPattern, '');
@@ -335,16 +335,16 @@ export const sanitizeInput = (input: string, config: SecurityConfig): SecurityVa
     const attributePattern = /\b(\w+)=/g;
     const attributes = [];
     let match;
-    
+
     while ((match = attributePattern.exec(sanitizedInput)) !== null) {
       attributes.push(match[1]);
     }
 
     const disallowedAttributes = attributes.filter(attr => !config.allowedAttributes!.includes(attr));
-    
+
     if (disallowedAttributes.length > 0) {
       warnings.push(`Disallowed attributes detected: ${disallowedAttributes.join(', ')}`);
-      
+
       // Remove disallowed attributes
       for (const attr of disallowedAttributes) {
         const attrPattern = new RegExp(`\\b${attr}\\s*=\\s*["'][^"']*["']`, 'gi');
@@ -411,7 +411,7 @@ export const validateFileUpload = (
 
   // File name validation
   const fileName = file.name.toLowerCase();
-  
+
   // Dangerous file extensions
   const dangerousExtensions = [
     '.exe', '.bat', '.cmd', '.com', '.pif', '.scr', '.vbs', '.js',
@@ -521,7 +521,7 @@ export const validateIPAddressSecurity = (ip: string, context: 'client' | 'serve
 
   // IPv4 validation
   const ipv4Regex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-  
+
   // IPv6 validation (simplified)
   const ipv6Regex = /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
 
@@ -611,7 +611,7 @@ export const validateSecurity = (
       allErrors.push(...sanitizeResult.errors);
       allWarnings.push(...sanitizeResult.warnings);
       allThreats.push(...sanitizeResult.threats);
-      
+
       if (sanitizeResult.sanitizedData !== undefined) {
         data = sanitizeResult.sanitizedData;
       }

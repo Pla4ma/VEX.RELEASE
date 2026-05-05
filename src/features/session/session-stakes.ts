@@ -140,17 +140,17 @@ export function getRecommendedDifficulty(
   if (userLevel < 2) {
     return 'CASUAL';
   }
-  
+
   // Struggling users: Keep it Casual
   if (recentCompletionRate < 0.6) {
     return 'CASUAL';
   }
-  
+
   // High performers with good streak: Recommend Deep Work
   if (currentStreak >= 7 && recentCompletionRate > 0.85 && userLevel >= 5) {
     return 'DEEP_WORK';
   }
-  
+
   // Default to Focused
   return 'FOCUSED';
 }
@@ -170,16 +170,16 @@ export function calculateStakesResult(
   userWinStreak: number
 ): StakesSessionResult {
   const stakes = getStakesForDifficulty(difficulty);
-  
+
   let xpEarned = 0;
   let gemsWon = 0;
   let gemsLost = 0;
   let newWinStreak = userWinStreak;
-  
+
   if (completed) {
     // Calculate XP with multiplier
     xpEarned = Math.floor(baseXp * stakes.xpMultiplier);
-    
+
     // Deep Work bonus gems
     if (difficulty === 'DEEP_WORK') {
       gemsWon = stakes.gemWager; // Win your wager back
@@ -191,20 +191,20 @@ export function calculateStakesResult(
     if (stakes.failureConsequence === 'LOSE_WAGER' && stakes.gemWager > 0) {
       gemsLost = stakes.gemWager;
     }
-    
+
     // Reset win streak on failure
     newWinStreak = 0;
-    
+
     // Reduced XP for partial completion (if not Deep Work)
     if (stakes.failureConsequence === 'REDUCED_XP') {
       xpEarned = Math.floor(baseXp * 0.25); // 25% for trying
     }
   }
-  
+
   // Calculate quality score based on stakes
   const pausePenalty = Math.min(pausesUsed * stakes.pausePenaltyPercent, 50);
   const qualityScore = Math.max(0, 100 - pausePenalty);
-  
+
   return {
     sessionId,
     userId,
@@ -229,7 +229,7 @@ export async function recordStakesResult(result: StakesSessionResult): Promise<v
   try {
     // Publish event for progression system
     eventBus.publish('session:stakes_completed', result);
-    
+
     // Special rewards for Deep Work streaks
     if (result.difficulty === 'DEEP_WORK' && result.completed) {
       if (result.winStreakUpdated >= 3) {
@@ -245,7 +245,7 @@ export async function recordStakesResult(result: StakesSessionResult): Promise<v
         });
       }
     }
-    
+
     // Track analytics
     Sentry.addBreadcrumb({
       category: 'session_stakes',
@@ -290,19 +290,19 @@ export function formatStakesSummary(result: StakesSessionResult): string {
     if (result.gemsLost > 0) {
       return `💔 Abandoned! Lost ${result.gemsLost} gems. Try Focused mode next time?`;
     }
-    return `⚠️ Session abandoned. No rewards earned.`;
+    return '⚠️ Session abandoned. No rewards earned.';
   }
-  
+
   const difficultyConfig = DIFFICULTY_CONFIG[result.difficulty];
   let summary = `${difficultyConfig.icon} ${difficultyConfig.label} complete! +${result.xpEarned} XP`;
-  
+
   if (result.gemsWon > 0) {
     summary += ` (+${result.gemsWon} gems)`;
   }
-  
+
   if (result.winStreakUpdated > 1 && result.difficulty === 'DEEP_WORK') {
     summary += ` 🔥 ${result.winStreakUpdated} win streak!`;
   }
-  
+
   return summary;
 }

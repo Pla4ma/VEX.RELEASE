@@ -3,7 +3,7 @@ import { SessionMode, SessionModeSchema } from '../modes';
 
 export const SessionStatusSchema = z.enum([
   'PREPARING',
-  'STARTING', 
+  'STARTING',
   'ACTIVE',
   'PAUSED',
   'BACKGROUNDED',
@@ -22,7 +22,7 @@ export type SessionStatus = z.infer<typeof SessionStatusSchema>;
 
 export const SessionPhaseSchema = z.enum([
   'FOCUS',
-  'SHORT_BREAK', 
+  'SHORT_BREAK',
   'LONG_BREAK',
   'PREPARATION',
   'REVIEW',

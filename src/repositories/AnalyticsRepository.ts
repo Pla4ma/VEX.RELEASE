@@ -1,6 +1,6 @@
 /**
  * Analytics Repository
- * 
+ *
  * Repository for analytics data management including metrics collection,
  * event tracking, reporting, and analytics aggregation.
  */
@@ -246,20 +246,20 @@ export class AnalyticsRepository extends BaseRepository<AnalyticsEvent> {
       ]);
 
       const executionTime = Date.now() - startTime;
-      this.logOperation('trackEvent', 'success', { 
-        eventType: event.eventType, 
-        eventName: event.eventName, 
+      this.logOperation('trackEvent', 'success', {
+        eventType: event.eventType,
+        eventName: event.eventName,
         userId: event.userId,
-        executionTime 
+        executionTime,
       });
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logOperation('trackEvent', 'error', { 
-        eventType: event.eventType, 
-        eventName: event.eventName, 
+      this.logOperation('trackEvent', 'error', {
+        eventType: event.eventType,
+        eventName: event.eventName,
         userId: event.userId,
-        error: error.message, 
-        executionTime 
+        error: error.message,
+        executionTime,
       });
       throw error;
     }
@@ -287,20 +287,20 @@ export class AnalyticsRepository extends BaseRepository<AnalyticsEvent> {
       ]);
 
       const executionTime = Date.now() - startTime;
-      this.logOperation('recordMetric', 'success', { 
-        metricName: metric.name, 
-        metricType: metric.type, 
+      this.logOperation('recordMetric', 'success', {
+        metricName: metric.name,
+        metricType: metric.type,
         value: metric.value,
-        executionTime 
+        executionTime,
       });
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logOperation('recordMetric', 'error', { 
-        metricName: metric.name, 
-        metricType: metric.type, 
+      this.logOperation('recordMetric', 'error', {
+        metricName: metric.name,
+        metricType: metric.type,
         value: metric.value,
-        error: error.message, 
-        executionTime 
+        error: error.message,
+        executionTime,
       });
       throw error;
     }
@@ -324,28 +324,28 @@ export class AnalyticsRepository extends BaseRepository<AnalyticsEvent> {
       // Build SQL query from AnalyticsQuery
       const { sqlQuery, params } = this.buildEventQuery(query);
       const result = await this.dbConnection.query(sqlQuery, params);
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, result.rows, this.options.cacheTTL);
       }
 
       const executionTime = Date.now() - startTime;
-      this.logOperation('queryEvents', 'success', { 
-        eventType: query.eventType, 
+      this.logOperation('queryEvents', 'success', {
+        eventType: query.eventType,
         eventName: query.eventName,
         count: result.rows.length,
-        executionTime 
+        executionTime,
       });
 
       return result.rows;
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logOperation('queryEvents', 'error', { 
-        eventType: query.eventType, 
+      this.logOperation('queryEvents', 'error', {
+        eventType: query.eventType,
         eventName: query.eventName,
-        error: error.message, 
-        executionTime 
+        error: error.message,
+        executionTime,
       });
       throw error;
     }
@@ -404,29 +404,29 @@ export class AnalyticsRepository extends BaseRepository<AnalyticsEvent> {
       query += ' ORDER BY timestamp DESC';
 
       if (filters.timeRange) {
-        query += ` LIMIT 1000`; // Limit time-range queries
+        query += ' LIMIT 1000'; // Limit time-range queries
       }
 
       const result = await this.dbConnection.query(query, params);
       const metrics = result.rows.map(row => this.mapRowToMetric(row));
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, metrics, this.options.cacheTTL);
       }
 
       const executionTime = Date.now() - startTime;
-      this.logOperation('getMetrics', 'success', { 
+      this.logOperation('getMetrics', 'success', {
         count: metrics.length,
-        executionTime 
+        executionTime,
       });
 
       return metrics;
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logOperation('getMetrics', 'error', { 
-        error: error.message, 
-        executionTime 
+      this.logOperation('getMetrics', 'error', {
+        error: error.message,
+        executionTime,
       });
       throw error;
     }
@@ -460,17 +460,17 @@ export class AnalyticsRepository extends BaseRepository<AnalyticsEvent> {
       const createdDashboard = this.mapRowToDashboard(result.rows[0]);
 
       const executionTime = Date.now() - startTime;
-      this.logOperation('createDashboard', 'success', { 
+      this.logOperation('createDashboard', 'success', {
         dashboardId: createdDashboard.id,
-        executionTime 
+        executionTime,
       });
 
       return createdDashboard;
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      this.logOperation('createDashboard', 'error', { 
-        error: error.message, 
-        executionTime 
+      this.logOperation('createDashboard', 'error', {
+        error: error.message,
+        executionTime,
       });
       throw error;
     }
@@ -493,13 +493,13 @@ export class AnalyticsRepository extends BaseRepository<AnalyticsEvent> {
 
       const query = 'SELECT * FROM analytics_dashboards WHERE id = $1';
       const result = await this.dbConnection.query(query, [dashboardId]);
-      
+
       if (result.rows.length === 0) {
         return null;
       }
 
       const dashboard = this.mapRowToDashboard(result.rows[0]);
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, dashboard, this.options.cacheTTL);
@@ -609,7 +609,7 @@ export class AnalyticsRepository extends BaseRepository<AnalyticsEvent> {
         errorRate,
         averageResponseTime,
       };
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, summary, this.options.cacheTTL);
@@ -630,7 +630,7 @@ export class AnalyticsRepository extends BaseRepository<AnalyticsEvent> {
   protected async findInDatabase(id: string, _options?: any): Promise<AnalyticsEvent | null> {
     const query = 'SELECT * FROM analytics_events WHERE id = $1';
     const result = await this.dbConnection.query(query, [id]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -736,7 +736,7 @@ export class AnalyticsRepository extends BaseRepository<AnalyticsEvent> {
 
   protected async createInDatabase(entity: Partial<AnalyticsEvent>): Promise<AnalyticsEvent> {
     const eventData = entity as Omit<AnalyticsEvent, 'id' | 'timestamp'>;
-    
+
     const query = `
       INSERT INTO analytics_events (
         event_type, event_name, user_id, session_id, properties, 

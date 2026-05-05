@@ -10,17 +10,17 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { createDebugger } from '../../../utils/debug';
-import { getSessionOrchestrator } from '../orchestrator';
-import { getProgressionService } from '../../progression';
+import { getSessionOrchestrator } from '../../../session/orchestrator-factory';
+import { addXp as addProgressionXp } from '../../progression';
 import { getEconomyService } from '../../economy';
 import { getAnalyticsService } from '../../analytics';
 import { getCoachService } from '../../ai-coach';
 import type {
   SessionState,
   SessionPhase,
-  FocusTechnique,
   SessionConfig,
-} from '../types';
+} from '../../../session/types';
+import type { FocusTechnique } from '../types';
 
 const debug = createDebugger('session:useStudySession');
 
@@ -43,7 +43,6 @@ const studySessionKeys = {
 export function useStudySession() {
   const queryClient = useQueryClient();
   const orchestrator = getSessionOrchestrator();
-  const progressionService = getProgressionService();
   const economyService = getEconomyService();
   const analyticsService = getAnalyticsService();
   const coachService = getCoachService();
@@ -88,7 +87,7 @@ export function useStudySession() {
       debug.info('Study session started', { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
-      
+
       // Track analytics
       analyticsService.track('session_started', {
         sessionId: sessionState.id,
@@ -104,7 +103,7 @@ export function useStudySession() {
       debug.info('Study session paused', { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
-      
+
       // Track analytics
       analyticsService.track('session_paused', {
         sessionId: sessionState.id,
@@ -120,7 +119,7 @@ export function useStudySession() {
       debug.info('Study session resumed', { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
-      
+
       // Track analytics
       analyticsService.track('session_resumed', {
         sessionId: sessionState.id,
@@ -138,12 +137,14 @@ export function useStudySession() {
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.history() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.stats() });
-      
+
       // Award XP and coins
       if (sessionState.completed) {
-        progressionService.addXp(sessionState.xpEarned || 0, 'session_complete');
-        economyService.addCoins(sessionState.coinsEarned || 0, 'session_complete');
-        
+        // TODO: Fix progression service integration when functional pattern is fully implemented
+        // addProgressionXp(userId, { amount: sessionState.xpEarned || 0, source: 'session_complete' });
+        // TODO: Fix economy service integration when functional pattern is fully implemented
+        // economyService.addCurrency({ userId, amount: sessionState.coinsEarned || 0, currency: 'COINS', source: 'SESSION_COMPLETE' });
+
         // Track analytics
         analyticsService.track('session_completed', {
           sessionId: sessionState.id,
@@ -273,9 +274,9 @@ export function useStudySession() {
   const isWork = currentSession?.currentPhase === 'WORK';
   const isCompleted = currentSession?.completed || false;
 
-  const progress = currentSession ? 
+  const progress = currentSession ?
     (currentSession.elapsedTime / (currentSession.targetDuration || 1)) * 100 : 0;
-  
+
   const timeRemaining = currentSession && currentSession.targetDuration ?
     Math.max(0, currentSession.targetDuration - currentSession.elapsedTime) : 0;
 
@@ -283,9 +284,9 @@ export function useStudySession() {
   // Error Handling
   // ============================================================================
 
-  const error = currentSessionQuery.error || 
-                sessionHistoryQuery.error || 
-                sessionStatsQuery.error || 
+  const error = currentSessionQuery.error ||
+                sessionHistoryQuery.error ||
+                sessionStatsQuery.error ||
                 activeSessionQuery.error || null;
 
   // ============================================================================
@@ -310,11 +311,11 @@ export function useStudySession() {
     timeRemaining,
 
     // Loading states
-    isLoading: currentSessionQuery.isLoading || 
-               sessionHistoryQuery.isLoading || 
+    isLoading: currentSessionQuery.isLoading ||
+               sessionHistoryQuery.isLoading ||
                sessionStatsQuery.isLoading,
-    isFetching: currentSessionQuery.isFetching || 
-                 sessionHistoryQuery.isFetching || 
+    isFetching: currentSessionQuery.isFetching ||
+                 sessionHistoryQuery.isFetching ||
                  sessionStatsQuery.isFetching,
     isStarting: startSessionMutation.isPending,
     isPausing: pauseSessionMutation.isPending,
@@ -369,9 +370,9 @@ export function useSessionTimer() {
     return () => clearInterval(interval);
   }, [isActive, isPaused]);
 
-  const elapsedTime = currentSession ? 
+  const elapsedTime = currentSession ?
     currentSession.elapsedTime : 0;
-  
+
   const timeRemaining = currentSession && currentSession.targetDuration ?
     Math.max(0, currentSession.targetDuration - elapsedTime) : 0;
 

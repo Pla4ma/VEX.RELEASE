@@ -1,6 +1,6 @@
 /**
  * Validation Index
- * 
+ *
  * Central export point for all validation layers and utilities.
  */
 
@@ -247,7 +247,7 @@ export class ValidationEngine {
 
           } catch (error) {
             allErrors.push(`Validation step '${step.name}' error: ${error}`);
-            
+
             if (step.required) {
               break; // Stop pipeline if required step fails
             }
@@ -280,7 +280,7 @@ export class ValidationEngine {
         return validator(data);
       } catch (error) {
         lastError = error;
-        
+
         if (attempt < maxRetries) {
           await new Promise(resolve => setTimeout(resolve, delay * attempt));
         }
@@ -302,13 +302,13 @@ export class ValidationEngine {
     ttl: number = 300000 // 5 minutes
   ): any {
     const cached = this.validationCache.get(key);
-    
+
     if (cached && Date.now() - cached.timestamp < ttl) {
       return cached.result;
     }
 
     const result = validator(data);
-    
+
     this.validationCache.set(key, {
       result,
       timestamp: Date.now(),
@@ -375,7 +375,7 @@ export const ValidationUtils = {
    * Check if value is empty
    */
   isEmpty(value: any): boolean {
-    return value === null || value === undefined || value === '' || 
+    return value === null || value === undefined || value === '' ||
            (Array.isArray(value) && value.length === 0) ||
            (typeof value === 'object' && Object.keys(value).length === 0);
   },
@@ -438,7 +438,7 @@ export const ValidationUtils = {
    */
   createError(message: string, context?: string, code?: string): string {
     const parts = [message];
-    
+
     if (context) {
       parts.push(`(${context})`);
     }
@@ -460,7 +460,7 @@ export const ValidationUtils = {
   ): Promise<boolean> {
     return Promise.race([
       validator(data),
-      new Promise<boolean>((_, reject) => 
+      new Promise<boolean>((_, reject) =>
         setTimeout(() => reject(new Error('Validation timeout')), timeout)
       ),
     ]);

@@ -76,7 +76,7 @@ const Dots: React.FC<{ size: number; color: string }> = ({ size, color }) => {
   const { isReducedMotion } = useReducedMotion();
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     dot1.value = withRepeat(
       withTiming(1, { duration: 400, easing: Easing.ease }),
       -1,
@@ -143,7 +143,7 @@ const Pulse: React.FC<{ size: number; color: string }> = ({ size, color }) => {
   const { isReducedMotion } = useReducedMotion();
 
   useEffect(() => {
-    if (isReducedMotion) return;
+    if (isReducedMotion) {return;}
     scale.value = withRepeat(
       withTiming(1.5, { duration: 1000, easing: Easing.ease }),
       -1,

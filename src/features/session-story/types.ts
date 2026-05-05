@@ -1,6 +1,6 @@
 /**
  * Session Story Feature Types
- * 
+ *
  * Types for narrative generation, storytelling, and session chronicles.
  */
 
@@ -22,7 +22,7 @@ export interface SessionStory {
   updatedAt: Date;
 }
 
-export type StoryGenre = 
+export type StoryGenre =
   | 'adventure'
   | 'mystery'
   | 'fantasy'
@@ -36,7 +36,7 @@ export type StoryGenre =
   | 'coming_of_age'
   | 'hero_journey';
 
-export type StoryTheme = 
+export type StoryTheme =
   | 'growth'
   | 'courage'
   | 'wisdom'
@@ -59,7 +59,7 @@ export interface NarrativeStructure {
   moral: StoryMoral;
 }
 
-export type NarrativeType = 
+export type NarrativeType =
   | 'linear'
   | 'non_linear'
   | 'branching'
@@ -80,7 +80,7 @@ export interface NarrativeAct {
   resolution: boolean;
 }
 
-export type ActType = 
+export type ActType =
   | 'exposition'
   | 'rising_action'
   | 'climax'
@@ -95,7 +95,7 @@ export interface PacingProfile {
   beats: StoryBeat[];
 }
 
-export type PacingRhythm = 
+export type PacingRhythm =
   | 'steady'
   | 'accelerating'
   | 'decelerating'
@@ -109,7 +109,7 @@ export interface PacingVariation {
   pattern: VariationPattern;
 }
 
-export type VariationPattern = 
+export type VariationPattern =
   | 'regular'
   | 'irregular'
   | 'crescendo'
@@ -148,7 +148,7 @@ export interface IntensityTransition {
   duration: number; // relative
 }
 
-export type TransitionMethod = 
+export type TransitionMethod =
   | 'gradual'
   | 'abrupt'
   | 'crescendo'
@@ -166,7 +166,7 @@ export interface StoryBeat {
   impact: number; // 0-100
 }
 
-export type BeatType = 
+export type BeatType =
   | 'inciting_incident'
   | 'plot_point'
   | 'revelation'
@@ -185,7 +185,7 @@ export interface EmotionalBeat {
   target_audience: AudienceType;
 }
 
-export type EmotionType = 
+export type EmotionType =
   | 'joy'
   | 'sadness'
   | 'anger'
@@ -202,13 +202,13 @@ export type EmotionType =
   | 'nostalgia'
   | 'triumph';
 
-export type AudienceType = 
+export type AudienceType =
   | 'character'
   | 'reader'
   | 'both'
   | 'neither';
 
-export type ImpactScope = 
+export type ImpactScope =
   | 'personal'
   | 'relational'
   | 'situational'
@@ -231,7 +231,7 @@ export interface TensionPoint {
   resolution?: number; // timestamp
 }
 
-export type TensionType = 
+export type TensionType =
   | 'conflict'
   | 'mystery'
   | 'suspense'
@@ -249,7 +249,7 @@ export interface TensionArc {
   descent: number; // duration
 }
 
-export type ArcShape = 
+export type ArcShape =
   | 'linear'
   | 'exponential'
   | 'logarithmic'
@@ -266,7 +266,7 @@ export interface TensionRelease {
   setup: string; // what led to this
 }
 
-export type ReleaseType = 
+export type ReleaseType =
   | 'resolution'
   | 'revelation'
   | 'catharsis'
@@ -284,7 +284,7 @@ export interface TensionBuilding {
   techniques: BuildingTechnique[];
 }
 
-export type BuildingMethod = 
+export type BuildingMethod =
   | 'gradual'
   | 'stepwise'
   | 'exponential'
@@ -297,7 +297,7 @@ export interface BuildingTechnique {
   effectiveness: number; // 0-100
 }
 
-export type ResolutionType = 
+export type ResolutionType =
   | 'happy'
   | 'sad'
   | 'bittersweet'
@@ -339,7 +339,7 @@ export interface StoryCharacter {
   symbolism: CharacterSymbolism;
 }
 
-export type CharacterRole = 
+export type CharacterRole =
   | 'protagonist'
   | 'antagonist'
   | 'mentor'
@@ -353,7 +353,7 @@ export type CharacterRole =
   | 'guide'
   | 'guardian';
 
-export type CharacterArchetype = 
+export type CharacterArchetype =
   | 'hero'
   | 'mentor'
   | 'threshold_guardian'
@@ -391,14 +391,14 @@ export interface PersonalityTrait {
   development: TraitDevelopment;
 }
 
-export type TraitDevelopment = 
+export type TraitDevelopment =
   | 'static'
   | 'growing'
   | 'diminishing'
   | 'transforming'
   | 'revealed';
 
-export type TemperamentType = 
+export type TemperamentType =
   | 'sanguine'
   | 'choleric'
   | 'melancholic'
@@ -414,7 +414,7 @@ export interface CharacterValue {
   evolution: ValueEvolution;
 }
 
-export type ValueEvolution = 
+export type ValueEvolution =
   | 'strengthened'
   | 'weakened'
   | 'questioned'
@@ -430,7 +430,7 @@ export interface CharacterFlaw {
   growth: FlawGrowth;
 }
 
-export type FlawGrowth = 
+export type FlawGrowth =
   | 'acknowledged'
   | 'addressed'
   | 'overcome'
@@ -445,7 +445,7 @@ export interface CharacterStrength {
   growth: StrengthGrowth;
 }
 
-export type StrengthGrowth = 
+export type StrengthGrowth =
   | 'developed'
   | 'mastered'
   | 'shared'
@@ -476,7 +476,7 @@ export interface FamilyBackground {
   influence: number; // 0-100
 }
 
-export type FamilyStructure = 
+export type FamilyStructure =
   | 'nuclear'
   | 'extended'
   | 'single_parent'
@@ -492,7 +492,7 @@ export interface FamilyDynamics {
   support: SupportLevel;
 }
 
-export type CommunicationStyle = 
+export type CommunicationStyle =
   | 'open'
   | 'closed'
   | 'indirect'
@@ -500,14 +500,14 @@ export type CommunicationStyle =
   | 'passive_aggressive'
   | 'assertive';
 
-export type ConflictResolutionStyle = 
+export type ConflictResolutionStyle =
   | 'collaborative'
   | 'competitive'
   | 'accommodating'
   | 'avoiding'
   | 'compromising';
 
-export type SupportLevel = 
+export type SupportLevel =
   | 'overwhelming'
   | 'supportive'
   | 'conditional'
@@ -531,7 +531,7 @@ export interface EducationBackground {
   influence: number; // 0-100
 }
 
-export type EducationLevel = 
+export type EducationLevel =
   | 'none'
   | 'basic'
   | 'secondary'
@@ -547,7 +547,7 @@ export interface EducationalInstitution {
   experience: InstitutionalExperience;
 }
 
-export type InstitutionType = 
+export type InstitutionType =
   | 'formal'
   | 'informal'
   | 'military'
@@ -591,7 +591,7 @@ export interface LifeExperience {
   lessons: string[];
 }
 
-export type ExperienceType = 
+export type ExperienceType =
   | 'travel'
   | 'career'
   | 'relationship'
@@ -619,7 +619,7 @@ export interface PastTrauma {
   coping: CopingMechanism[];
 }
 
-export type TraumaType = 
+export type TraumaType =
   | 'physical'
   | 'emotional'
   | 'psychological'
@@ -628,7 +628,7 @@ export type TraumaType =
   | 'moral'
   | 'spiritual';
 
-export type ProcessingStage = 
+export type ProcessingStage =
   | 'denial'
   | 'anger'
   | 'bargaining'
@@ -644,7 +644,7 @@ export interface TraumaEffect {
   duration: DurationType;
 }
 
-export type EffectArea = 
+export type EffectArea =
   | 'behavior'
   | 'emotion'
   | 'cognition'
@@ -652,7 +652,7 @@ export type EffectArea =
   | 'worldview'
   | 'physical';
 
-export type DurationType = 
+export type DurationType =
   | 'temporary'
   | 'persistent'
   | 'chronic'
@@ -667,7 +667,7 @@ export interface CopingMechanism {
   development: CopingDevelopment;
 }
 
-export type CopingType = 
+export type CopingType =
   | 'avoidance'
   | 'confrontation'
   | 'seeking_support'
@@ -677,7 +677,7 @@ export type CopingType =
   | 'intellectual'
   | 'physical';
 
-export type CopingDevelopment = 
+export type CopingDevelopment =
   | 'innate'
   | 'learned'
   | 'adapted'
@@ -692,7 +692,7 @@ export interface PastTriumph {
   legacy: string;
 }
 
-export type TriumphType = 
+export type TriumphType =
   | 'personal'
   | 'professional'
   | 'creative'
@@ -718,7 +718,7 @@ export interface CharacterSecret {
   revelation: RevelationCondition;
 }
 
-export type SecretType = 
+export type SecretType =
   | 'shameful'
   | 'dangerous'
   | 'embarrassing'
@@ -735,7 +735,7 @@ export interface RevelationCondition {
   necessity: RevelationNecessity;
 }
 
-export type RevelationTiming = 
+export type RevelationTiming =
   | 'early'
   | 'mid_story'
   | 'climax'
@@ -743,14 +743,14 @@ export type RevelationTiming =
   | 'epilogue'
   | 'never';
 
-export type RevelationImpact = 
+export type RevelationImpact =
   | 'minor'
   | 'significant'
   | 'transformative'
   | 'catastrophic'
   | 'redemptive';
 
-export type RevelationNecessity = 
+export type RevelationNecessity =
   | 'optional'
   | 'helpful'
   | 'important'
@@ -773,7 +773,7 @@ export interface PrimaryMotivation {
   accessibility: number; // 0-100
 }
 
-export type MotivationSource = 
+export type MotivationSource =
   | 'intrinsic'
   | 'extrinsic'
   | 'existential'
@@ -803,7 +803,7 @@ export interface ConflictingMotivation {
   resolution: ConflictResolution;
 }
 
-export type ConflictResolution = 
+export type ConflictResolution =
   | 'prioritized'
   | 'compromised'
   | 'integrated'
@@ -831,7 +831,7 @@ export interface MotivationCatalyst {
   type: CatalystType;
 }
 
-export type CatalystType = 
+export type CatalystType =
   | 'trauma'
   | 'revelation'
   | 'relationship'
@@ -848,7 +848,7 @@ export interface MotivationGrowth {
   integration: number; // 0-100
 }
 
-export type GrowthDirection = 
+export type GrowthDirection =
   | 'simplifying'
   | 'complexifying'
   | 'deepening'
@@ -865,7 +865,7 @@ export interface CharacterArc {
   significance: ArcSignificance;
 }
 
-export type ArcType = 
+export type ArcType =
   | 'growth'
   | 'fall'
   | 'redemption'
@@ -894,7 +894,7 @@ export interface CharacterState {
   purpose: string;
 }
 
-export type TrajectoryPath = 
+export type TrajectoryPath =
   | 'linear'
   | 'spiral'
   | 'zigzag'
@@ -912,7 +912,7 @@ export interface ArcObstacle {
   method?: string;
 }
 
-export type ObstacleType = 
+export type ObstacleType =
   | 'internal'
   | 'external'
   | 'interpersonal'
@@ -955,7 +955,7 @@ export interface TransformationProcess {
   support: number; // 0-100
 }
 
-export type TransformationMethod = 
+export type TransformationMethod =
   | 'gradual'
   | 'sudden'
   | 'forced'
@@ -973,7 +973,7 @@ export interface ArcResolution {
   impact: string;
 }
 
-export type ResolutionOutcome = 
+export type ResolutionOutcome =
   | 'triumph'
   | 'tragedy'
   | 'bittersweet'
@@ -1000,7 +1000,7 @@ export interface CharacterRelationship {
   significance: RelationshipSignificance;
 }
 
-export type RelationshipType = 
+export type RelationshipType =
   | 'family'
   | 'friend'
   | 'romantic'
@@ -1045,7 +1045,7 @@ export interface CommunicationPattern {
   understanding: number; // 0-100
 }
 
-export type FrequencyLevel = 
+export type FrequencyLevel =
   | 'constant'
   | 'daily'
   | 'weekly'
@@ -1069,7 +1069,7 @@ export interface SupportPattern {
   conditions: string[];
 }
 
-export type SupportType = 
+export type SupportType =
   | 'emotional'
   | 'practical'
   | 'informational'
@@ -1163,7 +1163,7 @@ export interface EvolutionInfluence {
   timing: number; // story position
 }
 
-export type InfluenceSource = 
+export type InfluenceSource =
   | 'internal'
   | 'external'
   | 'mutual'
@@ -1204,7 +1204,7 @@ export interface DevelopmentDimension {
   opportunities: string[];
 }
 
-export type DevelopmentType = 
+export type DevelopmentType =
   | 'emotional'
   | 'intellectual'
   | 'moral'
@@ -1231,7 +1231,7 @@ export interface DevelopmentChallenge {
   learning: string;
 }
 
-export type ChallengeType = 
+export type ChallengeType =
   | 'internal'
   | 'external'
   | 'interpersonal'
@@ -1247,7 +1247,7 @@ export interface DevelopmentLearning {
   transfer: number; // 0-100
 }
 
-export type LearningSource = 
+export type LearningSource =
   | 'experience'
   | 'teaching'
   | 'observation'
@@ -1301,7 +1301,7 @@ export interface CharacterSymbol {
   significance: number; // 0-100
 }
 
-export type SymbolType = 
+export type SymbolType =
   | 'object'
   | 'action'
   | 'quality'
@@ -1392,7 +1392,7 @@ export interface StoryEvent {
   alternatives: AlternativeEvent[];
 }
 
-export type EventType = 
+export type EventType =
   | 'action'
   | 'dialogue'
   | 'revelation'
@@ -1420,7 +1420,7 @@ export interface EventCause {
   visibility: 'explicit' | 'implicit' | 'hidden' | 'revealed';
 }
 
-export type CauseType = 
+export type CauseType =
   | 'character_action'
   | 'external_force'
   | 'internal_conflict'
@@ -1438,7 +1438,7 @@ export interface EventEffect {
   permanence: number; // 0-100
 }
 
-export type EffectType = 
+export type EffectType =
   | 'plot_advancement'
   | 'character_change'
   | 'emotional_impact'
@@ -1447,7 +1447,7 @@ export type EffectType =
   | 'setup'
   | 'payoff';
 
-export type EffectScope = 
+export type EffectScope =
   | 'personal'
   | 'relational'
   | 'situational'
@@ -1507,7 +1507,7 @@ export interface StoryChapter {
   transitions: ChapterTransition[];
 }
 
-export type ChapterType = 
+export type ChapterType =
   | 'exposition'
   | 'rising_action'
   | 'climax'
@@ -1527,7 +1527,7 @@ export interface ChapterPurpose {
   theme_function: ThemeFunction;
 }
 
-export type PlotFunction = 
+export type PlotFunction =
   | 'setup'
   | 'complication'
   | 'confrontation'
@@ -1536,7 +1536,7 @@ export type PlotFunction =
   | 'revelation'
   | 'foreshadowing';
 
-export type CharacterFunction = 
+export type CharacterFunction =
   | 'introduction'
   | 'development'
   | 'transformation'
@@ -1544,7 +1544,7 @@ export type CharacterFunction =
   | 'conflict'
   | 'resolution';
 
-export type ThemeFunction = 
+export type ThemeFunction =
   | 'introduction'
   | 'exploration'
   | 'complication'
@@ -1594,7 +1594,7 @@ export interface ChapterMood {
   consistency: number; // 0-100
 }
 
-export type MoodType = 
+export type MoodType =
   | 'hopeful'
   | 'tense'
   | 'somber'
@@ -1613,7 +1613,7 @@ export interface MoodProgression {
   triggers: string[];
 }
 
-export type ProgressionPattern = 
+export type ProgressionPattern =
   | 'stable'
   | 'rising'
   | 'falling'
@@ -1635,7 +1635,7 @@ export interface ThemeReinforcement {
   effectiveness: number; // 0-100
 }
 
-export type ReinforcementMethod = 
+export type ReinforcementMethod =
   | 'dialogue'
   | 'action'
   | 'symbolism'
@@ -1689,7 +1689,7 @@ export interface ChapterTransition {
   effectiveness: number; // 0-100
 }
 
-export type TransitionType = 
+export type TransitionType =
   | 'temporal'
   | 'spatial'
   | 'perspective'
@@ -1697,7 +1697,7 @@ export type TransitionType =
   | 'emotional'
   | 'narrative';
 
-export type TransitionPurpose = 
+export type TransitionPurpose =
   | 'continuation'
   | 'contrast'
   | 'connection'
@@ -1716,7 +1716,7 @@ export interface StoryChoice {
   resolution: ChoiceResolution;
 }
 
-export type ChoiceType = 
+export type ChoiceType =
   | 'moral'
   | 'strategic'
   | 'emotional'
@@ -1772,7 +1772,7 @@ export interface ChoiceResolution {
   regret: number; // 0-100
 }
 
-export type ResolutionMethod = 
+export type ResolutionMethod =
   | 'deliberate'
   | 'instinctive'
   | 'forced'
@@ -1789,7 +1789,7 @@ export interface StoryOutcome {
   legacy: OutcomeLegacy;
 }
 
-export type OutcomeType = 
+export type OutcomeType =
   | 'triumph'
   | 'tragedy'
   | 'bittersweet'
@@ -1886,7 +1886,7 @@ export interface StoryMotif {
   evolution: MotifEvolution;
 }
 
-export type MotifType = 
+export type MotifType =
   | 'visual'
   | 'auditory'
   | 'behavioral'
@@ -1919,7 +1919,7 @@ export interface StoryInfluence {
   originality: number; // 0-100
 }
 
-export type InfluenceType = 
+export type InfluenceType =
   | 'literary'
   | 'mythological'
   | 'historical'
@@ -1945,7 +1945,7 @@ export interface NarrativeStyle {
   technique: NarrativeTechnique[];
 }
 
-export type NarrativePerspective = 
+export type NarrativePerspective =
   | 'first_person'
   | 'second_person'
   | 'third_person_limited'
@@ -1953,27 +1953,27 @@ export type NarrativePerspective =
   | 'multiple'
   | 'unreliable';
 
-export type NarrativeTense = 
+export type NarrativeTense =
   | 'past'
   | 'present'
   | 'future'
   | 'mixed';
 
-export type ReliabilityLevel = 
+export type ReliabilityLevel =
   | 'reliable'
   | 'somewhat_reliable'
   | 'questionable'
   | 'unreliable'
   | 'deceptive';
 
-export type NarrativeDistance = 
+export type NarrativeDistance =
   | 'intimate'
   | 'close'
   | 'moderate'
   | 'distant'
   | 'detached';
 
-export type NarrativeTechnique = 
+export type NarrativeTechnique =
   | 'stream_of_consciousness'
   | 'flashback'
   | 'foreshadowing'
@@ -1991,7 +1991,7 @@ export interface DialogueStyle {
   rhythm: DialogueRhythm;
 }
 
-export type DialogueRhythm = 
+export type DialogueRhythm =
   | 'rapid'
   | 'measured'
   | 'leisurely'
@@ -2007,14 +2007,14 @@ export interface DescriptionStyle {
   efficiency: number; // 0-100
 }
 
-export type DetailLevel = 
+export type DetailLevel =
   | 'minimal'
   | 'selective'
   | 'moderate'
   | 'detailed'
   | 'extensive';
 
-export type ImageryType = 
+export type ImageryType =
   | 'visual'
   | 'auditory'
   | 'tactile'
@@ -2046,7 +2046,7 @@ export interface PacingStyle {
   flow: FlowQuality;
 }
 
-export type PacingSpeed = 
+export type PacingSpeed =
   | 'slow'
   | 'moderate'
   | 'fast'
@@ -2075,7 +2075,7 @@ export interface ToneStyle {
   effectiveness: number; // 0-100
 }
 
-export type ToneType = 
+export type ToneType =
   | 'serious'
   | 'humorous'
   | 'ironic'
@@ -2095,7 +2095,7 @@ export interface AuthorialVoice {
   authenticity: number; // 0-100
 }
 
-export type VoicePresence = 
+export type VoicePresence =
   | 'invisible'
   | 'subtle'
   | 'moderate'
@@ -2116,7 +2116,7 @@ export interface VoiceTrait {
   expression: string;
 }
 
-export type VoiceAttitude = 
+export type VoiceAttitude =
   | 'objective'
   | 'subjective'
   | 'empathetic'
@@ -2161,7 +2161,7 @@ export interface AudienceExpectation {
   satisfaction_method: string;
 }
 
-export type ExpectationCategory = 
+export type ExpectationCategory =
   | 'genre'
   | 'character'
   | 'plot'
@@ -2177,7 +2177,7 @@ export interface AudienceSensitivity {
   consideration: number; // 0-100
 }
 
-export type HandlingApproach = 
+export type HandlingApproach =
   | 'avoidance'
   | 'subtle'
   | 'respectful'
@@ -2193,7 +2193,7 @@ export interface StoryPurpose {
   authenticity: number; // 0-100
 }
 
-export type PurposeType = 
+export type PurposeType =
   | 'entertainment'
   | 'education'
   | 'inspiration'
@@ -2215,7 +2215,7 @@ export interface ImpactMeasurement {
   indicators: string[];
 }
 
-export type MeasurementMethod = 
+export type MeasurementMethod =
   | 'emotional_response'
   | 'behavioral_change'
   | 'knowledge_retention'
@@ -2256,14 +2256,14 @@ export interface CreationProcess {
   environment: CreationEnvironment;
 }
 
-export type CreationApproach = 
+export type CreationApproach =
   | 'planned'
   | 'discovery'
   | 'hybrid'
   | 'collaborative'
   | 'experimental';
 
-export type CreationMethod = 
+export type CreationMethod =
   | 'outlining'
   | 'free_writing'
   | 'research'
@@ -2278,7 +2278,7 @@ export interface CreationTool {
   effectiveness: number; // 0-100
 }
 
-export type ToolType = 
+export type ToolType =
   | 'software'
   | 'reference'
   | 'organizational'
@@ -2307,7 +2307,7 @@ export interface InspirationSource {
   integration: string;
 }
 
-export type InspirationType = 
+export type InspirationType =
   | 'personal'
   | 'literary'
   | 'historical'
@@ -2339,7 +2339,7 @@ export interface FeedbackSource {
   incorporation: number; // 0-100
 }
 
-export type FeedbackType = 
+export type FeedbackType =
   | 'beta_reader'
   | 'editor'
   | 'workshop'
@@ -2355,7 +2355,7 @@ export interface MajorChange {
   impact: string;
 }
 
-export type ChangeType = 
+export type ChangeType =
   | 'structural'
   | 'character'
   | 'plot'

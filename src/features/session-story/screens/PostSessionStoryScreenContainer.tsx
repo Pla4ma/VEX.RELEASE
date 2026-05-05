@@ -28,7 +28,7 @@ export function PostSessionStoryScreenContainer(): JSX.Element {
   const route = useRoute<RouteProps>();
   const { user } = useAuthStore();
 
-  const { sessionId, summary } = route.params;
+  const { sessionId, focusScore, purityScore } = route.params;
   const { story, isLoading, error } = useSessionStory(sessionId, user?.id ?? null);
 
   const handleComplete = useCallback(() => {
@@ -48,9 +48,9 @@ export function PostSessionStoryScreenContainer(): JSX.Element {
     // Force refetch by navigating back and forth
     navigation.goBack();
     setTimeout(() => {
-      navigation.navigate('PostSessionStory', { sessionId, summary });
+      navigation.navigate('PostSessionStory', { sessionId, focusScore, purityScore });
     }, 100);
-  }, [navigation, sessionId, summary]);
+  }, [navigation, sessionId, focusScore, purityScore]);
 
   // Loading state
   if (isLoading) {

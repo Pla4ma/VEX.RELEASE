@@ -13,7 +13,7 @@ import Animated, { FadeInUp, useSharedValue, useAnimatedStyle, withSpring } from
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import type { CompanionElement } from '../../../onboarding/types';
+import type { CompanionElement } from '../../../features/onboarding/types';
 import { ELEMENT_THEMES } from '../../../features/companion/types';
 
 interface OnboardingChooseElementProps {

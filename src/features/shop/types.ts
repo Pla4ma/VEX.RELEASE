@@ -1,6 +1,6 @@
 /**
  * Shop Feature Types
- * 
+ *
  * Types for in-game shop, virtual economy, and marketplace features.
  */
 
@@ -20,7 +20,7 @@ export interface Shop {
   updatedAt: Date;
 }
 
-export type ShopType = 
+export type ShopType =
   | 'general_store'
   | 'specialty_shop'
   | 'premium_store'
@@ -32,7 +32,7 @@ export type ShopType =
   | 'event_shop'
   | 'vip_shop';
 
-export type ShopCategory = 
+export type ShopCategory =
   | 'items'
   | 'cosmetics'
   | 'abilities'
@@ -44,7 +44,7 @@ export type ShopCategory =
   | 'collectibles'
   | 'consumables';
 
-export type ShopStatus = 
+export type ShopStatus =
   | 'active'
   | 'inactive'
   | 'maintenance'
@@ -71,7 +71,7 @@ export interface ShopLayout {
   responsiveness: ResponsiveConfig;
 }
 
-export type LayoutType = 
+export type LayoutType =
   | 'grid'
   | 'list'
   | 'carousel'
@@ -90,7 +90,7 @@ export interface LayoutSection {
   visibility: VisibilityConfig;
 }
 
-export type SectionType = 
+export type SectionType =
   | 'featured'
   | 'new_arrivals'
   | 'best_sellers'
@@ -116,7 +116,7 @@ export interface LayoutItem {
   metadata: ItemMetadata;
 }
 
-export type ItemType = 
+export type ItemType =
   | 'product'
   | 'category'
   | 'banner'
@@ -168,7 +168,7 @@ export interface DeviceRestriction {
   max_version?: string;
 }
 
-export type PlatformType = 
+export type PlatformType =
   | 'ios'
   | 'android'
   | 'web'
@@ -182,7 +182,7 @@ export interface NavigationConfig {
   search: SearchNavigation;
 }
 
-export type NavigationType = 
+export type NavigationType =
   | 'sidebar'
   | 'top_bar'
   | 'bottom_bar'
@@ -278,7 +278,7 @@ export interface AnimationConfig {
   easing: string;
 }
 
-export type AnimationType = 
+export type AnimationType =
   | 'fade'
   | 'slide'
   | 'bounce'
@@ -329,7 +329,7 @@ export interface FeaturedSection {
   criteria: SelectionCriteria;
 }
 
-export type FeaturedType = 
+export type FeaturedType =
   | 'spotlight'
   | 'banner'
   | 'carousel'
@@ -358,7 +358,7 @@ export interface SelectionCriteria {
   limit: number;
 }
 
-export type CriteriaType = 
+export type CriteriaType =
   | 'manual'
   | 'algorithmic'
   | 'trending'
@@ -392,7 +392,7 @@ export interface CategoryFilter {
   multi_select: boolean;
 }
 
-export type FilterType = 
+export type FilterType =
   | 'range'
   | 'select'
   | 'checkbox'
@@ -471,7 +471,7 @@ export interface RecommendationEngine {
   a_b_testing: ABTestingConfig;
 }
 
-export type RecommendationAlgorithm = 
+export type RecommendationAlgorithm =
   | 'collaborative_filtering'
   | 'content_based'
   | 'hybrid'
@@ -485,7 +485,7 @@ export interface DataSource {
   configuration: Record<string, any>;
 }
 
-export type DataSourceType = 
+export type DataSourceType =
   | 'user_behavior'
   | 'product_attributes'
   | 'purchase_history'
@@ -561,7 +561,7 @@ export interface ShopProduct {
   updated_at: Date;
 }
 
-export type ProductType = 
+export type ProductType =
   | 'item'
   | 'cosmetic'
   | 'ability'
@@ -573,7 +573,7 @@ export type ProductType =
   | 'consumable'
   | 'bundle';
 
-export type ProductRarity = 
+export type ProductRarity =
   | 'common'
   | 'uncommon'
   | 'rare'
@@ -599,7 +599,7 @@ export interface ProductDiscount {
   reason?: string;
 }
 
-export type DiscountType = 
+export type DiscountType =
   | 'percentage'
   | 'fixed'
   | 'bogo'
@@ -613,7 +613,7 @@ export interface PricingModel {
   dynamic?: DynamicPricing;
 }
 
-export type ModelType = 
+export type ModelType =
   | 'fixed'
   | 'tiered'
   | 'subscription'
@@ -652,7 +652,7 @@ export interface DynamicPricing {
   update_frequency: number; // in hours
 }
 
-export type PricingAlgorithm = 
+export type PricingAlgorithm =
   | 'demand_based'
   | 'competition_based'
   | 'time_based'
@@ -676,7 +676,7 @@ export interface ProductAvailability {
   back_order: boolean;
 }
 
-export type AvailabilityStatus = 
+export type AvailabilityStatus =
   | 'available'
   | 'limited'
   | 'out_of_stock'
@@ -694,7 +694,7 @@ export interface ProductAttribute {
   filterable: boolean;
 }
 
-export type AttributeType = 
+export type AttributeType =
   | 'string'
   | 'number'
   | 'boolean'
@@ -712,7 +712,7 @@ export interface ProductImage {
   height?: number;
 }
 
-export type ImageType = 
+export type ImageType =
   | 'thumbnail'
   | 'gallery'
   | 'banner'
@@ -846,7 +846,7 @@ export interface ProductBundle {
   expires_at?: Date;
 }
 
-export type BundleType = 
+export type BundleType =
   | 'fixed'
   | 'customizable'
   | 'tiered'
@@ -887,7 +887,7 @@ export interface BundleLimitation {
   description: string;
 }
 
-export type LimitationType = 
+export type LimitationType =
   | 'quantity'
   | 'time'
   | 'user_level'
@@ -908,7 +908,7 @@ export interface ShopPromotion {
   created_at: Date;
 }
 
-export type PromotionType = 
+export type PromotionType =
   | 'discount'
   | 'bogo'
   | 'bundle'
@@ -918,7 +918,7 @@ export type PromotionType =
   | 'free_gift'
   | 'upgrade';
 
-export type PromotionScope = 
+export type PromotionScope =
   | 'global'
   | 'category'
   | 'product'
@@ -934,7 +934,7 @@ export interface PromotionCondition {
   description: string;
 }
 
-export type ConditionType = 
+export type ConditionType =
   | 'cart_value'
   | 'product_quantity'
   | 'user_level'
@@ -951,7 +951,7 @@ export interface PromotionReward {
   applies_to: string[]; // product IDs or categories
 }
 
-export type RewardType = 
+export type RewardType =
   | 'percentage_discount'
   | 'fixed_discount'
   | 'free_product'
@@ -973,7 +973,7 @@ export interface PromotionLimit {
   scope: LimitScope;
 }
 
-export type LimitType = 
+export type LimitType =
   | 'usage'
   | 'user'
   | 'total'
@@ -981,13 +981,13 @@ export type LimitType =
   | 'weekly'
   | 'monthly';
 
-export type LimitScope = 
+export type LimitScope =
   | 'global'
   | 'user'
   | 'segment'
   | 'product';
 
-export type PromotionStatus = 
+export type PromotionStatus =
   | 'draft'
   | 'scheduled'
   | 'active'
@@ -1009,7 +1009,7 @@ export interface StockTracking {
   real_time: boolean;
 }
 
-export type TrackingMethod = 
+export type TrackingMethod =
   | 'manual'
   | 'automated'
   | 'hybrid'
@@ -1026,14 +1026,14 @@ export interface StockAlert {
   enabled: boolean;
 }
 
-export type AlertType = 
+export type AlertType =
   | 'low_stock'
   | 'out_of_stock'
   | 'overstock'
   | 'restock_needed'
   | 'discontinued';
 
-export type AlertSeverity = 
+export type AlertSeverity =
   | 'info'
   | 'warning'
   | 'critical'
@@ -1059,7 +1059,7 @@ export interface RestockingConfig {
   max_stock: number;
 }
 
-export type RestockingMethod = 
+export type RestockingMethod =
   | 'manual'
   | 'automatic'
   | 'just_in_time'
@@ -1074,7 +1074,7 @@ export interface StockForecasting {
   horizon: number; // in days
 }
 
-export type ForecastingAlgorithm = 
+export type ForecastingAlgorithm =
   | 'moving_average'
   | 'exponential_smoothing'
   | 'arima'
@@ -1109,7 +1109,7 @@ export interface ConversionConfig {
   fees: ConversionFee[];
 }
 
-export type RoundingMethod = 
+export type RoundingMethod =
   | 'none'
   | 'up'
   | 'down'
@@ -1144,7 +1144,7 @@ export interface ShopTransaction {
   completed_at?: Date;
 }
 
-export type TransactionType = 
+export type TransactionType =
   | 'purchase'
   | 'refund'
   | 'exchange'
@@ -1152,7 +1152,7 @@ export type TransactionType =
   | 'subscription'
   | 'donation';
 
-export type TransactionStatus = 
+export type TransactionStatus =
   | 'pending'
   | 'processing'
   | 'completed'
@@ -1194,7 +1194,7 @@ export interface PaymentInfo {
   gateway_response?: any;
 }
 
-export type PaymentMethod = 
+export type PaymentMethod =
   | 'credit_card'
   | 'debit_card'
   | 'paypal'
@@ -1206,7 +1206,7 @@ export type PaymentMethod =
   | 'store_credit'
   | 'gift_card';
 
-export type PaymentStatus = 
+export type PaymentStatus =
   | 'pending'
   | 'authorized'
   | 'captured'
@@ -1271,7 +1271,7 @@ export interface AnalyticsOverview {
   bounce_rate: number;
 }
 
-export type AnalyticsPeriod = 
+export type AnalyticsPeriod =
   | 'hourly'
   | 'daily'
   | 'weekly'
@@ -1441,7 +1441,7 @@ export interface AnalyticsInsight {
   created_at: Date;
 }
 
-export type InsightType = 
+export type InsightType =
   | 'opportunity'
   | 'issue'
   | 'trend'
@@ -1503,7 +1503,7 @@ export interface FraudRule {
   action: FraudAction;
 }
 
-export type FraudAction = 
+export type FraudAction =
   | 'flag'
   | 'block'
   | 'review'

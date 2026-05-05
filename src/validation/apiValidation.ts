@@ -1,6 +1,6 @@
 /**
  * API Validation Layer
- * 
+ *
  * Comprehensive validation for API requests, responses, parameters,
  * headers, and payload data with security checks and sanitization.
  */
@@ -89,7 +89,7 @@ export const validateURL = (url: string, allowedDomains?: string[]): APIValidati
 
   try {
     const parsedURL = new URL(url);
-    
+
     // Protocol validation
     const allowedProtocols = ['http:', 'https:'];
     if (!allowedProtocols.includes(parsedURL.protocol)) {
@@ -187,7 +187,7 @@ export const validateHeaders = (
       'multipart/form-data',
       'application/x-www-form-urlencoded',
     ];
-    
+
     const mainType = contentType.split(';')[0].toLowerCase();
     if (!validContentTypes.some(type => mainType.includes(type))) {
       warnings.push(`Unusual Content-Type: ${contentType}`);
@@ -285,7 +285,7 @@ export const validateRequestBody = (
   // Content type validation
   if (contentType) {
     const mainType = contentType.split(';')[0].toLowerCase();
-    
+
     if (mainType.includes('application/json')) {
       if (typeof body !== 'object') {
         errors.push('Body must be an object for JSON content type');
@@ -293,15 +293,15 @@ export const validateRequestBody = (
         // Check for nested depth
         const maxDepth = 10;
         let currentDepth = 0;
-        
+
         const checkDepth = (obj: any, depth: number): boolean => {
-          if (depth > maxDepth) return false;
-          if (typeof obj !== 'object' || obj === null) return true;
-          
+          if (depth > maxDepth) {return false;}
+          if (typeof obj !== 'object' || obj === null) {return true;}
+
           currentDepth = Math.max(currentDepth, depth);
           return Object.values(obj).every(value => checkDepth(value, depth + 1));
         };
-        
+
         if (!checkDepth(body, 0)) {
           errors.push('Request body nesting too deep (maximum 10 levels)');
         }
@@ -396,7 +396,7 @@ export const validateQueryParams = (
     // SQL injection check
     const sqlPatterns = ['union', 'select', 'insert', 'update', 'delete', 'drop'];
     const lowerValue = value.toLowerCase();
-    
+
     if (sqlPatterns.some(pattern => lowerValue.includes(pattern))) {
       errors.push(`Potential SQL injection in parameter: ${key}`);
       securityLevel = 'low';
@@ -588,7 +588,7 @@ export const validateAPIResponse = (
     // Check for sensitive data exposure
     const sensitiveFields = ['password', 'token', 'secret', 'key', 'credential'];
     const bodyString = JSON.stringify(response.body).toLowerCase();
-    
+
     for (const field of sensitiveFields) {
       if (bodyString.includes(field)) {
         warnings.push(`Potential sensitive data exposure: ${field}`);

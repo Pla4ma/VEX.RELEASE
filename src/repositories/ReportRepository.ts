@@ -1,6 +1,6 @@
 /**
  * Report Repository
- * 
+ *
  * Repository for report generation and management including report templates,
  * scheduled reports, report execution, and report analytics.
  */
@@ -1046,7 +1046,7 @@ export class ReportRepository extends BaseRepository<Report> {
       return this.findById(id);
     }
 
-    setClause.push(`updated_at = CURRENT_TIMESTAMP`);
+    setClause.push('updated_at = CURRENT_TIMESTAMP');
     params.push(id);
 
     const query = `

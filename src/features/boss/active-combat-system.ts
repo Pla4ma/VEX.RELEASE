@@ -40,37 +40,37 @@ export const ActiveEncounterSchema = z.object({
   bossId: z.string(),
   bossName: z.string(),
   bossAvatarUrl: z.string().nullable(),
-  
+
   // Health
   bossMaxHealth: z.number().int(),
   bossCurrentHealth: z.number().int(),
-  
+
   // Combat State
   currentPhase: BossPhaseSchema,
   currentAttackPattern: BossAttackPatternSchema.nullable(),
   attackPatternStartedAt: z.number().nullable(),
   attackPatternDurationMs: z.number().int(),
-  
+
   // User Resources
   userMaxFocusEnergy: z.number().int().default(100),
   userCurrentFocusEnergy: z.number().int().default(100),
   userFocusEnergyRegenRate: z.number().default(1), // per second
-  
+
   // Abilities & Cooldowns
   availableAbilities: z.array(CombatAbilitySchema),
   abilityCooldowns: z.record(z.number()), // abilityId -> availableAt timestamp
-  
+
   // Timers
   encounterStartedAt: z.number(),
   expiresAt: z.number(),
   lastUserActionAt: z.number().nullable(),
-  
+
   // Session Tracking
   sessionCount: z.number().int().default(0),
   totalDamageDealt: z.number().int().default(0),
   attacksDodged: z.number().int().default(0),
   attacksHit: z.number().int().default(0),
-  
+
   status: z.enum(['ACTIVE', 'VICTORY', 'DEFEAT', 'TIMED_OUT']),
 });
 
@@ -216,7 +216,7 @@ export function calculateBossPhase(
 ): BossPhase {
   const healthPercent = currentHealth / maxHealth;
   const timePercent = timeElapsedMs / timeLimitMs;
-  
+
   // Health-based phases
   if (healthPercent <= 0.15) {
     return 'DESPERATE';
@@ -227,12 +227,12 @@ export function calculateBossPhase(
   if (healthPercent <= 0.7) {
     return 'AGITATED';
   }
-  
+
   // Time-based urgency
   if (timePercent > 0.8) {
     return 'ENRAGED';
   }
-  
+
   return 'CALM';
 }
 
@@ -256,7 +256,7 @@ export function selectAttackPattern(
   userLevel: number
 ): BossAttackPattern {
   const patterns = Object.keys(ATTACK_PATTERNS) as BossAttackPattern[];
-  
+
   // Weight patterns based on phase
   let weights: number[];
   switch (currentPhase) {
@@ -273,18 +273,18 @@ export function selectAttackPattern(
       weights = [0.0, 0.2, 0.2, 0.3, 0.3]; // Hardest patterns
       break;
   }
-  
+
   // Weighted random selection
   const totalWeight = weights.reduce((a, b) => a + b, 0);
   let random = Math.random() * totalWeight;
-  
+
   for (let i = 0; i < patterns.length; i++) {
     random -= weights[i];
     if (random <= 0) {
       return patterns[i];
     }
   }
-  
+
   return patterns[0];
 }
 
@@ -309,7 +309,7 @@ export function executeCombatAbility(
   now: number = Date.now()
 ): CombatActionResult {
   const ability = encounter.availableAbilities.find((a) => a.id === abilityId);
-  
+
   if (!ability) {
     return {
       success: false,
@@ -321,7 +321,7 @@ export function executeCombatAbility(
       message: 'Ability not available',
     };
   }
-  
+
   // Check cooldown
   const cooldownEnds = encounter.abilityCooldowns[abilityId] || 0;
   if (now < cooldownEnds) {
@@ -335,7 +335,7 @@ export function executeCombatAbility(
       message: 'Ability on cooldown',
     };
   }
-  
+
   // Check energy
   if (encounter.userCurrentFocusEnergy < ability.focusEnergyCost) {
     return {
@@ -348,7 +348,7 @@ export function executeCombatAbility(
       message: 'Not enough Focus Energy!',
     };
   }
-  
+
   // Check requirements
   if (userStreakDays < ability.requiresStreak) {
     return {
@@ -361,11 +361,11 @@ export function executeCombatAbility(
       message: `Requires ${ability.requiresStreak} day streak`,
     };
   }
-  
+
   // Calculate damage with phase multiplier
   const phaseMultiplier = getPhaseMultiplier(encounter.currentPhase);
   const damageDealt = Math.floor(ability.baseDamage * phaseMultiplier);
-  
+
   // Apply damage
   const newHealth = Math.max(0, encounter.bossCurrentHealth - damageDealt);
   const newPhase = calculateBossPhase(
@@ -374,19 +374,19 @@ export function executeCombatAbility(
     now - encounter.encounterStartedAt,
     encounter.expiresAt - encounter.encounterStartedAt
   );
-  
+
   // Update cooldown
   const updatedCooldowns = {
     ...encounter.abilityCooldowns,
     [abilityId]: now + ability.cooldownSeconds * 1000,
   };
-  
+
   // Calculate combo (multiple hits in succession)
-  const timeSinceLastAction = encounter.lastUserActionAt 
-    ? now - encounter.lastUserActionAt 
+  const timeSinceLastAction = encounter.lastUserActionAt
+    ? now - encounter.lastUserActionAt
     : Infinity;
   const comboBonus = timeSinceLastAction < 10000 ? 0.2 : 0; // 20% bonus for <10s between actions
-  
+
   // Publish event
   eventBus.publish('boss:ability_used', {
     userId: encounter.userId,
@@ -396,7 +396,7 @@ export function executeCombatAbility(
     newHealth,
     comboBonus,
   });
-  
+
   return {
     success: true,
     damageDealt,
@@ -426,18 +426,18 @@ export function resolveAttackPattern(
   if (!encounter.currentAttackPattern) {
     return { hit: false, damageTaken: 0, dodged: false, message: '' };
   }
-  
+
   const pattern = ATTACK_PATTERNS[encounter.currentAttackPattern];
-  
+
   // Check if pattern duration expired
-  const patternElapsed = encounter.attackPatternStartedAt 
-    ? now - encounter.attackPatternStartedAt 
+  const patternElapsed = encounter.attackPatternStartedAt
+    ? now - encounter.attackPatternStartedAt
     : 0;
-  
+
   if (patternElapsed < pattern.durationMs) {
     return { hit: false, damageTaken: 0, dodged: false, message: pattern.description };
   }
-  
+
   // Determine if user dodged based on mechanic
   let dodged = false;
   switch (encounter.currentAttackPattern) {
@@ -451,7 +451,7 @@ export function resolveAttackPattern(
     default:
       dodged = Math.random() > 0.5; // Fallback
   }
-  
+
   if (dodged) {
     return {
       hit: false,
@@ -460,7 +460,7 @@ export function resolveAttackPattern(
       message: `Dodged ${pattern.name}!`,
     };
   }
-  
+
   return {
     hit: true,
     damageTaken: pattern.damageOnHit,
@@ -491,7 +491,7 @@ export function checkEncounterEnd(
       rewards: calculateVictoryRewards(encounter),
     };
   }
-  
+
   // Check timeout
   if (now > encounter.expiresAt) {
     return {
@@ -501,7 +501,7 @@ export function checkEncounterEnd(
       rewards: [],
     };
   }
-  
+
   // Check user focus energy depletion (defeat condition)
   if (encounter.userCurrentFocusEnergy <= 0) {
     return {
@@ -511,7 +511,7 @@ export function checkEncounterEnd(
       rewards: [{ type: 'CONSOLATION_XP', amount: Math.floor(encounter.totalDamageDealt / 10) }],
     };
   }
-  
+
   return {
     ended: false,
     victory: false,
@@ -524,17 +524,17 @@ function calculateVictoryRewards(encounter: ActiveEncounter): Array<{ type: stri
   const baseXp = 100;
   const damageBonus = Math.floor(encounter.totalDamageDealt / 5);
   const dodgeBonus = encounter.attacksDodged * 25;
-  
+
   const rewards = [
     { type: 'XP', amount: baseXp + damageBonus + dodgeBonus },
     { type: 'COINS', amount: 50 + Math.floor(encounter.totalDamageDealt / 10) },
   ];
-  
+
   // Chance for gem drop
   if (encounter.attacksDodged >= 3) {
     rewards.push({ type: 'GEMS', amount: 10 });
   }
-  
+
   return rewards;
 }
 
@@ -551,20 +551,20 @@ export function formatCombatStatus(encounter: ActiveEncounter): {
 } {
   const bossPercent = Math.floor((encounter.bossCurrentHealth / encounter.bossMaxHealth) * 100);
   const energyPercent = Math.floor((encounter.userCurrentFocusEnergy / encounter.userMaxFocusEnergy) * 100);
-  
+
   const bossBar = '█'.repeat(bossPercent / 5) + '░'.repeat(20 - bossPercent / 5);
   const energyBar = '█'.repeat(energyPercent / 5) + '░'.repeat(20 - energyPercent / 5);
-  
+
   const timeMs = encounter.expiresAt - Date.now();
   const timeMinutes = Math.floor(timeMs / 60000);
-  
+
   return {
     bossHealthBar: `${bossBar} ${bossPercent}%`,
     energyBar: `${energyBar} ${energyPercent}%`,
     phaseIndicator: encounter.currentPhase,
     timeRemaining: timeMinutes > 0 ? `${timeMinutes}m` : 'EXPIRING!',
-    activeAttack: encounter.currentAttackPattern 
-      ? ATTACK_PATTERNS[encounter.currentAttackPattern]?.name 
+    activeAttack: encounter.currentAttackPattern
+      ? ATTACK_PATTERNS[encounter.currentAttackPattern]?.name
       : null,
   };
 }

@@ -80,7 +80,7 @@ export const DifficultyLevelSchema = z.enum([
 export const DifficultyFactorSchema = z.object({
   type: z.enum([
     'boss_health',
-    'attack_frequency', 
+    'attack_frequency',
     'mechanic_complexity',
     'time_pressure',
     'purity_threshold',
@@ -95,14 +95,15 @@ export const DifficultyFactorSchema = z.object({
 
 export const UserProfileSchema = z.object({
   userId: z.string(),
-  
+  profileId: z.string(),
+
   // Performance metrics
   recentPurity: z.number(),
   completionRate: z.number(),
   streakStrength: z.number(),
   sessionConsistency: z.number(),
   squadPerformance: z.number(),
-  
+
   // Difficulty history
   currentDifficulty: z.number(),
   difficultyHistory: z.array(z.object({
@@ -111,17 +112,17 @@ export const UserProfileSchema = z.object({
     outcome: z.enum(['victory', 'defeat', 'abandoned']),
     performance: z.number(),
   })),
-  
+
   // Learning patterns
   learningRate: z.number(),
   adaptationSpeed: z.number(),
   preferredDifficulty: z.number(),
-  
+
   // Predictive factors
   burnoutRisk: z.number(),
   frustrationLevel: z.number(),
   engagementTrend: z.enum(['increasing', 'stable', 'decreasing']),
-  
+
   updatedAt: z.number(),
 });
 
@@ -130,15 +131,15 @@ export const AdaptiveBossEncounterSchema = z.object({
   bossId: z.string(),
   userId: z.string(),
   squadId: z.string().optional(),
-  
+
   // Base configuration
   baseDifficulty: z.number(),
   currentDifficulty: z.number(),
   targetDifficulty: z.number(),
-  
+
   // Active factors
   factors: z.array(DifficultyFactorSchema),
-  
+
   // Real-time adjustments
   realTimeAdjustments: z.array(z.object({
     timestamp: z.number(),
@@ -147,18 +148,18 @@ export const AdaptiveBossEncounterSchema = z.object({
     newDifficulty: z.number(),
     reason: z.string(),
   })),
-  
+
   // Performance tracking
   currentPerformance: z.number(), // 0-1 during encounter
   predictedOutcome: z.enum(['victory', 'defeat', 'uncertain']).nullable(),
-  
+
   // Squad context
   squadMembers: z.array(z.object({
     userId: z.string(),
     difficulty: z.number(),
     role: z.enum(['leader', 'member', 'support']),
   })).optional(),
-  
+
   createdAt: z.number(),
   updatedAt: z.number(),
 });
@@ -219,28 +220,29 @@ export class AdaptiveDifficultyService {
     const now = Date.now();
     const profile: UserProfile = {
       userId,
-      
+      profileId: `profile-${userId}`,
+
       // Initialize with provided metrics or defaults
       recentPurity: initialMetrics?.sessionPurity || 0.7,
       completionRate: initialMetrics?.completionRate || 0.5,
       streakStrength: this.calculateStreakStrength(initialMetrics?.streakLength || 0),
       sessionConsistency: 0.7, // Default assumption
       squadPerformance: 0.5, // Will be updated with squad data
-      
+
       // Difficulty tracking
       currentDifficulty: 0.5, // Start at intermediate
       difficultyHistory: [],
-      
+
       // Learning patterns
       learningRate: 0.1,
       adaptationSpeed: 0.05,
       preferredDifficulty: 0.5,
-      
+
       // Predictive factors
       burnoutRisk: 0.1,
       frustrationLevel: 0.1,
       engagementTrend: 'stable',
-      
+
       updatedAt: now,
     };
 
@@ -249,7 +251,8 @@ export class AdaptiveDifficultyService {
     // Emit initialization event
     eventBus.publish('adaptive_difficulty:profile_initialized', {
       userId,
-      initialDifficulty: profile.currentDifficulty,
+      profileId: profile.profileId,
+      timestamp: now,
     });
 
     return profile;
@@ -266,16 +269,16 @@ export class AdaptiveDifficultyService {
   }): Promise<AdaptiveBossEncounter> {
     // Ensure user profile exists
     const profile = await this.initializeUserProfile(input.userId);
-    
+
     const now = Date.now();
     const encounterId = `adaptive_${input.bossId}_${input.userId}_${now}`;
-    
+
     // Calculate target difficulty
     const targetDifficulty = await this.calculateOptimalDifficulty(input.userId, input.squadId);
-    
+
     // Initialize difficulty factors
     const factors = this.initializeDifficultyFactors(targetDifficulty);
-    
+
     const encounter: AdaptiveBossEncounter = {
       id: encounterId,
       bossId: input.bossId,
@@ -302,11 +305,11 @@ export class AdaptiveDifficultyService {
 
     // Emit encounter creation event
     eventBus.publish('adaptive_difficulty:encounter_created', {
-      encounterId,
       userId: input.userId,
+      encounterId,
       bossId: input.bossId,
       difficulty: targetDifficulty,
-      squadId: input.squadId,
+      timestamp: Date.now(),
     });
 
     return encounter;
@@ -340,7 +343,7 @@ export class AdaptiveDifficultyService {
 
     // Check if adjustment is needed
     const adjustmentNeeded = this.shouldAdjustDifficulty(encounter, performance, context);
-    
+
     if (adjustmentNeeded.shouldAdjust) {
       const newDifficulty = this.calculateRealTimeAdjustment(
         encounter,
@@ -384,12 +387,11 @@ export class AdaptiveDifficultyService {
 
       // Emit adjustment event
       eventBus.publish('adaptive_difficulty:real_time_adjustment', {
-        encounterId,
         userId: encounter.userId,
-        oldDifficulty,
-        newDifficulty: smoothedDifficulty,
-        performance,
+        encounterId,
+        adjustment: smoothedDifficulty - oldDifficulty,
         reason: adjustment.reason,
+        timestamp: Date.now(),
       });
 
       this.activeEncounters.set(encounterId, encounter);
@@ -413,10 +415,10 @@ export class AdaptiveDifficultyService {
     finalPerformance: number
   ): Promise<void> {
     const encounter = this.activeEncounters.get(encounterId);
-    if (!encounter) return;
+    if (!encounter) {return;}
 
     const profile = this.userProfiles.get(encounter.userId);
-    if (!profile) return;
+    if (!profile) {return;}
 
     // Update difficulty history
     profile.difficultyHistory.push({
@@ -448,12 +450,11 @@ export class AdaptiveDifficultyService {
 
     // Emit completion event
     eventBus.publish('adaptive_difficulty:encounter_completed', {
-      encounterId,
       userId: encounter.userId,
+      encounterId,
       bossId: encounter.bossId,
-      outcome,
       finalDifficulty: encounter.currentDifficulty,
-      finalPerformance,
+      timestamp: Date.now(),
     });
   }
 
@@ -483,10 +484,10 @@ export class AdaptiveDifficultyService {
 
     const optimalDifficulty = await this.calculateOptimalDifficulty(userId, squadId);
     const difficultyLevel = this.getDifficultyLevel(optimalDifficulty);
-    
+
     // Analyze contributing factors
     const factors = this.analyzeDifficultyFactors(profile);
-    
+
     // Generate reasoning
     const reasoning = this.generateDifficultyReasoning(profile, factors, optimalDifficulty);
 
@@ -511,23 +512,23 @@ export class AdaptiveDifficultyService {
    */
   private async calculateOptimalDifficulty(userId: string, squadId?: string): Promise<number> {
     const profile = this.userProfiles.get(userId);
-    if (!profile) return 0.5;
+    if (!profile) {return 0.5;}
 
     // Base calculation from performance metrics
     let difficulty = 0;
-    
+
     // Recent purity (higher purity = higher difficulty)
     difficulty += profile.recentPurity * ADAPTIVE_DIFFICULTY_CONFIG.PERFORMANCE_WEIGHTS.recentPurity;
-    
+
     // Completion rate (higher completion = higher difficulty)
     difficulty += profile.completionRate * ADAPTIVE_DIFFICULTY_CONFIG.PERFORMANCE_WEIGHTS.completionRate;
-    
+
     // Streak strength (strong streak = higher difficulty)
     difficulty += profile.streakStrength * ADAPTIVE_DIFFICULTY_CONFIG.PERFORMANCE_WEIGHTS.streakStrength;
-    
+
     // Session consistency (more consistent = higher difficulty)
     difficulty += profile.sessionConsistency * ADAPTIVE_DIFFICULTY_CONFIG.PERFORMANCE_WEIGHTS.sessionConsistency;
-    
+
     // Squad performance (if applicable)
     if (squadId) {
       difficulty += profile.squadPerformance * ADAPTIVE_DIFFICULTY_CONFIG.PERFORMANCE_WEIGHTS.squadPerformance;
@@ -693,7 +694,7 @@ export class AdaptiveDifficultyService {
   private calculateFactorValue(factor: DifficultyFactor, difficulty: number): number {
     const range = factor.max - factor.min;
     const difficultyOffset = range * difficulty;
-    
+
     switch (factor.type) {
       case 'boss_health':
         return factor.baseValue * (1 + difficulty);
@@ -761,7 +762,7 @@ export class AdaptiveDifficultyService {
     if (recentEncounters.length >= 2) {
       const recentPerformance = recentEncounters.slice(-2).map(e => e.performance);
       const improvement = recentPerformance[1] - recentPerformance[0];
-      
+
       if (improvement > 0.1) {
         profile.learningRate = Math.min(0.3, profile.learningRate + 0.02);
       } else if (improvement < -0.1) {
@@ -777,14 +778,14 @@ export class AdaptiveDifficultyService {
    * Calculate preferred difficulty from history
    */
   private calculatePreferredDifficulty(profile: UserProfile): number {
-    if (profile.difficultyHistory.length === 0) return 0.5;
+    if (profile.difficultyHistory.length === 0) {return 0.5;}
 
     // Weight recent successful encounters more heavily
     const successfulEncounters = profile.difficultyHistory
       .filter(e => e.outcome === 'victory')
       .slice(-10);
 
-    if (successfulEncounters.length === 0) return 0.5;
+    if (successfulEncounters.length === 0) {return 0.5;}
 
     const totalWeight = successfulEncounters.reduce((sum, encounter, index) => {
       const weight = (index + 1) / successfulEncounters.length; // Newer = higher weight
@@ -823,7 +824,7 @@ export class AdaptiveDifficultyService {
     // Update engagement trend
     const recentOutcomes = profile.difficultyHistory.slice(-5).map(e => e.outcome);
     const recentWinRate = recentOutcomes.filter(o => o === 'victory').length / recentOutcomes.length;
-    
+
     if (recentWinRate > 0.7) {
       profile.engagementTrend = 'increasing';
     } else if (recentWinRate < 0.3) {

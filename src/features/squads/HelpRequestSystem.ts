@@ -70,24 +70,24 @@ export const HelpRequestSchema = z.object({
   squadId: z.string(),
   requesterId: z.string(),
   sessionId: z.string().optional(), // Optional: link to active session
-  
+
   // Request details
   helpType: z.enum(['struggling', 'stuck', 'motivation', 'breakthrough', 'accountability']),
   message: z.string().min(1).max(500),
   urgency: z.enum(['low', 'medium', 'high']).default('medium'),
-  
+
   // Status
   status: z.enum(['pending', 'active', 'resolved', 'expired']).default('pending'),
-  
+
   // Timing
   createdAt: z.number(),
   expiresAt: z.number(),
   resolvedAt: z.number().nullable().default(null),
-  
+
   // Response tracking
   responseCount: z.number().default(0),
   helpfulResponseCount: z.number().default(0),
-  
+
   // Metadata
   tags: z.array(z.string()).default([]),
   context: z.record(z.unknown()).optional(),
@@ -97,18 +97,18 @@ export const HelpResponseSchema = z.object({
   id: z.string(),
   helpRequestId: z.string(),
   responderId: z.string(),
-  
+
   // Response details
   responseType: z.enum(['encouragement', 'tip', 'join_session', 'check_in']),
   message: z.string().min(1).max(1000),
-  
+
   // Status
   status: z.enum(['sent', 'viewed', 'helpful', 'not_helpful']).default('sent'),
-  
+
   // Timing
   createdAt: z.number(),
   viewedAt: z.number().nullable().default(null),
-  
+
   // Metadata
   isAnonymous: z.boolean().default(false),
   metadata: z.record(z.unknown()).optional(),
@@ -349,7 +349,7 @@ export class HelpRequestService {
   }): Promise<{ success: boolean; error?: string }> {
     const responses = Array.from(this.helpResponses.values()).flat();
     const response = responses.find(r => r.id === input.responseId);
-    
+
     if (!response) {
       return { success: false, error: 'Response not found' };
     }
@@ -391,11 +391,11 @@ export class HelpRequestService {
   getSquadHelpRequests(squadId: string, status?: HelpRequest['status']): HelpRequest[] {
     const requests = Array.from(this.helpRequests.values())
       .filter(req => req.squadId === squadId);
-    
+
     if (status) {
       return requests.filter(req => req.status === status);
     }
-    
+
     return requests.sort((a, b) => b.createdAt - a.createdAt);
   }
 
@@ -421,7 +421,7 @@ export class HelpRequestService {
   getHelpCredits(userId: string, squadId: string): HelpCredits {
     const creditsKey = `${userId}_${squadId}`;
     let credits = this.helpCredits.get(creditsKey);
-    
+
     if (!credits) {
       credits = {
         userId,
@@ -447,7 +447,7 @@ export class HelpRequestService {
   getHelpReputation(userId: string, squadId: string): HelpReputation {
     const repKey = `${userId}_${squadId}`;
     let reputation = this.helpReputation.get(repKey);
-    
+
     if (!reputation) {
       reputation = {
         userId,
@@ -475,9 +475,9 @@ export class HelpRequestService {
 
     const pendingRequests = requests.filter(req => req.status === 'pending').length;
     const activeRequests = requests.filter(req => req.status === 'active').length;
-    const resolvedToday = requests.filter(req => 
-      req.status === 'resolved' && 
-      req.resolvedAt && 
+    const resolvedToday = requests.filter(req =>
+      req.status === 'resolved' &&
+      req.resolvedAt &&
       req.resolvedAt >= todayStart
     ).length;
 
@@ -493,13 +493,13 @@ export class HelpRequestService {
       return req ? (resp.createdAt - req.createdAt) / (1000 * 60) : 0; // minutes
     });
 
-    const averageResponseTime = responseTimes.length > 0 
-      ? responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length 
+    const averageResponseTime = responseTimes.length > 0
+      ? responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length
       : 0;
 
     // Get top helpers
     const helperStats = new Map<string, { name: string; helpGiven: number; reputation: number }>();
-    
+
     squadResponses.forEach(resp => {
       const existing = helperStats.get(resp.responderId) || {
         name: resp.responderId, // Would normally fetch user name
@@ -548,7 +548,7 @@ export class HelpRequestService {
   private updateReputation(userId: string, squadId: string, action: 'given' | 'received' | 'helpful'): void {
     const repKey = `${userId}_${squadId}`;
     let reputation = this.helpReputation.get(repKey);
-    
+
     if (!reputation) {
       reputation = {
         userId,
@@ -615,7 +615,7 @@ export class HelpRequestService {
       userId: helpRequest.requesterId,
       type: 'HELP_RESPONSE',
       title: 'Help Response Received! 💬',
-      body: `Someone responded to your help request`,
+      body: 'Someone responded to your help request',
       data: {
         helpRequestId: helpRequest.id,
         responseId: response.id,

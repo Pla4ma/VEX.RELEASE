@@ -1,6 +1,6 @@
 /**
  * Product Repository
- * 
+ *
  * Repository for product data management including CRUD operations,
  * inventory management, pricing, and product relationships.
  */
@@ -171,13 +171,13 @@ export class ProductRepository extends BaseRepository<Product> {
       // Query database
       const query = 'SELECT * FROM products WHERE sku = $1 AND status != $2';
       const result = await this.dbConnection.query(query, [sku, ProductStatus.ARCHIVED]);
-      
+
       if (result.rows.length === 0) {
         return null;
       }
 
       const product = await this.mapRowToProduct(result.rows[0]);
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, product, this.options.cacheTTL);
@@ -212,13 +212,13 @@ export class ProductRepository extends BaseRepository<Product> {
       // Query database
       const query = 'SELECT * FROM products WHERE barcode = $1 AND status != $2';
       const result = await this.dbConnection.query(query, [barcode, ProductStatus.ARCHIVED]);
-      
+
       if (result.rows.length === 0) {
         return null;
       }
 
       const product = await this.mapRowToProduct(result.rows[0]);
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, product, this.options.cacheTTL);
@@ -296,7 +296,7 @@ export class ProductRepository extends BaseRepository<Product> {
         }
 
         if (filters.inStock) {
-          query += ` AND p.inventory_quantity > 0`;
+          query += ' AND p.inventory_quantity > 0';
         }
 
         if (filters.tags && filters.tags.length > 0) {
@@ -310,7 +310,7 @@ export class ProductRepository extends BaseRepository<Product> {
 
       const result = await this.dbConnection.query(query, params);
       const products = await Promise.all(result.rows.map(row => this.mapRowToProduct(row)));
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, products, this.options.cacheTTL);
@@ -351,11 +351,11 @@ export class ProductRepository extends BaseRepository<Product> {
       }
 
       const result = await this.dbConnection.query(query, params);
-      
+
       if (result.rowCount === 0 && operation === 'subtract') {
         throw new Error('Insufficient inventory');
       }
-      
+
       // Clear cache
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', productId));
@@ -387,11 +387,11 @@ export class ProductRepository extends BaseRepository<Product> {
       `;
 
       const result = await this.dbConnection.query(query, [quantity, productId]);
-      
+
       if (result.rows.length === 0) {
         return false;
       }
-      
+
       // Clear cache
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', productId));
@@ -423,11 +423,11 @@ export class ProductRepository extends BaseRepository<Product> {
       `;
 
       const result = await this.dbConnection.query(query, [quantity, productId]);
-      
+
       if (result.rowCount === 0) {
         throw new Error('Insufficient reserved inventory');
       }
-      
+
       // Clear cache
       if (this.options.useCache) {
         await this.cacheManager.delete(this.generateCacheKey('findById', productId));
@@ -468,7 +468,7 @@ export class ProductRepository extends BaseRepository<Product> {
 
       const result = await this.dbConnection.query(query, [ProductStatus.ACTIVE]);
       const products = await Promise.all(result.rows.map(row => this.mapRowToProduct(row)));
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, products, this.options.cacheTTL);
@@ -509,7 +509,7 @@ export class ProductRepository extends BaseRepository<Product> {
 
       const result = await this.dbConnection.query(query, [category, ProductStatus.ACTIVE, limit]);
       const products = await Promise.all(result.rows.map(row => this.mapRowToProduct(row)));
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, products, this.options.cacheTTL);
@@ -562,7 +562,7 @@ export class ProductRepository extends BaseRepository<Product> {
 
       const result = await this.dbConnection.query(query, [ProductStatus.ACTIVE, ProductStatus.ARCHIVED]);
       const stats = result.rows[0];
-      
+
       // Cache the result
       if (this.options.useCache) {
         await this.cacheManager.set(cacheKey, stats, this.options.cacheTTL);
@@ -583,7 +583,7 @@ export class ProductRepository extends BaseRepository<Product> {
   protected async findInDatabase(id: string, _options?: any): Promise<Product | null> {
     const query = 'SELECT * FROM products WHERE id = $1 AND status != $2';
     const result = await this.dbConnection.query(query, [id, ProductStatus.ARCHIVED]);
-    
+
     if (result.rows.length === 0) {
       return null;
     }
@@ -654,7 +654,7 @@ export class ProductRepository extends BaseRepository<Product> {
 
   protected async createInDatabase(entity: Partial<Product>): Promise<Product> {
     const createData = entity as ProductCreateData;
-    
+
     const query = `
       INSERT INTO products (
         name, description, sku, barcode, category, subcategory, brand, 
@@ -691,7 +691,7 @@ export class ProductRepository extends BaseRepository<Product> {
 
   protected async updateInDatabase(id: string, updates: Partial<Product>): Promise<Product | null> {
     const updateData = updates as ProductUpdateData;
-    
+
     const setClause: string[] = [];
     const params: any[] = [];
     let paramIndex = 1;
@@ -725,7 +725,7 @@ export class ProductRepository extends BaseRepository<Product> {
       return this.findById(id);
     }
 
-    setClause.push(`updated_at = CURRENT_TIMESTAMP`);
+    setClause.push('updated_at = CURRENT_TIMESTAMP');
     params.push(id);
 
     const query = `
@@ -736,7 +736,7 @@ export class ProductRepository extends BaseRepository<Product> {
     `;
 
     const result = await this.dbConnection.query(query, params);
-    
+
     if (result.rows.length === 0) {
       return null;
     }

@@ -1,6 +1,6 @@
 /**
  * Form Validation Layer
- * 
+ *
  * Comprehensive validation for form data including field validation,
  * cross-field validation, form state management, and user experience
  * considerations.
@@ -102,7 +102,7 @@ export const validateFormField = (field: FormField, formData?: Record<string, an
       }
 
       // Email validation for email type
-      if (field.type === 'email' || field.name.toLowerCase().includes('email')) {
+      if ((field.type as any) === 'email' || field.name.toLowerCase().includes('email')) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(stringValue)) {
           fieldErrors.push('Invalid email format');
@@ -113,11 +113,11 @@ export const validateFormField = (field: FormField, formData?: Record<string, an
       if (field.name.toLowerCase().includes('phone') || field.name.toLowerCase().includes('tel')) {
         const phoneRegex = /^\+?[\d\s\-\(\)]+$/;
         const digitsOnly = stringValue.replace(/\D/g, '');
-        
+
         if (!phoneRegex.test(stringValue)) {
           fieldErrors.push('Invalid phone number format');
         }
-        
+
         if (digitsOnly.length < 10) {
           fieldErrors.push('Phone number must have at least 10 digits');
         }
@@ -133,7 +133,7 @@ export const validateFormField = (field: FormField, formData?: Record<string, an
 
       const emailValue = String(sanitizedValue);
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      
+
       if (!emailRegex.test(emailValue)) {
         fieldErrors.push('Invalid email format');
       }
@@ -230,7 +230,7 @@ export const validateFormField = (field: FormField, formData?: Record<string, an
 
       if (dateValue instanceof Date) {
         const now = new Date();
-        
+
         if (field.min !== undefined) {
           const minDate = new Date(field.min);
           if (dateValue < minDate) {
@@ -334,7 +334,7 @@ export const validateForm = (config: FormConfig, formData: Record<string, any>):
   // Validate each field
   for (const field of config.fields) {
     const fieldResult = validateFormField(field, formData);
-    
+
     // Merge errors
     Object.keys(fieldResult.errors).forEach(fieldName => {
       if (!allErrors[fieldName]) {
@@ -406,12 +406,12 @@ export const validateFormState = (
   const warnings: Record<string, string[]> = {};
 
   const validStates = [
-    'initial', 'dirty', 'validating', 'valid', 'invalid', 
-    'submitting', 'submitted', 'error'
+    'initial', 'dirty', 'validating', 'valid', 'invalid',
+    'submitting', 'submitted', 'error',
   ];
 
   if (!validStates.includes(currentState)) {
-    errors['formState'] = [`Invalid form state: ${currentState}`];
+    errors.formState = [`Invalid form state: ${currentState}`];
   }
 
   // State transition validation
@@ -428,7 +428,7 @@ export const validateFormState = (
     };
 
     if (invalidTransitions[previousState]?.includes(currentState)) {
-      warnings['formState'] = [`Invalid state transition: ${previousState} -> ${currentState}`];
+      warnings.formState = [`Invalid state transition: ${previousState} -> ${currentState}`];
     }
   }
 
@@ -455,7 +455,7 @@ export const validateFormSubmission = (
   // Validate form if required
   if (options.validateOnSubmit !== false) {
     const validationResult = validateForm(config, formData);
-    
+
     if (!validationResult.isValid) {
       return validationResult;
     }
@@ -465,23 +465,23 @@ export const validateFormSubmission = (
 
   // Check for confirmation requirement
   if (options.confirmBeforeSubmit) {
-    warnings['submission'] = ['User confirmation required before submission'];
+    warnings.submission = ['User confirmation required before submission'];
   }
 
   // Check for sensitive data
   const sensitiveFields = ['password', 'token', 'secret', 'key'];
   for (const fieldName of Object.keys(formData)) {
     if (sensitiveFields.some(sensitive => fieldName.toLowerCase().includes(sensitive))) {
-      warnings['security'] = [`Sensitive data detected in field: ${fieldName}`];
+      warnings.security = [`Sensitive data detected in field: ${fieldName}`];
     }
   }
 
   // Check form size
   const formSize = JSON.stringify(formData).length;
   if (formSize > 1048576) { // 1MB
-    errors['size'] = ['Form data is too large (maximum 1MB)'];
+    errors.size = ['Form data is too large (maximum 1MB)'];
   } else if (formSize > 524288) { // 512KB
-    warnings['size'] = ['Form data is large'];
+    warnings.size = ['Form data is large'];
   }
 
   return {
@@ -508,11 +508,11 @@ export const validateFieldDependencies = (
 
   for (const dependency of dependencies) {
     const dependentValue = formData[dependency.field];
-    
+
     if (dependency.condition(dependentValue)) {
       if (!fieldValue || fieldValue === '') {
         const message = dependency.message || `${fieldName} is required when ${dependency.field} meets condition`;
-        
+
         if (!errors[fieldName]) {
           errors[fieldName] = [];
         }
@@ -544,12 +544,12 @@ export const validateFormProgress = (
     const requiredCompletionRate = (completedRequired.length / requiredFields.length) * 100;
 
     if (requiredCompletionRate < 100) {
-      warnings['progress'] = [`Required fields completion: ${Math.round(requiredCompletionRate)}%`];
+      warnings.progress = [`Required fields completion: ${Math.round(requiredCompletionRate)}%`];
     }
   }
 
   if (completionRate < 50) {
-    warnings['progress'] = [`Form completion: ${Math.round(completionRate)}%`];
+    warnings.progress = [`Form completion: ${Math.round(completionRate)}%`];
   }
 
   return {
@@ -573,16 +573,16 @@ export const validateMultiStepForm = (
   if (currentStep >= 0 && currentStep < stepConfigs.length) {
     const currentStepConfig = stepConfigs[currentStep];
     const currentStepData = stepData[currentStep] || {};
-    
+
     const stepValidation = validateForm(currentStepConfig, currentStepData);
-    
+
     Object.assign(errors, stepValidation.errors);
     Object.assign(warnings, stepValidation.warnings);
   }
 
   // Validate step transition
   if (currentStep < 0 || currentStep >= totalSteps) {
-    errors['navigation'] = [`Invalid step: ${currentStep}`];
+    errors.navigation = [`Invalid step: ${currentStep}`];
   }
 
   // Check if previous steps are complete
@@ -590,7 +590,7 @@ export const validateMultiStepForm = (
     if (stepConfigs[i] && stepData[i]) {
       const stepValidation = validateForm(stepConfigs[i], stepData[i]);
       if (!stepValidation.isValid) {
-        warnings['navigation'] = [`Step ${i + 1} has validation errors`];
+        warnings.navigation = [`Step ${i + 1} has validation errors`];
       }
     }
   }
@@ -617,7 +617,7 @@ export const validateDynamicForm = (
   for (const rule of dynamicRules) {
     if (rule.condition(formData)) {
       const result = rule.validator(formData);
-      
+
       Object.keys(result.errors).forEach(fieldName => {
         if (!allErrors[fieldName]) {
           allErrors[fieldName] = [];

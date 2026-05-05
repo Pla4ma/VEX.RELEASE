@@ -35,7 +35,7 @@ export const WeeklyQuestCard: React.FC<WeeklyQuestCardProps> = ({ userId, onPres
 
   // Get current active step (first incomplete)
   const currentStep = questState.steps.find((s: WeeklyQuestStep) => !s.completed);
-  if (!currentStep) return null;
+  if (!currentStep) {return null;}
 
   const progressPercent = (currentStep.progress / currentStep.target) * 100;
 

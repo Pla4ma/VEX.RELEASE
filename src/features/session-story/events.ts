@@ -1,6 +1,6 @@
 /**
  * Session Story Feature Events
- * 
+ *
  * Event definitions for narrative generation, storytelling, and session chronicles features.
  */
 
@@ -673,7 +673,7 @@ export interface StorySystemErrorEvent extends BaseSessionStoryEvent {
 }
 
 // Union Type for All Session Story Events
-export type SessionStoryEventType = 
+export type SessionStoryEventType =
   | StoryGeneratedEvent
   | StoryStartedEvent
   | StoryProgressedEvent

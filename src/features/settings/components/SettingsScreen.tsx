@@ -8,7 +8,7 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
           <Text style={styles.errorMessage}>
             {error instanceof Error ? error.message : 'Unknown error'}
           </Text>
-          <Pressable style={({pressed})=>[styles.retryButton,pressed&&{opacity:0.8}]}onPress={handleRefresh}
+          <Pressable style={({pressed})=>[styles.retryButton,pressed && {opacity:0.8}]}onPress={handleRefresh}
   accessibilityLabel="Retry button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -28,7 +28,7 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
 
         {}
         <View style={styles.actionsContainer}>
-          <Pressable style={({pressed})=>[styles.actionButton,pressed&&{opacity:0.8}]}onPress={handleSync}disabled={settingsState === 'syncing'}
+          <Pressable style={({pressed})=>[styles.actionButton,pressed && {opacity:0.8}]}onPress={handleSync}disabled={settingsState === 'syncing'}
   accessibilityLabel="Sync button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -37,7 +37,7 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
             </Text>
           </Pressable>
 
-          <Pressable style={({pressed})=>[styles.actionButton,styles.dangerButton,pressed&&{opacity:0.8}]}onPress={handleReset}disabled={settingsState === 'saving'}
+          <Pressable style={({pressed})=>[styles.actionButton,styles.dangerButton,pressed && {opacity:0.8}]}onPress={handleReset}disabled={settingsState === 'saving'}
   accessibilityLabel="Reset to Defaults button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -74,7 +74,7 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
           </View>; case'data':return<View style={styles.settingsGroup}>
             <SettingItem label="Data Retention"value="standard"onPress={()=>{}}/>
             <SettingItem label="Auto Export"value="disabled"onPress={()=>{}}/>
-            <Pressable style={({pressed})=>[styles.actionRow,pressed&&{opacity:0.8}]}onPress={()=>{eventBus.publish('analytics:export_requested',{jobId:`export_${Date.now()}`,userId,format:'json'});}}
+            <Pressable style={({pressed})=>[styles.actionRow,pressed && {opacity:0.8}]}onPress={()=>{eventBus.publish('analytics:export_requested',{jobId:`export_${Date.now()}`,userId,format:'json'});}}
   accessibilityLabel="Export Data button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -84,7 +84,7 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
               </View>
               <Text style={styles.actionRowArrow}>→</Text>
             </Pressable>
-            <Pressable style={({pressed})=>[styles.actionRow,pressed&&{opacity:0.8}]}onPress={()=>{Alert.alert('Import Data','Import data from a previous export file.',[{text:'Cancel',style:'cancel'},{text:'Select File',style:'default'}]);}}
+            <Pressable style={({pressed})=>[styles.actionRow,pressed && {opacity:0.8}]}onPress={()=>{Alert.alert('Import Data','Import data from a previous export file.',[{text:'Cancel',style:'cancel'},{text:'Select File',style:'default'}]);}}
   accessibilityLabel="Import Data button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -98,7 +98,7 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
             {}
             <View style={styles.dangerZone}>
               <Text style={styles.dangerTitle}>Danger Zone</Text>
-              <Pressable style={({pressed})=>[styles.dangerAction,pressed&&{opacity:0.8}]}onPress={()=>{Alert.alert('Delete All Data?','This will permanently delete all your data. This action cannot be undone.',[{text:'Cancel',style:'cancel'},{text:'Delete',style:'destructive',onPress:()=>{Alert.alert('Final Confirmation','Type "DELETE" to permanently delete all data.',[{text:'Cancel',style:'cancel'},{text:'Delete Forever',style:'destructive'}]);}}]);}}
+              <Pressable style={({pressed})=>[styles.dangerAction,pressed && {opacity:0.8}]}onPress={()=>{Alert.alert('Delete All Data?','This will permanently delete all your data. This action cannot be undone.',[{text:'Cancel',style:'cancel'},{text:'Delete',style:'destructive',onPress:()=>{Alert.alert('Final Confirmation','Type "DELETE" to permanently delete all data.',[{text:'Cancel',style:'cancel'},{text:'Delete Forever',style:'destructive'}]);}}]);}}
   accessibilityLabel="Delete All My Data button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -108,7 +108,7 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
           </View>; default:return null;}}; return<View style={styles.container}>
       {}
       <View style={styles.header}>
-        <Pressable onPress={onBackPress}style={({pressed})=>[styles.backButton,pressed&&{opacity:0.8}]}
+        <Pressable onPress={onBackPress}style={({pressed})=>[styles.backButton,pressed && {opacity:0.8}]}
   accessibilityLabel="Back button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
@@ -120,7 +120,7 @@ import React,{useState,useCallback}from'react'; import{View,Text,ScrollView,Pres
 
       {}
       <ScrollView horizontal showsHorizontalScrollIndicator={false}style={styles.tabsContainer}contentContainerStyle={styles.tabsContent}>
-        {CATEGORIES.map(category=><Pressable key={category.key}style={({pressed})=>[styles.tab,activeCategory === category.key && styles.activeTab,pressed&&{opacity:0.8}]}onPress={()=>handleCategoryChange(category.key)}
+        {CATEGORIES.map(category=><Pressable key={category.key}style={({pressed})=>[styles.tab,activeCategory === category.key && styles.activeTab,pressed && {opacity:0.8}]}onPress={()=>handleCategoryChange(category.key)}
   accessibilityLabel={`${category.label} category button`}
   accessibilityRole="button"
   accessibilityHint="Activates this control">

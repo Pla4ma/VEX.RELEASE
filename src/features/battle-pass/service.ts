@@ -267,6 +267,7 @@ export async function purchasePremium(input: PurchasePremiumInput): Promise<Prem
           currency: 'GEMS',
           amount: gemsDeducted,
           source: 'REFUND',
+          skipEvents: false,
           description: 'Battle pass premium refund',
           metadata: {
             seasonId,

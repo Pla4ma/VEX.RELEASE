@@ -5,7 +5,7 @@ import React,{useCallback,useMemo}from'react'; import{View,Text,Modal,Pressable,
             <View style={styles.container}>
               {}
               <View style={[styles.header,{backgroundColor:rarity?.backgroundColor}]}>
-                <Pressable onPress={onClose}style={({pressed})=>[styles.closeButton,pressed&&{opacity:0.8}]}accessibilityLabel="Close modal"
+                <Pressable onPress={onClose}style={({pressed})=>[styles.closeButton,pressed && {opacity:0.8}]}accessibilityLabel="Close modal"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
                   <Text style={styles.closeButtonText}>×</Text>
@@ -109,7 +109,7 @@ import React,{useCallback,useMemo}from'react'; import{View,Text,Modal,Pressable,
 
               {}
               <View style={styles.actions}>
-                {isConsumable && onUse && <Pressable onPress={()=>handleAction(onUse)}disabled={isProcessing}style={({pressed})=>[styles.actionButton,styles.useButton,pressed&&{opacity:0.8}]}accessibilityLabel="Use item"
+                {isConsumable && onUse && <Pressable onPress={()=>handleAction(onUse)}disabled={isProcessing}style={({pressed})=>[styles.actionButton,styles.useButton,pressed && {opacity:0.8}]}accessibilityLabel="Use item"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
                     <Text style={styles.actionButtonText}>
@@ -117,13 +117,13 @@ import React,{useCallback,useMemo}from'react'; import{View,Text,Modal,Pressable,
                     </Text>
                   </Pressable>}
 
-                {isEquipment && (isEquipped ? onUnequip && <Pressable onPress={()=>handleAction(onUnequip)}disabled={isProcessing}style={({pressed})=>[styles.actionButton,styles.unequipButton,pressed&&{opacity:0.8}]}accessibilityLabel="Unequip item"
+                {isEquipment && (isEquipped ? onUnequip && <Pressable onPress={()=>handleAction(onUnequip)}disabled={isProcessing}style={({pressed})=>[styles.actionButton,styles.unequipButton,pressed && {opacity:0.8}]}accessibilityLabel="Unequip item"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
                         <Text style={styles.actionButtonText}>
                           {isProcessing ? 'Unequipping...' : 'UNEQUIP'}
                         </Text>
-                      </Pressable> : onEquip && <Pressable onPress={()=>handleAction(onEquip)}disabled={isProcessing}style={({pressed})=>[styles.actionButton,styles.equipButton,pressed&&{opacity:0.8}]}accessibilityLabel="Equip item"
+                      </Pressable> : onEquip && <Pressable onPress={()=>handleAction(onEquip)}disabled={isProcessing}style={({pressed})=>[styles.actionButton,styles.equipButton,pressed && {opacity:0.8}]}accessibilityLabel="Equip item"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
                         <Text style={styles.actionButtonText}>
@@ -131,19 +131,19 @@ import React,{useCallback,useMemo}from'react'; import{View,Text,Modal,Pressable,
                         </Text>
                       </Pressable>)}
 
-                {isCrafting && onCraft && <Pressable onPress={()=>handleAction(onCraft)}style={({pressed})=>[styles.actionButton,styles.craftButton,pressed&&{opacity:0.8}]}accessibilityLabel="Craft with item"
+                {isCrafting && onCraft && <Pressable onPress={()=>handleAction(onCraft)}style={({pressed})=>[styles.actionButton,styles.craftButton,pressed && {opacity:0.8}]}accessibilityLabel="Craft with item"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
                     <Text style={styles.actionButtonText}>CRAFT WITH</Text>
                   </Pressable>}
 
-                {onGift && <Pressable onPress={()=>handleAction(onGift)}style={({pressed})=>[styles.actionButton,styles.giftButton,pressed&&{opacity:0.8}]}accessibilityLabel="Gift item"
+                {onGift && <Pressable onPress={()=>handleAction(onGift)}style={({pressed})=>[styles.actionButton,styles.giftButton,pressed && {opacity:0.8}]}accessibilityLabel="Gift item"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
                     <Text style={styles.actionButtonText}>GIFT</Text>
                   </Pressable>}
 
-                {onDestroy && <Pressable onPress={()=>handleAction(onDestroy)}disabled={isProcessing}style={({pressed})=>[styles.actionButton,styles.destroyButton,pressed&&{opacity:0.8}]}accessibilityLabel="Destroy item"
+                {onDestroy && <Pressable onPress={()=>handleAction(onDestroy)}disabled={isProcessing}style={({pressed})=>[styles.actionButton,styles.destroyButton,pressed && {opacity:0.8}]}accessibilityLabel="Destroy item"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
                     <Text style={[styles.actionButtonText,styles.destroyText]}>
