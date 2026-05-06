@@ -190,7 +190,7 @@ export function useSession(userId: string): UseSessionReturn {
     }
   }, [service, refresh]);
 
-  const startSession = useCallback(async (countdownSeconds?: number): Promise<void> => {
+  const startSession = useCallback(async (countdownSeconds: number = 0): Promise<void> => {
     setState(prev => ({ ...prev, isLoading: true }));
     try {
       await service.startSession(countdownSeconds);

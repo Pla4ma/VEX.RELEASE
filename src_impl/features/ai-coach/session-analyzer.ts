@@ -1,4 +1,5 @@
 import { captureSilentFailure } from "../../utils/silent-failure";
+import { v4 } from "../../utils/uuid";
 /**
  * Session Analyzer
  * Business logic for analyzing session data and building behavior profiles
@@ -67,7 +68,7 @@ export async function processBehaviorSignal(input: ProcessBehaviorSignalInput): 
   const validated = ProcessBehaviorSignalInputSchema.parse(input);
 
   const signal: BehaviorSignal = {
-    id: crypto.randomUUID(),
+    id: v4(),
     userId: validated.userId,
     signalType: validated.signalType,
     value: validated.value,
@@ -313,7 +314,7 @@ async function buildRecommendation(input: CreateRecommendationInput, profile: Be
   const aiReasoning = await generateRecommendationReasoning(input, reasoning);
 
   return {
-    id: crypto.randomUUID(),
+    id: v4(),
     userId: input.userId,
     recommendationType: input.type,
     title: "Personalized Recommendation",

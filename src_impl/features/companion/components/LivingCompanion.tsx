@@ -8,7 +8,7 @@
 
 import React, { useEffect, useRef, useCallback } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withRepeat, withTiming, withSequence, interpolate, Easing, runOnJS, useAnimatedReaction } from "react-native-reanimated";
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withRepeat, withTiming, withSequence, interpolate, Easing, runOnJS, useAnimatedReaction, type SharedValue } from "react-native-reanimated";
 import { Svg, Circle, RadialGradient, Stop, G } from "react-native-svg";
 
 import { Text } from "../../../components/primitives/Text";
@@ -196,8 +196,8 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({ companionState
  */
 const CompanionBody: React.FC<{
   phase: CompanionPhase;
-  progress: Animated.SharedValue<number>;
-  energy: Animated.SharedValue<number>;
+  progress: SharedValue<number>;
+  energy: SharedValue<number>;
   theme: { primary: string; secondary: string; glow: string };
   size: number;
 }> = ({ phase, theme, size }) => {

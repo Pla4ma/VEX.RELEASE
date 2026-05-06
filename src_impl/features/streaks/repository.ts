@@ -5,6 +5,7 @@
 
 import { getSupabaseClient } from "../../config/supabase";
 import { StreakRowSchema, StreakSchema, type Streak } from "./schemas";
+import { v4 } from "../../utils/uuid";
 
 class RepositoryError extends Error {
   constructor(
@@ -52,7 +53,7 @@ export async function fetchStreak(userId: string): Promise<Streak | null> {
 export async function createStreak(userId: string, timezone: string = "UTC"): Promise<Streak> {
   const now = Date.now();
   const newStreak = {
-    id: crypto.randomUUID(),
+    id: v4(),
     user_id: userId,
     current_days: 0,
     longest_days: 0,
@@ -112,7 +113,7 @@ export async function updateStreak(
 
 export async function recordShieldEarned(userId: string, source: string): Promise<void> {
   const { error } = await supabase.from("streak_shields").insert({
-    id: crypto.randomUUID(),
+    id: v4(),
     user_id: userId,
     source,
     used: false,

@@ -67,19 +67,25 @@ export function initSentry(): void {
     return;
   }
 
-  Sentry.init({
-    dsn: SENTRY_CONFIG.dsn,
-    environment: SENTRY_CONFIG.environment,
-    enabled: SENTRY_CONFIG.enabled,
-    tracesSampleRate: SENTRY_CONFIG.tracesSampleRate,
-    replaysSessionSampleRate: SENTRY_CONFIG.replaysSessionSampleRate,
-    replaysOnErrorSampleRate: SENTRY_CONFIG.replaysOnErrorSampleRate,
-    sendDefaultPii: SENTRY_CONFIG.sendDefaultPii,
-    release: SENTRY_CONFIG.release,
-    dist: SENTRY_CONFIG.dist,
-    beforeSend: SENTRY_CONFIG.beforeSend,
-    integrations: createSentryIntegrations(),
-  });
+  try {
+    Sentry.init({
+      dsn: SENTRY_CONFIG.dsn,
+      environment: SENTRY_CONFIG.environment,
+      enabled: SENTRY_CONFIG.enabled,
+      tracesSampleRate: SENTRY_CONFIG.tracesSampleRate,
+      replaysSessionSampleRate: SENTRY_CONFIG.replaysSessionSampleRate,
+      replaysOnErrorSampleRate: SENTRY_CONFIG.replaysOnErrorSampleRate,
+      sendDefaultPii: SENTRY_CONFIG.sendDefaultPii,
+      release: SENTRY_CONFIG.release,
+      dist: SENTRY_CONFIG.dist,
+      beforeSend: SENTRY_CONFIG.beforeSend,
+      integrations: createSentryIntegrations(),
+    });
+  } catch (e) {
+    // Sentry may fail in Expo Go if native PlatformConstants is unavailable.
+    // The app continues without crash reporting in that environment.
+    debug.warn('[Sentry] Failed to initialize (likely Expo Go):', e as Error);
+  }
 }
 
 /**

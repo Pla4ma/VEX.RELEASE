@@ -24,6 +24,7 @@ import Animated, {
   FadeOut,
   Easing,
   runOnJS,
+  type SharedValue,
 } from 'react-native-reanimated';
 
 // ============================================================================
@@ -147,7 +148,7 @@ function useTransitionAnimation(
 // Animated Style Generators
 // ============================================================================
 
-function createAnimatedStyles(preset: TransitionPreset, progress: Animated.SharedValue<number>) {
+function createAnimatedStyles(preset: TransitionPreset, progress: SharedValue<number>) {
   'worklet';
 
   switch (preset) {

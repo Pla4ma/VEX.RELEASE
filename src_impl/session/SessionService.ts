@@ -168,7 +168,7 @@ export class SessionService {
   /**
    * Start the current session
    */
-  async startSession(countdownSeconds: number = 3): Promise<void> {
+  async startSession(countdownSeconds: number = 0): Promise<void> {
     await this.orchestrator.startSession(countdownSeconds);
 
     if (this.options.enableAnalytics) {

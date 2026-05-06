@@ -13,6 +13,7 @@
 
 import { eventBus } from "@/events";
 import { createDebugger } from "@/utils/debug";
+import { v4 } from "@/utils/uuid";
 import type { SessionSummary } from "@/session/types";
 import type { BossEncounterSummary } from "@/features/boss/schemas";
 import type { StreakEngineResult } from "@/features/streaks/schemas";
@@ -267,7 +268,7 @@ async function generateSessionStory(context: StoryContext): Promise<SessionStory
 
   // Build full story object
   const story: SessionStory = {
-    id: crypto.randomUUID(),
+    id: v4(),
     sessionId: context.sessionId,
     userId: context.userId,
     createdAt: Date.now(),

@@ -72,7 +72,10 @@ export function useStudySession() {
   // ============================================================================
 
   const startSessionMutation = useMutation({
-    mutationFn: (config: SessionConfig) => orchestrator.startSession(config),
+    mutationFn: async (config: SessionConfig) => {
+      await orchestrator.createSession(config);
+      return orchestrator.startSession();
+    },
     onSuccess: (sessionState) => {
       debug.info("Study session started", { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
@@ -364,7 +367,7 @@ export function useSessionTimer() {
 export function useSessionAnalytics() {
   const trackSessionEvent = useCallback((event: string, data?: Record<string, unknown>) => {
     // TODO: Track analytics when service is properly integrated
-    console.log("Session event:", event, data);
+    debug.info('Session event: %s', event, data);
   }, []);
 
   return {

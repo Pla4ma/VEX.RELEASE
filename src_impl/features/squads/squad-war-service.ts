@@ -25,18 +25,19 @@ export async function submitSquadWarDamage(
   userId: string,
   damage: number
 ): Promise<void> {
-  // Stub implementation
-  console.log(`Stub: submit damage ${damage} for war ${warId}`);
+  void warId;
+  void userId;
+  void damage;
 }
 
 export async function joinSquadWar(warId: string, userId: string): Promise<void> {
-  // Stub implementation
-  console.log(`Stub: join war ${warId}`);
+  void warId;
+  void userId;
 }
 
 export async function leaveSquadWar(warId: string, userId: string): Promise<void> {
-  // Stub implementation
-  console.log(`Stub: leave war ${warId}`);
+  void warId;
+  void userId;
 }
 
 export async function getSquadWarStatus(warId: string): Promise<SquadWar | null> {

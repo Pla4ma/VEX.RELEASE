@@ -199,7 +199,7 @@ export function StudyLibraryScreen(): JSX.Element {
 
   // Filter content based on selected filters
   const filteredContent = useMemo(() => {
-    return content.filter((item) => {
+    return content.filter((item: StudyContent) => {
       const matchesStatus = statusFilter === "all" || item.status === statusFilter;
       const matchesType = typeFilter === "all" || item.sourceType === typeFilter;
       return matchesStatus && matchesType;

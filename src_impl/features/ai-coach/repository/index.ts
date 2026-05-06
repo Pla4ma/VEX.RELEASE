@@ -71,3 +71,14 @@ export {
   fetchTodaysInterventionExecutions,
   wasRuleTriggeredRecently,
 } from './intervention';
+
+export {
+  createMemory,
+  getMemoriesByUser,
+  getMemoriesByType,
+  markMemoryReferenced,
+  deleteMemory,
+  getMemoriesByTypes,
+  getMostRecentMemoryByType,
+  hasMemoryOfType,
+} from './memories';

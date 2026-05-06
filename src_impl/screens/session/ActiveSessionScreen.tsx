@@ -15,6 +15,11 @@ import { useActiveSessionController } from './hooks/useActiveSessionController';
 import { useStudyQuizBreak } from './hooks/useStudyQuizBreak';
 import { useCoachState } from '../../features/ai-coach/hooks';
 
+const ENABLE_SESSION_COMPANION_LAYER = false;
+const ENABLE_SESSION_COACH_BANNER = false;
+const ENABLE_SESSION_MODE_OVERLAYS = true;
+const ENABLE_SESSION_HERO = true;
+
 export const ActiveSessionScreen: React.FC = () => {
   const controller = useActiveSessionController();
   const { actions, isDegradedSession, metrics, navigation, sessionQuery, showInterruption, showMultiplierInfo, streak, theme, themeBackgroundColor, userId } = controller;
@@ -57,7 +62,7 @@ export const ActiveSessionScreen: React.FC = () => {
 
       {currentMode === SessionMode.DEEP_WORK && <DeepWorkVignette />}
 
-      {controller.companion.state && currentMode !== SessionMode.DEEP_WORK ? (
+      {ENABLE_SESSION_COMPANION_LAYER && controller.companion.state && currentMode !== SessionMode.DEEP_WORK ? (
         <CompanionSessionLayer
           companionState={controller.companion.state}
           elapsedSeconds={sessionQuery.elapsedSeconds}
@@ -75,26 +80,28 @@ export const ActiveSessionScreen: React.FC = () => {
 
       <ActiveSessionHeader isPaused={sessionQuery.isPaused} theme={theme} onInterrupt={() => actions.setShowInterruption(true)} />
 
-      <ActiveSessionModeOverlays
-        chainCount={activeSession.config.sprintChainCount ?? 0}
-        completionPercentage={sessionQuery.completionPercentage}
-        currentMode={currentMode}
-        isPaused={sessionQuery.isPaused}
-        quizBreakKey={studyQuizBreak.quizBreakKey}
-        remainingSeconds={sessionQuery.remainingSeconds}
-        studyPlanId={activeSession.config.studyPlanId}
-        onCloseQuiz={(correctAnswers) => {
-          studyQuizBreak.finishQuizBreak(correctAnswers);
-        }}
-        onCreativeMoodSelected={actions.handleCreativeMoodSelected}
-        onSkipCreativeMood={actions.handleSkipCreativeMood}
-        onSkipQuiz={() => {
-          studyQuizBreak.finishQuizBreak();
-        }}
-      />
+      {ENABLE_SESSION_MODE_OVERLAYS && (
+        <ActiveSessionModeOverlays
+          chainCount={activeSession.config.sprintChainCount ?? 0}
+          completionPercentage={sessionQuery.completionPercentage}
+          currentMode={currentMode}
+          isPaused={sessionQuery.isPaused}
+          quizBreakKey={studyQuizBreak.quizBreakKey}
+          remainingSeconds={sessionQuery.remainingSeconds}
+          studyPlanId={activeSession.config.studyPlanId}
+          onCloseQuiz={(correctAnswers) => {
+            studyQuizBreak.finishQuizBreak(correctAnswers);
+          }}
+          onCreativeMoodSelected={actions.handleCreativeMoodSelected}
+          onSkipCreativeMood={actions.handleSkipCreativeMood}
+          onSkipQuiz={() => {
+            studyQuizBreak.finishQuizBreak();
+          }}
+        />
+      )}
 
       {/* Coach Session Banner - Phase 6.5 */}
-      {coachState && (
+      {ENABLE_SESSION_COACH_BANNER && coachState && (
         <CoachSessionBanner
           coachName="Coach"
           personaStyle={coachState.currentState === 'OVERLOAD_PROTECTION' ? 'DRILL_SERGEANT' : 'MENTOR'}
@@ -104,40 +111,42 @@ export const ActiveSessionScreen: React.FC = () => {
       )}
 
 
-      <ActiveSessionHero
-        CIRCUMFERENCE={metrics.CIRCUMFERENCE}
-        RADIUS={metrics.RADIUS}
-        RING_SIZE={metrics.RING_SIZE}
-        STROKE_WIDTH={metrics.STROKE_WIDTH}
-        animatedCircleProps={metrics.animatedCircleProps}
-        completionPercentage={sessionQuery.completionPercentage}
-        dailyProgress={metrics.dailyProgress}
-        elapsedSeconds={sessionQuery.elapsedSeconds}
-        glowStyle={metrics.glowStyle}
-        labelColor={metrics.labelColor}
-        momentumScores={metrics.momentumScores}
-        outerStrokeDashoffset={outerStrokeDashoffset}
-        perfectFocusActive={metrics.perfectFocusActive}
-        perfectFocusBurst={metrics.perfectFocusBurst}
-        phaseAccent={metrics.phaseAccent}
-        phaseIcon={metrics.phaseInfo.icon}
-        phaseLabel={metrics.phaseInfo.label}
-        pulseStyle={metrics.pulseStyle}
-        purityLabel={metrics.purityLabel}
-        purityScore={metrics.purityScore}
-        remainingSeconds={sessionQuery.remainingSeconds}
-        rotatingPerfectFocusStyle={metrics.rotatingPerfectFocusStyle}
-        streakMultiplier={metrics.streakMultiplier}
-        themeColors={{
-          error: theme.colors.error.DEFAULT,
-          inverse: theme.colors.text.inverse,
-          primary300: theme.colors.primary[300],
-          success: theme.colors.success.DEFAULT,
-          warning: theme.colors.warning.light,
-        }}
-        todayFocusSeconds={metrics.todayFocusSeconds}
-        withAlpha={metrics.withAlpha}
-      />
+      {ENABLE_SESSION_HERO && (
+        <ActiveSessionHero
+          CIRCUMFERENCE={metrics.CIRCUMFERENCE}
+          RADIUS={metrics.RADIUS}
+          RING_SIZE={metrics.RING_SIZE}
+          STROKE_WIDTH={metrics.STROKE_WIDTH}
+          animatedCircleProps={metrics.animatedCircleProps}
+          completionPercentage={sessionQuery.completionPercentage}
+          dailyProgress={metrics.dailyProgress}
+          elapsedSeconds={sessionQuery.elapsedSeconds}
+          glowStyle={metrics.glowStyle}
+          labelColor={metrics.labelColor}
+          momentumScores={metrics.momentumScores}
+          outerStrokeDashoffset={outerStrokeDashoffset}
+          perfectFocusActive={metrics.perfectFocusActive}
+          perfectFocusBurst={metrics.perfectFocusBurst}
+          phaseAccent={metrics.phaseAccent}
+          phaseIcon={metrics.phaseInfo.icon}
+          phaseLabel={metrics.phaseInfo.label}
+          pulseStyle={metrics.pulseStyle}
+          purityLabel={metrics.purityLabel}
+          purityScore={metrics.purityScore}
+          remainingSeconds={sessionQuery.remainingSeconds}
+          rotatingPerfectFocusStyle={metrics.rotatingPerfectFocusStyle}
+          streakMultiplier={metrics.streakMultiplier}
+          themeColors={{
+            error: theme.colors.error.DEFAULT,
+            inverse: theme.colors.text.inverse,
+            primary300: theme.colors.primary[300],
+            success: theme.colors.success.DEFAULT,
+            warning: theme.colors.warning.light,
+          }}
+          todayFocusSeconds={metrics.todayFocusSeconds}
+          withAlpha={metrics.withAlpha}
+        />
+      )}
 
       <ActiveSessionControlDock
         completionPercentage={sessionQuery.completionPercentage}

@@ -34,7 +34,7 @@ function navigateFromNotification(
       navigationRef.navigate('Main', { screen: 'Progress' });
       return;
     case 'boss_timeout_warning':
-      navigationRef.navigate('Main', { screen: 'Social' });
+      navigationRef.navigate('Guild');
       return;
     case 'welcome_back':
     case 'comeback':

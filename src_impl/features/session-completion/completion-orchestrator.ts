@@ -1,18 +1,18 @@
 import * as Sentry from '@sentry/react-native';
 import { z } from 'zod';
 import { eventBus } from '../../events';
-import { FocusIdentityService } from '../focus-identity/FocusIdentityEngine';
 import { getConnectionState } from '../../lib/repository/base';
 import { enqueue } from '../../lib/offline/queue';
-import { getProgressionService } from '../../progression/ProgressionService';
-import { getRewardService } from '../../rewards/RewardService';
 import { SessionSummarySchema } from '../../session/types';
-import { getStreakService } from '../../streaks/StreakService';
 import { useSessionUIStore } from '../../store/session-state';
 import { createDebugger } from '../../utils/debug';
+import { applyCompletionSubsystems } from './completion-subsystems';
 import { buildCompletionLedger } from './ledger-service';
 import { createCompletionLedger, getCompletionLedgerByIdempotencyKey } from './repository';
-import { buildPostSessionStoryViewModel } from './story-view-model-service';
+import {
+  buildPostSessionStoryViewModel,
+  type PostSessionStoryViewModel,
+} from './story-view-model-service';
 
 const debug = createDebugger('session-completion:orchestrator');
 
@@ -32,7 +32,7 @@ let initialized = false;
 
 export async function orchestrateSessionCompletion(
   event: SessionCompletedEvent,
-): Promise<void> {
+): Promise<PostSessionStoryViewModel | null> {
   const parsed = SessionCompletedEventSchema.parse(event);
   const summary = SessionSummarySchema.parse(parsed.summary);
   const isOnline = getConnectionState() !== 'offline';
@@ -47,7 +47,7 @@ export async function orchestrateSessionCompletion(
   const key = ledger.idempotencyKey;
 
   if (processedIdempotencyKeys.has(key)) {
-    return;
+    return null;
   }
   const existing = await getCompletionLedgerByIdempotencyKey(key);
   if (existing) {
@@ -59,8 +59,13 @@ export async function orchestrateSessionCompletion(
       status: 'synced',
       updatedAt: Date.now(),
     });
-    return;
+    return buildPostSessionStoryViewModel({
+      degradedWarnings: existing.degradedSystems,
+      ledger: existing,
+      summary,
+    });
   }
+  processedIdempotencyKeys.add(key);
 
   let persisted = ledger;
   if (isOnline) {
@@ -85,50 +90,20 @@ export async function orchestrateSessionCompletion(
     });
   }
 
-  const degradedSystems: string[] = [];
   const sessionUIStore = useSessionUIStore.getState();
-  const run = async (label: string, fn: () => Promise<void>): Promise<void> => {
-    try {
-      await fn();
-    } catch (error) {
-      degradedSystems.push(label);
-      Sentry.captureException(error, { tags: { feature: 'session-completion', subsystem: label } });
-    }
-  };
-
-  await run('progression', async () => {
-    await getProgressionService(parsed.userId).addXP(persisted.xpDelta, 'SESSION_COMPLETE', {
-      sessionId: parsed.sessionId,
-    });
-  });
-  await run('streak', async () => {
-    await getStreakService(parsed.userId).recordSession();
-  });
-  await run('rewards', async () => {
-    await getRewardService(parsed.userId).grantReward(
-      'CURRENCY',
-      'SESSION_COMPLETE',
-      { baseAmount: Math.max(1, Math.floor(persisted.xpDelta / 10)) },
-      { exactAmount: Math.max(1, Math.floor(persisted.xpDelta / 10)), sessionId: parsed.sessionId },
-    );
-  });
-  await run('focus-identity', async () => {
-    const service = new FocusIdentityService(parsed.userId);
-    await service.updateScore('SESSION_COMPLETE', {
-      grade: persisted.grade,
-      streakLength: persisted.streakResult.newDays,
-    });
-  });
+  const subsystemResult = await applyCompletionSubsystems({ ledger: persisted, summary });
+  const finalLedger = subsystemResult.ledger;
+  const degradedSystems = subsystemResult.degradedSystems;
 
   const storyViewModel = buildPostSessionStoryViewModel({
     degradedWarnings: degradedSystems,
-    ledger: persisted,
+    ledger: finalLedger,
     summary,
   });
 
   if (storyViewModel.pendingSync) {
     sessionUIStore.setCompletionSyncState({
-      ledgerId: persisted.ledgerId,
+      ledgerId: finalLedger.ledgerId,
       message: 'One session is saved offline. It will sync when you reconnect.',
       repairCtaLabel: null,
       status: 'pending_sync',
@@ -136,7 +111,7 @@ export async function orchestrateSessionCompletion(
     });
   } else if (degradedSystems.length > 0) {
     sessionUIStore.setCompletionSyncState({
-      ledgerId: persisted.ledgerId,
+      ledgerId: finalLedger.ledgerId,
       message: 'Session completion synced, but some rewards need repair.',
       repairCtaLabel: 'Repair now',
       status: 'failed_sync',
@@ -144,7 +119,7 @@ export async function orchestrateSessionCompletion(
     });
   } else {
     sessionUIStore.setCompletionSyncState({
-      ledgerId: persisted.ledgerId,
+      ledgerId: finalLedger.ledgerId,
       message: null,
       repairCtaLabel: null,
       status: 'synced',
@@ -152,8 +127,8 @@ export async function orchestrateSessionCompletion(
     });
   }
 
-  processedIdempotencyKeys.add(key);
   debug.info('Session completion orchestrated for %s', parsed.sessionId);
+  return storyViewModel;
 }
 
 export function initializeSessionCompletionOrchestrator(): void {

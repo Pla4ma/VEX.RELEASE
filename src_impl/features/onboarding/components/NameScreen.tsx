@@ -30,7 +30,7 @@ interface NameScreenProps {
 /**
  * Name input screen
  */
-export function NameScreen({ onContinue, onSkip }: NameScreenProps): JSX.Element {
+export function NameScreen({ onContinue, onSkip, onBack }: NameScreenProps & { onBack?: () => void }): JSX.Element {
   const { theme } = useTheme();
   const [name, setName] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -70,7 +70,18 @@ export function NameScreen({ onContinue, onSkip }: NameScreenProps): JSX.Element
 
   return (
     <Box flex={1} bg="background.primary" px="lg" py="xl">
-      {/* Header */}
+      {/* Header with Back Button */}
+      <Box flexDirection="row" alignItems="center" mb="md">
+        {onBack && (
+          <Pressable onPress={onBack} style={{ marginRight: 12 }}>
+            <Box p="xs">
+              <Text variant="h3" color="text.secondary">‹</Text>
+            </Box>
+          </Pressable>
+        )}
+      </Box>
+
+      {/* Header Content */}
       <Animated.View entering={FadeIn.duration(400)}>
         <Box gap="sm" mb="xl">
           <Text variant="label" color="primary.500">

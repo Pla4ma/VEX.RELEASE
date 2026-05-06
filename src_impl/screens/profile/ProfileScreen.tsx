@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { z } from 'zod';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useRoute, type RouteProp } from '@react-navigation/native';
 import { Avatar } from '../../components/Avatar';
 import { Badge } from '../../components/Badge';
 import { EmptyState } from '../../components/EmptyState';
@@ -26,6 +27,7 @@ import { ScoreHistoryChart } from '../../features/focus-identity/components/Scor
 import type { SessionHistoryEntry } from '../../session/types';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme';
+import type { MainTabParams } from '../../navigation/types';
 
 type Props = NativeStackScreenProps<ExtendedRootStackParams, 'Main'>;
 type Tab = 'stats' | 'achievements' | 'activity';
@@ -45,8 +47,15 @@ const minutes = (entry: SessionHistoryEntry) => `${Math.max(1, Math.round((entry
 export const ProfileScreen: React.FC<Props> = ({ navigation }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
+  const route = useRoute<RouteProp<MainTabParams, 'Profile'>>();
   const { user, logout } = useAuthStore();
-  const [activeTab, setActiveTab] = useState<Tab>('stats');
+  const requestedTab = route.params?.tab;
+  const initialTab: Tab = requestedTab === 'achievements'
+    ? 'achievements'
+    : requestedTab === 'activity' || requestedTab === 'social'
+    ? 'activity'
+    : 'stats';
+  const [activeTab, setActiveTab] = useState<Tab>(initialTab);
   const [mastery, setMastery] = useState<MasteryState>(makeMastery(user?.id ?? 'guest'));
   const [masteryLoading, setMasteryLoading] = useState(true);
   const userId = user?.id ?? null;
@@ -92,6 +101,10 @@ export const ProfileScreen: React.FC<Props> = ({ navigation }) => {
     void loadMastery();
     return () => { mounted = false; };
   }, [userId]);
+
+  useEffect(() => {
+    setActiveTab(initialTab);
+  }, [initialTab]);
 
   const renderStat = (item: (typeof stats)[number]) => (
     <Box key={item.label} style={{ width: '47%' }}>

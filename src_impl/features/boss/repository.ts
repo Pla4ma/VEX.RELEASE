@@ -5,6 +5,7 @@
 
 import { getSupabaseClient } from "../../config/supabase";
 import { BossTemplateSchema, BossEncounterSchema, type BossTemplate, type BossEncounter } from "./schemas";
+import { v4 } from "../../utils/uuid";
 
 // ============================================================================
 // Error Handling
@@ -90,7 +91,7 @@ export async function fetchEncounterById(encounterId: string): Promise<BossEncou
 export async function createEncounter(bossId: string, userId: string | null, squadId: string | null, maxHealth: number, timeLimit: number): Promise<BossEncounter> {
   const now = Date.now();
   const newEncounter = {
-    id: crypto.randomUUID(),
+    id: v4(),
     boss_id: bossId,
     user_id: userId,
     squad_id: squadId,
@@ -185,7 +186,7 @@ export async function markEncounterTimeout(encounterId: string): Promise<BossEnc
 
 export async function recordBossDefeat(userId: string, bossId: string, encounterId: string, damageDealt: number): Promise<void> {
   const { error } = await supabase.from("boss_defeat_history").insert({
-    id: crypto.randomUUID(),
+    id: v4(),
     user_id: userId,
     boss_id: bossId,
     encounter_id: encounterId,

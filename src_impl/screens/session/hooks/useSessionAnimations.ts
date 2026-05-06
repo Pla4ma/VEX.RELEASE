@@ -13,6 +13,7 @@ import Animated, {
   withRepeat,
   withTiming,
   Easing,
+  type SharedValue,
 } from 'react-native-reanimated';
 import { Circle } from 'react-native-svg';
 import { useTheme } from '../../../theme';
@@ -27,9 +28,9 @@ interface UseSessionAnimationsParams {
 }
 
 interface UseSessionAnimationsReturn {
-  progressValue: Animated.SharedValue<number>;
-  pulseValue: Animated.SharedValue<number>;
-  purityColorValue: Animated.SharedValue<number>;
+  progressValue: SharedValue<number>;
+  pulseValue: SharedValue<number>;
+  purityColorValue: SharedValue<number>;
   timerAccentColor: string;
   animatedCircleProps: ReturnType<typeof useAnimatedProps>;
   pulseStyle: ReturnType<typeof useAnimatedStyle>;

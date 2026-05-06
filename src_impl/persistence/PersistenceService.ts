@@ -86,7 +86,7 @@ class MMKVProvider implements StorageProvider {
 
   async getAllKeys(): Promise<string[]> {
     const storage = await this.getStorage();
-    return storage.getAllKeys();
+    return [...storage.getAllKeys()];
   }
 
   async multiGet(keys: string[]): Promise<[string, unknown][]> {
@@ -146,7 +146,7 @@ class AsyncStorageProvider implements StorageProvider {
 
   async getAllKeys(): Promise<string[]> {
     const storage = await this.getStorage();
-    return storage.getAllKeys();
+    return Array.from(await storage.getAllKeys());
   }
 
   async multiGet(keys: string[]): Promise<[string, unknown][]> {

@@ -18,7 +18,7 @@ type WeeklyStats = {
 };
 
 type SquadShareSheetProps = {
-  bottomSheetRef: React.RefObject<BottomSheet>;
+  bottomSheetRef: React.RefObject<BottomSheet | null>;
   squad: SquadSummary | null;
   weeklyStats: WeeklyStats;
 };

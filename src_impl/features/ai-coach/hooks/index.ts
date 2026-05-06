@@ -16,3 +16,8 @@ export {
   useUpdateRecommendationStatus,
   type SessionRecommendation,
 } from './useRecommendationMutations';
+export {
+  useCoachMemories,
+  useCreateCoachMemory,
+  type UseCoachMemoriesResult,
+} from './useMemories';

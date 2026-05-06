@@ -8,6 +8,7 @@ import { withRetry, RepositoryError, RepositoryErrorCode } from "../../lib/repos
 import { enqueue } from "../../lib/offline/queue";
 import { getSupabaseClient } from "../../config/supabase";
 import { StreakSchema, type Streak } from "./schemas";
+import { v4 } from "../../utils/uuid";
 
 const supabase = getSupabaseClient();
 
@@ -148,7 +149,7 @@ export async function recordShieldUsageEnhanced(userId: string, shieldData: { us
     const { data, error } = await supabase
       .from("streak_shields")
       .insert({
-        id: crypto.randomUUID(),
+        id: v4(),
         user_id: userId,
         used_at: shieldData.usedAt,
         reason: shieldData.reason,

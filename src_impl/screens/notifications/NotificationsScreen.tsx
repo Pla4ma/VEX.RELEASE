@@ -327,11 +327,11 @@ export const NotificationsScreen: React.FC = () => {
     // Fallback navigation based on type
     switch (type) {
       case 'ACHIEVEMENT':
-        navigation.navigate('Achievements' as never);
+        navigation.navigate('Main', { screen: 'Profile', params: { tab: 'achievements' } });
         break;
       case 'STREAK_RISK':
         // Navigate to Home - AtRiskBanner will be visible
-        navigation.navigate('Home' as never);
+        navigation.navigate('Main', { screen: 'Home' });
         break;
       case 'BOSS':
         navigation.navigate('Boss' as never);
@@ -346,7 +346,7 @@ export const NotificationsScreen: React.FC = () => {
         navigation.navigate('AICoach' as never);
         break;
       case 'LEVEL_UP':
-        navigation.navigate('Progress' as never);
+        navigation.navigate('Main', { screen: 'Progress' });
         break;
       case 'REWARD':
         // Stay on notifications screen - reward already shown

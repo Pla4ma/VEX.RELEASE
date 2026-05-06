@@ -35,7 +35,7 @@ export function restoreTimerEngine(
 ): TimerEngine {
   const engine = new TimerEngine(
     session.id,
-    Math.floor(session.config.duration / 1000),
+    session.config.duration,
     timerConfig,
     handlers
   );

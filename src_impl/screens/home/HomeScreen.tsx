@@ -15,6 +15,7 @@ import { GreetingHeader, StartSessionButton } from '../../features/home-spine/co
 import { CoachInterventionBanner } from '../../features/ai-coach/components/CoachInterventionBanner';
 import { trackInterventionDisplayed, trackInterventionActioned } from '../../features/ai-coach/analytics';
 import { eventBus } from '../../events';
+import { useCompletionSyncAutoRepair } from '../../features/session-completion/hooks';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import type { ActiveIntervention } from '../../features/ai-coach/hooks';
 import { HomeHero } from './HomeScreenVisuals';
@@ -29,6 +30,10 @@ export function HomeScreen(): JSX.Element {
   const data = useHomeData();
   const { controller, intervention, dismissIntervention, showToast } = data;
   const displayedInterventionIdRef = useRef<string | null>(null);
+  useCompletionSyncAutoRepair({
+    isOnline: controller.isOnline,
+    userId: controller.userId,
+  });
 
   // Track intervention display
   useEffect(() => {

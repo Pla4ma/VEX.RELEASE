@@ -13,7 +13,7 @@ import { SquadShareCard } from "./SquadShareCard";
 type Step = 1 | 2 | 3;
 
 type CreateSquadFlowProps = {
-  bottomSheetRef: React.RefObject<BottomSheet>;
+  bottomSheetRef: React.RefObject<BottomSheet | null>;
   userId: string;
 };
 

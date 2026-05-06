@@ -17,7 +17,7 @@ import { View, Share, Platform } from "react-native";
 // It will be dynamically imported to avoid hard crashes if not available
 let captureRef:
   | ((
-      ref: React.RefObject<View>,
+      ref: React.RefObject<View | null>,
       options: {
         format: "png" | "jpg";
         quality: number;
@@ -84,7 +84,7 @@ interface VictoryCardProps {
   /** Share callback */
   onShare?: (uri: string) => void;
   /** Ref for capturing */
-  captureRef?: React.RefObject<View>;
+  captureRef?: React.RefObject<View | null>;
 }
 
 // ============================================================================

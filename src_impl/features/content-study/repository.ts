@@ -8,6 +8,10 @@ import {
   type SubmitContentRequest,
   type SubmitFeedbackRequest,
 } from './types';
+import { createDebugger } from '../../utils/debug';
+import { withResilience } from '../../utils/supabase-resilience';
+
+const debug = createDebugger('content-study:repository');
 
 const contentRowSchema = z.object({
   id: z.string(),
@@ -104,24 +108,44 @@ function mapGenerationRow(row: unknown) {
 }
 
 export async function invokeContentStudy(path: string, body?: unknown, method?: 'GET' | 'POST') {
-  return getSupabaseClient().functions.invoke(path, {
-    body: body as Record<string, unknown> | string | Blob | FormData | ArrayBuffer | undefined,
-    ...(method ? { method } : {}),
-  });
+  return withResilience(
+    getSupabaseClient().functions.invoke(path, {
+      body: body as Record<string, unknown> | string | Blob | FormData | ArrayBuffer | undefined,
+      ...(method ? { method } : {}),
+    }),
+    { operation: `invokeContentStudy:${path}` }
+  );
 }
 
 export async function uploadStudyFileRecord(fileUri: string, filename: string, userId: string): Promise<string> {
-  const response = await fetch(fileUri);
-  const blob = await response.blob();
-  const filePath = `${userId}/${Date.now()}_${filename}`;
-  const { error } = await getSupabaseClient().storage.from('study-content').upload(filePath, blob, {
-    contentType: 'application/pdf',
-    upsert: false,
-  });
-  if (error) {
-    throw new Error(error.message);
+  try {
+    debug.info('Uploading study file: %s for user: %s', filename, userId);
+    
+    // Ensure fileUri is properly formatted for fetch
+    const response = await fetch(fileUri);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch file from URI: ${response.statusText}`);
+    }
+    
+    const blob = await response.blob();
+    const filePath = `${userId}/${Date.now()}_${filename}`;
+    
+    const { error } = await getSupabaseClient().storage.from('study-content').upload(filePath, blob, {
+      contentType: 'application/pdf',
+      upsert: false,
+    });
+    
+    if (error) {
+      debug.error('Supabase storage upload failed', error);
+      throw new Error(`Storage upload failed: ${error.message}`);
+    }
+    
+    debug.info('Study file uploaded successfully: %s', filePath);
+    return filePath;
+  } catch (error) {
+    debug.error('uploadStudyFileRecord failed', error as Error);
+    throw error;
   }
-  return filePath;
 }
 
 export async function deleteStudyFileRecord(filePath: string): Promise<void> {
@@ -132,13 +156,16 @@ export async function deleteStudyFileRecord(filePath: string): Promise<void> {
 }
 
 export async function fetchContentHistoryRecords(userId: string, limit = 20) {
-  const { data, error } = await getSupabaseClient()
-    .from('study_content')
-    .select('*')
-    .eq('user_id', userId)
-    .is('deleted_at', null)
-    .order('created_at', { ascending: false })
-    .limit(limit);
+  const { data, error } = await withResilience(
+    getSupabaseClient()
+      .from('study_content')
+      .select('*')
+      .eq('user_id', userId)
+      .is('deleted_at', null)
+      .order('created_at', { ascending: false })
+      .limit(limit),
+    { operation: 'fetchContentHistoryRecords', fallbackValue: [] }
+  );
   if (error) {
     throw new Error(error.message);
   }

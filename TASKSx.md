@@ -473,13 +473,13 @@ IMPLEMENT:
 
 VERIFY:
 
-- [ ] Tests cover S, A, B, C, D.
-- [ ] Tests cover recovery mode.
-- [ ] Tests cover strict mode.
-- [ ] Tests cover abandoned session path.
-- [ ] Tests cover pause-heavy but completed session.
-- [ ] Tests cover short intentional session.
-- [ ] Focus Score and story consume this result instead of recalculating.
+- [x] Tests cover S, A, B, C, D.
+- [x] Tests cover recovery mode.
+- [x] Tests cover strict mode.
+- [x] Tests cover abandoned session path.
+- [x] Tests cover pause-heavy but completed session.
+- [x] Tests cover short intentional session.
+- [x] Focus Score and story consume this result instead of recalculating.
 
 ### P1-03 - Completion Orchestrator
 
@@ -519,12 +519,12 @@ Rules:
 
 VERIFY:
 
-- [ ] Normal completion updates all core systems.
-- [ ] Offline completion queues ledger and shows pending state.
-- [ ] Reward failure does not erase session completion.
-- [ ] Focus Score failure is captured and retried or marked degraded.
-- [ ] Duplicate replay does not duplicate rewards, XP, streak, or analytics.
-- [ ] Tests cover each failure path.
+- [x] Normal completion updates all core systems.
+- [x] Offline completion queues ledger and shows pending state.
+- [x] Reward failure does not erase session completion.
+- [x] Focus Score failure is captured and retried or marked degraded.
+- [x] Duplicate replay does not duplicate rewards, XP, streak, or analytics.
+- [x] Tests cover each failure path.
 
 ### P1-04 - Post-Session Story View Model
 
@@ -555,14 +555,14 @@ The screen must only render this view model through hooks.
 
 VERIFY:
 
-- [ ] No business calculations in story JSX.
-- [ ] Story loading state is a skeleton matching final layout.
-- [ ] Story empty fallback handles missing ledger.
-- [ ] Story error state has retry.
-- [ ] Story offline state shows pending sync.
-- [ ] Story degraded state still lets user return Home.
-- [ ] Reduced motion is respected.
-- [ ] All controls have accessibility label, role, and hint.
+- [x] No business calculations in story JSX.
+- [x] Story loading state is a skeleton matching final layout.
+- [x] Story empty fallback handles missing ledger.
+- [x] Story error state has retry.
+- [x] Story offline state shows pending sync.
+- [x] Story degraded state still lets user return Home.
+- [x] Reduced motion is respected.
+- [x] All controls have accessibility label, role, and hint.
 
 ### P1-05 - Home Return Sync
 
@@ -593,20 +593,20 @@ IMPLEMENT:
 
 VERIFY:
 
-- [ ] Complete session -> story -> Home shows updated score, streak, mission, and companion.
-- [ ] Complete offline -> Home shows pending-sync banner.
-- [ ] Reconnect -> pending banner clears.
-- [ ] Query invalidation tests pass.
-- [ ] Optimistic rollback tests pass.
+- [x] Complete session -> story -> Home shows updated score, streak, mission, and companion.
+- [x] Complete offline -> Home shows pending-sync banner.
+- [x] Reconnect -> pending banner clears.
+- [x] Query invalidation tests pass.
+- [x] Optimistic rollback tests pass.
 
 PHASE 1 EXIT GATE:
 
-- [ ] End-to-end test: start session -> complete -> story -> Home.
-- [ ] Offline end-to-end test passes.
-- [ ] No edited file over 200 lines.
-- [ ] `npm run typecheck -- --pretty false` passes.
-- [ ] Targeted tests pass.
-- [ ] Verification report updated.
+- [x] End-to-end test: start session -> complete -> story -> Home.
+- [x] Offline end-to-end test passes.
+- [x] No edited file over 200 lines.
+- [x] `npm run typecheck -- --pretty false` passes.
+- [x] Targeted tests pass.
+- [x] Verification report updated.
 
 ---
 
@@ -644,10 +644,10 @@ Types:
 
 VERIFY:
 
-- [ ] Schema tests cover valid, invalid, edge, and corrupt persisted data.
-- [ ] No hand-written duplicate schema types.
-- [ ] Factor weights sum to exactly 100 percent in tests.
-- [ ] Score range is enforced at 300 to 850.
+- [x] Schema tests cover valid, invalid, edge, and corrupt persisted data.
+- [x] No hand-written duplicate schema types.
+- [x] Factor weights sum to exactly 100 percent in tests.
+- [x] Score range is enforced at 300 to 850.
 
 ### P2-02 - Focus Identity Repository
 
@@ -674,10 +674,10 @@ Rules:
 
 VERIFY:
 
-- [ ] Repository tests cover success, empty, invalid shape, Supabase error, and conflict.
-- [ ] RLS policy exists for user-owned score data.
-- [ ] Supabase types regenerated after schema change.
-- [ ] No Focus Score Supabase query exists outside repository.
+- [x] Repository tests cover success, empty, invalid shape, Supabase error, and conflict.
+- [x] RLS policy exists for user-owned score data.
+- [x] Supabase types regenerated after schema change.
+- [x] No Focus Score Supabase query exists outside repository.
 
 ### P2-03 - Focus Score Algorithm
 

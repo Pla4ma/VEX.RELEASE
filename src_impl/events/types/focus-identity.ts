@@ -6,6 +6,14 @@
  */
 
 export interface FocusIdentityEventDefinitions {
+  "focus-identity:score_updated": {
+    userId: string;
+    previousScore: number;
+    newScore: number;
+    delta: number;
+    band: string;
+    timestamp: number;
+  };
   'FOCUS_IDENTITY_CREATED': {
     userId: string;
     initialScore: number;

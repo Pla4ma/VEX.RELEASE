@@ -13,7 +13,9 @@ export async function recordWarDamage(
   userId: string,
   damage: number
 ): Promise<void> {
-  console.log(`Stub: record damage ${damage} for war ${warId}`);
+  void warId;
+  void userId;
+  void damage;
 }
 
 export function subscribeToSquadWar(

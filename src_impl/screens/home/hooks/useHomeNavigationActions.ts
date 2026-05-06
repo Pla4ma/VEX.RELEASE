@@ -38,7 +38,7 @@ export function useHomeNavigationActions(input: {
     [navigation],
   );
   const openSocial = useCallback(
-    () => navigation.navigate('Main', { screen: 'Social' }),
+    () => navigation.navigate('Main', { screen: 'Profile', params: { tab: 'social' } }),
     [navigation],
   );
   const openContentStudy = useCallback(

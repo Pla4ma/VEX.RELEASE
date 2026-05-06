@@ -123,8 +123,14 @@ export function useStartSessionFlow({
         notes: Object.keys(notesPayload).length > 0 ? JSON.stringify(notesPayload) : undefined,
       });
 
+      Sentry.addBreadcrumb({
+        category: 'session-start',
+        message: 'Creating session from setup flow',
+        level: 'info',
+      });
       const session = await createSession(config);
-      await startSession();
+      await startSession(0);
+
       started = true;
 
       // Trigger haptic for session start success

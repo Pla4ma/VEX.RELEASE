@@ -15,6 +15,8 @@ import { useFeatureAccess } from '../../features/liveops-config';
 import { MasteryCard } from '../../features/mastery/components/MasteryCard';
 import { MasteryService } from '../../features/mastery/service';
 import type { MasteryState } from '../../features/mastery/types';
+import { FocusScoreDashboard } from "../../features/focus-identity/components/focus-score-dashboard";
+import { useFocusScoreDashboardModel } from "../../features/focus-identity/hooks-focus-score";
 import { ProgressionDashboard } from '../../features/progression/components';
 // import { LeaderboardView } from '../../features/rankings/components'; // Feature not implemented
 import { useActiveSeason, useUpcomingSeasons } from '../../features/seasons/hooks';
@@ -37,6 +39,7 @@ export function ProgressScreen(): JSX.Element {
   const upcomingSeasons = useUpcomingSeasons();
   const battlePassTiers = useBattlePassTiers(seasonQuery.data?.id ?? '');
   const battlePassProgress = useUserBattlePass(userId, seasonQuery.data?.id ?? '');
+  const focusDashboardModel = useFocusScoreDashboardModel(userId || null, 30);
   const { stats, isLoading: isStatsLoading, refresh } = useSessionStats(userId);
   const [masteryState, setMasteryState] = useState<MasteryState | null>(null);
   const daysRemaining = useMemo(() => seasonQuery.data ? Math.max(0, Math.ceil((seasonQuery.data.endAt - Date.now()) / 86400000)) : null, [seasonQuery.data]);
@@ -53,6 +56,12 @@ export function ProgressScreen(): JSX.Element {
   return (
     <ScrollView style={{ flex: 1, backgroundColor: theme.colors.background.primary }} contentContainerStyle={{ paddingTop: insets.top + theme.spacing[5], paddingBottom: theme.spacing[10], paddingHorizontal: theme.spacing[5], gap: theme.spacing[4] }} showsVerticalScrollIndicator={false}>
       <View><Text variant="label" color={theme.colors.primary[500]}>Progress</Text><Text variant="h2" color={theme.colors.text.primary}>Your long-term loop.</Text><Text variant="body" color={theme.colors.text.secondary}>We keep this view useful from day one, then let more systems show up as they become emotionally relevant.</Text></View>
+      <FocusScoreDashboard
+        model={focusDashboardModel}
+        onRetry={() => { void focusDashboardModel.refetch(); }}
+        onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })}
+        onOpenMonthlyReport={() => navigation.navigate('Paywall', { source: 'focus-monthly-report', gatedFeature: 'monthly_focus_report' })}
+      />
       {userId ? (
         <ProgressionDashboard
           userId={userId}

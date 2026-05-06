@@ -1,1 +1,585 @@
-import{getSupabaseClient}from'../../config/supabase'; class RepositoryError extends Error{constructor(public operation:string,public originalError:unknown){super(`Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : 'Unknown error'}`); this.name = 'RepositoryError';}}const supabase = getSupabaseClient(); import{WalletSchema,WalletTransactionSchema,PurchaseAttemptSchema,RefundRequestSchema,LimitedOfferSchema,UserOfferClaimSchema,CurrencyConversionSchema,type Wallet,type WalletTransaction,type PurchaseAttempt,type RefundRequest,type LimitedOffer,type UserOfferClaim,type CurrencyConversion,type CurrencyType,type TransactionSource}from'./schemas'; export async function fetchWallet(userId:string):Promise<Wallet|null>{const{data,error} = await supabase.from('wallets').select('*').eq('user_id',userId).single(); if(error){if(error.code === 'PGRST116'){return null;}throw new RepositoryError('fetchWallet',error);}return WalletSchema.parse(data);}export async function createWallet(userId:string):Promise<Wallet>{const now = Date.now(); const{data,error} = await supabase.from('wallets').insert({user_id:userId,coins:0,gems:0,focus_points:0,seasonal:{},total_coins_earned:0,total_coins_spent:0,total_gems_earned:0,total_gems_spent:0,created_at:now,updated_at:now}).select().single(); if(error){throw new RepositoryError('createWallet',error);}return WalletSchema.parse(data);}export async function updateWalletBalance(userId:string,updates:{coins?:number;gems?:number;focusPoints?:number;seasonal?:Record<string,number>;totalCoinsEarned?:number;totalCoinsSpent?:number;totalGemsEarned?:number;totalGemsSpent?:number}):Promise<Wallet>{const{data,error} = await supabase.from('wallets').update({...updates,updated_at:Date.now()}).eq('user_id',userId).select().single(); if(error){throw new RepositoryError('updateWalletBalance',error);}return WalletSchema.parse(data);}export async function atomicBalanceUpdate(userId:string,currency:CurrencyType,amount:number,operation:'ADD'|'SUBTRACT'):Promise<Wallet>{const column = currency === 'COINS' ? 'coins' : currency === 'GEMS' ? 'gems' : 'seasonal'; const{data,error} = await supabase.rpc('update_wallet_balance',{p_user_id:userId,p_currency:column,p_amount:amount,p_operation:operation}); if(error){throw new RepositoryError('atomicBalanceUpdate',error);}return WalletSchema.parse(data);}export async function createTransaction(transaction:Omit<WalletTransaction,'id'|'createdAt'>):Promise<WalletTransaction>{const now = Date.now(); const{data,error} = await supabase.from('wallet_transactions').insert({wallet_id:transaction.walletId,user_id:transaction.userId,type:transaction.type,currency:transaction.currency,amount:transaction.amount,balance_before:transaction.balanceBefore,balance_after:transaction.balanceAfter,source:transaction.source,source_id:transaction.sourceId,description:transaction.description,metadata:transaction.metadata,created_at:now}).select().single(); if(error){throw new RepositoryError('createTransaction',error);}return WalletTransactionSchema.parse(data);}export async function fetchTransactions(userId:string,options:{currency?:CurrencyType;source?:TransactionSource;startDate?:number;endDate?:number;limit?:number;offset?:number} = {}):Promise<WalletTransaction[]>{let query = supabase.from('wallet_transactions').select('*').eq('user_id',userId); if(options.currency){query = query.eq('currency',options.currency);}if(options.source){query = query.eq('source',options.source);}if(options.startDate){query = query.gte('created_at',options.startDate);}if(options.endDate){query = query.lte('created_at',options.endDate);}const{data,error} = await query.order('created_at',{ascending:false}).limit(options.limit ?? 50).range(options.offset ?? 0,(options.offset ?? 0) + (options.limit ?? 50) - 1); if(error){throw new RepositoryError('fetchTransactions',error);}return WalletTransactionSchema.array().parse(data ?? []);}export async function fetchTransactionById(transactionId:string):Promise<WalletTransaction|null>{const{data,error} = await supabase.from('wallet_transactions').select('*').eq('id',transactionId).single(); if(error){if(error.code === 'PGRST116'){return null;}throw new RepositoryError('fetchTransactionById',error);}return WalletTransactionSchema.parse(data);}export async function createPurchaseAttempt(purchase:Omit<PurchaseAttempt,'id'|'createdAt'|'updatedAt'>):Promise<PurchaseAttempt>{const now = Date.now(); const{data,error} = await supabase.from('purchase_attempts').insert({user_id:purchase.userId,shop_item_id:purchase.shopItemId,quantity:purchase.quantity,unit_price_currency:purchase.unitPrice.currency,unit_price_amount:purchase.unitPrice.amount,total_price_currency:purchase.totalPrice.currency,total_price_amount:purchase.totalPrice.amount,status:purchase.status,error_code:purchase.errorCode,error_message:purchase.errorMessage,inventory_item_ids:purchase.inventoryItemIds,refunded_at:purchase.refundedAt,refund_reason:purchase.refundReason,created_at:now,updated_at:now}).select().single(); if(error){throw new RepositoryError('createPurchaseAttempt',error);}return PurchaseAttemptSchema.parse(data);}export async function updatePurchaseStatus(purchaseId:string,updates:{status:PurchaseAttempt['status'];errorCode?:PurchaseAttempt['errorCode'];errorMessage?:PurchaseAttempt['errorMessage'];inventoryItemIds?:PurchaseAttempt['inventoryItemIds']}):Promise<PurchaseAttempt>{const{data,error} = await supabase.from('purchase_attempts').update({status:updates.status,error_code:updates.errorCode,error_message:updates.errorMessage,inventory_item_ids:updates.inventoryItemIds,updated_at:Date.now()}).eq('id',purchaseId).select().single(); if(error){throw new RepositoryError('updatePurchaseStatus',error);}return PurchaseAttemptSchema.parse(data);}export async function fetchPurchaseById(purchaseId:string):Promise<PurchaseAttempt|null>{const{data,error} = await supabase.from('purchase_attempts').select('*').eq('id',purchaseId).single(); if(error){if(error.code === 'PGRST116'){return null;}throw new RepositoryError('fetchPurchaseById',error);}return PurchaseAttemptSchema.parse(data);}export async function fetchUserPurchases(userId:string,options:{status?:PurchaseAttempt['status'];limit?:number;offset?:number} = {}):Promise<PurchaseAttempt[]>{let query = supabase.from('purchase_attempts').select('*').eq('user_id',userId); if(options.status){query = query.eq('status',options.status);}const{data,error} = await query.order('created_at',{ascending:false}).limit(options.limit ?? 50).range(options.offset ?? 0,(options.offset ?? 0) + (options.limit ?? 50) - 1); if(error){throw new RepositoryError('fetchUserPurchases',error);}return PurchaseAttemptSchema.array().parse(data ?? []);}export async function markPurchaseRefunded(purchaseId:string,reason:string):Promise<PurchaseAttempt>{const{data,error} = await supabase.from('purchase_attempts').update({status:'REFUNDED',refunded_at:Date.now(),refund_reason:reason,updated_at:Date.now()}).eq('id',purchaseId).select().single(); if(error){throw new RepositoryError('markPurchaseRefunded',error);}return PurchaseAttemptSchema.parse(data);}export async function createRefundRequest(refund:Omit<RefundRequest,'id'|'processedAt'>):Promise<RefundRequest>{const{data,error} = await supabase.from('refund_requests').insert({purchase_id:refund.purchaseId,user_id:refund.userId,reason:refund.reason,status:refund.status,requested_at:refund.requestedAt,refund_amount_currency:refund.refundAmount?.currency,refund_amount_amount:refund.refundAmount?.amount,items_recovered:refund.itemsRecovered}).select().single(); if(error){throw new RepositoryError('createRefundRequest',error);}return RefundRequestSchema.parse(data);}export async function updateRefundStatus(refundId:string,updates:{status:RefundRequest['status'];refundAmount?:RefundRequest['refundAmount'];itemsRecovered?:boolean;processedAt?:number}):Promise<RefundRequest>{const{data,error} = await supabase.from('refund_requests').update({status:updates.status,refund_amount_currency:updates.refundAmount?.currency,refund_amount_amount:updates.refundAmount?.amount,items_recovered:updates.itemsRecovered,processed_at:updates.processedAt}).eq('id',refundId).select().single(); if(error){throw new RepositoryError('updateRefundStatus',error);}return RefundRequestSchema.parse(data);}export async function fetchRefundRequestById(refundId:string):Promise<RefundRequest|null>{const{data,error} = await supabase.from('refund_requests').select('*').eq('id',refundId).single(); if(error){if(error.code === 'PGRST116'){return null;}throw new RepositoryError('fetchRefundRequestById',error);}return RefundRequestSchema.parse(data);}export async function fetchActiveOffers(userLevel:number,now:number = Date.now()):Promise<LimitedOffer[]>{const{data,error} = await supabase.from('limited_offers').select('*').eq('status','ACTIVE').lte('start_at',now).gte('end_at',now).lte('min_level',userLevel).order('priority',{ascending:false}).order('created_at',{ascending:false}); if(error){throw new RepositoryError('fetchActiveOffers',error);}return LimitedOfferSchema.array().parse(data ?? []);}export async function fetchOfferById(offerId:string):Promise<LimitedOffer|null>{const{data,error} = await supabase.from('limited_offers').select('*').eq('id',offerId).single(); if(error){if(error.code === 'PGRST116'){return null;}throw new RepositoryError('fetchOfferById',error);}return LimitedOfferSchema.parse(data);}export async function incrementOfferPurchases(offerId:string):Promise<void>{const{error} = await supabase.rpc('increment_offer_purchases',{p_offer_id:offerId}); if(error){throw new RepositoryError('incrementOfferPurchases',error);}}export async function checkUserOfferClaim(offerId:string,userId:string):Promise<UserOfferClaim|null>{const{data,error} = await supabase.from('user_offer_claims').select('*').eq('offer_id',offerId).eq('user_id',userId).single(); if(error){if(error.code === 'PGRST116'){return null;}throw new RepositoryError('checkUserOfferClaim',error);}return UserOfferClaimSchema.parse(data);}export async function createUserOfferClaim(claim:Omit<UserOfferClaim,'id'>):Promise<UserOfferClaim>{const{data,error} = await supabase.from('user_offer_claims').insert({offer_id:claim.offerId,user_id:claim.userId,purchase_id:claim.purchaseId,claimed_at:claim.claimedAt}).select().single(); if(error){throw new RepositoryError('createUserOfferClaim',error);}return UserOfferClaimSchema.parse(data);}export async function createCurrencyConversion(conversion:Omit<CurrencyConversion,'id'|'createdAt'>):Promise<CurrencyConversion>{const now = Date.now(); const{data,error} = await supabase.from('currency_conversions').insert({user_id:conversion.userId,from_currency:conversion.fromCurrency,from_amount:conversion.fromAmount,to_currency:conversion.toCurrency,to_amount:conversion.toAmount,exchange_rate:conversion.exchangeRate,fee:conversion.fee,created_at:now}).select().single(); if(error){throw new RepositoryError('createCurrencyConversion',error);}return CurrencyConversionSchema.parse(data);}export async function fetchConversionHistory(userId:string,limit:number = 50):Promise<CurrencyConversion[]>{const{data,error} = await supabase.from('currency_conversions').select('*').eq('user_id',userId).order('created_at',{ascending:false}).limit(limit); if(error){throw new RepositoryError('fetchConversionHistory',error);}return CurrencyConversionSchema.array().parse(data ?? []);}export async function fetchEconomyAnalytics(userId:string,period:'DAILY'|'WEEKLY'|'MONTHLY',periodStart:number,periodEnd:number):Promise<{totalEarned:Record<CurrencyType,number>;totalSpent:Record<CurrencyType,number>;transactionsBySource:Record<TransactionSource,number>}>{const{data,error} = await supabase.rpc('get_economy_analytics',{p_user_id:userId,p_period:period,p_period_start:periodStart,p_period_end:periodEnd}); if(error){throw new RepositoryError('fetchEconomyAnalytics',error);}return{totalEarned:data.total_earned as Record<CurrencyType,number>,totalSpent:data.total_spent as Record<CurrencyType,number>,transactionsBySource:data.transactions_by_source as Record<TransactionSource,number>};}
+import { getSupabaseClient } from '../../config/supabase';
+import { withResilience } from '../../utils/supabase-resilience';
+import {
+  WalletSchema,
+  WalletTransactionSchema,
+  PurchaseAttemptSchema,
+  RefundRequestSchema,
+  LimitedOfferSchema,
+  UserOfferClaimSchema,
+  CurrencyConversionSchema,
+  type Wallet,
+  type WalletTransaction,
+  type PurchaseAttempt,
+  type RefundRequest,
+  type LimitedOffer,
+  type UserOfferClaim,
+  type CurrencyConversion,
+  type CurrencyType,
+  type TransactionSource
+} from './schemas';
+
+class RepositoryError extends Error {
+  constructor(public operation: string, public originalError: unknown) {
+    super(`Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : 'Unknown error'}`);
+    this.name = 'RepositoryError';
+  }
+}
+
+const supabase = getSupabaseClient();
+
+export async function fetchWallet(userId: string): Promise<Wallet | null> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('wallets')
+      .select('*')
+      .eq('user_id', userId)
+      .single(),
+    { operation: 'fetchWallet' }
+  );
+
+  if (error) {
+    if (error.code === 'PGRST116') {
+      return null;
+    }
+    throw new RepositoryError('fetchWallet', error);
+  }
+
+  if (!data) return null;
+  return WalletSchema.parse(data);
+}
+
+export async function createWallet(userId: string): Promise<Wallet> {
+  const now = Date.now();
+  const newWallet = {
+    user_id: userId,
+    coins: 0,
+    gems: 0,
+    focus_points: 0,
+    seasonal: {},
+    total_coins_earned: 0,
+    total_coins_spent: 0,
+    total_gems_earned: 0,
+    total_gems_spent: 0,
+    created_at: now,
+    updated_at: now
+  };
+
+  const { data, error } = await withResilience(
+    supabase
+      .from('wallets')
+      .insert(newWallet)
+      .select()
+      .single(),
+    { operation: 'createWallet', fallbackValue: newWallet }
+  );
+
+  if (error) {
+    throw new RepositoryError('createWallet', error);
+  }
+
+  return WalletSchema.parse(data);
+}
+
+export async function updateWalletBalance(userId: string, updates: {
+  coins?: number;
+  gems?: number;
+  focusPoints?: number;
+  seasonal?: Record<string, number>;
+  totalCoinsEarned?: number;
+  totalCoinsSpent?: number;
+  totalGemsEarned?: number;
+  totalGemsSpent?: number
+}): Promise<Wallet> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('wallets')
+      .update({ ...updates, updated_at: Date.now() })
+      .eq('user_id', userId)
+      .select()
+      .single(),
+    { operation: 'updateWalletBalance' }
+  );
+
+  if (error) {
+    throw new RepositoryError('updateWalletBalance', error);
+  }
+
+  return WalletSchema.parse(data);
+}
+
+export async function atomicBalanceUpdate(userId: string, currency: CurrencyType, amount: number, operation: 'ADD' | 'SUBTRACT'): Promise<Wallet> {
+  const column = currency === 'COINS' ? 'coins' : currency === 'GEMS' ? 'gems' : 'seasonal';
+  const { data, error } = await withResilience(
+    supabase.rpc('update_wallet_balance', {
+      p_user_id: userId,
+      p_currency: column,
+      p_amount: amount,
+      p_operation: operation
+    }),
+    { operation: 'atomicBalanceUpdate' }
+  );
+
+  if (error) {
+    throw new RepositoryError('atomicBalanceUpdate', error);
+  }
+
+  return WalletSchema.parse(data);
+}
+
+export async function createTransaction(transaction: Omit<WalletTransaction, 'id' | 'createdAt'>): Promise<WalletTransaction> {
+  const now = Date.now();
+  const { data, error } = await withResilience(
+    supabase
+      .from('wallet_transactions')
+      .insert({
+        wallet_id: transaction.walletId,
+        user_id: transaction.userId,
+        type: transaction.type,
+        currency: transaction.currency,
+        amount: transaction.amount,
+        balance_before: transaction.balanceBefore,
+        balance_after: transaction.balanceAfter,
+        source: transaction.source,
+        source_id: transaction.sourceId,
+        description: transaction.description,
+        metadata: transaction.metadata,
+        created_at: now
+      })
+      .select()
+      .single(),
+    { operation: 'createTransaction' }
+  );
+
+  if (error) {
+    throw new RepositoryError('createTransaction', error);
+  }
+
+  return WalletTransactionSchema.parse(data);
+}
+
+export async function fetchTransactions(userId: string, options: {
+  currency?: CurrencyType;
+  source?: TransactionSource;
+  startDate?: number;
+  endDate?: number;
+  limit?: number;
+  offset?: number
+} = {}): Promise<WalletTransaction[]> {
+  let query = supabase.from('wallet_transactions').select('*').eq('user_id', userId);
+
+  if (options.currency) {
+    query = query.eq('currency', options.currency);
+  }
+  if (options.source) {
+    query = query.eq('source', options.source);
+  }
+  if (options.startDate) {
+    query = query.gte('created_at', options.startDate);
+  }
+  if (options.endDate) {
+    query = query.lte('created_at', options.endDate);
+  }
+
+  const { data, error } = await withResilience(
+    query
+      .order('created_at', { ascending: false })
+      .limit(options.limit ?? 50)
+      .range(options.offset ?? 0, (options.offset ?? 0) + (options.limit ?? 50) - 1),
+    { operation: 'fetchTransactions', fallbackValue: [] }
+  );
+
+  if (error) {
+    throw new RepositoryError('fetchTransactions', error);
+  }
+
+  return WalletTransactionSchema.array().parse(data ?? []);
+}
+
+export async function fetchTransactionById(transactionId: string): Promise<WalletTransaction | null> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('wallet_transactions')
+      .select('*')
+      .eq('id', transactionId)
+      .single(),
+    { operation: 'fetchTransactionById' }
+  );
+
+  if (error) {
+    if (error.code === 'PGRST116') {
+      return null;
+    }
+    throw new RepositoryError('fetchTransactionById', error);
+  }
+
+  return WalletTransactionSchema.parse(data);
+}
+
+export async function createPurchaseAttempt(purchase: Omit<PurchaseAttempt, 'id' | 'createdAt' | 'updatedAt'>): Promise<PurchaseAttempt> {
+  const now = Date.now();
+  const { data, error } = await withResilience(
+    supabase
+      .from('purchase_attempts')
+      .insert({
+        user_id: purchase.userId,
+        shop_item_id: purchase.shopItemId,
+        quantity: purchase.quantity,
+        unit_price_currency: purchase.unitPrice.currency,
+        unit_price_amount: purchase.unitPrice.amount,
+        total_price_currency: purchase.totalPrice.currency,
+        total_price_amount: purchase.totalPrice.amount,
+        status: purchase.status,
+        error_code: purchase.errorCode,
+        error_message: purchase.errorMessage,
+        inventory_item_ids: purchase.inventoryItemIds,
+        refunded_at: purchase.refundedAt,
+        refund_reason: purchase.refundReason,
+        created_at: now,
+        updated_at: now
+      })
+      .select()
+      .single(),
+    { operation: 'createPurchaseAttempt' }
+  );
+
+  if (error) {
+    throw new RepositoryError('createPurchaseAttempt', error);
+  }
+
+  return PurchaseAttemptSchema.parse(data);
+}
+
+export async function updatePurchaseStatus(purchaseId: string, updates: {
+  status: PurchaseAttempt['status'];
+  errorCode?: PurchaseAttempt['errorCode'];
+  errorMessage?: PurchaseAttempt['errorMessage'];
+  inventoryItemIds?: PurchaseAttempt['inventoryItemIds']
+}): Promise<PurchaseAttempt> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('purchase_attempts')
+      .update({
+        status: updates.status,
+        error_code: updates.errorCode,
+        error_message: updates.errorMessage,
+        inventory_item_ids: updates.inventoryItemIds,
+        updated_at: Date.now()
+      })
+      .eq('id', purchaseId)
+      .select()
+      .single(),
+    { operation: 'updatePurchaseStatus' }
+  );
+
+  if (error) {
+    throw new RepositoryError('updatePurchaseStatus', error);
+  }
+
+  return PurchaseAttemptSchema.parse(data);
+}
+
+export async function fetchPurchaseById(purchaseId: string): Promise<PurchaseAttempt | null> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('purchase_attempts')
+      .select('*')
+      .eq('id', purchaseId)
+      .single(),
+    { operation: 'fetchPurchaseById' }
+  );
+
+  if (error) {
+    if (error.code === 'PGRST116') {
+      return null;
+    }
+    throw new RepositoryError('fetchPurchaseById', error);
+  }
+
+  return PurchaseAttemptSchema.parse(data);
+}
+
+export async function fetchUserPurchases(userId: string, options: {
+  status?: PurchaseAttempt['status'];
+  limit?: number;
+  offset?: number
+} = {}): Promise<PurchaseAttempt[]> {
+  let query = supabase.from('purchase_attempts').select('*').eq('user_id', userId);
+  if (options.status) {
+    query = query.eq('status', options.status);
+  }
+
+  const { data, error } = await withResilience(
+    query
+      .order('created_at', { ascending: false })
+      .limit(options.limit ?? 50)
+      .range(options.offset ?? 0, (options.offset ?? 0) + (options.limit ?? 50) - 1),
+    { operation: 'fetchUserPurchases', fallbackValue: [] }
+  );
+
+  if (error) {
+    throw new RepositoryError('fetchUserPurchases', error);
+  }
+
+  return PurchaseAttemptSchema.array().parse(data ?? []);
+}
+
+export async function markPurchaseRefunded(purchaseId: string, reason: string): Promise<PurchaseAttempt> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('purchase_attempts')
+      .update({ status: 'REFUNDED', refunded_at: Date.now(), refund_reason: reason, updated_at: Date.now() })
+      .eq('id', purchaseId)
+      .select()
+      .single(),
+    { operation: 'markPurchaseRefunded' }
+  );
+
+  if (error) {
+    throw new RepositoryError('markPurchaseRefunded', error);
+  }
+
+  return PurchaseAttemptSchema.parse(data);
+}
+
+export async function createRefundRequest(refund: Omit<RefundRequest, 'id' | 'processedAt'>): Promise<RefundRequest> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('refund_requests')
+      .insert({
+        purchase_id: refund.purchaseId,
+        user_id: refund.userId,
+        reason: refund.reason,
+        status: refund.status,
+        requested_at: refund.requestedAt,
+        refund_amount_currency: refund.refundAmount?.currency,
+        refund_amount_amount: refund.refundAmount?.amount,
+        items_recovered: refund.itemsRecovered
+      })
+      .select()
+      .single(),
+    { operation: 'createRefundRequest' }
+  );
+
+  if (error) {
+    throw new RepositoryError('createRefundRequest', error);
+  }
+
+  return RefundRequestSchema.parse(data);
+}
+
+export async function updateRefundStatus(refundId: string, updates: {
+  status: RefundRequest['status'];
+  refundAmount?: RefundRequest['refundAmount'];
+  itemsRecovered?: boolean;
+  processedAt?: number
+}): Promise<RefundRequest> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('refund_requests')
+      .update({
+        status: updates.status,
+        refund_amount_currency: updates.refundAmount?.currency,
+        refund_amount_amount: updates.refundAmount?.amount,
+        items_recovered: updates.itemsRecovered,
+        processed_at: updates.processedAt
+      })
+      .eq('id', refundId)
+      .select()
+      .single(),
+    { operation: 'updateRefundStatus' }
+  );
+
+  if (error) {
+    throw new RepositoryError('updateRefundStatus', error);
+  }
+
+  return RefundRequestSchema.parse(data);
+}
+
+export async function fetchRefundRequestById(refundId: string): Promise<RefundRequest | null> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('refund_requests')
+      .select('*')
+      .eq('id', refundId)
+      .single(),
+    { operation: 'fetchRefundRequestById' }
+  );
+
+  if (error) {
+    if (error.code === 'PGRST116') {
+      return null;
+    }
+    throw new RepositoryError('fetchRefundRequestById', error);
+  }
+
+  return RefundRequestSchema.parse(data);
+}
+
+export async function fetchActiveOffers(userLevel: number, now: number = Date.now()): Promise<LimitedOffer[]> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('limited_offers')
+      .select('*')
+      .eq('status', 'ACTIVE')
+      .lte('start_at', now)
+      .gte('end_at', now)
+      .lte('min_level', userLevel)
+      .order('priority', { ascending: false })
+      .order('created_at', { ascending: false }),
+    { operation: 'fetchActiveOffers', fallbackValue: [] }
+  );
+
+  if (error) {
+    throw new RepositoryError('fetchActiveOffers', error);
+  }
+
+  return LimitedOfferSchema.array().parse(data ?? []);
+}
+
+export async function fetchOfferById(offerId: string): Promise<LimitedOffer | null> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('limited_offers')
+      .select('*')
+      .eq('id', offerId)
+      .single(),
+    { operation: 'fetchOfferById' }
+  );
+
+  if (error) {
+    if (error.code === 'PGRST116') {
+      return null;
+    }
+    throw new RepositoryError('fetchOfferById', error);
+  }
+
+  return LimitedOfferSchema.parse(data);
+}
+
+export async function incrementOfferPurchases(offerId: string): Promise<void> {
+  const { error } = await withResilience(
+    supabase.rpc('increment_offer_purchases', { p_offer_id: offerId }),
+    { operation: 'incrementOfferPurchases' }
+  );
+
+  if (error) {
+    throw new RepositoryError('incrementOfferPurchases', error);
+  }
+}
+
+export async function checkUserOfferClaim(offerId: string, userId: string): Promise<UserOfferClaim | null> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('user_offer_claims')
+      .select('*')
+      .eq('offer_id', offerId)
+      .eq('user_id', userId)
+      .single(),
+    { operation: 'checkUserOfferClaim' }
+  );
+
+  if (error) {
+    if (error.code === 'PGRST116') {
+      return null;
+    }
+    throw new RepositoryError('checkUserOfferClaim', error);
+  }
+
+  return UserOfferClaimSchema.parse(data);
+}
+
+export async function createUserOfferClaim(claim: Omit<UserOfferClaim, 'id'>): Promise<UserOfferClaim> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('user_offer_claims')
+      .insert({
+        offer_id: claim.offerId,
+        user_id: claim.userId,
+        purchase_id: claim.purchaseId,
+        claimed_at: claim.claimedAt
+      })
+      .select()
+      .single(),
+    { operation: 'createUserOfferClaim' }
+  );
+
+  if (error) {
+    throw new RepositoryError('createUserOfferClaim', error);
+  }
+
+  return UserOfferClaimSchema.parse(data);
+}
+
+export async function createCurrencyConversion(conversion: Omit<CurrencyConversion, 'id' | 'createdAt'>): Promise<CurrencyConversion> {
+  const now = Date.now();
+  const { data, error } = await withResilience(
+    supabase
+      .from('currency_conversions')
+      .insert({
+        user_id: conversion.userId,
+        from_currency: conversion.fromCurrency,
+        from_amount: conversion.fromAmount,
+        to_currency: conversion.toCurrency,
+        to_amount: conversion.toAmount,
+        exchange_rate: conversion.exchangeRate,
+        fee: conversion.fee,
+        created_at: now
+      })
+      .select()
+      .single(),
+    { operation: 'createCurrencyConversion' }
+  );
+
+  if (error) {
+    throw new RepositoryError('createCurrencyConversion', error);
+  }
+
+  return CurrencyConversionSchema.parse(data);
+}
+
+export async function fetchConversionHistory(userId: string, limit: number = 50): Promise<CurrencyConversion[]> {
+  const { data, error } = await withResilience(
+    supabase
+      .from('currency_conversions')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(limit),
+    { operation: 'fetchConversionHistory', fallbackValue: [] }
+  );
+
+  if (error) {
+    throw new RepositoryError('fetchConversionHistory', error);
+  }
+
+  return CurrencyConversionSchema.array().parse(data ?? []);
+}
+
+export async function fetchEconomyAnalytics(userId: string, period: 'DAILY' | 'WEEKLY' | 'MONTHLY', periodStart: number, periodEnd: number): Promise<{
+  totalEarned: Record<CurrencyType, number>;
+  totalSpent: Record<CurrencyType, number>;
+  transactionsBySource: Record<TransactionSource, number>
+}> {
+  const { data, error } = await withResilience(
+    supabase.rpc('get_economy_analytics', {
+      p_user_id: userId,
+      p_period: period,
+      p_period_start: periodStart,
+      p_period_end: periodEnd
+    }),
+    { operation: 'fetchEconomyAnalytics', fallbackValue: { total_earned: {}, total_spent: {}, transactions_by_source: {} } }
+  );
+
+  if (error) {
+    throw new RepositoryError('fetchEconomyAnalytics', error);
+  }
+
+  return {
+    totalEarned: data.total_earned as Record<CurrencyType, number>,
+    totalSpent: data.total_spent as Record<CurrencyType, number>,
+    transactionsBySource: data.transactions_by_source as Record<TransactionSource, number>
+  };
+}
+

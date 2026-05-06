@@ -1,15 +1,24 @@
 import { MMKV } from 'react-native-mmkv';
 
-const mmkv = new MMKV({ id: 'vex-runtime-storage' });
+// Lazy singleton — avoids crashing at module load time in Expo Go
+// (the shim requires React to be initialized before hook APIs are available)
+let _mmkv: MMKV | null = null;
+
+function getMMKV(): MMKV {
+  if (!_mmkv) {
+    _mmkv = new MMKV({ id: 'vex-runtime-storage' });
+  }
+  return _mmkv;
+}
 
 export const storage = {
-  getString: (key: string): string | undefined => mmkv.getString(key),
+  getString: (key: string): string | undefined => getMMKV().getString(key),
   set: (key: string, value: string | number | boolean): void => {
-    mmkv.set(key, value);
+    getMMKV().set(key, value);
   },
   delete: (key: string): void => {
-    mmkv.delete(key);
+    getMMKV().delete(key);
   },
-  contains: (key: string): boolean => mmkv.contains(key),
-  getAllKeys: (): string[] => mmkv.getAllKeys(),
+  contains: (key: string): boolean => getMMKV().contains(key),
+  getAllKeys: (): string[] => getMMKV().getAllKeys(),
 };

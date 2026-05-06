@@ -1,5 +1,5 @@
 import React from 'react';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import Animated, { useAnimatedStyle, type SharedValue } from 'react-native-reanimated';
 
 export const PARTICLE_COUNT = 12;
 
@@ -29,7 +29,7 @@ export function BurstParticle({
 }: {
   color: string;
   index: number;
-  progress: Animated.SharedValue<number>;
+  progress: SharedValue<number>;
 }): JSX.Element {
   const angle = (Math.PI * 2 * index) / PARTICLE_COUNT;
   const style = useAnimatedStyle(() => ({

@@ -8,12 +8,13 @@
  * @phase 2.4
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Pressable } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInUp,
   useAnimatedStyle,
+  useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
 
@@ -43,23 +44,25 @@ function DurationCard({
   index: number;
 }): JSX.Element {
   const { theme } = useTheme();
+  const scale = useSharedValue(1);
+
+  useEffect(() => {
+    scale.value = withSpring(isSelected ? 0.95 : 1, {
+      damping: 15,
+      stiffness: 150,
+    });
+  }, [isSelected, scale]);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        scale: withSpring(isSelected ? 0.95 : 1, {
-          damping: 15,
-          stiffness: 150,
-        }),
-      },
-    ],
-    backgroundColor: isSelected
-      ? theme.colors.accent.purple
-      : theme.colors.background.secondary,
-    borderColor: isSelected
-      ? theme.colors.accent.purple
-      : theme.colors.border.light,
+    transform: [{ scale: scale.value }],
   }));
+
+  const backgroundColor = isSelected
+    ? theme.colors.accent.purple
+    : theme.colors.background.secondary;
+  const borderColor = isSelected
+    ? theme.colors.accent.purple
+    : theme.colors.border.light;
 
   return (
     <Animated.View
@@ -80,6 +83,8 @@ function DurationCard({
               justifyContent: 'center',
               gap: theme.spacing[3],
               minHeight: 120,
+              backgroundColor,
+              borderColor,
             },
             animatedStyle,
           ]}
@@ -104,7 +109,8 @@ function DurationCard({
 export function FocusTimeScreen({
   onSelect,
   onSkip,
-}: FocusTimeScreenProps): JSX.Element {
+  onBack,
+}: FocusTimeScreenProps & { onBack?: () => void }): JSX.Element {
   const { theme } = useTheme();
   const [selectedDuration, setSelectedDuration] = useState<FocusDuration | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);
@@ -123,7 +129,18 @@ export function FocusTimeScreen({
 
   return (
     <Box flex={1} bg="background.primary" px="lg" py="xl">
-      {/* Header */}
+      {/* Header with Back Button */}
+      <Box flexDirection="row" alignItems="center" mb="md">
+        {onBack && (
+          <Pressable onPress={onBack} style={{ marginRight: 12 }}>
+            <Box p="xs">
+              <Text variant="h3" color="text.secondary">‹</Text>
+            </Box>
+          </Pressable>
+        )}
+      </Box>
+
+      {/* Header Content */}
       <Animated.View entering={FadeIn.duration(400)}>
         <Box gap="sm" mb="xl">
           <Text variant="label" color="primary.500">

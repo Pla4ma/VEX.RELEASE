@@ -105,6 +105,7 @@ export function OnboardingNavigator({
           <GoalScreen
             onSelect={handleGoalSelect}
             onSkip={handleGoalSkip}
+            onBack={onBack}
           />
         );
       case 2:
@@ -112,6 +113,7 @@ export function OnboardingNavigator({
           <FocusTimeScreen
             onSelect={handleDurationSelect}
             onSkip={handleDurationSkip}
+            onBack={goToPreviousStep}
           />
         );
       case 3:
@@ -119,6 +121,7 @@ export function OnboardingNavigator({
           <NameScreen
             onContinue={handleNameContinue}
             onSkip={handleNameSkip}
+            onBack={goToPreviousStep}
           />
         );
       case 4:

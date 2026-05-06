@@ -8,74 +8,40 @@ export type HapticFeedbackKind =
   | 'impactMedium'
   | 'impactHeavy';
 
-type ExpoHaptics = {
-  notificationAsync: (type: unknown) => Promise<void>;
-  impactAsync: (style: unknown) => Promise<void>;
-  selectionAsync: () => Promise<void>;
-  NotificationFeedbackType: {
-    Success: unknown;
-    Warning: unknown;
-    Error: unknown;
-  };
-  ImpactFeedbackStyle: {
-    Light: unknown;
-    Medium: unknown;
-    Heavy: unknown;
-  };
-};
-
-let cachedModule: Promise<ExpoHaptics | null> | null = null;
-
-async function loadHaptics(): Promise<ExpoHaptics | null> {
-  if (!cachedModule) {
-    const dynamicImport = new Function('modulePath', 'return import(modulePath);') as (
-      modulePath: string
-    ) => Promise<unknown>;
-
-    cachedModule = dynamicImport('expo-haptics')
-      .then((module) => module as ExpoHaptics)
-      .catch(() => null);
-  }
-
-  return cachedModule;
-}
+import * as Haptics from 'expo-haptics';
 
 export async function triggerHaptic(kind: HapticFeedbackKind): Promise<void> {
-  const haptics = await loadHaptics();
 
-  if (!haptics) {
-    return;
-  }
 
   try {
     if (kind === 'selection') {
-      await haptics.selectionAsync();
+      await Haptics.selectionAsync();
       return;
     }
 
     if (kind === 'success') {
-      await haptics.notificationAsync(haptics.NotificationFeedbackType.Success);
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       return;
     }
 
     if (kind === 'warning') {
-      await haptics.notificationAsync(haptics.NotificationFeedbackType.Warning);
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
       return;
     }
 
     if (kind === 'error') {
-      await haptics.notificationAsync(haptics.NotificationFeedbackType.Error);
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       return;
     }
 
     const impactStyle =
       kind === 'impactHeavy'
-        ? haptics.ImpactFeedbackStyle.Heavy
+        ? Haptics.ImpactFeedbackStyle.Heavy
         : kind === 'impactLight'
-          ? haptics.ImpactFeedbackStyle.Light
-          : haptics.ImpactFeedbackStyle.Medium;
+          ? Haptics.ImpactFeedbackStyle.Light
+          : Haptics.ImpactFeedbackStyle.Medium;
 
-    await haptics.impactAsync(impactStyle);
+    await Haptics.impactAsync(impactStyle);
   } catch (error) { captureSilentFailure(error, { feature: 'utils', operation: 'ui-fallback', type: 'ui' });
     // Haptics are optional at runtime.
   }

@@ -121,4 +121,11 @@ export interface CoachEventDefinitions {
     }>;
     timestamp: number;
   };
+  'coach:memory_created': {
+    userId: string;
+    memoryId: string;
+    type: string;
+    occurredAt: number;
+    timestamp: number;
+  };
 }

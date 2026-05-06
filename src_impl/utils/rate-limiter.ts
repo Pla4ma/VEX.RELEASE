@@ -15,12 +15,17 @@ import { eventBus } from '../events';
 const debug = createDebugger('rate-limiter');
 
 // ============================================================================
-// Storage
+// Storage — lazy singleton to avoid crashing at module load time in Expo Go
 // ============================================================================
 
-const storage = new MMKV({
-  id: 'rate-limiter',
-});
+let _storage: MMKV | null = null;
+
+function getStorage(): MMKV {
+  if (!_storage) {
+    _storage = new MMKV({ id: 'rate-limiter' });
+  }
+  return _storage;
+}
 
 // ============================================================================
 // Types
@@ -123,7 +128,7 @@ export class SlidingWindowLimiter {
 
   private getRecords(key: string): UsageRecord[] {
     try {
-      const data = storage.getString(key);
+      const data = getStorage().getString(key);
       return data ? JSON.parse(data) : [];
     } catch (error) { captureSilentFailure(error, { feature: 'utils', operation: 'safe-fallback', type: 'data' });
       return [];
@@ -131,7 +136,7 @@ export class SlidingWindowLimiter {
   }
 
   private saveRecords(key: string, records: UsageRecord[]): void {
-    storage.set(key, JSON.stringify(records.slice(-100))); // Keep last 100
+    getStorage().set(key, JSON.stringify(records.slice(-100))); // Keep last 100
   }
 }
 
@@ -201,7 +206,7 @@ export class TokenBucketLimiter {
 
   private getBucket(key: string): BucketState {
     try {
-      const data = storage.getString(key);
+      const data = getStorage().getString(key);
       if (data) {
         return JSON.parse(data);
       }
@@ -215,7 +220,7 @@ export class TokenBucketLimiter {
   }
 
   private saveBucket(key: string, bucket: BucketState): void {
-    storage.set(key, JSON.stringify(bucket));
+    getStorage().set(key, JSON.stringify(bucket));
   }
 }
 

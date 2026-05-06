@@ -12,6 +12,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { BattlePassTierToastListener } from '../features/battle-pass/components/BattlePassTierToastListener';
+import { initializeFocusScoreIntegration } from "../features/focus-identity/integration-focus-score";
 import { VexTabBar } from './components/VexTabBar';
 
 import type { MainTabParams } from './types';
@@ -22,6 +23,11 @@ const Tab = createBottomTabNavigator<MainTabParams>();
  * Main navigator component - Launch structure (V2 with recommendation engine)
  */
 export const MainNavigator: React.FC = () => {
+  React.useEffect(() => {
+    const cleanup = initializeFocusScoreIntegration();
+    return cleanup;
+  }, []);
+
   return (
     <>
       <BattlePassTierToastListener />

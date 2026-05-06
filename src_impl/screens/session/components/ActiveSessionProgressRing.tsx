@@ -6,7 +6,7 @@ import Svg, {
   LinearGradient as SvgLinearGradient,
   Stop,
 } from 'react-native-svg';
-import Animated, { useAnimatedProps, useAnimatedStyle } from 'react-native-reanimated';
+import Animated, { useAnimatedProps, useAnimatedStyle, type SharedValue } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
@@ -20,6 +20,7 @@ type ActiveSessionProgressRingProps = {
   RING_SIZE: number;
   STROKE_WIDTH: number;
   animatedCircleProps: ReturnType<typeof useAnimatedProps>;
+  completionPercentage: number;
   glowStyle: {
     elevation: number;
     shadowColor: string;
@@ -28,7 +29,7 @@ type ActiveSessionProgressRingProps = {
   };
   outerStrokeDashoffset: number;
   perfectFocusActive: boolean;
-  perfectFocusBurst: Animated.SharedValue<number>;
+  perfectFocusBurst: SharedValue<number>;
   phaseAccent: string;
   pulseStyle: ReturnType<typeof useAnimatedStyle>;
   purityLabel: PurityLabel;
@@ -44,10 +45,12 @@ type ActiveSessionProgressRingProps = {
   withAlpha: (color: string, alpha: number) => string;
 };
 
+const USE_SAFE_PROGRESS_RING = true;
+
 const PerfectFocusBurstParticle: React.FC<{
   color: string;
   index: number;
-  progress: Animated.SharedValue<number>;
+  progress: SharedValue<number>;
 }> = ({ color, index, progress }) => {
   const angle = (Math.PI * 2 * index) / PERFECT_PARTICLE_COUNT;
   const style = useAnimatedStyle(() => ({
@@ -76,6 +79,7 @@ export const ActiveSessionProgressRing: React.FC<ActiveSessionProgressRingProps>
   RING_SIZE,
   STROKE_WIDTH,
   animatedCircleProps,
+  completionPercentage,
   glowStyle,
   outerStrokeDashoffset,
   perfectFocusActive,
@@ -125,18 +129,33 @@ export const ActiveSessionProgressRing: React.FC<ActiveSessionProgressRingProps>
             strokeWidth={STROKE_WIDTH}
             fill="none"
           />
-          <AnimatedCircle
-            cx={(RING_SIZE + 34) / 2}
-            cy={(RING_SIZE + 34) / 2}
-            r={RADIUS}
-            stroke={phaseAccent}
-            strokeWidth={STROKE_WIDTH}
-            fill="none"
-            strokeDasharray={CIRCUMFERENCE}
-            animatedProps={animatedCircleProps}
-            strokeLinecap="round"
-            transform={`rotate(-90 ${(RING_SIZE + 34) / 2} ${(RING_SIZE + 34) / 2})`}
-          />
+          {USE_SAFE_PROGRESS_RING ? (
+            <Circle
+              cx={(RING_SIZE + 34) / 2}
+              cy={(RING_SIZE + 34) / 2}
+              r={RADIUS}
+              stroke={phaseAccent}
+              strokeWidth={STROKE_WIDTH}
+              fill="none"
+              strokeDasharray={CIRCUMFERENCE}
+              strokeDashoffset={CIRCUMFERENCE * (1 - Math.max(0, Math.min(100, completionPercentage)) / 100)}
+              strokeLinecap="round"
+              transform={`rotate(-90 ${(RING_SIZE + 34) / 2} ${(RING_SIZE + 34) / 2})`}
+            />
+          ) : (
+            <AnimatedCircle
+              cx={(RING_SIZE + 34) / 2}
+              cy={(RING_SIZE + 34) / 2}
+              r={RADIUS}
+              stroke={phaseAccent}
+              strokeWidth={STROKE_WIDTH}
+              fill="none"
+              strokeDasharray={CIRCUMFERENCE}
+              animatedProps={animatedCircleProps}
+              strokeLinecap="round"
+              transform={`rotate(-90 ${(RING_SIZE + 34) / 2} ${(RING_SIZE + 34) / 2})`}
+            />
+          )}
         </Svg>
         {perfectFocusActive ? (
           <Animated.View style={[{ position: 'absolute' }, rotatingPerfectFocusStyle]}>

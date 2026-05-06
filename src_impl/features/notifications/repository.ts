@@ -11,6 +11,7 @@ import {
   type RetentionReminderType,
   type RetentionUserProfile,
 } from './schemas';
+import { v4 } from '../../utils/uuid';
 
 const UnreadNotificationsCountSchema = z.number().int().nonnegative();
 
@@ -67,7 +68,7 @@ export async function upsertReminderPlan(input: ReminderPlanInput): Promise<Remi
   const { data, error } = await supabase
     .from('reminder_plans')
     .upsert({
-      id: crypto.randomUUID(),
+      id: v4(),
       user_id: reminder.userId,
       reminder_type: reminder.type,
       scheduled_for: reminder.scheduledFor,

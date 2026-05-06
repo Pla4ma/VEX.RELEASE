@@ -5,6 +5,7 @@
  */
 
 import { eventBus } from '../../events';
+import { v4 } from '../../utils/uuid';
 import * as repository from './repository';
 import type { Streak } from './schemas';
 
@@ -67,7 +68,7 @@ export async function createRepairQuest(
   const targetRestoreDays = Math.floor(previousStreak * REPAIR_QUEST_CONFIG.restoredStreakPercentage);
 
   const quest: StreakRepairQuest = {
-    id: crypto.randomUUID(),
+    id: v4(),
     userId,
     previousStreak,
     targetRestoreDays,

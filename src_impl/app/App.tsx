@@ -19,14 +19,32 @@ import { bootstrapApp } from './bootstrap';
 import { initializeDevContrastChecker } from '../shared/accessibility/contrast-checker';
 import { SpectacleOverlay } from '../features/spectacle/components/SpectacleOverlay';
 
-// Initialize Sentry immediately
-initSentry();
+// Initialize Sentry immediately — wrapped in try/catch since Sentry uses
+// native PlatformConstants which may not be registered in Expo Go.
+try {
+  initSentry();
+} catch (e) {
+  // Sentry unavailable in Expo Go — continue without it
+}
 
 // Initialize RevenueCat (pass null for userId - will be set after login)
-initializeRevenueCat(null);
-initializeNotifications();
+// react-native-purchases is shimmed in Expo Go, so this is safe but no-op.
+void initializeRevenueCat(null);
+
+try {
+  initializeNotifications();
+} catch (e) {
+  // Notifications may not be fully available in Expo Go
+}
+
 bootstrapApp();
-initializeDevContrastChecker();
+
+try {
+  initializeDevContrastChecker();
+} catch (e) {
+  // Accessibility checker unavailable — non-critical
+}
+
 
 // Conditionally import GestureHandler for native only
 let GestureHandlerRootView: React.FC<{ children: React.ReactNode; style?: StyleProp<ViewStyle> }> = ({ children }) => <>{children}</>;

@@ -114,6 +114,7 @@ export const ActiveSessionHero: React.FC<ActiveSessionHeroProps> = ({
         RING_SIZE={RING_SIZE}
         STROKE_WIDTH={STROKE_WIDTH}
         animatedCircleProps={animatedCircleProps}
+        completionPercentage={completionPercentage}
         glowStyle={glowStyle}
         outerStrokeDashoffset={outerStrokeDashoffset}
         perfectFocusActive={perfectFocusActive}

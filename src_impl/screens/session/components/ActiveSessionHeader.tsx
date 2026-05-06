@@ -28,11 +28,14 @@ export function ActiveSessionHeader({
     >
       <Pressable
         accessibilityHint="Opens the session interruption confirmation."
-        accessibilityLabel="End or abandon session"
+        accessibilityLabel="Go back or end session"
         accessibilityRole="button"
         onPress={onInterrupt}
       >
-        <Icon name="chevron-down" size="lg" color={theme.colors.text.secondary} />
+        <Box flexDirection="row" alignItems="center">
+          <Icon name="chevron-left" size="lg" color={theme.colors.text.secondary} />
+          <Text variant="caption" color="text.secondary" style={{ marginLeft: 4 }}>Exit</Text>
+        </Box>
       </Pressable>
       <Box flexDirection="row" alignItems="center" gap="sm">
         <Box

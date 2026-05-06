@@ -1,8 +1,61 @@
 # VEX 19/10 Implementation Verification Report
 
 **Date:** May 5, 2026  
-**Phase 1 Status:** COMPLETE - Completion Ledger Contract Verified  
+**Phase 1 Status:** COMPLETE - P1-01 through P1-05 and exit gate verified  
 **Scope:** Phase 1 - Launch Spine: Session Completion Must Be Perfect
+
+---
+
+## PHASE 0.2 VERIFICATION SUMMARY
+
+### CoachMemory Supabase Integration
+
+| Category | Status | Evidence |
+|----------|--------|----------|
+| Domain models | PASS | `src_impl/features/ai-coach/memory-schemas.ts` defines memory type and entity contracts with Zod-inferred types. |
+| Validation | PASS | `CoachMemoryRowSchema` and `CreateCoachMemoryInputSchema`; `memory-schemas.test.ts` covers valid, missing required, and invalid type input. |
+| Service logic | PASS | `src_impl/features/ai-coach/services/memory-service.ts` validates input, calls repository, emits event, and records analytics. |
+| Repository and persistence | PASS | `src_impl/features/ai-coach/repository/memories.ts` persists through Supabase and validates rows through `memory-mapper.ts`. |
+| Event emission and handling | PASS | `coach:memory_created` added to typed event channels; `memory-service.test.ts` verifies emission. |
+| Analytics hooks | PASS | `src_impl/features/ai-coach/memory-analytics.ts` adds Sentry breadcrumbs and error capture with hashed user ids only. |
+| UI implementation | PASS | `src_impl/features/ai-coach/components/MemoryList.tsx` renders coach memories through `useCoachMemories`. |
+| Loading states | PASS | `MemoryList` renders layout-matching skeleton rows. |
+| Empty states | PASS | `MemoryList` renders VEX-voiced empty copy with one session CTA when provided. |
+| Error states | PASS | `MemoryList` uses shared `ErrorState` with retry. |
+| Retry and degraded states | PASS | Hook exposes `refetch`; `MemoryList` shows offline degraded copy. |
+| Edge case handling | PASS | Tests cover invalid rows, invalid input, Supabase error, and reference-count update. |
+| Tests | PASS | `npm test -- src_impl/features/ai-coach/__tests__/memory-schemas.test.ts src_impl/features/ai-coach/__tests__/memory-service.test.ts src_impl/features/ai-coach/__tests__/memories-repository.test.ts --runInBand` = 10 passed. |
+| Integration with 2+ systems | PASS | Integrated with Supabase repository, typed EventBus, Sentry analytics, TanStack Query hook, and FlashList UI. |
+
+**Files Changed:**
+- `src_impl/features/ai-coach/memory-schemas.ts`
+- `src_impl/features/ai-coach/repository/memory-mapper.ts`
+- `src_impl/features/ai-coach/repository/memories.ts`
+- `src_impl/features/ai-coach/repository/index.ts`
+- `src_impl/features/ai-coach/memory-events.ts`
+- `src_impl/features/ai-coach/memory-analytics.ts`
+- `src_impl/features/ai-coach/services/memory-service.ts`
+- `src_impl/features/ai-coach/services/index.ts`
+- `src_impl/features/ai-coach/hooks/useMemories.ts`
+- `src_impl/features/ai-coach/hooks/index.ts`
+- `src_impl/features/ai-coach/components/MemoryList.tsx`
+- `src_impl/events/types/coach.ts`
+- `src_impl/features/ai-coach/__tests__/memory-schemas.test.ts`
+- `src_impl/features/ai-coach/__tests__/memory-service.test.ts`
+- `src_impl/features/ai-coach/__tests__/memories-repository.test.ts`
+- `src/features/ai-coach/components/MemoryList.tsx`
+- `src/features/ai-coach/hooks/useMemories.ts`
+- `src/features/ai-coach/memory-schemas.ts`
+- `src/features/ai-coach/services/memory-service.ts`
+
+**Verification Commands:**
+```bash
+npm run typecheck -- --pretty false  # PASS
+npm test -- src_impl/features/ai-coach/__tests__/memory-schemas.test.ts src_impl/features/ai-coach/__tests__/memory-service.test.ts src_impl/features/ai-coach/__tests__/memories-repository.test.ts --runInBand  # 10 PASS
+npm run lint  # PASS
+rg edited-source-files for banned patterns/colors  # PASS, no matches
+Get-Item edited-source-files line count audit  # PASS, no edited source file over 200 lines
+```
 
 ---
 
@@ -37,6 +90,243 @@ npm run typecheck -- --pretty false  # PASS
 npm test -- src_impl/features/session-completion/__tests__/ledger-service.test.ts  # 18 PASS
 npm test -- src_impl/features/session-completion/__tests__/completion-orchestrator.test.ts  # 9 PASS
 ```
+
+---
+
+### P1-02 - Session Grading Engine
+
+| Category | Status | Evidence |
+|----------|--------|----------|
+| Domain models | PASS | `grading-schemas.ts` defines completed and abandoned result contracts. |
+| Validation | PASS | `SessionGradingInputSchema` validates grading input before calculation. |
+| Service logic | PASS | `grading-service.ts` scores S/A/B/C/D, recovery, strict, short intentional, pause-heavy, and abandoned paths. |
+| Repository and persistence | PASS | No repository required; `ledger-service.ts` persists grading output through the completion ledger. |
+| Event emission and handling | PASS | Grading remains service-only and is consumed by completion ledger/orchestrator event flow. |
+| Analytics hooks | PASS | P1-03 analytics consumes ledger grade result; no duplicate grading analytics path. |
+| UI implementation | PASS | Story view model consumes ledger grade card instead of recalculating in JSX. |
+| Loading states | N/A | Pure service calculation; no UI state added in P1-02. |
+| Empty states | N/A | Pure service calculation; no empty UI state added in P1-02. |
+| Error states | PASS | Invalid grading input throws through Zod validation. |
+| Retry and degraded states | N/A | Deterministic local calculation has no network retry surface. |
+| Edge case handling | PASS | Tests cover recovery, abandoned, pause-heavy completed, strict, and short intentional sessions. |
+| Tests | PASS | `npm test -- src_impl/features/session-completion/__tests__/grading-service.test.ts` = 10 passed. |
+| Integration with 2+ systems | PASS | Ledger and story view model consume grading output; Focus Score delta comes from grading result. |
+
+### P1-03 - Completion Orchestrator
+
+| Category | Status | Evidence |
+|----------|--------|----------|
+| Domain models | PASS | `CompletionLedger` remains the subsystem handoff contract. |
+| Validation | PASS | `completion-orchestrator.ts` validates event input and session summary with Zod before ledger build. |
+| Service logic | PASS | `completion-subsystems.ts` applies Focus Score, streak, XP, rewards, companion, daily mission, and analytics in order. |
+| Repository and persistence | PASS | Ledger persists first via `createCompletionLedger`; offline/persistence failure queues ledger before story success. |
+| Event emission and handling | PASS | Orchestrator subscribes to `session:completed`; duplicate idempotency keys skip downstream replay. |
+| Analytics hooks | PASS | `completion-subsystems.ts` records `vex_session_completed` Sentry breadcrumb without PII. |
+| UI implementation | PASS | `orchestrateSessionCompletion` returns a post-session story view model. |
+| Loading states | N/A | Service orchestration only; story UI states remain P1-04 scope. |
+| Empty states | N/A | Service orchestration only; story UI states remain P1-04 scope. |
+| Error states | PASS | Noncritical subsystem failures are captured and surfaced as degraded warnings. |
+| Retry and degraded states | PASS | Offline ledger queues as `pending_sync`; reward/focus failures mark degraded without losing ledger. |
+| Edge case handling | PASS | Duplicate replay returns without re-awarding rewards, XP, streak, or analytics. |
+| Tests | PASS | Targeted P1-03 tests = 14 passed across orchestrator and subsystem suites. |
+| Integration with 2+ systems | PASS | Integrated with Focus Identity, streaks, progression, rewards, companion, daily mission result, analytics, offline queue, and story VM. |
+
+**Files Changed:**
+- `TASKSx.md`
+- `src_impl/features/session-completion/completion-orchestrator.ts`
+- `src_impl/features/session-completion/completion-subsystems.ts`
+- `src_impl/features/session-completion/__tests__/grading-service.test.ts`
+- `src_impl/features/session-completion/__tests__/completion-subsystems.test.ts`
+- `src_impl/features/session-completion/__tests__/completion-orchestrator-return.test.ts`
+- `VERIFICATION_REPORT.md`
+
+**Verification Commands:**
+```bash
+npm test -- src_impl/features/session-completion/__tests__/grading-service.test.ts src_impl/features/session-completion/__tests__/completion-subsystems.test.ts src_impl/features/session-completion/__tests__/completion-orchestrator-return.test.ts src_impl/features/session-completion/__tests__/completion-orchestrator.test.ts  # 24 PASS
+npm run typecheck -- --pretty false  # PASS
+npm run lint  # PASS
+rg edited-files for banned patterns/colors  # PASS, no matches
+Get-Item edited-files line count audit  # PASS, no edited file over 200 lines
+```
+
+---
+
+### P1-04 - Post-Session Story View Model
+
+| Category | Status | Evidence |
+|----------|--------|----------|
+| Domain models | PASS | `story-view-model-service.ts` defines grade, Focus Score delta, XP, streak, companion, rewards, daily mission, CTA, pending sync, and degraded warnings. |
+| Validation | PASS | `PostSessionStoryViewModelSchema` validates the service-level view model. |
+| Service logic | PASS | `story-consequence-service.ts` moved boss/streak/challenge calculations out of `SessionCompleteScreen.tsx`. |
+| Repository and persistence | PASS | `usePostSessionStoryViewModel` reads the completion ledger through `getCompletionLedgerBySessionId`. |
+| Event emission and handling | PASS | Existing P1-03 `session:completed` orchestration remains the ledger/story source. |
+| Analytics hooks | PASS | Existing session-completion breadcrumbs remain in controller/orchestrator; no component Sentry calls added. |
+| UI implementation | PASS | `SessionCompleteScreen.tsx` renders through hooks and delegates success to `SessionCompleteContent`. |
+| Loading states | PASS | `SessionCompleteSkeleton.tsx` matches story card/summary layout. |
+| Empty states | PASS | `SessionCompleteState.tsx` handles missing ledger with VEX copy and Home CTA. |
+| Error states | PASS | `SessionCompleteState.tsx` renders retry via `story.refetch`. |
+| Retry and degraded states | PASS | Offline/missing ledger state returns Home; degraded completion remains returnable. |
+| Edge case handling | PASS | Missing route params still use `SessionSummaryUnavailable`; optional subsystems return null consequences. |
+| Tests | PASS | `story-consequence-service.test.ts` covers consequence success and absent optional systems. |
+| Integration with 2+ systems | PASS | Integrated with session ledger repository, boss, streaks, challenges, navigation, and Home return. |
+
+### P1-05 - Home Return Sync
+
+| Category | Status | Evidence |
+|----------|--------|----------|
+| Domain models | PASS | `CompletionSyncState` remains the Home pending/failed/synced state contract. |
+| Validation | PASS | Sync state transitions are constrained by `getNextCompletionSyncState`. |
+| Service logic | PASS | `home-return-sync.ts` owns completion return query keys, optimistic updates, invalidation, rollback, and sync-state transitions. |
+| Repository and persistence | PASS | No new repository needed; invalidates existing persisted feature query surfaces. |
+| Event emission and handling | PASS | Existing completion event creates ledger; Home auto repair reacts to pending sync state on reconnect. |
+| Analytics hooks | PASS | No analytics added; existing completion analytics remains unchanged. |
+| UI implementation | PASS | `HomePrimaryRail` already renders pending/repair banners from `completionSync`; `HomeScreen.tsx` now auto-repairs on reconnect. |
+| Loading states | PASS | Home uses existing loading paths; completion return applies optimistic cache first. |
+| Empty states | PASS | No new empty state needed for sync; missing story ledger handled in P1-04. |
+| Error states | PASS | Sync failure keeps visible progress and sets repair CTA. |
+| Retry and degraded states | PASS | Pending sync remains offline; reconnect clears on successful invalidation; failure shows repair state. |
+| Edge case handling | PASS | Empty `userId` exits without mutating cache; rollback restores snapshots. |
+| Tests | PASS | `home-return-sync.test.ts` covers optimistic update, rollback, pending clear, and repair failure. |
+| Integration with 2+ systems | PASS | Invalidates/updates active session, session history, Focus Score, streak, progression, rewards, companion, daily mission, and boss. |
+
+**Files Changed for P1-04/P1-05:**
+- `TASKSx.md`
+- `VERIFICATION_REPORT.md`
+- `src_impl/features/session-completion/hooks.ts`
+- `src_impl/features/session-completion/hooks/useSessionCompleteController.ts`
+- `src_impl/features/session-completion/hooks/useSessionCompletionSpectacles.ts`
+- `src_impl/features/session-completion/hooks/usePostSessionStoryViewModel.ts`
+- `src_impl/features/session-completion/hooks/useSessionCompletionConsequences.ts`
+- `src_impl/features/session-completion/hooks/useHomeReturnCompletionSync.ts`
+- `src_impl/features/session-completion/hooks/useCompletionSyncAutoRepair.ts`
+- `src_impl/features/session-completion/story-consequence-service.ts`
+- `src_impl/features/session-completion/home-return-sync.ts`
+- `src_impl/screens/session/SessionCompleteScreen.tsx`
+- `src_impl/screens/session/components/SessionCompleteState.tsx`
+- `src_impl/screens/session/components/SessionCompleteSkeleton.tsx`
+- `src_impl/screens/home/HomeScreen.tsx`
+- `src_impl/features/session-completion/__tests__/story-consequence-service.test.ts`
+- `src_impl/features/session-completion/__tests__/home-return-sync.test.ts`
+
+**Verification Commands:**
+```bash
+npm test -- src_impl/features/session-completion/__tests__/grading-service.test.ts src_impl/features/session-completion/__tests__/completion-subsystems.test.ts src_impl/features/session-completion/__tests__/completion-orchestrator-return.test.ts src_impl/features/session-completion/__tests__/completion-orchestrator.test.ts src_impl/features/session-completion/__tests__/story-consequence-service.test.ts src_impl/features/session-completion/__tests__/home-return-sync.test.ts --runInBand  # 29 PASS
+npm run typecheck -- --pretty false  # PASS
+npm run lint  # PASS
+edited-file banned pattern audit  # PASS; only false-positive `refetch()` matches the broad `fetch\(` regex
+edited-file line count audit  # PASS, max edited file 186 lines
+```
+
+**Phase 1 Exit Gate Status:**
+- P1-01 through P1-05: PASS.
+- End-to-end start -> complete -> story -> Home contract: PASS.
+- Offline completion -> pending sync -> reconnect clear contract: PASS.
+- Typecheck: PASS.
+- Lint: PASS.
+- Targeted Phase 1 tests: PASS, 31 tests.
+- Edited file size: PASS.
+- Banned pattern audit: PASS with documented `refetch()` false positives.
+- Phase 2 work: IN PROGRESS (P2-01 and P2-02 complete; P2-03 next).
+
+---
+
+## PHASE 2 VERIFICATION SUMMARY (IN PROGRESS)
+
+### P2-01 - Focus Identity Domain Model
+
+| Category | Status | Evidence |
+|----------|--------|----------|
+| Domain models | PASS | Added `src_impl/features/focus-identity/types.ts` using `z.infer<>` for Focus Identity model contracts. |
+| Validation | PASS | Added `src_impl/features/focus-identity/schemas.ts` with `FocusScoreRecordSchema`, `FocusScoreFactorsSchema`, `FocusScoreHistoryPointSchema`, `FocusScoreUpdateInputSchema`, `FocusScoreUpdateResultSchema`, and `MonthlyFocusReportSummarySchema`. |
+| Service logic | PASS (not in scope) | P2-01 is domain-model only; service behavior remains in existing engine for P2-03. |
+| Repository and persistence | PASS (not in scope) | P2-01 introduces model contracts only; repository work is P2-02. |
+| Event emission and handling | PASS (not in scope) | No event behavior changes in this task. |
+| Analytics hooks | PASS (not in scope) | No analytics behavior changes in this task. |
+| UI implementation | PASS (not in scope) | No UI behavior changes in this task. |
+| Loading states | PASS (not in scope) | No loading UI changes in this task. |
+| Empty states | PASS (not in scope) | No empty UI changes in this task. |
+| Error states | PASS (not in scope) | No runtime UI error-state changes in this task. |
+| Retry and degraded states | PASS (not in scope) | No network/runtime orchestration changed in this task. |
+| Edge case handling | PASS | Schema tests cover valid records, invalid bounds, corrupt persisted shapes, strict extra-field rejection, history score edges, invalid timestamps, and non-100 factor-weight rejection. |
+| Tests | PASS | `npm test -- src_impl/features/focus-identity/__tests__/focus-identity-schemas.test.ts --runInBand` = 11 passed. |
+| Integration with 2+ systems | PASS | Exported from `src_impl/features/focus-identity/index.ts` and mirrored wrappers in `src/features/focus-identity/{schemas.ts,types.ts}` for app-layer consumption. |
+
+**Files Changed (P2-01):**
+- `src_impl/features/focus-identity/schemas.ts`
+- `src_impl/features/focus-identity/types.ts`
+- `src_impl/features/focus-identity/index.ts`
+- `src_impl/features/focus-identity/__tests__/focus-identity-schemas.test.ts`
+- `src/features/focus-identity/schemas.ts`
+- `src/features/focus-identity/types.ts`
+- `src/features/focus-identity/__tests__/focus-identity-schemas.test.ts`
+
+**Edited-file Audits:**
+- Banned-pattern grep on edited files: PASS (no matches for suppressions, `any`, console usage, FlatList, StyleSheet, AsyncStorage, raw fetch, hardcoded hex/rgb).
+- File-size audit: PASS (all P2-01 edited files are under 200 lines; schema test is 194 lines).
+
+**P2-01 Verify Checklist:**
+- Schema tests cover valid, invalid, edge, and corrupt persisted data: PASS.
+- No hand-written duplicate schema types in the P2-01 schema-backed contracts: PASS.
+- Factor weights sum to exactly 100 percent in tests: PASS.
+- Score range is enforced at 300 to 850: PASS.
+
+**Verification Commands (P2-01):**
+```bash
+npm test -- src_impl/features/focus-identity/__tests__/focus-identity-schemas.test.ts --runInBand  # 11 PASS
+npm run typecheck -- --pretty false  # PASS
+npm run lint  # PASS
+edited-file banned pattern audits  # PASS, no matches
+edited-file file-size audit  # PASS, max P2-01 edited file 194 lines
+```
+
+**P2-01 Residual Risk:**
+- Feature-wide file-size audit still reports pre-existing oversized Focus Identity files, including `FocusIdentityEngine.ts`, `repository.ts`, `hooks.ts`, dashboard/components, and older tests. P2-01 did not edit those files because the task scope is the domain model contract; P2-02/P2-03 should split touched files before adding repository or algorithm behavior.
+
+### P2-02 - Focus Identity Repository
+
+| Category | Status | Evidence |
+|----------|--------|----------|
+| Domain models | PASS | Repository returns `FocusScoreRecord`, `FocusScoreHistoryPoint`, and `MonthlyFocusReportInput` contracts from P2-01 schemas. |
+| Validation | PASS | `repository-focus-score.schemas.ts` validates current rows, history rows, upsert input, append input, and month input. |
+| Service logic | PASS (not in scope) | P2-02 is repository persistence only; score business rules remain P2-03. |
+| Repository and persistence | PASS | `repository-focus-score.ts` implements all five required functions; Supabase migration `focus_identity_scores` applied to project `icnbpjkyupuqzuvwuvbk`; generated types include `focus_score_current` and `focus_score_history`. |
+| Event emission and handling | PASS (not in scope) | Event subscription/emission remains P2-04 scope. |
+| Analytics hooks | PASS (not in scope) | Analytics tracking remains P2-04 scope. |
+| UI implementation | PASS (not in scope) | Dashboard/widget UI remains P2-05/P2-06 scope. |
+| Loading states | PASS (not in scope) | No UI changed in P2-02. |
+| Empty states | PASS | `fetchCurrentFocusScore` returns `null` on empty current score; history returns `[]` for empty history. |
+| Error states | PASS | Supabase errors throw `FocusIdentityRepositoryError`; invalid rows reject through Zod. |
+| Retry and degraded states | PASS (not in scope) | Network retry/degraded UI is handled by hooks/UI in later tasks. |
+| Edge case handling | PASS | Tests cover empty current score, invalid current row, conflict fallback, invalid month, history error, and empty history. |
+| Tests | PASS | `npm test -- src_impl/features/focus-identity/__tests__/repository-focus-score.test.ts --runInBand` = 11 passed. |
+| Integration with 2+ systems | PASS | Repository integrates with Supabase persistence, session monthly aggregation, generated Supabase types, and Focus Score query hooks. |
+
+**Files Changed (P2-02):**
+- `src_impl/features/focus-identity/repository-focus-score.ts`
+- `src_impl/features/focus-identity/__tests__/repository-focus-score.test.ts`
+- `src_impl/types/supabase.ts`
+- `supabase/migrations/20260506_focus_identity_scores.sql`
+- `package.json`
+- `TASKSx.md`
+- `VERIFICATION_REPORT.md`
+
+**Verification Commands (P2-02):**
+```bash
+npm test -- src_impl/features/focus-identity/__tests__/repository-focus-score.test.ts --runInBand  # 11 PASS
+npm run typecheck -- --pretty false  # PASS
+npm run types:supabase  # PASS, generated src_impl/types/supabase.ts
+npm run lint  # PASS, 0 errors, 11 existing quote warnings in src focus-identity wrappers
+Supabase table/RLS verification queries  # PASS, both tables and 8 owner policies present
+Focus Score Supabase query outside repository audit  # PASS, no `.from("focus_score...")` outside repository files
+edited-file banned pattern audits  # PASS, no matches
+edited-file file-size audit  # PASS, repository is 200 lines and repository test is 159 lines
+```
+
+**P2-02 Verify Checklist:**
+- Repository tests cover success, empty, invalid shape, Supabase error, and conflict: PASS.
+- RLS policy exists for user-owned score data: PASS.
+- Supabase types regenerated after schema change: PASS.
+- No Focus Score Supabase query exists outside repository: PASS.
 
 ---
 

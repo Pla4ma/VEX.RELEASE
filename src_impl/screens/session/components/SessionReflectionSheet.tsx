@@ -6,7 +6,7 @@ import { useTheme } from '../../../theme';
 import { MOODS, type Mood } from '../utils';
 
 type SessionReflectionSheetProps = {
-  bottomSheetRef: React.RefObject<BottomSheet>;
+  bottomSheetRef: React.RefObject<BottomSheet | null>;
   onFinish: () => void;
   onSkip: () => void;
   reflection: string;

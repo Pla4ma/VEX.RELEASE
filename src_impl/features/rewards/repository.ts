@@ -9,6 +9,7 @@ import {
   type Reward,
   type RewardStatus,
 } from './schemas';
+import { v4 } from '../../utils/uuid';
 
 class RepositoryError extends Error {
   constructor(
@@ -75,7 +76,7 @@ export async function createReward(
   expiresAt: number | null
 ): Promise<Reward> {
   const newReward = {
-    id: crypto.randomUUID(),
+    id: v4(),
     user_id: userId,
     type,
     amount,
@@ -202,7 +203,7 @@ export async function recordLedgerEntry(
   const { error } = await supabase
     .from('reward_ledger')
     .insert({
-      id: crypto.randomUUID(),
+      id: v4(),
       reward_id: rewardId,
       action,
       timestamp: Date.now(),

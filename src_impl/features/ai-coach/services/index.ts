@@ -7,3 +7,4 @@
 export * from './notification-service';
 export * from './notification-permissions';
 export * from './CoachRecommendationService';
+export * from './memory-service';

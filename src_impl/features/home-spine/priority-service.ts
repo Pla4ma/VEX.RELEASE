@@ -284,7 +284,7 @@ async function buildHomeContextSnapshot(userId: string): Promise<HomeContextSnap
     timestamp: now,
 
     onboarding: {
-      isComplete: progressState?.status === "COMPLETED" ?? false,
+      isComplete: progressState?.status === "COMPLETED",
       firstSessionCompleted: progressState?.steps.firstSessionCompleted ?? false,
     },
 

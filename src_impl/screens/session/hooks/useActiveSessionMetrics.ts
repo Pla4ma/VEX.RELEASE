@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Easing,
   cancelAnimation,
@@ -93,11 +93,11 @@ export function useActiveSessionMetrics({
   const todayFocusSeconds = useMemo(() => {
     const dayStart = new Date();
     dayStart.setHours(0, 0, 0, 0);
-    const historical = history.reduce(
+    const historical = (history || []).reduce(
       (total, entry) => (entry.startedAt >= dayStart.getTime() ? total + (entry.summary?.effectiveDuration ?? 0) : total),
       0,
     );
-    return historical + (phase === 'FOCUS' ? elapsedSeconds : 0);
+    return (historical || 0) + (phase === 'FOCUS' ? (elapsedSeconds || 0) : 0);
   }, [elapsedSeconds, history, phase]);
   const animations = useSessionAnimations({ completionPercentage, purityScore, isActive, isPaused });
 
@@ -134,9 +134,19 @@ export function useActiveSessionMetrics({
     });
   }, [phase, purityLabel, visualState]);
 
-  useAnimatedReaction(() => visualState.value, (value) => {
-    runOnJS(setGradientState)(getGradientPalette(value));
-  });
+  const updateGradientState = useCallback((value: number) => {
+    setGradientState(getGradientPalette(value));
+  }, []);
+
+  useAnimatedReaction(
+    () => visualState.value,
+    (value, previousValue) => {
+      if (value === previousValue) {
+        return;
+      }
+      runOnJS(updateGradientState)(value);
+    }
+  );
 
   useEffect(() => {
     if (!sessionId || previousPurityLabelRef.current === purityLabel) {return;}
@@ -179,7 +189,7 @@ export function useActiveSessionMetrics({
   }));
 
   return {
-    dailyProgress: clamp((todayFocusSeconds / DAILY_GOAL_SECONDS) * 100, 0, 100),
+    dailyProgress: clamp(((todayFocusSeconds || 0) / (DAILY_GOAL_SECONDS || 7200)) * 100, 0, 100),
     glowStyle,
     gradientState,
     labelColor,

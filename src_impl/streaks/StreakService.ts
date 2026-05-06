@@ -1,5 +1,6 @@
 import { eventBus } from '../events';
 import { recordSession } from '../features/streaks/service';
+import { v4 } from '../utils/uuid';
 
 type LegacyStreakState = {
   currentStreak: number;
@@ -43,7 +44,7 @@ export function getStreakService(userId?: string): StreakService {
 
       const result = await recordSession({
         userId,
-        sessionId: crypto.randomUUID(),
+        sessionId: v4(),
         duration: 10 * 60,
         qualityScore: 80,
         completedAt: Date.now(),

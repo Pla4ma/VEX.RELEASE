@@ -195,13 +195,7 @@ export function deepLinkToNavigationParams(
 
     case 'invite':
       return {
-        screen: 'Main',
-        params: {
-          screen: 'Social',
-          params: {
-            inviteCode: link.params.code,
-          },
-        },
+        screen: 'Guild',
       };
 
     case 'study':

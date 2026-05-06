@@ -108,7 +108,7 @@ function GoalCard({
 /**
  * Goal selection screen
  */
-export function GoalScreen({ onSelect, onSkip }: GoalScreenProps): JSX.Element {
+export function GoalScreen({ onSelect, onSkip, onBack }: GoalScreenProps & { onBack?: () => void }): JSX.Element {
   const { theme } = useTheme();
   const [selectedGoal, setSelectedGoal] = useState<FocusGoal | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);
@@ -127,7 +127,18 @@ export function GoalScreen({ onSelect, onSkip }: GoalScreenProps): JSX.Element {
 
   return (
     <Box flex={1} bg="background.primary" px="lg" py="xl">
-      {/* Header */}
+      {/* Header with Back Button */}
+      <Box flexDirection="row" alignItems="center" mb="md">
+        {onBack && (
+          <Pressable onPress={onBack} style={{ marginRight: 12 }}>
+            <Box p="xs">
+              <Text variant="h3" color="text.secondary">‹</Text>
+            </Box>
+          </Pressable>
+        )}
+      </Box>
+
+      {/* Header Content */}
       <Animated.View entering={FadeIn.duration(400)}>
         <Box gap="sm" mb="xl">
           <Text variant="label" color="primary.500">

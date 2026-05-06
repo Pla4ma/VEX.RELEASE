@@ -4,12 +4,9 @@
  */
 
 import { getSupabaseClient } from '../../config/supabase';
-import {
-  ProgressionSchema,
-  XpEntrySchema,
-  type Progression,
-  type XpEntry,
-} from './schemas';
+import { ProgressionSchema, XpEntrySchema, type Progression, type XpEntry } from './schemas';
+import { v4 } from '../../utils/uuid';
+import { withResilience } from '../../utils/supabase-resilience';
 
 // ============================================================================
 // Error Handling
@@ -32,11 +29,14 @@ const supabase = getSupabaseClient();
 // ============================================================================
 
 export async function fetchProgression(userId: string): Promise<Progression | null> {
-  const { data, error } = await supabase
-    .from('progression')
-    .select('*')
-    .eq('user_id', userId)
-    .single();
+  const { data, error } = await withResilience(
+    supabase
+      .from('progression')
+      .select('*')
+      .eq('user_id', userId)
+      .single(),
+    { operation: 'fetchProgression' }
+  );
 
   if (error) {
     if (error.code === 'PGRST116') {
@@ -45,13 +45,14 @@ export async function fetchProgression(userId: string): Promise<Progression | nu
     throw new RepositoryError('fetchProgression', error);
   }
 
+  if (!data) return null;
   return ProgressionSchema.parse(data);
 }
 
 export async function createProgression(userId: string): Promise<Progression> {
   const now = Date.now();
   const newProgression = {
-    id: crypto.randomUUID(),
+    id: v4(),
     user_id: userId,
     level: 1,
     xp: 0,
@@ -62,11 +63,14 @@ export async function createProgression(userId: string): Promise<Progression> {
     updated_at: now,
   };
 
-  const { data, error } = await supabase
-    .from('progression')
-    .insert(newProgression)
-    .select()
-    .single();
+  const { data, error } = await withResilience(
+    supabase
+      .from('progression')
+      .insert(newProgression)
+      .select()
+      .single(),
+    { operation: 'createProgression', fallbackValue: newProgression }
+  );
 
   if (error) {
     throw new RepositoryError('createProgression', error);
@@ -85,15 +89,18 @@ export async function updateProgression(
     last_level_up_at: number | null;
   }>
 ): Promise<Progression> {
-  const { data, error } = await supabase
-    .from('progression')
-    .update({
-      ...updates,
-      updated_at: Date.now(),
-    })
-    .eq('user_id', userId)
-    .select()
-    .single();
+  const { data, error } = await withResilience(
+    supabase
+      .from('progression')
+      .update({
+        ...updates,
+        updated_at: Date.now(),
+      })
+      .eq('user_id', userId)
+      .select()
+      .single(),
+    { operation: 'updateProgression' }
+  );
 
   if (error) {
     throw new RepositoryError('updateProgression', error);
@@ -138,7 +145,7 @@ export async function recordXpEntry(
   entry: Omit<XpEntry, 'id' | 'userId'>
 ): Promise<XpEntry> {
   const newEntry = {
-    id: crypto.randomUUID(),
+    id: v4(),
     user_id: userId,
     amount: entry.amount,
     source: entry.source,
@@ -147,11 +154,14 @@ export async function recordXpEntry(
     created_at: entry.createdAt,
   };
 
-  const { data, error } = await supabase
-    .from('xp_history')
-    .insert(newEntry)
-    .select()
-    .single();
+  const { data, error } = await withResilience(
+    supabase
+      .from('xp_history')
+      .insert(newEntry)
+      .select()
+      .single(),
+    { operation: 'recordXpEntry', fallbackValue: newEntry }
+  );
 
   if (error) {
     throw new RepositoryError('recordXpEntry', error);
@@ -192,7 +202,7 @@ export async function recordLevelUp(
   const { error } = await supabase
     .from('level_up_history')
     .insert({
-      id: crypto.randomUUID(),
+      id: v4(),
       user_id: userId,
       level,
       achieved_at: Date.now(),

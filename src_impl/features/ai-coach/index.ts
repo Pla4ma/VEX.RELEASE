@@ -7,6 +7,8 @@
 // Types - from schemas.ts (which includes types inferred from Zod schemas)
 export * from './schemas';
 export * from './events';
+export * from './memory-schemas';
+export * from './memory-events';
 
 // Service layer
 export * as coachService from './service';
@@ -79,3 +81,4 @@ export {
   SessionSuggestionCard,
   type SessionSuggestionCardProps,
 } from './components/session-suggestion-card';
+export { MemoryList } from './components/MemoryList';

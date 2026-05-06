@@ -1,4 +1,5 @@
 import { captureSilentFailure } from '../../utils/silent-failure';
+import { v4 } from '../../utils/uuid';
 /**
  * Offline Queue System
  * Manages pending operations when connection is lost
@@ -52,7 +53,7 @@ export function enqueue(entry: OfflineQueueEntryInput): OfflineQueueEntry {
     retryCount: entry.retryCount ?? 0,
     maxRetries: entry.maxRetries ?? 3,
     priority: entry.priority ?? 'normal',
-    id: crypto.randomUUID(),
+    id: v4(),
     createdAt: Date.now(),
   };
 

@@ -8,6 +8,7 @@ import { withRetry, RepositoryError, RepositoryErrorCode } from "../../lib/repos
 import { enqueue } from "../../lib/offline/queue";
 import { getSupabaseClient } from "../../config/supabase";
 import { RewardSchema, RewardLedgerSchema, type Reward, type RewardLedger } from "./schemas";
+import { v4 } from "../../utils/uuid";
 
 const supabase = getSupabaseClient();
 
@@ -61,7 +62,7 @@ async function executeWithFallback<T>(operation: string, onlineFn: () => Promise
 
 export async function createRewardEnhanced(userId: string, type: string, amount: number | null, triggerType: string, triggerId: string | null, expiresAt: number | null): Promise<RepositoryResult<Reward>> {
   const newReward = {
-    id: crypto.randomUUID(),
+    id: v4(),
     user_id: userId,
     type,
     amount,
@@ -227,7 +228,7 @@ export async function recordLedgerEntryEnhanced(rewardId: string, action: string
     const { data, error } = await supabase
       .from("reward_ledger")
       .insert({
-        id: crypto.randomUUID(),
+        id: v4(),
         reward_id: rewardId,
         action,
         details,

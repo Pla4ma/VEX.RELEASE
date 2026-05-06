@@ -2,8 +2,11 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { StatusBanner } from '../../../shared/ui/components/StatusFeedback';
+import { FocusScoreHomeWidget } from "../../../features/focus-identity/components/focus-score-home-widget";
+import { useFocusScoreDashboardModel } from "../../../features/focus-identity/hooks-focus-score";
 import type { HomeCard } from '../../../features/home-spine/schemas';
 import type { CompletionSyncState } from '../../../store/session-state';
+import { useAuthStore } from '../../../store';
 import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
 import { ProgressPreviewCard, ReturnReasonCard } from '../HomeProgressiveBlocks';
 import { GradientStartButton } from '../HomeScreenVisuals';
@@ -35,6 +38,9 @@ export function HomePrimaryRail({
   progressSignal,
   returnReason,
 }: HomePrimaryRailProps): JSX.Element {
+  const userId = useAuthStore((state) => state.user?.id ?? null);
+  const focusModel = useFocusScoreDashboardModel(userId, 30);
+
   return (
     <View style={{ gap: 16 }}>
       {!isOnline ? (
@@ -66,6 +72,13 @@ export function HomePrimaryRail({
         onPress={onStart}
         pulse={returnReason.source === 'completion-highlight' || returnReason.source === 'coach'}
         title={primaryAction.title}
+      />
+      <FocusScoreHomeWidget
+        model={focusModel}
+        onPress={onOpenProgress}
+        onRetry={() => {
+          void focusModel.refetch();
+        }}
       />
       <ProgressPreviewCard
         body={progressSignal.body}

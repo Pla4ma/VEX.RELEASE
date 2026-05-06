@@ -127,11 +127,7 @@ export class SessionOrchestrator {
       }
     }
   }
-  async startSession(config?: number | SessionConfig, countdownSeconds: number = 3): Promise<SessionState> {
-    // Handle config object passed from hook
-    if (config && typeof config === 'object') {
-      await this.createSession(config);
-    }
+  async startSession(countdownSeconds: number = 0): Promise<SessionState> {
     if (!this.session) {
       throw new Error('No active session');
     }
@@ -801,7 +797,21 @@ export class SessionOrchestrator {
     return this.getSession();
   }
 }
-export {
-  createSessionOrchestrator,
-  getSessionOrchestrator,
-} from './orchestrator-factory';
+let orchestratorInstance: SessionOrchestrator | null = null;
+
+/**
+ * Get the singleton instance of the SessionOrchestrator
+ */
+export function getSessionOrchestrator(config?: OrchestratorConfig): SessionOrchestrator {
+  if (!orchestratorInstance) {
+    orchestratorInstance = new SessionOrchestrator(config);
+  }
+  return orchestratorInstance;
+}
+
+/**
+ * Create a new instance of the SessionOrchestrator (for testing or isolation)
+ */
+export function createSessionOrchestrator(config?: OrchestratorConfig): SessionOrchestrator {
+  return new SessionOrchestrator(config);
+}

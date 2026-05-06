@@ -12,7 +12,7 @@
 import 'react-native-gesture-handler';
 import { AppRegistry } from 'react-native';
 import { name as appName } from './app.json';
-import { App } from './src/app/App';
+import { App } from './src/app_root/App';
 
 /**
  * Register the root component with the AppRegistry.
@@ -24,5 +24,5 @@ AppRegistry.registerComponent(appName, () => App);
  * Enable React DevTools integration in development
  */
 if (__DEV__) {
-  require('./src/app/bootstrap').bootstrapDevelopment();
+  require('./src/app_root/bootstrap').bootstrapDevelopment();
 }

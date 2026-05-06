@@ -8,6 +8,7 @@
  * - Progression (streak XP bonuses)
  */
 
+import { v4 } from "../../utils/uuid";
 import * as repository from "./repository";
 import { hasUsedStreakRestoreThisMonth } from "./restore-quest";
 import { RecordSessionInputSchema, UseShieldInputSchema, FreezeStreakInputSchema, RestoreStreakInputSchema, ComebackStateSchema, type Streak, type StreakSummary, type StreakMilestone, type StreakEngineResult, type RecordSessionInput, type UseShieldInput, type RestoreStreakInput, type ComebackState, type RiskLevel } from "./schemas";
@@ -180,7 +181,7 @@ export function checkMilestone(streakDays: number): StreakMilestone | null {
   }
 
   return {
-    id: crypto.randomUUID(),
+    id: v4(),
     days: streakDays,
     name: `${streakDays} Day Streak`,
     description: `Maintained focus for ${streakDays} consecutive days`,

@@ -14,6 +14,7 @@ import { z } from "zod";
 import { getMMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
 import { parseJsonWithSchema, stringifyJsonSafe } from "../../persistence/safe-json";
 import { createDebugger } from "../../utils/debug";
+import { v4 } from "../../utils/uuid";
 
 const debug = createDebugger("economy:offline-queue");
 
@@ -149,7 +150,7 @@ class OfflineQueue {
     const now = Date.now();
     const newEntry: QueueEntry = {
       ...entry,
-      id: crypto.randomUUID(),
+      id: v4(),
       status: "PENDING",
       createdAt: now,
       updatedAt: now,
