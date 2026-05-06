@@ -41,6 +41,7 @@ export async function orchestrateSessionCompletion(
     offlineSyncStatus: isOnline ? 'synced' : 'pending_sync',
     sessionId: parsed.sessionId,
     summary,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC',
     userId: parsed.userId,
   });
   const key = ledger.idempotencyKey;

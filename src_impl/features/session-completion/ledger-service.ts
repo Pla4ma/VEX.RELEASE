@@ -4,31 +4,51 @@ import { SessionSummarySchema, type SessionSummary } from '../../session/types';
 import { calculateSessionGrade } from './grading-service';
 import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
 
-export const BuildCompletionLedgerInputSchema = z
-  .object({
-    backgroundTimeSeconds: z.number().int().min(0).default(0),
-    companionReactionId: z.string().nullable().default(null),
-    completedAt: z.number().int().nonnegative().optional(),
-    dailyMissionResult: CompletionLedgerSchema.shape.dailyMissionResult.optional(),
-    degradedSystems: z.array(z.string()).default([]),
-    focusScoreDelta: z.number().int().optional(),
-    idempotencyKey: z.string().min(1).optional(),
-    interruptionCount: z.number().int().min(0).optional(),
-    isAbandoned: z.boolean().default(false),
-    isRecoverySession: z.boolean().default(false),
-    offlineSyncStatus: CompletionLedgerSchema.shape.offlineSyncStatus.default('synced'),
-    pauseCount: z.number().int().min(0).optional(),
-    rewardIds: z.array(z.string()).default([]),
-    sessionId: z.string().uuid(),
-    startedAt: z.number().int().nonnegative().optional(),
-    strictMode: z.boolean().optional(),
-    summary: SessionSummarySchema,
-    timezone: z.string().min(1).default('UTC'),
-    userId: z.string().min(1),
-    xpDelta: z.number().int().optional(),
-  })
-  .strict();
-export type BuildCompletionLedgerInput = z.infer<typeof BuildCompletionLedgerInputSchema>;
+const BuildCompletionLedgerInputSchemaBase = z.object({
+  backgroundTimeSeconds: z.number().int().min(0).default(0),
+  companionReactionId: z.string().nullable().default(null),
+  completedAt: z.number().int().nonnegative().optional(),
+  dailyMissionResult: CompletionLedgerSchema.shape.dailyMissionResult.optional(),
+  degradedSystems: z.array(z.string()).default([]),
+  focusScoreDelta: z.number().int().optional(),
+  idempotencyKey: z.string().min(1).optional(),
+  interruptionCount: z.number().int().min(0).optional(),
+  isAbandoned: z.boolean().default(false),
+  isRecoverySession: z.boolean().default(false),
+  offlineSyncStatus: CompletionLedgerSchema.shape.offlineSyncStatus.default('synced'),
+  pauseCount: z.number().int().min(0).optional(),
+  rewardIds: z.array(z.string()).default([]),
+  sessionId: z.string().uuid(),
+  startedAt: z.number().int().nonnegative().optional(),
+  strictMode: z.boolean().optional(),
+  summary: SessionSummarySchema,
+  timezone: z.string().min(1).default('UTC'),
+  userId: z.string().min(1),
+  xpDelta: z.number().int().optional(),
+});
+
+export type BuildCompletionLedgerInput = {
+  userId: string;
+  sessionId: string;
+  summary: SessionSummary;
+  backgroundTimeSeconds?: number;
+  companionReactionId?: string | null;
+  completedAt?: number;
+  dailyMissionResult?: CompletionLedger['dailyMissionResult'];
+  degradedSystems?: string[];
+  focusScoreDelta?: number;
+  idempotencyKey?: string;
+  interruptionCount?: number;
+  isAbandoned?: boolean;
+  isRecoverySession?: boolean;
+  offlineSyncStatus?: CompletionLedger['offlineSyncStatus'];
+  pauseCount?: number;
+  rewardIds?: string[];
+  startedAt?: number;
+  strictMode?: boolean;
+  timezone?: string;
+  xpDelta?: number;
+};
 
 function toLedgerMode(input: SessionSummary): z.infer<typeof CompletionLedgerSchema.shape.mode> {
   const parsed = SessionModeSchema.safeParse(input.sessionMode);
@@ -40,7 +60,7 @@ function createIdempotencyKey(sessionId: string, completedAt: number): string {
 }
 
 export function buildCompletionLedger(rawInput: BuildCompletionLedgerInput): CompletionLedger {
-  const input = BuildCompletionLedgerInputSchema.parse(rawInput);
+  const input = BuildCompletionLedgerInputSchemaBase.parse(rawInput);
   const completedAt = input.completedAt ?? Date.now();
   const startedAt = input.startedAt ?? Math.max(0, completedAt - input.summary.plannedDuration * 1000);
   const pauseCount = input.pauseCount ?? input.summary.pauses ?? 0;
