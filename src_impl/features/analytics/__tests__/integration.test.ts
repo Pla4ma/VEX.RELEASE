@@ -1,0 +1,295 @@
+/**
+ * Analytics Integration Tests
+ * Tests for cross-system integration and coordination
+ */
+
+import { trackSessionCompleted, syncAnalyticsData, getRealtimeAnalytics, trackBossEncounter, trackItemCrafted, initializeAnalytics } from "../integration";
+import * as repository from "../repository";
+import { eventBus } from "../../../events";
+import * as Sentry from "@sentry/react-native";
+
+// Mock dependencies
+jest.mock("../repository");
+jest.mock("../service", () => ({
+  generateInsights: jest.fn().mockResolvedValue([]),
+}));
+jest.mock("../../../events", () => ({
+  eventBus: {
+    publish: jest.fn(),
+  },
+}));
+jest.mock("@sentry/react-native", () => ({
+  addBreadcrumb: jest.fn(),
+  captureException: jest.fn(),
+}));
+
+describe("AnalyticsIntegration", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date("2024-01-15T12:00:00Z"));
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  describe("trackSessionCompleted", () => {
+    it("should track session and emit events", async () => {
+      (repository.bulkInsertAnalyticsEvents as jest.Mock).mockResolvedValue(undefined);
+
+      await trackSessionCompleted("user-123", {
+        sessionId: "session-1",
+        duration: 1800,
+        xpEarned: 100,
+        quality: 85,
+        streakDay: 3,
+        bossActive: false,
+      });
+
+      expect(repository.bulkInsertAnalyticsEvents).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            user_id: "user-123",
+            metric_type: "sessions_completed",
+            value: 1,
+          }),
+          expect.objectContaining({
+            user_id: "user-123",
+            metric_type: "xp_earned",
+            value: 100,
+          }),
+        ]),
+      );
+
+      expect(eventBus.publish).toHaveBeenCalledWith(
+        "analytics:data_refreshed",
+        expect.objectContaining({
+          userId: "user-123",
+        }),
+      );
+
+      expect(Sentry.addBreadcrumb).toHaveBeenCalled();
+    });
+
+    it("should prevent duplicate processing", async () => {
+      (repository.bulkInsertAnalyticsEvents as jest.Mock).mockResolvedValue(undefined);
+
+      const sessionData = {
+        sessionId: "session-1",
+        duration: 1800,
+        xpEarned: 100,
+        quality: 85,
+        streakDay: 3,
+        bossActive: false,
+      };
+
+      await trackSessionCompleted("user-123", sessionData);
+      await trackSessionCompleted("user-123", sessionData);
+
+      expect(repository.bulkInsertAnalyticsEvents).toHaveBeenCalledTimes(1);
+    });
+
+    it("should handle errors gracefully", async () => {
+      (repository.bulkInsertAnalyticsEvents as jest.Mock).mockRejectedValue(new Error("Database error"));
+
+      await expect(
+        trackSessionCompleted("user-123", {
+          sessionId: "session-1",
+          duration: 1800,
+          xpEarned: 100,
+          quality: 85,
+          streakDay: 3,
+          bossActive: false,
+        }),
+      ).rejects.toThrow("Database error");
+
+      expect(Sentry.captureException).toHaveBeenCalled();
+    });
+  });
+
+  describe("syncAnalyticsData", () => {
+    it("should sync all data successfully", async () => {
+      (repository.fetchAggregatedStats as jest.Mock).mockResolvedValue({
+        metrics: { sessions_completed: { value: 5 } },
+      });
+      (repository.fetchInsights as jest.Mock).mockResolvedValue([]);
+      (repository.fetchDetectedPatterns as jest.Mock).mockResolvedValue([]);
+
+      const result = await syncAnalyticsData("user-123");
+
+      expect(result.success).toBe(true);
+      expect(result.synced).toBe(1);
+      expect(result.failed).toBe(0);
+      expect(result.errors).toHaveLength(0);
+
+      expect(eventBus.publish).toHaveBeenCalledWith("network:sync:complete", expect.any(Object));
+    });
+
+    it("should handle partial failures", async () => {
+      (repository.fetchAggregatedStats as jest.Mock).mockRejectedValue(new Error("Stats error"));
+      (repository.fetchInsights as jest.Mock).mockResolvedValue([]);
+      (repository.fetchDetectedPatterns as jest.Mock).mockRejectedValue(new Error("Patterns error"));
+
+      const result = await syncAnalyticsData("user-123");
+
+      expect(result.success).toBe(false);
+      expect(result.synced).toBe(0);
+      expect(result.failed).toBe(2);
+      expect(result.errors).toHaveLength(2);
+    });
+
+    it("should handle complete failure", async () => {
+      (repository.fetchAggregatedStats as jest.Mock).mockRejectedValue(new Error("Connection lost"));
+      (repository.fetchInsights as jest.Mock).mockRejectedValue(new Error("Connection lost"));
+      (repository.fetchDetectedPatterns as jest.Mock).mockRejectedValue(new Error("Connection lost"));
+
+      const result = await syncAnalyticsData("user-123");
+
+      expect(result.success).toBe(false);
+      expect(result.failed).toBeGreaterThan(0);
+      expect(Sentry.captureException).toHaveBeenCalled();
+    });
+  });
+
+  describe("getRealtimeAnalytics", () => {
+    it("should fetch fresh data when cache is stale", async () => {
+      (repository.fetchAggregatedStats as jest.Mock).mockResolvedValue({
+        metrics: {
+          sessions_completed: { value: 5 },
+          xp_earned: { value: 500 },
+          total_focus_time: { value: 3600 },
+          streak_days: { value: 7 },
+        },
+      });
+      (repository.fetchInsights as jest.Mock).mockResolvedValue([
+        {
+          id: "insight-1",
+          type: "milestone",
+          title: "7 Day Streak!",
+          severity: "celebration",
+        },
+      ]);
+
+      const result = await getRealtimeAnalytics("user-123");
+
+      expect(result.today.sessions).toBe(5);
+      expect(result.today.xp).toBe(500);
+      expect(result.today.focusTime).toBe(3600);
+      expect(result.streak).toBe(7);
+      expect(result.recentInsights).toHaveLength(1);
+    });
+
+    it("should return fallback data on error", async () => {
+      (repository.fetchAggregatedStats as jest.Mock).mockRejectedValue(new Error("Database error"));
+      (repository.fetchInsights as jest.Mock).mockRejectedValue(new Error("Database error"));
+
+      const result = await getRealtimeAnalytics("user-123");
+
+      expect(result.today.sessions).toBe(0);
+      expect(result.today.xp).toBe(0);
+      expect(result.streak).toBe(0);
+      expect(result.recentInsights).toHaveLength(0);
+
+      expect(Sentry.captureException).toHaveBeenCalled();
+    });
+  });
+
+  describe("trackBossEncounter", () => {
+    it("should track boss damage and generate insights on win", async () => {
+      const { generateInsights } = jest.requireMock("../service");
+      (repository.bulkInsertAnalyticsEvents as jest.Mock).mockResolvedValue(undefined);
+
+      await trackBossEncounter("user-123", {
+        bossId: "boss-1",
+        damageDealt: 1500,
+        won: true,
+        duration: 600,
+      });
+
+      expect(repository.bulkInsertAnalyticsEvents).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            user_id: "user-123",
+            metric_type: "boss_damage_dealt",
+            value: 1500,
+          }),
+        ]),
+      );
+
+      expect(generateInsights).toHaveBeenCalledWith("user-123");
+      expect(eventBus.publish).toHaveBeenCalled();
+    });
+
+    it("should not generate insights on loss", async () => {
+      const { generateInsights } = jest.requireMock("../service");
+      (repository.bulkInsertAnalyticsEvents as jest.Mock).mockResolvedValue(undefined);
+
+      await trackBossEncounter("user-123", {
+        bossId: "boss-1",
+        damageDealt: 500,
+        won: false,
+        duration: 300,
+      });
+
+      expect(generateInsights).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("trackItemCrafted", () => {
+    it("should track item crafting and coin spending", async () => {
+      (repository.bulkInsertAnalyticsEvents as jest.Mock).mockResolvedValue(undefined);
+
+      await trackItemCrafted("user-123", {
+        itemId: "item-1",
+        rarity: "epic",
+        coinsSpent: 500,
+      });
+
+      expect(repository.bulkInsertAnalyticsEvents).toHaveBeenCalledWith(
+        expect.arrayContaining([
+          expect.objectContaining({
+            user_id: "user-123",
+            metric_type: "items_crafted",
+            value: 1,
+          }),
+          expect.objectContaining({
+            user_id: "user-123",
+            metric_type: "coins_spent",
+            value: 500,
+          }),
+        ]),
+      );
+    });
+  });
+
+  describe("initializeAnalytics", () => {
+    it("should initialize successfully with data", async () => {
+      (repository.fetchAggregatedStats as jest.Mock).mockResolvedValue({
+        metrics: {
+          sessions_completed: { value: 5 },
+          xp_earned: { value: 500 },
+          streak_days: { value: 7 },
+        },
+      });
+      (repository.fetchInsights as jest.Mock).mockResolvedValue([]);
+      (repository.fetchDetectedPatterns as jest.Mock).mockResolvedValue([]);
+
+      const result = await initializeAnalytics("user-123");
+
+      expect(result.success).toBe(true);
+      expect(result.initialData).toBeDefined();
+      expect(result.initialData?.todayStats.sessions).toBe(5);
+      expect(result.initialData?.streak).toBe(7);
+    });
+
+    it("should handle initialization failure", async () => {
+      (repository.fetchAggregatedStats as jest.Mock).mockRejectedValue(new Error("Database unavailable"));
+
+      const result = await initializeAnalytics("user-123");
+
+      expect(result.success).toBe(false);
+      expect(result.error).toContain("Database unavailable");
+    });
+  });
+});

@@ -1,0 +1,112 @@
+import {
+  SessionCompletionHeroSchema,
+  SessionCompletionNavigationParamsSchema,
+  SessionCompletionReturnPlanSchema,
+  type SessionCompletionHero,
+  type SessionCompletionNavigationParams,
+  type SessionCompletionReturnPlan,
+} from './schemas';
+
+export { buildCompletionLedger, type BuildCompletionLedgerInput } from './ledger-service';
+export { calculateSessionGrade } from './grading-service';
+export type { SessionGradingInput, SessionGradingResult } from './grading-schemas';
+
+export function parseSessionCompletionParams(input: unknown): {
+  params: SessionCompletionNavigationParams | null;
+  warningMessage: string | null;
+} {
+  const result = SessionCompletionNavigationParamsSchema.safeParse(input);
+  if (result.success) {
+    return { params: result.data, warningMessage: null };
+  }
+
+  return {
+    params: null,
+    warningMessage:
+      'We could not restore the finished session summary, so we sent you back to a safe exit.',
+  };
+}
+
+export function buildSessionCompletionHero(input: {
+  focusedDurationLabel: string;
+  interruptions: number;
+  streakIncreased: boolean;
+}): SessionCompletionHero {
+  const { focusedDurationLabel, interruptions, streakIncreased } = input;
+  const title =
+    interruptions === 0
+      ? 'Clean finish. Rewards are landing now.'
+      : streakIncreased
+        ? 'Streak protected. Rewards are landing now.'
+        : 'Session complete. Rewards are landing now.';
+
+  return SessionCompletionHeroSchema.parse({
+    body: focusedDurationLabel,
+    eyebrow: 'Session Complete',
+    title,
+  });
+}
+
+export function buildSessionCompletionReturnPlan(input: {
+  completionPercentage: number;
+  hasStudyFollowUp: boolean;
+  streakDays: number;
+  streakIncreased: boolean;
+}): SessionCompletionReturnPlan {
+  const { completionPercentage, hasStudyFollowUp, streakDays, streakIncreased } =
+    input;
+
+  if (streakIncreased) {
+    return SessionCompletionReturnPlanSchema.parse({
+      highlightMessage:
+        "Home is primed with tomorrow's anchor so this win turns into a return plan.",
+      highlightTitle: `${streakDays}-day streak secured`,
+      highlightTone: 'celebration',
+      homeCtaLabel: 'See tomorrow plan',
+      nextSessionLabel: 'Bank another block',
+      returnReasonBody:
+        'Go home to see what this session unlocked and the simplest reason to return tomorrow.',
+      returnReasonTitle: 'Tomorrow already has a clear anchor',
+    });
+  }
+
+  if (hasStudyFollowUp) {
+    return SessionCompletionReturnPlanSchema.parse({
+      highlightMessage:
+        'Home will bring your active study plan back to the front so this session keeps compounding.',
+      highlightTitle: 'Study momentum saved',
+      highlightTone: 'info',
+      homeCtaLabel: 'Continue on home',
+      nextSessionLabel: 'Start another session',
+      returnReasonBody:
+        'Return home and keep moving through the plan while the material is still fresh.',
+      returnReasonTitle: 'Your study follow-up is already queued',
+    });
+  }
+
+  if (completionPercentage >= 100) {
+    return SessionCompletionReturnPlanSchema.parse({
+      highlightMessage:
+        'Home will show how this win changed today and what the next useful move is.',
+      highlightTitle: 'Session banked cleanly',
+      highlightTone: 'celebration',
+      homeCtaLabel: 'See next move',
+      nextSessionLabel: 'Bank another block',
+      returnReasonBody:
+        'Return home for the next best action and the progress signal from this finish.',
+      returnReasonTitle: 'This finish now points to the next one',
+    });
+  }
+
+  return SessionCompletionReturnPlanSchema.parse({
+    highlightMessage:
+      'Home will help you turn this partial win into a cleaner follow-up session.',
+    highlightTitle: 'Progress locked in',
+    highlightTone: 'info',
+    homeCtaLabel: 'Plan the next move',
+    nextSessionLabel: 'Start a recovery session',
+    returnReasonBody:
+      'Go home and take the next easiest session while the context is still warm.',
+    returnReasonTitle: 'The loop stays alive with one more clean rep',
+  });
+}

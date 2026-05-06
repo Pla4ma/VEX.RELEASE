@@ -1,5 +1,1 @@
-/**
- * Providers Export
- */
-
-export { AppProviders } from './AppProviders';
+export * from '../../../src_impl/app/providers/index';

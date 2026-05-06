@@ -1,8 +1,1 @@
-/**
- * Animation Hooks Export
- */
-
-export { useSpring, useSpringStyle } from './useSpring';
-export { useFade, useAutoFade } from './useFade';
-export { useSlide, type SlideDirection } from './useSlide';
-export { useScale, usePressableScale } from './useScale';
+export * from '../../../src_impl/animation/hooks/index';

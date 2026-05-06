@@ -1,6 +1,1 @@
-/**
- * Settings Components
- * UI components for settings screens
- */
-
-export { SettingsScreen } from './SettingsScreen';
+export * from '../../../../src_impl/features/settings/components/index';

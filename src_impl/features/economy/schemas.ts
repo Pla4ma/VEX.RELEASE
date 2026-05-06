@@ -1,0 +1,385 @@
+/**
+ * Economy Schemas
+ * Zod schemas for validation - all types inferred from here
+ */
+
+import { z } from "zod";
+
+// ============================================================================
+// Currency Schemas
+// ============================================================================
+
+export const CurrencyTypeSchema = z.enum(["COINS", "GEMS", "FOCUS_POINTS", "SEASONAL"]);
+
+export const CurrencyAmountSchema = z
+  .object({
+    currency: CurrencyTypeSchema,
+    amount: z.number().int().min(0),
+  })
+  .strict();
+
+// ============================================================================
+// Wallet Schemas
+// ============================================================================
+
+export const WalletSchema = z
+  .object({
+    id: z.string().uuid(),
+    userId: z.string().uuid(),
+    coins: z.number().int().min(0).default(0),
+    gems: z.number().int().min(0).default(0),
+    focusPoints: z.number().int().min(0).default(0),
+    seasonal: z.record(z.number().int().min(0)).default({}),
+    totalCoinsEarned: z.number().int().min(0).default(0),
+    totalCoinsSpent: z.number().int().min(0).default(0),
+    totalGemsEarned: z.number().int().min(0).default(0),
+    totalGemsSpent: z.number().int().min(0).default(0),
+    createdAt: z.number().int(),
+    updatedAt: z.number().int(),
+  })
+  .strict();
+
+export const WalletSummarySchema = z
+  .object({
+    coins: z.number().int().min(0),
+    gems: z.number().int().min(0),
+    focusPoints: z.number().int().min(0),
+    seasonal: z.record(z.number().int().min(0)).default({}),
+  })
+  .strict();
+
+// ============================================================================
+// Transaction Schemas
+// ============================================================================
+
+export const TransactionTypeSchema = z.enum(["EARN", "SPEND", "REFUND", "CONVERT", "GIFT_RECEIVE", "GIFT_SEND"]);
+
+export const TransactionSourceSchema = z.enum(["SESSION", "STREAK", "BOSS", "LEVEL_UP", "SHOP", "REWARD", "CRAFTING", "SQUAD", "DAILY_LOGIN", "ACHIEVEMENT", "FOCUS_POINTS", "PROMOTION", "REFUND"]);
+
+export const WalletTransactionSchema = z
+  .object({
+    id: z.string().uuid(),
+    walletId: z.string().uuid(),
+    userId: z.string().uuid(),
+    type: TransactionTypeSchema,
+    currency: CurrencyTypeSchema,
+    amount: z.number().int().positive(),
+    balanceBefore: z.number().int().min(0),
+    balanceAfter: z.number().int().min(0),
+    source: TransactionSourceSchema,
+    sourceId: z.string().uuid().nullable(),
+    description: z.string().min(1).max(500),
+    metadata: z.record(z.unknown()).nullable(),
+    createdAt: z.number().int(),
+  })
+  .strict();
+
+// ============================================================================
+// Earning Schemas
+// ============================================================================
+
+export const EarningMultiplierSchema = z
+  .object({
+    source: TransactionSourceSchema,
+    baseMultiplier: z.number().min(0.1).default(1),
+    levelBonus: z.number().min(0).default(0),
+    streakBonus: z.number().min(0).default(0),
+    squadBonus: z.number().min(0).default(0),
+    eventBonus: z.number().min(0).default(0),
+    totalMultiplier: z.number().min(0.1),
+  })
+  .strict();
+
+export const CalculateEarningsInputSchema = z
+  .object({
+    userId: z.string().uuid(),
+    source: TransactionSourceSchema,
+    baseAmount: z.number().int().positive(),
+    currency: CurrencyTypeSchema,
+    userLevel: z.number().int().min(1),
+    streakDays: z.number().int().min(0).optional(),
+    squadMultiplier: z.number().min(1).optional(),
+    eventMultiplier: z.number().min(1).optional(),
+    metadata: z.record(z.unknown()).optional(),
+  })
+  .strict();
+
+// ============================================================================
+// Spending Schemas
+// ============================================================================
+
+export const SpendingSinkSchema = z
+  .object({
+    id: z.string().uuid(),
+    type: z.enum(["SHOP", "CRAFTING", "UPGRADE", "GIFT", "CONVERT", "STREAK_INSURANCE", "STREAK_WAGER", "BOSS_BOUNTY"]),
+    currency: CurrencyTypeSchema,
+    baseAmount: z.number().int().positive(),
+    discountApplied: z.number().min(0).max(1).default(0),
+    finalAmount: z.number().int().positive(),
+    spentAt: z.number().int(),
+    metadata: z.record(z.unknown()).nullable(),
+  })
+  .strict();
+
+// ============================================================================
+// Purchase Flow Schemas
+// ============================================================================
+
+export const PurchaseStatusSchema = z.enum(["PENDING", "VALIDATING", "PROCESSING_PAYMENT", "DELIVERING", "COMPLETED", "FAILED", "REFUNDED", "PARTIAL_DELIVERY"]);
+
+export const PurchaseErrorCodeSchema = z.enum(["INSUFFICIENT_FUNDS", "ITEM_UNAVAILABLE", "PRICE_CHANGED", "INVENTORY_FULL", "NETWORK_ERROR", "SYSTEM_ERROR"]);
+
+export const PurchaseErrorSchema = z
+  .object({
+    code: PurchaseErrorCodeSchema,
+    message: z.string(),
+    recoverable: z.boolean(),
+  })
+  .strict();
+
+export const PurchaseAttemptSchema = z
+  .object({
+    id: z.string().uuid(),
+    userId: z.string().uuid(),
+    shopItemId: z.string().uuid(),
+    quantity: z.number().int().min(1).max(999),
+    unitPrice: CurrencyAmountSchema,
+    totalPrice: CurrencyAmountSchema,
+    status: PurchaseStatusSchema,
+    errorCode: PurchaseErrorCodeSchema.nullable(),
+    errorMessage: z.string().nullable(),
+    inventoryItemIds: z.array(z.string().uuid()).nullable(),
+    refundedAt: z.number().int().nullable(),
+    refundReason: z.string().nullable(),
+    createdAt: z.number().int(),
+    updatedAt: z.number().int(),
+  })
+  .strict();
+
+export const InitiatePurchaseInputSchema = z
+  .object({
+    userId: z.string().uuid(),
+    shopItemId: z.string().uuid(),
+    quantity: z.number().int().min(1).max(999).default(1),
+    expectedPrice: CurrencyAmountSchema.optional(), // For price validation
+  })
+  .strict();
+
+export const PurchaseResultSchema = z
+  .object({
+    success: z.boolean(),
+    purchaseId: z.string().uuid().nullable(),
+    inventoryItemIds: z.array(z.string().uuid()).nullable(),
+    error: PurchaseErrorSchema.nullable(),
+    remainingBalance: CurrencyAmountSchema.nullable(),
+  })
+  .strict();
+
+// ============================================================================
+// Refund Schemas
+// ============================================================================
+
+export const RefundStatusSchema = z.enum(["PENDING", "APPROVED", "REJECTED", "PROCESSED"]);
+
+export const RefundRequestSchema = z
+  .object({
+    id: z.string().uuid(),
+    purchaseId: z.string().uuid(),
+    userId: z.string().uuid(),
+    reason: z.string().min(1).max(500),
+    status: RefundStatusSchema,
+    requestedAt: z.number().int(),
+    processedAt: z.number().int().nullable(),
+    refundAmount: CurrencyAmountSchema.nullable(),
+    itemsRecovered: z.boolean().default(false),
+  })
+  .strict();
+
+export const ProcessRefundInputSchema = z
+  .object({
+    refundRequestId: z.string().uuid(),
+    approved: z.boolean(),
+    adminId: z.string().uuid(),
+    notes: z.string().max(1000).optional(),
+  })
+  .strict();
+
+// ============================================================================
+// Currency Conversion Schemas
+// ============================================================================
+
+export const CurrencyConversionSchema = z
+  .object({
+    id: z.string().uuid(),
+    userId: z.string().uuid(),
+    fromCurrency: CurrencyTypeSchema,
+    fromAmount: z.number().int().positive(),
+    toCurrency: CurrencyTypeSchema,
+    toAmount: z.number().int().positive(),
+    exchangeRate: z.number().positive(),
+    fee: z.number().int().min(0).default(0),
+    createdAt: z.number().int(),
+  })
+  .strict();
+
+export const ConvertCurrencyInputSchema = z
+  .object({
+    userId: z.string().uuid(),
+    fromCurrency: CurrencyTypeSchema,
+    fromAmount: z.number().int().positive(),
+    toCurrency: CurrencyTypeSchema,
+  })
+  .strict();
+
+// ============================================================================
+// Offer Schemas
+// ============================================================================
+
+export const OfferTypeSchema = z.enum(["FLASH_SALE", "BUNDLE", "DAILY_DEAL", "FIRST_PURCHASE", "VIP_EXCLUSIVE", "SEASONAL"]);
+
+export const OfferStatusSchema = z.enum(["SCHEDULED", "ACTIVE", "EXPIRED", "SOLD_OUT"]);
+
+export const LimitedOfferSchema = z
+  .object({
+    id: z.string().uuid(),
+    type: OfferTypeSchema,
+    name: z.string().min(1).max(100),
+    description: z.string().max(500),
+    itemIds: z.array(z.string().uuid()),
+    bonusItemIds: z.array(z.string().uuid()).default([]),
+    originalPrice: CurrencyAmountSchema,
+    discountedPrice: CurrencyAmountSchema,
+    discountPercent: z.number().min(0).max(100),
+    status: OfferStatusSchema,
+    startAt: z.number().int(),
+    endAt: z.number().int(),
+    maxPurchases: z.number().int().positive().nullable(),
+    currentPurchases: z.number().int().min(0).default(0),
+    minLevel: z.number().int().min(1).default(1),
+    maxLevel: z.number().int().min(1).nullable(),
+    requiredItems: z.array(z.string().uuid()).default([]),
+    excludedItems: z.array(z.string().uuid()).default([]),
+    badgeText: z.string().max(50).nullable(),
+    timerDisplay: z.boolean().default(true),
+    priority: z.number().int().default(0),
+    createdAt: z.number().int(),
+  })
+  .strict();
+
+export const UserOfferClaimSchema = z
+  .object({
+    id: z.string().uuid(),
+    offerId: z.string().uuid(),
+    userId: z.string().uuid(),
+    purchaseId: z.string().uuid(),
+    claimedAt: z.number().int(),
+  })
+  .strict();
+
+export const CheckOfferEligibilityInputSchema = z
+  .object({
+    offerId: z.string().uuid(),
+    userId: z.string().uuid(),
+    userLevel: z.number().int().min(1),
+    ownedItemIds: z.array(z.string().uuid()),
+  })
+  .strict();
+
+// ============================================================================
+// Price History Schemas
+// ============================================================================
+
+export const PricePointSchema = z
+  .object({
+    timestamp: z.number().int(),
+    price: CurrencyAmountSchema,
+    reason: z.string().max(200).nullable(),
+  })
+  .strict();
+
+// ============================================================================
+// Service Input Schemas
+// ============================================================================
+
+export const AddCurrencyInputSchema = z
+  .object({
+    userId: z.string().uuid(),
+    currency: CurrencyTypeSchema,
+    amount: z.number().int().positive(),
+    source: TransactionSourceSchema,
+    sourceId: z.string().uuid().optional(),
+    description: z.string().min(1).max(500),
+    metadata: z.record(z.unknown()).optional(),
+    skipEvents: z.boolean().default(false).optional(),
+  })
+  .strict()
+  .transform((data) => ({
+    ...data,
+    skipEvents: data.skipEvents ?? false,
+  }));
+
+export const SpendCurrencyInputSchema = z
+  .object({
+    userId: z.string().uuid(),
+    currency: CurrencyTypeSchema,
+    amount: z.number().int().positive(),
+    sink: z.enum(["SHOP", "CRAFTING", "UPGRADE", "GIFT", "CONVERT", "STREAK_INSURANCE", "STREAK_WAGER", "BOSS_BOUNTY"]),
+    description: z.string().min(1).max(500),
+    metadata: z.record(z.unknown()).optional(),
+  })
+  .strict();
+
+export const GetBalanceInputSchema = z
+  .object({
+    userId: z.string().uuid(),
+    currency: CurrencyTypeSchema.optional(),
+  })
+  .strict();
+
+export const GetTransactionHistoryInputSchema = z
+  .object({
+    userId: z.string().uuid(),
+    currency: CurrencyTypeSchema.optional(),
+    source: TransactionSourceSchema.optional(),
+    startDate: z.number().int().optional(),
+    endDate: z.number().int().optional(),
+    limit: z.number().int().min(1).max(100).default(50),
+    offset: z.number().int().min(0).default(0),
+  })
+  .strict();
+
+// ============================================================================
+// Type Exports
+// ============================================================================
+
+export type CurrencyType = z.infer<typeof CurrencyTypeSchema>;
+export type CurrencyAmount = z.infer<typeof CurrencyAmountSchema>;
+export type Wallet = z.infer<typeof WalletSchema>;
+export type WalletSummary = z.infer<typeof WalletSummarySchema>;
+export type TransactionType = z.infer<typeof TransactionTypeSchema>;
+export type TransactionSource = z.infer<typeof TransactionSourceSchema>;
+export type WalletTransaction = z.infer<typeof WalletTransactionSchema>;
+export type EarningMultiplier = z.infer<typeof EarningMultiplierSchema>;
+export type CalculateEarningsInput = z.infer<typeof CalculateEarningsInputSchema>;
+export type SpendingSink = z.infer<typeof SpendingSinkSchema>;
+export type PurchaseStatus = z.infer<typeof PurchaseStatusSchema>;
+export type PurchaseErrorCode = z.infer<typeof PurchaseErrorCodeSchema>;
+export type PurchaseError = z.infer<typeof PurchaseErrorSchema>;
+export type PurchaseAttempt = z.infer<typeof PurchaseAttemptSchema>;
+export type InitiatePurchaseInput = z.infer<typeof InitiatePurchaseInputSchema>;
+export type PurchaseResult = z.infer<typeof PurchaseResultSchema>;
+export type RefundStatus = z.infer<typeof RefundStatusSchema>;
+export type RefundRequest = z.infer<typeof RefundRequestSchema>;
+export type ProcessRefundInput = z.infer<typeof ProcessRefundInputSchema>;
+export type CurrencyConversion = z.infer<typeof CurrencyConversionSchema>;
+export type ConvertCurrencyInput = z.infer<typeof ConvertCurrencyInputSchema>;
+export type OfferType = z.infer<typeof OfferTypeSchema>;
+export type OfferStatus = z.infer<typeof OfferStatusSchema>;
+export type LimitedOffer = z.infer<typeof LimitedOfferSchema>;
+export type UserOfferClaim = z.infer<typeof UserOfferClaimSchema>;
+export type CheckOfferEligibilityInput = z.infer<typeof CheckOfferEligibilityInputSchema>;
+export type PricePoint = z.infer<typeof PricePointSchema>;
+export type AddCurrencyInput = z.infer<typeof AddCurrencyInputSchema>;
+export type SpendCurrencyInput = z.infer<typeof SpendCurrencyInputSchema>;
+export type GetBalanceInput = z.infer<typeof GetBalanceInputSchema>;
+export type GetTransactionHistoryInput = z.infer<typeof GetTransactionHistoryInputSchema>;

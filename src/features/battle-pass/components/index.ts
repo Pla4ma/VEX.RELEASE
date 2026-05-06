@@ -1,7 +1,1 @@
-/**
- * Battle Pass Components - Barrel Export
- */
-
-export { BattlePassTrack } from './BattlePassTrack';
-export { PremiumPreview } from './PremiumPreview';
-export { BattlePassUrgencyBanner } from './BattlePassUrgencyBanner';
+export * from '../../../../src_impl/features/battle-pass/components/index';

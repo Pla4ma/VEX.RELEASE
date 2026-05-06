@@ -1,1 +1,1 @@
-export * from './RewardService';
+export * from '../../src_impl/rewards/index';

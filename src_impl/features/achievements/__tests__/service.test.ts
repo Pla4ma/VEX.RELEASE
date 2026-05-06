@@ -1,0 +1,368 @@
+/**
+ * Achievement Service Tests
+ *
+ * Tests for achievement progress tracking, unlock conditions, and reward logic.
+ */
+
+import { describe, it, expect, jest, beforeEach } from "@jest/globals";
+import * as service from "../service";
+import * as repository from "../repository";
+import { eventBus } from "../../../events";
+
+jest.mock("../repository");
+jest.mock("../../../events", () => ({
+  eventBus: {
+    publish: jest.fn(),
+    subscribe: jest.fn(),
+  },
+}));
+jest.mock("../../../shared/analytics/analytics-service", () => ({
+  capture: jest.fn(),
+}));
+jest.mock("../../../shared/analytics/analytics-events", () => ({
+  ProgressionEvents: {
+    ACHIEVEMENT_UNLOCKED: "achievement_unlocked",
+  },
+}));
+
+const mockedRepository = jest.mocked(repository);
+const mockedEventBus = jest.mocked(eventBus);
+
+const mockUserAchievement = (overrides = {}) => ({
+  userId: "user-1",
+  achievementId: "session-first",
+  progress: 0,
+  maxProgress: 1,
+  isUnlocked: false,
+  unlockedAt: undefined,
+  progressHistory: [],
+  ...overrides,
+});
+
+describe("updateAchievementProgress", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("returns an empty array when no achievements match the condition type", async () => {
+    const result = await service.updateAchievementProgress("user-1", "NONEXISTENT_CONDITION", 1);
+    expect(result).toEqual([]);
+    expect(mockedRepository.updateAchievementProgress).not.toHaveBeenCalled();
+  });
+
+  it("skips already-unlocked achievements", async () => {
+    mockedRepository.getUserAchievement.mockResolvedValue(mockUserAchievement({ isUnlocked: true }) as any);
+    mockedRepository.updateAchievementProgress.mockResolvedValue(null);
+
+    const result = await service.updateAchievementProgress("user-1", "SESSION_COMPLETE", 1);
+
+    expect(mockedRepository.updateAchievementProgress).not.toHaveBeenCalled();
+    expect(result).toEqual([]);
+  });
+
+  it("updates progress for a matching achievement", async () => {
+    mockedRepository.getUserAchievement.mockResolvedValue(null);
+    const updated = mockUserAchievement({ progress: 1, isUnlocked: false });
+    mockedRepository.updateAchievementProgress.mockResolvedValue(updated as any);
+
+    const result = await service.updateAchievementProgress("user-1", "SESSION_COMPLETE", 1);
+
+    expect(mockedRepository.updateAchievementProgress).toHaveBeenCalled();
+    expect(result.length).toBeGreaterThan(0);
+  });
+
+  it("unlocks a GREATER_THAN achievement when value meets target", async () => {
+    // 'session-first' requires SESSION_COMPLETE >= 1
+    mockedRepository.getUserAchievement.mockResolvedValue(null);
+    const unlockedAchievement = mockUserAchievement({
+      achievementId: "session-first",
+      progress: 1,
+      isUnlocked: true,
+      unlockedAt: Date.now(),
+    });
+    mockedRepository.updateAchievementProgress.mockImplementation(async (_userId, achievementId) => {
+      if (achievementId === "session-first") {
+        return unlockedAchievement as any;
+      }
+      return mockUserAchievement({ achievementId }) as any;
+    });
+
+    await service.updateAchievementProgress("user-1", "SESSION_COMPLETE", 1);
+
+    expect(mockedEventBus.publish).toHaveBeenCalledWith("achievement:unlocked", expect.objectContaining({ userId: "user-1", achievementId: "session-first" }));
+  });
+
+  it("emits economy event when achievement has coin reward", async () => {
+    mockedRepository.getUserAchievement.mockResolvedValue(null);
+    const unlockedAchievement = mockUserAchievement({
+      achievementId: "session-first",
+      progress: 1,
+      isUnlocked: true,
+      unlockedAt: Date.now(),
+    });
+    mockedRepository.updateAchievementProgress.mockImplementation(async (_userId, achievementId) => {
+      if (achievementId === "session-first") return unlockedAchievement as any;
+      return mockUserAchievement({ achievementId }) as any;
+    });
+
+    await service.updateAchievementProgress("user-1", "SESSION_COMPLETE", 1);
+
+    const economyCall = (mockedEventBus.publish as jest.Mock).mock.calls.find(([event]) => event === "economy:add-currency");
+    expect(economyCall).toBeDefined();
+  });
+
+  it("accumulates progress for CUMULATIVE achievements", async () => {
+    // 'session-10' requires cumulative SESSION_COMPLETE >= 10
+    const currentProgress = mockUserAchievement({
+      achievementId: "session-10",
+      progress: 8,
+      isUnlocked: false,
+    });
+    mockedRepository.getUserAchievement.mockImplementation(async (_userId, achievementId) => {
+      if (achievementId === "session-10") return currentProgress as any;
+      return null;
+    });
+    mockedRepository.updateAchievementProgress.mockImplementation(
+      async (_userId, achievementId, data) =>
+        ({
+          ...mockUserAchievement({ achievementId }),
+          ...data,
+        }) as any,
+    );
+
+    await service.updateAchievementProgress("user-1", "SESSION_COMPLETE", 1);
+
+    // progress for session-10 should have been passed as 8 + 1 = 9 (not yet unlocked)
+    const call = (mockedRepository.updateAchievementProgress as jest.Mock).mock.calls.find(([, id]) => id === "session-10");
+    expect(call).toBeDefined();
+    const updateData = call?.[2] as { progress: number; isUnlocked: boolean } | undefined;
+    expect(updateData?.progress).toBe(9);
+    expect(updateData?.isUnlocked).toBe(false);
+  });
+
+  it("unlocks a CUMULATIVE achievement when threshold is exactly reached", async () => {
+    // 'session-10' requires cumulative SESSION_COMPLETE >= 10, starting at progress 9
+    const currentProgress = mockUserAchievement({
+      achievementId: "session-10",
+      progress: 9,
+      isUnlocked: false,
+    });
+    mockedRepository.getUserAchievement.mockImplementation(async (_userId, achievementId) => {
+      if (achievementId === "session-10") return currentProgress as any;
+      return null;
+    });
+    mockedRepository.updateAchievementProgress.mockImplementation(
+      async (_userId, achievementId, data) =>
+        ({
+          ...mockUserAchievement({ achievementId }),
+          ...data,
+        }) as any,
+    );
+
+    await service.updateAchievementProgress("user-1", "SESSION_COMPLETE", 1);
+
+    const call = (mockedRepository.updateAchievementProgress as jest.Mock).mock.calls.find(([, id]) => id === "session-10");
+    const updateData = call?.[2] as { progress: number; isUnlocked: boolean } | undefined;
+    expect(updateData?.progress).toBe(10);
+    expect(updateData?.isUnlocked).toBe(true);
+
+    expect(mockedEventBus.publish).toHaveBeenCalledWith("achievement:unlocked", expect.objectContaining({ userId: "user-1", achievementId: "session-10" }));
+  });
+});
+
+describe("getAllAchievementsWithProgress", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockedRepository.getUserAchievement.mockResolvedValue(null);
+  });
+
+  it("returns all achievements with default progress of 0 when no user data", async () => {
+    const result = await service.getAllAchievementsWithProgress("user-1");
+    expect(result.length).toBeGreaterThan(0);
+    for (const a of result) {
+      expect(a.progress).toBe(0);
+      expect(a.isUnlocked).toBe(false);
+    }
+  });
+
+  it("merges user progress with achievement definitions", async () => {
+    mockedRepository.getUserAchievement.mockImplementation(async (_userId, achievementId) => {
+      if (achievementId === "session-first") {
+        return mockUserAchievement({
+          achievementId: "session-first",
+          progress: 1,
+          isUnlocked: true,
+        }) as any;
+      }
+      return null;
+    });
+
+    const result = await service.getAllAchievementsWithProgress("user-1");
+    const sessionFirst = result.find((a) => a.id === "session-first");
+    expect(sessionFirst?.progress).toBe(1);
+    expect(sessionFirst?.isUnlocked).toBe(true);
+  });
+});
+
+describe("getAchievementStats", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockedRepository.getUserAchievement.mockResolvedValue(null);
+  });
+
+  it("returns totals matching ALL_ACHIEVEMENTS length", async () => {
+    const stats = await service.getAchievementStats("user-1");
+    const { ALL_ACHIEVEMENTS } = require("../definitions");
+    expect(stats.total).toBe(ALL_ACHIEVEMENTS.length);
+    expect(stats.unlocked).toBe(0);
+  });
+
+  it("counts unlocked achievements correctly", async () => {
+    mockedRepository.getUserAchievement.mockImplementation(async (_userId, achievementId) => {
+      if (achievementId === "session-first") {
+        return mockUserAchievement({ achievementId: "session-first", isUnlocked: true }) as any;
+      }
+      return null;
+    });
+
+    const stats = await service.getAchievementStats("user-1");
+    expect(stats.unlocked).toBe(1);
+  });
+
+  it("groups achievements by category", async () => {
+    const stats = await service.getAchievementStats("user-1");
+    expect(typeof stats.byCategory).toBe("object");
+    expect(Object.keys(stats.byCategory).length).toBeGreaterThan(0);
+  });
+
+  it("groups achievements by rarity tier", async () => {
+    const stats = await service.getAchievementStats("user-1");
+    expect(typeof stats.byTier).toBe("object");
+    expect(Object.keys(stats.byTier).length).toBeGreaterThan(0);
+  });
+});
+
+describe("getCompletionPercentage", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockedRepository.getUserAchievement.mockResolvedValue(null);
+  });
+
+  it("returns 0 when no achievements are unlocked", async () => {
+    const pct = await service.getCompletionPercentage("user-1");
+    expect(pct).toBe(0);
+  });
+
+  it("returns a value between 0 and 100", async () => {
+    mockedRepository.getUserAchievement.mockImplementation(async (_userId, achievementId) => {
+      if (achievementId === "session-first") {
+        return mockUserAchievement({ achievementId: "session-first", isUnlocked: true }) as any;
+      }
+      return null;
+    });
+
+    const pct = await service.getCompletionPercentage("user-1");
+    expect(pct).toBeGreaterThan(0);
+    expect(pct).toBeLessThanOrEqual(100);
+  });
+});
+
+describe("getRecentlyUnlockedAchievements", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it("returns an empty array when no achievements are unlocked", async () => {
+    mockedRepository.getAllUserAchievements.mockResolvedValue([]);
+
+    const result = await service.getRecentlyUnlockedAchievements("user-1");
+    expect(result).toEqual([]);
+  });
+
+  it("returns unlocked achievements sorted by most recent", async () => {
+    const now = Date.now();
+    mockedRepository.getAllUserAchievements.mockResolvedValue([mockUserAchievement({ achievementId: "session-first", isUnlocked: true, unlockedAt: now - 1000 }) as any, mockUserAchievement({ achievementId: "session-10", isUnlocked: true, unlockedAt: now }) as any]);
+
+    const result = await service.getRecentlyUnlockedAchievements("user-1", 2);
+    expect(result.length).toBe(2);
+    expect(result[0]?.id).toBe("session-10"); // most recent first
+  });
+
+  it("respects the limit parameter", async () => {
+    const now = Date.now();
+    mockedRepository.getAllUserAchievements.mockResolvedValue([mockUserAchievement({ achievementId: "session-first", isUnlocked: true, unlockedAt: now }) as any, mockUserAchievement({ achievementId: "session-10", isUnlocked: true, unlockedAt: now - 1000 }) as any, mockUserAchievement({ achievementId: "session-50", isUnlocked: true, unlockedAt: now - 2000 }) as any]);
+
+    const result = await service.getRecentlyUnlockedAchievements("user-1", 2);
+    expect(result.length).toBe(2);
+  });
+});
+
+describe("getNextAchievements", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockedRepository.getUserAchievement.mockResolvedValue(null);
+  });
+
+  it("returns achievements with progress and percentComplete", async () => {
+    const result = await service.getNextAchievements("user-1", 3);
+    expect(result.length).toBeGreaterThan(0);
+    for (const a of result) {
+      expect(typeof a.percentComplete).toBe("number");
+      expect(typeof a.remaining).toBe("number");
+    }
+  });
+
+  it("does not include already-unlocked achievements", async () => {
+    mockedRepository.getUserAchievement.mockImplementation(async (_userId, achievementId) => {
+      if (achievementId === "session-first") {
+        return mockUserAchievement({ achievementId: "session-first", isUnlocked: true }) as any;
+      }
+      return null;
+    });
+
+    const result = await service.getNextAchievements("user-1", 50);
+    const sessionFirst = result.find((a) => a.id === "session-first");
+    expect(sessionFirst).toBeUndefined();
+  });
+
+  it("respects the limit parameter", async () => {
+    const result = await service.getNextAchievements("user-1", 2);
+    expect(result.length).toBeLessThanOrEqual(2);
+  });
+});
+
+describe("revealHiddenAchievement", () => {
+  it("returns proper info for a known achievement", () => {
+    // session-first is a visible achievement but we test the function with its id
+    const info = service.revealHiddenAchievement("session-first");
+    expect(info.name).not.toBe("???");
+    expect(info.description).not.toBe("Unknown achievement");
+    expect(info.icon).not.toBe("❓");
+  });
+
+  it("returns placeholder for unknown achievement id", () => {
+    const info = service.revealHiddenAchievement("nonexistent-id");
+    expect(info.name).toBe("???");
+    expect(info.description).toBe("Unknown achievement");
+    expect(info.icon).toBe("❓");
+  });
+});
+
+describe("initializeUserAchievements", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockedRepository.createUserAchievement.mockResolvedValue(null);
+  });
+
+  it("creates achievement records for each achievement", async () => {
+    const { ALL_ACHIEVEMENTS } = require("../definitions");
+    await service.initializeUserAchievements("user-1");
+    expect(mockedRepository.createUserAchievement).toHaveBeenCalledTimes(ALL_ACHIEVEMENTS.length);
+  });
+
+  it("initializes achievements with progress 0 and unlocked false", async () => {
+    await service.initializeUserAchievements("user-1");
+    const firstCall = (mockedRepository.createUserAchievement as jest.Mock).mock.calls[0];
+    expect(firstCall?.[2]).toMatchObject({ progress: 0, isUnlocked: false });
+  });
+});

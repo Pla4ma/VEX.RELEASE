@@ -1,15 +1,1 @@
-export {
-  submitContent,
-  extractContent,
-  generateStudyPlan,
-  getContentStatus,
-  submitFeedback,
-  uploadStudyFile,
-  deleteStudyFile,
-  fetchContentHistory,
-  fetchContentById,
-  fetchGenerationById,
-  updateContentText,
-  deleteContent,
-  pollContentStatus,
-} from './service';
+export * from '../../../src_impl/features/content-study/ContentStudyService';

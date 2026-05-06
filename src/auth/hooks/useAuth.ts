@@ -1,18 +1,2 @@
-/**
- * useAuth Hook Stub
- * Placeholder for authentication hook
- */
-
-export function useAuth() {
-  return {
-    user: null,
-    userId: null,
-    isAuthenticated: false,
-    isLoading: false,
-    login: async () => {},
-    logout: async () => {},
-    register: async () => {},
-  };
-}
-
-export default useAuth;
+export * from '../../../src_impl/auth/hooks/useAuth';
+export { default } from '../../../src_impl/auth/hooks/useAuth';

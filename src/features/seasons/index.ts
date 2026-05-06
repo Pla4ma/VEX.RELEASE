@@ -1,4 +1,1 @@
-export * from './schemas';
-export * from './repository';
-export * from './service';
-export * from './hooks';
+export * from '../../../src_impl/features/seasons/index';

@@ -1,1391 +1,2159 @@
-# VEX App — Production Tasks.md
-> **For Windsurf AI** · Every task is atomic, verifiable, and non-negotiable.
-> Generated after deep codebase + analysis review on May 4, 2026.
-> Stack: Expo SDK 54 · TypeScript strict · Supabase · TanStack Query v5 · Zustand · Reanimated 3 · MMKV · Zod
+# VEX 11/10 AI-IDE Implementation Plan
+
+> This document is written for Windsurf or any AI IDE implementing VEX.
+> It is not a human brainstorming roadmap.
+> Last updated: May 5, 2026.
+> Launch target: App Store submission by May 30, 2026.
+> Phase 0 status: COMPLETE. Do not reopen Phase 0. Do not create new cleanup debt.
 
 ---
 
-## HOW TO READ THIS FILE
+## Prime Directive
 
-- Tasks are grouped into **Phases** (P0 → P9), ordered by dependency.
-- Each task has a **WHY** (product rationale), **WHAT** (exact files/changes), and **VERIFY** (acceptance criteria).
-- Never mark a task ✅ until every VERIFY item passes.
-- Never skip a task to get to the "interesting" ones. Order matters.
-- If a VERIFY says "zero TypeScript errors", that means `npx tsc --noEmit` passes clean.
-- If a VERIFY says "tests pass", that means `jest --testPathPattern=<feature>` exits 0.
-- File size hard limit: **200 lines**. If you write past it, stop and split first.
-- No `any`, no `@ts-ignore`, no `TODO` as implementation, no logic in JSX, no `FlatList`, no hardcoded colors.
+VEX wins by shipping one world-class loop:
 
----
+`Open app -> see one best action -> start focus fast -> complete session -> see proof of growth -> know what to do next.`
 
-## PHASE 0 — CODEBASE HYGIENE & ANTI-SLOP FOUNDATION
-> *Nothing else can be built safely until this is clean.*
+The app becomes 11/10 through ruthless coherence, not through feature count.
 
-### P0-01 · TypeScript Strict Pass — Eliminate All Errors
-**WHY:** `npx tsc --noEmit` likely produces errors due to partial implementations across 37 active features. These are load-bearing bugs.
-**WHAT:**
-1. Run `npx tsc --noEmit 2>&1 | tee /tmp/ts-errors.log`. Count the errors.
-2. Fix all errors in this priority order:
-   - `src/features/focus-identity/` — main identity spine, must be clean first
-   - `src/features/session/` and `src/features/session-completion/` — critical flow
-   - `src/features/home-spine/` — entry point for every user
-   - `src/features/ai-coach/` — has multiple hook files that may have type drift
-   - `src/features/progression/` — service-enhanced-*.ts files likely have type issues
-   - All remaining features alphabetically
-3. Fix rules:
-   - Replace `any` with proper generic or inferred types
-   - Replace `as X` casts with validated parse boundaries + comment explaining why
-   - Add missing return types to all `async function` declarations
-   - Resolve all `noUncheckedIndexedAccess` violations by null-checking array access
-4. Do NOT suppress errors with `@ts-ignore` or `@ts-expect-error` without a written comment explaining why the proper fix is architecturally blocked.
-**VERIFY:**
-- [ ] `npx tsc --noEmit` exits with code 0 and zero output
-- [ ] `node scripts/check-no-ts-nocheck.js` exits with code 0
-- [ ] No new `any` types introduced (grep: `grep -r ": any" src/ --include="*.ts" --include="*.tsx"` returns zero results)
+Every implementation decision must protect these outcomes:
+
+1. The user always knows what to do now.
+2. A completed session visibly changes Focus Score, streak, companion, rewards, and next mission.
+3. Progress is never lost, including offline.
+4. Every screen feels complete in loading, empty, error, offline, disabled, and success states.
+5. Premium sells insight, personalization, and cosmetics, never fear.
+6. Disabled or weak systems are invisible at launch.
+7. The codebase stays clean enough that no second Phase 0 is needed.
+
+If a task conflicts with this directive, stop and revise the task before coding.
 
 ---
 
-### P0-02 · Lint Pass — Zero ESLint Errors
-**WHY:** Lint errors indicate structural violations that cause runtime bugs.
-**WHAT:**
-1. Run `npm run lint 2>&1 | tee /tmp/lint-errors.log`
-2. Fix all errors (not warnings). Focus areas:
-   - Unused imports and variables
-   - React hooks rules violations
-   - Missing dependency arrays in `useEffect` / `useCallback` / `useMemo`
-   - Any `console.log` calls (replace with Sentry breadcrumbs or remove)
-3. Do not use `// eslint-disable` to silence errors without comment.
-**VERIFY:**
-- [ ] `npm run lint` exits 0 with zero errors
-- [ ] `grep -r "console.log\|console.error\|console.warn" src/ --include="*.ts" --include="*.tsx"` returns zero results (Sentry is the logging layer)
+## Non-Negotiable Stack
+
+- Expo SDK 54 managed workflow.
+- TypeScript 5.x strict mode.
+- TanStack Query v5 for server state only.
+- Zustand for persistent client state only.
+- Zod schemas as source of truth.
+- React Navigation v6 with typed route params.
+- Reanimated 3 only for animations.
+- Supabase for Postgres, Auth, Realtime, and Storage.
+- MMKV for non-sensitive fast storage only.
+- SecureStore through the existing SecureStorage wrapper for secrets only.
+- Sentry for unexpected errors.
+- RevenueCat through `src/shared/monetization/` only.
+- Design tokens from `src/theme/tokens/` only.
+
+No new libraries without explicit owner approval.
 
 ---
 
-### P0-03 · Dead Code Audit — Remove or Archive Unused Exports
-**WHY:** Features that were partially implemented and then superseded still export dead code that confuses Windsurf and bloats the bundle.
-**WHAT:**
-1. Audit `src/features/` for files that are never imported anywhere:
-   ```bash
-   # Find files with no imports pointing to them
-   find src/features -name "*.ts" -o -name "*.tsx" | while read f; do
-     base=$(basename "$f" | sed 's/\.[^.]*$//');
-     if ! grep -r "$base" src/ --include="*.ts" --include="*.tsx" -l | grep -v "$f" | grep -q .; then
-       echo "ORPHAN: $f";
-     fi;
-   done
-   ```
-2. For each orphan file:
-   - If it's a legitimate feature still needed: add it to the integration map in its `service.ts`
-   - If it's superseded by a newer file: move to `archive/` with a `DEPRECATED.md` explaining what replaced it
-   - If it was never supposed to be built: delete it
-3. Files that should be checked specifically:
-   - `src/features/economy/EmergencyGemSinks.ts` — confirm this is either feature-flagged or archived (analysis flagged as dark pattern risk)
-   - `src/features/economy/TradingSystem.ts` — confirmed archive candidate per analysis
-   - `src/features/boss/BossBountySystem.ts` — ensure it's feature-flagged, not live
-   - `src/features/boss/WeeklyRaidSystem.ts` — ensure feature-flagged
-   - `src/features/boss/SquadBossSystem.ts` — ensure feature-flagged
-   - `src/features/streaks/streak-insurance.ts` — confirm this monetizes recovery not fear (see P5 for details)
-**VERIFY:**
-- [ ] Zero orphan files in `src/features/` (re-run the bash audit above)
-- [ ] `EmergencyGemSinks.ts` is either behind a `FEATURE_FLAGS.EMERGENCY_GEM_SINKS = false` flag or moved to archive
-- [ ] `TradingSystem.ts` is in archive
-- [ ] TypeScript still passes after deletions
+## AI IDE Operating Protocol
+
+Windsurf must follow this protocol for every task in this file.
+
+### Before Editing
+
+1. Read the task fully.
+2. Read `AGENTS.md`.
+3. Read only the relevant feature files.
+4. Identify the exact files that will be edited.
+5. Identify the exact tests that must be added or changed.
+6. Confirm every target file can stay under 200 lines after the edit.
+7. If a file would exceed 200 lines, split it before adding behavior.
+8. Write down the expected data flow:
+   `Component -> Hook -> Service -> Repository -> Supabase`.
+
+### During Editing
+
+1. Make the smallest complete change that satisfies the task.
+2. Do not repair unrelated issues.
+3. Do not move logic into JSX.
+4. Do not add placeholder implementations.
+5. Do not add "temporary" `any`, casts, suppressions, or console calls.
+6. Do not introduce new global patterns.
+7. Do not duplicate business logic across features.
+8. Validate all external data with Zod.
+9. Emit events for cross-system integration instead of direct cross-feature orchestration.
+
+### After Editing
+
+1. Run the task-specific tests.
+2. Run `npm run typecheck -- --pretty false`.
+3. Run targeted lint if available, otherwise run `npm run lint`.
+4. Re-run file-size audit for edited files.
+5. Grep edited files for banned patterns.
+6. Update the task checkbox only if every verification item passes.
+7. Add a short verification note to `VERIFICATION_REPORT.md` for the changed feature.
+
+### Stop Conditions
+
+Stop immediately and do not continue coding if:
+
+- A required file is missing and architecture is unclear.
+- A task requires a schema migration but Supabase types cannot be regenerated.
+- A file would exceed 200 lines and no clean split is obvious.
+- The change would require a new library.
+- A feature cannot meet loading, empty, error, offline, and success states.
+- A task would expose a disabled feature to users.
+- A TypeScript or lint error appears outside the edited scope and blocks verification.
+
+When stopped, write a blocker note in the task, including files inspected and the smallest safe next step.
 
 ---
 
-### P0-04 · File Size Enforcement — Split All Files Over 200 Lines
-**WHY:** The `.windsurfrules` hard limit exists. Oversize files mean mixed responsibilities and untestable code.
-**WHAT:**
-1. Find all violations:
-   ```bash
-   find src/ -name "*.ts" -o -name "*.tsx" | while read f; do
-     lines=$(wc -l < "$f");
-     if [ "$lines" -gt 200 ]; then echo "$lines $f"; fi;
-   done | sort -rn
-   ```
-2. Split each file. Rules for splitting:
-   - Types → `types.ts`
-   - Zod schemas → `schemas.ts`
-   - Business logic → `service.ts` or sub-services with descriptive names
-   - Supabase queries → `repository.ts`
-   - Hooks → `hooks.ts`
-   - Component internals → sub-components in `components/`
-3. Known large files likely needing splits (verify current state):
-   - `src/features/ai-coach/CoachMemory.ts`
-   - `src/features/ai-coach/PersonalQuestGenerator.ts`
-   - `src/features/ai-coach/PredictiveInterventionEngine.ts`
-   - `src/features/progression/service-enhanced.ts`
-   - `src/features/boss/AdaptiveDifficultyEngine.ts`
-   - `src/features/focus-identity/FocusIdentityEngine.ts`
-   - Any component file touching 200 lines
-**VERIFY:**
-- [ ] Zero files over 200 lines in `src/` (re-run the bash audit above)
-- [ ] TypeScript still passes after all splits
-- [ ] Tests still pass after all splits
+## Regression Firewall
+
+Phase 0 is complete. The rest of this plan must not create Phase 0 again.
+
+Every task has a regression budget of zero for:
+
+- TypeScript errors.
+- Lint errors.
+- `any`.
+- `@ts-ignore`, `@ts-nocheck`, or unexplained `@ts-expect-error`.
+- `console.*`.
+- `FlatList`.
+- `StyleSheet.create`.
+- raw `fetch()`.
+- `AsyncStorage`.
+- hardcoded colors, spacing, font sizes, or radii in components.
+- Supabase queries outside repository files.
+- business logic inside JSX.
+- new files above 200 lines.
+- dead navigation to disabled features.
+- user-visible happy-path-only UI.
+
+Required edited-file audit:
 
----
-
-### P0-05 · Dependency Audit — Confirm All Imports Resolve
-**WHY:** Features added during the transformation phases may import from paths that don't exist yet, causing runtime crashes.
-**WHAT:**
-1. Run Metro bundler dry-run: `npx expo export --platform ios --output-dir /tmp/expo-export-test 2>&1 | grep -i "error\|cannot find\|module not found"` (or equivalent)
-2. For every import resolution error: either create the missing file or fix the import path
-3. Ensure all `@/` path aliases resolve correctly per `tsconfig.json` paths
-4. Specifically verify these aliased features exist and export correctly:
-   - `@/events` → `src/events/index.ts`
-   - `@/utils/debug` → exists
-   - `@/session/types` → `src/features/session/types.ts`
-   - `@/features/boss/schemas` → `src/features/boss/schemas.ts`
-**VERIFY:**
-- [ ] Metro bundler resolves all imports without errors
-- [ ] `npx tsc --noEmit` still clean
-- [ ] App starts on simulator without any "module not found" red screens
-
----
-
-## PHASE 1 — FOCUS IDENTITY ENGINE (THE SPINE)
-> *This is the main identity system. Everything else in the app should reference or feed into it.*
-> *The analysis is correct: Focus Score is the right main spine. Do not archive it — deepen it.*
-
-### P1-01 · Focus Identity Engine — Complete Repository Layer
-**WHY:** `FocusIdentityEngine.ts` uses `MMKVStorageAdapter` for local storage but has no Supabase persistence layer. Score is lost on reinstall and cannot be synced to monthly reports.
-**WHAT:**
-Create `src/features/focus-identity/repository.ts` (if incomplete — audit first):
-```typescript
-// Dependencies: Supabase client, focus_identity_scores table
-// Consumers: FocusIdentityEngine, MonthlyReport, FocusScoreDashboard
-```
-Required functions (each must have explicit async return types + Zod validation of DB response):
-- `fetchFocusScore(userId: string): Promise<FocusScoreRecord | null>`
-- `upsertFocusScore(userId: string, score: FocusScoreRecord): Promise<void>`
-- `fetchScoreHistory(userId: string, days: number): Promise<FocusScoreHistoryPoint[]>`
-- `fetchMonthlyReportData(userId: string, year: number, month: number): Promise<MonthlyReportData | null>`
-- `saveMonthlyReportData(userId: string, data: MonthlyReportData): Promise<void>`
-
-Add Supabase table migration (document in `docs/brain/domain-model.md`):
-```sql
--- focus_identity_scores
-CREATE TABLE focus_identity_scores (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid REFERENCES users(id) ON DELETE CASCADE NOT NULL,
-  score numeric(5,1) NOT NULL DEFAULT 550,
-  consistency_score numeric(4,1) NOT NULL DEFAULT 0,
-  streak_stability_score numeric(4,1) NOT NULL DEFAULT 0,
-  session_quality_score numeric(4,1) NOT NULL DEFAULT 0,
-  diversity_score numeric(4,1) NOT NULL DEFAULT 0,
-  recency_score numeric(4,1) NOT NULL DEFAULT 0,
-  sessions_this_month integer NOT NULL DEFAULT 0,
-  last_calculated_at timestamptz,
-  created_at timestamptz NOT NULL DEFAULT now(),
-  updated_at timestamptz NOT NULL DEFAULT now(),
-  UNIQUE(user_id)
-);
-ALTER TABLE focus_identity_scores ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users manage own score" ON focus_identity_scores
-  USING (auth.uid() = user_id);
-```
-**VERIFY:**
-- [ ] `repository.ts` exists with all 5 functions
-- [ ] Each function validates its DB response with Zod `.parse()`
-- [ ] Each function reports errors to Sentry in the catch block
-- [ ] `src/features/focus-identity/__tests__/repository.test.ts` exists and tests: fetch success, fetch empty (no row), upsert creates + updates, error path with Sentry call
-- [ ] TypeScript clean
-
----
-
-### P1-02 · Focus Identity Engine — Wire Session Completion → Score Update
-**WHY:** The engine exists but it's not confirmed to be called on every session completion. This is the most critical integration in the app — without it, the whole identity spine is meaningless.
-**WHAT:**
-1. In `src/features/focus-identity/integration.ts` (create if missing), add:
-   ```typescript
-   // Dependencies: session:completed event, FocusIdentityEngine, repository
-   // Consumers: AppProviders bootstrap
-   export function initializeFocusIdentityIntegration(): () => void
-   ```
-   This function:
-   - Subscribes to `session:completed` on the EventBus
-   - Calls `FocusIdentityEngine.recordSession(sessionSummary)` 
-   - Persists the updated score via repository
-   - Emits `focus-identity:score_updated` event with `{ userId, previousScore, newScore, delta, factors }`
-   - Handles errors without crashing (Sentry capture + graceful fallback)
-
-2. Register `initializeFocusIdentityIntegration()` in `src/app/bootstrap.ts`
-
-3. Confirm `FocusIdentityEngine.recordSession()` correctly uses the 5-factor weighting:
-   - CONSISTENCY (35%) — based on `session.completedAt` vs daily goal
-   - STREAK_STABILITY (30%) — based on current streak length + history
-   - SESSION_QUALITY (15%) — based on `session.purityScore` + grade
-   - DIVERSITY (10%) — based on session mode variety over last 30 days
-   - RECENCY (10%) — recency-weighted completion rate
-
-4. Session grade → Focus Score contribution mapping:
-   ```
-   S-grade: +12 to +15 points (base 12 + quality bonus)
-   A-grade: +8 to +11 points
-   B-grade: +5 to +7 points
-   C-grade: +2 to +4 points
-   D-grade: +0 to +1 points (barely passing, still shows improvement)
-   ABANDONED: -25 to -50 points (harsh — creates intentionality)
-   MISSED_DAY: -15 to -35 points (based on streak state)
-   ```
-
-**VERIFY:**
-- [ ] Complete a mock session → `focus-identity:score_updated` event fires with correct delta
-- [ ] Score persists to Supabase (check repo test)
-- [ ] Score is recalculated correctly for each grade (unit test: `FocusIdentityEngine.test.ts` covers all grade cases)
-- [ ] `bootstrap.ts` calls `initializeFocusIdentityIntegration()`
-- [ ] TypeScript clean
-
----
-
-### P1-03 · Focus Score Dashboard — Complete All UI States
-**WHY:** `FocusScoreDashboard.tsx` exists but likely lacks all required states per `.windsurfrules`.
-**WHAT:**
-Audit `src/features/focus-identity/FocusScoreDashboard.tsx` and `src/features/focus-identity/components/`:
-
-Required states (create missing components — each sub-component ≤200 lines):
-1. **Loading state**: `FocusScoreDashboardSkeleton.tsx` — animated skeleton matching the full dashboard layout (score circle, factor bars, trend graph). Use Reanimated 3 shimmer. No spinner.
-2. **Empty state**: `FocusScoreDashboardEmpty.tsx` — for users with 0 sessions. Show the score at 550 with "Complete your first session to begin building your Focus Identity." CTA to start session.
-3. **Error state**: `FocusScoreDashboardError.tsx` — error message + "Try Again" button that calls the retry function from the hook.
-4. **Success/Full state** (already exists but audit): 
-   - Large score display (300-850) with animated count-up on load
-   - Score band label prominently displayed ("Disciplined", "Elite", etc.)
-   - Percentile: "You're in the top X% of VEX users"
-   - 5 factor breakdown bars with labels and percentages
-   - 30-day trend sparkline (simple line, no over-engineering)
-   - "What changed" section: last session's impact on score
-   - Monthly report CTA (premium gate if not subscribed)
-
-5. **Compact widget variant**: `FocusScoreWidget.tsx` for home screen — score number, band label, small trend arrow (up/down). Max 60 lines.
-
-All components:
-- Use design system tokens only (`shared/design/tokens.ts`)
-- All interactive elements have `accessibilityLabel` and `accessibilityRole`
-- Minimum 44×44pt touch targets
-**VERIFY:**
-- [ ] Dashboard renders loading skeleton before data loads
-- [ ] Dashboard renders empty state for userId with 0 sessions
-- [ ] Dashboard renders error state + retry when fetch fails
-- [ ] Dashboard renders full state with all 5 factor bars
-- [ ] `FocusScoreWidget.tsx` exists and renders in <3 lines of JSX from HomeScreen
-- [ ] `src/features/focus-identity/__tests__/FocusScoreDashboard.test.tsx` covers all 4 states
-- [ ] No hardcoded colors or sizes
-- [ ] TypeScript clean
-
----
-
-### P1-04 · Session Grading System — Formalize and Expose
-**WHY:** Session grading (S/A/B/C/D) is referenced throughout the codebase but may not be formally extracted as a standalone, testable service.
-**WHAT:**
-1. Create `src/features/session-completion/grading-service.ts`:
-   ```typescript
-   // Dependencies: session completion data
-   // Consumers: session-completion service, focus-identity integration, session-story
-   export type SessionGrade = 'S' | 'A' | 'B' | 'C' | 'D';
-   
-   export interface GradingInput {
-     durationCompletedSeconds: number;
-     targetDurationSeconds: number;
-     pauseCount: number;
-     backgroundTimeSeconds: number;
-     purityScore: number; // 0-100
-     focusInterruptions: number;
-     mode: SessionMode;
-     timeOfDay: 'MORNING' | 'AFTERNOON' | 'EVENING' | 'NIGHT';
-     isInPeakWindow: boolean;
-   }
-   
-   export interface GradingResult {
-     grade: SessionGrade;
-     gradeLabel: string; // "Deep Focus", "Strong Session", etc.
-     gradeScore: number; // 0-100 numeric equivalent
-     breakdown: {
-       completionFactor: number;  // Did user finish?
-       purityFactor: number;      // Purity score contribution
-       disciplineFactor: number;  // Pause/interruption penalty
-       bonusFactor: number;       // Peak window + no-pause bonus
-     };
-     focusScoreImpact: number; // Pre-calculated delta for FocusIdentityEngine
-     flavorText: string; // "Clean finish. No pauses." etc.
-   }
-   
-   export function calculateSessionGrade(input: GradingInput): GradingResult
-   ```
-
-2. Grade thresholds:
-   ```
-   S: completionFactor=100% + purityScore≥90 + pauseCount=0
-   A: completionFactor≥90% + purityScore≥75
-   B: completionFactor≥75% + purityScore≥50
-   C: completionFactor≥50% + purityScore≥25
-   D: completionFactor<50% OR purityScore<25 (but session marked complete)
-   ```
-
-3. Wire `calculateSessionGrade()` into `src/features/session-completion/service.ts` so every `buildCompletionLedger()` call includes the grade.
-
-4. Expose `grade` in `CompletionLedger` type and `SessionCompletionNavigationParams` so the PostSessionStoryScreen can display it.
-**VERIFY:**
-- [ ] `grading-service.ts` exists with `calculateSessionGrade()` 
-- [ ] `src/features/session-completion/__tests__/grading-service.test.ts` covers: S grade (perfect session), D grade (barely finished), all intermediate grades, mode-specific adjustments, peak window bonus
-- [ ] `CompletionLedger` includes `grade: SessionGrade`
-- [ ] PostSessionStoryScreen displays the grade
-- [ ] TypeScript clean
-
----
-
-### P1-05 · Home Screen — Wire Focus Score Widget
-**WHY:** The home screen's `GreetingHeader` shows level and streak but not the most important identity number: Focus Score.
-**WHAT:**
-1. Add `FocusScoreWidget` (from P1-03) to `HomeScreen.tsx` between `GreetingHeader` and the primary rail.
-2. The widget must:
-   - Pull score from `useFocusScore(userId)` hook
-   - Show loading skeleton while loading
-   - Be tappable → navigate to `FocusIdentityDashboard` screen
-   - Show subtle up/down arrow based on last session's delta
-3. Register `FocusIdentityDashboard` route in `navigation/types.ts` and add to `RootStackScreens.tsx`:
-   ```typescript
-   // In ExtendedRootStackParams:
-   FocusIdentityDashboard: undefined;
-   ```
-4. Create `src/screens/focus-identity/FocusIdentityDashboardScreen.tsx` — wraps `FocusScoreDashboard` with nav header.
-**VERIFY:**
-- [ ] Home screen renders FocusScoreWidget for authenticated users
-- [ ] Tapping widget navigates to FocusIdentityDashboardScreen
-- [ ] Widget shows skeleton during load, score when loaded
-- [ ] Route is typed in `ExtendedRootStackParams`
-- [ ] TypeScript clean
-
----
-
-## PHASE 2 — DAILY MISSION SYSTEM (THE DAILY HOOK)
-> *Users must always know "what should I do right now". This collapses all competing priorities into one clear action.*
-
-### P2-01 · Daily Mission Service — Build the Priority Engine
-**WHY:** The home-spine `priority-service.ts` exists but the Phase Audit Report flagged it as having no persistence layer, no loading states, and no tests. This is the core of D1/D7 retention.
-**WHAT:**
-1. Audit `src/features/home-spine/priority-service.ts` current state.
-2. Complete `src/features/home-spine/repository.ts` (create if missing):
-   ```typescript
-   // Dependencies: Supabase daily_missions table
-   // Consumers: priority-service, HomeScreen
-   ```
-   Functions needed:
-   - `fetchTodaysMission(userId: string): Promise<DailyMission | null>`
-   - `upsertTodaysMission(userId: string, mission: DailyMission): Promise<void>`
-   - `markMissionCompleted(userId: string, missionId: string): Promise<void>`
-   - `fetchMissionHistory(userId: string, days: number): Promise<DailyMission[]>`
-
-3. Mission priority logic in `priority-service.ts` (one mission per day, chosen by situation):
-   ```
-   Priority order (highest wins):
-   1. COMEBACK_QUEST — user missed 3+ days, comeback quest active
-   2. STREAK_CRITICAL — streak at risk (< 4 hours remaining)
-   3. BOSS_NEAR_DEFEAT — active boss with ≤ 20% HP remaining
-   4. NEW_USER — user has < 3 total sessions (first-week onboarding arc)
-   5. SQUAD_GOAL_CLOSE — squad ≥ 80% of weekly goal, user hasn't contributed today
-   6. STREAK_PROTECTION — streak at risk (< 12 hours remaining)
-   7. WEEKLY_BOSS — weekly boss exists and is active
-   8. DEFAULT — "Build your Focus Score" with AI-suggested duration/mode
-   ```
-
-4. Daily mission structure:
-   ```typescript
-   interface DailyMission {
-     id: string;
-     userId: string;
-     date: string; // YYYY-MM-DD
-     type: MissionType;
-     title: string;
-     description: string;
-     ctaLabel: string;
-     targetDurationSeconds: number;
-     targetMode: SessionMode | null;
-     completedAt: string | null;
-     expiresAt: string; // midnight local time
-     urgencyLevel: 'HIGH' | 'MEDIUM' | 'LOW';
-   }
-   ```
-
-5. Generate mission once per day (not on every screen view) — check `fetchTodaysMission()` first, generate only if null or date mismatch.
-
-6. Emit `home:daily_mission_generated` event when new mission is created.
-**VERIFY:**
-- [ ] `repository.ts` exists with 4 functions
-- [ ] `priority-service.ts` correctly picks mission by priority order
-- [ ] Mission is persisted to Supabase (not regenerated on every app open)
-- [ ] `src/features/home-spine/__tests__/priority-service.test.ts` covers all 8 priority cases
-- [ ] `src/features/home-spine/__tests__/repository.test.ts` covers CRUD operations
-- [ ] TypeScript clean
-
----
-
-### P2-02 · Daily Mission — Home Screen UI
-**WHY:** The home screen shows many competing items. The daily mission needs to be the unmissable centerpiece.
-**WHAT:**
-1. Create `src/features/home-spine/components/DailyMissionCard.tsx` (≤200 lines):
-   - Visually dominant card — this is the most important element on the screen
-   - Shows mission title, description, urgency indicator, CTA button
-   - HIGH urgency: red accent, pulsing border (Reanimated 3)
-   - MEDIUM urgency: orange accent
-   - LOW urgency: default card style
-   - Shows timer countdown if urgency is HIGH (streak expires in X hours)
-   - "See Details" chevron that expands inline OR navigates to detail
-   - Completed state: strikethrough + celebration micro-animation
-
-2. Create `DailyMissionCardSkeleton.tsx`, `DailyMissionCardEmpty.tsx` (no mission = rare, show "Rest day — great for reflection"), `DailyMissionCardError.tsx`.
-
-3. Wire into `src/screens/home/components/HomeContent.tsx` as the first content element after the greeting header.
-
-4. Tapping the CTA should navigate to `SessionStack/SessionSetup` with the mission's `targetDurationSeconds` and `targetMode` pre-filled as params.
-
-5. On session completion, check if completed session satisfies the daily mission → call `markMissionCompleted()`.
-**VERIFY:**
-- [ ] `DailyMissionCard` renders all 3 urgency styles correctly
-- [ ] Tapping CTA pre-fills session setup with mission params
-- [ ] Mission shows as completed after qualifying session
-- [ ] HIGH urgency card has visible pulsing animation
-- [ ] All 4 states (loading, empty, error, success) render
-- [ ] Component is ≤200 lines (split if needed)
-- [ ] TypeScript clean
-
----
-
-### P2-03 · Daily Mission — Tomorrow Preview
-**WHY:** `tomorrowPreviewService.ts` exists. It needs to be surfaced on the completion screen AND home screen to create anticipation.
-**WHAT:**
-1. Audit `src/features/home-spine/tomorrowPreviewService.ts` — ensure it:
-   - Calculates what tomorrow's mission will likely be (based on current state)
-   - Returns a `TomorrowPreview` object: `{ previewTitle, previewDescription, expectedReward, reasonToReturn }`
-
-2. Surface in `src/features/session-story/screens/PostSessionStoryScreen.tsx`:
-   - After the session result summary, add a "Tomorrow" section
-   - Shows: "Tomorrow's mission: [preview]" with the reward teaser
-   - This is the last thing the user sees before leaving the app
-
-3. Surface on home screen (HomeContent bottom section):
-   - "Come back tomorrow" card — small, below daily mission
-   - Shows tomorrow's preview + what reward is waiting
-
-4. Ensure `TomorrowPreview` is generated server-side via `jobs/notifications/weekly-report.ts` pattern — not just client-side.
-**VERIFY:**
-- [ ] PostSessionStoryScreen shows tomorrow preview
-- [ ] Home screen shows "tomorrow" section for users who already completed today's mission
-- [ ] `TomorrowPreview` has loading/empty/error states
-- [ ] `src/features/home-spine/__tests__/tomorrowPreviewService.test.ts` exists
-- [ ] TypeScript clean
-
----
-
-## PHASE 3 — SESSION COMPLETION CEREMONY (THE EMOTIONAL PEAK)
-> *The post-session moment is the most important in the app. It must tell a story, not dump stats.*
-
-### P3-01 · Post-Session Story Screen — Full Implementation
-**WHY:** `PostSessionStoryScreen.tsx` exists but the session story system (SessionStoryEngine, StoryBeatCalculator) needs to produce emotionally resonant output — not a stats dump. This screen determines whether users come back tomorrow.
-**WHAT:**
-1. Audit `src/features/session-story/SessionStoryEngine.ts` and `StoryBeatCalculator.ts`.
-2. Ensure `StoryBeatCalculator.ts` produces story beats in this narrative order:
-   ```
-   Beat 1: THE RESULT (2-3 seconds)
-   → Grade reveal with animation (S/A/B/C/D letter, color-coded)
-   → "25 minutes. Grade A." — simple, declarative
-   
-   Beat 2: THE IDENTITY IMPACT (2-3 seconds)
-   → Focus Score delta: "+8 points → Now 634 (Strong)"
-   → If crossed a band: "You just reached DISCIPLINED" — celebratory
-   
-   Beat 3: THE PROGRESSION (1-2 seconds)
-   → XP earned, level progress bar tick
-   → Boss damage if boss active: "22 damage dealt. Boss at 18% HP."
-   → Streak update: "7-day streak. Creature grew."
-   
-   Beat 4: THE RETURN HOOK (2-3 seconds)
-   → Tomorrow preview (from P2-03)
-   → One specific reason to come back: "One more session defeats the boss"
-   
-   Beat 5: THE CTA
-   → "Go Home" button → HomeScreen
-   → "One More" button → SessionSetup (pre-filled with recommended mode)
-   ```
-
-3. Animate beats sequentially using Reanimated 3 (fade-in-up each beat, staggered 400ms).
-
-4. The screen must receive data via navigation params (`PostSessionStory` route) — params include: `sessionId`, `grade`, `focusScoreDelta`, `xpEarned`, `streakDay`, `bossContext`, `tomorrowPreview`.
-
-5. Create `src/features/session-story/screens/PostSessionStoryScreen.tsx` loading state: brief 1-second "Calculating your results..." with skeleton while StoryBeatCalculator runs.
-
-6. Grade-specific flavor text examples (sample — create 5 per grade):
-   ```
-   S: "Flawless. No pauses. Your best work."
-   A: "Strong focus. Clean execution."
-   B: "Solid session. You showed up."
-   C: "You finished. That matters more than the grade."
-   D: "A hard session. The discipline to finish anyway counts."
-   ```
-**VERIFY:**
-- [ ] Story beats play in correct sequence with staggered animation
-- [ ] Grade letter is prominently displayed with correct color
-- [ ] Focus Score delta is shown with animated count
-- [ ] Boss damage beat appears only when boss is active
-- [ ] "One More" button pre-fills session with recommended mode
-- [ ] Screen has loading/error states
-- [ ] `src/features/session-story/__tests/SessionStoryEngine.test.ts` covers beat calculation for each grade
-- [ ] TypeScript clean
-
----
-
-### P3-02 · Completion Ceremony — Reward Staging (Not Dump)
-**WHY:** The Phase Audit identified "reward dump" as a major product problem. Users get +8 rewards at once → nothing feels special. This task fixes that.
-**WHAT:**
-1. Audit `src/features/rewards/service.ts` and the completion reward pipeline.
-2. Implement reward staging in the PostSessionStoryScreen:
-   - **Primary reward** (shown prominently in Beat 3): the single most meaningful reward (Focus Score delta or level-up if it occurred)
-   - **Secondary rewards** (shown as a tray that slides up after Beat 3): XP, coins, streak update
-   - **Bonus rewards** (shown separately if triggered): chest, achievement badge, cosmetic — only one per session max
-   - Rule: no more than 3 distinct reward elements shown simultaneously
-3. Update `CompletionLedger` in `src/features/session-completion/schemas.ts`:
-   ```typescript
-   interface CompletionLedger {
-     // existing fields...
-     grade: SessionGrade; // from P1-04
-     primaryReward: PrimaryReward; // Focus Score delta OR level-up
-     secondaryRewards: SecondaryReward[]; // XP, coins, streak (max 3)
-     bonusReward: BonusReward | null; // chest/badge/cosmetic (at most 1)
-   }
-   ```
-4. If user earned a chest, defer its opening to a separate modal AFTER the story screen, not during.
-**VERIFY:**
-- [ ] PostSessionStoryScreen never shows more than 3 rewards at once
-- [ ] Chest opening happens in separate modal after story screen
-- [ ] Level-up (if it occurred) gets its own celebration beat (existing `LevelUpCelebration.tsx`)
-- [ ] `CompletionLedger` schema updated and all consumers compile
-- [ ] TypeScript clean
-
----
-
-## PHASE 4 — STREAK CREATURE (THE EMOTIONAL ANCHOR)
-> *The companion/creature is confirmed as one of the best retention systems. It needs personality and real stakes.*
-
-### P4-01 · Companion Personality Engine — Validate and Complete
-**WHY:** `CompanionPersonalityEngine.ts` was confirmed complete in the BONUS audit, but the creature's personality traits (morning owl, night owl, etc.) must be saved persistently and reflected in its visual state.
-**WHAT:**
-1. Audit `src/features/companion/CompanionPersonalityEngine.ts` — verify it stores personality type.
-2. Personality must be determined from session history and PERSISTED (not recalculated every time):
-   ```typescript
-   type CreaturePersonality =
-     | 'EARLY_BIRD'       // >60% sessions before noon
-     | 'NIGHT_OWL'        // >60% sessions after 8pm
-     | 'MARATHON_RUNNER'  // avg session >45 min
-     | 'SPRINTER'         // avg session <20 min, high completion
-     | 'DISCIPLINED'      // zero-pause session rate >50%
-     | 'SOCIAL'           // >20% squad sessions
-     | 'EXPLORER'         // used 4+ different session modes
-     | 'CONSISTENT'       // 7+ day streak at least once
-   ```
-3. Personality must update weekly (not every session).
-4. The personality must affect the companion's displayed name suffix on ProfileScreen:
-   - EARLY_BIRD: "[Name] the Early Bird"
-   - NIGHT_OWL: "[Name] the Night Owl"
-   - etc.
-
-5. Creature evolution stages must be fully defined with clear unlock conditions:
-   ```typescript
-   const EVOLUTION_STAGES = [
-     { stage: 0, name: 'Egg',      requirement: 0,   description: 'Just starting' },
-     { stage: 1, name: 'Hatchling',requirement: 3,   description: '3-day streak' },
-     { stage: 2, name: 'Juvenile', requirement: 7,   description: '7-day streak' },
-     { stage: 3, name: 'Adult',    requirement: 14,  description: '14-day streak' },
-     { stage: 4, name: 'Guardian', requirement: 30,  description: '30-day streak' },
-     { stage: 5, name: 'Mythic',   requirement: 100, description: '100-day streak' },
-   ];
-   ```
-6. When creature evolves: full-screen celebration moment in `PostSessionStoryScreen` (Beat 3 addition).
-
-7. Streak break: creature becomes "wounded" (visual indicator) but does NOT die. Comeback quest heals it.
-**VERIFY:**
-- [ ] Personality is calculated from session history and saved to Supabase
-- [ ] Personality updates weekly (job or on-login check)
-- [ ] Evolution stages are defined and creature advances correctly
-- [ ] Creature evolution triggers celebration in PostSessionStoryScreen
-- [ ] Streak break → creature wounded (not dead) visual state
-- [ ] `src/features/companion/__tests__/CompanionPersonalityEngine.test.ts` covers personality calculation for each type
-- [ ] TypeScript clean
-
----
-
-### P4-02 · Streak Funeral Screen — Rename to Streak Recovery Screen
-**WHY:** `StreakFuneralScreen.tsx` exists. The name "funeral" is demotivating. The analysis correctly identifies that apps that punish failure lose users. Rebrand as recovery, not death.
-**WHAT:**
-1. Rename `src/screens/streaks/StreakFuneralScreen.tsx` → `src/screens/streaks/StreakRecoveryScreen.tsx`
-2. Update all references in navigation types and navigators
-3. Rewrite the screen content:
-   - **Remove**: any shame-based language, skull imagery, "you failed" framing
-   - **Add**: 
-     - Wounded creature animation (sad but alive)
-     - "Your streak broke. But your creature survived."
-     - "Comeback Quest unlocked — complete 3 sessions to restore full health"
-     - Progress indicator: 0/3 comeback sessions
-     - "Begin Comeback" CTA → SessionSetup with RECOVERY mode pre-filled
-4. Emit `streak:recovery_started` event when user taps "Begin Comeback"
-**VERIFY:**
-- [ ] File renamed, all navigation references updated
-- [ ] Screen shows wounded creature (not dead/funeral imagery)
-- [ ] Comeback Quest progress is shown (0/3)
-- [ ] "Begin Comeback" CTA works
-- [ ] TypeScript and navigation types clean
-
----
-
-### P4-03 · Comeback Quest System — Full Implementation
-**WHY:** `ComebackQuestSystem.ts` exists but `PHASE_AUDIT_REPORT.md` flagged it as partial. This is high-ROI retention: handling failure gracefully is how apps keep real humans.
-**WHAT:**
-1. Audit `src/features/streaks/ComebackQuestSystem.ts` — verify it has:
-   - `initiateComebackQuest(userId: string, brokenStreakLength: number): Promise<ComebackQuest>`
-   - `recordComebackSession(userId: string, questId: string, sessionId: string): Promise<ComebackProgress>`
-   - `completeComebackQuest(userId: string, questId: string): Promise<ComebackReward>`
-
-2. Comeback Quest requirements (adjust based on broken streak length):
-   ```
-   Streak 1-6 days broken:   2 sessions to complete comeback
-   Streak 7-29 days broken:  3 sessions to complete comeback
-   Streak 30+ days broken:   3 sessions + 1 must be 25+ min
-   ```
-
-3. Comeback Quest reward (NOT a streak restore — that's the fear monetization the analysis warned against):
-   ```
-   Reward: Phoenix Badge (permanent achievement)
-   Reward: +50 Focus Score recovery bonus
-   Reward: Creature healed to full
-   Reward: "Resilient" title unlocked
-   NOT: Streak restored to previous length (that devalues streaks)
-   NOTE: A new streak starts fresh — but the comeback shows on the profile
-   ```
-
-4. Wire comeback quest display to home screen (DailyMissionCard type: `COMEBACK_QUEST` — highest priority per P2-01).
-
-5. Ensure `src/features/streaks/__tests__/ComebackQuestSystem.test.ts` covers:
-   - Quest initiation on streak break
-   - Progress tracking (1/3, 2/3, 3/3)
-   - Quest completion with correct rewards
-   - Repeat comebacks (second streak break after first comeback)
-**VERIFY:**
-- [ ] Streak break auto-initiates comeback quest
-- [ ] Comeback quest appears as highest-priority daily mission on HomeScreen
-- [ ] Completing 3 sessions completes the quest
-- [ ] Phoenix Badge is granted (check achievements feature)
-- [ ] Creature heals on quest completion (event fired, companion responds)
-- [ ] Tests pass
-- [ ] TypeScript clean
-
----
-
-## PHASE 5 — BOSS SYSTEM (SESSION-TO-SESSION MOTIVATION)
-> *Bosses are the "one more session" hook. Keep them metaphorical, not an RPG simulator.*
-> *Analysis was WRONG to suggest fully archiving bosses — they're strong. But they need simplification.*
-
-### P5-01 · Boss System — Establish Clear Feature Flag Hierarchy
-**WHY:** The boss feature has 7+ subsystems (BossBountySystem, BossPrimeTimeSystem, SquadBossSystem, WeeklyRaidSystem, BossSpawnScheduler, AdaptiveDifficultyEngine, CriticalHitSystem). Not all should be active for new users.
-**WHAT:**
-1. In `src/constants/features.ts`, ensure these flags exist with correct defaults:
-   ```typescript
-   BOSS_CORE: true,              // Solo boss, damage from sessions — always on
-   BOSS_ADAPTIVE_DIFFICULTY: true, // Difficulty adjusts to user level — on
-   BOSS_PRIME_TIME: false,       // Prime-time event bosses — feature flag off by default
-   BOSS_SQUAD: false,            // Cooperative squad boss — off by default  
-   BOSS_WEEKLY_RAID: false,      // Weekly raid system — off by default
-   BOSS_BOUNTY: false,           // Bounty system — off by default
-   BOSS_CRITICAL_HIT: false,     // Critical hit system — off by default
-   ```
-
-2. Wrap each non-core system with the feature flag in its initialization code.
-
-3. Ensure BOSS_CORE behavior is:
-   - One active solo boss per user at a time
-   - Boss takes damage equal to: `focusedMinutes × purityMultiplier × streakBonus`
-   - `purityMultiplier`: 1.0 (S-grade) → 0.4 (D-grade)
-   - `streakBonus`: 1.0 + (streakDays × 0.01) capped at 1.5
-   - Boss has HP of 100 (medium) or 200 (hard) — no more complex HP systems until BOSS_ADAPTIVE is deeply tested
-   - When boss HP hits 0: defeated. Loot is granted. New boss spawns from roster.
-
-4. Boss metaphor names (already good in the codebase — verify these exist):
-   - The Scroll Beast (phone distraction)
-   - The Deadline Wraith (avoidance)
-   - The Chaos Hydra (multitasking)
-   - The Burnout Giant (overwork)
-   - The Doubt Phantom (self-doubt)
-**VERIFY:**
-- [ ] `BOSS_CORE: true` and all other flags false in development `.env`
-- [ ] All non-core boss systems are gated by their feature flags
-- [ ] Damage formula produces correct output for test cases (unit test)
-- [ ] Boss metaphor names are used in BossScreen UI
-- [ ] TypeScript clean
-
----
-
-### P5-02 · Boss Screen — Complete All UI States
-**WHY:** `BossScreen.tsx` exists in navigation but may not have all required states.
-**WHAT:**
-Create `src/screens/boss/BossScreen.tsx` with full states (audit first, add missing):
-1. **Active boss state**: 
-   - Boss art/illustration (SVG or existing assets)
-   - HP bar (animated, red/orange gradient)
-   - HP remaining label: "247 HP remaining"
-   - Last session's damage: "+22 damage from your last session"
-   - "How to deal more damage" — expandable info: focus longer + higher grade = more damage
-   - Active boss name + metaphor subtitle
-   - Estimated sessions to defeat: "~3 more sessions"
-   
-2. **No active boss state**: "Boss defeated! New challenger spawns when you complete your next session." with CTA to start session.
-
-3. **Boss defeated state** (transition screen): Full-screen celebration, loot display, new boss tease.
-
-4. **Loading state**: skeleton matching the boss card layout.
-
-5. **Error state**: error + retry.
-
-6. HP percentage shown prominently in `HomePrimaryRail` or `HomeSecondaryRail` so users see boss progress without navigating away — shows "🔥 22% HP left" as a teaser card.
-**VERIFY:**
-- [ ] BossScreen renders active boss with HP bar
-- [ ] BossScreen renders "no boss" state
-- [ ] Boss HP visible from HomeScreen as a teaser element
-- [ ] Boss defeat triggers celebration + loot reveal
-- [ ] All 4 states render
-- [ ] TypeScript clean
-
----
-
-### P5-03 · Streak Insurance — Audit for Hostile Monetization
-**WHY:** The analysis specifically flagged streak insurance as a dark-pattern risk. This task ensures it's ethical.
-**WHAT:**
-1. Audit `src/features/economy/StreakInsurance.ts` and `src/features/streaks/streak-insurance.ts`.
-2. Apply these ethical rules:
-   - Streak insurance must be purchased BEFORE the streak breaks (pro-active, not reactive)
-   - It should feel like "preparation" not "punishment avoidance"
-   - Insurance can be earned for free through 7-day engagement milestones (don't ONLY sell it)
-   - Max 1 insurance activation per 30 days (prevents it becoming "buy unlimited saves")
-   - When insurance activates: show the user "Your insurance protected your streak. New insurance unlocks in X days."
-3. Remove or archive `src/features/economy/EmergencyGemSinks.ts` if it contains "pay to save your streak mid-break" mechanics. Replace with the comeback quest flow from P4-03.
-4. Remove or archive the `StreakWager` mechanics (found in `archive/economy-dark-patterns/`). These are already archived — ensure they're NOT referenced from active code.
-**VERIFY:**
-- [ ] `grep -r "StreakWager\|WagerSheet\|streak.*wager" src/` returns zero results
-- [ ] Streak insurance is purchase-before-break only (no "pay to restore after break")
-- [ ] Insurance can be earned free via 7-day milestone
-- [ ] `EmergencyGemSinks.ts` is either archived or behind a disabled feature flag
-- [ ] TypeScript clean
-
----
-
-## PHASE 6 — AI COACH (THE DIFFERENTIATION LAYER)
-> *The AI coach must feel personal and intelligent. Generic motivational fluff = users ignore it.*
-
-### P6-01 · AI Coach — Consolidate Duplicate Hook Files
-**WHY:** `src/features/ai-coach/` has: `hooks.ts`, `hooks-enhanced.ts`, `hooks-offline.ts`, `hooks-realtime.ts`. This is hook soup. Consumers don't know which to use.
-**WHAT:**
-1. Audit what each hook file exports:
-   - `hooks.ts` — primary hooks
-   - `hooks-enhanced.ts` — enhanced variants
-   - `hooks-offline.ts` — offline-aware variants
-   - `hooks-realtime.ts` — realtime subscription hooks
-2. Consolidate into a clear structure:
-   - `hooks/use-coach-recommendation.ts` — primary recommendation hook
-   - `hooks/use-coach-intervention.ts` — active intervention hook
-   - `hooks/use-coach-memory.ts` — coach memory/history hook
-   - `hooks/use-personal-quest.ts` — personal quest hook
-   - `hooks/index.ts` — re-exports
-3. Delete the old `hooks-*.ts` files after migration. Update all consumers.
-4. Each consolidated hook must handle:
-   - Loading state
-   - Error state with retry
-   - Offline degraded state (return last known recommendation from MMKV cache)
-**VERIFY:**
-- [ ] Old `hooks-enhanced.ts`, `hooks-offline.ts`, `hooks-realtime.ts` are deleted
-- [ ] All consumers updated to import from `hooks/` subdirectory
-- [ ] Each hook has loading/error/offline states
-- [ ] TypeScript clean
-
----
-
-### P6-02 · AI Coach — Personal Message Quality Standards
-**WHY:** The analysis is correct — generic messages ("You're doing great!") are ignored. Specific, data-driven messages are retained. This task enforces quality.
-**WHAT:**
-1. Audit `src/features/ai-coach/message-generator.ts` — find all message templates.
-2. Apply this rule to every message: **it must reference at least one specific data point from the user's session history.**
-3. Message templates that must exist (replace generic ones):
-   ```
-   // Peak window message:
-   "Your last 4 A-grade sessions were at 8-9 PM. Tonight at 8 is your best window."
-   
-   // Streak risk message:
-   "Your 12-day streak ends in 4 hours. A 10-minute Recovery session counts."
-   
-   // Boss message:
-   "3 sessions away from defeating the Deadline Wraith. A 20-minute session deals ~15 damage."
-   
-   // Comeback message:
-   "You completed a comeback quest in February. You can do it again. Session 1 of 3."
-   
-   // Improvement message:
-   "Your average grade went from C last week to B this week. You're improving."
-   
-   // Pattern warning:
-   "You've abandoned 3 sessions on Mondays this month. Consider a shorter Monday target."
-   ```
-4. Audit `src/features/ai-coach/context-snapshot.ts` — ensure it provides the data needed for these messages:
-   - Last N sessions with grades
-   - Peak focus hours (calculated from history)
-   - Streak state
-   - Boss HP
-   - Comeback quest state
-5. `PersonalQuestGenerator.ts` must generate quests that reference user's actual patterns:
-   ```
-   Bad: "Complete 3 sessions this week"
-   Good: "Beat your Tuesday record — 47 minutes. Complete one 50-minute session."
-   ```
-**VERIFY:**
-- [ ] Every message template in `message-generator.ts` has at least one `{dataPoint}` interpolation
-- [ ] `context-snapshot.ts` provides peak focus hours, grade history, streak state, boss HP
-- [ ] `PersonalQuestGenerator.ts` generates pattern-specific quests
-- [ ] `src/features/ai-coach/__tests__/message-generator.test.ts` verifies messages include user data
-- [ ] TypeScript clean
-
----
-
-### P6-03 · AI Coach — Next Best Action Integration
-**WHY:** `src/features/progression/next-best-action.ts` exists alongside the coach. They may be duplicating logic. Consolidate.
-**WHAT:**
-1. The AI coach should own the "Next Best Action" recommendation.
-2. `next-best-action.ts` should be the output layer that formats the coach's recommendation for the home screen.
-3. Ensure the chain is:
-   ```
-   CoachMemory (user history) 
-   → CoachRecommendationService (recommendation engine)
-   → PersonalQuestGenerator (quest framing)
-   → next-best-action.ts (home screen output format)
-   → HomeScreen → DailyMissionCard
-   ```
-4. Remove any duplicate recommendation logic in `HomeRecommendationEngine.ts` if it overlaps with coach logic.
-5. Emit `coach:next_best_action_served` event with recommendation type and source for analytics.
-**VERIFY:**
-- [ ] Clear linear flow from coach memory → home screen recommendation
-- [ ] No duplicate recommendation engines
-- [ ] `coach:next_best_action_served` event fires every time recommendation is shown
-- [ ] TypeScript clean
-
----
-
-## PHASE 7 — PROGRESSION & ECONOMY (REWARDS THAT MEAN SOMETHING)
-> *Trim reward inflation. Make each reward feel earned. Keep all systems but make them hierarchical.*
-
-### P7-01 · Economy — Consolidate Currencies
-**WHY:** The app has XP, coins, gems, focus points, energy, boosts, shields. Too many. The analysis correctly identifies this as "reward inflation."
-**WHAT:**
-1. Audit `src/features/economy/types.ts` for all currency types.
-2. The canonical currency structure going forward:
-   ```
-   XP        — progression currency, not spendable, gates levels
-   Coins     — earned soft currency, spendable in shop for cosmetics
-   Gems      — premium hard currency, bought or earned rarely
-   FocusScore— identity metric, never spendable
-   ```
-3. Remove/merge "Focus Points" if they're a fourth soft currency doing the same job as coins. If they exist, either:
-   - Alias them to coins (1:1 migration)
-   - Or deprecate with migration path in `CurrencyTypes-v2.ts` (check if this file exists)
-4. Remove energy from the standard session loop if it creates "can't play" friction. Energy should only exist in squad context if needed.
-5. Audit `src/features/economy/session-rewards.ts` — ensure it only grants: XP + coins (always) + gems (rare, event-based) + Focus Score delta (via integration).
-6. Update `CompletionLedger` to reflect the simplified currency structure.
-**VERIFY:**
-- [ ] `grep -rn "focusPoints\|focus_points\|FocusPoints" src/` returns zero or only legacy migration code
-- [ ] Session completion grants max 2 currencies (XP + coins)
-- [ ] Gems are only granted by: achievements, premium events, and purchase — not every session
-- [ ] `src/features/economy/__tests__/session-rewards.test.ts` verifies correct currencies granted
-- [ ] TypeScript clean
-
----
-
-### P7-02 · Focus Tower — Persistence and Bonuses
-**WHY:** `FocusTower.ts` has the schema and tier config but the Phase Audit flagged missing persistence layer.
-**WHAT:**
-1. Create `src/features/progression/focus-tower-repository.ts`:
-   ```typescript
-   // Dependencies: Supabase focus_towers table
-   // Consumers: focus-tower.ts service, ProgressionScreen
-   export async function fetchFocusTower(userId: string): Promise<FocusTower | null>
-   export async function upsertFocusTower(userId: string, tower: FocusTower): Promise<void>
-   export async function addTowerBlock(userId: string, block: TowerBlock): Promise<void>
-   export async function fetchTowerBlocks(userId: string): Promise<TowerBlock[]>
-   ```
-
-2. Wire into session completion: every completed session adds 1 block to the tower. Block type cycles through tier bonuses.
-
-3. Tower milestones should emit events that unlock permanent bonuses:
-   - Block 10 (Tier 1 complete): +2% XP on all future sessions (persistent buff stored in progression)
-   - Block 20 (Tier 2 complete): streak grace period +1 hour
-   - Block 30 (Tier 3 complete): +5% boss damage
-   - etc. per `TIER_CONFIG`
-
-4. Create `src/screens/profile/FocusTowerScreen.tsx` — visual tower with all blocks, current tier, next milestone. All 4 states (loading/empty/error/success).
-**VERIFY:**
-- [ ] Tower block added to DB after every session completion
-- [ ] Tier bonuses correctly stored in user progression record
-- [ ] `FocusTowerScreen.tsx` renders tower with all blocks and milestone markers
-- [ ] `src/features/progression/__tests__/focus-tower.test.ts` covers: add block, tier completion, bonus application
-- [ ] TypeScript clean
-
----
-
-### P7-03 · Battle Pass → Season Journey Migration
-**WHY:** `GAMIFICATION_MIGRATION_GUIDE.md` documents the Battle Pass → Season Journey migration. This may be incomplete.
-**WHAT:**
-1. Audit current state of `src/features/battle-pass/` vs the Season Journey target.
-2. If still using the old battle-pass structure, complete the migration:
-   - Reduce tiers from 100+ to 20-30 named milestones
-   - Remove separate free/premium tracks (one track for everyone)
-   - Premium subscribers get cosmetic rewards at each milestone (not content gates)
-   - Season milestones are named: "Established a Routine", "First 10-Day Streak", "Defeated Your First Boss", etc.
-3. Season Journey should feed into Focus Score (reaching milestone X grants identity recognition, not just items).
-4. Ensure the Season Journey route in navigation works: `BattlePass` route now renders `SeasonJourneyScreen`.
-**VERIFY:**
-- [ ] Season Journey has 20-30 milestones (not 100+)
-- [ ] No separate premium content track (premium = cosmetic variant of same milestone)
-- [ ] `SeasonJourneyScreen` renders milestone list with progress
-- [ ] TypeScript clean
-
----
-
-### P7-04 · Chest System — Limit and Make Special
-**WHY:** Variable rewards (chests) are good for engagement. But if every session drops a chest, they become noise.
-**WHAT:**
-1. Audit `src/features/rewards/chest-engine.ts` and `VariableRewardEngine.ts`.
-2. Apply the rule: chest drops are variable, not guaranteed. Drop rate:
-   ```
-   Standard session completion: 15% chance of chest
-   S-grade session: 30% chance
-   Streak milestone: 100% guaranteed chest (special streak chest)
-   Boss defeat: 100% guaranteed boss chest (larger loot table)
-   Weekly goal completion: 100% guaranteed chest
-   ```
-3. Chest opening must happen in a dedicated `ChestOpeningModal.tsx` — not inline in the story screen.
-4. ChestOpeningModal shows the reveal animation only when user taps "Open Chest". It's not auto-opened. User can defer ("Save for later" adds to inventory).
-5. Loot table for standard chest: cosmetic item (70%), bonus coins (20%), gem (10%).
-**VERIFY:**
-- [ ] Standard session chest drop rate is ~15% (not 100%)
-- [ ] Milestone/boss chests still guaranteed (check unit tests)
-- [ ] Chest opening is in separate modal
-- [ ] "Save for later" adds chest to inventory
-- [ ] `src/features/rewards/__tests__/chest-engine.test.ts` covers drop rates
-- [ ] TypeScript clean
-
----
-
-## PHASE 8 — SQUADS & SOCIAL (ACCOUNTABILITY, NOT COMPETITION)
-> *Analysis is correct: build accountability, not a social network. Keep squads, simplify the social layer.*
-
-### P8-01 · Squads — Simplified Squad System Feature Completion
-**WHY:** `SimplifiedSquadSystem.ts` exists but the full squad flow (create, invite, join, weekly goal, activity feed) must be verified end-to-end.
-**WHAT:**
-1. Audit `src/features/squads/SimplifiedSquadSystem.ts` and `src/features/squads/service.ts`.
-2. Required squad flow:
-   - Create squad: name + invite code (max 8 members)
-   - Join squad: via invite code or deep link
-   - Weekly shared goal: total minutes of focus from all members
-   - Squad activity feed: simple list — "[Name] completed 25 minutes · 2h ago" (no likes, no comments)
-   - Squad streak: consecutive weeks the squad hit their goal
-   - Help request: member can tap "I need encouragement" → other members get a push notification
-3. Ensure `SquadStreakService.ts` is wired and updates squad streak weekly.
-4. `HelpRequestSystem.ts` must:
-   - Send push notification to all squad members when help requested
-   - Show help request in squad activity feed
-   - Complete when the requesting member starts a session
-5. Create `src/features/squads/components/SquadHomeCard.tsx` — compact squad status card for home screen secondary rail. Shows: squad name, weekly progress bar (X/Y minutes), squad streak, one recent activity line.
-**VERIFY:**
-- [ ] Create → invite → join flow works end-to-end
-- [ ] Weekly goal progress visible in `SquadHomeCard`
-- [ ] Help request sends push notification (unit test with mock)
-- [ ] Squad streak increments on weekly goal completion
-- [ ] `src/features/squads/__tests__/SimplifiedSquadSystem.test.ts` covers: create, join, goal update, help request, streak increment
-- [ ] TypeScript clean
-
----
-
-### P8-02 · Social — Archive Competitive Features Behind Flags
-**WHY:** The analysis recommends archiving Duels, Rankings, Feed, and Squad Wars. But they're wired into navigation. They should be feature-flagged off, not deleted, to preserve the work.
-**WHAT:**
-1. Add feature flags if not present:
-   ```typescript
-   SOCIAL_FEED: false,
-   DUELS: false,
-   RANKINGS: false,
-   SQUAD_WARS: false,
-   RIVALS: false,
-   ```
-2. Gate the navigation routes with these flags:
-   - `Duels` route: rendered only if `DUELS` flag is true
-   - `Feed` route: rendered only if `SOCIAL_FEED` flag is true
-   - `Rankings` route: rendered only if `RANKINGS` flag is true
-   - `SquadWars` route: rendered only if `SQUAD_WARS` flag is true
-   - `Rivals` route: rendered only if `RIVALS` flag is true
-3. Remove nav tabs or menu items that lead to disabled routes.
-4. These features stay in codebase, just hidden until the app has enough users to make them meaningful.
-**VERIFY:**
-- [ ] All 5 competitive features are behind disabled feature flags
-- [ ] No navigation item in the tab bar or menu leads to a disabled route
-- [ ] App builds and navigates without errors with all flags off
-- [ ] TypeScript clean
-
----
-
-## PHASE 9 — MONETIZATION, ONBOARDING, AND PRODUCTION READINESS
-> *Premium must sell growth, not fear. Onboarding must establish identity fast.*
-
-### P9-01 · Onboarding — Establish Focus Identity from Session 1
-**WHY:** Current onboarding screens (WelcomeScreen, GoalScreen, FocusTimeScreen, NameScreen) may not establish the Focus Score identity promise. Users need to understand the core loop before completing onboarding.
-**WHAT:**
-1. Audit current onboarding flow in `src/features/onboarding/components/`.
-2. Required onboarding arc (5 screens max):
-   ```
-   Screen 1: IDENTITY PROMISE
-   "Every focus session makes you stronger. 
-    You'll build a Focus Score from 300 to 850.
-    Let's start."
-   → Big animated Focus Score display starting at 550 (their starting score)
-   
-   Screen 2: NAME + GOAL
-   "What should we call you?" (name input)
-   "What are you focusing on?" (Study / Work / Creative / Other)
-   
-   Screen 3: CREATURE REVEAL
-   "Your companion hatches when you focus."
-   → Creature egg animation. Tap to "hatch" it (they tap, egg cracks, creature appears)
-   → "It grows with your streaks. Let's get started."
-   
-   Screen 4: FIRST FOCUS
-   "Complete your first session to raise your score."
-   → Pre-set 10-minute session (Recovery mode) — low pressure first win
-   → "Your companion is waiting." CTA
-   
-   Screen 5: (After first session completes) RESULT
-   → Their Focus Score updated: "550 → 555"
-   → "Your journey begins. Score: 555."
-   → Navigate to HomeScreen
-   ```
-3. Ensure onboarding completion is persisted via `hasCompletedOnboarding` flag (already exists in navigation logic — verify it).
-4. Skip to HomeScreen if already onboarded (already implemented — verify).
-**VERIFY:**
-- [ ] 5-screen max onboarding flow
-- [ ] Creature hatch animation plays on Screen 3
-- [ ] First session is pre-configured as 10-minute Recovery
-- [ ] Focus Score updates after first session
-- [ ] Onboarding completion flag correctly gates navigation
-- [ ] `src/features/onboarding/__tests__/` has tests for completion flow
-- [ ] TypeScript clean
-
----
-
-### P9-02 · Paywall / Premium — Audit and Ensure Ethical Structure
-**WHY:** Premium must not sell fear. The `PaywallScreen.tsx` and `VipPaywallScreen.tsx` must offer growth features only.
-**WHAT:**
-1. Audit `src/screens/paywall/PaywallScreen.tsx` — document every premium feature shown.
-2. Approved premium features (keep/add):
-   - ✅ Full AI Coach (free users get 3 suggestions/week, premium = unlimited)
-   - ✅ Monthly Focus Report (free users get summary, premium = full breakdown)
-   - ✅ Advanced analytics + pattern insights
-   - ✅ Premium cosmetic creature skins
-   - ✅ Season Journey premium cosmetic track
-   - ✅ Squad advanced insights
-   - ✅ Unlimited personal quests
-3. Features that must NOT be on the paywall (remove if present):
-   - ❌ "Restore your streak" (fear monetization)
-   - ❌ "Save your progress" (fear monetization)
-   - ❌ Boss retry (fear monetization)
-   - ❌ Emergency gem purchase during session (dark pattern)
-4. Ensure RevenueCat integration in `src/shared/monetization/revenuecat-service.ts` correctly gates features via `entitlements.ts`.
-5. Ensure free users still have a compelling experience (they shouldn't feel constantly blocked).
-**VERIFY:**
-- [ ] Paywall only shows growth features (no fear-based offers)
-- [ ] Free tier has: unlimited basic sessions, basic AI suggestions (3/week), streak system, boss battles, basic companion
-- [ ] Premium tier has: full AI coach, monthly reports, premium cosmetics, advanced analytics
-- [ ] `src/shared/monetization/__tests__/entitlements.test.ts` covers free vs premium feature gating
-- [ ] TypeScript clean
-
----
-
-### P9-03 · Monthly Focus Report — Premium Feature Completion
-**WHY:** `BONUS_PHASE_AUDIT_COMPLETE.md` confirms this is implemented. But verify it's production-ready with real data and correct premium gating.
-**WHAT:**
-1. Verify `src/features/focus-identity/components/MonthlyFocusReport.tsx` renders with real Supabase data.
-2. Report must include:
-   - Focus Score: start of month → end of month (delta + trend)
-   - Best focus hour (peak window analytics)
-   - Sessions completed
-   - Strongest pattern (e.g., "Evening sessions")
-   - Weakest pattern (e.g., "Weekend consistency")
-   - Next goal: "Reach [next band] score"
-   - Streak achievements this month
-3. For free users: show a blurred/preview version with "Upgrade to see your full report" CTA.
-4. Report is generated by `jobs/notifications/weekly-report.ts` job — verify this triggers monthly (add `monthly-report` job if only weekly exists).
-5. Add "Share report" functionality — generates a shareable image card (even basic text-on-gradient is fine for MVP).
-**VERIFY:**
-- [ ] Monthly report renders with real Supabase data (test with populated account)
-- [ ] Free users see preview (blurred sections) with upgrade CTA
-- [ ] Premium users see full report
-- [ ] Share functionality works (or is feature-flagged for later)
-- [ ] `src/features/focus-identity/__tests__/MonthlyFocusReport.test.tsx` covers all states
-- [ ] TypeScript clean
-
----
-
-### P9-04 · Notifications — Smart, Not Noisy
-**WHY:** The app has a notification scheduler but with too many systems generating notifications (streak risk, boss timer, prime-time events, AI coach, daily login, social, comeback, battle pass). This creates notification fatigue.
-**WHAT:**
-1. Audit `src/features/ai-coach/reminder-scheduler.ts` and `jobs/notifications/`.
-2. Enforce notification budget: max **2 notifications per day per user**. Priority order:
-   ```
-   1. Streak critical (< 2 hours remaining) — always sends, max 1/day
-   2. AI Coach next best action — smart timing, 1/day at detected peak window
-   [All other notification types are SUPPRESSED if either of the above is sent today]
-   3. Boss near defeat (sends only if no streak notification today)
-   4. Squad help request (sends only if no notifications sent today)
-   5. Daily mission reminder (sends only if nothing sent today, 1-per-day max)
-   ```
-3. "Quiet hours" respect: never send between 10 PM - 7 AM local time.
-4. Implement notification dedup tracking in MMKV: track last notification type and time per user.
-5. Remove any notifications that fire on: daily login, random engagement prompts, generic "come back" messages.
-**VERIFY:**
-- [ ] Max 2 notifications per user per day (enforced in scheduler)
-- [ ] Quiet hours respected (test: 11 PM → no notification)
-- [ ] `src/features/ai-coach/__tests__/reminder-scheduler.test.ts` covers budget enforcement
-- [ ] No notification for "daily login bonus" or generic re-engagement
-- [ ] TypeScript clean
-
----
-
-### P9-05 · Analytics — Verify Key Events Fire
-**WHY:** The app has `VEXAnalyticsInfrastructure.ts` and PostHog integration. The core funnel events must fire correctly to enable product analytics.
-**WHAT:**
-Verify these events fire at the correct moments (add if missing):
-```
-vex_session_started       → Session start, with: mode, duration_target, userId
-vex_session_completed     → Session complete, with: grade, duration_actual, focus_score_delta
-vex_session_abandoned     → Session abandoned, with: duration_at_abandon, reason
-vex_streak_milestone      → Streak N days, with: streak_length
-vex_streak_broken         → Streak broken, with: broken_length
-vex_comeback_started      → Comeback quest started
-vex_comeback_completed    → Comeback quest finished
-vex_boss_defeated         → Boss defeated, with: boss_name, total_sessions_to_defeat
-vex_focus_score_changed   → Score update, with: previous, new, delta, grade_that_caused_it
-vex_daily_mission_shown   → Mission shown, with: type, urgency_level
-vex_daily_mission_completed → Mission completed
-vex_squad_session_contributed → Squad session, with: squad_id, minutes
-vex_paywall_viewed        → Paywall seen, with: source_screen
-vex_premium_purchased     → Purchase, with: product_id, revenue
-vex_onboarding_completed  → Onboarding done, with: first_session_grade
-```
-Each event must use the `AnalyticsService.track()` method — not direct PostHog calls.
-**VERIFY:**
-- [ ] All events in list above exist in `src/events/types/` or analytics service
-- [ ] Each event fires in the correct location (grep to verify)
-- [ ] No PII in any event payload
-- [ ] TypeScript clean
-
----
-
-### P9-06 · Error Boundaries — Every Screen is Wrapped
-**WHY:** `ErrorBoundary.tsx` exists. But if screens don't have error boundaries, a runtime error in one feature crashes the whole app.
-**WHAT:**
-1. Audit every screen in `src/screens/` and `src/features/*/screens/` — verify each is wrapped in an ErrorBoundary or `ScreenErrorBoundary`.
-2. `ScreenErrorBoundary` should show: feature name in error message + "Reload" button that resets the boundary.
-3. The `HomeScreen` specifically must NEVER crash the app — it must degrade gracefully if any sub-component fails.
-4. Add error boundary to:
-   - `HomeScreen` (wraps entire screen content)
-   - `PostSessionStoryScreen` (wraps story beats — if story fails, show plain completion summary)
-   - `FocusIdentityDashboardScreen`
-   - `BossScreen`
-   - `SquadRouteHub`
-**VERIFY:**
-- [ ] Throw a test error in `HomeContent` → screen shows error UI, doesn't crash app
-- [ ] Throw a test error in `PostSessionStoryScreen` → shows plain completion fallback
-- [ ] `src/shared/ui/components/__tests__/ScreenErrorBoundary.test.tsx` covers recovery behavior
-- [ ] TypeScript clean
-
----
-
-### P9-07 · Offline Queue — Verify Session Completion is Queued
-**WHY:** If a user completes a session offline, the completion must be queued and synced when connectivity returns. Loss of session data is catastrophic for user trust.
-**WHAT:**
-1. Audit `src/features/economy/offline-queue.ts` — verify it handles:
-   - Session completion writes
-   - Focus Score updates
-   - Streak updates
-   - XP/coin grants
-2. If session data is lost due to network failure, the offline queue must replay it within 10 seconds of connectivity being restored (via NetInfo listener).
-3. Add optimistic UI: show session as completed in the app immediately, even before server confirmation.
-4. If an offline session fails to sync after 3 retries: show banner "1 session is pending sync" that resolves when successful.
-5. Test: complete session in airplane mode → enable WiFi → verify DB row exists within 10 seconds.
-**VERIFY:**
-- [ ] Offline session completion is queued in MMKV
-- [ ] Queue replays on connectivity restored
-- [ ] Optimistic UI shows session as completed immediately
-- [ ] "Pending sync" banner appears for stuck queue items
-- [ ] `src/features/economy/__tests__/offline-queue.test.ts` covers: queue, replay, retry, permanent failure
-- [ ] TypeScript clean
-
----
-
-### P9-08 · Performance — Critical Path Optimization
-**WHY:** App startup time and home screen load time directly impact D1 retention.
-**WHAT:**
-1. Run `npm run perf:audit` and document current metrics.
-2. Required targets:
-   - App cold start to interactive HomeScreen: **< 2.5 seconds**
-   - Session start to timer running: **< 500ms**
-   - PostSessionStoryScreen first beat render: **< 300ms after completion**
-3. Optimizations to make:
-   - Use `getComponent` lazy loading in `RootStackScreens.tsx` (already implemented — verify all screens use it)
-   - Prefetch focus score and daily mission on app foreground (not on screen mount)
-   - Cache home screen data in MMKV for 5-minute TTL — show cached data immediately, then refresh
-   - All FlashList components must have `estimatedItemSize` set
-   - No images fetched without `expo-image` with proper caching headers
-4. Remove any unused listeners or intervals that run in the background.
-**VERIFY:**
-- [ ] Cold start to interactive HomeScreen ≤ 2.5 seconds (measure 5 times, take median)
-- [ ] Session start ≤ 500ms
-- [ ] No console warnings about missing `estimatedItemSize` on FlashList
-- [ ] TypeScript clean
-
----
-
-### P9-09 · Pre-Flight Checklist — Production Readiness Gate
-**WHY:** Nothing ships until this checklist passes.
-**WHAT:**
-Run and pass ALL of these, in order:
 ```bash
-# 1. TypeScript
-npx tsc --noEmit
-# Expected: 0 errors
+rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|@ts-expect-error" <edited-files>
+rg "StyleSheet\.create|FlatList|AsyncStorage|fetch\(" <edited-files>
+rg "#[0-9A-Fa-f]{3,8}|rgb\(" <edited-files>
+```
 
-# 2. No ts-nocheck
-node scripts/check-no-ts-nocheck.js
-# Expected: 0 violations
+Expected result: no unacceptable matches.
 
-# 3. Lint
+---
+
+## Mandatory Phase Workflow
+
+Windsurf must execute each phase as a sequence of task packets, not as one giant edit.
+
+For each phase:
+
+1. Create a phase scratch note in the current chat or local notes, not in source unless asked.
+2. List all phase tasks.
+3. Pick the first unchecked task only.
+4. Complete the task packet template for that task.
+5. Edit only the files needed for that task.
+6. Add or update tests for that task.
+7. Run targeted verification.
+8. Run edited-file regression audits.
+9. Update `VERIFICATION_REPORT.md`.
+10. Mark the task complete only when verification passes.
+11. Move to the next task.
+
+Batching rule:
+
+- One task packet per implementation pass.
+- Never implement two unrelated features in the same pass.
+- Never mix UI polish, service logic, repository changes, and navigation changes unless the task explicitly requires the full vertical slice.
+- If a task touches more than eight source files, stop and split it into smaller task packets.
+
+Phase exit rule:
+
+- A phase is not complete because all code was written.
+- A phase is complete only when the exit gate passes and `VERIFICATION_REPORT.md` has evidence.
+
+---
+
+## Windows Verification Command Cookbook
+
+The repo is on Windows. Prefer `rg` and PowerShell commands that work in this workspace.
+
+Typecheck:
+
+```powershell
+npm run typecheck -- --pretty false
+```
+
+Lint:
+
+```powershell
 npm run lint
-# Expected: 0 errors
+```
 
-# 4. Tests
+Targeted tests:
+
+```powershell
+npm test -- <test-file-or-pattern>
+```
+
+Vitest-style targeted tests when the suite uses Vitest imports:
+
+```powershell
+npx vitest run <test-file>
+```
+
+Edited-file banned pattern audit:
+
+```powershell
+rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|@ts-expect-error" <edited-files>
+rg "StyleSheet\.create|FlatList|AsyncStorage|fetch\(" <edited-files>
+rg "#[0-9A-Fa-f]{3,8}|rgb\(" <edited-files>
+```
+
+Edited-file line count audit:
+
+```powershell
+Get-Item <edited-files> | ForEach-Object {
+  $lineCount = (Get-Content -LiteralPath $_.FullName).Count
+  if ($lineCount -gt 200) { "$lineCount $($_.FullName)" }
+}
+```
+
+Feature-wide file size audit:
+
+```powershell
+Get-ChildItem -Path src/features/<feature-name> -Recurse -Include *.ts,*.tsx | ForEach-Object {
+  $lineCount = (Get-Content -LiteralPath $_.FullName).Count
+  if ($lineCount -gt 200) { "$lineCount $($_.FullName)" }
+}
+```
+
+Find Supabase calls outside repository files:
+
+```powershell
+rg "supabase\.(from|rpc|channel|storage)" src --glob "!**/repository.ts" --glob "!**/repository/**"
+```
+
+Find direct component queries:
+
+```powershell
+rg "useQuery\(|useMutation\(" src/screens src/features --glob "*.tsx"
+```
+
+This command can produce valid matches in hooks or container components. Each match must be reviewed. Data-driven screen components should consume feature hooks rather than define query calls inline.
+
+Find disabled feature routes:
+
+```powershell
+rg "Social|Duels|Rankings|SquadWars|Rivals|Trading|EmergencyGem" src/navigation src/screens src/features src/constants
+```
+
+Final launch audit commands are listed again in Phase 10.
+
+---
+
+## Task Completion Contract
+
+No task is complete until all of these are true:
+
+- Implementation exists across every required layer.
+- Tests cover success and failure paths.
+- Offline/degraded behavior is implemented where relevant.
+- Sentry captures unexpected errors outside components.
+- User-facing errors are shown where relevant.
+- Mutations invalidate related queries on success.
+- Mutations use optimistic update and rollback where the user cares.
+- Every UI state is rendered.
+- Feature integrates with at least two other systems.
+- `VERIFICATION_REPORT.md` is updated.
+- Required commands pass.
+
+Do not mark `[x]` because code "looks right".
+Only mark `[x]` when verification has run.
+
+---
+
+## 14-Category Verification Matrix
+
+Every shipped feature must be verified against:
+
+1. domain models
+2. validation
+3. service logic
+4. repository and persistence
+5. event emission and handling
+6. analytics hooks
+7. UI implementation
+8. loading states
+9. empty states
+10. error states
+11. retry and degraded states
+12. edge case handling
+13. tests
+14. integration with at least two other systems
+
+Each phase must update `VERIFICATION_REPORT.md` with this table:
+
+```md
+## <Feature Name>
+
+| Category | Status | Evidence |
+|---|---|---|
+| Domain models | PASS/FAIL | files/tests |
+| Validation | PASS/FAIL | files/tests |
+| Service logic | PASS/FAIL | files/tests |
+| Repository and persistence | PASS/FAIL | files/tests |
+| Event emission and handling | PASS/FAIL | files/tests |
+| Analytics hooks | PASS/FAIL | files/tests |
+| UI implementation | PASS/FAIL | files/tests |
+| Loading states | PASS/FAIL | files/tests |
+| Empty states | PASS/FAIL | files/tests |
+| Error states | PASS/FAIL | files/tests |
+| Retry and degraded states | PASS/FAIL | files/tests |
+| Edge case handling | PASS/FAIL | files/tests |
+| Tests | PASS/FAIL | command output summary |
+| Integration with 2+ systems | PASS/FAIL | systems listed |
+```
+
+---
+
+## 11/10 Product Standard
+
+The launch app must feel:
+
+- fast: session start is immediate
+- obvious: Home has one best action
+- alive: companion reacts to progress
+- fair: rewards are earned and explainable
+- durable: offline progress is safe
+- personal: AI coach references real behavior
+- polished: every state is designed
+- ethical: premium does not exploit fear
+- trustworthy: privacy, purchases, and errors are handled cleanly
+
+The app is not 11/10 if:
+
+- Home looks like a pile of unrelated systems.
+- A completed session does not visibly affect the app.
+- AI coach gives generic advice.
+- Offline completion can lose progress.
+- Disabled social features appear empty.
+- Premium copy pressures users during failure.
+- Any screen only handles success state.
+- Any feature ships without tests.
+
+---
+
+## Phase 0 - Completed Foundation
+
+Status: COMPLETE.
+
+Do not redo Phase 0.
+Do not add Phase 0 tasks.
+Do not use Phase 0 as a dumping ground for regressions.
+
+Phase 0 is treated as a locked baseline:
+
+- TypeScript strict baseline is clean.
+- Lint baseline is clean.
+- Suppression baseline is clean.
+- Import baseline is clean.
+- File-size baseline is clean.
+- Dead-code baseline is clean.
+
+Allowed Phase 0-related action:
+
+- If a later task breaks a Phase 0 guarantee, fix that regression inside the same later task before marking it complete.
+
+Not allowed:
+
+- "Clean up later."
+- "Add TODO."
+- "Temporary any."
+- "Suppress for now."
+- "Move fast and fix types after."
+
+---
+
+## Phase 1 - Launch Spine: Session Completion Must Be Perfect
+
+Goal: Turn one completed focus session into validated, persistent, visible progress.
+
+This phase is mandatory. Do not work on AI coach, paywall polish, social, boss, or cosmetics until Phase 1 is green.
+
+### P1-01 - Completion Ledger Contract
+
+WHY:
+Every downstream system depends on a single trustworthy record of what happened.
+
+READ FIRST:
+
+- `src/features/session-completion/`
+- `src/session/`
+- `src/screens/session/`
+- `src/events/types/session.ts`
+- `docs/brain/product-logic.md`
+
+IMPLEMENT:
+
+1. Create or harden a completion ledger schema in `src/features/session-completion/schemas.ts`.
+2. Ledger fields must include:
+   - ledger id
+   - idempotency key
+   - session id
+   - user id
+   - mode
+   - target duration seconds
+   - completed duration seconds
+   - effective focused seconds
+   - pause count
+   - interruption count
+   - strict mode flag
+   - started at
+   - completed at
+   - timezone
+   - grade
+   - grade score
+   - quality score
+   - Focus Score delta
+   - XP delta
+   - streak result
+   - companion reaction id
+   - reward ids
+   - daily mission result
+   - offline sync status
+   - created at
+3. Keep ledger construction in `service.ts` or a service submodule.
+4. Keep persistence in `repository.ts`.
+5. Validate repository responses with Zod.
+6. Emit exactly one `session:completed` event per idempotency key.
+
+VERIFY:
+
+- [ ] Ledger schema rejects missing required fields.
+- [ ] Ledger service creates a valid ledger for a normal completed session.
+- [ ] Ledger service creates a valid pending ledger offline.
+- [ ] Duplicate idempotency key does not duplicate ledger or downstream events.
+- [ ] Repository tests cover success, conflict, invalid response, and Supabase error.
+- [ ] Service tests cover success, offline, partial dependency failure, and duplicate replay.
+- [ ] `session:completed` fires exactly once per ledger idempotency key.
+- [ ] `npm run typecheck -- --pretty false` passes.
+
+### P1-02 - Session Grading Engine
+
+WHY:
+The grade is the emotional receipt. It must be deterministic, fair, and reused everywhere.
+
+READ FIRST:
+
+- `src/features/session-completion/`
+- `src/session/engines/`
+- `src/session/validation/`
+- `docs/brain/product-logic.md`
+
+IMPLEMENT:
+
+1. Put grading logic in `src/features/session-completion/grading-service.ts` or a service submodule.
+2. Do not calculate grades in components, hooks, repositories, or story screens.
+3. Use a Zod input schema for grading input.
+4. Output:
+   - grade: `S | A | B | C | D`
+   - grade score from 0 to 100
+   - grade label
+   - factor breakdown
+   - Focus Score impact recommendation
+   - XP quality multiplier
+   - user-facing reason
+5. Grade factors:
+   - completion ratio
+   - effective focus time
+   - pause count
+   - interruption count
+   - strict mode
+   - session mode
+   - background time
+6. Recovery sessions must be judged against their intended recovery goal, not against deep-work expectations.
+7. Abandoned sessions must use a separate abandonment result, not fake a completed grade.
+
+VERIFY:
+
+- [ ] Tests cover S, A, B, C, D.
+- [ ] Tests cover recovery mode.
+- [ ] Tests cover strict mode.
+- [ ] Tests cover abandoned session path.
+- [ ] Tests cover pause-heavy but completed session.
+- [ ] Tests cover short intentional session.
+- [ ] Focus Score and story consume this result instead of recalculating.
+
+### P1-03 - Completion Orchestrator
+
+WHY:
+Completing a session touches many systems. The orchestration must be explicit, idempotent, and resilient.
+
+READ FIRST:
+
+- `src/session/integration/`
+- `src/features/session-completion/service.ts`
+- `src/features/economy/offline-queue.ts`
+- `src/events/`
+
+IMPLEMENT:
+
+Completion order:
+
+1. Validate session completion input.
+2. Build completion ledger.
+3. Persist ledger or enqueue offline.
+4. Emit `session:completed`.
+5. Update Focus Score.
+6. Update streak.
+7. Award XP.
+8. Create rewards.
+9. Update companion.
+10. Update daily mission.
+11. Track analytics.
+12. Return post-session story view model.
+
+Rules:
+
+- Each downstream system must be idempotent.
+- One subsystem failure must not lose the ledger.
+- If a noncritical subsystem fails, story shows a degraded state.
+- If persistence fails offline, queue the ledger before showing success.
+
+VERIFY:
+
+- [ ] Normal completion updates all core systems.
+- [ ] Offline completion queues ledger and shows pending state.
+- [ ] Reward failure does not erase session completion.
+- [ ] Focus Score failure is captured and retried or marked degraded.
+- [ ] Duplicate replay does not duplicate rewards, XP, streak, or analytics.
+- [ ] Tests cover each failure path.
+
+### P1-04 - Post-Session Story View Model
+
+WHY:
+The story screen should render a prepared result, not perform business logic.
+
+READ FIRST:
+
+- `src/screens/session/SessionCompleteScreen.tsx`
+- `src/screens/session/components/`
+- `src/features/session-story/` if present
+
+IMPLEMENT:
+
+Create a service-level story view model containing:
+
+- grade card data
+- Focus Score delta card data
+- XP and level progress data
+- streak state data
+- companion reaction data
+- reward reveal data
+- daily mission completion data
+- next action CTA
+- degraded section warnings
+
+The screen must only render this view model through hooks.
+
+VERIFY:
+
+- [ ] No business calculations in story JSX.
+- [ ] Story loading state is a skeleton matching final layout.
+- [ ] Story empty fallback handles missing ledger.
+- [ ] Story error state has retry.
+- [ ] Story offline state shows pending sync.
+- [ ] Story degraded state still lets user return Home.
+- [ ] Reduced motion is respected.
+- [ ] All controls have accessibility label, role, and hint.
+
+### P1-05 - Home Return Sync
+
+WHY:
+After completion, Home must immediately show the new truth.
+
+READ FIRST:
+
+- `src/screens/home/`
+- `src/features/home-spine/`
+- `src/api/QueryProvider.tsx`
+
+IMPLEMENT:
+
+1. Define completion-related query keys in one place.
+2. On completion success, invalidate or optimistically update:
+   - active session
+   - session history
+   - Focus Score
+   - streak
+   - progression
+   - rewards
+   - companion
+   - daily mission
+3. On offline completion, show optimistic state with pending-sync banner.
+4. On sync success, clear pending state.
+5. On sync failure after retries, keep progress visible and show repair CTA.
+
+VERIFY:
+
+- [ ] Complete session -> story -> Home shows updated score, streak, mission, and companion.
+- [ ] Complete offline -> Home shows pending-sync banner.
+- [ ] Reconnect -> pending banner clears.
+- [ ] Query invalidation tests pass.
+- [ ] Optimistic rollback tests pass.
+
+PHASE 1 EXIT GATE:
+
+- [ ] End-to-end test: start session -> complete -> story -> Home.
+- [ ] Offline end-to-end test passes.
+- [ ] No edited file over 200 lines.
+- [ ] `npm run typecheck -- --pretty false` passes.
+- [ ] Targeted tests pass.
+- [ ] Verification report updated.
+
+---
+
+## Phase 2 - Focus Identity: The Main Product Spine
+
+Goal: Focus Score becomes the primary identity system and the user's daily reason to return.
+
+### P2-01 - Focus Identity Domain Model
+
+WHY:
+AI IDEs create drift when domain shape is vague. The score model needs one source of truth.
+
+READ FIRST:
+
+- `src/features/focus-identity/`
+- `src/events/types/focus-identity.ts`
+- `src/types/supabase.ts`
+
+IMPLEMENT:
+
+Schemas:
+
+- `FocusScoreRecordSchema`
+- `FocusScoreFactorsSchema`
+- `FocusScoreHistoryPointSchema`
+- `FocusScoreUpdateInputSchema`
+- `FocusScoreUpdateResultSchema`
+- `MonthlyFocusReportSummarySchema`
+
+Types:
+
+- Infer all schema-backed types with `z.infer<>`.
+- Keep domain-only types in `types.ts`.
+- Do not mirror schema types manually.
+
+VERIFY:
+
+- [ ] Schema tests cover valid, invalid, edge, and corrupt persisted data.
+- [ ] No hand-written duplicate schema types.
+- [ ] Factor weights sum to exactly 100 percent in tests.
+- [ ] Score range is enforced at 300 to 850.
+
+### P2-02 - Focus Identity Repository
+
+WHY:
+Focus Score must survive reinstall and support reports, analytics, and coach recommendations.
+
+IMPLEMENT:
+
+Repository functions:
+
+- `fetchCurrentFocusScore(userId)`
+- `upsertCurrentFocusScore(userId, score)`
+- `appendFocusScoreHistory(event)`
+- `fetchFocusScoreHistory(userId, days)`
+- `fetchMonthlyFocusReportInput(userId, month)`
+
+Rules:
+
+- All Supabase queries live here.
+- All responses are parsed with Zod.
+- Supabase errors throw typed repository errors.
+- RLS protects user-owned records.
+- Schema migrations must be followed by `npm run types:supabase`.
+
+VERIFY:
+
+- [ ] Repository tests cover success, empty, invalid shape, Supabase error, and conflict.
+- [ ] RLS policy exists for user-owned score data.
+- [ ] Supabase types regenerated after schema change.
+- [ ] No Focus Score Supabase query exists outside repository.
+
+### P2-03 - Focus Score Algorithm
+
+WHY:
+The score must be explainable enough to trust and stable enough to feel meaningful.
+
+IMPLEMENT:
+
+Use this five-factor model:
+
+- Consistency: 35 percent.
+- Streak stability: 25 percent.
+- Session quality: 20 percent.
+- Intentional difficulty: 10 percent.
+- Recency: 10 percent.
+
+Rules:
+
+- New users start at 550.
+- Score floor is 300.
+- Score ceiling is 850.
+- First session should create visible movement.
+- S-grade sessions create strong positive movement.
+- Recovery sessions can improve consistency but cannot farm elite scores.
+- Missed days reduce score gradually.
+- Comeback sessions soften recent losses.
+- Abandoned committed sessions reduce score.
+- Every update includes explanation strings and factor deltas.
+
+VERIFY:
+
+- [ ] Tests cover first session.
+- [ ] Tests cover score floor and ceiling.
+- [ ] Tests cover each grade.
+- [ ] Tests cover missed day.
+- [ ] Tests cover comeback.
+- [ ] Tests cover recovery farming prevention.
+- [ ] Tests cover abandoned session.
+- [ ] Explanation output names top positive and top negative factor.
+
+### P2-04 - Focus Identity Integration
+
+WHY:
+The score is useless if it is not updated from real events.
+
+IMPLEMENT:
+
+1. Subscribe to `session:completed`.
+2. Update Focus Score from ledger data.
+3. Persist current score.
+4. Append history event.
+5. Emit `focus-identity:score_updated`.
+6. Invalidate Focus Score queries.
+7. Track `vex_focus_score_changed`.
+
+VERIFY:
+
+- [ ] Session completion updates Focus Score.
+- [ ] History row is appended.
+- [ ] Event fires once.
+- [ ] Analytics contains no PII.
+- [ ] Failure is captured by Sentry and does not crash completion flow.
+
+### P2-05 - Focus Score Dashboard
+
+WHY:
+The dashboard is where users understand why they are improving.
+
+IMPLEMENT:
+
+Dashboard sections:
+
+- hero score and band
+- last session delta
+- 30-day trend
+- five factor bars
+- strongest pattern
+- weakest pattern
+- "what changed" section
+- next score target
+- monthly report CTA
+
+Required states:
+
+- loading skeleton
+- empty zero-session state
+- error with retry
+- offline degraded banner
+- stale-data refetching state
+- success
+
+VERIFY:
+
+- [ ] Component tests cover all states.
+- [ ] Trend handles 0, 1, 2, and 30 data points.
+- [ ] CTA routes are typed.
+- [ ] No hardcoded styles.
+- [ ] Reduced motion respected.
+
+### P2-06 - Home Focus Widget
+
+WHY:
+The main identity number must be visible every day.
+
+IMPLEMENT:
+
+Widget shows:
+
+- current score
+- band
+- delta since last session
+- one sentence reason
+- tap target to dashboard
+
+VERIFY:
+
+- [ ] Widget appears above secondary rails.
+- [ ] Widget updates after session completion.
+- [ ] Widget handles loading, empty, error, offline, and success.
+- [ ] Tapping navigates through typed route.
+
+PHASE 2 EXIT GATE:
+
+- [ ] Focus Score changes after test session.
+- [ ] Focus Score survives reinstall with same user.
+- [ ] Dashboard and widget render all states.
+- [ ] All Focus Identity tests pass.
+- [ ] Typecheck passes.
+- [ ] Verification report updated.
+
+---
+
+## Phase 3 - Home Command Center
+
+Goal: Home gives exactly one best action and hides everything that is not ready.
+
+### P3-01 - Home Information Architecture
+
+WHY:
+A cluttered Home screen makes the app feel unfinished.
+
+IMPLEMENT:
+
+Home order:
+
+1. identity greeting
+2. Focus Score widget
+3. one daily mission card
+4. primary session start control
+5. companion status
+6. streak/progress strip
+7. secondary optional rail
+
+Rules:
+
+- One primary CTA above the fold.
+- No disabled feature cards.
+- No empty social surfaces.
+- No generic marketing explanation.
+- Stale data must be labeled.
+- Offline mode must be visible and calm.
+
+VERIFY:
+
+- [ ] First viewport shows score, mission, and start action.
+- [ ] Disabled routes are invisible.
+- [ ] Home section failure does not crash screen.
+- [ ] Home has loading, empty, error, offline, stale, and success states.
+
+### P3-02 - Daily Mission Priority Engine
+
+WHY:
+The app must decide what matters so the user does not have to.
+
+IMPLEMENT:
+
+Mission priority:
+
+1. first session for new user
+2. pending sync repair
+3. streak critical
+4. comeback quest
+5. active daily mission
+6. boss near defeat if boss enabled
+7. companion care
+8. AI coach next action
+9. squad weekly goal if squads enabled
+10. default recommended focus session
+
+Mission payload:
+
+- id
+- type
+- priority
+- title
+- reason
+- CTA label
+- CTA route/action
+- target system
+- expires at
+- analytics payload
+
+VERIFY:
+
+- [ ] Exactly one primary mission appears.
+- [ ] Priority tests cover every branch.
+- [ ] Mission persistence works.
+- [ ] Completion listens to `session:completed`.
+- [ ] Mission analytics fires shown, started, completed, dismissed.
+
+### P3-03 - Recommended Session Engine
+
+WHY:
+Starting focus must feel effortless and personal.
+
+IMPLEMENT:
+
+Recommendation inputs:
+
+- user goal
+- recent session length
+- recent grade
+- time of day
+- streak urgency
+- recovery status
+- daily mission
+
+Output:
+
+- duration
+- mode
+- reason
+- fallback if data missing
+
+Rules:
+
+- One tap starts recommendation.
+- Advanced setup remains secondary.
+- Start action is disabled with reason if blocked.
+- Haptic goes through `src/utils/haptics.ts`.
+
+VERIFY:
+
+- [ ] New users get a safe starter recommendation.
+- [ ] Returning users get history-aware recommendation.
+- [ ] Streak-critical users get recovery-friendly option.
+- [ ] Session starts within 500ms median.
+- [ ] Tests cover sparse data and conflicting signals.
+
+### P3-04 - Home Feature Visibility Gate
+
+WHY:
+AI IDEs often leave dead links. Launch cannot expose unfinished systems.
+
+IMPLEMENT:
+
+Create or harden feature visibility rules:
+
+- disabled feature has no tab
+- disabled feature has no Home card
+- disabled feature has no settings entry unless explicitly needed
+- disabled feature deep link routes to safe fallback
+- disabled feature analytics does not fire
+
+VERIFY:
+
+- [ ] Social feed hidden when flag false.
+- [ ] Duels hidden when flag false.
+- [ ] Rankings hidden when flag false.
+- [ ] Squad wars hidden when flag false.
+- [ ] Trading hidden or archived.
+- [ ] Emergency gem sinks hidden or archived.
+- [ ] App works with all optional flags false.
+
+PHASE 3 EXIT GATE:
+
+- [ ] Home communicates one best action.
+- [ ] All disabled feature routes are unreachable.
+- [ ] Recommended session starts in one tap.
+- [ ] Home tests pass.
+- [ ] Typecheck passes.
+- [ ] Verification report updated.
+
+---
+
+## Phase 4 - Onboarding And First Session Magic
+
+Goal: A new user reaches a meaningful first win fast.
+
+### P4-01 - Five-Screen Maximum Onboarding
+
+WHY:
+Long onboarding kills activation.
+
+IMPLEMENT:
+
+Onboarding must be five screens or fewer:
+
+1. identity promise: Focus Score starts at 550
+2. name and goal
+3. companion reveal
+4. first session setup
+5. first result after completion
+
+Rules:
+
+- No marketing-only screen.
+- No permission prompt before value is explained.
+- No feature tour of disabled systems.
+- No generic "all-in-one productivity" copy.
+- Form screens use `KeyboardAvoidingView` and `ScrollView`.
+
+VERIFY:
+
+- [ ] New user can start first session within 90 seconds.
+- [ ] Existing onboarded user skips onboarding.
+- [ ] Onboarding state persists.
+- [ ] Accessibility labels exist for every control.
+- [ ] Tests cover completion and skip paths.
+
+### P4-02 - Starter Session
+
+WHY:
+The first session should be easy enough to complete and meaningful enough to matter.
+
+IMPLEMENT:
+
+Starter session:
+
+- 10 minutes by default
+- Recovery or Starter mode
+- clear expectation
+- companion waiting state
+- Focus Score preview
+- no advanced choices blocking start
+
+VERIFY:
+
+- [ ] Starter session begins from onboarding.
+- [ ] Completion updates Focus Score.
+- [ ] First result screen shows score movement.
+- [ ] Abandoning starter session has supportive recovery path.
+
+### P4-03 - First Result Moment
+
+WHY:
+The first completion is where the user decides if VEX is real.
+
+IMPLEMENT:
+
+First result must show:
+
+- grade
+- Focus Score before and after
+- companion reaction
+- first XP progress
+- streak seed
+- next mission
+
+VERIFY:
+
+- [ ] First result screen renders without historical data.
+- [ ] Missing optional systems do not break first result.
+- [ ] User lands on Home with updated state.
+
+PHASE 4 EXIT GATE:
+
+- [ ] Fresh install activation flow passes end to end.
+- [ ] Onboarding tests pass.
+- [ ] No disabled features shown in onboarding.
+- [ ] Typecheck passes.
+- [ ] Verification report updated.
+
+---
+
+## Phase 5 - Emotional Retention Systems
+
+Goal: Retention comes from attachment, mastery, and recovery.
+
+### P5-01 - Companion Growth
+
+WHY:
+The companion makes progress feel alive.
+
+IMPLEMENT:
+
+Companion reacts to:
+
+- session completion
+- grade
+- streak maintained
+- comeback completed
+- Focus Score band changed
+- daily mission completed
+
+Rules:
+
+- Basic companion growth is free.
+- Premium cosmetics are optional.
+- Companion state is persisted.
+- Offline updates are optimistic and retryable.
+
+VERIFY:
+
+- [ ] Companion changes after session completion.
+- [ ] Companion has empty, loading, error, offline, and success states.
+- [ ] Tests cover growth thresholds.
+- [ ] No premium gate blocks basic growth.
+
+### P5-02 - Streaks Without Shame
+
+WHY:
+Streaks should motivate without making users feel trapped.
+
+IMPLEMENT:
+
+Rules:
+
+- qualifying session uses timezone-aware calendar logic
+- streak risk creates one clear action
+- broken streak creates comeback quest
+- streak shields are earned, not panic-sold
+- no emergency gem prompt
+- no paywall copy about saving failure
+
+VERIFY:
+
+- [ ] Timezone tests cover boundary cases.
+- [ ] Active, at-risk, grace, broken, and comeback states tested.
+- [ ] Paywall contains no fear streak rescue.
+- [ ] Streak integrates with companion, Focus Score, notifications, and mission.
+
+### P5-03 - Comeback Quest
+
+WHY:
+The app should recover users after missed days instead of punishing them.
+
+IMPLEMENT:
+
+Trigger:
+
+- 2 or more missed days
+- user returns after streak break
+- repeated failed session attempts
+
+Quest:
+
+- small recovery session
+- supportive copy
+- Focus Score partial recovery
+- XP bonus
+- companion encouragement
+- next mission reset
+
+VERIFY:
+
+- [ ] Comeback outranks normal daily mission.
+- [ ] Comeback completion updates Focus Score, XP, companion, and analytics.
+- [ ] Tests cover trigger, completion, expiration, and repeat misses.
+- [ ] Copy has no shame language.
+
+### P5-04 - Monthly Focus Report
+
+WHY:
+Premium should sell insight that feels real.
+
+IMPLEMENT:
+
+Report includes:
+
+- month start score
+- month end score
+- score delta
+- best focus window
+- strongest pattern
+- weakest pattern
+- session count
+- total focused time
+- best grade
+- next month target
+- AI coach insight if available
+
+Free users:
+
+- get a useful summary
+- see premium preview for deeper sections
+
+Premium users:
+
+- get full report
+
+VERIFY:
+
+- [ ] Report uses real persisted data.
+- [ ] Empty month state is handled.
+- [ ] Free preview is useful and ethical.
+- [ ] Premium gate uses monetization layer only.
+- [ ] Tests cover free, premium, empty, loading, error, and offline.
+
+PHASE 5 EXIT GATE:
+
+- [ ] Companion, streak, comeback, and report integrate with session completion.
+- [ ] No fear monetization exists.
+- [ ] Tests pass.
+- [ ] Typecheck passes.
+- [ ] Verification report updated.
+
+---
+
+## Phase 6 - Rewards, Progression, And Economy Integrity
+
+Goal: Rewards feel clean, earned, and impossible to duplicate.
+
+### P6-01 - Reward Ledger
+
+WHY:
+Duplicate or missing rewards destroy trust.
+
+IMPLEMENT:
+
+Reward ledger states:
+
+- pending
+- delivered
+- failed
+- expired
+
+Rules:
+
+- every reward has idempotency key
+- creation and delivery are separate
+- failed delivery is retryable
+- offline delivery is queued
+- UI distinguishes pending from delivered
+
+VERIFY:
+
+- [ ] Duplicate event replay does not duplicate reward.
+- [ ] Failed delivery captured by Sentry.
+- [ ] Retry succeeds.
+- [ ] Tests cover success, duplicate, failure, retry, and offline.
+
+### P6-02 - XP And Level Pacing
+
+WHY:
+Progression should be motivating without becoming noise.
+
+IMPLEMENT:
+
+First week arc:
+
+- session 1: Focus Score movement and companion reaction
+- session 2: streak explanation
+- session 3: first meaningful reward
+- session 5: AI coach pattern insight
+- session 7: weekly milestone
+
+Rules:
+
+- early progress is visible
+- long-term systems unlock gradually
+- no more than one new concept introduced after a session
+
+VERIFY:
+
+- [ ] First 7-session progression path is tested or documented.
+- [ ] Level thresholds are deterministic.
+- [ ] Reward amounts are balanced and not excessive.
+- [ ] UI explains unlocks clearly.
+
+### P6-03 - Currency And Monetization Boundaries
+
+WHY:
+Too many currencies and dark sinks make the app feel cheap.
+
+Launch currencies:
+
+- XP for progression
+- Coins for earned soft rewards
+- Gems only through compliant purchase flows
+
+Banned:
+
+- trading
+- emergency gem sinks
+- paid streak rescue
+- paid boss retry panic
+- hidden exchange rates
+- purchase prompts during failure states
+
+VERIFY:
+
+- [ ] Trading disabled or archived.
+- [ ] Emergency gem sinks disabled or archived.
+- [ ] Purchases go through `src/shared/monetization/`.
+- [ ] Wallet transactions are ledgered.
+- [ ] Entitlement tests cover free, premium, expired, restore, and purchase failure.
+
+PHASE 6 EXIT GATE:
+
+- [ ] Reward ledger is idempotent.
+- [ ] Economy has no dark pattern sinks.
+- [ ] Monetization layer owns purchases.
+- [ ] Tests pass.
+- [ ] Typecheck passes.
+- [ ] Verification report updated.
+
+---
+
+## Phase 7 - AI Coach That Feels Real
+
+Goal: AI coach uses real behavior or stays quiet.
+
+### P7-01 - Coach Input Contract
+
+WHY:
+AI slop starts with vague inputs.
+
+IMPLEMENT:
+
+Coach may use:
+
+- recent session grades
+- preferred session lengths
+- completion times
+- missed days
+- Focus Score factors
+- streak state
+- mission history
+- user goal category
+- notification preferences
+- premium status
+
+Coach must not use:
+
+- raw private notes unless user explicitly provided them for coaching
+- secrets
+- unnecessary PII
+- unvalidated storage data
+
+VERIFY:
+
+- [ ] Coach input schema exists.
+- [ ] Missing data produces fallback insight.
+- [ ] PII is excluded from Sentry and analytics.
+- [ ] Tests cover empty, sparse, strong-pattern, weak-pattern, and offline inputs.
+
+### P7-02 - Message Quality Gate
+
+WHY:
+Generic messages make the feature feel fake.
+
+Every coach message must include at least two:
+
+- observed behavior
+- specific recommendation
+- timing suggestion
+- reason
+- next action
+- confidence level
+
+Reject:
+
+- "Keep going."
+- "You are doing great."
+- "Try focusing more."
+- "Come back today."
+
+Allow:
+
+- "Your strongest sessions this week started after 8 PM. Try a 25-minute Recovery session tonight to protect your streak without overreaching."
+
+VERIFY:
+
+- [ ] Message generator rejects generic templates.
+- [ ] Tests snapshot accepted and rejected messages.
+- [ ] Coach messages link to one concrete action when possible.
+- [ ] Free tier limits are enforced without breaking core app.
+
+### P7-03 - Coach Integration
+
+WHY:
+Coach should support the core loop, not become another dashboard.
+
+IMPLEMENT:
+
+Coach integrates with:
+
+- daily mission
+- session recommendation
+- streak risk
+- comeback quest
+- monthly report
+- notifications
+
+Rules:
+
+- Home shows coach only when it is the best action or useful context.
+- Coach cannot override streak critical or pending sync.
+- Coach suggestions must be actionable.
+
+VERIFY:
+
+- [ ] Coach suggestion can become daily mission.
+- [ ] Coach respects priority engine.
+- [ ] Coach does not show generic empty panel.
+- [ ] Analytics tracks shown, accepted, dismissed.
+
+### P7-04 - Notification Budget
+
+WHY:
+Noisy notifications get apps deleted.
+
+IMPLEMENT:
+
+Rules:
+
+- maximum 2 notifications per user per day
+- quiet hours 10 PM to 7 AM local time
+- opt-out respected
+- priority:
+  1. streak critical
+  2. pending sync
+  3. AI coach next best action
+  4. daily mission reminder
+  5. squad help if squads enabled
+- suppress generic login reminders
+
+VERIFY:
+
+- [ ] Tests cover budget, priority, quiet hours, opt-out, and duplicate suppression.
+- [ ] Notification copy is specific.
+- [ ] No notification fires from disabled features.
+
+PHASE 7 EXIT GATE:
+
+- [ ] Coach messages pass quality tests.
+- [ ] Coach integrates with mission and recommendations.
+- [ ] Notification budget is enforced.
+- [ ] Typecheck passes.
+- [ ] Verification report updated.
+
+---
+
+## Phase 8 - Optional Systems: Ship Only If Alive
+
+Goal: Bosses, challenges, and squads only launch if they improve the core loop.
+
+### P8-01 - Feature Flag Matrix
+
+WHY:
+Dead features make users distrust the app.
+
+Launch enabled by default:
+
+- sessions
+- session grading
+- Focus Score
+- daily mission
+- companion
+- streaks
+- comeback quest
+- basic rewards
+- XP progression
+- AI coach basics
+- paywall
+- settings
+
+Launch optional:
+
+- basic solo boss
+- basic challenges
+- squads accountability
+- monthly report
+
+Launch disabled:
+
+- social feed
+- duels
+- rankings
+- squad wars
+- rivals
+- trading
+- emergency gem sinks
+- complex crafting
+- AR or experimental features
+
+VERIFY:
+
+- [ ] Flags default correctly.
+- [ ] Disabled routes hidden from navigation.
+- [ ] Disabled routes hidden from Home.
+- [ ] Disabled deep links fall back safely.
+- [ ] App works with optional flags false.
+
+### P8-02 - Basic Solo Boss
+
+WHY:
+Bosses are useful only if they create one-more-session motivation without complexity.
+
+Launch scope:
+
+- one active solo boss
+- deterministic damage from completed sessions
+- persistent health
+- defeat reward
+- timeout consolation
+- no paid retry
+- no raids
+- no squad war dependency
+
+VERIFY:
+
+- [ ] Damage calculation tested.
+- [ ] Boss updates from `session:completed`.
+- [ ] Defeat reward ledgered.
+- [ ] Timeout has no fear monetization.
+- [ ] Boss hides if unstable.
+
+### P8-03 - Basic Challenges
+
+WHY:
+Challenges add variety only if they remain simple.
+
+Launch scope:
+
+- daily challenge
+- weekly challenge
+- one CTA per challenge
+- progress from sessions
+- reward ledger integration
+- no social dependency
+
+VERIFY:
+
+- [ ] Challenge progress updates from sessions.
+- [ ] Completion creates ledgered reward.
+- [ ] Empty state has one CTA.
+- [ ] Tests cover expiration, completion, claim, and duplicate claim.
+
+### P8-04 - Squads Accountability
+
+WHY:
+Squads can work at low scale only as private accountability.
+
+Launch scope:
+
+- create squad
+- join by invite
+- weekly shared focus goal
+- member contribution list
+- supportive notification
+
+Banned at launch:
+
+- global feed
+- rankings
+- wars
+- duels
+- public discovery
+
+VERIFY:
+
+- [ ] Two-person squad works.
+- [ ] Empty state invites user to create or join.
+- [ ] Sessions contribute to weekly goal.
+- [ ] No global population required.
+
+PHASE 8 EXIT GATE:
+
+- [ ] Optional systems either green or disabled.
+- [ ] No dead navigation.
+- [ ] No empty social surfaces.
+- [ ] Tests pass for enabled optional systems.
+- [ ] Typecheck passes.
+- [ ] Verification report updated.
+
+---
+
+## Phase 9 - Production Hardening
+
+Goal: VEX survives real networks, crashes, accessibility needs, and App Review.
+
+External references checked May 5, 2026:
+
+- Apple App Review Guidelines: https://developer.apple.com/app-store/review/guidelines
+- Apple App Store submission overview: https://developer.apple.com/app-store/submitting/
+- Apple App Privacy Details: https://developer.apple.com/app-store/app-privacy-details/
+
+### P9-01 - Offline Sync Reliability
+
+WHY:
+Losing a focus session is unforgivable.
+
+Offline queue supports:
+
+- session completion
+- Focus Score update
+- streak update
+- XP grant
+- reward delivery
+- mission completion
+- companion state
+
+Rules:
+
+- queue entries use schemas
+- idempotency keys required
+- processing ordered by creation time
+- reconnect starts sync within 10 seconds
+- permanent failure shows persistent repair banner
+
+VERIFY:
+
+- [ ] Airplane mode completion shows local progress.
+- [ ] Reconnect syncs within 10 seconds.
+- [ ] Duplicate replay does not duplicate effects.
+- [ ] Corrupt queue data is handled safely.
+- [ ] Tests cover enqueue, replay, retry, permanent failure, and corrupt data.
+
+### P9-02 - Error Boundaries
+
+WHY:
+One broken widget should not crash the app.
+
+Wrap:
+
+- Home
+- onboarding
+- session setup
+- active session
+- post-session story
+- Focus dashboard
+- paywall
+- settings
+
+Fallbacks:
+
+- Home section failure: compact retry section.
+- Session failure: active session recovery.
+- Story failure: plain completion summary.
+- Paywall failure: restore purchases and support path.
+
+VERIFY:
+
+- [ ] Injected render error does not crash.
+- [ ] Sentry captures feature tag.
+- [ ] User can retry.
+- [ ] Tests cover reset behavior.
+
+### P9-03 - Accessibility And Motion
+
+WHY:
+Polish includes users with accessibility settings.
+
+Audit:
+
+- labels
+- roles
+- hints
+- 44 by 44 touch targets
+- reduced motion
+- dynamic text
+- light and dark mode contrast
+- form keyboard handling
+
+VERIFY:
+
+- [ ] Onboarding accessible.
+- [ ] Home accessible.
+- [ ] Session flow accessible.
+- [ ] Story accessible.
+- [ ] Paywall accessible.
+- [ ] Dynamic text does not clip.
+- [ ] Reduced motion path tested.
+
+### P9-04 - Performance Gate
+
+Targets:
+
+- cold start to interactive Home: under 2.5 seconds median
+- Home primary CTA visible: under 1.5 seconds median
+- session start to timer running: under 500ms median
+- story first content after ledger ready: under 300ms median
+
+Fix common issues:
+
+- `ScrollView` plus `.map(...)` lists
+- missing FlashList `estimatedItemSize`
+- missing query `staleTime`
+- uncleaned realtime subscriptions
+- heavy work on Home render
+- uncached images
+- background intervals
+
+VERIFY:
+
+- [ ] `npm run perf:audit` passes.
+- [ ] Median targets pass across 5 runs.
+- [ ] No list warnings.
+- [ ] No avoidable network calls on re-render.
+
+### P9-05 - Privacy And Security
+
+WHY:
+Trust and App Review depend on accurate data handling.
+
+IMPLEMENT:
+
+Data inventory:
+
+- auth identifiers
+- profile fields
+- session behavior
+- Focus Score
+- analytics events
+- purchase status
+- notification token
+- device diagnostics
+
+Rules:
+
+- secrets never in source
+- auth tokens in SecureStorage wrapper only
+- MMKV only for non-sensitive data
+- privacy labels match real collection
+- account deletion works
+- data export works or is disabled
+- no PII in Sentry
+- no PII in analytics unless required and disclosed
+
+VERIFY:
+
+- [ ] Privacy inventory documented.
+- [ ] Account deletion verified.
+- [ ] Export verified or disabled.
+- [ ] No secrets found.
+- [ ] Analytics privacy tests pass.
+- [ ] App Store privacy answers prepared.
+
+### P9-06 - Paywall And RevenueCat
+
+WHY:
+Bad monetization can cause rejection and user distrust.
+
+Approved premium:
+
+- unlimited AI coach
+- monthly Focus Report
+- advanced analytics
+- premium companion cosmetics
+- cosmetic season track
+- extra personal quests
+- squad insights if squads enabled
+
+Banned:
+
+- paid streak rescue
+- paid boss retry panic
+- emergency gem prompts
+- "save your progress" paywall
+- blocking basic sessions
+- blocking basic companion growth
+
+VERIFY:
+
+- [ ] Paywall copy sells growth and insight.
+- [ ] Restore purchases works.
+- [ ] Purchase failure has user-facing error.
+- [ ] Expired entitlement falls back cleanly.
+- [ ] Free tier remains useful.
+- [ ] RevenueCat access only through shared monetization layer.
+
+### P9-07 - App Store Submission Pack
+
+Prepare:
+
+- app name
+- subtitle
+- description
+- keywords
+- support URL
+- privacy policy URL
+- screenshots
+- review notes
+- demo account if needed
+- IAP review notes
+- notification permission explanation
+- age rating answers
+- privacy nutrition label answers
+
+VERIFY:
+
+- [ ] Metadata drafted.
+- [ ] Privacy policy URL ready.
+- [ ] Reviewer can complete onboarding and a session.
+- [ ] Review notes explain subscriptions, login, offline mode, and notifications.
+- [ ] Screenshots show real core loop.
+
+PHASE 9 EXIT GATE:
+
+- [ ] Offline sync proven.
+- [ ] Error boundaries proven.
+- [ ] Accessibility pass complete.
+- [ ] Performance targets met.
+- [ ] Privacy and monetization ready.
+- [ ] App Store pack ready.
+- [ ] Typecheck passes.
+- [ ] Tests pass.
+- [ ] Verification report updated.
+
+---
+
+## Phase 10 - Final Launch Gate
+
+Goal: Make the release decision with evidence, not vibes.
+
+### P10-01 - Required Commands
+
+Run in order:
+
+```bash
+npm run typecheck -- --pretty false
+node scripts/check-no-ts-nocheck.js
+npm run lint
 npm test -- --coverage
-# Expected: > 80% coverage on service layer files, all tests pass
-
-# 5. File size
-find src/ -name "*.ts" -o -name "*.tsx" | while read f; do
-  lines=$(wc -l < "$f"); 
-  if [ "$lines" -gt 200 ]; then echo "OVERSIZE: $lines $f"; fi;
-done
-# Expected: 0 results
-
-# 6. No console.log
-grep -r "console\." src/ --include="*.ts" --include="*.tsx"
-# Expected: 0 results
-
-# 7. No any type
-grep -rn ": any\b\|<any>" src/ --include="*.ts" --include="*.tsx"
-# Expected: 0 results
-
-# 8. No hardcoded colors (hex or rgb)
-grep -rn "#[0-9A-Fa-f]\{3,6\}\|rgb(" src/ --include="*.tsx"
-# Expected: 0 results (all colors from design tokens)
-
-# 9. Preflight script
-npx ts-node scripts/preflight-check.ts
-# Expected: 0 failures
-
-# 10. Dead code / orphan files
-# Run orphan file detection from P0-03
-# Expected: 0 orphans
-
-# 11. Integration audit
-node scripts/integration-audit.js
-# Expected: All systems connected to 2+ other systems
-
-# 12. Archive check
-grep -r "from.*archive/" src/ --include="*.ts" --include="*.tsx"
-# Expected: 0 results (no imports from archived code)
-```
-**VERIFY:**
-- [ ] ALL 12 checks pass with zero failures
-- [ ] App runs on iOS simulator without crash
-- [ ] App runs on Android emulator without crash
-- [ ] First-time onboarding flow completes end-to-end
-- [ ] Session start → complete → story screen → home works end-to-end
-- [ ] Focus Score updates correctly after test session
-
----
-
-## APPENDIX A — WHAT NOT TO ARCHIVE
-> *The analysis over-recommends archiving. Here's what to KEEP and deepen:*
-
-| Feature | Keep? | Rationale |
-|---------|-------|-----------|
-| Boss system | ✅ Keep (simplify) | Best "one more session" hook. Just feature-flag the complex subsystems. |
-| Battle Pass | ✅ Keep (migrate to Season Journey) | Good seasonal layer. Just reduce tiers and remove dual tracks. |
-| Streak creature / companion | ✅ Deepen | Most emotional retention system in the app. |
-| Achievements | ✅ Keep | Free progression signal. Don't over-reward but keep them. |
-| Challenges | ✅ Keep | Good medium-term engagement. Gate behind daily mission completion. |
-| Mastery system | ✅ Keep | Skill paths (Deep Worker, Sprinter, etc.) create identity attachment. |
-| Focus Tower | ✅ Keep | Long-term investment mechanic. Critical for churn prevention. |
-| Content Study feature | ✅ Keep (in archive — unblock when ready) | Actually differentiated. Reconnect when session grading is perfect. |
-| Squads | ✅ Keep + simplify | Accountability mechanic. Highest-ROI social feature. |
-| Social Feed | ❌ Feature-flag off | Not worth moderation cost yet. Re-enable at 10k+ users. |
-| Duels | ❌ Feature-flag off | Too competitive for early user base. |
-| Rankings | ❌ Feature-flag off | Needs critical mass to feel alive. |
-| Squad Wars | ❌ Feature-flag off | Too complex. Simplify squads first. |
-| Rivals | ❌ Feature-flag off | "Past You" rival (P1 suggestion) is better first. |
-| Trading System | ❌ Archive | Economy abuse risk. Bring back only if item economy becomes robust. |
-| Emergency Gem Sinks | ❌ Archive or flag off | Dark pattern confirmed. |
-| Streak Wager | ❌ Already archived — keep archived | Dark pattern. |
-| AR/VR, Blockchain, Nanotech | ❌ Already archived — keep archived | Not part of the product fantasy. |
-
----
-
-## APPENDIX B — SYSTEM INTEGRATION MAP
-> *Every system must be wired to at least 2 others. Reference when building.*
-
-```
-session              → focus-identity, progression, streaks, boss, rewards, analytics, session-story
-session-completion   → session-story, focus-identity, rewards, progression, daily-mission, companion
-focus-identity       → home-spine, session-completion, monthly-report, ai-coach
-home-spine           → daily-mission, focus-identity, ai-coach, streaks, boss, squads
-ai-coach             → session, streaks, focus-identity, notifications, home-spine, personal-quests
-streaks              → companion, comeback-quest, focus-identity, notifications, boss
-boss                 → session, progression, rewards, squads (when enabled)
-companion            → streaks, session-completion, focus-identity
-rewards              → progression, economy, inventory, session-completion
-economy              → rewards, shop, progression, offline-queue
-squads               → social, notifications, challenges, weekly-goal
-progression          → focus-tower, season-journey, rewards, achievements
-auth                 → user-profile, analytics, onboarding, notifications
-notifications        → ai-coach, streaks, squads, daily-mission
+npm run perf:audit
+npx expo export --platform ios --output-dir dist/ios-export-test
 ```
 
+Run audits:
+
+```bash
+rg "console\." src
+rg ": any\b|<any>" src
+rg "@ts-ignore|@ts-nocheck|@ts-expect-error" src
+rg "StyleSheet\.create|FlatList|AsyncStorage|fetch\(" src
+rg "#[0-9A-Fa-f]{3,8}|rgb\(" src --glob "*.tsx"
+rg "from .*archive|from '../archive|from \"../archive" src
+```
+
+VERIFY:
+
+- [ ] Typecheck passes.
+- [ ] No suppressions.
+- [ ] Lint passes.
+- [ ] Tests pass.
+- [ ] Coverage acceptable for service layers.
+- [ ] Performance audit passes.
+- [ ] iOS export passes.
+- [ ] Banned pattern audits are clean.
+
+### P10-02 - Manual End-To-End Flows
+
+VERIFY:
+
+- [ ] Fresh install -> onboarding -> first session -> first result -> Home.
+- [ ] Returning user -> Home -> recommended session -> completion -> story -> Home.
+- [ ] Offline completion -> reconnect -> sync.
+- [ ] App background during active session -> return -> timer correct.
+- [ ] App kill during active session -> reopen -> recovery correct.
+- [ ] Supabase outage -> degraded state.
+- [ ] Paywall -> sandbox purchase -> entitlement active.
+- [ ] Restore purchase.
+- [ ] Expired entitlement fallback.
+- [ ] Account deletion.
+- [ ] Dark mode.
+- [ ] Reduced motion.
+- [ ] Large text.
+- [ ] Notification permission prompt after value explanation.
+
+### P10-03 - Release Decision Rules
+
+Ship if all are green:
+
+- core session loop
+- Focus Score
+- Home mission
+- companion
+- streak/comeback
+- offline sync
+- paywall/RevenueCat
+- privacy/App Store pack
+- no disabled feature reachable
+- required commands
+
+Cut first if not green:
+
+1. squads
+2. boss
+3. challenges
+4. monthly report
+5. advanced analytics
+6. cosmetics
+
+Never cut:
+
+- session start
+- session completion
+- completion ledger
+- Focus Score
+- Home mission
+- offline sync
+- error states
+- paywall restore purchase if subscriptions are live
+
+VERIFY:
+
+- [ ] Release decision recorded in `VERIFICATION_REPORT.md`.
+- [ ] Disabled systems listed with flags.
+- [ ] Remaining launch scope is coherent.
+
 ---
 
-## APPENDIX C — DECISION LOG (Analysis Agreements & Disagreements)
+## Launch Feature Matrix
 
-| Analysis Claim | Agreement | Decision |
-|----------------|-----------|----------|
-| "App is 4.3/10 — too many unranked systems" | ✅ Agree | Hierarchy implemented via Focus Score spine + Daily Mission priority engine |
-| "Archive boss system" | ❌ Disagree | Boss system is kept — feature-flagged subsystems, core boss kept live |
-| "Archive battle pass" | ⚠️ Partial | Migrated to Season Journey (simplified), not archived |
-| "Archive social feed/duels/rankings" | ✅ Agree | Feature-flagged off, not deleted |
-| "Archive trading" | ✅ Agree | Already in archive, stays there |
-| "Focus Score as main spine" | ✅ Strongly agree | Implemented as P1 (Phase 1 priority) |
-| "Streak creature is strong" | ✅ Agree | Deepened in Phase 4 |
-| "Comeback quests over punishing failures" | ✅ Agree | Implemented in P4-03 |
-| "Generic AI messages are useless" | ✅ Agree | P6-02 enforces specific data-driven messages |
-| "Too many currencies" | ✅ Agree | Consolidated to XP + Coins + Gems in P7-01 |
-| "Content study (PDF/YouTube) should be archived" | ❌ Disagree | It's already in archive — but it's differentiated. Flag it for re-activation |
-| "Emergency gem sinks are dark patterns" | ✅ Agree | Archived/disabled in P5-03 |
-| "Squads over social network" | ✅ Agree | P8-01 deepens squads, P8-02 flags off competitive social |
+| System | Launch Decision | Quality Bar |
+|---|---|---|
+| Session start | Must ship | One tap from Home, under 500ms median. |
+| Session completion | Must ship | Ledgered, idempotent, offline-safe. |
+| Session grading | Must ship | Deterministic, tested, reused by all systems. |
+| Focus Score | Must ship | Persistent, explainable, visible on Home. |
+| Home mission | Must ship | Exactly one best action. |
+| Companion | Must ship | Reacts to real progress, basic growth free. |
+| Streaks | Must ship | Supportive, timezone-aware, no shame copy. |
+| Comeback quest | Must ship | Recovery path after missed days. |
+| Rewards | Must ship | Ledgered and idempotent. |
+| XP/levels | Must ship | Clear early pacing. |
+| AI coach | Ship if quality gate passes | Specific, data-backed, actionable. |
+| Notifications | Ship if budget enforced | Max 2/day, quiet hours, opt-out. |
+| Paywall | Ship if RevenueCat verified | Growth and insight only. |
+| Monthly report | Optional | Real data or disable. |
+| Basic boss | Optional | Simple solo loop or disable. |
+| Challenges | Optional | Basic daily/weekly only or disable. |
+| Squads | Optional | Private accountability only or disable. |
+| Social feed | Disable | Needs population and moderation. |
+| Duels | Disable | Needs balance and population. |
+| Rankings | Disable | Empty leaderboard risk. |
+| Squad wars | Disable | Too complex before launch. |
+| Rivals | Disable | Use past-self comparison later. |
+| Trading | Archive | Abuse risk. |
+| Emergency gem sinks | Archive | Dark pattern risk. |
+| Complex crafting | Disable | Not core enough for launch. |
+| AR/experimental | Archive | Product distraction. |
 
 ---
 
-*End of Tasks.md — 9 phases, ~60 atomic tasks, full production readiness path.*
-*Every VERIFY block is a binary pass/fail gate. If it fails, the task is not done.*
+## Windsurf Task Packet Template
+
+Every implementation task should be converted into this packet before coding:
+
+```md
+## Task: <name>
+
+Goal:
+<one sentence>
+
+Files to read first:
+- <file>
+- <file>
+
+Files allowed to edit:
+- <file>
+- <file>
+
+Files forbidden to edit:
+- unrelated features
+- generated Supabase types except through `npm run types:supabase`
+
+Architecture:
+- Component:
+- Hook:
+- Service:
+- Repository:
+- Events:
+- Analytics:
+- Tests:
+
+Implementation steps:
+1.
+2.
+3.
+
+Verification:
+- [ ] targeted test command
+- [ ] typecheck
+- [ ] lint or targeted lint
+- [ ] banned pattern grep
+- [ ] file-size check
+- [ ] verification report updated
+
+Stop if:
+- <specific blocker>
+```
+
+If Windsurf cannot fill this packet, it is not ready to code.
+
+---
+
+## Copy System
+
+VEX voice:
+
+- direct
+- specific
+- supportive
+- evidence-backed
+- never shame-based
+- never manipulative
+
+Approved patterns:
+
+- "Clean finish. No pauses. Focus Score +9."
+- "Your evening sessions are strongest. Try 25 minutes after 8 PM."
+- "Your streak is at risk. A 10-minute Recovery session keeps the chain alive."
+- "One session is saved offline. It will sync when you are back online."
+- "You missed a few days. Start small and rebuild momentum."
+
+Banned patterns:
+
+- "Do not lose everything."
+- "Buy now to save your progress."
+- "Your streak will die."
+- "No items found."
+- "Something went wrong."
+- "Unlock success with premium."
+- "Last chance."
+
+Every empty state must include:
+
+- what happened
+- why it is okay
+- one next action
+
+Every error state must include:
+
+- human-readable problem
+- retry or fallback
+- no technical stack trace
+
+---
+
+## Design And UI Standards For AI IDE
+
+Rules:
+
+- Use existing primitives before creating new UI.
+- Use tokens from `src/theme/tokens/`.
+- No magic numbers.
+- No hardcoded hex.
+- No nested cards.
+- No decorative feature cards that do not perform an action.
+- No spinner-only loading for data-driven screens.
+- Skeleton must match loaded layout.
+- Empty states need one CTA.
+- Error states use shared error components where available.
+- Offline state must be visible.
+- Buttons need labels, roles, and hints.
+- Touch targets at least 44 by 44.
+- Reanimated 3 only.
+- `useReducedMotion()` must gate nonessential animation.
+- FlashList only for lists, with measured `estimatedItemSize`.
+
+Screen quality checklist:
+
+- [ ] first viewport makes purpose obvious
+- [ ] one primary action
+- [ ] no clipped text
+- [ ] no overlapping UI
+- [ ] dark mode works
+- [ ] large text works
+- [ ] offline visible
+- [ ] loading skeleton
+- [ ] empty state
+- [ ] error state
+- [ ] success state
+- [ ] disabled state
+- [ ] accessibility labels
+- [ ] reduced motion
+
+---
+
+## Data And Event Contracts
+
+Core events:
+
+- `session:started`
+- `session:completed`
+- `session:abandoned`
+- `focus-identity:score_updated`
+- `streak:updated`
+- `comeback:started`
+- `comeback:completed`
+- `companion:state_changed`
+- `reward:created`
+- `reward:delivered`
+- `daily-mission:shown`
+- `daily-mission:completed`
+- `coach:suggestion_shown`
+- `coach:suggestion_accepted`
+- `purchase:started`
+- `purchase:completed`
+- `purchase:failed`
+
+Core analytics:
+
+- `vex_onboarding_started`
+- `vex_onboarding_completed`
+- `vex_session_started`
+- `vex_session_completed`
+- `vex_session_abandoned`
+- `vex_focus_score_changed`
+- `vex_daily_mission_shown`
+- `vex_daily_mission_completed`
+- `vex_streak_at_risk`
+- `vex_streak_broken`
+- `vex_comeback_started`
+- `vex_comeback_completed`
+- `vex_reward_delivered`
+- `vex_coach_suggestion_accepted`
+- `vex_paywall_viewed`
+- `vex_premium_purchased`
+- `vex_purchase_failed`
+
+Rules:
+
+- No PII in event payloads unless explicitly required and disclosed.
+- Events should carry ids, types, timestamps, and numeric metrics.
+- Components do not directly call PostHog or Sentry except through approved wrappers where existing architecture allows.
+- Analytics follows existing `AnalyticsService` patterns.
+
+---
+
+## Anti-Slop Review Checklist
+
+Before any AI-generated task is accepted, inspect for:
+
+- [ ] New `any`.
+- [ ] Hidden casts.
+- [ ] Business logic inside components.
+- [ ] Supabase call outside repository.
+- [ ] Hook containing repository query directly.
+- [ ] Component using `useQuery` directly.
+- [ ] Missing error state.
+- [ ] Missing empty state.
+- [ ] Missing offline state.
+- [ ] Spinner-only loading.
+- [ ] Missing tests.
+- [ ] Fake stub that returns null, empty array, or hardcoded success.
+- [ ] Dead route or dead CTA.
+- [ ] Feature flag ignored.
+- [ ] New file over 200 lines.
+- [ ] Design token violation.
+- [ ] Console logging.
+- [ ] Sentry PII.
+- [ ] Purchase outside monetization layer.
+
+If any item is found, the task is not complete.
+
+---
+
+## Final Standard
+
+The May 30 build should feel smaller, sharper, and more complete than a feature-heavy 7/10 app.
+
+The launch build is an 11/10 only if:
+
+1. first session feels meaningful
+2. Focus Score is visible and explainable
+3. Home always gives one best action
+4. companion and streak make progress emotional
+5. AI coach is specific and useful
+6. offline progress is safe
+7. premium is ethical
+8. disabled systems are invisible
+9. App Store readiness is complete
+10. the codebase remains clean enough that Phase 0 never needs to happen again
+
+Any task that risks those standards must be cut, scoped down, or feature-flagged off.

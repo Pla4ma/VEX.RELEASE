@@ -1,12 +1,1 @@
-/**
- * Squad War Events
- */
-
-export interface SquadWarEventDefinitions {
-  'squad-war:ended': {
-    squadId: string;
-    warId: string;
-    winner: string;
-    participants: string[];
-  };
-}
+export * from '../../../src_impl/events/types/squad-war';

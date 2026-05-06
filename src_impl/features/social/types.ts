@@ -1,0 +1,212 @@
+/**
+ * Enhanced Social Features Types
+ *
+ * Phase 12.3 — Friends, activity feed, messaging
+ */
+
+// ============================================================================
+// Friends System
+// ============================================================================
+
+export interface Friend {
+  id: string;
+  userId: string;
+  friendId: string;
+  status: 'PENDING' | 'ACCEPTED' | 'BLOCKED';
+  initiatedBy: string;
+  createdAt: number;
+  updatedAt: number;
+  // Friend info (joined)
+  friendName?: string;
+  friendAvatar?: string;
+  friendLevel?: number;
+  currentStreak?: number;
+  weeklyFocusMinutes?: number;
+}
+
+export interface FriendRequest {
+  id: string;
+  fromUserId: string;
+  toUserId: string;
+  status: 'PENDING' | 'ACCEPTED' | 'REJECTED';
+  createdAt: number;
+  // Sender info
+  fromUserName?: string;
+  fromUserAvatar?: string;
+  fromUserLevel?: number;
+}
+
+export interface FriendActivity {
+  userId: string;
+  friendId: string;
+  activityType: 'SESSION_COMPLETE' | 'BOSS_DEFEAT' | 'ACHIEVEMENT_UNLOCK' | 'LEVEL_UP' | 'STREAK_MILESTONE';
+  timestamp: number;
+  data: {
+    sessionDuration?: number;
+    bossName?: string;
+    achievementName?: string;
+    newLevel?: number;
+    streakDays?: number;
+  };
+}
+
+// ============================================================================
+// Activity Feed
+// ============================================================================
+
+export type SocialPost = ActivityFeedItem;
+
+export interface ActivityFeedItem {
+  id: string;
+  userId: string;
+  actorId: string;
+  actorName: string;
+  actorAvatar?: string;
+  type: 'SESSION' | 'BOSS' | 'ACHIEVEMENT' | 'SQUAD' | 'DUEL' | 'STREAK';
+  action: string;
+  timestamp: number;
+  visibility: 'PUBLIC' | 'FRIENDS' | 'SQUAD' | 'PRIVATE';
+  data: Record<string, unknown>;
+  likes: number;
+  comments: number;
+  reactionCounts: Record<string, number>;
+  userReaction?: 'fire' | 'strong' | 'clap' | 'mind_blown';
+}
+
+export interface FeedLike {
+  feedItemId: string;
+  userId: string;
+  createdAt: number;
+}
+
+export interface FeedComment {
+  id: string;
+  feedItemId: string;
+  userId: string;
+  userName: string;
+  userAvatar?: string;
+  content: string;
+  createdAt: number;
+  likes: number;
+}
+
+// ============================================================================
+// Messaging
+// ============================================================================
+
+export interface Message {
+  id: string;
+  conversationId: string;
+  senderId: string;
+  content: string;
+  type: 'TEXT' | 'IMAGE' | 'SESSION_INVITE' | 'SQUAD_INVITE';
+  timestamp: number;
+  readAt?: number;
+  editedAt?: number;
+  isDeleted: boolean;
+}
+
+export interface Conversation {
+  id: string;
+  type: 'DIRECT' | 'SQUAD';
+  participants: string[];
+  lastMessageAt: number;
+  lastMessagePreview?: string;
+  unreadCount: Record<string, number>;
+  createdAt: number;
+}
+
+export interface DirectMessage extends Conversation {
+  type: 'DIRECT';
+  otherUserId: string;
+  otherUserName: string;
+  otherUserAvatar?: string;
+  isOnline?: boolean;
+  lastSeen?: number;
+}
+
+export interface SquadMessage extends Conversation {
+  type: 'SQUAD';
+  squadId: string;
+  squadName: string;
+  squadAvatar?: string;
+}
+
+// ============================================================================
+// Shareable Victory Cards
+// ============================================================================
+
+export interface VictoryCard {
+  id: string;
+  userId: string;
+  type: 'BOSS_DEFEAT' | 'ACHIEVEMENT' | 'STREAK' | 'RANK' | 'DUEL_WIN';
+  title: string;
+  subtitle: string;
+  stats: {
+    label: string;
+    value: string;
+  }[];
+  imageUrl?: string;
+  accentColor: string;
+  createdAt: number;
+  shareCount: number;
+}
+
+// ============================================================================
+// Invite & Referral
+// ============================================================================
+
+export interface Referral {
+  id: string;
+  referrerId: string;
+  referredId?: string;
+  referralCode: string;
+  status: 'PENDING' | 'COMPLETED' | 'REWARDED';
+  createdAt: number;
+  completedAt?: number;
+  rewardClaimed: boolean;
+}
+
+export interface InviteReward {
+  referrerCoins: number;
+  referredCoins: number;
+  referrerBadge?: string;
+  requiredActions: string[];
+}
+
+// ============================================================================
+// Social Graph
+// ============================================================================
+
+export interface SocialGraph {
+  userId: string;
+  friends: string[];
+  friendRequests: {
+    incoming: string[];
+    outgoing: string[];
+  };
+  blockedUsers: string[];
+  suggestedFriends: string[];
+}
+
+// ============================================================================
+// Constants
+// ============================================================================
+
+export const FRIEND_LIMITS = {
+  MAX_FRIENDS: 100,
+  MAX_PENDING_REQUESTS: 20,
+  MAX_OUTGOING_REQUESTS_PER_DAY: 10,
+};
+
+export const ACTIVITY_FEED_CONFIG = {
+  PAGE_SIZE: 20,
+  MAX_AGE_DAYS: 7,
+  CACHE_DURATION: 5 * 60 * 1000, // 5 minutes
+};
+
+export const MESSAGE_CONFIG = {
+  MAX_MESSAGE_LENGTH: 1000,
+  MAX_MESSAGES_PER_MINUTE: 30,
+  RETENTION_DAYS: 90,
+};

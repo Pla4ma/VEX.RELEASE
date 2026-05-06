@@ -1,0 +1,207 @@
+/**
+ * Loading Component
+ *
+ * Loading state display with various indicators.
+ */
+
+import React, { useEffect } from "react";
+import { View, StyleSheet, ActivityIndicator, type ViewStyle } from "react-native";
+import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing } from "react-native-reanimated";
+
+import { useTheme } from "../../theme";
+import { Box, Text } from "../primitives";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { useReducedMotion } from "../../hooks/useReducedMotion";
+
+/**
+ * Loading variant
+ */
+export type LoadingVariant = "spinner" | "dots" | "pulse" | "skeleton";
+
+/**
+ * Loading size
+ */
+export type LoadingSize = "sm" | "md" | "lg" | "xl";
+
+/**
+ * Loading props
+ */
+export interface LoadingProps {
+  /** Loading variant */
+  variant?: LoadingVariant;
+  /** Loading size */
+  size?: LoadingSize;
+  /** Loading text */
+  text?: string;
+  /** Whether to show full screen overlay */
+  fullScreen?: boolean;
+  /** Custom style */
+  style?: ViewStyle;
+  /** Whether loading is visible */
+  visible?: boolean;
+  /** Accessibility label */
+  accessibilityLabel?: string;
+}
+
+/**
+ * Size mappings
+ */
+const sizeMap: Record<LoadingSize, number> = {
+  sm: 16,
+  md: 24,
+  lg: 32,
+  xl: 48,
+};
+
+/**
+ * Spinner variant
+ */
+const Spinner: React.FC<{ size: number; color: string }> = ({ size, color }) => {
+  return <ActivityIndicator size={size} color={color} />;
+};
+
+/**
+ * Dots variant
+ */
+const Dots: React.FC<{ size: number; color: string }> = ({ size, color }) => {
+  const dot1 = useSharedValue(0);
+  const dot2 = useSharedValue(0);
+  const dot3 = useSharedValue(0);
+  const { isReducedMotion } = useReducedMotion();
+
+  useEffect(() => {
+    if (isReducedMotion) {
+      return;
+    }
+    dot1.value = withRepeat(withTiming(1, { duration: 400, easing: Easing.ease }), -1, true);
+    dot2.value = withRepeat(withTiming(1, { duration: 400, easing: Easing.ease }), -1, true);
+    dot3.value = withRepeat(withTiming(1, { duration: 400, easing: Easing.ease }), -1, true);
+  }, [dot1, dot2, dot3, isReducedMotion]);
+
+  const dotSize = size / 3;
+  const gap = dotSize / 2;
+
+  const createDotStyle = (scale: ReturnType<typeof useSharedValue<number>>, delay: number) =>
+    useAnimatedStyle(() => ({
+      transform: [{ scale: scale.value }],
+      opacity: 0.4 + scale.value * 0.6,
+    }));
+
+  const dot1Style = createDotStyle(dot1, 0);
+  const dot2Style = createDotStyle(dot2, 100);
+  const dot3Style = createDotStyle(dot3, 200);
+
+  return (
+    <View style={[styles.dotsContainer, { gap }]}>
+      <Animated.View style={[styles.dot, { width: dotSize, height: dotSize, borderRadius: dotSize / 2, backgroundColor: color }, dot1Style]} />
+      <Animated.View style={[styles.dot, { width: dotSize, height: dotSize, borderRadius: dotSize / 2, backgroundColor: color }, dot2Style]} />
+      <Animated.View style={[styles.dot, { width: dotSize, height: dotSize, borderRadius: dotSize / 2, backgroundColor: color }, dot3Style]} />
+    </View>
+  );
+};
+
+/**
+ * Pulse variant
+ */
+const Pulse: React.FC<{ size: number; color: string }> = ({ size, color }) => {
+  const scale = useSharedValue(1);
+  const opacity = useSharedValue(1);
+  const { isReducedMotion } = useReducedMotion();
+
+  useEffect(() => {
+    if (isReducedMotion) {
+      return;
+    }
+    scale.value = withRepeat(withTiming(1.5, { duration: 1000, easing: Easing.ease }), -1, true);
+    opacity.value = withRepeat(withTiming(0, { duration: 1000, easing: Easing.ease }), -1, true);
+  }, [scale, opacity, isReducedMotion]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+    opacity: opacity.value,
+  }));
+
+  return (
+    <View style={{ width: size, height: size }}>
+      <View style={[styles.pulse, { width: size, height: size, borderRadius: size / 2, backgroundColor: color }]} />
+      <Animated.View
+        style={[
+          styles.pulse,
+          {
+            width: size,
+            height: size,
+            borderRadius: size / 2,
+            backgroundColor: color,
+            position: "absolute",
+            top: 0,
+            left: 0,
+          },
+          animatedStyle,
+        ]}
+      />
+    </View>
+  );
+};
+
+/**
+ * Loading component
+ */
+export const Loading: React.FC<LoadingProps> = ({ variant = "spinner", size = "md", text, fullScreen = false, style, visible = true, accessibilityLabel }) => {
+  const { theme } = useTheme();
+  const sizeValue = sizeMap[size];
+  const color = theme.colors.primary[500];
+
+  if (!visible) {
+    return null;
+  }
+
+  const renderVariant = () => {
+    switch (variant) {
+      case "dots":
+        return <Dots size={sizeValue} color={color} />;
+      case "pulse":
+        return <Pulse size={sizeValue} color={color} />;
+      case "spinner":
+      default:
+        return <Spinner size={sizeValue} color={color} />;
+    }
+  };
+
+  const content = (
+    <Box justifyContent="center" alignItems="center" style={Object.assign({ gap: theme.spacing[3] }, style || {})} accessible={true} accessibilityRole="progressbar" accessibilityLabel={accessibilityLabel || text || "Loading"}>
+      {renderVariant()}
+      {text && (
+        <Text variant="body" color="text.secondary">
+          {text}
+        </Text>
+      )}
+    </Box>
+  );
+
+  if (fullScreen) {
+    return <View style={[styles.fullScreen, { backgroundColor: theme.colors.background.primary }]}>{content}</View>;
+  }
+
+  return content;
+};
+
+const styles = createSheet({
+  fullScreen: {
+    ...StyleSheet.absoluteFillObject,
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 100,
+  },
+  dotsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  dot: {
+    backgroundColor: "#000",
+  },
+  pulse: {
+    opacity: 0.3,
+  },
+});
+
+export default Loading;

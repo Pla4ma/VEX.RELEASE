@@ -1,0 +1,408 @@
+/**
+ * Social Repository
+ *
+ * Data access layer for social features
+ */
+
+import { getSupabaseClient } from "../../config/supabase";
+
+const supabase = getSupabaseClient();
+import { type Friend, type FriendRequest, type ActivityFeedItem, type Message, type Conversation, type VictoryCard, type Referral } from "./types";
+
+// ============================================================================
+// Friends
+// ============================================================================
+
+export async function saveFriendRequest(request: FriendRequest): Promise<void> {
+  await supabase.from("friend_requests").insert({
+    id: request.id,
+    from_user_id: request.fromUserId,
+    to_user_id: request.toUserId,
+    status: request.status,
+    created_at: new Date(request.createdAt).toISOString(),
+  });
+}
+
+export async function updateFriendRequest(requestId: string, updates: Partial<FriendRequest>): Promise<void> {
+  const updateData: Record<string, unknown> = {};
+  if (updates.status) {
+    updateData.status = updates.status;
+  }
+
+  await supabase.from("friend_requests").update(updateData).eq("id", requestId);
+}
+
+export async function createFriendship(friendship: Friend): Promise<void> {
+  await supabase.from("friends").insert({
+    id: friendship.id,
+    user_id: friendship.userId,
+    friend_id: friendship.friendId,
+    status: friendship.status,
+    initiated_by: friendship.initiatedBy,
+    created_at: new Date(friendship.createdAt).toISOString(),
+    updated_at: new Date(friendship.updatedAt).toISOString(),
+  });
+}
+
+export async function deleteFriendship(userId: string, friendId: string): Promise<void> {
+  await supabase.from("friends").delete().eq("user_id", userId).eq("friend_id", friendId);
+}
+
+export async function getFriends(userId: string): Promise<Friend[]> {
+  const { data, error } = await supabase.from("friends").select("*").eq("user_id", userId).eq("status", "ACCEPTED");
+
+  if (error || !data) {
+    return [];
+  }
+
+  return data.map((row) => ({
+    id: row.id,
+    userId: row.user_id,
+    friendId: row.friend_id,
+    status: row.status,
+    initiatedBy: row.initiated_by,
+    createdAt: new Date(row.created_at).getTime(),
+    updatedAt: new Date(row.updated_at).getTime(),
+  }));
+}
+
+export async function getFriendRequests(userId: string): Promise<{
+  incoming: FriendRequest[];
+  outgoing: FriendRequest[];
+}> {
+  const { data: incoming, error: incomingError } = await supabase.from("friend_requests").select("*").eq("to_user_id", userId).eq("status", "PENDING");
+
+  const { data: outgoing, error: outgoingError } = await supabase.from("friend_requests").select("*").eq("from_user_id", userId).eq("status", "PENDING");
+
+  return {
+    incoming: (incoming || []).map((row) => ({
+      id: row.id,
+      fromUserId: row.from_user_id,
+      toUserId: row.to_user_id,
+      status: row.status,
+      createdAt: new Date(row.created_at).getTime(),
+    })),
+    outgoing: (outgoing || []).map((row) => ({
+      id: row.id,
+      fromUserId: row.from_user_id,
+      toUserId: row.to_user_id,
+      status: row.status,
+      createdAt: new Date(row.created_at).getTime(),
+    })),
+  };
+}
+
+// ============================================================================
+// Activity Feed
+// ============================================================================
+
+export async function saveActivityItem(item: ActivityFeedItem): Promise<void> {
+  await supabase.from("activity_feed").insert({
+    id: item.id,
+    user_id: item.userId,
+    actor_id: item.actorId,
+    actor_name: item.actorName,
+    type: item.type,
+    action: item.action,
+    timestamp: new Date(item.timestamp).toISOString(),
+    visibility: item.visibility,
+    data: item.data,
+    likes: item.likes,
+    comments: item.comments,
+  });
+}
+
+export async function getActivityFeed(userId: string, page: number, pageSize: number = 20): Promise<ActivityFeedItem[]> {
+  const { data, error } = await supabase
+    .from("activity_feed")
+    .select("*")
+    .or(`visibility.eq.PUBLIC,and(visibility.eq.FRIENDS,actor_id.in.(select friend_id from friends where user_id = ${userId}))`)
+    .order("timestamp", { ascending: false })
+    .range((page - 1) * pageSize, page * pageSize - 1);
+
+  if (error || !data) {
+    return [];
+  }
+
+  return data.map((row) => ({
+    id: row.id,
+    userId: row.user_id,
+    actorId: row.actor_id,
+    actorName: row.actor_name,
+    type: row.type,
+    action: row.action,
+    timestamp: new Date(row.timestamp).getTime(),
+    visibility: row.visibility,
+    data: row.data || {},
+    likes: row.likes || 0,
+    comments: row.comments || 0,
+    reactionCounts: {},
+    userReaction: undefined,
+  }));
+}
+
+export async function createLike(itemId: string, userId: string): Promise<void> {
+  await supabase.from("feed_likes").insert({
+    feed_item_id: itemId,
+    user_id: userId,
+    created_at: new Date().toISOString(),
+  });
+
+  // Update like count
+  await supabase.rpc("increment_feed_likes", { item_id: itemId });
+}
+
+// ============================================================================
+// Messages
+// ============================================================================
+
+export async function saveMessage(message: Message): Promise<void> {
+  await supabase.from("messages").insert({
+    id: message.id,
+    conversation_id: message.conversationId,
+    sender_id: message.senderId,
+    content: message.content,
+    type: message.type,
+    timestamp: new Date(message.timestamp).toISOString(),
+    is_deleted: message.isDeleted,
+  });
+}
+
+export async function getMessages(conversationId: string, before?: number, limit: number = 50): Promise<Message[]> {
+  let query = supabase.from("messages").select("*").eq("conversation_id", conversationId).order("timestamp", { ascending: false }).limit(limit);
+
+  if (before) {
+    query = query.lt("timestamp", new Date(before).toISOString());
+  }
+
+  const { data, error } = await query;
+
+  if (error || !data) {
+    return [];
+  }
+
+  return data.map((row) => ({
+    id: row.id,
+    conversationId: row.conversation_id,
+    senderId: row.sender_id,
+    content: row.content,
+    type: row.type,
+    timestamp: new Date(row.timestamp).getTime(),
+    readAt: row.read_at ? new Date(row.read_at).getTime() : undefined,
+    isDeleted: row.is_deleted,
+  }));
+}
+
+export async function getPost(postId: string): Promise<ActivityFeedItem | null> {
+  const { data, error } = await supabase.from("activity_feed").select("*").eq("id", postId).single();
+
+  if (error || !data) return null;
+
+  return {
+    id: data.id,
+    userId: data.user_id,
+    actorId: data.actor_id,
+    actorName: data.actor_name,
+    actorAvatar: data.actor_avatar,
+    type: data.type,
+    action: data.action,
+    timestamp: new Date(data.timestamp).getTime(),
+    visibility: data.visibility,
+    data: data.data || {},
+    likes: data.likes || 0,
+    comments: data.comments || 0,
+    reactionCounts: {},
+    userReaction: undefined,
+  };
+}
+
+export async function getReactionCounts(postId: string): Promise<Record<string, number>> {
+  const { data, error } = await supabase.from("feed_reactions").select("reaction_type").eq("feed_item_id", postId);
+
+  if (error || !data) return {};
+
+  const counts: Record<string, number> = {};
+  data.forEach((row) => {
+    counts[row.reaction_type] = (counts[row.reaction_type] || 0) + 1;
+  });
+
+  return counts;
+}
+
+export async function getSquadFeed(squadId: string, userId?: string, cursor?: number | null, limit: number = 20): Promise<{ items: ActivityFeedItem[]; nextCursor: number | null }> {
+  const { data, error } = await supabase.from("activity_feed").select("*").eq("squad_id", squadId).order("timestamp", { ascending: false }).limit(limit);
+
+  if (error || !data) return { items: [], nextCursor: null };
+
+  const items = data.map((row) => ({
+    id: row.id,
+    userId: row.user_id,
+    actorId: row.actor_id,
+    actorName: row.actor_name,
+    actorAvatar: row.actor_avatar,
+    type: row.type,
+    action: row.action,
+    timestamp: new Date(row.timestamp).getTime(),
+    visibility: row.visibility,
+    data: row.data || {},
+    likes: row.likes || 0,
+    comments: row.comments || 0,
+    reactionCounts: {},
+    userReaction: undefined,
+  }));
+
+  return {
+    items,
+    nextCursor: data.length > 0 ? data[data.length - 1].timestamp : null,
+  };
+}
+
+export async function reactToPost(postId: string, userId: string, reaction: "fire" | "strong" | "clap" | "mind_blown"): Promise<void> {
+  await supabase.from("feed_reactions").upsert({
+    feed_item_id: postId,
+    user_id: userId,
+    reaction_type: reaction,
+    created_at: new Date().toISOString(),
+  });
+}
+
+export async function getFeed(userId: string, limit: number = 20): Promise<ActivityFeedItem[]> {
+  const { data, error } = await supabase.from("activity_feed").select("*").eq("user_id", userId).order("timestamp", { ascending: false }).limit(limit);
+
+  if (error || !data) return [];
+
+  return data.map((row) => ({
+    id: row.id,
+    userId: row.user_id,
+    actorId: row.actor_id,
+    actorName: row.actor_name,
+    actorAvatar: row.actor_avatar,
+    type: row.type,
+    action: row.action,
+    timestamp: new Date(row.timestamp).getTime(),
+    visibility: row.visibility,
+    data: row.data || {},
+    likes: row.likes || 0,
+    comments: row.comments || 0,
+    reactionCounts: {},
+    userReaction: undefined,
+  }));
+}
+
+export async function saveConversation(conversation: Conversation): Promise<void> {
+  await supabase.from("conversations").insert({
+    id: conversation.id,
+    type: conversation.type,
+    participants: conversation.participants,
+    last_message_at: new Date(conversation.lastMessageAt).toISOString(),
+    last_message_preview: conversation.lastMessagePreview,
+    unread_count: conversation.unreadCount,
+    created_at: new Date(conversation.createdAt).toISOString(),
+  });
+}
+
+export async function getConversations(userId: string): Promise<Conversation[]> {
+  const { data, error } = await supabase.from("conversations").select("*").contains("participants", [userId]).order("last_message_at", { ascending: false });
+
+  if (error || !data) {
+    return [];
+  }
+
+  return data.map((row) => ({
+    id: row.id,
+    type: row.type,
+    participants: row.participants,
+    lastMessageAt: new Date(row.last_message_at).getTime(),
+    lastMessagePreview: row.last_message_preview,
+    unreadCount: row.unread_count,
+    createdAt: new Date(row.created_at).getTime(),
+  }));
+}
+
+export async function markConversationRead(conversationId: string, userId: string): Promise<void> {
+  await supabase
+    .from("conversations")
+    .update({
+      [`unread_count.${userId}`]: 0,
+    })
+    .eq("id", conversationId);
+
+  await supabase.from("messages").update({ read_at: new Date().toISOString() }).eq("conversation_id", conversationId).neq("sender_id", userId).is("read_at", null);
+}
+
+// ============================================================================
+// Victory Cards
+// ============================================================================
+
+export async function saveVictoryCard(card: VictoryCard): Promise<void> {
+  await supabase.from("victory_cards").insert({
+    id: card.id,
+    user_id: card.userId,
+    type: card.type,
+    title: card.title,
+    subtitle: card.subtitle,
+    stats: card.stats,
+    image_url: card.imageUrl,
+    accent_color: card.accentColor,
+    created_at: new Date(card.createdAt).toISOString(),
+    share_count: card.shareCount,
+  });
+}
+
+export async function incrementShareCount(cardId: string): Promise<void> {
+  await supabase.rpc("increment_card_shares", { card_id: cardId });
+}
+
+// ============================================================================
+// Referrals
+// ============================================================================
+
+export async function saveReferral(referral: Referral): Promise<void> {
+  await supabase.from("referrals").insert({
+    id: referral.id,
+    referrer_id: referral.referrerId,
+    referred_id: referral.referredId,
+    referral_code: referral.referralCode,
+    status: referral.status,
+    created_at: new Date(referral.createdAt).toISOString(),
+    completed_at: referral.completedAt ? new Date(referral.completedAt).toISOString() : null,
+    reward_claimed: referral.rewardClaimed,
+  });
+}
+
+export async function getReferralByCode(code: string): Promise<Referral | null> {
+  const { data, error } = await supabase.from("referrals").select("*").eq("referral_code", code).single();
+
+  if (error || !data) {
+    return null;
+  }
+
+  return {
+    id: data.id,
+    referrerId: data.referrer_id,
+    referredId: data.referred_id,
+    referralCode: data.referral_code,
+    status: data.status,
+    createdAt: new Date(data.created_at).getTime(),
+    completedAt: data.completed_at ? new Date(data.completed_at).getTime() : undefined,
+    rewardClaimed: data.reward_claimed,
+  };
+}
+
+export async function updateReferral(referralId: string, updates: Partial<Referral>): Promise<void> {
+  const updateData: Record<string, unknown> = {};
+  if (updates.referredId) {
+    updateData.referred_id = updates.referredId;
+  }
+  if (updates.status) {
+    updateData.status = updates.status;
+  }
+  if (updates.completedAt) {
+    updateData.completed_at = new Date(updates.completedAt).toISOString();
+  }
+  if (updates.rewardClaimed !== undefined) {
+    updateData.reward_claimed = updates.rewardClaimed;
+  }
+
+  await supabase.from("referrals").update(updateData).eq("id", referralId);
+}

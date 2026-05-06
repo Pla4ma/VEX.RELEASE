@@ -1,6 +1,1 @@
-export type {
-  EvaluateMidSessionEventInput,
-  MidSessionBossTaunts,
-  MidSessionEvent,
-  MidSessionEventType,
-} from './schemas';
+export * from '../../../src_impl/features/session-events/types';

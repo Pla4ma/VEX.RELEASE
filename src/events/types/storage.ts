@@ -1,8 +1,1 @@
-/**
- * Storage Events
- */
-
-export interface StorageEventDefinitions {
-  'storage:quota:warning': { usage: number; limit: number };
-  'storage:error': { operation: string; error: Error };
-}
+export * from '../../../src_impl/events/types/storage';

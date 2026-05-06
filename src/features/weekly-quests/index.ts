@@ -1,4 +1,1 @@
-export * from './schemas';
-export * from './service';
-export * from './integration';
-export * from './hooks';
+export * from '../../../src_impl/features/weekly-quests/index';
