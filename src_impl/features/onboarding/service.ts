@@ -46,6 +46,11 @@ export const GOAL_OPTIONS = [
 
 export const DURATION_OPTIONS = [
   DurationOptionSchema.parse({
+    value: 10,
+    label: "10 min",
+    emoji: "🌱",
+  }),
+  DurationOptionSchema.parse({
     value: 15,
     label: "15 min",
     emoji: "⚡",
@@ -205,7 +210,7 @@ export function getFirstSessionConfig(): {
   isOnboardingSession: true;
 } {
   const state = useOnboardingStore.getState();
-  const durationMinutes = state.focusDuration ?? 25; // Default 25 min
+  const durationMinutes = state.focusDuration ?? 10; // Default 10 min starter session
 
   return {
     duration: durationMinutes * 60,

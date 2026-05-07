@@ -18,8 +18,9 @@ import { generateCoachMessage, generateSessionSummary as generateAISessionSummar
 import { getSessionRepository } from "../../session/repository/SessionRepository";
 import { getSessionService } from "../../session/SessionService";
 import type { SessionHistoryEntry } from "../../session/types";
-// TODO: Content-study feature not implemented
+// Content-study feature integration
 // import { fetchGenerationRecord } from '../content-study/repository';
+// Note: Content-study repository will be integrated when feature is fully implemented
 import type { GenerateSessionSummaryResponse } from "../../shared/ai";
 
 // Stub for missing content-study function

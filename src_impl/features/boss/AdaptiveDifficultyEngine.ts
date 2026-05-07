@@ -382,8 +382,14 @@ export class AdaptiveDifficultyEngine {
       messageToUser: this.getAdjustmentMessage(newRating, metrics),
     };
 
-    // Event publishing temporarily disabled due to channel type issues
-    // TODO: Fix event channel types and re-enable
+    // Event publishing re-enabled with fixed channel types
+    eventBus.publish('boss:difficulty_adjusted', {
+      bossId: metrics.bossId,
+      userId: metrics.userId,
+      oldRating: oldRating,
+      newRating: newRating,
+      adjustment,
+    });
 
     return adjustment;
   }

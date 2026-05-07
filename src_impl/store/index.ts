@@ -19,12 +19,10 @@ import { getSecureStorage, SecureStorageKeys } from '../persistence/SecureStorag
 import { signInWithEmail, signUpWithEmail, signOut, getCurrentUser, onAuthStateChange } from '../services/supabaseAuth';
 import { setSentryUser, clearSentryUser, captureException } from '../config/sentry';
 import { revenueCatService } from '../shared/monetization/revenuecat-service';
-// TODO: Integration system archived - replace with direct service calls
-// import { initializeAllIntegrations } from '../integration';
-// import { getProgressionService } from '../progression/ProgressionService';
-// import { getEconomyService } from '../economy/EconomyService';
-// import { getRewardService } from '../rewards/RewardService';
-// import { getStreakService } from '../streaks/StreakService';
+import { progressionService } from '../services/progressionService';
+import { economyService } from '../services/economyService';
+import { rewardService } from '../services/rewardService';
+import { streakService } from '../services/streakService';
 import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('store');
@@ -34,30 +32,29 @@ function toError(error: unknown): Error {
 }
 
 function resetServiceSingletonsForLogout(): void {
-  // TODO: Service system archived - replace with direct service calls
-  // try {
-  //   getProgressionService().setUserId('');
-  // } catch (error) {
-  //   debug.error('Failed to reset progression singleton on logout', error as Error);
-  // }
+  try {
+    progressionService.reset();
+  } catch (error) {
+    debug.error('Failed to reset progression service on logout', error as Error);
+  }
 
-  // try {
-  //   getEconomyService().setUserId('');
-  // } catch (error) {
-  //   debug.error('Failed to reset economy singleton on logout', error as Error);
-  // }
+  try {
+    economyService.reset();
+  } catch (error) {
+    debug.error('Failed to reset economy service on logout', error as Error);
+  }
 
-  // try {
-  //   getRewardService().setUserId('');
-  // } catch (error) {
-  //   debug.error('Failed to reset reward singleton on logout', error as Error);
-  // }
+  try {
+    rewardService.reset();
+  } catch (error) {
+    debug.error('Failed to reset reward service on logout', error as Error);
+  }
 
-  // try {
-  //   getStreakService().setUserId('');
-  // } catch (error) {
-  //   debug.error('Failed to reset streak singleton on logout', error as Error);
-  // }
+  try {
+    streakService.reset();
+  } catch (error) {
+    debug.error('Failed to reset streak service on logout', error as Error);
+  }
 }
 
 /**
@@ -159,11 +156,18 @@ export const useAuthStore = create<AuthState>()(
                 debug.error('[AuthStore] Failed to set RevenueCat user ID:', error);
                 // Don't fail login due to RevenueCat issues
               }
-              // Initialize integrations on first successful auth
+              // Initialize services on first successful auth
               if (!integrationsInitialized) {
-                // TODO: Integration system archived - replace with direct service calls
-                // cleanupIntegrations = initializeAllIntegrations();
-                // integrationsInitialized = true;
+                try {
+                  progressionService.setUserId(user.id);
+                  economyService.setUserId(user.id);
+                  rewardService.setUserId(user.id);
+                  streakService.setUserId(user.id);
+                  integrationsInitialized = true;
+                  debug.info('All services initialized for user:', user.id);
+                } catch (error) {
+                  debug.error('Failed to initialize services:', error);
+                }
               }
               return true;
             }

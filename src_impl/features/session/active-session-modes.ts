@@ -106,6 +106,19 @@ export const ACTIVE_SESSION_CONFIG: Partial<Record<SessionMode, ActiveSessionCon
     coachEnabled: true,
     coachCooldownSeconds: 300,
   },
+  [SessionMode.STARTER]: {
+    mode: SessionMode.STARTER,
+    allowPauses: false,
+    maxPauses: 0,
+    minFocusSecondsBeforePause: 0,
+    pauseCooldownSeconds: 0,
+    allowBackground: false,
+    maxBackgroundSeconds: 0,
+    strictMode: false,
+    companionEnabled: true,
+    coachEnabled: false,
+    coachCooldownSeconds: 0,
+  },
 };
 
 export const MODE_SPECIFIC_UI: Partial<Record<SessionMode, ModeSpecificUI>> = {
@@ -135,6 +148,15 @@ export const MODE_SPECIFIC_UI: Partial<Record<SessionMode, ModeSpecificUI>> = {
     showStreakFlame: false,
     allowMoodLogging: true,
     allowNotes: true,
+  },
+  [SessionMode.STARTER]: {
+    theme: 'light',
+    companionPosition: 'bottom',
+    showProgressBar: true,
+    showPurityIndicator: false,
+    showStreakFlame: false,
+    allowMoodLogging: false,
+    allowNotes: false,
   },
   [SessionMode.CREATIVE]: {
     theme: 'creative',

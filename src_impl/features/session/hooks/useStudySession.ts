@@ -13,6 +13,11 @@ import { createDebugger } from "../../../utils/debug";
 import { getSessionOrchestrator } from "../../../session/orchestrator-factory";
 import { getCoachService } from "../../ai-coach/service";
 import type { SessionConfig } from "../../../session/types";
+import { capture } from "../../../shared/analytics/analytics-service";
+import { SessionEvents } from "../../../shared/analytics/analytics-events";
+import { progressionService } from "../../../services/progressionService";
+import { economyService } from "../../../services/economyService";
+import { streakService } from "../../../services/streakService";
 
 const debug = createDebugger("session:useStudySession");
 
@@ -81,7 +86,13 @@ export function useStudySession() {
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
 
-      // TODO: Track analytics when service is properly integrated
+      // Track session started analytics
+      capture(SessionEvents.SESSION_STARTED, {
+        session_id: sessionState.id,
+        user_id: sessionState.userId,
+        mode: sessionState.mode,
+        duration_seconds: sessionState.targetDurationSeconds,
+      });
     },
   });
 
@@ -92,7 +103,13 @@ export function useStudySession() {
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
 
-      // TODO: Track analytics when service is properly integrated
+      // Track session paused analytics
+      capture(SessionEvents.SESSION_PAUSED, {
+        session_id: sessionState.id,
+        user_id: sessionState.userId,
+        duration_seconds: sessionState.elapsedSeconds,
+        progress_percentage: sessionState.progressPercentage,
+      });
     },
   });
 
@@ -103,7 +120,13 @@ export function useStudySession() {
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
 
-      // TODO: Track analytics when service is properly integrated
+      // Track session resumed analytics
+      capture(SessionEvents.SESSION_RESUMED, {
+        session_id: sessionState.id,
+        user_id: sessionState.userId,
+        duration_seconds: sessionState.elapsedSeconds,
+        progress_percentage: sessionState.progressPercentage,
+      });
     },
   });
 
@@ -118,13 +141,65 @@ export function useStudySession() {
 
       // Award XP and coins
       if (sessionState.status === "COMPLETED") {
-        // TODO: Fix progression service integration when functional pattern is fully implemented
-        // addProgressionXp(userId, { amount: sessionState.finalScore || 0, source: 'session_complete' });
-        // TODO: Fix economy service integration when functional pattern is fully implemented
-        // economyService.addCurrency({ userId, amount: 0, currency: 'COINS', source: 'SESSION_COMPLETE' });
-        // TODO: Track analytics when service is properly integrated
+        // Grant progression XP
+        try {
+          await progressionService.grantXP({
+            amount: sessionState.finalScore || 0,
+            source: 'session_complete',
+            metadata: {
+              session_id: sessionState.id,
+              mode: sessionState.mode,
+              duration_seconds: sessionState.elapsedSeconds,
+            },
+          });
+        } catch (error) {
+          debug.error('Failed to grant XP for completed session:', error);
+        }
+
+        // Grant currency rewards
+        try {
+          const baseCoins = Math.floor((sessionState.finalScore || 0) / 10);
+          await economyService.addCurrency({
+            userId: sessionState.userId,
+            amount: baseCoins,
+            currency: 'COINS',
+            source: 'SESSION_COMPLETE',
+            metadata: {
+              session_id: sessionState.id,
+              score: sessionState.finalScore,
+            },
+          });
+        } catch (error) {
+          debug.error('Failed to grant coins for completed session:', error);
+        }
+
+        // Update streak
+        try {
+          await streakService.updateStreak(sessionState.completedAt);
+        } catch (error) {
+          debug.error('Failed to update streak for completed session:', error);
+        }
+
+        // Track session completed analytics
+        capture(SessionEvents.SESSION_COMPLETED, {
+          session_id: sessionState.id,
+          user_id: sessionState.userId,
+          mode: sessionState.mode,
+          duration_seconds: sessionState.elapsedSeconds,
+          final_score: sessionState.finalScore,
+          xp_granted: sessionState.finalScore || 0,
+          coins_granted: Math.floor((sessionState.finalScore || 0) / 10),
+        });
       } else {
-        // TODO: Track analytics when service is properly integrated
+        // Track session abandoned analytics
+        capture(SessionEvents.SESSION_ABANDONED, {
+          session_id: sessionState.id,
+          user_id: sessionState.userId,
+          mode: sessionState.mode,
+          duration_seconds: sessionState.elapsedSeconds,
+          progress_percentage: sessionState.progressPercentage,
+          reason: 'user_abandoned',
+        });
       }
     },
   });
@@ -366,8 +441,9 @@ export function useSessionTimer() {
 
 export function useSessionAnalytics() {
   const trackSessionEvent = useCallback((event: string, data?: Record<string, unknown>) => {
-    // TODO: Track analytics when service is properly integrated
-    debug.info('Session event: %s', event, data);
+    // Track session analytics events
+    capture(`session_${event}` as any, data);
+    debug.info('Session event tracked: %s', event, data);
   }, []);
 
   return {

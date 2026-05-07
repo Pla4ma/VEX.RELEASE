@@ -1,142 +1,18 @@
-import { z } from "zod";
-
-import { spendCurrency } from "../economy/service";
-import { getDefaultStorageAdapter } from "../../persistence/MMKVStorageAdapter";
-import { CompanionMood, CompanionPhase, CompanionSessionEvent, CompanionState, EVOLUTION_THRESHOLDS } from "./types";
-
-const profileSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  type: z.string(),
-  mood: z.enum(["happy", "neutral", "sad", "starving"]),
-  level: z.number().min(1),
-  xp: z.number().min(0),
-  lastFedAt: z.number(),
-  lastPettedAt: z.number().nullable(),
-  specialAbilityCharge: z.number().min(0),
-  equippedItems: z.array(z.string()),
-  unlockedAbilities: z.array(z.enum(["xp_boost_5pct", "coin_boost_10pct", "streak_protection"])),
-});
-
-type CompanionProfile = z.infer<typeof profileSchema>;
-type PersistOptions = { skipSyncEnqueue?: boolean };
-
-const storage = getDefaultStorageAdapter();
-
-function profileKey(userId: string): string {
-  return `companion_profile_${userId}`;
-}
-
-function getMoodFromFeedTime(lastFedAt: number): CompanionProfile["mood"] {
-  const hours = (Date.now() - lastFedAt) / (1000 * 60 * 60);
-  if (hours < 12) {
-    return "happy";
-  }
-  if (hours < 24) {
-    return "neutral";
-  }
-  if (hours < 48) {
-    return "sad";
-  }
-  return "starving";
-}
-
-function getDefaultProfile(userId: string): CompanionProfile {
-  const lastFedAt = Date.now();
-  return {
-    id: `companion_${userId}`,
-    name: "Vexling",
-    type: "focus_wisp",
-    mood: "happy",
-    level: 1,
-    xp: 0,
-    lastFedAt,
-    lastPettedAt: null,
-    specialAbilityCharge: 0,
-    equippedItems: [],
-    unlockedAbilities: [],
-  };
-}
-
-async function loadProfile(userId: string): Promise<CompanionProfile> {
-  const raw = await storage.getItem(profileKey(userId));
-  if (!raw) {
-    return getDefaultProfile(userId);
-  }
-  const parsed = profileSchema.parse(JSON.parse(raw));
-  return { ...parsed, mood: getMoodFromFeedTime(parsed.lastFedAt) };
-}
-
-async function saveProfile(userId: string, profile: CompanionProfile): Promise<CompanionProfile> {
-  const next = { ...profile, mood: getMoodFromFeedTime(profile.lastFedAt) };
-  await storage.setItem(profileKey(userId), JSON.stringify(next));
-  return next;
-}
-
-function getAbilityUnlocks(level: number): CompanionProfile["unlockedAbilities"] {
-  return [...(level >= 5 ? (["xp_boost_5pct"] as const) : []), ...(level >= 10 ? (["coin_boost_10pct"] as const) : []), ...(level >= 20 ? (["streak_protection"] as const) : [])];
-}
-
-export async function getCompanion(userId: string): Promise<CompanionProfile> {
-  return loadProfile(userId);
-}
-
-export async function levelUpCompanion(userId: string): Promise<CompanionProfile> {
-  const current = await loadProfile(userId);
-  const nextLevel = Math.max(1, Math.floor(current.xp / 500) + 1);
-  return saveProfile(userId, {
-    ...current,
-    level: nextLevel,
-    unlockedAbilities: getAbilityUnlocks(nextLevel),
-  });
-}
-
-export async function feedCompanion(userId: string, options: PersistOptions = {}): Promise<CompanionProfile> {
-  await spendCurrency({
-    userId,
-    currency: "COINS",
-    amount: 10,
-    sink: "UPGRADE",
-    description: "Feed companion",
-  });
-  const current = await loadProfile(userId);
-  const updated = await saveProfile(userId, {
-    ...current,
-    xp: current.xp + 50,
-    lastFedAt: Date.now(),
-    mood: "happy",
-  });
-  const leveled = await levelUpCompanion(userId);
-  void options.skipSyncEnqueue;
-  return { ...leveled, mood: updated.mood };
-}
-
-export async function getCompanionBonus(userId: string): Promise<{
-  xpMultiplier: number;
-  coinMultiplier: number;
-  streakProtection: boolean;
-  mood: CompanionProfile["mood"];
-}> {
-  const companion = await loadProfile(userId);
-  const moodMultiplier = { happy: 1.1, neutral: 1, sad: 0.95, starving: 0.9 }[companion.mood];
-  return {
-    xpMultiplier: moodMultiplier * (companion.unlockedAbilities.includes("xp_boost_5pct") ? 1.05 : 1),
-    coinMultiplier: companion.unlockedAbilities.includes("coin_boost_10pct") ? 1.1 : 1,
-    streakProtection: companion.unlockedAbilities.includes("streak_protection"),
-    mood: companion.mood,
-  };
-}
+import { CompanionMood, CompanionPhase, CompanionSessionEvent, CompanionState } from "./types";
+import { CompanionGrowthService } from "./growth-service";
 
 export class CompanionService {
   private state: CompanionState | null = null;
   private eventListeners: Array<(event: CompanionSessionEvent) => void> = [];
   private lastMilestone = 0;
   private currentStreakSeconds = 0;
+  private growthService: CompanionGrowthService;
 
   constructor(initialState?: CompanionState) {
     if (initialState) {
       this.state = { ...initialState };
     }
+    this.growthService = new CompanionGrowthService(this.state || undefined);
   }
 
   startSession(_sessionDurationMinutes?: number): void {
@@ -156,9 +32,7 @@ export class CompanionService {
   }
 
   tick(elapsedSeconds: number, totalDurationSeconds: number, purityScore: number, isPaused: boolean): void {
-    if (!this.state) {
-      return;
-    }
+    if (!this.state) return;
     const progress = (elapsedSeconds / totalDurationSeconds) * 100;
     this.state.sessionProgress = progress;
     this.state.purityScore = purityScore;
@@ -181,33 +55,18 @@ export class CompanionService {
       this.emitEvent({
         type: "MILESTONE",
         timestamp: Date.now(),
-        data: {
-          progressDelta: milestone,
-          message: `${milestone}% - Your companion grows stronger!`,
-        },
+        data: { progressDelta: milestone, message: `${milestone}% - Your companion grows stronger!` },
       });
     }
   }
 
-  completeSession(sessionMinutes: number, finalPurity: number): { leveledUp: boolean; evolved: boolean; newPhase?: CompanionPhase } {
-    if (!this.state) {
-      return { leveledUp: false, evolved: false };
-    }
-    this.state.totalFocusMinutes += sessionMinutes;
-    this.state.sessionCount += 1;
-    if (finalPurity > 90) {
-      this.state.perfectSessions += 1;
-    }
-    const currentThreshold = EVOLUTION_THRESHOLDS[this.state.phase];
-    const phases: CompanionPhase[] = ["EGG", "HATCHING", "YOUNG", "MATURE", "AWAKENED", "TRANSCENDENT"];
-    const minutesInPhase = this.state.totalFocusMinutes - phases.slice(0, phases.indexOf(this.state.phase)).reduce((sum, phase) => sum + EVOLUTION_THRESHOLDS[phase], 0);
-    if (minutesInPhase >= currentThreshold && this.state.phase !== "TRANSCENDENT") {
-      this.state.phase = phases[phases.indexOf(this.state.phase) + 1];
-      this.state.level = 1;
-      return { leveledUp: true, evolved: true, newPhase: this.state.phase };
-    }
-    this.state.level = Math.max(1, Math.floor((minutesInPhase / currentThreshold) * 100));
-    return { leveledUp: true, evolved: false };
+  completeSession(sessionMinutes: number, finalPurity: number, userId?: string, sessionId?: string): { leveledUp: boolean; evolved: boolean; newPhase?: CompanionPhase } {
+    if (!this.state) return { leveledUp: false, evolved: false };
+    this.growthService.updateState(this.state);
+    const result = this.growthService.processSessionCompletion(sessionMinutes, finalPurity, userId, sessionId);
+    const updatedState = this.growthService.getState();
+    if (updatedState) this.state = updatedState;
+    return result;
   }
 
   getState(): CompanionState | null {
@@ -219,6 +78,82 @@ export class CompanionService {
     return () => {
       this.eventListeners = this.eventListeners.filter((listener) => listener !== callback);
     };
+  }
+
+  reactToStreakMaintained(userId: string): void {
+    if (!this.state) return;
+    this.growthService.updateState(this.state);
+    this.growthService.reactToStreakMaintained(userId);
+    const updatedState = this.growthService.getState();
+    if (updatedState) {
+      this.state = updatedState;
+    }
+    this.emitEvent({
+      type: "MILESTONE",
+      timestamp: Date.now(),
+      data: {
+        progressDelta: 100,
+        message: "Your companion celebrates your streak consistency!",
+        intensity: 0.8,
+      },
+    });
+  }
+
+  reactToComebackCompleted(userId: string): void {
+    if (!this.state) return;
+    this.growthService.updateState(this.state);
+    this.growthService.reactToComebackCompleted(userId);
+    const updatedState = this.growthService.getState();
+    if (updatedState) {
+      this.state = updatedState;
+    }
+    this.emitEvent({
+      type: "MILESTONE",
+      timestamp: Date.now(),
+      data: {
+        progressDelta: 100,
+        message: "Your companion admires your resilience!",
+        intensity: 0.9,
+      },
+    });
+  }
+
+  reactToFocusScoreChanged(userId: string, previousScore: number, newScore: number): void {
+    if (!this.state) return;
+    this.growthService.updateState(this.state);
+    this.growthService.reactToFocusScoreChanged(userId, previousScore, newScore);
+    const updatedState = this.growthService.getState();
+    if (updatedState) {
+      this.state = updatedState;
+    }
+    this.emitEvent({
+      type: newScore > previousScore ? "GROWTH_PULSE" : "MOOD_SHIFT",
+      timestamp: Date.now(),
+      data: {
+        mood: this.state.currentMood,
+        message: newScore > previousScore ? "Your companion feels your focus growing!" : "Your companion senses the challenge.",
+        intensity: 0.6,
+      },
+    });
+  }
+
+  reactToDailyMissionCompleted(userId: string): void {
+    if (!this.state) return;
+    this.growthService.updateState(this.state);
+    this.growthService.reactToDailyMissionCompleted(userId);
+    const updatedState = this.growthService.getState();
+    if (updatedState) {
+      this.state = updatedState;
+    }
+    this.emitEvent({
+      type: "MILESTONE",
+      timestamp: Date.now(),
+      data: {
+        progressDelta: 100,
+        message: "Your companion nods with approval at your daily progress!",
+        intensity: 0.5,
+      },
+    });
   }
 
   private calculateMood(progress: number, energy: number, purity: number): CompanionMood {
@@ -260,17 +195,4 @@ export class CompanionService {
       callback(event);
     }
   }
-}
-
-let activeCompanionService: CompanionService | null = null;
-
-export function getCompanionService(state?: CompanionState): CompanionService {
-  if (!activeCompanionService || state) {
-    activeCompanionService = new CompanionService(state);
-  }
-  return activeCompanionService;
-}
-
-export function clearCompanionService(): void {
-  activeCompanionService = null;
 }

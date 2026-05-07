@@ -1,8 +1,8 @@
 
 import React from 'react';
-import { useNavigation } from '@react-navigation/native'; // Add this import
+import { useNavigation } from '@react-navigation/native';
 import { useFocusScore } from './hooks-focus-score';
-import { Box, Text, Stack, Button } from '@components/primitives';
+import { Box, Text, Stack, Button, Skeleton } from '@components/primitives';
 import { useTheme } from '@theme';
 import { useReducedMotion } from '@hooks';
 import { useNetInfo } from '@network';
@@ -54,10 +54,9 @@ const FocusScoreDashboardSkeleton = () => {
 };
 
 export const FocusScoreDashboard = () => {
-  const navigation = useNavigation(); // Add this line
+  const navigation = useNavigation();
   const { score, history, status, error, refetch, isRefetching } = useFocusScore();
-  const { theme } = useTheme();
-  const { isOffline } = useNetInfo(); // Use the hook
+  const { isOffline } = useNetInfo();
 
   if (status === 'pending') {
     return <FocusScoreDashboardSkeleton />;

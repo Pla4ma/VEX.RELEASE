@@ -97,6 +97,7 @@ export function HomeScreen(): JSX.Element {
 
   return (
     <AppScreen contentStyle={{ gap: 0, paddingHorizontal: 0, paddingTop: 0 }} padded={false}>
+      {/* 1. Identity greeting */}
       <GreetingHeader
         userName={controller.user?.firstName}
         avatarUrl={controller.user?.avatar ?? undefined}
@@ -108,37 +109,6 @@ export function HomeScreen(): JSX.Element {
         onPressCompanion={() => navigation.navigate('CompanionDetail')}
         onPressNotifications={() => navigation.navigate('Notifications' as never)}
         unreadNotificationCount={data.unreadNotificationCount}
-      />
-
-      <HomeHero
-        currentStreak={controller.currentStreak}
-        insetsTop={data.insets.top}
-        isAtRisk={Boolean(controller.streakQuery.data?.isAtRisk)}
-        isFirstRun={controller.isFirstRun}
-        isLoading={controller.isLoading}
-        progressPercent={controller.progressPercent}
-        todayFocusMinutes={controller.todayFocusMinutes}
-        userFirstName={controller.user?.firstName}
-        userId={controller.userId || undefined}
-      />
-
-      {!data.interventionLoading && intervention && (
-        <CoachInterventionBanner
-          intervention={intervention}
-          coachName="VEX Coach"
-          onAction={handleInterventionAction}
-          onDismiss={(dismissed) => dismissIntervention(dismissed.id)}
-        />
-      )}
-
-      <StartSessionButton
-        hasActiveSession={data.hasActiveSession}
-        isLoading={controller.isLoading}
-        onPress={() => controller.openSetup()}
-        resumeTimeSeconds={data.resumeTimeSeconds}
-        squadMembersFocusing={data.squadMembersFocusing}
-        streakHoursRemaining={data.streakHoursRemaining}
-        streakRiskLevel={controller.streakQuery.data?.riskLevel ?? 'NONE'}
       />
 
       <HomeContent navigation={navigation} data={data} />

@@ -15,6 +15,7 @@
  * - persona-manager.ts: Coach state and persona management
  * - reminder-scheduler.ts: Reminders, comeback, and difficulty
  * - CoachRecommendationService.ts: Phase 2.1 - Coach as Recommendation Engine
+ * - input-contract.ts: Phase 7 - Input validation and PII protection
  *
  * Cross-system integration via eventBus
  */
@@ -96,19 +97,35 @@ export {
   COMEBACK_BONUS_MULTIPLIER,
 } from './reminder-scheduler';
 
+// Phase 7 - Input Contract Integration
+export {
+  validateCoachInput,
+  createFallbackInsight,
+  containsForbiddenPII,
+  createMockCoachInput,
+  CoachInputContractSchema,
+  type CoachInputContract,
+} from '../../features/ai-coach/input-contract';
+
 // Service getter for compatibility with hooks expecting service pattern
 import type { CoachRecommendation } from './services/CoachRecommendationService';
+import type { CoachInputContract } from './input-contract';
 
 export interface CoachService {
   createRecommendation: (userId: string, context: Record<string, unknown>) => Promise<CoachRecommendation | null>;
   generateMessage: (type: string, context: Record<string, unknown>) => Promise<string>;
   getSessionAdvice: (sessionData: Record<string, unknown>) => Promise<string | null>;
+  // Phase 7: Input validation methods
+  validateInput: (input: unknown) => CoachInputContract;
+  canCoach: (input: Partial<CoachInputContract>) => { canCoach: boolean; reason: string };
 }
 
 const coachServiceInstance: CoachService = {
   createRecommendation: async () => null,
   generateMessage: async () => '',
   getSessionAdvice: async () => null,
+  validateInput: validateCoachInput,
+  canCoach: createFallbackInsight,
 };
 
 export function getCoachService(): CoachService {

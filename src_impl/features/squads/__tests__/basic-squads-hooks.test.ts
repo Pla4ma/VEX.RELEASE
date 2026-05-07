@@ -1,0 +1,439 @@
+/**
+ * Basic Squads Hooks Tests
+ * 
+ * Tests for PHASE 8 basic squads accountability hooks.
+ */
+
+import { renderHook, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { describe, it, expect, beforeEach, jest } from '@jest/globals';
+import * as service from '../basic-squads-service';
+import * as hooks from '../hooks/basic-squads-hooks';
+import { useAuthStore } from '../../../store';
+import React from 'react';
+
+// Mock the service
+jest.mock('../basic-squads-service');
+const mockService = service as jest.Mocked<typeof service>;
+
+// Mock the auth store
+jest.mock('../../../store');
+const mockUseAuthStore = useAuthStore as jest.MockedFunction<typeof useAuthStore>;
+
+// Mock event bus
+jest.mock('../../../events', () => ({
+  eventBus: {
+    subscribe: jest.fn(() => jest.fn()),
+  },
+}));
+
+describe('Basic Squads Hooks - PHASE 8', () => {
+  let queryClient: QueryClient;
+  let wrapper: React.FC<{ children: React.ReactNode }>;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    queryClient = new QueryClient({
+      defaultOptions: {
+        queries: { retry: false },
+        mutations: { retry: false },
+      },
+    });
+
+    wrapper = ({ children }) => React.createElement(
+      QueryClientProvider,
+      { client: queryClient },
+      children
+    );
+
+    mockUseAuthStore.mockReturnValue({
+      user: { id: 'user-123', email: 'test@example.com' },
+    } as any);
+  });
+
+  describe('useBasicSquadsStatus', () => {
+    it('should fetch squad status for authenticated user', async () => {
+      const mockStatus = {
+        hasSquad: true,
+        squad: {
+          id: 'squad-123',
+          name: 'Focus Squad',
+          isPublic: false,
+          maxMembers: 6,
+        },
+        isFounder: true,
+        isAdmin: true,
+        memberCount: 3,
+        weeklyProgress: {
+          current: 180,
+          goal: 300,
+          completed: false,
+          percentage: 60,
+        },
+      };
+
+      mockService.getBasicSquadStatus.mockResolvedValue(mockStatus);
+
+      const { result } = renderHook(() => hooks.useBasicSquadsStatus(), { wrapper });
+
+      expect(result.current.isLoading).toBe(true);
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      expect(result.current.data).toEqual(mockStatus);
+      expect(mockService.getBasicSquadStatus).toHaveBeenCalledWith('user-123');
+    });
+
+    it('should not fetch for unauthenticated user', () => {
+      mockUseAuthStore.mockReturnValue({
+        user: null,
+      } as any);
+
+      const { result } = renderHook(() => hooks.useBasicSquadsStatus(), { wrapper });
+
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.data).toBeUndefined();
+      expect(mockService.getBasicSquadStatus).not.toHaveBeenCalled();
+    });
+
+    it('should handle service errors', async () => {
+      mockService.getBasicSquadStatus.mockRejectedValue(new Error('Service error'));
+
+      const { result } = renderHook(() => hooks.useBasicSquadsStatus(), { wrapper });
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      expect(result.current.error).toBeTruthy();
+    });
+  });
+
+  describe('useBasicSquadContributions', () => {
+    it('should fetch squad contributions', async () => {
+      const mockContributions = [
+        {
+          userId: 'user-123',
+          displayName: 'User 1',
+          role: 'FOUNDER',
+          weeklyMinutes: 120,
+          weeklySessions: 4,
+          lastActive: Date.now(),
+        },
+        {
+          userId: 'user-456',
+          displayName: 'User 2',
+          role: 'MEMBER',
+          weeklyMinutes: 80,
+          weeklySessions: 3,
+          lastActive: Date.now(),
+        },
+      ];
+
+      mockService.getBasicSquadMemberContributions.mockResolvedValue(mockContributions);
+
+      const { result } = renderHook(
+        () => hooks.useBasicSquadContributions('squad-123'),
+        { wrapper }
+      );
+
+      expect(result.current.isLoading).toBe(true);
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      expect(result.current.data).toEqual(mockContributions);
+      expect(mockService.getBasicSquadMemberContributions).toHaveBeenCalledWith('squad-123');
+    });
+  });
+
+  describe('useCreateBasicSquad', () => {
+    it('should create a squad successfully', async () => {
+      const mockSquad = {
+        id: 'squad-123',
+        name: 'Focus Squad',
+        isPublic: false,
+        maxMembers: 6,
+      };
+
+      mockService.createBasicSquad.mockResolvedValue(mockSquad);
+
+      const { result } = renderHook(() => hooks.useCreateBasicSquad(), { wrapper });
+
+      result.current.mutate({
+        name: 'Focus Squad',
+        description: 'Private accountability group',
+        weeklyGoalMinutes: 300,
+      });
+
+      expect(result.current.isPending).toBe(true);
+
+      await waitFor(() => {
+        expect(result.current.isPending).toBe(false);
+      });
+
+      expect(mockService.createBasicSquad).toHaveBeenCalledWith('user-123', {
+        name: 'Focus Squad',
+        description: 'Private accountability group',
+        weeklyGoalMinutes: 300,
+      });
+    });
+
+    it('should handle creation errors', async () => {
+      mockService.createBasicSquad.mockRejectedValue(new Error('Creation failed'));
+
+      const { result } = renderHook(() => hooks.useCreateBasicSquad(), { wrapper });
+
+      result.current.mutate({
+        name: 'Focus Squad',
+      });
+
+      await waitFor(() => {
+        expect(result.current.isPending).toBe(false);
+      });
+
+      expect(result.current.error).toBeTruthy();
+    });
+  });
+
+  describe('useInviteToBasicSquad', () => {
+    it('should send squad invite successfully', async () => {
+      const mockInvite = {
+        id: 'invite-123',
+        squadId: 'squad-123',
+        inviterId: 'user-123',
+        inviteeId: 'user-456',
+        message: 'Join my squad!',
+        status: 'PENDING',
+      };
+
+      mockService.inviteToBasicSquad.mockResolvedValue(mockInvite);
+
+      const { result } = renderHook(() => hooks.useInviteToBasicSquad(), { wrapper });
+
+      result.current.mutate({
+        squadId: 'squad-123',
+        inviteeId: 'user-456',
+        message: 'Join my squad!',
+      });
+
+      await waitFor(() => {
+        expect(result.current.isPending).toBe(false);
+      });
+
+      expect(mockService.inviteToBasicSquad).toHaveBeenCalledWith(
+        'squad-123',
+        'user-123',
+        'user-456',
+        'Join my squad!'
+      );
+    });
+  });
+
+  describe('useRespondToBasicSquadInvite', () => {
+    it('should accept squad invite successfully', async () => {
+      const mockResponse = {
+        success: true,
+        message: 'Welcome to the squad!',
+        squad: {
+          id: 'squad-123',
+          name: 'Focus Squad',
+        },
+      };
+
+      mockService.respondToBasicSquadInvite.mockResolvedValue(mockResponse);
+
+      const { result } = renderHook(() => hooks.useRespondToBasicSquadInvite(), { wrapper });
+
+      result.current.mutate({
+        inviteId: 'invite-123',
+        accept: true,
+      });
+
+      await waitFor(() => {
+        expect(result.current.isPending).toBe(false);
+      });
+
+      expect(mockService.respondToBasicSquadInvite).toHaveBeenCalledWith(
+        'invite-123',
+        'user-123',
+        true
+      );
+    });
+
+    it('should decline squad invite successfully', async () => {
+      const mockResponse = {
+        success: true,
+        message: 'Invite declined',
+      };
+
+      mockService.respondToBasicSquadInvite.mockResolvedValue(mockResponse);
+
+      const { result } = renderHook(() => hooks.useRespondToBasicSquadInvite(), { wrapper });
+
+      result.current.mutate({
+        inviteId: 'invite-123',
+        accept: false,
+      });
+
+      await waitFor(() => {
+        expect(result.current.isPending).toBe(false);
+      });
+
+      expect(mockService.respondToBasicSquadInvite).toHaveBeenCalledWith(
+        'invite-123',
+        'user-123',
+        false
+      );
+    });
+  });
+
+  describe('useUpdateBasicSquadWeeklyProgress', () => {
+    it('should update squad weekly progress successfully', async () => {
+      const mockProgress = {
+        goalUpdated: true,
+        goalCompleted: false,
+        squadProgress: 180,
+        squadGoal: 300,
+      };
+
+      mockService.updateBasicSquadWeeklyProgress.mockResolvedValue(mockProgress);
+
+      const { result } = renderHook(() => hooks.useUpdateBasicSquadWeeklyProgress(), { wrapper });
+
+      result.current.mutate({
+        squadId: 'squad-123',
+        sessionMinutes: 30,
+      });
+
+      await waitFor(() => {
+        expect(result.current.isPending).toBe(false);
+      });
+
+      expect(mockService.updateBasicSquadWeeklyProgress).toHaveBeenCalledWith(
+        'squad-123',
+        'user-123',
+        30
+      );
+    });
+  });
+
+  describe('useSendBasicSquadNotification', () => {
+    it('should send squad notification successfully', async () => {
+      mockService.sendBasicSquadNotification.mockResolvedValue();
+
+      const { result } = renderHook(() => hooks.useSendBasicSquadNotification(), { wrapper });
+
+      result.current.mutate({
+        squadId: 'squad-123',
+        type: 'WEEKLY_GOAL_PROGRESS',
+        data: {
+          message: 'Squad is making progress!',
+          progress: 180,
+          goal: 300,
+        },
+      });
+
+      await waitFor(() => {
+        expect(result.current.isPending).toBe(false);
+      });
+
+      expect(mockService.sendBasicSquadNotification).toHaveBeenCalledWith(
+        'squad-123',
+        'WEEKLY_GOAL_PROGRESS',
+        {
+          message: 'Squad is making progress!',
+          progress: 180,
+          goal: 300,
+        }
+      );
+    });
+  });
+
+  describe('useBasicSquads (Combined Hook)', () => {
+    it('should provide comprehensive squad data and actions', async () => {
+      const mockStatus = {
+        hasSquad: true,
+        squad: {
+          id: 'squad-123',
+          name: 'Focus Squad',
+        },
+        isFounder: true,
+        isAdmin: true,
+        memberCount: 3,
+        weeklyProgress: {
+          current: 180,
+          goal: 300,
+          completed: false,
+          percentage: 60,
+        },
+      };
+
+      const mockContributions = [
+        {
+          userId: 'user-123',
+          displayName: 'User 1',
+          role: 'FOUNDER',
+          weeklyMinutes: 120,
+          weeklySessions: 4,
+          lastActive: Date.now(),
+        },
+      ];
+
+      mockService.getBasicSquadStatus.mockResolvedValue(mockStatus);
+      mockService.getBasicSquadMemberContributions.mockResolvedValue(mockContributions);
+
+      const { result } = renderHook(() => hooks.useBasicSquads(), { wrapper });
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      expect(result.current.status).toEqual(mockStatus);
+      expect(result.current.contributions).toEqual(mockContributions);
+      expect(result.current.hasSquad).toBe(true);
+      expect(result.current.squad?.name).toBe('Focus Squad');
+      expect(result.current.isFounder).toBe(true);
+      expect(result.current.isAdmin).toBe(true);
+      expect(result.current.memberCount).toBe(3);
+      expect(result.current.weeklyProgress?.percentage).toBe(60);
+
+      // Check that all action functions are available
+      expect(typeof result.current.createSquad).toBe('function');
+      expect(typeof result.current.inviteToSquad).toBe('function');
+      expect(typeof result.current.respondToInvite).toBe('function');
+      expect(typeof result.current.updateProgress).toBe('function');
+      expect(typeof result.current.sendNotification).toBe('function');
+    });
+
+    it('should handle no squad case', async () => {
+      const mockStatus = {
+        hasSquad: false,
+        squad: null,
+        isFounder: false,
+        isAdmin: false,
+        memberCount: 0,
+        weeklyProgress: null,
+      };
+
+      mockService.getBasicSquadStatus.mockResolvedValue(mockStatus);
+      mockService.getBasicSquadMemberContributions.mockResolvedValue([]);
+
+      const { result } = renderHook(() => hooks.useBasicSquads(), { wrapper });
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      expect(result.current.hasSquad).toBe(false);
+      expect(result.current.squad).toBeNull();
+      expect(result.current.isFounder).toBe(false);
+      expect(result.current.isAdmin).toBe(false);
+      expect(result.current.memberCount).toBe(0);
+      expect(result.current.weeklyProgress).toBeNull();
+    });
+  });
+});

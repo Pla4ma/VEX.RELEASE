@@ -446,13 +446,13 @@ export class SessionNarrator {
     });
 
     // Emit narrative complete event
-    // TODO: Fix event channel type and re-enable
-    // eventBus.publish('narrative:session_complete', {
-    //   sessionId,
-    //   userId: narrative.userId,
-    //   theme: narrative.theme,
-    //   summary: narrative.shareableSummary,
-    // });
+    // Note: Event channel type fixed - re-enabled
+    eventBus.publish('narrative:session_complete', {
+      sessionId,
+      userId: narrative.userId,
+      theme: narrative.theme,
+      summary: narrative.shareableSummary,
+    });
 
     return narrative;
   }

@@ -601,7 +601,7 @@ export class FocusIdentityEngine {
       change *= FOCUS_SCORE_CONFIG.RECOVERY_BONUS_MULTIPLIER;
     }
 
-    return Math.round(Math.max(-config.max, Math.min(config.max, change)));
+    return Math.round(Math.min(config.max, Math.max(-Math.abs(config.max), change)));
   }
 
   // ========================================================================

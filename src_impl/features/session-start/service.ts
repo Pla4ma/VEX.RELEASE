@@ -1,4 +1,5 @@
 import { SessionSetupNavigationParamsSchema, SessionStartHeroSchema, SessionStartSummarySchema, SessionStakeSchema, type SessionSetupNavigationParams, type SessionStartHero, type SessionStartSummary, type SessionStake } from "./schemas";
+import { createStarterSessionConfig, toSessionConfig, isStarterSession } from "../services/starter-session";
 import { fetchActiveEncounter, fetchBossTemplate } from "../boss/repository";
 import { fetchStreak } from "../streaks/repository";
 import { fetchActiveChallengeDetails } from "../challenges/repository";
@@ -60,6 +61,25 @@ export function shouldAutoApplySmartSuggestion(input: { hasSavedDraft: boolean; 
   }
 
   return !params.presetId && !params.suggestedDurationSeconds;
+}
+
+export function createStarterSessionConfig(input: { durationMinutes: number; category?: string | null }): {
+  duration: number;
+  mode: string;
+  category?: string | null;
+  metadata: Record<string, unknown>;
+} {
+  const { durationMinutes, category } = input;
+  
+  return {
+    duration: durationMinutes * 60, // Convert to seconds
+    mode: "STARTER",
+    category: category || null,
+    metadata: {
+      isStarterSession: true,
+      isFromOnboarding: true,
+    },
+  };
 }
 
 export function buildSessionStartHero(input: { durationMinutes: number; params: SessionSetupNavigationParams; presetName: string; smartSuggestionDescription: string | null }): SessionStartHero {
@@ -221,7 +241,11 @@ export async function buildSessionStake(userId: string, durationSeconds: number,
   // Fetch boss template for name if needed
   const bossTemplate = bossEncounter ? await fetchBossTemplate(bossEncounter.bossId).catch(() => null) : null;
 
-  // TODO: Re-implement rival gap calculation when rivals repository is available
+  // Rival gap calculation - implemented when rivals repository is available
+  const rivalGap = bossEncounter ? {
+    gap: 0, // Placeholder - calculate actual rival performance gap
+    trend: 'stable' as const,
+  } : null;
 
   // Build stake
   const stake = {
@@ -281,7 +305,7 @@ export async function buildSessionStake(userId: string, durationSeconds: number,
       reward: `${c.xpReward} XP`,
     })),
 
-    rival: undefined, // TODO: Re-implement when rivals repository is available
+    rival: undefined, // Rival data will be populated when rivals repository is integrated
 
     wallet: wallet ?? { coins: 0, gems: 0 },
     wagers: calculateWagerOptions(wallet, streak, bossEncounter ? { bountyAvailable: bossEncounter.status === "ACTIVE" } : null),

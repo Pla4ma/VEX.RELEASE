@@ -67,7 +67,7 @@ export function initializeFeatureIntegrations(config: Partial<IntegrationConfig>
   }
 
   if (fullConfig.enableFocusIdentity) {
-    unsubscribers.push(initializeFocusIdentityIntegrations());
+    unsubscribers.push(initializeFocusScoreIntegration());
   }
 
   return cleanupIntegrations;

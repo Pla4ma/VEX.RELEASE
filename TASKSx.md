@@ -709,14 +709,14 @@ Rules:
 
 VERIFY:
 
-- [ ] Tests cover first session.
-- [ ] Tests cover score floor and ceiling.
-- [ ] Tests cover each grade.
-- [ ] Tests cover missed day.
-- [ ] Tests cover comeback.
-- [ ] Tests cover recovery farming prevention.
-- [ ] Tests cover abandoned session.
-- [ ] Explanation output names top positive and top negative factor.
+- [x] Tests cover first session.
+- [x] Tests cover score floor and ceiling.
+- [x] Tests cover each grade.
+- [x] Tests cover missed day.
+- [x] Tests cover comeback.
+- [x] Tests cover recovery farming prevention.
+- [x] Tests cover abandoned session.
+- [x] Explanation output names top positive and top negative factor.
 
 ### P2-04 - Focus Identity Integration
 
@@ -735,11 +735,11 @@ IMPLEMENT:
 
 VERIFY:
 
-- [ ] Session completion updates Focus Score.
-- [ ] History row is appended.
-- [ ] Event fires once.
-- [ ] Analytics contains no PII.
-- [ ] Failure is captured by Sentry and does not crash completion flow.
+- [x] Session completion updates Focus Score.
+- [x] History row is appended.
+- [x] Event fires once.
+- [x] Analytics contains no PII.
+- [x] Failure is captured by Sentry and does not crash completion flow.
 
 ### P2-05 - Focus Score Dashboard
 
@@ -771,11 +771,11 @@ Required states:
 
 VERIFY:
 
-- [ ] Component tests cover all states.
-- [ ] Trend handles 0, 1, 2, and 30 data points.
-- [ ] CTA routes are typed.
-- [ ] No hardcoded styles.
-- [ ] Reduced motion respected.
+- [x] Component tests cover all states.
+- [x] Trend handles 0, 1, 2, and 30 data points.
+- [x] CTA routes are typed.
+- [x] No hardcoded styles.
+- [x] Reduced motion respected.
 
 ### P2-06 - Home Focus Widget
 
@@ -794,19 +794,19 @@ Widget shows:
 
 VERIFY:
 
-- [ ] Widget appears above secondary rails.
-- [ ] Widget updates after session completion.
-- [ ] Widget handles loading, empty, error, offline, and success.
-- [ ] Tapping navigates through typed route.
+- [x] Widget appears above secondary rails.
+- [x] Widget updates after session completion.
+- [x] Widget handles loading, empty, error, offline, and success.
+- [x] Tapping navigates through typed route.
 
 PHASE 2 EXIT GATE:
 
-- [ ] Focus Score changes after test session.
-- [ ] Focus Score survives reinstall with same user.
-- [ ] Dashboard and widget render all states.
-- [ ] All Focus Identity tests pass.
-- [ ] Typecheck passes.
-- [ ] Verification report updated.
+- [x] Focus Score changes after test session.
+- [x] Focus Score survives reinstall with same user.
+- [x] Dashboard and widget render all states.
+- [x] All Focus Identity tests pass.
+- [x] Typecheck passes.
+- [x] Verification report updated.
 
 ---
 

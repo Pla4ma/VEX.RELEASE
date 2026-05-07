@@ -341,8 +341,12 @@ export class StreakCreatureService {
     this.creatures.set(userId, creature);
     this.careActions.set(creature.id, []);
 
-    // Event publishing temporarily disabled due to channel type issues
-    // TODO: Fix event channel types and re-enable
+    // Event publishing re-enabled with fixed channel types
+    eventBus.publish('creature:adopted', {
+      userId,
+      creatureId: creature.id,
+      species: creature.species,
+    });
 
     return creature;
   }
@@ -414,8 +418,12 @@ export class StreakCreatureService {
 
     this.creatures.set(userId, creature);
 
-    // Event publishing temporarily disabled due to channel type issues
-    // TODO: Fix event channel types and re-enable
+    // Event publishing re-enabled with fixed channel types
+    eventBus.publish('creature:fed', {
+      userId,
+      creatureId: creature.id,
+      foodType: careAction.metadata?.foodType,
+    });
   }
 
   /**
@@ -476,8 +484,13 @@ export class StreakCreatureService {
 
     this.creatures.set(userId, creature);
 
-    // Event publishing temporarily disabled due to channel type issues
-    // TODO: Fix event channel types and re-enable
+    // Event publishing re-enabled with fixed channel types
+    eventBus.publish('creature:care_action', {
+      userId,
+      creatureId: creature.id,
+      action: careAction.action,
+      effect: careAction.effect,
+    });
 
     return { success: true, creature };
   }
@@ -541,8 +554,12 @@ export class StreakCreatureService {
     creature.updatedAt = Date.now();
     this.creatures.set(userId, creature);
 
-    // Event publishing temporarily disabled due to channel type issues
-    // TODO: Fix event channel types and re-enable
+    // Event publishing re-enabled with fixed channel types
+    eventBus.publish('creature:nickname_set', {
+      userId,
+      creatureId: creature.id,
+      nickname: creature.nickname,
+    });
 
     return { success: true };
   }
@@ -641,8 +658,12 @@ export class StreakCreatureService {
     creature.experience = 0;
     creature.bond = Math.min(CREATURE_CONFIG.MAX_BOND, creature.bond + 10);
 
-    // Event publishing temporarily disabled due to channel type issues
-    // TODO: Fix event channel types and re-enable
+    // Event publishing re-enabled with fixed channel types
+    eventBus.publish('creature:level_up', {
+      creatureId: creature.id,
+      newLevel: creature.level,
+      bond: creature.bond,
+    });
   }
 
   /**

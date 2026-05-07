@@ -16,10 +16,10 @@ const debug = createDebugger('streak-risk-monitor');
 // ============================================================================
 
 const NOTIFICATION_THRESHOLDS = [
-  { hoursRemaining: 20, urgency: 'MEDIUM', message: 'Your streak expires in 4 hours' },
-  { hoursRemaining: 22, urgency: 'HIGH', message: 'Your streak expires in 2 hours - start a session now!' },
-  { hoursRemaining: 23, urgency: 'CRITICAL', message: 'URGENT: Your streak expires in 1 hour!' },
-  { hoursRemaining: 23.5, urgency: 'CRITICAL', message: 'FINAL WARNING: 30 minutes to save your streak!' },
+  { hoursRemaining: 20, urgency: 'MEDIUM', message: 'A quick 10-minute session keeps your streak alive. You have got this.' },
+  { hoursRemaining: 22, urgency: 'HIGH', message: 'Your streak is within reach. A short session today keeps your momentum going.' },
+  { hoursRemaining: 23, urgency: 'CRITICAL', message: 'One small session today preserves your streak. Start small and keep building.' },
+  { hoursRemaining: 23.5, urgency: 'CRITICAL', message: 'A 10-minute Recovery session keeps the chain alive. You are stronger than the gap.' },
 ];
 
 const FLAME_HEALTH_SEGMENTS = 24; // One segment per hour
@@ -123,7 +123,7 @@ export async function checkAndSendRiskNotifications(userId: string): Promise<voi
       eventBus.publish('notification:send', {
         userId,
         type: 'STREAK_AT_RISK',
-        title: `🔥 ${streak.currentDays}-Day Streak at Risk!`,
+        title: `${streak.currentDays}-day streak within reach`,
         body: threshold.message,
         data: {
           streakDays: streak.currentDays,
@@ -209,12 +209,12 @@ async function breakStreakInternal(userId: string, streak: Streak): Promise<void
     canRepair: true, // Offer repair quest
   } as any);
 
-  // Send notification
+  // Send supportive notification
   eventBus.publish('notification:send', {
     userId,
     type: 'STREAK_BROKEN',
-    title: '💔 Streak Broken',
-    body: `Your ${brokenDays}-day streak ended. Complete the Comeback Trail to restore it!`,
+    title: 'You missed a few days',
+    body: `Start small and rebuild momentum. Your ${brokenDays}-day streak shows what you are capable of.`,
     data: {
       previousStreak: brokenDays,
       action: 'START_REPAIR_QUEST',

@@ -1,12 +1,19 @@
 
 import React from 'react';
 import { useFocusScore } from '../hooks-focus-score';
-import { Box, Text, Stack } from '../../../components/primitives';
+import { Box, Text, Stack, Skeleton } from '../../../components/primitives';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-// TODO: Create a skeleton component
-const FocusScoreWidgetSkeleton = () => <Text>Loading...</Text>;
+const FocusScoreWidgetSkeleton = () => (
+  <Box p="m" bg="surface" borderRadius="m">
+    <Stack space="s">
+      <Skeleton width={80} height={16} />
+      <Skeleton width={60} height={24} />
+      <Skeleton width={100} height={14} />
+    </Stack>
+  </Box>
+);
 
 export const FocusScoreWidget = () => {
   const { score, status, error } = useFocusScore();

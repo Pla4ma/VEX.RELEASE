@@ -14,7 +14,7 @@ import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme';
 import { useAuthStore } from '../../store';
 import { useStreakSummary } from '../../features/streaks/hooks';
-import { createSheet } from '@/shared/ui/create-sheet';
+import { createSheet } from '../../shared/ui/create-sheet';
 
 // Launch tab structure: Home / Focus / Progress / Profile
 const ICONS = { Home: 'home', Focus: 'target', Progress: 'chart', Profile: 'user' } as const;

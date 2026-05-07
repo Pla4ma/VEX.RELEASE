@@ -59,3 +59,7 @@ export type {
   EarnPremiumStatus,
   CheckEligibilityInput,
 } from './EarnPremiumSystem';
+
+// PHASE 6: Rewards, Progression, And Economy Integrity
+export * from './currency-boundaries';
+export * from './anti-duplication';
