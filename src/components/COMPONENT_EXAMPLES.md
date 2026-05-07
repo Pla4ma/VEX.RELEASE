@@ -375,47 +375,47 @@ function DataComponent() {
 
 ## Anti-Patterns to Avoid
 
-### ❌ Don't Use StyleSheet.create
+### ❌ Don't Use StyleSheet.create (BANNED PATTERN)
 
 ```tsx
-// Wrong
-const styles = StyleSheet.create({
-  container: { padding: 16 },
-});
+// VIOLATION - This pattern is banned in AGENTS.md
+// const styles = StyleSheet.create({
+//   container: { padding: 16 },
+// });
 
-// Correct
+// CORRECT - Use theme tokens and inline styles
 <View style={{ padding: theme.spacing.md }} />
 ```
 
-### ❌ Don't Hardcode Colors
+### ❌ Don't Hardcode Colors (BANNED PATTERN)
 
 ```tsx
-// Wrong
-<Text style={{ color: '#000000' }} />
+// VIOLATION - Hardcoded colors are banned in AGENTS.md
+// <Text style={{ color: '#000000' }} />
 
-// Correct
+// CORRECT - Always use theme tokens
 <Text style={{ color: theme.colors.text.primary }} />
 ```
 
-### ❌ Don't Use console.log
+### ❌ Don't Use console.log (BANNED PATTERN)
 
 ```tsx
-// Wrong
-console.log('Debug', value);
+// VIOLATION - console.log is banned in AGENTS.md
+// console.log('Debug', value);
 
-// Correct
+// CORRECT - Use the debug utility
 import { createDebugger } from '../utils/debug';
 const debug = createDebugger('component:Name');
 debug.log('Debug', value);
 ```
 
-### ❌ Don't Use any
+### ❌ Don't Use any (BANNED PATTERN)
 
 ```tsx
-// Wrong
-function process(data: any) { }
+// VIOLATION - 'any' type is banned in AGENTS.md
+// function process(data: any) { }
 
-// Correct
+// CORRECT - Use proper TypeScript types
 function process(data: DataType) { }
 ```
 

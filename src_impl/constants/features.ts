@@ -1,211 +1,269 @@
 /**
- * Feature Flag Constants
- *
- * Default values and configuration for feature flags.
- * These control which features are available to users.
+ * PHASE 8 Feature Flag Matrix
+ * 
+ * Complete feature configuration for launch with proper categorization.
+ * Features are categorized as: core (enabled), optional (conditional), or disabled.
  */
 
-/**
- * Feature flag names
- */
-export const FEATURE_FLAGS = {
-  // UI Features
+export interface FeatureConfig {
+  enabled: boolean;
+  optional: boolean;
+  disabled: boolean;
+  description: string;
+  launchScope: 'core' | 'optional' | 'disabled';
+}
+
+export const FEATURE_FLAGS: Record<string, FeatureConfig> = {
+  // ============================================================================
+  // CORE FEATURES (12) - Always enabled for launch
+  // ============================================================================
+  sessions: {
+    enabled: true,
+    optional: false,
+    disabled: false,
+    description: 'Core focus session functionality - essential for app',
+    launchScope: 'core',
+  },
+  'focus-timer': {
+    enabled: true,
+    optional: false,
+    disabled: false,
+    description: 'Timer and focus tracking - core feature',
+    launchScope: 'core',
+  },
+  streaks: {
+    enabled: true,
+    optional: false,
+    disabled: false,
+    description: 'Daily streak tracking - core retention feature',
+    launchScope: 'core',
+  },
+  rewards: {
+    enabled: true,
+    optional: false,
+    disabled: false,
+    description: 'Basic reward system - core motivation feature',
+    launchScope: 'core',
+  },
+  progression: {
+    enabled: true,
+    optional: false,
+    disabled: false,
+    description: 'User progression and leveling - core feature',
+    launchScope: 'core',
+  },
+  achievements: {
+    enabled: true,
+    optional: false,
+    disabled: false,
+    description: 'Achievement system - core gamification',
+    launchScope: 'core',
+  },
+  'ai-coach': {
+    enabled: true,
+    optional: false,
+    disabled: false,
+    description: 'AI coaching and recommendations - core feature',
+    launchScope: 'core',
+  },
+  notifications: {
+    enabled: true,
+    optional: false,
+    disabled: false,
+    description: 'Push notifications - core engagement feature',
+    launchScope: 'core',
+  },
+  settings: {
+    enabled: true,
+    optional: false,
+    disabled: false,
+    description: 'App settings and preferences - core feature',
+    launchScope: 'core',
+  },
+  profile: {
+    enabled: true,
+    optional: false,
+    disabled: false,
+    description: 'User profile management - core feature',
+    launchScope: 'core',
+  },
+  analytics: {
+    enabled: true,
+    optional: false,
+    disabled: false,
+    description: 'Analytics and insights - core feature',
+    launchScope: 'core',
+  },
+  'offline-support': {
+    enabled: true,
+    optional: false,
+    disabled: false,
+    description: 'Offline functionality - core reliability feature',
+    launchScope: 'core',
+  },
+
+  // ============================================================================
+  // OPTIONAL FEATURES (4) - Ship if stable and improve core loop
+  // ============================================================================
+  boss: {
+    enabled: false,
+    optional: true,
+    disabled: false,
+    description: 'Solo boss battles - optional engagement feature',
+    launchScope: 'optional',
+  },
+  challenges: {
+    enabled: false,
+    optional: true,
+    disabled: false,
+    description: 'Daily and weekly challenges - optional variety feature',
+    launchScope: 'optional',
+  },
+  squads: {
+    enabled: false,
+    optional: true,
+    disabled: false,
+    description: 'Private squad accountability - optional social feature',
+    launchScope: 'optional',
+  },
+  'monthly-report': {
+    enabled: false,
+    optional: true,
+    disabled: false,
+    description: 'Monthly progress reports - optional insight feature',
+    launchScope: 'optional',
+  },
+
+  // ============================================================================
+  // DISABLED FEATURES (9) - Explicitly disabled for launch
+  // ============================================================================
+  'social-feed': {
+    enabled: false,
+    optional: false,
+    disabled: true,
+    description: 'Social media feed - disabled for launch',
+    launchScope: 'disabled',
+  },
+  duels: {
+    enabled: false,
+    optional: false,
+    disabled: true,
+    description: 'Player duels - disabled for launch',
+    launchScope: 'disabled',
+  },
+  rankings: {
+    enabled: false,
+    optional: false,
+    disabled: true,
+    description: 'Global rankings - disabled for launch',
+    launchScope: 'disabled',
+  },
+  'squad-wars': {
+    enabled: false,
+    optional: false,
+    disabled: true,
+    description: 'Squad vs squad competitions - disabled for launch',
+    launchScope: 'disabled',
+  },
+  rivals: {
+    enabled: false,
+    optional: false,
+    disabled: true,
+    description: 'Rival system - disabled for launch',
+    launchScope: 'disabled',
+  },
+  trading: {
+    enabled: false,
+    optional: false,
+    disabled: true,
+    description: 'Item trading system - disabled for launch',
+    launchScope: 'disabled',
+  },
+  'emergency-gem-sinks': {
+    enabled: false,
+    optional: false,
+    disabled: true,
+    description: 'Emergency gem consumption - disabled for launch',
+    launchScope: 'disabled',
+  },
+  'complex-crafting': {
+    enabled: false,
+    optional: false,
+    disabled: true,
+    description: 'Complex crafting system - disabled for launch',
+    launchScope: 'disabled',
+  },
+  'ar-experimental': {
+    enabled: false,
+    optional: false,
+    disabled: true,
+    description: 'AR features - disabled for launch',
+    launchScope: 'disabled',
+  },
+};
+
+// ============================================================================
+// Feature Flag Helper Functions
+// ============================================================================
+
+export function isFeatureEnabled(feature: string): boolean {
+  const config = FEATURE_FLAGS[feature];
+  return config?.enabled ?? false;
+}
+
+export function isFeatureOptional(feature: string): boolean {
+  const config = FEATURE_FLAGS[feature];
+  return config?.optional ?? false;
+}
+
+export function isFeatureDisabled(feature: string): boolean {
+  const config = FEATURE_FLAGS[feature];
+  return config?.disabled ?? false;
+}
+
+export function getLaunchEnabledFeatures(): string[] {
+  return Object.entries(FEATURE_FLAGS)
+    .filter(([_, config]) => config.enabled)
+    .map(([feature, _]) => feature);
+}
+
+export function getOptionalFeatures(): string[] {
+  return Object.entries(FEATURE_FLAGS)
+    .filter(([_, config]) => config.optional)
+    .map(([feature, _]) => feature);
+}
+
+export function getDisabledFeatures(): string[] {
+  return Object.entries(FEATURE_FLAGS)
+    .filter(([_, config]) => config.disabled)
+    .map(([feature, _]) => feature);
+}
+
+// Legacy compatibility with existing code
+export const FEATURE_FLAG_DEFAULTS: Record<string, boolean> = Object.fromEntries(
+  Object.entries(FEATURE_FLAGS).map(([key, config]) => [key, config.enabled])
+);
+
+export const FEATURE_DESCRIPTIONS: Record<string, string> = Object.fromEntries(
+  Object.entries(FEATURE_FLAGS).map(([key, config]) => [key, config.description])
+);
+
+// Legacy feature names for backward compatibility
+export const LEGACY_FEATURE_FLAGS = {
   DARK_MODE: 'dark_mode',
-  DARK_MODE_TOGGLE: 'dark_mode_toggle',
-  CUSTOM_THEMES: 'custom_themes',
-  REDUCED_MOTION: 'reduced_motion',
-
-  // Navigation Features
-  BOTTOM_TABS: 'bottom_tabs',
-  GESTURE_NAVIGATION: 'gesture_navigation',
-  QUICK_ACTIONS: 'quick_actions',
-
-  // Auth Features
   BIOMETRIC_LOGIN: 'biometric_login',
-  SOCIAL_LOGIN: 'social_login',
-  MAGIC_LINK_LOGIN: 'magic_link_login',
-  TWO_FACTOR_AUTH: 'two_factor_auth',
-
-  // User Features
-  PROFILE_CUSTOMIZATION: 'profile_customization',
-  AVATAR_FRAME: 'avatar_frame',
-  STATUS_MESSAGE: 'status_message',
-
-  // Squad Features
-  SQUAD_CREATION: 'squad_creation',
-  SQUAD_EVENTS: 'squad_events',
-  SQUAD_TOURNAMENTS: 'squad_tournaments',
   SQUAD_VOICE_CHAT: 'squad_voice_chat',
-
-  // Economy Features
-  WALLET: 'wallet',
-  TRANSFERS: 'transfers',
-  REWARDS: 'rewards',
-  MARKETPLACE: 'marketplace',
-  PREMIUM_CURRENCY: 'premium_currency',
-
-  // Gamification Features
-  ACHIEVEMENTS: 'achievements',
-  LEADERBOARDS: 'leaderboards',
-  DAILY_STREAKS: 'daily_streaks',
-  MISSIONS: 'missions',
-  SEASON_PASS: 'season_pass',
-
-  // Social Features
-  FRIENDS: 'friends',
-  BLOCKING: 'blocking',
-  DIRECT_MESSAGES: 'direct_messages',
-  GROUP_MESSAGES: 'group_messages',
-
-  // Content Features
-  CONTENT_CREATION: 'content_creation',
-  MEDIA_UPLOAD: 'media_upload',
-  RICH_TEXT: 'rich_text',
-  POLLS: 'polls',
-
-  // Notification Features
-  PUSH_NOTIFICATIONS: 'push_notifications',
-  EMAIL_NOTIFICATIONS: 'email_notifications',
-  SMS_NOTIFICATIONS: 'sms_notifications',
-  SMART_DIGESTS: 'smart_digests',
-
-  // AI Features
   AI_ASSISTANT: 'ai_assistant',
-  SMART_SUGGESTIONS: 'smart_suggestions',
-  CONTENT_MODERATION: 'content_moderation',
-
-  // Analytics Features
-  ANALYTICS: 'analytics',
-  CRASH_REPORTING: 'crash_reporting',
-  PERFORMANCE_MONITORING: 'performance_monitoring',
-
-  // Beta/Experimental Features
   BETA_FEATURES: 'beta_features',
-  EXPERIMENTAL_UI: 'experimental_ui',
-  EARLY_ACCESS: 'early_access',
 } as const;
 
-/**
- * Feature flag default states
- */
-export const FEATURE_FLAG_DEFAULTS: Record<string, boolean> = {
-  // UI Features
-  [FEATURE_FLAGS.DARK_MODE]: false,
-  [FEATURE_FLAGS.DARK_MODE_TOGGLE]: true,
-  [FEATURE_FLAGS.CUSTOM_THEMES]: false,
-  [FEATURE_FLAGS.REDUCED_MOTION]: false,
-
-  // Navigation Features
-  [FEATURE_FLAGS.BOTTOM_TABS]: true,
-  [FEATURE_FLAGS.GESTURE_NAVIGATION]: true,
-  [FEATURE_FLAGS.QUICK_ACTIONS]: true,
-
-  // Auth Features
-  [FEATURE_FLAGS.BIOMETRIC_LOGIN]: true,
-  [FEATURE_FLAGS.SOCIAL_LOGIN]: true,
-  [FEATURE_FLAGS.MAGIC_LINK_LOGIN]: false,
-  [FEATURE_FLAGS.TWO_FACTOR_AUTH]: false,
-
-  // User Features
-  [FEATURE_FLAGS.PROFILE_CUSTOMIZATION]: true,
-  [FEATURE_FLAGS.AVATAR_FRAME]: false,
-  [FEATURE_FLAGS.STATUS_MESSAGE]: true,
-
-  // Squad Features
-  [FEATURE_FLAGS.SQUAD_CREATION]: true,
-  [FEATURE_FLAGS.SQUAD_EVENTS]: true,
-  [FEATURE_FLAGS.SQUAD_TOURNAMENTS]: false,
-  [FEATURE_FLAGS.SQUAD_VOICE_CHAT]: false,
-
-  // Economy Features
-  [FEATURE_FLAGS.WALLET]: true,
-  [FEATURE_FLAGS.TRANSFERS]: true,
-  [FEATURE_FLAGS.REWARDS]: true,
-  [FEATURE_FLAGS.MARKETPLACE]: false,
-  [FEATURE_FLAGS.PREMIUM_CURRENCY]: false,
-
-  // Gamification Features
-  [FEATURE_FLAGS.ACHIEVEMENTS]: true,
-  [FEATURE_FLAGS.LEADERBOARDS]: true,
-  [FEATURE_FLAGS.DAILY_STREAKS]: true,
-  [FEATURE_FLAGS.MISSIONS]: false,
-  [FEATURE_FLAGS.SEASON_PASS]: false,
-
-  // Social Features
-  [FEATURE_FLAGS.FRIENDS]: true,
-  [FEATURE_FLAGS.BLOCKING]: true,
-  [FEATURE_FLAGS.DIRECT_MESSAGES]: true,
-  [FEATURE_FLAGS.GROUP_MESSAGES]: false,
-
-  // Content Features
-  [FEATURE_FLAGS.CONTENT_CREATION]: true,
-  [FEATURE_FLAGS.MEDIA_UPLOAD]: true,
-  [FEATURE_FLAGS.RICH_TEXT]: true,
-  [FEATURE_FLAGS.POLLS]: true,
-
-  // Notification Features
-  [FEATURE_FLAGS.PUSH_NOTIFICATIONS]: true,
-  [FEATURE_FLAGS.EMAIL_NOTIFICATIONS]: true,
-  [FEATURE_FLAGS.SMS_NOTIFICATIONS]: false,
-  [FEATURE_FLAGS.SMART_DIGESTS]: true,
-
-  // AI Features
-  [FEATURE_FLAGS.AI_ASSISTANT]: false,
-  [FEATURE_FLAGS.SMART_SUGGESTIONS]: true,
-  [FEATURE_FLAGS.CONTENT_MODERATION]: true,
-
-  // Analytics Features
-  [FEATURE_FLAGS.ANALYTICS]: true,
-  [FEATURE_FLAGS.CRASH_REPORTING]: true,
-  [FEATURE_FLAGS.PERFORMANCE_MONITORING]: true,
-
-  // Beta/Experimental Features
-  [FEATURE_FLAGS.BETA_FEATURES]: false,
-  [FEATURE_FLAGS.EXPERIMENTAL_UI]: false,
-  [FEATURE_FLAGS.EARLY_ACCESS]: false,
-};
-
-/**
- * Feature flag descriptions for UI display
- */
-export const FEATURE_DESCRIPTIONS: Record<string, string> = {
-  [FEATURE_FLAGS.DARK_MODE]: 'Enable dark mode for the app interface',
-  [FEATURE_FLAGS.BIOMETRIC_LOGIN]: 'Use fingerprint or face recognition to login',
-  [FEATURE_FLAGS.SQUAD_VOICE_CHAT]: 'Voice chat within squads (coming soon)',
-  [FEATURE_FLAGS.MARKETPLACE]: 'Buy and sell items with other users (coming soon)',
-  [FEATURE_FLAGS.AI_ASSISTANT]: 'AI-powered assistant for help and recommendations',
-  [FEATURE_FLAGS.BETA_FEATURES]: 'Enable experimental features (may be unstable)',
-};
-
-/**
- * Feature groups for organization
- */
 export const FEATURE_GROUPS = {
-  ui: [
-    FEATURE_FLAGS.DARK_MODE,
-    FEATURE_FLAGS.DARK_MODE_TOGGLE,
-    FEATURE_FLAGS.CUSTOM_THEMES,
-    FEATURE_FLAGS.REDUCED_MOTION,
-  ],
-  auth: [
-    FEATURE_FLAGS.BIOMETRIC_LOGIN,
-    FEATURE_FLAGS.SOCIAL_LOGIN,
-    FEATURE_FLAGS.TWO_FACTOR_AUTH,
-  ],
-  social: [
-    FEATURE_FLAGS.FRIENDS,
-    FEATURE_FLAGS.DIRECT_MESSAGES,
-    FEATURE_FLAGS.GROUP_MESSAGES,
-  ],
-  economy: [
-    FEATURE_FLAGS.WALLET,
-    FEATURE_FLAGS.TRANSFERS,
-    FEATURE_FLAGS.REWARDS,
-    FEATURE_FLAGS.MARKETPLACE,
-  ],
-  experimental: [
-    FEATURE_FLAGS.BETA_FEATURES,
-    FEATURE_FLAGS.EXPERIMENTAL_UI,
-    FEATURE_FLAGS.EARLY_ACCESS,
-  ],
+  core: getLaunchEnabledFeatures(),
+  optional: getOptionalFeatures(),
+  disabled: getDisabledFeatures(),
+  ui: ['dark_mode', 'reduced_motion'],
+  auth: ['biometric_login', 'social_login'],
+  social: ['squads'],
+  economy: ['rewards'],
+  experimental: ['ar-experimental'],
 } as const;
