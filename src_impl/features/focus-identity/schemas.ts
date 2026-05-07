@@ -70,6 +70,8 @@ export const FocusScoreRecordSchema = z
     updatedAt: z.string().datetime(),
     createdAt: z.string().datetime(),
     lastChangeReason: z.string().min(1),
+    topPositiveFactor: FocusScoreFactorKeySchema.optional(), // Add this
+    topNegativeFactor: FocusScoreFactorKeySchema.optional(), // Add this
   })
   .strict();
 

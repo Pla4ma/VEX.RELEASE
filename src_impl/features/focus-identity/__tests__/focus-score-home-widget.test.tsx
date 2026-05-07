@@ -35,7 +35,7 @@ function model(overrides: Partial<FocusScoreDashboardModel> = {}): FocusScoreDas
 describe("FocusScoreHomeWidget", () => {
   it("renders loading state", () => {
     const screen = render(<FocusScoreHomeWidget model={model({ isPending: true })} onPress={jest.fn()} onRetry={jest.fn()} />);
-    expect(screen.getByText("Loading your focus identity...")).toBeTruthy();
+    expect(screen.getByTestId("focus-score-home-widget-skeleton")).toBeTruthy();
   });
 
   it("renders error state", () => {
@@ -74,5 +74,27 @@ describe("FocusScoreHomeWidget", () => {
     fireEvent.press(screen.getByLabelText("Open focus score dashboard"));
     expect(onPress).toHaveBeenCalled();
     expect(screen.getByText("640 · Strong")).toBeTruthy();
+  });
+
+  it("renders offline state", () => {
+    const screen = render(<FocusScoreHomeWidget model={model({ isOffline: true, current: {
+      id: "123e4567-e89b-12d3-a456-426614174111",
+      userId: "123e4567-e89b-12d3-a456-426614174000",
+      currentScore: 640,
+      previousScore: 630,
+      band: "Strong",
+      factors: {
+        consistency: { weightPercent: 35, score: 82, delta: 5, explanation: "Good consistency." },
+        streakStability: { weightPercent: 25, score: 72, delta: 2, explanation: "Stable streak." },
+        sessionQuality: { weightPercent: 20, score: 87, delta: 4, explanation: "Quality up." },
+        intentionalDifficulty: { weightPercent: 10, score: 61, delta: 1, explanation: "Balanced challenge." },
+        recency: { weightPercent: 10, score: 78, delta: 2, explanation: "Recent sessions." },
+      },
+      updatedAt: "2026-05-06T10:00:00.000Z",
+      createdAt: "2026-05-01T10:00:00.000Z",
+      lastChangeReason: "Session quality improved",
+    } })} onPress={jest.fn()} onRetry={jest.fn()} />);
+    expect(screen.getByText("Offline focus mode")).toBeTruthy();
+    expect(screen.getByText("Cached score shown while VEX waits to sync.")).toBeTruthy();
   });
 });

@@ -15,9 +15,9 @@ import type { Nullable } from '../types/global';
 // Track integration initialization state
 let integrationsInitialized = false;
 let cleanupIntegrations: (() => void) | null = null;
-import { getSecureStorage, SecureStorageKeys } from '../persistence';
+import { getSecureStorage, SecureStorageKeys } from '../persistence/SecureStorage';
 import { signInWithEmail, signUpWithEmail, signOut, getCurrentUser, onAuthStateChange } from '../services/supabaseAuth';
-import { setSentryUser, clearSentryUser } from '../config/sentry';
+import { setSentryUser, clearSentryUser, captureException } from '../config/sentry';
 import { revenueCatService } from '../shared/monetization/revenuecat-service';
 // TODO: Integration system archived - replace with direct service calls
 // import { initializeAllIntegrations } from '../integration';
@@ -28,6 +28,10 @@ import { revenueCatService } from '../shared/monetization/revenuecat-service';
 import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('store');
+
+function toError(error: unknown): Error {
+  return error instanceof Error ? error : new Error(String(error));
+}
 
 function resetServiceSingletonsForLogout(): void {
   // TODO: Service system archived - replace with direct service calls
@@ -124,84 +128,114 @@ export const useAuthStore = create<AuthState>()(
         },
 
         loginWithCredentials: async (email: string, password: string) => {
-          set((state) => {
-            state.isLoading = true;
-            state.error = null;
-          });
-
-          const { user, error } = await signInWithEmail(email, password);
-
-          if (error) {
+          try {
             set((state) => {
-              state.error = error.message;
+              state.isLoading = true;
+              state.error = null;
+            });
+
+            const { user, error } = await signInWithEmail(email, password);
+
+            if (error) {
+              set((state) => {
+                state.error = error.message;
+                state.isLoading = false;
+              });
+              return false;
+            }
+
+            if (user) {
+              set((state) => {
+                state.user = user;
+                state.isAuthenticated = true;
+                state.isLoading = false;
+              });
+              // Track user in Sentry
+              setSentryUser(user.id, user.email, user.username);
+              // Identify user in RevenueCat for purchases (with error handling)
+              try {
+                void revenueCatService.setUserId(user.id);
+              } catch (error) {
+                debug.error('[AuthStore] Failed to set RevenueCat user ID:', error);
+                // Don't fail login due to RevenueCat issues
+              }
+              // Initialize integrations on first successful auth
+              if (!integrationsInitialized) {
+                // TODO: Integration system archived - replace with direct service calls
+                // cleanupIntegrations = initializeAllIntegrations();
+                // integrationsInitialized = true;
+              }
+              return true;
+            }
+
+            set((state) => {
+              state.error = 'Login failed';
+              state.isLoading = false;
+            });
+            return false;
+          } catch (error) {
+            const err = toError(error);
+            captureException(err, { feature: 'auth', operation: 'loginWithCredentials' });
+            set((state) => {
+              state.error = err.message;
               state.isLoading = false;
             });
             return false;
           }
-
-          if (user) {
-            set((state) => {
-              state.user = user;
-              state.isAuthenticated = true;
-              state.isLoading = false;
-            });
-            // Track user in Sentry
-            setSentryUser(user.id, user.email, user.username);
-            // Identify user in RevenueCat for purchases
-            revenueCatService.setUserId(user.id);
-            // Initialize integrations on first successful auth
-            if (!integrationsInitialized) {
-              // TODO: Integration system archived - replace with direct service calls
-              // cleanupIntegrations = initializeAllIntegrations();
-              // integrationsInitialized = true;
-            }
-            return true;
-          }
-
-          set((state) => {
-            state.error = 'Login failed';
-            state.isLoading = false;
-          });
-          return false;
         },
 
         register: async (data) => {
-          set((state) => {
-            state.isLoading = true;
-            state.error = null;
-          });
-
-          const { user, error } = await signUpWithEmail(data.email, data.password, {
-            firstName: data.firstName,
-            lastName: data.lastName,
-          });
-
-          if (error) {
+          try {
             set((state) => {
-              state.error = error.message;
+              state.isLoading = true;
+              state.error = null;
+            });
+
+            const { user, error } = await signUpWithEmail(data.email, data.password, {
+              firstName: data.firstName,
+              lastName: data.lastName,
+            });
+
+            if (error) {
+              set((state) => {
+                state.error = error.message;
+                state.isLoading = false;
+              });
+              return false;
+            }
+
+            if (user) {
+              set((state) => {
+                state.user = user;
+                state.isAuthenticated = true;
+                state.isLoading = false;
+              });
+              // Track user in Sentry
+              setSentryUser(user.id, user.email, user.username);
+              // Identify user in RevenueCat for purchases (with error handling)
+              try {
+                revenueCatService.setUserId(user.id);
+              } catch (error) {
+                debug.error('[AuthStore] Failed to set RevenueCat user ID:', error);
+                // Don't fail registration due to RevenueCat issues
+              }
+              return true;
+            }
+
+            set((state) => {
+              state.error = 'Registration failed';
+              state.isLoading = false;
+            });
+            return false;
+          } catch (error) {
+            const err = toError(error);
+            captureException(err, { feature: 'auth', operation: 'register' });
+            set((state) => {
+              state.error = err.message;
               state.isLoading = false;
             });
             return false;
           }
-
-          if (user) {
-            set((state) => {
-              state.user = user;
-              state.isAuthenticated = true;
-              state.isLoading = false;
-            });
-            // Track user in Sentry
-            setSentryUser(user.id, user.email, user.username);
-            // Identify user in RevenueCat for purchases
-            revenueCatService.setUserId(user.id);
-            return true;
-          }
-
-          set((state) => {
-            state.error = 'Registration failed';
-            state.isLoading = false;
-          });
-          return false;
         },
 
         clearError: () =>
@@ -284,8 +318,13 @@ export const useAuthStore = create<AuthState>()(
           // Clear Sentry user context
           clearSentryUser();
 
-          // Clear RevenueCat user identification
-          revenueCatService.clearUserId();
+          // Clear RevenueCat user identification (with error handling)
+          try {
+            revenueCatService.clearUserId();
+          } catch (error) {
+            debug.error('[AuthStore] Failed to clear RevenueCat user ID:', error);
+            // Don't fail logout due to RevenueCat issues
+          }
 
           // Cleanup integrations
           cleanupIntegrations?.();
@@ -317,8 +356,13 @@ export const useAuthStore = create<AuthState>()(
               });
               // Track user in Sentry
               setSentryUser(user.id, user.email, user.username);
-              // Identify user in RevenueCat for purchases
-              revenueCatService.setUserId(user.id);
+              // Identify user in RevenueCat for purchases (with error handling)
+              try {
+                revenueCatService.setUserId(user.id);
+              } catch (error) {
+                debug.error('[AuthStore] Failed to set RevenueCat user ID during checkAuth:', error);
+                // Don't fail auth check due to RevenueCat issues
+              }
               // Initialize integrations on first successful session validation
               if (!integrationsInitialized) {
                 // TODO: Integration system archived - replace with direct service calls
@@ -332,8 +376,13 @@ export const useAuthStore = create<AuthState>()(
                 state.isLoading = false;
               });
               clearSentryUser();
-              // Clear RevenueCat user identification
-              revenueCatService.clearUserId();
+              // Clear RevenueCat user identification (with error handling)
+              try {
+                revenueCatService.clearUserId();
+              } catch (error) {
+                debug.error('[AuthStore] Failed to clear RevenueCat user ID during checkAuth:', error);
+                // Don't fail auth check due to RevenueCat issues
+              }
             }
           } catch (err) {
             set((state) => {

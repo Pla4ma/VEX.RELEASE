@@ -1,9 +1,10 @@
 import React from "react";
 import { Pressable, View } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { StatusBanner } from "../../../shared/ui/components/StatusFeedback";
-import { useTheme } from "../../../theme";
-import type { FocusScoreDashboardModel } from "../hooks-focus-score";
+import { Text } from "@components/primitives/Text"; // Use alias
+import { Skeleton } from "@components/ui/Skeleton"; // Use alias
+import { StatusBanner } from "@/shared/ui/components/StatusFeedback"; // Use alias
+import { useTheme } from "@theme"; // Use alias
+import type { FocusScoreDashboardModel } from "../types"; // Import from types.ts
 
 interface FocusScoreHomeWidgetProps {
   model: FocusScoreDashboardModel;
@@ -15,9 +16,10 @@ export function FocusScoreHomeWidget({ model, onPress, onRetry }: FocusScoreHome
   const { theme } = useTheme();
   if (model.isPending) {
     return (
-      <View style={{ borderWidth: 1, borderColor: theme.colors.border.light, borderRadius: theme.borderRadius.lg, backgroundColor: theme.colors.background.secondary, padding: theme.spacing[4], gap: theme.spacing[2] }}>
-        <Text variant="label" color={theme.colors.text.secondary}>Focus Score</Text>
-        <Text variant="h3" color={theme.colors.text.primary}>Loading your focus identity...</Text>
+      <View testID="focus-score-home-widget-skeleton" style={{ borderWidth: 1, borderColor: theme.colors.border.light, borderRadius: theme.borderRadius.lg, backgroundColor: theme.colors.background.secondary, padding: theme.spacing[4], gap: theme.spacing[2] }}>
+        <Skeleton width={100} height={16} />
+        <Skeleton width={200} height={24} />
+        <Skeleton width={150} height={16} />
       </View>
     );
   }

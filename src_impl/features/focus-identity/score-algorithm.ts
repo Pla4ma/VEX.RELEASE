@@ -109,7 +109,7 @@ export function calculateFocusScoreUpdate(rawInput: FocusScoreUpdateInput): Focu
   if (input.eventType === "session:completed" && input.previousScore === 550 && delta < 4) {
     delta = 4;
   }
-  if (input.grade === "S" && input.eventType === "session:completed" && delta < 12) {
+  if (input.grade === "S" && input.eventType === "session:completed" && delta < 12 && input.sessionMode !== "recovery") {
     delta = 12;
   }
 

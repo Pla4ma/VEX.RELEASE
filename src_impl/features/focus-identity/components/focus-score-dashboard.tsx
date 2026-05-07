@@ -64,12 +64,12 @@ export function FocusScoreDashboard({ model, onRetry, onStartSession, onOpenMont
       />
     );
   }
-  if (!model.current || model.history.length === 0) {
+  if (!model.current) {
     return (
       <EmptyState
-        icon="🎯"
+        icon="◎"
         title="Your Focus Score starts after session one"
-        body="Complete one focused session and VEX will unlock your score trend, factor map, and next target."
+        body="Complete one focused session and VEX will unlock your signal map, score trend, and next target."
         actionLabel="Start session"
         onAction={onStartSession}
       />
@@ -92,6 +92,20 @@ export function FocusScoreDashboard({ model, onRetry, onStartSession, onOpenMont
       ) : null}
       {model.isRefetching ? (
         <StatusBanner status="loading" message="Refreshing Focus Score" description="Updating your latest score signals." />
+      ) : null}
+      {model.isOptionalDataSyncing ? (
+        <StatusBanner
+          status="loading"
+          message="Calibrating deeper signals"
+          description="Your main Focus Score is ready. Trend and monthly insights will fill in as fresh data syncs."
+        />
+      ) : null}
+      {model.optionalDataError ? (
+        <StatusBanner
+          status="error"
+          message="Some insights are delayed"
+          description="Your current score is stable while history and monthly reports retry in the background."
+        />
       ) : null}
       <View style={{ borderWidth: 1, borderColor: theme.colors.border.light, borderRadius: theme.borderRadius.lg, padding: theme.spacing[4], gap: theme.spacing[2], backgroundColor: theme.colors.background.secondary }}>
         <Text variant="label" color={theme.colors.text.secondary}>Focus Score</Text>

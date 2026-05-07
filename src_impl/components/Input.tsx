@@ -81,11 +81,10 @@ export const Input = forwardRef<TextInput, InputProps>(
       [onBlur]
     );
 
-    // Border color based on state
-    const getBorderColor = () => {
+    const getBorderColor = (): string => {
       if (error) {return theme.colors.error.DEFAULT;}
-      if (isFocused) {return theme.colors.primary[500];}
-      return theme.colors.border.DEFAULT;
+      if (isFocused) {return theme.colors.semantic.primary;}
+      return theme.colors.semantic.inputBorder;
     };
 
     return (
@@ -103,8 +102,8 @@ export const Input = forwardRef<TextInput, InputProps>(
             styles.container,
             {
               borderColor: getBorderColor(),
-              backgroundColor: theme.colors.background.secondary,
-              borderRadius: theme.borderRadius.md,
+              backgroundColor: theme.colors.semantic.inputBackground,
+              borderRadius: theme.borderRadius.xl,
             },
             inputStyle,
           ]}
@@ -127,12 +126,12 @@ export const Input = forwardRef<TextInput, InputProps>(
               styles.input,
               {
                 color: theme.colors.text.primary,
-                fontSize: 16,
-                paddingLeft: leftIcon ? 0 : 16,
-                paddingRight: rightIcon ? 0 : 16,
+                fontSize: theme.typography.body.medium.fontSize,
+                paddingLeft: leftIcon ? 0 : theme.spacing[4],
+                paddingRight: rightIcon ? 0 : theme.spacing[4],
               },
             ]}
-            placeholderTextColor={theme.colors.text.tertiary}
+            placeholderTextColor={theme.colors.text.placeholder}
             onFocus={handleFocus}
             onBlur={handleBlur}
             maxLength={textInputProps.maxLength || 500}
@@ -171,12 +170,11 @@ const styles = createSheet({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderRadius: 12,
-    minHeight: 48,
+    minHeight: 52,
   },
   input: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 14,
     fontFamily: 'System',
   },
   leftIcon: {

@@ -77,17 +77,9 @@ export {
   useFocusScoreColor,
   useIdentityStatement,
 } from './hooks';
-export { useFocusScoreCard, useFocusScoreDashboardModel } from "./hooks-focus-score";
+export { useFocusScore } from "./hooks-focus-score"; // Only export useFocusScore
 
 // Integration
-export {
-  initializeFocusIdentityIntegrations,
-  initializeSessionIntegration,
-  initializeProgressionIntegration,
-  initializeForNewUser,
-  checkRetentionRisk,
-  getXpMultiplierForScore,
-} from './integration';
 export { initializeFocusScoreIntegration } from "./integration-focus-score";
 
 // Components

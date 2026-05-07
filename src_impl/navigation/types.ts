@@ -210,7 +210,7 @@ export interface MainStackParams {
   Feed: { userId?: string };
   Notifications: undefined;
   Search: { query?: string };
-  Analytics: undefined;
+  Analytics: { month?: string }; // Updated to accept month
   Rankings: undefined;
   ContentStudy: NavigatorScreenParams<ContentStudyStackParamList> | undefined;
   ContentReview: { contentId: string };

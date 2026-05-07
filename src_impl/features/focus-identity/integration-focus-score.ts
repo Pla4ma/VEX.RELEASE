@@ -50,7 +50,7 @@ function buildSignals(summary: unknown): {
     streakStability: Math.max(0, Math.min(100, 45 + streakDays * 3)),
     sessionQuality: quality,
     intentionalDifficulty: readSessionMode(summary) === "deep_work" ? 72 : 55,
-    recency: 80,
+    recency: Math.max(0, Math.min(100, 30 + streakDays * 5)),
   };
 }
 
@@ -78,6 +78,8 @@ export function initializeFocusScoreIntegration(): () => void {
         band: result.band,
         factors: result.factors,
         lastChangeReason: result.userFacingReason,
+        topPositiveFactor: result.topPositiveFactor, // Add this
+        topNegativeFactor: result.topNegativeFactor, // Add this
       });
       await appendFocusScoreHistory({
         userId,

@@ -39,24 +39,24 @@ export function PremiumSurface({
 
   const toneStyle = {
     default: {
-      borderColor: (theme.colors.border as any)?.light || theme.colors.border.light,
-      backgroundColor: (theme.colors.background as any).secondary,
+      borderColor: theme.colors.semantic.border,
+      backgroundColor: theme.colors.semantic.surface,
     },
     celebration: {
-      borderColor: (theme.colors.primary as any)[200],
-      backgroundColor: (theme.colors.surface as any).selected,
+      borderColor: theme.colors.primary[300],
+      backgroundColor: theme.colors.surface.selected,
     },
     info: {
-      borderColor: (theme.colors.info as any)[500],
-      backgroundColor: (theme.colors.info as any)[50],
+      borderColor: theme.colors.info.DEFAULT,
+      backgroundColor: theme.colors.info[50],
     },
     warning: {
-      borderColor: (theme.colors.warning as any)[500],
-      backgroundColor: (theme.colors.warning as any)[50],
+      borderColor: theme.colors.warning.DEFAULT,
+      backgroundColor: theme.colors.warning[50],
     },
     locked: {
-      borderColor: (theme.colors.border as any)?.DEFAULT || theme.colors.border.DEFAULT,
-      backgroundColor: (theme.colors.background as any).secondary,
+      borderColor: theme.colors.semantic.border,
+      backgroundColor: theme.colors.semantic.surfaceGlass,
     },
   }[tone];
 

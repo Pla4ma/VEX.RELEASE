@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   FocusScoreBandLabelSchema,
   FocusScoreFactorsSchema,
+  FocusScoreFactorKeySchema, // Add this
   FocusScoreHistoryPointSchema,
   MAX_FOCUS_SCORE,
   MIN_FOCUS_SCORE,
@@ -16,6 +17,8 @@ export const UpsertCurrentFocusScoreInputSchema = z
     band: FocusScoreBandLabelSchema,
     factors: FocusScoreFactorsSchema,
     lastChangeReason: z.string().min(1),
+    topPositiveFactor: FocusScoreFactorKeySchema.optional(), // Add this
+    topNegativeFactor: FocusScoreFactorKeySchema.optional(), // Add this
   })
   .strict();
 
@@ -38,6 +41,8 @@ export const CurrentFocusScoreRowSchema = z
     band: FocusScoreBandLabelSchema,
     factors: FocusScoreFactorsSchema,
     last_change_reason: z.string().min(1),
+    top_positive_factor: FocusScoreFactorKeySchema.optional(), // Add this
+    top_negative_factor: FocusScoreFactorKeySchema.optional(), // Add this
     created_at: z.string().datetime(),
     updated_at: z.string().datetime(),
   })

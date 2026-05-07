@@ -62,6 +62,7 @@
   },
   "include": [
     "src/**/*",
+    "src_impl/**/*", // Add this line
     "index.js"
   ],
   "exclude": [

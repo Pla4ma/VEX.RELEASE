@@ -58,6 +58,7 @@ module.exports = {
     '^@validation/(.*)$': '<rootDir>/src/validation/$1',
     '^expo-modules-core/src/Refs$': '<rootDir>/src/__tests__/mocks/expo-modules-core-Refs.ts',
     '^expo-modules-core/src/web/index.web$': '<rootDir>/src/__tests__/mocks/expo-modules-core-web-index.ts',
+    '^expo-haptics$': '<rootDir>/src/__tests__/mocks/expo-haptics.ts',
     '^react-native/Libraries/BatchedBridge/NativeModules$': '<rootDir>/src/__tests__/mocks/native-modules.ts',
     '^@sentry/node$': '<rootDir>/src/__tests__/mocks/sentry-node.ts',
     '^vitest$': '<rootDir>/src/__tests__/mocks/vitest.ts',

@@ -39,7 +39,9 @@ export function EmptyState({
           borderRadius: 36,
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: theme.colors.background.secondary,
+          backgroundColor: theme.colors.semantic.primarySoft,
+          borderColor: theme.colors.semantic.border,
+          borderWidth: 1,
         }}
       >
         <Text fontSize={48} lineHeight={48}>
@@ -66,10 +68,13 @@ export function EmptyState({
         </Text>
       </View>
       {actionLabel && onAction ? (
-        <Button variant="outline" onPress={onAction}
-  accessibilityLabel="Action button"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+        <Button
+          accessibilityHint="Activates this empty state action"
+          accessibilityLabel={actionLabel}
+          accessibilityRole="button"
+          onPress={onAction}
+          variant="outline"
+        >
           {actionLabel}
         </Button>
       ) : null}

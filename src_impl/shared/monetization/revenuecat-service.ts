@@ -56,11 +56,20 @@ class RevenueCatService {
         return { status: 'error' };
       }
 
-      Purchases.configure({ apiKey, appUserID: undefined });
-      Purchases.setLogLevel(this.debugMode ? LOG_LEVEL.DEBUG : LOG_LEVEL.ERROR);
-      Purchases.addCustomerInfoUpdateListener((customerInfo) => {
-        this.handleCustomerInfoUpdate(customerInfo);
-      });
+      // Wrap Purchases.configure in try/catch to prevent crashes
+      try {
+        Purchases.configure({ apiKey, appUserID: undefined });
+        Purchases.setLogLevel(this.debugMode ? LOG_LEVEL.DEBUG : LOG_LEVEL.ERROR);
+        Purchases.addCustomerInfoUpdateListener((customerInfo) => {
+          this.handleCustomerInfoUpdate(customerInfo);
+        });
+      } catch (configError) {
+        const configErr = configError instanceof Error ? configError : new Error(String(configError));
+        if (this.debugMode) {debug.error('[RevenueCat] Configuration failed', configErr);}
+        Sentry.captureException(configErr, { tags: { component: 'RevenueCatService', operation: 'configure' } });
+        this.status = 'error';
+        return { status: 'error' };
+      }
 
       this.status = 'ready';
       if (this.debugMode) {debug.debug('[RevenueCat] SDK initialized successfully');}

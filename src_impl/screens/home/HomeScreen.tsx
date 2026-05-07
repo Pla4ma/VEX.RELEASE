@@ -7,7 +7,6 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -22,6 +21,7 @@ import { HomeHero } from './HomeScreenVisuals';
 import { HomeContent } from './components/HomeContent';
 import { useHomeData } from './hooks/useHomeData';
 import { readSuggestedDuration, readSuggestedMode } from './utils';
+import { AppScreen } from '../../components/primitives';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -96,11 +96,7 @@ export function HomeScreen(): JSX.Element {
   }, [controller.userId, navigation]);
 
   return (
-    <ScrollView
-      style={{ flex: 1 }}
-      contentContainerStyle={{ paddingBottom: 40 }}
-      showsVerticalScrollIndicator={false}
-    >
+    <AppScreen contentStyle={{ gap: 0, paddingHorizontal: 0, paddingTop: 0 }} padded={false}>
       <GreetingHeader
         userName={controller.user?.firstName}
         avatarUrl={controller.user?.avatar ?? undefined}
@@ -146,7 +142,7 @@ export function HomeScreen(): JSX.Element {
       />
 
       <HomeContent navigation={navigation} data={data} />
-    </ScrollView>
+    </AppScreen>
   );
 }
 

@@ -14,8 +14,15 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
   hasCompletedOnboarding,
   isAuthenticated,
 }) => {
+  const navigatorKey = isAuthenticated
+    ? hasCompletedOnboarding
+      ? 'app'
+      : 'onboarding'
+    : 'auth';
+
   return (
     <Stack.Navigator
+      key={navigatorKey}
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',

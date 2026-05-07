@@ -44,6 +44,8 @@ function mapCurrentRowToRecord(row: unknown): FocusScoreRecord {
     updatedAt: parsed.updated_at,
     createdAt: parsed.created_at,
     lastChangeReason: parsed.last_change_reason,
+    topPositiveFactor: parsed.top_positive_factor,
+    topNegativeFactor: parsed.top_negative_factor,
   };
 }
 
@@ -101,6 +103,8 @@ export async function upsertCurrentFocusScore(
           band: input.band,
           factors: input.factors,
           last_change_reason: input.lastChangeReason,
+          top_positive_factor: input.topPositiveFactor,
+          top_negative_factor: input.topNegativeFactor,
         },
         { onConflict: "user_id" },
       )

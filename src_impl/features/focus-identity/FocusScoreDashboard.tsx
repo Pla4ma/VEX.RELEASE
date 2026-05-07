@@ -1,393 +1,162 @@
-/**
- * Focus Score Dashboard
- *
- * Phase 2: Progression Redesign
- * Primary home screen widget showing the user's Focus Score (300-850)
- * like a credit score app. This becomes the central identity metric.
- *
- * Dependencies:
- * - features/focus-identity/FocusIdentityEngine (score data)
- * - feature-flags (gradual rollout)
- */
 
-import React, { useMemo } from "react";
-import { View, StyleSheet, Dimensions, TouchableOpacity, Text as RNText } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming, interpolate, Extrapolate } from "react-native-reanimated";
-// TODO: Install react-native-chart-kit and uncomment below
-// import { LineChart } from 'react-native-chart-kit';
+import React from 'react';
+import { useNavigation } from '@react-navigation/native'; // Add this import
+import { useFocusScore } from './hooks-focus-score';
+import { Box, Text, Stack, Button } from '@components/primitives';
+import { useTheme } from '@theme';
+import { useReducedMotion } from '@hooks';
+import { useNetInfo } from '@network';
 
-import { Text } from "../../components/primitives/Text";
-import { featureFlags } from "../../feature-flags/FeatureFlagEngine";
-import type { FocusIdentityProfile, ScoreBand, FocusScoreFactors } from "./FocusIdentityEngine";
+const FocusScoreDashboardSkeleton = () => {
+  const { isReducedMotion } = useReducedMotion(); // Use the hook
+  const animate = !isReducedMotion;
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+  return (
+    <Stack space="m" testID="focus-score-dashboard-skeleton">
+      <Box>
+        <Skeleton width={100} height={20} animate={animate} />
+        <Skeleton width={80} height={30} animate={animate} />
+        <Skeleton width={120} height={16} animate={animate} />
+        <Skeleton width={60} height={16} animate={animate} />
+      </Box>
 
-interface FocusScoreDashboardProps {
-  profile: FocusIdentityProfile | null;
-  onPress?: () => void;
-  compact?: boolean;
-}
+      <Box>
+        <Skeleton width="100%" height={150} animate={animate} /> {/* For 30-day trend */}
+      </Box>
 
-/**
- * Focus Score Dashboard Component
- * Shows credit-score style display with percentile ranking
- */
-export const FocusScoreDashboard: React.FC<FocusScoreDashboardProps> = ({ profile, onPress, compact = false }) => {
-  const scale = useSharedValue(1);
+      <Box>
+        <Skeleton width={150} height={20} animate={animate} />
+        <Stack space="s">
+          <Skeleton width="100%" height={16} animate={animate} />
+          <Skeleton width="90%" height={16} animate={animate} />
+          <Skeleton width="80%" height={16} animate={animate} />
+          <Skeleton width="70%" height={16} animate={animate} />
+          <Skeleton width="60%" height={16} animate={animate} />
+        </Stack>
+      </Box>
 
-  // Check if feature is enabled
-  if (!featureFlags.isEnabled("focus_score_primary")) {
-    return null;
+      <Box>
+        <Skeleton width={120} height={20} animate={animate} />
+        <Skeleton width="100%" height={16} animate={animate} />
+      </Box>
+
+      <Box>
+        <Skeleton width={100} height={20} animate={animate} />
+        <Skeleton width={80} height={16} animate={animate} />
+      </Box>
+
+      <Box>
+        <Skeleton width={120} height={20} animate={animate} />
+        <Skeleton width="100%" height={40} variant="rounded" animate={animate} />
+      </Box>
+    </Stack>
+  );
+};
+
+export const FocusScoreDashboard = () => {
+  const navigation = useNavigation(); // Add this line
+  const { score, history, status, error, refetch, isRefetching } = useFocusScore();
+  const { theme } = useTheme();
+  const { isOffline } = useNetInfo(); // Use the hook
+
+  if (status === 'pending') {
+    return <FocusScoreDashboardSkeleton />;
   }
 
-  if (!profile) {
+  if (status === 'error') {
     return (
-      <View style={styles.container}>
-        <Text style={styles.loadingText}>Loading your Focus Score...</Text>
-      </View>
+      <Box p="m" space="m" alignItems="center">
+        <Text color="error">Error: {error?.message}</Text>
+        <Button onPress={() => refetch()} variant="primary">Retry</Button>
+      </Box>
     );
   }
 
-  const { currentScore, previousScore, band, percentileRank, factors, scoreHistory } = profile;
-  const scoreChange = currentScore - previousScore;
+  // Offline banner
+  if (isOffline) {
+    return (
+      <Box p="m" bg="warning" borderRadius="m" mb="m" alignItems="center">
+        <Text color="onWarning">You are offline. Data may be outdated.</Text>
+      </Box>
+    );
+  }
 
-  // Animation on mount
-  React.useEffect(() => {
-    scale.value = withSpring(1, { damping: 15 });
-  }, []);
+  if (!score) {
+    return (
+      <Box>
+        <Text>Start your first session to see your Focus Score.</Text>
+      </Box>
+    );
+  }
 
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  // Chart data (last 30 days)
-  const chartData = useMemo(() => {
-    const recent = scoreHistory.slice(-30);
-    return {
-      labels:
-        recent.length > 7
-          ? recent.filter((_, i) => i % 5 === 0).map((h) => h.date.slice(5)) // MM-DD
-          : recent.map((h) => h.date.slice(5)),
-      datasets: [
-        {
-          data: recent.map((h) => h.score),
-          color: () => band.color,
-          strokeWidth: 2,
-        },
-      ],
-    };
-  }, [scoreHistory, band.color]);
-
-  // Score gauge position (0-100%)
-  const gaugePercent = ((currentScore - 300) / (850 - 300)) * 100;
+  const { currentScore, band, lastChangeReason, factors, previousScore } = score;
+  const delta = currentScore - previousScore;
 
   return (
-    <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
-      <Animated.View style={[styles.container, animatedStyle]}>
-        {/* Score Display */}
-        <View style={styles.scoreSection}>
-          <Text style={styles.scoreLabel}>Your Focus Score</Text>
+    <Box p="m">
+      <Stack space="m">
+        <Box>
+          <Text>Focus Score</Text>
+          <Text>{currentScore}</Text>
+          <Text>{band}</Text>
+          <Text>+{delta}</Text>
+          {status === 'success' && isRefetching && (
+            <Text color="textSecondary" fontSize="xs">Updating...</Text>
+          )}
+        </Box>
 
-          <View style={styles.scoreRow}>
-            <Text style={[styles.scoreValue, { color: band.color }]}>{currentScore}</Text>
-
-            {scoreChange !== 0 && (
-              <View style={[styles.changeBadge, { backgroundColor: scoreChange > 0 ? "#10B981" : "#EF4444" }]}>
-                <Text style={styles.changeText}>
-                  {scoreChange > 0 ? "+" : ""}
-                  {scoreChange}
+        <Box>
+          <Text>30-day trend</Text>
+          <Stack space="s">
+            {history && history.length > 0 ? (
+              history.slice(-30).map((point, index) => (
+                <Text key={index}>
+                  {new Date(point.timestamp).toLocaleDateString()}: {point.score} ({point.delta > 0 ? '+' : ''}{point.delta})
                 </Text>
-              </View>
+              ))
+            ) : (
+              <Text>No history available yet.</Text>
             )}
-          </View>
+          </Stack>
+        </Box>
 
-          <Text style={[styles.bandLabel, { color: band.color }]}>{band.title}</Text>
+        <Box>
+          <Text>Five factor bars</Text>
+          {Object.entries(factors).map(([key, factor]) => (
+            <Box key={key}>
+              <Text>{key}</Text>
+              <Text>{factor.score}</Text>
+            </Box>
+          ))}
+        </Box>
 
-          <Text style={styles.percentileText}>Top {100 - percentileRank}% of focused people</Text>
-        </View>
+        <Box>
+          <Text>What Changed</Text>
+          <Text>{lastChangeReason}</Text>
+          {score.topPositiveFactor && (
+            <Text>Strongest: {score.factors[score.topPositiveFactor].explanation}</Text>
+          )}
+          {score.topNegativeFactor && (
+            <Text>Weakest: {score.factors[score.topNegativeFactor].explanation}</Text>
+          )}
+        </Box>
 
-        {/* Score Gauge */}
-        <View style={styles.gaugeContainer}>
-          <View style={styles.gaugeBackground}>
-            <View
-              style={[
-                styles.gaugeFill,
-                {
-                  width: `${gaugePercent}%`,
-                  backgroundColor: band.color,
-                },
-              ]}
-            />
-          </View>
-          <View style={styles.gaugeLabels}>
-            <Text style={styles.gaugeLabel}>300</Text>
-            <Text style={styles.gaugeLabel}>850</Text>
-          </View>
-        </View>
+        <Box>
+          <Text>Next Score Target</Text>
+          {/* Logic to determine next target */}
+          <Text>Reach {Math.min(850, Math.floor(currentScore / 10) * 10 + 10)}</Text>
+        </Box>
 
-        {/* Factor Breakdown (non-compact) */}
-        {!compact && (
-          <View style={styles.factorsSection}>
-            <Text style={styles.factorsTitle}>Score Factors</Text>
-            <FactorRadar factors={factors} />
-          </View>
-        )}
-
-        {/* Score History Chart (non-compact) */}
-        {/* TODO: Install react-native-chart-kit and uncomment this section */}
-        {/* {!compact && scoreHistory.length > 7 && (
-          <View style={styles.chartSection}>
-            <Text style={styles.chartTitle}>30-Day Trend</Text>
-            <LineChart
-              data={chartData}
-              width={SCREEN_WIDTH - 64}
-              height={120}
-              chartConfig={{
-                backgroundColor: 'transparent',
-                backgroundGradientFrom: 'transparent',
-                backgroundGradientTo: 'transparent',
-                decimalPlaces: 0,
-                color: () => band.color,
-                labelColor: () => '#9CA3AF',
-                style: { borderRadius: 16 },
-                propsForDots: { r: '3', strokeWidth: '2' },
-              }}
-              bezier
-              style={styles.chart}
-            />
-          </View>
-        )} */}
-
-        {/* Identity Statement */}
-        <View style={styles.identitySection}>
-          <Text style={styles.identityText}>"{profile.identityStatement}"</Text>
-        </View>
-
-        {/* Recommended Actions */}
-        {!compact && profile.recommendedActions.length > 0 && (
-          <View style={styles.recommendationsSection}>
-            <Text style={styles.recommendationsTitle}>Recommended Actions</Text>
-            {profile.recommendedActions.slice(0, 3).map((action, index) => (
-              <View key={index} style={styles.recommendationItem}>
-                <Text style={styles.recommendationBullet}>•</Text>
-                <Text style={styles.recommendationText}>{action}</Text>
-              </View>
-            ))}
-          </View>
-        )}
-      </Animated.View>
-    </TouchableOpacity>
+        <Box>
+          <Text>Monthly Report</Text>
+          <Button
+            onPress={() => navigation.navigate('Analytics', { month: new Date().toISOString().slice(0, 7) })}
+            variant="secondary"
+          >
+            View Monthly Report
+          </Button>
+        </Box>
+      </Stack>
+    </Box>
   );
-};
-
-/**
- * Factor Radar Chart (simplified)
- */
-const FactorRadar: React.FC<{ factors: FocusScoreFactors }> = ({ factors }) => {
-  const factorItems = [
-    { key: "consistency", label: "Consistency", value: factors.consistency.score, weight: 35 },
-    { key: "streak", label: "Streak", value: factors.streakStability.score, weight: 30 },
-    { key: "quality", label: "Quality", value: factors.sessionQuality.score, weight: 15 },
-    { key: "diversity", label: "Diversity", value: factors.diversity.score, weight: 10 },
-    { key: "recency", label: "Recency", value: factors.recency.score, weight: 10 },
-  ];
-
-  return (
-    <View style={styles.radarContainer}>
-      {factorItems.map((item) => (
-        <View key={item.key} style={styles.factorRow}>
-          <Text style={styles.factorLabel}>{item.label}</Text>
-          <View style={styles.factorBarContainer}>
-            <View style={[styles.factorBar, { width: `${item.value}%`, opacity: 0.7 + item.weight / 100 }]} />
-          </View>
-          <Text style={styles.factorValue}>{item.value}</Text>
-          <Text style={styles.factorWeight}>({item.weight}%)</Text>
-        </View>
-      ))}
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: "#1F2937",
-    borderRadius: 20,
-    padding: 20,
-    margin: 16,
-  },
-  loadingText: {
-    color: "#9CA3AF",
-    fontSize: 16,
-    textAlign: "center" as const,
-  },
-  scoreSection: {
-    alignItems: "center" as const,
-    marginBottom: 20,
-  },
-  scoreLabel: {
-    color: "#9CA3AF",
-    fontSize: 14,
-    fontWeight: "600" as const,
-    textTransform: "uppercase" as const,
-    letterSpacing: 1,
-  },
-  scoreRow: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-    marginTop: 8,
-  },
-  scoreValue: {
-    fontSize: 64,
-    fontWeight: "800" as const,
-  },
-  changeBadge: {
-    marginLeft: 12,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  changeText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "700" as const,
-  },
-  bandLabel: {
-    fontSize: 20,
-    fontWeight: "700" as const,
-    marginTop: 4,
-  },
-  percentileText: {
-    color: "#6B7280",
-    fontSize: 14,
-    marginTop: 4,
-  },
-  gaugeContainer: {
-    marginBottom: 20,
-  },
-  gaugeBackground: {
-    height: 12,
-    backgroundColor: "#374151",
-    borderRadius: 6,
-    overflow: "hidden" as const,
-  },
-  gaugeFill: {
-    height: "100%",
-    borderRadius: 6,
-  },
-  gaugeLabels: {
-    flexDirection: "row" as const,
-    justifyContent: "space-between" as const,
-    marginTop: 4,
-  },
-  gaugeLabel: {
-    color: "#6B7280",
-    fontSize: 12,
-  },
-  factorsSection: {
-    marginBottom: 20,
-  },
-  factorsTitle: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "700" as const,
-    marginBottom: 12,
-  },
-  radarContainer: {
-    gap: 8,
-  },
-  factorRow: {
-    flexDirection: "row" as const,
-    alignItems: "center" as const,
-  },
-  factorLabel: {
-    color: "#D1D5DB",
-    fontSize: 13,
-    width: 70,
-  },
-  factorBarContainer: {
-    flex: 1,
-    height: 8,
-    backgroundColor: "#374151",
-    borderRadius: 4,
-    marginHorizontal: 8,
-  },
-  factorBar: {
-    height: "100%",
-    backgroundColor: "#3B82F6",
-    borderRadius: 4,
-  },
-  factorValue: {
-    color: "#FFFFFF",
-    fontSize: 13,
-    fontWeight: "600" as const,
-    width: 30,
-    textAlign: "right" as const,
-  },
-  factorWeight: {
-    color: "#6B7280",
-    fontSize: 11,
-    width: 40,
-    textAlign: "right" as const,
-  },
-  chartSection: {
-    marginBottom: 20,
-  },
-  chartTitle: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "700" as const,
-    marginBottom: 12,
-  },
-  chart: {
-    borderRadius: 16,
-  },
-  identitySection: {
-    backgroundColor: "#374151",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-  },
-  identityText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontStyle: "italic" as const,
-    textAlign: "center" as const,
-  },
-  recommendationsSection: {
-    backgroundColor: "#374151",
-    borderRadius: 12,
-    padding: 16,
-  },
-  recommendationsTitle: {
-    color: "#FFFFFF",
-    fontSize: 14,
-    fontWeight: "700" as const,
-    marginBottom: 12,
-  },
-  recommendationItem: {
-    flexDirection: "row" as const,
-    alignItems: "flex-start" as const,
-    marginBottom: 8,
-  },
-  recommendationBullet: {
-    color: "#3B82F6",
-    fontSize: 14,
-    marginRight: 8,
-  },
-  recommendationText: {
-    color: "#D1D5DB",
-    fontSize: 13,
-    flex: 1,
-    lineHeight: 18,
-  },
-});
-
-/**
- * Compact version for home screen
- */
-export const FocusScoreCompact: React.FC<{
-  profile: FocusIdentityProfile | null;
-  onPress?: () => void;
-}> = ({ profile, onPress }) => {
-  return <FocusScoreDashboard profile={profile} onPress={onPress} compact={true} />;
 };

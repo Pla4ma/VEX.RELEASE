@@ -2,6 +2,7 @@ import React, { useMemo, type ReactNode } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { SmartCoachHint } from '../../../components/coach/SmartCoachHint';
 import { PremiumSurface } from '../../../components/premium';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
@@ -20,6 +21,25 @@ type OnboardingFlowLayoutProps = {
   onRetryFinish: () => void;
   step: number;
 };
+
+function getCoachCue(step: number): { title: string; body: string } {
+  const fallback = {
+    title: 'We will keep the experience responsive.',
+    body: 'If a signal is still syncing, you will see the usable state first and deeper insights as they arrive.',
+  };
+  const cues = [
+    {
+      title: 'I will tune VEX around how you focus.',
+      body: 'Pick the honest answer. The app adapts the first session, study surfaces, and reminders from this setup.',
+    },
+    {
+      title: 'This shapes your daily command center.',
+      body: 'VEX will highlight the next best action instead of making you hunt through menus.',
+    },
+    fallback,
+  ];
+  return cues[step] ?? fallback;
+}
 
 export function SignedOutOnboardingState(): JSX.Element {
   const { theme } = useTheme();
@@ -92,6 +112,11 @@ export function OnboardingFlowLayout({
               Step {step + 1} of {STEP_TITLES.length}
             </Text>
             <Text style={[styles.title, { color: theme.colors.text.primary }]}>{STEP_TITLES[step]}</Text>
+            <SmartCoachHint
+              body={getCoachCue(step).body}
+              mood={step === lastStepIndex - 1 ? 'celebrate' : 'active'}
+              title={getCoachCue(step).title}
+            />
           </>
         )}
         {finishError ? (

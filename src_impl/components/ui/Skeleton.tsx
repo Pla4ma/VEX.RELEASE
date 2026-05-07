@@ -1,9 +1,3 @@
-/**
- * Skeleton Loading Component
- *
- * Animated placeholder for content loading states.
- */
-
 import React from 'react';
 import { View } from 'react-native';
 import Animated, {
@@ -15,7 +9,6 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useTheme } from '../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
-
 type SkeletonWidth = number | `${number}%` | 'auto';
 
 interface SkeletonProps {
@@ -79,7 +72,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
             width,
             height,
             borderRadius: getBorderRadius(),
-            backgroundColor: (theme.colors.surface as any).card,
+            backgroundColor: theme.colors.surface.selected,
             marginBottom: index < lines - 1 ? spacing : 0,
           },
           animatedOpacityStyle,
@@ -118,7 +111,7 @@ export const SkeletonCard: React.FC<{ lines?: number; height?: number }> = ({
       style={[
         styles.card,
         {
-          backgroundColor: (theme.colors.background as any).secondary,
+          backgroundColor: theme.colors.semantic.surfaceGlass,
         },
         animatedOpacityStyle,
       ]}
