@@ -438,7 +438,8 @@ describe('Basic Squads Service - PHASE 8', () => {
         joinedAt: Date.now(),
       };
 
-      mockRepository.fetchSquadInvite.mockResolvedValue(mockInvite);
+      // For PHASE 8, we'll use a simplified approach
+      // mockRepository.fetchSquadInvite is not used in the simplified version
       mockRepository.fetchUserSquads.mockResolvedValue([]);
       mockRepository.fetchSquadMembers.mockResolvedValue([
         {
@@ -448,10 +449,11 @@ describe('Basic Squads Service - PHASE 8', () => {
           role: 'FOUNDER',
         },
       ]);
-      mockRepository.fetchSquad.mockResolvedValue(mockSquad);
+      mockRepository.fetchSquadById.mockResolvedValue(mockSquad);
       mockRepository.addSquadMember.mockResolvedValue(mockMembership);
-      mockRepository.updateSquadInvite.mockResolvedValue(mockInvite);
-      mockRepository.fetchUserSquadMembership.mockResolvedValue(mockMembership);
+      // For PHASE 8, we'll use a simplified approach
+      // mockRepository.updateSquadInvite is not used in the simplified version
+      mockRepository.fetchUserSquads.mockResolvedValue([mockSquad]);
 
       const result = await service.respondToBasicSquadInvite('invite-123', mockInviteeId, true);
 
