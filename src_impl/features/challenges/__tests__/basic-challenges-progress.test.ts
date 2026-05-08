@@ -1,7 +1,5 @@
 import * as service from '../basic-challenges-service';
 import * as repository from '../repository';
-import { eventBus } from '../../../events';
-
 jest.mock('../repository');
 jest.mock('../../../events');
 jest.mock('../../../rewards/RewardService', () => ({

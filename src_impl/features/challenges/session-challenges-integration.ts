@@ -4,9 +4,9 @@
  * Integrates session completion with basic challenges progress.
  */
 
-import { eventBus } from "../../events";
-import { useBasicChallengesStatus, useUpdateBasicChallengeProgress } from "../challenges/hooks/basic-challenges-hooks";
-import { useEffect } from "react";
+import { eventBus } from '../../events';
+import { useBasicChallengesStatus, useUpdateBasicChallengeProgress } from '../challenges/hooks/basic-challenges-hooks';
+import { useEffect } from 'react';
 import * as Sentry from '@sentry/react-native';
 
 export function useSessionChallengesIntegration() {
@@ -87,7 +87,7 @@ export function getChallengeCTA(challengeStatus: {
 
   if (dailyCompleted && weeklyCompleted) {
     return {
-      primaryCTA: "Claim Rewards",
+      primaryCTA: 'Claim Rewards',
       secondaryCTA: null,
       motivationMessage: "Great job! You've completed all challenges today.",
     };
@@ -96,8 +96,8 @@ export function getChallengeCTA(challengeStatus: {
   if (dailyCompleted) {
     const weeklyRemaining = weeklyRequired - weeklyProgress;
     return {
-      primaryCTA: "Complete Weekly Challenge",
-      secondaryCTA: "Claim Daily Reward",
+      primaryCTA: 'Complete Weekly Challenge',
+      secondaryCTA: 'Claim Daily Reward',
       motivationMessage: `Daily done! ${weeklyRemaining} more session${weeklyRemaining !== 1 ? 's' : ''} for weekly.`,
     };
   }
@@ -105,8 +105,8 @@ export function getChallengeCTA(challengeStatus: {
   if (weeklyCompleted) {
     const dailyRemaining = dailyRequired - dailyProgress;
     return {
-      primaryCTA: "Complete Daily Challenge",
-      secondaryCTA: "Claim Weekly Reward",
+      primaryCTA: 'Complete Daily Challenge',
+      secondaryCTA: 'Claim Weekly Reward',
       motivationMessage: `Weekly done! ${dailyRemaining} more session${dailyRemaining !== 1 ? 's' : ''} for daily.`,
     };
   }
@@ -115,7 +115,7 @@ export function getChallengeCTA(challengeStatus: {
   const weeklyRemaining = weeklyRequired - weeklyProgress;
 
   return {
-    primaryCTA: "Start Focus Session",
+    primaryCTA: 'Start Focus Session',
     secondaryCTA: null,
     motivationMessage: `${dailyRemaining} daily, ${weeklyRemaining} weekly sessions remaining.`,
   };

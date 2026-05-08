@@ -29,7 +29,7 @@ export function useBasicChallengesStatus() {
   const query = useQuery({
     queryKey: challengesKeys.status(userId ?? 'no-user'),
     queryFn: () => {
-      if (!userId) throw new Error('User not authenticated');
+      if (!userId) {throw new Error('User not authenticated');}
       return service.getBasicChallengesStatus(userId);
     },
     enabled: !!userId,
@@ -44,7 +44,7 @@ export function useBasicDailyChallenge() {
   const query = useQuery({
     queryKey: challengesKeys.daily(userId ?? 'no-user'),
     queryFn: () => {
-      if (!userId) return null;
+      if (!userId) {return null;}
       return service.getOrCreateBasicDailyChallenge(userId);
     },
     enabled: !!userId,
@@ -59,7 +59,7 @@ export function useBasicWeeklyChallenge() {
   const query = useQuery({
     queryKey: challengesKeys.weekly(userId ?? 'no-user'),
     queryFn: () => {
-      if (!userId) return null;
+      if (!userId) {return null;}
       return service.getOrCreateBasicWeeklyChallenge(userId);
     },
     enabled: !!userId,
@@ -74,7 +74,7 @@ export function useUpdateBasicChallengeProgress() {
   const userId = useAuthStore((state) => state.user?.id ?? null);
   return useMutation({
     mutationFn: ({ sessionId, sessionDuration }: { sessionId: string; sessionDuration: number }) => {
-      if (!userId) throw new Error('User not authenticated');
+      if (!userId) {throw new Error('User not authenticated');}
       return service.updateBasicChallengeProgressFromSession(userId, sessionId, sessionDuration);
     },
     onSuccess: (result) => {
@@ -99,8 +99,8 @@ export function useClaimBasicChallengeReward() {
   const queryClient = useQueryClient();
   const userId = useAuthStore((state) => state.user?.id ?? null);
   return useMutation({
-    mutationFn: (challengeType: "DAILY" | "WEEKLY") => {
-      if (!userId) throw new Error('User not authenticated');
+    mutationFn: (challengeType: 'DAILY' | 'WEEKLY') => {
+      if (!userId) {throw new Error('User not authenticated');}
       return service.claimBasicChallengeReward(userId, challengeType);
     },
     onSuccess: (result) => {

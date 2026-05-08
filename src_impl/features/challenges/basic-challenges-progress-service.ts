@@ -5,20 +5,20 @@
  */
 
 import * as Sentry from '@sentry/react-native';
-import * as repository from "./repository";
-import { type UserChallenge } from "./schemas";
+import * as repository from './repository';
+import { type UserChallenge } from './schemas';
 import {
   BASIC_CHALLENGE_CONFIG,
   BASIC_DAILY_CHALLENGE,
-  BASIC_WEEKLY_CHALLENGE
-} from "./basic-challenges-constants";
+  BASIC_WEEKLY_CHALLENGE,
+} from './basic-challenges-constants';
 import {
   getOrCreateBasicDailyChallenge,
-  getOrCreateBasicWeeklyChallenge
-} from "./basic-challenges-management-service";
-import { getRewardService } from "../../rewards/RewardService";
-import { eventBus } from "../../events";
-import { trackProgressUpdate, trackChallengeCompleted } from "./analytics/events";
+  getOrCreateBasicWeeklyChallenge,
+} from './basic-challenges-management-service';
+import { getRewardService } from '../../rewards/RewardService';
+import { eventBus } from '../../events';
+import { trackProgressUpdate, trackChallengeCompleted } from './analytics/events';
 
 export async function updateBasicChallengeProgressFromSession(
   userId: string,
@@ -33,7 +33,7 @@ export async function updateBasicChallengeProgressFromSession(
   let dailyCompleted = false;
   let weeklyCompleted = false;
 
-  if (dailyChallenge && dailyChallenge.status === "ACTIVE") {
+  if (dailyChallenge && dailyChallenge.status === 'ACTIVE') {
     const isCompleted = dailyChallenge.currentValue + 1 >= dailyChallenge.requiredCount;
     await repository.addChallengeProgress(userId, dailyChallenge.challengeId, 1, `session:${sessionId}`);
 
@@ -46,7 +46,7 @@ export async function updateBasicChallengeProgressFromSession(
     }
   }
 
-  if (weeklyChallenge && weeklyChallenge.status === "ACTIVE") {
+  if (weeklyChallenge && weeklyChallenge.status === 'ACTIVE') {
     const isCompleted = weeklyChallenge.currentValue + 1 >= weeklyChallenge.requiredCount;
     await repository.addChallengeProgress(userId, weeklyChallenge.challengeId, 1, `session:${sessionId}`);
 
@@ -69,7 +69,7 @@ async function completeBasicChallenge(userChallenge: UserChallenge, userId: stri
     : BASIC_WEEKLY_CHALLENGE;
 
   await repository.updateUserChallenge(userChallenge.id, userChallenge.challengeId, {
-    status: "COMPLETED",
+    status: 'COMPLETED',
     completedAt: now,
   });
 
@@ -93,21 +93,21 @@ async function completeBasicChallenge(userChallenge: UserChallenge, userId: stri
   const rewardAmount = challenge.rewardAmount;
   const rewardType = challenge.rewardType;
 
-  if (rewardType === "XP") {
+  if (rewardType === 'XP') {
     await rewardService.addXpReward(userId, rewardAmount, {
-      source: "challenge_completion",
+      source: 'challenge_completion',
       challengeId: userChallenge.challengeId,
       challengeType: challenge.type,
     });
-  } else if (rewardType === "COINS") {
+  } else if (rewardType === 'COINS') {
     await rewardService.addCoinReward(userId, rewardAmount, {
-      source: "challenge_completion",
+      source: 'challenge_completion',
       challengeId: userChallenge.challengeId,
       challengeType: challenge.type,
     });
   }
 
-  eventBus.publish("challenge:completed", {
+  eventBus.publish('challenge:completed', {
     userId,
     challengeId: userChallenge.challengeId,
     challengeType: challenge.type,

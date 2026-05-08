@@ -5,15 +5,15 @@
  */
 
 import * as Sentry from '@sentry/react-native';
-import * as repository from "./repository";
-import { type UserChallenge } from "./schemas";
+import * as repository from './repository';
+import { type UserChallenge } from './schemas';
 import {
   BASIC_CHALLENGE_CONFIG,
   BASIC_DAILY_CHALLENGE,
-  BASIC_WEEKLY_CHALLENGE
-} from "./basic-challenges-constants";
-import { eventBus } from "../../events";
-import { trackRewardClaimed } from "./analytics/events";
+  BASIC_WEEKLY_CHALLENGE,
+} from './basic-challenges-constants';
+import { eventBus } from '../../events';
+import { trackRewardClaimed } from './analytics/events';
 
 export async function getOrCreateBasicDailyChallenge(userId: string): Promise<UserChallenge | null> {
   const existingChallenges = await repository.fetchUserActiveChallenges(userId);
@@ -23,7 +23,7 @@ export async function getOrCreateBasicDailyChallenge(userId: string): Promise<Us
     const now = new Date();
     const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
     if (existing.expiresAt < endOfDay.getTime()) {
-      await repository.updateUserChallenge(existing.id, existing.challengeId, { status: "EXPIRED" });
+      await repository.updateUserChallenge(existing.id, existing.challengeId, { status: 'EXPIRED' });
       return await createBasicDailyChallenge(userId);
     }
     return existing;
@@ -57,7 +57,7 @@ export async function getOrCreateBasicWeeklyChallenge(userId: string): Promise<U
     endOfWeek.setHours(23, 59, 59, 999);
 
     if (existing.expiresAt < endOfWeek.getTime()) {
-      await repository.updateUserChallenge(existing.id, existing.challengeId, { status: "EXPIRED" });
+      await repository.updateUserChallenge(existing.id, existing.challengeId, { status: 'EXPIRED' });
       return await createBasicWeeklyChallenge(userId);
     }
     return existing;
@@ -91,37 +91,37 @@ export async function getBasicChallengesStatus(userId: string) {
       hasActiveChallenge: !!dailyChallenge,
       progress: dailyChallenge?.currentValue ?? 0,
       required: BASIC_DAILY_CHALLENGE.targetValue,
-      isCompleted: dailyChallenge?.status === "COMPLETED",
-      canClaim: dailyChallenge?.status === "COMPLETED" && !dailyChallenge?.claimedAt,
+      isCompleted: dailyChallenge?.status === 'COMPLETED',
+      canClaim: dailyChallenge?.status === 'COMPLETED' && !dailyChallenge?.claimedAt,
     },
     weekly: {
       hasActiveChallenge: !!weeklyChallenge,
       progress: weeklyChallenge?.currentValue ?? 0,
       required: BASIC_WEEKLY_CHALLENGE.targetValue,
-      isCompleted: weeklyChallenge?.status === "COMPLETED",
-      canClaim: weeklyChallenge?.status === "COMPLETED" && !weeklyChallenge?.claimedAt,
+      isCompleted: weeklyChallenge?.status === 'COMPLETED',
+      canClaim: weeklyChallenge?.status === 'COMPLETED' && !weeklyChallenge?.claimedAt,
     },
   };
 }
 
 export async function claimBasicChallengeReward(
   userId: string,
-  challengeType: "DAILY" | "WEEKLY"
+  challengeType: 'DAILY' | 'WEEKLY'
 ) {
-  const challenge = challengeType === "DAILY"
+  const challenge = challengeType === 'DAILY'
     ? await getOrCreateBasicDailyChallenge(userId)
     : await getOrCreateBasicWeeklyChallenge(userId);
 
-  if (!challenge || challenge.status !== "COMPLETED") {
-    return { success: false, error: "Challenge not completed" };
+  if (!challenge || challenge.status !== 'COMPLETED') {
+    return { success: false, error: 'Challenge not completed' };
   }
 
   if (challenge.claimedAt) {
-    return { success: false, error: "Reward already claimed" };
+    return { success: false, error: 'Reward already claimed' };
   }
 
   const now = Date.now();
-  const baseChallenge = challengeType === "DAILY" ? BASIC_DAILY_CHALLENGE : BASIC_WEEKLY_CHALLENGE;
+  const baseChallenge = challengeType === 'DAILY' ? BASIC_DAILY_CHALLENGE : BASIC_WEEKLY_CHALLENGE;
 
   await repository.updateUserChallenge(challenge.id, challenge.challengeId, {
     claimedAt: now,
@@ -146,7 +146,7 @@ export async function claimBasicChallengeReward(
     now - (challenge.completedAt || now)
   );
 
-  eventBus.publish("challenge:reward_claimed", {
+  eventBus.publish('challenge:reward_claimed', {
     userId,
     challengeId: challenge.challengeId,
     challengeType,
