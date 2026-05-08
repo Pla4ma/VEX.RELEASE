@@ -5,7 +5,7 @@
  * Split from main service to maintain file size limits.
  */
 
-import { CompanionState, CompanionMood } from './types';
+import { CompanionState, CompanionMood, CompanionPhase } from './types';
 import { emitCompanionStateChanged, emitCompanionEvolution } from './events';
 import { trackCompanionGrowth, trackCompanionEvolution } from './analytics';
 import { checkMilestones } from './milestone-tracker';

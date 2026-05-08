@@ -23,6 +23,7 @@ import { SuccessCelebration } from './SuccessCelebration';
 import { FocusScoreChange } from './FocusScoreChange';
 import { calculateSessionGrade } from '../../session-completion/grading-service';
 import type { SessionGradingInput } from '../../session-completion/grading-schemas';
+import { resolveSessionMode } from '../../../session/modes';
 
 interface FirstResultScreenProps {
   userName: string;
@@ -56,14 +57,20 @@ export function FirstResultScreen({
   const displayName = userName || 'there';
 
   // Calculate session grade using the grading service
+  const resolvedMode = resolveSessionMode(sessionData.mode);
   const gradingInput: SessionGradingInput = {
     ...sessionData,
-    isRecoverySession: sessionData.mode === 'STARTER' || sessionData.mode === 'RECOVERY',
+    mode: resolvedMode,
+    isRecoverySession: resolvedMode === 'STARTER' || resolvedMode === 'RECOVERY',
   };
   
   const gradingResult = calculateSessionGrade(gradingInput);
   const focusScoreAfter = focusScoreBefore + (gradingResult.focusScoreImpactRecommendation || 0);
   const xpEarned = Math.floor(sessionDuration * 2 * (gradingResult.xpQualityMultiplier || 1));
+  const sessionGrade = gradingResult.kind === 'completed' ? gradingResult.grade : 'D';
+  const sessionGradeLabel = gradingResult.kind === 'completed'
+    ? gradingResult.gradeLabel
+    : 'Recovery needed';
 
   return (
     <Box flex={1} bg="background.primary" px="lg" py="xl">
@@ -106,10 +113,10 @@ export function FirstResultScreen({
               Session Grade
             </Text>
             <Text variant="hero" color="text.primary" fontWeight="800">
-              {gradingResult.grade}
+              {sessionGrade}
             </Text>
             <Text variant="body" color="text.secondary">
-              {gradingResult.gradeLabel}
+              {sessionGradeLabel}
             </Text>
             <Text variant="bodySmall" color="text.tertiary">
               {sessionDuration} minutes completed
@@ -134,9 +141,9 @@ export function FirstResultScreen({
               Your companion is excited!
             </Text>
             <Text variant="body" color="text.secondary" textAlign="center">
-              {gradingResult.grade === 'S' || gradingResult.grade === 'A' 
+              {sessionGrade === 'S' || sessionGrade === 'A' 
                 ? "Amazing focus! Your companion can't wait for the next session."
-                : gradingResult.grade === 'B'
+                : sessionGrade === 'B'
                 ? "Great job! Your companion is proud of your progress."
                 : "Good start! Your companion knows you'll do even better next time."}
             </Text>

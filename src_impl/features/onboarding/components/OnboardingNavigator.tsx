@@ -12,7 +12,7 @@ import { View } from 'react-native';
 
 import { Box } from '../../../components/primitives/Box';
 import { useOnboardingStore, useOnboardingProgress } from '../store';
-import type { FocusGoal, FocusDuration } from '../schemas';
+import type { FocusGoal } from '../schemas';
 import {
   saveGoal,
   saveDisplayName,
@@ -70,7 +70,7 @@ export function OnboardingNavigator({
   }, []);
 
   // Step 3: First Session Setup
-  const handleSessionStart = useCallback((config: { duration: number; category: string | null }) => {
+  const handleSessionStart = useCallback((config: { duration: number; category: FocusGoal | null }) => {
     completeOnboarding();
     onStartSession(config);
   }, [onStartSession]);
@@ -102,9 +102,9 @@ export function OnboardingNavigator({
         );
       case 3:
         return (
-          <FirstSessionSetup
-            userName={store.displayName || ''}
-            goal={store.goal || ''}
+            <FirstSessionSetup
+              userName={store.displayName || ''}
+              goal={store.goal}
             onStartSession={handleSessionStart}
             onBack={handleSessionBack}
           />

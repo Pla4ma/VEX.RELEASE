@@ -19,15 +19,15 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme';
-import type { FocusDuration } from '../schemas';
+import type { FocusDuration, FocusGoal } from '../schemas';
 import { DURATION_OPTIONS } from '../service';
 import { DurationCard } from './DurationCard';
 import { SessionPreview } from './SessionPreview';
 
 interface FirstSessionSetupProps {
   userName: string;
-  goal: string;
-  onStartSession: (config: { duration: number; category: string | null }) => void;
+  goal: FocusGoal | null;
+  onStartSession: (config: { duration: number; category: FocusGoal | null }) => void;
   onBack?: () => void;
 }
 
@@ -107,7 +107,7 @@ export function FirstSessionSetup({ userName, goal, onStartSession, onBack }: Fi
 
       {/* Session Preview */}
       <Animated.View entering={FadeInUp.duration(400).delay(400)} style={{ width: '100%' }}>
-        <SessionPreview duration={selectedDuration} goal={goal} />
+        <SessionPreview duration={selectedDuration} goal={goal ?? ''} />
       </Animated.View>
 
       {/* Benefits list */}

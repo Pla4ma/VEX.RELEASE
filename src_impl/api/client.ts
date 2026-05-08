@@ -157,6 +157,15 @@ function isRetryableError(error: ApiError): boolean {
   return error.retryable && ["NETWORK_ERROR", "TIMEOUT", "RATE_LIMIT", "SERVER_ERROR"].includes(error.code);
 }
 
+function isApiError(error: unknown): error is ApiError {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    "retryable" in error
+  );
+}
+
 // ============================================================================
 // API Client
 // ============================================================================
@@ -217,6 +226,67 @@ export class ApiClient {
     this.responseInterceptors.push(interceptor);
   }
 
+  async request<T>(endpoint: string, config: ApiRequestConfig = {}): Promise<ApiResponse<T>> {
+    const requestConfig = await this.runRequestInterceptors(config);
+    const execute = (): Promise<ApiResponse<T>> => this.executeRequest<T>(endpoint, requestConfig);
+
+    if (requestConfig.deduplicate) {
+      const key = `${requestConfig.method ?? "GET"}:${endpoint}:${JSON.stringify(requestConfig.params ?? {})}:${JSON.stringify(requestConfig.data ?? {})}`;
+      return this.deduplicator.deduplicate(key, execute);
+    }
+
+    return this.executeWithRetry(execute, requestConfig.retries ?? this.config.retries);
+  }
+
+  async get<T>(endpoint: string, config: Omit<ApiRequestConfig, "method" | "data"> = {}): Promise<T> {
+    const response = await this.request<T>(endpoint, { ...config, method: "GET" });
+    return response.data;
+  }
+
+  async post<T>(endpoint: string, data?: unknown, config: Omit<ApiRequestConfig, "method" | "data"> = {}): Promise<T> {
+    const response = await this.request<T>(endpoint, { ...config, method: "POST", data });
+    return response.data;
+  }
+
+  async put<T>(endpoint: string, data?: unknown, config: Omit<ApiRequestConfig, "method" | "data"> = {}): Promise<T> {
+    const response = await this.request<T>(endpoint, { ...config, method: "PUT", data });
+    return response.data;
+  }
+
+  async patch<T>(endpoint: string, data?: unknown, config: Omit<ApiRequestConfig, "method" | "data"> = {}): Promise<T> {
+    const response = await this.request<T>(endpoint, { ...config, method: "PATCH", data });
+    return response.data;
+  }
+
+  async delete<T>(endpoint: string, config: Omit<ApiRequestConfig, "method" | "data"> = {}): Promise<T> {
+    const response = await this.request<T>(endpoint, { ...config, method: "DELETE" });
+    return response.data;
+  }
+
+  private async executeWithRetry<T>(
+    execute: () => Promise<ApiResponse<T>>,
+    retries: number
+  ): Promise<ApiResponse<T>> {
+    let attempt = 0;
+
+    while (true) {
+      try {
+        return await execute();
+      } catch (error) {
+        const shouldRetry = attempt < retries && isApiError(error) && isRetryableError(error);
+
+        if (!shouldRetry) {
+          throw error;
+        }
+
+        await new Promise((resolve) => {
+          setTimeout(resolve, calculateBackoff(attempt, this.config.retryDelay));
+        });
+        attempt += 1;
+      }
+    }
+  }
+
   private async runRequestInterceptors(config: ApiRequestConfig): Promise<ApiRequestConfig> {
     let result = config;
     for (const interceptor of this.requestInterceptors) {
@@ -264,75 +334,8 @@ export class ApiClient {
         ...config.headers,
       };
 
-      const fetchConfig: RequestInit = {
-        method: config.method ?? "GET",
-        headers,
-        signal: controller.signal,
-      };
-
-      if (config.data && config.method !== "GET") {
-        fetchConfig.body = JSON.stringify(config.data);
-      }
-
       debug.debug("Request: %s %s", config.method, url);
-      // TODO: Replace with proper networking layer - fetch() is banned by AGENTS.md
-      // This should use Supabase client or a proper HTTP client library
-      throw new Error("Direct fetch() calls are not allowed. Use Supabase client or proper HTTP client instead.");
-      
-      // The following code is commented out until proper networking layer is implemented
-      /*
-      const response = await fetch(url, fetchConfig);
-      clearTimeout(timeoutId);
-
-      const processedResponse = await this.runResponseInterceptors(response);
-
-      // Handle auth errors
-      if (processedResponse.status === 401 && !config.skipAuth && this.authProvider) {
-        const refreshed = await this.authProvider.refreshToken();
-
-        if (refreshed) {
-          // Retry with new token
-          return this.executeRequest(endpoint, config);
-        } else {
-          await this.authProvider.logout();
-          throw this.createError("AUTH_ERROR", "Session expired", 401);
-        }
-      }
-
-      // Parse response
-      let data: T;
-      const contentType = processedResponse.headers.get("content-type");
-
-      if (contentType?.includes("application/json")) {
-        data = await processedResponse.json();
-      } else {
-        data = (await processedResponse.text()) as unknown as T;
-      }
-
-      // Validate with schema if provided
-      if (config.schema) {
-        try {
-          data = config.schema.parse(data) as T;
-        } catch (validationError) {
-          if (validationError instanceof z.ZodError) {
-            throw this.createError("VALIDATION_ERROR", `Response validation failed: ${validationError.errors.map((e) => e.message).join(", ")}`, 500, validationError.errors);
-          }
-          throw validationError;
-        }
-      }
-
-      if (!processedResponse.ok) {
-        throw this.createError(this.getErrorCode(processedResponse.status), (data as Record<string, string>)?.message || "Request failed", processedResponse.status, data, this.isRetryableStatus(processedResponse.status));
-      }
-
-      this.circuitBreaker.recordSuccess();
-
-      return {
-        data,
-        status: processedResponse.status,
-        headers: Object.fromEntries(processedResponse.headers.entries()),
-      };
-      */
+      throw new Error("Direct HTTP calls are not allowed. Use Supabase client or a repository layer instead.");
     } catch (error) {
       clearTimeout(timeoutId);
 
@@ -342,7 +345,7 @@ export class ApiClient {
         }
       }
 
-      if ((error as ApiError).code) {
+      if (isApiError(error)) {
         this.circuitBreaker.recordFailure();
         throw error;
       }

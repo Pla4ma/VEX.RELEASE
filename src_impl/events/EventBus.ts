@@ -10,6 +10,7 @@ import type { EventChannels } from './EventTypes';
 import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('events:bus');
+const isDevRuntime = typeof __DEV__ !== 'undefined' && __DEV__;
 
 /**
  * Event bus options
@@ -25,9 +26,9 @@ interface EventBusOptions {
  * Event bus configuration
  */
 const DEFAULT_OPTIONS: EventBusOptions = {
-  debug: __DEV__,
+  debug: isDevRuntime,
   maxListeners: 100,
-  enableHistory: __DEV__,
+  enableHistory: isDevRuntime,
   historySize: 100,
 };
 
@@ -104,6 +105,27 @@ export class EventBus {
     }
 
     // Add to history
+    if (this.options.enableHistory) {
+      this.addToHistory(channel, data);
+    }
+
+    this.emitter.emit(channel, data);
+  }
+
+  emit<T extends keyof EventChannels>(
+    channel: T,
+    data: EventChannels[T]
+  ): void;
+  emit(channel: string, data: unknown): void;
+  emit(channel: string, data: unknown): void {
+    this.publishUntyped(channel, data);
+  }
+
+  private publishUntyped(channel: string, data: unknown): void {
+    if (this.options.debug) {
+      this.log('emit', channel, data);
+    }
+
     if (this.options.enableHistory) {
       this.addToHistory(channel, data);
     }

@@ -1,21 +1,10 @@
-/**
- * BossPreviewCard Component
- *
- * Mini boss card for home screen showing active boss encounter.
- * Displays boss name, health bar, time remaining, and estimated damage.
- *
- * @phase 1A.5
- */
-
 import React, { useMemo } from "react";
 import { Pressable } from "react-native";
 import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withTiming, withSpring, useSharedValue, withDelay, withRepeat, withSequence } from "react-native-reanimated";
-
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
 import * as Haptics from "../../../utils/haptics";
-
 export interface BossPreviewCardProps {
   /** Boss name */
   bossName: string;
@@ -48,13 +37,8 @@ export interface BossPreviewCardProps {
   coinBalance?: number;
   BOUNTY_COST?: number;
 }
-
-/**
- * Skeleton loading state
- */
 function BossPreviewSkeleton(): JSX.Element {
   const { theme } = useTheme();
-
   return (
     <Box m="lg" p="lg" borderRadius="xl" bg={theme.colors.background.secondary}>
       <Box flexDirection="row" alignItems="center" gap="md">
@@ -67,13 +51,8 @@ function BossPreviewSkeleton(): JSX.Element {
     </Box>
   );
 }
-
-/**
- * Boss tier badge with color coding
- */
 function TierBadge({ tier }: { tier: BossPreviewCardProps["tier"] }): JSX.Element {
   const { theme } = useTheme();
-
   const tierConfig = useMemo(() => {
     switch (tier) {
       case "LEGENDARY":
@@ -108,7 +87,6 @@ function TierBadge({ tier }: { tier: BossPreviewCardProps["tier"] }): JSX.Elemen
         };
     }
   }, [tier, theme]);
-
   return (
     <Box px="sm" py="xs" borderRadius="full" bg={tierConfig.bg} borderWidth={1} borderColor={tierConfig.color}>
       <Text variant="caption" color={tierConfig.color} fontWeight="700" fontSize={10}>
@@ -117,13 +95,8 @@ function TierBadge({ tier }: { tier: BossPreviewCardProps["tier"] }): JSX.Elemen
     </Box>
   );
 }
-
-/**
- * Boss taunt speech bubble - PHASE 12.1
- */
 function BossTauntBubble({ taunt }: { taunt: string }): JSX.Element {
   const { theme } = useTheme();
-
   const slideStyle = useAnimatedStyle(() => ({
     transform: [
       {
@@ -132,7 +105,6 @@ function BossTauntBubble({ taunt }: { taunt: string }): JSX.Element {
     ],
     opacity: withTiming(1, { duration: 400 }),
   }));
-
   return (
     <Animated.View entering={FadeInUp.duration(400).delay(300)} style={slideStyle}>
       <Box
@@ -177,14 +149,9 @@ function BossTauntBubble({ taunt }: { taunt: string }): JSX.Element {
     </Animated.View>
   );
 }
-
-/**
- * Animated health bar
- */
 function HealthBar({ healthPercent, animated = true }: { healthPercent: number; animated?: boolean }): JSX.Element {
   const { theme } = useTheme();
   const progressValue = useSharedValue(0);
-
   React.useEffect(() => {
     if (animated) {
       progressValue.value = withDelay(300, withSpring(healthPercent / 100, { damping: 15, stiffness: 100 }));
@@ -192,11 +159,9 @@ function HealthBar({ healthPercent, animated = true }: { healthPercent: number; 
       progressValue.value = healthPercent / 100;
     }
   }, [healthPercent, animated, progressValue]);
-
   const barStyle = useAnimatedStyle(() => ({
     width: `${progressValue.value * 100}%`,
   }));
-
   const getHealthColor = () => {
     if (healthPercent <= 15) {
       return theme.colors.error.DEFAULT;
@@ -209,7 +174,6 @@ function HealthBar({ healthPercent, animated = true }: { healthPercent: number; 
     }
     return theme.colors.success.DEFAULT;
   };
-
   return (
     <Box>
       <Box
@@ -251,16 +215,10 @@ function HealthBar({ healthPercent, animated = true }: { healthPercent: number; 
     </Box>
   );
 }
-
-/**
- * Boss escape timer with urgency states
- */
 function EscapeTimer({ hoursRemaining }: { hoursRemaining: number }): JSX.Element {
   const { theme } = useTheme();
-
   const isUrgent = hoursRemaining <= 6;
   const isWarning = hoursRemaining <= 12;
-
   return (
     <Box flexDirection="row" alignItems="center" gap="xs">
       <Text fontSize={12}>⏰</Text>
@@ -271,13 +229,8 @@ function EscapeTimer({ hoursRemaining }: { hoursRemaining: number }): JSX.Elemen
     </Box>
   );
 }
-
-/**
- * Defeat celebration indicator
- */
 function DefeatIndicator(): JSX.Element {
   const { theme } = useTheme();
-
   const bounceStyle = useAnimatedStyle(() => ({
     transform: [
       {
@@ -285,7 +238,6 @@ function DefeatIndicator(): JSX.Element {
       },
     ],
   }));
-
   return (
     <Animated.View style={bounceStyle}>
       <Box px="sm" py="xs" borderRadius="lg" bg={`${theme.colors.success[500]}20`} borderWidth={1} borderColor={theme.colors.success[500]}>
@@ -296,13 +248,8 @@ function DefeatIndicator(): JSX.Element {
     </Animated.View>
   );
 }
-
-/**
- * PHASE 7.3: Final Strike indicator - shown when boss is 1-15% health
- */
 function FinalStrikeIndicator(): JSX.Element {
   const { theme } = useTheme();
-
   const pulseStyle = useAnimatedStyle(() => ({
     transform: [
       {
@@ -311,7 +258,6 @@ function FinalStrikeIndicator(): JSX.Element {
     ],
     opacity: withRepeat(withSequence(withTiming(1, { duration: 500 }), withTiming(0.7, { duration: 500 })), -1, true),
   }));
-
   return (
     <Animated.View style={pulseStyle}>
       <Box px="sm" py="xs" borderRadius="lg" bg={`${theme.colors.error[500]}25`} borderWidth={2} borderColor={theme.colors.error[500]}>
@@ -322,20 +268,13 @@ function FinalStrikeIndicator(): JSX.Element {
     </Animated.View>
   );
 }
-
-/**
- * Main boss preview card component
- */
 export function BossPreviewCard({ bossName, healthPercent, hoursRemaining, estimatedDamage, tier, wouldDefeat, onPress, isLoading = false, isFinalStrike = false, taunt, activeBountyCount, maxBounties = 4, onPlaceBounty, isPlacingBounty = false, bountyError = null, coinBalance, BOUNTY_COST = 50 }: BossPreviewCardProps): JSX.Element {
   const { theme } = useTheme();
-
   if (isLoading) {
     return <BossPreviewSkeleton />;
   }
-
   const isNearDeath = healthPercent <= 15;
   const showFinalStrike = isFinalStrike || (isNearDeath && !wouldDefeat);
-
   return (
     <Pressable onPress={onPress} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
       <Animated.View entering={FadeIn.duration(400).delay(200)}>
@@ -360,14 +299,12 @@ export function BossPreviewCard({ bossName, healthPercent, hoursRemaining, estim
         >
           {/* PHASE 12.1: Boss Taunt Speech Bubble */}
           {taunt && <BossTauntBubble taunt={taunt} />}
-
           {/* Header: Icon + Name + Tier */}
           <Box flexDirection="row" alignItems="center" gap="md" mb="md">
             {/* Boss Icon Placeholder */}
             <Box width={56} height={56} borderRadius="lg" bg={theme.colors.background.tertiary} justifyContent="center" alignItems="center" borderWidth={showFinalStrike ? 2 : 1} borderColor={showFinalStrike ? theme.colors.error[500] : theme.colors.border.DEFAULT}>
               <Text fontSize={28}>{showFinalStrike ? "🔥" : "👹"}</Text>
             </Box>
-
             <Box flex={1} gap="xs">
               <Box flexDirection="row" alignItems="center" gap="sm">
                 <Text variant="h4" color="text.primary" numberOfLines={1}>
@@ -376,18 +313,14 @@ export function BossPreviewCard({ bossName, healthPercent, hoursRemaining, estim
               </Box>
               <TierBadge tier={tier} />
             </Box>
-
             {showFinalStrike && <FinalStrikeIndicator />}
             {!showFinalStrike && wouldDefeat && <DefeatIndicator />}
           </Box>
-
           {/* Health Bar */}
           <HealthBar healthPercent={healthPercent} />
-
           {/* Footer: Timer + Damage */}
           <Box flexDirection="row" justifyContent="space-between" alignItems="center" mt="md">
             <EscapeTimer hoursRemaining={hoursRemaining} />
-
             {estimatedDamage && estimatedDamage > 0 && (
               <Box flexDirection="row" alignItems="center" gap="xs">
                 <Text fontSize={12}>⚔️</Text>
@@ -397,7 +330,6 @@ export function BossPreviewCard({ bossName, healthPercent, hoursRemaining, estim
               </Box>
             )}
           </Box>
-
           {/* Bounty Section — Phase 4 */}
           {onPlaceBounty && (
             <Box mt="sm" pt="sm" borderTopWidth={1} borderTopColor="border.subtle" flexDirection="row" alignItems="center" justifyContent="space-between">
@@ -415,7 +347,6 @@ export function BossPreviewCard({ bossName, healthPercent, hoursRemaining, estim
                   </Text>
                 )}
               </Box>
-
               <Pressable
                 onPress={() => {
                   void Haptics.triggerHaptic("impactLight");
@@ -439,7 +370,6 @@ export function BossPreviewCard({ bossName, healthPercent, hoursRemaining, estim
               </Pressable>
             </Box>
           )}
-
           {bountyError && (
             <Text variant="caption" color="error.500" mt="xs">
               {bountyError}
@@ -450,5 +380,4 @@ export function BossPreviewCard({ bossName, healthPercent, hoursRemaining, estim
     </Pressable>
   );
 }
-
 export default BossPreviewCard;

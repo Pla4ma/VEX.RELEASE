@@ -12,6 +12,7 @@ import type {
 } from '../../features/liveops-config';
 import type { NextBestAction } from '../../features/progression';
 import { useTheme } from '../../theme';
+import { HOME_FEATURE_COPY } from './home-feature-copy';
 
 export function NextBestActionCard({
   action,
@@ -160,50 +161,6 @@ export function ComingSoonSection({
     return null;
   }
 
-  const copy: Record<FeatureKey, { icon: string; title: string; why: string }> = {
-    // Core features
-    focus_session: { icon: '⏱️', title: 'Focus', why: 'The core focus loop keeps getting smoother as you build consistency.' },
-    progress_view: { icon: '📈', title: 'Progress', why: 'Progress turns each session into visible momentum.' },
-    ai_coach_basic: { icon: '🧠', title: 'Coach', why: 'Your coach becomes personal once it sees real behavior.' },
-    ai_coach_advanced: { icon: '✨', title: 'Advanced Coach', why: 'Deeper coaching helps the app feel bespoke instead of generic.' },
-    economy_basic: { icon: '💰', title: 'Rewards', why: 'Simple rewards make each win feel tangible right away.' },
-    economy_advanced: { icon: '💎', title: 'Advanced Rewards', why: 'The deeper economy shows up once the basic loop already feels clean.' },
-    // Navigation tabs
-    home_tab: { icon: '🏠', title: 'Home', why: 'Your home base for focus and progress.' },
-    focus_tab: { icon: '🎯', title: 'Focus', why: 'The heart of your focus practice.' },
-    social_tab: { icon: '⚔️', title: 'Arena', why: 'The social layer keeps you accountable when your habit starts to matter.' },
-    profile_tab: { icon: '👤', title: 'Profile', why: 'Your personal hub for stats and settings.' },
-    // Boss system
-    boss_tab: { icon: '🐉', title: 'Boss', why: 'Boss fights turn your focus sessions into high-stakes momentum.' },
-    boss_bounties: { icon: '🎯', title: 'Bounties', why: 'Boost your rewards by placing bounties on bosses.' },
-    // Social features
-    squads: { icon: '🛡️', title: 'Squads', why: 'Squads make showing up feel shared, not solo.' },
-    rivals: { icon: '🏁', title: 'Rivals', why: 'Friendly competition to push your limits.' },
-    // Progression systems
-    battle_pass: { icon: '🎟️', title: 'Battle Pass', why: 'Seasonal progression makes repeat effort feel premium.' },
-    achievements: { icon: '🏅', title: 'Achievements', why: 'Collect milestones that celebrate your journey.' },
-    challenges: { icon: '🎯', title: 'Challenges', why: 'Daily and weekly goals to keep you engaged.' },
-    rankings: { icon: '🏆', title: 'Rankings', why: 'Rankings sharpen ambition once you have real data behind you.' },
-    // Economy systems
-    shop: { icon: '🛍️', title: 'Shop', why: 'The shop matters more once rewards already feel earned.' },
-    inventory: { icon: '🎒', title: 'Inventory', why: 'Your collection of earned rewards and items.' },
-    wagers: { icon: '💰', title: 'Wagers', why: 'Bet on your streak for bigger rewards.' },
-    streak_insurance: { icon: '🛡️', title: 'Streak Insurance', why: 'Protect your hard-earned streaks.' },
-    gems_prominent: { icon: '💎', title: 'Premium Currency', why: 'Premium rewards for your dedication.' },
-    // Content & Study
-    content_study: { icon: '📚', title: 'Study', why: 'Content study expands VEX from habit builder into a serious work tool.' },
-    content_study_advanced: { icon: '📖', title: 'Advanced Study', why: 'Deep learning tools for complex material.' },
-    quiz_review_mode: { icon: '❓', title: 'Quiz Mode', why: 'Test your knowledge and reinforce learning.' },
-    // Companion
-    companion_detail: { icon: '🤖', title: 'Companion', why: 'Your AI companion for focus and study.' },
-    // Seasonal
-    seasonal_features: { icon: '🌟', title: 'Seasonal', why: 'Seasonal moments work best once VEX already feels like your place.' },
-    // Paywall
-    premium_paywall: { icon: '⭐', title: 'Premium', why: 'Unlock the full VEX experience.' },
-    // Settings
-    advanced_settings: { icon: '⚙️', title: 'Settings', why: 'Fine-tune your VEX experience.' },
-  };
-
   return (
     <View style={{ gap: 12 }}>
       <Text variant="h4">Later, when it helps</Text>
@@ -213,13 +170,13 @@ export function ComingSoonSection({
           ctaLabel="Start a session"
           description={access.lockedDescription}
           feature={feature}
-          icon={copy[feature].icon}
+          icon={HOME_FEATURE_COPY[feature].icon}
           onPress={() => onPress(feature)}
           progressLabel={access.recommendedUnlockMoment}
           stage={stage}
-          title={copy[feature].title}
+          title={HOME_FEATURE_COPY[feature].title}
           unlockLabel={access.unlockReason}
-          whyItMatters={copy[feature].why}
+          whyItMatters={HOME_FEATURE_COPY[feature].why}
         />
       ))}
     </View>

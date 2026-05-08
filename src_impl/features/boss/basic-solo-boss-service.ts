@@ -233,8 +233,12 @@ export async function handleBasicSoloBossTimeout(encounterId: string): Promise<v
   
   // No fear monetization - just a simple timeout
   eventBus.publish("boss:timeout", {
+    userId: "system",
+    bossId: "basic-solo",
     encounterId,
-    message: "The boss has retreated. Try again tomorrow!",
+    damageDealt: 0,
+    maxHealth: 0,
+    timestamp: Date.now(),
   });
 }
 

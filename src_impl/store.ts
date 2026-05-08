@@ -5,17 +5,23 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { mmkvStorage } from './shared/storage/mmkv';
+import { mmkvStorage } from './store/mmkv-storage';
 
 // Types
 export interface AuthState {
   userId: string | null;
-  user: { id: string; displayName: string } | null;
+  user: {
+    id: string;
+    displayName: string;
+    createdAt: string;
+  } | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   sessionToken: string | null;
 }
 
 export interface AuthActions {
+  checkAuth: () => Promise<void>;
   login: (userId: string, token: string) => void;
   logout: () => void;
   setSessionToken: (token: string | null) => void;
@@ -29,15 +35,21 @@ export const useAuthStore = create<AuthStore>()(
     (set) => ({
       // Initial state
       userId: null,
+      user: null,
       isAuthenticated: false,
+      isLoading: false,
       sessionToken: null,
 
       // Actions
+      checkAuth: async () => {
+        set((state) => ({ isLoading: false, isAuthenticated: Boolean(state.sessionToken) }));
+      },
       login: (userId: string, token: string) =>
         set({
           userId,
-          user: { id: userId, displayName: `User ${userId}` },
+          user: { id: userId, displayName: `User ${userId}`, createdAt: new Date().toISOString() },
           isAuthenticated: true,
+          isLoading: false,
           sessionToken: token,
         }),
 
@@ -46,6 +58,7 @@ export const useAuthStore = create<AuthStore>()(
           userId: null,
           user: null,
           isAuthenticated: false,
+          isLoading: false,
           sessionToken: null,
         }),
 

@@ -26,10 +26,8 @@ import { buildDisplayedReturnReason, getFocusedMinutesForToday, getNextUnlockFea
 import { useHomeAnalyticsEffects } from './useHomeAnalyticsEffects';
 import { useHomeNavigationActions } from './useHomeNavigationActions';
 import { useHomeReturnReason } from './useHomeReturnReason';
-type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
-
 export function useHomeScreenController() {
-  const navigation = useNavigation<Nav>();
+  const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const { isOnline } = useNetInfo();
   const { user } = useAuthStore();
   const homeHighlight = useSessionUIStore((state) => state.homeHighlight);
@@ -48,7 +46,6 @@ export function useHomeScreenController() {
   const activeBossQuery = useActiveBoss(userId || null);
   const createRecommendation = useCreateRecommendation();
   const updateRecommendationStatus = useUpdateRecommendationStatus();
-
   const activeSeasonQuery = useQuery({
     queryKey: seasonKeys.active(),
     queryFn: () => seasonService.getActiveSeason(),
@@ -60,7 +57,6 @@ export function useHomeScreenController() {
     enabled: Boolean(userId && activeSeasonQuery.data?.id && !activeSeasonQuery.isLoading),
     staleTime: 1000 * 60 * 2,
   });
-
   const currentStreak = streakQuery.data?.currentDays ?? 0;
   const currentXp = progressionQuery.data?.xp ?? 0;
   const latestSession = historyQuery.history[0] ?? null;
@@ -68,16 +64,12 @@ export function useHomeScreenController() {
   const progressPercent = Math.min(100, Math.round((todayFocusMinutes / 120) * 100));
   const shouldShowSecondarySystems = disclosure.productTier !== 'CORE';
   const shouldShowExpansionSystems = disclosure.productTier === 'EXPANSION';
-  const nextUnlockFeature = useMemo(
-    () => getNextUnlockFeature(disclosure.features),
-    [disclosure.features],
-  );
+  const nextUnlockFeature = useMemo(() => getNextUnlockFeature(disclosure.features), [disclosure.features]);
   const nextBestAction = getNextBestAction({
     completedSessions: disclosure.inputs.totalCompletedSessions,
     currentStreak,
     nextUnlockFeature,
   });
-
   const isCoreLoading =
     disclosure.isLoading ||
     activeSeasonQuery.isLoading ||
@@ -96,11 +88,9 @@ export function useHomeScreenController() {
         .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null,
     [recommendationsQuery.data],
   );
-
   const isLoading = isCoreLoading || recommendationsQuery.isLoading;
   const loadError = disclosure.error ?? activeStudyPlanQuery.error ?? comebackQuery.error;
   const isFirstRun = !isLoading && disclosure.inputs.totalCompletedSessions === 0 && currentStreak === 0 && currentXp === 0;
-
   useHomeAnalyticsEffects({
     analytics,
     features: disclosure.features,
@@ -108,7 +98,6 @@ export function useHomeScreenController() {
     totalCompletedSessions: disclosure.inputs.totalCompletedSessions,
     userId,
   });
-
   const {
     continueStudyPlan,
     openContentStudy,
@@ -129,7 +118,6 @@ export function useHomeScreenController() {
     stage: disclosure.stage,
     userId,
   });
-
   const { returnReason } = useHomeReturnReason({
     activeStudyPlan: activeStudyPlanQuery.data ?? null,
     canShowExpansionSystems: shouldShowExpansionSystems,
@@ -170,7 +158,6 @@ export function useHomeScreenController() {
     () => buildDisplayedReturnReason(homeSpine.returnReason, returnReason),
     [homeSpine.returnReason, returnReason],
   );
-
   return {
     user,
     userId,

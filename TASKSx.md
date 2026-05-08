@@ -426,14 +426,14 @@ IMPLEMENT:
 
 VERIFY:
 
-- [ ] Ledger schema rejects missing required fields.
-- [ ] Ledger service creates a valid ledger for a normal completed session.
-- [ ] Ledger service creates a valid pending ledger offline.
-- [ ] Duplicate idempotency key does not duplicate ledger or downstream events.
-- [ ] Repository tests cover success, conflict, invalid response, and Supabase error.
-- [ ] Service tests cover success, offline, partial dependency failure, and duplicate replay.
-- [ ] `session:completed` fires exactly once per ledger idempotency key.
-- [ ] `npm run typecheck -- --pretty false` passes.
+- [x] Ledger schema rejects missing required fields.
+- [x] Ledger service creates a valid ledger for a normal completed session.
+- [x] Ledger service creates a valid pending ledger offline.
+- [x] Duplicate idempotency key does not duplicate ledger or downstream events.
+- [x] Repository tests cover success, conflict, invalid response, and Supabase error.
+- [x] Service tests cover success, offline, partial dependency failure, and duplicate replay.
+- [x] `session:completed` fires exactly once per ledger idempotency key.
+- [x] `npm run typecheck -- --pretty false` passes.
 
 ### P1-02 - Session Grading Engine
 
@@ -1320,10 +1320,10 @@ Coach must not use:
 
 VERIFY:
 
-- [ ] Coach input schema exists.
-- [ ] Missing data produces fallback insight.
-- [ ] PII is excluded from Sentry and analytics.
-- [ ] Tests cover empty, sparse, strong-pattern, weak-pattern, and offline inputs.
+- [x] Coach input schema exists.
+- [x] Missing data produces fallback insight.
+- [x] PII is excluded from Sentry and analytics.
+- [x] Tests cover empty, sparse, strong-pattern, weak-pattern, and offline inputs.
 
 ### P7-02 - Message Quality Gate
 
@@ -1352,10 +1352,10 @@ Allow:
 
 VERIFY:
 
-- [ ] Message generator rejects generic templates.
-- [ ] Tests snapshot accepted and rejected messages.
-- [ ] Coach messages link to one concrete action when possible.
-- [ ] Free tier limits are enforced without breaking core app.
+- [x] Message generator rejects generic templates.
+- [x] Tests snapshot accepted and rejected messages.
+- [x] Coach messages link to one concrete action when possible.
+- [x] Free tier limits are enforced without breaking core app.
 
 ### P7-03 - Coach Integration
 
@@ -1381,10 +1381,10 @@ Rules:
 
 VERIFY:
 
-- [ ] Coach suggestion can become daily mission.
-- [ ] Coach respects priority engine.
-- [ ] Coach does not show generic empty panel.
-- [ ] Analytics tracks shown, accepted, dismissed.
+- [x] Coach suggestion can become daily mission.
+- [x] Coach respects priority engine.
+- [x] Coach does not show generic empty panel.
+- [x] Analytics tracks shown, accepted, dismissed.
 
 ### P7-04 - Notification Budget
 
@@ -1408,17 +1408,17 @@ Rules:
 
 VERIFY:
 
-- [ ] Tests cover budget, priority, quiet hours, opt-out, and duplicate suppression.
-- [ ] Notification copy is specific.
-- [ ] No notification fires from disabled features.
+- [x] Tests cover budget, priority, quiet hours, opt-out, and duplicate suppression.
+- [x] Notification copy is specific.
+- [x] No notification fires from disabled features.
 
 PHASE 7 EXIT GATE:
 
-- [ ] Coach messages pass quality tests.
-- [ ] Coach integrates with mission and recommendations.
-- [ ] Notification budget is enforced.
-- [ ] Typecheck passes.
-- [ ] Verification report updated.
+- [x] Coach messages pass quality tests.
+- [x] Coach integrates with mission and recommendations.
+- [x] Notification budget is enforced.
+- [x] Typecheck passes.
+- [x] Verification report updated.
 
 ---
 

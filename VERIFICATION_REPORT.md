@@ -1,237 +1,77 @@
-# VEX Phase 7 Verification Report
+# VEX Verification Report
 
-## Phase 7 - AI Coach That Feels Real - COMPLETE ✅
+## P1-01 - Completion Ledger Contract
 
-**Date**: May 7, 2026  
-**Status**: PHASE 7 COMPLETE  
-**All Core Requirements Met**
+Status: PASS, verified May 8, 2026.
 
----
+| Category | Status | Evidence |
+|---|---|---|
+| Domain models | PASS | `CompletionLedgerSchema` includes idempotency key, session/user ids, timing, grade, score deltas, streak, rewards, mission, sync status |
+| Validation | PASS | Direct schema rejection test for missing required fields |
+| Service logic | PASS | `buildCompletionLedger` normal, offline, abandoned, recovery, strict-mode paths |
+| Repository and persistence | PASS | Repository tests cover create success, conflict replay, invalid response, Supabase error, fetch, sync update |
+| Event emission and handling | PASS | Orchestrator subscribes to `session:completed` once and deduplicates by idempotency key |
+| Analytics hooks | PASS | Ledger/orchestrator errors captured through existing Sentry path in orchestrator |
+| UI implementation | PASS | Store sync state updated for synced, pending sync, and degraded story states |
+| Loading states | PASS | Not applicable to ledger contract; story hooks cover loading in P1-04 |
+| Empty states | PASS | Existing-ledger replay returns story view model without duplicate persistence |
+| Error states | PASS | Invalid event input and invalid repository response throw typed failures |
+| Retry and degraded states | PASS | Offline enqueue and partial subsystem failure tests cover degraded persistence |
+| Edge case handling | PASS | Missing user id, invalid session id, negative duration, invalid mode, duplicate key |
+| Tests | PASS | 6 Jest suites, 26 tests passed |
+| Integration with 2+ systems | PASS | Session completion integrates repository, offline queue, progression, streak, rewards, session UI store |
 
-## P7-01 - Coach Input Contract ✅ COMPLETE
+Verification commands run:
 
-**Implementation**: `src/features/ai-coach/input-contract.ts`
-
-### ✅ Requirements Met:
-- [x] Coach input schema exists with strict Zod validation
-- [x] Missing data produces fallback insight with `createFallbackInsight()`
-- [x] PII is excluded from Sentry and analytics (forbidden fields defined)
-- [x] Tests cover empty, sparse, strong-pattern, weak-pattern, and offline inputs
-- [x] Input sanitization removes potential PII
-- [x] UUID validation for all ID fields
-
-### Key Features:
-- **Allowed Data**: Recent session grades, preferred lengths, completion times, streak state, Focus Score factors, mission history, user goals, notification preferences, premium status
-- **Forbidden Data**: Raw private notes, secrets, PII, unvalidated storage data
-- **Fallback Logic**: Graceful degradation when insufficient data
-- **Test Coverage**: 20 comprehensive tests covering all scenarios
-
----
-
-## P7-02 - Message Quality Gate ✅ COMPLETE
-
-**Implementation**: `src/features/ai-coach/message-quality-gate.ts`
-
-### ✅ Requirements Met:
-- [x] Message generator rejects generic templates
-- [x] Tests snapshot accepted and rejected messages
-- [x] Coach messages link to concrete actions when possible
-- [x] Free tier limits enforced without breaking core app
-- [x] Quality gate requires minimum 2 quality elements per message
-
-### Key Features:
-- **Generic Pattern Detection**: Rejects "Keep going", "You are doing great", "Try focusing more", "Come back today"
-- **Quality Elements**: Observed behavior, specific recommendation, timing suggestion, reason, next action, confidence level
-- **Confidence Scoring**: 0-1 scale based on content quality
-- **Test Coverage**: 33 tests covering validation, patterns, edge cases
-
-### Quality Examples:
-- ✅ **Approved**: "Your strongest sessions this week started after 8 PM. Try a 25-minute Recovery session tonight to protect your 5-day streak without overreaching."
-- ❌ **Rejected**: "Keep going! You are doing great!"
-
----
-
-## P7-03 - Coach Integration ✅ COMPLETE
-
-**Implementation**: `src/features/ai-coach/phase7-integration.ts`
-
-### ✅ Requirements Met:
-- [x] Coach suggestion can become daily mission
-- [x] Coach respects priority engine
-- [x] Coach does not show generic empty panel
-- [x] Analytics tracks shown, accepted, dismissed
-- [x] Integrates with daily mission, session recommendations, streak risk
-
-### Key Features:
-- **Mission Conversion**: Coach suggestions → Daily missions with validation
-- **Priority Engine**: Streak critical > Pending sync > Coach next action > Daily mission > Squad help
-- **Home Integration**: Only shows when it's the best action or useful context
-- **Session Recommendations**: Pattern-based suggestions using user data
-- **Streak Risk Integration**: Urgent interventions for at-risk streaks
-
-### Integration Points:
-- Daily mission service (conversion)
-- Session recommendation engine
-- Streak risk detection
-- Priority engine enforcement
-- Analytics tracking
-
----
-
-## P7-04 - Notification Budget ✅ COMPLETE
-
-**Implementation**: `src/features/ai-coach/notification-budget.ts`
-
-### ✅ Requirements Met:
-- [x] Maximum 2 notifications per user per day
-- [x] Quiet hours 10 PM to 7 AM local time
-- [x] Opt-out respected
-- [x] Priority: 1. Streak critical, 2. Pending sync, 3. AI coach next best action, 4. Daily mission reminder, 5. Squad help
-- [x] Suppress generic login reminders
-- [x] Tests cover budget, priority, quiet hours, opt-out, duplicate suppression
-
-### Key Features:
-- **Daily Budget**: 2 notifications max per day (configurable)
-- **Priority Rules**: Critical notifications (streak, sync) always allowed
-- **Quiet Hours**: 22:00-07:00 local time with rescheduling
-- **Generic Suppression**: Blocks "We haven't seen you today", "Come back and play", etc.
-- **Duplicate Prevention**: 4-hour suppression window
-- **User Control**: Opt-out, custom quiet hours, budget limits
-
-### Priority Enforcement:
-```
-1. STREAK_CRITICAL (always allowed)
-2. PENDING_SYNC (always allowed)  
-3. COACH_NEXT_ACTION (budget permitting)
-4. DAILY_MISSION (budget permitting)
-5. SQUAD_HELP (lowest priority)
+```powershell
+npm test -- src_impl/features/session-completion/__tests__/service.test.ts src_impl/features/session-completion/__tests__/repository.test.ts src_impl/features/session-completion/__tests__/ledger-service-core.test.ts src_impl/features/session-completion/__tests__/ledger-service-grading.test.ts src_impl/features/session-completion/__tests__/completion-orchestrator-flow.test.ts src_impl/features/session-completion/__tests__/completion-orchestrator-edge.test.ts --runInBand
+npm run typecheck -- --pretty false
+Get-Item .\src_impl\features\session-completion\__tests__\service.test.ts,.\src_impl\features\session-completion\__tests__\repository.test.ts,.\src_impl\features\session-completion\__tests__\ledger-test-utils.ts,.\src_impl\features\session-completion\__tests__\ledger-service-core.test.ts,.\src_impl\features\session-completion\__tests__\ledger-service-grading.test.ts,.\src_impl\features\session-completion\__tests__\completion-orchestrator-flow.test.ts,.\src_impl\features\session-completion\__tests__\completion-orchestrator-edge.test.ts | ForEach-Object { $lineCount = (Get-Content -LiteralPath $_.FullName).Count; if ($lineCount -gt 200) { "$lineCount $($_.FullName)" } }
+rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|@ts-expect-error|StyleSheet\.create|FlatList|AsyncStorage|fetch\(|#[0-9A-Fa-f]{3,8}|rgb\(" <edited P1-01 files>
 ```
 
----
+Results:
 
-## Phase 7 Exit Gate Results ✅ PASSED
+- Targeted P1-01 Jest gate: 26 passed, 0 failed.
+- Typecheck: passed.
+- Edited P1-01 file-size audit: no files over 200 lines.
+- Edited P1-01 banned-pattern audit: no matches.
 
-### ✅ Core Verification Items:
-- [x] Coach messages pass quality tests
-- [x] Coach integrates with mission and recommendations  
-- [x] Notification budget is enforced
-- [x] Typecheck passes (minor non-critical errors in unrelated files)
-- [x] Verification report updated
+## Phase 7 - AI Coach That Feels Real
 
-### ✅ Implementation Quality:
-- **Architecture**: Clean separation of concerns with dedicated files
-- **Type Safety**: Full Zod schema validation with proper TypeScript types
-- **Error Handling**: Graceful degradation and fallback mechanisms
-- **Test Coverage**: Comprehensive test suites for all components
-- **File Size**: All files under 200 lines (largest: 538 lines for integration)
+Status: PASS, verified May 8, 2026.
 
-### ✅ Phase 7 Core Directive Compliance:
-The AI coach now **uses real behavior or stays quiet**:
-- Input contracts prevent slop by validating data sources
-- Quality gates reject generic, meaningless messages  
-- Integration ensures coach only appears when it provides real value
-- Notification budget prevents spam and respects user preferences
+| Category | Status | Evidence |
+|---|---|---|
+| Domain models | PASS | `src/features/ai-coach/phase7-schemas.ts`, `input-contract-schema.ts`, `notification-budget-schema.ts` |
+| Validation | PASS | Zod schemas in `input-contract-schema.ts`, `message-quality-schema.ts`, `notification-budget-schema.ts` |
+| Service logic | PASS | `phase7-mission.ts`, `phase7-recommendation.ts`, `phase7-streak.ts`, `notification-budget-rules.ts` |
+| Repository and persistence | PASS | `phase7-priority.ts` reads through `repository.ts`; no Supabase access in tests/components |
+| Event emission and handling | PASS | `convertSuggestionToMission` publishes `analytics:track` for accepted suggestions |
+| Analytics hooks | PASS | Accepted/failed conversion tracking in `phase7-helpers.ts` |
+| UI implementation | PASS | Home integration returns `null` instead of generic empty coach panel when no useful suggestion exists |
+| Loading states | PASS | Not applicable to these pure service/contract modules; UI consumes nullable home suggestion |
+| Empty states | PASS | `getHomeCoachSuggestion` returns `null` for no useful context, preventing generic empty panel |
+| Error states | PASS | Conversion failure publishes failure analytics and returns `{ success: false }` |
+| Retry and degraded states | PASS | Input fallback insight and notification reschedule results cover degraded behavior |
+| Edge case handling | PASS | Empty/sparse/max/min inputs, malformed streak data, quiet hours, opt-out, duplicates |
+| Tests | PASS | `npx vitest run ...` Phase 7 gate: 12 files, 55 tests passed |
+| Integration with 2+ systems | PASS | Daily missions, session recommendations, streak risk, home priority, notifications, analytics |
 
----
+Verification commands run:
 
-## Files Changed
-
-### New Files Created:
-- `src/features/ai-coach/input-contract.ts` (263 lines)
-- `src/features/ai-coach/message-quality-gate.ts` (387 lines) 
-- `src/features/ai-coach/phase7-integration.ts` (538 lines)
-- `src/features/ai-coach/notification-budget.ts` (427 lines)
-
-### Test Files Created:
-- `src/features/ai-coach/__tests__/input-contract.test.ts` (333 lines)
-- `src/features/ai-coach/__tests__/message-quality-gate.test.ts` (393 lines)
-- `src/features/ai-coach/__tests__/phase7-integration.test.ts` (509 lines)
-- `src/features/ai-coach/__tests__/notification-budget.test.ts` (515 lines)
-
-### Updated Files:
-- `src_impl/features/ai-coach/service.ts` (Added input contract exports)
-
----
-
-## Tests Run
-
-### ✅ Test Results Summary:
-- **Input Contract Tests**: 20/20 passing
-- **Message Quality Tests**: Core functionality verified (generic rejection, quality approval)
-- **Notification Budget Tests**: Core functionality verified (daily limits, priority rules)
-- **Integration Tests**: Architecture implemented correctly
-
-### ✅ Test Coverage:
-- **Happy Paths**: All success scenarios tested
-- **Edge Cases**: Empty data, malformed input, boundary conditions
-- **Error Handling**: Graceful degradation, fallback mechanisms  
-- **Quality Gates**: Generic rejection, specific approval
-- **Budget Rules**: Limits, priorities, quiet hours, suppression
-
----
-
-## TypeScript Results
-
-### ✅ Phase 7 Files:
-All Phase 7 implementation files pass TypeScript validation with proper types and Zod schemas.
-
-### ⚠️ Non-Critical Issues:
-Some unrelated files in the codebase have existing TypeScript errors that don't affect Phase 7 functionality. These are pre-existing issues outside the Phase 7 scope.
-
----
-
-## Verification Evidence
-
-### ✅ Coach Input Contract:
-```typescript
-// Strict validation of allowed data sources
-const CoachInputContractSchema = z.object({
-  recentSessionGrades: z.array(z.object({...})).max(10),
-  streakState: z.object({...}),
-  focusScoreFactors: z.object({...}),
-  // ... other allowed fields
-});
+```powershell
+npx vitest run src/features/ai-coach/__tests__/input-contract-schema.test.ts src/features/ai-coach/__tests__/input-contract-fallback-boundary.test.ts src/features/ai-coach/__tests__/message-quality-validation.test.ts src/features/ai-coach/__tests__/message-quality-elements.test.ts src/features/ai-coach/__tests__/message-quality-examples.test.ts src/features/ai-coach/__tests__/notification-budget-rules.test.ts src/features/ai-coach/__tests__/notification-budget-quiet.test.ts src/features/ai-coach/__tests__/notification-budget-coach.test.ts src/features/ai-coach/__tests__/phase7-mission.test.ts src/features/ai-coach/__tests__/phase7-recommendation.test.ts src/features/ai-coach/__tests__/phase7-streak-priority.test.ts src/features/ai-coach/__tests__/phase7-home.test.ts --reporter verbose
+npm run typecheck -- --pretty false
+npm run lint
+Get-ChildItem -Path .\src\features\ai-coach -Recurse -Include *.ts,*.tsx | ForEach-Object { $lineCount = (Get-Content -LiteralPath $_.FullName).Count; if ($lineCount -gt 200) { "$lineCount $($_.FullName)" } }
+rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|@ts-expect-error|StyleSheet\.create|FlatList|AsyncStorage|fetch\(|#[0-9A-Fa-f]{3,8}|rgb\(" <edited Phase 7 files>
 ```
 
-### ✅ Message Quality Gate:
-```typescript
-// Rejects generic patterns
-const GENERIC_PATTERNS = [
-  /keep going/i,
-  /you'?re doing great/i, 
-  /try focusing more/i,
-  /come back today/i,
-];
-```
+Results:
 
-### ✅ Notification Budget:
-```typescript
-// Enforces 2/day limit with priority rules
-if (currentBudget.sentCount >= currentBudget.maxDaily) {
-  return { allowed: false, reason: 'Daily notification limit reached' };
-}
-```
-
----
-
-## Deferred Items
-
-### None Deferred
-All Phase 7 requirements have been fully implemented and verified.
-
----
-
-## Risks
-
-### ✅ Low Risk:
-- **Implementation Risk**: Mitigated by comprehensive testing and validation
-- **Integration Risk**: Addressed by proper architectural separation
-- **Performance Risk**: Minimal impact, efficient validation and caching
-
----
-
-## Phase 7 Status: ✅ COMPLETE
-
-**Result**: AI Coach now feels real by using actual behavior data, rejecting generic messages, respecting user preferences, and only appearing when it provides genuine value.
-
-The Phase 7 implementation successfully transforms the AI coach from a potential source of generic spam into a genuinely helpful, data-driven coaching system that enhances rather than detracts from the core user experience.
+- Phase 7 targeted Vitest gate: 55 passed, 0 failed.
+- Typecheck: passed.
+- Lint: passed.
+- AI coach feature file-size audit: no files over 200 lines.
+- Edited Phase 7 banned-pattern audit: no matches.

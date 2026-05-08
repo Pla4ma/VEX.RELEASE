@@ -98,6 +98,12 @@ export {
 } from './reminder-scheduler';
 
 // Phase 7 - Input Contract Integration
+import {
+  validateCoachInput,
+  createFallbackInsight,
+  type CoachInputContract,
+} from '../../../src/features/ai-coach/input-contract';
+
 export {
   validateCoachInput,
   createFallbackInsight,
@@ -105,7 +111,7 @@ export {
   createMockCoachInput,
   CoachInputContractSchema,
   type CoachInputContract,
-} from '../../../features/ai-coach/input-contract';
+} from '../../../src/features/ai-coach/input-contract';
 
 // Service getter for compatibility with hooks expecting service pattern
 import type { CoachRecommendation } from './services/CoachRecommendationService';

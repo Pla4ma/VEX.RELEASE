@@ -9,7 +9,6 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-
 import { FocusRing } from '../../components/FocusRing';
 import { StreakBadge } from '../../components/StreakBadge';
 import { Button } from '../../components/primitives/Button';
@@ -19,19 +18,16 @@ import { SimpleWalletBadge } from '../../features/economy/components/SimpleWalle
 import { getPremiumCardStyle } from '../../components/premiumStyles';
 import { useTheme } from '../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
-
 const WHITE = 'rgba(255,255,255,0.96)';
 const WHITE_MUTED = 'rgba(255,255,255,0.72)';
 const WHITE_SOFT = 'rgba(255,255,255,0.18)';
 const CTA_GRADIENT = ['#7C3AED', '#4F46E5'] as const;
-
 export function getHeroGradientColors(streak: number): readonly [string, string] {
   if (streak >= 30) {return ['#0d1b2a', '#1b4332'];}
   if (streak >= 7) {return ['#1a0533', '#6b0f1a'];}
   if (streak >= 1) {return ['#0f3460', '#533483'];}
   return ['#1a1a2e', '#16213e'];
 }
-
 export function HomeHero({
   currentStreak,
   isAtRisk,
@@ -57,7 +53,6 @@ export function HomeHero({
   const { width } = useWindowDimensions();
   const isCompact = width < 380;
   const gradientColors = useMemo(() => getHeroGradientColors(currentStreak), [currentStreak]);
-
   return (
     <LinearGradient
       colors={[...gradientColors]}
@@ -116,7 +111,6 @@ export function HomeHero({
     </LinearGradient>
   );
 }
-
 export function GradientStartButton({
   body,
   buttonLabel,
@@ -134,7 +128,6 @@ export function GradientStartButton({
 }): JSX.Element {
   const { theme } = useTheme();
   const scale = useSharedValue(1);
-
   useEffect(() => {
     if (pulse) {
       scale.value = withRepeat(withSequence(withTiming(1.02, { duration: 1500 }), withTiming(1, { duration: 1500 })), -1, false);
@@ -144,9 +137,7 @@ export function GradientStartButton({
     }
     return () => cancelAnimation(scale);
   }, [pulse, scale]);
-
   const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
-
   return (
     <Animated.View style={animatedStyle}>
       <LinearGradient
@@ -181,18 +172,15 @@ export function GradientStartButton({
     </Animated.View>
   );
 }
-
 export function SectionHeader({ title }: { title: string }): JSX.Element {
   const { theme } = useTheme();
   return <View style={styles.sectionHeader}><View style={[styles.sectionAccent, { backgroundColor: theme.colors.primary[500] }]} /><Text variant="h4" color={theme.colors.text.primary}>{title}</Text></View>;
 }
-
 function formatMinutes(totalMinutes: number) {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
   return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
 }
-
 const styles = createSheet({
   ctaGradient: { overflow: 'hidden' },
   eyebrow: { textTransform: 'uppercase', letterSpacing: 1.2 },
@@ -203,5 +191,4 @@ const styles = createSheet({
   onboardPanel: { borderWidth: 1, gap: 8, padding: 16 },
   sectionAccent: { borderRadius: 2, height: 18, marginRight: 8, width: 3 },
   sectionHeader: { alignItems: 'center', flexDirection: 'row' },
-  statCard: { borderRadius: 16, gap: 8, width: 110 },
 });

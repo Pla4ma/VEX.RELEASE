@@ -385,10 +385,10 @@ export class AdaptiveDifficultyEngine {
     // Event publishing re-enabled with fixed channel types
     eventBus.publish('adaptive_difficulty:real_time_adjustment', {
       userId: metrics.userId,
-      userId: metrics.userId,
-      encounterId: metrics.encounterId || 'unknown',
-      adjustment,
-      adjustment,
+      encounterId: metrics.sessionId,
+      adjustment: newRating,
+      reason: adjustment.reason,
+      timestamp: Date.now(),
     });
 
     return adjustment;

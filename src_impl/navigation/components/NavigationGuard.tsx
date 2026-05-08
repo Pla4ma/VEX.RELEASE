@@ -5,13 +5,11 @@
  */
 
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, type TextStyle, type ViewStyle } from 'react-native';
 import { useFeatureFlags } from '../../hooks/useFeatureFlags';
-import { FEATURE_FLAGS } from '../../constants/features';
-import { useTheme } from '../../theme';
 
 interface NavigationGuardProps {
-  featureFlag: keyof typeof FEATURE_FLAGS;
+  featureFlag: string;
   children: React.ReactNode;
   fallback?: React.ReactNode;
 }
@@ -36,7 +34,7 @@ export const NavigationGuard: React.FC<NavigationGuardProps> = ({
   return <>{children}</>;
 };
 
-const styles = {
+const styles: { container: ViewStyle; text: TextStyle } = {
   container: {
     flex: 1,
     justifyContent: 'center',

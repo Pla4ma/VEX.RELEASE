@@ -59,12 +59,7 @@ export function SuccessCelebration(): JSX.Element {
         justifyContent="center"
         alignItems="center"
         borderWidth={3}
-        borderColor={`${theme.colors.success[600]}50`}
-        shadowColor={theme.colors.success[500]}
-        shadowOffset={{ width: 0, height: 6 }}
-        shadowOpacity={0.3}
-        shadowRadius={12}
-        elevation={6}
+        borderColor={`${theme.colors.success.DEFAULT}50`}
       >
         <Text fontSize={48}>🎉</Text>
       </Box>
