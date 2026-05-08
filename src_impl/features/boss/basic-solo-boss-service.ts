@@ -1,20 +1,20 @@
 /**
  * Basic Solo Boss Service
- * 
+ *
  * Simplified boss system for PHASE 8 launch scope.
  * Focuses on solo boss battles only.
  */
 
 import { eventBus } from "../../events";
 import * as repository from "./repository";
-import { 
-  BossTemplateSchema, 
-  BossEncounterSchema, 
+import {
+  BossTemplateSchema,
+  BossEncounterSchema,
   CalculateDamageInputSchema,
-  type BossTemplate, 
-  type BossEncounter, 
-  type BossEncounterSummary, 
-  type BossDamageResult 
+  type BossTemplate,
+  type BossEncounter,
+  type BossEncounterSummary,
+  type BossDamageResult
 } from "./schemas";
 
 // ============================================================================
@@ -47,12 +47,12 @@ export function calculateBasicSoloBossDamage(input: {
   streakDays: number;
 }): number {
   const { sessionDurationMinutes, sessionQuality, streakDays } = input;
-  
+
   // Simple deterministic formula
   const baseDamage = Math.max(1, Math.round(sessionDurationMinutes * 0.8));
   const qualityMultiplier = Math.max(0.5, sessionQuality / 100);
   const streakBonus = streakDays >= 3 ? 1.2 : 1.0;
-  
+
   return Math.round(baseDamage * qualityMultiplier * streakBonus);
 }
 
@@ -69,13 +69,13 @@ export async function getOrCreateBasicSoloBossEncounter(userId: string): Promise
       await repository.markEncounterTimeout(existing.id);
       return null;
     }
-    
+
     const template = await repository.fetchBossTemplate(existing.bossId);
     if (!template) return null;
-    
+
     const timeRemaining = Math.max(0, existing.expiresAt - Date.now());
     const percentHealth = Math.floor((existing.healthRemaining / existing.maxHealth) * 100);
-    
+
     return {
       id: existing.id,
       bossId: existing.bossId,
@@ -89,7 +89,7 @@ export async function getOrCreateBasicSoloBossEncounter(userId: string): Promise
       timeRemaining,
     };
   }
-  
+
   // Create new encounter
   return await createBasicSoloBossEncounter(userId);
 }
@@ -97,7 +97,7 @@ export async function getOrCreateBasicSoloBossEncounter(userId: string): Promise
 async function createBasicSoloBossEncounter(userId: string): Promise<BossEncounterSummary | null> {
   // Use basic boss template or create default
   let template = await repository.fetchBossTemplate(BASIC_BOSS_CONFIG.soloBossId);
-  
+
   if (!template) {
     // Create a basic template if it doesn't exist
     template = {
@@ -116,7 +116,7 @@ async function createBasicSoloBossEncounter(userId: string): Promise<BossEncount
       rewardItemId: null,
     };
   }
-  
+
   const encounter = await repository.createEncounter(
     template.id,
     userId,
@@ -124,9 +124,9 @@ async function createBasicSoloBossEncounter(userId: string): Promise<BossEncount
     template.baseHealth,
     template.timeLimit
   );
-  
+
   const timeRemaining = Math.max(0, encounter.expiresAt - Date.now());
-  
+
   return {
     id: encounter.id,
     bossId: encounter.bossId,
@@ -154,34 +154,34 @@ export async function applyBasicSoloBossDamage(
   if (!encounter) {
     throw new Error("No active boss encounter found");
   }
-  
+
   if (encounter.status !== "ACTIVE") {
     throw new Error(`Cannot damage boss in ${encounter.status} state`);
   }
-  
+
   // Check for timeout
   if (encounter.expiresAt < Date.now()) {
     await repository.markEncounterTimeout(encounterId);
     throw new Error("Boss encounter has expired");
   }
-  
+
   const newHealth = Math.max(0, encounter.healthRemaining - damage);
   const totalDamageDealt = encounter.damageDealt + damage;
   const isDefeated = newHealth === 0;
-  
+
   const updated = await repository.updateEncounterHealth(
-    encounterId, 
-    newHealth, 
-    totalDamageDealt, 
+    encounterId,
+    newHealth,
+    totalDamageDealt,
     sessionId
   );
-  
+
   const percentComplete = Math.floor((totalDamageDealt / encounter.maxHealth) * 100);
-  
+
   if (isDefeated) {
     await handleBasicSoloBossDefeat(encounterId, encounter.userId!);
   }
-  
+
   return {
     damageDealt: damage,
     healthRemaining: newHealth,
@@ -199,14 +199,14 @@ export async function applyBasicSoloBossDamage(
 async function handleBasicSoloBossDefeat(encounterId: string, userId: string): Promise<void> {
   const encounter = await repository.markEncounterDefeated(encounterId);
   const template = await repository.fetchBossTemplate(encounter.bossId);
-  
+
   if (!template) {
     throw new Error(`Boss template not found: ${encounter.bossId}`);
   }
-  
+
   // Record defeat
   await repository.recordBossDefeat(userId, encounter.bossId, encounterId, encounter.damageDealt);
-  
+
   // Emit defeat event for reward processing
   eventBus.publish("boss:defeated", {
     userId,
@@ -220,7 +220,7 @@ async function handleBasicSoloBossDefeat(encounterId: string, userId: string): P
     },
     participants: [userId],
   });
-  
+
   // No next boss unlock in basic version - user needs to wait for next day
 }
 
@@ -230,7 +230,7 @@ async function handleBasicSoloBossDefeat(encounterId: string, userId: string): P
 
 export async function handleBasicSoloBossTimeout(encounterId: string): Promise<void> {
   await repository.markEncounterTimeout(encounterId);
-  
+
   // No fear monetization - just a simple timeout
   eventBus.publish("boss:timeout", {
     userId: "system",
@@ -252,7 +252,7 @@ export async function getBasicSoloBossStatus(userId: string): Promise<{
   nextAvailableTime: number | null;
 }> {
   const existing = await repository.fetchActiveEncounter(userId);
-  
+
   if (existing) {
     if (existing.expiresAt < Date.now()) {
       await repository.markEncounterTimeout(existing.id);
@@ -262,14 +262,14 @@ export async function getBasicSoloBossStatus(userId: string): Promise<{
         nextAvailableTime: null,
       };
     }
-    
+
     return {
       hasActiveEncounter: true,
       canStartNewEncounter: false,
       nextAvailableTime: existing.expiresAt,
     };
   }
-  
+
   return {
     hasActiveEncounter: false,
     canStartNewEncounter: true,

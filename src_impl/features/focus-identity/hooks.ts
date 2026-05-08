@@ -1,6 +1,6 @@
 /**
  * Focus Identity Hooks
- * 
+ *
  * Centralized hooks for focus identity functionality
  */
 
@@ -14,11 +14,11 @@ import { useTheme } from '../../theme';
  */
 export function useFocusIdentity(userId: string) {
   const { score, history, status, error, refetch } = useFocusScore();
-  
+
   // Transform the data to match the expected interface
   const profile: FocusIdentityProfile | null = useMemo(() => {
     if (!score) return null;
-    
+
     return FocusIdentityEngine.createProfile(score.currentScore, {
       streakInCurrentBand: 0, // Would be calculated from actual data
       percentileRank: score.percentileRank || 0,
@@ -57,12 +57,12 @@ export function useFocusIdentity(userId: string) {
  */
 export function useFocusScoreColor(score: number | null): string {
   const { theme } = useTheme();
-  
+
   return useMemo(() => {
     if (!score) return theme.colors.textMuted;
-    
+
     const band = FocusIdentityEngine.getScoreBand(score);
-    
+
     switch (band.label) {
       case 'BRONZE':
         return '#CD7F32';
@@ -90,9 +90,9 @@ export function useFocusScoreColor(score: number | null): string {
 export function useIdentityStatement(currentBand: ScoreBand | null, streakInCurrentBand: number): string {
   return useMemo(() => {
     if (!currentBand) return "Begin your focus journey";
-    
+
     const streakText = streakInCurrentBand > 1 ? ` (${streakInCurrentBand} sessions in this band)` : '';
-    
+
     switch (currentBand.label) {
       case 'BRONZE':
         return `Building the foundation${streakText}`;

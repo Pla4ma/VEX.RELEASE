@@ -1,6 +1,6 @@
 /**
  * Basic Solo Boss Service Tests
- * 
+ *
  * Tests for PHASE 8 basic solo boss requirements:
  * - one active solo boss
  * - deterministic damage from completed sessions
@@ -248,7 +248,7 @@ describe('Basic Solo Boss Service - PHASE 8', () => {
     it('should not have any paid retry mechanisms', () => {
       const serviceFunctions = Object.keys(service);
       const paidRetryKeywords = ['purchase', 'buy', 'pay', 'gem', 'coin', 'retry', 'revive'];
-      
+
       serviceFunctions.forEach(funcName => {
         paidRetryKeywords.forEach(keyword => {
           expect(funcName.toLowerCase()).not.toContain(keyword);

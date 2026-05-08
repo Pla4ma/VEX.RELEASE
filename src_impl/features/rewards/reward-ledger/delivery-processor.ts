@@ -17,7 +17,7 @@ export async function processRewardDelivery(entry: RewardLedgerEntry): Promise<{
   try {
     // This would integrate with the actual reward systems
     // For now, simulate successful delivery
-    
+
     switch (entry.type) {
       case 'XP':
         // Add XP to user's progression
@@ -37,9 +37,9 @@ export async function processRewardDelivery(entry: RewardLedgerEntry): Promise<{
 
     return { success: true };
   } catch (error) {
-    return { 
-      success: false, 
-      errorMessage: error instanceof Error ? error.message : 'Delivery failed' 
+    return {
+      success: false,
+      errorMessage: error instanceof Error ? error.message : 'Delivery failed'
     };
   }
 }
@@ -55,7 +55,7 @@ export async function updateRewardState(
   retryAfter: number | null = null
 ): Promise<void> {
   const supabase = getSupabaseClient();
-  
+
   const updateData: Record<string, unknown> = {
     state,
     error_message: errorMessage,

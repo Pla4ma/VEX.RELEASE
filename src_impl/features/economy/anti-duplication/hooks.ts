@@ -16,12 +16,12 @@ import { useCallback, useMemo } from 'react';
 
 import { eventBus } from '../../../events';
 import { antiDuplicationService } from './deduplication-service';
-import type { 
-  DeduplicationRequest, 
+import type {
+  DeduplicationRequest,
   DeduplicationResult,
   DeduplicationAttempt,
   ExploitDetection,
-  DeduplicationAnalytics 
+  DeduplicationAnalytics
 } from './schemas';
 
 // ============================================================================
@@ -236,7 +236,7 @@ export function useExploitDetection(props: UseExploitDetectionProps) {
   }, [query.data, severity]);
 
   const hasHighRiskDetections = useMemo(() => {
-    return query.data?.detections.some(d => 
+    return query.data?.detections.some(d =>
       d.severity === 'HIGH' || d.severity === 'CRITICAL'
     ) || false;
   }, [query.data]);
@@ -414,8 +414,8 @@ export function useActionStatus(props: UseActionStatusProps) {
 
   const recentAttempts = useMemo(() => {
     const oneHourAgo = Date.now() - (60 * 60 * 1000);
-    return attempts.filter(attempt => 
-      attempt.actionType === actionType && 
+    return attempts.filter(attempt =>
+      attempt.actionType === actionType &&
       attempt.createdAt > oneHourAgo
     );
   }, [attempts, actionType]);
@@ -425,7 +425,7 @@ export function useActionStatus(props: UseActionStatusProps) {
     const allowedCount = recentAttempts.filter(a => a.result === 'ALLOWED').length;
 
     let status: 'good' | 'warning' | 'blocked' = 'good';
-    
+
     if (blockedCount > 2) {
       status = 'blocked';
     } else if (blockedCount > 0 || allowedCount > 10) {

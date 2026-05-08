@@ -44,7 +44,7 @@ class ProgressionService {
   getProgressionInfo(): LevelInfo {
     const xpToNext = this.calculateXPToNext(this.currentLevel);
     const totalXP = this.calculateTotalXPForLevel(this.currentLevel);
-    
+
     return {
       level: this.currentLevel,
       currentXP: this.currentXP,
@@ -66,7 +66,7 @@ class ProgressionService {
     try {
       const oldLevel = this.currentLevel;
       this.currentXP += xpGrant.amount;
-      
+
       // Check for level up
       const newLevel = this.calculateLevelFromXP(this.currentXP);
       if (newLevel > oldLevel) {
@@ -105,12 +105,12 @@ class ProgressionService {
     // Simplified: XP needed = 50 * level * (level + 1)
     let level = 1;
     let xpNeeded = 0;
-    
+
     while (xpNeeded <= totalXP && level < 100) {
       level++;
       xpNeeded = 50 * level * (level + 1);
     }
-    
+
     return Math.max(1, level - 1);
   }
 
@@ -137,7 +137,7 @@ class ProgressionService {
    */
   private async handleLevelUp(oldLevel: number, newLevel: number): Promise<void> {
     debug.info('Level up!', { from: oldLevel, to: newLevel });
-    
+
     // Track level up analytics
     capture(ProgressionEvents.LEVEL_UP, {
       user_id: this.userId,

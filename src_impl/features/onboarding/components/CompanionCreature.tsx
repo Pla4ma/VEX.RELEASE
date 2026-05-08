@@ -95,7 +95,7 @@ export function CompanionCreature(): JSX.Element {
       >
         <Text fontSize={20}>✨</Text>
       </Animated.View>
-      
+
       <Animated.View
         entering={FadeIn.duration(600).delay(600)}
         style={{
@@ -106,7 +106,7 @@ export function CompanionCreature(): JSX.Element {
       >
         <Text fontSize={16}>⭐</Text>
       </Animated.View>
-      
+
       <Animated.View
         entering={FadeIn.duration(600).delay(800)}
         style={{

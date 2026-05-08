@@ -57,7 +57,7 @@ export async function progressToNextSession(
     const newSessionsCompleted = currentProgress.sessions_completed + 1;
     const newTotalXp = currentProgress.total_xp_earned + xpEarned;
     const newLevelProgress = calculateLevelProgress(newTotalXp);
-    
+
     // Check for unlocks
     const newUnlockedFeatures = [...currentProgress.unlocked_features];
     let nextUnlock = null;
@@ -105,12 +105,12 @@ export async function progressToNextSession(
       throw new Error(`Failed to progress first week: ${error.message}`);
     }
 
-    debug.info('Progressed to next session', { 
-      userId, 
+    debug.info('Progressed to next session', {
+      userId,
       from: currentProgress.current_session,
       to: nextSession,
       sessionNumber,
-      unlocks: newUnlockedFeatures.length 
+      unlocks: newUnlockedFeatures.length
     });
 
     return FirstWeekProgressSchema.parse(data);
@@ -127,10 +127,10 @@ export async function progressToNextSession(
 function calculateLevelProgress(totalXp: number): number {
   // Simple level calculation for first week
   // Level 1: 0-100 XP
-  // Level 2: 101-250 XP  
+  // Level 2: 101-250 XP
   // Level 3: 251-500 XP
   // Level 4: 501-1000 XP
-  
+
   if (totalXp <= 100) return 1;
   if (totalXp <= 250) return 2;
   if (totalXp <= 500) return 3;

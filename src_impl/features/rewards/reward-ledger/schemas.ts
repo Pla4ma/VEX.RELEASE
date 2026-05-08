@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 export const RewardLedgerStateSchema = z.enum([
   'PENDING',
-  'DELIVERED', 
+  'DELIVERED',
   'FAILED',
   'EXPIRED',
   'RETRYING'
@@ -18,7 +18,7 @@ export type RewardLedgerState = z.infer<typeof RewardLedgerStateSchema>;
 
 export const RewardTypeSchema = z.enum([
   'XP',
-  'COINS', 
+  'COINS',
   'GEMS',
   'ITEM',
   'BADGE',

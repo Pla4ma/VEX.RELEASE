@@ -34,7 +34,7 @@ export function useFirstWeekProgress(userId: string) {
 export function useCurrentFirstWeekProgress() {
   const { user } = useAuth();
   const userId = user?.id;
-  
+
   return useFirstWeekProgress(userId || '');
 }
 
@@ -44,7 +44,7 @@ export function useCurrentFirstWeekProgress() {
 
 export function useProgressToNextSession() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async ({
       userId,
@@ -73,7 +73,7 @@ export function useProgressToNextSession() {
 
 export function useFirstWeekCompletion(progress: any) {
   if (!progress) return 0;
-  
+
   const totalSessions = 7;
   return (progress.sessionsCompleted / totalSessions) * 100;
 }
@@ -101,21 +101,21 @@ export function useIsInFirstWeek(progress: any) {
 
 export function useNextSession(progress: any) {
   if (!progress) return null;
-  
+
   const sessions = [
     'SESSION_1',
-    'SESSION_2', 
+    'SESSION_2',
     'SESSION_3',
     'SESSION_4',
     'SESSION_5',
     'SESSION_6',
     'SESSION_7',
   ];
-  
+
   const currentIndex = sessions.indexOf(progress.currentSession);
   if (currentIndex === -1 || currentIndex >= sessions.length - 1) {
     return null;
   }
-  
+
   return sessions[currentIndex + 1];
 }

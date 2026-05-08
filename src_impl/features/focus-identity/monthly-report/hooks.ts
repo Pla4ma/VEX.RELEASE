@@ -15,9 +15,9 @@ import { useAuth } from '../../../auth/hooks';
 export const monthlyReportKeys = {
   all: ['monthly-reports'] as const,
   byUser: (userId: string) => [...monthlyReportKeys.all, 'user', userId] as const,
-  report: (userId: string, year: number, month: number) => 
+  report: (userId: string, year: number, month: number) =>
     [...monthlyReportKeys.byUser(userId), 'report', year, month] as const,
-  preview: (userId: string, year: number, month: number) => 
+  preview: (userId: string, year: number, month: number) =>
     [...monthlyReportKeys.byUser(userId), 'preview', year, month] as const,
 };
 
@@ -47,22 +47,22 @@ export function useMonthlyReportPreview(userId: string, year: number, month: num
 export function useCurrentMonthlyReport() {
   const { user } = useAuth();
   const userId = user?.id;
-  
+
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1; // JavaScript months are 0-indexed
-  
+
   return useMonthlyReport(userId || '', year, month);
 }
 
 export function useCurrentMonthlyReportPreview() {
   const { user } = useAuth();
   const userId = user?.id;
-  
+
   const now = new Date();
   const year = now.getFullYear();
   const month = now.getMonth() + 1; // JavaScript months are 0-indexed
-  
+
   return useMonthlyReportPreview(userId || '', year, month);
 }
 
@@ -72,7 +72,7 @@ export function useCurrentMonthlyReportPreview() {
 
 export function useRefreshMonthlyReport() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: async ({ userId, year, month }: { userId: string; year: number; month: number }) => {
       return service.generateMonthlyReport(userId, year, month);

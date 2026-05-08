@@ -1,6 +1,6 @@
 /**
  * Basic Squads Hooks Tests
- * 
+ *
  * Tests for PHASE 8 basic squads accountability hooks.
  */
 

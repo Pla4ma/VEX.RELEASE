@@ -1,6 +1,6 @@
 /**
  * Session Boss Integration
- * 
+ *
  * Integrates session completion with basic solo boss damage.
  * Listens for session completion events and applies boss damage.
  */

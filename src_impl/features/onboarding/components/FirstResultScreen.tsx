@@ -63,7 +63,7 @@ export function FirstResultScreen({
     mode: resolvedMode,
     isRecoverySession: resolvedMode === 'STARTER' || resolvedMode === 'RECOVERY',
   };
-  
+
   const gradingResult = calculateSessionGrade(gradingInput);
   const focusScoreAfter = focusScoreBefore + (gradingResult.focusScoreImpactRecommendation || 0);
   const xpEarned = Math.floor(sessionDuration * 2 * (gradingResult.xpQualityMultiplier || 1));
@@ -141,7 +141,7 @@ export function FirstResultScreen({
               Your companion is excited!
             </Text>
             <Text variant="body" color="text.secondary" textAlign="center">
-              {sessionGrade === 'S' || sessionGrade === 'A' 
+              {sessionGrade === 'S' || sessionGrade === 'A'
                 ? "Amazing focus! Your companion can't wait for the next session."
                 : sessionGrade === 'B'
                 ? "Great job! Your companion is proud of your progress."

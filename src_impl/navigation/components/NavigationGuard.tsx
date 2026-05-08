@@ -47,4 +47,3 @@ const styles: { container: ViewStyle; text: TextStyle } = {
     opacity: 0.6,
   },
 };
-

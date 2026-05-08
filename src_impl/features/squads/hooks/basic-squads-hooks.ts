@@ -1,6 +1,6 @@
 /**
  * Basic Squads Hooks
- * 
+ *
  * React hooks for the simplified squads accountability system.
  */
 
@@ -173,7 +173,7 @@ export function useUpdateBasicSquadWeeklyProgress() {
     onSuccess: (result, variables) => {
       // Invalidate squad contributions query
       queryClient.invalidateQueries({ queryKey: squadsKeys.contributions(variables.squadId) });
-      
+
       // Invalidate squad status query if goal was completed
       if (result.goalCompleted && userId) {
         queryClient.invalidateQueries({ queryKey: squadsKeys.status(userId) });

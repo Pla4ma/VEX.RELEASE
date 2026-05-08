@@ -48,7 +48,7 @@ export function NavigationGate({
         gap="md"
       >
         <Text fontSize={48}>🔒</Text>
-        
+
         <Text
           variant="h3"
           color="text.primary"
@@ -56,7 +56,7 @@ export function NavigationGate({
         >
           Feature Not Available
         </Text>
-        
+
         <Text
           variant="body"
           color="text.secondary"
@@ -65,7 +65,7 @@ export function NavigationGate({
         >
           {featureName} is {featureReason.toLowerCase()}.
         </Text>
-        
+
         <Button
           variant="primary"
           onPress={handleGoBack}

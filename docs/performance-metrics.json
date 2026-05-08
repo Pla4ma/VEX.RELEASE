@@ -1,14 +1,37 @@
 {
-  "timestamp": "2026-05-08T00:49:13.084Z",
+  "timestamp": "2026-05-07T22:31:16.489Z",
   "summary": {
-    "totalFiles": 1295,
+    "totalFiles": 1323,
     "issues": {
       "error": 0,
-      "warning": 0,
+      "warning": 2,
       "info": 0
     },
-    "filesWithIssues": 0
+    "filesWithIssues": 2
   },
-  "files": [],
+  "files": [
+    {
+      "path": "animation\\ConfettiCelebration.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "path": "app\\App.tsx",
+      "issues": [
+        {
+          "rule": "inlineObjectsInProps",
+          "severity": "warning",
+          "message": "Inline objects in JSX props can cause unnecessary re-renders",
+          "count": 1
+        }
+      ]
+    }
+  ],
   "recommendations": []
 }

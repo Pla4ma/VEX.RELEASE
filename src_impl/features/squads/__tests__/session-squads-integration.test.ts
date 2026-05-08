@@ -1,6 +1,6 @@
 /**
  * Session Squads Integration Tests
- * 
+ *
  * Tests for PHASE 8 session-to-squads integration requirements.
  */
 
@@ -169,7 +169,7 @@ describe('Session Squads Integration - PHASE 8', () => {
       };
 
       jest.doMock('../hooks/basic-squads-hooks', () => ({
-        useBasicSquadStatus: () => ({ 
+        useBasicSquadStatus: () => ({
           data: mockSquadStatus,
           isLoading: false,
           error: null,
@@ -203,7 +203,7 @@ describe('Session Squads Integration - PHASE 8', () => {
       };
 
       jest.doMock('../hooks/basic-squads-hooks', () => ({
-        useBasicSquadStatus: () => ({ 
+        useBasicSquadStatus: () => ({
           data: mockSquadStatus,
           isLoading: false,
           error: null,

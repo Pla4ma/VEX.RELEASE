@@ -44,13 +44,13 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
                 name="CompanionDetail"
                 getComponent={() => require('../screens/companion/CompanionDetailScreen').CompanionDetailScreen}
               />
-              <Stack.Screen 
-                name="Boss" 
+              <Stack.Screen
+                name="Boss"
                 component={() => (
                   <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}>
                     {require('../screens/boss/BossScreen').BossScreen()}
                   </NavigationGuard>
-                )} 
+                )}
               />
               <Stack.Screen
                 name="Paywall"
@@ -67,26 +67,26 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
                 getComponent={() => require('../screens/ComebackScreen').ComebackScreen}
                 options={{ animation: 'slide_from_bottom', presentation: 'fullScreenModal' }}
               />
-              <Stack.Screen 
-                name="Feed" 
+              <Stack.Screen
+                name="Feed"
                 component={() => (
                   <NavigationGuard featureFlag={FEATURE_FLAGS.SOCIAL_FEED}>
                     {require('../screens/social/SocialScreen').SocialScreen()}
                   </NavigationGuard>
-                )} 
+                )}
               />
               <Stack.Screen
                 name="Notifications"
                 getComponent={() => require('../screens/notifications/NotificationsScreen').NotificationsScreen}
               />
               <Stack.Screen name="Search" getComponent={() => require('../screens/search/SearchScreen').SearchScreen} />
-              <Stack.Screen 
-                name="Guild" 
+              <Stack.Screen
+                name="Guild"
                 component={() => (
                   <NavigationGuard featureFlag={FEATURE_FLAGS.SQUADS_ACCOUNTABILITY}>
                     {require('../features/squads/components').SquadRouteHub()}
                   </NavigationGuard>
-                )} 
+                )}
               />
               <Stack.Screen
                 name="BattlePass"
@@ -109,13 +109,13 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
                   </NavigationGuard>
                 )}
               />
-              <Stack.Screen 
-                name="Rivals" 
+              <Stack.Screen
+                name="Rivals"
                 component={() => (
                   <NavigationGuard featureFlag={FEATURE_FLAGS.RIVALS}>
                     {require('../screens/RivalsScreen').RivalsScreen()}
                   </NavigationGuard>
-                )} 
+                )}
               />
               <Stack.Screen
                 name="AICoach"

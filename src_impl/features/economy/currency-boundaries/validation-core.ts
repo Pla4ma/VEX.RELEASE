@@ -14,8 +14,8 @@
 import * as Sentry from '@sentry/react-native';
 
 import { eventBus } from '../../../events';
-import type { 
-  TransactionValidationRequest, 
+import type {
+  TransactionValidationRequest,
   TransactionValidationResult,
   BoundaryViolation,
   BoundaryViolationType,
@@ -188,9 +188,9 @@ class CurrencyBoundariesValidationCore {
 
     // Check recent activity within time window
     const recentCount = await this.getRecentTransactionCount(request.userId, rule.conditions.timeWindow);
-    
+
     if (recentCount >= rule.conditions.maxCount) {
-      const action = rule.actions.block ? 'BLOCKED' : 
+      const action = rule.actions.block ? 'BLOCKED' :
                     rule.actions.warn ? 'ALLOWED_WITH_WARNING' : 'DETECTED';
 
       return {

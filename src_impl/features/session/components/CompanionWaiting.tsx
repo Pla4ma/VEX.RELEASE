@@ -96,7 +96,7 @@ export function CompanionWaiting({ progress }: CompanionWaitingProps): JSX.Eleme
           <Text fontSize={16}>✨</Text>
         </Animated.View>
       )}
-      
+
       {progress > 0.5 && (
         <Animated.View
           entering={FadeIn.duration(400)}
@@ -109,7 +109,7 @@ export function CompanionWaiting({ progress }: CompanionWaitingProps): JSX.Eleme
           <Text fontSize={14}>⭐</Text>
         </Animated.View>
       )}
-      
+
       {progress > 0.75 && (
         <Animated.View
           entering={FadeIn.duration(400)}

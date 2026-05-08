@@ -113,7 +113,7 @@ export function CompanionRevealScreen({ userName, onContinue, onBack }: Companio
 
       {/* Back Option */}
       <Animated.View entering={FadeIn.duration(400).delay(900)} style={{ marginTop: 'auto' }}>
-        <Pressable onPress={onBack} 
+        <Pressable onPress={onBack}
           accessibilityLabel="← Go back button"
           accessibilityRole="button"
           accessibilityHint="Activates this control">

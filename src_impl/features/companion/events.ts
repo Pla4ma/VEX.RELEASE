@@ -85,10 +85,10 @@ export function subscribeToCompanionEvents() {
   return {
     onStateChanged: (callback: (data: EmotionRetentionEventDefinitions['companion:state_changed']) => void) =>
       eventBus.subscribe('companion:state_changed', callback),
-    
+
     onEvolution: (callback: (data: EmotionRetentionEventDefinitions['companion:evolution']) => void) =>
       eventBus.subscribe('companion:evolution', callback),
-    
+
     onMilestone: (callback: (data: EmotionRetentionEventDefinitions['companion:milestone_reached']) => void) =>
       eventBus.subscribe('companion:milestone_reached', callback),
   };

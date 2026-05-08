@@ -1,6 +1,6 @@
 /**
  * Basic Solo Boss Hooks
- * 
+ *
  * React hooks for the simplified boss system.
  */
 

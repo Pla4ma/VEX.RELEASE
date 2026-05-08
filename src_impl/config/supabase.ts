@@ -16,7 +16,7 @@ const debug = createDebugger('config:supabase');
  */
 function createMockSupabaseClient(): SupabaseClient {
   const error = new Error('Supabase not configured. Please set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY in your environment.');
-  
+
   return {
     auth: {
       signUp: async () => ({ data: { user: null }, error: { message: error.message } }),

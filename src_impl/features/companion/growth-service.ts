@@ -43,33 +43,33 @@ export class CompanionGrowthService {
     if (!this.state) {
       return { leveledUp: false, evolved: false };
     }
-    
+
     const previousState = { ...this.state };
     const previousLevel = this.state.level;
     const previousSessionCount = this.state.sessionCount;
     const previousFocusMinutes = this.state.totalFocusMinutes;
     const previousPerfectSessions = this.state.perfectSessions;
-    
+
     this.state.totalFocusMinutes += sessionMinutes;
     this.state.sessionCount += 1;
     if (finalPurity > 90) {
       this.state.perfectSessions += 1;
     }
-    
+
     const currentThreshold = this.getEvolutionThreshold(this.state.phase);
     const phases: CompanionPhase[] = ["EGG", "HATCHING", "YOUNG", "MATURE", "AWAKENED", "TRANSCENDENT"];
     const minutesInPhase = this.state.totalFocusMinutes - phases.slice(0, phases.indexOf(this.state.phase)).reduce((sum, phase) => sum + this.getEvolutionThreshold(phase), 0);
-    
+
     let evolved = false;
     let newPhase: CompanionPhase | undefined;
-    
+
     if (minutesInPhase >= currentThreshold && this.state.phase !== "TRANSCENDENT") {
       const previousPhase = this.state.phase;
       this.state.phase = phases[phases.indexOf(this.state.phase) + 1];
       this.state.level = 1;
       evolved = true;
       newPhase = this.state.phase;
-      
+
       // Emit evolution event
       if (userId) {
         emitCompanionEvolution(userId, this.state.id, previousPhase, newPhase, this.state.totalFocusMinutes, true);
@@ -78,16 +78,16 @@ export class CompanionGrowthService {
     } else {
       this.state.level = Math.max(1, Math.floor((minutesInPhase / currentThreshold) * 100));
     }
-    
+
     // Emit state change event for session completion
     if (userId) {
       emitCompanionStateChanged(userId, this.state.id, previousState, this.state, 'session_completed', sessionId);
       trackCompanionGrowth(userId, 'session_completed', previousState.phase, this.state.phase, previousState.currentMood, this.state.currentMood, this.state.level, sessionId);
-      
+
       // Check for milestones
       checkMilestones(this.state, userId, previousLevel, previousSessionCount, previousFocusMinutes, previousPerfectSessions);
     }
-    
+
     return { leveledUp: true, evolved, newPhase };
   }
 
@@ -96,16 +96,16 @@ export class CompanionGrowthService {
    */
   reactToStreakMaintained(userId: string): void {
     if (!this.state) return;
-    
+
     const previousState = { ...this.state };
-    
+
     // Boost companion mood and energy for streak maintenance
     this.state.currentMood = 'ECSTATIC';
     this.state.energyLevel = Math.min(100, this.state.energyLevel + 20);
-    
+
     // Small growth bonus for streak consistency
     this.state.level = Math.min(100, this.state.level + 2);
-    
+
     emitCompanionStateChanged(userId, this.state.id, previousState, this.state, 'streak_maintained');
     trackCompanionGrowth(userId, 'streak_maintained', previousState.phase, this.state.phase, previousState.currentMood, this.state.currentMood, this.state.level);
   }
@@ -115,16 +115,16 @@ export class CompanionGrowthService {
    */
   reactToComebackCompleted(userId: string): void {
     if (!this.state) return;
-    
+
     const previousState = { ...this.state };
-    
+
     // Significant mood boost for comeback
     this.state.currentMood = 'DETERMINED';
     this.state.energyLevel = Math.min(100, this.state.energyLevel + 30);
-    
+
     // Growth bonus for comeback resilience
     this.state.level = Math.min(100, this.state.level + 5);
-    
+
     emitCompanionStateChanged(userId, this.state.id, previousState, this.state, 'comeback_completed');
     trackCompanionGrowth(userId, 'comeback_completed', previousState.phase, this.state.phase, previousState.currentMood, this.state.currentMood, this.state.level);
   }
@@ -134,9 +134,9 @@ export class CompanionGrowthService {
    */
   reactToFocusScoreChanged(userId: string, previousScore: number, newScore: number): void {
     if (!this.state) return;
-    
+
     const previousState = { ...this.state };
-    
+
     // Determine mood based on score change
     if (newScore > previousScore) {
       this.state.currentMood = newScore > 700 ? 'ECSTATIC' : 'FOCUSED';
@@ -145,12 +145,12 @@ export class CompanionGrowthService {
       this.state.currentMood = 'CONTENT';
       this.state.energyLevel = Math.max(0, this.state.energyLevel - 10);
     }
-    
+
     // Small growth for score improvements
     if (newScore > previousScore) {
       this.state.level = Math.min(100, this.state.level + 1);
     }
-    
+
     emitCompanionStateChanged(userId, this.state.id, previousState, this.state, 'focus_score_changed');
     trackCompanionGrowth(userId, 'focus_score_changed', previousState.phase, this.state.phase, previousState.currentMood, this.state.currentMood, this.state.level);
   }
@@ -160,16 +160,16 @@ export class CompanionGrowthService {
    */
   reactToDailyMissionCompleted(userId: string): void {
     if (!this.state) return;
-    
+
     const previousState = { ...this.state };
-    
+
     // Positive mood reaction to mission completion
     this.state.currentMood = 'CONTENT';
     this.state.energyLevel = Math.min(100, this.state.energyLevel + 10);
-    
+
     // Small growth for mission consistency
     this.state.level = Math.min(100, this.state.level + 1);
-    
+
     emitCompanionStateChanged(userId, this.state.id, previousState, this.state, 'daily_mission_completed');
     trackCompanionGrowth(userId, 'daily_mission_completed', previousState.phase, this.state.phase, previousState.currentMood, this.state.currentMood, this.state.level);
   }
@@ -196,5 +196,5 @@ export class CompanionGrowthService {
     return thresholds[phase];
   }
 
-  
+
 }

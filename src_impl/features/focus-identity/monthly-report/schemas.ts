@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 export const MonthlyReportSectionSchema = z.enum([
   'SCORE_OVERVIEW',
-  'SESSION_ANALYSIS', 
+  'SESSION_ANALYSIS',
   'STREAK_HIGHLIGHTS',
   'BEST_PERFORMANCE',
   'WEEKLY_PATTERNS',
@@ -24,19 +24,19 @@ export const MonthlyFocusReportSchema = z.object({
   year: z.number(),
   month: z.number(),
   generatedAt: z.number(),
-  
+
   // Score metrics
   startingScore: z.number(),
   endingScore: z.number(),
   scoreDelta: z.number(),
   grade: z.enum(['A+', 'A', 'B', 'C', 'D', 'F']),
-  
+
   // Session metrics
   sessionCount: z.number(),
   totalFocusedMinutes: z.number(),
   averageSessionLength: z.number(),
   bestGrade: z.enum(['A+', 'A', 'B', 'C', 'D', 'F']),
-  
+
   // Performance insights
   bestFocusWindow: z.object({
     dayOfWeek: z.string(),
@@ -45,11 +45,11 @@ export const MonthlyFocusReportSchema = z.object({
   }),
   strongestPattern: z.string(),
   weakestPattern: z.string(),
-  
+
   // AI Coach insights (premium only)
   aiInsight: z.string().optional(),
   nextMonthTarget: z.string(),
-  
+
   // Premium status
   isPremium: z.boolean(),
   unlockedSections: z.array(MonthlyReportSectionSchema),
