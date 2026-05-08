@@ -20,7 +20,14 @@ export const MessageQualityElements = {
   CONFIDENCE_LEVEL: 'confidence_level',
 } as const;
 
-export const MessageQualityElementValues = Object.values(MessageQualityElements) as const;
+export const MessageQualityElementValues = Object.values(MessageQualityElements) as [
+  'reason',
+  'confidence_level', 
+  'observed_behavior',
+  'specific_recommendation',
+  'timing_suggestion',
+  'next_action'
+];
 
 export type MessageQualityElement = typeof MessageQualityElementValues[number];
 
@@ -414,12 +421,12 @@ export const APPROVED_MESSAGE_EXAMPLES = [
   {
     category: 'STREAK_RISK',
     content: 'Your strongest sessions this week started after 8 PM. Try a 25-minute Recovery session tonight to protect your 5-day streak without overreaching.',
-    expectedElements: [MessageQualityElements[0], MessageQualityElements[1], MessageQualityElements[2], MessageQualityElements[3]],
+    expectedElements: [MessageQualityElements.REASON, MessageQualityElements.CONFIDENCE_LEVEL, MessageQualityElements.OBSERVED_BEHAVIOR, MessageQualityElements.SPECIFIC_RECOMMENDATION],
   },
   {
     category: 'SESSION_SUGGESTION',
     content: 'Based on your 92% average quality in evening sessions, a 30-minute Challenging session at 7 PM would likely maintain your momentum.',
-    expectedElements: [MessageQualityElements[0], MessageQualityElements[1], MessageQualityElements[2], MessageQualityElements[5]],
+    expectedElements: [MessageQualityElements.REASON, MessageQualityElements.CONFIDENCE_LEVEL, MessageQualityElements.OBSERVED_BEHAVIOR, MessageQualityElements.NEXT_ACTION],
   },
 ];
 
@@ -453,9 +460,9 @@ export function createMockQualityAnalysis(overrides: Partial<MessageQualityAnaly
     content: 'Your strongest sessions this week started after 8 PM. Try a 25-minute Recovery session tonight.',
     category: 'STREAK_RISK',
     qualityElements: [
-      MessageQualityElements[0],
-      MessageQualityElements[1],
-      MessageQualityElements[2],
+      MessageQualityElements.REASON,
+      MessageQualityElements.CONFIDENCE_LEVEL,
+      MessageQualityElements.OBSERVED_BEHAVIOR,
     ],
     isGeneric: false,
     genericReasons: [],

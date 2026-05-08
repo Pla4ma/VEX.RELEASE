@@ -105,11 +105,11 @@ export {
   createMockCoachInput,
   CoachInputContractSchema,
   type CoachInputContract,
-} from '../../features/ai-coach/input-contract';
+} from '../../../features/ai-coach/input-contract';
 
 // Service getter for compatibility with hooks expecting service pattern
 import type { CoachRecommendation } from './services/CoachRecommendationService';
-import type { CoachInputContract } from './input-contract';
+
 
 export interface CoachService {
   createRecommendation: (userId: string, context: Record<string, unknown>) => Promise<CoachRecommendation | null>;

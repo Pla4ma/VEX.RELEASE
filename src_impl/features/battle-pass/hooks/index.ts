@@ -3,13 +3,13 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import * as service from './service';
-import * as repository from './repository';
+import * as service from '../service';
+import * as repository from '../repository';
 import type {
   AddBattlePassXpInput,
   ClaimTierInput,
   PurchasePremiumInput,
-} from './schemas';
+} from '../schemas';
 
 export const battlePassKeys = {
   all: ['battle-pass'] as const,

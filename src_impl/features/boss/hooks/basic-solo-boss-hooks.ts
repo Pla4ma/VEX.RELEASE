@@ -5,9 +5,9 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '../../store';
-import * as service from '../boss/basic-solo-boss-service';
-import type { BossEncounterSummary, BossDamageResult } from '../boss/schemas';
+import { useAuthStore } from '../../../store';
+import * as service from '../basic-solo-boss-service';
+import type { BossEncounterSummary, BossDamageResult } from '../schemas';
 
 // ============================================================================
 // Query Keys

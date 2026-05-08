@@ -525,10 +525,10 @@ async function createDailyMissionFromSuggestion(
 
 function trackCoachSuggestionAccepted(userId: string, suggestionId: string, action: string): void {
   // Track analytics for coach suggestion acceptance
-  eventBus.emit('coach:suggestion_accepted', {
+  eventBus.publish('coach:recommendation_accepted', {
     userId,
-    suggestionId,
-    action,
+    recommendationId: suggestionId,
+    
     timestamp: Date.now(),
   });
 }

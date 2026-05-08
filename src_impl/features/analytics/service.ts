@@ -1,5 +1,26 @@
 import { captureSilentFailure } from '../../utils/silent-failure';
-import{z}from'zod'; import*as repository from'./repository'; import{TrendAnalysisSchema,ComparativeStatsSchema,DetectedPatternSchema,InsightSchema,CreateInsightInputSchema,GetAnalyticsDataInputSchema,type TimeRange,type AnalyticsMetric,type TrendAnalysis,type Insight,type DetectedPattern,type ComparativeStats,type TrendDirection,getTimeRangeDates}from'./schemas'; import{eventBus}from'../../events'; import{uploadExportData,deleteExportData,StorageError}from'./storage'; import{withRetry,CircuitBreaker,classifyError}from'../../shared/hardening'; import*as Sentry from'@sentry/react-native';
+import { z } from 'zod';
+import * as repository from './repository';
+import {
+  TrendAnalysisSchema,
+  ComparativeStatsSchema,
+  DetectedPatternSchema,
+  InsightSchema,
+  CreateInsightInputSchema,
+  GetAnalyticsDataInputSchema,
+  type TimeRange,
+  type AnalyticsMetric,
+  type TrendAnalysis,
+  type Insight,
+  type DetectedPattern,
+  type ComparativeStats,
+  type TrendDirection,
+  getTimeRangeDates
+} from './schemas';
+import { eventBus } from '../../events';
+import { uploadExportData, deleteExportData, StorageError } from './storage';
+import { withRetry, CircuitBreaker, classifyError } from '../../shared/hardening';
+import * as Sentry from '@sentry/react-native';
 
 // Service getter for compatibility with hooks expecting service pattern
 export interface AnalyticsService {

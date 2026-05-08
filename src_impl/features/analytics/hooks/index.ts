@@ -5,9 +5,9 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
-import * as service from "./service";
-import * as repository from "./repository";
-import { GetAnalyticsDataInputSchema, CreateExportJobInputSchema, UpdateDashboardWidgetInputSchema, type TimeRange, type AnalyticsMetric, type AnalyticsDimension, type AnalyticsFilter, type ExportFormat } from "./schemas";
+import * as service from "../service";
+import * as repository from "../repository";
+import { GetAnalyticsDataInputSchema, CreateExportJobInputSchema, UpdateDashboardWidgetInputSchema, type TimeRange, type AnalyticsMetric, type AnalyticsDimension, type AnalyticsFilter, type ExportFormat } from "../schemas";
 
 // Query keys
 export const analyticsKeys = {

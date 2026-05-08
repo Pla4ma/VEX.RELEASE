@@ -1,8 +1,12 @@
 import { captureSilentFailure } from '../utils/silent-failure';
 /**
- * AsyncStorage Adapter
+ * DEPRECATED: AsyncStorage Adapter
  *
- * Fallback storage using AsyncStorage.
+ * ⚠️ VIOLATION: AsyncStorage usage is not allowed per AGENTS.md rules.
+ * This file has been replaced with MMKVStorageAdapter.
+ * 
+ * Use MMKVStorageAdapter instead:
+ * import { getDefaultStorageAdapter } from './MMKVStorageAdapter';
  */
 
 import type { StorageAdapter, StorageOptions } from './StorageAdapter';
@@ -12,7 +16,12 @@ import { createDebugger } from '../utils/debug';
 const debug = createDebugger('persistence:asyncstorage');
 
 /**
- * AsyncStorage adapter
+ * DEPRECATED: AsyncStorage adapter - VIOLATES PROJECT RULES
+ * 
+ * This implementation uses AsyncStorage which is banned by AGENTS.md.
+ * Use MMKVStorageAdapter instead for all non-sensitive storage.
+ * 
+ * @deprecated Use MMKVStorageAdapter from './MMKVStorageAdapter'
  */
 export class AsyncStorageAdapter implements StorageAdapter {
   private asyncStorage: unknown | null = null;
@@ -20,109 +29,80 @@ export class AsyncStorageAdapter implements StorageAdapter {
   private initialized = false;
 
   constructor(options: StorageOptions = {}) {
+    console.warn('⚠️ AsyncStorageAdapter is DEPRECATED and violates project rules. Use MMKVStorageAdapter instead.');
     this.options = options;
   }
 
   /**
    * Initialize AsyncStorage
+   * @deprecated This should not be used
    */
   async initialize(): Promise<void> {
     if (this.initialized) {return;}
 
-    try {
-      const AsyncStorage = require('@react-native-async-storage/async-storage').default;
-      this.asyncStorage = AsyncStorage;
-      this.initialized = true;
-    } catch (error) {
-      debug.error('Failed to initialize AsyncStorage:', error as Error);
-      throw error;
-    }
+    throw new Error('AsyncStorageAdapter is deprecated and violates project rules. Use MMKVStorageAdapter instead.');
   }
 
   /**
    * Ensure initialized
+   * @deprecated This should not be used
    */
   private checkInitialized(): void {
     if (!this.initialized || !this.asyncStorage) {
-      throw new Error('AsyncStorage not initialized. Call initialize() first.');
+      throw new Error('AsyncStorageAdapter is deprecated. Use MMKVStorageAdapter instead.');
     }
   }
 
   async getItem(key: string): Promise<Nullable<string>> {
-    this.checkInitialized();
-    const value = await (this.asyncStorage as { getItem: (key: string) => Promise<string | null> }).getItem(key);
-    return value;
+    throw new Error('AsyncStorageAdapter is deprecated. Use MMKVStorageAdapter instead.');
   }
 
   async setItem(key: string, value: string): Promise<void> {
-    this.checkInitialized();
-    await (this.asyncStorage as { setItem: (key: string, value: string) => Promise<void> }).setItem(key, value);
+    throw new Error('AsyncStorageAdapter is deprecated. Use MMKVStorageAdapter instead.');
   }
 
   async removeItem(key: string): Promise<void> {
-    this.checkInitialized();
-    await (this.asyncStorage as { removeItem: (key: string) => Promise<void> }).removeItem(key);
+    throw new Error('AsyncStorageAdapter is deprecated. Use MMKVStorageAdapter instead.');
   }
 
   async containsKey(key: string): Promise<boolean> {
-    this.checkInitialized();
-    const keys = await (this.asyncStorage as { getAllKeys: () => Promise<string[]> }).getAllKeys();
-    return keys.includes(key);
+    throw new Error('AsyncStorageAdapter is deprecated. Use MMKVStorageAdapter instead.');
   }
 
   async getAllKeys(): Promise<string[]> {
-    this.checkInitialized();
-    return await (this.asyncStorage as { getAllKeys: () => Promise<string[]> }).getAllKeys();
+    throw new Error('AsyncStorageAdapter is deprecated. Use MMKVStorageAdapter instead.');
   }
 
   async clear(): Promise<void> {
-    this.checkInitialized();
-    await (this.asyncStorage as { clear: () => Promise<void> }).clear();
+    throw new Error('AsyncStorageAdapter is deprecated. Use MMKVStorageAdapter instead.');
   }
 
   async getSize(): Promise<number> {
-    this.checkInitialized();
-    const keys = await this.getAllKeys();
-    let size = 0;
-    for (const key of keys) {
-      const value = await this.getItem(key);
-      if (value) {
-        size += key.length + value.length;
-      }
-    }
-    return size * 2; // Approximate bytes (UTF-16)
+    throw new Error('AsyncStorageAdapter is deprecated. Use MMKVStorageAdapter instead.');
   }
 
   /**
    * Set JSON value
+   * @deprecated Use MMKVStorageAdapter.setJSON instead
    */
   async setJSON<T>(key: string, value: T): Promise<void> {
-    const json = JSON.stringify(value);
-    await this.setItem(key, json);
+    throw new Error('AsyncStorageAdapter is deprecated. Use MMKVStorageAdapter instead.');
   }
 
   /**
    * Get JSON value
+   * @deprecated Use MMKVStorageAdapter.getJSON instead
    */
   async getJSON<T>(key: string): Promise<Nullable<T>> {
-    const json = await this.getItem(key);
-    if (!json) {return null;}
-    try {
-      return JSON.parse(json) as T;
-    } catch (error) { captureSilentFailure(error, { feature: 'persistence', operation: 'safe-fallback', type: 'data' });
-      return null;
-    }
+    throw new Error('AsyncStorageAdapter is deprecated. Use MMKVStorageAdapter instead.');
   }
 }
 
 /**
- * Singleton instance
+ * DEPRECATED: AsyncStorage singleton
+ * @deprecated Use getDefaultStorageAdapter from './MMKVStorageAdapter'
  */
-let asyncStorageInstance: AsyncStorageAdapter | null = null;
-
 export function getAsyncStorageAdapter(options?: StorageOptions): AsyncStorageAdapter {
-  if (!asyncStorageInstance) {
-    asyncStorageInstance = new AsyncStorageAdapter(options);
-  }
-  return asyncStorageInstance;
+  console.warn('⚠️ getAsyncStorageAdapter is DEPRECATED. Use getDefaultStorageAdapter() from MMKVStorageAdapter instead.');
+  throw new Error('AsyncStorageAdapter is deprecated. Use MMKVStorageAdapter instead.');
 }

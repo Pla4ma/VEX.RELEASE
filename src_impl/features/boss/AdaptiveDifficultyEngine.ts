@@ -383,11 +383,11 @@ export class AdaptiveDifficultyEngine {
     };
 
     // Event publishing re-enabled with fixed channel types
-    eventBus.publish('boss:difficulty_adjusted', {
-      bossId: metrics.bossId,
+    eventBus.publish('adaptive_difficulty:real_time_adjustment', {
       userId: metrics.userId,
-      oldRating: oldRating,
-      newRating: newRating,
+      userId: metrics.userId,
+      encounterId: metrics.encounterId || 'unknown',
+      adjustment,
       adjustment,
     });
 

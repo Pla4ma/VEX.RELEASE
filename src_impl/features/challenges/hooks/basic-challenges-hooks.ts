@@ -5,9 +5,9 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '../../store';
-import * as service from '../challenges/basic-challenges-service';
-import type { UserChallenge } from '../challenges/schemas';
+import { useAuthStore } from '../../../store';
+import * as service from '../basic-challenges-service';
+import type { UserChallenge } from '../schemas';
 
 // ============================================================================
 // Query Keys

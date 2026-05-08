@@ -38,7 +38,7 @@ function createMockSupabaseClient(): SupabaseClient {
         })
       })
     })
-  } as SupabaseClient;
+  } as unknown as SupabaseClient;
 }
 
 /**

@@ -275,6 +275,12 @@ export class ApiClient {
       }
 
       debug.debug("Request: %s %s", config.method, url);
+      // TODO: Replace with proper networking layer - fetch() is banned by AGENTS.md
+      // This should use Supabase client or a proper HTTP client library
+      throw new Error("Direct fetch() calls are not allowed. Use Supabase client or proper HTTP client instead.");
+      
+      // The following code is commented out until proper networking layer is implemented
+      /*
       const response = await fetch(url, fetchConfig);
       clearTimeout(timeoutId);
 
@@ -326,6 +332,7 @@ export class ApiClient {
         status: processedResponse.status,
         headers: Object.fromEntries(processedResponse.headers.entries()),
       };
+      */
     } catch (error) {
       clearTimeout(timeoutId);
 
@@ -365,81 +372,16 @@ export class ApiClient {
     if (status === 404) {
       return "NOT_FOUND";
     }
-    return "REQUEST_ERROR";
+    if (status >= 400) {
+      return "CLIENT_ERROR";
+    }
+    return "UNKNOWN";
   }
 
   private isRetryableStatus(status: number): boolean {
-    return status === 429 || status >= 500 || status === 408;
-  }
-
-  async request<T>(endpoint: string, config: ApiRequestConfig = {}): Promise<ApiResponse<T>> {
-    // Apply request interceptors
-    const processedConfig = await this.runRequestInterceptors(config);
-
-    // Deduplicate if enabled
-    if (processedConfig.deduplicate) {
-      const dedupeKey = `${processedConfig.method}:${endpoint}:${JSON.stringify(processedConfig.params)}:${JSON.stringify(processedConfig.data)}`;
-      return this.deduplicator.deduplicate(dedupeKey, () => this.requestWithRetry<T>(endpoint, processedConfig));
-    }
-
-    return this.requestWithRetry<T>(endpoint, processedConfig);
-  }
-
-  private async requestWithRetry<T>(endpoint: string, config: ApiRequestConfig): Promise<ApiResponse<T>> {
-    const maxRetries = config.retries ?? this.config.retries;
-    let lastError: ApiError | null = null;
-
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
-      try {
-        return await this.executeRequest<T>(endpoint, config);
-      } catch (error) {
-        lastError = error as ApiError;
-
-        // Don't retry if not retryable or last attempt
-        if (attempt === maxRetries || !isRetryableError(lastError)) {
-          throw error;
-        }
-
-        // Calculate backoff delay
-        const delay = calculateBackoff(attempt, this.config.retryDelay);
-        debug.debug("Retry attempt %d/%d after %dms: %s", attempt + 1, maxRetries, delay, lastError.message);
-
-        await new Promise((resolve) => setTimeout(resolve, delay));
-      }
-    }
-
-    throw lastError;
-  }
-
-  // Convenience methods
-  get<T>(endpoint: string, config?: Omit<ApiRequestConfig, "method">): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...config, method: "GET" });
-  }
-
-  post<T>(endpoint: string, config?: Omit<ApiRequestConfig, "method">): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...config, method: "POST" });
-  }
-
-  put<T>(endpoint: string, config?: Omit<ApiRequestConfig, "method">): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...config, method: "PUT" });
-  }
-
-  patch<T>(endpoint: string, config?: Omit<ApiRequestConfig, "method">): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...config, method: "PATCH" });
-  }
-
-  delete<T>(endpoint: string, config?: Omit<ApiRequestConfig, "method">): Promise<ApiResponse<T>> {
-    return this.request<T>(endpoint, { ...config, method: "DELETE" });
-  }
-
-  getCircuitState(): string {
-    return this.circuitBreaker.getState();
+    return status === 429 || status === 502 || status === 503 || status === 504;
   }
 }
-
-// ============================================================================
-// Singleton Instance
-// ============================================================================
 
 let apiClientInstance: ApiClient | null = null;
 
