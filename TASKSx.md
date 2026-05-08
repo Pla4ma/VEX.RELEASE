@@ -1513,10 +1513,10 @@ Launch scope:
 
 VERIFY:
 
-- [ ] Challenge progress updates from sessions.
-- [ ] Completion creates ledgered reward.
-- [ ] Empty state has one CTA.
-- [ ] Tests cover expiration, completion, claim, and duplicate claim.
+- [x] Challenge progress updates from sessions.
+- [x] Completion creates ledgered reward.
+- [x] Empty state has one CTA.
+- [x] Tests cover expiration, completion, claim, and duplicate claim.
 
 ### P8-04 - Squads Accountability
 

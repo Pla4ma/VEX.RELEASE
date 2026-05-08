@@ -2,51 +2,46 @@
  * Session Challenges Integration
  *
  * Integrates session completion with basic challenges progress.
- * Listens for session completion events and updates challenge progress.
  */
 
 import { eventBus } from "../../events";
 import { useBasicChallengesStatus, useUpdateBasicChallengeProgress } from "../challenges/hooks/basic-challenges-hooks";
 import { useEffect } from "react";
-
-// ============================================================================
-// Session to Challenges Progress Integration
-// ============================================================================
+import * as Sentry from '@sentry/react-native';
 
 export function useSessionChallengesIntegration() {
   const progressMutation = useUpdateBasicChallengeProgress();
 
   useEffect(() => {
-    // Listen for session completion events
     const unsubscribe = eventBus.subscribe('session:completed', async (event) => {
-      const { sessionId, duration, userId } = event;
+      const { sessionId, duration } = event;
 
       try {
-        // Update challenge progress based on session completion
-        const result = await progressMutation.mutateAsync({
+        await progressMutation.mutateAsync({
           sessionId,
           sessionDuration: duration,
         });
 
-        console.log(`Updated challenge progress from session ${sessionId}:`, {
-          dailyUpdated: result.dailyUpdated,
-          weeklyUpdated: result.weeklyUpdated,
-          dailyCompleted: result.dailyCompleted,
-          weeklyCompleted: result.weeklyCompleted,
+        Sentry.addBreadcrumb({
+          category: 'challenges',
+          message: 'Updated challenge progress from session',
+          data: { sessionId },
+          level: 'info',
         });
       } catch (error) {
-        console.error('Failed to update challenge progress from session:', error);
-        // Don't throw - challenge progress failure shouldn't break session completion
+        Sentry.addBreadcrumb({
+          category: 'challenges',
+          message: 'Failed to update challenge progress from session',
+          data: { sessionId, error: error instanceof Error ? error.message : String(error) },
+          level: 'error',
+        });
+        Sentry.captureException(error, { tags: { feature: 'challenges', context: 'session_integration' } });
       }
     });
 
     return unsubscribe;
   }, [progressMutation]);
 }
-
-// ============================================================================
-// Challenge Status for Session Setup
-// ============================================================================
 
 export function useChallengeStatusForSession() {
   const statusQuery = useBasicChallengesStatus();
@@ -61,37 +56,24 @@ export function useChallengeStatusForSession() {
     hasActiveChallenges: !!(statusQuery.data?.daily.hasActiveChallenge || statusQuery.data?.weekly.hasActiveChallenge),
     canCompleteDailyChallenge: statusQuery.data?.daily.hasActiveChallenge && !statusQuery.data?.daily.isCompleted,
     canCompleteWeeklyChallenge: statusQuery.data?.weekly.hasActiveChallenge && !statusQuery.data?.weekly.isCompleted,
+    refetch: statusQuery.refetch,
+    isPending: statusQuery.isPending,
+    isError: statusQuery.isError,
+    error: statusQuery.error,
   };
 }
 
-// ============================================================================
-// Challenge Progress Calculation Helper
-// ============================================================================
-
-export function calculateChallengeContribution(sessionData: {
+export function calculateChallengeContribution(_sessionData: {
   durationSeconds: number;
   qualityScore: number;
-}): {
-  dailyContribution: number;
-  weeklyContribution: number;
-  canCompleteDaily: boolean;
-  canCompleteWeekly: boolean;
-} {
-  // Basic challenges only care about session completion, not quality
-  const dailyContribution = 1; // Each session contributes 1 to daily challenge
-  const weeklyContribution = 1; // Each session contributes 1 to weekly challenge
-
+}) {
   return {
-    dailyContribution,
-    weeklyContribution,
-    canCompleteDaily: dailyContribution >= 1,
-    canCompleteWeekly: weeklyContribution >= 5, // Need 5 sessions for weekly
+    dailyContribution: 1,
+    weeklyContribution: 1,
+    canCompleteDaily: true,
+    canCompleteWeekly: false, // 1 session is not enough for weekly (needs 5)
   };
 }
-
-// ============================================================================
-// Challenge CTA (Call to Action) Helper
-// ============================================================================
 
 export function getChallengeCTA(challengeStatus: {
   dailyProgress: number;
@@ -100,11 +82,7 @@ export function getChallengeCTA(challengeStatus: {
   weeklyProgress: number;
   weeklyRequired: number;
   weeklyCompleted: boolean;
-}): {
-  primaryCTA: string;
-  secondaryCTA: string | null;
-  motivationMessage: string;
-} {
+}) {
   const { dailyProgress, dailyRequired, dailyCompleted, weeklyProgress, weeklyRequired, weeklyCompleted } = challengeStatus;
 
   if (dailyCompleted && weeklyCompleted) {
