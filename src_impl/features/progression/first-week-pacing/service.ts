@@ -14,7 +14,7 @@ import {
   type FirstWeekProgress,
   type FirstWeekSession,
 } from './schemas';
-import { 
+import {
   progressToNextSession as progressToNextSessionImpl,
   getSessionUnlocks,
   getSessionXpReward,
@@ -110,9 +110,9 @@ export async function getFirstWeekProgress(userId: string): Promise<FirstWeekPro
 
   } catch (error) {
     debug.error('Error getting first week progress', error instanceof Error ? error : undefined);
-    Sentry.captureException(error, { 
+    Sentry.captureException(error, {
       tags: { feature: 'first-week-pacing' },
-      extra: { userId } 
+      extra: { userId }
     });
     return null;
   }

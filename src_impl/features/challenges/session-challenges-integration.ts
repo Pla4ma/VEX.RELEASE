@@ -1,6 +1,6 @@
 /**
  * Session Challenges Integration
- * 
+ *
  * Integrates session completion with basic challenges progress.
  * Listens for session completion events and updates challenge progress.
  */
@@ -80,7 +80,7 @@ export function calculateChallengeContribution(sessionData: {
   // Basic challenges only care about session completion, not quality
   const dailyContribution = 1; // Each session contributes 1 to daily challenge
   const weeklyContribution = 1; // Each session contributes 1 to weekly challenge
-  
+
   return {
     dailyContribution,
     weeklyContribution,
@@ -135,7 +135,7 @@ export function getChallengeCTA(challengeStatus: {
 
   const dailyRemaining = dailyRequired - dailyProgress;
   const weeklyRemaining = weeklyRequired - weeklyProgress;
-  
+
   return {
     primaryCTA: "Start Focus Session",
     secondaryCTA: null,

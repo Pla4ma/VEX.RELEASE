@@ -77,11 +77,11 @@ class StreakService {
 
     try {
       const update = this.calculateStreakUpdate(sessionDateTime);
-      
+
       // Update streak data
       this.streakData.currentStreak = update.newStreak;
       this.streakData.lastSessionDate = sessionDateTime.toISOString();
-      
+
       if (update.newLongestStreak) {
         this.streakData.longestStreak = update.newStreak;
       }
@@ -128,7 +128,7 @@ class StreakService {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const sessionDay = new Date(sessionDate.getFullYear(), sessionDate.getMonth(), sessionDate.getDate());
-    const lastSessionDay = this.streakData.lastSessionDate 
+    const lastSessionDay = this.streakData.lastSessionDate
       ? new Date(new Date(this.streakData.lastSessionDate).getFullYear(), new Date(this.streakData.lastSessionDate).getMonth(), new Date(this.streakData.lastSessionDate).getDate())
       : null;
 
@@ -155,7 +155,7 @@ class StreakService {
     // If session is more than 1 day ago (streak broken)
     else if (sessionDay.getTime() < today.getTime() - (24 * 60 * 60 * 1000)) {
       const daysSinceLastSession = Math.floor((today.getTime() - lastSessionDay.getTime()) / (24 * 60 * 60 * 1000));
-      
+
       if (daysSinceLastSession > 1) {
         // Streak broken, start new one
         newStreak = 1;
@@ -194,7 +194,7 @@ class StreakService {
    */
   private addToStreakHistory(sessionDate: Date, maintained: boolean): void {
     const dateStr = sessionDate.toISOString().split('T')[0];
-    
+
     // Remove existing entry for this date if present
     this.streakData.streakHistory = this.streakData.streakHistory.filter(
       entry => entry.date !== dateStr
@@ -229,7 +229,7 @@ class StreakService {
 
     // User is at risk if they haven't completed a session in the last 20 hours
     this.streakData.isAtRisk = hoursSinceLastSession > 20 && this.streakData.currentStreak > 0;
-    
+
     // Calculate hours remaining until streak breaks (24 hours from last session)
     this.streakData.hoursRemaining = Math.max(0, 24 - hoursSinceLastSession);
   }

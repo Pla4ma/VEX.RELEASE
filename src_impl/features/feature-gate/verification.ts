@@ -24,14 +24,14 @@ interface FeatureVerificationResult {
  */
 export function useFeatureVisibilityGates(): FeatureVerificationResult[] {
   const { features } = useFeatureAccess();
-  
+
   return useMemo(() => {
     const verificationResults: FeatureVerificationResult[] = [];
-    
+
     // Features that should be hidden according to Phase 3 requirements
     const disabledFeatures: FeatureKey[] = [
       'rivals',        // Duels
-      'rankings',      // Rankings  
+      'rankings',      // Rankings
       'squads',        // Squad wars (partial)
       'wagers',        // Trading/gambling
       'gems_prominent', // Emergency gem sinks
@@ -48,7 +48,7 @@ export function useFeatureVisibilityGates(): FeatureVerificationResult[] {
         hasSafeFallback: verifySafeFallback(feature),
         analyticsBlocked: verifyAnalyticsBlocked(feature),
       };
-      
+
       verificationResults.push(result);
     }
 
@@ -109,12 +109,12 @@ export function getPhase3VerificationSummary(): {
   failedFeatures: string[];
 } {
   const results = useFeatureVisibilityGates();
-  const failedFeatures = results.filter(result => 
-    !result.isHidden || 
-    !result.hasNoTab || 
-    !result.hasNoHomeCard || 
-    !result.hasNoSettingsEntry || 
-    !result.hasSafeFallback || 
+  const failedFeatures = results.filter(result =>
+    !result.isHidden ||
+    !result.hasNoTab ||
+    !result.hasNoHomeCard ||
+    !result.hasNoSettingsEntry ||
+    !result.hasSafeFallback ||
     !result.analyticsBlocked
   ).map(result => result.feature);
 

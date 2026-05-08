@@ -40,12 +40,12 @@ export function useSessionRecommendation(input: Partial<SessionRecommendationInp
 
     try {
       const rec = generateSessionRecommendation(recommendationInput);
-      
+
       // If recommendation is invalid, use fallback
       if (!isRecommendationValid(rec)) {
         return getFallbackRecommendation(recommendationInput);
       }
-      
+
       return rec;
     } catch (error) {
       // Error generating recommendation, use fallback
@@ -76,7 +76,7 @@ export function useSessionRecommendationActions() {
   ) => {
     // Trigger haptic feedback
     triggerHaptic('impactLight');
-    
+
     // Start the session with recommended parameters
     onStartSession(recommendation.duration, recommendation.mode);
   }, []);
@@ -87,7 +87,7 @@ export function useSessionRecommendationActions() {
   ) => {
     // Trigger haptic feedback
     triggerHaptic('impactLight');
-    
+
     // Dismiss the recommendation
     onDismiss();
   }, []);
@@ -136,7 +136,7 @@ export function useRecommendationHistory(userId: string | null) {
     queryKey: sessionRecommendationKeys.analytics(userId ?? ''),
     queryFn: async () => {
       if (!userId) return [];
-      
+
       // This would typically fetch from a repository
       // For now, return empty array as recommendation history is not persisted
       return [];

@@ -70,7 +70,7 @@ export function createStarterSessionConfig(input: { durationMinutes: number; cat
   metadata: Record<string, unknown>;
 } {
   const { durationMinutes, category } = input;
-  
+
   return {
     duration: durationMinutes * 60, // Convert to seconds
     mode: "STARTER",

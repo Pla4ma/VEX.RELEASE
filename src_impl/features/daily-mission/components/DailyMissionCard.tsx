@@ -86,7 +86,7 @@ export function DailyMissionCard({ mission, onPress, onDismiss }: DailyMissionCa
           >
             <Text fontSize={24}>{getMissionIcon(mission.type)}</Text>
           </Box>
-          
+
           <Box flex={1}>
             <Text
               variant="h4"

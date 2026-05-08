@@ -5,10 +5,10 @@
  * Default deduplication rules and exploit detection patterns
  */
 
-import type { 
-  DeduplicationRule, 
+import type {
+  DeduplicationRule,
   ExploitPattern,
-  AntiDuplicationConfig 
+  AntiDuplicationConfig
 } from './schemas';
 
 // ============================================================================
@@ -40,7 +40,7 @@ export const DEFAULT_DEDUPLICATION_RULES: DeduplicationRule[] = [
     isActive: true,
     priority: 1,
   },
-  
+
   {
     id: 'daily-login-dedup',
     name: 'Daily Login Deduplication',
@@ -65,7 +65,7 @@ export const DEFAULT_DEDUPLICATION_RULES: DeduplicationRule[] = [
     isActive: true,
     priority: 2,
   },
-  
+
   {
     id: 'streak-milestone-dedup',
     name: 'Streak Milestone Deduplication',
@@ -90,7 +90,7 @@ export const DEFAULT_DEDUPLICATION_RULES: DeduplicationRule[] = [
     isActive: true,
     priority: 3,
   },
-  
+
   {
     id: 'achievement-unlock-dedup',
     name: 'Achievement Unlock Deduplication',
@@ -115,7 +115,7 @@ export const DEFAULT_DEDUPLICATION_RULES: DeduplicationRule[] = [
     isActive: true,
     priority: 4,
   },
-  
+
   {
     id: 'boss-defeat-dedup',
     name: 'Boss Defeat Deduplication',
@@ -140,7 +140,7 @@ export const DEFAULT_DEDUPLICATION_RULES: DeduplicationRule[] = [
     isActive: true,
     priority: 5,
   },
-  
+
   {
     id: 'level-up-dedup',
     name: 'Level Up Deduplication',
@@ -165,7 +165,7 @@ export const DEFAULT_DEDUPLICATION_RULES: DeduplicationRule[] = [
     isActive: true,
     priority: 6,
   },
-  
+
   {
     id: 'quest-complete-dedup',
     name: 'Quest Completion Deduplication',
@@ -190,7 +190,7 @@ export const DEFAULT_DEDUPLICATION_RULES: DeduplicationRule[] = [
     isActive: true,
     priority: 7,
   },
-  
+
   {
     id: 'challenge-complete-dedup',
     name: 'Challenge Completion Deduplication',
@@ -215,7 +215,7 @@ export const DEFAULT_DEDUPLICATION_RULES: DeduplicationRule[] = [
     isActive: true,
     priority: 8,
   },
-  
+
   {
     id: 'squad-join-dedup',
     name: 'Squad Join Deduplication',
@@ -240,7 +240,7 @@ export const DEFAULT_DEDUPLICATION_RULES: DeduplicationRule[] = [
     isActive: true,
     priority: 9,
   },
-  
+
   {
     id: 'reward-claim-dedup',
     name: 'Reward Claim Deduplication',
@@ -294,7 +294,7 @@ export const DEFAULT_EXPLOIT_PATTERNS: ExploitPattern[] = [
     isActive: true,
     priority: 1,
   },
-  
+
   {
     id: 'simultaneous-sessions',
     name: 'Simultaneous Sessions',
@@ -317,7 +317,7 @@ export const DEFAULT_EXPLOIT_PATTERNS: ExploitPattern[] = [
     isActive: true,
     priority: 2,
   },
-  
+
   {
     id: 'time-travel-detection',
     name: 'Time Travel Detection',
@@ -340,7 +340,7 @@ export const DEFAULT_EXPLOIT_PATTERNS: ExploitPattern[] = [
     isActive: true,
     priority: 3,
   },
-  
+
   {
     id: 'unrealistic-progress',
     name: 'Unrealistic Progress',
@@ -363,7 +363,7 @@ export const DEFAULT_EXPLOIT_PATTERNS: ExploitPattern[] = [
     isActive: true,
     priority: 4,
   },
-  
+
   {
     id: 'duplicate-context-keys',
     name: 'Duplicate Context Keys',
@@ -386,7 +386,7 @@ export const DEFAULT_EXPLOIT_PATTERNS: ExploitPattern[] = [
     isActive: true,
     priority: 5,
   },
-  
+
   {
     id: 'manipulated-metadata',
     name: 'Manipulated Metadata',
@@ -419,15 +419,15 @@ export const DEFAULT_ANTI_DUPLICATION_CONFIG: AntiDuplicationConfig = {
   enableDeduplication: true,
   enableExploitDetection: true,
   enableAnalytics: true,
-  
+
   defaultRules: DEFAULT_DEDUPLICATION_RULES,
-  
+
   exploitPatterns: DEFAULT_EXPLOIT_PATTERNS,
-  
+
   keyRetentionDays: 90,
   attemptRetentionDays: 30,
   cleanupIntervalHours: 24,
-  
+
   maxValidationTime: 1000, // 1 second
   enableCaching: true,
   cacheTTL: 300, // 5 minutes

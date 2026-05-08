@@ -28,7 +28,7 @@ export function FeatureGate({
   const featureAccess = features[feature];
 
   // Check if feature meets requirements
-  const meetsRequirements = 
+  const meetsRequirements =
     (!requireUnlocked || featureAccess.isUnlocked) &&
     (!requireVisible || featureAccess.isVisible);
 

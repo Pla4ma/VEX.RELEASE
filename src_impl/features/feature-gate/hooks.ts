@@ -52,7 +52,7 @@ export function useMultiFeatureGate(features: FeatureKey[], options: {
       const featureAccess = features[Object.keys(features)[index] as FeatureKey];
       return {
         feature: features[index],
-        isAvailable: (!requireUnlocked || featureAccess.isUnlocked) && 
+        isAvailable: (!requireUnlocked || featureAccess.isUnlocked) &&
                    (!requireVisible || featureAccess.isVisible),
         isUnlocked: featureAccess.isUnlocked,
         isVisible: featureAccess.isVisible,

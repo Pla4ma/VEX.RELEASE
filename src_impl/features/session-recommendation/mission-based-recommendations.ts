@@ -17,35 +17,35 @@ export function getMissionBasedRecommendation(missionType: string): { duration: 
         mode: 'RECOVERY',
         reason: 'Start your first session with a comfortable 10-minute focus block',
       };
-    
+
     case 'streak-critical':
       return {
         duration: 15,
         mode: 'RECOVERY',
         reason: 'Protect your streak with this essential 15-minute session',
       };
-    
+
     case 'boss-fight':
       return {
         duration: 45,
         mode: 'BOSS_PREP',
         reason: 'Boss battle ready! A 45-minute power session will deal maximum damage',
       };
-    
+
     case 'comeback-quest':
       return {
         duration: 20,
         mode: 'RECOVERY',
         reason: 'Comeback session: 20 minutes to restore your momentum',
       };
-    
+
     case 'daily-challenge':
       return {
         duration: 30,
         mode: 'FOCUS',
         reason: 'Challenge-ready: 30 minutes to complete your daily goal',
       };
-    
+
     default:
       return {
         duration: 25,

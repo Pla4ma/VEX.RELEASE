@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 export const FirstWeekSessionSchema = z.enum([
   'SESSION_1',
-  'SESSION_2', 
+  'SESSION_2',
   'SESSION_3',
   'SESSION_4',
   'SESSION_5',

@@ -1,6 +1,6 @@
 /**
  * Basic Challenges Service Tests
- * 
+ *
  * Tests for PHASE 8 basic challenges requirements:
  * - daily challenge
  * - weekly challenge
@@ -166,7 +166,7 @@ describe('Basic Challenges Service - PHASE 8', () => {
       mockRepository.fetchUserActiveChallenges.mockClear();
       mockRepository.addChallengeProgress.mockClear();
       mockRepository.updateUserChallenge.mockClear();
-      
+
       mockRepository.fetchUserActiveChallenges.mockResolvedValue([mockDailyChallenge]);
       mockRepository.addChallengeProgress.mockResolvedValue(mockDailyChallenge);
       mockRepository.updateUserChallenge.mockResolvedValue(mockDailyChallenge);
@@ -223,7 +223,7 @@ describe('Basic Challenges Service - PHASE 8', () => {
       expect(status.weekly.required).toBe(5);
       expect(status.daily.hasActiveChallenge).toBe(true);
       expect(status.weekly.hasActiveChallenge).toBe(true);
-      
+
       // Progress is clear and simple
       expect(status.daily.progress).toBe(0);
       expect(status.weekly.progress).toBe(3);
@@ -267,7 +267,7 @@ describe('Basic Challenges Service - PHASE 8', () => {
     it('should not have any social-related challenge types', () => {
       const serviceFunctions = Object.keys(service);
       const socialKeywords = ['social', 'friend', 'squad', 'team', 'share', 'compete'];
-      
+
       serviceFunctions.forEach(funcName => {
         socialKeywords.forEach(keyword => {
           expect(funcName.toLowerCase()).not.toContain(keyword);

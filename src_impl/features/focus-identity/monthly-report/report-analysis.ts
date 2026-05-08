@@ -14,16 +14,16 @@ export function analyzeSessionData(sessions: SessionData[]): SessionAnalysis {
   const totalFocusedMinutes = sessions.reduce((sum, session) => {
     return sum + (session.duration_minutes || 0);
   }, 0);
-  
+
   const averageSessionLength = sessionCount > 0 ? totalFocusedMinutes / sessionCount : 0;
-  
+
   // Find best grade
   const grades = sessions.map(s => s.grade || 'C');
   const bestGrade = determineBestGrade(grades);
-  
+
   // Find best focus window
   const bestFocusWindow = findBestFocusWindow(sessions);
-  
+
   // Analyze patterns
   const { strongestPattern, weakestPattern } = analyzePatterns(sessions);
 
@@ -44,7 +44,7 @@ export function analyzeSessionData(sessions: SessionData[]): SessionAnalysis {
 function determineBestGrade(grades: string[]): 'A+' | 'A' | 'B' | 'C' | 'D' | 'F' {
   const gradeOrder = ['F', 'D', 'C', 'B', 'A', 'A+'];
   let bestGrade = 'F';
-  
+
   for (const grade of grades) {
     const currentIndex = gradeOrder.indexOf(bestGrade);
     const newIndex = gradeOrder.indexOf(grade);
@@ -52,7 +52,7 @@ function determineBestGrade(grades: string[]): 'A+' | 'A' | 'B' | 'C' | 'D' | 'F
       bestGrade = grade as 'A+' | 'A' | 'B' | 'C' | 'D' | 'F';
     }
   }
-  
+
   return bestGrade;
 }
 
@@ -70,14 +70,14 @@ function findBestFocusWindow(sessions: SessionData[]) {
 
   // Group sessions by day of week and time
   const windowPerformance = new Map<string, { totalPurity: number; count: number }>();
-  
+
   sessions.forEach(session => {
     const date = new Date(session.completed_at);
     const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
     const hour = date.getHours();
     const timeWindow = `${hour}:00 - ${hour + 1}:00`;
     const key = `${dayOfWeek} ${timeWindow}`;
-    
+
     const purity = session.focus_purity_score || 0;
     const current = windowPerformance.get(key) || { totalPurity: 0, count: 0 };
     windowPerformance.set(key, {
@@ -88,7 +88,7 @@ function findBestFocusWindow(sessions: SessionData[]) {
 
   // Find the window with highest average purity
   let bestWindow = { dayOfWeek: 'Monday', timeRange: '9:00 AM - 10:00 AM', averagePurity: 0 };
-  
+
   for (const [key, data] of windowPerformance.entries()) {
     const averagePurity = data.totalPurity / data.count;
     if (averagePurity > bestWindow.averagePurity) {
@@ -128,7 +128,7 @@ function analyzePatterns(sessions: SessionData[]) {
   }).length;
 
   const totalSessions = sessions.length;
-  
+
   let strongestPattern = 'Consistent focus routine';
   let weakestPattern = 'Irregular scheduling';
 

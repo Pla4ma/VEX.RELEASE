@@ -1,6 +1,6 @@
 /**
  * Feature Flag Matrix Tests
- * 
+ *
  * Tests for PHASE 8 feature flag configuration to ensure:
  * - Launch-enabled features are enabled by default
  * - Optional features are disabled by default but can be enabled
@@ -89,13 +89,13 @@ describe('Feature Flag Matrix - PHASE 8', () => {
       ];
 
       const launchFeatureFlags = [
-        ...Object.values(FEATURE_FLAGS).filter(f => 
+        ...Object.values(FEATURE_FLAGS).filter(f =>
           allLaunchFeatures.includes(f)
         )
       ];
 
       expect(allLaunchFeatures).toHaveLength(launchFeatureFlags.length);
-      
+
       // Check for duplicates
       const uniqueFeatures = new Set(allLaunchFeatures);
       expect(uniqueFeatures.size).toBe(allLaunchFeatures.length);

@@ -1,6 +1,6 @@
 /**
  * Basic Challenges Hooks
- * 
+ *
  * React hooks for the simplified challenges system.
  */
 

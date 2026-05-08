@@ -31,7 +31,7 @@ export function HomeStatusBanners({
           description="You can still start a session. VEX will sync your momentum when you reconnect."
         />
       ) : null}
-      
+
       {/* Sync pending banner */}
       {completionSync.status === 'pending_sync' && completionSync.message ? (
         <StatusBanner
@@ -40,7 +40,7 @@ export function HomeStatusBanners({
           description={completionSync.message}
         />
       ) : null}
-      
+
       {/* Sync failed banner */}
       {completionSync.status === 'failed_sync' && completionSync.message ? (
         <StatusBanner
@@ -50,7 +50,7 @@ export function HomeStatusBanners({
           onRetry={onRetry}
         />
       ) : null}
-      
+
       {/* Load error banner */}
       {loadError ? (
         <StatusBanner

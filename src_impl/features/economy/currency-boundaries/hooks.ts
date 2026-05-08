@@ -16,11 +16,11 @@ import { useCallback, useMemo } from 'react';
 
 import { eventBus } from '../../../events';
 import { currencyBoundariesValidationService } from './validation-service';
-import type { 
-  TransactionValidationRequest, 
+import type {
+  TransactionValidationRequest,
   TransactionValidationResult,
   BoundaryViolation,
-  BoundaryAnalytics 
+  BoundaryAnalytics
 } from './schemas';
 
 // ============================================================================
@@ -64,7 +64,7 @@ export function useValidateTransaction(options: UseValidateTransactionOptions = 
             violation,
             timestamp: Date.now(),
           });
-          
+
           options.onViolation?.(violation);
         });
       }
@@ -332,7 +332,7 @@ export function useBoundaryStatus(props: UseBoundaryStatusProps) {
     const warningCount = recentViolations.filter(v => v.action === 'ALLOWED_WITH_WARNING').length;
 
     let status: 'good' | 'warning' | 'critical' = 'good';
-    
+
     if (blockedCount > 0) {
       status = 'critical';
     } else if (warningCount > 5) {

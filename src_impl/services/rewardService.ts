@@ -56,7 +56,7 @@ class RewardService {
    */
   getAvailableRewards(): ClaimableReward[] {
     const rewards: Reward[] = this.generateRewards();
-    
+
     return rewards.map(reward => ({
       reward,
       isAvailable: this.isRewardAvailable(reward),
@@ -76,7 +76,7 @@ class RewardService {
 
     const rewards = this.generateRewards();
     const reward = rewards.find(r => r.id === rewardId);
-    
+
     if (!reward) {
       debug.error('Reward not found:', rewardId);
       return false;
@@ -95,7 +95,7 @@ class RewardService {
     try {
       // Mark as claimed
       this.claimedRewards.add(rewardId);
-      
+
       // Handle special reward types
       if (reward.type === 'DAILY_LOGIN') {
         this.lastDailyClaim = new Date().toISOString();
@@ -228,10 +228,10 @@ class RewardService {
     // Check daily login availability
     if (reward.type === 'DAILY_LOGIN') {
       if (!this.lastDailyClaim) return true;
-      
+
       const lastClaim = new Date(this.lastDailyClaim);
       const now = new Date();
-      
+
       // Check if it's a new day (midnight reset)
       return lastClaim.toDateString() !== now.toDateString();
     }
@@ -249,7 +249,7 @@ class RewardService {
       const tomorrow = new Date(lastClaim);
       tomorrow.setDate(tomorrow.getDate() + 1);
       tomorrow.setHours(0, 0, 0, 0);
-      
+
       return tomorrow.getTime() - Date.now();
     }
 

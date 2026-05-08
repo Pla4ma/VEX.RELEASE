@@ -48,9 +48,9 @@ function mapRowToEntry(row: z.infer<typeof RewardLedgerRowSchema>): RewardLedger
  */
 export async function getRewardLedger(
   userId: string,
-  options?: { 
-    limit?: number; 
-    offset?: number; 
+  options?: {
+    limit?: number;
+    offset?: number;
     type?: string;
     state?: RewardLedgerState;
   }
@@ -98,12 +98,12 @@ export async function getPendingRewards(userId: string): Promise<RewardLedgerEnt
  * Get failed rewards that can be retried
  */
 export async function getRetryableFailedRewards(userId: string): Promise<RewardLedgerEntry[]> {
-  const failedEntries = await getRewardLedger(userId, { 
+  const failedEntries = await getRewardLedger(userId, {
     state: 'FAILED',
-    limit: 50 
+    limit: 50
   });
 
-  return failedEntries.filter(entry => 
+  return failedEntries.filter(entry =>
     entry.retryAfter && Date.now() >= entry.retryAfter
   );
 }
@@ -147,7 +147,7 @@ export async function getRewardSummary(userId: string): Promise<{
   }
 
   const entries = data || [];
-  
+
   return {
     totalXP: entries.filter(e => e.type === 'XP').reduce((sum, e) => sum + e.amount, 0),
     totalCoins: entries.filter(e => e.type === 'COINS').reduce((sum, e) => sum + e.amount, 0),

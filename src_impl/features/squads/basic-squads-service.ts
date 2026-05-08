@@ -1,20 +1,20 @@
 /**
  * Basic Squads Accountability Service
- * 
+ *
  * Simplified squads system for PHASE 8 launch scope.
  * Focuses on private accountability groups only.
  */
 
 import { eventBus } from "../../events";
 import * as repository from "./repository";
-import { 
-  SquadSchema, 
-  SquadMemberSchema, 
-  SquadInviteSchema, 
-  type Squad, 
-  type SquadMember, 
+import {
+  SquadSchema,
+  SquadMemberSchema,
+  SquadInviteSchema,
+  type Squad,
+  type SquadMember,
   type SquadInvite,
-  type SquadWeeklyGoal 
+  type SquadWeeklyGoal
 } from "./schemas";
 
 // ============================================================================
@@ -82,7 +82,7 @@ export async function createBasicSquad(
 
   // Add creator as founder
   await repository.addSquadMember(squad.id, userId, "FOUNDER");
-  
+
   // Weekly goal setup will be handled by the existing squad system
   // For PHASE 8, we'll use a simplified approach
 
@@ -122,7 +122,7 @@ export async function inviteToBasicSquad(
   // For PHASE 8, we'll use a simplified invite approach
   // The existing repository has invite functions but they're complex
   // We'll create a basic invite using the existing squad system
-  
+
   // Create a simple invite record (this would need to be implemented)
   const invite = {
     id: `invite-${Date.now()}`,
@@ -196,7 +196,7 @@ export async function respondToBasicSquadInvite(
       await repository.addSquadMember(invite.squadId, userId, invite.roleOffered || "MEMBER");
 
       const squad = await repository.fetchSquadById(invite.squadId);
-      
+
       eventBus.publish("squad:member_joined", {
         squadId: invite.squadId,
         userId,
@@ -225,7 +225,7 @@ export async function getBasicSquadMemberContributions(
 }>> {
   const members = await repository.fetchSquadMembers(squadId);
   const currentWeekStart = weekStart || getWeekStart();
-  
+
   return members.map(member => ({
     userId: member.userId,
     displayName: member.displayName || "Anonymous",
@@ -267,16 +267,16 @@ export async function updateBasicSquadWeeklyProgress(
 
   // Update member's weekly progress - simplified approach for PHASE 8
   // await repository.updateMemberActivity(squadId, userId);
-  
+
   // Update squad's total weekly progress
   const memberContributions = await getBasicSquadMemberContributions(squadId, currentWeekStart);
   const totalProgress = memberContributions.reduce((sum, member) => sum + member.weeklyMinutes, 0);
-  
+
   const isCompleted = totalProgress >= weeklyGoal.targetMinutes;
-  
+
   if (isCompleted && !weeklyGoal.completedAt) {
     weeklyGoal.completedAt = Date.now();
-    
+
     eventBus.publish("squad:weekly_goal_completed", {
       squadId,
       totalProgress,
@@ -303,7 +303,7 @@ export async function sendBasicSquadNotification(
   }
 ): Promise<void> {
   const members = await repository.fetchSquadMembers(squadId);
-  
+
   // Send notification to all members
   for (const member of members) {
     eventBus.publish("squad:notification", {
@@ -339,14 +339,14 @@ export async function getBasicSquadStatus(userId: string): Promise<{
 }> {
   // For PHASE 8, we'll use a simplified approach
   const userSquads = await repository.fetchUserSquads(userId);
-  
+
   if (!userSquads.length) {
     return { hasSquad: false, memberCount: 0, isFounder: false, isAdmin: false };
   }
 
   const squad = await repository.fetchSquadById(userSquads[0].id);
   const members = await repository.fetchSquadMembers(userSquads[0].id);
-  
+
   // Simplified weekly goal for PHASE 8
   const weeklyGoal = {
     squadId: userSquads[0].id,
@@ -356,12 +356,12 @@ export async function getBasicSquadStatus(userId: string): Promise<{
     resetDay: BASIC_SQUAD_CONFIG.weeklyGoalResetDay,
     completedAt: null,
   };
-  
+
   let weeklyProgress;
   if (weeklyGoal) {
     const contributions = await getBasicSquadMemberContributions(userSquads[0].id);
     const totalProgress = contributions.reduce((sum, member) => sum + member.weeklyMinutes, 0);
-    
+
     weeklyProgress = {
       current: totalProgress,
       goal: weeklyGoal.targetMinutes,
@@ -373,7 +373,7 @@ export async function getBasicSquadStatus(userId: string): Promise<{
   // For PHASE 8, we'll use a simplified role approach
   const isFounder = true; // Assume founder for simplicity
   const isAdmin = true; // Assume admin for simplicity
-  
+
   return {
     hasSquad: true,
     squad,

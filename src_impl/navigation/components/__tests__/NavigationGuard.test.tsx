@@ -72,7 +72,7 @@ describe('NavigationGuard', () => {
     });
 
     render(
-      <NavigationGuard 
+      <NavigationGuard
         featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}
         fallback={<div testID="custom-fallback">Custom Fallback</div>}
       >

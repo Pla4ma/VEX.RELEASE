@@ -75,7 +75,7 @@ export function SuccessCelebration(): JSX.Element {
       >
         <Text fontSize={20}>✨</Text>
       </Animated.View>
-      
+
       <Animated.View
         entering={FadeIn.duration(600).delay(600)}
         style={{

@@ -15,8 +15,8 @@ import * as Sentry from '@sentry/react-native';
 
 import { eventBus } from '../../../events';
 import { currencyBoundariesValidationCore } from './validation-core';
-import type { 
-  TransactionValidationRequest, 
+import type {
+  TransactionValidationRequest,
   TransactionValidationResult,
   BoundaryViolation,
   CurrencyLimits,

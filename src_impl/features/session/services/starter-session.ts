@@ -26,10 +26,10 @@ export function createStarterSessionConfig(input: {
   isFromOnboarding?: boolean;
 }): StarterSessionConfig {
   const { category, customDuration, isFromOnboarding = true } = input;
-  
+
   // Default to 10 minutes, allow custom duration
-  const duration = customDuration && customDuration >= 5 && customDuration <= 30 
-    ? customDuration 
+  const duration = customDuration && customDuration >= 5 && customDuration <= 30
+    ? customDuration
     : 10;
 
   return {
@@ -59,7 +59,7 @@ export function toSessionConfig(starterConfig: StarterSessionConfig): SessionCon
  * Validates if a session qualifies as a starter session
  */
 export function isStarterSession(config: SessionConfig): boolean {
-  return config.mode === SessionMode.STARTER && 
+  return config.mode === SessionMode.STARTER &&
          config.metadata?.isStarterSession === true;
 }
 
@@ -84,11 +84,11 @@ export function getStarterSessionSettings() {
  */
 export function calculateStarterSessionRewards(config: StarterSessionConfig, completedSeconds: number) {
   const completionRate = completedSeconds / config.duration;
-  
+
   // Generous rewards for first session
   const baseXP = Math.floor(config.duration / 60) * 2; // 2 XP per minute
   const completionBonus = completionRate >= 0.8 ? 5 : 0; // Bonus for mostly completing
-  
+
   return {
     xp: baseXP + completionBonus,
     focusScoreChange: Math.floor(10 * completionRate), // +10 focus score max

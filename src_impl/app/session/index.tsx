@@ -22,7 +22,7 @@ export default function SessionHomeScreen() {
   const [activeView, setActiveView] = useState<'home' | 'custom'>('home');
   const userId = 'current-user'; // In real app, get from auth context
   const theme = useTheme();
-  
+
   const styles = getStyles(theme);
 
   const {
@@ -146,4 +146,3 @@ const getStyles = (theme: any) => createSheet({
     marginTop: 40,
   },
 });
-

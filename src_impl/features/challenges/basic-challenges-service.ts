@@ -1,6 +1,6 @@
 /**
  * Basic Challenges Service
- * 
+ *
  * Simplified challenges system for PHASE 8 launch scope.
  * Focuses on daily and weekly challenges only.
  */
@@ -8,12 +8,12 @@
 import { eventBus } from "../../events";
 import { getRewardService } from "../../rewards/RewardService";
 import * as repository from "./repository";
-import { 
-  ChallengeSchema, 
-  UserChallengeSchema, 
-  type Challenge, 
-  type UserChallenge, 
-  type ChallengeProgress 
+import {
+  ChallengeSchema,
+  UserChallengeSchema,
+  type Challenge,
+  type UserChallenge,
+  type ChallengeProgress
 } from "./schemas";
 
 // ============================================================================
@@ -92,7 +92,7 @@ export async function getOrCreateBasicDailyChallenge(userId: string): Promise<Us
   // Check for existing daily challenges
   const existingChallenges = await repository.fetchUserActiveChallenges(userId);
   const existing = existingChallenges.find(c => c.challengeId === BASIC_CHALLENGE_CONFIG.dailyChallengeId);
-  
+
   if (existing) {
     // Check if expired (end of day)
     const now = new Date();
@@ -112,7 +112,7 @@ async function createBasicDailyChallenge(userId: string): Promise<UserChallenge>
   const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0);
 
   const userChallenge = await repository.createUserChallenge(userId, BASIC_CHALLENGE_CONFIG.dailyChallengeId, endOfDay.getTime());
-  
+
   return {
     ...userChallenge,
     requiredCount: BASIC_DAILY_CHALLENGE.targetValue,
@@ -124,7 +124,7 @@ export async function getOrCreateBasicWeeklyChallenge(userId: string): Promise<U
   // Check for existing weekly challenges
   const existingChallenges = await repository.fetchUserActiveChallenges(userId);
   const existing = existingChallenges.find(c => c.challengeId === BASIC_CHALLENGE_CONFIG.weeklyChallengeId);
-  
+
   if (existing) {
     // Check if expired (end of week - Sunday)
     const now = new Date();
@@ -132,7 +132,7 @@ export async function getOrCreateBasicWeeklyChallenge(userId: string): Promise<U
     const daysUntilSunday = (7 - now.getDay()) % 7 || 7;
     endOfWeek.setDate(now.getDate() + daysUntilSunday);
     endOfWeek.setHours(23, 59, 59, 999);
-    
+
     if (existing.expiresAt < endOfWeek.getTime()) {
       await repository.updateUserChallenge(existing.id, existing.challengeId, { status: "EXPIRED" });
       return await createBasicWeeklyChallenge(userId);
@@ -151,7 +151,7 @@ async function createBasicWeeklyChallenge(userId: string): Promise<UserChallenge
   endOfWeek.setHours(23, 59, 59, 999);
 
   const userChallenge = await repository.createUserChallenge(userId, BASIC_CHALLENGE_CONFIG.weeklyChallengeId, endOfWeek.getTime());
-  
+
   return {
     ...userChallenge,
     requiredCount: BASIC_WEEKLY_CHALLENGE.targetValue,
@@ -197,7 +197,7 @@ export async function updateBasicChallengeProgressFromSession(
         status: "COMPLETED",
         completedAt: Date.now(),
       });
-      
+
       await completeBasicChallenge(dailyChallenge, userId);
     }
   }
@@ -218,7 +218,7 @@ export async function updateBasicChallengeProgressFromSession(
         status: "COMPLETED",
         completedAt: Date.now(),
       });
-      
+
       await completeBasicChallenge(weeklyChallenge, userId);
     }
   }
@@ -237,8 +237,8 @@ export async function updateBasicChallengeProgressFromSession(
 
 async function completeBasicChallenge(userChallenge: UserChallenge, userId: string): Promise<void> {
   const now = Date.now();
-  const challenge = userChallenge.challengeId === BASIC_CHALLENGE_CONFIG.dailyChallengeId 
-    ? BASIC_DAILY_CHALLENGE 
+  const challenge = userChallenge.challengeId === BASIC_CHALLENGE_CONFIG.dailyChallengeId
+    ? BASIC_DAILY_CHALLENGE
     : BASIC_WEEKLY_CHALLENGE;
 
   // Mark as completed

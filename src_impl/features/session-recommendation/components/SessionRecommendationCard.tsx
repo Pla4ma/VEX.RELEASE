@@ -79,7 +79,7 @@ export function SessionRecommendationCard({
           >
             <Text fontSize={24}>⏸️</Text>
           </Box>
-          
+
           <Box flex={1}>
             <Text
               variant="h4"
@@ -139,7 +139,7 @@ export function SessionRecommendationCard({
         >
           <Text fontSize={24}>{modeIcon}</Text>
         </Box>
-        
+
         <Box flex={1}>
           <Text
             variant="h4"

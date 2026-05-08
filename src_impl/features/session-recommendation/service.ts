@@ -35,7 +35,7 @@ export function generateSessionRecommendation(input: SessionRecommendationInput)
 
   // Get priority-based recommendation
   const recommendation = getPriorityRecommendation(parsed);
-  
+
   return SessionRecommendationSchema.parse({
     ...recommendation,
     inputs: parsed,

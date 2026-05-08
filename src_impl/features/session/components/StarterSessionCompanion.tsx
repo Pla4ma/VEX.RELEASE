@@ -59,7 +59,7 @@ export function StarterSessionCompanion({
           >
             {getEncouragingMessage()}
           </Text>
-          
+
           {/* Time remaining */}
           <Text
             variant="bodySmall"

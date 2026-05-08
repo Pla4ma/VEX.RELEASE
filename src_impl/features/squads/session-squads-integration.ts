@@ -1,6 +1,6 @@
 /**
  * Session Squads Integration
- * 
+ *
  * Integrates session completion with basic squads accountability progress.
  * Listens for session completion events and updates squad weekly goals.
  */
@@ -82,10 +82,10 @@ export function calculateSquadContribution(sessionData: {
   weeklyProgressPercentage: number;
 } {
   const contributionMinutes = Math.floor(sessionData.durationSeconds / 60);
-  
+
   // Get weekly goal from status or use default
   const weeklyGoalMinutes = 300; // Default 5 hours per week
-  
+
   return {
     contributionMinutes,
     helpsWeeklyGoal: contributionMinutes > 0,

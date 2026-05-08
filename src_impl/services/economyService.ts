@@ -75,7 +75,7 @@ class EconomyService {
 
     try {
       const oldBalance = this.wallet[grant.currency.toLowerCase() as keyof Wallet] as number;
-      
+
       // Update wallet
       switch (grant.currency) {
         case 'COINS':
@@ -146,7 +146,7 @@ class EconomyService {
 
     try {
       const currentBalance = this.wallet[currency.toLowerCase() as keyof Wallet] as number;
-      
+
       if (currentBalance < amount) {
         debug.warn('Insufficient funds', {
           currency,
@@ -157,7 +157,7 @@ class EconomyService {
       }
 
       const oldBalance = currentBalance;
-      
+
       // Update wallet
       switch (currency) {
         case 'COINS':

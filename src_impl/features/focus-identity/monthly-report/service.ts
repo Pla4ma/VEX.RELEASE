@@ -6,12 +6,12 @@
 
 import { getSupabaseClient } from '../../../config/supabase';
 import { createDebugger } from '../../../utils/debug';
-import { 
-  MonthlyFocusReportSchema, 
+import {
+  MonthlyFocusReportSchema,
   MonthlyReportPreviewSchema,
   type MonthlyFocusReport,
   type MonthlyReportPreview,
-  type SessionData 
+  type SessionData
 } from './schemas';
 import { analyzeSessionData, generateNextMonthTarget } from './report-analysis';
 
@@ -78,12 +78,12 @@ export async function generateMonthlyReport(
 
     // Analyze session data
     const sessionAnalysis = analyzeSessionData(sessions || []);
-    
+
     // Generate AI insights for premium users
     const aiInsight = isPremium ? await generateAIInsight(userId, sessions || [], scoreDelta) : undefined;
 
     // Determine unlocked sections based on premium status
-    const unlockedSections = isPremium 
+    const unlockedSections = isPremium
       ? ['SCORE_OVERVIEW', 'SESSION_ANALYSIS', 'STREAK_HIGHLIGHTS', 'BEST_PERFORMANCE', 'WEEKLY_PATTERNS', 'AI_INSIGHTS', 'NEXT_TARGETS']
       : ['SCORE_OVERVIEW', 'SESSION_ANALYSIS'];
 
@@ -129,7 +129,7 @@ export async function generateMonthlyReportPreview(
 ): Promise<MonthlyReportPreview | null> {
   try {
     const fullReport = await generateMonthlyReport(userId, year, month, false);
-    
+
     if (!fullReport) {
       return null;
     }

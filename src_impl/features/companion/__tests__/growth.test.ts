@@ -59,7 +59,7 @@ describe('Companion Growth', () => {
 
       expect(result.leveledUp).toBe(true);
       expect(result.evolved).toBe(false);
-      
+
       const state = service.getState();
       expect(state?.totalFocusMinutes).toBe(175);
       expect(state?.sessionCount).toBe(6);
@@ -104,7 +104,7 @@ describe('Companion Growth', () => {
 
       expect(result.evolved).toBe(true);
       expect(result.newPhase).toBe('MATURE');
-      
+
       expect(eventBus.publish).toHaveBeenCalledWith('companion:evolution', expect.objectContaining({
         userId,
         previousPhase: 'YOUNG',

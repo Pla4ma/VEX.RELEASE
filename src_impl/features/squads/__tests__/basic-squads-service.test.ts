@@ -1,6 +1,6 @@
 /**
  * Basic Squads Service Tests
- * 
+ *
  * Tests for PHASE 8 basic squads accountability requirements:
  * - create squad
  * - join by invite
@@ -254,7 +254,7 @@ describe('Basic Squads Service - PHASE 8', () => {
       expect(result[1].weeklyMinutes).toBe(80);
       expect(result[2].userId).toBe('user-789');
       expect(result[2].weeklyMinutes).toBe(40);
-      
+
       // Should be sorted by contribution (highest first)
       expect(result[0].weeklyMinutes).toBe(120);
       expect(result[1].weeklyMinutes).toBe(80);
@@ -328,7 +328,7 @@ describe('Basic Squads Service - PHASE 8', () => {
     it('should not have any global squad discovery features', () => {
       const serviceFunctions = Object.keys(service);
       const globalKeywords = ['public', 'discover', 'browse', 'search', 'leaderboard', 'rankings'];
-      
+
       serviceFunctions.forEach(funcName => {
         globalKeywords.forEach(keyword => {
           expect(funcName.toLowerCase()).not.toContain(keyword);

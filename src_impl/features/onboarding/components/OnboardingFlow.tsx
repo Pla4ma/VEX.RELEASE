@@ -36,7 +36,7 @@ function NotificationPermissionScreen({
   onComplete: () => void;
 }): JSX.Element {
   const { theme } = useTheme();
-  
+
   // Lazy load the actual notification component to avoid circular deps
   const [NotificationCard, setNotificationCard] = React.useState<React.FC<{
     userId: string;

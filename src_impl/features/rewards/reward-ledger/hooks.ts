@@ -27,9 +27,9 @@ export const rewardLedgerKeys = {
 
 export function useRewardLedger(
   userId: string,
-  options?: { 
-    limit?: number; 
-    offset?: number; 
+  options?: {
+    limit?: number;
+    offset?: number;
     type?: string;
     state?: 'PENDING' | 'DELIVERED' | 'FAILED' | 'EXPIRED' | 'RETRYING';
   }
@@ -64,21 +64,21 @@ export function useRewardSummary(userId: string) {
 export function useCurrentRewardLedger() {
   const { user } = useAuth();
   const userId = user?.id;
-  
+
   return useRewardLedger(userId || '');
 }
 
 export function useCurrentPendingRewards() {
   const { user } = useAuth();
   const userId = user?.id;
-  
+
   return usePendingRewards(userId || '');
 }
 
 export function useCurrentRewardSummary() {
   const { user } = useAuth();
   const userId = user?.id;
-  
+
   return useRewardSummary(userId || '');
 }
 
@@ -88,7 +88,7 @@ export function useCurrentRewardSummary() {
 
 export function useCreateReward() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: service.createRewardEntry,
     onSuccess: (data, variables) => {
@@ -102,7 +102,7 @@ export function useCreateReward() {
 
 export function useDeliverReward() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: service.deliverReward,
     onSuccess: (data, entryId) => {
@@ -116,7 +116,7 @@ export function useDeliverReward() {
 
 export function useRetryFailedRewards() {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: (userId: string) => queries.retryFailedRewards(userId),
     onSuccess: (data, userId) => {

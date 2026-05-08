@@ -92,7 +92,7 @@ export function useMissionProgress() {
   const updateProgress = (mission: DailyMission, progressDelta: number) => {
     const newProgress = Math.min(1, mission.progress + progressDelta);
     const isCompleted = newProgress >= 1;
-    
+
     return updateMissionProgress(mission, newProgress, isCompleted);
   };
 
@@ -116,7 +116,7 @@ export function useMissionHistory(userId: string | null) {
     queryKey: dailyMissionKeys.analytics(userId ?? ''),
     queryFn: async () => {
       if (!userId) return [];
-      
+
       // This would typically fetch from a repository
       // For now, return empty array as mission history is not persisted
       return [];

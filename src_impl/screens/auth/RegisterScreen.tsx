@@ -120,7 +120,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
     if (createdUser?.id) {
       try {
         await scheduleOnboardingNotifications(createdUser.id);
-      } catch (error) { 
+      } catch (error) {
         captureSilentFailure(error, { feature: 'screens', operation: 'ui-fallback', type: 'ui' });
         // Scheduling failure is already captured by the retention strategy.
         // Don't fail registration due to notification scheduling issues

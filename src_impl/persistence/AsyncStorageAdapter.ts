@@ -4,7 +4,7 @@ import { captureSilentFailure } from '../utils/silent-failure';
  *
  * ⚠️ VIOLATION: AsyncStorage usage is not allowed per AGENTS.md rules.
  * This file has been replaced with MMKVStorageAdapter.
- * 
+ *
  * Use MMKVStorageAdapter instead:
  * import { getDefaultStorageAdapter } from './MMKVStorageAdapter';
  */
@@ -17,10 +17,10 @@ const debug = createDebugger('persistence:asyncstorage');
 
 /**
  * DEPRECATED: AsyncStorage adapter - VIOLATES PROJECT RULES
- * 
+ *
  * This implementation uses AsyncStorage which is banned by AGENTS.md.
  * Use MMKVStorageAdapter instead for all non-sensitive storage.
- * 
+ *
  * @deprecated Use MMKVStorageAdapter from './MMKVStorageAdapter'
  */
 export class AsyncStorageAdapter implements StorageAdapter {
