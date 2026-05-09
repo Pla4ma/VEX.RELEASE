@@ -60,30 +60,24 @@ function mapHistoryRowToPoint(row: unknown): FocusScoreHistoryPoint {
 }
 
 export async function fetchCurrentFocusScore(userId: string): Promise<FocusScoreRecord | null> {
-  try {
-    const supabase = getSupabaseClient();
-    const { data, error } = await withResilience(
-      supabase
-        .from('focus_score_current')
-        .select('*')
-        .eq('user_id', userId)
-        .single(),
-      { operation: 'fetchCurrentFocusScore' }
-    );
+  const supabase = getSupabaseClient();
+  const { data, error } = await withResilience(
+    supabase
+      .from('focus_score_current')
+      .select('*')
+      .eq('user_id', userId)
+      .single(),
+    { operation: 'fetchCurrentFocusScore' }
+  );
 
-    if (error) {
-      if (error.code === 'PGRST116') {
-        return null;
-      }
-      debug.warn('Supabase fetchCurrentFocusScore failed, returning null fallback', error);
+  if (error) {
+    if (error.code === 'PGRST116') {
       return null;
     }
-
-    return mapCurrentRowToRecord(data);
-  } catch (err) {
-    debug.error('Unexpected error in fetchCurrentFocusScore', err as Error);
-    return null;
+    throw new FocusIdentityRepositoryError('fetchCurrentFocusScore', error);
   }
+
+  return mapCurrentRowToRecord(data);
 }
 
 export async function upsertCurrentFocusScore(
@@ -203,6 +197,18 @@ export async function fetchMonthlyFocusReportInput(userId: string, month: string
     }
 
     const monthHistory = (historyRows ?? []).map(mapHistoryRowToPoint);
+    const { data: historyRows, error: historyError } = await supabase
+      .from('focus_score_history')
+      .select('user_id, occurred_at, score, delta, reason')
+      .eq('user_id', userId)
+      .gte('occurred_at', monthStart.toISOString())
+      .lt('occurred_at', monthEnd.toISOString());
+
+    if (historyError) {
+      throw new FocusIdentityRepositoryError('fetchMonthlyFocusReportInput:history-failed', historyError);
+    }
+
+    const monthHistory = (historyRows ?? []).map(mapHistoryRowToPoint);
     const { data, error } = await supabase
       .from('sessions')
       .select('duration, effective_duration, quality_score, status, completed_at')
@@ -212,7 +218,7 @@ export async function fetchMonthlyFocusReportInput(userId: string, month: string
       .lt('completed_at', monthEnd.toISOString());
 
     if (error) {
-      debug.warn('Supabase sessions fetch failed', error);
+      throw new FocusIdentityRepositoryError('fetchMonthlyFocusReportInput:sessions-failed', error);
     }
 
     const rows = data ?? [];
