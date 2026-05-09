@@ -1,12 +1,12 @@
 import { getDailyProgress } from '../service-enhanced-daily';
 import { fetchXpHistory } from '../repository';
-import { fetchXpStats } from '../repository-enhanced';
+import { fetchXpStats } from '../repository/enhanced';
 
 jest.mock('../repository', () => ({
   fetchXpHistory: jest.fn(),
 }));
 
-jest.mock('../repository-enhanced', () => ({
+jest.mock('../repository/enhanced', () => ({
   fetchXpStats: jest.fn(),
 }));
 
@@ -69,3 +69,4 @@ describe('getDailyProgress', () => {
     expect(progress.streakDay).toBe(false);
   });
 });
+

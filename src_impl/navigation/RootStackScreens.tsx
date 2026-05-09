@@ -1,6 +1,8 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { NavigationGuard } from './components/NavigationGuard';
+import { FEATURE_FLAGS } from '../constants/features';
 import type { ExtendedRootStackParams } from './types';
 
 interface RootStackScreensProps {
@@ -14,8 +16,15 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
   hasCompletedOnboarding,
   isAuthenticated,
 }) => {
+  const navigatorKey = isAuthenticated
+    ? hasCompletedOnboarding
+      ? 'app'
+      : 'onboarding'
+    : 'auth';
+
   return (
     <Stack.Navigator
+      key={navigatorKey}
       screenOptions={{
         headerShown: false,
         animation: 'slide_from_right',
@@ -35,7 +44,14 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
                 name="CompanionDetail"
                 getComponent={() => require('../screens/companion/CompanionDetailScreen').CompanionDetailScreen}
               />
-              <Stack.Screen name="Boss" getComponent={() => require('../screens/boss/BossScreen').BossScreen} />
+              <Stack.Screen
+                name="Boss"
+                component={() => (
+                  <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}>
+                    {require('../screens/boss/BossScreen').BossScreen()}
+                  </NavigationGuard>
+                )}
+              />
               <Stack.Screen
                 name="Paywall"
                 getComponent={() => require('../screens/paywall/PaywallScreen').PaywallScreen}
@@ -51,13 +67,27 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
                 getComponent={() => require('../screens/ComebackScreen').ComebackScreen}
                 options={{ animation: 'slide_from_bottom', presentation: 'fullScreenModal' }}
               />
-              <Stack.Screen name="Feed" getComponent={() => require('../screens/social/SocialScreen').SocialScreen} />
+              <Stack.Screen
+                name="Feed"
+                component={() => (
+                  <NavigationGuard featureFlag={FEATURE_FLAGS.SOCIAL_FEED}>
+                    {require('../screens/social/SocialScreen').SocialScreen()}
+                  </NavigationGuard>
+                )}
+              />
               <Stack.Screen
                 name="Notifications"
                 getComponent={() => require('../screens/notifications/NotificationsScreen').NotificationsScreen}
               />
               <Stack.Screen name="Search" getComponent={() => require('../screens/search/SearchScreen').SearchScreen} />
-              <Stack.Screen name="Guild" getComponent={() => require('../features/squads/components').SquadRouteHub} />
+              <Stack.Screen
+                name="Guild"
+                component={() => (
+                  <NavigationGuard featureFlag={FEATURE_FLAGS.SQUADS_ACCOUNTABILITY}>
+                    {require('../features/squads/components').SquadRouteHub()}
+                  </NavigationGuard>
+                )}
+              />
               <Stack.Screen
                 name="BattlePass"
                 getComponent={() => require('../features/battle-pass/components').BattlePassTrack}
@@ -73,9 +103,20 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
               />
               <Stack.Screen
                 name="Challenges"
-                getComponent={() => require('../screens/challenges/ChallengesScreen').ChallengesScreen}
+                component={() => (
+                  <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_CHALLENGES}>
+                    {require('../screens/challenges/ChallengesScreen').ChallengesScreen()}
+                  </NavigationGuard>
+                )}
               />
-              <Stack.Screen name="Rivals" getComponent={() => require('../screens/RivalsScreen').RivalsScreen} />
+              <Stack.Screen
+                name="Rivals"
+                component={() => (
+                  <NavigationGuard featureFlag={FEATURE_FLAGS.RIVALS}>
+                    {require('../screens/RivalsScreen').RivalsScreen()}
+                  </NavigationGuard>
+                )}
+              />
               <Stack.Screen
                 name="AICoach"
                 getComponent={() => require('../features/ai-coach/components/CoachScreen').CoachScreen}

@@ -10,20 +10,20 @@
  * - Server-side validation required for anti-cheat
  */
 
-import { z } from "zod";
-import * as Sentry from "@sentry/react-native";
+import { z } from 'zod';
+import * as Sentry from '@sentry/react-native';
 
 // ============================================================================
 // Variable Reward Types
 // ============================================================================
 
 export enum VariableRewardTier {
-  NONE = "NONE",
-  COMMON = "COMMON",
-  UNCOMMON = "UNCOMMON",
-  RARE = "RARE",
-  EPIC = "EPIC",
-  LEGENDARY = "LEGENDARY",
+  NONE = 'NONE',
+  COMMON = 'COMMON',
+  UNCOMMON = 'UNCOMMON',
+  RARE = 'RARE',
+  EPIC = 'EPIC',
+  LEGENDARY = 'LEGENDARY',
 }
 
 export interface VariableRewardModifiers {
@@ -50,7 +50,7 @@ export interface VariableRewardResult {
 }
 
 export interface VariableRewardItem {
-  type: "COINS" | "XP_BOOST" | "GEMS" | "STREAK_SHIELD" | "COSMETIC" | "LEGENDARY_ITEM";
+  type: 'COINS' | 'XP_BOOST' | 'GEMS' | 'STREAK_SHIELD' | 'COSMETIC' | 'LEGENDARY_ITEM';
   amount: number;
   name: string;
   icon: string;
@@ -89,66 +89,66 @@ const TIER_REWARDS: Record<VariableRewardTier, VariableRewardItem[]> = {
   [VariableRewardTier.NONE]: [],
   [VariableRewardTier.COMMON]: [
     {
-      type: "COINS",
+      type: 'COINS',
       amount: 0, // Will be calculated as 1.5-2.5x base coins
-      name: "Coin Boost",
-      icon: "🪙",
+      name: 'Coin Boost',
+      icon: '🪙',
     },
   ],
   [VariableRewardTier.UNCOMMON]: [
     {
-      type: "XP_BOOST",
+      type: 'XP_BOOST',
       amount: 1,
-      name: "XP Boost Item",
-      icon: "⚡",
+      name: 'XP Boost Item',
+      icon: '⚡',
     },
   ],
   [VariableRewardTier.RARE]: [
     {
-      type: "COSMETIC",
+      type: 'COSMETIC',
       amount: 1,
-      name: "Rare Cosmetic Ingredient",
-      icon: "💎",
+      name: 'Rare Cosmetic Ingredient',
+      icon: '💎',
     },
     {
-      type: "STREAK_SHIELD",
+      type: 'STREAK_SHIELD',
       amount: 1,
-      name: "Streak Shield",
-      icon: "🛡️",
+      name: 'Streak Shield',
+      icon: '🛡️',
     },
   ],
   [VariableRewardTier.EPIC]: [
     {
-      type: "GEMS",
+      type: 'GEMS',
       amount: 25,
-      name: "Gem Bundle",
-      icon: "💎",
+      name: 'Gem Bundle',
+      icon: '💎',
     },
     {
-      type: "COSMETIC",
+      type: 'COSMETIC',
       amount: 1,
-      name: "Epic Item",
-      icon: "✨",
+      name: 'Epic Item',
+      icon: '✨',
     },
   ],
   [VariableRewardTier.LEGENDARY]: [
     {
-      type: "COSMETIC",
+      type: 'COSMETIC',
       amount: 1,
-      name: "Legendary Cosmetic",
-      icon: "👑",
+      name: 'Legendary Cosmetic',
+      icon: '👑',
     },
     {
-      type: "GEMS",
+      type: 'GEMS',
       amount: 100,
-      name: "Huge Gem Bundle",
-      icon: "💎",
+      name: 'Huge Gem Bundle',
+      icon: '💎',
     },
     {
-      type: "LEGENDARY_ITEM",
+      type: 'LEGENDARY_ITEM',
       amount: 1,
-      name: "Legendary Item",
-      icon: "🏆",
+      name: 'Legendary Item',
+      icon: '🏆',
     },
   ],
 };
@@ -214,9 +214,9 @@ export class VariableRewardEngine {
 
       // Track analytics
       Sentry.addBreadcrumb({
-        category: "variable-reward",
+        category: 'variable-reward',
         message: `Variable reward rolled: ${tier}`,
-        level: tier === VariableRewardTier.LEGENDARY ? "warning" : "info",
+        level: tier === VariableRewardTier.LEGENDARY ? 'warning' : 'info',
         data: {
           userId: validated.userId,
           tier,
@@ -234,7 +234,7 @@ export class VariableRewardEngine {
       };
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: "variable-reward", operation: "calculate" },
+        tags: { feature: 'variable-reward', operation: 'calculate' },
         extra: { userId: validated.userId },
       });
 
@@ -271,22 +271,22 @@ export class VariableRewardEngine {
 
     if (modifiers.isSGrade) {
       totalModifier += MODIFIER_VALUES.S_GRADE_BONUS;
-      triggeredModifiers.push("S Grade Bonus");
+      triggeredModifiers.push('S Grade Bonus');
     }
 
     if (modifiers.bossActive) {
       totalModifier += MODIFIER_VALUES.BOSS_BONUS;
-      triggeredModifiers.push("Boss Active Bonus");
+      triggeredModifiers.push('Boss Active Bonus');
     }
 
     if (modifiers.squadSession) {
       totalModifier += MODIFIER_VALUES.SQUAD_BONUS;
-      triggeredModifiers.push("Squad Session Bonus");
+      triggeredModifiers.push('Squad Session Bonus');
     }
 
     if (modifiers.isPremium) {
       totalModifier += MODIFIER_VALUES.PREMIUM_BONUS;
-      triggeredModifiers.push("Premium Bonus");
+      triggeredModifiers.push('Premium Bonus');
     }
 
     // Cap total modifier
@@ -384,7 +384,7 @@ export class VariableRewardEngine {
       let amount = template.amount;
 
       // Calculate coin multiplier for COMMON tier
-      if (tier === VariableRewardTier.COMMON && template.type === "COINS") {
+      if (tier === VariableRewardTier.COMMON && template.type === 'COINS') {
         const multiplier = 1.5 + Math.random() * 1.0; // 1.5x to 2.5x
         amount = Math.floor(baseCoins * multiplier);
       }
@@ -483,7 +483,7 @@ export function validateVariableRewardServerSide(clientResult: VariableRewardRes
 
   // Recalculate with server's data
   const serverResult = serverEngine.calculateReward({
-    userId: "00000000-0000-4000-8000-000000000000",
+    userId: '00000000-0000-4000-8000-000000000000',
     baseCoins: 100, // dummy - we only care about tier validation
     modifiers: serverModifiers,
     seed: serverSeed,
@@ -532,7 +532,7 @@ export function calculateSessionVariableReward(
     baseCoins,
     modifiers: {
       streakDays: sessionData.streakDays,
-      isSGrade: sessionData.grade === "S",
+      isSGrade: sessionData.grade === 'S',
       bossActive: sessionData.bossActive,
       squadSession: sessionData.squadMode,
       isPremium: sessionData.isPremium,

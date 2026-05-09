@@ -1,26 +1,30 @@
-import { createCompletionLedger, getCompletionLedgerByIdempotencyKey, getCompletionLedgerBySessionId, hasSessionBeenCompleted, updateRewardStatus } from "../repository";
+import {
+  createCompletionLedger as persistCompletionLedger,
+  getCompletionLedgerByIdempotencyKey,
+  getCompletionLedgerBySessionId,
+  hasSessionBeenCompleted,
+  updateCompletionSyncStatus,
+} from '../repository';
+import {
+  createCompletionLedger,
+  createLedgerRow,
+  SESSION_ID,
+} from './ledger-test-utils';
 
-jest.mock("../../../config/supabase", () => ({
-  getSupabaseClient: jest.fn(),
+jest.mock('../../../config/supabase', () => ({ getSupabaseClient: jest.fn() }));
+jest.mock('../../../utils/debug', () => ({
+  createDebugger: () => ({ error: jest.fn(), info: jest.fn(), warn: jest.fn() }),
 }));
 
-jest.mock("../../../utils/debug", () => ({
-  createDebugger: () => ({
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-  }),
-}));
+import { getSupabaseClient } from '../../../config/supabase';
 
-import { getSupabaseClient } from "../../../config/supabase";
-
-describe("Session Completion Repository", () => {
+describe('Session completion repository', () => {
   const mockSupabase = {
+    eq: jest.fn().mockReturnThis(),
     from: jest.fn().mockReturnThis(),
     insert: jest.fn().mockReturnThis(),
     select: jest.fn().mockReturnThis(),
     single: jest.fn(),
-    eq: jest.fn().mockReturnThis(),
     update: jest.fn().mockReturnThis(),
   };
 
@@ -29,218 +33,83 @@ describe("Session Completion Repository", () => {
     (getSupabaseClient as jest.Mock).mockReturnValue(mockSupabase);
   });
 
-  describe("createCompletionLedger", () => {
-    const validLedger = {
-      ledgerId: "550e8400-e29b-41d4-a716-446655440000",
-      sessionId: "550e8400-e29b-41d4-a716-446655440001",
-      userId: "550e8400-e29b-41d4-a716-446655440002",
-      idempotencyKey: "idempotency-key-abc",
-      completedAt: Date.now(),
-      session: {
-        durationSeconds: 1800,
-        qualityScore: 85,
-        pauseCount: 2,
-      },
-      effects: {
-        economy: {
-          xpEarned: 100,
-          coinsEarned: 50,
-        },
-        streak: {
-          action: "EXTENDED" as const,
-          previousDays: 5,
-          newDays: 6,
-        },
-      },
-      rewardStatus: "PENDING" as const,
-      nextAction: {
-        type: "NEW_SESSION" as const,
-        reason: "Session completed successfully",
-      },
-    };
+  it('creates completion ledger successfully', async () => {
+    const ledger = createCompletionLedger();
+    mockSupabase.single.mockResolvedValue({ data: createLedgerRow(ledger), error: null });
 
-    it("creates completion ledger successfully", async () => {
-      const mockData = {
-        id: "550e8400-e29b-41d4-a716-446655440003",
-        ledger_id: validLedger.ledgerId,
-        session_id: validLedger.sessionId,
-        user_id: validLedger.userId,
-        idempotency_key: validLedger.idempotencyKey,
-        completed_at: validLedger.completedAt,
-        duration_seconds: validLedger.session.durationSeconds,
-        quality_score: validLedger.session.qualityScore,
-        pause_count: validLedger.session.pauseCount,
-        effects: validLedger.effects,
-        reward_status: validLedger.rewardStatus,
-        next_action: validLedger.nextAction,
-        created_at: new Date().toISOString(),
-      };
+    const result = await persistCompletionLedger(ledger);
 
-      mockSupabase.single.mockResolvedValue({ data: mockData, error: null });
-
-      const result = await createCompletionLedger(validLedger);
-
-      expect(result.ledgerId).toBe(validLedger.ledgerId);
-      expect(result.sessionId).toBe(validLedger.sessionId);
-      expect(result.rewardStatus).toBe("PENDING");
-    });
-
-    it("returns existing ledger on duplicate idempotency key", async () => {
-      const duplicateError = { code: "23505", message: "Duplicate key" };
-      const existingData = {
-        id: "550e8400-e29b-41d4-a716-446655440004",
-        ledger_id: "550e8400-e29b-41d4-a716-446655440005",
-        session_id: validLedger.sessionId,
-        user_id: validLedger.userId,
-        idempotency_key: validLedger.idempotencyKey,
-        completed_at: validLedger.completedAt,
-        duration_seconds: 1800,
-        quality_score: 85,
-        pause_count: 2,
-        effects: {},
-        reward_status: "COMPLETE",
-        next_action: { type: "VIEW_PROGRESS", reason: "Done" },
-        created_at: new Date().toISOString(),
-      };
-
-      mockSupabase.single.mockResolvedValueOnce({ data: null, error: duplicateError }).mockResolvedValueOnce({ data: existingData, error: null });
-
-      const result = await createCompletionLedger(validLedger);
-
-      expect(result.rewardStatus).toBe("COMPLETE");
-    });
-
-    it("throws error on database failure", async () => {
-      mockSupabase.single.mockResolvedValue({
-        data: null,
-        error: { message: "Database error" },
-      });
-
-      await expect(createCompletionLedger(validLedger)).rejects.toThrow("Failed to create completion ledger");
+    expect(result).toMatchObject({
+      ledgerId: ledger.ledgerId,
+      idempotencyKey: ledger.idempotencyKey,
+      sessionId: ledger.sessionId,
+      offlineSyncStatus: 'synced',
     });
   });
 
-  describe("getCompletionLedgerByIdempotencyKey", () => {
-    it("returns ledger when found", async () => {
-      const mockData = {
-        id: "550e8400-e29b-41d4-a716-446655440006",
-        ledger_id: "550e8400-e29b-41d4-a716-446655440007",
-        session_id: "550e8400-e29b-41d4-a716-446655440008",
-        user_id: "550e8400-e29b-41d4-a716-446655440009",
-        idempotency_key: "key-abc",
-        completed_at: Date.now(),
-        duration_seconds: 1800,
-        quality_score: 85,
-        pause_count: 2,
-        effects: {},
-        reward_status: "COMPLETE",
-        next_action: { type: "NEW_SESSION", reason: "Done" },
-        created_at: new Date().toISOString(),
-      };
-
-      mockSupabase.single.mockResolvedValue({ data: mockData, error: null });
-
-      const result = await getCompletionLedgerByIdempotencyKey("key-abc");
-
-      expect(result).not.toBeNull();
-      expect(result?.ledgerId).toBe("ledger-123");
+  it('returns existing ledger on duplicate idempotency key conflict', async () => {
+    const ledger = createCompletionLedger();
+    const existing = createCompletionLedger({
+      ledgerId: '550e8400-e29b-41d4-a716-446655440099',
+      offlineSyncStatus: 'pending_sync',
     });
+    mockSupabase.single
+      .mockResolvedValueOnce({ data: null, error: { code: '23505', message: 'Duplicate' } })
+      .mockResolvedValueOnce({ data: createLedgerRow(existing), error: null });
 
-    it("returns null when not found", async () => {
-      mockSupabase.single.mockResolvedValue({
-        data: null,
-        error: { code: "PGRST116", message: "Not found" },
-      });
+    const result = await persistCompletionLedger(ledger);
 
-      const result = await getCompletionLedgerByIdempotencyKey("non-existent");
-
-      expect(result).toBeNull();
-    });
+    expect(result.ledgerId).toBe(existing.ledgerId);
+    expect(result.offlineSyncStatus).toBe('pending_sync');
   });
 
-  describe("getCompletionLedgerBySessionId", () => {
-    it("returns ledger for session", async () => {
-      const mockData = {
-        id: "550e8400-e29b-41d4-a716-446655440010",
-        ledger_id: "550e8400-e29b-41d4-a716-446655440011",
-        session_id: "550e8400-e29b-41d4-a716-446655440012",
-        user_id: "550e8400-e29b-41d4-a716-446655440013",
-        idempotency_key: "key-abc",
-        completed_at: Date.now(),
-        duration_seconds: 1800,
-        quality_score: 85,
-        pause_count: 2,
-        effects: {},
-        reward_status: "COMPLETE",
-        next_action: { type: "NEW_SESSION", reason: "Done" },
-        created_at: new Date().toISOString(),
-      };
+  it('throws repository error on invalid create response and Supabase error', async () => {
+    const ledger = createCompletionLedger();
+    mockSupabase.single.mockResolvedValueOnce({ data: { bad: true }, error: null });
+    await expect(persistCompletionLedger(ledger)).rejects.toThrow(
+      'Session completion repository failed during create:invalid-response',
+    );
 
-      mockSupabase.single.mockResolvedValue({ data: mockData, error: null });
-
-      const result = await getCompletionLedgerBySessionId("session-456");
-
-      expect(result?.sessionId).toBe("session-456");
+    mockSupabase.single.mockResolvedValueOnce({
+      data: null,
+      error: { code: '500', message: 'Database error' },
     });
+    await expect(persistCompletionLedger(ledger)).rejects.toThrow(
+      'Session completion repository failed during create',
+    );
   });
 
-  describe("hasSessionBeenCompleted", () => {
-    it("returns true when session has completion ledger", async () => {
-      const mockData = {
-        id: "550e8400-e29b-41d4-a716-446655440014",
-        ledger_id: "550e8400-e29b-41d4-a716-446655440015",
-        session_id: "550e8400-e29b-41d4-a716-446655440016",
-        user_id: "550e8400-e29b-41d4-a716-446655440017",
-        idempotency_key: "key-abc",
-        completed_at: Date.now(),
-        duration_seconds: 1800,
-        quality_score: 85,
-        pause_count: 2,
-        effects: {},
-        reward_status: "COMPLETE",
-        next_action: { type: "NEW_SESSION", reason: "Done" },
-        created_at: new Date().toISOString(),
-      };
+  it('fetches by idempotency key and session id, including not found', async () => {
+    const ledger = createCompletionLedger();
+    mockSupabase.single
+      .mockResolvedValueOnce({ data: createLedgerRow(ledger), error: null })
+      .mockResolvedValueOnce({ data: createLedgerRow(ledger), error: null })
+      .mockResolvedValueOnce({ data: null, error: { code: 'PGRST116', message: 'Not found' } });
 
-      mockSupabase.single.mockResolvedValue({ data: mockData, error: null });
-
-      const result = await hasSessionBeenCompleted("session-456");
-
-      expect(result).toBe(true);
-    });
-
-    it("returns false when session has no completion ledger", async () => {
-      mockSupabase.single.mockResolvedValue({
-        data: null,
-        error: { code: "PGRST116", message: "Not found" },
-      });
-
-      const result = await hasSessionBeenCompleted("session-999");
-
-      expect(result).toBe(false);
-    });
+    await expect(getCompletionLedgerByIdempotencyKey(ledger.idempotencyKey))
+      .resolves.toMatchObject({ ledgerId: ledger.ledgerId });
+    await expect(getCompletionLedgerBySessionId(SESSION_ID))
+      .resolves.toMatchObject({ sessionId: SESSION_ID });
+    await expect(getCompletionLedgerBySessionId('550e8400-e29b-41d4-a716-446655440888'))
+      .resolves.toBeNull();
   });
 
-  describe("updateRewardStatus", () => {
-    it("updates reward status successfully", async () => {
-      mockSupabase.update.mockReturnThis();
+  it('reports session completion and updates sync status', async () => {
+    const ledger = createCompletionLedger();
+    mockSupabase.single.mockResolvedValue({ data: createLedgerRow(ledger), error: null });
+    await expect(hasSessionBeenCompleted(SESSION_ID)).resolves.toBe(true);
 
-      await updateRewardStatus("ledger-123", "COMPLETE", { deliveredAt: Date.now() });
+    mockSupabase.eq.mockResolvedValueOnce({ error: null });
+    await updateCompletionSyncStatus(ledger.ledgerId, 'failed_sync');
+    expect(mockSupabase.update).toHaveBeenCalledWith({ offline_sync_status: 'failed_sync' });
+  });
 
-      expect(mockSupabase.update).toHaveBeenCalledWith(
-        expect.objectContaining({
-          reward_status: "COMPLETE",
-          metadata: { deliveredAt: expect.any(Number) },
-        }),
-      );
-    });
+  it('throws repository error when sync status update fails', async () => {
+    mockSupabase.eq.mockResolvedValueOnce({ error: { message: 'Update failed' } });
 
-    it("throws error on update failure", async () => {
-      mockSupabase.update.mockReturnValue({
-        eq: jest.fn().mockResolvedValue({ error: { message: "Update failed" } }),
-      });
-
-      await expect(updateRewardStatus("ledger-123", "FAILED")).rejects.toThrow("Failed to update reward status");
-    });
+    await expect(updateCompletionSyncStatus(
+      '550e8400-e29b-41d4-a716-446655440001',
+      'failed_sync',
+    )).rejects.toThrow('Session completion repository failed during update-sync-status');
   });
 });

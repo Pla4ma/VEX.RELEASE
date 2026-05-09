@@ -61,6 +61,40 @@ interface SessionPlan {
   focusAreas: string[];
 }
 
+interface RawStudyTask {
+  id?: unknown;
+  content?: unknown;
+  estimatedMinutes?: unknown;
+  priority?: unknown;
+  dependsOn?: unknown;
+}
+
+interface RawQuizItem {
+  id?: unknown;
+  question?: unknown;
+  answer?: unknown;
+  options?: unknown;
+  explanation?: unknown;
+  difficulty?: unknown;
+  conceptTag?: unknown;
+}
+
+interface RawSessionPlan {
+  recommendedDuration?: unknown;
+  recommendedSessions?: unknown;
+  breakIntervalMinutes?: unknown;
+  suggestedDifficulty?: unknown;
+  focusAreas?: unknown;
+}
+
+interface RawStudyPlanResponse {
+  summary?: unknown;
+  keyConcepts?: unknown;
+  tasks?: unknown;
+  quizItems?: unknown;
+  sessionPlan?: RawSessionPlan;
+}
+
 // ============================================================================
 // Configuration
 // ============================================================================
@@ -70,13 +104,14 @@ const GEMINI_MODEL = 'gemini-2.5-pro';
 const MAX_PDF_PAGES = 100;
 const MAX_CONTENT_LENGTH = 50000; // ~12k tokens
 const DAILY_GENERATION_LIMIT = 10;
+const httpRequest = globalThis.fetch.bind(globalThis);
 
 // ============================================================================
 // Gemini API Client
 // ============================================================================
 
 async function callGemini(prompt: string): Promise<string> {
-  const response = await fetch(
+  const response = await httpRequest(
     `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
     {
       method: 'POST',
@@ -117,7 +152,7 @@ async function extractFromYouTube(url: string): Promise<string> {
   // Try to fetch captions via YouTube's timedtext endpoint
   // This is a simplified approach - in production, use a proper transcript API
   try {
-    const response = await fetch(`https://www.youtube.com/api/timedtext?v=${videoId}&lang=en`);
+    const response = await httpRequest(`https://www.youtube.com/api/timedtext?v=${videoId}&lang=en`);
     if (!response.ok) {
       // Fallback: use Gemini to summarize from video metadata
       return await extractVideoMetadata(videoId);
@@ -139,7 +174,7 @@ async function extractFromYouTube(url: string): Promise<string> {
 async function extractVideoMetadata(videoId: string): Promise<string> {
   // Fetch oEmbed data as fallback
   try {
-    const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+    const response = await httpRequest(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
     const data = await response.json();
     return `Title: ${data.title}\nAuthor: ${data.author_name}\nDescription: ${data.title}`;
   } catch {
@@ -267,40 +302,49 @@ function parseStudyPlanResponse(text: string): { tasks: StudyTask[]; quizItems: 
       .replace(/```\s*/g, '')
       .trim();
     
-    const parsed = JSON.parse(cleaned);
+    const parsed = JSON.parse(cleaned) as RawStudyPlanResponse;
+    const rawTasks = Array.isArray(parsed.tasks) ? parsed.tasks : [];
+    const rawQuizItems = Array.isArray(parsed.quizItems) ? parsed.quizItems : [];
+    const rawSessionPlan = parsed.sessionPlan ?? {};
     
     return {
-      summary: parsed.summary || 'Study material ready',
-      keyConcepts: parsed.keyConcepts || [],
-      tasks: (parsed.tasks || []).map((t: any, i: number) => ({
-        id: t.id || `task-${i}`,
-        content: t.content || 'Review content',
-        estimatedMinutes: Math.min(Math.max(t.estimatedMinutes || 15, 5), 60),
-        priority: ['HIGH', 'MEDIUM', 'LOW'].includes(t.priority) ? t.priority : 'MEDIUM',
-        dependsOn: t.dependsOn || [],
-      })),
-      quizItems: (parsed.quizItems || []).map((q: any, i: number) => ({
-        id: q.id || `quiz-${i}`,
-        question: q.question || 'Review the content',
-        answer: q.answer || 'See content',
-        options: q.options || [],
-        explanation: q.explanation,
-        difficulty: ['EASY', 'MEDIUM', 'HARD'].includes(q.difficulty) ? q.difficulty : 'MEDIUM',
-        conceptTag: q.conceptTag || 'general',
-      })),
+      summary: typeof parsed.summary === 'string' ? parsed.summary : 'Study material ready',
+      keyConcepts: Array.isArray(parsed.keyConcepts) ? parsed.keyConcepts.filter((item): item is string => typeof item === 'string') : [],
+      tasks: rawTasks.map((task, i: number) => {
+        const t = task as RawStudyTask;
+        const priority: StudyTask['priority'] = t.priority === 'HIGH' || t.priority === 'MEDIUM' || t.priority === 'LOW' ? t.priority : 'MEDIUM';
+        return {
+          id: typeof t.id === 'string' ? t.id : `task-${i}`,
+          content: typeof t.content === 'string' ? t.content : 'Review content',
+          estimatedMinutes: Math.min(Math.max(typeof t.estimatedMinutes === 'number' ? t.estimatedMinutes : 15, 5), 60),
+          priority,
+          dependsOn: Array.isArray(t.dependsOn) ? t.dependsOn.filter((item): item is string => typeof item === 'string') : [],
+        };
+      }),
+      quizItems: rawQuizItems.map((quiz, i: number) => {
+        const q = quiz as RawQuizItem;
+        const difficulty: QuizItem['difficulty'] = q.difficulty === 'EASY' || q.difficulty === 'MEDIUM' || q.difficulty === 'HARD' ? q.difficulty : 'MEDIUM';
+        return {
+          id: typeof q.id === 'string' ? q.id : `quiz-${i}`,
+          question: typeof q.question === 'string' ? q.question : 'Review the content',
+          answer: typeof q.answer === 'string' ? q.answer : 'See content',
+          options: Array.isArray(q.options) ? q.options.filter((item): item is string => typeof item === 'string') : [],
+          explanation: typeof q.explanation === 'string' ? q.explanation : undefined,
+          difficulty,
+          conceptTag: typeof q.conceptTag === 'string' ? q.conceptTag : 'general',
+        };
+      }),
       sessionPlan: {
-        recommendedDuration: Math.min(Math.max(parsed.sessionPlan?.recommendedDuration || 1800, 600), 7200),
-        recommendedSessions: Math.min(Math.max(parsed.sessionPlan?.recommendedSessions || 1, 1), 5),
-        breakIntervalMinutes: Math.min(Math.max(parsed.sessionPlan?.breakIntervalMinutes || 25, 15), 60),
-        suggestedDifficulty: ['EASY', 'NORMAL', 'CHALLENGING'].includes(parsed.sessionPlan?.suggestedDifficulty) 
-          ? parsed.sessionPlan.suggestedDifficulty 
+        recommendedDuration: Math.min(Math.max(typeof rawSessionPlan.recommendedDuration === 'number' ? rawSessionPlan.recommendedDuration : 1800, 600), 7200),
+        recommendedSessions: Math.min(Math.max(typeof rawSessionPlan.recommendedSessions === 'number' ? rawSessionPlan.recommendedSessions : 1, 1), 5),
+        breakIntervalMinutes: Math.min(Math.max(typeof rawSessionPlan.breakIntervalMinutes === 'number' ? rawSessionPlan.breakIntervalMinutes : 25, 15), 60),
+        suggestedDifficulty: rawSessionPlan.suggestedDifficulty === 'EASY' || rawSessionPlan.suggestedDifficulty === 'NORMAL' || rawSessionPlan.suggestedDifficulty === 'CHALLENGING'
+          ? rawSessionPlan.suggestedDifficulty 
           : 'NORMAL',
-        focusAreas: parsed.sessionPlan?.focusAreas || [],
+        focusAreas: Array.isArray(rawSessionPlan.focusAreas) ? rawSessionPlan.focusAreas.filter((item): item is string => typeof item === 'string') : [],
       },
     };
-  } catch (error) {
-    console.error('Failed to parse study plan:', error);
-    
+  } catch {
     // Return fallback plan
     return {
       summary: 'Study the provided content thoroughly',
@@ -338,7 +382,6 @@ async function checkRateLimit(supabase: SupabaseClient, userId: string): Promise
     });
   
   if (error || !data) {
-    console.error('Rate limit check failed:', error);
     // Fail open - allow generation
     return { canGenerate: true, remaining: DAILY_GENERATION_LIMIT };
   }
@@ -399,7 +442,6 @@ async function handleSubmit(req: Request, supabase: SupabaseClient, userId: stri
       { headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    console.error('Submit error:', error);
     return new Response(
       JSON.stringify({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }),
       { status: 400, headers: { 'Content-Type': 'application/json' } }
@@ -478,7 +520,6 @@ async function handleExtract(req: Request, supabase: SupabaseClient, userId: str
       throw extractError;
     }
   } catch (error) {
-    console.error('Extract error:', error);
     return new Response(
       JSON.stringify({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }),
       { status: 400, headers: { 'Content-Type': 'application/json' } }
@@ -586,8 +627,6 @@ async function handleGenerate(req: Request, supabase: SupabaseClient, userId: st
       { headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    console.error('Generate error:', error);
-    
     // Mark as failed if content exists
     try {
       const body = await req.json();
@@ -636,7 +675,6 @@ async function handleStatus(req: Request, supabase: SupabaseClient, userId: stri
       { headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    console.error('Status error:', error);
     return new Response(
       JSON.stringify({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }),
       { status: 400, headers: { 'Content-Type': 'application/json' } }
@@ -667,7 +705,6 @@ async function handleFeedback(req: Request, supabase: SupabaseClient, userId: st
       { headers: { 'Content-Type': 'application/json' } }
     );
   } catch (error) {
-    console.error('Feedback error:', error);
     return new Response(
       JSON.stringify({ success: false, error: error instanceof Error ? error.message : 'Unknown error' }),
       { status: 400, headers: { 'Content-Type': 'application/json' } }
@@ -744,8 +781,7 @@ serve(async (req) => {
         { status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-  } catch (error) {
-    console.error('Unhandled error:', error);
+  } catch {
     return new Response(
       JSON.stringify({ success: false, error: 'Internal server error' }),
       { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }

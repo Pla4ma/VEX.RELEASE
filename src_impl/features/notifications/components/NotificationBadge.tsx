@@ -7,21 +7,21 @@
  * @phase 13.2
  */
 
-import React, { useState, useEffect } from "react";
-import Animated, { useAnimatedStyle, withSpring } from "react-native-reanimated";
+import React, { useState, useEffect } from 'react';
+import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { getSupabaseClient } from "../../../config/supabase";
-import { createDebugger } from "../../../utils/debug";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { getSupabaseClient } from '../../../config/supabase';
+import { createDebugger } from '../../../utils/debug';
 
-const debug = createDebugger("notifications:badge");
+const debug = createDebugger('notifications:badge');
 
 interface NotificationBadgeProps {
   /** User ID */
   userId: string;
   /** Size variant */
-  size?: "sm" | "md";
+  size?: 'sm' | 'md';
 }
 
 /**
@@ -29,16 +29,16 @@ interface NotificationBadgeProps {
  */
 async function fetchUnreadCount(userId: string): Promise<number> {
   try {
-    const { count, error } = await getSupabaseClient().from("notifications").select("*", { count: "exact", head: true }).eq("user_id", userId).eq("read", false);
+    const { count, error } = await getSupabaseClient().from('notifications').select('*', { count: 'exact', head: true }).eq('user_id', userId).eq('read', false);
 
     if (error) {
-      debug.warn("Failed to fetch unread count", error);
+      debug.warn('Failed to fetch unread count', error);
       return 0;
     }
 
     return count ?? 0;
   } catch (error) {
-    debug.error("Error fetching unread count", error instanceof Error ? error : undefined);
+    debug.error('Error fetching unread count', error instanceof Error ? error : undefined);
     return 0;
   }
 }
@@ -46,7 +46,7 @@ async function fetchUnreadCount(userId: string): Promise<number> {
 /**
  * Notification Badge for Tab Bar
  */
-export function NotificationBadge({ userId, size = "md" }: NotificationBadgeProps): JSX.Element | null {
+export function NotificationBadge({ userId, size = 'md' }: NotificationBadgeProps): JSX.Element | null {
   const [count, setCount] = useState(0);
 
   // Initial fetch
@@ -62,13 +62,13 @@ export function NotificationBadge({ userId, size = "md" }: NotificationBadgeProp
   // Subscribe to realtime updates
   useEffect(() => {
     const subscription = getSupabaseClient()
-      .channel("notifications-badge")
+      .channel('notifications-badge')
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "*",
-          schema: "public",
-          table: "notifications",
+          event: '*',
+          schema: 'public',
+          table: 'notifications',
           filter: `user_id=eq.${userId}`,
         },
         () => {
@@ -87,7 +87,7 @@ export function NotificationBadge({ userId, size = "md" }: NotificationBadgeProp
     return null;
   }
 
-  const displayCount = count > 99 ? "99+" : count.toString();
+  const displayCount = count > 99 ? '99+' : count.toString();
   const isLargeNumber = count > 9;
 
   const sizeMap = {
@@ -121,9 +121,9 @@ export function NotificationBadge({ userId, size = "md" }: NotificationBadgeProp
         alignItems="center"
         px={s.paddingHorizontal}
         style={{
-          backgroundColor: "#EF4444",
+          backgroundColor: '#EF4444',
           borderWidth: 2,
-          borderColor: "#FFFFFF",
+          borderColor: '#FFFFFF',
         }}
       >
         <Text fontSize={s.fontSize} color="white" fontWeight="800">
@@ -149,13 +149,13 @@ export function NotificationDot({ userId }: { userId: string }): JSX.Element | n
     loadUnread();
 
     const subscription = getSupabaseClient()
-      .channel("notifications-dot")
+      .channel('notifications-dot')
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "*",
-          schema: "public",
-          table: "notifications",
+          event: '*',
+          schema: 'public',
+          table: 'notifications',
           filter: `user_id=eq.${userId}`,
         },
         () => {
@@ -179,9 +179,9 @@ export function NotificationDot({ userId }: { userId: string }): JSX.Element | n
       height={8}
       borderRadius="full"
       style={{
-        backgroundColor: "#EF4444",
+        backgroundColor: '#EF4444',
         borderWidth: 1,
-        borderColor: "#FFFFFF",
+        borderColor: '#FFFFFF',
       }}
     />
   );
@@ -209,13 +209,13 @@ export function useNotificationBadge(userId: string | undefined): {
     loadCount();
 
     const subscription = getSupabaseClient()
-      .channel("notifications-hook")
+      .channel('notifications-hook')
       .on(
-        "postgres_changes",
+        'postgres_changes',
         {
-          event: "*",
-          schema: "public",
-          table: "notifications",
+          event: '*',
+          schema: 'public',
+          table: 'notifications',
           filter: `user_id=eq.${userId}`,
         },
         () => {

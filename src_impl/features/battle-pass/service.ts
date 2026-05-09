@@ -3,10 +3,10 @@
  * Business logic for battle pass progression and rewards
  */
 
-import * as repository from "./repository";
-import { eventBus } from "../../events";
-import { addCurrency, spendCurrency } from "../economy/service";
-import type { BattlePass, BattlePassTier, UserBattlePass, UserBattlePassSummary, TierDisplay, ClaimStatus, TierReward, ClaimResult, TierAdvanceResult, PremiumPurchaseResult, RetroactiveClaimResult, AddBattlePassXpInput, ClaimTierInput, PurchasePremiumInput } from "./schemas";
+import * as repository from './repository';
+import { eventBus } from '../../events';
+import { addCurrency, spendCurrency } from '../economy/service';
+import type { BattlePass, BattlePassTier, UserBattlePass, UserBattlePassSummary, TierDisplay, ClaimStatus, TierReward, ClaimResult, TierAdvanceResult, PremiumPurchaseResult, RetroactiveClaimResult, AddBattlePassXpInput, ClaimTierInput, PurchasePremiumInput } from './schemas';
 
 // ============================================================================
 // User Progress Management
@@ -55,7 +55,7 @@ export async function addBattlePassXp(input: AddBattlePassXpInput): Promise<Tier
   const [userBp, battlePass, tiers] = await Promise.all([getOrCreateUserBattlePass(userId, seasonId), repository.fetchBattlePassBySeason(seasonId), repository.fetchBattlePassTiers(seasonId)]);
 
   if (!battlePass) {
-    throw new Error("Battle pass not found");
+    throw new Error('Battle pass not found');
   }
 
   const previousTier = userBp.currentTier;
@@ -83,7 +83,7 @@ export async function addBattlePassXp(input: AddBattlePassXpInput): Promise<Tier
   const newUnlockedTiers: number[] = [];
   for (let i = previousTier + 1; i <= currentTier; i++) {
     newUnlockedTiers.push(i);
-    eventBus.publish("season:tier_unlocked", { userId, seasonId, tier: i, source });
+    eventBus.publish('season:tier_unlocked', { userId, seasonId, tier: i, source });
   }
 
   return {
@@ -105,29 +105,29 @@ export async function claimTier(input: ClaimTierInput): Promise<ClaimResult> {
   const [userBp, battlePass, tiers] = await Promise.all([repository.fetchUserBattlePass(userId, seasonId), repository.fetchBattlePassBySeason(seasonId), repository.fetchBattlePassTiers(seasonId)]);
 
   if (!userBp || !battlePass) {
-    return { success: false, tierNumber, track, rewards: [], error: "Battle pass not found" };
+    return { success: false, tierNumber, track, rewards: [], error: 'Battle pass not found' };
   }
 
   if (tierNumber > userBp.currentTier) {
-    return { success: false, tierNumber, track, rewards: [], error: "Tier not unlocked" };
+    return { success: false, tierNumber, track, rewards: [], error: 'Tier not unlocked' };
   }
 
-  if (track === "PREMIUM" && !userBp.isPremium) {
-    return { success: false, tierNumber, track, rewards: [], error: "Premium required" };
+  if (track === 'PREMIUM' && !userBp.isPremium) {
+    return { success: false, tierNumber, track, rewards: [], error: 'Premium required' };
   }
 
-  const claimedTiers = track === "FREE" ? userBp.claimedFreeTiers : userBp.claimedPremiumTiers;
+  const claimedTiers = track === 'FREE' ? userBp.claimedFreeTiers : userBp.claimedPremiumTiers;
   if (claimedTiers.includes(tierNumber)) {
-    return { success: false, tierNumber, track, rewards: [], error: "Already claimed" };
+    return { success: false, tierNumber, track, rewards: [], error: 'Already claimed' };
   }
 
   await repository.markTierClaimed(userId, seasonId, tierNumber, track);
 
   const tier = tiers.find((t) => t.tierNumber === tierNumber);
-  const reward = track === "FREE" ? tier?.freeReward : tier?.premiumReward;
+  const reward = track === 'FREE' ? tier?.freeReward : tier?.premiumReward;
 
   const eventRewards = reward ? [{ type: reward.type, amount: reward.amount ?? undefined, itemId: reward.itemId ?? undefined }] : [];
-  eventBus.publish("season:tier:claimed", { userId, seasonId, tier: tierNumber, rewards: eventRewards, timestamp: Date.now() });
+  eventBus.publish('season:tier:claimed', { userId, seasonId, tier: tierNumber, rewards: eventRewards, timestamp: Date.now() });
 
   return {
     success: true,
@@ -155,7 +155,7 @@ export async function claimAllAvailable(
 
   // Claim free tiers
   for (let i = 1; i <= summary.currentTier; i++) {
-    const result = await claimTier({ userId, seasonId, tierNumber: i, track: "FREE" });
+    const result = await claimTier({ userId, seasonId, tierNumber: i, track: 'FREE' });
     if (result.success) {
       results.push(result);
     }
@@ -164,15 +164,15 @@ export async function claimAllAvailable(
   // Claim premium tiers if applicable
   if (summary.isPremium) {
     for (let i = 1; i <= summary.currentTier; i++) {
-      const result = await claimTier({ userId, seasonId, tierNumber: i, track: "PREMIUM" });
+      const result = await claimTier({ userId, seasonId, tierNumber: i, track: 'PREMIUM' });
       if (result.success) {
         results.push(result);
       }
     }
   }
 
-  const freeClaimed = results.filter((r) => r.track === "FREE").length;
-  const premiumClaimed = results.filter((r) => r.track === "PREMIUM").length;
+  const freeClaimed = results.filter((r) => r.track === 'FREE').length;
+  const premiumClaimed = results.filter((r) => r.track === 'PREMIUM').length;
   const rewards = results.flatMap((r) => r.rewards);
 
   return { freeClaimed, premiumClaimed, rewards };
@@ -188,14 +188,14 @@ export async function purchasePremium(input: PurchasePremiumInput): Promise<Prem
   const [userBp, battlePass] = await Promise.all([repository.fetchUserBattlePass(userId, seasonId), repository.fetchBattlePassBySeason(seasonId)]);
 
   if (!userBp || !battlePass) {
-    return { success: false, gemsDeducted: 0, previousTier: 0, newRewardsUnlocked: [], error: "Battle pass not found" };
+    return { success: false, gemsDeducted: 0, previousTier: 0, newRewardsUnlocked: [], error: 'Battle pass not found' };
   }
 
   if (userBp.isPremium) {
-    return { success: false, gemsDeducted: 0, previousTier: userBp.currentTier, newRewardsUnlocked: [], error: "Already premium" };
+    return { success: false, gemsDeducted: 0, previousTier: userBp.currentTier, newRewardsUnlocked: [], error: 'Already premium' };
   }
 
-  const gemsDeducted = paymentMethod === "GEMS" ? battlePass.premiumPriceGems : 0;
+  const gemsDeducted = paymentMethod === 'GEMS' ? battlePass.premiumPriceGems : 0;
   let gemsSpent = false;
   let premiumGranted = false;
   let retroactive: RetroactiveClaimResult = {
@@ -208,11 +208,11 @@ export async function purchasePremium(input: PurchasePremiumInput): Promise<Prem
     if (gemsDeducted > 0) {
       await spendCurrency({
         userId,
-        currency: "GEMS",
+        currency: 'GEMS',
         amount: gemsDeducted,
-        sink: "UPGRADE",
+        sink: 'UPGRADE',
         description: `Battle pass premium upgrade: ${seasonId}`,
-        metadata: { seasonId, source: "BATTLE_PASS_PREMIUM_PURCHASE" },
+        metadata: { seasonId, source: 'BATTLE_PASS_PREMIUM_PURCHASE' },
       });
       gemsSpent = true;
     }
@@ -234,7 +234,7 @@ export async function purchasePremium(input: PurchasePremiumInput): Promise<Prem
           premiumPurchasedAt: null,
         });
       } catch (rollbackError) {
-        rollbackErrors.push(rollbackError instanceof Error ? rollbackError.message : "Failed to revoke premium battle pass access");
+        rollbackErrors.push(rollbackError instanceof Error ? rollbackError.message : 'Failed to revoke premium battle pass access');
       }
     }
 
@@ -242,23 +242,23 @@ export async function purchasePremium(input: PurchasePremiumInput): Promise<Prem
       try {
         await addCurrency({
           userId,
-          currency: "GEMS",
+          currency: 'GEMS',
           amount: gemsDeducted,
-          source: "REFUND",
+          source: 'REFUND',
           skipEvents: false,
-          description: "Battle pass premium refund",
+          description: 'Battle pass premium refund',
           metadata: {
             seasonId,
-            source: "BATTLE_PASS_PREMIUM_PURCHASE_ROLLBACK",
+            source: 'BATTLE_PASS_PREMIUM_PURCHASE_ROLLBACK',
           },
         });
       } catch (rollbackError) {
-        rollbackErrors.push(rollbackError instanceof Error ? rollbackError.message : "Failed to refund battle pass premium gems");
+        rollbackErrors.push(rollbackError instanceof Error ? rollbackError.message : 'Failed to refund battle pass premium gems');
       }
     }
 
-    const message = error instanceof Error ? error.message : "Premium purchase failed";
-    const errorMessage = rollbackErrors.length > 0 ? `${message}. Rollback failed: ${rollbackErrors.join("; ")}` : message;
+    const message = error instanceof Error ? error.message : 'Premium purchase failed';
+    const errorMessage = rollbackErrors.length > 0 ? `${message}. Rollback failed: ${rollbackErrors.join('; ')}` : message;
 
     return {
       success: false,
@@ -269,7 +269,7 @@ export async function purchasePremium(input: PurchasePremiumInput): Promise<Prem
     };
   }
 
-  eventBus.publish("season:premium:purchased", { userId, seasonId, tier: userBp.currentTier, gemsSpent: gemsDeducted, timestamp: Date.now() });
+  eventBus.publish('season:premium:purchased', { userId, seasonId, tier: userBp.currentTier, gemsSpent: gemsDeducted, timestamp: Date.now() });
 
   return {
     success: true,
@@ -289,7 +289,7 @@ async function claimRetroactivePremium(userId: string, seasonId: string, current
   for (let i = 1; i <= currentTier; i++) {
     const tier = tiers.find((t) => t.tierNumber === i);
     if (tier?.premiumReward) {
-      await repository.markTierClaimed(userId, seasonId, i, "PREMIUM");
+      await repository.markTierClaimed(userId, seasonId, i, 'PREMIUM');
       claimedTiers.push(i);
       claimedRewards.push(tier.premiumReward);
       totalValue += tier.premiumReward.amount || 0;
@@ -326,25 +326,25 @@ export async function getBattlePassDisplay(
 
     const getFreeStatus = (): ClaimStatus => {
       if (isFreeClaimed) {
-        return "CLAIMED";
+        return 'CLAIMED';
       }
       if (!isUnlocked) {
-        return "LOCKED";
+        return 'LOCKED';
       }
-      return "AVAILABLE";
+      return 'AVAILABLE';
     };
 
     const getPremiumStatus = (): ClaimStatus => {
       if (isPremiumClaimed) {
-        return "CLAIMED";
+        return 'CLAIMED';
       }
       if (!userBp.isPremium) {
-        return "PREMIUM_REQUIRED";
+        return 'PREMIUM_REQUIRED';
       }
       if (!isUnlocked) {
-        return "LOCKED";
+        return 'LOCKED';
       }
-      return "AVAILABLE";
+      return 'AVAILABLE';
     };
 
     return {

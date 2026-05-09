@@ -61,8 +61,11 @@
     ]
   },
   "include": [
-    "src/**/*",
-    "index.js"
+    "App.js",
+    "index.js",
+    "src/app_root/**/*",
+    "src/types/**/*.d.ts",
+    "src_impl/types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",

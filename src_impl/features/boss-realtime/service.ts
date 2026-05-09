@@ -5,7 +5,7 @@
  * Damage happens continuously based on focus quality.
  */
 
-import { RealTimeBossEncounter, CombatEvent, DamageCalculation, BossCombatState, AttackType, calculateBaseDamage, calculatePurityMultiplier, calculateComboMultiplier, determineAttackType, getAttackVisuals, BOSS_RAGE_THRESHOLD, BOSS_NEAR_DEATH_THRESHOLD, PURE_STRIKE_THRESHOLD, COMBO_THRESHOLD } from "./types";
+import { RealTimeBossEncounter, CombatEvent, DamageCalculation, BossCombatState, AttackType, calculateBaseDamage, calculatePurityMultiplier, calculateComboMultiplier, determineAttackType, getAttackVisuals, BOSS_RAGE_THRESHOLD, BOSS_NEAR_DEATH_THRESHOLD, PURE_STRIKE_THRESHOLD, COMBO_THRESHOLD } from './types';
 
 export class RealTimeBossService {
   private encounter: RealTimeBossEncounter | null = null;
@@ -41,7 +41,7 @@ export class RealTimeBossService {
     newState?: BossCombatState;
   } {
     if (!this.encounter || isPaused) {
-      return { damageDealt: 0, attackType: "NORMAL_FOCUS", bossDefeated: false, stateChanged: false };
+      return { damageDealt: 0, attackType: 'NORMAL_FOCUS', bossDefeated: false, stateChanged: false };
     }
 
     const now = Date.now();
@@ -62,7 +62,7 @@ export class RealTimeBossService {
         this.currentCombo++;
         if (this.currentCombo >= COMBO_THRESHOLD) {
           this.emitEvent({
-            type: "COMBO_BONUS",
+            type: 'COMBO_BONUS',
             timestamp: now,
             data: { comboCount: this.currentCombo, message: `${this.currentCombo}x COMBO!` },
           });
@@ -90,7 +90,7 @@ export class RealTimeBossService {
     this.encounter.lastAttackType = attackType;
     this.encounter.currentCombo = this.currentCombo;
 
-    if (attackType === "CRITICAL_FOCUS" || attackType === "STREAK_COMBO" || attackType === "FINISHING_BLOW") {
+    if (attackType === 'CRITICAL_FOCUS' || attackType === 'STREAK_COMBO' || attackType === 'FINISHING_BLOW') {
       this.encounter.criticalHits++;
     }
 
@@ -110,33 +110,33 @@ export class RealTimeBossService {
     // Rage mode trigger
     if (newHealthPercent <= BOSS_RAGE_THRESHOLD && !this.rageModeTriggered) {
       this.rageModeTriggered = true;
-      this.encounter.combatState = "BOSS_RAGE";
+      this.encounter.combatState = 'BOSS_RAGE';
       stateChanged = true;
-      newState = "BOSS_RAGE";
+      newState = 'BOSS_RAGE';
       this.emitEvent({
-        type: "PHASE_CHANGE",
+        type: 'PHASE_CHANGE',
         timestamp: now,
-        data: { message: "BOSS ENRAGED!", healthPercent: newHealthPercent, intensity: 0.8 },
+        data: { message: 'BOSS ENRAGED!', healthPercent: newHealthPercent, intensity: 0.8 },
       });
     }
 
     // Near death trigger
     if (newHealthPercent <= BOSS_NEAR_DEATH_THRESHOLD && !this.nearDeathTriggered) {
       this.nearDeathTriggered = true;
-      this.encounter.combatState = "NEAR_DEATH";
+      this.encounter.combatState = 'NEAR_DEATH';
       stateChanged = true;
-      newState = "NEAR_DEATH";
+      newState = 'NEAR_DEATH';
       this.emitEvent({
-        type: "NEAR_DEATH",
+        type: 'NEAR_DEATH',
         timestamp: now,
-        data: { message: "ALMOST THERE! FINISH IT!", healthPercent: newHealthPercent, intensity: 1 },
+        data: { message: 'ALMOST THERE! FINISH IT!', healthPercent: newHealthPercent, intensity: 1 },
       });
     }
 
     // Emit attack event
     const attackVisuals = getAttackVisuals(attackType);
     this.emitEvent({
-      type: "ATTACK_LANDED",
+      type: 'ATTACK_LANDED',
       timestamp: now,
       data: {
         damage,
@@ -150,14 +150,14 @@ export class RealTimeBossService {
 
     // Check victory
     const bossDefeated = this.encounter.currentHealth <= 0;
-    if (bossDefeated && this.encounter.combatState !== "VICTORY") {
-      this.encounter.combatState = "VICTORY";
+    if (bossDefeated && this.encounter.combatState !== 'VICTORY') {
+      this.encounter.combatState = 'VICTORY';
       stateChanged = true;
-      newState = "VICTORY";
+      newState = 'VICTORY';
       this.emitEvent({
-        type: "VICTORY",
+        type: 'VICTORY',
         timestamp: now,
-        data: { message: "VICTORY! BOSS DEFEATED!", intensity: 1 },
+        data: { message: 'VICTORY! BOSS DEFEATED!', intensity: 1 },
       });
     }
 
@@ -261,7 +261,7 @@ export function createBossEncounter(bossId: string, bossName: string, bossAvatar
     bossAvatar,
     maxHealth,
     currentHealth: maxHealth,
-    combatState: "ENCOUNTER_START",
+    combatState: 'ENCOUNTER_START',
     damageDealtThisSession: 0,
     attacksLanded: 0,
     criticalHits: 0,

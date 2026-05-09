@@ -3,12 +3,12 @@
  * Full-screen celebration for level up with confetti, animations, and reward reveal
  */
 
-import React, { useEffect, useState } from "react";
-import { View, Text, Modal, Dimensions, Pressable, StyleSheet } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { levelUp } from "../../../utils/haptics";
+import React, { useEffect, useState } from 'react';
+import { View, Text, Modal, Dimensions, Pressable, StyleSheet } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { levelUp } from '../../../utils/haptics';
 
 interface LevelUpOverlayProps {
   isVisible: boolean;
@@ -23,7 +23,7 @@ interface LevelUpOverlayProps {
   onContinue: () => void;
 }
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('window');
 
 interface ConfettiPiece {
   id: number;
@@ -52,7 +52,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({ isVisible, previ
         x: Math.random() * width,
         y: -20 - Math.random() * 100,
         rotation: Math.random() * 360,
-        color: ["#FFD700", "#FF6B35", "#4CAF50", "#2196F3", "#9C27B0"][Math.floor(Math.random() * 5)],
+        color: ['#FFD700', '#FF6B35', '#4CAF50', '#2196F3', '#9C27B0'][Math.floor(Math.random() * 5)],
         size: 5 + Math.random() * 10,
       }));
       setConfetti(pieces);
@@ -73,37 +73,37 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({ isVisible, previ
 
   const getTierTitle = (level: number): string => {
     if (level >= 100) {
-      return "🏆 GRAND MASTER";
+      return '🏆 GRAND MASTER';
     }
     if (level >= 50) {
-      return "🌟 MASTER";
+      return '🌟 MASTER';
     }
     if (level >= 25) {
-      return "⭐ EXPERT";
+      return '⭐ EXPERT';
     }
     if (level >= 10) {
-      return "💫 ADEPT";
+      return '💫 ADEPT';
     }
     if (level >= 5) {
-      return "✨ APPRENTICE";
+      return '✨ APPRENTICE';
     }
-    return "🌱 NOVICE";
+    return '🌱 NOVICE';
   };
 
   const getTierColor = (level: number): [string, string] => {
     if (level >= 100) {
-      return ["#FFD700", "#FF6B35"];
+      return ['#FFD700', '#FF6B35'];
     }
     if (level >= 50) {
-      return ["#9C27B0", "#E91E63"];
+      return ['#9C27B0', '#E91E63'];
     }
     if (level >= 25) {
-      return ["#2196F3", "#03A9F4"];
+      return ['#2196F3', '#03A9F4'];
     }
     if (level >= 10) {
-      return ["#4CAF50", "#8BC34A"];
+      return ['#4CAF50', '#8BC34A'];
     }
-    return ["#FF9800", "#FFC107"];
+    return ['#FF9800', '#FFC107'];
   };
 
   const [startColor, endColor] = getTierColor(newLevel);
@@ -120,7 +120,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({ isVisible, previ
     <Modal visible={isVisible} transparent animationType="fade" onRequestClose={onContinue}>
       <View style={styles.container}>
         {/* Background */}
-        <LinearGradient colors={["#1a1a2e", "#0f0f1e", "#1a1a2e"]} style={styles.background} />
+        <LinearGradient colors={['#1a1a2e', '#0f0f1e', '#1a1a2e']} style={styles.background} />
 
         {/* Confetti */}
         {showConfetti &&
@@ -170,8 +170,8 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({ isVisible, previ
               <View style={styles.rewardsRow}>
                 {rewards.map((reward, index) => (
                   <View key={index} style={styles.rewardBadge}>
-                    <LinearGradient colors={["rgba(255,255,255,0.2)", "rgba(255,255,255,0.1)"]} style={styles.rewardGradient}>
-                      <Text style={styles.rewardIcon}>{reward.type === "XP" ? "⭐" : reward.type === "COINS" ? "🪙" : reward.type === "GEMS" ? "💎" : "🎁"}</Text>
+                    <LinearGradient colors={['rgba(255,255,255,0.2)', 'rgba(255,255,255,0.1)']} style={styles.rewardGradient}>
+                      <Text style={styles.rewardIcon}>{reward.type === 'XP' ? '⭐' : reward.type === 'COINS' ? '🪙' : reward.type === 'GEMS' ? '💎' : '🎁'}</Text>
                       <Text style={styles.rewardAmount}>+{reward.amount}</Text>
                       <Text style={styles.rewardType}>{reward.type}</Text>
                     </LinearGradient>
@@ -196,7 +196,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({ isVisible, previ
 
           {/* Continue Button */}
           <Pressable style={({ pressed }) => [styles.continueButton, pressed && { opacity: 0.8 }]} onPress={onContinue} accessibilityLabel="AWESOME! 🎉 button" accessibilityRole="button" accessibilityHint="Activates this control">
-            <LinearGradient colors={["#FFD700", "#FF6B35"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.continueGradient}>
+            <LinearGradient colors={['#FFD700', '#FF6B35']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.continueGradient}>
               <Text style={styles.continueText}>AWESOME! 🎉</Text>
             </LinearGradient>
           </Pressable>
@@ -209,35 +209,35 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({ isVisible, previ
 const styles = createSheet({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   background: {
     ...StyleSheet.absoluteFillObject,
   },
   confetti: {
-    position: "absolute",
+    position: 'absolute',
     borderRadius: 2,
   },
   content: {
-    alignItems: "center",
+    alignItems: 'center',
     width: width - 48,
   },
   levelBadge: {
     width: 120,
     height: 120,
     borderRadius: 60,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 24,
   },
   badgeGradient: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "#FFD700",
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#FFD700',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.8,
     shadowRadius: 20,
@@ -247,78 +247,78 @@ const styles = createSheet({
     ...StyleSheet.absoluteFillObject,
     borderRadius: 60,
     borderWidth: 3,
-    borderColor: "rgba(255,255,255,0.3)",
+    borderColor: 'rgba(255,255,255,0.3)',
   },
   levelNumber: {
     fontSize: 48,
-    fontWeight: "bold",
-    color: "#FFF",
-    textShadowColor: "rgba(0,0,0,0.3)",
+    fontWeight: 'bold',
+    color: '#FFF',
+    textShadowColor: 'rgba(0,0,0,0.3)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
   },
   levelUpText: {
     fontSize: 36,
-    fontWeight: "bold",
-    color: "#FFD700",
-    textShadowColor: "#FFD700",
+    fontWeight: 'bold',
+    color: '#FFD700',
+    textShadowColor: '#FFD700',
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 20,
     marginBottom: 16,
   },
   levelChangeRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 8,
   },
   previousLevel: {
     fontSize: 20,
-    color: "rgba(255,255,255,0.5)",
-    textDecorationLine: "line-through",
+    color: 'rgba(255,255,255,0.5)',
+    textDecorationLine: 'line-through',
   },
   arrow: {
     fontSize: 24,
-    color: "#FFD700",
+    color: '#FFD700',
     marginHorizontal: 12,
   },
   newLevel: {
     fontSize: 28,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   tierTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 24,
-    textShadowColor: "rgba(0,0,0,0.5)",
+    textShadowColor: 'rgba(0,0,0,0.5)',
     textShadowOffset: { width: 1, height: 1 },
     textShadowRadius: 2,
   },
   rewardsSection: {
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 24,
   },
   rewardsLabel: {
     fontSize: 14,
-    color: "rgba(255,255,255,0.6)",
+    color: 'rgba(255,255,255,0.6)',
     marginBottom: 12,
     letterSpacing: 2,
   },
   rewardsRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 12,
   },
   rewardBadge: {
     width: 80,
     height: 100,
     borderRadius: 16,
-    overflow: "hidden",
+    overflow: 'hidden',
     borderWidth: 2,
-    borderColor: "rgba(255,255,255,0.2)",
+    borderColor: 'rgba(255,255,255,0.2)',
   },
   rewardGradient: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 8,
   },
   rewardIcon: {
@@ -327,30 +327,30 @@ const styles = createSheet({
   },
   rewardAmount: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "#FFF",
+    fontWeight: 'bold',
+    color: '#FFF',
   },
   rewardType: {
     fontSize: 10,
-    color: "rgba(255,255,255,0.7)",
+    color: 'rgba(255,255,255,0.7)',
     marginTop: 2,
   },
   unlocksSection: {
-    width: "100%",
+    width: '100%',
     marginBottom: 24,
     paddingHorizontal: 24,
   },
   unlocksLabel: {
     fontSize: 14,
-    color: "rgba(255,255,255,0.6)",
+    color: 'rgba(255,255,255,0.6)',
     marginBottom: 12,
-    textAlign: "center",
+    textAlign: 'center',
     letterSpacing: 2,
   },
   unlockItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.1)",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.1)',
     padding: 12,
     borderRadius: 12,
     marginBottom: 8,
@@ -361,14 +361,14 @@ const styles = createSheet({
   },
   unlockText: {
     fontSize: 14,
-    color: "#FFF",
-    fontWeight: "500",
+    color: '#FFF',
+    fontWeight: '500',
   },
   continueButton: {
     width: 200,
     borderRadius: 12,
-    overflow: "hidden",
-    shadowColor: "#FFD700",
+    overflow: 'hidden',
+    shadowColor: '#FFD700',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
@@ -376,11 +376,11 @@ const styles = createSheet({
   },
   continueGradient: {
     paddingVertical: 16,
-    alignItems: "center",
+    alignItems: 'center',
   },
   continueText: {
-    color: "#FFF",
+    color: '#FFF',
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });

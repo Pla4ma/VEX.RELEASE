@@ -1,1 +1,2 @@
-export * from '../../../src_impl/features/rewards/repository-daily';
+export * from '../../../src_impl/features/rewards/repository/daily';
+

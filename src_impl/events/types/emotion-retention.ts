@@ -5,6 +5,7 @@
  */
 
 import type { RetentionIntervention } from '@/features/emotion-retention/EmotionRetentionEngine';
+import type { CompanionPhase, CompanionMood } from '@/features/companion/types';
 
 export interface EmotionRetentionEventDefinitions {
   // Trajectory tracking
@@ -54,5 +55,40 @@ export interface EmotionRetentionEventDefinitions {
     userId: string;
     factorType: string;
     strength: number;
+  };
+
+  // Companion growth events
+  'companion:state_changed': {
+    userId: string;
+    companionId: string;
+    previousPhase?: CompanionPhase;
+    newPhase: CompanionPhase;
+    previousMood?: CompanionMood;
+    newMood: CompanionMood;
+    level: number;
+    totalFocusMinutes: number;
+    sessionCount: number;
+    reason: 'session_completed' | 'streak_maintained' | 'comeback_completed' | 'focus_score_changed' | 'daily_mission_completed';
+    sessionId?: string;
+    timestamp: number;
+  };
+
+  'companion:evolution': {
+    userId: string;
+    companionId: string;
+    previousPhase: CompanionPhase;
+    newPhase: CompanionPhase;
+    totalFocusMinutes: number;
+    evolutionCeremony: boolean;
+    timestamp: number;
+  };
+
+  'companion:milestone_reached': {
+    userId: string;
+    companionId: string;
+    milestoneType: 'level' | 'sessions' | 'focus_minutes' | 'perfect_sessions';
+    value: number;
+    previousValue: number;
+    timestamp: number;
   };
 }

@@ -6,55 +6,55 @@
  * claim buttons, and preview for premium rewards (if not premium).
  */
 
-import React, { useCallback } from "react";
-import { View, Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Box, Text, Button } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import type { TierDisplay, TierReward, RewardType, ClaimStatus } from "../types";
+import React, { useCallback } from 'react';
+import { View, Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box, Text, Button } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import type { TierDisplay, TierReward, RewardType, ClaimStatus } from '../types';
 
 // ============================================================================
 // Constants
 // ============================================================================
 
 const REWARD_ICONS: Record<RewardType, string> = {
-  XP: "⭐",
-  COINS: "🪙",
-  GEMS: "💎",
-  ITEM: "🎁",
-  COSMETIC: "👕",
-  TITLE: "👑",
-  STREAK_SHIELD: "🛡️",
-  BOOST: "⚡",
-  AVATAR_FRAME: "🖼️",
-  EMOTE: "😊",
+  XP: '⭐',
+  COINS: '🪙',
+  GEMS: '💎',
+  ITEM: '🎁',
+  COSMETIC: '👕',
+  TITLE: '👑',
+  STREAK_SHIELD: '🛡️',
+  BOOST: '⚡',
+  AVATAR_FRAME: '🖼️',
+  EMOTE: '😊',
 };
 
 const REWARD_LABELS: Record<RewardType, string> = {
-  XP: "Experience Points",
-  COINS: "Coins",
-  GEMS: "Gems",
-  ITEM: "Item",
-  COSMETIC: "Cosmetic",
-  TITLE: "Title",
-  STREAK_SHIELD: "Streak Shield",
-  BOOST: "XP Boost",
-  AVATAR_FRAME: "Avatar Frame",
-  EMOTE: "Emote",
+  XP: 'Experience Points',
+  COINS: 'Coins',
+  GEMS: 'Gems',
+  ITEM: 'Item',
+  COSMETIC: 'Cosmetic',
+  TITLE: 'Title',
+  STREAK_SHIELD: 'Streak Shield',
+  BOOST: 'XP Boost',
+  AVATAR_FRAME: 'Avatar Frame',
+  EMOTE: 'Emote',
 };
 
 const RARITY_COLORS = {
-  common: "#94A3B8",
-  rare: "#3B82F6",
-  epic: "#A855F7",
-  legendary: "#FFD700",
+  common: '#94A3B8',
+  rare: '#3B82F6',
+  epic: '#A855F7',
+  legendary: '#FFD700',
 };
 
 const RARITY_LABELS = {
-  common: "COMMON",
-  rare: "RARE",
-  epic: "EPIC",
-  legendary: "LEGENDARY",
+  common: 'COMMON',
+  rare: 'RARE',
+  epic: 'EPIC',
+  legendary: 'LEGENDARY',
 };
 
 // ============================================================================
@@ -80,7 +80,7 @@ const RewardCard: React.FC<{
   isClaimed: boolean;
   canClaim: boolean;
   isPremium: boolean;
-  track: "FREE" | "PREMIUM";
+  track: 'FREE' | 'PREMIUM';
   onClaim: () => void;
   onUpgrade: () => void;
 }> = ({ reward, isClaimed, canClaim, isPremium, track, onClaim, onUpgrade }) => {
@@ -88,7 +88,7 @@ const RewardCard: React.FC<{
   const rarity = reward.rarity.toLowerCase() as keyof typeof RARITY_COLORS;
   const rarityColor = RARITY_COLORS[rarity] || RARITY_COLORS.common;
 
-  const isLocked = track === "PREMIUM" && !isPremium;
+  const isLocked = track === 'PREMIUM' && !isPremium;
 
   return (
     <Animated.View entering={FadeInUp.duration(300)}>
@@ -103,9 +103,9 @@ const RewardCard: React.FC<{
         }}
       >
         {/* Track badge */}
-        <Box px={3} py={1} borderRadius={8} bg={track === "FREE" ? theme.colors.success.DEFAULT : theme.colors.warning.DEFAULT} alignSelf="flex-start" mb={3}>
+        <Box px={3} py={1} borderRadius={8} bg={track === 'FREE' ? theme.colors.success.DEFAULT : theme.colors.warning.DEFAULT} alignSelf="flex-start" mb={3}>
           <Text variant="caption" color="#FFFFFF" fontWeight="bold">
-            {track === "FREE" ? "FREE TRACK" : "👑 PREMIUM"}
+            {track === 'FREE' ? 'FREE TRACK' : '👑 PREMIUM'}
           </Text>
         </Box>
 
@@ -175,8 +175,8 @@ export const TierRewardDetail: React.FC<TierRewardDetailProps> = ({ tier, curren
   const { theme } = useTheme();
 
   const isUnlocked = tier.tierNumber <= currentTier;
-  const canClaimFree = isUnlocked && tier.freeStatus === "AVAILABLE";
-  const canClaimPremium = isUnlocked && hasPremium && tier.premiumStatus === "AVAILABLE";
+  const canClaimFree = isUnlocked && tier.freeStatus === 'AVAILABLE';
+  const canClaimPremium = isUnlocked && hasPremium && tier.premiumStatus === 'AVAILABLE';
 
   // Calculate XP needed for this tier
   const xpRequired = tier.xpRequired || tier.tierNumber * 1000;
@@ -194,7 +194,7 @@ export const TierRewardDetail: React.FC<TierRewardDetailProps> = ({ tier, curren
           TIER {tier.tierNumber}
         </Text>
         <Text variant="h2" color={theme.colors.text.primary}>
-          {tier.tierNumber <= currentTier ? "Tier Unlocked!" : "Locked Tier"}
+          {tier.tierNumber <= currentTier ? 'Tier Unlocked!' : 'Locked Tier'}
         </Text>
 
         {/* XP requirement */}
@@ -208,28 +208,28 @@ export const TierRewardDetail: React.FC<TierRewardDetailProps> = ({ tier, curren
 
       {/* Progress indicator */}
       <Box px={6} mb={4}>
-        <Box height={8} borderRadius={4} bg={theme.colors.background.tertiary} style={{ overflow: "hidden" }}>
+        <Box height={8} borderRadius={4} bg={theme.colors.background.tertiary} style={{ overflow: 'hidden' }}>
           <Box
             height="100%"
             borderRadius={4}
             bg={tier.tierNumber <= currentTier ? theme.colors.success.DEFAULT : theme.colors.primary[500]}
             style={{
-              width: tier.tierNumber <= currentTier ? "100%" : `${Math.max(0, Math.min(100, (currentTier / tier.tierNumber) * 100))}%`,
+              width: tier.tierNumber <= currentTier ? '100%' : `${Math.max(0, Math.min(100, (currentTier / tier.tierNumber) * 100))}%`,
             }}
           />
         </Box>
         <Text variant="caption" color={theme.colors.text.tertiary} textAlign="center" mt={1}>
-          {tier.tierNumber <= currentTier ? "Tier completed!" : `${tier.tierNumber - currentTier} tiers away`}
+          {tier.tierNumber <= currentTier ? 'Tier completed!' : `${tier.tierNumber - currentTier} tiers away`}
         </Text>
       </Box>
 
       {/* Rewards */}
       <Box px={6} gap={4}>
         {/* Free reward */}
-        {tier.freeReward && <RewardCard reward={tier.freeReward} isClaimed={tier.freeStatus === "CLAIMED"} canClaim={canClaimFree} isPremium={hasPremium} track="FREE" onClaim={onClaimFree} onUpgrade={onUpgrade} />}
+        {tier.freeReward && <RewardCard reward={tier.freeReward} isClaimed={tier.freeStatus === 'CLAIMED'} canClaim={canClaimFree} isPremium={hasPremium} track="FREE" onClaim={onClaimFree} onUpgrade={onUpgrade} />}
 
         {/* Premium reward */}
-        {tier.premiumReward && <RewardCard reward={tier.premiumReward} isClaimed={tier.premiumStatus === "CLAIMED"} canClaim={canClaimPremium} isPremium={hasPremium} track="PREMIUM" onClaim={onClaimPremium} onUpgrade={onUpgrade} />}
+        {tier.premiumReward && <RewardCard reward={tier.premiumReward} isClaimed={tier.premiumStatus === 'CLAIMED'} canClaim={canClaimPremium} isPremium={hasPremium} track="PREMIUM" onClaim={onClaimPremium} onUpgrade={onUpgrade} />}
       </Box>
 
       {/* Premium upsell (if not premium) */}

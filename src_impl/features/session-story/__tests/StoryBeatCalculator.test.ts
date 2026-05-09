@@ -4,19 +4,19 @@
  * Comprehensive tests for narrative generation logic.
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { calculateStory, BEAT_TEMPLATES } from "../StoryBeatCalculator";
-import type { GenerateStoryInput } from "../schemas";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { calculateStory, BEAT_TEMPLATES } from '../StoryBeatCalculator';
+import type { GenerateStoryInput } from '../schemas';
 
 // Mock crypto.randomUUID
-vi.stubGlobal("crypto", {
-  randomUUID: () => "test-uuid-123",
+vi.stubGlobal('crypto', {
+  randomUUID: () => 'test-uuid-123',
 });
 
-describe("StoryBeatCalculator", () => {
+describe('StoryBeatCalculator', () => {
   const baseInput: GenerateStoryInput = {
-    sessionId: "session-123",
-    userId: "user-123",
+    sessionId: 'session-123',
+    userId: 'user-123',
     sessionSummary: {
       duration: 25 * 60 * 1000, // 25 minutes
       effectiveDuration: 25 * 60 * 1000,
@@ -26,7 +26,7 @@ describe("StoryBeatCalculator", () => {
       pauses: 0,
       streakDays: 5,
       streakMaintained: true,
-      sessionMode: "STANDARD",
+      sessionMode: 'STANDARD',
       completionPercentage: 100,
       finalScore: 850,
     },
@@ -47,24 +47,24 @@ describe("StoryBeatCalculator", () => {
     },
   };
 
-  describe("calculateStory", () => {
-    it("should generate a story with at least opening and closing beats", () => {
+  describe('calculateStory', () => {
+    it('should generate a story with at least opening and closing beats', () => {
       const story = calculateStory(baseInput);
 
       expect(story.beats.length).toBeGreaterThanOrEqual(2);
-      expect(story.beats.some((b) => b.type === "OPENING")).toBe(true);
-      expect(story.beats.some((b) => b.type === "CLOSING_REFLECTION")).toBe(true);
+      expect(story.beats.some((b) => b.type === 'OPENING')).toBe(true);
+      expect(story.beats.some((b) => b.type === 'CLOSING_REFLECTION')).toBe(true);
     });
 
-    it("should include streak moment for continuing streak", () => {
+    it('should include streak moment for continuing streak', () => {
       const story = calculateStory(baseInput);
 
-      const streakBeat = story.beats.find((b) => b.type === "STREAK_MOMENT");
+      const streakBeat = story.beats.find((b) => b.type === 'STREAK_MOMENT');
       expect(streakBeat).toBeDefined();
-      expect(streakBeat?.headline).toContain("Day 5");
+      expect(streakBeat?.headline).toContain('Day 5');
     });
 
-    it("should include perfection moment for zero interruptions", () => {
+    it('should include perfection moment for zero interruptions', () => {
       const perfectInput = {
         ...baseInput,
         sessionSummary: {
@@ -75,16 +75,16 @@ describe("StoryBeatCalculator", () => {
 
       const story = calculateStory(perfectInput);
 
-      const perfectionBeat = story.beats.find((b) => b.type === "PERFECTION_MOMENT");
+      const perfectionBeat = story.beats.find((b) => b.type === 'PERFECTION_MOMENT');
       expect(perfectionBeat).toBeDefined();
     });
 
-    it("should include boss defeat beat when boss is defeated", () => {
+    it('should include boss defeat beat when boss is defeated', () => {
       const bossInput: GenerateStoryInput = {
         ...baseInput,
         bossContext: {
-          encounterId: "encounter-123",
-          bossName: "Procrastination Phantom",
+          encounterId: 'encounter-123',
+          bossName: 'Procrastination Phantom',
           damageDealt: 500,
           defeated: true,
         },
@@ -92,17 +92,17 @@ describe("StoryBeatCalculator", () => {
 
       const story = calculateStory(bossInput);
 
-      const bossBeat = story.beats.find((b) => b.type === "BOSS_BATTLE");
+      const bossBeat = story.beats.find((b) => b.type === 'BOSS_BATTLE');
       expect(bossBeat).toBeDefined();
-      expect(bossBeat?.headline).toContain("defeated");
+      expect(bossBeat?.headline).toContain('defeated');
     });
 
-    it("should include boss damage beat when damage dealt but not defeated", () => {
+    it('should include boss damage beat when damage dealt but not defeated', () => {
       const bossInput: GenerateStoryInput = {
         ...baseInput,
         bossContext: {
-          encounterId: "encounter-123",
-          bossName: "Procrastination Phantom",
+          encounterId: 'encounter-123',
+          bossName: 'Procrastination Phantom',
           damageDealt: 300,
           defeated: false,
           healthRemaining: 200,
@@ -112,12 +112,12 @@ describe("StoryBeatCalculator", () => {
 
       const story = calculateStory(bossInput);
 
-      const bossBeat = story.beats.find((b) => b.type === "BOSS_BATTLE");
+      const bossBeat = story.beats.find((b) => b.type === 'BOSS_BATTLE');
       expect(bossBeat).toBeDefined();
       expect(bossBeat?.metadata?.value).toBe(300);
     });
 
-    it("should include milestone beat when milestone reached", () => {
+    it('should include milestone beat when milestone reached', () => {
       const milestoneInput: GenerateStoryInput = {
         ...baseInput,
         streakContext: {
@@ -130,12 +130,12 @@ describe("StoryBeatCalculator", () => {
 
       const story = calculateStory(milestoneInput);
 
-      const milestoneBeat = story.beats.find((b) => b.type === "MILESTONE_REACHED");
+      const milestoneBeat = story.beats.find((b) => b.type === 'MILESTONE_REACHED');
       expect(milestoneBeat).toBeDefined();
-      expect(milestoneBeat?.headline).toContain("Day 7");
+      expect(milestoneBeat?.headline).toContain('Day 7');
     });
 
-    it("should include comeback beat for comeback sessions", () => {
+    it('should include comeback beat for comeback sessions', () => {
       const comebackInput: GenerateStoryInput = {
         ...baseInput,
         streakContext: {
@@ -150,12 +150,12 @@ describe("StoryBeatCalculator", () => {
 
       const story = calculateStory(comebackInput);
 
-      const comebackBeat = story.beats.find((b) => b.type === "COMEBACK_TRIUMPH");
+      const comebackBeat = story.beats.find((b) => b.type === 'COMEBACK_TRIUMPH');
       expect(comebackBeat).toBeDefined();
-      expect(comebackBeat?.headline).toContain("returned");
+      expect(comebackBeat?.headline).toContain('returned');
     });
 
-    it("should include progression cliffhanger when close to next tier", () => {
+    it('should include progression cliffhanger when close to next tier', () => {
       const tierInput: GenerateStoryInput = {
         ...baseInput,
         progressionContext: {
@@ -166,43 +166,43 @@ describe("StoryBeatCalculator", () => {
 
       const story = calculateStory(tierInput);
 
-      const cliffhangerBeat = story.beats.find((b) => b.type === "PROGRESSION_CLIFFHANGER");
+      const cliffhangerBeat = story.beats.find((b) => b.type === 'PROGRESSION_CLIFFHANGER');
       expect(cliffhangerBeat).toBeDefined();
-      expect(cliffhangerBeat?.headline).toContain("1 session");
+      expect(cliffhangerBeat?.headline).toContain('1 session');
     });
 
-    it("should set appropriate emotion based on session quality", () => {
+    it('should set appropriate emotion based on session quality', () => {
       const highQualityStory = calculateStory({
         ...baseInput,
         sessionSummary: { ...baseInput.sessionSummary, focusQuality: 95 },
       });
 
-      expect(["TRIUMPH", "MASTERY", "GRATITUDE"]).toContain(highQualityStory.overallEmotion);
+      expect(['TRIUMPH', 'MASTERY', 'GRATITUDE']).toContain(highQualityStory.overallEmotion);
     });
 
-    it("should generate a title based on emotion", () => {
+    it('should generate a title based on emotion', () => {
       const story = calculateStory(baseInput);
 
       expect(story.title).toBeTruthy();
       expect(story.title.length).toBeGreaterThan(0);
     });
 
-    it("should generate next session hooks", () => {
+    it('should generate next session hooks', () => {
       const story = calculateStory(baseInput);
 
       expect(story.nextSessionHooks).toBeDefined();
       expect(story.nextSessionHooks.length).toBeGreaterThanOrEqual(0);
     });
 
-    it("should prioritize streak at risk hook for active streaks", () => {
+    it('should prioritize streak at risk hook for active streaks', () => {
       const story = calculateStory(baseInput);
 
-      const streakHook = story.nextSessionHooks.find((h) => h.type === "STREAK_AT_RISK");
+      const streakHook = story.nextSessionHooks.find((h) => h.type === 'STREAK_AT_RISK');
       expect(streakHook).toBeDefined();
-      expect(streakHook?.urgency).toBe("MEDIUM"); // 5-day streak
+      expect(streakHook?.urgency).toBe('MEDIUM'); // 5-day streak
     });
 
-    it("should order beats by priority", () => {
+    it('should order beats by priority', () => {
       const complexInput: GenerateStoryInput = {
         ...baseInput,
         sessionSummary: {
@@ -221,22 +221,22 @@ describe("StoryBeatCalculator", () => {
       const story = calculateStory(complexInput);
 
       // Check that higher priority beats come first
-      const perfectionIndex = story.beats.findIndex((b) => b.type === "PERFECTION_MOMENT");
-      const milestoneIndex = story.beats.findIndex((b) => b.type === "MILESTONE_REACHED");
-      const streakIndex = story.beats.findIndex((b) => b.type === "STREAK_MOMENT");
+      const perfectionIndex = story.beats.findIndex((b) => b.type === 'PERFECTION_MOMENT');
+      const milestoneIndex = story.beats.findIndex((b) => b.type === 'MILESTONE_REACHED');
+      const streakIndex = story.beats.findIndex((b) => b.type === 'STREAK_MOMENT');
 
       expect(perfectionIndex).toBeLessThan(streakIndex);
       expect(milestoneIndex).toBeLessThan(streakIndex);
     });
 
-    it("should include duration in subtitle", () => {
+    it('should include duration in subtitle', () => {
       const story = calculateStory(baseInput);
 
-      expect(story.subtitle).toContain("25");
-      expect(story.subtitle).toContain("minute");
+      expect(story.subtitle).toContain('25');
+      expect(story.subtitle).toContain('minute');
     });
 
-    it("should handle short sessions", () => {
+    it('should handle short sessions', () => {
       const shortInput: GenerateStoryInput = {
         ...baseInput,
         sessionSummary: {
@@ -251,7 +251,7 @@ describe("StoryBeatCalculator", () => {
       expect(story.beats.length).toBeGreaterThanOrEqual(2);
     });
 
-    it("should handle sessions with interruptions", () => {
+    it('should handle sessions with interruptions', () => {
       const interruptedInput: GenerateStoryInput = {
         ...baseInput,
         sessionSummary: {
@@ -264,11 +264,11 @@ describe("StoryBeatCalculator", () => {
       const story = calculateStory(interruptedInput);
 
       // Should NOT have perfection moment
-      const perfectionBeat = story.beats.find((b) => b.type === "PERFECTION_MOMENT");
+      const perfectionBeat = story.beats.find((b) => b.type === 'PERFECTION_MOMENT');
       expect(perfectionBeat).toBeUndefined();
     });
 
-    it("should generate appropriate haptic patterns for beats", () => {
+    it('should generate appropriate haptic patterns for beats', () => {
       const celebrationInput: GenerateStoryInput = {
         ...baseInput,
         streakContext: {
@@ -280,24 +280,24 @@ describe("StoryBeatCalculator", () => {
 
       const story = calculateStory(celebrationInput);
 
-      const milestoneBeat = story.beats.find((b) => b.type === "MILESTONE_REACHED");
-      expect(milestoneBeat?.hapticPattern).toBe("CELEBRATION");
+      const milestoneBeat = story.beats.find((b) => b.type === 'MILESTONE_REACHED');
+      expect(milestoneBeat?.hapticPattern).toBe('CELEBRATION');
     });
   });
 
-  describe("BEAT_TEMPLATES", () => {
-    it("should have OPENING template", () => {
-      const opening = BEAT_TEMPLATES.find((t) => t.type === "OPENING");
+  describe('BEAT_TEMPLATES', () => {
+    it('should have OPENING template', () => {
+      const opening = BEAT_TEMPLATES.find((t) => t.type === 'OPENING');
       expect(opening).toBeDefined();
       expect(opening?.condition(baseInput)).toBe(true);
     });
 
-    it("should have CLOSING_REFLECTION template", () => {
-      const closing = BEAT_TEMPLATES.find((t) => t.type === "CLOSING_REFLECTION");
+    it('should have CLOSING_REFLECTION template', () => {
+      const closing = BEAT_TEMPLATES.find((t) => t.type === 'CLOSING_REFLECTION');
       expect(closing).toBeDefined();
     });
 
-    it("each template should have at least one variation", () => {
+    it('each template should have at least one variation', () => {
       for (const template of BEAT_TEMPLATES) {
         expect(template.variations.length).toBeGreaterThan(0);
       }

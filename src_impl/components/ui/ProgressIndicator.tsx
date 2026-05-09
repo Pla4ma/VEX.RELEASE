@@ -1,17 +1,12 @@
-/**
- * Progress Indicator Components
- *
- * Linear, circular, and stepped progress indicators.
- */
+import React, { useEffect } from 'react';
+import { View } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import React, { useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { useTheme } from "../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { Text } from '../primitives';
+import { useTheme } from '../../theme';
 
 interface ProgressBarProps {
-  progress: number; // 0 to 1
+  progress: number;
   color?: string;
   backgroundColor?: string;
   height?: number;
@@ -20,52 +15,46 @@ interface ProgressBarProps {
   label?: string;
 }
 
-export const ProgressBar: React.FC<ProgressBarProps> = ({ progress, color, backgroundColor, height = 8, showPercentage = false, animated = true, label }) => {
+const clampProgress = (value: number): number => Math.max(0, Math.min(1, value));
+
+export const ProgressBar: React.FC<ProgressBarProps> = ({
+  progress,
+  color,
+  backgroundColor,
+  height = 8,
+  showPercentage = false,
+  animated = true,
+  label,
+}) => {
   const { theme } = useTheme();
   const animatedValue = useSharedValue(0);
+  const nextProgress = clampProgress(progress);
+  const barColor = color ?? theme.colors.semantic.primary;
+  const bgColor = backgroundColor ?? theme.colors.semantic.border;
 
   useEffect(() => {
-    const nextProgress = Math.max(0, Math.min(1, progress));
-    if (animated) {
-      animatedValue.value = withTiming(nextProgress, { duration: 500 });
-    } else {
-      animatedValue.value = nextProgress;
-    }
-  }, [progress, animated, animatedValue]);
+    animatedValue.value = animated ? withTiming(nextProgress, { duration: 500 }) : nextProgress;
+  }, [animated, animatedValue, nextProgress]);
 
-  const fillStyle = useAnimatedStyle(() => ({
-    width: `${animatedValue.value * 100}%`,
-  }));
-
-  const barColor = color || (theme.colors.primary as any)[500];
-  const bgColor = backgroundColor || (theme.colors.border as any)?.DEFAULT || theme.colors.border;
-  const percentage = Math.round(Math.max(0, Math.min(1, progress)) * 100);
+  const fillStyle = useAnimatedStyle(() => ({ width: `${animatedValue.value * 100}%` }));
 
   return (
-    <View style={styles.progressBarContainer}>
-      {(label || showPercentage) && (
-        <View style={styles.progressHeader}>
-          {label && <Text style={styles.progressLabel}>{label}</Text>}
-          {showPercentage && <Text style={[styles.progressPercentage, { color: barColor }]}>{percentage}%</Text>}
+    <View style={{ width: '100%' }}>
+      {label || showPercentage ? (
+        <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between', marginBottom: theme.spacing[1] }}>
+          {label ? <Text color="text.secondary" variant="caption">{label}</Text> : <View />}
+          {showPercentage ? <Text color={barColor} fontWeight="700" variant="caption">{Math.round(nextProgress * 100)}%</Text> : null}
         </View>
-      )}
-      <View style={[styles.progressBar, { height, backgroundColor: bgColor }]}>
-        <Animated.View
-          style={[
-            styles.progressFill,
-            {
-              backgroundColor: barColor,
-            },
-            fillStyle,
-          ]}
-        />
+      ) : null}
+      <View style={{ backgroundColor: bgColor, borderRadius: theme.borderRadius.full, height, overflow: 'hidden' }}>
+        <Animated.View style={[{ backgroundColor: barColor, borderRadius: theme.borderRadius.full, height: '100%' }, fillStyle]} />
       </View>
     </View>
   );
 };
 
 interface CircularProgressProps {
-  progress: number; // 0 to 1
+  progress: number;
   size?: number;
   strokeWidth?: number;
   color?: string;
@@ -74,74 +63,53 @@ interface CircularProgressProps {
   animated?: boolean;
 }
 
-export const CircularProgress: React.FC<CircularProgressProps> = ({ progress, size = 80, strokeWidth = 8, color, backgroundColor, showPercentage = true, animated = true }) => {
+export const CircularProgress: React.FC<CircularProgressProps> = ({
+  progress,
+  size = 80,
+  strokeWidth = 8,
+  color,
+  backgroundColor,
+  showPercentage = true,
+  animated = true,
+}) => {
   const { theme } = useTheme();
   const animatedValue = useSharedValue(0);
+  const nextProgress = clampProgress(progress);
+  const circleColor = color ?? theme.colors.semantic.primary;
+  const bgCircleColor = backgroundColor ?? theme.colors.semantic.border;
 
   useEffect(() => {
-    const nextProgress = Math.max(0, Math.min(1, progress));
-    if (animated) {
-      animatedValue.value = withTiming(nextProgress, { duration: 800 });
-    } else {
-      animatedValue.value = nextProgress;
-    }
-  }, [progress, animated, animatedValue]);
+    animatedValue.value = animated ? withTiming(nextProgress, { duration: 800 }) : nextProgress;
+  }, [animated, animatedValue, nextProgress]);
 
-  const circleColor = color || theme.colors.primary[500];
-  const bgCircleColor = backgroundColor || theme.colors.border.DEFAULT;
-  const percentage = Math.round(Math.max(0, Math.min(1, progress)) * 100);
   const rotationStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${animatedValue.value * 360}deg` }],
   }));
 
   return (
-    <View style={{ width: size, height: size }}>
-      <Animated.View
-        style={[
-          styles.circularProgress,
-          {
-            width: size,
-            height: size,
-          },
-          rotationStyle,
-        ]}
-      >
+    <View style={{ height: size, width: size }}>
+      <Animated.View style={[{ position: 'absolute' }, rotationStyle]}>
+        <View style={{ borderColor: bgCircleColor, borderRadius: size / 2, borderWidth: strokeWidth, height: size, position: 'absolute', width: size }} />
         <View
-          style={[
-            styles.circularBackground,
-            {
-              width: size,
-              height: size,
-              borderRadius: size / 2,
-              borderWidth: strokeWidth,
-              borderColor: bgCircleColor,
-            },
-          ]}
-        />
-        <Animated.View
-          style={[
-            styles.circularFill,
-            {
-              width: size,
-              height: size,
-              borderRadius: size / 2,
-              borderWidth: strokeWidth,
-              borderColor: circleColor,
-              borderTopColor: circleColor,
-              borderRightColor: circleColor,
-              borderBottomColor: "transparent",
-              borderLeftColor: "transparent",
-              transform: [{ rotate: "-45deg" }],
-            },
-          ]}
+          style={{
+            borderBottomColor: 'transparent',
+            borderColor: circleColor,
+            borderLeftColor: 'transparent',
+            borderRadius: size / 2,
+            borderRightColor: circleColor,
+            borderTopColor: circleColor,
+            borderWidth: strokeWidth,
+            height: size,
+            transform: [{ rotate: '-45deg' }],
+            width: size,
+          }}
         />
       </Animated.View>
-
-      {showPercentage && (
-        <View style={styles.circularTextContainer}>
-          <Text style={[styles.circularPercentage, { color: circleColor }]}>{percentage}%</Text>
+      {showPercentage ? (
+        <View style={{ alignItems: 'center', bottom: 0, justifyContent: 'center', left: 0, position: 'absolute', right: 0, top: 0 }}>
+          <Text color={circleColor} fontSize={18} fontWeight="700">{Math.round(nextProgress * 100)}%</Text>
         </View>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -153,125 +121,47 @@ interface StepIndicatorProps {
   color?: string;
 }
 
-export const StepIndicator: React.FC<StepIndicatorProps> = ({ steps, currentStep, labels, color }) => {
+export const StepIndicator: React.FC<StepIndicatorProps> = ({
+  steps,
+  currentStep,
+  labels,
+  color,
+}) => {
   const { theme } = useTheme();
-  const stepColor = color || theme.colors.primary[500];
-
+  const stepColor = color ?? theme.colors.semantic.primary;
   return (
-    <View style={styles.stepContainer}>
+    <View style={{ alignItems: 'flex-start', flexDirection: 'row' }}>
       {Array.from({ length: steps }, (_, index) => {
         const isCompleted = index < currentStep;
         const isCurrent = index === currentStep;
-        const isPending = index > currentStep;
-
+        const fillColor = isCompleted ? stepColor : isCurrent ? theme.colors.semantic.surface : theme.colors.semantic.border;
         return (
-          <View key={index} style={styles.stepWrapper}>
+          <View key={index} style={{ alignItems: 'center', flex: 1, flexDirection: 'row' }}>
             <View
-              style={[
-                styles.step,
-                isCompleted && { backgroundColor: stepColor },
-                isCurrent && {
-                  backgroundColor: "#fff",
-                  borderWidth: 2,
-                  borderColor: stepColor,
-                },
-                isPending && { backgroundColor: "#E0E0E0" },
-              ]}
+              style={{
+                alignItems: 'center',
+                backgroundColor: fillColor,
+                borderColor: isCurrent ? stepColor : fillColor,
+                borderRadius: 14,
+                borderWidth: isCurrent ? 2 : 0,
+                height: 28,
+                justifyContent: 'center',
+                width: 28,
+              }}
             >
-              {isCompleted ? <Text style={styles.stepCheck}>✓</Text> : <Text style={[styles.stepNumber, isCurrent && { color: stepColor }, isPending && { color: "#999" }]}>{index + 1}</Text>}
+              <Text color={isCompleted ? 'text.inverse' : isCurrent ? stepColor : 'text.muted'} fontSize={12} fontWeight="700">
+                {isCompleted ? '✓' : index + 1}
+              </Text>
             </View>
-
-            {labels && labels[index] && <Text style={[styles.stepLabel, isCompleted && { color: stepColor }, isCurrent && { color: stepColor, fontWeight: "600" }, isPending && { color: "#999" }]}>{labels[index]}</Text>}
-
-            {index < steps - 1 && <View style={[styles.stepLine, isCompleted && { backgroundColor: stepColor }, !isCompleted && { backgroundColor: "#E0E0E0" }]} />}
+            {labels?.[index] ? (
+              <Text color={isCurrent || isCompleted ? stepColor : 'text.muted'} fontSize={10} textAlign="center" style={{ left: 0, position: 'absolute', right: 0, top: 32 }}>
+                {labels[index]}
+              </Text>
+            ) : null}
+            {index < steps - 1 ? <View style={{ backgroundColor: isCompleted ? stepColor : theme.colors.semantic.border, flex: 1, height: 2, marginHorizontal: 4 }} /> : null}
           </View>
         );
       })}
     </View>
   );
 };
-
-const styles = createSheet({
-  progressBarContainer: {
-    width: "100%",
-  },
-  progressHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 4,
-  },
-  progressLabel: {
-    fontSize: 12,
-    color: "#666",
-  },
-  progressPercentage: {
-    fontSize: 12,
-    fontWeight: "600",
-  },
-  progressBar: {
-    borderRadius: 4,
-    overflow: "hidden",
-  },
-  progressFill: {
-    height: "100%",
-    borderRadius: 4,
-  },
-  circularProgress: {
-    position: "absolute",
-  },
-  circularBackground: {
-    position: "absolute",
-  },
-  circularFill: {
-    position: "absolute",
-  },
-  circularTextContainer: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  circularPercentage: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  stepContainer: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-  },
-  stepWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  step: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  stepNumber: {
-    fontSize: 12,
-    fontWeight: "600",
-  },
-  stepCheck: {
-    fontSize: 14,
-    color: "#fff",
-    fontWeight: "bold",
-  },
-  stepLabel: {
-    fontSize: 10,
-    marginTop: 4,
-    position: "absolute",
-    top: 32,
-    left: 0,
-    right: 0,
-    textAlign: "center",
-  },
-  stepLine: {
-    flex: 1,
-    height: 2,
-    marginHorizontal: 4,
-  },
-});

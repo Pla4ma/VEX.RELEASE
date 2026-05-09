@@ -8,6 +8,8 @@ import { z } from 'zod';
 import { createDebugger } from '../utils/debug';
 import * as Sentry from '@sentry/react-native';
 import type { RootStackParams } from './types';
+import { useFeatureFlags } from '../hooks/useFeatureFlags';
+import { FEATURE_FLAGS } from '../constants/features';
 
 const debug = createDebugger('navigation:deep-links');
 
@@ -151,6 +153,14 @@ export function deepLinkToNavigationParams(
       };
 
     case 'boss':
+      // Check if basic solo boss feature is enabled
+      const { isEnabled: isBossEnabled } = useFeatureFlags();
+      if (!isBossEnabled(FEATURE_FLAGS.BASIC_SOLO_BOSS)) {
+        return {
+          screen: 'Main',
+          params: undefined,
+        };
+      }
       return {
         screen: 'Main',
         params: {
@@ -159,6 +169,14 @@ export function deepLinkToNavigationParams(
       };
 
     case 'duels':
+      // Check if duels feature is enabled
+      const { isEnabled: areDuelsEnabled } = useFeatureFlags();
+      if (!areDuelsEnabled(FEATURE_FLAGS.DUELS)) {
+        return {
+          screen: 'Main',
+          params: undefined,
+        };
+      }
       return {
         screen: 'Main',
         params: {
@@ -167,10 +185,18 @@ export function deepLinkToNavigationParams(
       };
 
     case 'squad':
+      // Check if squads accountability feature is enabled
+      const { isEnabled: areSquadsEnabled } = useFeatureFlags();
+      if (!areSquadsEnabled(FEATURE_FLAGS.SQUADS_ACCOUNTABILITY)) {
+        return {
+          screen: 'Main',
+          params: undefined,
+        };
+      }
       return {
         screen: 'Main',
         params: {
-          screen: 'SquadWars',
+          screen: 'Guild',
         },
       };
 

@@ -1,16 +1,16 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 /**
  * Content Study Analytics
  * Comprehensive tracking for user behavior, engagement, and performance metrics
  */
 
-import type { ContentStudyAnalyticsEvent, ContentStudyAnalyticsEventName, ContentStudyMetrics, ContentSourceType, ContentStudyErrorCode } from "./types";
-import { CONTENT_STUDY_CONSTANTS } from "./types";
-import { getDefaultStorageAdapter } from "../../persistence";
-import { createDebugger } from "../../utils/debug";
+import type { ContentStudyAnalyticsEvent, ContentStudyAnalyticsEventName, ContentStudyMetrics, ContentSourceType, ContentStudyErrorCode } from './types';
+import { CONTENT_STUDY_CONSTANTS } from './types';
+import { getDefaultStorageAdapter } from '../../persistence';
+import { createDebugger } from '../../utils/debug';
 
 const getStorage = () => getDefaultStorageAdapter();
-const debug = createDebugger("content-study:analytics");
+const debug = createDebugger('content-study:analytics');
 
 // ============================================================================
 // Analytics Service
@@ -49,7 +49,7 @@ export class ContentStudyAnalyticsService {
     // Identify user with traits
     if (provider) {
       provider.identify(userId, {
-        feature: "content-study",
+        feature: 'content-study',
       });
     }
 
@@ -76,9 +76,9 @@ export class ContentStudyAnalyticsService {
       sessionId: this.sessionId || undefined,
       properties,
       context: {
-        appVersion: "1.0.0", // Should be from config
-        platform: "mobile",
-        screenSize: "default",
+        appVersion: '1.0.0', // Should be from config
+        platform: 'mobile',
+        screenSize: 'default',
         isOnline: this.isOnline,
       },
     };
@@ -104,7 +104,7 @@ export class ContentStudyAnalyticsService {
         context: event.context,
       });
     } catch (e) {
-      debug.error("Analytics tracking error:", e as Error);
+      debug.error('Analytics tracking error:', e as Error);
       this.queue.push(event);
     }
   }
@@ -113,7 +113,7 @@ export class ContentStudyAnalyticsService {
     try {
       await getStorage().setItem(`${CONTENT_STUDY_CONSTANTS.LOCAL_STORAGE_KEY}:analytics-queue`, JSON.stringify(this.queue));
     } catch (e) {
-      debug.error("Failed to persist analytics queue:", e as Error);
+      debug.error('Failed to persist analytics queue:', e as Error);
     }
   }
 
@@ -128,7 +128,7 @@ export class ContentStudyAnalyticsService {
       try {
         this.sendToProvider(event);
       } catch (error) {
-        captureSilentFailure(error, { feature: "content-study", operation: "ui-fallback", type: "ui" });
+        captureSilentFailure(error, { feature: 'content-study', operation: 'ui-fallback', type: 'ui' });
         failed.push(event);
       }
     }
@@ -159,7 +159,7 @@ export class ContentStudyAnalyticsService {
         this.metrics = JSON.parse(data);
       }
     } catch (error) {
-      captureSilentFailure(error, { feature: "content-study", operation: "ui-fallback", type: "ui" });
+      captureSilentFailure(error, { feature: 'content-study', operation: 'ui-fallback', type: 'ui' });
       // Ignore load errors
     }
   }
@@ -168,7 +168,7 @@ export class ContentStudyAnalyticsService {
     try {
       await getStorage().setItem(`${CONTENT_STUDY_CONSTANTS.LOCAL_STORAGE_KEY}:metrics`, JSON.stringify(this.metrics));
     } catch (error) {
-      captureSilentFailure(error, { feature: "content-study", operation: "ui-fallback", type: "ui" });
+      captureSilentFailure(error, { feature: 'content-study', operation: 'ui-fallback', type: 'ui' });
       // Ignore persist errors
     }
   }
@@ -183,20 +183,20 @@ export const contentStudyAnalytics = ContentStudyAnalyticsService.getInstance();
 export const analytics = {
   // Input tracking
   inputOpened(preferredTab?: string): void {
-    contentStudyAnalytics.track("content_study_input_opened", {
+    contentStudyAnalytics.track('content_study_input_opened', {
       preferred_tab: preferredTab,
     });
   },
 
   tabSwitched(from: string, to: string): void {
-    contentStudyAnalytics.track("content_study_tab_switched", {
+    contentStudyAnalytics.track('content_study_tab_switched', {
       from_tab: from,
       to_tab: to,
     });
   },
 
   textPasted(characterCount: number, wordCount: number): void {
-    contentStudyAnalytics.track("content_study_text_pasted", {
+    contentStudyAnalytics.track('content_study_text_pasted', {
       character_count: characterCount,
       word_count: wordCount,
       estimated_read_time: Math.ceil(wordCount / 200),
@@ -204,7 +204,7 @@ export const analytics = {
   },
 
   fileSelected(fileType: string, fileSize: number, fileName: string): void {
-    contentStudyAnalytics.track("content_study_file_selected", {
+    contentStudyAnalytics.track('content_study_file_selected', {
       file_type: fileType,
       file_size_bytes: fileSize,
       file_size_mb: Math.round((fileSize / (1024 * 1024)) * 100) / 100,
@@ -213,14 +213,14 @@ export const analytics = {
   },
 
   youtubeEntered(url: string, isValid: boolean): void {
-    contentStudyAnalytics.track("content_study_youtube_entered", {
+    contentStudyAnalytics.track('content_study_youtube_entered', {
       url_valid: isValid,
       url_length: url.length,
     });
   },
 
   submitted(type: ContentSourceType, validationResult: { isValid: boolean; errorCount: number; warningCount: number }): void {
-    contentStudyAnalytics.track("content_study_submitted", {
+    contentStudyAnalytics.track('content_study_submitted', {
       source_type: type,
       validation_passed: validationResult.isValid,
       validation_errors: validationResult.errorCount,
@@ -230,14 +230,14 @@ export const analytics = {
 
   // Extraction tracking
   extractionStarted(contentId: string, sourceType: ContentSourceType): void {
-    contentStudyAnalytics.track("content_study_extraction_started", {
+    contentStudyAnalytics.track('content_study_extraction_started', {
       content_id: contentId,
       source_type: sourceType,
     });
   },
 
   extractionProgress(contentId: string, progress: number, stage: string): void {
-    contentStudyAnalytics.track("content_study_extraction_progress", {
+    contentStudyAnalytics.track('content_study_extraction_progress', {
       content_id: contentId,
       progress_percent: progress,
       stage,
@@ -245,7 +245,7 @@ export const analytics = {
   },
 
   extractionCompleted(contentId: string, sourceType: ContentSourceType, extractedLength: number, durationMs: number): void {
-    contentStudyAnalytics.track("content_study_extraction_completed", {
+    contentStudyAnalytics.track('content_study_extraction_completed', {
       content_id: contentId,
       source_type: sourceType,
       extracted_length: extractedLength,
@@ -255,7 +255,7 @@ export const analytics = {
   },
 
   extractionFailed(contentId: string, errorCode: ContentStudyErrorCode, retryAttempt: number): void {
-    contentStudyAnalytics.track("content_study_extraction_failed", {
+    contentStudyAnalytics.track('content_study_extraction_failed', {
       content_id: contentId,
       error_code: errorCode,
       retry_attempt: retryAttempt,
@@ -265,14 +265,14 @@ export const analytics = {
 
   // Review tracking
   reviewOpened(contentId: string, sourceType: ContentSourceType): void {
-    contentStudyAnalytics.track("content_study_review_opened", {
+    contentStudyAnalytics.track('content_study_review_opened', {
       content_id: contentId,
       source_type: sourceType,
     });
   },
 
-  textEdited(contentId: string, editType: "insert" | "delete" | "replace", editLength: number): void {
-    contentStudyAnalytics.track("content_study_text_edited", {
+  textEdited(contentId: string, editType: 'insert' | 'delete' | 'replace', editLength: number): void {
+    contentStudyAnalytics.track('content_study_text_edited', {
       content_id: contentId,
       edit_type: editType,
       edit_length: editLength,
@@ -281,13 +281,13 @@ export const analytics = {
 
   // Generation tracking
   generationStarted(contentId: string): void {
-    contentStudyAnalytics.track("content_study_generation_started", {
+    contentStudyAnalytics.track('content_study_generation_started', {
       content_id: contentId,
     });
   },
 
   generationCompleted(generationId: string, taskCount: number, quizCount: number, durationMs: number, model: string): void {
-    contentStudyAnalytics.track("content_study_generation_completed", {
+    contentStudyAnalytics.track('content_study_generation_completed', {
       generation_id: generationId,
       task_count: taskCount,
       quiz_count: quizCount,
@@ -297,7 +297,7 @@ export const analytics = {
   },
 
   generationFailed(contentId: string, errorCode: ContentStudyErrorCode, retryAttempt: number): void {
-    contentStudyAnalytics.track("content_study_generation_failed", {
+    contentStudyAnalytics.track('content_study_generation_failed', {
       content_id: contentId,
       error_code: errorCode,
       retry_attempt: retryAttempt,
@@ -306,14 +306,14 @@ export const analytics = {
 
   // Study plan tracking
   planViewed(generationId: string, viewDurationMs: number): void {
-    contentStudyAnalytics.track("content_study_plan_viewed", {
+    contentStudyAnalytics.track('content_study_plan_viewed', {
       generation_id: generationId,
       view_duration_ms: viewDurationMs,
     });
   },
 
   taskViewed(generationId: string, taskId: string, taskIndex: number): void {
-    contentStudyAnalytics.track("content_study_task_viewed", {
+    contentStudyAnalytics.track('content_study_task_viewed', {
       generation_id: generationId,
       task_id: taskId,
       task_index: taskIndex,
@@ -321,7 +321,7 @@ export const analytics = {
   },
 
   taskCompleted(generationId: string, taskId: string, taskIndex: number, timeSpentMs: number): void {
-    contentStudyAnalytics.track("content_study_task_completed", {
+    contentStudyAnalytics.track('content_study_task_completed', {
       generation_id: generationId,
       task_id: taskId,
       task_index: taskIndex,
@@ -330,7 +330,7 @@ export const analytics = {
   },
 
   quizViewed(generationId: string, quizId: string, quizIndex: number): void {
-    contentStudyAnalytics.track("content_study_quiz_viewed", {
+    contentStudyAnalytics.track('content_study_quiz_viewed', {
       generation_id: generationId,
       quiz_id: quizId,
       quiz_index: quizIndex,
@@ -338,7 +338,7 @@ export const analytics = {
   },
 
   quizAnswered(generationId: string, quizId: string, isCorrect: boolean, timeSpentMs: number, difficulty: string): void {
-    contentStudyAnalytics.track("content_study_quiz_answered", {
+    contentStudyAnalytics.track('content_study_quiz_answered', {
       generation_id: generationId,
       quiz_id: quizId,
       is_correct: isCorrect,
@@ -356,7 +356,7 @@ export const analytics = {
       focus_areas: string[];
     },
   ): void {
-    contentStudyAnalytics.track("content_study_session_started", {
+    contentStudyAnalytics.track('content_study_session_started', {
       generation_id: generationId,
       duration_seconds: sessionConfig.duration,
       difficulty: sessionConfig.difficulty,
@@ -365,7 +365,7 @@ export const analytics = {
   },
 
   sessionCompleted(generationId: string, actualDurationMs: number, interruptions: number, tasksCompleted: number): void {
-    contentStudyAnalytics.track("content_study_session_completed", {
+    contentStudyAnalytics.track('content_study_session_completed', {
       generation_id: generationId,
       actual_duration_ms: actualDurationMs,
       interruptions,
@@ -375,7 +375,7 @@ export const analytics = {
 
   // Feedback tracking
   feedbackSubmitted(generationId: string, rating: number, timeSinceGenerationMs: number): void {
-    contentStudyAnalytics.track("content_study_feedback_submitted", {
+    contentStudyAnalytics.track('content_study_feedback_submitted', {
       generation_id: generationId,
       rating,
       time_since_generation_ms: timeSinceGenerationMs,
@@ -384,21 +384,21 @@ export const analytics = {
 
   // Error tracking
   rateLimited(remaining: number, resetsAt: number): void {
-    contentStudyAnalytics.track("content_study_rate_limited", {
+    contentStudyAnalytics.track('content_study_rate_limited', {
       remaining_generations: remaining,
       resets_at: resetsAt,
       hours_until_reset: Math.ceil((resetsAt - Date.now()) / (1000 * 60 * 60)),
     });
   },
 
-  offlineMode(reason: "user_initiated" | "network_loss" | "forced"): void {
-    contentStudyAnalytics.track("content_study_offline_mode", {
+  offlineMode(reason: 'user_initiated' | 'network_loss' | 'forced'): void {
+    contentStudyAnalytics.track('content_study_offline_mode', {
       reason,
     });
   },
 
   error(errorCode: ContentStudyErrorCode, context: string, recoverable: boolean): void {
-    contentStudyAnalytics.track("content_study_error", {
+    contentStudyAnalytics.track('content_study_error', {
       error_code: errorCode,
       context,
       recoverable,
@@ -457,7 +457,7 @@ export async function calculateMetrics(userId: string): Promise<Partial<ContentS
 // React Hook
 // ============================================================================
 
-import { useCallback, useRef } from "react";
+import { useCallback, useRef } from 'react';
 
 export function useContentStudyAnalytics() {
   const trackRef = useRef(analytics);

@@ -55,7 +55,7 @@ export const LoadingState: React.FC<LoadingStateProps> = ({
       {message && (
         <Text
           variant="body"
-          color="secondary"
+        color="text.secondary"
           style={{
             marginTop: theme.spacing[4],
             textAlign: 'center',

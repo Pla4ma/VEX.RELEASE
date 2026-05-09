@@ -12,10 +12,9 @@ import { View } from 'react-native';
 
 import { Box } from '../../../components/primitives/Box';
 import { useOnboardingStore, useOnboardingProgress } from '../store';
-import type { FocusGoal, FocusDuration } from '../schemas';
+import type { FocusGoal } from '../schemas';
 import {
   saveGoal,
-  saveFocusDuration,
   saveDisplayName,
   goToNextStep,
   goToPreviousStep,
@@ -24,10 +23,9 @@ import {
   getFirstSessionConfig,
 } from '../service';
 import { WelcomeScreen } from './WelcomeScreen';
-import { GoalScreen } from './GoalScreen';
-import { FocusTimeScreen } from './FocusTimeScreen';
-import { NameScreen } from './NameScreen';
-import { FirstSessionCTA } from './FirstSessionCTA';
+import { NameAndGoalScreen } from './NameAndGoalScreen';
+import { CompanionRevealScreen } from './CompanionRevealScreen';
+import { FirstSessionSetup } from './FirstSessionSetup';
 import { OnboardingProgressBar, OnboardingDots } from './OnboardingProgressBar';
 
 interface OnboardingNavigatorProps {
@@ -55,43 +53,29 @@ export function OnboardingNavigator({
     goToNextStep();
   }, [store]);
 
-  // Step 1: Goal Selection
-  const handleGoalSelect = useCallback((goal: FocusGoal) => {
-    saveGoal(goal);
-  }, []);
-
-  const handleGoalSkip = useCallback(() => {
-    skipOnboarding();
-  }, []);
-
-  // Step 2: Focus Duration
-  const handleDurationSelect = useCallback((duration: FocusDuration) => {
-    saveFocusDuration(duration);
-  }, []);
-
-  const handleDurationSkip = useCallback(() => {
-    skipOnboarding();
-  }, []);
-
-  // Step 3: Name Setup
-  const handleNameContinue = useCallback((name: string) => {
+  // Step 1: Name and Goal Selection
+  const handleNameAndGoalContinue = useCallback((name: string, goal: FocusGoal) => {
     if (saveDisplayName(name)) {
-      goToNextStep();
+      saveGoal(goal);
     }
   }, []);
 
-  const handleNameSkip = useCallback(() => {
+  const handleNameAndGoalSkip = useCallback(() => {
+    skipOnboarding();
+  }, []);
+
+  // Step 2: Companion Reveal
+  const handleCompanionContinue = useCallback(() => {
     goToNextStep();
   }, []);
 
-  // Step 4: First Session CTA
-  const handleStartSession = useCallback(() => {
-    const config = getFirstSessionConfig();
+  // Step 3: First Session Setup
+  const handleSessionStart = useCallback((config: { duration: number; category: FocusGoal | null }) => {
     completeOnboarding();
     onStartSession(config);
   }, [onStartSession]);
 
-  const handleCTABack = useCallback(() => {
+  const handleSessionBack = useCallback(() => {
     goToPreviousStep();
   }, []);
 
@@ -102,36 +86,27 @@ export function OnboardingNavigator({
         return <WelcomeScreen onStart={handleWelcomeStart} />;
       case 1:
         return (
-          <GoalScreen
-            onSelect={handleGoalSelect}
-            onSkip={handleGoalSkip}
+          <NameAndGoalScreen
+            onContinue={handleNameAndGoalContinue}
+            onSkip={handleNameAndGoalSkip}
             onBack={onBack}
           />
         );
       case 2:
         return (
-          <FocusTimeScreen
-            onSelect={handleDurationSelect}
-            onSkip={handleDurationSkip}
+          <CompanionRevealScreen
+            userName={store.displayName || ''}
+            onContinue={handleCompanionContinue}
             onBack={goToPreviousStep}
           />
         );
       case 3:
         return (
-          <NameScreen
-            onContinue={handleNameContinue}
-            onSkip={handleNameSkip}
-            onBack={goToPreviousStep}
-          />
-        );
-      case 4:
-        return (
-          <FirstSessionCTA
-            userName={store.displayName}
-            duration={store.focusDuration}
-            goal={store.goal}
-            onStartSession={handleStartSession}
-            onBack={handleCTABack}
+            <FirstSessionSetup
+              userName={store.displayName || ''}
+              goal={store.goal}
+            onStartSession={handleSessionStart}
+            onBack={handleSessionBack}
           />
         );
       default:

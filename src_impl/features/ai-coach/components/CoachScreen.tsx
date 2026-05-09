@@ -5,21 +5,17 @@
  * Accessible from home screen, not just push notifications
  */
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { View, Text, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView, Image } from "react-native";
-import { FlashList, type FlashListRef, type ListRenderItem } from "@shopify/flash-list";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAnalytics } from "@/shared/analytics";
-import { CoachEvents } from "@/shared/analytics/analytics-events";
-import { createDebugger } from "@/utils/debug";
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { View, Text, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView, Image } from 'react-native';
+import { FlashList, type FlashListRef, type ListRenderItem } from '@shopify/flash-list';
+import { useAnalytics } from '@/shared/analytics';
+import { CoachEvents } from '@/shared/analytics/analytics-events';
 
-const debug = createDebugger("coach:screen");
-
-import { getCoachState, getCoachHistory, askCoachQuestion, getCurrentRecommendation } from "../services/coach-screen-service";
-import type { CoachMessage, CoachState, CoachUserState } from "../types";
-import { getPersonalizedContext } from "../services/coach-memory";
-import { PERSONALITY_METADATA } from "../service/personality-templates";
-import { styles } from "./CoachScreen.styles";
+import { getCurrentRecommendation } from '../services/coach-screen-service';
+import type { CoachMessage, CoachState, CoachUserState } from '../types';
+import { PERSONALITY_METADATA } from '../service/personality-templates';
+import { useAskCoachQuestionMutation, useCoachScreenState } from '../hooks';
+import { styles } from './CoachScreen.styles';
 
 // ============================================================================
 // Types
@@ -27,7 +23,7 @@ import { styles } from "./CoachScreen.styles";
 
 interface ChatMessage {
   id: string;
-  type: "coach" | "user" | "system";
+  type: 'coach' | 'user' | 'system';
   content: string;
   timestamp: number;
   metadata?: {
@@ -44,51 +40,28 @@ interface CoachRecommendation {
   reasoning: string;
 }
 
-// ============================================================================
-// Main Component
-// ============================================================================
-
 export function CoachScreen(): JSX.Element {
   const { track } = useAnalytics();
-  const queryClient = useQueryClient();
   const flashListRef = useRef<FlashListRef<ChatMessage> | null>(null);
 
   // State
-  const [inputText, setInputText] = useState("");
+  const [inputText, setInputText] = useState('');
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [isTyping, setIsTyping] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch coach state
-  const { data: coachState, isLoading: stateLoading } = useQuery<CoachState>({
-    queryKey: ["coach", "state"],
-    queryFn: getCoachState,
-    staleTime: 60000,
-  });
+  const { coachState, coachHistory, stateLoading, historyLoading } = useCoachScreenState();
 
-  // Fetch coach history
-  const { data: coachHistory, isLoading: historyLoading } = useQuery<{
-    messages: CoachMessage[];
-  }>({
-    queryKey: ["coach", "history"],
-    queryFn: getCoachHistory,
-    staleTime: 300000,
-  });
-
-  // Ask coach mutation
-  const askMutation = useMutation({
-    mutationFn: askCoachQuestion,
+  const askMutation = useAskCoachQuestionMutation({
     onMutate: () => {
       setIsTyping(true);
       setError(null);
     },
     onSuccess: (response) => {
       setIsTyping(false);
-
-      // Add coach response to chat
       const coachMsg: ChatMessage = {
         id: `coach-${Date.now()}`,
-        type: "coach",
+        type: 'coach',
         content: response.message,
         timestamp: Date.now(),
         metadata: {
@@ -99,19 +72,13 @@ export function CoachScreen(): JSX.Element {
       };
 
       setChatMessages((prev) => [...prev, coachMsg]);
-
-      // Track analytics
       track(CoachEvents.COACH_QUESTION_ANSWERED, {
         has_action: response.hasAction,
       } as Record<string, unknown>);
-
-      // Invalidate cache to refresh history
-      queryClient.invalidateQueries({ queryKey: ["coach", "history"] });
     },
-    onError: (err) => {
+    onError: (message) => {
       setIsTyping(false);
-      setError("Sorry, I had trouble responding. Please try again.");
-      debug.error("Coach response error", err instanceof Error ? err : new Error(String(err)));
+      setError(message);
     },
   });
 
@@ -122,7 +89,7 @@ export function CoachScreen(): JSX.Element {
         .slice(-20) // Last 20 messages
         .map((msg) => ({
           id: msg.id,
-          type: (msg as unknown as { sender?: string }).sender === "user" ? "user" : "coach",
+          type: (msg as unknown as { sender?: string }).sender === 'user' ? 'user' : 'coach',
           content: msg.content,
           timestamp: msg.createdAt,
           metadata: (msg as unknown as { metadata?: Record<string, unknown> }).metadata,
@@ -131,8 +98,8 @@ export function CoachScreen(): JSX.Element {
       // Add welcome message if empty
       if (initialMessages.length === 0) {
         initialMessages.push({
-          id: "welcome",
-          type: "coach",
+          id: 'welcome',
+          type: 'coach',
           content: getWelcomeMessage(coachState),
           timestamp: Date.now(),
           metadata: { state: coachState?.currentState },
@@ -163,13 +130,13 @@ export function CoachScreen(): JSX.Element {
     // Add user message to chat
     const userMsg: ChatMessage = {
       id: `user-${Date.now()}`,
-      type: "user",
+      type: 'user',
       content: question,
       timestamp: Date.now(),
     };
 
     setChatMessages((prev) => [...prev, userMsg]);
-    setInputText("");
+    setInputText('');
 
     // Track analytics
     track(CoachEvents.COACH_QUESTION_ASKED, {
@@ -191,26 +158,26 @@ export function CoachScreen(): JSX.Element {
 
       // Handle different action types
       switch (action.type) {
-        case "START_SESSION":
+        case 'START_SESSION':
           // Navigate to session with pre-filled config
           // This would integrate with navigation
           track(CoachEvents.COACH_CTA_CLICKED, {
-            cta_type: "start_session",
+            cta_type: 'start_session',
             session_duration: action.duration as number,
           });
           break;
 
-        case "VIEW_STREAK":
+        case 'VIEW_STREAK':
           // Navigate to streak screen
           track(CoachEvents.COACH_CTA_CLICKED, {
-            cta_type: "view_streak",
+            cta_type: 'view_streak',
           });
           break;
 
-        case "VIEW_PROGRESS":
+        case 'VIEW_PROGRESS':
           // Navigate to progression
           track(CoachEvents.COACH_CTA_CLICKED, {
-            cta_type: "view_progress",
+            cta_type: 'view_progress',
           });
           break;
 
@@ -224,8 +191,8 @@ export function CoachScreen(): JSX.Element {
   // Render chat message
   const renderMessage: ListRenderItem<ChatMessage> = useCallback(
     ({ item }) => {
-      const isCoach = item.type === "coach";
-      const isUser = item.type === "user";
+      const isCoach = item.type === 'coach';
+      const isUser = item.type === 'user';
 
       return (
         <View style={[styles.messageContainer, isCoach ? styles.coachMessageContainer : isUser ? styles.userMessageContainer : styles.systemMessageContainer]}>
@@ -299,7 +266,7 @@ export function CoachScreen(): JSX.Element {
               track(CoachEvents.COACH_CTA_CLICKED, {
                 duration: recommendation.duration,
                 difficulty: recommendation.difficulty,
-                source: "coach_recommendation",
+                source: 'coach_recommendation',
               });
               // Navigate to session setup
             }}
@@ -313,7 +280,7 @@ export function CoachScreen(): JSX.Element {
       )}
 
       {/* Chat Area */}
-      <KeyboardAvoidingView style={styles.chatContainer} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}>
+      <KeyboardAvoidingView style={styles.chatContainer} behavior={Platform.OS === 'ios' ? 'padding' : 'height'} keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}>
         <FlashList
           ref={flashListRef}
           data={chatMessages}
@@ -372,19 +339,19 @@ function getWelcomeMessage(coachState?: CoachState | null): string {
   }
 
   switch (coachState.currentState) {
-    case "COLD_START":
+    case 'COLD_START':
       return "Welcome! I'm your AI coach. I can see you're just getting started — that's exciting! Let's build some momentum together. What brings you here today?";
 
-    case "HIGH_CONFIDENCE":
+    case 'HIGH_CONFIDENCE':
       return "You're on fire! 🔥 I can see your consistency is paying off. What can I help you with today?";
 
-    case "STREAK_AT_RISK":
+    case 'STREAK_AT_RISK':
       return "I noticed your streak needs attention soon. Don't worry — I've got your back. Want to protect it together?";
 
-    case "COMEBACK_MODE":
-      return "Welcome back! 💪 Every master was once a beginner who returned. Your comeback starts now. How can I support you?";
+    case 'COMEBACK_MODE':
+      return 'Welcome back! 💪 Every master was once a beginner who returned. Your comeback starts now. How can I support you?';
 
-    case "POST_FAILURE_SUPPORT":
+    case 'POST_FAILURE_SUPPORT':
       return "Hey, I saw things didn't go as planned recently. That's okay — setbacks are part of growth. Let's talk about what happened and how to move forward.";
 
     default:
@@ -394,70 +361,70 @@ function getWelcomeMessage(coachState?: CoachState | null): string {
 
 function getPersonalityName(personaId?: string | null): string {
   if (!personaId) {
-    return "Coach";
+    return 'Coach';
   }
-  return PERSONALITY_METADATA[personaId as keyof typeof PERSONALITY_METADATA]?.name || "Coach";
+  return PERSONALITY_METADATA[personaId as keyof typeof PERSONALITY_METADATA]?.name || 'Coach';
 }
 
 function getPersonalityEmoji(personaId?: string | null): string {
   if (!personaId) {
-    return "🎯";
+    return '🎯';
   }
 
   switch (personaId) {
-    case "DRILL_SERGEANT":
-      return "⭐";
-    case "FRIEND":
-      return "🤗";
-    case "MENTOR":
-      return "📚";
-    case "RIVAL":
-      return "⚡";
-    case "MINDFUL":
-      return "🧘";
+    case 'DRILL_SERGEANT':
+      return '⭐';
+    case 'FRIEND':
+      return '🤗';
+    case 'MENTOR':
+      return '📚';
+    case 'RIVAL':
+      return '⚡';
+    case 'MINDFUL':
+      return '🧘';
     default:
-      return "🎯";
+      return '🎯';
   }
 }
 
 function formatState(state?: CoachUserState | null): string {
   if (!state) {
-    return "Ready";
+    return 'Ready';
   }
 
   const stateLabels: Record<CoachUserState, string> = {
-    COLD_START: "Getting Started",
-    LOW_CONFIDENCE: "Building Confidence",
-    HIGH_CONFIDENCE: "In The Zone",
-    STREAK_AT_RISK: "Streak Alert",
-    COMEBACK_MODE: "Comeback",
-    POST_FAILURE_SUPPORT: "Recovery",
-    MILESTONE_HYPE: "Celebrating",
-    OVERLOAD_PROTECTION: "Rest Mode",
-    MUTED_MODE: "Quiet",
+    COLD_START: 'Getting Started',
+    LOW_CONFIDENCE: 'Building Confidence',
+    HIGH_CONFIDENCE: 'In The Zone',
+    STREAK_AT_RISK: 'Streak Alert',
+    COMEBACK_MODE: 'Comeback',
+    POST_FAILURE_SUPPORT: 'Recovery',
+    MILESTONE_HYPE: 'Celebrating',
+    OVERLOAD_PROTECTION: 'Rest Mode',
+    MUTED_MODE: 'Quiet',
   };
 
-  return stateLabels[state] || "Active";
+  return stateLabels[state] || 'Active';
 }
 
 function getStateColor(state?: CoachUserState | null): string {
   if (!state) {
-    return "#22c55e";
+    return '#22c55e';
   }
 
   const stateColors: Record<CoachUserState, string> = {
-    COLD_START: "#3b82f6",
-    LOW_CONFIDENCE: "#f59e0b",
-    HIGH_CONFIDENCE: "#22c55e",
-    STREAK_AT_RISK: "#ef4444",
-    COMEBACK_MODE: "#8b5cf6",
-    POST_FAILURE_SUPPORT: "#f97316",
-    MILESTONE_HYPE: "#ec4899",
-    OVERLOAD_PROTECTION: "#06b6d4",
-    MUTED_MODE: "#6b7280",
+    COLD_START: '#3b82f6',
+    LOW_CONFIDENCE: '#f59e0b',
+    HIGH_CONFIDENCE: '#22c55e',
+    STREAK_AT_RISK: '#ef4444',
+    COMEBACK_MODE: '#8b5cf6',
+    POST_FAILURE_SUPPORT: '#f97316',
+    MILESTONE_HYPE: '#ec4899',
+    OVERLOAD_PROTECTION: '#06b6d4',
+    MUTED_MODE: '#6b7280',
   };
 
-  return stateColors[state] || "#22c55e";
+  return stateColors[state] || '#22c55e';
 }
 
 export default CoachScreen;

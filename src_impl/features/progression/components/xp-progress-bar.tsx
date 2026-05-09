@@ -3,12 +3,12 @@
  * Animated XP bar with level transitions, particle effects, and milestone celebrations
  */
 
-import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Dimensions, Text } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
-import Svg, { Circle, G, Path, Text as SvgText } from "react-native-svg";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Dimensions, Text } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
+import Svg, { Circle, G, Path, Text as SvgText } from 'react-native-svg';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface XpProgressBarProps {
   currentXp: number;
@@ -20,7 +20,7 @@ interface XpProgressBarProps {
   onLevelUp?: () => void;
 }
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 const BAR_WIDTH = width - 48;
 const BAR_HEIGHT = 24;
 
@@ -66,15 +66,15 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({ currentXp, thresho
 
   const getTierColor = (lvl: number): [string, string] => {
     if (lvl >= 50) {
-      return ["#FFD700", "#FFA500"];
+      return ['#FFD700', '#FFA500'];
     } // Gold
     if (lvl >= 25) {
-      return ["#C0C0C0", "#808080"];
+      return ['#C0C0C0', '#808080'];
     } // Silver
     if (lvl >= 10) {
-      return ["#CD7F32", "#8B4513"];
+      return ['#CD7F32', '#8B4513'];
     } // Bronze
-    return ["#4CAF50", "#2E7D32"]; // Green
+    return ['#4CAF50', '#2E7D32']; // Green
   };
 
   const [startColor, endColor] = getTierColor(level);
@@ -106,7 +106,7 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({ currentXp, thresho
       <View style={styles.barContainer}>
         {/* Background Track */}
         <View style={[styles.track, { width: BAR_WIDTH }]}>
-          <LinearGradient colors={["#2a2a4a", "#1a1a2e"]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
+          <LinearGradient colors={['#2a2a4a', '#1a1a2e']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
         </View>
 
         {/* Progress Fill */}
@@ -160,41 +160,41 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({ currentXp, thresho
 
 const styles = createSheet({
   container: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingVertical: 16,
   },
   levelBadgeContainer: {
     marginBottom: 12,
   },
   barContainer: {
-    position: "relative",
+    position: 'relative',
     height: BAR_HEIGHT,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   track: {
     height: BAR_HEIGHT,
     borderRadius: 12,
-    overflow: "hidden",
-    backgroundColor: "#1a1a2e",
+    overflow: 'hidden',
+    backgroundColor: '#1a1a2e',
   },
   progressFill: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     top: 0,
     height: BAR_HEIGHT,
     borderRadius: 12,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   shine: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: "50%",
-    backgroundColor: "rgba(255,255,255,0.2)",
+    height: '50%',
+    backgroundColor: 'rgba(255,255,255,0.2)',
   },
   tipGlow: {
-    position: "absolute",
+    position: 'absolute',
     right: -4,
     top: -2,
     width: 8,
@@ -206,55 +206,55 @@ const styles = createSheet({
     elevation: 10,
   },
   particle: {
-    position: "absolute",
+    position: 'absolute',
     width: 4,
     height: 4,
     borderRadius: 2,
     opacity: 0.8,
   },
   xpTextContainer: {
-    position: "absolute",
+    position: 'absolute',
     left: 0,
     right: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   xpText: {
-    flexDirection: "row",
+    flexDirection: 'row',
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   xpCurrent: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   xpSeparator: {
-    color: "rgba(255,255,255,0.5)",
+    color: 'rgba(255,255,255,0.5)',
   },
   xpThreshold: {
-    color: "rgba(255,255,255,0.6)",
+    color: 'rgba(255,255,255,0.6)',
   },
   levelUpBadge: {
-    position: "absolute",
+    position: 'absolute',
     right: 10,
     top: -30,
-    backgroundColor: "#FFD700",
+    backgroundColor: '#FFD700',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
-    shadowColor: "#FFD700",
+    shadowColor: '#FFD700',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 10,
     elevation: 5,
   },
   levelUpText: {
-    color: "#1a1a2e",
-    fontWeight: "bold",
+    color: '#1a1a2e',
+    fontWeight: 'bold',
     fontSize: 11,
   },
   totalXp: {
     marginTop: 8,
     fontSize: 12,
-    color: "rgba(255,255,255,0.5)",
+    color: 'rgba(255,255,255,0.5)',
   },
 });

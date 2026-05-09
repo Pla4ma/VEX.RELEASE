@@ -5,6 +5,7 @@
  */
 
 import { job } from '@trigger.dev/sdk';
+import * as Sentry from '@sentry/node';
 import { getSupabaseClient } from '../../src/config/supabase';
 import {
   scheduleLocalNotification,
@@ -13,6 +14,11 @@ import {
 } from '../../src/features/ai-coach/services/notification-service';
 import { withRetry } from '../../src/features/ai-coach/utils/retry';
 import { getUserTimezone, isQuietHours } from '../../src/features/ai-coach/utils/timezone';
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+});
 
 // ============================================================================
 // Reminder Delivery Job
@@ -241,7 +247,7 @@ export const coachReminderSchedulerJob = job({
 
         scheduled++;
       } catch (error) {
-        console.error(`Failed to schedule reminder for ${state.user_id}:`, error);
+        Sentry.captureException(error, { tags: { job: 'coach-reminder-delivery', operation: 'schedule-reminder', userId: state.user_id } });
       }
     }
 

@@ -10,12 +10,12 @@
  * Players feel agency - their skill can save them, not just items.
  */
 
-import React, { useEffect, useState } from "react";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming, withRepeat, withSequence, FadeIn, FadeInUp, runOnJS } from "react-native-reanimated";
-import { Box, Text, Button } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import * as Sentry from "@sentry/react-native";
-import { getAnalyticsService } from "@/analytics/AnalyticsService";
+import React, { useEffect, useState } from 'react';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming, withRepeat, withSequence, FadeIn, FadeInUp, runOnJS } from 'react-native-reanimated';
+import { Box, Text, Button } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import * as Sentry from '@sentry/react-native';
+import { getAnalyticsService } from '@/analytics/AnalyticsService';
 
 // ============================================================================
 // Types
@@ -37,10 +37,10 @@ interface StreakGamblePromptProps {
   /** Called when user dismisses/declines both options */
   onDismiss: () => void;
   /** Called after session completes with grade - determines if gamble succeeded */
-  onSessionComplete?: (grade: "S" | "A" | "B" | "C" | "D") => void;
+  onSessionComplete?: (grade: 'S' | 'A' | 'B' | 'C' | 'D') => void;
 }
 
-type GambleState = "prompt" | "gambling" | "won" | "lost";
+type GambleState = 'prompt' | 'gambling' | 'won' | 'lost';
 
 interface GambleOutcome {
   success: boolean;
@@ -54,7 +54,7 @@ interface GambleOutcome {
 // ============================================================================
 
 const CRITICAL_HOURS_THRESHOLD = 3; // Show prompt when < 3 hours
-const GAMBLE_SUCCESS_GRADES = ["S", "A"]; // Must score S or A to win
+const GAMBLE_SUCCESS_GRADES = ['S', 'A']; // Must score S or A to win
 const GAMBLE_BONUS_XP = 50; // Bonus XP for winning the gamble
 
 // ============================================================================
@@ -63,9 +63,9 @@ const GAMBLE_BONUS_XP = 50; // Bonus XP for winning the gamble
 
 export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDays, hoursRemaining, shieldsAvailable, userLevel, onUseShield, onGamble, onDismiss, onSessionComplete }) => {
   const { theme } = useTheme();
-  const [gambleState, setGambleState] = useState<GambleState>("prompt");
+  const [gambleState, setGambleState] = useState<GambleState>('prompt');
   const [outcome, setOutcome] = useState<GambleOutcome | null>(null);
-  const [selectedOption, setSelectedOption] = useState<"shield" | "gamble" | null>(null);
+  const [selectedOption, setSelectedOption] = useState<'shield' | 'gamble' | null>(null);
 
   // Animation values
   const pulseOpacity = useSharedValue(1);
@@ -85,9 +85,9 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
 
     // Track analytics
     Sentry.addBreadcrumb({
-      category: "streaks",
-      message: "Streak gamble prompt shown",
-      level: "warning",
+      category: 'streaks',
+      message: 'Streak gamble prompt shown',
+      level: 'warning',
       data: {
         streakDays,
         hoursRemaining,
@@ -98,7 +98,7 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
 
   // Handle user selecting shield option
   const handleUseShield = () => {
-    setSelectedOption("shield");
+    setSelectedOption('shield');
 
     // Glow animation
     glowScale.value = withSpring(1.2, { damping: 10 }, () => {
@@ -109,13 +109,13 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
 
   // Handle user selecting gamble option
   const handleGamble = () => {
-    setSelectedOption("gamble");
-    setGambleState("gambling");
+    setSelectedOption('gamble');
+    setGambleState('gambling');
     onGamble();
   };
 
   // Handle session completion (called externally)
-  const handleSessionComplete = (grade: "S" | "A" | "B" | "C" | "D") => {
+  const handleSessionComplete = (grade: 'S' | 'A' | 'B' | 'C' | 'D') => {
     const success = GAMBLE_SUCCESS_GRADES.includes(grade);
 
     const outcome: GambleOutcome = {
@@ -126,13 +126,13 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
     };
 
     setOutcome(outcome);
-    setGambleState(success ? "won" : "lost");
+    setGambleState(success ? 'won' : 'lost');
 
     // Track outcome
     Sentry.addBreadcrumb({
-      category: "streaks",
-      message: `Streak gamble ${success ? "WON" : "LOST"}`,
-      level: success ? "info" : "warning",
+      category: 'streaks',
+      message: `Streak gamble ${success ? 'WON' : 'LOST'}`,
+      level: success ? 'info' : 'warning',
       data: {
         grade,
         streakDays,
@@ -171,18 +171,18 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
   // Calculate risk level text
   const getRiskText = (hours: number): { text: string; color: string } => {
     if (hours < 1) {
-      return { text: "CRITICAL - About to break!", color: theme.colors.error.DEFAULT };
+      return { text: 'CRITICAL - About to break!', color: theme.colors.error.DEFAULT };
     }
     if (hours < 2) {
-      return { text: "HIGH RISK", color: theme.colors.error.DEFAULT };
+      return { text: 'HIGH RISK', color: theme.colors.error.DEFAULT };
     }
-    return { text: "AT RISK", color: theme.colors.warning.DEFAULT };
+    return { text: 'AT RISK', color: theme.colors.warning.DEFAULT };
   };
 
   const riskInfo = getRiskText(hoursRemaining);
 
   // RENDER: Prompt state
-  if (gambleState === "prompt") {
+  if (gambleState === 'prompt') {
     return (
       <Animated.View entering={FadeInUp.springify()}>
         <Box
@@ -256,7 +256,7 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
                       Use Streak Shield
                     </Text>
                     <Text color={theme.colors.text.inverse} variant="caption" opacity={0.8}>
-                      {shieldsAvailable > 0 ? `Save streak guaranteed (${shieldsAvailable} available)` : "No shields available"}
+                      {shieldsAvailable > 0 ? `Save streak guaranteed (${shieldsAvailable} available)` : 'No shields available'}
                     </Text>
                   </Box>
                 </Box>
@@ -311,7 +311,7 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
                 }}
               >
                 <Text variant="caption" color={theme.colors.warning.DEFAULT} textAlign="center">
-                  ⚡ If you score S or A: Streak saved + {GAMBLE_BONUS_XP} bonus XP!{"\n"}
+                  ⚡ If you score S or A: Streak saved + {GAMBLE_BONUS_XP} bonus XP!{'\n'}
                   If below A: Streak breaks, no shield used
                 </Text>
               </Box>
@@ -330,7 +330,7 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
   }
 
   // RENDER: Gambling state (session in progress)
-  if (gambleState === "gambling") {
+  if (gambleState === 'gambling') {
     return (
       <Animated.View entering={FadeIn}>
         <Box
@@ -348,7 +348,7 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
               Gamble in Progress!
             </Text>
             <Text variant="body" color={theme.colors.text.secondary} textAlign="center" mt={2}>
-              Focus and give it your best shot!{"\n"}
+              Focus and give it your best shot!{'\n'}
               Score S or A to save your {streakDays}-day streak.
             </Text>
 
@@ -364,7 +364,7 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
   }
 
   // RENDER: Won state
-  if (gambleState === "won" && outcome) {
+  if (gambleState === 'won' && outcome) {
     return (
       <Animated.View entering={FadeInUp.springify()}>
         <Box
@@ -414,7 +414,7 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
   }
 
   // RENDER: Lost state
-  if (gambleState === "lost" && outcome) {
+  if (gambleState === 'lost' && outcome) {
     return (
       <Animated.View entering={FadeInUp.springify()}>
         <Box
@@ -437,7 +437,7 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
 
             <Box mt={4} p={4} borderRadius={12} bg={theme.colors.background.primary}>
               <Text variant="body" color={theme.colors.text.secondary} textAlign="center">
-                You gave it your best shot!{"\n"}
+                You gave it your best shot!{'\n'}
                 Your {streakDays}-day streak will reset.
               </Text>
             </Box>
@@ -469,11 +469,11 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
 /**
  * Track streak gamble decision
  */
-export function trackStreakGambleDecision(userId: string, decision: "shield" | "gamble" | "dismiss", streakDays: number, hoursRemaining: number): void {
+export function trackStreakGambleDecision(userId: string, decision: 'shield' | 'gamble' | 'dismiss', streakDays: number, hoursRemaining: number): void {
   Sentry.addBreadcrumb({
-    category: "streaks",
+    category: 'streaks',
     message: `Streak gamble decision: ${decision}`,
-    level: "info",
+    level: 'info',
     data: {
       userId,
       decision,
@@ -482,7 +482,7 @@ export function trackStreakGambleDecision(userId: string, decision: "shield" | "
     },
   });
 
-  getAnalyticsService().track("streak_gamble_decision", {
+  getAnalyticsService().track('streak_gamble_decision', {
     user_id: userId,
     decision,
     streak_days: streakDays,

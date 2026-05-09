@@ -5,20 +5,28 @@
  */
 
 import React from 'react';
+import { useRoute, type RouteProp } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import type { RootStackParams } from './types';
 
-const Stack = createNativeStackNavigator<RootStackParams>();
+type OnboardingStackParams = {
+  OnboardingFlow: RootStackParams['Onboarding'];
+};
+
+const Stack = createNativeStackNavigator<OnboardingStackParams>();
 
 /**
  * Onboarding navigator component
  */
 export const OnboardingNavigator: React.FC = () => {
+  const route = useRoute<RouteProp<RootStackParams, 'Onboarding'>>();
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen
-        name="Onboarding"
+        name="OnboardingFlow"
+        initialParams={route.params}
         getComponent={() => require('../screens/onboarding/OnboardingFlowScreen').OnboardingFlowScreen}
       />
     </Stack.Navigator>

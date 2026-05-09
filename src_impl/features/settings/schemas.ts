@@ -3,19 +3,19 @@
  * Zod schemas for validation at all boundaries
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // Enum schemas
-export const SettingCategorySchema = z.enum(["general", "notifications", "coach", "appearance", "privacy", "data", "advanced"]);
+export const SettingCategorySchema = z.enum(['general', 'notifications', 'coach', 'appearance', 'privacy', 'data', 'advanced']);
 
-export const NotificationChannelSchema = z.enum(["push", "email", "in_app", "sms"]);
-export const NotificationPrioritySchema = z.enum(["critical", "high", "normal", "low"]);
-export const CoachPersonalitySchema = z.enum(["supportive", "tough", "neutral", "funny"]);
-export const CoachFrequencySchema = z.enum(["minimal", "moderate", "frequent", "constant"]);
-export const ThemeModeSchema = z.enum(["light", "dark", "system"]);
-export const DataRetentionPolicySchema = z.enum(["minimal", "standard", "comprehensive", "forever"]);
-export const ExportFormatSchema = z.enum(["json", "csv", "pdf"]);
-export const SyncStatusSchema = z.enum(["idle", "syncing", "error", "conflict"]);
+export const NotificationChannelSchema = z.enum(['push', 'email', 'in_app', 'sms']);
+export const NotificationPrioritySchema = z.enum(['critical', 'high', 'normal', 'low']);
+export const CoachPersonalitySchema = z.enum(['supportive', 'tough', 'neutral', 'funny']);
+export const CoachFrequencySchema = z.enum(['minimal', 'moderate', 'frequent', 'constant']);
+export const ThemeModeSchema = z.enum(['light', 'dark', 'system']);
+export const DataRetentionPolicySchema = z.enum(['minimal', 'standard', 'comprehensive', 'forever']);
+export const ExportFormatSchema = z.enum(['json', 'csv', 'pdf']);
+export const SyncStatusSchema = z.enum(['idle', 'syncing', 'error', 'conflict']);
 
 // Export types
 export type SettingCategory = z.infer<typeof SettingCategorySchema>;
@@ -76,7 +76,7 @@ export const NotificationSettingsSchema = z
           .object({
             enabled: z.boolean(),
             email: z.string().email(),
-            digestFrequency: z.enum(["immediate", "daily", "weekly", "never"]),
+            digestFrequency: z.enum(['immediate', 'daily', 'weekly', 'never']),
           })
           .strict(),
         inApp: z
@@ -104,7 +104,7 @@ export const NotificationSettingsSchema = z
           name: z.string().min(1).max(100),
           condition: z
             .object({
-              type: z.enum(["time", "location", "activity", "streak"]),
+              type: z.enum(['time', 'location', 'activity', 'streak']),
               params: z.record(z.unknown()),
             })
             .strict(),
@@ -153,7 +153,7 @@ export const CoachSettingsSchema = z
           id: z.string().uuid(),
           userId: z.string().uuid(),
           eventType: z.string(),
-          condition: z.enum(["before", "after", "during"]),
+          condition: z.enum(['before', 'after', 'during']),
           threshold: z.number().optional(),
           messageTemplate: z.string(),
           isActive: z.boolean(),
@@ -181,7 +181,7 @@ export const AppearanceSettingsSchema = z
 export const PrivacySettingsSchema = z
   .object({
     userId: z.string().uuid(),
-    profileVisibility: z.enum(["public", "friends", "private"]),
+    profileVisibility: z.enum(['public', 'friends', 'private']),
     showOnlineStatus: z.boolean(),
     showActivityStatus: z.boolean(),
     allowDataAnalysis: z.boolean(),
@@ -199,7 +199,7 @@ export const DataControlSettingsSchema = z
     autoExport: z
       .object({
         enabled: z.boolean(),
-        frequency: z.enum(["weekly", "monthly", "never"]),
+        frequency: z.enum(['weekly', 'monthly', 'never']),
         format: ExportFormatSchema,
         lastExport: z.number().int().positive().optional(),
       })
@@ -226,7 +226,7 @@ export const SyncStateSchema = z
           remoteValue: SettingValueSchema,
           localTimestamp: z.number().int().positive(),
           remoteTimestamp: z.number().int().positive(),
-          resolution: z.enum(["local", "remote", "merge"]).optional(),
+          resolution: z.enum(['local', 'remote', 'merge']).optional(),
         })
         .strict(),
     ),
@@ -271,7 +271,7 @@ export const ImportSettingsInputSchema = z
   .object({
     userId: z.string().uuid(),
     settingsJson: z.string(),
-    mergeStrategy: z.enum(["merge", "replace", "local_wins", "remote_wins"]).default("merge"),
+    mergeStrategy: z.enum(['merge', 'replace', 'local_wins', 'remote_wins']).default('merge'),
   })
   .strict();
 
@@ -291,21 +291,21 @@ export function createDefaultSettings(userId: string): z.infer<typeof UserPrefer
     userId,
     version: 1,
     settings: {
-      "general.language": {
+      'general.language': {
         id: crypto.randomUUID(),
         userId,
-        key: "general.language",
-        value: "en",
-        category: "general",
+        key: 'general.language',
+        value: 'en',
+        category: 'general',
         isDefault: true,
         lastModified: now,
       },
-      "general.timezone": {
+      'general.timezone': {
         id: crypto.randomUUID(),
         userId,
-        key: "general.timezone",
+        key: 'general.timezone',
         value: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        category: "general",
+        category: 'general',
         isDefault: true,
         lastModified: now,
       },
@@ -327,8 +327,8 @@ export function createDefaultNotificationSettings(userId: string): z.infer<typeo
       },
       email: {
         enabled: true,
-        email: "",
-        digestFrequency: "daily",
+        email: '',
+        digestFrequency: 'daily',
       },
       inApp: {
         enabled: true,
@@ -337,9 +337,9 @@ export function createDefaultNotificationSettings(userId: string): z.infer<typeo
       },
     },
     preferences: {
-      critical: { enabled: true, channels: ["push", "email", "in_app"] },
-      high: { enabled: true, channels: ["push", "in_app"] },
-      normal: { enabled: true, channels: ["in_app"] },
+      critical: { enabled: true, channels: ['push', 'email', 'in_app'] },
+      high: { enabled: true, channels: ['push', 'in_app'] },
+      normal: { enabled: true, channels: ['in_app'] },
       low: { enabled: false, channels: [] },
     },
     customRules: [],
@@ -351,8 +351,8 @@ export function createDefaultCoachSettings(userId: string): z.infer<typeof Coach
   return CoachSettingsSchema.parse({
     userId,
     enabled: true,
-    personality: "supportive",
-    frequency: "moderate",
+    personality: 'supportive',
+    frequency: 'moderate',
     messageTypes: {
       streakReminders: true,
       sessionTips: true,
@@ -362,8 +362,8 @@ export function createDefaultCoachSettings(userId: string): z.infer<typeof Coach
     },
     quietHours: {
       enabled: true,
-      start: "22:00",
-      end: "08:00",
+      start: '22:00',
+      end: '08:00',
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
     customTriggers: [],
@@ -374,8 +374,8 @@ export function createDefaultCoachSettings(userId: string): z.infer<typeof Coach
 export function createDefaultAppearanceSettings(userId: string): AppearanceSettings {
   return AppearanceSettingsSchema.parse({
     userId,
-    theme: "system",
-    accentColor: "#6366f1",
+    theme: 'system',
+    accentColor: '#6366f1',
     fontScale: 1,
     useSystemFont: true,
     reduceMotion: false,
@@ -388,7 +388,7 @@ export function createDefaultAppearanceSettings(userId: string): AppearanceSetti
 export function createDefaultPrivacySettings(userId: string): z.infer<typeof PrivacySettingsSchema> {
   return PrivacySettingsSchema.parse({
     userId,
-    profileVisibility: "friends",
+    profileVisibility: 'friends',
     showOnlineStatus: true,
     showActivityStatus: true,
     allowDataAnalysis: true,
@@ -402,11 +402,11 @@ export function createDefaultPrivacySettings(userId: string): z.infer<typeof Pri
 export function createDefaultDataControlSettings(userId: string): z.infer<typeof DataControlSettingsSchema> {
   return DataControlSettingsSchema.parse({
     userId,
-    retentionPolicy: "standard",
+    retentionPolicy: 'standard',
     autoExport: {
       enabled: false,
-      frequency: "never",
-      format: "json",
+      frequency: 'never',
+      format: 'json',
     },
     backupEnabled: true,
   });

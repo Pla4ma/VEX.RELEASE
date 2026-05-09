@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useSession } from '../../session/hooks/useSession';
 import { useSessionStats } from '../../session/hooks/useSession';
 import { ActiveSessionHUD } from '../../session/components/ActiveSessionHUD';
@@ -16,10 +16,14 @@ import { SessionLoadingState } from '../../session/components/states/SessionLoad
 import { SessionControls } from '../../session/components/SessionControls';
 import type { SessionPreset } from '../../session/types';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { useTheme, type Theme } from '../../theme';
 
 export default function SessionHomeScreen() {
   const [activeView, setActiveView] = useState<'home' | 'custom'>('home');
   const userId = 'current-user'; // In real app, get from auth context
+  const theme = useTheme();
+
+  const styles = getStyles(theme);
 
   const {
     session,
@@ -104,42 +108,41 @@ export default function SessionHomeScreen() {
   );
 }
 
-const styles = createSheet({
+const getStyles = ({ theme }: { theme: Theme }) => createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: theme.colors.semantic.background,
   },
   statsContainer: {
     flexDirection: 'row',
-    padding: 16,
-    gap: 12,
+    padding: theme.spacing[4],
+    gap: theme.spacing[2],
   },
   statBox: {
     flex: 1,
-    backgroundColor: '#2a2a3e',
-    borderRadius: 12,
-    padding: 16,
+    backgroundColor: theme.colors.semantic.surface,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing[4],
     alignItems: 'center',
   },
   statValue: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#e94560',
+    fontSize: theme.typography.heading.h3.fontSize,
+    fontWeight: theme.fontWeights.bold,
+    color: theme.colors.semantic.primary,
   },
   statLabel: {
-    fontSize: 12,
-    color: '#9E9E9E',
-    marginTop: 4,
+    fontSize: theme.typography.ui.caption.fontSize,
+    color: theme.colors.semantic.textMuted,
+    marginTop: theme.spacing[1],
   },
   content: {
     flex: 1,
-    padding: 16,
+    padding: theme.spacing[4],
   },
   errorText: {
-    color: '#e94560',
+    color: theme.colors.semantic.danger,
     fontSize: 16,
     textAlign: 'center',
     marginTop: 40,
   },
 });
-

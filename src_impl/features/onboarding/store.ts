@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 /**
  * Onboarding Store
  *
@@ -7,12 +7,12 @@ import { captureSilentFailure } from "../../utils/silent-failure";
  * @phase 2
  */
 
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
-import { getMMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
-import type { OnboardingState, FocusGoal, FocusDuration } from "./schemas";
-import { OnboardingStateSchema } from "./schemas";
+import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
+import type { OnboardingState, FocusGoal, FocusDuration } from './schemas';
+import { OnboardingStateSchema } from './schemas';
 
 /**
  * Initial onboarding state
@@ -165,7 +165,7 @@ export const useOnboardingStore = create<OnboardingStore>()(
       },
     }),
     {
-      name: "onboarding-storage",
+      name: 'onboarding-storage',
       storage: createJSONStorage(() => ({
         getItem: async (name: string): Promise<string | null> => {
           return await mmkvStorage.getItem(name);
@@ -191,7 +191,7 @@ export const useOnboardingStore = create<OnboardingStore>()(
           try {
             OnboardingStateSchema.parse(state);
           } catch (error) {
-            captureSilentFailure(error, { feature: "onboarding", operation: "safe-fallback", type: "data" });
+            captureSilentFailure(error, { feature: 'onboarding', operation: 'safe-fallback', type: 'data' });
             // Invalid stored state, will use initial state
           }
         }

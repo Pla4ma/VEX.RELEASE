@@ -8,12 +8,12 @@
  * @phase 3A.2
  */
 
-import React from "react";
-import Animated, { useAnimatedStyle, withRepeat, withTiming, withSequence, withSpring, interpolateColor } from "react-native-reanimated";
+import React from 'react';
+import Animated, { useAnimatedStyle, withRepeat, withTiming, withSequence, withSpring, interpolateColor } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export interface BossNearDeathProps {
   /** Current boss health percentage (0-100) */
@@ -56,7 +56,7 @@ export function BossNearDeath({ healthPercent, hoursRemaining, bossName, compact
           {
             borderWidth: 2,
             borderRadius: 12,
-            overflow: "hidden",
+            overflow: 'hidden',
           },
           pulseStyle,
         ]}
@@ -68,7 +68,7 @@ export function BossNearDeath({ healthPercent, hoursRemaining, bossName, compact
             px="md"
             py="xs"
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: 0,
               left: 0,
               right: 0,
@@ -85,7 +85,7 @@ export function BossNearDeath({ healthPercent, hoursRemaining, bossName, compact
         {!isCritical && (
           <Box
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: -8,
               right: -8,
               zIndex: 10,
@@ -109,7 +109,7 @@ export function BossNearDeath({ healthPercent, hoursRemaining, bossName, compact
         {
           borderWidth: 3,
           borderRadius: 16,
-          overflow: "hidden",
+          overflow: 'hidden',
         },
         pulseStyle,
       ]}
@@ -169,7 +169,7 @@ export function BossEscapeWarning({ bossName, hoursRemaining }: { bossName: stri
           borderRadius: 12,
           borderWidth: 2,
           borderColor: theme.colors.error.DEFAULT,
-          overflow: "hidden",
+          overflow: 'hidden',
         },
         pulseStyle,
       ]}

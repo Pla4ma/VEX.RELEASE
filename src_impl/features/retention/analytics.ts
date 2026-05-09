@@ -4,7 +4,7 @@
  * Comprehensive analytics tracking for user retention, engagement, and churn prevention features.
  */
 
-import { capture } from "../../shared/analytics/analytics-service";
+import { capture } from '../../shared/analytics/analytics-service';
 
 // ============================================================================
 // USER ACTIVITY ANALYTICS
@@ -12,7 +12,7 @@ import { capture } from "../../shared/analytics/analytics-service";
 
 export function trackUserActivity(
   userId: string,
-  activityType: "session_start" | "feature_use" | "social_interaction" | "achievement" | "purchase",
+  activityType: 'session_start' | 'feature_use' | 'social_interaction' | 'achievement' | 'purchase',
   activityDetails: {
     feature?: string;
     duration?: number;
@@ -26,7 +26,7 @@ export function trackUserActivity(
     churnRisk: number;
   },
 ): void {
-  capture("retention_user_activity", {
+  capture('retention_user_activity', {
     user_id: userId,
     activity_type: activityType,
     activity_details: activityDetails,
@@ -38,7 +38,7 @@ export function trackUserInactivity(
   userId: string,
   inactivityPeriod: number,
   lastActivityDate: Date,
-  inactivityReason: "natural" | "forced" | "technical" | "user_choice",
+  inactivityReason: 'natural' | 'forced' | 'technical' | 'user_choice',
   previousEngagement: {
     averageSessionDuration: number;
     featuresUsed: string[];
@@ -51,7 +51,7 @@ export function trackUserInactivity(
     socialDisconnection: boolean;
   },
 ): void {
-  capture("retention_user_inactivity", {
+  capture('retention_user_inactivity', {
     user_id: userId,
     inactivity_period: inactivityPeriod,
     last_activity_date: lastActivityDate.toISOString(),
@@ -65,7 +65,7 @@ export function trackChurnRiskChanged(
   userId: string,
   previousRisk: number,
   currentRisk: number,
-  riskLevel: "low" | "medium" | "high" | "critical",
+  riskLevel: 'low' | 'medium' | 'high' | 'critical',
   contributingFactors: {
     factor: string;
     impact: number;
@@ -78,11 +78,11 @@ export function trackChurnRiskChanged(
   },
   recommendedActions: {
     action: string;
-    priority: "low" | "medium" | "high" | "urgent";
+    priority: 'low' | 'medium' | 'high' | 'urgent';
     expectedImpact: number;
   }[],
 ): void {
-  capture("retention_churn_risk_changed", {
+  capture('retention_churn_risk_changed', {
     user_id: userId,
     previous_risk: previousRisk,
     current_risk: currentRisk,
@@ -120,7 +120,7 @@ export function trackRetentionStrategyTriggered(
     priority: number;
   }[],
 ): void {
-  capture("retention_strategy_triggered", {
+  capture('retention_strategy_triggered', {
     user_id: userId,
     strategy_id: strategyId,
     strategy_name: strategyName,
@@ -152,7 +152,7 @@ export function trackRetentionStrategyCompleted(
     costPerUser: number;
   },
 ): void {
-  capture("retention_strategy_completed", {
+  capture('retention_strategy_completed', {
     user_id: userId,
     strategy_id: strategyId,
     completion_date: completionDate.toISOString(),
@@ -167,7 +167,7 @@ export function trackRetentionStrategyFailed(
   strategyId: string,
   failureDate: Date,
   failureReason: string,
-  failureType: "technical" | "execution" | "performance" | "budget" | "compliance",
+  failureType: 'technical' | 'execution' | 'performance' | 'budget' | 'compliance',
   affectedUsers: number,
   impact: {
     userExperience: string;
@@ -180,7 +180,7 @@ export function trackRetentionStrategyFailed(
     timeline: string;
   },
 ): void {
-  capture("retention_strategy_failed", {
+  capture('retention_strategy_failed', {
     user_id: userId,
     strategy_id: strategyId,
     failure_date: failureDate.toISOString(),
@@ -219,7 +219,7 @@ export function trackCohortAnalysisCompleted(
     recommendations: string[];
   },
 ): void {
-  capture("retention_cohort_analysis_completed", {
+  capture('retention_cohort_analysis_completed', {
     user_id: userId,
     cohort_id: cohortId,
     cohort_name: cohortName,
@@ -236,8 +236,8 @@ export function trackCohortAnalysisCompleted(
 export function trackCohortPerformanceAlert(
   userId: string,
   cohortId: string,
-  alertType: "retention_drop" | "churn_spike" | "engagement_decline" | "anomaly",
-  severity: "low" | "medium" | "high" | "critical",
+  alertType: 'retention_drop' | 'churn_spike' | 'engagement_decline' | 'anomaly',
+  severity: 'low' | 'medium' | 'high' | 'critical',
   metrics: {
     current: number;
     baseline: number;
@@ -255,7 +255,7 @@ export function trackCohortPerformanceAlert(
     longTerm: string[];
   },
 ): void {
-  capture("retention_cohort_performance_alert", {
+  capture('retention_cohort_performance_alert', {
     user_id: userId,
     cohort_id: cohortId,
     alert_type: alertType,
@@ -296,7 +296,7 @@ export function trackRetentionExperimentStarted(
   startDate: Date,
   endDate: Date,
 ): void {
-  capture("retention_experiment_started", {
+  capture('retention_experiment_started', {
     user_id: userId,
     experiment_id: experimentId,
     experiment_name: experimentName,
@@ -341,7 +341,7 @@ export function trackRetentionExperimentCompleted(
     roi: number;
   },
 ): void {
-  capture("retention_experiment_completed", {
+  capture('retention_experiment_completed', {
     user_id: userId,
     experiment_id: experimentId,
     completion_date: completionDate.toISOString(),
@@ -373,13 +373,13 @@ export function trackChurnPredictionUpdated(
   version: string,
   recommendations: {
     type: string;
-    priority: "low" | "medium" | "high" | "urgent";
+    priority: 'low' | 'medium' | 'high' | 'urgent';
     action: string;
     expectedImpact: number;
     timeframe: string;
   }[],
 ): void {
-  capture("retention_churn_prediction_updated", {
+  capture('retention_churn_prediction_updated', {
     user_id: userId,
     prediction_id: predictionId,
     prediction_date: new Date().toISOString(),
@@ -423,7 +423,7 @@ export function trackRetentionPredictionAccuracy(
     contributingFactors: string[];
   },
 ): void {
-  capture("retention_prediction_accuracy", {
+  capture('retention_prediction_accuracy', {
     user_id: userId,
     model,
     version,
@@ -445,7 +445,7 @@ export function trackRetentionPredictionAccuracy(
 export function trackRetentionInterventionTriggered(
   userId: string,
   interventionId: string,
-  interventionType: "reactivation" | "engagement" | "incentive" | "support" | "education",
+  interventionType: 'reactivation' | 'engagement' | 'incentive' | 'support' | 'education',
   triggerReason: string,
   triggerCondition: {
     metric: string;
@@ -467,7 +467,7 @@ export function trackRetentionInterventionTriggered(
     }[];
   },
 ): void {
-  capture("retention_intervention_triggered", {
+  capture('retention_intervention_triggered', {
     user_id: userId,
     intervention_id: interventionId,
     intervention_type: interventionType,
@@ -501,7 +501,7 @@ export function trackRetentionInterventionCompleted(
     cost: number;
   },
 ): void {
-  capture("retention_intervention_completed", {
+  capture('retention_intervention_completed', {
     user_id: userId,
     intervention_id: interventionId,
     completion_date: completionDate.toISOString(),
@@ -542,7 +542,7 @@ export function trackUserLifecycleStageChanged(
     ongoing: string[];
   },
 ): void {
-  capture("retention_user_lifecycle_stage_changed", {
+  capture('retention_user_lifecycle_stage_changed', {
     user_id: userId,
     previous_stage: previousStage,
     current_stage: currentStage,
@@ -558,7 +558,7 @@ export function trackUserLifecycleStageChanged(
 export function trackUserMilestoneReached(
   userId: string,
   milestoneId: string,
-  milestoneType: "engagement" | "retention" | "value" | "loyalty" | "achievement",
+  milestoneType: 'engagement' | 'retention' | 'value' | 'loyalty' | 'achievement',
   milestoneName: string,
   reachedAt: Date,
   progress: {
@@ -577,7 +577,7 @@ export function trackUserMilestoneReached(
     estimatedTime: number;
   },
 ): void {
-  capture("retention_user_milestone_reached", {
+  capture('retention_user_milestone_reached', {
     user_id: userId,
     milestone_id: milestoneId,
     milestone_type: milestoneType,
@@ -595,7 +595,7 @@ export function trackUserMilestoneReached(
 
 export function trackRetentionDashboardViewed(
   userId: string,
-  dashboardType: "overview" | "user_detail" | "cohort" | "experiments" | "strategies",
+  dashboardType: 'overview' | 'user_detail' | 'cohort' | 'experiments' | 'strategies',
   filters: {
     timeframe: string;
     segments: string[];
@@ -613,7 +613,7 @@ export function trackRetentionDashboardViewed(
     role: string;
   },
 ): void {
-  capture("retention_dashboard_viewed", {
+  capture('retention_dashboard_viewed', {
     user_id: userId,
     dashboard_type: dashboardType,
     filters,
@@ -640,7 +640,7 @@ export function trackRetentionUserProperties(
     lastInterventionDate?: Date;
   },
 ): void {
-  capture("retention_user_properties", {
+  capture('retention_user_properties', {
     user_id: userId,
     current_stage: userProperties.currentStage,
     churn_risk: userProperties.churnRisk,
@@ -660,7 +660,7 @@ export function trackRetentionUserProperties(
 
 export function trackRetentionError(
   userId: string,
-  errorType: "prediction_error" | "intervention_error" | "analytics_error" | "system_error",
+  errorType: 'prediction_error' | 'intervention_error' | 'analytics_error' | 'system_error',
   errorCode: string,
   errorMessage: string,
   context: {
@@ -671,7 +671,7 @@ export function trackRetentionError(
     experimentId?: string;
   },
 ): void {
-  capture("retention_error", {
+  capture('retention_error', {
     user_id: userId,
     error_type: errorType,
     error_code: errorCode,
@@ -684,8 +684,8 @@ export function trackRetentionError(
 // FUNNEL ANALYTICS
 // ============================================================================
 
-export function trackRetentionFunnel(userId: string, step: "user_acquired" | "first_session" | "engagement" | "retention" | "churn_prevented" | "loyalty"): void {
-  capture("retention_funnel", {
+export function trackRetentionFunnel(userId: string, step: 'user_acquired' | 'first_session' | 'engagement' | 'retention' | 'churn_prevented' | 'loyalty'): void {
+  capture('retention_funnel', {
     user_id: userId,
     funnel_step: step,
   });

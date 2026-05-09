@@ -3,16 +3,16 @@
  * Animated flame chain showing streak days with fire effects
  */
 
-import React, { useEffect } from "react";
-import { View, Text } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useEffect } from 'react';
+import { View, Text } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface StreakFlameChainProps {
   currentStreak: number;
   longestStreak: number;
   isAtRisk: boolean;
-  riskLevel: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  riskLevel: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   streakDays: Array<{
     date: string;
     completed: boolean;
@@ -40,35 +40,35 @@ export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({ currentStrea
 
   const getRiskColor = () => {
     switch (riskLevel) {
-      case "CRITICAL":
-        return "#F44336";
-      case "HIGH":
-        return "#FF9800";
-      case "MEDIUM":
-        return "#FFC107";
-      case "LOW":
-        return "#FFEB3B";
+      case 'CRITICAL':
+        return '#F44336';
+      case 'HIGH':
+        return '#FF9800';
+      case 'MEDIUM':
+        return '#FFC107';
+      case 'LOW':
+        return '#FFEB3B';
       default:
-        return "#4CAF50";
+        return '#4CAF50';
     }
   };
 
   const getFlameColor = (index: number, completed: boolean) => {
     if (!completed) {
-      return ["#3a3a5a", "#2a2a4a"];
+      return ['#3a3a5a', '#2a2a4a'];
     }
 
     const day = index + 1;
     if (day >= 100) {
-      return ["#FFD700", "#FF6B35"];
+      return ['#FFD700', '#FF6B35'];
     } // Gold fire
     if (day >= 30) {
-      return ["#FF6B35", "#F44336"];
+      return ['#FF6B35', '#F44336'];
     } // Orange-red fire
     if (day >= 7) {
-      return ["#FF9800", "#FF5722"];
+      return ['#FF9800', '#FF5722'];
     } // Orange fire
-    return ["#FFC107", "#FF9800"]; // Yellow-orange fire
+    return ['#FFC107', '#FF9800']; // Yellow-orange fire
   };
 
   const renderDayNode = (day: (typeof streakDays)[0], index: number) => {
@@ -145,7 +145,7 @@ export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({ currentStrea
               styles.progressFill,
               {
                 width: `${(currentStreak / Math.max(longestStreak, 30)) * 100}%`,
-                backgroundColor: isAtRisk ? getRiskColor() : "#FF6B35",
+                backgroundColor: isAtRisk ? getRiskColor() : '#FF6B35',
               },
             ]}
           />
@@ -166,7 +166,7 @@ export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({ currentStrea
             <View style={styles.milestoneCard}>
               <Text style={styles.milestoneEmojiSmall}>🎯</Text>
               <Text style={styles.milestoneText}>
-                {remaining} day{remaining !== 1 ? "s" : ""} until {nextMilestone}-day milestone!
+                {remaining} day{remaining !== 1 ? 's' : ''} until {nextMilestone}-day milestone!
               </Text>
               <Text style={styles.milestoneReward}>Reward: {getMilestoneReward(nextMilestone)}</Text>
             </View>
@@ -180,39 +180,39 @@ export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({ currentStrea
 
 const getMilestoneReward = (days: number): string => {
   const rewards: Record<number, string> = {
-    3: "100 Coins",
-    7: "250 Coins",
-    14: "25 Gems",
-    30: "Streak Shield",
-    60: "100 Gems",
-    100: "250 Gems",
-    180: "500 Gems",
-    365: "1000 Gems + Legendary Badge",
+    3: '100 Coins',
+    7: '250 Coins',
+    14: '25 Gems',
+    30: 'Streak Shield',
+    60: '100 Gems',
+    100: '250 Gems',
+    180: '500 Gems',
+    365: '1000 Gems + Legendary Badge',
   };
-  return rewards[days] || "Special Reward";
+  return rewards[days] || 'Special Reward';
 };
 
 const styles = createSheet({
   container: {
-    backgroundColor: "#1a1a2e",
+    backgroundColor: '#1a1a2e',
     borderRadius: 20,
     padding: 20,
     margin: 16,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 16,
   },
   streakBadge: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "rgba(255,107,53,0.2)",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,107,53,0.2)',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: "#FF6B35",
+    borderColor: '#FF6B35',
   },
   streakEmoji: {
     fontSize: 24,
@@ -220,8 +220,8 @@ const styles = createSheet({
   },
   streakCount: {
     fontSize: 28,
-    fontWeight: "bold",
-    color: "#FF6B35",
+    fontWeight: 'bold',
+    color: '#FF6B35',
   },
   streakInfo: {
     marginLeft: 16,
@@ -229,16 +229,16 @@ const styles = createSheet({
   },
   streakLabel: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#FFF",
+    fontWeight: '600',
+    color: '#FFF',
   },
   longestText: {
     fontSize: 12,
-    color: "rgba(255,255,255,0.5)",
+    color: 'rgba(255,255,255,0.5)',
     marginTop: 2,
   },
   riskBadge: {
-    alignItems: "center",
+    alignItems: 'center',
     padding: 8,
   },
   riskEmoji: {
@@ -246,7 +246,7 @@ const styles = createSheet({
   },
   riskText: {
     fontSize: 10,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 4,
   },
   progressContainer: {
@@ -254,57 +254,57 @@ const styles = createSheet({
   },
   progressTrack: {
     height: 8,
-    backgroundColor: "#2a2a4a",
+    backgroundColor: '#2a2a4a',
     borderRadius: 4,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   progressFill: {
-    height: "100%",
+    height: '100%',
     borderRadius: 4,
   },
   progressText: {
     fontSize: 11,
-    color: "rgba(255,255,255,0.5)",
+    color: 'rgba(255,255,255,0.5)',
     marginTop: 6,
-    textAlign: "right",
+    textAlign: 'right',
   },
   chainContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
     gap: SPACING,
     marginBottom: 16,
   },
   dayNode: {
-    position: "relative",
+    position: 'relative',
   },
   dayCircle: {
     width: DAY_SIZE,
     height: DAY_SIZE,
     borderRadius: DAY_SIZE / 2,
-    backgroundColor: "#2a2a4a",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#2a2a4a',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   inactiveCircle: {
-    backgroundColor: "#2a2a4a",
+    backgroundColor: '#2a2a4a',
     borderWidth: 2,
-    borderColor: "#3a3a5a",
+    borderColor: '#3a3a5a',
   },
   todayCircle: {
     borderWidth: 3,
-    borderColor: "#4CAF50",
+    borderColor: '#4CAF50',
   },
   dayNumber: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "rgba(255,255,255,0.3)",
+    fontWeight: '600',
+    color: 'rgba(255,255,255,0.3)',
   },
   activeDayNumber: {
-    color: "#FFF",
+    color: '#FFF',
   },
   flameIcon: {
-    position: "absolute",
+    position: 'absolute',
     top: -4,
     right: -4,
   },
@@ -312,29 +312,29 @@ const styles = createSheet({
     fontSize: 16,
   },
   milestoneBadge: {
-    position: "absolute",
+    position: 'absolute',
     bottom: -4,
-    left: "50%",
+    left: '50%',
     marginLeft: -8,
   },
   milestoneEmoji: {
     fontSize: 16,
   },
   connector: {
-    position: "absolute",
+    position: 'absolute',
     right: -SPACING,
-    top: "50%",
+    top: '50%',
     width: SPACING,
     height: 4,
     marginTop: -2,
   },
   milestoneCard: {
-    backgroundColor: "rgba(255,215,0,0.1)",
+    backgroundColor: 'rgba(255,215,0,0.1)',
     borderRadius: 12,
     padding: 12,
     borderWidth: 1,
-    borderColor: "rgba(255,215,0,0.3)",
-    alignItems: "center",
+    borderColor: 'rgba(255,215,0,0.3)',
+    alignItems: 'center',
   },
   milestoneEmojiSmall: {
     fontSize: 20,
@@ -342,13 +342,13 @@ const styles = createSheet({
   },
   milestoneText: {
     fontSize: 13,
-    color: "#FFF",
-    textAlign: "center",
-    fontWeight: "600",
+    color: '#FFF',
+    textAlign: 'center',
+    fontWeight: '600',
   },
   milestoneReward: {
     fontSize: 11,
-    color: "#FFD700",
+    color: '#FFD700',
     marginTop: 4,
   },
 });

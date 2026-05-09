@@ -1,28 +1,28 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 /**
  * Squad Domain Validation Rules
  *
  * Comprehensive validation for all squad operations.
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
-import { CreateSquadInputSchema, type CreateSquadInput, type InviteToSquadInput, type Squad, type SquadRole, type UpdateSquadInput } from "./schemas";
+import { CreateSquadInputSchema, type CreateSquadInput, type InviteToSquadInput, type Squad, type SquadRole, type UpdateSquadInput } from './schemas';
 
-const ROLE_HIERARCHY: SquadRole[] = ["GUEST", "MEMBER", "MODERATOR", "ADMIN", "FOUNDER"];
+const ROLE_HIERARCHY: SquadRole[] = ['GUEST', 'MEMBER', 'MODERATOR', 'ADMIN', 'FOUNDER'];
 
 export const SquadValidationRules = {
   createSquad: (input: CreateSquadInput) => {
     const extendedSchema = CreateSquadInputSchema.extend({
       name: z
         .string()
-        .min(3, "Squad name must be at least 3 characters")
-        .max(50, "Squad name must be at most 50 characters")
-        .regex(/^[a-zA-Z0-9\s-_]+$/, "Squad name can only contain letters, numbers, spaces, hyphens and underscores")
+        .min(3, 'Squad name must be at least 3 characters')
+        .max(50, 'Squad name must be at most 50 characters')
+        .regex(/^[a-zA-Z0-9\s-_]+$/, 'Squad name can only contain letters, numbers, spaces, hyphens and underscores')
         .trim(),
-      description: z.string().max(500, "Description must be at most 500 characters").nullable().optional(),
-      maxMembers: z.number().int().min(2, "Squad must allow at least 2 members").max(20, "Squad cannot exceed 20 members").default(5),
-      minLevelRequirement: z.number().int().min(1, "Minimum level must be at least 1").max(100, "Minimum level cannot exceed 100").nullable().optional(),
+      description: z.string().max(500, 'Description must be at most 500 characters').nullable().optional(),
+      maxMembers: z.number().int().min(2, 'Squad must allow at least 2 members').max(20, 'Squad cannot exceed 20 members').default(5),
+      minLevelRequirement: z.number().int().min(1, 'Minimum level must be at least 1').max(100, 'Minimum level cannot exceed 100').nullable().optional(),
     });
 
     return extendedSchema.safeParse(input);
@@ -32,30 +32,30 @@ export const SquadValidationRules = {
     const errors: string[] = [];
     const warnings: string[] = [];
 
-    if (typeof updates.maxMembers === "number") {
+    if (typeof updates.maxMembers === 'number') {
       if (updates.maxMembers < memberCount) {
         errors.push(`Cannot reduce max members below current count (${memberCount})`);
       }
 
       if (updates.maxMembers > 20) {
-        errors.push("Max members cannot exceed 20");
+        errors.push('Max members cannot exceed 20');
       }
     }
 
-    if (updates.joinRequirements === "OPEN" && current.memberCount > 10) {
-      warnings.push("Opening squad to public with many members may attract unwanted join requests");
+    if (updates.joinRequirements === 'OPEN' && current.memberCount > 10) {
+      warnings.push('Opening squad to public with many members may attract unwanted join requests');
     }
 
-    if (typeof updates.description === "string" && updates.description.length > 500) {
-      errors.push("Description cannot exceed 500 characters");
+    if (typeof updates.description === 'string' && updates.description.length > 500) {
+      errors.push('Description cannot exceed 500 characters');
     }
 
-    if (typeof updates.avatarUrl === "string" && updates.avatarUrl.length > 0) {
+    if (typeof updates.avatarUrl === 'string' && updates.avatarUrl.length > 0) {
       try {
         new URL(updates.avatarUrl);
       } catch (error) {
-        captureSilentFailure(error, { feature: "squads", operation: "safe-fallback", type: "data" });
-        errors.push("Invalid avatar URL format");
+        captureSilentFailure(error, { feature: 'squads', operation: 'safe-fallback', type: 'data' });
+        errors.push('Invalid avatar URL format');
       }
     }
 
@@ -77,36 +77,36 @@ export const SquadValidationRules = {
     const errors: string[] = [];
 
     if (context.squadMemberCount >= context.squadMaxMembers) {
-      errors.push("Squad is at maximum capacity");
+      errors.push('Squad is at maximum capacity');
     }
 
     if (context.isSelfInvite) {
-      errors.push("Cannot invite yourself");
+      errors.push('Cannot invite yourself');
     }
 
     if (context.targetAlreadyMember) {
-      errors.push("User is already a member of this squad");
+      errors.push('User is already a member of this squad');
     }
 
     if (ROLE_HIERARCHY.indexOf(context.offeredRole) > ROLE_HIERARCHY.indexOf(context.inviterRole)) {
-      errors.push("Cannot offer a role higher than your own");
+      errors.push('Cannot offer a role higher than your own');
     }
 
     if (context.existingPendingInvite) {
       const hoursSinceLastInvite = (Date.now() - context.existingPendingInvite.createdAt) / (1000 * 60 * 60);
 
       if (hoursSinceLastInvite < 1) {
-        errors.push("Please wait at least 1 hour before sending another invite to the same user");
+        errors.push('Please wait at least 1 hour before sending another invite to the same user');
       }
     }
 
     if (input.expiresInHours !== undefined) {
       if (input.expiresInHours < 1) {
-        errors.push("Invite must be valid for at least 1 hour");
+        errors.push('Invite must be valid for at least 1 hour');
       }
 
       if (input.expiresInHours > 168) {
-        errors.push("Invite cannot be valid for more than 7 days");
+        errors.push('Invite cannot be valid for more than 7 days');
       }
     }
 
@@ -134,16 +134,16 @@ export const SquadValidationRules = {
   validateSessionConfig: (config: { type: string; duration: number; maxParticipants?: number }): { valid: boolean; errors: string[] } => {
     const errors: string[] = [];
 
-    if (!["focus", "break", "collaboration"].includes(config.type)) {
-      errors.push("Invalid session type");
+    if (!['focus', 'break', 'collaboration'].includes(config.type)) {
+      errors.push('Invalid session type');
     }
 
     if (config.duration < 60 || config.duration > 7200) {
-      errors.push("Session duration must be between 1 minute and 2 hours");
+      errors.push('Session duration must be between 1 minute and 2 hours');
     }
 
     if (config.maxParticipants !== undefined && (config.maxParticipants < 2 || config.maxParticipants > 20)) {
-      errors.push("Session participants must be between 2 and 20");
+      errors.push('Session participants must be between 2 and 20');
     }
 
     return { valid: errors.length === 0, errors };
@@ -197,16 +197,16 @@ export const SquadBusinessRules = {
     const DAYS_14 = 14 * 24 * 60 * 60 * 1000;
     const DAYS_7 = 7 * 24 * 60 * 60 * 1000;
 
-    if (["FOUNDER", "ADMIN"].includes(member.role)) {
+    if (['FOUNDER', 'ADMIN'].includes(member.role)) {
       return { shouldKick: false };
     }
 
     if (!member.lastContributionAt && now - member.joinedAt > DAYS_7) {
-      return { shouldKick: true, reason: "No activity for 7 days after joining" };
+      return { shouldKick: true, reason: 'No activity for 7 days after joining' };
     }
 
     if (member.lastContributionAt && now - member.lastContributionAt > DAYS_14) {
-      return { shouldKick: true, reason: "No activity for 14 days" };
+      return { shouldKick: true, reason: 'No activity for 14 days' };
     }
 
     return { shouldKick: false };
@@ -220,7 +220,7 @@ export const SquadBusinessRules = {
       return false;
     }
 
-    const profanityList = ["badword1", "badword2"];
+    const profanityList = ['badword1', 'badword2'];
     if (profanityList.some((word) => normalized.includes(word))) {
       return false;
     }

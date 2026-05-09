@@ -5,7 +5,9 @@
  * providing immediate visual feedback and emotional connection.
  */
 
-export { CompanionService, getCompanionService, clearCompanionService } from './service';
+export { CompanionService } from './service';
+export { getCompanionService, clearCompanionService } from './service-instance';
+export { getCompanion, levelUpCompanion, feedCompanion, getCompanionBonus } from './profile-service';
 export { LivingCompanion } from './components/LivingCompanion';
 export { CompanionEvolutionCeremony } from './components/CompanionEvolutionCeremony';
 export {
@@ -26,3 +28,11 @@ export type { PersonalityEventType } from './CompanionPersonalityEngine';
 
 // Analytics
 export * as analytics from './analytics';
+
+// Events
+export {
+  emitCompanionStateChanged,
+  emitCompanionEvolution,
+  emitCompanionMilestone,
+  subscribeToCompanionEvents,
+} from './events';

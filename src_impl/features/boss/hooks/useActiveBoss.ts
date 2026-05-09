@@ -7,8 +7,8 @@
  * @phase 3.7
  */
 
-import { useMemo, useCallback } from "react";
-import { useActiveBoss as useActiveBossBase } from "../hooks";
+import { useMemo, useCallback } from 'react';
+import { useActiveBoss as useActiveBossBase } from '../hooks';
 
 export interface DamageCalculation {
   /** Base damage from session duration */
@@ -44,14 +44,14 @@ export interface ActiveBossState {
     healthRemaining: number;
     maxHealth: number;
     percentHealthRemaining: number;
-    tier: "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+    tier: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
   } | null;
   /** Damage calculation for current session */
   damageThisSession: DamageCalculation;
   /** Kill estimate based on current session */
   estimatedKill: KillEstimate;
   /** Current combat state */
-  combatState: "ENCOUNTER_START" | "COMBAT_ACTIVE" | "BOSS_RAGE" | "NEAR_DEATH" | "VICTORY";
+  combatState: 'ENCOUNTER_START' | 'COMBAT_ACTIVE' | 'BOSS_RAGE' | 'NEAR_DEATH' | 'VICTORY';
   /** Whether damage flash should show */
   showDamageFlash: boolean;
   /** Recent damage dealt (for flash animation) */
@@ -112,7 +112,7 @@ export function useActiveBoss(
     streakDays: number;
   },
 ): ActiveBossState {
-  const { data: encounter, isLoading, error, refetch } = useActiveBossBase(userId ?? "");
+  const { data: encounter, isLoading, error, refetch } = useActiveBossBase(userId ?? '');
 
   /**
    * Calculate damage based on session progress
@@ -188,23 +188,23 @@ export function useActiveBoss(
   /**
    * Combat state based on boss health
    */
-  const combatState = useMemo((): ActiveBossState["combatState"] => {
+  const combatState = useMemo((): ActiveBossState['combatState'] => {
     if (!encounter) {
-      return "ENCOUNTER_START";
+      return 'ENCOUNTER_START';
     }
 
     const percentHealth = encounter.percentHealthRemaining;
 
     if (percentHealth <= 0) {
-      return "VICTORY";
+      return 'VICTORY';
     }
     if (percentHealth <= 10) {
-      return "NEAR_DEATH";
+      return 'NEAR_DEATH';
     }
     if (percentHealth <= 25) {
-      return "BOSS_RAGE";
+      return 'BOSS_RAGE';
     }
-    return "COMBAT_ACTIVE";
+    return 'COMBAT_ACTIVE';
   }, [encounter]);
 
   // Mock flash state - would be triggered by actual damage events
@@ -221,7 +221,7 @@ export function useActiveBoss(
           healthRemaining: encounter.healthRemaining,
           maxHealth: encounter.maxHealth,
           percentHealthRemaining: encounter.percentHealthRemaining,
-          tier: "COMMON",
+          tier: 'COMMON',
         }
       : null,
     damageThisSession,

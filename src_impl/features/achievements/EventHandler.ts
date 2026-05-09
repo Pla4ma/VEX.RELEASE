@@ -5,16 +5,16 @@
  * Routes events to appropriate achievement checkers.
  */
 
-import { eventBus } from "../../events/EventBus";
-import type { EventChannels } from "../../events/EventTypes";
-import * as Sentry from "@sentry/react-native";
-import { createDebugger } from "../../utils/debug";
-import { ALL_ACHIEVEMENTS, getAchievementById } from "./definitions";
-import type { Achievement, AchievementCategory } from "./types";
-import * as achievementRepository from "./repository";
-import { spectacleService, SpectacleType, LootRarity } from "../spectacle";
+import { eventBus } from '../../events/EventBus';
+import type { EventChannels } from '../../events/EventTypes';
+import * as Sentry from '@sentry/react-native';
+import { createDebugger } from '../../utils/debug';
+import { ALL_ACHIEVEMENTS, getAchievementById } from './definitions';
+import type { Achievement, AchievementCategory } from './types';
+import * as achievementRepository from './repository';
+import { spectacleService, SpectacleType, LootRarity } from '../spectacle';
 
-const debug = createDebugger("achievements:event-handler");
+const debug = createDebugger('achievements:event-handler');
 
 // ============================================================================
 // Types
@@ -49,51 +49,51 @@ export class AchievementEventHandler {
    */
   initialize(): void {
     if (this.isInitialized) {
-      debug.warn("AchievementEventHandler already initialized");
+      debug.warn('AchievementEventHandler already initialized');
       return;
     }
 
     // Session events
-    this.subscribe("session:completed", this.handleSessionCompleted.bind(this));
-    this.subscribe("sessions:completed", this.handleSessionCompleted.bind(this));
+    this.subscribe('session:completed', this.handleSessionCompleted.bind(this));
+    this.subscribe('sessions:completed', this.handleSessionCompleted.bind(this));
 
     // Streak events
-    this.subscribe("streak:updated", this.handleStreakUpdated.bind(this));
-    this.subscribe("streak:milestone", this.handleStreakMilestone.bind(this));
-    this.subscribe("streak:broken", this.handleStreakBroken.bind(this));
-    this.subscribe("streak:comeback", this.handleStreakComeback.bind(this));
+    this.subscribe('streak:updated', this.handleStreakUpdated.bind(this));
+    this.subscribe('streak:milestone', this.handleStreakMilestone.bind(this));
+    this.subscribe('streak:broken', this.handleStreakBroken.bind(this));
+    this.subscribe('streak:comeback', this.handleStreakComeback.bind(this));
 
     // Boss events
-    this.subscribe("boss:defeated", this.handleBossDefeated.bind(this));
+    this.subscribe('boss:defeated', this.handleBossDefeated.bind(this));
 
     // Level/Progression events
-    this.subscribe("progression:level_up", this.handleLevelUp.bind(this));
-    this.subscribe("progression:prestige", this.handlePrestige.bind(this));
+    this.subscribe('progression:level_up', this.handleLevelUp.bind(this));
+    this.subscribe('progression:prestige', this.handlePrestige.bind(this));
 
     // Social events
-    this.subscribe("squad:joined", this.handleSquadJoined.bind(this));
-    this.subscribe("squad:created", this.handleSquadCreated.bind(this));
-    this.subscribe("squad-war:ended", this.handleSquadWarWon.bind(this));
-    this.subscribe("duel:completed", this.handleDuelCompleted.bind(this));
-    this.subscribe("social:referral-completed", this.handleFriendRecruited.bind(this));
+    this.subscribe('squad:joined', this.handleSquadJoined.bind(this));
+    this.subscribe('squad:created', this.handleSquadCreated.bind(this));
+    this.subscribe('squad-war:ended', this.handleSquadWarWon.bind(this));
+    this.subscribe('duel:completed', this.handleDuelCompleted.bind(this));
+    this.subscribe('social:referral-completed', this.handleFriendRecruited.bind(this));
 
     // Economy events
-    this.subscribe("economy:currency_spent", this.handleCurrencySpent.bind(this));
-    this.subscribe("crafting:item_crafted", this.handleItemCrafted.bind(this));
-    this.subscribe("inventory:add_item", this.handleItemAdded.bind(this));
+    this.subscribe('economy:currency_spent', this.handleCurrencySpent.bind(this));
+    this.subscribe('crafting:item_crafted', this.handleItemCrafted.bind(this));
+    this.subscribe('inventory:add_item', this.handleItemAdded.bind(this));
 
     // Season/Battle Pass events
-    this.subscribe("season:tier_unlocked", this.handleTierUnlocked.bind(this));
+    this.subscribe('season:tier_unlocked', this.handleTierUnlocked.bind(this));
 
     // Achievement check event (for manual triggers)
-    this.subscribe("achievements:check", this.handleAchievementCheck.bind(this));
+    this.subscribe('achievements:check', this.handleAchievementCheck.bind(this));
 
     this.isInitialized = true;
 
     Sentry.addBreadcrumb({
-      category: "achievements",
-      message: "AchievementEventHandler initialized",
-      level: "info",
+      category: 'achievements',
+      message: 'AchievementEventHandler initialized',
+      level: 'info',
     });
   }
 
@@ -121,60 +121,60 @@ export class AchievementEventHandler {
   /**
    * Handle session completion - check session achievements
    */
-  private async handleSessionCompleted(data: EventChannels["session:completed"] | EventChannels["sessions:completed"]): Promise<void> {
-    const timestamp = "timestamp" in data ? data.timestamp : Date.now();
+  private async handleSessionCompleted(data: EventChannels['session:completed'] | EventChannels['sessions:completed']): Promise<void> {
+    const timestamp = 'timestamp' in data ? data.timestamp : Date.now();
     const context: AchievementCheckContext = {
       userId: data.userId,
-      eventType: "SESSION_COMPLETE",
+      eventType: 'SESSION_COMPLETE',
       data: {
         duration: data.duration,
-        quality: "quality" in data ? data.quality : "qualityScore" in data ? data.qualityScore : undefined,
+        quality: 'quality' in data ? data.quality : 'qualityScore' in data ? data.qualityScore : undefined,
         timestamp,
       },
       timestamp: Date.now(),
     };
 
     // Check session count achievements
-    await this.checkCumulativeAchievements(context.userId, "SESSION_COMPLETE", ["session-first", "session-10", "session-50", "session-100", "session-500"]);
+    await this.checkCumulativeAchievements(context.userId, 'SESSION_COMPLETE', ['session-first', 'session-10', 'session-50', 'session-100', 'session-500']);
 
     // Check duration achievements
     if (data.duration >= 60 * 60) {
       // 60 minutes
-      await this.checkAchievement(context.userId, "session-60-min");
+      await this.checkAchievement(context.userId, 'session-60-min');
     }
 
     // Check perfect session (S-grade)
-    if ("quality" in data && data.quality && data.quality >= 95) {
-      await this.checkCumulativeAchievements(context.userId, "PERFECT_SESSION", ["session-first-s-grade", "session-10-perfect"]);
+    if ('quality' in data && data.quality && data.quality >= 95) {
+      await this.checkCumulativeAchievements(context.userId, 'PERFECT_SESSION', ['session-first-s-grade', 'session-10-perfect']);
     }
 
     // Check time-based achievements
-    const ts = "timestamp" in data ? data.timestamp : Date.now();
+    const ts = 'timestamp' in data ? data.timestamp : Date.now();
     const hour = new Date(ts).getHours();
     if (hour === 0) {
-      await this.checkAchievement(context.userId, "session-midnight");
+      await this.checkAchievement(context.userId, 'session-midnight');
     }
     if (hour === 5) {
-      await this.checkAchievement(context.userId, "session-early-bird");
+      await this.checkAchievement(context.userId, 'session-early-bird');
     }
   }
 
   /**
    * Handle streak updates - check streak achievements
    */
-  private async handleStreakUpdated(data: EventChannels["streak:updated"]): Promise<void> {
+  private async handleStreakUpdated(data: EventChannels['streak:updated']): Promise<void> {
     const streakDays = data.state.currentStreak;
 
     // Check milestone achievements
     const streakAchievements = [
-      { id: "streak-3", minDays: 3 },
-      { id: "streak-7", minDays: 7 },
-      { id: "streak-14", minDays: 14 },
-      { id: "streak-30", minDays: 30 },
-      { id: "streak-60", minDays: 60 },
-      { id: "streak-100", minDays: 100 },
-      { id: "streak-180", minDays: 180 },
-      { id: "streak-365", minDays: 365 },
+      { id: 'streak-3', minDays: 3 },
+      { id: 'streak-7', minDays: 7 },
+      { id: 'streak-14', minDays: 14 },
+      { id: 'streak-30', minDays: 30 },
+      { id: 'streak-60', minDays: 60 },
+      { id: 'streak-100', minDays: 100 },
+      { id: 'streak-180', minDays: 180 },
+      { id: 'streak-365', minDays: 365 },
     ];
 
     for (const { id, minDays } of streakAchievements) {
@@ -187,12 +187,12 @@ export class AchievementEventHandler {
   /**
    * Handle streak milestone
    */
-  private async handleStreakMilestone(data: EventChannels["streak:milestone"]): Promise<void> {
+  private async handleStreakMilestone(data: EventChannels['streak:milestone']): Promise<void> {
     // Already handled by streak:updated, but could add specific milestone logic
     Sentry.addBreadcrumb({
-      category: "achievements",
+      category: 'achievements',
       message: `Streak milestone reached: ${data.milestone}`,
-      level: "info",
+      level: 'info',
       data: { userId: data.userId, milestone: data.milestone },
     });
   }
@@ -200,7 +200,7 @@ export class AchievementEventHandler {
   /**
    * Handle streak broken - check phoenix achievement
    */
-  private async handleStreakBroken(_data: EventChannels["streak:broken"]): Promise<void> {
+  private async handleStreakBroken(_data: EventChannels['streak:broken']): Promise<void> {
     // This sets up for the phoenix achievement (recover after break)
     // We don't unlock anything here, just track that they had a streak
   }
@@ -208,45 +208,45 @@ export class AchievementEventHandler {
   /**
    * Handle streak comeback - check phoenix achievement
    */
-  private async handleStreakComeback(data: EventChannels["streak:comeback"]): Promise<void> {
-    await this.checkAchievement(data.userId, "streak-phoenix");
+  private async handleStreakComeback(data: EventChannels['streak:comeback']): Promise<void> {
+    await this.checkAchievement(data.userId, 'streak-phoenix');
   }
 
   /**
    * Handle boss defeat - check boss achievements
    */
-  private async handleBossDefeated(data: EventChannels["boss:defeated"]): Promise<void> {
+  private async handleBossDefeated(data: EventChannels['boss:defeated']): Promise<void> {
     // First boss defeat
-    await this.checkCumulativeAchievements(data.userId, "BOSS_DEFEAT", ["boss-first", "boss-all-6"]);
+    await this.checkCumulativeAchievements(data.userId, 'BOSS_DEFEAT', ['boss-first', 'boss-all-6']);
 
     // Solo defeat (no participants)
     if (!data.participants || data.participants.length === 0) {
-      await this.checkAchievement(data.userId, "boss-solo");
+      await this.checkAchievement(data.userId, 'boss-solo');
     }
 
     // Squad defeat
     if (data.participants && data.participants.length > 0) {
-      await this.checkAchievement(data.userId, "boss-squad");
+      await this.checkAchievement(data.userId, 'boss-squad');
     }
 
     // Check critical hit achievement
     if (data.damageDealt > 100) {
       // Threshold for crit
-      await this.checkAchievement(data.userId, "boss-critical");
+      await this.checkAchievement(data.userId, 'boss-critical');
     }
   }
 
   /**
    * Handle level up - check progression achievements
    */
-  private async handleLevelUp(data: EventChannels["progression:level_up"]): Promise<void> {
+  private async handleLevelUp(data: EventChannels['progression:level_up']): Promise<void> {
     const level = data.newLevel;
 
     const levelAchievements = [
-      { id: "prog-level-5", minLevel: 5 },
-      { id: "prog-level-10", minLevel: 10 },
-      { id: "prog-level-20", minLevel: 20 },
-      { id: "prog-level-50", minLevel: 50 },
+      { id: 'prog-level-5', minLevel: 5 },
+      { id: 'prog-level-10', minLevel: 10 },
+      { id: 'prog-level-20', minLevel: 20 },
+      { id: 'prog-level-50', minLevel: 50 },
     ];
 
     for (const { id, minLevel } of levelAchievements) {
@@ -259,43 +259,43 @@ export class AchievementEventHandler {
   /**
    * Handle prestige - check prestige achievement
    */
-  private async handlePrestige(data: EventChannels["progression:prestige"]): Promise<void> {
-    await this.checkAchievement(data.userId, "prog-first-prestige");
+  private async handlePrestige(data: EventChannels['progression:prestige']): Promise<void> {
+    await this.checkAchievement(data.userId, 'prog-first-prestige');
   }
 
   /**
    * Handle squad join - check social achievements
    */
-  private async handleSquadJoined(data: EventChannels["squad:joined"]): Promise<void> {
-    await this.checkAchievement(data.userId, "social-join-squad");
+  private async handleSquadJoined(data: EventChannels['squad:joined']): Promise<void> {
+    await this.checkAchievement(data.userId, 'social-join-squad');
   }
 
   /**
    * Handle squad create - check social achievements
    */
-  private async handleSquadCreated(data: EventChannels["squad:created"]): Promise<void> {
+  private async handleSquadCreated(data: EventChannels['squad:created']): Promise<void> {
     if (data.userId) {
-      await this.checkAchievement(data.userId, "social-create-squad");
+      await this.checkAchievement(data.userId, 'social-create-squad');
     }
   }
 
   /**
    * Handle squad war win
    */
-  private async handleSquadWarWon(data: EventChannels["squad-war:ended"]): Promise<void> {
+  private async handleSquadWarWon(data: EventChannels['squad-war:ended']): Promise<void> {
     // Check if user was on winning side
     const participants = data.participants || [];
     for (const userId of participants) {
-      await this.checkAchievement(userId, "social-war-win");
+      await this.checkAchievement(userId, 'social-war-win');
     }
   }
 
   /**
    * Handle duel completion - check duel win achievement
    */
-  private async handleDuelCompleted(data: EventChannels["duel:completed"]): Promise<void> {
+  private async handleDuelCompleted(data: EventChannels['duel:completed']): Promise<void> {
     if (data.winnerId) {
-      await this.checkCumulativeAchievements(data.winnerId, "DUEL_WIN", ["social-win-duel"]);
+      await this.checkCumulativeAchievements(data.winnerId, 'DUEL_WIN', ['social-win-duel']);
 
       // Check rival beat (if they beat a specific rival)
       // This would need additional context about rival relationships
@@ -305,41 +305,41 @@ export class AchievementEventHandler {
   /**
    * Handle friend recruited
    */
-  private async handleFriendRecruited(data: EventChannels["social:referral-completed"]): Promise<void> {
-    await this.checkAchievement(data.referrerId, "social-invite-join");
+  private async handleFriendRecruited(data: EventChannels['social:referral-completed']): Promise<void> {
+    await this.checkAchievement(data.referrerId, 'social-invite-join');
   }
 
   /**
    * Handle currency spent - check economy achievements
    */
-  private async handleCurrencySpent(data: EventChannels["economy:currency_spent"]): Promise<void> {
-    if (data.currency === "COINS" && data.amount >= 1000) {
-      await this.checkAchievement(data.userId, "econ-spend-1000");
+  private async handleCurrencySpent(data: EventChannels['economy:currency_spent']): Promise<void> {
+    if (data.currency === 'COINS' && data.amount >= 1000) {
+      await this.checkAchievement(data.userId, 'econ-spend-1000');
     }
   }
 
   /**
    * Handle item crafted
    */
-  private async handleItemCrafted(data: EventChannels["crafting:item_crafted"]): Promise<void> {
-    await this.checkAchievement(data.userId, "econ-craft-first");
+  private async handleItemCrafted(data: EventChannels['crafting:item_crafted']): Promise<void> {
+    await this.checkAchievement(data.userId, 'econ-craft-first');
   }
 
   /**
    * Handle item added to inventory
    */
-  private async handleItemAdded(data: EventChannels["inventory:add_item"]): Promise<void> {
+  private async handleItemAdded(data: EventChannels['inventory:add_item']): Promise<void> {
     // Check total items owned
     // This would need to query the inventory count
     // For now, just check the achievement exists
-    await this.checkAchievement(data.userId, "econ-own-5");
+    await this.checkAchievement(data.userId, 'econ-own-5');
   }
 
   /**
    * Handle tier unlocked - check progression achievements
    */
-  private async handleTierUnlocked(data: EventChannels["season:tier_unlocked"]): Promise<void> {
-    await this.checkAchievement(data.userId, "prog-first-tier");
+  private async handleTierUnlocked(data: EventChannels['season:tier_unlocked']): Promise<void> {
+    await this.checkAchievement(data.userId, 'prog-first-tier');
   }
 
   /**
@@ -347,19 +347,19 @@ export class AchievementEventHandler {
    */
   private async handleBattlePassTier(data: { userId: string; tier: number }): Promise<void> {
     if (data.tier >= 25) {
-      await this.checkAchievement(data.userId, "prog-bp-tier-25");
+      await this.checkAchievement(data.userId, 'prog-bp-tier-25');
     }
   }
 
   /**
    * Handle manual achievement check
    */
-  private async handleAchievementCheck(data: EventChannels["achievements:check"]): Promise<void> {
+  private async handleAchievementCheck(data: EventChannels['achievements:check']): Promise<void> {
     // Manual check triggered by other systems
     Sentry.addBreadcrumb({
-      category: "achievements",
+      category: 'achievements',
       message: `Manual achievement check: ${data.type}`,
-      level: "debug",
+      level: 'debug',
       data: { userId: data.userId, type: data.type },
     });
   }
@@ -374,7 +374,7 @@ export class AchievementEventHandler {
   private async checkAchievement(userId: string, achievementId: string): Promise<AchievementUnlockResult | null> {
     const achievement = getAchievementById(achievementId);
     if (!achievement) {
-      debug.warn(`Achievement ${achievementId} not found`, new Error("Not found"));
+      debug.warn(`Achievement ${achievementId} not found`, new Error('Not found'));
       return null;
     }
 
@@ -447,7 +447,7 @@ export class AchievementEventHandler {
     }
 
     // 3. Trigger spectacle for rare+ achievements
-    if (achievement.rarity === "RARE" || achievement.rarity === "EPIC" || achievement.rarity === "LEGENDARY") {
+    if (achievement.rarity === 'RARE' || achievement.rarity === 'EPIC' || achievement.rarity === 'LEGENDARY') {
       // Convert AchievementRarity to LootRarity
       const lootRarityMap: Record<string, LootRarity> = {
         RARE: LootRarity.RARE,
@@ -456,20 +456,20 @@ export class AchievementEventHandler {
       };
 
       // Use LEGENDARY_LOOT_DROP spectacle type for legendary achievements
-      const spectacleType = achievement.rarity === "LEGENDARY" ? SpectacleType.LEGENDARY_LOOT_DROP : SpectacleType.RARE_LOOT_DROP;
+      const spectacleType = achievement.rarity === 'LEGENDARY' ? SpectacleType.LEGENDARY_LOOT_DROP : SpectacleType.RARE_LOOT_DROP;
 
       spectacleService.triggerSpectacle(spectacleType, {
         userId,
         rarity: lootRarityMap[achievement.rarity],
         items: [
           {
-            type: "achievement",
+            type: 'achievement',
             name: achievement.title,
             amount: 1,
             icon: achievement.icon,
           },
         ],
-        source: "CHEST",
+        source: 'CHEST',
         timestamp: Date.now(),
       });
     }
@@ -482,9 +482,9 @@ export class AchievementEventHandler {
 
     // 6. Track analytics
     Sentry.addBreadcrumb({
-      category: "achievements",
+      category: 'achievements',
       message: `Achievement unlocked: ${achievement.title}`,
-      level: "info",
+      level: 'info',
       data: {
         userId,
         achievementId: achievement.id,
@@ -493,7 +493,7 @@ export class AchievementEventHandler {
     });
 
     // 7. Emit achievement unlocked event
-    eventBus.publish("achievement:unlocked", {
+    eventBus.publish('achievement:unlocked', {
       userId,
       achievementId: achievement.id,
       unlockedAt: Date.now(),
@@ -529,7 +529,7 @@ export function destroyAchievementEventHandler(): void {
 export async function checkAchievementManually(userId: string, achievementId: string): Promise<boolean> {
   const achievement = getAchievementById(achievementId);
   if (!achievement) {
-    debug.warn(`Achievement ${achievementId} not found`, new Error("Not found"));
+    debug.warn(`Achievement ${achievementId} not found`, new Error('Not found'));
     return false;
   }
 

@@ -7,15 +7,15 @@
  * @phase 17.2 - Enhancement to existing SessionCompleteContent
  */
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { View, Text, Pressable } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTheme } from "@/theme";
-import { haptics } from "@/shared/feedback";
-import { useReducedMotion } from "@/hooks";
-import { useSessionStory } from "../hooks";
-import type { StoryBeat, EmotionalArc } from "../schemas";
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { View, Text, Pressable } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '@/theme';
+import { haptics } from '@/shared/feedback';
+import { useReducedMotion } from '@/hooks';
+import { useSessionStory } from '../hooks';
+import type { StoryBeat, EmotionalArc } from '../schemas';
 
 // ============================================================================
 // Types
@@ -62,25 +62,25 @@ export const SessionStoryOverlay: React.FC<SessionStoryOverlayProps> = ({ sessio
 
   // Haptic handler - defined before useEffect that uses it
   const handleHaptic = useCallback(
-    (pattern: StoryBeat["hapticPattern"]) => {
+    (pattern: StoryBeat['hapticPattern']) => {
       if (isReducedMotion) {
         return;
       }
       switch (pattern) {
-        case "LIGHT":
-          haptics.impact("light");
+        case 'LIGHT':
+          haptics.impact('light');
           break;
-        case "MEDIUM":
-          haptics.impact("medium");
+        case 'MEDIUM':
+          haptics.impact('medium');
           break;
-        case "HEAVY":
-          haptics.impact("heavy");
+        case 'HEAVY':
+          haptics.impact('heavy');
           break;
-        case "SUCCESS":
-          haptics.success("light");
+        case 'SUCCESS':
+          haptics.success('light');
           break;
-        case "CELEBRATION":
-          haptics.success("heavy");
+        case 'CELEBRATION':
+          haptics.success('heavy');
           break;
       }
     },
@@ -104,7 +104,7 @@ export const SessionStoryOverlay: React.FC<SessionStoryOverlayProps> = ({ sessio
     const currentBeat = story.beats[currentBeatIndex];
 
     // Trigger haptic
-    if (currentBeat.hapticPattern !== "NONE" && !isReducedMotion) {
+    if (currentBeat.hapticPattern !== 'NONE' && !isReducedMotion) {
       handleHaptic(currentBeat.hapticPattern);
     }
 
@@ -162,13 +162,13 @@ export const SessionStoryOverlay: React.FC<SessionStoryOverlayProps> = ({ sessio
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
           zIndex: 100,
-          backgroundColor: theme.colors.background?.primary ?? "#000",
+          backgroundColor: theme.colors.background?.primary ?? '#000',
           paddingTop: insets.top,
           paddingBottom: insets.bottom,
         },
@@ -176,8 +176,8 @@ export const SessionStoryOverlay: React.FC<SessionStoryOverlayProps> = ({ sessio
       ]}
     >
       {/* Progress dots */}
-      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 20, paddingTop: 16, paddingBottom: 12 }}>
-        <View style={{ flexDirection: "row", gap: 6 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 16, paddingBottom: 12 }}>
+        <View style={{ flexDirection: 'row', gap: 6 }}>
           {story.beats.map((_beat: StoryBeat, index: number) => (
             <View
               key={index}
@@ -185,23 +185,23 @@ export const SessionStoryOverlay: React.FC<SessionStoryOverlayProps> = ({ sessio
                 width: 6,
                 height: 6,
                 borderRadius: 3,
-                backgroundColor: index <= currentBeatIndex ? emotionColor : (theme.colors.border?.DEFAULT ?? "#3333"),
+                backgroundColor: index <= currentBeatIndex ? emotionColor : (theme.colors.border?.DEFAULT ?? '#3333'),
               }}
             />
           ))}
         </View>
 
         <Pressable onPress={handleSkip} style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
-          <Text style={{ fontSize: 14, fontWeight: "500", color: theme.colors.text?.muted ?? "#888" }}>Skip Story</Text>
+          <Text style={{ fontSize: 14, fontWeight: '500', color: theme.colors.text?.muted ?? '#888' }}>Skip Story</Text>
         </Pressable>
       </View>
 
       {/* Story content */}
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center", paddingHorizontal: 32 }}>{currentBeat && <StoryBeatCard beat={currentBeat} emotionColor={emotionColor} theme={theme} />}</View>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 32 }}>{currentBeat && <StoryBeatCard beat={currentBeat} emotionColor={emotionColor} theme={theme} />}</View>
 
       {/* Tap to continue */}
-      <Pressable style={{ paddingVertical: 24, alignItems: "center" }} onPress={handleNext}>
-        <Text style={{ fontSize: 14, fontWeight: "500", color: theme.colors.text?.muted ?? "#888" }}>Tap to continue</Text>
+      <Pressable style={{ paddingVertical: 24, alignItems: 'center' }} onPress={handleNext}>
+        <Text style={{ fontSize: 14, fontWeight: '500', color: theme.colors.text?.muted ?? '#888' }}>Tap to continue</Text>
       </Pressable>
     </Animated.View>
   );
@@ -233,39 +233,39 @@ const StoryBeatCard: React.FC<StoryBeatCardProps> = ({ beat, emotionColor, theme
   }));
 
   // Get icon for beat type
-  const getIcon = (type: StoryBeat["type"]): string => {
+  const getIcon = (type: StoryBeat['type']): string => {
     const icons: Record<string, string> = {
-      OPENING: "🌅",
-      FOCUS_JOURNEY: "🎯",
-      STREAK_MOMENT: "🔥",
-      BOSS_BATTLE: "⚔️",
-      MILESTONE_REACHED: "🏆",
-      PERFECTION_MOMENT: "✨",
-      COMEBACK_TRIUMPH: "🦅",
-      PROGRESSION_CLIFFHANGER: "📈",
-      ACHIEVEMENT_UNLOCK: "🎖️",
-      CLOSING_REFLECTION: "🌟",
+      OPENING: '🌅',
+      FOCUS_JOURNEY: '🎯',
+      STREAK_MOMENT: '🔥',
+      BOSS_BATTLE: '⚔️',
+      MILESTONE_REACHED: '🏆',
+      PERFECTION_MOMENT: '✨',
+      COMEBACK_TRIUMPH: '🦅',
+      PROGRESSION_CLIFFHANGER: '📈',
+      ACHIEVEMENT_UNLOCK: '🎖️',
+      CLOSING_REFLECTION: '🌟',
     };
-    return icons[type] ?? "📝";
+    return icons[type] ?? '📝';
   };
 
   return (
-    <Animated.View style={[{ alignItems: "center", width: "100%" }, slideStyle]}>
+    <Animated.View style={[{ alignItems: 'center', width: '100%' }, slideStyle]}>
       {/* Icon */}
-      <View style={{ width: 80, height: 80, borderRadius: 40, justifyContent: "center", alignItems: "center", marginBottom: 24, backgroundColor: `${emotionColor}20` }}>
+      <View style={{ width: 80, height: 80, borderRadius: 40, justifyContent: 'center', alignItems: 'center', marginBottom: 24, backgroundColor: `${emotionColor}20` }}>
         <Text style={{ fontSize: 36 }}>{getIcon(beat.type)}</Text>
       </View>
 
       {/* Headline */}
-      <Text style={{ fontSize: 28, fontWeight: "700", textAlign: "center", marginBottom: 12, lineHeight: 36, color: theme.colors.text?.primary ?? "#fff" }}>{beat.headline}</Text>
+      <Text style={{ fontSize: 28, fontWeight: '700', textAlign: 'center', marginBottom: 12, lineHeight: 36, color: theme.colors.text?.primary ?? '#fff' }}>{beat.headline}</Text>
 
       {/* Subtext */}
-      {beat.subtext && <Text style={{ fontSize: 16, textAlign: "center", lineHeight: 24, marginBottom: 20, color: theme.colors.text?.secondary ?? "#aaa" }}>{beat.subtext}</Text>}
+      {beat.subtext && <Text style={{ fontSize: 16, textAlign: 'center', lineHeight: 24, marginBottom: 20, color: theme.colors.text?.secondary ?? '#aaa' }}>{beat.subtext}</Text>}
 
       {/* Context pill */}
       {beat.metadata?.context && (
         <View style={{ paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, backgroundColor: `${emotionColor}20` }}>
-          <Text style={{ fontSize: 14, fontWeight: "600", color: emotionColor }}>{beat.metadata.context}</Text>
+          <Text style={{ fontSize: 14, fontWeight: '600', color: emotionColor }}>{beat.metadata.context}</Text>
         </View>
       )}
     </Animated.View>

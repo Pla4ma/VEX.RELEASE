@@ -10,16 +10,16 @@
  * This is a VARIABLE MOMENT - keeps users engaged during sessions.
  */
 
-import { z } from "zod";
-import * as Sentry from "@sentry/react-native";
-import { MMKV } from "react-native-mmkv";
+import { z } from 'zod';
+import * as Sentry from '@sentry/react-native';
+import { MMKV } from 'react-native-mmkv';
 
 // ============================================================================
 // Storage Setup
 // ============================================================================
 
 const storage = new MMKV({
-  id: "boss-crit-storage",
+  id: 'boss-crit-storage',
 });
 
 // ============================================================================
@@ -28,11 +28,11 @@ const storage = new MMKV({
 
 export enum CritStatus {
   /** No crit this session */
-  NONE = "NONE",
+  NONE = 'NONE',
   /** Crit is active - will trigger at completion */
-  ACTIVE = "ACTIVE",
+  ACTIVE = 'ACTIVE',
   /** Near-miss (11-20%) - almost got crit */
-  NEAR_MISS = "NEAR_MISS",
+  NEAR_MISS = 'NEAR_MISS',
 }
 
 export interface CriticalHitResult {
@@ -93,7 +93,7 @@ const CRIT_CONFIG = {
 export const CalculateCritChanceInputSchema = z.object({
   userId: z.string().uuid(),
   streakDays: z.number().int().min(0).default(0),
-  currentGrade: z.enum(["S", "A", "B", "C", "D", "N/A"]).default("N/A"),
+  currentGrade: z.enum(['S', 'A', 'B', 'C', 'D', 'N/A']).default('N/A'),
   seed: z.string().optional(),
 });
 
@@ -121,7 +121,7 @@ class BossCriticalHitService {
         critChance += CRIT_CONFIG.STREAK_BONUS;
       }
 
-      if (validated.currentGrade === "S") {
+      if (validated.currentGrade === 'S') {
         critChance += CRIT_CONFIG.S_GRADE_BONUS;
       }
 
@@ -163,9 +163,9 @@ class BossCriticalHitService {
 
       // Track analytics
       Sentry.addBreadcrumb({
-        category: "boss-crit",
+        category: 'boss-crit',
         message: `Crit calculated: ${result.status}`,
-        level: result.triggered ? "info" : "debug",
+        level: result.triggered ? 'info' : 'debug',
         data: {
           userId: validated.userId,
           status: result.status,
@@ -177,7 +177,7 @@ class BossCriticalHitService {
       return result;
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: "boss-crit", operation: "calculate" },
+        tags: { feature: 'boss-crit', operation: 'calculate' },
       });
 
       // Return no crit on error (graceful)
@@ -366,9 +366,9 @@ class BossCriticalHitService {
   getCritsThisWeekText(userId: string): string {
     const stats = this.getWeeklyStats(userId);
     if (stats.totalCrits === 0) {
-      return "No crits yet this week";
+      return 'No crits yet this week';
     }
-    return `${stats.totalCrits} crit${stats.totalCrits > 1 ? "s" : ""} this week`;
+    return `${stats.totalCrits} crit${stats.totalCrits > 1 ? 's' : ''} this week`;
   }
 
   /**
@@ -403,7 +403,7 @@ class BossCriticalHitService {
     const startOfYear = new Date(now.getFullYear(), 0, 1);
     const pastDays = (now.getTime() - startOfYear.getTime()) / 86400000;
     const weekNum = Math.ceil((pastDays + startOfYear.getDay() + 1) / 7);
-    return `${now.getFullYear()}-W${weekNum.toString().padStart(2, "0")}`;
+    return `${now.getFullYear()}-W${weekNum.toString().padStart(2, '0')}`;
   }
 
   /**
@@ -420,7 +420,7 @@ class BossCriticalHitService {
   resetStats(userId: string): void {
     const keys = storage.getAllKeys();
     for (const key of keys) {
-      if (key.startsWith("crit_")) {
+      if (key.startsWith('crit_')) {
         storage.delete(key);
       }
     }
@@ -430,7 +430,7 @@ class BossCriticalHitService {
   /**
    * Simulate crit distribution
    */
-  simulateCritDistribution(rollCount: number, streakDays: number = 0, currentGrade: string = "N/A"): { crits: number; nearMisses: number; normal: number } {
+  simulateCritDistribution(rollCount: number, streakDays: number = 0, currentGrade: string = 'N/A'): { crits: number; nearMisses: number; normal: number } {
     let crits = 0;
     let nearMisses = 0;
     let normal = 0;
@@ -440,7 +440,7 @@ class BossCriticalHitService {
     if (streakDays >= 7) {
       critChance += CRIT_CONFIG.STREAK_BONUS;
     }
-    if (currentGrade === "S") {
+    if (currentGrade === 'S') {
       critChance += CRIT_CONFIG.S_GRADE_BONUS;
     }
 
@@ -489,31 +489,31 @@ export function getCritStatusText(sessionId: string): {
   if (!state || state.critStatus === CritStatus.NONE) {
     return {
       showOverlay: false,
-      statusText: "",
-      icon: "",
+      statusText: '',
+      icon: '',
     };
   }
 
   if (state.critStatus === CritStatus.ACTIVE) {
     return {
       showOverlay: !state.hasShownOverlay,
-      statusText: "⚡ CRITICAL HIT CHANCE ACTIVE!",
-      icon: "⚡",
+      statusText: '⚡ CRITICAL HIT CHANCE ACTIVE!',
+      icon: '⚡',
     };
   }
 
   if (state.critStatus === CritStatus.NEAR_MISS) {
     return {
       showOverlay: false,
-      statusText: "Almost a critical hit!",
-      icon: "💫",
+      statusText: 'Almost a critical hit!',
+      icon: '💫',
     };
   }
 
   return {
     showOverlay: false,
-    statusText: "",
-    icon: "",
+    statusText: '',
+    icon: '',
   };
 }
 

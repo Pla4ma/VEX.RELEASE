@@ -4,14 +4,14 @@
  * Comprehensive test suite for battle pass service logic.
  */
 
-import { describe, it, expect, jest, beforeEach } from "@jest/globals";
-import * as service from "../service";
-import * as repository from "../repository";
-import { eventBus } from "../../../events";
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+import * as service from '../service';
+import * as repository from '../repository';
+import { eventBus } from '../../../events';
 
 // Mock dependencies
-jest.mock("../repository");
-jest.mock("../../../events", () => ({
+jest.mock('../repository');
+jest.mock('../../../events', () => ({
   eventBus: {
     publish: jest.fn(),
   },
@@ -20,17 +20,17 @@ jest.mock("../../../events", () => ({
 const mockedRepository = jest.mocked(repository);
 const mockedEventBus = jest.mocked(eventBus);
 
-describe("Battle Pass Service", () => {
+describe('Battle Pass Service', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("getUserBattlePassSummary", () => {
-    it("should return battle pass summary for user", async () => {
+  describe('getUserBattlePassSummary', () => {
+    it('should return battle pass summary for user', async () => {
       const mockUserBp = {
-        id: "ubp-1",
-        userId: "user-1",
-        seasonId: "season-1",
+        id: 'ubp-1',
+        userId: 'user-1',
+        seasonId: 'season-1',
         currentTier: 5,
         isPremium: true,
         claimedFreeTiers: [1, 2, 3],
@@ -38,8 +38,8 @@ describe("Battle Pass Service", () => {
       };
 
       const mockBp = {
-        id: "bp-1",
-        seasonId: "season-1",
+        id: 'bp-1',
+        seasonId: 'season-1',
         tiers: [],
       };
 
@@ -47,43 +47,43 @@ describe("Battle Pass Service", () => {
       mockedRepository.fetchBattlePassBySeason.mockResolvedValue(mockBp as any);
       mockedRepository.fetchBattlePassTiers.mockResolvedValue([]);
 
-      const result = await service.getUserBattlePassSummary("user-1", "season-1");
+      const result = await service.getUserBattlePassSummary('user-1', 'season-1');
 
       expect(result).toBeDefined();
-      expect(result.userProgress.userId).toBe("user-1");
+      expect(result.userProgress.userId).toBe('user-1');
       expect(result.userProgress.currentTier).toBe(5);
     });
 
-    it("should create new progress if none exists", async () => {
+    it('should create new progress if none exists', async () => {
       mockedRepository.fetchUserBattlePass.mockResolvedValue(null);
       mockedRepository.createUserBattlePass.mockResolvedValue({
-        id: "new-bp",
-        userId: "user-1",
-        seasonId: "season-1",
+        id: 'new-bp',
+        userId: 'user-1',
+        seasonId: 'season-1',
         currentTier: 0,
       } as any);
 
       const mockBp = {
-        id: "bp-1",
-        seasonId: "season-1",
+        id: 'bp-1',
+        seasonId: 'season-1',
       };
 
       mockedRepository.fetchBattlePassBySeason.mockResolvedValue(mockBp as any);
       mockedRepository.fetchBattlePassTiers.mockResolvedValue([]);
 
-      const result = await service.getUserBattlePassSummary("user-1", "season-1");
+      const result = await service.getUserBattlePassSummary('user-1', 'season-1');
 
       expect(mockedRepository.createUserBattlePass).toHaveBeenCalled();
       expect(result.userProgress.currentTier).toBe(0);
     });
   });
 
-  describe("addBattlePassXp", () => {
-    it("should add XP and advance tiers", async () => {
+  describe('addBattlePassXp', () => {
+    it('should add XP and advance tiers', async () => {
       const mockUserBp = {
-        id: "ubp-1",
-        userId: "user-1",
-        seasonId: "season-1",
+        id: 'ubp-1',
+        userId: 'user-1',
+        seasonId: 'season-1',
         currentTier: 1,
         tierXp: 500,
         totalXp: 500,
@@ -91,8 +91,8 @@ describe("Battle Pass Service", () => {
       };
 
       const mockBp = {
-        id: "bp-1",
-        seasonId: "season-1",
+        id: 'bp-1',
+        seasonId: 'season-1',
         xpPerTier: 1000,
       };
 
@@ -105,34 +105,34 @@ describe("Battle Pass Service", () => {
         totalXp: 1200,
       } as any);
 
-      const result = await service.addBattlePassXp("user-1", "season-1", 700);
+      const result = await service.addBattlePassXp('user-1', 'season-1', 700);
 
       expect(result.xpAdded).toBe(700);
       expect(result.tiersGained).toBe(1);
-      expect(mockedEventBus.publish).toHaveBeenCalledWith("seasons:tier_unlocked", expect.any(Object));
+      expect(mockedEventBus.publish).toHaveBeenCalledWith('seasons:tier_unlocked', expect.any(Object));
     });
   });
 
-  describe("claimTier", () => {
-    it("should claim free tier reward", async () => {
+  describe('claimTier', () => {
+    it('should claim free tier reward', async () => {
       const mockUserBp = {
-        id: "ubp-1",
-        userId: "user-1",
-        seasonId: "season-1",
+        id: 'ubp-1',
+        userId: 'user-1',
+        seasonId: 'season-1',
         currentTier: 5,
         isPremium: false,
         claimedFreeTiers: [],
       };
 
       const mockBp = {
-        id: "bp-1",
-        seasonId: "season-1",
+        id: 'bp-1',
+        seasonId: 'season-1',
       };
 
       const mockTiers = [
         {
           tierNumber: 1,
-          freeReward: { type: "COINS", amount: 100 },
+          freeReward: { type: 'COINS', amount: 100 },
           premiumReward: null,
         },
       ];
@@ -143,26 +143,26 @@ describe("Battle Pass Service", () => {
       mockedRepository.markTierClaimed.mockResolvedValue();
 
       const result = await service.claimTier({
-        userId: "user-1",
-        seasonId: "season-1",
+        userId: 'user-1',
+        seasonId: 'season-1',
         tierNumber: 1,
-        track: "FREE",
+        track: 'FREE',
       });
 
       expect(result.success).toBe(true);
       expect(result.rewards).toHaveLength(1);
     });
 
-    it("should fail to claim premium without premium pass", async () => {
+    it('should fail to claim premium without premium pass', async () => {
       const mockUserBp = {
-        id: "ubp-1",
-        userId: "user-1",
-        seasonId: "season-1",
+        id: 'ubp-1',
+        userId: 'user-1',
+        seasonId: 'season-1',
         currentTier: 5,
         isPremium: false,
       };
 
-      const mockBp = { id: "bp-1", seasonId: "season-1" };
+      const mockBp = { id: 'bp-1', seasonId: 'season-1' };
       const mockTiers = [];
 
       mockedRepository.fetchUserBattlePass.mockResolvedValue(mockUserBp as any);
@@ -170,31 +170,31 @@ describe("Battle Pass Service", () => {
       mockedRepository.fetchBattlePassTiers.mockResolvedValue(mockTiers as any);
 
       const result = await service.claimTier({
-        userId: "user-1",
-        seasonId: "season-1",
+        userId: 'user-1',
+        seasonId: 'season-1',
         tierNumber: 1,
-        track: "PREMIUM",
+        track: 'PREMIUM',
       });
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain("Premium required");
+      expect(result.error).toContain('Premium required');
     });
   });
 
-  describe("purchasePremium", () => {
-    it("should purchase premium pass", async () => {
+  describe('purchasePremium', () => {
+    it('should purchase premium pass', async () => {
       const mockUserBp = {
-        id: "ubp-1",
-        userId: "user-1",
-        seasonId: "season-1",
+        id: 'ubp-1',
+        userId: 'user-1',
+        seasonId: 'season-1',
         currentTier: 5,
         isPremium: false,
         claimedFreeTiers: [1, 2, 3, 4, 5],
       };
 
       const mockBp = {
-        id: "bp-1",
-        seasonId: "season-1",
+        id: 'bp-1',
+        seasonId: 'season-1',
         premiumPriceGems: 499,
       };
 
@@ -206,8 +206,8 @@ describe("Battle Pass Service", () => {
       } as any);
 
       const result = await service.purchasePremium({
-        userId: "user-1",
-        seasonId: "season-1",
+        userId: 'user-1',
+        seasonId: 'season-1',
         gemsAvailable: 500,
       });
 
@@ -215,17 +215,17 @@ describe("Battle Pass Service", () => {
       expect(result.gemsDeducted).toBe(499);
     });
 
-    it("should fail if insufficient gems", async () => {
+    it('should fail if insufficient gems', async () => {
       const mockUserBp = {
-        id: "ubp-1",
-        userId: "user-1",
-        seasonId: "season-1",
+        id: 'ubp-1',
+        userId: 'user-1',
+        seasonId: 'season-1',
         isPremium: false,
       };
 
       const mockBp = {
-        id: "bp-1",
-        seasonId: "season-1",
+        id: 'bp-1',
+        seasonId: 'season-1',
         premiumPriceGems: 499,
       };
 
@@ -233,13 +233,13 @@ describe("Battle Pass Service", () => {
       mockedRepository.fetchBattlePassBySeason.mockResolvedValue(mockBp as any);
 
       const result = await service.purchasePremium({
-        userId: "user-1",
-        seasonId: "season-1",
+        userId: 'user-1',
+        seasonId: 'season-1',
         gemsAvailable: 100,
       });
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain("Insufficient gems");
+      expect(result.error).toContain('Insufficient gems');
     });
   });
 });

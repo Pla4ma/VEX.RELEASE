@@ -62,9 +62,9 @@ export interface SquadSummary {
   userRole: SquadRole | null;
 }
 
-export type SquadRole = "FOUNDER" | "ADMIN" | "MODERATOR" | "MEMBER" | "GUEST";
+export type SquadRole = 'FOUNDER' | 'ADMIN' | 'MODERATOR' | 'MEMBER' | 'GUEST';
 
-export type JoinRequirement = "OPEN" | "APPROVAL" | "INVITE_ONLY" | "LEVEL_REQ";
+export type JoinRequirement = 'OPEN' | 'APPROVAL' | 'INVITE_ONLY' | 'LEVEL_REQ';
 
 // ============================================================================
 // Squad Member Types
@@ -100,7 +100,7 @@ export interface SquadMemberDetail extends SquadMember {
   lastSeenAt: number;
 }
 
-export type SquadPermission = "VIEW_SQUAD" | "INVITE_MEMBERS" | "KICK_MEMBERS" | "MANAGE_ROLES" | "EDIT_SQUAD" | "DELETE_SQUAD" | "START_SESSION" | "MANAGE_CHALLENGE" | "MANAGE_BOSS" | "VIEW_ANALYTICS" | "PIN_MESSAGES" | "MODERATE_CHAT" | "USE_SYERGY_BOOST";
+export type SquadPermission = 'VIEW_SQUAD' | 'INVITE_MEMBERS' | 'KICK_MEMBERS' | 'MANAGE_ROLES' | 'EDIT_SQUAD' | 'DELETE_SQUAD' | 'START_SESSION' | 'MANAGE_CHALLENGE' | 'MANAGE_BOSS' | 'VIEW_ANALYTICS' | 'PIN_MESSAGES' | 'MODERATE_CHAT' | 'USE_SYERGY_BOOST';
 
 // ============================================================================
 // Squad Invite Types
@@ -127,7 +127,7 @@ export interface SquadInvite {
   respondedAt: number | null;
 }
 
-export type InviteStatus = "PENDING" | "ACCEPTED" | "DECLINED" | "EXPIRED" | "REVOKED";
+export type InviteStatus = 'PENDING' | 'ACCEPTED' | 'DECLINED' | 'EXPIRED' | 'REVOKED';
 
 export interface SquadInviteDetail extends SquadInvite {
   // Squad info
@@ -159,7 +159,7 @@ export interface SquadJoinRequest {
   reviewedBy: string | null;
 }
 
-export type JoinRequestStatus = "PENDING" | "APPROVED" | "REJECTED" | "CANCELLED";
+export type JoinRequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED';
 
 export interface SquadJoinRequestDetail extends SquadJoinRequest {
   // Requester info
@@ -198,7 +198,7 @@ export interface SquadSession {
   synergyBonus: number;
 }
 
-export type SquadSessionStatus = "SCHEDULED" | "ACTIVE" | "PAUSED" | "COMPLETED" | "CANCELLED";
+export type SquadSessionStatus = 'SCHEDULED' | 'ACTIVE' | 'PAUSED' | 'COMPLETED' | 'CANCELLED';
 
 export interface SquadSessionParticipant {
   userId: string;
@@ -208,7 +208,7 @@ export interface SquadSessionParticipant {
   joinedSessionId: string | null;
 }
 
-export type ParticipantStatus = "INVITED" | "JOINED" | "ACTIVE" | "PAUSED" | "LEFT" | "COMPLETED";
+export type ParticipantStatus = 'INVITED' | 'JOINED' | 'ACTIVE' | 'PAUSED' | 'LEFT' | 'COMPLETED';
 
 // ============================================================================
 // Squad Synergy Types
@@ -239,7 +239,7 @@ export interface SynergyActivity {
   createdAt: number;
 }
 
-export type SynergyActivityType = "SESSION_COMPLETE" | "SESSION_TOGETHER" | "BOSS_DAMAGE" | "CHALLENGE_PROGRESS" | "DAILY_LOGIN" | "STREAK_MILESTONE" | "INVITE_ACCEPTED";
+export type SynergyActivityType = 'SESSION_COMPLETE' | 'SESSION_TOGETHER' | 'BOSS_DAMAGE' | 'CHALLENGE_PROGRESS' | 'DAILY_LOGIN' | 'STREAK_MILESTONE' | 'INVITE_ACCEPTED';
 
 // ============================================================================
 // Squad Challenge Types
@@ -265,13 +265,13 @@ export interface SquadChallenge {
   completedAt: number | null;
 
   // Rewards
-  rewardType: "XP" | "COINS" | "GEMS" | "SYERGY_POINTS";
+  rewardType: 'XP' | 'COINS' | 'GEMS' | 'SYERGY_POINTS';
   rewardAmount: number;
 }
 
-export type SquadChallengeType = "TOTAL_FOCUS_TIME" | "SESSION_COUNT" | "CONCURRENT_SESSIONS" | "BOSS_DAMAGE" | "STREAK_MAINTAIN";
+export type SquadChallengeType = 'TOTAL_FOCUS_TIME' | 'SESSION_COUNT' | 'CONCURRENT_SESSIONS' | 'BOSS_DAMAGE' | 'STREAK_MAINTAIN';
 
-export type SquadChallengeStatus = "PENDING" | "ACTIVE" | "COMPLETED" | "FAILED" | "CANCELLED";
+export type SquadChallengeStatus = 'PENDING' | 'ACTIVE' | 'COMPLETED' | 'FAILED' | 'CANCELLED';
 
 // ============================================================================
 // Squad Activity Types
@@ -287,7 +287,7 @@ export interface SquadActivity {
   createdAt: number;
 }
 
-export type SquadActivityType = "MEMBER_JOINED" | "MEMBER_LEFT" | "MEMBER_KICKED" | "ROLE_CHANGED" | "SESSION_STARTED" | "SESSION_COMPLETED" | "CHALLENGE_COMPLETED" | "BOSS_DEFEATED" | "SYNERGY_LEVEL_UP" | "SETTINGS_CHANGED" | "INVITE_SENT";
+export type SquadActivityType = 'MEMBER_JOINED' | 'MEMBER_LEFT' | 'MEMBER_KICKED' | 'ROLE_CHANGED' | 'SESSION_STARTED' | 'SESSION_COMPLETED' | 'CHALLENGE_COMPLETED' | 'BOSS_DEFEATED' | 'SYNERGY_LEVEL_UP' | 'SETTINGS_CHANGED' | 'INVITE_SENT';
 
 // ============================================================================
 // Service Input Types
@@ -365,7 +365,7 @@ export interface JoinSquadSessionInput {
 // Error Types
 // ============================================================================
 
-export type SquadErrorCode = "SQUAD_NOT_FOUND" | "SQUAD_FULL" | "ALREADY_MEMBER" | "NOT_MEMBER" | "INSUFFICIENT_PERMISSIONS" | "INVITE_NOT_FOUND" | "INVITE_EXPIRED" | "INVITE_ALREADY_USED" | "CANNOT_INVITE_SELF" | "USER_NOT_FOUND" | "ROLE_NOT_FOUND" | "CANNOT_KICK_FOUNDER" | "CANNOT_LEAVE_AS_FOUNDER" | "FOUNDER_TRANSFER_REQUIRED" | "INVALID_ROLE_HIERARCHY" | "REQUEST_NOT_FOUND" | "SESSION_NOT_FOUND" | "SESSION_FULL" | "SESSION_ALREADY_STARTED" | "DUPLICATE_MEMBERSHIP" | "RATE_LIMITED" | "NETWORK_ERROR" | "UNKNOWN_ERROR";
+export type SquadErrorCode = 'SQUAD_NOT_FOUND' | 'SQUAD_FULL' | 'ALREADY_MEMBER' | 'NOT_MEMBER' | 'INSUFFICIENT_PERMISSIONS' | 'INVITE_NOT_FOUND' | 'INVITE_EXPIRED' | 'INVITE_ALREADY_USED' | 'CANNOT_INVITE_SELF' | 'USER_NOT_FOUND' | 'ROLE_NOT_FOUND' | 'CANNOT_KICK_FOUNDER' | 'CANNOT_LEAVE_AS_FOUNDER' | 'FOUNDER_TRANSFER_REQUIRED' | 'INVALID_ROLE_HIERARCHY' | 'REQUEST_NOT_FOUND' | 'SESSION_NOT_FOUND' | 'SESSION_FULL' | 'SESSION_ALREADY_STARTED' | 'DUPLICATE_MEMBERSHIP' | 'RATE_LIMITED' | 'NETWORK_ERROR' | 'UNKNOWN_ERROR';
 
 export interface SquadError {
   code: SquadErrorCode;

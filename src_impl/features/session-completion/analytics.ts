@@ -4,7 +4,7 @@
  * Comprehensive analytics tracking for session completion, rewards, achievements, and post-session analytics.
  */
 
-import { capture } from "../../shared/analytics/analytics-service";
+import { capture } from '../../shared/analytics/analytics-service';
 
 // ============================================================================
 // SESSION LIFECYCLE ANALYTICS
@@ -13,7 +13,7 @@ import { capture } from "../../shared/analytics/analytics-service";
 export function trackSessionCompleted(
   userId: string,
   sessionId: string,
-  completionType: "natural" | "forced" | "abandoned" | "timeout" | "achievement",
+  completionType: 'natural' | 'forced' | 'abandoned' | 'timeout' | 'achievement',
   duration: number,
   objectives: {
     total: number;
@@ -37,7 +37,7 @@ export function trackSessionCompleted(
     missedCriteria: string[];
   },
 ): void {
-  capture("session_completion_completed", {
+  capture('session_completion_completed', {
     user_id: userId,
     session_id: sessionId,
     completion_type: completionType,
@@ -59,7 +59,7 @@ export function trackSessionAborted(
     totalObjectives: number;
     currentPhase: string;
   },
-  abortReason: "user_choice" | "technical_error" | "timeout" | "emergency" | "system_intervention",
+  abortReason: 'user_choice' | 'technical_error' | 'timeout' | 'emergency' | 'system_intervention',
   abortContext: {
     trigger: string;
     userState: string;
@@ -71,7 +71,7 @@ export function trackSessionAborted(
     penalty: unknown;
   },
 ): void {
-  capture("session_completion_aborted", {
+  capture('session_completion_aborted', {
     user_id: userId,
     session_id: sessionId,
     abort_time: abortTime.toISOString(),
@@ -94,7 +94,7 @@ export function trackSessionTimeout(
     objectivesCompleted: number;
     totalObjectives: number;
   },
-  timeoutType: "soft" | "hard" | "grace_period",
+  timeoutType: 'soft' | 'hard' | 'grace_period',
   consequences: {
     scorePenalty: number;
     rewardReduction: number;
@@ -107,7 +107,7 @@ export function trackSessionTimeout(
     cost?: unknown;
   },
 ): void {
-  capture("session_completion_timeout", {
+  capture('session_completion_timeout', {
     user_id: userId,
     session_id: sessionId,
     timeout_time: timeoutTime.toISOString(),
@@ -163,7 +163,7 @@ export function trackSessionPerformanceCalculated(
     insights: string[];
   },
 ): void {
-  capture("session_completion_performance_calculated", {
+  capture('session_completion_performance_calculated', {
     user_id: userId,
     session_id: sessionId,
     performance_metrics: performanceMetrics,
@@ -176,13 +176,13 @@ export function trackSessionMilestoneReached(
   userId: string,
   sessionId: string,
   milestoneId: string,
-  milestoneType: "score" | "streak" | "accuracy" | "speed" | "completion" | "special",
+  milestoneType: 'score' | 'streak' | 'accuracy' | 'speed' | 'completion' | 'special',
   milestoneName: string,
   value: number,
   target: number,
   previousRecord: number,
   improvement: number,
-  significance: "personal" | "session" | "daily" | "weekly" | "all_time",
+  significance: 'personal' | 'session' | 'daily' | 'weekly' | 'all_time',
   recognition: {
     badge: string;
     title: string;
@@ -196,7 +196,7 @@ export function trackSessionMilestoneReached(
     unlocks: string[];
   },
 ): void {
-  capture("session_completion_milestone_reached", {
+  capture('session_completion_milestone_reached', {
     user_id: userId,
     session_id: sessionId,
     milestone_id: milestoneId,
@@ -216,7 +216,7 @@ export function trackSessionRecordBroken(
   userId: string,
   sessionId: string,
   recordType: string,
-  recordCategory: "personal" | "session" | "daily" | "weekly" | "global",
+  recordCategory: 'personal' | 'session' | 'daily' | 'weekly' | 'global',
   previousRecord: number,
   newRecord: number,
   improvement: number,
@@ -235,7 +235,7 @@ export function trackSessionRecordBroken(
     public: boolean;
   },
 ): void {
-  capture("session_completion_record_broken", {
+  capture('session_completion_record_broken', {
     user_id: userId,
     session_id: sessionId,
     record_type: recordType,
@@ -296,7 +296,7 @@ export function trackSessionRewardsCalculated(
     items: unknown[];
   },
 ): void {
-  capture("session_completion_rewards_calculated", {
+  capture('session_completion_rewards_calculated', {
     user_id: userId,
     session_id: sessionId,
     base_rewards: baseRewards,
@@ -311,7 +311,7 @@ export function trackSessionRewardsClaimed(
   userId: string,
   sessionId: string,
   claimedAt: Date,
-  claimMethod: "auto" | "manual" | "delayed",
+  claimMethod: 'auto' | 'manual' | 'delayed',
   rewards: {
     experience: number;
     currency: number;
@@ -335,7 +335,7 @@ export function trackSessionRewardsClaimed(
     overflow: unknown;
   },
 ): void {
-  capture("session_completion_rewards_claimed", {
+  capture('session_completion_rewards_claimed', {
     user_id: userId,
     session_id: sessionId,
     claimed_at: claimedAt.toISOString(),
@@ -376,7 +376,7 @@ export function trackSessionRewardMultiplierActivated(
     efficiency: number;
   },
 ): void {
-  capture("session_completion_reward_multiplier_activated", {
+  capture('session_completion_reward_multiplier_activated', {
     user_id: userId,
     session_id: sessionId,
     multiplier_id: multiplierId,
@@ -400,7 +400,7 @@ export function trackSessionAchievementUnlocked(
   sessionId: string,
   achievementId: string,
   achievementName: string,
-  achievementType: "completion" | "performance" | "streak" | "special" | "hidden",
+  achievementType: 'completion' | 'performance' | 'streak' | 'special' | 'hidden',
   progress: {
     current: number;
     required: number;
@@ -434,7 +434,7 @@ export function trackSessionAchievementUnlocked(
     next: string;
   },
 ): void {
-  capture("session_completion_achievement_unlocked", {
+  capture('session_completion_achievement_unlocked', {
     user_id: userId,
     session_id: sessionId,
     achievement_id: achievementId,
@@ -476,7 +476,7 @@ export function trackSessionAchievementProgressUpdated(
     confidence: number;
   },
 ): void {
-  capture("session_completion_achievement_progress_updated", {
+  capture('session_completion_achievement_progress_updated', {
     user_id: userId,
     session_id: sessionId,
     achievement_id: achievementId,
@@ -498,7 +498,7 @@ export function trackSessionAchievementProgressUpdated(
 export function trackSessionFeedbackRequested(
   userId: string,
   sessionId: string,
-  feedbackType: "rating" | "survey" | "comment" | "suggestion" | "bug_report",
+  feedbackType: 'rating' | 'survey' | 'comment' | 'suggestion' | 'bug_report',
   requestedAt: Date,
   context: {
     sessionType: string;
@@ -524,7 +524,7 @@ export function trackSessionFeedbackRequested(
     deadline?: Date;
   },
 ): void {
-  capture("session_completion_feedback_requested", {
+  capture('session_completion_feedback_requested', {
     user_id: userId,
     session_id: sessionId,
     feedback_type: feedbackType,
@@ -552,7 +552,7 @@ export function trackSessionFeedbackSubmitted(
   }[],
   rating?: number,
   comment?: string,
-  sentiment?: "positive" | "neutral" | "negative",
+  sentiment?: 'positive' | 'neutral' | 'negative',
   context?: {
     device: string;
     location?: string;
@@ -564,7 +564,7 @@ export function trackSessionFeedbackSubmitted(
     availability?: string;
   },
 ): void {
-  capture("session_completion_feedback_submitted", {
+  capture('session_completion_feedback_submitted', {
     user_id: userId,
     session_id: sessionId,
     feedback_id: feedbackId,
@@ -586,7 +586,7 @@ export function trackSessionFeedbackSubmitted(
 export function trackSessionShared(
   userId: string,
   sessionId: string,
-  shareType: "achievement" | "record" | "milestone" | "completion" | "performance",
+  shareType: 'achievement' | 'record' | 'milestone' | 'completion' | 'performance',
   sharedAt: Date,
   platform: string,
   content: {
@@ -597,7 +597,7 @@ export function trackSessionShared(
     stats: unknown;
   },
   audience: {
-    type: "public" | "friends" | "group" | "private";
+    type: 'public' | 'friends' | 'group' | 'private';
     recipients?: string[];
   },
   engagement: {
@@ -612,7 +612,7 @@ export function trackSessionShared(
     social: number;
   },
 ): void {
-  capture("session_completion_shared", {
+  capture('session_completion_shared', {
     user_id: userId,
     session_id: sessionId,
     share_type: shareType,
@@ -628,7 +628,7 @@ export function trackSessionShared(
 export function trackSessionCompared(
   userId: string,
   sessionId: string,
-  comparisonType: "peer" | "friend" | "leaderboard" | "global" | "historical",
+  comparisonType: 'peer' | 'friend' | 'leaderboard' | 'global' | 'historical',
   comparisonTarget: string,
   metrics: {
     user: number;
@@ -650,7 +650,7 @@ export function trackSessionCompared(
     nextSteps: string[];
   },
 ): void {
-  capture("session_completion_compared", {
+  capture('session_completion_compared', {
     user_id: userId,
     session_id: sessionId,
     comparison_type: comparisonType,
@@ -667,7 +667,7 @@ export function trackSessionCompared(
 
 export function trackSessionCompletionDashboardViewed(
   userId: string,
-  dashboardType: "overview" | "session_detail" | "progress" | "achievements" | "rewards",
+  dashboardType: 'overview' | 'session_detail' | 'progress' | 'achievements' | 'rewards',
   filters: {
     timeframe: string;
     sessionType: string[];
@@ -685,7 +685,7 @@ export function trackSessionCompletionDashboardViewed(
     role: string;
   },
 ): void {
-  capture("session_completion_dashboard_viewed", {
+  capture('session_completion_dashboard_viewed', {
     user_id: userId,
     dashboard_type: dashboardType,
     filters,
@@ -715,7 +715,7 @@ export function trackSessionCompletionUserProperties(
     preferredDifficulty: string;
   },
 ): void {
-  capture("session_completion_user_properties", {
+  capture('session_completion_user_properties', {
     user_id: userId,
     total_sessions: userProperties.totalSessions,
     completed_sessions: userProperties.completedSessions,
@@ -738,7 +738,7 @@ export function trackSessionCompletionUserProperties(
 
 export function trackSessionCompletionError(
   userId: string,
-  errorType: "completion_error" | "reward_error" | "analytics_error" | "system_error",
+  errorType: 'completion_error' | 'reward_error' | 'analytics_error' | 'system_error',
   errorCode: string,
   errorMessage: string,
   context: {
@@ -748,7 +748,7 @@ export function trackSessionCompletionError(
     sessionId: string;
   },
 ): void {
-  capture("session_completion_error", {
+  capture('session_completion_error', {
     user_id: userId,
     error_type: errorType,
     error_code: errorCode,
@@ -761,8 +761,8 @@ export function trackSessionCompletionError(
 // FUNNEL ANALYTICS
 // ============================================================================
 
-export function trackSessionCompletionFunnel(userId: string, step: "session_started" | "objectives_met" | "performance_calculated" | "rewards_earned" | "achievement_unlocked" | "completed"): void {
-  capture("session_completion_funnel", {
+export function trackSessionCompletionFunnel(userId: string, step: 'session_started' | 'objectives_met' | 'performance_calculated' | 'rewards_earned' | 'achievement_unlocked' | 'completed'): void {
+  capture('session_completion_funnel', {
     user_id: userId,
     funnel_step: step,
   });

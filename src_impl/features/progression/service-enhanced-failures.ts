@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/react-native';
 import { getProgressionServiceConfig } from './service-enhanced-config';
 import { createProgressionError } from './service-enhanced-errors';
-import type { EnhancedRepositoryError } from './repository-enhanced';
+import type { EnhancedRepositoryError } from './repository/enhanced';
 import type { AddXpOperationResult } from './service-enhanced-types';
 
 export function handleFetchFailure(
@@ -68,3 +68,4 @@ export function handleFetchFailure(
     offlineQueued: false,
   };
 }
+

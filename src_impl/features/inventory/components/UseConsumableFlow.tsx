@@ -9,26 +9,26 @@
  * - Integration with ActiveBuffs system
  */
 
-import React, { useState, useCallback } from "react";
-import { Modal, Pressable, ViewStyle } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence, withTiming } from "react-native-reanimated";
+import React, { useState, useCallback } from 'react';
+import { Modal, Pressable, ViewStyle } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence, withTiming } from 'react-native-reanimated';
 
-import { useTheme } from "../../../theme";
-import { Box, Text, Card } from "../../../components/primitives";
-import { Icon } from "../../../icons";
-import { useUIStore } from "../../../store";
-import type { InventoryItem } from "../types";
+import { useTheme } from '../../../theme';
+import { Box, Text, Card } from '../../../components/primitives';
+import { Icon } from '../../../icons';
+import { useUIStore } from '../../../store';
+import type { InventoryItem } from '../types';
 
 type ConsumableType =
-  | "XP_BOOST"
-  | "FOCUS_POTION"
-  | "STREAK_SHIELD"
-  | "COIN_BOOST"
-  | "GEM_BOOST"
+  | 'XP_BOOST'
+  | 'FOCUS_POTION'
+  | 'STREAK_SHIELD'
+  | 'COIN_BOOST'
+  | 'GEM_BOOST'
   // PHASE 5.5: New premium consumables
-  | "VOID_FRAGMENT" // Rare - 50 extra boss damage
-  | "FOCUS_CRYSTAL" // Uncommon - Reduces purity threshold by 10
-  | "CHAIN_BREAKER"; // Rare - Restores broken SPRINT chain
+  | 'VOID_FRAGMENT' // Rare - 50 extra boss damage
+  | 'FOCUS_CRYSTAL' // Uncommon - Reduces purity threshold by 10
+  | 'CHAIN_BREAKER'; // Rare - Restores broken SPRINT chain
 
 interface ConsumableEffect {
   type: ConsumableType;
@@ -42,77 +42,77 @@ interface ConsumableEffect {
 
 const CONSUMABLE_EFFECTS: Record<string, ConsumableEffect> = {
   XP_BOOST: {
-    type: "XP_BOOST",
-    label: "XP Boost",
-    description: "+25% XP for 30 minutes",
-    icon: "zap",
-    color: "#F59E0B",
+    type: 'XP_BOOST',
+    label: 'XP Boost',
+    description: '+25% XP for 30 minutes',
+    icon: 'zap',
+    color: '#F59E0B',
     duration: 30,
-    effectDescription: "All XP gains increased by 25%",
+    effectDescription: 'All XP gains increased by 25%',
   },
   FOCUS_POTION: {
-    type: "FOCUS_POTION",
-    label: "Focus Potion",
-    description: "+10% session quality for next session",
-    icon: "target",
-    color: "#3B82F6",
+    type: 'FOCUS_POTION',
+    label: 'Focus Potion',
+    description: '+10% session quality for next session',
+    icon: 'target',
+    color: '#3B82F6',
     duration: 60,
-    effectDescription: "Next session gets +10% quality bonus",
+    effectDescription: 'Next session gets +10% quality bonus',
   },
   STREAK_SHIELD: {
-    type: "STREAK_SHIELD",
-    label: "Streak Shield",
-    description: "Protects streak for 24 hours",
-    icon: "shield",
-    color: "#10B981",
+    type: 'STREAK_SHIELD',
+    label: 'Streak Shield',
+    description: 'Protects streak for 24 hours',
+    icon: 'shield',
+    color: '#10B981',
     duration: 1440, // 24 hours
-    effectDescription: "Streak protected from breaking",
+    effectDescription: 'Streak protected from breaking',
   },
   COIN_BOOST: {
-    type: "COIN_BOOST",
-    label: "Coin Boost",
-    description: "+50% coins for 1 hour",
-    icon: "coins",
-    color: "#F59E0B",
+    type: 'COIN_BOOST',
+    label: 'Coin Boost',
+    description: '+50% coins for 1 hour',
+    icon: 'coins',
+    color: '#F59E0B',
     duration: 60,
-    effectDescription: "All coin rewards increased by 50%",
+    effectDescription: 'All coin rewards increased by 50%',
   },
   GEM_BOOST: {
-    type: "GEM_BOOST",
-    label: "Gem Boost",
-    description: "Double gem drops for 2 hours",
-    icon: "gem",
-    color: "#8B5CF6",
+    type: 'GEM_BOOST',
+    label: 'Gem Boost',
+    description: 'Double gem drops for 2 hours',
+    icon: 'gem',
+    color: '#8B5CF6',
     duration: 120,
-    effectDescription: "Gem drop rate doubled",
+    effectDescription: 'Gem drop rate doubled',
   },
   // PHASE 5.5: New premium consumables
   VOID_FRAGMENT: {
-    type: "VOID_FRAGMENT",
-    label: "Void Fragment",
-    description: "Deals 50 extra boss damage next session",
-    icon: "skull", // Using skull icon for void/dark theme
-    color: "#6366F1", // Indigo for rare rarity
+    type: 'VOID_FRAGMENT',
+    label: 'Void Fragment',
+    description: 'Deals 50 extra boss damage next session',
+    icon: 'skull', // Using skull icon for void/dark theme
+    color: '#6366F1', // Indigo for rare rarity
     duration: 0, // One-time use, applied immediately on session
-    effectDescription: "+50 guaranteed boss damage on next encounter",
+    effectDescription: '+50 guaranteed boss damage on next encounter',
   },
   FOCUS_CRYSTAL: {
-    type: "FOCUS_CRYSTAL",
-    label: "Focus Crystal",
-    description: "Reduces purity threshold for this session",
-    icon: "diamond",
-    color: "#10B981", // Green for uncommon rarity
+    type: 'FOCUS_CRYSTAL',
+    label: 'Focus Crystal',
+    description: 'Reduces purity threshold for this session',
+    icon: 'diamond',
+    color: '#10B981', // Green for uncommon rarity
     duration: 0, // Applies to next session only
-    effectDescription: "Purity threshold reduced by 10 points (easier passing)",
+    effectDescription: 'Purity threshold reduced by 10 points (easier passing)',
   },
   CHAIN_BREAKER: {
-    type: "CHAIN_BREAKER",
-    label: "Chain Breaker",
-    description: "Restores broken SPRINT chain",
-    icon: "link",
-    color: "#6366F1", // Indigo for rare rarity
+    type: 'CHAIN_BREAKER',
+    label: 'Chain Breaker',
+    description: 'Restores broken SPRINT chain',
+    icon: 'link',
+    color: '#6366F1', // Indigo for rare rarity
     duration: 0, // One-time use, immediate effect
-    effectDescription: "Instantly restore your broken SPRINT chain progress",
+    effectDescription: 'Instantly restore your broken SPRINT chain progress',
   },
 };
 
@@ -173,8 +173,8 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
 
     // Show success toast
     showToast({
-      message: `${effect?.label || "Item"} activated!`,
-      type: "success",
+      message: `${effect?.label || 'Item'} activated!`,
+      type: 'success',
       duration: 3000,
     });
   }, [effect, onConfirm, onClose, scale, showToast]);
@@ -189,9 +189,9 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
         style={[
           {
             flex: 1,
-            backgroundColor: "rgba(0, 0, 0, 0.7)",
-            justifyContent: "center",
-            alignItems: "center",
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            justifyContent: 'center',
+            alignItems: 'center',
             padding: 20,
           },
           containerStyle,
@@ -202,8 +202,8 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
             size="lg"
             style={{
               width: 320,
-              maxWidth: "100%",
-              alignItems: "center",
+              maxWidth: '100%',
+              alignItems: 'center',
               padding: 24,
             }}
           >
@@ -216,7 +216,7 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
               alignItems="center"
               mb={16}
               style={{
-                backgroundColor: effect.color + "20",
+                backgroundColor: effect.color + '20',
                 borderWidth: 3,
                 borderColor: effect.color,
               }}
@@ -225,12 +225,12 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
             </Box>
 
             {/* Title */}
-            <Text variant="h3" style={{ marginBottom: 8, textAlign: "center" }}>
+            <Text variant="h3" style={{ marginBottom: 8, textAlign: 'center' }}>
               Use {itemDefinition?.name || effect.label}?
             </Text>
 
             {/* Description */}
-            <Text variant="body" color="text.secondary" style={{ marginBottom: 20, textAlign: "center" }}>
+            <Text variant="body" color="text.secondary" style={{ marginBottom: 20, textAlign: 'center' }}>
               {effect.description}
             </Text>
 
@@ -252,7 +252,7 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
                   variant="caption"
                   style={{
                     marginLeft: 8,
-                    fontWeight: "600",
+                    fontWeight: '600',
                     color: effect.color,
                   }}
                 >
@@ -263,7 +263,7 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
                 {effect.effectDescription}
               </Text>
               <Text variant="caption" color="text.secondary">
-                Duration: {effect.duration >= 60 ? `${Math.floor(effect.duration / 60)} hour${effect.duration >= 120 ? "s" : ""}` : `${effect.duration} minutes`}
+                Duration: {effect.duration >= 60 ? `${Math.floor(effect.duration / 60)} hour${effect.duration >= 120 ? 's' : ''}` : `${effect.duration} minutes`}
               </Text>
             </Box>
 
@@ -275,9 +275,9 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
                 borderRadius={8}
                 mb={16}
                 style={{
-                  backgroundColor: theme.colors.warning[50] || "#FFFBEB",
+                  backgroundColor: theme.colors.warning[50] || '#FFFBEB',
                   borderWidth: 1,
-                  borderColor: theme.colors.warning.DEFAULT + "30",
+                  borderColor: theme.colors.warning.DEFAULT + '30',
                 }}
               >
                 <Box flexDirection="row" alignItems="center">
@@ -287,7 +287,7 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
                     style={{
                       marginLeft: 8,
                       color: theme.colors.warning.DEFAULT,
-                      fontWeight: "500",
+                      fontWeight: '500',
                     }}
                   >
                     This is your last one!
@@ -306,7 +306,7 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
                   backgroundColor: theme.colors.background.secondary,
                   paddingVertical: 14,
                   borderRadius: 10,
-                  alignItems: "center",
+                  alignItems: 'center',
                   marginRight: 8,
                   opacity: isUsing ? 0.5 : 1,
                 }}
@@ -317,7 +317,7 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
                 <Text
                   style={{
                     color: theme.colors.text.primary,
-                    fontWeight: "600",
+                    fontWeight: '600',
                     fontSize: 16,
                   }}
                 >
@@ -332,7 +332,7 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
                   backgroundColor: effect.color,
                   paddingVertical: 14,
                   borderRadius: 10,
-                  alignItems: "center",
+                  alignItems: 'center',
                   marginLeft: 8,
                   opacity: isUsing ? 0.7 : 1,
                 }}
@@ -348,8 +348,8 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
                         height: 20,
                         borderRadius: 10,
                         borderWidth: 2,
-                        borderColor: "#FFF",
-                        borderTopColor: "transparent",
+                        borderColor: '#FFF',
+                        borderTopColor: 'transparent',
                       }}
                     />
                   ) : (
@@ -357,13 +357,13 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
                   )}
                   <Text
                     style={{
-                      color: "#FFF",
-                      fontWeight: "600",
+                      color: '#FFF',
+                      fontWeight: '600',
                       fontSize: 16,
                       marginLeft: 8,
                     }}
                   >
-                    {isUsing ? "Using..." : "Use Now"}
+                    {isUsing ? 'Using...' : 'Use Now'}
                   </Text>
                 </Box>
               </Pressable>

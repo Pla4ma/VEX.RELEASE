@@ -7,20 +7,20 @@
  * @phase 3A.3
  */
 
-import React from "react";
-import { ScrollView } from "react-native";
-import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming, withDelay } from "react-native-reanimated";
+import React from 'react';
+import { ScrollView } from 'react-native';
+import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming, withDelay } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
 
 export interface BossTimeoutScreenProps {
   /** Boss name */
   bossName: string;
   /** Boss tier */
-  bossTier: "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+  bossTier: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
   /** Boss health when escaped */
   remainingHealth: number;
   /** Boss escape taunt/laugh */
@@ -46,7 +46,7 @@ export interface BossTimeoutScreenProps {
 /**
  * Retreating boss animation with laugh taunt
  */
-function RetreatingBoss({ bossTier, escapeTaunt }: { bossTier: BossTimeoutScreenProps["bossTier"]; escapeTaunt?: string }): JSX.Element {
+function RetreatingBoss({ bossTier, escapeTaunt }: { bossTier: BossTimeoutScreenProps['bossTier']; escapeTaunt?: string }): JSX.Element {
   const { theme } = useTheme();
 
   const tierColors = {
@@ -54,7 +54,7 @@ function RetreatingBoss({ bossTier, escapeTaunt }: { bossTier: BossTimeoutScreen
     UNCOMMON: theme.colors.success.DEFAULT,
     RARE: theme.colors.info.DEFAULT,
     EPIC: theme.colors.accent.purple,
-    LEGENDARY: "#F59E0B",
+    LEGENDARY: '#F59E0B',
   };
 
   const retreatStyle = useAnimatedStyle(() => ({
@@ -88,13 +88,13 @@ function RetreatingBoss({ bossTier, escapeTaunt }: { bossTier: BossTimeoutScreen
       <Animated.View
         style={[
           {
-            position: "absolute",
+            position: 'absolute',
             width: 120,
             height: 120,
             borderRadius: 20,
             backgroundColor: `${tierColors[bossTier]}30`,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
             borderWidth: 3,
             borderColor: tierColors[bossTier],
           },
@@ -109,7 +109,7 @@ function RetreatingBoss({ bossTier, escapeTaunt }: { bossTier: BossTimeoutScreen
         <Animated.View
           style={[
             {
-              position: "absolute",
+              position: 'absolute',
               top: 20,
               paddingHorizontal: 16,
               paddingVertical: 12,
@@ -131,7 +131,7 @@ function RetreatingBoss({ bossTier, escapeTaunt }: { bossTier: BossTimeoutScreen
       <Animated.View
         style={[
           {
-            position: "absolute",
+            position: 'absolute',
             width: 120,
             height: 120,
             borderRadius: 20,
@@ -145,7 +145,7 @@ function RetreatingBoss({ bossTier, escapeTaunt }: { bossTier: BossTimeoutScreen
       <Animated.View
         entering={FadeIn.duration(300).delay(1500)}
         style={{
-          position: "absolute",
+          position: 'absolute',
         }}
       >
         <Text fontSize={40}>💨</Text>
@@ -157,7 +157,7 @@ function RetreatingBoss({ bossTier, escapeTaunt }: { bossTier: BossTimeoutScreen
 /**
  * Consolation rewards card
  */
-function ConsolationRewards({ consolation }: { consolation: BossTimeoutScreenProps["consolation"] }): JSX.Element {
+function ConsolationRewards({ consolation }: { consolation: BossTimeoutScreenProps['consolation'] }): JSX.Element {
   const { theme } = useTheme();
 
   return (
@@ -240,7 +240,7 @@ export function BossTimeoutScreen({ bossName, bossTier, remainingHealth, escapeT
               {bossName}
             </Text>
             <Text variant="bodyLarge" color="text.secondary" textAlign="center">
-              {escapeTaunt || "Got away this time..."}
+              {escapeTaunt || 'Got away this time...'}
             </Text>
           </Box>
         </Animated.View>
@@ -267,7 +267,7 @@ export function BossTimeoutScreen({ bossName, bossTier, remainingHealth, escapeT
         <Animated.View entering={FadeInUp.duration(500).delay(1000)}>
           <Box alignItems="center">
             <Text variant="body" color="text.tertiary">
-              Challenge again in{" "}
+              Challenge again in{' '}
               <Text color="text.primary" fontWeight="600">
                 {retryCooldownDays} days
               </Text>

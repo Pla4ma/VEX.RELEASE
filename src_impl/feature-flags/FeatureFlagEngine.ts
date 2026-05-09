@@ -12,11 +12,11 @@
  * - Offline fallback
  */
 
-import { createDebugger } from "@/utils/debug";
-import { Platform } from "react-native";
-import { MMKV } from "react-native-mmkv";
+import { createDebugger } from '@/utils/debug';
+import { Platform } from 'react-native';
+import { MMKV } from 'react-native-mmkv';
 
-const debug = createDebugger("feature-flags");
+const debug = createDebugger('feature-flags');
 
 // ============================================================================
 // Types
@@ -29,7 +29,7 @@ interface FeatureFlagConfig {
   defaultValue: FeatureFlagValue;
   rolloutPercentage?: number; // 0-100
   targetSegments?: string[];
-  platform?: ("ios" | "android" | "web")[];
+  platform?: ('ios' | 'android' | 'web')[];
   versionConstraint?: string; // semver
   requiresPremium?: boolean;
   description?: string; // Human-readable explanation
@@ -46,7 +46,7 @@ interface UserContext {
 interface FlagEvaluation {
   key: string;
   value: FeatureFlagValue;
-  source: "local" | "remote" | "default";
+  source: 'local' | 'remote' | 'default';
   evaluatedAt: number;
 }
 
@@ -54,194 +54,194 @@ interface FlagEvaluation {
 // Constants
 // ============================================================================
 
-const STORAGE_KEY = "feature_flags_v1";
+const STORAGE_KEY = 'feature_flags_v1';
 const CACHE_DURATION_MS = 5 * 60 * 1000; // 5 minutes
 
 // Built-in feature flags
 export const DEFAULT_FLAGS: FeatureFlagConfig[] = [
   {
-    key: "new_session_ui",
+    key: 'new_session_ui',
     defaultValue: false,
     rolloutPercentage: 0,
-    platform: ["ios", "android"],
+    platform: ['ios', 'android'],
   },
   {
-    key: "ai_coach_v2",
+    key: 'ai_coach_v2',
     defaultValue: false,
     rolloutPercentage: 0,
     requiresPremium: true,
   },
   {
-    key: "squad_wars_enabled",
+    key: 'squad_wars_enabled',
     defaultValue: false,
     rolloutPercentage: 0,
   },
   {
-    key: "battle_pass_season_2",
+    key: 'battle_pass_season_2',
     defaultValue: false,
     rolloutPercentage: 0,
   },
   {
-    key: "streak_recovery_v2",
+    key: 'streak_recovery_v2',
     defaultValue: true,
     rolloutPercentage: 50, // Gradual rollout
   },
   {
-    key: "premium_gifting",
+    key: 'premium_gifting',
     defaultValue: false,
     rolloutPercentage: 0,
     requiresPremium: false, // Free users can receive
   },
   {
-    key: "analytics_enhanced",
+    key: 'analytics_enhanced',
     defaultValue: true,
     rolloutPercentage: 100,
   },
   // ===== 10X TRANSFORMATION FLAGS =====
   // Phase 1: Core Loop Revolution
   {
-    key: "real_time_boss_combat",
+    key: 'real_time_boss_combat',
     defaultValue: false,
     rolloutPercentage: 0, // Start at 0, enable for testing
-    description: "Enable real-time boss combat overlay during sessions",
+    description: 'Enable real-time boss combat overlay during sessions',
   },
   {
-    key: "consolidated_session_modes",
+    key: 'consolidated_session_modes',
     defaultValue: false,
     rolloutPercentage: 0,
-    description: "Use 3 modes (FLOW/CHALLENGE/RECOVERY) instead of 5",
+    description: 'Use 3 modes (FLOW/CHALLENGE/RECOVERY) instead of 5',
   },
   {
-    key: "real_time_purity_feedback",
+    key: 'real_time_purity_feedback',
     defaultValue: false,
     rolloutPercentage: 0,
-    description: "Show live purity score during sessions",
+    description: 'Show live purity score during sessions',
   },
   // Phase 2: Progression Redesign
   {
-    key: "focus_score_primary",
+    key: 'focus_score_primary',
     defaultValue: true,
     rolloutPercentage: 100,
-    description: "Make Focus Score (300-850) the primary progression metric",
+    description: 'Make Focus Score (300-850) the primary progression metric',
   },
   {
-    key: "mastery_skill_trees",
+    key: 'mastery_skill_trees',
     defaultValue: false,
     rolloutPercentage: 0,
-    description: "Enable skill tree progression (Endurance/Intensity/Social/Tactics)",
+    description: 'Enable skill tree progression (Endurance/Intensity/Social/Tactics)',
   },
   {
-    key: "prestige_system",
+    key: 'prestige_system',
     defaultValue: false,
     rolloutPercentage: 0,
-    description: "Enable ascension/prestige for max-level users",
+    description: 'Enable ascension/prestige for max-level users',
   },
   // Phase 3: Social Systems
   {
-    key: "squad_energy_system",
+    key: 'squad_energy_system',
     defaultValue: true,
     rolloutPercentage: 100,
-    description: "Replace synergy with energy pool mechanic",
+    description: 'Replace synergy with energy pool mechanic',
   },
   {
-    key: "help_request_system",
+    key: 'help_request_system',
     defaultValue: true,
     rolloutPercentage: 100,
     description: 'Enable "Send Help" during difficult sessions',
   },
   {
-    key: "squad_tournaments",
+    key: 'squad_tournaments',
     defaultValue: false,
     rolloutPercentage: 0,
-    description: "Enable weekly squad vs squad tournaments",
+    description: 'Enable weekly squad vs squad tournaments',
   },
   // Phase 4: Economy
   {
-    key: "consolidated_currencies",
+    key: 'consolidated_currencies',
     defaultValue: true,
     rolloutPercentage: 100,
-    description: "Remove seasonal currency, use only COINS and GEMS",
+    description: 'Remove seasonal currency, use only COINS and GEMS',
   },
   {
-    key: "focus_points_currency",
+    key: 'focus_points_currency',
     defaultValue: true,
     rolloutPercentage: 100,
-    description: "Enable FOCUS_POINTS as simplified primary earning currency",
+    description: 'Enable FOCUS_POINTS as simplified primary earning currency',
   },
   {
-    key: "emergency_gem_sinks",
+    key: 'emergency_gem_sinks',
     defaultValue: false,
     rolloutPercentage: 0,
-    description: "DISABLED: Emergency gem sinks (streak freeze, boss retry, session save) - dark pattern risk",
+    description: 'DISABLED: Emergency gem sinks (streak freeze, boss retry, session save) - dark pattern risk',
   },
   {
-    key: "trading_system",
+    key: 'trading_system',
     defaultValue: false,
     rolloutPercentage: 0,
-    description: "Enable item trading between users",
+    description: 'Enable item trading between users',
   },
   // Phase 5: Retention
   {
-    key: "prime_time_events",
+    key: 'prime_time_events',
     defaultValue: true,
     rolloutPercentage: 100,
-    description: "Enable scheduled bonus windows (Morning Rally, Power Hour, etc)",
+    description: 'Enable scheduled bonus windows (Morning Rally, Power Hour, etc)',
   },
   {
-    key: "streak_creature_system",
+    key: 'streak_creature_system',
     defaultValue: true,
     rolloutPercentage: 100,
-    description: "Replace streak numbers with evolving creature companions",
+    description: 'Replace streak numbers with evolving creature companions',
   },
   {
-    key: "weekly_boss_raids",
+    key: 'weekly_boss_raids',
     defaultValue: false,
     rolloutPercentage: 0,
-    description: "Enable weekend epic boss raids for squad collaboration",
+    description: 'Enable weekend epic boss raids for squad collaboration',
   },
   {
-    key: "boss_bounty_system",
+    key: 'boss_bounty_system',
     defaultValue: false,
     rolloutPercentage: 0,
-    description: "DISABLED: Boss bounty loot multiplier system until economy risk is resolved",
+    description: 'DISABLED: Boss bounty loot multiplier system until economy risk is resolved',
   },
   {
-    key: "squad_boss_system",
+    key: 'squad_boss_system',
     defaultValue: false,
     rolloutPercentage: 0,
-    description: "DISABLED: Squad boss subsystem until squads are simplified",
+    description: 'DISABLED: Squad boss subsystem until squads are simplified',
   },
   // Phase 6: AI Coach
   {
-    key: "predictive_interventions",
+    key: 'predictive_interventions',
     defaultValue: true,
     rolloutPercentage: 100,
-    description: "AI predicts and prevents problems vs reactive",
+    description: 'AI predicts and prevents problems vs reactive',
   },
   {
-    key: "adaptive_difficulty",
+    key: 'adaptive_difficulty',
     defaultValue: true,
     rolloutPercentage: 100,
-    description: "Dynamic boss difficulty based on user performance",
+    description: 'Dynamic boss difficulty based on user performance',
   },
   // System Sunsets (gradual deprecation)
   {
-    key: "legacy_linear_leveling",
+    key: 'legacy_linear_leveling',
     defaultValue: true, // Start enabled, sunset gradually
     rolloutPercentage: 0, // Phase 8A: Complete sunset
-    description: "DEPRECATED: Old linear level system (being replaced by Focus Score)",
+    description: 'DEPRECATED: Old linear level system (being replaced by Focus Score)',
   },
   {
-    key: "legacy_squad_synergy",
+    key: 'legacy_squad_synergy',
     defaultValue: true, // Start enabled, sunset gradually
     rolloutPercentage: 0, // Phase 8A: Complete sunset
-    description: "DEPRECATED: Old synergy system (being replaced by Energy)",
+    description: 'DEPRECATED: Old synergy system (being replaced by Energy)',
   },
   {
-    key: "legacy_seasonal_currency",
+    key: 'legacy_seasonal_currency',
     defaultValue: true,
     rolloutPercentage: 0, // Phase 8A: Complete sunset
-    description: "DEPRECATED: Seasonal currency (being removed)",
+    description: 'DEPRECATED: Seasonal currency (being removed)',
   },
 ];
 
@@ -254,7 +254,7 @@ class FeatureFlagEngine {
   private evaluations: Map<string, FlagEvaluation> = new Map();
   private userContext: UserContext | null = null;
   private lastSync: number = 0;
-  private storage = new MMKV({ id: "feature-flags" });
+  private storage = new MMKV({ id: 'feature-flags' });
 
   constructor() {
     this.loadDefaults();
@@ -268,7 +268,7 @@ class FeatureFlagEngine {
     DEFAULT_FLAGS.forEach((flag) => {
       this.flags.set(flag.key, flag);
     });
-    debug.info("Loaded %d default flags", DEFAULT_FLAGS.length);
+    debug.info('Loaded %d default flags', DEFAULT_FLAGS.length);
   }
 
   /**
@@ -286,10 +286,10 @@ class FeatureFlagEngine {
             this.flags.set(flag.key, { ...existing, ...flag });
           }
         });
-        debug.info("Loaded %d flags from storage", parsed.length);
+        debug.info('Loaded %d flags from storage', parsed.length);
       }
     } catch (error) {
-      debug.warn("Failed to load flags from storage: %s", error instanceof Error ? error.message : String(error));
+      debug.warn('Failed to load flags from storage: %s', error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -301,7 +301,7 @@ class FeatureFlagEngine {
       const flagsArray = Array.from(this.flags.values());
       this.storage.set(STORAGE_KEY, JSON.stringify(flagsArray));
     } catch (error) {
-      debug.warn("Failed to save flags to storage: %s", error instanceof Error ? error.message : String(error));
+      debug.warn('Failed to save flags to storage: %s', error instanceof Error ? error.message : String(error));
     }
   }
 
@@ -310,7 +310,7 @@ class FeatureFlagEngine {
    */
   setUserContext(context: UserContext): void {
     this.userContext = context;
-    debug.info("User context set: %s", context.userId);
+    debug.info('User context set: %s', context.userId);
   }
 
   /**
@@ -319,7 +319,7 @@ class FeatureFlagEngine {
   clearUserContext(): void {
     this.userContext = null;
     this.evaluations.clear();
-    debug.info("User context cleared");
+    debug.info('User context cleared');
   }
 
   /**
@@ -361,16 +361,16 @@ class FeatureFlagEngine {
    */
   private evaluateFlag(flag: FeatureFlagConfig): FlagEvaluation {
     let value = flag.defaultValue;
-    let source: FlagEvaluation["source"] = "default";
+    let source: FlagEvaluation['source'] = 'default';
 
     // Platform check
     if (flag.platform && flag.platform.length > 0) {
-      const currentPlatform = Platform.OS as "ios" | "android" | "web";
+      const currentPlatform = Platform.OS as 'ios' | 'android' | 'web';
       if (!flag.platform.includes(currentPlatform)) {
         return {
           key: flag.key,
           value: false,
-          source: "default",
+          source: 'default',
           evaluatedAt: Date.now(),
         };
       }
@@ -383,7 +383,7 @@ class FeatureFlagEngine {
         return {
           key: flag.key,
           value: false,
-          source: "default",
+          source: 'default',
           evaluatedAt: Date.now(),
         };
       }
@@ -395,7 +395,7 @@ class FeatureFlagEngine {
         return {
           key: flag.key,
           value: false,
-          source: "default",
+          source: 'default',
           evaluatedAt: Date.now(),
         };
       }
@@ -407,17 +407,17 @@ class FeatureFlagEngine {
         return {
           key: flag.key,
           value: false,
-          source: "default",
+          source: 'default',
           evaluatedAt: Date.now(),
         };
       }
     }
 
     // Rollout percentage gates boolean flags on; it must never invert disabled flags.
-    if (flag.rolloutPercentage !== undefined && this.userContext && typeof flag.defaultValue === "boolean") {
+    if (flag.rolloutPercentage !== undefined && this.userContext && typeof flag.defaultValue === 'boolean') {
       const userBucket = this.getUserBucket(this.userContext.userId, flag.key);
       value = flag.defaultValue === true && userBucket <= flag.rolloutPercentage;
-      source = userBucket <= flag.rolloutPercentage ? "local" : "default";
+      source = userBucket <= flag.rolloutPercentage ? 'local' : 'default';
     }
 
     return {
@@ -450,8 +450,8 @@ class FeatureFlagEngine {
    */
   private checkVersion(current: string, constraint: string): boolean {
     // Simplified version check - could use semver library
-    const currentParts = current.split(".").map(Number);
-    const constraintParts = constraint.replace(">=", "").split(".").map(Number);
+    const currentParts = current.split('.').map(Number);
+    const constraintParts = constraint.replace('>=', '').split('.').map(Number);
 
     for (let i = 0; i < Math.max(currentParts.length, constraintParts.length); i++) {
       const currentPart = currentParts[i] || 0;
@@ -472,7 +472,7 @@ class FeatureFlagEngine {
    * Update feature flags from remote
    */
   async syncRemoteFlags(remoteFlags: FeatureFlagConfig[]): Promise<void> {
-    debug.info("Syncing %d remote flags", remoteFlags.length);
+    debug.info('Syncing %d remote flags', remoteFlags.length);
 
     remoteFlags.forEach((flag) => {
       const existing = this.flags.get(flag.key);
@@ -496,7 +496,7 @@ class FeatureFlagEngine {
    */
   registerFlag(flag: FeatureFlagConfig): void {
     this.flags.set(flag.key, flag);
-    debug.info("Registered flag: %s", flag.key);
+    debug.info('Registered flag: %s', flag.key);
   }
 
   /**
@@ -508,10 +508,10 @@ class FeatureFlagEngine {
       this.evaluations.set(key, {
         key,
         value,
-        source: "local",
+        source: 'local',
         evaluatedAt: Date.now(),
       });
-      debug.info("Overrode flag %s to %s", key, String(value));
+      debug.info('Overrode flag %s to %s', key, String(value));
     }
   }
 

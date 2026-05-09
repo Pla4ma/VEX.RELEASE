@@ -155,7 +155,7 @@ try {
         View: 'Animated.View',
         Text: 'Animated.Text',
         ScrollView: 'Animated.ScrollView',
-        FlatList: 'Animated.FlatList',
+        VirtualizedList: 'Animated.VirtualizedList',
         Image: 'Animated.Image',
       },
       createAnimatedComponent: jest.fn((component: unknown) => component),
@@ -328,10 +328,11 @@ declare global {
 global.__TEST__ = true;
 
 // Suppress specific console warnings during tests
-const originalConsoleError = globalThis.console.error;
-const originalConsoleWarn = globalThis.console.warn;
+const testConsole = globalThis['console'];
+const originalConsoleError = testConsole.error;
+const originalConsoleWarn = testConsole.warn;
 
-globalThis.console.error = (...args: unknown[]) => {
+testConsole.error = (...args: unknown[]) => {
   // Suppress React act() warnings
   if (typeof args[0] === 'string' && /Warning.*not wrapped in act/.test(args[0])) {
     return;
@@ -340,15 +341,15 @@ globalThis.console.error = (...args: unknown[]) => {
   if (typeof args[0] === 'string' && /Native module cannot be null/.test(args[0])) {
     return;
   }
-  originalConsoleError.call(console, ...args);
+  originalConsoleError.call(testConsole, ...args);
 };
 
-globalThis.console.warn = (...args: unknown[]) => {
+testConsole.warn = (...args: unknown[]) => {
   // Suppress specific warnings
   if (typeof args[0] === 'string' && /has been renamed/.test(args[0])) {
     return;
   }
-  originalConsoleWarn.call(console, ...args);
+  originalConsoleWarn.call(testConsole, ...args);
 };
 
 // ============================================================================

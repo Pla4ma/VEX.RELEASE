@@ -23,7 +23,7 @@
  * - Streaks (squad streak logic)
  */
 
-import { eventBus } from "../../events";
+import { eventBus } from '../../events';
 
 // ============================================================================
 // Types
@@ -62,7 +62,7 @@ export interface SquadMember {
   userId: string;
   userName: string;
   avatarUrl: string | null;
-  role: "LEADER" | "MEMBER";
+  role: 'LEADER' | 'MEMBER';
   joinedAt: number;
 
   // Activity Stats (current week)
@@ -93,7 +93,7 @@ export interface SquadActivity {
   id: string;
   userId: string;
   userName: string;
-  type: "SESSION_COMPLETE" | "BOSS_DAMAGE" | "STREAK_MILESTONE" | "GOAL_ACHIEVED";
+  type: 'SESSION_COMPLETE' | 'BOSS_DAMAGE' | 'STREAK_MILESTONE' | 'GOAL_ACHIEVED';
   description: string;
   timestamp: number;
   metadata?: {
@@ -112,7 +112,7 @@ export interface SquadBossEncounter {
   healthRemaining: number;
   maxHealth: number;
   participantDamage: Record<string, number>; // userId -> damage
-  status: "ACTIVE" | "DEFEATED" | "EXPIRED";
+  status: 'ACTIVE' | 'DEFEATED' | 'EXPIRED';
 }
 
 // ============================================================================
@@ -141,7 +141,7 @@ export function createSquad(creatorId: string, creatorName: string, name: string
         userId: creatorId,
         userName: creatorName,
         avatarUrl: null,
-        role: "LEADER",
+        role: 'LEADER',
         joinedAt: now,
         weeklyFocusMinutes: 0,
         lastSessionAt: null,
@@ -175,7 +175,7 @@ export function createSquad(creatorId: string, creatorName: string, name: string
 
   squads.set(squad.id, squad);
 
-  eventBus.publish("squad:created", {
+  eventBus.publish('squad:created', {
     squadId: squad.id,
     creatorId,
     name,
@@ -203,22 +203,22 @@ function generateJoinCode(): string {
 export function joinSquad(squadId: string, userId: string, userName: string, joinCode?: string): { success: boolean; squad?: SimplifiedSquad; error?: string } {
   const squad = squads.get(squadId);
   if (!squad) {
-    return { success: false, error: "Squad not found" };
+    return { success: false, error: 'Squad not found' };
   }
 
   // Check if private and code required
   if (!squad.isPublic && squad.joinCode !== joinCode) {
-    return { success: false, error: "Invalid join code" };
+    return { success: false, error: 'Invalid join code' };
   }
 
   // Check capacity
   if (squad.members.length >= squad.maxMembers) {
-    return { success: false, error: "Squad is full (max 10 members)" };
+    return { success: false, error: 'Squad is full (max 10 members)' };
   }
 
   // Check if already member
   if (squad.members.some((m) => m.userId === userId)) {
-    return { success: false, error: "Already a member" };
+    return { success: false, error: 'Already a member' };
   }
 
   // Add member
@@ -226,7 +226,7 @@ export function joinSquad(squadId: string, userId: string, userName: string, joi
     userId,
     userName,
     avatarUrl: null,
-    role: "MEMBER",
+    role: 'MEMBER',
     joinedAt: Date.now(),
     weeklyFocusMinutes: 0,
     lastSessionAt: null,
@@ -237,10 +237,10 @@ export function joinSquad(squadId: string, userId: string, userName: string, joi
   // Update goal target based on member count
   squad.weeklyGoal.targetFocusHours = Math.round(squad.members.length * 8); // 8 hours avg per member
 
-  eventBus.publish("squad:member_joined", {
+  eventBus.publish('squad:member_joined', {
     squadId,
     userId,
-    role: "member",
+    role: 'member',
     userName,
     memberCount: squad.members.length,
   });
@@ -262,25 +262,25 @@ export function leaveSquad(squadId: string, userId: string): boolean {
     return false;
   }
 
-  const wasLeader = squad.members[memberIndex].role === "LEADER";
+  const wasLeader = squad.members[memberIndex].role === 'LEADER';
   squad.members.splice(memberIndex, 1);
 
   // If leader left, assign new leader
   if (wasLeader && squad.members.length > 0) {
-    squad.members[0].role = "LEADER";
+    squad.members[0].role = 'LEADER';
   }
 
   // Disband if empty
   if (squad.members.length === 0) {
     squads.delete(squadId);
-    eventBus.publish("squad:disbanded", { squadId, userId, memberCount: 0 });
+    eventBus.publish('squad:disbanded', { squadId, userId, memberCount: 0 });
     return true;
   }
 
   // Update goal target
   squad.weeklyGoal.targetFocusHours = Math.round(squad.members.length * 8);
 
-  eventBus.publish("squad:member_left", {
+  eventBus.publish('squad:member_left', {
     squadId,
     userId,
     wasFounder: userId === (squad as any).founderId,
@@ -300,12 +300,12 @@ export function leaveSquad(squadId: string, userId: string): boolean {
 export function recordMemberActivity(squadId: string, userId: string, durationMinutes: number): SimplifiedSquad {
   const squad = squads.get(squadId);
   if (!squad) {
-    throw new Error("Squad not found");
+    throw new Error('Squad not found');
   }
 
   const member = squad.members.find((m) => m.userId === userId);
   if (!member) {
-    throw new Error("Not a squad member");
+    throw new Error('Not a squad member');
   }
 
   // Update member stats
@@ -324,7 +324,7 @@ export function recordMemberActivity(squadId: string, userId: string, durationMi
     id: `act-${Date.now()}`,
     userId,
     userName: member.userName,
-    type: "SESSION_COMPLETE",
+    type: 'SESSION_COMPLETE',
     description: `${member.userName} focused for ${Math.round(durationMinutes)} minutes`,
     timestamp: Date.now(),
     metadata: { duration: durationMinutes },
@@ -348,17 +348,17 @@ function handleGoalAchieved(squad: SimplifiedSquad): void {
   // Add celebration activity
   addActivity(squad, {
     id: `act-${Date.now()}-goal`,
-    userId: "system",
-    userName: "Squad",
-    type: "GOAL_ACHIEVED",
+    userId: 'system',
+    userName: 'Squad',
+    type: 'GOAL_ACHIEVED',
     description: `Weekly goal achieved! ${squad.streak.currentWeeks} week streak!`,
     timestamp: Date.now(),
   });
 
-  eventBus.publish("squad:goal_achieved", {
+  eventBus.publish('squad:goal_achieved', {
     squadId: squad.id,
     goalId: `weekly-${squad.id}`,
-    goalType: "weekly",
+    goalType: 'weekly',
     achievedBy: squad.members.map((m) => m.userId),
   });
 }
@@ -369,7 +369,7 @@ function handleGoalAchieved(squad: SimplifiedSquad): void {
 export function resetWeeklyProgress(squadId: string): SimplifiedSquad {
   const squad = squads.get(squadId);
   if (!squad) {
-    throw new Error("Squad not found");
+    throw new Error('Squad not found');
   }
 
   const now = Date.now();
@@ -381,9 +381,9 @@ export function resetWeeklyProgress(squadId: string): SimplifiedSquad {
   if (!allMembersActive) {
     // Streak broken
     squad.streak.currentWeeks = 0;
-    eventBus.publish("squad:streak_broken", {
+    eventBus.publish('squad:streak_broken', {
       squadId: squad.id,
-      userId: "system",
+      userId: 'system',
       previousStreak: squad.streak.currentWeeks,
     });
   }
@@ -457,7 +457,7 @@ export function recordBossDamageActivity(squadId: string, userId: string, damage
     id: `act-${Date.now()}`,
     userId,
     userName: member.userName,
-    type: "BOSS_DAMAGE",
+    type: 'BOSS_DAMAGE',
     description: `${member.userName} dealt ${damage} damage to the boss`,
     timestamp: Date.now(),
     metadata: { damage },
@@ -474,12 +474,12 @@ export function recordBossDamageActivity(squadId: string, userId: string, damage
 export function startSquadBoss(squadId: string, bossId: string, bossName: string, baseHealth: number): { success: boolean; encounter?: SquadBossEncounter; error?: string } {
   const squad = squads.get(squadId);
   if (!squad) {
-    return { success: false, error: "Squad not found" };
+    return { success: false, error: 'Squad not found' };
   }
 
   // Check if already has active boss
-  if (squad.activeBossEncounter?.status === "ACTIVE") {
-    return { success: false, error: "Squad already has an active boss" };
+  if (squad.activeBossEncounter?.status === 'ACTIVE') {
+    return { success: false, error: 'Squad already has an active boss' };
   }
 
   const now = Date.now();
@@ -494,7 +494,7 @@ export function startSquadBoss(squadId: string, bossId: string, bossName: string
     healthRemaining: scaledHealth,
     maxHealth: scaledHealth,
     participantDamage: {},
-    status: "ACTIVE",
+    status: 'ACTIVE',
   };
 
   squad.activeBossEncounter = encounter;
@@ -502,14 +502,14 @@ export function startSquadBoss(squadId: string, bossId: string, bossName: string
   // Add activity
   addActivity(squad, {
     id: `act-${now}-boss`,
-    userId: "system",
-    userName: "Squad",
-    type: "BOSS_DAMAGE",
+    userId: 'system',
+    userName: 'Squad',
+    type: 'BOSS_DAMAGE',
     description: `Squad boss ${bossName} has appeared! Defeat it together!`,
     timestamp: now,
   });
 
-  eventBus.publish("squad:boss_started", {
+  eventBus.publish('squad:boss_started', {
     squadId,
     encounterId: encounter.encounterId,
     bossId,
@@ -530,7 +530,7 @@ export function damageSquadBoss(squadId: string, userId: string, damage: number)
   }
 
   const encounter = squad.activeBossEncounter;
-  if (encounter.status !== "ACTIVE") {
+  if (encounter.status !== 'ACTIVE') {
     return { success: false, isDefeated: false };
   }
 
@@ -541,7 +541,7 @@ export function damageSquadBoss(squadId: string, userId: string, damage: number)
   // Check defeat
   const isDefeated = encounter.healthRemaining === 0;
   if (isDefeated) {
-    encounter.status = "DEFEATED";
+    encounter.status = 'DEFEATED';
     handleBossDefeated(squad, encounter);
   }
 
@@ -552,14 +552,14 @@ function handleBossDefeated(squad: SimplifiedSquad, encounter: SquadBossEncounte
   // Add celebration activity
   addActivity(squad, {
     id: `act-${Date.now()}-victory`,
-    userId: "system",
-    userName: "Squad",
-    type: "BOSS_DAMAGE",
+    userId: 'system',
+    userName: 'Squad',
+    type: 'BOSS_DAMAGE',
     description: `${encounter.bossName} defeated by the squad! Great teamwork!`,
     timestamp: Date.now(),
   });
 
-  eventBus.publish("squad:boss_defeated", {
+  eventBus.publish('squad:boss_defeated', {
     squadId: squad.id,
     encounterId: encounter.encounterId,
     bossId: encounter.encounterId,
@@ -612,7 +612,7 @@ export interface SquadSummary {
   recentActivityCount: number;
   hasActiveBoss: boolean;
   isMember: boolean;
-  userRole?: "LEADER" | "MEMBER";
+  userRole?: 'LEADER' | 'MEMBER';
 }
 
 /**
@@ -636,7 +636,7 @@ export function getSquadSummary(squadId: string, userId: string): SquadSummary |
     streakWeeks: squad.streak.currentWeeks,
     weeklyProgress: Math.round(progress),
     recentActivityCount: squad.recentActivity.length,
-    hasActiveBoss: squad.activeBossEncounter?.status === "ACTIVE",
+    hasActiveBoss: squad.activeBossEncounter?.status === 'ACTIVE',
     isMember: !!member,
     userRole: member?.role,
   };

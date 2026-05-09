@@ -4,10 +4,10 @@
  * Premium empty states with illustrations and actions
  */
 
-import React from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React from 'react';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
+import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface EmptyStateProps {
   icon: string;
@@ -92,8 +92,8 @@ export function ColdStartEmptyState({ onStart }: { onStart?: () => void }) {
 
 const styles = createSheet({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 32,
     flex: 1,
   },
@@ -103,48 +103,48 @@ const styles = createSheet({
   },
   title: {
     fontSize: 20,
-    fontWeight: "700",
-    color: "#1a1a1a",
-    textAlign: "center",
+    fontWeight: '700',
+    color: '#1a1a1a',
+    textAlign: 'center',
     marginBottom: 8,
   },
   message: {
     fontSize: 16,
-    color: "#666",
-    textAlign: "center",
+    color: '#666',
+    textAlign: 'center',
     lineHeight: 22,
     marginBottom: 24,
     maxWidth: 280,
   },
   actions: {
     gap: 12,
-    width: "100%",
+    width: '100%',
     maxWidth: 280,
   },
   primaryButton: {
-    backgroundColor: "#4ECDC4",
+    backgroundColor: '#4ECDC4',
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   primaryButtonText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   secondaryButton: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: '#ddd',
   },
   secondaryButtonText: {
-    color: "#666",
+    color: '#666',
     fontSize: 16,
-    fontWeight: "500",
+    fontWeight: '500',
   },
 });

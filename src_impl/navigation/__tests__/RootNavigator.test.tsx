@@ -24,9 +24,18 @@ jest.mock('../../theme', () => ({
       colors: {
         background: { primary: '#ffffff', secondary: '#f5f5f5' },
         primary: { 500: '#2563eb' },
-        text: { primary: '#111111' },
+        text: { primary: '#111111', secondary: '#404040' },
         border: { DEFAULT: '#d4d4d4' },
         error: { DEFAULT: '#dc2626' },
+        semantic: {
+          background: '#ffffff',
+          border: '#d4d4d4',
+          primary: '#2563eb',
+          surface: '#ffffff',
+          surfaceElevated: '#ffffff',
+          textPrimary: '#111111',
+          textSecondary: '#404040',
+        },
       },
       spacing: [0, 4, 8, 12, 16, 20],
     },
@@ -167,8 +176,8 @@ describe('RootNavigator', () => {
   beforeEach(() => {
     mockedUseOnboardingStore.mockImplementation((selector: unknown) =>
       selector({
-        isHydrated: true,
-        profiles: {},
+        completedAt: null,
+        isOnboarded: false,
       })
     );
   });
@@ -191,13 +200,13 @@ describe('RootNavigator', () => {
       isAuthenticated: true,
       isLoading: false,
       checkAuth: jest.fn().mockResolvedValue(undefined),
-      user: { id: 'user-1' },
+      user: { id: 'user-1', createdAt: new Date().toISOString() },
     } as any);
 
     mockedUseOnboardingStore.mockImplementation((selector: unknown) =>
       selector({
-        isHydrated: true,
-        profiles: {},
+        completedAt: null,
+        isOnboarded: false,
       })
     );
 
@@ -211,21 +220,13 @@ describe('RootNavigator', () => {
       isAuthenticated: true,
       isLoading: false,
       checkAuth: jest.fn().mockResolvedValue(undefined),
-      user: { id: 'user-1' },
+      user: { id: 'user-1', createdAt: new Date(0).toISOString() },
     } as any);
 
+    const completedAt = Date.now();
     mockedUseOnboardingStore.mockImplementation((selector: unknown) =>
       selector({
-        isHydrated: true,
-        profiles: {
-          'user-1': {
-            goal: 'build_consistency',
-            personaId: 'mentor',
-            starterPresetId: 'pomodoro',
-            squadId: null,
-            completedAt: Date.now(),
-          },
-        },
+        completedAt,
         isOnboarded: true,
       })
     );

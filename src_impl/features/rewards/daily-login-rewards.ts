@@ -5,21 +5,21 @@
  * Core retention mechanic for 10/10 product
  */
 
-import { eventBus } from "../../events";
-import * as Sentry from "@sentry/react-native";
-import { z } from "zod";
+import { eventBus } from '../../events';
+import * as Sentry from '@sentry/react-native';
+import { z } from 'zod';
 
 // ============================================================================
 // Schemas
 // ============================================================================
 
-export const DailyRewardTierSchema = z.enum(["DAY_1", "DAY_2", "DAY_3", "DAY_4", "DAY_5", "DAY_6", "DAY_7"]);
+export const DailyRewardTierSchema = z.enum(['DAY_1', 'DAY_2', 'DAY_3', 'DAY_4', 'DAY_5', 'DAY_6', 'DAY_7']);
 
 export const DailyRewardItemSchema = z.object({
-  type: z.enum(["COINS", "GEMS", "ITEM", "XP_BOOST", "STREAK_SHIELD", "CHEST"]),
+  type: z.enum(['COINS', 'GEMS', 'ITEM', 'XP_BOOST', 'STREAK_SHIELD', 'CHEST']),
   amount: z.number().int().min(0),
   itemId: z.string().nullable(),
-  chestType: z.enum(["COMMON", "RARE", "EPIC", "LEGENDARY"]).nullable(),
+  chestType: z.enum(['COMMON', 'RARE', 'EPIC', 'LEGENDARY']).nullable(),
 });
 
 export const DailyRewardDaySchema = z.object({
@@ -57,87 +57,87 @@ const REWARD_LADDER: Array<{
 }> = [
   {
     day: 1,
-    tier: "DAY_1",
-    freeRewards: [{ type: "COINS", amount: 100 }],
+    tier: 'DAY_1',
+    freeRewards: [{ type: 'COINS', amount: 100 }],
     premiumRewards: [
-      { type: "COINS", amount: 200 },
-      { type: "GEMS", amount: 5 },
+      { type: 'COINS', amount: 200 },
+      { type: 'GEMS', amount: 5 },
     ],
-    bonusDescription: "Welcome back!",
+    bonusDescription: 'Welcome back!',
   },
   {
     day: 2,
-    tier: "DAY_2",
-    freeRewards: [{ type: "COINS", amount: 200 }],
+    tier: 'DAY_2',
+    freeRewards: [{ type: 'COINS', amount: 200 }],
     premiumRewards: [
-      { type: "COINS", amount: 400 },
-      { type: "GEMS", amount: 10 },
+      { type: 'COINS', amount: 400 },
+      { type: 'GEMS', amount: 10 },
     ],
-    bonusDescription: "Building momentum!",
+    bonusDescription: 'Building momentum!',
   },
   {
     day: 3,
-    tier: "DAY_3",
+    tier: 'DAY_3',
     freeRewards: [
-      { type: "COINS", amount: 300 },
-      { type: "STREAK_SHIELD", amount: 1 },
+      { type: 'COINS', amount: 300 },
+      { type: 'STREAK_SHIELD', amount: 1 },
     ],
     premiumRewards: [
-      { type: "COINS", amount: 600 },
-      { type: "GEMS", amount: 15 },
-      { type: "STREAK_SHIELD", amount: 2 },
+      { type: 'COINS', amount: 600 },
+      { type: 'GEMS', amount: 15 },
+      { type: 'STREAK_SHIELD', amount: 2 },
     ],
-    bonusDescription: "Halfway to weekly bonus!",
+    bonusDescription: 'Halfway to weekly bonus!',
   },
   {
     day: 4,
-    tier: "DAY_4",
-    freeRewards: [{ type: "COINS", amount: 400 }],
+    tier: 'DAY_4',
+    freeRewards: [{ type: 'COINS', amount: 400 }],
     premiumRewards: [
-      { type: "COINS", amount: 800 },
-      { type: "GEMS", amount: 20 },
+      { type: 'COINS', amount: 800 },
+      { type: 'GEMS', amount: 20 },
     ],
-    bonusDescription: "So close!",
+    bonusDescription: 'So close!',
   },
   {
     day: 5,
-    tier: "DAY_5",
+    tier: 'DAY_5',
     freeRewards: [
-      { type: "COINS", amount: 500 },
-      { type: "CHEST", amount: 1 },
+      { type: 'COINS', amount: 500 },
+      { type: 'CHEST', amount: 1 },
     ],
     premiumRewards: [
-      { type: "COINS", amount: 1000 },
-      { type: "GEMS", amount: 25 },
-      { type: "CHEST", amount: 2 },
+      { type: 'COINS', amount: 1000 },
+      { type: 'GEMS', amount: 25 },
+      { type: 'CHEST', amount: 2 },
     ],
-    bonusDescription: "Weekend warrior bonus!",
+    bonusDescription: 'Weekend warrior bonus!',
   },
   {
     day: 6,
-    tier: "DAY_6",
-    freeRewards: [{ type: "COINS", amount: 600 }],
+    tier: 'DAY_6',
+    freeRewards: [{ type: 'COINS', amount: 600 }],
     premiumRewards: [
-      { type: "COINS", amount: 1200 },
-      { type: "GEMS", amount: 30 },
+      { type: 'COINS', amount: 1200 },
+      { type: 'GEMS', amount: 30 },
     ],
-    bonusDescription: "One more day!",
+    bonusDescription: 'One more day!',
   },
   {
     day: 7,
-    tier: "DAY_7",
+    tier: 'DAY_7',
     freeRewards: [
-      { type: "COINS", amount: 1000 },
-      { type: "GEMS", amount: 50 },
-      { type: "CHEST", amount: 1 },
+      { type: 'COINS', amount: 1000 },
+      { type: 'GEMS', amount: 50 },
+      { type: 'CHEST', amount: 1 },
     ],
     premiumRewards: [
-      { type: "COINS", amount: 2000 },
-      { type: "GEMS", amount: 100 },
-      { type: "CHEST", amount: 3 },
-      { type: "ITEM", amount: 1 },
+      { type: 'COINS', amount: 2000 },
+      { type: 'GEMS', amount: 100 },
+      { type: 'CHEST', amount: 3 },
+      { type: 'ITEM', amount: 1 },
     ],
-    bonusDescription: "🎉 WEEKLY BONUS UNLOCKED!",
+    bonusDescription: '🎉 WEEKLY BONUS UNLOCKED!',
   },
 ];
 
@@ -190,10 +190,10 @@ export function buildDailyRewardDay(day: number, isPremium: boolean, claimableAt
   const items: DailyRewardItem[] = [
     ...config.freeRewards.map((reward) =>
       DailyRewardItemSchema.parse({
-        type: reward.type as DailyRewardItem["type"],
+        type: reward.type as DailyRewardItem['type'],
         amount: reward.amount,
         itemId: null,
-        chestType: reward.type === "CHEST" ? "COMMON" : null,
+        chestType: reward.type === 'CHEST' ? 'COMMON' : null,
       }),
     ),
   ];
@@ -202,10 +202,10 @@ export function buildDailyRewardDay(day: number, isPremium: boolean, claimableAt
     items.push(
       ...config.premiumRewards.map((reward) =>
         DailyRewardItemSchema.parse({
-          type: reward.type as DailyRewardItem["type"],
+          type: reward.type as DailyRewardItem['type'],
           amount: reward.amount,
           itemId: null,
-          chestType: reward.type === "CHEST" ? "RARE" : null,
+          chestType: reward.type === 'CHEST' ? 'RARE' : null,
         }),
       ),
     );
@@ -251,7 +251,7 @@ export async function claimDailyReward(
         newStreak: state.currentStreak,
         nextDay: state.lastClaimedDay,
         streakReset: false,
-        error: "Already claimed today",
+        error: 'Already claimed today',
       };
     }
 
@@ -263,7 +263,7 @@ export async function claimDailyReward(
         newStreak: state.currentStreak,
         nextDay: state.lastClaimedDay,
         streakReset: false,
-        error: "Not eligible to claim yet",
+        error: 'Not eligible to claim yet',
       };
     }
 
@@ -293,7 +293,7 @@ export async function claimDailyReward(
     });
 
     // Publish events
-    eventBus.publish("daily_reward:claimed", {
+    eventBus.publish('daily_reward:claimed', {
       userId,
       day,
       items: rewardDay.items,
@@ -303,14 +303,14 @@ export async function claimDailyReward(
 
     // Day 7 celebration
     if (day === 7) {
-      eventBus.publish("daily_reward:weekly_completed", {
+      eventBus.publish('daily_reward:weekly_completed', {
         userId,
         weekNumber: Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000)),
       });
     }
 
     Sentry.addBreadcrumb({
-      category: "daily_rewards",
+      category: 'daily_rewards',
       message: `Day ${day} reward claimed`,
       data: { userId, day, isPremium, items: rewardDay.items.length },
     });
@@ -324,7 +324,7 @@ export async function claimDailyReward(
     };
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "daily_rewards", action: "claim" },
+      tags: { feature: 'daily_rewards', action: 'claim' },
     });
     return {
       success: false,
@@ -332,7 +332,7 @@ export async function claimDailyReward(
       newStreak: state.currentStreak,
       nextDay: state.lastClaimedDay,
       streakReset: false,
-      error: error instanceof Error ? error.message : "Unknown error",
+      error: error instanceof Error ? error.message : 'Unknown error',
     };
   }
 }
@@ -344,7 +344,7 @@ export async function claimDailyReward(
 export function getRewardPreview(day: number, isPremium: boolean): string {
   const config = REWARD_LADDER[day - 1];
   if (!config) {
-    return "";
+    return '';
   }
 
   const freeTotal = config.freeRewards.reduce((sum, r) => sum + r.amount, 0);
@@ -359,25 +359,25 @@ export function getRewardPreview(day: number, isPremium: boolean): string {
 export function formatDailyRewardUI(state: UserDailyRewardsState): {
   title: string;
   subtitle: string;
-  urgency: "NONE" | "LOW" | "HIGH";
+  urgency: 'NONE' | 'LOW' | 'HIGH';
   dayLabel: string;
 } {
   const { day, streakAtRisk, hoursRemaining } = calculateCurrentRewardDay(state.currentStreak, state.lastClaimedAt);
 
   const config = REWARD_LADDER[day - 1];
 
-  let urgency: "NONE" | "LOW" | "HIGH" = "NONE";
+  let urgency: 'NONE' | 'LOW' | 'HIGH' = 'NONE';
   if (streakAtRisk) {
-    urgency = "HIGH";
+    urgency = 'HIGH';
   } else if (state.currentStreak > 0) {
-    urgency = "LOW";
+    urgency = 'LOW';
   }
 
   return {
     title: `Day ${day} Reward`,
-    subtitle: streakAtRisk ? `⚠️ Claim in ${Math.floor(hoursRemaining)}h or lose streak!` : config?.bonusDescription || "Daily bonus ready!",
+    subtitle: streakAtRisk ? `⚠️ Claim in ${Math.floor(hoursRemaining)}h or lose streak!` : config?.bonusDescription || 'Daily bonus ready!',
     urgency,
-    dayLabel: day === 7 ? "🎉 BONUS DAY" : `Day ${day} of 7`,
+    dayLabel: day === 7 ? '🎉 BONUS DAY' : `Day ${day} of 7`,
   };
 }
 
@@ -404,14 +404,14 @@ export async function processExpiredDailyStreaks(repository: { fetchUsersWithStr
 
       // Send notification
       await repository.sendNotification(user.userId, {
-        title: "💔 Daily Streak Reset",
+        title: '💔 Daily Streak Reset',
         body: `Your ${user.currentStreak}-day login streak ended. Start fresh today!`,
       });
 
-      eventBus.publish("daily_reward:streak_reset", {
+      eventBus.publish('daily_reward:streak_reset', {
         userId: user.userId,
         previousStreak: user.currentStreak,
-        reason: "TIMEOUT",
+        reason: 'TIMEOUT',
       });
     }
   }

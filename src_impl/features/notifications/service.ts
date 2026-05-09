@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { eventBus } from "../../events";
-import { MMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
-import * as repository from "./repository";
+import { z } from 'zod';
+import { eventBus } from '../../events';
+import { MMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
+import * as repository from './repository';
 
 const UserIdSchema = z.string().min(1);
 const UnreadNotificationsCountSchema = z.number().int().nonnegative();
@@ -16,16 +16,16 @@ export async function getUnreadNotificationsCount(userId: string): Promise<numbe
 // Notification Intelligence Engine (Phase 5B)
 // ============================================================================
 
-export type UrgencyNotificationType = "STREAK_AT_RISK" | "BOSS_ESCAPE_IMMINENT" | "SQUAD_STREAK_AT_RISK" | "RIVAL_PULLING_AHEAD" | "CHEST_INVENTORY_FULL" | "CHALLENGE_EXPIRING" | "SEASON_ENDING_UNCLAIMED";
+export type UrgencyNotificationType = 'STREAK_AT_RISK' | 'BOSS_ESCAPE_IMMINENT' | 'SQUAD_STREAK_AT_RISK' | 'RIVAL_PULLING_AHEAD' | 'CHEST_INVENTORY_FULL' | 'CHALLENGE_EXPIRING' | 'SEASON_ENDING_UNCLAIMED';
 
-export type SocialNotificationType = "RIVAL_COMPLETED_SESSION" | "SQUAD_MEMBER_NUDGE" | "SQUAD_MILESTONE" | "FEED_REACTION";
+export type SocialNotificationType = 'RIVAL_COMPLETED_SESSION' | 'SQUAD_MEMBER_NUDGE' | 'SQUAD_MILESTONE' | 'FEED_REACTION';
 
 export interface NotificationContext {
   userId: string;
   streakRisk?: {
     hoursRemaining: number;
     streakDays: number;
-    riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+    riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   };
   bossEscape?: {
     bossName: string;
@@ -60,7 +60,7 @@ export interface NotificationContext {
 
 // Maximum notifications per day (respect user's attention)
 const MAX_NOTIFICATIONS_PER_DAY = 2;
-const notificationLimitStorage = new MMKVStorageAdapter("notification-limits");
+const notificationLimitStorage = new MMKVStorageAdapter('notification-limits');
 
 // Quiet hours (default 10 PM - 8 AM)
 const DEFAULT_QUIET_START_HOUR = 22;
@@ -69,9 +69,9 @@ const DEFAULT_QUIET_END_HOUR = 8;
 /**
  * Check if currently in quiet hours
  */
-export function isQuietHours(userTimezone: string = "UTC", quietStart: number = DEFAULT_QUIET_START_HOUR, quietEnd: number = DEFAULT_QUIET_END_HOUR): boolean {
+export function isQuietHours(userTimezone: string = 'UTC', quietStart: number = DEFAULT_QUIET_START_HOUR, quietEnd: number = DEFAULT_QUIET_END_HOUR): boolean {
   const now = new Date();
-  const userTime = new Date(now.toLocaleString("en-US", { timeZone: userTimezone }));
+  const userTime = new Date(now.toLocaleString('en-US', { timeZone: userTimezone }));
   const hour = userTime.getHours();
 
   if (quietStart <= quietEnd) {
@@ -84,9 +84,9 @@ export function isQuietHours(userTimezone: string = "UTC", quietStart: number = 
 /**
  * Get next allowed notification time
  */
-export function getNextNotificationWindow(userTimezone: string = "UTC", quietEnd: number = DEFAULT_QUIET_END_HOUR): Date {
+export function getNextNotificationWindow(userTimezone: string = 'UTC', quietEnd: number = DEFAULT_QUIET_END_HOUR): Date {
   const now = new Date();
-  const userTime = new Date(now.toLocaleString("en-US", { timeZone: userTimezone }));
+  const userTime = new Date(now.toLocaleString('en-US', { timeZone: userTimezone }));
 
   const nextWindow = new Date(userTime);
   nextWindow.setHours(quietEnd, 0, 0, 0);
@@ -109,14 +109,14 @@ export function shouldNotifyStreakAtRisk(context: NotificationContext): {
   const { streakRisk } = context;
 
   if (!streakRisk || streakRisk.hoursRemaining > 12) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
 
-  const urgency = streakRisk.riskLevel === "CRITICAL" ? "🚨 LAST CHANCE" : streakRisk.riskLevel === "HIGH" ? "⚠️ Streak at Risk" : "⏰ Streak Warning";
+  const urgency = streakRisk.riskLevel === 'CRITICAL' ? '🚨 LAST CHANCE' : streakRisk.riskLevel === 'HIGH' ? '⚠️ Streak at Risk' : '⏰ Streak Warning';
 
   return {
     shouldSend: true,
-    priority: streakRisk.riskLevel === "CRITICAL" ? 10 : 8,
+    priority: streakRisk.riskLevel === 'CRITICAL' ? 10 : 8,
     message: {
       title: urgency,
       body: `Your 🔥 ${streakRisk.streakDays}-day streak ends in ${streakRisk.hoursRemaining} hours! Start a session now.`,
@@ -135,14 +135,14 @@ export function shouldNotifyBossEscape(context: NotificationContext): {
   const { bossEscape } = context;
 
   if (!bossEscape || bossEscape.hoursRemaining > 4) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
 
   return {
     shouldSend: true,
     priority: 9,
     message: {
-      title: "👹 Boss Escaping Soon!",
+      title: '👹 Boss Escaping Soon!',
       body: `${bossEscape.bossName} has ${bossEscape.healthPercent.toFixed(0)}% health and escapes in ${bossEscape.hoursRemaining}h! Defeat them now!`,
     },
   };
@@ -159,14 +159,14 @@ export function shouldNotifySquadStreakAtRisk(context: NotificationContext): {
   const { squadStreak } = context;
 
   if (!squadStreak) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
 
   return {
     shouldSend: true,
     priority: 7,
     message: {
-      title: "🔥 Squad Streak at Risk!",
+      title: '🔥 Squad Streak at Risk!',
       body: `${squadStreak.atRiskMemberName} hasn't focused today — your ${squadStreak.streakDays}-day squad streak is at risk!`,
     },
   };
@@ -183,7 +183,7 @@ export function shouldNotifyRivalAhead(context: NotificationContext): {
   const { rivalUpdate } = context;
 
   if (!rivalUpdate || rivalUpdate.myScore >= rivalUpdate.theirScore) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
 
   const diff = rivalUpdate.theirScore - rivalUpdate.myScore;
@@ -192,7 +192,7 @@ export function shouldNotifyRivalAhead(context: NotificationContext): {
     shouldSend: true,
     priority: 6,
     message: {
-      title: "⚔️ Rival Alert!",
+      title: '⚔️ Rival Alert!',
       body: `${rivalUpdate.rivalName} just focused for ${rivalUpdate.theirNewSessionMinutes} min. You're ${diff} min behind this week!`,
     },
   };
@@ -209,14 +209,14 @@ export function shouldNotifyChestFull(context: NotificationContext): {
   const { chestStatus } = context;
 
   if (!chestStatus || chestStatus.unopenedCount < chestStatus.maxCapacity) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
 
   return {
     shouldSend: true,
     priority: 5,
     message: {
-      title: "🎁 Chests Full!",
+      title: '🎁 Chests Full!',
       body: `Your chest inventory is full (${chestStatus.unopenedCount}/${chestStatus.maxCapacity}). Open one to make room for more!`,
     },
   };
@@ -233,14 +233,14 @@ export function shouldNotifyChallengeExpiring(context: NotificationContext): {
   const { challengeExpiry } = context;
 
   if (!challengeExpiry || challengeExpiry.hoursRemaining > 2 || challengeExpiry.progressPercent >= 50) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
 
   return {
     shouldSend: true,
     priority: 4,
     message: {
-      title: "⏰ Challenge Ending!",
+      title: '⏰ Challenge Ending!',
       body: `"${challengeExpiry.challengeName}" expires in ${challengeExpiry.hoursRemaining}h and you're only ${challengeExpiry.progressPercent}% complete!`,
     },
   };
@@ -257,14 +257,14 @@ export function shouldNotifySeasonEnding(context: NotificationContext): {
   const { seasonEnding } = context;
 
   if (!seasonEnding || seasonEnding.hoursRemaining > 24 || seasonEnding.unclaimedTiers === 0) {
-    return { shouldSend: false, priority: 0, message: { title: "", body: "" } };
+    return { shouldSend: false, priority: 0, message: { title: '', body: '' } };
   }
 
   return {
     shouldSend: true,
     priority: 8,
     message: {
-      title: "🌙 Season Ending!",
+      title: '🌙 Season Ending!',
       body: `Season ends in ${Math.floor(seasonEnding.hoursRemaining)} hours! You have ${seasonEnding.unclaimedTiers} unclaimed reward tiers!`,
     },
   };
@@ -308,7 +308,7 @@ export function createSquadMilestoneNotification(squadName: string, milestoneDay
 export function createFeedReactionNotification(reactorName: string, reactionEmoji: string, postTitle: string): { title: string; body: string } {
   return {
     title: `${reactorName} reacted ${reactionEmoji}`,
-    body: `To your post: "${postTitle.substring(0, 50)}${postTitle.length > 50 ? "..." : ""}"`,
+    body: `To your post: "${postTitle.substring(0, 50)}${postTitle.length > 50 ? '...' : ''}"`,
   };
 }
 
@@ -374,12 +374,12 @@ export function recordNotificationSent(userId: string): void {
 /**
  * Main notification dispatch function
  */
-export async function dispatchUrgencyNotification(context: NotificationContext, userTimezone: string = "UTC", quietStart: number = DEFAULT_QUIET_START_HOUR, quietEnd: number = DEFAULT_QUIET_END_HOUR): Promise<{ sent: boolean; reason?: string; deferred?: boolean; nextWindow?: Date }> {
+export async function dispatchUrgencyNotification(context: NotificationContext, userTimezone: string = 'UTC', quietStart: number = DEFAULT_QUIET_START_HOUR, quietEnd: number = DEFAULT_QUIET_END_HOUR): Promise<{ sent: boolean; reason?: string; deferred?: boolean; nextWindow?: Date }> {
   // Check quiet hours
   if (isQuietHours(userTimezone, quietStart, quietEnd)) {
     return {
       sent: false,
-      reason: "quiet_hours",
+      reason: 'quiet_hours',
       deferred: true,
       nextWindow: getNextNotificationWindow(userTimezone, quietEnd),
     };
@@ -388,21 +388,21 @@ export async function dispatchUrgencyNotification(context: NotificationContext, 
   // Check daily limit
   const limit = checkDailyNotificationLimit(context.userId);
   if (!limit.canSend) {
-    return { sent: false, reason: "daily_limit_reached" };
+    return { sent: false, reason: 'daily_limit_reached' };
   }
 
   // Evaluate rules
   const evaluation = evaluateNotificationRules(context);
   if (!evaluation.shouldSend) {
-    return { sent: false, reason: "no_urgent_context" };
+    return { sent: false, reason: 'no_urgent_context' };
   }
 
-  eventBus.publish("notification:send", {
+  eventBus.publish('notification:send', {
     userId: context.userId,
-    type: "URGENCY",
-    title: evaluation.notification?.title ?? "VEX",
-    body: evaluation.notification?.body ?? "You have an update waiting.",
-    priority: "high",
+    type: 'URGENCY',
+    title: evaluation.notification?.title ?? 'VEX',
+    body: evaluation.notification?.body ?? 'You have an update waiting.',
+    priority: 'high',
   });
 
   // Record sent

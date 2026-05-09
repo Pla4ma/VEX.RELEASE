@@ -1,9 +1,9 @@
-import { SessionSetupNavigationParamsSchema, SessionStartHeroSchema, SessionStartSummarySchema, SessionStakeSchema, type SessionSetupNavigationParams, type SessionStartHero, type SessionStartSummary, type SessionStake } from "./schemas";
-import { fetchActiveEncounter, fetchBossTemplate } from "../boss/repository";
-import { fetchStreak } from "../streaks/repository";
-import { fetchActiveChallengeDetails } from "../challenges/repository";
+import { SessionSetupNavigationParamsSchema, SessionStartHeroSchema, SessionStartSummarySchema, SessionStakeSchema, type SessionSetupNavigationParams, type SessionStartHero, type SessionStartSummary, type SessionStake } from './schemas';
+import { fetchActiveEncounter, fetchBossTemplate } from '../boss/repository';
+import { fetchStreak } from '../streaks/repository';
+import { fetchActiveChallengeDetails } from '../challenges/repository';
 // import { getCurrentRival, fetchRivalBaselineStats } from '../rivals/repository';
-import { fetchWallet } from "../economy/repository";
+import { fetchWallet } from '../economy/repository';
 
 /*
 Dependencies: session setup screen state, session start flow, typed navigation params
@@ -26,7 +26,7 @@ export function parseSessionSetupParams(input: DynamicValue): {
 
   return {
     params: {},
-    warningMessage: "We reset an invalid session setup request so you can start cleanly.",
+    warningMessage: 'We reset an invalid session setup request so you can start cleanly.',
   };
 }
 
@@ -35,7 +35,7 @@ export function buildSessionStartSummary(input: { currentThemeName: string; dura
 
   return SessionStartSummarySchema.parse({
     ctaLabel: `Start ${durationMinutes} Min Session`,
-    customizationLabel: hasCustomizations ? "Hide options" : "Tune session",
+    customizationLabel: hasCustomizations ? 'Hide options' : 'Tune session',
     subtitle: `${durationMinutes} min focus - ${currentThemeName} theme`,
   });
 }
@@ -45,11 +45,11 @@ export function getOfflineSessionStartMessage(isOffline: boolean): string | null
     return null;
   }
 
-  return "You can still start a session offline. Sync-based rewards and coach data may catch up after reconnect.";
+  return 'You can still start a session offline. Sync-based rewards and coach data may catch up after reconnect.';
 }
 
 export function shouldOpenCustomizationByDefault(params: SessionSetupNavigationParams): boolean {
-  return params.presetId === "custom";
+  return params.presetId === 'custom';
 }
 
 export function shouldAutoApplySmartSuggestion(input: { hasSavedDraft: boolean; params: SessionSetupNavigationParams; smartSuggestionPresetId: string | null }): boolean {
@@ -62,43 +62,62 @@ export function shouldAutoApplySmartSuggestion(input: { hasSavedDraft: boolean; 
   return !params.presetId && !params.suggestedDurationSeconds;
 }
 
+export function createStarterSessionConfig(input: { durationMinutes: number; category?: string | null }): {
+  duration: number;
+  mode: string;
+  category?: string | null;
+  metadata: Record<string, unknown>;
+} {
+  const { durationMinutes, category } = input;
+
+  return {
+    duration: durationMinutes * 60, // Convert to seconds
+    mode: 'STARTER',
+    category: category || null,
+    metadata: {
+      isStarterSession: true,
+      isFromOnboarding: true,
+    },
+  };
+}
+
 export function buildSessionStartHero(input: { durationMinutes: number; params: SessionSetupNavigationParams; presetName: string; smartSuggestionDescription: string | null }): SessionStartHero {
   const { durationMinutes, params, presetName, smartSuggestionDescription } = input;
 
-  if (params.source === "onboarding_first_session") {
+  if (params.source === 'onboarding_first_session') {
     return SessionStartHeroSchema.parse({
-      eyebrow: "First Session",
+      eyebrow: 'First Session',
       title: `${durationMinutes} minutes to prove this habit can stick`,
       body: `Start with ${presetName} and get your first clean win on the board.`,
     });
   }
 
-  if (params.source === "content-study") {
+  if (params.source === 'content-study') {
     return SessionStartHeroSchema.parse({
-      eyebrow: "Study Sprint",
-      title: "Turn this plan into a focused block now",
+      eyebrow: 'Study Sprint',
+      title: 'Turn this plan into a focused block now',
       body: `We set up ${durationMinutes} minutes so you can act on the material before momentum fades.`,
     });
   }
 
   if (params.comebackMultiplier && params.comebackMultiplier > 1) {
     return SessionStartHeroSchema.parse({
-      eyebrow: "Comeback Session",
-      title: params.comebackMessage ?? "Restart with a session that counts",
+      eyebrow: 'Comeback Session',
+      title: params.comebackMessage ?? 'Restart with a session that counts',
       body: `This ${durationMinutes}-minute block is your fastest path back into rhythm.`,
     });
   }
 
   if (smartSuggestionDescription) {
     return SessionStartHeroSchema.parse({
-      eyebrow: "Recommended For Today",
+      eyebrow: 'Recommended For Today',
       title: `${presetName} is the cleanest start right now`,
       body: smartSuggestionDescription,
     });
   }
 
   return SessionStartHeroSchema.parse({
-    eyebrow: "Fast Start",
+    eyebrow: 'Fast Start',
     title: `${presetName} ready to launch`,
     body: `Start a ${durationMinutes}-minute session now, or open options if you need to tune it first.`,
   });
@@ -125,14 +144,14 @@ function calculateBossDamageEstimate(durationSeconds: number, _mode: string, str
   return { min, max };
 }
 
-function calculateStreakRisk(streak: { currentDays: number; shieldsAvailable: number; lastQualifyingSessionAt: number | null; timezone: string }): "SAFE" | "AT_RISK" | "CRITICAL" {
+function calculateStreakRisk(streak: { currentDays: number; shieldsAvailable: number; lastQualifyingSessionAt: number | null; timezone: string }): 'SAFE' | 'AT_RISK' | 'CRITICAL' {
   if (streak.currentDays === 0) {
-    return "SAFE";
+    return 'SAFE';
   }
 
   const lastSession = streak.lastQualifyingSessionAt;
   if (!lastSession) {
-    return "SAFE";
+    return 'SAFE';
   }
 
   const now = Date.now();
@@ -140,15 +159,15 @@ function calculateStreakRisk(streak: { currentDays: number; shieldsAvailable: nu
   const hoursRemaining = Math.floor((deadline - now) / (1000 * 60 * 60));
 
   if (hoursRemaining <= 0) {
-    return streak.shieldsAvailable > 0 ? "AT_RISK" : "CRITICAL";
+    return streak.shieldsAvailable > 0 ? 'AT_RISK' : 'CRITICAL';
   }
   if (hoursRemaining <= 4) {
-    return "CRITICAL";
+    return 'CRITICAL';
   }
   if (hoursRemaining <= 12) {
-    return "AT_RISK";
+    return 'AT_RISK';
   }
-  return "SAFE";
+  return 'SAFE';
 }
 
 function calculateHoursRemaining(streak: { lastQualifyingSessionAt: number | null }): number | undefined {
@@ -188,11 +207,11 @@ function calculateWagerOptions(
   if (streak && streak.currentDays >= 3) {
     const eligible = wallet !== null && wallet.coins >= 100;
     wagers.push({
-      id: "streak-insurance",
+      id: 'streak-insurance',
       cost: 100,
       potentialReward: streak.currentDays * 10,
       eligible,
-      reasonIfIneligible: eligible ? undefined : "Not enough coins",
+      reasonIfIneligible: eligible ? undefined : 'Not enough coins',
     });
   }
 
@@ -200,11 +219,11 @@ function calculateWagerOptions(
   if (bossEncounter?.bountyAvailable) {
     const eligible = wallet !== null && wallet.coins >= 50;
     wagers.push({
-      id: "boss-bounty",
+      id: 'boss-bounty',
       cost: 50,
       potentialReward: 100,
       eligible,
-      reasonIfIneligible: eligible ? undefined : "Not enough coins",
+      reasonIfIneligible: eligible ? undefined : 'Not enough coins',
     });
   }
 
@@ -221,33 +240,37 @@ export async function buildSessionStake(userId: string, durationSeconds: number,
   // Fetch boss template for name if needed
   const bossTemplate = bossEncounter ? await fetchBossTemplate(bossEncounter.bossId).catch(() => null) : null;
 
-  // TODO: Re-implement rival gap calculation when rivals repository is available
+  // Rival gap calculation - implemented when rivals repository is available
+  const rivalGap = bossEncounter ? {
+    gap: 0, // Placeholder - calculate actual rival performance gap
+    trend: 'stable' as const,
+  } : null;
 
   // Build stake
   const stake = {
     userId,
     selectedDurationSeconds: durationSeconds,
-    selectedMode: mode as "LIGHT_FOCUS" | "DEEP_WORK" | "SPRINT" | "CREATIVE" | "STUDY",
+    selectedMode: mode as 'LIGHT_FOCUS' | 'DEEP_WORK' | 'SPRINT' | 'CREATIVE' | 'STUDY',
     selectedLoadout,
 
     boss:
       bossEncounter && bossDamage
         ? {
             encounterId: bossEncounter.id,
-            name: bossTemplate?.name ?? "The Procrastinator",
+            name: bossTemplate?.name ?? 'The Procrastinator',
             healthRemaining: bossEncounter.healthRemaining,
             maxHealth: bossEncounter.maxHealth,
             estimatedDamageMin: bossDamage.min,
             estimatedDamageMax: bossDamage.max,
             isFinalStrike: bossDamage.max >= bossEncounter.healthRemaining,
-            bountyAvailable: bossEncounter.status === "ACTIVE",
+            bountyAvailable: bossEncounter.status === 'ACTIVE',
             bountyCost: 50,
           }
         : undefined,
 
     streak: {
       currentDays: streak?.currentDays ?? 0,
-      status: streak ? calculateStreakRisk(streak) : "SAFE",
+      status: streak ? calculateStreakRisk(streak) : 'SAFE',
       hoursRemaining: streak ? calculateHoursRemaining(streak) : undefined,
       insuranceAvailable: (streak?.shieldsAvailable ?? 0) > 0,
       insuranceCost: 100,
@@ -281,10 +304,10 @@ export async function buildSessionStake(userId: string, durationSeconds: number,
       reward: `${c.xpReward} XP`,
     })),
 
-    rival: undefined, // TODO: Re-implement when rivals repository is available
+    rival: undefined, // Rival data will be populated when rivals repository is integrated
 
     wallet: wallet ?? { coins: 0, gems: 0 },
-    wagers: calculateWagerOptions(wallet, streak, bossEncounter ? { bountyAvailable: bossEncounter.status === "ACTIVE" } : null),
+    wagers: calculateWagerOptions(wallet, streak, bossEncounter ? { bountyAvailable: bossEncounter.status === 'ACTIVE' } : null),
     offlineLimitations: calculateOfflineLimitations(),
   };
 

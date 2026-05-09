@@ -1,0 +1,384 @@
+/**
+ * Currency Boundaries Hooks
+ *
+ * Phase 6.03 - Currency And Monetization Boundaries
+ * React hooks for UI integration with currency boundary validation
+ * Provides real-time feedback and premium upgrade prompts
+ *
+ * Dependencies:
+ * - Economy (wallet operations, balance queries)
+ * - Monetization (premium status checks)
+ * - Analytics (violation tracking)
+ */
+
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useMemo } from 'react';
+
+import { eventBus } from '../../../events';
+import { currencyBoundariesValidationService } from './validation-service';
+import type {
+  TransactionValidationRequest,
+  TransactionValidationResult,
+  BoundaryViolation,
+  BoundaryAnalytics,
+} from './schemas';
+
+// ============================================================================
+// Query Keys
+// ============================================================================
+
+export const currencyBoundariesKeys = {
+  all: ['currency-boundaries'] as const,
+  violations: (userId: string) => [...currencyBoundariesKeys.all, 'violations', userId] as const,
+  analytics: (userId: string, period: string) => [...currencyBoundariesKeys.all, 'analytics', userId, period] as const,
+  limits: () => [...currencyBoundariesKeys.all, 'limits'] as const,
+};
+
+// ============================================================================
+// Validation Hook
+// ============================================================================
+
+interface UseValidateTransactionOptions {
+  onSuccess?: (result: TransactionValidationResult) => void;
+  onError?: (error: Error) => void;
+  onViolation?: (violation: BoundaryViolation) => void;
+}
+
+export function useValidateTransaction(options: UseValidateTransactionOptions = {}) {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (request: TransactionValidationRequest) => {
+      return await currencyBoundariesValidationService.validateTransaction(request);
+    },
+    onSuccess: (result) => {
+      // Invalidate related queries
+      queryClient.invalidateQueries({
+        queryKey: currencyBoundariesKeys.violations(result.request?.userId || ''),
+      });
+
+      // Track violations
+      if (result.violations.length > 0) {
+        result.violations.forEach(violation => {
+          eventBus.emit('currency-boundaries:violation_detected', {
+            violation,
+            timestamp: Date.now(),
+          });
+
+          options.onViolation?.(violation);
+        });
+      }
+
+      options.onSuccess?.(result);
+    },
+    onError: (error) => {
+      options.onError?.(error);
+    },
+  });
+
+  return {
+    validateTransaction: mutation.mutate,
+    validateTransactionAsync: mutation.mutateAsync,
+    isPending: mutation.isPending,
+    error: mutation.error,
+    result: mutation.data,
+  };
+}
+
+// ============================================================================
+// Transaction Validation Hook
+// ============================================================================
+
+interface UseTransactionValidationProps {
+  userId: string;
+  currency: string;
+  isPremiumUser: boolean;
+  userLevel: number;
+}
+
+export function useTransactionValidation(props: UseTransactionValidationProps) {
+  const { validateTransactionAsync } = useValidateTransaction();
+
+  const validateTransaction = useCallback(async (
+    amount: number,
+    action: 'EARN' | 'SPEND' | 'CONVERT' | 'GIFT',
+    source: string,
+    sourceId?: string,
+    metadata?: Record<string, unknown>
+  ): Promise<TransactionValidationResult> => {
+    const request: TransactionValidationRequest = {
+      userId: props.userId,
+      currency: props.currency,
+      amount,
+      action,
+      source,
+      sourceId: sourceId || null,
+      metadata: metadata || null,
+      isPremiumUser: props.isPremiumUser,
+      userLevel: props.userLevel,
+    };
+
+    return await validateTransactionAsync(request);
+  }, [
+    validateTransactionAsync,
+    props.userId,
+    props.currency,
+    props.isPremiumUser,
+    props.userLevel,
+  ]);
+
+  return {
+    validateTransaction,
+  };
+}
+
+// ============================================================================
+// Boundary Violations Hook
+// ============================================================================
+
+interface UseBoundaryViolationsProps {
+  userId: string;
+  period?: 'hour' | 'day' | 'week';
+}
+
+export function useBoundaryViolations(props: UseBoundaryViolationsProps) {
+  const { userId, period = 'day' } = props;
+
+  const query = useQuery({
+    queryKey: currencyBoundariesKeys.violations(userId),
+    queryFn: async () => {
+      // In a real implementation, this would fetch from the database
+      // For now, return mock data
+      return {
+        violations: [],
+        totalCount: 0,
+        blockedCount: 0,
+        warningCount: 0,
+      };
+    },
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+
+  const violationsByType = useMemo(() => {
+    const byType: Record<string, number> = {};
+    query.data?.violations.forEach(violation => {
+      byType[violation.type] = (byType[violation.type] || 0) + 1;
+    });
+    return byType;
+  }, [query.data]);
+
+  const violationsByCurrency = useMemo(() => {
+    const byCurrency: Record<string, number> = {};
+    query.data?.violations.forEach(violation => {
+      byCurrency[violation.currency] = (byCurrency[violation.currency] || 0) + 1;
+    });
+    return byCurrency;
+  }, [query.data]);
+
+  return {
+    violations: query.data?.violations || [],
+    totalCount: query.data?.totalCount || 0,
+    blockedCount: query.data?.blockedCount || 0,
+    warningCount: query.data?.warningCount || 0,
+    violationsByType,
+    violationsByCurrency,
+    isLoading: query.isPending,
+    error: query.error,
+    refetch: query.refetch,
+  };
+}
+
+// ============================================================================
+// Currency Limits Hook
+// ============================================================================
+
+export function useCurrencyLimits(currency: string) {
+  const query = useQuery({
+    queryKey: currencyBoundariesKeys.limits(),
+    queryFn: async () => {
+      return currencyBoundariesValidationService.getCurrencyLimits();
+    },
+    staleTime: 10 * 60 * 1000, // 10 minutes
+  });
+
+  const currencyLimits = useMemo(() => {
+    return query.data?.[currency];
+  }, [query.data, currency]);
+
+  return {
+    limits: currencyLimits,
+    allLimits: query.data,
+    isLoading: query.isPending,
+    error: query.error,
+  };
+}
+
+// ============================================================================
+// Boundary Analytics Hook
+// ============================================================================
+
+interface UseBoundaryAnalyticsProps {
+  userId: string;
+  period: 'hourly' | 'daily' | 'weekly';
+}
+
+export function useBoundaryAnalytics(props: UseBoundaryAnalyticsProps) {
+  const { userId, period } = props;
+
+  const query = useQuery({
+    queryKey: currencyBoundariesKeys.analytics(userId, period),
+    queryFn: async () => {
+      // In a real implementation, this would fetch analytics data
+      // For now, return mock data
+      const analytics: BoundaryAnalytics = {
+        period,
+        periodStart: Date.now() - (period === 'hourly' ? 3600000 : period === 'daily' ? 86400000 : 604800000),
+        periodEnd: Date.now(),
+        violationsByType: {},
+        violationsByCurrency: {},
+        uniqueUsersAffected: 0,
+        totalViolations: 0,
+        freeUserViolations: 0,
+        premiumUserViolations: 0,
+        blockedTransactions: 0,
+        warningsIssued: 0,
+        premiumUpgradesTriggered: 0,
+      };
+      return analytics;
+    },
+    staleTime: 15 * 60 * 1000, // 15 minutes
+  });
+
+  return {
+    analytics: query.data,
+    isLoading: query.isPending,
+    error: query.error,
+    refetch: query.refetch,
+  };
+}
+
+// ============================================================================
+// Premium Upgrade Prompt Hook
+// ============================================================================
+
+export function usePremiumUpgradePrompt() {
+  const showUpgradePrompt = useCallback((
+    violation: BoundaryViolation,
+    onUpgrade?: () => void,
+    onCancel?: () => void
+  ) => {
+    // Emit event to show premium upgrade prompt
+    eventBus.emit('premium:upgrade_prompt_requested', {
+      reason: violation.type,
+      message: violation.warningMessage,
+      currency: violation.currency,
+      currentLimit: violation.limitAmount,
+      attemptedAmount: violation.attemptedAmount,
+      onUpgrade,
+      onCancel,
+      timestamp: Date.now(),
+    });
+  }, []);
+
+  return {
+    showUpgradePrompt,
+  };
+}
+
+// ============================================================================
+// Transaction Warning Hook
+// ============================================================================
+
+export function useTransactionWarning() {
+  const showWarning = useCallback((
+    message: string,
+    type: 'info' | 'warning' | 'error' = 'warning',
+    onDismiss?: () => void
+  ) => {
+    // Emit event to show warning toast
+    eventBus.emit('ui:show_toast', {
+      message,
+      type,
+      duration: type === 'error' ? 5000 : 3000,
+      onDismiss,
+      timestamp: Date.now(),
+    });
+  }, []);
+
+  return {
+    showWarning,
+  };
+}
+
+// ============================================================================
+// Boundary Status Hook
+// ============================================================================
+
+interface UseBoundaryStatusProps {
+  userId: string;
+  isPremiumUser: boolean;
+}
+
+export function useBoundaryStatus(props: UseBoundaryStatusProps) {
+  const { userId, isPremiumUser } = props;
+  const { violations } = useBoundaryViolations({ userId });
+
+  const status = useMemo(() => {
+    const recentViolations = violations.filter(
+      v => Date.now() - v.createdAt < 24 * 60 * 60 * 1000 // Last 24 hours
+    );
+
+    const blockedCount = recentViolations.filter(v => v.action === 'BLOCKED').length;
+    const warningCount = recentViolations.filter(v => v.action === 'ALLOWED_WITH_WARNING').length;
+
+    let status: 'good' | 'warning' | 'critical' = 'good';
+
+    if (blockedCount > 0) {
+      status = 'critical';
+    } else if (warningCount > 5) {
+      status = 'warning';
+    }
+
+    return {
+      status,
+      blockedCount,
+      warningCount,
+      totalViolations: recentViolations.length,
+      isAtRisk: warningCount > 3 || blockedCount > 0,
+    };
+  }, [violations]);
+
+  return {
+    ...status,
+    isPremiumUser,
+  };
+}
+
+// ============================================================================
+// Currency Boundary Event Handlers Hook
+// ============================================================================
+
+export function useCurrencyBoundaryEvents() {
+  const { showWarning } = useTransactionWarning();
+  const { showUpgradePrompt } = usePremiumUpgradePrompt();
+
+  // Handle violation detected events
+  const handleViolationDetected = useCallback((data: { violation: BoundaryViolation }) => {
+    const { violation } = data;
+
+    // Show warning or upgrade prompt based on violation type
+    if (violation.action === 'BLOCKED') {
+      if (violation.type === 'PREMIUM_FEATURE_ABUSE' || violation.type === 'WALLET_CAP_EXCEEDED') {
+        showUpgradePrompt(violation);
+      } else {
+        showWarning(violation.warningMessage || 'Transaction blocked', 'error');
+      }
+    } else if (violation.action === 'ALLOWED_WITH_WARNING') {
+      showWarning(violation.warningMessage || 'Transaction allowed with warning', 'warning');
+    }
+  }, [showWarning, showUpgradePrompt]);
+
+  return {
+    handleViolationDetected,
+  };
+}

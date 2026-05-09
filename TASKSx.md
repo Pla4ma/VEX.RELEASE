@@ -426,14 +426,14 @@ IMPLEMENT:
 
 VERIFY:
 
-- [ ] Ledger schema rejects missing required fields.
-- [ ] Ledger service creates a valid ledger for a normal completed session.
-- [ ] Ledger service creates a valid pending ledger offline.
-- [ ] Duplicate idempotency key does not duplicate ledger or downstream events.
-- [ ] Repository tests cover success, conflict, invalid response, and Supabase error.
-- [ ] Service tests cover success, offline, partial dependency failure, and duplicate replay.
-- [ ] `session:completed` fires exactly once per ledger idempotency key.
-- [ ] `npm run typecheck -- --pretty false` passes.
+- [x] Ledger schema rejects missing required fields.
+- [x] Ledger service creates a valid ledger for a normal completed session.
+- [x] Ledger service creates a valid pending ledger offline.
+- [x] Duplicate idempotency key does not duplicate ledger or downstream events.
+- [x] Repository tests cover success, conflict, invalid response, and Supabase error.
+- [x] Service tests cover success, offline, partial dependency failure, and duplicate replay.
+- [x] `session:completed` fires exactly once per ledger idempotency key.
+- [x] `npm run typecheck -- --pretty false` passes.
 
 ### P1-02 - Session Grading Engine
 
@@ -709,14 +709,14 @@ Rules:
 
 VERIFY:
 
-- [ ] Tests cover first session.
-- [ ] Tests cover score floor and ceiling.
-- [ ] Tests cover each grade.
-- [ ] Tests cover missed day.
-- [ ] Tests cover comeback.
-- [ ] Tests cover recovery farming prevention.
-- [ ] Tests cover abandoned session.
-- [ ] Explanation output names top positive and top negative factor.
+- [x] Tests cover first session.
+- [x] Tests cover score floor and ceiling.
+- [x] Tests cover each grade.
+- [x] Tests cover missed day.
+- [x] Tests cover comeback.
+- [x] Tests cover recovery farming prevention.
+- [x] Tests cover abandoned session.
+- [x] Explanation output names top positive and top negative factor.
 
 ### P2-04 - Focus Identity Integration
 
@@ -735,11 +735,11 @@ IMPLEMENT:
 
 VERIFY:
 
-- [ ] Session completion updates Focus Score.
-- [ ] History row is appended.
-- [ ] Event fires once.
-- [ ] Analytics contains no PII.
-- [ ] Failure is captured by Sentry and does not crash completion flow.
+- [x] Session completion updates Focus Score.
+- [x] History row is appended.
+- [x] Event fires once.
+- [x] Analytics contains no PII.
+- [x] Failure is captured by Sentry and does not crash completion flow.
 
 ### P2-05 - Focus Score Dashboard
 
@@ -771,11 +771,11 @@ Required states:
 
 VERIFY:
 
-- [ ] Component tests cover all states.
-- [ ] Trend handles 0, 1, 2, and 30 data points.
-- [ ] CTA routes are typed.
-- [ ] No hardcoded styles.
-- [ ] Reduced motion respected.
+- [x] Component tests cover all states.
+- [x] Trend handles 0, 1, 2, and 30 data points.
+- [x] CTA routes are typed.
+- [x] No hardcoded styles.
+- [x] Reduced motion respected.
 
 ### P2-06 - Home Focus Widget
 
@@ -794,19 +794,19 @@ Widget shows:
 
 VERIFY:
 
-- [ ] Widget appears above secondary rails.
-- [ ] Widget updates after session completion.
-- [ ] Widget handles loading, empty, error, offline, and success.
-- [ ] Tapping navigates through typed route.
+- [x] Widget appears above secondary rails.
+- [x] Widget updates after session completion.
+- [x] Widget handles loading, empty, error, offline, and success.
+- [x] Tapping navigates through typed route.
 
 PHASE 2 EXIT GATE:
 
-- [ ] Focus Score changes after test session.
-- [ ] Focus Score survives reinstall with same user.
-- [ ] Dashboard and widget render all states.
-- [ ] All Focus Identity tests pass.
-- [ ] Typecheck passes.
-- [ ] Verification report updated.
+- [x] Focus Score changes after test session.
+- [x] Focus Score survives reinstall with same user.
+- [x] Dashboard and widget render all states.
+- [x] All Focus Identity tests pass.
+- [x] Typecheck passes.
+- [x] Verification report updated.
 
 ---
 
@@ -1320,10 +1320,10 @@ Coach must not use:
 
 VERIFY:
 
-- [ ] Coach input schema exists.
-- [ ] Missing data produces fallback insight.
-- [ ] PII is excluded from Sentry and analytics.
-- [ ] Tests cover empty, sparse, strong-pattern, weak-pattern, and offline inputs.
+- [x] Coach input schema exists.
+- [x] Missing data produces fallback insight.
+- [x] PII is excluded from Sentry and analytics.
+- [x] Tests cover empty, sparse, strong-pattern, weak-pattern, and offline inputs.
 
 ### P7-02 - Message Quality Gate
 
@@ -1352,10 +1352,10 @@ Allow:
 
 VERIFY:
 
-- [ ] Message generator rejects generic templates.
-- [ ] Tests snapshot accepted and rejected messages.
-- [ ] Coach messages link to one concrete action when possible.
-- [ ] Free tier limits are enforced without breaking core app.
+- [x] Message generator rejects generic templates.
+- [x] Tests snapshot accepted and rejected messages.
+- [x] Coach messages link to one concrete action when possible.
+- [x] Free tier limits are enforced without breaking core app.
 
 ### P7-03 - Coach Integration
 
@@ -1381,10 +1381,10 @@ Rules:
 
 VERIFY:
 
-- [ ] Coach suggestion can become daily mission.
-- [ ] Coach respects priority engine.
-- [ ] Coach does not show generic empty panel.
-- [ ] Analytics tracks shown, accepted, dismissed.
+- [x] Coach suggestion can become daily mission.
+- [x] Coach respects priority engine.
+- [x] Coach does not show generic empty panel.
+- [x] Analytics tracks shown, accepted, dismissed.
 
 ### P7-04 - Notification Budget
 
@@ -1408,17 +1408,17 @@ Rules:
 
 VERIFY:
 
-- [ ] Tests cover budget, priority, quiet hours, opt-out, and duplicate suppression.
-- [ ] Notification copy is specific.
-- [ ] No notification fires from disabled features.
+- [x] Tests cover budget, priority, quiet hours, opt-out, and duplicate suppression.
+- [x] Notification copy is specific.
+- [x] No notification fires from disabled features.
 
 PHASE 7 EXIT GATE:
 
-- [ ] Coach messages pass quality tests.
-- [ ] Coach integrates with mission and recommendations.
-- [ ] Notification budget is enforced.
-- [ ] Typecheck passes.
-- [ ] Verification report updated.
+- [x] Coach messages pass quality tests.
+- [x] Coach integrates with mission and recommendations.
+- [x] Notification budget is enforced.
+- [x] Typecheck passes.
+- [x] Verification report updated.
 
 ---
 

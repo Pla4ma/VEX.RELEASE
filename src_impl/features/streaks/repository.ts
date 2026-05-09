@@ -3,17 +3,17 @@
  * Supabase queries for streak data
  */
 
-import { getSupabaseClient } from "../../config/supabase";
-import { StreakRowSchema, StreakSchema, type Streak } from "./schemas";
-import { v4 } from "../../utils/uuid";
+import { getSupabaseClient } from '../../config/supabase';
+import { StreakRowSchema, StreakSchema, type Streak } from './schemas';
+import { v4 } from '../../utils/uuid';
 
 class RepositoryError extends Error {
   constructor(
     public operation: string,
     public originalError: unknown,
   ) {
-    super(`Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : "Unknown error"}`);
-    this.name = "RepositoryError";
+    super(`Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : 'Unknown error'}`);
+    this.name = 'RepositoryError';
   }
 }
 
@@ -38,19 +38,19 @@ function parseStreakRow(row: unknown): Streak {
 }
 
 export async function fetchStreak(userId: string): Promise<Streak | null> {
-  const { data, error } = await supabase.from("streaks").select("*").eq("user_id", userId).single();
+  const { data, error } = await supabase.from('streaks').select('*').eq('user_id', userId).single();
 
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
-    throw new RepositoryError("fetchStreak", error);
+    throw new RepositoryError('fetchStreak', error);
   }
 
   return parseStreakRow(data);
 }
 
-export async function createStreak(userId: string, timezone: string = "UTC"): Promise<Streak> {
+export async function createStreak(userId: string, timezone: string = 'UTC'): Promise<Streak> {
   const now = Date.now();
   const newStreak = {
     id: v4(),
@@ -67,10 +67,10 @@ export async function createStreak(userId: string, timezone: string = "UTC"): Pr
     updated_at: now,
   };
 
-  const { data, error } = await supabase.from("streaks").insert(newStreak).select().single();
+  const { data, error } = await supabase.from('streaks').insert(newStreak).select().single();
 
   if (error) {
-    throw new RepositoryError("createStreak", error);
+    throw new RepositoryError('createStreak', error);
   }
 
   return parseStreakRow(data);
@@ -89,7 +89,7 @@ export async function updateStreak(
   }>,
 ): Promise<Streak> {
   const { data, error } = await supabase
-    .from("streaks")
+    .from('streaks')
     .update({
       current_days: updates.currentDays,
       longest_days: updates.longestDays,
@@ -100,19 +100,19 @@ export async function updateStreak(
       grace_period_used: updates.gracePeriodUsed,
       updated_at: Date.now(),
     })
-    .eq("user_id", userId)
+    .eq('user_id', userId)
     .select()
     .single();
 
   if (error) {
-    throw new RepositoryError("updateStreak", error);
+    throw new RepositoryError('updateStreak', error);
   }
 
   return parseStreakRow(data);
 }
 
 export async function recordShieldEarned(userId: string, source: string): Promise<void> {
-  const { error } = await supabase.from("streak_shields").insert({
+  const { error } = await supabase.from('streak_shields').insert({
     id: v4(),
     user_id: userId,
     source,
@@ -121,32 +121,32 @@ export async function recordShieldEarned(userId: string, source: string): Promis
   });
 
   if (error) {
-    throw new RepositoryError("recordShieldEarned", error);
+    throw new RepositoryError('recordShieldEarned', error);
   }
 
   // Increment shields available count
-  await supabase.rpc("increment_shield_count", { p_user_id: userId });
+  await supabase.rpc('increment_shield_count', { p_user_id: userId });
 }
 
 export async function recordShieldUsed(userId: string, shieldId: string): Promise<void> {
   const { error } = await supabase
-    .from("streak_shields")
+    .from('streak_shields')
     .update({
       used: true,
       used_at: Date.now(),
     })
-    .eq("id", shieldId);
+    .eq('id', shieldId);
 
   if (error) {
-    throw new RepositoryError("recordShieldUsed", error);
+    throw new RepositoryError('recordShieldUsed', error);
   }
 }
 
 export async function getAvailableShield(userId: string): Promise<string | null> {
-  const { data, error } = await supabase.from("streak_shields").select("id").eq("user_id", userId).eq("used", false).order("created_at", { ascending: true }).limit(1).maybeSingle();
+  const { data, error } = await supabase.from('streak_shields').select('id').eq('user_id', userId).eq('used', false).order('created_at', { ascending: true }).limit(1).maybeSingle();
 
   if (error) {
-    throw new RepositoryError("getAvailableShield", error);
+    throw new RepositoryError('getAvailableShield', error);
   }
 
   return data?.id || null;
@@ -168,13 +168,13 @@ export async function fetchActiveRepairQuest(userId: string): Promise<{
   status: string;
   sessionIds: string[];
 } | null> {
-  const { data, error } = await supabase.from("streak_repair_quests").select("*").eq("user_id", userId).eq("status", "ACTIVE").single();
+  const { data, error } = await supabase.from('streak_repair_quests').select('*').eq('user_id', userId).eq('status', 'ACTIVE').single();
 
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
-    throw new RepositoryError("fetchActiveRepairQuest", error);
+    throw new RepositoryError('fetchActiveRepairQuest', error);
   }
 
   if (!data) {
@@ -196,7 +196,7 @@ export async function fetchActiveRepairQuest(userId: string): Promise<{
 }
 
 export async function saveRepairQuest(quest: { id: string; userId: string; previousStreak: number; targetRestoreDays: number; sessionsCompleted: number; sessionsRequired: number; startedAt: number; expiresAt: number; status: string; sessionIds: string[] }): Promise<void> {
-  const { error } = await supabase.from("streak_repair_quests").insert({
+  const { error } = await supabase.from('streak_repair_quests').insert({
     id: quest.id,
     user_id: quest.userId,
     previous_streak: quest.previousStreak,
@@ -210,7 +210,7 @@ export async function saveRepairQuest(quest: { id: string; userId: string; previ
   });
 
   if (error) {
-    throw new RepositoryError("saveRepairQuest", error);
+    throw new RepositoryError('saveRepairQuest', error);
   }
 }
 
@@ -225,7 +225,7 @@ export async function updateRepairQuest(
   },
 ): Promise<void> {
   const { error } = await supabase
-    .from("streak_repair_quests")
+    .from('streak_repair_quests')
     .update({
       sessions_completed: updates.sessionsCompleted,
       session_ids: updates.sessionIds,
@@ -233,11 +233,11 @@ export async function updateRepairQuest(
       completed_at: updates.completedAt,
       updated_at: Date.now(),
     })
-    .eq("id", questId)
-    .eq("user_id", userId);
+    .eq('id', questId)
+    .eq('user_id', userId);
 
   if (error) {
-    throw new RepositoryError("updateRepairQuest", error);
+    throw new RepositoryError('updateRepairQuest', error);
   }
 }
 
@@ -250,10 +250,10 @@ export async function fetchExpiredRepairQuests(): Promise<
     expiresAt: number;
   }>
 > {
-  const { data, error } = await supabase.from("streak_repair_quests").select("id, user_id, previous_streak, status, expires_at").eq("status", "ACTIVE").lt("expires_at", Date.now());
+  const { data, error } = await supabase.from('streak_repair_quests').select('id, user_id, previous_streak, status, expires_at').eq('status', 'ACTIVE').lt('expires_at', Date.now());
 
   if (error) {
-    throw new RepositoryError("fetchExpiredRepairQuests", error);
+    throw new RepositoryError('fetchExpiredRepairQuests', error);
   }
 
   return (data || []).map((row: Record<string, unknown>) => ({
@@ -270,10 +270,10 @@ export async function fetchExpiredRepairQuests(): Promise<
 // ============================================================================
 
 export async function fetchUsersWithActiveStreaks(): Promise<string[]> {
-  const { data, error } = await supabase.from("streaks").select("user_id").gt("current_days", 0);
+  const { data, error } = await supabase.from('streaks').select('user_id').gt('current_days', 0);
 
   if (error) {
-    throw new RepositoryError("fetchUsersWithActiveStreaks", error);
+    throw new RepositoryError('fetchUsersWithActiveStreaks', error);
   }
 
   return (data || []).map((row: { user_id: string }) => row.user_id);

@@ -3,8 +3,8 @@
  * Sentry breadcrumbs and custom event tracking for economy system
  */
 
-import * as Sentry from "@sentry/react-native";
-import type { CurrencyType, TransactionSource, PurchaseError } from "./schemas";
+import * as Sentry from '@sentry/react-native';
+import type { CurrencyType, TransactionSource, PurchaseError } from './schemas';
 
 function hashUserId(userId: string): string {
   let hash = 0;
@@ -20,17 +20,17 @@ function hashUserId(userId: string): string {
 
 export function trackWalletCreated(userId: string): void {
   Sentry.addBreadcrumb({
-    message: "Wallet created",
-    category: "economy",
+    message: 'Wallet created',
+    category: 'economy',
     data: { userId },
-    level: "info",
+    level: 'info',
   });
 }
 
 export function trackCurrencyEarned(userId: string, currency: CurrencyType, amount: number, source: TransactionSource, multiplier: number): void {
   Sentry.addBreadcrumb({
     message: `Currency earned: ${amount} ${currency}`,
-    category: "economy",
+    category: 'economy',
     data: {
       userId,
       currency,
@@ -38,21 +38,21 @@ export function trackCurrencyEarned(userId: string, currency: CurrencyType, amou
       source,
       multiplier,
     },
-    level: "info",
+    level: 'info',
   });
 }
 
 export function trackCurrencySpent(userId: string, currency: CurrencyType, amount: number, sink: string): void {
   Sentry.addBreadcrumb({
     message: `Currency spent: ${amount} ${currency}`,
-    category: "economy",
+    category: 'economy',
     data: {
       userId,
       currency,
       amount,
       sink,
     },
-    level: "info",
+    level: 'info',
   });
 }
 
@@ -62,8 +62,8 @@ export function trackCurrencySpent(userId: string, currency: CurrencyType, amoun
 
 export function trackPurchaseInitiated(userId: string, purchaseId: string, shopItemId: string, quantity: number, totalPrice: number, currency: CurrencyType): void {
   Sentry.addBreadcrumb({
-    message: "Purchase initiated",
-    category: "economy.purchase",
+    message: 'Purchase initiated',
+    category: 'economy.purchase',
     data: {
       userId,
       purchaseId,
@@ -72,48 +72,48 @@ export function trackPurchaseInitiated(userId: string, purchaseId: string, shopI
       totalPrice,
       currency,
     },
-    level: "info",
+    level: 'info',
   });
 }
 
 export function trackPurchasePaymentSuccess(userId: string, purchaseId: string, currency: CurrencyType, amount: number): void {
   Sentry.addBreadcrumb({
-    message: "Purchase payment successful",
-    category: "economy.purchase",
+    message: 'Purchase payment successful',
+    category: 'economy.purchase',
     data: {
       userId,
       purchaseId,
       currency,
       amount,
     },
-    level: "info",
+    level: 'info',
   });
 }
 
 export function trackPurchaseCompleted(userId: string, purchaseId: string, shopItemId: string, itemsDelivered: number): void {
   Sentry.addBreadcrumb({
-    message: "Purchase completed",
-    category: "economy.purchase",
+    message: 'Purchase completed',
+    category: 'economy.purchase',
     data: {
       userId,
       purchaseId,
       shopItemId,
       itemsDelivered,
     },
-    level: "info",
+    level: 'info',
   });
 }
 
-export function trackPurchaseFailed(userId: string, purchaseId: string, errorCode: PurchaseError["code"] | string): void {
+export function trackPurchaseFailed(userId: string, purchaseId: string, errorCode: PurchaseError['code'] | string): void {
   Sentry.addBreadcrumb({
-    message: "Purchase failed",
-    category: "economy.purchase",
+    message: 'Purchase failed',
+    category: 'economy.purchase',
     data: {
       userId,
       purchaseId,
       errorCode,
     },
-    level: "warning",
+    level: 'warning',
   });
 }
 
@@ -123,36 +123,36 @@ export function trackPurchaseFailed(userId: string, purchaseId: string, errorCod
 
 export function trackRefundRequested(userId: string, purchaseId: string, reason: string): void {
   Sentry.addBreadcrumb({
-    message: "Refund requested",
-    category: "economy.refund",
+    message: 'Refund requested',
+    category: 'economy.refund',
     data: {
       userId,
       purchaseId,
       reason,
     },
-    level: "info",
+    level: 'info',
   });
 }
 
 export function trackRefundProcessed(userId: string, purchaseId: string, approved: boolean): void {
   Sentry.addBreadcrumb({
-    message: `Refund ${approved ? "approved" : "rejected"}`,
-    category: "economy.refund",
+    message: `Refund ${approved ? 'approved' : 'rejected'}`,
+    category: 'economy.refund',
     data: {
       userId,
       purchaseId,
       approved,
     },
-    level: approved ? "info" : "warning",
+    level: approved ? 'info' : 'warning',
   });
 }
 
 export function trackRefundFailed(userId: string, purchaseId: string, error: string): void {
-  Sentry.captureMessage("Refund processing failed", {
-    level: "error",
+  Sentry.captureMessage('Refund processing failed', {
+    level: 'error',
     tags: {
-      feature: "economy",
-      operation: "refund",
+      feature: 'economy',
+      operation: 'refund',
     },
     extra: {
       userId,
@@ -168,26 +168,26 @@ export function trackRefundFailed(userId: string, purchaseId: string, error: str
 
 export function trackOfferClaimed(userId: string, offerId: string, purchaseId: string): void {
   Sentry.addBreadcrumb({
-    message: "Limited offer claimed",
-    category: "economy.offer",
+    message: 'Limited offer claimed',
+    category: 'economy.offer',
     data: {
       userId,
       offerId,
       purchaseId,
     },
-    level: "info",
+    level: 'info',
   });
 }
 
 export function trackOfferExpired(offerId: string, totalClaims: number): void {
   Sentry.addBreadcrumb({
-    message: "Limited offer expired",
-    category: "economy.offer",
+    message: 'Limited offer expired',
+    category: 'economy.offer',
     data: {
       offerId,
       totalClaims,
     },
-    level: "info",
+    level: 'info',
   });
 }
 
@@ -198,7 +198,7 @@ export function trackOfferExpired(offerId: string, totalClaims: number): void {
 export function trackCurrencyConverted(userId: string, fromCurrency: CurrencyType, toCurrency: CurrencyType, fromAmount: number, toAmount: number): void {
   Sentry.addBreadcrumb({
     message: `Currency converted: ${fromAmount} ${fromCurrency} → ${toAmount} ${toCurrency}`,
-    category: "economy.conversion",
+    category: 'economy.conversion',
     data: {
       userId,
       fromCurrency,
@@ -206,7 +206,7 @@ export function trackCurrencyConverted(userId: string, fromCurrency: CurrencyTyp
       fromAmount,
       toAmount,
     },
-    level: "info",
+    level: 'info',
   });
 }
 
@@ -216,18 +216,18 @@ export function trackCurrencyConverted(userId: string, fromCurrency: CurrencyTyp
 
 export function trackWagerPlaced(userId: string, wagerType: string, betAmount: number, currency: string): void {
   Sentry.addBreadcrumb({
-    category: "economy.wager",
+    category: 'economy.wager',
     message: `Wager placed: ${wagerType}`,
-    level: "info",
+    level: 'info',
     data: { userId: hashUserId(userId), wagerType, betAmount, currency },
   });
 }
 
-export function trackWagerResolved(userId: string, wagerId: string, outcome: "WIN" | "LOSS", coinsEarned: number): void {
+export function trackWagerResolved(userId: string, wagerId: string, outcome: 'WIN' | 'LOSS', coinsEarned: number): void {
   Sentry.addBreadcrumb({
-    category: "economy.wager",
+    category: 'economy.wager',
     message: `Wager resolved: ${outcome}`,
-    level: "info",
+    level: 'info',
     data: { userId: hashUserId(userId), wagerId, outcome, coinsEarned },
   });
 }
@@ -238,9 +238,9 @@ export function trackWagerResolved(userId: string, wagerId: string, outcome: "WI
 
 export function trackInsurancePurchased(userId: string, costGems: number, streakDays: number): void {
   Sentry.addBreadcrumb({
-    category: "economy.insurance",
-    message: "Streak insurance purchased",
-    level: "info",
+    category: 'economy.insurance',
+    message: 'Streak insurance purchased',
+    level: 'info',
     data: {
       userId: hashUserId(userId),
       costGems,
@@ -251,9 +251,9 @@ export function trackInsurancePurchased(userId: string, costGems: number, streak
 
 export function trackInsuranceConsumed(userId: string, restoredStreakDays: number): void {
   Sentry.addBreadcrumb({
-    category: "economy.insurance",
-    message: "Streak insurance consumed - streak restored",
-    level: "info",
+    category: 'economy.insurance',
+    message: 'Streak insurance consumed - streak restored',
+    level: 'info',
     data: {
       userId: hashUserId(userId),
       restoredStreakDays,
@@ -267,23 +267,23 @@ export function trackInsuranceConsumed(userId: string, restoredStreakDays: numbe
 
 export function trackInsufficientFunds(userId: string, currency: CurrencyType, required: number, available: number): void {
   Sentry.addBreadcrumb({
-    message: "Insufficient funds",
-    category: "economy.error",
+    message: 'Insufficient funds',
+    category: 'economy.error',
     data: {
       userId,
       currency,
       required,
       available,
     },
-    level: "warning",
+    level: 'warning',
   });
 }
 
 export function trackWalletSyncError(userId: string, operation: string, error: unknown): void {
   Sentry.captureException(error, {
     tags: {
-      feature: "economy",
-      operation: "wallet_sync",
+      feature: 'economy',
+      operation: 'wallet_sync',
     },
     extra: {
       userId,

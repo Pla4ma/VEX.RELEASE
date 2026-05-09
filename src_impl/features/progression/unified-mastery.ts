@@ -11,17 +11,17 @@
  * @phase 2A - Progression Consolidation
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Core Types
 // ============================================================================
 
-export const MasteryTrackSchema = z.enum(["DURATION", "PURITY", "CONSISTENCY", "COMEBACK", "BOSS"]);
+export const MasteryTrackSchema = z.enum(['DURATION', 'PURITY', 'CONSISTENCY', 'COMEBACK', 'BOSS']);
 
 export type MasteryTrack = z.infer<typeof MasteryTrackSchema>;
 
-export const MASTERY_TRACKS: MasteryTrack[] = ["DURATION", "PURITY", "CONSISTENCY", "COMEBACK", "BOSS"];
+export const MASTERY_TRACKS: MasteryTrack[] = ['DURATION', 'PURITY', 'CONSISTENCY', 'COMEBACK', 'BOSS'];
 
 export interface MasteryTrackState {
   level: number; // 1-50
@@ -51,12 +51,12 @@ export interface UnifiedMasteryState {
 }
 
 export type MasteryRank =
-  | "APPRENTICE" // Overall 1-10
-  | "ADEPT" // 11-20
-  | "EXPERT" // 21-30
-  | "MASTER" // 31-40
-  | "GRANDMASTER" // 41-50
-  | "TRANSCENDENT"; // Prestiged
+  | 'APPRENTICE' // Overall 1-10
+  | 'ADEPT' // 11-20
+  | 'EXPERT' // 21-30
+  | 'MASTER' // 31-40
+  | 'GRANDMASTER' // 41-50
+  | 'TRANSCENDENT'; // Prestiged
 
 // ============================================================================
 // Rank Configuration
@@ -76,50 +76,50 @@ export const RANK_CONFIG: Record<
   APPRENTICE: {
     minLevel: 1,
     maxLevel: 10,
-    displayName: "Apprentice",
-    color: "#8B4513",
-    icon: "🌱",
-    unlocks: ["Basic bosses", "Light Focus mode"],
+    displayName: 'Apprentice',
+    color: '#8B4513',
+    icon: '🌱',
+    unlocks: ['Basic bosses', 'Light Focus mode'],
   },
   ADEPT: {
     minLevel: 11,
     maxLevel: 20,
-    displayName: "Adept",
-    color: "#4A5568",
-    icon: "⚔️",
-    unlocks: ["Sprint mode", "Study mode", "Advanced challenges"],
+    displayName: 'Adept',
+    color: '#4A5568',
+    icon: '⚔️',
+    unlocks: ['Sprint mode', 'Study mode', 'Advanced challenges'],
   },
   EXPERT: {
     minLevel: 21,
     maxLevel: 30,
-    displayName: "Expert",
-    color: "#4169E1",
-    icon: "🛡️",
-    unlocks: ["Deep Work mode", "Creative mode", "Squad access", "Daily dungeons"],
+    displayName: 'Expert',
+    color: '#4169E1',
+    icon: '🛡️',
+    unlocks: ['Deep Work mode', 'Creative mode', 'Squad access', 'Daily dungeons'],
   },
   MASTER: {
     minLevel: 31,
     maxLevel: 40,
-    displayName: "Master",
-    color: "#9400D3",
-    icon: "👑",
-    unlocks: ["Nightmare bosses", "Rival system", "Item crafting"],
+    displayName: 'Master',
+    color: '#9400D3',
+    icon: '👑',
+    unlocks: ['Nightmare bosses', 'Rival system', 'Item crafting'],
   },
   GRANDMASTER: {
     minLevel: 41,
     maxLevel: 50,
-    displayName: "Grandmaster",
-    color: "#FFD700",
-    icon: "⭐",
-    unlocks: ["Transcendence (Prestige)", "Legendary items", "Guild Wars"],
+    displayName: 'Grandmaster',
+    color: '#FFD700',
+    icon: '⭐',
+    unlocks: ['Transcendence (Prestige)', 'Legendary items', 'Guild Wars'],
   },
   TRANSCENDENT: {
     minLevel: 51,
     maxLevel: 999,
-    displayName: "Transcendent",
-    color: "#FF00FF",
-    icon: "✨",
-    unlocks: ["All previous + prestige bonuses"],
+    displayName: 'Transcendent',
+    color: '#FF00FF',
+    icon: '✨',
+    unlocks: ['All previous + prestige bonuses'],
   },
 };
 
@@ -373,21 +373,21 @@ export function applyMasteryXp(state: UnifiedMasteryState, xpByTrack: Record<Mas
 
 export function calculateMasteryRank(overallLevel: number, prestigeLevel: number): MasteryRank {
   if (prestigeLevel > 0) {
-    return "TRANSCENDENT";
+    return 'TRANSCENDENT';
   }
   if (overallLevel >= 41) {
-    return "GRANDMASTER";
+    return 'GRANDMASTER';
   }
   if (overallLevel >= 31) {
-    return "MASTER";
+    return 'MASTER';
   }
   if (overallLevel >= 21) {
-    return "EXPERT";
+    return 'EXPERT';
   }
   if (overallLevel >= 11) {
-    return "ADEPT";
+    return 'ADEPT';
   }
-  return "APPRENTICE";
+  return 'APPRENTICE';
 }
 
 // ============================================================================
@@ -405,29 +405,29 @@ export interface MasteryUnlock {
 
 export const MASTERY_UNLOCKS: MasteryUnlock[] = [
   // Duration unlocks
-  { id: "mode_sprint", name: "Sprint Mode", description: "Fast-paced 25-minute sessions", requiredTrack: "DURATION", requiredLevel: 5, unlocked: false },
-  { id: "boss_tier2", name: "Tier 2 Bosses", description: "Face stronger opponents", requiredTrack: "DURATION", requiredLevel: 10, unlocked: false },
-  { id: "mode_deep_work", name: "Deep Work Mode", description: "Extended 90-minute sessions", requiredTrack: "DURATION", requiredLevel: 20, unlocked: false },
+  { id: 'mode_sprint', name: 'Sprint Mode', description: 'Fast-paced 25-minute sessions', requiredTrack: 'DURATION', requiredLevel: 5, unlocked: false },
+  { id: 'boss_tier2', name: 'Tier 2 Bosses', description: 'Face stronger opponents', requiredTrack: 'DURATION', requiredLevel: 10, unlocked: false },
+  { id: 'mode_deep_work', name: 'Deep Work Mode', description: 'Extended 90-minute sessions', requiredTrack: 'DURATION', requiredLevel: 20, unlocked: false },
 
   // Purity unlocks
-  { id: "perfect_session_bonus", name: "Perfect Session Bonus", description: "Extra rewards for 95%+ purity", requiredTrack: "PURITY", requiredLevel: 5, unlocked: false },
-  { id: "critical_hits", name: "Critical Hit System", description: "Land critical strikes on bosses", requiredTrack: "PURITY", requiredLevel: 15, unlocked: false },
-  { id: "nightmare_bosses", name: "Nightmare Difficulty", description: "Ultimate challenge mode", requiredTrack: "PURITY", requiredLevel: 30, unlocked: false },
+  { id: 'perfect_session_bonus', name: 'Perfect Session Bonus', description: 'Extra rewards for 95%+ purity', requiredTrack: 'PURITY', requiredLevel: 5, unlocked: false },
+  { id: 'critical_hits', name: 'Critical Hit System', description: 'Land critical strikes on bosses', requiredTrack: 'PURITY', requiredLevel: 15, unlocked: false },
+  { id: 'nightmare_bosses', name: 'Nightmare Difficulty', description: 'Ultimate challenge mode', requiredTrack: 'PURITY', requiredLevel: 30, unlocked: false },
 
   // Consistency unlocks
-  { id: "squad_access", name: "Squads", description: "Join or create focus squads", requiredTrack: "CONSISTENCY", requiredLevel: 10, unlocked: false },
-  { id: "daily_dungeons", name: "Daily Dungeons", description: "Special daily challenges", requiredTrack: "CONSISTENCY", requiredLevel: 15, unlocked: false },
-  { id: "streak_insurance", name: "Streak Insurance", description: "Protect your streak with coins", requiredTrack: "CONSISTENCY", requiredLevel: 20, unlocked: false },
+  { id: 'squad_access', name: 'Squads', description: 'Join or create focus squads', requiredTrack: 'CONSISTENCY', requiredLevel: 10, unlocked: false },
+  { id: 'daily_dungeons', name: 'Daily Dungeons', description: 'Special daily challenges', requiredTrack: 'CONSISTENCY', requiredLevel: 15, unlocked: false },
+  { id: 'streak_insurance', name: 'Streak Insurance', description: 'Protect your streak with coins', requiredTrack: 'CONSISTENCY', requiredLevel: 20, unlocked: false },
 
   // Comeback unlocks
-  { id: "comeback_tokens", name: "Comeback Tokens", description: "Earn tokens from broken streaks", requiredTrack: "COMEBACK", requiredLevel: 5, unlocked: false },
-  { id: "rivals", name: "Rival System", description: "Compete with matched opponents", requiredTrack: "COMEBACK", requiredLevel: 15, unlocked: false },
-  { id: "phoenix_mode", name: "Phoenix Mode", description: "2x XP for 7 days after comeback", requiredTrack: "COMEBACK", requiredLevel: 25, unlocked: false },
+  { id: 'comeback_tokens', name: 'Comeback Tokens', description: 'Earn tokens from broken streaks', requiredTrack: 'COMEBACK', requiredLevel: 5, unlocked: false },
+  { id: 'rivals', name: 'Rival System', description: 'Compete with matched opponents', requiredTrack: 'COMEBACK', requiredLevel: 15, unlocked: false },
+  { id: 'phoenix_mode', name: 'Phoenix Mode', description: '2x XP for 7 days after comeback', requiredTrack: 'COMEBACK', requiredLevel: 25, unlocked: false },
 
   // Boss unlocks
-  { id: "boss_crafting", name: "Boss Essence Crafting", description: "Craft items from defeated bosses", requiredTrack: "BOSS", requiredLevel: 10, unlocked: false },
-  { id: "squad_raids", name: "Squad Raids", description: "Coordinated boss battles", requiredTrack: "BOSS", requiredLevel: 20, unlocked: false },
-  { id: "transcendence", name: "Transcendence", description: "Prestige and start anew stronger", requiredTrack: "BOSS", requiredLevel: 40, unlocked: false },
+  { id: 'boss_crafting', name: 'Boss Essence Crafting', description: 'Craft items from defeated bosses', requiredTrack: 'BOSS', requiredLevel: 10, unlocked: false },
+  { id: 'squad_raids', name: 'Squad Raids', description: 'Coordinated boss battles', requiredTrack: 'BOSS', requiredLevel: 20, unlocked: false },
+  { id: 'transcendence', name: 'Transcendence', description: 'Prestige and start anew stronger', requiredTrack: 'BOSS', requiredLevel: 40, unlocked: false },
 ];
 
 export function checkUnlocks(state: UnifiedMasteryState, existingUnlocks: string[]): { newlyUnlocked: MasteryUnlock[]; allUnlocks: string[] } {
@@ -464,7 +464,7 @@ export function createInitialMasteryState(userId: string): UnifiedMasteryState {
     userId,
     tracks,
     overallLevel: 1,
-    overallRank: "APPRENTICE",
+    overallRank: 'APPRENTICE',
     prestigeLevel: 0,
     prestigeBonuses: [],
     lastUpdated: Date.now(),

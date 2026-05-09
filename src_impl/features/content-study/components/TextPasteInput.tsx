@@ -1,203 +1,179 @@
-/**
- * Text Paste Input Component
- * Rich text input with validation, autosave, and character count
- */
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Pressable, TextInput, View } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { View, TextInput, Animated, Pressable } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { TextPasteInputProps, ValidationError } from "../types";
-import { validatePastedText } from "../validation";
-import { CONTENT_STUDY_CONSTANTS } from "../types";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { Text } from '../../../components/primitives/Text';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
+import { useTheme } from '../../../theme';
+import type { TextPasteInputProps, ValidationError } from '../types';
+import { CONTENT_STUDY_CONSTANTS } from '../types';
+import { validatePastedText } from '../validation';
 
-export const TextPasteInput: React.FC<TextPasteInputProps> = ({ value, onChange, onValidationChange, onAutoSave, disabled = false, autoFocus = false, showCharacterCount = true, showMinLengthIndicator = true }) => {
+export function TextPasteInput({
+  value,
+  onChange,
+  onValidationChange,
+  onAutoSave,
+  disabled = false,
+  autoFocus = false,
+  showCharacterCount = true,
+  showMinLengthIndicator = true,
+}: TextPasteInputProps): JSX.Element {
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
   const inputRef = useRef<TextInput>(null);
   const [errors, setErrors] = useState<ValidationError[]>([]);
   const [warnings, setWarnings] = useState<ValidationError[]>([]);
   const [isFocused, setIsFocused] = useState(false);
-  const shakeAnimation = useRef(new Animated.Value(0)).current;
+  const shakeOffset = useSharedValue(0);
 
-  // Auto-focus
   useEffect(() => {
     if (autoFocus) {
-      setTimeout(() => inputRef.current?.focus(), 100);
+      const timer = setTimeout(() => inputRef.current?.focus(), 100);
+      return () => clearTimeout(timer);
     }
+    return undefined;
   }, [autoFocus]);
 
-  // Validation
   useEffect(() => {
     const result = validatePastedText(value);
     setErrors(result.errors);
     setWarnings(result.warnings);
     onValidationChange?.(result.isValid, [...result.errors, ...result.warnings]);
-  }, [value, onValidationChange]);
+  }, [onValidationChange, value]);
 
-  // Autosave
   useEffect(() => {
     if (!onAutoSave || !value.trim()) {
+      return undefined;
+    }
+    const timer = setTimeout(() => onAutoSave(value), CONTENT_STUDY_CONSTANTS.AUTOSAVE_INTERVAL_MS);
+    return () => clearTimeout(timer);
+  }, [onAutoSave, value]);
+
+  const shake = useCallback((): void => {
+    if (isReducedMotion) {
       return;
     }
+    shakeOffset.value = withSequence(
+      withTiming(10, { duration: 50 }),
+      withTiming(-10, { duration: 50 }),
+      withTiming(8, { duration: 50 }),
+      withTiming(0, { duration: 50 }),
+    );
+  }, [isReducedMotion, shakeOffset]);
 
-    const timer = setTimeout(() => {
-      onAutoSave(value);
-    }, CONTENT_STUDY_CONSTANTS.AUTOSAVE_INTERVAL_MS);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: shakeOffset.value }],
+  }));
 
-    return () => clearTimeout(timer);
-  }, [value, onAutoSave]);
+  const handleChange = useCallback((text: string): void => {
+    if (text.length > CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH) {
+      shake();
+      return;
+    }
+    onChange(text);
+  }, [onChange, shake]);
 
-  // Shake on error
-  const shake = useCallback(() => {
-    Animated.sequence([Animated.timing(shakeAnimation, { toValue: 10, duration: 50, useNativeDriver: true }), Animated.timing(shakeAnimation, { toValue: -10, duration: 50, useNativeDriver: true }), Animated.timing(shakeAnimation, { toValue: 10, duration: 50, useNativeDriver: true }), Animated.timing(shakeAnimation, { toValue: 0, duration: 50, useNativeDriver: true })]).start();
-  }, [shakeAnimation]);
-
-  const handleChange = useCallback(
-    (text: string) => {
-      if (text.length > CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH) {
-        shake();
-        return;
-      }
-      onChange(text);
-    },
-    [onChange, shake],
-  );
-
-  const clearInput = useCallback(() => {
-    onChange("");
+  const clearInput = useCallback((): void => {
+    onChange('');
     inputRef.current?.focus();
   }, [onChange]);
 
   const characterCount = value.length;
+  const wordCount = value.trim() ? value.trim().split(/\s+/).length : 0;
   const isOverLimit = characterCount > CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH;
   const isUnderMin = characterCount < CONTENT_STUDY_CONSTANTS.MIN_PASTE_LENGTH && characterCount > 0;
-  const wordCount = value.trim() ? value.trim().split(/\s+/).length : 0;
+  const borderColor = isFocused
+    ? theme.colors.semantic.primary
+    : errors.length > 0
+    ? theme.colors.semantic.danger
+    : warnings.length > 0
+    ? theme.colors.semantic.warning
+    : theme.colors.semantic.inputBorder;
 
   return (
-    <Animated.View style={{ transform: [{ translateX: shakeAnimation }] }}>
+    <Animated.View style={animatedStyle}>
       <View
-        style={[
-          styles.container,
-          {
-            borderColor: isFocused ? theme.colors.primary[500] : errors.length > 0 ? theme.colors.error[500] : warnings.length > 0 ? theme.colors.warning[500] : theme.colors.border.DEFAULT,
-          },
-        ]}
+        style={{
+          borderWidth: 1,
+          borderRadius: theme.borderRadius.xl,
+          borderColor,
+          backgroundColor: theme.colors.semantic.inputBackground,
+          position: 'relative',
+        }}
       >
         <TextInput
-          ref={inputRef}
-          style={[styles.input, { color: theme.colors.text.primary }, disabled && styles.inputDisabled]}
+          accessibilityHint="Paste study notes, article text, or source material here"
+          accessibilityLabel="Study content text input"
+          editable={!disabled}
+          maxLength={CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH + 100}
           multiline
-          placeholder="Paste your notes, article, or any text here..."
-          placeholderTextColor={theme.colors.text.muted}
-          value={value}
+          onBlur={() => setIsFocused(false)}
           onChangeText={handleChange}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          editable={!disabled}
-          maxLength={CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH + 100} // Allow slight overflow for UX
+          placeholder="Paste your notes, article, or any study text here..."
+          placeholderTextColor={theme.colors.text.placeholder}
+          ref={inputRef}
+          style={{
+            minHeight: theme.spacing[8] * 3,
+            maxHeight: theme.spacing[8] * 6,
+            padding: theme.spacing[4],
+            paddingRight: theme.spacing[8],
+            color: theme.colors.text.primary,
+            fontSize: theme.typography.body.medium.fontSize,
+            lineHeight: theme.typography.body.medium.lineHeight,
+            opacity: disabled ? 0.64 : 1,
+          }}
           textAlignVertical="top"
-          accessibilityLabel="Text input for pasting content"
-          accessibilityHint="Paste your study content here"
+          value={value}
         />
-
-        {value.length > 0 && !disabled && (
-          <Pressable style={({ pressed }) => [styles.clearButton, pressed && { opacity: 0.8 }]} onPress={clearInput} accessibilityLabel="Clear text" accessibilityRole="button" accessibilityHint="Activates this control">
-            <Text style={{ color: theme.colors.text.muted }}>×</Text>
+        {value.length > 0 && !disabled ? (
+          <Pressable
+            accessibilityHint="Clears the pasted study text"
+            accessibilityLabel="Clear study text"
+            accessibilityRole="button"
+            onPress={clearInput}
+            style={{
+              position: 'absolute',
+              top: theme.spacing[3],
+              right: theme.spacing[3],
+              width: 44,
+              height: 44,
+              borderRadius: theme.borderRadius.full,
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: theme.colors.semantic.surfaceGlass,
+            }}
+          >
+            <Text color="text.secondary" variant="label">x</Text>
           </Pressable>
-        )}
+        ) : null}
       </View>
 
-      {/* Character Count */}
-      {showCharacterCount && (
-        <View style={styles.footer}>
-          <Text
-            style={[
-              styles.count,
-              {
-                color: isOverLimit ? theme.colors.error[500] : isUnderMin && showMinLengthIndicator ? theme.colors.warning[500] : theme.colors.text.muted,
-              },
-            ]}
-          >
-            {characterCount.toLocaleString()}
-            {showMinLengthIndicator && characterCount < CONTENT_STUDY_CONSTANTS.MIN_PASTE_LENGTH ? ` / min ${CONTENT_STUDY_CONSTANTS.MIN_PASTE_LENGTH}` : ""}
-            {` / max ${CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH.toLocaleString()}`}
+      {showCharacterCount ? (
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: theme.spacing[2] }}>
+          <Text color={isOverLimit ? 'error.DEFAULT' : isUnderMin && showMinLengthIndicator ? 'warning.DEFAULT' : 'text.muted'} variant="caption">
+            {`${characterCount.toLocaleString()} / max ${CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH.toLocaleString()}`}
           </Text>
-
-          {wordCount > 0 && (
-            <Text style={[styles.count, { color: theme.colors.text.muted }]}>
-              {wordCount.toLocaleString()} words
-              {wordCount > 0 && ` (~${Math.ceil(wordCount / 200)} min read)`}
-            </Text>
-          )}
+          {wordCount > 0 ? (
+            <Text color="text.muted" variant="caption">{`${wordCount.toLocaleString()} words`}</Text>
+          ) : null}
         </View>
-      )}
+      ) : null}
 
-      {/* Validation Messages */}
-      {errors.length > 0 && (
-        <View style={styles.validationContainer}>
-          {errors.map((error, index) => (
-            <Text key={`error-${index}`} style={[styles.validationText, { color: theme.colors.error[500] }]}>
-              {error.message}
-            </Text>
-          ))}
-        </View>
-      )}
-
-      {errors.length === 0 && warnings.length > 0 && (
-        <View style={styles.validationContainer}>
-          {warnings.slice(0, 2).map((warning, index) => (
-            <Text key={`warning-${index}`} style={[styles.validationText, { color: theme.colors.warning[500] }]}>
-              {warning.message}
-            </Text>
-          ))}
-        </View>
-      )}
+      <View style={{ marginTop: theme.spacing[2], gap: theme.spacing[1] }}>
+        {errors.map((error) => (
+          <Text key={error.message} color="error.DEFAULT" variant="caption">{error.message}</Text>
+        ))}
+        {errors.length === 0 ? warnings.slice(0, 2).map((warning) => (
+          <Text key={warning.message} color="warning.DEFAULT" variant="caption">{warning.message}</Text>
+        )) : null}
+      </View>
     </Animated.View>
   );
-};
-
-const styles = createSheet({
-  container: {
-    borderWidth: 1,
-    borderRadius: 12,
-    backgroundColor: "transparent",
-    position: "relative",
-  },
-  input: {
-    minHeight: 200,
-    maxHeight: 400,
-    padding: 16,
-    paddingRight: 40,
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  inputDisabled: {
-    opacity: 0.6,
-  },
-  clearButton: {
-    position: "absolute",
-    top: 12,
-    right: 12,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 8,
-  },
-  count: {
-    fontSize: 12,
-  },
-  validationContainer: {
-    marginTop: 8,
-    gap: 4,
-  },
-  validationText: {
-    fontSize: 13,
-  },
-});
+}

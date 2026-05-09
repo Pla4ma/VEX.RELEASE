@@ -9,13 +9,13 @@
  * @phase 4B.4
  */
 
-import React from "react";
-import { ScrollView } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React from 'react';
+import { ScrollView } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export interface SquadLeaderboardEntry {
   userId: string;
@@ -42,13 +42,13 @@ function RankBadge({ rank }: { rank: number }): JSX.Element {
 
   const getRankStyle = () => {
     if (rank === 1) {
-      return { bg: "#F59E0B", text: "#FFFFFF" };
+      return { bg: '#F59E0B', text: '#FFFFFF' };
     } // Gold
     if (rank === 2) {
-      return { bg: "#6B7280", text: "#FFFFFF" };
+      return { bg: '#6B7280', text: '#FFFFFF' };
     } // Silver
     if (rank === 3) {
-      return { bg: "#B45309", text: "#FFFFFF" };
+      return { bg: '#B45309', text: '#FFFFFF' };
     } // Bronze
     return { bg: theme.colors.background.tertiary, text: theme.colors.text.secondary };
   };
@@ -58,7 +58,7 @@ function RankBadge({ rank }: { rank: number }): JSX.Element {
   return (
     <Box width={36} height={36} borderRadius="full" justifyContent="center" alignItems="center" style={{ backgroundColor: style.bg }}>
       <Text fontSize={16} color={style.text} fontWeight="800">
-        {rank === 1 ? "👑" : rank}
+        {rank === 1 ? '👑' : rank}
       </Text>
     </Box>
   );
@@ -81,8 +81,8 @@ function RankDelta({ delta }: { delta: number }): JSX.Element {
   const isUp = delta > 0;
   return (
     <Box flexDirection="row" alignItems="center">
-      <Text variant="caption" color={isUp ? "success.DEFAULT" : "error.DEFAULT"}>
-        {isUp ? "↑" : "↓"} {Math.abs(delta)}
+      <Text variant="caption" color={isUp ? 'success.DEFAULT' : 'error.DEFAULT'}>
+        {isUp ? '↑' : '↓'} {Math.abs(delta)}
       </Text>
     </Box>
   );
@@ -113,7 +113,7 @@ function LeaderboardRow({ entry, index }: { entry: SquadLeaderboardEntry; index:
 
   return (
     <Animated.View entering={FadeInUp.duration(400).delay(index * 50)}>
-      <Box flexDirection="row" alignItems="center" p="md" borderRadius="xl" bg={entry.isMe ? `${theme.colors.primary[500]}15` : "background.secondary"} borderWidth={2} borderColor={entry.isMe ? "primary.500" : isTop3 ? "accent.orange" : "transparent"} mb="sm">
+      <Box flexDirection="row" alignItems="center" p="md" borderRadius="xl" bg={entry.isMe ? `${theme.colors.primary[500]}15` : 'background.secondary'} borderWidth={2} borderColor={entry.isMe ? 'primary.500' : isTop3 ? 'accent.orange' : 'transparent'} mb="sm">
         {/* Rank */}
         <RankBadge rank={entry.rank} />
 
@@ -131,7 +131,7 @@ function LeaderboardRow({ entry, index }: { entry: SquadLeaderboardEntry; index:
         {/* Info */}
         <Box flex={1}>
           <Box flexDirection="row" alignItems="center" gap="sm">
-            <Text variant="body" color="text.primary" fontWeight={entry.isMe ? "700" : "600"}>
+            <Text variant="body" color="text.primary" fontWeight={entry.isMe ? '700' : '600'}>
               {entry.name}
             </Text>
             {entry.isMe && (

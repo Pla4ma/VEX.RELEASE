@@ -4,13 +4,13 @@
  * List view for challenges with filtering and refresh.
  */
 
-import React from "react";
-import { View, StyleSheet, RefreshControl } from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { Text, Card, Button } from "../../../components";
-import { ChallengeCard } from "./ChallengeCard";
-import type { UserChallengeSummary } from "../schemas";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React from 'react';
+import { View, StyleSheet, RefreshControl } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import { Text, Card, Button } from '../../../components';
+import { ChallengeCard } from './ChallengeCard';
+import type { UserChallengeSummary } from '../schemas';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface ChallengeListProps {
   challenges: UserChallengeSummary[];
@@ -20,16 +20,16 @@ interface ChallengeListProps {
   loading?: boolean;
   error?: Error | null;
   onRetry?: () => void;
-  filter?: "ALL" | "ACTIVE" | "COMPLETED";
+  filter?: 'ALL' | 'ACTIVE' | 'COMPLETED';
 }
 
-export function ChallengeList({ challenges, onClaimChallenge, onRerollChallenge, onRefresh, loading, error, onRetry, filter = "ALL" }: ChallengeListProps): JSX.Element {
+export function ChallengeList({ challenges, onClaimChallenge, onRerollChallenge, onRefresh, loading, error, onRetry, filter = 'ALL' }: ChallengeListProps): JSX.Element {
   const filteredChallenges = React.useMemo(() => {
     switch (filter) {
-      case "ACTIVE":
-        return challenges.filter((c) => c.status === "ACTIVE");
-      case "COMPLETED":
-        return challenges.filter((c) => c.status === "COMPLETED" || c.status === "CLAIMED");
+      case 'ACTIVE':
+        return challenges.filter((c) => c.status === 'ACTIVE');
+      case 'COMPLETED':
+        return challenges.filter((c) => c.status === 'COMPLETED' || c.status === 'CLAIMED');
       default:
         return challenges;
     }
@@ -77,9 +77,9 @@ export function ChallengeList({ challenges, onClaimChallenge, onRerollChallenge,
     return (
       <View style={styles.centerContainer}>
         <Card style={styles.emptyCard}>
-          <Text style={styles.emptyTitle}>{filter === "ALL" ? "No Challenges" : `No ${filter.toLowerCase()} challenges`}</Text>
-          <Text style={styles.emptyText}>{filter === "ALL" ? "Check back later for new challenges!" : "Try a different filter"}</Text>
-          {filter !== "ALL" && onRefresh && (
+          <Text style={styles.emptyTitle}>{filter === 'ALL' ? 'No Challenges' : `No ${filter.toLowerCase()} challenges`}</Text>
+          <Text style={styles.emptyText}>{filter === 'ALL' ? 'Check back later for new challenges!' : 'Try a different filter'}</Text>
+          {filter !== 'ALL' && onRefresh && (
             <Button variant="secondary" onPress={onRefresh} style={styles.retryButton} accessibilityLabel="Show All button" accessibilityRole="button" accessibilityHint="Activates this control">
               Show All
             </Button>
@@ -99,7 +99,7 @@ export function ChallengeList({ challenges, onClaimChallenge, onRerollChallenge,
       ListHeaderComponent={
         <View style={styles.header}>
           <Text style={styles.headerText}>
-            {filteredChallenges.length} Challenge{filteredChallenges.length !== 1 ? "s" : ""}
+            {filteredChallenges.length} Challenge{filteredChallenges.length !== 1 ? 's' : ''}
           </Text>
         </View>
       }
@@ -114,8 +114,8 @@ const styles = createSheet({
   },
   centerContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 16,
   },
   listContainer: {
@@ -127,8 +127,8 @@ const styles = createSheet({
   },
   headerText: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#6B7280",
+    fontWeight: '600',
+    color: '#6B7280',
   },
   skeletonCard: {
     padding: 16,
@@ -136,32 +136,32 @@ const styles = createSheet({
   },
   skeletonHeader: {
     height: 20,
-    backgroundColor: "#E0E0E0",
+    backgroundColor: '#E0E0E0',
     borderRadius: 4,
     marginBottom: 12,
-    width: "70%",
+    width: '70%',
   },
   skeletonLine: {
     height: 12,
-    backgroundColor: "#E0E0E0",
+    backgroundColor: '#E0E0E0',
     borderRadius: 4,
     marginBottom: 8,
   },
   errorCard: {
     padding: 24,
-    alignItems: "center",
+    alignItems: 'center',
     maxWidth: 400,
   },
   errorTitle: {
     fontSize: 18,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 8,
-    color: "#DC2626",
+    color: '#DC2626',
   },
   errorMessage: {
     fontSize: 14,
-    color: "#6B7280",
-    textAlign: "center",
+    color: '#6B7280',
+    textAlign: 'center',
     marginBottom: 16,
   },
   retryButton: {
@@ -169,16 +169,16 @@ const styles = createSheet({
   },
   emptyCard: {
     padding: 32,
-    alignItems: "center",
+    alignItems: 'center',
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 8,
   },
   emptyText: {
     fontSize: 14,
-    color: "#6B7280",
-    textAlign: "center",
+    color: '#6B7280',
+    textAlign: 'center',
   },
 });

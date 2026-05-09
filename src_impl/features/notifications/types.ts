@@ -23,15 +23,15 @@ export interface Notification {
   metadata: NotificationMetadata;
 }
 
-export type NotificationType = "session_reminder" | "achievement_unlocked" | "challenge_update" | "social_invite" | "system_update" | "progress_milestone" | "streak_update" | "reward_claimed" | "leaderboard_change" | "feature_announcement" | "maintenance" | "security" | "billing" | "custom";
+export type NotificationType = 'session_reminder' | 'achievement_unlocked' | 'challenge_update' | 'social_invite' | 'system_update' | 'progress_milestone' | 'streak_update' | 'reward_claimed' | 'leaderboard_change' | 'feature_announcement' | 'maintenance' | 'security' | 'billing' | 'custom';
 
-export type NotificationCategory = "productivity" | "social" | "gamification" | "system" | "security" | "billing" | "updates" | "reminders" | "achievements" | "challenges";
+export type NotificationCategory = 'productivity' | 'social' | 'gamification' | 'system' | 'security' | 'billing' | 'updates' | 'reminders' | 'achievements' | 'challenges';
 
-export type NotificationPriority = "low" | "medium" | "high" | "urgent" | "critical";
+export type NotificationPriority = 'low' | 'medium' | 'high' | 'urgent' | 'critical';
 
-export type NotificationChannel = "in_app" | "push" | "email" | "sms" | "webhook";
+export type NotificationChannel = 'in_app' | 'push' | 'email' | 'sms' | 'webhook';
 
-export type NotificationStatus = "pending" | "scheduled" | "sending" | "delivered" | "read" | "failed" | "expired" | "cancelled";
+export type NotificationStatus = 'pending' | 'scheduled' | 'sending' | 'delivered' | 'read' | 'failed' | 'expired' | 'cancelled';
 
 export interface NotificationMetadata {
   source: string;
@@ -45,7 +45,7 @@ export interface NotificationMetadata {
 }
 
 export interface DeviceInfo {
-  type: "mobile" | "tablet" | "desktop" | "web";
+  type: 'mobile' | 'tablet' | 'desktop' | 'web';
   os: string;
   version: string;
   appVersion?: string;
@@ -78,7 +78,7 @@ export interface NotificationTemplate {
 
 export interface TemplateVariable {
   name: string;
-  type: "string" | "number" | "boolean" | "date" | "object";
+  type: 'string' | 'number' | 'boolean' | 'date' | 'object';
   required: boolean;
   defaultValue?: unknown;
   description: string;
@@ -112,13 +112,13 @@ export interface NotificationRule {
 
 export interface RuleCondition {
   field: string;
-  operator: "equals" | "not_equals" | "contains" | "not_contains" | "greater_than" | "less_than" | "in" | "not_in";
+  operator: 'equals' | 'not_equals' | 'contains' | 'not_contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
   value: unknown;
-  logicalOperator?: "and" | "or";
+  logicalOperator?: 'and' | 'or';
 }
 
 export interface RuleAction {
-  type: "send" | "schedule" | "transform" | "filter" | "route" | "suppress";
+  type: 'send' | 'schedule' | 'transform' | 'filter' | 'route' | 'suppress';
   parameters: Record<string, unknown>;
 }
 
@@ -154,7 +154,7 @@ export interface CategoryNotificationSettings {
 export interface TypeNotificationSettings {
   enabled: boolean;
   channels: NotificationChannel[];
-  frequency: "immediate" | "hourly" | "daily" | "weekly";
+  frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
   maxPerDay: number;
 }
 
@@ -213,16 +213,16 @@ export interface CampaignTarget {
 
 export interface TargetFilter {
   field: string;
-  operator: "equals" | "not_equals" | "contains" | "greater_than" | "less_than" | "in" | "not_in";
+  operator: 'equals' | 'not_equals' | 'contains' | 'greater_than' | 'less_than' | 'in' | 'not_in';
   value: unknown;
 }
 
 export interface CampaignSchedule {
-  type: "immediate" | "scheduled" | "recurring";
+  type: 'immediate' | 'scheduled' | 'recurring';
   startDate?: Date;
   endDate?: Date;
   timezone: string;
-  frequency?: "hourly" | "daily" | "weekly" | "monthly";
+  frequency?: 'hourly' | 'daily' | 'weekly' | 'monthly';
   sendTimes?: string[]; // HH:mm
 }
 
@@ -233,7 +233,7 @@ export interface CampaignBudget {
   currency?: string;
 }
 
-export type CampaignStatus = "draft" | "scheduled" | "running" | "paused" | "completed" | "cancelled" | "failed";
+export type CampaignStatus = 'draft' | 'scheduled' | 'running' | 'paused' | 'completed' | 'cancelled' | 'failed';
 
 export interface CampaignMetrics {
   sent: number;
@@ -249,7 +249,7 @@ export interface CampaignMetrics {
 
 export interface NotificationAnalytics {
   userId: string;
-  timeframe: "hourly" | "daily" | "weekly" | "monthly";
+  timeframe: 'hourly' | 'daily' | 'weekly' | 'monthly';
   metrics: {
     totalReceived: number;
     totalRead: number;
@@ -273,7 +273,7 @@ export interface TrendData {
   timestamp: Date;
   value: number;
   change: number;
-  significance: "low" | "medium" | "high";
+  significance: 'low' | 'medium' | 'high';
 }
 
 export interface NotificationDelivery {
@@ -289,7 +289,7 @@ export interface NotificationDelivery {
   metadata: DeliveryMetadata;
 }
 
-export type DeliveryStatus = "pending" | "processing" | "sent" | "delivered" | "failed" | "cancelled";
+export type DeliveryStatus = 'pending' | 'processing' | 'sent' | 'delivered' | 'failed' | 'cancelled';
 
 export interface DeliveryAttempt {
   attempt: number;
@@ -303,7 +303,7 @@ export interface DeliveryAttempt {
 export interface DeliveryError {
   code: string;
   message: string;
-  type: "temporary" | "permanent";
+  type: 'temporary' | 'permanent';
   retryable: boolean;
   retryAfter?: number;
 }
@@ -318,7 +318,7 @@ export interface DeliveryMetadata {
 
 // Event Types
 export interface NotificationEvent {
-  type: "notification_sent" | "notification_delivered" | "notification_read" | "notification_clicked" | "notification_failed" | "preferences_updated";
+  type: 'notification_sent' | 'notification_delivered' | 'notification_read' | 'notification_clicked' | 'notification_failed' | 'preferences_updated';
   userId: string;
   notificationId?: string;
   channelId?: NotificationChannel;
@@ -331,7 +331,7 @@ export interface NotificationWebhook {
   id: string;
   name: string;
   url: string;
-  events: NotificationEvent["type"][];
+  events: NotificationEvent['type'][];
   secret: string;
   active: boolean;
   retryPolicy: WebhookRetryPolicy;
@@ -343,12 +343,12 @@ export interface NotificationWebhook {
 export interface WebhookRetryPolicy {
   enabled: boolean;
   maxRetries: number;
-  backoffStrategy: "linear" | "exponential" | "fixed";
+  backoffStrategy: 'linear' | 'exponential' | 'fixed';
   retryDelay: number; // in seconds
 }
 
 export interface WebhookPayload {
-  event: NotificationEvent["type"];
+  event: NotificationEvent['type'];
   data: Record<string, unknown>;
   timestamp: Date;
   signature: string;

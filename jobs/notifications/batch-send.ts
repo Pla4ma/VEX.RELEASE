@@ -26,6 +26,7 @@ const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_KEY!
 );
+const httpRequest = globalThis.fetch.bind(globalThis);
 
 /**
  * Notification batch send job
@@ -180,10 +181,6 @@ export const notificationBatchSend = task({
   },
 });
 
-/**
- * Simulated push notification send
- * Replace with actual FCM/APNS integration
- */
 async function sendPushNotification(params: {
   token: string;
   platform: string;
@@ -191,14 +188,30 @@ async function sendPushNotification(params: {
   body: string;
   data?: Record<string, unknown>;
 }): Promise<boolean> {
-  // TODO: Replace with actual push notification service
-  // Example: Firebase Cloud Messaging (FCM) or AWS SNS
-  
-  // Simulate API call
-  await new Promise(resolve => setTimeout(resolve, 10));
-  
-  // Simulate 95% success rate
-  return Math.random() > 0.05;
+  const response = await httpRequest('https://exp.host/--/api/v2/push/send', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Accept-Encoding': 'gzip, deflate',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      to: params.token,
+      title: params.title,
+      body: params.body,
+      data: {
+        ...params.data,
+        platform: params.platform,
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Expo push service failed with ${response.status}`);
+  }
+
+  const payload = await response.json() as { data?: { status?: string }; errors?: unknown[] };
+  return payload.data?.status === 'ok';
 }
 
 export default notificationBatchSend;

@@ -7,15 +7,15 @@
  * @phase 11.4
  */
 
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { type ComebackQuest, type ComebackQuestProgress, COMEBACK_QUEST_CONFIG } from "../ComebackQuestSystem";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { type ComebackQuest, type ComebackQuestProgress, COMEBACK_QUEST_CONFIG } from '../ComebackQuestSystem';
 
 interface ComebackQuestCardProps {
   /** Quest data */
@@ -40,7 +40,7 @@ function QuestStep({ step, title, description, isCompleted, isActive, requiremen
       gap="md"
       p="md"
       borderRadius="lg"
-      bg={isActive ? "background.tertiary" : "background.secondary"}
+      bg={isActive ? 'background.tertiary' : 'background.secondary'}
       style={{
         opacity: isCompleted ? 0.7 : 1,
         borderLeftWidth: 4,
@@ -61,7 +61,7 @@ function QuestStep({ step, title, description, isCompleted, isActive, requiremen
         {isCompleted ? (
           <Text fontSize={16}>✓</Text>
         ) : (
-          <Text variant="caption" color={isActive ? "white" : "text.tertiary"} fontWeight="700">
+          <Text variant="caption" color={isActive ? 'white' : 'text.tertiary'} fontWeight="700">
             {step}
           </Text>
         )}
@@ -69,7 +69,7 @@ function QuestStep({ step, title, description, isCompleted, isActive, requiremen
 
       {/* Content */}
       <Box flex={1}>
-        <Text variant="body" color={isActive ? "text.primary" : "text.secondary"} fontWeight={isActive ? "600" : "400"}>
+        <Text variant="body" color={isActive ? 'text.primary' : 'text.secondary'} fontWeight={isActive ? '600' : '400'}>
           {title}
         </Text>
         <Text variant="caption" color="text.tertiary" mb="xs">
@@ -150,8 +150,8 @@ function QuestProgressBar({ progress }: { progress: number }): JSX.Element {
 export function ComebackQuestCard({ quest, progress, onStartSession, onViewDetails }: ComebackQuestCardProps): JSX.Element {
   const { theme } = useTheme();
 
-  const isComplete = progress.currentStage === "COMPLETE";
-  const currentQuestNum = progress.currentStage === "QUEST_1" ? 1 : progress.currentStage === "QUEST_2" ? 2 : progress.currentStage === "QUEST_3" ? 3 : 0;
+  const isComplete = progress.currentStage === 'COMPLETE';
+  const currentQuestNum = progress.currentStage === 'QUEST_1' ? 1 : progress.currentStage === 'QUEST_2' ? 2 : progress.currentStage === 'QUEST_3' ? 3 : 0;
 
   return (
     <Animated.View entering={FadeInUp.duration(400)}>
@@ -160,10 +160,10 @@ export function ComebackQuestCard({ quest, progress, onStartSession, onViewDetai
         <Box alignItems="center" gap="sm">
           <Text fontSize={48}>🔥</Text>
           <Text variant="h3" color="text.primary" textAlign="center">
-            {isComplete ? "Welcome Back!" : "Comeback Quest"}
+            {isComplete ? 'Welcome Back!' : 'Comeback Quest'}
           </Text>
           <Text variant="body" color="text.secondary" textAlign="center">
-            {isComplete ? "You completed your comeback. The streak is back." : `${quest.daysAbsent} days away. Your streak is gone but your skills are not. Do this one session. Rebuild from here.`}
+            {isComplete ? 'You completed your comeback. The streak is back.' : `${quest.daysAbsent} days away. Your streak is gone but your skills are not. Do this one session. Rebuild from here.`}
           </Text>
         </Box>
 
@@ -201,7 +201,7 @@ export function ComebackQuestCard({ quest, progress, onStartSession, onViewDetai
         {/* CTA Button */}
         {!isComplete && (
           <Button variant="primary" size="lg" onPress={onStartSession} fullWidth accessibilityLabel="Action button" accessibilityRole="button" accessibilityHint="Activates this control">
-            {currentQuestNum === 1 ? "🚀 Start First Comeback Session" : currentQuestNum === 2 ? "⚡ Continue Your Comeback" : "🎯 Final Quest — You Got This!"}
+            {currentQuestNum === 1 ? '🚀 Start First Comeback Session' : currentQuestNum === 2 ? '⚡ Continue Your Comeback' : '🎯 Final Quest — You Got This!'}
           </Button>
         )}
 
@@ -254,10 +254,10 @@ export function ComebackQuestCompact({ progress, onPress }: { progress: Comeback
             Comeback Quest: {completedCount}/3 Complete
           </Text>
           <Text variant="caption" color="text.secondary">
-            {progress.currentStage === "QUEST_1" && "First step: 15 min session"}
-            {progress.currentStage === "QUEST_2" && "Step 2: 30 min, Grade A+"}
-            {progress.currentStage === "QUEST_3" && "Final step: 45 min, Grade A+"}
-            {progress.currentStage === "COMPLETE" && "All complete! Claim rewards"}
+            {progress.currentStage === 'QUEST_1' && 'First step: 15 min session'}
+            {progress.currentStage === 'QUEST_2' && 'Step 2: 30 min, Grade A+'}
+            {progress.currentStage === 'QUEST_3' && 'Final step: 45 min, Grade A+'}
+            {progress.currentStage === 'COMPLETE' && 'All complete! Claim rewards'}
           </Text>
         </Box>
         <Text fontSize={20}>→</Text>

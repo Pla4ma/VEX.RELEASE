@@ -50,6 +50,7 @@ const AIRequestSchema = z.discriminatedUnion('requestType', [
 
 type AIRequest = z.infer<typeof AIRequestSchema>;
 type GeminiResponse = { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>; usageMetadata?: { promptTokenCount?: number; candidatesTokenCount?: number } };
+const httpRequest = globalThis.fetch.bind(globalThis);
 
 serve(async (request) => {
   if (request.method === 'OPTIONS') {
@@ -125,7 +126,7 @@ async function callGemini(apiKey: string, systemPrompt: string, userPrompt: stri
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 9000);
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+    const response = await httpRequest(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       signal: controller.signal,

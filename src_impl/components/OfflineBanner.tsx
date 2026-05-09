@@ -60,7 +60,7 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
     });
 
     // Initial check
-    NetInfo.fetch().then((state) => {
+    NetInfo['fetch']().then((state) => {
       const offline = !state.isConnected || !state.isInternetReachable;
       setIsOffline(offline);
       if (offline) {

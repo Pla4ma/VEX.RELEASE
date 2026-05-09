@@ -14,7 +14,7 @@
 // Currency Types
 // ============================================================================
 
-export type CurrencyType = "COINS" | "GEMS" | "FOCUS_POINTS" | "SEASONAL";
+export type CurrencyType = 'COINS' | 'GEMS' | 'FOCUS_POINTS' | 'SEASONAL';
 
 export interface CurrencyAmount {
   currency: CurrencyType;
@@ -51,9 +51,9 @@ export interface WalletSummary {
 // Transactions
 // ============================================================================
 
-export type TransactionType = "EARN" | "SPEND" | "REFUND" | "CONVERT" | "GIFT_RECEIVE" | "GIFT_SEND";
+export type TransactionType = 'EARN' | 'SPEND' | 'REFUND' | 'CONVERT' | 'GIFT_RECEIVE' | 'GIFT_SEND';
 
-export type TransactionSource = "SESSION" | "STREAK" | "BOSS" | "LEVEL_UP" | "SHOP" | "REWARD" | "CRAFTING" | "SQUAD" | "DAILY_LOGIN" | "ACHIEVEMENT" | "PROMOTION" | "REFUND";
+export type TransactionSource = 'SESSION' | 'STREAK' | 'BOSS' | 'LEVEL_UP' | 'SHOP' | 'REWARD' | 'CRAFTING' | 'SQUAD' | 'DAILY_LOGIN' | 'ACHIEVEMENT' | 'PROMOTION' | 'REFUND';
 
 export interface WalletTransaction {
   id: string;
@@ -102,7 +102,7 @@ export interface EarningMultiplier {
 
 export interface SpendingSink {
   id: string;
-  type: "SHOP" | "CRAFTING" | "UPGRADE" | "GIFT" | "CONVERT";
+  type: 'SHOP' | 'CRAFTING' | 'UPGRADE' | 'GIFT' | 'CONVERT';
   currency: CurrencyType;
   baseAmount: number;
   discountApplied: number;
@@ -115,7 +115,7 @@ export interface SpendingSink {
 // Purchase Flow
 // ============================================================================
 
-export type PurchaseStatus = "PENDING" | "VALIDATING" | "PROCESSING_PAYMENT" | "DELIVERING" | "COMPLETED" | "FAILED" | "REFUNDED" | "PARTIAL_DELIVERY";
+export type PurchaseStatus = 'PENDING' | 'VALIDATING' | 'PROCESSING_PAYMENT' | 'DELIVERING' | 'COMPLETED' | 'FAILED' | 'REFUNDED' | 'PARTIAL_DELIVERY';
 
 export interface PurchaseAttempt {
   id: string;
@@ -143,7 +143,7 @@ export interface PurchaseResult {
 }
 
 export interface PurchaseError {
-  code: "INSUFFICIENT_FUNDS" | "ITEM_UNAVAILABLE" | "PRICE_CHANGED" | "INVENTORY_FULL" | "NETWORK_ERROR" | "SYSTEM_ERROR";
+  code: 'INSUFFICIENT_FUNDS' | 'ITEM_UNAVAILABLE' | 'PRICE_CHANGED' | 'INVENTORY_FULL' | 'NETWORK_ERROR' | 'SYSTEM_ERROR';
   message: string;
   recoverable: boolean;
 }
@@ -157,7 +157,7 @@ export interface RefundRequest {
   purchaseId: string;
   userId: string;
   reason: string;
-  status: "PENDING" | "APPROVED" | "REJECTED" | "PROCESSED";
+  status: 'PENDING' | 'APPROVED' | 'REJECTED' | 'PROCESSED';
   requestedAt: number;
   processedAt: number | null;
   refundAmount: CurrencyAmount | null;
@@ -170,7 +170,7 @@ export interface RefundRequest {
 
 export interface EconomyAnalytics {
   userId: string;
-  period: "DAILY" | "WEEKLY" | "MONTHLY";
+  period: 'DAILY' | 'WEEKLY' | 'MONTHLY';
   periodStart: number;
   periodEnd: number;
 
@@ -233,9 +233,9 @@ export interface ItemPriceHistory {
 // Offer System
 // ============================================================================
 
-export type OfferType = "FLASH_SALE" | "BUNDLE" | "DAILY_DEAL" | "FIRST_PURCHASE" | "VIP_EXCLUSIVE" | "SEASONAL";
+export type OfferType = 'FLASH_SALE' | 'BUNDLE' | 'DAILY_DEAL' | 'FIRST_PURCHASE' | 'VIP_EXCLUSIVE' | 'SEASONAL';
 
-export type OfferStatus = "SCHEDULED" | "ACTIVE" | "EXPIRED" | "SOLD_OUT";
+export type OfferStatus = 'SCHEDULED' | 'ACTIVE' | 'EXPIRED' | 'SOLD_OUT';
 
 export interface LimitedOffer {
   id: string;

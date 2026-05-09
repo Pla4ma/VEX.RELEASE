@@ -31,9 +31,9 @@
  * @scientific-backing self-determination-theory identity-based-habits
  */
 
-import { z } from "zod";
-import { MMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
-import { eventBus } from "../../events";
+import { z } from 'zod';
+import { MMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
+import { eventBus } from '../../events';
 
 // ============================================================================
 // CONFIGURATION
@@ -46,13 +46,13 @@ export const FOCUS_SCORE_CONFIG = {
 
   // Score bands with identity labels
   BANDS: [
-    { min: 800, max: 850, label: "Legendary", title: "Focus Virtuoso", color: "#FFD700", percentile: 99 },
-    { min: 740, max: 799, label: "Elite", title: "Elite Performer", color: "#C0C0C0", percentile: 95 },
-    { min: 670, max: 739, label: "Exceptional", title: "Exceptional Focus", color: "#CD7F32", percentile: 85 },
-    { min: 580, max: 669, label: "Strong", title: "Strong Focus", color: "#4CAF50", percentile: 70 },
-    { min: 500, max: 579, label: "Good", title: "Good Focus", color: "#8BC34A", percentile: 50 },
-    { min: 420, max: 499, label: "Fair", title: "Developing Focus", color: "#FFC107", percentile: 30 },
-    { min: 300, max: 419, label: "Building", title: "Building Habits", color: "#FF9800", percentile: 10 },
+    { min: 800, max: 850, label: 'Legendary', title: 'Focus Virtuoso', color: '#FFD700', percentile: 99 },
+    { min: 740, max: 799, label: 'Elite', title: 'Elite Performer', color: '#C0C0C0', percentile: 95 },
+    { min: 670, max: 739, label: 'Exceptional', title: 'Exceptional Focus', color: '#CD7F32', percentile: 85 },
+    { min: 580, max: 669, label: 'Strong', title: 'Strong Focus', color: '#4CAF50', percentile: 70 },
+    { min: 500, max: 579, label: 'Good', title: 'Good Focus', color: '#8BC34A', percentile: 50 },
+    { min: 420, max: 499, label: 'Fair', title: 'Developing Focus', color: '#FFC107', percentile: 30 },
+    { min: 300, max: 419, label: 'Building', title: 'Building Habits', color: '#FF9800', percentile: 10 },
   ] as const,
 
   // Weight factors (like FICO)
@@ -66,12 +66,12 @@ export const FOCUS_SCORE_CONFIG = {
 
   // Score change parameters
   SCORE_CHANGES: {
-    SESSION_COMPLETE: { base: 5, max: 15 },
+    SESSION_COMPLETE: { base: 5, max: 25 },
     STREAK_MILESTONE: { base: 20, max: 50 },
     MISSED_DAY: { base: -15, max: -35 },
     STREAK_BREAK: { base: -30, max: -80 },
     SESSION_ABANDON: { base: -25, max: -50 },
-    PERFECT_SESSION: { base: 10, max: 25 },
+    PERFECT_SESSION: { base: 31, max: 50 },
   },
 
   // Recovery mechanics (hope)
@@ -83,7 +83,7 @@ export const FOCUS_SCORE_CONFIG = {
 // STORAGE
 // ============================================================================
 
-const identityStorage = new MMKVStorageAdapter("focus-identity");
+const identityStorage = new MMKVStorageAdapter('focus-identity');
 
 // ============================================================================
 // TYPES & SCHEMAS
@@ -122,7 +122,7 @@ export interface FocusScoreFactors {
   sessionQuality: {
     score: number;
     averageFocusPurity: number; // 0-100
-    averageGrade: "S" | "A" | "B" | "C" | "D";
+    averageGrade: 'S' | 'A' | 'B' | 'C' | 'D';
     perfectSessionsCount: number;
     averageSessionDuration: number;
   };
@@ -143,7 +143,7 @@ export interface FocusScoreFactors {
     daysSinceLastSession: number;
     last7DayActivity: number; // sessions
     last30DayActivity: number;
-    trendDirection: "UP" | "STABLE" | "DOWN" | "CONCERNING";
+    trendDirection: 'UP' | 'STABLE' | 'DOWN' | 'CONCERNING';
     velocity: number; // score change rate
   };
 }
@@ -181,7 +181,7 @@ export interface FocusIdentityProfile {
     endingScore: number;
     change: number;
     sessionsCompleted: number;
-    grade: "A+" | "A" | "B+" | "B" | "C" | "D";
+    grade: 'A+' | 'A' | 'B+' | 'B' | 'C' | 'D';
     highlight: string;
   } | null;
 
@@ -207,7 +207,7 @@ const FocusScoreFactorsSchema = z.object({
   sessionQuality: z.object({
     score: z.number().min(0).max(100),
     averageFocusPurity: z.number().min(0).max(100),
-    averageGrade: z.enum(["S", "A", "B", "C", "D"]),
+    averageGrade: z.enum(['S', 'A', 'B', 'C', 'D']),
     perfectSessionsCount: z.number(),
     averageSessionDuration: z.number(),
   }),
@@ -224,7 +224,7 @@ const FocusScoreFactorsSchema = z.object({
     daysSinceLastSession: z.number(),
     last7DayActivity: z.number(),
     last30DayActivity: z.number(),
-    trendDirection: z.enum(["UP", "STABLE", "DOWN", "CONCERNING"]),
+    trendDirection: z.enum(['UP', 'STABLE', 'DOWN', 'CONCERNING']),
     velocity: z.number(),
   }),
 });
@@ -258,8 +258,8 @@ const FocusIdentityProfileSchema = z.object({
   recoveryStartDate: z.string().nullable(),
   recoveryProgress: z.number().min(0).max(100),
   preLapseScore: z.number().nullable(),
-  topStrength: z.enum(["consistency", "streakStability", "sessionQuality", "diversity", "recency"]),
-  topWeakness: z.enum(["consistency", "streakStability", "sessionQuality", "diversity", "recency"]),
+  topStrength: z.enum(['consistency', 'streakStability', 'sessionQuality', 'diversity', 'recency']),
+  topWeakness: z.enum(['consistency', 'streakStability', 'sessionQuality', 'diversity', 'recency']),
   recommendedActions: z.array(z.string()),
   monthlyReport: z
     .object({
@@ -268,7 +268,7 @@ const FocusIdentityProfileSchema = z.object({
       endingScore: z.number(),
       change: z.number(),
       sessionsCompleted: z.number(),
-      grade: z.enum(["A+", "A", "B+", "B", "C", "D"]),
+      grade: z.enum(['A+', 'A', 'B+', 'B', 'C', 'D']),
       highlight: z.string(),
     })
     .nullable(),
@@ -279,14 +279,14 @@ const FocusIdentityProfileSchema = z.object({
 // IDENTITY STATEMENTS
 // ============================================================================
 
-const IDENTITY_STATEMENTS: Record<ScoreBand["label"], string[]> = {
-  Legendary: ["You are a Focus Virtuoso. Your discipline inspires others.", "Focus isn't just what you do—it's who you are.", "You're in the top 1%. Your commitment is legendary."],
-  Elite: ["You are an Elite Performer. Excellence is your standard.", "Your focus habits are exceptional. Keep raising the bar.", "You're among the most disciplined people using this app."],
+const IDENTITY_STATEMENTS: Record<ScoreBand['label'], string[]> = {
+  Legendary: ['You are a Focus Virtuoso. Your discipline inspires others.', "Focus isn't just what you do—it's who you are.", "You're in the top 1%. Your commitment is legendary."],
+  Elite: ['You are an Elite Performer. Excellence is your standard.', 'Your focus habits are exceptional. Keep raising the bar.', "You're among the most disciplined people using this app."],
   Exceptional: ["You have Exceptional Focus. You're building something great.", "Your consistency is paying off. You're becoming unstoppable.", "You're in the top 15%. Your dedication shows."],
-  Strong: ["You have Strong Focus. You're developing powerful habits.", "You're becoming the kind of person who follows through.", "Your momentum is building. Stay consistent."],
+  Strong: ["You have Strong Focus. You're developing powerful habits.", "You're becoming the kind of person who follows through.", 'Your momentum is building. Stay consistent.'],
   Good: ["You have Good Focus. You're on the right path.", "You're building the habits that will change your life.", "Keep showing up. You're becoming more focused every day."],
-  Fair: ["You're Developing Focus. Every session makes you stronger.", "Progress, not perfection. You're learning to be consistent.", "Your potential is there. Keep building the habit."],
-  Building: ["You're Building Habits. Small steps lead to big changes.", "Everyone starts somewhere. Your journey is just beginning.", "Focus is a muscle. You're getting stronger with each session."],
+  Fair: ["You're Developing Focus. Every session makes you stronger.", "Progress, not perfection. You're learning to be consistent.", 'Your potential is there. Keep building the habit.'],
+  Building: ["You're Building Habits. Small steps lead to big changes.", 'Everyone starts somewhere. Your journey is just beginning.', "Focus is a muscle. You're getting stronger with each session."],
 };
 
 // ============================================================================
@@ -304,7 +304,7 @@ export class FocusIdentityEngine {
   // SCORING ALGORITHMS
   // ========================================================================
 
-  private calculateConsistencyFactor(sessionsLast30Days: number, targetPerWeek: number, missedDays: number): FocusScoreFactors["consistency"] {
+  private calculateConsistencyFactor(sessionsLast30Days: number, targetPerWeek: number, missedDays: number): FocusScoreFactors['consistency'] {
     const targetSessions = targetPerWeek * 4;
     const actualConsistency = Math.min(sessionsLast30Days / targetSessions, 1);
 
@@ -322,7 +322,7 @@ export class FocusIdentityEngine {
     };
   }
 
-  private calculateStreakStabilityFactor(currentStreak: number, longestStreak: number, streakHistory: { start: number; end: number | null; length: number }[]): FocusScoreFactors["streakStability"] {
+  private calculateStreakStabilityFactor(currentStreak: number, longestStreak: number, streakHistory: { start: number; end: number | null; length: number }[]): FocusScoreFactors['streakStability'] {
     // Calculate average streak length
     const completedStreaks = streakHistory.filter((s) => s.end !== null);
     const avgLength = completedStreaks.length > 0 ? completedStreaks.reduce((sum, s) => sum + s.length, 0) / completedStreaks.length : 0;
@@ -356,12 +356,12 @@ export class FocusIdentityEngine {
       duration: number;
       wasAbandoned: boolean;
     }>,
-  ): FocusScoreFactors["sessionQuality"] {
+  ): FocusScoreFactors['sessionQuality'] {
     if (sessions.length === 0) {
       return {
         score: 0,
         averageFocusPurity: 0,
-        averageGrade: "D",
+        averageGrade: 'D',
         perfectSessionsCount: 0,
         averageSessionDuration: 0,
       };
@@ -372,7 +372,7 @@ export class FocusIdentityEngine {
     const avgDuration = completed.reduce((sum, s) => sum + s.duration, 0) / completed.length;
 
     // Count perfect sessions (S grade, 95%+ purity, 45+ min)
-    const perfectCount = completed.filter((s) => s.grade === "S" && s.focusPurity >= 95 && s.duration >= 45).length;
+    const perfectCount = completed.filter((s) => s.grade === 'S' && s.focusPurity >= 95 && s.duration >= 45).length;
 
     // Grade distribution
     const gradeCounts = completed.reduce(
@@ -394,8 +394,8 @@ export class FocusIdentityEngine {
     score += Math.min(avgDuration / 60, 1) * 10; // Duration bonus
 
     // Determine dominant grade
-    const gradeOrder = ["S", "A", "B", "C", "D"];
-    let dominantGrade: string = "D";
+    const gradeOrder = ['S', 'A', 'B', 'C', 'D'];
+    let dominantGrade: string = 'D';
     for (const grade of gradeOrder) {
       if (gradeCounts[grade] > 0) {
         dominantGrade = grade;
@@ -406,7 +406,7 @@ export class FocusIdentityEngine {
     return {
       score: Math.round(score),
       averageFocusPurity: Math.round(avgPurity),
-      averageGrade: dominantGrade as "S" | "A" | "B" | "C" | "D",
+      averageGrade: dominantGrade as 'S' | 'A' | 'B' | 'C' | 'D',
       perfectSessionsCount: perfectCount,
       averageSessionDuration: Math.round(avgDuration),
     };
@@ -419,7 +419,7 @@ export class FocusIdentityEngine {
       dayOfWeek: number;
       context?: string;
     }>,
-  ): FocusScoreFactors["diversity"] {
+  ): FocusScoreFactors['diversity'] {
     if (sessions.length === 0) {
       return {
         score: 0,
@@ -437,21 +437,21 @@ export class FocusIdentityEngine {
     const timeSlots = new Set(
       sessions.map((s) => {
         if (s.hour >= 5 && s.hour < 12) {
-          return "morning";
+          return 'morning';
         }
         if (s.hour >= 12 && s.hour < 17) {
-          return "afternoon";
+          return 'afternoon';
         }
         if (s.hour >= 17 && s.hour < 22) {
-          return "evening";
+          return 'evening';
         }
-        return "night";
+        return 'night';
       }),
     ).size;
 
     const uniqueDays = new Set(sessions.map((s) => s.dayOfWeek)).size;
     const weekendCount = sessions.filter((s) => s.dayOfWeek === 0 || s.dayOfWeek === 6).length;
-    const uniqueContexts = new Set(sessions.map((s) => s.context || "default")).size;
+    const uniqueContexts = new Set(sessions.map((s) => s.context || 'default')).size;
 
     // Score
     let score = 0;
@@ -471,7 +471,7 @@ export class FocusIdentityEngine {
     };
   }
 
-  private calculateRecencyFactor(daysSinceLastSession: number, last7Days: number, last30Days: number, scoreHistory: { date: string; score: number }[]): FocusScoreFactors["recency"] {
+  private calculateRecencyFactor(daysSinceLastSession: number, last7Days: number, last30Days: number, scoreHistory: { date: string; score: number }[]): FocusScoreFactors['recency'] {
     let score = 100;
 
     // Heavy penalty for recent inactivity
@@ -490,7 +490,7 @@ export class FocusIdentityEngine {
     score += Math.min(last30Days / 20, 1) * 15;
 
     // Trend analysis
-    let trend: "UP" | "STABLE" | "DOWN" | "CONCERNING" = "STABLE";
+    let trend: 'UP' | 'STABLE' | 'DOWN' | 'CONCERNING' = 'STABLE';
     let velocity = 0;
 
     if (scoreHistory.length >= 7) {
@@ -500,16 +500,16 @@ export class FocusIdentityEngine {
       velocity = last - first;
 
       if (velocity > 10) {
-        trend = "UP";
+        trend = 'UP';
       } else if (velocity < -10) {
-        trend = "CONCERNING";
+        trend = 'CONCERNING';
       } else if (velocity < -5) {
-        trend = "DOWN";
+        trend = 'DOWN';
       }
     }
 
     // Penalty for concerning trend
-    if (trend === "CONCERNING") {
+    if (trend === 'CONCERNING') {
       score -= 20;
     }
 
@@ -592,7 +592,7 @@ export class FocusIdentityEngine {
 
     // Grade bonus for session completes
     if (modifiers.sessionGrade && change > 0) {
-      const gradeBonus = { S: 10, A: 5, B: 2, C: 0, D: -2 };
+      const gradeBonus = { S: 10, A: 10, B: 2, C: 0, D: -2 };
       change += gradeBonus[modifiers.sessionGrade as keyof typeof gradeBonus] || 0;
     }
 
@@ -601,7 +601,7 @@ export class FocusIdentityEngine {
       change *= FOCUS_SCORE_CONFIG.RECOVERY_BONUS_MULTIPLIER;
     }
 
-    return Math.round(Math.max(-config.max, Math.min(config.max, change)));
+    return Math.round(Math.min(config.max, Math.max(-Math.abs(config.max), change)));
   }
 
   // ========================================================================
@@ -613,11 +613,11 @@ export class FocusIdentityEngine {
 
     // Find weakest factor
     const factorScores = [
-      { name: "consistency" as const, score: factors.consistency.score, label: "Consistency" },
-      { name: "streakStability" as const, score: factors.streakStability.score, label: "Streak Stability" },
-      { name: "sessionQuality" as const, score: factors.sessionQuality.score, label: "Session Quality" },
-      { name: "diversity" as const, score: factors.diversity.score, label: "Diversity" },
-      { name: "recency" as const, score: factors.recency.score, label: "Recent Activity" },
+      { name: 'consistency' as const, score: factors.consistency.score, label: 'Consistency' },
+      { name: 'streakStability' as const, score: factors.streakStability.score, label: 'Streak Stability' },
+      { name: 'sessionQuality' as const, score: factors.sessionQuality.score, label: 'Session Quality' },
+      { name: 'diversity' as const, score: factors.diversity.score, label: 'Diversity' },
+      { name: 'recency' as const, score: factors.recency.score, label: 'Recent Activity' },
     ];
 
     const sorted = [...factorScores].sort((a, b) => a.score - b.score);
@@ -626,23 +626,23 @@ export class FocusIdentityEngine {
 
     // Recommendations based on weakest factor
     switch (weakest.name) {
-      case "consistency":
+      case 'consistency':
         recommendations.push(`Your ${weakest.label} is your biggest opportunity. Try the "Never Miss Twice" rule.`);
-        recommendations.push("Set a minimum of 3 sessions per week to build momentum.");
+        recommendations.push('Set a minimum of 3 sessions per week to build momentum.');
         break;
-      case "streakStability":
-        recommendations.push("Your streaks keep breaking. Try shorter, more achievable sessions (15-20 min).");
-        recommendations.push("Use streak freeze items to protect your progress during busy weeks.");
+      case 'streakStability':
+        recommendations.push('Your streaks keep breaking. Try shorter, more achievable sessions (15-20 min).');
+        recommendations.push('Use streak freeze items to protect your progress during busy weeks.');
         break;
-      case "sessionQuality":
-        recommendations.push("Focus on quality over quantity. One perfect 45-min session beats three distracted ones.");
-        recommendations.push("Turn on Do Not Disturb and put your phone in another room.");
+      case 'sessionQuality':
+        recommendations.push('Focus on quality over quantity. One perfect 45-min session beats three distracted ones.');
+        recommendations.push('Turn on Do Not Disturb and put your phone in another room.');
         break;
-      case "diversity":
-        recommendations.push("Mix up your routine! Try different session modes and times.");
-        recommendations.push("Weekend warriors have higher long-term retention. Try a Saturday session.");
+      case 'diversity':
+        recommendations.push('Mix up your routine! Try different session modes and times.');
+        recommendations.push('Weekend warriors have higher long-term retention. Try a Saturday session.');
         break;
-      case "recency":
+      case 'recency':
         recommendations.push("It's been a while. Start with just 10 minutes today to rebuild momentum.");
         recommendations.push("You're in recovery mode - all gains are 1.5x until you're back on track!");
         break;
@@ -698,9 +698,9 @@ export class FocusIdentityService {
       previousScore: FOCUS_SCORE_CONFIG.INITIAL_SCORE,
       scoreHistory: [
         {
-          date: now.toISOString().split("T")[0],
+          date: now.toISOString().split('T')[0],
           score: FOCUS_SCORE_CONFIG.INITIAL_SCORE,
-          reason: "Initial score",
+          reason: 'Initial score',
         },
       ],
       percentileRank: 50,
@@ -708,34 +708,39 @@ export class FocusIdentityService {
       factors: {
         consistency: { score: 55, sessionsLast30Days: 0, targetSessionsPerWeek: 4, actualConsistency: 0, missedDaysLast30Days: 0 },
         streakStability: { score: 50, currentStreak: 0, longestStreak: 0, averageStreakLength: 0, totalStreaksStarted: 0, streakBreakFrequency: 0 },
-        sessionQuality: { score: 50, averageFocusPurity: 0, averageGrade: "D", perfectSessionsCount: 0, averageSessionDuration: 0 },
+        sessionQuality: { score: 50, averageFocusPurity: 0, averageGrade: 'D', perfectSessionsCount: 0, averageSessionDuration: 0 },
         diversity: { score: 0, uniqueSessionModes: 0, uniqueTimeSlots: 0, uniqueDaysOfWeek: 0, weekendSessions: 0, contextVariety: 0 },
-        recency: { score: 50, daysSinceLastSession: 999, last7DayActivity: 0, last30DayActivity: 0, trendDirection: "STABLE", velocity: 0 },
+        recency: { score: 50, daysSinceLastSession: 999, last7DayActivity: 0, last30DayActivity: 0, trendDirection: 'STABLE', velocity: 0 },
       },
       identityStatement: IDENTITY_STATEMENTS.Building[0],
       streakInCurrentBand: 0,
       totalScoreCalculations: 1,
-      firstScoreDate: now.toISOString().split("T")[0],
+      firstScoreDate: now.toISOString().split('T')[0],
       isInRecovery: false,
       recoveryStartDate: null,
       recoveryProgress: 0,
       preLapseScore: null,
-      topStrength: "consistency",
-      topWeakness: "recency",
-      recommendedActions: ["Complete your first session to activate your Focus Score", "Set a weekly goal of 3-4 sessions to build consistency", "Try different session modes to improve diversity"],
+      topStrength: 'consistency',
+      topWeakness: 'recency',
+      recommendedActions: ['Complete your first session to activate your Focus Score', 'Set a weekly goal of 3-4 sessions to build consistency', 'Try different session modes to improve diversity'],
       monthlyReport: null,
       updatedAt: Date.now(),
     };
 
     identityStorage.setItemSync(`focus-identity:${this.userId}`, JSON.stringify(profile));
 
-    eventBus.publish("FOCUS_IDENTITY_CREATED", {
+    eventBus.publish('FOCUS_IDENTITY_CREATED', {
       userId: this.userId,
       initialScore: profile.currentScore,
       band: profile.band.label,
     });
 
     return profile;
+  }
+
+  public async saveProfile(profile: FocusIdentityProfile): Promise<void> {
+    const validated = FocusIdentityProfileSchema.parse(profile);
+    identityStorage.setItemSync(`focus-identity:${this.userId}`, JSON.stringify(validated));
   }
 
   public async updateScore(
@@ -769,9 +774,9 @@ export class FocusIdentityService {
     profile.previousScore = previousScore;
     profile.currentScore = newScore;
     profile.scoreHistory.push({
-      date: new Date().toISOString().split("T")[0],
+      date: new Date().toISOString().split('T')[0],
       score: newScore,
-      reason: `${eventType}: ${change > 0 ? "+" : ""}${change}`,
+      reason: `${eventType}: ${change > 0 ? '+' : ''}${change}`,
     });
 
     // Keep only last 90 days of history
@@ -789,7 +794,7 @@ export class FocusIdentityService {
       profile.identityStatement = this.engine.getIdentityStatement(newBand.label, 0);
 
       // Milestone celebration
-      eventBus.publish("FOCUS_SCORE_BAND_CHANGE", {
+      eventBus.publish('FOCUS_SCORE_BAND_CHANGE', {
         userId: this.userId,
         oldBand: oldBand.label,
         newBand: newBand.label,
@@ -801,10 +806,10 @@ export class FocusIdentityService {
     }
 
     // Recovery handling
-    if (eventType === "MISSED_DAY" || eventType === "STREAK_BREAK") {
+    if (eventType === 'MISSED_DAY' || eventType === 'STREAK_BREAK') {
       if (!profile.isInRecovery) {
         profile.isInRecovery = true;
-        profile.recoveryStartDate = new Date().toISOString().split("T")[0];
+        profile.recoveryStartDate = new Date().toISOString().split('T')[0];
         profile.preLapseScore = previousScore;
         profile.recoveryProgress = 0;
       }
@@ -816,7 +821,7 @@ export class FocusIdentityService {
         profile.preLapseScore = null;
         profile.recoveryProgress = 0;
 
-        eventBus.publish("FOCUS_RECOVERY_COMPLETE", {
+        eventBus.publish('FOCUS_RECOVERY_COMPLETE', {
           userId: this.userId,
           finalScore: newScore,
         });
@@ -827,11 +832,10 @@ export class FocusIdentityService {
     profile.recommendedActions = this.engine.generateRecommendations(profile.factors);
     profile.updatedAt = Date.now();
 
-    // Save
-    identityStorage.setItemSync(`focus-identity:${this.userId}`, JSON.stringify(profile));
+    await this.saveProfile(profile);
 
     // Events
-    eventBus.publish("FOCUS_SCORE_UPDATED", {
+    eventBus.publish('FOCUS_SCORE_UPDATED', {
       userId: this.userId,
       previousScore,
       newScore,
@@ -847,14 +851,14 @@ export class FocusIdentityService {
     };
   }
 
-  public async getMonthlyReport(): Promise<FocusIdentityProfile["monthlyReport"]> {
+  public async getMonthlyReport(): Promise<FocusIdentityProfile['monthlyReport']> {
     const profile = await this.getProfile();
     if (!profile) {
       return null;
     }
 
     const now = new Date();
-    const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+    const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
 
     // Calculate this month's stats
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -869,24 +873,24 @@ export class FocusIdentityService {
     const change = endingScore - startingScore;
 
     // Count sessions (approximate from score history positive changes)
-    const sessionsCompleted = profile.scoreHistory.filter((h) => h.reason.includes("SESSION_COMPLETE") && new Date(h.date) >= monthStart).length;
+    const sessionsCompleted = profile.scoreHistory.filter((h) => h.reason.includes('SESSION_COMPLETE') && new Date(h.date) >= monthStart).length;
 
     // Determine grade
-    let grade: "A+" | "A" | "B+" | "B" | "C" | "D" = "D";
+    let grade: 'A+' | 'A' | 'B+' | 'B' | 'C' | 'D' = 'D';
     if (change >= 50) {
-      grade = "A+";
+      grade = 'A+';
     } else if (change >= 30) {
-      grade = "A";
+      grade = 'A';
     } else if (change >= 15) {
-      grade = "B+";
+      grade = 'B+';
     } else if (change >= 5) {
-      grade = "B";
+      grade = 'B';
     } else if (change >= -5) {
-      grade = "C";
+      grade = 'C';
     }
 
     // Generate highlight
-    const highlights = [change > 30 ? `Incredible +${change} point improvement!` : null, sessionsCompleted >= 20 ? `${sessionsCompleted} sessions completed this month` : null, profile.band.label === "Legendary" ? "Maintaining Legendary status" : null, profile.isInRecovery ? "Strong recovery from setback" : null].filter(Boolean);
+    const highlights = [change > 30 ? `Incredible +${change} point improvement!` : null, sessionsCompleted >= 20 ? `${sessionsCompleted} sessions completed this month` : null, profile.band.label === 'Legendary' ? 'Maintaining Legendary status' : null, profile.isInRecovery ? 'Strong recovery from setback' : null].filter(Boolean);
 
     return {
       month: monthKey,
@@ -895,7 +899,7 @@ export class FocusIdentityService {
       change,
       sessionsCompleted,
       grade,
-      highlight: highlights[0] || `Score change: ${change > 0 ? "+" : ""}${change}`,
+      highlight: highlights[0] || `Score change: ${change > 0 ? '+' : ''}${change}`,
     };
   }
 }

@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 /**
  * API Client Tests
  *
@@ -10,12 +10,12 @@ import { captureSilentFailure } from "../../utils/silent-failure";
  * - Error handling
  */
 
-import { ApiClient, ApiError } from "../client";
-import { getAuthService } from "../../services/auth";
+import { ApiClient, ApiError } from '../client';
+import { getAuthService } from '../../services/auth';
 
 // Mock dependencies
-jest.mock("../../services/auth");
-jest.mock("../../utils/debug", () => ({
+jest.mock('../../services/auth');
+jest.mock('../../utils/debug', () => ({
   createDebugger: () => ({
     debug: jest.fn(),
     info: jest.fn(),
@@ -29,13 +29,13 @@ jest.mock("../../utils/debug", () => ({
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
-describe("ApiClient", () => {
+describe('ApiClient', () => {
   let client: ApiClient;
 
   beforeEach(() => {
     jest.clearAllMocks();
     client = new ApiClient({
-      baseURL: "https://api.test.com",
+      baseURL: 'https://api.test.com',
       timeout: 5000,
       retries: 2,
       retryDelay: 100,
@@ -44,42 +44,42 @@ describe("ApiClient", () => {
     });
   });
 
-  describe("Basic Requests", () => {
-    it("should make successful GET request", async () => {
+  describe('Basic Requests', () => {
+    it('should make successful GET request', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
-        headers: new Map([["content-type", "application/json"]]),
-        json: async () => ({ data: "test" }),
+        headers: new Map([['content-type', 'application/json']]),
+        json: async () => ({ data: 'test' }),
       });
 
-      const response = await client.get("/test");
+      const response = await client.get('/test');
 
-      expect(response.data).toEqual({ data: "test" });
+      expect(response.data).toEqual({ data: 'test' });
       expect(response.status).toBe(200);
-      expect(mockFetch).toHaveBeenCalledWith("https://api.test.com/test", expect.objectContaining({ method: "GET" }));
+      expect(mockFetch).toHaveBeenCalledWith('https://api.test.com/test', expect.objectContaining({ method: 'GET' }));
     });
 
-    it("should make POST request with body", async () => {
+    it('should make POST request with body', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 201,
-        headers: new Map([["content-type", "application/json"]]),
-        json: async () => ({ id: "123" }),
+        headers: new Map([['content-type', 'application/json']]),
+        json: async () => ({ id: '123' }),
       });
 
-      await client.post("/users", { data: { name: "John" } });
+      await client.post('/users', { data: { name: 'John' } });
 
       expect(mockFetch).toHaveBeenCalledWith(
-        "https://api.test.com/users",
+        'https://api.test.com/users',
         expect.objectContaining({
-          method: "POST",
-          body: JSON.stringify({ name: "John" }),
+          method: 'POST',
+          body: JSON.stringify({ name: 'John' }),
         }),
       );
     });
 
-    it("should add query params", async () => {
+    it('should add query params', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: true,
         status: 200,
@@ -87,70 +87,70 @@ describe("ApiClient", () => {
         json: async () => ({}),
       });
 
-      await client.get("/search", { params: { q: "test", page: 1 } });
+      await client.get('/search', { params: { q: 'test', page: 1 } });
 
-      expect(mockFetch).toHaveBeenCalledWith("https://api.test.com/search?q=test&page=1", expect.any(Object));
+      expect(mockFetch).toHaveBeenCalledWith('https://api.test.com/search?q=test&page=1', expect.any(Object));
     });
   });
 
-  describe("Error Handling", () => {
-    it("should throw ApiError on HTTP error", async () => {
+  describe('Error Handling', () => {
+    it('should throw ApiError on HTTP error', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 400,
-        headers: new Map([["content-type", "application/json"]]),
-        json: async () => ({ message: "Bad Request" }),
+        headers: new Map([['content-type', 'application/json']]),
+        json: async () => ({ message: 'Bad Request' }),
       });
 
-      await expect(client.get("/test")).rejects.toMatchObject({
-        code: "REQUEST_ERROR",
+      await expect(client.get('/test')).rejects.toMatchObject({
+        code: 'REQUEST_ERROR',
         status: 400,
-        message: "Bad Request",
+        message: 'Bad Request',
       });
     });
 
-    it("should categorize 500 errors as server errors", async () => {
+    it('should categorize 500 errors as server errors', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 500,
-        headers: new Map([["content-type", "application/json"]]),
-        json: async () => ({ message: "Server Error" }),
+        headers: new Map([['content-type', 'application/json']]),
+        json: async () => ({ message: 'Server Error' }),
       });
 
       try {
-        await client.get("/test");
+        await client.get('/test');
       } catch (error) {
-        expect((error as ApiError).code).toBe("SERVER_ERROR");
+        expect((error as ApiError).code).toBe('SERVER_ERROR');
         expect((error as ApiError).retryable).toBe(true);
       }
     });
 
-    it("should categorize network errors", async () => {
-      mockFetch.mockRejectedValueOnce(new Error("Network request failed"));
+    it('should categorize network errors', async () => {
+      mockFetch.mockRejectedValueOnce(new Error('Network request failed'));
 
       try {
-        await client.get("/test");
+        await client.get('/test');
       } catch (error) {
-        expect((error as ApiError).code).toBe("NETWORK_ERROR");
+        expect((error as ApiError).code).toBe('NETWORK_ERROR');
         expect((error as ApiError).retryable).toBe(true);
       }
     });
 
-    it("should handle timeout", async () => {
+    it('should handle timeout', async () => {
       mockFetch.mockImplementation(() => new Promise(() => {}));
 
-      await expect(client.get("/test", { timeout: 100 })).rejects.toMatchObject({
-        code: "TIMEOUT",
+      await expect(client.get('/test', { timeout: 100 })).rejects.toMatchObject({
+        code: 'TIMEOUT',
       });
     });
   });
 
-  describe("Retry Logic", () => {
-    it("should retry on retryable errors", async () => {
+  describe('Retry Logic', () => {
+    it('should retry on retryable errors', async () => {
       // First two calls fail, third succeeds
       mockFetch
-        .mockRejectedValueOnce(new Error("Network error"))
-        .mockRejectedValueOnce(new Error("Network error"))
+        .mockRejectedValueOnce(new Error('Network error'))
+        .mockRejectedValueOnce(new Error('Network error'))
         .mockResolvedValueOnce({
           ok: true,
           status: 200,
@@ -158,64 +158,64 @@ describe("ApiClient", () => {
           json: async () => ({ success: true }),
         });
 
-      const response = await client.get("/test");
+      const response = await client.get('/test');
 
       expect(response.data).toEqual({ success: true });
       expect(mockFetch).toHaveBeenCalledTimes(3);
     });
 
-    it("should not retry on client errors (4xx)", async () => {
+    it('should not retry on client errors (4xx)', async () => {
       mockFetch.mockResolvedValueOnce({
         ok: false,
         status: 400,
-        headers: new Map([["content-type", "application/json"]]),
-        json: async () => ({ message: "Bad Request" }),
+        headers: new Map([['content-type', 'application/json']]),
+        json: async () => ({ message: 'Bad Request' }),
       });
 
-      await expect(client.get("/test")).rejects.toBeDefined();
+      await expect(client.get('/test')).rejects.toBeDefined();
       expect(mockFetch).toHaveBeenCalledTimes(1);
     });
 
-    it("should respect maxRetries limit", async () => {
-      mockFetch.mockRejectedValue(new Error("Network error"));
+    it('should respect maxRetries limit', async () => {
+      mockFetch.mockRejectedValue(new Error('Network error'));
 
-      await expect(client.get("/test")).rejects.toBeDefined();
+      await expect(client.get('/test')).rejects.toBeDefined();
       expect(mockFetch).toHaveBeenCalledTimes(3); // Initial + 2 retries
     });
   });
 
-  describe("Circuit Breaker", () => {
-    it("should open circuit after threshold failures", async () => {
+  describe('Circuit Breaker', () => {
+    it('should open circuit after threshold failures', async () => {
       // All requests fail
-      mockFetch.mockRejectedValue(new Error("Server error"));
+      mockFetch.mockRejectedValue(new Error('Server error'));
 
       // Make 3 requests (threshold)
       for (let i = 0; i < 3; i++) {
         try {
-          await client.get("/test");
+          await client.get('/test');
         } catch (error) {
-          captureSilentFailure(error, { feature: "api", operation: "network-fallback", type: "network" });
+          captureSilentFailure(error, { feature: 'api', operation: 'network-fallback', type: 'network' });
           // Expected
         }
       }
 
       // Circuit should be open now
-      await expect(client.get("/test")).rejects.toMatchObject({
-        code: "CIRCUIT_OPEN",
+      await expect(client.get('/test')).rejects.toMatchObject({
+        code: 'CIRCUIT_OPEN',
       });
     });
 
-    it("should close circuit after reset time", async () => {
+    it('should close circuit after reset time', async () => {
       jest.useFakeTimers();
 
-      mockFetch.mockRejectedValue(new Error("Server error"));
+      mockFetch.mockRejectedValue(new Error('Server error'));
 
       // Open the circuit
       for (let i = 0; i < 3; i++) {
         try {
-          await client.get("/test");
+          await client.get('/test');
         } catch (error) {
-          captureSilentFailure(error, { feature: "api", operation: "network-fallback", type: "network" });
+          captureSilentFailure(error, { feature: 'api', operation: 'network-fallback', type: 'network' });
           // Expected
         }
       }
@@ -231,44 +231,44 @@ describe("ApiClient", () => {
         json: async () => ({ success: true }),
       });
 
-      const response = await client.get("/test");
+      const response = await client.get('/test');
       expect(response.data).toEqual({ success: true });
 
       jest.useRealTimers();
     });
   });
 
-  describe("Request Deduplication", () => {
-    it("should deduplicate identical requests", async () => {
+  describe('Request Deduplication', () => {
+    it('should deduplicate identical requests', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
         status: 200,
         headers: new Map(),
-        json: async () => ({ data: "test" }),
+        json: async () => ({ data: 'test' }),
       });
 
       // Fire two identical requests
-      const [r1, r2] = await Promise.all([client.get("/test", { deduplicate: true }), client.get("/test", { deduplicate: true })]);
+      const [r1, r2] = await Promise.all([client.get('/test', { deduplicate: true }), client.get('/test', { deduplicate: true })]);
 
       expect(r1).toEqual(r2);
       expect(mockFetch).toHaveBeenCalledTimes(1);
     });
 
-    it("should not deduplicate different requests", async () => {
+    it('should not deduplicate different requests', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
         status: 200,
         headers: new Map(),
-        json: async () => ({ data: "test" }),
+        json: async () => ({ data: 'test' }),
       });
 
-      await Promise.all([client.get("/test1", { deduplicate: true }), client.get("/test2", { deduplicate: true })]);
+      await Promise.all([client.get('/test1', { deduplicate: true }), client.get('/test2', { deduplicate: true })]);
 
       expect(mockFetch).toHaveBeenCalledTimes(2);
     });
   });
 
-  describe("Auth Token Refresh", () => {
+  describe('Auth Token Refresh', () => {
     const mockAuthService = {
       getAccessToken: jest.fn(),
       refreshToken: jest.fn(),
@@ -279,8 +279,8 @@ describe("ApiClient", () => {
       (getAuthService as jest.Mock).mockReturnValue(mockAuthService);
     });
 
-    it("should add auth token to requests", async () => {
-      mockAuthService.getAccessToken.mockResolvedValue("test-token");
+    it('should add auth token to requests', async () => {
+      mockAuthService.getAccessToken.mockResolvedValue('test-token');
       mockFetch.mockResolvedValue({
         ok: true,
         status: 200,
@@ -288,20 +288,20 @@ describe("ApiClient", () => {
         json: async () => ({}),
       });
 
-      await client.get("/test");
+      await client.get('/test');
 
       expect(mockFetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           headers: expect.objectContaining({
-            Authorization: "Bearer test-token",
+            Authorization: 'Bearer test-token',
           }),
         }),
       );
     });
 
-    it("should refresh token on 401 and retry", async () => {
-      mockAuthService.getAccessToken.mockResolvedValue("old-token");
+    it('should refresh token on 401 and retry', async () => {
+      mockAuthService.getAccessToken.mockResolvedValue('old-token');
       mockAuthService.refreshToken.mockResolvedValue(true);
 
       mockFetch
@@ -309,7 +309,7 @@ describe("ApiClient", () => {
           ok: false,
           status: 401,
           headers: new Map(),
-          json: async () => ({ message: "Unauthorized" }),
+          json: async () => ({ message: 'Unauthorized' }),
         })
         .mockResolvedValueOnce({
           ok: true,
@@ -318,33 +318,33 @@ describe("ApiClient", () => {
           json: async () => ({ success: true }),
         });
 
-      const response = await client.get("/test");
+      const response = await client.get('/test');
 
       expect(mockAuthService.refreshToken).toHaveBeenCalled();
       expect(response.data).toEqual({ success: true });
     });
 
-    it("should logout if token refresh fails", async () => {
-      mockAuthService.getAccessToken.mockResolvedValue("old-token");
+    it('should logout if token refresh fails', async () => {
+      mockAuthService.getAccessToken.mockResolvedValue('old-token');
       mockAuthService.refreshToken.mockResolvedValue(false);
 
       mockFetch.mockResolvedValue({
         ok: false,
         status: 401,
         headers: new Map(),
-        json: async () => ({ message: "Unauthorized" }),
+        json: async () => ({ message: 'Unauthorized' }),
       });
 
-      await expect(client.get("/test")).rejects.toMatchObject({
-        code: "AUTH_ERROR",
+      await expect(client.get('/test')).rejects.toMatchObject({
+        code: 'AUTH_ERROR',
       });
 
       expect(mockAuthService.logout).toHaveBeenCalled();
     });
   });
 
-  describe("Schema Validation", () => {
-    it("should validate response with Zod schema", async () => {
+  describe('Schema Validation', () => {
+    it('should validate response with Zod schema', async () => {
       const schema = {
         parse: jest.fn().mockReturnValue({ validated: true }),
       };
@@ -352,31 +352,31 @@ describe("ApiClient", () => {
       mockFetch.mockResolvedValue({
         ok: true,
         status: 200,
-        headers: new Map([["content-type", "application/json"]]),
-        json: async () => ({ data: "test" }),
+        headers: new Map([['content-type', 'application/json']]),
+        json: async () => ({ data: 'test' }),
       });
 
-      const response = await client.get("/test", { schema });
+      const response = await client.get('/test', { schema });
 
-      expect(schema.parse).toHaveBeenCalledWith({ data: "test" });
+      expect(schema.parse).toHaveBeenCalledWith({ data: 'test' });
       expect(response.data).toEqual({ validated: true });
     });
 
-    it("should throw on validation failure", async () => {
+    it('should throw on validation failure', async () => {
       const schema = {
         parse: jest.fn().mockImplementation(() => {
-          throw new Error("Invalid data");
+          throw new Error('Invalid data');
         }),
       };
 
       mockFetch.mockResolvedValue({
         ok: true,
         status: 200,
-        headers: new Map([["content-type", "application/json"]]),
+        headers: new Map([['content-type', 'application/json']]),
         json: async () => ({ invalid: true }),
       });
 
-      await expect(client.get("/test", { schema })).rejects.toBeDefined();
+      await expect(client.get('/test', { schema })).rejects.toBeDefined();
     });
   });
 });

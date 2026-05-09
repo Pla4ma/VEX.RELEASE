@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
+import { captureSilentFailure } from '../../../utils/silent-failure';
 /**
  * Onboarding Persistence Utilities
  *
@@ -8,21 +8,21 @@ import { captureSilentFailure } from "../../../utils/silent-failure";
  * @phase 2 - Deepening: Persistence layer
  */
 
-import { MMKV } from "react-native-mmkv";
-import { z } from "zod";
-import { createDebugger } from "../../../utils/debug";
-import { eventBus } from "../../../events";
-import type { OnboardingState, OnboardingStep, FocusGoal, FocusDuration } from "../types";
+import { MMKV } from 'react-native-mmkv';
+import { z } from 'zod';
+import { createDebugger } from '../../../utils/debug';
+import { eventBus } from '../../../events';
+import type { OnboardingState, OnboardingStep, FocusGoal, FocusDuration } from '../types';
 
-const debug = createDebugger("onboarding:persistence");
+const debug = createDebugger('onboarding:persistence');
 
 // ============================================================================
 // Storage Instance
 // ============================================================================
 
 const storage = new MMKV({
-  id: "onboarding-persistence",
-  encryptionKey: "onboarding-secure-storage",
+  id: 'onboarding-persistence',
+  encryptionKey: 'onboarding-secure-storage',
 });
 
 // ============================================================================
@@ -32,7 +32,7 @@ const storage = new MMKV({
 const PersistedOnboardingStateSchema = z.object({
   isOnboarded: z.boolean(),
   currentStep: z.number().min(0).max(4),
-  goal: z.enum(["WORK", "STUDY", "CREATIVE", "PERSONAL"]).nullable(),
+  goal: z.enum(['WORK', 'STUDY', 'CREATIVE', 'PERSONAL']).nullable(),
   focusDuration: z
     .number()
     .refine((val): val is FocusDuration => [15, 25, 45, 60].includes(val))
@@ -51,11 +51,11 @@ type PersistedOnboardingState = z.infer<typeof PersistedOnboardingStateSchema>;
 // ============================================================================
 
 const KEYS = {
-  ONBOARDING_STATE: "onboarding:state",
-  INCOMPLETE_BACKUP: "onboarding:incomplete_backup",
-  ABANDON_COUNT: "onboarding:abandon_count",
-  COMPLETION_ATTEMPTS: "onboarding:completion_attempts",
-  LAST_STEP_ABANDONED: "onboarding:last_step_abandoned",
+  ONBOARDING_STATE: 'onboarding:state',
+  INCOMPLETE_BACKUP: 'onboarding:incomplete_backup',
+  ABANDON_COUNT: 'onboarding:abandon_count',
+  COMPLETION_ATTEMPTS: 'onboarding:completion_attempts',
+  LAST_STEP_ABANDONED: 'onboarding:last_step_abandoned',
 } as const;
 
 // ============================================================================
@@ -81,12 +81,12 @@ export function persistOnboardingState(state: OnboardingState): void {
       storage.set(KEYS.INCOMPLETE_BACKUP, JSON.stringify(validated));
     }
 
-    debug.info("Onboarding state persisted", {
+    debug.info('Onboarding state persisted', {
       step: state.currentStep,
       isOnboarded: state.isOnboarded,
     });
   } catch (error) {
-    debug.error("Failed to persist onboarding state", error instanceof Error ? error : new Error(String(error)));
+    debug.error('Failed to persist onboarding state', error instanceof Error ? error : new Error(String(error)));
   }
 }
 
@@ -98,7 +98,7 @@ export function loadPersistedOnboarding(): OnboardingState | null {
     const data = storage.getString(KEYS.ONBOARDING_STATE);
 
     if (!data) {
-      debug.info("No persisted onboarding state found");
+      debug.info('No persisted onboarding state found');
       return null;
     }
 
@@ -110,10 +110,10 @@ export function loadPersistedOnboarding(): OnboardingState | null {
     const isStale = age > 7 * 24 * 60 * 60 * 1000;
 
     if (isStale && !validated.isOnboarded) {
-      debug.warn("Stale incomplete onboarding found, resetting", { age });
+      debug.warn('Stale incomplete onboarding found, resetting', { age });
 
-      eventBus.publish("analytics:track", {
-        event: "onboarding_stale_reset",
+      eventBus.publish('analytics:track', {
+        event: 'onboarding_stale_reset',
         properties: { age, step: validated.currentStep },
       });
 
@@ -131,10 +131,10 @@ export function loadPersistedOnboarding(): OnboardingState | null {
       completedAt: validated.completedAt,
     };
 
-    debug.info("Onboarding state loaded", { step: state.currentStep });
+    debug.info('Onboarding state loaded', { step: state.currentStep });
     return state;
   } catch (error) {
-    debug.error("Failed to load onboarding state", error instanceof Error ? error : new Error(String(error)));
+    debug.error('Failed to load onboarding state', error instanceof Error ? error : new Error(String(error)));
 
     // Try recovery from backup
     return recoverFromBackup();
@@ -148,7 +148,7 @@ export function clearOnboardingState(): void {
   storage.delete(KEYS.ONBOARDING_STATE);
   storage.delete(KEYS.INCOMPLETE_BACKUP);
 
-  debug.info("Onboarding state cleared");
+  debug.info('Onboarding state cleared');
 }
 
 /**
@@ -169,7 +169,7 @@ export function getResumeStep(): OnboardingStep | null {
     return null;
   }
 
-  const steps: OnboardingStep[] = ["WELCOME", "GOAL_SETTING", "FOCUS_TIME", "NAME_SETUP", "FIRST_SESSION_CTA"];
+  const steps: OnboardingStep[] = ['WELCOME', 'GOAL_SETTING', 'FOCUS_TIME', 'NAME_SETUP', 'FIRST_SESSION_CTA'];
 
   return steps[state.currentStep] || null;
 }
@@ -199,16 +199,16 @@ function recoverFromBackup(): OnboardingState | null {
       completedAt: validated.completedAt,
     };
 
-    debug.info("Onboarding state recovered from backup", { step: state.currentStep });
+    debug.info('Onboarding state recovered from backup', { step: state.currentStep });
 
-    eventBus.publish("analytics:track", {
-      event: "onboarding_recovered_from_backup",
+    eventBus.publish('analytics:track', {
+      event: 'onboarding_recovered_from_backup',
       properties: { step: state.currentStep },
     });
 
     return state;
   } catch (error) {
-    debug.error("Failed to recover from backup", error instanceof Error ? error : new Error(String(error)));
+    debug.error('Failed to recover from backup', error instanceof Error ? error : new Error(String(error)));
     return null;
   }
 }
@@ -239,12 +239,12 @@ export function recordAbandon(currentStep: number, partialData: Partial<Onboardi
     // Store abandon history (keep last 5)
     const history = getAbandonHistory();
     history.unshift(record);
-    storage.set("onboarding:abandon_history", JSON.stringify(history.slice(0, 5)));
+    storage.set('onboarding:abandon_history', JSON.stringify(history.slice(0, 5)));
 
-    debug.info("Onboarding abandoned recorded", { step: currentStep });
+    debug.info('Onboarding abandoned recorded', { step: currentStep });
 
-    eventBus.publish("analytics:track", {
-      event: "onboarding_abandoned",
+    eventBus.publish('analytics:track', {
+      event: 'onboarding_abandoned',
       properties: {
         step: currentStep,
         abandonCount: currentCount + 1,
@@ -254,16 +254,16 @@ export function recordAbandon(currentStep: number, partialData: Partial<Onboardi
       },
     });
   } catch (error) {
-    debug.error("Failed to record abandon", error instanceof Error ? error : new Error(String(error)));
+    debug.error('Failed to record abandon', error instanceof Error ? error : new Error(String(error)));
   }
 }
 
 export function getAbandonHistory(): AbandonRecord[] {
   try {
-    const data = storage.getString("onboarding:abandon_history");
+    const data = storage.getString('onboarding:abandon_history');
     return data ? JSON.parse(data) : [];
   } catch (error) {
-    captureSilentFailure(error, { feature: "onboarding", operation: "safe-fallback", type: "data" });
+    captureSilentFailure(error, { feature: 'onboarding', operation: 'safe-fallback', type: 'data' });
     return [];
   }
 }
@@ -309,8 +309,8 @@ export function recordCompletionAttempt(success: boolean, error?: string): void 
   const attempts = storage.getNumber(KEYS.COMPLETION_ATTEMPTS) || 0;
   storage.set(KEYS.COMPLETION_ATTEMPTS, attempts + 1);
 
-  eventBus.publish("analytics:track", {
-    event: "onboarding_completion_attempt",
+  eventBus.publish('analytics:track', {
+    event: 'onboarding_completion_attempt',
     properties: {
       success,
       attemptNumber: attempts + 1,

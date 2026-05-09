@@ -1,5 +1,5 @@
-import { getSupabaseClient } from "../../config/supabase";
-import { ChallengeDetailSchema, ChallengeSchema, ChallengeTemplateSchema, UserChallengeSchema, type Challenge, type ChallengeDetail, type ChallengeTemplate, type UserChallenge } from "./schemas";
+import { getSupabaseClient } from '../../config/supabase';
+import { ChallengeDetailSchema, ChallengeSchema, ChallengeTemplateSchema, UserChallengeSchema, type Challenge, type ChallengeDetail, type ChallengeTemplate, type UserChallenge } from './schemas';
 
 const supabase = getSupabaseClient();
 
@@ -9,7 +9,7 @@ export class RepositoryError extends Error {
     public originalError: unknown,
   ) {
     super(`Repository error in ${operation}: ${String(originalError)}`);
-    this.name = "RepositoryError";
+    this.name = 'RepositoryError';
   }
 }
 
@@ -43,79 +43,79 @@ const mapJoinedChallenge = (row: Record<string, unknown>): ChallengeDetail => {
 };
 
 export async function fetchChallengeById(challengeId: string): Promise<Challenge | null> {
-  const { data, error } = await supabase.from("challenges").select("*").eq("id", challengeId).maybeSingle();
+  const { data, error } = await supabase.from('challenges').select('*').eq('id', challengeId).maybeSingle();
   if (error) {
-    throw new RepositoryError("fetchChallengeById", error);
+    throw new RepositoryError('fetchChallengeById', error);
   }
   return data ? ChallengeSchema.parse(data) : null;
 }
 
 export async function fetchActiveChallenges(seasonId: string): Promise<Challenge[]> {
   const now = new Date().toISOString();
-  const { data, error } = await supabase.from("challenges").select("*").eq("season_id", seasonId).eq("is_active", true).lte("start_at", now).gte("end_at", now);
+  const { data, error } = await supabase.from('challenges').select('*').eq('season_id', seasonId).eq('is_active', true).lte('start_at', now).gte('end_at', now);
   if (error) {
-    throw new RepositoryError("fetchActiveChallenges", error);
+    throw new RepositoryError('fetchActiveChallenges', error);
   }
   return (data ?? []).map((row) => ChallengeSchema.parse(row));
 }
 
-export async function fetchChallengesByType(seasonId: string, type: "DAILY" | "WEEKLY" | "EVENT"): Promise<Challenge[]> {
-  const { data, error } = await supabase.from("challenges").select("*").eq("season_id", seasonId).eq("type", type).eq("is_active", true).order("created_at", { ascending: false });
+export async function fetchChallengesByType(seasonId: string, type: 'DAILY' | 'WEEKLY' | 'EVENT'): Promise<Challenge[]> {
+  const { data, error } = await supabase.from('challenges').select('*').eq('season_id', seasonId).eq('type', type).eq('is_active', true).order('created_at', { ascending: false });
   if (error) {
-    throw new RepositoryError("fetchChallengesByType", error);
+    throw new RepositoryError('fetchChallengesByType', error);
   }
   return (data ?? []).map((row) => ChallengeSchema.parse(row));
 }
 
 export async function fetchChallengeTemplates(): Promise<ChallengeTemplate[]> {
-  const { data, error } = await supabase.from("challenge_templates").select("*").eq("is_active", true);
+  const { data, error } = await supabase.from('challenge_templates').select('*').eq('is_active', true);
   if (error) {
-    throw new RepositoryError("fetchChallengeTemplates", error);
+    throw new RepositoryError('fetchChallengeTemplates', error);
   }
   return (data ?? []).map((row) => ChallengeTemplateSchema.parse(row));
 }
 
 export async function fetchUserChallenge(userId: string, challengeId: string): Promise<UserChallenge | null> {
-  const { data, error } = await supabase.from("user_challenges").select("*").eq("user_id", userId).eq("challenge_id", challengeId).maybeSingle();
+  const { data, error } = await supabase.from('user_challenges').select('*').eq('user_id', userId).eq('challenge_id', challengeId).maybeSingle();
   if (error) {
-    throw new RepositoryError("fetchUserChallenge", error);
+    throw new RepositoryError('fetchUserChallenge', error);
   }
   return data ? UserChallengeSchema.parse(data) : null;
 }
 
 export async function fetchUserChallenges(userId: string, filters?: { status?: string }): Promise<UserChallenge[]> {
-  let query = supabase.from("user_challenges").select("*").eq("user_id", userId);
+  let query = supabase.from('user_challenges').select('*').eq('user_id', userId);
   if (filters?.status) {
-    query = query.eq("status", filters.status);
+    query = query.eq('status', filters.status);
   }
-  const { data, error } = await query.order("assigned_at", { ascending: false });
+  const { data, error } = await query.order('assigned_at', { ascending: false });
   if (error) {
-    throw new RepositoryError("fetchUserChallenges", error);
+    throw new RepositoryError('fetchUserChallenges', error);
   }
   return (data ?? []).map((row) => UserChallengeSchema.parse(row));
 }
 
 export async function fetchUserActiveChallenges(userId: string): Promise<UserChallenge[]> {
-  const { data, error } = await supabase.from("user_challenges").select("*").eq("user_id", userId).in("status", ["ACTIVE", "COMPLETED"]).order("assigned_at", { ascending: false });
+  const { data, error } = await supabase.from('user_challenges').select('*').eq('user_id', userId).in('status', ['ACTIVE', 'COMPLETED']).order('assigned_at', { ascending: false });
   if (error) {
-    throw new RepositoryError("fetchUserActiveChallenges", error);
+    throw new RepositoryError('fetchUserActiveChallenges', error);
   }
   return (data ?? []).map((row) => UserChallengeSchema.parse(row));
 }
 
 export async function fetchActiveChallengeDetails(userId: string): Promise<ChallengeDetail[]> {
   const now = new Date().toISOString();
-  const { data, error } = await supabase.from("user_challenges").select(baseJoinedSelect).eq("user_id", userId).in("status", ["ACTIVE", "COMPLETED"]).or(`expires_at.is.null,expires_at.gt.${now}`).order("assigned_at", { ascending: false });
+  const { data, error } = await supabase.from('user_challenges').select(baseJoinedSelect).eq('user_id', userId).in('status', ['ACTIVE', 'COMPLETED']).or(`expires_at.is.null,expires_at.gt.${now}`).order('assigned_at', { ascending: false });
   if (error) {
-    throw new RepositoryError("fetchActiveChallengeDetails", error);
+    throw new RepositoryError('fetchActiveChallengeDetails', error);
   }
   return (data ?? []).map((row) => mapJoinedChallenge(row as Record<string, unknown>));
 }
 
 export async function fetchCompletedChallengeDetails(userId: string, limit: number): Promise<ChallengeDetail[]> {
-  const { data, error } = await supabase.from("user_challenges").select(baseJoinedSelect).eq("user_id", userId).in("status", ["COMPLETED", "CLAIMED"]).not("completed_at", "is", null).order("completed_at", { ascending: false }).limit(limit);
+  const { data, error } = await supabase.from('user_challenges').select(baseJoinedSelect).eq('user_id', userId).in('status', ['COMPLETED', 'CLAIMED']).not('completed_at', 'is', null).order('completed_at', { ascending: false }).limit(limit);
   if (error) {
-    throw new RepositoryError("fetchCompletedChallengeDetails", error);
+    throw new RepositoryError('fetchCompletedChallengeDetails', error);
   }
   return (data ?? []).map((row) => mapJoinedChallenge(row as Record<string, unknown>));
 }
@@ -123,12 +123,12 @@ export async function fetchCompletedChallengeDetails(userId: string, limit: numb
 export async function createUserChallenge(userId: string, challengeId: string, expiresAt?: number): Promise<UserChallenge> {
   const now = new Date().toISOString();
   const { data, error } = await supabase
-    .from("user_challenges")
+    .from('user_challenges')
     .insert({
       user_id: userId,
       challenge_id: challengeId,
       current_value: 0,
-      status: "ACTIVE",
+      status: 'ACTIVE',
       assigned_at: now,
       completed_at: null,
       claimed_at: null,
@@ -136,15 +136,15 @@ export async function createUserChallenge(userId: string, challengeId: string, e
       reroll_count: 0,
       created_at: now,
     })
-    .select("*")
+    .select('*')
     .single();
   if (error) {
-    throw new RepositoryError("createUserChallenge", error);
+    throw new RepositoryError('createUserChallenge', error);
   }
   return UserChallengeSchema.parse(data);
 }
 
-export async function updateUserChallenge(userId: string, challengeId: string, updates: Partial<Omit<UserChallenge, "id" | "userId" | "challengeId" | "createdAt">>): Promise<UserChallenge> {
+export async function updateUserChallenge(userId: string, challengeId: string, updates: Partial<Omit<UserChallenge, 'id' | 'userId' | 'challengeId' | 'createdAt'>>): Promise<UserChallenge> {
   const payload: Record<string, unknown> = {};
   if (updates.currentValue !== undefined) {
     payload.current_value = updates.currentValue;
@@ -164,9 +164,9 @@ export async function updateUserChallenge(userId: string, challengeId: string, u
   if (updates.rerollCount !== undefined) {
     payload.reroll_count = updates.rerollCount;
   }
-  const { data, error } = await supabase.from("user_challenges").update(payload).eq("user_id", userId).eq("challenge_id", challengeId).select("*").single();
+  const { data, error } = await supabase.from('user_challenges').update(payload).eq('user_id', userId).eq('challenge_id', challengeId).select('*').single();
   if (error) {
-    throw new RepositoryError("updateUserChallenge", error);
+    throw new RepositoryError('updateUserChallenge', error);
   }
   return UserChallengeSchema.parse(data);
 }
@@ -174,13 +174,13 @@ export async function updateUserChallenge(userId: string, challengeId: string, u
 export async function addChallengeProgress(userId: string, challengeId: string, delta: number, _source: string): Promise<UserChallenge> {
   const current = await fetchUserChallenge(userId, challengeId);
   if (!current) {
-    throw new RepositoryError("addChallengeProgress", "Challenge not found");
+    throw new RepositoryError('addChallengeProgress', 'Challenge not found');
   }
   return updateUserChallenge(userId, challengeId, { currentValue: current.currentValue + delta });
 }
 
-export async function recordReroll(userId: string, originalChallengeId: string, newChallengeId: string, rerollType: "FREE" | "PAID", gemsSpent: number): Promise<void> {
-  const { error } = await supabase.from("challenge_rerolls").insert({
+export async function recordReroll(userId: string, originalChallengeId: string, newChallengeId: string, rerollType: 'FREE' | 'PAID', gemsSpent: number): Promise<void> {
+  const { error } = await supabase.from('challenge_rerolls').insert({
     user_id: userId,
     original_challenge_id: originalChallengeId,
     new_challenge_id: newChallengeId,
@@ -189,32 +189,32 @@ export async function recordReroll(userId: string, originalChallengeId: string, 
     rerolled_at: new Date().toISOString(),
   });
   if (error) {
-    throw new RepositoryError("recordReroll", error);
+    throw new RepositoryError('recordReroll', error);
   }
 }
 
 export async function getRerollCountToday(userId: string): Promise<number> {
-  const today = new Date().toISOString().split("T")[0];
-  const { count, error } = await supabase.from("challenge_rerolls").select("*", { count: "exact", head: true }).eq("user_id", userId).gte("rerolled_at", today);
+  const today = new Date().toISOString().split('T')[0];
+  const { count, error } = await supabase.from('challenge_rerolls').select('*', { count: 'exact', head: true }).eq('user_id', userId).gte('rerolled_at', today);
   if (error) {
-    throw new RepositoryError("getRerollCountToday", error);
+    throw new RepositoryError('getRerollCountToday', error);
   }
   return count ?? 0;
 }
 
 export async function getFreeRerollCountToday(userId: string): Promise<number> {
-  const today = new Date().toISOString().split("T")[0];
-  const { count, error } = await supabase.from("challenge_rerolls").select("*", { count: "exact", head: true }).eq("user_id", userId).eq("reroll_type", "FREE").gte("rerolled_at", today);
+  const today = new Date().toISOString().split('T')[0];
+  const { count, error } = await supabase.from('challenge_rerolls').select('*', { count: 'exact', head: true }).eq('user_id', userId).eq('reroll_type', 'FREE').gte('rerolled_at', today);
   if (error) {
-    throw new RepositoryError("getFreeRerollCountToday", error);
+    throw new RepositoryError('getFreeRerollCountToday', error);
   }
   return count ?? 0;
 }
 
 export async function expireOldChallenges(cutoffDate: number): Promise<number> {
-  const { data, error } = await supabase.from("user_challenges").update({ status: "EXPIRED" }).lt("expires_at", new Date(cutoffDate).toISOString()).eq("status", "ACTIVE").select("id");
+  const { data, error } = await supabase.from('user_challenges').update({ status: 'EXPIRED' }).lt('expires_at', new Date(cutoffDate).toISOString()).eq('status', 'ACTIVE').select('id');
   if (error) {
-    throw new RepositoryError("expireOldChallenges", error);
+    throw new RepositoryError('expireOldChallenges', error);
   }
   return data?.length ?? 0;
 }
@@ -222,9 +222,9 @@ export async function expireOldChallenges(cutoffDate: number): Promise<number> {
 export async function cleanupRerollHistory(olderThanDays: number): Promise<number> {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - olderThanDays);
-  const { error } = await supabase.from("challenge_rerolls").delete().lt("rerolled_at", cutoff.toISOString());
+  const { error } = await supabase.from('challenge_rerolls').delete().lt('rerolled_at', cutoff.toISOString());
   if (error) {
-    throw new RepositoryError("cleanupRerollHistory", error);
+    throw new RepositoryError('cleanupRerollHistory', error);
   }
   return 0;
 }

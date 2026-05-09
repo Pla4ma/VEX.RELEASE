@@ -1,14 +1,5 @@
-/**
- * HomeHeroCard
- *
- * The primary recommendation card on Home screen.
- * Shows one clear action with emotional context.
- *
- * @phase 1 - Foundation
- */
-
 import React from 'react';
-import { View, Pressable, Animated, StyleSheet } from 'react-native';
+import { View, Pressable } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useTheme } from '../../../theme';
 import { Text } from '../../../components/primitives/Text';
@@ -16,8 +7,9 @@ import { Button } from '../../../components/primitives/Button';
 import { Icon } from '../../../icons';
 import { useHaptics } from '../../../utils/haptics';
 import { useFocusIdentity } from '../../../features/focus-identity/hooks';
-import type { HomeRecommendation, UrgencyLevel } from '../services/HomeRecommendationEngine';
-
+import type { HomeRecommendation } from '../services/HomeRecommendationEngine';
+import { getHeroGradientColors, getHeroIcon, getHeroUrgencyColor } from './home-hero-card-helpers';
+import { HomeHeroSecondaryActions } from './HomeHeroSecondaryActions';
 interface HomeHeroCardProps {
   recommendation: HomeRecommendation | null;
   isLoading: boolean;
@@ -25,18 +17,10 @@ interface HomeHeroCardProps {
   onPressSecondary?: () => void;
   userId?: string | null;
 }
-
-export function HomeHeroCard({
-  recommendation,
-  isLoading,
-  onPressCta,
-  onPressSecondary,
-  userId,
-}: HomeHeroCardProps): JSX.Element {
+export function HomeHeroCard({ recommendation, isLoading, onPressCta, onPressSecondary, userId }: HomeHeroCardProps): JSX.Element {
   const { theme } = useTheme();
   const haptics = useHaptics();
   const { profile, currentBand } = useFocusIdentity(userId || null);
-
   const containerStyle = {
       marginHorizontal: theme.spacing[4],
       marginTop: theme.spacing[4],
@@ -48,11 +32,9 @@ export function HomeHeroCard({
       shadowRadius: 20,
       elevation: 8,
     };
-
   const gradientStyle = {
         padding: theme.spacing[5],
       };
-
   const urgencyStripStyle = {
         position: 'absolute' as const,
         top: 0,
@@ -60,13 +42,11 @@ export function HomeHeroCard({
         right: 0,
         height: 4,
       };
-
   const headerStyle = {
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         marginBottom: theme.spacing[3],
       };
-
   const iconContainerStyle = {
         width: 44,
         height: 44,
@@ -76,16 +56,13 @@ export function HomeHeroCard({
         alignItems: 'center' as const,
         marginRight: theme.spacing[3],
       };
-
   const headlineStyle = {
         flex: 1,
       };
-
   const subtextStyle = {
         marginBottom: theme.spacing[4],
         opacity: 0.9,
       };
-
   const coachMessageStyle = {
         flexDirection: 'row' as const,
         alignItems: 'flex-start' as const,
@@ -94,102 +71,39 @@ export function HomeHeroCard({
         backgroundColor: 'rgba(255,255,255,0.15)',
         borderRadius: theme.borderRadius.lg,
       };
-
   const coachIconStyle = {
         marginRight: theme.spacing[2],
         marginTop: 2,
       };
-
   const ctaButtonStyle = {
         width: '100%' as const,
       };
-
   const secondaryRowStyle = {
         flexDirection: 'row' as const,
         justifyContent: 'center' as const,
         marginTop: theme.spacing[3],
         gap: theme.spacing[4],
       };
-
   const secondaryButtonStyle = {
         flexDirection: 'row' as const,
         alignItems: 'center' as const,
         paddingVertical: theme.spacing[2],
         paddingHorizontal: theme.spacing[3],
       };
-
   const secondaryTextStyle = {
         opacity: 0.8,
       };
-
   const loadingContainerStyle = {
         height: 280,
         justifyContent: 'center' as const,
         alignItems: 'center' as const,
       };
-
   const handleCtaPress = () => {
     if (recommendation) {
       haptics.primaryAction();
       onPressCta(recommendation);
     }
   };
-
-  const getGradientColors = (urgency: UrgencyLevel, type: string): [string, string] => {
-    switch (urgency) {
-      case 'critical':
-        return ['#DC2626', '#991B1B']; // Red gradient
-      case 'high':
-        return ['#F59E0B', '#D97706']; // Amber gradient
-      case 'medium':
-        return [theme.colors.primary[500], theme.colors.primary[700]];
-      default:
-        // Type-specific gradients for low urgency
-        switch (type) {
-          case 'study_plan':
-            return ['#6366F1', '#4F46E5']; // Indigo for study
-          case 'boss_battle':
-            return ['#7C3AED', '#6D28D9']; // Purple for boss
-          case 'comeback':
-            return ['#10B981', '#059669']; // Green for comeback
-          default:
-            return [theme.colors.primary[500], theme.colors.primary[700]];
-        }
-    }
-  };
-
-  const getUrgencyColor = (urgency: UrgencyLevel): string => {
-    switch (urgency) {
-      case 'critical':
-        return '#EF4444';
-      case 'high':
-        return '#F59E0B';
-      case 'medium':
-        return theme.colors.primary[400];
-      default:
-        return 'transparent';
-    }
-  };
-
-  const getIcon = (type: string): string => {
-    switch (type) {
-      case 'focus_session':
-        return 'target';
-      case 'study_plan':
-        return 'book-open';
-      case 'comeback':
-        return 'rotate-ccw';
-      case 'protect_streak':
-        return 'shield';
-      case 'boss_battle':
-        return 'zap';
-      case 'start_streak':
-        return 'flame';
-      default:
-        return 'play';
-    }
-  };
-
   if (isLoading || !recommendation) {
     return (
       <View
@@ -209,11 +123,9 @@ export function HomeHeroCard({
       </View>
     );
   }
-
-  const gradientColors = getGradientColors(recommendation.urgency, recommendation.type);
-  const urgencyColor = getUrgencyColor(recommendation.urgency);
-  const icon = getIcon(recommendation.type);
-
+  const gradientColors = getHeroGradientColors(recommendation.urgency, recommendation.type, theme);
+  const urgencyColor = getHeroUrgencyColor(recommendation.urgency, theme);
+  const icon = getHeroIcon(recommendation.type);
   return (
     <View style={containerStyle}>
       <LinearGradient colors={gradientColors} style={gradientStyle}>
@@ -221,7 +133,6 @@ export function HomeHeroCard({
         {recommendation.urgency !== 'low' && (
           <View style={[urgencyStripStyle, { backgroundColor: urgencyColor }]} />
         )}
-
         {/* Focus Score Badge */}
         {profile && (
           <View
@@ -237,11 +148,10 @@ export function HomeHeroCard({
             }}
           >
             <Text variant="caption" color="#FFFFFF">
-              Focus Score: {(profile as any).focusScore}
+              Focus Score: {profile.currentScore}
             </Text>
           </View>
         )}
-
         {/* Header with icon and headline */}
         <View style={headerStyle}>
           <View style={iconContainerStyle}>
@@ -253,12 +163,10 @@ export function HomeHeroCard({
             </Text>
           </View>
         </View>
-
         {/* Subtext */}
         <Text variant="body" color="#FFFFFF" style={subtextStyle}>
           {recommendation.subtext}
         </Text>
-
         {/* AI Coach message (if present) */}
         {recommendation.aiCoachMessage && (
           <View style={coachMessageStyle}>
@@ -273,7 +181,6 @@ export function HomeHeroCard({
             </Text>
           </View>
         )}
-
         {/* Primary CTA */}
         <Button
           variant="secondary"
@@ -283,41 +190,8 @@ export function HomeHeroCard({
         >
           {recommendation.ctaText}
         </Button>
-
         {/* Secondary actions */}
-        <View style={secondaryRowStyle}>
-          <Pressable
-            onPress={onPressSecondary}
-            style={secondaryButtonStyle}
-            android_ripple={{ color: 'rgba(255,255,255,0.1)' }}
-          >
-            <Icon
-              name="settings"
-              size={14}
-              color="rgba(255,255,255,0.8)"
-              style={{ marginRight: 6 }}
-            />
-            <Text variant="label" style={secondaryTextStyle} color="rgba(255,255,255,0.8)">
-              Customize
-            </Text>
-          </Pressable>
-
-          <Pressable
-            onPress={onPressSecondary}
-            style={secondaryButtonStyle}
-            android_ripple={{ color: 'rgba(255,255,255,0.1)' }}
-          >
-            <Icon
-              name="calendar"
-              size={14}
-              color="rgba(255,255,255,0.8)"
-              style={{ marginRight: 6 }}
-            />
-            <Text variant="label" style={secondaryTextStyle} color="rgba(255,255,255,0.8)">
-              Schedule
-            </Text>
-          </Pressable>
-        </View>
+        <HomeHeroSecondaryActions onPress={onPressSecondary} rowStyle={secondaryRowStyle} buttonStyle={secondaryButtonStyle} textStyle={secondaryTextStyle} />
       </LinearGradient>
     </View>
   );

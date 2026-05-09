@@ -14,7 +14,7 @@ import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme';
 import { useAuthStore } from '../../store';
 import { useStreakSummary } from '../../features/streaks/hooks';
-import { createSheet } from '@/shared/ui/create-sheet';
+import { createSheet } from '../../shared/ui/create-sheet';
 
 // Launch tab structure: Home / Focus / Progress / Profile
 const ICONS = { Home: 'home', Focus: 'target', Progress: 'chart', Profile: 'user' } as const;
@@ -117,14 +117,21 @@ export function VexTabBar({ state, descriptors, navigation }: BottomTabBarProps)
 
   return (
     <View style={[styles.container, {
-      backgroundColor: theme.colors.background.secondary,
-      borderTopColor: theme.colors.border.light,
-      height: 56 + insets.bottom,
-      paddingBottom: insets.bottom,
+      backgroundColor: theme.colors.semantic.surfaceGlass,
+      borderColor: theme.colors.semantic.border,
+      elevation: 14,
+      height: 70 + insets.bottom,
+      marginBottom: Math.max(insets.bottom - 4, 8),
+      marginHorizontal: 14,
+      paddingBottom: 8,
+      shadowColor: theme.colors.semantic.shadow,
+      shadowOffset: { width: 0, height: 12 },
+      shadowOpacity: 0.24,
+      shadowRadius: 24,
     }]}>
       {state.routes.map((route) => {
         const focused = state.index === state.routes.findIndex(r => r.key === route.key);
-        const color = focused ? theme.colors.primary[500] : theme.colors.text.tertiary;
+        const color = focused ? theme.colors.semantic.tabActive : theme.colors.semantic.tabInactive;
         const onPress = () => {
           const event = navigation.emit({ type: 'tabPress', target: route.key, canPreventDefault: true });
           if (!focused && !event.defaultPrevented) {
@@ -149,12 +156,12 @@ export function VexTabBar({ state, descriptors, navigation }: BottomTabBarProps)
 }
 
 const styles = createSheet({
-  container: { borderTopWidth: 1, flexDirection: 'row', paddingHorizontal: 8 },
+  container: { borderRadius: 28, borderWidth: 1, flexDirection: 'row', paddingHorizontal: 8 },
   pressable: { flex: 1 },
   item: { alignItems: 'center', flex: 1, justifyContent: 'center', paddingTop: 8 },
   iconShell: { alignItems: 'center', height: 28, justifyContent: 'center', minWidth: 28, position: 'relative' },
   label: { marginTop: 4 },
-  indicator: { borderRadius: 1.5, height: 3, marginTop: 4, width: 14 },
+  indicator: { borderRadius: 999, height: 3, marginTop: 4, width: 14 },
 });
 
 export default VexTabBar;

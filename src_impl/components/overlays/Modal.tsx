@@ -4,14 +4,14 @@
  * Full-screen modal with animations and gesture support.
  */
 
-import React, { useEffect, useCallback, type ReactNode } from "react";
-import { View, StyleSheet, TouchableWithoutFeedback, BackHandler, type ViewStyle } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, runOnJS, type SharedValue } from "react-native-reanimated";
+import React, { useEffect, useCallback, type ReactNode } from 'react';
+import { View, StyleSheet, TouchableWithoutFeedback, BackHandler, type ViewStyle } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, runOnJS, type SharedValue } from 'react-native-reanimated';
 
-import { useTheme } from "../../theme";
-import { Box, Text } from "../primitives";
-import { IconButton } from "../../icons";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { useTheme } from '../../theme';
+import { Box, Text } from '../primitives';
+import { IconButton } from '../../icons';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 /**
  * Modal props
@@ -36,7 +36,7 @@ export interface ModalProps {
   /** Custom footer content */
   footer?: ReactNode;
   /** Modal animation type */
-  animation?: "fade" | "slide" | "scale";
+  animation?: 'fade' | 'slide' | 'scale';
   /** Custom styles */
   style?: ViewStyle;
   /** Content container style */
@@ -48,7 +48,7 @@ export interface ModalProps {
 /**
  * Modal component
  */
-export const Modal: React.FC<ModalProps> = ({ visible, children, title, onClose, showCloseButton = true, closeOnBackdropPress = true, closeOnBackButton = true, header, footer, animation = "slide", style, contentStyle, testID }) => {
+export const Modal: React.FC<ModalProps> = ({ visible, children, title, onClose, showCloseButton = true, closeOnBackdropPress = true, closeOnBackButton = true, header, footer, animation = 'slide', style, contentStyle, testID }) => {
   const { theme } = useTheme();
 
   // Animation values
@@ -63,14 +63,14 @@ export const Modal: React.FC<ModalProps> = ({ visible, children, title, onClose,
 
   const contentAnimatedStyle = useAnimatedStyle(() => {
     switch (animation) {
-      case "fade":
+      case 'fade':
         return { opacity: opacity.value };
-      case "scale":
+      case 'scale':
         return {
           opacity: opacity.value,
           transform: [{ scale: scale.value }],
         };
-      case "slide":
+      case 'slide':
       default:
         return {
           opacity: opacity.value,
@@ -84,10 +84,10 @@ export const Modal: React.FC<ModalProps> = ({ visible, children, title, onClose,
     opacity.value = withTiming(1, { duration: 200 });
 
     switch (animation) {
-      case "scale":
+      case 'scale':
         scale.value = withSpring(1, { damping: 20, stiffness: 200 });
         break;
-      case "slide":
+      case 'slide':
       default:
         translateY.value = withSpring(0, { damping: 25, stiffness: 300 });
         break;
@@ -101,10 +101,10 @@ export const Modal: React.FC<ModalProps> = ({ visible, children, title, onClose,
     });
 
     switch (animation) {
-      case "scale":
+      case 'scale':
         scale.value = withTiming(0.9, { duration: 150 });
         break;
-      case "slide":
+      case 'slide':
       default:
         translateY.value = withTiming(500, { duration: 200 });
         break;
@@ -124,7 +124,7 @@ export const Modal: React.FC<ModalProps> = ({ visible, children, title, onClose,
       return;
     }
 
-    const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       close();
       return true;
     });
@@ -152,7 +152,7 @@ export const Modal: React.FC<ModalProps> = ({ visible, children, title, onClose,
     <View style={styles.container} testID={testID}>
       {/* Backdrop */}
       <TouchableWithoutFeedback onPress={handleBackdropPress}>
-        <Animated.View style={[styles.backdrop, { backgroundColor: "rgba(0, 0, 0, 0.5)" }, backdropStyle]} />
+        <Animated.View style={[styles.backdrop, { backgroundColor: 'rgba(0, 0, 0, 0.5)' }, backdropStyle]} />
       </TouchableWithoutFeedback>
 
       {/* Content */}
@@ -192,23 +192,23 @@ export const Modal: React.FC<ModalProps> = ({ visible, children, title, onClose,
 const styles = createSheet({
   container: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 1000,
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
   },
   content: {
-    width: "90%",
+    width: '90%',
     maxWidth: 400,
-    maxHeight: "80%",
-    boxShadow: "0px 2px 4px rgba(0,0,0,0.25)",
+    maxHeight: '80%',
+    boxShadow: '0px 2px 4px rgba(0,0,0,0.25)',
     elevation: 5,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 8,
@@ -219,7 +219,7 @@ const styles = createSheet({
   footer: {
     padding: 16,
     borderTopWidth: 1,
-    borderTopColor: "rgba(0, 0, 0, 0.1)",
+    borderTopColor: 'rgba(0, 0, 0, 0.1)',
   },
 });
 

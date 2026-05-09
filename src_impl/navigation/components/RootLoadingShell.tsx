@@ -9,8 +9,8 @@ const LOADING_STAT_PLACEHOLDERS = ['first', 'second', 'third'] as const;
 export const RootLoadingShell: React.FC = () => {
   const { theme } = useTheme();
   const surfaceStyle = {
-    backgroundColor: theme.colors.background.secondary,
-    borderColor: theme.colors.border.DEFAULT,
+    backgroundColor: theme.colors.semantic.surfaceGlass,
+    borderColor: theme.colors.semantic.border,
   };
 
   return (
@@ -18,7 +18,7 @@ export const RootLoadingShell: React.FC = () => {
       style={[
         styles.loadingShell,
         {
-          backgroundColor: theme.colors.background.primary,
+          backgroundColor: theme.colors.semantic.background,
           paddingHorizontal: theme.spacing[5],
           gap: theme.spacing[4],
         },

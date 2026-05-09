@@ -4,29 +4,29 @@
  * Comprehensive test coverage for mastery ranks, techniques, and challenges
  */
 
-import { getMasteryState, recordSessionMastery, claimMasteryChallenge, getActiveChallenges, getTechniqueStats, getUnlockedFeatures } from "../service";
-import { loadStoredMasteryState, persistMasteryState } from "../repository";
-import { MASTERY_RANK_THRESHOLDS } from "../types";
+import { getMasteryState, recordSessionMastery, claimMasteryChallenge, getActiveChallenges, getTechniqueStats, getUnlockedFeatures } from '../service';
+import { loadStoredMasteryState, persistMasteryState } from '../repository';
+import { MASTERY_RANK_THRESHOLDS } from '../types';
 
 // Mock repository
-jest.mock("../repository");
+jest.mock('../repository');
 
-const TEST_USER_ID = "test-user-123";
+const TEST_USER_ID = 'test-user-123';
 
-describe("Mastery Service", () => {
+describe('Mastery Service', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (loadStoredMasteryState as jest.Mock).mockReturnValue(null);
   });
 
-  describe("getMasteryState", () => {
-    it("should return default state for new user", async () => {
+  describe('getMasteryState', () => {
+    it('should return default state for new user', async () => {
       const state = await getMasteryState(TEST_USER_ID);
 
       expect(state).toMatchObject({
         userId: TEST_USER_ID,
         totalMasteryPoints: 0,
-        rank: "APPRENTICE",
+        rank: 'APPRENTICE',
         techniques: {
           durationMastery: 0,
           purityMastery: 0,
@@ -41,11 +41,11 @@ describe("Mastery Service", () => {
       expect(state.updatedAt).toBeDefined();
     });
 
-    it("should load and hydrate existing state", async () => {
+    it('should load and hydrate existing state', async () => {
       const existingState = {
         userId: TEST_USER_ID,
         totalMasteryPoints: 1500,
-        rank: "ADEPT",
+        rank: 'ADEPT',
         techniques: {
           durationMastery: 10,
           purityMastery: 8,
@@ -55,16 +55,16 @@ describe("Mastery Service", () => {
         },
         activeChallenges: [
           {
-            id: "challenge-1",
-            title: "Deep Focus",
-            description: "Complete a 60-minute session",
-            technique: "durationMastery",
+            id: 'challenge-1',
+            title: 'Deep Focus',
+            description: 'Complete a 60-minute session',
+            technique: 'durationMastery',
             target: 100,
             current: 80,
-            status: "ACTIVE",
+            status: 'ACTIVE',
           },
         ],
-        unlockedFeatures: ["advanced_analytics"],
+        unlockedFeatures: ['advanced_analytics'],
         updatedAt: Date.now(),
       };
       (loadStoredMasteryState as jest.Mock).mockReturnValue(existingState);
@@ -72,15 +72,15 @@ describe("Mastery Service", () => {
       const state = await getMasteryState(TEST_USER_ID);
 
       expect(state.totalMasteryPoints).toBe(1500);
-      expect(state.rank).toBe("ADEPT");
+      expect(state.rank).toBe('ADEPT');
       expect(state.activeChallenges.length).toBe(3); // Hydrated to 3
     });
 
-    it("should correct rank if points threshold crossed", async () => {
+    it('should correct rank if points threshold crossed', async () => {
       const incorrectRankState = {
         userId: TEST_USER_ID,
         totalMasteryPoints: MASTERY_RANK_THRESHOLDS.MASTER,
-        rank: "ADEPT", // Incorrect, should be MASTER
+        rank: 'ADEPT', // Incorrect, should be MASTER
         techniques: {
           durationMastery: 15,
           purityMastery: 15,
@@ -96,16 +96,16 @@ describe("Mastery Service", () => {
 
       const state = await getMasteryState(TEST_USER_ID);
 
-      expect(state.rank).toBe("MASTER");
+      expect(state.rank).toBe('MASTER');
     });
   });
 
-  describe("recordSessionMastery", () => {
-    it("should award XP for duration mastery", async () => {
+  describe('recordSessionMastery', () => {
+    it('should award XP for duration mastery', async () => {
       const baseState = {
         userId: TEST_USER_ID,
         totalMasteryPoints: 0,
-        rank: "APPRENTICE",
+        rank: 'APPRENTICE',
         techniques: {
           durationMastery: 0,
           purityMastery: 0,
@@ -131,11 +131,11 @@ describe("Mastery Service", () => {
       expect(persistMasteryState).toHaveBeenCalled();
     });
 
-    it("should award bonus XP for purity mastery", async () => {
+    it('should award bonus XP for purity mastery', async () => {
       const baseState = {
         userId: TEST_USER_ID,
         totalMasteryPoints: 0,
-        rank: "APPRENTICE",
+        rank: 'APPRENTICE',
         techniques: {
           durationMastery: 5,
           purityMastery: 5,
@@ -159,11 +159,11 @@ describe("Mastery Service", () => {
       expect(result.techniqueGains.purityMastery).toBeGreaterThan(0);
     });
 
-    it("should award comeback mastery when comeback used", async () => {
+    it('should award comeback mastery when comeback used', async () => {
       const baseState = {
         userId: TEST_USER_ID,
         totalMasteryPoints: 0,
-        rank: "APPRENTICE",
+        rank: 'APPRENTICE',
         techniques: {
           durationMastery: 0,
           purityMastery: 0,
@@ -187,11 +187,11 @@ describe("Mastery Service", () => {
       expect(result.techniqueGains.comebackMastery).toBeGreaterThan(0);
     });
 
-    it("should award boss mastery when boss defeated", async () => {
+    it('should award boss mastery when boss defeated', async () => {
       const baseState = {
         userId: TEST_USER_ID,
         totalMasteryPoints: 0,
-        rank: "APPRENTICE",
+        rank: 'APPRENTICE',
         techniques: {
           durationMastery: 0,
           purityMastery: 0,
@@ -215,11 +215,11 @@ describe("Mastery Service", () => {
       expect(result.techniqueGains.bossMastery).toBeGreaterThan(0);
     });
 
-    it("should rank up when threshold crossed", async () => {
+    it('should rank up when threshold crossed', async () => {
       const nearRankUpState = {
         userId: TEST_USER_ID,
         totalMasteryPoints: MASTERY_RANK_THRESHOLDS.ADEPT - 10,
-        rank: "APPRENTICE",
+        rank: 'APPRENTICE',
         techniques: {
           durationMastery: 8,
           purityMastery: 8,
@@ -240,15 +240,15 @@ describe("Mastery Service", () => {
         defeatedBoss: false,
       });
 
-      expect(result.newRank).toBe("ADEPT");
+      expect(result.newRank).toBe('ADEPT');
       expect(result.rankUpOccurred).toBe(true);
     });
 
-    it("should cap technique values at 25", async () => {
+    it('should cap technique values at 25', async () => {
       const nearCapState = {
         userId: TEST_USER_ID,
         totalMasteryPoints: 2000,
-        rank: "EXPERT",
+        rank: 'EXPERT',
         techniques: {
           durationMastery: 24,
           purityMastery: 24,
@@ -257,7 +257,7 @@ describe("Mastery Service", () => {
           bossMastery: 20,
         },
         activeChallenges: [],
-        unlockedFeatures: ["advanced_analytics"],
+        unlockedFeatures: ['advanced_analytics'],
         updatedAt: Date.now(),
       };
       (loadStoredMasteryState as jest.Mock).mockReturnValue(nearCapState);
@@ -273,12 +273,12 @@ describe("Mastery Service", () => {
     });
   });
 
-  describe("claimMasteryChallenge", () => {
-    it("should claim completed challenge and award points", async () => {
+  describe('claimMasteryChallenge', () => {
+    it('should claim completed challenge and award points', async () => {
       const stateWithCompletedChallenge = {
         userId: TEST_USER_ID,
         totalMasteryPoints: 100,
-        rank: "APPRENTICE",
+        rank: 'APPRENTICE',
         techniques: {
           durationMastery: 5,
           purityMastery: 5,
@@ -288,13 +288,13 @@ describe("Mastery Service", () => {
         },
         activeChallenges: [
           {
-            id: "challenge-1",
-            title: "Deep Focus",
-            description: "Complete a 60-minute session",
-            technique: "durationMastery",
+            id: 'challenge-1',
+            title: 'Deep Focus',
+            description: 'Complete a 60-minute session',
+            technique: 'durationMastery',
             target: 100,
             current: 100,
-            status: "COMPLETED",
+            status: 'COMPLETED',
             completedAt: Date.now(),
           },
         ],
@@ -303,18 +303,18 @@ describe("Mastery Service", () => {
       };
       (loadStoredMasteryState as jest.Mock).mockReturnValue(stateWithCompletedChallenge);
 
-      const result = await claimMasteryChallenge(TEST_USER_ID, "challenge-1");
+      const result = await claimMasteryChallenge(TEST_USER_ID, 'challenge-1');
 
       expect(result.success).toBe(true);
       expect(result.pointsAwarded).toBeGreaterThan(0);
       expect(persistMasteryState).toHaveBeenCalled();
     });
 
-    it("should throw error for incomplete challenge", async () => {
+    it('should throw error for incomplete challenge', async () => {
       const stateWithIncompleteChallenge = {
         userId: TEST_USER_ID,
         totalMasteryPoints: 100,
-        rank: "APPRENTICE",
+        rank: 'APPRENTICE',
         techniques: {
           durationMastery: 5,
           purityMastery: 5,
@@ -324,13 +324,13 @@ describe("Mastery Service", () => {
         },
         activeChallenges: [
           {
-            id: "challenge-1",
-            title: "Deep Focus",
-            description: "Complete a 60-minute session",
-            technique: "durationMastery",
+            id: 'challenge-1',
+            title: 'Deep Focus',
+            description: 'Complete a 60-minute session',
+            technique: 'durationMastery',
             target: 100,
             current: 50,
-            status: "ACTIVE",
+            status: 'ACTIVE',
           },
         ],
         unlockedFeatures: [],
@@ -338,14 +338,14 @@ describe("Mastery Service", () => {
       };
       (loadStoredMasteryState as jest.Mock).mockReturnValue(stateWithIncompleteChallenge);
 
-      await expect(claimMasteryChallenge(TEST_USER_ID, "challenge-1")).rejects.toThrow("Challenge not completed");
+      await expect(claimMasteryChallenge(TEST_USER_ID, 'challenge-1')).rejects.toThrow('Challenge not completed');
     });
 
-    it("should throw error for non-existent challenge", async () => {
+    it('should throw error for non-existent challenge', async () => {
       const stateWithNoChallenges = {
         userId: TEST_USER_ID,
         totalMasteryPoints: 100,
-        rank: "APPRENTICE",
+        rank: 'APPRENTICE',
         techniques: {
           durationMastery: 5,
           purityMastery: 5,
@@ -359,16 +359,16 @@ describe("Mastery Service", () => {
       };
       (loadStoredMasteryState as jest.Mock).mockReturnValue(stateWithNoChallenges);
 
-      await expect(claimMasteryChallenge(TEST_USER_ID, "non-existent")).rejects.toThrow("Challenge not found");
+      await expect(claimMasteryChallenge(TEST_USER_ID, 'non-existent')).rejects.toThrow('Challenge not found');
     });
   });
 
-  describe("getActiveChallenges", () => {
-    it("should return all active challenges", async () => {
+  describe('getActiveChallenges', () => {
+    it('should return all active challenges', async () => {
       const stateWithChallenges = {
         userId: TEST_USER_ID,
         totalMasteryPoints: 500,
-        rank: "ADEPT",
+        rank: 'ADEPT',
         techniques: {
           durationMastery: 10,
           purityMastery: 8,
@@ -377,9 +377,9 @@ describe("Mastery Service", () => {
           bossMastery: 5,
         },
         activeChallenges: [
-          { id: "c1", title: "Challenge 1", status: "ACTIVE" },
-          { id: "c2", title: "Challenge 2", status: "ACTIVE" },
-          { id: "c3", title: "Challenge 3", status: "COMPLETED" },
+          { id: 'c1', title: 'Challenge 1', status: 'ACTIVE' },
+          { id: 'c2', title: 'Challenge 2', status: 'ACTIVE' },
+          { id: 'c3', title: 'Challenge 3', status: 'COMPLETED' },
         ],
         unlockedFeatures: [],
         updatedAt: Date.now(),
@@ -389,16 +389,16 @@ describe("Mastery Service", () => {
       const challenges = await getActiveChallenges(TEST_USER_ID);
 
       expect(challenges.length).toBe(2);
-      expect(challenges.every((c) => c.status === "ACTIVE")).toBe(true);
+      expect(challenges.every((c) => c.status === 'ACTIVE')).toBe(true);
     });
   });
 
-  describe("getTechniqueStats", () => {
-    it("should return technique levels and next milestones", async () => {
+  describe('getTechniqueStats', () => {
+    it('should return technique levels and next milestones', async () => {
       const stateWithTechniques = {
         userId: TEST_USER_ID,
         totalMasteryPoints: 1000,
-        rank: "EXPERT",
+        rank: 'EXPERT',
         techniques: {
           durationMastery: 15,
           purityMastery: 12,
@@ -421,12 +421,12 @@ describe("Mastery Service", () => {
     });
   });
 
-  describe("getUnlockedFeatures", () => {
-    it("should return unlocked features for rank", async () => {
+  describe('getUnlockedFeatures', () => {
+    it('should return unlocked features for rank', async () => {
       const expertState = {
         userId: TEST_USER_ID,
         totalMasteryPoints: MASTERY_RANK_THRESHOLDS.EXPERT,
-        rank: "EXPERT",
+        rank: 'EXPERT',
         techniques: {
           durationMastery: 15,
           purityMastery: 15,
@@ -435,22 +435,22 @@ describe("Mastery Service", () => {
           bossMastery: 10,
         },
         activeChallenges: [],
-        unlockedFeatures: ["advanced_analytics", "custom_themes"],
+        unlockedFeatures: ['advanced_analytics', 'custom_themes'],
         updatedAt: Date.now(),
       };
       (loadStoredMasteryState as jest.Mock).mockReturnValue(expertState);
 
       const features = await getUnlockedFeatures(TEST_USER_ID);
 
-      expect(features).toContain("advanced_analytics");
-      expect(features).toContain("custom_themes");
+      expect(features).toContain('advanced_analytics');
+      expect(features).toContain('custom_themes');
     });
 
-    it("should unlock new features on rank up", async () => {
+    it('should unlock new features on rank up', async () => {
       const apprenticeState = {
         userId: TEST_USER_ID,
         totalMasteryPoints: 0,
-        rank: "APPRENTICE",
+        rank: 'APPRENTICE',
         techniques: {
           durationMastery: 0,
           purityMastery: 0,
@@ -466,7 +466,7 @@ describe("Mastery Service", () => {
 
       const features = await getUnlockedFeatures(TEST_USER_ID);
 
-      expect(features).toEqual(expect.arrayContaining(["basic_stats"]));
+      expect(features).toEqual(expect.arrayContaining(['basic_stats']));
     });
   });
 });

@@ -6,17 +6,17 @@
  * unlock conditions, share button, and special handling for hidden achievements.
  */
 
-import React, { useCallback, useMemo } from "react";
-import { View, Pressable, Share } from "react-native";
-import Animated, { useAnimatedStyle, withSpring } from "react-native-reanimated";
-import { Box, Text, Button } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import type { Achievement } from "../types";
-import { getAchievementDisplayInfo, getRarityColor } from "../definitions";
-import { triggerHaptic, type HapticFeedbackKind } from "@/utils/haptics";
-import { createDebugger } from "@/utils/debug";
+import React, { useCallback, useMemo } from 'react';
+import { View, Pressable, Share } from 'react-native';
+import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import { Box, Text, Button } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import type { Achievement } from '../types';
+import { getAchievementDisplayInfo, getRarityColor } from '../definitions';
+import { triggerHaptic, type HapticFeedbackKind } from '@/utils/haptics';
+import { createDebugger } from '@/utils/debug';
 
-const debug = createDebugger("achievements:detail-sheet");
+const debug = createDebugger('achievements:detail-sheet');
 
 // ============================================================================
 // Types
@@ -42,23 +42,23 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({ 
 
   // Animation for legendary achievements
   const glowStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: withSpring(achievement.rarity === "LEGENDARY" ? 1.05 : 1, { damping: 10 }) }],
+    transform: [{ scale: withSpring(achievement.rarity === 'LEGENDARY' ? 1.05 : 1, { damping: 10 }) }],
   }));
 
   // Handle share
   const handleShare = useCallback(async () => {
-    await triggerHaptic("impactMedium");
+    await triggerHaptic('impactMedium');
 
     const shareText = isUnlocked ? `I just unlocked "${display.title}" in VEX! 🏆\n\n${display.description}\n\n${achievement.shareText}` : `Check out this achievement in VEX: "${display.title}"\n\nCan you unlock it?`;
 
     try {
       await Share.share({
         message: shareText,
-        title: "VEX Achievement",
+        title: 'VEX Achievement',
       });
       onShare?.();
     } catch (error) {
-      debug.error("Share failed", error instanceof Error ? error : new Error(String(error)));
+      debug.error('Share failed', error instanceof Error ? error : new Error(String(error)));
     }
   }, [achievement, display, isUnlocked, onShare]);
 
@@ -72,15 +72,15 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({ 
     if (!unlockedAt) {
       return null;
     }
-    return new Date(unlockedAt).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    return new Date(unlockedAt).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   }, [unlockedAt]);
 
   // Is this a legendary hidden achievement that is still locked?
-  const isHiddenLegendaryLocked = achievement.isHidden && !isUnlocked && achievement.rarity === "LEGENDARY";
+  const isHiddenLegendaryLocked = achievement.isHidden && !isUnlocked && achievement.rarity === 'LEGENDARY';
 
   return (
     <Box flex={1} bg={theme.colors.background.primary} style={{ borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
@@ -93,7 +93,7 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({ 
       <Box flex={1} px={6} py={4}>
         {/* Large Icon */}
         <Box alignItems="center" mb={6}>
-          <Animated.View style={achievement.rarity === "LEGENDARY" ? glowStyle : undefined}>
+          <Animated.View style={achievement.rarity === 'LEGENDARY' ? glowStyle : undefined}>
             <Box
               width={120}
               height={120}
@@ -104,7 +104,7 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({ 
               style={{
                 borderWidth: 4,
                 borderColor: isUnlocked ? rarityColor : theme.colors.border.DEFAULT,
-                shadowColor: isUnlocked ? rarityColor : "transparent",
+                shadowColor: isUnlocked ? rarityColor : 'transparent',
                 shadowOffset: { width: 0, height: 0 },
                 shadowOpacity: isUnlocked ? 0.5 : 0,
                 shadowRadius: isUnlocked ? 20 : 0,
@@ -137,7 +137,7 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({ 
 
         {/* Description */}
         <Text variant="body" color={theme.colors.text.secondary} textAlign="center" mb={6} style={{ lineHeight: 22 }}>
-          {isHiddenLegendaryLocked ? "This achievement is rumored to exist... The conditions to unlock it remain a mystery to all but the most dedicated players." : display.description}
+          {isHiddenLegendaryLocked ? 'This achievement is rumored to exist... The conditions to unlock it remain a mystery to all but the most dedicated players.' : display.description}
         </Text>
 
         {/* Unlock Info */}
@@ -171,19 +171,19 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({ 
             </Text>
 
             {isHiddenLegendaryLocked ? (
-              <Text variant="body" color={theme.colors.text.secondary} textAlign="center" style={{ fontStyle: "italic" }}>
+              <Text variant="body" color={theme.colors.text.secondary} textAlign="center" style={{ fontStyle: 'italic' }}>
                 ???
               </Text>
             ) : (
               <>
                 <Text variant="body" color={theme.colors.text.secondary} textAlign="center" mb={3}>
-                  {achievement.isHidden ? "This is a hidden achievement. Keep playing to discover how to unlock it!" : `Complete ${achievement.progressMax > 1 ? `${achievement.progressMax} ` : ""}${achievement.unlockCondition.type.toLowerCase().replace(/_/g, " ")}${achievement.unlockCondition.context ? " with specific conditions" : ""}`}
+                  {achievement.isHidden ? 'This is a hidden achievement. Keep playing to discover how to unlock it!' : `Complete ${achievement.progressMax > 1 ? `${achievement.progressMax} ` : ''}${achievement.unlockCondition.type.toLowerCase().replace(/_/g, ' ')}${achievement.unlockCondition.context ? ' with specific conditions' : ''}`}
                 </Text>
 
                 {/* Progress bar */}
                 {progress > 0 && (
                   <Box>
-                    <Box height={8} borderRadius={4} bg={theme.colors.background.tertiary} style={{ overflow: "hidden" }}>
+                    <Box height={8} borderRadius={4} bg={theme.colors.background.tertiary} style={{ overflow: 'hidden' }}>
                       <Box height="100%" borderRadius={4} bg={rarityColor} style={{ width: `${completionPercentage}%` }} />
                     </Box>
                     <Text variant="caption" color={theme.colors.text.tertiary} textAlign="center" mt={1}>

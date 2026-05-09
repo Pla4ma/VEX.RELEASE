@@ -7,7 +7,6 @@
  */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -22,6 +21,7 @@ import { HomeHero } from './HomeScreenVisuals';
 import { HomeContent } from './components/HomeContent';
 import { useHomeData } from './hooks/useHomeData';
 import { readSuggestedDuration, readSuggestedMode } from './utils';
+import { AppScreen } from '../../components/primitives';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -96,11 +96,8 @@ export function HomeScreen(): JSX.Element {
   }, [controller.userId, navigation]);
 
   return (
-    <ScrollView
-      style={{ flex: 1 }}
-      contentContainerStyle={{ paddingBottom: 40 }}
-      showsVerticalScrollIndicator={false}
-    >
+    <AppScreen contentStyle={{ gap: 0, paddingHorizontal: 0, paddingTop: 0 }} padded={false}>
+      {/* 1. Identity greeting */}
       <GreetingHeader
         userName={controller.user?.firstName}
         avatarUrl={controller.user?.avatar ?? undefined}
@@ -114,39 +111,8 @@ export function HomeScreen(): JSX.Element {
         unreadNotificationCount={data.unreadNotificationCount}
       />
 
-      <HomeHero
-        currentStreak={controller.currentStreak}
-        insetsTop={data.insets.top}
-        isAtRisk={Boolean(controller.streakQuery.data?.isAtRisk)}
-        isFirstRun={controller.isFirstRun}
-        isLoading={controller.isLoading}
-        progressPercent={controller.progressPercent}
-        todayFocusMinutes={controller.todayFocusMinutes}
-        userFirstName={controller.user?.firstName}
-        userId={controller.userId || undefined}
-      />
-
-      {!data.interventionLoading && intervention && (
-        <CoachInterventionBanner
-          intervention={intervention}
-          coachName="VEX Coach"
-          onAction={handleInterventionAction}
-          onDismiss={(dismissed) => dismissIntervention(dismissed.id)}
-        />
-      )}
-
-      <StartSessionButton
-        hasActiveSession={data.hasActiveSession}
-        isLoading={controller.isLoading}
-        onPress={() => controller.openSetup()}
-        resumeTimeSeconds={data.resumeTimeSeconds}
-        squadMembersFocusing={data.squadMembersFocusing}
-        streakHoursRemaining={data.streakHoursRemaining}
-        streakRiskLevel={controller.streakQuery.data?.riskLevel ?? 'NONE'}
-      />
-
       <HomeContent navigation={navigation} data={data} />
-    </ScrollView>
+    </AppScreen>
   );
 }
 

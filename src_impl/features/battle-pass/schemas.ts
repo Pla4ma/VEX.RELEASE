@@ -2,7 +2,7 @@
  * Battle Pass Feature - Zod Schemas
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Constants
@@ -21,7 +21,7 @@ const BATTLE_PASS_LIMITS = {
 // Reward Type Schema
 // ============================================================================
 
-export const RewardTypeSchema = z.enum(["XP", "COINS", "GEMS", "ITEM", "COSMETIC", "TITLE", "BOOST", "STREAK_SHIELD", "AVATAR_FRAME", "EMOTE"]);
+export const RewardTypeSchema = z.enum(['XP', 'COINS', 'GEMS', 'ITEM', 'COSMETIC', 'TITLE', 'BOOST', 'STREAK_SHIELD', 'AVATAR_FRAME', 'EMOTE']);
 
 // ============================================================================
 // Core Battle Pass Schemas
@@ -52,7 +52,7 @@ export const TierRewardSchema = z
     name: z.string().min(1).max(100),
     description: z.string().max(500),
     iconUrl: z.string().url().nullable(),
-    rarity: z.enum(["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"]),
+    rarity: z.enum(['COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY']),
   })
   .strict();
 
@@ -121,7 +121,7 @@ export const UserBattlePassSummarySchema = z
 // Claim State Schemas
 // ============================================================================
 
-export const ClaimStatusSchema = z.enum(["AVAILABLE", "CLAIMED", "LOCKED", "PREMIUM_REQUIRED"]);
+export const ClaimStatusSchema = z.enum(['AVAILABLE', 'CLAIMED', 'LOCKED', 'PREMIUM_REQUIRED']);
 
 export const TierClaimStateSchema = z
   .object({
@@ -139,7 +139,7 @@ export const ClaimResultSchema = z
   .object({
     success: z.boolean(),
     tierNumber: z.number().int().positive(),
-    track: z.enum(["FREE", "PREMIUM"]),
+    track: z.enum(['FREE', 'PREMIUM']),
     rewards: z.array(TierRewardSchema),
     error: z.string().nullable(),
   })
@@ -230,7 +230,7 @@ export const ClaimTierInputSchema = z
     userId: z.string().uuid(),
     seasonId: z.string().uuid(),
     tierNumber: z.number().int().positive(),
-    track: z.enum(["FREE", "PREMIUM"]),
+    track: z.enum(['FREE', 'PREMIUM']),
   })
   .strict();
 
@@ -238,7 +238,7 @@ export const PurchasePremiumInputSchema = z
   .object({
     userId: z.string().uuid(),
     seasonId: z.string().uuid(),
-    paymentMethod: z.enum(["GEMS", "REAL_MONEY"]),
+    paymentMethod: z.enum(['GEMS', 'REAL_MONEY']),
   })
   .strict();
 

@@ -12,6 +12,36 @@ import { createDebugger } from '../utils/debug';
 const debug = createDebugger('config:supabase');
 
 /**
+ * Create mock Supabase client for missing credentials
+ */
+function createMockSupabaseClient(): SupabaseClient {
+  const error = new Error('Supabase not configured. Please set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY in your environment.');
+
+  return {
+    auth: {
+      signUp: async () => ({ data: { user: null }, error: { message: error.message } }),
+      signInWithPassword: async () => ({ data: { user: null }, error: { message: error.message } }),
+      signOut: async () => ({ error: { message: error.message } }),
+      getSession: async () => ({ data: { session: null }, error: { message: error.message } }),
+      getUser: async () => ({ data: { user: null }, error: { message: error.message } }),
+      resetPasswordForEmail: async () => ({ error: { message: error.message } }),
+      updateUser: async () => ({ error: { message: error.message } }),
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+    },
+    from: () => ({
+      select: () => ({
+        eq: () => ({
+          order: () => ({
+            data: [],
+            error: { message: error.message },
+          }),
+        }),
+      }),
+    }),
+  } as unknown as SupabaseClient;
+}
+
+/**
  * Supabase configuration
  */
 const IS_JEST = Boolean(process.env.JEST_WORKER_ID);
@@ -26,6 +56,8 @@ const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || TEST_SUPA
 function createSupabaseClient(): SupabaseClient {
   if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
     debug.warn('[Supabase] Missing URL or anon key, client will not function');
+    // Return a mock client that prevents crashes but provides clear error messages
+    return createMockSupabaseClient();
   }
 
   return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
@@ -33,17 +65,16 @@ function createSupabaseClient(): SupabaseClient {
       // Storage is handled by our secure storage
       storage: {
         getItem: async (key: string) => {
-          // Import dynamically to avoid circular deps
-          const { getSecureStorage } = await import('../persistence');
+          const { getSecureStorage } = await import('../persistence/SecureStorage');
           const value = await getSecureStorage().getItem(key);
           return value ?? null;
         },
         setItem: async (key: string, value: string) => {
-          const { getSecureStorage } = await import('../persistence');
+          const { getSecureStorage } = await import('../persistence/SecureStorage');
           return getSecureStorage().setItem(key, value);
         },
         removeItem: async (key: string) => {
-          const { getSecureStorage } = await import('../persistence');
+          const { getSecureStorage } = await import('../persistence/SecureStorage');
           return getSecureStorage().removeItem(key);
         },
       },

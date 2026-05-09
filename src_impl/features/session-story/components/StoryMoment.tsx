@@ -7,14 +7,14 @@
  * @phase 17.2 - Integration with SessionCompleteContent
  */
 
-import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, Pressable } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from "react-native-reanimated";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTheme } from "@/theme";
-import { haptics } from "@/shared/feedback";
-import { useReducedMotion } from "@/hooks";
-import type { SessionStory, StoryBeat } from "../schemas";
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, Pressable } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '@/theme';
+import { haptics } from '@/shared/feedback';
+import { useReducedMotion } from '@/hooks';
+import type { SessionStory, StoryBeat } from '../schemas';
 
 // ============================================================================
 // Types
@@ -59,7 +59,7 @@ export const StoryMoment: React.FC<StoryMomentProps> = ({ story, onComplete, onS
     } else {
       // Haptic feedback
       if (!isReducedMotion) {
-        haptics.impact("light");
+        haptics.impact('light');
       }
       setCurrentBeatIndex((prev) => prev + 1);
     }
@@ -79,7 +79,7 @@ export const StoryMoment: React.FC<StoryMomentProps> = ({ story, onComplete, onS
       style={[
         {
           flex: 1,
-          backgroundColor: theme.colors.background?.primary ?? "#000",
+          backgroundColor: theme.colors.background?.primary ?? '#000',
           paddingTop: insets.top,
           paddingBottom: insets.bottom,
         },
@@ -89,15 +89,15 @@ export const StoryMoment: React.FC<StoryMomentProps> = ({ story, onComplete, onS
       {/* Header with progress and skip */}
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           paddingHorizontal: 20,
           paddingTop: 16,
           paddingBottom: 12,
         }}
       >
-        <View style={{ flexDirection: "row", gap: 6 }}>
+        <View style={{ flexDirection: 'row', gap: 6 }}>
           {story.beats.map((_, index) => (
             <View
               key={index}
@@ -105,7 +105,7 @@ export const StoryMoment: React.FC<StoryMomentProps> = ({ story, onComplete, onS
                 width: 6,
                 height: 6,
                 borderRadius: 3,
-                backgroundColor: index <= currentBeatIndex ? (theme.colors.primary?.[500] ?? "#fff") : (theme.colors.border?.DEFAULT ?? "#333"),
+                backgroundColor: index <= currentBeatIndex ? (theme.colors.primary?.[500] ?? '#fff') : (theme.colors.border?.DEFAULT ?? '#333'),
               }}
             />
           ))}
@@ -116,8 +116,8 @@ export const StoryMoment: React.FC<StoryMomentProps> = ({ story, onComplete, onS
             <Text
               style={{
                 fontSize: 14,
-                fontWeight: "500",
-                color: theme.colors.text?.muted ?? "#888",
+                fontWeight: '500',
+                color: theme.colors.text?.muted ?? '#888',
               }}
             >
               Skip
@@ -130,8 +130,8 @@ export const StoryMoment: React.FC<StoryMomentProps> = ({ story, onComplete, onS
       <Pressable
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           paddingHorizontal: 32,
         }}
         onPress={handleTap}
@@ -140,15 +140,15 @@ export const StoryMoment: React.FC<StoryMomentProps> = ({ story, onComplete, onS
       </Pressable>
 
       {/* Footer */}
-      <View style={{ paddingVertical: 24, alignItems: "center" }}>
+      <View style={{ paddingVertical: 24, alignItems: 'center' }}>
         <Text
           style={{
             fontSize: 14,
-            fontWeight: "500",
-            color: theme.colors.text?.muted ?? "#888",
+            fontWeight: '500',
+            color: theme.colors.text?.muted ?? '#888',
           }}
         >
-          {isLastBeat ? "Tap to finish" : "Tap to continue"}
+          {isLastBeat ? 'Tap to finish' : 'Tap to continue'}
         </Text>
       </View>
     </Animated.View>
@@ -166,49 +166,49 @@ interface StoryBeatContentProps {
 
 const StoryBeatContent: React.FC<StoryBeatContentProps> = ({ beat, theme }) => {
   // Get icon for beat type
-  const getIcon = (type: StoryBeat["type"]): string => {
+  const getIcon = (type: StoryBeat['type']): string => {
     const icons: Record<string, string> = {
-      OPENING: "🌅",
-      FOCUS_JOURNEY: "🎯",
-      STREAK_MOMENT: "🔥",
-      BOSS_BATTLE: "⚔️",
-      MILESTONE_REACHED: "🏆",
-      PERFECTION_MOMENT: "✨",
-      COMEBACK_TRIUMPH: "🦅",
-      PROGRESSION_CLIFFHANGER: "📈",
-      ACHIEVEMENT_UNLOCK: "🎖️",
-      CLOSING_REFLECTION: "🌟",
+      OPENING: '🌅',
+      FOCUS_JOURNEY: '🎯',
+      STREAK_MOMENT: '🔥',
+      BOSS_BATTLE: '⚔️',
+      MILESTONE_REACHED: '🏆',
+      PERFECTION_MOMENT: '✨',
+      COMEBACK_TRIUMPH: '🦅',
+      PROGRESSION_CLIFFHANGER: '📈',
+      ACHIEVEMENT_UNLOCK: '🎖️',
+      CLOSING_REFLECTION: '🌟',
     };
-    return icons[type] ?? "📝";
+    return icons[type] ?? '📝';
   };
 
   // Get emotion color
-  const getEmotionColor = (emotion: StoryBeat["emotion"]): string => {
+  const getEmotionColor = (emotion: StoryBeat['emotion']): string => {
     const colors: Record<string, string> = {
-      TRIUMPH: theme.colors.success?.DEFAULT ?? "#22c55e",
-      MASTERY: theme.colors.primary?.[500] ?? "#3b82f6",
-      RESILIENCE: theme.colors.warning?.DEFAULT ?? "#f59e0b",
-      DETERMINATION: theme.colors.info?.DEFAULT ?? "#3b82f6",
-      ANTICIPATION: theme.colors.primary?.[400] ?? "#60a5fa",
-      WONDER: theme.colors.primary?.[400] ?? "#60a5fa",
-      GRATITUDE: theme.colors.success?.DEFAULT ?? "#22c55e",
-      RELIEF: theme.colors.success?.DEFAULT ?? "#22c55e",
+      TRIUMPH: theme.colors.success?.DEFAULT ?? '#22c55e',
+      MASTERY: theme.colors.primary?.[500] ?? '#3b82f6',
+      RESILIENCE: theme.colors.warning?.DEFAULT ?? '#f59e0b',
+      DETERMINATION: theme.colors.info?.DEFAULT ?? '#3b82f6',
+      ANTICIPATION: theme.colors.primary?.[400] ?? '#60a5fa',
+      WONDER: theme.colors.primary?.[400] ?? '#60a5fa',
+      GRATITUDE: theme.colors.success?.DEFAULT ?? '#22c55e',
+      RELIEF: theme.colors.success?.DEFAULT ?? '#22c55e',
     };
-    return colors[emotion] ?? theme.colors.primary?.[500] ?? "#3b82f6";
+    return colors[emotion] ?? theme.colors.primary?.[500] ?? '#3b82f6';
   };
 
   const emotionColor = getEmotionColor(beat.emotion);
 
   return (
-    <View style={{ alignItems: "center", width: "100%" }}>
+    <View style={{ alignItems: 'center', width: '100%' }}>
       {/* Icon */}
       <View
         style={{
           width: 80,
           height: 80,
           borderRadius: 40,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           marginBottom: 24,
           backgroundColor: `${emotionColor}20`,
         }}
@@ -220,11 +220,11 @@ const StoryBeatContent: React.FC<StoryBeatContentProps> = ({ beat, theme }) => {
       <Text
         style={{
           fontSize: 28,
-          fontWeight: "700",
-          textAlign: "center",
+          fontWeight: '700',
+          textAlign: 'center',
           marginBottom: 12,
           lineHeight: 36,
-          color: theme.colors.text?.primary ?? "#fff",
+          color: theme.colors.text?.primary ?? '#fff',
         }}
       >
         {beat.headline}
@@ -235,10 +235,10 @@ const StoryBeatContent: React.FC<StoryBeatContentProps> = ({ beat, theme }) => {
         <Text
           style={{
             fontSize: 16,
-            textAlign: "center",
+            textAlign: 'center',
             lineHeight: 24,
             marginBottom: 20,
-            color: theme.colors.text?.secondary ?? "#aaa",
+            color: theme.colors.text?.secondary ?? '#aaa',
           }}
         >
           {beat.subtext}
@@ -255,7 +255,7 @@ const StoryBeatContent: React.FC<StoryBeatContentProps> = ({ beat, theme }) => {
             backgroundColor: `${emotionColor}20`,
           }}
         >
-          <Text style={{ fontSize: 14, fontWeight: "600", color: emotionColor }}>{beat.metadata.context}</Text>
+          <Text style={{ fontSize: 14, fontWeight: '600', color: emotionColor }}>{beat.metadata.context}</Text>
         </View>
       )}
     </View>

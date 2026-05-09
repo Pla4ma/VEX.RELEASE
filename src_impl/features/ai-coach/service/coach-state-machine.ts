@@ -5,9 +5,9 @@
  * Handles state transitions, validation, and entry/exit actions.
  */
 
-import { type CoachUserState, type CoachState, type BehaviorProfile, type CoachMessage, CoachUserStateSchema } from "../schemas";
-import * as repository from "../repository";
-import { withRetry, RetryableError } from "../utils/retry";
+import { type CoachUserState, type CoachState, type BehaviorProfile, type CoachMessage, CoachUserStateSchema } from '../schemas';
+import * as repository from '../repository';
+import { withRetry, RetryableError } from '../utils/retry';
 
 // ============================================================================
 // State Machine Configuration
@@ -23,20 +23,20 @@ interface StateConfig {
 
 const STATE_CONFIG: Record<CoachUserState, StateConfig> = {
   COLD_START: {
-    allowedTransitions: ["LOW_CONFIDENCE", "STREAK_AT_RISK"],
+    allowedTransitions: ['LOW_CONFIDENCE', 'STREAK_AT_RISK'],
     requiredDataPoints: 0,
   },
   LOW_CONFIDENCE: {
-    allowedTransitions: ["HIGH_CONFIDENCE", "STREAK_AT_RISK", "COLD_START"],
+    allowedTransitions: ['HIGH_CONFIDENCE', 'STREAK_AT_RISK', 'COLD_START'],
     requiredDataPoints: 5,
     maxDurationHours: 168, // 1 week - re-evaluate after
   },
   HIGH_CONFIDENCE: {
-    allowedTransitions: ["STREAK_AT_RISK", "COMEBACK_MODE", "OVERLOAD_PROTECTION", "MUTED_MODE"],
+    allowedTransitions: ['STREAK_AT_RISK', 'COMEBACK_MODE', 'OVERLOAD_PROTECTION', 'MUTED_MODE'],
     requiredDataPoints: 20,
   },
   STREAK_AT_RISK: {
-    allowedTransitions: ["HIGH_CONFIDENCE", "POST_FAILURE_SUPPORT", "MUTED_MODE"],
+    allowedTransitions: ['HIGH_CONFIDENCE', 'POST_FAILURE_SUPPORT', 'MUTED_MODE'],
     maxDurationHours: 48, // Auto-resolve after 2 days
   },
   COMEBACK_MODE: {
@@ -44,7 +44,7 @@ const STATE_CONFIG: Record<CoachUserState, StateConfig> = {
       // Initialize comeback plan if not exists
       await ensureComebackPlan(state.userId);
     },
-    allowedTransitions: ["HIGH_CONFIDENCE", "POST_FAILURE_SUPPORT", "MUTED_MODE"],
+    allowedTransitions: ['HIGH_CONFIDENCE', 'POST_FAILURE_SUPPORT', 'MUTED_MODE'],
     maxDurationHours: 168, // 1 week comeback window
   },
   POST_FAILURE_SUPPORT: {
@@ -52,7 +52,7 @@ const STATE_CONFIG: Record<CoachUserState, StateConfig> = {
       // Send supportive message
       await sendPostFailureSupport(state.userId);
     },
-    allowedTransitions: ["COMEBACK_MODE", "LOW_CONFIDENCE", "MUTED_MODE"],
+    allowedTransitions: ['COMEBACK_MODE', 'LOW_CONFIDENCE', 'MUTED_MODE'],
     maxDurationHours: 72, // 3 days of support
   },
   MILESTONE_HYPE: {
@@ -60,7 +60,7 @@ const STATE_CONFIG: Record<CoachUserState, StateConfig> = {
       // Send milestone celebration
       await sendMilestoneCelebration(state.userId, state);
     },
-    allowedTransitions: ["HIGH_CONFIDENCE", "STREAK_AT_RISK"],
+    allowedTransitions: ['HIGH_CONFIDENCE', 'STREAK_AT_RISK'],
     maxDurationHours: 24, // Hype lasts 1 day
   },
   OVERLOAD_PROTECTION: {
@@ -72,7 +72,7 @@ const STATE_CONFIG: Record<CoachUserState, StateConfig> = {
       // Restore normal notifications
       await restoreNotifications(state.userId);
     },
-    allowedTransitions: ["HIGH_CONFIDENCE", "MUTED_MODE"],
+    allowedTransitions: ['HIGH_CONFIDENCE', 'MUTED_MODE'],
     maxDurationHours: 24,
   },
   MUTED_MODE: {
@@ -84,7 +84,7 @@ const STATE_CONFIG: Record<CoachUserState, StateConfig> = {
       // Restore notifications
       await restoreNotifications(state.userId);
     },
-    allowedTransitions: ["HIGH_CONFIDENCE", "LOW_CONFIDENCE"],
+    allowedTransitions: ['HIGH_CONFIDENCE', 'LOW_CONFIDENCE'],
     maxDurationHours: 168, // 1 week max mute
   },
 };
@@ -102,45 +102,45 @@ export async function determineOptimalState(userId: string, profile: BehaviorPro
   const [currentState, streakStatus, recentSessions, comebackPlan] = await Promise.all([getCurrentStateSafe(userId), fetchStreakStatus(userId), fetchRecentSessionMetrics(userId, 7), repository.fetchActiveComebackPlan(userId)]);
 
   // Check for comeback mode first (highest priority)
-  if (comebackPlan?.status === "ACTIVE") {
-    return "COMEBACK_MODE";
+  if (comebackPlan?.status === 'ACTIVE') {
+    return 'COMEBACK_MODE';
   }
 
   // Check for streak at risk
-  if (streakStatus.isAtRisk && streakStatus.riskLevel !== "NONE") {
-    return "STREAK_AT_RISK";
+  if (streakStatus.isAtRisk && streakStatus.riskLevel !== 'NONE') {
+    return 'STREAK_AT_RISK';
   }
 
   // Check for streak break (post-failure)
   if (streakStatus.wasRecentlyBroken && streakStatus.daysSinceBreak < 3) {
-    return "POST_FAILURE_SUPPORT";
+    return 'POST_FAILURE_SUPPORT';
   }
 
   // Check for milestone
   if (streakStatus.recentMilestone && !streakStatus.milestoneCelebrated) {
-    return "MILESTONE_HYPE";
+    return 'MILESTONE_HYPE';
   }
 
   // Check for overload
   if (recentSessions.sessionsToday >= 5) {
-    return "OVERLOAD_PROTECTION";
+    return 'OVERLOAD_PROTECTION';
   }
 
   // Check for muted mode
   if (currentState?.reduceNotifications || currentState?.muteUntil) {
-    return "MUTED_MODE";
+    return 'MUTED_MODE';
   }
 
   // Determine based on data confidence
   if (!profile || profile.coldStart || profile.dataPoints < 5) {
-    return "COLD_START";
+    return 'COLD_START';
   }
 
-  if (profile.confidenceLevel === "LOW" || profile.dataPoints < 20) {
-    return "LOW_CONFIDENCE";
+  if (profile.confidenceLevel === 'LOW' || profile.dataPoints < 20) {
+    return 'LOW_CONFIDENCE';
   }
 
-  return "HIGH_CONFIDENCE";
+  return 'HIGH_CONFIDENCE';
 }
 
 /**
@@ -158,7 +158,7 @@ export async function transitionState(userId: string, newState: CoachUserState, 
   // Execute exit actions for current state
   const currentConfig = STATE_CONFIG[previousStateValue];
   if (currentConfig?.onExit) {
-    await withRetry(() => currentConfig.onExit!(currentState, newState), { maxAttempts: 3 }, "state-exit-action");
+    await withRetry(() => currentConfig.onExit!(currentState, newState), { maxAttempts: 3 }, 'state-exit-action');
   }
 
   // Build new state
@@ -170,12 +170,12 @@ export async function transitionState(userId: string, newState: CoachUserState, 
   };
 
   // Persist state change
-  await withRetry(() => repository.upsertCoachState(newStateRecord), { maxAttempts: 3 }, "persist-state");
+  await withRetry(() => repository.upsertCoachState(newStateRecord), { maxAttempts: 3 }, 'persist-state');
 
   // Execute entry actions for new state
   const newConfig = STATE_CONFIG[newState];
   if (newConfig?.onEntry) {
-    await withRetry(() => newConfig.onEntry!(newStateRecord, previousStateValue), { maxAttempts: 3 }, "state-entry-action");
+    await withRetry(() => newConfig.onEntry!(newStateRecord, previousStateValue), { maxAttempts: 3 }, 'state-entry-action');
   }
 
   // Emit state change event
@@ -235,10 +235,10 @@ async function getCurrentStateSafe(userId: string): Promise<CoachState> {
   // Create default state if none exists
   const defaultState: CoachState = {
     userId,
-    currentState: "COLD_START",
+    currentState: 'COLD_START',
     previousState: null,
     stateEnteredAt: Date.now(),
-    personaId: "encouraging-mentor",
+    personaId: 'encouraging-mentor',
     behaviorProfile: null,
     lastInterventionAt: null,
     interventionsToday: 0,
@@ -251,7 +251,7 @@ async function getCurrentStateSafe(userId: string): Promise<CoachState> {
 
 interface StreakStatus {
   isAtRisk: boolean;
-  riskLevel: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  riskLevel: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   wasRecentlyBroken: boolean;
   daysSinceBreak: number;
   recentMilestone: boolean;
@@ -263,7 +263,7 @@ async function fetchStreakStatus(userId: string): Promise<StreakStatus> {
   // Placeholder for actual implementation
   return {
     isAtRisk: false,
-    riskLevel: "NONE",
+    riskLevel: 'NONE',
     wasRecentlyBroken: false,
     daysSinceBreak: 0,
     recentMilestone: false,
@@ -341,13 +341,13 @@ export class StateTransitionError extends Error {
     public toState: CoachUserState,
   ) {
     super(message);
-    this.name = "StateTransitionError";
+    this.name = 'StateTransitionError';
   }
 }
 
 export class StateMachineError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "StateMachineError";
+    this.name = 'StateMachineError';
   }
 }

@@ -10,20 +10,20 @@
  * @phase 4B.3
  */
 
-import React from "react";
-import { Pressable, ScrollView } from "react-native";
-import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming } from "react-native-reanimated";
+import React from 'react';
+import { Pressable, ScrollView } from 'react-native';
+import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
 
 export interface SquadMember {
   userId: string;
   name: string;
   avatarUrl?: string;
-  status: "done" | "pending" | "focusing";
+  status: 'done' | 'pending' | 'focusing';
   sessionDuration?: number; // minutes focused today
   currentSessionStart?: number; // timestamp if focusing now
   isMe?: boolean;
@@ -72,10 +72,10 @@ function SquadStreak({ days }: { days: number }): JSX.Element {
 /**
  * Member status indicator
  */
-function MemberStatus({ status, duration }: { status: SquadMember["status"]; duration?: number }): JSX.Element {
+function MemberStatus({ status, duration }: { status: SquadMember['status']; duration?: number }): JSX.Element {
   const { theme } = useTheme();
 
-  if (status === "done") {
+  if (status === 'done') {
     return (
       <Box flexDirection="row" alignItems="center" gap="xs">
         <Text fontSize={16}>✅</Text>
@@ -86,7 +86,7 @@ function MemberStatus({ status, duration }: { status: SquadMember["status"]; dur
     );
   }
 
-  if (status === "focusing") {
+  if (status === 'focusing') {
     return (
       <Box flexDirection="row" alignItems="center" gap="xs">
         <Animated.View
@@ -121,18 +121,18 @@ function SquadMemberCard({ member, onNudge, onView }: { member: SquadMember; onN
   const { theme } = useTheme();
   const initial = member.name.charAt(0).toUpperCase();
 
-  const canNudge = member.status === "pending" && !member.isMe && onNudge;
+  const canNudge = member.status === 'pending' && !member.isMe && onNudge;
 
   return (
     <Pressable onPress={() => onView?.(member.userId)} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
-      <Box flexDirection="row" alignItems="center" justifyContent="space-between" p="md" borderRadius="xl" bg={member.isMe ? `${theme.colors.primary[500]}15` : "background.secondary"} borderWidth={1} borderColor={member.isMe ? "primary.500" : "border.light"} mb="sm">
+      <Box flexDirection="row" alignItems="center" justifyContent="space-between" p="md" borderRadius="xl" bg={member.isMe ? `${theme.colors.primary[500]}15` : 'background.secondary'} borderWidth={1} borderColor={member.isMe ? 'primary.500' : 'border.light'} mb="sm">
         <Box flexDirection="row" alignItems="center" gap="md">
           {/* Avatar */}
-          <Box width={48} height={48} borderRadius="full" bg={member.isMe ? "primary.500" : "background.tertiary"} justifyContent="center" alignItems="center">
+          <Box width={48} height={48} borderRadius="full" bg={member.isMe ? 'primary.500' : 'background.tertiary'} justifyContent="center" alignItems="center">
             {member.avatarUrl ? (
               <Box width={44} height={44} borderRadius="full" bg="primary.500" />
             ) : (
-              <Text fontSize={18} color={member.isMe ? "text.inverse" : "text.tertiary"} fontWeight="600">
+              <Text fontSize={18} color={member.isMe ? 'text.inverse' : 'text.tertiary'} fontWeight="600">
                 {initial}
               </Text>
             )}
@@ -168,7 +168,7 @@ function SquadMemberCard({ member, onNudge, onView }: { member: SquadMember; onN
         )}
 
         {/* View indicator */}
-        {member.status === "focusing" && <Text fontSize={20}>🔥</Text>}
+        {member.status === 'focusing' && <Text fontSize={20}>🔥</Text>}
       </Box>
     </Pressable>
   );
@@ -179,8 +179,8 @@ function SquadMemberCard({ member, onNudge, onView }: { member: SquadMember; onN
  */
 export function SquadLiveDashboard({ squadName, streakDays, members, onFocusTogether, onNudgeMember, onViewMember }: SquadLiveDashboardProps): JSX.Element {
   const { theme } = useTheme();
-  const focusingCount = members.filter((m) => m.status === "focusing").length;
-  const doneCount = members.filter((m) => m.status === "done").length;
+  const focusingCount = members.filter((m) => m.status === 'focusing').length;
+  const doneCount = members.filter((m) => m.status === 'done').length;
 
   return (
     <Box flex={1} bg="background.primary">

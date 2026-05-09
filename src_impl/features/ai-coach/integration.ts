@@ -14,11 +14,11 @@
  * - Analytics (effectiveness tracking)
  */
 
-import * as service from "./service";
-import * as repository from "./repository";
-import * as analytics from "./analytics";
-import { AI_COACH_EVENT_CHANNELS, createCoachMessageGeneratedEvent, createStreakRiskDetectedEvent, createComebackActivatedEvent, createBehaviorSignalDetectedEvent, type AICoachEventPayloadMap } from "./events";
-import { type CoachMessage, type MessageCategory, type TriggerType, type SignalType } from "./schemas";
+import * as service from './service';
+import * as repository from './repository';
+import * as analytics from './analytics';
+import { AI_COACH_EVENT_CHANNELS, createCoachMessageGeneratedEvent, createStreakRiskDetectedEvent, createComebackActivatedEvent, createBehaviorSignalDetectedEvent, type AICoachEventPayloadMap } from './events';
+import { type CoachMessage, type MessageCategory, type TriggerType, type SignalType } from './schemas';
 
 // Event bus would be imported from shared/events
 // import { eventBus } from '@/shared/events';
@@ -34,7 +34,7 @@ export async function handleSessionCompleted(payload: { userId: string; sessionI
   // Process behavior signals
   await service.processBehaviorSignal({
     userId: payload.userId,
-    signalType: "SESSION_QUALITY_TREND",
+    signalType: 'SESSION_QUALITY_TREND',
     value: payload.qualityScore,
     metadata: {
       sessionId: payload.sessionId,
@@ -44,24 +44,24 @@ export async function handleSessionCompleted(payload: { userId: string; sessionI
 
   // Check for streak risk mitigation
   const state = await service.getOrCreateCoachState(payload.userId);
-  if (state.currentState === "STREAK_AT_RISK") {
+  if (state.currentState === 'STREAK_AT_RISK') {
     // Evaluate if streak was saved
     await service.evaluateInterventions({
       userId: payload.userId,
-      trigger: "NO_SESSION_24H",
+      trigger: 'NO_SESSION_24H',
       context: { sessionCompleted: true, qualityScore: payload.qualityScore },
     });
   }
 
   // Track comeback session if active
   const comeback = await repository.fetchActiveComebackPlan(payload.userId);
-  if (comeback && comeback.status === "ACTIVE") {
+  if (comeback && comeback.status === 'ACTIVE') {
     await service.trackComebackSession(payload.userId, true);
   }
 
   // Generate progress-based message if milestone reached
   if (payload.qualityScore >= 95) {
-    await generateAndSendMessage(payload.userId, "MOTIVATION_BOOST", {
+    await generateAndSendMessage(payload.userId, 'MOTIVATION_BOOST', {
       qualityScore: payload.qualityScore,
     });
   }
@@ -73,7 +73,7 @@ export async function handleSessionCompleted(payload: { userId: string; sessionI
 export async function handleSessionAbandoned(payload: { userId: string; sessionId: string; duration: number; reason?: string }): Promise<void> {
   await service.evaluateInterventions({
     userId: payload.userId,
-    trigger: "SESSION_ABANDONED",
+    trigger: 'SESSION_ABANDONED',
     context: {
       sessionId: payload.sessionId,
       duration: payload.duration,
@@ -84,7 +84,7 @@ export async function handleSessionAbandoned(payload: { userId: string; sessionI
   // Track signal for future personalization
   await service.processBehaviorSignal({
     userId: payload.userId,
-    signalType: "SESSION_QUALITY_TREND",
+    signalType: 'SESSION_QUALITY_TREND',
     value: 0.3, // Low quality due to abandonment
     metadata: { abandoned: true, duration: payload.duration },
   });
@@ -109,8 +109,8 @@ export async function handleStreakRiskDetected(payload: { userId: string; curren
   // eventBus.publish(AI_COACH_EVENT_CHANNELS.STREAK_RISK_DETECTED, event);
 
   // Generate urgent message for high/critical risk
-  if (payload.riskLevel === "HIGH" || payload.riskLevel === "CRITICAL") {
-    await generateAndSendMessage(payload.userId, "STREAK_RISK", {
+  if (payload.riskLevel === 'HIGH' || payload.riskLevel === 'CRITICAL') {
+    await generateAndSendMessage(payload.userId, 'STREAK_RISK', {
       currentStreak: payload.currentStreak,
       hoursRemaining: Math.max(0, 48 - payload.hoursSinceLastSession),
       riskLevel: payload.riskLevel,
@@ -144,7 +144,7 @@ export async function handleStreakBroken(payload: { userId: string; previousStre
     // eventBus.publish(AI_COACH_EVENT_CHANNELS.COMEBACK_ACTIVATED, event);
   } else {
     // Send post-failure support message
-    await generateAndSendMessage(payload.userId, "POST_FAILURE", {
+    await generateAndSendMessage(payload.userId, 'POST_FAILURE', {
       previousStreak: payload.previousStreak,
     });
   }
@@ -159,7 +159,7 @@ export async function handleStreakBroken(payload: { userId: string; previousStre
  */
 export async function handleLevelUp(payload: { userId: string; oldLevel: number; newLevel: number; xpGained: number }): Promise<void> {
   // Generate milestone hype message
-  await generateAndSendMessage(payload.userId, "MILESTONE_HYPE", {
+  await generateAndSendMessage(payload.userId, 'MILESTONE_HYPE', {
     milestoneLevel: payload.newLevel,
     oldLevel: payload.oldLevel,
   });
@@ -175,7 +175,7 @@ export async function handleLevelUp(payload: { userId: string; oldLevel: number;
   // Track signal
   await service.processBehaviorSignal({
     userId: payload.userId,
-    signalType: "DIFFICULTY_PREFERENCE",
+    signalType: 'DIFFICULTY_PREFERENCE',
     value: payload.newLevel,
   });
 }
@@ -190,7 +190,7 @@ export async function handleLevelUp(payload: { userId: string; oldLevel: number;
 export async function handleChallengeExpiring(payload: { userId: string; challengeId: string; challengeName: string; hoursRemaining: number; progress: number }): Promise<void> {
   await service.evaluateInterventions({
     userId: payload.userId,
-    trigger: "CHALLENGE_EXPIRING",
+    trigger: 'CHALLENGE_EXPIRING',
     context: {
       challengeId: payload.challengeId,
       challengeName: payload.challengeName,
@@ -207,7 +207,7 @@ export async function handleChallengeCompleted(payload: { userId: string; challe
   // Track completion rate signal
   await service.processBehaviorSignal({
     userId: payload.userId,
-    signalType: "CHALLENGE_COMPLETION_RATE",
+    signalType: 'CHALLENGE_COMPLETION_RATE',
     value: 1.0, // completed
     metadata: { challengeId: payload.challengeId, difficulty: payload.difficulty },
   });
@@ -223,7 +223,7 @@ export async function handleChallengeCompleted(payload: { userId: string; challe
 export async function handleBossTimeoutWarning(payload: { userId: string; bossId: string; bossName: string; hoursRemaining: number; healthRemaining: number }): Promise<void> {
   await service.evaluateInterventions({
     userId: payload.userId,
-    trigger: "BOSS_TIMEOUT_WARNING",
+    trigger: 'BOSS_TIMEOUT_WARNING',
     context: {
       bossId: payload.bossId,
       bossName: payload.bossName,
@@ -246,7 +246,7 @@ export async function handleUserReturned(payload: { userId: string; daysInactive
     // But we can also check for comeback eligibility here
     await service.processBehaviorSignal({
       userId: payload.userId,
-      signalType: "COMEBACK_VELOCITY",
+      signalType: 'COMEBACK_VELOCITY',
       value: 1, // returning user
       metadata: { daysInactive: payload.daysInactive },
     });
@@ -264,7 +264,7 @@ export async function handleDailyCheck(payload: { userId: string; lastSessionAt:
   if (hoursSinceLastSession > 24) {
     await service.evaluateInterventions({
       userId: payload.userId,
-      trigger: "NO_SESSION_24H",
+      trigger: 'NO_SESSION_24H',
       context: { hoursSinceLastSession, streakDays: payload.streakDays },
     });
   }
@@ -272,7 +272,7 @@ export async function handleDailyCheck(payload: { userId: string; lastSessionAt:
   // Generate daily recommendation
   await service.createRecommendation({
     userId: payload.userId,
-    type: payload.streakDays > 0 ? "STREAK_PROTECTION" : "OPTIMAL_TIME",
+    type: payload.streakDays > 0 ? 'STREAK_PROTECTION' : 'OPTIMAL_TIME',
     context: { hoursSinceLastSession, streakDays: payload.streakDays },
   });
 }
@@ -286,13 +286,13 @@ async function generateAndSendMessage(userId: string, category: MessageCategory,
     userId,
     category,
     context,
-    preferredDelivery: "BOTH",
+    preferredDelivery: 'BOTH',
   });
 
   if (message) {
     const savedMessage = await repository.createCoachMessage({
       ...message,
-      status: "SENT",
+      status: 'SENT',
       deliveredAt: Date.now(),
     });
 
@@ -342,7 +342,7 @@ export function subscribeToCoachEvents(): () => void {
 // ============================================================================
 
 export interface IntegrationHealth {
-  status: "healthy" | "degraded" | "unhealthy";
+  status: 'healthy' | 'degraded' | 'unhealthy';
   checks: {
     serviceAvailable: boolean;
     repositoryConnected: boolean;
@@ -361,7 +361,7 @@ export async function checkIntegrationHealth(): Promise<IntegrationHealth> {
   const healthy = Object.values(checks).every(Boolean);
 
   return {
-    status: healthy ? "healthy" : "degraded",
+    status: healthy ? 'healthy' : 'degraded',
     checks,
     lastChecked: Date.now(),
   };

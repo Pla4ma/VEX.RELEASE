@@ -4,12 +4,12 @@ import {
   type CoachMemory,
   type CoachMemoryRow,
   type CreateCoachMemoryInput,
-} from "../memory-schemas";
-import { v4 } from "../../../utils/uuid";
+} from '../memory-schemas';
+import { v4 } from '../../../utils/uuid';
 
 export type NewCoachMemoryRow = Omit<
   CoachMemoryRow,
-  "created_at" | "updated_at"
+  'created_at' | 'updated_at'
 >;
 
 export function mapRowToMemory(row: unknown): CoachMemory {

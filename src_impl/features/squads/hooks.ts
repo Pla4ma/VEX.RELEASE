@@ -4,33 +4,33 @@
  * TanStack Query hooks for squad data fetching and mutations.
  */
 
-import { useEffect, useState, useCallback } from "react";
-import { useQuery, useMutation, useQueryClient, type UseQueryOptions } from "@tanstack/react-query";
-import * as service from "./service";
-import * as repository from "./repository";
-import { fetchWarLeaderboard, subscribeToSquadWarDamage } from "./squad-war-repository";
-import { createDebugger } from "../../utils/debug";
-import { type Squad, type SquadSummary, type SquadMemberDetail, type SquadInviteDetail, type CreateSquadInput, type UpdateSquadInput, type InviteToSquadInput, type RespondToInviteInput, type LeaveSquadInput, type KickMemberInput, type UpdateMemberRoleInput, type StartSquadSessionInput } from "./schemas";
+import { useEffect, useState, useCallback } from 'react';
+import { useQuery, useMutation, useQueryClient, type UseQueryOptions } from '@tanstack/react-query';
+import * as service from './service';
+import * as repository from './repository';
+import { fetchWarLeaderboard, subscribeToSquadWarDamage } from './squad-war-repository';
+import { createDebugger } from '../../utils/debug';
+import { type Squad, type SquadSummary, type SquadMemberDetail, type SquadInviteDetail, type CreateSquadInput, type UpdateSquadInput, type InviteToSquadInput, type RespondToInviteInput, type LeaveSquadInput, type KickMemberInput, type UpdateMemberRoleInput, type StartSquadSessionInput } from './schemas';
 
 const SQUAD_QUERY_KEYS = {
-  all: ["squads"] as const,
-  lists: () => [...SQUAD_QUERY_KEYS.all, "list"] as const,
+  all: ['squads'] as const,
+  lists: () => [...SQUAD_QUERY_KEYS.all, 'list'] as const,
   list: (filters: { userId: string }) => [...SQUAD_QUERY_KEYS.lists(), filters] as const,
-  details: () => [...SQUAD_QUERY_KEYS.all, "detail"] as const,
+  details: () => [...SQUAD_QUERY_KEYS.all, 'detail'] as const,
   detail: (squadId: string) => [...SQUAD_QUERY_KEYS.details(), squadId] as const,
-  members: (squadId: string) => [...SQUAD_QUERY_KEYS.detail(squadId), "members"] as const,
-  invites: (userId: string) => [...SQUAD_QUERY_KEYS.all, "invites", userId] as const,
-  public: () => [...SQUAD_QUERY_KEYS.all, "public"] as const,
+  members: (squadId: string) => [...SQUAD_QUERY_KEYS.detail(squadId), 'members'] as const,
+  invites: (userId: string) => [...SQUAD_QUERY_KEYS.all, 'invites', userId] as const,
+  public: () => [...SQUAD_QUERY_KEYS.all, 'public'] as const,
 };
-const debug = createDebugger("squads:hooks");
+const debug = createDebugger('squads:hooks');
 
 // ============================================================================
 // Query Hooks
 // ============================================================================
 
-export function useUserSquads(userId: string | undefined, options?: Omit<UseQueryOptions<SquadSummary[], Error, SquadSummary[], ReturnType<typeof SQUAD_QUERY_KEYS.list>>, "queryKey" | "queryFn">) {
+export function useUserSquads(userId: string | undefined, options?: Omit<UseQueryOptions<SquadSummary[], Error, SquadSummary[], ReturnType<typeof SQUAD_QUERY_KEYS.list>>, 'queryKey' | 'queryFn'>) {
   return useQuery({
-    queryKey: SQUAD_QUERY_KEYS.list({ userId: userId || "" }),
+    queryKey: SQUAD_QUERY_KEYS.list({ userId: userId || '' }),
     queryFn: () => service.getUserSquads(userId!),
     enabled: !!userId,
     staleTime: 5 * 60 * 1000,
@@ -40,7 +40,7 @@ export function useUserSquads(userId: string | undefined, options?: Omit<UseQuer
 
 export function useSquad(squadId: string | undefined, options?: UseQueryOptions<Squad | null>) {
   return useQuery({
-    queryKey: SQUAD_QUERY_KEYS.detail(squadId || ""),
+    queryKey: SQUAD_QUERY_KEYS.detail(squadId || ''),
     queryFn: () => service.getSquadById(squadId!),
     enabled: !!squadId,
     staleTime: 2 * 60 * 1000,
@@ -50,7 +50,7 @@ export function useSquad(squadId: string | undefined, options?: UseQueryOptions<
 
 export function useSquadMembers(squadId: string | undefined, options?: UseQueryOptions<SquadMemberDetail[]>) {
   return useQuery({
-    queryKey: SQUAD_QUERY_KEYS.members(squadId || ""),
+    queryKey: SQUAD_QUERY_KEYS.members(squadId || ''),
     queryFn: () => service.getSquadMembers(squadId!),
     enabled: !!squadId,
     staleTime: 1 * 60 * 1000,
@@ -60,7 +60,7 @@ export function useSquadMembers(squadId: string | undefined, options?: UseQueryO
 
 export function useSquadInvites(userId: string | undefined, options?: UseQueryOptions<SquadInviteDetail[]>) {
   return useQuery({
-    queryKey: SQUAD_QUERY_KEYS.invites(userId || ""),
+    queryKey: SQUAD_QUERY_KEYS.invites(userId || ''),
     queryFn: () => service.getSquadInvitesForUser(userId!),
     enabled: !!userId,
     staleTime: 1 * 60 * 1000,
@@ -114,7 +114,7 @@ export function useDeleteSquad(squadId: string, userId: string) {
 export function useInviteToSquad(invitedBy: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: Omit<InviteToSquadInput, "squadId"> & { squadId: string }) => service.inviteToSquad({ ...input, invitedBy }),
+    mutationFn: (input: Omit<InviteToSquadInput, 'squadId'> & { squadId: string }) => service.inviteToSquad({ ...input, invitedBy }),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: SQUAD_QUERY_KEYS.detail(variables.squadId) });
     },
@@ -146,7 +146,7 @@ export function useLeaveSquad(userId: string) {
 export function useKickMember(adminUserId: string, squadId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: Omit<KickMemberInput, "squadId">) => service.kickMember(adminUserId, { ...input, squadId }),
+    mutationFn: (input: Omit<KickMemberInput, 'squadId'>) => service.kickMember(adminUserId, { ...input, squadId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SQUAD_QUERY_KEYS.members(squadId) });
       queryClient.invalidateQueries({ queryKey: SQUAD_QUERY_KEYS.detail(squadId) });
@@ -157,7 +157,7 @@ export function useKickMember(adminUserId: string, squadId: string) {
 export function useUpdateMemberRole(adminUserId: string, squadId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: Omit<UpdateMemberRoleInput, "squadId">) => service.updateMemberRole(adminUserId, { ...input, squadId }),
+    mutationFn: (input: Omit<UpdateMemberRoleInput, 'squadId'>) => service.updateMemberRole(adminUserId, { ...input, squadId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SQUAD_QUERY_KEYS.members(squadId) });
     },
@@ -188,7 +188,7 @@ export function useRequestToJoinSquad(userId: string) {
 export function useStartSquadSession(userId: string, squadId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (input: Omit<StartSquadSessionInput, "squadId">) => service.startSquadSession(userId, { ...input, squadId }),
+    mutationFn: (input: Omit<StartSquadSessionInput, 'squadId'>) => service.startSquadSession(userId, { ...input, squadId }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: SQUAD_QUERY_KEYS.detail(squadId) });
     },
@@ -201,7 +201,7 @@ export function useStartSquadSession(userId: string, squadId: string) {
 
 export function useSquadPermissions(squadId: string | undefined, userId: string | undefined) {
   const { data: member } = useQuery({
-    queryKey: [...SQUAD_QUERY_KEYS.detail(squadId || ""), "member", userId || ""],
+    queryKey: [...SQUAD_QUERY_KEYS.detail(squadId || ''), 'member', userId || ''],
     queryFn: () => service.getSquadMember(squadId!, userId!),
     enabled: !!squadId && !!userId,
     staleTime: 2 * 60 * 1000,
@@ -210,7 +210,7 @@ export function useSquadPermissions(squadId: string | undefined, userId: string 
   return {
     role: member?.role || null,
     permissions: member ? service.getRolePermissions(member.role) : [],
-    hasPermission: (permission: import("./schemas").SquadPermission) => (member ? service.hasPermission(member, permission) : false),
+    hasPermission: (permission: import('./schemas').SquadPermission) => (member ? service.hasPermission(member, permission) : false),
     isLoading: !squadId || !userId,
   };
 }
@@ -237,11 +237,11 @@ export function useSquadMembersFocusing(userId: string | undefined) {
     const fetchActiveCount = async () => {
       try {
         const { data, error } = await repository.getActiveSquadSessionCount(squadId, userId);
-        if (!isCancelled && !error && typeof data === "number") {
+        if (!isCancelled && !error && typeof data === 'number') {
           setCount(data);
         }
       } catch (error) {
-        debug.error("Failed to fetch squad active count", error instanceof Error ? error : new Error(String(error)));
+        debug.error('Failed to fetch squad active count', error instanceof Error ? error : new Error(String(error)));
         if (!isCancelled) {
           setCount(0);
         }
@@ -262,7 +262,7 @@ export function useSquadMembersFocusing(userId: string | undefined) {
 
     return () => {
       isCancelled = true;
-      if (channel && typeof channel.unsubscribe === "function") {
+      if (channel && typeof channel.unsubscribe === 'function') {
         void channel.unsubscribe();
       }
     };
@@ -280,7 +280,7 @@ export function useSquadMembersFocusing(userId: string | undefined) {
 
 export function useSquadStats(squadId: string | undefined) {
   return useQuery({
-    queryKey: ["squad-stats", squadId],
+    queryKey: ['squad-stats', squadId],
     queryFn: () =>
       Promise.resolve({
         totalFocusTime: 0,
@@ -293,7 +293,7 @@ export function useSquadStats(squadId: string | undefined) {
 
 export function useSquadMissions(squadId: string | undefined) {
   return useQuery({
-    queryKey: ["squad-missions", squadId],
+    queryKey: ['squad-missions', squadId],
     queryFn: () => Promise.resolve([]),
     enabled: !!squadId,
   });
@@ -305,18 +305,18 @@ export function useSquadMissions(squadId: string | undefined) {
 export function useSquadWarLeaderboardLive(warId: string | null) {
   const queryClient = useQueryClient();
   const query = useQuery({
-    queryKey: ["squad-war", "leaderboard", warId],
+    queryKey: ['squad-war', 'leaderboard', warId],
     queryFn: () => (warId ? fetchWarLeaderboard(warId) : Promise.resolve([])),
     enabled: !!warId,
     staleTime: 30_000,
   });
 
   const refreshWar = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ["squad-war", "leaderboard", warId] });
+    queryClient.invalidateQueries({ queryKey: ['squad-war', 'leaderboard', warId] });
   }, [queryClient, warId]);
 
   useEffect(() => {
-    if (!warId) return;
+    if (!warId) {return;}
 
     const intervalId = setInterval(() => {
       refreshWar();

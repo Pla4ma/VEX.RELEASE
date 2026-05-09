@@ -1,12 +1,12 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 /**
  * Content Study Persistence Layer
  * Handles local storage, caching, offline support, and sync queue
  */
 
-import type { PersistedDraft, PersistedStudySession, LocalCacheEntry, SyncQueueItem, StudyContent, StudyGeneration } from "./types";
-import { CONTENT_STUDY_CONSTANTS } from "./types";
-import { getDefaultStorageAdapter } from "../../persistence";
+import type { PersistedDraft, PersistedStudySession, LocalCacheEntry, SyncQueueItem, StudyContent, StudyGeneration } from './types';
+import { CONTENT_STUDY_CONSTANTS } from './types';
+import { getDefaultStorageAdapter } from '../../persistence';
 
 // Get storage adapter
 const getStorage = () => getDefaultStorageAdapter();
@@ -41,7 +41,7 @@ export class DraftManager {
     DraftManager.instance = new DraftManager();
   }
 
-  async saveDraft(draft: Omit<PersistedDraft, "id" | "createdAt" | "updatedAt" | "autoSaveVersion">): Promise<PersistedDraft> {
+  async saveDraft(draft: Omit<PersistedDraft, 'id' | 'createdAt' | 'updatedAt' | 'autoSaveVersion'>): Promise<PersistedDraft> {
     const now = Date.now();
     const id = `draft-${now}-${Math.random().toString(36).substr(2, 9)}`;
 
@@ -68,7 +68,7 @@ export class DraftManager {
     return fullDraft;
   }
 
-  async updateDraft(id: string, updates: Partial<Omit<PersistedDraft, "id" | "createdAt">>): Promise<PersistedDraft | null> {
+  async updateDraft(id: string, updates: Partial<Omit<PersistedDraft, 'id' | 'createdAt'>>): Promise<PersistedDraft | null> {
     const drafts = await this.getAllDrafts();
     const draftIndex = drafts.findIndex((d) => d.id === id);
 
@@ -112,12 +112,12 @@ export class DraftManager {
       const drafts: PersistedDraft[] = JSON.parse(data);
       return this.filterExpiredDrafts(drafts);
     } catch (error) {
-      captureSilentFailure(error, { feature: "content-study", operation: "safe-fallback", type: "data" });
+      captureSilentFailure(error, { feature: 'content-study', operation: 'safe-fallback', type: 'data' });
       return [];
     }
   }
 
-  async getDraftsByType(type: PersistedDraft["type"]): Promise<PersistedDraft[]> {
+  async getDraftsByType(type: PersistedDraft['type']): Promise<PersistedDraft[]> {
     const drafts = await this.getAllDrafts();
     return drafts.filter((d) => d.type === type);
   }
@@ -148,17 +148,17 @@ export class DraftManager {
     return drafts.filter((draft) => now - draft.updatedAt < expiryMs);
   }
 
-  async autoSave(type: PersistedDraft["type"], content: string, existingDraftId?: string): Promise<PersistedDraft> {
+  async autoSave(type: PersistedDraft['type'], content: string, existingDraftId?: string): Promise<PersistedDraft> {
     if (existingDraftId) {
-      const updates = type === "paste" ? { pastedText: content } : type === "youtube" ? { youtubeUrl: content } : {};
+      const updates = type === 'paste' ? { pastedText: content } : type === 'youtube' ? { youtubeUrl: content } : {};
       const updated = await this.updateDraft(existingDraftId, updates);
       if (updated) {
         return updated;
       }
     }
 
-    const draftData = type === "paste" ? { type, activeTab: type, pastedText: content, youtubeUrl: "", selectedFile: null } : type === "youtube" ? { type, activeTab: type, pastedText: "", youtubeUrl: content, selectedFile: null } : { type, activeTab: type, pastedText: "", youtubeUrl: "", selectedFile: null };
-    return this.saveDraft(draftData as Omit<PersistedDraft, "id" | "createdAt" | "updatedAt" | "autoSaveVersion">);
+    const draftData = type === 'paste' ? { type, activeTab: type, pastedText: content, youtubeUrl: '', selectedFile: null } : type === 'youtube' ? { type, activeTab: type, pastedText: '', youtubeUrl: content, selectedFile: null } : { type, activeTab: type, pastedText: '', youtubeUrl: '', selectedFile: null };
+    return this.saveDraft(draftData as Omit<PersistedDraft, 'id' | 'createdAt' | 'updatedAt' | 'autoSaveVersion'>);
   }
 }
 
@@ -198,7 +198,7 @@ export class StudySessionManager {
       const data = await getStorage().getItem(STORAGE_KEYS.SESSIONS);
       return data ? JSON.parse(data) : [];
     } catch (error) {
-      captureSilentFailure(error, { feature: "content-study", operation: "safe-fallback", type: "data" });
+      captureSilentFailure(error, { feature: 'content-study', operation: 'safe-fallback', type: 'data' });
       return [];
     }
   }
@@ -306,7 +306,7 @@ export class CacheManager {
       this.memoryCache.set(key, entry);
       return entry.data;
     } catch (error) {
-      captureSilentFailure(error, { feature: "content-study", operation: "safe-fallback", type: "data" });
+      captureSilentFailure(error, { feature: 'content-study', operation: 'safe-fallback', type: 'data' });
       return null;
     }
   }
@@ -325,7 +325,7 @@ export class CacheManager {
       cachedAt: now,
       expiresAt: now + (options.ttlMs || 5 * 60 * 1000), // Default 5 min
       etag: options.etag,
-      source: "localStorage",
+      source: 'localStorage',
     };
 
     this.memoryCache.set(key, entry);
@@ -386,16 +386,16 @@ export class SyncQueueManager {
     SyncQueueManager.instance = new SyncQueueManager();
   }
 
-  async enqueue(item: Omit<SyncQueueItem, "id" | "createdAt" | "retryCount">): Promise<SyncQueueItem> {
+  async enqueue(item: Omit<SyncQueueItem, 'id' | 'createdAt' | 'retryCount'>): Promise<SyncQueueItem> {
     const queue = await this.getQueue();
 
     if (queue.length >= CONTENT_STUDY_CONSTANTS.OFFLINE_QUEUE_MAX_SIZE) {
       // Remove oldest non-critical items
-      const nonCriticalIndex = queue.findIndex((i) => i.entity !== "content");
+      const nonCriticalIndex = queue.findIndex((i) => i.entity !== 'content');
       if (nonCriticalIndex >= 0) {
         queue.splice(nonCriticalIndex, 1);
       } else {
-        throw new Error("Sync queue is full");
+        throw new Error('Sync queue is full');
       }
     }
 
@@ -417,7 +417,7 @@ export class SyncQueueManager {
       const data = await getStorage().getItem(STORAGE_KEYS.SYNC_QUEUE);
       return data ? JSON.parse(data) : [];
     } catch (error) {
-      captureSilentFailure(error, { feature: "content-study", operation: "safe-fallback", type: "data" });
+      captureSilentFailure(error, { feature: 'content-study', operation: 'safe-fallback', type: 'data' });
       return [];
     }
   }
@@ -500,7 +500,7 @@ export class OfflineManager {
       const data = await getStorage().getItem(STORAGE_KEYS.OFFLINE_MODE);
       return data ? JSON.parse(data) : false;
     } catch (error) {
-      captureSilentFailure(error, { feature: "content-study", operation: "safe-fallback", type: "data" });
+      captureSilentFailure(error, { feature: 'content-study', operation: 'safe-fallback', type: 'data' });
       return false;
     }
   }
@@ -509,7 +509,7 @@ export class OfflineManager {
     return this.isOfflineMode;
   }
 
-  async canPerformAction(action: "submit" | "generate" | "feedback"): Promise<boolean> {
+  async canPerformAction(action: 'submit' | 'generate' | 'feedback'): Promise<boolean> {
     const offline = await this.isInOfflineMode();
 
     if (!offline) {

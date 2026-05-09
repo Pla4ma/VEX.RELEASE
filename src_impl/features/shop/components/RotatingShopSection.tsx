@@ -7,26 +7,26 @@
  * @phase 6C.1
  */
 
-import React, { useEffect, useMemo, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeIn, FadeInRight } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
+import React, { useEffect, useMemo, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeIn, FadeInRight } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { capture } from "../../../shared/analytics";
-import { EconomyEvents } from "../../../shared/analytics/analytics-events";
-import { triggerHaptic } from "../../../utils/haptics";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { capture } from '../../../shared/analytics';
+import { EconomyEvents } from '../../../shared/analytics/analytics-events';
+import { triggerHaptic } from '../../../utils/haptics';
+import { createSheet } from '@/shared/ui/create-sheet';
 
-const ROTATION_GRADIENT = ["#3B82F6", "#8B5CF6"] as const;
+const ROTATION_GRADIENT = ['#3B82F6', '#8B5CF6'] as const;
 
 export interface RotatingShopItem {
   id: string;
   name: string;
   description: string;
   icon: string;
-  rarity: "common" | "rare" | "epic" | "legendary";
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
   price: {
     gems?: number;
     coins?: number;
@@ -73,7 +73,7 @@ export function RotatingShopSection({ items, gemBalance, coinBalance, nextRotati
   const rotationCountdown = useMemo(() => {
     const diff = nextRotationAt.getTime() - currentTime.getTime();
     if (diff <= 0) {
-      return "Rotating now...";
+      return 'Rotating now...';
     }
 
     const hours = Math.floor(diff / (1000 * 60 * 60));
@@ -190,15 +190,15 @@ function RotatingItemCard({ item, index, gemBalance, coinBalance, onPurchase, on
   // Rarity colors
   const rarityColors = {
     common: colors.border.DEFAULT,
-    rare: "#3B82F6",
-    epic: "#8B5CF6",
-    legendary: "#FFD700",
+    rare: '#3B82F6',
+    epic: '#8B5CF6',
+    legendary: '#FFD700',
   };
 
   const handlePress = () => {
-    triggerHaptic("impactLight");
+    triggerHaptic('impactLight');
     capture(EconomyEvents.SHOP_VIEWED, {
-      source: "rotating_shop",
+      source: 'rotating_shop',
     });
     onViewDetails?.(item);
   };
@@ -207,7 +207,7 @@ function RotatingItemCard({ item, index, gemBalance, coinBalance, onPurchase, on
     if (!canAfford) {
       return;
     }
-    triggerHaptic("success");
+    triggerHaptic('success');
     onPurchase(item);
   };
 
@@ -238,7 +238,7 @@ function RotatingItemCard({ item, index, gemBalance, coinBalance, onPurchase, on
 
         {/* Rarity Badge */}
         <View style={[styles.rarityBadge, { backgroundColor: rarityColors[item.rarity] }]}>
-          <Text style={styles.rarityText}>{isRare ? "🔥 RARE" : item.rarity.toUpperCase()}</Text>
+          <Text style={styles.rarityText}>{isRare ? '🔥 RARE' : item.rarity.toUpperCase()}</Text>
         </View>
 
         {/* Item Content */}
@@ -255,7 +255,7 @@ function RotatingItemCard({ item, index, gemBalance, coinBalance, onPurchase, on
         {/* Time Remaining */}
         <View style={styles.timeContainer}>
           <Text style={[styles.timeText, isLowTime && styles.urgentTime]}>
-            {isLowTime ? "⏰ " : "🕐 "}
+            {isLowTime ? '⏰ ' : '🕐 '}
             {item.hoursRemaining < 1 ? `${Math.floor(item.hoursRemaining * 60)}m left` : `${Math.floor(item.hoursRemaining)}h left`}
           </Text>
         </View>
@@ -278,12 +278,12 @@ function RotatingItemCard({ item, index, gemBalance, coinBalance, onPurchase, on
           )}
           <View style={styles.priceRow}>
             {item.price.gems && (
-              <Text variant="body" fontWeight="800" color={canAfford ? "#8B5CF6" : "error.DEFAULT"}>
+              <Text variant="body" fontWeight="800" color={canAfford ? '#8B5CF6' : 'error.DEFAULT'}>
                 💎{item.price.gems}
               </Text>
             )}
             {item.price.coins && (
-              <Text variant="body" fontWeight="800" color={canAfford ? "#F59E0B" : "error.DEFAULT"}>
+              <Text variant="body" fontWeight="800" color={canAfford ? '#F59E0B' : 'error.DEFAULT'}>
                 🪙{item.price.coins}
               </Text>
             )}
@@ -297,7 +297,7 @@ function RotatingItemCard({ item, index, gemBalance, coinBalance, onPurchase, on
           style={[
             styles.purchaseButton,
             {
-              backgroundColor: canAfford ? "#10B981" : colors.background.tertiary,
+              backgroundColor: canAfford ? '#10B981' : colors.background.tertiary,
               opacity: canAfford ? 1 : 0.5,
             },
           ]}
@@ -305,7 +305,7 @@ function RotatingItemCard({ item, index, gemBalance, coinBalance, onPurchase, on
           accessibilityRole="button"
           accessibilityHint="Activates this control"
         >
-          <Text style={styles.purchaseText}>{canAfford ? "BUY NOW" : "NOT ENOUGH"}</Text>
+          <Text style={styles.purchaseText}>{canAfford ? 'BUY NOW' : 'NOT ENOUGH'}</Text>
         </Pressable>
       </Pressable>
     </Animated.View>
@@ -318,157 +318,157 @@ const styles = createSheet({
     gap: 16,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   headerLeft: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
   },
   iconContainer: {
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: "rgba(59, 130, 246, 0.1)",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   icon: {
     fontSize: 22,
   },
   countdownBadge: {
-    backgroundColor: "rgba(59, 130, 246, 0.15)",
+    backgroundColor: 'rgba(59, 130, 246, 0.15)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
   },
   urgentCountdown: {
-    backgroundColor: "rgba(239, 68, 68, 0.15)",
+    backgroundColor: 'rgba(239, 68, 68, 0.15)',
   },
   countdownText: {
     fontSize: 12,
-    fontWeight: "700",
-    color: "#3B82F6",
+    fontWeight: '700',
+    color: '#3B82F6',
   },
   urgentText: {
-    color: "#EF4444",
+    color: '#EF4444',
   },
   urgencyBanner: {
-    backgroundColor: "rgba(239, 68, 68, 0.1)",
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
     borderRadius: 12,
     padding: 12,
     borderWidth: 1,
-    borderColor: "rgba(239, 68, 68, 0.3)",
+    borderColor: 'rgba(239, 68, 68, 0.3)',
   },
   urgencyText: {
     fontSize: 13,
-    color: "#EF4444",
-    fontWeight: "600",
-    textAlign: "center",
+    color: '#EF4444',
+    fontWeight: '600',
+    textAlign: 'center',
   },
   itemsContainer: {
     paddingRight: 16,
     gap: 12,
   },
   scheduleNote: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingTop: 8,
   },
   scheduleText: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   card: {
     width: 200,
   },
   cardInner: {
     borderRadius: 20,
-    overflow: "hidden",
+    overflow: 'hidden',
     paddingBottom: 16,
   },
   topBar: {
     height: 4,
   },
   rarityBadge: {
-    alignSelf: "center",
+    alignSelf: 'center',
     marginTop: 12,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
   },
   rarityText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 10,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0.5,
   },
   content: {
     padding: 16,
-    alignItems: "center",
+    alignItems: 'center',
     gap: 8,
   },
   itemIcon: {
     fontSize: 48,
   },
   itemName: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   itemDesc: {
-    textAlign: "center",
+    textAlign: 'center',
     height: 32,
   },
   timeContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingHorizontal: 16,
     paddingBottom: 8,
   },
   timeText: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "#6B7280",
+    fontWeight: '600',
+    color: '#6B7280',
   },
   urgentTime: {
-    color: "#EF4444",
-    fontWeight: "700",
+    color: '#EF4444',
+    fontWeight: '700',
   },
   rareNote: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingBottom: 8,
   },
   priceContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
     paddingHorizontal: 16,
     paddingBottom: 12,
   },
   discountBadge: {
-    backgroundColor: "#EF4444",
+    backgroundColor: '#EF4444',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
   },
   discountText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 10,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   priceRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 6,
   },
   purchaseButton: {
     marginHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   purchaseText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0.5,
   },
 });

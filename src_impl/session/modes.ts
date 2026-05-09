@@ -9,6 +9,7 @@ export enum SessionMode {
   CREATIVE = 'CREATIVE',
   SPRINT = 'SPRINT',
   RECOVERY = 'RECOVERY',      // Formerly SPRINT - Short comeback sessions
+  STARTER = 'STARTER',       // First-time user sessions - easy and encouraging
 }
 
 export const SessionModeSchema = z.nativeEnum(SessionMode);
@@ -106,6 +107,15 @@ export const SESSION_MODE_CONFIG: Record<SessionMode, SessionModeConfig> = {
     purityPassThreshold: 60,
     scoringWeights: { consistency: 0.3, depth: 0.2, recovery: 0.5 },
     xpMultiplier: 0.9,
+  },
+  [SessionMode.STARTER]: {
+    bossDamageMultiplier: 0.5,
+    companionBehavior: 'supportive',
+    minimumQualifyingDurationSeconds: 5 * 60,  // Very low threshold for first session
+    pausePenaltyMultiplier: 0.1,  // Very forgiving
+    purityPassThreshold: 50,  // Very easy to pass
+    scoringWeights: { consistency: 0.2, depth: 0.1, recovery: 0.7 },
+    xpMultiplier: 1.0,  // Full XP for encouragement
   },
 };
 

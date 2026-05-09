@@ -6,17 +6,17 @@
  * emotional connection and immediate feedback.
  */
 
-import React, { useEffect, useRef, useCallback } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withRepeat, withTiming, withSequence, interpolate, Easing, runOnJS, useAnimatedReaction, type SharedValue } from "react-native-reanimated";
-import { Svg, Circle, RadialGradient, Stop, G } from "react-native-svg";
+import React, { useEffect, useRef, useCallback } from 'react';
+import { View, StyleSheet, Dimensions } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withRepeat, withTiming, withSequence, interpolate, Easing, runOnJS, useAnimatedReaction, type SharedValue } from 'react-native-reanimated';
+import { Svg, Circle, RadialGradient, Stop, G } from 'react-native-svg';
 
-import { Text } from "../../../components/primitives/Text";
-import { CompanionState, CompanionPhase, CompanionMood, CompanionElement, ELEMENT_THEMES } from "../types";
-import { getCompanionService, CompanionService } from "../service";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { Text } from '../../../components/primitives/Text';
+import { CompanionState, CompanionPhase, CompanionMood, CompanionElement, ELEMENT_THEMES } from '../types';
+import { getCompanionService, CompanionService } from '../service';
+import { createSheet } from '@/shared/ui/create-sheet';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 const COMPANION_SIZE = Math.min(SCREEN_WIDTH * 0.6, 300);
 const PARTICLE_COUNT = 12;
 
@@ -48,17 +48,17 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({ companionState
     serviceRef.current.startSession(totalSeconds / 60);
 
     const unsubscribe = serviceRef.current.onEvent((event) => {
-      if (event.type === "MILESTONE" && event.data.progressDelta && onMilestone) {
+      if (event.type === 'MILESTONE' && event.data.progressDelta && onMilestone) {
         onMilestone(event.data.progressDelta);
       }
 
-      if (event.type === "PURE_FOCUS_BURST") {
+      if (event.type === 'PURE_FOCUS_BURST') {
         // Trigger burst animation
         scale.value = withSequence(withSpring(1.3, { damping: 10 }), withSpring(1, { damping: 15 }));
         glowIntensity.value = withSequence(withTiming(1, { duration: 200 }), withTiming(0.7, { duration: 1000 }));
       }
 
-      if (event.type === "DANGER_WARN") {
+      if (event.type === 'DANGER_WARN') {
         scale.value = withRepeat(withSequence(withSpring(0.95, { damping: 5 }), withSpring(1.05, { damping: 5 })), 3);
       }
     });
@@ -207,7 +207,7 @@ const CompanionBody: React.FC<{
   // Different shapes for different phases
   const renderPhaseShape = () => {
     switch (phase) {
-      case "EGG":
+      case 'EGG':
         // Simple egg shape
         return (
           <>
@@ -219,7 +219,7 @@ const CompanionBody: React.FC<{
           </>
         );
 
-      case "HATCHING":
+      case 'HATCHING':
         // Cracked egg with emerging form
         return (
           <>
@@ -235,7 +235,7 @@ const CompanionBody: React.FC<{
           </>
         );
 
-      case "YOUNG":
+      case 'YOUNG':
         // Small creature form
         return (
           <>
@@ -250,9 +250,9 @@ const CompanionBody: React.FC<{
           </>
         );
 
-      case "MATURE":
-      case "AWAKENED":
-      case "TRANSCENDENT":
+      case 'MATURE':
+      case 'AWAKENED':
+      case 'TRANSCENDENT':
         // Full form with complex aura
         return (
           <>
@@ -264,7 +264,7 @@ const CompanionBody: React.FC<{
             </RadialGradient>
             <Circle cx={center} cy={center} r={radius} fill="url(#matureGradient)" />
             {/* Crown/horns for higher phases */}
-            {phase !== "MATURE" && (
+            {phase !== 'MATURE' && (
               <>
                 <Circle cx={center - radius * 0.5} cy={center - radius * 0.3} r={4} fill={theme.glow} />
                 <Circle cx={center + radius * 0.5} cy={center - radius * 0.3} r={4} fill={theme.glow} />
@@ -292,13 +292,13 @@ function getPhaseMultiplier(phase: CompanionPhase): number {
 
 function getMoodEmoji(mood: CompanionMood): string {
   const emojis: Record<CompanionMood, string> = {
-    SLEEPY: "😴",
-    CONTENT: "😊",
-    FOCUSED: "🎯",
-    DETERMINED: "🔥",
-    ECSTATIC: "✨",
-    STRUGGLING: "😰",
-    DANGER: "⚠️",
+    SLEEPY: '😴',
+    CONTENT: '😊',
+    FOCUSED: '🎯',
+    DETERMINED: '🔥',
+    ECSTATIC: '✨',
+    STRUGGLING: '😰',
+    DANGER: '⚠️',
   };
   return emojis[mood];
 }
@@ -307,22 +307,22 @@ const styles = createSheet({
   container: {
     width: COMPANION_SIZE,
     height: COMPANION_SIZE + 60,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   glowContainer: {
-    position: "absolute",
+    position: 'absolute',
     opacity: 0.3,
   },
   particleOrbit: {
-    position: "absolute",
+    position: 'absolute',
     width: COMPANION_SIZE,
     height: COMPANION_SIZE,
   },
   particle: {
-    position: "absolute",
+    position: 'absolute',
     borderRadius: 100,
-    shadowColor: "#FFF",
+    shadowColor: '#FFF',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.8,
     shadowRadius: 4,
@@ -332,14 +332,14 @@ const styles = createSheet({
     zIndex: 10,
   },
   statusContainer: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
-    alignItems: "center",
+    alignItems: 'center',
   },
   moodText: {
-    fontWeight: "700",
+    fontWeight: '700',
     fontSize: 14,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     letterSpacing: 1,
   },
   phaseText: {

@@ -16,12 +16,12 @@
  * @phase 7.1
  */
 
-import React from "react";
-import { View, Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 // ============================================================================
 // Types
@@ -33,7 +33,7 @@ export interface SessionStake {
   icon: string;
   title: string;
   subtitle: string;
-  urgency: "critical" | "high" | "medium" | "low";
+  urgency: 'critical' | 'high' | 'medium' | 'low';
   accentColor?: string;
 }
 
@@ -87,24 +87,24 @@ export interface SessionStakesBriefingProps {
 // Stake Card Component
 // ============================================================================
 
-function StakeCard({ icon, title, subtitle, urgency, accentColor, onPress }: { icon: string; title: string; subtitle: string; urgency: SessionStake["urgency"]; accentColor?: string; onPress?: () => void }): JSX.Element {
+function StakeCard({ icon, title, subtitle, urgency, accentColor, onPress }: { icon: string; title: string; subtitle: string; urgency: SessionStake['urgency']; accentColor?: string; onPress?: () => void }): JSX.Element {
   const { theme } = useTheme();
 
   const getUrgencyStyles = () => {
     switch (urgency) {
-      case "critical":
+      case 'critical':
         return {
           borderColor: theme.colors.error[500],
           bgColor: `${theme.colors.error[500]}15`,
           iconBg: theme.colors.error[500],
         };
-      case "high":
+      case 'high':
         return {
           borderColor: theme.colors.warning[500],
           bgColor: `${theme.colors.warning[500]}10`,
           iconBg: theme.colors.warning[500],
         };
-      case "medium":
+      case 'medium':
         return {
           borderColor: accentColor || theme.colors.primary[500],
           bgColor: `${accentColor || theme.colors.primary[500]}10`,
@@ -127,8 +127,8 @@ function StakeCard({ icon, title, subtitle, urgency, accentColor, onPress }: { i
     <CardWrapper onPress={onPress}>
       <View
         style={{
-          flexDirection: "row",
-          alignItems: "center",
+          flexDirection: 'row',
+          alignItems: 'center',
           gap: theme.spacing[3],
           padding: theme.spacing[3],
           backgroundColor: styles.bgColor,
@@ -143,8 +143,8 @@ function StakeCard({ icon, title, subtitle, urgency, accentColor, onPress }: { i
             height: 36,
             borderRadius: theme.borderRadius.full,
             backgroundColor: styles.iconBg,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
         >
           <Text fontSize={18}>{icon}</Text>
@@ -172,8 +172,8 @@ function EmptyStakesMessage(): JSX.Element {
   return (
     <View
       style={{
-        flexDirection: "row",
-        alignItems: "center",
+        flexDirection: 'row',
+        alignItems: 'center',
         gap: theme.spacing[3],
         padding: theme.spacing[3],
         backgroundColor: theme.colors.background.primary,
@@ -209,12 +209,12 @@ export function SessionStakesBriefing({ bossStake, streakStake, challengeStake, 
   if (bossStake) {
     const isCritical = bossStake.healthPercent <= 15;
     stakes.push({
-      id: "boss",
+      id: 'boss',
       priority: isCritical ? 1 : 2,
-      icon: bossStake.isFinalStrike ? "⚔️" : "🐲",
+      icon: bossStake.isFinalStrike ? '⚔️' : '🐲',
       title: bossStake.isFinalStrike ? `⚔️ FINAL STRIKE: ${bossStake.bossName}` : `${bossStake.bossName} at ${bossStake.healthPercent.toFixed(0)}%`,
-      subtitle: bossStake.wouldDefeat ? "This session defeats the boss!" : `Est. damage: ~${bossStake.estimatedDamage} HP`,
-      urgency: isCritical ? "critical" : bossStake.healthPercent <= 50 ? "high" : "medium",
+      subtitle: bossStake.wouldDefeat ? 'This session defeats the boss!' : `Est. damage: ~${bossStake.estimatedDamage} HP`,
+      urgency: isCritical ? 'critical' : bossStake.healthPercent <= 50 ? 'high' : 'medium',
       accentColor: theme.colors.primary[500],
     });
   }
@@ -223,12 +223,12 @@ export function SessionStakesBriefing({ bossStake, streakStake, challengeStake, 
   if (streakStake) {
     const isCritical = streakStake.isAtRisk && streakStake.hoursUntilDeadline !== null && streakStake.hoursUntilDeadline <= 6;
     stakes.push({
-      id: "streak",
+      id: 'streak',
       priority: isCritical ? 1 : 3,
-      icon: "🔥",
+      icon: '🔥',
       title: streakStake.isAtRisk && streakStake.hoursUntilDeadline !== null ? `🔥 Streak at risk — ${streakStake.hoursUntilDeadline}h left` : `Day ${streakStake.currentDays} of your streak`,
-      subtitle: streakStake.isAtRisk ? "Complete this session to save it!" : `Session ${streakStake.sessionNumberInStreak} • ${streakStake.multiplier.toFixed(1)}× multiplier`,
-      urgency: isCritical ? "critical" : streakStake.isAtRisk ? "high" : "low",
+      subtitle: streakStake.isAtRisk ? 'Complete this session to save it!' : `Session ${streakStake.sessionNumberInStreak} • ${streakStake.multiplier.toFixed(1)}× multiplier`,
+      urgency: isCritical ? 'critical' : streakStake.isAtRisk ? 'high' : 'low',
       accentColor: theme.colors.warning[500],
     });
   }
@@ -236,12 +236,12 @@ export function SessionStakesBriefing({ bossStake, streakStake, challengeStake, 
   // Priority 3: Challenge
   if (challengeStake) {
     stakes.push({
-      id: "challenge",
+      id: 'challenge',
       priority: challengeStake.canComplete ? 2 : 4,
-      icon: "📋",
+      icon: '📋',
       title: `'${challengeStake.challengeName}'`,
       subtitle: challengeStake.canComplete ? `This session completes it! (${challengeStake.current}/${challengeStake.target})` : `Progress: ${challengeStake.current}/${challengeStake.target}`,
-      urgency: challengeStake.canComplete ? "high" : "medium",
+      urgency: challengeStake.canComplete ? 'high' : 'medium',
       accentColor: theme.colors.primary[500],
     });
   }
@@ -250,12 +250,12 @@ export function SessionStakesBriefing({ bossStake, streakStake, challengeStake, 
   if (rivalStake) {
     const isBehind = rivalStake.gapMinutes > 0;
     stakes.push({
-      id: "rival",
+      id: 'rival',
       priority: isBehind ? 3 : 5,
-      icon: "⚔️",
+      icon: '⚔️',
       title: `${rivalStake.rivalName}`,
       subtitle: isBehind ? `${rivalStake.gapMinutes} min behind — catch up?` : `You're ${Math.abs(rivalStake.gapMinutes)} min ahead`,
-      urgency: isBehind ? "medium" : "low",
+      urgency: isBehind ? 'medium' : 'low',
       accentColor: theme.colors.error[500],
     });
   }
@@ -264,12 +264,12 @@ export function SessionStakesBriefing({ bossStake, streakStake, challengeStake, 
   if (squadWarStake) {
     const isUrgent = squadWarStake.hoursRemaining <= 12;
     stakes.push({
-      id: "squadwar",
+      id: 'squadwar',
       priority: isUrgent ? 3 : 5,
-      icon: "🛡️",
+      icon: '🛡️',
       title: `Squad War ends in ${squadWarStake.hoursRemaining}h`,
       subtitle: `Squad needs ${squadWarStake.squadMinutesNeeded} more min`,
-      urgency: isUrgent ? "high" : "medium",
+      urgency: isUrgent ? 'high' : 'medium',
       accentColor: theme.colors.primary[500],
     });
   }
@@ -281,7 +281,7 @@ export function SessionStakesBriefing({ bossStake, streakStake, challengeStake, 
     <Animated.View entering={FadeInUp.duration(400).delay(200)}>
       <View style={{ gap: theme.spacing[2] }}>
         {/* Header */}
-        <View style={{ flexDirection: "row", alignItems: "center", gap: theme.spacing[2] }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing[2] }}>
           <Text fontSize={16}>🎯</Text>
           <Text variant="label" color="text.tertiary">
             WHAT'S AT STAKE

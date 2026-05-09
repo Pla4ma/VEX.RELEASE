@@ -8,13 +8,13 @@
  * @phase 8
  */
 
-import React, { useState } from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInUp, useAnimatedStyle, withSpring } from "react-native-reanimated";
+import React, { useState } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInUp, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
-import { Text } from "../../../components/primitives";
-import { useTheme } from "../../../theme";
-import type { CoachMessage } from "../types";
+import { Text } from '../../../components/primitives';
+import { useTheme } from '../../../theme';
+import type { CoachMessage } from '../types';
 
 export interface CoachMessageBubbleProps {
   /** Message data */
@@ -37,17 +37,17 @@ export function CoachMessageBubble({ message, isCoach = true, index = 0, onActio
   // Format timestamp
   const formatTime = (timestamp: number): string => {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
   // Check if message is long (needs collapse)
   const isLongMessage = message.content.length > 200;
-  const displayContent = expanded || !isLongMessage ? message.content : message.content.slice(0, 200) + "...";
+  const displayContent = expanded || !isLongMessage ? message.content : message.content.slice(0, 200) + '...';
 
   // Get persona emoji based on message style/persona
   const getPersonaEmoji = () => {
     // Could be derived from message.personaId
-    return "🤖";
+    return '🤖';
   };
 
   return (
@@ -56,12 +56,12 @@ export function CoachMessageBubble({ message, isCoach = true, index = 0, onActio
         .delay(index * 100)
         .springify()}
       style={{
-        flexDirection: "row",
-        alignItems: "flex-start",
+        flexDirection: 'row',
+        alignItems: 'flex-start',
         gap: theme.spacing[2],
         marginBottom: theme.spacing[3],
-        alignSelf: isCoach ? "flex-start" : "flex-end",
-        maxWidth: "85%",
+        alignSelf: isCoach ? 'flex-start' : 'flex-end',
+        maxWidth: '85%',
       }}
     >
       {/* Coach Avatar */}
@@ -72,8 +72,8 @@ export function CoachMessageBubble({ message, isCoach = true, index = 0, onActio
             height: 36,
             borderRadius: 18,
             backgroundColor: theme.colors.primary[500],
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
             marginTop: theme.spacing[1],
           }}
         >
@@ -99,7 +99,7 @@ export function CoachMessageBubble({ message, isCoach = true, index = 0, onActio
         {isLongMessage && (
           <Pressable onPress={() => setExpanded(!expanded)} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
             <Text variant="caption" color={theme.colors.primary[500]} fontWeight="600" style={{ marginTop: theme.spacing[1] }}>
-              {expanded ? "Show less" : "Read more"}
+              {expanded ? 'Show less' : 'Read more'}
             </Text>
           </Pressable>
         )}
@@ -112,14 +112,14 @@ export function CoachMessageBubble({ message, isCoach = true, index = 0, onActio
         {/* Action Button (if message has action taken) */}
         {message.actionTaken && (
           <Pressable
-            onPress={() => onActionPress?.(message.actionTaken || "")}
+            onPress={() => onActionPress?.(message.actionTaken || '')}
             style={{
               backgroundColor: isCoach ? theme.colors.primary[500] : theme.colors.background.primary,
               paddingHorizontal: theme.spacing[3],
               paddingVertical: theme.spacing[2],
               borderRadius: theme.borderRadius.lg,
               marginTop: theme.spacing[2],
-              alignSelf: "flex-start",
+              alignSelf: 'flex-start',
             }}
             accessibilityLabel="Interactive control"
             accessibilityRole="button"
@@ -150,31 +150,31 @@ export function SystemMessageBubble({ message, index = 0 }: SystemMessageBubbleP
   // Get icon based on category
   const getCategoryIcon = () => {
     switch (message.category) {
-      case "STREAK_RISK":
-        return "🔥";
-      case "MILESTONE_HYPE":
-        return "🎉";
-      case "SESSION_SUGGESTION":
-        return "💡";
-      case "COMEBACK_SUPPORT":
-        return "💪";
-      case "POST_FAILURE":
-        return "🌱";
+      case 'STREAK_RISK':
+        return '🔥';
+      case 'MILESTONE_HYPE':
+        return '🎉';
+      case 'SESSION_SUGGESTION':
+        return '💡';
+      case 'COMEBACK_SUPPORT':
+        return '💪';
+      case 'POST_FAILURE':
+        return '🌱';
       default:
-        return "📢";
+        return '📢';
     }
   };
 
   // Get background color based on category
   const getCategoryColor = () => {
     switch (message.category) {
-      case "STREAK_RISK":
+      case 'STREAK_RISK':
         return theme.colors.error[500];
-      case "MILESTONE_HYPE":
+      case 'MILESTONE_HYPE':
         return theme.colors.success[500];
-      case "SESSION_SUGGESTION":
+      case 'SESSION_SUGGESTION':
         return theme.colors.primary[500];
-      case "COMEBACK_SUPPORT":
+      case 'COMEBACK_SUPPORT':
         return theme.colors.warning[500];
       default:
         return theme.colors.accent.purple;
@@ -187,10 +187,10 @@ export function SystemMessageBubble({ message, index = 0 }: SystemMessageBubbleP
         .delay(index * 100)
         .springify()}
       style={{
-        alignSelf: "center",
-        alignItems: "center",
+        alignSelf: 'center',
+        alignItems: 'center',
         marginVertical: theme.spacing[3],
-        maxWidth: "80%",
+        maxWidth: '80%',
       }}
     >
       <Animated.View
@@ -198,7 +198,7 @@ export function SystemMessageBubble({ message, index = 0 }: SystemMessageBubbleP
           backgroundColor: `${getCategoryColor()}15`,
           borderRadius: theme.borderRadius.xl,
           padding: theme.spacing[3],
-          alignItems: "center",
+          alignItems: 'center',
           borderWidth: 1,
           borderColor: `${getCategoryColor()}30`,
         }}
@@ -228,7 +228,7 @@ export function UserMessageBubble({ content, timestamp, index = 0 }: UserMessage
 
   const formatTime = (ts: number): string => {
     const date = new Date(ts);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
   return (
@@ -237,8 +237,8 @@ export function UserMessageBubble({ content, timestamp, index = 0 }: UserMessage
         .delay(index * 100)
         .springify()}
       style={{
-        alignSelf: "flex-end",
-        maxWidth: "80%",
+        alignSelf: 'flex-end',
+        maxWidth: '80%',
         marginBottom: theme.spacing[3],
       }}
     >

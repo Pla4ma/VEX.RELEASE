@@ -9,19 +9,19 @@
  * Drives daily retention through FOMO and anticipation.
  */
 
-import { z } from "zod";
-import * as Sentry from "@sentry/react-native";
-import { MMKV } from "react-native-mmkv";
+import { z } from 'zod';
+import * as Sentry from '@sentry/react-native';
+import { MMKV } from 'react-native-mmkv';
 
 // ============================================================================
 // Storage Setup
 // ============================================================================
 
 const storage = new MMKV({
-  id: "lucky-bonus-storage",
+  id: 'lucky-bonus-storage',
 });
 
-const STORAGE_KEY = "daily_lucky_bonus";
+const STORAGE_KEY = 'daily_lucky_bonus';
 
 // ============================================================================
 // Types
@@ -44,7 +44,7 @@ export interface LuckyBonusResult {
   /** Whether lucky bonus was triggered this session */
   triggered: boolean;
   /** Type of bonus that occurred */
-  type: "double_tier" | "tier_skip" | "none";
+  type: 'double_tier' | 'tier_skip' | 'none';
   /** Original tier before bonus */
   originalTier: string;
   /** Final tier after bonus */
@@ -54,9 +54,9 @@ export interface LuckyBonusResult {
 }
 
 export enum LuckyBonusType {
-  NONE = "NONE",
-  DOUBLE_TIER = "DOUBLE_TIER", // 10% chance - double variable reward tier
-  TIER_SKIP = "TIER_SKIP", // 5% chance - skip one tier up
+  NONE = 'NONE',
+  DOUBLE_TIER = 'DOUBLE_TIER', // 10% chance - double variable reward tier
+  TIER_SKIP = 'TIER_SKIP', // 5% chance - skip one tier up
 }
 
 // ============================================================================
@@ -72,11 +72,11 @@ const LUCKY_BONUS_CONFIG = {
   REWARD_MULTIPLIER: 2,
   /** Tier upgrade map for TIER_SKIP */
   TIER_UPGRADE: {
-    COMMON: "UNCOMMON",
-    UNCOMMON: "RARE",
-    RARE: "EPIC",
-    EPIC: "LEGENDARY",
-    LEGENDARY: "LEGENDARY", // Already max
+    COMMON: 'UNCOMMON',
+    UNCOMMON: 'RARE',
+    RARE: 'EPIC',
+    EPIC: 'LEGENDARY',
+    LEGENDARY: 'LEGENDARY', // Already max
   } as Record<string, string>,
 } as const;
 
@@ -99,22 +99,22 @@ export const LuckyBonusStatusSchema = z.object({
 /**
  * Get current date in user's timezone as YYYY-MM-DD string
  */
-function getTodayDate(timezone: string = "UTC"): string {
+function getTodayDate(timezone: string = 'UTC'): string {
   const now = new Date();
   return now
-    .toLocaleDateString("en-US", {
+    .toLocaleDateString('en-US', {
       timeZone: timezone,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
     })
-    .replace(/\//g, "-");
+    .replace(/\//g, '-');
 }
 
 /**
  * Get time until next midnight in user's timezone
  */
-function getTimeUntilMidnight(timezone: string = "UTC"): { hours: number; minutes: number } {
+function getTimeUntilMidnight(timezone: string = 'UTC'): { hours: number; minutes: number } {
   const now = new Date();
   const tomorrow = new Date(now);
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -138,8 +138,8 @@ function getTimezoneOffset(timezone: string): number {
   // Simplified - in production, use a proper timezone library
   // This is a rough approximation
   const now = new Date();
-  const utcDate = new Date(now.toLocaleString("en-US", { timeZone: "UTC" }));
-  const tzDate = new Date(now.toLocaleString("en-US", { timeZone: timezone }));
+  const utcDate = new Date(now.toLocaleString('en-US', { timeZone: 'UTC' }));
+  const tzDate = new Date(now.toLocaleString('en-US', { timeZone: timezone }));
   return utcDate.getTime() - tzDate.getTime();
 }
 
@@ -148,7 +148,7 @@ function getTimezoneOffset(timezone: string): number {
 // ============================================================================
 
 class DailyLuckyBonusService {
-  private userTimezone: string = "UTC";
+  private userTimezone: string = 'UTC';
 
   /**
    * Set user's timezone for accurate daily reset
@@ -203,7 +203,7 @@ class DailyLuckyBonusService {
       };
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: "lucky-bonus", operation: "getStatus" },
+        tags: { feature: 'lucky-bonus', operation: 'getStatus' },
       });
 
       // Graceful fallback - assume available
@@ -228,9 +228,9 @@ class DailyLuckyBonusService {
     if (!status.available) {
       return {
         triggered: false,
-        type: "none",
-        originalTier: "NONE",
-        finalTier: "NONE",
+        type: 'none',
+        originalTier: 'NONE',
+        finalTier: 'NONE',
         rewardMultiplier: 1,
       };
     }
@@ -246,36 +246,36 @@ class DailyLuckyBonusService {
       // Tier skip (5%)
       result = {
         triggered: true,
-        type: "tier_skip",
-        originalTier: "DETERMINED_BY_ENGINE",
-        finalTier: "UPGRADED",
+        type: 'tier_skip',
+        originalTier: 'DETERMINED_BY_ENGINE',
+        finalTier: 'UPGRADED',
         rewardMultiplier: 1,
       };
     } else if (roll < LUCKY_BONUS_CONFIG.TIER_SKIP_CHANCE + LUCKY_BONUS_CONFIG.DOUBLE_TIER_CHANCE) {
       // Double tier (10%)
       result = {
         triggered: true,
-        type: "double_tier",
-        originalTier: "DETERMINED_BY_ENGINE",
-        finalTier: "DOUBLED",
+        type: 'double_tier',
+        originalTier: 'DETERMINED_BY_ENGINE',
+        finalTier: 'DOUBLED',
         rewardMultiplier: LUCKY_BONUS_CONFIG.REWARD_MULTIPLIER,
       };
     } else {
       // No bonus this time (85%)
       result = {
         triggered: false,
-        type: "none",
-        originalTier: "NONE",
-        finalTier: "NONE",
+        type: 'none',
+        originalTier: 'NONE',
+        finalTier: 'NONE',
         rewardMultiplier: 1,
       };
     }
 
     // Track analytics
     Sentry.addBreadcrumb({
-      category: "lucky-bonus",
+      category: 'lucky-bonus',
       message: `Lucky bonus consumed: ${result.type}`,
-      level: result.triggered ? "info" : "debug",
+      level: result.triggered ? 'info' : 'debug',
       data: {
         userId,
         triggered: result.triggered,
@@ -316,7 +316,7 @@ class DailyLuckyBonusService {
       );
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: "lucky-bonus", operation: "markUsed" },
+        tags: { feature: 'lucky-bonus', operation: 'markUsed' },
       });
     }
   }
@@ -359,7 +359,7 @@ class DailyLuckyBonusService {
       storage.delete(storageKey);
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: "lucky-bonus", operation: "reset" },
+        tags: { feature: 'lucky-bonus', operation: 'reset' },
       });
     }
   }
@@ -427,15 +427,15 @@ export function getLuckyBonusDisplay(userId: string): {
   if (status.available) {
     return {
       available: true,
-      badge: "🍀",
-      subtitle: "Lucky Bonus Available",
+      badge: '🍀',
+      subtitle: 'Lucky Bonus Available',
     };
   }
 
   const countdown = dailyLuckyBonusService.getCountdownString(status);
   return {
     available: false,
-    badge: "⏰",
+    badge: '⏰',
     subtitle: `Next bonus in ${countdown}`,
   };
 }

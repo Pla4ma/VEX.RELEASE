@@ -144,7 +144,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
               textAlign="center"
               fontWeight="800"
             >
-              Your focus.{'\n'}Gamified.
+              Your Focus Score{'\n'}starts at 550
             </Text>
           </Box>
         </Animated.View>
@@ -160,14 +160,14 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
               color="text.secondary"
               textAlign="center"
             >
-              Beat bosses. Build streaks. Level up.
+              Every session proves your focus grows.
             </Text>
             <Text
               variant="body"
               color="text.tertiary"
               textAlign="center"
             >
-              The focus app where your distractions have health bars.
+              Start above average. Level up from there.
             </Text>
           </Box>
         </Animated.View>

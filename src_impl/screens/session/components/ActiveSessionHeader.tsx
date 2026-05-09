@@ -27,14 +27,25 @@ export function ActiveSessionHeader({
       style={{ zIndex: 2 }}
     >
       <Pressable
-        accessibilityHint="Opens the session interruption confirmation."
-        accessibilityLabel="Go back or end session"
+        accessibilityHint="Opens the quit session confirmation before leaving."
+        accessibilityLabel="Quit focus session"
         accessibilityRole="button"
         onPress={onInterrupt}
       >
-        <Box flexDirection="row" alignItems="center">
-          <Icon name="chevron-left" size="lg" color={theme.colors.text.secondary} />
-          <Text variant="caption" color="text.secondary" style={{ marginLeft: 4 }}>Exit</Text>
+        <Box
+          flexDirection="row"
+          alignItems="center"
+          style={{
+            minHeight: 44,
+            borderRadius: theme.borderRadius.full,
+            borderWidth: 1,
+            borderColor: theme.colors.semantic.borderStrong,
+            paddingHorizontal: theme.spacing[3],
+            backgroundColor: theme.colors.semantic.surfaceGlass,
+          }}
+        >
+          <Icon name="chevron-left" size="lg" color={theme.colors.text.primary} />
+          <Text variant="label" color="text.primary" style={{ marginLeft: theme.spacing[1] }}>Quit</Text>
         </Box>
       </Pressable>
       <Box flexDirection="row" alignItems="center" gap="sm">
@@ -48,7 +59,7 @@ export function ActiveSessionHeader({
           {isPaused ? 'Paused' : 'In Session'}
         </Text>
       </Box>
-      <Box width={40} />
+      <Box width={72} />
     </Box>
   );
 }

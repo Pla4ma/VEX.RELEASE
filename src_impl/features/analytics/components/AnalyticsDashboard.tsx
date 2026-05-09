@@ -1,27 +1,27 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import React, { useCallback, useMemo, useState } from "react";
-import { Dimensions, RefreshControl, ScrollView, Text, Pressable, View } from "react-native";
-import { useQueryClient } from "@tanstack/react-query";
-import * as Sentry from "@sentry/react-native";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Dimensions, RefreshControl, ScrollView, Text, Pressable, View } from 'react-native';
+import { useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
 
-import { ErrorBoundary } from "../../../errors";
-import { eventBus } from "../../../events";
-import { EmptyAnalytics, NetworkError } from "../../../shared/ui/primitives/EmptyState";
-import { Skeleton, SkeletonChart, SkeletonList } from "../../../shared/ui/primitives/Skeleton";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { analyticsKeys, useAnalyticsData, useInsights, useSessionHeatmapData } from "../hooks";
-import type { AnalyticsMetric } from "../schemas";
-import { Heatmap } from "./Heatmap";
-import { InsightCard } from "./InsightCard";
-import { MetricSelector } from "./MetricSelector";
-import { TimeRangeFilter } from "./TimeRangeFilter";
-import { TimeSeriesChart } from "./TimeSeriesChart";
+import { ErrorBoundary } from '../../../errors';
+import { eventBus } from '../../../events';
+import { EmptyAnalytics, NetworkError } from '../../../shared/ui/primitives/EmptyState';
+import { Skeleton, SkeletonChart, SkeletonList } from '../../../shared/ui/primitives/Skeleton';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { analyticsKeys, useAnalyticsData, useInsights, useSessionHeatmapData } from '../hooks';
+import type { AnalyticsMetric } from '../schemas';
+import { Heatmap } from './Heatmap';
+import { InsightCard } from './InsightCard';
+import { MetricSelector } from './MetricSelector';
+import { TimeRangeFilter } from './TimeRangeFilter';
+import { TimeSeriesChart } from './TimeSeriesChart';
 
-const { width: screenWidth } = Dimensions.get("window");
+const { width: screenWidth } = Dimensions.get('window');
 const MIN_HEATMAP_SESSIONS = 5;
 
-type DashboardState = "idle" | "loading" | "error" | "empty" | "partial" | "ready";
-type DashboardTimeRange = "today" | "last_7_days" | "last_30_days" | "this_month";
+type DashboardState = 'idle' | 'loading' | 'error' | 'empty' | 'partial' | 'ready';
+type DashboardTimeRange = 'today' | 'last_7_days' | 'last_30_days' | 'this_month';
 
 interface DashboardError {
   title: string;
@@ -40,11 +40,11 @@ interface AnalyticsDashboardProps {
   onSettingsPress?: () => void;
 }
 
-export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_completed", "xp_earned"], initialTimeRange = "last_7_days", onInsightPress, onExportPress, onSettingsPress }: AnalyticsDashboardProps) {
+export function AnalyticsDashboard({ userId, initialMetrics = ['sessions_completed', 'xp_earned'], initialTimeRange = 'last_7_days', onInsightPress, onExportPress, onSettingsPress }: AnalyticsDashboardProps) {
   const queryClient = useQueryClient();
   const [selectedMetrics, setSelectedMetrics] = useState<string[]>(initialMetrics);
   const [timeRange, setTimeRange] = useState<DashboardTimeRange>(initialTimeRange);
-  const [dashboardState, setDashboardState] = useState<DashboardState>("idle");
+  const [dashboardState, setDashboardState] = useState<DashboardState>('idle');
   const [error, setError] = useState<DashboardError | null>(null);
 
   const weeks = useMemo(() => timeRangeToWeeks(timeRange), [timeRange]);
@@ -56,7 +56,7 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
     isError: dataError,
     error: dataErrorObj,
     refetch: refetchData,
-  } = useAnalyticsData(userId, analyticsMetrics, timeRange, "day", {
+  } = useAnalyticsData(userId, analyticsMetrics, timeRange, 'day', {
     dimensions: [],
     filters: [],
   });
@@ -67,10 +67,10 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
 
   React.useEffect(() => {
     if (dataError && dataErrorObj) {
-      const analyticsError = dataErrorObj instanceof Error ? dataErrorObj : new Error("Unknown error");
-      setDashboardState("error");
+      const analyticsError = dataErrorObj instanceof Error ? dataErrorObj : new Error('Unknown error');
+      setDashboardState('error');
       setError({
-        title: "Failed to load analytics",
+        title: 'Failed to load analytics',
         message: analyticsError.message,
         recoverable: true,
         action: () => {
@@ -79,7 +79,7 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
       });
 
       Sentry.captureException(analyticsError, {
-        tags: { component: "AnalyticsDashboard", operation: "fetchData" },
+        tags: { component: 'AnalyticsDashboard', operation: 'fetchData' },
         extra: { userId, timeRange, metrics: selectedMetrics },
       });
     }
@@ -87,22 +87,22 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
 
   const state = useMemo<DashboardState>(() => {
     if (dataLoading || insightsLoading) {
-      return "loading";
+      return 'loading';
     }
 
     if (dataError) {
-      return "error";
+      return 'error';
     }
 
     if (!analyticsData || analyticsData.length === 0) {
-      return "empty";
+      return 'empty';
     }
 
     if (analyticsData.some((entry) => entry.points.length === 0)) {
-      return "partial";
+      return 'partial';
     }
 
-    return "ready";
+    return 'ready';
   }, [analyticsData, dataError, dataLoading, insightsLoading]);
 
   React.useEffect(() => {
@@ -110,18 +110,18 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
   }, [state]);
 
   const handleRefresh = useCallback(async () => {
-    setDashboardState("loading");
+    setDashboardState('loading');
 
     try {
       await Promise.all([refetchData(), refetchHeatmap(), queryClient.invalidateQueries({ queryKey: analyticsKeys.insights(userId) })]);
 
       Sentry.addBreadcrumb({
-        category: "analytics_dashboard",
-        message: "Dashboard refreshed",
-        level: "info",
+        category: 'analytics_dashboard',
+        message: 'Dashboard refreshed',
+        level: 'info',
       });
     } catch (error) {
-      captureSilentFailure(error, { feature: "analytics", operation: "ui-fallback", type: "ui" });
+      captureSilentFailure(error, { feature: 'analytics', operation: 'ui-fallback', type: 'ui' });
       return;
     }
   }, [queryClient, refetchData, refetchHeatmap, userId]);
@@ -130,9 +130,9 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
     if (metrics.length > 0 && metrics.length <= 10) {
       setSelectedMetrics(metrics);
       Sentry.addBreadcrumb({
-        category: "analytics_dashboard",
-        message: "Metrics changed",
-        level: "info",
+        category: 'analytics_dashboard',
+        message: 'Metrics changed',
+        level: 'info',
         data: { metrics },
       });
     }
@@ -141,9 +141,9 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
   const handleTimeRangeChange = useCallback((range: string) => {
     setTimeRange(range as DashboardTimeRange);
     Sentry.addBreadcrumb({
-      category: "analytics_dashboard",
-      message: "Time range changed",
-      level: "info",
+      category: 'analytics_dashboard',
+      message: 'Time range changed',
+      level: 'info',
       data: { range },
     });
   }, []);
@@ -151,7 +151,7 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
   const handleInsightPress = useCallback(
     (insightId: string) => {
       onInsightPress?.(insightId);
-      eventBus.publish("analytics:insight_read", { userId, insightId });
+      eventBus.publish('analytics:insight_read', { userId, insightId });
     },
     [onInsightPress, userId],
   );
@@ -184,7 +184,7 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
 
   const renderContent = () => {
     switch (dashboardState) {
-      case "loading":
+      case 'loading':
         return (
           <View style={styles.skeletonContainer}>
             <Skeleton width="60%" height={24} style={styles.skeletonTitle} />
@@ -196,13 +196,13 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
             <SkeletonList count={3} />
           </View>
         );
-      case "error":
+      case 'error':
         return <NetworkError onRetry={error?.recoverable ? error.action : undefined} />;
-      case "empty":
+      case 'empty':
         return (
           <EmptyAnalytics
             onStartSession={() => {
-              eventBus.publish("session:created", {
+              eventBus.publish('session:created', {
                 sessionId: `session_${Date.now()}`,
                 userId,
                 config: {},
@@ -211,8 +211,8 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
             }}
           />
         );
-      case "partial":
-      case "ready":
+      case 'partial':
+      case 'ready':
         return (
           <>
             <View style={styles.summaryContainer}>
@@ -223,7 +223,7 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
                   {data.summary.changePercent !== 0 && (
                     <View style={[styles.changeBadge, data.summary.changePercent > 0 ? styles.changePositive : styles.changeNegative]}>
                       <Text style={styles.changeText}>
-                        {data.summary.changePercent > 0 ? "+" : ""}
+                        {data.summary.changePercent > 0 ? '+' : ''}
                         {data.summary.changePercent.toFixed(1)}%
                       </Text>
                     </View>
@@ -257,7 +257,7 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
               </View>
             )}
 
-            {dashboardState === "partial" && (
+            {dashboardState === 'partial' && (
               <View style={styles.partialWarning}>
                 <Text style={styles.partialText}>Some metrics may have limited data for this time period.</Text>
               </View>
@@ -287,10 +287,10 @@ export function AnalyticsDashboard({ userId, initialMetrics = ["sessions_complet
       {/* Filters */}
       <View style={styles.filtersContainer}>
         <TimeRangeFilter selected={timeRange} onChange={handleTimeRangeChange} />
-        <MetricSelector selected={analyticsMetrics} onChange={handleMetricsChange} maxSelection={5} disabled={dashboardState === "loading"} />
+        <MetricSelector selected={analyticsMetrics} onChange={handleMetricsChange} maxSelection={5} disabled={dashboardState === 'loading'} />
       </View>
 
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} refreshControl={<RefreshControl refreshing={dashboardState === "loading"} onRefresh={handleRefresh} tintColor="#6366f1" />} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent} refreshControl={<RefreshControl refreshing={dashboardState === 'loading'} onRefresh={handleRefresh} tintColor="#6366f1" />} showsVerticalScrollIndicator={false}>
         <ErrorBoundary onReset={handleRefresh}>{renderContent()}</ErrorBoundary>
       </ScrollView>
     </View>
@@ -309,26 +309,26 @@ function HeatmapSkeleton() {
 
 function timeRangeToWeeks(timeRange: DashboardTimeRange): number {
   switch (timeRange) {
-    case "today":
+    case 'today':
       return 1;
-    case "last_7_days":
+    case 'last_7_days':
       return 1;
-    case "last_30_days":
+    case 'last_30_days':
       return 4;
-    case "this_month":
+    case 'this_month':
       return 4;
   }
 }
 
 function formatMetricName(metric: string): string {
   return metric
-    .split("_")
+    .split('_')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .join(' ');
 }
 
 function formatValue(value: number, metric: string): string {
-  if (metric.includes("time")) {
+  if (metric.includes('time')) {
     const hours = Math.floor(value / 3600);
     if (hours > 0) {
       return `${hours}h`;
@@ -348,41 +348,41 @@ function formatValue(value: number, metric: string): string {
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: "#f9fafb",
+    backgroundColor: '#f9fafb',
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 16,
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: '#e5e7eb',
   },
   headerTitle: {
     fontSize: 20,
-    fontWeight: "700",
-    color: "#111827",
+    fontWeight: '700',
+    color: '#111827',
   },
   headerActions: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 8,
   },
   iconButton: {
     padding: 8,
     borderRadius: 8,
-    backgroundColor: "#f3f4f6",
+    backgroundColor: '#f3f4f6',
   },
   iconButtonText: {
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   filtersContainer: {
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: '#e5e7eb',
   },
   scrollView: {
     flex: 1,
@@ -392,18 +392,18 @@ const styles = createSheet({
     paddingBottom: 32,
   },
   summaryContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 12,
     marginBottom: 16,
   },
   summaryCard: {
     flex: 1,
     minWidth: (screenWidth - 56) / 2,
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 16,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
@@ -411,32 +411,32 @@ const styles = createSheet({
   },
   summaryValue: {
     fontSize: 24,
-    fontWeight: "700",
-    color: "#111827",
+    fontWeight: '700',
+    color: '#111827',
   },
   summaryLabel: {
     fontSize: 12,
-    color: "#6b7280",
+    color: '#6b7280',
     marginTop: 4,
-    textTransform: "capitalize",
+    textTransform: 'capitalize',
   },
   changeBadge: {
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
     marginTop: 8,
   },
   changePositive: {
-    backgroundColor: "#d1fae5",
+    backgroundColor: '#d1fae5',
   },
   changeNegative: {
-    backgroundColor: "#fee2e2",
+    backgroundColor: '#fee2e2',
   },
   changeText: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "#374151",
+    fontWeight: '600',
+    color: '#374151',
   },
   chartsContainer: {
     marginBottom: 16,
@@ -445,31 +445,31 @@ const styles = createSheet({
     marginTop: 8,
   },
   sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 12,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: "600",
-    color: "#111827",
+    fontWeight: '600',
+    color: '#111827',
   },
   seeAllText: {
     fontSize: 14,
-    color: "#6366f1",
-    fontWeight: "500",
+    color: '#6366f1',
+    fontWeight: '500',
   },
   partialWarning: {
-    backgroundColor: "#fef3c7",
+    backgroundColor: '#fef3c7',
     borderRadius: 8,
     padding: 12,
     marginTop: 16,
   },
   partialText: {
     fontSize: 12,
-    color: "#92400e",
-    textAlign: "center",
+    color: '#92400e',
+    textAlign: 'center',
   },
   skeletonContainer: {
     padding: 16,
@@ -479,12 +479,12 @@ const styles = createSheet({
     marginBottom: 8,
   },
   skeletonFilters: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 12,
     marginBottom: 8,
   },
   heatmapSkeleton: {
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 12,
@@ -492,7 +492,7 @@ const styles = createSheet({
     gap: 12,
   },
   infoCard: {
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 12,
@@ -500,13 +500,13 @@ const styles = createSheet({
   },
   infoTitle: {
     fontSize: 18,
-    fontWeight: "700",
-    color: "#111827",
+    fontWeight: '700',
+    color: '#111827',
     marginBottom: 6,
   },
   infoSubtitle: {
     fontSize: 14,
-    color: "#6b7280",
+    color: '#6b7280',
     lineHeight: 20,
   },
 });

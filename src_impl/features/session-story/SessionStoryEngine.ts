@@ -11,17 +11,17 @@
  * - Event emission for UI consumption
  */
 
-import { eventBus } from "@/events";
-import { createDebugger } from "@/utils/debug";
-import { v4 } from "@/utils/uuid";
-import type { SessionSummary } from "@/session/types";
-import type { BossEncounterSummary } from "@/features/boss/schemas";
-import type { StreakEngineResult } from "@/features/streaks/schemas";
-import { calculateStory } from "./StoryBeatCalculator";
-import * as storyRepository from "./repository";
-import { SessionStorySchema, GenerateStoryInputSchema, StoryAnalyticsEventSchema, type SessionStory, type GenerateStoryInput, type StoryAnalyticsEvent } from "./schemas";
+import { eventBus } from '@/events';
+import { createDebugger } from '@/utils/debug';
+import { v4 } from '@/utils/uuid';
+import type { SessionSummary } from '@/session/types';
+import type { BossEncounterSummary } from '@/features/boss/schemas';
+import type { StreakEngineResult } from '@/features/streaks/schemas';
+import { calculateStory } from './StoryBeatCalculator';
+import * as storyRepository from './repository';
+import { SessionStorySchema, GenerateStoryInputSchema, StoryAnalyticsEventSchema, type SessionStory, type GenerateStoryInput, type StoryAnalyticsEvent } from './schemas';
 
-const debug = createDebugger("session-story:engine");
+const debug = createDebugger('session-story:engine');
 
 // ============================================================================
 // Types
@@ -52,20 +52,20 @@ let initialized = false;
 
 export function initializeSessionStoryEngine(): () => void {
   if (initialized) {
-    debug.warn("SessionStoryEngine already initialized");
+    debug.warn('SessionStoryEngine already initialized');
     return () => {};
   }
 
   initialized = true;
-  debug.info("Initializing SessionStoryEngine");
+  debug.info('Initializing SessionStoryEngine');
 
   // Listen for session completion events
-  const unsubscribeCompleted = eventBus.subscribe("session:completed", async (event) => {
+  const unsubscribeCompleted = eventBus.subscribe('session:completed', async (event) => {
     try {
       const { sessionId, userId } = event as { sessionId: string; userId: string; summary?: SessionSummary };
       const summary = (event as { summary?: SessionSummary }).summary;
       if (!summary) {
-        debug.warn("No summary in session completed event");
+        debug.warn('No summary in session completed event');
         return;
       }
 
@@ -80,7 +80,7 @@ export function initializeSessionStoryEngine(): () => void {
         await storyRepository.saveStory(story);
 
         // Emit story ready event
-        eventBus.publish("session:story:ready", {
+        eventBus.publish('session:story:ready', {
           storyId: story.id,
           sessionId,
           userId,
@@ -92,20 +92,20 @@ export function initializeSessionStoryEngine(): () => void {
         trackStoryEvent({
           storyId: story.id,
           userId,
-          eventType: "STORY_STARTED",
+          eventType: 'STORY_STARTED',
           timestamp: Date.now(),
         });
 
-        debug.info("Story generated and ready: %s", story.id);
+        debug.info('Story generated and ready: %s', story.id);
       }
     } catch (error) {
-      debug.error("Failed to generate session story", error as Error);
+      debug.error('Failed to generate session story', error as Error);
       // Don't throw - story generation should not block session completion
     }
   });
 
   // Listen for story view events
-  const unsubscribeViewed = eventBus.subscribe("session:story:viewed", (event) => {
+  const unsubscribeViewed = eventBus.subscribe('session:story:viewed', (event) => {
     const { storyId, userId, completionRate } = event as {
       storyId: string;
       userId: string;
@@ -117,7 +117,7 @@ export function initializeSessionStoryEngine(): () => void {
     trackStoryEvent({
       storyId,
       userId,
-      eventType: completionRate >= 90 ? "STORY_COMPLETED" : "STORY_SKIPPED",
+      eventType: completionRate >= 90 ? 'STORY_COMPLETED' : 'STORY_SKIPPED',
       timestamp: Date.now(),
       metadata: { completionRate },
     });
@@ -139,12 +139,12 @@ async function buildStoryContext(sessionId: string, userId: string, summary: Ses
   const bossContext = await fetchBossContext(userId, sessionId);
 
   // Fetch streak result
-  const { getStreakService } = await import("@/streaks/StreakService");
+  const { getStreakService } = await import('@/streaks/StreakService');
   const streakService = getStreakService(userId);
   const streakState = await streakService.recordSession().catch(() => null);
 
   // Fetch progression context
-  const { getProgressionService } = await import("@/progression/ProgressionService");
+  const { getProgressionService } = await import('@/progression/ProgressionService');
   const progressionService = getProgressionService(userId);
   const progression = progressionService.getState();
 
@@ -158,7 +158,7 @@ async function buildStoryContext(sessionId: string, userId: string, summary: Ses
     bossContext: bossContext ?? undefined,
     streakResult: streakState
       ? {
-          action: "INCREMENTED",
+          action: 'INCREMENTED',
           previousStreak: (streakState.currentStreak || 1) - 1,
           newStreak: streakState.currentStreak || 1,
           milestoneReached: null,
@@ -173,17 +173,17 @@ async function buildStoryContext(sessionId: string, userId: string, summary: Ses
   };
 }
 
-async function fetchBossContext(userId: string, sessionId: string): Promise<StoryContext["bossContext"] | null> {
+async function fetchBossContext(userId: string, sessionId: string): Promise<StoryContext['bossContext'] | null> {
   try {
-    const { getActiveEncounter } = await import("@/features/boss/service");
+    const { getActiveEncounter } = await import('@/features/boss/service');
     const encounter = await getActiveEncounter(userId);
 
-    if (!encounter || encounter.status !== "ACTIVE") {
+    if (!encounter || encounter.status !== 'ACTIVE') {
       return null;
     }
 
     // Fetch damage dealt in this session
-    const { calculateBossDamage } = await import("@/session/integration/SessionBossIntegration");
+    const { calculateBossDamage } = await import('@/session/integration/SessionBossIntegration');
     const damageDealt = calculateBossDamage(
       {
         effectiveDuration: 0, // Will be filled in
@@ -198,7 +198,7 @@ async function fetchBossContext(userId: string, sessionId: string): Promise<Stor
       defeated: encounter.healthRemaining <= 0,
     };
   } catch (error) {
-    debug.warn("Failed to fetch boss context", error);
+    debug.warn('Failed to fetch boss context', error);
     return null;
   }
 }
@@ -224,7 +224,7 @@ async function generateSessionStory(context: StoryContext): Promise<SessionStory
       pauses: context.sessionSummary.pauses ?? 0,
       streakDays: context.sessionSummary.streakDays ?? 0,
       streakMaintained: context.sessionSummary.streakMaintained ?? true,
-      sessionMode: context.sessionSummary.sessionMode ?? "STANDARD",
+      sessionMode: context.sessionSummary.sessionMode ?? 'STANDARD',
       completionPercentage: context.sessionSummary.completionPercentage ?? 100,
       finalScore: context.sessionSummary.finalScore ?? 0,
     },
@@ -244,7 +244,7 @@ async function generateSessionStory(context: StoryContext): Promise<SessionStory
       isMilestone: context.streakResult?.milestoneReached !== null,
       milestoneDay: context.streakResult?.milestoneReached?.days,
       wasProtected: context.streakResult?.shieldUsed ?? false,
-      isComeback: context.streakResult?.action === "BROKEN" && context.streakResult?.newStreak === 1 && context.streakResult?.previousStreak > 0,
+      isComeback: context.streakResult?.action === 'BROKEN' && context.streakResult?.newStreak === 1 && context.streakResult?.previousStreak > 0,
       daysAbsent: 0, // Would be calculated from streak data
     },
     progressionContext: {
@@ -259,7 +259,7 @@ async function generateSessionStory(context: StoryContext): Promise<SessionStory
   // Validate input
   const validated = GenerateStoryInputSchema.safeParse(input);
   if (!validated.success) {
-    debug.error("Invalid story input:", validated.error);
+    debug.error('Invalid story input:', validated.error);
     return null;
   }
 
@@ -280,17 +280,17 @@ async function generateSessionStory(context: StoryContext): Promise<SessionStory
     sessionContext: {
       durationMinutes: Math.round(context.sessionSummary.effectiveDuration / 60000),
       focusScore: context.sessionSummary.focusQuality ?? 0,
-      streakDays: calculated.beats.find((b) => b.type === "STREAK_MOMENT" || b.type === "MILESTONE_REACHED")?.metadata?.value ?? 0,
+      streakDays: calculated.beats.find((b) => b.type === 'STREAK_MOMENT' || b.type === 'MILESTONE_REACHED')?.metadata?.value ?? 0,
       interruptions: context.sessionSummary.interruptions ?? 0,
       pauses: context.sessionSummary.pauses ?? 0,
-      sessionMode: context.sessionSummary.sessionMode ?? "STANDARD",
+      sessionMode: context.sessionSummary.sessionMode ?? 'STANDARD',
       bossDamageDealt: context.bossContext?.damageDealt ?? 0,
       bossDefeated: context.bossContext?.defeated ?? false,
-      milestoneReached: calculated.beats.find((b) => b.type === "MILESTONE_REACHED")?.metadata?.value,
+      milestoneReached: calculated.beats.find((b) => b.type === 'MILESTONE_REACHED')?.metadata?.value,
       xpEarned: context.xpEarned,
       isPerfectSession: context.sessionSummary.interruptions === 0 && context.sessionSummary.pauses === 0,
-      isComeback: calculated.beats.some((b) => b.type === "COMEBACK_TRIUMPH"),
-      daysAbsent: calculated.beats.find((b) => b.type === "COMEBACK_TRIUMPH")?.metadata?.value ?? 0,
+      isComeback: calculated.beats.some((b) => b.type === 'COMEBACK_TRIUMPH'),
+      daysAbsent: calculated.beats.find((b) => b.type === 'COMEBACK_TRIUMPH')?.metadata?.value ?? 0,
     },
     nextSessionHooks: calculated.nextSessionHooks,
     viewedAt: null,
@@ -301,7 +301,7 @@ async function generateSessionStory(context: StoryContext): Promise<SessionStory
   // Validate output
   const validatedStory = SessionStorySchema.safeParse(story);
   if (!validatedStory.success) {
-    debug.error("Generated invalid story:", validatedStory.error);
+    debug.error('Generated invalid story:', validatedStory.error);
     return null;
   }
 
@@ -312,15 +312,15 @@ async function generateSessionStory(context: StoryContext): Promise<SessionStory
 // Analytics
 // ============================================================================
 
-function trackStoryEvent(event: Omit<StoryAnalyticsEvent, "timestamp"> & { timestamp: number }): void {
+function trackStoryEvent(event: Omit<StoryAnalyticsEvent, 'timestamp'> & { timestamp: number }): void {
   const validated = StoryAnalyticsEventSchema.safeParse(event);
   if (!validated.success) {
-    debug.warn("Invalid analytics event:", validated.error);
+    debug.warn('Invalid analytics event:', validated.error);
     return;
   }
 
-  eventBus.publish("session:story:analytics", validated.data);
-  eventBus.publish("analytics:track", {
+  eventBus.publish('session:story:analytics', validated.data);
+  eventBus.publish('analytics:track', {
     event: `session_story_${event.eventType.toLowerCase()}`,
     properties: {
       storyId: event.storyId,
@@ -347,7 +347,7 @@ export async function markStoryBeatViewed(storyId: string, beatType: string, use
   trackStoryEvent({
     storyId,
     userId,
-    eventType: "BEAT_VIEWED",
+    eventType: 'BEAT_VIEWED',
     beatType: beatType as any,
     timestamp: Date.now(),
   });
@@ -359,7 +359,7 @@ export async function shareStory(storyId: string, userId: string): Promise<void>
   trackStoryEvent({
     storyId,
     userId,
-    eventType: "STORY_SHARED",
+    eventType: 'STORY_SHARED',
     timestamp: Date.now(),
   });
 }
@@ -369,6 +369,6 @@ export async function shareStory(storyId: string, userId: string): Promise<void>
 // ============================================================================
 
 // Auto-initialize on import in production
-if (process.env.NODE_ENV === "production") {
+if (process.env.NODE_ENV === 'production') {
   initializeSessionStoryEngine();
 }

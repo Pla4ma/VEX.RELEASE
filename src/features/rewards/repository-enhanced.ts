@@ -1,1 +1,2 @@
-export * from '../../../src_impl/features/rewards/repository-enhanced';
+export * from '../../../src_impl/features/rewards/repository/enhanced';
+

@@ -5,9 +5,9 @@
  * Aggregates user signals into actionable behavioral profiles.
  */
 
-import { type BehaviorSignal, type BehaviorProfile, type SignalType, BehaviorProfileSchema, BehaviorSignalSchema } from "../schemas";
-import * as repository from "../repository";
-import { withRetry } from "../utils/retry";
+import { type BehaviorSignal, type BehaviorProfile, type SignalType, BehaviorProfileSchema, BehaviorSignalSchema } from '../schemas';
+import * as repository from '../repository';
+import { withRetry } from '../utils/retry';
 
 // ============================================================================
 // Signal Processing Configuration
@@ -94,7 +94,7 @@ export async function processBehaviorSignal(userId: string, signalType: SignalTy
   const validatedSignal = BehaviorSignalSchema.parse(signal);
 
   // Persist signal
-  await withRetry(() => repository.addBehaviorSignal(validatedSignal), { maxAttempts: 3 }, "add-behavior-signal");
+  await withRetry(() => repository.addBehaviorSignal(validatedSignal), { maxAttempts: 3 }, 'add-behavior-signal');
 
   // Rebuild profile with new signal
   const profile = await rebuildBehaviorProfile(userId);
@@ -107,7 +107,7 @@ export async function processBehaviorSignal(userId: string, signalType: SignalTy
  */
 export async function rebuildBehaviorProfile(userId: string): Promise<BehaviorProfile> {
   // Fetch recent signals
-  const signals = await withRetry(() => repository.fetchRecentBehaviorSignals(userId, 100), { maxAttempts: 3 }, "fetch-behavior-signals");
+  const signals = await withRetry(() => repository.fetchRecentBehaviorSignals(userId, 100), { maxAttempts: 3 }, 'fetch-behavior-signals');
 
   // Apply decay and weight signals
   const weightedSignals = applyDecayAndWeight(signals);
@@ -131,7 +131,7 @@ export async function rebuildBehaviorProfile(userId: string): Promise<BehaviorPr
 
   // Persist profile
   const validatedProfile = BehaviorProfileSchema.parse(profile);
-  await withRetry(() => repository.upsertBehaviorProfile(validatedProfile), { maxAttempts: 3 }, "upsert-behavior-profile");
+  await withRetry(() => repository.upsertBehaviorProfile(validatedProfile), { maxAttempts: 3 }, 'upsert-behavior-profile');
 
   return validatedProfile;
 }
@@ -234,7 +234,7 @@ function calculateSignalConfidence(signalType: SignalType, value: number, metada
   let confidence = baseConfidence[signalType] || 0.7;
 
   // Adjust based on sample size in metadata
-  if (metadata.sampleSize && typeof metadata.sampleSize === "number") {
+  if (metadata.sampleSize && typeof metadata.sampleSize === 'number') {
     if (metadata.sampleSize < 3) {
       confidence *= 0.7;
     } else if (metadata.sampleSize < 10) {
@@ -243,24 +243,24 @@ function calculateSignalConfidence(signalType: SignalType, value: number, metada
   }
 
   // Adjust based on data quality
-  if (metadata.quality === "high") {
+  if (metadata.quality === 'high') {
     confidence *= 1.1;
   }
-  if (metadata.quality === "low") {
+  if (metadata.quality === 'low') {
     confidence *= 0.8;
   }
 
   return Math.min(1, confidence);
 }
 
-function calculateConfidenceLevel(dataPoints: number, signals: BehaviorSignal[]): "LOW" | "MEDIUM" | "HIGH" {
+function calculateConfidenceLevel(dataPoints: number, signals: BehaviorSignal[]): 'LOW' | 'MEDIUM' | 'HIGH' {
   // Check minimum data points
   if (dataPoints < DEFAULT_SIGNAL_CONFIG.coldStartThreshold) {
-    return "LOW";
+    return 'LOW';
   }
 
   if (dataPoints >= DEFAULT_SIGNAL_CONFIG.highConfidenceThreshold) {
-    return "HIGH";
+    return 'HIGH';
   }
 
   // Check signal confidences
@@ -269,13 +269,13 @@ function calculateConfidenceLevel(dataPoints: number, signals: BehaviorSignal[])
   const { low, medium, high } = DEFAULT_SIGNAL_CONFIG.confidenceThresholds;
 
   if (avgConfidence >= high && dataPoints >= 15) {
-    return "HIGH";
+    return 'HIGH';
   }
   if (avgConfidence >= medium && dataPoints >= 10) {
-    return "MEDIUM";
+    return 'MEDIUM';
   }
 
-  return "LOW";
+  return 'LOW';
 }
 
 function calculateExpiration(signalType: SignalType): number {
@@ -327,17 +327,17 @@ export function detectPatterns(profile: BehaviorProfile): DetectedPattern[] {
   const signals = new Map(profile.signals.map((s) => [s.signalType, s]));
 
   // Pattern: Consistent Morning Person
-  const morningSignal = signals.get("MORNING_PERSON");
-  const nightSignal = signals.get("NIGHT_OWL");
+  const morningSignal = signals.get('MORNING_PERSON');
+  const nightSignal = signals.get('NIGHT_OWL');
 
   if (morningSignal && morningSignal.value > 0.7 && morningSignal.confidence > 0.6) {
     if (!nightSignal || morningSignal.value > nightSignal.value) {
       patterns.push({
-        patternType: "CHRONOTYPE",
-        description: "Consistent morning performer",
+        patternType: 'CHRONOTYPE',
+        description: 'Consistent morning performer',
         confidence: morningSignal.confidence,
-        evidence: ["High morning session frequency", "Better quality scores before noon"],
-        recommendation: "Schedule important focus sessions in the morning",
+        evidence: ['High morning session frequency', 'Better quality scores before noon'],
+        recommendation: 'Schedule important focus sessions in the morning',
       });
     }
   }
@@ -346,60 +346,60 @@ export function detectPatterns(profile: BehaviorProfile): DetectedPattern[] {
   if (nightSignal && nightSignal.value > 0.7 && nightSignal.confidence > 0.6) {
     if (!morningSignal || nightSignal.value > morningSignal.value) {
       patterns.push({
-        patternType: "CHRONOTYPE",
-        description: "Evening focus champion",
+        patternType: 'CHRONOTYPE',
+        description: 'Evening focus champion',
         confidence: nightSignal.confidence,
-        evidence: ["Higher evening session completion", "Better focus quality after 6pm"],
-        recommendation: "Plan deep work sessions for evening hours",
+        evidence: ['Higher evening session completion', 'Better focus quality after 6pm'],
+        recommendation: 'Plan deep work sessions for evening hours',
       });
     }
   }
 
   // Pattern: Streak Maintainer
-  const streakSignal = signals.get("STREAK_MAINTENANCE_RATE");
+  const streakSignal = signals.get('STREAK_MAINTENANCE_RATE');
   if (streakSignal && streakSignal.value > 0.8) {
     patterns.push({
-      patternType: "CONSISTENCY",
-      description: "Elite streak maintainer",
+      patternType: 'CONSISTENCY',
+      description: 'Elite streak maintainer',
       confidence: streakSignal.confidence,
-      evidence: ["High streak completion rate", "Regular daily sessions"],
-      recommendation: "Keep your momentum! Your consistency is building compound benefits.",
+      evidence: ['High streak completion rate', 'Regular daily sessions'],
+      recommendation: 'Keep your momentum! Your consistency is building compound benefits.',
     });
   }
 
   // Pattern: Challenge Seeker
-  const challengeSignal = signals.get("CHALLENGE_COMPLETION_RATE");
+  const challengeSignal = signals.get('CHALLENGE_COMPLETION_RATE');
   if (challengeSignal && challengeSignal.value > 0.75) {
     patterns.push({
-      patternType: "ENGAGEMENT",
-      description: "Challenge-driven achiever",
+      patternType: 'ENGAGEMENT',
+      description: 'Challenge-driven achiever',
       confidence: challengeSignal.confidence,
-      evidence: ["High challenge completion rate", "Engagement with difficult tasks"],
-      recommendation: "Continue accepting challenges to accelerate progress",
+      evidence: ['High challenge completion rate', 'Engagement with difficult tasks'],
+      recommendation: 'Continue accepting challenges to accelerate progress',
     });
   }
 
   // Pattern: Weekend Warrior
-  const weekendSignal = signals.get("WEEKEND_WARRIOR");
+  const weekendSignal = signals.get('WEEKEND_WARRIOR');
   if (weekendSignal && weekendSignal.value > 0.6) {
     patterns.push({
-      patternType: "SCHEDULING",
-      description: "Weekend focus specialist",
+      patternType: 'SCHEDULING',
+      description: 'Weekend focus specialist',
       confidence: weekendSignal.confidence,
-      evidence: ["Higher session frequency on weekends", "Longer weekend sessions"],
-      recommendation: "Use weekends for extended deep work sessions",
+      evidence: ['Higher session frequency on weekends', 'Longer weekend sessions'],
+      recommendation: 'Use weekends for extended deep work sessions',
     });
   }
 
   // Pattern: Responsive to Reminders
-  const reminderSignal = signals.get("RESPONSIVENESS_TO_REMINDERS");
+  const reminderSignal = signals.get('RESPONSIVENESS_TO_REMINDERS');
   if (reminderSignal && reminderSignal.value > 0.6) {
     patterns.push({
-      patternType: "INTERACTION",
-      description: "Reminder-responsive user",
+      patternType: 'INTERACTION',
+      description: 'Reminder-responsive user',
       confidence: reminderSignal.confidence,
-      evidence: ["Higher session start rate after reminders", "Engagement with coach messages"],
-      recommendation: "Reminders are effective for you - enable smart notifications",
+      evidence: ['Higher session start rate after reminders', 'Engagement with coach messages'],
+      recommendation: 'Reminders are effective for you - enable smart notifications',
     });
   }
 
@@ -424,7 +424,7 @@ export interface BehaviorAnalytics {
   signalsCount: number;
   patternsDetected: number;
   confidenceLevel: string;
-  dominantChronotype?: "morning" | "evening" | "variable";
+  dominantChronotype?: 'morning' | 'evening' | 'variable';
   consistencyScore: number;
   engagementScore: number;
 }
@@ -433,26 +433,26 @@ export function generateBehaviorAnalytics(profile: BehaviorProfile): BehaviorAna
   const patterns = detectPatterns(profile);
 
   // Determine dominant chronotype
-  const morningSignal = profile.signals.find((s) => s.signalType === "MORNING_PERSON");
-  const nightSignal = profile.signals.find((s) => s.signalType === "NIGHT_OWL");
+  const morningSignal = profile.signals.find((s) => s.signalType === 'MORNING_PERSON');
+  const nightSignal = profile.signals.find((s) => s.signalType === 'NIGHT_OWL');
 
-  let dominantChronotype: "morning" | "evening" | "variable" | undefined;
+  let dominantChronotype: 'morning' | 'evening' | 'variable' | undefined;
   if (morningSignal && nightSignal) {
     if (morningSignal.value > nightSignal.value + 0.2) {
-      dominantChronotype = "morning";
+      dominantChronotype = 'morning';
     } else if (nightSignal.value > morningSignal.value + 0.2) {
-      dominantChronotype = "evening";
+      dominantChronotype = 'evening';
     } else {
-      dominantChronotype = "variable";
+      dominantChronotype = 'variable';
     }
   }
 
   // Calculate consistency score
-  const consistencySignal = profile.signals.find((s) => s.signalType === "CONSISTENCY_SCORE");
+  const consistencySignal = profile.signals.find((s) => s.signalType === 'CONSISTENCY_SCORE');
   const consistencyScore = consistencySignal?.value || 0.5;
 
   // Calculate engagement score (average of engagement signals)
-  const engagementSignals = profile.signals.filter((s) => ["CHALLENGE_COMPLETION_RATE", "BOSS_PARTICIPATION", "SOCIAL_ENGAGEMENT"].includes(s.signalType));
+  const engagementSignals = profile.signals.filter((s) => ['CHALLENGE_COMPLETION_RATE', 'BOSS_PARTICIPATION', 'SOCIAL_ENGAGEMENT'].includes(s.signalType));
   const engagementScore = engagementSignals.length > 0 ? engagementSignals.reduce((sum, s) => sum + s.value, 0) / engagementSignals.length : 0.5;
 
   return {

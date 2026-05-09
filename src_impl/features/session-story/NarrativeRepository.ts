@@ -5,8 +5,8 @@
  * Stores session narratives for history and analytics
  */
 
-import { z } from "zod";
-import { SessionNarrative, NarrativeBeat } from "./SessionNarrator";
+import { z } from 'zod';
+import { SessionNarrative, NarrativeBeat } from './SessionNarrator';
 
 const NarrativeBeatDBSchema = z.object({
   id: z.string(),
@@ -24,7 +24,7 @@ const SessionNarrativeDBSchema = z.object({
   beats: z.array(NarrativeBeatDBSchema),
   openingLine: z.string(),
   closingLine: z.string(),
-  theme: z.enum(["triumph", "struggle", "comeback", "mastery", "learning"]),
+  theme: z.enum(['triumph', 'struggle', 'comeback', 'mastery', 'learning']),
   totalInterruptions: z.number(),
   longestPureStreak: z.number(),
   comboCount: z.number(),
@@ -37,7 +37,7 @@ const SessionNarrativeDBSchema = z.object({
 });
 
 export interface RepositoryError {
-  code: "NOT_FOUND" | "SAVE_FAILED" | "LOAD_FAILED" | "VALIDATION_ERROR" | "NETWORK_ERROR";
+  code: 'NOT_FOUND' | 'SAVE_FAILED' | 'LOAD_FAILED' | 'VALIDATION_ERROR' | 'NETWORK_ERROR';
   message: string;
   retryable: boolean;
 }
@@ -78,8 +78,8 @@ export class NarrativeRepository {
       return {
         success: false,
         error: {
-          code: "SAVE_FAILED",
-          message: error instanceof Error ? error.message : "Failed to save narrative",
+          code: 'SAVE_FAILED',
+          message: error instanceof Error ? error.message : 'Failed to save narrative',
           retryable: true,
         },
       };
@@ -105,8 +105,8 @@ export class NarrativeRepository {
         return {
           success: false,
           error: {
-            code: "NOT_FOUND",
-            message: "Narrative not found",
+            code: 'NOT_FOUND',
+            message: 'Narrative not found',
             retryable: false,
           },
         };
@@ -122,8 +122,8 @@ export class NarrativeRepository {
       return {
         success: false,
         error: {
-          code: "LOAD_FAILED",
-          message: error instanceof Error ? error.message : "Failed to load narrative",
+          code: 'LOAD_FAILED',
+          message: error instanceof Error ? error.message : 'Failed to load narrative',
           retryable: true,
         },
       };
@@ -158,8 +158,8 @@ export class NarrativeRepository {
       return {
         success: false,
         error: {
-          code: "LOAD_FAILED",
-          message: error instanceof Error ? error.message : "Failed to load user narratives",
+          code: 'LOAD_FAILED',
+          message: error instanceof Error ? error.message : 'Failed to load user narratives',
           retryable: true,
         },
       };
@@ -201,7 +201,7 @@ export class NarrativeRepository {
     for (const n of narratives) {
       quoteCounts[n.heroQuote] = (quoteCounts[n.heroQuote] || 0) + 1;
     }
-    const favoriteQuote = Object.entries(quoteCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || "";
+    const favoriteQuote = Object.entries(quoteCounts).sort((a, b) => b[1] - a[1])[0]?.[0] || '';
 
     return {
       success: true,
@@ -253,7 +253,7 @@ export class NarrativeRepository {
       ...db,
       beats: db.beats.map((b) => ({
         ...b,
-        type: b.type as NarrativeBeat["type"],
+        type: b.type as NarrativeBeat['type'],
       })),
     };
   }

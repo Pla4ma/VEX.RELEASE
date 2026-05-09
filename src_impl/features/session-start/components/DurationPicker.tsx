@@ -7,13 +7,13 @@
  * @phase 1B.2
  */
 
-import React, { useMemo } from "react";
-import { ScrollView, TextInput, Pressable } from "react-native";
-import Animated, { useAnimatedStyle, withSpring, useSharedValue, withTiming } from "react-native-reanimated";
+import React, { useMemo } from 'react';
+import { ScrollView, TextInput, Pressable } from 'react-native';
+import Animated, { useAnimatedStyle, withSpring, useSharedValue, withTiming } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export type DurationPreset = 15 | 25 | 45 | 60 | 90;
 
@@ -76,7 +76,7 @@ function DurationChip({ minutes, isSelected, onPress }: { minutes: number; isSel
           },
         ]}
       >
-        <Text variant="body" color={isSelected ? "text.inverse" : "text.primary"} fontWeight={isSelected ? "700" : "500"}>
+        <Text variant="body" color={isSelected ? 'text.inverse' : 'text.primary'} fontWeight={isSelected ? '700' : '500'}>
           {minutes} min
         </Text>
       </Animated.View>
@@ -89,7 +89,7 @@ function DurationChip({ minutes, isSelected, onPress }: { minutes: number; isSel
  */
 function CustomDurationInput({ value, onChange, isActive, onActivate }: { value: number | null; onChange: (minutes: number) => void; isActive: boolean; onActivate: () => void }): JSX.Element {
   const { theme } = useTheme();
-  const [inputValue, setInputValue] = React.useState(value && !PRESETS.includes(value as DurationPreset) ? value.toString() : "");
+  const [inputValue, setInputValue] = React.useState(value && !PRESETS.includes(value as DurationPreset) ? value.toString() : '');
 
   const handleSubmit = () => {
     const num = parseInt(inputValue, 10);
@@ -112,9 +112,9 @@ function CustomDurationInput({ value, onChange, isActive, onActivate }: { value:
           style={{
             width: 60,
             fontSize: 16,
-            fontWeight: "600",
+            fontWeight: '600',
             color: theme.colors.text.primary,
-            textAlign: "center",
+            textAlign: 'center',
           }}
           autoFocus
         />
@@ -127,7 +127,7 @@ function CustomDurationInput({ value, onChange, isActive, onActivate }: { value:
 
   return (
     <Pressable onPress={onActivate} accessibilityLabel="Custom button" accessibilityRole="button" accessibilityHint="Activates this control">
-      <Box px="md" py="md" borderRadius="xl" bg={theme.colors.background.secondary} borderWidth={2} borderColor={theme.colors.border.DEFAULT} style={{ borderStyle: "dashed" }}>
+      <Box px="md" py="md" borderRadius="xl" bg={theme.colors.background.secondary} borderWidth={2} borderColor={theme.colors.border.DEFAULT} style={{ borderStyle: 'dashed' }}>
         <Text variant="body" color="text.secondary" fontWeight="500">
           Custom
         </Text>

@@ -5,10 +5,10 @@
  * variable substitution, and validation.
  */
 
-import { type CoachMessage, type CoachMessageTemplate, type MessageCategory, type DeliveryMethod, type CoachState, CoachMessageSchema } from "../schemas";
-import * as repository from "../repository";
-import { withRetry } from "../utils/retry";
-import { getPersonalityTemplates, type CoachStyle } from "./personality-templates";
+import { type CoachMessage, type CoachMessageTemplate, type MessageCategory, type DeliveryMethod, type CoachState, CoachMessageSchema } from '../schemas';
+import * as repository from '../repository';
+import { withRetry } from '../utils/retry';
+import { getPersonalityTemplates, type CoachStyle } from './personality-templates';
 
 // ============================================================================
 // Message Generation Configuration
@@ -43,7 +43,7 @@ interface TemplateLibrary {
 const templateCache: TemplateLibrary = {
   templates: new Map(),
   lastUpdated: 0,
-  version: "1.0.0",
+  version: '1.0.0',
 };
 
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
@@ -53,17 +53,17 @@ const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 // ============================================================================
 
 const DEFAULT_TEMPLATES: Record<MessageCategory, string[]> = {
-  STREAK_RISK: ["🔥 Your {{currentStreak}}-day streak is at risk! {{hoursRemaining}} hours left to save it with a quick {{suggestedDuration}}-minute session.", "Don't let your streak slip! ⚡ Just {{suggestedDuration}} minutes today keeps your {{currentStreak}}-day streak alive.", "Streak emergency! 🚨 {{hoursRemaining}} hours remaining. One short session saves everything you've built!"],
-  SESSION_SUGGESTION: ["🎯 Perfect time for focus! Based on your patterns, a {{suggestedDuration}}-minute {{difficulty}} session would be ideal right now.", "Your optimal focus window is open! You've crushed {{similarPastSessions}} sessions like this before.", "Ready to build momentum? {{encouragement}} A quick {{suggestedDuration}}-minute session fits perfectly in your schedule."],
-  MILESTONE_HYPE: ["🎉 INCREDIBLE! {{milestoneDays}} days of pure dedication! You're in the top {{percentile}}% of focused performers!", "LEGENDARY STATUS! 🔥 {{milestoneDays}} days strong! Your consistency is absolutely inspiring!", "MILESTONE CRUSHED! 🏆 {{milestoneDays}} days proves your unstoppable commitment to growth!"],
-  COMEBACK_SUPPORT: ["💪 Welcome back! Every master was once a beginner who returned. Your comeback starts now with {{bonusMultiplier}}x XP!", "The streak may have paused, but your journey continues! 🌱 Day {{comebackDay}} of your comeback - you've got this!", "Stronger than before! 🔥 Your previous {{previousStreak}}-day streak shows you have what it takes. Let's rebuild!"],
-  POST_FAILURE: ["That session was tough, but here's what matters: you showed up. 🌱 Growth happens in challenges.", "Every expert faced setbacks. Yours just made you more resilient. 💪 Ready when you are!", "Focus is a skill, and skills develop through practice - including the challenging sessions. 🎯"],
-  PROGRESS_REMINDER: ["You're {{percentToNextLevel}}% to Level {{nextLevel}}! 🎯 One more quality session could push you over the edge!", "Your progress is adding up beautifully! {{totalXp}} XP earned. Keep this momentum! 📈", "Level {{currentLevel}} looks great on you! Ready to unlock Level {{nextLevel}}? You're closer than you think!"],
-  DIFFICULTY_ADJUST: ["Noticing your recent sessions? 🧠 Let's {{adjustmentDirection}} the challenge to match your current flow state.", "Smart adaptation is key to growth. Your patterns suggest a {{adjustmentDirection}} would optimize your focus.", "You've been {{performanceTrend}}. A difficulty {{adjustmentDirection}} might be exactly what you need right now."],
+  STREAK_RISK: ['🔥 Your {{currentStreak}}-day streak is at risk! {{hoursRemaining}} hours left to save it with a quick {{suggestedDuration}}-minute session.', "Don't let your streak slip! ⚡ Just {{suggestedDuration}} minutes today keeps your {{currentStreak}}-day streak alive.", "Streak emergency! 🚨 {{hoursRemaining}} hours remaining. One short session saves everything you've built!"],
+  SESSION_SUGGESTION: ['🎯 Perfect time for focus! Based on your patterns, a {{suggestedDuration}}-minute {{difficulty}} session would be ideal right now.', "Your optimal focus window is open! You've crushed {{similarPastSessions}} sessions like this before.", 'Ready to build momentum? {{encouragement}} A quick {{suggestedDuration}}-minute session fits perfectly in your schedule.'],
+  MILESTONE_HYPE: ["🎉 INCREDIBLE! {{milestoneDays}} days of pure dedication! You're in the top {{percentile}}% of focused performers!", 'LEGENDARY STATUS! 🔥 {{milestoneDays}} days strong! Your consistency is absolutely inspiring!', 'MILESTONE CRUSHED! 🏆 {{milestoneDays}} days proves your unstoppable commitment to growth!'],
+  COMEBACK_SUPPORT: ['💪 Welcome back! Every master was once a beginner who returned. Your comeback starts now with {{bonusMultiplier}}x XP!', "The streak may have paused, but your journey continues! 🌱 Day {{comebackDay}} of your comeback - you've got this!", "Stronger than before! 🔥 Your previous {{previousStreak}}-day streak shows you have what it takes. Let's rebuild!"],
+  POST_FAILURE: ["That session was tough, but here's what matters: you showed up. 🌱 Growth happens in challenges.", 'Every expert faced setbacks. Yours just made you more resilient. 💪 Ready when you are!', 'Focus is a skill, and skills develop through practice - including the challenging sessions. 🎯'],
+  PROGRESS_REMINDER: ["You're {{percentToNextLevel}}% to Level {{nextLevel}}! 🎯 One more quality session could push you over the edge!", 'Your progress is adding up beautifully! {{totalXp}} XP earned. Keep this momentum! 📈', "Level {{currentLevel}} looks great on you! Ready to unlock Level {{nextLevel}}? You're closer than you think!"],
+  DIFFICULTY_ADJUST: ["Noticing your recent sessions? 🧠 Let's {{adjustmentDirection}} the challenge to match your current flow state.", 'Smart adaptation is key to growth. Your patterns suggest a {{adjustmentDirection}} would optimize your focus.', "You've been {{performanceTrend}}. A difficulty {{adjustmentDirection}} might be exactly what you need right now."],
   CHALLENGE_PROMPT: ["🎮 Challenge alert! {{challengeName}} expires in {{hoursLeft}} hours. You're {{progressPercent}}% there - finish strong!", "Don't leave rewards on the table! {{challengeProgress}}% done - one focused session could complete it! 💎", "Your challenge is calling! 📢 {{hoursLeft}} hours left. You've got the skills - time to use them!"],
-  MOTIVATION_BOOST: ["You're capable of incredible focus. Today's session is tomorrow's achievement. ✨ Believe in your progress!", "Small steps compound into extraordinary results. Every session you're building something great! 📈", "Your future self is watching and thanking you for showing up today. 🙏 Keep building those habits!"],
-  BREAK_SUGGESTION: ["You've been crushing it! 🧘 Your focus quality may benefit from a short reset. Step away, breathe, return stronger.", "Quality over quantity champion! A mindful break now means sharper focus when you return. 🌊", "Your brain has been working hard. Give it 5 minutes of rest - you'll come back even stronger! 💪"],
-  OVERLOAD_WARNING: ["Whoa, that's {{sessionCount}} sessions today! 🔥 Impressive dedication, but remember: sustainable progress beats burnout.", "You're pushing hard today! 🎯 Consider pacing - your best work comes from consistent energy, not depletion.", "Amazing commitment, but your focus quality may drop. 🌊 Balance intensity with recovery for long-term growth."],
+  MOTIVATION_BOOST: ["You're capable of incredible focus. Today's session is tomorrow's achievement. ✨ Believe in your progress!", "Small steps compound into extraordinary results. Every session you're building something great! 📈", 'Your future self is watching and thanking you for showing up today. 🙏 Keep building those habits!'],
+  BREAK_SUGGESTION: ["You've been crushing it! 🧘 Your focus quality may benefit from a short reset. Step away, breathe, return stronger.", 'Quality over quantity champion! A mindful break now means sharper focus when you return. 🌊', "Your brain has been working hard. Give it 5 minutes of rest - you'll come back even stronger! 💪"],
+  OVERLOAD_WARNING: ["Whoa, that's {{sessionCount}} sessions today! 🔥 Impressive dedication, but remember: sustainable progress beats burnout.", "You're pushing hard today! 🎯 Consider pacing - your best work comes from consistent energy, not depletion.", 'Amazing commitment, but your focus quality may drop. 🌊 Balance intensity with recovery for long-term growth.'],
 };
 
 // ============================================================================
@@ -79,7 +79,7 @@ export async function generateMessage(params: { userId: string; category: Messag
 
   try {
     // Fetch coach state
-    const coachState = await withRetry(() => repository.fetchCoachState(params.userId), { maxAttempts: 2 }, "fetch-coach-state");
+    const coachState = await withRetry(() => repository.fetchCoachState(params.userId), { maxAttempts: 2 }, 'fetch-coach-state');
 
     // Check if user has muted this category
     if (await isCategoryMuted(params.category, coachState, params.userId)) {
@@ -92,10 +92,10 @@ export async function generateMessage(params: { userId: string; category: Messag
     }
 
     // Fetch templates with caching
-    const templates = await fetchTemplatesWithCache(coachState?.personaId || "default", params.category);
+    const templates = await fetchTemplatesWithCache(coachState?.personaId || 'default', params.category);
 
     // Get personality-specific templates (Phase 9.1)
-    const personalityStyle = (coachState?.personaId as CoachStyle) || "FRIEND";
+    const personalityStyle = (coachState?.personaId as CoachStyle) || 'FRIEND';
     const personalityTemplates = getPersonalityTemplates(personalityStyle, params.category);
 
     // Select best template
@@ -123,12 +123,12 @@ export async function generateMessage(params: { userId: string; category: Messag
     const message: CoachMessage = {
       id: generateMessageId(),
       userId: params.userId,
-      personaId: coachState?.personaId || "default",
+      personaId: coachState?.personaId || 'default',
       category: params.category,
       content,
       deliveryMethod: params.preferredDelivery,
       priority: calculatePriority(params.category, params.context),
-      status: "DRAFT",
+      status: 'DRAFT',
       createdAt: Date.now(),
       scheduledFor: null,
       deliveredAt: null,
@@ -160,7 +160,7 @@ async function fetchTemplatesWithCache(personaId: string, category: MessageCateg
   }
 
   // Fetch from repository
-  const templates = await withRetry(() => repository.fetchMessageTemplates(personaId, category), { maxAttempts: 2 }, "fetch-templates");
+  const templates = await withRetry(() => repository.fetchMessageTemplates(personaId, category), { maxAttempts: 2 }, 'fetch-templates');
 
   // Update cache
   templateCache.templates.set(category, templates);
@@ -201,17 +201,17 @@ function checkTemplateConditions(template: CoachMessageTemplate, context: Record
     }
 
     switch (condition.operator) {
-      case "eq":
+      case 'eq':
         return contextValue === condition.value;
-      case "gt":
+      case 'gt':
         return Number(contextValue) > Number(condition.value);
-      case "lt":
+      case 'lt':
         return Number(contextValue) < Number(condition.value);
-      case "gte":
+      case 'gte':
         return Number(contextValue) >= Number(condition.value);
-      case "lte":
+      case 'lte':
         return Number(contextValue) <= Number(condition.value);
-      case "in":
+      case 'in':
         return Array.isArray(condition.value) && condition.value.includes(contextValue);
       default:
         return false;
@@ -254,7 +254,7 @@ function generateFromDefaults(category: MessageCategory, context: Record<string,
  */
 function generateFromPersonalityTemplate(templates: string[], context: Record<string, unknown>, config: GenerationConfig): string {
   if (!templates || templates.length === 0) {
-    return getSafeDefault("SESSION_SUGGESTION");
+    return getSafeDefault('SESSION_SUGGESTION');
   }
 
   // Select random template from personality set
@@ -284,7 +284,7 @@ function substituteVariables(template: string, context: Record<string, unknown>)
 function sanitizeContent(content: string): string {
   // Remove potentially harmful content
   return content
-    .replace(/[<>]/g, "") // Remove HTML-like chars
+    .replace(/[<>]/g, '') // Remove HTML-like chars
     .trim();
 }
 
@@ -317,14 +317,14 @@ function validateContent(content: string, config: GenerationConfig): ValidationR
 
   for (const pattern of forbiddenPatterns) {
     if (pattern.test(content)) {
-      errors.push("Content contains forbidden patterns");
+      errors.push('Content contains forbidden patterns');
       break;
     }
   }
 
   // Check for unsubstituted variables
   if (/\{\{\w+\}\}/.test(content)) {
-    errors.push("Content contains unsubstituted variables");
+    errors.push('Content contains unsubstituted variables');
   }
 
   return {
@@ -355,13 +355,13 @@ function calculatePriority(category: MessageCategory, context: Record<string, un
   let priority = basePriorities[category] || 5;
 
   // Adjust based on context
-  if (context.urgency === "high") {
+  if (context.urgency === 'high') {
     priority += 2;
   }
-  if (context.urgency === "critical") {
+  if (context.urgency === 'critical') {
     priority += 3;
   }
-  if (context.riskLevel === "CRITICAL") {
+  if (context.riskLevel === 'CRITICAL') {
     priority += 2;
   }
 
@@ -383,7 +383,7 @@ async function isCategoryMuted(category: MessageCategory, coachState: CoachState
   }
 
   // Fetch history to check muted categories
-  const history = await withRetry(() => repository.fetchCoachHistory(userId, 100), { maxAttempts: 2 }, "fetch-history");
+  const history = await withRetry(() => repository.fetchCoachHistory(userId, 100), { maxAttempts: 2 }, 'fetch-history');
 
   return history.mutedCategories.includes(category);
 }
@@ -405,9 +405,9 @@ function generateMessageId(): string {
 
 function getSafeDefault(category: MessageCategory): string {
   const safeDefaults: Record<MessageCategory, string> = {
-    STREAK_RISK: "🔥 Your streak is at risk! Quick session needed to save it.",
-    SESSION_SUGGESTION: "🎯 Perfect time for a focus session!",
-    MILESTONE_HYPE: "🎉 Amazing progress! Keep it up!",
+    STREAK_RISK: '🔥 Your streak is at risk! Quick session needed to save it.',
+    SESSION_SUGGESTION: '🎯 Perfect time for a focus session!',
+    MILESTONE_HYPE: '🎉 Amazing progress! Keep it up!',
     COMEBACK_SUPPORT: "💪 You're doing great! Every session counts.",
     POST_FAILURE: "That was tough, but you showed up. That's what matters!",
     PROGRESS_REMINDER: "You're making great progress! Keep going!",
@@ -415,10 +415,10 @@ function getSafeDefault(category: MessageCategory): string {
     CHALLENGE_PROMPT: "🎮 Don't miss out on that challenge reward!",
     MOTIVATION_BOOST: "You've got this! Believe in your progress!",
     BREAK_SUGGESTION: "🧘 Take a moment to recharge. You've earned it!",
-    OVERLOAD_WARNING: "🔥 Impressive dedication! Consider pacing for sustainability.",
+    OVERLOAD_WARNING: '🔥 Impressive dedication! Consider pacing for sustainability.',
   };
 
-  return safeDefaults[category] || "Keep up the great work!";
+  return safeDefaults[category] || 'Keep up the great work!';
 }
 
 function logGenerationError(userId: string, category: MessageCategory, error: unknown): void {

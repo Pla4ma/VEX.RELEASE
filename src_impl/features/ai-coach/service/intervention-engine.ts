@@ -1,7 +1,7 @@
-import { type CoachState, type InterventionCondition, type InterventionExecution, type InterventionRule, type MessageCategory, type TriggerType } from "../schemas";
-import * as repository from "../repository";
-import { CircuitBreaker, RateLimiter, withRetry } from "../utils/retry";
-import { generateMessage } from "./message-generator";
+import { type CoachState, type InterventionCondition, type InterventionExecution, type InterventionRule, type MessageCategory, type TriggerType } from '../schemas';
+import * as repository from '../repository';
+import { CircuitBreaker, RateLimiter, withRetry } from '../utils/retry';
+import { generateMessage } from './message-generator';
 
 interface EngineConfig {
   maxConcurrentExecutions: number;
@@ -24,7 +24,7 @@ class InterventionEngineState {
   private ruleCache: Map<string, InterventionRule[]> = new Map();
   private cacheTimestamp = 0;
   private readonly cacheTTLMs = 5 * 60 * 1000;
-  private circuitBreaker = new CircuitBreaker({ failureThreshold: 5, resetTimeoutMs: 30000, halfOpenMaxCalls: 3 }, "intervention-engine");
+  private circuitBreaker = new CircuitBreaker({ failureThreshold: 5, resetTimeoutMs: 30000, halfOpenMaxCalls: 3 }, 'intervention-engine');
   private rateLimiter = new RateLimiter(10, 60000);
 
   async acquireExecutionSlot(executionId: string): Promise<boolean> {
@@ -74,7 +74,7 @@ export async function evaluateInterventions(userId: string, trigger: TriggerType
         throw new DailyLimitExceededError(`Daily intervention limit (${DEFAULT_ENGINE_CONFIG.maxInterventionsPerDay}) exceeded`);
       }
       if (isGloballyMuted(coachState)) {
-        throw new InterventionSuppressedError("User has muted all interventions");
+        throw new InterventionSuppressedError('User has muted all interventions');
       }
 
       const rules = await fetchRulesWithCache(trigger);
@@ -124,17 +124,17 @@ function evaluateSingleCondition(condition: InterventionCondition, context: Reco
   const { field, operator, value } = condition;
   const contextValue = getNestedValue(context, field);
   switch (operator) {
-    case "eq":
+    case 'eq':
       return contextValue === value;
-    case "gt":
+    case 'gt':
       return Number(contextValue) > Number(value);
-    case "lt":
+    case 'lt':
       return Number(contextValue) < Number(value);
-    case "gte":
+    case 'gte':
       return Number(contextValue) >= Number(value);
-    case "lte":
+    case 'lte':
       return Number(contextValue) <= Number(value);
-    case "in":
+    case 'in':
       return Array.isArray(value) && value.includes(contextValue);
     default:
       return false;
@@ -142,8 +142,8 @@ function evaluateSingleCondition(condition: InterventionCondition, context: Reco
 }
 
 function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
-  return path.split(".").reduce<unknown>((current, key) => {
-    if (current && typeof current === "object") {
+  return path.split('.').reduce<unknown>((current, key) => {
+    if (current && typeof current === 'object') {
       return Object.entries(current).find(([entryKey]) => entryKey === key)?.[1];
     }
     return undefined;
@@ -153,7 +153,7 @@ function getNestedValue(obj: Record<string, unknown>, path: string): unknown {
 async function executeIntervention(userId: string, rule: InterventionRule, context: Record<string, unknown>, coachState: CoachState): Promise<InterventionExecution> {
   const executionId = generateExecutionId();
   if (!(await engineState.acquireExecutionSlot(executionId))) {
-    throw new ExecutionSlotUnavailableError("Max concurrent executions reached");
+    throw new ExecutionSlotUnavailableError('Max concurrent executions reached');
   }
 
   const execution: InterventionExecution = {
@@ -161,7 +161,7 @@ async function executeIntervention(userId: string, rule: InterventionRule, conte
     userId,
     ruleId: rule.id,
     triggerType: rule.trigger.type,
-    status: "PENDING",
+    status: 'PENDING',
     triggeredAt: Date.now(),
     executedAt: null,
     messageId: null,
@@ -170,15 +170,15 @@ async function executeIntervention(userId: string, rule: InterventionRule, conte
   };
 
   try {
-    await withRetry(() => repository.createInterventionExecution(execution), { maxAttempts: 3 }, "persist-execution");
+    await withRetry(() => repository.createInterventionExecution(execution), { maxAttempts: 3 }, 'persist-execution');
     const result = await executeAction(userId, rule, context, coachState);
-    execution.status = "EXECUTED";
+    execution.status = 'EXECUTED';
     execution.executedAt = Date.now();
     execution.messageId = result.messageId;
-    await withRetry(() => repository.updateInterventionExecution(execution.id, execution.status, execution.result ?? undefined), { maxAttempts: 3 }, "update-execution");
+    await withRetry(() => repository.updateInterventionExecution(execution.id, execution.status, execution.result ?? undefined), { maxAttempts: 3 }, 'update-execution');
     await updateInterventionCount(userId);
   } catch (error) {
-    execution.status = "FAILED";
+    execution.status = 'FAILED';
     await repository.updateInterventionExecution(execution.id, execution.status, execution.result ?? undefined);
     throw error;
   } finally {
@@ -191,10 +191,10 @@ async function executeIntervention(userId: string, rule: InterventionRule, conte
 async function executeAction(userId: string, rule: InterventionRule, context: Record<string, unknown>, coachState: CoachState): Promise<{ messageId: string | null }> {
   const { action } = rule;
   switch (action.type) {
-    case "SEND_MESSAGE":
-    case "SEND_PUSH":
-    case "SHOW_MODAL":
-    case "SHOW_BANNER": {
+    case 'SEND_MESSAGE':
+    case 'SEND_PUSH':
+    case 'SHOW_MODAL':
+    case 'SHOW_BANNER': {
       const message = await generateMessage({
         userId,
         category: inferCategoryFromTrigger(rule.trigger.type),
@@ -206,25 +206,25 @@ async function executeAction(userId: string, rule: InterventionRule, context: Re
           () =>
             repository.createCoachMessage({
               ...message,
-              status: action.delayMinutes > 0 ? "SCHEDULED" : "SENT",
+              status: action.delayMinutes > 0 ? 'SCHEDULED' : 'SENT',
               scheduledFor: action.delayMinutes > 0 ? Date.now() + action.delayMinutes * 60 * 1000 : null,
             }),
           { maxAttempts: 3 },
-          "create-message",
+          'create-message',
         );
         return { messageId: savedMessage.id };
       }
       return { messageId: null };
     }
-    case "SUGGEST_SESSION":
+    case 'SUGGEST_SESSION':
       return { messageId: null };
-    case "ADJUST_DIFFICULTY":
+    case 'ADJUST_DIFFICULTY':
       return { messageId: null };
-    case "SCHEDULE_REMINDER":
+    case 'SCHEDULE_REMINDER':
       return { messageId: null };
-    case "ACTIVATE_COMEBACK":
+    case 'ACTIVATE_COMEBACK':
       return { messageId: null };
-    case "MUTE_NOTIFICATIONS":
+    case 'MUTE_NOTIFICATIONS':
       await muteUserNotifications(userId, 24);
       return { messageId: null };
     default:
@@ -233,7 +233,7 @@ async function executeAction(userId: string, rule: InterventionRule, context: Re
 }
 
 async function fetchCoachStateWithRetry(userId: string): Promise<CoachState> {
-  const state = await withRetry(() => repository.fetchCoachState(userId), { maxAttempts: 3 }, "fetch-coach-state");
+  const state = await withRetry(() => repository.fetchCoachState(userId), { maxAttempts: 3 }, 'fetch-coach-state');
   if (!state) {
     throw new InterventionError(`No coach state found for user ${userId}`);
   }
@@ -241,7 +241,7 @@ async function fetchCoachStateWithRetry(userId: string): Promise<CoachState> {
 }
 
 async function fetchTodaysExecutionsWithRetry(userId: string): Promise<InterventionExecution[]> {
-  return withRetry(() => repository.fetchTodaysInterventionExecutions(userId), { maxAttempts: 3 }, "fetch-todays-executions");
+  return withRetry(() => repository.fetchTodaysInterventionExecutions(userId), { maxAttempts: 3 }, 'fetch-todays-executions');
 }
 
 async function fetchRulesWithCache(triggerType: TriggerType): Promise<InterventionRule[]> {
@@ -249,14 +249,14 @@ async function fetchRulesWithCache(triggerType: TriggerType): Promise<Interventi
   if (cached) {
     return cached;
   }
-  const rules = await withRetry(() => repository.fetchInterventionRulesByTrigger(triggerType), { maxAttempts: 3 }, "fetch-intervention-rules");
+  const rules = await withRetry(() => repository.fetchInterventionRulesByTrigger(triggerType), { maxAttempts: 3 }, 'fetch-intervention-rules');
   const enabledRules = rules.filter((rule) => rule.enabled);
   engineState.setCachedRules(triggerType, enabledRules);
   return enabledRules;
 }
 
 async function isInCooldown(userId: string, rule: InterventionRule): Promise<boolean> {
-  return withRetry(() => repository.wasRuleTriggeredRecently(userId, rule.id, rule.cooldownHours || DEFAULT_ENGINE_CONFIG.defaultCooldownHours), { maxAttempts: 2 }, "check-cooldown");
+  return withRetry(() => repository.wasRuleTriggeredRecently(userId, rule.id, rule.cooldownHours || DEFAULT_ENGINE_CONFIG.defaultCooldownHours), { maxAttempts: 2 }, 'check-cooldown');
 }
 
 function isGloballyMuted(coachState: CoachState): boolean {
@@ -295,22 +295,22 @@ function generateExecutionId(): string {
 
 function inferCategoryFromTrigger(triggerType: TriggerType): MessageCategory {
   const mapping: Record<TriggerType, MessageCategory> = {
-    STREAK_AT_RISK: "STREAK_RISK",
-    NO_SESSION_24H: "MOTIVATION_BOOST",
-    NO_SESSION_48H: "STREAK_RISK",
-    NO_SESSION_72H: "COMEBACK_SUPPORT",
-    SESSION_ABANDONED: "POST_FAILURE",
-    LOW_QUALITY_SESSION: "POST_FAILURE",
-    MILESTONE_REACHED: "MILESTONE_HYPE",
-    LEVEL_UP: "MILESTONE_HYPE",
-    BOSS_TIMEOUT_WARNING: "CHALLENGE_PROMPT",
-    CHALLENGE_EXPIRING: "CHALLENGE_PROMPT",
-    COMEBACK_WINDOW_OPEN: "COMEBACK_SUPPORT",
-    DIFFICULTY_MISMATCH: "DIFFICULTY_ADJUST",
-    OVERLOAD_DETECTED: "OVERLOAD_WARNING",
-    MUTED_USER_REMINDER: "MOTIVATION_BOOST",
+    STREAK_AT_RISK: 'STREAK_RISK',
+    NO_SESSION_24H: 'MOTIVATION_BOOST',
+    NO_SESSION_48H: 'STREAK_RISK',
+    NO_SESSION_72H: 'COMEBACK_SUPPORT',
+    SESSION_ABANDONED: 'POST_FAILURE',
+    LOW_QUALITY_SESSION: 'POST_FAILURE',
+    MILESTONE_REACHED: 'MILESTONE_HYPE',
+    LEVEL_UP: 'MILESTONE_HYPE',
+    BOSS_TIMEOUT_WARNING: 'CHALLENGE_PROMPT',
+    CHALLENGE_EXPIRING: 'CHALLENGE_PROMPT',
+    COMEBACK_WINDOW_OPEN: 'COMEBACK_SUPPORT',
+    DIFFICULTY_MISMATCH: 'DIFFICULTY_ADJUST',
+    OVERLOAD_DETECTED: 'OVERLOAD_WARNING',
+    MUTED_USER_REMINDER: 'MOTIVATION_BOOST',
   };
-  return mapping[triggerType] || "MOTIVATION_BOOST";
+  return mapping[triggerType] || 'MOTIVATION_BOOST';
 }
 
 function logInterventionError(userId: string, trigger: string, error: unknown): void {}
@@ -318,27 +318,27 @@ function logInterventionError(userId: string, trigger: string, error: unknown): 
 export class InterventionError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = "InterventionError";
+    this.name = 'InterventionError';
   }
 }
 
 export class DailyLimitExceededError extends InterventionError {
   constructor(message: string) {
     super(message);
-    this.name = "DailyLimitExceededError";
+    this.name = 'DailyLimitExceededError';
   }
 }
 
 export class InterventionSuppressedError extends InterventionError {
   constructor(message: string) {
     super(message);
-    this.name = "InterventionSuppressedError";
+    this.name = 'InterventionSuppressedError';
   }
 }
 
 export class ExecutionSlotUnavailableError extends InterventionError {
   constructor(message: string) {
     super(message);
-    this.name = "ExecutionSlotUnavailableError";
+    this.name = 'ExecutionSlotUnavailableError';
   }
 }

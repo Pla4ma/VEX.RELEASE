@@ -4,17 +4,17 @@
  * Bosses have attack patterns, users have abilities, combat requires skill
  */
 
-import { eventBus } from "../../events";
-import * as Sentry from "@sentry/react-native";
-import { z } from "zod";
+import { eventBus } from '../../events';
+import * as Sentry from '@sentry/react-native';
+import { z } from 'zod';
 
 // ============================================================================
 // Schemas
 // ============================================================================
 
-export const BossAttackPatternSchema = z.enum(["DISTRACTION_WAVE", "PROCRASTINATION_BEAM", "NOTIFICATION_BLAST", "SOCIAL_MEDIA_TRAP", "MULTITASKING_TEMPEST"]);
+export const BossAttackPatternSchema = z.enum(['DISTRACTION_WAVE', 'PROCRASTINATION_BEAM', 'NOTIFICATION_BLAST', 'SOCIAL_MEDIA_TRAP', 'MULTITASKING_TEMPEST']);
 
-export const BossPhaseSchema = z.enum(["CALM", "AGITATED", "ENRAGED", "DESPERATE"]);
+export const BossPhaseSchema = z.enum(['CALM', 'AGITATED', 'ENRAGED', 'DESPERATE']);
 
 export const CombatAbilitySchema = z.object({
   id: z.string(),
@@ -65,7 +65,7 @@ export const ActiveEncounterSchema = z.object({
   attacksDodged: z.number().int().default(0),
   attacksHit: z.number().int().default(0),
 
-  status: z.enum(["ACTIVE", "VICTORY", "DEFEAT", "TIMED_OUT"]),
+  status: z.enum(['ACTIVE', 'VICTORY', 'DEFEAT', 'TIMED_OUT']),
 });
 
 // ============================================================================
@@ -74,70 +74,70 @@ export const ActiveEncounterSchema = z.object({
 
 export const COMBAT_ABILITIES = [
   {
-    id: "focus_strike",
-    name: "Focus Strike",
-    description: "A concentrated attack dealing moderate damage",
+    id: 'focus_strike',
+    name: 'Focus Strike',
+    description: 'A concentrated attack dealing moderate damage',
     focusEnergyCost: 20,
     baseDamage: 15,
     cooldownSeconds: 5,
     requiresStreak: 0,
     requiresLevel: 1,
-    icon: "⚔️",
+    icon: '⚔️',
   },
   {
-    id: "deep_dive",
-    name: "Deep Dive",
-    description: "High damage attack, costs more energy",
+    id: 'deep_dive',
+    name: 'Deep Dive',
+    description: 'High damage attack, costs more energy',
     focusEnergyCost: 40,
     baseDamage: 35,
     cooldownSeconds: 15,
     requiresStreak: 3,
     requiresLevel: 3,
-    icon: "🌊",
+    icon: '🌊',
   },
   {
-    id: "flow_state",
-    name: "Flow State",
-    description: "Massive damage but requires 7+ day streak",
+    id: 'flow_state',
+    name: 'Flow State',
+    description: 'Massive damage but requires 7+ day streak',
     focusEnergyCost: 60,
     baseDamage: 60,
     cooldownSeconds: 30,
     requiresStreak: 7,
     requiresLevel: 5,
-    icon: "🔥",
+    icon: '🔥',
   },
   {
-    id: "pomodoro_barrage",
-    name: "Pomodoro Barrage",
-    description: "Rapid small attacks, good for building combos",
+    id: 'pomodoro_barrage',
+    name: 'Pomodoro Barrage',
+    description: 'Rapid small attacks, good for building combos',
     focusEnergyCost: 10,
     baseDamage: 8,
     cooldownSeconds: 3,
     requiresStreak: 0,
     requiresLevel: 2,
-    icon: "⏱️",
+    icon: '⏱️',
   },
   {
-    id: "distraction_purge",
-    name: "Distraction Purge",
-    description: "Bonus damage against DISTRACTION attacks",
+    id: 'distraction_purge',
+    name: 'Distraction Purge',
+    description: 'Bonus damage against DISTRACTION attacks',
     focusEnergyCost: 25,
     baseDamage: 20,
     cooldownSeconds: 10,
     requiresStreak: 5,
     requiresLevel: 4,
-    icon: "🛡️",
+    icon: '🛡️',
   },
   {
-    id: "zen_strike",
-    name: "Zen Strike",
-    description: "Ultimate attack. Requires mastery.",
+    id: 'zen_strike',
+    name: 'Zen Strike',
+    description: 'Ultimate attack. Requires mastery.',
     focusEnergyCost: 100,
     baseDamage: 150,
     cooldownSeconds: 60,
     requiresStreak: 14,
     requiresLevel: 10,
-    icon: "☯️",
+    icon: '☯️',
   },
 ];
 
@@ -156,39 +156,39 @@ const ATTACK_PATTERNS: Record<
   }
 > = {
   DISTRACTION_WAVE: {
-    name: "Distraction Wave",
+    name: 'Distraction Wave',
     durationMs: 30000, // 30 seconds
     damageOnHit: 15,
-    description: "Boss emits waves of distraction!",
-    dodgeMechanic: "Complete a 5-minute focus sprint",
+    description: 'Boss emits waves of distraction!',
+    dodgeMechanic: 'Complete a 5-minute focus sprint',
   },
   PROCRASTINATION_BEAM: {
-    name: "Procrastination Beam",
+    name: 'Procrastination Beam',
     durationMs: 60000, // 60 seconds
     damageOnHit: 25,
-    description: "A beam of procrastination sweeps across!",
-    dodgeMechanic: "Do not pause for 10 minutes",
+    description: 'A beam of procrastination sweeps across!',
+    dodgeMechanic: 'Do not pause for 10 minutes',
   },
   NOTIFICATION_BLAST: {
-    name: "Notification Blast",
+    name: 'Notification Blast',
     durationMs: 20000, // 20 seconds
     damageOnHit: 10,
-    description: "Notification spam incoming!",
-    dodgeMechanic: "Ignore all notifications for 20 seconds",
+    description: 'Notification spam incoming!',
+    dodgeMechanic: 'Ignore all notifications for 20 seconds',
   },
   SOCIAL_MEDIA_TRAP: {
-    name: "Social Media Trap",
+    name: 'Social Media Trap',
     durationMs: 45000, // 45 seconds
     damageOnHit: 20,
-    description: "Boss sets a social media trap!",
-    dodgeMechanic: "Stay in app without backgrounding",
+    description: 'Boss sets a social media trap!',
+    dodgeMechanic: 'Stay in app without backgrounding',
   },
   MULTITASKING_TEMPEST: {
-    name: "Multitasking Tempest",
+    name: 'Multitasking Tempest',
     durationMs: 90000, // 90 seconds
     damageOnHit: 30,
-    description: "The tempest of multitasking swirls!",
-    dodgeMechanic: "Complete session without switching apps",
+    description: 'The tempest of multitasking swirls!',
+    dodgeMechanic: 'Complete session without switching apps',
   },
 };
 
@@ -211,32 +211,32 @@ export function calculateBossPhase(currentHealth: number, maxHealth: number, tim
 
   // Health-based phases
   if (healthPercent <= 0.15) {
-    return "DESPERATE";
+    return 'DESPERATE';
   }
   if (healthPercent <= 0.4) {
-    return "ENRAGED";
+    return 'ENRAGED';
   }
   if (healthPercent <= 0.7) {
-    return "AGITATED";
+    return 'AGITATED';
   }
 
   // Time-based urgency
   if (timePercent > 0.8) {
-    return "ENRAGED";
+    return 'ENRAGED';
   }
 
-  return "CALM";
+  return 'CALM';
 }
 
 export function getPhaseMultiplier(phase: BossPhase): number {
   switch (phase) {
-    case "CALM":
+    case 'CALM':
       return 1.0;
-    case "AGITATED":
+    case 'AGITATED':
       return 1.2;
-    case "ENRAGED":
+    case 'ENRAGED':
       return 1.5;
-    case "DESPERATE":
+    case 'DESPERATE':
       return 2.0;
     default:
       return 1.0;
@@ -249,16 +249,16 @@ export function selectAttackPattern(currentPhase: BossPhase, userLevel: number):
   // Weight patterns based on phase
   let weights: number[];
   switch (currentPhase) {
-    case "CALM":
+    case 'CALM':
       weights = [0.5, 0.2, 0.2, 0.1, 0.0]; // Easier patterns
       break;
-    case "AGITATED":
+    case 'AGITATED':
       weights = [0.3, 0.3, 0.2, 0.2, 0.0];
       break;
-    case "ENRAGED":
+    case 'ENRAGED':
       weights = [0.1, 0.3, 0.2, 0.3, 0.1];
       break;
-    case "DESPERATE":
+    case 'DESPERATE':
       weights = [0.0, 0.2, 0.2, 0.3, 0.3]; // Hardest patterns
       break;
   }
@@ -302,7 +302,7 @@ export function executeCombatAbility(encounter: ActiveEncounter, abilityId: stri
       bossHealthRemaining: encounter.bossCurrentHealth,
       newPhase: encounter.currentPhase,
       comboBonus: 0,
-      message: "Ability not available",
+      message: 'Ability not available',
     };
   }
 
@@ -316,7 +316,7 @@ export function executeCombatAbility(encounter: ActiveEncounter, abilityId: stri
       bossHealthRemaining: encounter.bossCurrentHealth,
       newPhase: encounter.currentPhase,
       comboBonus: 0,
-      message: "Ability on cooldown",
+      message: 'Ability on cooldown',
     };
   }
 
@@ -329,7 +329,7 @@ export function executeCombatAbility(encounter: ActiveEncounter, abilityId: stri
       bossHealthRemaining: encounter.bossCurrentHealth,
       newPhase: encounter.currentPhase,
       comboBonus: 0,
-      message: "Not enough Focus Energy!",
+      message: 'Not enough Focus Energy!',
     };
   }
 
@@ -365,7 +365,7 @@ export function executeCombatAbility(encounter: ActiveEncounter, abilityId: stri
   const comboBonus = timeSinceLastAction < 10000 ? 0.2 : 0; // 20% bonus for <10s between actions
 
   // Publish event
-  eventBus.publish("boss:ability_used", {
+  eventBus.publish('boss:ability_used', {
     userId: encounter.userId,
     encounterId: encounter.id,
     abilityId,
@@ -401,7 +401,7 @@ export function resolveAttackPattern(
   message: string;
 } {
   if (!encounter.currentAttackPattern) {
-    return { hit: false, damageTaken: 0, dodged: false, message: "" };
+    return { hit: false, damageTaken: 0, dodged: false, message: '' };
   }
 
   const pattern = ATTACK_PATTERNS[encounter.currentAttackPattern];
@@ -416,10 +416,10 @@ export function resolveAttackPattern(
   // Determine if user dodged based on mechanic
   let dodged = false;
   switch (encounter.currentAttackPattern) {
-    case "DISTRACTION_WAVE":
+    case 'DISTRACTION_WAVE':
       dodged = userCompletedSprint;
       break;
-    case "PROCRASTINATION_BEAM":
+    case 'PROCRASTINATION_BEAM':
       dodged = userDidNotPause;
       break;
     // Add other pattern logic...
@@ -454,7 +454,7 @@ export function checkEncounterEnd(
 ): {
   ended: boolean;
   victory: boolean;
-  reason: "DEFEATED" | "TIMED_OUT" | "ABANDONED" | "ACTIVE";
+  reason: 'DEFEATED' | 'TIMED_OUT' | 'ABANDONED' | 'ACTIVE';
   rewards: Array<{ type: string; amount: number }>;
 } {
   // Check victory
@@ -462,7 +462,7 @@ export function checkEncounterEnd(
     return {
       ended: true,
       victory: true,
-      reason: "DEFEATED",
+      reason: 'DEFEATED',
       rewards: calculateVictoryRewards(encounter),
     };
   }
@@ -472,7 +472,7 @@ export function checkEncounterEnd(
     return {
       ended: true,
       victory: false,
-      reason: "TIMED_OUT",
+      reason: 'TIMED_OUT',
       rewards: [],
     };
   }
@@ -482,15 +482,15 @@ export function checkEncounterEnd(
     return {
       ended: true,
       victory: false,
-      reason: "ABANDONED",
-      rewards: [{ type: "CONSOLATION_XP", amount: Math.floor(encounter.totalDamageDealt / 10) }],
+      reason: 'ABANDONED',
+      rewards: [{ type: 'CONSOLATION_XP', amount: Math.floor(encounter.totalDamageDealt / 10) }],
     };
   }
 
   return {
     ended: false,
     victory: false,
-    reason: "ACTIVE",
+    reason: 'ACTIVE',
     rewards: [],
   };
 }
@@ -501,13 +501,13 @@ function calculateVictoryRewards(encounter: ActiveEncounter): Array<{ type: stri
   const dodgeBonus = encounter.attacksDodged * 25;
 
   const rewards = [
-    { type: "XP", amount: baseXp + damageBonus + dodgeBonus },
-    { type: "COINS", amount: 50 + Math.floor(encounter.totalDamageDealt / 10) },
+    { type: 'XP', amount: baseXp + damageBonus + dodgeBonus },
+    { type: 'COINS', amount: 50 + Math.floor(encounter.totalDamageDealt / 10) },
   ];
 
   // Chance for gem drop
   if (encounter.attacksDodged >= 3) {
-    rewards.push({ type: "GEMS", amount: 10 });
+    rewards.push({ type: 'GEMS', amount: 10 });
   }
 
   return rewards;
@@ -527,8 +527,8 @@ export function formatCombatStatus(encounter: ActiveEncounter): {
   const bossPercent = Math.floor((encounter.bossCurrentHealth / encounter.bossMaxHealth) * 100);
   const energyPercent = Math.floor((encounter.userCurrentFocusEnergy / encounter.userMaxFocusEnergy) * 100);
 
-  const bossBar = "█".repeat(bossPercent / 5) + "░".repeat(20 - bossPercent / 5);
-  const energyBar = "█".repeat(energyPercent / 5) + "░".repeat(20 - energyPercent / 5);
+  const bossBar = '█'.repeat(bossPercent / 5) + '░'.repeat(20 - bossPercent / 5);
+  const energyBar = '█'.repeat(energyPercent / 5) + '░'.repeat(20 - energyPercent / 5);
 
   const timeMs = encounter.expiresAt - Date.now();
   const timeMinutes = Math.floor(timeMs / 60000);
@@ -537,7 +537,7 @@ export function formatCombatStatus(encounter: ActiveEncounter): {
     bossHealthBar: `${bossBar} ${bossPercent}%`,
     energyBar: `${energyBar} ${energyPercent}%`,
     phaseIndicator: encounter.currentPhase,
-    timeRemaining: timeMinutes > 0 ? `${timeMinutes}m` : "EXPIRING!",
+    timeRemaining: timeMinutes > 0 ? `${timeMinutes}m` : 'EXPIRING!',
     activeAttack: encounter.currentAttackPattern ? ATTACK_PATTERNS[encounter.currentAttackPattern]?.name : null,
   };
 }

@@ -7,15 +7,15 @@
  * @phase 11.1
  */
 
-import React, { useEffect, useState } from "react";
-import { Pressable } from "react-native";
-import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming, withDelay, interpolate, Extrapolate } from "react-native-reanimated";
+import React, { useEffect, useState } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming, withDelay, interpolate, Extrapolate } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { type PrimeTimeWindow, formatTimeRemaining } from "../BossSpawnScheduler";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { type PrimeTimeWindow, formatTimeRemaining } from '../BossSpawnScheduler';
 
 interface PrimeTimeBannerProps {
   /** Prime time window data */
@@ -135,7 +135,7 @@ export function PrimeTimeBanner({ window, bossName, onPress, compact = false }: 
                 PRIME TIME ACTIVE
               </Text>
             </Box>
-            <Box px="md" py="xs" borderRadius="full" style={{ backgroundColor: "rgba(255,255,255,0.3)" }}>
+            <Box px="md" py="xs" borderRadius="full" style={{ backgroundColor: 'rgba(255,255,255,0.3)' }}>
               <Text variant="caption" color="white" fontWeight="700">
                 2× XP
               </Text>
@@ -153,7 +153,7 @@ export function PrimeTimeBanner({ window, bossName, onPress, compact = false }: 
           </Box>
 
           {/* Countdown */}
-          <Box flexDirection="row" alignItems="center" justifyContent="center" gap="sm" mb="lg" p="md" borderRadius="lg" style={{ backgroundColor: "rgba(0,0,0,0.2)" }}>
+          <Box flexDirection="row" alignItems="center" justifyContent="center" gap="sm" mb="lg" p="md" borderRadius="lg" style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}>
             <Text fontSize={32}>⏰</Text>
             <Text fontSize={36} fontWeight="900" color="white">
               {formatTimeRemaining(displayTime)}
@@ -177,7 +177,7 @@ export function PrimeTimeBanner({ window, bossName, onPress, compact = false }: 
  * Pre-Prime Time Countdown Banner
  * Shows before prime time starts
  */
-export function PrePrimeTimeBanner({ window, bossName, onPress }: Omit<PrimeTimeBannerProps, "compact">): JSX.Element {
+export function PrePrimeTimeBanner({ window, bossName, onPress }: Omit<PrimeTimeBannerProps, 'compact'>): JSX.Element {
   const { theme } = useTheme();
   const [displayTime, setDisplayTime] = useState(window.timeRemainingMinutes);
 

@@ -4,25 +4,25 @@
  * Generates personalized recommendations based on user context and behavior.
  */
 
-import { z } from "zod";
-import { createDebugger } from "../../utils/debug";
-import type { ContextSnapshot } from "./context-snapshot";
+import { z } from 'zod';
+import { createDebugger } from '../../utils/debug';
+import type { ContextSnapshot } from './context-snapshot';
 
-const debug = createDebugger("ai-coach:recommendations");
+const debug = createDebugger('ai-coach:recommendations');
 
 // Recommendation output schema
 export const CoachRecommendationSchema = z.object({
   id: z.string(),
   userId: z.string(),
-  type: z.enum(["session", "duration", "difficulty", "time", "social", "break"]),
+  type: z.enum(['session', 'duration', 'difficulty', 'time', 'social', 'break']),
   title: z.string(),
   description: z.string(),
   reasoning: z.string(),
   confidence: z.number().min(0).max(1),
-  priority: z.enum(["critical", "high", "medium", "low"]),
-  actionType: z.enum(["start_session", "adjust_duration", "join_squad", "take_break", "view_progress"]),
+  priority: z.enum(['critical', 'high', 'medium', 'low']),
+  actionType: z.enum(['start_session', 'adjust_duration', 'join_squad', 'take_break', 'view_progress']),
   suggestedDuration: z.number().optional(),
-  suggestedDifficulty: z.enum(["easy", "normal", "challenging", "push"]).optional(),
+  suggestedDifficulty: z.enum(['easy', 'normal', 'challenging', 'push']).optional(),
   suggestedTime: z.number().optional(),
   expiresAt: z.number(),
 });
@@ -39,15 +39,15 @@ export async function generateRecommendations(userId: string, context: ContextSn
     recommendations.push({
       id: `rec-streak-${now}`,
       userId,
-      type: "session",
-      title: "Protect Your Streak",
+      type: 'session',
+      title: 'Protect Your Streak',
       description: `Complete a session in the next ${Math.max(0, 24 - context.streakContext.hoursSinceLastSession)} hours to keep your ${context.streakContext.currentStreak}-day streak alive.`,
-      reasoning: "Streak is at risk of breaking",
+      reasoning: 'Streak is at risk of breaking',
       confidence: 0.95,
-      priority: "critical",
-      actionType: "start_session",
+      priority: 'critical',
+      actionType: 'start_session',
       suggestedDuration: 15,
-      suggestedDifficulty: "easy",
+      suggestedDifficulty: 'easy',
       expiresAt: now + 6 * 60 * 60 * 1000,
     });
   }
@@ -57,15 +57,15 @@ export async function generateRecommendations(userId: string, context: ContextSn
     recommendations.push({
       id: `rec-boss-${now}`,
       userId,
-      type: "session",
-      title: "Boss Escaping Soon",
+      type: 'session',
+      title: 'Boss Escaping Soon',
       description: `The boss has ${Math.ceil(context.bossContext.timeRemaining / (60 * 60 * 1000))} hours remaining. Deal damage now!`,
-      reasoning: "Active boss battle nearing timeout",
+      reasoning: 'Active boss battle nearing timeout',
       confidence: 0.9,
-      priority: "high",
-      actionType: "start_session",
+      priority: 'high',
+      actionType: 'start_session',
       suggestedDuration: context.bossContext.bossHealth && context.bossContext.bossHealth > 50 ? 45 : 25,
-      suggestedDifficulty: "challenging",
+      suggestedDifficulty: 'challenging',
       expiresAt: now + context.bossContext.timeRemaining,
     });
   }
@@ -76,15 +76,15 @@ export async function generateRecommendations(userId: string, context: ContextSn
     recommendations.push({
       id: `rec-time-${now}`,
       userId,
-      type: "time",
-      title: "Perfect Time to Focus",
-      description: "This is typically your most productive hour. Take advantage of it!",
-      reasoning: "User historical pattern shows high success at this time",
+      type: 'time',
+      title: 'Perfect Time to Focus',
+      description: 'This is typically your most productive hour. Take advantage of it!',
+      reasoning: 'User historical pattern shows high success at this time',
       confidence: 0.85,
-      priority: "medium",
-      actionType: "start_session",
+      priority: 'medium',
+      actionType: 'start_session',
       suggestedDuration: context.behaviorContext.typicalSessionDuration,
-      suggestedDifficulty: "normal",
+      suggestedDifficulty: 'normal',
       suggestedTime: optimalHour,
       expiresAt: now + 60 * 60 * 1000,
     });
@@ -95,13 +95,13 @@ export async function generateRecommendations(userId: string, context: ContextSn
     recommendations.push({
       id: `rec-war-${now}`,
       userId,
-      type: "social",
-      title: "Squad War Active",
-      description: "Your squad is in a war. Contribute focus time to help win!",
-      reasoning: "Active squad war needs contribution",
+      type: 'social',
+      title: 'Squad War Active',
+      description: 'Your squad is in a war. Contribute focus time to help win!',
+      reasoning: 'Active squad war needs contribution',
       confidence: 0.8,
-      priority: "medium",
-      actionType: "join_squad",
+      priority: 'medium',
+      actionType: 'join_squad',
       suggestedDuration: 30,
       expiresAt: now + 4 * 60 * 60 * 1000,
     });
@@ -112,23 +112,23 @@ export async function generateRecommendations(userId: string, context: ContextSn
     recommendations.push({
       id: `rec-break-${now}`,
       userId,
-      type: "break",
-      title: "Consider a Recovery Day",
-      description: "You have been crushing it this week. A rest day might help you come back stronger.",
-      reasoning: "High weekly session count suggests need for recovery",
+      type: 'break',
+      title: 'Consider a Recovery Day',
+      description: 'You have been crushing it this week. A rest day might help you come back stronger.',
+      reasoning: 'High weekly session count suggests need for recovery',
       confidence: 0.7,
-      priority: "low",
-      actionType: "take_break",
+      priority: 'low',
+      actionType: 'take_break',
       expiresAt: now + 24 * 60 * 60 * 1000,
     });
   }
 
-  debug.info("Generated %d recommendations for user %s", recommendations.length, userId);
+  debug.info('Generated %d recommendations for user %s', recommendations.length, userId);
   return recommendations.sort((a, b) => priorityWeight(b.priority) - priorityWeight(a.priority));
 }
 
 // Get priority weight for sorting
-function priorityWeight(priority: CoachRecommendation["priority"]): number {
+function priorityWeight(priority: CoachRecommendation['priority']): number {
   const weights = { critical: 4, high: 3, medium: 2, low: 1 };
   return weights[priority];
 }
@@ -167,15 +167,15 @@ export function isRecommendationRelevant(recommendation: CoachRecommendation, co
   }
 
   // Context-specific checks
-  if (recommendation.type === "session" && context.sessionContext.activeSession) {
+  if (recommendation.type === 'session' && context.sessionContext.activeSession) {
     return false;
   }
 
-  if (recommendation.type === "break" && context.progressContext.sessionsThisWeek < 5) {
+  if (recommendation.type === 'break' && context.progressContext.sessionsThisWeek < 5) {
     return false;
   }
 
-  if (recommendation.type === "social" && !context.socialContext.hasSquad) {
+  if (recommendation.type === 'social' && !context.socialContext.hasSquad) {
     return false;
   }
 
@@ -189,17 +189,17 @@ export function formatRecommendation(recommendation: CoachRecommendation): {
   cta: string;
 } {
   const difficultyLabels = {
-    easy: "Easy Start",
-    normal: "Standard",
-    challenging: "Challenge",
-    push: "Push Mode",
+    easy: 'Easy Start',
+    normal: 'Standard',
+    challenging: 'Challenge',
+    push: 'Push Mode',
   };
 
-  let cta = "Start Session";
-  if (recommendation.actionType === "take_break") {
-    cta = "Take Break";
-  } else if (recommendation.actionType === "join_squad") {
-    cta = "View Squad";
+  let cta = 'Start Session';
+  if (recommendation.actionType === 'take_break') {
+    cta = 'Take Break';
+  } else if (recommendation.actionType === 'join_squad') {
+    cta = 'View Squad';
   } else if (recommendation.suggestedDifficulty) {
     cta = `${difficultyLabels[recommendation.suggestedDifficulty]} (${recommendation.suggestedDuration}m)`;
   }
@@ -212,8 +212,8 @@ export function formatRecommendation(recommendation: CoachRecommendation): {
 }
 
 // Track recommendation interaction
-export async function trackRecommendationInteraction(recommendationId: string, userId: string, action: "viewed" | "accepted" | "dismissed" | "expired"): Promise<void> {
-  debug.info("Recommendation %s %s by user %s", recommendationId, action, userId);
+export async function trackRecommendationInteraction(recommendationId: string, userId: string, action: 'viewed' | 'accepted' | 'dismissed' | 'expired'): Promise<void> {
+  debug.info('Recommendation %s %s by user %s', recommendationId, action, userId);
 
   // In production: analytics tracking
   // await analytics.logEvent('recommendation_interaction', {
@@ -232,9 +232,9 @@ export function batchProcessRecommendations(recommendations: CoachRecommendation
   low: CoachRecommendation[];
 } {
   return {
-    critical: recommendations.filter((r) => r.priority === "critical"),
-    high: recommendations.filter((r) => r.priority === "high"),
-    medium: recommendations.filter((r) => r.priority === "medium"),
-    low: recommendations.filter((r) => r.priority === "low"),
+    critical: recommendations.filter((r) => r.priority === 'critical'),
+    high: recommendations.filter((r) => r.priority === 'high'),
+    medium: recommendations.filter((r) => r.priority === 'medium'),
+    low: recommendations.filter((r) => r.priority === 'low'),
   };
 }

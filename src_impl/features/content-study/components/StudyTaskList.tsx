@@ -3,14 +3,14 @@
  * Interactive task list with completion tracking and dependency visualization
  */
 
-import React, { useCallback, useMemo } from "react";
-import { View, Pressable, ScrollView } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { Icon } from "../../../icons";
-import type { StudyTaskListProps, StudyTask } from "../types";
-import { TASK_PRIORITY_CONFIG } from "../constants";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useCallback, useMemo } from 'react';
+import { View, Pressable, ScrollView } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import type { StudyTaskListProps, StudyTask } from '../types';
+import { TASK_PRIORITY_CONFIG } from '../constants';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 export const StudyTaskList: React.FC<StudyTaskListProps> = ({ tasks, completedIds, activeId, onTaskComplete, onTaskSelect, showDependencies = true, readOnly = false, estimatedTotalTime, completedTime }) => {
   const { theme } = useTheme();
@@ -111,7 +111,7 @@ export const StudyTaskList: React.FC<StudyTaskListProps> = ({ tasks, completedId
                   styles.checkbox,
                   {
                     borderColor: isCompleted ? theme.colors.success[500] : theme.colors.border.DEFAULT,
-                    backgroundColor: isCompleted ? theme.colors.success[500] : "transparent",
+                    backgroundColor: isCompleted ? theme.colors.success[500] : 'transparent',
                     opacity: pressed && !isLocked && !readOnly ? 0.8 : 1,
                   },
                 ]}
@@ -131,7 +131,7 @@ export const StudyTaskList: React.FC<StudyTaskListProps> = ({ tasks, completedId
                     styles.taskText,
                     {
                       color: theme.colors.text.primary,
-                      textDecorationLine: isCompleted ? "line-through" : "none",
+                      textDecorationLine: isCompleted ? 'line-through' : 'none',
                     },
                   ]}
                 >
@@ -155,7 +155,7 @@ export const StudyTaskList: React.FC<StudyTaskListProps> = ({ tasks, completedId
                     <View style={styles.dependencyBadge}>
                       <Icon name="link" size="xs" color={theme.colors.text.muted} />
                       <Text style={[styles.dependencyText, { color: theme.colors.text.muted }]}>
-                        {task.dependsOn.length} prerequisite{task.dependsOn.length > 1 ? "s" : ""}
+                        {task.dependsOn.length} prerequisite{task.dependsOn.length > 1 ? 's' : ''}
                       </Text>
                     </View>
                   )}
@@ -180,13 +180,13 @@ const styles = createSheet({
     gap: 8,
   },
   headerTitle: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   title: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   progressInfo: {
     gap: 8,
@@ -194,10 +194,10 @@ const styles = createSheet({
   progressBar: {
     height: 6,
     borderRadius: 3,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   progressFill: {
-    height: "100%",
+    height: '100%',
     borderRadius: 3,
   },
   timeText: {
@@ -207,8 +207,8 @@ const styles = createSheet({
     maxHeight: 400,
   },
   taskCard: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
     gap: 12,
     padding: 12,
     borderRadius: 12,
@@ -220,8 +220,8 @@ const styles = createSheet({
     height: 24,
     borderRadius: 6,
     borderWidth: 2,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 2,
   },
   taskContent: {
@@ -233,8 +233,8 @@ const styles = createSheet({
     lineHeight: 22,
   },
   taskMeta: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 8,
   },
   priorityBadge: {
@@ -244,19 +244,19 @@ const styles = createSheet({
   },
   priorityText: {
     fontSize: 11,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   durationBadge: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   durationText: {
     fontSize: 12,
   },
   dependencyBadge: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   dependencyText: {

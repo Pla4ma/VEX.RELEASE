@@ -3,10 +3,10 @@
  * Core wallet management functions for the economy system
  */
 
-import * as repository from "./repository";
-import * as analytics from "./analytics";
-import { eventBus } from "../../events";
-import { AddCurrencyInputSchema, CalculateEarningsInputSchema, type Wallet, type WalletTransaction, type AddCurrencyInput, type CalculateEarningsInput, type CurrencyType } from "./schemas";
+import * as repository from './repository';
+import * as analytics from './analytics';
+import { eventBus } from '../../events';
+import { AddCurrencyInputSchema, CalculateEarningsInputSchema, type Wallet, type WalletTransaction, type AddCurrencyInput, type CalculateEarningsInput, type CurrencyType } from './schemas';
 
 // Level-based multipliers for earnings
 const LEVEL_MULTIPLIERS: Record<number, number> = {
@@ -62,13 +62,13 @@ export async function getBalance(userId: string, currency: CurrencyType): Promis
   const wallet = await getOrCreateWallet(userId);
 
   switch (currency) {
-    case "COINS":
+    case 'COINS':
       return wallet.coins;
-    case "GEMS":
+    case 'GEMS':
       return wallet.gems;
-    case "FOCUS_POINTS":
+    case 'FOCUS_POINTS':
       return wallet.focusPoints;
-    case "SEASONAL":
+    case 'SEASONAL':
       return Object.values(wallet.seasonal).reduce((a, b) => a + b, 0);
     default:
       return 0;
@@ -80,13 +80,13 @@ export async function getBalance(userId: string, currency: CurrencyType): Promis
  */
 export function hasEnoughBalance(wallet: Wallet, currency: CurrencyType, amount: number): boolean {
   switch (currency) {
-    case "COINS":
+    case 'COINS':
       return wallet.coins >= amount;
-    case "GEMS":
+    case 'GEMS':
       return wallet.gems >= amount;
-    case "FOCUS_POINTS":
+    case 'FOCUS_POINTS':
       return wallet.focusPoints >= amount;
-    case "SEASONAL":
+    case 'SEASONAL':
       return Object.values(wallet.seasonal).some((balance) => balance >= amount);
   }
 }
@@ -155,20 +155,20 @@ export async function addCurrency(input: AddCurrencyInput): Promise<{
 
   let newBalance = 0;
   switch (validated.currency) {
-    case "COINS": {
+    case 'COINS': {
       newBalance = wallet.coins + finalAmount;
       break;
     }
-    case "GEMS": {
+    case 'GEMS': {
       newBalance = wallet.gems + finalAmount;
       break;
     }
-    case "FOCUS_POINTS": {
+    case 'FOCUS_POINTS': {
       newBalance = wallet.focusPoints + finalAmount;
       break;
     }
-    case "SEASONAL": {
-      const seasonId = (validated.metadata?.seasonId as string) ?? "current";
+    case 'SEASONAL': {
+      const seasonId = (validated.metadata?.seasonId as string) ?? 'current';
       newBalance = (wallet.seasonal[seasonId] ?? 0) + finalAmount;
       break;
     }
@@ -176,21 +176,21 @@ export async function addCurrency(input: AddCurrencyInput): Promise<{
 
   const updateData: Parameters<typeof repository.updateWalletBalance>[1] = {};
   switch (validated.currency) {
-    case "COINS": {
+    case 'COINS': {
       updateData.coins = newBalance;
       updateData.totalCoinsEarned = wallet.totalCoinsEarned + finalAmount;
       break;
     }
-    case "GEMS": {
+    case 'GEMS': {
       updateData.gems = newBalance;
       updateData.totalGemsEarned = wallet.totalGemsEarned + finalAmount;
       break;
     }
-    case "FOCUS_POINTS":
+    case 'FOCUS_POINTS':
       updateData.focusPoints = newBalance;
       break;
-    case "SEASONAL":
-      const seasonId = (validated.metadata?.seasonId as string) ?? "current";
+    case 'SEASONAL':
+      const seasonId = (validated.metadata?.seasonId as string) ?? 'current';
       updateData.seasonal = { ...wallet.seasonal, [seasonId]: newBalance };
       break;
   }
@@ -200,10 +200,10 @@ export async function addCurrency(input: AddCurrencyInput): Promise<{
   const transaction = await repository.createTransaction({
     walletId: wallet.id,
     userId: validated.userId,
-    type: "EARN",
+    type: 'EARN',
     currency: validated.currency,
     amount: finalAmount,
-    balanceBefore: validated.currency === "COINS" ? wallet.coins : validated.currency === "GEMS" ? wallet.gems : validated.currency === "FOCUS_POINTS" ? wallet.focusPoints : (wallet.seasonal[(validated.metadata?.seasonId as string) ?? "current"] ?? 0),
+    balanceBefore: validated.currency === 'COINS' ? wallet.coins : validated.currency === 'GEMS' ? wallet.gems : validated.currency === 'FOCUS_POINTS' ? wallet.focusPoints : (wallet.seasonal[(validated.metadata?.seasonId as string) ?? 'current'] ?? 0),
     balanceAfter: newBalance,
     source: validated.source,
     sourceId: validated.sourceId ?? null,
@@ -218,7 +218,7 @@ export async function addCurrency(input: AddCurrencyInput): Promise<{
   analytics.trackCurrencyEarned(validated.userId, validated.currency, finalAmount, validated.source, multiplier);
 
   if (!validated.skipEvents) {
-    eventBus.publish("economy:currency_added", {
+    eventBus.publish('economy:currency_added', {
       userId: validated.userId,
       currency: validated.currency,
       amount: finalAmount,

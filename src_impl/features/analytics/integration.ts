@@ -3,12 +3,12 @@
  * Cross-system integration with events, analytics tracking, and feature coordination
  */
 
-import { eventBus } from "../../events";
-import * as Sentry from "@sentry/react-native";
-import { TTLCache } from "../../shared/hardening";
-import * as repository from "./repository";
-import * as service from "./service";
-import { generateInsights } from "./service";
+import { eventBus } from '../../events';
+import * as Sentry from '@sentry/react-native';
+import { TTLCache } from '../../shared/hardening';
+import * as repository from './repository';
+import * as service from './service';
+import { generateInsights } from './service';
 
 // Cache for integration state to prevent duplicate processing
 const integrationCache = new TTLCache<{ processed: boolean }>(60000);
@@ -60,16 +60,16 @@ export async function trackSessionCompleted(
     });
 
     // Emit analytics event
-    eventBus.publish("analytics:data_refreshed", {
+    eventBus.publish('analytics:data_refreshed', {
       userId,
-      metrics: ["sessions_completed", "xp_earned", "streak_days"],
+      metrics: ['sessions_completed', 'xp_earned', 'streak_days'],
     });
 
     // Track with Sentry
     Sentry.addBreadcrumb({
-      category: "analytics_session",
-      message: "Session completed and tracked",
-      level: "info",
+      category: 'analytics_session',
+      message: 'Session completed and tracked',
+      level: 'info',
       data: {
         userId,
         sessionId: sessionData.sessionId,
@@ -87,32 +87,32 @@ export async function trackSessionCompleted(
     await repository.bulkInsertAnalyticsEvents([
       {
         user_id: userId,
-        metric_type: "sessions_completed",
+        metric_type: 'sessions_completed',
         value: 1,
-        dimension_type: "session_category",
-        dimension_value: sessionData.bossActive ? "boss" : "standard",
+        dimension_type: 'session_category',
+        dimension_value: sessionData.bossActive ? 'boss' : 'standard',
         timestamp: Date.now(),
       },
       {
         user_id: userId,
-        metric_type: "xp_earned",
+        metric_type: 'xp_earned',
         value: sessionData.xpEarned,
-        dimension_type: "session_category",
-        dimension_value: sessionData.bossActive ? "boss" : "standard",
+        dimension_type: 'session_category',
+        dimension_value: sessionData.bossActive ? 'boss' : 'standard',
         timestamp: Date.now(),
       },
       {
         user_id: userId,
-        metric_type: "total_focus_time",
+        metric_type: 'total_focus_time',
         value: sessionData.duration,
-        dimension_type: "time_of_day",
+        dimension_type: 'time_of_day',
         dimension_value: getTimeOfDay(),
         timestamp: Date.now(),
       },
     ]);
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { integration: "analytics_session" },
+      tags: { integration: 'analytics_session' },
       extra: { userId, sessionId: sessionData.sessionId },
     });
     throw error;
@@ -135,7 +135,7 @@ export async function syncAnalyticsData(userId: string): Promise<{
   try {
     // Fetch current state from repository
     const [stats, insights, patterns] = await Promise.all([
-      repository.fetchAggregatedStats(userId, "today").catch((e) => {
+      repository.fetchAggregatedStats(userId, 'today').catch((e) => {
         errors.push(`Stats fetch failed: ${e.message}`);
         failed++;
         return null;
@@ -157,7 +157,7 @@ export async function syncAnalyticsData(userId: string): Promise<{
     }
 
     // Emit sync completion event
-    eventBus.publish("network:sync:complete", {
+    eventBus.publish('network:sync:complete', {
       synced,
       failed,
     });
@@ -185,9 +185,9 @@ export async function syncAnalyticsData(userId: string): Promise<{
       errors,
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
+    const message = error instanceof Error ? error.message : 'Unknown error';
     Sentry.captureException(error, {
-      tags: { integration: "analytics_sync" },
+      tags: { integration: 'analytics_sync' },
       extra: { userId },
     });
 
@@ -238,7 +238,7 @@ export async function getRealtimeAnalytics(userId: string): Promise<{
 
   // Fetch fresh data
   try {
-    const [todayStats, insights] = await Promise.all([repository.fetchAggregatedStats(userId, "today"), repository.fetchInsights(userId, { unreadOnly: false, limit: 3 })]);
+    const [todayStats, insights] = await Promise.all([repository.fetchAggregatedStats(userId, 'today'), repository.fetchInsights(userId, { unreadOnly: false, limit: 3 })]);
 
     // Update cache
     stateCache.set(userId, {
@@ -266,7 +266,7 @@ export async function getRealtimeAnalytics(userId: string): Promise<{
     };
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { integration: "analytics_realtime" },
+      tags: { integration: 'analytics_realtime' },
       extra: { userId },
     });
 
@@ -300,9 +300,9 @@ export async function trackBossEncounter(
     await repository.bulkInsertAnalyticsEvents([
       {
         user_id: userId,
-        metric_type: "boss_damage_dealt",
+        metric_type: 'boss_damage_dealt',
         value: bossData.damageDealt,
-        dimension_type: "boss_type",
+        dimension_type: 'boss_type',
         dimension_value: bossData.bossId,
         timestamp: Date.now(),
       },
@@ -313,13 +313,13 @@ export async function trackBossEncounter(
       await generateInsights(userId);
     }
 
-    eventBus.publish("analytics:data_refreshed", {
+    eventBus.publish('analytics:data_refreshed', {
       userId,
-      metrics: ["boss_damage_dealt"],
+      metrics: ['boss_damage_dealt'],
     });
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { integration: "analytics_boss" },
+      tags: { integration: 'analytics_boss' },
       extra: { userId, bossId: bossData.bossId },
     });
   }
@@ -340,29 +340,29 @@ export async function trackItemCrafted(
     await repository.bulkInsertAnalyticsEvents([
       {
         user_id: userId,
-        metric_type: "items_crafted",
+        metric_type: 'items_crafted',
         value: 1,
-        dimension_type: "item_type",
+        dimension_type: 'item_type',
         dimension_value: itemData.rarity,
         timestamp: Date.now(),
       },
       {
         user_id: userId,
-        metric_type: "coins_spent",
+        metric_type: 'coins_spent',
         value: itemData.coinsSpent,
-        dimension_type: "item_type",
+        dimension_type: 'item_type',
         dimension_value: itemData.rarity,
         timestamp: Date.now(),
       },
     ]);
 
-    eventBus.publish("analytics:data_refreshed", {
+    eventBus.publish('analytics:data_refreshed', {
       userId,
-      metrics: ["items_crafted", "coins_spent"],
+      metrics: ['items_crafted', 'coins_spent'],
     });
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { integration: "analytics_crafting" },
+      tags: { integration: 'analytics_crafting' },
       extra: { userId, itemId: itemData.itemId },
     });
   }
@@ -390,15 +390,15 @@ function updateIntegrationState(userId: string, updates: Partial<IntegrationStat
 function getTimeOfDay(): string {
   const hour = new Date().getHours();
   if (hour < 6) {
-    return "night";
+    return 'night';
   }
   if (hour < 12) {
-    return "morning";
+    return 'morning';
   }
   if (hour < 18) {
-    return "afternoon";
+    return 'afternoon';
   }
-  return "evening";
+  return 'evening';
 }
 
 /**
@@ -412,19 +412,19 @@ export async function cleanupAnalyticsData(userId: string, retentionDays: number
     await repository.deleteOldAnalyticsData(userId, cutoff);
 
     Sentry.addBreadcrumb({
-      category: "analytics_cleanup",
+      category: 'analytics_cleanup',
       message: `Cleaned up analytics data older than ${retentionDays} days`,
-      level: "info",
+      level: 'info',
       data: { userId, retentionDays },
     });
 
     return { deleted: 1, errors };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
+    const message = error instanceof Error ? error.message : 'Unknown error';
     errors.push(message);
 
     Sentry.captureException(error, {
-      tags: { integration: "analytics_cleanup" },
+      tags: { integration: 'analytics_cleanup' },
       extra: { userId, retentionDays },
     });
 
@@ -451,7 +451,7 @@ export async function initializeAnalytics(userId: string): Promise<{
     if (!syncResult.success) {
       return {
         success: false,
-        error: `Sync failed: ${syncResult.errors.join(", ")}`,
+        error: `Sync failed: ${syncResult.errors.join(', ')}`,
       };
     }
 
@@ -471,10 +471,10 @@ export async function initializeAnalytics(userId: string): Promise<{
       },
     };
   } catch (error) {
-    const message = error instanceof Error ? error.message : "Unknown error";
+    const message = error instanceof Error ? error.message : 'Unknown error';
 
     Sentry.captureException(error, {
-      tags: { integration: "analytics_init" },
+      tags: { integration: 'analytics_init' },
       extra: { userId },
     });
 

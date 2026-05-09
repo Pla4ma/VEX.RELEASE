@@ -1,32 +1,32 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { BackHandler, ScrollView } from "react-native";
-import * as Sentry from "@sentry/react-native";
-import { useQuery } from "@tanstack/react-query";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { BackHandler, ScrollView } from 'react-native';
+import * as Sentry from '@sentry/react-native';
+import { useQuery } from '@tanstack/react-query';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { useProgressionSummary } from "../../progression/hooks";
-import { useStreakMultiplier } from "../../streaks/hooks";
-import { useUserSquads } from "../../squads/hooks";
-import type { SessionStackParams } from "../../../navigation/types";
-import { getSessionService } from "../../../session/SessionService";
-import type { SessionSummary } from "../../../session/types";
-import { useAuthStore } from "../../../store";
-import { useSessionUIStore } from "../../../store/session-state";
-import { useToast } from "../../../shared/ui/components/Toast";
-import { useTheme } from "../../../theme";
-import { formatDuration } from "../../../screens/session/utils";
+import { useProgressionSummary } from '../../progression/hooks';
+import { useStreakMultiplier } from '../../streaks/hooks';
+import { useUserSquads } from '../../squads/hooks';
+import type { SessionStackParams } from '../../../navigation/types';
+import { getSessionService } from '../../../session/SessionService';
+import type { SessionSummary } from '../../../session/types';
+import { useAuthStore } from '../../../store';
+import { useSessionUIStore } from '../../../store/session-state';
+import { useToast } from '../../../shared/ui/components/Toast';
+import { useTheme } from '../../../theme';
+import { formatDuration } from '../../../screens/session/utils';
 import {
   getChestTierDisplay,
   getGradeDisplay,
   getPurityDisplay,
-} from "../../../screens/session/utils/session-complete-display";
-import { useSessionMastery } from "../../../screens/session/hooks/useSessionMastery";
-import { useSessionCompleteRewards } from "../../../screens/session/hooks/useSessionCompleteRewards";
-import { useSessionCompleteStudyProgress } from "../../../screens/session/hooks/useSessionCompleteStudyProgress";
-import { buildSessionCompletionHero, buildSessionCompletionReturnPlan } from "../service";
-import { useHomeReturnCompletionSync } from "./useHomeReturnCompletionSync";
-import { useSessionCompletionSpectacles } from "./useSessionCompletionSpectacles";
+} from '../../../screens/session/utils/session-complete-display';
+import { useSessionMastery } from '../../../screens/session/hooks/useSessionMastery';
+import { useSessionCompleteRewards } from '../../../screens/session/hooks/useSessionCompleteRewards';
+import { useSessionCompleteStudyProgress } from '../../../screens/session/hooks/useSessionCompleteStudyProgress';
+import { buildSessionCompletionHero, buildSessionCompletionReturnPlan } from '../service';
+import { useHomeReturnCompletionSync } from './useHomeReturnCompletionSync';
+import { useSessionCompletionSpectacles } from './useSessionCompletionSpectacles';
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 
@@ -38,9 +38,9 @@ export function useSessionCompleteController(input: { sessionId: string; summary
   const { show: showToast } = useToast();
   const showHomeHighlight = useSessionUIStore((state) => state.showHomeHighlight);
   const scrollRef = useRef<ScrollView>(null);
-  const [selectedMood, setSelectedMood] = useState<"BAD" | "GOOD" | "GREAT" | "NEUTRAL" | "TERRIBLE" | null>(null);
-  const [reflection, setReflection] = useState("");
-  const userId = user?.id ?? "";
+  const [selectedMood, setSelectedMood] = useState<'BAD' | 'GOOD' | 'GREAT' | 'NEUTRAL' | 'TERRIBLE' | null>(null);
+  const [reflection, setReflection] = useState('');
+  const userId = user?.id ?? '';
   const syncHomeReturn = useHomeReturnCompletionSync({ sessionId, summary, userId });
   const progressionQuery = useProgressionSummary(userId || null);
   const squadsQuery = useUserSquads(userId || undefined);
@@ -53,7 +53,7 @@ export function useSessionCompleteController(input: { sessionId: string; summary
       sessionService.setUserId(userId);
       return sessionService.getSessionById(sessionId);
     },
-    queryKey: ["session-history-entry", userId, sessionId],
+    queryKey: ['session-history-entry', userId, sessionId],
     staleTime: 30 * 1000,
   });
   const studyProgressState = useSessionCompleteStudyProgress({
@@ -98,10 +98,10 @@ export function useSessionCompleteController(input: { sessionId: string; summary
   const finishSession = useCallback(
     (skipped: boolean) => {
       Sentry.addBreadcrumb({
-        category: "session",
-        data: skipped ? undefined : { mood: selectedMood ?? "SKIPPED", reflectionLength: reflection.trim().length },
-        level: "info",
-        message: skipped ? "Session completion notes skipped" : "Session completion notes submitted",
+        category: 'session',
+        data: skipped ? undefined : { mood: selectedMood ?? 'SKIPPED', reflectionLength: reflection.trim().length },
+        level: 'info',
+        message: skipped ? 'Session completion notes skipped' : 'Session completion notes submitted',
       });
       void syncHomeReturn();
       showHomeHighlight({
@@ -109,7 +109,7 @@ export function useSessionCompleteController(input: { sessionId: string; summary
         title: returnPlan.highlightTitle,
         tone: returnPlan.highlightTone,
       });
-      navigation.navigate({ name: "Main", params: {} });
+      navigation.navigate({ name: 'Main', params: {} });
     },
     [navigation, reflection, returnPlan, selectedMood, showHomeHighlight, syncHomeReturn],
   );
@@ -120,8 +120,8 @@ export function useSessionCompleteController(input: { sessionId: string; summary
     !progressionQuery.error && progressionQuery.data
       ? {
           accent: theme.colors.primary[500],
-          id: "level",
-          label: "Level XP",
+          id: 'level',
+          label: 'Level XP',
           progress: progressionQuery.data.progressPercent / 100,
           reward: `+${rewards.chestResult?.xpReward ?? summary.xpEarned} XP`,
           value: `Level ${progressionQuery.data.level} ${progressionQuery.data.xp}/${progressionQuery.data.nextLevelThreshold} XP`,
@@ -130,9 +130,9 @@ export function useSessionCompleteController(input: { sessionId: string; summary
 
   useEffect(() => {
     Sentry.addBreadcrumb({
-      category: "session",
-      level: "info",
-      message: "Session complete screen viewed",
+      category: 'session',
+      level: 'info',
+      message: 'Session complete screen viewed',
     });
   }, []);
 
@@ -146,8 +146,8 @@ export function useSessionCompleteController(input: { sessionId: string; summary
   }, [rewards.revealStage]);
 
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
-      navigation.navigate({ name: "Main", params: {} });
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      navigation.navigate({ name: 'Main', params: {} });
       return true;
     });
 

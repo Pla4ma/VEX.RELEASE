@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 /**
  * Message Generator
  * Business logic for generating personalized coach messages and interventions
@@ -9,12 +9,12 @@ import { captureSilentFailure } from "../../utils/silent-failure";
  * - Schemas (validation)
  */
 
-import * as repository from "./repository";
-import { GenerateMessageInputSchema, EvaluateInterventionsInputSchema, MarkMessageActionInputSchema, type CoachMessageTemplate, type CoachMessage, type InterventionRule, type InterventionExecution, type MessageCategory, type TriggerType, type DeliveryMethod, type GenerateMessageInput, type EvaluateInterventionsInput, type MarkMessageActionInput } from "./schemas";
-import { getOrCreateCoachState, updateCoachState } from "./persona-manager";
-import { generateCoachMessage, generateSessionSummary } from "../../shared/ai/edge-function-service";
-import { getSessionRepository } from "../../session/repository/SessionRepository";
-import { getRelevantMemories, generateMemoryReferenceMessage, type MemoryType, getMilestoneSummary } from "./CoachMemory";
+import * as repository from './repository';
+import { GenerateMessageInputSchema, EvaluateInterventionsInputSchema, MarkMessageActionInputSchema, type CoachMessageTemplate, type CoachMessage, type InterventionRule, type InterventionExecution, type MessageCategory, type TriggerType, type DeliveryMethod, type GenerateMessageInput, type EvaluateInterventionsInput, type MarkMessageActionInput } from './schemas';
+import { getOrCreateCoachState, updateCoachState } from './persona-manager';
+import { generateCoachMessage, generateSessionSummary } from '../../shared/ai/edge-function-service';
+import { getSessionRepository } from '../../session/repository/SessionRepository';
+import { getRelevantMemories, generateMemoryReferenceMessage, type MemoryType, getMilestoneSummary } from './CoachMemory';
 
 // ============================================================================
 // Constants
@@ -25,17 +25,17 @@ const MAX_INTERVENTIONS_PER_DAY = 5;
 const MUTE_DURATION_HOURS = 24;
 
 const DEFAULT_MESSAGE_TEMPLATES: Record<MessageCategory, string[]> = {
-  STREAK_RISK: ["Your streak is at risk! 🔥 Just {{minutesNeeded}} more minutes to keep it alive.", "Don't let your {{currentStreak}}-day streak slip away! One quick session will save it.", "Your streak needs you! ⚡ A short focus session today keeps the momentum going."],
-  SESSION_SUGGESTION: ["Perfect time for a session! 🎯 You usually focus best at this time.", "Ready to build momentum? A {{suggestedDuration}}-minute session would be ideal now.", "Your optimal focus window is open! Let's make the most of it."],
-  MILESTONE_HYPE: ["Incredible! 🎉 {{milestoneDays}} days strong! You're unstoppable!", "LEGENDARY! 🔥 {{milestoneDays}} days of pure dedication!", "Milestone crushed! 🏆 {{milestoneDays}} days proves your commitment!"],
-  COMEBACK_SUPPORT: ["Welcome back! 💪 Every master was once a beginner. Let's rebuild together.", "Missed a few days? No problem! Your comeback starts now with {{bonusMultiplier}}x XP!", "The streak may have broken, but your spirit didn't! Ready to rise again?"],
-  POST_FAILURE: ["That session didn't go as planned. That's okay—growth comes from challenges! 🌱", "Every expert was once a beginner who kept trying. Next time will be better! 💪", "Focus is a skill. Today's difficulty is tomorrow's strength. Keep going!"],
-  PROGRESS_REMINDER: ["You're {{percentToNextLevel}}% to Level {{nextLevel}}! One more session could push you over! 🎯", "Your progress is adding up! {{totalXp}} XP earned so far. Keep the momentum!", "Level {{currentLevel}} looks good on you! Ready to push for {{nextLevel}}?"],
-  DIFFICULTY_ADJUST: ["Noticing a pattern? 🧠 Let's adjust the challenge to match your current flow.", "Your focus sessions have been {{trend}}. Want to {{adjustmentDirection}} the difficulty?", "Smart adaptation is key to growth. A difficulty tweak might be perfect now."],
-  CHALLENGE_PROMPT: ["Challenge alert! 🎮 {{challengeName}} expires in {{hoursLeft}} hours. Ready to crush it?", "Don't leave rewards on the table! {{challengeProgress}}% done—finish strong!", "Your challenge is calling! One session could complete it. 💎"],
-  MOTIVATION_BOOST: ["You're capable of amazing things. Today's focus is tomorrow's achievement. ✨", "Small steps, big results. Every session compounds into greatness! 📈", "Your future self will thank you for the focus you put in today. 🙏"],
-  BREAK_SUGGESTION: ["You've been crushing it! 🧘 A short break will recharge you for even better focus.", "Quality over quantity. A mindful break now means sharper focus later.", "Your brain deserves a reset. Step away, breathe, then come back stronger."],
-  OVERLOAD_WARNING: ["Whoa, that's a lot of sessions today! 🔥 Remember to rest—burnout helps no one.", "Impressive dedication, but your focus quality may drop. Consider pacing yourself.", "You're pushing hard! Make sure to balance intensity with recovery. 🌊"],
+  STREAK_RISK: ['Your streak is at risk! 🔥 Just {{minutesNeeded}} more minutes to keep it alive.', "Don't let your {{currentStreak}}-day streak slip away! One quick session will save it.", 'Your streak needs you! ⚡ A short focus session today keeps the momentum going.'],
+  SESSION_SUGGESTION: ['Perfect time for a session! 🎯 You usually focus best at this time.', 'Ready to build momentum? A {{suggestedDuration}}-minute session would be ideal now.', "Your optimal focus window is open! Let's make the most of it."],
+  MILESTONE_HYPE: ["Incredible! 🎉 {{milestoneDays}} days strong! You're unstoppable!", 'LEGENDARY! 🔥 {{milestoneDays}} days of pure dedication!', 'Milestone crushed! 🏆 {{milestoneDays}} days proves your commitment!'],
+  COMEBACK_SUPPORT: ["Welcome back! 💪 Every master was once a beginner. Let's rebuild together.", 'Missed a few days? No problem! Your comeback starts now with {{bonusMultiplier}}x XP!', "The streak may have broken, but your spirit didn't! Ready to rise again?"],
+  POST_FAILURE: ["That session didn't go as planned. That's okay—growth comes from challenges! 🌱", 'Every expert was once a beginner who kept trying. Next time will be better! 💪', "Focus is a skill. Today's difficulty is tomorrow's strength. Keep going!"],
+  PROGRESS_REMINDER: ["You're {{percentToNextLevel}}% to Level {{nextLevel}}! One more session could push you over! 🎯", 'Your progress is adding up! {{totalXp}} XP earned so far. Keep the momentum!', 'Level {{currentLevel}} looks good on you! Ready to push for {{nextLevel}}?'],
+  DIFFICULTY_ADJUST: ["Noticing a pattern? 🧠 Let's adjust the challenge to match your current flow.", 'Your focus sessions have been {{trend}}. Want to {{adjustmentDirection}} the difficulty?', 'Smart adaptation is key to growth. A difficulty tweak might be perfect now.'],
+  CHALLENGE_PROMPT: ['Challenge alert! 🎮 {{challengeName}} expires in {{hoursLeft}} hours. Ready to crush it?', "Don't leave rewards on the table! {{challengeProgress}}% done—finish strong!", 'Your challenge is calling! One session could complete it. 💎'],
+  MOTIVATION_BOOST: ["You're capable of amazing things. Today's focus is tomorrow's achievement. ✨", 'Small steps, big results. Every session compounds into greatness! 📈', 'Your future self will thank you for the focus you put in today. 🙏'],
+  BREAK_SUGGESTION: ["You've been crushing it! 🧘 A short break will recharge you for even better focus.", 'Quality over quantity. A mindful break now means sharper focus later.', 'Your brain deserves a reset. Step away, breathe, then come back stronger.'],
+  OVERLOAD_WARNING: ["Whoa, that's a lot of sessions today! 🔥 Remember to rest—burnout helps no one.", 'Impressive dedication, but your focus quality may drop. Consider pacing yourself.', "You're pushing hard! Make sure to balance intensity with recovery. 🌊"],
 };
 
 // ============================================================================
@@ -93,11 +93,11 @@ async function generateAIBackedMessage(input: GenerateMessageInput): Promise<str
       userId: input.userId,
       context: {
         category: input.category,
-        currentStreak: readNumericContext(input.context, "currentStreak", "streakDays"),
-        hoursSinceLastSession: readNumericContext(input.context, "hoursSinceLastSession"),
-        currentLevel: readNumericContext(input.context, "currentLevel"),
-        recentSessionQuality: readNumericContext(input.context, "recentSessionQuality"),
-        daysInactive: readNumericContext(input.context, "daysInactive"),
+        currentStreak: readNumericContext(input.context, 'currentStreak', 'streakDays'),
+        hoursSinceLastSession: readNumericContext(input.context, 'hoursSinceLastSession'),
+        currentLevel: readNumericContext(input.context, 'currentLevel'),
+        recentSessionQuality: readNumericContext(input.context, 'recentSessionQuality'),
+        daysInactive: readNumericContext(input.context, 'daysInactive'),
       },
     });
 
@@ -105,7 +105,7 @@ async function generateAIBackedMessage(input: GenerateMessageInput): Promise<str
       return response.content;
     }
   } catch (error) {
-    captureSilentFailure(error, { feature: "ai-coach", operation: "ui-fallback", type: "ui" });
+    captureSilentFailure(error, { feature: 'ai-coach', operation: 'ui-fallback', type: 'ui' });
     return null;
   }
 
@@ -115,7 +115,7 @@ async function generateAIBackedMessage(input: GenerateMessageInput): Promise<str
 function readNumericContext(context: Record<string, unknown>, ...keys: string[]): number | undefined {
   for (const key of keys) {
     const value = context[key];
-    if (typeof value === "number" && Number.isFinite(value)) {
+    if (typeof value === 'number' && Number.isFinite(value)) {
       return value;
     }
   }
@@ -140,17 +140,17 @@ function checkConditions(conditions: Array<{ type?: string; operator: string; va
     }
 
     switch (condition.operator) {
-      case "eq":
+      case 'eq':
         return contextValue === condition.value;
-      case "gt":
+      case 'gt':
         return Number(contextValue) > Number(condition.value);
-      case "lt":
+      case 'lt':
         return Number(contextValue) < Number(condition.value);
-      case "gte":
+      case 'gte':
         return Number(contextValue) >= Number(condition.value);
-      case "lte":
+      case 'lte':
         return Number(contextValue) <= Number(condition.value);
-      case "in":
+      case 'in':
         return Array.isArray(condition.value) && condition.value.includes(contextValue);
       default:
         return false;
@@ -169,7 +169,7 @@ function getDefaultTemplate(category: MessageCategory, context: Record<string, u
 
   // Replace variables
   Object.entries(context).forEach(([key, value]) => {
-    template = template.replace(new RegExp(`{{${key}}}`, "g"), String(value));
+    template = template.replace(new RegExp(`{{${key}}}`, 'g'), String(value));
   });
 
   return template;
@@ -189,7 +189,7 @@ function createMessageFromTemplate(input: GenerateMessageInput, personaId: strin
     content,
     deliveryMethod: input.preferredDelivery,
     priority,
-    status: "DRAFT",
+    status: 'DRAFT',
     createdAt: Date.now(),
     scheduledFor: null,
     deliveredAt: null,
@@ -268,7 +268,7 @@ async function executeIntervention(userId: string, rule: InterventionRule, conte
     userId,
     ruleId: rule.id,
     triggerType: rule.trigger.type,
-    status: "PENDING",
+    status: 'PENDING',
     triggeredAt: Date.now(),
     executedAt: null,
     messageId: null,
@@ -281,10 +281,10 @@ async function executeIntervention(userId: string, rule: InterventionRule, conte
   try {
     // Handle different action types
     switch (rule.action.type) {
-      case "SEND_MESSAGE":
-      case "SEND_PUSH":
-      case "SHOW_MODAL":
-      case "SHOW_BANNER": {
+      case 'SEND_MESSAGE':
+      case 'SEND_PUSH':
+      case 'SHOW_MODAL':
+      case 'SHOW_BANNER': {
         const category = inferCategoryFromTrigger(rule.trigger.type);
         const message = await generateMessage({
           userId,
@@ -296,7 +296,7 @@ async function executeIntervention(userId: string, rule: InterventionRule, conte
         if (message) {
           const savedMessage = await repository.createCoachMessage({
             ...message,
-            status: rule.action.delayMinutes > 0 ? "SCHEDULED" : "SENT",
+            status: rule.action.delayMinutes > 0 ? 'SCHEDULED' : 'SENT',
             scheduledFor: rule.action.delayMinutes > 0 ? Date.now() + rule.action.delayMinutes * 60 * 1000 : null,
           });
 
@@ -305,19 +305,19 @@ async function executeIntervention(userId: string, rule: InterventionRule, conte
         break;
       }
 
-      case "SUGGEST_SESSION":
-      case "ADJUST_DIFFICULTY":
-      case "SCHEDULE_REMINDER":
-      case "ACTIVATE_COMEBACK":
-      case "MUTE_NOTIFICATIONS":
+      case 'SUGGEST_SESSION':
+      case 'ADJUST_DIFFICULTY':
+      case 'SCHEDULE_REMINDER':
+      case 'ACTIVATE_COMEBACK':
+      case 'MUTE_NOTIFICATIONS':
         // These are handled by other modules
         break;
     }
 
-    execution.status = "EXECUTED";
+    execution.status = 'EXECUTED';
     execution.executedAt = Date.now();
   } catch (error) {
-    execution.status = "FAILED";
+    execution.status = 'FAILED';
     // Log error via analytics
   }
 
@@ -327,23 +327,23 @@ async function executeIntervention(userId: string, rule: InterventionRule, conte
 
 function inferCategoryFromTrigger(triggerType: TriggerType): MessageCategory {
   const mapping: Record<TriggerType, MessageCategory> = {
-    STREAK_AT_RISK: "STREAK_RISK",
-    NO_SESSION_24H: "MOTIVATION_BOOST",
-    NO_SESSION_48H: "STREAK_RISK",
-    NO_SESSION_72H: "COMEBACK_SUPPORT",
-    SESSION_ABANDONED: "POST_FAILURE",
-    LOW_QUALITY_SESSION: "POST_FAILURE",
-    MILESTONE_REACHED: "MILESTONE_HYPE",
-    LEVEL_UP: "MILESTONE_HYPE",
-    BOSS_TIMEOUT_WARNING: "CHALLENGE_PROMPT",
-    CHALLENGE_EXPIRING: "CHALLENGE_PROMPT",
-    COMEBACK_WINDOW_OPEN: "COMEBACK_SUPPORT",
-    DIFFICULTY_MISMATCH: "DIFFICULTY_ADJUST",
-    OVERLOAD_DETECTED: "OVERLOAD_WARNING",
-    MUTED_USER_REMINDER: "MOTIVATION_BOOST",
+    STREAK_AT_RISK: 'STREAK_RISK',
+    NO_SESSION_24H: 'MOTIVATION_BOOST',
+    NO_SESSION_48H: 'STREAK_RISK',
+    NO_SESSION_72H: 'COMEBACK_SUPPORT',
+    SESSION_ABANDONED: 'POST_FAILURE',
+    LOW_QUALITY_SESSION: 'POST_FAILURE',
+    MILESTONE_REACHED: 'MILESTONE_HYPE',
+    LEVEL_UP: 'MILESTONE_HYPE',
+    BOSS_TIMEOUT_WARNING: 'CHALLENGE_PROMPT',
+    CHALLENGE_EXPIRING: 'CHALLENGE_PROMPT',
+    COMEBACK_WINDOW_OPEN: 'COMEBACK_SUPPORT',
+    DIFFICULTY_MISMATCH: 'DIFFICULTY_ADJUST',
+    OVERLOAD_DETECTED: 'OVERLOAD_WARNING',
+    MUTED_USER_REMINDER: 'MOTIVATION_BOOST',
   };
 
-  return mapping[triggerType] || "MOTIVATION_BOOST";
+  return mapping[triggerType] || 'MOTIVATION_BOOST';
 }
 
 // ============================================================================
@@ -391,7 +391,7 @@ export async function generateMemoryAwareMessage(userId: string, category: Messa
   // Get persona style for template selection
   const state = await getOrCreateCoachState(userId);
   const persona = await repository.fetchCoachPersona(state.personaId);
-  const personaStyle = persona?.style || "MENTOR";
+  const personaStyle = persona?.style || 'MENTOR';
 
   // Build memory-aware message based on category and memories
   const memory = memories[0];
@@ -400,7 +400,7 @@ export async function generateMemoryAwareMessage(userId: string, category: Messa
   // Template library with 20+ memory-aware messages
   const memoryTemplates: Record<string, Record<string, string[]>> = {
     MENTOR: {
-      FIRST_S_GRADE: [`You hit your first S grade ${daysSince} days ago — that means ${memory?.metadata.duration || "focused"} minutes of pure focus. You're capable of that excellence again.`, "Remember your first S grade? That wasn't luck — that was skill. You have it in you to do it again.", "Your first perfect session showed you what's possible. Time to show yourself again."],
+      FIRST_S_GRADE: [`You hit your first S grade ${daysSince} days ago — that means ${memory?.metadata.duration || 'focused'} minutes of pure focus. You're capable of that excellence again.`, "Remember your first S grade? That wasn't luck — that was skill. You have it in you to do it again.", "Your first perfect session showed you what's possible. Time to show yourself again."],
       LONGEST_SESSION: [`Remember when you completed that ${memory?.metadata.duration}-minute session? That was a breakthrough. You have that capacity within you.`, `Your personal best of ${memory?.metadata.duration} minutes wasn't a fluke. That focus is still inside you.`, `${daysSince} days ago, you proved you can focus for ${memory?.metadata.duration} minutes. Your record is waiting to be broken.`],
       BEST_STREAK: [`Your ${memory?.metadata.streakDays}-day streak record still stands. You built that through consistency, not intensity. That's the path forward.`, `You once maintained a ${memory?.metadata.streakDays}-day streak. That discipline is still in you — time to reignite it.`, `The ${memory?.metadata.streakDays}-day streak you built wasn't about perfection — it was about showing up. Let's start again.`],
       FIRST_BOSS_DEFEATED: [`Your first boss victory against ${memory?.metadata.bossName} showed you what focused effort can accomplish. That same determination is available to you now.`, `Remember defeating ${memory?.metadata.bossName}? You have that power right now — it's just waiting to be used.`, `When you beat ${memory?.metadata.bossName}, you proved you can overcome big challenges. Another one awaits.`],
@@ -408,7 +408,7 @@ export async function generateMemoryAwareMessage(userId: string, category: Messa
       SESSION_COUNT_MILESTONE: [`${milestoneSummary.totalMemories} sessions in. You're building a real habit — one session at a time.`, `You've completed ${milestoneSummary.totalMemories} sessions. That's not beginner luck — that's commitment.`, `Session ${milestoneSummary.totalMemories} awaits. Each one compounds into something bigger.`],
     },
     CHEERLEADER: {
-      FIRST_S_GRADE: [`OMG! 🌟 You got your first S grade ${daysSince} days ago and you've been CRUSHING IT since! Keep that momentum!`, "Your first S grade was AMAZING! 🔥 That focus power is still inside you — use it!", "Remember that INCREDIBLE first S grade?! 🎉 You can absolutely do that again!"],
+      FIRST_S_GRADE: [`OMG! 🌟 You got your first S grade ${daysSince} days ago and you've been CRUSHING IT since! Keep that momentum!`, 'Your first S grade was AMAZING! 🔥 That focus power is still inside you — use it!', 'Remember that INCREDIBLE first S grade?! 🎉 You can absolutely do that again!'],
       LONGEST_SESSION: [`That EPIC ${memory?.metadata.duration}-minute session?! 🔥 That was ${daysSince} days ago and you STILL got it!`, `Your ${memory?.metadata.duration}-minute LEGEND is still the record! 🏆 Time to beat it!`, `${memory?.metadata.duration} minutes of PURE FOCUS! 💪 You have that POWER right now!`],
       BEST_STREAK: [`Your ${memory?.metadata.streakDays}-day streak LEGEND is alive! 🏆 You built that through showing up every day!`, `${memory?.metadata.streakDays} days of AWESOME! 🎉 That champion spirit is still in you!`, `You maintained a ${memory?.metadata.streakDays}-day streak! 🔥 Time to start a new one!`],
       FIRST_BOSS_DEFEATED: [`Your first boss takedown of ${memory?.metadata.bossName}?! 👑 That was EPIC! You have that SAME POWER now!`, `Remember beating ${memory?.metadata.bossName}? 🎯 You were UNSTOPPABLE! Be that again!`, `${memory?.metadata.bossName} went DOWN! 💥 Another boss awaits your greatness!`],
@@ -419,7 +419,7 @@ export async function generateMemoryAwareMessage(userId: string, category: Messa
       FIRST_S_GRADE: [`You got your first S grade ${daysSince} days ago. What happened since? Complacency. You were capable of excellence then, and you're capable now. PROVE IT.`, "Your first S grade wasn't a gift. You earned it. Now earn another.", `${daysSince} days since your first perfect session. Pathetic. Get back to work.`],
       LONGEST_SESSION: [`${memory?.metadata.duration} minutes. That was your record. Set ${daysSince} days ago. Pathetic that you haven't beaten it. TODAY IS THE DAY.`, `Your ${memory?.metadata.duration}-minute session is still your best. Weak. Beat it now.`, `You've coasted for ${daysSince} days since your record. Enough. Break it today.`],
       BEST_STREAK: [`${memory?.metadata.streakDays} days. That was your best. You had discipline then. Where is it now? Find it. Or admit you're weak.`, `You once maintained ${memory?.metadata.streakDays} days. Now you make excuses. Stop.`, `Your ${memory?.metadata.streakDays}-day streak proves you CAN commit. So commit now.`],
-      FIRST_BOSS_DEFEATED: [`${memory?.metadata.bossName} went down because you had FOCUS. Now you make excuses. Enough. Get back to work.`, `You beat ${memory?.metadata.bossName} through effort. Where's that effort now?`, "Your first boss victory meant something. Make the next one mean more."],
+      FIRST_BOSS_DEFEATED: [`${memory?.metadata.bossName} went down because you had FOCUS. Now you make excuses. Enough. Get back to work.`, `You beat ${memory?.metadata.bossName} through effort. Where's that effort now?`, 'Your first boss victory meant something. Make the next one mean more.'],
       FIRST_RIVAL_WIN: [`${memory?.metadata.rivalName} lost to you by ${memory?.metadata.margin} minutes. Make it ${String((Number(memory?.metadata.margin) || 0) * 2)} this week. Crush them.`, `You beat ${memory?.metadata.rivalName} once. Beat them again. And again.`, `${memory?.metadata.rivalName} is plotting revenge. Destroy their hopes.`],
       SESSION_COUNT_MILESTONE: [`${milestoneSummary.totalMemories} sessions. Barely a start. Most people quit at 10. Don't be most people.`, `Session ${milestoneSummary.totalMemories}. Big deal. Talk to me at 100.`, `${milestoneSummary.totalMemories} isn't a milestone — it's a warm-up. Move faster.`],
     },
@@ -427,7 +427,7 @@ export async function generateMemoryAwareMessage(userId: string, category: Messa
 
   // Select appropriate template set
   const styleTemplates = memoryTemplates[personaStyle] || memoryTemplates.MENTOR;
-  const memoryType = (memory?.type || "SESSION_COUNT_MILESTONE") as string;
+  const memoryType = (memory?.type || 'SESSION_COUNT_MILESTONE') as string;
   const templates = styleTemplates[memoryType] || styleTemplates.SESSION_COUNT_MILESTONE || ["You're building real momentum. Keep going."];
 
   // Select random template from available options
@@ -443,7 +443,7 @@ export async function generateMemoryAwareMessage(userId: string, category: Messa
  */
 export async function generatePerformanceSummary(
   userId: string,
-  period: "daily" | "weekly" | "monthly",
+  period: 'daily' | 'weekly' | 'monthly',
 ): Promise<{
   period: string;
   sessionsCompleted: number;
@@ -487,7 +487,7 @@ export async function generatePerformanceSummary(
 
 async function generateAISummaryMessage(
   userId: string,
-  period: "daily" | "weekly" | "monthly",
+  period: 'daily' | 'weekly' | 'monthly',
   context: {
     sessionCount: number;
     totalFocusMinutes: number;
@@ -517,7 +517,7 @@ async function generateAISummaryMessage(
       return response.structuredData.encouragement || response.content;
     }
   } catch (error) {
-    captureSilentFailure(error, { feature: "ai-coach", operation: "ui-fallback", type: "ui" });
+    captureSilentFailure(error, { feature: 'ai-coach', operation: 'ui-fallback', type: 'ui' });
     return generateSummaryMessage(currentState, period);
   }
 
@@ -526,9 +526,9 @@ async function generateAISummaryMessage(
 
 function generateSummaryMessage(state: string, period: string): string {
   const messages: Record<string, string[]> = {
-    daily: ["Great work today! Every session is a step forward.", "You showed up today—that's what matters. Keep building!", "Today's focus is tomorrow's success. Well done!"],
-    weekly: ["What a week! Your consistency is paying off. 🎉", "7 days of effort, infinite progress. Keep it up!", "You crushed this week! Ready for the next one?"],
-    monthly: ["A month of dedication! You're becoming unstoppable. 🚀", "30 days of growth. Look how far you've come!", "Monthly milestone achieved! Your future self thanks you."],
+    daily: ['Great work today! Every session is a step forward.', "You showed up today—that's what matters. Keep building!", "Today's focus is tomorrow's success. Well done!"],
+    weekly: ['What a week! Your consistency is paying off. 🎉', '7 days of effort, infinite progress. Keep it up!', 'You crushed this week! Ready for the next one?'],
+    monthly: ["A month of dedication! You're becoming unstoppable. 🚀", "30 days of growth. Look how far you've come!", 'Monthly milestone achieved! Your future self thanks you.'],
   };
 
   const periodMessages = messages[period] || messages.daily;

@@ -15,8 +15,8 @@
  * - Notifications (squad activity)
  */
 
-import { eventBus } from "../../events";
-import { featureFlags } from "../../feature-flags/FeatureFlagEngine";
+import { eventBus } from '../../events';
+import { featureFlags } from '../../feature-flags/FeatureFlagEngine';
 
 // ============================================================================
 // Types
@@ -28,7 +28,7 @@ export interface SquadBossEncounter {
   squadId: string;
   healthRemaining: number;
   maxHealth: number;
-  status: "ACTIVE" | "DEFEATED" | "TIMEOUT" | "ABANDONED";
+  status: 'ACTIVE' | 'DEFEATED' | 'TIMEOUT' | 'ABANDONED';
   startedAt: number;
   expiresAt: number;
   defeatedAt: number | null;
@@ -92,8 +92,8 @@ export const MVP_BONUS_MULTIPLIER = 1.5; // MVP gets 50% more rewards
 export const PARTICIPATION_THRESHOLD = 0.05; // Must deal at least 5% damage to get rewards
 
 function assertSquadBossEnabled(): void {
-  if (!featureFlags.isEnabled("squad_boss_system")) {
-    throw new Error("Squad boss system is disabled");
+  if (!featureFlags.isEnabled('squad_boss_system')) {
+    throw new Error('Squad boss system is disabled');
   }
 }
 
@@ -125,7 +125,7 @@ export function createSquadBossEncounter(bossId: string, squadId: string, baseHe
     squadId,
     healthRemaining: scaledHealth,
     maxHealth: scaledHealth,
-    status: "ACTIVE",
+    status: 'ACTIVE',
     startedAt: now,
     expiresAt: now + scaledDuration,
     defeatedAt: null,
@@ -145,7 +145,7 @@ export function createSquadBossEncounter(bossId: string, squadId: string, baseHe
   };
 
   // Publish event
-  eventBus.publish("boss:squad_encounter_created", {
+  eventBus.publish('boss:squad_encounter_created', {
     encounterId: encounter.id,
     squadId,
     bossId,
@@ -183,7 +183,7 @@ export function applySquadMemberDamage(
   if (!contribution) {
     contribution = {
       userId,
-      userName: "Unknown",
+      userName: 'Unknown',
       avatarUrl: null,
       damageDealt: 0,
       sessionsContributed: 0,
@@ -212,12 +212,12 @@ export function applySquadMemberDamage(
   // Check for defeat
   const isDefeated = encounter.healthRemaining === 0;
   if (isDefeated) {
-    encounter.status = "DEFEATED";
+    encounter.status = 'DEFEATED';
     encounter.defeatedAt = Date.now();
   }
 
   // Publish event
-  eventBus.publish("boss:squad_damage_dealt", {
+  eventBus.publish('boss:squad_damage_dealt', {
     encounterId: encounter.id,
     userId,
     damage,
@@ -288,7 +288,7 @@ export function createVictoryCeremony(encounter: SquadBossEncounter, bossName: s
         userId: c.userId,
         xpAmount: isMVP ? Math.floor(baseXP * MVP_BONUS_MULTIPLIER) : baseXP,
         coinAmount: isMVP ? Math.floor(baseCoins * MVP_BONUS_MULTIPLIER) : baseCoins,
-        cosmeticId: isMVP ? "mvp-badge" : null,
+        cosmeticId: isMVP ? 'mvp-badge' : null,
         bonusReward: isMVP,
       };
     });
@@ -307,7 +307,7 @@ export function createVictoryCeremony(encounter: SquadBossEncounter, bossName: s
   };
 
   // Publish event
-  eventBus.publish("boss:squad_victory", {
+  eventBus.publish('boss:squad_victory', {
     encounterId: encounter.id,
     squadId: encounter.squadId,
     bossId: encounter.bossId,
@@ -328,14 +328,14 @@ function generateVictoryMessage(encounter: SquadBossEncounter, mvp: SquadMemberC
   }
 
   if (contributorCount === encounter.memberContributions.length) {
-    return "Perfect squad coordination! Every member contributed to this victory!";
+    return 'Perfect squad coordination! Every member contributed to this victory!';
   }
 
   if (mvp) {
     return `Victory! ${mvp.userName} led the charge with ${formatDamage(mvp.damageDealt)} damage!`;
   }
 
-  return "Squad victory achieved through teamwork and dedication!";
+  return 'Squad victory achieved through teamwork and dedication!';
 }
 
 function formatDamage(damage: number): string {
@@ -379,7 +379,7 @@ export function getSquadProgressSummary(encounter: SquadBossEncounter): {
  */
 export function canMemberJoin(encounter: SquadBossEncounter, userId: string): boolean {
   // Check if encounter is active
-  if (encounter.status !== "ACTIVE") {
+  if (encounter.status !== 'ACTIVE') {
     return false;
   }
 
@@ -403,7 +403,7 @@ export function canMemberJoin(encounter: SquadBossEncounter, userId: string): bo
  */
 export function addMemberToEncounter(encounter: SquadBossEncounter, userId: string, userName: string, avatarUrl: string | null): SquadBossEncounter {
   if (!canMemberJoin(encounter, userId)) {
-    throw new Error("Cannot join this encounter");
+    throw new Error('Cannot join this encounter');
   }
 
   // Check if already exists
@@ -429,7 +429,7 @@ export function addMemberToEncounter(encounter: SquadBossEncounter, userId: stri
   encounter.maxHealth = newHealth;
   encounter.healthRemaining += healthDelta;
 
-  eventBus.publish("boss:squad_member_joined", {
+  eventBus.publish('boss:squad_member_joined', {
     encounterId: encounter.id,
     userId,
     displayName: userName,

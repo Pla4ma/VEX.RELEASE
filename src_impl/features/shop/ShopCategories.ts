@@ -14,15 +14,15 @@
  * - PremiumTierSystem (premium exclusives)
  */
 
-import { eventBus } from "../../events";
-import type { CurrencyType } from "./ShopEconomy";
+import { eventBus } from '../../events';
+import type { CurrencyType } from './ShopEconomy';
 
 // ============================================================================
 // Shop Item Types
 // ============================================================================
 
-export type ShopCategory = "COSMETICS" | "UTILITY" | "PREMIUM";
-export type ItemRarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+export type ShopCategory = 'COSMETICS' | 'UTILITY' | 'PREMIUM';
+export type ItemRarity = 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
 
 export interface ShopItem {
   id: string;
@@ -78,7 +78,7 @@ export interface InventoryItem {
   itemId: string;
   acquiredAt: number;
   equipped: boolean;
-  source: "SHOP_PURCHASE" | "ACHIEVEMENT" | "BOSS_DEFEAT" | "STREAK_MILESTONE" | "PREMIUM_BONUS";
+  source: 'SHOP_PURCHASE' | 'ACHIEVEMENT' | 'BOSS_DEFEAT' | 'STREAK_MILESTONE' | 'PREMIUM_BONUS';
 }
 
 // ============================================================================
@@ -88,147 +88,147 @@ export interface InventoryItem {
 export const COSMETIC_ITEMS: ShopItem[] = [
   // Avatar Frames (Coin purchases)
   {
-    id: "frame-focus-beginner",
-    name: "Focus Beginner",
-    description: "A simple frame for those starting their journey",
-    category: "COSMETICS",
-    rarity: "COMMON",
-    icon: "🌱",
-    price: { currency: "COINS", amount: 500 },
+    id: 'frame-focus-beginner',
+    name: 'Focus Beginner',
+    description: 'A simple frame for those starting their journey',
+    category: 'COSMETICS',
+    rarity: 'COMMON',
+    icon: '🌱',
+    price: { currency: 'COINS', amount: 500 },
     addedAt: Date.now(),
     new: false,
   },
   {
-    id: "frame-dedicated-student",
-    name: "Dedicated Student",
-    description: "Shows your commitment to learning",
-    category: "COSMETICS",
-    rarity: "UNCOMMON",
-    icon: "📚",
-    price: { currency: "COINS", amount: 1500 },
+    id: 'frame-dedicated-student',
+    name: 'Dedicated Student',
+    description: 'Shows your commitment to learning',
+    category: 'COSMETICS',
+    rarity: 'UNCOMMON',
+    icon: '📚',
+    price: { currency: 'COINS', amount: 1500 },
     requirements: { minLevel: 5 },
     addedAt: Date.now(),
   },
   {
-    id: "frame-boss-slayer",
-    name: "Boss Slayer",
-    description: "Frame awarded to those who defeat their first boss",
-    category: "COSMETICS",
-    rarity: "RARE",
-    icon: "⚔️",
-    price: { currency: "COINS", amount: 3000 },
-    requirements: { achievementId: "achievement-first-boss" },
+    id: 'frame-boss-slayer',
+    name: 'Boss Slayer',
+    description: 'Frame awarded to those who defeat their first boss',
+    category: 'COSMETICS',
+    rarity: 'RARE',
+    icon: '⚔️',
+    price: { currency: 'COINS', amount: 3000 },
+    requirements: { achievementId: 'achievement-first-boss' },
     addedAt: Date.now(),
   },
   {
-    id: "frame-streak-warrior",
-    name: "Streak Warrior",
-    description: "Animated flames show your 7+ day streak",
-    category: "COSMETICS",
-    rarity: "RARE",
-    icon: "🔥",
-    price: { currency: "COINS", amount: 5000 },
+    id: 'frame-streak-warrior',
+    name: 'Streak Warrior',
+    description: 'Animated flames show your 7+ day streak',
+    category: 'COSMETICS',
+    rarity: 'RARE',
+    icon: '🔥',
+    price: { currency: 'COINS', amount: 5000 },
     requirements: { streakDays: 7 },
     addedAt: Date.now(),
   },
   {
-    id: "frame-monthly-master",
-    name: "Monthly Master",
-    description: "Crown frame for 30-day streak achievers",
-    category: "COSMETICS",
-    rarity: "EPIC",
-    icon: "👑",
-    price: { currency: "GEMS", amount: 50 },
+    id: 'frame-monthly-master',
+    name: 'Monthly Master',
+    description: 'Crown frame for 30-day streak achievers',
+    category: 'COSMETICS',
+    rarity: 'EPIC',
+    icon: '👑',
+    price: { currency: 'GEMS', amount: 50 },
     requirements: { streakDays: 30 },
     addedAt: Date.now(),
   },
   {
-    id: "frame-century-legend",
-    name: "Century Legend",
-    description: "Exclusive rainbow aura for 100-day streak holders",
-    category: "COSMETICS",
-    rarity: "LEGENDARY",
-    icon: "🏆",
-    price: { currency: "GEMS", amount: 200 },
+    id: 'frame-century-legend',
+    name: 'Century Legend',
+    description: 'Exclusive rainbow aura for 100-day streak holders',
+    category: 'COSMETICS',
+    rarity: 'LEGENDARY',
+    icon: '🏆',
+    price: { currency: 'GEMS', amount: 200 },
     requirements: { streakDays: 100, premiumOnly: true },
     addedAt: Date.now(),
   },
 
   // Session Backgrounds
   {
-    id: "bg-calm-forest",
-    name: "Calm Forest",
-    description: "Peaceful forest ambiance for your sessions",
-    category: "COSMETICS",
-    rarity: "COMMON",
-    icon: "🌲",
-    price: { currency: "COINS", amount: 1000 },
+    id: 'bg-calm-forest',
+    name: 'Calm Forest',
+    description: 'Peaceful forest ambiance for your sessions',
+    category: 'COSMETICS',
+    rarity: 'COMMON',
+    icon: '🌲',
+    price: { currency: 'COINS', amount: 1000 },
     addedAt: Date.now(),
   },
   {
-    id: "bg-cozy-library",
-    name: "Cozy Library",
-    description: "Study in a warm, classic library setting",
-    category: "COSMETICS",
-    rarity: "UNCOMMON",
-    icon: "📖",
-    price: { currency: "COINS", amount: 2500 },
+    id: 'bg-cozy-library',
+    name: 'Cozy Library',
+    description: 'Study in a warm, classic library setting',
+    category: 'COSMETICS',
+    rarity: 'UNCOMMON',
+    icon: '📖',
+    price: { currency: 'COINS', amount: 2500 },
     addedAt: Date.now(),
   },
   {
-    id: "bg-neon-cyber",
-    name: "Neon Cyber",
-    description: "Futuristic cyberpunk focus environment",
-    category: "COSMETICS",
-    rarity: "RARE",
-    icon: "💠",
-    price: { currency: "GEMS", amount: 30 },
+    id: 'bg-neon-cyber',
+    name: 'Neon Cyber',
+    description: 'Futuristic cyberpunk focus environment',
+    category: 'COSMETICS',
+    rarity: 'RARE',
+    icon: '💠',
+    price: { currency: 'GEMS', amount: 30 },
     addedAt: Date.now(),
   },
   {
-    id: "bg-zen-garden",
-    name: "Zen Garden",
-    description: "Minimalist zen garden for deep focus",
-    category: "COSMETICS",
-    rarity: "EPIC",
-    icon: "🏯",
-    price: { currency: "GEMS", amount: 75 },
-    requirements: { achievementId: "achievement-100-sessions" },
+    id: 'bg-zen-garden',
+    name: 'Zen Garden',
+    description: 'Minimalist zen garden for deep focus',
+    category: 'COSMETICS',
+    rarity: 'EPIC',
+    icon: '🏯',
+    price: { currency: 'GEMS', amount: 75 },
+    requirements: { achievementId: 'achievement-100-sessions' },
     addedAt: Date.now(),
   },
 
   // Boss Themes (affect boss battle visuals)
   {
-    id: "theme-dragon-arena",
-    name: "Dragon Arena",
-    description: "Fiery arena for boss battles",
-    category: "COSMETICS",
-    rarity: "UNCOMMON",
-    icon: "🐉",
-    price: { currency: "COINS", amount: 2000 },
-    requirements: { bossDefeatId: "procrastination-dragon" },
+    id: 'theme-dragon-arena',
+    name: 'Dragon Arena',
+    description: 'Fiery arena for boss battles',
+    category: 'COSMETICS',
+    rarity: 'UNCOMMON',
+    icon: '🐉',
+    price: { currency: 'COINS', amount: 2000 },
+    requirements: { bossDefeatId: 'procrastination-dragon' },
     addedAt: Date.now(),
   },
   {
-    id: "theme-demon-circus",
-    name: "Demon Circus",
-    description: "Chaotic circus theme for distraction demon",
-    category: "COSMETICS",
-    rarity: "RARE",
-    icon: "🎪",
-    price: { currency: "GEMS", amount: 40 },
-    requirements: { bossDefeatId: "distraction-demon" },
+    id: 'theme-demon-circus',
+    name: 'Demon Circus',
+    description: 'Chaotic circus theme for distraction demon',
+    category: 'COSMETICS',
+    rarity: 'RARE',
+    icon: '🎪',
+    price: { currency: 'GEMS', amount: 40 },
+    requirements: { bossDefeatId: 'distraction-demon' },
     addedAt: Date.now(),
   },
   {
-    id: "theme-legendary-sanctum",
-    name: "Legendary Sanctum",
-    description: "Mythical battleground for master slayers",
-    category: "COSMETICS",
-    rarity: "LEGENDARY",
-    icon: "⚡",
-    price: { currency: "GEMS", amount: 150 },
-    requirements: { achievementId: "achievement-all-bosses", premiumOnly: true },
+    id: 'theme-legendary-sanctum',
+    name: 'Legendary Sanctum',
+    description: 'Mythical battleground for master slayers',
+    category: 'COSMETICS',
+    rarity: 'LEGENDARY',
+    icon: '⚡',
+    price: { currency: 'GEMS', amount: 150 },
+    requirements: { achievementId: 'achievement-all-bosses', premiumOnly: true },
     addedAt: Date.now(),
   },
 ];
@@ -240,89 +240,89 @@ export const COSMETIC_ITEMS: ShopItem[] = [
 export const UTILITY_ITEMS: ShopItem[] = [
   // Streak Insurance (backup purchase)
   {
-    id: "insurance-single",
-    name: "Streak Insurance",
-    description: "Protect your streak once when life gets busy",
-    category: "UTILITY",
-    rarity: "RARE",
-    icon: "🛡️",
-    price: { currency: "GEMS", amount: 25 },
+    id: 'insurance-single',
+    name: 'Streak Insurance',
+    description: 'Protect your streak once when life gets busy',
+    category: 'UTILITY',
+    rarity: 'RARE',
+    icon: '🛡️',
+    price: { currency: 'GEMS', amount: 25 },
     addedAt: Date.now(),
   },
   {
-    id: "insurance-pack-3",
-    name: "Insurance Pack (3)",
-    description: "3 streak insurances at a discount",
-    category: "UTILITY",
-    rarity: "EPIC",
-    icon: "🛡️",
-    price: { currency: "GEMS", amount: 60 },
+    id: 'insurance-pack-3',
+    name: 'Insurance Pack (3)',
+    description: '3 streak insurances at a discount',
+    category: 'UTILITY',
+    rarity: 'EPIC',
+    icon: '🛡️',
+    price: { currency: 'GEMS', amount: 60 },
     addedAt: Date.now(),
   },
 
   // XP Boosts
   {
-    id: "xp-boost-24h",
-    name: "XP Boost (24h)",
-    description: "Earn 2x XP for 24 hours",
-    category: "UTILITY",
-    rarity: "UNCOMMON",
-    icon: "⬆️",
-    price: { currency: "COINS", amount: 3000 },
+    id: 'xp-boost-24h',
+    name: 'XP Boost (24h)',
+    description: 'Earn 2x XP for 24 hours',
+    category: 'UTILITY',
+    rarity: 'UNCOMMON',
+    icon: '⬆️',
+    price: { currency: 'COINS', amount: 3000 },
     addedAt: Date.now(),
   },
   {
-    id: "xp-boost-3d",
-    name: "XP Boost (3 Days)",
-    description: "Earn 2x XP for 3 days",
-    category: "UTILITY",
-    rarity: "RARE",
-    icon: "⬆️",
-    price: { currency: "GEMS", amount: 20 },
+    id: 'xp-boost-3d',
+    name: 'XP Boost (3 Days)',
+    description: 'Earn 2x XP for 3 days',
+    category: 'UTILITY',
+    rarity: 'RARE',
+    icon: '⬆️',
+    price: { currency: 'GEMS', amount: 20 },
     addedAt: Date.now(),
   },
   {
-    id: "xp-boost-week",
-    name: "XP Boost (Week)",
-    description: "Earn 2x XP for 7 days",
-    category: "UTILITY",
-    rarity: "EPIC",
-    icon: "⬆️",
-    price: { currency: "GEMS", amount: 50 },
+    id: 'xp-boost-week',
+    name: 'XP Boost (Week)',
+    description: 'Earn 2x XP for 7 days',
+    category: 'UTILITY',
+    rarity: 'EPIC',
+    icon: '⬆️',
+    price: { currency: 'GEMS', amount: 50 },
     addedAt: Date.now(),
   },
 
   // Boss Damage Boosts (single use, not pay-to-win)
   {
-    id: "damage-boost-small",
-    name: "Damage Boost",
-    description: "Deal 1.5x damage in your next boss session",
-    category: "UTILITY",
-    rarity: "UNCOMMON",
-    icon: "⚡",
-    price: { currency: "COINS", amount: 1500 },
+    id: 'damage-boost-small',
+    name: 'Damage Boost',
+    description: 'Deal 1.5x damage in your next boss session',
+    category: 'UTILITY',
+    rarity: 'UNCOMMON',
+    icon: '⚡',
+    price: { currency: 'COINS', amount: 1500 },
     addedAt: Date.now(),
   },
   {
-    id: "damage-boost-large",
-    name: "Major Damage Boost",
-    description: "Deal 2x damage in your next boss session",
-    category: "UTILITY",
-    rarity: "RARE",
-    icon: "⚡",
-    price: { currency: "GEMS", amount: 15 },
+    id: 'damage-boost-large',
+    name: 'Major Damage Boost',
+    description: 'Deal 2x damage in your next boss session',
+    category: 'UTILITY',
+    rarity: 'RARE',
+    icon: '⚡',
+    price: { currency: 'GEMS', amount: 15 },
     addedAt: Date.now(),
   },
 
   // Convenience Items
   {
-    id: "study-slot-extra",
-    name: "Extra Study Plan Slot",
-    description: "Permanently unlock +1 study plan slot (Free users only)",
-    category: "UTILITY",
-    rarity: "EPIC",
-    icon: "📚",
-    price: { currency: "GEMS", amount: 100 },
+    id: 'study-slot-extra',
+    name: 'Extra Study Plan Slot',
+    description: 'Permanently unlock +1 study plan slot (Free users only)',
+    category: 'UTILITY',
+    rarity: 'EPIC',
+    icon: '📚',
+    price: { currency: 'GEMS', amount: 100 },
     addedAt: Date.now(),
   },
 ];
@@ -334,46 +334,46 @@ export const UTILITY_ITEMS: ShopItem[] = [
 export const PREMIUM_ITEMS: ShopItem[] = [
   // These are not purchasable - they come with subscription
   {
-    id: "premium-avatar-frames",
-    name: "Premium Avatar Frames",
-    description: "Exclusive frames updated monthly for Premium members",
-    category: "PREMIUM",
-    rarity: "LEGENDARY",
-    icon: "💎",
-    price: { currency: "GEMS", amount: 0 }, // Not purchasable
+    id: 'premium-avatar-frames',
+    name: 'Premium Avatar Frames',
+    description: 'Exclusive frames updated monthly for Premium members',
+    category: 'PREMIUM',
+    rarity: 'LEGENDARY',
+    icon: '💎',
+    price: { currency: 'GEMS', amount: 0 }, // Not purchasable
     requirements: { premiumOnly: true },
     addedAt: Date.now(),
   },
   {
-    id: "premium-boss-themes",
-    name: "Premium Boss Themes",
-    description: "Exclusive boss battle themes for Premium members",
-    category: "PREMIUM",
-    rarity: "LEGENDARY",
-    icon: "👑",
-    price: { currency: "GEMS", amount: 0 },
+    id: 'premium-boss-themes',
+    name: 'Premium Boss Themes',
+    description: 'Exclusive boss battle themes for Premium members',
+    category: 'PREMIUM',
+    rarity: 'LEGENDARY',
+    icon: '👑',
+    price: { currency: 'GEMS', amount: 0 },
     requirements: { premiumOnly: true },
     addedAt: Date.now(),
   },
   {
-    id: "premium-session-bg",
-    name: "Premium Session Backgrounds",
-    description: "New backgrounds added monthly for Premium members",
-    category: "PREMIUM",
-    rarity: "LEGENDARY",
-    icon: "🎨",
-    price: { currency: "GEMS", amount: 0 },
+    id: 'premium-session-bg',
+    name: 'Premium Session Backgrounds',
+    description: 'New backgrounds added monthly for Premium members',
+    category: 'PREMIUM',
+    rarity: 'LEGENDARY',
+    icon: '🎨',
+    price: { currency: 'GEMS', amount: 0 },
     requirements: { premiumOnly: true },
     addedAt: Date.now(),
   },
   {
-    id: "premium-beta-access",
-    name: "Beta Feature Access",
-    description: "Try new features before everyone else",
-    category: "PREMIUM",
-    rarity: "EPIC",
-    icon: "🔮",
-    price: { currency: "GEMS", amount: 0 },
+    id: 'premium-beta-access',
+    name: 'Beta Feature Access',
+    description: 'Try new features before everyone else',
+    category: 'PREMIUM',
+    rarity: 'EPIC',
+    icon: '🔮',
+    price: { currency: 'GEMS', amount: 0 },
     requirements: { premiumOnly: true },
     addedAt: Date.now(),
   },
@@ -421,8 +421,8 @@ export function getAvailableItems(userId: string, isPremium: boolean): Record<Sh
   });
 
   return {
-    COSMETICS: available.filter((i) => i.category === "COSMETICS"),
-    UTILITY: available.filter((i) => i.category === "UTILITY"),
+    COSMETICS: available.filter((i) => i.category === 'COSMETICS'),
+    UTILITY: available.filter((i) => i.category === 'UTILITY'),
     PREMIUM: isPremium ? PREMIUM_ITEMS : [],
   };
 }
@@ -454,12 +454,12 @@ export function getUserInventory(userId: string): UserInventory {
 export function purchaseItem(userId: string, itemId: string, deductCurrency: (currency: CurrencyType, amount: number) => boolean): { success: boolean; inventory?: UserInventory; error?: string } {
   const item = allItems.find((i) => i.id === itemId);
   if (!item) {
-    return { success: false, error: "Item not found" };
+    return { success: false, error: 'Item not found' };
   }
 
   const inventory = getUserInventory(userId);
   if (inventory.items.some((i) => i.itemId === itemId)) {
-    return { success: false, error: "Item already owned" };
+    return { success: false, error: 'Item already owned' };
   }
 
   // Deduct currency
@@ -474,7 +474,7 @@ export function purchaseItem(userId: string, itemId: string, deductCurrency: (cu
     itemId,
     acquiredAt: Date.now(),
     equipped: false,
-    source: "SHOP_PURCHASE",
+    source: 'SHOP_PURCHASE',
   });
 
   // Track purchase count for limited items
@@ -482,7 +482,7 @@ export function purchaseItem(userId: string, itemId: string, deductCurrency: (cu
     item.purchasedCount = (item.purchasedCount || 0) + 1;
   }
 
-  eventBus.publish("shop:item_purchased", {
+  eventBus.publish('shop:item_purchased', {
     userId,
     itemId,
     currency: item.price.currency,
@@ -495,12 +495,12 @@ export function purchaseItem(userId: string, itemId: string, deductCurrency: (cu
 /**
  * Equip cosmetic
  */
-export function equipCosmetic(userId: string, itemId: string, slot: keyof UserInventory["equippedCosmetics"]): UserInventory {
+export function equipCosmetic(userId: string, itemId: string, slot: keyof UserInventory['equippedCosmetics']): UserInventory {
   const inventory = getUserInventory(userId);
   const hasItem = inventory.items.some((i) => i.itemId === itemId);
 
   if (!hasItem) {
-    throw new Error("User does not own this item");
+    throw new Error('User does not own this item');
   }
 
   // Unequip previous
@@ -519,7 +519,7 @@ export function equipCosmetic(userId: string, itemId: string, slot: keyof UserIn
     newItem.equipped = true;
   }
 
-  eventBus.publish("shop:cosmetic_equipped", {
+  eventBus.publish('shop:cosmetic_equipped', {
     userId,
     itemId,
     slot,
@@ -531,12 +531,12 @@ export function equipCosmetic(userId: string, itemId: string, slot: keyof UserIn
 /**
  * Award item from achievement/boss/etc
  */
-export function awardItem(userId: string, itemId: string, source: InventoryItem["source"]): UserInventory {
+export function awardItem(userId: string, itemId: string, source: InventoryItem['source']): UserInventory {
   const inventory = getUserInventory(userId);
   const item = allItems.find((i) => i.id === itemId);
 
   if (!item) {
-    throw new Error("Item not found");
+    throw new Error('Item not found');
   }
 
   if (inventory.items.some((i) => i.itemId === itemId)) {
@@ -550,7 +550,7 @@ export function awardItem(userId: string, itemId: string, source: InventoryItem[
     source,
   });
 
-  (eventBus as any).publish("shop:item_awarded", {
+  (eventBus as any).publish('shop:item_awarded', {
     userId,
     itemId,
     source,
@@ -562,7 +562,7 @@ export function awardItem(userId: string, itemId: string, source: InventoryItem[
 /**
  * Get equipped cosmetics
  */
-export function getEquippedCosmetics(userId: string): UserInventory["equippedCosmetics"] {
+export function getEquippedCosmetics(userId: string): UserInventory['equippedCosmetics'] {
   return getUserInventory(userId).equippedCosmetics;
 }
 
@@ -581,7 +581,7 @@ export function getItemById(itemId: string): ShopItem | undefined {
  * Get featured items
  */
 export function getFeaturedItems(limit: number = 4): ShopItem[] {
-  return allItems.filter((i) => i.featured && i.category !== "PREMIUM").slice(0, limit);
+  return allItems.filter((i) => i.featured && i.category !== 'PREMIUM').slice(0, limit);
 }
 
 /**

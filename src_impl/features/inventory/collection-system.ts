@@ -4,9 +4,9 @@
  * Gotta-catch-em-all psychology drives engagement
  */
 
-import { eventBus } from "../../events";
-import * as Sentry from "@sentry/react-native";
-import { z } from "zod";
+import { eventBus } from '../../events';
+import * as Sentry from '@sentry/react-native';
+import { z } from 'zod';
 
 // ============================================================================
 // Schemas
@@ -16,11 +16,11 @@ export const CollectionItemSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
-  rarity: z.enum(["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"]),
+  rarity: z.enum(['COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY']),
   icon: z.string(),
   acquired: z.boolean().default(false),
   acquiredAt: z.number().nullable(),
-  source: z.enum(["CHEST", "SHOP", "BOSS_DROP", "ACHIEVEMENT", "EVENT", "BATTLE_PASS"]),
+  source: z.enum(['CHEST', 'SHOP', 'BOSS_DROP', 'ACHIEVEMENT', 'EVENT', 'BATTLE_PASS']),
 });
 
 export const CollectionSetSchema = z.object({
@@ -30,11 +30,11 @@ export const CollectionSetSchema = z.object({
   theme: z.string(),
   items: z.array(CollectionItemSchema),
   completionBonus: z.object({
-    type: z.enum(["XP_BOOST", "GEM_BONUS", "STREAK_SHIELD", "EXCLUSIVE_COSMETIC", "TITLE"]),
+    type: z.enum(['XP_BOOST', 'GEM_BONUS', 'STREAK_SHIELD', 'EXCLUSIVE_COSMETIC', 'TITLE']),
     amount: z.number(),
     description: z.string(),
   }),
-  difficulty: z.enum(["EASY", "MEDIUM", "HARD", "EXTREME"]),
+  difficulty: z.enum(['EASY', 'MEDIUM', 'HARD', 'EXTREME']),
   hidden: z.boolean().default(false), // Secret collections
 });
 
@@ -55,95 +55,95 @@ export const UserCollectionSchema = z.object({
 
 export const COLLECTION_SETS = [
   {
-    id: "starter_set",
-    name: "Focus Fundamentals",
-    description: "Complete your first collection by earning basic rewards",
-    theme: "starter",
+    id: 'starter_set',
+    name: 'Focus Fundamentals',
+    description: 'Complete your first collection by earning basic rewards',
+    theme: 'starter',
     items: [
-      { id: "sf_1", name: "First Focus", description: "Complete your first session", rarity: "COMMON", icon: "🎯", acquired: false, acquiredAt: null, source: "ACHIEVEMENT" },
-      { id: "sf_2", name: "3-Day Streaker", description: "Reach a 3-day streak", rarity: "COMMON", icon: "🔥", acquired: false, acquiredAt: null, source: "ACHIEVEMENT" },
-      { id: "sf_3", name: "Deep Diver", description: "Complete a Deep Work session", rarity: "UNCOMMON", icon: "🌊", acquired: false, acquiredAt: null, source: "ACHIEVEMENT" },
-      { id: "sf_4", name: "Boss Slayer", description: "Defeat your first boss", rarity: "UNCOMMON", icon: "⚔️", acquired: false, acquiredAt: null, source: "BOSS_DROP" },
+      { id: 'sf_1', name: 'First Focus', description: 'Complete your first session', rarity: 'COMMON', icon: '🎯', acquired: false, acquiredAt: null, source: 'ACHIEVEMENT' },
+      { id: 'sf_2', name: '3-Day Streaker', description: 'Reach a 3-day streak', rarity: 'COMMON', icon: '🔥', acquired: false, acquiredAt: null, source: 'ACHIEVEMENT' },
+      { id: 'sf_3', name: 'Deep Diver', description: 'Complete a Deep Work session', rarity: 'UNCOMMON', icon: '🌊', acquired: false, acquiredAt: null, source: 'ACHIEVEMENT' },
+      { id: 'sf_4', name: 'Boss Slayer', description: 'Defeat your first boss', rarity: 'UNCOMMON', icon: '⚔️', acquired: false, acquiredAt: null, source: 'BOSS_DROP' },
     ],
     completionBonus: {
-      type: "XP_BOOST",
+      type: 'XP_BOOST',
       amount: 10,
-      description: "+10% permanent XP boost",
+      description: '+10% permanent XP boost',
     },
-    difficulty: "EASY",
+    difficulty: 'EASY',
   },
   {
-    id: "streak_master",
-    name: "Streak Master",
-    description: "Collect all streak milestone badges",
-    theme: "streaks",
+    id: 'streak_master',
+    name: 'Streak Master',
+    description: 'Collect all streak milestone badges',
+    theme: 'streaks',
     items: [
-      { id: "sm_7", name: "Week Warrior", description: "7-day streak badge", rarity: "UNCOMMON", icon: "📅", acquired: false, acquiredAt: null, source: "ACHIEVEMENT" },
-      { id: "sm_14", name: "Fortnight Focus", description: "14-day streak badge", rarity: "RARE", icon: "🗓️", acquired: false, acquiredAt: null, source: "ACHIEVEMENT" },
-      { id: "sm_30", name: "Monthly Master", description: "30-day streak badge", rarity: "EPIC", icon: "📆", acquired: false, acquiredAt: null, source: "ACHIEVEMENT" },
-      { id: "sm_100", name: "Century Club", description: "100-day streak badge", rarity: "LEGENDARY", icon: "💯", acquired: false, acquiredAt: null, source: "ACHIEVEMENT" },
+      { id: 'sm_7', name: 'Week Warrior', description: '7-day streak badge', rarity: 'UNCOMMON', icon: '📅', acquired: false, acquiredAt: null, source: 'ACHIEVEMENT' },
+      { id: 'sm_14', name: 'Fortnight Focus', description: '14-day streak badge', rarity: 'RARE', icon: '🗓️', acquired: false, acquiredAt: null, source: 'ACHIEVEMENT' },
+      { id: 'sm_30', name: 'Monthly Master', description: '30-day streak badge', rarity: 'EPIC', icon: '📆', acquired: false, acquiredAt: null, source: 'ACHIEVEMENT' },
+      { id: 'sm_100', name: 'Century Club', description: '100-day streak badge', rarity: 'LEGENDARY', icon: '💯', acquired: false, acquiredAt: null, source: 'ACHIEVEMENT' },
     ],
     completionBonus: {
-      type: "STREAK_SHIELD",
+      type: 'STREAK_SHIELD',
       amount: 5,
-      description: "5 free streak shields",
+      description: '5 free streak shields',
     },
-    difficulty: "HARD",
+    difficulty: 'HARD',
   },
   {
-    id: "boss_hunter",
-    name: "Boss Hunter",
-    description: "Collect trophies from all boss types",
-    theme: "bosses",
+    id: 'boss_hunter',
+    name: 'Boss Hunter',
+    description: 'Collect trophies from all boss types',
+    theme: 'bosses',
     items: [
-      { id: "bh_1", name: "Procrastinator Fang", description: "Defeated Slacker the Procrastinator", rarity: "COMMON", icon: "🦷", acquired: false, acquiredAt: null, source: "BOSS_DROP" },
-      { id: "bh_2", name: "Demon Horn", description: "Defeated Distraction Demon", rarity: "UNCOMMON", icon: "🦄", acquired: false, acquiredAt: null, source: "BOSS_DROP" },
-      { id: "bh_3", name: "Infinite Scroll", description: "Defeated The Infinite Scroller", rarity: "RARE", icon: "📜", acquired: false, acquiredAt: null, source: "BOSS_DROP" },
-      { id: "bh_4", name: "Multitask Mask", description: "Defeated Master of Multitasking", rarity: "EPIC", icon: "🎭", acquired: false, acquiredAt: null, source: "BOSS_DROP" },
-      { id: "bh_5", name: "Perfectionist Prism", description: "Defeated The Perfectionist", rarity: "LEGENDARY", icon: "💎", acquired: false, acquiredAt: null, source: "BOSS_DROP" },
+      { id: 'bh_1', name: 'Procrastinator Fang', description: 'Defeated Slacker the Procrastinator', rarity: 'COMMON', icon: '🦷', acquired: false, acquiredAt: null, source: 'BOSS_DROP' },
+      { id: 'bh_2', name: 'Demon Horn', description: 'Defeated Distraction Demon', rarity: 'UNCOMMON', icon: '🦄', acquired: false, acquiredAt: null, source: 'BOSS_DROP' },
+      { id: 'bh_3', name: 'Infinite Scroll', description: 'Defeated The Infinite Scroller', rarity: 'RARE', icon: '📜', acquired: false, acquiredAt: null, source: 'BOSS_DROP' },
+      { id: 'bh_4', name: 'Multitask Mask', description: 'Defeated Master of Multitasking', rarity: 'EPIC', icon: '🎭', acquired: false, acquiredAt: null, source: 'BOSS_DROP' },
+      { id: 'bh_5', name: 'Perfectionist Prism', description: 'Defeated The Perfectionist', rarity: 'LEGENDARY', icon: '💎', acquired: false, acquiredAt: null, source: 'BOSS_DROP' },
     ],
     completionBonus: {
-      type: "GEM_BONUS",
+      type: 'GEM_BONUS',
       amount: 500,
-      description: "500 gems reward",
+      description: '500 gems reward',
     },
-    difficulty: "EXTREME",
+    difficulty: 'EXTREME',
   },
   {
-    id: "fashion_focus",
-    name: "Fashion Focus",
-    description: "Collect all cosmetic items in the Focus line",
-    theme: "cosmetics",
+    id: 'fashion_focus',
+    name: 'Fashion Focus',
+    description: 'Collect all cosmetic items in the Focus line',
+    theme: 'cosmetics',
     items: [
-      { id: "ff_1", name: "Focus Aura", description: "Common focus aura cosmetic", rarity: "COMMON", icon: "✨", acquired: false, acquiredAt: null, source: "CHEST" },
-      { id: "ff_2", name: "Concentration Crown", description: "Rare concentration crown", rarity: "RARE", icon: "👑", acquired: false, acquiredAt: null, source: "CHEST" },
-      { id: "ff_3", name: "Deep Work Robe", description: "Epic deep work robe", rarity: "EPIC", icon: "🥋", acquired: false, acquiredAt: null, source: "BATTLE_PASS" },
-      { id: "ff_4", name: "Legendary Focus Wings", description: "Legendary focus wings", rarity: "LEGENDARY", icon: "🪽", acquired: false, acquiredAt: null, source: "EVENT" },
+      { id: 'ff_1', name: 'Focus Aura', description: 'Common focus aura cosmetic', rarity: 'COMMON', icon: '✨', acquired: false, acquiredAt: null, source: 'CHEST' },
+      { id: 'ff_2', name: 'Concentration Crown', description: 'Rare concentration crown', rarity: 'RARE', icon: '👑', acquired: false, acquiredAt: null, source: 'CHEST' },
+      { id: 'ff_3', name: 'Deep Work Robe', description: 'Epic deep work robe', rarity: 'EPIC', icon: '🥋', acquired: false, acquiredAt: null, source: 'BATTLE_PASS' },
+      { id: 'ff_4', name: 'Legendary Focus Wings', description: 'Legendary focus wings', rarity: 'LEGENDARY', icon: '🪽', acquired: false, acquiredAt: null, source: 'EVENT' },
     ],
     completionBonus: {
-      type: "EXCLUSIVE_COSMETIC",
+      type: 'EXCLUSIVE_COSMETIC',
       amount: 1,
       description: 'Exclusive "Completionist" title and aura',
     },
-    difficulty: "MEDIUM",
+    difficulty: 'MEDIUM',
   },
   {
-    id: "mystery_collection",
-    name: "???",
-    description: "A secret collection. Can you discover it?",
-    theme: "secret",
+    id: 'mystery_collection',
+    name: '???',
+    description: 'A secret collection. Can you discover it?',
+    theme: 'secret',
     items: [
-      { id: "sc_1", name: "First Clue", description: "Found in a Common chest...", rarity: "RARE", icon: "🧩", acquired: false, acquiredAt: null, source: "CHEST" },
-      { id: "sc_2", name: "Second Clue", description: "Complete a 30-day streak...", rarity: "RARE", icon: "🧩", acquired: false, acquiredAt: null, source: "ACHIEVEMENT" },
-      { id: "sc_3", name: "Third Clue", description: "Defeat 10 bosses...", rarity: "RARE", icon: "🧩", acquired: false, acquiredAt: null, source: "BOSS_DROP" },
-      { id: "sc_4", name: "Secret Unlocked", description: "The final piece", rarity: "LEGENDARY", icon: "🔐", acquired: false, acquiredAt: null, source: "ACHIEVEMENT" },
+      { id: 'sc_1', name: 'First Clue', description: 'Found in a Common chest...', rarity: 'RARE', icon: '🧩', acquired: false, acquiredAt: null, source: 'CHEST' },
+      { id: 'sc_2', name: 'Second Clue', description: 'Complete a 30-day streak...', rarity: 'RARE', icon: '🧩', acquired: false, acquiredAt: null, source: 'ACHIEVEMENT' },
+      { id: 'sc_3', name: 'Third Clue', description: 'Defeat 10 bosses...', rarity: 'RARE', icon: '🧩', acquired: false, acquiredAt: null, source: 'BOSS_DROP' },
+      { id: 'sc_4', name: 'Secret Unlocked', description: 'The final piece', rarity: 'LEGENDARY', icon: '🔐', acquired: false, acquiredAt: null, source: 'ACHIEVEMENT' },
     ],
     completionBonus: {
-      type: "TITLE",
+      type: 'TITLE',
       amount: 1,
       description: 'Exclusive "Mystery Solver" title',
     },
-    difficulty: "EXTREME",
+    difficulty: 'EXTREME',
     hidden: true,
   },
 ];
@@ -222,7 +222,7 @@ export function acquireCollectionItem(
   };
 
   // Publish events
-  eventBus.publish("collection:item_acquired", {
+  eventBus.publish('collection:item_acquired', {
     userId: userCollection.userId,
     setId: collectionSet.id,
     itemId,
@@ -232,7 +232,7 @@ export function acquireCollectionItem(
   });
 
   if (nowCompleted && !wasCompleted) {
-    eventBus.publish("collection:completed", {
+    eventBus.publish('collection:completed', {
       userId: userCollection.userId,
       setId: collectionSet.id,
       rewards: collectionSet.completionBonus,
@@ -271,19 +271,19 @@ export function getCollectionProgress(
   let estimatedDays = 0;
   for (const item of missingItems) {
     switch (item.rarity) {
-      case "COMMON":
+      case 'COMMON':
         estimatedDays += 1;
         break;
-      case "UNCOMMON":
+      case 'UNCOMMON':
         estimatedDays += 3;
         break;
-      case "RARE":
+      case 'RARE':
         estimatedDays += 7;
         break;
-      case "EPIC":
+      case 'EPIC':
         estimatedDays += 14;
         break;
-      case "LEGENDARY":
+      case 'LEGENDARY':
         estimatedDays += 30;
         break;
     }
@@ -303,7 +303,7 @@ export function getCollectionProgress(
     missingItems,
     progressPercent,
     nextItem,
-    estimatedCompletion: estimatedDays === 0 ? "Complete!" : estimatedDays <= 7 ? "Within a week" : estimatedDays <= 30 ? "Within a month" : "Long term goal",
+    estimatedCompletion: estimatedDays === 0 ? 'Complete!' : estimatedDays <= 7 ? 'Within a week' : estimatedDays <= 30 ? 'Within a month' : 'Long term goal',
   };
 }
 
@@ -316,7 +316,7 @@ export function claimCompletionBonus(
   collectionSet: CollectionSet,
 ): {
   success: boolean;
-  bonus: CollectionSet["completionBonus"] | null;
+  bonus: CollectionSet['completionBonus'] | null;
   updatedCollection: UserCollection;
   error?: string;
 } {
@@ -325,7 +325,7 @@ export function claimCompletionBonus(
       success: false,
       bonus: null,
       updatedCollection: userCollection,
-      error: "Collection not yet completed",
+      error: 'Collection not yet completed',
     };
   }
 
@@ -334,7 +334,7 @@ export function claimCompletionBonus(
       success: false,
       bonus: null,
       updatedCollection: userCollection,
-      error: "Bonus already claimed",
+      error: 'Bonus already claimed',
     };
   }
 
@@ -344,7 +344,7 @@ export function claimCompletionBonus(
   };
 
   // Publish bonus claim
-  eventBus.publish("collection:bonus_claimed", {
+  eventBus.publish('collection:bonus_claimed', {
     userId: userCollection.userId,
     setId: collectionSet.id,
     bonusId: `${collectionSet.id}-bonus`,
@@ -376,48 +376,48 @@ export function formatCollectionCard(
   const progress = userCollection.progress;
   const filled = Math.floor(progress / 10);
   const empty = 10 - filled;
-  const progressBar = "█".repeat(filled) + "░".repeat(empty) + ` ${progress}%`;
+  const progressBar = '█'.repeat(filled) + '░'.repeat(empty) + ` ${progress}%`;
 
   const difficultyColors: Record<string, string> = {
-    EASY: "#4CAF50",
-    MEDIUM: "#FF9800",
-    HARD: "#F44336",
-    EXTREME: "#9C27B0",
+    EASY: '#4CAF50',
+    MEDIUM: '#FF9800',
+    HARD: '#F44336',
+    EXTREME: '#9C27B0',
   };
 
   const themeEmojis: Record<string, string> = {
-    starter: "🌱",
-    streaks: "🔥",
-    bosses: "👹",
-    cosmetics: "👗",
-    secret: "🔮",
+    starter: '🌱',
+    streaks: '🔥',
+    bosses: '👹',
+    cosmetics: '👗',
+    secret: '🔮',
   };
 
   const missingCount = collectionSet.items.length - userCollection.itemsAcquired.length;
 
   return {
-    title: collectionSet.hidden && !userCollection.completed ? "???" : collectionSet.name,
-    subtitle: collectionSet.hidden && progress < 25 ? "A secret collection..." : collectionSet.description,
+    title: collectionSet.hidden && !userCollection.completed ? '???' : collectionSet.name,
+    subtitle: collectionSet.hidden && progress < 25 ? 'A secret collection...' : collectionSet.description,
     progressBar,
-    emoji: themeEmojis[collectionSet.theme] || "📦",
+    emoji: themeEmojis[collectionSet.theme] || '📦',
     color: difficultyColors[collectionSet.difficulty],
-    status: userCollection.completed ? `✅ Completed ${userCollection.completionCount > 1 ? `x${userCollection.completionCount}` : ""}` : `${userCollection.itemsAcquired.length}/${collectionSet.items.length}`,
-    missingText: missingCount === 0 ? "Set complete!" : missingCount === 1 ? "Just 1 item remaining!" : `${missingCount} items to go`,
+    status: userCollection.completed ? `✅ Completed ${userCollection.completionCount > 1 ? `x${userCollection.completionCount}` : ''}` : `${userCollection.itemsAcquired.length}/${collectionSet.items.length}`,
+    missingText: missingCount === 0 ? 'Set complete!' : missingCount === 1 ? 'Just 1 item remaining!' : `${missingCount} items to go`,
   };
 }
 
-export function getRarityDisplay(rarity: CollectionItem["rarity"]): {
+export function getRarityDisplay(rarity: CollectionItem['rarity']): {
   color: string;
   bgColor: string;
   label: string;
   stars: string;
 } {
   const displays: Record<string, { color: string; bgColor: string; label: string; stars: string }> = {
-    COMMON: { color: "#9E9E9E", bgColor: "#F5F5F5", label: "Common", stars: "★" },
-    UNCOMMON: { color: "#4CAF50", bgColor: "#E8F5E9", label: "Uncommon", stars: "★★" },
-    RARE: { color: "#2196F3", bgColor: "#E3F2FD", label: "Rare", stars: "★★★" },
-    EPIC: { color: "#9C27B0", bgColor: "#F3E5F5", label: "Epic", stars: "★★★★" },
-    LEGENDARY: { color: "#FF9800", bgColor: "#FFF3E0", label: "Legendary", stars: "★★★★★" },
+    COMMON: { color: '#9E9E9E', bgColor: '#F5F5F5', label: 'Common', stars: '★' },
+    UNCOMMON: { color: '#4CAF50', bgColor: '#E8F5E9', label: 'Uncommon', stars: '★★' },
+    RARE: { color: '#2196F3', bgColor: '#E3F2FD', label: 'Rare', stars: '★★★' },
+    EPIC: { color: '#9C27B0', bgColor: '#F3E5F5', label: 'Epic', stars: '★★★★' },
+    LEGENDARY: { color: '#FF9800', bgColor: '#FFF3E0', label: 'Legendary', stars: '★★★★★' },
   };
 
   return displays[rarity] || displays.COMMON;
@@ -435,24 +435,24 @@ export function getDiscoveryHint(collectionSet: CollectionSet, currentProgress: 
     return null;
   } // Completely hidden
   if (currentProgress < 25) {
-    return "🔮 A mysterious collection exists...";
+    return '🔮 A mysterious collection exists...';
   }
   if (currentProgress < 50) {
     return "🧩 You've found some pieces of a puzzle...";
   }
   if (currentProgress < 75) {
-    return "🔍 The picture is becoming clearer...";
+    return '🔍 The picture is becoming clearer...';
   }
-  return "🔐 Almost there! The secret will soon be revealed!";
+  return '🔐 Almost there! The secret will soon be revealed!';
 }
 
 // ============================================================================
 // Analytics
 // ============================================================================
 
-export function trackCollectionAnalytics(userId: string, action: "VIEW" | "ITEM_ACQUIRED" | "COMPLETED" | "BONUS_CLAIMED", setId: string, metadata?: Record<string, unknown>): void {
+export function trackCollectionAnalytics(userId: string, action: 'VIEW' | 'ITEM_ACQUIRED' | 'COMPLETED' | 'BONUS_CLAIMED', setId: string, metadata?: Record<string, unknown>): void {
   Sentry.addBreadcrumb({
-    category: "collections",
+    category: 'collections',
     message: `Collection ${action}`,
     data: { userId, setId, ...metadata },
   });
