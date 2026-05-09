@@ -1,6 +1,6 @@
 /**
  * Item Service Tests
- * 
+ *
  * Comprehensive test coverage for item definitions, effects, and drop tables
  */
 
@@ -101,9 +101,9 @@ describe('Item Service', () => {
     });
 
     it('should throw error on database failure', async () => {
-      mockSupabase.single.mockResolvedValue({ 
-        data: null, 
-        error: { message: 'Database error' } 
+      mockSupabase.single.mockResolvedValue({
+        data: null,
+        error: { message: 'Database error' }
       });
 
       await expect(getItemDefinition(TEST_ITEM_ID)).rejects.toThrow();
