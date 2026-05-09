@@ -1,19 +1,25 @@
-// DEPRECATED: Rivals features are disabled at launch
-// This screen should not be accessible in navigation
-// Re-enable only when rivals systems are fully implemented
+/**
+ * Rivals Screen (Disabled at Launch)
+ *
+ * Rivals features are disabled at launch. This screen renders a
+ * simple "coming soon" placeholder so the route can compile if
+ * it is referenced anywhere, but it is gated out of navigation.
+ */
 
 import React from 'react';
-import { Box, Text } from '../../components/primitives';
-import { LockedFeatureScreen } from '../../components/LockedFeatureScreen';
+import { View } from 'react-native';
+import { Box, Text } from '../components/primitives';
 
 export const RivalsScreen: React.FC = () => {
   return (
-    <LockedFeatureScreen
-      title="Rivals"
-      description="Challenge opponents and climb the rankings"
-      comingSoonText="Rivals features will be available in a future update"
-      featureIcon="swords"
-    />
+    <View style={{ flex: 1 }}>
+      <Box flex={1} alignItems="center" justifyContent="center" px="lg">
+        <Text variant="h2">Rivals</Text>
+        <Text variant="body" color="text.secondary">
+          Rivals features will be available in a future update.
+        </Text>
+      </Box>
+    </View>
   );
 };
 

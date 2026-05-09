@@ -59,23 +59,50 @@ export interface AnalyticsEventDefinitions {
     metrics: unknown;
   };
   'experiment:created': {
-    experimentId: string;
-    name: string;
-    type: string;
+    experimentId?: string;
+    name?: string;
+    type?: string;
+    experiment?: unknown;
   };
   'experiment:assigned': {
-    userId: string;
-    experimentId: string;
-    variantId: string;
+    userId?: string;
+    experimentId?: string;
+    variantId?: string;
+    assignment?: unknown;
+    experiment?: unknown;
   };
   'experiment:event': {
     userId: string;
     experimentId: string;
     variantId: string;
+    eventName?: string;
+    value?: number;
+    properties?: Record<string, unknown>;
+    timestamp?: number;
   };
   'experiment:completed': {
+    experimentId?: string;
+    winner?: string;
+    results?: unknown;
+    experiment?: unknown;
+  };
+  'experiment:unassigned': {
+    userId: string;
     experimentId: string;
-    winner: string;
-    results: unknown;
+  };
+  'experiment:assignments_cleared': {
+    userId: string;
+  };
+  'analytics:paywall': {
+    userId: string;
+    context: string;
+    event: string;
+    analytics: unknown;
+  };
+  'analytics:streak': {
+    userId: string;
+    event: string;
+    streakLength: number;
+    metrics: unknown;
   };
 }

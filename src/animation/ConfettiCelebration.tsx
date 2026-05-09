@@ -14,10 +14,9 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { View, Dimensions } from "react-native";
 import { useReducedMotion } from "@/hooks";
-import { useTheme } from "@/theme";
-import { ConfettiCelebrationProps, ParticleConfig } from "./types";
-import { CONFETTI_COLORS, PARTICLE_SHAPES, DEFAULT_PARTICLE_COUNT, DEFAULT_DURATION } from "./constants";
-import { Particle } from "./Particle";
+import { ConfettiCelebrationProps, ParticleConfig } from "./confetti/types";
+import { CONFETTI_COLORS, PARTICLE_SHAPES, DEFAULT_PARTICLE_COUNT, DEFAULT_DURATION } from "./confetti/constants";
+import { Particle } from "./confetti/Particle";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -31,7 +30,6 @@ export function ConfettiCelebration({
 }: ConfettiCelebrationProps) {
   const [particles, setParticles] = useState<ParticleConfig[]>([]);
   const isReducedMotion = useReducedMotion();
-  const theme = useTheme();
 
   const generateParticles = useCallback(() => {
     const newParticles: ParticleConfig[] = [];
@@ -62,16 +60,16 @@ export function ConfettiCelebration({
       const newParticles = generateParticles();
       setParticles(newParticles);
 
-      // Auto-cleanup
       const timeout = setTimeout(() => {
         setParticles([]);
         onComplete?.();
       }, duration);
 
       return () => clearTimeout(timeout);
-    } else {
-      setParticles([]);
     }
+
+    setParticles([]);
+    return undefined;
   }, [active, isReducedMotion, generateParticles, duration, onComplete]);
 
   const handleParticleComplete = useCallback(

@@ -54,23 +54,27 @@ export interface EngagementMetrics {
   userId: string;
   sessionsLast7Days: number;
   sessionsLast30Days: number;
-  averageSessionDuration: number;
+  totalFocusMinutes: number;
+  avgSessionDuration: number;
   studyPlansCompleted: number;
   studyPlansStarted: number;
-  completionRate: number;
-  lastActiveDate: string;
+  bossBattlesCompleted: number;
+  streakDays: number;
+  weeklyActive: boolean;
+  powerUser: boolean;
 }
 
 export interface MonetizationMetrics {
-  userId: string;
-  isPremium: boolean;
-  conversionDate?: string;
-  lifetimeValue: number;
-  purchases: number;
-  totalSpent: number;
-  subscriptionRevenue: number;
-  oneTimeRevenue: number;
-  refundRate: number;
+  totalUsers: number;
+  freeUsers: number;
+  premiumUsers: number;
+  trialUsers: number;
+  conversionRate: number;
+  trialConversionRate: number;
+  averageLTV: number;
+  totalRevenue: number;
+  arpu: number;
+  mrr: number;
 }
 
 export interface PaywallAnalytics {
@@ -113,11 +117,7 @@ export interface VEXDashboard {
     averageCompletionRate: number;
     averageSessionDuration: number;
   };
-  monetization: {
-    totalRevenue: number;
-    premiumConversionRate: number;
-    averageLTV: number;
-  };
+  monetization: MonetizationMetrics;
   trends: {
     weeklyGrowth: number;
     monthlyGrowth: number;

@@ -96,12 +96,12 @@ export function getRetentionCohorts(): RetentionCohort[] {
   return Array.from(retentionCohorts.values());
 }
 
-function getUserFirstOpen(userId: string): string | null {
+function getUserFirstOpen(_userId: string): string | null {
   // Would integrate with persistent storage
   return null;
 }
 
-function storeUserFirstOpen(userId: string, date: string): void {
+function storeUserFirstOpen(_userId: string, _date: string): void {
   // Would integrate with persistent storage
 }
 

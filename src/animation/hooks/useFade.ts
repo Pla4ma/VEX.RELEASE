@@ -4,7 +4,7 @@
  * React hook for fade in/out animations.
  */
 
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { Platform } from 'react-native';
 import {
   useSharedValue,

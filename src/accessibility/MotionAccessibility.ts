@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { Animated, Platform, Easing } from 'react-native';
+import { Animated, Easing } from 'react-native';
 import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('motion-accessibility');
@@ -293,11 +293,11 @@ export class MotionAccessibilityManager {
       case 'linear':
         return Easing.linear;
       case 'ease-in':
-        return Easing.in;
+        return Easing.in(Easing.ease);
       case 'ease-out':
-        return Easing.out;
+        return Easing.out(Easing.ease);
       case 'ease-in-out':
-        return Easing.inOut;
+        return Easing.inOut(Easing.ease);
       case 'ease-in-quad':
         return Easing.in(Easing.quad);
       case 'ease-out-quad':
@@ -375,12 +375,10 @@ export class MotionAccessibilityManager {
 
   async detectSystemMotionPreferences(): Promise<Partial<MotionPreferences>> {
     try {
-      // In a real implementation, this would use platform APIs
-      // For React Native: AccessibilityInfo.isReduceMotionEnabled()
-      
-      // For now, return defaults
+      // Placeholder for AccessibilityInfo.isReduceMotionEnabled() integration.
+      const reducedMotion = await Promise.resolve(false);
       return {
-        reducedMotion: false,
+        reducedMotion,
       };
     } catch (error) {
       debug.error('Failed to detect system motion preferences:', error);
@@ -510,18 +508,18 @@ export function useMotionAccessibility(): MotionPreferences & {
 export function withMotionAccessibility<P extends object>(
   Component: React.ComponentType<P>
 ): React.ComponentType<P> {
-  const MotionAccessibleComponent = React.forwardRef<any, P>((props, ref) => {
+  const MotionAccessibleComponent = React.forwardRef<unknown, P>((props, ref) => {
     const motion = useMotionAccessibility();
 
     return React.createElement(Component, {
       ...props,
       ref,
       motionAccessibility: motion,
-    });
+    } as unknown as P);
   });
 
   MotionAccessibleComponent.displayName = `WithMotionAccessibility(${Component.displayName || Component.name})`;
-  return MotionAccessibleComponent;
+  return MotionAccessibleComponent as unknown as React.ComponentType<P>;
 }
 
 // ============================================================================

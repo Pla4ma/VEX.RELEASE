@@ -4,7 +4,6 @@
  * Predefined timing functions and durations for animations.
  */
 
-import type { WithTimingConfig } from 'react-native-reanimated';
 import { Easing } from 'react-native-reanimated';
 
 /**
