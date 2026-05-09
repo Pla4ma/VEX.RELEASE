@@ -54,9 +54,12 @@ const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || TEST_SUPA
  * Create Supabase client
  */
 function createSupabaseClient(): SupabaseClient {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
-    debug.warn('[Supabase] Missing URL or anon key, client will not function');
-    // Return a mock client that prevents crashes but provides clear error messages
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || IS_JEST) {
+    if (IS_JEST) {
+      debug.warn('[Supabase] Jest environment detected — using mock client');
+    } else {
+      debug.warn('[Supabase] Missing URL or anon key, client will not function');
+    }
     return createMockSupabaseClient();
   }
 

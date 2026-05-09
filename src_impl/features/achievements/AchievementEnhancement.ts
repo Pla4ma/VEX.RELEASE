@@ -479,11 +479,11 @@ export function handleAchievementUnlock(userId: string, achievement: Achievement
 
   // Award milestone insurance automatically
   if (achievement.id === 'achievement-7-day-streak') {
-    awardInsurance(userId, 'MILESTONE_7', '7-Day Streak Milestone Reward');
+    awardInsurance(userId, 'MILESTONE_7', 1);
   } else if (achievement.id === 'achievement-30-day-streak') {
-    awardInsurance(userId, 'MILESTONE_30', '30-Day Streak Milestone Reward');
+    awardInsurance(userId, 'MILESTONE_30', 1);
   } else if (achievement.id === 'achievement-100-day-streak') {
-    awardInsurance(userId, 'MILESTONE_100', '100-Day Streak Milestone Reward');
+    awardInsurance(userId, 'MILESTONE_100', 1);
   }
 
   // Publish event

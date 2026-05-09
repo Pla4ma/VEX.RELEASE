@@ -147,7 +147,7 @@ function getTimezoneOffset(timezone: string): number {
 // Core Service
 // ============================================================================
 
-class DailyLuckyBonusService {
+export class DailyLuckyBonusService {
   private userTimezone: string = 'UTC';
 
   /**

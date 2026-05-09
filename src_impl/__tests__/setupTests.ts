@@ -22,6 +22,13 @@ if (!process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY) {
   process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY = 'test-anon-key';
 }
 
+// Polyfill Web Crypto API for Node.js environments that lack it (Node < 19)
+if (typeof global.crypto === 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { webcrypto } = require('crypto') as { webcrypto: Crypto };
+  (global as typeof globalThis & { crypto: Crypto }).crypto = webcrypto;
+}
+
 function recordSetupFallback(error: unknown): void {
   void error;
 }
@@ -159,6 +166,31 @@ try {
         Image: 'Animated.Image',
       },
       createAnimatedComponent: jest.fn((component: unknown) => component),
+
+      // Layout animations (entering/exiting props)
+      FadeIn: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      FadeOut: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      FadeInUp: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      FadeInDown: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      FadeInLeft: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      FadeInRight: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      FadeOutUp: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      FadeOutDown: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      SlideInUp: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      SlideInDown: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      SlideInLeft: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      SlideInRight: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      SlideOutUp: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      SlideOutDown: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      ZoomIn: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      ZoomOut: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      BounceIn: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      BounceOut: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      StretchInX: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      StretchOutX: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      LightSpeedInLeft: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      LightSpeedOutLeft: { duration: jest.fn(function(this: unknown) { return this; }), delay: jest.fn(function(this: unknown) { return this; }) },
+      Layout: { duration: jest.fn(function(this: unknown) { return this; }) },
     };
   });
 } catch (error) { recordSetupFallback(error);
