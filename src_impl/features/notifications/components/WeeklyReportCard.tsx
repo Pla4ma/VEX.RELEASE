@@ -7,14 +7,14 @@
  * @phase 11.6
  */
 
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
 
 interface WeeklyReportCardProps {
   /** Total focus minutes this week */
@@ -61,7 +61,7 @@ export function WeeklyReportCard({ totalMinutes, sessionsCompleted, xpEarned, st
   const { theme } = useTheme();
 
   const isImprovement = comparison.changePercent >= 0;
-  const trendEmoji = isImprovement ? "📈" : "📉";
+  const trendEmoji = isImprovement ? '📈' : '📉';
 
   return (
     <Animated.View entering={FadeInUp.duration(400)}>
@@ -71,7 +71,7 @@ export function WeeklyReportCard({ totalMinutes, sessionsCompleted, xpEarned, st
         bg="background.secondary"
         gap="lg"
         style={{
-          shadowColor: "#000",
+          shadowColor: '#000',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.05,
           shadowRadius: 8,
@@ -85,7 +85,7 @@ export function WeeklyReportCard({ totalMinutes, sessionsCompleted, xpEarned, st
             Your Week in Focus
           </Text>
           <Text variant="caption" color="text.secondary">
-            {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric" })} - Weekly Report
+            {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - Weekly Report
           </Text>
         </Box>
 
@@ -113,12 +113,12 @@ export function WeeklyReportCard({ totalMinutes, sessionsCompleted, xpEarned, st
         >
           <Text fontSize={24}>{trendEmoji}</Text>
           <Box>
-            <Text variant="body" color={isImprovement ? "success.DEFAULT" : "warning.DEFAULT"} fontWeight="700">
-              {isImprovement ? "+" : ""}
+            <Text variant="body" color={isImprovement ? 'success.DEFAULT' : 'warning.DEFAULT'} fontWeight="700">
+              {isImprovement ? '+' : ''}
               {comparison.changePercent}% vs last week
             </Text>
             <Text variant="caption" color="text.secondary">
-              {Math.abs(comparison.changeMinutes)} minutes {isImprovement ? "more" : "less"}
+              {Math.abs(comparison.changeMinutes)} minutes {isImprovement ? 'more' : 'less'}
             </Text>
           </Box>
         </Box>
@@ -208,7 +208,7 @@ export function WeeklyReportCompact({
   totalMinutes,
   changePercent,
   onPress,
-}: Pick<WeeklyReportCardProps, "totalMinutes" | "onViewAnalytics"> & {
+}: Pick<WeeklyReportCardProps, 'totalMinutes' | 'onViewAnalytics'> & {
   changePercent: number;
   onPress: () => void;
 }): JSX.Element {
@@ -225,7 +225,7 @@ export function WeeklyReportCompact({
         bg="background.secondary"
         style={{
           borderLeftWidth: 4,
-          borderLeftColor: isImprovement ? "#22C55E" : "#F59E0B",
+          borderLeftColor: isImprovement ? '#22C55E' : '#F59E0B',
         }}
       >
         <Text fontSize={24}>📊</Text>
@@ -233,8 +233,8 @@ export function WeeklyReportCompact({
           <Text variant="body" color="text.primary" fontWeight="600">
             {totalMinutes}m this week
           </Text>
-          <Text variant="caption" color={isImprovement ? "success.DEFAULT" : "warning.DEFAULT"}>
-            {isImprovement ? "+" : ""}
+          <Text variant="caption" color={isImprovement ? 'success.DEFAULT' : 'warning.DEFAULT'}>
+            {isImprovement ? '+' : ''}
             {changePercent}% vs last week
           </Text>
         </Box>

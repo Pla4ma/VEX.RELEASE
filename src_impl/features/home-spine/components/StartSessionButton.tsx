@@ -1,9 +1,11 @@
-import React, { useMemo } from "react";
-import { Pressable, ActivityIndicator } from "react-native";
-import Animated, { useAnimatedStyle, withSpring, withRepeat, withSequence, cancelAnimation, useSharedValue } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";`r`nimport { StartSessionButtonCompact } from "./StartSessionButtonCompact";`r`nimport { useStartSessionButtonColors } from "./start-session-button-colors";
+import React, { useMemo } from 'react';
+import { Pressable, ActivityIndicator } from 'react-native';
+import Animated, { useAnimatedStyle, withSpring, withRepeat, withSequence, cancelAnimation, useSharedValue } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { StartSessionButtonCompact } from './StartSessionButtonCompact';
+import { useStartSessionButtonColors } from './start-session-button-colors';
 export interface StartSessionButtonProps {
   /** Primary label text */
   label?: string;
@@ -14,7 +16,7 @@ export interface StartSessionButtonProps {
   /** Number of squad members currently focusing */
   squadMembersFocusing?: number;
   /** Streak risk level for urgency styling */
-  streakRiskLevel?: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  streakRiskLevel?: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   /** Hours remaining until streak breaks */
   streakHoursRemaining?: number | null;
   /** Loading state while creating session */
@@ -33,14 +35,14 @@ export interface StartSessionButtonProps {
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
-export function StartSessionButton({ label, subtitle, resumeTimeSeconds, squadMembersFocusing, streakRiskLevel = "NONE", streakHoursRemaining, isLoading = false, hasActiveSession = false, onPress, testID, bossName, isFinalStrike = false }: StartSessionButtonProps): JSX.Element {
+export function StartSessionButton({ label, subtitle, resumeTimeSeconds, squadMembersFocusing, streakRiskLevel = 'NONE', streakHoursRemaining, isLoading = false, hasActiveSession = false, onPress, testID, bossName, isFinalStrike = false }: StartSessionButtonProps): JSX.Element {
   const { theme } = useTheme();
   const scale = useSharedValue(1);
   const colors = useStartSessionButtonColors(streakRiskLevel, hasActiveSession, isFinalStrike);
   React.useEffect(() => {
-    if (streakRiskLevel === "CRITICAL" || streakRiskLevel === "HIGH") {
+    if (streakRiskLevel === 'CRITICAL' || streakRiskLevel === 'HIGH') {
       scale.value = withRepeat(withSequence(withSpring(1.02, { damping: 3, stiffness: 150 }), withSpring(1, { damping: 3, stiffness: 150 })), -1, true);
     } else {
       cancelAnimation(scale);
@@ -58,12 +60,12 @@ export function StartSessionButton({ label, subtitle, resumeTimeSeconds, squadMe
       return label;
     }
     if (hasActiveSession) {
-      return "Resume Session";
+      return 'Resume Session';
     }
     if (isFinalStrike && bossName) {
       return `⚔️ Defeat ${bossName} Now`;
     }
-    return "Start Focus Session";
+    return 'Start Focus Session';
   }, [label, hasActiveSession, isFinalStrike, bossName]);
   const subtitleText = useMemo(() => {
     if (subtitle) {
@@ -73,20 +75,20 @@ export function StartSessionButton({ label, subtitle, resumeTimeSeconds, squadMe
       return `${formatTime(resumeTimeSeconds)} elapsed`;
     }
     if (isFinalStrike) {
-      return "🔥 Final Strike mode — guaranteed defeat this session!";
+      return '🔥 Final Strike mode — guaranteed defeat this session!';
     }
     if (squadMembersFocusing && squadMembersFocusing > 0) {
-      return `${squadMembersFocusing} squad member${squadMembersFocusing > 1 ? "s" : ""} currently focusing`;
+      return `${squadMembersFocusing} squad member${squadMembersFocusing > 1 ? 's' : ''} currently focusing`;
     }
-    if (streakRiskLevel === "CRITICAL" && streakHoursRemaining !== null) {
+    if (streakRiskLevel === 'CRITICAL' && streakHoursRemaining !== null) {
       return `⚠️ ${streakHoursRemaining}h left to save your streak!`;
     }
-    if (streakRiskLevel === "HIGH" && streakHoursRemaining !== null) {
+    if (streakRiskLevel === 'HIGH' && streakHoursRemaining !== null) {
       return `⏰ ${streakHoursRemaining} hours remaining`;
     }
-    return "Tap to begin your focus session";
+    return 'Tap to begin your focus session';
   }, [subtitle, hasActiveSession, resumeTimeSeconds, isFinalStrike, squadMembersFocusing, streakRiskLevel, streakHoursRemaining]);
-  const isUrgent = streakRiskLevel === "CRITICAL" || streakRiskLevel === "HIGH" || isFinalStrike;
+  const isUrgent = streakRiskLevel === 'CRITICAL' || streakRiskLevel === 'HIGH' || isFinalStrike;
   return (
     <Animated.View style={animatedStyle} testID={testID}>
       <Pressable onPress={onPress} disabled={isLoading} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
@@ -132,7 +134,7 @@ export function StartSessionButton({ label, subtitle, resumeTimeSeconds, squadMe
             ) : (
               <Box width={44} height={44} borderRadius="full" bg={`${theme.colors.text.inverse}20`} justifyContent="center" alignItems="center">
                 <Text fontSize={20} color={theme.colors.text.inverse}>
-                  {hasActiveSession ? "▶" : "›"}
+                  {hasActiveSession ? '▶' : '›'}
                 </Text>
               </Box>
             )}
@@ -155,4 +157,5 @@ export function StartSessionButton({ label, subtitle, resumeTimeSeconds, squadMe
     </Animated.View>
   );
 }
-export { StartSessionButtonCompact };`r`nexport default StartSessionButton;
+export { StartSessionButtonCompact };
+export default StartSessionButton;

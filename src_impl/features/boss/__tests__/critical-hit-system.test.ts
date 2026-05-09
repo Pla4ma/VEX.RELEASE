@@ -4,24 +4,24 @@
  * Tests probability distributions and crit mechanics.
  */
 
-import { bossCritService, CritStatus, CRIT_CONFIG, isCritActive, BossCriticalHitService } from "../critical-hit-system";
+import { bossCritService, CritStatus, CRIT_CONFIG, isCritActive, BossCriticalHitService } from '../critical-hit-system';
 
-describe("BossCriticalHitService", () => {
+describe('BossCriticalHitService', () => {
   let service: BossCriticalHitService;
-  const TEST_SESSION_ID = "test-session-123";
-  const TEST_BOSS_ID = "test-boss-456";
+  const TEST_SESSION_ID = 'test-session-123';
+  const TEST_BOSS_ID = 'test-boss-456';
 
   beforeEach(() => {
     service = new BossCriticalHitService();
-    service.resetStats("test-user");
+    service.resetStats('test-user');
   });
 
-  describe("Base Probability", () => {
-    it("should have 10% base crit chance", () => {
+  describe('Base Probability', () => {
+    it('should have 10% base crit chance', () => {
       expect(CRIT_CONFIG.BASE_CHANCE).toBe(0.1);
     });
 
-    it("should trigger crit ~10% of the time (within statistical bounds)", () => {
+    it('should trigger crit ~10% of the time (within statistical bounds)', () => {
       const iterations = 10000;
       const distribution = service.simulateCritDistribution(iterations);
 
@@ -30,7 +30,7 @@ describe("BossCriticalHitService", () => {
       expect(critRate).toBeLessThan(0.12);
     });
 
-    it("should near-miss ~10% of the time (11-20% range)", () => {
+    it('should near-miss ~10% of the time (11-20% range)', () => {
       const iterations = 10000;
       const distribution = service.simulateCritDistribution(iterations);
 
@@ -39,7 +39,7 @@ describe("BossCriticalHitService", () => {
       expect(nearMissRate).toBeLessThan(0.12);
     });
 
-    it("should have no crit ~80% of the time", () => {
+    it('should have no crit ~80% of the time', () => {
       const iterations = 10000;
       const distribution = service.simulateCritDistribution(iterations);
 
@@ -49,32 +49,32 @@ describe("BossCriticalHitService", () => {
     });
   });
 
-  describe("Modified Chances", () => {
-    it("should increase crit chance with 7+ day streak", () => {
+  describe('Modified Chances', () => {
+    it('should increase crit chance with 7+ day streak', () => {
       const iterations = 10000;
 
-      const noStreak = service.simulateCritDistribution(iterations, 3, "B");
-      const withStreak = service.simulateCritDistribution(iterations, 10, "B");
+      const noStreak = service.simulateCritDistribution(iterations, 3, 'B');
+      const withStreak = service.simulateCritDistribution(iterations, 10, 'B');
 
       expect(withStreak.crits).toBeGreaterThan(noStreak.crits);
     });
 
-    it("should increase crit chance with S grade", () => {
+    it('should increase crit chance with S grade', () => {
       const iterations = 10000;
 
-      const normalGrade = service.simulateCritDistribution(iterations, 0, "B");
-      const sGrade = service.simulateCritDistribution(iterations, 0, "S");
+      const normalGrade = service.simulateCritDistribution(iterations, 0, 'B');
+      const sGrade = service.simulateCritDistribution(iterations, 0, 'S');
 
       expect(sGrade.crits).toBeGreaterThan(normalGrade.crits);
     });
   });
 
-  describe("Session State Management", () => {
-    it("should register and retrieve session state", () => {
+  describe('Session State Management', () => {
+    it('should register and retrieve session state', () => {
       const result = service.calculateCritChance({
-        userId: "test-user",
+        userId: 'test-user',
         streakDays: 0,
-        currentGrade: "B",
+        currentGrade: 'B',
       });
 
       service.registerSession(TEST_SESSION_ID, TEST_BOSS_ID, result);
@@ -85,11 +85,11 @@ describe("BossCriticalHitService", () => {
       expect(state?.bossEncounterId).toBe(TEST_BOSS_ID);
     });
 
-    it("should mark overlay as shown", () => {
+    it('should mark overlay as shown', () => {
       const result = service.calculateCritChance({
-        userId: "test-user",
+        userId: 'test-user',
         streakDays: 0,
-        currentGrade: "B",
+        currentGrade: 'B',
       });
 
       service.registerSession(TEST_SESSION_ID, TEST_BOSS_ID, result);
@@ -99,13 +99,13 @@ describe("BossCriticalHitService", () => {
       expect(state?.hasShownOverlay).toBe(true);
     });
 
-    it("should determine if overlay should show", () => {
+    it('should determine if overlay should show', () => {
       // Force crit with seed
       const result = service.calculateCritChance({
-        userId: "test-user",
+        userId: 'test-user',
         streakDays: 0,
-        currentGrade: "B",
-        seed: "force-crit-seed",
+        currentGrade: 'B',
+        seed: 'force-crit-seed',
       });
 
       service.registerSession(TEST_SESSION_ID, TEST_BOSS_ID, result);
@@ -119,14 +119,14 @@ describe("BossCriticalHitService", () => {
     });
   });
 
-  describe("Damage Application", () => {
-    it("should double damage when crit triggers", () => {
+  describe('Damage Application', () => {
+    it('should double damage when crit triggers', () => {
       // Force crit
       const result = service.calculateCritChance({
-        userId: "test-user",
+        userId: 'test-user',
         streakDays: 0,
-        currentGrade: "B",
-        seed: "force-crit-seed",
+        currentGrade: 'B',
+        seed: 'force-crit-seed',
       });
 
       service.registerSession(TEST_SESSION_ID, TEST_BOSS_ID, result);
@@ -140,13 +140,13 @@ describe("BossCriticalHitService", () => {
       }
     });
 
-    it("should not double damage when no crit", () => {
+    it('should not double damage when no crit', () => {
       // Force no crit with seed
       const result = service.calculateCritChance({
-        userId: "test-user",
+        userId: 'test-user',
         streakDays: 0,
-        currentGrade: "B",
-        seed: "force-no-crit-seed-999",
+        currentGrade: 'B',
+        seed: 'force-no-crit-seed-999',
       });
 
       service.registerSession(TEST_SESSION_ID, TEST_BOSS_ID, result);
@@ -160,13 +160,13 @@ describe("BossCriticalHitService", () => {
       }
     });
 
-    it("should track near-miss correctly", () => {
+    it('should track near-miss correctly', () => {
       // Force near-miss (11-20% roll)
       const result = service.calculateCritChance({
-        userId: "test-user",
+        userId: 'test-user',
         streakDays: 0,
-        currentGrade: "B",
-        seed: "force-near-miss", // This should roll in 11-20% range
+        currentGrade: 'B',
+        seed: 'force-near-miss', // This should roll in 11-20% range
       });
 
       service.registerSession(TEST_SESSION_ID, TEST_BOSS_ID, result);
@@ -182,9 +182,9 @@ describe("BossCriticalHitService", () => {
     });
   });
 
-  describe("Weekly Stats", () => {
-    it("should track crits this week", () => {
-      const userId = "test-user";
+  describe('Weekly Stats', () => {
+    it('should track crits this week', () => {
+      const userId = 'test-user';
 
       // Simulate sessions
       for (let i = 0; i < 10; i++) {
@@ -192,7 +192,7 @@ describe("BossCriticalHitService", () => {
         const result = service.calculateCritChance({
           userId,
           streakDays: 0,
-          currentGrade: "B",
+          currentGrade: 'B',
         });
         service.registerSession(sessionId, TEST_BOSS_ID, result);
         service.applyCritDamage(sessionId, 100);
@@ -203,8 +203,8 @@ describe("BossCriticalHitService", () => {
       expect(stats.totalSessions).toBeGreaterThanOrEqual(stats.totalCrits);
     });
 
-    it("should calculate crit rate percentage", () => {
-      const userId = "test-user";
+    it('should calculate crit rate percentage', () => {
+      const userId = 'test-user';
 
       // Force some crits
       for (let i = 0; i < 10; i++) {
@@ -212,8 +212,8 @@ describe("BossCriticalHitService", () => {
         const result = service.calculateCritChance({
           userId,
           streakDays: 0,
-          currentGrade: "B",
-          seed: i < 2 ? "force-crit" : `normal-${i}`,
+          currentGrade: 'B',
+          seed: i < 2 ? 'force-crit' : `normal-${i}`,
         });
         service.registerSession(sessionId, TEST_BOSS_ID, result);
         service.applyCritDamage(sessionId, 100);
@@ -225,13 +225,13 @@ describe("BossCriticalHitService", () => {
     });
   });
 
-  describe("Convenience Functions", () => {
-    it("isCritActive should return correct state", () => {
+  describe('Convenience Functions', () => {
+    it('isCritActive should return correct state', () => {
       const result = service.calculateCritChance({
-        userId: "test-user",
+        userId: 'test-user',
         streakDays: 0,
-        currentGrade: "B",
-        seed: "force-crit",
+        currentGrade: 'B',
+        seed: 'force-crit',
       });
 
       service.registerSession(TEST_SESSION_ID, TEST_BOSS_ID, result);
@@ -242,21 +242,21 @@ describe("BossCriticalHitService", () => {
     });
   });
 
-  describe("Seeded Random", () => {
-    it("should produce same result with same seed", () => {
-      const seed = "my-test-seed";
+  describe('Seeded Random', () => {
+    it('should produce same result with same seed', () => {
+      const seed = 'my-test-seed';
 
       const result1 = service.calculateCritChance({
-        userId: "test-user",
+        userId: 'test-user',
         streakDays: 0,
-        currentGrade: "B",
+        currentGrade: 'B',
         seed,
       });
 
       const result2 = service.calculateCritChance({
-        userId: "test-user",
+        userId: 'test-user',
         streakDays: 0,
-        currentGrade: "B",
+        currentGrade: 'B',
         seed,
       });
 

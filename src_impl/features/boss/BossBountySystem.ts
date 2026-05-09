@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 /**
  * Boss Bounty System
  *
@@ -16,11 +16,11 @@ import { captureSilentFailure } from "../../utils/silent-failure";
  * - Analytics (tracking)
  */
 
-import { z } from "zod";
-import * as Sentry from "@sentry/react-native";
-import { spendCurrency } from "../economy/spending-service";
-import { eventBus } from "../../events";
-import { featureFlags } from "../../feature-flags/FeatureFlagEngine";
+import { z } from 'zod';
+import * as Sentry from '@sentry/react-native';
+import { spendCurrency } from '../economy/spending-service';
+import { eventBus } from '../../events';
+import { featureFlags } from '../../feature-flags/FeatureFlagEngine';
 
 // ============================================================================
 // Constants
@@ -101,7 +101,7 @@ export interface PlaceBountyResult {
 }
 
 function isBossBountyEnabled(): boolean {
-  return featureFlags.isEnabled("boss_bounty_system");
+  return featureFlags.isEnabled('boss_bounty_system');
 }
 
 // ============================================================================
@@ -112,10 +112,10 @@ const BOUNTY_STORAGE_KEY = (encounterId: string) => `boss_bounties:${encounterId
 
 function getStorage() {
   try {
-    const { storage } = require("../../store/mmkv-storage");
+    const { storage } = require('../../store/mmkv-storage');
     return storage;
   } catch (error) {
-    captureSilentFailure(error, { feature: "boss", operation: "ui-fallback", type: "ui" });
+    captureSilentFailure(error, { feature: 'boss', operation: 'ui-fallback', type: 'ui' });
     return null;
   }
 }
@@ -130,7 +130,7 @@ function saveBounties(encounterId: string, bounties: BossBounty[]): void {
     storage.set(BOUNTY_STORAGE_KEY(encounterId), JSON.stringify(bounties));
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "boss-bounty", operation: "save" },
+      tags: { feature: 'boss-bounty', operation: 'save' },
       extra: { encounterId },
     });
   }
@@ -152,7 +152,7 @@ function loadBounties(encounterId: string): BossBounty[] {
     return z.array(BossBountySchema).parse(parsed);
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "boss-bounty", operation: "load" },
+      tags: { feature: 'boss-bounty', operation: 'load' },
       extra: { encounterId },
     });
     return [];
@@ -169,7 +169,7 @@ function clearBounties(encounterId: string): void {
     storage.delete(BOUNTY_STORAGE_KEY(encounterId));
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "boss-bounty", operation: "clear" },
+      tags: { feature: 'boss-bounty', operation: 'clear' },
       extra: { encounterId },
     });
   }
@@ -242,8 +242,8 @@ export async function placeBounty(input: PlaceBountyInput): Promise<PlaceBountyR
       stackCount: 0,
       lootMultiplier: 1,
       error: {
-        code: "FEATURE_DISABLED",
-        message: "Boss bounties are disabled",
+        code: 'FEATURE_DISABLED',
+        message: 'Boss bounties are disabled',
       },
     };
   }
@@ -262,8 +262,8 @@ export async function placeBounty(input: PlaceBountyInput): Promise<PlaceBountyR
       stackCount: status.bountyCount,
       lootMultiplier: status.totalLootMultiplier,
       error: {
-        code: "MAX_STACK_REACHED",
-        message: "Maximum bounty stack reached (4 bounties)",
+        code: 'MAX_STACK_REACHED',
+        message: 'Maximum bounty stack reached (4 bounties)',
       },
     };
   }
@@ -276,8 +276,8 @@ export async function placeBounty(input: PlaceBountyInput): Promise<PlaceBountyR
       stackCount: status.bountyCount,
       lootMultiplier: status.totalLootMultiplier,
       error: {
-        code: "ALREADY_ACTIVE",
-        message: "You already have an active bounty on this boss",
+        code: 'ALREADY_ACTIVE',
+        message: 'You already have an active bounty on this boss',
       },
     };
   }
@@ -285,10 +285,10 @@ export async function placeBounty(input: PlaceBountyInput): Promise<PlaceBountyR
   // Attempt atomic spend
   const spendResult = await spendCurrency({
     userId: validated.userId,
-    currency: "COINS",
+    currency: 'COINS',
     amount: BOUNTY_COST_COINS,
-    sink: "BOSS_BOUNTY",
-    description: "Boss Bounty placed",
+    sink: 'BOSS_BOUNTY',
+    description: 'Boss Bounty placed',
     metadata: {
       encounterId: validated.encounterId,
       stackPosition: status.bountyCount + 1,
@@ -302,8 +302,8 @@ export async function placeBounty(input: PlaceBountyInput): Promise<PlaceBountyR
       stackCount: status.bountyCount,
       lootMultiplier: status.totalLootMultiplier,
       error: {
-        code: spendResult.error?.code || "BOUNTY_FAILED",
-        message: spendResult.error?.message || "Failed to place bounty",
+        code: spendResult.error?.code || 'BOUNTY_FAILED',
+        message: spendResult.error?.message || 'Failed to place bounty',
       },
     };
   }
@@ -331,7 +331,7 @@ export async function placeBounty(input: PlaceBountyInput): Promise<PlaceBountyR
   const newLootMultiplier = Math.min(newStackCount * BOUNTY_LOOT_MULTIPLIER, MAX_BOUNTY_STACK * BOUNTY_LOOT_MULTIPLIER);
 
   // Emit event
-  eventBus.publish("economy:boss_bounty_placed", {
+  eventBus.publish('economy:boss_bounty_placed', {
     userId: validated.userId,
     encounterId: validated.encounterId,
     costCoins: BOUNTY_COST_COINS,
@@ -341,8 +341,8 @@ export async function placeBounty(input: PlaceBountyInput): Promise<PlaceBountyR
 
   // Analytics
   Sentry.addBreadcrumb({
-    message: "Boss bounty placed",
-    category: "economy",
+    message: 'Boss bounty placed',
+    category: 'economy',
     data: {
       userId: validated.userId,
       encounterId: validated.encounterId,
@@ -404,7 +404,7 @@ export function consumeBountiesOnDamage(encounterId: string, damageDealt: number
 
   // Cleanup after a delay (keep consumed records briefly for analytics)
   const cleanupTimer = setTimeout(() => clearBounties(encounterId), 60 * 60 * 1000); // 1 hour
-  if (typeof cleanupTimer === "object" && "unref" in cleanupTimer) {
+  if (typeof cleanupTimer === 'object' && 'unref' in cleanupTimer) {
     cleanupTimer.unref();
   }
 
@@ -463,20 +463,20 @@ export function getBountyDisplayInfo(encounterId: string): {
   multiplier: string;
   expiresIn: string;
 } {
-  const status = getBountyStatus({ encounterId, userId: "00000000-0000-0000-0000-000000000000" });
+  const status = getBountyStatus({ encounterId, userId: '00000000-0000-0000-0000-000000000000' });
 
   if (!status.hasActiveBounty) {
     return {
       hasBounty: false,
-      badgeText: "",
-      multiplier: "",
-      expiresIn: "",
+      badgeText: '',
+      multiplier: '',
+      expiresIn: '',
     };
   }
 
   return {
     hasBounty: true,
-    badgeText: `🎯 ${status.bountyCount} Bounty${status.bountyCount > 1 ? "ies" : ""}`,
+    badgeText: `🎯 ${status.bountyCount} Bounty${status.bountyCount > 1 ? 'ies' : ''}`,
     multiplier: `${status.totalLootMultiplier}×`,
     expiresIn: `${status.hoursRemaining}h left`,
   };

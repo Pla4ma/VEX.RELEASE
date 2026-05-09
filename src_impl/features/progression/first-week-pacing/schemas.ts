@@ -14,7 +14,7 @@ export const FirstWeekSessionSchema = z.enum([
   'SESSION_5',
   'SESSION_6',
   'SESSION_7',
-  'COMPLETED'
+  'COMPLETED',
 ]);
 
 export type FirstWeekSession = z.infer<typeof FirstWeekSessionSchema>;

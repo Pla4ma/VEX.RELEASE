@@ -20,7 +20,7 @@ import type {
   TransactionValidationRequest,
   TransactionValidationResult,
   BoundaryViolation,
-  BoundaryAnalytics
+  BoundaryAnalytics,
 } from './schemas';
 
 // ============================================================================

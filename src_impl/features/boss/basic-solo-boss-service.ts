@@ -9,12 +9,12 @@
  * - constants/calculator: core logic
  */
 
-import { eventBus } from "../../events";
-import * as repository from "./repository";
-import { trackBossError, trackBossDamageApplied } from "./analytics";
-import { BASIC_BOSS_CONFIG } from "./basic-solo-boss-constants";
-import { calculateBasicSoloBossDamage } from "./basic-solo-boss-calculator";
-import { type BossEncounterSummary, type BossDamageResult } from "./schemas";
+import { eventBus } from '../../events';
+import * as repository from './repository';
+import { trackBossError, trackBossDamageApplied } from './analytics';
+import { BASIC_BOSS_CONFIG } from './basic-solo-boss-constants';
+import { calculateBasicSoloBossDamage } from './basic-solo-boss-calculator';
+import { type BossEncounterSummary, type BossDamageResult } from './schemas';
 
 export async function getOrCreateBasicSoloBossEncounter(userId: string): Promise<BossEncounterSummary | null> {
   try {
@@ -25,7 +25,7 @@ export async function getOrCreateBasicSoloBossEncounter(userId: string): Promise
         return null;
       }
       const template = await repository.fetchBossTemplate(existing.bossId);
-      if (!template) return null;
+      if (!template) {return null;}
       const timeRemaining = Math.max(0, existing.expiresAt - Date.now());
       const percentHealth = Math.floor((existing.healthRemaining / existing.maxHealth) * 100);
       return {
@@ -37,7 +37,7 @@ export async function getOrCreateBasicSoloBossEncounter(userId: string): Promise
     }
     return await createBasicSoloBossEncounter(userId);
   } catch (error) {
-    trackBossError("getOrCreateBasicSoloBossEncounter", error, userId);
+    trackBossError('getOrCreateBasicSoloBossEncounter', error, userId);
     return null;
   }
 }
@@ -46,12 +46,12 @@ async function createBasicSoloBossEncounter(userId: string): Promise<BossEncount
   let template = await repository.fetchBossTemplate(BASIC_BOSS_CONFIG.soloBossId);
   if (!template) {
     template = {
-      id: BASIC_BOSS_CONFIG.soloBossId, name: "Focus Guardian",
-      description: "A guardian that tests your focus consistency",
+      id: BASIC_BOSS_CONFIG.soloBossId, name: 'Focus Guardian',
+      description: 'A guardian that tests your focus consistency',
       avatarUrl: null, tier: 1, baseHealth: BASIC_BOSS_CONFIG.baseHealth,
       healthScaling: 0.1, minLevel: 1, previousBossId: null,
       timeLimit: BASIC_BOSS_CONFIG.timeLimitHours * 3600,
-      rewardType: "XP", rewardAmount: BASIC_BOSS_CONFIG.rewardXp, rewardItemId: null,
+      rewardType: 'XP', rewardAmount: BASIC_BOSS_CONFIG.rewardXp, rewardItemId: null,
     };
   }
   const encounter = await repository.createEncounter(
@@ -70,12 +70,12 @@ export async function applyBasicSoloBossDamage(
   encounterId: string, sessionId: string, damage: number
 ): Promise<BossDamageResult> {
   const encounter = await repository.fetchEncounterById(encounterId);
-  if (!encounter || encounter.status !== "ACTIVE") {
-    throw new Error("No active boss encounter found");
+  if (!encounter || encounter.status !== 'ACTIVE') {
+    throw new Error('No active boss encounter found');
   }
   if (encounter.expiresAt < Date.now()) {
     await repository.markEncounterTimeout(encounterId);
-    throw new Error("Boss encounter has expired");
+    throw new Error('Boss encounter has expired');
   }
   const newHealth = Math.max(0, encounter.healthRemaining - damage);
   const totalDamageDealt = encounter.damageDealt + damage;
@@ -95,13 +95,13 @@ export async function applyBasicSoloBossDamage(
 async function handleBasicSoloBossDefeat(encounterId: string, userId: string): Promise<void> {
   const encounter = await repository.markEncounterDefeated(encounterId);
   const template = await repository.fetchBossTemplate(encounter.bossId);
-  if (!template) throw new Error(`Boss template not found: ${encounter.bossId}`);
+  if (!template) {throw new Error(`Boss template not found: ${encounter.bossId}`);}
   await repository.recordBossDefeat(userId, encounter.bossId, encounterId, encounter.damageDealt);
-  eventBus.publish("boss:defeated", {
+  eventBus.publish('boss:defeated', {
     userId, bossId: encounter.bossId, damageDealt: encounter.damageDealt,
     won: true, rewards: {
-      xp: template.rewardType === "XP" ? template.rewardAmount : 0,
-      coins: template.rewardType === "COINS" ? template.rewardAmount : 0,
+      xp: template.rewardType === 'XP' ? template.rewardAmount : 0,
+      coins: template.rewardType === 'COINS' ? template.rewardAmount : 0,
       items: [],
     },
     participants: [userId],
@@ -110,8 +110,8 @@ async function handleBasicSoloBossDefeat(encounterId: string, userId: string): P
 
 export async function handleBasicSoloBossTimeout(encounterId: string): Promise<void> {
   await repository.markEncounterTimeout(encounterId);
-  eventBus.publish("boss:timeout", {
-    userId: "system", bossId: "basic-solo", encounterId,
+  eventBus.publish('boss:timeout', {
+    userId: 'system', bossId: 'basic-solo', encounterId,
     damageDealt: 0, maxHealth: 0, timestamp: Date.now(),
   });
 }

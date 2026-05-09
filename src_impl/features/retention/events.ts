@@ -4,7 +4,7 @@
  * Event definitions for user retention, engagement, and churn prevention features.
  */
 
-import { RetentionEvent } from "./types";
+import { RetentionEvent } from './types';
 
 // Base Event Interface
 export interface BaseRetentionEvent {
@@ -25,7 +25,7 @@ export interface EventMetadata {
 }
 
 export interface DeviceInfo {
-  type: "mobile" | "tablet" | "desktop" | "web";
+  type: 'mobile' | 'tablet' | 'desktop' | 'web';
   os: string;
   version: string;
   appVersion?: string;
@@ -33,9 +33,9 @@ export interface DeviceInfo {
 
 // User Activity Events
 export interface UserActiveEvent extends BaseRetentionEvent {
-  type: "user_active";
+  type: 'user_active';
   data: {
-    activityType: "session_start" | "feature_use" | "social_interaction" | "achievement" | "purchase";
+    activityType: 'session_start' | 'feature_use' | 'social_interaction' | 'achievement' | 'purchase';
     activityDetails: {
       feature?: string;
       duration?: number;
@@ -58,11 +58,11 @@ export interface UserActiveEvent extends BaseRetentionEvent {
 }
 
 export interface UserInactiveEvent extends BaseRetentionEvent {
-  type: "user_inactive";
+  type: 'user_inactive';
   data: {
     inactivityPeriod: number; // days
     lastActivityDate: Date;
-    inactivityReason: "natural" | "forced" | "technical" | "user_choice";
+    inactivityReason: 'natural' | 'forced' | 'technical' | 'user_choice';
     previousEngagement: {
       averageSessionDuration: number;
       featuresUsed: string[];
@@ -78,12 +78,12 @@ export interface UserInactiveEvent extends BaseRetentionEvent {
 }
 
 export interface UserChurnRiskChangedEvent extends BaseRetentionEvent {
-  type: "user_churn_risk_changed";
+  type: 'user_churn_risk_changed';
   data: {
     previousRisk: number;
     currentRisk: number;
     riskChange: number;
-    riskLevel: "low" | "medium" | "high" | "critical";
+    riskLevel: 'low' | 'medium' | 'high' | 'critical';
     contributingFactors: {
       factor: string;
       impact: number;
@@ -96,7 +96,7 @@ export interface UserChurnRiskChangedEvent extends BaseRetentionEvent {
     };
     recommendedActions: {
       action: string;
-      priority: "low" | "medium" | "high" | "urgent";
+      priority: 'low' | 'medium' | 'high' | 'urgent';
       expectedImpact: number;
     }[];
   };
@@ -104,7 +104,7 @@ export interface UserChurnRiskChangedEvent extends BaseRetentionEvent {
 
 // Strategy Events
 export interface RetentionStrategyTriggeredEvent extends BaseRetentionEvent {
-  type: "retention_strategy_triggered";
+  type: 'retention_strategy_triggered';
   data: {
     strategyId: string;
     strategyName: string;
@@ -134,7 +134,7 @@ export interface RetentionStrategyTriggeredEvent extends BaseRetentionEvent {
 }
 
 export interface RetentionStrategyCompletedEvent extends BaseRetentionEvent {
-  type: "retention_strategy_completed";
+  type: 'retention_strategy_completed';
   data: {
     strategyId: string;
     completionDate: Date;
@@ -163,12 +163,12 @@ export interface RetentionStrategyCompletedEvent extends BaseRetentionEvent {
 }
 
 export interface RetentionStrategyFailedEvent extends BaseRetentionEvent {
-  type: "retention_strategy_failed";
+  type: 'retention_strategy_failed';
   data: {
     strategyId: string;
     failureDate: Date;
     failureReason: string;
-    failureType: "technical" | "execution" | "performance" | "budget" | "compliance";
+    failureType: 'technical' | 'execution' | 'performance' | 'budget' | 'compliance';
     affectedUsers: number;
     impact: {
       userExperience: string;
@@ -185,7 +185,7 @@ export interface RetentionStrategyFailedEvent extends BaseRetentionEvent {
 
 // Cohort Events
 export interface CohortAnalysisCompletedEvent extends BaseRetentionEvent {
-  type: "cohort_analysis_completed";
+  type: 'cohort_analysis_completed';
   data: {
     cohortId: string;
     cohortName: string;
@@ -216,11 +216,11 @@ export interface CohortAnalysisCompletedEvent extends BaseRetentionEvent {
 }
 
 export interface CohortPerformanceAlertEvent extends BaseRetentionEvent {
-  type: "cohort_performance_alert";
+  type: 'cohort_performance_alert';
   data: {
     cohortId: string;
-    alertType: "retention_drop" | "churn_spike" | "engagement_decline" | "anomaly";
-    severity: "low" | "medium" | "high" | "critical";
+    alertType: 'retention_drop' | 'churn_spike' | 'engagement_decline' | 'anomaly';
+    severity: 'low' | 'medium' | 'high' | 'critical';
     metrics: {
       current: number;
       baseline: number;
@@ -242,7 +242,7 @@ export interface CohortPerformanceAlertEvent extends BaseRetentionEvent {
 
 // Experiment Events
 export interface RetentionExperimentStartedEvent extends BaseRetentionEvent {
-  type: "retention_experiment_started";
+  type: 'retention_experiment_started';
   data: {
     experimentId: string;
     experimentName: string;
@@ -271,7 +271,7 @@ export interface RetentionExperimentStartedEvent extends BaseRetentionEvent {
 }
 
 export interface RetentionExperimentCompletedEvent extends BaseRetentionEvent {
-  type: "retention_experiment_completed";
+  type: 'retention_experiment_completed';
   data: {
     experimentId: string;
     completionDate: Date;
@@ -306,7 +306,7 @@ export interface RetentionExperimentCompletedEvent extends BaseRetentionEvent {
 
 // Prediction Events
 export interface ChurnPredictionUpdatedEvent extends BaseRetentionEvent {
-  type: "churn_prediction_updated";
+  type: 'churn_prediction_updated';
   data: {
     predictionId: string;
     userId: string;
@@ -325,7 +325,7 @@ export interface ChurnPredictionUpdatedEvent extends BaseRetentionEvent {
     version: string;
     recommendations: {
       type: string;
-      priority: "low" | "medium" | "high" | "urgent";
+      priority: 'low' | 'medium' | 'high' | 'urgent';
       action: string;
       expectedImpact: number;
       timeframe: string;
@@ -339,7 +339,7 @@ export interface ChurnPredictionUpdatedEvent extends BaseRetentionEvent {
 }
 
 export interface RetentionPredictionAccuracyEvent extends BaseRetentionEvent {
-  type: "retention_prediction_accuracy";
+  type: 'retention_prediction_accuracy';
   data: {
     model: string;
     version: string;
@@ -373,10 +373,10 @@ export interface RetentionPredictionAccuracyEvent extends BaseRetentionEvent {
 
 // Intervention Events
 export interface RetentionInterventionTriggeredEvent extends BaseRetentionEvent {
-  type: "retention_intervention_triggered";
+  type: 'retention_intervention_triggered';
   data: {
     interventionId: string;
-    interventionType: "reactivation" | "engagement" | "incentive" | "support" | "education";
+    interventionType: 'reactivation' | 'engagement' | 'incentive' | 'support' | 'education';
     triggerReason: string;
     triggerCondition: {
       metric: string;
@@ -407,7 +407,7 @@ export interface RetentionInterventionTriggeredEvent extends BaseRetentionEvent 
 }
 
 export interface RetentionInterventionCompletedEvent extends BaseRetentionEvent {
-  type: "retention_intervention_completed";
+  type: 'retention_intervention_completed';
   data: {
     interventionId: string;
     userId: string;
@@ -441,7 +441,7 @@ export interface RetentionInterventionCompletedEvent extends BaseRetentionEvent 
 
 // Lifecycle Events
 export interface UserLifecycleStageChangedEvent extends BaseRetentionEvent {
-  type: "user_lifecycle_stage_changed";
+  type: 'user_lifecycle_stage_changed';
   data: {
     previousStage: string;
     currentStage: string;
@@ -467,10 +467,10 @@ export interface UserLifecycleStageChangedEvent extends BaseRetentionEvent {
 }
 
 export interface UserMilestoneReachedEvent extends BaseRetentionEvent {
-  type: "user_milestone_reached";
+  type: 'user_milestone_reached';
   data: {
     milestoneId: string;
-    milestoneType: "engagement" | "retention" | "value" | "loyalty" | "achievement";
+    milestoneType: 'engagement' | 'retention' | 'value' | 'loyalty' | 'achievement';
     milestoneName: string;
     reachedAt: Date;
     progress: {
@@ -498,9 +498,9 @@ export interface UserMilestoneReachedEvent extends BaseRetentionEvent {
 
 // Analytics Events
 export interface RetentionAnalyticsEvent extends BaseRetentionEvent {
-  type: "retention_analytics";
+  type: 'retention_analytics';
   data: {
-    analyticsType: "overview" | "cohort" | "prediction" | "intervention" | "experiment";
+    analyticsType: 'overview' | 'cohort' | 'prediction' | 'intervention' | 'experiment';
     timeframe: string;
     metrics: Record<string, number>;
     dimensions: DynamicRecord;
@@ -512,7 +512,7 @@ export interface RetentionAnalyticsEvent extends BaseRetentionEvent {
     }[];
     trends: {
       metric: string;
-      direction: "up" | "down" | "stable";
+      direction: 'up' | 'down' | 'stable';
       change: number;
       significance: string;
     }[];
@@ -521,9 +521,9 @@ export interface RetentionAnalyticsEvent extends BaseRetentionEvent {
 }
 
 export interface RetentionDashboardViewedEvent extends BaseRetentionEvent {
-  type: "retention_dashboard_viewed";
+  type: 'retention_dashboard_viewed';
   data: {
-    dashboardType: "overview" | "user_detail" | "cohort" | "experiments" | "strategies";
+    dashboardType: 'overview' | 'user_detail' | 'cohort' | 'experiments' | 'strategies';
     filters: {
       timeframe: string;
       segments: string[];
@@ -545,9 +545,9 @@ export interface RetentionDashboardViewedEvent extends BaseRetentionEvent {
 
 // System Events
 export interface RetentionSystemMaintenanceEvent extends BaseRetentionEvent {
-  type: "retention_system_maintenance";
+  type: 'retention_system_maintenance';
   data: {
-    maintenanceType: "scheduled" | "emergency" | "upgrade" | "migration";
+    maintenanceType: 'scheduled' | 'emergency' | 'upgrade' | 'migration';
     startTime: Date;
     endTime?: Date;
     duration?: number;
@@ -564,12 +564,12 @@ export interface RetentionSystemMaintenanceEvent extends BaseRetentionEvent {
 }
 
 export interface RetentionSystemErrorEvent extends BaseRetentionEvent {
-  type: "retention_system_error";
+  type: 'retention_system_error';
   data: {
-    errorType: "prediction_error" | "intervention_error" | "analytics_error" | "system_error";
+    errorType: 'prediction_error' | 'intervention_error' | 'analytics_error' | 'system_error';
     errorCode: string;
     errorMessage: string;
-    severity: "low" | "medium" | "high" | "critical";
+    severity: 'low' | 'medium' | 'high' | 'critical';
     context: {
       service: string;
       operation: string;
@@ -587,10 +587,10 @@ export interface RetentionSystemErrorEvent extends BaseRetentionEvent {
 export type RetentionEventType = UserActiveEvent | UserInactiveEvent | UserChurnRiskChangedEvent | RetentionStrategyTriggeredEvent | RetentionStrategyCompletedEvent | RetentionStrategyFailedEvent | CohortAnalysisCompletedEvent | CohortPerformanceAlertEvent | RetentionExperimentStartedEvent | RetentionExperimentCompletedEvent | ChurnPredictionUpdatedEvent | RetentionPredictionAccuracyEvent | RetentionInterventionTriggeredEvent | RetentionInterventionCompletedEvent | UserLifecycleStageChangedEvent | UserMilestoneReachedEvent | RetentionAnalyticsEvent | RetentionDashboardViewedEvent | RetentionSystemMaintenanceEvent | RetentionSystemErrorEvent;
 
 // Event Factory Functions
-export function createUserActiveEvent(userId: string, activityType: "session_start" | "feature_use" | "social_interaction" | "achievement" | "purchase", activityDetails: DynamicValue, sessionId: string, sessionDuration: number, device: string, retentionMetrics: DynamicValue): UserActiveEvent {
+export function createUserActiveEvent(userId: string, activityType: 'session_start' | 'feature_use' | 'social_interaction' | 'achievement' | 'purchase', activityDetails: DynamicValue, sessionId: string, sessionDuration: number, device: string, retentionMetrics: DynamicValue): UserActiveEvent {
   return {
     id: generateEventId(),
-    type: "user_active",
+    type: 'user_active',
     userId,
     timestamp: new Date(),
     data: {
@@ -603,14 +603,14 @@ export function createUserActiveEvent(userId: string, activityType: "session_sta
       },
       retentionMetrics,
     },
-    metadata: createEventMetadata("retention"),
+    metadata: createEventMetadata('retention'),
   };
 }
 
-export function createUserChurnRiskChangedEvent(userId: string, previousRisk: number, currentRisk: number, riskLevel: "low" | "medium" | "high" | "critical", contributingFactors: DynamicValue[], prediction: DynamicValue, recommendedActions: DynamicValue[]): UserChurnRiskChangedEvent {
+export function createUserChurnRiskChangedEvent(userId: string, previousRisk: number, currentRisk: number, riskLevel: 'low' | 'medium' | 'high' | 'critical', contributingFactors: DynamicValue[], prediction: DynamicValue, recommendedActions: DynamicValue[]): UserChurnRiskChangedEvent {
   return {
     id: generateEventId(),
-    type: "user_churn_risk_changed",
+    type: 'user_churn_risk_changed',
     userId,
     timestamp: new Date(),
     data: {
@@ -622,14 +622,14 @@ export function createUserChurnRiskChangedEvent(userId: string, previousRisk: nu
       prediction,
       recommendedActions,
     },
-    metadata: createEventMetadata("retention"),
+    metadata: createEventMetadata('retention'),
   };
 }
 
 export function createRetentionStrategyTriggeredEvent(userId: string, strategyId: string, strategyName: string, strategyType: string, triggerCondition: DynamicValue, targetAudience: DynamicValue, actions: DynamicValue[]): RetentionStrategyTriggeredEvent {
   return {
     id: generateEventId(),
-    type: "retention_strategy_triggered",
+    type: 'retention_strategy_triggered',
     userId,
     timestamp: new Date(),
     data: {
@@ -645,14 +645,14 @@ export function createRetentionStrategyTriggeredEvent(userId: string, strategyId
         environment: {},
       },
     },
-    metadata: createEventMetadata("retention"),
+    metadata: createEventMetadata('retention'),
   };
 }
 
 export function createChurnPredictionUpdatedEvent(userId: string, predictionId: string, churnProbability: number, churnTimeframe: number, riskFactors: DynamicValue[], confidence: number, model: string, version: string, recommendations: DynamicValue[]): ChurnPredictionUpdatedEvent {
   return {
     id: generateEventId(),
-    type: "churn_prediction_updated",
+    type: 'churn_prediction_updated',
     userId,
     timestamp: new Date(),
     data: {
@@ -667,14 +667,14 @@ export function createChurnPredictionUpdatedEvent(userId: string, predictionId: 
       version,
       recommendations,
     },
-    metadata: createEventMetadata("retention"),
+    metadata: createEventMetadata('retention'),
   };
 }
 
-export function createRetentionInterventionTriggeredEvent(userId: string, interventionId: string, interventionType: "reactivation" | "engagement" | "incentive" | "support" | "education", triggerReason: string, triggerCondition: DynamicValue, intervention: DynamicValue): RetentionInterventionTriggeredEvent {
+export function createRetentionInterventionTriggeredEvent(userId: string, interventionId: string, interventionType: 'reactivation' | 'engagement' | 'incentive' | 'support' | 'education', triggerReason: string, triggerCondition: DynamicValue, intervention: DynamicValue): RetentionInterventionTriggeredEvent {
   return {
     id: generateEventId(),
-    type: "retention_intervention_triggered",
+    type: 'retention_intervention_triggered',
     userId,
     timestamp: new Date(),
     data: {
@@ -685,12 +685,12 @@ export function createRetentionInterventionTriggeredEvent(userId: string, interv
       intervention,
       targetUser: {
         userId,
-        riskLevel: "medium",
+        riskLevel: 'medium',
         personalized: true,
         context: {},
       },
     },
-    metadata: createEventMetadata("retention"),
+    metadata: createEventMetadata('retention'),
   };
 }
 
@@ -702,17 +702,17 @@ function generateEventId(): string {
 function createEventMetadata(source: string): EventMetadata {
   return {
     source,
-    version: "1.0.0",
+    version: '1.0.0',
     platform: getPlatform(),
   };
 }
 
 function getPlatform(): string {
-  if (typeof window !== "undefined") {
-    return "web";
+  if (typeof window !== 'undefined') {
+    return 'web';
   }
   // Add platform detection logic here
-  return "unknown";
+  return 'unknown';
 }
 
 // Event Validation
@@ -727,13 +727,13 @@ export function validateRetentionEvent(event: RetentionEventType): boolean {
 
   // Add specific validation for each event type
   switch (event.type) {
-    case "user_active":
+    case 'user_active':
       return validateUserActiveEvent(event as UserActiveEvent);
-    case "user_churn_risk_changed":
+    case 'user_churn_risk_changed':
       return validateUserChurnRiskChangedEvent(event as UserChurnRiskChangedEvent);
-    case "retention_strategy_triggered":
+    case 'retention_strategy_triggered':
       return validateRetentionStrategyTriggeredEvent(event as RetentionStrategyTriggeredEvent);
-    case "churn_prediction_updated":
+    case 'churn_prediction_updated':
       return validateChurnPredictionUpdatedEvent(event as ChurnPredictionUpdatedEvent);
     default:
       return true;
@@ -747,7 +747,7 @@ function validateUserActiveEvent(event: UserActiveEvent): boolean {
 
 function validateUserChurnRiskChangedEvent(event: UserChurnRiskChangedEvent): boolean {
   const { data } = event;
-  return !!(typeof data.previousRisk === "number" && typeof data.currentRisk === "number" && data.riskLevel && data.contributingFactors && data.prediction && data.recommendedActions);
+  return !!(typeof data.previousRisk === 'number' && typeof data.currentRisk === 'number' && data.riskLevel && data.contributingFactors && data.prediction && data.recommendedActions);
 }
 
 function validateRetentionStrategyTriggeredEvent(event: RetentionStrategyTriggeredEvent): boolean {
@@ -757,7 +757,7 @@ function validateRetentionStrategyTriggeredEvent(event: RetentionStrategyTrigger
 
 function validateChurnPredictionUpdatedEvent(event: ChurnPredictionUpdatedEvent): boolean {
   const { data } = event;
-  return !!(data.predictionId && typeof data.churnProbability === "number" && typeof data.churnTimeframe === "number" && data.riskFactors && typeof data.confidence === "number" && data.model && data.version && data.recommendations);
+  return !!(data.predictionId && typeof data.churnProbability === 'number' && typeof data.churnTimeframe === 'number' && data.riskFactors && typeof data.confidence === 'number' && data.model && data.version && data.recommendations);
 }
 
 // Event Serialization

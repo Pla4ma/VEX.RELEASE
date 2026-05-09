@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
+import { captureSilentFailure } from '../../../utils/silent-failure';
 /**
  * Coach Memory Service
  *
@@ -6,15 +6,15 @@ import { captureSilentFailure } from "../../../utils/silent-failure";
  * Stores key facts about user in MMKV for personalized coaching messages.
  */
 
-import { MMKV } from "react-native-mmkv";
+import { MMKV } from 'react-native-mmkv';
 
 // Storage instance for coach memory
 const storage = new MMKV({
-  id: "coach-memory",
-  encryptionKey: "coach-memory-key",
+  id: 'coach-memory',
+  encryptionKey: 'coach-memory-key',
 });
 
-const STORAGE_KEY = "coach_user_memory";
+const STORAGE_KEY = 'coach_user_memory';
 
 // ============================================================================
 // Memory Types
@@ -26,7 +26,7 @@ export interface CoachMemory {
   longestStreakDate: number | null; // timestamp
   bestSessionQuality: number; // 0-100
   bestSessionQualityDate: number | null;
-  mostProductiveTimeOfDay: "morning" | "afternoon" | "evening" | "night" | null;
+  mostProductiveTimeOfDay: 'morning' | 'afternoon' | 'evening' | 'night' | null;
   mostUsedSessionDuration: number; // minutes
   totalSessionsCompleted: number;
   totalFocusMinutes: number;
@@ -43,7 +43,7 @@ export interface SessionFacts {
   quality: number;
   completedAt: number;
   sessionType: string;
-  timeOfDay: "morning" | "afternoon" | "evening" | "night";
+  timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
 }
 
 export interface StreakFacts {
@@ -68,7 +68,7 @@ export function getOrCreateMemory(userId: string): CoachMemory {
     try {
       return JSON.parse(stored) as CoachMemory;
     } catch (error) {
-      captureSilentFailure(error, { feature: "ai-coach", operation: "network-fallback", type: "network" });
+      captureSilentFailure(error, { feature: 'ai-coach', operation: 'network-fallback', type: 'network' });
       // Invalid stored data, create fresh
     }
   }
@@ -204,36 +204,36 @@ export function generatePersonalizedMessage(userId: string, baseMessage: string,
   let personalized = baseMessage;
 
   // Streak references
-  if (personalized.includes("{{personalBestStreak}}")) {
+  if (personalized.includes('{{personalBestStreak}}')) {
     personalized = personalized.replace(/\{\{personalBestStreak\}\}/g, String(memory.longestStreak));
   }
 
   // Quality references
-  if (personalized.includes("{{personalBestQuality}}")) {
+  if (personalized.includes('{{personalBestQuality}}')) {
     personalized = personalized.replace(/\{\{personalBestQuality\}\}/g, String(memory.bestSessionQuality));
   }
 
   // Time preference references
-  if (personalized.includes("{{productiveTimeOfDay}}") && memory.mostProductiveTimeOfDay) {
+  if (personalized.includes('{{productiveTimeOfDay}}') && memory.mostProductiveTimeOfDay) {
     personalized = personalized.replace(/\{\{productiveTimeOfDay\}\}/g, memory.mostProductiveTimeOfDay);
   }
 
   // Total progress references
-  if (personalized.includes("{{totalSessions}}")) {
+  if (personalized.includes('{{totalSessions}}')) {
     personalized = personalized.replace(/\{\{totalSessions\}\}/g, String(memory.totalSessionsCompleted));
   }
 
-  if (personalized.includes("{{totalFocusHours}}")) {
+  if (personalized.includes('{{totalFocusHours}}')) {
     personalized = personalized.replace(/\{\{totalFocusHours\}\}/g, String(Math.round(memory.totalFocusMinutes / 60)));
   }
 
   // Boss references
-  if (personalized.includes("{{lastBossDefeated}}") && memory.lastBossDefeated) {
+  if (personalized.includes('{{lastBossDefeated}}') && memory.lastBossDefeated) {
     personalized = personalized.replace(/\{\{lastBossDefeated\}\}/g, memory.lastBossDefeated);
   }
 
   // Resilience references
-  if (personalized.includes("{{comebackCount}}")) {
+  if (personalized.includes('{{comebackCount}}')) {
     personalized = personalized.replace(/\{\{comebackCount\}\}/g, String(memory.comebackCount));
   }
 
@@ -243,18 +243,18 @@ export function generatePersonalizedMessage(userId: string, baseMessage: string,
 /**
  * Get memory-based message suggestions for specific categories
  */
-export function getMemoryBasedSuggestions(userId: string, category: "STREAK_RISK" | "MILESTONE_HYPE" | "COMEBACK_SUPPORT" | "PROGRESS_REMINDER"): string[] {
+export function getMemoryBasedSuggestions(userId: string, category: 'STREAK_RISK' | 'MILESTONE_HYPE' | 'COMEBACK_SUPPORT' | 'PROGRESS_REMINDER'): string[] {
   const memory = getOrCreateMemory(userId);
   const suggestions: string[] = [];
 
   switch (category) {
-    case "STREAK_RISK":
+    case 'STREAK_RISK':
       if (memory.longestStreak > 0) {
         suggestions.push(`You had a ${memory.longestStreak}-day streak in the past. Let's beat that record!`, `Your personal best is ${memory.longestStreak} days. I know you can protect this one.`, `You've done ${memory.longestStreak} days before. This current streak could be even longer!`);
       }
       break;
 
-    case "MILESTONE_HYPE":
+    case 'MILESTONE_HYPE':
       if (memory.bestSessionQuality > 90) {
         suggestions.push(`Your best session ever scored ${memory.bestSessionQuality}! That kind of focus is legendary.`, `Remember that ${memory.bestSessionQuality}-quality session? You're capable of incredible things!`);
       }
@@ -263,7 +263,7 @@ export function getMemoryBasedSuggestions(userId: string, category: "STREAK_RISK
       }
       break;
 
-    case "COMEBACK_SUPPORT":
+    case 'COMEBACK_SUPPORT':
       if (memory.comebackCount > 0) {
         suggestions.push(`This is comeback #${memory.comebackCount} for you. Each one made you stronger.`, `You've bounced back ${memory.comebackCount} times before. This is just the next chapter.`, `Your ${memory.comebackCount} previous comebacks prove your resilience. Let's make this #${memory.comebackCount + 1}!`);
       }
@@ -272,7 +272,7 @@ export function getMemoryBasedSuggestions(userId: string, category: "STREAK_RISK
       }
       break;
 
-    case "PROGRESS_REMINDER":
+    case 'PROGRESS_REMINDER':
       if (memory.mostProductiveTimeOfDay) {
         suggestions.push(`Your most productive time tends to be ${memory.mostProductiveTimeOfDay}s. Use that knowledge!`, `You've crushed sessions during ${memory.mostProductiveTimeOfDay} before. That's your power time!`);
       }
@@ -316,7 +316,7 @@ export function getMemoryStats(userId: string): {
       dataSize: stored.length,
     };
   } catch (error) {
-    captureSilentFailure(error, { feature: "ai-coach", operation: "network-fallback", type: "network" });
+    captureSilentFailure(error, { feature: 'ai-coach', operation: 'network-fallback', type: 'network' });
     return { exists: true, lastUpdated: null, dataSize: stored.length };
   }
 }
@@ -377,7 +377,7 @@ function updateProductiveTimeOfDay(memory: CoachMemory, session: SessionFacts): 
   }
 
   if (maxTime) {
-    memory.mostProductiveTimeOfDay = maxTime as CoachMemory["mostProductiveTimeOfDay"];
+    memory.mostProductiveTimeOfDay = maxTime as CoachMemory['mostProductiveTimeOfDay'];
   }
 }
 
@@ -399,21 +399,21 @@ function generateInsights(memory: CoachMemory): string[] {
   const insights: string[] = [];
 
   if (memory.longestStreak >= 14) {
-    insights.push("You have elite-level consistency (14+ day streaks)");
+    insights.push('You have elite-level consistency (14+ day streaks)');
   } else if (memory.longestStreak >= 7) {
-    insights.push("You build strong weekly habits (7+ day streaks)");
+    insights.push('You build strong weekly habits (7+ day streaks)');
   }
 
   if (memory.bestSessionQuality >= 90) {
-    insights.push("You are capable of elite focus sessions (90+ quality)");
+    insights.push('You are capable of elite focus sessions (90+ quality)');
   }
 
   if (memory.totalFocusMinutes >= 600) {
-    insights.push("You are a 10+ hour focus veteran");
+    insights.push('You are a 10+ hour focus veteran');
   }
 
   if (memory.comebackCount >= 2) {
-    insights.push("You have proven resilience (multiple comebacks)");
+    insights.push('You have proven resilience (multiple comebacks)');
   }
 
   return insights;

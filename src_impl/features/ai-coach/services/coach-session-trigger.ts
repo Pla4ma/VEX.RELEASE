@@ -5,13 +5,13 @@
  * Handles CTA clicks from coach messages that create pre-configured sessions
  */
 
-import { eventBus } from "../../../events";
-import { capture } from "@/shared/analytics";
-import { CoachEvents } from "@/shared/analytics/analytics-events";
-import { getPersonalizedContext } from "./coach-memory";
-import { createDebugger } from "../../../utils/debug";
+import { eventBus } from '../../../events';
+import { capture } from '@/shared/analytics';
+import { CoachEvents } from '@/shared/analytics/analytics-events';
+import { getPersonalizedContext } from './coach-memory';
+import { createDebugger } from '../../../utils/debug';
 
-const debug = createDebugger("ai-coach:session-trigger");
+const debug = createDebugger('ai-coach:session-trigger');
 
 // ============================================================================
 // Types
@@ -19,9 +19,9 @@ const debug = createDebugger("ai-coach:session-trigger");
 
 export interface CoachSessionConfig {
   duration: number;
-  difficulty: "EASY" | "NORMAL" | "CHALLENGING" | "PUSH";
-  sessionType: "FOCUS" | "BOSS_BATTLE" | "CHALLENGE" | "FREE";
-  source: "COACH_RECOMMENDATION" | "STREAK_PROTECTION" | "COMEBACK_BUILDER" | "OPTIMAL_TIME";
+  difficulty: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
+  sessionType: 'FOCUS' | 'BOSS_BATTLE' | 'CHALLENGE' | 'FREE';
+  source: 'COACH_RECOMMENDATION' | 'STREAK_PROTECTION' | 'COMEBACK_BUILDER' | 'OPTIMAL_TIME';
   context: {
     coachReasoning: string;
     userStreakDays?: number;
@@ -38,24 +38,24 @@ export interface SessionTriggerResult {
   error?: string;
 }
 
-function toAnalyticsDifficulty(difficulty: CoachSessionConfig["difficulty"]): "easy" | "medium" | "hard" {
-  if (difficulty === "EASY") {
-    return "easy";
+function toAnalyticsDifficulty(difficulty: CoachSessionConfig['difficulty']): 'easy' | 'medium' | 'hard' {
+  if (difficulty === 'EASY') {
+    return 'easy';
   }
-  if (difficulty === "PUSH" || difficulty === "CHALLENGING") {
-    return "hard";
+  if (difficulty === 'PUSH' || difficulty === 'CHALLENGING') {
+    return 'hard';
   }
-  return "medium";
+  return 'medium';
 }
 
-function toAnalyticsSessionType(sessionType: CoachSessionConfig["sessionType"]): "focus" | "challenge" | "boss" {
-  if (sessionType === "CHALLENGE") {
-    return "challenge";
+function toAnalyticsSessionType(sessionType: CoachSessionConfig['sessionType']): 'focus' | 'challenge' | 'boss' {
+  if (sessionType === 'CHALLENGE') {
+    return 'challenge';
   }
-  if (sessionType === "BOSS_BATTLE") {
-    return "boss";
+  if (sessionType === 'BOSS_BATTLE') {
+    return 'boss';
   }
-  return "focus";
+  return 'focus';
 }
 
 // ============================================================================
@@ -72,9 +72,9 @@ export function getStreakProtectionConfig(userId: string): CoachSessionConfig {
 
   return {
     duration: Math.min(preferredDuration, 20), // Shorter to reduce friction
-    difficulty: "EASY",
-    sessionType: "FOCUS",
-    source: "STREAK_PROTECTION",
+    difficulty: 'EASY',
+    sessionType: 'FOCUS',
+    source: 'STREAK_PROTECTION',
     context: {
       coachReasoning: `Quick ${Math.min(preferredDuration, 20)}-minute session to protect your streak. Based on your history, you can absolutely do this.`,
       userStreakDays: context.personalBestStreak as number,
@@ -92,19 +92,19 @@ export async function startStreakAtRiskSession(userId: string, hoursRemaining: n
   try {
     // Track the urgent intervention
     capture(CoachEvents.COACH_CTA_CLICKED, {
-      cta_type: "streak_at_risk_start",
+      cta_type: 'streak_at_risk_start',
       urgency_hours: hoursRemaining,
-      source: "STREAK_PROTECTION",
+      source: 'STREAK_PROTECTION',
     });
 
     // Pre-configured session: 15 min, LIGHT_FOCUS, no strict mode
     const config: CoachSessionConfig = {
       duration: 15,
-      difficulty: "EASY",
-      sessionType: "FOCUS",
-      source: "STREAK_PROTECTION",
+      difficulty: 'EASY',
+      sessionType: 'FOCUS',
+      source: 'STREAK_PROTECTION',
       context: {
-        coachReasoning: hoursRemaining < 4 ? `Quick 15-minute session to save your streak — only ${hoursRemaining} hours left!` : "15 minutes to protect your streak. You got this!",
+        coachReasoning: hoursRemaining < 4 ? `Quick 15-minute session to save your streak — only ${hoursRemaining} hours left!` : '15 minutes to protect your streak. You got this!',
         userStreakDays: 0, // Will be populated from actual streak data
         isStreakAtRisk: true,
       },
@@ -114,25 +114,25 @@ export async function startStreakAtRiskSession(userId: string, hoursRemaining: n
     const sessionId = `streak-save-${Date.now()}`;
 
     // Emit event to immediately start session (no setup screen)
-    eventBus.publish("coach:streak_at_risk_session", {
+    eventBus.publish('coach:streak_at_risk_session', {
       userId,
       sessionId,
       config,
       skipSetup: true, // Key: bypasses SessionSetupScreen
-      mode: "LIGHT_FOCUS", // Light focus mode for easier completion
+      mode: 'LIGHT_FOCUS', // Light focus mode for easier completion
       strictMode: false, // No strict mode to reduce friction
     });
 
     // Track success
-    capture("session_configured", {
-      source: "streak_at_risk_cta",
+    capture('session_configured', {
+      source: 'streak_at_risk_cta',
       duration: 15,
-      difficulty: "easy",
-      session_type: "focus",
+      difficulty: 'easy',
+      session_type: 'focus',
       urgency_hours: hoursRemaining,
     });
 
-    debug.info("[Phase 6.4] Streak at risk session triggered for user %s, %s hours remaining", userId, hoursRemaining);
+    debug.info('[Phase 6.4] Streak at risk session triggered for user %s, %s hours remaining', userId, hoursRemaining);
 
     return {
       success: true,
@@ -141,17 +141,17 @@ export async function startStreakAtRiskSession(userId: string, hoursRemaining: n
     };
   } catch (error) {
     const err = error instanceof Error ? error : new Error(String(error));
-    debug.error("[Phase 6.4] Failed to trigger streak at risk session", err);
+    debug.error('[Phase 6.4] Failed to trigger streak at risk session', err);
 
     return {
       success: false,
       config: {
         duration: 15,
-        difficulty: "EASY",
-        sessionType: "FOCUS",
-        source: "STREAK_PROTECTION",
+        difficulty: 'EASY',
+        sessionType: 'FOCUS',
+        source: 'STREAK_PROTECTION',
         context: {
-          coachReasoning: "Emergency streak protection session",
+          coachReasoning: 'Emergency streak protection session',
           isStreakAtRisk: true,
         },
       },
@@ -170,9 +170,9 @@ export function getComebackBuilderConfig(userId: string): CoachSessionConfig {
 
   return {
     duration: 25,
-    difficulty: "NORMAL",
-    sessionType: "FOCUS",
-    source: "COMEBACK_BUILDER",
+    difficulty: 'NORMAL',
+    sessionType: 'FOCUS',
+    source: 'COMEBACK_BUILDER',
     context: {
       coachReasoning: comebackCount > 0 ? `Comeback #${comebackCount + 1} starts now. 25 minutes to rebuild momentum.` : "Fresh start time. 25 minutes to begin your new streak. You've got this!",
       isComebackMode: true,
@@ -191,9 +191,9 @@ export function getOptimalTimeConfig(userId: string): CoachSessionConfig {
 
   return {
     duration: preferredDuration,
-    difficulty: "CHALLENGING",
-    sessionType: "FOCUS",
-    source: "OPTIMAL_TIME",
+    difficulty: 'CHALLENGING',
+    sessionType: 'FOCUS',
+    source: 'OPTIMAL_TIME',
     context: {
       coachReasoning: productiveTime ? `It's your power time (${productiveTime})! A ${preferredDuration}-minute session now will be incredibly productive.` : `Your optimal focus window is open! Based on your patterns, a ${preferredDuration}-minute session would be perfect right now.`,
       optimalTimeWindow: true,
@@ -214,9 +214,9 @@ export function getCoachRecommendedConfig(
 ): CoachSessionConfig {
   return {
     duration: recommendation.duration,
-    difficulty: recommendation.difficulty as CoachSessionConfig["difficulty"],
-    sessionType: "FOCUS",
-    source: "COACH_RECOMMENDATION",
+    difficulty: recommendation.difficulty as CoachSessionConfig['difficulty'],
+    sessionType: 'FOCUS',
+    source: 'COACH_RECOMMENDATION',
     context: {
       coachReasoning: recommendation.reasoning,
     },
@@ -235,7 +235,7 @@ export async function triggerCoachSession(userId: string, config: CoachSessionCo
   try {
     // Track the CTA click
     capture(CoachEvents.COACH_CTA_CLICKED, {
-      cta_type: "start_session",
+      cta_type: 'start_session',
       session_duration: config.duration,
       difficulty: toAnalyticsDifficulty(config.difficulty),
       source: config.source,
@@ -243,22 +243,22 @@ export async function triggerCoachSession(userId: string, config: CoachSessionCo
 
     // Validate config
     if (config.duration < 5 || config.duration > 180) {
-      throw new Error("Invalid session duration");
+      throw new Error('Invalid session duration');
     }
 
     // Generate session ID
     const sessionId = `coach-session-${Date.now()}`;
 
     // Emit event to start session
-    eventBus.publish("coach:session_triggered", {
+    eventBus.publish('coach:session_triggered', {
       userId,
       sessionId,
       config,
     });
 
     // Track session start success
-    capture("session_configured", {
-      source: "coach_cta",
+    capture('session_configured', {
+      source: 'coach_cta',
       duration: config.duration,
       difficulty: toAnalyticsDifficulty(config.difficulty),
       session_type: toAnalyticsSessionType(config.sessionType),
@@ -271,7 +271,7 @@ export async function triggerCoachSession(userId: string, config: CoachSessionCo
     };
   } catch (error) {
     const err = error instanceof Error ? error : new Error(String(error));
-    debug.error("Failed to trigger coach session", err);
+    debug.error('Failed to trigger coach session', err);
 
     return {
       success: false,
@@ -285,39 +285,39 @@ export async function triggerCoachSession(userId: string, config: CoachSessionCo
  * Handle coach message CTA click
  * This is the main entry point when user clicks "Start Session" from a coach message
  */
-export async function handleCoachCta(userId: string, ctaType: "start_session" | "view_streak" | "view_progress", ctaData?: Record<string, unknown>): Promise<void> {
+export async function handleCoachCta(userId: string, ctaType: 'start_session' | 'view_streak' | 'view_progress', ctaData?: Record<string, unknown>): Promise<void> {
   switch (ctaType) {
-    case "start_session":
+    case 'start_session':
       if (ctaData?.duration) {
         const config: CoachSessionConfig = {
           duration: ctaData.duration as number,
-          difficulty: (ctaData.difficulty as CoachSessionConfig["difficulty"]) || "NORMAL",
-          sessionType: "FOCUS",
-          source: "COACH_RECOMMENDATION",
+          difficulty: (ctaData.difficulty as CoachSessionConfig['difficulty']) || 'NORMAL',
+          sessionType: 'FOCUS',
+          source: 'COACH_RECOMMENDATION',
           context: {
-            coachReasoning: (ctaData.reasoning as string) || "Coach recommended session",
+            coachReasoning: (ctaData.reasoning as string) || 'Coach recommended session',
           },
         };
         await triggerCoachSession(userId, config);
       }
       break;
 
-    case "view_streak":
+    case 'view_streak':
       // Navigate to streak screen
-      eventBus.publish("navigation:navigate", {
-        screen: "Streak",
+      eventBus.publish('navigation:navigate', {
+        screen: 'Streak',
       });
       break;
 
-    case "view_progress":
+    case 'view_progress':
       // Navigate to progress screen
-      eventBus.publish("navigation:navigate", {
-        screen: "Progress",
+      eventBus.publish('navigation:navigate', {
+        screen: 'Progress',
       });
       break;
 
     default:
-      debug.warn("Unknown CTA type: %s", ctaType);
+      debug.warn('Unknown CTA type: %s', ctaType);
   }
 }
 
@@ -330,7 +330,7 @@ export async function handleCoachCta(userId: string, ctaType: "start_session" | 
  * Should be called after session completion to measure conversion
  */
 export function trackCoachCtaEffectiveness(sessionId: string, config: CoachSessionConfig, sessionCompleted: boolean, sessionQuality?: number): void {
-  capture("coach_cta_effectiveness", {
+  capture('coach_cta_effectiveness', {
     session_id: sessionId,
     source: config.source,
     duration: config.duration,

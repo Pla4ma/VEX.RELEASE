@@ -34,7 +34,7 @@ export function HomeInterventionBanner({
     actionLabel: string;
     metadata?: Record<string, unknown>;
   }): void => {
-    if (!userId) return;
+    if (!userId) {return;}
 
     const normalized: ActiveIntervention = {
       ...activeIntervention,
@@ -66,7 +66,7 @@ export function HomeInterventionBanner({
     });
   }, [userId, navigation]);
 
-  if (interventionLoading || !intervention) return null;
+  if (interventionLoading || !intervention) {return null;}
 
   return (
     <CoachInterventionBanner

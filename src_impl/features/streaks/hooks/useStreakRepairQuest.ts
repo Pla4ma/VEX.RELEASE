@@ -3,17 +3,17 @@
  * 10/10 Quality: Loading states, error handling, retry logic, optimistic updates
  */
 
-import { useState, useCallback, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import * as Sentry from "@sentry/react-native";
-import { z } from "zod";
-import { useAuth } from "../../../auth/hooks/useAuth";
-import { useOfflineAwareMutation } from "../../../shared/hooks/useOfflineAwareMutation";
-import { useAnalytics } from "../../../analytics/hooks/useAnalytics";
-import { eventBus } from "../../../events";
+import { useState, useCallback, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/react-native';
+import { z } from 'zod';
+import { useAuth } from '../../../auth/hooks/useAuth';
+import { useOfflineAwareMutation } from '../../../shared/hooks/useOfflineAwareMutation';
+import { useAnalytics } from '../../../analytics/hooks/useAnalytics';
+import { eventBus } from '../../../events';
 
-import { createRepairQuest, recordRepairQuestSession, getRepairQuestStatus } from "../streak-repair-quest";
-import { fetchActiveRepairQuestEnhanced, saveRepairQuestEnhanced, updateRepairQuestEnhanced } from "../repository-enhanced";
+import { createRepairQuest, recordRepairQuestSession, getRepairQuestStatus } from '../streak-repair-quest';
+import { fetchActiveRepairQuestEnhanced, saveRepairQuestEnhanced, updateRepairQuestEnhanced } from '../repository/enhanced';
 // Schema imports - using z.any() for problematic schemas
 
 // ============================================================================
@@ -21,8 +21,8 @@ import { fetchActiveRepairQuestEnhanced, saveRepairQuestEnhanced, updateRepairQu
 // ============================================================================
 
 const QUERY_KEYS = {
-  repairQuest: (userId: string) => ["streaks", "repairQuest", userId],
-  repairQuestStatus: (userId: string) => ["streaks", "repairQuestStatus", userId],
+  repairQuest: (userId: string) => ['streaks', 'repairQuest', userId],
+  repairQuestStatus: (userId: string) => ['streaks', 'repairQuestStatus', userId],
 };
 
 const STALE_TIME = 5 * 60 * 1000; // 5 minutes
@@ -87,7 +87,7 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
     error,
     refetch: refetchQuest,
   } = useQuery({
-    queryKey: QUERY_KEYS.repairQuest(userId || ""),
+    queryKey: QUERY_KEYS.repairQuest(userId || ''),
     queryFn: async () => {
       if (!userId) {
         return null;
@@ -108,7 +108,7 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
         return z.any().parse(result.data);
       } catch (err) {
         Sentry.captureException(err, {
-          tags: { feature: "streaks", hook: "useStreakRepairQuest", operation: "fetchQuest" },
+          tags: { feature: 'streaks', hook: 'useStreakRepairQuest', operation: 'fetchQuest' },
         });
         throw err;
       }
@@ -126,7 +126,7 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
     error: statusError,
     refetch: refetchStatusFn,
   } = useQuery({
-    queryKey: QUERY_KEYS.repairQuestStatus(userId || ""),
+    queryKey: QUERY_KEYS.repairQuestStatus(userId || ''),
     queryFn: async () => {
       if (!userId) {
         return null;
@@ -137,7 +137,7 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
         return z.any().parse(statusData);
       } catch (err) {
         Sentry.captureException(err, {
-          tags: { feature: "streaks", hook: "useStreakRepairQuest", operation: "fetchStatus" },
+          tags: { feature: 'streaks', hook: 'useStreakRepairQuest', operation: 'fetchStatus' },
         });
         throw err;
       }
@@ -155,12 +155,12 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
   const createQuestMutation = useOfflineAwareMutation(
     async (previousStreak: number) => {
       if (!userId) {
-        throw new Error("User not authenticated");
+        throw new Error('User not authenticated');
       }
 
       const quest = await (createRepairQuest as any)(userId, previousStreak);
       if (!quest) {
-        throw new Error("Failed to create repair quest");
+        throw new Error('Failed to create repair quest');
       }
 
       // Persist to database
@@ -173,17 +173,17 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
     },
     {
       onSuccess: (data: unknown) => {
-        queryClient.setQueryData(QUERY_KEYS.repairQuest(userId || ""), data);
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.repairQuestStatus(userId || "") });
+        queryClient.setQueryData(QUERY_KEYS.repairQuest(userId || ''), data);
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.repairQuestStatus(userId || '') });
 
-        (track as any)("streak_repair_quest_created", {
+        (track as any)('streak_repair_quest_created', {
           questId: (data as any).id,
           previousStreak: (data as any).previousStreak,
           targetRestoreDays: (data as any).targetRestoreDays,
         });
 
-        (eventBus as any).publish("streak:repair_quest_created", {
-          userId: userId || "",
+        (eventBus as any).publish('streak:repair_quest_created', {
+          userId: userId || '',
           questId: (data as any).id,
           daysToRecover: (data as any).targetRestoreDays,
           deadline: (data as any).expiresAt,
@@ -191,7 +191,7 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
       },
       onError: (error: unknown) => {
         Sentry.captureException(error, {
-          tags: { feature: "streaks", hook: "useStreakRepairQuest", operation: "createQuest" },
+          tags: { feature: 'streaks', hook: 'useStreakRepairQuest', operation: 'createQuest' },
         });
       },
     },
@@ -200,7 +200,7 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
   const recordSessionMutation = useOfflineAwareMutation(
     async ({ sessionId, duration, qualityScore }: { sessionId: string; duration: number; qualityScore: number }) => {
       if (!userId) {
-        throw new Error("User not authenticated");
+        throw new Error('User not authenticated');
       }
 
       const result = await (recordRepairQuestSession as any)(userId, sessionId, duration, qualityScore);
@@ -208,7 +208,7 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
       if ((result as any).questCompleted && (result as any).quest) {
         // Update quest in database
         const updateResult = await (updateRepairQuestEnhanced as any)((result as any).quest.id, {
-          status: "COMPLETED",
+          status: 'COMPLETED',
           sessionsCompleted: (result as any).quest.sessionsCompleted,
           sessionIds: (result as any).quest.sessionIds,
           completedAt: Date.now(),
@@ -224,22 +224,22 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
     {
       onSuccess: (data: unknown) => {
         // Invalidate queries to refetch fresh data
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.repairQuest(userId || "") });
-        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.repairQuestStatus(userId || "") });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.repairQuest(userId || '') });
+        queryClient.invalidateQueries({ queryKey: QUERY_KEYS.repairQuestStatus(userId || '') });
 
         if ((data as any).questCompleted) {
-          (track as any)("streak_repair_quest_completed", {
+          (track as any)('streak_repair_quest_completed', {
             restoredToDays: (data as any).restoredToDays,
           });
         } else if ((data as any).questUpdated) {
-          (track as any)("streak_repair_quest_progress", {
+          (track as any)('streak_repair_quest_progress', {
             sessionsCompleted: (data as any).quest?.sessionsCompleted,
           });
         }
       },
       onError: (error: unknown) => {
         Sentry.captureException(error, {
-          tags: { feature: "streaks", hook: "useStreakRepairQuest", operation: "recordSession" },
+          tags: { feature: 'streaks', hook: 'useStreakRepairQuest', operation: 'recordSession' },
         });
       },
     },
@@ -341,7 +341,7 @@ export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
 // Utility Hook for Quest Status Only (lighter weight)
 // ============================================================================
 
-export function useRepairQuestStatus(): Pick<UseStreakRepairQuestReturn, "status" | "isStatusLoading" | "statusError" | "refetchStatus" | "canStartQuest" | "progressPercent" | "hoursRemaining"> {
+export function useRepairQuestStatus(): Pick<UseStreakRepairQuestReturn, 'status' | 'isStatusLoading' | 'statusError' | 'refetchStatus' | 'canStartQuest' | 'progressPercent' | 'hoursRemaining'> {
   const { user } = useAuth();
   const userId = (user as any)?.id;
 
@@ -351,7 +351,7 @@ export function useRepairQuestStatus(): Pick<UseStreakRepairQuestReturn, "status
     error: statusError,
     refetch: refetchStatus,
   } = useQuery({
-    queryKey: QUERY_KEYS.repairQuestStatus(userId || ""),
+    queryKey: QUERY_KEYS.repairQuestStatus(userId || ''),
     queryFn: async () => {
       if (!userId) {
         return null;
@@ -375,3 +375,4 @@ export function useRepairQuestStatus(): Pick<UseStreakRepairQuestReturn, "status
     hoursRemaining: (status as any)?.hoursRemaining ?? 0,
   };
 }
+

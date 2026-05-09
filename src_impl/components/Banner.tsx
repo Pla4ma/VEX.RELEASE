@@ -5,14 +5,14 @@
  * Part of the VEX Design System.
  */
 
-import React from "react";
-import { View, Pressable, StyleProp, ViewStyle, Image, ImageSourcePropType } from "react-native";
+import React from 'react';
+import { View, Pressable, StyleProp, ViewStyle, Image, ImageSourcePropType } from 'react-native';
 
-import { useTheme } from "../theme";
-import { Text } from "./primitives";
-import { Icon } from "../icons";
-import { Button } from "./primitives";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { useTheme } from '../theme';
+import { Text } from './primitives';
+import { Icon } from '../icons';
+import { Button } from './primitives';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 export interface BannerProps {
   /** Banner title */
@@ -20,9 +20,9 @@ export interface BannerProps {
   /** Banner description */
   description?: string;
   /** Visual variant */
-  variant?: "default" | "primary" | "success" | "warning" | "error" | "info" | "gradient";
+  variant?: 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info' | 'gradient';
   /** Size variant */
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   /** Icon name (left side) */
   icon?: string;
   /** Background image */
@@ -43,59 +43,59 @@ export interface BannerProps {
   style?: StyleProp<ViewStyle>;
 }
 
-export const Banner: React.FC<BannerProps> = ({ title, description, variant = "default", size = "md", icon, backgroundImage, actionText, onAction, secondaryActionText, onSecondaryAction, onDismiss, fullWidth = true, style }) => {
+export const Banner: React.FC<BannerProps> = ({ title, description, variant = 'default', size = 'md', icon, backgroundImage, actionText, onAction, secondaryActionText, onSecondaryAction, onDismiss, fullWidth = true, style }) => {
   const { theme } = useTheme();
 
   const getVariantStyles = () => {
     switch (variant) {
-      case "primary":
+      case 'primary':
         return {
           backgroundColor: theme.colors.primary[500],
-          textColor: "#FFFFFF",
-          iconColor: "#FFFFFF",
-          buttonVariant: "secondary" as const,
+          textColor: '#FFFFFF',
+          iconColor: '#FFFFFF',
+          buttonVariant: 'secondary' as const,
         };
-      case "success":
+      case 'success':
         return {
           backgroundColor: theme.colors.success.DEFAULT,
-          textColor: "#FFFFFF",
-          iconColor: "#FFFFFF",
-          buttonVariant: "secondary" as const,
+          textColor: '#FFFFFF',
+          iconColor: '#FFFFFF',
+          buttonVariant: 'secondary' as const,
         };
-      case "warning":
+      case 'warning':
         return {
           backgroundColor: theme.colors.warning.DEFAULT,
           textColor: theme.colors.text.primary,
           iconColor: theme.colors.text.primary,
-          buttonVariant: "primary" as const,
+          buttonVariant: 'primary' as const,
         };
-      case "error":
+      case 'error':
         return {
           backgroundColor: theme.colors.error.DEFAULT,
-          textColor: "#FFFFFF",
-          iconColor: "#FFFFFF",
-          buttonVariant: "secondary" as const,
+          textColor: '#FFFFFF',
+          iconColor: '#FFFFFF',
+          buttonVariant: 'secondary' as const,
         };
-      case "info":
+      case 'info':
         return {
           backgroundColor: theme.colors.info.DEFAULT,
-          textColor: "#FFFFFF",
-          iconColor: "#FFFFFF",
-          buttonVariant: "secondary" as const,
+          textColor: '#FFFFFF',
+          iconColor: '#FFFFFF',
+          buttonVariant: 'secondary' as const,
         };
-      case "gradient":
+      case 'gradient':
         return {
           backgroundColor: `linear-gradient(135deg, ${theme.colors.primary[500]}, ${theme.colors.accent.purple})`,
-          textColor: "#FFFFFF",
-          iconColor: "#FFFFFF",
-          buttonVariant: "secondary" as const,
+          textColor: '#FFFFFF',
+          iconColor: '#FFFFFF',
+          buttonVariant: 'secondary' as const,
         };
       default:
         return {
           backgroundColor: theme.colors.background.secondary,
           textColor: theme.colors.text.primary,
           iconColor: theme.colors.primary[500],
-          buttonVariant: "primary" as const,
+          buttonVariant: 'primary' as const,
         };
     }
   };
@@ -103,9 +103,9 @@ export const Banner: React.FC<BannerProps> = ({ title, description, variant = "d
   const variantStyles = getVariantStyles();
 
   const sizeStyles = {
-    sm: { padding: 12, iconSize: 20, titleSize: "h4" as const, descSize: "caption" as const },
-    md: { padding: 16, iconSize: 24, titleSize: "h3" as const, descSize: "body" as const },
-    lg: { padding: 20, iconSize: 32, titleSize: "h2" as const, descSize: "body" as const },
+    sm: { padding: 12, iconSize: 20, titleSize: 'h4' as const, descSize: 'caption' as const },
+    md: { padding: 16, iconSize: 24, titleSize: 'h3' as const, descSize: 'body' as const },
+    lg: { padding: 20, iconSize: 32, titleSize: 'h2' as const, descSize: 'body' as const },
   };
 
   const currentSize = sizeStyles[size];
@@ -117,13 +117,13 @@ export const Banner: React.FC<BannerProps> = ({ title, description, variant = "d
         {
           backgroundColor: variantStyles.backgroundColor,
           padding: currentSize.padding,
-          borderRadius: size === "sm" ? 8 : size === "md" ? 12 : 16,
+          borderRadius: size === 'sm' ? 8 : size === 'md' ? 12 : 16,
         },
         fullWidth && styles.fullWidth,
         style,
       ]}
     >
-      {backgroundImage && <Image source={backgroundImage} resizeMode="cover" style={[styles.backgroundImage, { borderRadius: size === "sm" ? 8 : size === "md" ? 12 : 16 }]} />}
+      {backgroundImage && <Image source={backgroundImage} resizeMode="cover" style={[styles.backgroundImage, { borderRadius: size === 'sm' ? 8 : size === 'md' ? 12 : 16 }]} />}
 
       <View style={styles.content}>
         {icon && (
@@ -133,7 +133,7 @@ export const Banner: React.FC<BannerProps> = ({ title, description, variant = "d
         )}
 
         <View style={styles.textContainer}>
-          <Text variant={currentSize.titleSize} style={{ color: variantStyles.textColor, fontWeight: "600" }}>
+          <Text variant={currentSize.titleSize} style={{ color: variantStyles.textColor, fontWeight: '600' }}>
             {title}
           </Text>
           {description && (
@@ -177,36 +177,36 @@ export const Banner: React.FC<BannerProps> = ({ title, description, variant = "d
 
 const styles = createSheet({
   container: {
-    overflow: "hidden",
-    position: "relative",
+    overflow: 'hidden',
+    position: 'relative',
   },
   fullWidth: {
-    width: "100%",
+    width: '100%',
   },
   backgroundImage: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    resizeMode: "cover",
+    resizeMode: 'cover',
     opacity: 0.3,
   },
   content: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
   },
   iconContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   textContainer: {
     flex: 1,
   },
   actions: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   dismissButton: {
     marginLeft: 8,

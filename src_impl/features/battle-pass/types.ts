@@ -42,7 +42,7 @@ export interface BattlePassTier {
   isMajorMilestone: boolean;
 }
 
-export type RewardType = "XP" | "COINS" | "GEMS" | "ITEM" | "COSMETIC" | "TITLE" | "BOOST" | "STREAK_SHIELD" | "AVATAR_FRAME" | "EMOTE";
+export type RewardType = 'XP' | 'COINS' | 'GEMS' | 'ITEM' | 'COSMETIC' | 'TITLE' | 'BOOST' | 'STREAK_SHIELD' | 'AVATAR_FRAME' | 'EMOTE';
 
 // ============================================================================
 // User Battle Pass Progress
@@ -81,7 +81,7 @@ export interface UserBattlePassSummary {
 // Tier Claim Types
 // ============================================================================
 
-export type ClaimStatus = "AVAILABLE" | "CLAIMED" | "LOCKED" | "PREMIUM_REQUIRED";
+export type ClaimStatus = 'AVAILABLE' | 'CLAIMED' | 'LOCKED' | 'PREMIUM_REQUIRED';
 
 export interface TierClaimState {
   tierNumber: number;
@@ -101,13 +101,13 @@ export interface TierReward {
   name: string;
   description: string;
   iconUrl: string | null;
-  rarity: "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+  rarity: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
 }
 
 export interface ClaimResult {
   success: boolean;
   tierNumber: number;
-  track: "FREE" | "PREMIUM";
+  track: 'FREE' | 'PREMIUM';
   rewards: TierReward[];
   error: string | null;
 }
@@ -166,8 +166,8 @@ export interface CreateBattlePassTierInput {
   seasonId: string;
   tierNumber: number;
   xpRequired: number;
-  freeReward?: Omit<TierReward, "id">;
-  premiumReward?: Omit<TierReward, "id">;
+  freeReward?: Omit<TierReward, 'id'>;
+  premiumReward?: Omit<TierReward, 'id'>;
   isMajorMilestone?: boolean;
 }
 
@@ -182,13 +182,13 @@ export interface ClaimTierInput {
   userId: string;
   seasonId: string;
   tierNumber: number;
-  track: "FREE" | "PREMIUM";
+  track: 'FREE' | 'PREMIUM';
 }
 
 export interface PurchasePremiumInput {
   userId: string;
   seasonId: string;
-  paymentMethod: "GEMS" | "REAL_MONEY";
+  paymentMethod: 'GEMS' | 'REAL_MONEY';
 }
 
 // ============================================================================

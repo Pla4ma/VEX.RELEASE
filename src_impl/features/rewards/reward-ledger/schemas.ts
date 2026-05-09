@@ -11,7 +11,7 @@ export const RewardLedgerStateSchema = z.enum([
   'DELIVERED',
   'FAILED',
   'EXPIRED',
-  'RETRYING'
+  'RETRYING',
 ]);
 
 export type RewardLedgerState = z.infer<typeof RewardLedgerStateSchema>;
@@ -22,7 +22,7 @@ export const RewardTypeSchema = z.enum([
   'GEMS',
   'ITEM',
   'BADGE',
-  'STREAK_SHIELD'
+  'STREAK_SHIELD',
 ]);
 
 export type RewardType = z.infer<typeof RewardTypeSchema>;

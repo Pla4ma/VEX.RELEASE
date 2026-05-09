@@ -2,55 +2,55 @@
  * Squads Service Tests
  */
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import * as service from "../service";
-import * as repository from "../repository";
-import { SquadRole, SquadErrorCode } from "../schemas";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import * as service from '../service';
+import * as repository from '../repository';
+import { SquadRole, SquadErrorCode } from '../schemas';
 
 // Mock repository
-vi.mock("../repository");
-vi.mock("../../../events", () => ({
+vi.mock('../repository');
+vi.mock('../../../events', () => ({
   eventBus: { publish: vi.fn() },
 }));
 
-describe("Squads Service", () => {
+describe('Squads Service', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe("Permission System", () => {
-    it("should return correct permissions for FOUNDER", () => {
-      const perms = service.getRolePermissions("FOUNDER");
-      expect(perms).toContain("DELETE_SQUAD");
-      expect(perms).toContain("MANAGE_ROLES");
-      expect(perms).toContain("KICK_MEMBERS");
+  describe('Permission System', () => {
+    it('should return correct permissions for FOUNDER', () => {
+      const perms = service.getRolePermissions('FOUNDER');
+      expect(perms).toContain('DELETE_SQUAD');
+      expect(perms).toContain('MANAGE_ROLES');
+      expect(perms).toContain('KICK_MEMBERS');
     });
 
-    it("should return correct permissions for MEMBER", () => {
-      const perms = service.getRolePermissions("MEMBER");
-      expect(perms).toContain("VIEW_SQUAD");
-      expect(perms).not.toContain("DELETE_SQUAD");
-      expect(perms).not.toContain("KICK_MEMBERS");
+    it('should return correct permissions for MEMBER', () => {
+      const perms = service.getRolePermissions('MEMBER');
+      expect(perms).toContain('VIEW_SQUAD');
+      expect(perms).not.toContain('DELETE_SQUAD');
+      expect(perms).not.toContain('KICK_MEMBERS');
     });
 
-    it("should check permissions correctly", () => {
-      const member = { role: "ADMIN" as SquadRole } as any;
-      expect(service.hasPermission(member, "KICK_MEMBERS")).toBe(true);
-      expect(service.hasPermission(member, "DELETE_SQUAD")).toBe(false);
+    it('should check permissions correctly', () => {
+      const member = { role: 'ADMIN' as SquadRole } as any;
+      expect(service.hasPermission(member, 'KICK_MEMBERS')).toBe(true);
+      expect(service.hasPermission(member, 'DELETE_SQUAD')).toBe(false);
     });
 
-    it("should check role hierarchy correctly", () => {
-      expect(service.canManageRole("FOUNDER", "ADMIN")).toBe(true);
-      expect(service.canManageRole("ADMIN", "FOUNDER")).toBe(false);
-      expect(service.canManageRole("MEMBER", "ADMIN")).toBe(false);
+    it('should check role hierarchy correctly', () => {
+      expect(service.canManageRole('FOUNDER', 'ADMIN')).toBe(true);
+      expect(service.canManageRole('ADMIN', 'FOUNDER')).toBe(false);
+      expect(service.canManageRole('MEMBER', 'ADMIN')).toBe(false);
     });
   });
 
-  describe("createSquad", () => {
-    it("should create a squad successfully", async () => {
+  describe('createSquad', () => {
+    it('should create a squad successfully', async () => {
       const mockSquad = {
-        id: "squad-1",
-        name: "Test Squad",
+        id: 'squad-1',
+        name: 'Test Squad',
         memberCount: 1,
         maxMembers: 10,
       };
@@ -58,12 +58,12 @@ describe("Squads Service", () => {
       vi.mocked(repository.createSquad).mockResolvedValue(mockSquad as any);
       vi.mocked(repository.addSquadMember).mockResolvedValue({} as any);
 
-      const result = await service.createSquad("user-1", {
-        name: "Test Squad",
+      const result = await service.createSquad('user-1', {
+        name: 'Test Squad',
         description: null,
         avatarUrl: null,
         isPublic: true,
-        joinRequirements: "APPROVAL",
+        joinRequirements: 'APPROVAL',
         maxMembers: 10,
       });
 
@@ -71,185 +71,185 @@ describe("Squads Service", () => {
       expect(repository.createSquad).toHaveBeenCalled();
     });
 
-    it("should throw DUPLICATE_MEMBERSHIP if user already in squad", async () => {
-      vi.mocked(repository.checkDuplicateMembership).mockResolvedValue({ id: "existing" } as any);
+    it('should throw DUPLICATE_MEMBERSHIP if user already in squad', async () => {
+      vi.mocked(repository.checkDuplicateMembership).mockResolvedValue({ id: 'existing' } as any);
 
       await expect(
-        service.createSquad("user-1", {
-          name: "Test Squad",
+        service.createSquad('user-1', {
+          name: 'Test Squad',
           description: null,
           avatarUrl: null,
           isPublic: true,
-          joinRequirements: "APPROVAL",
+          joinRequirements: 'APPROVAL',
           maxMembers: 10,
         }),
-      ).rejects.toThrow("DUPLICATE_MEMBERSHIP");
+      ).rejects.toThrow('DUPLICATE_MEMBERSHIP');
     });
   });
 
-  describe("inviteToSquad", () => {
-    it("should create invite successfully", async () => {
-      vi.mocked(repository.fetchSquadMember).mockResolvedValue({ role: "FOUNDER", isActive: true } as any);
-      vi.mocked(repository.fetchSquadById).mockResolvedValue({ id: "squad-1", memberCount: 1, maxMembers: 10, name: "Test" } as any);
+  describe('inviteToSquad', () => {
+    it('should create invite successfully', async () => {
+      vi.mocked(repository.fetchSquadMember).mockResolvedValue({ role: 'FOUNDER', isActive: true } as any);
+      vi.mocked(repository.fetchSquadById).mockResolvedValue({ id: 'squad-1', memberCount: 1, maxMembers: 10, name: 'Test' } as any);
       vi.mocked(repository.checkExistingInvite).mockResolvedValue(null);
       vi.mocked(repository.fetchSquadMember).mockResolvedValueOnce(null);
-      vi.mocked(repository.createSquadInvite).mockResolvedValue({ id: "invite-1" } as any);
+      vi.mocked(repository.createSquadInvite).mockResolvedValue({ id: 'invite-1' } as any);
 
       const result = await service.inviteToSquad({
-        squadId: "squad-1",
-        invitedUserId: "user-2",
-        roleOffered: "MEMBER",
+        squadId: 'squad-1',
+        invitedUserId: 'user-2',
+        roleOffered: 'MEMBER',
         message: null,
         expiresInHours: 48,
-        invitedBy: "user-1",
+        invitedBy: 'user-1',
       });
 
-      expect(result.id).toBe("invite-1");
+      expect(result.id).toBe('invite-1');
     });
 
-    it("should throw SQUAD_FULL when squad is at capacity", async () => {
-      vi.mocked(repository.fetchSquadMember).mockResolvedValue({ role: "FOUNDER", isActive: true } as any);
-      vi.mocked(repository.fetchSquadById).mockResolvedValue({ id: "squad-1", memberCount: 10, maxMembers: 10, name: "Test" } as any);
+    it('should throw SQUAD_FULL when squad is at capacity', async () => {
+      vi.mocked(repository.fetchSquadMember).mockResolvedValue({ role: 'FOUNDER', isActive: true } as any);
+      vi.mocked(repository.fetchSquadById).mockResolvedValue({ id: 'squad-1', memberCount: 10, maxMembers: 10, name: 'Test' } as any);
 
       await expect(
         service.inviteToSquad({
-          squadId: "squad-1",
-          invitedUserId: "user-2",
-          roleOffered: "MEMBER",
+          squadId: 'squad-1',
+          invitedUserId: 'user-2',
+          roleOffered: 'MEMBER',
           message: null,
           expiresInHours: 48,
-          invitedBy: "user-1",
+          invitedBy: 'user-1',
         }),
-      ).rejects.toThrow("SQUAD_FULL");
+      ).rejects.toThrow('SQUAD_FULL');
     });
 
-    it("should throw CANNOT_INVITE_SELF when inviting self", async () => {
-      vi.mocked(repository.fetchSquadMember).mockResolvedValue({ role: "FOUNDER", isActive: true } as any);
-      vi.mocked(repository.fetchSquadById).mockResolvedValue({ id: "squad-1", memberCount: 1, maxMembers: 10, name: "Test" } as any);
+    it('should throw CANNOT_INVITE_SELF when inviting self', async () => {
+      vi.mocked(repository.fetchSquadMember).mockResolvedValue({ role: 'FOUNDER', isActive: true } as any);
+      vi.mocked(repository.fetchSquadById).mockResolvedValue({ id: 'squad-1', memberCount: 1, maxMembers: 10, name: 'Test' } as any);
 
       await expect(
         service.inviteToSquad({
-          squadId: "squad-1",
-          invitedUserId: "user-1",
-          roleOffered: "MEMBER",
+          squadId: 'squad-1',
+          invitedUserId: 'user-1',
+          roleOffered: 'MEMBER',
           message: null,
           expiresInHours: 48,
-          invitedBy: "user-1",
+          invitedBy: 'user-1',
         }),
-      ).rejects.toThrow("CANNOT_INVITE_SELF");
+      ).rejects.toThrow('CANNOT_INVITE_SELF');
     });
 
-    it("should throw INVALID_ROLE_HIERARCHY when offering higher role", async () => {
-      vi.mocked(repository.fetchSquadMember).mockResolvedValue({ role: "ADMIN", isActive: true } as any);
-      vi.mocked(repository.fetchSquadById).mockResolvedValue({ id: "squad-1", memberCount: 1, maxMembers: 10, name: "Test" } as any);
+    it('should throw INVALID_ROLE_HIERARCHY when offering higher role', async () => {
+      vi.mocked(repository.fetchSquadMember).mockResolvedValue({ role: 'ADMIN', isActive: true } as any);
+      vi.mocked(repository.fetchSquadById).mockResolvedValue({ id: 'squad-1', memberCount: 1, maxMembers: 10, name: 'Test' } as any);
       vi.mocked(repository.checkExistingInvite).mockResolvedValue(null);
       vi.mocked(repository.fetchSquadMember).mockResolvedValueOnce(null);
 
       await expect(
         service.inviteToSquad({
-          squadId: "squad-1",
-          invitedUserId: "user-2",
-          roleOffered: "FOUNDER",
+          squadId: 'squad-1',
+          invitedUserId: 'user-2',
+          roleOffered: 'FOUNDER',
           message: null,
           expiresInHours: 48,
-          invitedBy: "user-1",
+          invitedBy: 'user-1',
         }),
-      ).rejects.toThrow("INVALID_ROLE_HIERARCHY");
+      ).rejects.toThrow('INVALID_ROLE_HIERARCHY');
     });
   });
 
-  describe("respondToInvite", () => {
-    it("should accept invite and add member", async () => {
+  describe('respondToInvite', () => {
+    it('should accept invite and add member', async () => {
       vi.mocked(repository.fetchSquadInviteById).mockResolvedValue({
-        id: "invite-1",
-        squadId: "squad-1",
-        invitedUserId: "user-2",
-        invitedBy: "user-1",
-        roleOffered: "MEMBER",
-        status: "PENDING",
+        id: 'invite-1',
+        squadId: 'squad-1',
+        invitedUserId: 'user-2',
+        invitedBy: 'user-1',
+        roleOffered: 'MEMBER',
+        status: 'PENDING',
         expiresAt: Date.now() + 10000,
       } as any);
-      vi.mocked(repository.fetchSquadById).mockResolvedValue({ id: "squad-1", memberCount: 1, maxMembers: 10 } as any);
+      vi.mocked(repository.fetchSquadById).mockResolvedValue({ id: 'squad-1', memberCount: 1, maxMembers: 10 } as any);
       vi.mocked(repository.checkDuplicateMembership).mockResolvedValue(null);
       vi.mocked(repository.addSquadMember).mockResolvedValue({} as any);
       vi.mocked(repository.updateSquadInviteStatus).mockResolvedValue({} as any);
 
-      const result = await service.respondToInvite("user-2", { inviteId: "invite-1", accept: true });
+      const result = await service.respondToInvite('user-2', { inviteId: 'invite-1', accept: true });
 
       expect(result).toBeTruthy();
-      expect(repository.addSquadMember).toHaveBeenCalledWith("squad-1", "user-2", "MEMBER", "user-1");
+      expect(repository.addSquadMember).toHaveBeenCalledWith('squad-1', 'user-2', 'MEMBER', 'user-1');
     });
 
-    it("should throw INVITE_EXPIRED for expired invite", async () => {
+    it('should throw INVITE_EXPIRED for expired invite', async () => {
       vi.mocked(repository.fetchSquadInviteById).mockResolvedValue({
-        id: "invite-1",
-        squadId: "squad-1",
-        invitedUserId: "user-2",
-        status: "PENDING",
+        id: 'invite-1',
+        squadId: 'squad-1',
+        invitedUserId: 'user-2',
+        status: 'PENDING',
         expiresAt: Date.now() - 10000,
       } as any);
       vi.mocked(repository.updateSquadInviteStatus).mockResolvedValue({} as any);
 
-      await expect(service.respondToInvite("user-2", { inviteId: "invite-1", accept: true })).rejects.toThrow("INVITE_EXPIRED");
+      await expect(service.respondToInvite('user-2', { inviteId: 'invite-1', accept: true })).rejects.toThrow('INVITE_EXPIRED');
     });
 
-    it("should throw ALREADY_MEMBER if already in another squad", async () => {
+    it('should throw ALREADY_MEMBER if already in another squad', async () => {
       vi.mocked(repository.fetchSquadInviteById).mockResolvedValue({
-        id: "invite-1",
-        squadId: "squad-1",
-        invitedUserId: "user-2",
-        invitedBy: "user-1",
-        roleOffered: "MEMBER",
-        status: "PENDING",
+        id: 'invite-1',
+        squadId: 'squad-1',
+        invitedUserId: 'user-2',
+        invitedBy: 'user-1',
+        roleOffered: 'MEMBER',
+        status: 'PENDING',
         expiresAt: Date.now() + 10000,
       } as any);
-      vi.mocked(repository.fetchSquadById).mockResolvedValue({ id: "squad-1", memberCount: 1, maxMembers: 10 } as any);
-      vi.mocked(repository.checkDuplicateMembership).mockResolvedValue({ id: "other-squad" } as any);
+      vi.mocked(repository.fetchSquadById).mockResolvedValue({ id: 'squad-1', memberCount: 1, maxMembers: 10 } as any);
+      vi.mocked(repository.checkDuplicateMembership).mockResolvedValue({ id: 'other-squad' } as any);
       vi.mocked(repository.updateSquadInviteStatus).mockResolvedValue({} as any);
 
-      await expect(service.respondToInvite("user-2", { inviteId: "invite-1", accept: true })).rejects.toThrow("DUPLICATE_MEMBERSHIP");
+      await expect(service.respondToInvite('user-2', { inviteId: 'invite-1', accept: true })).rejects.toThrow('DUPLICATE_MEMBERSHIP');
     });
   });
 
-  describe("leaveSquad", () => {
-    it("should allow member to leave", async () => {
+  describe('leaveSquad', () => {
+    it('should allow member to leave', async () => {
       vi.mocked(repository.fetchSquadMember).mockResolvedValue({
-        squadId: "squad-1",
-        userId: "user-1",
-        role: "MEMBER",
+        squadId: 'squad-1',
+        userId: 'user-1',
+        role: 'MEMBER',
         isActive: true,
       } as any);
       vi.mocked(repository.removeSquadMember).mockResolvedValue(undefined);
       vi.mocked(repository.fetchSquadMembers).mockResolvedValue([]);
       vi.mocked(repository.updateSquadStats).mockResolvedValue(undefined);
 
-      await service.leaveSquad("user-1", { squadId: "squad-1", newFounderId: null });
+      await service.leaveSquad('user-1', { squadId: 'squad-1', newFounderId: null });
 
-      expect(repository.removeSquadMember).toHaveBeenCalledWith("squad-1", "user-1");
+      expect(repository.removeSquadMember).toHaveBeenCalledWith('squad-1', 'user-1');
     });
 
-    it("should throw FOUNDER_TRANSFER_REQUIRED for founder without transfer", async () => {
+    it('should throw FOUNDER_TRANSFER_REQUIRED for founder without transfer', async () => {
       vi.mocked(repository.fetchSquadMember).mockResolvedValue({
-        squadId: "squad-1",
-        userId: "user-1",
-        role: "FOUNDER",
+        squadId: 'squad-1',
+        userId: 'user-1',
+        role: 'FOUNDER',
         isActive: true,
       } as any);
 
-      await expect(service.leaveSquad("user-1", { squadId: "squad-1", newFounderId: null })).rejects.toThrow("FOUNDER_TRANSFER_REQUIRED");
+      await expect(service.leaveSquad('user-1', { squadId: 'squad-1', newFounderId: null })).rejects.toThrow('FOUNDER_TRANSFER_REQUIRED');
     });
 
-    it("should transfer ownership when founder leaves with transfer", async () => {
+    it('should transfer ownership when founder leaves with transfer', async () => {
       vi.mocked(repository.fetchSquadMember).mockResolvedValueOnce({
-        squadId: "squad-1",
-        userId: "user-1",
-        role: "FOUNDER",
+        squadId: 'squad-1',
+        userId: 'user-1',
+        role: 'FOUNDER',
         isActive: true,
       } as any);
       vi.mocked(repository.fetchSquadMember).mockResolvedValueOnce({
-        squadId: "squad-1",
-        userId: "user-2",
-        role: "ADMIN",
+        squadId: 'squad-1',
+        userId: 'user-2',
+        role: 'ADMIN',
         isActive: true,
       } as any);
       vi.mocked(repository.transferFounderRole).mockResolvedValue(undefined);
@@ -257,91 +257,91 @@ describe("Squads Service", () => {
       vi.mocked(repository.fetchSquadMembers).mockResolvedValue([]);
       vi.mocked(repository.updateSquadStats).mockResolvedValue(undefined);
 
-      await service.leaveSquad("user-1", { squadId: "squad-1", newFounderId: "user-2" });
+      await service.leaveSquad('user-1', { squadId: 'squad-1', newFounderId: 'user-2' });
 
-      expect(repository.transferFounderRole).toHaveBeenCalledWith("squad-1", "user-2");
+      expect(repository.transferFounderRole).toHaveBeenCalledWith('squad-1', 'user-2');
     });
   });
 
-  describe("kickMember", () => {
-    it("should kick member with sufficient permissions", async () => {
+  describe('kickMember', () => {
+    it('should kick member with sufficient permissions', async () => {
       vi.mocked(repository.fetchSquadMember).mockResolvedValueOnce({
-        role: "ADMIN",
+        role: 'ADMIN',
         isActive: true,
       } as any);
       vi.mocked(repository.fetchSquadMember).mockResolvedValueOnce({
-        role: "MEMBER",
+        role: 'MEMBER',
         isActive: true,
       } as any);
       vi.mocked(repository.removeSquadMember).mockResolvedValue(undefined);
       vi.mocked(repository.fetchSquadMembers).mockResolvedValue([]);
       vi.mocked(repository.updateSquadStats).mockResolvedValue(undefined);
 
-      await service.kickMember("user-1", {
-        squadId: "squad-1",
-        memberUserId: "user-2",
-        reason: "Violation",
+      await service.kickMember('user-1', {
+        squadId: 'squad-1',
+        memberUserId: 'user-2',
+        reason: 'Violation',
       });
 
-      expect(repository.removeSquadMember).toHaveBeenCalledWith("squad-1", "user-2");
+      expect(repository.removeSquadMember).toHaveBeenCalledWith('squad-1', 'user-2');
     });
 
-    it("should throw CANNOT_KICK_FOUNDER when trying to kick founder", async () => {
+    it('should throw CANNOT_KICK_FOUNDER when trying to kick founder', async () => {
       vi.mocked(repository.fetchSquadMember).mockResolvedValueOnce({
-        role: "ADMIN",
+        role: 'ADMIN',
         isActive: true,
       } as any);
       vi.mocked(repository.fetchSquadMember).mockResolvedValueOnce({
-        role: "FOUNDER",
+        role: 'FOUNDER',
         isActive: true,
       } as any);
 
       await expect(
-        service.kickMember("user-1", {
-          squadId: "squad-1",
-          memberUserId: "user-2",
-          reason: "Violation",
+        service.kickMember('user-1', {
+          squadId: 'squad-1',
+          memberUserId: 'user-2',
+          reason: 'Violation',
         }),
-      ).rejects.toThrow("CANNOT_KICK_FOUNDER");
+      ).rejects.toThrow('CANNOT_KICK_FOUNDER');
     });
   });
 
-  describe("updateMemberRole", () => {
-    it("should update role successfully", async () => {
+  describe('updateMemberRole', () => {
+    it('should update role successfully', async () => {
       vi.mocked(repository.fetchSquadMember).mockResolvedValueOnce({
-        role: "FOUNDER",
+        role: 'FOUNDER',
         isActive: true,
       } as any);
       vi.mocked(repository.fetchSquadMember).mockResolvedValueOnce({
-        role: "MEMBER",
+        role: 'MEMBER',
         isActive: true,
       } as any);
       vi.mocked(repository.updateSquadMemberRole).mockResolvedValue({} as any);
 
-      await service.updateMemberRole("user-1", {
-        squadId: "squad-1",
-        memberUserId: "user-2",
-        newRole: "ADMIN",
+      await service.updateMemberRole('user-1', {
+        squadId: 'squad-1',
+        memberUserId: 'user-2',
+        newRole: 'ADMIN',
       });
 
-      expect(repository.updateSquadMemberRole).toHaveBeenCalledWith("squad-1", "user-2", "ADMIN");
+      expect(repository.updateSquadMemberRole).toHaveBeenCalledWith('squad-1', 'user-2', 'ADMIN');
     });
 
-    it("should throw when trying to change founder role directly", async () => {
+    it('should throw when trying to change founder role directly', async () => {
       vi.mocked(repository.fetchSquadMember).mockResolvedValueOnce({
-        role: "ADMIN",
+        role: 'ADMIN',
         isActive: true,
       } as any);
       vi.mocked(repository.fetchSquadMember).mockResolvedValueOnce({
-        role: "FOUNDER",
+        role: 'FOUNDER',
         isActive: true,
       } as any);
 
       await expect(
-        service.updateMemberRole("user-1", {
-          squadId: "squad-1",
-          memberUserId: "user-2",
-          newRole: "ADMIN",
+        service.updateMemberRole('user-1', {
+          squadId: 'squad-1',
+          memberUserId: 'user-2',
+          newRole: 'ADMIN',
         }),
       ).rejects.toThrow();
     });

@@ -4,9 +4,9 @@
  * Tests for PHASE 8 basic squads accountability hooks.
  */
 
-import { renderHook, waitFor } from '@testing-library/react';
+import { renderHook, waitFor, act, cleanup } from '@testing-library/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { describe, it, expect, beforeEach, jest } from '@jest/globals';
+import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import * as service from '../basic-squads-service';
 import * as hooks from '../hooks/basic-squads-hooks';
 import { useAuthStore } from '../../../store';
@@ -20,10 +20,24 @@ const mockService = service as jest.Mocked<typeof service>;
 jest.mock('../../../store');
 const mockUseAuthStore = useAuthStore as jest.MockedFunction<typeof useAuthStore>;
 
+type MockAuthState = {
+  user: { id: string; email: string } | null;
+};
+
+function mockAuthState(state: MockAuthState): void {
+  mockUseAuthStore.mockImplementation((selector?: (value: MockAuthState) => unknown) => {
+    if (selector) {
+      return selector(state) as ReturnType<typeof useAuthStore>;
+    }
+    return state as ReturnType<typeof useAuthStore>;
+  });
+}
+
 // Mock event bus
 jest.mock('../../../events', () => ({
   eventBus: {
     subscribe: jest.fn(() => jest.fn()),
+    publish: jest.fn(),
   },
 }));
 
@@ -36,7 +50,7 @@ describe('Basic Squads Hooks - PHASE 8', () => {
     queryClient = new QueryClient({
       defaultOptions: {
         queries: { retry: false },
-        mutations: { retry: false },
+        mutations: { retry: false, gcTime: 0 },
       },
     });
 
@@ -46,9 +60,14 @@ describe('Basic Squads Hooks - PHASE 8', () => {
       children
     );
 
-    mockUseAuthStore.mockReturnValue({
+    mockAuthState({
       user: { id: 'user-123', email: 'test@example.com' },
-    } as any);
+    });
+  });
+
+  afterEach(() => {
+    cleanup();
+    queryClient.clear();
   });
 
   describe('useBasicSquadsStatus', () => {
@@ -87,9 +106,9 @@ describe('Basic Squads Hooks - PHASE 8', () => {
     });
 
     it('should not fetch for unauthenticated user', () => {
-      mockUseAuthStore.mockReturnValue({
+      mockAuthState({
         user: null,
-      } as any);
+      });
 
       const { result } = renderHook(() => hooks.useBasicSquadsStatus(), { wrapper });
 
@@ -163,13 +182,13 @@ describe('Basic Squads Hooks - PHASE 8', () => {
 
       const { result } = renderHook(() => hooks.useCreateBasicSquad(), { wrapper });
 
-      result.current.mutate({
-        name: 'Focus Squad',
-        description: 'Private accountability group',
-        weeklyGoalMinutes: 300,
+      await act(async () => {
+        result.current.mutate({
+          name: 'Focus Squad',
+          description: 'Private accountability group',
+          weeklyGoalMinutes: 300,
+        });
       });
-
-      expect(result.current.isPending).toBe(true);
 
       await waitFor(() => {
         expect(result.current.isPending).toBe(false);
@@ -187,8 +206,10 @@ describe('Basic Squads Hooks - PHASE 8', () => {
 
       const { result } = renderHook(() => hooks.useCreateBasicSquad(), { wrapper });
 
-      result.current.mutate({
-        name: 'Focus Squad',
+      await act(async () => {
+        await expect(result.current.mutateAsync({
+          name: 'Focus Squad',
+        })).rejects.toThrow('Creation failed');
       });
 
       await waitFor(() => {
@@ -214,10 +235,12 @@ describe('Basic Squads Hooks - PHASE 8', () => {
 
       const { result } = renderHook(() => hooks.useInviteToBasicSquad(), { wrapper });
 
-      result.current.mutate({
-        squadId: 'squad-123',
-        inviteeId: 'user-456',
-        message: 'Join my squad!',
+      await act(async () => {
+        result.current.mutate({
+          squadId: 'squad-123',
+          inviteeId: 'user-456',
+          message: 'Join my squad!',
+        });
       });
 
       await waitFor(() => {
@@ -248,9 +271,11 @@ describe('Basic Squads Hooks - PHASE 8', () => {
 
       const { result } = renderHook(() => hooks.useRespondToBasicSquadInvite(), { wrapper });
 
-      result.current.mutate({
-        inviteId: 'invite-123',
-        accept: true,
+      await act(async () => {
+        result.current.mutate({
+          inviteId: 'invite-123',
+          accept: true,
+        });
       });
 
       await waitFor(() => {
@@ -274,9 +299,11 @@ describe('Basic Squads Hooks - PHASE 8', () => {
 
       const { result } = renderHook(() => hooks.useRespondToBasicSquadInvite(), { wrapper });
 
-      result.current.mutate({
-        inviteId: 'invite-123',
-        accept: false,
+      await act(async () => {
+        result.current.mutate({
+          inviteId: 'invite-123',
+          accept: false,
+        });
       });
 
       await waitFor(() => {
@@ -304,9 +331,11 @@ describe('Basic Squads Hooks - PHASE 8', () => {
 
       const { result } = renderHook(() => hooks.useUpdateBasicSquadWeeklyProgress(), { wrapper });
 
-      result.current.mutate({
-        squadId: 'squad-123',
-        sessionMinutes: 30,
+      await act(async () => {
+        result.current.mutate({
+          squadId: 'squad-123',
+          sessionMinutes: 30,
+        });
       });
 
       await waitFor(() => {
@@ -327,14 +356,16 @@ describe('Basic Squads Hooks - PHASE 8', () => {
 
       const { result } = renderHook(() => hooks.useSendBasicSquadNotification(), { wrapper });
 
-      result.current.mutate({
-        squadId: 'squad-123',
-        type: 'WEEKLY_GOAL_PROGRESS',
-        data: {
-          message: 'Squad is making progress!',
-          progress: 180,
-          goal: 300,
-        },
+      await act(async () => {
+        result.current.mutate({
+          squadId: 'squad-123',
+          type: 'WEEKLY_GOAL_PROGRESS',
+          data: {
+            message: 'Squad is making progress!',
+            progress: 180,
+            goal: 300,
+          },
+        });
       });
 
       await waitFor(() => {

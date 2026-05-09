@@ -1,14 +1,14 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
+import { captureSilentFailure } from '../../../utils/silent-failure';
 /**
  * Analytics Storage Tests
  * Comprehensive tests for storage operations including failure scenarios
  */
 
-import { uploadExportData, downloadExportData, deleteExportData, getStorageMetrics, cleanupOldExports, AnalyticsStorageError } from "../storage";
-import { getSupabaseClient } from "../../../config/supabase";
+import { uploadExportData, downloadExportData, deleteExportData, getStorageMetrics, cleanupOldExports, AnalyticsStorageError } from '../storage';
+import { getSupabaseClient } from '../../../config/supabase';
 
 // Mock Supabase
-jest.mock("../../../config/supabase", () => ({
+jest.mock('../../../config/supabase', () => ({
   getSupabaseClient: jest.fn(),
   handleSupabaseError: jest.fn((error) => {
     throw new Error(error.message);
@@ -16,12 +16,12 @@ jest.mock("../../../config/supabase", () => ({
 }));
 
 // Mock Sentry
-jest.mock("@sentry/react-native", () => ({
+jest.mock('@sentry/react-native', () => ({
   addBreadcrumb: jest.fn(),
   captureException: jest.fn(),
 }));
 
-describe("AnalyticsStorage", () => {
+describe('AnalyticsStorage', () => {
   let mockSupabase: {
     storage: {
       from: jest.Mock;
@@ -46,13 +46,13 @@ describe("AnalyticsStorage", () => {
     (getSupabaseClient as jest.Mock).mockReturnValue(mockSupabase);
   });
 
-  describe("uploadExportData", () => {
-    it("should upload JSON data successfully", async () => {
+  describe('uploadExportData', () => {
+    it('should upload JSON data successfully', async () => {
       const mockData = { sessions: [{ timestamp: 1, value: 100 }] };
-      const mockUrl = "https://example.com/signed-url";
+      const mockUrl = 'https://example.com/signed-url';
 
       mockSupabase.storage.from().upload.mockResolvedValue({
-        data: { path: "test-job-id.json" },
+        data: { path: 'test-job-id.json' },
         error: null,
       });
 
@@ -61,7 +61,7 @@ describe("AnalyticsStorage", () => {
         error: null,
       });
 
-      const result = await uploadExportData("test-job-id", mockData, "json", "user-123");
+      const result = await uploadExportData('test-job-id', mockData, 'json', 'user-123');
 
       expect(result.url).toBe(mockUrl);
       expect(result.size).toBeGreaterThan(0);
@@ -70,309 +70,309 @@ describe("AnalyticsStorage", () => {
       expect(result.expiresAt).toBeGreaterThan(result.uploadedAt);
     });
 
-    it("should upload CSV data successfully", async () => {
+    it('should upload CSV data successfully', async () => {
       const mockData = [
         { timestamp: 1, value: 100 },
         { timestamp: 2, value: 200 },
       ];
 
       mockSupabase.storage.from().upload.mockResolvedValue({
-        data: { path: "test-job-id.csv" },
+        data: { path: 'test-job-id.csv' },
         error: null,
       });
 
       mockSupabase.storage.from().createSignedUrl.mockResolvedValue({
-        data: { signedUrl: "https://example.com/csv-url" },
+        data: { signedUrl: 'https://example.com/csv-url' },
         error: null,
       });
 
-      const result = await uploadExportData("test-job-id", mockData, "csv", "user-123");
+      const result = await uploadExportData('test-job-id', mockData, 'csv', 'user-123');
 
-      expect(result.url).toBe("https://example.com/csv-url");
+      expect(result.url).toBe('https://example.com/csv-url');
     });
 
-    it("should throw error for non-array data in CSV format", async () => {
+    it('should throw error for non-array data in CSV format', async () => {
       const mockData = { notAnArray: true };
 
-      await expect(uploadExportData("test-job-id", mockData, "csv", "user-123")).rejects.toThrow("Data must be an array for CSV export");
+      await expect(uploadExportData('test-job-id', mockData, 'csv', 'user-123')).rejects.toThrow('Data must be an array for CSV export');
     });
 
-    it("should retry on network error and succeed", async () => {
+    it('should retry on network error and succeed', async () => {
       const mockData = { sessions: [] };
 
       // First attempt fails
       mockSupabase.storage
         .from()
-        .upload.mockRejectedValueOnce(new Error("network_error"))
+        .upload.mockRejectedValueOnce(new Error('network_error'))
         // Second attempt succeeds
         .mockResolvedValueOnce({
-          data: { path: "test-job-id.json" },
+          data: { path: 'test-job-id.json' },
           error: null,
         });
 
       mockSupabase.storage.from().createSignedUrl.mockResolvedValue({
-        data: { signedUrl: "https://example.com/signed-url" },
+        data: { signedUrl: 'https://example.com/signed-url' },
         error: null,
       });
 
-      const result = await uploadExportData("test-job-id", mockData, "json", "user-123");
+      const result = await uploadExportData('test-job-id', mockData, 'json', 'user-123');
 
-      expect(result.url).toBe("https://example.com/signed-url");
+      expect(result.url).toBe('https://example.com/signed-url');
       expect(mockSupabase.storage.from().upload).toHaveBeenCalledTimes(2);
     });
 
-    it("should throw after max retry attempts", async () => {
+    it('should throw after max retry attempts', async () => {
       const mockData = { sessions: [] };
 
-      mockSupabase.storage.from().upload.mockRejectedValue(new Error("network_error"));
+      mockSupabase.storage.from().upload.mockRejectedValue(new Error('network_error'));
 
-      await expect(uploadExportData("test-job-id", mockData, "json", "user-123")).rejects.toThrow();
+      await expect(uploadExportData('test-job-id', mockData, 'json', 'user-123')).rejects.toThrow();
 
       expect(mockSupabase.storage.from().upload).toHaveBeenCalledTimes(3);
     });
 
-    it("should handle large file upload with extended timeout", async () => {
+    it('should handle large file upload with extended timeout', async () => {
       // Create data that exceeds 5MB threshold
       const largeData = {
         sessions: Array.from({ length: 100000 }, (_, i) => ({
           timestamp: i,
           value: Math.random() * 1000,
-          metadata: { extra: "data".repeat(100) },
+          metadata: { extra: 'data'.repeat(100) },
         })),
       };
 
       mockSupabase.storage.from().upload.mockResolvedValue({
-        data: { path: "test-job-id.json" },
+        data: { path: 'test-job-id.json' },
         error: null,
       });
 
       mockSupabase.storage.from().createSignedUrl.mockResolvedValue({
-        data: { signedUrl: "https://example.com/signed-url" },
+        data: { signedUrl: 'https://example.com/signed-url' },
         error: null,
       });
 
-      const result = await uploadExportData("test-job-id", largeData, "json", "user-123");
+      const result = await uploadExportData('test-job-id', largeData, 'json', 'user-123');
 
       expect(result.size).toBeGreaterThan(5 * 1024 * 1024);
     });
 
-    it("should handle circuit breaker open state", async () => {
+    it('should handle circuit breaker open state', async () => {
       const mockData = { sessions: [] };
 
       // Fail multiple times to trigger circuit breaker
-      mockSupabase.storage.from().upload.mockRejectedValue(new Error("service_unavailable"));
+      mockSupabase.storage.from().upload.mockRejectedValue(new Error('service_unavailable'));
 
       // First 3 attempts fail
       try {
-        await uploadExportData("test-1", mockData, "json", "user-123");
+        await uploadExportData('test-1', mockData, 'json', 'user-123');
       } catch (error) {
-        captureSilentFailure(error, { feature: "analytics", operation: "safe-fallback", type: "data" });
+        captureSilentFailure(error, { feature: 'analytics', operation: 'safe-fallback', type: 'data' });
         // Expected
       }
 
       try {
-        await uploadExportData("test-2", mockData, "json", "user-123");
+        await uploadExportData('test-2', mockData, 'json', 'user-123');
       } catch (error) {
-        captureSilentFailure(error, { feature: "analytics", operation: "safe-fallback", type: "data" });
+        captureSilentFailure(error, { feature: 'analytics', operation: 'safe-fallback', type: 'data' });
         // Expected
       }
 
       try {
-        await uploadExportData("test-3", mockData, "json", "user-123");
+        await uploadExportData('test-3', mockData, 'json', 'user-123');
       } catch (error) {
-        captureSilentFailure(error, { feature: "analytics", operation: "safe-fallback", type: "data" });
+        captureSilentFailure(error, { feature: 'analytics', operation: 'safe-fallback', type: 'data' });
         // Expected
       }
 
       // Circuit breaker should be open now
-      await expect(uploadExportData("test-4", mockData, "json", "user-123")).rejects.toThrow("Circuit breaker is OPEN");
+      await expect(uploadExportData('test-4', mockData, 'json', 'user-123')).rejects.toThrow('Circuit breaker is OPEN');
     });
   });
 
-  describe("downloadExportData", () => {
-    it("should download data successfully", async () => {
-      const mockBlob = new Blob(["test data"], { type: "application/json" });
+  describe('downloadExportData', () => {
+    it('should download data successfully', async () => {
+      const mockBlob = new Blob(['test data'], { type: 'application/json' });
 
       mockSupabase.storage.from().download.mockResolvedValue({
         data: mockBlob,
         error: null,
       });
 
-      const result = await downloadExportData("test-job-id", "user-123", "json");
+      const result = await downloadExportData('test-job-id', 'user-123', 'json');
 
       expect(result.data).toBe(mockBlob);
-      expect(result.contentType).toBe("application/json");
+      expect(result.contentType).toBe('application/json');
       expect(result.size).toBe(mockBlob.size);
       expect(result.checksum).toMatch(/^[a-f0-9]{64}$/);
     });
 
-    it("should throw on download failure", async () => {
+    it('should throw on download failure', async () => {
       mockSupabase.storage.from().download.mockResolvedValue({
         data: null,
-        error: { name: "NotFound", message: "File not found" },
+        error: { name: 'NotFound', message: 'File not found' },
       });
 
-      await expect(downloadExportData("test-job-id", "user-123", "json")).rejects.toThrow("Download failed");
+      await expect(downloadExportData('test-job-id', 'user-123', 'json')).rejects.toThrow('Download failed');
     });
 
-    it("should throw on empty response", async () => {
+    it('should throw on empty response', async () => {
       mockSupabase.storage.from().download.mockResolvedValue({
         data: null,
         error: null,
       });
 
-      await expect(downloadExportData("test-job-id", "user-123", "json")).rejects.toThrow("No data returned from download");
+      await expect(downloadExportData('test-job-id', 'user-123', 'json')).rejects.toThrow('No data returned from download');
     });
   });
 
-  describe("deleteExportData", () => {
-    it("should delete data successfully", async () => {
+  describe('deleteExportData', () => {
+    it('should delete data successfully', async () => {
       mockSupabase.storage.from().remove.mockResolvedValue({
-        data: { message: "Deleted" },
+        data: { message: 'Deleted' },
         error: null,
       });
 
-      await expect(deleteExportData("test-job-id", "user-123", "json")).resolves.not.toThrow();
+      await expect(deleteExportData('test-job-id', 'user-123', 'json')).resolves.not.toThrow();
     });
 
-    it("should throw on delete failure", async () => {
+    it('should throw on delete failure', async () => {
       mockSupabase.storage.from().remove.mockResolvedValue({
         data: null,
-        error: { name: "DeleteFailed", message: "Cannot delete file" },
+        error: { name: 'DeleteFailed', message: 'Cannot delete file' },
       });
 
-      await expect(deleteExportData("test-job-id", "user-123", "json")).rejects.toThrow("Delete failed");
+      await expect(deleteExportData('test-job-id', 'user-123', 'json')).rejects.toThrow('Delete failed');
     });
   });
 
-  describe("getStorageMetrics", () => {
-    it("should return metrics successfully", async () => {
+  describe('getStorageMetrics', () => {
+    it('should return metrics successfully', async () => {
       mockSupabase.storage.from().list.mockResolvedValue({
         data: [
-          { name: "file1.json", metadata: { size: 1000 }, created_at: "2024-01-01" },
-          { name: "file2.json", metadata: { size: 2000 }, created_at: "2024-01-02" },
+          { name: 'file1.json', metadata: { size: 1000 }, created_at: '2024-01-01' },
+          { name: 'file2.json', metadata: { size: 2000 }, created_at: '2024-01-02' },
         ],
         error: null,
       });
 
-      const result = await getStorageMetrics("user-123");
+      const result = await getStorageMetrics('user-123');
 
       expect(result.totalExports).toBe(2);
       expect(result.totalSize).toBe(3000);
-      expect(result.oldestExport).toBe(new Date("2024-01-01").getTime());
+      expect(result.oldestExport).toBe(new Date('2024-01-01').getTime());
     });
 
-    it("should handle empty storage", async () => {
+    it('should handle empty storage', async () => {
       mockSupabase.storage.from().list.mockResolvedValue({
         data: [],
         error: null,
       });
 
-      const result = await getStorageMetrics("user-123");
+      const result = await getStorageMetrics('user-123');
 
       expect(result.totalExports).toBe(0);
       expect(result.totalSize).toBe(0);
       expect(result.oldestExport).toBeNull();
     });
 
-    it("should handle list error gracefully", async () => {
+    it('should handle list error gracefully', async () => {
       mockSupabase.storage.from().list.mockResolvedValue({
         data: null,
-        error: { message: "List failed" },
+        error: { message: 'List failed' },
       });
 
-      const result = await getStorageMetrics("user-123");
+      const result = await getStorageMetrics('user-123');
 
       expect(result.totalExports).toBe(0);
       expect(result.totalSize).toBe(0);
     });
 
-    it("should handle missing metadata", async () => {
+    it('should handle missing metadata', async () => {
       mockSupabase.storage.from().list.mockResolvedValue({
         data: [
-          { name: "file1.json" }, // No metadata
-          { name: "file2.json", metadata: {} }, // Empty metadata
+          { name: 'file1.json' }, // No metadata
+          { name: 'file2.json', metadata: {} }, // Empty metadata
         ],
         error: null,
       });
 
-      const result = await getStorageMetrics("user-123");
+      const result = await getStorageMetrics('user-123');
 
       expect(result.totalExports).toBe(2);
       expect(result.totalSize).toBe(0);
     });
   });
 
-  describe("cleanupOldExports", () => {
-    it("should delete old files successfully", async () => {
-      const oldDate = new Date("2023-01-01").toISOString();
+  describe('cleanupOldExports', () => {
+    it('should delete old files successfully', async () => {
+      const oldDate = new Date('2023-01-01').toISOString();
       const newDate = new Date().toISOString();
 
       mockSupabase.storage.from().list.mockResolvedValue({
         data: [
-          { name: "old1.json", metadata: { size: 1000 }, created_at: oldDate },
-          { name: "old2.json", metadata: { size: 2000 }, created_at: oldDate },
-          { name: "new.json", metadata: { size: 500 }, created_at: newDate },
+          { name: 'old1.json', metadata: { size: 1000 }, created_at: oldDate },
+          { name: 'old2.json', metadata: { size: 2000 }, created_at: oldDate },
+          { name: 'new.json', metadata: { size: 500 }, created_at: newDate },
         ],
         error: null,
       });
 
       mockSupabase.storage.from().remove.mockResolvedValue({
-        data: { message: "Deleted" },
+        data: { message: 'Deleted' },
         error: null,
       });
 
-      const result = await cleanupOldExports("user-123", 7); // 7 days
+      const result = await cleanupOldExports('user-123', 7); // 7 days
 
       expect(result.deleted).toBe(2);
       expect(result.freedSpace).toBe(3000);
     });
 
-    it("should handle no old files", async () => {
+    it('should handle no old files', async () => {
       const newDate = new Date().toISOString();
 
       mockSupabase.storage.from().list.mockResolvedValue({
-        data: [{ name: "new.json", metadata: { size: 500 }, created_at: newDate }],
+        data: [{ name: 'new.json', metadata: { size: 500 }, created_at: newDate }],
         error: null,
       });
 
-      const result = await cleanupOldExports("user-123", 7);
+      const result = await cleanupOldExports('user-123', 7);
 
       expect(result.deleted).toBe(0);
       expect(result.freedSpace).toBe(0);
     });
 
-    it("should throw on delete failure during cleanup", async () => {
-      const oldDate = new Date("2023-01-01").toISOString();
+    it('should throw on delete failure during cleanup', async () => {
+      const oldDate = new Date('2023-01-01').toISOString();
 
       mockSupabase.storage.from().list.mockResolvedValue({
-        data: [{ name: "old.json", metadata: { size: 1000 }, created_at: oldDate }],
+        data: [{ name: 'old.json', metadata: { size: 1000 }, created_at: oldDate }],
         error: null,
       });
 
       mockSupabase.storage.from().remove.mockResolvedValue({
         data: null,
-        error: { name: "DeleteFailed", message: "Cleanup failed" },
+        error: { name: 'DeleteFailed', message: 'Cleanup failed' },
       });
 
-      await expect(cleanupOldExports("user-123", 7)).rejects.toThrow("Cleanup failed");
+      await expect(cleanupOldExports('user-123', 7)).rejects.toThrow('Cleanup failed');
     });
   });
 
-  describe("AnalyticsStorageError", () => {
-    it("should create error with all properties", () => {
-      const error = new AnalyticsStorageError("Test error", "TEST_CODE", "test-bucket", "test-path", true);
+  describe('AnalyticsStorageError', () => {
+    it('should create error with all properties', () => {
+      const error = new AnalyticsStorageError('Test error', 'TEST_CODE', 'test-bucket', 'test-path', true);
 
-      expect(error.message).toBe("Test error");
-      expect(error.code).toBe("TEST_CODE");
-      expect(error.bucket).toBe("test-bucket");
-      expect(error.path).toBe("test-path");
+      expect(error.message).toBe('Test error');
+      expect(error.code).toBe('TEST_CODE');
+      expect(error.bucket).toBe('test-bucket');
+      expect(error.path).toBe('test-path');
       expect(error.retryable).toBe(true);
-      expect(error.name).toBe("AnalyticsStorageError");
+      expect(error.name).toBe('AnalyticsStorageError');
     });
 
-    it("should work with optional properties", () => {
-      const error = new AnalyticsStorageError("Test error", "TEST_CODE");
+    it('should work with optional properties', () => {
+      const error = new AnalyticsStorageError('Test error', 'TEST_CODE');
 
       expect(error.bucket).toBeUndefined();
       expect(error.path).toBeUndefined();
@@ -380,3 +380,4 @@ describe("AnalyticsStorage", () => {
     });
   });
 });
+

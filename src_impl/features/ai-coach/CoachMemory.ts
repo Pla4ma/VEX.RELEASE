@@ -8,33 +8,33 @@
  * @phase 8
  */
 
-import type { CoachMessage, MessageCategory } from "./types";
-import { createDebugger } from "../../utils/debug";
-import { createMemory as repoCreateMemory, getMemoriesByUser as repoGetMemoriesByUser, getMemoriesByType as repoGetMemoriesByType, markMemoryReferenced as repoMarkMemoryReferenced, hasMemoryOfType as repoHasMemoryOfType, getMostRecentMemoryByType as repoGetMostRecentMemoryByType } from "./repository/memories";
+import type { CoachMessage, MessageCategory } from './types';
+import { createDebugger } from '../../utils/debug';
+import { createMemory as repoCreateMemory, getMemoriesByUser as repoGetMemoriesByUser, getMemoriesByType as repoGetMemoriesByType, markMemoryReferenced as repoMarkMemoryReferenced, hasMemoryOfType as repoHasMemoryOfType, getMostRecentMemoryByType as repoGetMostRecentMemoryByType } from './repository/memories';
 
-const debug = createDebugger("ai-coach:memory");
+const debug = createDebugger('ai-coach:memory');
 
 // ============================================================================
 // Types
 // ============================================================================
 
 export type MemoryType =
-  | "FIRST_S_GRADE"
-  | "LONGEST_SESSION"
-  | "BEST_STREAK"
-  | "FIRST_BOSS_DEFEATED"
-  | "FIRST_RIVAL_WIN"
-  | "LEVEL_UP"
-  | "STREAK_MILESTONE"
-  | "PERFECT_SESSION"
-  | "ONBOARDING_GOAL"
-  | "SESSION_COUNT_MILESTONE"
+  | 'FIRST_S_GRADE'
+  | 'LONGEST_SESSION'
+  | 'BEST_STREAK'
+  | 'FIRST_BOSS_DEFEATED'
+  | 'FIRST_RIVAL_WIN'
+  | 'LEVEL_UP'
+  | 'STREAK_MILESTONE'
+  | 'PERFECT_SESSION'
+  | 'ONBOARDING_GOAL'
+  | 'SESSION_COUNT_MILESTONE'
   // Phase 1: Memory Deepening
-  | "STUDY_PATTERN"
-  | "PREFERRED_TECHNIQUE"
-  | "FAILURE_MODE"
-  | "OPTIMAL_FOCUS_TIME"
-  | "DOCUMENT_MILESTONE";
+  | 'STUDY_PATTERN'
+  | 'PREFERRED_TECHNIQUE'
+  | 'FAILURE_MODE'
+  | 'OPTIMAL_FOCUS_TIME'
+  | 'DOCUMENT_MILESTONE';
 
 export interface CoachMemory {
   id: string;
@@ -71,11 +71,11 @@ export interface UserMilestones {
  */
 export async function storeStudyPattern(
   userId: string,
-  pattern: "MORNING_PERSON" | "NIGHT_OWL" | "WEEKEND_WARRIOR" | "CONSISTENT_DAILY" | "BURST_LEARNER",
+  pattern: 'MORNING_PERSON' | 'NIGHT_OWL' | 'WEEKEND_WARRIOR' | 'CONSISTENT_DAILY' | 'BURST_LEARNER',
   confidence: number, // 0-1
   evidence: string,
 ): Promise<CoachMemory> {
-  return storeMemory(userId, "STUDY_PATTERN", `Pattern: ${pattern}`, evidence, { pattern, confidence, detectedAt: Date.now() });
+  return storeMemory(userId, 'STUDY_PATTERN', `Pattern: ${pattern}`, evidence, { pattern, confidence, detectedAt: Date.now() });
 }
 
 /**
@@ -83,66 +83,66 @@ export async function storeStudyPattern(
  */
 export async function storePreferredTechnique(
   userId: string,
-  technique: "POMODORO" | "FLOWTIME" | "DEEP_WORK" | "52_17" | "CUSTOM",
+  technique: 'POMODORO' | 'FLOWTIME' | 'DEEP_WORK' | '52_17' | 'CUSTOM',
   effectivenessScore: number, // 0-100
   context: string,
 ): Promise<CoachMemory> {
-  return storeMemory(userId, "PREFERRED_TECHNIQUE", `Technique: ${technique}`, context, { technique, effectivenessScore, recordedAt: Date.now() });
+  return storeMemory(userId, 'PREFERRED_TECHNIQUE', `Technique: ${technique}`, context, { technique, effectivenessScore, recordedAt: Date.now() });
 }
 
 /**
  * Store observed failure mode for personalized support
  */
-export async function storeFailureMode(userId: string, failureType: "DISTRACTION" | "FATIGUE" | "OVERWHELM" | "LACK_OF_MOTIVATION" | "POOR_TIMING", context: string, suggestedIntervention: string): Promise<CoachMemory> {
-  return storeMemory(userId, "FAILURE_MODE", `Challenge: ${failureType}`, context, { failureType, suggestedIntervention, occurredAt: Date.now() });
+export async function storeFailureMode(userId: string, failureType: 'DISTRACTION' | 'FATIGUE' | 'OVERWHELM' | 'LACK_OF_MOTIVATION' | 'POOR_TIMING', context: string, suggestedIntervention: string): Promise<CoachMemory> {
+  return storeMemory(userId, 'FAILURE_MODE', `Challenge: ${failureType}`, context, { failureType, suggestedIntervention, occurredAt: Date.now() });
 }
 
 /**
  * Store optimal focus time observation
  */
 export async function storeOptimalFocusTime(userId: string, dayOfWeek: string, hourRange: string, averageQuality: number, sampleSize: number): Promise<CoachMemory> {
-  return storeMemory(userId, "OPTIMAL_FOCUS_TIME", `Peak: ${dayOfWeek} ${hourRange}`, `You average ${averageQuality.toFixed(0)}% quality during this time`, { dayOfWeek, hourRange, averageQuality, sampleSize, recordedAt: Date.now() });
+  return storeMemory(userId, 'OPTIMAL_FOCUS_TIME', `Peak: ${dayOfWeek} ${hourRange}`, `You average ${averageQuality.toFixed(0)}% quality during this time`, { dayOfWeek, hourRange, averageQuality, sampleSize, recordedAt: Date.now() });
 }
 
 /**
  * Store document milestone (pages read, sections completed)
  */
-export async function storeDocumentMilestone(userId: string, documentId: string, documentName: string, milestoneType: "STARTED" | "HALFWAY" | "COMPLETED", progressPercent: number): Promise<CoachMemory> {
+export async function storeDocumentMilestone(userId: string, documentId: string, documentName: string, milestoneType: 'STARTED' | 'HALFWAY' | 'COMPLETED', progressPercent: number): Promise<CoachMemory> {
   const titles: Record<string, string> = {
     STARTED: `Started: ${documentName}`,
     HALFWAY: `Halfway: ${documentName}`,
     COMPLETED: `Finished: ${documentName}`,
   };
 
-  return storeMemory(userId, "DOCUMENT_MILESTONE", titles[milestoneType], `${documentName} — ${progressPercent}% complete`, { documentId, documentName, milestoneType, progressPercent });
+  return storeMemory(userId, 'DOCUMENT_MILESTONE', titles[milestoneType], `${documentName} — ${progressPercent}% complete`, { documentId, documentName, milestoneType, progressPercent });
 }
 
 /**
  * Get user's study patterns
  */
 export async function getStudyPatterns(userId: string): Promise<CoachMemory[]> {
-  return getMemoriesByType(userId, "STUDY_PATTERN");
+  return getMemoriesByType(userId, 'STUDY_PATTERN');
 }
 
 /**
  * Get user's preferred techniques
  */
 export async function getPreferredTechniques(userId: string): Promise<CoachMemory[]> {
-  return getMemoriesByType(userId, "PREFERRED_TECHNIQUE");
+  return getMemoriesByType(userId, 'PREFERRED_TECHNIQUE');
 }
 
 /**
  * Get user's observed failure modes
  */
 export async function getFailureModes(userId: string): Promise<CoachMemory[]> {
-  return getMemoriesByType(userId, "FAILURE_MODE");
+  return getMemoriesByType(userId, 'FAILURE_MODE');
 }
 
 /**
  * Get user's optimal focus times
  */
 export async function getOptimalFocusTimes(userId: string): Promise<CoachMemory[]> {
-  return getMemoriesByType(userId, "OPTIMAL_FOCUS_TIME");
+  return getMemoriesByType(userId, 'OPTIMAL_FOCUS_TIME');
 }
 
 /**
@@ -150,7 +150,7 @@ export async function getOptimalFocusTimes(userId: string): Promise<CoachMemory[
  */
 export async function storeMemory(userId: string, type: MemoryType, title: string, description: string, metadata: Record<string, unknown> = {}): Promise<CoachMemory> {
   const memory = await repoCreateMemory(userId, type, title, description, metadata);
-  debug.info("[CoachMemory] Stored: %s for user %s", type, userId);
+  debug.info('[CoachMemory] Stored: %s for user %s', type, userId);
   return memory;
 }
 
@@ -183,17 +183,17 @@ export async function markMemoryReferenced(memoryId: string): Promise<void> {
  * Check and store first S grade milestone
  */
 export async function checkFirstSGrade(userId: string, sessionGrade: string, sessionQuality: number, sessionDate: number): Promise<CoachMemory | null> {
-  if (sessionGrade !== "S") {
+  if (sessionGrade !== 'S') {
     return null;
   }
 
   // Check if already has S grade memory
-  const existing = await getMemoriesByType(userId, "FIRST_S_GRADE");
+  const existing = await getMemoriesByType(userId, 'FIRST_S_GRADE');
   if (existing.length > 0) {
     return null;
   }
 
-  return storeMemory(userId, "FIRST_S_GRADE", "First S-Grade Session", `Achieved first perfect S-grade session with ${sessionQuality}% quality`, { grade: sessionGrade, quality: sessionQuality, date: sessionDate });
+  return storeMemory(userId, 'FIRST_S_GRADE', 'First S-Grade Session', `Achieved first perfect S-grade session with ${sessionQuality}% quality`, { grade: sessionGrade, quality: sessionQuality, date: sessionDate });
 }
 
 /**
@@ -204,7 +204,7 @@ export async function checkLongestSession(userId: string, sessionDuration: numbe
     return null;
   }
 
-  return storeMemory(userId, "LONGEST_SESSION", "Personal Best Session", `Completed longest session ever: ${sessionDuration} minutes`, { duration: sessionDuration, previousBest });
+  return storeMemory(userId, 'LONGEST_SESSION', 'Personal Best Session', `Completed longest session ever: ${sessionDuration} minutes`, { duration: sessionDuration, previousBest });
 }
 
 /**
@@ -215,7 +215,7 @@ export async function checkBestStreak(userId: string, currentStreak: number, pre
     return null;
   }
 
-  return storeMemory(userId, "BEST_STREAK", `${currentStreak}-Day Streak Record`, `Achieved new personal best streak of ${currentStreak} days`, { streakDays: currentStreak, previousBest });
+  return storeMemory(userId, 'BEST_STREAK', `${currentStreak}-Day Streak Record`, `Achieved new personal best streak of ${currentStreak} days`, { streakDays: currentStreak, previousBest });
 }
 
 /**
@@ -223,12 +223,12 @@ export async function checkBestStreak(userId: string, currentStreak: number, pre
  * NOTE: Boss system being archived, but keeping for compatibility
  */
 export async function checkFirstBossDefeated(userId: string, bossName: string, bossTier: number): Promise<CoachMemory | null> {
-  const hasExisting = await repoHasMemoryOfType(userId, "FIRST_BOSS_DEFEATED");
+  const hasExisting = await repoHasMemoryOfType(userId, 'FIRST_BOSS_DEFEATED');
   if (hasExisting) {
     return null;
   }
 
-  return storeMemory(userId, "FIRST_BOSS_DEFEATED", `First Boss Defeated: ${bossName}`, `Defeated ${bossName} (Tier ${bossTier}) — your first boss victory!`, { bossName, bossTier });
+  return storeMemory(userId, 'FIRST_BOSS_DEFEATED', `First Boss Defeated: ${bossName}`, `Defeated ${bossName} (Tier ${bossTier}) — your first boss victory!`, { bossName, bossTier });
 }
 
 /**
@@ -236,19 +236,19 @@ export async function checkFirstBossDefeated(userId: string, bossName: string, b
  * NOTE: Rivals system being archived, but keeping for compatibility
  */
 export async function checkFirstRivalWin(userId: string, rivalName: string, margin: number): Promise<CoachMemory | null> {
-  const hasExisting = await repoHasMemoryOfType(userId, "FIRST_RIVAL_WIN");
+  const hasExisting = await repoHasMemoryOfType(userId, 'FIRST_RIVAL_WIN');
   if (hasExisting) {
     return null;
   }
 
-  return storeMemory(userId, "FIRST_RIVAL_WIN", "First Rival Victory", `Beat ${rivalName} by ${margin} minutes in weekly competition`, { rivalName, margin });
+  return storeMemory(userId, 'FIRST_RIVAL_WIN', 'First Rival Victory', `Beat ${rivalName} by ${margin} minutes in weekly competition`, { rivalName, margin });
 }
 
 /**
  * Store onboarding goal
  */
 export async function storeOnboardingGoal(userId: string, goal: string): Promise<CoachMemory> {
-  return storeMemory(userId, "ONBOARDING_GOAL", "Your Goal", `You said you wanted to: ${goal}`, { goal });
+  return storeMemory(userId, 'ONBOARDING_GOAL', 'Your Goal', `You said you wanted to: ${goal}`, { goal });
 }
 
 // ============================================================================
@@ -271,32 +271,32 @@ export async function getRelevantMemories(userId: string, category: MessageCateg
 
     // Category-specific relevance
     switch (category) {
-      case "STREAK_RISK":
-        if (memory.type === "BEST_STREAK") {
+      case 'STREAK_RISK':
+        if (memory.type === 'BEST_STREAK') {
           score += 10;
         }
-        if (memory.type === "FIRST_S_GRADE") {
+        if (memory.type === 'FIRST_S_GRADE') {
           score += 5;
         }
         break;
-      case "SESSION_SUGGESTION":
-        if (memory.type === "LONGEST_SESSION") {
+      case 'SESSION_SUGGESTION':
+        if (memory.type === 'LONGEST_SESSION') {
           score += 10;
         }
-        if (memory.type === "FIRST_S_GRADE") {
+        if (memory.type === 'FIRST_S_GRADE') {
           score += 5;
         }
         break;
-      case "MILESTONE_HYPE":
-        if (memory.type.includes("MILESTONE") || memory.type.includes("FIRST")) {
+      case 'MILESTONE_HYPE':
+        if (memory.type.includes('MILESTONE') || memory.type.includes('FIRST')) {
           score += 10;
         }
         break;
-      case "COMEBACK_SUPPORT":
-        if (memory.type === "BEST_STREAK") {
+      case 'COMEBACK_SUPPORT':
+        if (memory.type === 'BEST_STREAK') {
           score += 8;
         }
-        if (memory.type === "FIRST_S_GRADE") {
+        if (memory.type === 'FIRST_S_GRADE') {
           score += 5;
         }
         break;
@@ -328,7 +328,7 @@ export async function getRelevantMemories(userId: string, category: MessageCateg
 /**
  * Generate message referencing memories
  */
-export async function generateMemoryReferenceMessage(userId: string, category: MessageCategory, persona: "MENTOR" | "CHEERLEADER" | "DRILL_SERGEANT" = "MENTOR"): Promise<string | null> {
+export async function generateMemoryReferenceMessage(userId: string, category: MessageCategory, persona: 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT' = 'MENTOR'): Promise<string | null> {
   const memories = await getRelevantMemories(userId, category, 2);
 
   if (memories.length === 0) {
@@ -341,14 +341,14 @@ export async function generateMemoryReferenceMessage(userId: string, category: M
 
   const templates: Record<string, Record<string, string>> = {
     MENTOR: {
-      FIRST_S_GRADE: `You hit your first S grade ${daysSince} days ago — since then, you've earned ${memories.length > 1 ? "several more" : "another one"}. You're improving faster than you realize.`,
+      FIRST_S_GRADE: `You hit your first S grade ${daysSince} days ago — since then, you've earned ${memories.length > 1 ? 'several more' : 'another one'}. You're improving faster than you realize.`,
       LONGEST_SESSION: `Remember when you completed that ${primaryMemory.metadata.duration}-minute session ${daysSince} days ago? That was a breakthrough moment. You have that capacity within you.`,
       BEST_STREAK: `Your ${primaryMemory.metadata.streakDays}-day streak record still stands. You built that through consistency, not intensity. That's the path forward.`,
       FIRST_BOSS_DEFEATED: `Your first boss victory against ${primaryMemory.metadata.bossName} showed you what focused effort can accomplish. That same determination is available to you now.`,
       ONBOARDING_GOAL: `When you started, you said you wanted to ${primaryMemory.metadata.goal}. Let's look at how you're doing — you've made more progress than you might think.`,
     },
     CHEERLEADER: {
-      FIRST_S_GRADE: `OMG! 🌟 You got your first S grade ${daysSince} days ago and you've been CRUSHING IT since! You've earned ${memories.length > 1 ? "even MORE" : "another one"}! Keep that momentum!`,
+      FIRST_S_GRADE: `OMG! 🌟 You got your first S grade ${daysSince} days ago and you've been CRUSHING IT since! You've earned ${memories.length > 1 ? 'even MORE' : 'another one'}! Keep that momentum!`,
       LONGEST_SESSION: `Remember that EPIC ${primaryMemory.metadata.duration}-minute session?! 🔥 That was ${daysSince} days ago and you HAVEN'T forgotten how to focus! You've got this!`,
       BEST_STREAK: `Your ${primaryMemory.metadata.streakDays}-day streak LEGEND is still alive! 🏆 You built that through showing up every day! That's the champion spirit!`,
       FIRST_BOSS_DEFEATED: `Your first boss takedown of ${primaryMemory.metadata.bossName}?! 👑 That was AMAZING! You have that SAME POWER right now! Use it!`,
@@ -371,7 +371,7 @@ export async function generateMemoryReferenceMessage(userId: string, category: M
  * Get user's onboarding goal
  */
 export async function getOnboardingGoal(userId: string): Promise<string | null> {
-  const memories = await getMemoriesByType(userId, "ONBOARDING_GOAL");
+  const memories = await getMemoriesByType(userId, 'ONBOARDING_GOAL');
   if (memories.length === 0) {
     return null;
   }
@@ -417,7 +417,7 @@ export async function getMilestoneSummary(userId: string): Promise<{
   const favoriteType = Object.entries(typeCounts).sort((a, b) => b[1] - a[1])[0][0] as MemoryType;
 
   // Count S-grade memories
-  const sGradeCount = memories.filter((m) => m.type === "FIRST_S_GRADE" || m.metadata.grade === "S").length;
+  const sGradeCount = memories.filter((m) => m.type === 'FIRST_S_GRADE' || m.metadata.grade === 'S').length;
 
   return {
     totalMemories: memories.length,

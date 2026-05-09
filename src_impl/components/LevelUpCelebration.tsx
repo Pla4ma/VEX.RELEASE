@@ -23,9 +23,6 @@ export const LevelUpCelebration: React.FC<LevelUpCelebrationProps> = ({
   rewards,
   onDismiss,
 }) => {
-  // Guard: don't render if no actual level up occurred
-  if (newLevel <= oldLevel) {return null;}
-
   const { theme } = useTheme();
   const levelScale = useSharedValue(0.7);
 
@@ -36,6 +33,8 @@ export const LevelUpCelebration: React.FC<LevelUpCelebrationProps> = ({
   }, [levelScale, onDismiss]);
 
   const levelStyle = useAnimatedStyle(() => ({ transform: [{ scale: levelScale.value }] }));
+
+  if (newLevel <= oldLevel) {return null;}
 
   return (
     <Pressable onPress={onDismiss} style={{ flex: 1 }}

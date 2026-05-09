@@ -1,10 +1,11 @@
-import React, { useState, useMemo } from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn, FadeInUp, Layout } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";`r`nimport { ChallengesEmptyState, ChallengesErrorState, ChallengesWidgetSkeleton } from "./TodaysChallengesStates";
+import React, { useState, useMemo } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn, FadeInUp, Layout } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { ChallengesEmptyState, ChallengesErrorState, ChallengesWidgetSkeleton } from './TodaysChallengesStates';
 export interface ChallengeItem {
   id: string;
   title: string;
@@ -12,7 +13,7 @@ export interface ChallengeItem {
   currentProgress: number;
   targetProgress: number;
   rewardAmount: number;
-  rewardType: "XP" | "COINS" | "GEMS";
+  rewardType: 'XP' | 'COINS' | 'GEMS';
   isCompleted: boolean;
   isClaimed: boolean;
   timeRemainingMinutes: number;
@@ -36,22 +37,22 @@ function ChallengeProgressRow({ challenge, onClaim }: { challenge: ChallengeItem
   const progressPercent = Math.min(100, (challenge.currentProgress / challenge.targetProgress) * 100);
   const getRewardIcon = () => {
     switch (challenge.rewardType) {
-      case "XP":
-        return "⭐";
-      case "GEMS":
-        return "💎";
-      case "COINS":
-        return "🪙";
+      case 'XP':
+        return '⭐';
+      case 'GEMS':
+        return '💎';
+      case 'COINS':
+        return '🪙';
       default:
-        return "🎁";
+        return '🎁';
     }
   };
   return (
     <Box gap="xs">
       {/* Title and reward */}
       <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-        <Text variant="bodySmall" color={challenge.isCompleted ? "success.DEFAULT" : "text.primary"} fontWeight={challenge.isCompleted ? "600" : "400"} style={challenge.isClaimed ? { textDecorationLine: "line-through", opacity: 0.6 } : undefined}>
-          {challenge.isCompleted ? "✓ " : ""}
+        <Text variant="bodySmall" color={challenge.isCompleted ? 'success.DEFAULT' : 'text.primary'} fontWeight={challenge.isCompleted ? '600' : '400'} style={challenge.isClaimed ? { textDecorationLine: 'line-through', opacity: 0.6 } : undefined}>
+          {challenge.isCompleted ? '✓ ' : ''}
           {challenge.title}
         </Text>
         <Box flexDirection="row" alignItems="center" gap="xs">
@@ -71,7 +72,7 @@ function ChallengeProgressRow({ challenge, onClaim }: { challenge: ChallengeItem
           {challenge.currentProgress}/{challenge.targetProgress}
           {challenge.isCompleted && !challenge.isClaimed && (
             <Text variant="caption" color="success.DEFAULT" fontWeight="600">
-              {" "}
+              {' '}
               · Ready to claim!
             </Text>
           )}
@@ -119,7 +120,7 @@ export function TodaysChallengesWidget({ challenges, isLoading = false, error = 
                     {stats.completed}/{stats.total} completed
                     {stats.claimable > 0 && (
                       <Text variant="caption" color="success.DEFAULT" fontWeight="600">
-                        {" "}
+                        {' '}
                         · {stats.claimable} to claim!
                       </Text>
                     )}
@@ -128,7 +129,7 @@ export function TodaysChallengesWidget({ challenges, isLoading = false, error = 
               </Box>
             </Box>
             {/* Expand/Collapse indicator */}
-            <Text fontSize={20} color={theme.colors.text.tertiary} style={{ transform: [{ rotate: isExpanded ? "90deg" : "0deg" }] }}>
+            <Text fontSize={20} color={theme.colors.text.tertiary} style={{ transform: [{ rotate: isExpanded ? '90deg' : '0deg' }] }}>
               ›
             </Text>
           </Box>
@@ -150,7 +151,7 @@ export function TodaysChallengesWidget({ challenges, isLoading = false, error = 
                     </Box>
                   ))}
                   {/* View All button */}
-                  <Button variant="ghost" size="sm" onPress={onViewAll} style={{ alignSelf: "center" }} accessibilityLabel="View All Challenges › button" accessibilityRole="button" accessibilityHint="Activates this control">
+                  <Button variant="ghost" size="sm" onPress={onViewAll} style={{ alignSelf: 'center' }} accessibilityLabel="View All Challenges › button" accessibilityRole="button" accessibilityHint="Activates this control">
                     View All Challenges ›
                   </Button>
                 </>

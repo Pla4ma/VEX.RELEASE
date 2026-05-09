@@ -91,7 +91,7 @@ describe('Feature Flag Matrix - PHASE 8', () => {
       const launchFeatureFlags = [
         ...Object.values(FEATURE_FLAGS).filter(f =>
           allLaunchFeatures.includes(f)
-        )
+        ),
       ];
 
       expect(allLaunchFeatures).toHaveLength(launchFeatureFlags.length);

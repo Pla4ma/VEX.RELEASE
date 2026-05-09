@@ -7,16 +7,16 @@
  * @phase 3C.4
  */
 
-import React, { useEffect } from "react";
-import { Modal, ScrollView, Dimensions } from "react-native";
-import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming, withRepeat, withDelay, runOnJS } from "react-native-reanimated";
+import React, { useEffect } from 'react';
+import { Modal, ScrollView, Dimensions } from 'react-native';
+import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming, withRepeat, withDelay, runOnJS } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export interface StreakMilestoneModalProps {
   /** Modal visibility */
@@ -62,7 +62,7 @@ function ConfettiPiece({ index, color }: { index: number; color: string }): JSX.
       entering={FadeIn.duration(100).delay(index * 50)}
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           left: startX,
           top: -20,
           width: 10,
@@ -80,7 +80,7 @@ function ConfettiPiece({ index, color }: { index: number; color: string }): JSX.
  * Confetti burst effect
  */
 function ConfettiBurst({ count = 50 }: { count?: number }): JSX.Element {
-  const colors = ["#EF4444", "#22C55E", "#3B82F6", "#F59E0B", "#A855F7", "#EC4899"];
+  const colors = ['#EF4444', '#22C55E', '#3B82F6', '#F59E0B', '#A855F7', '#EC4899'];
 
   return (
     <>
@@ -118,15 +118,15 @@ function StreakFlame({ days }: { days: number }): JSX.Element {
 
   const getFlameColor = () => {
     if (days >= 100) {
-      return "#F59E0B";
+      return '#F59E0B';
     } // Gold
     if (days >= 60) {
-      return "#A855F7";
+      return '#A855F7';
     } // Purple
     if (days >= 30) {
-      return "#3B82F6";
+      return '#3B82F6';
     } // Blue
-    return "#EF4444"; // Red
+    return '#EF4444'; // Red
   };
 
   const size = getFlameSize();
@@ -139,8 +139,8 @@ function StreakFlame({ days }: { days: number }): JSX.Element {
           height: size * 2,
           borderRadius: size,
           backgroundColor: `${getFlameColor()}30`,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           borderWidth: 3,
           borderColor: getFlameColor(),
         },
@@ -227,7 +227,7 @@ export function StreakMilestoneModal({ visible, milestone, rewards, onDismiss, o
             </Animated.View>
 
             {/* Rewards */}
-            <Animated.View entering={FadeInUp.duration(500).delay(800)} style={{ width: "100%" }}>
+            <Animated.View entering={FadeInUp.duration(500).delay(800)} style={{ width: '100%' }}>
               <Box p="xl" borderRadius="2xl" bg="background.secondary" borderWidth={2} borderColor="accent.orange" gap="lg">
                 <Text variant="h4" color="text.primary" textAlign="center">
                   Rewards Unlocked
@@ -245,13 +245,13 @@ export function StreakMilestoneModal({ visible, milestone, rewards, onDismiss, o
             <Animated.View entering={FadeInUp.duration(500).delay(1200)}>
               <Box alignItems="center" gap="sm">
                 <Text variant="body" color="text.secondary" textAlign="center">
-                  {milestone >= 100 ? "LEGENDARY! Few achieve this level of focus." : milestone >= 30 ? "Incredible dedication! You're unstoppable." : milestone >= 7 ? "A full week of focus! Keep the momentum." : "Great start! Your streak is growing."}
+                  {milestone >= 100 ? 'LEGENDARY! Few achieve this level of focus.' : milestone >= 30 ? "Incredible dedication! You're unstoppable." : milestone >= 7 ? 'A full week of focus! Keep the momentum.' : 'Great start! Your streak is growing.'}
                 </Text>
               </Box>
             </Animated.View>
 
             {/* CTAs */}
-            <Animated.View entering={FadeInUp.duration(500).delay(1400)} style={{ width: "100%", marginTop: 20 }}>
+            <Animated.View entering={FadeInUp.duration(500).delay(1400)} style={{ width: '100%', marginTop: 20 }}>
               <Box gap="md">
                 {onShare && (
                   <Button variant="secondary" size="lg" fullWidth onPress={onShare} accessibilityLabel="-day streak`} button" accessibilityRole="button" accessibilityHint="Activates this control">

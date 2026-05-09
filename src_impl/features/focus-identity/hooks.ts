@@ -17,7 +17,7 @@ export function useFocusIdentity(userId: string) {
 
   // Transform the data to match the expected interface
   const profile: FocusIdentityProfile | null = useMemo(() => {
-    if (!score) return null;
+    if (!score) {return null;}
 
     return FocusIdentityEngine.createProfile(score.currentScore, {
       streakInCurrentBand: 0, // Would be calculated from actual data
@@ -27,12 +27,12 @@ export function useFocusIdentity(userId: string) {
   }, [score]);
 
   const currentBand: ScoreBand | null = useMemo(() => {
-    if (!profile) return null;
+    if (!profile) {return null;}
     return FocusIdentityEngine.getScoreBand(profile.currentScore);
   }, [profile]);
 
   const scoreChange = useMemo(() => {
-    if (!history || history.length < 2) return 0;
+    if (!history || history.length < 2) {return 0;}
     const latest = history[0];
     const previous = history[1];
     return latest.score - previous.score;
@@ -59,7 +59,7 @@ export function useFocusScoreColor(score: number | null): string {
   const { theme } = useTheme();
 
   return useMemo(() => {
-    if (!score) return theme.colors.textMuted;
+    if (!score) {return theme.colors.textMuted;}
 
     const band = FocusIdentityEngine.getScoreBand(score);
 
@@ -89,7 +89,7 @@ export function useFocusScoreColor(score: number | null): string {
  */
 export function useIdentityStatement(currentBand: ScoreBand | null, streakInCurrentBand: number): string {
   return useMemo(() => {
-    if (!currentBand) return "Begin your focus journey";
+    if (!currentBand) {return 'Begin your focus journey';}
 
     const streakText = streakInCurrentBand > 1 ? ` (${streakInCurrentBand} sessions in this band)` : '';
 
@@ -109,7 +109,7 @@ export function useIdentityStatement(currentBand: ScoreBand | null, streakInCurr
       case 'GRANDMASTER':
         return `Legendary focus${streakText}`;
       default:
-        return "Continue your journey";
+        return 'Continue your journey';
     }
   }, [currentBand, streakInCurrentBand]);
 }

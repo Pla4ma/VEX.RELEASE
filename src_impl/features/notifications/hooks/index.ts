@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import * as service from './service';
+import * as service from '../service';
 
 export const notificationKeys = {
   all: ['notifications'] as const,

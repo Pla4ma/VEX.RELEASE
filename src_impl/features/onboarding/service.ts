@@ -6,8 +6,8 @@
  * @phase 2
  */
 
-import { useOnboardingStore } from "./store";
-import { type FocusGoal, type FocusDuration, GoalOptionSchema, DurationOptionSchema } from "./schemas";
+import { useOnboardingStore } from './store';
+import { type FocusGoal, type FocusDuration, GoalOptionSchema, DurationOptionSchema } from './schemas';
 
 // ============================================================================
 // Goal Options
@@ -15,28 +15,28 @@ import { type FocusGoal, type FocusDuration, GoalOptionSchema, DurationOptionSch
 
 export const GOAL_OPTIONS = [
   GoalOptionSchema.parse({
-    key: "WORK",
-    label: "Work",
-    emoji: "💼",
-    description: "Meetings, emails, deep work",
+    key: 'WORK',
+    label: 'Work',
+    emoji: '💼',
+    description: 'Meetings, emails, deep work',
   }),
   GoalOptionSchema.parse({
-    key: "STUDY",
-    label: "Study",
-    emoji: "📚",
-    description: "Learning, reading, exams",
+    key: 'STUDY',
+    label: 'Study',
+    emoji: '📚',
+    description: 'Learning, reading, exams',
   }),
   GoalOptionSchema.parse({
-    key: "CREATIVE",
-    label: "Creative",
-    emoji: "🎨",
-    description: "Design, writing, art",
+    key: 'CREATIVE',
+    label: 'Creative',
+    emoji: '🎨',
+    description: 'Design, writing, art',
   }),
   GoalOptionSchema.parse({
-    key: "PERSONAL",
-    label: "Personal",
-    emoji: "🌱",
-    description: "Goals, habits, growth",
+    key: 'PERSONAL',
+    label: 'Personal',
+    emoji: '🌱',
+    description: 'Goals, habits, growth',
   }),
 ];
 
@@ -47,28 +47,28 @@ export const GOAL_OPTIONS = [
 export const DURATION_OPTIONS = [
   DurationOptionSchema.parse({
     value: 10,
-    label: "10 min",
-    emoji: "🌱",
+    label: '10 min',
+    emoji: '🌱',
   }),
   DurationOptionSchema.parse({
     value: 15,
-    label: "15 min",
-    emoji: "⚡",
+    label: '15 min',
+    emoji: '⚡',
   }),
   DurationOptionSchema.parse({
     value: 25,
-    label: "25 min",
-    emoji: "🍅",
+    label: '25 min',
+    emoji: '🍅',
   }),
   DurationOptionSchema.parse({
     value: 45,
-    label: "45 min",
-    emoji: "⏱️",
+    label: '45 min',
+    emoji: '⏱️',
   }),
   DurationOptionSchema.parse({
     value: 60,
-    label: "60+ min",
-    emoji: "🚀",
+    label: '60+ min',
+    emoji: '🚀',
   }),
 ];
 
@@ -76,13 +76,13 @@ export const DURATION_OPTIONS = [
 // Step Navigation
 // ============================================================================
 
-const STEP_ORDER = ["WELCOME", "GOAL_SETTING", "FOCUS_TIME", "NAME_SETUP", "FIRST_SESSION_CTA"] as const;
+const STEP_ORDER = ['WELCOME', 'GOAL_SETTING', 'FOCUS_TIME', 'NAME_SETUP', 'FIRST_SESSION_CTA'] as const;
 
 /**
  * Get current step name from step number
  */
 export function getStepName(stepNumber: number): (typeof STEP_ORDER)[number] {
-  return STEP_ORDER[stepNumber] ?? "WELCOME";
+  return STEP_ORDER[stepNumber] ?? 'WELCOME';
 }
 
 /**
@@ -167,7 +167,7 @@ export class OnboardingError extends Error {
     message: string,
   ) {
     super(message);
-    this.name = "OnboardingError";
+    this.name = 'OnboardingError';
   }
 }
 
@@ -176,17 +176,17 @@ export class OnboardingError extends Error {
  * HARD REQUIREMENT: Cannot complete without first session
  */
 export async function completeOnboardingWithGate(userId: string): Promise<void> {
-  const { onboardingRepository } = await import("./repository");
+  const { onboardingRepository } = await import('./repository');
   const state = await onboardingRepository.getProgress(userId);
 
   // HARD REQUIREMENT: Cannot complete without first session
   if (!state || !state.steps.firstSessionCompleted) {
-    throw new OnboardingError("ONBOARDING_INCOMPLETE", "Complete your first session to finish onboarding");
+    throw new OnboardingError('ONBOARDING_INCOMPLETE', 'Complete your first session to finish onboarding');
   }
 
   await onboardingRepository.saveProgress(userId, {
     ...state,
-    status: "COMPLETED",
+    status: 'COMPLETED',
   });
 }
 

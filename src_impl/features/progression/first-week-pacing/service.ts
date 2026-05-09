@@ -10,9 +10,7 @@ import { createDebugger } from '../../../utils/debug';
 import * as Sentry from '@sentry/react-native';
 import {
   FirstWeekProgressSchema,
-  FirstWeekSessionSchema,
   type FirstWeekProgress,
-  type FirstWeekSession,
 } from './schemas';
 import {
   progressToNextSession as progressToNextSessionImpl,
@@ -30,7 +28,24 @@ const debug = createDebugger('progression:first-week');
 // Helper Functions
 // ============================================================================
 
-function mapRowToProgress(row: any): FirstWeekProgress {
+type FirstWeekProgressRow = {
+  user_id: string;
+  current_session: string;
+  sessions_completed: number;
+  unlocked_features: string[] | null;
+  next_unlock: string | null;
+  total_xp_earned: number;
+  level_progress: number;
+  companion_unlocked: boolean;
+  streak_explained: boolean;
+  first_reward_earned: boolean;
+  ai_coach_unlocked: boolean;
+  weekly_milestone_earned: boolean;
+  started_at: number;
+  last_session_at: number | null;
+};
+
+function mapRowToProgress(row: FirstWeekProgressRow): FirstWeekProgress {
   return FirstWeekProgressSchema.parse({
     userId: row.user_id,
     currentSession: row.current_session,
@@ -112,7 +127,7 @@ export async function getFirstWeekProgress(userId: string): Promise<FirstWeekPro
     debug.error('Error getting first week progress', error instanceof Error ? error : undefined);
     Sentry.captureException(error, {
       tags: { feature: 'first-week-pacing' },
-      extra: { userId }
+      extra: { userId },
     });
     return null;
   }

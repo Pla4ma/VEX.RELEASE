@@ -8,7 +8,7 @@
 import type {
   DeduplicationRule,
   ExploitPattern,
-  AntiDuplicationConfig
+  AntiDuplicationConfig,
 } from './schemas';
 
 // ============================================================================

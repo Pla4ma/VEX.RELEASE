@@ -3,5 +3,9 @@ module.exports = {
   extends: ['@react-native'],
   rules: {
     'prettier/prettier': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn',
+    'react-hooks/exhaustive-deps': 'warn',
+    'react-hooks/rules-of-hooks': 'warn',
+    'no-new-func': 'warn',
   },
 };

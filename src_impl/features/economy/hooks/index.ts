@@ -3,29 +3,29 @@
  * TanStack Query hooks for UI consumption
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import * as service from "./service";
-import { checkInsuranceStatus, purchaseInsurance, type InsuranceStatus, type PurchaseInsuranceInput } from "./StreakInsurance";
-import type { CurrencyType, TransactionSource, AddCurrencyInput, SpendCurrencyInput, InitiatePurchaseInput, ConvertCurrencyInput } from "./schemas";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as service from '../service';
+import { checkInsuranceStatus, purchaseInsurance, type InsuranceStatus, type PurchaseInsuranceInput } from '../StreakInsurance';
+import type { CurrencyType, TransactionSource, AddCurrencyInput, SpendCurrencyInput, InitiatePurchaseInput, ConvertCurrencyInput } from '../schemas';
 
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const economyKeys = {
-  all: ["economy"] as const,
-  wallet: (userId: string) => [...economyKeys.all, "wallet", userId] as const,
-  balance: (userId: string, currency?: CurrencyType) => [...economyKeys.all, "balance", userId, currency] as const,
-  transactions: (userId: string, filters?: Record<string, unknown>) => [...economyKeys.all, "transactions", userId, filters] as const,
-  purchase: (purchaseId: string) => [...economyKeys.all, "purchase", purchaseId] as const,
-  offers: (userId: string, userLevel: number) => [...economyKeys.all, "offers", userId, userLevel] as const,
-  analytics: (userId: string, period: string) => [...economyKeys.all, "analytics", userId, period] as const,
+  all: ['economy'] as const,
+  wallet: (userId: string) => [...economyKeys.all, 'wallet', userId] as const,
+  balance: (userId: string, currency?: CurrencyType) => [...economyKeys.all, 'balance', userId, currency] as const,
+  transactions: (userId: string, filters?: Record<string, unknown>) => [...economyKeys.all, 'transactions', userId, filters] as const,
+  purchase: (purchaseId: string) => [...economyKeys.all, 'purchase', purchaseId] as const,
+  offers: (userId: string, userLevel: number) => [...economyKeys.all, 'offers', userId, userLevel] as const,
+  analytics: (userId: string, period: string) => [...economyKeys.all, 'analytics', userId, period] as const,
 };
 
 // Wager keys removed - gambling dark patterns archived
 
 export const insuranceKeys = {
-  status: (userId: string) => [...economyKeys.all, "insurance", "status", userId] as const,
+  status: (userId: string) => [...economyKeys.all, 'insurance', 'status', userId] as const,
 };
 
 // ============================================================================
@@ -57,7 +57,7 @@ export function useInsuranceStatus(userId: string | undefined): {
   refetch: () => void;
 } {
   const query = useQuery({
-    queryKey: insuranceKeys.status(userId ?? ""),
+    queryKey: insuranceKeys.status(userId ?? ''),
     queryFn: () => checkInsuranceStatus({ userId: userId! }),
     enabled: Boolean(userId),
     staleTime: 2 * 60 * 1000, // 2 min - insurance status changes rarely
@@ -85,7 +85,7 @@ export function usePurchaseInsurance() {
         queryKey: economyKeys.wallet(variables.userId),
       });
       void queryClient.invalidateQueries({
-        queryKey: economyKeys.balance(variables.userId, "GEMS"),
+        queryKey: economyKeys.balance(variables.userId, 'GEMS'),
       });
     },
   });
@@ -93,7 +93,7 @@ export function usePurchaseInsurance() {
 
 export function useWalletSummary(userId: string) {
   return useQuery({
-    queryKey: [...economyKeys.wallet(userId), "summary"],
+    queryKey: [...economyKeys.wallet(userId), 'summary'],
     queryFn: () => service.getWalletSummary(userId),
     enabled: Boolean(userId),
     staleTime: 1000 * 30,
@@ -276,7 +276,7 @@ export function useClaimOffer() {
 // Analytics Queries
 // ============================================================================
 
-export function useEconomyAnalytics(userId: string, period: "DAILY" | "WEEKLY" | "MONTHLY", periodStart: number, periodEnd: number) {
+export function useEconomyAnalytics(userId: string, period: 'DAILY' | 'WEEKLY' | 'MONTHLY', periodStart: number, periodEnd: number) {
   return useQuery({
     queryKey: economyKeys.analytics(userId, `${period}_${periodStart}_${periodEnd}`),
     queryFn: () => service.getEconomyAnalytics(userId, period, periodStart, periodEnd),

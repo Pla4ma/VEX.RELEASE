@@ -2,129 +2,129 @@
  * Settings Validation Tests
  */
 
-import { validateSettingValue, validateSettingsExport, batchValidateSettings, formatValidationErrors, SettingsValidationError } from "../validation";
+import { validateSettingValue, validateSettingsExport, batchValidateSettings, formatValidationErrors, SettingsValidationError } from '../validation';
 
-describe("SettingsValidation", () => {
-  describe("validateSettingValue", () => {
-    it("should validate notification frequency", () => {
-      const result = validateSettingValue("notifications.email.digestFrequency", "daily", "notifications");
+describe('SettingsValidation', () => {
+  describe('validateSettingValue', () => {
+    it('should validate notification frequency', () => {
+      const result = validateSettingValue('notifications.email.digestFrequency', 'daily', 'notifications');
       expect(result.valid).toBe(true);
     });
 
-    it("should reject invalid notification frequency", () => {
-      const result = validateSettingValue("notifications.email.digestFrequency", "invalid", "notifications");
+    it('should reject invalid notification frequency', () => {
+      const result = validateSettingValue('notifications.email.digestFrequency', 'invalid', 'notifications');
       expect(result.valid).toBe(false);
-      expect(result.errors[0].code).toBe("INVALID_FREQUENCY");
+      expect(result.errors[0].code).toBe('INVALID_FREQUENCY');
     });
 
-    it("should validate quiet hours", () => {
-      const result = validateSettingValue("notifications.push.quietHoursStart", 22, "notifications");
+    it('should validate quiet hours', () => {
+      const result = validateSettingValue('notifications.push.quietHoursStart', 22, 'notifications');
       expect(result.valid).toBe(true);
     });
 
-    it("should reject invalid quiet hours", () => {
-      const result = validateSettingValue("notifications.push.quietHoursStart", 25, "notifications");
+    it('should reject invalid quiet hours', () => {
+      const result = validateSettingValue('notifications.push.quietHoursStart', 25, 'notifications');
       expect(result.valid).toBe(false);
-      expect(result.errors[0].code).toBe("INVALID_HOUR");
+      expect(result.errors[0].code).toBe('INVALID_HOUR');
     });
 
-    it("should validate appearance font scale", () => {
-      const result = validateSettingValue("appearance.fontScale", 1.2, "appearance");
+    it('should validate appearance font scale', () => {
+      const result = validateSettingValue('appearance.fontScale', 1.2, 'appearance');
       expect(result.valid).toBe(true);
     });
 
-    it("should reject invalid font scale", () => {
-      const result = validateSettingValue("appearance.fontScale", 3.0, "appearance");
+    it('should reject invalid font scale', () => {
+      const result = validateSettingValue('appearance.fontScale', 3.0, 'appearance');
       expect(result.valid).toBe(false);
-      expect(result.errors[0].code).toBe("INVALID_FONT_SCALE");
+      expect(result.errors[0].code).toBe('INVALID_FONT_SCALE');
     });
 
-    it("should warn about large font scale", () => {
-      const result = validateSettingValue("appearance.fontScale", 1.6, "appearance");
+    it('should warn about large font scale', () => {
+      const result = validateSettingValue('appearance.fontScale', 1.6, 'appearance');
       expect(result.valid).toBe(true);
-      expect(result.warnings[0].code).toBe("LARGE_FONT_SCALE");
+      expect(result.warnings[0].code).toBe('LARGE_FONT_SCALE');
     });
 
-    it("should validate theme", () => {
-      const result = validateSettingValue("appearance.theme", "dark", "appearance");
+    it('should validate theme', () => {
+      const result = validateSettingValue('appearance.theme', 'dark', 'appearance');
       expect(result.valid).toBe(true);
     });
 
-    it("should reject invalid theme", () => {
-      const result = validateSettingValue("appearance.theme", "invalid", "appearance");
+    it('should reject invalid theme', () => {
+      const result = validateSettingValue('appearance.theme', 'invalid', 'appearance');
       expect(result.valid).toBe(false);
-      expect(result.errors[0].code).toBe("INVALID_THEME");
+      expect(result.errors[0].code).toBe('INVALID_THEME');
     });
 
-    it("should validate accent color", () => {
-      const result = validateSettingValue("appearance.accentColor", "#6366f1", "appearance");
+    it('should validate accent color', () => {
+      const result = validateSettingValue('appearance.accentColor', '#6366f1', 'appearance');
       expect(result.valid).toBe(true);
     });
 
-    it("should reject invalid accent color", () => {
-      const result = validateSettingValue("appearance.accentColor", "red", "appearance");
+    it('should reject invalid accent color', () => {
+      const result = validateSettingValue('appearance.accentColor', 'red', 'appearance');
       expect(result.valid).toBe(false);
-      expect(result.errors[0].code).toBe("INVALID_COLOR");
+      expect(result.errors[0].code).toBe('INVALID_COLOR');
     });
 
-    it("should validate coach personality", () => {
-      const result = validateSettingValue("coach.personality", "supportive", "coach");
+    it('should validate coach personality', () => {
+      const result = validateSettingValue('coach.personality', 'supportive', 'coach');
       expect(result.valid).toBe(true);
     });
 
-    it("should reject invalid coach personality", () => {
-      const result = validateSettingValue("coach.personality", "angry", "coach");
+    it('should reject invalid coach personality', () => {
+      const result = validateSettingValue('coach.personality', 'angry', 'coach');
       expect(result.valid).toBe(false);
-      expect(result.errors[0].code).toBe("INVALID_PERSONALITY");
+      expect(result.errors[0].code).toBe('INVALID_PERSONALITY');
     });
 
-    it("should validate coach frequency", () => {
-      const result = validateSettingValue("coach.frequency", "moderate", "coach");
+    it('should validate coach frequency', () => {
+      const result = validateSettingValue('coach.frequency', 'moderate', 'coach');
       expect(result.valid).toBe(true);
     });
 
-    it("should reject invalid coach frequency", () => {
-      const result = validateSettingValue("coach.frequency", "sometimes", "coach");
+    it('should reject invalid coach frequency', () => {
+      const result = validateSettingValue('coach.frequency', 'sometimes', 'coach');
       expect(result.valid).toBe(false);
-      expect(result.errors[0].code).toBe("INVALID_FREQUENCY");
+      expect(result.errors[0].code).toBe('INVALID_FREQUENCY');
     });
 
-    it("should validate privacy visibility", () => {
-      const result = validateSettingValue("privacy.profileVisibility", "friends", "privacy");
+    it('should validate privacy visibility', () => {
+      const result = validateSettingValue('privacy.profileVisibility', 'friends', 'privacy');
       expect(result.valid).toBe(true);
     });
 
-    it("should reject invalid visibility", () => {
-      const result = validateSettingValue("privacy.profileVisibility", "everyone", "privacy");
+    it('should reject invalid visibility', () => {
+      const result = validateSettingValue('privacy.profileVisibility', 'everyone', 'privacy');
       expect(result.valid).toBe(false);
-      expect(result.errors[0].code).toBe("INVALID_VISIBILITY");
+      expect(result.errors[0].code).toBe('INVALID_VISIBILITY');
     });
 
-    it("should warn about analytics opt out", () => {
-      const result = validateSettingValue("privacy.analyticsOptOut", true, "privacy");
+    it('should warn about analytics opt out', () => {
+      const result = validateSettingValue('privacy.analyticsOptOut', true, 'privacy');
       expect(result.valid).toBe(true);
-      expect(result.warnings[0].code).toBe("ANALYTICS_DISABLED");
+      expect(result.warnings[0].code).toBe('ANALYTICS_DISABLED');
     });
 
-    it("should warn about invalid key format", () => {
-      const result = validateSettingValue("invalidkey", "value", "general");
+    it('should warn about invalid key format', () => {
+      const result = validateSettingValue('invalidkey', 'value', 'general');
       expect(result.valid).toBe(true);
-      expect(result.warnings[0].code).toBe("INVALID_KEY_FORMAT");
+      expect(result.warnings[0].code).toBe('INVALID_KEY_FORMAT');
     });
 
-    it("should reject undefined values", () => {
-      const result = validateSettingValue("test.key", undefined, "general");
+    it('should reject undefined values', () => {
+      const result = validateSettingValue('test.key', undefined, 'general');
       expect(result.valid).toBe(false);
-      expect(result.errors[0].code).toBe("UNDEFINED_VALUE");
+      expect(result.errors[0].code).toBe('UNDEFINED_VALUE');
     });
   });
 
-  describe("validateSettingsExport", () => {
-    it("should validate correct export", () => {
+  describe('validateSettingsExport', () => {
+    it('should validate correct export', () => {
       const exportData = {
         version: 1,
         exportedAt: Date.now(),
-        userId: "user-123",
+        userId: 'user-123',
         preferences: {},
       };
 
@@ -132,54 +132,54 @@ describe("SettingsValidation", () => {
       expect(result.valid).toBe(true);
     });
 
-    it("should reject missing version", () => {
+    it('should reject missing version', () => {
       const exportData = {
-        userId: "user-123",
+        userId: 'user-123',
       };
 
       const result = validateSettingsExport(exportData);
       expect(result.valid).toBe(false);
-      expect(result.errors[0].code).toBe("MISSING_VERSION");
+      expect(result.errors[0].code).toBe('MISSING_VERSION');
     });
 
-    it("should reject invalid version", () => {
+    it('should reject invalid version', () => {
       const exportData = {
         version: -1,
-        userId: "user-123",
+        userId: 'user-123',
       };
 
       const result = validateSettingsExport(exportData);
       expect(result.valid).toBe(false);
-      expect(result.errors[0].code).toBe("INVALID_VERSION");
+      expect(result.errors[0].code).toBe('INVALID_VERSION');
     });
 
-    it("should reject missing userId", () => {
+    it('should reject missing userId', () => {
       const exportData = {
         version: 1,
       };
 
       const result = validateSettingsExport(exportData);
       expect(result.valid).toBe(false);
-      expect(result.errors[0].code).toBe("MISSING_USER_ID");
+      expect(result.errors[0].code).toBe('MISSING_USER_ID');
     });
 
-    it("should warn about missing timestamp", () => {
+    it('should warn about missing timestamp', () => {
       const exportData = {
         version: 1,
-        userId: "user-123",
+        userId: 'user-123',
       };
 
       const result = validateSettingsExport(exportData);
       expect(result.valid).toBe(true);
-      expect(result.warnings[0].code).toBe("MISSING_TIMESTAMP");
+      expect(result.warnings[0].code).toBe('MISSING_TIMESTAMP');
     });
   });
 
-  describe("batchValidateSettings", () => {
-    it("should validate multiple settings", async () => {
+  describe('batchValidateSettings', () => {
+    it('should validate multiple settings', async () => {
       const settings = [
-        { key: "appearance.theme", value: "dark", category: "appearance" as const },
-        { key: "appearance.fontScale", value: 1.2, category: "appearance" as const },
+        { key: 'appearance.theme', value: 'dark', category: 'appearance' as const },
+        { key: 'appearance.fontScale', value: 1.2, category: 'appearance' as const },
       ];
 
       const result = await batchValidateSettings(settings);
@@ -189,10 +189,10 @@ describe("SettingsValidation", () => {
       expect(result.summary.invalid).toBe(0);
     });
 
-    it("should track invalid settings", async () => {
+    it('should track invalid settings', async () => {
       const settings = [
-        { key: "appearance.theme", value: "dark", category: "appearance" as const },
-        { key: "appearance.fontScale", value: 3.0, category: "appearance" as const },
+        { key: 'appearance.theme', value: 'dark', category: 'appearance' as const },
+        { key: 'appearance.fontScale', value: 3.0, category: 'appearance' as const },
       ];
 
       const result = await batchValidateSettings(settings);
@@ -201,11 +201,11 @@ describe("SettingsValidation", () => {
       expect(result.summary.invalid).toBe(1);
     });
 
-    it("should stop early on too many errors", async () => {
+    it('should stop early on too many errors', async () => {
       const settings = [
-        { key: "a", value: 3.0, category: "appearance" as const },
-        { key: "b", value: 3.0, category: "appearance" as const },
-        { key: "c", value: "valid", category: "appearance" as const },
+        { key: 'a', value: 3.0, category: 'appearance' as const },
+        { key: 'b', value: 3.0, category: 'appearance' as const },
+        { key: 'c', value: 'valid', category: 'appearance' as const },
       ];
 
       const result = await batchValidateSettings(settings, {
@@ -217,41 +217,41 @@ describe("SettingsValidation", () => {
     });
   });
 
-  describe("formatValidationErrors", () => {
-    it("should format errors correctly", () => {
+  describe('formatValidationErrors', () => {
+    it('should format errors correctly', () => {
       const errors = [
         {
-          field: "theme",
-          code: "INVALID_THEME",
-          message: "Invalid theme",
-          severity: "error" as const,
-          recoveryHint: "Use light, dark, or system",
+          field: 'theme',
+          code: 'INVALID_THEME',
+          message: 'Invalid theme',
+          severity: 'error' as const,
+          recoveryHint: 'Use light, dark, or system',
         },
         {
-          field: "fontScale",
-          code: "LARGE_FONT_SCALE",
-          message: "Large font scale",
-          severity: "warning" as const,
+          field: 'fontScale',
+          code: 'LARGE_FONT_SCALE',
+          message: 'Large font scale',
+          severity: 'warning' as const,
         },
       ];
 
       const formatted = formatValidationErrors(errors);
 
-      expect(formatted).toContain("[ERROR] theme: Invalid theme");
-      expect(formatted).toContain("Hint: Use light, dark, or system");
-      expect(formatted).toContain("[WARNING] fontScale: Large font scale");
+      expect(formatted).toContain('[ERROR] theme: Invalid theme');
+      expect(formatted).toContain('Hint: Use light, dark, or system');
+      expect(formatted).toContain('[WARNING] fontScale: Large font scale');
     });
   });
 
-  describe("SettingsValidationError", () => {
-    it("should create error with all properties", () => {
-      const error = new SettingsValidationError("Validation failed", "theme", "INVALID_THEME", "Use valid theme");
+  describe('SettingsValidationError', () => {
+    it('should create error with all properties', () => {
+      const error = new SettingsValidationError('Validation failed', 'theme', 'INVALID_THEME', 'Use valid theme');
 
-      expect(error.message).toBe("Validation failed");
-      expect(error.field).toBe("theme");
-      expect(error.code).toBe("INVALID_THEME");
-      expect(error.recoveryHint).toBe("Use valid theme");
-      expect(error.name).toBe("SettingsValidationError");
+      expect(error.message).toBe('Validation failed');
+      expect(error.field).toBe('theme');
+      expect(error.code).toBe('INVALID_THEME');
+      expect(error.recoveryHint).toBe('Use valid theme');
+      expect(error.name).toBe('SettingsValidationError');
     });
   });
 });

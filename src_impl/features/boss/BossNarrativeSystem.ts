@@ -5,15 +5,15 @@
  * Narrative arcs, phase transitions, and visual themes for boss battles
  */
 
-import { eventBus } from "../../events";
+import { eventBus } from '../../events';
 
 // ============================================================================
 // Types
 // ============================================================================
 
-export type BossPhase = "PHASE_1" | "PHASE_2" | "PHASE_3" | "FINAL_PHASE";
-export type VisualTheme = "dark" | "fire" | "ice" | "nature" | "shadow";
-export type MusicMood = "tense" | "epic" | "calm" | "dramatic" | "victory";
+export type BossPhase = 'PHASE_1' | 'PHASE_2' | 'PHASE_3' | 'FINAL_PHASE';
+export type VisualTheme = 'dark' | 'fire' | 'ice' | 'nature' | 'shadow';
+export type MusicMood = 'tense' | 'epic' | 'calm' | 'dramatic' | 'victory';
 export type PhaseEffects = {
   visual: string[];
   audio: string[];
@@ -55,61 +55,61 @@ export type PhaseNarrative = {
 // ============================================================================
 
 export const BOSS_NARRATIVE_ARCS: Record<string, BossNarrativeArc> = {
-  "procrastination-dragon": {
-    bossId: "procrastination-dragon",
-    bossName: "The Procrastination Dragon",
+  'procrastination-dragon': {
+    bossId: 'procrastination-dragon',
+    bossName: 'The Procrastination Dragon',
     phases: [
       {
-        phase: "PHASE_1",
-        title: "The Dragon Wakes",
-        description: "The beast stirs from its slumber...",
+        phase: 'PHASE_1',
+        title: 'The Dragon Wakes',
+        description: 'The beast stirs from its slumber...',
         healthThreshold: 1.0,
-        effects: { visual: ["glow"], audio: ["rumble"], haptic: false },
-        musicMood: "tense",
+        effects: { visual: ['glow'], audio: ['rumble'], haptic: false },
+        musicMood: 'tense',
       },
       {
-        phase: "PHASE_2",
-        title: "Fiery Resistance",
-        description: "The dragon unleashes its flames!",
+        phase: 'PHASE_2',
+        title: 'Fiery Resistance',
+        description: 'The dragon unleashes its flames!',
         healthThreshold: 0.6,
-        effects: { visual: ["fire"], audio: ["roar"], haptic: true },
-        musicMood: "epic",
+        effects: { visual: ['fire'], audio: ['roar'], haptic: true },
+        musicMood: 'epic',
       },
       {
-        phase: "PHASE_3",
-        title: "Final Stand",
-        description: "The dragon fights with desperate fury!",
+        phase: 'PHASE_3',
+        title: 'Final Stand',
+        description: 'The dragon fights with desperate fury!',
         healthThreshold: 0.2,
-        effects: { visual: ["inferno"], audio: ["scream"], haptic: true },
-        musicMood: "dramatic",
+        effects: { visual: ['inferno'], audio: ['scream'], haptic: true },
+        musicMood: 'dramatic',
       },
     ],
-    taunts: ["I'll deal with it tomorrow...", "Just five more minutes...", "The deadline isn't until next week!"],
-    theme: "fire",
+    taunts: ["I'll deal with it tomorrow...", 'Just five more minutes...', "The deadline isn't until next week!"],
+    theme: 'fire',
   },
-  "distraction-demon": {
-    bossId: "distraction-demon",
-    bossName: "The Distraction Demon",
+  'distraction-demon': {
+    bossId: 'distraction-demon',
+    bossName: 'The Distraction Demon',
     phases: [
       {
-        phase: "PHASE_1",
-        title: "Whispers Begin",
-        description: "Subtle temptations start to surface...",
+        phase: 'PHASE_1',
+        title: 'Whispers Begin',
+        description: 'Subtle temptations start to surface...',
         healthThreshold: 1.0,
-        effects: { visual: ["shadow"], audio: ["whisper"], haptic: false },
-        musicMood: "tense",
+        effects: { visual: ['shadow'], audio: ['whisper'], haptic: false },
+        musicMood: 'tense',
       },
       {
-        phase: "PHASE_2",
-        title: "Temptation Grows",
-        description: "The demon offers irresistible diversions!",
+        phase: 'PHASE_2',
+        title: 'Temptation Grows',
+        description: 'The demon offers irresistible diversions!',
         healthThreshold: 0.5,
-        effects: { visual: ["phantom"], audio: ["laughter"], haptic: true },
-        musicMood: "dramatic",
+        effects: { visual: ['phantom'], audio: ['laughter'], haptic: true },
+        musicMood: 'dramatic',
       },
     ],
-    taunts: ["Did you see that notification?", "Your phone is calling to you...", "Just a quick scroll through social media..."],
-    theme: "shadow",
+    taunts: ['Did you see that notification?', 'Your phone is calling to you...', 'Just a quick scroll through social media...'],
+    theme: 'shadow',
   },
 };
 
@@ -124,7 +124,7 @@ export function getBossNarrativeArc(bossId: string): BossNarrativeArc | null {
 export function determineBossPhase(bossId: string, healthPercent: number): BossPhase {
   const arc = getBossNarrativeArc(bossId);
   if (!arc) {
-    return "PHASE_1";
+    return 'PHASE_1';
   }
 
   // Find the phase based on health threshold
@@ -133,7 +133,7 @@ export function determineBossPhase(bossId: string, healthPercent: number): BossP
       return arc.phases[i].phase;
     }
   }
-  return "PHASE_1";
+  return 'PHASE_1';
 }
 
 export function calculateHealthPercent(remaining: number, max: number): number {
@@ -170,17 +170,17 @@ export function getRandomTaunt(bossId: string): string | null {
 
 export function getCurrentVisualTheme(bossId: string): VisualTheme {
   const arc = getBossNarrativeArc(bossId);
-  return arc?.theme ?? "dark";
+  return arc?.theme ?? 'dark';
 }
 
 export function getCurrentMusicMood(bossId: string, phase: BossPhase): MusicMood {
   const arc = getBossNarrativeArc(bossId);
   if (!arc) {
-    return "tense";
+    return 'tense';
   }
 
   const phaseData = arc.phases.find((p) => p.phase === phase);
-  return phaseData?.musicMood ?? "tense";
+  return phaseData?.musicMood ?? 'tense';
 }
 
 export function getPhaseEffects(bossId: string, phase: BossPhase): PhaseEffects {
@@ -198,7 +198,7 @@ const phaseStateMap = new Map<string, BossPhaseState>();
 
 export function initializePhaseState(bossId: string): BossPhaseState {
   const state: BossPhaseState = {
-    currentPhase: "PHASE_1",
+    currentPhase: 'PHASE_1',
     phaseTransitions: 0,
     tauntsShown: [],
   };
@@ -213,7 +213,7 @@ export function updatePhaseState(bossId: string, newPhase: BossPhase): void {
     state.phaseTransitions++;
 
     // Publish event for phase change
-    eventBus.publish("boss:phase_changed", {
+    eventBus.publish('boss:phase_changed', {
       bossId,
       newPhase,
       previousPhase: state.currentPhase,
@@ -240,7 +240,7 @@ export function clearPhaseState(bossId: string): void {
 export function getBossStory(bossId: string): string {
   const arc = getBossNarrativeArc(bossId);
   if (!arc) {
-    return "";
+    return '';
   }
 
   return `${arc.bossName} - A formidable foe that tests your focus and determination.`;
@@ -250,11 +250,11 @@ export function getBossTheme(bossId: string): BossTheme {
   const visualTheme = getCurrentVisualTheme(bossId);
 
   const themeColors: Record<VisualTheme, BossTheme> = {
-    dark: { primary: "#1a1a2e", secondary: "#16213e", accent: "#e94560" },
-    fire: { primary: "#2d142c", secondary: "#801336", accent: "#ff6b35" },
-    ice: { primary: "#1e3a5f", secondary: "#4a90e2", accent: "#a8d8ea" },
-    nature: { primary: "#1b4332", secondary: "#2d6a4f", accent: "#52b788" },
-    shadow: { primary: "#0f0f0f", secondary: "#232323", accent: "#6c5ce7" },
+    dark: { primary: '#1a1a2e', secondary: '#16213e', accent: '#e94560' },
+    fire: { primary: '#2d142c', secondary: '#801336', accent: '#ff6b35' },
+    ice: { primary: '#1e3a5f', secondary: '#4a90e2', accent: '#a8d8ea' },
+    nature: { primary: '#1b4332', secondary: '#2d6a4f', accent: '#52b788' },
+    shadow: { primary: '#0f0f0f', secondary: '#232323', accent: '#6c5ce7' },
   };
 
   return themeColors[visualTheme] ?? themeColors.dark;

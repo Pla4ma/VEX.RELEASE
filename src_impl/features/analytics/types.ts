@@ -3,8 +3,8 @@
  * Domain types for analytics dashboards, insights, and trend analysis
  */
 
-import type { z } from "zod";
-import type { AnalyticsMetricSchema, AnalyticsDimensionSchema, TrendDirectionSchema, TimeRangeSchema, InsightSeveritySchema, InsightTypeSchema, DashboardWidgetTypeSchema, ExportFormatSchema, AnalyticsFilterSchema } from "./schemas";
+import type { z } from 'zod';
+import type { AnalyticsMetricSchema, AnalyticsDimensionSchema, TrendDirectionSchema, TimeRangeSchema, InsightSeveritySchema, InsightTypeSchema, DashboardWidgetTypeSchema, ExportFormatSchema, AnalyticsFilterSchema } from './schemas';
 
 // Metric and dimension types
 export type AnalyticsMetric = z.infer<typeof AnalyticsMetricSchema>;
@@ -28,7 +28,7 @@ export interface AnalyticsDataPoint {
 // Time series data
 export interface TimeSeriesData {
   metric: AnalyticsMetric;
-  granularity: "hour" | "day" | "week" | "month";
+  granularity: 'hour' | 'day' | 'week' | 'month';
   points: AnalyticsDataPoint[];
   summary: {
     total: number;
@@ -134,7 +134,7 @@ export interface ComparativeStats {
 // Pattern detection result
 export interface DetectedPattern {
   id: string;
-  type: "correlation" | "anomaly" | "cycle" | "milestone" | "regression";
+  type: 'correlation' | 'anomaly' | 'cycle' | 'milestone' | 'regression';
   metric: AnalyticsMetric;
   description: string;
   confidence: number;
@@ -149,7 +149,7 @@ export interface DetectedPattern {
 export interface ExportJob {
   id: string;
   userId: string;
-  status: "pending" | "processing" | "completed" | "failed" | "cancelled";
+  status: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
   format: ExportFormat;
   dataTypes: string[];
   dateRange: {
@@ -172,11 +172,11 @@ export interface AnalyticsPreferences {
   defaultTimeRange: TimeRange;
   defaultDashboardId: string;
   emailReportsEnabled: boolean;
-  emailReportFrequency: "daily" | "weekly" | "monthly" | "never";
+  emailReportFrequency: 'daily' | 'weekly' | 'monthly' | 'never';
   insightNotificationsEnabled: boolean;
   autoRefreshEnabled: boolean;
   autoRefreshInterval: number;
-  currencyDisplay: "coins" | "gems" | "both";
+  currencyDisplay: 'coins' | 'gems' | 'both';
   timezone: string;
   updatedAt: number;
 }
@@ -222,8 +222,8 @@ export interface AnalyticsState {
 // Degraded analytics mode state
 export interface DegradedAnalyticsState {
   enabled: boolean;
-  reason: "offline" | "rate_limited" | "server_error" | "cache_only";
+  reason: 'offline' | 'rate_limited' | 'server_error' | 'cache_only';
   availableMetrics: AnalyticsMetric[];
-  dataFreshness: "realtime" | "stale" | "cached" | "unavailable";
+  dataFreshness: 'realtime' | 'stale' | 'cached' | 'unavailable';
   lastSuccessfulFetch: number;
 }

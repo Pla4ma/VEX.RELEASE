@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
+import { captureSilentFailure } from '../../../utils/silent-failure';
 /**
  * VictoryCard Component
  *
@@ -10,8 +10,8 @@ import { captureSilentFailure } from "../../../utils/silent-failure";
  * @phase 10.3
  */
 
-import React, { useRef, useCallback, useState } from "react";
-import { View, Share, Platform } from "react-native";
+import React, { useRef, useCallback, useState } from 'react';
+import { View, Share, Platform } from 'react-native';
 
 // react-native-view-shot is installed as an optional dependency
 // It will be dynamically imported to avoid hard crashes if not available
@@ -19,33 +19,33 @@ let captureRef:
   | ((
       ref: React.RefObject<View | null>,
       options: {
-        format: "png" | "jpg";
+        format: 'png' | 'jpg';
         quality: number;
-        result: "tmpfile" | "base64" | "data-uri";
+        result: 'tmpfile' | 'base64' | 'data-uri';
       },
     ) => Promise<string>)
   | null = null;
 
 // Dynamic import for react-native-view-shot
 try {
-  const ViewShot = require("react-native-view-shot");
+  const ViewShot = require('react-native-view-shot');
   captureRef = ViewShot.captureRef;
 } catch (error) {
-  captureSilentFailure(error, { feature: "social", operation: "network-fallback", type: "network" });
+  captureSilentFailure(error, { feature: 'social', operation: 'network-fallback', type: 'network' });
   // Module not installed - will fall back to text sharing
   captureRef = null;
 }
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
 
 // ============================================================================
 // Types
 // ============================================================================
 
-export type VictoryCardType = "SESSION" | "ACHIEVEMENT" | "STREAK" | "BOSS";
+export type VictoryCardType = 'SESSION' | 'ACHIEVEMENT' | 'STREAK' | 'BOSS';
 
 export interface VictoryCardData {
   type: VictoryCardType;
@@ -63,7 +63,7 @@ export interface VictoryCardData {
   /** Achievement type: achievement name */
   achievementName?: string;
   /** Achievement type: rarity */
-  rarity?: "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+  rarity?: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
   /** Streak type: days */
   milestoneDays?: number;
   /** Boss type: boss name */
@@ -80,7 +80,7 @@ interface VictoryCardProps {
   /** Card data */
   data: VictoryCardData;
   /** Aspect ratio: 'square' (1:1) or 'story' (9:16) */
-  format?: "square" | "story";
+  format?: 'square' | 'story';
   /** Share callback */
   onShare?: (uri: string) => void;
   /** Ref for capturing */
@@ -92,38 +92,38 @@ interface VictoryCardProps {
 // ============================================================================
 
 const RARITY_COLORS: Record<string, string> = {
-  COMMON: "#94A3B8",
-  UNCOMMON: "#22C55E",
-  RARE: "#3B82F6",
-  EPIC: "#A855F7",
-  LEGENDARY: "#F59E0B",
+  COMMON: '#94A3B8',
+  UNCOMMON: '#22C55E',
+  RARE: '#3B82F6',
+  EPIC: '#A855F7',
+  LEGENDARY: '#F59E0B',
 };
 
 const BOSS_ICONS: Record<number, string> = {
-  1: "👾",
-  2: "👹",
-  3: "📱",
-  4: "🤹",
-  5: "👺",
-  6: "👻",
+  1: '👾',
+  2: '👹',
+  3: '📱',
+  4: '🤹',
+  5: '👺',
+  6: '👻',
 };
 
 /**
  * Session Receipt Card
  */
-function SessionReceiptCard({ data, format }: { data: VictoryCardData; format: "square" | "story" }): JSX.Element {
+function SessionReceiptCard({ data, format }: { data: VictoryCardData; format: 'square' | 'story' }): JSX.Element {
   const { theme } = useTheme();
-  const isStory = format === "story";
+  const isStory = format === 'story';
 
   return (
     <Box
       flex={1}
-      p={isStory ? "xl" : "lg"}
+      p={isStory ? 'xl' : 'lg'}
       bg="background.primary"
       style={{
-        backgroundColor: "#0F172A", // Dark background for premium feel
-        justifyContent: "center",
-        alignItems: "center",
+        backgroundColor: '#0F172A', // Dark background for premium feel
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       {/* VEX Logo */}
@@ -147,7 +147,7 @@ function SessionReceiptCard({ data, format }: { data: VictoryCardData; format: "
           }}
         >
           <Text fontSize={isStory ? 56 : 40} fontWeight="900" color="primary.500">
-            {data.grade || "A"}
+            {data.grade || 'A'}
           </Text>
         </Box>
 
@@ -192,8 +192,8 @@ function SessionReceiptCard({ data, format }: { data: VictoryCardData; format: "
 
       {/* Coach Quote */}
       {data.coachQuote && (
-        <Box mt="lg" p="md" borderRadius="lg" style={{ backgroundColor: "#1E293B", maxWidth: "80%" }}>
-          <Text fontSize={isStory ? 16 : 14} color="text.secondary" textAlign="center" style={{ fontStyle: "italic" }}>
+        <Box mt="lg" p="md" borderRadius="lg" style={{ backgroundColor: '#1E293B', maxWidth: '80%' }}>
+          <Text fontSize={isStory ? 16 : 14} color="text.secondary" textAlign="center" style={{ fontStyle: 'italic' }}>
             "{data.coachQuote}"
           </Text>
         </Box>
@@ -212,18 +212,18 @@ function SessionReceiptCard({ data, format }: { data: VictoryCardData; format: "
 /**
  * Achievement Badge Card
  */
-function AchievementBadgeCard({ data, format }: { data: VictoryCardData; format: "square" | "story" }): JSX.Element {
-  const isStory = format === "story";
-  const rarityColor = RARITY_COLORS[data.rarity || "COMMON"];
+function AchievementBadgeCard({ data, format }: { data: VictoryCardData; format: 'square' | 'story' }): JSX.Element {
+  const isStory = format === 'story';
+  const rarityColor = RARITY_COLORS[data.rarity || 'COMMON'];
 
   return (
     <Box
       flex={1}
-      p={isStory ? "xl" : "lg"}
+      p={isStory ? 'xl' : 'lg'}
       style={{
-        backgroundColor: "#0F172A",
-        justifyContent: "center",
-        alignItems: "center",
+        backgroundColor: '#0F172A',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       {/* VEX Logo */}
@@ -234,7 +234,7 @@ function AchievementBadgeCard({ data, format }: { data: VictoryCardData; format:
       {/* Rarity Badge */}
       <Box px="lg" py="sm" borderRadius="full" style={{ backgroundColor: rarityColor }} mb="lg">
         <Text fontSize={isStory ? 16 : 14} fontWeight="700" color="white">
-          {data.rarity || "COMMON"} ACHIEVEMENT
+          {data.rarity || 'COMMON'} ACHIEVEMENT
         </Text>
       </Box>
 
@@ -257,7 +257,7 @@ function AchievementBadgeCard({ data, format }: { data: VictoryCardData; format:
 
       {/* Achievement Name */}
       <Text fontSize={isStory ? 32 : 24} fontWeight="800" color="text.inverse" textAlign="center" mb="md">
-        {data.achievementName || "Achievement Unlocked"}
+        {data.achievementName || 'Achievement Unlocked'}
       </Text>
 
       {/* Username */}
@@ -283,37 +283,37 @@ function AchievementBadgeCard({ data, format }: { data: VictoryCardData; format:
 /**
  * Streak Milestone Card
  */
-function StreakMilestoneCard({ data, format }: { data: VictoryCardData; format: "square" | "story" }): JSX.Element {
-  const isStory = format === "story";
+function StreakMilestoneCard({ data, format }: { data: VictoryCardData; format: 'square' | 'story' }): JSX.Element {
+  const isStory = format === 'story';
   const days = data.milestoneDays || data.streakDays || 7;
 
   const getMilestoneTitle = (d: number): string => {
     if (d >= 100) {
-      return "CENTURY LEGEND";
+      return 'CENTURY LEGEND';
     }
     if (d >= 60) {
-      return "CONSISTENCY KING";
+      return 'CONSISTENCY KING';
     }
     if (d >= 30) {
-      return "MONTHLY MASTER";
+      return 'MONTHLY MASTER';
     }
     if (d >= 14) {
-      return "TWO WEEK CHAMP";
+      return 'TWO WEEK CHAMP';
     }
     if (d >= 7) {
-      return "WEEK WARRIOR";
+      return 'WEEK WARRIOR';
     }
-    return "STREAK STARTER";
+    return 'STREAK STARTER';
   };
 
   return (
     <Box
       flex={1}
-      p={isStory ? "xl" : "lg"}
+      p={isStory ? 'xl' : 'lg'}
       style={{
-        backgroundColor: "#0F172A",
-        justifyContent: "center",
-        alignItems: "center",
+        backgroundColor: '#0F172A',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       {/* VEX Logo */}
@@ -330,7 +330,7 @@ function StreakMilestoneCard({ data, format }: { data: VictoryCardData; format: 
 
       {/* Flame Animation Effect */}
       <Box mb="lg">
-        <Text fontSize={isStory ? 64 : 48}>{"🔥".repeat(Math.min(Math.floor(days / 7) + 1, 6))}</Text>
+        <Text fontSize={isStory ? 64 : 48}>{'🔥'.repeat(Math.min(Math.floor(days / 7) + 1, 6))}</Text>
       </Box>
 
       {/* Day Count */}
@@ -347,8 +347,8 @@ function StreakMilestoneCard({ data, format }: { data: VictoryCardData; format: 
       </Text>
 
       {/* Motivational Text */}
-      <Text fontSize={isStory ? 16 : 14} color="text.secondary" textAlign="center" style={{ maxWidth: "80%" }}>
-        {days >= 30 ? "A month of dedication. You are unstoppable!" : days >= 7 ? "A week of focus. Keep the fire burning!" : "Building momentum. Keep going!"}
+      <Text fontSize={isStory ? 16 : 14} color="text.secondary" textAlign="center" style={{ maxWidth: '80%' }}>
+        {days >= 30 ? 'A month of dedication. You are unstoppable!' : days >= 7 ? 'A week of focus. Keep the fire burning!' : 'Building momentum. Keep going!'}
       </Text>
 
       {/* App Tagline */}
@@ -364,18 +364,18 @@ function StreakMilestoneCard({ data, format }: { data: VictoryCardData; format: 
 /**
  * Boss Defeat Card
  */
-function BossDefeatCard({ data, format }: { data: VictoryCardData; format: "square" | "story" }): JSX.Element {
-  const isStory = format === "story";
-  const bossIcon = BOSS_ICONS[data.bossTier || 1] || "👾";
+function BossDefeatCard({ data, format }: { data: VictoryCardData; format: 'square' | 'story' }): JSX.Element {
+  const isStory = format === 'story';
+  const bossIcon = BOSS_ICONS[data.bossTier || 1] || '👾';
 
   return (
     <Box
       flex={1}
-      p={isStory ? "xl" : "lg"}
+      p={isStory ? 'xl' : 'lg'}
       style={{
-        backgroundColor: "#0F172A",
-        justifyContent: "center",
-        alignItems: "center",
+        backgroundColor: '#0F172A',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
       {/* VEX Logo */}
@@ -398,9 +398,9 @@ function BossDefeatCard({ data, format }: { data: VictoryCardData; format: "squa
         justifyContent="center"
         alignItems="center"
         style={{
-          backgroundColor: "#EF444430",
+          backgroundColor: '#EF444430',
           borderWidth: 4,
-          borderColor: "#EF4444",
+          borderColor: '#EF4444',
         }}
         mb="lg"
       >
@@ -409,7 +409,7 @@ function BossDefeatCard({ data, format }: { data: VictoryCardData; format: "squa
 
       {/* Boss Name */}
       <Text fontSize={isStory ? 32 : 24} fontWeight="800" color="text.inverse" textAlign="center" mb="md">
-        {data.bossName || "Unknown Boss"}
+        {data.bossName || 'Unknown Boss'}
       </Text>
 
       {/* Damage Stats */}
@@ -446,15 +446,15 @@ function BossDefeatCard({ data, format }: { data: VictoryCardData; format: "squa
 /**
  * Victory Card component - renders the appropriate card type
  */
-export function VictoryCard({ data, format = "square" }: VictoryCardProps): JSX.Element {
+export function VictoryCard({ data, format = 'square' }: VictoryCardProps): JSX.Element {
   switch (data.type) {
-    case "SESSION":
+    case 'SESSION':
       return <SessionReceiptCard data={data} format={format} />;
-    case "ACHIEVEMENT":
+    case 'ACHIEVEMENT':
       return <AchievementBadgeCard data={data} format={format} />;
-    case "STREAK":
+    case 'STREAK':
       return <StreakMilestoneCard data={data} format={format} />;
-    case "BOSS":
+    case 'BOSS':
       return <BossDefeatCard data={data} format={format} />;
     default:
       return <SessionReceiptCard data={data} format={format} />;
@@ -464,7 +464,7 @@ export function VictoryCard({ data, format = "square" }: VictoryCardProps): JSX.
 /**
  * Victory Card with capture and share functionality
  */
-export function VictoryCardWithShare({ data, format = "square" }: Omit<VictoryCardProps, "captureRef">): JSX.Element {
+export function VictoryCardWithShare({ data, format = 'square' }: Omit<VictoryCardProps, 'captureRef'>): JSX.Element {
   const cardRef = useRef<View>(null);
   const [isCapturing, setIsCapturing] = useState(false);
   const { theme } = useTheme();
@@ -481,9 +481,9 @@ export function VictoryCardWithShare({ data, format = "square" }: Omit<VictoryCa
       let uri: string | undefined;
       if (captureRef) {
         uri = await captureRef(cardRef, {
-          format: "png",
+          format: 'png',
           quality: 1,
-          result: "tmpfile",
+          result: 'tmpfile',
         });
       }
 
@@ -491,7 +491,7 @@ export function VictoryCardWithShare({ data, format = "square" }: Omit<VictoryCa
       const shareMessage = getShareMessage(data);
 
       if (uri) {
-        if (Platform.OS === "ios") {
+        if (Platform.OS === 'ios') {
           await Share.share({
             url: uri,
             message: shareMessage,
@@ -520,9 +520,9 @@ export function VictoryCardWithShare({ data, format = "square" }: Omit<VictoryCa
       <View
         ref={cardRef}
         style={{
-          width: format === "story" ? 360 : 360,
-          height: format === "story" ? 640 : 360,
-          overflow: "hidden",
+          width: format === 'story' ? 360 : 360,
+          height: format === 'story' ? 640 : 360,
+          overflow: 'hidden',
         }}
         collapsable={false}
       >
@@ -531,13 +531,13 @@ export function VictoryCardWithShare({ data, format = "square" }: Omit<VictoryCa
 
       {/* Share Button */}
       <Button variant="primary" size="lg" onPress={handleShare} disabled={isCapturing} fullWidth accessibilityLabel="Action button" accessibilityRole="button" accessibilityHint="Activates this control">
-        {isCapturing ? "Capturing..." : "Share Victory"}
+        {isCapturing ? 'Capturing...' : 'Share Victory'}
       </Button>
 
       {/* Format Toggle */}
       <Box flexDirection="row" justifyContent="center" gap="md">
         <Text fontSize={12} color="text.tertiary">
-          Format: {format === "square" ? "1:1 (Instagram)" : "9:16 (Stories)"}
+          Format: {format === 'square' ? '1:1 (Instagram)' : '9:16 (Stories)'}
         </Text>
       </Box>
     </Box>
@@ -548,16 +548,16 @@ export function VictoryCardWithShare({ data, format = "square" }: Omit<VictoryCa
  * Get pre-filled share message based on card type
  */
 function getShareMessage(data: VictoryCardData): string {
-  const base = `I just focused for ${data.duration || 25} minutes and dealt ${data.damageDealt || 0} damage to ${data.bossName || "my distractions"} on @VEXApp`;
+  const base = `I just focused for ${data.duration || 25} minutes and dealt ${data.damageDealt || 0} damage to ${data.bossName || 'my distractions'} on @VEXApp`;
 
   switch (data.type) {
-    case "SESSION":
+    case 'SESSION':
       return `I just focused for ${data.duration} minutes and earned a ${data.grade} grade on @VEXApp! 🔥 ${data.streakDays}-day streak going strong.`;
-    case "ACHIEVEMENT":
+    case 'ACHIEVEMENT':
       return `I just unlocked the "${data.achievementName}" achievement on @VEXApp! 🏆 ${data.rarity} rarity!`;
-    case "STREAK":
+    case 'STREAK':
       return `I just hit a ${data.milestoneDays || data.streakDays}-day focus streak on @VEXApp! 🔥🔥🔥 Don't break the chain!`;
-    case "BOSS":
+    case 'BOSS':
       return `I just defeated ${data.bossName} on @VEXApp! ⚔️ ${data.damageDealt} damage dealt. Who's next?`;
     default:
       return base;
@@ -568,7 +568,7 @@ function getShareMessage(data: VictoryCardData): string {
  * Generate shareable caption for social media
  */
 export function generateShareCaption(data: VictoryCardData): string {
-  const hashtags = "#VEXApp #FocusMode #Productivity #GamifiedFocus";
+  const hashtags = '#VEXApp #FocusMode #Productivity #GamifiedFocus';
   return `${getShareMessage(data)}\n\n${hashtags}`;
 }
 

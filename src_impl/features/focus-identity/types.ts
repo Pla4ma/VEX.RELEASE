@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import type { z } from 'zod';
 import {
   FocusScoreBandLabelSchema,
   FocusScoreFactorKeySchema,
@@ -8,7 +8,7 @@ import {
   FocusScoreUpdateInputSchema,
   FocusScoreUpdateResultSchema,
   MonthlyFocusReportSummarySchema,
-} from "./schemas";
+} from './schemas';
 
 export type FocusScoreBandLabel = z.infer<typeof FocusScoreBandLabelSchema>;
 export type FocusScoreFactorKey = z.infer<typeof FocusScoreFactorKeySchema>;

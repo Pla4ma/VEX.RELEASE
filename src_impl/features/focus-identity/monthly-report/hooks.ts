@@ -6,7 +6,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as service from './service';
-import { useAuth } from '../../../auth/hooks';
+import { useAuth } from '../../../auth/hooks/useAuth';
 
 // ============================================================================
 // Query Keys

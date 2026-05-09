@@ -1,13 +1,13 @@
-import React from "react";
-import { Pressable, View } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { Pressable, View } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export interface TomorrowPreviewSessionProps {
   preview: {
-    type: "STREAK_MILESTONE" | "BOSS_NEAR_DEATH" | "RIVAL_GAP" | "POWER_HOUR" | "CHALLENGE_RESET" | "GENERIC";
+    type: 'STREAK_MILESTONE' | 'BOSS_NEAR_DEATH' | 'RIVAL_GAP' | 'POWER_HOUR' | 'CHALLENGE_RESET' | 'GENERIC';
     headline: string;
     subtext: string;
     emoji: string;
@@ -16,21 +16,21 @@ export interface TomorrowPreviewSessionProps {
   onPress?: () => void;
 }
 
-function useTypeColor(type: TomorrowPreviewSessionProps["preview"]["type"]): string {
+function useTypeColor(type: TomorrowPreviewSessionProps['preview']['type']): string {
   const { theme } = useTheme();
-  if (type === "STREAK_MILESTONE") {
+  if (type === 'STREAK_MILESTONE') {
     return theme.colors.warning[500];
   }
-  if (type === "BOSS_NEAR_DEATH") {
+  if (type === 'BOSS_NEAR_DEATH') {
     return theme.colors.error[500];
   }
-  if (type === "RIVAL_GAP") {
+  if (type === 'RIVAL_GAP') {
     return theme.colors.primary[500];
   }
-  if (type === "POWER_HOUR") {
+  if (type === 'POWER_HOUR') {
     return theme.colors.warning[500];
   }
-  if (type === "CHALLENGE_RESET") {
+  if (type === 'CHALLENGE_RESET') {
     return theme.colors.success[500];
   }
   return theme.colors.primary[500];
@@ -49,7 +49,7 @@ export function TomorrowPreviewSession({ preview, onPress }: TomorrowPreviewSess
             <Text variant="label" color="text.tertiary">TOMORROW</Text>
           </Box>
           <Box flexDirection="row" alignItems="flex-start" gap="md">
-            <View style={{ width: 48, height: 48, borderRadius: theme.borderRadius.full, backgroundColor: `${accentColor}20`, justifyContent: "center", alignItems: "center" }}>
+            <View style={{ width: 48, height: 48, borderRadius: theme.borderRadius.full, backgroundColor: `${accentColor}20`, justifyContent: 'center', alignItems: 'center' }}>
               <Text fontSize={24}>{preview.emoji}</Text>
             </View>
             <View style={{ flex: 1 }}>

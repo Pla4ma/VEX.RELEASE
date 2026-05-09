@@ -11,8 +11,8 @@
  * @phase 2C - Progression Consolidation
  */
 
-import { z } from "zod";
-import type { UnifiedMasteryState } from "./unified-mastery";
+import { z } from 'zod';
+import type { UnifiedMasteryState } from './unified-mastery';
 
 // ============================================================================
 // Core Types
@@ -22,10 +22,10 @@ export const PrestigeBonusSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string(),
-  type: z.enum(["XP_BOOST", "COIN_BOOST", "DROP_CHANCE", "DAMAGE_BOOST", "TIME_REDUCTION", "SPECIAL"]),
+  type: z.enum(['XP_BOOST', 'COIN_BOOST', 'DROP_CHANCE', 'DAMAGE_BOOST', 'TIME_REDUCTION', 'SPECIAL']),
   value: z.number(), // Percent or flat value
   icon: z.string(),
-  rarity: z.enum(["COMMON", "RARE", "EPIC", "LEGENDARY"]),
+  rarity: z.enum(['COMMON', 'RARE', 'EPIC', 'LEGENDARY']),
 });
 
 export type PrestigeBonus = z.infer<typeof PrestigeBonusSchema>;
@@ -63,118 +63,118 @@ export interface PrestigeResult {
 export const PRESTIGE_BONUSES: PrestigeBonus[] = [
   // Common bonuses (Prestige 1-3)
   {
-    id: "xp_boost_5",
-    name: "Wisdom of Experience",
-    description: "+5% XP from all sessions",
-    type: "XP_BOOST",
+    id: 'xp_boost_5',
+    name: 'Wisdom of Experience',
+    description: '+5% XP from all sessions',
+    type: 'XP_BOOST',
     value: 5,
-    icon: "🧠",
-    rarity: "COMMON",
+    icon: '🧠',
+    rarity: 'COMMON',
   },
   {
-    id: "coin_boost_10",
-    name: "Golden Touch",
-    description: "+10% coins from rewards",
-    type: "COIN_BOOST",
+    id: 'coin_boost_10',
+    name: 'Golden Touch',
+    description: '+10% coins from rewards',
+    type: 'COIN_BOOST',
     value: 10,
-    icon: "🪙",
-    rarity: "COMMON",
+    icon: '🪙',
+    rarity: 'COMMON',
   },
   {
-    id: "drop_boost_5",
+    id: 'drop_boost_5',
     name: "Fortune's Favor",
-    description: "+5% rare drop chance",
-    type: "DROP_CHANCE",
+    description: '+5% rare drop chance',
+    type: 'DROP_CHANCE',
     value: 5,
-    icon: "🍀",
-    rarity: "COMMON",
+    icon: '🍀',
+    rarity: 'COMMON',
   },
 
   // Rare bonuses (Prestige 4-6)
   {
-    id: "xp_boost_10",
+    id: 'xp_boost_10',
     name: "Master's Insight",
-    description: "+10% XP from all sessions",
-    type: "XP_BOOST",
+    description: '+10% XP from all sessions',
+    type: 'XP_BOOST',
     value: 10,
-    icon: "👁️",
-    rarity: "RARE",
+    icon: '👁️',
+    rarity: 'RARE',
   },
   {
-    id: "damage_boost_10",
-    name: "Focused Fury",
-    description: "+10% damage to bosses",
-    type: "DAMAGE_BOOST",
+    id: 'damage_boost_10',
+    name: 'Focused Fury',
+    description: '+10% damage to bosses',
+    type: 'DAMAGE_BOOST',
     value: 10,
-    icon: "⚔️",
-    rarity: "RARE",
+    icon: '⚔️',
+    rarity: 'RARE',
   },
   {
-    id: "time_reduction_10",
-    name: "Flow State",
-    description: "-10% time to complete daily challenges",
-    type: "TIME_REDUCTION",
+    id: 'time_reduction_10',
+    name: 'Flow State',
+    description: '-10% time to complete daily challenges',
+    type: 'TIME_REDUCTION',
     value: 10,
-    icon: "⏱️",
-    rarity: "RARE",
+    icon: '⏱️',
+    rarity: 'RARE',
   },
 
   // Epic bonuses (Prestige 7-9)
   {
-    id: "xp_boost_15",
-    name: "Transcendent Mind",
-    description: "+15% XP from all sessions",
-    type: "XP_BOOST",
+    id: 'xp_boost_15',
+    name: 'Transcendent Mind',
+    description: '+15% XP from all sessions',
+    type: 'XP_BOOST',
     value: 15,
-    icon: "🧘",
-    rarity: "EPIC",
+    icon: '🧘',
+    rarity: 'EPIC',
   },
   {
-    id: "damage_boost_20",
-    name: "Unstoppable Force",
-    description: "+20% damage to bosses",
-    type: "DAMAGE_BOOST",
+    id: 'damage_boost_20',
+    name: 'Unstoppable Force',
+    description: '+20% damage to bosses',
+    type: 'DAMAGE_BOOST',
     value: 20,
-    icon: "💥",
-    rarity: "EPIC",
+    icon: '💥',
+    rarity: 'EPIC',
   },
   {
-    id: "drop_boost_15",
-    name: "Treasure Hunter",
-    description: "+15% legendary drop chance",
-    type: "DROP_CHANCE",
+    id: 'drop_boost_15',
+    name: 'Treasure Hunter',
+    description: '+15% legendary drop chance',
+    type: 'DROP_CHANCE',
     value: 15,
-    icon: "💎",
-    rarity: "EPIC",
+    icon: '💎',
+    rarity: 'EPIC',
   },
 
   // Legendary bonuses (Prestige 10+)
   {
-    id: "xp_boost_25",
-    name: "Eternal Student",
-    description: "+25% XP from all sessions",
-    type: "XP_BOOST",
+    id: 'xp_boost_25',
+    name: 'Eternal Student',
+    description: '+25% XP from all sessions',
+    type: 'XP_BOOST',
     value: 25,
-    icon: "📚",
-    rarity: "LEGENDARY",
+    icon: '📚',
+    rarity: 'LEGENDARY',
   },
   {
-    id: "special_nightmare",
-    name: "Nightmare Walker",
-    description: "Unlock Nightmare difficulty permanently",
-    type: "SPECIAL",
+    id: 'special_nightmare',
+    name: 'Nightmare Walker',
+    description: 'Unlock Nightmare difficulty permanently',
+    type: 'SPECIAL',
     value: 0,
-    icon: "👻",
-    rarity: "LEGENDARY",
+    icon: '👻',
+    rarity: 'LEGENDARY',
   },
   {
-    id: "special_dual_path",
-    name: "Path Diverger",
-    description: "Progress on two journey paths simultaneously",
-    type: "SPECIAL",
+    id: 'special_dual_path',
+    name: 'Path Diverger',
+    description: 'Progress on two journey paths simultaneously',
+    type: 'SPECIAL',
     value: 0,
-    icon: "🛤️",
-    rarity: "LEGENDARY",
+    icon: '🛤️',
+    rarity: 'LEGENDARY',
   },
 ];
 
@@ -193,7 +193,7 @@ export function canPrestige(masteryState: UnifiedMasteryState, prestigeState: Pr
 
     return {
       canPrestige: false,
-      reason: `Max all 5 tracks first. Maxed: ${maxedTracks.join(", ") || "none"}`,
+      reason: `Max all 5 tracks first. Maxed: ${maxedTracks.join(', ') || 'none'}`,
       recommended: false,
     };
   }
@@ -230,16 +230,16 @@ export function calculatePrestigeBonuses(prestigeLevel: number, _totalXp: number
 
   // Always get one bonus per prestige
   const availableBonuses = PRESTIGE_BONUSES.filter((b) => {
-    if (b.rarity === "COMMON") {
+    if (b.rarity === 'COMMON') {
       return prestigeLevel >= 1;
     }
-    if (b.rarity === "RARE") {
+    if (b.rarity === 'RARE') {
       return prestigeLevel >= 4;
     }
-    if (b.rarity === "EPIC") {
+    if (b.rarity === 'EPIC') {
       return prestigeLevel >= 7;
     }
-    if (b.rarity === "LEGENDARY") {
+    if (b.rarity === 'LEGENDARY') {
       return prestigeLevel >= 10;
     }
     return false;
@@ -266,7 +266,7 @@ export function executePrestige(masteryState: UnifiedMasteryState, prestigeState
       newState: masteryState,
       prestigeState,
       bonusesGained: [],
-      message: check.reason || "Cannot prestige",
+      message: check.reason || 'Cannot prestige',
     };
   }
 
@@ -291,7 +291,7 @@ export function executePrestige(masteryState: UnifiedMasteryState, prestigeState
       BOSS: { level: 1, xp: 0, xpToNext: 100, totalXp: 0, milestonesCompleted: [] },
     },
     overallLevel: 1,
-    overallRank: "APPRENTICE",
+    overallRank: 'APPRENTICE',
     prestigeLevel: newPrestigeLevel,
     prestigeBonuses: [...masteryState.prestigeBonuses, ...bonusesGained.map((b) => b.id)],
     lastUpdated: Date.now(),
@@ -341,7 +341,7 @@ export function getNightmareConfig(prestigeState: PrestigeState): NightmareModeC
     enemyDamageMultiplier: 1.5 * baseMultiplier,
     xpMultiplier: 2 * baseMultiplier,
     dropChanceMultiplier: 1.5 * baseMultiplier,
-    exclusiveRewards: ["nightmare_cosmetics", "prestige_titles", "legendary_crafting_materials"],
+    exclusiveRewards: ['nightmare_cosmetics', 'prestige_titles', 'legendary_crafting_materials'],
   };
 }
 
@@ -349,7 +349,7 @@ export function getNightmareConfig(prestigeState: PrestigeState): NightmareModeC
 // Bonus Application
 // ============================================================================
 
-export function applyPrestigeBonuses(baseValue: number, bonusType: PrestigeBonus["type"], prestigeState: PrestigeState): number {
+export function applyPrestigeBonuses(baseValue: number, bonusType: PrestigeBonus['type'], prestigeState: PrestigeState): number {
   const relevantBonuses = PRESTIGE_BONUSES.filter((b) => prestigeState.activeBonuses.includes(b.id) && b.type === bonusType);
 
   let multiplier = 1;
@@ -360,7 +360,7 @@ export function applyPrestigeBonuses(baseValue: number, bonusType: PrestigeBonus
   return Math.floor(baseValue * multiplier);
 }
 
-export function getTotalBonusPercent(bonusType: PrestigeBonus["type"], prestigeState: PrestigeState): number {
+export function getTotalBonusPercent(bonusType: PrestigeBonus['type'], prestigeState: PrestigeState): number {
   return PRESTIGE_BONUSES.filter((b) => prestigeState.activeBonuses.includes(b.id) && b.type === bonusType).reduce((sum, b) => sum + b.value, 0);
 }
 

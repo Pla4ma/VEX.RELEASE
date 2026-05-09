@@ -2,17 +2,17 @@
  * Rewards Feature - Zod Schemas
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Core Reward Schemas
 // ============================================================================
 
-export const RewardTypeSchema = z.enum(["XP", "COINS", "GEMS", "ITEM", "COSMETIC", "TITLE", "STREAK_SHIELD", "BOOST"]);
+export const RewardTypeSchema = z.enum(['XP', 'COINS', 'GEMS', 'ITEM', 'COSMETIC', 'TITLE', 'STREAK_SHIELD', 'BOOST']);
 
-export const RewardStatusSchema = z.enum(["PENDING", "CLAIMED", "EXPIRED", "FAILED"]);
+export const RewardStatusSchema = z.enum(['PENDING', 'CLAIMED', 'EXPIRED', 'FAILED']);
 
-export const RewardTriggerSchema = z.enum(["SESSION_COMPLETE", "STREAK_MILESTONE", "BOSS_DEFEAT", "LEVEL_UP", "ACHIEVEMENT_UNLOCK", "DAILY_LOGIN", "COMEBACK", "PROMOTIONAL"]);
+export const RewardTriggerSchema = z.enum(['SESSION_COMPLETE', 'STREAK_MILESTONE', 'BOSS_DEFEAT', 'LEVEL_UP', 'ACHIEVEMENT_UNLOCK', 'DAILY_LOGIN', 'COMEBACK', 'PROMOTIONAL']);
 
 export const RewardSchema = z
   .object({
@@ -34,7 +34,7 @@ export const RewardSchema = z
 // Ledger Schemas
 // ============================================================================
 
-export const LedgerActionSchema = z.enum(["CREATED", "CLAIMED", "EXPIRED", "FAILED", "REVOKED"]);
+export const LedgerActionSchema = z.enum(['CREATED', 'CLAIMED', 'EXPIRED', 'FAILED', 'REVOKED']);
 
 export const RewardLedgerEntrySchema = z
   .object({
@@ -50,9 +50,9 @@ export const RewardLedgerEntrySchema = z
 // Claim Schemas
 // ============================================================================
 
-export const DeliverableTypeSchema = z.enum(["XP", "COINS", "GEMS", "ITEM", "COSMETIC", "TITLE", "SHIELD"]);
+export const DeliverableTypeSchema = z.enum(['XP', 'COINS', 'GEMS', 'ITEM', 'COSMETIC', 'TITLE', 'SHIELD']);
 
-export const ClaimStatusSchema = z.enum(["IN_PROGRESS", "COMPLETED", "PARTIAL", "FAILED"]);
+export const ClaimStatusSchema = z.enum(['IN_PROGRESS', 'COMPLETED', 'PARTIAL', 'FAILED']);
 
 export const DeliverableSchema = z
   .object({
@@ -78,7 +78,7 @@ export const RewardLedgerSchema = z
   .object({
     id: z.string().uuid(),
     rewardId: z.string().uuid(),
-    action: z.enum(["CREATED", "CLAIMED", "EXPIRED", "FAILED"]),
+    action: z.enum(['CREATED', 'CLAIMED', 'EXPIRED', 'FAILED']),
     details: z.record(z.unknown()),
     createdAt: z.number(),
   })
@@ -117,7 +117,7 @@ export const RewardCalculationSchema = z
 // Session Chest Schemas
 // ============================================================================
 
-export const ChestTierSchema = z.enum(["common", "rare", "epic", "legendary"]);
+export const ChestTierSchema = z.enum(['common', 'rare', 'epic', 'legendary']);
 
 export const ChestRollInputSchema = z
   .object({
@@ -146,7 +146,7 @@ export const ChestResultSchema = z
 // Definition Schemas
 // ============================================================================
 
-export const MilestoneTypeSchema = z.enum(["STREAK_DAYS", "LEVEL", "SESSIONS_COMPLETED", "BOSS_DEFEATS", "DAYS_ACTIVE"]);
+export const MilestoneTypeSchema = z.enum(['STREAK_DAYS', 'LEVEL', 'SESSIONS_COMPLETED', 'BOSS_DEFEATS', 'DAYS_ACTIVE']);
 
 export const MilestoneRewardItemSchema = z
   .object({

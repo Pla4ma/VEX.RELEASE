@@ -3,25 +3,25 @@
  * TanStack Query hooks for settings data fetching and mutations
  */
 
-import { useQuery, useMutation, useQueryClient, type UseQueryOptions, type UseMutationOptions } from "@tanstack/react-query";
-import * as service from "./service";
-import { type Setting, type UserPreferences, type NotificationSettings, type CoachSettings, type AppearanceSettings, type PrivacySettings, type SyncState, type SettingCategory, type SettingValue, type SettingsExport } from "./types";
+import { useQuery, useMutation, useQueryClient, type UseQueryOptions, type UseMutationOptions } from '@tanstack/react-query';
+import * as service from '../service';
+import { type Setting, type UserPreferences, type NotificationSettings, type CoachSettings, type AppearanceSettings, type PrivacySettings, type SyncState, type SettingCategory, type SettingValue, type SettingsExport } from '../types';
 
 // Query keys
 export const settingsKeys = {
-  all: ["settings"] as const,
+  all: ['settings'] as const,
   user: (userId: string) => [...settingsKeys.all, userId] as const,
-  setting: (userId: string, key: string) => [...settingsKeys.user(userId), "setting", key] as const,
-  preferences: (userId: string) => [...settingsKeys.user(userId), "preferences"] as const,
-  notifications: (userId: string) => [...settingsKeys.user(userId), "notifications"] as const,
-  coach: (userId: string) => [...settingsKeys.user(userId), "coach"] as const,
-  appearance: (userId: string) => [...settingsKeys.user(userId), "appearance"] as const,
-  privacy: (userId: string) => [...settingsKeys.user(userId), "privacy"] as const,
-  sync: (userId: string) => [...settingsKeys.user(userId), "sync"] as const,
+  setting: (userId: string, key: string) => [...settingsKeys.user(userId), 'setting', key] as const,
+  preferences: (userId: string) => [...settingsKeys.user(userId), 'preferences'] as const,
+  notifications: (userId: string) => [...settingsKeys.user(userId), 'notifications'] as const,
+  coach: (userId: string) => [...settingsKeys.user(userId), 'coach'] as const,
+  appearance: (userId: string) => [...settingsKeys.user(userId), 'appearance'] as const,
+  privacy: (userId: string) => [...settingsKeys.user(userId), 'privacy'] as const,
+  sync: (userId: string) => [...settingsKeys.user(userId), 'sync'] as const,
 };
 
 // Hook: Get a single setting
-export function useSetting(userId: string, key: string, options?: Omit<UseQueryOptions<Setting | null>, "queryKey" | "queryFn">) {
+export function useSetting(userId: string, key: string, options?: Omit<UseQueryOptions<Setting | null>, 'queryKey' | 'queryFn'>) {
   return useQuery({
     queryKey: settingsKeys.setting(userId, key),
     queryFn: () => service.getSetting(userId, key),
@@ -32,7 +32,7 @@ export function useSetting(userId: string, key: string, options?: Omit<UseQueryO
 }
 
 // Hook: Get all settings
-export function useAllSettings(userId: string, options?: Omit<UseQueryOptions<Setting[]>, "queryKey" | "queryFn">) {
+export function useAllSettings(userId: string, options?: Omit<UseQueryOptions<Setting[]>, 'queryKey' | 'queryFn'>) {
   return useQuery({
     queryKey: settingsKeys.user(userId),
     queryFn: () => service.getAllSettings(userId),
@@ -43,7 +43,7 @@ export function useAllSettings(userId: string, options?: Omit<UseQueryOptions<Se
 }
 
 // Hook: Get user preferences
-export function useUserPreferences(userId: string, options?: Omit<UseQueryOptions<UserPreferences>, "queryKey" | "queryFn">) {
+export function useUserPreferences(userId: string, options?: Omit<UseQueryOptions<UserPreferences>, 'queryKey' | 'queryFn'>) {
   return useQuery({
     queryKey: settingsKeys.preferences(userId),
     queryFn: () => service.getUserPreferences(userId),
@@ -54,7 +54,7 @@ export function useUserPreferences(userId: string, options?: Omit<UseQueryOption
 }
 
 // Hook: Update a setting
-export function useUpdateSetting(userId: string, options?: Omit<UseMutationOptions<Setting, Error, { key: string; value: SettingValue; category: SettingCategory }>, "mutationFn">) {
+export function useUpdateSetting(userId: string, options?: Omit<UseMutationOptions<Setting, Error, { key: string; value: SettingValue; category: SettingCategory }>, 'mutationFn'>) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -76,7 +76,7 @@ export function useUpdateSetting(userId: string, options?: Omit<UseMutationOptio
 }
 
 // Hook: Batch update settings
-export function useBatchUpdateSettings(userId: string, options?: Omit<UseMutationOptions<Setting[], Error, Array<{ key: string; value: SettingValue; category: SettingCategory }>>, "mutationFn">) {
+export function useBatchUpdateSettings(userId: string, options?: Omit<UseMutationOptions<Setting[], Error, Array<{ key: string; value: SettingValue; category: SettingCategory }>>, 'mutationFn'>) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -92,7 +92,7 @@ export function useBatchUpdateSettings(userId: string, options?: Omit<UseMutatio
 }
 
 // Hook: Delete a setting
-export function useDeleteSetting(userId: string, options?: Omit<UseMutationOptions<boolean, Error, string>, "mutationFn">) {
+export function useDeleteSetting(userId: string, options?: Omit<UseMutationOptions<boolean, Error, string>, 'mutationFn'>) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -110,7 +110,7 @@ export function useDeleteSetting(userId: string, options?: Omit<UseMutationOptio
 }
 
 // Hook: Sync settings
-export function useSyncSettings(userId: string, options?: Omit<UseMutationOptions<SyncState, Error, { force?: boolean; direction?: "up" | "down" | "both" }>, "mutationFn">) {
+export function useSyncSettings(userId: string, options?: Omit<UseMutationOptions<SyncState, Error, { force?: boolean; direction?: 'up' | 'down' | 'both' }>, 'mutationFn'>) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -130,7 +130,7 @@ export function useSyncSettings(userId: string, options?: Omit<UseMutationOption
 }
 
 // Hook: Get notification settings
-export function useNotificationSettings(userId: string, options?: Omit<UseQueryOptions<NotificationSettings>, "queryKey" | "queryFn">) {
+export function useNotificationSettings(userId: string, options?: Omit<UseQueryOptions<NotificationSettings>, 'queryKey' | 'queryFn'>) {
   return useQuery({
     queryKey: settingsKeys.notifications(userId),
     queryFn: () => service.getNotificationSettings(userId),
@@ -141,7 +141,7 @@ export function useNotificationSettings(userId: string, options?: Omit<UseQueryO
 }
 
 // Hook: Update notification settings
-export function useUpdateNotificationSettings(userId: string, options?: Omit<UseMutationOptions<NotificationSettings, Error, Partial<NotificationSettings>>, "mutationFn">) {
+export function useUpdateNotificationSettings(userId: string, options?: Omit<UseMutationOptions<NotificationSettings, Error, Partial<NotificationSettings>>, 'mutationFn'>) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -157,7 +157,7 @@ export function useUpdateNotificationSettings(userId: string, options?: Omit<Use
 }
 
 // Hook: Get coach settings
-export function useCoachSettings(userId: string, options?: Omit<UseQueryOptions<CoachSettings>, "queryKey" | "queryFn">) {
+export function useCoachSettings(userId: string, options?: Omit<UseQueryOptions<CoachSettings>, 'queryKey' | 'queryFn'>) {
   return useQuery({
     queryKey: settingsKeys.coach(userId),
     queryFn: () => service.getCoachSettings(userId),
@@ -168,7 +168,7 @@ export function useCoachSettings(userId: string, options?: Omit<UseQueryOptions<
 }
 
 // Hook: Update coach settings
-export function useUpdateCoachSettings(userId: string, options?: Omit<UseMutationOptions<CoachSettings, Error, Partial<CoachSettings>>, "mutationFn">) {
+export function useUpdateCoachSettings(userId: string, options?: Omit<UseMutationOptions<CoachSettings, Error, Partial<CoachSettings>>, 'mutationFn'>) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -184,7 +184,7 @@ export function useUpdateCoachSettings(userId: string, options?: Omit<UseMutatio
 }
 
 // Hook: Get appearance settings
-export function useAppearanceSettings(userId: string, options?: Omit<UseQueryOptions<AppearanceSettings>, "queryKey" | "queryFn">) {
+export function useAppearanceSettings(userId: string, options?: Omit<UseQueryOptions<AppearanceSettings>, 'queryKey' | 'queryFn'>) {
   return useQuery({
     queryKey: settingsKeys.appearance(userId),
     queryFn: () => service.getAppearanceSettings(userId),
@@ -195,7 +195,7 @@ export function useAppearanceSettings(userId: string, options?: Omit<UseQueryOpt
 }
 
 // Hook: Update appearance settings
-export function useUpdateAppearanceSettings(userId: string, options?: Omit<UseMutationOptions<AppearanceSettings, Error, Partial<AppearanceSettings>>, "mutationFn">) {
+export function useUpdateAppearanceSettings(userId: string, options?: Omit<UseMutationOptions<AppearanceSettings, Error, Partial<AppearanceSettings>>, 'mutationFn'>) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -211,7 +211,7 @@ export function useUpdateAppearanceSettings(userId: string, options?: Omit<UseMu
 }
 
 // Hook: Get privacy settings
-export function usePrivacySettings(userId: string, options?: Omit<UseQueryOptions<import("./types").PrivacySettings>, "queryKey" | "queryFn">) {
+export function usePrivacySettings(userId: string, options?: Omit<UseQueryOptions<import('./types').PrivacySettings>, 'queryKey' | 'queryFn'>) {
   return useQuery({
     queryKey: settingsKeys.privacy(userId),
     queryFn: () => service.getPrivacySettings(userId),
@@ -222,7 +222,7 @@ export function usePrivacySettings(userId: string, options?: Omit<UseQueryOption
 }
 
 // Hook: Update privacy settings
-export function useUpdatePrivacySettings(userId: string, options?: Omit<UseMutationOptions<import("./types").PrivacySettings, Error, Partial<import("./types").PrivacySettings>>, "mutationFn">) {
+export function useUpdatePrivacySettings(userId: string, options?: Omit<UseMutationOptions<import('./types').PrivacySettings, Error, Partial<import('./types').PrivacySettings>>, 'mutationFn'>) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -238,7 +238,7 @@ export function useUpdatePrivacySettings(userId: string, options?: Omit<UseMutat
 }
 
 // Hook: Export settings
-export function useExportSettings(userId: string, options?: Omit<UseMutationOptions<SettingsExport, Error, void>, "mutationFn">) {
+export function useExportSettings(userId: string, options?: Omit<UseMutationOptions<SettingsExport, Error, void>, 'mutationFn'>) {
   return useMutation({
     mutationFn: () => service.exportSettings(userId),
     ...options,
@@ -246,7 +246,7 @@ export function useExportSettings(userId: string, options?: Omit<UseMutationOpti
 }
 
 // Hook: Import settings
-export function useImportSettings(userId: string, options?: Omit<UseMutationOptions<{ imported: number; errors: string[] }, Error, SettingsExport>, "mutationFn">) {
+export function useImportSettings(userId: string, options?: Omit<UseMutationOptions<{ imported: number; errors: string[] }, Error, SettingsExport>, 'mutationFn'>) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -262,7 +262,7 @@ export function useImportSettings(userId: string, options?: Omit<UseMutationOpti
 }
 
 // Hook: Reset settings
-export function useResetSettings(userId: string, options?: Omit<UseMutationOptions<void, Error, { category?: SettingCategory }>, "mutationFn">) {
+export function useResetSettings(userId: string, options?: Omit<UseMutationOptions<void, Error, { category?: SettingCategory }>, 'mutationFn'>) {
   const queryClient = useQueryClient();
 
   return useMutation({

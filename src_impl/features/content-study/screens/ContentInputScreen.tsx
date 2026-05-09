@@ -1,24 +1,24 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { View } from "react-native";
-import { useNavigation, useRoute, type RouteProp } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { captureSilentFailure } from '../../../utils/silent-failure';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { View } from 'react-native';
+import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { AppScreen, Button, Card } from "../../../components/primitives";
-import { Text } from "../../../components/primitives/Text";
-import { ExtractionProgress, InputTypeSelector, PdfUploader, TextPasteInput, YouTubeInput } from "../components";
-import { UI_TEXT } from "../constants";
-import { useContentInput } from "../hooks";
-import { useTheme } from "../../../theme";
-import type { ContentSourceType, ContentStudyStackParamList, InputTab } from "../types";
+import { AppScreen, Button, Card } from '../../../components/primitives';
+import { Text } from '../../../components/primitives/Text';
+import { ExtractionProgress, InputTypeSelector, PdfUploader, TextPasteInput, YouTubeInput } from '../components';
+import { UI_TEXT } from '../constants';
+import { useContentInput } from '../hooks';
+import { useTheme } from '../../../theme';
+import type { ContentSourceType, ContentStudyStackParamList, InputTab } from '../types';
 
-type ContentInputRouteProp = RouteProp<ContentStudyStackParamList, "ContentInput">;
-type ContentInputNavigationProp = NativeStackNavigationProp<ContentStudyStackParamList, "ContentInput">;
+type ContentInputRouteProp = RouteProp<ContentStudyStackParamList, 'ContentInput'>;
+type ContentInputNavigationProp = NativeStackNavigationProp<ContentStudyStackParamList, 'ContentInput'>;
 
 const TAB_TO_CONTENT_TYPE: Record<InputTab, ContentSourceType> = {
-  paste: "PASTE",
-  pdf: "PDF",
-  youtube: "YOUTUBE",
+  paste: 'PASTE',
+  pdf: 'PDF',
+  youtube: 'YOUTUBE',
 };
 
 export function ContentInputScreen(): JSX.Element {
@@ -56,27 +56,27 @@ export function ContentInputScreen(): JSX.Element {
   );
 
   const handleSubmit = useCallback(async () => {
-    setShowExtractionProgress(state.activeTab !== "paste");
+    setShowExtractionProgress(state.activeTab !== 'paste');
 
     try {
       const result = await submit();
-      navigation.navigate("ContentReview", { contentId: result.contentId });
+      navigation.navigate('ContentReview', { contentId: result.contentId });
     } catch (error) {
-      captureSilentFailure(error, { feature: "content-study", operation: "ui-fallback", type: "ui" });
+      captureSilentFailure(error, { feature: 'content-study', operation: 'ui-fallback', type: 'ui' });
       setShowExtractionProgress(false);
     }
   }, [navigation, state.activeTab, submit]);
 
   const renderActiveInput = (): JSX.Element => {
     if (showExtractionProgress) {
-      return <ExtractionProgress stage={state.activeTab === "pdf" ? "uploading" : "processing"} progress={state.activeTab === "pdf" ? Math.max(uploadProgress, 15) : 30} contentType={TAB_TO_CONTENT_TYPE[state.activeTab]} />;
+      return <ExtractionProgress stage={state.activeTab === 'pdf' ? 'uploading' : 'processing'} progress={state.activeTab === 'pdf' ? Math.max(uploadProgress, 15) : 30} contentType={TAB_TO_CONTENT_TYPE[state.activeTab]} />;
     }
 
-    if (state.activeTab === "pdf") {
+    if (state.activeTab === 'pdf') {
       return <PdfUploader selectedFile={state.selectedFile} onFileSelect={setSelectedFile} disabled={isSubmitting} uploadProgress={uploadProgress} uploadError={error} />;
     }
 
-    if (state.activeTab === "youtube") {
+    if (state.activeTab === 'youtube') {
       return <YouTubeInput value={state.youtubeUrl} onChange={setYoutubeUrl} disabled={isSubmitting} isExtracting={isSubmitting} />;
     }
 

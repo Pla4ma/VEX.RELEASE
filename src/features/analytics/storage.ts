@@ -1,1 +1,2 @@
-export * from '../../../src_impl/features/analytics/storage';
+export * from '../../../src_impl/features/analytics/repository/storage';
+

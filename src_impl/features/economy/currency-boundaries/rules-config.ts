@@ -8,7 +8,7 @@
 import type {
   MonetizationBoundary,
   EconomyProtectionRule,
-  CurrencyBoundariesConfig
+  CurrencyBoundariesConfig,
 } from './schemas';
 import { DEFAULT_CURRENCY_LIMITS } from './limits-config';
 

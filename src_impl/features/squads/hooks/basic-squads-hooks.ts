@@ -5,9 +5,17 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '../../store';
-import * as service from '../squads/basic-squads-service';
-import type { Squad, SquadInvite } from '../squads/schemas';
+import { useAuthStore } from '../../../store';
+import { eventBus } from '../../../events';
+import * as service from '../basic-squads-service';
+import type { Squad, SquadInvite } from '../schemas';
+
+function publishSquadMutationError(action: string, error: Error): void {
+  eventBus.publish('squad:mutation_failed', {
+    action,
+    reason: error.message,
+  });
+}
 
 // ============================================================================
 // Query Keys
@@ -29,7 +37,7 @@ export function useBasicSquadsStatus() {
   return useQuery({
     queryKey: squadsKeys.status(userId ?? 'no-user'),
     queryFn: () => {
-      if (!userId) throw new Error('User not authenticated');
+      if (!userId) {throw new Error('User not authenticated');}
       return service.getBasicSquadStatus(userId);
     },
     enabled: !!userId,
@@ -71,7 +79,7 @@ export function useCreateBasicSquad() {
       description?: string;
       weeklyGoalMinutes?: number;
     }) => {
-      if (!userId) throw new Error('User not authenticated');
+      if (!userId) {throw new Error('User not authenticated');}
       return service.createBasicSquad(userId, { name, description, weeklyGoalMinutes });
     },
     onSuccess: (result, variables) => {
@@ -80,8 +88,8 @@ export function useCreateBasicSquad() {
         queryClient.invalidateQueries({ queryKey: squadsKeys.status(userId) });
       }
     },
-    onError: (error) => {
-      console.error('Failed to create squad:', error);
+    onError: (error: Error) => {
+      publishSquadMutationError('create', error);
     },
   });
 }
@@ -104,7 +112,7 @@ export function useInviteToBasicSquad() {
       inviteeId: string;
       message?: string;
     }) => {
-      if (!userId) throw new Error('User not authenticated');
+      if (!userId) {throw new Error('User not authenticated');}
       return service.inviteToBasicSquad(squadId, userId, inviteeId, message);
     },
     onSuccess: (result, variables) => {
@@ -113,8 +121,8 @@ export function useInviteToBasicSquad() {
         queryClient.invalidateQueries({ queryKey: squadsKeys.status(userId) });
       }
     },
-    onError: (error) => {
-      console.error('Failed to send squad invite:', error);
+    onError: (error: Error) => {
+      publishSquadMutationError('invite', error);
     },
   });
 }
@@ -135,7 +143,7 @@ export function useRespondToBasicSquadInvite() {
       inviteId: string;
       accept: boolean;
     }) => {
-      if (!userId) throw new Error('User not authenticated');
+      if (!userId) {throw new Error('User not authenticated');}
       return service.respondToBasicSquadInvite(inviteId, userId, accept);
     },
     onSuccess: (result, variables) => {
@@ -145,8 +153,8 @@ export function useRespondToBasicSquadInvite() {
         queryClient.invalidateQueries({ queryKey: squadsKeys.contributions(result.squad.id) });
       }
     },
-    onError: (error) => {
-      console.error('Failed to respond to squad invite:', error);
+    onError: (error: Error) => {
+      publishSquadMutationError('respond-invite', error);
     },
   });
 }
@@ -167,7 +175,7 @@ export function useUpdateBasicSquadWeeklyProgress() {
       squadId: string;
       sessionMinutes: number;
     }) => {
-      if (!userId) throw new Error('User not authenticated');
+      if (!userId) {throw new Error('User not authenticated');}
       return service.updateBasicSquadWeeklyProgress(squadId, userId, sessionMinutes);
     },
     onSuccess: (result, variables) => {
@@ -179,8 +187,8 @@ export function useUpdateBasicSquadWeeklyProgress() {
         queryClient.invalidateQueries({ queryKey: squadsKeys.status(userId) });
       }
     },
-    onError: (error) => {
-      console.error('Failed to update squad weekly progress:', error);
+    onError: (error: Error) => {
+      publishSquadMutationError('weekly-progress', error);
     },
   });
 }
@@ -197,7 +205,7 @@ export function useSendBasicSquadNotification() {
       data,
     }: {
       squadId: string;
-      type: "WEEKLY_GOAL_PROGRESS" | "WEEKLY_GOAL_COMPLETED" | "MEMBER_ACTIVITY";
+      type: 'WEEKLY_GOAL_PROGRESS' | 'WEEKLY_GOAL_COMPLETED' | 'MEMBER_ACTIVITY';
       data: {
         message: string;
         userId?: string;
@@ -207,8 +215,8 @@ export function useSendBasicSquadNotification() {
     }) => {
       return service.sendBasicSquadNotification(squadId, type, data);
     },
-    onError: (error) => {
-      console.error('Failed to send squad notification:', error);
+    onError: (error: Error) => {
+      publishSquadMutationError('notification', error);
     },
   });
 }

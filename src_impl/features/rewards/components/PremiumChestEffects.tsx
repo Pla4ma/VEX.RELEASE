@@ -11,14 +11,14 @@
  * Consumers: SessionCompleteScreen, RewardClaimScreen
  */
 
-import React from "react";
-import { StyleSheet, View, type ViewStyle } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withSequence, withTiming, withDelay, FadeIn } from "react-native-reanimated";
+import React from 'react';
+import { StyleSheet, View, type ViewStyle } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withSequence, withTiming, withDelay, FadeIn } from 'react-native-reanimated';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { usePremiumStatus } from "../../../shared/monetization";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { usePremiumStatus } from '../../../shared/monetization';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 // ============================================================================
 // Types
@@ -148,60 +148,60 @@ export function PremiumChestEffects({ children, style }: PremiumChestEffectsProp
 
 const styles = createSheet({
   container: {
-    position: "relative",
+    position: 'relative',
   },
   content: {
     zIndex: 1,
   },
   particlesContainer: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 0,
-    pointerEvents: "none",
+    pointerEvents: 'none',
   },
   particle: {
-    position: "absolute",
-    backgroundColor: "#FFD700", // Gold color
-    shadowColor: "#FFD700",
+    position: 'absolute',
+    backgroundColor: '#FFD700', // Gold color
+    shadowColor: '#FFD700',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.8,
     shadowRadius: 4,
     elevation: 5,
   },
   premiumBadge: {
-    position: "absolute",
+    position: 'absolute',
     top: -8,
     right: -8,
     width: 28,
     height: 28,
     borderRadius: 14,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 2,
     borderWidth: 2,
-    borderColor: "#FFFFFF",
-    shadowColor: "#000",
+    borderColor: '#FFFFFF',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 4,
   },
   premiumBadgeText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: '800',
   },
   bonusLabel: {
-    position: "absolute",
+    position: 'absolute',
     top: -40,
-    alignSelf: "center",
-    flexDirection: "row",
-    alignItems: "center",
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -214,7 +214,7 @@ const styles = createSheet({
   },
   bonusText: {
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
   },
 });
 

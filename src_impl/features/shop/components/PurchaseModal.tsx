@@ -3,12 +3,12 @@
  * Modal for confirming shop purchases
  */
 
-import React from "react";
-import { View, Text, Modal, Pressable, ActivityIndicator } from "react-native";
-import type { ItemDefinition } from "../../items/schemas";
-import type { LimitedOffer } from "../../economy/schemas";
-import { RARITY_COLORS } from "./shop-constants";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React from 'react';
+import { View, Text, Modal, Pressable, ActivityIndicator } from 'react-native';
+import type { ItemDefinition } from '../../items/schemas';
+import type { LimitedOffer } from '../../economy/schemas';
+import { RARITY_COLORS } from './shop-constants';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface PurchaseModalProps {
   visible: boolean;
@@ -85,26 +85,26 @@ export function PurchaseModal({ visible, item, offer, userCoins, onConfirm, onCa
 const styles = createSheet({
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
   modalContent: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 24,
-    width: "100%",
+    width: '100%',
     maxWidth: 360,
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: "700",
-    textAlign: "center",
+    fontWeight: '700',
+    textAlign: 'center',
     marginBottom: 16,
   },
   previewContainer: {
-    alignItems: "center",
+    alignItems: 'center',
     marginBottom: 16,
   },
   previewIcon: {
@@ -112,8 +112,8 @@ const styles = createSheet({
     height: 80,
     borderWidth: 3,
     borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 12,
   },
   previewIconText: {
@@ -121,55 +121,55 @@ const styles = createSheet({
   },
   previewName: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   previewRarity: {
     fontSize: 12,
-    color: "#6B7280",
-    textTransform: "capitalize",
+    color: '#6B7280',
+    textTransform: 'capitalize',
   },
   previewDescription: {
     fontSize: 12,
-    color: "#6B7280",
-    textAlign: "center",
+    color: '#6B7280',
+    textAlign: 'center',
     marginTop: 4,
   },
   priceDisplay: {
-    backgroundColor: "#F3F4F6",
+    backgroundColor: '#F3F4F6',
     borderRadius: 12,
     padding: 16,
     marginBottom: 16,
   },
   savingsRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
     marginBottom: 8,
   },
   originalPriceLarge: {
     fontSize: 14,
-    textDecorationLine: "line-through",
-    color: "#9CA3AF",
+    textDecorationLine: 'line-through',
+    color: '#9CA3AF',
   },
   savingsBadge: {
-    backgroundColor: "#10B981",
+    backgroundColor: '#10B981',
     borderRadius: 8,
     paddingHorizontal: 8,
     paddingVertical: 2,
   },
   finalPriceRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   finalPriceLabel: {
     fontSize: 14,
-    color: "#6B7280",
+    color: '#6B7280',
   },
   finalPriceValue: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   coinIconLarge: {
@@ -177,61 +177,61 @@ const styles = createSheet({
   },
   finalPrice: {
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   priceUnaffordable: {
-    color: "#EF4444",
+    color: '#EF4444',
   },
   balanceInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 16,
   },
   balanceLabel: {
     fontSize: 12,
-    color: "#6B7280",
+    color: '#6B7280',
   },
   balanceValue: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   balanceInsufficient: {
-    color: "#EF4444",
+    color: '#EF4444',
   },
   errorText: {
-    color: "#EF4444",
+    color: '#EF4444',
     fontSize: 12,
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 16,
   },
   modalActions: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 12,
   },
   cancelButton: {
     flex: 1,
     paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: "#F3F4F6",
-    alignItems: "center",
+    backgroundColor: '#F3F4F6',
+    alignItems: 'center',
   },
   cancelButtonText: {
-    color: "#374151",
-    fontWeight: "600",
+    color: '#374151',
+    fontWeight: '600',
   },
   confirmButton: {
     flex: 2,
     paddingVertical: 12,
     borderRadius: 8,
-    backgroundColor: "#3B82F6",
-    alignItems: "center",
+    backgroundColor: '#3B82F6',
+    alignItems: 'center',
   },
   confirmButtonDisabled: {
-    backgroundColor: "#9CA3AF",
+    backgroundColor: '#9CA3AF',
   },
   confirmButtonText: {
-    color: "#FFFFFF",
-    fontWeight: "600",
+    color: '#FFFFFF',
+    fontWeight: '600',
   },
 });

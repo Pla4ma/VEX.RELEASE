@@ -3,7 +3,7 @@
  * All types are inferred from these schemas (source of truth)
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Core Progression Schemas
@@ -38,7 +38,7 @@ export const ProgressionSummarySchema = z
 // XP and Level Schemas
 // ============================================================================
 
-export const XpSourceSchema = z.enum(["SESSION_COMPLETE", "STREAK_BONUS", "BOSS_BONUS", "SQUAD_BONUS", "PERFECT_SESSION_BONUS", "COMEBACK_BONUS", "DAILY_LOGIN", "ACHIEVEMENT_UNLOCK", "ACHIEVEMENT_BONUS", "CHALLENGE_BONUS", "SOCIAL_BONUS", "EVENT_BONUS", "BOOST_BONUS", "SEASON_BONUS", "AI_COACH_BONUS", "LEVEL_UP_REWARD", "MILESTONE_REWARD", "PROMOTIONAL", "EVENT_PARTICIPATION", "AI_COACH_GOAL"]);
+export const XpSourceSchema = z.enum(['SESSION_COMPLETE', 'STREAK_BONUS', 'BOSS_BONUS', 'SQUAD_BONUS', 'PERFECT_SESSION_BONUS', 'COMEBACK_BONUS', 'DAILY_LOGIN', 'ACHIEVEMENT_UNLOCK', 'ACHIEVEMENT_BONUS', 'CHALLENGE_BONUS', 'SOCIAL_BONUS', 'EVENT_BONUS', 'BOOST_BONUS', 'SEASON_BONUS', 'AI_COACH_BONUS', 'LEVEL_UP_REWARD', 'MILESTONE_REWARD', 'PROMOTIONAL', 'EVENT_PARTICIPATION', 'AI_COACH_GOAL']);
 
 export const XpMetadataSchema = z
   .object({
@@ -86,7 +86,7 @@ export const XpBreakdownSchema = z
 // Unlock and Milestone Schemas
 // ============================================================================
 
-export const UnlockTypeSchema = z.enum(["FEATURE", "BOSS", "SHOP_ITEM", "COSMETIC", "TITLE", "GAME_MODE"]);
+export const UnlockTypeSchema = z.enum(['FEATURE', 'BOSS', 'SHOP_ITEM', 'COSMETIC', 'TITLE', 'GAME_MODE']);
 
 export const UnlockSchema = z
   .object({
@@ -100,9 +100,9 @@ export const UnlockSchema = z
   })
   .strict();
 
-export const MilestoneTypeSchema = z.enum(["LEVEL", "XP_TOTAL", "SESSIONS_COMPLETED", "DAYS_ACTIVE"]);
+export const MilestoneTypeSchema = z.enum(['LEVEL', 'XP_TOTAL', 'SESSIONS_COMPLETED', 'DAYS_ACTIVE']);
 
-export const MilestoneRewardTypeSchema = z.enum(["XP", "COINS", "GEMS", "ITEM", "TITLE", "COSMETIC"]);
+export const MilestoneRewardTypeSchema = z.enum(['XP', 'COINS', 'GEMS', 'ITEM', 'TITLE', 'COSMETIC']);
 
 export const MilestoneSchema = z
   .object({

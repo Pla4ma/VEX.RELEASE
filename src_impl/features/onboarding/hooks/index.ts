@@ -7,9 +7,9 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '../../store';
-import { onboardingRepository } from './repository';
-import type { OnboardingProgress } from './schemas';
+import { useAuthStore } from '../../../store';
+import { onboardingRepository } from '../repository';
+import type { OnboardingProgress } from '../schemas';
 
 const ONBOARDING_PROGRESS_KEY = 'onboarding-progress';
 

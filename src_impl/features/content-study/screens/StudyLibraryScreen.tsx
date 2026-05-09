@@ -7,54 +7,54 @@
  * @phase 10.4
  */
 
-import React, { useState, useCallback, useMemo } from "react";
-import { ScrollView, Pressable, Alert } from "react-native";
-import { FlashList, type ListRenderItem } from "@shopify/flash-list";
-import Animated, { FadeInUp } from "react-native-reanimated";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React, { useState, useCallback, useMemo } from 'react';
+import { ScrollView, Pressable, Alert } from 'react-native';
+import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { Icon } from "../../../icons";
-import { useTheme } from "../../../theme";
-import type { ContentStudyStackParamList } from "../types";
-import type { StudyContent, ContentStatus, ContentSourceType } from "../types";
-import { useContentHistory } from "../hooks";
-import { Skeleton } from "../components";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { Icon } from '../../../icons';
+import { useTheme } from '../../../theme';
+import type { ContentStudyStackParamList } from '../types';
+import type { StudyContent, ContentStatus, ContentSourceType } from '../types';
+import { useContentHistory } from '../hooks';
+import { Skeleton } from '../components';
 
 type ContentStudyNavigationProp = NativeStackNavigationProp<ContentStudyStackParamList>;
 
-const STATUS_FILTERS: Array<{ label: string; value: ContentStatus | "all" }> = [
-  { label: "All", value: "all" },
-  { label: "Pending", value: "PENDING" },
-  { label: "Extracting", value: "EXTRACTING" },
-  { label: "Ready", value: "READY" },
+const STATUS_FILTERS: Array<{ label: string; value: ContentStatus | 'all' }> = [
+  { label: 'All', value: 'all' },
+  { label: 'Pending', value: 'PENDING' },
+  { label: 'Extracting', value: 'EXTRACTING' },
+  { label: 'Ready', value: 'READY' },
 ];
 
-const TYPE_FILTERS: Array<{ label: string; value: ContentSourceType | "all"; icon: string }> = [
-  { label: "All Types", value: "all", icon: "filter" },
-  { label: "PDF", value: "PDF", icon: "document" },
-  { label: "YouTube", value: "YOUTUBE", icon: "video" },
-  { label: "URL", value: "URL", icon: "link" },
-  { label: "Text", value: "PASTE", icon: "text" },
+const TYPE_FILTERS: Array<{ label: string; value: ContentSourceType | 'all'; icon: string }> = [
+  { label: 'All Types', value: 'all', icon: 'filter' },
+  { label: 'PDF', value: 'PDF', icon: 'document' },
+  { label: 'YouTube', value: 'YOUTUBE', icon: 'video' },
+  { label: 'URL', value: 'URL', icon: 'link' },
+  { label: 'Text', value: 'PASTE', icon: 'text' },
 ];
 
 const STATUS_CONFIG: Record<ContentStatus, { color: string; label: string; icon: string }> = {
-  PENDING: { color: "warning", label: "Pending", icon: "clock" },
-  EXTRACTING: { color: "info", label: "Extracting", icon: "loader" },
-  EXTRACTED: { color: "success", label: "Extracted", icon: "check" },
-  PROCESSING: { color: "info", label: "Processing", icon: "loader" },
-  READY: { color: "success", label: "Ready", icon: "check-circle" },
-  FAILED: { color: "error", label: "Failed", icon: "alert" },
+  PENDING: { color: 'warning', label: 'Pending', icon: 'clock' },
+  EXTRACTING: { color: 'info', label: 'Extracting', icon: 'loader' },
+  EXTRACTED: { color: 'success', label: 'Extracted', icon: 'check' },
+  PROCESSING: { color: 'info', label: 'Processing', icon: 'loader' },
+  READY: { color: 'success', label: 'Ready', icon: 'check-circle' },
+  FAILED: { color: 'error', label: 'Failed', icon: 'alert' },
 };
 
 const SOURCE_TYPE_ICONS: Record<ContentSourceType, string> = {
-  PASTE: "text",
-  PDF: "document",
-  YOUTUBE: "video",
-  URL: "link",
+  PASTE: 'text',
+  PDF: 'document',
+  YOUTUBE: 'video',
+  URL: 'link',
 };
 
 /**
@@ -66,9 +66,9 @@ function ContentItemCard({ content, onPress, onDelete, index }: { content: Study
   const typeIcon = SOURCE_TYPE_ICONS[content.sourceType];
 
   const handleDelete = () => {
-    Alert.alert("Delete Study Content?", `This will permanently remove "${content.title || "Untitled"}" and all associated study plans.`, [
-      { text: "Cancel", style: "cancel" },
-      { text: "Delete", style: "destructive", onPress: onDelete },
+    Alert.alert('Delete Study Content?', `This will permanently remove "${content.title || 'Untitled'}" and all associated study plans.`, [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Delete', style: 'destructive', onPress: onDelete },
     ]);
   };
 
@@ -85,7 +85,7 @@ function ContentItemCard({ content, onPress, onDelete, index }: { content: Study
             {/* Content */}
             <Box flex={1} gap="xs">
               <Text variant="body" color="text.primary" fontWeight="600" numberOfLines={1}>
-                {content.title || "Untitled Study Content"}
+                {content.title || 'Untitled Study Content'}
               </Text>
 
               <Box flexDirection="row" alignItems="center" gap="sm">
@@ -98,15 +98,15 @@ function ContentItemCard({ content, onPress, onDelete, index }: { content: Study
                   py="xs"
                   borderRadius="sm"
                   style={{
-                    backgroundColor: theme.colors[status.color as "success" | "error" | "warning" | "info"]?.DEFAULT ? `${theme.colors[status.color as "success" | "error" | "warning" | "info"].DEFAULT}15` : `${theme.colors.info.DEFAULT}15`,
+                    backgroundColor: theme.colors[status.color as 'success' | 'error' | 'warning' | 'info']?.DEFAULT ? `${theme.colors[status.color as 'success' | 'error' | 'warning' | 'info'].DEFAULT}15` : `${theme.colors.info.DEFAULT}15`,
                   }}
                 >
-                  <Icon name={status.icon} size={12} color={theme.colors[status.color as "success" | "error" | "warning" | "info"]?.DEFAULT || theme.colors.info.DEFAULT} />
+                  <Icon name={status.icon} size={12} color={theme.colors[status.color as 'success' | 'error' | 'warning' | 'info']?.DEFAULT || theme.colors.info.DEFAULT} />
                   <Text
                     variant="caption"
                     style={{
-                      color: theme.colors[status.color as "success" | "error" | "warning" | "info"]?.DEFAULT || theme.colors.info.DEFAULT,
-                      fontWeight: "600",
+                      color: theme.colors[status.color as 'success' | 'error' | 'warning' | 'info']?.DEFAULT || theme.colors.info.DEFAULT,
+                      fontWeight: '600',
                     }}
                   >
                     {status.label}
@@ -125,16 +125,16 @@ function ContentItemCard({ content, onPress, onDelete, index }: { content: Study
               </Box>
 
               {/* Extraction Progress for pending/extracting */}
-              {(content.status === "PENDING" || content.status === "EXTRACTING") && (
+              {(content.status === 'PENDING' || content.status === 'EXTRACTING') && (
                 <Box mt="xs">
                   <Text variant="caption" color="text.secondary">
-                    {content.status === "PENDING" ? "Waiting to extract..." : "Extracting content..."}
+                    {content.status === 'PENDING' ? 'Waiting to extract...' : 'Extracting content...'}
                   </Text>
                 </Box>
               )}
 
               {/* Error message for failed */}
-              {content.status === "FAILED" && content.errorMessage && (
+              {content.status === 'FAILED' && content.errorMessage && (
                 <Box mt="xs">
                   <Text variant="caption" color="error.DEFAULT" numberOfLines={2}>
                     {content.errorMessage}
@@ -171,14 +171,14 @@ function FilterChip({ label, isActive, onPress, icon }: { label: string; isActiv
         px="md"
         py="sm"
         borderRadius="full"
-        bg={isActive ? "primary.500" : "background.tertiary"}
+        bg={isActive ? 'primary.500' : 'background.tertiary'}
         style={{
           borderWidth: 1,
-          borderColor: isActive ? "transparent" : theme.colors.border.light,
+          borderColor: isActive ? 'transparent' : theme.colors.border.light,
         }}
       >
-        {icon && <Icon name={icon} size={14} color={isActive ? "#FFF" : theme.colors.text.secondary} />}
-        <Text variant="caption" style={{ color: isActive ? "#FFF" : theme.colors.text.secondary, fontWeight: isActive ? "600" : "400" }}>
+        {icon && <Icon name={icon} size={14} color={isActive ? '#FFF' : theme.colors.text.secondary} />}
+        <Text variant="caption" style={{ color: isActive ? '#FFF' : theme.colors.text.secondary, fontWeight: isActive ? '600' : '400' }}>
           {label}
         </Text>
       </Box>
@@ -194,21 +194,21 @@ export function StudyLibraryScreen(): JSX.Element {
   const navigation = useNavigation<ContentStudyNavigationProp>();
   const { content, isLoading, error, refetch, deleteContent } = useContentHistory();
 
-  const [statusFilter, setStatusFilter] = useState<ContentStatus | "all">("all");
-  const [typeFilter, setTypeFilter] = useState<ContentSourceType | "all">("all");
+  const [statusFilter, setStatusFilter] = useState<ContentStatus | 'all'>('all');
+  const [typeFilter, setTypeFilter] = useState<ContentSourceType | 'all'>('all');
 
   // Filter content based on selected filters
   const filteredContent = useMemo(() => {
     return content.filter((item: StudyContent) => {
-      const matchesStatus = statusFilter === "all" || item.status === statusFilter;
-      const matchesType = typeFilter === "all" || item.sourceType === typeFilter;
+      const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
+      const matchesType = typeFilter === 'all' || item.sourceType === typeFilter;
       return matchesStatus && matchesType;
     });
   }, [content, statusFilter, typeFilter]);
 
   const handleContentPress = useCallback(
     (contentId: string) => {
-      navigation.navigate("ContentReview", { contentId });
+      navigation.navigate('ContentReview', { contentId });
     },
     [navigation],
   );
@@ -260,10 +260,10 @@ export function StudyLibraryScreen(): JSX.Element {
         <Box alignItems="center" py="xl">
           <Icon name="book" size={48} color={theme.colors.text.tertiary} />
           <Text variant="body" color="text.secondary" mt="md" textAlign="center">
-            {content.length === 0 ? "No study content yet" : "No content matches your filters"}
+            {content.length === 0 ? 'No study content yet' : 'No content matches your filters'}
           </Text>
           {content.length === 0 && (
-            <Button variant="primary" size="sm" mt="md" onPress={() => navigation.navigate("ContentInput", {})} accessibilityLabel="Add Your First Content button" accessibilityRole="button" accessibilityHint="Activates this control">
+            <Button variant="primary" size="sm" mt="md" onPress={() => navigation.navigate('ContentInput', {})} accessibilityLabel="Add Your First Content button" accessibilityRole="button" accessibilityHint="Activates this control">
               Add Your First Content
             </Button>
           )}
@@ -284,10 +284,10 @@ export function StudyLibraryScreen(): JSX.Element {
               Study Library
             </Text>
             <Text variant="caption" color="text.secondary" mt="xs">
-              {content.length} saved {content.length === 1 ? "item" : "items"}
+              {content.length} saved {content.length === 1 ? 'item' : 'items'}
             </Text>
           </Box>
-          <Button variant="outline" size="sm" onPress={() => navigation.navigate("ContentInput", {})} accessibilityLabel="+ Add New button" accessibilityRole="button" accessibilityHint="Activates this control">
+          <Button variant="outline" size="sm" onPress={() => navigation.navigate('ContentInput', {})} accessibilityLabel="+ Add New button" accessibilityRole="button" accessibilityHint="Activates this control">
             + Add New
           </Button>
         </Box>

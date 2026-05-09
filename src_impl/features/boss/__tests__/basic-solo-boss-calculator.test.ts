@@ -28,7 +28,7 @@ describe('Basic Solo Boss Calculator', () => {
     const result = calculateBasicSoloBossDamage({
       sessionDurationMinutes: 0,
       sessionQuality: 0,
-      streakDays: 0
+      streakDays: 0,
     });
     expect(result).toBe(1); // min base damage 1 * 0.5 quality multiplier = 0.5 -> rounded 1
   });

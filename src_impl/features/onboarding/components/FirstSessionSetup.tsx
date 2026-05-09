@@ -46,7 +46,7 @@ export function FirstSessionSetup({ userName, goal, onStartSession, onBack }: Fi
   };
 
   const handleStartSession = () => {
-    if (isAdvancing) return;
+    if (isAdvancing) {return;}
 
     setIsAdvancing(true);
     onStartSession({

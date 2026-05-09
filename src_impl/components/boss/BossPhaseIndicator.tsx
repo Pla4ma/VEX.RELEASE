@@ -3,10 +3,10 @@
  * Shows current boss phase, health thresholds, and phase mechanics
  */
 
-import React, { useMemo } from "react";
-import { View, Text, Animated } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
-import type { BossPhase, BossPhaseState } from "../../features/boss/boss-phases";
+import React, { useMemo } from 'react';
+import { View, Text, Animated } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
+import type { BossPhase, BossPhaseState } from '../../features/boss/boss-phases';
 
 interface BossPhaseIndicatorProps {
   phase: BossPhase;
@@ -19,38 +19,38 @@ interface BossPhaseIndicatorProps {
 export const BossPhaseIndicator: React.FC<BossPhaseIndicatorProps> = ({ phase, phaseState, bossHealthPercent, mechanicActive, mechanicTimeRemaining }) => {
   const phaseInfo = useMemo(() => {
     switch (phase) {
-      case "PHASE_1":
+      case 'PHASE_1':
         return {
-          name: "Phase 1: Standard",
-          color: "#38A169",
-          description: "Normal combat conditions",
+          name: 'Phase 1: Standard',
+          color: '#38A169',
+          description: 'Normal combat conditions',
         };
-      case "PHASE_2":
+      case 'PHASE_2':
         return {
-          name: "Phase 2: Enrage",
-          color: "#D69E2E",
-          description: "Increased pressure - pauses deal damage!",
+          name: 'Phase 2: Enrage',
+          color: '#D69E2E',
+          description: 'Increased pressure - pauses deal damage!',
         };
-      case "PHASE_3":
+      case 'PHASE_3':
         return {
-          name: "Phase 3: Execute",
-          color: "#E53E3E",
-          description: "FINAL PUSH! Maintain 90%+ purity or fail!",
+          name: 'Phase 3: Execute',
+          color: '#E53E3E',
+          description: 'FINAL PUSH! Maintain 90%+ purity or fail!',
         };
       default:
         return {
-          name: "Unknown Phase",
-          color: "#718096",
-          description: "",
+          name: 'Unknown Phase',
+          color: '#718096',
+          description: '',
         };
     }
   }, [phase]);
 
   const nextThreshold = useMemo(() => {
-    if (phase === "PHASE_1") {
+    if (phase === 'PHASE_1') {
       return 50;
     }
-    if (phase === "PHASE_2") {
+    if (phase === 'PHASE_2') {
       return 25;
     }
     return 0;
@@ -63,7 +63,7 @@ export const BossPhaseIndicator: React.FC<BossPhaseIndicatorProps> = ({ phase, p
       {/* Phase Header */}
       <View style={[styles.header, { backgroundColor: phaseInfo.color }]}>
         <Text style={styles.phaseName}>{phaseInfo.name}</Text>
-        {phase === "ENRAGED" && (
+        {phase === 'ENRAGED' && (
           <View style={styles.enragedBadge}>
             <Text style={styles.enragedText}>ENRAGED!</Text>
           </View>
@@ -138,11 +138,11 @@ const ThresholdMarker: React.FC<ThresholdMarkerProps> = ({ percent: _percent, la
 
 const PhaseTips: React.FC<{ phase: BossPhase }> = ({ phase }) => {
   const tips: Record<string, string[]> = {
-    PHASE_1: ["Focus on maintaining high purity", "Save your pause time for emergencies", "Build momentum for later phases"],
-    PHASE_2: ["⚠️ Pauses now deal damage to YOU!", "Commit to uninterrupted focus", "Use Deep Work mode if available"],
-    PHASE_3: ["🚨 EXECUTE PHASE!", "Maintain 90%+ purity or FAIL!", "2-minute countdown - finish strong!", "Your streak is on the line!"],
-    ENRAGED: ["⚠️ BOSS IS ENRAGED!", "Damage output increased!", "Focus now or fail!"],
-    EXECUTE: ["🚨 EXECUTE WINDOW!", "FINAL PUSH REQUIRED!", "All or nothing!"],
+    PHASE_1: ['Focus on maintaining high purity', 'Save your pause time for emergencies', 'Build momentum for later phases'],
+    PHASE_2: ['⚠️ Pauses now deal damage to YOU!', 'Commit to uninterrupted focus', 'Use Deep Work mode if available'],
+    PHASE_3: ['🚨 EXECUTE PHASE!', 'Maintain 90%+ purity or FAIL!', '2-minute countdown - finish strong!', 'Your streak is on the line!'],
+    ENRAGED: ['⚠️ BOSS IS ENRAGED!', 'Damage output increased!', 'Focus now or fail!'],
+    EXECUTE: ['🚨 EXECUTE WINDOW!', 'FINAL PUSH REQUIRED!', 'All or nothing!'],
   };
 
   const phaseTips = tips[phase] || tips.PHASE_1;
@@ -161,11 +161,11 @@ const PhaseTips: React.FC<{ phase: BossPhase }> = ({ phase }) => {
 
 const styles = createSheet({
   container: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 12,
-    overflow: "hidden",
+    overflow: 'hidden',
     margin: 16,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -173,132 +173,132 @@ const styles = createSheet({
   },
   header: {
     padding: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   phaseName: {
     fontSize: 16,
-    fontWeight: "bold",
-    color: "white",
+    fontWeight: 'bold',
+    color: 'white',
   },
   enragedBadge: {
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
   },
   enragedText: {
-    color: "white",
+    color: 'white',
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   progressSection: {
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#E2E8F0",
+    borderBottomColor: '#E2E8F0',
   },
   thresholds: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 8,
   },
   thresholdContainer: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   thresholdDot: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: "#E2E8F0",
+    backgroundColor: '#E2E8F0',
   },
   thresholdDotActive: {
-    backgroundColor: "#4A5568",
+    backgroundColor: '#4A5568',
   },
   thresholdDotPhase: {
     width: 12,
     height: 12,
     borderRadius: 6,
     borderWidth: 2,
-    borderColor: "#4A5568",
+    borderColor: '#4A5568',
   },
   thresholdLabel: {
     fontSize: 10,
-    color: "#A0AEC0",
+    color: '#A0AEC0',
     marginTop: 4,
   },
   thresholdLabelActive: {
-    color: "#4A5568",
-    fontWeight: "600",
+    color: '#4A5568',
+    fontWeight: '600',
   },
   healthBarContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   healthBarBackground: {
     flex: 1,
     height: 12,
-    backgroundColor: "#E2E8F0",
+    backgroundColor: '#E2E8F0',
     borderRadius: 6,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   healthBar: {
-    height: "100%",
+    height: '100%',
     borderRadius: 6,
   },
   healthPercent: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "#4A5568",
+    fontWeight: '600',
+    color: '#4A5568',
     minWidth: 45,
   },
   nextPhaseText: {
     fontSize: 12,
-    color: "#718096",
+    color: '#718096',
     marginTop: 8,
-    fontStyle: "italic",
+    fontStyle: 'italic',
   },
   descriptionSection: {
     padding: 16,
-    backgroundColor: "#F7FAFC",
+    backgroundColor: '#F7FAFC',
     borderBottomWidth: 1,
-    borderBottomColor: "#E2E8F0",
+    borderBottomColor: '#E2E8F0',
   },
   description: {
     fontSize: 14,
-    color: "#4A5568",
-    fontStyle: "italic",
+    color: '#4A5568',
+    fontStyle: 'italic',
   },
   mechanicWarning: {
-    backgroundColor: "#FED7D7",
+    backgroundColor: '#FED7D7',
     padding: 12,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   mechanicTitle: {
     fontSize: 12,
-    fontWeight: "bold",
-    color: "#C53030",
+    fontWeight: 'bold',
+    color: '#C53030',
   },
   mechanicTimer: {
     fontSize: 14,
-    fontWeight: "bold",
-    color: "#C53030",
+    fontWeight: 'bold',
+    color: '#C53030',
   },
   tipsSection: {
     padding: 16,
   },
   tipsHeader: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "#718096",
+    fontWeight: '600',
+    color: '#718096',
     marginBottom: 8,
   },
   tip: {
     fontSize: 12,
-    color: "#4A5568",
+    color: '#4A5568',
     marginBottom: 4,
   },
 });

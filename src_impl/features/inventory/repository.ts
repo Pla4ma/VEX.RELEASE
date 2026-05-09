@@ -3,16 +3,16 @@
  * All Supabase queries for inventory system
  */
 
-import { getSupabaseClient } from "../../config/supabase";
-import { InventoryItemSchema, type InventoryItem, type ItemStatus, type EquipmentSlot, type AcquisitionSource } from "./schemas";
+import { getSupabaseClient } from '../../config/supabase';
+import { InventoryItemSchema, type InventoryItem, type ItemStatus, type EquipmentSlot, type AcquisitionSource } from './schemas';
 
 class RepositoryError extends Error {
   constructor(
     public operation: string,
     public originalError: unknown,
   ) {
-    super(`Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : "Unknown error"}`);
-    this.name = "RepositoryError";
+    super(`Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : 'Unknown error'}`);
+    this.name = 'RepositoryError';
   }
 }
 
@@ -30,68 +30,68 @@ export async function fetchUserInventory(
     offset?: number;
   } = {},
 ): Promise<InventoryItem[]> {
-  let query = supabase.from("inventory_items").select("*").eq("user_id", userId);
+  let query = supabase.from('inventory_items').select('*').eq('user_id', userId);
 
   if (!options.includeDeleted) {
-    query = query.is("deleted_at", null);
+    query = query.is('deleted_at', null);
   }
 
   const { data, error } = await query
-    .order("created_at", { ascending: false })
+    .order('created_at', { ascending: false })
     .limit(options.limit ?? 100)
     .range(options.offset ?? 0, (options.offset ?? 0) + (options.limit ?? 100) - 1);
 
   if (error) {
-    throw new RepositoryError("fetchUserInventory", error);
+    throw new RepositoryError('fetchUserInventory', error);
   }
   return InventoryItemSchema.array().parse(data ?? []);
 }
 
 export async function fetchInventoryItemById(itemId: string): Promise<InventoryItem | null> {
-  const { data, error } = await supabase.from("inventory_items").select("*").eq("id", itemId).single();
+  const { data, error } = await supabase.from('inventory_items').select('*').eq('id', itemId).single();
 
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
-    throw new RepositoryError("fetchInventoryItemById", error);
+    throw new RepositoryError('fetchInventoryItemById', error);
   }
 
   return InventoryItemSchema.parse(data);
 }
 
 export async function fetchInventoryItemsByDefinition(userId: string, itemDefinitionId: string, status?: ItemStatus): Promise<InventoryItem[]> {
-  let query = supabase.from("inventory_items").select("*").eq("user_id", userId).eq("item_definition_id", itemDefinitionId).is("deleted_at", null);
+  let query = supabase.from('inventory_items').select('*').eq('user_id', userId).eq('item_definition_id', itemDefinitionId).is('deleted_at', null);
 
   if (status) {
-    query = query.eq("status", status);
+    query = query.eq('status', status);
   }
 
   const { data, error } = await query;
 
   if (error) {
-    throw new RepositoryError("fetchInventoryItemsByDefinition", error);
+    throw new RepositoryError('fetchInventoryItemsByDefinition', error);
   }
   return InventoryItemSchema.array().parse(data ?? []);
 }
 
 export async function fetchEquippedItems(userId: string): Promise<InventoryItem[]> {
-  const { data, error } = await supabase.from("inventory_items").select("*").eq("user_id", userId).eq("status", "EQUIPPED").is("deleted_at", null);
+  const { data, error } = await supabase.from('inventory_items').select('*').eq('user_id', userId).eq('status', 'EQUIPPED').is('deleted_at', null);
 
   if (error) {
-    throw new RepositoryError("fetchEquippedItems", error);
+    throw new RepositoryError('fetchEquippedItems', error);
   }
   return InventoryItemSchema.array().parse(data ?? []);
 }
 
 export async function fetchItemInSlot(userId: string, slot: EquipmentSlot): Promise<InventoryItem | null> {
-  const { data, error } = await supabase.from("inventory_items").select("*").eq("user_id", userId).eq("slot", slot).eq("status", "EQUIPPED").is("deleted_at", null).single();
+  const { data, error } = await supabase.from('inventory_items').select('*').eq('user_id', userId).eq('slot', slot).eq('status', 'EQUIPPED').is('deleted_at', null).single();
 
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
-    throw new RepositoryError("fetchItemInSlot", error);
+    throw new RepositoryError('fetchItemInSlot', error);
   }
 
   return InventoryItemSchema.parse(data);
@@ -101,10 +101,10 @@ export async function fetchItemInSlot(userId: string, slot: EquipmentSlot): Prom
 // Inventory Mutations
 // ============================================================================
 
-export async function createInventoryItem(item: Omit<InventoryItem, "id" | "createdAt" | "updatedAt">): Promise<InventoryItem> {
+export async function createInventoryItem(item: Omit<InventoryItem, 'id' | 'createdAt' | 'updatedAt'>): Promise<InventoryItem> {
   const now = Date.now();
   const { data, error } = await supabase
-    .from("inventory_items")
+    .from('inventory_items')
     .insert({
       user_id: item.userId,
       item_definition_id: item.itemDefinitionId,
@@ -127,14 +127,14 @@ export async function createInventoryItem(item: Omit<InventoryItem, "id" | "crea
     .single();
 
   if (error) {
-    throw new RepositoryError("createInventoryItem", error);
+    throw new RepositoryError('createInventoryItem', error);
   }
   return InventoryItemSchema.parse(data);
 }
 
-export async function updateInventoryItem(itemId: string, updates: Partial<Omit<InventoryItem, "id" | "createdAt" | "userId">>): Promise<InventoryItem> {
+export async function updateInventoryItem(itemId: string, updates: Partial<Omit<InventoryItem, 'id' | 'createdAt' | 'userId'>>): Promise<InventoryItem> {
   const { data, error } = await supabase
-    .from("inventory_items")
+    .from('inventory_items')
     .update({
       status: updates.status,
       quantity: updates.quantity,
@@ -147,46 +147,46 @@ export async function updateInventoryItem(itemId: string, updates: Partial<Omit<
       deleted_reason: updates.deletedReason,
       updated_at: Date.now(),
     })
-    .eq("id", itemId)
+    .eq('id', itemId)
     .select()
     .single();
 
   if (error) {
-    throw new RepositoryError("updateInventoryItem", error);
+    throw new RepositoryError('updateInventoryItem', error);
   }
   return InventoryItemSchema.parse(data);
 }
 
 export async function updateItemQuantity(itemId: string, newQuantity: number): Promise<InventoryItem> {
   const { data, error } = await supabase
-    .from("inventory_items")
+    .from('inventory_items')
     .update({
       quantity: newQuantity,
       updated_at: Date.now(),
     })
-    .eq("id", itemId)
+    .eq('id', itemId)
     .select()
     .single();
 
   if (error) {
-    throw new RepositoryError("updateItemQuantity", error);
+    throw new RepositoryError('updateItemQuantity', error);
   }
   return InventoryItemSchema.parse(data);
 }
 
 export async function markItemDeleted(itemId: string, reason: string): Promise<void> {
   const { error } = await supabase
-    .from("inventory_items")
+    .from('inventory_items')
     .update({
-      status: "DESTROYED",
+      status: 'DESTROYED',
       deleted_at: Date.now(),
       deleted_reason: reason,
       updated_at: Date.now(),
     })
-    .eq("id", itemId);
+    .eq('id', itemId);
 
   if (error) {
-    throw new RepositoryError("markItemDeleted", error);
+    throw new RepositoryError('markItemDeleted', error);
   }
 }
 
@@ -196,25 +196,25 @@ export async function markItemDeleted(itemId: string, reason: string): Promise<v
 
 export async function mergeItems(targetItemId: string, sourceItemId: string, quantityToTransfer: number): Promise<void> {
   // Use RPC for atomic merge operation
-  const { error } = await supabase.rpc("merge_inventory_items", {
+  const { error } = await supabase.rpc('merge_inventory_items', {
     p_target_item_id: targetItemId,
     p_source_item_id: sourceItemId,
     p_quantity: quantityToTransfer,
   });
 
   if (error) {
-    throw new RepositoryError("mergeItems", error);
+    throw new RepositoryError('mergeItems', error);
   }
 }
 
 export async function splitItemStack(itemId: string, splitQuantity: number): Promise<InventoryItem> {
-  const { data, error } = await supabase.rpc("split_inventory_item", {
+  const { data, error } = await supabase.rpc('split_inventory_item', {
     p_item_id: itemId,
     p_split_quantity: splitQuantity,
   });
 
   if (error) {
-    throw new RepositoryError("splitItemStack", error);
+    throw new RepositoryError('splitItemStack', error);
   }
   return InventoryItemSchema.parse(data);
 }
@@ -227,12 +227,12 @@ export async function getInventoryCapacity(userId: string): Promise<{
   maxSlots: number;
   usedSlots: number;
 }> {
-  const { data, error } = await supabase.rpc("get_inventory_capacity", {
+  const { data, error } = await supabase.rpc('get_inventory_capacity', {
     p_user_id: userId,
   });
 
   if (error) {
-    throw new RepositoryError("getInventoryCapacity", error);
+    throw new RepositoryError('getInventoryCapacity', error);
   }
 
   return {
@@ -251,19 +251,19 @@ export async function checkInventorySpace(userId: string, requiredSlots: number)
 // ============================================================================
 
 export async function getUsableConsumables(userId: string): Promise<InventoryItem[]> {
-  const { data, error } = await supabase.from("inventory_items").select("*").eq("user_id", userId).eq("status", "OWNED").is("deleted_at", null).gt("quantity", 0);
+  const { data, error } = await supabase.from('inventory_items').select('*').eq('user_id', userId).eq('status', 'OWNED').is('deleted_at', null).gt('quantity', 0);
 
   if (error) {
-    throw new RepositoryError("getUsableConsumables", error);
+    throw new RepositoryError('getUsableConsumables', error);
   }
   return InventoryItemSchema.array().parse(data ?? []);
 }
 
 export async function getActiveBuffs(userId: string): Promise<InventoryItem[]> {
-  const { data, error } = await supabase.from("inventory_items").select("*").eq("user_id", userId).eq("status", "EQUIPPED").is("deleted_at", null);
+  const { data, error } = await supabase.from('inventory_items').select('*').eq('user_id', userId).eq('status', 'EQUIPPED').is('deleted_at', null);
 
   if (error) {
-    throw new RepositoryError("getActiveBuffs", error);
+    throw new RepositoryError('getActiveBuffs', error);
   }
   return InventoryItemSchema.array().parse(data ?? []);
 }
@@ -278,10 +278,10 @@ export interface QuickUseSlotData {
 }
 
 export async function fetchQuickUseSlots(userId: string): Promise<QuickUseSlotData[]> {
-  const { data, error } = await supabase.from("quick_use_slots").select("*").eq("user_id", userId).order("slot_index", { ascending: true });
+  const { data, error } = await supabase.from('quick_use_slots').select('*').eq('user_id', userId).order('slot_index', { ascending: true });
 
   if (error) {
-    throw new RepositoryError("fetchQuickUseSlots", error);
+    throw new RepositoryError('fetchQuickUseSlots', error);
   }
 
   return (data ?? []).map((row) => ({
@@ -291,7 +291,7 @@ export async function fetchQuickUseSlots(userId: string): Promise<QuickUseSlotDa
 }
 
 export async function setQuickUseSlot(userId: string, slotIndex: number, itemId: string | null): Promise<void> {
-  const { error } = await supabase.from("quick_use_slots").upsert(
+  const { error } = await supabase.from('quick_use_slots').upsert(
     {
       user_id: userId,
       slot_index: slotIndex,
@@ -299,12 +299,12 @@ export async function setQuickUseSlot(userId: string, slotIndex: number, itemId:
       updated_at: Date.now(),
     },
     {
-      onConflict: "user_id,slot_index",
+      onConflict: 'user_id,slot_index',
     },
   );
 
   if (error) {
-    throw new RepositoryError("setQuickUseSlot", error);
+    throw new RepositoryError('setQuickUseSlot', error);
   }
 }
 
@@ -313,10 +313,10 @@ export async function setQuickUseSlot(userId: string, slotIndex: number, itemId:
 // ============================================================================
 
 export async function checkDuplicatePurchaseItem(userId: string, purchaseId: string): Promise<boolean> {
-  const { data, error } = await supabase.from("inventory_items").select("id").eq("user_id", userId).eq("purchase_id", purchaseId).is("deleted_at", null).limit(1);
+  const { data, error } = await supabase.from('inventory_items').select('id').eq('user_id', userId).eq('purchase_id', purchaseId).is('deleted_at', null).limit(1);
 
   if (error) {
-    throw new RepositoryError("checkDuplicatePurchaseItem", error);
+    throw new RepositoryError('checkDuplicatePurchaseItem', error);
   }
   return (data ?? []).length > 0;
 }
@@ -326,10 +326,10 @@ export async function checkDuplicateItemDefinition(userId: string, itemDefinitio
     return false;
   }
 
-  const { data, error } = await supabase.from("inventory_items").select("id").eq("user_id", userId).eq("item_definition_id", itemDefinitionId).is("deleted_at", null).limit(1);
+  const { data, error } = await supabase.from('inventory_items').select('id').eq('user_id', userId).eq('item_definition_id', itemDefinitionId).is('deleted_at', null).limit(1);
 
   if (error) {
-    throw new RepositoryError("checkDuplicateItemDefinition", error);
+    throw new RepositoryError('checkDuplicateItemDefinition', error);
   }
   return (data ?? []).length > 0;
 }

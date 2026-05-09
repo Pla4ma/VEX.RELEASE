@@ -4,15 +4,15 @@
  * Casual (50% XP, unlimited pauses) → Focused (100% XP, 2 pauses) → Deep Work (150% XP + gem wager, no pauses)
  */
 
-import { eventBus } from "../../events";
-import * as Sentry from "@sentry/react-native";
-import { z } from "zod";
+import { eventBus } from '../../events';
+import * as Sentry from '@sentry/react-native';
+import { z } from 'zod';
 
 // ============================================================================
 // Schemas
 // ============================================================================
 
-export const SessionDifficultySchema = z.enum(["CASUAL", "FOCUSED", "DEEP_WORK"]);
+export const SessionDifficultySchema = z.enum(['CASUAL', 'FOCUSED', 'DEEP_WORK']);
 
 export const SessionStakesSchema = z.object({
   difficulty: SessionDifficultySchema,
@@ -21,7 +21,7 @@ export const SessionStakesSchema = z.object({
   pausePenaltyPercent: z.number().min(0).max(100),
   gemWager: z.number().int().min(0),
   strictMode: z.boolean(),
-  failureConsequence: z.enum(["NONE", "REDUCED_XP", "LOSE_WAGER"]),
+  failureConsequence: z.enum(['NONE', 'REDUCED_XP', 'LOSE_WAGER']),
 });
 
 export const UserStakesPreferenceSchema = z.object({
@@ -45,11 +45,11 @@ export const DIFFICULTY_CONFIG = {
     pausePenaltyPercent: 10,
     gemWager: 0,
     strictMode: false,
-    failureConsequence: "NONE" as const,
-    label: "Casual",
-    description: "Practice mode. Unlimited pauses. 50% XP.",
-    icon: "🌱",
-    color: "#4CAF50",
+    failureConsequence: 'NONE' as const,
+    label: 'Casual',
+    description: 'Practice mode. Unlimited pauses. 50% XP.',
+    icon: '🌱',
+    color: '#4CAF50',
   },
   FOCUSED: {
     xpMultiplier: 1.0,
@@ -57,11 +57,11 @@ export const DIFFICULTY_CONFIG = {
     pausePenaltyPercent: 25,
     gemWager: 0,
     strictMode: false,
-    failureConsequence: "NONE" as const,
-    label: "Focused",
-    description: "Standard mode. 2 pauses allowed. 100% XP.",
-    icon: "🔥",
-    color: "#FF9800",
+    failureConsequence: 'NONE' as const,
+    label: 'Focused',
+    description: 'Standard mode. 2 pauses allowed. 100% XP.',
+    icon: '🔥',
+    color: '#FF9800',
   },
   DEEP_WORK: {
     xpMultiplier: 1.5,
@@ -69,11 +69,11 @@ export const DIFFICULTY_CONFIG = {
     pausePenaltyPercent: 100,
     gemWager: 5,
     strictMode: true,
-    failureConsequence: "LOSE_WAGER" as const,
-    label: "Deep Work",
-    description: "No pauses. Wager 5 gems. 150% XP if completed, lose gems if abandoned.",
-    icon: "⚡",
-    color: "#9C27B0",
+    failureConsequence: 'LOSE_WAGER' as const,
+    label: 'Deep Work',
+    description: 'No pauses. Wager 5 gems. 150% XP if completed, lose gems if abandoned.',
+    icon: '⚡',
+    color: '#9C27B0',
   },
 } as const;
 
@@ -119,10 +119,10 @@ export function getStakesForDifficulty(difficulty: SessionDifficulty): SessionSt
 
 export function canSelectDifficulty(userLevel: number, difficulty: SessionDifficulty): { allowed: boolean; reason?: string } {
   // Deep Work locked until level 3
-  if (difficulty === "DEEP_WORK" && userLevel < 3) {
+  if (difficulty === 'DEEP_WORK' && userLevel < 3) {
     return {
       allowed: false,
-      reason: "Deep Work unlocks at level 3",
+      reason: 'Deep Work unlocks at level 3',
     };
   }
   return { allowed: true };
@@ -131,21 +131,21 @@ export function canSelectDifficulty(userLevel: number, difficulty: SessionDiffic
 export function getRecommendedDifficulty(userLevel: number, recentCompletionRate: number, currentStreak: number): SessionDifficulty {
   // New users: Start with Casual
   if (userLevel < 2) {
-    return "CASUAL";
+    return 'CASUAL';
   }
 
   // Struggling users: Keep it Casual
   if (recentCompletionRate < 0.6) {
-    return "CASUAL";
+    return 'CASUAL';
   }
 
   // High performers with good streak: Recommend Deep Work
   if (currentStreak >= 7 && recentCompletionRate > 0.85 && userLevel >= 5) {
-    return "DEEP_WORK";
+    return 'DEEP_WORK';
   }
 
   // Default to Focused
-  return "FOCUSED";
+  return 'FOCUSED';
 }
 
 // ============================================================================
@@ -165,14 +165,14 @@ export function calculateStakesResult(sessionId: string, userId: string, difficu
     xpEarned = Math.floor(baseXp * stakes.xpMultiplier);
 
     // Deep Work bonus gems
-    if (difficulty === "DEEP_WORK") {
+    if (difficulty === 'DEEP_WORK') {
       gemsWon = stakes.gemWager; // Win your wager back
       gemsWon += Math.min(3, Math.floor(totalDuration / 30 / 60)); // +1 gem per 30 min, max 3
       newWinStreak = userWinStreak + 1;
     }
   } else {
     // Abandoned session
-    if (stakes.failureConsequence === "LOSE_WAGER" && stakes.gemWager > 0) {
+    if (stakes.failureConsequence === 'LOSE_WAGER' && stakes.gemWager > 0) {
       gemsLost = stakes.gemWager;
     }
 
@@ -180,7 +180,7 @@ export function calculateStakesResult(sessionId: string, userId: string, difficu
     newWinStreak = 0;
 
     // Reduced XP for partial completion (if not Deep Work)
-    if (stakes.failureConsequence === "REDUCED_XP") {
+    if (stakes.failureConsequence === 'REDUCED_XP') {
       xpEarned = Math.floor(baseXp * 0.25); // 25% for trying
     }
   }
@@ -212,28 +212,28 @@ export function calculateStakesResult(sessionId: string, userId: string, difficu
 export async function recordStakesResult(result: StakesSessionResult): Promise<void> {
   try {
     // Publish event for progression system
-    eventBus.publish("session:stakes_completed", result);
+    eventBus.publish('session:stakes_completed', result);
 
     // Special rewards for Deep Work streaks
-    if (result.difficulty === "DEEP_WORK" && result.completed) {
+    if (result.difficulty === 'DEEP_WORK' && result.completed) {
       if (result.winStreakUpdated >= 3) {
-        (eventBus as any).publish("achievement:unlocked", {
+        (eventBus as any).publish('achievement:unlocked', {
           userId: result.userId,
-          achievementId: "deep_work_streak_3",
+          achievementId: 'deep_work_streak_3',
         });
       }
       if (result.winStreakUpdated >= 7) {
-        (eventBus as any).publish("achievement:unlocked", {
+        (eventBus as any).publish('achievement:unlocked', {
           userId: result.userId,
-          achievementId: "deep_work_streak_7",
+          achievementId: 'deep_work_streak_7',
         });
       }
     }
 
     // Track analytics
     Sentry.addBreadcrumb({
-      category: "session_stakes",
-      message: `Session completed with ${result.difficulty}: ${result.completed ? "success" : "abandoned"}`,
+      category: 'session_stakes',
+      message: `Session completed with ${result.difficulty}: ${result.completed ? 'success' : 'abandoned'}`,
       data: {
         difficulty: result.difficulty,
         xpEarned: result.xpEarned,
@@ -243,7 +243,7 @@ export async function recordStakesResult(result: StakesSessionResult): Promise<v
     });
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "session_stakes", action: "record_result" },
+      tags: { feature: 'session_stakes', action: 'record_result' },
     });
   }
 }
@@ -257,7 +257,7 @@ export function getDifficultyDisplay(difficulty: SessionDifficulty): {
   description: string;
   icon: string;
   color: string;
-  riskLevel: "LOW" | "MEDIUM" | "HIGH";
+  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
 } {
   const config = DIFFICULTY_CONFIG[difficulty];
   return {
@@ -265,7 +265,7 @@ export function getDifficultyDisplay(difficulty: SessionDifficulty): {
     description: config.description,
     icon: config.icon,
     color: config.color,
-    riskLevel: difficulty === "CASUAL" ? "LOW" : difficulty === "FOCUSED" ? "MEDIUM" : "HIGH",
+    riskLevel: difficulty === 'CASUAL' ? 'LOW' : difficulty === 'FOCUSED' ? 'MEDIUM' : 'HIGH',
   };
 }
 
@@ -274,7 +274,7 @@ export function formatStakesSummary(result: StakesSessionResult): string {
     if (result.gemsLost > 0) {
       return `💔 Abandoned! Lost ${result.gemsLost} gems. Try Focused mode next time?`;
     }
-    return "⚠️ Session abandoned. No rewards earned.";
+    return '⚠️ Session abandoned. No rewards earned.';
   }
 
   const difficultyConfig = DIFFICULTY_CONFIG[result.difficulty];
@@ -284,7 +284,7 @@ export function formatStakesSummary(result: StakesSessionResult): string {
     summary += ` (+${result.gemsWon} gems)`;
   }
 
-  if (result.winStreakUpdated > 1 && result.difficulty === "DEEP_WORK") {
+  if (result.winStreakUpdated > 1 && result.difficulty === 'DEEP_WORK') {
     summary += ` 🔥 ${result.winStreakUpdated} win streak!`;
   }
 

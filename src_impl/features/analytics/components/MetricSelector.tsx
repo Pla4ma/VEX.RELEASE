@@ -3,11 +3,11 @@
  * Multi-select dropdown for choosing analytics metrics
  */
 
-import React, { useState } from "react";
-import { View, Text, Modal, ScrollView, Pressable } from "react-native";
-import { AnalyticsMetricSchema } from "../schemas";
-import type { z } from "zod";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useState } from 'react';
+import { View, Text, Modal, ScrollView, Pressable } from 'react-native';
+import { AnalyticsMetricSchema } from '../schemas';
+import type { z } from 'zod';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 type AnalyticsMetric = z.infer<typeof AnalyticsMetricSchema>;
 
@@ -19,18 +19,18 @@ interface MetricSelectorProps {
 }
 
 const AVAILABLE_METRICS: { value: AnalyticsMetric; label: string; category: string }[] = [
-  { value: "sessions_completed", label: "Sessions Completed", category: "Sessions" },
-  { value: "sessions_abandoned", label: "Sessions Abandoned", category: "Sessions" },
-  { value: "total_focus_time", label: "Total Focus Time", category: "Sessions" },
-  { value: "average_session_duration", label: "Avg Session Duration", category: "Sessions" },
-  { value: "streak_days", label: "Streak Days", category: "Progress" },
-  { value: "longest_streak", label: "Longest Streak", category: "Progress" },
-  { value: "xp_earned", label: "XP Earned", category: "Progress" },
-  { value: "level_progression", label: "Level Progression", category: "Progress" },
-  { value: "boss_damage_dealt", label: "Boss Damage", category: "Combat" },
-  { value: "items_crafted", label: "Items Crafted", category: "Economy" },
-  { value: "coins_spent", label: "Coins Spent", category: "Economy" },
-  { value: "challenges_completed", label: "Challenges Completed", category: "Social" },
+  { value: 'sessions_completed', label: 'Sessions Completed', category: 'Sessions' },
+  { value: 'sessions_abandoned', label: 'Sessions Abandoned', category: 'Sessions' },
+  { value: 'total_focus_time', label: 'Total Focus Time', category: 'Sessions' },
+  { value: 'average_session_duration', label: 'Avg Session Duration', category: 'Sessions' },
+  { value: 'streak_days', label: 'Streak Days', category: 'Progress' },
+  { value: 'longest_streak', label: 'Longest Streak', category: 'Progress' },
+  { value: 'xp_earned', label: 'XP Earned', category: 'Progress' },
+  { value: 'level_progression', label: 'Level Progression', category: 'Progress' },
+  { value: 'boss_damage_dealt', label: 'Boss Damage', category: 'Combat' },
+  { value: 'items_crafted', label: 'Items Crafted', category: 'Economy' },
+  { value: 'coins_spent', label: 'Coins Spent', category: 'Economy' },
+  { value: 'challenges_completed', label: 'Challenges Completed', category: 'Social' },
 ];
 
 export function MetricSelector({ selected, onChange, maxSelection = 5, disabled }: MetricSelectorProps) {
@@ -70,7 +70,7 @@ export function MetricSelector({ selected, onChange, maxSelection = 5, disabled 
             <Text style={styles.placeholder}>Select metrics...</Text>
           ) : (
             <Text style={styles.selectedChipText}>
-              {selected.length} selected: {selected.map((metric) => AVAILABLE_METRICS.find((m) => m.value === metric)?.label || metric).join(", ")}
+              {selected.length} selected: {selected.map((metric) => AVAILABLE_METRICS.find((m) => m.value === metric)?.label || metric).join(', ')}
             </Text>
           )}
         </View>
@@ -118,78 +118,78 @@ const styles = createSheet({
   },
   label: {
     fontSize: 12,
-    fontWeight: "500",
-    color: "#6b7280",
+    fontWeight: '500',
+    color: '#6b7280',
     marginBottom: 8,
     marginLeft: 4,
   },
   selector: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 12,
     borderRadius: 8,
-    backgroundColor: "#f9fafb",
+    backgroundColor: '#f9fafb',
     borderWidth: 1,
-    borderColor: "#e5e7eb",
+    borderColor: '#e5e7eb',
   },
   selectorDisabled: {
     opacity: 0.5,
   },
   selectedContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     flex: 1,
     gap: 6,
   },
   selectedChip: {
-    backgroundColor: "#e0e7ff",
+    backgroundColor: '#e0e7ff',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },
   selectedChipText: {
     fontSize: 12,
-    color: "#4338ca",
-    fontWeight: "500",
+    color: '#4338ca',
+    fontWeight: '500',
   },
   placeholder: {
-    color: "#9ca3af",
+    color: '#9ca3af',
     fontSize: 14,
   },
   chevron: {
     fontSize: 12,
-    color: "#6b7280",
+    color: '#6b7280',
     marginLeft: 8,
   },
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "flex-end",
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    maxHeight: "80%",
+    maxHeight: '80%',
   },
   modalHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#e5e7eb",
+    borderBottomColor: '#e5e7eb',
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: "600",
-    color: "#111827",
+    fontWeight: '600',
+    color: '#111827',
   },
   closeButton: {
     fontSize: 16,
-    color: "#6366f1",
-    fontWeight: "500",
+    color: '#6366f1',
+    fontWeight: '500',
   },
   modalScroll: {
     padding: 16,
@@ -199,21 +199,21 @@ const styles = createSheet({
   },
   categoryTitle: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#374151",
+    fontWeight: '600',
+    color: '#374151',
     marginBottom: 8,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   metricOption: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 8,
     borderRadius: 6,
   },
   metricOptionSelected: {
-    backgroundColor: "#f3f4f6",
+    backgroundColor: '#f3f4f6',
   },
   metricOptionDisabled: {
     opacity: 0.4,
@@ -223,29 +223,29 @@ const styles = createSheet({
     height: 20,
     borderRadius: 4,
     borderWidth: 2,
-    borderColor: "#d1d5db",
+    borderColor: '#d1d5db',
     marginRight: 12,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   checkboxSelected: {
-    backgroundColor: "#6366f1",
-    borderColor: "#6366f1",
+    backgroundColor: '#6366f1',
+    borderColor: '#6366f1',
   },
   checkmark: {
-    color: "#ffffff",
+    color: '#ffffff',
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   metricLabel: {
     fontSize: 14,
-    color: "#374151",
+    color: '#374151',
   },
   metricLabelSelected: {
-    color: "#111827",
-    fontWeight: "500",
+    color: '#111827',
+    fontWeight: '500',
   },
   metricLabelDisabled: {
-    color: "#9ca3af",
+    color: '#9ca3af',
   },
 });

@@ -99,7 +99,7 @@ export function HomeContextualCards({
         activeBountyCount={bountyStatusQuery.status?.bountyCount ?? 0}
         maxBounties={4}
         onPlaceBounty={() => {
-          if (!userId || !activeBossQuery.data?.id) return;
+          if (!userId || !activeBossQuery.data?.id) {return;}
           placeBountyMutation.mutate(
             { userId, encounterId: activeBossQuery.data.id },
             {

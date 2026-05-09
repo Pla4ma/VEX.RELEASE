@@ -1,10 +1,10 @@
-import React, { useMemo } from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withTiming, withSpring, useSharedValue, withDelay, withRepeat, withSequence } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import * as Haptics from "../../../utils/haptics";
+import React, { useMemo } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withTiming, withSpring, useSharedValue, withDelay, withRepeat, withSequence } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import * as Haptics from '../../../utils/haptics';
 export interface BossPreviewCardProps {
   /** Boss name */
   bossName: string;
@@ -15,7 +15,7 @@ export interface BossPreviewCardProps {
   /** Estimated damage this session would deal */
   estimatedDamage?: number;
   /** Boss tier/rarity */
-  tier: "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+  tier: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
   /** Boss avatar/icon URL */
   bossIcon?: string;
   /** Whether this session would defeat the boss */
@@ -51,39 +51,39 @@ function BossPreviewSkeleton(): JSX.Element {
     </Box>
   );
 }
-function TierBadge({ tier }: { tier: BossPreviewCardProps["tier"] }): JSX.Element {
+function TierBadge({ tier }: { tier: BossPreviewCardProps['tier'] }): JSX.Element {
   const { theme } = useTheme();
   const tierConfig = useMemo(() => {
     switch (tier) {
-      case "LEGENDARY":
+      case 'LEGENDARY':
         return {
-          color: "#F59E0B", // Amber
-          bg: "rgba(245, 158, 11, 0.2)",
-          label: "LEGENDARY",
+          color: '#F59E0B', // Amber
+          bg: 'rgba(245, 158, 11, 0.2)',
+          label: 'LEGENDARY',
         };
-      case "EPIC":
+      case 'EPIC':
         return {
-          color: "#A855F7", // Purple
-          bg: "rgba(168, 85, 247, 0.2)",
-          label: "EPIC",
+          color: '#A855F7', // Purple
+          bg: 'rgba(168, 85, 247, 0.2)',
+          label: 'EPIC',
         };
-      case "RARE":
+      case 'RARE':
         return {
-          color: "#3B82F6", // Blue
-          bg: "rgba(59, 130, 246, 0.2)",
-          label: "RARE",
+          color: '#3B82F6', // Blue
+          bg: 'rgba(59, 130, 246, 0.2)',
+          label: 'RARE',
         };
-      case "UNCOMMON":
+      case 'UNCOMMON':
         return {
-          color: "#22C55E", // Green
-          bg: "rgba(34, 197, 94, 0.2)",
-          label: "UNCOMMON",
+          color: '#22C55E', // Green
+          bg: 'rgba(34, 197, 94, 0.2)',
+          label: 'UNCOMMON',
         };
       default:
         return {
           color: theme.colors.text.tertiary,
           bg: theme.colors.background.tertiary,
-          label: "COMMON",
+          label: 'COMMON',
         };
     }
   }, [tier, theme]);
@@ -140,8 +140,8 @@ function BossTauntBubble({ taunt }: { taunt: string }): JSX.Element {
             borderLeftWidth: 8,
             borderRightWidth: 8,
             borderTopWidth: 8,
-            borderLeftColor: "transparent",
-            borderRightColor: "transparent",
+            borderLeftColor: 'transparent',
+            borderRightColor: 'transparent',
             borderTopColor: theme.colors.error[500],
           }}
         />
@@ -194,7 +194,7 @@ function HealthBar({ healthPercent, animated = true }: { healthPercent: number; 
         <Animated.View
           style={[
             {
-              height: "100%",
+              height: '100%',
               borderRadius: 4,
               backgroundColor: getHealthColor(),
             },
@@ -222,8 +222,8 @@ function EscapeTimer({ hoursRemaining }: { hoursRemaining: number }): JSX.Elemen
   return (
     <Box flexDirection="row" alignItems="center" gap="xs">
       <Text fontSize={12}>⏰</Text>
-      <Text variant="caption" color={isUrgent ? theme.colors.error.DEFAULT : isWarning ? theme.colors.warning.DEFAULT : "text.tertiary"} fontWeight={isUrgent ? "600" : "400"}>
-        {isUrgent ? "🚨 " : ""}
+      <Text variant="caption" color={isUrgent ? theme.colors.error.DEFAULT : isWarning ? theme.colors.warning.DEFAULT : 'text.tertiary'} fontWeight={isUrgent ? '600' : '400'}>
+        {isUrgent ? '🚨 ' : ''}
         Escapes in {hoursRemaining}h
       </Text>
     </Box>
@@ -303,7 +303,7 @@ export function BossPreviewCard({ bossName, healthPercent, hoursRemaining, estim
           <Box flexDirection="row" alignItems="center" gap="md" mb="md">
             {/* Boss Icon Placeholder */}
             <Box width={56} height={56} borderRadius="lg" bg={theme.colors.background.tertiary} justifyContent="center" alignItems="center" borderWidth={showFinalStrike ? 2 : 1} borderColor={showFinalStrike ? theme.colors.error[500] : theme.colors.border.DEFAULT}>
-              <Text fontSize={28}>{showFinalStrike ? "🔥" : "👹"}</Text>
+              <Text fontSize={28}>{showFinalStrike ? '🔥' : '👹'}</Text>
             </Box>
             <Box flex={1} gap="xs">
               <Box flexDirection="row" alignItems="center" gap="sm">
@@ -349,7 +349,7 @@ export function BossPreviewCard({ bossName, healthPercent, hoursRemaining, estim
               </Box>
               <Pressable
                 onPress={() => {
-                  void Haptics.triggerHaptic("impactLight");
+                  void Haptics.triggerHaptic('impactLight');
                   onPlaceBounty?.();
                 }}
                 disabled={isPlacingBounty || (coinBalance !== undefined && coinBalance < BOUNTY_COST) || (activeBountyCount !== undefined && activeBountyCount >= maxBounties)}
@@ -365,7 +365,7 @@ export function BossPreviewCard({ bossName, healthPercent, hoursRemaining, estim
                 accessibilityHint="Doubles your loot chance from the next session that damages this boss"
               >
                 <Text variant="caption" fontWeight="600" color="background.primary">
-                  {isPlacingBounty ? "..." : "50 🪙"}
+                  {isPlacingBounty ? '...' : '50 🪙'}
                 </Text>
               </Pressable>
             </Box>

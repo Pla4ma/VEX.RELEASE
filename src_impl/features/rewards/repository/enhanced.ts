@@ -1,14 +1,14 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 /**
  * Enhanced Rewards Repository
  * Features: Retry logic, offline queue integration
  */
 
-import { withRetry, RepositoryError, RepositoryErrorCode } from "../../lib/repository/base";
-import { enqueue } from "../../lib/offline/queue";
-import { getSupabaseClient } from "../../config/supabase";
-import { RewardSchema, RewardLedgerSchema, type Reward, type RewardLedger } from "./schemas";
-import { v4 } from "../../utils/uuid";
+import { withRetry, RepositoryError, RepositoryErrorCode } from '../../lib/repository/base';
+import { enqueue } from '../../lib/offline/queue';
+import { getSupabaseClient } from '../../config/supabase';
+import { RewardSchema, RewardLedgerSchema, type Reward, type RewardLedger } from './schemas';
+import { v4 } from '../../utils/uuid';
 
 const supabase = getSupabaseClient();
 
@@ -19,7 +19,7 @@ const supabase = getSupabaseClient();
 export class RewardsRepositoryError extends RepositoryError {
   constructor(operation: string, error: unknown, code?: RepositoryErrorCode) {
     super(operation, error, code);
-    this.name = "RewardsRepositoryError";
+    this.name = 'RewardsRepositoryError';
   }
 }
 
@@ -47,7 +47,7 @@ async function executeWithFallback<T>(operation: string, onlineFn: () => Promise
           return { data: cached, error: repoError, fromCache: true };
         }
       } catch (error) {
-        captureSilentFailure(error, { feature: "rewards", operation: "network-fallback", type: "network" });
+        captureSilentFailure(error, { feature: 'rewards', operation: 'network-fallback', type: 'network' });
         // Cache miss
       }
     }
@@ -68,22 +68,22 @@ export async function createRewardEnhanced(userId: string, type: string, amount:
     amount,
     trigger_type: triggerType,
     trigger_id: triggerId,
-    status: "PENDING",
+    status: 'PENDING',
     expires_at: expiresAt,
     created_at: Date.now(),
   };
 
   enqueue({
-    operation: "REWARD_CLAIM",
-    feature: "rewards",
+    operation: 'REWARD_CLAIM',
+    feature: 'rewards',
     payload: newReward,
     idempotencyKey: `reward:create:${userId}:${triggerType}:${triggerId || Date.now()}`,
     maxRetries: 5,
-    priority: "high",
+    priority: 'high',
   });
 
-  return executeWithFallback("createReward", async () => {
-    const { data, error } = await supabase.from("rewards").insert(newReward).select().single();
+  return executeWithFallback('createReward', async () => {
+    const { data, error } = await supabase.from('rewards').insert(newReward).select().single();
 
     if (error) {
       throw error;
@@ -93,11 +93,11 @@ export async function createRewardEnhanced(userId: string, type: string, amount:
 }
 
 export async function fetchRewardEnhanced(rewardId: string): Promise<RepositoryResult<Reward | null>> {
-  return executeWithFallback("fetchReward", async () => {
-    const { data, error } = await supabase.from("rewards").select("*").eq("id", rewardId).single();
+  return executeWithFallback('fetchReward', async () => {
+    const { data, error } = await supabase.from('rewards').select('*').eq('id', rewardId).single();
 
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return null;
       }
       throw error;
@@ -108,11 +108,11 @@ export async function fetchRewardEnhanced(rewardId: string): Promise<RepositoryR
 }
 
 export async function fetchRewardsEnhanced(userId: string, status?: string): Promise<RepositoryResult<Reward[]>> {
-  return executeWithFallback("fetchRewards", async () => {
-    let query = supabase.from("rewards").select("*").eq("user_id", userId).order("created_at", { ascending: false });
+  return executeWithFallback('fetchRewards', async () => {
+    let query = supabase.from('rewards').select('*').eq('user_id', userId).order('created_at', { ascending: false });
 
     if (status) {
-      query = query.eq("status", status);
+      query = query.eq('status', status);
     }
 
     const { data, error } = await query;
@@ -130,23 +130,23 @@ export async function fetchRewardsEnhanced(userId: string, status?: string): Pro
 
 export async function markRewardClaimedEnhanced(rewardId: string): Promise<RepositoryResult<Reward>> {
   enqueue({
-    operation: "UPDATE",
-    feature: "rewards",
-    payload: { rewardId, status: "CLAIMED" },
+    operation: 'UPDATE',
+    feature: 'rewards',
+    payload: { rewardId, status: 'CLAIMED' },
     idempotencyKey: `reward:claim:${rewardId}`,
     maxRetries: 5,
-    priority: "high",
+    priority: 'high',
   });
 
-  return executeWithFallback("markRewardClaimed", async () => {
+  return executeWithFallback('markRewardClaimed', async () => {
     const { data, error } = await supabase
-      .from("rewards")
+      .from('rewards')
       .update({
-        status: "CLAIMED",
+        status: 'CLAIMED',
         claimed_at: Date.now(),
         updated_at: Date.now(),
       })
-      .eq("id", rewardId)
+      .eq('id', rewardId)
       .select()
       .single();
 
@@ -158,14 +158,14 @@ export async function markRewardClaimedEnhanced(rewardId: string): Promise<Repos
 }
 
 export async function markRewardExpiredEnhanced(rewardId: string): Promise<RepositoryResult<Reward>> {
-  return executeWithFallback("markRewardExpired", async () => {
+  return executeWithFallback('markRewardExpired', async () => {
     const { data, error } = await supabase
-      .from("rewards")
+      .from('rewards')
       .update({
-        status: "EXPIRED",
+        status: 'EXPIRED',
         updated_at: Date.now(),
       })
-      .eq("id", rewardId)
+      .eq('id', rewardId)
       .select()
       .single();
 
@@ -177,14 +177,14 @@ export async function markRewardExpiredEnhanced(rewardId: string): Promise<Repos
 }
 
 export async function markRewardFailedEnhanced(rewardId: string): Promise<RepositoryResult<Reward>> {
-  return executeWithFallback("markRewardFailed", async () => {
+  return executeWithFallback('markRewardFailed', async () => {
     const { data, error } = await supabase
-      .from("rewards")
+      .from('rewards')
       .update({
-        status: "FAILED",
+        status: 'FAILED',
         updated_at: Date.now(),
       })
-      .eq("id", rewardId)
+      .eq('id', rewardId)
       .select()
       .single();
 
@@ -200,8 +200,8 @@ export async function markRewardFailedEnhanced(rewardId: string): Promise<Reposi
 // ============================================================================
 
 export async function checkDuplicateRewardEnhanced(userId: string, triggerType: string, triggerId: string): Promise<RepositoryResult<boolean>> {
-  return executeWithFallback("checkDuplicateReward", async () => {
-    const { data, error } = await supabase.from("rewards").select("id").eq("user_id", userId).eq("trigger_type", triggerType).eq("trigger_id", triggerId).limit(1);
+  return executeWithFallback('checkDuplicateReward', async () => {
+    const { data, error } = await supabase.from('rewards').select('id').eq('user_id', userId).eq('trigger_type', triggerType).eq('trigger_id', triggerId).limit(1);
 
     if (error) {
       throw error;
@@ -216,17 +216,17 @@ export async function checkDuplicateRewardEnhanced(userId: string, triggerType: 
 
 export async function recordLedgerEntryEnhanced(rewardId: string, action: string, details: Record<string, unknown>): Promise<RepositoryResult<RewardLedger>> {
   enqueue({
-    operation: "CREATE",
-    feature: "rewards",
+    operation: 'CREATE',
+    feature: 'rewards',
     payload: { rewardId, action, details },
     idempotencyKey: `ledger:${rewardId}:${action}:${Date.now()}`,
     maxRetries: 3,
-    priority: "normal",
+    priority: 'normal',
   });
 
-  return executeWithFallback("recordLedgerEntry", async () => {
+  return executeWithFallback('recordLedgerEntry', async () => {
     const { data, error } = await supabase
-      .from("reward_ledger")
+      .from('reward_ledger')
       .insert({
         id: v4(),
         reward_id: rewardId,
@@ -249,8 +249,8 @@ export async function recordLedgerEntryEnhanced(rewardId: string, action: string
 // ============================================================================
 
 export async function fetchExpiredRewardsEnhanced(): Promise<RepositoryResult<Reward[]>> {
-  return executeWithFallback("fetchExpiredRewards", async () => {
-    const { data, error } = await supabase.from("rewards").select("*").eq("status", "PENDING").lt("expires_at", Date.now());
+  return executeWithFallback('fetchExpiredRewards', async () => {
+    const { data, error } = await supabase.from('rewards').select('*').eq('status', 'PENDING').lt('expires_at', Date.now());
 
     if (error) {
       throw error;

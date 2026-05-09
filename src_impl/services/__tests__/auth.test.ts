@@ -8,13 +8,15 @@
  * - Session validation
  */
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AuthService, LoginCredentials, RegisterData } from '../auth';
 import { getApiClient } from '../../api/client';
 import { useAuthStore } from '../../store';
 
 // Mock dependencies
-jest.mock('@react-native-async-storage/async-storage');
+const mockStorage = { getItem: jest.fn(), setItem: jest.fn(), removeItem: jest.fn() };
+jest.mock('../../persistence/MMKVStorageAdapter', () => ({
+  getMMKVStorageAdapter: () => mockStorage,
+}));
 jest.mock('../../api/client');
 jest.mock('../../store', () => ({
   useAuthStore: {
@@ -35,7 +37,6 @@ jest.mock('../../utils/debug', () => ({
   }),
 }));
 
-const mockAsyncStorage = AsyncStorage as jest.Mocked<typeof AsyncStorage>;
 const mockGetApiClient = getApiClient as jest.Mock;
 
 describe('AuthService', () => {
@@ -60,7 +61,7 @@ describe('AuthService', () => {
   describe('Initialization', () => {
     it('should restore session from storage on init', async () => {
       const now = Date.now();
-      mockAsyncStorage.getItem.mockImplementation((key: string) => {
+      mockStorage.getItem.mockImplementation((key: string) => {
         switch (key) {
           case 'auth:access_token':
             return Promise.resolve('test-token');
@@ -83,7 +84,7 @@ describe('AuthService', () => {
 
     it('should refresh expired token on init', async () => {
       const now = Date.now();
-      mockAsyncStorage.getItem.mockImplementation((key: string) => {
+      mockStorage.getItem.mockImplementation((key: string) => {
         switch (key) {
           case 'auth:access_token':
             return Promise.resolve('expired-token');
@@ -110,11 +111,11 @@ describe('AuthService', () => {
     });
 
     it('should clear storage on init failure', async () => {
-      mockAsyncStorage.getItem.mockRejectedValue(new Error('Storage error'));
+      mockStorage.getItem.mockRejectedValue(new Error('Storage error'));
 
       await authService.initialize();
 
-      expect(mockAsyncStorage.removeItem).toHaveBeenCalledWith('auth:access_token');
+      expect(mockStorage.removeItem).toHaveBeenCalledWith('auth:access_token');
     });
   });
 
@@ -144,7 +145,7 @@ describe('AuthService', () => {
 
       expect(user.email).toBe('test@test.com');
       expect(user.firstName).toBe('Test');
-      expect(mockAsyncStorage.setItem).toHaveBeenCalledWith('auth:access_token', 'access-token');
+      expect(mockStorage.setItem).toHaveBeenCalledWith('auth:access_token', 'access-token');
       expect(useAuthStore.getState().login).toHaveBeenCalled();
     });
 
@@ -230,7 +231,7 @@ describe('AuthService', () => {
       const refreshed = await authService.refreshToken();
 
       expect(refreshed).toBe(false);
-      expect(mockAsyncStorage.removeItem).toHaveBeenCalledWith('auth:access_token');
+      expect(mockStorage.removeItem).toHaveBeenCalledWith('auth:access_token');
     });
 
     it('should deduplicate concurrent refresh calls', async () => {
@@ -298,9 +299,9 @@ describe('AuthService', () => {
     it('should clear all tokens on logout', async () => {
       await authService.logout();
 
-      expect(mockAsyncStorage.removeItem).toHaveBeenCalledWith('auth:access_token');
-      expect(mockAsyncStorage.removeItem).toHaveBeenCalledWith('auth:refresh_token');
-      expect(mockAsyncStorage.removeItem).toHaveBeenCalledWith('auth:token_expires');
+      expect(mockStorage.removeItem).toHaveBeenCalledWith('auth:access_token');
+      expect(mockStorage.removeItem).toHaveBeenCalledWith('auth:refresh_token');
+      expect(mockStorage.removeItem).toHaveBeenCalledWith('auth:token_expires');
       expect(useAuthStore.getState().logout).toHaveBeenCalled();
     });
 
@@ -322,7 +323,7 @@ describe('AuthService', () => {
         expiresAt: now + 3600000,
       });
 
-      mockAsyncStorage.getItem.mockResolvedValue(now.toString());
+      mockStorage.getItem.mockResolvedValue(now.toString());
 
       const info = await authService.getSessionInfo();
 
@@ -353,7 +354,7 @@ describe('AuthService', () => {
     it('should enable/disable biometric', async () => {
       await authService.setBiometricEnabled(true);
 
-      expect(mockAsyncStorage.setItem).toHaveBeenCalledWith(
+      expect(mockStorage.setItem).toHaveBeenCalledWith(
         'auth:biometric_enabled',
         'true'
       );
@@ -363,3 +364,4 @@ describe('AuthService', () => {
     });
   });
 });
+

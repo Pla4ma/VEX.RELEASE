@@ -22,15 +22,15 @@
  * - feature-flags (gradual rollout)
  */
 
-import { z } from "zod";
-import { featureFlags } from "../../feature-flags/FeatureFlagEngine";
-import { eventBus } from "../../events";
+import { z } from 'zod';
+import { featureFlags } from '../../feature-flags/FeatureFlagEngine';
+import { eventBus } from '../../events';
 
 // ============================================================================
 // Difficulty Types
 // ============================================================================
 
-export type DifficultyRating = "EASY" | "NORMAL" | "HARD" | "EXTREME";
+export type DifficultyRating = 'EASY' | 'NORMAL' | 'HARD' | 'EXTREME';
 
 export interface UserPerformanceMetrics {
   userId: string;
@@ -42,11 +42,11 @@ export interface UserPerformanceMetrics {
 
   // Quality metrics
   averagePurity: number; // 0-100
-  averageGrade: "S" | "A" | "B" | "C" | "D";
+  averageGrade: 'S' | 'A' | 'B' | 'C' | 'D';
   perfectSessions: number;
 
   // Trend
-  trendDirection: "improving" | "stable" | "declining";
+  trendDirection: 'improving' | 'stable' | 'declining';
   consistencyScore: number; // 0-100
 
   // Boss-specific
@@ -62,7 +62,7 @@ export interface AdaptiveBossConfig {
   attackFrequency: number; // attacks per 10 min
   purityThreshold: number; // 0-100
   timeLimit: number; // seconds
-  recommendedMode: "FLOW" | "CHALLENGE" | "RECOVERY";
+  recommendedMode: 'FLOW' | 'CHALLENGE' | 'RECOVERY';
 }
 
 export interface DifficultyAdjustment {
@@ -89,7 +89,7 @@ export class AdaptiveDifficultyEngine {
    * Check if adaptive difficulty is enabled
    */
   static isEnabled(): boolean {
-    return featureFlags.isEnabled("adaptive_difficulty");
+    return featureFlags.isEnabled('adaptive_difficulty');
   }
 
   /**
@@ -120,14 +120,14 @@ export class AdaptiveDifficultyEngine {
 
     // Calculate grade distribution
     const grades = last7Days.map((s) => s.grade);
-    const perfectSessions = grades.filter((g) => g === "S").length;
+    const perfectSessions = grades.filter((g) => g === 'S').length;
 
     // Determine dominant grade
-    const gradeOrder = ["S", "A", "B", "C", "D"];
-    let averageGrade: UserPerformanceMetrics["averageGrade"] = "C";
+    const gradeOrder = ['S', 'A', 'B', 'C', 'D'];
+    let averageGrade: UserPerformanceMetrics['averageGrade'] = 'C';
     for (const grade of gradeOrder) {
       if (grades.includes(grade)) {
-        averageGrade = grade as UserPerformanceMetrics["averageGrade"];
+        averageGrade = grade as UserPerformanceMetrics['averageGrade'];
         break;
       }
     }
@@ -138,11 +138,11 @@ export class AdaptiveDifficultyEngine {
     const firstHalfRate = firstHalf.filter((s) => s.completed).length / Math.max(1, firstHalf.length);
     const secondHalfRate = secondHalf.filter((s) => s.completed).length / Math.max(1, secondHalf.length);
 
-    let trendDirection: UserPerformanceMetrics["trendDirection"] = "stable";
+    let trendDirection: UserPerformanceMetrics['trendDirection'] = 'stable';
     if (secondHalfRate > firstHalfRate * 1.2) {
-      trendDirection = "improving";
+      trendDirection = 'improving';
     } else if (secondHalfRate < firstHalfRate * 0.8) {
-      trendDirection = "declining";
+      trendDirection = 'declining';
     }
 
     // Consistency score (inverse of variance)
@@ -190,22 +190,22 @@ export class AdaptiveDifficultyEngine {
   } {
     if (!AdaptiveDifficultyEngine.isEnabled()) {
       return {
-        rating: "NORMAL",
+        rating: 'NORMAL',
         config: this.getDefaultConfig(),
-        reason: "Adaptive difficulty disabled",
-        message: "Standard difficulty selected",
+        reason: 'Adaptive difficulty disabled',
+        message: 'Standard difficulty selected',
       };
     }
 
     const metrics = this.userMetrics.get(userId);
-    const rating = this.difficultyRatings.get(userId) || "NORMAL";
+    const rating = this.difficultyRatings.get(userId) || 'NORMAL';
 
     if (!metrics) {
       return {
         rating,
         config: this.getDefaultConfig(),
-        reason: "No performance data",
-        message: "Complete some sessions to unlock adaptive difficulty!",
+        reason: 'No performance data',
+        message: 'Complete some sessions to unlock adaptive difficulty!',
       };
     }
 
@@ -223,7 +223,7 @@ export class AdaptiveDifficultyEngine {
    * Manually override difficulty (for testing or user preference)
    */
   setDifficulty(userId: string, rating: DifficultyRating): DifficultyAdjustment {
-    const previousRating = this.difficultyRatings.get(userId) || "NORMAL";
+    const previousRating = this.difficultyRatings.get(userId) || 'NORMAL';
     const metrics = this.userMetrics.get(userId);
 
     this.difficultyRatings.set(userId, rating);
@@ -232,7 +232,7 @@ export class AdaptiveDifficultyEngine {
     const newConfig = this.calculateConfig(rating, metrics);
 
     return {
-      reason: "Manual override",
+      reason: 'Manual override',
       previousRating,
       newRating: rating,
       changes: {
@@ -240,7 +240,7 @@ export class AdaptiveDifficultyEngine {
         attackFreqChange: ((newConfig.attackFrequency - oldConfig.attackFrequency) / oldConfig.attackFrequency) * 100,
         purityThresholdChange: newConfig.purityThreshold - oldConfig.purityThreshold,
       },
-      messageToUser: `Difficulty set to ${rating}. Boss health ${newConfig.healthMultiplier > 1 ? "increased" : "decreased"} by ${Math.abs((newConfig.healthMultiplier - 1) * 100).toFixed(0)}%`,
+      messageToUser: `Difficulty set to ${rating}. Boss health ${newConfig.healthMultiplier > 1 ? 'increased' : 'decreased'} by ${Math.abs((newConfig.healthMultiplier - 1) * 100).toFixed(0)}%`,
     };
   }
 
@@ -254,14 +254,14 @@ export class AdaptiveDifficultyEngine {
     reason: string;
   } {
     const metrics = this.userMetrics.get(userId);
-    const currentRating = this.difficultyRatings.get(userId) || "NORMAL";
+    const currentRating = this.difficultyRatings.get(userId) || 'NORMAL';
 
     if (!metrics) {
-      return { shouldChange: false, suggestedRating: currentRating, confidence: 0, reason: "No data" };
+      return { shouldChange: false, suggestedRating: currentRating, confidence: 0, reason: 'No data' };
     }
 
     // Suggest increase if performing very well
-    if (metrics.completionRate > 0.9 && metrics.averagePurity > 80 && currentRating !== "EXTREME") {
+    if (metrics.completionRate > 0.9 && metrics.averagePurity > 80 && currentRating !== 'EXTREME') {
       const nextRating = this.getNextRating(currentRating);
       return {
         shouldChange: true,
@@ -272,7 +272,7 @@ export class AdaptiveDifficultyEngine {
     }
 
     // Suggest decrease if struggling
-    if (metrics.completionRate < 0.5 && currentRating !== "EASY") {
+    if (metrics.completionRate < 0.5 && currentRating !== 'EASY') {
       const prevRating = this.getPreviousRating(currentRating);
       return {
         shouldChange: true,
@@ -283,16 +283,16 @@ export class AdaptiveDifficultyEngine {
     }
 
     // Suggest recovery mode if declining trend
-    if (metrics.trendDirection === "declining" && metrics.completionRate < 0.6) {
+    if (metrics.trendDirection === 'declining' && metrics.completionRate < 0.6) {
       return {
         shouldChange: true,
-        suggestedRating: "EASY",
+        suggestedRating: 'EASY',
         confidence: 0.7,
-        reason: "Performance declining. Take it easy for a bit.",
+        reason: 'Performance declining. Take it easy for a bit.',
       };
     }
 
-    return { shouldChange: false, suggestedRating: currentRating, confidence: 0, reason: "Current difficulty appropriate" };
+    return { shouldChange: false, suggestedRating: currentRating, confidence: 0, reason: 'Current difficulty appropriate' };
   }
 
   /**
@@ -347,7 +347,7 @@ export class AdaptiveDifficultyEngine {
       return null;
     }
 
-    const currentRating = this.difficultyRatings.get(userId) || "NORMAL";
+    const currentRating = this.difficultyRatings.get(userId) || 'NORMAL';
 
     // Auto-adjust rules
     let newRating = currentRating;
@@ -402,7 +402,7 @@ export class AdaptiveDifficultyEngine {
         attackFrequency: 1,
         purityThreshold: 60,
         timeLimit: 3600, // 1 hour grace
-        recommendedMode: "RECOVERY",
+        recommendedMode: 'RECOVERY',
       },
       NORMAL: {
         baseHealth: 1000,
@@ -410,7 +410,7 @@ export class AdaptiveDifficultyEngine {
         attackFrequency: 2,
         purityThreshold: 75,
         timeLimit: 3300, // 55 min
-        recommendedMode: "FLOW",
+        recommendedMode: 'FLOW',
       },
       HARD: {
         baseHealth: 1200,
@@ -418,7 +418,7 @@ export class AdaptiveDifficultyEngine {
         attackFrequency: 3,
         purityThreshold: 85,
         timeLimit: 3000, // 50 min
-        recommendedMode: "CHALLENGE",
+        recommendedMode: 'CHALLENGE',
       },
       EXTREME: {
         baseHealth: 1500,
@@ -426,7 +426,7 @@ export class AdaptiveDifficultyEngine {
         attackFrequency: 4,
         purityThreshold: 90,
         timeLimit: 2700, // 45 min
-        recommendedMode: "CHALLENGE",
+        recommendedMode: 'CHALLENGE',
       },
     };
 
@@ -434,13 +434,13 @@ export class AdaptiveDifficultyEngine {
   }
 
   private getNextRating(current: DifficultyRating): DifficultyRating {
-    const order: DifficultyRating[] = ["EASY", "NORMAL", "HARD", "EXTREME"];
+    const order: DifficultyRating[] = ['EASY', 'NORMAL', 'HARD', 'EXTREME'];
     const index = order.indexOf(current);
     return order[Math.min(index + 1, order.length - 1)];
   }
 
   private getPreviousRating(current: DifficultyRating): DifficultyRating {
-    const order: DifficultyRating[] = ["EASY", "NORMAL", "HARD", "EXTREME"];
+    const order: DifficultyRating[] = ['EASY', 'NORMAL', 'HARD', 'EXTREME'];
     const index = order.indexOf(current);
     return order[Math.max(index - 1, 0)];
   }
@@ -450,20 +450,20 @@ export class AdaptiveDifficultyEngine {
       return `Excellent performance (${Math.floor(metrics.completionRate * 100)}% completion)`;
     } else if (metrics.completionRate < 0.5) {
       return `Struggling with current difficulty (${Math.floor(metrics.completionRate * 100)}% completion)`;
-    } else if (metrics.trendDirection === "improving") {
-      return "Performance improving - stepping up difficulty";
-    } else if (metrics.trendDirection === "declining") {
-      return "Performance declining - easing difficulty";
+    } else if (metrics.trendDirection === 'improving') {
+      return 'Performance improving - stepping up difficulty';
+    } else if (metrics.trendDirection === 'declining') {
+      return 'Performance declining - easing difficulty';
     }
-    return "Maintaining appropriate challenge level";
+    return 'Maintaining appropriate challenge level';
   }
 
   private getDifficultyMessage(rating: DifficultyRating, metrics: UserPerformanceMetrics): string {
     const messages: Record<DifficultyRating, string> = {
-      EASY: "Recovery mode active. Focus on consistency, not perfection.",
+      EASY: 'Recovery mode active. Focus on consistency, not perfection.',
       NORMAL: "Standard challenge level. You've got this!",
-      HARD: "Challenge mode! Push your limits and earn bigger rewards.",
-      EXTREME: "Extreme difficulty! Only for the truly disciplined.",
+      HARD: 'Challenge mode! Push your limits and earn bigger rewards.',
+      EXTREME: 'Extreme difficulty! Only for the truly disciplined.',
     };
 
     return messages[rating];
@@ -475,12 +475,12 @@ export class AdaptiveDifficultyEngine {
     } else if (metrics.completionRate < 0.5) {
       return `Auto-decreased: ${Math.floor(metrics.completionRate * 100)}% completion rate suggests difficulty too high`;
     }
-    return "Performance-based adjustment";
+    return 'Performance-based adjustment';
   }
 
   private getAdjustmentMessage(newRating: DifficultyRating, metrics: UserPerformanceMetrics): string {
-    if (newRating === "EASY" || newRating === "NORMAL") {
-      return `Difficulty ${newRating === "EASY" ? "reduced" : "maintained"}. Focus on building your streak back up! 💪`;
+    if (newRating === 'EASY' || newRating === 'NORMAL') {
+      return `Difficulty ${newRating === 'EASY' ? 'reduced' : 'maintained'}. Focus on building your streak back up! 💪`;
     }
     return `Difficulty increased to ${newRating}! You're ready for the challenge! 🔥`;
   }
@@ -492,7 +492,7 @@ export class AdaptiveDifficultyEngine {
       attackFrequency: 2,
       purityThreshold: 75,
       timeLimit: 3300,
-      recommendedMode: "FLOW",
+      recommendedMode: 'FLOW',
     };
   }
 
@@ -503,9 +503,9 @@ export class AdaptiveDifficultyEngine {
       sessionsCompleted: 0,
       completionRate: 0.5,
       averagePurity: 75,
-      averageGrade: "B",
+      averageGrade: 'B',
       perfectSessions: 0,
-      trendDirection: "stable",
+      trendDirection: 'stable',
       consistencyScore: 50,
       bossDefeatRate: 0.5,
       averageBossDamage: 500,

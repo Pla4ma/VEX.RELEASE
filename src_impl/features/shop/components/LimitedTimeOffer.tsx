@@ -14,30 +14,30 @@
  * Answer: YES — limited time creates urgency, rare items create FOMO
  */
 
-import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { Pressable, StyleSheet, View, Dimensions } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, interpolate, Extrapolation, FadeIn, FadeInRight } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import { Pressable, StyleSheet, View, Dimensions } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, interpolate, Extrapolation, FadeIn, FadeInRight } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
 
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { capture } from "../../../shared/analytics";
-import { EconomyEvents } from "../../../shared/analytics/analytics-events";
-import { triggerHaptic } from "../../../utils/haptics";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { capture } from '../../../shared/analytics';
+import { EconomyEvents } from '../../../shared/analytics/analytics-events';
+import { triggerHaptic } from '../../../utils/haptics';
+import { createSheet } from '@/shared/ui/create-sheet';
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Sale gradient
-const FLASH_SALE_GRADIENT = ["#EF4444", "#F97316", "#F59E0B"] as const;
-const RARE_GRADIENT = ["#A855F7", "#EC4899"] as const;
+const FLASH_SALE_GRADIENT = ['#EF4444', '#F97316', '#F59E0B'] as const;
+const RARE_GRADIENT = ['#A855F7', '#EC4899'] as const;
 
 export interface ShopItem {
   id: string;
   name: string;
   description: string;
   icon: string;
-  rarity: "common" | "rare" | "epic" | "legendary";
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
   price: {
     gems?: number;
     coins?: number;
@@ -156,7 +156,7 @@ function OfferCard({ item, index, currentTime, gemBalance, coinBalance, onPurcha
     }
     const diff = item.flashSaleEndsAt.getTime() - currentTime.getTime();
     if (diff <= 0) {
-      return "Expired";
+      return 'Expired';
     }
 
     const hours = Math.floor(diff / (1000 * 60 * 60));
@@ -181,13 +181,13 @@ function OfferCard({ item, index, currentTime, gemBalance, coinBalance, onPurcha
   }, [item.price, gemBalance, coinBalance]);
 
   const handlePress = () => {
-    triggerHaptic("impactLight");
+    triggerHaptic('impactLight');
     capture(EconomyEvents.SHOP_VIEWED, {
       item_id: item.id,
       item_name: item.name,
-      item_type: "limited_time",
+      item_type: 'limited_time',
       item_rarity: item.rarity,
-      source: "flash_sale",
+      source: 'flash_sale',
     });
     onViewDetails?.(item);
   };
@@ -196,7 +196,7 @@ function OfferCard({ item, index, currentTime, gemBalance, coinBalance, onPurcha
     if (!canAfford) {
       return;
     }
-    triggerHaptic("success");
+    triggerHaptic('success');
     onPurchase(item);
   };
 
@@ -206,9 +206,9 @@ function OfferCard({ item, index, currentTime, gemBalance, coinBalance, onPurcha
 
   const rarityColors = {
     common: colors.border.DEFAULT,
-    rare: "#3B82F6",
-    epic: "#A855F7",
-    legendary: "#FFD700",
+    rare: '#3B82F6',
+    epic: '#A855F7',
+    legendary: '#FFD700',
   };
 
   const gradientColors: readonly [string, string, ...string[]] = isFlashSale ? FLASH_SALE_GRADIENT : isRare ? RARE_GRADIENT : [rarityColors[item.rarity], rarityColors[item.rarity]];
@@ -223,7 +223,7 @@ function OfferCard({ item, index, currentTime, gemBalance, coinBalance, onPurcha
           styles.cardInner,
           {
             backgroundColor: colors.background.secondary,
-            borderColor: isFlashSale ? "#EF4444" : rarityColors[item.rarity],
+            borderColor: isFlashSale ? '#EF4444' : rarityColors[item.rarity],
             borderWidth: isFlashSale ? 3 : 2,
             opacity: canAfford ? 1 : 0.6,
             transform: [{ scale: isPressed ? 0.98 : 1 }],
@@ -254,8 +254,8 @@ function OfferCard({ item, index, currentTime, gemBalance, coinBalance, onPurcha
         {/* Countdown Timer */}
         {item.isFlashSale && (
           <View style={styles.countdownContainer}>
-            <View style={[styles.countdown, { backgroundColor: "rgba(239, 68, 68, 0.1)" }]}>
-              <Text style={[styles.countdownText, { color: "#EF4444" }]}>⏰ {getCountdown()}</Text>
+            <View style={[styles.countdown, { backgroundColor: 'rgba(239, 68, 68, 0.1)' }]}>
+              <Text style={[styles.countdownText, { color: '#EF4444' }]}>⏰ {getCountdown()}</Text>
             </View>
           </View>
         )}
@@ -281,12 +281,12 @@ function OfferCard({ item, index, currentTime, gemBalance, coinBalance, onPurcha
           {/* Current price */}
           <View style={styles.currentPrice}>
             {item.price.gems && (
-              <Text variant="body" fontWeight="800" color={canAfford ? "#8B5CF6" : "error.DEFAULT"}>
+              <Text variant="body" fontWeight="800" color={canAfford ? '#8B5CF6' : 'error.DEFAULT'}>
                 💎{item.price.gems}
               </Text>
             )}
             {item.price.coins && (
-              <Text variant="body" fontWeight="800" color={canAfford ? "#F59E0B" : "error.DEFAULT"}>
+              <Text variant="body" fontWeight="800" color={canAfford ? '#F59E0B' : 'error.DEFAULT'}>
                 🪙{item.price.coins}
               </Text>
             )}
@@ -300,7 +300,7 @@ function OfferCard({ item, index, currentTime, gemBalance, coinBalance, onPurcha
           style={[
             styles.buyButton,
             {
-              backgroundColor: canAfford ? "#10B981" : colors.background.tertiary,
+              backgroundColor: canAfford ? '#10B981' : colors.background.tertiary,
               opacity: canAfford ? 1 : 0.5,
             },
           ]}
@@ -308,7 +308,7 @@ function OfferCard({ item, index, currentTime, gemBalance, coinBalance, onPurcha
           accessibilityRole="button"
           accessibilityHint="Activates this control"
         >
-          <Text style={styles.buyButtonText}>{canAfford ? "BUY NOW" : "NOT ENOUGH"}</Text>
+          <Text style={styles.buyButtonText}>{canAfford ? 'BUY NOW' : 'NOT ENOUGH'}</Text>
         </Pressable>
 
         {/* FOMO indicator for rare items */}
@@ -330,22 +330,22 @@ const styles = createSheet({
     gap: 16,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   headerLeft: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
   },
   flashIcon: {
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: "rgba(239, 68, 68, 0.1)",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   flashEmoji: {
     fontSize: 22,
@@ -356,41 +356,41 @@ const styles = createSheet({
     borderRadius: 8,
   },
   rareBadgeText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 10,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0.5,
   },
   itemsGrid: {
     gap: 12,
   },
   card: {
-    width: "100%",
+    width: '100%',
   },
   cardInner: {
     borderRadius: 16,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   banner: {
     paddingHorizontal: 12,
     paddingVertical: 6,
   },
   bannerText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 11,
-    fontWeight: "800",
-    textAlign: "center",
+    fontWeight: '800',
+    textAlign: 'center',
   },
   content: {
     padding: 16,
-    alignItems: "center",
+    alignItems: 'center',
     gap: 8,
   },
   icon: {
     fontSize: 48,
   },
   name: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   countdownContainer: {
     paddingHorizontal: 16,
@@ -400,29 +400,29 @@ const styles = createSheet({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   countdownText: {
     fontSize: 13,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   priceSection: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 12,
     paddingHorizontal: 16,
     paddingBottom: 12,
   },
   originalPrice: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 6,
   },
   strikethrough: {
-    textDecorationLine: "line-through",
+    textDecorationLine: 'line-through',
   },
   currentPrice: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 6,
   },
   buyButton: {
@@ -430,21 +430,21 @@ const styles = createSheet({
     marginTop: 0,
     paddingVertical: 12,
     borderRadius: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   buyButtonText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0.5,
   },
   fomoIndicator: {
-    alignItems: "center",
+    alignItems: 'center',
     paddingBottom: 12,
     marginTop: -4,
   },
   fomoText: {
-    fontStyle: "italic",
+    fontStyle: 'italic',
   },
 });
 

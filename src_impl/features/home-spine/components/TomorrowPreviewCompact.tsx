@@ -1,10 +1,10 @@
-import React from "react";
-import { Pressable } from "react-native";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import type { TomorrowPreviewProps } from "./TomorrowPreview";
+import React from 'react';
+import { Pressable } from 'react-native';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import type { TomorrowPreviewProps } from './TomorrowPreview';
 
-function getEventEmoji(events: TomorrowPreviewProps["events"]): string | null {
+function getEventEmoji(events: TomorrowPreviewProps['events']): string | null {
   if (events.length === 0) {
     return null;
   }
@@ -12,16 +12,16 @@ function getEventEmoji(events: TomorrowPreviewProps["events"]): string | null {
   if (!first) {
     return null;
   }
-  if (first.type === "double_xp") {
-    return "🔥";
+  if (first.type === 'double_xp') {
+    return '🔥';
   }
-  if (first.type === "squad_war") {
-    return "⚔️";
+  if (first.type === 'squad_war') {
+    return '⚔️';
   }
-  if (first.type === "boss_rush") {
-    return "👹";
+  if (first.type === 'boss_rush') {
+    return '👹';
   }
-  return "🌙";
+  return '🌙';
 }
 
 export function TomorrowPreviewCompact({
@@ -30,7 +30,7 @@ export function TomorrowPreviewCompact({
   onPress,
 }: {
   streakWillContinue: boolean;
-  events: TomorrowPreviewProps["events"];
+  events: TomorrowPreviewProps['events'];
   onPress: () => void;
 }): JSX.Element {
   const eventEmoji = getEventEmoji(events);
@@ -40,8 +40,8 @@ export function TomorrowPreviewCompact({
         <Box flexDirection="row" alignItems="center" gap="sm">
           <Text fontSize={16}>➡️</Text>
           <Text variant="body" color="text.secondary">Tomorrow:</Text>
-          <Text variant="body" color={streakWillContinue ? "text.primary" : "error.DEFAULT"} fontWeight="600">
-            {streakWillContinue ? "🔥 Streak continues" : "⚠️ Streak at risk"}
+          <Text variant="body" color={streakWillContinue ? 'text.primary' : 'error.DEFAULT'} fontWeight="600">
+            {streakWillContinue ? '🔥 Streak continues' : '⚠️ Streak at risk'}
           </Text>
           {eventEmoji ? <Text fontSize={16}>{eventEmoji}</Text> : null}
         </Box>

@@ -12,9 +12,9 @@
 // Core Challenge Types
 // ============================================================================
 
-export type ChallengeType = "DAILY" | "WEEKLY" | "EVENT";
-export type ChallengeStatus = "ACTIVE" | "COMPLETED" | "CLAIMED" | "EXPIRED" | "REROLLED" | "ABANDONED";
-export type ChallengeCategory = "SESSIONS" | "MINUTES" | "STREAK" | "BOSS_DAMAGE" | "SQUAD_ACTIVITY" | "SHOP_PURCHASE" | "LEVEL_UP" | "ACHIEVEMENT" | "SOCIAL";
+export type ChallengeType = 'DAILY' | 'WEEKLY' | 'EVENT';
+export type ChallengeStatus = 'ACTIVE' | 'COMPLETED' | 'CLAIMED' | 'EXPIRED' | 'REROLLED' | 'ABANDONED';
+export type ChallengeCategory = 'SESSIONS' | 'MINUTES' | 'STREAK' | 'BOSS_DAMAGE' | 'SQUAD_ACTIVITY' | 'SHOP_PURCHASE' | 'LEVEL_UP' | 'ACHIEVEMENT' | 'SOCIAL';
 
 export interface Challenge {
   id: string;
@@ -42,7 +42,7 @@ export interface Challenge {
   isActive: boolean;
 
   // Difficulty
-  difficulty: "EASY" | "MEDIUM" | "HARD" | "EXPERT";
+  difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'EXPERT';
   xpBonus: number; // Percentage bonus
 
   createdAt: number;

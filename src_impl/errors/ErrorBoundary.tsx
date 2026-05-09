@@ -9,22 +9,22 @@
  * - Rich UI states (loading, error, retry, degraded)
  */
 
-import React, { Component, type ReactNode, type ErrorInfo } from "react";
-import { View, StyleSheet, ActivityIndicator } from "react-native";
+import React, { Component, type ReactNode, type ErrorInfo } from 'react';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 
-import { Box } from "../components/primitives";
-import { Text } from "../components/primitives";
-import { Button } from "../components";
-import { useTheme } from "../theme";
-import { createDebugger } from "../utils/debug";
-import { getAnalyticsService } from "../analytics/AnalyticsService";
+import { Box } from '../components/primitives';
+import { Text } from '../components/primitives';
+import { Button } from '../components';
+import { useTheme } from '../theme';
+import { createDebugger } from '../utils/debug';
+import { getAnalyticsService } from '../analytics/AnalyticsService';
 
-const debug = createDebugger("error");
+const debug = createDebugger('error');
 
 /**
  * Error categories for handling strategy
  */
-export type ErrorCategory = "network" | "auth" | "validation" | "server" | "client" | "unknown";
+export type ErrorCategory = 'network' | 'auth' | 'validation' | 'server' | 'client' | 'unknown';
 
 /**
  * Error state with retry tracking
@@ -61,22 +61,22 @@ function categorizeError(error: Error): ErrorCategory {
   const message = error.message.toLowerCase();
   const name = error.name.toLowerCase();
 
-  if (message.includes("network") || message.includes("fetch") || message.includes("timeout")) {
-    return "network";
+  if (message.includes('network') || message.includes('fetch') || message.includes('timeout')) {
+    return 'network';
   }
-  if (message.includes("auth") || message.includes("unauthorized") || message.includes("token")) {
-    return "auth";
+  if (message.includes('auth') || message.includes('unauthorized') || message.includes('token')) {
+    return 'auth';
   }
-  if (message.includes("validation") || message.includes("invalid")) {
-    return "validation";
+  if (message.includes('validation') || message.includes('invalid')) {
+    return 'validation';
   }
-  if (message.includes("server") || message.includes("500") || message.includes("503")) {
-    return "server";
+  if (message.includes('server') || message.includes('500') || message.includes('503')) {
+    return 'server';
   }
-  if (name.includes("error") && !name.includes("reference") && !name.includes("type")) {
-    return "client";
+  if (name.includes('error') && !name.includes('reference') && !name.includes('type')) {
+    return 'client';
   }
-  return "unknown";
+  return 'unknown';
 }
 
 /**
@@ -99,7 +99,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
     this.state = {
       hasError: false,
       error: null,
-      category: "unknown",
+      category: 'unknown',
       retryCount: 0,
       isRetrying: false,
       lastRetryAt: null,
@@ -120,8 +120,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     const { category } = this.state;
 
-    debug.error("ErrorBoundary caught error: " + error.message, error);
-    debug.debug("Component stack: %s", errorInfo.componentStack);
+    debug.error('ErrorBoundary caught error: ' + error.message, error);
+    debug.debug('Component stack: %s', errorInfo.componentStack);
 
     // Report to analytics
     this.reportError(error, errorInfo, category);
@@ -143,14 +143,14 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
 
   private shouldAutoRetry(category: ErrorCategory): boolean {
     const { maxRetries = 3 } = this.props;
-    return category === "network" && this.state.retryCount < maxRetries;
+    return category === 'network' && this.state.retryCount < maxRetries;
   }
 
   private scheduleRetry(): void {
     const { retryDelay = 1000 } = this.props;
     const delay = calculateRetryDelay(this.state.retryCount, retryDelay);
 
-    debug.debug("Scheduling retry in %dms", delay);
+    debug.debug('Scheduling retry in %dms', delay);
 
     this.retryTimer = setTimeout(() => {
       this.handleRetry();
@@ -160,21 +160,21 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
   private reportError(error: Error, errorInfo: ErrorInfo, category: ErrorCategory): void {
     const analytics = getAnalyticsService();
 
-    analytics.track("error", {
+    analytics.track('error', {
       error: error.message,
       category,
       stack: __DEV__ ? (error.stack ?? undefined) : undefined,
       componentStack: errorInfo.componentStack,
-      fatal: category === "client",
+      fatal: category === 'client',
     });
 
     if (__DEV__) {
-      debug.debug("🔴 Error Report");
-      debug.debug("Category: %s", category);
-      debug.debug("Error: %s", error.message);
-      debug.debug("Stack: %s", error.stack);
-      debug.debug("Component Stack: %s", errorInfo.componentStack);
-      debug.debug("Retry Count: %d", this.state.retryCount);
+      debug.debug('🔴 Error Report');
+      debug.debug('Category: %s', category);
+      debug.debug('Error: %s', error.message);
+      debug.debug('Stack: %s', error.stack);
+      debug.debug('Component Stack: %s', errorInfo.componentStack);
+      debug.debug('Retry Count: %d', this.state.retryCount);
     }
   }
 
@@ -183,7 +183,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
     const { retryCount, category } = this.state;
 
     if (retryCount >= maxRetries) {
-      debug.warn("Max retries reached, entering degraded mode");
+      debug.warn('Max retries reached, entering degraded mode');
       this.setState({ degraded: true, isRetrying: false });
       return;
     }
@@ -204,9 +204,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
         retryCount: retryCount + 1,
       });
 
-      debug.info("Retry successful after %d attempts", retryCount + 1);
+      debug.info('Retry successful after %d attempts', retryCount + 1);
     } catch (retryError) {
-      debug.error("Retry failed:", retryError as Error);
+      debug.error('Retry failed:', retryError as Error);
 
       this.setState({
         isRetrying: false,
@@ -241,8 +241,8 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
       return this.renderDegradedUI();
     }
 
-    const canRetry = retryCount < maxRetries && category !== "client";
-    const isRecoverable = category === "network" || category === "server";
+    const canRetry = retryCount < maxRetries && category !== 'client';
+    const isRecoverable = category === 'network' || category === 'server';
 
     return <ErrorFallback error={error} category={category} retryCount={retryCount} maxRetries={maxRetries} isRetrying={isRetrying} canRetry={canRetry} isRecoverable={isRecoverable} onRetry={this.handleRetry} onDegraded={allowDegraded ? this.handleDegradedContinue : undefined} />;
   }
@@ -256,13 +256,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorState> {
         <Box
           p="md"
           style={{
-            backgroundColor: "#fef3c7",
+            backgroundColor: '#fef3c7',
             borderRadius: 8,
             borderLeftWidth: 4,
-            borderLeftColor: "#f59e0b",
+            borderLeftColor: '#f59e0b',
           }}
         >
-          <Text variant="body" style={{ color: "#92400e" }}>
+          <Text variant="body" style={{ color: '#92400e' }}>
             Running in limited mode. Some features may be unavailable.
           </Text>
         </Box>
@@ -300,33 +300,33 @@ function ErrorFallback({ error, category, retryCount, maxRetries, isRetrying, ca
 
   const getErrorMessage = () => {
     switch (category) {
-      case "network":
-        return "Connection lost. Check your internet and try again.";
-      case "auth":
-        return "Session expired. Please sign in again.";
-      case "server":
-        return "Our servers are having issues. Please try again later.";
-      case "validation":
-        return "Invalid data. Please check your input.";
-      case "client":
-        return "An unexpected error occurred. Please restart the app.";
+      case 'network':
+        return 'Connection lost. Check your internet and try again.';
+      case 'auth':
+        return 'Session expired. Please sign in again.';
+      case 'server':
+        return 'Our servers are having issues. Please try again later.';
+      case 'validation':
+        return 'Invalid data. Please check your input.';
+      case 'client':
+        return 'An unexpected error occurred. Please restart the app.';
       default:
-        return error?.message || "Something went wrong";
+        return error?.message || 'Something went wrong';
     }
   };
 
   const getErrorIcon = () => {
     switch (category) {
-      case "network":
-        return "📡";
-      case "auth":
-        return "🔐";
-      case "server":
-        return "🔧";
-      case "validation":
-        return "⚠️";
+      case 'network':
+        return '📡';
+      case 'auth':
+        return '🔐';
+      case 'server':
+        return '🔧';
+      case 'validation':
+        return '⚠️';
       default:
-        return "❌";
+        return '❌';
     }
   };
 
@@ -340,12 +340,12 @@ function ErrorFallback({ error, category, retryCount, maxRetries, isRetrying, ca
         Oops! Something went wrong
       </Text>
 
-      <Text variant="body" style={{ color: "#6b7280", textAlign: "center" }} mb="lg">
+      <Text variant="body" style={{ color: '#6b7280', textAlign: 'center' }} mb="lg">
         {getErrorMessage()}
       </Text>
 
       {retryCount > 0 && (
-        <Text variant="caption" style={{ color: "#9ca3af" }} mb="lg">
+        <Text variant="caption" style={{ color: '#9ca3af' }} mb="lg">
           Retry attempt {retryCount} of {maxRetries}
         </Text>
       )}
@@ -353,7 +353,7 @@ function ErrorFallback({ error, category, retryCount, maxRetries, isRetrying, ca
       {isRetrying ? (
         <Box flexDirection="row" alignItems="center" style={{ gap: 8 }}>
           <ActivityIndicator color="#3b82f6" />
-          <Text variant="body" style={{ color: "#6b7280" }}>
+          <Text variant="body" style={{ color: '#6b7280' }}>
             Retrying...
           </Text>
         </Box>
@@ -383,14 +383,14 @@ export function setupGlobalErrorHandler(): void {
   const originalHandler = ErrorUtils.getGlobalHandler();
 
   ErrorUtils.setGlobalHandler((error: Error, isFatal?: boolean) => {
-    debug.error(isFatal ? "Fatal Error" : "Error", error);
+    debug.error(isFatal ? 'Fatal Error' : 'Error', error);
 
     // Report to error tracking
     if (__DEV__) {
-      debug.debug("Global Error Handler");
-      debug.debug("Error: %s", error.message);
-      debug.debug("Stack: %s", error.stack);
-      debug.debug("Is Fatal: %s", String(isFatal));
+      debug.debug('Global Error Handler');
+      debug.debug('Error: %s', error.message);
+      debug.debug('Stack: %s', error.stack);
+      debug.debug('Is Fatal: %s', String(isFatal));
     }
 
     // Call original handler

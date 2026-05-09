@@ -28,13 +28,13 @@
  * - Boss (boss unlock)
  */
 
-import { eventBus } from "../../events";
+import { eventBus } from '../../events';
 
 // ============================================================================
 // Types
 // ============================================================================
 
-export type OnboardingStep = "WELCOME" | "QUICK_START" | "FIRST_SESSION" | "POST_SESSION" | "HOME_INTRO" | "FEATURE_UNLOCK" | "COMPLETE";
+export type OnboardingStep = 'WELCOME' | 'QUICK_START' | 'FIRST_SESSION' | 'POST_SESSION' | 'HOME_INTRO' | 'FEATURE_UNLOCK' | 'COMPLETE';
 
 export interface OnboardingState {
   userId: string;
@@ -81,52 +81,52 @@ export interface FeatureUnlockGate {
 
 export const FEATURE_UNLOCK_GATES: FeatureUnlockGate[] = [
   {
-    featureId: "boss_battles",
-    featureName: "Boss Battles",
-    description: "Defeat bosses representing your productivity challenges",
+    featureId: 'boss_battles',
+    featureName: 'Boss Battles',
+    description: 'Defeat bosses representing your productivity challenges',
     requiresSessions: 4,
-    icon: "⚔️",
-    color: "#E53E3E",
+    icon: '⚔️',
+    color: '#E53E3E',
   },
   {
-    featureId: "ai_study_plans",
-    featureName: "AI Study Plans",
-    description: "AI-generated study plans for any topic you want to learn",
+    featureId: 'ai_study_plans',
+    featureName: 'AI Study Plans',
+    description: 'AI-generated study plans for any topic you want to learn',
     requiresSessions: 5,
-    icon: "📚",
-    color: "#4299E1",
+    icon: '📚',
+    color: '#4299E1',
   },
   {
-    featureId: "squads",
-    featureName: "Squads",
-    description: "Join accountability groups and tackle challenges together",
+    featureId: 'squads',
+    featureName: 'Squads',
+    description: 'Join accountability groups and tackle challenges together',
     requiresSessions: 7,
-    icon: "👥",
-    color: "#48BB78",
+    icon: '👥',
+    color: '#48BB78',
   },
   {
-    featureId: "advanced_analytics",
-    featureName: "Study Analytics",
-    description: "Track your progress and optimize your learning patterns",
+    featureId: 'advanced_analytics',
+    featureName: 'Study Analytics',
+    description: 'Track your progress and optimize your learning patterns',
     requiresSessions: 10,
-    icon: "📊",
-    color: "#9F7AEA",
+    icon: '📊',
+    color: '#9F7AEA',
   },
   {
-    featureId: "streak_protection",
-    featureName: "Streak Protection",
-    description: "Protect your streak with insurance when life gets busy",
+    featureId: 'streak_protection',
+    featureName: 'Streak Protection',
+    description: 'Protect your streak with insurance when life gets busy',
     requiresSessions: 14,
-    icon: "🛡️",
-    color: "#ED8936",
+    icon: '🛡️',
+    color: '#ED8936',
   },
   {
-    featureId: "coach_personality",
-    featureName: "Coach Personality",
-    description: "Choose your AI coach personality: Mentor, Trainer, Peer, or Professor",
+    featureId: 'coach_personality',
+    featureName: 'Coach Personality',
+    description: 'Choose your AI coach personality: Mentor, Trainer, Peer, or Professor',
     requiresSessions: 20,
-    icon: "🤖",
-    color: "#38B2AC",
+    icon: '🤖',
+    color: '#38B2AC',
   },
 ];
 
@@ -142,7 +142,7 @@ const onboardingStates = new Map<string, OnboardingState>();
 export function initializeOnboarding(userId: string): OnboardingState {
   const state: OnboardingState = {
     userId,
-    currentStep: "WELCOME",
+    currentStep: 'WELCOME',
     sessionsCompleted: 0,
     firstSessionAt: null,
     skippedCustomization: false,
@@ -157,7 +157,7 @@ export function initializeOnboarding(userId: string): OnboardingState {
 
   onboardingStates.set(userId, state);
 
-  eventBus.publish("onboarding:started", { userId });
+  eventBus.publish('onboarding:started', { userId });
 
   return state;
 }
@@ -178,18 +178,18 @@ export function advanceStep(userId: string): OnboardingState | null {
     return null;
   }
 
-  const stepOrder: OnboardingStep[] = ["WELCOME", "QUICK_START", "FIRST_SESSION", "POST_SESSION", "HOME_INTRO", "FEATURE_UNLOCK", "COMPLETE"];
+  const stepOrder: OnboardingStep[] = ['WELCOME', 'QUICK_START', 'FIRST_SESSION', 'POST_SESSION', 'HOME_INTRO', 'FEATURE_UNLOCK', 'COMPLETE'];
 
   const currentIndex = stepOrder.indexOf(state.currentStep);
   if (currentIndex < stepOrder.length - 1) {
     state.currentStep = stepOrder[currentIndex + 1];
   }
 
-  if (state.currentStep === "COMPLETE") {
+  if (state.currentStep === 'COMPLETE') {
     state.completedAt = Date.now();
-    eventBus.publish("onboarding:completed", { userId });
+    eventBus.publish('onboarding:completed', { userId });
   } else {
-    eventBus.publish("onboarding:step_changed", {
+    eventBus.publish('onboarding:step_changed', {
       userId,
       step: state.currentStep,
     });
@@ -208,9 +208,9 @@ export function skipToFirstSession(userId: string): OnboardingState | null {
   }
 
   state.skippedCustomization = true;
-  state.currentStep = "FIRST_SESSION";
+  state.currentStep = 'FIRST_SESSION';
 
-  eventBus.publish("onboarding:skipped", { userId, step: "CUSTOMIZATION", timestamp: Date.now() });
+  eventBus.publish('onboarding:skipped', { userId, step: 'CUSTOMIZATION', timestamp: Date.now() });
 
   return state;
 }
@@ -228,8 +228,8 @@ export function recordSession(userId: string, durationMinutes: number): Onboardi
 
   if (!state.firstSessionAt) {
     state.firstSessionAt = Date.now();
-    state.currentStep = "POST_SESSION";
-    eventBus.publish("onboarding:first_session_complete", { userId, durationMinutes });
+    state.currentStep = 'POST_SESSION';
+    eventBus.publish('onboarding:first_session_complete', { userId, durationMinutes });
   }
 
   // Check for feature unlocks
@@ -264,7 +264,7 @@ function checkFeatureUnlocks(state: OnboardingState): void {
       const nextIndex = FEATURE_UNLOCK_GATES.findIndex((g) => g.featureId === gate.featureId) + 1;
       state.nextFeatureUnlock = nextIndex < FEATURE_UNLOCK_GATES.length ? FEATURE_UNLOCK_GATES[nextIndex] : null;
 
-      eventBus.publish("onboarding:feature_unlocked", {
+      eventBus.publish('onboarding:feature_unlocked', {
         userId: state.userId,
         feature: gate.featureId,
         featureId: gate.featureId,
@@ -305,64 +305,64 @@ export interface StepContent {
 
 export const STEP_CONTENT: Record<OnboardingStep, StepContent> = {
   WELCOME: {
-    step: "WELCOME",
-    title: "Welcome to Focus",
-    subtitle: "Your journey to better productivity starts here",
+    step: 'WELCOME',
+    title: 'Welcome to Focus',
+    subtitle: 'Your journey to better productivity starts here',
     primaryAction: "Let's Get Started",
-    secondaryAction: "Skip Tutorial",
+    secondaryAction: 'Skip Tutorial',
     showSkip: true,
-    content: "We help you build focus habits through engaging sessions, boss battles, and study plans. Ready to focus?",
+    content: 'We help you build focus habits through engaging sessions, boss battles, and study plans. Ready to focus?',
   },
   QUICK_START: {
-    step: "QUICK_START",
-    title: "Quick Start",
-    subtitle: "How would you like to begin?",
-    primaryAction: "Start 15-min Session",
-    secondaryAction: "Customize First",
+    step: 'QUICK_START',
+    title: 'Quick Start',
+    subtitle: 'How would you like to begin?',
+    primaryAction: 'Start 15-min Session',
+    secondaryAction: 'Customize First',
     showSkip: false,
-    content: "You can jump right into a 15-minute focus session, or customize your experience first. What feels right?",
+    content: 'You can jump right into a 15-minute focus session, or customize your experience first. What feels right?',
   },
   FIRST_SESSION: {
-    step: "FIRST_SESSION",
-    title: "Your First Session",
-    subtitle: "15 minutes of focused work",
-    primaryAction: "Start Focusing",
+    step: 'FIRST_SESSION',
+    title: 'Your First Session',
+    subtitle: '15 minutes of focused work',
+    primaryAction: 'Start Focusing',
     showSkip: false,
-    content: "Pick one task to focus on. We will guide you through 15 minutes of distraction-free work. You have got this!",
+    content: 'Pick one task to focus on. We will guide you through 15 minutes of distraction-free work. You have got this!',
   },
   POST_SESSION: {
-    step: "POST_SESSION",
-    title: "Great Job! 🎉",
-    subtitle: "You completed your first session",
-    primaryAction: "Set a Goal",
-    secondaryAction: "Explore Home",
+    step: 'POST_SESSION',
+    title: 'Great Job! 🎉',
+    subtitle: 'You completed your first session',
+    primaryAction: 'Set a Goal',
+    secondaryAction: 'Explore Home',
     showSkip: true,
-    content: "That is one session toward building your focus habit. Want to set a goal, or explore what is next?",
+    content: 'That is one session toward building your focus habit. Want to set a goal, or explore what is next?',
   },
   HOME_INTRO: {
-    step: "HOME_INTRO",
-    title: "Your Home Screen",
-    subtitle: "Everything you need, right here",
-    primaryAction: "Got It",
+    step: 'HOME_INTRO',
+    title: 'Your Home Screen',
+    subtitle: 'Everything you need, right here',
+    primaryAction: 'Got It',
     showSkip: false,
-    content: "Your Home shows personalized recommendations based on your activity. The AI Coach suggests what to focus on next.",
+    content: 'Your Home shows personalized recommendations based on your activity. The AI Coach suggests what to focus on next.',
   },
   FEATURE_UNLOCK: {
-    step: "FEATURE_UNLOCK",
-    title: "New Feature Unlocked!",
-    subtitle: "Check out what is new",
-    primaryAction: "Try It Out",
-    secondaryAction: "Later",
+    step: 'FEATURE_UNLOCK',
+    title: 'New Feature Unlocked!',
+    subtitle: 'Check out what is new',
+    primaryAction: 'Try It Out',
+    secondaryAction: 'Later',
     showSkip: true,
-    content: "New features unlock as you build your focus habit. Keep going to discover more!",
+    content: 'New features unlock as you build your focus habit. Keep going to discover more!',
   },
   COMPLETE: {
-    step: "COMPLETE",
-    title: "You are All Set!",
-    subtitle: "Welcome to the community",
-    primaryAction: "Start Focusing",
+    step: 'COMPLETE',
+    title: 'You are All Set!',
+    subtitle: 'Welcome to the community',
+    primaryAction: 'Start Focusing',
     showSkip: false,
-    content: "You have completed onboarding. Your focus journey continues from here.",
+    content: 'You have completed onboarding. Your focus journey continues from here.',
   },
 };
 
@@ -373,7 +373,7 @@ export function getStepContent(state: OnboardingState): StepContent {
   const content = STEP_CONTENT[state.currentStep];
 
   // Customize FEATURE_UNLOCK content
-  if (state.currentStep === "FEATURE_UNLOCK" && state.unlockedFeatures.length > 0) {
+  if (state.currentStep === 'FEATURE_UNLOCK' && state.unlockedFeatures.length > 0) {
     const latest = state.unlockedFeatures[state.unlockedFeatures.length - 1];
     const gate = FEATURE_UNLOCK_GATES.find((g) => g.featureId === latest.featureId);
 
@@ -411,7 +411,7 @@ export function getOnboardingProgress(userId: string): OnboardingProgress | null
     return null;
   }
 
-  const stepOrder: OnboardingStep[] = ["WELCOME", "QUICK_START", "FIRST_SESSION", "POST_SESSION", "HOME_INTRO", "FEATURE_UNLOCK", "COMPLETE"];
+  const stepOrder: OnboardingStep[] = ['WELCOME', 'QUICK_START', 'FIRST_SESSION', 'POST_SESSION', 'HOME_INTRO', 'FEATURE_UNLOCK', 'COMPLETE'];
 
   const currentIndex = stepOrder.indexOf(state.currentStep);
   const totalSteps = stepOrder.length;
@@ -455,7 +455,7 @@ export function shouldShowOnboarding(userId: string): boolean {
   // Show if has new feature to introduce
   const unintroduced = state.unlockedFeatures.filter((f) => !f.introduced);
   if (unintroduced.length > 0) {
-    state.currentStep = "FEATURE_UNLOCK";
+    state.currentStep = 'FEATURE_UNLOCK';
     return true;
   }
 

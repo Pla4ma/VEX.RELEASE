@@ -9,17 +9,17 @@
  * @phase 4
  */
 
-import React from "react";
-import { View, Pressable } from "react-native";
-import Animated, { useAnimatedStyle, withSpring, interpolate, Extrapolation } from "react-native-reanimated";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import Animated, { useAnimatedStyle, withSpring, interpolate, Extrapolation } from 'react-native-reanimated';
 
-import { useTheme } from "../../../theme";
-import { Text } from "../../../components/primitives/Text";
-import { useHaptics } from "../../../utils/haptics";
-import { eventBus } from "../../../events";
-import * as Sentry from "@sentry/react-native";
+import { useTheme } from '../../../theme';
+import { Text } from '../../../components/primitives/Text';
+import { useHaptics } from '../../../utils/haptics';
+import { eventBus } from '../../../events';
+import * as Sentry from '@sentry/react-native';
 
-export type SessionDifficulty = "CASUAL" | "FOCUSED" | "DEEP_WORK";
+export type SessionDifficulty = 'CASUAL' | 'FOCUSED' | 'DEEP_WORK';
 
 interface DifficultyOption {
   id: SessionDifficulty;
@@ -39,31 +39,31 @@ interface DifficultySelectorProps {
 
 const DIFFICULTY_OPTIONS: DifficultyOption[] = [
   {
-    id: "CASUAL",
-    icon: "🌿",
-    name: "Casual",
-    pauseLimit: "Unlimited",
-    xpMultiplier: "50%",
-    description: "Good for maintenance",
-    color: "#22C55E", // Green
+    id: 'CASUAL',
+    icon: '🌿',
+    name: 'Casual',
+    pauseLimit: 'Unlimited',
+    xpMultiplier: '50%',
+    description: 'Good for maintenance',
+    color: '#22C55E', // Green
   },
   {
-    id: "FOCUSED",
-    icon: "⚡",
-    name: "Focused",
-    pauseLimit: "2 max",
-    xpMultiplier: "100%",
-    description: "Standard mode",
-    color: "#3B82F6", // Blue
+    id: 'FOCUSED',
+    icon: '⚡',
+    name: 'Focused',
+    pauseLimit: '2 max',
+    xpMultiplier: '100%',
+    description: 'Standard mode',
+    color: '#3B82F6', // Blue
   },
   {
-    id: "DEEP_WORK",
-    icon: "🔥",
-    name: "Deep Work",
-    pauseLimit: "0 pauses",
-    xpMultiplier: "150%",
-    description: "Maximum impact",
-    color: "#EF4444", // Red
+    id: 'DEEP_WORK',
+    icon: '🔥',
+    name: 'Deep Work',
+    pauseLimit: '0 pauses',
+    xpMultiplier: '150%',
+    description: 'Maximum impact',
+    color: '#EF4444', // Red
   },
 ];
 
@@ -79,14 +79,14 @@ export function DifficultySelector({ selected, onChange, disabled = false }: Dif
 
     // Track analytics
     Sentry.addBreadcrumb({
-      category: "session",
-      message: "Difficulty selected",
+      category: 'session',
+      message: 'Difficulty selected',
       data: { difficulty, xpMultiplier: DIFFICULTY_OPTIONS.find((d) => d.id === difficulty)?.xpMultiplier },
-      level: "info",
+      level: 'info',
     });
 
     // Publish event for integration
-    eventBus.publish("session:difficulty_selected", {
+    eventBus.publish('session:difficulty_selected', {
       difficulty,
       timestamp: Date.now(),
     });
@@ -95,8 +95,8 @@ export function DifficultySelector({ selected, onChange, disabled = false }: Dif
   };
 
   const containerStyle = {
-    flexDirection: "row" as const,
-    justifyContent: "space-between" as const,
+    flexDirection: 'row' as const,
+    justifyContent: 'space-between' as const,
     gap: theme.spacing[2],
     paddingHorizontal: theme.spacing[4],
   };
@@ -185,7 +185,7 @@ function DifficultyCard({ option, isSelected, disabled, onPress }: DifficultyCar
       >
         <Text style={{ fontSize: 24, marginBottom: theme.spacing[2] }}>{option.icon}</Text>
 
-        <Text variant="body" color={theme.colors.text.primary} style={{ marginBottom: theme.spacing[1], fontWeight: "700" }}>
+        <Text variant="body" color={theme.colors.text.primary} style={{ marginBottom: theme.spacing[1], fontWeight: '700' }}>
           {option.name}
         </Text>
 
@@ -193,7 +193,7 @@ function DifficultyCard({ option, isSelected, disabled, onPress }: DifficultyCar
           <Text variant="caption" color={theme.colors.text.secondary}>
             {option.pauseLimit} pauses
           </Text>
-          <Text variant="caption" color={option.color} style={{ fontWeight: "600" }}>
+          <Text variant="caption" color={option.color} style={{ fontWeight: '600' }}>
             {option.xpMultiplier} XP
           </Text>
         </View>

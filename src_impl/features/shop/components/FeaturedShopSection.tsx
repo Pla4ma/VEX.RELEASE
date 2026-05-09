@@ -11,13 +11,13 @@
  * - Creates weekly appointment mechanics
  */
 
-import React, { useState, useEffect, useMemo } from "react";
-import { Pressable, ScrollView } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing } from "react-native-reanimated";
+import React, { useState, useEffect, useMemo } from 'react';
+import { Pressable, ScrollView } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing } from 'react-native-reanimated';
 
-import { useTheme } from "../../../theme";
-import { Box, Text, Card } from "../../../components/primitives";
-import { Icon } from "../../../icons";
+import { useTheme } from '../../../theme';
+import { Box, Text, Card } from '../../../components/primitives';
+import { Icon } from '../../../icons';
 
 export interface FeaturedItem {
   id: string;
@@ -27,8 +27,8 @@ export interface FeaturedItem {
   emoji: string;
   originalPrice: number;
   discountedPrice: number;
-  currency: "COINS" | "GEMS";
-  rarity: "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+  currency: 'COINS' | 'GEMS';
+  rarity: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
 }
 
 interface FeaturedShopSectionProps {
@@ -66,11 +66,11 @@ const formatTimeRemaining = (targetTime: number): string => {
 };
 
 const RARITY_COLORS: Record<string, string> = {
-  COMMON: "#94A3B8",
-  UNCOMMON: "#22C55E",
-  RARE: "#3B82F6",
-  EPIC: "#A855F7",
-  LEGENDARY: "#F59E0B",
+  COMMON: '#94A3B8',
+  UNCOMMON: '#22C55E',
+  RARE: '#3B82F6',
+  EPIC: '#A855F7',
+  LEGENDARY: '#F59E0B',
 };
 
 const FeaturedItemCard: React.FC<{
@@ -114,7 +114,7 @@ const FeaturedItemCard: React.FC<{
         {
           width: 160,
           marginRight: 12,
-          shadowColor: isLastChance ? "#EF4444" : rarityColor,
+          shadowColor: isLastChance ? '#EF4444' : rarityColor,
           shadowOffset: { width: 0, height: 4 },
           shadowRadius: 12,
           elevation: 4,
@@ -129,7 +129,7 @@ const FeaturedItemCard: React.FC<{
             style={{
               padding: 12,
               borderWidth: 2,
-              borderColor: isLastChance ? "#EF4444" : rarityColor + "50",
+              borderColor: isLastChance ? '#EF4444' : rarityColor + '50',
             }}
           >
             {/* Discount Badge */}
@@ -141,14 +141,14 @@ const FeaturedItemCard: React.FC<{
               py={4}
               borderRadius={10}
               style={{
-                backgroundColor: "#EF4444",
+                backgroundColor: '#EF4444',
                 zIndex: 10,
               }}
             >
               <Text
                 style={{
-                  color: "#FFF",
-                  fontWeight: "800",
+                  color: '#FFF',
+                  fontWeight: '800',
                   fontSize: 12,
                 }}
               >
@@ -166,9 +166,9 @@ const FeaturedItemCard: React.FC<{
               alignSelf="center"
               mb={12}
               style={{
-                backgroundColor: rarityColor + "15",
+                backgroundColor: rarityColor + '15',
                 borderWidth: 2,
-                borderColor: rarityColor + "30",
+                borderColor: rarityColor + '30',
               }}
             >
               <Text style={{ fontSize: 40 }}>{item.emoji}</Text>
@@ -178,8 +178,8 @@ const FeaturedItemCard: React.FC<{
             <Text
               variant="body"
               style={{
-                fontWeight: "600",
-                textAlign: "center",
+                fontWeight: '600',
+                textAlign: 'center',
                 marginBottom: 4,
               }}
               numberOfLines={1}
@@ -192,7 +192,7 @@ const FeaturedItemCard: React.FC<{
               <Text
                 variant="caption"
                 style={{
-                  textDecorationLine: "line-through",
+                  textDecorationLine: 'line-through',
                   color: theme.colors.text.tertiary,
                   marginRight: 8,
                 }}
@@ -200,11 +200,11 @@ const FeaturedItemCard: React.FC<{
                 {item.originalPrice}
               </Text>
               <Box flexDirection="row" alignItems="center">
-                <Icon name={item.currency === "GEMS" ? "gem" : "coins"} size={14} color={item.currency === "GEMS" ? "#8B5CF6" : "#F59E0B"} />
+                <Icon name={item.currency === 'GEMS' ? 'gem' : 'coins'} size={14} color={item.currency === 'GEMS' ? '#8B5CF6' : '#F59E0B'} />
                 <Text
                   style={{
-                    fontWeight: "700",
-                    color: item.currency === "GEMS" ? "#8B5CF6" : "#F59E0B",
+                    fontWeight: '700',
+                    color: item.currency === 'GEMS' ? '#8B5CF6' : '#F59E0B',
                     marginLeft: 4,
                   }}
                 >
@@ -222,17 +222,17 @@ const FeaturedItemCard: React.FC<{
                 borderRadius={8}
                 alignSelf="center"
                 style={{
-                  backgroundColor: "#EF4444" + "20",
+                  backgroundColor: '#EF4444' + '20',
                   borderWidth: 1,
-                  borderColor: "#EF4444",
+                  borderColor: '#EF4444',
                 }}
               >
                 <Box flexDirection="row" alignItems="center">
                   <Icon name="alert-circle" size={12} color="#EF4444" />
                   <Text
                     style={{
-                      color: "#EF4444",
-                      fontWeight: "600",
+                      color: '#EF4444',
+                      fontWeight: '600',
                       fontSize: 11,
                       marginLeft: 4,
                     }}
@@ -251,7 +251,7 @@ const FeaturedItemCard: React.FC<{
 
 export const FeaturedShopSection: React.FC<FeaturedShopSectionProps> = ({ items, onItemPress }) => {
   const { theme } = useTheme();
-  const [timeRemaining, setTimeRemaining] = useState("");
+  const [timeRemaining, setTimeRemaining] = useState('');
   const [isLastChance, setIsLastChance] = useState(false);
 
   const resetTime = useMemo(() => getNextResetTime(), []);
@@ -286,7 +286,7 @@ export const FeaturedShopSection: React.FC<FeaturedShopSectionProps> = ({ items,
             alignItems="center"
             mr={10}
             style={{
-              backgroundColor: "#F59E0B" + "20",
+              backgroundColor: '#F59E0B' + '20',
             }}
           >
             <Icon name="star" size={18} color="#F59E0B" />
@@ -307,19 +307,19 @@ export const FeaturedShopSection: React.FC<FeaturedShopSectionProps> = ({ items,
           py={6}
           borderRadius={8}
           style={{
-            backgroundColor: isLastChance ? "#EF4444" + "15" : theme.colors.background.secondary,
+            backgroundColor: isLastChance ? '#EF4444' + '15' : theme.colors.background.secondary,
             borderWidth: 1,
-            borderColor: isLastChance ? "#EF4444" + "30" : theme.colors.border.light,
+            borderColor: isLastChance ? '#EF4444' + '30' : theme.colors.border.light,
           }}
         >
           <Box flexDirection="row" alignItems="center">
-            <Icon name="clock" size={12} color={isLastChance ? "#EF4444" : theme.colors.text.tertiary} />
+            <Icon name="clock" size={12} color={isLastChance ? '#EF4444' : theme.colors.text.tertiary} />
             <Text
               variant="caption"
               style={{
                 marginLeft: 4,
-                fontWeight: "600",
-                color: isLastChance ? "#EF4444" : theme.colors.text.secondary,
+                fontWeight: '600',
+                color: isLastChance ? '#EF4444' : theme.colors.text.secondary,
               }}
             >
               Resets in {timeRemaining}

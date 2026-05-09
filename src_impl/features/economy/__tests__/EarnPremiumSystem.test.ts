@@ -5,13 +5,13 @@
  * Verifies eligibility checking, reward claiming, and trial management.
  */
 
-import { earnPremiumSystem, EarnPremiumAchievementType, EarnPremiumStatusSchema, CheckEligibilityInputSchema, checkEarnPremiumEligibility, claimEarnPremiumReward, hasUnclaimedPremiumRewards } from "../EarnPremiumSystem";
+import { earnPremiumSystem, EarnPremiumAchievementType, EarnPremiumStatusSchema, CheckEligibilityInputSchema, checkEarnPremiumEligibility, claimEarnPremiumReward, hasUnclaimedPremiumRewards } from '../EarnPremiumSystem';
 
-describe("EarnPremiumSystem", () => {
-  const mockUserId = "550e8400-e29b-41d4-a716-446655440000";
+describe('EarnPremiumSystem', () => {
+  const mockUserId = '550e8400-e29b-41d4-a716-446655440000';
 
-  describe("checkAndUnlock", () => {
-    it("creates initial status for new users with no achievements", () => {
+  describe('checkAndUnlock', () => {
+    it('creates initial status for new users with no achievements', () => {
       const status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 0,
@@ -26,7 +26,7 @@ describe("EarnPremiumSystem", () => {
       expect(status.totalTrialsClaimed).toBe(0);
     });
 
-    it("unlocks streak 30-day reward when streak reaches 30", () => {
+    it('unlocks streak 30-day reward when streak reaches 30', () => {
       const status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 30,
@@ -42,7 +42,7 @@ describe("EarnPremiumSystem", () => {
       expect(status.rewards[0]?.unlockedAt).toBeGreaterThan(0);
     });
 
-    it("does not duplicate streak reward if already unlocked", () => {
+    it('does not duplicate streak reward if already unlocked', () => {
       const existingStatus = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 30,
@@ -62,11 +62,11 @@ describe("EarnPremiumSystem", () => {
       expect(updatedStatus.rewards).toHaveLength(1);
     });
 
-    it("unlocks all bosses defeated reward when all 6 bosses are defeated", () => {
+    it('unlocks all bosses defeated reward when all 6 bosses are defeated', () => {
       const status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 0,
-        defeatedBossIds: ["1", "2", "3", "4", "5", "6"],
+        defeatedBossIds: ['1', '2', '3', '4', '5', '6'],
         currentLevel: 1,
         existingStatus: null,
       });
@@ -76,11 +76,11 @@ describe("EarnPremiumSystem", () => {
       expect(status.rewards[0]?.trialDays).toBe(7);
     });
 
-    it("does not unlock boss reward if not all bosses defeated", () => {
+    it('does not unlock boss reward if not all bosses defeated', () => {
       const status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 0,
-        defeatedBossIds: ["1", "2", "3", "4", "5"], // Missing boss 6
+        defeatedBossIds: ['1', '2', '3', '4', '5'], // Missing boss 6
         currentLevel: 1,
         existingStatus: null,
       });
@@ -88,7 +88,7 @@ describe("EarnPremiumSystem", () => {
       expect(status.rewards).toHaveLength(0);
     });
 
-    it("unlocks level 20 reward when user reaches level 20", () => {
+    it('unlocks level 20 reward when user reaches level 20', () => {
       const status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 0,
@@ -102,7 +102,7 @@ describe("EarnPremiumSystem", () => {
       expect(status.rewards[0]?.trialDays).toBe(3);
     });
 
-    it("does not unlock level reward if below level 20", () => {
+    it('does not unlock level reward if below level 20', () => {
       const status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 0,
@@ -114,11 +114,11 @@ describe("EarnPremiumSystem", () => {
       expect(status.rewards).toHaveLength(0);
     });
 
-    it("can unlock multiple rewards simultaneously", () => {
+    it('can unlock multiple rewards simultaneously', () => {
       const status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 30,
-        defeatedBossIds: ["1", "2", "3", "4", "5", "6"],
+        defeatedBossIds: ['1', '2', '3', '4', '5', '6'],
         currentLevel: 20,
         existingStatus: null,
       });
@@ -130,10 +130,10 @@ describe("EarnPremiumSystem", () => {
       expect(types).toContain(EarnPremiumAchievementType.LEVEL_20);
     });
 
-    it("validates input with Zod schema", () => {
+    it('validates input with Zod schema', () => {
       expect(() => {
         earnPremiumSystem.checkAndUnlock({
-          userId: "invalid-uuid",
+          userId: 'invalid-uuid',
           streakDays: 30,
           defeatedBossIds: [],
           currentLevel: 1,
@@ -143,8 +143,8 @@ describe("EarnPremiumSystem", () => {
     });
   });
 
-  describe("claimReward", () => {
-    it("successfully claims an unlocked reward", () => {
+  describe('claimReward', () => {
+    it('successfully claims an unlocked reward', () => {
       const status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 30,
@@ -165,16 +165,16 @@ describe("EarnPremiumSystem", () => {
       expect(claimedReward?.claimedAt).toBeGreaterThan(0);
     });
 
-    it("fails to claim if reward not found", () => {
+    it('fails to claim if reward not found', () => {
       const status = earnPremiumSystem.createInitialStatus(mockUserId);
 
       const result = earnPremiumSystem.claimReward(status, EarnPremiumAchievementType.STREAK_30_DAYS);
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe("Reward not found or not yet unlocked");
+      expect(result.error).toBe('Reward not found or not yet unlocked');
     });
 
-    it("fails to claim if reward already claimed", () => {
+    it('fails to claim if reward already claimed', () => {
       let status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 30,
@@ -190,10 +190,10 @@ describe("EarnPremiumSystem", () => {
       // Second claim attempt
       const secondResult = earnPremiumSystem.claimReward(firstResult.status, EarnPremiumAchievementType.STREAK_30_DAYS);
       expect(secondResult.success).toBe(false);
-      expect(secondResult.error).toBe("Reward already claimed");
+      expect(secondResult.error).toBe('Reward already claimed');
     });
 
-    it("correctly calculates trial end date (7 days)", () => {
+    it('correctly calculates trial end date (7 days)', () => {
       const beforeClaim = Date.now();
       const status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
@@ -210,7 +210,7 @@ describe("EarnPremiumSystem", () => {
       expect(result.status.trialEndsAt).toBeLessThanOrEqual(expectedEndDate + 1000);
     });
 
-    it("correctly calculates trial end date (3 days for level 20)", () => {
+    it('correctly calculates trial end date (3 days for level 20)', () => {
       const beforeClaim = Date.now();
       const status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
@@ -228,12 +228,12 @@ describe("EarnPremiumSystem", () => {
     });
   });
 
-  describe("getAvailableRewards", () => {
-    it("returns only unlocked and unclaimed rewards", () => {
+  describe('getAvailableRewards', () => {
+    it('returns only unlocked and unclaimed rewards', () => {
       let status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 30,
-        defeatedBossIds: ["1", "2", "3", "4", "5", "6"],
+        defeatedBossIds: ['1', '2', '3', '4', '5', '6'],
         currentLevel: 20,
         existingStatus: null,
       });
@@ -247,13 +247,13 @@ describe("EarnPremiumSystem", () => {
     });
   });
 
-  describe("getTrialTimeRemaining", () => {
-    it("returns 0 when no active trial", () => {
+  describe('getTrialTimeRemaining', () => {
+    it('returns 0 when no active trial', () => {
       const status = earnPremiumSystem.createInitialStatus(mockUserId);
       expect(earnPremiumSystem.getTrialTimeRemaining(status)).toBe(0);
     });
 
-    it("returns remaining time for active trial", () => {
+    it('returns remaining time for active trial', () => {
       let status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 30,
@@ -270,33 +270,33 @@ describe("EarnPremiumSystem", () => {
     });
   });
 
-  describe("formatTrialTimeRemaining", () => {
-    it("formats days remaining correctly", () => {
+  describe('formatTrialTimeRemaining', () => {
+    it('formats days remaining correctly', () => {
       const status = earnPremiumSystem.createInitialStatus(mockUserId);
       status.hasActiveTrial = true;
       status.trialEndsAt = Date.now() + 5 * 24 * 60 * 60 * 1000; // 5 days
 
-      expect(earnPremiumSystem.formatTrialTimeRemaining(status)).toBe("5 days left");
+      expect(earnPremiumSystem.formatTrialTimeRemaining(status)).toBe('5 days left');
     });
 
-    it("formats hours remaining when less than 1 day", () => {
+    it('formats hours remaining when less than 1 day', () => {
       const status = earnPremiumSystem.createInitialStatus(mockUserId);
       status.hasActiveTrial = true;
       status.trialEndsAt = Date.now() + 6 * 60 * 60 * 1000; // 6 hours
 
-      expect(earnPremiumSystem.formatTrialTimeRemaining(status)).toBe("6 hours left");
+      expect(earnPremiumSystem.formatTrialTimeRemaining(status)).toBe('6 hours left');
     });
 
-    it("returns expired when no time remaining", () => {
+    it('returns expired when no time remaining', () => {
       const status = earnPremiumSystem.createInitialStatus(mockUserId);
       status.hasActiveTrial = false;
 
-      expect(earnPremiumSystem.formatTrialTimeRemaining(status)).toBe("Trial expired");
+      expect(earnPremiumSystem.formatTrialTimeRemaining(status)).toBe('Trial expired');
     });
   });
 
-  describe("refreshTrialStatus", () => {
-    it("expires trial when end date has passed", () => {
+  describe('refreshTrialStatus', () => {
+    it('expires trial when end date has passed', () => {
       const status = earnPremiumSystem.createInitialStatus(mockUserId);
       status.hasActiveTrial = true;
       status.trialEndsAt = Date.now() - 1000; // 1 second ago
@@ -307,7 +307,7 @@ describe("EarnPremiumSystem", () => {
       expect(refreshed.trialEndsAt).toBeNull();
     });
 
-    it("keeps trial active when end date is in future", () => {
+    it('keeps trial active when end date is in future', () => {
       const status = earnPremiumSystem.createInitialStatus(mockUserId);
       status.hasActiveTrial = true;
       status.trialEndsAt = Date.now() + 24 * 60 * 60 * 1000; // 1 day from now
@@ -319,14 +319,14 @@ describe("EarnPremiumSystem", () => {
     });
   });
 
-  describe("convenience functions", () => {
-    it("checkEarnPremiumEligibility creates correct initial status", () => {
+  describe('convenience functions', () => {
+    it('checkEarnPremiumEligibility creates correct initial status', () => {
       const status = checkEarnPremiumEligibility(mockUserId, 0, [], 1, null);
       expect(status.userId).toBe(mockUserId);
       expect(status.rewards).toHaveLength(0);
     });
 
-    it("claimEarnPremiumReward returns correct result", () => {
+    it('claimEarnPremiumReward returns correct result', () => {
       let status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 30,
@@ -339,7 +339,7 @@ describe("EarnPremiumSystem", () => {
       expect(result.success).toBe(true);
     });
 
-    it("hasUnclaimedPremiumRewards returns true when unclaimed rewards exist", () => {
+    it('hasUnclaimedPremiumRewards returns true when unclaimed rewards exist', () => {
       const status = earnPremiumSystem.checkAndUnlock({
         userId: mockUserId,
         streakDays: 30,
@@ -351,14 +351,14 @@ describe("EarnPremiumSystem", () => {
       expect(hasUnclaimedPremiumRewards(status)).toBe(true);
     });
 
-    it("hasUnclaimedPremiumRewards returns false when no unclaimed rewards", () => {
+    it('hasUnclaimedPremiumRewards returns false when no unclaimed rewards', () => {
       const status = earnPremiumSystem.createInitialStatus(mockUserId);
       expect(hasUnclaimedPremiumRewards(status)).toBe(false);
     });
   });
 
-  describe("schemas", () => {
-    it("EarnPremiumStatusSchema validates correct status", () => {
+  describe('schemas', () => {
+    it('EarnPremiumStatusSchema validates correct status', () => {
       const validStatus = {
         userId: mockUserId,
         rewards: [],
@@ -371,11 +371,11 @@ describe("EarnPremiumSystem", () => {
       expect(result.success).toBe(true);
     });
 
-    it("CheckEligibilityInputSchema validates correct input", () => {
+    it('CheckEligibilityInputSchema validates correct input', () => {
       const validInput = {
         userId: mockUserId,
         streakDays: 30,
-        defeatedBossIds: ["1", "2", "3"],
+        defeatedBossIds: ['1', '2', '3'],
         currentLevel: 20,
         existingStatus: null,
       };
@@ -384,9 +384,9 @@ describe("EarnPremiumSystem", () => {
       expect(result.success).toBe(true);
     });
 
-    it("CheckEligibilityInputSchema rejects invalid UUID", () => {
+    it('CheckEligibilityInputSchema rejects invalid UUID', () => {
       const invalidInput = {
-        userId: "not-a-uuid",
+        userId: 'not-a-uuid',
         streakDays: 30,
         defeatedBossIds: [],
         currentLevel: 1,

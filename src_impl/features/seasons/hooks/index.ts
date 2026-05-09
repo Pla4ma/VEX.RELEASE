@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import * as service from './service';
+import * as service from '../service';
 
 const ONE_HOUR_MS = 60 * 60 * 1000;
 

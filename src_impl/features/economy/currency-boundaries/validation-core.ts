@@ -21,7 +21,7 @@ import type {
   BoundaryViolationType,
   CurrencyLimits,
   MonetizationBoundary,
-  EconomyProtectionRule
+  EconomyProtectionRule,
 } from './schemas';
 import { DEFAULT_CURRENCY_LIMITS, DEFAULT_MONETIZATION_BOUNDARIES, DEFAULT_PROTECTION_RULES } from './config';
 
@@ -41,7 +41,7 @@ class CurrencyBoundariesValidationCore {
     request: TransactionValidationRequest,
     limits: CurrencyLimits
   ): Promise<BoundaryViolation | null> {
-    if (request.action !== 'EARN') return null;
+    if (request.action !== 'EARN') {return null;}
 
     // In a real implementation, this would query the database
     // For now, we'll simulate the check
@@ -77,7 +77,7 @@ class CurrencyBoundariesValidationCore {
     request: TransactionValidationRequest,
     limits: CurrencyLimits
   ): Promise<BoundaryViolation | null> {
-    if (request.action !== 'EARN') return null;
+    if (request.action !== 'EARN') {return null;}
 
     // In a real implementation, this would query the wallet
     // For now, we'll simulate the check
@@ -113,7 +113,7 @@ class CurrencyBoundariesValidationCore {
     request: TransactionValidationRequest,
     limits: CurrencyLimits
   ): Promise<BoundaryViolation | null> {
-    if (request.action !== 'EARN') return null;
+    if (request.action !== 'EARN') {return null;}
 
     const singleLimit = limits.maxSingleEarn;
 
@@ -180,11 +180,11 @@ class CurrencyBoundariesValidationCore {
     request: TransactionValidationRequest
   ): Promise<BoundaryViolation | null> {
     // Check if rule conditions match
-    if (rule.conditions.currency && rule.conditions.currency !== request.currency) return null;
-    if (rule.conditions.userLevel && rule.conditions.userLevel > request.userLevel) return null;
-    if (rule.conditions.isPremium !== null && rule.conditions.isPremium !== request.isPremiumUser) return null;
-    if (rule.conditions.minAmount && request.amount < rule.conditions.minAmount) return null;
-    if (rule.conditions.maxAmount && request.amount > rule.conditions.maxAmount) return null;
+    if (rule.conditions.currency && rule.conditions.currency !== request.currency) {return null;}
+    if (rule.conditions.userLevel && rule.conditions.userLevel > request.userLevel) {return null;}
+    if (rule.conditions.isPremium !== null && rule.conditions.isPremium !== request.isPremiumUser) {return null;}
+    if (rule.conditions.minAmount && request.amount < rule.conditions.minAmount) {return null;}
+    if (rule.conditions.maxAmount && request.amount > rule.conditions.maxAmount) {return null;}
 
     // Check recent activity within time window
     const recentCount = await this.getRecentTransactionCount(request.userId, rule.conditions.timeWindow);
@@ -222,8 +222,8 @@ class CurrencyBoundariesValidationCore {
     request: TransactionValidationRequest
   ): Promise<BoundaryViolation | null> {
     // Check if boundary applies
-    if (boundary.currency && boundary.currency !== request.currency) return null;
-    if (boundary.conditions.minLevel && boundary.conditions.minLevel > request.userLevel) return null;
+    if (boundary.currency && boundary.currency !== request.currency) {return null;}
+    if (boundary.conditions.minLevel && boundary.conditions.minLevel > request.userLevel) {return null;}
 
     // Check if user has required entitlements
     if (boundary.conditions.requiredEntitlements?.length > 0 && !request.isPremiumUser) {

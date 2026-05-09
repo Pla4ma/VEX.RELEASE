@@ -9,17 +9,17 @@
  * @phase 8
  */
 
-import { z } from "zod";
-import { MMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
-import type { CoachMessage, MessageCategory } from "./types";
+import { z } from 'zod';
+import { MMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
+import type { CoachMessage, MessageCategory } from './types';
 
-const questStorage = new MMKVStorageAdapter("personal-quests");
+const questStorage = new MMKVStorageAdapter('personal-quests');
 
 // ============================================================================
 // Types
 // ============================================================================
 
-export type QuestType = "PEAK_TIME_FOCUS" | "BEAT_PERSONAL_BEST" | "NO_PAUSE_CHALLENGE" | "STREAK_PROTECTION" | "QUALITY_GRADE_TARGET" | "DURATION_MILESTONE" | "BOSS_DAMAGE_DEALT" | "RIVAL_OUTFOCUS" | "SQUAD_SUPPORT";
+export type QuestType = 'PEAK_TIME_FOCUS' | 'BEAT_PERSONAL_BEST' | 'NO_PAUSE_CHALLENGE' | 'STREAK_PROTECTION' | 'QUALITY_GRADE_TARGET' | 'DURATION_MILESTONE' | 'BOSS_DAMAGE_DEALT' | 'RIVAL_OUTFOCUS' | 'SQUAD_SUPPORT';
 
 export interface PersonalQuest {
   id: string;
@@ -50,7 +50,7 @@ export interface UserPatterns {
   preferredSessionTimes: number[]; // hours of day
   commonPauseReasons: string[];
   lastBossEncounter: number | null; // timestamp
-  rivalStatus: "AHEAD" | "BEHIND" | "NONE";
+  rivalStatus: 'AHEAD' | 'BEHIND' | 'NONE';
   squadContribution: number; // minutes contributed this week
 }
 
@@ -86,13 +86,13 @@ export async function analyzeUserPatterns(userId: string): Promise<UserPatterns>
     maxSessionDuration: 60,
     daysSinceNoPauseSession: 5,
     currentStreak: 7,
-    lastQualityGrade: "B",
+    lastQualityGrade: 'B',
     avgQualityScore: 75,
     sessionsThisWeek: 12,
     preferredSessionTimes: [8, 13, 20], // 8am, 1pm, 8pm
-    commonPauseReasons: ["distraction", "notification"],
+    commonPauseReasons: ['distraction', 'notification'],
     lastBossEncounter: Date.now() - 86400000, // yesterday
-    rivalStatus: "BEHIND",
+    rivalStatus: 'BEHIND',
     squadContribution: 180, // 3 hours this week
   };
 }
@@ -109,22 +109,22 @@ export function generateQuestFromPatterns(userId: string, patterns: UserPatterns
   const questType = selectQuestType(patterns);
 
   switch (questType) {
-    case "PEAK_TIME_FOCUS":
+    case 'PEAK_TIME_FOCUS':
       return generatePeakTimeQuest(userId, patterns, endOfDay.getTime());
 
-    case "BEAT_PERSONAL_BEST":
+    case 'BEAT_PERSONAL_BEST':
       return generatePersonalBestQuest(userId, patterns, endOfDay.getTime());
 
-    case "NO_PAUSE_CHALLENGE":
+    case 'NO_PAUSE_CHALLENGE':
       return generateNoPauseQuest(userId, patterns, endOfDay.getTime());
 
-    case "QUALITY_GRADE_TARGET":
+    case 'QUALITY_GRADE_TARGET':
       return generateQualityQuest(userId, patterns, endOfDay.getTime());
 
-    case "BOSS_DAMAGE_DEALT":
+    case 'BOSS_DAMAGE_DEALT':
       return generateBossQuest(userId, patterns, endOfDay.getTime());
 
-    case "RIVAL_OUTFOCUS":
+    case 'RIVAL_OUTFOCUS':
       return generateRivalQuest(userId, patterns, endOfDay.getTime());
 
     default:
@@ -140,36 +140,36 @@ function selectQuestType(patterns: UserPatterns): QuestType {
 
   // Peak time quest: if user has clear peak time
   if (patterns.peakFocusHour !== null) {
-    options.push("PEAK_TIME_FOCUS");
+    options.push('PEAK_TIME_FOCUS');
   }
 
   // No pause challenge: if it's been a while
   if (patterns.daysSinceNoPauseSession > 3) {
-    options.push("NO_PAUSE_CHALLENGE");
+    options.push('NO_PAUSE_CHALLENGE');
   }
 
   // Quality quest: if average quality is mediocre
   if (patterns.avgQualityScore < 80) {
-    options.push("QUALITY_GRADE_TARGET");
+    options.push('QUALITY_GRADE_TARGET');
   }
 
   // Personal best: if close to beating record
   if (patterns.avgSessionDuration > patterns.maxSessionDuration * 0.8) {
-    options.push("BEAT_PERSONAL_BEST");
+    options.push('BEAT_PERSONAL_BEST');
   }
 
   // Boss quest: if boss active recently
   if (patterns.lastBossEncounter && Date.now() - patterns.lastBossEncounter < 172800000) {
-    options.push("BOSS_DAMAGE_DEALT");
+    options.push('BOSS_DAMAGE_DEALT');
   }
 
   // Rival quest: if behind rival
-  if (patterns.rivalStatus === "BEHIND") {
-    options.push("RIVAL_OUTFOCUS");
+  if (patterns.rivalStatus === 'BEHIND') {
+    options.push('RIVAL_OUTFOCUS');
   }
 
   // Pick one randomly or by priority
-  return options[Math.floor(Math.random() * options.length)] || "DURATION_MILESTONE";
+  return options[Math.floor(Math.random() * options.length)] || 'DURATION_MILESTONE';
 }
 
 // ============================================================================
@@ -183,12 +183,12 @@ function generatePeakTimeQuest(userId: string, patterns: UserPatterns, expiresAt
   return {
     id: `quest-${Date.now()}-peak`,
     userId,
-    type: "PEAK_TIME_FOCUS",
-    title: "Peak Performance",
+    type: 'PEAK_TIME_FOCUS',
+    title: 'Peak Performance',
     description: `Focus at your peak time (${hourFormatted}) today. Your historical data shows this is when you do your best work.`,
     target: 30, // 30 min session
     current: 0,
-    unit: "minutes",
+    unit: 'minutes',
     rewardXp: 150, // 150 XP (vs 100 for normal challenge)
     rewardBonus: 1.5,
     expiresAt,
@@ -204,12 +204,12 @@ function generatePersonalBestQuest(userId: string, patterns: UserPatterns, expir
   return {
     id: `quest-${Date.now()}-pb`,
     userId,
-    type: "BEAT_PERSONAL_BEST",
-    title: "Personal Best Challenge",
+    type: 'BEAT_PERSONAL_BEST',
+    title: 'Personal Best Challenge',
     description: `Beat your longest session record! Your current best is ${patterns.maxSessionDuration} minutes. Can you reach ${targetDuration}?`,
     target: targetDuration,
     current: 0,
-    unit: "minutes",
+    unit: 'minutes',
     rewardXp: 200,
     rewardBonus: 1.5,
     expiresAt,
@@ -225,12 +225,12 @@ function generateNoPauseQuest(userId: string, patterns: UserPatterns, expiresAt:
   return {
     id: `quest-${Date.now()}-nopause`,
     userId,
-    type: "NO_PAUSE_CHALLENGE",
-    title: "Uninterrupted Flow",
+    type: 'NO_PAUSE_CHALLENGE',
+    title: 'Uninterrupted Flow',
     description: `Complete a ${duration}-minute session without pausing. Your last pause-free session was ${patterns.daysSinceNoPauseSession} days ago.`,
     target: duration,
     current: 0,
-    unit: "minutes (no pauses)",
+    unit: 'minutes (no pauses)',
     rewardXp: 180,
     rewardBonus: 1.5,
     expiresAt,
@@ -241,23 +241,23 @@ function generateNoPauseQuest(userId: string, patterns: UserPatterns, expiresAt:
 }
 
 function generateQualityQuest(userId: string, patterns: UserPatterns, expiresAt: number): PersonalQuest {
-  const targetGrade = patterns.avgQualityScore >= 70 ? "A" : "B";
+  const targetGrade = patterns.avgQualityScore >= 70 ? 'A' : 'B';
 
   return {
     id: `quest-${Date.now()}-quality`,
     userId,
-    type: "QUALITY_GRADE_TARGET",
+    type: 'QUALITY_GRADE_TARGET',
     title: `${targetGrade}-Grade Focus`,
     description: `Achieve a ${targetGrade} grade or higher on your next session. Quality over quantity — minimize pauses and stay focused.`,
-    target: targetGrade === "A" ? 85 : 70,
+    target: targetGrade === 'A' ? 85 : 70,
     current: 0,
-    unit: "quality score",
+    unit: 'quality score',
     rewardXp: 150,
     rewardBonus: 1.5,
     expiresAt,
     completedAt: null,
     createdAt: Date.now(),
-    reasoning: `Your average quality score is ${patterns.avgQualityScore}% — targeting ${targetGrade === "A" ? "85" : "70"}% to push your limits`,
+    reasoning: `Your average quality score is ${patterns.avgQualityScore}% — targeting ${targetGrade === 'A' ? '85' : '70'}% to push your limits`,
   };
 }
 
@@ -265,18 +265,18 @@ function generateBossQuest(userId: string, patterns: UserPatterns, expiresAt: nu
   return {
     id: `quest-${Date.now()}-boss`,
     userId,
-    type: "BOSS_DAMAGE_DEALT",
-    title: "Boss Slayer",
-    description: "Deal 50+ damage to the active boss in one session. Your streak multiplier is active — this is the time to strike!",
+    type: 'BOSS_DAMAGE_DEALT',
+    title: 'Boss Slayer',
+    description: 'Deal 50+ damage to the active boss in one session. Your streak multiplier is active — this is the time to strike!',
     target: 50,
     current: 0,
-    unit: "damage",
+    unit: 'damage',
     rewardXp: 175,
     rewardBonus: 1.5,
     expiresAt,
     completedAt: null,
     createdAt: Date.now(),
-    reasoning: "Boss encounter detected — perfect time to challenge yourself with high-damage session",
+    reasoning: 'Boss encounter detected — perfect time to challenge yourself with high-damage session',
   };
 }
 
@@ -286,12 +286,12 @@ function generateRivalQuest(userId: string, patterns: UserPatterns, expiresAt: n
   return {
     id: `quest-${Date.now()}-rival`,
     userId,
-    type: "RIVAL_OUTFOCUS",
-    title: "Rival Showdown",
+    type: 'RIVAL_OUTFOCUS',
+    title: 'Rival Showdown',
     description: `Focus for ${targetMinutes} minutes today to catch up with your rival. You're behind — time to fight back!`,
     target: targetMinutes,
     current: 0,
-    unit: "minutes today",
+    unit: 'minutes today',
     rewardXp: 160,
     rewardBonus: 1.5,
     expiresAt,
@@ -305,18 +305,18 @@ function generateDefaultQuest(userId: string, patterns: UserPatterns, expiresAt:
   return {
     id: `quest-${Date.now()}-default`,
     userId,
-    type: "DURATION_MILESTONE",
-    title: "Daily Focus Goal",
+    type: 'DURATION_MILESTONE',
+    title: 'Daily Focus Goal',
     description: `Complete ${patterns.avgSessionDuration} minutes of focused time today. You've got this!`,
     target: patterns.avgSessionDuration,
     current: 0,
-    unit: "minutes",
+    unit: 'minutes',
     rewardXp: 100,
     rewardBonus: 1.5,
     expiresAt,
     completedAt: null,
     createdAt: Date.now(),
-    reasoning: "Daily quest based on your average session duration",
+    reasoning: 'Daily quest based on your average session duration',
   };
 }
 
@@ -327,11 +327,11 @@ function generateDefaultQuest(userId: string, patterns: UserPatterns, expiresAt:
 /**
  * Convert a quest to a coach chat message
  */
-export function questToCoachMessage(quest: PersonalQuest, persona: "MENTOR" | "CHEERLEADER" | "DRILL_SERGEANT" = "MENTOR"): string {
+export function questToCoachMessage(quest: PersonalQuest, persona: 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT' = 'MENTOR'): string {
   const introTexts: Record<string, string> = {
     MENTOR: "I've been reviewing your progress, and I have a personalized challenge for you today.",
     CHEERLEADER: "Hey champion! 🎉 I've got a SPECIAL challenge just for YOU today!",
-    DRILL_SERGEANT: "Your objective for today. Pay attention.",
+    DRILL_SERGEANT: 'Your objective for today. Pay attention.',
   };
 
   return `${introTexts[persona]}
@@ -365,26 +365,26 @@ export function updateQuestProgress(
   let newCurrent = quest.current;
 
   switch (quest.type) {
-    case "PEAK_TIME_FOCUS":
-    case "BEAT_PERSONAL_BEST":
-    case "NO_PAUSE_CHALLENGE":
-      if (quest.type === "NO_PAUSE_CHALLENGE" && sessionData.pauses === 0) {
+    case 'PEAK_TIME_FOCUS':
+    case 'BEAT_PERSONAL_BEST':
+    case 'NO_PAUSE_CHALLENGE':
+      if (quest.type === 'NO_PAUSE_CHALLENGE' && sessionData.pauses === 0) {
         newCurrent = sessionData.duration;
-      } else if (quest.type !== "NO_PAUSE_CHALLENGE") {
+      } else if (quest.type !== 'NO_PAUSE_CHALLENGE') {
         newCurrent = sessionData.duration;
       }
       break;
 
-    case "QUALITY_GRADE_TARGET":
+    case 'QUALITY_GRADE_TARGET':
       newCurrent = sessionData.qualityScore;
       break;
 
-    case "BOSS_DAMAGE_DEALT":
+    case 'BOSS_DAMAGE_DEALT':
       newCurrent = sessionData.damageDealt || 0;
       break;
 
-    case "RIVAL_OUTFOCUS":
-    case "DURATION_MILESTONE":
+    case 'RIVAL_OUTFOCUS':
+    case 'DURATION_MILESTONE':
       newCurrent += sessionData.duration;
       break;
   }

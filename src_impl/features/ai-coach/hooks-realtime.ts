@@ -200,7 +200,7 @@ export function useRealtimeCoach(userId: string) {
 
 function subscribeToMessages(userId: string) {
   const supabase = getSupabaseClient();
-  return supabase.channel(`coach-messages-${userId}`);
+  return supabase['channel'](`coach-messages-${userId}`);
 }
 
 async function showLocalNotification(message: CoachMessage) {
@@ -208,3 +208,4 @@ async function showLocalNotification(message: CoachMessage) {
   // This is a placeholder for the actual implementation
   debug.info('[Coach Notification]', message.content);
 }
+

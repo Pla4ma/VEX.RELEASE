@@ -100,7 +100,7 @@ export async function getPendingRewards(userId: string): Promise<RewardLedgerEnt
 export async function getRetryableFailedRewards(userId: string): Promise<RewardLedgerEntry[]> {
   const failedEntries = await getRewardLedger(userId, {
     state: 'FAILED',
-    limit: 50
+    limit: 50,
   });
 
   return failedEntries.filter(entry =>

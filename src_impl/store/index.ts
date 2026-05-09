@@ -369,9 +369,11 @@ export const useAuthStore = create<AuthState>()(
               }
               // Initialize integrations on first successful session validation
               if (!integrationsInitialized) {
-                // TODO: Integration system archived - replace with direct service calls
-                // cleanupIntegrations = initializeAllIntegrations();
-                // integrationsInitialized = true;
+                progressionService.setUserId(user.id);
+                economyService.setUserId(user.id);
+                rewardService.setUserId(user.id);
+                streakService.setUserId(user.id);
+                integrationsInitialized = true;
               }
             } else {
               set((state) => {

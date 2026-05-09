@@ -39,26 +39,26 @@ export function useFeatureGate(feature: FeatureKey, options: {
 /**
  * Hook for checking multiple features at once
  */
-export function useMultiFeatureGate(features: FeatureKey[], options: {
+export function useMultiFeatureGate(featureKeys: FeatureKey[], options: {
   requireAll?: boolean;
   requireUnlocked?: boolean;
   requireVisible?: boolean;
 } = {}) {
   const { requireAll = true, requireUnlocked = true, requireVisible = true } = options;
-  const { features } = useFeatureAccess();
+  const { features: featureAccessMap } = useFeatureAccess();
 
   const featureStates = useMemo(() => {
-    return features.map((featureKey, index) => {
-      const featureAccess = features[Object.keys(features)[index] as FeatureKey];
+    return featureKeys.map((featureKey) => {
+      const featureAccess = featureAccessMap[featureKey];
       return {
-        feature: features[index],
+        feature: featureKey,
         isAvailable: (!requireUnlocked || featureAccess.isUnlocked) &&
                    (!requireVisible || featureAccess.isVisible),
         isUnlocked: featureAccess.isUnlocked,
         isVisible: featureAccess.isVisible,
       };
     });
-  }, [features, requireUnlocked, requireVisible]);
+  }, [featureAccessMap, featureKeys, requireUnlocked, requireVisible]);
 
   const isAvailable = useMemo(() => {
     if (requireAll) {

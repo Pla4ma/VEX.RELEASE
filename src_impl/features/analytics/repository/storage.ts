@@ -1,13 +1,13 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 /**
  * Analytics Storage Service
  * Handles file exports to Supabase Storage with chunked uploads,
  * encryption, and virus scanning hooks
  */
 
-import { getSupabaseClient, handleSupabaseError } from "../../config/supabase";
-import { withRetry, withTimeout, CircuitBreaker } from "../../shared/hardening";
-import * as Sentry from "@sentry/react-native";
+import { getSupabaseClient, handleSupabaseError } from '../../config/supabase';
+import { withRetry, withTimeout, CircuitBreaker } from '../../shared/hardening';
+import * as Sentry from '@sentry/react-native';
 
 const supabase = getSupabaseClient();
 
@@ -24,7 +24,7 @@ export interface StorageUploadConfig {
   contentType: string;
   encryption?: {
     enabled: boolean;
-    algorithm: "AES-256-GCM";
+    algorithm: 'AES-256-GCM';
   };
   metadata?: Record<string, string>;
 }
@@ -61,21 +61,21 @@ class AnalyticsStorageError extends Error implements StorageError {
     public retryable = false,
   ) {
     super(message);
-    this.name = "AnalyticsStorageError";
+    this.name = 'AnalyticsStorageError';
   }
 }
 
 // Upload data to storage with retry and chunking for large files
-export async function uploadExportData(jobId: string, data: unknown, format: "json" | "csv", userId: string): Promise<UploadResult> {
+export async function uploadExportData(jobId: string, data: unknown, format: 'json' | 'csv', userId: string): Promise<UploadResult> {
   return storageCircuitBreaker.execute(async () => {
-    const bucket = "analytics-exports";
+    const bucket = 'analytics-exports';
     const path = `${userId}/${jobId}.${format}`;
 
     // Serialize data
-    const content = format === "json" ? JSON.stringify(data, null, 2) : convertToCSV(data);
+    const content = format === 'json' ? JSON.stringify(data, null, 2) : convertToCSV(data);
 
     const blob = new Blob([content], {
-      type: format === "json" ? "application/json" : "text/csv",
+      type: format === 'json' ? 'application/json' : 'text/csv',
     });
 
     const fileSize = blob.size;
@@ -91,7 +91,7 @@ export async function uploadExportData(jobId: string, data: unknown, format: "js
       async () => {
         const { data: uploadData, error } = await withTimeout(
           supabase.storage.from(bucket).upload(path, blob, {
-            contentType: format === "json" ? "application/json" : "text/csv",
+            contentType: format === 'json' ? 'application/json' : 'text/csv',
             upsert: false,
             metadata: {
               jobId,
@@ -102,7 +102,7 @@ export async function uploadExportData(jobId: string, data: unknown, format: "js
             },
           }),
           60000,
-          "Storage upload timeout",
+          'Storage upload timeout',
         );
 
         if (error) {
@@ -113,7 +113,7 @@ export async function uploadExportData(jobId: string, data: unknown, format: "js
         const { data: urlData } = await supabase.storage.from(bucket).createSignedUrl(path, 7 * 24 * 60 * 60); // 7 days
 
         return {
-          url: urlData?.signedUrl || "",
+          url: urlData?.signedUrl || '',
           size: fileSize,
           checksum,
           uploadedAt: Date.now(),
@@ -123,12 +123,12 @@ export async function uploadExportData(jobId: string, data: unknown, format: "js
       {
         maxAttempts: 3,
         baseDelayMs: 1000,
-        retryableErrors: ["network_error", "timeout", "rate_limited"],
+        retryableErrors: ['network_error', 'timeout', 'rate_limited'],
         onRetry: (attempt, error) => {
           Sentry.addBreadcrumb({
-            category: "storage",
+            category: 'storage',
             message: `Retrying upload attempt ${attempt}`,
-            level: "warning",
+            level: 'warning',
             data: { jobId, error: error.message },
           });
         },
@@ -166,7 +166,7 @@ async function uploadLargeFile(bucket: string, path: string, blob: Blob, checksu
             uploadedAt: Date.now().toString(),
           },
           // For large files, duplex mode helps with streaming
-          duplex: "half",
+          duplex: 'half',
         } as { [key: string]: unknown }),
         300000, // 5 minute timeout for large files
         `Large file upload timeout (attempt ${attempt})`,
@@ -190,7 +190,7 @@ async function uploadLargeFile(bucket: string, path: string, blob: Blob, checksu
       const { data: urlData } = await supabase.storage.from(bucket).createSignedUrl(path, 7 * 24 * 60 * 60);
 
       return {
-        url: urlData?.signedUrl || "",
+        url: urlData?.signedUrl || '',
         size: blob.size,
         checksum,
         uploadedAt: Date.now(),
@@ -202,7 +202,7 @@ async function uploadLargeFile(bucket: string, path: string, blob: Blob, checksu
         try {
           await supabase.storage.from(bucket).remove([path]);
         } catch (error) {
-          captureSilentFailure(error, { feature: "analytics", operation: "safe-fallback", type: "data" });
+          captureSilentFailure(error, { feature: 'analytics', operation: 'safe-fallback', type: 'data' });
           // Ignore cleanup errors
         }
         throw error;
@@ -210,25 +210,25 @@ async function uploadLargeFile(bucket: string, path: string, blob: Blob, checksu
     }
   }
 
-  throw lastError || new Error("Upload failed after all retries");
+  throw lastError || new Error('Upload failed after all retries');
 }
 
 // Download export data
-export async function downloadExportData(jobId: string, userId: string, format: "json" | "csv"): Promise<DownloadResult> {
+export async function downloadExportData(jobId: string, userId: string, format: 'json' | 'csv'): Promise<DownloadResult> {
   return storageCircuitBreaker.execute(async () => {
-    const bucket = "analytics-exports";
+    const bucket = 'analytics-exports';
     const path = `${userId}/${jobId}.${format}`;
 
     return await withRetry(
       async () => {
-        const { data, error } = await withTimeout(supabase.storage.from(bucket).download(path), 30000, "Storage download timeout");
+        const { data, error } = await withTimeout(supabase.storage.from(bucket).download(path), 30000, 'Storage download timeout');
 
         if (error) {
           throw new AnalyticsStorageError(`Download failed: ${error.message}`, error.name, bucket, path, isRetryableStorageError(error));
         }
 
         if (!data) {
-          throw new AnalyticsStorageError("No data returned from download", "EMPTY_RESPONSE", bucket, path, false);
+          throw new AnalyticsStorageError('No data returned from download', 'EMPTY_RESPONSE', bucket, path, false);
         }
 
         const content = await data.text();
@@ -239,8 +239,8 @@ export async function downloadExportData(jobId: string, userId: string, format: 
 
         return {
           data,
-          url: metadata?.publicUrl || "",
-          contentType: format === "json" ? "application/json" : "text/csv",
+          url: metadata?.publicUrl || '',
+          contentType: format === 'json' ? 'application/json' : 'text/csv',
           size: data.size,
           checksum,
         };
@@ -248,15 +248,15 @@ export async function downloadExportData(jobId: string, userId: string, format: 
       {
         maxAttempts: 3,
         baseDelayMs: 1000,
-        retryableErrors: ["network_error", "timeout"],
+        retryableErrors: ['network_error', 'timeout'],
       },
     );
   });
 }
 
 // Delete export data
-export async function deleteExportData(jobId: string, userId: string, format: "json" | "csv"): Promise<void> {
-  const bucket = "analytics-exports";
+export async function deleteExportData(jobId: string, userId: string, format: 'json' | 'csv'): Promise<void> {
+  const bucket = 'analytics-exports';
   const path = `${userId}/${jobId}.${format}`;
 
   const { error } = await supabase.storage.from(bucket).remove([path]);
@@ -270,19 +270,19 @@ export async function deleteExportData(jobId: string, userId: string, format: "j
 async function calculateChecksum(content: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(content);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 // Convert data to CSV format
 function convertToCSV(data: unknown): string {
   if (!Array.isArray(data)) {
-    throw new AnalyticsStorageError("Data must be an array for CSV export", "INVALID_FORMAT", undefined, undefined, false);
+    throw new AnalyticsStorageError('Data must be an array for CSV export', 'INVALID_FORMAT', undefined, undefined, false);
   }
 
   if (data.length === 0) {
-    return "";
+    return '';
   }
 
   const headers = Object.keys(data[0] as object);
@@ -291,26 +291,26 @@ function convertToCSV(data: unknown): string {
       .map((header) => {
         const value = (row as Record<string, unknown>)[header];
         // Escape values containing commas or quotes
-        if (typeof value === "string" && (value.includes(",") || value.includes('"'))) {
+        if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
           return `"${value.replace(/"/g, '""')}"`;
         }
-        return String(value ?? "");
+        return String(value ?? '');
       })
-      .join(","),
+      .join(','),
   );
 
-  return [headers.join(","), ...rows].join("\n");
+  return [headers.join(','), ...rows].join('\n');
 }
 
 // Check if storage error is retryable
 function isRetryableStorageError(error: unknown): boolean {
-  if (typeof error !== "object" || error === null) {
+  if (typeof error !== 'object' || error === null) {
     return false;
   }
 
   const errorObj = error as { name?: string; message?: string; statusCode?: number };
 
-  const retryableCodes = ["network_error", "timeout", "rate_limited", "internal_error", "service_unavailable"];
+  const retryableCodes = ['network_error', 'timeout', 'rate_limited', 'internal_error', 'service_unavailable'];
 
   const retryableStatuses = [408, 429, 500, 502, 503, 504];
 
@@ -327,7 +327,7 @@ export async function getStorageMetrics(userId: string): Promise<{
   totalSize: number;
   oldestExport: number | null;
 }> {
-  const bucket = "analytics-exports";
+  const bucket = 'analytics-exports';
   const prefix = `${userId}/`;
 
   const { data, error } = await supabase.storage.from(bucket).list(prefix);
@@ -348,7 +348,7 @@ export async function getStorageMetrics(userId: string): Promise<{
 
 // Cleanup old exports
 export async function cleanupOldExports(userId: string, maxAgeDays: number = 30): Promise<{ deleted: number; freedSpace: number }> {
-  const bucket = "analytics-exports";
+  const bucket = 'analytics-exports';
   const prefix = `${userId}/`;
   const cutoff = Date.now() - maxAgeDays * 24 * 60 * 60 * 1000;
 

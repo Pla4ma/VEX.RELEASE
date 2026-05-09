@@ -1,10 +1,10 @@
-import React from "react";
-import { Pressable, View } from "react-native";
-import { Text } from "@components/primitives/Text"; // Use alias
-import { Skeleton } from "@components/ui/Skeleton"; // Use alias
-import { StatusBanner } from "@/shared/ui/components/StatusFeedback"; // Use alias
-import { useTheme } from "@theme"; // Use alias
-import type { FocusScoreDashboardModel } from "../types"; // Import from types.ts
+import React from 'react';
+import { Pressable, View } from 'react-native';
+import { Text } from '@components/primitives/Text'; // Use alias
+import { Skeleton } from '@components/ui/Skeleton'; // Use alias
+import { StatusBanner } from '@/shared/ui/components/StatusFeedback'; // Use alias
+import { useTheme } from '@theme'; // Use alias
+import type { FocusScoreDashboardModel } from '../types'; // Import from types.ts
 
 interface FocusScoreHomeWidgetProps {
   model: FocusScoreDashboardModel;
@@ -29,7 +29,7 @@ export function FocusScoreHomeWidget({ model, onPress, onRetry }: FocusScoreHome
       <StatusBanner
         status="error"
         message="Focus Score is unavailable"
-        description={model.error?.message ?? "Retry to load your score widget."}
+        description={model.error?.message ?? 'Retry to load your score widget.'}
         onRetry={onRetry}
       />
     );

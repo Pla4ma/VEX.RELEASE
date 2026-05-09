@@ -5,22 +5,22 @@
  * Split from main service to maintain file size limits.
  */
 
-import { z } from "zod";
-import { spendCurrency } from "../economy/service";
-import { getDefaultStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import { z } from 'zod';
+import { spendCurrency } from '../economy/service';
+import { getDefaultStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 
 const profileSchema = z.object({
   id: z.string(),
   name: z.string(),
   type: z.string(),
-  mood: z.enum(["happy", "neutral", "sad", "starving"]),
+  mood: z.enum(['happy', 'neutral', 'sad', 'starving']),
   level: z.number().min(1),
   xp: z.number().min(0),
   lastFedAt: z.number(),
   lastPettedAt: z.number().nullable(),
   specialAbilityCharge: z.number().min(0),
   equippedItems: z.array(z.string()),
-  unlockedAbilities: z.array(z.enum(["xp_boost_5pct", "coin_boost_10pct", "streak_protection"])),
+  unlockedAbilities: z.array(z.enum(['xp_boost_5pct', 'coin_boost_10pct', 'streak_protection'])),
 });
 
 type CompanionProfile = z.infer<typeof profileSchema>;
@@ -32,27 +32,27 @@ function profileKey(userId: string): string {
   return `companion_profile_${userId}`;
 }
 
-function getMoodFromFeedTime(lastFedAt: number): CompanionProfile["mood"] {
+function getMoodFromFeedTime(lastFedAt: number): CompanionProfile['mood'] {
   const hours = (Date.now() - lastFedAt) / (1000 * 60 * 60);
   if (hours < 12) {
-    return "happy";
+    return 'happy';
   }
   if (hours < 24) {
-    return "neutral";
+    return 'neutral';
   }
   if (hours < 48) {
-    return "sad";
+    return 'sad';
   }
-  return "starving";
+  return 'starving';
 }
 
 function getDefaultProfile(userId: string): CompanionProfile {
   const lastFedAt = Date.now();
   return {
     id: `companion_${userId}`,
-    name: "Vexling",
-    type: "focus_wisp",
-    mood: "happy",
+    name: 'Vexling',
+    type: 'focus_wisp',
+    mood: 'happy',
     level: 1,
     xp: 0,
     lastFedAt,
@@ -78,11 +78,11 @@ async function saveProfile(userId: string, profile: CompanionProfile): Promise<C
   return next;
 }
 
-function getAbilityUnlocks(level: number): CompanionProfile["unlockedAbilities"] {
+function getAbilityUnlocks(level: number): CompanionProfile['unlockedAbilities'] {
   return [
-    ...(level >= 5 ? (["xp_boost_5pct"] as const) : []),
-    ...(level >= 10 ? (["coin_boost_10pct"] as const) : []),
-    ...(level >= 20 ? (["streak_protection"] as const) : []),
+    ...(level >= 5 ? (['xp_boost_5pct'] as const) : []),
+    ...(level >= 10 ? (['coin_boost_10pct'] as const) : []),
+    ...(level >= 20 ? (['streak_protection'] as const) : []),
   ];
 }
 
@@ -103,17 +103,17 @@ export async function levelUpCompanion(userId: string): Promise<CompanionProfile
 export async function feedCompanion(userId: string, options: PersistOptions = {}): Promise<CompanionProfile> {
   await spendCurrency({
     userId,
-    currency: "COINS",
+    currency: 'COINS',
     amount: 10,
-    sink: "UPGRADE",
-    description: "Feed companion",
+    sink: 'UPGRADE',
+    description: 'Feed companion',
   });
   const current = await loadProfile(userId);
   const updated = await saveProfile(userId, {
     ...current,
     xp: current.xp + 50,
     lastFedAt: Date.now(),
-    mood: "happy",
+    mood: 'happy',
   });
   const leveled = await levelUpCompanion(userId);
   void options.skipSyncEnqueue;
@@ -124,14 +124,14 @@ export async function getCompanionBonus(userId: string): Promise<{
   xpMultiplier: number;
   coinMultiplier: number;
   streakProtection: boolean;
-  mood: CompanionProfile["mood"];
+  mood: CompanionProfile['mood'];
 }> {
   const companion = await loadProfile(userId);
   const moodMultiplier = { happy: 1.1, neutral: 1, sad: 0.95, starving: 0.9 }[companion.mood];
   return {
-    xpMultiplier: moodMultiplier * (companion.unlockedAbilities.includes("xp_boost_5pct") ? 1.05 : 1),
-    coinMultiplier: companion.unlockedAbilities.includes("coin_boost_10pct") ? 1.1 : 1,
-    streakProtection: companion.unlockedAbilities.includes("streak_protection"),
+    xpMultiplier: moodMultiplier * (companion.unlockedAbilities.includes('xp_boost_5pct') ? 1.05 : 1),
+    coinMultiplier: companion.unlockedAbilities.includes('coin_boost_10pct') ? 1.1 : 1,
+    streakProtection: companion.unlockedAbilities.includes('streak_protection'),
     mood: companion.mood,
   };
 }

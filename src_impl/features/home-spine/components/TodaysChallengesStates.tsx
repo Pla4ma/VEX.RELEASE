@@ -1,8 +1,8 @@
-import React from "react";
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export function ChallengesWidgetSkeleton(): JSX.Element {
   const { theme } = useTheme();

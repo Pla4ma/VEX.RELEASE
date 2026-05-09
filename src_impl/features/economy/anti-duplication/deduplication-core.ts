@@ -21,7 +21,7 @@ import type {
   DeduplicationRule,
   DeduplicationAttempt,
   ExploitPattern,
-  ExploitDetection
+  ExploitDetection,
 } from './schemas';
 import { DEFAULT_DEDUPLICATION_RULES, DEFAULT_EXPLOIT_PATTERNS } from './config';
 
@@ -114,8 +114,8 @@ class AntiDuplicationCore {
    * Check if a deduplication key has expired
    */
   isKeyExpired(key: DeduplicationKey): boolean {
-    if (key.timeWindow === 0) return false; // Never expires
-    if (!key.expiresAt) return false;
+    if (key.timeWindow === 0) {return false;} // Never expires
+    if (!key.expiresAt) {return false;}
 
     return Date.now() > key.expiresAt;
   }
@@ -172,7 +172,7 @@ class AntiDuplicationCore {
    */
   async checkExploitPatterns(request: DeduplicationRequest): Promise<ExploitDetection | null> {
     for (const pattern of this.exploitPatterns) {
-      if (!pattern.isActive) continue;
+      if (!pattern.isActive) {continue;}
 
       const detection = await this.evaluateExploitPattern(pattern, request);
       if (detection) {

@@ -115,10 +115,8 @@ export class EventBus {
   emit<T extends keyof EventChannels>(
     channel: T,
     data: EventChannels[T]
-  ): void;
-  emit(channel: string, data: unknown): void;
-  emit(channel: string, data: unknown): void {
-    this.publishUntyped(channel, data);
+  ): void {
+    this.publish(channel, data);
   }
 
   private publishUntyped(channel: string, data: unknown): void {

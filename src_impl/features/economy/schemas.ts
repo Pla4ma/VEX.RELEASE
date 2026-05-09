@@ -3,13 +3,13 @@
  * Zod schemas for validation - all types inferred from here
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Currency Schemas
 // ============================================================================
 
-export const CurrencyTypeSchema = z.enum(["COINS", "GEMS", "FOCUS_POINTS", "SEASONAL"]);
+export const CurrencyTypeSchema = z.enum(['COINS', 'GEMS', 'FOCUS_POINTS', 'SEASONAL']);
 
 export const CurrencyAmountSchema = z
   .object({
@@ -52,9 +52,9 @@ export const WalletSummarySchema = z
 // Transaction Schemas
 // ============================================================================
 
-export const TransactionTypeSchema = z.enum(["EARN", "SPEND", "REFUND", "CONVERT", "GIFT_RECEIVE", "GIFT_SEND"]);
+export const TransactionTypeSchema = z.enum(['EARN', 'SPEND', 'REFUND', 'CONVERT', 'GIFT_RECEIVE', 'GIFT_SEND']);
 
-export const TransactionSourceSchema = z.enum(["SESSION", "STREAK", "BOSS", "LEVEL_UP", "SHOP", "REWARD", "CRAFTING", "SQUAD", "DAILY_LOGIN", "ACHIEVEMENT", "FOCUS_POINTS", "PROMOTION", "REFUND"]);
+export const TransactionSourceSchema = z.enum(['SESSION', 'STREAK', 'BOSS', 'LEVEL_UP', 'SHOP', 'REWARD', 'CRAFTING', 'SQUAD', 'DAILY_LOGIN', 'ACHIEVEMENT', 'FOCUS_POINTS', 'PROMOTION', 'REFUND']);
 
 export const WalletTransactionSchema = z
   .object({
@@ -111,7 +111,7 @@ export const CalculateEarningsInputSchema = z
 export const SpendingSinkSchema = z
   .object({
     id: z.string().uuid(),
-    type: z.enum(["SHOP", "CRAFTING", "UPGRADE", "GIFT", "CONVERT", "STREAK_INSURANCE", "STREAK_WAGER", "BOSS_BOUNTY"]),
+    type: z.enum(['SHOP', 'CRAFTING', 'UPGRADE', 'GIFT', 'CONVERT', 'STREAK_INSURANCE', 'STREAK_WAGER', 'BOSS_BOUNTY']),
     currency: CurrencyTypeSchema,
     baseAmount: z.number().int().positive(),
     discountApplied: z.number().min(0).max(1).default(0),
@@ -125,9 +125,9 @@ export const SpendingSinkSchema = z
 // Purchase Flow Schemas
 // ============================================================================
 
-export const PurchaseStatusSchema = z.enum(["PENDING", "VALIDATING", "PROCESSING_PAYMENT", "DELIVERING", "COMPLETED", "FAILED", "REFUNDED", "PARTIAL_DELIVERY"]);
+export const PurchaseStatusSchema = z.enum(['PENDING', 'VALIDATING', 'PROCESSING_PAYMENT', 'DELIVERING', 'COMPLETED', 'FAILED', 'REFUNDED', 'PARTIAL_DELIVERY']);
 
-export const PurchaseErrorCodeSchema = z.enum(["INSUFFICIENT_FUNDS", "ITEM_UNAVAILABLE", "PRICE_CHANGED", "INVENTORY_FULL", "NETWORK_ERROR", "SYSTEM_ERROR"]);
+export const PurchaseErrorCodeSchema = z.enum(['INSUFFICIENT_FUNDS', 'ITEM_UNAVAILABLE', 'PRICE_CHANGED', 'INVENTORY_FULL', 'NETWORK_ERROR', 'SYSTEM_ERROR']);
 
 export const PurchaseErrorSchema = z
   .object({
@@ -179,7 +179,7 @@ export const PurchaseResultSchema = z
 // Refund Schemas
 // ============================================================================
 
-export const RefundStatusSchema = z.enum(["PENDING", "APPROVED", "REJECTED", "PROCESSED"]);
+export const RefundStatusSchema = z.enum(['PENDING', 'APPROVED', 'REJECTED', 'PROCESSED']);
 
 export const RefundRequestSchema = z
   .object({
@@ -235,9 +235,9 @@ export const ConvertCurrencyInputSchema = z
 // Offer Schemas
 // ============================================================================
 
-export const OfferTypeSchema = z.enum(["FLASH_SALE", "BUNDLE", "DAILY_DEAL", "FIRST_PURCHASE", "VIP_EXCLUSIVE", "SEASONAL"]);
+export const OfferTypeSchema = z.enum(['FLASH_SALE', 'BUNDLE', 'DAILY_DEAL', 'FIRST_PURCHASE', 'VIP_EXCLUSIVE', 'SEASONAL']);
 
-export const OfferStatusSchema = z.enum(["SCHEDULED", "ACTIVE", "EXPIRED", "SOLD_OUT"]);
+export const OfferStatusSchema = z.enum(['SCHEDULED', 'ACTIVE', 'EXPIRED', 'SOLD_OUT']);
 
 export const LimitedOfferSchema = z
   .object({
@@ -323,7 +323,7 @@ export const SpendCurrencyInputSchema = z
     userId: z.string().uuid(),
     currency: CurrencyTypeSchema,
     amount: z.number().int().positive(),
-    sink: z.enum(["SHOP", "CRAFTING", "UPGRADE", "GIFT", "CONVERT", "STREAK_INSURANCE", "STREAK_WAGER", "BOSS_BOUNTY"]),
+    sink: z.enum(['SHOP', 'CRAFTING', 'UPGRADE', 'GIFT', 'CONVERT', 'STREAK_INSURANCE', 'STREAK_WAGER', 'BOSS_BOUNTY']),
     description: z.string().min(1).max(500),
     metadata: z.record(z.unknown()).optional(),
   })

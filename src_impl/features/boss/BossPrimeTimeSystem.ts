@@ -13,7 +13,7 @@
  * - Analytics (engagement tracking)
  */
 
-import { eventBus } from "../../events";
+import { eventBus } from '../../events';
 
 // ============================================================================
 // Types
@@ -46,7 +46,7 @@ export interface PrimeTimeSchedule {
   timezone: string;
 }
 
-export type PrimeTimePattern = "MORNING" | "AFTERNOON" | "EVENING" | "NIGHT" | "WEEKEND";
+export type PrimeTimePattern = 'MORNING' | 'AFTERNOON' | 'EVENING' | 'NIGHT' | 'WEEKEND';
 
 // ============================================================================
 // Constants
@@ -76,7 +76,7 @@ const PATTERN_TIME_RANGES: Record<PrimeTimePattern, { start: number; end: number
  * Generate prime time windows for a boss encounter
  * Creates 1-2 windows within the encounter duration
  */
-export function generatePrimeTimeWindows(encounterId: string, encounterStartTime: number, encounterDurationMs: number, pattern: PrimeTimePattern = "EVENING", userTimezone: string = "America/New_York"): PrimeTimeWindow[] {
+export function generatePrimeTimeWindows(encounterId: string, encounterStartTime: number, encounterDurationMs: number, pattern: PrimeTimePattern = 'EVENING', userTimezone: string = 'America/New_York'): PrimeTimeWindow[] {
   const windows: PrimeTimeWindow[] = [];
   const encounterEndTime = encounterStartTime + encounterDurationMs;
 
@@ -133,11 +133,11 @@ function calculatePrimeTimeStart(baseTime: number, patternHour: number, timezone
  */
 function generatePrimeTimeDescription(pattern: PrimeTimePattern, windowNumber: number): string {
   const descriptions: Record<PrimeTimePattern, string> = {
-    MORNING: "Morning Focus Window - Start your day strong!",
-    AFTERNOON: "Afternoon Power Hour - Beat the midday slump!",
-    EVENING: "Evening Champion Time - Your peak performance window!",
-    NIGHT: "Night Owl Advantage - Quiet focus bonus!",
-    WEEKEND: "Weekend Warrior Bonus - Extended power window!",
+    MORNING: 'Morning Focus Window - Start your day strong!',
+    AFTERNOON: 'Afternoon Power Hour - Beat the midday slump!',
+    EVENING: 'Evening Champion Time - Your peak performance window!',
+    NIGHT: 'Night Owl Advantage - Quiet focus bonus!',
+    WEEKEND: 'Weekend Warrior Bonus - Extended power window!',
   };
 
   return windowNumber > 1 ? `${descriptions[pattern]} (Part ${windowNumber})` : descriptions[pattern];
@@ -241,7 +241,7 @@ export function storePrimeTimeSchedule(schedule: PrimeTimeSchedule): void {
   primeTimeSchedules.set(schedule.encounterId, schedule);
 
   // Publish event for notification scheduling
-  eventBus.publish("boss:prime_time_scheduled", {
+  eventBus.publish('boss:prime_time_scheduled', {
     encounterId: schedule.encounterId,
     windows: schedule.windows,
   });
@@ -362,7 +362,7 @@ export function getRecommendedAttackMessage(status: PrimeTimeStatus): string {
   if (status.nextWindow && status.hoursUntilNext && status.hoursUntilNext <= 4) {
     return `⏰ Prime Time starts in ${Math.round(status.hoursUntilNext * 10) / 10}h`;
   }
-  return "Attack anytime - focus is always powerful!";
+  return 'Attack anytime - focus is always powerful!';
 }
 
 // ============================================================================

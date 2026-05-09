@@ -8,23 +8,27 @@ import { HomeStreakProgress } from './HomeStreakProgress';
 import { HomeWeeklyQuest } from './HomeWeeklyQuest';
 
 import { HomeContextualCards } from './HomeContextualCards';
-import type { HomeController, HomeProps } from '../../types';
+import type { ChallengeItem } from '../../../features/home-spine/components';
+import type { useHomeData } from '../hooks/useHomeData';
+
+type HomeData = ReturnType<typeof useHomeData>;
+type HomeController = HomeData['controller'];
 
 type NavigationProp = NativeStackNavigationProp<RootStackParams>;
 
 interface HomeContentLowerProps {
   controller: HomeController;
-  data: HomeProps;
+  data: HomeData;
   handleClaimReward: (rewardId: string) => void;
   streakHoursRemaining: number;
   canShowWagers: boolean;
-  activeWagerQuery: any;
+  activeWagerQuery: HomeData['activeWagerQuery'];
   canShowBattlePass: boolean;
-  features: any;
+  features: HomeController['disclosure']['features'];
   comebackSessionsCompleted: number;
-  activeBossQuery: any;
-  bountyStatusQuery: any;
-  placeBountyMutation: any;
+  activeBossQuery: HomeData['activeBossQuery'];
+  bountyStatusQuery: HomeData['bountyStatusQuery'];
+  placeBountyMutation: HomeData['placeBountyMutation'];
   coinBalance: number | null;
   canShowBossBounties: boolean;
 }
@@ -48,9 +52,9 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   const navigation = useNavigation<NavigationProp>();
   const { isAvailable, isUnlocked, isVisible } = useFeatureGate('challenges');
 
-  const todaysChallenges = data.challengesQuery.data?.filter((_challenge: any) =>
-    isAvailable && isUnlocked && isVisible
-  ) ?? [];
+  const todaysChallenges: ChallengeItem[] = isAvailable && isUnlocked && isVisible
+    ? data.todaysChallenges
+    : [];
 
   return (
     <>
@@ -118,4 +122,4 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
       />
     </>
   );
-}
+};

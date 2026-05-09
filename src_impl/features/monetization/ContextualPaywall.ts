@@ -19,7 +19,7 @@
  * - Streaks (insurance)
  */
 
-import { type SubscriptionTier, type PaywallContextType, shouldShowPaywall, getPaywallContext, isPremium, type PaywallContextData } from "./PremiumTierSystem";
+import { type SubscriptionTier, type PaywallContextType, shouldShowPaywall, getPaywallContext, isPremium, type PaywallContextData } from './PremiumTierSystem';
 
 // ============================================================================
 // Contextual Paywall Rules
@@ -34,77 +34,77 @@ export interface PaywallMoment {
   respectDND: boolean; // Don't show during "Do Not Disturb" sessions
 }
 
-export type PaywallTriggerCondition = { type: "STUDY_PLAN_CREATE_ATTEMPT"; currentPlanCount: number } | { type: "BOSS_BOUNTY_PLACE_ATTEMPT" } | { type: "STREAK_BREAK_NO_INSURANCE"; daysLost: number } | { type: "ANALYTICS_VIEW_ATTEMPT" } | { type: "PERSONALITY_SWITCH_ATTEMPT" } | { type: "SQUAD_JOIN_ATTEMPT"; currentSquadCount: number } | { type: "COSMETIC_PREVIEW_ATTEMPT"; cosmeticId: string } | { type: "FEATURE_CLICK"; feature: string };
+export type PaywallTriggerCondition = { type: 'STUDY_PLAN_CREATE_ATTEMPT'; currentPlanCount: number } | { type: 'BOSS_BOUNTY_PLACE_ATTEMPT' } | { type: 'STREAK_BREAK_NO_INSURANCE'; daysLost: number } | { type: 'ANALYTICS_VIEW_ATTEMPT' } | { type: 'PERSONALITY_SWITCH_ATTEMPT' } | { type: 'SQUAD_JOIN_ATTEMPT'; currentSquadCount: number } | { type: 'COSMETIC_PREVIEW_ATTEMPT'; cosmeticId: string } | { type: 'FEATURE_CLICK'; feature: string };
 
 // Define when each paywall context can trigger
 export const PAYWALL_MOMENTS: Record<PaywallContextType, PaywallMoment> = {
   STUDY_PLAN_LIMIT: {
-    context: "STUDY_PLAN_LIMIT",
-    triggerCondition: { type: "STUDY_PLAN_CREATE_ATTEMPT", currentPlanCount: 1 },
+    context: 'STUDY_PLAN_LIMIT',
+    triggerCondition: { type: 'STUDY_PLAN_CREATE_ATTEMPT', currentPlanCount: 1 },
     priority: 9,
     cooldownHours: 24,
     maxShowsPerDay: 1,
     respectDND: true,
   },
   BOSS_BOUNTY: {
-    context: "BOSS_BOUNTY",
-    triggerCondition: { type: "BOSS_BOUNTY_PLACE_ATTEMPT" },
+    context: 'BOSS_BOUNTY',
+    triggerCondition: { type: 'BOSS_BOUNTY_PLACE_ATTEMPT' },
     priority: 7,
     cooldownHours: 48,
     maxShowsPerDay: 1,
     respectDND: true,
   },
   STREAK_INSURANCE: {
-    context: "STREAK_INSURANCE",
-    triggerCondition: { type: "STREAK_BREAK_NO_INSURANCE", daysLost: 0 },
+    context: 'STREAK_INSURANCE',
+    triggerCondition: { type: 'STREAK_BREAK_NO_INSURANCE', daysLost: 0 },
     priority: 10, // Highest - user just lost something
     cooldownHours: 168, // 1 week - only on actual streak break
     maxShowsPerDay: 1,
     respectDND: false, // Always show when streak breaks
   },
   PERSONALITY_SELECT: {
-    context: "PERSONALITY_SELECT",
-    triggerCondition: { type: "PERSONALITY_SWITCH_ATTEMPT" },
+    context: 'PERSONALITY_SELECT',
+    triggerCondition: { type: 'PERSONALITY_SWITCH_ATTEMPT' },
     priority: 5,
     cooldownHours: 72,
     maxShowsPerDay: 1,
     respectDND: true,
   },
   ANALYTICS_REQUEST: {
-    context: "ANALYTICS_REQUEST",
-    triggerCondition: { type: "ANALYTICS_VIEW_ATTEMPT" },
+    context: 'ANALYTICS_REQUEST',
+    triggerCondition: { type: 'ANALYTICS_VIEW_ATTEMPT' },
     priority: 4,
     cooldownHours: 24,
     maxShowsPerDay: 2,
     respectDND: true,
   },
   SQUAD_LIMIT: {
-    context: "SQUAD_LIMIT",
-    triggerCondition: { type: "SQUAD_JOIN_ATTEMPT", currentSquadCount: 3 },
+    context: 'SQUAD_LIMIT',
+    triggerCondition: { type: 'SQUAD_JOIN_ATTEMPT', currentSquadCount: 3 },
     priority: 6,
     cooldownHours: 24,
     maxShowsPerDay: 1,
     respectDND: true,
   },
   EXCLUSIVE_COSMETIC: {
-    context: "EXCLUSIVE_COSMETIC",
-    triggerCondition: { type: "COSMETIC_PREVIEW_ATTEMPT", cosmeticId: "" },
+    context: 'EXCLUSIVE_COSMETIC',
+    triggerCondition: { type: 'COSMETIC_PREVIEW_ATTEMPT', cosmeticId: '' },
     priority: 3,
     cooldownHours: 48,
     maxShowsPerDay: 2,
     respectDND: true,
   },
   ADVANCED_AI: {
-    context: "ADVANCED_AI",
-    triggerCondition: { type: "FEATURE_CLICK", feature: "advanced_ai" },
+    context: 'ADVANCED_AI',
+    triggerCondition: { type: 'FEATURE_CLICK', feature: 'advanced_ai' },
     priority: 5,
     cooldownHours: 24,
     maxShowsPerDay: 1,
     respectDND: true,
   },
   BETA_FEATURE: {
-    context: "BETA_FEATURE",
-    triggerCondition: { type: "FEATURE_CLICK", feature: "beta" },
+    context: 'BETA_FEATURE',
+    triggerCondition: { type: 'FEATURE_CLICK', feature: 'beta' },
     priority: 2,
     cooldownHours: 72,
     maxShowsPerDay: 1,
@@ -156,18 +156,18 @@ export function canShowPaywall(userId: string, context: PaywallContextType, isIn
 
   // Don't show if user is premium
   if (isPremium(userId)) {
-    return { canShow: false, reason: "User is already premium" };
+    return { canShow: false, reason: 'User is already premium' };
   }
 
   // Don't show during sessions if respectDND is true
   if (isInSession && moment.respectDND) {
-    return { canShow: false, reason: "Respecting Do Not Disturb during session" };
+    return { canShow: false, reason: 'Respecting Do Not Disturb during session' };
   }
 
   // Check daily frequency
   const todayShows = history.filter((h) => h.context === context && h.shownAt > now - 24 * 60 * 60 * 1000);
   if (todayShows.length >= moment.maxShowsPerDay) {
-    return { canShow: false, reason: "Daily frequency limit reached" };
+    return { canShow: false, reason: 'Daily frequency limit reached' };
   }
 
   // Check cooldown
@@ -175,7 +175,7 @@ export function canShowPaywall(userId: string, context: PaywallContextType, isIn
   if (lastShow) {
     const hoursSinceLastShow = (now - lastShow.shownAt) / (1000 * 60 * 60);
     if (hoursSinceLastShow < moment.cooldownHours) {
-      return { canShow: false, reason: "Cooldown period active" };
+      return { canShow: false, reason: 'Cooldown period active' };
     }
   }
 
@@ -206,10 +206,10 @@ export function getPaywallCooldownRemaining(userId: string, context: PaywallCont
 /**
  * Evaluate if a trigger condition should show paywall
  */
-export function evaluateTrigger(userId: string, condition: PaywallTriggerCondition, tier: SubscriptionTier = "FREE"): { shouldShow: boolean; context: PaywallContextType | null } {
+export function evaluateTrigger(userId: string, condition: PaywallTriggerCondition, tier: SubscriptionTier = 'FREE'): { shouldShow: boolean; context: PaywallContextType | null } {
   switch (condition.type) {
-    case "STUDY_PLAN_CREATE_ATTEMPT": {
-      const { show, context } = shouldShowPaywall(tier, "maxActiveStudyPlans");
+    case 'STUDY_PLAN_CREATE_ATTEMPT': {
+      const { show, context } = shouldShowPaywall(tier, 'maxActiveStudyPlans');
       if (show && context) {
         const canShow = canShowPaywall(userId, context);
         return { shouldShow: canShow.canShow, context };
@@ -217,8 +217,8 @@ export function evaluateTrigger(userId: string, condition: PaywallTriggerConditi
       return { shouldShow: false, context: null };
     }
 
-    case "BOSS_BOUNTY_PLACE_ATTEMPT": {
-      const { show, context } = shouldShowPaywall(tier, "bossBounties");
+    case 'BOSS_BOUNTY_PLACE_ATTEMPT': {
+      const { show, context } = shouldShowPaywall(tier, 'bossBounties');
       if (show && context) {
         const canShow = canShowPaywall(userId, context);
         return { shouldShow: canShow.canShow, context };
@@ -226,15 +226,15 @@ export function evaluateTrigger(userId: string, condition: PaywallTriggerConditi
       return { shouldShow: false, context: null };
     }
 
-    case "STREAK_BREAK_NO_INSURANCE": {
+    case 'STREAK_BREAK_NO_INSURANCE': {
       // Always show streak insurance paywall on break if no insurance
-      const context: PaywallContextType = "STREAK_INSURANCE";
+      const context: PaywallContextType = 'STREAK_INSURANCE';
       const canShow = canShowPaywall(userId, context);
       return { shouldShow: canShow.canShow, context };
     }
 
-    case "ANALYTICS_VIEW_ATTEMPT": {
-      const { show, context } = shouldShowPaywall(tier, "studyAnalytics");
+    case 'ANALYTICS_VIEW_ATTEMPT': {
+      const { show, context } = shouldShowPaywall(tier, 'studyAnalytics');
       if (show && context) {
         const canShow = canShowPaywall(userId, context);
         return { shouldShow: canShow.canShow, context };
@@ -242,8 +242,8 @@ export function evaluateTrigger(userId: string, condition: PaywallTriggerConditi
       return { shouldShow: false, context: null };
     }
 
-    case "PERSONALITY_SWITCH_ATTEMPT": {
-      const { show, context } = shouldShowPaywall(tier, "personalitySelection");
+    case 'PERSONALITY_SWITCH_ATTEMPT': {
+      const { show, context } = shouldShowPaywall(tier, 'personalitySelection');
       if (show && context) {
         const canShow = canShowPaywall(userId, context);
         return { shouldShow: canShow.canShow, context };
@@ -251,8 +251,8 @@ export function evaluateTrigger(userId: string, condition: PaywallTriggerConditi
       return { shouldShow: false, context: null };
     }
 
-    case "SQUAD_JOIN_ATTEMPT": {
-      const { show, context } = shouldShowPaywall(tier, "maxSquads");
+    case 'SQUAD_JOIN_ATTEMPT': {
+      const { show, context } = shouldShowPaywall(tier, 'maxSquads');
       if (show && context) {
         const canShow = canShowPaywall(userId, context);
         return { shouldShow: canShow.canShow, context };
@@ -260,17 +260,17 @@ export function evaluateTrigger(userId: string, condition: PaywallTriggerConditi
       return { shouldShow: false, context: null };
     }
 
-    case "COSMETIC_PREVIEW_ATTEMPT": {
-      const context: PaywallContextType = "EXCLUSIVE_COSMETIC";
+    case 'COSMETIC_PREVIEW_ATTEMPT': {
+      const context: PaywallContextType = 'EXCLUSIVE_COSMETIC';
       const canShow = canShowPaywall(userId, context);
       return { shouldShow: canShow.canShow, context };
     }
 
-    case "FEATURE_CLICK": {
+    case 'FEATURE_CLICK': {
       // Map feature clicks to appropriate contexts
       const featureMap: Record<string, PaywallContextType> = {
-        advanced_ai: "ADVANCED_AI",
-        beta: "BETA_FEATURE",
+        advanced_ai: 'ADVANCED_AI',
+        beta: 'BETA_FEATURE',
       };
       const context = featureMap[condition.feature];
       if (context) {
@@ -373,7 +373,7 @@ export function getConversionRate(context: PaywallContextType): number {
  * Get best converting paywall context
  */
 export function getBestConvertingContext(): PaywallContextType | null {
-  const contexts: PaywallContextType[] = ["STUDY_PLAN_LIMIT", "BOSS_BOUNTY", "STREAK_INSURANCE", "PERSONALITY_SELECT", "ANALYTICS_REQUEST"];
+  const contexts: PaywallContextType[] = ['STUDY_PLAN_LIMIT', 'BOSS_BOUNTY', 'STREAK_INSURANCE', 'PERSONALITY_SELECT', 'ANALYTICS_REQUEST'];
 
   let bestContext: PaywallContextType | null = null;
   let bestRate = 0;
@@ -399,24 +399,24 @@ export function getBestConvertingContext(): PaywallContextType | null {
 export function shouldPreventPaywall(userId: string, sessionsCompleted: number, isOnboarding: boolean, isFirstSession: boolean): { prevent: boolean; reason: string | null } {
   // Never show during onboarding
   if (isOnboarding) {
-    return { prevent: true, reason: "Onboarding in progress" };
+    return { prevent: true, reason: 'Onboarding in progress' };
   }
 
   // Never show during very first session
   if (isFirstSession) {
-    return { prevent: true, reason: "First session" };
+    return { prevent: true, reason: 'First session' };
   }
 
   // Wait until user has completed at least 1 session
   if (sessionsCompleted < 1) {
-    return { prevent: true, reason: "Not enough sessions completed" };
+    return { prevent: true, reason: 'Not enough sessions completed' };
   }
 
   // Don't show if user dismissed 3+ paywalls in last 24h (fatigue)
   const history = getPaywallHistory(userId);
   const last24h = history.filter((h) => h.shownAt > Date.now() - 24 * 60 * 60 * 1000 && h.dismissed);
   if (last24h.length >= 3) {
-    return { prevent: true, reason: "Paywall fatigue detected" };
+    return { prevent: true, reason: 'Paywall fatigue detected' };
   }
 
   return { prevent: false, reason: null };

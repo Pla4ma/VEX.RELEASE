@@ -10,7 +10,7 @@
  * @phase 8
  */
 
-import type { CoachMessage, CoachUserState } from "./types";
+import type { CoachMessage, CoachUserState } from './types';
 
 // ============================================================================
 // Types
@@ -26,12 +26,12 @@ export interface InterventionScenario {
 
 export interface InterventionMessage {
   content: string;
-  tone: "supportive" | "urgent" | "motivational" | "strategic";
+  tone: 'supportive' | 'urgent' | 'motivational' | 'strategic';
   quickResponses: string[];
 }
 
 export interface InterventionAction {
-  type: "SUGGEST_SESSION" | "AUTO_CREATE_SESSION" | "SEND_NOTIFICATION";
+  type: 'SUGGEST_SESSION' | 'AUTO_CREATE_SESSION' | 'SEND_NOTIFICATION';
   data: Record<string, unknown>;
 }
 
@@ -45,7 +45,7 @@ export interface PlateauInput {
   xpGrowthRate7d: number; // percentage change vs previous 7d
   xpGrowthRatePrev7d: number;
   currentLevel: number;
-  sessionsPerWeekTrend: "INCREASING" | "STABLE" | "DECREASING";
+  sessionsPerWeekTrend: 'INCREASING' | 'STABLE' | 'DECREASING';
 }
 
 export interface StreakRescueInput {
@@ -72,7 +72,7 @@ export interface BossStrategyInput {
  */
 export function detectBurnout(input: BurnoutInput): {
   detected: boolean;
-  severity: "MILD" | "MODERATE" | "SEVERE";
+  severity: 'MILD' | 'MODERATE' | 'SEVERE';
   intervention: InterventionMessage;
   suggestedSessionDuration: number;
 } {
@@ -83,24 +83,24 @@ export function detectBurnout(input: BurnoutInput): {
   if (!isBurnoutRisk) {
     return {
       detected: false,
-      severity: "MILD",
-      intervention: { content: "", tone: "supportive", quickResponses: [] },
+      severity: 'MILD',
+      intervention: { content: '', tone: 'supportive', quickResponses: [] },
       suggestedSessionDuration: 25,
     };
   }
 
   // Determine severity
-  let severity: "MILD" | "MODERATE" | "SEVERE" = "MILD";
+  let severity: 'MILD' | 'MODERATE' | 'SEVERE' = 'MILD';
   if (sessionsLast24h >= 8 && avgQualityLast24h < 50) {
-    severity = "SEVERE";
+    severity = 'SEVERE';
   } else if (sessionsLast24h >= 6 && avgQualityLast24h < 60) {
-    severity = "MODERATE";
+    severity = 'MODERATE';
   }
 
   const intervention: InterventionMessage = {
     content: `You're pushing hard — ${sessionsLast24h} sessions in 24 hours! Your focus quality is dropping, which could hurt your streak. Want a shorter session today to protect your progress? I'll set up a 15-minute chill session.`,
-    tone: "supportive",
-    quickResponses: ["Yes, set it up", "I can handle more", "Maybe later", "I need a break"],
+    tone: 'supportive',
+    quickResponses: ['Yes, set it up', 'I can handle more', 'Maybe later', 'I need a break'],
   };
 
   return {
@@ -114,7 +114,7 @@ export function detectBurnout(input: BurnoutInput): {
 /**
  * Generate burnout intervention message based on persona
  */
-export function generateBurnoutMessage(sessionsLast24h: number, avgQuality: number, persona: "MENTOR" | "CHEERLEADER" | "DRILL_SERGEANT" = "MENTOR"): string {
+export function generateBurnoutMessage(sessionsLast24h: number, avgQuality: number, persona: 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT' = 'MENTOR'): string {
   const messages: Record<string, string> = {
     MENTOR: `You've completed ${sessionsLast24h} sessions in 24 hours — impressive dedication. But I've noticed your quality scores averaging ${avgQuality}%. To maintain your streak long-term, consider a shorter, focused session today. Quality over quantity.`,
     CHEERLEADER: `Whoa superstar! 🌟 ${sessionsLast24h} sessions?! You're ON FIRE! But I'm seeing your quality dip to ${avgQuality}%. Let's keep that streak strong with a quick 15-min power session. You've got this!`,
@@ -134,7 +134,7 @@ export function generateBurnoutMessage(sessionsLast24h: number, avgQuality: numb
  */
 export function detectPlateau(input: PlateauInput): {
   detected: boolean;
-  severity: "MILD" | "MODERATE" | "SEVERE";
+  severity: 'MILD' | 'MODERATE' | 'SEVERE';
   intervention: InterventionMessage;
   suggestedSessionDuration: number;
 } {
@@ -148,24 +148,24 @@ export function detectPlateau(input: PlateauInput): {
   if (!isPlateau) {
     return {
       detected: false,
-      severity: "MILD",
-      intervention: { content: "", tone: "motivational", quickResponses: [] },
+      severity: 'MILD',
+      intervention: { content: '', tone: 'motivational', quickResponses: [] },
       suggestedSessionDuration: 25,
     };
   }
 
   // Determine severity
-  let severity: "MILD" | "MODERATE" | "SEVERE" = "MILD";
+  let severity: 'MILD' | 'MODERATE' | 'SEVERE' = 'MILD';
   if (dropPercent > 60) {
-    severity = "SEVERE";
+    severity = 'SEVERE';
   } else if (dropPercent > 45) {
-    severity = "MODERATE";
+    severity = 'MODERATE';
   }
 
   const intervention: InterventionMessage = {
     content: `You've been in a groove, but I've noticed your XP growth slowed ${dropPercent.toFixed(0)}% over the last week. Try a longer session today — I think you're capable of more. A 60-minute deep focus could break through.`,
-    tone: "motivational",
-    quickResponses: ["Let's do 60 min", "Start with 30", "What's my pattern?", "Not today"],
+    tone: 'motivational',
+    quickResponses: ["Let's do 60 min", 'Start with 30', "What's my pattern?", 'Not today'],
   };
 
   return {
@@ -179,8 +179,8 @@ export function detectPlateau(input: PlateauInput): {
 /**
  * Generate plateau intervention message based on persona
  */
-export function generatePlateauMessage(dropPercent: number, sessionsPerWeekTrend: string, persona: "MENTOR" | "CHEERLEADER" | "DRILL_SERGEANT" = "MENTOR"): string {
-  const trendText = sessionsPerWeekTrend === "DECREASING" ? "I also see your session frequency dropping." : "Your session count is steady, but intensity is down.";
+export function generatePlateauMessage(dropPercent: number, sessionsPerWeekTrend: string, persona: 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT' = 'MENTOR'): string {
+  const trendText = sessionsPerWeekTrend === 'DECREASING' ? 'I also see your session frequency dropping.' : 'Your session count is steady, but intensity is down.';
 
   const messages: Record<string, string> = {
     MENTOR: `Your XP growth has slowed ${dropPercent.toFixed(0)}% this week. ${trendText} You've hit a plateau — this is normal. To break through, try a longer session at your peak focus time. Growth happens outside comfort zones.`,
@@ -201,7 +201,7 @@ export function generatePlateauMessage(dropPercent: number, sessionsPerWeekTrend
  */
 export function detectStreakRescueNeeded(input: StreakRescueInput): {
   needsRescue: boolean;
-  urgency: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   intervention: InterventionMessage;
   suggestedSessionDuration: number;
 } {
@@ -211,47 +211,47 @@ export function detectStreakRescueNeeded(input: StreakRescueInput): {
   if (hasActiveSession) {
     return {
       needsRescue: false,
-      urgency: "LOW",
-      intervention: { content: "", tone: "urgent", quickResponses: [] },
+      urgency: 'LOW',
+      intervention: { content: '', tone: 'urgent', quickResponses: [] },
       suggestedSessionDuration: 15,
     };
   }
 
   // Determine urgency based on hours remaining
-  let urgency: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL" = "LOW";
+  let urgency: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' = 'LOW';
   let needsRescue = false;
 
   if (hoursUntilStreakBreak <= 2) {
-    urgency = "CRITICAL";
+    urgency = 'CRITICAL';
     needsRescue = true;
   } else if (hoursUntilStreakBreak <= 4) {
-    urgency = "HIGH";
+    urgency = 'HIGH';
     needsRescue = true;
   } else if (hoursUntilStreakBreak <= 6) {
-    urgency = "MEDIUM";
+    urgency = 'MEDIUM';
     needsRescue = true;
   }
 
   if (!needsRescue) {
     return {
       needsRescue: false,
-      urgency: "LOW",
-      intervention: { content: "", tone: "urgent", quickResponses: [] },
+      urgency: 'LOW',
+      intervention: { content: '', tone: 'urgent', quickResponses: [] },
       suggestedSessionDuration: 15,
     };
   }
 
   const urgencyEmojis: Record<string, string> = {
-    CRITICAL: "🚨",
-    HIGH: "⚠️",
-    MEDIUM: "⏰",
-    LOW: "🔔",
+    CRITICAL: '🚨',
+    HIGH: '⚠️',
+    MEDIUM: '⏰',
+    LOW: '🔔',
   };
 
   const intervention: InterventionMessage = {
     content: `${urgencyEmojis[urgency]} Your ${streakDays}-day streak breaks in ${hoursUntilStreakBreak} hours. I'm holding a 15-minute session slot for you right now. One quick focus session saves your streak!`,
-    tone: "urgent",
-    quickResponses: ["Start now!", "15 min later", "I'm busy", "Protect my streak"],
+    tone: 'urgent',
+    quickResponses: ['Start now!', '15 min later', "I'm busy", 'Protect my streak'],
   };
 
   return {
@@ -265,7 +265,7 @@ export function detectStreakRescueNeeded(input: StreakRescueInput): {
 /**
  * Generate streak rescue message with countdown timer
  */
-export function generateStreakRescueMessage(streakDays: number, hoursRemaining: number, persona: "MENTOR" | "CHEERLEADER" | "DRILL_SERGEANT" = "MENTOR"): string {
+export function generateStreakRescueMessage(streakDays: number, hoursRemaining: number, persona: 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT' = 'MENTOR'): string {
   const timeText = hoursRemaining <= 2 ? `${hoursRemaining} HOURS` : `${hoursRemaining} hours`;
 
   const messages: Record<string, string> = {
@@ -287,7 +287,7 @@ export function generateStreakRescueMessage(streakDays: number, hoursRemaining: 
  */
 export function detectBossStrategyOpportunity(input: BossStrategyInput): {
   shouldShow: boolean;
-  priority: "LOW" | "MEDIUM" | "HIGH";
+  priority: 'LOW' | 'MEDIUM' | 'HIGH';
   intervention: InterventionMessage;
   strategy: BossStrategy;
 } {
@@ -298,32 +298,32 @@ export function detectBossStrategyOpportunity(input: BossStrategyInput): {
   if (!shouldShow) {
     return {
       shouldShow: false,
-      priority: "LOW",
-      intervention: { content: "", tone: "strategic", quickResponses: [] },
-      strategy: { recommendedDuration: 25, targetQuality: "S", expectedDamage: 0 },
+      priority: 'LOW',
+      intervention: { content: '', tone: 'strategic', quickResponses: [] },
+      strategy: { recommendedDuration: 25, targetQuality: 'S', expectedDamage: 0 },
     };
   }
 
   // Determine priority based on time remaining
-  let priority: "LOW" | "MEDIUM" | "HIGH" = "LOW";
+  let priority: 'LOW' | 'MEDIUM' | 'HIGH' = 'LOW';
   if (bossTimeRemaining < 4) {
-    priority = "HIGH";
+    priority = 'HIGH';
   } else if (bossHealthPercent < 15) {
-    priority = "HIGH";
+    priority = 'HIGH';
   } else if (bossTimeRemaining < 12) {
-    priority = "MEDIUM";
+    priority = 'MEDIUM';
   }
 
   const strategy: BossStrategy = {
     recommendedDuration: 45, // Longer session for max damage
-    targetQuality: "S", // S-grade for critical hit chance
+    targetQuality: 'S', // S-grade for critical hit chance
     expectedDamage: Math.floor(45 * currentStreakMultiplier * 1.2), // Base + streak + quality bonus
   };
 
   const intervention: InterventionMessage = {
     content: `Boss is almost down — ${bossHealthPercent.toFixed(0)}% health left! One focused session at S quality = killing blow. Your ${currentStreakMultiplier}x streak multiplier is active = maximum damage. Time to finish this!`,
-    tone: "strategic",
-    quickResponses: ["Finish the boss!", "45 min session", "What damage will I deal?", "Later"],
+    tone: 'strategic',
+    quickResponses: ['Finish the boss!', '45 min session', 'What damage will I deal?', 'Later'],
   };
 
   return {
@@ -336,14 +336,14 @@ export function detectBossStrategyOpportunity(input: BossStrategyInput): {
 
 export interface BossStrategy {
   recommendedDuration: number;
-  targetQuality: "S" | "A" | "B";
+  targetQuality: 'S' | 'A' | 'B';
   expectedDamage: number;
 }
 
 /**
  * Generate boss strategy message based on context
  */
-export function generateBossStrategyMessage(bossHealthPercent: number, timeRemaining: number, streakMultiplier: number, persona: "MENTOR" | "CHEERLEADER" | "DRILL_SERGEANT" = "MENTOR"): string {
+export function generateBossStrategyMessage(bossHealthPercent: number, timeRemaining: number, streakMultiplier: number, persona: 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT' = 'MENTOR'): string {
   const messages: Record<string, string> = {
     MENTOR: `The boss is near defeat at ${bossHealthPercent.toFixed(0)}% health. With ${timeRemaining} hours remaining and your ${streakMultiplier}x streak multiplier active, a 45-minute S-quality session will deal the killing blow. This is your moment.`,
     CHEERLEADER: `OMG! 🎉 The boss is ALMOST DOWN! ${bossHealthPercent.toFixed(0)}% health left! Your ${streakMultiplier}x streak multiplier is CRUSHING IT! One epic 45-min S-quality session = BOOM! Victory! Let's DO THIS! 👑`,
@@ -409,7 +409,7 @@ export interface StudyStuckInput {
 export interface DistractionDetectedInput {
   sessionId: string;
   currentPurityScore: number;
-  purityScoreTrend: "IMPROVING" | "STABLE" | "DECLINING";
+  purityScoreTrend: 'IMPROVING' | 'STABLE' | 'DECLINING';
   pausesInLast10Min: number;
   backgroundSwitches: number;
 }
@@ -417,7 +417,7 @@ export interface DistractionDetectedInput {
 export interface OptimalBreakInput {
   sessionDuration: number;
   currentPurityScore: number;
-  focusPattern: "DEEP" | "MODERATE" | "FRAGMENTED";
+  focusPattern: 'DEEP' | 'MODERATE' | 'FRAGMENTED';
   timeSinceLastBreak: number;
   userPreferredBreakInterval?: number;
 }
@@ -428,7 +428,7 @@ export interface OptimalBreakInput {
  */
 export function detectStudyStuck(input: StudyStuckInput): {
   detected: boolean;
-  severity: "MILD" | "MODERATE" | "SEVERE";
+  severity: 'MILD' | 'MODERATE' | 'SEVERE';
   intervention: InterventionMessage;
   suggestedAction: InterventionAction;
 } {
@@ -439,25 +439,25 @@ export function detectStudyStuck(input: StudyStuckInput): {
   if (!isStuck) {
     return {
       detected: false,
-      severity: "MILD",
-      intervention: { content: "", tone: "supportive", quickResponses: [] },
-      suggestedAction: { type: "SEND_NOTIFICATION", data: {} },
+      severity: 'MILD',
+      intervention: { content: '', tone: 'supportive', quickResponses: [] },
+      suggestedAction: { type: 'SEND_NOTIFICATION', data: {} },
     };
   }
 
-  const severity: "MILD" | "MODERATE" | "SEVERE" = minutesOnSameSection >= 60 ? "SEVERE" : minutesOnSameSection >= 45 ? "MODERATE" : "MILD";
+  const severity: 'MILD' | 'MODERATE' | 'SEVERE' = minutesOnSameSection >= 60 ? 'SEVERE' : minutesOnSameSection >= 45 ? 'MODERATE' : 'MILD';
 
-  const sectionText = sectionName ? ` on "${sectionName}"` : "";
+  const sectionText = sectionName ? ` on "${sectionName}"` : '';
 
   const intervention: InterventionMessage = {
     content: `You've been on ${documentName}${sectionText} for ${minutesOnSameSection} minutes. Are you stuck? I can help summarize, quiz you, or suggest a different section.`,
-    tone: "supportive",
-    quickResponses: ["Summarize this", "Quiz me", "Skip section", "I'm fine"],
+    tone: 'supportive',
+    quickResponses: ['Summarize this', 'Quiz me', 'Skip section', "I'm fine"],
   };
 
   const suggestedAction: InterventionAction = {
-    type: "SUGGEST_SESSION",
-    data: { action: "STUDY_HELP", documentId: input.documentId },
+    type: 'SUGGEST_SESSION',
+    data: { action: 'STUDY_HELP', documentId: input.documentId },
   };
 
   return { detected: true, severity, intervention, suggestedAction };
@@ -469,44 +469,44 @@ export function detectStudyStuck(input: StudyStuckInput): {
  */
 export function detectDistraction(input: DistractionDetectedInput): {
   detected: boolean;
-  severity: "MILD" | "MODERATE" | "SEVERE";
+  severity: 'MILD' | 'MODERATE' | 'SEVERE';
   intervention: InterventionMessage;
-  technique: "REFocus" | "BREAK" | "END_SESSION";
+  technique: 'REFocus' | 'BREAK' | 'END_SESSION';
 } {
   const { currentPurityScore, purityScoreTrend, pausesInLast10Min, backgroundSwitches } = input;
 
   // Distraction signals
-  const isDistracted = purityScoreTrend === "DECLINING" || pausesInLast10Min >= 2 || backgroundSwitches >= 3;
+  const isDistracted = purityScoreTrend === 'DECLINING' || pausesInLast10Min >= 2 || backgroundSwitches >= 3;
 
   if (!isDistracted) {
     return {
       detected: false,
-      severity: "MILD",
-      intervention: { content: "", tone: "motivational", quickResponses: [] },
-      technique: "REFocus",
+      severity: 'MILD',
+      intervention: { content: '', tone: 'motivational', quickResponses: [] },
+      technique: 'REFocus',
     };
   }
 
   // Determine severity
-  let severity: "MILD" | "MODERATE" | "SEVERE" = "MILD";
+  let severity: 'MILD' | 'MODERATE' | 'SEVERE' = 'MILD';
   if (currentPurityScore < 50 || pausesInLast10Min >= 4) {
-    severity = "SEVERE";
+    severity = 'SEVERE';
   } else if (currentPurityScore < 70 || pausesInLast10Min >= 3) {
-    severity = "MODERATE";
+    severity = 'MODERATE';
   }
 
   // Determine technique based on severity
-  let technique: "REFocus" | "BREAK" | "END_SESSION" = "REFocus";
-  if (severity === "SEVERE") {
-    technique = "END_SESSION";
-  } else if (severity === "MODERATE") {
-    technique = "BREAK";
+  let technique: 'REFocus' | 'BREAK' | 'END_SESSION' = 'REFocus';
+  if (severity === 'SEVERE') {
+    technique = 'END_SESSION';
+  } else if (severity === 'MODERATE') {
+    technique = 'BREAK';
   }
 
   const intervention: InterventionMessage = {
     content: `I noticed your focus wandering — ${pausesInLast10Min} pauses recently. Want to try the REFocus technique, take a short break, or end the session early?`,
-    tone: "supportive",
-    quickResponses: ["Try REFocus", "Take break", "End early", "Push through"],
+    tone: 'supportive',
+    quickResponses: ['Try REFocus', 'Take break', 'End early', 'Push through'],
   };
 
   return { detected: true, severity, intervention, technique };
@@ -518,7 +518,7 @@ export function detectDistraction(input: DistractionDetectedInput): {
  */
 export function detectOptimalBreak(input: OptimalBreakInput): {
   shouldBreak: boolean;
-  confidence: "LOW" | "MEDIUM" | "HIGH";
+  confidence: 'LOW' | 'MEDIUM' | 'HIGH';
   intervention: InterventionMessage;
   recommendedBreakDuration: number;
 } {
@@ -529,7 +529,7 @@ export function detectOptimalBreak(input: OptimalBreakInput): {
 
   // Predict fatigue based on patterns
   const timeBased = timeSinceLastBreak >= interval;
-  const patternBased = focusPattern === "FRAGMENTED" || (focusPattern === "MODERATE" && sessionDuration > 45);
+  const patternBased = focusPattern === 'FRAGMENTED' || (focusPattern === 'MODERATE' && sessionDuration > 45);
   const purityBased = currentPurityScore < 80 && sessionDuration > 30;
 
   const shouldBreak = timeBased || patternBased || purityBased;
@@ -537,19 +537,19 @@ export function detectOptimalBreak(input: OptimalBreakInput): {
   if (!shouldBreak) {
     return {
       shouldBreak: false,
-      confidence: "LOW",
-      intervention: { content: "", tone: "supportive", quickResponses: [] },
+      confidence: 'LOW',
+      intervention: { content: '', tone: 'supportive', quickResponses: [] },
       recommendedBreakDuration: 0,
     };
   }
 
   // Calculate confidence
-  let confidence: "LOW" | "MEDIUM" | "HIGH" = "LOW";
+  let confidence: 'LOW' | 'MEDIUM' | 'HIGH' = 'LOW';
   const signals = [timeBased, patternBased, purityBased].filter(Boolean).length;
   if (signals >= 3) {
-    confidence = "HIGH";
+    confidence = 'HIGH';
   } else if (signals >= 2) {
-    confidence = "MEDIUM";
+    confidence = 'MEDIUM';
   }
 
   // Break duration based on session length
@@ -557,8 +557,8 @@ export function detectOptimalBreak(input: OptimalBreakInput): {
 
   const intervention: InterventionMessage = {
     content: `Your focus patterns suggest you're approaching fatigue. A ${recommendedBreakDuration}-minute break now could help you return stronger. Want to take it?`,
-    tone: "supportive",
-    quickResponses: ["Take break", "5 more minutes", "Skip break", "End session"],
+    tone: 'supportive',
+    quickResponses: ['Take break', '5 more minutes', 'Skip break', 'End session'],
   };
 
   return { shouldBreak: true, confidence, intervention, recommendedBreakDuration };
@@ -574,7 +574,7 @@ export function detectOptimalBreak(input: OptimalBreakInput): {
  */
 export function detectStudyBehind(input: StudyBehindInput): {
   detected: boolean;
-  severity: "MILD" | "MODERATE" | "SEVERE";
+  severity: 'MILD' | 'MODERATE' | 'SEVERE';
   intervention: InterventionMessage;
   suggestedAction: InterventionAction;
 } {
@@ -585,23 +585,23 @@ export function detectStudyBehind(input: StudyBehindInput): {
   if (!isBehind) {
     return {
       detected: false,
-      severity: "MILD",
-      intervention: { content: "", tone: "supportive", quickResponses: [] },
-      suggestedAction: { type: "SEND_NOTIFICATION", data: {} },
+      severity: 'MILD',
+      intervention: { content: '', tone: 'supportive', quickResponses: [] },
+      suggestedAction: { type: 'SEND_NOTIFICATION', data: {} },
     };
   }
 
-  const severity: "MILD" | "MODERATE" | "SEVERE" = daysBehindSchedule >= 5 ? "SEVERE" : daysBehindSchedule >= 3 ? "MODERATE" : "MILD";
+  const severity: 'MILD' | 'MODERATE' | 'SEVERE' = daysBehindSchedule >= 5 ? 'SEVERE' : daysBehindSchedule >= 3 ? 'MODERATE' : 'MILD';
 
   const intervention: InterventionMessage = {
     content: `You're ${daysBehindSchedule} days behind on ${input.planName}. A catch-up session today gets you back on track.`,
-    tone: "supportive",
-    quickResponses: ["Catch up now", "Adjust schedule", "Later", "Need help"],
+    tone: 'supportive',
+    quickResponses: ['Catch up now', 'Adjust schedule', 'Later', 'Need help'],
   };
 
   const suggestedAction: InterventionAction = {
-    type: "SUGGEST_SESSION",
-    data: { duration: 30, type: "STUDY_CATCH_UP" },
+    type: 'SUGGEST_SESSION',
+    data: { duration: 30, type: 'STUDY_CATCH_UP' },
   };
 
   return { detected: true, severity, intervention, suggestedAction };
@@ -613,7 +613,7 @@ export function detectStudyBehind(input: StudyBehindInput): {
  */
 export function detectBossOpportunity(input: BossOpportunityInput): {
   detected: boolean;
-  priority: "LOW" | "MEDIUM" | "HIGH";
+  priority: 'LOW' | 'MEDIUM' | 'HIGH';
   intervention: InterventionMessage;
   suggestedAction: InterventionAction;
 } {
@@ -624,23 +624,23 @@ export function detectBossOpportunity(input: BossOpportunityInput): {
   if (!isOpportunity) {
     return {
       detected: false,
-      priority: "LOW",
-      intervention: { content: "", tone: "strategic", quickResponses: [] },
-      suggestedAction: { type: "SEND_NOTIFICATION", data: {} },
+      priority: 'LOW',
+      intervention: { content: '', tone: 'strategic', quickResponses: [] },
+      suggestedAction: { type: 'SEND_NOTIFICATION', data: {} },
     };
   }
 
-  const priority: "LOW" | "MEDIUM" | "HIGH" = bossHealthPercent < 15 ? "HIGH" : "MEDIUM";
+  const priority: 'LOW' | 'MEDIUM' | 'HIGH' = bossHealthPercent < 15 ? 'HIGH' : 'MEDIUM';
 
   const intervention: InterventionMessage = {
     content: `Boss is at ${bossHealthPercent}% health! With your ${currentStreakMultiplier}x multiplier, one focused session could finish this.`,
-    tone: "motivational",
-    quickResponses: ["Attack now", "45-min session", "View boss", "Later"],
+    tone: 'motivational',
+    quickResponses: ['Attack now', '45-min session', 'View boss', 'Later'],
   };
 
   const suggestedAction: InterventionAction = {
-    type: "SUGGEST_SESSION",
-    data: { duration: 45, type: "BOSS_KILL", targetQuality: "S" },
+    type: 'SUGGEST_SESSION',
+    data: { duration: 45, type: 'BOSS_KILL', targetQuality: 'S' },
   };
 
   return { detected: true, priority, intervention, suggestedAction };
@@ -661,14 +661,14 @@ export function detectMomentumBuilding(input: MomentumBuildingInput): {
   if (!hasMomentum) {
     return {
       detected: false,
-      intervention: { content: "", tone: "motivational", quickResponses: [] },
+      intervention: { content: '', tone: 'motivational', quickResponses: [] },
     };
   }
 
   const intervention: InterventionMessage = {
     content: `${streakDays} days strong! You're building serious momentum. Another session would compound your progress.`,
-    tone: "motivational",
-    quickResponses: ["Another session", "Good for today", "View progress"],
+    tone: 'motivational',
+    quickResponses: ['Another session', 'Good for today', 'View progress'],
   };
 
   return { detected: true, intervention };
@@ -690,20 +690,20 @@ export function detectComebackReady(input: ComebackReadyInput): {
   if (!isComebackWindow) {
     return {
       detected: false,
-      intervention: { content: "", tone: "supportive", quickResponses: [] },
-      suggestedAction: { type: "SEND_NOTIFICATION", data: {} },
+      intervention: { content: '', tone: 'supportive', quickResponses: [] },
+      suggestedAction: { type: 'SEND_NOTIFICATION', data: {} },
     };
   }
 
   const intervention: InterventionMessage = {
     content: `Ready to restart? Your ${previousStreakLength}-day streak proved you can do this. One easy session begins your comeback.`,
-    tone: "supportive",
-    quickResponses: ["Comeback session", "15 minutes", "Not yet"],
+    tone: 'supportive',
+    quickResponses: ['Comeback session', '15 minutes', 'Not yet'],
   };
 
   const suggestedAction: InterventionAction = {
-    type: "SUGGEST_SESSION",
-    data: { duration: 15, type: "COMEBACK", bonusMultiplier: 2 },
+    type: 'SUGGEST_SESSION',
+    data: { duration: 15, type: 'COMEBACK', bonusMultiplier: 2 },
   };
 
   return { detected: true, intervention, suggestedAction };
@@ -723,8 +723,8 @@ export function detectStudyPlanComplete(input: StudyPlanCompleteInput): {
   // For now, always return detected=true when called (external trigger)
   const intervention: InterventionMessage = {
     content: `Congratulations! You completed ${input.planName} — ${totalTasks} tasks in ${completionTimeDays} days. That's worth celebrating!`,
-    tone: "supportive",
-    quickResponses: ["View rewards", "Start new plan", "Share progress"],
+    tone: 'supportive',
+    quickResponses: ['View rewards', 'Start new plan', 'Share progress'],
   };
 
   return { detected: true, intervention };
@@ -743,13 +743,13 @@ export function evaluateInterventions(
   plateauInput?: PlateauInput,
   streakRescueInput?: StreakRescueInput,
   bossStrategyInput?: BossStrategyInput,
-  currentPersona: "MENTOR" | "CHEERLEADER" | "DRILL_SERGEANT" = "MENTOR",
+  currentPersona: 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT' = 'MENTOR',
 ): {
   shouldIntervene: boolean;
   priority: number;
   intervention?: InterventionMessage;
   action?: InterventionAction;
-  type: "BURNOUT" | "PLATEAU" | "STREAK_RESCUE" | "BOSS_STRATEGY" | "NONE";
+  type: 'BURNOUT' | 'PLATEAU' | 'STREAK_RESCUE' | 'BOSS_STRATEGY' | 'NONE';
 } {
   // Priority order: Streak Rescue > Burnout > Boss Strategy > Plateau
 
@@ -759,13 +759,13 @@ export function evaluateInterventions(
     if (rescue.needsRescue) {
       return {
         shouldIntervene: true,
-        priority: rescue.urgency === "CRITICAL" ? 10 : rescue.urgency === "HIGH" ? 8 : 6,
+        priority: rescue.urgency === 'CRITICAL' ? 10 : rescue.urgency === 'HIGH' ? 8 : 6,
         intervention: rescue.intervention,
         action: {
-          type: "SUGGEST_SESSION",
-          data: { duration: rescue.suggestedSessionDuration, type: "STREAK_RESCUE" },
+          type: 'SUGGEST_SESSION',
+          data: { duration: rescue.suggestedSessionDuration, type: 'STREAK_RESCUE' },
         },
-        type: "STREAK_RESCUE",
+        type: 'STREAK_RESCUE',
       };
     }
   }
@@ -776,13 +776,13 @@ export function evaluateInterventions(
     if (burnout.detected) {
       return {
         shouldIntervene: true,
-        priority: burnout.severity === "SEVERE" ? 7 : burnout.severity === "MODERATE" ? 5 : 3,
+        priority: burnout.severity === 'SEVERE' ? 7 : burnout.severity === 'MODERATE' ? 5 : 3,
         intervention: burnout.intervention,
         action: {
-          type: "SUGGEST_SESSION",
-          data: { duration: burnout.suggestedSessionDuration, type: "BURNOUT_RECOVERY" },
+          type: 'SUGGEST_SESSION',
+          data: { duration: burnout.suggestedSessionDuration, type: 'BURNOUT_RECOVERY' },
         },
-        type: "BURNOUT",
+        type: 'BURNOUT',
       };
     }
   }
@@ -793,17 +793,17 @@ export function evaluateInterventions(
     if (boss.shouldShow) {
       return {
         shouldIntervene: true,
-        priority: boss.priority === "HIGH" ? 6 : boss.priority === "MEDIUM" ? 4 : 2,
+        priority: boss.priority === 'HIGH' ? 6 : boss.priority === 'MEDIUM' ? 4 : 2,
         intervention: boss.intervention,
         action: {
-          type: "SUGGEST_SESSION",
+          type: 'SUGGEST_SESSION',
           data: {
             duration: boss.strategy.recommendedDuration,
-            type: "BOSS_KILL",
+            type: 'BOSS_KILL',
             targetQuality: boss.strategy.targetQuality,
           },
         },
-        type: "BOSS_STRATEGY",
+        type: 'BOSS_STRATEGY',
       };
     }
   }
@@ -814,13 +814,13 @@ export function evaluateInterventions(
     if (plateau.detected) {
       return {
         shouldIntervene: true,
-        priority: plateau.severity === "SEVERE" ? 5 : plateau.severity === "MODERATE" ? 3 : 2,
+        priority: plateau.severity === 'SEVERE' ? 5 : plateau.severity === 'MODERATE' ? 3 : 2,
         intervention: plateau.intervention,
         action: {
-          type: "SUGGEST_SESSION",
-          data: { duration: plateau.suggestedSessionDuration, type: "PLATEAU_BREAKER" },
+          type: 'SUGGEST_SESSION',
+          data: { duration: plateau.suggestedSessionDuration, type: 'PLATEAU_BREAKER' },
         },
-        type: "PLATEAU",
+        type: 'PLATEAU',
       };
     }
   }
@@ -828,7 +828,7 @@ export function evaluateInterventions(
   return {
     shouldIntervene: false,
     priority: 0,
-    type: "NONE",
+    type: 'NONE',
   };
 }
 

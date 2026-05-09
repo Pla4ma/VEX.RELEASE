@@ -5,13 +5,13 @@
  * Tests for the proactive recommendation system
  */
 
-import { CoachRecommendationService, createCoachRecommendationService, convertToHomeRecommendation, COACH_PERSONAS, type RecommendationContext, type CoachPersonaId } from "../services/CoachRecommendationService";
-import type { ActiveStudyPlan } from "../../content-study/hooks/helpers";
+import { CoachRecommendationService, createCoachRecommendationService, convertToHomeRecommendation, COACH_PERSONAS, type RecommendationContext, type CoachPersonaId } from '../services/CoachRecommendationService';
+import type { ActiveStudyPlan } from '../../content-study/hooks/helpers';
 
-describe("CoachRecommendationService", () => {
+describe('CoachRecommendationService', () => {
   // Base context for testing
   const createBaseContext = (overrides: Partial<RecommendationContext> = {}): RecommendationContext => ({
-    userId: "test-user",
+    userId: 'test-user',
     currentTime: new Date(),
     streakDays: 5,
     hasCompletedSessionToday: false,
@@ -24,12 +24,12 @@ describe("CoachRecommendationService", () => {
     currentLevel: 3,
     daysSinceLastSession: 0.5,
     behaviorProfile: null,
-    coachPersonaId: "mentor",
+    coachPersonaId: 'mentor',
     ...overrides,
   });
 
-  describe("Recommendation Priority", () => {
-    it("should prioritize critical streak protection when < 2 hours remaining", () => {
+  describe('Recommendation Priority', () => {
+    it('should prioritize critical streak protection when < 2 hours remaining', () => {
       const context = createBaseContext({
         streakDays: 10,
         hoursUntilStreakBreak: 1.5,
@@ -39,12 +39,12 @@ describe("CoachRecommendationService", () => {
       const service = new CoachRecommendationService(context);
       const recommendation = service.getRecommendation();
 
-      expect(recommendation.type).toBe("protect_streak");
-      expect(recommendation.urgency).toBe("critical");
+      expect(recommendation.type).toBe('protect_streak');
+      expect(recommendation.urgency).toBe('critical');
       expect(recommendation.priority).toBe(100);
     });
 
-    it("should prioritize high streak protection when 2-4 hours remaining", () => {
+    it('should prioritize high streak protection when 2-4 hours remaining', () => {
       const context = createBaseContext({
         streakDays: 10,
         hoursUntilStreakBreak: 3,
@@ -54,21 +54,21 @@ describe("CoachRecommendationService", () => {
       const service = new CoachRecommendationService(context);
       const recommendation = service.getRecommendation();
 
-      expect(recommendation.type).toBe("protect_streak");
-      expect(recommendation.urgency).toBe("high");
+      expect(recommendation.type).toBe('protect_streak');
+      expect(recommendation.urgency).toBe('high');
       expect(recommendation.priority).toBe(100);
     });
 
-    it("should prioritize study behind when 3+ days behind schedule", () => {
+    it('should prioritize study behind when 3+ days behind schedule', () => {
       const context = createBaseContext({
         hasCompletedSessionToday: true,
         activeStudyPlan: {
-          generationId: "plan-1",
-          title: "Biology 101",
+          generationId: 'plan-1',
+          title: 'Biology 101',
           totalTasks: 10,
           completedTasks: 3,
           remainingMinutes: 120,
-          status: "active",
+          status: 'active',
         } as ActiveStudyPlan,
         studyPlanProgress: 0.3,
         studyPlanDaysBehind: 4,
@@ -77,17 +77,17 @@ describe("CoachRecommendationService", () => {
       const service = new CoachRecommendationService(context);
       const recommendation = service.getRecommendation();
 
-      expect(recommendation.type).toBe("study_behind");
-      expect(recommendation.urgency).toBe("high");
+      expect(recommendation.type).toBe('study_behind');
+      expect(recommendation.urgency).toBe('high');
       expect(recommendation.priority).toBe(90);
     });
 
-    it("should prioritize boss opportunity when boss health < 30%", () => {
+    it('should prioritize boss opportunity when boss health < 30%', () => {
       const context = createBaseContext({
         hasCompletedSessionToday: true,
         activeBoss: {
-          id: "boss-1",
-          name: "Procrastination Dragon",
+          id: 'boss-1',
+          name: 'Procrastination Dragon',
           healthRemaining: 25,
           maxHealth: 100,
           timeRemaining: 12,
@@ -97,12 +97,12 @@ describe("CoachRecommendationService", () => {
       const service = new CoachRecommendationService(context);
       const recommendation = service.getRecommendation();
 
-      expect(recommendation.type).toBe("boss_opportunity");
-      expect(recommendation.urgency).toBe("high");
+      expect(recommendation.type).toBe('boss_opportunity');
+      expect(recommendation.urgency).toBe('high');
       expect(recommendation.priority).toBe(85);
     });
 
-    it("should show momentum building when on 2+ day streak and already completed session", () => {
+    it('should show momentum building when on 2+ day streak and already completed session', () => {
       const context = createBaseContext({
         streakDays: 5,
         hasCompletedSessionToday: true,
@@ -112,12 +112,12 @@ describe("CoachRecommendationService", () => {
       const service = new CoachRecommendationService(context);
       const recommendation = service.getRecommendation();
 
-      expect(recommendation.type).toBe("momentum_building");
-      expect(recommendation.urgency).toBe("low");
+      expect(recommendation.type).toBe('momentum_building');
+      expect(recommendation.urgency).toBe('low');
       expect(recommendation.priority).toBe(70);
     });
 
-    it("should show comeback recommendation after streak break within 7 days", () => {
+    it('should show comeback recommendation after streak break within 7 days', () => {
       const context = createBaseContext({
         streakDays: 0,
         hasCompletedSessionToday: false,
@@ -129,15 +129,15 @@ describe("CoachRecommendationService", () => {
       const service = new CoachRecommendationService(context);
       const recommendation = service.getRecommendation();
 
-      expect(recommendation.type).toBe("comeback");
-      expect(recommendation.urgency).toBe("medium");
+      expect(recommendation.type).toBe('comeback');
+      expect(recommendation.urgency).toBe('medium');
       expect(recommendation.priority).toBe(55);
     });
   });
 
-  describe("Persona Message Generation", () => {
-    it("should generate different messages for each persona type", () => {
-      const personas: CoachPersonaId[] = ["mentor", "trainer", "peer", "professor"];
+  describe('Persona Message Generation', () => {
+    it('should generate different messages for each persona type', () => {
+      const personas: CoachPersonaId[] = ['mentor', 'trainer', 'peer', 'professor'];
       const context = createBaseContext({
         streakDays: 5,
         hoursUntilStreakBreak: 3,
@@ -158,17 +158,17 @@ describe("CoachRecommendationService", () => {
       expect(uniqueHeadlines.size).toBeGreaterThan(1);
 
       // Trainer should be more direct
-      const trainer = messages.find((m) => m.personaId === "trainer");
-      expect(trainer?.headline).toContain("SAVE");
+      const trainer = messages.find((m) => m.personaId === 'trainer');
+      expect(trainer?.headline).toContain('SAVE');
 
       // Peer should be more casual
-      const peer = messages.find((m) => m.personaId === "peer");
+      const peer = messages.find((m) => m.personaId === 'peer');
       expect(peer?.coachMessage).toMatch(/!|🔥|💪/);
     });
 
-    it("should follow voice guidelines (max 2 sentences)", () => {
+    it('should follow voice guidelines (max 2 sentences)', () => {
       const context = createBaseContext({
-        coachPersonaId: "mentor",
+        coachPersonaId: 'mentor',
       });
 
       const service = new CoachRecommendationService(context);
@@ -179,8 +179,8 @@ describe("CoachRecommendationService", () => {
     });
   });
 
-  describe("Recommendation Context", () => {
-    it("should include reasoning for analytics", () => {
+  describe('Recommendation Context', () => {
+    it('should include reasoning for analytics', () => {
       const context = createBaseContext({
         streakDays: 5,
         hoursUntilStreakBreak: 3,
@@ -190,10 +190,10 @@ describe("CoachRecommendationService", () => {
       const recommendation = service.getRecommendation();
 
       expect(recommendation.reasoning).toBeTruthy();
-      expect(recommendation.reasoning).toContain("streak");
+      expect(recommendation.reasoning).toContain('streak');
     });
 
-    it("should include visual cues based on urgency", () => {
+    it('should include visual cues based on urgency', () => {
       const criticalContext = createBaseContext({
         streakDays: 5,
         hoursUntilStreakBreak: 1,
@@ -202,12 +202,12 @@ describe("CoachRecommendationService", () => {
       const service = new CoachRecommendationService(criticalContext);
       const recommendation = service.getRecommendation();
 
-      expect(recommendation.visualCue).toBe("urgent");
+      expect(recommendation.visualCue).toBe('urgent');
     });
   });
 
-  describe("Home Recommendation Conversion", () => {
-    it("should convert coach recommendation to home format", () => {
+  describe('Home Recommendation Conversion', () => {
+    it('should convert coach recommendation to home format', () => {
       const context = createBaseContext({
         streakDays: 5,
         hoursUntilStreakBreak: 3,
@@ -228,8 +228,8 @@ describe("CoachRecommendationService", () => {
     });
   });
 
-  describe("Refresh Logic", () => {
-    it("should refresh after 5 minutes", () => {
+  describe('Refresh Logic', () => {
+    it('should refresh after 5 minutes', () => {
       const context = createBaseContext();
       const service = new CoachRecommendationService(context);
       const recommendation = service.getRecommendation();
@@ -238,7 +238,7 @@ describe("CoachRecommendationService", () => {
       expect(service.shouldRefresh(sixMinutesAgo, recommendation)).toBe(true);
     });
 
-    it("should NOT refresh before 5 minutes", () => {
+    it('should NOT refresh before 5 minutes', () => {
       const context = createBaseContext();
       const service = new CoachRecommendationService(context);
       const recommendation = service.getRecommendation();
@@ -247,7 +247,7 @@ describe("CoachRecommendationService", () => {
       expect(service.shouldRefresh(oneMinuteAgo, recommendation)).toBe(false);
     });
 
-    it("should refresh more frequently for critical streak protection", () => {
+    it('should refresh more frequently for critical streak protection', () => {
       const context = createBaseContext({
         streakDays: 5,
         hoursUntilStreakBreak: 1,
@@ -262,8 +262,8 @@ describe("CoachRecommendationService", () => {
     });
   });
 
-  describe("Factory Function", () => {
-    it("should create service via factory function", () => {
+  describe('Factory Function', () => {
+    it('should create service via factory function', () => {
       const context = createBaseContext();
       const service = createCoachRecommendationService(context);
 
@@ -274,8 +274,8 @@ describe("CoachRecommendationService", () => {
     });
   });
 
-  describe("Edge Cases", () => {
-    it("should handle null active study plan", () => {
+  describe('Edge Cases', () => {
+    it('should handle null active study plan', () => {
       const context = createBaseContext({
         activeStudyPlan: null,
       });
@@ -285,10 +285,10 @@ describe("CoachRecommendationService", () => {
 
       // Should not throw and should provide a default recommendation
       expect(recommendation).toBeDefined();
-      expect(recommendation.type).not.toBe("study_plan");
+      expect(recommendation.type).not.toBe('study_plan');
     });
 
-    it("should handle null active boss", () => {
+    it('should handle null active boss', () => {
       const context = createBaseContext({
         activeBoss: null,
       });
@@ -298,11 +298,11 @@ describe("CoachRecommendationService", () => {
 
       // Should not throw
       expect(recommendation).toBeDefined();
-      expect(recommendation.type).not.toBe("boss_battle");
-      expect(recommendation.type).not.toBe("boss_opportunity");
+      expect(recommendation.type).not.toBe('boss_battle');
+      expect(recommendation.type).not.toBe('boss_opportunity');
     });
 
-    it("should handle zero streak days", () => {
+    it('should handle zero streak days', () => {
       const context = createBaseContext({
         streakDays: 0,
         hoursUntilStreakBreak: null,
@@ -312,12 +312,12 @@ describe("CoachRecommendationService", () => {
       const recommendation = service.getRecommendation();
 
       // Should not suggest streak protection for zero streak
-      expect(recommendation.type).not.toBe("protect_streak");
+      expect(recommendation.type).not.toBe('protect_streak');
     });
 
-    it("should handle invalid persona gracefully", () => {
+    it('should handle invalid persona gracefully', () => {
       const context = createBaseContext({
-        coachPersonaId: "invalid-persona" as CoachPersonaId,
+        coachPersonaId: 'invalid-persona' as CoachPersonaId,
       });
 
       const service = new CoachRecommendationService(context);
@@ -329,14 +329,14 @@ describe("CoachRecommendationService", () => {
     });
   });
 
-  describe("All Applicable Recommendations", () => {
-    it("should return multiple applicable recommendations", () => {
+  describe('All Applicable Recommendations', () => {
+    it('should return multiple applicable recommendations', () => {
       const context = createBaseContext({
         hasCompletedSessionToday: true,
         streakDays: 5,
         activeBoss: {
-          id: "boss-1",
-          name: "Test Boss",
+          id: 'boss-1',
+          name: 'Test Boss',
           healthRemaining: 80,
           maxHealth: 100,
           timeRemaining: 24,
@@ -350,35 +350,35 @@ describe("CoachRecommendationService", () => {
       expect(allRecs.length).toBeGreaterThan(1);
 
       // Should include streak building
-      const momentumRec = allRecs.find((r) => r.type === "momentum_building");
+      const momentumRec = allRecs.find((r) => r.type === 'momentum_building');
       expect(momentumRec).toBeDefined();
 
       // Should include active boss
-      const bossRec = allRecs.find((r) => r.type === "boss_battle");
+      const bossRec = allRecs.find((r) => r.type === 'boss_battle');
       expect(bossRec).toBeDefined();
     });
   });
 
-  describe("Personas", () => {
-    it("should have all four personas defined", () => {
+  describe('Personas', () => {
+    it('should have all four personas defined', () => {
       expect(COACH_PERSONAS.mentor).toBeDefined();
       expect(COACH_PERSONAS.trainer).toBeDefined();
       expect(COACH_PERSONAS.peer).toBeDefined();
       expect(COACH_PERSONAS.professor).toBeDefined();
     });
 
-    it("should have correct voice tone for each persona", () => {
-      expect(COACH_PERSONAS.mentor.voiceTone).toBe("WISE");
-      expect(COACH_PERSONAS.trainer.voiceTone).toBe("STERN");
-      expect(COACH_PERSONAS.peer.voiceTone).toBe("PLAYFUL");
-      expect(COACH_PERSONAS.professor.voiceTone).toBe("WISE");
+    it('should have correct voice tone for each persona', () => {
+      expect(COACH_PERSONAS.mentor.voiceTone).toBe('WISE');
+      expect(COACH_PERSONAS.trainer.voiceTone).toBe('STERN');
+      expect(COACH_PERSONAS.peer.voiceTone).toBe('PLAYFUL');
+      expect(COACH_PERSONAS.professor.voiceTone).toBe('WISE');
     });
 
-    it("should have correct sentence structure guidelines", () => {
-      expect(COACH_PERSONAS.mentor.sentenceStructure).toBe("MEASURED");
-      expect(COACH_PERSONAS.trainer.sentenceStructure).toBe("SHORT_DIRECT");
-      expect(COACH_PERSONAS.peer.sentenceStructure).toBe("CONVERSATIONAL");
-      expect(COACH_PERSONAS.professor.sentenceStructure).toBe("MEASURED");
+    it('should have correct sentence structure guidelines', () => {
+      expect(COACH_PERSONAS.mentor.sentenceStructure).toBe('MEASURED');
+      expect(COACH_PERSONAS.trainer.sentenceStructure).toBe('SHORT_DIRECT');
+      expect(COACH_PERSONAS.peer.sentenceStructure).toBe('CONVERSATIONAL');
+      expect(COACH_PERSONAS.professor.sentenceStructure).toBe('MEASURED');
     });
   });
 });

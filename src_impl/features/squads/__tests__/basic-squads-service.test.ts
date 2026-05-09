@@ -50,7 +50,7 @@ describe('Basic Squads Service - PHASE 8', () => {
   describe('Launch Scope Requirements', () => {
     it('should support private squad creation only', async () => {
       // Mock no existing membership
-      mockRepository.fetchUserSquads.mockResolvedValue([]);
+      mockRepository.fetchUserSquads.mockResolvedValueOnce([]);
       mockRepository.createSquad.mockResolvedValue({
         id: mockSquadId,
         name: 'Focus Squad',
@@ -453,7 +453,6 @@ describe('Basic Squads Service - PHASE 8', () => {
       mockRepository.addSquadMember.mockResolvedValue(mockMembership);
       // For PHASE 8, we'll use a simplified approach
       // mockRepository.updateSquadInvite is not used in the simplified version
-      mockRepository.fetchUserSquads.mockResolvedValue([mockSquad]);
 
       const result = await service.respondToBasicSquadInvite('invite-123', mockInviteeId, true);
 

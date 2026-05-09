@@ -57,13 +57,13 @@ export class CompanionGrowthService {
     }
 
     const currentThreshold = this.getEvolutionThreshold(this.state.phase);
-    const phases: CompanionPhase[] = ["EGG", "HATCHING", "YOUNG", "MATURE", "AWAKENED", "TRANSCENDENT"];
+    const phases: CompanionPhase[] = ['EGG', 'HATCHING', 'YOUNG', 'MATURE', 'AWAKENED', 'TRANSCENDENT'];
     const minutesInPhase = this.state.totalFocusMinutes - phases.slice(0, phases.indexOf(this.state.phase)).reduce((sum, phase) => sum + this.getEvolutionThreshold(phase), 0);
 
     let evolved = false;
     let newPhase: CompanionPhase | undefined;
 
-    if (minutesInPhase >= currentThreshold && this.state.phase !== "TRANSCENDENT") {
+    if (minutesInPhase >= currentThreshold && this.state.phase !== 'TRANSCENDENT') {
       const previousPhase = this.state.phase;
       this.state.phase = phases[phases.indexOf(this.state.phase) + 1];
       this.state.level = 1;
@@ -95,7 +95,7 @@ export class CompanionGrowthService {
    * React to streak maintained event
    */
   reactToStreakMaintained(userId: string): void {
-    if (!this.state) return;
+    if (!this.state) {return;}
 
     const previousState = { ...this.state };
 
@@ -114,7 +114,7 @@ export class CompanionGrowthService {
    * React to comeback completed event
    */
   reactToComebackCompleted(userId: string): void {
-    if (!this.state) return;
+    if (!this.state) {return;}
 
     const previousState = { ...this.state };
 
@@ -133,7 +133,7 @@ export class CompanionGrowthService {
    * React to Focus Score band change
    */
   reactToFocusScoreChanged(userId: string, previousScore: number, newScore: number): void {
-    if (!this.state) return;
+    if (!this.state) {return;}
 
     const previousState = { ...this.state };
 
@@ -159,7 +159,7 @@ export class CompanionGrowthService {
    * React to daily mission completed
    */
   reactToDailyMissionCompleted(userId: string): void {
-    if (!this.state) return;
+    if (!this.state) {return;}
 
     const previousState = { ...this.state };
 

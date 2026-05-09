@@ -92,7 +92,7 @@ export function OnboardingNotificationPermissionCard({
           const pushToken = await Notifications.getExpoPushTokenAsync();
           if (pushToken.data) {
             const supabase = getSupabaseClient();
-            await supabase.from('push_tokens').upsert(
+            await supabase['from']('push_tokens').upsert(
               {
                 user_id: userId,
                 token: pushToken.data,
@@ -219,3 +219,4 @@ const styles = createSheet({
     width: '100%',
   },
 });
+

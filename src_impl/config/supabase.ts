@@ -33,11 +33,11 @@ function createMockSupabaseClient(): SupabaseClient {
         eq: () => ({
           order: () => ({
             data: [],
-            error: { message: error.message }
-          })
-        })
-      })
-    })
+            error: { message: error.message },
+          }),
+        }),
+      }),
+    }),
   } as unknown as SupabaseClient;
 }
 

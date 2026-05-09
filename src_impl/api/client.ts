@@ -10,13 +10,13 @@
  * - Auth token refresh
  */
 
-import { Platform } from "react-native";
-import { z, type ZodType } from "zod";
+import { Platform } from 'react-native';
+import { z, type ZodType } from 'zod';
 
-import { CURRENT_CONFIG } from "../constants/app";
-import { createDebugger } from "../utils/debug";
+import { CURRENT_CONFIG } from '../constants/app';
+import { createDebugger } from '../utils/debug';
 
-const debug = createDebugger("api");
+const debug = createDebugger('api');
 
 // ============================================================================
 // Types
@@ -38,7 +38,7 @@ export interface AuthProvider {
 }
 
 export interface ApiRequestConfig {
-  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   headers?: Record<string, string>;
   params?: Record<string, string | number | boolean>;
   data?: unknown;
@@ -68,9 +68,9 @@ export interface ApiError {
 // ============================================================================
 
 enum CircuitState {
-  CLOSED = "CLOSED", // Normal operation
-  OPEN = "OPEN", // Failing, reject requests
-  HALF_OPEN = "HALF_OPEN", // Testing recovery
+  CLOSED = 'CLOSED', // Normal operation
+  OPEN = 'OPEN', // Failing, reject requests
+  HALF_OPEN = 'HALF_OPEN', // Testing recovery
 }
 
 class CircuitBreaker {
@@ -101,7 +101,7 @@ class CircuitBreaker {
   recordSuccess(): void {
     this.failures = 0;
     this.state = CircuitState.CLOSED;
-    debug.debug("Circuit breaker closed");
+    debug.debug('Circuit breaker closed');
   }
 
   recordFailure(): void {
@@ -111,7 +111,7 @@ class CircuitBreaker {
     if (this.failures >= this.threshold) {
       this.state = CircuitState.OPEN;
       this.nextAttempt = Date.now() + this.resetTimeout;
-      debug.debug("Circuit breaker opened, next attempt in %dms", this.resetTimeout);
+      debug.debug('Circuit breaker opened, next attempt in %dms', this.resetTimeout);
     }
   }
 
@@ -129,7 +129,7 @@ class RequestDeduplicator {
 
   async deduplicate<T>(key: string, request: () => Promise<T>): Promise<T> {
     if (this.pending.has(key)) {
-      debug.debug("Deduplicating request: %s", key);
+      debug.debug('Deduplicating request: %s', key);
       return this.pending.get(key) as Promise<T>;
     }
 
@@ -154,15 +154,15 @@ function calculateBackoff(attempt: number, baseDelay: number): number {
 }
 
 function isRetryableError(error: ApiError): boolean {
-  return error.retryable && ["NETWORK_ERROR", "TIMEOUT", "RATE_LIMIT", "SERVER_ERROR"].includes(error.code);
+  return error.retryable && ['NETWORK_ERROR', 'TIMEOUT', 'RATE_LIMIT', 'SERVER_ERROR'].includes(error.code);
 }
 
 function isApiError(error: unknown): error is ApiError {
   return (
-    typeof error === "object" &&
+    typeof error === 'object' &&
     error !== null &&
-    "code" in error &&
-    "retryable" in error
+    'code' in error &&
+    'retryable' in error
   );
 }
 
@@ -231,35 +231,35 @@ export class ApiClient {
     const execute = (): Promise<ApiResponse<T>> => this.executeRequest<T>(endpoint, requestConfig);
 
     if (requestConfig.deduplicate) {
-      const key = `${requestConfig.method ?? "GET"}:${endpoint}:${JSON.stringify(requestConfig.params ?? {})}:${JSON.stringify(requestConfig.data ?? {})}`;
+      const key = `${requestConfig.method ?? 'GET'}:${endpoint}:${JSON.stringify(requestConfig.params ?? {})}:${JSON.stringify(requestConfig.data ?? {})}`;
       return this.deduplicator.deduplicate(key, execute);
     }
 
     return this.executeWithRetry(execute, requestConfig.retries ?? this.config.retries);
   }
 
-  async get<T>(endpoint: string, config: Omit<ApiRequestConfig, "method" | "data"> = {}): Promise<T> {
-    const response = await this.request<T>(endpoint, { ...config, method: "GET" });
+  async get<T>(endpoint: string, config: Omit<ApiRequestConfig, 'method' | 'data'> = {}): Promise<T> {
+    const response = await this.request<T>(endpoint, { ...config, method: 'GET' });
     return response.data;
   }
 
-  async post<T>(endpoint: string, data?: unknown, config: Omit<ApiRequestConfig, "method" | "data"> = {}): Promise<T> {
-    const response = await this.request<T>(endpoint, { ...config, method: "POST", data });
+  async post<T>(endpoint: string, data?: unknown, config: Omit<ApiRequestConfig, 'method' | 'data'> = {}): Promise<T> {
+    const response = await this.request<T>(endpoint, { ...config, method: 'POST', data });
     return response.data;
   }
 
-  async put<T>(endpoint: string, data?: unknown, config: Omit<ApiRequestConfig, "method" | "data"> = {}): Promise<T> {
-    const response = await this.request<T>(endpoint, { ...config, method: "PUT", data });
+  async put<T>(endpoint: string, data?: unknown, config: Omit<ApiRequestConfig, 'method' | 'data'> = {}): Promise<T> {
+    const response = await this.request<T>(endpoint, { ...config, method: 'PUT', data });
     return response.data;
   }
 
-  async patch<T>(endpoint: string, data?: unknown, config: Omit<ApiRequestConfig, "method" | "data"> = {}): Promise<T> {
-    const response = await this.request<T>(endpoint, { ...config, method: "PATCH", data });
+  async patch<T>(endpoint: string, data?: unknown, config: Omit<ApiRequestConfig, 'method' | 'data'> = {}): Promise<T> {
+    const response = await this.request<T>(endpoint, { ...config, method: 'PATCH', data });
     return response.data;
   }
 
-  async delete<T>(endpoint: string, config: Omit<ApiRequestConfig, "method" | "data"> = {}): Promise<T> {
-    const response = await this.request<T>(endpoint, { ...config, method: "DELETE" });
+  async delete<T>(endpoint: string, config: Omit<ApiRequestConfig, 'method' | 'data'> = {}): Promise<T> {
+    const response = await this.request<T>(endpoint, { ...config, method: 'DELETE' });
     return response.data;
   }
 
@@ -319,7 +319,7 @@ export class ApiClient {
 
   private async executeRequest<T>(endpoint: string, config: ApiRequestConfig): Promise<ApiResponse<T>> {
     if (!this.circuitBreaker.canExecute()) {
-      throw this.createError("CIRCUIT_OPEN", "Service temporarily unavailable", 503);
+      throw this.createError('CIRCUIT_OPEN', 'Service temporarily unavailable', 503);
     }
 
     const url = this.buildURL(endpoint, config.params);
@@ -328,20 +328,20 @@ export class ApiClient {
 
     try {
       const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-        "X-Platform": Platform.OS,
-        "X-App-Version": CURRENT_CONFIG.version,
+        'Content-Type': 'application/json',
+        'X-Platform': Platform.OS,
+        'X-App-Version': CURRENT_CONFIG.version,
         ...config.headers,
       };
 
-      debug.debug("Request: %s %s", config.method, url);
-      throw new Error("Direct HTTP calls are not allowed. Use Supabase client or a repository layer instead.");
+      debug.debug('Request: %s %s', config.method, url);
+      throw new Error('Direct HTTP calls are not allowed. Use Supabase client or a repository layer instead.');
     } catch (error) {
       clearTimeout(timeoutId);
 
       if (error instanceof Error) {
-        if (error.name === "AbortError") {
-          throw this.createError("TIMEOUT", "Request timeout", 408, undefined, true);
+        if (error.name === 'AbortError') {
+          throw this.createError('TIMEOUT', 'Request timeout', 408, undefined, true);
         }
       }
 
@@ -351,7 +351,7 @@ export class ApiClient {
       }
 
       this.circuitBreaker.recordFailure();
-      throw this.createError("NETWORK_ERROR", error instanceof Error ? error.message : "Network error", 0, error, true);
+      throw this.createError('NETWORK_ERROR', error instanceof Error ? error.message : 'Network error', 0, error, true);
     }
   }
 
@@ -361,24 +361,24 @@ export class ApiClient {
 
   private getErrorCode(status: number): string {
     if (status === 429) {
-      return "RATE_LIMIT";
+      return 'RATE_LIMIT';
     }
     if (status >= 500) {
-      return "SERVER_ERROR";
+      return 'SERVER_ERROR';
     }
     if (status === 401) {
-      return "AUTH_ERROR";
+      return 'AUTH_ERROR';
     }
     if (status === 403) {
-      return "FORBIDDEN";
+      return 'FORBIDDEN';
     }
     if (status === 404) {
-      return "NOT_FOUND";
+      return 'NOT_FOUND';
     }
     if (status >= 400) {
-      return "CLIENT_ERROR";
+      return 'CLIENT_ERROR';
     }
-    return "UNKNOWN";
+    return 'UNKNOWN';
   }
 
   private isRetryableStatus(status: number): boolean {

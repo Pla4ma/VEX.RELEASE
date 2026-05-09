@@ -10,25 +10,25 @@
  * @phase 12.4
  */
 
-import React from "react";
-import { Pressable } from "react-native";
+import React from 'react';
+import { Pressable } from 'react-native';
 
-import { Box, Card, Text } from "../../../components/primitives";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { getMasteryRankDisplay, type MasteryRank } from "../../mastery/types";
+import { Box, Card, Text } from '../../../components/primitives';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { getMasteryRankDisplay, type MasteryRank } from '../../mastery/types';
 
 // Mastery rank requirements for boss tiers
 const TIER_REQUIREMENTS: Record<number, MasteryRank> = {
-  1: "APPRENTICE",
-  2: "APPRENTICE",
-  3: "ADEPT",
-  4: "ADEPT",
-  5: "EXPERT",
-  6: "EXPERT",
+  1: 'APPRENTICE',
+  2: 'APPRENTICE',
+  3: 'ADEPT',
+  4: 'ADEPT',
+  5: 'EXPERT',
+  6: 'EXPERT',
 };
 
-const RANK_ORDER: MasteryRank[] = ["APPRENTICE", "ADEPT", "EXPERT", "MASTER", "GRANDMASTER"];
+const RANK_ORDER: MasteryRank[] = ['APPRENTICE', 'ADEPT', 'EXPERT', 'MASTER', 'GRANDMASTER'];
 
 export interface BossTierGateProps {
   /** Boss tier number (1-6) */
@@ -60,7 +60,7 @@ export function isBossTierUnlocked(tier: number, userRank: MasteryRank): boolean
  * Get the required mastery rank for a boss tier
  */
 export function getRequiredRankForTier(tier: number): MasteryRank {
-  return TIER_REQUIREMENTS[tier] || "APPRENTICE";
+  return TIER_REQUIREMENTS[tier] || 'APPRENTICE';
 }
 
 /**
@@ -68,8 +68,8 @@ export function getRequiredRankForTier(tier: number): MasteryRank {
  */
 export function getTierAvailabilityText(tier: number): string {
   const requiredRank = TIER_REQUIREMENTS[tier];
-  if (!requiredRank || requiredRank === "APPRENTICE") {
-    return "Available now";
+  if (!requiredRank || requiredRank === 'APPRENTICE') {
+    return 'Available now';
   }
   const rankDisplay = getMasteryRankDisplay(requiredRank);
   return `Requires ${rankDisplay.title} Mastery`;
@@ -92,7 +92,7 @@ export function BossTierGate({ tier, userRank, children, onNavigateToMastery }: 
         backgroundColor: theme.colors.background.secondary,
         borderWidth: 2,
         borderColor: `${rankDisplay.color}40`,
-        borderStyle: "dashed",
+        borderStyle: 'dashed',
         opacity: 0.9,
       }}
     >
@@ -136,7 +136,7 @@ export function BossTierGate({ tier, userRank, children, onNavigateToMastery }: 
         <Box flexDirection="row" alignItems="center" gap="xs" px="sm" py="xs" borderRadius="md" bg="background.tertiary">
           <Text fontSize={12}>✨</Text>
           <Text variant="caption" color="success.DEFAULT">
-            Unlock: {tier <= 4 ? "Rare boss drops" : "Legendary boss drops"}
+            Unlock: {tier <= 4 ? 'Rare boss drops' : 'Legendary boss drops'}
           </Text>
         </Box>
       </Box>

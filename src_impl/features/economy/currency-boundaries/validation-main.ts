@@ -21,7 +21,7 @@ import type {
   BoundaryViolation,
   CurrencyLimits,
   MonetizationBoundary,
-  EconomyProtectionRule
+  EconomyProtectionRule,
 } from './schemas';
 
 // ============================================================================
@@ -152,7 +152,7 @@ class CurrencyBoundariesValidationMain {
     const protectionRules = currencyBoundariesValidationCore.getProtectionRules();
 
     for (const rule of protectionRules) {
-      if (!rule.isActive) continue;
+      if (!rule.isActive) {continue;}
 
       const violation = await currencyBoundariesValidationCore.evaluateProtectionRule(rule, request);
       if (violation) {
@@ -173,7 +173,7 @@ class CurrencyBoundariesValidationMain {
     const monetizationBoundaries = currencyBoundariesValidationCore.getMonetizationBoundaries();
 
     for (const boundary of monetizationBoundaries) {
-      if (!boundary.isActive) continue;
+      if (!boundary.isActive) {continue;}
 
       const violation = await currencyBoundariesValidationCore.evaluateMonetizationBoundary(boundary, request);
       if (violation) {

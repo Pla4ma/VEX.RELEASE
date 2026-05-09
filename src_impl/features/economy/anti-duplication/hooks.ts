@@ -21,7 +21,7 @@ import type {
   DeduplicationResult,
   DeduplicationAttempt,
   ExploitDetection,
-  DeduplicationAnalytics
+  DeduplicationAnalytics,
 } from './schemas';
 
 // ============================================================================
@@ -333,12 +333,12 @@ export function useDeduplicationAnalytics(props: UseDeduplicationAnalyticsProps)
   });
 
   const successRate = useMemo(() => {
-    if (!query.data?.totalAttempts) return 0;
+    if (!query.data?.totalAttempts) {return 0;}
     return (query.data.allowedAttempts / query.data.totalAttempts) * 100;
   }, [query.data]);
 
   const duplicateRate = useMemo(() => {
-    if (!query.data?.totalAttempts) return 0;
+    if (!query.data?.totalAttempts) {return 0;}
     return (query.data.blockedDuplicates / query.data.totalAttempts) * 100;
   }, [query.data]);
 

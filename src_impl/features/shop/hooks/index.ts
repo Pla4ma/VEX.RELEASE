@@ -4,10 +4,10 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import * as itemService from '../items/service';
-import * as economyService from '../economy/service';
-import type { ItemType } from '../items/schemas';
-import type { InitiatePurchaseInput, PurchaseResult } from '../economy/schemas';
+import * as itemService from '../../items/service';
+import * as economyService from '../../economy/service';
+import type { ItemType } from '../../items/schemas';
+import type { InitiatePurchaseInput, PurchaseResult } from '../../economy/schemas';
 
 // ============================================================================
 // Query Keys

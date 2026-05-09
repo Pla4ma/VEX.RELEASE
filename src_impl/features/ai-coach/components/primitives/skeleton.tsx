@@ -4,10 +4,10 @@
  * Premium skeleton placeholders with shimmer animation
  */
 
-import React, { useEffect } from "react";
-import { View, type ViewStyle } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useEffect } from 'react';
+import { View, type ViewStyle } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface SkeletonProps {
   width?: number | string;
@@ -17,7 +17,7 @@ interface SkeletonProps {
   shimmer?: boolean;
 }
 
-export function Skeleton({ width = "100%", height = 16, borderRadius = 4, style, shimmer = true }: SkeletonProps) {
+export function Skeleton({ width = '100%', height = 16, borderRadius = 4, style, shimmer = true }: SkeletonProps) {
   const shimmerAnim = useSharedValue(0);
 
   useEffect(() => {
@@ -33,7 +33,7 @@ export function Skeleton({ width = "100%", height = 16, borderRadius = 4, style,
       style={[
         styles.container,
         {
-          width: width as ViewStyle["width"],
+          width: width as ViewStyle['width'],
           height,
           borderRadius,
         },
@@ -46,11 +46,11 @@ export function Skeleton({ width = "100%", height = 16, borderRadius = 4, style,
 }
 
 // Pre-built skeleton layouts
-export function TextSkeleton({ lines = 3, lastLineWidth = "60%" }: { lines?: number; lastLineWidth?: string | number }) {
+export function TextSkeleton({ lines = 3, lastLineWidth = '60%' }: { lines?: number; lastLineWidth?: string | number }) {
   return (
     <View style={styles.textContainer}>
       {Array.from({ length: lines }).map((_, i) => (
-        <Skeleton key={i} height={14} width={i === lines - 1 ? lastLineWidth : "100%"} style={styles.textLine} />
+        <Skeleton key={i} height={14} width={i === lines - 1 ? lastLineWidth : '100%'} style={styles.textLine} />
       ))}
     </View>
   );
@@ -130,13 +130,13 @@ export function ComebackBannerSkeleton() {
 
 const styles = createSheet({
   container: {
-    backgroundColor: "#E1E4E8",
-    overflow: "hidden",
+    backgroundColor: '#E1E4E8',
+    overflow: 'hidden',
   },
   shimmer: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(255, 255, 255, 0.3)",
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
   textContainer: {
     gap: 8,
@@ -146,13 +146,13 @@ const styles = createSheet({
   },
   cardContainer: {
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 12,
     gap: 12,
   },
   cardHeader: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
   },
   headerText: {
@@ -166,14 +166,14 @@ const styles = createSheet({
     marginTop: 8,
   },
   personaContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 12,
   },
   personaCard: {
-    alignItems: "center",
+    alignItems: 'center',
     gap: 8,
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 12,
     flex: 1,
   },
@@ -184,11 +184,11 @@ const styles = createSheet({
     gap: 12,
   },
   listItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
     padding: 12,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 8,
   },
   listContent: {
@@ -206,11 +206,11 @@ const styles = createSheet({
     gap: 12,
   },
   streakBadge: {
-    alignSelf: "center",
+    alignSelf: 'center',
   },
   comebackContainer: {
     padding: 16,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 12,
     gap: 16,
   },

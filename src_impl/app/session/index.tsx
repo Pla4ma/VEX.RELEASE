@@ -6,7 +6,7 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useSession } from '../../session/hooks/useSession';
 import { useSessionStats } from '../../session/hooks/useSession';
 import { ActiveSessionHUD } from '../../session/components/ActiveSessionHUD';
@@ -16,7 +16,7 @@ import { SessionLoadingState } from '../../session/components/states/SessionLoad
 import { SessionControls } from '../../session/components/SessionControls';
 import type { SessionPreset } from '../../session/types';
 import { createSheet } from '@/shared/ui/create-sheet';
-import { useTheme } from '../../theme';
+import { useTheme, type Theme } from '../../theme';
 
 export default function SessionHomeScreen() {
   const [activeView, setActiveView] = useState<'home' | 'custom'>('home');
@@ -108,36 +108,36 @@ export default function SessionHomeScreen() {
   );
 }
 
-const getStyles = (theme: any) => createSheet({
+const getStyles = ({ theme }: { theme: Theme }) => createSheet({
   container: {
     flex: 1,
     backgroundColor: theme.colors.semantic.background,
   },
   statsContainer: {
     flexDirection: 'row',
-    padding: theme.spacing.md,
-    gap: theme.spacing.sm,
+    padding: theme.spacing[4],
+    gap: theme.spacing[2],
   },
   statBox: {
     flex: 1,
     backgroundColor: theme.colors.semantic.surface,
-    borderRadius: theme.radius.md,
-    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.md,
+    padding: theme.spacing[4],
     alignItems: 'center',
   },
   statValue: {
-    fontSize: theme.typography.sizes['2xl'],
-    fontWeight: theme.typography.weights.bold,
+    fontSize: theme.typography.heading.h3.fontSize,
+    fontWeight: theme.fontWeights.bold,
     color: theme.colors.semantic.primary,
   },
   statLabel: {
-    fontSize: theme.typography.sizes.xs,
+    fontSize: theme.typography.ui.caption.fontSize,
     color: theme.colors.semantic.textMuted,
-    marginTop: theme.spacing.xs,
+    marginTop: theme.spacing[1],
   },
   content: {
     flex: 1,
-    padding: theme.spacing.md,
+    padding: theme.spacing[4],
   },
   errorText: {
     color: theme.colors.semantic.danger,

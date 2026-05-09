@@ -131,7 +131,7 @@ export async function deliverReward(entryId: string): Promise<RewardDeliveryResu
       if (!shouldRetry) {
         Sentry.captureException(new Error(`Reward permanently failed: ${deliveryResult.errorMessage}`), {
           tags: { feature: 'reward-ledger' },
-          extra: { entryId, rewardEntry }
+          extra: { entryId, rewardEntry },
         });
       }
     }
@@ -148,7 +148,7 @@ export async function deliverReward(entryId: string): Promise<RewardDeliveryResu
     debug.error('Error delivering reward', error instanceof Error ? error : undefined);
     Sentry.captureException(error, {
       tags: { feature: 'reward-ledger' },
-      extra: { entryId }
+      extra: { entryId },
     });
 
     return RewardDeliveryResultSchema.parse({

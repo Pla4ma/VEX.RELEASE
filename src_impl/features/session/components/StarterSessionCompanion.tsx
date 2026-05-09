@@ -66,7 +66,7 @@ export function StarterSessionCompanion({
             color="text.tertiary"
             textAlign="center"
           >
-            {remainingMinutes > 0 ? `${remainingMinutes} min left` : "Almost done!"}
+            {remainingMinutes > 0 ? `${remainingMinutes} min left` : 'Almost done!'}
           </Text>
         </Box>
       </Animated.View>

@@ -1,8 +1,8 @@
-import * as Sentry from "@sentry/react-native";
-import { eventBus } from "../../events";
-import { getRewardService } from "../../rewards/RewardService";
-import * as repository from "./repository";
-import { AssignChallengeInputSchema, ClaimChallengeRewardInputSchema, ChallengeProgressCheckResultSchema, ChallengeRewardSchema, DailyChallengeContextSchema, RerollChallengeInputSchema, type AssignChallengeInput, type Challenge, type ChallengeCompletionResult, type ChallengeDetail, type ChallengeProgressCheckResult, type ChallengeReward, type DailyChallengeContext, type DailyChallengeTriggerType, type RerollEligibility, type RerollResult, type UpdateChallengeProgressInput, UpdateChallengeProgressInputSchema, type UserChallenge, type UserChallengeSummary } from "./schemas";
+import * as Sentry from '@sentry/react-native';
+import { eventBus } from '../../events';
+import { getRewardService } from '../../rewards/RewardService';
+import * as repository from './repository';
+import { AssignChallengeInputSchema, ClaimChallengeRewardInputSchema, ChallengeProgressCheckResultSchema, ChallengeRewardSchema, DailyChallengeContextSchema, RerollChallengeInputSchema, type AssignChallengeInput, type Challenge, type ChallengeCompletionResult, type ChallengeDetail, type ChallengeProgressCheckResult, type ChallengeReward, type DailyChallengeContext, type DailyChallengeTriggerType, type RerollEligibility, type RerollResult, type UpdateChallengeProgressInput, UpdateChallengeProgressInputSchema, type UserChallenge, type UserChallengeSummary } from './schemas';
 
 const CONFIG = {
   FREE_REROLLS_PER_DAY: 1,
@@ -18,19 +18,19 @@ export class ChallengeError extends Error {
     public context?: Record<string, unknown>,
   ) {
     super(message);
-    this.name = "ChallengeError";
+    this.name = 'ChallengeError';
   }
 }
 
 export class ChallengeNotFoundError extends ChallengeError {
   constructor(challengeId: string) {
-    super(`Challenge not found: ${challengeId}`, "CHALLENGE_NOT_FOUND", { challengeId });
+    super(`Challenge not found: ${challengeId}`, 'CHALLENGE_NOT_FOUND', { challengeId });
   }
 }
 
 export class ChallengeNotActiveError extends ChallengeError {
   constructor(challengeId: string, status: string) {
-    super(`Challenge is not active: ${challengeId}`, "CHALLENGE_NOT_ACTIVE", { challengeId, status });
+    super(`Challenge is not active: ${challengeId}`, 'CHALLENGE_NOT_ACTIVE', { challengeId, status });
   }
 }
 
@@ -44,23 +44,23 @@ const rewardBundleFor = (challenge: Challenge) => ({
 });
 
 const inferTriggerDelta = (challenge: Challenge, triggerType: DailyChallengeTriggerType, context: DailyChallengeContext): number => {
-  if (challenge.category === "MINUTES" && triggerType === "SESSION_COMPLETED") {
+  if (challenge.category === 'MINUTES' && triggerType === 'SESSION_COMPLETED') {
     return context.minutesCompleted ?? 0;
   }
-  if (challenge.category === "SESSIONS" && triggerType === "SESSION_COMPLETED") {
+  if (challenge.category === 'SESSIONS' && triggerType === 'SESSION_COMPLETED') {
     return context.sessionCount ?? 1;
   }
-  if (challenge.category === "SOCIAL" && triggerType === "MOOD_LOGGED") {
+  if (challenge.category === 'SOCIAL' && triggerType === 'MOOD_LOGGED') {
     return context.moodLogged ? 1 : 0;
   }
-  if (challenge.category === "STREAK" && triggerType === "STREAK_CHECKED") {
+  if (challenge.category === 'STREAK' && triggerType === 'STREAK_CHECKED') {
     return context.streakChecked ? 1 : 0;
   }
-  if (challenge.category === "BOSS_DAMAGE" && triggerType === "PURITY_RECORDED") {
-    return typeof context.purity === "number" && context.purity >= 80 ? 1 : 0;
+  if (challenge.category === 'BOSS_DAMAGE' && triggerType === 'PURITY_RECORDED') {
+    return typeof context.purity === 'number' && context.purity >= 80 ? 1 : 0;
   }
-  if (challenge.category === "ACHIEVEMENT" && triggerType === "STREAK_UPDATED") {
-    return typeof context.streakDays === "number" && context.streakDays >= challenge.targetValue ? challenge.targetValue : 0;
+  if (challenge.category === 'ACHIEVEMENT' && triggerType === 'STREAK_UPDATED') {
+    return typeof context.streakDays === 'number' && context.streakDays >= challenge.targetValue ? challenge.targetValue : 0;
   }
   return 0;
 };
@@ -69,17 +69,17 @@ const toCompletionResult = async (detail: ChallengeDetail, updatedChallenge: Use
   const now = Date.now();
   const rewards: ChallengeReward[] = [];
   if (detail.xpReward > 0) {
-    rewards.push(ChallengeRewardSchema.parse({ type: "XP", amount: detail.xpReward, itemId: null, delivered: false, deliveredAt: null }));
+    rewards.push(ChallengeRewardSchema.parse({ type: 'XP', amount: detail.xpReward, itemId: null, delivered: false, deliveredAt: null }));
   }
   if (detail.coinReward > 0) {
-    rewards.push(ChallengeRewardSchema.parse({ type: "COINS", amount: detail.coinReward, itemId: null, delivered: false, deliveredAt: null }));
+    rewards.push(ChallengeRewardSchema.parse({ type: 'COINS', amount: detail.coinReward, itemId: null, delivered: false, deliveredAt: null }));
   }
   await repository.updateUserChallenge(updatedChallenge.userId, updatedChallenge.challengeId, {
-    status: "COMPLETED",
+    status: 'COMPLETED',
     completedAt: now,
     currentValue: Math.min(updatedChallenge.currentValue, detail.requiredCount),
   });
-  eventBus.publish("challenge:completed", { userId: updatedChallenge.userId, challengeId: updatedChallenge.challengeId, completedAt: now });
+  eventBus.publish('challenge:completed', { userId: updatedChallenge.userId, challengeId: updatedChallenge.challengeId, completedAt: now });
   return {
     success: true,
     challengeId: updatedChallenge.challengeId,
@@ -98,7 +98,7 @@ export async function assignChallenge(input: AssignChallengeInput): Promise<User
   const validated = AssignChallengeInputSchema.parse(input);
   const challengeId = validated.challengeId;
   if (!challengeId) {
-    throw new ChallengeError("A concrete challengeId is required for assignment", "CHALLENGE_ID_REQUIRED");
+    throw new ChallengeError('A concrete challengeId is required for assignment', 'CHALLENGE_ID_REQUIRED');
   }
   return repository.createUserChallenge(validated.userId, challengeId, Date.now() + CONFIG.DAILY_CHALLENGE_EXPIRY_HOURS * 60 * 60 * 1000);
 }
@@ -109,11 +109,11 @@ export async function updateChallengeProgress(input: UpdateChallengeProgressInpu
   if (!userChallenge || !challenge) {
     throw new ChallengeNotFoundError(validated.challengeId);
   }
-  if (userChallenge.status !== "ACTIVE") {
+  if (userChallenge.status !== 'ACTIVE') {
     throw new ChallengeNotActiveError(validated.challengeId, userChallenge.status);
   }
   const updated = await repository.addChallengeProgress(validated.userId, validated.challengeId, validated.delta, validated.source);
-  eventBus.publish("challenge:progress", {
+  eventBus.publish('challenge:progress', {
     userId: validated.userId,
     challengeId: validated.challengeId,
     progress: updated.currentValue,
@@ -133,7 +133,7 @@ export async function checkChallengeProgress(userId: string, triggerType: DailyC
     const updated: ChallengeDetail[] = [];
     const completed: ChallengeCompletionResult[] = [];
     for (const detail of details) {
-      if (detail.userChallenge.status !== "ACTIVE") {
+      if (detail.userChallenge.status !== 'ACTIVE') {
         continue;
       }
       const delta = inferTriggerDelta(detail.challenge, triggerType, validatedContext);
@@ -154,7 +154,7 @@ export async function checkChallengeProgress(userId: string, triggerType: DailyC
     }
     return ChallengeProgressCheckResultSchema.parse({ updated, completed });
   } catch (error) {
-    Sentry.captureException(error, { tags: { feature: "challenges", action: "check-progress" } });
+    Sentry.captureException(error, { tags: { feature: 'challenges', action: 'check-progress' } });
     throw error;
   }
 }
@@ -164,27 +164,27 @@ export async function claimChallengeReward(input: { userId: string; challengeId:
   try {
     const detail = (await getCompletedChallenges(validated.userId, 50)).find((item) => item.challenge.id === validated.challengeId);
     if (!detail) {
-      return { success: false, rewards: [], error: "Challenge not completed" };
+      return { success: false, rewards: [], error: 'Challenge not completed' };
     }
-    if (detail.userChallenge.status === "CLAIMED") {
-      return { success: false, rewards: [], error: "Reward already claimed" };
+    if (detail.userChallenge.status === 'CLAIMED') {
+      return { success: false, rewards: [], error: 'Reward already claimed' };
     }
     const rewardService = getRewardService(validated.userId);
     const rewards: ChallengeReward[] = [];
     if (detail.xpReward > 0) {
-      await rewardService.grantReward("XP", "CHALLENGE_COMPLETE", { baseAmount: 1 }, { exactAmount: detail.xpReward, challengeId: validated.challengeId });
-      rewards.push({ type: "XP", amount: detail.xpReward, itemId: null, delivered: true, deliveredAt: Date.now() });
+      await rewardService.grantReward('XP', 'CHALLENGE_COMPLETE', { baseAmount: 1 }, { exactAmount: detail.xpReward, challengeId: validated.challengeId });
+      rewards.push({ type: 'XP', amount: detail.xpReward, itemId: null, delivered: true, deliveredAt: Date.now() });
     }
     if (detail.coinReward > 0) {
-      await rewardService.grantReward("CURRENCY", "CHALLENGE_COMPLETE", { baseAmount: 1 }, { exactAmount: detail.coinReward, challengeId: validated.challengeId, currency: "COINS" });
-      rewards.push({ type: "COINS", amount: detail.coinReward, itemId: null, delivered: true, deliveredAt: Date.now() });
+      await rewardService.grantReward('CURRENCY', 'CHALLENGE_COMPLETE', { baseAmount: 1 }, { exactAmount: detail.coinReward, challengeId: validated.challengeId, currency: 'COINS' });
+      rewards.push({ type: 'COINS', amount: detail.coinReward, itemId: null, delivered: true, deliveredAt: Date.now() });
     }
-    await repository.updateUserChallenge(validated.userId, validated.challengeId, { status: "CLAIMED", claimedAt: Date.now() });
-    eventBus.publish("challenge:reward_claimed", { userId: validated.userId, challengeId: validated.challengeId, claimedAt: Date.now() });
+    await repository.updateUserChallenge(validated.userId, validated.challengeId, { status: 'CLAIMED', claimedAt: Date.now() });
+    eventBus.publish('challenge:reward_claimed', { userId: validated.userId, challengeId: validated.challengeId, claimedAt: Date.now() });
     return { success: true, rewards, error: null };
   } catch (error) {
-    Sentry.captureException(error, { tags: { feature: "challenges", action: "claim-reward" } });
-    return { success: false, rewards: [], error: error instanceof Error ? error.message : "Unknown challenge reward error" };
+    Sentry.captureException(error, { tags: { feature: 'challenges', action: 'claim-reward' } });
+    return { success: false, rewards: [], error: error instanceof Error ? error.message : 'Unknown challenge reward error' };
   }
 }
 
@@ -209,12 +209,12 @@ export async function getUserChallengeSummaries(userId: string): Promise<UserCha
     targetValue: detail.requiredCount,
     progressPercent: Math.min(100, Math.round((detail.userChallenge.currentValue / detail.requiredCount) * 100)),
     status: detail.userChallenge.status,
-    isClaimable: detail.userChallenge.status === "COMPLETED",
+    isClaimable: detail.userChallenge.status === 'COMPLETED',
     isExpired: detail.userChallenge.expiresAt !== null && detail.userChallenge.expiresAt <= Date.now(),
     expiresInMs: detail.userChallenge.expiresAt ? Math.max(0, detail.userChallenge.expiresAt - Date.now()) : null,
-    rewardType: detail.coinReward > 0 ? "COINS" : "XP",
+    rewardType: detail.coinReward > 0 ? 'COINS' : 'XP',
     rewardAmount: detail.coinReward > 0 ? detail.coinReward : detail.xpReward,
-    canReroll: detail.userChallenge.status === "ACTIVE",
+    canReroll: detail.userChallenge.status === 'ACTIVE',
     rerollCost: CONFIG.PAID_REROLL_COST,
     freeRerollAvailable: detail.userChallenge.rerollCount < CONFIG.FREE_REROLLS_PER_DAY,
     rerollCount: detail.userChallenge.rerollCount,
@@ -224,14 +224,14 @@ export async function getUserChallengeSummaries(userId: string): Promise<UserCha
 export async function checkRerollEligibility(userId: string, challengeId: string): Promise<RerollEligibility> {
   const [userChallenge, rerollCountToday, freeRerollCountToday] = await Promise.all([repository.fetchUserChallenge(userId, challengeId), repository.getRerollCountToday(userId), repository.getFreeRerollCountToday(userId)]);
   if (!userChallenge) {
-    return { canReroll: false, reason: "Challenge not found", freeRerollAvailable: false, gemsRequired: CONFIG.PAID_REROLL_COST, currentGems: 0, rerollCountToday, maxRerollsPerDay: CONFIG.MAX_REROLLS_PER_DAY };
+    return { canReroll: false, reason: 'Challenge not found', freeRerollAvailable: false, gemsRequired: CONFIG.PAID_REROLL_COST, currentGems: 0, rerollCountToday, maxRerollsPerDay: CONFIG.MAX_REROLLS_PER_DAY };
   }
   if (rerollCountToday >= CONFIG.MAX_REROLLS_PER_DAY) {
-    return { canReroll: false, reason: "Daily reroll limit reached", freeRerollAvailable: false, gemsRequired: CONFIG.PAID_REROLL_COST, currentGems: 0, rerollCountToday, maxRerollsPerDay: CONFIG.MAX_REROLLS_PER_DAY };
+    return { canReroll: false, reason: 'Daily reroll limit reached', freeRerollAvailable: false, gemsRequired: CONFIG.PAID_REROLL_COST, currentGems: 0, rerollCountToday, maxRerollsPerDay: CONFIG.MAX_REROLLS_PER_DAY };
   }
   return {
-    canReroll: userChallenge.status === "ACTIVE",
-    reason: userChallenge.status === "ACTIVE" ? null : `Challenge is ${userChallenge.status.toLowerCase()}`,
+    canReroll: userChallenge.status === 'ACTIVE',
+    reason: userChallenge.status === 'ACTIVE' ? null : `Challenge is ${userChallenge.status.toLowerCase()}`,
     freeRerollAvailable: freeRerollCountToday < CONFIG.FREE_REROLLS_PER_DAY,
     gemsRequired: freeRerollCountToday < CONFIG.FREE_REROLLS_PER_DAY ? 0 : CONFIG.PAID_REROLL_COST,
     currentGems: 0,
@@ -247,11 +247,11 @@ export async function rerollChallenge(input: { userId: string; challengeId: stri
     return {
       success: false,
       oldChallengeId: validated.challengeId,
-      newChallengeId: "",
+      newChallengeId: '',
       newChallenge: null,
       gemsSpent: 0,
       freeRerollUsed: false,
-      error: eligibility.reason ?? "Reroll not allowed",
+      error: eligibility.reason ?? 'Reroll not allowed',
       remainingGems: eligibility.currentGems,
       remainingFreeRerollsToday: eligibility.freeRerollAvailable ? 1 : 0,
     };
@@ -259,11 +259,11 @@ export async function rerollChallenge(input: { userId: string; challengeId: stri
   return {
     success: false,
     oldChallengeId: validated.challengeId,
-    newChallengeId: "",
+    newChallengeId: '',
     newChallenge: null,
     gemsSpent: 0,
     freeRerollUsed: false,
-    error: "Reroll generation is not supported for the refreshed daily challenge pool yet",
+    error: 'Reroll generation is not supported for the refreshed daily challenge pool yet',
     remainingGems: eligibility.currentGems,
     remainingFreeRerollsToday: eligibility.freeRerollAvailable ? 1 : 0,
   };

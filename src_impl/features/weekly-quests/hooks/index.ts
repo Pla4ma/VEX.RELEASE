@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { getWeeklyQuestStateForUser } from './service';
-import type { WeeklyQuestState } from './schemas';
+import { getWeeklyQuestStateForUser } from '../service';
+import type { WeeklyQuestState } from '../schemas';
 
 export function useWeeklyQuestState(
   userId: string | null,

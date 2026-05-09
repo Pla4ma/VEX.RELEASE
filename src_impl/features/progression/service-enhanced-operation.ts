@@ -6,7 +6,7 @@ import {
   recordLevelUpEnhanced,
   recordXpEntryEnhanced,
   updateProgressionEnhanced,
-} from './repository-enhanced';
+} from './repository/enhanced';
 import { createProgressionError } from './service-enhanced-errors';
 import { handleFetchFailure } from './service-enhanced-failures';
 import {
@@ -170,3 +170,4 @@ function publishProgressionEvents(
     });
   }
 }
+

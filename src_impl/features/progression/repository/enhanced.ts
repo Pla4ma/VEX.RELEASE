@@ -1,5 +1,5 @@
-import * as repository from './repository';
-import type { Progression, XpEntry } from './schemas';
+import * as repository from '../repository';
+import type { Progression, XpEntry } from '../schemas';
 
 export type EnhancedRepositoryErrorCode =
   | 'NETWORK_ERROR'

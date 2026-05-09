@@ -36,7 +36,7 @@ export function useSessionRecommendation(input: Partial<SessionRecommendationInp
   }), [input, userId]);
 
   const recommendation = useMemo(() => {
-    if (!userId) return null;
+    if (!userId) {return null;}
 
     try {
       const rec = generateSessionRecommendation(recommendationInput);
@@ -103,7 +103,7 @@ export function useSessionRecommendationActions() {
  */
 export function useSessionRecommendationAnalytics(recommendation: SessionRecommendation | null) {
   return useMemo(() => {
-    if (!recommendation) return null;
+    if (!recommendation) {return null;}
 
     return {
       duration: recommendation.duration,
@@ -135,7 +135,7 @@ export function useRecommendationHistory(userId: string | null) {
   return useQuery({
     queryKey: sessionRecommendationKeys.analytics(userId ?? ''),
     queryFn: async () => {
-      if (!userId) return [];
+      if (!userId) {return [];}
 
       // This would typically fetch from a repository
       // For now, return empty array as recommendation history is not persisted

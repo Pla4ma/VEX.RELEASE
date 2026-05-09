@@ -1,11 +1,11 @@
-import * as Sentry from "@sentry/react-native";
-import type { CoachMemory } from "./memory-schemas";
+import * as Sentry from '@sentry/react-native';
+import type { CoachMemory } from './memory-schemas';
 
 export function trackMemoryCreated(memory: CoachMemory): void {
   Sentry.addBreadcrumb({
-    category: "coach.memory",
+    category: 'coach.memory',
     message: `Coach memory created: ${memory.type}`,
-    level: "info",
+    level: 'info',
     data: {
       userId: hashUserId(memory.userId),
       memoryId: memory.id,
@@ -21,7 +21,7 @@ export function trackMemoryError(
   userId?: string,
 ): void {
   Sentry.captureException(error, {
-    tags: { feature: "ai-coach", operation },
+    tags: { feature: 'ai-coach', operation },
     extra: { userId: userId ? hashUserId(userId) : undefined },
   });
 }

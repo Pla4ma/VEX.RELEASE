@@ -1,14 +1,14 @@
-import React, { useCallback } from "react";
-import { Pressable } from "react-native";
-import { FlashList, type ListRenderItem } from "@shopify/flash-list";
-import Animated, { FadeIn } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React, { useCallback } from 'react';
+import { Pressable } from 'react-native';
+import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 export interface SessionListItem {
   id: string;
   duration: number;
-  qualityGrade: "S" | "A" | "B" | "C" | "D";
+  qualityGrade: 'S' | 'A' | 'B' | 'C' | 'D';
   xpEarned: number;
   endedAt: string;
   interruptions: number;
@@ -36,7 +36,7 @@ function formatTimeAgo(isoDate: string): string {
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
   if (diffMins < 5) {
-    return "Just now";
+    return 'Just now';
   }
   if (diffMins < 60) {
     return `${diffMins}m ago`;
@@ -45,24 +45,24 @@ function formatTimeAgo(isoDate: string): string {
     return `${diffHours}h ago`;
   }
   if (diffDays === 1) {
-    return "Yesterday";
+    return 'Yesterday';
   }
   if (diffDays < 7) {
     return `${diffDays} days ago`;
   }
-  return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
-function getGradeColor(grade: SessionListItem["qualityGrade"], theme: ReturnType<typeof useTheme>["theme"]): string {
+function getGradeColor(grade: SessionListItem['qualityGrade'], theme: ReturnType<typeof useTheme>['theme']): string {
   switch (grade) {
-    case "S":
+    case 'S':
       return theme.colors.accent.purple;
-    case "A":
+    case 'A':
       return theme.colors.success.DEFAULT;
-    case "B":
+    case 'B':
       return theme.colors.info.DEFAULT;
-    case "C":
+    case 'C':
       return theme.colors.text.tertiary;
-    case "D":
+    case 'D':
       return theme.colors.error.DEFAULT;
     default:
       return theme.colors.text.tertiary;
@@ -133,7 +133,7 @@ function SessionRow({ session, onPress }: { session: SessionListItem; onPress?: 
             </Box>
             {hasInterruptions && (
               <Text variant="caption" color="text.tertiary">
-                {session.interruptions} interruption{session.interruptions > 1 ? "s" : ""}
+                {session.interruptions} interruption{session.interruptions > 1 ? 's' : ''}
               </Text>
             )}
           </Box>

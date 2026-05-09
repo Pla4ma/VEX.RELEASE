@@ -110,7 +110,7 @@ export async function progressToNextSession(
       from: currentProgress.current_session,
       to: nextSession,
       sessionNumber,
-      unlocks: newUnlockedFeatures.length
+      unlocks: newUnlockedFeatures.length,
     });
 
     return FirstWeekProgressSchema.parse(data);
@@ -131,10 +131,10 @@ function calculateLevelProgress(totalXp: number): number {
   // Level 3: 251-500 XP
   // Level 4: 501-1000 XP
 
-  if (totalXp <= 100) return 1;
-  if (totalXp <= 250) return 2;
-  if (totalXp <= 500) return 3;
-  if (totalXp <= 1000) return 4;
+  if (totalXp <= 100) {return 1;}
+  if (totalXp <= 250) {return 2;}
+  if (totalXp <= 500) {return 3;}
+  if (totalXp <= 1000) {return 4;}
   return Math.min(5, Math.floor(totalXp / 250) + 1);
 }
 

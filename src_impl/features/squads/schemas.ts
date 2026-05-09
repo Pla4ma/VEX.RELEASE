@@ -1,16 +1,16 @@
-import { z } from "zod";
-export const SquadRoleSchema = z.enum(["FOUNDER", "ADMIN", "MODERATOR", "MEMBER", "GUEST"]);
-export const JoinRequirementSchema = z.enum(["OPEN", "APPROVAL", "INVITE_ONLY", "LEVEL_REQ"]);
-export const InviteStatusSchema = z.enum(["PENDING", "ACCEPTED", "DECLINED", "EXPIRED", "REVOKED"]);
-export const JoinRequestStatusSchema = z.enum(["PENDING", "APPROVED", "REJECTED", "CANCELLED"]);
-export const SquadSessionStatusSchema = z.enum(["SCHEDULED", "ACTIVE", "PAUSED", "COMPLETED", "CANCELLED"]);
-export const ParticipantStatusSchema = z.enum(["INVITED", "JOINED", "ACTIVE", "PAUSED", "LEFT", "COMPLETED"]);
-export const SquadChallengeTypeSchema = z.enum(["TOTAL_FOCUS_TIME", "SESSION_COUNT", "CONCURRENT_SESSIONS", "BOSS_DAMAGE", "STREAK_MAINTAIN"]);
-export const SquadChallengeStatusSchema = z.enum(["PENDING", "ACTIVE", "COMPLETED", "FAILED", "CANCELLED"]);
-export const SquadActivityTypeSchema = z.enum(["MEMBER_JOINED", "MEMBER_LEFT", "MEMBER_KICKED", "ROLE_CHANGED", "SESSION_STARTED", "SESSION_COMPLETED", "CHALLENGE_COMPLETED", "BOSS_DEFEATED", "SYNERGY_LEVEL_UP", "SETTINGS_CHANGED", "INVITE_SENT"]);
-export const SynergyActivityTypeSchema = z.enum(["SESSION_COMPLETE", "SESSION_TOGETHER", "BOSS_DAMAGE", "CHALLENGE_PROGRESS", "DAILY_LOGIN", "STREAK_MILESTONE", "INVITE_ACCEPTED"]);
-export const SquadPermissionSchema = z.enum(["VIEW_SQUAD", "INVITE_MEMBERS", "KICK_MEMBERS", "MANAGE_ROLES", "EDIT_SQUAD", "DELETE_SQUAD", "START_SESSION", "MANAGE_CHALLENGE", "MANAGE_BOSS", "VIEW_ANALYTICS", "PIN_MESSAGES", "MODERATE_CHAT", "USE_SYERGY_BOOST"]);
-export const SquadErrorCodeSchema = z.enum(["SQUAD_NOT_FOUND", "SQUAD_FULL", "ALREADY_MEMBER", "NOT_MEMBER", "INSUFFICIENT_PERMISSIONS", "INVITE_NOT_FOUND", "INVITE_EXPIRED", "INVITE_ALREADY_USED", "CANNOT_INVITE_SELF", "USER_NOT_FOUND", "ROLE_NOT_FOUND", "CANNOT_KICK_FOUNDER", "CANNOT_LEAVE_AS_FOUNDER", "FOUNDER_TRANSFER_REQUIRED", "INVALID_ROLE_HIERARCHY", "REQUEST_NOT_FOUND", "SESSION_NOT_FOUND", "SESSION_FULL", "SESSION_ALREADY_STARTED", "DUPLICATE_MEMBERSHIP", "RATE_LIMITED", "NETWORK_ERROR", "UNKNOWN_ERROR"]);
+import { z } from 'zod';
+export const SquadRoleSchema = z.enum(['FOUNDER', 'ADMIN', 'MODERATOR', 'MEMBER', 'GUEST']);
+export const JoinRequirementSchema = z.enum(['OPEN', 'APPROVAL', 'INVITE_ONLY', 'LEVEL_REQ']);
+export const InviteStatusSchema = z.enum(['PENDING', 'ACCEPTED', 'DECLINED', 'EXPIRED', 'REVOKED']);
+export const JoinRequestStatusSchema = z.enum(['PENDING', 'APPROVED', 'REJECTED', 'CANCELLED']);
+export const SquadSessionStatusSchema = z.enum(['SCHEDULED', 'ACTIVE', 'PAUSED', 'COMPLETED', 'CANCELLED']);
+export const ParticipantStatusSchema = z.enum(['INVITED', 'JOINED', 'ACTIVE', 'PAUSED', 'LEFT', 'COMPLETED']);
+export const SquadChallengeTypeSchema = z.enum(['TOTAL_FOCUS_TIME', 'SESSION_COUNT', 'CONCURRENT_SESSIONS', 'BOSS_DAMAGE', 'STREAK_MAINTAIN']);
+export const SquadChallengeStatusSchema = z.enum(['PENDING', 'ACTIVE', 'COMPLETED', 'FAILED', 'CANCELLED']);
+export const SquadActivityTypeSchema = z.enum(['MEMBER_JOINED', 'MEMBER_LEFT', 'MEMBER_KICKED', 'ROLE_CHANGED', 'SESSION_STARTED', 'SESSION_COMPLETED', 'CHALLENGE_COMPLETED', 'BOSS_DEFEATED', 'SYNERGY_LEVEL_UP', 'SETTINGS_CHANGED', 'INVITE_SENT']);
+export const SynergyActivityTypeSchema = z.enum(['SESSION_COMPLETE', 'SESSION_TOGETHER', 'BOSS_DAMAGE', 'CHALLENGE_PROGRESS', 'DAILY_LOGIN', 'STREAK_MILESTONE', 'INVITE_ACCEPTED']);
+export const SquadPermissionSchema = z.enum(['VIEW_SQUAD', 'INVITE_MEMBERS', 'KICK_MEMBERS', 'MANAGE_ROLES', 'EDIT_SQUAD', 'DELETE_SQUAD', 'START_SESSION', 'MANAGE_CHALLENGE', 'MANAGE_BOSS', 'VIEW_ANALYTICS', 'PIN_MESSAGES', 'MODERATE_CHAT', 'USE_SYERGY_BOOST']);
+export const SquadErrorCodeSchema = z.enum(['SQUAD_NOT_FOUND', 'SQUAD_FULL', 'ALREADY_MEMBER', 'NOT_MEMBER', 'INSUFFICIENT_PERMISSIONS', 'INVITE_NOT_FOUND', 'INVITE_EXPIRED', 'INVITE_ALREADY_USED', 'CANNOT_INVITE_SELF', 'USER_NOT_FOUND', 'ROLE_NOT_FOUND', 'CANNOT_KICK_FOUNDER', 'CANNOT_LEAVE_AS_FOUNDER', 'FOUNDER_TRANSFER_REQUIRED', 'INVALID_ROLE_HIERARCHY', 'REQUEST_NOT_FOUND', 'SESSION_NOT_FOUND', 'SESSION_FULL', 'SESSION_ALREADY_STARTED', 'DUPLICATE_MEMBERSHIP', 'RATE_LIMITED', 'NETWORK_ERROR', 'UNKNOWN_ERROR']);
 export const SquadSchema = z
   .object({
     id: z.string().uuid(),
@@ -30,7 +30,7 @@ export const SquadSchema = z
     activeBossId: z.string().uuid().nullable(),
     bossHealthRemaining: z.number().min(0).nullable(),
     isPublic: z.boolean().default(true),
-    joinRequirements: JoinRequirementSchema.default("APPROVAL"),
+    joinRequirements: JoinRequirementSchema.default('APPROVAL'),
     createdAt: z.number(),
     updatedAt: z.number(),
     createdBy: z.string().uuid(),
@@ -79,8 +79,8 @@ export const SquadInviteSchema = z
     squadId: z.string().uuid(),
     invitedBy: z.string().uuid(),
     invitedUserId: z.string().uuid(),
-    status: InviteStatusSchema.default("PENDING"),
-    roleOffered: SquadRoleSchema.default("MEMBER"),
+    status: InviteStatusSchema.default('PENDING'),
+    roleOffered: SquadRoleSchema.default('MEMBER'),
     message: z.string().max(200).nullable(),
     expiresAt: z.number(),
     createdAt: z.number(),
@@ -99,7 +99,7 @@ export const SquadJoinRequestSchema = z
     id: z.string().uuid(),
     squadId: z.string().uuid(),
     userId: z.string().uuid(),
-    status: JoinRequestStatusSchema.default("PENDING"),
+    status: JoinRequestStatusSchema.default('PENDING'),
     message: z.string().max(200).nullable(),
     createdAt: z.number(),
     reviewedAt: z.number().nullable(),
@@ -175,7 +175,7 @@ export const SquadChallengeSchema = z
     startsAt: z.number(),
     endsAt: z.number(),
     completedAt: z.number().nullable(),
-    rewardType: z.enum(["XP", "COINS", "GEMS", "SYERGY_POINTS"]),
+    rewardType: z.enum(['XP', 'COINS', 'GEMS', 'SYERGY_POINTS']),
     rewardAmount: z.number().min(0),
   })
   .strict();
@@ -190,7 +190,7 @@ export const SquadActivitySchema = z
     createdAt: z.number(),
   })
   .strict();
-export const SquadWarStatusSchema = z.enum(["active", "victory", "defeat", "expired"]);
+export const SquadWarStatusSchema = z.enum(['active', 'victory', 'defeat', 'expired']);
 export const SquadWarMemberStatusSchema = z
   .object({
     userId: z.string().uuid(),
@@ -248,7 +248,7 @@ export const CreateSquadInputSchema = z
     description: z.string().max(500).nullable().default(null),
     avatarUrl: z.string().url().nullable().default(null),
     isPublic: z.boolean().default(true),
-    joinRequirements: JoinRequirementSchema.default("APPROVAL"),
+    joinRequirements: JoinRequirementSchema.default('APPROVAL'),
     maxMembers: z.number().int().min(2).max(50).default(10),
   })
   .strict();
@@ -267,7 +267,7 @@ export const InviteToSquadInputSchema = z
   .object({
     squadId: z.string().uuid(),
     invitedUserId: z.string().uuid(),
-    roleOffered: SquadRoleSchema.default("MEMBER"),
+    roleOffered: SquadRoleSchema.default('MEMBER'),
     message: z.string().max(200).nullable().default(null),
     expiresInHours: z.number().int().min(1).max(168).default(48),
   })

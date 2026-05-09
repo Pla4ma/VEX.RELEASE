@@ -13,7 +13,7 @@ export const MonthlyReportSectionSchema = z.enum([
   'BEST_PERFORMANCE',
   'WEEKLY_PATTERNS',
   'AI_INSIGHTS',
-  'NEXT_TARGETS'
+  'NEXT_TARGETS',
 ]);
 
 export type MonthlyReportSection = z.infer<typeof MonthlyReportSectionSchema>;

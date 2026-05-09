@@ -8,11 +8,11 @@
  * @phase 11.5
  */
 
-import { z } from "zod";
-import { getSupabaseClient } from "../../config/supabase";
-import { createDebugger } from "../../utils/debug";
+import { z } from 'zod';
+import { getSupabaseClient } from '../../config/supabase';
+import { createDebugger } from '../../utils/debug';
 
-const debug = createDebugger("notifications:smart-scheduler");
+const debug = createDebugger('notifications:smart-scheduler');
 
 // ============================================================================
 // Configuration
@@ -31,19 +31,19 @@ export const PeakFocusWindowSchema = z.object({
   peakHour: z.number().min(0).max(23),
   confidence: z.number().min(0).max(1), // How consistent is the pattern
   sessionCount: z.number(),
-  pattern: z.enum(["CONSISTENT", "VARIABLE", "ERRATIC", "NEW"]),
+  pattern: z.enum(['CONSISTENT', 'VARIABLE', 'ERRATIC', 'NEW']),
   hourDistribution: z.record(z.number(), z.number()), // hour -> count
 });
 
 export type PeakFocusWindow = z.infer<typeof PeakFocusWindowSchema>;
 
 export const NotificationContentTypeSchema = z.enum([
-  "STREAK",
-  "BOSS",
-  "SOCIAL",
-  "POSITIVE",
-  "COMEBACK",
-  "RANK_REPORT", // PHASE 14.4
+  'STREAK',
+  'BOSS',
+  'SOCIAL',
+  'POSITIVE',
+  'COMEBACK',
+  'RANK_REPORT', // PHASE 14.4
 ]);
 
 export type NotificationContentType = z.infer<typeof NotificationContentTypeSchema>;
@@ -53,7 +53,7 @@ export const SmartNotificationConfigSchema = z.object({
   peakWindow: PeakFocusWindowSchema,
   lastNotificationSent: z.number().optional(),
   notificationCountToday: z.number().default(0),
-  preferredContentTypes: z.array(NotificationContentTypeSchema).default(["STREAK", "BOSS", "SOCIAL", "POSITIVE"]),
+  preferredContentTypes: z.array(NotificationContentTypeSchema).default(['STREAK', 'BOSS', 'SOCIAL', 'POSITIVE']),
 });
 
 export type SmartNotificationConfig = z.infer<typeof SmartNotificationConfigSchema>;
@@ -70,7 +70,7 @@ export async function analyzePeakFocusWindow(userId: string): Promise<PeakFocusW
     const fromDate = new Date();
     fromDate.setDate(fromDate.getDate() - ANALYSIS_WINDOW_DAYS);
 
-    const { data: sessions, error } = await getSupabaseClient().from("sessions").select("started_at, timezone").eq("user_id", userId).eq("status", "COMPLETED").gte("started_at", fromDate.toISOString()).order("started_at", { ascending: false });
+    const { data: sessions, error } = await getSupabaseClient().from('sessions').select('started_at, timezone').eq('user_id', userId).eq('status', 'COMPLETED').gte('started_at', fromDate.toISOString()).order('started_at', { ascending: false });
 
     if (error || !sessions || sessions.length === 0) {
       // No sessions - return default for new user
@@ -79,7 +79,7 @@ export async function analyzePeakFocusWindow(userId: string): Promise<PeakFocusW
         peakHour: DEFAULT_PEAK_HOUR,
         confidence: 0,
         sessionCount: 0,
-        pattern: "NEW",
+        pattern: 'NEW',
         hourDistribution: {},
       };
     }
@@ -88,13 +88,13 @@ export async function analyzePeakFocusWindow(userId: string): Promise<PeakFocusW
     const hourDistribution: Record<number, number> = {};
 
     for (const session of sessions) {
-      const timezone = session.timezone || "UTC";
+      const timezone = session.timezone || 'UTC';
       const sessionDate = new Date(session.started_at);
 
       // Get hour in user's timezone
-      const hourString = sessionDate.toLocaleString("en-US", {
+      const hourString = sessionDate.toLocaleString('en-US', {
         timeZone: timezone,
-        hour: "numeric",
+        hour: 'numeric',
         hour12: false,
       });
       const hour = parseInt(hourString, 10);
@@ -119,13 +119,13 @@ export async function analyzePeakFocusWindow(userId: string): Promise<PeakFocusW
     const confidence = Math.min(peakRatio, 1);
 
     // Determine pattern
-    let pattern: PeakFocusWindow["pattern"] = "CONSISTENT";
+    let pattern: PeakFocusWindow['pattern'] = 'CONSISTENT';
     if (totalSessions < 5) {
-      pattern = "NEW";
+      pattern = 'NEW';
     } else if (confidence < 0.3) {
-      pattern = "ERRATIC";
+      pattern = 'ERRATIC';
     } else if (confidence < 0.6) {
-      pattern = "VARIABLE";
+      pattern = 'VARIABLE';
     }
 
     return {
@@ -137,13 +137,13 @@ export async function analyzePeakFocusWindow(userId: string): Promise<PeakFocusW
       hourDistribution,
     };
   } catch (error) {
-    debug.error("Error analyzing peak focus window", error instanceof Error ? error : undefined);
+    debug.error('Error analyzing peak focus window', error instanceof Error ? error : undefined);
     return {
       userId,
       peakHour: DEFAULT_PEAK_HOUR,
       confidence: 0,
       sessionCount: 0,
-      pattern: "NEW",
+      pattern: 'NEW',
       hourDistribution: {},
     };
   }
@@ -176,7 +176,7 @@ interface NotificationContent {
  */
 async function generateStreakNotification(userId: string): Promise<NotificationContent | null> {
   try {
-    const { data: streak, error } = await getSupabaseClient().from("user_streaks").select("current_streak").eq("user_id", userId).single();
+    const { data: streak, error } = await getSupabaseClient().from('user_streaks').select('current_streak').eq('user_id', userId).single();
 
     if (error || !streak) {
       return null;
@@ -186,16 +186,16 @@ async function generateStreakNotification(userId: string): Promise<NotificationC
 
     if (streakDays === 0) {
       return {
-        title: "Start your streak today 🔥",
-        body: "Day 1 is the most important. Complete a session to begin!",
-        data: { type: "STREAK_START" },
+        title: 'Start your streak today 🔥',
+        body: 'Day 1 is the most important. Complete a session to begin!',
+        data: { type: 'STREAK_START' },
       };
     }
 
     return {
       title: `Your ${streakDays}-day streak continues 🔥`,
       body: "Complete today's session to keep it alive!",
-      data: { type: "STREAK_CONTINUE", streakDays },
+      data: { type: 'STREAK_CONTINUE', streakDays },
     };
   } catch (error) {
     return null;
@@ -207,7 +207,7 @@ async function generateStreakNotification(userId: string): Promise<NotificationC
  */
 async function generateBossNotification(userId: string): Promise<NotificationContent | null> {
   try {
-    const { data: encounter, error } = await getSupabaseClient().from("boss_encounters").select("boss_name, current_health, max_health").eq("user_id", userId).eq("status", "ACTIVE").order("created_at", { ascending: false }).limit(1).maybeSingle();
+    const { data: encounter, error } = await getSupabaseClient().from('boss_encounters').select('boss_name, current_health, max_health').eq('user_id', userId).eq('status', 'ACTIVE').order('created_at', { ascending: false }).limit(1).maybeSingle();
 
     if (error || !encounter) {
       return null;
@@ -217,16 +217,16 @@ async function generateBossNotification(userId: string): Promise<NotificationCon
 
     if (healthPercent <= 25) {
       return {
-        title: "👹 Boss almost defeated!",
+        title: '👹 Boss almost defeated!',
         body: `${encounter.boss_name} has ${healthPercent.toFixed(0)}% health. One more session could finish it!`,
-        data: { type: "BOSS_KILLING_BLOW", bossName: encounter.boss_name },
+        data: { type: 'BOSS_KILLING_BLOW', bossName: encounter.boss_name },
       };
     }
 
     return {
-      title: "Boss needs your attention 👹",
+      title: 'Boss needs your attention 👹',
       body: `${encounter.boss_name} has ${healthPercent.toFixed(0)}% health remaining. Deal some damage!`,
-      data: { type: "BOSS_DAMAGE", bossName: encounter.boss_name, healthPercent },
+      data: { type: 'BOSS_DAMAGE', bossName: encounter.boss_name, healthPercent },
     };
   } catch (error) {
     return null;
@@ -239,7 +239,7 @@ async function generateBossNotification(userId: string): Promise<NotificationCon
 async function generateSocialNotification(userId: string): Promise<NotificationContent | null> {
   try {
     // Get user's rival
-    const { data: rival, error } = await getSupabaseClient().from("rivals").select("rival_name, rival_minutes, my_minutes").eq("user_id", userId).eq("is_active", true).maybeSingle();
+    const { data: rival, error } = await getSupabaseClient().from('rivals').select('rival_name, rival_minutes, my_minutes').eq('user_id', userId).eq('is_active', true).maybeSingle();
 
     if (error || !rival) {
       return null;
@@ -251,14 +251,14 @@ async function generateSocialNotification(userId: string): Promise<NotificationC
       return {
         title: `⚔️ ${rival.rival_name} is ahead!`,
         body: `They're ${gap} minutes ahead this week. Time to focus and close the gap!`,
-        data: { type: "RIVAL_AHEAD", rivalName: rival.rival_name, gap },
+        data: { type: 'RIVAL_AHEAD', rivalName: rival.rival_name, gap },
       };
     }
 
     return {
       title: `⚔️ You're beating ${rival.rival_name}!`,
       body: `You're ${Math.abs(gap)} minutes ahead. Keep the lead!`,
-      data: { type: "RIVAL_LEADING", rivalName: rival.rival_name },
+      data: { type: 'RIVAL_LEADING', rivalName: rival.rival_name },
     };
   } catch (error) {
     return null;
@@ -274,7 +274,7 @@ async function generatePositiveNotification(userId: string): Promise<Notificatio
     const weekStart = new Date();
     weekStart.setDate(weekStart.getDate() - 7);
 
-    const { data: sessions, error } = await getSupabaseClient().from("sessions").select("duration_seconds").eq("user_id", userId).eq("status", "COMPLETED").gte("completed_at", weekStart.toISOString());
+    const { data: sessions, error } = await getSupabaseClient().from('sessions').select('duration_seconds').eq('user_id', userId).eq('status', 'COMPLETED').gte('completed_at', weekStart.toISOString());
 
     if (error || !sessions || sessions.length === 0) {
       return null;
@@ -283,9 +283,9 @@ async function generatePositiveNotification(userId: string): Promise<Notificatio
     const totalMinutes = sessions.reduce((sum, s) => sum + (s.duration_seconds || 0) / 60, 0);
 
     return {
-      title: "Great momentum this week 📈",
+      title: 'Great momentum this week 📈',
       body: `You've focused for ${Math.round(totalMinutes)} minutes this week. Today's session keeps it going!`,
-      data: { type: "MOMENTUM", totalMinutes },
+      data: { type: 'MOMENTUM', totalMinutes },
     };
   } catch (error) {
     return null;
@@ -312,7 +312,7 @@ async function generateRankReportNotification(userId: string): Promise<Notificat
     const weekStart = new Date();
     weekStart.setDate(weekStart.getDate() - 7);
 
-    const { data: sessions, error } = await getSupabaseClient().from("sessions").select("duration_seconds").eq("user_id", userId).eq("status", "COMPLETED").gte("completed_at", weekStart.toISOString());
+    const { data: sessions, error } = await getSupabaseClient().from('sessions').select('duration_seconds').eq('user_id', userId).eq('status', 'COMPLETED').gte('completed_at', weekStart.toISOString());
 
     if (error) {
       return null;
@@ -321,7 +321,7 @@ async function generateRankReportNotification(userId: string): Promise<Notificat
     const weeklyMinutes = (sessions || []).reduce((sum, s) => sum + (s.duration_seconds || 0) / 60, 0);
 
     // Get rank info from leaderboard position
-    const { data: leaderboard, error: lbError } = await getSupabaseClient().from("weekly_leaderboard").select("user_id, focus_minutes").order("focus_minutes", { ascending: false });
+    const { data: leaderboard, error: lbError } = await getSupabaseClient().from('weekly_leaderboard').select('user_id, focus_minutes').order('focus_minutes', { ascending: false });
 
     if (lbError || !leaderboard) {
       return null;
@@ -340,27 +340,27 @@ async function generateRankReportNotification(userId: string): Promise<Notificat
     let sessionsToNext: number | null = null;
 
     if (percentile >= 99) {
-      tier = "LEGEND";
-      tierIcon = "👑";
+      tier = 'LEGEND';
+      tierIcon = '👑';
     } else if (percentile >= 95) {
-      tier = "DIAMOND";
-      tierIcon = "💎";
+      tier = 'DIAMOND';
+      tierIcon = '💎';
       sessionsToNext = Math.ceil((0.99 * totalUsers - (totalUsers - rankPosition)) * 25);
     } else if (percentile >= 90) {
-      tier = "PLATINUM";
-      tierIcon = "⭐";
+      tier = 'PLATINUM';
+      tierIcon = '⭐';
       sessionsToNext = Math.ceil((0.95 * totalUsers - (totalUsers - rankPosition)) * 25);
     } else if (percentile >= 75) {
-      tier = "GOLD";
-      tierIcon = "🥇";
+      tier = 'GOLD';
+      tierIcon = '🥇';
       sessionsToNext = Math.ceil((0.9 * totalUsers - (totalUsers - rankPosition)) * 25);
     } else if (percentile >= 50) {
-      tier = "SILVER";
-      tierIcon = "🥈";
+      tier = 'SILVER';
+      tierIcon = '🥈';
       sessionsToNext = Math.ceil((0.75 * totalUsers - (totalUsers - rankPosition)) * 25);
     } else {
-      tier = "BRONZE";
-      tierIcon = "🥉";
+      tier = 'BRONZE';
+      tierIcon = '🥉';
       sessionsToNext = Math.ceil((0.5 * totalUsers - (totalUsers - rankPosition)) * 25);
     }
 
@@ -373,7 +373,7 @@ async function generateRankReportNotification(userId: string): Promise<Notificat
       title: `Weekly Rank: ${tierIcon} ${tier}`,
       body,
       data: {
-        type: "RANK_REPORT",
+        type: 'RANK_REPORT',
         tier,
         percentile: Math.round(percentile),
         weeklyMinutes: Math.round(weeklyMinutes),
@@ -391,18 +391,18 @@ async function generateRankReportNotification(userId: string): Promise<Notificat
  */
 async function generateComebackNotification(userId: string): Promise<NotificationContent | null> {
   try {
-    const { data: quest, error } = await getSupabaseClient().from("comeback_quests").select("stage, days_absent").eq("user_id", userId).eq("all_quests_completed", false).order("created_at", { ascending: false }).limit(1).maybeSingle();
+    const { data: quest, error } = await getSupabaseClient().from('comeback_quests').select('stage, days_absent').eq('user_id', userId).eq('all_quests_completed', false).order('created_at', { ascending: false }).limit(1).maybeSingle();
 
     if (error || !quest) {
       return null;
     }
 
-    const stageNum = quest.stage === "QUEST_1" ? 1 : quest.stage === "QUEST_2" ? 2 : 3;
+    const stageNum = quest.stage === 'QUEST_1' ? 1 : quest.stage === 'QUEST_2' ? 2 : 3;
 
     return {
-      title: "🔥 Your comeback continues!",
+      title: '🔥 Your comeback continues!',
       body: `You're on Quest ${stageNum}/3. Complete today's session to progress!`,
-      data: { type: "COMEBACK_QUEST", stage: stageNum },
+      data: { type: 'COMEBACK_QUEST', stage: stageNum },
     };
   } catch (error) {
     return null;
@@ -449,10 +449,10 @@ async function checkRateLimit(userId: string): Promise<boolean> {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const { count, error } = await getSupabaseClient().from("notifications_sent").select("*", { count: "exact", head: true }).eq("user_id", userId).eq("notification_type", "SMART_REMINDER").gte("sent_at", today.toISOString());
+    const { count, error } = await getSupabaseClient().from('notifications_sent').select('*', { count: 'exact', head: true }).eq('user_id', userId).eq('notification_type', 'SMART_REMINDER').gte('sent_at', today.toISOString());
 
     if (error) {
-      debug.warn("Error checking rate limit", error);
+      debug.warn('Error checking rate limit', error);
       return false; // Allow on error
     }
 
@@ -467,13 +467,13 @@ async function checkRateLimit(userId: string): Promise<boolean> {
  */
 async function recordNotificationSent(userId: string): Promise<void> {
   try {
-    await getSupabaseClient().from("notifications_sent").insert({
+    await getSupabaseClient().from('notifications_sent').insert({
       user_id: userId,
-      notification_type: "SMART_REMINDER",
+      notification_type: 'SMART_REMINDER',
       sent_at: new Date().toISOString(),
     });
   } catch (error) {
-    debug.warn("Failed to record notification", error instanceof Error ? error : undefined);
+    debug.warn('Failed to record notification', error instanceof Error ? error : undefined);
   }
 }
 
@@ -487,18 +487,18 @@ async function recordNotificationSent(userId: string): Promise<void> {
 export async function processSmartNotifications(): Promise<void> {
   try {
     // Get all users with notifications enabled
-    const { data: users, error } = await getSupabaseClient().from("users").select("id, timezone").eq("notifications_enabled", true);
+    const { data: users, error } = await getSupabaseClient().from('users').select('id, timezone').eq('notifications_enabled', true);
 
     if (error || !users) {
-      debug.error("Failed to fetch users", error instanceof Error ? error : undefined);
+      debug.error('Failed to fetch users', error instanceof Error ? error : undefined);
       return;
     }
 
     for (const user of users) {
-      await processUserSmartNotification(user.id, user.timezone || "UTC");
+      await processUserSmartNotification(user.id, user.timezone || 'UTC');
     }
   } catch (error) {
-    debug.error("Error processing smart notifications", error instanceof Error ? error : undefined);
+    debug.error('Error processing smart notifications', error instanceof Error ? error : undefined);
   }
 }
 
@@ -510,7 +510,7 @@ export async function processUserSmartNotification(userId: string, timezone: str
     // Check rate limit
     const canSend = await checkRateLimit(userId);
     if (!canSend) {
-      debug.info("Rate limit reached for user", { userId });
+      debug.info('Rate limit reached for user', { userId });
       return;
     }
 
@@ -519,26 +519,26 @@ export async function processUserSmartNotification(userId: string, timezone: str
 
     // Check if we're in peak window
     if (!isInPeakWindow(peakWindow.peakHour)) {
-      debug.info("Not in peak window", { userId, peakHour: peakWindow.peakHour });
+      debug.info('Not in peak window', { userId, peakHour: peakWindow.peakHour });
       return;
     }
 
     // Get notification content
-    const content = await selectNotificationType(userId, ["COMEBACK", "BOSS", "STREAK", "SOCIAL", "POSITIVE"]);
+    const content = await selectNotificationType(userId, ['COMEBACK', 'BOSS', 'STREAK', 'SOCIAL', 'POSITIVE']);
 
     if (!content) {
-      debug.info("No notification content generated", { userId });
+      debug.info('No notification content generated', { userId });
       return;
     }
 
     // Send notification
     // await sendPushNotification(userId, content);
-    debug.info("Would send smart notification", { userId, title: content.title });
+    debug.info('Would send smart notification', { userId, title: content.title });
 
     // Record sent
     await recordNotificationSent(userId);
   } catch (error) {
-    debug.error("Error processing user notification", error instanceof Error ? error : undefined);
+    debug.error('Error processing user notification', error instanceof Error ? error : undefined);
   }
 }
 
@@ -546,7 +546,7 @@ export async function processUserSmartNotification(userId: string, timezone: str
 // React Hook
 // ============================================================================
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 
 interface UseSmartNotificationsResult {
   peakWindow: PeakFocusWindow | null;

@@ -49,14 +49,14 @@ export {
 // Repository
 export * as repository from './repository';
 export type { MonthlyReportData } from './repository';
-export * as focusScoreRepository from "./repository-focus-score";
+export * as focusScoreRepository from './repository-focus-score';
 export type {
   AppendFocusScoreHistoryEvent,
   MonthlyFocusReportInput,
   UpsertCurrentFocusScoreInput,
-} from "./repository-focus-score.schemas";
-export { focusScoreKeys } from "./focus-score-query-keys";
-export { calculateFocusScoreUpdate } from "./score-algorithm";
+} from './repository-focus-score.schemas';
+export { focusScoreKeys } from './focus-score-query-keys';
+export { calculateFocusScoreUpdate } from './score-algorithm';
 
 // Analytics
 export * as analytics from './analytics';
@@ -77,13 +77,13 @@ export {
   useFocusScoreColor,
   useIdentityStatement,
 } from './hooks';
-export { useFocusScore } from "./hooks-focus-score"; // Only export useFocusScore
+export { useFocusScore } from './hooks-focus-score'; // Only export useFocusScore
 
 // Integration
-export { initializeFocusScoreIntegration } from "./integration-focus-score";
+export { initializeFocusScoreIntegration } from './integration-focus-score';
 
 // Components
 export { FocusScoreCard } from './components/FocusScoreCard';
 export { ScoreHistoryChart } from './components/ScoreHistoryChart';
-export { FocusScoreDashboard } from "./components/focus-score-dashboard";
-export { FocusScoreHomeWidget } from "./components/focus-score-home-widget";
+export { FocusScoreDashboard } from './components/focus-score-dashboard';
+export { FocusScoreHomeWidget } from './components/focus-score-home-widget';

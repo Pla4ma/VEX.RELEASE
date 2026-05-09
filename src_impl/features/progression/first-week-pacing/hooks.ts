@@ -7,6 +7,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as service from './service';
 import { useAuth } from '../../../../auth/hooks';
+import type { FirstWeekProgress, FirstWeekSession } from './schemas';
 
 // ============================================================================
 // Query Keys
@@ -71,38 +72,38 @@ export function useProgressToNextSession() {
 // Utility Hooks
 // ============================================================================
 
-export function useFirstWeekCompletion(progress: any) {
-  if (!progress) return 0;
+export function useFirstWeekCompletion(progress: FirstWeekProgress | null | undefined): number {
+  if (!progress) {return 0;}
 
   const totalSessions = 7;
   return (progress.sessionsCompleted / totalSessions) * 100;
 }
 
 export function useSessionUnlocks(session: string) {
-  return service.getSessionUnlocks(session as any);
+  return service.getSessionUnlocks(session as FirstWeekSession);
 }
 
 export function useSessionXpReward(session: string) {
-  return service.getSessionXpReward(session as any);
+  return service.getSessionXpReward(session as FirstWeekSession);
 }
 
 export function useCompanionReaction(session: string) {
-  return service.getCompanionReaction(session as any);
+  return service.getCompanionReaction(session as FirstWeekSession);
 }
 
 export function useTutorialSteps(session: string) {
-  return service.getTutorialSteps(session as any);
+  return service.getTutorialSteps(session as FirstWeekSession);
 }
 
-export function useIsInFirstWeek(progress: any) {
-  if (!progress) return false;
+export function useIsInFirstWeek(progress: FirstWeekProgress | null | undefined): boolean {
+  if (!progress) {return false;}
   return service.isInFirstWeek(progress);
 }
 
-export function useNextSession(progress: any) {
-  if (!progress) return null;
+export function useNextSession(progress: FirstWeekProgress | null | undefined): FirstWeekSession | null {
+  if (!progress) {return null;}
 
-  const sessions = [
+  const sessions: FirstWeekSession[] = [
     'SESSION_1',
     'SESSION_2',
     'SESSION_3',

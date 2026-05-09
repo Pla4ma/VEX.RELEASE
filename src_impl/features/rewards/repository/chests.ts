@@ -3,11 +3,11 @@
  * Persistence for gacha chest system
  */
 
-import { getSupabaseClient } from "../../config/supabase";
-import { enqueue } from "../../lib/offline/queue";
-import { withRetry, RepositoryError } from "../../lib/repository/base";
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { z } from "zod";
+import { getSupabaseClient } from '../../config/supabase';
+import { enqueue } from '../../lib/offline/queue';
+import { withRetry, RepositoryError } from '../../lib/repository/base';
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { z } from 'zod';
 
 const supabase = getSupabaseClient();
 
@@ -18,15 +18,15 @@ const supabase = getSupabaseClient();
 export const ChestSchema = z.object({
   id: z.string().uuid(),
   user_id: z.string().uuid(),
-  type: z.enum(["COMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"]),
-  source: z.enum(["DAILY_REWARD", "BATTLE_PASS", "BOSS_DEFEAT", "SHOP_PURCHASE", "ACHIEVEMENT", "EVENT"]),
+  type: z.enum(['COMMON', 'RARE', 'EPIC', 'LEGENDARY', 'MYTHIC']),
+  source: z.enum(['DAILY_REWARD', 'BATTLE_PASS', 'BOSS_DEFEAT', 'SHOP_PURCHASE', 'ACHIEVEMENT', 'EVENT']),
   opened: z.boolean().default(false),
   rewards: z
     .array(
       z.object({
-        type: z.enum(["COINS", "GEMS", "XP_BOOST", "STREAK_SHIELD", "COSMETIC", "TITLE", "BOSS_RETRY"]),
+        type: z.enum(['COINS', 'GEMS', 'XP_BOOST', 'STREAK_SHIELD', 'COSMETIC', 'TITLE', 'BOSS_RETRY']),
         amount: z.number(),
-        rarity: z.enum(["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"]),
+        rarity: z.enum(['COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY']),
       }),
     )
     .nullable(),
@@ -53,20 +53,20 @@ export type MysteryMultiplier = z.infer<typeof MysteryMultiplierSchema>;
 // Repository Functions
 // ============================================================================
 
-export async function createChest(chest: Omit<Chest, "opened" | "rewards" | "opened_at">): Promise<{ data: Chest | null; error: RepositoryError | null }> {
+export async function createChest(chest: Omit<Chest, 'opened' | 'rewards' | 'opened_at'>): Promise<{ data: Chest | null; error: RepositoryError | null }> {
   try {
     enqueue({
-      operation: "CREATE",
-      feature: "rewards",
+      operation: 'CREATE',
+      feature: 'rewards',
       payload: chest,
       idempotencyKey: `chest:create:${chest.user_id}:${chest.id}`,
       maxRetries: 5,
-      priority: "high",
+      priority: 'high',
     });
 
-    const { data, error } = await withRetry("createChest", async () => {
+    const { data, error } = await withRetry('createChest', async () => {
       return await supabase
-        .from("chests")
+        .from('chests')
         .insert({
           id: chest.id,
           user_id: chest.user_id,
@@ -86,31 +86,31 @@ export async function createChest(chest: Omit<Chest, "opened" | "rewards" | "ope
     }
     return { data: ChestSchema.parse(data), error: null };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "create", type: "data" });
-    return { data: null, error: new RepositoryError("createChest", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'create', type: 'data' });
+    return { data: null, error: new RepositoryError('createChest', error) };
   }
 }
 
-export async function openChest(chestId: string, rewards: NonNullable<Chest["rewards"]>): Promise<{ data: Chest | null; error: RepositoryError | null }> {
+export async function openChest(chestId: string, rewards: NonNullable<Chest['rewards']>): Promise<{ data: Chest | null; error: RepositoryError | null }> {
   try {
     enqueue({
-      operation: "UPDATE",
-      feature: "rewards",
+      operation: 'UPDATE',
+      feature: 'rewards',
       payload: { chestId, rewards },
       idempotencyKey: `chest:open:${chestId}:${Date.now()}`,
       maxRetries: 5,
-      priority: "high",
+      priority: 'high',
     });
 
-    const { data, error } = await withRetry("openChest", async () => {
+    const { data, error } = await withRetry('openChest', async () => {
       return await supabase
-        .from("chests")
+        .from('chests')
         .update({
           opened: true,
           rewards,
           opened_at: Date.now(),
         })
-        .eq("id", chestId)
+        .eq('id', chestId)
         .select()
         .single();
     });
@@ -120,21 +120,21 @@ export async function openChest(chestId: string, rewards: NonNullable<Chest["rew
     }
     return { data: ChestSchema.parse(data), error: null };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "open", type: "data" });
-    return { data: null, error: new RepositoryError("openChest", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'open', type: 'data' });
+    return { data: null, error: new RepositoryError('openChest', error) };
   }
 }
 
 export async function fetchUserChests(userId: string, opened: boolean | null = null): Promise<{ data: Chest[]; error: RepositoryError | null }> {
   try {
-    let query = supabase.from("chests").select("*").eq("user_id", userId);
+    let query = supabase.from('chests').select('*').eq('user_id', userId);
 
     if (opened !== null) {
-      query = query.eq("opened", opened);
+      query = query.eq('opened', opened);
     }
 
-    const { data, error } = await withRetry("fetchUserChests", async () => {
-      return await query.order("created_at", { ascending: false });
+    const { data, error } = await withRetry('fetchUserChests', async () => {
+      return await query.order('created_at', { ascending: false });
     });
 
     if (error) {
@@ -145,19 +145,19 @@ export async function fetchUserChests(userId: string, opened: boolean | null = n
       error: null,
     };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "fetch", type: "data" });
-    return { data: [], error: new RepositoryError("fetchUserChests", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'fetch', type: 'data' });
+    return { data: [], error: new RepositoryError('fetchUserChests', error) };
   }
 }
 
 export async function fetchChestById(chestId: string): Promise<{ data: Chest | null; error: RepositoryError | null }> {
   try {
-    const { data, error } = await withRetry("fetchChestById", async () => {
-      return await supabase.from("chests").select("*").eq("id", chestId).single();
+    const { data, error } = await withRetry('fetchChestById', async () => {
+      return await supabase.from('chests').select('*').eq('id', chestId).single();
     });
 
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return { data: null, error: null };
       }
       throw error;
@@ -165,16 +165,16 @@ export async function fetchChestById(chestId: string): Promise<{ data: Chest | n
 
     return { data: ChestSchema.parse(data), error: null };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "fetchById", type: "data" });
-    return { data: null, error: new RepositoryError("fetchChestById", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'fetchById', type: 'data' });
+    return { data: null, error: new RepositoryError('fetchChestById', error) };
   }
 }
 
-export async function createMysteryMultiplier(multiplier: Omit<MysteryMultiplier, "used">): Promise<{ data: MysteryMultiplier | null; error: RepositoryError | null }> {
+export async function createMysteryMultiplier(multiplier: Omit<MysteryMultiplier, 'used'>): Promise<{ data: MysteryMultiplier | null; error: RepositoryError | null }> {
   try {
-    const { data, error } = await withRetry("createMysteryMultiplier", async () => {
+    const { data, error } = await withRetry('createMysteryMultiplier', async () => {
       return await supabase
-        .from("mystery_multipliers")
+        .from('mystery_multipliers')
         .insert({
           id: multiplier.id,
           user_id: multiplier.user_id,
@@ -195,15 +195,15 @@ export async function createMysteryMultiplier(multiplier: Omit<MysteryMultiplier
     }
     return { data: MysteryMultiplierSchema.parse(data), error: null };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "createMultiplier", type: "data" });
-    return { data: null, error: new RepositoryError("createMysteryMultiplier", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'createMultiplier', type: 'data' });
+    return { data: null, error: new RepositoryError('createMysteryMultiplier', error) };
   }
 }
 
 export async function markMultiplierUsed(multiplierId: string): Promise<{ success: boolean; error: RepositoryError | null }> {
   try {
-    const { error } = await withRetry("markMultiplierUsed", async () => {
-      return await supabase.from("mystery_multipliers").update({ used: true }).eq("id", multiplierId);
+    const { error } = await withRetry('markMultiplierUsed', async () => {
+      return await supabase.from('mystery_multipliers').update({ used: true }).eq('id', multiplierId);
     });
 
     if (error) {
@@ -211,19 +211,19 @@ export async function markMultiplierUsed(multiplierId: string): Promise<{ succes
     }
     return { success: true, error: null };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "markUsed", type: "data" });
-    return { success: false, error: new RepositoryError("markMultiplierUsed", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'markUsed', type: 'data' });
+    return { success: false, error: new RepositoryError('markMultiplierUsed', error) };
   }
 }
 
 export async function fetchActiveMultiplier(userId: string): Promise<{ data: MysteryMultiplier | null; error: RepositoryError | null }> {
   try {
-    const { data, error } = await withRetry("fetchActiveMultiplier", async () => {
-      return await supabase.from("mystery_multipliers").select("*").eq("user_id", userId).eq("triggered", true).eq("used", false).gt("expires_at", Date.now()).single();
+    const { data, error } = await withRetry('fetchActiveMultiplier', async () => {
+      return await supabase.from('mystery_multipliers').select('*').eq('user_id', userId).eq('triggered', true).eq('used', false).gt('expires_at', Date.now()).single();
     });
 
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return { data: null, error: null };
       }
       throw error;
@@ -231,8 +231,8 @@ export async function fetchActiveMultiplier(userId: string): Promise<{ data: Mys
 
     return { data: MysteryMultiplierSchema.parse(data), error: null };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "fetchMultiplier", type: "data" });
-    return { data: null, error: new RepositoryError("fetchActiveMultiplier", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'fetchMultiplier', type: 'data' });
+    return { data: null, error: new RepositoryError('fetchActiveMultiplier', error) };
   }
 }
 
@@ -249,8 +249,8 @@ export async function fetchChestAnalytics(userId: string): Promise<{
   error: RepositoryError | null;
 }> {
   try {
-    const { data, error } = await withRetry("fetchChestAnalytics", async () => {
-      return await supabase.rpc("get_chest_analytics", { p_user_id: userId });
+    const { data, error } = await withRetry('fetchChestAnalytics', async () => {
+      return await supabase.rpc('get_chest_analytics', { p_user_id: userId });
     });
 
     if (error) {
@@ -258,7 +258,7 @@ export async function fetchChestAnalytics(userId: string): Promise<{
     }
     return { data, error: null };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "analytics", type: "data" });
-    return { data: null, error: new RepositoryError("fetchChestAnalytics", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'analytics', type: 'data' });
+    return { data: null, error: new RepositoryError('fetchChestAnalytics', error) };
   }
 }

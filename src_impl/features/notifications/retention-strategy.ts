@@ -87,8 +87,6 @@ async function scheduleReminder(userId: string, draft: ReminderDraft): Promise<v
       tags: { feature: 'retention-notifications', reminderType: draft.type },
       extra: { userId },
     });
-    // Don't throw error - this prevents registration/login from failing
-    console.error('[RetentionStrategy] Failed to schedule reminder:', error);
   }
 }
 
@@ -121,14 +119,16 @@ export async function scheduleOnboardingNotifications(userId: string): Promise<v
 
     await Promise.all(reminders.map((reminder) => scheduleReminder(validatedUserId, reminder)));
   } catch (error) {
-    console.error('[RetentionStrategy] Failed to schedule onboarding notifications:', error);
     Sentry.addBreadcrumb({
       category: 'notifications.retention',
       message: 'Onboarding notifications scheduling failed',
       level: 'error',
       data: { userId },
     });
-    // Don't throw - this prevents registration from completing
+    Sentry.captureException(error, {
+      tags: { feature: 'retention-notifications', operation: 'schedule-onboarding' },
+      extra: { userId },
+    });
   }
 }
 

@@ -43,7 +43,7 @@ export function NameAndGoalScreen({ onContinue, onSkip, onBack }: NameAndGoalScr
   const showGoals = isValid && !isFocused;
 
   const handleGoalSelect = (goal: FocusGoal) => {
-    if (isAdvancing) return;
+    if (isAdvancing) {return;}
 
     setSelectedGoal(goal);
     setIsAdvancing(true);
@@ -74,10 +74,10 @@ export function NameAndGoalScreen({ onContinue, onSkip, onBack }: NameAndGoalScr
             Step 2 of 5
           </Text>
           <Text variant="h2" color="text.primary">
-            {showGoals ? "What do you mainly want to focus on?" : "What should we call you?"}
+            {showGoals ? 'What do you mainly want to focus on?' : 'What should we call you?'}
           </Text>
           <Text variant="body" color="text.secondary">
-            {showGoals ? "Pick one — this sets your default session category." : "This is how you'll appear to your squad."}
+            {showGoals ? 'Pick one — this sets your default session category.' : "This is how you'll appear to your squad."}
           </Text>
         </Box>
       </Animated.View>

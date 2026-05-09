@@ -4,7 +4,7 @@
  * Comprehensive analytics tracking for in-game shop, virtual economy, and marketplace features.
  */
 
-import { capture } from "../../shared/analytics/analytics-service";
+import { capture } from '../../shared/analytics/analytics-service';
 
 // ============================================================================
 // SHOP LIFECYCLE ANALYTICS
@@ -14,7 +14,7 @@ export function trackShopVisited(
   userId: string,
   shopId: string,
   shopType: string,
-  visitType: "browse" | "search" | "specific" | "promotion",
+  visitType: 'browse' | 'search' | 'specific' | 'promotion',
   context: {
     source: string;
     campaign?: string;
@@ -28,7 +28,7 @@ export function trackShopVisited(
     decisionTime: number;
   },
 ): void {
-  capture("shop_visited", {
+  capture('shop_visited', {
     user_id: userId,
     shop_id: shopId,
     shop_type: shopType,
@@ -64,7 +64,7 @@ export function trackShopViewed(
     sessionDuration: number;
   },
 ): void {
-  capture("shop_viewed", {
+  capture('shop_viewed', {
     user_id: userId,
     shop_id: shopId,
     view_duration: viewDuration,
@@ -79,7 +79,7 @@ export function trackShopLeft(
   shopId: string,
   leftAt: Date,
   totalDuration: number,
-  reason: "purchase" | "no_purchase" | "timeout" | "error" | "interruption",
+  reason: 'purchase' | 'no_purchase' | 'timeout' | 'error' | 'interruption',
   outcomes: {
     itemsViewed: number;
     itemsAdded: number;
@@ -93,7 +93,7 @@ export function trackShopLeft(
     reasons: string[];
   },
 ): void {
-  capture("shop_left", {
+  capture('shop_left', {
     user_id: userId,
     shop_id: shopId,
     left_at: leftAt.toISOString(),
@@ -134,7 +134,7 @@ export function trackProductViewed(
     inquiry: boolean;
   },
 ): void {
-  capture("shop_product_viewed", {
+  capture('shop_product_viewed', {
     user_id: userId,
     product_id: productId,
     product_name: productName,
@@ -171,7 +171,7 @@ export function trackProductAddedToCart(
     confidence: number;
   },
 ): void {
-  capture("shop_product_added_to_cart", {
+  capture('shop_product_added_to_cart', {
     user_id: userId,
     product_id: productId,
     product_name: productName,
@@ -190,7 +190,7 @@ export function trackProductRemovedFromCart(
   productName: string,
   quantity: number,
   removedAt: Date,
-  reason: "change_mind" | "budget" | "found_better" | "technical" | "timeout",
+  reason: 'change_mind' | 'budget' | 'found_better' | 'technical' | 'timeout',
   context: {
     timeInCart: number;
     priceChange: boolean;
@@ -203,7 +203,7 @@ export function trackProductRemovedFromCart(
     satisfaction: number;
   },
 ): void {
-  capture("shop_product_removed_from_cart", {
+  capture('shop_product_removed_from_cart', {
     user_id: userId,
     product_id: productId,
     product_name: productName,
@@ -221,7 +221,7 @@ export function trackProductWishlisted(
   productName: string,
   productType: string,
   wishlistedAt: Date,
-  reason: "future_purchase" | "price_drop" | "budget" | "research" | "gift",
+  reason: 'future_purchase' | 'price_drop' | 'budget' | 'research' | 'gift',
   context: {
     price: number;
     discount: number;
@@ -234,7 +234,7 @@ export function trackProductWishlisted(
     promotionAlert: boolean;
   },
 ): void {
-  capture("shop_product_wishlisted", {
+  capture('shop_product_wishlisted', {
     user_id: userId,
     product_id: productId,
     product_name: productName,
@@ -252,7 +252,7 @@ export function trackProductWishlisted(
 
 export function trackCartUpdated(
   userId: string,
-  updateType: "add" | "remove" | "modify" | "clear" | "restore",
+  updateType: 'add' | 'remove' | 'modify' | 'clear' | 'restore',
   updatedAt: Date,
   items: {
     productId: string;
@@ -273,7 +273,7 @@ export function trackCartUpdated(
     location: string;
   },
 ): void {
-  capture("shop_cart_updated", {
+  capture('shop_cart_updated', {
     user_id: userId,
     update_type: updateType,
     updated_at: updatedAt.toISOString(),
@@ -286,7 +286,7 @@ export function trackCartUpdated(
 export function trackCartAbandoned(
   userId: string,
   abandonedAt: Date,
-  abandonmentReason: "timeout" | "price" | "technical" | "distraction" | "decision",
+  abandonmentReason: 'timeout' | 'price' | 'technical' | 'distraction' | 'decision',
   cartValue: number,
   itemCount: number,
   timeSinceLastActivity: number,
@@ -302,7 +302,7 @@ export function trackCartAbandoned(
     timeframe: number;
   },
 ): void {
-  capture("shop_cart_abandoned", {
+  capture('shop_cart_abandoned', {
     user_id: userId,
     abandoned_at: abandonedAt.toISOString(),
     abandonment_reason: abandonmentReason,
@@ -317,7 +317,7 @@ export function trackCartAbandoned(
 export function trackCartRecovered(
   userId: string,
   recoveredAt: Date,
-  recoveryMethod: "email" | "notification" | "promotion" | "return_visit",
+  recoveryMethod: 'email' | 'notification' | 'promotion' | 'return_visit',
   originalAbandonment: Date,
   timeSinceAbandonment: number,
   incentive: {
@@ -331,7 +331,7 @@ export function trackCartRecovered(
     finalValue: number;
   },
 ): void {
-  capture("shop_cart_recovered", {
+  capture('shop_cart_recovered', {
     user_id: userId,
     recovered_at: recoveredAt.toISOString(),
     recovery_method: recoveryMethod,
@@ -374,7 +374,7 @@ export function trackPurchaseInitiated(
     sessionDuration: number;
   },
 ): void {
-  capture("shop_purchase_initiated", {
+  capture('shop_purchase_initiated', {
     user_id: userId,
     transaction_id: transactionId,
     initiated_at: initiatedAt.toISOString(),
@@ -390,7 +390,7 @@ export function trackPurchaseCompleted(
   transactionId: string,
   completedAt: Date,
   completionTime: number,
-  status: "success" | "failed" | "pending" | "cancelled",
+  status: 'success' | 'failed' | 'pending' | 'cancelled',
   items: {
     productId: string;
     quantity: number;
@@ -417,7 +417,7 @@ export function trackPurchaseCompleted(
     tracking?: string;
   },
 ): void {
-  capture("shop_purchase_completed", {
+  capture('shop_purchase_completed', {
     user_id: userId,
     transaction_id: transactionId,
     completed_at: completedAt.toISOString(),
@@ -438,7 +438,7 @@ export function trackPurchaseFailed(
   transactionId: string,
   failedAt: Date,
   failureReason: string,
-  failureType: "payment" | "inventory" | "technical" | "validation" | "fraud",
+  failureType: 'payment' | 'inventory' | 'technical' | 'validation' | 'fraud',
   errorCode: string,
   errorMessage: string,
   items: {
@@ -457,7 +457,7 @@ export function trackPurchaseFailed(
     recommendations: string[];
   },
 ): void {
-  capture("shop_purchase_failed", {
+  capture('shop_purchase_failed', {
     user_id: userId,
     transaction_id: transactionId,
     failed_at: failedAt.toISOString(),
@@ -477,7 +477,7 @@ export function trackPurchaseRefunded(
   refundId: string,
   refundedAt: Date,
   refundReason: string,
-  refundType: "full" | "partial" | "exchange" | "store_credit",
+  refundType: 'full' | 'partial' | 'exchange' | 'store_credit',
   amount: number,
   items: {
     productId: string;
@@ -496,7 +496,7 @@ export function trackPurchaseRefunded(
     feedback: string;
   },
 ): void {
-  capture("shop_purchase_refunded", {
+  capture('shop_purchase_refunded', {
     user_id: userId,
     transaction_id: transactionId,
     refund_id: refundId,
@@ -538,7 +538,7 @@ export function trackPromotionViewed(
     urgency: string;
   },
 ): void {
-  capture("shop_promotion_viewed", {
+  capture('shop_promotion_viewed', {
     user_id: userId,
     promotion_id: promotionId,
     promotion_name: promotionName,
@@ -572,7 +572,7 @@ export function trackPromotionApplied(
     satisfaction: number;
   },
 ): void {
-  capture("shop_promotion_applied", {
+  capture('shop_promotion_applied', {
     user_id: userId,
     promotion_id: promotionId,
     promotion_name: promotionName,
@@ -589,7 +589,7 @@ export function trackPromotionExpired(
   promotionId: string,
   promotionName: string,
   expiredAt: Date,
-  reason: "time" | "usage_limit" | "budget" | "manual" | "technical",
+  reason: 'time' | 'usage_limit' | 'budget' | 'manual' | 'technical',
   usage: {
     totalUses: number;
     uniqueUsers: number;
@@ -607,7 +607,7 @@ export function trackPromotionExpired(
     improvements: string[];
   },
 ): void {
-  capture("shop_promotion_expired", {
+  capture('shop_promotion_expired', {
     user_id: userId,
     promotion_id: promotionId,
     promotion_name: promotionName,
@@ -646,7 +646,7 @@ export function trackRecommendationViewed(
     ignored: number;
   },
 ): void {
-  capture("shop_recommendation_viewed", {
+  capture('shop_recommendation_viewed', {
     user_id: userId,
     recommendation_id: recommendationId,
     recommendation_type: recommendationType,
@@ -674,7 +674,7 @@ export function trackRecommendationClicked(
     timeToAction: number;
   },
 ): void {
-  capture("shop_recommendation_clicked", {
+  capture('shop_recommendation_clicked', {
     user_id: userId,
     recommendation_id: recommendationId,
     product_id: productId,
@@ -689,7 +689,7 @@ export function trackRecommendationFeedback(
   userId: string,
   recommendationId: string,
   productId: string,
-  feedbackType: "positive" | "negative" | "neutral" | "irrelevant",
+  feedbackType: 'positive' | 'negative' | 'neutral' | 'irrelevant',
   feedbackAt: Date,
   reasons: string[],
   rating?: number,
@@ -700,7 +700,7 @@ export function trackRecommendationFeedback(
     expectation: string;
   },
 ): void {
-  capture("shop_recommendation_feedback", {
+  capture('shop_recommendation_feedback', {
     user_id: userId,
     recommendation_id: recommendationId,
     product_id: productId,
@@ -719,7 +719,7 @@ export function trackRecommendationFeedback(
 
 export function trackShopDashboardViewed(
   userId: string,
-  dashboardType: "overview" | "products" | "transactions" | "promotions" | "analytics",
+  dashboardType: 'overview' | 'products' | 'transactions' | 'promotions' | 'analytics',
   filters: {
     timeframe: string;
     category: string[];
@@ -737,7 +737,7 @@ export function trackShopDashboardViewed(
     role: string;
   },
 ): void {
-  capture("shop_dashboard_viewed", {
+  capture('shop_dashboard_viewed', {
     user_id: userId,
     dashboard_type: dashboardType,
     filters,
@@ -766,7 +766,7 @@ export function trackShopUserProperties(
     discountUsageRate: number;
   },
 ): void {
-  capture("shop_user_properties", {
+  capture('shop_user_properties', {
     user_id: userId,
     total_purchases: userProperties.totalPurchases,
     total_spent: userProperties.totalSpent,
@@ -788,7 +788,7 @@ export function trackShopUserProperties(
 
 export function trackShopError(
   userId: string,
-  errorType: "inventory_error" | "payment_error" | "pricing_error" | "system_error",
+  errorType: 'inventory_error' | 'payment_error' | 'pricing_error' | 'system_error',
   errorCode: string,
   errorMessage: string,
   context: {
@@ -799,7 +799,7 @@ export function trackShopError(
     productId?: string;
   },
 ): void {
-  capture("shop_error", {
+  capture('shop_error', {
     user_id: userId,
     error_type: errorType,
     error_code: errorCode,
@@ -812,8 +812,8 @@ export function trackShopError(
 // FUNNEL ANALYTICS
 // ============================================================================
 
-export function trackShopFunnel(userId: string, step: "shop_visited" | "product_viewed" | "added_to_cart" | "checkout_started" | "purchase_completed" | "repeat_purchase"): void {
-  capture("shop_funnel", {
+export function trackShopFunnel(userId: string, step: 'shop_visited' | 'product_viewed' | 'added_to_cart' | 'checkout_started' | 'purchase_completed' | 'repeat_purchase'): void {
+  capture('shop_funnel', {
     user_id: userId,
     funnel_step: step,
   });

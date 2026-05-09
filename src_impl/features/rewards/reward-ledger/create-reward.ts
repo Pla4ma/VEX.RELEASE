@@ -85,7 +85,7 @@ export async function createRewardEntry(
     if (existing) {
       debug.info('Reward already exists, returning existing entry', {
         idempotencyKey: validated.idempotencyKey,
-        state: existing.state
+        state: existing.state,
       });
 
       return RewardDeliveryResultSchema.parse({
@@ -142,7 +142,7 @@ export async function createRewardEntry(
     debug.error('Error creating reward entry', error instanceof Error ? error : undefined);
     Sentry.captureException(error, {
       tags: { feature: 'reward-ledger' },
-      extra: { request }
+      extra: { request },
     });
 
     return RewardDeliveryResultSchema.parse({

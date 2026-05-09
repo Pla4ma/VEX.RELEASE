@@ -8,12 +8,18 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { configure, handleRequest } from 'npm:@trigger.dev/sdk@latest';
 
+type TriggerLogLevel = 'debug' | 'info' | 'warn' | 'error';
+
+function resolveTriggerLogLevel(value: string | null): TriggerLogLevel {
+  return value === 'debug' || value === 'info' || value === 'warn' || value === 'error' ? value : 'info';
+}
+
 // Configure Trigger.dev SDK
 configure({
   apiKey: Deno.env.get('TRIGGER_SECRET_KEY')!,
   project: Deno.env.get('TRIGGER_PROJECT_REF')!,
   apiUrl: Deno.env.get('TRIGGER_API_URL') || 'https://api.trigger.dev',
-  logLevel: (Deno.env.get('TRIGGER_LOG_LEVEL') as any) || 'info',
+  logLevel: resolveTriggerLogLevel(Deno.env.get('TRIGGER_LOG_LEVEL')),
 });
 
 // Import all job definitions
@@ -50,8 +56,6 @@ serve(async (req) => {
     
     return response;
   } catch (error) {
-    console.error('Error handling Trigger.dev request:', error);
-    
     return new Response(
       JSON.stringify({
         error: 'Internal server error',

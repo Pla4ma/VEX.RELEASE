@@ -1,7 +1,7 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-import { getSupabaseClient, handleSupabaseError } from "../../config/supabase";
-import { AggregatedStatsSchema, AnalyticsPreferencesSchema, DashboardLayoutSchema, DashboardWidgetSchema, DetectedPatternSchema, ExportJobSchema, InsightSchema, TimeSeriesDataSchema, getTimeRangeDates, type AnalyticsDimension, type AnalyticsFilter, type AnalyticsMetric, type TimeRange } from "./schemas";
+import { getSupabaseClient, handleSupabaseError } from '../../config/supabase';
+import { AggregatedStatsSchema, AnalyticsPreferencesSchema, DashboardLayoutSchema, DashboardWidgetSchema, DetectedPatternSchema, ExportJobSchema, InsightSchema, TimeSeriesDataSchema, getTimeRangeDates, type AnalyticsDimension, type AnalyticsFilter, type AnalyticsMetric, type TimeRange } from './schemas';
 
 const supabase = getSupabaseClient();
 
@@ -23,7 +23,7 @@ const SessionHeatmapInputSchema = z.object({
 });
 
 const HeatmapBucketSchema = z.object({
-  day: z.enum(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]),
+  day: z.enum(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']),
   hour: z.number().int().min(0).max(23),
   value: z.number().int().min(0),
 });
@@ -33,41 +33,41 @@ const SessionHeatmapDataSchema = z.object({
   buckets: z.array(HeatmapBucketSchema).length(7 * 24),
 });
 
-const HEATMAP_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
+const HEATMAP_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] as const;
 
 export type SessionHeatmapData = z.infer<typeof SessionHeatmapDataSchema>;
 
-export async function fetchTimeSeriesData(userId: string, metric: AnalyticsMetric, timeRange: TimeRange, granularity: "hour" | "day" | "week" | "month", dimensions?: AnalyticsDimension[], filters?: AnalyticsFilter[]) {
+export async function fetchTimeSeriesData(userId: string, metric: AnalyticsMetric, timeRange: TimeRange, granularity: 'hour' | 'day' | 'week' | 'month', dimensions?: AnalyticsDimension[], filters?: AnalyticsFilter[]) {
   const { start, end } = getTimeRangeDates(timeRange);
 
-  let query = supabase.from("analytics_events").select("*").eq("user_id", userId).eq("metric_type", metric).gte("timestamp", start).lte("timestamp", end).order("timestamp", { ascending: true });
+  let query = supabase.from('analytics_events').select('*').eq('user_id', userId).eq('metric_type', metric).gte('timestamp', start).lte('timestamp', end).order('timestamp', { ascending: true });
 
   if (dimensions?.length) {
-    query = query.in("dimension_type", dimensions);
+    query = query.in('dimension_type', dimensions);
   }
 
   if (filters?.length) {
     for (const filter of filters) {
       switch (filter.operator) {
-        case "eq":
+        case 'eq':
           query = query.eq(filter.dimension, filter.value);
           break;
-        case "ne":
+        case 'ne':
           query = query.neq(filter.dimension, filter.value);
           break;
-        case "gt":
+        case 'gt':
           query = query.gt(filter.dimension, filter.value);
           break;
-        case "gte":
+        case 'gte':
           query = query.gte(filter.dimension, filter.value);
           break;
-        case "lt":
+        case 'lt':
           query = query.lt(filter.dimension, filter.value);
           break;
-        case "lte":
+        case 'lte':
           query = query.lte(filter.dimension, filter.value);
           break;
-        case "in":
+        case 'in':
           query = query.in(filter.dimension, filter.value as string[]);
           break;
       }
@@ -94,7 +94,7 @@ export async function fetchSessionHeatmapData(userId: string, weeks: number): Pr
   const validated = SessionHeatmapInputSchema.parse({ userId, weeks });
   const periodStart = Date.now() - validated.weeks * 7 * 24 * 60 * 60 * 1000;
 
-  const { data, error } = await supabase.from("analytics_events").select("timestamp").eq("user_id", validated.userId).eq("metric_type", "sessions_completed").gte("timestamp", periodStart).order("timestamp", { ascending: false });
+  const { data, error } = await supabase.from('analytics_events').select('timestamp').eq('user_id', validated.userId).eq('metric_type', 'sessions_completed').gte('timestamp', periodStart).order('timestamp', { ascending: false });
 
   if (error) {
     throw handleSupabaseError(error);
@@ -129,7 +129,7 @@ export async function fetchSessionHeatmapData(userId: string, weeks: number): Pr
 
 function aggregateDataPoints(
   rawData: unknown[],
-  granularity: "hour" | "day" | "week" | "month",
+  granularity: 'hour' | 'day' | 'week' | 'month',
   metric: AnalyticsMetric,
 ): {
   points: AggregatedPoint[];
@@ -176,7 +176,7 @@ function aggregateDataPoints(
     .sort((left, right) => left.timestamp - right.timestamp)
     .map((bucket) => ({
       timestamp: bucket.timestamp,
-      value: bucket.values.reduce((sum, value) => sum + value, 0) / (metric.includes("average") ? bucket.values.length : 1),
+      value: bucket.values.reduce((sum, value) => sum + value, 0) / (metric.includes('average') ? bucket.values.length : 1),
       metadata: bucket.metadata,
     }));
 
@@ -193,23 +193,23 @@ function aggregateDataPoints(
   return { points, summary: { total, average, min, max, change, changePercent } };
 }
 
-function getBucketTimestamp(timestamp: number, granularity: "hour" | "day" | "week" | "month"): number {
+function getBucketTimestamp(timestamp: number, granularity: 'hour' | 'day' | 'week' | 'month'): number {
   const date = new Date(timestamp);
 
   switch (granularity) {
-    case "hour":
+    case 'hour':
       date.setMinutes(0, 0, 0);
       break;
-    case "day":
+    case 'day':
       date.setHours(0, 0, 0, 0);
       break;
-    case "week": {
+    case 'week': {
       const day = date.getDay();
       date.setDate(date.getDate() - day);
       date.setHours(0, 0, 0, 0);
       break;
     }
-    case "month":
+    case 'month':
       date.setDate(1);
       date.setHours(0, 0, 0, 0);
       break;
@@ -219,18 +219,18 @@ function getBucketTimestamp(timestamp: number, granularity: "hour" | "day" | "we
 }
 
 export async function fetchInsights(userId: string, options?: { unreadOnly?: boolean; types?: string[]; severities?: string[]; limit?: number }) {
-  let query = supabase.from("insights").select("*").eq("user_id", userId).order("detected_at", { ascending: false });
+  let query = supabase.from('insights').select('*').eq('user_id', userId).order('detected_at', { ascending: false });
 
   if (options?.unreadOnly) {
-    query = query.eq("is_read", false);
+    query = query.eq('is_read', false);
   }
 
   if (options?.types?.length) {
-    query = query.in("type", options.types);
+    query = query.in('type', options.types);
   }
 
   if (options?.severities?.length) {
-    query = query.in("severity", options.severities);
+    query = query.in('severity', options.severities);
   }
 
   if (options?.limit) {
@@ -247,7 +247,7 @@ export async function fetchInsights(userId: string, options?: { unreadOnly?: boo
 }
 
 export async function createInsight(insight: z.infer<typeof InsightSchema>) {
-  const { data, error } = await supabase.from("insights").insert(insight).select().single();
+  const { data, error } = await supabase.from('insights').insert(insight).select().single();
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -255,7 +255,7 @@ export async function createInsight(insight: z.infer<typeof InsightSchema>) {
 }
 
 export async function markInsightAsRead(userId: string, insightId: string) {
-  const { data, error } = await supabase.from("insights").update({ is_read: true }).eq("id", insightId).eq("user_id", userId).select().single();
+  const { data, error } = await supabase.from('insights').update({ is_read: true }).eq('id', insightId).eq('user_id', userId).select().single();
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -263,7 +263,7 @@ export async function markInsightAsRead(userId: string, insightId: string) {
 }
 
 export async function markInsightAsActioned(userId: string, insightId: string, actionType: string, actionPayload?: Record<string, unknown>) {
-  const { data, error } = await supabase.from("insights").update({ is_actioned: true, action_type: actionType, action_payload: actionPayload }).eq("id", insightId).eq("user_id", userId).select().single();
+  const { data, error } = await supabase.from('insights').update({ is_actioned: true, action_type: actionType, action_payload: actionPayload }).eq('id', insightId).eq('user_id', userId).select().single();
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -272,15 +272,15 @@ export async function markInsightAsActioned(userId: string, insightId: string, a
 
 export async function fetchDashboardLayouts(userId: string) {
   const { data, error } = await supabase
-    .from("dashboard_layouts")
+    .from('dashboard_layouts')
     .select(
       `
       *,
       widgets:dashboard_widgets(*)
     `,
     )
-    .eq("user_id", userId)
-    .order("is_default", { ascending: false });
+    .eq('user_id', userId)
+    .order('is_default', { ascending: false });
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -289,15 +289,15 @@ export async function fetchDashboardLayouts(userId: string) {
 
 export async function fetchDefaultDashboard(userId: string) {
   const { data, error } = await supabase
-    .from("dashboard_layouts")
+    .from('dashboard_layouts')
     .select(
       `
       *,
       widgets:dashboard_widgets(*)
     `,
     )
-    .eq("user_id", userId)
-    .eq("is_default", true)
+    .eq('user_id', userId)
+    .eq('is_default', true)
     .single();
   if (error) {
     throw handleSupabaseError(error);
@@ -307,12 +307,12 @@ export async function fetchDefaultDashboard(userId: string) {
 
 export async function createDashboardLayout(layout: z.infer<typeof DashboardLayoutSchema>) {
   const { widgets, ...layoutData } = layout;
-  const { data, error } = await supabase.from("dashboard_layouts").insert(layoutData).select().single();
+  const { data, error } = await supabase.from('dashboard_layouts').insert(layoutData).select().single();
   if (error) {
     throw handleSupabaseError(error);
   }
   if (widgets?.length) {
-    const { error: widgetError } = await supabase.from("dashboard_widgets").insert(widgets.map((widget) => ({ ...widget, dashboard_id: data.id })));
+    const { error: widgetError } = await supabase.from('dashboard_widgets').insert(widgets.map((widget) => ({ ...widget, dashboard_id: data.id })));
     if (widgetError) {
       throw handleSupabaseError(widgetError);
     }
@@ -322,9 +322,9 @@ export async function createDashboardLayout(layout: z.infer<typeof DashboardLayo
 
 export async function updateDashboardWidget(widgetId: string, updates: Partial<z.infer<typeof DashboardWidgetSchema>>) {
   const { data, error } = await supabase
-    .from("dashboard_widgets")
+    .from('dashboard_widgets')
     .update({ ...updates, updated_at: Date.now() })
-    .eq("id", widgetId)
+    .eq('id', widgetId)
     .select()
     .single();
   if (error) {
@@ -334,14 +334,14 @@ export async function updateDashboardWidget(widgetId: string, updates: Partial<z
 }
 
 export async function deleteDashboardWidget(widgetId: string) {
-  const { error } = await supabase.from("dashboard_widgets").delete().eq("id", widgetId);
+  const { error } = await supabase.from('dashboard_widgets').delete().eq('id', widgetId);
   if (error) {
     throw handleSupabaseError(error);
   }
 }
 
 export async function fetchExportJobs(userId: string, limit = 10) {
-  const { data, error } = await supabase.from("export_jobs").select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(limit);
+  const { data, error } = await supabase.from('export_jobs').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(limit);
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -349,7 +349,7 @@ export async function fetchExportJobs(userId: string, limit = 10) {
 }
 
 export async function createExportJob(job: z.infer<typeof ExportJobSchema>) {
-  const { data, error } = await supabase.from("export_jobs").insert(job).select().single();
+  const { data, error } = await supabase.from('export_jobs').insert(job).select().single();
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -361,10 +361,10 @@ export async function updateExportJobProgress(jobId: string, progress: number, f
   if (fileUrl) {
     updates.file_url = fileUrl;
     updates.file_size = fileSize;
-    updates.status = "completed";
+    updates.status = 'completed';
     updates.completed_at = Date.now();
   }
-  const { data, error } = await supabase.from("export_jobs").update(updates).eq("id", jobId).select().single();
+  const { data, error } = await supabase.from('export_jobs').update(updates).eq('id', jobId).select().single();
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -372,7 +372,7 @@ export async function updateExportJobProgress(jobId: string, progress: number, f
 }
 
 export async function markExportJobFailed(jobId: string, errorMessage: string) {
-  const { data, error } = await supabase.from("export_jobs").update({ status: "failed", error_message: errorMessage }).eq("id", jobId).select().single();
+  const { data, error } = await supabase.from('export_jobs').update({ status: 'failed', error_message: errorMessage }).eq('id', jobId).select().single();
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -380,8 +380,8 @@ export async function markExportJobFailed(jobId: string, errorMessage: string) {
 }
 
 export async function fetchAnalyticsPreferences(userId: string) {
-  const { data, error } = await supabase.from("analytics_preferences").select("*").eq("user_id", userId).single();
-  if (error && error.code !== "PGRST116") {
+  const { data, error } = await supabase.from('analytics_preferences').select('*').eq('user_id', userId).single();
+  if (error && error.code !== 'PGRST116') {
     throw handleSupabaseError(error);
   }
   return data ? AnalyticsPreferencesSchema.parse(data) : null;
@@ -389,7 +389,7 @@ export async function fetchAnalyticsPreferences(userId: string) {
 
 export async function updateAnalyticsPreferences(userId: string, preferences: Partial<z.infer<typeof AnalyticsPreferencesSchema>>) {
   const { data, error } = await supabase
-    .from("analytics_preferences")
+    .from('analytics_preferences')
     .upsert({ user_id: userId, ...preferences, updated_at: Date.now() })
     .select()
     .single();
@@ -400,15 +400,15 @@ export async function updateAnalyticsPreferences(userId: string, preferences: Pa
 }
 
 export async function fetchAggregatedStats(userId: string, period: TimeRange) {
-  const { data, error } = await supabase.from("aggregated_stats").select("*").eq("user_id", userId).eq("period", period).single();
-  if (error && error.code !== "PGRST116") {
+  const { data, error } = await supabase.from('aggregated_stats').select('*').eq('user_id', userId).eq('period', period).single();
+  if (error && error.code !== 'PGRST116') {
     throw handleSupabaseError(error);
   }
   return data ? AggregatedStatsSchema.parse(data) : null;
 }
 
 export async function storeAggregatedStats(stats: z.infer<typeof AggregatedStatsSchema>) {
-  const { data, error } = await supabase.from("aggregated_stats").upsert(stats).select().single();
+  const { data, error } = await supabase.from('aggregated_stats').upsert(stats).select().single();
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -416,15 +416,15 @@ export async function storeAggregatedStats(stats: z.infer<typeof AggregatedStats
 }
 
 export async function fetchDetectedPatterns(userId: string, options?: { since?: number; types?: string[]; minConfidence?: number }) {
-  let query = supabase.from("detected_patterns").select("*").eq("user_id", userId).order("detected_at", { ascending: false });
+  let query = supabase.from('detected_patterns').select('*').eq('user_id', userId).order('detected_at', { ascending: false });
   if (options?.since) {
-    query = query.gte("detected_at", options.since);
+    query = query.gte('detected_at', options.since);
   }
   if (options?.types?.length) {
-    query = query.in("type", options.types);
+    query = query.in('type', options.types);
   }
   if (options?.minConfidence !== undefined) {
-    query = query.gte("confidence", options.minConfidence);
+    query = query.gte('confidence', options.minConfidence);
   }
   const { data, error } = await query;
   if (error) {
@@ -434,7 +434,7 @@ export async function fetchDetectedPatterns(userId: string, options?: { since?: 
 }
 
 export async function storeDetectedPattern(pattern: z.infer<typeof DetectedPatternSchema>) {
-  const { data, error } = await supabase.from("detected_patterns").insert(pattern).select().single();
+  const { data, error } = await supabase.from('detected_patterns').insert(pattern).select().single();
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -442,7 +442,7 @@ export async function storeDetectedPattern(pattern: z.infer<typeof DetectedPatte
 }
 
 export async function deleteOldAnalyticsData(userId: string, olderThan: number) {
-  const { error } = await supabase.from("analytics_events").delete().eq("user_id", userId).lt("timestamp", olderThan);
+  const { error } = await supabase.from('analytics_events').delete().eq('user_id', userId).lt('timestamp', olderThan);
   if (error) {
     throw handleSupabaseError(error);
   }
@@ -459,7 +459,7 @@ export async function bulkInsertAnalyticsEvents(
     metadata?: Record<string, unknown>;
   }>,
 ) {
-  const { error } = await supabase.from("analytics_events").insert(events);
+  const { error } = await supabase.from('analytics_events').insert(events);
   if (error) {
     throw handleSupabaseError(error);
   }

@@ -1,5 +1,5 @@
-import { FocusScoreUpdateInputSchema, FocusScoreUpdateResultSchema, MAX_FOCUS_SCORE, MIN_FOCUS_SCORE } from "./schemas";
-import type { FocusScoreFactorKey, FocusScoreUpdateInput, FocusScoreUpdateResult } from "./types";
+import { FocusScoreUpdateInputSchema, FocusScoreUpdateResultSchema, MAX_FOCUS_SCORE, MIN_FOCUS_SCORE } from './schemas';
+import type { FocusScoreFactorKey, FocusScoreUpdateInput, FocusScoreUpdateResult } from './types';
 
 const FACTOR_WEIGHTS = {
   consistency: 35,
@@ -10,25 +10,25 @@ const FACTOR_WEIGHTS = {
 } as const;
 
 const FACTOR_LABELS: Record<FocusScoreFactorKey, string> = {
-  consistency: "Consistency",
-  streakStability: "Streak stability",
-  sessionQuality: "Session quality",
-  intentionalDifficulty: "Intentional difficulty",
-  recency: "Recency",
+  consistency: 'Consistency',
+  streakStability: 'Streak stability',
+  sessionQuality: 'Session quality',
+  intentionalDifficulty: 'Intentional difficulty',
+  recency: 'Recency',
 };
 
 function clampScore(score: number): number {
   return Math.max(MIN_FOCUS_SCORE, Math.min(MAX_FOCUS_SCORE, score));
 }
 
-function getBand(score: number): FocusScoreUpdateResult["band"] {
-  if (score >= 800) {return "Legendary";}
-  if (score >= 740) {return "Elite";}
-  if (score >= 670) {return "Exceptional";}
-  if (score >= 580) {return "Strong";}
-  if (score >= 500) {return "Good";}
-  if (score >= 420) {return "Fair";}
-  return "Building";
+function getBand(score: number): FocusScoreUpdateResult['band'] {
+  if (score >= 800) {return 'Legendary';}
+  if (score >= 740) {return 'Elite';}
+  if (score >= 670) {return 'Exceptional';}
+  if (score >= 580) {return 'Strong';}
+  if (score >= 500) {return 'Good';}
+  if (score >= 420) {return 'Fair';}
+  return 'Building';
 }
 
 function getFactorExplanation(key: FocusScoreFactorKey, score: number): string {
@@ -40,8 +40,8 @@ function getFactorExplanation(key: FocusScoreFactorKey, score: number): string {
 }
 
 function getGradeAdjustment(input: FocusScoreUpdateInput): number {
-  if (input.eventType === "session:abandoned") {return -12;}
-  const byGrade: Record<NonNullable<FocusScoreUpdateInput["grade"]>, number> = {
+  if (input.eventType === 'session:abandoned') {return -12;}
+  const byGrade: Record<NonNullable<FocusScoreUpdateInput['grade']>, number> = {
     S: 14,
     A: 9,
     B: 4,
@@ -52,20 +52,20 @@ function getGradeAdjustment(input: FocusScoreUpdateInput): number {
 }
 
 function getModeAdjustment(input: FocusScoreUpdateInput): number {
-  const byMode: Record<NonNullable<FocusScoreUpdateInput["sessionMode"]>, number> = {
+  const byMode: Record<NonNullable<FocusScoreUpdateInput['sessionMode']>, number> = {
     deep_work: 3,
     standard: 1,
     starter: 2,
     recovery: 0,
   };
   if (!input.sessionMode) {return 0;}
-  if (input.sessionMode === "recovery" && input.grade === "S") {return 1;}
+  if (input.sessionMode === 'recovery' && input.grade === 'S') {return 1;}
   return byMode[input.sessionMode];
 }
 
 function getXpMultiplier(input: FocusScoreUpdateInput): number {
-  if (input.eventType === "session:abandoned") {return 0.5;}
-  const byGrade: Record<NonNullable<FocusScoreUpdateInput["grade"]>, number> = {
+  if (input.eventType === 'session:abandoned') {return 0.5;}
+  const byGrade: Record<NonNullable<FocusScoreUpdateInput['grade']>, number> = {
     S: 1.8,
     A: 1.4,
     B: 1.1,
@@ -73,7 +73,7 @@ function getXpMultiplier(input: FocusScoreUpdateInput): number {
     D: 0.75,
   };
   const gradeMultiplier = input.grade ? byGrade[input.grade] : 1;
-  if (input.sessionMode === "recovery") {
+  if (input.sessionMode === 'recovery') {
     return Math.min(1.05, gradeMultiplier);
   }
   return gradeMultiplier;
@@ -97,19 +97,19 @@ export function calculateFocusScoreUpdate(rawInput: FocusScoreUpdateInput): Focu
   delta += getGradeAdjustment(input);
   delta += getModeAdjustment(input);
 
-  if (input.eventType === "comeback:completed") {
+  if (input.eventType === 'comeback:completed') {
     delta += 6;
   }
-  if (input.eventType === "streak:updated" && input.signals.recency < 40) {
+  if (input.eventType === 'streak:updated' && input.signals.recency < 40) {
     delta -= 4;
   }
-  if (input.sessionMode === "recovery" && delta > 8) {
+  if (input.sessionMode === 'recovery' && delta > 8) {
     delta = 8;
   }
-  if (input.eventType === "session:completed" && input.previousScore === 550 && delta < 4) {
+  if (input.eventType === 'session:completed' && input.previousScore === 550 && delta < 4) {
     delta = 4;
   }
-  if (input.grade === "S" && input.eventType === "session:completed" && delta < 12 && input.sessionMode !== "recovery") {
+  if (input.grade === 'S' && input.eventType === 'session:completed' && delta < 12 && input.sessionMode !== 'recovery') {
     delta = 12;
   }
 
@@ -133,32 +133,32 @@ export function calculateFocusScoreUpdate(rawInput: FocusScoreUpdateInput): Focu
       consistency: {
         weightPercent: 35,
         score: input.signals.consistency,
-        delta: factorEntries.find((entry) => entry.key === "consistency")?.delta ?? 0,
-        explanation: factorEntries.find((entry) => entry.key === "consistency")?.explanation ?? "",
+        delta: factorEntries.find((entry) => entry.key === 'consistency')?.delta ?? 0,
+        explanation: factorEntries.find((entry) => entry.key === 'consistency')?.explanation ?? '',
       },
       streakStability: {
         weightPercent: 25,
         score: input.signals.streakStability,
-        delta: factorEntries.find((entry) => entry.key === "streakStability")?.delta ?? 0,
-        explanation: factorEntries.find((entry) => entry.key === "streakStability")?.explanation ?? "",
+        delta: factorEntries.find((entry) => entry.key === 'streakStability')?.delta ?? 0,
+        explanation: factorEntries.find((entry) => entry.key === 'streakStability')?.explanation ?? '',
       },
       sessionQuality: {
         weightPercent: 20,
         score: input.signals.sessionQuality,
-        delta: factorEntries.find((entry) => entry.key === "sessionQuality")?.delta ?? 0,
-        explanation: factorEntries.find((entry) => entry.key === "sessionQuality")?.explanation ?? "",
+        delta: factorEntries.find((entry) => entry.key === 'sessionQuality')?.delta ?? 0,
+        explanation: factorEntries.find((entry) => entry.key === 'sessionQuality')?.explanation ?? '',
       },
       intentionalDifficulty: {
         weightPercent: 10,
         score: input.signals.intentionalDifficulty,
-        delta: factorEntries.find((entry) => entry.key === "intentionalDifficulty")?.delta ?? 0,
-        explanation: factorEntries.find((entry) => entry.key === "intentionalDifficulty")?.explanation ?? "",
+        delta: factorEntries.find((entry) => entry.key === 'intentionalDifficulty')?.delta ?? 0,
+        explanation: factorEntries.find((entry) => entry.key === 'intentionalDifficulty')?.explanation ?? '',
       },
       recency: {
         weightPercent: 10,
         score: input.signals.recency,
-        delta: factorEntries.find((entry) => entry.key === "recency")?.delta ?? 0,
-        explanation: factorEntries.find((entry) => entry.key === "recency")?.explanation ?? "",
+        delta: factorEntries.find((entry) => entry.key === 'recency')?.delta ?? 0,
+        explanation: factorEntries.find((entry) => entry.key === 'recency')?.explanation ?? '',
       },
     },
     topPositiveFactor: topPositive.key,

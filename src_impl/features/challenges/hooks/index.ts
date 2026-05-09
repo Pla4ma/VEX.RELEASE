@@ -6,13 +6,13 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect } from 'react';
-import { eventBus } from '../../events';
-import * as service from './service';
-import * as repository from './repository';
-import { economyKeys } from '../economy/hooks';
+import { eventBus } from '../../../events';
+import * as service from '../service';
+import * as repository from '../repository';
+import { economyKeys } from '../../economy/hooks';
 import type {
   UpdateChallengeProgressInput,
-} from './schemas';
+} from '../schemas';
 
 // ============================================================================
 // Query Keys

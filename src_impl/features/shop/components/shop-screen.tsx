@@ -12,16 +12,16 @@
  * - Error handling with retry
  */
 
-import React, { useState, useCallback, useMemo } from "react";
-import { View, Text, ScrollView, Pressable, RefreshControl, Alert } from "react-native";
-import { useWalletSummary, useActiveOffers, useBalance } from "../../economy/hooks";
-import { useShopItems, useInitiatePurchase, useCompletePurchaseDelivery, useProcessPurchasePayment } from "../../shop/hooks";
-import { useInventory } from "../../inventory/hooks";
-import type { ItemDefinition } from "../../items/schemas";
-import type { LimitedOffer } from "../../economy/schemas";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useState, useCallback, useMemo } from 'react';
+import { View, Text, ScrollView, Pressable, RefreshControl, Alert } from 'react-native';
+import { useWalletSummary, useActiveOffers, useBalance } from '../../economy/hooks';
+import { useShopItems, useInitiatePurchase, useCompletePurchaseDelivery, useProcessPurchasePayment } from '../../shop/hooks';
+import { useInventory } from '../../inventory/hooks';
+import type { ItemDefinition } from '../../items/schemas';
+import type { LimitedOffer } from '../../economy/schemas';
+import { createSheet } from '@/shared/ui/create-sheet';
 
-import { CurrencyDisplay, ShopItemCard, PurchaseModal, ShopSkeleton, EmptyShop, ShopError, CATEGORIES, type ShopCategory } from "./";
+import { CurrencyDisplay, ShopItemCard, PurchaseModal, ShopSkeleton, EmptyShop, ShopError, CATEGORIES, type ShopCategory } from './';
 
 interface ShopScreenProps {
   userId: string;
@@ -29,17 +29,17 @@ interface ShopScreenProps {
 }
 
 export function ShopScreen({ userId, userLevel }: ShopScreenProps) {
-  const [selectedCategory, setSelectedCategory] = useState<ShopCategory>("ALL");
+  const [selectedCategory, setSelectedCategory] = useState<ShopCategory>('ALL');
   const [selectedItem, setSelectedItem] = useState<ItemDefinition | null>(null);
   const [selectedOffer, setSelectedOffer] = useState<LimitedOffer | null>(null);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
 
   // Data queries
   const walletQuery = useWalletSummary(userId);
-  const coinsQuery = useBalance(userId, "COINS");
-  const gemsQuery = useBalance(userId, "GEMS");
+  const coinsQuery = useBalance(userId, 'COINS');
+  const gemsQuery = useBalance(userId, 'GEMS');
   const offersQuery = useActiveOffers(userId, userLevel);
-  const shopItemsQuery = useShopItems(selectedCategory === "ALL" ? undefined : selectedCategory);
+  const shopItemsQuery = useShopItems(selectedCategory === 'ALL' ? undefined : selectedCategory);
   const inventoryQuery = useInventory(userId);
 
   // Mutations
@@ -54,14 +54,14 @@ export function ShopScreen({ userId, userLevel }: ShopScreenProps) {
 
   // Filter items based on category
   const displayedItems = useMemo(() => {
-    if (selectedCategory === "OFFERS") {
+    if (selectedCategory === 'OFFERS') {
       return [];
     }
     return shopItemsQuery.data ?? [];
   }, [shopItemsQuery.data, selectedCategory]);
 
   const displayedOffers = useMemo(() => {
-    if (selectedCategory === "ALL" || selectedCategory === "OFFERS") {
+    if (selectedCategory === 'ALL' || selectedCategory === 'OFFERS') {
       return offersQuery.data ?? [];
     }
     return [];
@@ -86,7 +86,7 @@ export function ShopScreen({ userId, userLevel }: ShopScreenProps) {
         shopItemId: selectedItem.id,
         quantity: 1,
         expectedPrice: {
-          currency: "COINS",
+          currency: 'COINS',
           amount: selectedOffer?.discountedPrice?.amount ?? selectedItem.baseValue,
         },
       });
@@ -95,7 +95,7 @@ export function ShopScreen({ userId, userLevel }: ShopScreenProps) {
         // Process payment first
         await processPayment.mutateAsync({
           purchaseId: result.purchaseId,
-          currency: "COINS",
+          currency: 'COINS',
           amount: selectedOffer?.discountedPrice?.amount ?? selectedItem.baseValue,
         });
 
@@ -107,9 +107,9 @@ export function ShopScreen({ userId, userLevel }: ShopScreenProps) {
 
         if (complete.success) {
           // Success - item added to inventory
-          Alert.alert("Purchase Successful!", `You bought ${selectedItem.name}`, [
+          Alert.alert('Purchase Successful!', `You bought ${selectedItem.name}`, [
             {
-              text: "Awesome!",
+              text: 'Awesome!',
               onPress: () => {
                 setSelectedItem(null);
                 setSelectedOffer(null);
@@ -121,13 +121,13 @@ export function ShopScreen({ userId, userLevel }: ShopScreenProps) {
           walletQuery.refetch();
           inventoryQuery.refetch();
         } else {
-          setPurchaseError((complete as { error?: { message?: string } }).error?.message || "Purchase failed");
+          setPurchaseError((complete as { error?: { message?: string } }).error?.message || 'Purchase failed');
         }
       } else {
-        setPurchaseError(result.error?.message || "Could not start purchase");
+        setPurchaseError(result.error?.message || 'Could not start purchase');
       }
     } catch (err) {
-      setPurchaseError(err instanceof Error ? err.message : "Unknown error");
+      setPurchaseError(err instanceof Error ? err.message : 'Unknown error');
     }
   }, [selectedItem, selectedOffer, userId, initiatePurchase, completePurchase]);
 
@@ -149,7 +149,7 @@ export function ShopScreen({ userId, userLevel }: ShopScreenProps) {
   }
 
   if (isError && error) {
-    return <ShopError error={error instanceof Error ? error : new Error("Unknown error")} onRetry={handleRefresh} />;
+    return <ShopError error={error instanceof Error ? error : new Error('Unknown error')} onRetry={handleRefresh} />;
   }
 
   const userCoins = coinsQuery.data ?? 0;
@@ -189,7 +189,7 @@ export function ShopScreen({ userId, userLevel }: ShopScreenProps) {
                     if (!item) {
                       return null;
                     }
-                    return <ShopItemCard key={offer.id} item={item} offer={offer as LimitedOffer} userLevel={userLevel} onPress={() => handleItemPress(item, offer as LimitedOffer)} disabled={offer.status !== "ACTIVE"} />;
+                    return <ShopItemCard key={offer.id} item={item} offer={offer as LimitedOffer} userLevel={userLevel} onPress={() => handleItemPress(item, offer as LimitedOffer)} disabled={offer.status !== 'ACTIVE'} />;
                   })}
                 </View>
               </View>
@@ -198,7 +198,7 @@ export function ShopScreen({ userId, userLevel }: ShopScreenProps) {
             {/* Regular Items */}
             {displayedItems.length > 0 && (
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>{selectedCategory === "ALL" ? "All Items" : selectedCategory}</Text>
+                <Text style={styles.sectionTitle}>{selectedCategory === 'ALL' ? 'All Items' : selectedCategory}</Text>
                 <View style={styles.grid}>
                   {displayedItems.map((item: ItemDefinition) => (
                     <ShopItemCard key={item.id} item={item} userLevel={userLevel} onPress={() => handleItemPress(item)} />
@@ -233,41 +233,41 @@ export function ShopScreen({ userId, userLevel }: ShopScreenProps) {
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: "#1a1a2e",
+    backgroundColor: '#1a1a2e',
   },
   categoryBar: {
     maxHeight: 60,
-    backgroundColor: "#16213e",
+    backgroundColor: '#16213e',
     borderBottomWidth: 1,
-    borderBottomColor: "#0f3460",
+    borderBottomColor: '#0f3460',
   },
   categoryContent: {
     paddingHorizontal: 12,
     gap: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
   categoryButton: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: "#0f3460",
+    backgroundColor: '#0f3460',
     gap: 4,
   },
   categoryButtonActive: {
-    backgroundColor: "#e94560",
+    backgroundColor: '#e94560',
   },
   categoryIcon: {
     fontSize: 16,
   },
   categoryLabel: {
-    color: "#94a3b8",
+    color: '#94a3b8',
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   categoryLabelActive: {
-    color: "#fff",
+    color: '#fff',
   },
   scrollView: {
     flex: 1,
@@ -276,30 +276,30 @@ const styles = createSheet({
     padding: 16,
   },
   sectionTitle: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 12,
   },
   grid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 12,
   },
   errorToast: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 100,
     left: 24,
     right: 24,
-    backgroundColor: "#ef4444",
+    backgroundColor: '#ef4444',
     padding: 12,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
   errorToastText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   bottomSpacer: {
     height: 40,

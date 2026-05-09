@@ -5,23 +5,23 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import * as service from './service';
-import * as repository from './repository';
+import * as service from '../service';
+import * as repository from '../repository';
 import {
   getProgressionEnhanced,
   getProgressionSummaryEnhanced,
-} from './service-enhanced-read';
+} from '../service-enhanced-read';
 import {
   AddXpInputSchema,
   PrestigeInputSchema,
   type AddXpInput,
   type PrestigeInput,
-} from './schemas';
+} from '../schemas';
 import {
   getProgressionService,
   type LevelState,
-} from '../../progression/ProgressionService';
-import type { AddXpOperationResult } from './service-enhanced';
+} from '../../../progression/ProgressionService';
+import type { AddXpOperationResult } from '../service-enhanced';
 
 // ============================================================================
 // Query Keys

@@ -375,11 +375,11 @@ function DataComponent() {
 
 ## Anti-Patterns to Avoid
 
-### ❌ Don't Use StyleSheet.create
+### ❌ Don't Use tokenized styles
 
 ```tsx
 // Wrong
-const styles = StyleSheet.create({
+const styles = tokenized styles({
   container: { padding: 16 },
 });
 
@@ -397,11 +397,11 @@ const styles = StyleSheet.create({
 <Text style={{ color: theme.colors.text.primary }} />
 ```
 
-### ❌ Don't Use console.log
+### ❌ Don't Use debug logger
 
 ```tsx
 // Wrong
-console.log('Debug', value);
+debug logger('Debug', value);
 
 // Correct
 import { createDebugger } from '../utils/debug';
@@ -413,7 +413,7 @@ debug.log('Debug', value);
 
 ```tsx
 // Wrong
-function process(data: any) { }
+function process(data: unknown) { }
 
 // Correct
 function process(data: DataType) { }
@@ -442,3 +442,4 @@ function process(data: DataType) { }
 - [UI_STANDARDS.md](../UI_STANDARDS.md) - Complete standards
 - [Theme Tokens](../theme/tokens/) - All theme values
 - [Primitive Components](./primitives/) - Building blocks
+

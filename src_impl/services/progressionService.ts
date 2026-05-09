@@ -8,6 +8,7 @@
 import { createDebugger } from '../utils/debug';
 import { capture } from '../shared/analytics/analytics-service';
 import { ProgressionEvents } from '../shared/analytics/analytics-events';
+import { rewardService } from './rewardService';
 
 const debug = createDebugger('progression-service');
 
@@ -118,7 +119,7 @@ class ProgressionService {
    * Calculate XP needed for next level
    */
   private calculateXPToNext(level: number): number {
-    if (level >= 100) return 0; // Max level
+    if (level >= 100) {return 0;} // Max level
     const nextLevel = level + 1;
     const totalXPForNext = 50 * nextLevel * (nextLevel + 1);
     const totalXPForCurrent = 50 * level * (level + 1);
@@ -145,7 +146,8 @@ class ProgressionService {
       new_level: newLevel,
     });
 
-    // TODO: Add level up rewards, notifications, etc.
+    rewardService.setUserId(this.userId);
+    await rewardService.claimReward(`level_${Math.floor(newLevel / 5) * 5}`);
   }
 
   /**

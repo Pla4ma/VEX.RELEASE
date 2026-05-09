@@ -3,24 +3,24 @@
  * TanStack Query hooks for analytics data fetching and mutations
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { z } from "zod";
-import * as service from "../service";
-import * as repository from "../repository";
-import { GetAnalyticsDataInputSchema, CreateExportJobInputSchema, UpdateDashboardWidgetInputSchema, type TimeRange, type AnalyticsMetric, type AnalyticsDimension, type AnalyticsFilter, type ExportFormat } from "../schemas";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { z } from 'zod';
+import * as service from '../service';
+import * as repository from '../repository';
+import { GetAnalyticsDataInputSchema, CreateExportJobInputSchema, UpdateDashboardWidgetInputSchema, type TimeRange, type AnalyticsMetric, type AnalyticsDimension, type AnalyticsFilter, type ExportFormat } from '../schemas';
 
 // Query keys
 export const analyticsKeys = {
-  all: ["analytics"] as const,
-  data: (userId: string, metrics: AnalyticsMetric[], timeRange: TimeRange) => [...analyticsKeys.all, "data", userId, metrics, timeRange] as const,
-  trend: (userId: string, metric: AnalyticsMetric, timeRange: TimeRange) => [...analyticsKeys.all, "trend", userId, metric, timeRange] as const,
-  insights: (userId: string, filters?: { unreadOnly?: boolean }) => [...analyticsKeys.all, "insights", userId, filters] as const,
-  patterns: (userId: string) => [...analyticsKeys.all, "patterns", userId] as const,
-  dashboard: (userId: string) => [...analyticsKeys.all, "dashboard", userId] as const,
-  exportJobs: (userId: string) => [...analyticsKeys.all, "exports", userId] as const,
-  preferences: (userId: string) => [...analyticsKeys.all, "preferences", userId] as const,
-  summary: (userId: string, timeRange: TimeRange) => [...analyticsKeys.all, "summary", userId, timeRange] as const,
-  sessionHeatmap: (userId: string, weeks: number) => [...analyticsKeys.all, "session-heatmap", userId, weeks] as const,
+  all: ['analytics'] as const,
+  data: (userId: string, metrics: AnalyticsMetric[], timeRange: TimeRange) => [...analyticsKeys.all, 'data', userId, metrics, timeRange] as const,
+  trend: (userId: string, metric: AnalyticsMetric, timeRange: TimeRange) => [...analyticsKeys.all, 'trend', userId, metric, timeRange] as const,
+  insights: (userId: string, filters?: { unreadOnly?: boolean }) => [...analyticsKeys.all, 'insights', userId, filters] as const,
+  patterns: (userId: string) => [...analyticsKeys.all, 'patterns', userId] as const,
+  dashboard: (userId: string) => [...analyticsKeys.all, 'dashboard', userId] as const,
+  exportJobs: (userId: string) => [...analyticsKeys.all, 'exports', userId] as const,
+  preferences: (userId: string) => [...analyticsKeys.all, 'preferences', userId] as const,
+  summary: (userId: string, timeRange: TimeRange) => [...analyticsKeys.all, 'summary', userId, timeRange] as const,
+  sessionHeatmap: (userId: string, weeks: number) => [...analyticsKeys.all, 'session-heatmap', userId, weeks] as const,
 };
 
 // Hook: Get analytics data for multiple metrics
@@ -28,7 +28,7 @@ export function useAnalyticsData(
   userId: string,
   metrics: AnalyticsMetric[],
   timeRange: TimeRange,
-  granularity: "hour" | "day" | "week" | "month" = "day",
+  granularity: 'hour' | 'day' | 'week' | 'month' = 'day',
   options?: {
     dimensions?: AnalyticsDimension[];
     filters?: AnalyticsFilter[];
@@ -148,9 +148,9 @@ export function useCreateExportJob(userId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (input: Omit<z.infer<typeof CreateExportJobInputSchema>, "userId">) => {
+    mutationFn: async (input: Omit<z.infer<typeof CreateExportJobInputSchema>, 'userId'>) => {
       const validated = CreateExportJobInputSchema.parse({ ...input, userId });
-      return service.exportAnalyticsData(userId, validated.format as "json" | "csv", validated.dateRange);
+      return service.exportAnalyticsData(userId, validated.format as 'json' | 'csv', validated.dateRange);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -218,7 +218,7 @@ export function useGenerateInsights(userId: string) {
         queryKey: analyticsKeys.insights(userId),
       });
       queryClient.invalidateQueries({
-        queryKey: analyticsKeys.summary(userId, "last_30_days"),
+        queryKey: analyticsKeys.summary(userId, 'last_30_days'),
       });
     },
   });
@@ -241,7 +241,7 @@ export function useDetectPatterns(userId: string) {
 // Hook: Get comparative stats
 export function useComparativeStats(userId: string, metric: AnalyticsMetric, timeRange: TimeRange) {
   return useQuery({
-    queryKey: [...analyticsKeys.all, "comparison", userId, metric, timeRange],
+    queryKey: [...analyticsKeys.all, 'comparison', userId, metric, timeRange],
     queryFn: () => service.getComparativeStats(userId, metric, timeRange),
     staleTime: 10 * 60 * 1000,
     enabled: !!userId,
@@ -252,7 +252,7 @@ export function useComparativeStats(userId: string, metric: AnalyticsMetric, tim
 export function useAnalyticsDegradedState(userId: string, isError: boolean, error: Error | null) {
   return {
     isDegraded: isError,
-    degradedReason: error?.message?.includes("offline") ? "offline" : error?.message?.includes("rate") ? "rate_limited" : "server_error",
+    degradedReason: error?.message?.includes('offline') ? 'offline' : error?.message?.includes('rate') ? 'rate_limited' : 'server_error',
     canShowCached: true,
     lastSuccessfulFetch: Date.now(),
   };

@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
+import { captureSilentFailure } from '../../../utils/silent-failure';
 /**
  * CoachInterventionBanner
  *
@@ -10,15 +10,15 @@ import { captureSilentFailure } from "../../../utils/silent-failure";
  *        BOSS_OPPORTUNITY, MOMENTUM_BUILDING, COMEBACK_READY, STUDY_PLAN_COMPLETE
  */
 
-import React, { useCallback, useEffect, useState } from "react";
-import { View, Pressable } from "react-native";
-import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
-import { useTheme } from "../../../theme/ThemeContext";
-import { Text } from "../../../components";
-import { MMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
+import React, { useCallback, useEffect, useState } from 'react';
+import { View, Pressable } from 'react-native';
+import Animated, { FadeInDown, FadeOutUp } from 'react-native-reanimated';
+import { useTheme } from '../../../theme/ThemeContext';
+import { Text } from '../../../components';
+import { MMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 
 // Phase 2.3 - New intervention types added
-export type InterventionType = "BURNOUT" | "PLATEAU" | "STREAK_RISK" | "BOSS_FINISH" | "STUDY_BEHIND" | "BOSS_OPPORTUNITY" | "MOMENTUM_BUILDING" | "COMEBACK_READY" | "STUDY_PLAN_COMPLETE";
+export type InterventionType = 'BURNOUT' | 'PLATEAU' | 'STREAK_RISK' | 'BOSS_FINISH' | 'STUDY_BEHIND' | 'BOSS_OPPORTUNITY' | 'MOMENTUM_BUILDING' | 'COMEBACK_READY' | 'STUDY_PLAN_COMPLETE';
 
 interface Intervention {
   id: string;
@@ -37,16 +37,16 @@ interface CoachInterventionBannerProps {
   onDismiss?: (intervention: Intervention) => void;
 }
 
-const DISMISSAL_STORAGE_KEY = "dismissed_interventions";
+const DISMISSAL_STORAGE_KEY = 'dismissed_interventions';
 const DISMISSAL_TTL_HOURS = 24;
 
 export function CoachInterventionBanner({ intervention, coachName, coachAvatar, onAction, onDismiss }: CoachInterventionBannerProps): JSX.Element | null {
   const { theme } = useTheme();
   const [isDismissed, setIsDismissed] = useState(false);
-  const [storage] = useState(() => new MMKVStorageAdapter("coach-interventions"));
+  const [storage] = useState(() => new MMKVStorageAdapter('coach-interventions'));
 
   const isNonDismissable = useCallback((type: InterventionType, hours?: number): boolean => {
-    return type === "STREAK_RISK" && hours !== undefined && hours < 4;
+    return type === 'STREAK_RISK' && hours !== undefined && hours < 4;
   }, []);
 
   useEffect(() => {
@@ -82,7 +82,7 @@ export function CoachInterventionBanner({ intervention, coachName, coachAvatar, 
           setIsDismissed(false);
         }
       } catch (error) {
-        captureSilentFailure(error, { feature: "ai-coach", operation: "ui-fallback", type: "ui" });
+        captureSilentFailure(error, { feature: 'ai-coach', operation: 'ui-fallback', type: 'ui' });
         setIsDismissed(false);
       }
     };
@@ -118,58 +118,58 @@ export function CoachInterventionBanner({ intervention, coachName, coachAvatar, 
 
   const getBannerColors = (type: InterventionType): { bg: string; border: string; accent: string } => {
     switch (type) {
-      case "BURNOUT":
+      case 'BURNOUT':
         return {
-          bg: theme.colors.warning[500] + "15",
+          bg: theme.colors.warning[500] + '15',
           border: theme.colors.warning[500],
           accent: theme.colors.warning[500],
         };
-      case "PLATEAU":
+      case 'PLATEAU':
         return {
-          bg: theme.colors.info[500] + "15",
+          bg: theme.colors.info[500] + '15',
           border: theme.colors.info[500],
           accent: theme.colors.info[500],
         };
-      case "STREAK_RISK":
+      case 'STREAK_RISK':
         return {
-          bg: theme.colors.error[500] + "15",
+          bg: theme.colors.error[500] + '15',
           border: theme.colors.error[500],
           accent: theme.colors.error[500],
         };
-      case "BOSS_FINISH":
-      case "BOSS_OPPORTUNITY":
+      case 'BOSS_FINISH':
+      case 'BOSS_OPPORTUNITY':
         return {
-          bg: theme.colors.success[500] + "15",
+          bg: theme.colors.success[500] + '15',
           border: theme.colors.success[500],
           accent: theme.colors.success[500],
         };
-      case "STUDY_BEHIND":
+      case 'STUDY_BEHIND':
         return {
-          bg: theme.colors.warning[500] + "15",
+          bg: theme.colors.warning[500] + '15',
           border: theme.colors.warning[500],
           accent: theme.colors.warning[500],
         };
-      case "MOMENTUM_BUILDING":
+      case 'MOMENTUM_BUILDING':
         return {
-          bg: theme.colors.primary[500] + "15",
+          bg: theme.colors.primary[500] + '15',
           border: theme.colors.primary[500],
           accent: theme.colors.primary[500],
         };
-      case "COMEBACK_READY":
+      case 'COMEBACK_READY':
         return {
-          bg: theme.colors.primary[500] + "15",
+          bg: theme.colors.primary[500] + '15',
           border: theme.colors.primary[500],
           accent: theme.colors.primary[500],
         };
-      case "STUDY_PLAN_COMPLETE":
+      case 'STUDY_PLAN_COMPLETE':
         return {
-          bg: theme.colors.success[500] + "15",
+          bg: theme.colors.success[500] + '15',
           border: theme.colors.success[500],
           accent: theme.colors.success[500],
         };
       default:
         return {
-          bg: theme.colors.primary[500] + "15",
+          bg: theme.colors.primary[500] + '15',
           border: theme.colors.primary[500],
           accent: theme.colors.primary[500],
         };
@@ -178,26 +178,26 @@ export function CoachInterventionBanner({ intervention, coachName, coachAvatar, 
 
   const getIcon = (type: InterventionType): string => {
     switch (type) {
-      case "BURNOUT":
-        return "🔥";
-      case "PLATEAU":
-        return "📊";
-      case "STREAK_RISK":
-        return "⏰";
-      case "BOSS_FINISH":
-        return "⚔️";
-      case "BOSS_OPPORTUNITY":
-        return "🎯";
-      case "STUDY_BEHIND":
-        return "📚";
-      case "MOMENTUM_BUILDING":
-        return "📈";
-      case "COMEBACK_READY":
-        return "🔄";
-      case "STUDY_PLAN_COMPLETE":
-        return "🏆";
+      case 'BURNOUT':
+        return '🔥';
+      case 'PLATEAU':
+        return '📊';
+      case 'STREAK_RISK':
+        return '⏰';
+      case 'BOSS_FINISH':
+        return '⚔️';
+      case 'BOSS_OPPORTUNITY':
+        return '🎯';
+      case 'STUDY_BEHIND':
+        return '📚';
+      case 'MOMENTUM_BUILDING':
+        return '📈';
+      case 'COMEBACK_READY':
+        return '🔄';
+      case 'STUDY_PLAN_COMPLETE':
+        return '🏆';
       default:
-        return "💡";
+        return '💡';
     }
   };
 
@@ -220,15 +220,15 @@ export function CoachInterventionBanner({ intervention, coachName, coachAvatar, 
         borderRadius: theme.borderRadius.xl,
         borderWidth: 1,
         borderColor: colors.border,
-        overflow: "hidden",
+        overflow: 'hidden',
       }}
     >
       <View style={{ padding: theme.spacing[4] }}>
         {/* Header with Coach Avatar and Type */}
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
+            flexDirection: 'row',
+            alignItems: 'center',
             gap: theme.spacing[2],
             marginBottom: theme.spacing[2],
           }}
@@ -236,7 +236,7 @@ export function CoachInterventionBanner({ intervention, coachName, coachAvatar, 
           <Text fontSize={20}>{coachAvatar || getIcon(intervention.type)}</Text>
           <View style={{ flex: 1 }}>
             <Text variant="caption" color="secondary" weight="semibold">
-              {coachName} • {intervention.type.replace("_", " ")}
+              {coachName} • {intervention.type.replace('_', ' ')}
             </Text>
           </View>
           {canDismiss && (
@@ -267,7 +267,7 @@ export function CoachInterventionBanner({ intervention, coachName, coachAvatar, 
             borderRadius: theme.borderRadius.lg,
             paddingVertical: theme.spacing[2],
             paddingHorizontal: theme.spacing[4],
-            alignSelf: "flex-start",
+            alignSelf: 'flex-start',
           }}
           accessibilityLabel={intervention.actionLabel}
           accessibilityRole="button"
@@ -276,7 +276,7 @@ export function CoachInterventionBanner({ intervention, coachName, coachAvatar, 
           <Text
             style={{
               color: theme.colors.background.primary,
-              fontWeight: "600",
+              fontWeight: '600',
               fontSize: 14,
             }}
           >

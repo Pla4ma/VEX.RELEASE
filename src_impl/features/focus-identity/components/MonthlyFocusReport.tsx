@@ -6,17 +6,17 @@
  * Includes share functionality to generate an image card.
  */
 
-import React, { useMemo } from "react";
-import { View, Pressable, Share } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming, FadeIn, SlideInDown } from "react-native-reanimated";
+import React, { useMemo } from 'react';
+import { View, Pressable, Share } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming, FadeIn, SlideInDown } from 'react-native-reanimated';
 
-import { Text } from "../../../components/primitives/Text";
-import { Box } from "../../../components/primitives/Box";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { useMonthlyReport } from "../hooks";
-import { useFocusScoreColor } from "../hooks";
-import { publishMonthlyReportViewed, publishMonthlyReportShared, publishMonthlyReportDismissed } from "../events";
+import { Text } from '../../../components/primitives/Text';
+import { Box } from '../../../components/primitives/Box';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { useMonthlyReport } from '../hooks';
+import { useFocusScoreColor } from '../hooks';
+import { publishMonthlyReportViewed, publishMonthlyReportShared, publishMonthlyReportDismissed } from '../events';
 
 interface MonthlyFocusReportProps {
   userId: string;
@@ -39,14 +39,14 @@ function MonthlyReportSkeleton(): JSX.Element {
         paddingTop: theme.spacing[8],
       }}
     >
-      <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: theme.spacing[4] }}>
-        <View style={{ width: 200, height: 32, backgroundColor: theme.colors.border?.DEFAULT || "#E5E5E5", borderRadius: 4 }} />
-        <View style={{ width: 32, height: 32, backgroundColor: theme.colors.border?.DEFAULT || "#E5E5E5", borderRadius: 16 }} />
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: theme.spacing[4] }}>
+        <View style={{ width: 200, height: 32, backgroundColor: theme.colors.border?.DEFAULT || '#E5E5E5', borderRadius: 4 }} />
+        <View style={{ width: 32, height: 32, backgroundColor: theme.colors.border?.DEFAULT || '#E5E5E5', borderRadius: 16 }} />
       </View>
       <View style={{ gap: theme.spacing[4] }}>
-        <View style={{ height: 200, backgroundColor: theme.colors.surface?.card || "#F5F5F5", borderRadius: 16 }} />
-        <View style={{ height: 150, backgroundColor: theme.colors.surface?.card || "#F5F5F5", borderRadius: 16 }} />
-        <View style={{ height: 100, backgroundColor: theme.colors.surface?.card || "#F5F5F5", borderRadius: 16 }} />
+        <View style={{ height: 200, backgroundColor: theme.colors.surface?.card || '#F5F5F5', borderRadius: 16 }} />
+        <View style={{ height: 150, backgroundColor: theme.colors.surface?.card || '#F5F5F5', borderRadius: 16 }} />
+        <View style={{ height: 100, backgroundColor: theme.colors.surface?.card || '#F5F5F5', borderRadius: 16 }} />
       </View>
     </View>
   );
@@ -94,23 +94,23 @@ export function MonthlyFocusReport({ userId, onClose, visible }: MonthlyFocusRep
     const drivers = [];
     // Consistency driver
     if (report.sessionsCompleted >= 15) {
-      drivers.push({ name: "Consistency", value: "+23" });
+      drivers.push({ name: 'Consistency', value: '+23' });
     } else if (report.sessionsCompleted >= 10) {
-      drivers.push({ name: "Consistency", value: "+15" });
+      drivers.push({ name: 'Consistency', value: '+15' });
     } else if (report.sessionsCompleted >= 5) {
-      drivers.push({ name: "Consistency", value: "+8" });
+      drivers.push({ name: 'Consistency', value: '+8' });
     }
 
     // Boss damage driver (negative if high activity)
     if (report.change < 0) {
-      drivers.push({ name: "Boss Damage", value: String(report.change) });
+      drivers.push({ name: 'Boss Damage', value: String(report.change) });
     }
 
     // Purity driver
-    if (report.grade === "A+" || report.grade === "A") {
-      drivers.push({ name: "Purity", value: "+11" });
-    } else if (report.grade === "B+" || report.grade === "B") {
-      drivers.push({ name: "Purity", value: "+5" });
+    if (report.grade === 'A+' || report.grade === 'A') {
+      drivers.push({ name: 'Purity', value: '+11' });
+    } else if (report.grade === 'B+' || report.grade === 'B') {
+      drivers.push({ name: 'Purity', value: '+5' });
     }
 
     return drivers.slice(0, 3);
@@ -119,19 +119,19 @@ export function MonthlyFocusReport({ userId, onClose, visible }: MonthlyFocusRep
   // Generate identity statement based on grade
   const identityStatement = useMemo(() => {
     if (!report) {
-      return "";
+      return '';
     }
 
     const statements: Record<string, string> = {
-      "A+": "You are a Focus Virtuoso. Your discipline inspires others.",
-      A: "You are an Elite Performer. Excellence is your standard.",
-      "B+": "You have Exceptional Focus. You are building something great.",
-      B: "You have Strong Focus. You are developing powerful habits.",
-      C: "You have Good Focus. You are on the right path.",
-      D: "You are Developing Focus. Every session makes you stronger.",
+      'A+': 'You are a Focus Virtuoso. Your discipline inspires others.',
+      A: 'You are an Elite Performer. Excellence is your standard.',
+      'B+': 'You have Exceptional Focus. You are building something great.',
+      B: 'You have Strong Focus. You are developing powerful habits.',
+      C: 'You have Good Focus. You are on the right path.',
+      D: 'You are Developing Focus. Every session makes you stronger.',
     };
 
-    return statements[report.grade] || "Keep building your focus habit.";
+    return statements[report.grade] || 'Keep building your focus habit.';
   }, [report]);
 
   // Generate percentile based on score
@@ -172,7 +172,7 @@ export function MonthlyFocusReport({ userId, onClose, visible }: MonthlyFocusRep
 
 ${identityStatement}
 
-Score: ${report.endingScore} (${report.change > 0 ? "+" : ""}${report.change})
+Score: ${report.endingScore} (${report.change > 0 ? '+' : ''}${report.change})
 Grade: ${report.grade}
 Sessions: ${report.sessionsCompleted}
 Percentile: Top ${100 - percentile}%
@@ -184,7 +184,7 @@ ${report.highlight}
     try {
       await Share.share({
         message: shareText,
-        title: "Monthly Focus Report",
+        title: 'Monthly Focus Report',
       });
       // Publish share event
       if (report) {
@@ -206,20 +206,20 @@ ${report.highlight}
   // ============================================================================
   // LOADING STATE
   // ============================================================================
-  if (loadingState === "loading") {
+  if (loadingState === 'loading') {
     return <MonthlyReportSkeleton />;
   }
 
   // ============================================================================
   // ERROR STATE with Retry
   // ============================================================================
-  if (loadingState === "error") {
+  if (loadingState === 'error') {
     return (
       <View
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           backgroundColor: theme.colors.background.primary,
           paddingHorizontal: theme.spacing[6],
         }}
@@ -227,8 +227,8 @@ ${report.highlight}
         <Text variant="heading3" color="error" style={{ marginBottom: theme.spacing[4] }}>
           ⚠️ Report Unavailable
         </Text>
-        <Text variant="body" color="textSecondary" style={{ textAlign: "center", marginBottom: theme.spacing[6] }}>
-          {error?.message || "Unable to generate your monthly focus report."}
+        <Text variant="body" color="textSecondary" style={{ textAlign: 'center', marginBottom: theme.spacing[6] }}>
+          {error?.message || 'Unable to generate your monthly focus report.'}
         </Text>
         <Button onPress={refresh} variant="primary" style={{ marginBottom: theme.spacing[4] }}>
           Try Again
@@ -248,8 +248,8 @@ ${report.highlight}
       <View
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           backgroundColor: theme.colors.background.primary,
           paddingHorizontal: theme.spacing[6],
         }}
@@ -257,7 +257,7 @@ ${report.highlight}
         <Text variant="heading2" color="text" style={{ marginBottom: theme.spacing[4] }}>
           No Report Available
         </Text>
-        <Text variant="body" color="textSecondary" style={{ textAlign: "center", marginBottom: theme.spacing[6] }}>
+        <Text variant="body" color="textSecondary" style={{ textAlign: 'center', marginBottom: theme.spacing[6] }}>
           Complete sessions this month to generate your first focus report.
         </Text>
         <Button onPress={handleClose} variant="primary">
@@ -286,9 +286,9 @@ ${report.highlight}
       {/* Header */}
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
           paddingHorizontal: theme.spacing[6],
           paddingTop: theme.spacing[8],
           paddingBottom: theme.spacing[4],
@@ -316,15 +316,15 @@ ${report.highlight}
         {/* Month and Grade */}
         <Animated.View entering={FadeIn.delay(100).duration(300)}>
           <Box backgroundColor="surface" borderRadius="xl" padding="xl" style={{ marginBottom: theme.spacing[6] }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <View>
                 <Text variant="heading3" color="textSecondary">
-                  {new Date(report.month + "-01").toLocaleDateString("en-US", {
-                    month: "long",
-                    year: "numeric",
+                  {new Date(report.month + '-01').toLocaleDateString('en-US', {
+                    month: 'long',
+                    year: 'numeric',
                   })}
                 </Text>
-                <Text variant="display" color="text" style={{ marginTop: theme.spacing[2], fontWeight: "700" }}>
+                <Text variant="display" color="text" style={{ marginTop: theme.spacing[2], fontWeight: '700' }}>
                   {report.endingScore}
                 </Text>
                 <Text variant="body" color="textSecondary">
@@ -336,12 +336,12 @@ ${report.highlight}
                   paddingHorizontal: theme.spacing[3],
                   paddingVertical: theme.spacing[2],
                   borderRadius: theme.borderRadius.lg,
-                  backgroundColor: scoreColor + "20",
+                  backgroundColor: scoreColor + '20',
                   minWidth: 60,
-                  alignItems: "center",
+                  alignItems: 'center',
                 }}
               >
-                <Text variant="heading2" style={{ fontWeight: "700", color: scoreColor }}>
+                <Text variant="heading2" style={{ fontWeight: '700', color: scoreColor }}>
                   {report.grade}
                 </Text>
               </View>
@@ -352,11 +352,11 @@ ${report.highlight}
               <Text
                 variant="body"
                 style={{
-                  fontWeight: "600",
+                  fontWeight: '600',
                   color: report.change > 0 ? theme.colors.success.DEFAULT : theme.colors.error.DEFAULT,
                 }}
               >
-                {report.change > 0 ? "↑" : "↓"} {Math.abs(report.change)} from last month
+                {report.change > 0 ? '↑' : '↓'} {Math.abs(report.change)} from last month
               </Text>
             </View>
           </Box>
@@ -374,9 +374,9 @@ ${report.highlight}
                   <View
                     key={index}
                     style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
                     }}
                   >
                     <Text variant="body" color="text">
@@ -385,8 +385,8 @@ ${report.highlight}
                     <Text
                       variant="body"
                       style={{
-                        fontWeight: "600",
-                        color: driver.value.startsWith("+") ? theme.colors.success.DEFAULT : theme.colors.error.DEFAULT,
+                        fontWeight: '600',
+                        color: driver.value.startsWith('+') ? theme.colors.success.DEFAULT : theme.colors.error.DEFAULT,
                       }}
                     >
                       {driver.value}
@@ -422,7 +422,7 @@ ${report.highlight}
             <Text variant="body" color="textSecondary" style={{ marginBottom: theme.spacing[3] }}>
               You're in the top {100 - percentile}% of focused people
             </Text>
-            <Text variant="body" color="text" style={{ fontStyle: "italic", lineHeight: 24 }}>
+            <Text variant="body" color="text" style={{ fontStyle: 'italic', lineHeight: 24 }}>
               {identityStatement}
             </Text>
           </Box>

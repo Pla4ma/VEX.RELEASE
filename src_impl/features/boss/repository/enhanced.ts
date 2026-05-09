@@ -1,13 +1,13 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 /**
  * Enhanced Boss Repository
  * Features: Retry logic, offline queue integration
  */
 
-import { withRetry, RepositoryError, RepositoryErrorCode } from "../../lib/repository/base";
-import { enqueue } from "../../lib/offline/queue";
-import { getSupabaseClient } from "../../config/supabase";
-import { BossEncounterSchema, BossTemplateSchema, type BossEncounter, type BossTemplate } from "./schemas";
+import { withRetry, RepositoryError, RepositoryErrorCode } from '../../lib/repository/base';
+import { enqueue } from '../../lib/offline/queue';
+import { getSupabaseClient } from '../../config/supabase';
+import { BossEncounterSchema, BossTemplateSchema, type BossEncounter, type BossTemplate } from './schemas';
 
 const supabase = getSupabaseClient();
 
@@ -18,7 +18,7 @@ const supabase = getSupabaseClient();
 export class BossRepositoryError extends RepositoryError {
   constructor(operation: string, error: unknown, code?: RepositoryErrorCode) {
     super(operation, error, code);
-    this.name = "BossRepositoryError";
+    this.name = 'BossRepositoryError';
   }
 }
 
@@ -46,7 +46,7 @@ async function executeWithFallback<T>(operation: string, onlineFn: () => Promise
           return { data: cached, error: repoError, fromCache: true };
         }
       } catch (error) {
-        captureSilentFailure(error, { feature: "boss", operation: "network-fallback", type: "network" });
+        captureSilentFailure(error, { feature: 'boss', operation: 'network-fallback', type: 'network' });
         // Cache miss
       }
     }
@@ -60,19 +60,19 @@ async function executeWithFallback<T>(operation: string, onlineFn: () => Promise
 // ============================================================================
 
 export async function fetchActiveEncounterEnhanced(userId: string, squadId?: string): Promise<RepositoryResult<BossEncounter | null>> {
-  return executeWithFallback("fetchActiveEncounter", async () => {
-    let query = supabase.from("boss_encounters").select("*").eq("status", "ACTIVE");
+  return executeWithFallback('fetchActiveEncounter', async () => {
+    let query = supabase.from('boss_encounters').select('*').eq('status', 'ACTIVE');
 
     if (squadId) {
-      query = query.eq("squad_id", squadId);
+      query = query.eq('squad_id', squadId);
     } else {
-      query = query.eq("user_id", userId).is("squad_id", null);
+      query = query.eq('user_id', userId).is('squad_id', null);
     }
 
     const { data, error } = await query.single();
 
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return null;
       }
       throw error;
@@ -91,22 +91,22 @@ export async function createEncounterEnhanced(userId: string, bossId: string, ma
     health_remaining: maxHealth,
     max_health: maxHealth,
     damage_dealt: 0,
-    status: "ACTIVE",
+    status: 'ACTIVE',
     created_at: Date.now(),
     expires_at: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
   };
 
   enqueue({
-    operation: "CREATE",
-    feature: "boss",
+    operation: 'CREATE',
+    feature: 'boss',
     payload: newEncounter,
     idempotencyKey: `boss:encounter:${userId}:${bossId}:${Date.now()}`,
     maxRetries: 5,
-    priority: "high",
+    priority: 'high',
   });
 
-  return executeWithFallback("createEncounter", async () => {
-    const { data, error } = await supabase.from("boss_encounters").insert(newEncounter).select().single();
+  return executeWithFallback('createEncounter', async () => {
+    const { data, error } = await supabase.from('boss_encounters').insert(newEncounter).select().single();
 
     if (error) {
       throw error;
@@ -117,23 +117,23 @@ export async function createEncounterEnhanced(userId: string, bossId: string, ma
 
 export async function updateEncounterHealthEnhanced(encounterId: string, healthRemaining: number, damageDealt: number, sessionId: string): Promise<RepositoryResult<BossEncounter>> {
   enqueue({
-    operation: "UPDATE",
-    feature: "boss",
+    operation: 'UPDATE',
+    feature: 'boss',
     payload: { encounterId, healthRemaining, damageDealt, sessionId },
     idempotencyKey: `boss:damage:${encounterId}:${sessionId}`,
     maxRetries: 5,
-    priority: "high",
+    priority: 'high',
   });
 
-  return executeWithFallback("updateEncounterHealth", async () => {
+  return executeWithFallback('updateEncounterHealth', async () => {
     const { data, error } = await supabase
-      .from("boss_encounters")
+      .from('boss_encounters')
       .update({
         health_remaining: healthRemaining,
         damage_dealt: damageDealt,
         updated_at: Date.now(),
       })
-      .eq("id", encounterId)
+      .eq('id', encounterId)
       .select()
       .single();
 
@@ -149,15 +149,15 @@ export async function updateEncounterHealthEnhanced(encounterId: string, healthR
 // ============================================================================
 
 export async function markEncounterDefeatedEnhanced(encounterId: string): Promise<RepositoryResult<BossEncounter>> {
-  return executeWithFallback("markEncounterDefeated", async () => {
+  return executeWithFallback('markEncounterDefeated', async () => {
     const { data, error } = await supabase
-      .from("boss_encounters")
+      .from('boss_encounters')
       .update({
-        status: "DEFEATED",
+        status: 'DEFEATED',
         defeated_at: Date.now(),
         updated_at: Date.now(),
       })
-      .eq("id", encounterId)
+      .eq('id', encounterId)
       .select()
       .single();
 
@@ -170,17 +170,17 @@ export async function markEncounterDefeatedEnhanced(encounterId: string): Promis
 
 export async function recordBossDefeatEnhanced(userId: string, bossId: string, encounterId: string, damageDealt: number): Promise<RepositoryResult<{ id: string }>> {
   enqueue({
-    operation: "CREATE",
-    feature: "boss",
+    operation: 'CREATE',
+    feature: 'boss',
     payload: { userId, bossId, encounterId, damageDealt },
     idempotencyKey: `boss:defeat:${userId}:${encounterId}`,
     maxRetries: 5,
-    priority: "high",
+    priority: 'high',
   });
 
-  return executeWithFallback("recordBossDefeat", async () => {
+  return executeWithFallback('recordBossDefeat', async () => {
     const { data, error } = await supabase
-      .from("boss_defeat_history")
+      .from('boss_defeat_history')
       .insert({
         id: crypto.randomUUID(),
         user_id: userId,
@@ -190,7 +190,7 @@ export async function recordBossDefeatEnhanced(userId: string, bossId: string, e
         defeated_at: Date.now(),
         created_at: Date.now(),
       })
-      .select("id")
+      .select('id')
       .single();
 
     if (error) {
@@ -205,8 +205,8 @@ export async function recordBossDefeatEnhanced(userId: string, bossId: string, e
 // ============================================================================
 
 export async function fetchBossTemplatesEnhanced(): Promise<RepositoryResult<BossTemplate[]>> {
-  return executeWithFallback("fetchBossTemplates", async () => {
-    const { data, error } = await supabase.from("boss_templates").select("*").order("unlock_level", { ascending: true });
+  return executeWithFallback('fetchBossTemplates', async () => {
+    const { data, error } = await supabase.from('boss_templates').select('*').order('unlock_level', { ascending: true });
 
     if (error) {
       throw error;
@@ -220,11 +220,11 @@ export async function fetchBossTemplatesEnhanced(): Promise<RepositoryResult<Bos
 // ============================================================================
 
 export async function getCooldownStatusEnhanced(userId: string, bossId: string): Promise<RepositoryResult<{ onCooldown: boolean; remainingMs: number }>> {
-  return executeWithFallback("getCooldownStatus", async () => {
-    const { data, error } = await supabase.from("boss_defeat_history").select("defeated_at").eq("user_id", userId).eq("boss_id", bossId).order("defeated_at", { ascending: false }).limit(1).single();
+  return executeWithFallback('getCooldownStatus', async () => {
+    const { data, error } = await supabase.from('boss_defeat_history').select('defeated_at').eq('user_id', userId).eq('boss_id', bossId).order('defeated_at', { ascending: false }).limit(1).single();
 
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return { onCooldown: false, remainingMs: 0 };
       }
       throw error;

@@ -45,7 +45,7 @@ export async function fetchProgression(userId: string): Promise<Progression | nu
     throw new RepositoryError('fetchProgression', error);
   }
 
-  if (!data) return null;
+  if (!data) {return null;}
   return ProgressionSchema.parse(data);
 }
 

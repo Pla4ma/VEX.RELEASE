@@ -4,14 +4,14 @@
  * Displays a challenge with progress, status, and reroll/claim actions.
  */
 
-import React from "react";
-import { View, Pressable, type ViewStyle } from "react-native";
+import React from 'react';
+import { View, Pressable, type ViewStyle } from 'react-native';
 
-import { Badge, Button, Card, Text } from "../../../components";
-import { useTheme } from "../../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { Badge, Button, Card, Text } from '../../../components';
+import { useTheme } from '../../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
 
-import type { UserChallengeSummary } from "../schemas";
+import type { UserChallengeSummary } from '../schemas';
 
 interface ChallengeCardProps {
   challenge: UserChallengeSummary;
@@ -22,7 +22,7 @@ interface ChallengeCardProps {
 
 export function ChallengeCard({ challenge, onClaim, onReroll, loading = false }: ChallengeCardProps): JSX.Element {
   const { theme } = useTheme();
-  const isActionable = challenge.status === "ACTIVE" || challenge.status === "COMPLETED";
+  const isActionable = challenge.status === 'ACTIVE' || challenge.status === 'COMPLETED';
   const cardStyle: ViewStyle = challenge.isExpired ? { ...styles.container, ...styles.expiredContainer } : styles.container;
 
   const statusBadge = getStatusBadge(challenge.status);
@@ -48,7 +48,7 @@ export function ChallengeCard({ challenge, onClaim, onReroll, loading = false }:
         </Text>
       </View>
 
-      {challenge.status === "ACTIVE" && (
+      {challenge.status === 'ACTIVE' && (
         <View style={styles.progressSection}>
           <View style={styles.progressRow}>
             <Text style={styles.progressText}>
@@ -79,15 +79,15 @@ export function ChallengeCard({ challenge, onClaim, onReroll, loading = false }:
 
       {isActionable && (
         <View style={[styles.actionsRow, { borderTopColor: theme.colors.border.light }]}>
-          {challenge.status === "COMPLETED" && onClaim && (
+          {challenge.status === 'COMPLETED' && onClaim && (
             <Button variant="primary" onPress={onClaim} style={styles.actionButton} isLoading={loading} isDisabled={loading} accessibilityLabel="Claim Reward button" accessibilityRole="button" accessibilityHint="Activates this control">
               Claim Reward
             </Button>
           )}
 
-          {challenge.status === "ACTIVE" && challenge.canReroll && onReroll && (
+          {challenge.status === 'ACTIVE' && challenge.canReroll && onReroll && (
             <Pressable onPress={onReroll} style={({ pressed }) => [styles.rerollButton, pressed && { opacity: 0.8 }]} disabled={loading} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
-              <Badge variant="outline">{challenge.freeRerollAvailable ? "Free Reroll" : `${challenge.rerollCost} Gems`}</Badge>
+              <Badge variant="outline">{challenge.freeRerollAvailable ? 'Free Reroll' : `${challenge.rerollCost} Gems`}</Badge>
             </Pressable>
           )}
         </View>
@@ -96,33 +96,33 @@ export function ChallengeCard({ challenge, onClaim, onReroll, loading = false }:
   );
 }
 
-function getStatusBadge(status: UserChallengeSummary["status"]): JSX.Element | null {
+function getStatusBadge(status: UserChallengeSummary['status']): JSX.Element | null {
   switch (status) {
-    case "COMPLETED":
+    case 'COMPLETED':
       return <Badge variant="success">Ready to Claim</Badge>;
-    case "CLAIMED":
+    case 'CLAIMED':
       return <Badge variant="secondary">Claimed</Badge>;
-    case "EXPIRED":
+    case 'EXPIRED':
       return <Badge variant="error">Expired</Badge>;
-    case "REROLLED":
+    case 'REROLLED':
       return <Badge variant="secondary">Rerolled</Badge>;
     default:
       return null;
   }
 }
 
-function getDifficultyVariant(difficulty: string): "default" | "primary" | "success" | "warning" | "error" {
+function getDifficultyVariant(difficulty: string): 'default' | 'primary' | 'success' | 'warning' | 'error' {
   switch (difficulty.toLowerCase()) {
-    case "easy":
-      return "success";
-    case "medium":
-      return "primary";
-    case "hard":
-      return "warning";
-    case "expert":
-      return "error";
+    case 'easy':
+      return 'success';
+    case 'medium':
+      return 'primary';
+    case 'hard':
+      return 'warning';
+    case 'expert':
+      return 'error';
     default:
-      return "default";
+      return 'default';
   }
 }
 
@@ -155,13 +155,13 @@ const styles = createSheet({
     marginBottom: 12,
   },
   categoryRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 8,
     marginBottom: 8,
   },
   title: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 4,
   },
   description: {
@@ -171,24 +171,24 @@ const styles = createSheet({
     marginBottom: 12,
   },
   progressRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 4,
   },
   progressText: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   progressPercent: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   progressBarTrack: {
     height: 8,
     borderRadius: 4,
   },
   progressBarFill: {
-    height: "100%",
+    height: '100%',
     borderRadius: 4,
   },
   expiresText: {
@@ -201,12 +201,12 @@ const styles = createSheet({
   },
   rewardText: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   actionsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,

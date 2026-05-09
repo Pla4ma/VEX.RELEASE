@@ -2,8 +2,8 @@ import React from 'react';
 import { View } from 'react-native';
 
 import { StatusBanner } from '../../../shared/ui/components/StatusFeedback';
-import { FocusScoreHomeWidget } from "../../../features/focus-identity/components/focus-score-home-widget";
-import { useFocusScoreDashboardModel } from "../../../features/focus-identity/hooks-focus-score";
+import { FocusScoreHomeWidget } from '../../../features/focus-identity/components/focus-score-home-widget';
+import { useFocusScoreDashboardModel } from '../../../features/focus-identity/hooks-focus-score';
 import type { HomeCard } from '../../../features/home-spine/schemas';
 import type { CompletionSyncState } from '../../../store/session-state';
 import { useAuthStore } from '../../../store';

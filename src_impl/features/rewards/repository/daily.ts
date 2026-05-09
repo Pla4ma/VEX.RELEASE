@@ -3,11 +3,11 @@
  * Persistence for D1-D7 login reward system
  */
 
-import { getSupabaseClient } from "../../config/supabase";
-import { enqueue } from "../../lib/offline/queue";
-import { withRetry, RepositoryError } from "../../lib/repository/base";
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { z } from "zod";
+import { getSupabaseClient } from '../../config/supabase';
+import { enqueue } from '../../lib/offline/queue';
+import { withRetry, RepositoryError } from '../../lib/repository/base';
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { z } from 'zod';
 
 const supabase = getSupabaseClient();
 
@@ -19,10 +19,10 @@ export const DailyRewardClaimSchema = z.object({
   id: z.string().uuid(),
   user_id: z.string().uuid(),
   day: z.number().min(1).max(7),
-  tier: z.enum(["DAY_1", "DAY_2", "DAY_3", "DAY_4", "DAY_5", "DAY_6", "DAY_7"]),
+  tier: z.enum(['DAY_1', 'DAY_2', 'DAY_3', 'DAY_4', 'DAY_5', 'DAY_6', 'DAY_7']),
   items: z.array(
     z.object({
-      type: z.enum(["COINS", "GEMS", "XP_BOOST", "STREAK_SHIELD", "CHEST"]),
+      type: z.enum(['COINS', 'GEMS', 'XP_BOOST', 'STREAK_SHIELD', 'CHEST']),
       amount: z.number(),
     }),
   ),
@@ -51,17 +51,17 @@ export type UserDailyRewardsState = z.infer<typeof UserDailyRewardsStateSchema>;
 export async function saveDailyRewardClaim(claim: DailyRewardClaim): Promise<{ data: DailyRewardClaim | null; error: RepositoryError | null }> {
   try {
     enqueue({
-      operation: "CREATE",
-      feature: "rewards",
+      operation: 'CREATE',
+      feature: 'rewards',
       payload: claim,
       idempotencyKey: `daily-reward:${claim.user_id}:${claim.day}:${claim.claimed_at}`,
       maxRetries: 5,
-      priority: "high",
+      priority: 'high',
     });
 
-    const { data, error } = await withRetry("saveDailyRewardClaim", async () => {
+    const { data, error } = await withRetry('saveDailyRewardClaim', async () => {
       return await supabase
-        .from("daily_reward_claims")
+        .from('daily_reward_claims')
         .insert({
           id: claim.id,
           user_id: claim.user_id,
@@ -81,19 +81,19 @@ export async function saveDailyRewardClaim(claim: DailyRewardClaim): Promise<{ d
     }
     return { data: DailyRewardClaimSchema.parse(data), error: null };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "saveClaim", type: "network" });
-    return { data: null, error: new RepositoryError("saveDailyRewardClaim", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'saveClaim', type: 'network' });
+    return { data: null, error: new RepositoryError('saveDailyRewardClaim', error) };
   }
 }
 
 export async function fetchDailyRewardsState(userId: string): Promise<{ data: UserDailyRewardsState | null; error: RepositoryError | null }> {
   try {
-    const { data, error } = await withRetry("fetchDailyRewardsState", async () => {
-      return await supabase.from("user_daily_rewards").select("*").eq("user_id", userId).single();
+    const { data, error } = await withRetry('fetchDailyRewardsState', async () => {
+      return await supabase.from('user_daily_rewards').select('*').eq('user_id', userId).single();
     });
 
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return { data: null, error: null };
       }
       throw error;
@@ -112,25 +112,25 @@ export async function fetchDailyRewardsState(userId: string): Promise<{ data: Us
       error: null,
     };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "fetchState", type: "network" });
-    return { data: null, error: new RepositoryError("fetchDailyRewardsState", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'fetchState', type: 'network' });
+    return { data: null, error: new RepositoryError('fetchDailyRewardsState', error) };
   }
 }
 
 export async function updateDailyRewardsState(userId: string, updates: Partial<UserDailyRewardsState>): Promise<{ data: UserDailyRewardsState | null; error: RepositoryError | null }> {
   try {
     enqueue({
-      operation: "UPDATE",
-      feature: "rewards",
+      operation: 'UPDATE',
+      feature: 'rewards',
       payload: { userId, updates },
       idempotencyKey: `daily-state:${userId}:${Date.now()}`,
       maxRetries: 5,
-      priority: "high",
+      priority: 'high',
     });
 
-    const { data, error } = await withRetry("updateDailyRewardsState", async () => {
+    const { data, error } = await withRetry('updateDailyRewardsState', async () => {
       return await supabase
-        .from("user_daily_rewards")
+        .from('user_daily_rewards')
         .upsert(
           {
             user_id: userId,
@@ -142,7 +142,7 @@ export async function updateDailyRewardsState(userId: string, updates: Partial<U
             next_reset_at: updates.next_reset_at,
             updated_at: Date.now(),
           },
-          { onConflict: "user_id" },
+          { onConflict: 'user_id' },
         )
         .select()
         .single();
@@ -153,8 +153,8 @@ export async function updateDailyRewardsState(userId: string, updates: Partial<U
     }
     return { data: UserDailyRewardsStateSchema.parse(data), error: null };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "updateState", type: "network" });
-    return { data: null, error: new RepositoryError("updateDailyRewardsState", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'updateState', type: 'network' });
+    return { data: null, error: new RepositoryError('updateDailyRewardsState', error) };
   }
 }
 
@@ -163,8 +163,8 @@ export async function fetchUsersWithExpiredStreaks(): Promise<{
   error: RepositoryError | null;
 }> {
   try {
-    const { data, error } = await withRetry("fetchUsersWithExpiredStreaks", async () => {
-      return await supabase.from("user_daily_rewards").select("user_id, current_streak, last_claimed_at").lt("next_reset_at", Date.now()).gt("current_streak", 0);
+    const { data, error } = await withRetry('fetchUsersWithExpiredStreaks', async () => {
+      return await supabase.from('user_daily_rewards').select('user_id, current_streak, last_claimed_at').lt('next_reset_at', Date.now()).gt('current_streak', 0);
     });
 
     if (error) {
@@ -179,15 +179,15 @@ export async function fetchUsersWithExpiredStreaks(): Promise<{
       error: null,
     };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "fetchExpired", type: "network" });
-    return { data: [], error: new RepositoryError("fetchUsersWithExpiredStreaks", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'fetchExpired', type: 'network' });
+    return { data: [], error: new RepositoryError('fetchUsersWithExpiredStreaks', error) };
   }
 }
 
 export async function fetchClaimHistory(userId: string, limit: number = 30): Promise<{ data: DailyRewardClaim[]; error: RepositoryError | null }> {
   try {
-    const { data, error } = await withRetry("fetchClaimHistory", async () => {
-      return await supabase.from("daily_reward_claims").select("*").eq("user_id", userId).order("claimed_at", { ascending: false }).limit(limit);
+    const { data, error } = await withRetry('fetchClaimHistory', async () => {
+      return await supabase.from('daily_reward_claims').select('*').eq('user_id', userId).order('claimed_at', { ascending: false }).limit(limit);
     });
 
     if (error) {
@@ -198,7 +198,7 @@ export async function fetchClaimHistory(userId: string, limit: number = 30): Pro
       error: null,
     };
   } catch (error) {
-    captureSilentFailure(error, { feature: "rewards", operation: "fetchHistory", type: "network" });
-    return { data: [], error: new RepositoryError("fetchClaimHistory", error) };
+    captureSilentFailure(error, { feature: 'rewards', operation: 'fetchHistory', type: 'network' });
+    return { data: [], error: new RepositoryError('fetchClaimHistory', error) };
   }
 }

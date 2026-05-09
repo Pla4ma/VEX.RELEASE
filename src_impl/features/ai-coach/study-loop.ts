@@ -4,10 +4,10 @@
  * Manages study plan creation, tracking, and completion.
  */
 
-import { z } from "zod";
-import { createDebugger } from "../../utils/debug";
+import { z } from 'zod';
+import { createDebugger } from '../../utils/debug';
 
-const debug = createDebugger("ai-coach:study-loop");
+const debug = createDebugger('ai-coach:study-loop');
 
 // Study plan schema
 export const StudyPlanSchema = z.object({
@@ -20,8 +20,8 @@ export const StudyPlanSchema = z.object({
   sessionsTotal: z.number(),
   sessionsCompleted: z.number(),
   estimatedMinutesPerSession: z.number(),
-  difficulty: z.enum(["beginner", "intermediate", "advanced"]),
-  status: z.enum(["draft", "active", "completed", "abandoned"]),
+  difficulty: z.enum(['beginner', 'intermediate', 'advanced']),
+  status: z.enum(['draft', 'active', 'completed', 'abandoned']),
   createdAt: z.number(),
   startedAt: z.number().optional(),
   completedAt: z.number().optional(),
@@ -57,7 +57,7 @@ export async function createStudyPlan(
     goal: string;
     sessionsTotal: number;
     estimatedMinutesPerSession: number;
-    difficulty: StudyPlan["difficulty"];
+    difficulty: StudyPlan['difficulty'];
   },
 ): Promise<StudyPlan> {
   const now = Date.now();
@@ -78,24 +78,24 @@ export async function createStudyPlan(
     sessionsCompleted: 0,
     estimatedMinutesPerSession: input.estimatedMinutesPerSession,
     difficulty: input.difficulty,
-    status: "draft",
+    status: 'draft',
     createdAt: now,
     sessions,
   };
 
-  debug.info("Created study plan %s for user %s", plan.id, userId);
+  debug.info('Created study plan %s for user %s', plan.id, userId);
   return StudyPlanSchema.parse(plan);
 }
 
 // Start study plan
 export function startStudyPlan(plan: StudyPlan): StudyPlan {
-  if (plan.status !== "draft") {
-    throw new Error("Can only start plans in draft status");
+  if (plan.status !== 'draft') {
+    throw new Error('Can only start plans in draft status');
   }
 
   return {
     ...plan,
-    status: "active",
+    status: 'active',
     startedAt: Date.now(),
   };
 }
@@ -121,13 +121,13 @@ export function completeStudySession(plan: StudyPlan, sessionId: string, result:
     ...plan,
     sessions,
     sessionsCompleted: completedCount,
-    status: isComplete ? "completed" : "active",
+    status: isComplete ? 'completed' : 'active',
     completedAt: isComplete ? Date.now() : plan.completedAt,
   };
 }
 
 // Get next incomplete session
-export function getNextSession(plan: StudyPlan): StudyPlan["sessions"][0] | null {
+export function getNextSession(plan: StudyPlan): StudyPlan['sessions'][0] | null {
   return plan.sessions.find((s) => !s.completed) ?? null;
 }
 
@@ -183,7 +183,7 @@ export function getStudyStreakMessage(plan: StudyPlan): string {
 
 // Check if study plan needs attention
 export function needsAttention(plan: StudyPlan, lastSessionAt?: number): boolean {
-  if (plan.status !== "active") {
+  if (plan.status !== 'active') {
     return false;
   }
 
@@ -203,7 +203,7 @@ export function needsAttention(plan: StudyPlan, lastSessionAt?: number): boolean
 
 // Adjust study plan difficulty
 export function adjustStudyDifficulty(plan: StudyPlan, averageSessionQuality: number): StudyPlan {
-  const difficulties: StudyPlan["difficulty"][] = ["beginner", "intermediate", "advanced"];
+  const difficulties: StudyPlan['difficulty'][] = ['beginner', 'intermediate', 'advanced'];
   const currentIndex = difficulties.indexOf(plan.difficulty);
 
   let newIndex = currentIndex;
@@ -226,11 +226,11 @@ export function adjustStudyDifficulty(plan: StudyPlan, averageSessionQuality: nu
 
 // Abandon study plan
 export function abandonStudyPlan(plan: StudyPlan, reason?: string): StudyPlan {
-  debug.info("Study plan %s abandoned: %s", plan.id, reason ?? "no reason");
+  debug.info('Study plan %s abandoned: %s', plan.id, reason ?? 'no reason');
 
   return {
     ...plan,
-    status: "abandoned",
+    status: 'abandoned',
   };
 }
 
@@ -248,8 +248,8 @@ export function getStudyInsights(plan: StudyPlan): {
   const completionRate = (plan.sessionsCompleted / plan.sessionsTotal) * 100;
 
   return {
-    strongAreas: completionRate > 75 ? ["Consistency", "Focus duration"] : [],
-    improvementAreas: completionRate < 50 ? ["Session completion", "Regular practice"] : [],
+    strongAreas: completionRate > 75 ? ['Consistency', 'Focus duration'] : [],
+    improvementAreas: completionRate < 50 ? ['Session completion', 'Regular practice'] : [],
     avgSessionDuration,
     completionRate,
   };
@@ -259,20 +259,20 @@ export function getStudyInsights(plan: StudyPlan): {
 export function getNextStudyReminder(plan: StudyPlan): {
   shouldRemind: boolean;
   message: string;
-  urgency: "low" | "medium" | "high";
+  urgency: 'low' | 'medium' | 'high';
 } {
   const progress = calculateStudyProgress(plan);
   const nextSession = getNextSession(plan);
 
   if (!nextSession) {
-    return { shouldRemind: false, message: "", urgency: "low" };
+    return { shouldRemind: false, message: '', urgency: 'low' };
   }
 
   if (progress.sessionsRemaining === 1) {
     return {
       shouldRemind: true,
       message: `Final session of ${plan.subject}! Complete your plan.`,
-      urgency: "high",
+      urgency: 'high',
     };
   }
 
@@ -280,14 +280,14 @@ export function getNextStudyReminder(plan: StudyPlan): {
     return {
       shouldRemind: true,
       message: `You are ${progress.percentage}% through your study plan. Keep going!`,
-      urgency: "medium",
+      urgency: 'medium',
     };
   }
 
   return {
     shouldRemind: true,
     message: `Time for your next ${plan.subject} session.`,
-    urgency: "low",
+    urgency: 'low',
   };
 }
 

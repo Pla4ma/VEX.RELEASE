@@ -31,9 +31,9 @@ export function SessionPreview({ duration, goal }: SessionPreviewProps): JSX.Ele
     <Box p="lg" borderRadius="xl" bg="background.secondary" borderWidth={1} borderColor="border.light" alignItems="center" gap="md">
       {/* Duration Display */}
       <Box flexDirection="row" alignItems="center" gap="sm">
-        <Text fontSize={32}>{durationOption?.emoji ?? "🍅"}</Text>
+        <Text fontSize={32}>{durationOption?.emoji ?? '🍅'}</Text>
         <Text variant="h2" color="text.primary" fontWeight="700">
-          {durationOption?.label ?? "10 min"}
+          {durationOption?.label ?? '10 min'}
         </Text>
       </Box>
 

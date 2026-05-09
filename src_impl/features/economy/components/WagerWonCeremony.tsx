@@ -6,15 +6,15 @@
  * celebratory text with spring animation.
  */
 
-import React, { useEffect, useCallback } from "react";
-import { View, Dimensions } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming, withSequence, withDelay, withRepeat, runOnJS, FadeIn, FadeOut, SlideInDown, SlideOutUp } from "react-native-reanimated";
+import React, { useEffect, useCallback } from 'react';
+import { View, Dimensions } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming, withSequence, withDelay, withRepeat, runOnJS, FadeIn, FadeOut, SlideInDown, SlideOutUp } from 'react-native-reanimated';
 
-import { Text } from "../../../components/primitives/Text";
-import { ConfettiCelebration } from "../../../animation/ConfettiCelebration";
-import { useTheme } from "../../../theme";
+import { Text } from '../../../components/primitives/Text';
+import { ConfettiCelebration } from '../../../animation/ConfettiCelebration';
+import { useTheme } from '../../../theme';
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 interface WagerWonCeremonyProps {
   amount: number;
@@ -105,14 +105,14 @@ export function WagerWonCeremony({ amount, onComplete, autoDismiss = true, dismi
   return (
     <View
       style={{
-        position: "absolute",
+        position: 'absolute',
         left: 0,
         right: 0,
         top: 0,
         bottom: 0,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
         zIndex: 9999,
       }}
     >
@@ -120,7 +120,7 @@ export function WagerWonCeremony({ amount, onComplete, autoDismiss = true, dismi
       <ConfettiCelebration
         active={confettiActive.value}
         particleCount={80}
-        colors={[theme.colors.success.DEFAULT, theme.colors.primary[500], theme.colors.warning.DEFAULT, "#FFD700", "#FFA500"]}
+        colors={[theme.colors.success.DEFAULT, theme.colors.primary[500], theme.colors.warning.DEFAULT, '#FFD700', '#FFA500']}
         onComplete={() => {
           // Confetti complete
         }}
@@ -132,8 +132,8 @@ export function WagerWonCeremony({ amount, onComplete, autoDismiss = true, dismi
         exiting={FadeOut.duration(300)}
         style={[
           {
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
             padding: theme.spacing[8],
           },
           containerStyle,
@@ -147,8 +147,8 @@ export function WagerWonCeremony({ amount, onComplete, autoDismiss = true, dismi
               height: 120,
               borderRadius: 60,
               backgroundColor: theme.colors.success.DEFAULT,
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
               shadowColor: theme.colors.success.DEFAULT,
               shadowOffset: { width: 0, height: 0 },
               shadowOpacity: 0.5,
@@ -168,9 +168,9 @@ export function WagerWonCeremony({ amount, onComplete, autoDismiss = true, dismi
             variant="heading"
             style={{
               color: theme.colors.success.DEFAULT,
-              fontWeight: "800",
-              textAlign: "center",
-              textShadowColor: "rgba(0, 0, 0, 0.3)",
+              fontWeight: '800',
+              textAlign: 'center',
+              textShadowColor: 'rgba(0, 0, 0, 0.3)',
               textShadowOffset: { width: 0, height: 2 },
               textShadowRadius: 4,
             }}
@@ -184,9 +184,9 @@ export function WagerWonCeremony({ amount, onComplete, autoDismiss = true, dismi
           <Text
             variant="display"
             style={{
-              color: "#FFD700",
-              fontWeight: "700",
-              textAlign: "center",
+              color: '#FFD700',
+              fontWeight: '700',
+              textAlign: 'center',
               fontSize: 48,
             }}
           >
@@ -200,7 +200,7 @@ export function WagerWonCeremony({ amount, onComplete, autoDismiss = true, dismi
             variant="body"
             style={{
               color: theme.colors.text.secondary,
-              textAlign: "center",
+              textAlign: 'center',
             }}
           >
             Your focus paid off!

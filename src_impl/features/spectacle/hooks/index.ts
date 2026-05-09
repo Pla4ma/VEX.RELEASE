@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { spectacleService } from './index';
-import { SpectacleType, type SpectacleEvent, type SpectaclePayload } from './types';
+import { spectacleService } from '../index';
+import { SpectacleType, type SpectacleEvent, type SpectaclePayload } from '../types';
 
 interface MasteryRankUpPayload extends SpectaclePayload {
   userId: string;

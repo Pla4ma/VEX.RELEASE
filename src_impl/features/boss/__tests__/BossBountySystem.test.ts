@@ -4,16 +4,16 @@
  * Phase 4 - Boss Bounty Placement Button
  */
 
-import { placeBounty, getBountyStatus, consumeBountiesOnDamage, getActiveBounties, getBountyDisplayInfo, userHasActiveBounty, BOUNTY_COST_COINS, MAX_BOUNTY_STACK, BOUNTY_LOOT_MULTIPLIER } from "../BossBountySystem";
-import { spendCurrency } from "../../economy/spending-service";
+import { placeBounty, getBountyStatus, consumeBountiesOnDamage, getActiveBounties, getBountyDisplayInfo, userHasActiveBounty, BOUNTY_COST_COINS, MAX_BOUNTY_STACK, BOUNTY_LOOT_MULTIPLIER } from '../BossBountySystem';
+import { spendCurrency } from '../../economy/spending-service';
 
 // Mock the spending service
-jest.mock("../../economy/spending-service", () => ({
+jest.mock('../../economy/spending-service', () => ({
   spendCurrency: jest.fn(),
 }));
 
 // Mock Sentry
-jest.mock("@sentry/react-native", () => ({
+jest.mock('@sentry/react-native', () => ({
   captureException: jest.fn(),
   addBreadcrumb: jest.fn(),
 }));
@@ -22,7 +22,7 @@ jest.mock("@sentry/react-native", () => ({
 const mockStorage: Record<string, string> = {};
 
 jest.mock(
-  "../../../store/mmkv-storage",
+  '../../../store/mmkv-storage',
   () => ({
     storage: {
       set: (key: string, value: string) => {
@@ -37,9 +37,9 @@ jest.mock(
   { virtual: true },
 );
 
-describe("BossBountySystem", () => {
-  const mockUserId = "550e8400-e29b-41d4-a716-446655440000";
-  const mockEncounterId = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
+describe('BossBountySystem', () => {
+  const mockUserId = '550e8400-e29b-41d4-a716-446655440000';
+  const mockEncounterId = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
 
   beforeEach(() => {
     // Clear mock storage before each test
@@ -47,11 +47,11 @@ describe("BossBountySystem", () => {
     jest.clearAllMocks();
   });
 
-  describe("placeBounty", () => {
-    it("places a bounty and deducts 50 coins atomically when balance is sufficient", async () => {
+  describe('placeBounty', () => {
+    it('places a bounty and deducts 50 coins atomically when balance is sufficient', async () => {
       (spendCurrency as jest.Mock).mockResolvedValue({
         success: true,
-        transactionId: "tx-123",
+        transactionId: 'tx-123',
       });
 
       const result = await placeBounty({
@@ -65,10 +65,10 @@ describe("BossBountySystem", () => {
       expect(result.lootMultiplier).toBe(2);
       expect(spendCurrency).toHaveBeenCalledWith({
         userId: mockUserId,
-        currency: "COINS",
+        currency: 'COINS',
         amount: BOUNTY_COST_COINS,
-        sink: "BOSS_BOUNTY",
-        description: "Boss Bounty placed",
+        sink: 'BOSS_BOUNTY',
+        description: 'Boss Bounty placed',
         metadata: expect.objectContaining({
           encounterId: mockEncounterId,
           stackPosition: 1,
@@ -76,10 +76,10 @@ describe("BossBountySystem", () => {
       });
     });
 
-    it("fails to place bounty when coin balance is insufficient", async () => {
+    it('fails to place bounty when coin balance is insufficient', async () => {
       (spendCurrency as jest.Mock).mockResolvedValue({
         success: false,
-        error: { code: "INSUFFICIENT_BALANCE", message: "Not enough coins" },
+        error: { code: 'INSUFFICIENT_BALANCE', message: 'Not enough coins' },
       });
 
       const result = await placeBounty({
@@ -88,18 +88,18 @@ describe("BossBountySystem", () => {
       });
 
       expect(result.success).toBe(false);
-      expect(result.error?.code).toBe("INSUFFICIENT_BALANCE");
+      expect(result.error?.code).toBe('INSUFFICIENT_BALANCE');
       expect(result.bountyId).toBeNull();
     });
 
-    it("allows stacking up to 4 bounties on the same encounter", async () => {
+    it('allows stacking up to 4 bounties on the same encounter', async () => {
       (spendCurrency as jest.Mock).mockResolvedValue({
         success: true,
-        transactionId: "tx-123",
+        transactionId: 'tx-123',
       });
 
       // Place 4 bounties (max stack) - different users can stack
-      const userIds = ["550e8400-e29b-41d4-a716-446655440001", "550e8400-e29b-41d4-a716-446655440002", "550e8400-e29b-41d4-a716-446655440003", "550e8400-e29b-41d4-a716-446655440004"];
+      const userIds = ['550e8400-e29b-41d4-a716-446655440001', '550e8400-e29b-41d4-a716-446655440002', '550e8400-e29b-41d4-a716-446655440003', '550e8400-e29b-41d4-a716-446655440004'];
       for (const userId of userIds) {
         const result = await placeBounty({
           userId,
@@ -110,7 +110,7 @@ describe("BossBountySystem", () => {
 
       const status = getBountyStatus({
         encounterId: mockEncounterId,
-        userId: "550e8400-e29b-41d4-a716-446655440005",
+        userId: '550e8400-e29b-41d4-a716-446655440005',
       });
 
       expect(status.bountyCount).toBe(MAX_BOUNTY_STACK);
@@ -118,14 +118,14 @@ describe("BossBountySystem", () => {
       expect(status.totalLootMultiplier).toBe(MAX_BOUNTY_STACK * BOUNTY_LOOT_MULTIPLIER);
     });
 
-    it("prevents placing more than max stack bounties", async () => {
+    it('prevents placing more than max stack bounties', async () => {
       (spendCurrency as jest.Mock).mockResolvedValue({
         success: true,
-        transactionId: "tx-123",
+        transactionId: 'tx-123',
       });
 
       // Fill up the stack
-      const stackUserIds = ["550e8400-e29b-41d4-a716-446655440010", "550e8400-e29b-41d4-a716-446655440011", "550e8400-e29b-41d4-a716-446655440012", "550e8400-e29b-41d4-a716-446655440013"];
+      const stackUserIds = ['550e8400-e29b-41d4-a716-446655440010', '550e8400-e29b-41d4-a716-446655440011', '550e8400-e29b-41d4-a716-446655440012', '550e8400-e29b-41d4-a716-446655440013'];
       for (const userId of stackUserIds) {
         await placeBounty({
           userId,
@@ -135,18 +135,18 @@ describe("BossBountySystem", () => {
 
       // Try to place one more
       const result = await placeBounty({
-        userId: "550e8400-e29b-41d4-a716-446655440014",
+        userId: '550e8400-e29b-41d4-a716-446655440014',
         encounterId: mockEncounterId,
       });
 
       expect(result.success).toBe(false);
-      expect(result.error?.code).toBe("MAX_STACK_REACHED");
+      expect(result.error?.code).toBe('MAX_STACK_REACHED');
     });
 
-    it("prevents user from placing duplicate bounty on same encounter", async () => {
+    it('prevents user from placing duplicate bounty on same encounter', async () => {
       (spendCurrency as jest.Mock).mockResolvedValue({
         success: true,
-        transactionId: "tx-123",
+        transactionId: 'tx-123',
       });
 
       // First bounty succeeds
@@ -162,12 +162,12 @@ describe("BossBountySystem", () => {
         encounterId: mockEncounterId,
       });
       expect(result2.success).toBe(false);
-      expect(result2.error?.code).toBe("ALREADY_ACTIVE");
+      expect(result2.error?.code).toBe('ALREADY_ACTIVE');
     });
   });
 
-  describe("getBountyStatus", () => {
-    it("returns correct status when no bounties exist", () => {
+  describe('getBountyStatus', () => {
+    it('returns correct status when no bounties exist', () => {
       const status = getBountyStatus({
         encounterId: mockEncounterId,
         userId: mockUserId,
@@ -180,10 +180,10 @@ describe("BossBountySystem", () => {
       expect(status.maxStackReached).toBe(false);
     });
 
-    it("returns correct status with active bounties", async () => {
+    it('returns correct status with active bounties', async () => {
       (spendCurrency as jest.Mock).mockResolvedValue({
         success: true,
-        transactionId: "tx-123",
+        transactionId: 'tx-123',
       });
 
       await placeBounty({
@@ -193,7 +193,7 @@ describe("BossBountySystem", () => {
 
       const status = getBountyStatus({
         encounterId: mockEncounterId,
-        userId: "550e8400-e29b-41d4-a716-446655440005",
+        userId: '550e8400-e29b-41d4-a716-446655440005',
       });
 
       expect(status.hasActiveBounty).toBe(true);
@@ -204,18 +204,18 @@ describe("BossBountySystem", () => {
     });
   });
 
-  describe("getBountyDisplayInfo", () => {
-    it("does not throw when rendering display info without a viewer user id", () => {
+  describe('getBountyDisplayInfo', () => {
+    it('does not throw when rendering display info without a viewer user id', () => {
       expect(() => getBountyDisplayInfo(mockEncounterId)).not.toThrow();
       expect(getBountyDisplayInfo(mockEncounterId).hasBounty).toBe(false);
     });
   });
 
-  describe("consumeBountiesOnDamage", () => {
-    it("returns 2× loot multiplier when one bounty is active", async () => {
+  describe('consumeBountiesOnDamage', () => {
+    it('returns 2× loot multiplier when one bounty is active', async () => {
       (spendCurrency as jest.Mock).mockResolvedValue({
         success: true,
-        transactionId: "tx-123",
+        transactionId: 'tx-123',
       });
 
       await placeBounty({
@@ -230,14 +230,14 @@ describe("BossBountySystem", () => {
       expect(result.consumedBountyIds.length).toBe(1);
     });
 
-    it("returns 8× loot multiplier when 4 bounties are stacked", async () => {
+    it('returns 8× loot multiplier when 4 bounties are stacked', async () => {
       (spendCurrency as jest.Mock).mockResolvedValue({
         success: true,
-        transactionId: "tx-123",
+        transactionId: 'tx-123',
       });
 
       // Stack 4 bounties
-      const stackUserIds = ["550e8400-e29b-41d4-a716-446655440020", "550e8400-e29b-41d4-a716-446655440021", "550e8400-e29b-41d4-a716-446655440022", "550e8400-e29b-41d4-a716-446655440023"];
+      const stackUserIds = ['550e8400-e29b-41d4-a716-446655440020', '550e8400-e29b-41d4-a716-446655440021', '550e8400-e29b-41d4-a716-446655440022', '550e8400-e29b-41d4-a716-446655440023'];
       for (const userId of stackUserIds) {
         await placeBounty({
           userId,
@@ -251,10 +251,10 @@ describe("BossBountySystem", () => {
       expect(result.consumedCount).toBe(4);
     });
 
-    it("marks bounties as consumed after damage and cannot be reused", async () => {
+    it('marks bounties as consumed after damage and cannot be reused', async () => {
       (spendCurrency as jest.Mock).mockResolvedValue({
         success: true,
-        transactionId: "tx-123",
+        transactionId: 'tx-123',
       });
 
       await placeBounty({
@@ -273,16 +273,16 @@ describe("BossBountySystem", () => {
     });
   });
 
-  describe("getActiveBounties", () => {
-    it("returns empty array when no bounties exist", () => {
+  describe('getActiveBounties', () => {
+    it('returns empty array when no bounties exist', () => {
       const bounties = getActiveBounties(mockEncounterId);
       expect(bounties).toEqual([]);
     });
 
-    it("returns only active (non-consumed, non-expired) bounties", async () => {
+    it('returns only active (non-consumed, non-expired) bounties', async () => {
       (spendCurrency as jest.Mock).mockResolvedValue({
         success: true,
-        transactionId: "tx-123",
+        transactionId: 'tx-123',
       });
 
       await placeBounty({
@@ -301,16 +301,16 @@ describe("BossBountySystem", () => {
     });
   });
 
-  describe("userHasActiveBounty", () => {
-    it("returns false when user has no active bounty", () => {
+  describe('userHasActiveBounty', () => {
+    it('returns false when user has no active bounty', () => {
       const hasBounty = userHasActiveBounty(mockEncounterId, mockUserId);
       expect(hasBounty).toBe(false);
     });
 
-    it("returns true when user has active bounty", async () => {
+    it('returns true when user has active bounty', async () => {
       (spendCurrency as jest.Mock).mockResolvedValue({
         success: true,
-        transactionId: "tx-123",
+        transactionId: 'tx-123',
       });
 
       await placeBounty({
@@ -322,10 +322,10 @@ describe("BossBountySystem", () => {
       expect(hasBounty).toBe(true);
     });
 
-    it("returns false after bounty is consumed", async () => {
+    it('returns false after bounty is consumed', async () => {
       (spendCurrency as jest.Mock).mockResolvedValue({
         success: true,
-        transactionId: "tx-123",
+        transactionId: 'tx-123',
       });
 
       await placeBounty({

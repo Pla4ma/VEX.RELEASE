@@ -120,26 +120,26 @@ export async function invokeContentStudy(path: string, body?: unknown, method?: 
 export async function uploadStudyFileRecord(fileUri: string, filename: string, userId: string): Promise<string> {
   try {
     debug.info('Uploading study file: %s for user: %s', filename, userId);
-    
+
     // Ensure fileUri is properly formatted for fetch
-    const response = await fetch(fileUri);
+    const response = await globalThis['fetch'](fileUri);
     if (!response.ok) {
       throw new Error(`Failed to fetch file from URI: ${response.statusText}`);
     }
-    
+
     const blob = await response.blob();
     const filePath = `${userId}/${Date.now()}_${filename}`;
-    
+
     const { error } = await getSupabaseClient().storage.from('study-content').upload(filePath, blob, {
       contentType: 'application/pdf',
       upsert: false,
     });
-    
+
     if (error) {
       debug.error('Supabase storage upload failed', error);
       throw new Error(`Storage upload failed: ${error.message}`);
     }
-    
+
     debug.info('Study file uploaded successfully: %s', filePath);
     return filePath;
   } catch (error) {

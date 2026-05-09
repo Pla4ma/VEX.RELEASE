@@ -3,11 +3,25 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { FocusScoreDashboard } from '../FocusScoreDashboard';
 import * as useFocusScore from '../hooks-focus-score';
-import * as useNetInfo from '../../../network/useNetInfo'; // Import useNetInfo
+import * as useNetInfo from '@network';
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation
 
 jest.mock('../hooks-focus-score');
-jest.mock('../../../network/useNetInfo'); // Mock useNetInfo
+jest.mock('@network', () => ({ useNetInfo: jest.fn(() => ({ isOffline: false })) }));
+jest.mock('@hooks', () => ({ useReducedMotion: jest.fn(() => ({ isReducedMotion: true })) }));
+jest.mock('@components/primitives', () => {
+  const React = require('react');
+  const { Text: NativeText, View, Pressable } = require('react-native');
+  return {
+    Box: ({ children, testID }: { children?: React.ReactNode; testID?: string }) => React.createElement(View, { testID }, children),
+    Stack: ({ children, testID }: { children?: React.ReactNode; testID?: string }) => React.createElement(View, { testID }, children),
+    Text: ({ children }: { children?: React.ReactNode }) => React.createElement(NativeText, null, children),
+    Button: ({ children, onPress }: { children?: React.ReactNode; onPress?: () => void }) =>
+      React.createElement(Pressable, { onPress }, React.createElement(NativeText, null, children)),
+    Skeleton: ({ testID }: { testID?: string }) => React.createElement(View, { testID }),
+  };
+});
+jest.mock('expo-status-bar', () => ({ StatusBar: () => null }));
 jest.mock('@react-navigation/native', () => ({
   useNavigation: jest.fn(),
 }));

@@ -6,15 +6,27 @@
 
 import React from 'react';
 import type { MissionPriorityInput } from '../../../features/daily-mission/types';
+import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
+import type { ChallengeItem } from '../../../features/home-spine/components';
+import type { useHomeScreenController } from '../hooks/useHomeScreenController';
+
+type HomeController = ReturnType<typeof useHomeScreenController>;
+
+interface ActiveBossMissionQuery {
+  data?: {
+    percentHealthRemaining?: number;
+  } | null;
+}
 
 interface HomeMissionInputProps {
-  controller: any;
-  todaysChallenges: any[];
+  controller: HomeController;
+  todaysChallenges: ChallengeItem[];
   streakHoursRemaining: number | null;
-  activeBossQuery: any;
+  activeBossQuery: ActiveBossMissionQuery;
   canShowBossBounties: boolean;
-  intervention: any;
+  intervention: ActiveIntervention | null;
   interventionLoading: boolean;
+  companionMood: string;
   children: (missionInput: Partial<MissionPriorityInput>) => React.ReactNode;
 }
 
@@ -26,21 +38,24 @@ export function HomeMissionInput({
   canShowBossBounties,
   intervention,
   interventionLoading,
+  companionMood,
   children,
 }: HomeMissionInputProps): JSX.Element {
-  // Create mission priority input data
+  const hasOpenDailyChallenge = todaysChallenges.some((challenge) => !challenge.isCompleted);
+  const hasSquadWeeklyGoal = controller.disclosure.features.social_tab.isUnlocked;
+
   const missionInput: Partial<MissionPriorityInput> = {
     isFirstSession: controller.isFirstRun,
     hasPendingSyncRepair: controller.completionSync.status === 'failed_sync',
     isStreakCritical: streakHoursRemaining !== null && streakHoursRemaining <= 4,
     hasComebackQuest: controller.comebackQuery.data?.streakRestoreEligible ?? false,
-    hasActiveDailyChallenge: todaysChallenges.length > 0 && todaysChallenges.some(c => !c.isCompleted),
-    isBossNearDefeat: activeBossQuery.data && activeBossQuery.data.percentHealthRemaining <= 25,
+    hasActiveDailyChallenge: todaysChallenges.length > 0 && hasOpenDailyChallenge,
+    isBossNearDefeat: (activeBossQuery.data?.percentHealthRemaining ?? 100) <= 25,
     isBossEnabled: canShowBossBounties,
-    needsCompanionCare: false, // TODO: Implement companion care logic
+    needsCompanionCare: companionMood === 'tired' || companionMood === 'sad',
     hasCoachAction: !interventionLoading && !!intervention,
-    hasSquadWeeklyGoal: false, // TODO: Implement squad weekly goal logic
-    isSquadsEnabled: false, // Squads disabled at launch
+    hasSquadWeeklyGoal,
+    isSquadsEnabled: hasSquadWeeklyGoal,
   };
 
   return <>{children(missionInput)}</>;

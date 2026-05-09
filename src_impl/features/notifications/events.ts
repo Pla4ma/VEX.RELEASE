@@ -4,14 +4,14 @@
  * Event definitions for notification management, delivery, and user preferences.
  */
 
-import { NotificationEvent } from "./types";
+import { NotificationEvent } from './types';
 
 // Base Event Interface
 export interface BaseNotificationEvent {
   id: string;
   userId: string;
   notificationId?: string;
-  channelId?: "in_app" | "push" | "email" | "sms" | "webhook";
+  channelId?: 'in_app' | 'push' | 'email' | 'sms' | 'webhook';
   timestamp: Date;
   data: DynamicRecord;
   metadata: EventMetadata;
@@ -27,7 +27,7 @@ export interface EventMetadata {
 }
 
 export interface DeviceInfo {
-  type: "mobile" | "tablet" | "desktop" | "web";
+  type: 'mobile' | 'tablet' | 'desktop' | 'web';
   os: string;
   version: string;
   appVersion?: string;
@@ -36,7 +36,7 @@ export interface DeviceInfo {
 
 // Notification Lifecycle Events
 export interface NotificationSentEvent extends BaseNotificationEvent {
-  type: "notification_sent";
+  type: 'notification_sent';
   data: {
     notificationId: string;
     type: string;
@@ -59,7 +59,7 @@ export interface NotificationSentEvent extends BaseNotificationEvent {
 }
 
 export interface NotificationDeliveredEvent extends BaseNotificationEvent {
-  type: "notification_delivered";
+  type: 'notification_delivered';
   data: {
     notificationId: string;
     channel: string;
@@ -77,12 +77,12 @@ export interface NotificationDeliveredEvent extends BaseNotificationEvent {
 }
 
 export interface NotificationReadEvent extends BaseNotificationEvent {
-  type: "notification_read";
+  type: 'notification_read';
   data: {
     notificationId: string;
     readAt: Date;
     readTimeframe: number; // time between delivery and read in seconds
-    readMethod: "click" | "mark_read" | "auto_read";
+    readMethod: 'click' | 'mark_read' | 'auto_read';
     readContext: {
       device: string;
       location?: string;
@@ -92,7 +92,7 @@ export interface NotificationReadEvent extends BaseNotificationEvent {
 }
 
 export interface NotificationClickedEvent extends BaseNotificationEvent {
-  type: "notification_clicked";
+  type: 'notification_clicked';
   data: {
     notificationId: string;
     clickedAt: Date;
@@ -109,7 +109,7 @@ export interface NotificationClickedEvent extends BaseNotificationEvent {
 }
 
 export interface NotificationFailedEvent extends BaseNotificationEvent {
-  type: "notification_failed";
+  type: 'notification_failed';
   data: {
     notificationId: string;
     channel: string;
@@ -126,12 +126,12 @@ export interface NotificationFailedEvent extends BaseNotificationEvent {
 }
 
 export interface NotificationExpiredEvent extends BaseNotificationEvent {
-  type: "notification_expired";
+  type: 'notification_expired';
   data: {
     notificationId: string;
     expiredAt: Date;
     originalScheduledTime: Date;
-    expirationReason: "ttl_exceeded" | "no_longer_relevant" | "user_preference" | "system_limit";
+    expirationReason: 'ttl_exceeded' | 'no_longer_relevant' | 'user_preference' | 'system_limit';
     channels: string[];
     deliveryAttempts: number;
     usersAffected: number;
@@ -139,16 +139,16 @@ export interface NotificationExpiredEvent extends BaseNotificationEvent {
 }
 
 export interface NotificationCancelledEvent extends BaseNotificationEvent {
-  type: "notification_cancelled";
+  type: 'notification_cancelled';
   data: {
     notificationId: string;
     cancelledAt: Date;
-    reason: "user_request" | "system_policy" | "content_update" | "technical_issue";
+    reason: 'user_request' | 'system_policy' | 'content_update' | 'technical_issue';
     cancelledBy: string;
     channels: string[];
     usersAffected: number;
     refund?: {
-      type: "credits" | "tokens" | "money";
+      type: 'credits' | 'tokens' | 'money';
       amount: number;
     };
   };
@@ -156,7 +156,7 @@ export interface NotificationCancelledEvent extends BaseNotificationEvent {
 
 // Template Events
 export interface NotificationTemplateCreatedEvent extends BaseNotificationEvent {
-  type: "notification_template_created";
+  type: 'notification_template_created';
   data: {
     templateId: string;
     name: string;
@@ -185,7 +185,7 @@ export interface NotificationTemplateCreatedEvent extends BaseNotificationEvent 
 }
 
 export interface NotificationTemplateUpdatedEvent extends BaseNotificationEvent {
-  type: "notification_template_updated";
+  type: 'notification_template_updated';
   data: {
     templateId: string;
     changes: {
@@ -201,7 +201,7 @@ export interface NotificationTemplateUpdatedEvent extends BaseNotificationEvent 
 }
 
 export interface NotificationTemplateDeletedEvent extends BaseNotificationEvent {
-  type: "notification_template_deleted";
+  type: 'notification_template_deleted';
   data: {
     templateId: string;
     deletedAt: Date;
@@ -214,7 +214,7 @@ export interface NotificationTemplateDeletedEvent extends BaseNotificationEvent 
 
 // Preference Events
 export interface NotificationPreferencesUpdatedEvent extends BaseNotificationEvent {
-  type: "notification_preferences_updated";
+  type: 'notification_preferences_updated';
   data: {
     preferences: {
       globalSettings: {
@@ -270,12 +270,12 @@ export interface NotificationPreferencesUpdatedEvent extends BaseNotificationEve
       };
     };
     updatedFields: string[];
-    updatedBy: "user" | "system" | "admin";
+    updatedBy: 'user' | 'system' | 'admin';
   };
 }
 
 export interface NotificationChannelPreferencesUpdatedEvent extends BaseNotificationEvent {
-  type: "notification_channel_preferences_updated";
+  type: 'notification_channel_preferences_updated';
   data: {
     channel: string;
     preferences: {
@@ -292,7 +292,7 @@ export interface NotificationChannelPreferencesUpdatedEvent extends BaseNotifica
 
 // Campaign Events
 export interface NotificationCampaignCreatedEvent extends BaseNotificationEvent {
-  type: "notification_campaign_created";
+  type: 'notification_campaign_created';
   data: {
     campaignId: string;
     name: string;
@@ -324,7 +324,7 @@ export interface NotificationCampaignCreatedEvent extends BaseNotificationEvent 
 }
 
 export interface NotificationCampaignStartedEvent extends BaseNotificationEvent {
-  type: "notification_campaign_started";
+  type: 'notification_campaign_started';
   data: {
     campaignId: string;
     startedAt: Date;
@@ -339,7 +339,7 @@ export interface NotificationCampaignStartedEvent extends BaseNotificationEvent 
 }
 
 export interface NotificationCampaignCompletedEvent extends BaseNotificationEvent {
-  type: "notification_campaign_completed";
+  type: 'notification_campaign_completed';
   data: {
     campaignId: string;
     completedAt: Date;
@@ -365,7 +365,7 @@ export interface NotificationCampaignCompletedEvent extends BaseNotificationEven
 }
 
 export interface NotificationCampaignPausedEvent extends BaseNotificationEvent {
-  type: "notification_campaign_paused";
+  type: 'notification_campaign_paused';
   data: {
     campaignId: string;
     pausedAt: Date;
@@ -382,7 +382,7 @@ export interface NotificationCampaignPausedEvent extends BaseNotificationEvent {
 
 // Rule Events
 export interface NotificationRuleTriggeredEvent extends BaseNotificationEvent {
-  type: "notification_rule_triggered";
+  type: 'notification_rule_triggered';
   data: {
     ruleId: string;
     ruleName: string;
@@ -407,7 +407,7 @@ export interface NotificationRuleTriggeredEvent extends BaseNotificationEvent {
 }
 
 export interface NotificationRuleCreatedEvent extends BaseNotificationEvent {
-  type: "notification_rule_created";
+  type: 'notification_rule_created';
   data: {
     ruleId: string;
     name: string;
@@ -422,7 +422,7 @@ export interface NotificationRuleCreatedEvent extends BaseNotificationEvent {
 }
 
 export interface NotificationRuleUpdatedEvent extends BaseNotificationEvent {
-  type: "notification_rule_updated";
+  type: 'notification_rule_updated';
   data: {
     ruleId: string;
     changes: {
@@ -438,9 +438,9 @@ export interface NotificationRuleUpdatedEvent extends BaseNotificationEvent {
 
 // Analytics Events
 export interface NotificationAnalyticsEvent extends BaseNotificationEvent {
-  type: "notification_analytics";
+  type: 'notification_analytics';
   data: {
-    analyticsType: "performance" | "engagement" | "delivery" | "user_behavior";
+    analyticsType: 'performance' | 'engagement' | 'delivery' | 'user_behavior';
     timeframe: string;
     metrics: Record<string, number>;
     dimensions: DynamicRecord;
@@ -455,7 +455,7 @@ export interface NotificationAnalyticsEvent extends BaseNotificationEvent {
 }
 
 export interface NotificationPerformanceReportEvent extends BaseNotificationEvent {
-  type: "notification_performance_report";
+  type: 'notification_performance_report';
   data: {
     reportPeriod: {
       start: Date;
@@ -505,7 +505,7 @@ export interface NotificationPerformanceReportEvent extends BaseNotificationEven
 
 // Webhook Events
 export interface NotificationWebhookTriggeredEvent extends BaseNotificationEvent {
-  type: "notification_webhook_triggered";
+  type: 'notification_webhook_triggered';
   data: {
     webhookId: string;
     webhookName: string;
@@ -524,7 +524,7 @@ export interface NotificationWebhookTriggeredEvent extends BaseNotificationEvent
 }
 
 export interface NotificationWebhookFailedEvent extends BaseNotificationEvent {
-  type: "notification_webhook_failed";
+  type: 'notification_webhook_failed';
   data: {
     webhookId: string;
     webhookName: string;
@@ -545,9 +545,9 @@ export interface NotificationWebhookFailedEvent extends BaseNotificationEvent {
 
 // System Events
 export interface NotificationSystemMaintenanceEvent extends BaseNotificationEvent {
-  type: "notification_system_maintenance";
+  type: 'notification_system_maintenance';
   data: {
-    maintenanceType: "scheduled" | "emergency" | "upgrade" | "migration";
+    maintenanceType: 'scheduled' | 'emergency' | 'upgrade' | 'migration';
     startTime: Date;
     endTime?: Date;
     duration?: number;
@@ -564,12 +564,12 @@ export interface NotificationSystemMaintenanceEvent extends BaseNotificationEven
 }
 
 export interface NotificationSystemErrorEvent extends BaseNotificationEvent {
-  type: "notification_system_error";
+  type: 'notification_system_error';
   data: {
-    errorType: "delivery_failure" | "template_error" | "rule_error" | "system_error";
+    errorType: 'delivery_failure' | 'template_error' | 'rule_error' | 'system_error';
     errorCode: string;
     errorMessage: string;
-    severity: "low" | "medium" | "high" | "critical";
+    severity: 'low' | 'medium' | 'high' | 'critical';
     context: {
       service: string;
       operation: string;
@@ -585,12 +585,12 @@ export interface NotificationSystemErrorEvent extends BaseNotificationEvent {
 }
 
 export interface NotificationSystemPerformanceEvent extends BaseNotificationEvent {
-  type: "notification_system_performance";
+  type: 'notification_system_performance';
   data: {
     metric: string;
     value: number;
     threshold: number;
-    status: "normal" | "warning" | "critical";
+    status: 'normal' | 'warning' | 'critical';
     service: string;
     timeframe: string;
     context: DynamicRecord;
@@ -599,9 +599,9 @@ export interface NotificationSystemPerformanceEvent extends BaseNotificationEven
 
 // User Interaction Events
 export interface NotificationUserInteractionEvent extends BaseNotificationEvent {
-  type: "notification_user_interaction";
+  type: 'notification_user_interaction';
   data: {
-    interactionType: "dismiss" | "snooze" | "mute" | "unmute" | "mark_spam" | "report_abuse";
+    interactionType: 'dismiss' | 'snooze' | 'mute' | 'unmute' | 'mark_spam' | 'report_abuse';
     notificationId?: string;
     category?: string;
     channel?: string;
@@ -620,14 +620,14 @@ export interface NotificationUserInteractionEvent extends BaseNotificationEvent 
 }
 
 export interface NotificationUserFeedbackEvent extends BaseNotificationEvent {
-  type: "notification_user_feedback";
+  type: 'notification_user_feedback';
   data: {
-    feedbackType: "rating" | "comment" | "suggestion" | "complaint";
+    feedbackType: 'rating' | 'comment' | 'suggestion' | 'complaint';
     notificationId?: string;
     category?: string;
     rating?: number;
     comment?: string;
-    sentiment?: "positive" | "neutral" | "negative";
+    sentiment?: 'positive' | 'neutral' | 'negative';
     tags?: string[];
     submittedAt: Date;
     context: {
@@ -644,7 +644,7 @@ export type NotificationEventType = NotificationSentEvent | NotificationDelivere
 export function createNotificationSentEvent(userId: string, notificationId: string, type: string, category: string, priority: string, channels: string[], template: string, personalization: DynamicValue): NotificationSentEvent {
   return {
     id: generateEventId(),
-    type: "notification_sent",
+    type: 'notification_sent',
     userId,
     notificationId,
     timestamp: new Date(),
@@ -659,17 +659,17 @@ export function createNotificationSentEvent(userId: string, notificationId: stri
       delivery: {
         attempts: 1,
         maxAttempts: 3,
-        retryPolicy: "exponential_backoff",
+        retryPolicy: 'exponential_backoff',
       },
     },
-    metadata: createEventMetadata("notifications"),
+    metadata: createEventMetadata('notifications'),
   };
 }
 
-export function createNotificationDeliveredEvent(userId: string, notificationId: string, channel: "push" | "email" | "sms" | "in_app" | "webhook", deliveryTime: Date, latency: number, provider: string, messageId?: string): NotificationDeliveredEvent {
+export function createNotificationDeliveredEvent(userId: string, notificationId: string, channel: 'push' | 'email' | 'sms' | 'in_app' | 'webhook', deliveryTime: Date, latency: number, provider: string, messageId?: string): NotificationDeliveredEvent {
   return {
     id: generateEventId(),
-    type: "notification_delivered",
+    type: 'notification_delivered',
     userId,
     notificationId,
     channelId: channel,
@@ -682,17 +682,17 @@ export function createNotificationDeliveredEvent(userId: string, notificationId:
       provider,
       messageId,
       deliveryDetails: {
-        status: "delivered",
+        status: 'delivered',
       },
     },
-    metadata: createEventMetadata("notifications"),
+    metadata: createEventMetadata('notifications'),
   };
 }
 
-export function createNotificationReadEvent(userId: string, notificationId: string, readAt: Date, readTimeframe: number, readMethod: "click" | "mark_read" | "auto_read", readContext: DynamicValue): NotificationReadEvent {
+export function createNotificationReadEvent(userId: string, notificationId: string, readAt: Date, readTimeframe: number, readMethod: 'click' | 'mark_read' | 'auto_read', readContext: DynamicValue): NotificationReadEvent {
   return {
     id: generateEventId(),
-    type: "notification_read",
+    type: 'notification_read',
     userId,
     notificationId,
     timestamp: new Date(),
@@ -703,14 +703,14 @@ export function createNotificationReadEvent(userId: string, notificationId: stri
       readMethod,
       readContext,
     },
-    metadata: createEventMetadata("notifications"),
+    metadata: createEventMetadata('notifications'),
   };
 }
 
 export function createNotificationClickedEvent(userId: string, notificationId: string, clickedAt: Date, clickTimeframe: number, action: string, actionUrl?: string, actionData?: DynamicValue, clickContext?: DynamicValue): NotificationClickedEvent {
   return {
     id: generateEventId(),
-    type: "notification_clicked",
+    type: 'notification_clicked',
     userId,
     notificationId,
     timestamp: new Date(),
@@ -722,17 +722,17 @@ export function createNotificationClickedEvent(userId: string, notificationId: s
       actionUrl,
       actionData,
       clickContext: clickContext || {
-        device: "unknown",
+        device: 'unknown',
       },
     },
-    metadata: createEventMetadata("notifications"),
+    metadata: createEventMetadata('notifications'),
   };
 }
 
-export function createNotificationFailedEvent(userId: string, notificationId: string, channel: "push" | "email" | "sms" | "in_app" | "webhook", failureReason: string, errorCode: string, errorDetails: string, attemptNumber: number, maxAttempts: number, provider: string): NotificationFailedEvent {
+export function createNotificationFailedEvent(userId: string, notificationId: string, channel: 'push' | 'email' | 'sms' | 'in_app' | 'webhook', failureReason: string, errorCode: string, errorDetails: string, attemptNumber: number, maxAttempts: number, provider: string): NotificationFailedEvent {
   return {
     id: generateEventId(),
-    type: "notification_failed",
+    type: 'notification_failed',
     userId,
     notificationId,
     channelId: channel,
@@ -749,14 +749,14 @@ export function createNotificationFailedEvent(userId: string, notificationId: st
       provider,
       affectedUsers: 1,
     },
-    metadata: createEventMetadata("notifications"),
+    metadata: createEventMetadata('notifications'),
   };
 }
 
-export function createNotificationPreferencesUpdatedEvent(userId: string, preferences: DynamicValue, updatedFields: string[], updatedBy: "user" | "system" | "admin"): NotificationPreferencesUpdatedEvent {
+export function createNotificationPreferencesUpdatedEvent(userId: string, preferences: DynamicValue, updatedFields: string[], updatedBy: 'user' | 'system' | 'admin'): NotificationPreferencesUpdatedEvent {
   return {
     id: generateEventId(),
-    type: "notification_preferences_updated",
+    type: 'notification_preferences_updated',
     userId,
     timestamp: new Date(),
     data: {
@@ -764,7 +764,7 @@ export function createNotificationPreferencesUpdatedEvent(userId: string, prefer
       updatedFields,
       updatedBy,
     },
-    metadata: createEventMetadata("notifications"),
+    metadata: createEventMetadata('notifications'),
   };
 }
 
@@ -776,17 +776,17 @@ function generateEventId(): string {
 function createEventMetadata(source: string): EventMetadata {
   return {
     source,
-    version: "1.0.0",
+    version: '1.0.0',
     platform: getPlatform(),
   };
 }
 
 function getPlatform(): string {
-  if (typeof window !== "undefined") {
-    return "web";
+  if (typeof window !== 'undefined') {
+    return 'web';
   }
   // Add platform detection logic here
-  return "unknown";
+  return 'unknown';
 }
 
 // Event Validation
@@ -801,13 +801,13 @@ export function validateNotificationEvent(event: NotificationEventType): boolean
 
   // Add specific validation for each event type
   switch (event.type) {
-    case "notification_sent":
+    case 'notification_sent':
       return validateNotificationSentEvent(event as NotificationSentEvent);
-    case "notification_delivered":
+    case 'notification_delivered':
       return validateNotificationDeliveredEvent(event as NotificationDeliveredEvent);
-    case "notification_read":
+    case 'notification_read':
       return validateNotificationReadEvent(event as NotificationReadEvent);
-    case "notification_clicked":
+    case 'notification_clicked':
       return validateNotificationClickedEvent(event as NotificationClickedEvent);
     default:
       return true;
@@ -821,17 +821,17 @@ function validateNotificationSentEvent(event: NotificationSentEvent): boolean {
 
 function validateNotificationDeliveredEvent(event: NotificationDeliveredEvent): boolean {
   const { data } = event;
-  return !!(data.notificationId && data.channel && data.deliveryTime && typeof data.latency === "number" && data.provider);
+  return !!(data.notificationId && data.channel && data.deliveryTime && typeof data.latency === 'number' && data.provider);
 }
 
 function validateNotificationReadEvent(event: NotificationReadEvent): boolean {
   const { data } = event;
-  return !!(data.notificationId && data.readAt && typeof data.readTimeframe === "number" && data.readMethod && data.readContext);
+  return !!(data.notificationId && data.readAt && typeof data.readTimeframe === 'number' && data.readMethod && data.readContext);
 }
 
 function validateNotificationClickedEvent(event: NotificationClickedEvent): boolean {
   const { data } = event;
-  return !!(data.notificationId && data.clickedAt && typeof data.clickTimeframe === "number" && data.action && data.clickContext);
+  return !!(data.notificationId && data.clickedAt && typeof data.clickTimeframe === 'number' && data.action && data.clickContext);
 }
 
 // Event Serialization

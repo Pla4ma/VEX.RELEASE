@@ -163,7 +163,7 @@ export function getNextSession(currentSession: FirstWeekSession): FirstWeekSessi
     'SESSION_5',
     'SESSION_6',
     'SESSION_7',
-    'COMPLETED'
+    'COMPLETED',
   ];
 
   const currentIndex = sessions.indexOf(currentSession);

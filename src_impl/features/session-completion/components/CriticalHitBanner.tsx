@@ -8,13 +8,13 @@
  * @phase 3B.2
  */
 
-import React, { useEffect } from "react";
-import Animated, { FadeIn, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming, withRepeat, withDelay, interpolate } from "react-native-reanimated";
-import { triggerHapticPattern } from "../../../utils/haptics";
+import React, { useEffect } from 'react';
+import Animated, { FadeIn, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming, withRepeat, withDelay, interpolate } from 'react-native-reanimated';
+import { triggerHapticPattern } from '../../../utils/haptics';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 export interface CriticalHitBannerProps {
   /** XP amount (will show 3x) */
@@ -40,7 +40,7 @@ function LightningBolt({ delay }: { delay: number }): JSX.Element {
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
         },
         boltStyle,
       ]}
@@ -69,7 +69,7 @@ function EnergyBurst(): JSX.Element {
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           width: 100,
           height: 100,
           borderRadius: 50,
@@ -90,7 +90,7 @@ export function CriticalHitBanner({ xpAmount, onRevealComplete }: CriticalHitBan
   // Trigger haptics on mount
   useEffect(() => {
     const triggerHaptics = async () => {
-      await triggerHapticPattern(["success", "success"], 200);
+      await triggerHapticPattern(['success', 'success'], 200);
     };
     void triggerHaptics();
 
@@ -126,8 +126,8 @@ export function CriticalHitBanner({ xpAmount, onRevealComplete }: CriticalHitBan
         exiting={FadeOut.duration(300)}
         style={[
           {
-            width: "100%",
-            alignItems: "center",
+            width: '100%',
+            alignItems: 'center',
           },
         ]}
       >
@@ -149,7 +149,7 @@ export function CriticalHitBanner({ xpAmount, onRevealComplete }: CriticalHitBan
               backgroundColor: `${theme.colors.accent.purple}30`,
               borderWidth: 3,
               borderColor: theme.colors.accent.purple,
-              alignItems: "center",
+              alignItems: 'center',
             },
             bannerStyle,
           ]}
@@ -168,7 +168,7 @@ export function CriticalHitBanner({ xpAmount, onRevealComplete }: CriticalHitBan
           style={[
             {
               marginTop: 32,
-              alignItems: "center",
+              alignItems: 'center',
               opacity: 0,
             },
             tripleXStyle,
@@ -198,7 +198,7 @@ export function CriticalHitBanner({ xpAmount, onRevealComplete }: CriticalHitBan
             variant="h4"
             color="text.tertiary"
             style={{
-              textDecorationLine: "line-through",
+              textDecorationLine: 'line-through',
             }}
           >
             Was: {xpAmount} XP

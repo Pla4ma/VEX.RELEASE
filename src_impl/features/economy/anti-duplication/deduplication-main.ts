@@ -18,7 +18,7 @@ import type {
   DeduplicationRequest,
   DeduplicationResult,
   DeduplicationRule,
-  ExploitDetection
+  ExploitDetection,
 } from './schemas';
 
 // ============================================================================

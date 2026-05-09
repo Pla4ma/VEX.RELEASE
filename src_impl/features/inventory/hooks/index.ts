@@ -4,7 +4,7 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import * as service from './service';
+import * as service from '../service';
 import type {
   UseItemInput,
   EquipItemInput,
@@ -15,7 +15,7 @@ import type {
   SetQuickUseSlotInput,
   InventoryFilter,
   InventoryState,
-} from './schemas';
+} from '../schemas';
 
 // ============================================================================
 // Query Keys

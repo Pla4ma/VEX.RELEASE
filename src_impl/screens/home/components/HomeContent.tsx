@@ -19,22 +19,22 @@
  */
 
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { AtRiskBanner } from '../../../features/home-spine/components';
 import { StaggeredEnter } from '../../../shared/ui/components/EnterAnimation';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { HomeSecondaryRail } from './HomeSecondaryRail';
 import { HomeFocusScore } from './HomeFocusScore';
 import { HomeDailyMission } from './HomeDailyMission';
 import { HomeSessionControl } from './HomeSessionControl';
-import { HomeStreakProgress } from './HomeStreakProgress';
-import { HomeContextualCards } from './HomeContextualCards';
 import { HomeStatusBanners } from './HomeStatusBanners';
-import { HomeWeeklyQuest } from './HomeWeeklyQuest';
-import { HomeInterventionBanner } from './HomeInterventionBanner';
 import { HomeMissionInput } from './HomeMissionInput';
 import { HomeContentLower } from './HomeContentLower';
 import type { MissionPriorityInput } from '../../../features/daily-mission/types';
+import type { useHomeData } from '../hooks/useHomeData';
+
+type HomeData = ReturnType<typeof useHomeData>;
+type HomeController = HomeData['controller'];
 
 const staggeredEnterStyle = {
   container: {
@@ -48,18 +48,18 @@ const staggeredEnterStyle = {
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
 interface HomeContentProps {
-  controller: any;
-  data: any;
+  controller: HomeController;
+  data: HomeData;
   handleClaimReward: (rewardId: string) => void;
   streakHoursRemaining: number;
   canShowWagers: boolean;
-  activeWagerQuery: any;
+  activeWagerQuery: HomeData['activeWagerQuery'];
   canShowBattlePass: boolean;
-  features: any;
+  features: HomeController['disclosure']['features'];
   comebackSessionsCompleted: number;
-  activeBossQuery: any;
-  bountyStatusQuery: any;
-  placeBountyMutation: any;
+  activeBossQuery: HomeData['activeBossQuery'];
+  bountyStatusQuery: HomeData['bountyStatusQuery'];
+  placeBountyMutation: HomeData['placeBountyMutation'];
   coinBalance: number | null;
   canShowBossBounties: boolean;
 }
@@ -83,7 +83,16 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   const navigation = useNavigation<NavigationProp>();
 
   return (
-    <HomeMissionInput>
+    <HomeMissionInput
+      activeBossQuery={activeBossQuery}
+      canShowBossBounties={canShowBossBounties}
+      companionMood={data.companionMood}
+      controller={controller}
+      intervention={data.intervention}
+      interventionLoading={data.interventionLoading}
+      streakHoursRemaining={streakHoursRemaining}
+      todaysChallenges={data.todaysChallenges}
+    >
       {(missionInput: Partial<MissionPriorityInput>) => (
         <StaggeredEnter
           containerStyle={staggeredEnterStyle.container}

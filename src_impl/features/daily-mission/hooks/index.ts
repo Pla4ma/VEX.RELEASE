@@ -6,7 +6,7 @@
 
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { useAuthStore } from '../../store';
+import { useAuthStore } from '../../../store';
 import {
   determineMissionType,
   createDailyMission,
@@ -15,7 +15,7 @@ import {
   getMissionRemainingHours,
   type DailyMission,
   type MissionPriorityInput,
-} from './service';
+} from '../service';
 
 /**
  * Hook for determining the user's primary daily mission
@@ -39,7 +39,7 @@ export function useDailyMission(input: Partial<MissionPriorityInput>) {
   }), [input.isFirstSession, input.hasPendingSyncRepair, input.isStreakCritical, input.hasComebackQuest, input.hasActiveDailyChallenge, input.isBossNearDefeat, input.isBossEnabled, input.needsCompanionCare, input.hasCoachAction, input.hasSquadWeeklyGoal, input.isSquadsEnabled, userId]);
 
   const mission = useMemo(() => {
-    if (!userId) return null;
+    if (!userId) {return null;}
 
     try {
       const missionType = determineMissionType(missionInput);
@@ -71,7 +71,7 @@ export function useDailyMission(input: Partial<MissionPriorityInput>) {
  */
 export function useDailyMissionAnalytics(mission: DailyMission | null) {
   return useMemo(() => {
-    if (!mission) return null;
+    if (!mission) {return null;}
 
     return {
       missionType: mission.type,
@@ -115,7 +115,7 @@ export function useMissionHistory(userId: string | null) {
   return useQuery({
     queryKey: dailyMissionKeys.analytics(userId ?? ''),
     queryFn: async () => {
-      if (!userId) return [];
+      if (!userId) {return [];}
 
       // This would typically fetch from a repository
       // For now, return empty array as mission history is not persisted

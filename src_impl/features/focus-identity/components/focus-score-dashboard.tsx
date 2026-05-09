@@ -1,13 +1,13 @@
-import React, { useMemo } from "react";
-import { View } from "react-native";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { EmptyState } from "../../../components/EmptyState";
-import { ErrorState } from "../../../components/states/ErrorState";
-import { StatusBanner } from "../../../shared/ui/components/StatusFeedback";
-import { useTheme } from "../../../theme";
-import type { FocusScoreDashboardModel } from "../hooks-focus-score";
-import { MAX_FOCUS_SCORE } from "../schemas";
+import React, { useMemo } from 'react';
+import { View } from 'react-native';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { EmptyState } from '../../../components/EmptyState';
+import { ErrorState } from '../../../components/states/ErrorState';
+import { StatusBanner } from '../../../shared/ui/components/StatusFeedback';
+import { useTheme } from '../../../theme';
+import type { FocusScoreDashboardModel } from '../hooks-focus-score';
+import { MAX_FOCUS_SCORE } from '../schemas';
 
 interface FocusScoreDashboardProps {
   model: FocusScoreDashboardModel;
@@ -40,11 +40,11 @@ export function FocusScoreDashboard({ model, onRetry, onStartSession, onOpenMont
   const strongestWeakest = useMemo(() => {
     if (!model.current) {return null;}
     const entries = [
-      ["Consistency", model.current.factors.consistency.score],
-      ["Streak stability", model.current.factors.streakStability.score],
-      ["Session quality", model.current.factors.sessionQuality.score],
-      ["Intentional difficulty", model.current.factors.intentionalDifficulty.score],
-      ["Recency", model.current.factors.recency.score],
+      ['Consistency', model.current.factors.consistency.score],
+      ['Streak stability', model.current.factors.streakStability.score],
+      ['Session quality', model.current.factors.sessionQuality.score],
+      ['Intentional difficulty', model.current.factors.intentionalDifficulty.score],
+      ['Recency', model.current.factors.recency.score],
     ] as const;
     const strongest = [...entries].sort((a, b) => b[1] - a[1])[0];
     const weakest = [...entries].sort((a, b) => a[1] - b[1])[0];
@@ -58,7 +58,7 @@ export function FocusScoreDashboard({ model, onRetry, onStartSession, onOpenMont
     return (
       <ErrorState
         title="Focus Score couldn't load"
-        description={model.error?.message ?? "Your score data is temporarily unavailable."}
+        description={model.error?.message ?? 'Your score data is temporarily unavailable.'}
         retryLabel="Retry"
         onRetry={onRetry}
       />

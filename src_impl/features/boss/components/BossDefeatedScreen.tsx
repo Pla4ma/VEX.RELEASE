@@ -9,22 +9,22 @@
  * @phase 3A.1
  */
 
-import React, { useEffect, useState, useCallback } from "react";
-import { ScrollView, Dimensions } from "react-native";
-import Animated, { FadeIn, FadeInUp, FadeInDown, useAnimatedStyle, withSpring, withSequence, withTiming, withDelay, withRepeat, interpolate, Extrapolation, runOnJS } from "react-native-reanimated";
+import React, { useEffect, useState, useCallback } from 'react';
+import { ScrollView, Dimensions } from 'react-native';
+import Animated, { FadeIn, FadeInUp, FadeInDown, useAnimatedStyle, withSpring, withSequence, withTiming, withDelay, withRepeat, interpolate, Extrapolation, runOnJS } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export interface BossDefeatedScreenProps {
   /** Boss name */
   bossName: string;
   /** Boss tier/rarity */
-  bossTier: "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+  bossTier: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
   /** Total damage dealt to boss */
   totalDamage: number;
   /** Number of sessions contributed */
@@ -83,7 +83,7 @@ function Particle({ index, total, color }: { index: number; total: number; color
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           width: 8,
           height: 8,
           borderRadius: 4,
@@ -98,7 +98,7 @@ function Particle({ index, total, color }: { index: number; total: number; color
 /**
  * Boss shatter/explosion animation
  */
-function BossShatter({ bossTier, onShatterComplete }: { bossTier: BossDefeatedScreenProps["bossTier"]; onShatterComplete: () => void }): JSX.Element {
+function BossShatter({ bossTier, onShatterComplete }: { bossTier: BossDefeatedScreenProps['bossTier']; onShatterComplete: () => void }): JSX.Element {
   const { theme } = useTheme();
   const [showParticles, setShowParticles] = useState(false);
 
@@ -107,7 +107,7 @@ function BossShatter({ bossTier, onShatterComplete }: { bossTier: BossDefeatedSc
     UNCOMMON: theme.colors.success.DEFAULT,
     RARE: theme.colors.info.DEFAULT,
     EPIC: theme.colors.accent.purple,
-    LEGENDARY: "#F59E0B",
+    LEGENDARY: '#F59E0B',
   };
 
   const bossStyle = useAnimatedStyle(() => ({
@@ -137,8 +137,8 @@ function BossShatter({ bossTier, onShatterComplete }: { bossTier: BossDefeatedSc
             height: 150,
             borderRadius: 20,
             backgroundColor: `${tierColors[bossTier]}30`,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
             borderWidth: 3,
             borderColor: tierColors[bossTier],
           },
@@ -170,7 +170,7 @@ function DefeatedStamp(): JSX.Element {
         scale: withSequence(withTiming(2, { duration: 100 }), withSpring(1, { damping: 8, stiffness: 200 })),
       },
       {
-        rotate: withSequence(withTiming("-10deg", { duration: 100 }), withSpring("0deg", { damping: 8, stiffness: 100 })),
+        rotate: withSequence(withTiming('-10deg', { duration: 100 }), withSpring('0deg', { damping: 8, stiffness: 100 })),
       },
     ],
     opacity: withTiming(1, { duration: 300 }),
@@ -185,8 +185,8 @@ function DefeatedStamp(): JSX.Element {
           paddingVertical: 12,
           borderRadius: 8,
           borderWidth: 4,
-          borderColor: "#22C55E",
-          backgroundColor: "rgba(34, 197, 94, 0.1)",
+          borderColor: '#22C55E',
+          backgroundColor: 'rgba(34, 197, 94, 0.1)',
         },
         stampStyle,
       ]}
@@ -201,7 +201,7 @@ function DefeatedStamp(): JSX.Element {
 /**
  * Contributor list (for squad bosses)
  */
-function ContributorsList({ contributors }: { contributors: NonNullable<BossDefeatedScreenProps["contributors"]> }): JSX.Element {
+function ContributorsList({ contributors }: { contributors: NonNullable<BossDefeatedScreenProps['contributors']> }): JSX.Element {
   const { theme } = useTheme();
 
   return (
@@ -245,7 +245,7 @@ function ContributorsList({ contributors }: { contributors: NonNullable<BossDefe
 /**
  * Defeat rewards card
  */
-function DefeatRewards({ rewards, bossTier }: { rewards: BossDefeatedScreenProps["rewards"]; bossTier: BossDefeatedScreenProps["bossTier"] }): JSX.Element {
+function DefeatRewards({ rewards, bossTier }: { rewards: BossDefeatedScreenProps['rewards']; bossTier: BossDefeatedScreenProps['bossTier'] }): JSX.Element {
   const { theme } = useTheme();
 
   const tierMultipliers = {

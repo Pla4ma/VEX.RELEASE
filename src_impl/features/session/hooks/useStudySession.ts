@@ -7,30 +7,30 @@
  * @phase 4
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useEffect, useState } from "react";
-import { createDebugger } from "../../../utils/debug";
-import { getSessionOrchestrator } from "../../../session/orchestrator-factory";
-import { getCoachService } from "../../ai-coach/service";
-import type { SessionConfig } from "../../../session/types";
-import { capture } from "../../../shared/analytics/analytics-service";
-import { SessionEvents } from "../../../shared/analytics/analytics-events";
-import { progressionService } from "../../../services/progressionService";
-import { economyService } from "../../../services/economyService";
-import { streakService } from "../../../services/streakService";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useEffect, useState } from 'react';
+import { createDebugger } from '../../../utils/debug';
+import { getSessionOrchestrator } from '../../../session/orchestrator-factory';
+import { getCoachService } from '../../ai-coach/service';
+import type { SessionConfig } from '../../../session/types';
+import { capture } from '../../../shared/analytics/analytics-service';
+import { SessionEvents } from '../../../shared/analytics/analytics-events';
+import { progressionService } from '../../../services/progressionService';
+import { economyService } from '../../../services/economyService';
+import { streakService } from '../../../services/streakService';
 
-const debug = createDebugger("session:useStudySession");
+const debug = createDebugger('session:useStudySession');
 
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 const studySessionKeys = {
-  all: ["studySession"] as const,
-  current: () => [...studySessionKeys.all, "current"] as const,
-  history: () => [...studySessionKeys.all, "history"] as const,
-  stats: () => [...studySessionKeys.all, "stats"] as const,
-  active: () => [...studySessionKeys.all, "active"] as const,
+  all: ['studySession'] as const,
+  current: () => [...studySessionKeys.all, 'current'] as const,
+  history: () => [...studySessionKeys.all, 'history'] as const,
+  stats: () => [...studySessionKeys.all, 'stats'] as const,
+  active: () => [...studySessionKeys.all, 'active'] as const,
 };
 
 // ============================================================================
@@ -82,7 +82,7 @@ export function useStudySession() {
       return orchestrator.startSession();
     },
     onSuccess: (sessionState) => {
-      debug.info("Study session started", { sessionId: sessionState.id });
+      debug.info('Study session started', { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
 
@@ -99,7 +99,7 @@ export function useStudySession() {
   const pauseSessionMutation = useMutation({
     mutationFn: () => orchestrator.pauseSession(),
     onSuccess: (sessionState) => {
-      debug.info("Study session paused", { sessionId: sessionState.id });
+      debug.info('Study session paused', { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
 
@@ -116,7 +116,7 @@ export function useStudySession() {
   const resumeSessionMutation = useMutation({
     mutationFn: () => orchestrator.resumeSession(),
     onSuccess: (sessionState) => {
-      debug.info("Study session resumed", { sessionId: sessionState.id });
+      debug.info('Study session resumed', { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
 
@@ -133,14 +133,14 @@ export function useStudySession() {
   const endSessionMutation = useMutation({
     mutationFn: (reason?: string) => orchestrator.endSession(reason),
     onSuccess: (sessionState) => {
-      debug.info("Study session ended", { sessionId: sessionState.id });
+      debug.info('Study session ended', { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.history() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.stats() });
 
       // Award XP and coins
-      if (sessionState.status === "COMPLETED") {
+      if (sessionState.status === 'COMPLETED') {
         // Grant progression XP
         try {
           await progressionService.grantXP({
@@ -238,13 +238,13 @@ export function useStudySession() {
 
   const startBreak = useCallback(() => {
     orchestrator.startBreak();
-    debug.info("Break started");
+    debug.info('Break started');
     queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
   }, [orchestrator, queryClient]);
 
   const endBreak = useCallback(() => {
     orchestrator.endBreak();
-    debug.info("Break ended");
+    debug.info('Break ended');
     queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
   }, [orchestrator, queryClient]);
 
@@ -255,7 +255,7 @@ export function useStudySession() {
   const updateFocusQuality = useCallback(
     (quality: number) => {
       orchestrator.updateFocusQuality(quality);
-      debug.info("Focus quality updated", { quality });
+      debug.info('Focus quality updated', { quality });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
     },
     [orchestrator, queryClient],
@@ -264,7 +264,7 @@ export function useStudySession() {
   const logInterruption = useCallback(
     (type: string, details?: Record<string, unknown>) => {
       orchestrator.logInterruption(type, details);
-      debug.info("Interruption logged", { type, details });
+      debug.info('Interruption logged', { type, details });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
     },
     [orchestrator, queryClient],
@@ -273,7 +273,7 @@ export function useStudySession() {
   const logRecovery = useCallback(
     (type: string, details?: Record<string, unknown>) => {
       orchestrator.logRecovery(type, details);
-      debug.info("Recovery logged", { type, details });
+      debug.info('Recovery logged', { type, details });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
     },
     [orchestrator, queryClient],
@@ -286,7 +286,7 @@ export function useStudySession() {
   const addDocument = useCallback(
     (documentId: string) => {
       orchestrator.addDocument(documentId);
-      debug.info("Document added to session", { documentId });
+      debug.info('Document added to session', { documentId });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
     },
     [orchestrator, queryClient],
@@ -295,7 +295,7 @@ export function useStudySession() {
   const removeDocument = useCallback(
     (documentId: string) => {
       orchestrator.removeDocument(documentId);
-      debug.info("Document removed from session", { documentId });
+      debug.info('Document removed from session', { documentId });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
     },
     [orchestrator, queryClient],
@@ -312,10 +312,10 @@ export function useStudySession() {
 
     try {
       const advice = await coachService.getSessionAdvice(currentSessionQuery.data);
-      debug.info("Coach advice requested", { sessionId: currentSessionQuery.data.id });
+      debug.info('Coach advice requested', { sessionId: currentSessionQuery.data.id });
       return advice;
     } catch (err) {
-      debug.error("Failed to get coach advice", err as Error);
+      debug.error('Failed to get coach advice', err as Error);
       return null;
     }
   }, [coachService, currentSessionQuery.data]);
@@ -329,11 +329,11 @@ export function useStudySession() {
   const sessionStats = sessionStatsQuery.data;
   const activeSession = activeSessionQuery.data;
 
-  const isActive = currentSession?.status === "ACTIVE" || false;
-  const isPaused = currentSession?.status === "PAUSED" || false;
-  const isBreak = currentSession?.phase === "SHORT_BREAK" || currentSession?.phase === "LONG_BREAK" || false;
-  const isWork = currentSession?.phase === "FOCUS" || false;
-  const isCompleted = currentSession?.status === "COMPLETED" || false;
+  const isActive = currentSession?.status === 'ACTIVE' || false;
+  const isPaused = currentSession?.status === 'PAUSED' || false;
+  const isBreak = currentSession?.phase === 'SHORT_BREAK' || currentSession?.phase === 'LONG_BREAK' || false;
+  const isWork = currentSession?.phase === 'FOCUS' || false;
+  const isCompleted = currentSession?.status === 'COMPLETED' || false;
 
   const progress = currentSession && currentSession.elapsedTime && currentSession.config?.duration ? (currentSession.elapsedTime / currentSession.config.duration) * 100 : 0;
 

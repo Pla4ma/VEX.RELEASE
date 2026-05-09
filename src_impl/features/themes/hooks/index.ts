@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { streakKeys } from '../streaks/hooks';
-import type { Streak } from '../streaks/schemas';
-import { getOwnedSessionThemeIds, getSelectableThemes, purchaseTheme } from './service';
+import { streakKeys } from '../../streaks/hooks';
+import type { Streak } from '../../streaks/schemas';
+import { getOwnedSessionThemeIds, getSelectableThemes, purchaseTheme } from '../service';
 
 export const sessionThemeKeys = {
   all: ['session-themes'] as const,

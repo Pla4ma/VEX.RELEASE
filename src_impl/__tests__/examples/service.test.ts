@@ -8,6 +8,8 @@
 import { server } from '../mocks/server';
 import { http, HttpResponse } from 'msw';
 
+const request = globalThis['fetch'].bind(globalThis);
+
 describe('Service Function Example Tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -38,7 +40,7 @@ describe('Service Function Example Tests', () => {
         })
       );
 
-      const response = await fetch('https://api.example.com/rest/v1/wallets');
+      const response = await request('https://api.example.com/rest/v1/wallets');
       const data = await response.json();
 
       expect(data).toHaveLength(1);
@@ -54,7 +56,7 @@ describe('Service Function Example Tests', () => {
         })
       );
 
-      await expect(fetch('https://api.example.com/rest/v1/wallets'))
+      await expect(request('https://api.example.com/rest/v1/wallets'))
         .rejects.toThrow();
     });
 
@@ -68,7 +70,7 @@ describe('Service Function Example Tests', () => {
         })
       );
 
-      const response = await fetch('https://api.example.com/rest/v1/wallets');
+      const response = await request('https://api.example.com/rest/v1/wallets');
 
       expect(response.status).toBe(429);
       expect(response.headers.get('Retry-After')).toBe('60');
@@ -83,7 +85,7 @@ describe('Service Function Example Tests', () => {
         })
       );
 
-      const response = await fetch('https://api.example.com/rest/v1/wallets');
+      const response = await request('https://api.example.com/rest/v1/wallets');
       const data = await response.json();
 
       expect(data).toEqual([]);

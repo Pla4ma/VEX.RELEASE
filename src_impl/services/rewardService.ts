@@ -227,7 +227,7 @@ class RewardService {
 
     // Check daily login availability
     if (reward.type === 'DAILY_LOGIN') {
-      if (!this.lastDailyClaim) return true;
+      if (!this.lastDailyClaim) {return true;}
 
       const lastClaim = new Date(this.lastDailyClaim);
       const now = new Date();

@@ -1,17 +1,17 @@
-import React from "react";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import type { TomorrowPreviewProps } from "./TomorrowPreview";
+import React from 'react';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import type { TomorrowPreviewProps } from './TomorrowPreview';
 
 type Props = Pick<
   TomorrowPreviewProps,
-  | "bossPreview"
-  | "dailyChallengesIncomplete"
-  | "powerHourPreview"
-  | "rivalPreview"
-  | "streakMilestonePreview"
-  | "streakWillContinue"
-  | "xpAvailableTomorrow"
+  | 'bossPreview'
+  | 'dailyChallengesIncomplete'
+  | 'powerHourPreview'
+  | 'rivalPreview'
+  | 'streakMilestonePreview'
+  | 'streakWillContinue'
+  | 'xpAvailableTomorrow'
 > & {
   hasChallenges: boolean;
   hasEvents: boolean;

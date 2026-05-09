@@ -3,11 +3,11 @@
  * Persistence layer for difficulty selection and stakes history
  */
 
-import { getSupabaseClient } from "../../config/supabase";
-import { enqueue } from "../../lib/offline/queue";
-import { withRetry, RepositoryError } from "../../lib/repository/base";
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { z } from "zod";
+import { getSupabaseClient } from '../../config/supabase';
+import { enqueue } from '../../lib/offline/queue';
+import { withRetry, RepositoryError } from '../../lib/repository/base';
+import { captureSilentFailure } from '../../utils/silent-failure';
+import { z } from 'zod';
 
 const supabase = getSupabaseClient();
 
@@ -19,7 +19,7 @@ export const StakesSessionRecordSchema = z.object({
   id: z.string().uuid(),
   user_id: z.string().uuid(),
   session_id: z.string().uuid(),
-  difficulty: z.enum(["CASUAL", "FOCUSED", "DEEP_WORK"]),
+  difficulty: z.enum(['CASUAL', 'FOCUSED', 'DEEP_WORK']),
   xp_multiplier: z.number(),
   max_pauses: z.number(),
   gem_wager: z.number(),
@@ -36,7 +36,7 @@ export const StakesSessionRecordSchema = z.object({
 
 export const UserStakesPreferenceSchema = z.object({
   user_id: z.string().uuid(),
-  default_difficulty: z.enum(["CASUAL", "FOCUSED", "DEEP_WORK"]).default("FOCUSED"),
+  default_difficulty: z.enum(['CASUAL', 'FOCUSED', 'DEEP_WORK']).default('FOCUSED'),
   total_deep_work_completed: z.number().default(0),
   total_gems_wagered: z.number().default(0),
   total_gems_won: z.number().default(0),
@@ -56,17 +56,17 @@ export async function saveStakesSession(record: StakesSessionRecord): Promise<{ 
   try {
     // Queue for offline support
     (enqueue as any)({
-      operation: "INSERT",
-      feature: "sessions",
+      operation: 'INSERT',
+      feature: 'sessions',
       payload: record,
       idempotencyKey: `stakes:${record.session_id}`,
       maxRetries: 5,
-      priority: "high",
+      priority: 'high',
     });
 
-    const { data, error } = await withRetry("saveStakesSession", async () => {
+    const { data, error } = await withRetry('saveStakesSession', async () => {
       return await supabase
-        .from("stakes_sessions")
+        .from('stakes_sessions')
         .insert({
           id: record.id,
           user_id: record.user_id,
@@ -94,18 +94,18 @@ export async function saveStakesSession(record: StakesSessionRecord): Promise<{ 
     }
     return { data: (StakesSessionRecordSchema as any).parse(data), error: null };
   } catch (error) {
-    captureSilentFailure(error, { feature: "sessions", operation: "save", type: "REPOSITORY_ERROR" as any });
+    captureSilentFailure(error, { feature: 'sessions', operation: 'save', type: 'REPOSITORY_ERROR' as any });
     return {
       data: null,
-      error: new RepositoryError("saveStakesSession", error),
+      error: new RepositoryError('saveStakesSession', error),
     };
   }
 }
 
 export async function fetchUserStakesHistory(userId: string, limit: number = 50): Promise<{ data: StakesSessionRecord[]; error: RepositoryError | null }> {
   try {
-    const { data, error } = await withRetry("fetchUserStakesHistory", async () => {
-      return await supabase.from("stakes_sessions").select("*").eq("user_id", userId).order("created_at", { ascending: false }).limit(limit);
+    const { data, error } = await withRetry('fetchUserStakesHistory', async () => {
+      return await supabase.from('stakes_sessions').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(limit);
     });
 
     if (error) {
@@ -116,19 +116,19 @@ export async function fetchUserStakesHistory(userId: string, limit: number = 50)
       error: null,
     };
   } catch (error) {
-    captureSilentFailure(error, { feature: "sessions", operation: "fetchHistory", type: "REPOSITORY_ERROR" as any });
-    return { data: [], error: new RepositoryError("fetchUserStakesHistory", error) };
+    captureSilentFailure(error, { feature: 'sessions', operation: 'fetchHistory', type: 'REPOSITORY_ERROR' as any });
+    return { data: [], error: new RepositoryError('fetchUserStakesHistory', error) };
   }
 }
 
 export async function fetchStakesPreference(userId: string): Promise<{ data: UserStakesPreference | null; error: RepositoryError | null }> {
   try {
-    const { data, error } = await withRetry("fetchStakesPreference", async () => {
-      return await supabase.from("user_stakes_preferences").select("*").eq("user_id", userId).single();
+    const { data, error } = await withRetry('fetchStakesPreference', async () => {
+      return await supabase.from('user_stakes_preferences').select('*').eq('user_id', userId).single();
     });
 
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return { data: null, error: null };
       }
       throw error;
@@ -139,32 +139,32 @@ export async function fetchStakesPreference(userId: string): Promise<{ data: Use
       error: null,
     };
   } catch (error) {
-    captureSilentFailure(error, { feature: "sessions", operation: "fetchPreference", type: "REPOSITORY_ERROR" as any });
-    return { data: null, error: new RepositoryError("fetchStakesPreference", error) };
+    captureSilentFailure(error, { feature: 'sessions', operation: 'fetchPreference', type: 'REPOSITORY_ERROR' as any });
+    return { data: null, error: new RepositoryError('fetchStakesPreference', error) };
   }
 }
 
 export async function updateStakesPreference(userId: string, updates: Partial<UserStakesPreference>): Promise<{ data: UserStakesPreference | null; error: RepositoryError | null }> {
   try {
     (enqueue as any)({
-      operation: "UPDATE",
-      feature: "sessions",
+      operation: 'UPDATE',
+      feature: 'sessions',
       payload: { userId, updates },
       idempotencyKey: `stakes-pref:${userId}:${Date.now()}`,
       maxRetries: 5,
-      priority: "normal",
+      priority: 'normal',
     });
 
-    const { data, error } = await withRetry("updateStakesPreference", async () => {
+    const { data, error } = await withRetry('updateStakesPreference', async () => {
       return await supabase
-        .from("user_stakes_preferences")
+        .from('user_stakes_preferences')
         .upsert(
           {
             user_id: userId,
             ...updates,
             updated_at: Date.now(),
           },
-          { onConflict: "user_id" },
+          { onConflict: 'user_id' },
         )
         .select()
         .single();
@@ -178,8 +178,8 @@ export async function updateStakesPreference(userId: string, updates: Partial<Us
       error: null,
     };
   } catch (error) {
-    captureSilentFailure(error, { feature: "sessions", operation: "updatePreference", type: "REPOSITORY_ERROR" as any });
-    return { data: null, error: new RepositoryError("updateStakesPreference", error) };
+    captureSilentFailure(error, { feature: 'sessions', operation: 'updatePreference', type: 'REPOSITORY_ERROR' as any });
+    return { data: null, error: new RepositoryError('updateStakesPreference', error) };
   }
 }
 
@@ -194,8 +194,8 @@ export async function fetchStakesStats(userId: string): Promise<{
   error: RepositoryError | null;
 }> {
   try {
-    const { data, error } = await withRetry("fetchStakesStats", async () => {
-      return await supabase.rpc("get_stakes_stats", { p_user_id: userId });
+    const { data, error } = await withRetry('fetchStakesStats', async () => {
+      return await supabase.rpc('get_stakes_stats', { p_user_id: userId });
     });
 
     if (error) {
@@ -203,8 +203,8 @@ export async function fetchStakesStats(userId: string): Promise<{
     }
     return { data, error: null };
   } catch (error) {
-    captureSilentFailure(error, { feature: "sessions", operation: "fetchStats", type: "REPOSITORY_ERROR" as any });
-    return { data: null, error: new RepositoryError("fetchStakesStats", error) };
+    captureSilentFailure(error, { feature: 'sessions', operation: 'fetchStats', type: 'REPOSITORY_ERROR' as any });
+    return { data: null, error: new RepositoryError('fetchStakesStats', error) };
   }
 }
 

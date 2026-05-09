@@ -3,25 +3,25 @@
  * TanStack Query hooks for UI consumption
  */
 
-import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
-import { useCallback } from "react";
-import { z } from "zod";
-import * as service from "./service";
-import * as repository from "./repository";
-import { getRewardLedger, getTodayRewardSummary, type RewardLedgerEntry } from "./ledger-service";
-import { CreateRewardInputSchema, ClaimRewardInputSchema, CalculateRewardInputSchema, type CreateRewardInput, type ClaimRewardInput, type CalculateRewardInput, type RewardCalculation, type Reward } from "./schemas";
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
+import { useCallback } from 'react';
+import { z } from 'zod';
+import * as service from '../service';
+import * as repository from '../repository';
+import { getRewardLedger, getTodayRewardSummary, type RewardLedgerEntry } from '../ledger-service';
+import { CreateRewardInputSchema, ClaimRewardInputSchema, CalculateRewardInputSchema, type CreateRewardInput, type ClaimRewardInput, type CalculateRewardInput, type RewardCalculation, type Reward } from '../schemas';
 
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const rewardKeys = {
-  all: ["rewards"] as const,
-  byUser: (userId: string) => [...rewardKeys.all, "user", userId] as const,
-  pending: (userId: string) => [...rewardKeys.byUser(userId), "pending"] as const,
-  history: (userId: string) => [...rewardKeys.byUser(userId), "history"] as const,
-  stats: (userId: string) => [...rewardKeys.byUser(userId), "stats"] as const,
-  byId: (rewardId: string) => [...rewardKeys.all, "id", rewardId] as const,
+  all: ['rewards'] as const,
+  byUser: (userId: string) => [...rewardKeys.all, 'user', userId] as const,
+  pending: (userId: string) => [...rewardKeys.byUser(userId), 'pending'] as const,
+  history: (userId: string) => [...rewardKeys.byUser(userId), 'history'] as const,
+  stats: (userId: string) => [...rewardKeys.byUser(userId), 'stats'] as const,
+  byId: (rewardId: string) => [...rewardKeys.all, 'id', rewardId] as const,
 };
 
 // ============================================================================
@@ -30,10 +30,10 @@ export const rewardKeys = {
 
 export function usePendingRewards(userId: string | null) {
   return useQuery({
-    queryKey: rewardKeys.pending(userId || ""),
+    queryKey: rewardKeys.pending(userId || ''),
     queryFn: () => {
       if (!userId) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
       return service.getPendingRewards(userId);
     },
@@ -44,10 +44,10 @@ export function usePendingRewards(userId: string | null) {
 
 export function useRewardHistory(userId: string | null, limit?: number) {
   return useQuery({
-    queryKey: rewardKeys.history(userId || ""),
+    queryKey: rewardKeys.history(userId || ''),
     queryFn: () => {
       if (!userId) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
       return service.getRewardHistory(userId, limit);
     },
@@ -57,10 +57,10 @@ export function useRewardHistory(userId: string | null, limit?: number) {
 
 export function useRewardStats(userId: string | null) {
   return useQuery({
-    queryKey: rewardKeys.stats(userId || ""),
+    queryKey: rewardKeys.stats(userId || ''),
     queryFn: () => {
       if (!userId) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
       return service.getRewardStats(userId);
     },
@@ -71,10 +71,10 @@ export function useRewardStats(userId: string | null) {
 
 export function useReward(rewardId: string | null) {
   return useQuery({
-    queryKey: rewardKeys.byId(rewardId || ""),
+    queryKey: rewardKeys.byId(rewardId || ''),
     queryFn: () => {
       if (!rewardId) {
-        throw new Error("Reward ID required");
+        throw new Error('Reward ID required');
       }
       return repository.fetchReward(rewardId);
     },
@@ -84,9 +84,9 @@ export function useReward(rewardId: string | null) {
 
 type VaultChest = {
   id: string;
-  tier: "WOOD" | "SILVER" | "GOLD" | "LEGENDARY";
+  tier: 'WOOD' | 'SILVER' | 'GOLD' | 'LEGENDARY';
   obtainedAt: number;
-  source: "SESSION" | "BOSS" | "DAILY" | "ACHIEVEMENT";
+  source: 'SESSION' | 'BOSS' | 'DAILY' | 'ACHIEVEMENT';
   isOpened: boolean;
 };
 
@@ -97,10 +97,10 @@ export function useRewards(userId: string) {
   const chests: VaultChest[] = (pendingQuery.data ?? []).map(
     (reward): VaultChest => ({
       id: reward.id,
-      tier: reward.type === "GEMS" ? "GOLD" : reward.type === "ITEM" ? "SILVER" : "WOOD",
+      tier: reward.type === 'GEMS' ? 'GOLD' : reward.type === 'ITEM' ? 'SILVER' : 'WOOD',
       obtainedAt: reward.createdAt,
-      source: reward.triggerType === "BOSS_DEFEAT" ? "BOSS" : reward.triggerType === "DAILY_LOGIN" ? "DAILY" : reward.triggerType === "ACHIEVEMENT_UNLOCK" ? "ACHIEVEMENT" : "SESSION",
-      isOpened: reward.status !== "PENDING",
+      source: reward.triggerType === 'BOSS_DEFEAT' ? 'BOSS' : reward.triggerType === 'DAILY_LOGIN' ? 'DAILY' : reward.triggerType === 'ACHIEVEMENT_UNLOCK' ? 'ACHIEVEMENT' : 'SESSION',
+      isOpened: reward.status !== 'PENDING',
     }),
   );
 
@@ -181,7 +181,7 @@ export function useClaimAllRewards() {
             .catch((error) => ({
               success: false,
               rewardId: reward.id,
-              error: error instanceof Error ? error.message : "Unknown error",
+              error: error instanceof Error ? error.message : 'Unknown error',
             })),
         ),
       );
@@ -201,7 +201,7 @@ export function useClaimAllRewards() {
 
 export function useRewardLedger(userId: string) {
   return useInfiniteQuery<RewardLedgerEntry[], Error, { pages: RewardLedgerEntry[][]; pageParams: number[] }, (string | number)[], number>({
-    queryKey: ["rewards", "ledger", userId],
+    queryKey: ['rewards', 'ledger', userId],
     queryFn: ({ pageParam = 0 }) => getRewardLedger(userId, { limit: 20, offset: pageParam }),
     initialPageParam: 0,
     getNextPageParam: (lastPage: RewardLedgerEntry[], pages: RewardLedgerEntry[][]) => (lastPage.length === 20 ? pages.length * 20 : undefined),
@@ -212,7 +212,7 @@ export function useRewardLedger(userId: string) {
 
 export function useTodayRewardSummary(userId: string) {
   return useQuery({
-    queryKey: ["rewards", "today-summary", userId],
+    queryKey: ['rewards', 'today-summary', userId],
     queryFn: () => getTodayRewardSummary(userId),
     enabled: !!userId,
     staleTime: 30_000,
@@ -223,18 +223,18 @@ export function useTodayRewardSummary(userId: string) {
 // Daily Login Hook
 // ============================================================================
 
-import { fetchDailyRewardsState, saveDailyRewardClaim, type UserDailyRewardsState } from "./repository-daily";
-import { eventBus } from "../../events";
-import { trackDailyLoginClaimed } from "./analytics";
+import { fetchDailyRewardsState, saveDailyRewardClaim, type UserDailyRewardsState } from '../repository/daily';
+import { eventBus } from '../../../events';
+import { trackDailyLoginClaimed } from '../analytics';
 
 const dailyLoginKeys = {
-  all: ["daily-login"] as const,
-  byUser: (userId: string) => [...dailyLoginKeys.all, "user", userId] as const,
+  all: ['daily-login'] as const,
+  byUser: (userId: string) => [...dailyLoginKeys.all, 'user', userId] as const,
 };
 
 export interface DailyLoginReward {
   dayNumber: number;
-  type: "COINS" | "GEMS" | "XP_BOOST" | "STREAK_SHIELD" | "CHEST";
+  type: 'COINS' | 'GEMS' | 'XP_BOOST' | 'STREAK_SHIELD' | 'CHEST';
   amount: number;
   label: string;
   icon: string;
@@ -244,7 +244,7 @@ export function useDailyLoginReward(userId: string | undefined) {
   const queryClient = useQueryClient();
 
   const query = useQuery({
-    queryKey: dailyLoginKeys.byUser(userId || ""),
+    queryKey: dailyLoginKeys.byUser(userId || ''),
     queryFn: async (): Promise<UserDailyRewardsState | null> => {
       if (!userId) {
         return null;
@@ -262,7 +262,7 @@ export function useDailyLoginReward(userId: string | undefined) {
   const claimMutation = useMutation({
     mutationFn: async (): Promise<void> => {
       if (!userId || !query.data) {
-        throw new Error("User ID required");
+        throw new Error('User ID required');
       }
 
       const dayNumber = query.data.last_claimed_day + 1;
@@ -271,14 +271,14 @@ export function useDailyLoginReward(userId: string | undefined) {
       }
 
       // Determine reward based on day
-      const rewardMap: Record<number, { type: "COINS" | "GEMS" | "XP_BOOST" | "STREAK_SHIELD" | "CHEST"; amount: number }> = {
-        1: { type: "COINS", amount: 100 },
-        2: { type: "COINS", amount: 200 },
-        3: { type: "GEMS", amount: 10 },
-        4: { type: "COINS", amount: 300 },
-        5: { type: "XP_BOOST", amount: 1 },
-        6: { type: "GEMS", amount: 25 },
-        7: { type: "CHEST", amount: 1 },
+      const rewardMap: Record<number, { type: 'COINS' | 'GEMS' | 'XP_BOOST' | 'STREAK_SHIELD' | 'CHEST'; amount: number }> = {
+        1: { type: 'COINS', amount: 100 },
+        2: { type: 'COINS', amount: 200 },
+        3: { type: 'GEMS', amount: 10 },
+        4: { type: 'COINS', amount: 300 },
+        5: { type: 'XP_BOOST', amount: 1 },
+        6: { type: 'GEMS', amount: 25 },
+        7: { type: 'CHEST', amount: 1 },
       };
 
       const reward = rewardMap[dayNumber];
@@ -303,7 +303,7 @@ export function useDailyLoginReward(userId: string | undefined) {
       trackDailyLoginClaimed(userId, dayNumber, reward.type, reward.amount, query.data.current_streak + 1);
 
       // Emit event for integration
-      (eventBus as any).publish("rewards:daily_login_claimed", {
+      (eventBus as any).publish('rewards:daily_login_claimed', {
         userId,
         dayNumber,
         reward: { type: reward.type, amount: reward.amount },
@@ -311,7 +311,7 @@ export function useDailyLoginReward(userId: string | undefined) {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: dailyLoginKeys.byUser(userId || "") });
+      queryClient.invalidateQueries({ queryKey: dailyLoginKeys.byUser(userId || '') });
     },
   });
 
@@ -320,14 +320,14 @@ export function useDailyLoginReward(userId: string | undefined) {
 
   // Build current reward
   const nextDay = dayNumber >= 7 ? 1 : dayNumber + 1;
-  const rewardMap: Record<number, { type: "COINS" | "GEMS" | "XP_BOOST" | "STREAK_SHIELD" | "CHEST"; amount: number; label: string; icon: string }> = {
-    1: { type: "COINS", amount: 100, label: "100 Coins", icon: "🪙" },
-    2: { type: "COINS", amount: 200, label: "200 Coins", icon: "🪙" },
-    3: { type: "GEMS", amount: 10, label: "10 Gems", icon: "💎" },
-    4: { type: "COINS", amount: 300, label: "300 Coins", icon: "🪙" },
-    5: { type: "XP_BOOST", amount: 1, label: "XP Boost", icon: "⚡" },
-    6: { type: "GEMS", amount: 25, label: "25 Gems", icon: "💎" },
-    7: { type: "CHEST", amount: 1, label: "Premium Chest", icon: "🎁" },
+  const rewardMap: Record<number, { type: 'COINS' | 'GEMS' | 'XP_BOOST' | 'STREAK_SHIELD' | 'CHEST'; amount: number; label: string; icon: string }> = {
+    1: { type: 'COINS', amount: 100, label: '100 Coins', icon: '🪙' },
+    2: { type: 'COINS', amount: 200, label: '200 Coins', icon: '🪙' },
+    3: { type: 'GEMS', amount: 10, label: '10 Gems', icon: '💎' },
+    4: { type: 'COINS', amount: 300, label: '300 Coins', icon: '🪙' },
+    5: { type: 'XP_BOOST', amount: 1, label: 'XP Boost', icon: '⚡' },
+    6: { type: 'GEMS', amount: 25, label: '25 Gems', icon: '💎' },
+    7: { type: 'CHEST', amount: 1, label: 'Premium Chest', icon: '🎁' },
   };
 
   const currentReward: DailyLoginReward | null = canClaim
@@ -350,3 +350,4 @@ export function useDailyLoginReward(userId: string | undefined) {
     refetch: query.refetch,
   };
 }
+

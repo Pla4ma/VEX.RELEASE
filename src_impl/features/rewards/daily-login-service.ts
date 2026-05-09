@@ -7,8 +7,8 @@
  * @phase 5C.2
  */
 
-import { z } from "zod";
-import { MMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import { z } from 'zod';
+import { MMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 
 // ============================================================================
 // Schemas
@@ -36,7 +36,7 @@ const WEEK_LENGTH = 7;
 const WEEK_COMPLETION_BONUS = {
   coins: 200,
   gems: 20,
-  badge: "Consistent",
+  badge: 'Consistent',
 };
 
 // ============================================================================
@@ -76,7 +76,7 @@ export function processDailyLogin(
   state: DailyLoginState;
   reward: {
     day: number;
-    type: "coins" | "gems" | "boost" | "chest";
+    type: 'coins' | 'gems' | 'boost' | 'chest';
     amount: number;
     weekCompleted: boolean;
     weekBonus?: { coins: number; gems: number; badge: string };
@@ -142,20 +142,20 @@ export function processDailyLogin(
  * Get reward for specific day
  */
 function getRewardForDay(day: number): {
-  type: "coins" | "gems" | "boost" | "chest";
+  type: 'coins' | 'gems' | 'boost' | 'chest';
   amount: number;
 } {
-  const rewards: Record<number, { type: "coins" | "gems" | "boost" | "chest"; amount: number }> = {
-    1: { type: "coins", amount: 50 },
-    2: { type: "coins", amount: 75 },
-    3: { type: "gems", amount: 5 },
-    4: { type: "coins", amount: 100 },
-    5: { type: "boost", amount: 1 },
-    6: { type: "gems", amount: 10 },
-    7: { type: "chest", amount: 1 },
+  const rewards: Record<number, { type: 'coins' | 'gems' | 'boost' | 'chest'; amount: number }> = {
+    1: { type: 'coins', amount: 50 },
+    2: { type: 'coins', amount: 75 },
+    3: { type: 'gems', amount: 5 },
+    4: { type: 'coins', amount: 100 },
+    5: { type: 'boost', amount: 1 },
+    6: { type: 'gems', amount: 10 },
+    7: { type: 'chest', amount: 1 },
   };
 
-  return rewards[day] || { type: "coins", amount: 50 };
+  return rewards[day] || { type: 'coins', amount: 50 };
 }
 
 /**
@@ -168,9 +168,9 @@ export function getLoginStreakMessage(streakDays: number): {
 } {
   if (streakDays === 0) {
     return {
-      title: "Start Your Streak",
-      subtitle: "Log in 7 days in a row for bonus rewards!",
-      emoji: "📅",
+      title: 'Start Your Streak',
+      subtitle: 'Log in 7 days in a row for bonus rewards!',
+      emoji: '📅',
     };
   }
 
@@ -178,22 +178,22 @@ export function getLoginStreakMessage(streakDays: number): {
     return {
       title: `${streakDays}-Day Streak`,
       subtitle: `${7 - streakDays} more days for the weekly bonus!`,
-      emoji: "🔥",
+      emoji: '🔥',
     };
   }
 
   if (streakDays === 7) {
     return {
-      title: "Week Complete! 🎉",
-      subtitle: "You earned the Consistent badge!",
-      emoji: "🏆",
+      title: 'Week Complete! 🎉',
+      subtitle: 'You earned the Consistent badge!',
+      emoji: '🏆',
     };
   }
 
   return {
     title: `${streakDays}-Day Legend`,
-    subtitle: "Unstoppable daily login streak!",
-    emoji: "👑",
+    subtitle: 'Unstoppable daily login streak!',
+    emoji: '👑',
   };
 }
 
@@ -228,8 +228,8 @@ export function createInitialLoginState(): DailyLoginState {
 // Persistence
 // ============================================================================
 
-const STORAGE_KEY = "daily_login_state";
-const storage = new MMKVStorageAdapter("daily-login");
+const STORAGE_KEY = 'daily_login_state';
+const storage = new MMKVStorageAdapter('daily-login');
 
 export function loadDailyLoginState(): DailyLoginState {
   const raw = storage.getItemSync(STORAGE_KEY);

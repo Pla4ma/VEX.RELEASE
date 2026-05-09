@@ -4,33 +4,33 @@
  * End-to-end flows with real-world scenarios.
  */
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import * as service from "../service";
-import * as repository from "../repository";
-import { SquadValidationRules } from "../validation";
-import { withRetry } from "../retry";
-import { SquadError } from "../errors";
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import * as service from '../service';
+import * as repository from '../repository';
+import { SquadValidationRules } from '../validation';
+import { withRetry } from '../retry';
+import { SquadError } from '../errors';
 
-vi.mock("../repository");
-vi.mock("../../../events", () => ({
+vi.mock('../repository');
+vi.mock('../../../events', () => ({
   eventBus: { publish: vi.fn() },
 }));
 
-describe("Squad Integration Flows", () => {
+describe('Squad Integration Flows', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  describe("Full Squad Lifecycle", () => {
-    it("should handle complete squad creation to dissolution flow", async () => {
-      const founderId = "user-founder";
-      const squadId = "squad-123";
+  describe('Full Squad Lifecycle', () => {
+    it('should handle complete squad creation to dissolution flow', async () => {
+      const founderId = 'user-founder';
+      const squadId = 'squad-123';
 
       // Step 1: Create squad
       vi.mocked(repository.checkDuplicateMembership).mockResolvedValue(null);
       vi.mocked(repository.createSquad).mockResolvedValue({
         id: squadId,
-        name: "Test Squad",
+        name: 'Test Squad',
         memberCount: 0,
         maxMembers: 5,
         createdBy: founderId,
@@ -38,20 +38,20 @@ describe("Squad Integration Flows", () => {
       vi.mocked(repository.addSquadMember).mockResolvedValue({} as any);
 
       const squad = await service.createSquad(founderId, {
-        name: "Test Squad",
-        description: "A test squad",
+        name: 'Test Squad',
+        description: 'A test squad',
         avatarUrl: null,
         isPublic: true,
-        joinRequirements: "APPROVAL",
+        joinRequirements: 'APPROVAL',
         maxMembers: 5,
       });
 
       expect(squad.id).toBe(squadId);
 
       // Step 2: Invite members
-      const memberId1 = "user-member-1";
+      const memberId1 = 'user-member-1';
       vi.mocked(repository.fetchSquadMember).mockResolvedValue({
-        role: "FOUNDER",
+        role: 'FOUNDER',
         isActive: true,
       } as any);
       vi.mocked(repository.fetchSquadById).mockResolvedValue({
@@ -61,28 +61,28 @@ describe("Squad Integration Flows", () => {
       } as any);
       vi.mocked(repository.checkExistingInvite).mockResolvedValue(null);
       vi.mocked(repository.createSquadInvite).mockResolvedValue({
-        id: "invite-1",
+        id: 'invite-1',
         squadId,
         invitedUserId: memberId1,
-        status: "PENDING",
+        status: 'PENDING',
       } as any);
 
       const invite = await service.inviteToSquad({
         squadId,
         invitedUserId: memberId1,
-        roleOffered: "MEMBER",
+        roleOffered: 'MEMBER',
         invitedBy: founderId,
         message: null,
         expiresInHours: 48,
       });
 
-      expect(invite.status).toBe("PENDING");
+      expect(invite.status).toBe('PENDING');
 
       // Step 3: Member accepts invite
       vi.mocked(repository.fetchSquadInviteById).mockResolvedValue({
         ...invite,
         invitedBy: founderId,
-        roleOffered: "MEMBER",
+        roleOffered: 'MEMBER',
         expiresAt: Date.now() + 100000,
       } as any);
       vi.mocked(repository.checkDuplicateMembership).mockResolvedValue(null);
@@ -103,14 +103,14 @@ describe("Squad Integration Flows", () => {
       await service.updateMemberRole(founderId, {
         squadId,
         memberUserId: memberId1,
-        newRole: "ADMIN",
+        newRole: 'ADMIN',
       });
 
       // Step 5: Founder leaves and transfers ownership
-      const memberId2 = "user-member-2";
+      const memberId2 = 'user-member-2';
       vi.mocked(repository.fetchSquadMember)
-        .mockResolvedValueOnce({ role: "FOUNDER", isActive: true } as any)
-        .mockResolvedValueOnce({ role: "ADMIN", isActive: true } as any);
+        .mockResolvedValueOnce({ role: 'FOUNDER', isActive: true } as any)
+        .mockResolvedValueOnce({ role: 'ADMIN', isActive: true } as any);
       vi.mocked(repository.transferFounderRole).mockResolvedValue(undefined);
       vi.mocked(repository.removeSquadMember).mockResolvedValue(undefined);
 
@@ -124,30 +124,30 @@ describe("Squad Integration Flows", () => {
     });
   });
 
-  describe("Concurrent Operations", () => {
-    it("should handle concurrent invite acceptance race condition", async () => {
-      const squadId = "squad-full";
+  describe('Concurrent Operations', () => {
+    it('should handle concurrent invite acceptance race condition', async () => {
+      const squadId = 'squad-full';
       const squad = {
         id: squadId,
         memberCount: 4,
         maxMembers: 5,
-        name: "Full Squad",
+        name: 'Full Squad',
       };
 
       // First invite acceptance succeeds
       vi.mocked(repository.fetchSquadInviteById)
         .mockResolvedValueOnce({
-          id: "invite-1",
+          id: 'invite-1',
           squadId,
-          invitedUserId: "user-a",
-          status: "PENDING",
+          invitedUserId: 'user-a',
+          status: 'PENDING',
           expiresAt: Date.now() + 10000,
         } as any)
         .mockResolvedValueOnce({
-          id: "invite-2",
+          id: 'invite-2',
           squadId,
-          invitedUserId: "user-b",
-          status: "PENDING",
+          invitedUserId: 'user-b',
+          status: 'PENDING',
           expiresAt: Date.now() + 10000,
         } as any);
 
@@ -161,45 +161,45 @@ describe("Squad Integration Flows", () => {
       vi.mocked(repository.fetchSquadMembers).mockResolvedValue([]);
 
       // First user joins successfully
-      await service.respondToInvite("user-a", { inviteId: "invite-1", accept: true });
+      await service.respondToInvite('user-a', { inviteId: 'invite-1', accept: true });
 
       // Second user should fail because squad is now full
-      await expect(service.respondToInvite("user-b", { inviteId: "invite-2", accept: true })).rejects.toThrow();
+      await expect(service.respondToInvite('user-b', { inviteId: 'invite-2', accept: true })).rejects.toThrow();
     });
   });
 
-  describe("Validation Edge Cases", () => {
-    it("should reject invalid squad names", () => {
+  describe('Validation Edge Cases', () => {
+    it('should reject invalid squad names', () => {
       const valid = SquadValidationRules.createSquad({
-        name: "Valid Squad Name",
+        name: 'Valid Squad Name',
         description: null,
         avatarUrl: null,
         isPublic: true,
-        joinRequirements: "OPEN",
+        joinRequirements: 'OPEN',
         maxMembers: 5,
       });
 
       expect(valid.success).toBe(true);
 
       const tooShort = SquadValidationRules.createSquad({
-        name: "AB",
+        name: 'AB',
         description: null,
         avatarUrl: null,
         isPublic: true,
-        joinRequirements: "OPEN",
+        joinRequirements: 'OPEN',
         maxMembers: 5,
       });
 
       expect(tooShort.success).toBe(false);
     });
 
-    it("should reject profane squad names", () => {
+    it('should reject profane squad names', () => {
       const profane = SquadValidationRules.createSquad({
-        name: "badword1 Squad",
+        name: 'badword1 Squad',
         description: null,
         avatarUrl: null,
         isPublic: true,
-        joinRequirements: "OPEN",
+        joinRequirements: 'OPEN',
         maxMembers: 5,
       });
 
@@ -207,42 +207,42 @@ describe("Squad Integration Flows", () => {
     });
   });
 
-  describe("Retry Logic", () => {
-    it("should retry transient failures", async () => {
+  describe('Retry Logic', () => {
+    it('should retry transient failures', async () => {
       let attempts = 0;
       const operation = async () => {
         attempts++;
         if (attempts < 3) {
-          throw new SquadError("NETWORK_ERROR", "Temporary failure", {}, { retryable: true });
+          throw new SquadError('NETWORK_ERROR', 'Temporary failure', {}, { retryable: true });
         }
-        return "success";
+        return 'success';
       };
 
-      const result = await withRetry(operation, "test-operation", {
+      const result = await withRetry(operation, 'test-operation', {
         maxAttempts: 3,
         baseDelayMs: 10,
       });
 
-      expect(result).toBe("success");
+      expect(result).toBe('success');
       expect(attempts).toBe(3);
     });
 
-    it("should not retry non-retryable errors", async () => {
+    it('should not retry non-retryable errors', async () => {
       let attempts = 0;
       const operation = async () => {
         attempts++;
-        throw new SquadError("SQUAD_FULL", "No space", {}, { retryable: false });
+        throw new SquadError('SQUAD_FULL', 'No space', {}, { retryable: false });
       };
 
-      await expect(withRetry(operation, "test-operation", { maxAttempts: 3, baseDelayMs: 10 })).rejects.toThrow("SQUAD_FULL");
+      await expect(withRetry(operation, 'test-operation', { maxAttempts: 3, baseDelayMs: 10 })).rejects.toThrow('SQUAD_FULL');
 
       expect(attempts).toBe(1);
     });
   });
 
-  describe("Synergy Calculations", () => {
-    it("should calculate synergy progress correctly", async () => {
-      const squadId = "squad-synergy";
+  describe('Synergy Calculations', () => {
+    it('should calculate synergy progress correctly', async () => {
+      const squadId = 'squad-synergy';
       const initialPoints = 80;
       const pointsToAdd = 30;
 
@@ -258,7 +258,7 @@ describe("Squad Integration Flows", () => {
       vi.mocked(repository.addContribution).mockResolvedValue(undefined);
       vi.mocked(repository.updateSquadStats).mockResolvedValue(undefined);
 
-      await service.addContribution(squadId, "user-1", pointsToAdd, "session");
+      await service.addContribution(squadId, 'user-1', pointsToAdd, 'session');
 
       // Should trigger level up since 80 + 30 > 100
       expect(repository.updateSquadStats).toHaveBeenCalledWith(
@@ -270,17 +270,17 @@ describe("Squad Integration Flows", () => {
     });
   });
 
-  describe("Session Management", () => {
-    it("should track session participation and rewards", async () => {
-      const squadId = "squad-session";
-      const sessionId = "session-1";
-      const userId = "user-1";
+  describe('Session Management', () => {
+    it('should track session participation and rewards', async () => {
+      const squadId = 'squad-session';
+      const sessionId = 'session-1';
+      const userId = 'user-1';
 
       vi.mocked(repository.createSquadSession).mockResolvedValue({
         id: sessionId,
         squadId,
         startedBy: userId,
-        status: "ACTIVE",
+        status: 'ACTIVE',
       } as any);
 
       vi.mocked(repository.addSessionParticipant).mockResolvedValue({} as any);
@@ -289,7 +289,7 @@ describe("Squad Integration Flows", () => {
       // Start session
       const session = await service.startSquadSession(userId, {
         squadId,
-        config: { type: "focus", duration: 1500 },
+        config: { type: 'focus', duration: 1500 },
       });
 
       expect(session.id).toBe(sessionId);

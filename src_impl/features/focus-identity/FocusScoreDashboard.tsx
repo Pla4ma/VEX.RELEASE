@@ -110,7 +110,7 @@ export const FocusScoreDashboard = () => {
             {history && history.length > 0 ? (
               history.slice(-30).map((point, index) => (
                 <Text key={index}>
-                  {new Date(point.timestamp).toLocaleDateString()}: {point.score} ({point.delta > 0 ? '+' : ''}{point.delta})
+                  {new Date(point.timestamp).toLocaleDateString('en-US', { timeZone: 'UTC' })}: {point.score} ({point.delta >= 0 ? '+' : ''}{point.delta})
                 </Text>
               ))
             ) : (

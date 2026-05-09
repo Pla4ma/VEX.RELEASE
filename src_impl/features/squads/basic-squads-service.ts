@@ -5,8 +5,8 @@
  * Focuses on private accountability groups only.
  */
 
-import { eventBus } from "../../events";
-import * as repository from "./repository";
+import { eventBus } from '../../events';
+import * as repository from './repository';
 import {
   SquadSchema,
   SquadMemberSchema,
@@ -14,8 +14,8 @@ import {
   type Squad,
   type SquadMember,
   type SquadInvite,
-  type SquadWeeklyGoal
-} from "./schemas";
+  type SquadWeeklyGoal,
+} from './schemas';
 
 // ============================================================================
 // Basic Squads Configuration
@@ -63,17 +63,17 @@ export async function createBasicSquad(
   // Check if user is already in a squad using existing repository function
   const userSquads = await repository.fetchUserSquads(userId);
   if (userSquads.length > 0) {
-    throw new Error("User is already in a squad");
+    throw new Error('User is already in a squad');
   }
 
   const squad = await repository.createSquad({
     name: squadData.name,
-    description: squadData.description || "Private accountability group",
+    description: squadData.description || 'Private accountability group',
     avatarUrl: null,
     bannerUrl: null,
     maxMembers: BASIC_SQUAD_CONFIG.maxMembers,
     isPublic: false, // Always private for basic squads
-    joinRequirements: "invite_only",
+    joinRequirements: 'invite_only',
     activeChallengeId: null,
     activeBossId: null,
     bossHealthRemaining: null,
@@ -81,12 +81,12 @@ export async function createBasicSquad(
   });
 
   // Add creator as founder
-  await repository.addSquadMember(squad.id, userId, "FOUNDER");
+  await repository.addSquadMember(squad.id, userId, 'FOUNDER');
 
   // Weekly goal setup will be handled by the existing squad system
   // For PHASE 8, we'll use a simplified approach
 
-  eventBus.publish("squad:created", {
+  eventBus.publish('squad:created', {
     squadId: squad.id,
     userId,
     name: squad.name,
@@ -103,20 +103,20 @@ export async function inviteToBasicSquad(
 ): Promise<SquadInvite> {
   // Check if inviter is a member with invite permissions
   const inviter = await repository.fetchSquadMember(squadId, inviterId);
-  if (!inviter || !["FOUNDER", "ADMIN"].includes(inviter.role)) {
-    throw new Error("Only founders and admins can invite members");
+  if (!inviter || !['FOUNDER', 'ADMIN'].includes(inviter.role)) {
+    throw new Error('Only founders and admins can invite members');
   }
 
   // Check if invitee is already in a squad
   const inviteeSquads = await repository.fetchUserSquads(inviteeId);
   if (inviteeSquads.length > 0) {
-    throw new Error("User is already in a squad");
+    throw new Error('User is already in a squad');
   }
 
   // Check if squad is full
   const members = await repository.fetchSquadMembers(squadId);
   if (members.length >= BASIC_SQUAD_CONFIG.maxMembers) {
-    throw new Error("Squad is full");
+    throw new Error('Squad is full');
   }
 
   // For PHASE 8, we'll use a simplified invite approach
@@ -129,14 +129,14 @@ export async function inviteToBasicSquad(
     squadId,
     inviterId,
     inviteeId,
-    message: message || "Join my accountability squad!",
-    roleOffered: "MEMBER",
-    status: "PENDING",
+    message: message || 'Join my accountability squad!',
+    roleOffered: 'MEMBER',
+    status: 'PENDING',
     expiresAt: Date.now() + (BASIC_SQUAD_CONFIG.inviteExpiryHours * 3600000),
     createdAt: Date.now(),
   } as SquadInvite;
 
-  eventBus.publish("squad:invite_sent", {
+  eventBus.publish('squad:invite_sent', {
     squadId,
     inviterId,
     inviteeId,
@@ -168,48 +168,48 @@ export async function respondToBasicSquadInvite(
     } as SquadInvite;
 
     if (invite.inviteeId !== userId) {
-      return { success: false, message: "This invite is not for you" };
+      return { success: false, message: 'This invite is not for you' };
     }
 
-    if (invite.status !== "PENDING") {
-      return { success: false, message: "Invite is no longer valid" };
+    if (invite.status !== 'PENDING') {
+      return { success: false, message: 'Invite is no longer valid' };
     }
 
     if (Date.now() > invite.expiresAt) {
-      return { success: false, message: "Invite has expired" };
+      return { success: false, message: 'Invite has expired' };
     }
 
     if (accept) {
       // Check if user is already in a squad
       const userSquads = await repository.fetchUserSquads(userId);
       if (userSquads.length > 0) {
-        return { success: false, message: "You are already in a squad" };
+        return { success: false, message: 'You are already in a squad' };
       }
 
       // Check if squad is full
       const members = await repository.fetchSquadMembers(invite.squadId);
       if (members.length >= BASIC_SQUAD_CONFIG.maxMembers) {
-        return { success: false, message: "Squad is full" };
+        return { success: false, message: 'Squad is full' };
       }
 
       // Add user to squad
-      await repository.addSquadMember(invite.squadId, userId, invite.roleOffered || "MEMBER");
+      await repository.addSquadMember(invite.squadId, userId, invite.roleOffered || 'MEMBER');
 
       const squad = await repository.fetchSquadById(invite.squadId);
 
-      eventBus.publish("squad:member_joined", {
+      eventBus.publish('squad:member_joined', {
         squadId: invite.squadId,
         userId,
         inviterId: invite.inviterId,
       });
 
-      return { success: true, squad, message: "Welcome to the squad!" };
+      return { success: true, squad, message: 'Welcome to the squad!' };
     } else {
-      return { success: true, message: "Invite declined" };
+      return { success: true, message: 'Invite declined' };
     }
   }
 
-  return { success: false, message: "Invite not found" };
+  return { success: false, message: 'Invite not found' };
 }
 
 export async function getBasicSquadMemberContributions(
@@ -228,7 +228,7 @@ export async function getBasicSquadMemberContributions(
 
   return members.map(member => ({
     userId: member.userId,
-    displayName: member.displayName || "Anonymous",
+    displayName: member.displayName || 'Anonymous',
     role: member.role,
     weeklyMinutes: member.weeklyMinutes || 0,
     weeklySessions: member.weeklySessions || 0,
@@ -277,7 +277,7 @@ export async function updateBasicSquadWeeklyProgress(
   if (isCompleted && !weeklyGoal.completedAt) {
     weeklyGoal.completedAt = Date.now();
 
-    eventBus.publish("squad:weekly_goal_completed", {
+    eventBus.publish('squad:weekly_goal_completed', {
       squadId,
       totalProgress,
       targetMinutes: weeklyGoal.targetMinutes,
@@ -294,7 +294,7 @@ export async function updateBasicSquadWeeklyProgress(
 
 export async function sendBasicSquadNotification(
   squadId: string,
-  type: "WEEKLY_GOAL_PROGRESS" | "WEEKLY_GOAL_COMPLETED" | "MEMBER_ACTIVITY",
+  type: 'WEEKLY_GOAL_PROGRESS' | 'WEEKLY_GOAL_COMPLETED' | 'MEMBER_ACTIVITY',
   data: {
     message: string;
     userId?: string;
@@ -306,7 +306,7 @@ export async function sendBasicSquadNotification(
 
   // Send notification to all members
   for (const member of members) {
-    eventBus.publish("squad:notification", {
+    eventBus.publish('squad:notification', {
       squadId,
       userId: member.userId,
       type,

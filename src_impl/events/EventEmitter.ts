@@ -5,9 +5,9 @@
  * Provides pub/sub pattern for cross-component communication.
  */
 
-import { createDebugger } from "../utils/debug";
+import { createDebugger } from '../utils/debug';
 
-const debug = createDebugger("events");
+const debug = createDebugger('events');
 
 /**
  * Event handler function type
@@ -168,7 +168,7 @@ export class EventEmitter {
         const result = subscription.handler(data);
 
         // Handle async handlers
-        if (result && typeof result === "object" && "then" in result && typeof (result as Promise<unknown>).then === "function") {
+        if (result && typeof result === 'object' && 'then' in result && typeof (result as Promise<unknown>).then === 'function') {
           await (result as Promise<unknown>);
         }
 
@@ -242,11 +242,11 @@ export class EventEmitter {
     // In production, this would log to error tracking service
     if (__DEV__) {
       debug.error(`Error in event handler for "${event}":`, error as Error);
-      debug.debug("Event data:", data);
+      debug.debug('Event data:', data);
     }
 
     // Emit error event for error tracking
-    this.emit("error:handler", {
+    this.emit('error:handler', {
       originalEvent: event,
       error,
       data,
@@ -285,7 +285,7 @@ export function createNamespacedEmitter(namespace: string): EventEmitter {
       baseEmitter
         .eventNames()
         .filter((name) => name.startsWith(`${namespace}:`))
-        .map((name) => name.replace(`${namespace}:`, "")),
+        .map((name) => name.replace(`${namespace}:`, '')),
 
     removeAllListeners: (event?: string) =>
       event

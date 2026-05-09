@@ -3,16 +3,16 @@
  * Integrates session completion with basic solo boss damage.
  */
 
-import { useEffect } from "react";
+import { useEffect } from 'react';
 import * as Sentry from '@sentry/react-native';
-import { eventBus } from "../../events";
+import { eventBus } from '../../events';
 import {
   useBasicSoloBossEncounter,
-  useApplyBasicSoloBossDamage
-} from "./hooks/basic-solo-boss-hooks";
-import { calculateBasicSoloBossDamage } from "./basic-solo-boss-calculator";
-import { useStreakData } from "../streaks/hooks";
-import { trackBossError } from "./analytics";
+  useApplyBasicSoloBossDamage,
+} from './hooks/basic-solo-boss-hooks';
+import { calculateBasicSoloBossDamage } from './basic-solo-boss-calculator';
+import { useStreakData } from '../streaks/hooks';
+import { trackBossError } from './analytics';
 
 export function useSessionBossIntegration() {
   const encounterQuery = useBasicSoloBossEncounter();

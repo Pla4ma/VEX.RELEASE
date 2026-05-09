@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 /**
  * Focus Identity Repository
  *
@@ -6,10 +6,10 @@ import { captureSilentFailure } from "../../utils/silent-failure";
  * Provides CRUD operations with error handling and retry logic.
  */
 
-import { z } from "zod";
-import { getSupabaseClient } from "../../config/supabase";
-import * as Sentry from "@sentry/react-native";
-import type { FocusIdentityProfile, FocusScoreFactors } from "./FocusIdentityEngine";
+import { z } from 'zod';
+import { getSupabaseClient } from '../../config/supabase';
+import * as Sentry from '@sentry/react-native';
+import type { FocusIdentityProfile, FocusScoreFactors } from './FocusIdentityEngine';
 
 // ============================================================================
 // ERROR HANDLING
@@ -21,7 +21,7 @@ class RepositoryError extends Error {
     public originalError: unknown,
   ) {
     super(`Repository error in ${operation}: ${originalError}`);
-    this.name = "RepositoryError";
+    this.name = 'RepositoryError';
   }
 }
 
@@ -41,7 +41,7 @@ async function withRetry<T>(operation: () => Promise<T>, operationName: string, 
       // Log to Sentry on final attempt
       if (attempt === maxRetries) {
         Sentry.captureException(error, {
-          tags: { repository: "focus-identity", operation: operationName },
+          tags: { repository: 'focus-identity', operation: operationName },
           extra: { attempt, maxRetries },
         });
         throw new RepositoryError(operationName, error);
@@ -100,10 +100,10 @@ export async function getFocusProfile(userId: string): Promise<FocusIdentityProf
   return withRetry(async () => {
     const supabase = getSupabaseClient();
 
-    const { data, error } = await supabase.from("focus_identity_profiles").select("*").eq("user_id", userId).single();
+    const { data, error } = await supabase.from('focus_identity_profiles').select('*').eq('user_id', userId).single();
 
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return null;
       } // Not found
       throw error;
@@ -121,10 +121,10 @@ export async function getFocusProfile(userId: string): Promise<FocusIdentityProf
 
     // Transform to domain model
     return transformRowToProfile(parsed.data);
-  }, "getFocusProfile");
+  }, 'getFocusProfile');
 }
 
-export async function createFocusProfile(userId: string, profile: Omit<FocusIdentityProfile, "userId">): Promise<FocusIdentityProfile> {
+export async function createFocusProfile(userId: string, profile: Omit<FocusIdentityProfile, 'userId'>): Promise<FocusIdentityProfile> {
   return withRetry(async () => {
     const supabase = getSupabaseClient();
 
@@ -148,7 +148,7 @@ export async function createFocusProfile(userId: string, profile: Omit<FocusIden
       recommended_actions: profile.recommendedActions,
     };
 
-    const { data, error } = await supabase.from("focus_identity_profiles").insert(row).select().single();
+    const { data, error } = await supabase.from('focus_identity_profiles').insert(row).select().single();
 
     if (error) {
       throw error;
@@ -158,7 +158,7 @@ export async function createFocusProfile(userId: string, profile: Omit<FocusIden
     await insertScoreHistoryBatch(userId, data.id, profile.scoreHistory);
 
     return transformRowToProfile(data);
-  }, "createFocusProfile");
+  }, 'createFocusProfile');
 }
 
 export async function updateFocusProfile(userId: string, updates: Partial<FocusIdentityProfile>): Promise<FocusIdentityProfile> {
@@ -213,7 +213,7 @@ export async function updateFocusProfile(userId: string, updates: Partial<FocusI
       rowUpdates.recommended_actions = updates.recommendedActions;
     }
 
-    const { data, error } = await supabase.from("focus_identity_profiles").update(rowUpdates).eq("user_id", userId).select().single();
+    const { data, error } = await supabase.from('focus_identity_profiles').update(rowUpdates).eq('user_id', userId).select().single();
 
     if (error) {
       throw error;
@@ -226,14 +226,14 @@ export async function updateFocusProfile(userId: string, updates: Partial<FocusI
     }
 
     return transformRowToProfile(data);
-  }, "updateFocusProfile");
+  }, 'updateFocusProfile');
 }
 
 export async function insertScoreHistory(userId: string, profileId: string, entry: { date: string; score: number; reason: string }): Promise<void> {
   return withRetry(async () => {
     const supabase = getSupabaseClient();
 
-    const { error } = await supabase.from("focus_score_history").insert({
+    const { error } = await supabase.from('focus_score_history').insert({
       user_id: userId,
       profile_id: profileId,
       date: entry.date,
@@ -244,7 +244,7 @@ export async function insertScoreHistory(userId: string, profileId: string, entr
     if (error) {
       throw error;
     }
-  }, "insertScoreHistory");
+  }, 'insertScoreHistory');
 }
 
 export async function insertScoreHistoryBatch(userId: string, profileId: string, entries: Array<{ date: string; score: number; reason: string }>): Promise<void> {
@@ -259,12 +259,12 @@ export async function insertScoreHistoryBatch(userId: string, profileId: string,
       reason: entry.reason,
     }));
 
-    const { error } = await supabase.from("focus_score_history").insert(rows);
+    const { error } = await supabase.from('focus_score_history').insert(rows);
 
     if (error) {
       throw error;
     }
-  }, "insertScoreHistoryBatch");
+  }, 'insertScoreHistoryBatch');
 }
 
 export async function getScoreHistory(userId: string, days: number = 90): Promise<Array<{ date: string; score: number; reason: string }>> {
@@ -274,14 +274,14 @@ export async function getScoreHistory(userId: string, days: number = 90): Promis
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - days);
 
-    const { data, error } = await supabase.from("focus_score_history").select("date, score, reason").eq("user_id", userId).gte("date", cutoffDate.toISOString().split("T")[0]).order("date", { ascending: true });
+    const { data, error } = await supabase.from('focus_score_history').select('date, score, reason').eq('user_id', userId).gte('date', cutoffDate.toISOString().split('T')[0]).order('date', { ascending: true });
 
     if (error) {
       throw error;
     }
 
     return data || [];
-  }, "getScoreHistory");
+  }, 'getScoreHistory');
 }
 
 export async function getFocusProfileForMigration(userId: string): Promise<{
@@ -296,7 +296,7 @@ export async function getFocusProfileForMigration(userId: string): Promise<{
     ]);
 
     return { localProfile, remoteProfile };
-  }, "getFocusProfileForMigration");
+  }, 'getFocusProfileForMigration');
 }
 
 export async function deleteFocusProfile(userId: string): Promise<void> {
@@ -304,15 +304,15 @@ export async function deleteFocusProfile(userId: string): Promise<void> {
     const supabase = getSupabaseClient();
 
     // Delete history first (FK constraint)
-    await supabase.from("focus_score_history").delete().eq("user_id", userId);
+    await supabase.from('focus_score_history').delete().eq('user_id', userId);
 
     // Delete profile
-    const { error } = await supabase.from("focus_identity_profiles").delete().eq("user_id", userId);
+    const { error } = await supabase.from('focus_identity_profiles').delete().eq('user_id', userId);
 
     if (error) {
       throw error;
     }
-  }, "deleteFocusProfile");
+  }, 'deleteFocusProfile');
 }
 
 // ============================================================================
@@ -331,15 +331,15 @@ function transformRowToProfile(row: z.infer<typeof FocusProfileRowSchema>): Focu
       max: row.current_score >= 800 ? 850 : row.current_score >= 740 ? 799 : row.current_score >= 670 ? 739 : row.current_score >= 580 ? 669 : row.current_score >= 500 ? 579 : row.current_score >= 420 ? 499 : 419,
       label: row.band_label,
       title: row.band_title,
-      color: "#4CAF50", // Default, would be mapped from label
+      color: '#4CAF50', // Default, would be mapped from label
       percentile: row.percentile_rank,
     },
     factors: {
       consistency: { score: 50, sessionsLast30Days: 0, targetSessionsPerWeek: 4, actualConsistency: 0, missedDaysLast30Days: 0 },
       streakStability: { score: 50, currentStreak: 0, longestStreak: 0, averageStreakLength: 0, totalStreaksStarted: 0, streakBreakFrequency: 0 },
-      sessionQuality: { score: 50, averageFocusPurity: 0, averageGrade: "D", perfectSessionsCount: 0, averageSessionDuration: 0 },
+      sessionQuality: { score: 50, averageFocusPurity: 0, averageGrade: 'D', perfectSessionsCount: 0, averageSessionDuration: 0 },
       diversity: { score: 0, uniqueSessionModes: 0, uniqueTimeSlots: 0, uniqueDaysOfWeek: 0, weekendSessions: 0, contextVariety: 0 },
-      recency: { score: 50, daysSinceLastSession: 999, last7DayActivity: 0, last30DayActivity: 0, trendDirection: "STABLE", velocity: 0 },
+      recency: { score: 50, daysSinceLastSession: 999, last7DayActivity: 0, last30DayActivity: 0, trendDirection: 'STABLE', velocity: 0 },
     },
     identityStatement: row.identity_statement,
     streakInCurrentBand: row.streak_in_current_band,
@@ -367,7 +367,7 @@ export interface MonthlyReportData {
   endingScore: number;
   change: number;
   sessionsCompleted: number;
-  grade: "A+" | "A" | "B+" | "B" | "C" | "D";
+  grade: 'A+' | 'A' | 'B+' | 'B' | 'C' | 'D';
   highlight: string;
 }
 
@@ -378,13 +378,13 @@ export async function getMonthlyReportData(userId: string, yearMonth: string): P
   return withRetry(async () => {
     const supabase = getSupabaseClient();
 
-    const { data, error } = await supabase.from("focus_monthly_reports").select("*").eq("user_id", userId).eq("month", yearMonth).single();
+    const { data, error } = await supabase.from('focus_monthly_reports').select('*').eq('user_id', userId).eq('month', yearMonth).single();
 
     if (error) {
-      if (error.code === "PGRST116") {
+      if (error.code === 'PGRST116') {
         return null; // No report found
       }
-      throw new RepositoryError("getMonthlyReportData", error);
+      throw new RepositoryError('getMonthlyReportData', error);
     }
 
     return {
@@ -396,7 +396,7 @@ export async function getMonthlyReportData(userId: string, yearMonth: string): P
       grade: data.grade,
       highlight: data.highlight,
     };
-  }, "getMonthlyReportData");
+  }, 'getMonthlyReportData');
 }
 
 /**
@@ -406,7 +406,7 @@ export async function saveMonthlyReportData(userId: string, report: MonthlyRepor
   return withRetry(async () => {
     const supabase = getSupabaseClient();
 
-    const { error } = await supabase.from("focus_monthly_reports").upsert({
+    const { error } = await supabase.from('focus_monthly_reports').upsert({
       user_id: userId,
       month: report.month,
       starting_score: report.startingScore,
@@ -419,9 +419,9 @@ export async function saveMonthlyReportData(userId: string, report: MonthlyRepor
     });
 
     if (error) {
-      throw new RepositoryError("saveMonthlyReportData", error);
+      throw new RepositoryError('saveMonthlyReportData', error);
     }
-  }, "saveMonthlyReportData");
+  }, 'saveMonthlyReportData');
 }
 
 // ============================================================================
@@ -431,10 +431,10 @@ export async function saveMonthlyReportData(userId: string, report: MonthlyRepor
 export async function isRepositoryHealthy(): Promise<boolean> {
   try {
     const supabase = getSupabaseClient();
-    const { error } = await supabase.from("focus_identity_profiles").select("count", { count: "exact", head: true });
+    const { error } = await supabase.from('focus_identity_profiles').select('count', { count: 'exact', head: true });
     return !error;
   } catch (error) {
-    captureSilentFailure(error, { feature: "focus-identity", operation: "network-fallback", type: "network" });
+    captureSilentFailure(error, { feature: 'focus-identity', operation: 'network-fallback', type: 'network' });
     return false;
   }
 }

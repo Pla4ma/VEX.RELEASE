@@ -4,25 +4,25 @@
  * Primitive layout component - the building block for all layouts.
  */
 
-import React, { type ReactNode } from "react";
-import { View, type StyleProp, type ViewProps, type ViewStyle } from "react-native";
+import React, { type ReactNode } from 'react';
+import { View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native';
 
-import { useTheme } from "../../theme";
-import type { SpacingValue, ColorValue } from "./types";
+import { useTheme } from '../../theme';
+import type { SpacingValue, ColorValue } from './types';
 import { resolveColorValue, resolveSpacingValue } from './theme-values';
 
 /**
  * Box component props
  */
-export interface BoxProps extends Omit<ViewProps, "style"> {
+export interface BoxProps extends Omit<ViewProps, 'style'> {
   /** Flex direction */
-  flex?: ViewStyle["flex"];
-  flexDirection?: ViewStyle["flexDirection"];
-  flexWrap?: ViewStyle["flexWrap"];
-  justifyContent?: ViewStyle["justifyContent"];
-  alignItems?: ViewStyle["alignItems"];
-  alignContent?: ViewStyle["alignContent"];
-  alignSelf?: ViewStyle["alignSelf"];
+  flex?: ViewStyle['flex'];
+  flexDirection?: ViewStyle['flexDirection'];
+  flexWrap?: ViewStyle['flexWrap'];
+  justifyContent?: ViewStyle['justifyContent'];
+  alignItems?: ViewStyle['alignItems'];
+  alignContent?: ViewStyle['alignContent'];
+  alignSelf?: ViewStyle['alignSelf'];
 
   /** Spacing */
   margin?: SpacingValue;
@@ -43,39 +43,39 @@ export interface BoxProps extends Omit<ViewProps, "style"> {
   py?: SpacingValue;
 
   /** Sizing */
-  width?: ViewStyle["width"];
-  height?: ViewStyle["height"];
-  aspectRatio?: ViewStyle["aspectRatio"];
-  minWidth?: ViewStyle["minWidth"];
-  minHeight?: ViewStyle["minHeight"];
-  maxWidth?: ViewStyle["maxWidth"];
-  maxHeight?: ViewStyle["maxHeight"];
+  width?: ViewStyle['width'];
+  height?: ViewStyle['height'];
+  aspectRatio?: ViewStyle['aspectRatio'];
+  minWidth?: ViewStyle['minWidth'];
+  minHeight?: ViewStyle['minHeight'];
+  maxWidth?: ViewStyle['maxWidth'];
+  maxHeight?: ViewStyle['maxHeight'];
 
   /** Positioning */
-  position?: ViewStyle["position"];
-  top?: ViewStyle["top"];
-  right?: ViewStyle["right"];
-  bottom?: ViewStyle["bottom"];
-  left?: ViewStyle["left"];
-  zIndex?: ViewStyle["zIndex"];
+  position?: ViewStyle['position'];
+  top?: ViewStyle['top'];
+  right?: ViewStyle['right'];
+  bottom?: ViewStyle['bottom'];
+  left?: ViewStyle['left'];
+  zIndex?: ViewStyle['zIndex'];
 
   /** Appearance */
   bg?: ColorValue;
   backgroundColor?: ColorValue;
-  opacity?: ViewStyle["opacity"];
+  opacity?: ViewStyle['opacity'];
   shadow?: boolean;
-  borderRadius?: ViewStyle["borderRadius"];
-  borderWidth?: ViewStyle["borderWidth"];
+  borderRadius?: ViewStyle['borderRadius'];
+  borderWidth?: ViewStyle['borderWidth'];
   borderColor?: ColorValue;
-  borderLeftWidth?: ViewStyle["borderLeftWidth"];
+  borderLeftWidth?: ViewStyle['borderLeftWidth'];
   borderLeftColor?: ColorValue;
-  borderRightWidth?: ViewStyle["borderRightWidth"];
+  borderRightWidth?: ViewStyle['borderRightWidth'];
   borderRightColor?: ColorValue;
-  borderTopWidth?: ViewStyle["borderTopWidth"];
+  borderTopWidth?: ViewStyle['borderTopWidth'];
   borderTopColor?: ColorValue;
-  borderBottomWidth?: ViewStyle["borderBottomWidth"];
+  borderBottomWidth?: ViewStyle['borderBottomWidth'];
   borderBottomColor?: ColorValue;
-  overflow?: ViewStyle["overflow"];
+  overflow?: ViewStyle['overflow'];
 
   /** Gap between children */
   gap?: SpacingValue;

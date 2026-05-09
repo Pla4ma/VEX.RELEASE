@@ -1,12 +1,12 @@
-import React, { useState, useCallback } from "react";
-import { Pressable, Dimensions } from "react-native";
-import Animated, { useAnimatedStyle, withSpring, FadeIn } from "react-native-reanimated";
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-const DAY_WIDTH = (Dimensions.get("window").width - 40) / 7;
-export type DayStatus = "completed" | "partial" | "upcoming" | "missed";
-export type EventType = "squad_war" | "double_xp" | "challenge_expires" | "season_ends" | "boss_rush";
+import React, { useState, useCallback } from 'react';
+import { Pressable, Dimensions } from 'react-native';
+import Animated, { useAnimatedStyle, withSpring, FadeIn } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+const DAY_WIDTH = (Dimensions.get('window').width - 40) / 7;
+export type DayStatus = 'completed' | 'partial' | 'upcoming' | 'missed';
+export type EventType = 'squad_war' | 'double_xp' | 'challenge_expires' | 'season_ends' | 'boss_rush';
 export interface DayData {
   date: Date;
   status: DayStatus;
@@ -16,28 +16,28 @@ export interface DayData {
 }
 export interface WeeklyCalendarProps { days: DayData[]; selectedDay: Date; onDaySelect: (day: Date) => void; currentStreak: number; }
 const EVENT_ICONS: Record<EventType, string> = {
-  squad_war: "⚔️",
-  double_xp: "🔥",
-  challenge_expires: "🏆",
-  season_ends: "🌙",
-  boss_rush: "👹",
+  squad_war: '⚔️',
+  double_xp: '🔥',
+  challenge_expires: '🏆',
+  season_ends: '🌙',
+  boss_rush: '👹',
 };
 const EVENT_LABELS: Record<EventType, string> = {
-  squad_war: "Squad War",
-  double_xp: "Double XP",
-  challenge_expires: "Challenge Ends",
-  season_ends: "Season Ends",
-  boss_rush: "Boss Rush",
+  squad_war: 'Squad War',
+  double_xp: 'Double XP',
+  challenge_expires: 'Challenge Ends',
+  season_ends: 'Season Ends',
+  boss_rush: 'Boss Rush',
 };
 function DayCell({ day, isSelected, isToday, onPress, index }: { day: DayData; isSelected: boolean; isToday: boolean; onPress: () => void; index: number }): JSX.Element {
   const { theme } = useTheme();
   const getStatusColor = () => {
     switch (day.status) {
-      case "completed":
+      case 'completed':
         return theme.colors.success.DEFAULT;
-      case "partial":
+      case 'partial':
         return theme.colors.warning.DEFAULT;
-      case "missed":
+      case 'missed':
         return theme.colors.error.DEFAULT;
       default:
         return theme.colors.text.tertiary;
@@ -45,14 +45,14 @@ function DayCell({ day, isSelected, isToday, onPress, index }: { day: DayData; i
   };
   const getStatusIcon = () => {
     switch (day.status) {
-      case "completed":
-        return "✓";
-      case "partial":
-        return "◐";
-      case "missed":
-        return "✕";
+      case 'completed':
+        return '✓';
+      case 'partial':
+        return '◐';
+      case 'missed':
+        return '✕';
       default:
-        return "";
+        return '';
     }
   };
   const animatedStyle = useAnimatedStyle(() => ({
@@ -64,19 +64,19 @@ function DayCell({ day, isSelected, isToday, onPress, index }: { day: DayData; i
     backgroundColor: isSelected ? theme.colors.primary[500] : isToday ? `${theme.colors.primary[500]}20` : theme.colors.background.secondary,
     borderColor: isToday ? theme.colors.primary[500] : theme.colors.border.light,
   }));
-  const dayName = day.date.toLocaleDateString("en-US", { weekday: "narrow" });
+  const dayName = day.date.toLocaleDateString('en-US', { weekday: 'narrow' });
   const dayNum = day.date.getDate();
   return (
     <Animated.View entering={FadeIn.duration(400).delay(index * 50)} style={[{ width: DAY_WIDTH, paddingHorizontal: 2 }, animatedStyle]}>
       <Pressable onPress={onPress} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
         <Box alignItems="center" py="sm" borderRadius="lg" borderWidth={1}>
-          <Text variant="caption" color={isSelected ? "text.inverse" : isToday ? "primary.500" : "text.tertiary"} fontWeight={isToday ? "700" : "400"}>
+          <Text variant="caption" color={isSelected ? 'text.inverse' : isToday ? 'primary.500' : 'text.tertiary'} fontWeight={isToday ? '700' : '400'}>
             {dayName}
           </Text>
-          <Text variant="h4" color={isSelected ? "text.inverse" : "text.primary"} fontWeight={isToday || isSelected ? "700" : "400"}>
+          <Text variant="h4" color={isSelected ? 'text.inverse' : 'text.primary'} fontWeight={isToday || isSelected ? '700' : '400'}>
             {dayNum}
           </Text>
-          {day.status !== "upcoming" && (
+          {day.status !== 'upcoming' && (
             <Text fontSize={12} color={isSelected ? theme.colors.text.inverse : getStatusColor()}>
               {getStatusIcon()}
             </Text>
@@ -97,10 +97,10 @@ function DayCell({ day, isSelected, isToday, onPress, index }: { day: DayData; i
 }
 function DayDetailsPopover({ day, onClose }: { day: DayData; onClose: () => void }): JSX.Element {
   const { theme } = useTheme();
-  const formattedDate = day.date.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "short",
-    day: "numeric",
+  const formattedDate = day.date.toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'short',
+    day: 'numeric',
   });
   return (
     <Box p="lg" borderRadius="xl" bg="background.elevated" borderWidth={1} borderColor="border.light" shadow>
@@ -119,9 +119,9 @@ function DayDetailsPopover({ day, onClose }: { day: DayData; onClose: () => void
           SESSIONS
         </Text>
         <Box flexDirection="row" alignItems="center" gap="sm">
-          <Text fontSize={24}>{day.status === "completed" ? "✅" : day.status === "partial" ? "◐" : day.status === "missed" ? "❌" : "📅"}</Text>
+          <Text fontSize={24}>{day.status === 'completed' ? '✅' : day.status === 'partial' ? '◐' : day.status === 'missed' ? '❌' : '📅'}</Text>
           <Text variant="body" color="text.primary">
-            {day.sessionsCompleted > 0 ? `${day.sessionsCompleted} session${day.sessionsCompleted !== 1 ? "s" : ""}` : "No sessions"}
+            {day.sessionsCompleted > 0 ? `${day.sessionsCompleted} session${day.sessionsCompleted !== 1 ? 's' : ''}` : 'No sessions'}
           </Text>
         </Box>
       </Box>

@@ -4,16 +4,34 @@
  * Tests for PHASE 8 session-to-squads integration requirements.
  */
 
-import { renderHook, act, waitFor } from '@testing-library/react';
+import React from 'react';
+import { renderHook, act, waitFor, cleanup } from '@testing-library/react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { describe, it, expect, beforeEach, jest } from '@jest/globals';
+import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
 import * as hooks from '../session-squads-integration';
+import {
+  useBasicSquadsStatus,
+  useUpdateBasicSquadWeeklyProgress,
+} from '../hooks/basic-squads-hooks';
 import { eventBus } from '../../../events';
 import { useAuthStore } from '../../../store';
 
 // Mock the auth store
 jest.mock('../../../store');
 const mockUseAuthStore = useAuthStore as jest.MockedFunction<typeof useAuthStore>;
+
+type MockAuthState = {
+  user: { id: string; email: string } | null;
+};
+
+function mockAuthState(state: MockAuthState): void {
+  mockUseAuthStore.mockImplementation((selector?: (value: MockAuthState) => unknown) => {
+    if (selector) {
+      return selector(state) as ReturnType<typeof useAuthStore>;
+    }
+    return state as ReturnType<typeof useAuthStore>;
+  });
+}
 
 // Mock event bus
 jest.mock('../../../events', () => ({
@@ -22,6 +40,19 @@ jest.mock('../../../events', () => ({
     publish: jest.fn(),
   },
 }));
+
+jest.mock('../hooks/basic-squads-hooks', () => ({
+  useBasicSquadsStatus: jest.fn(),
+  useUpdateBasicSquadWeeklyProgress: jest.fn(),
+}));
+
+const mockUseBasicSquadsStatus = useBasicSquadsStatus as jest.MockedFunction<
+  typeof useBasicSquadsStatus
+>;
+const mockUseUpdateBasicSquadWeeklyProgress =
+  useUpdateBasicSquadWeeklyProgress as jest.MockedFunction<
+    typeof useUpdateBasicSquadWeeklyProgress
+  >;
 
 describe('Session Squads Integration - PHASE 8', () => {
   let queryClient: QueryClient;
@@ -32,17 +63,30 @@ describe('Session Squads Integration - PHASE 8', () => {
     queryClient = new QueryClient({
       defaultOptions: {
         queries: { retry: false },
-        mutations: { retry: false },
+        mutations: { retry: false, gcTime: 0 },
       },
     });
 
-    wrapper = ({ children }) => (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    wrapper = ({ children }) => React.createElement(
+      QueryClientProvider,
+      { client: queryClient },
+      children,
     );
 
-    mockUseAuthStore.mockReturnValue({
+    mockAuthState({
       user: { id: 'user-123', email: 'test@example.com' },
-    } as any);
+    });
+    mockUseBasicSquadsStatus.mockReturnValue({
+      data: undefined,
+    } as ReturnType<typeof useBasicSquadsStatus>);
+    mockUseUpdateBasicSquadWeeklyProgress.mockReturnValue({
+      mutateAsync: jest.fn(),
+    } as ReturnType<typeof useUpdateBasicSquadWeeklyProgress>);
+  });
+
+  afterEach(() => {
+    cleanup();
+    queryClient.clear();
   });
 
   describe('useSessionSquadsIntegration', () => {
@@ -74,18 +118,18 @@ describe('Session Squads Integration - PHASE 8', () => {
         },
       };
 
-      // Mock the hooks that the integration hook depends on
-      jest.doMock('../hooks/basic-squads-hooks', () => ({
-        useBasicSquadsStatus: () => ({ data: mockSquadStatus }),
-        useUpdateBasicSquadWeeklyProgress: () => ({
-          mutateAsync: jest.fn().mockResolvedValue({
-            goalUpdated: true,
-            goalCompleted: false,
-            squadProgress: 210, // 180 + 30
-            squadGoal: 300,
-          }),
-        }),
-      }));
+      const mutateAsync = jest.fn().mockResolvedValue({
+        goalUpdated: true,
+        goalCompleted: false,
+        squadProgress: 210,
+        squadGoal: 300,
+      });
+      mockUseBasicSquadsStatus.mockReturnValue({
+        data: mockSquadStatus,
+      } as ReturnType<typeof useBasicSquadsStatus>);
+      mockUseUpdateBasicSquadWeeklyProgress.mockReturnValue({
+        mutateAsync,
+      } as ReturnType<typeof useUpdateBasicSquadWeeklyProgress>);
 
       const mockUnsubscribe = jest.fn();
       (eventBus.subscribe as jest.Mock).mockReturnValue(mockUnsubscribe);
@@ -108,6 +152,10 @@ describe('Session Squads Integration - PHASE 8', () => {
 
       // The event handler should have been called
       expect(eventBus.subscribe).toHaveBeenCalledWith('session:completed', expect.any(Function));
+      expect(mutateAsync).toHaveBeenCalledWith({
+        squadId: 'squad-123',
+        sessionMinutes: 30,
+      });
     });
 
     it('should not update squad progress when user has no squad', async () => {
@@ -121,12 +169,13 @@ describe('Session Squads Integration - PHASE 8', () => {
         weeklyProgress: null,
       };
 
-      jest.doMock('../hooks/basic-squads-hooks', () => ({
-        useBasicSquadsStatus: () => ({ data: mockSquadStatus }),
-        useUpdateBasicSquadWeeklyProgress: () => ({
-          mutateAsync: jest.fn(),
-        }),
-      }));
+      const mutateAsync = jest.fn();
+      mockUseBasicSquadsStatus.mockReturnValue({
+        data: mockSquadStatus,
+      } as ReturnType<typeof useBasicSquadsStatus>);
+      mockUseUpdateBasicSquadWeeklyProgress.mockReturnValue({
+        mutateAsync,
+      } as ReturnType<typeof useUpdateBasicSquadWeeklyProgress>);
 
       const mockUnsubscribe = jest.fn();
       (eventBus.subscribe as jest.Mock).mockReturnValue(mockUnsubscribe);
@@ -146,6 +195,7 @@ describe('Session Squads Integration - PHASE 8', () => {
       });
 
       expect(eventBus.subscribe).toHaveBeenCalledWith('session:completed', expect.any(Function));
+      expect(mutateAsync).not.toHaveBeenCalled();
     });
   });
 
@@ -168,13 +218,11 @@ describe('Session Squads Integration - PHASE 8', () => {
         },
       };
 
-      jest.doMock('../hooks/basic-squads-hooks', () => ({
-        useBasicSquadStatus: () => ({
-          data: mockSquadStatus,
-          isLoading: false,
-          error: null,
-        }),
-      }));
+      mockUseBasicSquadsStatus.mockReturnValue({
+        data: mockSquadStatus,
+        isLoading: false,
+        error: null,
+      } as ReturnType<typeof useBasicSquadsStatus>);
 
       const { result } = renderHook(() => hooks.useSquadStatusForSession(), { wrapper });
 
@@ -202,13 +250,11 @@ describe('Session Squads Integration - PHASE 8', () => {
         weeklyProgress: null,
       };
 
-      jest.doMock('../hooks/basic-squads-hooks', () => ({
-        useBasicSquadStatus: () => ({
-          data: mockSquadStatus,
-          isLoading: false,
-          error: null,
-        }),
-      }));
+      mockUseBasicSquadsStatus.mockReturnValue({
+        data: mockSquadStatus,
+        isLoading: false,
+        error: null,
+      } as ReturnType<typeof useBasicSquadsStatus>);
 
       const { result } = renderHook(() => hooks.useSquadStatusForSession(), { wrapper });
 

@@ -19,13 +19,13 @@
  * - PremiumTierSystem (gem earning for premium)
  */
 
-import { eventBus } from "../../events";
+import { eventBus } from '../../events';
 
 // ============================================================================
 // Currency Types
 // ============================================================================
 
-export type CurrencyType = "COINS" | "GEMS";
+export type CurrencyType = 'COINS' | 'GEMS';
 
 export interface Wallet {
   userId: string;
@@ -47,28 +47,28 @@ export interface CurrencyTransaction {
   createdAt: number;
 }
 
-export type TransactionType = "EARN" | "SPEND" | "REFUND" | "CONVERT" | "BONUS";
+export type TransactionType = 'EARN' | 'SPEND' | 'REFUND' | 'CONVERT' | 'BONUS';
 
 export type TransactionSource =
   // Earn sources
-  | "SESSION_COMPLETE"
-  | "BOSS_DAMAGE"
-  | "BOSS_DEFEAT"
-  | "BOSS_BOUNTY"
-  | "STREAK_MILESTONE"
-  | "ACHIEVEMENT_UNLOCK"
-  | "CHALLENGE_COMPLETE"
-  | "DAILY_REWARD"
-  | "PURCHASE"
-  | "PREMIUM_BONUS"
+  | 'SESSION_COMPLETE'
+  | 'BOSS_DAMAGE'
+  | 'BOSS_DEFEAT'
+  | 'BOSS_BOUNTY'
+  | 'STREAK_MILESTONE'
+  | 'ACHIEVEMENT_UNLOCK'
+  | 'CHALLENGE_COMPLETE'
+  | 'DAILY_REWARD'
+  | 'PURCHASE'
+  | 'PREMIUM_BONUS'
   // Spend sources
-  | "SHOP_PURCHASE"
-  | "BOSS_BOUNTY_PLACE"
-  | "STREAK_INSURANCE"
-  | "XP_BOOST"
-  | "DAMAGE_BOOST"
-  | "COSMETIC_UNLOCK"
-  | "STUDY_PLAN_SLOT";
+  | 'SHOP_PURCHASE'
+  | 'BOSS_BOUNTY_PLACE'
+  | 'STREAK_INSURANCE'
+  | 'XP_BOOST'
+  | 'DAMAGE_BOOST'
+  | 'COSMETIC_UNLOCK'
+  | 'STUDY_PLAN_SLOT';
 
 // ============================================================================
 // Currency Constants
@@ -152,11 +152,11 @@ export function earnCoins(userId: string, amount: number, source: TransactionSou
   wallet.lifetimeCoins += amount;
   wallet.lastUpdated = Date.now();
 
-  recordTransaction(userId, "COINS", amount, "EARN", source, description);
+  recordTransaction(userId, 'COINS', amount, 'EARN', source, description);
 
-  eventBus.publish("currency:earned", {
+  eventBus.publish('currency:earned', {
     userId,
-    currency: "COINS",
+    currency: 'COINS',
     amount,
     source,
     newBalance: wallet.coins,
@@ -174,11 +174,11 @@ export function earnGems(userId: string, amount: number, source: TransactionSour
   wallet.lifetimeGems += amount;
   wallet.lastUpdated = Date.now();
 
-  recordTransaction(userId, "GEMS", amount, "EARN", source, description);
+  recordTransaction(userId, 'GEMS', amount, 'EARN', source, description);
 
-  eventBus.publish("currency:earned", {
+  eventBus.publish('currency:earned', {
     userId,
-    currency: "GEMS",
+    currency: 'GEMS',
     amount,
     source,
     newBalance: wallet.gems,
@@ -204,11 +204,11 @@ export function spendCoins(userId: string, amount: number, source: TransactionSo
   wallet.coins -= amount;
   wallet.lastUpdated = Date.now();
 
-  recordTransaction(userId, "COINS", -amount, "SPEND", source, description);
+  recordTransaction(userId, 'COINS', -amount, 'SPEND', source, description);
 
-  eventBus.publish("currency:spent", {
+  eventBus.publish('currency:spent', {
     userId,
-    currency: "COINS",
+    currency: 'COINS',
     amount,
     source,
     newBalance: wallet.coins,
@@ -234,11 +234,11 @@ export function spendGems(userId: string, amount: number, source: TransactionSou
   wallet.gems -= amount;
   wallet.lastUpdated = Date.now();
 
-  recordTransaction(userId, "GEMS", -amount, "SPEND", source, description);
+  recordTransaction(userId, 'GEMS', -amount, 'SPEND', source, description);
 
-  eventBus.publish("currency:spent", {
+  eventBus.publish('currency:spent', {
     userId,
-    currency: "GEMS",
+    currency: 'GEMS',
     amount,
     source,
     newBalance: wallet.gems,
@@ -267,8 +267,8 @@ export function convertGemsToCoins(userId: string, gemAmount: number): { success
   wallet.coins += coinAmount;
   wallet.lastUpdated = Date.now();
 
-  recordTransaction(userId, "GEMS", -gemAmount, "CONVERT", "SHOP_PURCHASE", `Converted to ${coinAmount} coins`);
-  recordTransaction(userId, "COINS", coinAmount, "CONVERT", "SHOP_PURCHASE", `Converted from ${gemAmount} gems`);
+  recordTransaction(userId, 'GEMS', -gemAmount, 'CONVERT', 'SHOP_PURCHASE', `Converted to ${coinAmount} coins`);
+  recordTransaction(userId, 'COINS', coinAmount, 'CONVERT', 'SHOP_PURCHASE', `Converted from ${gemAmount} gems`);
 
   return { success: true, wallet };
 }
@@ -309,19 +309,19 @@ export function getTransactionHistory(userId: string, currency?: CurrencyType, l
 /**
  * Calculate session coins earned
  */
-export function calculateSessionCoins(durationMinutes: number, qualityRank: "S" | "A" | "B" | "C" | "D", streakMultiplier: number = 1): number {
+export function calculateSessionCoins(durationMinutes: number, qualityRank: 'S' | 'A' | 'B' | 'C' | 'D', streakMultiplier: number = 1): number {
   const base = COIN_EARN_RATES.SESSION_BASE;
   const minuteBonus = durationMinutes * COIN_EARN_RATES.SESSION_MINUTE;
 
   let qualityBonus = 0;
   switch (qualityRank) {
-    case "S":
+    case 'S':
       qualityBonus = COIN_EARN_RATES.QUALITY_BONUS_S;
       break;
-    case "A":
+    case 'A':
       qualityBonus = COIN_EARN_RATES.QUALITY_BONUS_A;
       break;
-    case "B":
+    case 'B':
       qualityBonus = COIN_EARN_RATES.QUALITY_BONUS_B;
       break;
   }
@@ -363,7 +363,7 @@ export function calculateStreakMilestoneCoins(days: number): { coins: number; ge
  * Award premium monthly gems
  */
 export function awardPremiumMonthlyGems(userId: string): Wallet {
-  return earnGems(userId, GEM_EARN_RATES.PREMIUM_MONTHLY, "PREMIUM_BONUS", "Monthly premium gem allowance");
+  return earnGems(userId, GEM_EARN_RATES.PREMIUM_MONTHLY, 'PREMIUM_BONUS', 'Monthly premium gem allowance');
 }
 
 // ============================================================================
@@ -379,7 +379,7 @@ export interface EconomyAnalytics {
   netWorth: number;
   dailyAverageEarn: number;
   dailyAverageSpend: number;
-  favoriteCurrency: "COINS" | "GEMS" | "BOTH";
+  favoriteCurrency: 'COINS' | 'GEMS' | 'BOTH';
   spendingCategories: Record<string, number>;
 }
 
@@ -390,10 +390,10 @@ export function getEconomyAnalytics(userId: string): EconomyAnalytics {
   const wallet = getWallet(userId);
   const userTransactions = transactions.filter((t) => t.userId === userId);
 
-  const coinEarns = userTransactions.filter((t) => t.currency === "COINS" && t.type === "EARN");
-  const coinSpends = userTransactions.filter((t) => t.currency === "COINS" && t.type === "SPEND");
-  const gemEarns = userTransactions.filter((t) => t.currency === "GEMS" && t.type === "EARN");
-  const gemSpends = userTransactions.filter((t) => t.currency === "GEMS" && t.type === "SPEND");
+  const coinEarns = userTransactions.filter((t) => t.currency === 'COINS' && t.type === 'EARN');
+  const coinSpends = userTransactions.filter((t) => t.currency === 'COINS' && t.type === 'SPEND');
+  const gemEarns = userTransactions.filter((t) => t.currency === 'GEMS' && t.type === 'EARN');
+  const gemSpends = userTransactions.filter((t) => t.currency === 'GEMS' && t.type === 'SPEND');
 
   const totalCoinsEarned = coinEarns.reduce((sum, t) => sum + t.amount, 0);
   const totalCoinsSpent = Math.abs(coinSpends.reduce((sum, t) => sum + t.amount, 0));
@@ -420,7 +420,7 @@ export function getEconomyAnalytics(userId: string): EconomyAnalytics {
     netWorth: wallet.coins + wallet.gems * GEM_TO_COIN_RATE,
     dailyAverageEarn,
     dailyAverageSpend,
-    favoriteCurrency: totalGemsEarned > totalCoinsEarned / 10 ? "GEMS" : totalCoinsEarned > 0 ? "COINS" : "BOTH",
+    favoriteCurrency: totalGemsEarned > totalCoinsEarned / 10 ? 'GEMS' : totalCoinsEarned > 0 ? 'COINS' : 'BOTH',
     spendingCategories,
   };
 }
@@ -444,23 +444,23 @@ export function checkEconomyBalance(userId: string): {
   // Check if user is earning too much vs spending (inflation)
   const spendRatio = analytics.totalCoinsSpent / Math.max(1, analytics.totalCoinsEarned);
   if (spendRatio < 0.3) {
-    issues.push("Low spend ratio - user is accumulating too many coins");
-    recommendations.push("Introduce more compelling coin sinks");
-    recommendations.push("Offer limited-time exclusive items");
+    issues.push('Low spend ratio - user is accumulating too many coins');
+    recommendations.push('Introduce more compelling coin sinks');
+    recommendations.push('Offer limited-time exclusive items');
   }
 
   // Check if user is spending too much (deflation)
   if (spendRatio > 0.9) {
-    issues.push("High spend ratio - user may run out of coins");
-    recommendations.push("Increase coin rewards slightly");
-    recommendations.push("Offer coin bonus events");
+    issues.push('High spend ratio - user may run out of coins');
+    recommendations.push('Increase coin rewards slightly');
+    recommendations.push('Offer coin bonus events');
   }
 
   // Check gem scarcity
   if (analytics.totalGemsEarned > analytics.totalGemsSpent * 2) {
-    issues.push("User accumulating gems without spending");
-    recommendations.push("Show premium cosmetic previews");
-    recommendations.push("Offer gem-exclusive limited items");
+    issues.push('User accumulating gems without spending');
+    recommendations.push('Show premium cosmetic previews');
+    recommendations.push('Offer gem-exclusive limited items');
   }
 
   return {

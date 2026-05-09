@@ -191,7 +191,8 @@ export function HomeHeroCard({ recommendation, isLoading, onPressCta, onPressSec
           {recommendation.ctaText}
         </Button>
         {/* Secondary actions */}
-        <HomeHeroSecondaryActions onPress={onPressSecondary} rowStyle={secondaryRowStyle} buttonStyle={secondaryButtonStyle} textStyle={secondaryTextStyle} />`r`n      </LinearGradient>
+        <HomeHeroSecondaryActions onPress={onPressSecondary} rowStyle={secondaryRowStyle} buttonStyle={secondaryButtonStyle} textStyle={secondaryTextStyle} />
+      </LinearGradient>
     </View>
   );
 }

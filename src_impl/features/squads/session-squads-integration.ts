@@ -5,9 +5,9 @@
  * Listens for session completion events and updates squad weekly goals.
  */
 
-import { eventBus } from "../../../events";
-import { useBasicSquadsStatus, useUpdateBasicSquadWeeklyProgress } from "../squads/hooks/basic-squads-hooks";
-import { useEffect } from "react";
+import { eventBus } from '../../events';
+import { useBasicSquadsStatus, useUpdateBasicSquadWeeklyProgress } from './hooks/basic-squads-hooks';
+import { useEffect } from 'react';
 
 // ============================================================================
 // Session to Squads Progress Integration
@@ -20,27 +20,21 @@ export function useSessionSquadsIntegration() {
   useEffect(() => {
     // Listen for session completion events
     const unsubscribe = eventBus.subscribe('session:completed', async (event) => {
-      const { sessionId, duration, userId } = event;
+      const { duration } = event;
 
       // Only update squad progress if user is in a squad
       if (statusQuery.data?.hasSquad && statusQuery.data.squad) {
         try {
           // Update squad weekly progress based on session completion
-          const result = await progressMutation.mutateAsync({
+          await progressMutation.mutateAsync({
             squadId: statusQuery.data.squad.id,
-            sessionMinutes: Math.floor(duration / 60), // Convert seconds to minutes
-          });
-
-          console.log(`Updated squad weekly progress from session ${sessionId}:`, {
-            squadId: statusQuery.data.squad.id,
-            goalUpdated: result.goalUpdated,
-            goalCompleted: result.goalCompleted,
-            squadProgress: result.squadProgress,
-            squadGoal: result.squadGoal,
+            sessionMinutes: Math.floor(duration / 60),
           });
         } catch (error) {
-          console.error('Failed to update squad progress from session:', error);
-          // Don't throw - squad progress failure shouldn't break session completion
+          eventBus.publish('squad:progress_update_failed', {
+            squadId: statusQuery.data.squad.id,
+            reason: error instanceof Error ? error.message : 'Unknown error',
+          });
         }
       }
     });
@@ -54,7 +48,7 @@ export function useSessionSquadsIntegration() {
 // ============================================================================
 
 export function useSquadStatusForSession() {
-  const statusQuery = useBasicSquadStatus();
+  const statusQuery = useBasicSquadsStatus();
 
   return {
     hasSquad: statusQuery.data?.hasSquad ?? false,
@@ -64,7 +58,9 @@ export function useSquadStatusForSession() {
     isAdmin: statusQuery.data?.isAdmin ?? false,
     memberCount: statusQuery.data?.memberCount ?? 0,
     weeklyProgress: statusQuery.data?.weeklyProgress,
-    canContributeToGoal: statusQuery.data?.hasSquad && !!(statusQuery.data?.weeklyProgress?.completed),
+    canContributeToGoal:
+      statusQuery.data?.hasSquad &&
+      !statusQuery.data?.weeklyProgress?.completed,
   };
 }
 
@@ -119,15 +115,15 @@ export function getSquadCTA(squadStatus: {
 
   if (!hasSquad) {
     return {
-      primaryCTA: "Create Squad",
+      primaryCTA: 'Create Squad',
       secondaryCTA: null,
-      motivationMessage: "Start a private accountability group with friends.",
+      motivationMessage: 'Start a private accountability group with friends.',
     };
   }
 
   if (weeklyProgress?.completed) {
     return {
-      primaryCTA: "View Squad Progress",
+      primaryCTA: 'View Squad Progress',
       secondaryCTA: null,
       motivationMessage: `Great job! ${squadName} completed the weekly goal!`,
     };
@@ -136,11 +132,11 @@ export function getSquadCTA(squadStatus: {
   const remainingMinutes = weeklyProgress ? weeklyProgress.goal - weeklyProgress.current : 300;
   const remainingSessions = Math.ceil(remainingMinutes / 30); // Assuming 30-minute sessions
 
-  let primaryCTA = "Start Focus Session";
+  let primaryCTA = 'Start Focus Session';
   let secondaryCTA = null;
 
   if (isFounder || isAdmin) {
-    secondaryCTA = "Invite Members";
+    secondaryCTA = 'Invite Members';
   }
 
   return {

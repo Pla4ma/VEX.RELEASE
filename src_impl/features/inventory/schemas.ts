@@ -3,21 +3,21 @@
  * Zod schemas for validation - all types inferred from here
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Enums
 // ============================================================================
 
-export const ItemRaritySchema = z.enum(["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"]);
+export const ItemRaritySchema = z.enum(['COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY']);
 
-export const ItemTypeSchema = z.enum(["CONSUMABLE", "EQUIPMENT", "COSMETIC", "CRAFTING", "COLLECTIBLE"]);
+export const ItemTypeSchema = z.enum(['CONSUMABLE', 'EQUIPMENT', 'COSMETIC', 'CRAFTING', 'COLLECTIBLE']);
 
-export const ItemStatusSchema = z.enum(["OWNED", "EQUIPPED", "CONSUMED", "TRADED", "DESTROYED"]);
+export const ItemStatusSchema = z.enum(['OWNED', 'EQUIPPED', 'CONSUMED', 'TRADED', 'DESTROYED']);
 
-export const EquipmentSlotSchema = z.enum(["HEAD", "BODY", "HANDS", "FEET", "ACCESSORY_1", "ACCESSORY_2", "FOCUS_TOOL", "PET"]);
+export const EquipmentSlotSchema = z.enum(['HEAD', 'BODY', 'HANDS', 'FEET', 'ACCESSORY_1', 'ACCESSORY_2', 'FOCUS_TOOL', 'PET']);
 
-export const AcquisitionSourceSchema = z.enum(["SHOP", "CRAFTING", "DROP", "REWARD", "GIFT", "TRADE"]);
+export const AcquisitionSourceSchema = z.enum(['SHOP', 'CRAFTING', 'DROP', 'REWARD', 'GIFT', 'TRADE']);
 
 // ============================================================================
 // Inventory Item Schema
@@ -202,8 +202,8 @@ export const InventoryFilterSchema = z
     minQuantity: z.number().int().min(1).optional(),
     acquiredAfter: z.number().int().optional(),
     acquiredBefore: z.number().int().optional(),
-    sortBy: z.enum(["acquiredAt", "name", "rarity", "quantity"]).default("acquiredAt"),
-    sortOrder: z.enum(["asc", "desc"]).default("desc"),
+    sortBy: z.enum(['acquiredAt', 'name', 'rarity', 'quantity']).default('acquiredAt'),
+    sortOrder: z.enum(['asc', 'desc']).default('desc'),
   })
   .strict();
 

@@ -39,7 +39,7 @@ export async function processRewardDelivery(entry: RewardLedgerEntry): Promise<{
   } catch (error) {
     return {
       success: false,
-      errorMessage: error instanceof Error ? error.message : 'Delivery failed'
+      errorMessage: error instanceof Error ? error.message : 'Delivery failed',
     };
   }
 }

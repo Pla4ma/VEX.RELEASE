@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Share, View } from "react-native";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
-import { z } from "zod";
+import React, { useEffect, useState } from 'react';
+import { Share, View } from 'react-native';
+import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
+import { z } from 'zod';
 
-import { Input } from "../../../components/Input";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import { useCreateSquad } from "../hooks";
-import { buildPreviewSquad, createSquadSchema, ELEMENTS, SQUAD_TYPES, toCreatedSquadSummary, type ElementId, type SquadType } from "./createSquadFlowData";
-import { SquadShareCard } from "./SquadShareCard";
+import { Input } from '../../../components/Input';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { useCreateSquad } from '../hooks';
+import { buildPreviewSquad, createSquadSchema, ELEMENTS, SQUAD_TYPES, toCreatedSquadSummary, type ElementId, type SquadType } from './createSquadFlowData';
+import { SquadShareCard } from './SquadShareCard';
 type Step = 1 | 2 | 3;
 
 type CreateSquadFlowProps = {
@@ -21,9 +21,9 @@ export function CreateSquadFlow({ bottomSheetRef, userId }: CreateSquadFlowProps
   const { theme } = useTheme();
   const createSquad = useCreateSquad(userId);
   const [step, setStep] = useState<Step>(1);
-  const [name, setName] = useState("");
-  const [elementId, setElementId] = useState<ElementId>("FLAME");
-  const [squadType, setSquadType] = useState<SquadType>("STUDY");
+  const [name, setName] = useState('');
+  const [elementId, setElementId] = useState<ElementId>('FLAME');
+  const [squadType, setSquadType] = useState<SquadType>('STUDY');
   const [formError, setFormError] = useState<string | null>(null);
 
   const selectedElement = ELEMENTS.find((item) => item.id === elementId) ?? ELEMENTS[0];
@@ -52,12 +52,12 @@ export function CreateSquadFlow({ bottomSheetRef, userId }: CreateSquadFlowProps
         description: `${selectedElement.emoji} ${squadType} squad`,
         avatarUrl: null,
         isPublic: true,
-        joinRequirements: "OPEN",
+        joinRequirements: 'OPEN',
         maxMembers: 10,
       });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        setFormError(error.issues[0]?.message ?? "Please complete this step before continuing.");
+        setFormError(error.issues[0]?.message ?? 'Please complete this step before continuing.');
       }
     }
   };
@@ -77,7 +77,7 @@ export function CreateSquadFlow({ bottomSheetRef, userId }: CreateSquadFlowProps
     <BottomSheet
       ref={bottomSheetRef}
       index={-1}
-      snapPoints={["90%"]}
+      snapPoints={['90%']}
       enablePanDownToClose
       backdropComponent={(props) => <BottomSheetBackdrop {...props} appearsOnIndex={0} disappearsOnIndex={-1} />}
       backgroundStyle={{
@@ -93,7 +93,7 @@ export function CreateSquadFlow({ bottomSheetRef, userId }: CreateSquadFlowProps
             {`Step ${step} of 3`}
           </Text>
           <Text variant="h3" color={theme.colors.text.primary}>
-            {step === 1 ? "Forge your squad" : step === 2 ? "Choose its lane" : "Squad created!"}
+            {step === 1 ? 'Forge your squad' : step === 2 ? 'Choose its lane' : 'Squad created!'}
           </Text>
         </View>
 
@@ -104,15 +104,15 @@ export function CreateSquadFlow({ bottomSheetRef, userId }: CreateSquadFlowProps
               <Text variant="label" color={theme.colors.text.secondary}>
                 Choose your element
               </Text>
-              <View style={{ flexDirection: "row", flexWrap: "wrap", gap: theme.spacing[2] }}>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing[2] }}>
                 {ELEMENTS.map((element) => (
-                  <Button key={element.id} variant={elementId === element.id ? "primary" : "secondary"} onPress={() => setElementId(element.id)} accessibilityLabel="$ `} button" accessibilityRole="button" accessibilityHint="Activates this control">
+                  <Button key={element.id} variant={elementId === element.id ? 'primary' : 'secondary'} onPress={() => setElementId(element.id)} accessibilityLabel="$ `} button" accessibilityRole="button" accessibilityHint="Activates this control">
                     {`${element.label} ${element.emoji}`}
                   </Button>
                 ))}
               </View>
             </View>
-            <View style={{ alignItems: "center" }}>
+            <View style={{ alignItems: 'center' }}>
               <SquadShareCard squad={previewSquad} weeklyStats={{ totalSessions: 0, totalFocusMinutes: 0, activeMemberCount: 0 }} />
             </View>
           </View>
@@ -123,9 +123,9 @@ export function CreateSquadFlow({ bottomSheetRef, userId }: CreateSquadFlowProps
             <Text variant="bodySmall" color={theme.colors.text.secondary}>
               Pick the vibe your recruits should immediately feel.
             </Text>
-            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: theme.spacing[2] }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing[2] }}>
               {SQUAD_TYPES.map((type) => (
-                <Button key={type} variant={squadType === type ? "primary" : "secondary"} onPress={() => setSquadType(type)} accessibilityLabel="Action button" accessibilityRole="button" accessibilityHint="Activates this control">
+                <Button key={type} variant={squadType === type ? 'primary' : 'secondary'} onPress={() => setSquadType(type)} accessibilityLabel="Action button" accessibilityRole="button" accessibilityHint="Activates this control">
                   {type}
                 </Button>
               ))}
@@ -138,7 +138,7 @@ export function CreateSquadFlow({ bottomSheetRef, userId }: CreateSquadFlowProps
             <Text variant="bodySmall" color={theme.colors.text.secondary}>
               Share to recruit members and turn this week into your squad&apos;s first streak.
             </Text>
-            <View style={{ alignItems: "center" }}>
+            <View style={{ alignItems: 'center' }}>
               <SquadShareCard squad={createdSquad} weeklyStats={{ totalSessions: 0, totalFocusMinutes: 0, activeMemberCount: 0 }} />
             </View>
             <Button onPress={() => void handleShare()} accessibilityLabel="Share to recruit members button" accessibilityRole="button" accessibilityHint="Activates this control">
@@ -158,14 +158,14 @@ export function CreateSquadFlow({ bottomSheetRef, userId }: CreateSquadFlowProps
           </Text>
         ) : null}
 
-        <View style={{ flexDirection: "row", gap: theme.spacing[3] }}>
+        <View style={{ flexDirection: 'row', gap: theme.spacing[3] }}>
           {step < 3 ? (
             <Button variant="ghost" onPress={step === 1 ? () => bottomSheetRef.current?.close() : () => setStep(1)} accessibilityLabel="Action button" accessibilityRole="button" accessibilityHint="Activates this control">
-              {step === 1 ? "Close" : "Back"}
+              {step === 1 ? 'Close' : 'Back'}
             </Button>
           ) : null}
           <Button onPress={step < 3 ? () => void handleContinue() : () => bottomSheetRef.current?.close()} isLoading={createSquad.isPending} accessibilityLabel="Action button" accessibilityRole="button" accessibilityHint="Activates this control">
-            {step === 1 ? "Continue" : step === 2 ? "Create squad" : "Done"}
+            {step === 1 ? 'Continue' : step === 2 ? 'Create squad' : 'Done'}
           </Button>
         </View>
       </View>

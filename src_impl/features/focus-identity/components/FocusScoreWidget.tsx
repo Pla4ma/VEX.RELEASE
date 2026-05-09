@@ -4,6 +4,8 @@ import { useFocusScore } from '../hooks-focus-score';
 import { Box, Text, Stack, Skeleton } from '../../../components/primitives';
 import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParams } from '../../../navigation/types';
 
 const FocusScoreWidgetSkeleton = () => (
   <Box p="m" bg="surface" borderRadius="m">
@@ -17,10 +19,9 @@ const FocusScoreWidgetSkeleton = () => (
 
 export const FocusScoreWidget = () => {
   const { score, status, error } = useFocusScore();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const handlePress = () => {
-    // @ts-ignore - navigation types are not set up
     navigation.navigate('FocusScoreDashboard');
   };
 

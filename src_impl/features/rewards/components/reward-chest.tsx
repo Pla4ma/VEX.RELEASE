@@ -3,19 +3,19 @@
  * Animated chest opening with reward reveal and celebration effects
  */
 
-import React, { useEffect, useState } from "react";
-import { View, Text, Pressable, Modal, Dimensions } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withSpring, withTiming } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useEffect, useState } from 'react';
+import { View, Text, Pressable, Modal, Dimensions } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withSpring, withTiming } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface RewardItem {
   id: string;
-  type: "XP" | "COINS" | "GEMS" | "ITEM" | "SHIELD" | "TITLE" | "COSMETIC";
+  type: 'XP' | 'COINS' | 'GEMS' | 'ITEM' | 'SHIELD' | 'TITLE' | 'COSMETIC';
   amount: number;
   itemName?: string;
   itemIcon?: string;
-  rarity: "COMMON" | "RARE" | "EPIC" | "LEGENDARY";
+  rarity: 'COMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
 }
 
 interface RewardChestProps {
@@ -23,13 +23,13 @@ interface RewardChestProps {
   rewards: RewardItem[];
   onClaim: () => void;
   onClose: () => void;
-  chestType?: "WOOD" | "SILVER" | "GOLD" | "LEGENDARY";
+  chestType?: 'WOOD' | 'SILVER' | 'GOLD' | 'LEGENDARY';
   reason?: string;
 }
 
-const { width, height } = Dimensions.get("window");
+const { width, height } = Dimensions.get('window');
 
-export const RewardChest: React.FC<RewardChestProps> = ({ isVisible, rewards, onClaim, onClose, chestType = "WOOD", reason = "Session Complete!" }) => {
+export const RewardChest: React.FC<RewardChestProps> = ({ isVisible, rewards, onClaim, onClose, chestType = 'WOOD', reason = 'Session Complete!' }) => {
   const [isOpening, setIsOpening] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const chestAnim = useSharedValue(0);
@@ -63,46 +63,46 @@ export const RewardChest: React.FC<RewardChestProps> = ({ isVisible, rewards, on
 
   const getChestStyle = () => {
     switch (chestType) {
-      case "LEGENDARY":
-        return { colors: ["#FFD700", "#FF6B35", "#FFD700"], emoji: "👑", borderColor: "#FFD700" };
-      case "GOLD":
-        return { colors: ["#FFD700", "#FFA000"], emoji: "🏆", borderColor: "#FFD700" };
-      case "SILVER":
-        return { colors: ["#C0C0C0", "#808080"], emoji: "🥈", borderColor: "#C0C0C0" };
+      case 'LEGENDARY':
+        return { colors: ['#FFD700', '#FF6B35', '#FFD700'], emoji: '👑', borderColor: '#FFD700' };
+      case 'GOLD':
+        return { colors: ['#FFD700', '#FFA000'], emoji: '🏆', borderColor: '#FFD700' };
+      case 'SILVER':
+        return { colors: ['#C0C0C0', '#808080'], emoji: '🥈', borderColor: '#C0C0C0' };
       default:
-        return { colors: ["#8B4513", "#654321"], emoji: "📦", borderColor: "#8B4513" };
+        return { colors: ['#8B4513', '#654321'], emoji: '📦', borderColor: '#8B4513' };
     }
   };
 
   const getRarityStyle = (rarity: string) => {
     switch (rarity) {
-      case "LEGENDARY":
-        return { color: "#FFD700", glow: "#FF6B35", border: "#FFD700" };
-      case "EPIC":
-        return { color: "#9C27B0", glow: "#E91E63", border: "#9C27B0" };
-      case "RARE":
-        return { color: "#2196F3", glow: "#03A9F4", border: "#2196F3" };
+      case 'LEGENDARY':
+        return { color: '#FFD700', glow: '#FF6B35', border: '#FFD700' };
+      case 'EPIC':
+        return { color: '#9C27B0', glow: '#E91E63', border: '#9C27B0' };
+      case 'RARE':
+        return { color: '#2196F3', glow: '#03A9F4', border: '#2196F3' };
       default:
-        return { color: "#9E9E9E", glow: "#BDBDBD", border: "#9E9E9E" };
+        return { color: '#9E9E9E', glow: '#BDBDBD', border: '#9E9E9E' };
     }
   };
 
   const getRewardIcon = (type: string) => {
     switch (type) {
-      case "XP":
-        return "⭐";
-      case "COINS":
-        return "🪙";
-      case "GEMS":
-        return "💎";
-      case "SHIELD":
-        return "🛡️";
-      case "TITLE":
-        return "🏷️";
-      case "COSMETIC":
-        return "👕";
+      case 'XP':
+        return '⭐';
+      case 'COINS':
+        return '🪙';
+      case 'GEMS':
+        return '💎';
+      case 'SHIELD':
+        return '🛡️';
+      case 'TITLE':
+        return '🏷️';
+      case 'COSMETIC':
+        return '👕';
       default:
-        return "🎁";
+        return '🎁';
     }
   };
 
@@ -117,7 +117,7 @@ export const RewardChest: React.FC<RewardChestProps> = ({ isVisible, rewards, on
   return (
     <Modal visible={isVisible} transparent animationType="fade" onRequestClose={onClose}>
       <View style={styles.overlay}>
-        <LinearGradient colors={["rgba(0,0,0,0.9)", "rgba(26,26,46,0.95)"]} style={styles.background}>
+        <LinearGradient colors={['rgba(0,0,0,0.9)', 'rgba(26,26,46,0.95)']} style={styles.background}>
           {/* Reason Text */}
           <Text style={styles.reasonText}>{reason}</Text>
 
@@ -137,7 +137,7 @@ export const RewardChest: React.FC<RewardChestProps> = ({ isVisible, rewards, on
             {/* Chest */}
             <Pressable onPress={handleOpen} disabled={isOpen || isOpening} style={({ pressed }) => [styles.chest, pressed && { opacity: 0.8 }, { borderColor: chestStyle.borderColor }]} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
               <LinearGradient colors={chestStyle.colors as [string, string]} style={[styles.chest, isOpen && styles.chestOpen]}>
-                <Text style={styles.chestEmoji}>{isOpen ? "✨" : chestStyle.emoji}</Text>
+                <Text style={styles.chestEmoji}>{isOpen ? '✨' : chestStyle.emoji}</Text>
 
                 {!isOpen && (
                   <View style={styles.tapHint}>
@@ -171,7 +171,7 @@ export const RewardChest: React.FC<RewardChestProps> = ({ isVisible, rewards, on
                         <Text style={[styles.rewardIcon, { color: rarity.color }]}>{getRewardIcon(reward.type)}</Text>
                         <Text style={[styles.rewardAmount, { color: rarity.color }]}>+{reward.amount.toLocaleString()}</Text>
                         <Text style={styles.rewardType}>{reward.type}</Text>
-                        {reward.rarity !== "COMMON" && (
+                        {reward.rarity !== 'COMMON' && (
                           <View style={[styles.rarityBadge, { backgroundColor: rarity.color }]}>
                             <Text style={styles.rarityText}>{reward.rarity}</Text>
                           </View>
@@ -184,7 +184,7 @@ export const RewardChest: React.FC<RewardChestProps> = ({ isVisible, rewards, on
 
               {/* Claim Button */}
               <Pressable style={({ pressed }) => [styles.claimButton, pressed && { opacity: 0.8 }]} onPress={onClaim} accessibilityLabel="CLAIM ALL button" accessibilityRole="button" accessibilityHint="Activates this control">
-                <LinearGradient colors={["#4CAF50", "#2E7D32"]} style={styles.claimGradient}>
+                <LinearGradient colors={['#4CAF50', '#2E7D32']} style={styles.claimGradient}>
                   <Text style={styles.claimText}>CLAIM ALL</Text>
                 </LinearGradient>
               </Pressable>
@@ -199,37 +199,37 @@ export const RewardChest: React.FC<RewardChestProps> = ({ isVisible, rewards, on
 const styles = createSheet({
   overlay: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   background: {
-    position: "absolute" as const,
+    position: 'absolute' as const,
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 24,
   },
   reasonText: {
     fontSize: 18,
-    fontWeight: "600",
-    color: "#FFF",
+    fontWeight: '600',
+    color: '#FFF',
     marginBottom: 40,
-    textAlign: "center",
+    textAlign: 'center',
   },
   chestContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
   },
   glowRing: {
-    position: "absolute",
+    position: 'absolute',
     width: 200,
     height: 200,
     borderRadius: 100,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.6,
     shadowRadius: 40,
@@ -239,10 +239,10 @@ const styles = createSheet({
     width: 150,
     height: 150,
     borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderWidth: 4,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
@@ -255,36 +255,36 @@ const styles = createSheet({
     fontSize: 60,
   },
   tapHint: {
-    position: "absolute",
+    position: 'absolute',
     bottom: -30,
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: 'rgba(255,255,255,0.2)',
     paddingHorizontal: 16,
     paddingVertical: 6,
     borderRadius: 12,
   },
   tapText: {
-    color: "#FFF",
+    color: '#FFF',
     fontSize: 12,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   rewardsContainer: {
-    width: "100%",
-    alignItems: "center",
+    width: '100%',
+    alignItems: 'center',
     marginTop: 40,
   },
   rewardsTitle: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "#FFD700",
+    fontWeight: 'bold',
+    color: '#FFD700',
     marginBottom: 20,
-    textShadowColor: "#FFD700",
+    textShadowColor: '#FFD700',
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 20,
   },
   rewardsGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
     gap: 12,
     marginBottom: 30,
   },
@@ -293,7 +293,7 @@ const styles = createSheet({
     height: 120,
     borderRadius: 16,
     borderWidth: 2,
-    overflow: "hidden",
+    overflow: 'hidden',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.8,
     shadowRadius: 15,
@@ -301,8 +301,8 @@ const styles = createSheet({
   },
   rewardGradient: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 8,
   },
   rewardIcon: {
@@ -311,15 +311,15 @@ const styles = createSheet({
   },
   rewardAmount: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   rewardType: {
     fontSize: 10,
-    color: "rgba(255,255,255,0.7)",
+    color: 'rgba(255,255,255,0.7)',
     marginTop: 2,
   },
   rarityBadge: {
-    position: "absolute",
+    position: 'absolute',
     top: 4,
     right: 4,
     paddingHorizontal: 6,
@@ -327,22 +327,22 @@ const styles = createSheet({
     borderRadius: 4,
   },
   rarityText: {
-    color: "#FFF",
+    color: '#FFF',
     fontSize: 8,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   claimButton: {
     width: 200,
     borderRadius: 12,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   claimGradient: {
     paddingVertical: 16,
-    alignItems: "center",
+    alignItems: 'center',
   },
   claimText: {
-    color: "#FFF",
+    color: '#FFF',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
 });

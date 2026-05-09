@@ -144,7 +144,7 @@ export function FirstResultScreen({
               {sessionGrade === 'S' || sessionGrade === 'A'
                 ? "Amazing focus! Your companion can't wait for the next session."
                 : sessionGrade === 'B'
-                ? "Great job! Your companion is proud of your progress."
+                ? 'Great job! Your companion is proud of your progress.'
                 : "Good start! Your companion knows you'll do even better next time."}
             </Text>
           </Box>

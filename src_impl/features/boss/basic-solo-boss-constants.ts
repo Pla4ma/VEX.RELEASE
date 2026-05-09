@@ -11,7 +11,7 @@ export interface BasicBossConfig {
 }
 
 export const BASIC_BOSS_CONFIG: BasicBossConfig = {
-  soloBossId: "basic-solo-boss-001",
+  soloBossId: 'basic-solo-boss-001',
   baseHealth: 1000,
   timeLimitHours: 24,
   rewardXp: 50,

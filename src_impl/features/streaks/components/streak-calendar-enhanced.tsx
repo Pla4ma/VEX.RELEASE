@@ -11,12 +11,12 @@
  * - Share-worthy "proof of work" design
  */
 
-import React, { useMemo } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, interpolate, Easing } from "react-native-reanimated";
-import { useStreakCalendar } from "../hooks";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { useTheme } from "@/theme";
+import React, { useMemo } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, interpolate, Easing } from 'react-native-reanimated';
+import { useStreakCalendar } from '../hooks';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { useTheme } from '@/theme';
 
 // ============================================================================
 // Types
@@ -47,7 +47,7 @@ interface StreakCalendarEnhancedProps {
 function getIntensityColor(durationMinutes: number, theme: DynamicValue): string {
   // Color intensity based on session duration
   if (durationMinutes === 0) {
-    return "transparent";
+    return 'transparent';
   }
   if (durationMinutes < 15) {
     return `${theme.colors.warning[400]}40`;
@@ -66,12 +66,12 @@ function getIntensityColor(durationMinutes: number, theme: DynamicValue): string
 
 function getFlameGradient(durationMinutes: number): [string, string] {
   if (durationMinutes < 30) {
-    return ["#fbbf24", "#f59e0b"];
+    return ['#fbbf24', '#f59e0b'];
   } // Yellow flame
   if (durationMinutes < 60) {
-    return ["#f59e0b", "#ef4444"];
+    return ['#f59e0b', '#ef4444'];
   } // Orange-red flame
-  return ["#ef4444", "#dc2626"]; // Deep red flame
+  return ['#ef4444', '#dc2626']; // Deep red flame
 }
 
 // ============================================================================
@@ -143,7 +143,7 @@ function DayCell({ day, dayData, isToday, theme }: DayCellProps) {
           isToday && styles.dayToday,
         ]}
       >
-        <Text style={[styles.dayText, hasSession && styles.dayTextActive, isStreakDay && styles.dayTextStreak, isToday && styles.dayTextToday]}>{isBossDefeatDay ? "👑" : day}</Text>
+        <Text style={[styles.dayText, hasSession && styles.dayTextActive, isStreakDay && styles.dayTextStreak, isToday && styles.dayTextToday]}>{isBossDefeatDay ? '👑' : day}</Text>
         {hasSession && durationMinutes >= 60 && (
           <View style={styles.fireIndicator}>
             <Text style={styles.fireEmoji}>🔥</Text>
@@ -178,7 +178,7 @@ export function StreakCalendarEnhanced({ userId, month, year, previewCompletedDa
     );
   }
 
-  const monthName = new Date(year, month - 1).toLocaleString("default", { month: "long" });
+  const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
   const daysInMonth = new Date(year, month, 0).getDate();
   const firstDayOfMonth = new Date(year, month - 1, 1).getDay();
 
@@ -255,7 +255,7 @@ export function StreakCalendarEnhanced({ userId, month, year, previewCompletedDa
 
       {/* Weekday Headers */}
       <View style={styles.weekdays}>
-        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day, i) => (
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day, i) => (
           <Text key={i} style={styles.weekdayText}>
             {day}
           </Text>
@@ -273,8 +273,8 @@ export function StreakCalendarEnhanced({ userId, month, year, previewCompletedDa
         <View style={styles.legendRow}>
           <View style={styles.legendItem}>
             <View style={styles.legendGradientBox}>
-              <View style={[styles.legendDot, { backgroundColor: "#fbbf24" }]} />
-              <View style={[styles.legendDot, { backgroundColor: "#ef4444" }]} />
+              <View style={[styles.legendDot, { backgroundColor: '#fbbf24' }]} />
+              <View style={[styles.legendDot, { backgroundColor: '#ef4444' }]} />
             </View>
             <Text style={styles.legendText}>Focus intensity</Text>
           </View>
@@ -298,91 +298,91 @@ export function StreakCalendarEnhanced({ userId, month, year, previewCompletedDa
 
 const styles = createSheet({
   container: {
-    backgroundColor: "#1a1a2e",
+    backgroundColor: '#1a1a2e',
     borderRadius: 16,
     padding: 20,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
   },
   loadingText: {
-    color: "#9ca3af",
+    color: '#9ca3af',
     fontSize: 14,
-    textAlign: "center",
-    fontStyle: "italic",
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
   errorText: {
-    color: "#ef4444",
+    color: '#ef4444',
     fontSize: 14,
-    textAlign: "center",
+    textAlign: 'center',
   },
   header: {
     marginBottom: 20,
   },
   monthName: {
     fontSize: 20,
-    fontWeight: "700",
-    color: "#f3f4f6",
+    fontWeight: '700',
+    color: '#f3f4f6',
     marginBottom: 8,
   },
   statsRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginBottom: 4,
   },
   statText: {
     fontSize: 14,
-    color: "#9ca3af",
+    color: '#9ca3af',
   },
   statValueHighlight: {
-    color: "#fbbf24",
-    fontWeight: "700",
+    color: '#fbbf24',
+    fontWeight: '700',
     fontSize: 16,
   },
   subStats: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   subStat: {
     fontSize: 12,
-    color: "#6b7280",
+    color: '#6b7280',
   },
   subStatSeparator: {
     fontSize: 12,
-    color: "#6b7280",
+    color: '#6b7280',
     marginHorizontal: 8,
   },
   weekdays: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginBottom: 12,
     paddingBottom: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "#374151",
+    borderBottomColor: '#374151',
   },
   weekdayText: {
     width: 40,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 11,
-    color: "#6b7280",
-    fontWeight: "600",
-    textTransform: "uppercase",
+    color: '#6b7280',
+    fontWeight: '600',
+    textTransform: 'uppercase',
     letterSpacing: 0.5,
   },
   calendar: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
   },
   day: {
     width: 40,
     height: 40,
     margin: 2,
     borderRadius: 12,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#262642",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#262642',
   },
   dayEmpty: {
     width: 40,
@@ -391,45 +391,45 @@ const styles = createSheet({
   },
   dayToday: {
     borderWidth: 2,
-    borderColor: "#fbbf24",
-    shadowColor: "#fbbf24",
+    borderColor: '#fbbf24',
+    shadowColor: '#fbbf24',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 4,
   },
   dayText: {
     fontSize: 13,
-    color: "#6b7280",
-    fontWeight: "500",
+    color: '#6b7280',
+    fontWeight: '500',
   },
   dayTextActive: {
-    color: "#ffffff",
-    fontWeight: "600",
+    color: '#ffffff',
+    fontWeight: '600',
   },
   dayTextStreak: {
-    color: "#ffffff",
-    fontWeight: "700",
+    color: '#ffffff',
+    fontWeight: '700',
   },
   dayTextToday: {
-    color: "#fbbf24",
-    fontWeight: "700",
+    color: '#fbbf24',
+    fontWeight: '700',
   },
   todayContainer: {
-    position: "relative",
-    alignItems: "center",
-    justifyContent: "center",
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   pulseRing: {
-    position: "absolute",
+    position: 'absolute',
     width: 48,
     height: 48,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: "#fbbf24",
-    backgroundColor: "transparent",
+    borderColor: '#fbbf24',
+    backgroundColor: 'transparent',
   },
   fireIndicator: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 2,
     right: 2,
   },
@@ -440,16 +440,16 @@ const styles = createSheet({
     marginTop: 20,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: "#374151",
+    borderTopColor: '#374151',
   },
   legendRow: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    flexWrap: 'wrap',
   },
   legendItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: 16,
     marginBottom: 8,
   },
@@ -460,18 +460,18 @@ const styles = createSheet({
     marginRight: 6,
   },
   legendGradientBox: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginRight: 6,
     gap: 2,
   },
   legendToday: {
-    backgroundColor: "#fbbf24",
+    backgroundColor: '#fbbf24',
     borderWidth: 1,
-    borderColor: "#fbbf24",
+    borderColor: '#fbbf24',
   },
   legendText: {
     fontSize: 11,
-    color: "#9ca3af",
+    color: '#9ca3af',
   },
   legendEmoji: {
     fontSize: 12,

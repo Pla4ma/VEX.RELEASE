@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
+import { captureSilentFailure } from '../../utils/silent-failure';
 /**
  * Streak Insurance System
  *
@@ -13,12 +13,12 @@ import { captureSilentFailure } from "../../utils/silent-failure";
  * - Analytics (tracking)
  */
 
-import { z } from "zod";
-import { spendCurrency } from "./spending-service";
-import { addCurrency } from "./wallet-service";
-import { eventBus } from "../../events";
-import * as Sentry from "@sentry/react-native";
-import { trackInsurancePurchased, trackInsuranceConsumed } from "./analytics";
+import { z } from 'zod';
+import { spendCurrency } from './spending-service';
+import { addCurrency } from './wallet-service';
+import { eventBus } from '../../events';
+import * as Sentry from '@sentry/react-native';
+import { trackInsurancePurchased, trackInsuranceConsumed } from './analytics';
 
 // ============================================================================
 // Constants
@@ -104,10 +104,10 @@ const INSURANCE_STORAGE_KEY = (userId: string) => `streak_insurance:${userId}`;
 function getStorage() {
   // Dynamic import to avoid issues if MMKV is not available
   try {
-    const { storage } = require("../../store/mmkv-storage");
+    const { storage } = require('../../store/mmkv-storage');
     return storage;
   } catch (error) {
-    captureSilentFailure(error, { feature: "economy", operation: "ui-fallback", type: "ui" });
+    captureSilentFailure(error, { feature: 'economy', operation: 'ui-fallback', type: 'ui' });
     return null;
   }
 }
@@ -122,7 +122,7 @@ function saveInsurance(userId: string, insurance: StreakInsurance): void {
     storage.set(INSURANCE_STORAGE_KEY(userId), JSON.stringify(insurance));
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "streak-insurance", operation: "save" },
+      tags: { feature: 'streak-insurance', operation: 'save' },
       extra: { userId },
     });
   }
@@ -144,7 +144,7 @@ function loadInsurance(userId: string): StreakInsurance | null {
     return StreakInsuranceSchema.parse(parsed);
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "streak-insurance", operation: "load" },
+      tags: { feature: 'streak-insurance', operation: 'load' },
       extra: { userId },
     });
     return null;
@@ -161,7 +161,7 @@ function clearInsurance(userId: string): void {
     storage.delete(INSURANCE_STORAGE_KEY(userId));
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "streak-insurance", operation: "clear" },
+      tags: { feature: 'streak-insurance', operation: 'clear' },
       extra: { userId },
     });
   }
@@ -193,7 +193,7 @@ export async function checkInsuranceStatus(input: CheckInsuranceStatusInput): Pr
 
   if (hasActiveInsurance) {
     canPurchase = false;
-    reasonCannotPurchase = "You already have active insurance";
+    reasonCannotPurchase = 'You already have active insurance';
   }
 
   return {
@@ -222,8 +222,8 @@ export async function purchaseInsurance(input: PurchaseInsuranceInput): Promise<
       insuranceId: null,
       expiresAt: null,
       error: {
-        code: "ALREADY_ACTIVE",
-        message: status.reasonCannotPurchase || "Cannot purchase insurance at this time",
+        code: 'ALREADY_ACTIVE',
+        message: status.reasonCannotPurchase || 'Cannot purchase insurance at this time',
       },
     };
   }
@@ -231,10 +231,10 @@ export async function purchaseInsurance(input: PurchaseInsuranceInput): Promise<
   // Attempt atomic spend
   const spendResult = await spendCurrency({
     userId: validated.userId,
-    currency: "GEMS",
+    currency: 'GEMS',
     amount: INSURANCE_COST_GEMS,
-    sink: "STREAK_INSURANCE",
-    description: "7-Day Streak Insurance purchase",
+    sink: 'STREAK_INSURANCE',
+    description: '7-Day Streak Insurance purchase',
     metadata: {
       streakDaysAtPurchase: validated.currentStreakDays,
       durationDays: INSURANCE_DURATION_DAYS,
@@ -247,8 +247,8 @@ export async function purchaseInsurance(input: PurchaseInsuranceInput): Promise<
       insuranceId: null,
       expiresAt: null,
       error: {
-        code: spendResult.error?.code || "PURCHASE_FAILED",
-        message: spendResult.error?.message || "Failed to purchase insurance",
+        code: spendResult.error?.code || 'PURCHASE_FAILED',
+        message: spendResult.error?.message || 'Failed to purchase insurance',
       },
     };
   }
@@ -270,7 +270,7 @@ export async function purchaseInsurance(input: PurchaseInsuranceInput): Promise<
   saveInsurance(validated.userId, insurance);
 
   // Emit event
-  eventBus.publish("economy:insurance_purchased", {
+  eventBus.publish('economy:insurance_purchased', {
     userId: validated.userId,
     insuranceId: insurance.id,
     costGems: INSURANCE_COST_GEMS,
@@ -301,15 +301,15 @@ export async function consumeInsurance(input: ConsumeInsuranceInput): Promise<{ 
 
   // Validate insurance can be consumed
   if (!insurance) {
-    return { success: false, restoredDays: null, error: "No insurance found" };
+    return { success: false, restoredDays: null, error: 'No insurance found' };
   }
 
   if (insurance.consumed) {
-    return { success: false, restoredDays: null, error: "Insurance already consumed" };
+    return { success: false, restoredDays: null, error: 'Insurance already consumed' };
   }
 
   if (insurance.expiresAt < now) {
-    return { success: false, restoredDays: null, error: "Insurance expired" };
+    return { success: false, restoredDays: null, error: 'Insurance expired' };
   }
 
   // Mark as consumed
@@ -323,7 +323,7 @@ export async function consumeInsurance(input: ConsumeInsuranceInput): Promise<{ 
   saveInsurance(validated.userId, consumedInsurance);
 
   // Emit event for streak restoration
-  eventBus.publish("economy:insurance_consumed", {
+  eventBus.publish('economy:insurance_consumed', {
     userId: validated.userId,
     insuranceId: insurance.id,
     restoredStreakDays: validated.streakToRestore,

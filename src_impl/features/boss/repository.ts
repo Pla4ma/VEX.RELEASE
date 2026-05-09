@@ -3,9 +3,9 @@
  * Supabase queries for boss data
  */
 
-import { getSupabaseClient } from "../../config/supabase";
-import { BossTemplateSchema, BossEncounterSchema, type BossTemplate, type BossEncounter } from "./schemas";
-import { v4 } from "../../utils/uuid";
+import { getSupabaseClient } from '../../config/supabase';
+import { BossTemplateSchema, BossEncounterSchema, type BossTemplate, type BossEncounter } from './schemas';
+import { v4 } from '../../utils/uuid';
 
 // ============================================================================
 // Error Handling
@@ -16,8 +16,8 @@ class RepositoryError extends Error {
     public operation: string,
     public originalError: unknown,
   ) {
-    super(`Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : "Unknown error"}`);
-    this.name = "RepositoryError";
+    super(`Repository error in ${operation}: ${originalError instanceof Error ? originalError.message : 'Unknown error'}`);
+    this.name = 'RepositoryError';
   }
 }
 
@@ -28,23 +28,23 @@ const supabase = getSupabaseClient();
 // ============================================================================
 
 export async function fetchBossTemplates(): Promise<BossTemplate[]> {
-  const { data, error } = await supabase.from("boss_templates").select("*").order("tier", { ascending: true });
+  const { data, error } = await supabase.from('boss_templates').select('*').order('tier', { ascending: true });
 
   if (error) {
-    throw new RepositoryError("fetchBossTemplates", error);
+    throw new RepositoryError('fetchBossTemplates', error);
   }
 
   return BossTemplateSchema.array().parse(data || []);
 }
 
 export async function fetchBossTemplate(bossId: string): Promise<BossTemplate | null> {
-  const { data, error } = await supabase.from("boss_templates").select("*").eq("id", bossId).single();
+  const { data, error } = await supabase.from('boss_templates').select('*').eq('id', bossId).single();
 
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return null;
     }
-    throw new RepositoryError("fetchBossTemplate", error);
+    throw new RepositoryError('fetchBossTemplate', error);
   }
 
   return BossTemplateSchema.parse(data);
@@ -55,18 +55,18 @@ export async function fetchBossTemplate(bossId: string): Promise<BossTemplate | 
 // ============================================================================
 
 export async function fetchActiveEncounter(userId: string, squadId?: string): Promise<BossEncounter | null> {
-  let query = supabase.from("boss_encounters").select("*").eq("status", "ACTIVE");
+  let query = supabase.from('boss_encounters').select('*').eq('status', 'ACTIVE');
 
   if (squadId) {
-    query = query.eq("squad_id", squadId);
+    query = query.eq('squad_id', squadId);
   } else {
-    query = query.eq("user_id", userId);
+    query = query.eq('user_id', userId);
   }
 
   const { data, error } = await query.maybeSingle();
 
   if (error) {
-    throw new RepositoryError("fetchActiveEncounter", error);
+    throw new RepositoryError('fetchActiveEncounter', error);
   }
 
   if (!data) {
@@ -76,10 +76,10 @@ export async function fetchActiveEncounter(userId: string, squadId?: string): Pr
 }
 
 export async function fetchEncounterById(encounterId: string): Promise<BossEncounter | null> {
-  const { data, error } = await supabase.from("boss_encounters").select("*").eq("id", encounterId).maybeSingle();
+  const { data, error } = await supabase.from('boss_encounters').select('*').eq('id', encounterId).maybeSingle();
 
   if (error) {
-    throw new RepositoryError("fetchEncounterById", error);
+    throw new RepositoryError('fetchEncounterById', error);
   }
 
   if (!data) {
@@ -98,7 +98,7 @@ export async function createEncounter(bossId: string, userId: string | null, squ
     health_remaining: maxHealth,
     max_health: maxHealth,
     damage_dealt: 0,
-    status: "ACTIVE",
+    status: 'ACTIVE',
     started_at: now,
     expires_at: now + timeLimit * 1000,
     defeated_at: null,
@@ -106,38 +106,38 @@ export async function createEncounter(bossId: string, userId: string | null, squ
     created_at: now,
   };
 
-  const { data, error } = await supabase.from("boss_encounters").insert(newEncounter).select().single();
+  const { data, error } = await supabase.from('boss_encounters').insert(newEncounter).select().single();
 
   if (error) {
-    throw new RepositoryError("createEncounter", error);
+    throw new RepositoryError('createEncounter', error);
   }
 
   return BossEncounterSchema.parse(data);
 }
 
 export async function updateEncounterHealth(encounterId: string, healthRemaining: number, damageDealt: number, sessionId: string): Promise<BossEncounter> {
-  const { data: current, error: fetchError } = await supabase.from("boss_encounters").select("contributing_session_ids").eq("id", encounterId).single();
+  const { data: current, error: fetchError } = await supabase.from('boss_encounters').select('contributing_session_ids').eq('id', encounterId).single();
 
   if (fetchError) {
-    throw new RepositoryError("updateEncounterHealth:fetch", fetchError);
+    throw new RepositoryError('updateEncounterHealth:fetch', fetchError);
   }
 
   const sessionIds = [...(current?.contributing_session_ids || []), sessionId];
 
   const { data, error } = await supabase
-    .from("boss_encounters")
+    .from('boss_encounters')
     .update({
       health_remaining: healthRemaining,
       damage_dealt: damageDealt,
       contributing_session_ids: sessionIds,
       updated_at: Date.now(),
     })
-    .eq("id", encounterId)
+    .eq('id', encounterId)
     .select()
     .single();
 
   if (error) {
-    throw new RepositoryError("updateEncounterHealth", error);
+    throw new RepositoryError('updateEncounterHealth', error);
   }
 
   return BossEncounterSchema.parse(data);
@@ -145,18 +145,18 @@ export async function updateEncounterHealth(encounterId: string, healthRemaining
 
 export async function markEncounterDefeated(encounterId: string): Promise<BossEncounter> {
   const { data, error } = await supabase
-    .from("boss_encounters")
+    .from('boss_encounters')
     .update({
-      status: "DEFEATED",
+      status: 'DEFEATED',
       defeated_at: Date.now(),
       updated_at: Date.now(),
     })
-    .eq("id", encounterId)
+    .eq('id', encounterId)
     .select()
     .single();
 
   if (error) {
-    throw new RepositoryError("markEncounterDefeated", error);
+    throw new RepositoryError('markEncounterDefeated', error);
   }
 
   return BossEncounterSchema.parse(data);
@@ -164,17 +164,17 @@ export async function markEncounterDefeated(encounterId: string): Promise<BossEn
 
 export async function markEncounterTimeout(encounterId: string): Promise<BossEncounter> {
   const { data, error } = await supabase
-    .from("boss_encounters")
+    .from('boss_encounters')
     .update({
-      status: "TIMEOUT",
+      status: 'TIMEOUT',
       updated_at: Date.now(),
     })
-    .eq("id", encounterId)
+    .eq('id', encounterId)
     .select()
     .single();
 
   if (error) {
-    throw new RepositoryError("markEncounterTimeout", error);
+    throw new RepositoryError('markEncounterTimeout', error);
   }
 
   return BossEncounterSchema.parse(data);
@@ -185,7 +185,7 @@ export async function markEncounterTimeout(encounterId: string): Promise<BossEnc
 // ============================================================================
 
 export async function recordBossDefeat(userId: string, bossId: string, encounterId: string, damageDealt: number): Promise<void> {
-  const { error } = await supabase.from("boss_defeat_history").insert({
+  const { error } = await supabase.from('boss_defeat_history').insert({
     id: v4(),
     user_id: userId,
     boss_id: bossId,
@@ -195,15 +195,15 @@ export async function recordBossDefeat(userId: string, bossId: string, encounter
   });
 
   if (error) {
-    throw new RepositoryError("recordBossDefeat", error);
+    throw new RepositoryError('recordBossDefeat', error);
   }
 }
 
 export async function hasDefeatedBoss(userId: string, bossId: string): Promise<boolean> {
-  const { data, error } = await supabase.from("boss_defeat_history").select("id").eq("user_id", userId).eq("boss_id", bossId).maybeSingle();
+  const { data, error } = await supabase.from('boss_defeat_history').select('id').eq('user_id', userId).eq('boss_id', bossId).maybeSingle();
 
   if (error) {
-    throw new RepositoryError("hasDefeatedBoss", error);
+    throw new RepositoryError('hasDefeatedBoss', error);
   }
 
   return !!data;
@@ -213,10 +213,10 @@ export async function hasDefeatedBoss(userId: string, bossId: string): Promise<b
 // Boss Cooldowns
 // ============================================================================
 
-export async function setBossCooldown(userId: string, bossId: string, durationMs: number, reason: "TIMEOUT" | "MANUAL"): Promise<void> {
+export async function setBossCooldown(userId: string, bossId: string, durationMs: number, reason: 'TIMEOUT' | 'MANUAL'): Promise<void> {
   const expiresAt = Date.now() + durationMs;
 
-  const { error } = await supabase.from("boss_cooldowns").upsert(
+  const { error } = await supabase.from('boss_cooldowns').upsert(
     {
       user_id: userId,
       boss_id: bossId,
@@ -225,23 +225,23 @@ export async function setBossCooldown(userId: string, bossId: string, durationMs
       updated_at: Date.now(),
     },
     {
-      onConflict: "user_id,boss_id",
+      onConflict: 'user_id,boss_id',
     },
   );
 
   if (error) {
-    throw new RepositoryError("setBossCooldown", error);
+    throw new RepositoryError('setBossCooldown', error);
   }
 }
 
 export async function isOnCooldown(userId: string, bossId: string): Promise<boolean> {
-  const { data, error } = await supabase.from("boss_cooldowns").select("expires_at").eq("user_id", userId).eq("boss_id", bossId).single();
+  const { data, error } = await supabase.from('boss_cooldowns').select('expires_at').eq('user_id', userId).eq('boss_id', bossId).single();
 
   if (error) {
-    if (error.code === "PGRST116") {
+    if (error.code === 'PGRST116') {
       return false;
     }
-    throw new RepositoryError("isOnCooldown", error);
+    throw new RepositoryError('isOnCooldown', error);
   }
 
   return data ? data.expires_at > Date.now() : false;

@@ -24,7 +24,7 @@ interface StorageManagerConfig {
 /**
  * Storage manager
  *
- * Provides unified storage with automatic fallback from MMKV to AsyncStorage.
+ * Provides unified storage with automatic fallback from MMKV to MMKV.
  */
 export class StorageManager implements StorageAdapter {
   private primary: StorageAdapter | null = null;
@@ -53,7 +53,7 @@ export class StorageManager implements StorageAdapter {
         this.active = mmkv;
         return;
       } catch (error) {
-        debug.warn('MMKV initialization failed, falling back to AsyncStorage:', error as Error);
+        debug.warn('MMKV initialization failed, falling back to MMKV:', error as Error);
       }
     }
 
@@ -170,3 +170,4 @@ export function getStorageManager(config?: StorageManagerConfig): StorageManager
   }
   return storageManagerInstance;
 }
+

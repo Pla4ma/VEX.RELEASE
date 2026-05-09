@@ -30,7 +30,7 @@ export function useBasicSoloBossStatus() {
   return useQuery({
     queryKey: bossKeys.status(userId ?? 'no-user'),
     queryFn: () => {
-      if (!userId) throw new Error('User not authenticated');
+      if (!userId) {throw new Error('User not authenticated');}
       return service.getBasicSoloBossStatus(userId);
     },
     enabled: !!userId,
