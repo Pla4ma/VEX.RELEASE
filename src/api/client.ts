@@ -11,7 +11,7 @@
  */
 
 import { Platform } from "react-native";
-import { z, type ZodType } from "zod";
+import { type ZodType } from "zod";
 
 import { CURRENT_CONFIG } from "../constants/app";
 import { createDebugger } from "../utils/debug";

@@ -7,7 +7,7 @@
 
 import React, { useEffect } from 'react';
 import { QueryClient, QueryClientProvider, focusManager, onlineManager } from '@tanstack/react-query';
-import { AppState, AppStateStatus, Platform } from 'react-native';
+import { AppState, AppStateStatus } from 'react-native';
 import { getNetInfoAdapter } from '../network';
 
 /**

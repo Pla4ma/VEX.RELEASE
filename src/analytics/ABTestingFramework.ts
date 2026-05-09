@@ -473,7 +473,7 @@ export function completeExperiment(experimentId: string, winner?: string): void 
 // Helper Functions
 // ============================================================================
 
-function isUserEligibleForExperiment(userId: string, experiment: Experiment): boolean {
+function isUserEligibleForExperiment(_userId: string, _experiment: Experiment): boolean {
   // In a real implementation, this would check user properties
   // For now, assume all users are eligible
   return true;

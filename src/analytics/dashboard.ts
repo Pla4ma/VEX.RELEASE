@@ -10,7 +10,6 @@ import { calculateRetentionRates } from './retention';
 import { getAverageSessionsPerWeek, getStudyPlanCompletionRate, getAllEngagementMetrics } from './engagement';
 import { getMonetizationMetrics } from './monetization';
 import { getPaywallAnalytics } from './paywall';
-import { getStreakSurvivalMetrics } from './streak';
 
 /**
  * Generate comprehensive dashboard report

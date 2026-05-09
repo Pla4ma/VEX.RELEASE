@@ -11,15 +11,8 @@
  */
 
 import { createDebugger } from '../utils/debug';
-import { 
-  calculateContrastRatio, 
-  checkContrast, 
-  getAccessibleAlternatives,
-  getAccessibleColor,
-  getStatusPattern,
-  type ContrastCheck,
-  type ColorBlindType,
-} from './AccessibilitySystem';
+import { checkContrast } from './AccessibilitySystem';
+import type { AuditableComponent } from './types';
 
 const debug = createDebugger('accessibility-auditor');
 
@@ -69,7 +62,7 @@ export interface ComponentAccessibilityConfig {
 export interface AccessibilityRule {
   id: string;
   description: string;
-  check: (element: unknown) => AccessibilityIssue | null;
+  check: (element: AuditableComponent) => AccessibilityIssue | null;
   category: AccessibilityIssue['category'];
   severity: AccessibilityIssue['severity'];
   wcagGuideline: string;
@@ -79,6 +72,7 @@ export interface AccessibilityRule {
 // WCAG 2.1 AA Guidelines Reference
 // ============================================================================
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const WCAG_GUIDELINES = {
   '1.1.1': 'Non-text Content: All non-text content has a text alternative',
   '1.2.1': 'Audio-only and Video-only: Prerecorded content has alternatives',
@@ -172,8 +166,9 @@ export class AccessibilityAuditor {
   // Main Audit Methods
   // ============================================================================
 
-  async auditComponent(component: unknown, config?: ComponentAccessibilityConfig): Promise<AccessibilityAuditResult> {
-    const componentConfig = config || this.componentConfigs.get(component.type?.displayName) || {
+  async auditComponent(component: AuditableComponent, config?: ComponentAccessibilityConfig): Promise<AccessibilityAuditResult> {
+    const displayName = typeof component.type === 'object' ? component.type?.displayName : undefined;
+    const componentConfig = config || (displayName ? this.componentConfigs.get(displayName) : undefined) || {
       componentName: 'Unknown',
       requiresTesting: false,
     };
@@ -209,7 +204,7 @@ export class AccessibilityAuditor {
     return this.createAuditResult(issues, passedChecks, failedChecks);
   }
 
-  async auditScreen(screenName: string, screenElement: unknown): Promise<AccessibilityAuditResult> {
+  async auditScreen(screenName: string, screenElement: AuditableComponent): Promise<AccessibilityAuditResult> {
     debug.info(`Auditing screen: ${screenName}`);
 
     const issues: AccessibilityIssue[] = [];
@@ -238,7 +233,7 @@ export class AccessibilityAuditor {
   // Specific Accessibility Checks
   // ============================================================================
 
-  private checkAccessibilityLabels(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkAccessibilityLabels(component: AuditableComponent, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     if (!config.requiredLabels) return issues;
@@ -262,7 +257,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkFocusManagement(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkFocusManagement(component: AuditableComponent, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check if component is focusable when it should be
@@ -285,7 +280,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkKeyboardNavigation(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkKeyboardNavigation(component: AuditableComponent, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for keyboard navigation support
@@ -306,39 +301,32 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkColorContrast(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkColorContrast(component: AuditableComponent, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
-    // Check color contrast if style information is available
-    if (component.props?.style) {
-      // This would require actual color extraction from styles
-      // For now, just add a placeholder check
-      if (component.props.style.color && component.props.style.backgroundColor) {
-        const contrast = checkContrast(
-          component.props.style.color,
-          component.props.style.backgroundColor
-        );
+    const style = component.props?.style;
+    if (style && style.color && style.backgroundColor) {
+      const contrast = checkContrast(style.color, style.backgroundColor);
 
-        if (!contrast.passesAA) {
-          issues.push({
-            id: 'poor-contrast',
-            type: 'error',
-            category: 'contrast',
-            severity: 'critical',
-            message: `Poor color contrast: ${contrast.ratio.toFixed(2)} (minimum 4.5 required)`,
-            recommendation: 'Increase color contrast to meet WCAG AA standards',
-            element: config.componentName,
-            wcagGuideline: '1.4.3',
-            automated: true,
-          });
-        }
+      if (!contrast.passesAA) {
+        issues.push({
+          id: 'poor-contrast',
+          type: 'error',
+          category: 'contrast',
+          severity: 'critical',
+          message: `Poor color contrast: ${contrast.ratio.toFixed(2)} (minimum 4.5 required)`,
+          recommendation: 'Increase color contrast to meet WCAG AA standards',
+          element: config.componentName,
+          wcagGuideline: '1.4.3',
+          automated: true,
+        });
       }
     }
 
     return issues;
   }
 
-  private checkMotionAccessibility(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkMotionAccessibility(component: AuditableComponent, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for animations that should respect reduced motion
@@ -359,7 +347,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkSemanticHTML(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkSemanticHTML(component: AuditableComponent, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for proper accessibility roles
@@ -388,7 +376,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkTouchTargets(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkTouchTargets(component: AuditableComponent, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check minimum touch target size (44x44pt recommended)
@@ -419,7 +407,7 @@ export class AccessibilityAuditor {
   // Screen-Level Checks
   // ============================================================================
 
-  private checkScreenStructure(screenElement: unknown): AccessibilityIssue[] {
+  private checkScreenStructure(screenElement: AuditableComponent): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for page title
@@ -440,7 +428,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkNavigationOrder(screenElement: unknown): AccessibilityIssue[] {
+  private checkNavigationOrder(_screenElement: AuditableComponent): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // This would require analyzing the actual focus order
@@ -460,7 +448,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkScreenReaderAnnouncements(screenElement: unknown): AccessibilityIssue[] {
+  private checkScreenReaderAnnouncements(_screenElement: AuditableComponent): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for dynamic content that should announce changes
@@ -468,7 +456,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkReducedMotion(screenElement: unknown): AccessibilityIssue[] {
+  private checkReducedMotion(_screenElement: AuditableComponent): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check if animations respect reduced motion preferences
@@ -480,8 +468,8 @@ export class AccessibilityAuditor {
   // Utility Methods
   // ============================================================================
 
-  private findInteractiveElements(element: unknown): unknown[] {
-    const interactive: unknown[] = [];
+  private findInteractiveElements(element: AuditableComponent): AuditableComponent[] {
+    const interactive: AuditableComponent[] = [];
 
     // Recursively find interactive elements
     // This is a simplified implementation
@@ -543,7 +531,7 @@ export class AccessibilityAuditor {
     };
   }
 
-  private createPassingResult(message: string): AccessibilityAuditResult {
+  private createPassingResult(_message: string): AccessibilityAuditResult {
     return {
       score: 100,
       issues: [],
@@ -607,10 +595,16 @@ export const accessibilityAuditor = new AccessibilityAuditor();
 // Convenience Functions
 // ============================================================================
 
-export async function auditComponent(component: unknown, config?: ComponentAccessibilityConfig): Promise<AccessibilityAuditResult> {
+export async function auditComponent(
+  component: AuditableComponent,
+  config?: ComponentAccessibilityConfig,
+): Promise<AccessibilityAuditResult> {
   return accessibilityAuditor.auditComponent(component, config);
 }
 
-export async function auditScreen(screenName: string, screenElement: unknown): Promise<AccessibilityAuditResult> {
+export async function auditScreen(
+  screenName: string,
+  screenElement: AuditableComponent,
+): Promise<AccessibilityAuditResult> {
   return accessibilityAuditor.auditScreen(screenName, screenElement);
 }
