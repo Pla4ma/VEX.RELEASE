@@ -14,14 +14,14 @@ import { getConnectionState, subscribeToConnectionChanges, type ConnectionState 
 
 export const OfflineQueueEntrySchema = z.object({
   id: z.string().uuid(),
-  operation: z.enum(['CREATE', 'UPDATE', 'DELETE', 'XP_ADD', 'REWARD_CLAIM', 'STREAK_RECORD']),
+  operation: z.enum(['CREATE', 'UPDATE', 'DELETE', 'XP_ADD', 'REWARD_CLAIM', 'STREAK_RECORD', 'SESSION_COMPLETE']),
   feature: z.enum(['progression', 'streaks', 'rewards', 'boss', 'sessions']),
   payload: z.record(z.unknown()),
   idempotencyKey: z.string(),
   createdAt: z.number(),
   retryCount: z.number().default(0),
   maxRetries: z.number().default(3),
-  priority: z.enum(['high', 'normal', 'low']).default('normal'),
+  priority: z.enum(['high', 'normal', 'low', 'critical']).default('normal'),
   dependsOn: z.string().uuid().optional(),
   error: z.string().optional(),
 }).strict();
