@@ -8,15 +8,9 @@
  * @phase 2.6
  */
 
-<<<<<<< HEAD
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withRepeat, withTiming } from "react-native-reanimated";
-=======
 import React from 'react';
 import { Pressable } from 'react-native';
 import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withRepeat, withSpring, withTiming } from 'react-native-reanimated';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
@@ -105,12 +99,8 @@ function SessionPreview({ duration, goal }: { duration: FocusDuration | null; go
  * First session CTA screen
  */
 export function FirstSessionCTA({ userName, duration, goal, onStartSession, onBack }: FirstSessionCTAProps): JSX.Element {
-<<<<<<< HEAD
-  const displayName = userName || "there";
-=======
   const { theme } = useTheme();
   const displayName = userName || 'there';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   const durationOption = DURATION_OPTIONS.find((d) => d.value === duration);
 
   return (

@@ -146,15 +146,10 @@ function QuestProgressBar({ progress }: { progress: number }): JSX.Element {
  * Main Comeback Quest Card
  */
 export function ComebackQuestCard({ quest, progress, onStartSession, onViewDetails }: ComebackQuestCardProps): JSX.Element {
-<<<<<<< HEAD
-  const isComplete = progress.currentStage === "COMPLETE";
-  const currentQuestNum = progress.currentStage === "QUEST_1" ? 1 : progress.currentStage === "QUEST_2" ? 2 : progress.currentStage === "QUEST_3" ? 3 : 0;
-=======
   const { theme } = useTheme();
 
   const isComplete = progress.currentStage === 'COMPLETE';
   const currentQuestNum = progress.currentStage === 'QUEST_1' ? 1 : progress.currentStage === 'QUEST_2' ? 2 : progress.currentStage === 'QUEST_3' ? 3 : 0;
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
   return (
     <Animated.View entering={FadeInUp.duration(400)}>

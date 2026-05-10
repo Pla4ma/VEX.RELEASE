@@ -23,18 +23,10 @@ import {
   getFirstSessionConfig,
 } from '../service';
 import { WelcomeScreen } from './WelcomeScreen';
-<<<<<<< HEAD
-import { GoalScreen } from './GoalScreen';
-import { FocusTimeScreen } from './FocusTimeScreen';
-import { NameScreen } from './NameScreen';
-import { FirstSessionCTA } from './FirstSessionCTA';
-import { OnboardingDots } from './OnboardingProgressBar';
-=======
 import { NameAndGoalScreen } from './NameAndGoalScreen';
 import { CompanionRevealScreen } from './CompanionRevealScreen';
 import { FirstSessionSetup } from './FirstSessionSetup';
 import { OnboardingProgressBar, OnboardingDots } from './OnboardingProgressBar';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 interface OnboardingNavigatorProps {
   /** Navigate to active session */

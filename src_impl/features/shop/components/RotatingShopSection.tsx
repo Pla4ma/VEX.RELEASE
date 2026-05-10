@@ -7,17 +7,10 @@
  * @phase 6C.1
  */
 
-<<<<<<< HEAD
 import React, { useEffect, useMemo, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeInRight } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
-=======
-import React, { useEffect, useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeIn, FadeInRight } from 'react-native-reanimated';
-import { LinearGradient } from 'expo-linear-gradient';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';

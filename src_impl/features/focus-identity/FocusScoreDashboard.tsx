@@ -24,7 +24,6 @@ const FocusScoreDashboardSkeleton = () => {
         <Skeleton width="100%" height={150} animate={animate} /> {/* For 30-day trend */}
       </Box>
 
-<<<<<<< HEAD
 /**
  * Focus Score Dashboard Component
  * Shows credit-score style display with percentile ranking
@@ -60,18 +59,6 @@ export const FocusScoreDashboard: React.FC<FocusScoreDashboardProps> = ({ profil
       ],
     };
   }, [bandColor, profile?.scoreHistory]);
-=======
-      <Box>
-        <Skeleton width={150} height={20} animate={animate} />
-        <Stack space="s">
-          <Skeleton width="100%" height={16} animate={animate} />
-          <Skeleton width="90%" height={16} animate={animate} />
-          <Skeleton width="80%" height={16} animate={animate} />
-          <Skeleton width="70%" height={16} animate={animate} />
-          <Skeleton width="60%" height={16} animate={animate} />
-        </Stack>
-      </Box>
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
       <Box>
         <Skeleton width={120} height={20} animate={animate} />
@@ -109,13 +96,6 @@ export const FocusScoreDashboard = () => {
     );
   }
 
-<<<<<<< HEAD
-  const { currentScore, previousScore, band, percentileRank, factors } = profile;
-  const scoreChange = currentScore - previousScore;
-
-  // Score gauge position (0-100%)
-  const gaugePercent = ((currentScore - 300) / (850 - 300)) * 100;
-=======
   // Offline banner
   if (isOffline) {
     return (
@@ -135,7 +115,6 @@ export const FocusScoreDashboard = () => {
 
   const { currentScore, band, lastChangeReason, factors, previousScore } = score;
   const delta = currentScore - previousScore;
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
   return (
     <Box p="m">

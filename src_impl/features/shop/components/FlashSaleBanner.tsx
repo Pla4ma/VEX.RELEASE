@@ -10,8 +10,7 @@
  * - Urgent styling with pulsing animation
  */
 
-<<<<<<< HEAD
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Pressable } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, withSequence, Easing, interpolate } from "react-native-reanimated";
 
@@ -20,17 +19,6 @@ import { Box, Text } from "../../../components/primitives";
 import { Icon } from "../../../icons";
 import type { FlashSale } from "../FlashSaleSystem";
 import { formatFlashSaleCountdown, getFlashSaleTimeRemaining } from "../FlashSaleSystem";
-=======
-import React, { useState, useEffect } from 'react';
-import { Pressable } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, withSequence, Easing, interpolate } from 'react-native-reanimated';
-
-import { useTheme } from '../../../theme';
-import { Box, Text, Card } from '../../../components/primitives';
-import { Icon } from '../../../icons';
-import type { FlashSale } from '../FlashSaleSystem';
-import { formatFlashSaleCountdown, getFlashSaleTimeRemaining } from '../FlashSaleSystem';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 interface FlashSaleBannerProps {
   flashSale: FlashSale | null;

@@ -7,17 +7,7 @@
  * @phase 13.2
  */
 
-<<<<<<< HEAD
-import React, { useCallback, useEffect, useState } from "react";
-import { Dimensions, Pressable } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, interpolate, Easing } from "react-native-reanimated";
-
-import { Box, Text } from "../../../components/primitives";
-import { useTheme } from "../../../theme";
-import type { CompanionState, CompanionPhase } from "../types";
-import { ELEMENT_THEMES } from "../types";
-=======
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Dimensions, Pressable } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, withSequence, withDelay, interpolate, Easing, runOnJS } from 'react-native-reanimated';
 
@@ -25,7 +15,6 @@ import { Box, Text } from '../../../components/primitives';
 import { useTheme } from '../../../theme';
 import type { CompanionState, CompanionPhase } from '../types';
 import { ELEMENT_THEMES, EVOLUTION_THRESHOLDS } from '../types';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -113,18 +102,13 @@ export const CompanionEvolutionCeremony: React.FC<CompanionEvolutionCeremonyProp
     await delay(1000);
 
     // Complete
-<<<<<<< HEAD
-    setCeremonyPhase("complete");
+    setCeremonyPhase('complete');
   }, [flashOpacity, glowOpacity, glowScale, newFormOpacity, newFormScale, oldFormOpacity, particleBurst, textOpacity, textScale]);
 
   // Run ceremony sequence
   useEffect(() => {
     runCeremony();
   }, [runCeremony]);
-=======
-    setCeremonyPhase('complete');
-  };
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
   const handleTap = () => {
     if (ceremonyPhase === 'complete') {

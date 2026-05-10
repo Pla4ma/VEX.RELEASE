@@ -63,15 +63,9 @@ const GAMBLE_BONUS_XP = 50; // Bonus XP for winning the gamble
 
 export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDays, hoursRemaining, shieldsAvailable, userLevel: _userLevel, onUseShield, onGamble, onDismiss, onSessionComplete: _onSessionComplete }) => {
   const { theme } = useTheme();
-<<<<<<< HEAD
-  const [gambleState, setGambleState] = useState<GambleState>("prompt");
-  const [outcome] = useState<GambleOutcome | null>(null);
-  const [, setSelectedOption] = useState<"shield" | "gamble" | null>(null);
-=======
   const [gambleState, setGambleState] = useState<GambleState>('prompt');
   const [outcome, setOutcome] = useState<GambleOutcome | null>(null);
   const [selectedOption, setSelectedOption] = useState<'shield' | 'gamble' | null>(null);
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
   // Animation values
   const pulseOpacity = useSharedValue(1);
@@ -120,8 +114,6 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
     onGamble();
   };
 
-<<<<<<< HEAD
-=======
   // Handle session completion (called externally)
   const handleSessionComplete = (grade: 'S' | 'A' | 'B' | 'C' | 'D') => {
     const success = GAMBLE_SUCCESS_GRADES.includes(grade);
@@ -129,7 +121,7 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
     const outcome: GambleOutcome = {
       success,
       grade,
-      xpEarned: success ? GAMBLE_BONUS_XP + userLevel * 2 : 0,
+      xpEarned: success ? GAMBLE_BONUS_XP + _userLevel * 2 : 0,
       shieldPreserved: success, // Shield only used if gamble failed
     };
 
@@ -148,10 +140,8 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
       },
     });
 
-    onSessionComplete?.(grade);
+    _onSessionComplete?.(grade);
   };
-
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   // Animated styles
   const pulseStyle = useAnimatedStyle(() => ({
     opacity: pulseOpacity.value,

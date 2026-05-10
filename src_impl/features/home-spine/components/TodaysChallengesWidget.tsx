@@ -90,8 +90,6 @@ function ChallengeProgressRow({ challenge, onClaim }: { challenge: ChallengeItem
     </Box>
   );
 }
-<<<<<<< HEAD
-
 /**
  * Empty state when no challenges assigned
  */
@@ -140,8 +138,6 @@ function ChallengesErrorState({ onRetry }: { onRetry?: () => void }): JSX.Elemen
 /**
  * Main challenges widget component
  */
-=======
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 export function TodaysChallengesWidget({ challenges, isLoading = false, error = null, onViewAll, onClaimReward, onRetry }: TodaysChallengesWidgetProps): JSX.Element {
   const { theme } = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);

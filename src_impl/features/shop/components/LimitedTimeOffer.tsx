@@ -14,17 +14,10 @@
  * Answer: YES — limited time creates urgency, rare items create FOMO
  */
 
-<<<<<<< HEAD
-import React, { useEffect, useMemo, useState } from "react";
-import { Pressable, View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeInRight } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
-=======
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
-import { Pressable, StyleSheet, View, Dimensions } from 'react-native';
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, interpolate, Extrapolation, FadeIn, FadeInRight } from 'react-native-reanimated';
+import { Pressable, View, Dimensions } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeInRight } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
@@ -33,11 +26,7 @@ import { EconomyEvents } from '../../../shared/analytics/analytics-events';
 import { triggerHaptic } from '../../../utils/haptics';
 import { createSheet } from '@/shared/ui/create-sheet';
 
-<<<<<<< HEAD
-=======
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 // Sale gradient
 const FLASH_SALE_GRADIENT = ['#EF4444', '#F97316', '#F59E0B'] as const;
 const RARE_GRADIENT = ['#A855F7', '#EC4899'] as const;

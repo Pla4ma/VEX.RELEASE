@@ -7,15 +7,9 @@
  * @phase 3C.4
  */
 
-<<<<<<< HEAD
-import React, { useEffect } from "react";
-import { Modal, ScrollView, Dimensions } from "react-native";
-import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withSpring, withSequence, withTiming, withRepeat } from "react-native-reanimated";
-=======
 import React, { useEffect } from 'react';
 import { Modal, ScrollView, Dimensions } from 'react-native';
 import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming, withRepeat, withDelay, runOnJS } from 'react-native-reanimated';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';

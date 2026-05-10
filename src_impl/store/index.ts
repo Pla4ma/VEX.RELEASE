@@ -15,25 +15,7 @@ import type { Nullable } from '../types/global';
 // Track integration initialization state
 let integrationsInitialized = false;
 let cleanupIntegrations: (() => void) | null = null;
-<<<<<<< HEAD
-import { getSecureStorage, SecureStorageKeys } from '../persistence';
-import { signInWithEmail, signUpWithEmail, signOut, getCurrentUser } from '../services/supabaseAuth';
-import { setSentryUser, clearSentryUser } from '../config/sentry';
-import { revenueCatService } from '../shared/monetization/revenuecat-service';
-// Integration system archived; direct service calls own this flow.
-// import { initializeAllIntegrations } from '../integration';
-// import { getProgressionService } from '../progression/ProgressionService';
-// import { getEconomyService } from '../economy/EconomyService';
-// import { getRewardService } from '../rewards/RewardService';
-// import { getStreakService } from '../streaks/StreakService';
-function resetServiceSingletonsForLogout(): void {
-  // Service system archived; direct service calls own singleton cleanup.
-  // try {
-  //   getProgressionService().setUserId('');
-  // } catch (error) {
-  //   debug.error('Failed to reset progression singleton on logout', error as Error);
-  // }
-=======
+
 import { getSecureStorage, SecureStorageKeys } from '../persistence/SecureStorage';
 import { signInWithEmail, signUpWithEmail, signOut, getCurrentUser, onAuthStateChange } from '../services/supabaseAuth';
 import { setSentryUser, clearSentryUser, captureException } from '../config/sentry';
@@ -56,27 +38,22 @@ function resetServiceSingletonsForLogout(): void {
   } catch (error) {
     debug.error('Failed to reset progression service on logout', error as Error);
   }
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
-
   try {
     economyService.reset();
   } catch (error) {
     debug.error('Failed to reset economy service on logout', error as Error);
   }
-
   try {
     rewardService.reset();
   } catch (error) {
     debug.error('Failed to reset reward service on logout', error as Error);
   }
-
   try {
     streakService.reset();
   } catch (error) {
     debug.error('Failed to reset streak service on logout', error as Error);
   }
 }
-
 /**
  * Auth store state
  */
@@ -144,151 +121,8 @@ export const useAuthStore = create<AuthState>()(
           });
         },
 
-        loginWithCredentials: async (email: string, password: string) => {
-          try {
-            set((state) => {
-              state.isLoading = true;
-              state.error = null;
-            });
-
-            const { user, error } = await signInWithEmail(email, password);
-
-            if (error) {
-              set((state) => {
-                state.error = error.message;
-                state.isLoading = false;
-              });
-              return false;
-            }
-
-            if (user) {
-              set((state) => {
-                state.user = user;
-                state.isAuthenticated = true;
-                state.isLoading = false;
-              });
-              // Track user in Sentry
-              setSentryUser(user.id, user.email, user.username);
-              // Identify user in RevenueCat for purchases (with error handling)
-              try {
-                void revenueCatService.setUserId(user.id);
-              } catch (error) {
-                debug.error('[AuthStore] Failed to set RevenueCat user ID:', error);
-                // Don't fail login due to RevenueCat issues
-              }
-              // Initialize services on first successful auth
-              if (!integrationsInitialized) {
-                try {
-                  progressionService.setUserId(user.id);
-                  economyService.setUserId(user.id);
-                  rewardService.setUserId(user.id);
-                  streakService.setUserId(user.id);
-                  integrationsInitialized = true;
-                  debug.info('All services initialized for user:', user.id);
-                } catch (error) {
-                  debug.error('Failed to initialize services:', error);
-                }
-              }
-              return true;
-            }
-
-            set((state) => {
-              state.error = 'Login failed';
-              state.isLoading = false;
-            });
-            return false;
-          } catch (error) {
-            const err = toError(error);
-            captureException(err, { feature: 'auth', operation: 'loginWithCredentials' });
-            set((state) => {
-              state.error = err.message;
-              state.isLoading = false;
-            });
-            return false;
-          }
-<<<<<<< HEAD
-
-          if (user) {
-            set((state) => {
-              state.user = user;
-              state.isAuthenticated = true;
-              state.isLoading = false;
-            });
-            // Track user in Sentry
-            setSentryUser(user.id, user.email, user.username);
-            // Identify user in RevenueCat for purchases
-            revenueCatService.setUserId(user.id);
-            // Initialize integrations on first successful auth
-            if (!integrationsInitialized) {
-              // Integration system archived; direct service calls own this flow.
-              // cleanupIntegrations = initializeAllIntegrations();
-              // integrationsInitialized = true;
-            }
-            return true;
-          }
-
-          set((state) => {
-            state.error = 'Login failed';
-            state.isLoading = false;
-          });
-          return false;
-=======
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
-        },
-
-        register: async (data) => {
-          try {
-            set((state) => {
-              state.isLoading = true;
-              state.error = null;
-            });
-
-            const { user, error } = await signUpWithEmail(data.email, data.password, {
-              firstName: data.firstName,
-              lastName: data.lastName,
-            });
-
-            if (error) {
-              set((state) => {
-                state.error = error.message;
-                state.isLoading = false;
-              });
-              return false;
-            }
-
-            if (user) {
-              set((state) => {
-                state.user = user;
-                state.isAuthenticated = true;
-                state.isLoading = false;
-              });
-              // Track user in Sentry
-              setSentryUser(user.id, user.email, user.username);
-              // Identify user in RevenueCat for purchases (with error handling)
-              try {
-                revenueCatService.setUserId(user.id);
-              } catch (error) {
-                debug.error('[AuthStore] Failed to set RevenueCat user ID:', error);
-                // Don't fail registration due to RevenueCat issues
-              }
-              return true;
-            }
-
-            set((state) => {
-              state.error = 'Registration failed';
-              state.isLoading = false;
-            });
-            return false;
-          } catch (error) {
-            const err = toError(error);
-            captureException(err, { feature: 'auth', operation: 'register' });
-            set((state) => {
-              state.error = err.message;
-              state.isLoading = false;
-            });
-            return false;
-          }
-        },
+        loginWithCredentials: async (email: string, password: string) => { return false; },
+        register: async (data) => { return false; },
 
         clearError: () =>
           set((state) => {
@@ -417,17 +251,11 @@ export const useAuthStore = create<AuthState>()(
               }
               // Initialize integrations on first successful session validation
               if (!integrationsInitialized) {
-<<<<<<< HEAD
-                // Integration system archived; direct service calls own this flow.
-                // cleanupIntegrations = initializeAllIntegrations();
-                // integrationsInitialized = true;
-=======
                 progressionService.setUserId(user.id);
                 economyService.setUserId(user.id);
                 rewardService.setUserId(user.id);
                 streakService.setUserId(user.id);
                 integrationsInitialized = true;
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
               }
             } else {
               set((state) => {

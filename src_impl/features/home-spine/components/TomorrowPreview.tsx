@@ -102,7 +102,6 @@ export function TomorrowPreview(props: TomorrowPreviewProps): JSX.Element {
   );
 }
 
-<<<<<<< HEAD
 /**
  * Compact tomorrow preview (for minimal home screen space)
  */
@@ -238,8 +237,3 @@ export function TomorrowPreviewSession({ preview, onPress }: TomorrowPreviewSess
     </Animated.View>
   );
 }
-
-=======
-export { TomorrowPreviewCompact, TomorrowPreviewSession, type TomorrowPreviewSessionProps };
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
-export default TomorrowPreview;

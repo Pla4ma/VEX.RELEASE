@@ -51,8 +51,6 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
   // Validate props
   const isValidNearMiss = progressPercent >= NEAR_MISS_THRESHOLD && progressPercent < COMPLETE_THRESHOLD;
 
-<<<<<<< HEAD
-=======
   if (!isValidNearMiss) {
     // Log analytics but don't render
     Sentry.addBreadcrumb({
@@ -63,12 +61,10 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
     return null;
   }
 
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   // Animation values
   const pulseOpacity = useSharedValue(0.6);
   const progressWidth = useSharedValue(0);
   const shakeX = useSharedValue(0);
-
   useEffect(() => {
     // Animate progress bar filling
     progressWidth.value = withSpring(progressPercent / 100, {

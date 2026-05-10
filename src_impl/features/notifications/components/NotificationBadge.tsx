@@ -83,15 +83,11 @@ export function NotificationBadge({ userId, size = 'md' }: NotificationBadgeProp
     };
   }, [userId]);
 
-<<<<<<< HEAD
-  const displayCount = count > 99 ? "99+" : count.toString();
-=======
   if (count === 0) {
     return null;
   }
 
   const displayCount = count > 99 ? '99+' : count.toString();
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   const isLargeNumber = count > 9;
 
   const sizeMap = {

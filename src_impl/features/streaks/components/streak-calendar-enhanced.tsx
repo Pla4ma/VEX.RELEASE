@@ -11,21 +11,12 @@
  * - Share-worthy "proof of work" design
  */
 
-<<<<<<< HEAD
 import React, { useMemo } from "react";
 import { View, Text } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, interpolate, Easing } from "react-native-reanimated";
 import { useStreakCalendar } from "../hooks";
 import { createSheet } from "@/shared/ui/create-sheet";
 import { useTheme } from "@/theme";
-=======
-import React, { useMemo } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, interpolate, Easing } from 'react-native-reanimated';
-import { useStreakCalendar } from '../hooks';
-import { createSheet } from '@/shared/ui/create-sheet';
-import { useTheme } from '@/theme';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 // ============================================================================
 // Types

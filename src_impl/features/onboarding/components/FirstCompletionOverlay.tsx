@@ -9,13 +9,8 @@
  * @phase 2.7
  */
 
-<<<<<<< HEAD
-import React, { useEffect } from "react";
-import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withRepeat, withSpring, withSequence } from "react-native-reanimated";
-=======
 import React, { useEffect } from 'react';
 import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withRepeat, withSpring, withSequence, withDelay } from 'react-native-reanimated';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';

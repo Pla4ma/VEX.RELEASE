@@ -16,11 +16,7 @@
     "test:e2e": "detox test",
     "test:e2e:build": "detox build",
     "lint": "eslint src src_impl --ext .ts,.tsx",
-<<<<<<< HEAD
-    "lint:fix": "eslint src --ext .ts,.tsx --fix",
-=======
     "lint:fix": "eslint src src_impl --ext .ts,.tsx --fix",
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
     "typecheck": "tsc --noEmit",
     "check:no-ts-nocheck": "node scripts/check-no-ts-nocheck.js",
     "types:supabase": "npx supabase gen types typescript --project-id icnbpjkyupuqzuvwuvbk --schema public > src_impl/types/supabase.ts",

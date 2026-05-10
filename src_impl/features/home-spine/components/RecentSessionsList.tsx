@@ -1,31 +1,11 @@
-<<<<<<< HEAD
-/**
- * RecentSessionsList Component
- *
- * Shows last 5 sessions with duration, quality score, XP earned, and time ago.
- * Uses FlashList for performance. Each row has quality-based color accent.
- *
- * @phase 1A.6
- */
-
-import React, { useCallback } from "react";
-import { Pressable } from "react-native";
-import { FlashList, type ListRenderItem } from "@shopify/flash-list";
-import Animated, { FadeIn } from "react-native-reanimated";
-
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-
-=======
 import React, { useCallback } from 'react';
 import { Pressable } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import Animated, { FadeIn } from 'react-native-reanimated';
+
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 export interface SessionListItem {
   id: string;
   duration: number;
@@ -111,16 +91,7 @@ function RecentSessionsSkeleton(): JSX.Element {
     </Box>
   );
 }
-<<<<<<< HEAD
-
-/**
- * Empty state when no sessions
- */
-function EmptyState({ onStart: _onStart }: { onStart?: () => void }): JSX.Element {
-
-=======
 function EmptyState(): JSX.Element {
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   return (
     <Animated.View entering={FadeIn.duration(400)}>
       <Box py="xl" px="lg" alignItems="center" justifyContent="center" gap="md">

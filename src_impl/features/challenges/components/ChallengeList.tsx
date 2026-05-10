@@ -4,15 +4,6 @@
  * List view for challenges with filtering and refresh.
  */
 
-<<<<<<< HEAD
-import React from "react";
-import { View, RefreshControl } from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { Text, Card, Button } from "../../../components";
-import { ChallengeCard } from "./ChallengeCard";
-import type { UserChallengeSummary } from "../schemas";
-import { createSheet } from "@/shared/ui/create-sheet";
-=======
 import React from 'react';
 import { View, StyleSheet, RefreshControl } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
@@ -20,7 +11,6 @@ import { Text, Card, Button } from '../../../components';
 import { ChallengeCard } from './ChallengeCard';
 import type { UserChallengeSummary } from '../schemas';
 import { createSheet } from '@/shared/ui/create-sheet';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 interface ChallengeListProps {
   challenges: UserChallengeSummary[];

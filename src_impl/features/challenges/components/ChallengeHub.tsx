@@ -4,17 +4,6 @@
  * Central hub for all challenge types with filtering and progress overview.
  */
 
-<<<<<<< HEAD
-import React, { useState } from "react";
-import { View, Text, ScrollView, Pressable, ActivityIndicator } from "react-native";
-import { FlashList, type ListRenderItem } from "@shopify/flash-list";
-import { useThemeObject } from "../../../theme";
-import { Card, Badge, ProgressBar } from "../../../components";
-import { useActiveChallenges, useChallengeSummaries } from "../hooks";
-import { ChallengeCard } from "./ChallengeCard";
-import { type UserChallengeSummary } from "../schemas";
-import { createSheet } from "@/shared/ui/create-sheet";
-=======
 import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
@@ -24,7 +13,6 @@ import { useActiveChallenges, useChallengeSummaries } from '../hooks';
 import { ChallengeCard } from './ChallengeCard';
 import { type UserChallengeSummary } from '../schemas';
 import { createSheet } from '@/shared/ui/create-sheet';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 type ChallengeFilter = 'ALL' | 'DAILY' | 'WEEKLY' | 'EVENT' | 'COMPLETED';
 
@@ -36,12 +24,8 @@ interface ChallengeHubProps {
 
 export const ChallengeHub: React.FC<ChallengeHubProps> = ({ userId, onChallengePress, onClaimReward }) => {
   const theme = useThemeObject();
-<<<<<<< HEAD
-  const [activeFilter, setActiveFilter] = useState<ChallengeFilter>("ALL");
-=======
   const [activeFilter, setActiveFilter] = useState<ChallengeFilter>('ALL');
   const [refreshing, setRefreshing] = useState(false);
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
   const { isLoading: isLoadingAll } = useActiveChallenges(userId);
   const { data: challengeSummaries, isLoading: isLoadingSummaries } = useChallengeSummaries(userId);

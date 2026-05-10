@@ -7,16 +7,10 @@
  * @phase 2 - Deepening: Abandon recovery UI
  */
 
-<<<<<<< HEAD
-import React, { useEffect, useState } from "react";
-import { View } from "react-native";
-import Animated, { FadeIn, FadeInUp, FadeOut } from "react-native-reanimated";
-=======
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { FadeIn, FadeInUp, FadeOut } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';

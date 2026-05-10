@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/react-native';
 import { z } from 'zod';
 import { eventBus } from '../../events';
+import { queryClient, QueryKeys } from '../../api/QueryProvider';
 import { getConnectionState } from '../../lib/repository/base';
 import { enqueue } from '../../lib/offline/queue';
 import { SessionSummarySchema } from '../../session/types';
@@ -128,6 +129,20 @@ export async function orchestrateSessionCompletion(
   }
 
   debug.info('Session completion orchestrated for %s', parsed.sessionId);
+
+  // Invalidate relevant queries to update UI
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.session.active() });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.session.history() });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.focusScore.current(parsed.userId) });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.focusScore.history(parsed.userId) });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.streak(parsed.userId) });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.progression.xp(parsed.userId) });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.progression.level(parsed.userId) });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.rewards.all(parsed.userId) });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.rewards.pending(parsed.userId) });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.companion.state(parsed.userId) });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.dailyMission.current(parsed.userId) });
+
   return storyViewModel;
 }
 

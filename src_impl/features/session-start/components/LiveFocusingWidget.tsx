@@ -7,15 +7,9 @@
  * @phase 10.6
  */
 
-<<<<<<< HEAD
-import React, { useState, useEffect } from "react";
-import { Pressable } from "react-native";
-import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming, FadeIn } from "react-native-reanimated";
-=======
 import React, { useState, useEffect, useCallback } from 'react';
 import { Pressable } from 'react-native';
 import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming, withDelay, FadeIn } from 'react-native-reanimated';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
@@ -198,15 +192,11 @@ function TrendIndicator({ trend, percent }: { trend: 'up' | 'down' | 'stable'; p
     stable: '➡️',
   };
 
-<<<<<<< HEAD
-=======
   const colors = {
     up: '#22C55E',
     down: '#EF4444',
     stable: '#94A3B8',
   };
-
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   return (
     <Box flexDirection="row" alignItems="center" gap="xs">
       <Text fontSize={12}>{icons[trend]}</Text>

@@ -8,13 +8,8 @@
  * @phase 3C.3
  */
 
-<<<<<<< HEAD
-import React from "react";
-import Animated, { useAnimatedStyle, withSpring, withRepeat, withSequence } from "react-native-reanimated";
-=======
 import React from 'react';
 import Animated, { useAnimatedStyle, withSpring, withTiming, withRepeat, withSequence } from 'react-native-reanimated';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';

@@ -1,38 +1,6 @@
-<<<<<<< HEAD
-/**
- * Form Field Component
- * Premium form field with validation, states, and accessibility
- *
- * Features:
- * - Label with required indicator
- * - Helper text and error messages
- * - Loading state
- * - Disabled state
- * - Success state
- * - Character counter
- * - Validation with debounce
- * - Accessible error announcements
- */
-
-import React, { useState, useCallback, useEffect, useRef } from 'react';
-import {
-  View,
-  ViewStyle,
-  TextStyle,
-  TextInput,
-  TextInputProps,
-} from 'react-native';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
-  withSpring,
-} from 'react-native-reanimated';
-=======
 import React, { useCallback, useState } from 'react';
 import { TextInput, View, type TextInputProps, type TextStyle, type ViewStyle } from 'react-native';
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
@@ -126,19 +94,8 @@ export const FormField: React.FC<FormFieldProps> = ({
     ? semantic.primary
     : semantic.inputBorder;
 
-<<<<<<< HEAD
-  const animatedBorderStyle = useAnimatedStyle(() => ({
-    borderColor: state === 'error'
-      ? theme.colors.error.DEFAULT
-      : state === 'success'
-      ? theme.colors.success.DEFAULT
-      : state === 'focused'
-      ? theme.colors.primary[500]
-      : theme.colors.border.DEFAULT,
-=======
   const animatedStyle = useAnimatedStyle(() => ({
     borderColor: withTiming(borderColor, { duration: 160 }),
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   }));
   const message = error ?? internalError ?? successMessage ?? helperText;
   const messageColor = error || internalError

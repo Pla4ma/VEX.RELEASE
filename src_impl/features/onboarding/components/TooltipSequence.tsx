@@ -16,11 +16,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 
-<<<<<<< HEAD
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
-=======
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 interface TooltipSequenceProps {
   hasStreak: boolean;

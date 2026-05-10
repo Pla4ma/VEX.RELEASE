@@ -3,17 +3,10 @@
  * Visual calendar showing daily focus activity
  */
 
-<<<<<<< HEAD
 import React from "react";
 import { View, Text } from "react-native";
 import { useStreakCalendar } from "../hooks";
 import { createSheet } from "@/shared/ui/create-sheet";
-=======
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { useStreakCalendar } from '../hooks';
-import { createSheet } from '@/shared/ui/create-sheet';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 // ============================================================================
 // Types
