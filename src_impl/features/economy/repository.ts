@@ -16,7 +16,7 @@ import {
   type UserOfferClaim,
   type CurrencyConversion,
   type CurrencyType,
-  type TransactionSource
+  type TransactionSource,
 } from './schemas';
 
 class RepositoryError extends Error {
@@ -45,7 +45,7 @@ export async function fetchWallet(userId: string): Promise<Wallet | null> {
     throw new RepositoryError('fetchWallet', error);
   }
 
-  if (!data) return null;
+  if (!data) {return null;}
   return WalletSchema.parse(data);
 }
 
@@ -62,7 +62,7 @@ export async function createWallet(userId: string): Promise<Wallet> {
     total_gems_earned: 0,
     total_gems_spent: 0,
     created_at: now,
-    updated_at: now
+    updated_at: now,
   };
 
   const { data, error } = await withResilience(
@@ -115,7 +115,7 @@ export async function atomicBalanceUpdate(userId: string, currency: CurrencyType
       p_user_id: userId,
       p_currency: column,
       p_amount: amount,
-      p_operation: operation
+      p_operation: operation,
     }),
     { operation: 'atomicBalanceUpdate' }
   );
@@ -144,7 +144,7 @@ export async function createTransaction(transaction: Omit<WalletTransaction, 'id
         source_id: transaction.sourceId,
         description: transaction.description,
         metadata: transaction.metadata,
-        created_at: now
+        created_at: now,
       })
       .select()
       .single(),
@@ -236,7 +236,7 @@ export async function createPurchaseAttempt(purchase: Omit<PurchaseAttempt, 'id'
         refunded_at: purchase.refundedAt,
         refund_reason: purchase.refundReason,
         created_at: now,
-        updated_at: now
+        updated_at: now,
       })
       .select()
       .single(),
@@ -264,7 +264,7 @@ export async function updatePurchaseStatus(purchaseId: string, updates: {
         error_code: updates.errorCode,
         error_message: updates.errorMessage,
         inventory_item_ids: updates.inventoryItemIds,
-        updated_at: Date.now()
+        updated_at: Date.now(),
       })
       .eq('id', purchaseId)
       .select()
@@ -354,7 +354,7 @@ export async function createRefundRequest(refund: Omit<RefundRequest, 'id' | 'pr
         requested_at: refund.requestedAt,
         refund_amount_currency: refund.refundAmount?.currency,
         refund_amount_amount: refund.refundAmount?.amount,
-        items_recovered: refund.itemsRecovered
+        items_recovered: refund.itemsRecovered,
       })
       .select()
       .single(),
@@ -382,7 +382,7 @@ export async function updateRefundStatus(refundId: string, updates: {
         refund_amount_currency: updates.refundAmount?.currency,
         refund_amount_amount: updates.refundAmount?.amount,
         items_recovered: updates.itemsRecovered,
-        processed_at: updates.processedAt
+        processed_at: updates.processedAt,
       })
       .eq('id', refundId)
       .select()
@@ -498,7 +498,7 @@ export async function createUserOfferClaim(claim: Omit<UserOfferClaim, 'id'>): P
         offer_id: claim.offerId,
         user_id: claim.userId,
         purchase_id: claim.purchaseId,
-        claimed_at: claim.claimedAt
+        claimed_at: claim.claimedAt,
       })
       .select()
       .single(),
@@ -525,7 +525,7 @@ export async function createCurrencyConversion(conversion: Omit<CurrencyConversi
         to_amount: conversion.toAmount,
         exchange_rate: conversion.exchangeRate,
         fee: conversion.fee,
-        created_at: now
+        created_at: now,
       })
       .select()
       .single(),
@@ -567,7 +567,7 @@ export async function fetchEconomyAnalytics(userId: string, period: 'DAILY' | 'W
       p_user_id: userId,
       p_period: period,
       p_period_start: periodStart,
-      p_period_end: periodEnd
+      p_period_end: periodEnd,
     }),
     { operation: 'fetchEconomyAnalytics', fallbackValue: { total_earned: {}, total_spent: {}, transactions_by_source: {} } }
   );
@@ -579,7 +579,7 @@ export async function fetchEconomyAnalytics(userId: string, period: 'DAILY' | 'W
   return {
     totalEarned: data.total_earned as Record<CurrencyType, number>,
     totalSpent: data.total_spent as Record<CurrencyType, number>,
-    transactionsBySource: data.transactions_by_source as Record<TransactionSource, number>
+    transactionsBySource: data.transactions_by_source as Record<TransactionSource, number>,
   };
 }
 

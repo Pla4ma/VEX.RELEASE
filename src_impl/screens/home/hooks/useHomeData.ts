@@ -1,9 +1,3 @@
-/**
- * useHomeData Hook
- *
- * Consolidates all data fetching and derived state for HomeScreen.
- */
-
 import { useMemo, useRef, useCallback } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
@@ -23,13 +17,11 @@ import { useToast } from '../../../shared/ui/components/Toast';
 import { useHomeScreenController } from './useHomeScreenController';
 import type { ChallengeItem, SessionListItem } from '../../../features/home-spine/components';
 import { getQualityGrade, getHomeCompanionMood } from '../utils';
-
+import { createHomeDailyDungeon } from './home-daily-dungeon';
 export function useHomeData() {
   const insets = useSafeAreaInsets();
   const controller = useHomeScreenController();
   const { show: showToast } = useToast();
-
-  // Data fetching hooks
   const challengesQuery = useActiveChallenges(controller.userId);
   const claimRewardMutation = useClaimChallengeReward();
   const freezeStreakMutation = useFreezeStreak();
@@ -38,8 +30,6 @@ export function useHomeData() {
     isLoading: interventionLoading,
     dismiss: dismissIntervention,
   } = useActiveIntervention(controller.userId || undefined);
-
-  // Boss bounty
   const activeBossQuery = controller.activeBossQuery;
   const coinBalance = controller.walletQuery.data?.coins ?? 0;
   const activeWagerQuery = { wager: null };
@@ -48,18 +38,10 @@ export function useHomeData() {
     controller.userId || undefined
   );
   const placeBountyMutation = usePlaceBounty();
-
-  // Tomorrow preview
   const savedPreview = useSavedTomorrowPreview(controller.userId ?? '');
   const displayedInterventionIdRef = useRef<string | null>(null);
-
-  // Squad members focusing
   const squadMembersFocusing = useSquadMembersFocusing(controller.userId || undefined);
-
-  // Notification badge
   const { count: unreadNotificationCount } = useNotificationBadge(controller.userId);
-
-  // Derived state
   const todaysChallenges: ChallengeItem[] = useMemo(() => {
     if (!challengesQuery.data) {return [];}
     return challengesQuery.data
@@ -80,18 +62,15 @@ export function useHomeData() {
           : 0,
       }));
   }, [challengesQuery.data]);
-
   const streakHoursRemaining = useMemo(() => {
     if (!controller.streakQuery.data?.nextDeadline) {return null;}
     return Math.max(0, Math.floor((controller.streakQuery.data.nextDeadline - Date.now()) / (1000 * 60 * 60)));
   }, [controller.streakQuery.data?.nextDeadline]);
-
   const hasActiveSession = useMemo(() => {
     const latest = controller.historyQuery.history[0];
     if (!latest) {return false;}
     return latest.status === 'ACTIVE' || latest.status === 'PAUSED';
   }, [controller.historyQuery.history]);
-
   const resumeTimeSeconds = useMemo(() => {
     if (!hasActiveSession) {return null;}
     const latest = controller.historyQuery.history[0];
@@ -101,7 +80,6 @@ export function useHomeData() {
     }
     return null;
   }, [hasActiveSession, controller.historyQuery.history]);
-
   const recentSessions = useMemo<SessionListItem[]>(() => {
     return controller.historyQuery.history.flatMap((entry) => {
       if (!entry.endedAt || !entry.startedAt) {return [];}
@@ -117,18 +95,14 @@ export function useHomeData() {
       }];
     }).slice(0, 5);
   }, [controller.historyQuery.history]);
-
   const comebackSessionsCompleted = useMemo(() => {
     if (!controller.comebackQuery.data?.streakRestoreEligible) {return 0;}
     return controller.historyQuery.history.filter((entry) => entry.status === 'COMPLETED').length;
   }, [controller.comebackQuery.data?.streakRestoreEligible, controller.historyQuery.history]);
-
   const companionMood = useMemo(
     () => getHomeCompanionMood(controller.historyQuery.history, controller.currentStreak),
     [controller.currentStreak, controller.historyQuery.history]
   );
-
-  // Handlers
   const handleClaimReward = useCallback((challengeId: string) => {
     if (!controller.userId) {
       showToast({
@@ -138,7 +112,6 @@ export function useHomeData() {
       });
       return;
     }
-
     claimRewardMutation.mutate(
       { userId: controller.userId, challengeId },
       {
@@ -165,7 +138,6 @@ export function useHomeData() {
       }
     );
   }, [claimRewardMutation, controller.userId, showToast]);
-
   const handleFreezeStreak = useCallback(() => {
     if (!controller.userId) {return;}
     freezeStreakMutation.mutate(controller.userId, {
@@ -185,38 +157,14 @@ export function useHomeData() {
       },
     });
   }, [controller.userId, freezeStreakMutation, showToast]);
-
-  // Daily Dungeon data from master orchestrator
   const dailyDungeon = useMemo(() => {
     if (!controller.userId) {return null;}
-    // Access master orchestrator through controller or create mock data for now
-    return {
-      dungeon: {
-        id: `dungeon_${new Date().toISOString().split('T')[0]}`,
-        date: new Date().toISOString().split('T')[0],
-        bossName: 'Procrastination Demon',
-        theme: 'VOID',
-        specialMechanic: 'DISTRACTION_FIELDS',
-        guaranteedDrop: { type: 'CHEST', rarity: 'RARE', amount: 1 },
-      },
-      attempt: {
-        userId: controller.userId,
-        dungeonId: `dungeon_${new Date().toISOString().split('T')[0]}`,
-        completed: false,
-        score: 0,
-      },
-      timeRemaining: {
-        hours: Math.max(0, 24 - new Date().getHours()),
-        minutes: 60 - new Date().getMinutes(),
-      },
-    };
+    return createHomeDailyDungeon(controller.userId);
   }, [controller.userId]);
-
   return {
     insets,
     controller,
     showToast,
-    // Data queries
     challengesQuery,
     claimRewardMutation,
     freezeStreakMutation,
@@ -232,7 +180,6 @@ export function useHomeData() {
     displayedInterventionIdRef,
     squadMembersFocusing,
     unreadNotificationCount,
-    // Derived state
     todaysChallenges,
     streakHoursRemaining,
     hasActiveSession,
@@ -241,7 +188,6 @@ export function useHomeData() {
     comebackSessionsCompleted,
     companionMood,
     dailyDungeon,
-    // Handlers
     handleClaimReward,
     handleFreezeStreak,
   };

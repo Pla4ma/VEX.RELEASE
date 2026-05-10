@@ -1,31 +1,31 @@
-import { MASTERY_RANK_THRESHOLDS, calculateTechniqueXp, generateMasteryChallenges, getMasteryRankDisplay, type MasteryRank, type MasteryState } from "./types";
-import { loadStoredMasteryState, persistMasteryState } from "./repository";
-import { spectacleService } from "../spectacle/service";
-import { SpectacleType } from "../spectacle/types";
-import { RANK_UNLOCKS } from "./components/MasteryUnlockGate";
+import { MASTERY_RANK_THRESHOLDS, calculateTechniqueXp, generateMasteryChallenges, getMasteryRankDisplay, type MasteryRank, type MasteryState } from './types';
+import { loadStoredMasteryState, persistMasteryState } from './repository';
+import { spectacleService } from '../spectacle/service';
+import { SpectacleType } from '../spectacle/types';
+import { RANK_UNLOCKS } from './components/MasteryUnlockGate';
 
 type TechniqueXpGains = ReturnType<typeof calculateTechniqueXp>;
 type StoredMasteryState = MasteryState;
-type TechniqueKey = keyof StoredMasteryState["techniques"];
+type TechniqueKey = keyof StoredMasteryState['techniques'];
 
 function resolveRank(points: number): MasteryRank {
   if (points >= MASTERY_RANK_THRESHOLDS.GRANDMASTER) {
-    return "GRANDMASTER";
+    return 'GRANDMASTER';
   }
   if (points >= MASTERY_RANK_THRESHOLDS.MASTER) {
-    return "MASTER";
+    return 'MASTER';
   }
   if (points >= MASTERY_RANK_THRESHOLDS.EXPERT) {
-    return "EXPERT";
+    return 'EXPERT';
   }
   if (points >= MASTERY_RANK_THRESHOLDS.ADEPT) {
-    return "ADEPT";
+    return 'ADEPT';
   }
-  return "APPRENTICE";
+  return 'APPRENTICE';
 }
 
 function hydrateChallenges(state: StoredMasteryState): StoredMasteryState {
-  const nextChallenges = state.activeChallenges.filter((challenge) => challenge.status !== "CLAIMED");
+  const nextChallenges = state.activeChallenges.filter((challenge) => challenge.status !== 'CLAIMED');
   while (nextChallenges.length < 3) {
     const generated = generateMasteryChallenges(state.techniques, state.rank).filter((challenge) => !nextChallenges.some((item) => item.id === challenge.id));
     if (generated.length === 0) {
@@ -40,7 +40,7 @@ function createDefaultState(userId: string): StoredMasteryState {
   return hydrateChallenges({
     userId,
     totalMasteryPoints: 0,
-    rank: "APPRENTICE",
+    rank: 'APPRENTICE',
     techniques: {
       durationMastery: 0,
       purityMastery: 0,
@@ -63,14 +63,14 @@ function updateChallengeProgress(state: StoredMasteryState, xpGains: TechniqueXp
   return {
     ...state,
     activeChallenges: state.activeChallenges.map((challenge) => {
-      if (challenge.status !== "ACTIVE") {
+      if (challenge.status !== 'ACTIVE') {
         return challenge;
       }
       const nextCurrent = Math.min(challenge.target, challenge.current + xpGains[challenge.technique]);
       return {
         ...challenge,
         current: nextCurrent,
-        status: nextCurrent >= challenge.target ? "COMPLETED" : challenge.status,
+        status: nextCurrent >= challenge.target ? 'COMPLETED' : challenge.status,
         completedAt: nextCurrent >= challenge.target ? Date.now() : challenge.completedAt,
       };
     }),
@@ -98,11 +98,11 @@ function updateTechniqueProgress(userId: string, technique: TechniqueKey, delta:
           rank: resolveRank(currentState.totalMasteryPoints + pointsGained),
         },
         {
-          durationMastery: technique === "durationMastery" ? delta : 0,
-          purityMastery: technique === "purityMastery" ? delta : 0,
-          consistencyMastery: technique === "consistencyMastery" ? delta : 0,
-          comebackMastery: technique === "comebackMastery" ? delta : 0,
-          bossMastery: technique === "bossMastery" ? delta : 0,
+          durationMastery: technique === 'durationMastery' ? delta : 0,
+          purityMastery: technique === 'purityMastery' ? delta : 0,
+          consistencyMastery: technique === 'consistencyMastery' ? delta : 0,
+          comebackMastery: technique === 'comebackMastery' ? delta : 0,
+          bossMastery: technique === 'bossMastery' ? delta : 0,
         },
       ),
     ),
@@ -122,10 +122,10 @@ export async function recordSessionMasteryProgress(
   const sessionMinutes = Math.floor(sessionData.effectiveDuration / 60000);
   const qualityBonus = sessionData.focusQuality >= 90 ? 1 : 0;
 
-  updateTechniqueProgress(userId, "durationMastery", sessionMinutes > 45 ? 1 : 0, sessionMinutes > 45 ? 1 + qualityBonus : 0);
-  updateTechniqueProgress(userId, "purityMastery", sessionData.purityScore > 85 ? 1 : 0, sessionData.purityScore > 85 ? 1 + qualityBonus : 0);
-  updateTechniqueProgress(userId, "consistencyMastery", sessionData.streak > 0 ? 1 : 0, sessionData.streak > 0 ? 1 : 0);
-  updateTechniqueProgress(userId, "bossMastery", sessionData.hasBossActive ? 1 : 0, sessionData.hasBossActive ? 1 + qualityBonus : 0);
+  updateTechniqueProgress(userId, 'durationMastery', sessionMinutes > 45 ? 1 : 0, sessionMinutes > 45 ? 1 + qualityBonus : 0);
+  updateTechniqueProgress(userId, 'purityMastery', sessionData.purityScore > 85 ? 1 : 0, sessionData.purityScore > 85 ? 1 + qualityBonus : 0);
+  updateTechniqueProgress(userId, 'consistencyMastery', sessionData.streak > 0 ? 1 : 0, sessionData.streak > 0 ? 1 : 0);
+  updateTechniqueProgress(userId, 'bossMastery', sessionData.hasBossActive ? 1 : 0, sessionData.hasBossActive ? 1 + qualityBonus : 0);
 }
 
 export const MasteryService = {
@@ -182,7 +182,7 @@ export const MasteryService = {
   claimChallenge(userId: string, challengeId: string): boolean {
     const state = loadState(userId);
     const challenge = state.activeChallenges.find((item) => item.id === challengeId);
-    if (!challenge || challenge.status !== "COMPLETED") {
+    if (!challenge || challenge.status !== 'COMPLETED') {
       return false;
     }
 

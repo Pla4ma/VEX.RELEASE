@@ -23,7 +23,7 @@ export interface EventMetadata {
 }
 
 export interface DeviceInfo {
-  type: "mobile" | "tablet" | "desktop" | "web";
+  type: 'mobile' | 'tablet' | 'desktop' | 'web';
   os: string;
   version: string;
   appVersion?: string;
@@ -31,9 +31,9 @@ export interface DeviceInfo {
 
 // Session Lifecycle Events
 export interface SessionCompletedEvent extends BaseSessionCompletionEvent {
-  type: "session_completed";
+  type: 'session_completed';
   data: {
-    completionType: "natural" | "forced" | "abandoned" | "timeout" | "achievement";
+    completionType: 'natural' | 'forced' | 'abandoned' | 'timeout' | 'achievement';
     completionTime: Date;
     duration: number;
     objectives: {
@@ -61,7 +61,7 @@ export interface SessionCompletedEvent extends BaseSessionCompletionEvent {
 }
 
 export interface SessionAbortedEvent extends BaseSessionCompletionEvent {
-  type: "session_aborted";
+  type: 'session_aborted';
   data: {
     abortTime: Date;
     duration: number;
@@ -71,7 +71,7 @@ export interface SessionAbortedEvent extends BaseSessionCompletionEvent {
       totalObjectives: number;
       currentPhase: string;
     };
-    abortReason: "user_choice" | "technical_error" | "timeout" | "emergency" | "system_intervention";
+    abortReason: 'user_choice' | 'technical_error' | 'timeout' | 'emergency' | 'system_intervention';
     abortContext: {
       trigger: string;
       userState: string;
@@ -86,7 +86,7 @@ export interface SessionAbortedEvent extends BaseSessionCompletionEvent {
 }
 
 export interface SessionTimeoutEvent extends BaseSessionCompletionEvent {
-  type: "session_timeout";
+  type: 'session_timeout';
   data: {
     timeoutTime: Date;
     duration: number;
@@ -96,7 +96,7 @@ export interface SessionTimeoutEvent extends BaseSessionCompletionEvent {
       objectivesCompleted: number;
       totalObjectives: number;
     };
-    timeoutType: "soft" | "hard" | "grace_period";
+    timeoutType: 'soft' | 'hard' | 'grace_period';
     consequences: {
       scorePenalty: number;
       rewardReduction: number;
@@ -113,7 +113,7 @@ export interface SessionTimeoutEvent extends BaseSessionCompletionEvent {
 
 // Performance Events
 export interface SessionPerformanceCalculatedEvent extends BaseSessionCompletionEvent {
-  type: "session_performance_calculated";
+  type: 'session_performance_calculated';
   data: {
     performanceMetrics: {
       overall: {
@@ -154,17 +154,17 @@ export interface SessionPerformanceCalculatedEvent extends BaseSessionCompletion
 }
 
 export interface SessionMilestoneReachedEvent extends BaseSessionCompletionEvent {
-  type: "session_milestone_reached";
+  type: 'session_milestone_reached';
   data: {
     milestoneId: string;
-    milestoneType: "score" | "streak" | "accuracy" | "speed" | "completion" | "special";
+    milestoneType: 'score' | 'streak' | 'accuracy' | 'speed' | 'completion' | 'special';
     milestoneName: string;
     achievedAt: Date;
     value: number;
     target: number;
     previousRecord: number;
     improvement: number;
-    significance: "personal" | "session" | "daily" | "weekly" | "all_time";
+    significance: 'personal' | 'session' | 'daily' | 'weekly' | 'all_time';
     recognition: {
       badge: string;
       title: string;
@@ -181,10 +181,10 @@ export interface SessionMilestoneReachedEvent extends BaseSessionCompletionEvent
 }
 
 export interface SessionRecordBrokenEvent extends BaseSessionCompletionEvent {
-  type: "session_record_broken";
+  type: 'session_record_broken';
   data: {
     recordType: string;
-    recordCategory: "personal" | "session" | "daily" | "weekly" | "global";
+    recordCategory: 'personal' | 'session' | 'daily' | 'weekly' | 'global';
     previousRecord: number;
     newRecord: number;
     improvement: number;
@@ -207,7 +207,7 @@ export interface SessionRecordBrokenEvent extends BaseSessionCompletionEvent {
 
 // Reward Events
 export interface SessionRewardsCalculatedEvent extends BaseSessionCompletionEvent {
-  type: "session_rewards_calculated";
+  type: 'session_rewards_calculated';
   data: {
     baseRewards: {
       experience: number;
@@ -250,10 +250,10 @@ export interface SessionRewardsCalculatedEvent extends BaseSessionCompletionEven
 }
 
 export interface SessionRewardsClaimedEvent extends BaseSessionCompletionEvent {
-  type: "session_rewards_claimed";
+  type: 'session_rewards_claimed';
   data: {
     claimedAt: Date;
-    claimMethod: "auto" | "manual" | "delayed";
+    claimMethod: 'auto' | 'manual' | 'delayed';
     rewards: {
       experience: number;
       currency: number;
@@ -280,7 +280,7 @@ export interface SessionRewardsClaimedEvent extends BaseSessionCompletionEvent {
 }
 
 export interface SessionRewardMultiplierActivatedEvent extends BaseSessionCompletionEvent {
-  type: "session_reward_multiplier_activated";
+  type: 'session_reward_multiplier_activated';
   data: {
     multiplierId: string;
     multiplierType: string;
@@ -312,11 +312,11 @@ export interface SessionRewardMultiplierActivatedEvent extends BaseSessionComple
 
 // Achievement Events
 export interface SessionAchievementUnlockedEvent extends BaseSessionCompletionEvent {
-  type: "session_achievement_unlocked";
+  type: 'session_achievement_unlocked';
   data: {
     achievementId: string;
     achievementName: string;
-    achievementType: "completion" | "performance" | "streak" | "special" | "hidden";
+    achievementType: 'completion' | 'performance' | 'streak' | 'special' | 'hidden';
     unlockedAt: Date;
     progress: {
       current: number;
@@ -354,7 +354,7 @@ export interface SessionAchievementUnlockedEvent extends BaseSessionCompletionEv
 }
 
 export interface SessionAchievementProgressUpdatedEvent extends BaseSessionCompletionEvent {
-  type: "session_achievement_progress_updated";
+  type: 'session_achievement_progress_updated';
   data: {
     achievementId: string;
     previousProgress: number;
@@ -382,9 +382,9 @@ export interface SessionAchievementProgressUpdatedEvent extends BaseSessionCompl
 
 // Analytics Events
 export interface SessionAnalyticsGeneratedEvent extends BaseSessionCompletionEvent {
-  type: "session_analytics_generated";
+  type: 'session_analytics_generated';
   data: {
-    analyticsType: "performance" | "progress" | "trends" | "predictions" | "insights";
+    analyticsType: 'performance' | 'progress' | 'trends' | 'predictions' | 'insights';
     timeframe: string;
     metrics: Record<string, number>;
     dimensions: DynamicRecord;
@@ -396,7 +396,7 @@ export interface SessionAnalyticsGeneratedEvent extends BaseSessionCompletionEve
     }[];
     trends: {
       metric: string;
-      direction: "up" | "down" | "stable";
+      direction: 'up' | 'down' | 'stable';
       change: number;
       significance: string;
     }[];
@@ -411,7 +411,7 @@ export interface SessionAnalyticsGeneratedEvent extends BaseSessionCompletionEve
 }
 
 export interface SessionPerformanceReportEvent extends BaseSessionCompletionEvent {
-  type: "session_performance_report";
+  type: 'session_performance_report';
   data: {
     reportPeriod: {
       start: Date;
@@ -455,9 +455,9 @@ export interface SessionPerformanceReportEvent extends BaseSessionCompletionEven
 
 // Feedback Events
 export interface SessionFeedbackRequestedEvent extends BaseSessionCompletionEvent {
-  type: "session_feedback_requested";
+  type: 'session_feedback_requested';
   data: {
-    feedbackType: "rating" | "survey" | "comment" | "suggestion" | "bug_report";
+    feedbackType: 'rating' | 'survey' | 'comment' | 'suggestion' | 'bug_report';
     requestedAt: Date;
     context: {
       sessionType: string;
@@ -486,7 +486,7 @@ export interface SessionFeedbackRequestedEvent extends BaseSessionCompletionEven
 }
 
 export interface SessionFeedbackSubmittedEvent extends BaseSessionCompletionEvent {
-  type: "session_feedback_submitted";
+  type: 'session_feedback_submitted';
   data: {
     feedbackId: string;
     feedbackType: string;
@@ -498,7 +498,7 @@ export interface SessionFeedbackSubmittedEvent extends BaseSessionCompletionEven
     }[];
     rating?: number;
     comment?: string;
-    sentiment?: "positive" | "neutral" | "negative";
+    sentiment?: 'positive' | 'neutral' | 'negative';
     context: {
       device: string;
       location?: string;
@@ -514,9 +514,9 @@ export interface SessionFeedbackSubmittedEvent extends BaseSessionCompletionEven
 
 // Social Events
 export interface SessionSharedEvent extends BaseSessionCompletionEvent {
-  type: "session_shared";
+  type: 'session_shared';
   data: {
-    shareType: "achievement" | "record" | "milestone" | "completion" | "performance";
+    shareType: 'achievement' | 'record' | 'milestone' | 'completion' | 'performance';
     sharedAt: Date;
     platform: string;
     content: {
@@ -527,7 +527,7 @@ export interface SessionSharedEvent extends BaseSessionCompletionEvent {
       stats: DynamicValue;
     };
     audience: {
-      type: "public" | "friends" | "group" | "private";
+      type: 'public' | 'friends' | 'group' | 'private';
       recipients?: string[];
     };
     engagement: {
@@ -545,9 +545,9 @@ export interface SessionSharedEvent extends BaseSessionCompletionEvent {
 }
 
 export interface SessionComparedEvent extends BaseSessionCompletionEvent {
-  type: "session_compared";
+  type: 'session_compared';
   data: {
-    comparisonType: "peer" | "friend" | "leaderboard" | "global" | "historical";
+    comparisonType: 'peer' | 'friend' | 'leaderboard' | 'global' | 'historical';
     comparisonTarget: string;
     metrics: {
       user: number;
@@ -573,9 +573,9 @@ export interface SessionComparedEvent extends BaseSessionCompletionEvent {
 
 // System Events
 export interface SessionSystemMaintenanceEvent extends BaseSessionCompletionEvent {
-  type: "session_system_maintenance";
+  type: 'session_system_maintenance';
   data: {
-    maintenanceType: "scheduled" | "emergency" | "upgrade" | "migration";
+    maintenanceType: 'scheduled' | 'emergency' | 'upgrade' | 'migration';
     startTime: Date;
     endTime?: Date;
     duration?: number;
@@ -592,12 +592,12 @@ export interface SessionSystemMaintenanceEvent extends BaseSessionCompletionEven
 }
 
 export interface SessionSystemErrorEvent extends BaseSessionCompletionEvent {
-  type: "session_system_error";
+  type: 'session_system_error';
   data: {
-    errorType: "completion_error" | "reward_error" | "analytics_error" | "system_error";
+    errorType: 'completion_error' | 'reward_error' | 'analytics_error' | 'system_error';
     errorCode: string;
     errorMessage: string;
-    severity: "low" | "medium" | "high" | "critical";
+    severity: 'low' | 'medium' | 'high' | 'critical';
     context: {
       service: string;
       operation: string;
@@ -619,10 +619,10 @@ export interface SessionSystemErrorEvent extends BaseSessionCompletionEvent {
 export type SessionCompletionEventType = SessionCompletedEvent | SessionAbortedEvent | SessionTimeoutEvent | SessionPerformanceCalculatedEvent | SessionMilestoneReachedEvent | SessionRecordBrokenEvent | SessionRewardsCalculatedEvent | SessionRewardsClaimedEvent | SessionRewardMultiplierActivatedEvent | SessionAchievementUnlockedEvent | SessionAchievementProgressUpdatedEvent | SessionAnalyticsGeneratedEvent | SessionPerformanceReportEvent | SessionFeedbackRequestedEvent | SessionFeedbackSubmittedEvent | SessionSharedEvent | SessionComparedEvent | SessionSystemMaintenanceEvent | SessionSystemErrorEvent;
 
 // Event Factory Functions
-export function createSessionCompletedEvent(userId: string, sessionId: string, completionType: "natural" | "forced" | "abandoned" | "timeout" | "achievement", duration: number, objectives: DynamicValue, performance: DynamicValue, conditions: DynamicValue): SessionCompletedEvent {
+export function createSessionCompletedEvent(userId: string, sessionId: string, completionType: 'natural' | 'forced' | 'abandoned' | 'timeout' | 'achievement', duration: number, objectives: DynamicValue, performance: DynamicValue, conditions: DynamicValue): SessionCompletedEvent {
   return {
     id: generateEventId(),
-    type: "session_completed",
+    type: 'session_completed',
     userId,
     sessionId,
     timestamp: new Date(),
@@ -634,14 +634,14 @@ export function createSessionCompletedEvent(userId: string, sessionId: string, c
       performance,
       conditions,
     },
-    metadata: createEventMetadata("session-completion"),
+    metadata: createEventMetadata('session-completion'),
   };
 }
 
 export function createSessionPerformanceCalculatedEvent(userId: string, sessionId: string, performanceMetrics: DynamicValue, benchmarks: DynamicValue, analysis: DynamicValue): SessionPerformanceCalculatedEvent {
   return {
     id: generateEventId(),
-    type: "session_performance_calculated",
+    type: 'session_performance_calculated',
     userId,
     sessionId,
     timestamp: new Date(),
@@ -650,14 +650,14 @@ export function createSessionPerformanceCalculatedEvent(userId: string, sessionI
       benchmarks,
       analysis,
     },
-    metadata: createEventMetadata("session-completion"),
+    metadata: createEventMetadata('session-completion'),
   };
 }
 
 export function createSessionRewardsCalculatedEvent(userId: string, sessionId: string, baseRewards: DynamicValue, performanceBonus: DynamicValue, completionBonus: DynamicValue, specialRewards: DynamicValue[]): SessionRewardsCalculatedEvent {
   return {
     id: generateEventId(),
-    type: "session_rewards_calculated",
+    type: 'session_rewards_calculated',
     userId,
     sessionId,
     timestamp: new Date(),
@@ -673,14 +673,14 @@ export function createSessionRewardsCalculatedEvent(userId: string, sessionId: s
         items: specialRewards,
       },
     },
-    metadata: createEventMetadata("session-completion"),
+    metadata: createEventMetadata('session-completion'),
   };
 }
 
-export function createSessionAchievementUnlockedEvent(userId: string, sessionId: string, achievementId: string, achievementName: string, achievementType: "streak" | "completion" | "special" | "performance" | "hidden", progress: DynamicValue, criteria: DynamicValue[], rarity: string, points: number, rewards: DynamicValue): SessionAchievementUnlockedEvent {
+export function createSessionAchievementUnlockedEvent(userId: string, sessionId: string, achievementId: string, achievementName: string, achievementType: 'streak' | 'completion' | 'special' | 'performance' | 'hidden', progress: DynamicValue, criteria: DynamicValue[], rarity: string, points: number, rewards: DynamicValue): SessionAchievementUnlockedEvent {
   return {
     id: generateEventId(),
-    type: "session_achievement_unlocked",
+    type: 'session_achievement_unlocked',
     userId,
     sessionId,
     timestamp: new Date(),
@@ -698,18 +698,18 @@ export function createSessionAchievementUnlockedEvent(userId: string, sessionId:
         badge: `${achievementId}_badge`,
         celebration: true,
         shareable: true,
-        public: rarity === "legendary" || rarity === "epic",
+        public: rarity === 'legendary' || rarity === 'epic',
       },
       firstTime: true,
     },
-    metadata: createEventMetadata("session-completion"),
+    metadata: createEventMetadata('session-completion'),
   };
 }
 
-export function createSessionMilestoneReachedEvent(userId: string, sessionId: string, milestoneId: string, milestoneType: "score" | "streak" | "accuracy" | "speed" | "completion" | "special", milestoneName: string, value: number, target: number, previousRecord: number, significance: "personal" | "session" | "daily" | "weekly" | "all_time"): SessionMilestoneReachedEvent {
+export function createSessionMilestoneReachedEvent(userId: string, sessionId: string, milestoneId: string, milestoneType: 'score' | 'streak' | 'accuracy' | 'speed' | 'completion' | 'special', milestoneName: string, value: number, target: number, previousRecord: number, significance: 'personal' | 'session' | 'daily' | 'weekly' | 'all_time'): SessionMilestoneReachedEvent {
   return {
     id: generateEventId(),
-    type: "session_milestone_reached",
+    type: 'session_milestone_reached',
     userId,
     sessionId,
     timestamp: new Date(),
@@ -736,7 +736,7 @@ export function createSessionMilestoneReachedEvent(userId: string, sessionId: st
         unlocks: [],
       },
     },
-    metadata: createEventMetadata("session-completion"),
+    metadata: createEventMetadata('session-completion'),
   };
 }
 
@@ -748,17 +748,17 @@ function generateEventId(): string {
 function createEventMetadata(source: string): EventMetadata {
   return {
     source,
-    version: "1.0.0",
+    version: '1.0.0',
     platform: getPlatform(),
   };
 }
 
 function getPlatform(): string {
-  if (typeof window !== "undefined") {
-    return "web";
+  if (typeof window !== 'undefined') {
+    return 'web';
   }
   // Add platform detection logic here
-  return "unknown";
+  return 'unknown';
 }
 
 // Event Validation
@@ -773,15 +773,15 @@ export function validateSessionCompletionEvent(event: SessionCompletionEventType
 
   // Add specific validation for each event type
   switch (event.type) {
-    case "session_completed":
+    case 'session_completed':
       return validateSessionCompletedEvent(event as SessionCompletedEvent);
-    case "session_performance_calculated":
+    case 'session_performance_calculated':
       return validateSessionPerformanceCalculatedEvent(event as SessionPerformanceCalculatedEvent);
-    case "session_rewards_calculated":
+    case 'session_rewards_calculated':
       return validateSessionRewardsCalculatedEvent(event as SessionRewardsCalculatedEvent);
-    case "session_achievement_unlocked":
+    case 'session_achievement_unlocked':
       return validateSessionAchievementUnlockedEvent(event as SessionAchievementUnlockedEvent);
-    case "session_milestone_reached":
+    case 'session_milestone_reached':
       return validateSessionMilestoneReachedEvent(event as SessionMilestoneReachedEvent);
     default:
       return true;
@@ -790,7 +790,7 @@ export function validateSessionCompletionEvent(event: SessionCompletionEventType
 
 function validateSessionCompletedEvent(event: SessionCompletedEvent): boolean {
   const { data } = event;
-  return !!(data.completionType && data.completionTime && typeof data.duration === "number" && data.objectives && data.performance && data.conditions);
+  return !!(data.completionType && data.completionTime && typeof data.duration === 'number' && data.objectives && data.performance && data.conditions);
 }
 
 function validateSessionPerformanceCalculatedEvent(event: SessionPerformanceCalculatedEvent): boolean {
@@ -805,12 +805,12 @@ function validateSessionRewardsCalculatedEvent(event: SessionRewardsCalculatedEv
 
 function validateSessionAchievementUnlockedEvent(event: SessionAchievementUnlockedEvent): boolean {
   const { data } = event;
-  return !!(data.achievementId && data.achievementName && data.achievementType && data.progress && data.criteria && data.rarity && typeof data.points === "number" && data.rewards && data.recognition);
+  return !!(data.achievementId && data.achievementName && data.achievementType && data.progress && data.criteria && data.rarity && typeof data.points === 'number' && data.rewards && data.recognition);
 }
 
 function validateSessionMilestoneReachedEvent(event: SessionMilestoneReachedEvent): boolean {
   const { data } = event;
-  return !!(data.milestoneId && data.milestoneType && data.milestoneName && typeof data.value === "number" && typeof data.target === "number" && typeof data.previousRecord === "number" && data.significance && data.recognition && data.rewards);
+  return !!(data.milestoneId && data.milestoneType && data.milestoneName && typeof data.value === 'number' && typeof data.target === 'number' && typeof data.previousRecord === 'number' && data.significance && data.recognition && data.rewards);
 }
 
 // Event Serialization

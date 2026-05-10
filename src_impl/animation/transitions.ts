@@ -4,7 +4,7 @@
  * Predefined transition configurations for React Navigation.
  */
 
-import { Easing } from "react-native-reanimated";
+import { Easing } from 'react-native-reanimated';
 
 type InterpolatedValue = string | number;
 type AnimatedProgress = {
@@ -51,7 +51,7 @@ export const slideFromRight: StackCardStyleInterpolator = ({ current, next, layo
 /**
  * Slide from bottom transition (modal style)
  */
-export const slideFromBottom: StackCardStyleInterpolator = ({ current, layouts: { screen } }: Omit<TransitionParams, "next" | "inverted">) => {
+export const slideFromBottom: StackCardStyleInterpolator = ({ current, layouts: { screen } }: Omit<TransitionParams, 'next' | 'inverted'>) => {
   const translateY = current.progress.interpolate({
     inputRange: [0, 1],
     outputRange: [screen.height, 0],
@@ -67,7 +67,7 @@ export const slideFromBottom: StackCardStyleInterpolator = ({ current, layouts: 
 /**
  * Fade transition
  */
-export const fadeTransition: StackCardStyleInterpolator = ({ current }: Pick<TransitionParams, "current">) => {
+export const fadeTransition: StackCardStyleInterpolator = ({ current }: Pick<TransitionParams, 'current'>) => {
   const opacity = current.progress.interpolate({
     inputRange: [0, 1],
     outputRange: [0, 1],
@@ -83,7 +83,7 @@ export const fadeTransition: StackCardStyleInterpolator = ({ current }: Pick<Tra
 /**
  * Scale transition
  */
-export const scaleTransition: StackCardStyleInterpolator = ({ current }: Pick<TransitionParams, "current">) => {
+export const scaleTransition: StackCardStyleInterpolator = ({ current }: Pick<TransitionParams, 'current'>) => {
   const scale = current.progress.interpolate({
     inputRange: [0, 1],
     outputRange: [0.9, 1],
@@ -105,7 +105,7 @@ export const scaleTransition: StackCardStyleInterpolator = ({ current }: Pick<Tr
 /**
  * Shared element transition placeholder
  */
-export const sharedElementTransition: StackCardStyleInterpolator = ({ current }: Pick<TransitionParams, "current">) => {
+export const sharedElementTransition: StackCardStyleInterpolator = ({ current }: Pick<TransitionParams, 'current'>) => {
   // This is a placeholder - actual implementation requires
   // react-navigation-shared-element library
   return {
@@ -120,17 +120,17 @@ export const sharedElementTransition: StackCardStyleInterpolator = ({ current }:
  */
 export const transitionPresets = {
   slideFromRight: {
-    gestureDirection: "horizontal",
+    gestureDirection: 'horizontal',
     transitionSpec: {
       open: {
-        animation: "timing",
+        animation: 'timing',
         config: {
           duration: 300,
           easing: Easing.bezier(0.25, 0.1, 0.25, 1),
         },
       },
       close: {
-        animation: "timing",
+        animation: 'timing',
         config: {
           duration: 300,
           easing: Easing.bezier(0.25, 0.1, 0.25, 1),
@@ -141,17 +141,17 @@ export const transitionPresets = {
   },
 
   slideFromBottom: {
-    gestureDirection: "vertical",
+    gestureDirection: 'vertical',
     transitionSpec: {
       open: {
-        animation: "timing",
+        animation: 'timing',
         config: {
           duration: 400,
           easing: Easing.out(Easing.cubic),
         },
       },
       close: {
-        animation: "timing",
+        animation: 'timing',
         config: {
           duration: 300,
           easing: Easing.in(Easing.cubic),
@@ -162,17 +162,17 @@ export const transitionPresets = {
   },
 
   fade: {
-    gestureDirection: "horizontal",
+    gestureDirection: 'horizontal',
     transitionSpec: {
       open: {
-        animation: "timing",
+        animation: 'timing',
         config: {
           duration: 200,
           easing: Easing.linear,
         },
       },
       close: {
-        animation: "timing",
+        animation: 'timing',
         config: {
           duration: 200,
           easing: Easing.linear,
@@ -183,10 +183,10 @@ export const transitionPresets = {
   },
 
   scale: {
-    gestureDirection: "horizontal",
+    gestureDirection: 'horizontal',
     transitionSpec: {
       open: {
-        animation: "spring",
+        animation: 'spring',
         config: {
           stiffness: 1000,
           damping: 50,
@@ -194,7 +194,7 @@ export const transitionPresets = {
         },
       },
       close: {
-        animation: "timing",
+        animation: 'timing',
         config: {
           duration: 200,
           easing: Easing.linear,

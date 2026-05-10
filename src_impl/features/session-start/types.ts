@@ -5,7 +5,7 @@
  */
 
 export interface SessionEnvironment {
-  type: "physical" | "virtual" | "hybrid";
+  type: 'physical' | 'virtual' | 'hybrid';
   setup: EnvironmentSetup;
   conditions: EnvironmentConditions;
   resources: EnvironmentResources;
@@ -49,9 +49,9 @@ export interface SessionStart {
   experience: StartExperience;
 }
 
-export type StartType = "manual" | "scheduled" | "auto" | "quick_start" | "tutorial" | "challenge" | "social" | "guided";
+export type StartType = 'manual' | 'scheduled' | 'auto' | 'quick_start' | 'tutorial' | 'challenge' | 'social' | 'guided';
 
-export type StartStatus = "initializing" | "preparing" | "ready" | "starting" | "started" | "failed" | "cancelled";
+export type StartStatus = 'initializing' | 'preparing' | 'ready' | 'starting' | 'started' | 'failed' | 'cancelled';
 
 export interface SessionPreparation {
   warmup: WarmupSession;
@@ -72,15 +72,15 @@ export interface WarmupSession {
   effectiveness: number; // 0-100
 }
 
-export type WarmupType = "mental" | "physical" | "technical" | "creative" | "social" | "comprehensive";
+export type WarmupType = 'mental' | 'physical' | 'technical' | 'creative' | 'social' | 'comprehensive';
 
 export interface WarmupExercise {
   id: string;
   name: string;
-  type: "breathing" | "stretching" | "focus" | "visualization" | "reaction" | "memory";
+  type: 'breathing' | 'stretching' | 'focus' | 'visualization' | 'reaction' | 'memory';
   duration: number; // in seconds
   instructions: string[];
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: 'easy' | 'medium' | 'hard';
   completed: boolean;
   performance?: ExercisePerformance;
 }
@@ -113,7 +113,7 @@ export interface SetupStep {
   duration: number; // in seconds
 }
 
-export type SetupStepType = "account_check" | "equipment_setup" | "environment_check" | "profile_configuration" | "goal_setting" | "privacy_settings" | "notification_preferences" | "accessibility_options";
+export type SetupStepType = 'account_check' | 'equipment_setup' | 'environment_check' | 'profile_configuration' | 'goal_setting' | 'privacy_settings' | 'notification_preferences' | 'accessibility_options';
 
 export interface CalibrationSession {
   enabled: boolean;
@@ -125,7 +125,7 @@ export interface CalibrationSession {
   accuracy: number; // 0-100
 }
 
-export type CalibrationType = "input" | "output" | "biometric" | "environmental" | "performance" | "comprehensive";
+export type CalibrationType = 'input' | 'output' | 'biometric' | 'environmental' | 'performance' | 'comprehensive';
 
 export interface CalibrationMeasurement {
   metric: string;
@@ -133,7 +133,7 @@ export interface CalibrationMeasurement {
   unit: string;
   target: number;
   tolerance: number;
-  status: "measuring" | "complete" | "failed";
+  status: 'measuring' | 'complete' | 'failed';
   timestamp: Date;
 }
 
@@ -150,7 +150,7 @@ export interface CalibrationAdjustment {
   oldValue: number;
   newValue: number;
   reason: string;
-  impact: "low" | "medium" | "high";
+  impact: 'low' | 'medium' | 'high';
   timestamp: Date;
 }
 
@@ -163,7 +163,7 @@ export interface OrientationSession {
   understanding: number; // 0-100
 }
 
-export type OrientationType = "tutorial" | "overview" | "controls" | "objectives" | "interface" | "features";
+export type OrientationType = 'tutorial' | 'overview' | 'controls' | 'objectives' | 'interface' | 'features';
 
 export interface OrientationContent {
   sections: OrientationSection[];
@@ -176,7 +176,7 @@ export interface OrientationSection {
   id: string;
   title: string;
   content: string;
-  type: "text" | "video" | "interactive" | "demonstration";
+  type: 'text' | 'video' | 'interactive' | 'demonstration';
   duration: number; // in seconds
   required: boolean;
   completed: boolean;
@@ -200,13 +200,13 @@ export interface BriefingSession {
   completed: boolean;
 }
 
-export type BriefingType = "mission" | "goals" | "strategy" | "tips" | "motivation" | "comprehensive";
+export type BriefingType = 'mission' | 'goals' | 'strategy' | 'tips' | 'motivation' | 'comprehensive';
 
 export interface BriefingObjective {
   id: string;
   title: string;
   description: string;
-  priority: "low" | "medium" | "high" | "critical";
+  priority: 'low' | 'medium' | 'high' | 'critical';
   measurable: boolean;
   target?: number;
   unit?: string;
@@ -240,9 +240,9 @@ export interface EnvironmentContext {
 }
 
 export interface TimeContext {
-  timeOfDay: "morning" | "afternoon" | "evening" | "night";
+  timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
   dayOfWeek: number; // 0-6
-  season: "spring" | "summer" | "fall" | "winter";
+  season: 'spring' | 'summer' | 'fall' | 'winter';
   timezone: string;
   availableTime: number; // in minutes
   preferredDuration: number; // in minutes
@@ -253,11 +253,11 @@ export interface SocialContext {
   friendsOnline: number;
   activeRivalries: number;
   teamMembers: number;
-  socialMood: "energetic" | "calm" | "competitive" | "collaborative";
+  socialMood: 'energetic' | 'calm' | 'competitive' | 'collaborative';
 }
 
 export interface PerformanceContext {
-  recentTrend: "improving" | "stable" | "declining";
+  recentTrend: 'improving' | 'stable' | 'declining';
   averageScore: number;
   bestScore: number;
   consistency: number; // 0-100
@@ -276,7 +276,7 @@ export interface GoalInfo {
   id: string;
   title: string;
   progress: number; // 0-100
-  priority: "low" | "medium" | "high" | "critical";
+  priority: 'low' | 'medium' | 'high' | 'critical';
 }
 
 export interface DeadlineInfo {
@@ -301,13 +301,13 @@ export interface EmotionState {
   arousal: number; // 0-100
 }
 
-export type EmotionType = "excited" | "calm" | "focused" | "creative" | "energetic" | "relaxed" | "competitive" | "collaborative" | "curious" | "confident";
+export type EmotionType = 'excited' | 'calm' | 'focused' | 'creative' | 'energetic' | 'relaxed' | 'competitive' | 'collaborative' | 'curious' | 'confident';
 
 export interface MoodFactor {
   factor: string;
   impact: number; // -100 to 100
   description: string;
-  category: "positive" | "negative" | "neutral";
+  category: 'positive' | 'negative' | 'neutral';
 }
 
 export interface PerformanceSummary {
@@ -330,8 +330,8 @@ export interface SessionSummary {
 export interface ChallengeInfo {
   id: string;
   name: string;
-  type: "daily" | "weekly" | "monthly" | "special";
-  difficulty: "easy" | "medium" | "hard" | "expert";
+  type: 'daily' | 'weekly' | 'monthly' | 'special';
+  difficulty: 'easy' | 'medium' | 'hard' | 'expert';
   progress: number; // 0-100
   deadline?: Date;
 }
@@ -343,7 +343,7 @@ export interface BriefingStrategy {
   contingencies: StrategyContingency[];
 }
 
-export type StrategyApproach = "conservative" | "balanced" | "aggressive" | "adaptive" | "experimental" | "optimized";
+export type StrategyApproach = 'conservative' | 'balanced' | 'aggressive' | 'adaptive' | 'experimental' | 'optimized';
 
 export interface StrategyTactic {
   id: string;
@@ -351,11 +351,11 @@ export interface StrategyTactic {
   description: string;
   适用条件: string[];
   expectedOutcome: string;
-  riskLevel: "low" | "medium" | "high";
+  riskLevel: 'low' | 'medium' | 'high';
 }
 
 export interface StrategyResource {
-  type: "tool" | "skill" | "knowledge" | "support" | "equipment";
+  type: 'tool' | 'skill' | 'knowledge' | 'support' | 'equipment';
   name: string;
   availability: boolean;
   effectiveness: number; // 0-100
@@ -365,7 +365,7 @@ export interface StrategyContingency {
   scenario: string;
   trigger: string;
   action: string;
-  priority: "low" | "medium" | "high";
+  priority: 'low' | 'medium' | 'high';
 }
 
 export interface BriefingTip {
@@ -376,7 +376,7 @@ export interface BriefingTip {
   personalized: boolean;
 }
 
-export type TipCategory = "performance" | "strategy" | "mindset" | "technical" | "social" | "health" | "environment";
+export type TipCategory = 'performance' | 'strategy' | 'mindset' | 'technical' | 'social' | 'health' | 'environment';
 
 export interface EquipmentCheck {
   required: EquipmentItem[];
@@ -395,7 +395,7 @@ export interface EquipmentItem {
   lastChecked?: Date;
 }
 
-export type EquipmentType = "hardware" | "software" | "peripheral" | "furniture" | "environmental" | "accessory";
+export type EquipmentType = 'hardware' | 'software' | 'peripheral' | 'furniture' | 'environmental' | 'accessory';
 
 export interface EquipmentStatus {
   ready: boolean;
@@ -407,7 +407,7 @@ export interface EquipmentStatus {
 export interface EquipmentIssue {
   item: string;
   issue: string;
-  severity: "low" | "medium" | "high" | "critical";
+  severity: 'low' | 'medium' | 'high' | 'critical';
   solution?: string;
   resolved: boolean;
 }
@@ -415,7 +415,7 @@ export interface EquipmentIssue {
 export interface EquipmentRecommendation {
   item: string;
   recommendation: string;
-  priority: "low" | "medium" | "high";
+  priority: 'low' | 'medium' | 'high';
   estimatedImpact: number; // 0-100
   cost?: number;
 }
@@ -432,7 +432,7 @@ export interface LightingSetup {
   current: number; // 0-100
   optimal: number; // 0-100
   adjustable: boolean;
-  type: "natural" | "artificial" | "mixed";
+  type: 'natural' | 'artificial' | 'mixed';
   recommendations: string[];
 }
 
@@ -457,7 +457,7 @@ export interface ComfortSetup {
   recommendations: string[];
 }
 
-export type ComfortLevel = "poor" | "fair" | "good" | "excellent";
+export type ComfortLevel = 'poor' | 'fair' | 'good' | 'excellent';
 
 export interface PostureCheck {
   current: PostureState;
@@ -465,7 +465,7 @@ export interface PostureCheck {
   exercises: PostureExercise[];
 }
 
-export type PostureState = "excellent" | "good" | "fair" | "poor" | "needs_improvement";
+export type PostureState = 'excellent' | 'good' | 'fair' | 'poor' | 'needs_improvement';
 
 export interface PostureExercise {
   name: string;
@@ -482,7 +482,7 @@ export interface ErgonomicAssessment {
 
 export interface ErgonomicIssue {
   area: string;
-  severity: "low" | "medium" | "high";
+  severity: 'low' | 'medium' | 'high';
   description: string;
   solution: string;
 }
@@ -491,7 +491,7 @@ export interface ErgonomicImprovement {
   area: string;
   improvement: string;
   impact: number; // 0-100
-  effort: "low" | "medium" | "high";
+  effort: 'low' | 'medium' | 'high';
 }
 
 export interface DistractionManagement {
@@ -502,9 +502,9 @@ export interface DistractionManagement {
 }
 
 export interface DistractionSource {
-  type: "digital" | "physical" | "social" | "environmental";
+  type: 'digital' | 'physical' | 'social' | 'environmental';
   source: string;
-  frequency: "rare" | "occasional" | "frequent" | "constant";
+  frequency: 'rare' | 'occasional' | 'frequent' | 'constant';
   impact: number; // 0-100
 }
 
@@ -525,9 +525,9 @@ export interface SessionConfiguration {
   social: SocialConfig;
 }
 
-export type SessionMode = "focus" | "learning" | "practice" | "challenge" | "creative" | "social" | "relaxation" | "custom";
+export type SessionMode = 'focus' | 'learning' | 'practice' | 'challenge' | 'creative' | 'social' | 'relaxation' | 'custom';
 
-export type DifficultyLevel = "beginner" | "easy" | "medium" | "hard" | "expert" | "adaptive";
+export type DifficultyLevel = 'beginner' | 'easy' | 'medium' | 'hard' | 'expert' | 'adaptive';
 
 export interface DurationConfig {
   target: number; // in minutes
@@ -547,8 +547,8 @@ export interface ObjectiveConfig {
 }
 
 export interface AccessibilityConfig {
-  fontSize: "small" | "medium" | "large" | "extra-large";
-  colorBlindMode: "none" | "protanopia" | "deuteranopia" | "tritanopia";
+  fontSize: 'small' | 'medium' | 'large' | 'extra-large';
+  colorBlindMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
   highContrast: boolean;
   reducedMotion: boolean;
   screenReader: boolean;
@@ -589,9 +589,9 @@ export interface SessionGoal {
   milestones: GoalMilestone[];
 }
 
-export type GoalType = "performance" | "learning" | "completion" | "time" | "accuracy" | "speed" | "engagement" | "social" | "custom";
+export type GoalType = 'performance' | 'learning' | 'completion' | 'time' | 'accuracy' | 'speed' | 'engagement' | 'social' | 'custom';
 
-export type GoalPriority = "low" | "medium" | "high" | "critical";
+export type GoalPriority = 'low' | 'medium' | 'high' | 'critical';
 
 export interface GoalProgress {
   current: number;
@@ -635,7 +635,7 @@ export interface MoodAssessment {
   recommendations: string[];
 }
 
-export type AssessmentMethod = "self_report" | "behavioral" | "physiological" | "performance" | "hybrid";
+export type AssessmentMethod = 'self_report' | 'behavioral' | 'physiological' | 'performance' | 'hybrid';
 
 export interface MoodStrategy {
   strategy: string;
@@ -645,12 +645,12 @@ export interface MoodStrategy {
   instructions: string[];
 }
 
-export type StrategyType = "breathing" | "visualization" | "music" | "exercise" | "meditation" | "social" | "environment" | "cognitive";
+export type StrategyType = 'breathing' | 'visualization' | 'music' | 'exercise' | 'meditation' | 'social' | 'environment' | 'cognitive';
 
 export interface MoodTracking {
   baseline: MoodState;
   current: MoodState;
-  trend: "improving" | "stable" | "declining";
+  trend: 'improving' | 'stable' | 'declining';
   volatility: number; // 0-100
   patterns: MoodPattern[];
 }
@@ -677,7 +677,7 @@ export interface ReadinessScore {
   lastUpdated: Date;
 }
 
-export type ReadinessLevel = "not_ready" | "minimal" | "moderate" | "good" | "excellent" | "peak";
+export type ReadinessLevel = 'not_ready' | 'minimal' | 'moderate' | 'good' | 'excellent' | 'peak';
 
 export interface ReadinessDimension {
   dimension: ReadinessDimensionType;
@@ -687,16 +687,16 @@ export interface ReadinessDimension {
   factors: string[];
 }
 
-export type ReadinessDimensionType = "physical" | "mental" | "emotional" | "technical" | "environmental" | "social";
+export type ReadinessDimensionType = 'physical' | 'mental' | 'emotional' | 'technical' | 'environmental' | 'social';
 
-export type DimensionStatus = "excellent" | "good" | "fair" | "poor" | "critical";
+export type DimensionStatus = 'excellent' | 'good' | 'fair' | 'poor' | 'critical';
 
 export interface ReadinessFactor {
   factor: string;
   impact: number; // -100 to 100
   category: ReadinessDimensionType;
   actionable: boolean;
-  urgency: "low" | "medium" | "high";
+  urgency: 'low' | 'medium' | 'high';
 }
 
 export interface ReadinessRecommendation {
@@ -708,11 +708,11 @@ export interface ReadinessRecommendation {
   type: RecommendationType;
 }
 
-export type RecommendationPriority = "low" | "medium" | "high" | "urgent";
+export type RecommendationPriority = 'low' | 'medium' | 'high' | 'urgent';
 
-export type EffortLevel = "minimal" | "low" | "medium" | "high" | "significant";
+export type EffortLevel = 'minimal' | 'low' | 'medium' | 'high' | 'significant';
 
-export type RecommendationType = "preparation" | "adjustment" | "intervention" | "enhancement" | "recovery" | "prevention";
+export type RecommendationType = 'preparation' | 'adjustment' | 'intervention' | 'enhancement' | 'recovery' | 'prevention';
 
 export interface ReadinessClearance {
   cleared: boolean;
@@ -722,7 +722,7 @@ export interface ReadinessClearance {
   validUntil: Date;
 }
 
-export type ClearanceLevel = "no_go" | "conditional" | "full" | "enhanced";
+export type ClearanceLevel = 'no_go' | 'conditional' | 'full' | 'enhanced';
 
 export interface ClearanceCondition {
   condition: string;
@@ -781,7 +781,7 @@ export interface SatisfactionFactor {
   factor: string;
   impact: number; // -100 to 100
   description: string;
-  category: "positive" | "negative";
+  category: 'positive' | 'negative';
 }
 
 export interface ExperienceFeedback {
@@ -794,7 +794,7 @@ export interface ExperienceFeedback {
 
 export interface ExperienceIssue {
   issue: string;
-  severity: "low" | "medium" | "high" | "critical";
+  severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   reproduction?: string;
   impact: string;
@@ -802,7 +802,7 @@ export interface ExperienceIssue {
 
 export interface ExperienceHighlight {
   highlight: string;
-  category: "feature" | "moment" | "achievement" | "interaction";
+  category: 'feature' | 'moment' | 'achievement' | 'interaction';
   description: string;
   memorable: boolean;
 }
@@ -812,13 +812,13 @@ export interface ExperienceImprovement {
   current: number; // 0-100
   target: number; // 0-100
   gap: number;
-  priority: "low" | "medium" | "high";
+  priority: 'low' | 'medium' | 'high';
   strategies: string[];
   resources: ImprovementResource[];
 }
 
 export interface ImprovementResource {
-  type: "tutorial" | "tool" | "setting" | "feature" | "exercise";
+  type: 'tutorial' | 'tool' | 'setting' | 'feature' | 'exercise';
   name: string;
   description: string;
   availability: boolean;
@@ -827,7 +827,7 @@ export interface ImprovementResource {
 
 // Event Types
 export interface SessionStartEvent {
-  type: "session_initiated" | "session_prepared" | "session_ready" | "session_started" | "preparation_completed" | "readiness_assessed";
+  type: 'session_initiated' | 'session_prepared' | 'session_ready' | 'session_started' | 'preparation_completed' | 'readiness_assessed';
   userId: string;
   sessionId: string;
   startId: string;

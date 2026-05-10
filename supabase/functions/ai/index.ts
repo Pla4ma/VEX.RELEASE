@@ -31,6 +31,8 @@ const ROUTE_BY_SLUG: Record<string, AIRequest['requestType']> = {
   'weekly-reflection': 'GENERATE_WEEKLY_REFLECTION',
 };
 
+const httpRequest = globalThis.fetch.bind(globalThis);
+
 serve(async (request) => {
   if (request.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -91,8 +93,6 @@ serve(async (request) => {
       );
     }
 
-    console.error('[AI Function] Request failed', error);
-
     const fallbackResponse = buildFallbackResponse({
       requestType: expectedRequestType,
       userId: crypto.randomUUID(),
@@ -139,7 +139,6 @@ async function generateAIResponse(request: AIRequest): Promise<AIResponse> {
       structuredData: buildStructuredData(request, content),
     } as AIResponse;
   } catch (error) {
-    console.error('[AI Function] Gemini call failed', error);
     return buildFallbackResponse(
       request,
       error instanceof Error ? error.message : 'Gemini API failure',
@@ -164,7 +163,7 @@ async function callGemini(params: {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), params.timeoutMs);
 
-      const response = await fetch(
+      const response = await httpRequest(
         `https://generativelanguage.googleapis.com/v1beta/models/${params.model}:generateContent`,
         {
           method: 'POST',

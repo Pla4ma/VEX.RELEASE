@@ -7,17 +7,17 @@
  * @phase 3 - Deepening: Progression validation
  */
 
-import { z } from "zod";
-import { createDebugger } from "../../../utils/debug";
-import { eventBus } from "../../../events";
+import { z } from 'zod';
+import { createDebugger } from '../../../utils/debug';
+import { eventBus } from '../../../events';
 
-const debug = createDebugger("progression:validation");
+const debug = createDebugger('progression:validation');
 
 // ============================================================================
 // XP Validation Schemas
 // ============================================================================
 
-export const XPSourceSchema = z.enum(["SESSION_COMPLETE", "SESSION_QUALITY", "STREAK_BONUS", "CHALLENGE_COMPLETE", "BOSS_DAMAGE", "BOSS_DEFEAT", "ACHIEVEMENT_UNLOCK", "DAILY_LOGIN", "REFERRAL", "PROMOTION", "ADMIN_GRANT", "REFUND"]);
+export const XPSourceSchema = z.enum(['SESSION_COMPLETE', 'SESSION_QUALITY', 'STREAK_BONUS', 'CHALLENGE_COMPLETE', 'BOSS_DAMAGE', 'BOSS_DEFEAT', 'ACHIEVEMENT_UNLOCK', 'DAILY_LOGIN', 'REFERRAL', 'PROMOTION', 'ADMIN_GRANT', 'REFUND']);
 
 export const XPTransactionSchema = z.object({
   id: z.string().uuid(),
@@ -54,10 +54,10 @@ export interface ValidationResult<T> {
 }
 
 export interface Violation {
-  type: "RATE_LIMIT" | "IMPOSSIBLE" | "SUSPICIOUS" | "POLICY";
+  type: 'RATE_LIMIT' | 'IMPOSSIBLE' | 'SUSPICIOUS' | 'POLICY';
   field: string;
   message: string;
-  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
   details?: Record<string, unknown>;
 }
 
@@ -95,10 +95,10 @@ export function validateXPTransaction(
   if (!schemaResult.success) {
     result.valid = false;
     result.violations.push({
-      type: "POLICY",
-      field: "transaction",
-      message: "Invalid transaction structure",
-      severity: "HIGH",
+      type: 'POLICY',
+      field: 'transaction',
+      message: 'Invalid transaction structure',
+      severity: 'HIGH',
       details: { errors: schemaResult.error.errors },
     });
     result.riskScore = 100;
@@ -110,10 +110,10 @@ export function validateXPTransaction(
   // Check 1: Per-session cap
   if (transaction.amount > MAX_XP_PER_SESSION) {
     result.violations.push({
-      type: "IMPOSSIBLE",
-      field: "amount",
+      type: 'IMPOSSIBLE',
+      field: 'amount',
       message: `XP amount ${transaction.amount} exceeds maximum ${MAX_XP_PER_SESSION}`,
-      severity: "CRITICAL",
+      severity: 'CRITICAL',
       details: { amount: transaction.amount, max: MAX_XP_PER_SESSION },
     });
     result.riskScore += 40;
@@ -125,10 +125,10 @@ export function validateXPTransaction(
 
   if (recentXP + transaction.amount > MAX_XP_PER_HOUR) {
     result.violations.push({
-      type: "RATE_LIMIT",
-      field: "amount",
+      type: 'RATE_LIMIT',
+      field: 'amount',
       message: `Hourly XP cap exceeded: ${recentXP + transaction.amount}/${MAX_XP_PER_HOUR}`,
-      severity: "HIGH",
+      severity: 'HIGH',
       details: { recentXP, newAmount: transaction.amount, limit: MAX_XP_PER_HOUR },
     });
     result.riskScore += 35;
@@ -141,10 +141,10 @@ export function validateXPTransaction(
   const timeDrift = Date.now() - transaction.timestamp;
   if (timeDrift < 0 || timeDrift > 24 * 60 * 60 * 1000) {
     result.violations.push({
-      type: "SUSPICIOUS",
-      field: "timestamp",
-      message: "Transaction timestamp is suspicious (future or very old)",
-      severity: "MEDIUM",
+      type: 'SUSPICIOUS',
+      field: 'timestamp',
+      message: 'Transaction timestamp is suspicious (future or very old)',
+      severity: 'MEDIUM',
       details: { timestamp: transaction.timestamp, drift: timeDrift },
     });
     result.riskScore += 20;
@@ -154,10 +154,10 @@ export function validateXPTransaction(
   const isDuplicate = userHistory.recentTransactions.some((t) => t.sourceId === transaction.sourceId && t.source === transaction.source);
   if (isDuplicate) {
     result.violations.push({
-      type: "POLICY",
-      field: "sourceId",
-      message: "Duplicate transaction detected",
-      severity: "MEDIUM",
+      type: 'POLICY',
+      field: 'sourceId',
+      message: 'Duplicate transaction detected',
+      severity: 'MEDIUM',
       details: { sourceId: transaction.sourceId },
     });
     result.riskScore += 15;
@@ -170,8 +170,8 @@ export function validateXPTransaction(
 
   // Track analytics
   if (result.violations.length > 0) {
-    eventBus.publish("analytics:track", {
-      event: "progression_xp_validation_alert",
+    eventBus.publish('analytics:track', {
+      event: 'progression_xp_validation_alert',
       properties: {
         userId: transaction.userId,
         riskScore: result.riskScore,
@@ -181,7 +181,7 @@ export function validateXPTransaction(
     });
   }
 
-  debug.info("XP transaction validated", {
+  debug.info('XP transaction validated', {
     valid: result.valid,
     riskScore: result.riskScore,
     violations: result.violations.length,
@@ -204,10 +204,10 @@ export function validateLevelUp(currentLevel: number, currentXP: number, newXP: 
   // Sanity checks
   if (currentLevel < 1) {
     result.violations.push({
-      type: "IMPOSSIBLE",
-      field: "currentLevel",
-      message: "Current level cannot be less than 1",
-      severity: "CRITICAL",
+      type: 'IMPOSSIBLE',
+      field: 'currentLevel',
+      message: 'Current level cannot be less than 1',
+      severity: 'CRITICAL',
     });
     result.valid = false;
     result.riskScore = 100;
@@ -216,10 +216,10 @@ export function validateLevelUp(currentLevel: number, currentXP: number, newXP: 
 
   if (currentXP < 0 || newXP < 0) {
     result.violations.push({
-      type: "IMPOSSIBLE",
-      field: "xp",
-      message: "XP values cannot be negative",
-      severity: "CRITICAL",
+      type: 'IMPOSSIBLE',
+      field: 'xp',
+      message: 'XP values cannot be negative',
+      severity: 'CRITICAL',
     });
     result.valid = false;
     result.riskScore = 100;
@@ -228,10 +228,10 @@ export function validateLevelUp(currentLevel: number, currentXP: number, newXP: 
 
   if (newXP < currentXP) {
     result.violations.push({
-      type: "SUSPICIOUS",
-      field: "newXP",
-      message: "New XP is less than current XP (possible rollback attempt)",
-      severity: "HIGH",
+      type: 'SUSPICIOUS',
+      field: 'newXP',
+      message: 'New XP is less than current XP (possible rollback attempt)',
+      severity: 'HIGH',
     });
     result.riskScore += 40;
   }
@@ -254,10 +254,10 @@ export function validateLevelUp(currentLevel: number, currentXP: number, newXP: 
   // Check for massive level jumps
   if (levelsGained > 10) {
     result.violations.push({
-      type: "SUSPICIOUS",
-      field: "levelsGained",
+      type: 'SUSPICIOUS',
+      field: 'levelsGained',
       message: `Large level jump detected: +${levelsGained} levels`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
     });
     result.riskScore += 25;
   }
@@ -266,10 +266,10 @@ export function validateLevelUp(currentLevel: number, currentXP: number, newXP: 
   const MAX_LEVEL = 100;
   if (level > MAX_LEVEL) {
     result.violations.push({
-      type: "POLICY",
-      field: "newLevel",
+      type: 'POLICY',
+      field: 'newLevel',
       message: `Level ${level} exceeds maximum ${MAX_LEVEL}`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
     });
     level = MAX_LEVEL;
   }
@@ -295,16 +295,16 @@ function validateSourceSpecific(
   result: ValidationResult<XPTransaction>,
 ): void {
   switch (transaction.source) {
-    case "SESSION_COMPLETE":
+    case 'SESSION_COMPLETE':
       validateSessionXP(transaction, userHistory, result);
       break;
-    case "STREAK_BONUS":
+    case 'STREAK_BONUS':
       validateStreakBonus(transaction, result);
       break;
-    case "SESSION_QUALITY":
+    case 'SESSION_QUALITY':
       validateQualityBonus(transaction, result);
       break;
-    case "BOSS_DAMAGE":
+    case 'BOSS_DAMAGE':
       validateBossDamageXP(transaction, result);
       break;
   }
@@ -316,9 +316,9 @@ function validateSessionXP(transaction: XPTransaction, userHistory: { sessionHis
 
   if (!session) {
     result.warnings.push({
-      field: "sourceId",
-      message: "No matching session found for session XP",
-      code: "ORPHAN_SESSION_XP",
+      field: 'sourceId',
+      message: 'No matching session found for session XP',
+      code: 'ORPHAN_SESSION_XP',
     });
     return;
   }
@@ -329,10 +329,10 @@ function validateSessionXP(transaction: XPTransaction, userHistory: { sessionHis
 
   if (xpPerMinute > maxXPPerMinute) {
     result.violations.push({
-      type: "SUSPICIOUS",
-      field: "amount",
+      type: 'SUSPICIOUS',
+      field: 'amount',
       message: `XP per minute ratio too high: ${xpPerMinute.toFixed(1)} XP/min`,
-      severity: "HIGH",
+      severity: 'HIGH',
       details: { xpPerMinute, maxAllowed: maxXPPerMinute, duration: session.duration },
     });
     result.riskScore += 30;
@@ -341,10 +341,10 @@ function validateSessionXP(transaction: XPTransaction, userHistory: { sessionHis
   // Check for very short sessions with high XP
   if (session.duration < 60000 && transaction.amount > 100) {
     result.violations.push({
-      type: "SUSPICIOUS",
-      field: "amount",
-      message: "High XP for very short session",
-      severity: "MEDIUM",
+      type: 'SUSPICIOUS',
+      field: 'amount',
+      message: 'High XP for very short session',
+      severity: 'MEDIUM',
       details: { duration: session.duration, xp: transaction.amount },
     });
     result.riskScore += 15;
@@ -357,10 +357,10 @@ function validateStreakBonus(transaction: XPTransaction, result: ValidationResul
 
   if (multiplier && multiplier > MAX_STREAK_BONUS_MULTIPLIER) {
     result.violations.push({
-      type: "POLICY",
-      field: "metadata.multiplier",
+      type: 'POLICY',
+      field: 'metadata.multiplier',
       message: `Streak multiplier ${multiplier} exceeds maximum ${MAX_STREAK_BONUS_MULTIPLIER}`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
       details: { multiplier, max: MAX_STREAK_BONUS_MULTIPLIER },
     });
     result.riskScore += 20;
@@ -372,10 +372,10 @@ function validateQualityBonus(transaction: XPTransaction, result: ValidationResu
 
   if (multiplier && multiplier > MAX_QUALITY_BONUS) {
     result.violations.push({
-      type: "POLICY",
-      field: "metadata.qualityMultiplier",
+      type: 'POLICY',
+      field: 'metadata.qualityMultiplier',
       message: `Quality multiplier ${multiplier} exceeds maximum ${MAX_QUALITY_BONUS}`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
       details: { multiplier, max: MAX_QUALITY_BONUS },
     });
     result.riskScore += 20;
@@ -392,10 +392,10 @@ function validateBossDamageXP(transaction: XPTransaction, result: ValidationResu
 
     if (ratio > 3) {
       result.violations.push({
-        type: "SUSPICIOUS",
-        field: "amount",
+        type: 'SUSPICIOUS',
+        field: 'amount',
         message: `Boss XP ratio suspicious: ${ratio.toFixed(1)}x expected`,
-        severity: "HIGH",
+        severity: 'HIGH',
         details: { damage, expectedXP, actualXP: transaction.amount, ratio },
       });
       result.riskScore += 25;
@@ -418,10 +418,10 @@ export function validatePrestige(currentLevel: number, currentPrestige: number, 
   if (currentLevel < minLevelForPrestige) {
     result.valid = false;
     result.violations.push({
-      type: "POLICY",
-      field: "currentLevel",
+      type: 'POLICY',
+      field: 'currentLevel',
       message: `Must be level ${minLevelForPrestige} to prestige (currently ${currentLevel})`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
     });
     result.data = { canPrestige: false, prestigeLevel: currentPrestige };
     return result;
@@ -431,10 +431,10 @@ export function validatePrestige(currentLevel: number, currentPrestige: number, 
   if (currentPrestige >= MAX_PRESTIGE) {
     result.valid = false;
     result.violations.push({
-      type: "POLICY",
-      field: "currentPrestige",
+      type: 'POLICY',
+      field: 'currentPrestige',
       message: `Maximum prestige level (${MAX_PRESTIGE}) already reached`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
     });
     result.data = { canPrestige: false, prestigeLevel: currentPrestige };
     return result;
@@ -490,10 +490,10 @@ export function validateXPBatch(
   const totalXP = result.data!.valid.reduce((sum, t) => sum + t.amount, 0);
   if (totalXP > MAX_XP_PER_HOUR * 2) {
     result.violations.push({
-      type: "RATE_LIMIT",
-      field: "batch",
+      type: 'RATE_LIMIT',
+      field: 'batch',
       message: `Batch total XP ${totalXP} exceeds safe threshold`,
-      severity: "HIGH",
+      severity: 'HIGH',
       details: { totalXP, threshold: MAX_XP_PER_HOUR * 2 },
     });
     result.riskScore = Math.min(100, result.riskScore + 20);

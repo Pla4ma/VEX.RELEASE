@@ -8,15 +8,15 @@
  * @phase 3E.2
  */
 
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeIn, useAnimatedStyle, withRepeat, withSequence, withTiming, withSpring } from "react-native-reanimated";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn, useAnimatedStyle, withRepeat, withSequence, withTiming, withSpring } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
-import type { MysteryChest, ChestRarity } from "../../rewards/service";
-import { getChestAppearance } from "../../rewards/service";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import type { MysteryChest, ChestRarity } from '../../rewards/service';
+import { getChestAppearance } from '../../rewards/service';
 
 export interface MysteryChestListProps {
   /** Unopened chests */
@@ -63,8 +63,8 @@ function ChestItem({ chest, onPress, index }: { chest: MysteryChest; onPress: ()
               backgroundColor: `${appearance.color}20`,
               borderWidth: 2,
               borderColor: appearance.color,
-              justifyContent: "center",
-              alignItems: "center",
+              justifyContent: 'center',
+              alignItems: 'center',
               elevation: 5,
             },
             glowStyle,

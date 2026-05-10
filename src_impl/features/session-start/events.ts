@@ -4,7 +4,7 @@
  * Event definitions for session initialization, preparation, and setup features.
  */
 
-import { SessionStartEvent } from "./types";
+import { SessionStartEvent } from './types';
 
 // Base Event Interface
 export interface BaseSessionStartEvent {
@@ -25,7 +25,7 @@ export interface EventMetadata {
 }
 
 export interface DeviceInfo {
-  type: "mobile" | "tablet" | "desktop" | "web";
+  type: 'mobile' | 'tablet' | 'desktop' | 'web';
   os: string;
   version: string;
   appVersion?: string;
@@ -33,9 +33,9 @@ export interface DeviceInfo {
 
 // Session Lifecycle Events
 export interface SessionInitiatedEvent extends BaseSessionStartEvent {
-  type: "session_initiated";
+  type: 'session_initiated';
   data: {
-    initiationType: "manual" | "auto" | "scheduled" | "triggered";
+    initiationType: 'manual' | 'auto' | 'scheduled' | 'triggered';
     initiatedAt: Date;
     trigger: {
       source: string;
@@ -58,9 +58,9 @@ export interface SessionInitiatedEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionPreparationStartedEvent extends BaseSessionStartEvent {
-  type: "session_preparation_started";
+  type: 'session_preparation_started';
   data: {
-    preparationType: "standard" | "quick" | "comprehensive" | "custom";
+    preparationType: 'standard' | 'quick' | 'comprehensive' | 'custom';
     preparationSteps: {
       step: string;
       required: boolean;
@@ -103,9 +103,9 @@ export interface SessionPreparationCompletedEvent extends BaseSessionStartEvent 
 }
 
 export interface SessionConfigurationSetEvent extends BaseSessionStartEvent {
-  type: "session_configuration_set";
+  type: 'session_configuration_set';
   data: {
-    configurationType: "difficulty" | "duration" | "objectives" | "environment" | "accessibility";
+    configurationType: 'difficulty' | 'duration' | 'objectives' | 'environment' | 'accessibility';
     configuration: {
       settings: DynamicRecord;
       constraints: DynamicRecord;
@@ -126,12 +126,12 @@ export interface SessionConfigurationSetEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionEnvironmentPreparedEvent extends BaseSessionStartEvent {
-  type: "session_environment_prepared";
+  type: 'session_environment_prepared';
   data: {
-    environmentType: "physical" | "digital" | "mixed";
+    environmentType: 'physical' | 'digital' | 'mixed';
     preparationSteps: {
       step: string;
-      status: "completed" | "skipped" | "failed";
+      status: 'completed' | 'skipped' | 'failed';
       duration: number;
       result: DynamicValue;
     }[];
@@ -153,11 +153,11 @@ export interface SessionEnvironmentPreparedEvent extends BaseSessionStartEvent {
 
 // Readiness Events
 export interface SessionReadinessAssessedEvent extends BaseSessionStartEvent {
-  type: "session_readiness_assessed";
+  type: 'session_readiness_assessed';
   data: {
-    assessmentType: "comprehensive" | "quick" | "targeted";
+    assessmentType: 'comprehensive' | 'quick' | 'targeted';
     readinessScore: number;
-    readinessLevel: "low" | "medium" | "high" | "optimal";
+    readinessLevel: 'low' | 'medium' | 'high' | 'optimal';
     factors: {
       factor: string;
       score: number;
@@ -168,7 +168,7 @@ export interface SessionReadinessAssessedEvent extends BaseSessionStartEvent {
     trends: {
       current: number;
       previous: number;
-      trend: "improving" | "declining" | "stable";
+      trend: 'improving' | 'declining' | 'stable';
       significance: string;
     };
     recommendations: {
@@ -180,9 +180,9 @@ export interface SessionReadinessAssessedEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionReadinessImprovedEvent extends BaseSessionStartEvent {
-  type: "session_readiness_improved";
+  type: 'session_readiness_improved';
   data: {
-    improvementType: "preparation" | "exercise" | "break" | "environment" | "motivation";
+    improvementType: 'preparation' | 'exercise' | 'break' | 'environment' | 'motivation';
     previousScore: number;
     currentScore: number;
     improvement: number;
@@ -206,9 +206,9 @@ export interface SessionReadinessImprovedEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionReadinessInsufficientEvent extends BaseSessionStartEvent {
-  type: "session_readiness_insufficient";
+  type: 'session_readiness_insufficient';
   data: {
-    thresholdType: "minimum" | "recommended" | "optimal";
+    thresholdType: 'minimum' | 'recommended' | 'optimal';
     currentScore: number;
     requiredScore: number;
     gap: number;
@@ -234,9 +234,9 @@ export interface SessionReadinessInsufficientEvent extends BaseSessionStartEvent
 
 // Goal Events
 export interface SessionGoalsSetEvent extends BaseSessionStartEvent {
-  type: "session_goals_set";
+  type: 'session_goals_set';
   data: {
-    goalType: "primary" | "secondary" | "stretch" | "maintenance";
+    goalType: 'primary' | 'secondary' | 'stretch' | 'maintenance';
     goals: {
       id: string;
       type: string;
@@ -264,9 +264,9 @@ export interface SessionGoalsSetEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionGoalsUpdatedEvent extends BaseSessionStartEvent {
-  type: "session_goals_updated";
+  type: 'session_goals_updated';
   data: {
-    updateType: "addition" | "modification" | "removal" | "reordering" | "reprioritization";
+    updateType: 'addition' | 'modification' | 'removal' | 'reordering' | 'reprioritization';
     changes: {
       goalId: string;
       changeType: string;
@@ -289,10 +289,10 @@ export interface SessionGoalsUpdatedEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionGoalProgressEvent extends BaseSessionStartEvent {
-  type: "session_goal_progress";
+  type: 'session_goal_progress';
   data: {
     goalId: string;
-    progressType: "milestone" | "increment" | "setback" | "completion";
+    progressType: 'milestone' | 'increment' | 'setback' | 'completion';
     currentProgress: number;
     targetProgress: number;
     increment: number;
@@ -316,9 +316,9 @@ export interface SessionGoalProgressEvent extends BaseSessionStartEvent {
 
 // Mood Events
 export interface SessionMoodAssessedEvent extends BaseSessionStartEvent {
-  type: "session_mood_assessed";
+  type: 'session_mood_assessed';
   data: {
-    assessmentType: "self_report" | "behavioral" | "physiological" | "comprehensive";
+    assessmentType: 'self_report' | 'behavioral' | 'physiological' | 'comprehensive';
     moodProfile: {
       energy: number;
       focus: number;
@@ -328,7 +328,7 @@ export interface SessionMoodAssessedEvent extends BaseSessionStartEvent {
       creativity: number;
       social: number;
     };
-    moodState: "optimal" | "good" | "neutral" | "suboptimal" | "poor";
+    moodState: 'optimal' | 'good' | 'neutral' | 'suboptimal' | 'poor';
     influences: {
       factors: string[];
       sources: string[];
@@ -343,9 +343,9 @@ export interface SessionMoodAssessedEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionMoodAdjustedEvent extends BaseSessionStartEvent {
-  type: "session_mood_adjusted";
+  type: 'session_mood_adjusted';
   data: {
-    adjustmentType: "preparation" | "intervention" | "environment" | "social" | "personal";
+    adjustmentType: 'preparation' | 'intervention' | 'environment' | 'social' | 'personal';
     adjustmentMethod: string;
     previousMood: DynamicValue;
     currentMood: DynamicValue;
@@ -369,9 +369,9 @@ export interface SessionMoodAdjustedEvent extends BaseSessionStartEvent {
 
 // Context Events
 export interface SessionContextEstablishedEvent extends BaseSessionStartEvent {
-  type: "session_context_established";
+  type: 'session_context_established';
   data: {
-    contextType: "personal" | "environmental" | "social" | "temporal" | "situational";
+    contextType: 'personal' | 'environmental' | 'social' | 'temporal' | 'situational';
     contextData: {
       personal: {
         preferences: DynamicRecord;
@@ -410,9 +410,9 @@ export interface SessionContextEstablishedEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionContextUpdatedEvent extends BaseSessionStartEvent {
-  type: "session_context_updated";
+  type: 'session_context_updated';
   data: {
-    updateType: "environmental" | "personal" | "social" | "system" | "external";
+    updateType: 'environmental' | 'personal' | 'social' | 'system' | 'external';
     changes: {
       aspect: string;
       previousValue: DynamicValue;
@@ -435,9 +435,9 @@ export interface SessionContextUpdatedEvent extends BaseSessionStartEvent {
 
 // System Events
 export interface SessionStartSystemMaintenanceEvent extends BaseSessionStartEvent {
-  type: "session_start_system_maintenance";
+  type: 'session_start_system_maintenance';
   data: {
-    maintenanceType: "scheduled" | "emergency" | "upgrade" | "migration";
+    maintenanceType: 'scheduled' | 'emergency' | 'upgrade' | 'migration';
     startTime: Date;
     endTime?: Date;
     duration?: number;
@@ -454,12 +454,12 @@ export interface SessionStartSystemMaintenanceEvent extends BaseSessionStartEven
 }
 
 export interface SessionStartSystemErrorEvent extends BaseSessionStartEvent {
-  type: "session_start_system_error";
+  type: 'session_start_system_error';
   data: {
-    errorType: "initiation_error" | "preparation_error" | "configuration_error" | "system_error";
+    errorType: 'initiation_error' | 'preparation_error' | 'configuration_error' | 'system_error';
     errorCode: string;
     errorMessage: string;
-    severity: "low" | "medium" | "high" | "critical";
+    severity: 'low' | 'medium' | 'high' | 'critical';
     context: {
       service: string;
       operation: string;
@@ -476,9 +476,9 @@ export interface SessionStartSystemErrorEvent extends BaseSessionStartEvent {
 
 // Analytics Events
 export interface SessionStartAnalyticsEvent extends BaseSessionStartEvent {
-  type: "session_start_analytics";
+  type: 'session_start_analytics';
   data: {
-    analyticsType: "preparation" | "readiness" | "configuration" | "trends" | "insights";
+    analyticsType: 'preparation' | 'readiness' | 'configuration' | 'trends' | 'insights';
     timeframe: string;
     metrics: Record<string, number>;
     dimensions: DynamicRecord;
@@ -490,7 +490,7 @@ export interface SessionStartAnalyticsEvent extends BaseSessionStartEvent {
     }[];
     trends: {
       metric: string;
-      direction: "up" | "down" | "stable";
+      direction: 'up' | 'down' | 'stable';
       change: number;
       significance: string;
     }[];
@@ -499,7 +499,7 @@ export interface SessionStartAnalyticsEvent extends BaseSessionStartEvent {
 }
 
 export interface SessionStartPerformanceReportEvent extends BaseSessionStartEvent {
-  type: "session_start_performance_report";
+  type: 'session_start_performance_report';
   data: {
     reportPeriod: {
       start: Date;
@@ -543,10 +543,10 @@ export interface SessionStartPerformanceReportEvent extends BaseSessionStartEven
 export type SessionStartEventType = SessionInitiatedEvent | SessionPreparationStartedEvent | SessionPreparationCompletedEvent | SessionConfigurationSetEvent | SessionEnvironmentPreparedEvent | SessionReadinessAssessedEvent | SessionReadinessImprovedEvent | SessionReadinessInsufficientEvent | SessionGoalsSetEvent | SessionGoalsUpdatedEvent | SessionGoalProgressEvent | SessionMoodAssessedEvent | SessionMoodAdjustedEvent | SessionContextEstablishedEvent | SessionContextUpdatedEvent | SessionStartSystemMaintenanceEvent | SessionStartSystemErrorEvent | SessionStartAnalyticsEvent | SessionStartPerformanceReportEvent;
 
 // Event Factory Functions
-export function createSessionInitiatedEvent(userId: string, sessionId: string, initiationType: "manual" | "auto" | "scheduled" | "triggered", trigger: DynamicValue, intent: DynamicValue, context: DynamicValue): SessionInitiatedEvent {
+export function createSessionInitiatedEvent(userId: string, sessionId: string, initiationType: 'manual' | 'auto' | 'scheduled' | 'triggered', trigger: DynamicValue, intent: DynamicValue, context: DynamicValue): SessionInitiatedEvent {
   return {
     id: generateEventId(),
-    type: "session_initiated",
+    type: 'session_initiated',
     userId,
     sessionId,
     timestamp: new Date(),
@@ -557,14 +557,14 @@ export function createSessionInitiatedEvent(userId: string, sessionId: string, i
       intent,
       context,
     },
-    metadata: createEventMetadata("session-start"),
+    metadata: createEventMetadata('session-start'),
   };
 }
 
-export function createSessionPreparationStartedEvent(userId: string, sessionId: string, preparationType: "standard" | "quick" | "comprehensive" | "custom", preparationSteps: DynamicValue[], environment: DynamicValue, user: DynamicValue): SessionPreparationStartedEvent {
+export function createSessionPreparationStartedEvent(userId: string, sessionId: string, preparationType: 'standard' | 'quick' | 'comprehensive' | 'custom', preparationSteps: DynamicValue[], environment: DynamicValue, user: DynamicValue): SessionPreparationStartedEvent {
   return {
     id: generateEventId(),
-    type: "session_preparation_started",
+    type: 'session_preparation_started',
     userId,
     sessionId,
     timestamp: new Date(),
@@ -574,14 +574,14 @@ export function createSessionPreparationStartedEvent(userId: string, sessionId: 
       environment,
       user,
     },
-    metadata: createEventMetadata("session-start"),
+    metadata: createEventMetadata('session-start'),
   };
 }
 
-export function createSessionReadinessAssessedEvent(userId: string, sessionId: string, assessmentType: "comprehensive" | "quick" | "targeted", readinessScore: number, readinessLevel: "low" | "medium" | "high" | "optimal", factors: DynamicValue[], trends: DynamicValue, recommendations: DynamicValue): SessionReadinessAssessedEvent {
+export function createSessionReadinessAssessedEvent(userId: string, sessionId: string, assessmentType: 'comprehensive' | 'quick' | 'targeted', readinessScore: number, readinessLevel: 'low' | 'medium' | 'high' | 'optimal', factors: DynamicValue[], trends: DynamicValue, recommendations: DynamicValue): SessionReadinessAssessedEvent {
   return {
     id: generateEventId(),
-    type: "session_readiness_assessed",
+    type: 'session_readiness_assessed',
     userId,
     sessionId,
     timestamp: new Date(),
@@ -593,14 +593,14 @@ export function createSessionReadinessAssessedEvent(userId: string, sessionId: s
       trends,
       recommendations,
     },
-    metadata: createEventMetadata("session-start"),
+    metadata: createEventMetadata('session-start'),
   };
 }
 
-export function createSessionGoalsSetEvent(userId: string, sessionId: string, goalType: "primary" | "secondary" | "stretch" | "maintenance", goals: DynamicValue[], alignment: DynamicValue, planning: DynamicValue): SessionGoalsSetEvent {
+export function createSessionGoalsSetEvent(userId: string, sessionId: string, goalType: 'primary' | 'secondary' | 'stretch' | 'maintenance', goals: DynamicValue[], alignment: DynamicValue, planning: DynamicValue): SessionGoalsSetEvent {
   return {
     id: generateEventId(),
-    type: "session_goals_set",
+    type: 'session_goals_set',
     userId,
     sessionId,
     timestamp: new Date(),
@@ -610,14 +610,14 @@ export function createSessionGoalsSetEvent(userId: string, sessionId: string, go
       alignment,
       planning,
     },
-    metadata: createEventMetadata("session-start"),
+    metadata: createEventMetadata('session-start'),
   };
 }
 
-export function createSessionMoodAssessedEvent(userId: string, sessionId: string, assessmentType: "self_report" | "behavioral" | "physiological" | "comprehensive", moodProfile: DynamicValue, moodState: "optimal" | "good" | "neutral" | "suboptimal" | "poor", influences: DynamicValue, recommendations: DynamicValue): SessionMoodAssessedEvent {
+export function createSessionMoodAssessedEvent(userId: string, sessionId: string, assessmentType: 'self_report' | 'behavioral' | 'physiological' | 'comprehensive', moodProfile: DynamicValue, moodState: 'optimal' | 'good' | 'neutral' | 'suboptimal' | 'poor', influences: DynamicValue, recommendations: DynamicValue): SessionMoodAssessedEvent {
   return {
     id: generateEventId(),
-    type: "session_mood_assessed",
+    type: 'session_mood_assessed',
     userId,
     sessionId,
     timestamp: new Date(),
@@ -628,14 +628,14 @@ export function createSessionMoodAssessedEvent(userId: string, sessionId: string
       influences,
       recommendations,
     },
-    metadata: createEventMetadata("session-start"),
+    metadata: createEventMetadata('session-start'),
   };
 }
 
-export function createSessionContextEstablishedEvent(userId: string, sessionId: string, contextType: "personal" | "environmental" | "social" | "temporal" | "situational", contextData: DynamicValue, adaptations: DynamicValue): SessionContextEstablishedEvent {
+export function createSessionContextEstablishedEvent(userId: string, sessionId: string, contextType: 'personal' | 'environmental' | 'social' | 'temporal' | 'situational', contextData: DynamicValue, adaptations: DynamicValue): SessionContextEstablishedEvent {
   return {
     id: generateEventId(),
-    type: "session_context_established",
+    type: 'session_context_established',
     userId,
     sessionId,
     timestamp: new Date(),
@@ -644,7 +644,7 @@ export function createSessionContextEstablishedEvent(userId: string, sessionId: 
       contextData,
       adaptations,
     },
-    metadata: createEventMetadata("session-start"),
+    metadata: createEventMetadata('session-start'),
   };
 }
 
@@ -656,17 +656,17 @@ function generateEventId(): string {
 function createEventMetadata(source: string): EventMetadata {
   return {
     source,
-    version: "1.0.0",
+    version: '1.0.0',
     platform: getPlatform(),
   };
 }
 
 function getPlatform(): string {
-  if (typeof window !== "undefined") {
-    return "web";
+  if (typeof window !== 'undefined') {
+    return 'web';
   }
   // Add platform detection logic here
-  return "unknown";
+  return 'unknown';
 }
 
 // Event Validation
@@ -681,17 +681,17 @@ export function validateSessionStartEvent(event: SessionStartEventType): boolean
 
   // Add specific validation for each event type using discriminated union
   switch ((event as any).type) {
-    case "session_initiated":
+    case 'session_initiated':
       return validateSessionInitiatedEvent(event as SessionInitiatedEvent);
-    case "session_preparation_started":
+    case 'session_preparation_started':
       return validateSessionPreparationStartedEvent(event as SessionPreparationStartedEvent);
-    case "session_readiness_assessed":
+    case 'session_readiness_assessed':
       return validateSessionReadinessAssessedEvent(event as SessionReadinessAssessedEvent);
-    case "session_goals_set":
+    case 'session_goals_set':
       return validateSessionGoalsSetEvent(event as SessionGoalsSetEvent);
-    case "session_mood_assessed":
+    case 'session_mood_assessed':
       return validateSessionMoodAssessedEvent(event as SessionMoodAssessedEvent);
-    case "session_context_established":
+    case 'session_context_established':
       return validateSessionContextEstablishedEvent(event as SessionContextEstablishedEvent);
     default:
       return true;
@@ -710,7 +710,7 @@ function validateSessionPreparationStartedEvent(event: SessionPreparationStarted
 
 function validateSessionReadinessAssessedEvent(event: SessionReadinessAssessedEvent): boolean {
   const { data } = event;
-  return !!(data.assessmentType && typeof data.readinessScore === "number" && data.readinessLevel && data.factors && data.trends && data.recommendations);
+  return !!(data.assessmentType && typeof data.readinessScore === 'number' && data.readinessLevel && data.factors && data.trends && data.recommendations);
 }
 
 function validateSessionGoalsSetEvent(event: SessionGoalsSetEvent): boolean {

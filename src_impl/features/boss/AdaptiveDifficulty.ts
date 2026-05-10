@@ -20,9 +20,9 @@
  * - ai-coach (predictive analytics)
  */
 
-import { z } from "zod";
-import { featureFlags } from "../../feature-flags/FeatureFlagEngine";
-import { eventBus } from "../../events";
+import { z } from 'zod';
+import { featureFlags } from '../../feature-flags/FeatureFlagEngine';
+import { eventBus } from '../../events';
 
 // ============================================================================
 // Adaptive Difficulty Constants
@@ -31,11 +31,11 @@ import { eventBus } from "../../events";
 export const ADAPTIVE_DIFFICULTY_CONFIG = {
   // Difficulty ranges (0.0 = easiest, 1.0 = hardest)
   DIFFICULTY_RANGES: {
-    BEGINNER: { min: 0.0, max: 0.3, description: "Learning phase" },
-    NOVICE: { min: 0.3, max: 0.5, description: "Building confidence" },
-    INTERMEDIATE: { min: 0.5, max: 0.7, description: "Balanced challenge" },
-    ADVANCED: { min: 0.7, max: 0.85, description: "Skilled players" },
-    EXPERT: { min: 0.85, max: 1.0, description: "Maximum challenge" },
+    BEGINNER: { min: 0.0, max: 0.3, description: 'Learning phase' },
+    NOVICE: { min: 0.3, max: 0.5, description: 'Building confidence' },
+    INTERMEDIATE: { min: 0.5, max: 0.7, description: 'Balanced challenge' },
+    ADVANCED: { min: 0.7, max: 0.85, description: 'Skilled players' },
+    EXPERT: { min: 0.85, max: 1.0, description: 'Maximum challenge' },
   },
 
   // Performance metrics weights
@@ -73,10 +73,10 @@ export const ADAPTIVE_DIFFICULTY_CONFIG = {
 // Types & Schemas
 // ============================================================================
 
-export const DifficultyLevelSchema = z.enum(["BEGINNER", "NOVICE", "INTERMEDIATE", "ADVANCED", "EXPERT"]);
+export const DifficultyLevelSchema = z.enum(['BEGINNER', 'NOVICE', 'INTERMEDIATE', 'ADVANCED', 'EXPERT']);
 
 export const DifficultyFactorSchema = z.object({
-  type: z.enum(["boss_health", "attack_frequency", "mechanic_complexity", "time_pressure", "purity_threshold", "damage_output"]),
+  type: z.enum(['boss_health', 'attack_frequency', 'mechanic_complexity', 'time_pressure', 'purity_threshold', 'damage_output']),
   baseValue: z.number(),
   currentValue: z.number(),
   min: z.number(),
@@ -101,7 +101,7 @@ export const UserProfileSchema = z.object({
     z.object({
       timestamp: z.number(),
       difficulty: z.number(),
-      outcome: z.enum(["victory", "defeat", "abandoned"]),
+      outcome: z.enum(['victory', 'defeat', 'abandoned']),
       performance: z.number(),
     }),
   ),
@@ -114,7 +114,7 @@ export const UserProfileSchema = z.object({
   // Predictive factors
   burnoutRisk: z.number(),
   frustrationLevel: z.number(),
-  engagementTrend: z.enum(["increasing", "stable", "decreasing"]),
+  engagementTrend: z.enum(['increasing', 'stable', 'decreasing']),
 
   updatedAt: z.number(),
 });
@@ -146,7 +146,7 @@ export const AdaptiveBossEncounterSchema = z.object({
 
   // Performance tracking
   currentPerformance: z.number(), // 0-1 during encounter
-  predictedOutcome: z.enum(["victory", "defeat", "uncertain"]).nullable(),
+  predictedOutcome: z.enum(['victory', 'defeat', 'uncertain']).nullable(),
 
   // Squad context
   squadMembers: z
@@ -154,7 +154,7 @@ export const AdaptiveBossEncounterSchema = z.object({
       z.object({
         userId: z.string(),
         difficulty: z.number(),
-        role: z.enum(["leader", "member", "support"]),
+        role: z.enum(['leader', 'member', 'support']),
       }),
     )
     .optional(),
@@ -171,7 +171,7 @@ export type AdaptiveBossEncounter = z.infer<typeof AdaptiveBossEncounterSchema>;
 export interface DifficultyAdjustment {
   encounterId: string;
   timestamp: number;
-  trigger: "performance_change" | "squad_balance" | "predictive" | "real_time";
+  trigger: 'performance_change' | 'squad_balance' | 'predictive' | 'real_time';
   adjustment: number;
   reason: string;
   factors: string[];
@@ -184,7 +184,7 @@ export interface PerformanceMetrics {
   streakLength: number;
   recentBossResults: Array<{
     bossId: string;
-    outcome: "victory" | "defeat";
+    outcome: 'victory' | 'defeat';
     performance: number;
     difficulty: number;
   }>;
@@ -204,7 +204,7 @@ export class AdaptiveDifficultyService {
    * Check if adaptive difficulty is enabled
    */
   static isEnabled(): boolean {
-    return featureFlags.isEnabled("adaptive_difficulty");
+    return featureFlags.isEnabled('adaptive_difficulty');
   }
 
   /**
@@ -240,7 +240,7 @@ export class AdaptiveDifficultyService {
       // Predictive factors
       burnoutRisk: 0.1,
       frustrationLevel: 0.1,
-      engagementTrend: "stable",
+      engagementTrend: 'stable',
 
       updatedAt: now,
     };
@@ -248,7 +248,7 @@ export class AdaptiveDifficultyService {
     this.userProfiles.set(userId, profile);
 
     // Emit initialization event
-    eventBus.publish("adaptive_difficulty:profile_initialized", {
+    eventBus.publish('adaptive_difficulty:profile_initialized', {
       userId,
       profileId: profile.profileId,
       timestamp: now,
@@ -298,7 +298,7 @@ export class AdaptiveDifficultyService {
     this.adjustmentHistory.set(encounterId, []);
 
     // Emit encounter creation event
-    eventBus.publish("adaptive_difficulty:encounter_created", {
+    eventBus.publish('adaptive_difficulty:encounter_created', {
       userId: input.userId,
       encounterId,
       bossId: input.bossId,
@@ -350,7 +350,7 @@ export class AdaptiveDifficultyService {
       const adjustment: DifficultyAdjustment = {
         encounterId,
         timestamp: Date.now(),
-        trigger: "real_time",
+        trigger: 'real_time',
         adjustment: smoothedDifficulty - oldDifficulty,
         reason: adjustmentNeeded.reason,
         factors: adjustmentNeeded.factors,
@@ -372,7 +372,7 @@ export class AdaptiveDifficultyService {
       this.updateEncounterFactors(encounter, smoothedDifficulty);
 
       // Emit adjustment event
-      eventBus.publish("adaptive_difficulty:real_time_adjustment", {
+      eventBus.publish('adaptive_difficulty:real_time_adjustment', {
         userId: encounter.userId,
         encounterId,
         adjustment: smoothedDifficulty - oldDifficulty,
@@ -395,7 +395,7 @@ export class AdaptiveDifficultyService {
   /**
    * Complete encounter and update user profile
    */
-  async completeEncounter(encounterId: string, outcome: "victory" | "defeat" | "abandoned", finalPerformance: number): Promise<void> {
+  async completeEncounter(encounterId: string, outcome: 'victory' | 'defeat' | 'abandoned', finalPerformance: number): Promise<void> {
     const encounter = this.activeEncounters.get(encounterId);
     if (!encounter) {
       return;
@@ -435,7 +435,7 @@ export class AdaptiveDifficultyService {
     this.activeEncounters.delete(encounterId);
 
     // Emit completion event
-    eventBus.publish("adaptive_difficulty:encounter_completed", {
+    eventBus.publish('adaptive_difficulty:encounter_completed', {
       userId: encounter.userId,
       encounterId,
       bossId: encounter.bossId,
@@ -546,7 +546,7 @@ export class AdaptiveDifficultyService {
   private initializeDifficultyFactors(baseDifficulty: number): DifficultyFactor[] {
     return [
       {
-        type: "boss_health",
+        type: 'boss_health',
         baseValue: 1000,
         currentValue: 1000 * (1 + baseDifficulty),
         min: 500,
@@ -554,7 +554,7 @@ export class AdaptiveDifficultyService {
         weight: 0.3,
       },
       {
-        type: "attack_frequency",
+        type: 'attack_frequency',
         baseValue: 1.0,
         currentValue: 1.0 + baseDifficulty * 0.5,
         min: 0.5,
@@ -562,7 +562,7 @@ export class AdaptiveDifficultyService {
         weight: 0.2,
       },
       {
-        type: "mechanic_complexity",
+        type: 'mechanic_complexity',
         baseValue: 1,
         currentValue: Math.ceil(1 + baseDifficulty * 2),
         min: 1,
@@ -570,7 +570,7 @@ export class AdaptiveDifficultyService {
         weight: 0.25,
       },
       {
-        type: "time_pressure",
+        type: 'time_pressure',
         baseValue: 300, // 5 minutes base
         currentValue: 300 * (1 - baseDifficulty * 0.3),
         min: 180, // 3 minutes
@@ -578,7 +578,7 @@ export class AdaptiveDifficultyService {
         weight: 0.15,
       },
       {
-        type: "purity_threshold",
+        type: 'purity_threshold',
         baseValue: 70,
         currentValue: 70 + baseDifficulty * 20,
         min: 60,
@@ -596,29 +596,29 @@ export class AdaptiveDifficultyService {
 
     // Struggling (performance too low)
     if (performance < 0.3) {
-      factors.push("low_performance");
-      return { shouldAdjust: true, reason: "User struggling - reducing difficulty", factors };
+      factors.push('low_performance');
+      return { shouldAdjust: true, reason: 'User struggling - reducing difficulty', factors };
     }
 
     // Too easy (performance too high)
     if (performance > 0.85) {
-      factors.push("high_performance");
-      return { shouldAdjust: true, reason: "User finding it too easy - increasing difficulty", factors };
+      factors.push('high_performance');
+      return { shouldAdjust: true, reason: 'User finding it too easy - increasing difficulty', factors };
     }
 
     // Frustration detection (multiple mistakes, low purity)
     if (context && context.mistakes > 5 && context.purity < 60) {
-      factors.push("frustration_detected");
-      return { shouldAdjust: true, reason: "Frustration detected - reducing difficulty", factors };
+      factors.push('frustration_detected');
+      return { shouldAdjust: true, reason: 'Frustration detected - reducing difficulty', factors };
     }
 
     // Engagement drop (slow progress, low session time)
     if (context && context.progress < 0.2 && context.sessionTime < 10) {
-      factors.push("engagement_drop");
-      return { shouldAdjust: true, reason: "Engagement dropping - adjusting difficulty", factors };
+      factors.push('engagement_drop');
+      return { shouldAdjust: true, reason: 'Engagement dropping - adjusting difficulty', factors };
     }
 
-    return { shouldAdjust: false, reason: "", factors: [] };
+    return { shouldAdjust: false, reason: '', factors: [] };
   }
 
   /**
@@ -628,16 +628,16 @@ export class AdaptiveDifficultyService {
     let adjustment = 0;
 
     switch (reason) {
-      case "User struggling - reducing difficulty":
+      case 'User struggling - reducing difficulty':
         adjustment = -ADAPTIVE_DIFFICULTY_CONFIG.ADJUSTMENT_SENSITIVITY;
         break;
-      case "User finding it too easy - increasing difficulty":
+      case 'User finding it too easy - increasing difficulty':
         adjustment = ADAPTIVE_DIFFICULTY_CONFIG.ADJUSTMENT_SENSITIVITY;
         break;
-      case "Frustration detected - reducing difficulty":
+      case 'Frustration detected - reducing difficulty':
         adjustment = -ADAPTIVE_DIFFICULTY_CONFIG.ADJUSTMENT_SENSITIVITY * 1.5;
         break;
-      case "Engagement dropping - adjusting difficulty":
+      case 'Engagement dropping - adjusting difficulty':
         adjustment = -ADAPTIVE_DIFFICULTY_CONFIG.ADJUSTMENT_SENSITIVITY * 0.5;
         break;
       default:
@@ -672,15 +672,15 @@ export class AdaptiveDifficultyService {
     const difficultyOffset = range * difficulty;
 
     switch (factor.type) {
-      case "boss_health":
+      case 'boss_health':
         return factor.baseValue * (1 + difficulty);
-      case "attack_frequency":
+      case 'attack_frequency':
         return factor.baseValue + difficulty * 0.5;
-      case "mechanic_complexity":
+      case 'mechanic_complexity':
         return Math.ceil(factor.baseValue + difficulty * 2);
-      case "time_pressure":
+      case 'time_pressure':
         return factor.baseValue * (1 - difficulty * 0.3);
-      case "purity_threshold":
+      case 'purity_threshold':
         return factor.baseValue + difficulty * 20;
       default:
         return factor.baseValue + difficultyOffset;
@@ -697,7 +697,7 @@ export class AdaptiveDifficultyService {
       {
         userId: currentUserId,
         difficulty: 0.5,
-        role: "leader",
+        role: 'leader',
       },
     ];
   }
@@ -750,7 +750,7 @@ export class AdaptiveDifficultyService {
     }
 
     // Weight recent successful encounters more heavily
-    const successfulEncounters = profile.difficultyHistory.filter((e) => e.outcome === "victory").slice(-10);
+    const successfulEncounters = profile.difficultyHistory.filter((e) => e.outcome === 'victory').slice(-10);
 
     if (successfulEncounters.length === 0) {
       return 0.5;
@@ -773,29 +773,29 @@ export class AdaptiveDifficultyService {
    */
   private updatePredictiveFactors(profile: UserProfile, encounter: AdaptiveBossEncounter, outcome: string): void {
     // Update burnout risk
-    if (outcome === "defeat" && encounter.currentDifficulty > 0.7) {
+    if (outcome === 'defeat' && encounter.currentDifficulty > 0.7) {
       profile.burnoutRisk = Math.min(1.0, profile.burnoutRisk + 0.1);
-    } else if (outcome === "victory") {
+    } else if (outcome === 'victory') {
       profile.burnoutRisk = Math.max(0.0, profile.burnoutRisk - 0.05);
     }
 
     // Update frustration level
-    if (outcome === "defeat" && encounter.currentPerformance < 0.3) {
+    if (outcome === 'defeat' && encounter.currentPerformance < 0.3) {
       profile.frustrationLevel = Math.min(1.0, profile.frustrationLevel + 0.15);
-    } else if (outcome === "victory") {
+    } else if (outcome === 'victory') {
       profile.frustrationLevel = Math.max(0.0, profile.frustrationLevel - 0.1);
     }
 
     // Update engagement trend
     const recentOutcomes = profile.difficultyHistory.slice(-5).map((e) => e.outcome);
-    const recentWinRate = recentOutcomes.filter((o) => o === "victory").length / recentOutcomes.length;
+    const recentWinRate = recentOutcomes.filter((o) => o === 'victory').length / recentOutcomes.length;
 
     if (recentWinRate > 0.7) {
-      profile.engagementTrend = "increasing";
+      profile.engagementTrend = 'increasing';
     } else if (recentWinRate < 0.3) {
-      profile.engagementTrend = "decreasing";
+      profile.engagementTrend = 'decreasing';
     } else {
-      profile.engagementTrend = "stable";
+      profile.engagementTrend = 'stable';
     }
   }
 
@@ -808,7 +808,7 @@ export class AdaptiveDifficultyService {
         return level as DifficultyLevel;
       }
     }
-    return "INTERMEDIATE";
+    return 'INTERMEDIATE';
   }
 
   /**
@@ -821,27 +821,27 @@ export class AdaptiveDifficultyService {
   }> {
     return [
       {
-        factor: "recent_purity",
+        factor: 'recent_purity',
         influence: ADAPTIVE_DIFFICULTY_CONFIG.PERFORMANCE_WEIGHTS.recentPurity,
         value: profile.recentPurity,
       },
       {
-        factor: "completion_rate",
+        factor: 'completion_rate',
         influence: ADAPTIVE_DIFFICULTY_CONFIG.PERFORMANCE_WEIGHTS.completionRate,
         value: profile.completionRate,
       },
       {
-        factor: "streak_strength",
+        factor: 'streak_strength',
         influence: ADAPTIVE_DIFFICULTY_CONFIG.PERFORMANCE_WEIGHTS.streakStrength,
         value: profile.streakStrength,
       },
       {
-        factor: "session_consistency",
+        factor: 'session_consistency',
         influence: ADAPTIVE_DIFFICULTY_CONFIG.PERFORMANCE_WEIGHTS.sessionConsistency,
         value: profile.sessionConsistency,
       },
       {
-        factor: "squad_performance",
+        factor: 'squad_performance',
         influence: ADAPTIVE_DIFFICULTY_CONFIG.PERFORMANCE_WEIGHTS.squadPerformance,
         value: profile.squadPerformance,
       },
@@ -856,31 +856,31 @@ export class AdaptiveDifficultyService {
 
     // High purity reasoning
     if (profile.recentPurity > 0.8) {
-      reasoning.push("High session purity suggests you can handle increased challenge");
+      reasoning.push('High session purity suggests you can handle increased challenge');
     } else if (profile.recentPurity < 0.6) {
-      reasoning.push("Lower session purity indicates need for gentler difficulty");
+      reasoning.push('Lower session purity indicates need for gentler difficulty');
     }
 
     // Completion rate reasoning
     if (profile.completionRate > 0.8) {
-      reasoning.push("Strong completion rate shows consistent performance");
+      reasoning.push('Strong completion rate shows consistent performance');
     } else if (profile.completionRate < 0.5) {
-      reasoning.push("Lower completion rate suggests need for more accessible challenges");
+      reasoning.push('Lower completion rate suggests need for more accessible challenges');
     }
 
     // Streak reasoning
     if (profile.streakStrength > 0.8) {
-      reasoning.push("Strong streak indicates readiness for advanced challenges");
+      reasoning.push('Strong streak indicates readiness for advanced challenges');
     }
 
     // Learning pattern reasoning
     if (profile.learningRate > 0.2) {
-      reasoning.push("Fast learning rate detected - can handle progressive difficulty");
+      reasoning.push('Fast learning rate detected - can handle progressive difficulty');
     }
 
     // Burnout protection
     if (profile.burnoutRisk > 0.6) {
-      reasoning.push("Burnout risk detected - difficulty adjusted for sustainability");
+      reasoning.push('Burnout risk detected - difficulty adjusted for sustainability');
     }
 
     return reasoning;

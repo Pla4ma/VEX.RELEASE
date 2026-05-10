@@ -5,11 +5,12 @@
  */
 
 import React from 'react';
-import { View, StyleSheet, type ViewStyle } from 'react-native';
+import { type ViewStyle } from 'react-native';
 
 import { useTheme } from '../../theme';
-import { Box, Text } from '../primitives';
-import { Button } from '../primitives';
+import { Box } from '../primitives/Box';
+import { Button } from '../primitives/Button';
+import { Text } from '../primitives/Text';
 
 /**
  * ErrorState props
@@ -58,7 +59,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       alignItems="center"
       p="xl"
       testID={testID}
-      style={Object.assign({}, { backgroundColor: theme.colors.background.primary }, style)}
+      style={Object.assign({}, { backgroundColor: theme?.colors?.semantic?.background || '#F7F9FC' }, style)}
     >
       {/* Error Icon - X in circle per spec */}
       <Box mb="lg">
@@ -67,12 +68,14 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
             width: 64,
             height: 64,
             borderRadius: 32,
-            backgroundColor: theme.colors.error.DEFAULT + '20',
+            backgroundColor: theme?.colors?.semantic?.primarySoft || 'rgba(91,77,255,0.12)',
+            borderColor: theme?.colors?.semantic?.danger || '#B91C1C',
+            borderWidth: 1,
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <Text variant="h1" style={{ fontSize: 32, color: theme.colors.error.DEFAULT }}>
+          <Text variant="h1" style={{ fontSize: 32, color: theme?.colors?.error?.DEFAULT || '#B91C1C' }}>
             ✕
           </Text>
         </Box>
@@ -83,7 +86,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         variant="h3"
         mb="md"
         textAlign="center"
-        style={{ color: theme.colors.text.primary }}
+        style={{ color: theme?.colors?.text?.primary || '#07111F' }}
       >
         {title}
       </Text>
@@ -93,7 +96,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         variant="body"
         mb="lg"
         textAlign="center"
-        style={{ color: theme.colors.text.secondary, maxWidth: 300 }}
+        style={{ color: theme?.colors?.text?.secondary || '#334155', maxWidth: 300 }}
       >
         {description}
       </Text>
@@ -104,14 +107,14 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
           mb="lg"
           p="sm"
           style={{
-            backgroundColor: theme.colors.background.secondary,
-            borderRadius: 8,
+            backgroundColor: theme?.colors?.semantic?.surfaceGlass || 'rgba(255,255,255,0.86)',
+            borderRadius: theme?.borderRadius?.md || 8,
           }}
         >
           <Text
             variant="caption"
             style={{
-              color: theme.colors.text.tertiary,
+              color: theme?.colors?.text?.tertiary || '#64748B',
               fontFamily: 'monospace',
             }}
           >
@@ -121,20 +124,26 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       )}
 
       {/* Actions */}
-      <Box flexDirection="column" style={{ gap: 12, width: '100%', maxWidth: 300 }}>
+      <Box flexDirection="column" style={{ gap: theme?.spacing?.[3] || 12, width: '100%', maxWidth: 300 }}>
         {onRetry && (
-          <Button variant="primary" onPress={onRetry}
-  accessibilityLabel="Action button"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+          <Button
+            accessibilityHint="Retries loading this content"
+            accessibilityLabel={retryLabel}
+            accessibilityRole="button"
+            onPress={onRetry}
+            variant="primary"
+          >
             {retryLabel}
           </Button>
         )}
         {onDegraded && (
-          <Button variant="ghost" onPress={onDegraded}
-  accessibilityLabel="Action button"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+          <Button
+            accessibilityHint="Continues with limited functionality"
+            accessibilityLabel={degradedLabel}
+            accessibilityRole="button"
+            onPress={onDegraded}
+            variant="ghost"
+          >
             {degradedLabel}
           </Button>
         )}

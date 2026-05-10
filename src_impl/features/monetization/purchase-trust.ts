@@ -4,10 +4,10 @@
  * Handles secure purchase verification and trust signals.
  */
 
-import { z } from "zod";
-import { createDebugger } from "../../utils/debug";
+import { z } from 'zod';
+import { createDebugger } from '../../utils/debug';
 
-const debug = createDebugger("monetization:purchase-trust");
+const debug = createDebugger('monetization:purchase-trust');
 
 // Purchase verification result
 export interface PurchaseVerification {
@@ -18,11 +18,11 @@ export interface PurchaseVerification {
   purchaseDate: number;
   expiryDate?: number;
   isTrial: boolean;
-  platform: "ios" | "android" | "web";
+  platform: 'ios' | 'android' | 'web';
 }
 
 // Trust signal types
-export type TrustSignal = "secure_payment" | "money_back_guarantee" | "no_hidden_fees" | "cancel_anytime" | "encrypted_transaction" | "verified_reviews";
+export type TrustSignal = 'secure_payment' | 'money_back_guarantee' | 'no_hidden_fees' | 'cancel_anytime' | 'encrypted_transaction' | 'verified_reviews';
 
 // Trust signal configuration
 export interface TrustSignalConfig {
@@ -36,31 +36,31 @@ export interface TrustSignalConfig {
 // Trust signals for paywall
 export const TRUST_SIGNALS: TrustSignalConfig[] = [
   {
-    id: "secure_payment",
-    icon: "shield-check",
-    title: "Secure Payment",
-    description: "256-bit SSL encryption",
+    id: 'secure_payment',
+    icon: 'shield-check',
+    title: 'Secure Payment',
+    description: '256-bit SSL encryption',
     priority: 1,
   },
   {
-    id: "cancel_anytime",
-    icon: "x-circle",
-    title: "Cancel Anytime",
-    description: "No commitment required",
+    id: 'cancel_anytime',
+    icon: 'x-circle',
+    title: 'Cancel Anytime',
+    description: 'No commitment required',
     priority: 2,
   },
   {
-    id: "money_back_guarantee",
-    icon: "refresh-cw",
-    title: "7-Day Guarantee",
-    description: "Full refund if not satisfied",
+    id: 'money_back_guarantee',
+    icon: 'refresh-cw',
+    title: '7-Day Guarantee',
+    description: 'Full refund if not satisfied',
     priority: 3,
   },
   {
-    id: "no_hidden_fees",
-    icon: "eye",
-    title: "No Hidden Fees",
-    description: "What you see is what you pay",
+    id: 'no_hidden_fees',
+    icon: 'eye',
+    title: 'No Hidden Fees',
+    description: 'What you see is what you pay',
     priority: 4,
   },
 ];
@@ -69,11 +69,11 @@ export const TRUST_SIGNALS: TrustSignalConfig[] = [
 export const PurchaseReceiptSchema = z.object({
   transactionId: z.string(),
   productId: z.string(),
-  tier: z.enum(["plus", "pro", "elite"]),
+  tier: z.enum(['plus', 'pro', 'elite']),
   purchaseDate: z.number(),
   expiryDate: z.number().optional(),
   isTrial: z.boolean(),
-  platform: z.enum(["ios", "android", "web"]),
+  platform: z.enum(['ios', 'android', 'web']),
   receiptData: z.string(),
 });
 
@@ -84,7 +84,7 @@ export async function verifyPurchaseReceipt(receipt: PurchaseReceipt): Promise<P
   // In production: validate with platform (Apple/Google) servers
   // const verification = await validateWithApple(receipt.receiptData);
 
-  debug.info("Verifying purchase: %s", receipt.transactionId);
+  debug.info('Verifying purchase: %s', receipt.transactionId);
 
   // Mock verification
   const verification: PurchaseVerification = {
@@ -103,7 +103,7 @@ export async function verifyPurchaseReceipt(receipt: PurchaseReceipt): Promise<P
 
 // Restore previous purchases
 export async function restorePurchases(userId: string): Promise<PurchaseVerification[]> {
-  debug.info("Restoring purchases for user: %s", userId);
+  debug.info('Restoring purchases for user: %s', userId);
 
   // In production: query platform for user's previous purchases
   // const purchases = await fetchRestoredPurchases(userId);
@@ -134,10 +134,10 @@ export function getActiveTrustSignals(includeTrial: boolean, limit: number = 3):
 
   if (includeTrial) {
     signals.push({
-      id: "verified_reviews",
-      icon: "star",
-      title: "Loved by Users",
-      description: "4.9/5 from 10,000+ reviews",
+      id: 'verified_reviews',
+      icon: 'star',
+      title: 'Loved by Users',
+      description: '4.9/5 from 10,000+ reviews',
       priority: 5,
     });
   }
@@ -168,7 +168,7 @@ export function calculatePriceTrustScore(originalPrice: number, discountedPrice:
 }
 
 // Generate price display explanation
-export function getPriceExplanation(tier: string, price: number, period: "month" | "year", hasTrial: boolean): string {
+export function getPriceExplanation(tier: string, price: number, period: 'month' | 'year', hasTrial: boolean): string {
   const dailyCost = price / 30;
 
   if (hasTrial) {
@@ -204,10 +204,10 @@ export function isSuspiciousPurchase(purchase: PurchaseVerification, userHistory
 
 // Log purchase attempt for fraud detection
 export async function logPurchaseAttempt(userId: string, tier: string, success: boolean, error?: string): Promise<void> {
-  debug.info("Purchase attempt: user=%s tier=%s success=%s", userId, tier, success);
+  debug.info('Purchase attempt: user=%s tier=%s success=%s', userId, tier, success);
 
   if (error) {
-    debug.error("Purchase error: %s", new Error(error));
+    debug.error('Purchase error: %s', new Error(error));
   }
 
   // In production: log to fraud detection service
@@ -229,14 +229,14 @@ export function getRefundEligibility(
   if (daysSincePurchase <= REFUND_WINDOW_DAYS) {
     return {
       eligible: true,
-      reason: "Within 7-day guarantee period",
+      reason: 'Within 7-day guarantee period',
       daysRemaining,
     };
   }
 
   return {
     eligible: false,
-    reason: "Refund period expired",
+    reason: 'Refund period expired',
     daysRemaining: 0,
   };
 }

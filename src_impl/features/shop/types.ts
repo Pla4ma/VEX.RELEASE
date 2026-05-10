@@ -20,11 +20,11 @@ export interface Shop {
   updatedAt: Date;
 }
 
-export type ShopType = "general_store" | "specialty_shop" | "premium_store" | "marketplace" | "auction_house" | "trade_post" | "mystery_shop" | "seasonal_shop" | "event_shop" | "vip_shop";
+export type ShopType = 'general_store' | 'specialty_shop' | 'premium_store' | 'marketplace' | 'auction_house' | 'trade_post' | 'mystery_shop' | 'seasonal_shop' | 'event_shop' | 'vip_shop';
 
-export type ShopCategory = "items" | "cosmetics" | "abilities" | "boosts" | "currency" | "bundles" | "services" | "upgrades" | "collectibles" | "consumables";
+export type ShopCategory = 'items' | 'cosmetics' | 'abilities' | 'boosts' | 'currency' | 'bundles' | 'services' | 'upgrades' | 'collectibles' | 'consumables';
 
-export type ShopStatus = "active" | "inactive" | "maintenance" | "seasonal" | "event" | "limited_time" | "coming_soon";
+export type ShopStatus = 'active' | 'inactive' | 'maintenance' | 'seasonal' | 'event' | 'limited_time' | 'coming_soon';
 
 export interface ShopConfiguration {
   layout: ShopLayout;
@@ -44,7 +44,7 @@ export interface ShopLayout {
   responsiveness: ResponsiveConfig;
 }
 
-export type LayoutType = "grid" | "list" | "carousel" | "masonry" | "featured_grid" | "category_tabs" | "infinite_scroll";
+export type LayoutType = 'grid' | 'list' | 'carousel' | 'masonry' | 'featured_grid' | 'category_tabs' | 'infinite_scroll';
 
 export interface LayoutSection {
   id: string;
@@ -56,7 +56,7 @@ export interface LayoutSection {
   visibility: VisibilityConfig;
 }
 
-export type SectionType = "featured" | "new_arrivals" | "best_sellers" | "special_offers" | "categories" | "recommendations" | "recently_viewed" | "limited_time";
+export type SectionType = 'featured' | 'new_arrivals' | 'best_sellers' | 'special_offers' | 'categories' | 'recommendations' | 'recently_viewed' | 'limited_time';
 
 export interface SectionSize {
   width: number; // percentage or pixels
@@ -74,7 +74,7 @@ export interface LayoutItem {
   metadata: ItemMetadata;
 }
 
-export type ItemType = "product" | "category" | "banner" | "promotion" | "recommendation" | "advertisement";
+export type ItemType = 'product' | 'category' | 'banner' | 'promotion' | 'recommendation' | 'advertisement';
 
 export interface ItemMetadata {
   title?: string;
@@ -96,7 +96,7 @@ export interface VisibilityConfig {
 
 export interface VisibilityCondition {
   field: string;
-  operator: "equals" | "not_equals" | "greater_than" | "less_than" | "in" | "not_in";
+  operator: 'equals' | 'not_equals' | 'greater_than' | 'less_than' | 'in' | 'not_in';
   value: unknown;
 }
 
@@ -108,7 +108,7 @@ export interface TimeRestriction {
 }
 
 export interface RecurringPattern {
-  type: "daily" | "weekly" | "monthly" | "yearly";
+  type: 'daily' | 'weekly' | 'monthly' | 'yearly';
   days?: number[]; // 0-6 for weekly
   dates?: number[]; // 1-31 for monthly
   months?: number[]; // 1-12 for yearly
@@ -120,7 +120,7 @@ export interface DeviceRestriction {
   max_version?: string;
 }
 
-export type PlatformType = "ios" | "android" | "web" | "desktop" | "console";
+export type PlatformType = 'ios' | 'android' | 'web' | 'desktop' | 'console';
 
 export interface NavigationConfig {
   type: NavigationType;
@@ -129,12 +129,12 @@ export interface NavigationConfig {
   search: SearchNavigation;
 }
 
-export type NavigationType = "sidebar" | "top_bar" | "bottom_bar" | "dropdown" | "mega_menu";
+export type NavigationType = 'sidebar' | 'top_bar' | 'bottom_bar' | 'dropdown' | 'mega_menu';
 
 export interface NavigationItem {
   id: string;
   label: string;
-  type: "link" | "category" | "dropdown" | "action";
+  type: 'link' | 'category' | 'dropdown' | 'action';
   target: string;
   icon?: string;
   badge?: string;
@@ -171,8 +171,8 @@ export interface ThemeCustomization {
 }
 
 export interface DisplayTheme {
-  mode: "light" | "dark" | "auto";
-  style: "minimal" | "modern" | "classic" | "playful";
+  mode: 'light' | 'dark' | 'auto';
+  style: 'minimal' | 'modern' | 'classic' | 'playful';
   customization: ThemeCustomization;
 }
 
@@ -225,7 +225,7 @@ export interface AnimationConfig {
   easing: string;
 }
 
-export type AnimationType = "fade" | "slide" | "bounce" | "zoom" | "flip" | "none";
+export type AnimationType = 'fade' | 'slide' | 'bounce' | 'zoom' | 'flip' | 'none';
 
 export interface SpacingConfig {
   unit: string;
@@ -270,7 +270,7 @@ export interface FeaturedSection {
   criteria: SelectionCriteria;
 }
 
-export type FeaturedType = "spotlight" | "banner" | "carousel" | "grid" | "showcase";
+export type FeaturedType = 'spotlight' | 'banner' | 'carousel' | 'grid' | 'showcase';
 
 export interface FeaturedLayout {
   items_per_view: number;
@@ -289,7 +289,7 @@ export interface RotationConfig {
 
 export interface ProductFilter {
   field: string;
-  operator: "eq" | "ne" | "gt" | "lt" | "gte" | "lte" | "in";
+  operator: 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'in';
   value: unknown;
 }
 
@@ -300,7 +300,7 @@ export interface SelectionCriteria {
   limit: number;
 }
 
-export type CriteriaType = "manual" | "algorithmic" | "trending" | "seasonal" | "personalized";
+export type CriteriaType = 'manual' | 'algorithmic' | 'trending' | 'seasonal' | 'personalized';
 
 export interface ShopCategorySection {
   id: string;
@@ -329,7 +329,7 @@ export interface CategoryFilter {
   multi_select: boolean;
 }
 
-export type FilterType = "range" | "select" | "checkbox" | "radio" | "toggle" | "search";
+export type FilterType = 'range' | 'select' | 'checkbox' | 'radio' | 'toggle' | 'search';
 
 export interface FilterOption {
   value: unknown;
@@ -359,7 +359,7 @@ export interface ShopSorting {
   id: string;
   name: string;
   field: string;
-  direction: "asc" | "desc";
+  direction: 'asc' | 'desc';
   default: boolean;
   icon?: string;
 }
@@ -383,7 +383,7 @@ export interface SearchFilter {
 export interface SearchSorting {
   field: string;
   name: string;
-  direction: "asc" | "desc";
+  direction: 'asc' | 'desc';
 }
 
 export interface SearchResultsConfig {
@@ -402,7 +402,7 @@ export interface RecommendationEngine {
   a_b_testing: ABTestingConfig;
 }
 
-export type RecommendationAlgorithm = "collaborative_filtering" | "content_based" | "hybrid" | "popularity_based" | "context_aware" | "deep_learning";
+export type RecommendationAlgorithm = 'collaborative_filtering' | 'content_based' | 'hybrid' | 'popularity_based' | 'context_aware' | 'deep_learning';
 
 export interface DataSource {
   type: DataSourceType;
@@ -410,7 +410,7 @@ export interface DataSource {
   configuration: Record<string, unknown>;
 }
 
-export type DataSourceType = "user_behavior" | "product_attributes" | "purchase_history" | "social_data" | "contextual_data" | "external_api";
+export type DataSourceType = 'user_behavior' | 'product_attributes' | 'purchase_history' | 'social_data' | 'contextual_data' | 'external_api';
 
 export interface PersonalizationConfig {
   enabled: boolean;
@@ -440,7 +440,7 @@ export interface TestGroup {
 }
 
 export interface TrafficAllocation {
-  type: "equal" | "weighted" | "adaptive";
+  type: 'equal' | 'weighted' | 'adaptive';
   allocations: Record<string, number>;
 }
 
@@ -480,9 +480,9 @@ export interface ShopProduct {
   updated_at: Date;
 }
 
-export type ProductType = "item" | "cosmetic" | "ability" | "boost" | "currency" | "service" | "upgrade" | "collectible" | "consumable" | "bundle";
+export type ProductType = 'item' | 'cosmetic' | 'ability' | 'boost' | 'currency' | 'service' | 'upgrade' | 'collectible' | 'consumable' | 'bundle';
 
-export type ProductRarity = "common" | "uncommon" | "rare" | "epic" | "legendary" | "mythic" | "exclusive";
+export type ProductRarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary' | 'mythic' | 'exclusive';
 
 export interface ProductPrice {
   base: number;
@@ -501,7 +501,7 @@ export interface ProductDiscount {
   reason?: string;
 }
 
-export type DiscountType = "percentage" | "fixed" | "bogo" | "tiered" | "bundle";
+export type DiscountType = 'percentage' | 'fixed' | 'bogo' | 'tiered' | 'bundle';
 
 export interface PricingModel {
   type: ModelType;
@@ -510,7 +510,7 @@ export interface PricingModel {
   dynamic?: DynamicPricing;
 }
 
-export type ModelType = "fixed" | "tiered" | "subscription" | "dynamic" | "auction" | "negotiated";
+export type ModelType = 'fixed' | 'tiered' | 'subscription' | 'dynamic' | 'auction' | 'negotiated';
 
 export interface PricingTier {
   id: string;
@@ -522,7 +522,7 @@ export interface PricingTier {
 }
 
 export interface SubscriptionModel {
-  interval: "daily" | "weekly" | "monthly" | "yearly";
+  interval: 'daily' | 'weekly' | 'monthly' | 'yearly';
   trial_period?: number; // in days
   auto_renew: boolean;
   cancellation_policy: CancellationPolicy;
@@ -543,7 +543,7 @@ export interface DynamicPricing {
   update_frequency: number; // in hours
 }
 
-export type PricingAlgorithm = "demand_based" | "competition_based" | "time_based" | "inventory_based" | "user_segment_based" | "machine_learning";
+export type PricingAlgorithm = 'demand_based' | 'competition_based' | 'time_based' | 'inventory_based' | 'user_segment_based' | 'machine_learning';
 
 export interface PricingFactor {
   factor: string;
@@ -561,7 +561,7 @@ export interface ProductAvailability {
   back_order: boolean;
 }
 
-export type AvailabilityStatus = "available" | "limited" | "out_of_stock" | "discontinued" | "coming_soon" | "pre_order" | "back_order";
+export type AvailabilityStatus = 'available' | 'limited' | 'out_of_stock' | 'discontinued' | 'coming_soon' | 'pre_order' | 'back_order';
 
 export interface ProductAttribute {
   name: string;
@@ -572,7 +572,7 @@ export interface ProductAttribute {
   filterable: boolean;
 }
 
-export type AttributeType = "string" | "number" | "boolean" | "date" | "array" | "object";
+export type AttributeType = 'string' | 'number' | 'boolean' | 'date' | 'array' | 'object';
 
 export interface ProductImage {
   id: string;
@@ -584,7 +584,7 @@ export interface ProductImage {
   height?: number;
 }
 
-export type ImageType = "thumbnail" | "gallery" | "banner" | "icon" | "detail";
+export type ImageType = 'thumbnail' | 'gallery' | 'banner' | 'icon' | 'detail';
 
 export interface ProductVideo {
   id: string;
@@ -631,7 +631,7 @@ export interface RatingDistribution {
 }
 
 export interface RatingTrend {
-  period: "daily" | "weekly" | "monthly";
+  period: 'daily' | 'weekly' | 'monthly';
   data: TrendData[];
 }
 
@@ -656,7 +656,7 @@ export interface ProductDimensions {
   length: number;
   width: number;
   height: number;
-  unit: "cm" | "in" | "mm";
+  unit: 'cm' | 'in' | 'mm';
 }
 
 export interface WarrantyInfo {
@@ -713,7 +713,7 @@ export interface ProductBundle {
   expires_at?: Date;
 }
 
-export type BundleType = "fixed" | "customizable" | "tiered" | "mystery" | "seasonal";
+export type BundleType = 'fixed' | 'customizable' | 'tiered' | 'mystery' | 'seasonal';
 
 export interface BundleProduct {
   product_id: string;
@@ -730,7 +730,7 @@ export interface BundleSubstitution {
 }
 
 export interface BundlePrice {
-  type: "fixed" | "discounted" | "percentage";
+  type: 'fixed' | 'discounted' | 'percentage';
   value: number;
   savings: number;
   show_savings: boolean;
@@ -749,7 +749,7 @@ export interface BundleLimitation {
   description: string;
 }
 
-export type LimitationType = "quantity" | "time" | "user_level" | "user_segment" | "location";
+export type LimitationType = 'quantity' | 'time' | 'user_level' | 'user_segment' | 'location';
 
 export interface ShopPromotion {
   id: string;
@@ -765,9 +765,9 @@ export interface ShopPromotion {
   created_at: Date;
 }
 
-export type PromotionType = "discount" | "bogo" | "bundle" | "free_shipping" | "cashback" | "loyalty_points" | "free_gift" | "upgrade";
+export type PromotionType = 'discount' | 'bogo' | 'bundle' | 'free_shipping' | 'cashback' | 'loyalty_points' | 'free_gift' | 'upgrade';
 
-export type PromotionScope = "global" | "category" | "product" | "user_segment" | "location" | "device";
+export type PromotionScope = 'global' | 'category' | 'product' | 'user_segment' | 'location' | 'device';
 
 export interface PromotionCondition {
   type: ConditionType;
@@ -777,7 +777,7 @@ export interface PromotionCondition {
   description: string;
 }
 
-export type ConditionType = "cart_value" | "product_quantity" | "user_level" | "user_segment" | "location" | "device" | "time" | "custom";
+export type ConditionType = 'cart_value' | 'product_quantity' | 'user_level' | 'user_segment' | 'location' | 'device' | 'time' | 'custom';
 
 export interface PromotionReward {
   type: RewardType;
@@ -786,7 +786,7 @@ export interface PromotionReward {
   applies_to: string[]; // product IDs or categories
 }
 
-export type RewardType = "percentage_discount" | "fixed_discount" | "free_product" | "free_shipping" | "cashback" | "points" | "upgrade";
+export type RewardType = 'percentage_discount' | 'fixed_discount' | 'free_product' | 'free_shipping' | 'cashback' | 'points' | 'upgrade';
 
 export interface PromotionSchedule {
   start_date: Date;
@@ -801,11 +801,11 @@ export interface PromotionLimit {
   scope: LimitScope;
 }
 
-export type LimitType = "usage" | "user" | "total" | "daily" | "weekly" | "monthly";
+export type LimitType = 'usage' | 'user' | 'total' | 'daily' | 'weekly' | 'monthly';
 
-export type LimitScope = "global" | "user" | "segment" | "product";
+export type LimitScope = 'global' | 'user' | 'segment' | 'product';
 
-export type PromotionStatus = "draft" | "scheduled" | "active" | "paused" | "expired" | "cancelled";
+export type PromotionStatus = 'draft' | 'scheduled' | 'active' | 'paused' | 'expired' | 'cancelled';
 
 export interface StockManagement {
   tracking: StockTracking;
@@ -821,7 +821,7 @@ export interface StockTracking {
   real_time: boolean;
 }
 
-export type TrackingMethod = "manual" | "automated" | "hybrid" | "api_based" | "rfid";
+export type TrackingMethod = 'manual' | 'automated' | 'hybrid' | 'api_based' | 'rfid';
 
 export interface StockAlert {
   id: string;
@@ -833,18 +833,18 @@ export interface StockAlert {
   enabled: boolean;
 }
 
-export type AlertType = "low_stock" | "out_of_stock" | "overstock" | "restock_needed" | "discontinued";
+export type AlertType = 'low_stock' | 'out_of_stock' | 'overstock' | 'restock_needed' | 'discontinued';
 
-export type AlertSeverity = "info" | "warning" | "critical" | "emergency";
+export type AlertSeverity = 'info' | 'warning' | 'critical' | 'emergency';
 
 export interface AlertRecipient {
-  type: "email" | "sms" | "webhook" | "user";
+  type: 'email' | 'sms' | 'webhook' | 'user';
   address: string;
   role?: string;
 }
 
 export interface AlertAction {
-  type: "notification" | "auto_restock" | "price_adjust" | "hide_product" | "custom";
+  type: 'notification' | 'auto_restock' | 'price_adjust' | 'hide_product' | 'custom';
   parameters: Record<string, unknown>;
 }
 
@@ -857,7 +857,7 @@ export interface RestockingConfig {
   max_stock: number;
 }
 
-export type RestockingMethod = "manual" | "automatic" | "just_in_time" | "periodic" | "demand_based";
+export type RestockingMethod = 'manual' | 'automatic' | 'just_in_time' | 'periodic' | 'demand_based';
 
 export interface StockForecasting {
   enabled: boolean;
@@ -867,10 +867,10 @@ export interface StockForecasting {
   horizon: number; // in days
 }
 
-export type ForecastingAlgorithm = "moving_average" | "exponential_smoothing" | "arima" | "neural_network" | "ensemble";
+export type ForecastingAlgorithm = 'moving_average' | 'exponential_smoothing' | 'arima' | 'neural_network' | 'ensemble';
 
 export interface ForecastingDataSource {
-  type: "sales" | "seasonal" | "trend" | "external" | "social";
+  type: 'sales' | 'seasonal' | 'trend' | 'external' | 'social';
   weight: number; // 0-1
   configuration: Record<string, unknown>;
 }
@@ -897,17 +897,17 @@ export interface ConversionConfig {
   fees: ConversionFee[];
 }
 
-export type RoundingMethod = "none" | "up" | "down" | "nearest";
+export type RoundingMethod = 'none' | 'up' | 'down' | 'nearest';
 
 export interface ConversionFee {
-  type: "percentage" | "fixed";
+  type: 'percentage' | 'fixed';
   value: number;
   min_fee?: number;
   max_fee?: number;
 }
 
 export interface CurrencyDisplay {
-  symbol_position: "before" | "after";
+  symbol_position: 'before' | 'after';
   decimal_places: number;
   thousands_separator: string;
   decimal_separator: string;
@@ -928,9 +928,9 @@ export interface ShopTransaction {
   completed_at?: Date;
 }
 
-export type TransactionType = "purchase" | "refund" | "exchange" | "gift" | "subscription" | "donation";
+export type TransactionType = 'purchase' | 'refund' | 'exchange' | 'gift' | 'subscription' | 'donation';
 
-export type TransactionStatus = "pending" | "processing" | "completed" | "failed" | "cancelled" | "refunded" | "disputed";
+export type TransactionStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled' | 'refunded' | 'disputed';
 
 export interface TransactionItem {
   product_id: string;
@@ -965,9 +965,9 @@ export interface PaymentInfo {
   gateway_response?: unknown;
 }
 
-export type PaymentMethod = "credit_card" | "debit_card" | "paypal" | "stripe" | "apple_pay" | "google_pay" | "crypto" | "bank_transfer" | "store_credit" | "gift_card";
+export type PaymentMethod = 'credit_card' | 'debit_card' | 'paypal' | 'stripe' | 'apple_pay' | 'google_pay' | 'crypto' | 'bank_transfer' | 'store_credit' | 'gift_card';
 
-export type PaymentStatus = "pending" | "authorized" | "captured" | "failed" | "refunded" | "cancelled";
+export type PaymentStatus = 'pending' | 'authorized' | 'captured' | 'failed' | 'refunded' | 'cancelled';
 
 export interface TransactionTotals {
   subtotal: number;
@@ -984,7 +984,7 @@ export interface TransactionDiscount {
   name: string;
   type: DiscountType;
   value: number;
-  applied_to: "cart" | "items" | "shipping";
+  applied_to: 'cart' | 'items' | 'shipping';
 }
 
 export interface TransactionMetadata {
@@ -1026,7 +1026,7 @@ export interface AnalyticsOverview {
   bounce_rate: number;
 }
 
-export type AnalyticsPeriod = "hourly" | "daily" | "weekly" | "monthly" | "quarterly" | "yearly";
+export type AnalyticsPeriod = 'hourly' | 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly';
 
 export interface SalesAnalytics {
   total_sales: number;
@@ -1176,8 +1176,8 @@ export interface AnalyticsTrend {
   metric: string;
   period: AnalyticsPeriod;
   data: TrendData[];
-  trend: "up" | "down" | "stable";
-  significance: "low" | "medium" | "high";
+  trend: 'up' | 'down' | 'stable';
+  significance: 'low' | 'medium' | 'high';
 }
 
 export interface AnalyticsInsight {
@@ -1190,10 +1190,10 @@ export interface AnalyticsInsight {
   created_at: Date;
 }
 
-export type InsightType = "opportunity" | "issue" | "trend" | "anomaly" | "prediction";
+export type InsightType = 'opportunity' | 'issue' | 'trend' | 'anomaly' | 'prediction';
 
 export interface InsightImpact {
-  level: "low" | "medium" | "high" | "critical";
+  level: 'low' | 'medium' | 'high' | 'critical';
   area: string;
   potential_value?: number;
 }
@@ -1247,7 +1247,7 @@ export interface FraudRule {
   action: FraudAction;
 }
 
-export type FraudAction = "flag" | "block" | "review" | "require_verification";
+export type FraudAction = 'flag' | 'block' | 'review' | 'require_verification';
 
 export interface ShippingSettings {
   enabled_methods: ShippingMethod[];
@@ -1268,11 +1268,11 @@ export interface TaxRate {
   country: string;
   region?: string;
   rate: number;
-  type: "standard" | "reduced" | "zero";
+  type: 'standard' | 'reduced' | 'zero';
 }
 
 export interface TaxCalculation {
-  method: "origin" | "destination" | "hybrid";
+  method: 'origin' | 'destination' | 'hybrid';
   vat_enabled: boolean;
 }
 
@@ -1338,7 +1338,7 @@ export interface LocalizationSettings {
 
 // Event Types
 export interface ShopEvent {
-  type: "product_viewed" | "product_added_to_cart" | "order_placed" | "payment_completed" | "order_shipped" | "order_delivered" | "refund_issued";
+  type: 'product_viewed' | 'product_added_to_cart' | 'order_placed' | 'payment_completed' | 'order_shipped' | 'order_delivered' | 'refund_issued';
   userId: string;
   sessionId: string;
   data: Record<string, unknown>;

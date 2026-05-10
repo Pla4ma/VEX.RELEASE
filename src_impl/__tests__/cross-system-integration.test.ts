@@ -16,13 +16,11 @@ import { getEventService } from '../events/EventService';
 import { getSocialService } from '../social/SocialService';
 import { getCoachService } from '../coach/CoachService';
 import { eventBus } from '../events';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Mock AsyncStorage
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  setItem: jest.fn(),
-  getItem: jest.fn(),
-  removeItem: jest.fn(),
+// Mock fast key-value storage
+const mockStorage = { setItem: jest.fn(), getItem: jest.fn(), removeItem: jest.fn() };
+jest.mock('../persistence/MMKVStorageAdapter', () => ({
+  getMMKVStorageAdapter: () => mockStorage,
 }));
 
 jest.mock('../utils/debug', () => ({
@@ -39,7 +37,7 @@ describe('Cross-System Integration', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    AsyncStorage.getItem = jest.fn().mockResolvedValue(null);
+    mockStorage.getItem = jest.fn().mockResolvedValue(null);
   });
 
   describe('Session Completion Flow', () => {
@@ -505,3 +503,4 @@ describe('Cross-System Integration', () => {
     });
   });
 });
+

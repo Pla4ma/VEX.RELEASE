@@ -7,6 +7,7 @@
  * @phase 6B.2
  */
 
+<<<<<<< HEAD
 import React, { useEffect, useMemo } from "react";
 import { View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeInDown } from "react-native-reanimated";
@@ -17,8 +18,21 @@ import { Button } from "../../../components/primitives/Button";
 import { capture } from "../../../shared/analytics";
 import { EconomyEvents } from "../../../shared/analytics/analytics-events";
 import { createSheet } from "@/shared/ui/create-sheet";
+=======
+import React, { useEffect, useMemo } from 'react';
+import { Pressable, StyleSheet, View } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeIn, FadeInDown } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
 
-const URGENCY_GRADIENT = ["#EF4444", "#F97316", "#F59E0B"] as const;
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { capture } from '../../../shared/analytics';
+import { EconomyEvents } from '../../../shared/analytics/analytics-events';
+import { createSheet } from '@/shared/ui/create-sheet';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
+
+const URGENCY_GRADIENT = ['#EF4444', '#F97316', '#F59E0B'] as const;
 
 interface BattlePassUrgencyBannerProps {
   /** Days remaining until season ends */
@@ -60,12 +74,12 @@ export function BattlePassUrgencyBanner({ daysRemaining, currentTier, totalTiers
   // Calculate urgency level
   const urgencyLevel = useMemo(() => {
     if (daysRemaining <= 1) {
-      return "critical";
+      return 'critical';
     }
     if (daysRemaining <= 3) {
-      return "high";
+      return 'high';
     }
-    return "medium";
+    return 'medium';
   }, [daysRemaining]);
 
   // Calculate if free user is capped
@@ -78,14 +92,14 @@ export function BattlePassUrgencyBanner({ daysRemaining, currentTier, totalTiers
 
   const handleViewBattlePass = () => {
     capture(EconomyEvents.PAYWALL_VIEWED, {
-      source: "battle_pass_urgency_banner",
+      source: 'battle_pass_urgency_banner',
     });
     onViewBattlePass();
   };
 
   const handleUpgrade = () => {
     capture(EconomyEvents.PAYWALL_VIEWED, {
-      source: "battle_pass_urgency_upgrade",
+      source: 'battle_pass_urgency_upgrade',
     });
     onUpgradeToPremium?.();
   };
@@ -103,9 +117,9 @@ export function BattlePassUrgencyBanner({ daysRemaining, currentTier, totalTiers
         {/* Urgency Badge */}
         <View style={styles.urgencyBadge}>
           <Text style={styles.urgencyText}>
-            {urgencyLevel === "critical" && "🚨 CRITICAL"}
-            {urgencyLevel === "high" && "⚠️ URGENT"}
-            {urgencyLevel === "medium" && "⏰ LIMITED TIME"}
+            {urgencyLevel === 'critical' && '🚨 CRITICAL'}
+            {urgencyLevel === 'high' && '⚠️ URGENT'}
+            {urgencyLevel === 'medium' && '⏰ LIMITED TIME'}
           </Text>
         </View>
 
@@ -113,13 +127,13 @@ export function BattlePassUrgencyBanner({ daysRemaining, currentTier, totalTiers
         <View style={styles.content}>
           {/* Header */}
           <Text style={styles.title}>
-            Season Ends in {daysRemaining} {daysRemaining === 1 ? "Day" : "Days"}
+            Season Ends in {daysRemaining} {daysRemaining === 1 ? 'Day' : 'Days'}
           </Text>
 
           {/* Progress Bar */}
           <View style={styles.progressContainer}>
-            <View style={[styles.progressBar, { backgroundColor: "rgba(255,255,255,0.3)" }]}>
-              <View style={[styles.progressFill, { width: `${progressPercent}%`, backgroundColor: "#FFFFFF" }]} />
+            <View style={[styles.progressBar, { backgroundColor: 'rgba(255,255,255,0.3)' }]}>
+              <View style={[styles.progressFill, { width: `${progressPercent}%`, backgroundColor: '#FFFFFF' }]} />
               {isCapped && (
                 <View style={[styles.capIndicator, { left: `${(freeTierCap / totalTiers) * 100}%` }]}>
                   <Text style={styles.capText}>FREE CAP</Text>
@@ -135,19 +149,19 @@ export function BattlePassUrgencyBanner({ daysRemaining, currentTier, totalTiers
           <View style={styles.statsGrid}>
             <View style={styles.stat}>
               <Text style={styles.statValue}>{unclaimedTiers}</Text>
-              <Text style={styles.statLabel}>Unclaimed {unclaimedTiers === 1 ? "Tier" : "Tiers"}</Text>
+              <Text style={styles.statLabel}>Unclaimed {unclaimedTiers === 1 ? 'Tier' : 'Tiers'}</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.stat}>
               <Text style={styles.statValue}>{remainingTiers}</Text>
-              <Text style={styles.statLabel}>{remainingTiers === 1 ? "Tier" : "Tiers"} Remaining</Text>
+              <Text style={styles.statLabel}>{remainingTiers === 1 ? 'Tier' : 'Tiers'} Remaining</Text>
             </View>
             {!hasPremium && (
               <>
                 <View style={styles.statDivider} />
                 <View style={styles.stat}>
-                  <Text style={[styles.statValue, isCapped && styles.cappedValue]}>{isCapped ? "CAPPED" : tiersUntilCap}</Text>
-                  <Text style={styles.statLabel}>{isCapped ? "Upgrade to continue" : "Tiers until cap"}</Text>
+                  <Text style={[styles.statValue, isCapped && styles.cappedValue]}>{isCapped ? 'CAPPED' : tiersUntilCap}</Text>
+                  <Text style={styles.statLabel}>{isCapped ? 'Upgrade to continue' : 'Tiers until cap'}</Text>
                 </View>
               </>
             )}
@@ -194,32 +208,32 @@ const styles = createSheet({
   container: {
     margin: 16,
     borderRadius: 20,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   gradient: {
     padding: 20,
   },
   urgencyBadge: {
-    alignSelf: "flex-start",
-    backgroundColor: "rgba(0,0,0,0.3)",
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(0,0,0,0.3)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
     marginBottom: 12,
   },
   urgencyText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: 0.5,
   },
   content: {
     gap: 16,
   },
   title: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 22,
-    fontWeight: "800",
+    fontWeight: '800',
   },
   progressContainer: {
     gap: 8,
@@ -227,110 +241,110 @@ const styles = createSheet({
   progressBar: {
     height: 12,
     borderRadius: 6,
-    overflow: "hidden",
-    position: "relative",
+    overflow: 'hidden',
+    position: 'relative',
   },
   progressFill: {
-    height: "100%",
+    height: '100%',
     borderRadius: 6,
   },
   capIndicator: {
-    position: "absolute",
+    position: 'absolute',
     top: -4,
     bottom: -4,
     width: 2,
-    backgroundColor: "#FFD700",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#FFD700',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   capText: {
-    position: "absolute",
+    position: 'absolute',
     top: -20,
     fontSize: 9,
-    fontWeight: "700",
-    color: "#FFD700",
-    backgroundColor: "rgba(0,0,0,0.5)",
+    fontWeight: '700',
+    color: '#FFD700',
+    backgroundColor: 'rgba(0,0,0,0.5)',
     paddingHorizontal: 4,
     paddingVertical: 2,
     borderRadius: 4,
   },
   progressText: {
-    color: "rgba(255,255,255,0.9)",
+    color: 'rgba(255,255,255,0.9)',
     fontSize: 13,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   statsGrid: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.15)",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255,255,255,0.15)',
     borderRadius: 16,
     padding: 16,
   },
   stat: {
-    alignItems: "center",
+    alignItems: 'center',
     flex: 1,
   },
   statValue: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 24,
-    fontWeight: "800",
+    fontWeight: '800',
   },
   statLabel: {
-    color: "rgba(255,255,255,0.8)",
+    color: 'rgba(255,255,255,0.8)',
     fontSize: 11,
-    fontWeight: "600",
-    textAlign: "center",
+    fontWeight: '600',
+    textAlign: 'center',
   },
   statDivider: {
     width: 1,
     height: 40,
-    backgroundColor: "rgba(255,255,255,0.3)",
+    backgroundColor: 'rgba(255,255,255,0.3)',
   },
   cappedValue: {
-    color: "#FFD700",
+    color: '#FFD700',
     fontSize: 14,
   },
   lockedMessage: {
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: 'rgba(0,0,0,0.3)',
     borderRadius: 12,
     padding: 12,
     borderWidth: 1,
-    borderColor: "#FFD700",
+    borderColor: '#FFD700',
   },
   lockedText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 13,
     lineHeight: 18,
-    textAlign: "center",
+    textAlign: 'center',
   },
   milestoneTeaser: {
-    backgroundColor: "rgba(255,215,0,0.2)",
+    backgroundColor: 'rgba(255,215,0,0.2)',
     borderRadius: 12,
     padding: 12,
     borderWidth: 1,
-    borderColor: "#FFD700",
+    borderColor: '#FFD700',
   },
   milestoneText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 13,
-    textAlign: "center",
+    textAlign: 'center',
   },
   milestoneHighlight: {
-    color: "#FFD700",
-    fontWeight: "700",
+    color: '#FFD700',
+    fontWeight: '700',
   },
   actions: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 12,
   },
   viewButton: {
     flex: 1,
-    backgroundColor: "rgba(255,255,255,0.2)",
+    backgroundColor: 'rgba(255,255,255,0.2)',
   },
   upgradeButton: {
     flex: 1,
-    backgroundColor: "#FFD700",
+    backgroundColor: '#FFD700',
   },
 });
 

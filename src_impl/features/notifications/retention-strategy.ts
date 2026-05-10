@@ -87,37 +87,49 @@ async function scheduleReminder(userId: string, draft: ReminderDraft): Promise<v
       tags: { feature: 'retention-notifications', reminderType: draft.type },
       extra: { userId },
     });
-    throw error;
   }
 }
 
 export async function scheduleOnboardingNotifications(userId: string): Promise<void> {
-  const validatedUserId = UserIdSchema.parse(userId);
-  const timezone = getUserTimezone(validatedUserId);
-  const profile = await fetchRetentionUserProfile(validatedUserId);
-  const firstName = profile.firstName?.trim() || 'Someone';
-  const reminders: ReminderDraft[] = [
-    {
-      type: 'RETENTION_ONBOARDING_DAY_1',
-      scheduledFor: daysLaterAt(1, 9, timezone),
-      message: 'Your streak starts now. One session today keeps it alive.',
-      metadata: { day: 1, timezone },
-    },
-    {
-      type: 'RETENTION_ONBOARDING_DAY_3',
-      scheduledFor: daysLaterAt(3, 19, timezone),
-      message: '3 days since you started. Quick check-in?',
-      metadata: { day: 3, timezone },
-    },
-    {
-      type: 'RETENTION_ONBOARDING_DAY_7',
-      scheduledFor: daysLaterAt(7, 9, timezone),
-      message: `One week in. ${firstName} is on the leaderboard.`,
-      metadata: { day: 7, timezone, firstName },
-    },
-  ];
+  try {
+    const validatedUserId = UserIdSchema.parse(userId);
+    const timezone = getUserTimezone(validatedUserId);
+    const profile = await fetchRetentionUserProfile(validatedUserId);
+    const firstName = profile.firstName?.trim() || 'Someone';
+    const reminders: ReminderDraft[] = [
+      {
+        type: 'RETENTION_ONBOARDING_DAY_1',
+        scheduledFor: daysLaterAt(1, 9, timezone),
+        message: 'Your streak starts now. One session today keeps it alive.',
+        metadata: { day: 1, timezone },
+      },
+      {
+        type: 'RETENTION_ONBOARDING_DAY_3',
+        scheduledFor: daysLaterAt(3, 19, timezone),
+        message: '3 days since you started. Quick check-in?',
+        metadata: { day: 3, timezone },
+      },
+      {
+        type: 'RETENTION_ONBOARDING_DAY_7',
+        scheduledFor: daysLaterAt(7, 9, timezone),
+        message: `One week in. ${firstName} is on the leaderboard.`,
+        metadata: { day: 7, timezone, firstName },
+      },
+    ];
 
-  await Promise.all(reminders.map((reminder) => scheduleReminder(validatedUserId, reminder)));
+    await Promise.all(reminders.map((reminder) => scheduleReminder(validatedUserId, reminder)));
+  } catch (error) {
+    Sentry.addBreadcrumb({
+      category: 'notifications.retention',
+      message: 'Onboarding notifications scheduling failed',
+      level: 'error',
+      data: { userId },
+    });
+    Sentry.captureException(error, {
+      tags: { feature: 'retention-notifications', operation: 'schedule-onboarding' },
+      extra: { userId },
+    });
+  }
 }
 
 export async function scheduleStreakProtectionNotification(

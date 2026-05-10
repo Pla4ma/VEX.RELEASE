@@ -9,10 +9,10 @@
  * - Squads (squad boss encounters)
  */
 
-import { eventBus } from "../../events";
-import * as repository from "./repository";
-import { applyBossDamageRules } from "./damage-rules";
-import { CreateEncounterInputSchema, ApplyDamageInputSchema, CalculateDamageInputSchema, BossEncounterStatusSchema, type BossTemplate, type BossEncounter, type BossEncounterSummary, type BossDamageResult, type BossDefeatResult, type BossDefeatSummary, type CreateEncounterInput, type ApplyDamageInput, type CalculateDamageInput } from "./schemas";
+import { eventBus } from '../../events';
+import * as repository from './repository';
+import { applyBossDamageRules } from './damage-rules';
+import { CreateEncounterInputSchema, ApplyDamageInputSchema, CalculateDamageInputSchema, BossEncounterStatusSchema, type BossTemplate, type BossEncounter, type BossEncounterSummary, type BossDamageResult, type BossDefeatResult, type BossDefeatSummary, type CreateEncounterInput, type ApplyDamageInput, type CalculateDamageInput } from './schemas';
 
 // ============================================================================
 // Boss Health Scaling
@@ -36,7 +36,7 @@ export async function canUserFightBoss(userId: string, bossId: string, userLevel
   const template = await repository.fetchBossTemplate(bossId);
 
   if (!template) {
-    return { allowed: false, reason: "Boss not found" };
+    return { allowed: false, reason: 'Boss not found' };
   }
 
   // Check level requirement
@@ -53,7 +53,7 @@ export async function canUserFightBoss(userId: string, bossId: string, userLevel
     if (!hasDefeatedPrevious) {
       return {
         allowed: false,
-        reason: "Must defeat previous boss first",
+        reason: 'Must defeat previous boss first',
       };
     }
   }
@@ -63,7 +63,7 @@ export async function canUserFightBoss(userId: string, bossId: string, userLevel
   if (onCooldown) {
     return {
       allowed: false,
-      reason: "Boss on cooldown",
+      reason: 'Boss on cooldown',
     };
   }
 
@@ -86,7 +86,7 @@ export async function createEncounter(input: CreateEncounterInput): Promise<Boss
   const { allowed, reason } = await canUserFightBoss(validated.userId, validated.bossId, validated.userLevel);
 
   if (!allowed) {
-    throw new Error(reason || "Cannot fight this boss");
+    throw new Error(reason || 'Cannot fight this boss');
   }
 
   // Calculate scaled health
@@ -110,7 +110,7 @@ export async function getActiveEncounter(userId: string, squadId?: string): Prom
   }
 
   // Check for timeout
-  if (encounter.status === "ACTIVE" && encounter.expiresAt < Date.now()) {
+  if (encounter.status === 'ACTIVE' && encounter.expiresAt < Date.now()) {
     await handleBossTimeout(encounter.id);
     return null;
   }
@@ -157,17 +157,17 @@ export async function applyDamage(input: ApplyDamageInput): Promise<BossDamageRe
 
   const encounter = await repository.fetchEncounterById(validated.encounterId);
   if (!encounter) {
-    throw new Error("No active encounter found");
+    throw new Error('No active encounter found');
   }
 
-  if (encounter.status !== "ACTIVE") {
+  if (encounter.status !== 'ACTIVE') {
     throw new Error(`Cannot damage boss in ${encounter.status} state`);
   }
 
   // Check for timeout
   if (encounter.expiresAt < Date.now()) {
     await handleBossTimeout(encounter.id);
-    throw new Error("Boss encounter timed out");
+    throw new Error('Boss encounter timed out');
   }
 
   const newHealth = Math.max(0, encounter.healthRemaining - validated.damage);
@@ -237,15 +237,15 @@ async function handleBossDefeat(encounterId: string): Promise<BossDefeatResult> 
     unlockedNextBoss: nextBossId,
   };
 
-  eventBus.publish("boss:defeated", {
-    userId: encounter.userId ?? contributors[0] ?? "",
+  eventBus.publish('boss:defeated', {
+    userId: encounter.userId ?? contributors[0] ?? '',
     bossId: encounter.bossId,
     damageDealt: encounter.damageDealt,
     won: true,
     rewards: {
-      xp: template.rewardType === "XP" ? template.rewardAmount : 0,
-      coins: template.rewardType === "COINS" ? template.rewardAmount : 0,
-      items: template.rewardType === "ITEM" && template.rewardItemId ? [template.rewardItemId] : [],
+      xp: template.rewardType === 'XP' ? template.rewardAmount : 0,
+      coins: template.rewardType === 'COINS' ? template.rewardAmount : 0,
+      items: template.rewardType === 'ITEM' && template.rewardItemId ? [template.rewardItemId] : [],
     },
     participants: contributors,
   });

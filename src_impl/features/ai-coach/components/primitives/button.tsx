@@ -4,18 +4,26 @@
  * Premium buttons with loading, disabled, and success states
  */
 
+<<<<<<< HEAD
 import React from "react";
 import { createSheet } from "@/shared/ui/create-sheet";
 import { Pressable, Text, ActivityIndicator, type GestureResponderEvent, type PressableProps, type ViewStyle, type TextStyle } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated";
 import { useReducedMotion } from "../../../../hooks/useReducedMotion";
+=======
+import React from 'react';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { Pressable, Text, ActivityIndicator, StyleSheet, type GestureResponderEvent, type PressableProps, type ViewStyle, type TextStyle } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
+import { useReducedMotion } from '../../../../hooks/useReducedMotion';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 // ============================================================================
 // Types
 // ============================================================================
 
-type ButtonVariant = "primary" | "secondary" | "outline" | "ghost" | "danger";
-type ButtonSize = "sm" | "md" | "lg";
+type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends PressableProps {
   variant?: ButtonVariant;
@@ -32,10 +40,10 @@ interface ButtonProps extends PressableProps {
 // Button Component
 // ============================================================================
 
-export function Button({ children, variant = "primary", size = "md", loading = false, disabled = false, leftIcon, rightIcon, style, textStyle, onPressIn, onPressOut, ...props }: ButtonProps) {
+export function Button({ children, variant = 'primary', size = 'md', loading = false, disabled = false, leftIcon, rightIcon, style, textStyle, onPressIn, onPressOut, ...props }: ButtonProps) {
   const { isReducedMotion } = useReducedMotion();
   const pressed = useSharedValue(0);
-  const defaultAccessibilityLabel = typeof children === "string" ? `${children} button` : "Coach action button";
+  const defaultAccessibilityLabel = typeof children === 'string' ? `${children} button` : 'Coach action button';
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: isReducedMotion ? 1 : withSpring(1 - pressed.value * 0.02) }],
@@ -83,7 +91,7 @@ interface IconButtonProps extends PressableProps {
   disabled?: boolean;
 }
 
-export function IconButton({ icon, variant = "ghost", size = "md", loading = false, disabled = false, ...props }: IconButtonProps) {
+export function IconButton({ icon, variant = 'ghost', size = 'md', loading = false, disabled = false, ...props }: IconButtonProps) {
   const { isReducedMotion } = useReducedMotion();
   const pressed = useSharedValue(0);
 
@@ -103,24 +111,24 @@ export function IconButton({ icon, variant = "ghost", size = "md", loading = fal
 // ============================================================================
 
 const variantStyles = {
-  primary: { indicatorColor: "#fff" },
-  secondary: { indicatorColor: "#4ECDC4" },
-  outline: { indicatorColor: "#4ECDC4" },
-  ghost: { indicatorColor: "#4ECDC4" },
-  danger: { indicatorColor: "#fff" },
+  primary: { indicatorColor: '#fff' },
+  secondary: { indicatorColor: '#4ECDC4' },
+  outline: { indicatorColor: '#4ECDC4' },
+  ghost: { indicatorColor: '#4ECDC4' },
+  danger: { indicatorColor: '#fff' },
 };
 
 const styles = createSheet({
   base: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 12,
     gap: 8,
   },
   text: {
-    fontWeight: "600",
-    textAlign: "center",
+    fontWeight: '600',
+    textAlign: 'center',
   },
 
   // Sizes
@@ -150,46 +158,46 @@ const styles = createSheet({
 
   // Variants
   primary: {
-    backgroundColor: "#4ECDC4",
+    backgroundColor: '#4ECDC4',
   },
   primaryText: {
-    color: "#fff",
+    color: '#fff',
   },
 
   secondary: {
-    backgroundColor: "#F0FDFB",
+    backgroundColor: '#F0FDFB',
   },
   secondaryText: {
-    color: "#4ECDC4",
+    color: '#4ECDC4',
   },
 
   outline: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: "#4ECDC4",
+    borderColor: '#4ECDC4',
   },
   outlineText: {
-    color: "#4ECDC4",
+    color: '#4ECDC4',
   },
 
   ghost: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   ghostText: {
-    color: "#666",
+    color: '#666',
   },
 
   danger: {
-    backgroundColor: "#FF6B6B",
+    backgroundColor: '#FF6B6B',
   },
   dangerText: {
-    color: "#fff",
+    color: '#fff',
   },
 
   // Icon Button
   iconButton: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderRadius: 8,
   },
   smIconButton: {
@@ -205,20 +213,20 @@ const styles = createSheet({
     height: 56,
   },
   primaryIconButton: {
-    backgroundColor: "#4ECDC4",
+    backgroundColor: '#4ECDC4',
   },
   secondaryIconButton: {
-    backgroundColor: "#F0FDFB",
+    backgroundColor: '#F0FDFB',
   },
   outlineIconButton: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: "#4ECDC4",
+    borderColor: '#4ECDC4',
   },
   ghostIconButton: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   dangerIconButton: {
-    backgroundColor: "#FF6B6B",
+    backgroundColor: '#FF6B6B',
   },
 });

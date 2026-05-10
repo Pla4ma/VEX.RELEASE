@@ -2,32 +2,32 @@
  * AI Coach Schema Validation Tests
  */
 
-import { CoachPersonaSchema, CoachMessageTemplateSchema, BehaviorSignalSchema, BehaviorProfileSchema, InterventionRuleSchema, InterventionExecutionSchema, SessionRecommendationSchema, ComebackPlanSchema, CoachMessageSchema, CoachStateSchema, GenerateMessageInputSchema, ProcessBehaviorSignalInputSchema, ActivateComebackInputSchema } from "../schemas";
+import { CoachPersonaSchema, CoachMessageTemplateSchema, BehaviorSignalSchema, BehaviorProfileSchema, InterventionRuleSchema, InterventionExecutionSchema, SessionRecommendationSchema, ComebackPlanSchema, CoachMessageSchema, CoachStateSchema, GenerateMessageInputSchema, ProcessBehaviorSignalInputSchema, ActivateComebackInputSchema } from '../schemas';
 
-describe("AI Coach Schemas", () => {
-  describe("CoachPersonaSchema", () => {
-    it("validates correct persona", () => {
+describe('AI Coach Schemas', () => {
+  describe('CoachPersonaSchema', () => {
+    it('validates correct persona', () => {
       const valid = {
-        id: "123e4567-e89b-12d3-a456-426614174000",
-        name: "Encouraging Mentor",
-        description: "Always supportive and positive",
-        avatarUrl: "https://example.com/avatar.png",
-        voiceTone: "ENCOURAGING",
-        style: "MENTOR",
-        catchphrase: "You have got this!",
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        name: 'Encouraging Mentor',
+        description: 'Always supportive and positive',
+        avatarUrl: 'https://example.com/avatar.png',
+        voiceTone: 'ENCOURAGING',
+        style: 'MENTOR',
+        catchphrase: 'You have got this!',
         defaultEnabled: true,
       };
 
       expect(() => CoachPersonaSchema.parse(valid)).not.toThrow();
     });
 
-    it("rejects invalid voice tone", () => {
+    it('rejects invalid voice tone', () => {
       const invalid = {
-        id: "123e4567-e89b-12d3-a456-426614174000",
-        name: "Test",
-        voiceTone: "INVALID_TONE",
-        style: "MENTOR",
-        catchphrase: "Test",
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        name: 'Test',
+        voiceTone: 'INVALID_TONE',
+        style: 'MENTOR',
+        catchphrase: 'Test',
         defaultEnabled: true,
       };
 
@@ -35,31 +35,31 @@ describe("AI Coach Schemas", () => {
     });
   });
 
-  describe("CoachMessageTemplateSchema", () => {
-    it("validates correct template", () => {
+  describe('CoachMessageTemplateSchema', () => {
+    it('validates correct template', () => {
       const valid = {
-        id: "123e4567-e89b-12d3-a456-426614174000",
-        personaId: "123e4567-e89b-12d3-a456-426614174000",
-        category: "STREAK_RISK",
-        subcategory: "urgent",
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        personaId: '123e4567-e89b-12d3-a456-426614174000',
+        category: 'STREAK_RISK',
+        subcategory: 'urgent',
         priority: 8,
-        content: "Your streak is at risk! {{hoursRemaining}} hours left.",
-        conditions: [{ type: "STREAK_DAYS", operator: "gt", value: 3 }],
-        variations: ["Alternative message"],
+        content: 'Your streak is at risk! {{hoursRemaining}} hours left.',
+        conditions: [{ type: 'STREAK_DAYS', operator: 'gt', value: 3 }],
+        variations: ['Alternative message'],
         cooldownHours: 4,
       };
 
       expect(() => CoachMessageTemplateSchema.parse(valid)).not.toThrow();
     });
 
-    it("rejects priority out of range", () => {
+    it('rejects priority out of range', () => {
       const invalid = {
-        id: "123e4567-e89b-12d3-a456-426614174000",
-        personaId: "123e4567-e89b-12d3-a456-426614174000",
-        category: "STREAK_RISK",
-        subcategory: "urgent",
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        personaId: '123e4567-e89b-12d3-a456-426614174000',
+        category: 'STREAK_RISK',
+        subcategory: 'urgent',
         priority: 15, // Too high
-        content: "Test",
+        content: 'Test',
         conditions: [],
         variations: [],
         cooldownHours: 4,
@@ -69,27 +69,27 @@ describe("AI Coach Schemas", () => {
     });
   });
 
-  describe("BehaviorSignalSchema", () => {
-    it("validates correct signal", () => {
+  describe('BehaviorSignalSchema', () => {
+    it('validates correct signal', () => {
       const valid = {
-        id: "123e4567-e89b-12d3-a456-426614174000",
-        userId: "123e4567-e89b-12d3-a456-426614174000",
-        signalType: "SESSION_QUALITY_TREND",
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        userId: '123e4567-e89b-12d3-a456-426614174000',
+        signalType: 'SESSION_QUALITY_TREND',
         value: 0.85,
         confidence: 0.9,
         timestamp: Date.now(),
-        metadata: { source: "session" },
+        metadata: { source: 'session' },
         expiresAt: Date.now() + 86400000,
       };
 
       expect(() => BehaviorSignalSchema.parse(valid)).not.toThrow();
     });
 
-    it("rejects confidence out of range", () => {
+    it('rejects confidence out of range', () => {
       const invalid = {
-        id: "123e4567-e89b-12d3-a456-426614174000",
-        userId: "123e4567-e89b-12d3-a456-426614174000",
-        signalType: "SESSION_QUALITY_TREND",
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        userId: '123e4567-e89b-12d3-a456-426614174000',
+        signalType: 'SESSION_QUALITY_TREND',
         value: 0.85,
         confidence: 1.5, // Too high
         timestamp: Date.now(),
@@ -101,13 +101,13 @@ describe("AI Coach Schemas", () => {
     });
   });
 
-  describe("BehaviorProfileSchema", () => {
-    it("validates correct profile", () => {
+  describe('BehaviorProfileSchema', () => {
+    it('validates correct profile', () => {
       const valid = {
-        userId: "123e4567-e89b-12d3-a456-426614174000",
+        userId: '123e4567-e89b-12d3-a456-426614174000',
         signals: [],
         lastUpdated: Date.now(),
-        confidenceLevel: "MEDIUM",
+        confidenceLevel: 'MEDIUM',
         coldStart: false,
         dataPoints: 15,
       };
@@ -115,12 +115,12 @@ describe("AI Coach Schemas", () => {
       expect(() => BehaviorProfileSchema.parse(valid)).not.toThrow();
     });
 
-    it("rejects invalid confidence level", () => {
+    it('rejects invalid confidence level', () => {
       const invalid = {
-        userId: "123e4567-e89b-12d3-a456-426614174000",
+        userId: '123e4567-e89b-12d3-a456-426614174000',
         signals: [],
         lastUpdated: Date.now(),
-        confidenceLevel: "VERY_HIGH", // Invalid
+        confidenceLevel: 'VERY_HIGH', // Invalid
         coldStart: false,
         dataPoints: 15,
       };
@@ -129,17 +129,17 @@ describe("AI Coach Schemas", () => {
     });
   });
 
-  describe("InterventionRuleSchema", () => {
-    it("validates correct rule", () => {
+  describe('InterventionRuleSchema', () => {
+    it('validates correct rule', () => {
       const valid = {
-        id: "123e4567-e89b-12d3-a456-426614174000",
-        name: "Streak Risk Alert",
-        trigger: { type: "STREAK_AT_RISK", threshold: 24 },
-        conditions: [{ field: "streakDays", operator: "gt", value: 3 }],
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        name: 'Streak Risk Alert',
+        trigger: { type: 'STREAK_AT_RISK', threshold: 24 },
+        conditions: [{ field: 'streakDays', operator: 'gt', value: 3 }],
         action: {
-          type: "SEND_MESSAGE",
-          messageTemplateId: "123e4567-e89b-12d3-a456-426614174000",
-          deliveryMethod: "BOTH",
+          type: 'SEND_MESSAGE',
+          messageTemplateId: '123e4567-e89b-12d3-a456-426614174000',
+          deliveryMethod: 'BOTH',
           delayMinutes: 0,
         },
         priority: 10,
@@ -152,14 +152,14 @@ describe("AI Coach Schemas", () => {
     });
   });
 
-  describe("ComebackPlanSchema", () => {
-    it("validates correct comeback plan", () => {
+  describe('ComebackPlanSchema', () => {
+    it('validates correct comeback plan', () => {
       const valid = {
-        id: "123e4567-e89b-12d3-a456-426614174000",
-        userId: "123e4567-e89b-12d3-a456-426614174000",
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        userId: '123e4567-e89b-12d3-a456-426614174000',
         previousStreak: 15,
         daysInactive: 5,
-        status: "ACTIVE",
+        status: 'ACTIVE',
         startedAt: Date.now(),
         expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
         sessionsCompleted: 1,
@@ -167,9 +167,9 @@ describe("AI Coach Schemas", () => {
         bonusMultiplier: 2.0,
         messages: [
           {
-            id: "123e4567-e89b-12d3-a456-426614174001",
+            id: '123e4567-e89b-12d3-a456-426614174001',
             day: 1,
-            content: "Welcome back!",
+            content: 'Welcome back!',
             sent: true,
             sentAt: Date.now(),
           },
@@ -180,17 +180,17 @@ describe("AI Coach Schemas", () => {
     });
   });
 
-  describe("CoachMessageSchema", () => {
-    it("validates correct message", () => {
+  describe('CoachMessageSchema', () => {
+    it('validates correct message', () => {
       const valid = {
-        id: "123e4567-e89b-12d3-a456-426614174000",
-        userId: "123e4567-e89b-12d3-a456-426614174000",
-        personaId: "123e4567-e89b-12d3-a456-426614174000",
-        category: "STREAK_RISK",
-        content: "Your streak is at risk!",
-        deliveryMethod: "BOTH",
+        id: '123e4567-e89b-12d3-a456-426614174000',
+        userId: '123e4567-e89b-12d3-a456-426614174000',
+        personaId: '123e4567-e89b-12d3-a456-426614174000',
+        category: 'STREAK_RISK',
+        content: 'Your streak is at risk!',
+        deliveryMethod: 'BOTH',
         priority: 8,
-        status: "SENT",
+        status: 'SENT',
         createdAt: Date.now(),
         scheduledFor: null,
         deliveredAt: Date.now(),
@@ -204,36 +204,36 @@ describe("AI Coach Schemas", () => {
     });
   });
 
-  describe("Input Schemas", () => {
-    describe("GenerateMessageInputSchema", () => {
-      it("validates correct input", () => {
+  describe('Input Schemas', () => {
+    describe('GenerateMessageInputSchema', () => {
+      it('validates correct input', () => {
         const valid = {
-          userId: "123e4567-e89b-12d3-a456-426614174000",
-          category: "STREAK_RISK",
+          userId: '123e4567-e89b-12d3-a456-426614174000',
+          category: 'STREAK_RISK',
           context: { streakDays: 5 },
-          preferredDelivery: "BOTH",
+          preferredDelivery: 'BOTH',
         };
 
         expect(() => GenerateMessageInputSchema.parse(valid)).not.toThrow();
       });
 
-      it("rejects invalid category", () => {
+      it('rejects invalid category', () => {
         const invalid = {
-          userId: "123e4567-e89b-12d3-a456-426614174000",
-          category: "INVALID_CATEGORY",
+          userId: '123e4567-e89b-12d3-a456-426614174000',
+          category: 'INVALID_CATEGORY',
           context: {},
-          preferredDelivery: "BOTH",
+          preferredDelivery: 'BOTH',
         };
 
         expect(() => GenerateMessageInputSchema.parse(invalid)).toThrow();
       });
     });
 
-    describe("ProcessBehaviorSignalInputSchema", () => {
-      it("validates correct input", () => {
+    describe('ProcessBehaviorSignalInputSchema', () => {
+      it('validates correct input', () => {
         const valid = {
-          userId: "123e4567-e89b-12d3-a456-426614174000",
-          signalType: "SESSION_QUALITY_TREND",
+          userId: '123e4567-e89b-12d3-a456-426614174000',
+          signalType: 'SESSION_QUALITY_TREND',
           value: 0.85,
         };
 
@@ -241,10 +241,10 @@ describe("AI Coach Schemas", () => {
       });
     });
 
-    describe("ActivateComebackInputSchema", () => {
-      it("validates correct input", () => {
+    describe('ActivateComebackInputSchema', () => {
+      it('validates correct input', () => {
         const valid = {
-          userId: "123e4567-e89b-12d3-a456-426614174000",
+          userId: '123e4567-e89b-12d3-a456-426614174000',
           previousStreak: 10,
           daysInactive: 5,
         };
@@ -252,9 +252,9 @@ describe("AI Coach Schemas", () => {
         expect(() => ActivateComebackInputSchema.parse(valid)).not.toThrow();
       });
 
-      it("rejects negative days inactive", () => {
+      it('rejects negative days inactive', () => {
         const invalid = {
-          userId: "123e4567-e89b-12d3-a456-426614174000",
+          userId: '123e4567-e89b-12d3-a456-426614174000',
           previousStreak: 10,
           daysInactive: -1,
         };

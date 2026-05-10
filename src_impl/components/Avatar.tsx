@@ -5,12 +5,17 @@
  * Part of the VEX Design System.
  */
 
+<<<<<<< HEAD
 import React from "react";
 import { View, Image, Pressable, StyleProp, ViewStyle } from "react-native";
+=======
+import React from 'react';
+import { View, Image, StyleSheet, Pressable, StyleProp, ViewStyle } from 'react-native';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-import { useTheme } from "../theme";
-import { Text } from "./primitives";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { useTheme } from '../theme';
+import { Text } from './primitives';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 export interface AvatarProps {
   /** Image source URL or require() */
@@ -18,9 +23,9 @@ export interface AvatarProps {
   /** User name for initials */
   name?: string;
   /** Avatar size */
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   /** Online/away/offline status */
-  status?: "online" | "away" | "offline" | "busy" | "none";
+  status?: 'online' | 'away' | 'offline' | 'busy' | 'none';
   /** Notification badge count */
   badge?: number;
   /** Custom border color */
@@ -34,7 +39,7 @@ export interface AvatarProps {
   /** Background color for initials */
   backgroundColor?: string;
   /** Shape variant */
-  shape?: "circle" | "rounded" | "square";
+  shape?: 'circle' | 'rounded' | 'square';
 }
 
 const sizeMap = {
@@ -43,7 +48,7 @@ const sizeMap = {
   md: 40,
   lg: 56,
   xl: 72,
-  "2xl": 96,
+  '2xl': 96,
 };
 
 const fontSizeMap = {
@@ -52,24 +57,24 @@ const fontSizeMap = {
   md: 14,
   lg: 18,
   xl: 24,
-  "2xl": 32,
+  '2xl': 32,
 };
 
 const statusColorMap = {
-  online: "#22C55E",
-  away: "#EAB308",
-  offline: "#94A3B8",
-  busy: "#EF4444",
-  none: "transparent",
+  online: '#22C55E',
+  away: '#EAB308',
+  offline: '#94A3B8',
+  busy: '#EF4444',
+  none: 'transparent',
 };
 
-export const Avatar: React.FC<AvatarProps> = ({ source, name = "?", size = "md", status = "none", badge, borderColor, borderWidth = 0, onPress, style, backgroundColor, shape = "circle" }) => {
+export const Avatar: React.FC<AvatarProps> = ({ source, name = '?', size = 'md', status = 'none', badge, borderColor, borderWidth = 0, onPress, style, backgroundColor, shape = 'circle' }) => {
   const { theme } = useTheme();
   const sizeValue = sizeMap[size];
   const fontSize = fontSizeMap[size];
 
   const getInitials = () => {
-    const parts = name.trim().split(" ");
+    const parts = name.trim().split(' ');
     if (parts.length === 1) {
       return parts[0].charAt(0).toUpperCase();
     }
@@ -78,11 +83,11 @@ export const Avatar: React.FC<AvatarProps> = ({ source, name = "?", size = "md",
 
   const getBorderRadius = () => {
     switch (shape) {
-      case "circle":
+      case 'circle':
         return sizeValue / 2;
-      case "rounded":
+      case 'rounded':
         return sizeValue / 4;
-      case "square":
+      case 'square':
         return 4;
       default:
         return sizeValue / 2;
@@ -91,7 +96,7 @@ export const Avatar: React.FC<AvatarProps> = ({ source, name = "?", size = "md",
 
   const renderContent = () => {
     if (source) {
-      const imageSource = typeof source === "string" ? { uri: source } : source;
+      const imageSource = typeof source === 'string' ? { uri: source } : source;
       return (
         <Image
           source={imageSource}
@@ -131,8 +136,8 @@ export const Avatar: React.FC<AvatarProps> = ({ source, name = "?", size = "md",
             styles.initials,
             {
               fontSize,
-              color: "#FFFFFF",
-              fontWeight: "600",
+              color: '#FFFFFF',
+              fontWeight: '600',
             },
           ]}
         >
@@ -143,7 +148,7 @@ export const Avatar: React.FC<AvatarProps> = ({ source, name = "?", size = "md",
   };
 
   const renderStatus = () => {
-    if (status === "none") {
+    if (status === 'none') {
       return null;
     }
 
@@ -175,7 +180,7 @@ export const Avatar: React.FC<AvatarProps> = ({ source, name = "?", size = "md",
     }
 
     const badgeSize = Math.max(18, sizeValue / 3);
-    const displayBadge = badge > 99 ? "99+" : badge.toString();
+    const displayBadge = badge > 99 ? '99+' : badge.toString();
 
     return (
       <View
@@ -219,31 +224,31 @@ export const Avatar: React.FC<AvatarProps> = ({ source, name = "?", size = "md",
 
 const styles = createSheet({
   container: {
-    position: "relative",
+    position: 'relative',
   },
   image: {
-    resizeMode: "cover",
+    resizeMode: 'cover',
   },
   initialsContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   initials: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   status: {
-    position: "absolute",
+    position: 'absolute',
   },
   badge: {
-    position: "absolute",
-    justifyContent: "center",
-    alignItems: "center",
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 4,
   },
   badgeText: {
-    color: "#FFFFFF",
-    fontWeight: "700",
-    textAlign: "center",
+    color: '#FFFFFF',
+    fontWeight: '700',
+    textAlign: 'center',
   },
 });
 

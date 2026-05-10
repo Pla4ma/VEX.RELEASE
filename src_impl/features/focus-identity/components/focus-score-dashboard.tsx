@@ -1,13 +1,13 @@
-import React, { useMemo } from "react";
-import { View } from "react-native";
-import { Button } from "../../../components/primitives/Button";
-import { Text } from "../../../components/primitives/Text";
-import { EmptyState } from "../../../components/EmptyState";
-import { ErrorState } from "../../../components/states/ErrorState";
-import { StatusBanner } from "../../../shared/ui/components/StatusFeedback";
-import { useTheme } from "../../../theme";
-import type { FocusScoreDashboardModel } from "../hooks-focus-score";
-import { MAX_FOCUS_SCORE } from "../schemas";
+import React, { useMemo } from 'react';
+import { View } from 'react-native';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { EmptyState } from '../../../components/EmptyState';
+import { ErrorState } from '../../../components/states/ErrorState';
+import { StatusBanner } from '../../../shared/ui/components/StatusFeedback';
+import { useTheme } from '../../../theme';
+import type { FocusScoreDashboardModel } from '../hooks-focus-score';
+import { MAX_FOCUS_SCORE } from '../schemas';
 
 interface FocusScoreDashboardProps {
   model: FocusScoreDashboardModel;
@@ -40,11 +40,11 @@ export function FocusScoreDashboard({ model, onRetry, onStartSession, onOpenMont
   const strongestWeakest = useMemo(() => {
     if (!model.current) {return null;}
     const entries = [
-      ["Consistency", model.current.factors.consistency.score],
-      ["Streak stability", model.current.factors.streakStability.score],
-      ["Session quality", model.current.factors.sessionQuality.score],
-      ["Intentional difficulty", model.current.factors.intentionalDifficulty.score],
-      ["Recency", model.current.factors.recency.score],
+      ['Consistency', model.current.factors.consistency.score],
+      ['Streak stability', model.current.factors.streakStability.score],
+      ['Session quality', model.current.factors.sessionQuality.score],
+      ['Intentional difficulty', model.current.factors.intentionalDifficulty.score],
+      ['Recency', model.current.factors.recency.score],
     ] as const;
     const strongest = [...entries].sort((a, b) => b[1] - a[1])[0];
     const weakest = [...entries].sort((a, b) => a[1] - b[1])[0];
@@ -58,18 +58,18 @@ export function FocusScoreDashboard({ model, onRetry, onStartSession, onOpenMont
     return (
       <ErrorState
         title="Focus Score couldn't load"
-        description={model.error?.message ?? "Your score data is temporarily unavailable."}
+        description={model.error?.message ?? 'Your score data is temporarily unavailable.'}
         retryLabel="Retry"
         onRetry={onRetry}
       />
     );
   }
-  if (!model.current || model.history.length === 0) {
+  if (!model.current) {
     return (
       <EmptyState
-        icon="🎯"
+        icon="◎"
         title="Your Focus Score starts after session one"
-        body="Complete one focused session and VEX will unlock your score trend, factor map, and next target."
+        body="Complete one focused session and VEX will unlock your signal map, score trend, and next target."
         actionLabel="Start session"
         onAction={onStartSession}
       />
@@ -92,6 +92,20 @@ export function FocusScoreDashboard({ model, onRetry, onStartSession, onOpenMont
       ) : null}
       {model.isRefetching ? (
         <StatusBanner status="loading" message="Refreshing Focus Score" description="Updating your latest score signals." />
+      ) : null}
+      {model.isOptionalDataSyncing ? (
+        <StatusBanner
+          status="loading"
+          message="Calibrating deeper signals"
+          description="Your main Focus Score is ready. Trend and monthly insights will fill in as fresh data syncs."
+        />
+      ) : null}
+      {model.optionalDataError ? (
+        <StatusBanner
+          status="error"
+          message="Some insights are delayed"
+          description="Your current score is stable while history and monthly reports retry in the background."
+        />
       ) : null}
       <View style={{ borderWidth: 1, borderColor: theme.colors.border.light, borderRadius: theme.borderRadius.lg, padding: theme.spacing[4], gap: theme.spacing[2], backgroundColor: theme.colors.background.secondary }}>
         <Text variant="label" color={theme.colors.text.secondary}>Focus Score</Text>

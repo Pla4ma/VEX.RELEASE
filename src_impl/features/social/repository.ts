@@ -4,17 +4,17 @@
  * Data access layer for social features
  */
 
-import { getSupabaseClient } from "../../config/supabase";
+import { getSupabaseClient } from '../../config/supabase';
 
 const supabase = getSupabaseClient();
-import { type Friend, type FriendRequest, type ActivityFeedItem, type Message, type Conversation, type VictoryCard, type Referral } from "./types";
+import { type Friend, type FriendRequest, type ActivityFeedItem, type Message, type Conversation, type VictoryCard, type Referral } from './types';
 
 // ============================================================================
 // Friends
 // ============================================================================
 
 export async function saveFriendRequest(request: FriendRequest): Promise<void> {
-  await supabase.from("friend_requests").insert({
+  await supabase.from('friend_requests').insert({
     id: request.id,
     from_user_id: request.fromUserId,
     to_user_id: request.toUserId,
@@ -29,11 +29,11 @@ export async function updateFriendRequest(requestId: string, updates: Partial<Fr
     updateData.status = updates.status;
   }
 
-  await supabase.from("friend_requests").update(updateData).eq("id", requestId);
+  await supabase.from('friend_requests').update(updateData).eq('id', requestId);
 }
 
 export async function createFriendship(friendship: Friend): Promise<void> {
-  await supabase.from("friends").insert({
+  await supabase.from('friends').insert({
     id: friendship.id,
     user_id: friendship.userId,
     friend_id: friendship.friendId,
@@ -45,11 +45,11 @@ export async function createFriendship(friendship: Friend): Promise<void> {
 }
 
 export async function deleteFriendship(userId: string, friendId: string): Promise<void> {
-  await supabase.from("friends").delete().eq("user_id", userId).eq("friend_id", friendId);
+  await supabase.from('friends').delete().eq('user_id', userId).eq('friend_id', friendId);
 }
 
 export async function getFriends(userId: string): Promise<Friend[]> {
-  const { data, error } = await supabase.from("friends").select("*").eq("user_id", userId).eq("status", "ACCEPTED");
+  const { data, error } = await supabase.from('friends').select('*').eq('user_id', userId).eq('status', 'ACCEPTED');
 
   if (error || !data) {
     return [];
@@ -70,9 +70,9 @@ export async function getFriendRequests(userId: string): Promise<{
   incoming: FriendRequest[];
   outgoing: FriendRequest[];
 }> {
-  const { data: incoming, error: incomingError } = await supabase.from("friend_requests").select("*").eq("to_user_id", userId).eq("status", "PENDING");
+  const { data: incoming, error: incomingError } = await supabase.from('friend_requests').select('*').eq('to_user_id', userId).eq('status', 'PENDING');
 
-  const { data: outgoing, error: outgoingError } = await supabase.from("friend_requests").select("*").eq("from_user_id", userId).eq("status", "PENDING");
+  const { data: outgoing, error: outgoingError } = await supabase.from('friend_requests').select('*').eq('from_user_id', userId).eq('status', 'PENDING');
 
   return {
     incoming: (incoming || []).map((row) => ({
@@ -97,7 +97,7 @@ export async function getFriendRequests(userId: string): Promise<{
 // ============================================================================
 
 export async function saveActivityItem(item: ActivityFeedItem): Promise<void> {
-  await supabase.from("activity_feed").insert({
+  await supabase.from('activity_feed').insert({
     id: item.id,
     user_id: item.userId,
     actor_id: item.actorId,
@@ -114,10 +114,10 @@ export async function saveActivityItem(item: ActivityFeedItem): Promise<void> {
 
 export async function getActivityFeed(userId: string, page: number, pageSize: number = 20): Promise<ActivityFeedItem[]> {
   const { data, error } = await supabase
-    .from("activity_feed")
-    .select("*")
+    .from('activity_feed')
+    .select('*')
     .or(`visibility.eq.PUBLIC,and(visibility.eq.FRIENDS,actor_id.in.(select friend_id from friends where user_id = ${userId}))`)
-    .order("timestamp", { ascending: false })
+    .order('timestamp', { ascending: false })
     .range((page - 1) * pageSize, page * pageSize - 1);
 
   if (error || !data) {
@@ -142,14 +142,14 @@ export async function getActivityFeed(userId: string, page: number, pageSize: nu
 }
 
 export async function createLike(itemId: string, userId: string): Promise<void> {
-  await supabase.from("feed_likes").insert({
+  await supabase.from('feed_likes').insert({
     feed_item_id: itemId,
     user_id: userId,
     created_at: new Date().toISOString(),
   });
 
   // Update like count
-  await supabase.rpc("increment_feed_likes", { item_id: itemId });
+  await supabase.rpc('increment_feed_likes', { item_id: itemId });
 }
 
 // ============================================================================
@@ -157,7 +157,7 @@ export async function createLike(itemId: string, userId: string): Promise<void> 
 // ============================================================================
 
 export async function saveMessage(message: Message): Promise<void> {
-  await supabase.from("messages").insert({
+  await supabase.from('messages').insert({
     id: message.id,
     conversation_id: message.conversationId,
     sender_id: message.senderId,
@@ -169,10 +169,10 @@ export async function saveMessage(message: Message): Promise<void> {
 }
 
 export async function getMessages(conversationId: string, before?: number, limit: number = 50): Promise<Message[]> {
-  let query = supabase.from("messages").select("*").eq("conversation_id", conversationId).order("timestamp", { ascending: false }).limit(limit);
+  let query = supabase.from('messages').select('*').eq('conversation_id', conversationId).order('timestamp', { ascending: false }).limit(limit);
 
   if (before) {
-    query = query.lt("timestamp", new Date(before).toISOString());
+    query = query.lt('timestamp', new Date(before).toISOString());
   }
 
   const { data, error } = await query;
@@ -194,9 +194,9 @@ export async function getMessages(conversationId: string, before?: number, limit
 }
 
 export async function getPost(postId: string): Promise<ActivityFeedItem | null> {
-  const { data, error } = await supabase.from("activity_feed").select("*").eq("id", postId).single();
+  const { data, error } = await supabase.from('activity_feed').select('*').eq('id', postId).single();
 
-  if (error || !data) return null;
+  if (error || !data) {return null;}
 
   return {
     id: data.id,
@@ -217,9 +217,9 @@ export async function getPost(postId: string): Promise<ActivityFeedItem | null> 
 }
 
 export async function getReactionCounts(postId: string): Promise<Record<string, number>> {
-  const { data, error } = await supabase.from("feed_reactions").select("reaction_type").eq("feed_item_id", postId);
+  const { data, error } = await supabase.from('feed_reactions').select('reaction_type').eq('feed_item_id', postId);
 
-  if (error || !data) return {};
+  if (error || !data) {return {};}
 
   const counts: Record<string, number> = {};
   data.forEach((row) => {
@@ -230,9 +230,9 @@ export async function getReactionCounts(postId: string): Promise<Record<string, 
 }
 
 export async function getSquadFeed(squadId: string, userId?: string, cursor?: number | null, limit: number = 20): Promise<{ items: ActivityFeedItem[]; nextCursor: number | null }> {
-  const { data, error } = await supabase.from("activity_feed").select("*").eq("squad_id", squadId).order("timestamp", { ascending: false }).limit(limit);
+  const { data, error } = await supabase.from('activity_feed').select('*').eq('squad_id', squadId).order('timestamp', { ascending: false }).limit(limit);
 
-  if (error || !data) return { items: [], nextCursor: null };
+  if (error || !data) {return { items: [], nextCursor: null };}
 
   const items = data.map((row) => ({
     id: row.id,
@@ -257,8 +257,8 @@ export async function getSquadFeed(squadId: string, userId?: string, cursor?: nu
   };
 }
 
-export async function reactToPost(postId: string, userId: string, reaction: "fire" | "strong" | "clap" | "mind_blown"): Promise<void> {
-  await supabase.from("feed_reactions").upsert({
+export async function reactToPost(postId: string, userId: string, reaction: 'fire' | 'strong' | 'clap' | 'mind_blown'): Promise<void> {
+  await supabase.from('feed_reactions').upsert({
     feed_item_id: postId,
     user_id: userId,
     reaction_type: reaction,
@@ -267,9 +267,9 @@ export async function reactToPost(postId: string, userId: string, reaction: "fir
 }
 
 export async function getFeed(userId: string, limit: number = 20): Promise<ActivityFeedItem[]> {
-  const { data, error } = await supabase.from("activity_feed").select("*").eq("user_id", userId).order("timestamp", { ascending: false }).limit(limit);
+  const { data, error } = await supabase.from('activity_feed').select('*').eq('user_id', userId).order('timestamp', { ascending: false }).limit(limit);
 
-  if (error || !data) return [];
+  if (error || !data) {return [];}
 
   return data.map((row) => ({
     id: row.id,
@@ -290,7 +290,7 @@ export async function getFeed(userId: string, limit: number = 20): Promise<Activ
 }
 
 export async function saveConversation(conversation: Conversation): Promise<void> {
-  await supabase.from("conversations").insert({
+  await supabase.from('conversations').insert({
     id: conversation.id,
     type: conversation.type,
     participants: conversation.participants,
@@ -302,7 +302,7 @@ export async function saveConversation(conversation: Conversation): Promise<void
 }
 
 export async function getConversations(userId: string): Promise<Conversation[]> {
-  const { data, error } = await supabase.from("conversations").select("*").contains("participants", [userId]).order("last_message_at", { ascending: false });
+  const { data, error } = await supabase.from('conversations').select('*').contains('participants', [userId]).order('last_message_at', { ascending: false });
 
   if (error || !data) {
     return [];
@@ -321,13 +321,13 @@ export async function getConversations(userId: string): Promise<Conversation[]> 
 
 export async function markConversationRead(conversationId: string, userId: string): Promise<void> {
   await supabase
-    .from("conversations")
+    .from('conversations')
     .update({
       [`unread_count.${userId}`]: 0,
     })
-    .eq("id", conversationId);
+    .eq('id', conversationId);
 
-  await supabase.from("messages").update({ read_at: new Date().toISOString() }).eq("conversation_id", conversationId).neq("sender_id", userId).is("read_at", null);
+  await supabase.from('messages').update({ read_at: new Date().toISOString() }).eq('conversation_id', conversationId).neq('sender_id', userId).is('read_at', null);
 }
 
 // ============================================================================
@@ -335,7 +335,7 @@ export async function markConversationRead(conversationId: string, userId: strin
 // ============================================================================
 
 export async function saveVictoryCard(card: VictoryCard): Promise<void> {
-  await supabase.from("victory_cards").insert({
+  await supabase.from('victory_cards').insert({
     id: card.id,
     user_id: card.userId,
     type: card.type,
@@ -350,7 +350,7 @@ export async function saveVictoryCard(card: VictoryCard): Promise<void> {
 }
 
 export async function incrementShareCount(cardId: string): Promise<void> {
-  await supabase.rpc("increment_card_shares", { card_id: cardId });
+  await supabase.rpc('increment_card_shares', { card_id: cardId });
 }
 
 // ============================================================================
@@ -358,7 +358,7 @@ export async function incrementShareCount(cardId: string): Promise<void> {
 // ============================================================================
 
 export async function saveReferral(referral: Referral): Promise<void> {
-  await supabase.from("referrals").insert({
+  await supabase.from('referrals').insert({
     id: referral.id,
     referrer_id: referral.referrerId,
     referred_id: referral.referredId,
@@ -371,7 +371,7 @@ export async function saveReferral(referral: Referral): Promise<void> {
 }
 
 export async function getReferralByCode(code: string): Promise<Referral | null> {
-  const { data, error } = await supabase.from("referrals").select("*").eq("referral_code", code).single();
+  const { data, error } = await supabase.from('referrals').select('*').eq('referral_code', code).single();
 
   if (error || !data) {
     return null;
@@ -404,5 +404,5 @@ export async function updateReferral(referralId: string, updates: Partial<Referr
     updateData.reward_claimed = updates.rewardClaimed;
   }
 
-  await supabase.from("referrals").update(updateData).eq("id", referralId);
+  await supabase.from('referrals').update(updateData).eq('id', referralId);
 }

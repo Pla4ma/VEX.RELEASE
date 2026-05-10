@@ -12,6 +12,7 @@ import { useTheme } from '../theme';
 import { useOnboardingStore } from '../onboarding';
 
 import { RootLoadingShell } from './components/RootLoadingShell';
+import { RootCrashBoundary } from './components/RootCrashBoundary';
 import { useNotificationNavigation } from './hooks/useNotificationNavigation';
 import { useStreakFuneralNavigation } from './hooks/useStreakFuneralNavigation';
 import { RootStackScreens } from './RootStackScreens';
@@ -24,10 +25,17 @@ export const RootNavigator: React.FC = () => {
   const [isNavigationReady, setIsNavigationReady] = useState(false);
   const { theme, isDark } = useTheme();
   const navigationRef = useNavigationContainerRef<ExtendedRootStackParams>();
-  const { isOnboarded } = useOnboardingStore((state) => ({
+  const { completedAt, isOnboarded } = useOnboardingStore((state) => ({
+    completedAt: state.completedAt,
     isOnboarded: state.isOnboarded,
   }));
-  const hasCompletedOnboarding = user?.id ? isOnboarded : false;
+  const userCreatedAt = user?.createdAt ? Date.parse(user.createdAt) : null;
+  const hasCompletedOnboarding = Boolean(
+    user?.id &&
+    isOnboarded &&
+    completedAt &&
+    (!userCreatedAt || completedAt >= userCreatedAt)
+  );
 
   useEffect(() => {
     const init = async (): Promise<void> => {
@@ -65,18 +73,30 @@ export const RootNavigator: React.FC = () => {
         dark: isDark,
         colors: {
           primary: theme.colors.primary[500],
-          background: theme.colors.background.primary,
-          card: theme.colors.background.secondary,
+          background: theme.colors.semantic.background,
+          card: theme.colors.semantic.surface,
           text: theme.colors.text.primary,
-          border: theme.colors.border.DEFAULT,
+          border: theme.colors.semantic.border,
           notification: theme.colors.error.DEFAULT,
         },
       }}
     >
-      <RootStackScreens
-        hasCompletedOnboarding={hasCompletedOnboarding}
-        isAuthenticated={isAuthenticated}
-      />
+      <RootCrashBoundary
+        colors={{
+          background: theme.colors.semantic.background,
+          border: theme.colors.semantic.border,
+          primary: theme.colors.semantic.primary,
+          surface: theme.colors.semantic.surfaceElevated,
+          textPrimary: theme.colors.semantic.textPrimary,
+          textSecondary: theme.colors.semantic.textSecondary,
+        }}
+        resetKey={`${user?.id ?? 'signed-out'}:${hasCompletedOnboarding ? 'main' : 'setup'}`}
+      >
+        <RootStackScreens
+          hasCompletedOnboarding={hasCompletedOnboarding}
+          isAuthenticated={isAuthenticated}
+        />
+      </RootCrashBoundary>
     </NavigationContainer>
   );
 };

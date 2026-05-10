@@ -8,16 +8,22 @@
  * @phase 2.6
  */
 
+<<<<<<< HEAD
 import React from "react";
 import { Pressable } from "react-native";
 import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withRepeat, withTiming } from "react-native-reanimated";
+=======
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withRepeat, withSpring, withTiming } from 'react-native-reanimated';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import type { FocusDuration, FocusGoal } from "../schemas";
-import { DURATION_OPTIONS, GOAL_OPTIONS } from "../service";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import type { FocusDuration, FocusGoal } from '../schemas';
+import { DURATION_OPTIONS, GOAL_OPTIONS } from '../service';
 
 interface FirstSessionCTAProps {
   userName: string | null;
@@ -46,7 +52,7 @@ function PulseRing(): JSX.Element {
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           width: 160,
           height: 160,
           borderRadius: 80,
@@ -71,9 +77,9 @@ function SessionPreview({ duration, goal }: { duration: FocusDuration | null; go
     <Box p="lg" borderRadius="xl" bg="background.secondary" borderWidth={1} borderColor="border.light" alignItems="center" gap="md">
       {/* Duration Display */}
       <Box flexDirection="row" alignItems="center" gap="sm">
-        <Text fontSize={40}>{durationOption?.emoji ?? "🍅"}</Text>
+        <Text fontSize={40}>{durationOption?.emoji ?? '🍅'}</Text>
         <Text variant="h2" color="text.primary" fontWeight="700">
-          {durationOption?.label ?? "25 min"}
+          {durationOption?.label ?? '25 min'}
         </Text>
       </Box>
 
@@ -99,7 +105,12 @@ function SessionPreview({ duration, goal }: { duration: FocusDuration | null; go
  * First session CTA screen
  */
 export function FirstSessionCTA({ userName, duration, goal, onStartSession, onBack }: FirstSessionCTAProps): JSX.Element {
+<<<<<<< HEAD
   const displayName = userName || "there";
+=======
+  const { theme } = useTheme();
+  const displayName = userName || 'there';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   const durationOption = DURATION_OPTIONS.find((d) => d.value === duration);
 
   return (
@@ -120,7 +131,7 @@ export function FirstSessionCTA({ userName, duration, goal, onStartSession, onBa
       </Animated.View>
 
       {/* Session Preview */}
-      <Animated.View entering={FadeInUp.duration(500).delay(200)} style={{ width: "100%" }}>
+      <Animated.View entering={FadeInUp.duration(500).delay(200)} style={{ width: '100%' }}>
         <Box alignItems="center" py="xl">
           {/* Pulse animation behind */}
           <Box justifyContent="center" alignItems="center" height={200}>
@@ -165,14 +176,14 @@ export function FirstSessionCTA({ userName, duration, goal, onStartSession, onBa
       <Box flex={1} minHeight={20} />
 
       {/* CTA Button */}
-      <Animated.View entering={FadeInUp.duration(400).delay(600)} style={{ width: "100%" }}>
+      <Animated.View entering={FadeInUp.duration(400).delay(600)} style={{ width: '100%' }}>
         <Button variant="primary" size="lg" fullWidth onPress={onStartSession} accessibilityLabel="focus session →`} button" accessibilityRole="button" accessibilityHint="Activates this control">
-          {`Start ${durationOption?.label ?? "25-minute"} focus session →`}
+          {`Start ${durationOption?.label ?? '25-minute'} focus session →`}
         </Button>
       </Animated.View>
 
       {/* Back Option */}
-      <Animated.View entering={FadeIn.duration(400).delay(700)} style={{ marginTop: "auto" }}>
+      <Animated.View entering={FadeIn.duration(400).delay(700)} style={{ marginTop: 'auto' }}>
         <Pressable onPress={onBack} accessibilityLabel="← Go back button" accessibilityRole="button" accessibilityHint="Activates this control">
           <Box alignItems="center" py="md">
             <Text variant="bodySmall" color="text.tertiary">

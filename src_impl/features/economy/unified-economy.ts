@@ -10,13 +10,13 @@
  * @phase 3 - Economy Rebuild
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Currency Types
 // ============================================================================
 
-export const CurrencySchema = z.enum(["COINS", "TOKENS"]);
+export const CurrencySchema = z.enum(['COINS', 'TOKENS']);
 export type Currency = z.infer<typeof CurrencySchema>;
 
 export interface Wallet {
@@ -34,7 +34,7 @@ export interface Wallet {
 // Item System with Durability
 // ============================================================================
 
-export const ItemRaritySchema = z.enum(["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"]);
+export const ItemRaritySchema = z.enum(['COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY']);
 export type ItemRarity = z.infer<typeof ItemRaritySchema>;
 
 export interface Item {
@@ -43,7 +43,7 @@ export interface Item {
   name: string;
   description: string;
   rarity: ItemRarity;
-  type: "EQUIPMENT" | "CONSUMABLE" | "MATERIAL" | "COSMETIC" | "CHEST";
+  type: 'EQUIPMENT' | 'CONSUMABLE' | 'MATERIAL' | 'COSMETIC' | 'CHEST';
 
   // For equipment
   level: number;
@@ -61,14 +61,14 @@ export interface Item {
 }
 
 export interface ItemStat {
-  type: "DAMAGE_BOOST" | "XP_BOOST" | "COIN_BOOST" | "PURITY_BOOST" | "DURABILITY_BOOST";
+  type: 'DAMAGE_BOOST' | 'XP_BOOST' | 'COIN_BOOST' | 'PURITY_BOOST' | 'DURABILITY_BOOST';
   value: number;
   isPercentage: boolean;
 }
 
 export interface Gem {
   id: string;
-  color: "RED" | "BLUE" | "GREEN" | "YELLOW" | "PURPLE";
+  color: 'RED' | 'BLUE' | 'GREEN' | 'YELLOW' | 'PURPLE';
   stat: ItemStat;
 }
 
@@ -95,8 +95,8 @@ export function calculateUpgradeCost(item: Item): UpgradeCost {
   return {
     coins: Math.floor(baseCost * rarityMultiplier[item.rarity]),
     materials: [
-      { materialId: "upgrade_shard", count: Math.floor(item.level / 2) + 1 },
-      { materialId: "essence_common", count: Math.max(1, 5 - item.level) },
+      { materialId: 'upgrade_shard', count: Math.floor(item.level / 2) + 1 },
+      { materialId: 'essence_common', count: Math.max(1, 5 - item.level) },
     ],
   };
 }
@@ -175,28 +175,28 @@ export interface LootDrop {
 
 export const VOID_CHESTS: LootTable[] = [
   {
-    id: "void_chest_basic",
-    name: "Basic Void Chest",
-    cost: { currency: "COINS", amount: 1000 },
+    id: 'void_chest_basic',
+    name: 'Basic Void Chest',
+    cost: { currency: 'COINS', amount: 1000 },
     drops: [
-      { itemId: "material_common", weight: 40, rarity: "COMMON" },
-      { itemId: "upgrade_shard", weight: 30, rarity: "COMMON" },
-      { itemId: "equipment_common", weight: 20, rarity: "UNCOMMON" },
-      { itemId: "equipment_rare", weight: 8, rarity: "RARE" },
-      { itemId: "gem_red", weight: 2, rarity: "EPIC" },
+      { itemId: 'material_common', weight: 40, rarity: 'COMMON' },
+      { itemId: 'upgrade_shard', weight: 30, rarity: 'COMMON' },
+      { itemId: 'equipment_common', weight: 20, rarity: 'UNCOMMON' },
+      { itemId: 'equipment_rare', weight: 8, rarity: 'RARE' },
+      { itemId: 'gem_red', weight: 2, rarity: 'EPIC' },
     ],
   },
   {
-    id: "void_chest_premium",
-    name: "Premium Void Chest",
-    cost: { currency: "TOKENS", amount: 100 },
+    id: 'void_chest_premium',
+    name: 'Premium Void Chest',
+    cost: { currency: 'TOKENS', amount: 100 },
     drops: [
-      { itemId: "material_rare", weight: 35, rarity: "UNCOMMON" },
-      { itemId: "equipment_rare", weight: 30, rarity: "RARE" },
-      { itemId: "gem_any", weight: 15, rarity: "EPIC" },
-      { itemId: "equipment_epic", weight: 15, rarity: "EPIC" },
-      { itemId: "equipment_legendary", weight: 4, rarity: "LEGENDARY" },
-      { itemId: "cosmetic_exclusive", weight: 1, rarity: "LEGENDARY" },
+      { itemId: 'material_rare', weight: 35, rarity: 'UNCOMMON' },
+      { itemId: 'equipment_rare', weight: 30, rarity: 'RARE' },
+      { itemId: 'gem_any', weight: 15, rarity: 'EPIC' },
+      { itemId: 'equipment_epic', weight: 15, rarity: 'EPIC' },
+      { itemId: 'equipment_legendary', weight: 4, rarity: 'LEGENDARY' },
+      { itemId: 'cosmetic_exclusive', weight: 1, rarity: 'LEGENDARY' },
     ],
   },
 ];
@@ -251,7 +251,7 @@ export function canListItem(userListings: number, item: Item, price: number): { 
     return { allowed: false, reason: `Maximum price is ${TRADING_POST_CONFIG.maxPrice} coins` };
   }
   if (item.durability < item.maxDurability) {
-    return { allowed: false, reason: "Cannot list damaged items" };
+    return { allowed: false, reason: 'Cannot list damaged items' };
   }
 
   return { allowed: true, reason: null };

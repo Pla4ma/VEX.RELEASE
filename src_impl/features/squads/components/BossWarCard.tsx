@@ -7,21 +7,21 @@
  * @phase 5.2
  */
 
-import React from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { BossAvatar } from "../../boss/components/BossAvatar";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { BossAvatar } from '../../boss/components/BossAvatar';
 
 export interface BossWarCardProps {
   /** Boss name */
   bossName: string;
   /** Boss tier */
-  bossTier: "NORMAL" | "ELITE" | "LEGENDARY";
+  bossTier: 'NORMAL' | 'ELITE' | 'LEGENDARY';
   /** Boss health remaining (0-100%) */
   bossHealthPercent: number;
   /** Hours remaining in war */
@@ -45,32 +45,32 @@ export interface BossWarCardProps {
  */
 function formatTimeRemaining(hours: number): string {
   if (hours <= 0) {
-    return "Ending soon!";
+    return 'Ending soon!';
   }
   if (hours < 1) {
-    return "Less than 1h";
+    return 'Less than 1h';
   }
   if (hours === 1) {
-    return "1h remaining";
+    return '1h remaining';
   }
   if (hours < 24) {
     return `${Math.floor(hours)}h remaining`;
   }
   const days = Math.floor(hours / 24);
-  return `${days} day${days > 1 ? "s" : ""} left`;
+  return `${days} day${days > 1 ? 's' : ''} left`;
 }
 
 /**
  * Get tier color
  */
-function getTierColor(tier: BossWarCardProps["bossTier"]): string {
+function getTierColor(tier: BossWarCardProps['bossTier']): string {
   switch (tier) {
-    case "LEGENDARY":
-      return "#F59E0B"; // Orange/Gold
-    case "ELITE":
-      return "#8B5CF6"; // Purple
+    case 'LEGENDARY':
+      return '#F59E0B'; // Orange/Gold
+    case 'ELITE':
+      return '#8B5CF6'; // Purple
     default:
-      return "#3B82F6"; // Blue
+      return '#3B82F6'; // Blue
   }
 }
 
@@ -117,8 +117,8 @@ export function BossWarCard({ bossName, bossTier, bossHealthPercent, hoursRemain
                   {bossTier}
                 </Text>
               </Box>
-              <Text variant="caption" color={isUrgent ? theme.colors.error.DEFAULT : theme.colors.text.secondary} fontWeight={isUrgent ? "600" : "400"}>
-                {isUrgent ? "⏰ " : ""}
+              <Text variant="caption" color={isUrgent ? theme.colors.error.DEFAULT : theme.colors.text.secondary} fontWeight={isUrgent ? '600' : '400'}>
+                {isUrgent ? '⏰ ' : ''}
                 {formatTimeRemaining(hoursRemaining)}
               </Text>
             </Box>
@@ -195,8 +195,8 @@ export function BossWarCard({ bossName, bossTier, bossHealthPercent, hoursRemain
           </Box>
 
           {/* CTA */}
-          <Button variant={isCritical ? "primary" : "secondary"} size="lg" fullWidth onPress={onJoinWar} accessibilityLabel="Action button" accessibilityRole="button" accessibilityHint="Activates this control">
-            {isCritical ? "⚔️ Join Final Push!" : "⚔️ Join War"}
+          <Button variant={isCritical ? 'primary' : 'secondary'} size="lg" fullWidth onPress={onJoinWar} accessibilityLabel="Action button" accessibilityRole="button" accessibilityHint="Activates this control">
+            {isCritical ? '⚔️ Join Final Push!' : '⚔️ Join War'}
           </Button>
         </Box>
       </Pressable>

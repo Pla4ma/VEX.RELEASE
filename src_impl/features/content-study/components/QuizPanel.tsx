@@ -3,15 +3,15 @@
  * Interactive quiz with multiple choice and short answer support
  */
 
-import React, { useState, useCallback, useMemo } from "react";
-import { View, Pressable, TextInput, StyleSheet, ScrollView } from "react-native";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { Icon } from "../../../icons";
-import type { QuizPanelProps, QuizItem } from "../types";
-import { QUIZ_DIFFICULTY_CONFIG } from "../constants";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useState, useCallback, useMemo } from 'react';
+import { View, Pressable, TextInput, StyleSheet, ScrollView } from 'react-native';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { Icon } from '../../../icons';
+import type { QuizPanelProps, QuizItem } from '../types';
+import { QUIZ_DIFFICULTY_CONFIG } from '../constants';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 export const QuizPanel: React.FC<QuizPanelProps> = ({ items, answers, activeId, onAnswer, onRevealAnswer, showResults = false, score, readOnly = false }) => {
   const { theme } = useTheme();
@@ -177,7 +177,7 @@ export const QuizPanel: React.FC<QuizPanelProps> = ({ items, answers, activeId, 
                     ]}
                     placeholder="Type your answer..."
                     placeholderTextColor={(theme.colors.text as any).muted}
-                    value={shortAnswers[quiz.id] || ""}
+                    value={shortAnswers[quiz.id] || ''}
                     onChangeText={(text) => setShortAnswers((prev) => ({ ...prev, [quiz.id]: text }))}
                     multiline
                     maxLength={500}
@@ -223,18 +223,18 @@ const styles = createSheet({
     gap: 12,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   headerTitle: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   title: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   scoreBadge: {
     paddingHorizontal: 12,
@@ -243,7 +243,7 @@ const styles = createSheet({
   },
   scoreText: {
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   quizList: {
     maxHeight: 500,
@@ -256,13 +256,13 @@ const styles = createSheet({
     gap: 12,
   },
   questionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
   },
   questionNumber: {
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   difficultyBadge: {
     paddingHorizontal: 8,
@@ -271,27 +271,27 @@ const styles = createSheet({
   },
   difficultyText: {
     fontSize: 11,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   conceptTag: {
     flex: 1,
-    alignItems: "flex-end",
+    alignItems: 'flex-end',
   },
   conceptText: {
     fontSize: 12,
   },
   question: {
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: '500',
     lineHeight: 22,
   },
   optionsContainer: {
     gap: 8,
   },
   optionButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
@@ -309,15 +309,15 @@ const styles = createSheet({
     padding: 12,
     fontSize: 14,
     minHeight: 80,
-    textAlignVertical: "top",
+    textAlignVertical: 'top',
   },
   revealButton: {
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     paddingVertical: 8,
   },
   revealText: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   answerReveal: {
     padding: 12,
@@ -329,7 +329,7 @@ const styles = createSheet({
   },
   answerText: {
     fontSize: 15,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   explanationContainer: {
     padding: 12,

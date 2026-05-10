@@ -3,8 +3,8 @@
  * Domain types for user preferences, notification settings, and data controls
  */
 
-import type { z } from "zod";
-import type { SettingCategorySchema, NotificationChannelSchema, NotificationPrioritySchema, CoachPersonalitySchema, CoachFrequencySchema, ThemeModeSchema, DataRetentionPolicySchema, ExportFormatSchema, SyncStatusSchema } from "./schemas";
+import type { z } from 'zod';
+import type { SettingCategorySchema, NotificationChannelSchema, NotificationPrioritySchema, CoachPersonalitySchema, CoachFrequencySchema, ThemeModeSchema, DataRetentionPolicySchema, ExportFormatSchema, SyncStatusSchema } from './schemas';
 
 // Enums from schemas
 export type SettingCategory = z.infer<typeof SettingCategorySchema>;
@@ -56,7 +56,7 @@ export interface NotificationSettings {
     email: {
       enabled: boolean;
       email: string;
-      digestFrequency: "immediate" | "daily" | "weekly" | "never";
+      digestFrequency: 'immediate' | 'daily' | 'weekly' | 'never';
     };
     inApp: {
       enabled: boolean;
@@ -79,7 +79,7 @@ export interface NotificationRule {
   userId: string;
   name: string;
   condition: {
-    type: "time" | "location" | "activity" | "streak";
+    type: 'time' | 'location' | 'activity' | 'streak';
     params: Record<string, unknown>;
   };
   action: {
@@ -118,7 +118,7 @@ export interface CoachTrigger {
   id: string;
   userId: string;
   eventType: string;
-  condition: "before" | "after" | "during";
+  condition: 'before' | 'after' | 'during';
   threshold?: number;
   messageTemplate: string;
   isActive: boolean;
@@ -139,7 +139,7 @@ export interface AppearanceSettings {
 // Privacy settings
 export interface PrivacySettings {
   userId: string;
-  profileVisibility: "public" | "friends" | "private";
+  profileVisibility: 'public' | 'friends' | 'private';
   showOnlineStatus: boolean;
   showActivityStatus: boolean;
   allowDataAnalysis: boolean;
@@ -154,7 +154,7 @@ export interface DataControlSettings {
   retentionPolicy: DataRetentionPolicy;
   autoExport: {
     enabled: boolean;
-    frequency: "weekly" | "monthly" | "never";
+    frequency: 'weekly' | 'monthly' | 'never';
     format: ExportFormat;
     lastExport?: number;
   };
@@ -181,7 +181,7 @@ export interface SyncConflict {
   remoteValue: SettingValue;
   localTimestamp: number;
   remoteTimestamp: number;
-  resolution?: "local" | "remote" | "merge";
+  resolution?: 'local' | 'remote' | 'merge';
 }
 
 // Settings export data

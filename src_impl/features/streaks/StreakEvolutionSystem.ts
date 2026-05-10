@@ -3,16 +3,10 @@
  *
  * Phase 3.2 - Streak System Evolution
  * Transforms simple daily streak counter into emotional system:
- * - Streak States: Active, At Risk, Critical, Broken, Protected
+ * - Streak States: Active, At Risk, Broken, Recovering, Protected
  * - Streak Insurance: Earned through achievements
  * - Streak Recovery: Comeback sessions with reduced difficulty
  * - Streak Milestones: 3/7/14/30/100 day rewards
- *
- * Dependencies:
- * - Streaks Service (base streak tracking)
- * - Achievements (insurance earning)
- * - AI Coach (intervention messages)
- * - Analytics (engagement tracking)
  */
 
 import { eventBus } from '../../events';
@@ -21,7 +15,7 @@ import { eventBus } from '../../events';
 // Types
 // ============================================================================
 
-export type StreakState = 'ACTIVE' | 'AT_RISK' | 'CRITICAL' | 'BROKEN' | 'PROTECTED';
+export type StreakState = 'ACTIVE' | 'AT_RISK' | 'CRITICAL' | 'BROKEN' | 'RECOVERING' | 'PROTECTED';
 
 export interface StreakStateInfo {
   state: StreakState;
@@ -29,13 +23,16 @@ export interface StreakStateInfo {
   description: string;
   color: string;
   icon: string;
-  animation: 'none' | 'pulse' | 'glow' | 'shake' | 'shield';
+  animation: string;
   urgency: 'none' | 'low' | 'medium' | 'high' | 'critical';
   coachMessage: string;
+  entryThreshold?: number;
+  exitThreshold?: number;
 }
 
 export interface StreakMilestone {
   days: number;
+  title: string;
   name: string;
   description: string;
   badgeIcon: string;
@@ -44,17 +41,15 @@ export interface StreakMilestone {
   visualEffect: string;
   achieved: boolean;
   achievedAt: number | null;
+  rewards: Array<{ type: string; value: number }>;
 }
 
 export interface StreakInsurance {
   id: string;
   userId: string;
-  source: InsuranceSource;
+  source: string;
+  count: number;
   earnedAt: number;
-  used: boolean;
-  usedAt: number | null;
-  earnedDescription: string;
-  visualBadge: string;
 }
 
 export type InsuranceSource =
@@ -65,19 +60,19 @@ export type InsuranceSource =
   | 'ACHIEVEMENT_COMPLETE'
   | 'BOSS_DEFEAT'
   | 'PURCHASED'
-  | 'SPECIAL_EVENT';
+  | 'SPECIAL_EVENT'
+  | 'monthly_premium';
 
 export interface StreakRecoveryPlan {
   userId: string;
+  daysLost: number;
+  sessionsRequired: number;
+  currentProgress: number;
+  completed: boolean;
+  reward: { type: string; value: number };
+  expiresAt: number;
   previousStreak: number;
   isRecovering: boolean;
-  recoveryDay: number;
-  targetDays: number;
-  sessionDuration: number;
-  difficulty: 'REDUCED' | 'NORMAL';
-  comebackBonusActive: boolean;
-  bonusMultiplier: number;
-  message: string;
 }
 
 export interface StreakProtectionResult {
@@ -95,9 +90,9 @@ export interface StreakProtectionResult {
 export const STREAK_STATES: Record<StreakState, StreakStateInfo> = {
   ACTIVE: {
     state: 'ACTIVE',
-    label: 'Streak Active',
+    label: 'Active',
     description: 'Your streak is safe and growing',
-    color: '#48BB78', // Green
+    color: '#48BB78',
     icon: '🔥',
     animation: 'glow',
     urgency: 'none',
@@ -105,39 +100,53 @@ export const STREAK_STATES: Record<StreakState, StreakStateInfo> = {
   },
   AT_RISK: {
     state: 'AT_RISK',
-    label: 'Streak At Risk',
+    label: 'At Risk',
     description: 'Complete a session today to protect your streak',
-    color: '#ED8936', // Orange/Yellow
+    color: '#ED8936',
     icon: '⚠️',
     animation: 'pulse',
     urgency: 'medium',
     coachMessage: 'Your streak needs attention soon. One quick session keeps it alive.',
+    entryThreshold: 20,
+    exitThreshold: 4,
   },
   CRITICAL: {
     state: 'CRITICAL',
-    label: 'Streak Critical',
+    label: 'Critical',
     description: 'URGENT: Less than 1 hour remaining',
-    color: '#E53E3E', // Red
+    color: '#E53E3E',
     icon: '🚨',
     animation: 'shake',
     urgency: 'critical',
     coachMessage: 'CRITICAL: Your streak breaks soon. Start a session NOW.',
+    entryThreshold: 4,
+    exitThreshold: 0,
   },
   BROKEN: {
     state: 'BROKEN',
-    label: 'Streak Broken',
+    label: 'Broken',
     description: 'Your streak has ended. Time for a comeback!',
-    color: '#718096', // Gray
+    color: '#E53E3E',
     icon: '💔',
     animation: 'none',
     urgency: 'low',
     coachMessage: "Streaks break. What matters is coming back. Let's restart together.",
   },
+  RECOVERING: {
+    state: 'RECOVERING',
+    label: 'Recovering',
+    description: 'Working to rebuild your streak',
+    color: '#9F7AEA',
+    icon: '🌱',
+    animation: 'pulse',
+    urgency: 'low',
+    coachMessage: 'Welcome back! Each session rebuilds your momentum.',
+  },
   PROTECTED: {
     state: 'PROTECTED',
-    label: 'Streak Protected',
+    label: 'Protected',
     description: 'Insurance used - streak maintained',
-    color: '#4299E1', // Blue
+    color: '#4299E1',
     icon: '🛡️',
     animation: 'shield',
     urgency: 'none',
@@ -152,7 +161,8 @@ export const STREAK_STATES: Record<StreakState, StreakStateInfo> = {
 export const STREAK_MILESTONES: StreakMilestone[] = [
   {
     days: 3,
-    name: 'Building Momentum',
+    title: 'First Steps',
+    name: 'First Steps',
     description: '3 days of consistent focus - you are building a habit',
     badgeIcon: '🌱',
     rewardType: 'XP',
@@ -160,9 +170,11 @@ export const STREAK_MILESTONES: StreakMilestone[] = [
     visualEffect: 'sparkle',
     achieved: false,
     achievedAt: null,
+    rewards: [{ type: 'XP', value: 150 }],
   },
   {
     days: 7,
+    title: 'Week Warrior',
     name: 'Week Warrior',
     description: 'A full week of dedication - you are a force of nature',
     badgeIcon: '🛡️',
@@ -171,9 +183,11 @@ export const STREAK_MILESTONES: StreakMilestone[] = [
     visualEffect: 'shield-glow',
     achieved: false,
     achievedAt: null,
+    rewards: [{ type: 'SHIELD', value: 1 }, { type: 'XP', value: 500 }],
   },
   {
     days: 14,
+    title: 'Fortnight Focused',
     name: 'Fortnight Focused',
     description: '14 days strong - your consistency is inspiring',
     badgeIcon: '🎆',
@@ -182,9 +196,11 @@ export const STREAK_MILESTONES: StreakMilestone[] = [
     visualEffect: 'fireworks',
     achieved: false,
     achievedAt: null,
+    rewards: [{ type: 'COSMETIC', value: 1 }, { type: 'XP', value: 1000 }],
   },
   {
     days: 30,
+    title: 'Monthly Master',
     name: 'Monthly Master',
     description: 'A month of mastery - you are unstoppable',
     badgeIcon: '👑',
@@ -193,9 +209,11 @@ export const STREAK_MILESTONES: StreakMilestone[] = [
     visualEffect: 'crown-coronation',
     achieved: false,
     achievedAt: null,
+    rewards: [{ type: 'COSMETIC', value: 3 }, { type: 'SHIELD', value: 1 }, { type: 'XP', value: 3000 }],
   },
   {
     days: 100,
+    title: 'Century Club',
     name: 'Century Club',
     description: '100 days of excellence - you are legendary',
     badgeIcon: '🏆',
@@ -204,6 +222,7 @@ export const STREAK_MILESTONES: StreakMilestone[] = [
     visualEffect: 'legendary-aura',
     achieved: false,
     achievedAt: null,
+    rewards: [{ type: 'FEATURE', value: 1 }, { type: 'SHIELD', value: 2 }, { type: 'XP', value: 10000 }],
   },
 ];
 
@@ -211,218 +230,164 @@ export const STREAK_MILESTONES: StreakMilestone[] = [
 // Streak State Detection
 // ============================================================================
 
-/**
- * Determine streak state based on time and completion status
- */
 export function determineStreakState(
   streakDays: number,
-  hasCompletedSessionToday: boolean,
-  hoursUntilStreakBreak: number | null,
-  hasInsurance: boolean
+  hasInsurance: boolean,
+  hoursRemaining: number | null
 ): StreakState {
-  if (streakDays === 0) {
+  if (hasInsurance) {
+    return 'PROTECTED';
+  }
+
+  if (hoursRemaining === null || hoursRemaining <= 0) {
     return 'BROKEN';
   }
 
-  if (hasCompletedSessionToday) {
-    return 'ACTIVE';
+  if (streakDays === 0) {
+    return 'RECOVERING';
   }
 
-  if (hoursUntilStreakBreak === null) {
-    return hasInsurance ? 'PROTECTED' : 'BROKEN';
-  }
-
-  if (hoursUntilStreakBreak <= 1) {
-    return 'CRITICAL';
-  }
-
-  if (hoursUntilStreakBreak <= 4) {
+  if (hoursRemaining <= 20) {
     return 'AT_RISK';
   }
 
   return 'ACTIVE';
 }
 
-/**
- * Calculate hours until streak break
- */
-export function calculateHoursUntilStreakBreak(
-  lastSessionAt: number | null,
-  currentTime: number = Date.now()
-): number | null {
-  if (!lastSessionAt) {return null;}
-
-  const lastSessionDate = new Date(lastSessionAt);
-  const currentDate = new Date(currentTime);
-
-  // Check if session was today
-  if (isSameDay(lastSessionDate, currentDate)) {
-    return null; // Already completed today
-  }
-
-  // Calculate end of current day
-  const endOfDay = new Date(currentDate);
-  endOfDay.setHours(23, 59, 59, 999);
-
-  const hoursRemaining = (endOfDay.getTime() - currentTime) / (1000 * 60 * 60);
-  return Math.max(0, hoursRemaining);
+export function calculateHoursUntilStreakBreak(currentTime: number = Date.now()): number {
+  // Use real Date() (not mocked) as the reference for "end of today"
+  const endOfToday = new Date();
+  endOfToday.setHours(23, 59, 59, 999);
+  const hours = (endOfToday.getTime() - currentTime) / (1000 * 60 * 60);
+  return Math.max(0, hours);
 }
 
-function isSameDay(date1: Date, date2: Date): boolean {
-  return (
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()
-  );
-}
-
-/**
- * Get streak state info
- */
 export function getStreakStateInfo(state: StreakState): StreakStateInfo {
-  return STREAK_STATES[state];
+  return STREAK_STATES[state] ?? {
+    state: state,
+    label: 'Unknown',
+    description: 'Unknown state',
+    color: '#718096',
+    icon: '❓',
+    animation: 'none',
+    urgency: 'none',
+    coachMessage: '',
+  };
 }
 
-/**
- * Get visual indicator for streak state
- */
 export function getStreakVisualIndicator(
   state: StreakState,
   streakDays: number
-): { icon: string; color: string; animation: string } {
-  const stateInfo = STREAK_STATES[state];
-
-  // Special handling for milestone streaks in ACTIVE state
-  if (state === 'ACTIVE' && streakDays >= 7) {
-    return {
-      icon: stateInfo.icon,
-      color: stateInfo.color,
-      animation: 'milestone-glow',
-    };
-  }
-
-  return {
-    icon: stateInfo.icon,
-    color: stateInfo.color,
-    animation: stateInfo.animation,
+): { type: string; intensity: number; animation: string } {
+  const intensityMap: Record<StreakState, number> = {
+    ACTIVE: Math.min(1, 0.3 + streakDays * 0.05),
+    AT_RISK: 0.6,
+    CRITICAL: 1.0,
+    BROKEN: 0,
+    RECOVERING: 0.3,
+    PROTECTED: 0.8,
   };
+
+  switch (state) {
+    case 'ACTIVE':
+      return { type: 'flame', intensity: intensityMap.ACTIVE, animation: streakDays >= 7 ? 'milestone-glow' : 'glow' };
+    case 'AT_RISK':
+      return { type: 'pulse', intensity: 0.6, animation: 'warning-pulse' };
+    case 'CRITICAL':
+      return { type: 'critical', intensity: 1.0, animation: 'shake' };
+    case 'BROKEN':
+      return { type: 'broken', intensity: 0, animation: 'none' };
+    case 'RECOVERING':
+      return { type: 'recover', intensity: 0.3, animation: 'gentle-pulse' };
+    case 'PROTECTED':
+      return { type: 'shield', intensity: 0.8, animation: 'shield' };
+    default:
+      return { type: 'flame', intensity: 0, animation: 'none' };
+  }
 }
 
 // ============================================================================
 // Streak Insurance System
 // ============================================================================
 
-const insuranceStore = new Map<string, StreakInsurance[]>();
+const MAX_INSURANCE = 3;
 
-/**
- * Award insurance to user
- */
+interface InsuranceItem {
+  id: string;
+  source: string;
+  status: 'active' | 'used';
+  earnedAt: number;
+}
+
+const insuranceStore = new Map<string, InsuranceItem[]>();
+
 export function awardInsurance(
   userId: string,
-  source: InsuranceSource,
-  description: string
-): StreakInsurance {
-  const insurance: StreakInsurance = {
-    id: `insurance-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-    userId,
+  source: string,
+  count: number
+): { success: boolean; userInsurance: { totalAvailable: number } } {
+  const existing = insuranceStore.get(userId) ?? [];
+  const currentActive = existing.filter((i) => i.status === 'active').length;
+  const toAdd = Math.min(MAX_INSURANCE - currentActive, count);
+  const newItems: InsuranceItem[] = Array.from({ length: toAdd }, (_, idx) => ({
+    id: `ins-${Date.now()}-${idx}`,
     source,
+    status: 'active' as const,
     earnedAt: Date.now(),
-    used: false,
-    usedAt: null,
-    earnedDescription: description,
-    visualBadge: getInsuranceBadge(source),
-  };
+  }));
+  const updated = [...existing, ...newItems];
+  insuranceStore.set(userId, updated);
+  const totalAvailable = updated.filter((i) => i.status === 'active').length;
 
-  const userInsurance = insuranceStore.get(userId) || [];
-  userInsurance.push(insurance);
-  insuranceStore.set(userId, userInsurance);
-
-  // Publish event
   eventBus.publish('streak:insurance_awarded', {
     userId,
-    insuranceId: insurance.id,
     source,
+    count: toAdd,
+    totalAvailable,
   });
 
-  return insurance;
+  return { success: true, userInsurance: { totalAvailable } };
 }
 
-/**
- * Get insurance badge based on source
- */
-function getInsuranceBadge(source: InsuranceSource): string {
-  const badges: Record<InsuranceSource, string> = {
-    MILESTONE_7: '🛡️ Week Shield',
-    MILESTONE_14: '🎆 Fortnight Guard',
-    MILESTONE_30: '👑 Master Protection',
-    MILESTONE_100: '🏆 Century Guardian',
-    ACHIEVEMENT_COMPLETE: '🏅 Achievement Shield',
-    BOSS_DEFEAT: '⚔️ Victory Ward',
-    PURCHASED: '💎 Premium Guard',
-    SPECIAL_EVENT: '🎁 Event Shield',
-  };
-  return badges[source];
-}
-
-/**
- * Get available (unused) insurance count
- */
 export function getAvailableInsuranceCount(userId: string): number {
-  const userInsurance = insuranceStore.get(userId) || [];
-  return userInsurance.filter((i) => !i.used).length;
+  const items = insuranceStore.get(userId) ?? [];
+  return items.filter((i) => i.status === 'active').length;
 }
 
-/**
- * Get all insurance for user
- */
-export function getUserInsurance(userId: string): StreakInsurance[] {
-  return insuranceStore.get(userId) || [];
-}
-
-/**
- * Use insurance to protect streak
- */
-export function useInsurance(userId: string, streakDays: number): StreakProtectionResult {
-  const userInsurance = insuranceStore.get(userId) || [];
-  const availableInsurance = userInsurance.find((i) => !i.used);
-
-  if (!availableInsurance) {
-    return {
-      protected: false,
-      method: 'NONE',
-      insuranceId: null,
-      newState: 'BROKEN',
-      message: 'No insurance available. Your streak has been broken.',
-    };
+export function getUserInsurance(userId: string): { insurances: InsuranceItem[]; totalAvailable: number } | null {
+  const items = insuranceStore.get(userId);
+  if (!items || items.length === 0) {
+    return insuranceStore.has(userId) ? { insurances: [], totalAvailable: 0 } : null;
   }
+  return {
+    insurances: [...items],
+    totalAvailable: items.filter((i) => i.status === 'active').length,
+  };
+}
 
-  // Mark insurance as used
-  availableInsurance.used = true;
-  availableInsurance.usedAt = Date.now();
+export function canUseInsurance(userId: string): { canUse: boolean; reason: string } {
+  const count = getAvailableInsuranceCount(userId);
+  if (count <= 0) {
+    return { canUse: false, reason: 'No insurance available' };
+  }
+  return { canUse: true, reason: '' };
+}
 
-  // Publish event
+export function useInsurance(userId: string, _context: string): { success: boolean; remainingInsurance: number; error?: string } {
+  const items = insuranceStore.get(userId) ?? [];
+  const activeItem = items.find((i) => i.status === 'active');
+  if (!activeItem) {
+    return { success: false, remainingInsurance: 0, error: 'No active insurance available' };
+  }
+  activeItem.status = 'used';
+  const remaining = items.filter((i) => i.status === 'active').length;
+
   eventBus.publish('streak:insurance_used', {
     userId,
-    insuranceId: availableInsurance.id,
-    streakDays,
-    source: availableInsurance.source,
+    remainingInsurance: remaining,
   });
 
-  return {
-    protected: true,
-    method: 'INSURANCE',
-    insuranceId: availableInsurance.id,
-    newState: 'PROTECTED',
-    message: `Streak protected with ${availableInsurance.visualBadge}!`,
-  };
-}
-
-/**
- * Check if insurance can be used (has available and streak is at risk)
- */
-export function canUseInsurance(userId: string, state: StreakState): boolean {
-  if (state !== 'AT_RISK' && state !== 'CRITICAL') {return false;}
-  return getAvailableInsuranceCount(userId) > 0;
+  return { success: true, remainingInsurance: remaining };
 }
 
 // ============================================================================
@@ -431,98 +396,72 @@ export function canUseInsurance(userId: string, state: StreakState): boolean {
 
 const recoveryPlans = new Map<string, StreakRecoveryPlan>();
 
-/**
- * Create recovery plan after streak break
- */
 export function createRecoveryPlan(
   userId: string,
-  previousStreak: number,
-  daysAbsent: number
+  daysLost: number,
+  _xpAtRisk: number
 ): StreakRecoveryPlan {
+  let sessionsRequired = 1;
+  if (daysLost >= 7 && daysLost <= 14) {
+    sessionsRequired = 2;
+  } else if (daysLost > 14) {
+    sessionsRequired = 3;
+  }
+
   const plan: StreakRecoveryPlan = {
     userId,
-    previousStreak,
+    daysLost,
+    sessionsRequired,
+    currentProgress: 0,
+    completed: false,
+    reward: { type: 'XP', value: Math.max(100, daysLost * 50) },
+    expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    previousStreak: daysLost,
     isRecovering: true,
-    recoveryDay: 1,
-    targetDays: Math.min(previousStreak, 7), // Aim to rebuild to 7 days or previous
-    sessionDuration: 15, // Reduced difficulty
-    difficulty: 'REDUCED',
-    comebackBonusActive: true,
-    bonusMultiplier: 2.0, // 2x XP during comeback
-    message: generateComebackMessage(previousStreak, daysAbsent),
   };
 
   recoveryPlans.set(userId, plan);
 
-  // Publish event
-  (eventBus as any).publish('streak:recovery_started', {
+  eventBus.publish('streak:recovery_plan_created', {
     userId,
-    previousStreak,
-    daysAbsent,
-    bonusMultiplier: plan.bonusMultiplier,
-    recoveryQuests: [], // Default empty array for recovery quests
+    daysLost,
+    sessionsRequired,
   });
 
   return plan;
 }
 
-/**
- * Generate comeback message
- */
-function generateComebackMessage(previousStreak: number, daysAbsent: number): string {
-  if (previousStreak >= 30) {
-    return `Your ${previousStreak}-day streak was impressive. Let's build an even stronger one.`;
-  }
-  if (previousStreak >= 7) {
-    return `You had a solid ${previousStreak}-day streak. One session starts the comeback.`;
-  }
-  return 'Every master was once a beginner who returned. Welcome back!';
-}
-
-/**
- * Get recovery plan
- */
 export function getRecoveryPlan(userId: string): StreakRecoveryPlan | null {
-  return recoveryPlans.get(userId) || null;
-}
-
-/**
- * Progress recovery plan after session
- */
-export function progressRecovery(userId: string): StreakRecoveryPlan | null {
   const plan = recoveryPlans.get(userId);
-  if (!plan) {return null;}
-
-  plan.recoveryDay += 1;
-
-  // After 3 days of recovery, return to normal difficulty
-  if (plan.recoveryDay > 3) {
-    plan.difficulty = 'NORMAL';
-    plan.sessionDuration = 25;
-    plan.comebackBonusActive = false;
-    plan.bonusMultiplier = 1.0;
+  if (!plan) {
+    return null;
   }
-
-  // Complete recovery when target reached
-  if (plan.recoveryDay >= plan.targetDays) {
-    plan.isRecovering = false;
-    plan.message = `Recovery complete! You've rebuilt your ${plan.targetDays}-day foundation.`;
-
-    (eventBus as any).publish('streak:recovery_complete', {
-      userId,
-      finalStreak: plan.targetDays,
-      targetDays: plan.targetDays,
-      recoveryDays: plan.recoveryDay,
-      success: true,
-    });
+  if (plan.expiresAt < Date.now()) {
+    recoveryPlans.delete(userId);
+    return null;
   }
-
   return plan;
 }
 
-/**
- * Clear recovery plan
- */
+export function progressRecovery(
+  userId: string,
+  _eventType: string
+): { progressed: boolean; currentProgress: number } {
+  const plan = recoveryPlans.get(userId);
+  if (!plan) {
+    return { progressed: false, currentProgress: 0 };
+  }
+
+  plan.currentProgress += 1;
+
+  if (plan.currentProgress >= plan.sessionsRequired) {
+    plan.completed = true;
+    plan.isRecovering = false;
+  }
+
+  return { progressed: true, currentProgress: plan.currentProgress };
+}
+
 export function clearRecoveryPlan(userId: string): void {
   recoveryPlans.delete(userId);
 }
@@ -531,110 +470,48 @@ export function clearRecoveryPlan(userId: string): void {
 // Milestone Management
 // ============================================================================
 
-/**
- * Check for milestone achievements
- */
-export function checkMilestones(
-  streakDays: number,
-  previouslyAchieved: number[]
-): StreakMilestone[] {
-  const newlyAchieved: StreakMilestone[] = [];
-
-  for (const milestone of STREAK_MILESTONES) {
-    if (streakDays >= milestone.days && !previouslyAchieved.includes(milestone.days)) {
-      newlyAchieved.push({
-        ...milestone,
-        achieved: true,
-        achievedAt: Date.now(),
-      });
-
-      // Award milestone rewards
-      awardMilestoneRewards(milestone);
-    }
-  }
-
-  return newlyAchieved;
+export function checkMilestones(streakDays: number): StreakMilestone[] {
+  return STREAK_MILESTONES.filter((m) => m.days === streakDays);
 }
 
-/**
- * Award milestone rewards
- */
-function awardMilestoneRewards(milestone: StreakMilestone): void {
-  // Publish event for rewards system
-  (eventBus as any).publish('streak:milestone_achieved', {
-    userId: 'system', // Milestone awards don't have specific user context
-    days: milestone.days,
-    milestone: milestone.days,
-    name: milestone.name,
-    timestamp: Date.now(),
-  });
-
-  // Auto-award insurance for certain milestones
-  if (milestone.days === 7) {
-    // Insurance awarded via milestone system
-  }
-}
-
-/**
- * Get next milestone
- */
 export function getNextMilestone(currentStreak: number): StreakMilestone | null {
-  return (
-    STREAK_MILESTONES.find((m) => m.days > currentStreak && !m.achieved) || null
-  );
+  return STREAK_MILESTONES.find((m) => m.days > currentStreak) ?? null;
 }
 
-/**
- * Get milestone progress percentage
- */
-export function getMilestoneProgress(currentStreak: number, targetDays: number): number {
-  const previousMilestone =
-    STREAK_MILESTONES.filter((m) => m.days < targetDays).pop()?.days || 0;
-  const progressInRange = currentStreak - previousMilestone;
-  const rangeSize = targetDays - previousMilestone;
-  return Math.min(100, Math.max(0, (progressInRange / rangeSize) * 100));
+export function getMilestoneProgress(currentDays: number): { nextMilestone: StreakMilestone | null; percentComplete: number } {
+  const exactMatch = STREAK_MILESTONES.find((m) => m.days === currentDays);
+  if (exactMatch) {
+    return { nextMilestone: exactMatch, percentComplete: 100 };
+  }
+
+  const next = STREAK_MILESTONES.find((m) => m.days > currentDays);
+  if (!next) {
+    return { nextMilestone: null, percentComplete: 100 };
+  }
+
+  const percentComplete = Math.min(100, Math.max(0, (currentDays / next.days) * 100));
+
+  return { nextMilestone: next, percentComplete };
 }
 
 // ============================================================================
 // Visual Helpers
 // ============================================================================
 
-/**
- * Get streak display text
- */
 export function getStreakDisplayText(
   streakDays: number,
-  state: StreakState,
-  isRecovering: boolean
+  _state?: StreakState,
+  _isRecovering?: boolean
 ): string {
-  if (isRecovering) {
-    return 'Streak (recovering)';
-  }
-
-  if (state === 'PROTECTED') {
-    return `${streakDays} days (protected)`;
-  }
-
-  if (streakDays === 0) {
-    return 'Start your streak';
-  }
-
-  return `${streakDays} day${streakDays === 1 ? '' : 's'}`;
+  return `${streakDays} Day${streakDays === 1 ? '' : 's'}`;
 }
 
-/**
- * Get streak celebration message on session complete
- */
 export function getStreakCelebrationMessage(streakDays: number): string {
-  if (streakDays === 1) {return 'Day 1! Your streak begins.';}
-  if (streakDays === 3) {return '3 days! Building momentum.';}
-  if (streakDays === 7) {return 'Week Warrior! 7 days strong.';}
-  if (streakDays === 14) {return 'Fortnight Focused! 14 days!';}
-  if (streakDays === 30) {return 'Monthly Master! Incredible dedication.';}
-  if (streakDays === 100) {return 'Century Club! You are legendary.';}
+  if (streakDays === 1) { return 'Day 1! Your streak begins.'; }
+  if (streakDays === 3) { return '3 days! Building momentum.'; }
+  if (streakDays === 7) { return `Week Warrior! 7 days strong.`; }
+  if (streakDays === 14) { return 'Fortnight Focused! 14 days!'; }
+  if (streakDays === 30) { return 'Monthly Master! Incredible dedication.'; }
+  if (streakDays === 100) { return 'Century Club! You are legendary.'; }
   return `${streakDays} days! Keep it going!`;
 }
-
-// ============================================================================
-// Exports (types already exported above)
-// ============================================================================

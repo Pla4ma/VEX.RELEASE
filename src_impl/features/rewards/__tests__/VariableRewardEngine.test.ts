@@ -5,25 +5,25 @@
  * Ensures the variable reward system is fair and mathematically sound.
  */
 
-import { VariableRewardEngine, VariableRewardTier, calculateSessionVariableReward, validateVariableRewardServerSide } from "../VariableRewardEngine";
+import { VariableRewardEngine, VariableRewardTier, calculateSessionVariableReward, validateVariableRewardServerSide } from '../VariableRewardEngine';
 
-const VALID_USER_ID = "00000000-0000-4000-8000-000000000001";
+const VALID_USER_ID = '00000000-0000-4000-8000-000000000001';
 
-describe("VariableRewardEngine", () => {
+describe('VariableRewardEngine', () => {
   let engine: VariableRewardEngine;
 
   beforeEach(() => {
     engine = new VariableRewardEngine();
   });
 
-  describe("Base Probability Distribution", () => {
-    it("should have probabilities that sum to 1", () => {
+  describe('Base Probability Distribution', () => {
+    it('should have probabilities that sum to 1', () => {
       const stats = engine.getExpectedValueStats(100);
       const totalChance = stats.reduce((sum, s) => sum + s.chance, 0);
       expect(totalChance).toBeCloseTo(1, 4);
     });
 
-    it("should have correct base chances", () => {
+    it('should have correct base chances', () => {
       const stats = engine.getExpectedValueStats(100);
       const chances = Object.fromEntries(stats.map((s) => [s.tier, s.chance]));
 
@@ -36,8 +36,8 @@ describe("VariableRewardEngine", () => {
     });
   });
 
-  describe("Reward Calculation", () => {
-    it("should return NONE tier 72.8% of the time (within statistical bounds)", () => {
+  describe('Reward Calculation', () => {
+    it('should return NONE tier 72.8% of the time (within statistical bounds)', () => {
       const iterations = 10000;
       const modifiers = {
         streakDays: 0,
@@ -56,7 +56,7 @@ describe("VariableRewardEngine", () => {
       expect(noneRate).toBeLessThan(0.75);
     });
 
-    it("should return LEGENDARY tier ~0.2% of the time", () => {
+    it('should return LEGENDARY tier ~0.2% of the time', () => {
       const iterations = 100000; // Need many iterations for rare event
       const modifiers = {
         streakDays: 0,
@@ -75,7 +75,7 @@ describe("VariableRewardEngine", () => {
       expect(legendaryRate).toBeLessThan(0.003);
     });
 
-    it("should return COMMON tier with ~15% chance", () => {
+    it('should return COMMON tier with ~15% chance', () => {
       const iterations = 10000;
       const modifiers = {
         streakDays: 0,
@@ -94,8 +94,8 @@ describe("VariableRewardEngine", () => {
     });
   });
 
-  describe("Modifiers", () => {
-    it("should increase drop chances with streak > 7 days", () => {
+  describe('Modifiers', () => {
+    it('should increase drop chances with streak > 7 days', () => {
       const iterations = 10000;
 
       const noStreak = engine.simulateDistribution(iterations, {
@@ -123,7 +123,7 @@ describe("VariableRewardEngine", () => {
       expect(withRewardRate).toBeLessThan(noRewardRate);
     });
 
-    it("should increase drop chances with S grade", () => {
+    it('should increase drop chances with S grade', () => {
       const iterations = 10000;
 
       const normalGrade = engine.simulateDistribution(iterations, {
@@ -151,7 +151,7 @@ describe("VariableRewardEngine", () => {
       expect(sGradeNoneRate).toBeLessThan(normalNoneRate);
     });
 
-    it("should cap total modifiers at 15%", () => {
+    it('should cap total modifiers at 15%', () => {
       // All modifiers active
       const result = engine.calculateReward({
         userId: VALID_USER_ID,
@@ -171,7 +171,7 @@ describe("VariableRewardEngine", () => {
       expect(result.modifiedChances[VariableRewardTier.NONE]).toBeLessThanOrEqual(0.728);
     });
 
-    it("should track triggered modifiers", () => {
+    it('should track triggered modifiers', () => {
       const result = engine.calculateReward({
         userId: VALID_USER_ID,
         baseCoins: 100,
@@ -185,16 +185,16 @@ describe("VariableRewardEngine", () => {
         },
       });
 
-      expect(result.triggeredModifiers).toContain("Streak Bonus (10 days)");
-      expect(result.triggeredModifiers).toContain("S Grade Bonus");
-      expect(result.triggeredModifiers).toContain("Boss Active Bonus");
-      expect(result.triggeredModifiers).not.toContain("Squad Session Bonus");
-      expect(result.triggeredModifiers).not.toContain("Premium Bonus");
+      expect(result.triggeredModifiers).toContain('Streak Bonus (10 days)');
+      expect(result.triggeredModifiers).toContain('S Grade Bonus');
+      expect(result.triggeredModifiers).toContain('Boss Active Bonus');
+      expect(result.triggeredModifiers).not.toContain('Squad Session Bonus');
+      expect(result.triggeredModifiers).not.toContain('Premium Bonus');
     });
   });
 
-  describe("Reward Items", () => {
-    it("should generate COINS for COMMON tier with 1.5-2.5x multiplier", () => {
+  describe('Reward Items', () => {
+    it('should generate COINS for COMMON tier with 1.5-2.5x multiplier', () => {
       const iterations = 100;
       const baseCoins = 100;
 
@@ -214,7 +214,7 @@ describe("VariableRewardEngine", () => {
         });
 
         if (result.tier === VariableRewardTier.COMMON) {
-          const coinItem = result.items.find((item) => item.type === "COINS");
+          const coinItem = result.items.find((item) => item.type === 'COINS');
           expect(coinItem).toBeDefined();
           if (coinItem) {
             // 1.5x to 2.5x of base
@@ -225,7 +225,7 @@ describe("VariableRewardEngine", () => {
       }
     });
 
-    it("should generate XP_BOOST for UNCOMMON tier", () => {
+    it('should generate XP_BOOST for UNCOMMON tier', () => {
       const result = engine.calculateReward({
         userId: VALID_USER_ID,
         baseCoins: 100,
@@ -237,16 +237,16 @@ describe("VariableRewardEngine", () => {
           isPremium: false,
           luckyBonusActive: false,
         },
-        seed: "fixed-uncOMMON-12345", // Force specific roll
+        seed: 'fixed-uncOMMON-12345', // Force specific roll
       });
 
       // This seed should produce unCOMMON
       if (result.tier === VariableRewardTier.UNCOMMON) {
-        expect(result.items.some((item) => item.type === "XP_BOOST")).toBe(true);
+        expect(result.items.some((item) => item.type === 'XP_BOOST')).toBe(true);
       }
     });
 
-    it("should generate multiple items for LEGENDARY tier", () => {
+    it('should generate multiple items for LEGENDARY tier', () => {
       const result = engine.calculateReward({
         userId: VALID_USER_ID,
         baseCoins: 100,
@@ -258,18 +258,18 @@ describe("VariableRewardEngine", () => {
           isPremium: false,
           luckyBonusActive: false,
         },
-        seed: "legendary-test-seed-99999",
+        seed: 'legendary-test-seed-99999',
       });
 
       if (result.tier === VariableRewardTier.LEGENDARY) {
         // Legendary gives ALL items
         expect(result.items.length).toBeGreaterThanOrEqual(2);
-        expect(result.items.some((item) => item.type === "COSMETIC")).toBe(true);
-        expect(result.items.some((item) => item.type === "GEMS")).toBe(true);
+        expect(result.items.some((item) => item.type === 'COSMETIC')).toBe(true);
+        expect(result.items.some((item) => item.type === 'GEMS')).toBe(true);
       }
     });
 
-    it("should double amounts with lucky bonus", () => {
+    it('should double amounts with lucky bonus', () => {
       const baseCoins = 100;
 
       const normal = engine.calculateReward({
@@ -283,7 +283,7 @@ describe("VariableRewardEngine", () => {
           isPremium: false,
           luckyBonusActive: false,
         },
-        seed: "common-fixed-seed",
+        seed: 'common-fixed-seed',
       });
 
       const lucky = engine.calculateReward({
@@ -297,20 +297,20 @@ describe("VariableRewardEngine", () => {
           isPremium: false,
           luckyBonusActive: true,
         },
-        seed: "common-fixed-seed",
+        seed: 'common-fixed-seed',
       });
 
       if (normal.tier === VariableRewardTier.COMMON && lucky.tier === VariableRewardTier.COMMON) {
-        const normalCoins = normal.items.find((item) => item.type === "COINS")?.amount || 0;
-        const luckyCoins = lucky.items.find((item) => item.type === "COINS")?.amount || 0;
+        const normalCoins = normal.items.find((item) => item.type === 'COINS')?.amount || 0;
+        const luckyCoins = lucky.items.find((item) => item.type === 'COINS')?.amount || 0;
         expect(luckyCoins).toBe(normalCoins * 2);
       }
     });
   });
 
-  describe("Seeded Random (Deterministic)", () => {
-    it("should produce same result with same seed", () => {
-      const seed = "my-test-seed-123";
+  describe('Seeded Random (Deterministic)', () => {
+    it('should produce same result with same seed', () => {
+      const seed = 'my-test-seed-123';
 
       const result1 = engine.calculateReward({
         userId: VALID_USER_ID,
@@ -345,7 +345,7 @@ describe("VariableRewardEngine", () => {
       expect(result1.items.length).toBe(result2.items.length);
     });
 
-    it("should produce different results with different seeds", () => {
+    it('should produce different results with different seeds', () => {
       const result1 = engine.calculateReward({
         userId: VALID_USER_ID,
         baseCoins: 100,
@@ -357,7 +357,7 @@ describe("VariableRewardEngine", () => {
           isPremium: false,
           luckyBonusActive: false,
         },
-        seed: "seed-a",
+        seed: 'seed-a',
       });
 
       const result2 = engine.calculateReward({
@@ -371,7 +371,7 @@ describe("VariableRewardEngine", () => {
           isPremium: false,
           luckyBonusActive: false,
         },
-        seed: "seed-b",
+        seed: 'seed-b',
       });
 
       // High probability they're different (not guaranteed but very likely)
@@ -380,9 +380,9 @@ describe("VariableRewardEngine", () => {
     });
   });
 
-  describe("Server-side Validation", () => {
-    it("should validate matching client and server results", () => {
-      const seed = "validation-test-seed";
+  describe('Server-side Validation', () => {
+    it('should validate matching client and server results', () => {
+      const seed = 'validation-test-seed';
       const modifiers = {
         streakDays: 10,
         isSGrade: true,
@@ -404,7 +404,7 @@ describe("VariableRewardEngine", () => {
       expect(validation.valid).toBe(true);
     });
 
-    it("should reject invalid roll values", () => {
+    it('should reject invalid roll values', () => {
       const fakeResult = {
         tier: VariableRewardTier.LEGENDARY,
         items: [],
@@ -423,36 +423,36 @@ describe("VariableRewardEngine", () => {
           isPremium: false,
           luckyBonusActive: false,
         },
-        "test-seed",
+        'test-seed',
       );
 
       expect(validation.valid).toBe(false);
-      expect(validation.reason).toContain("Invalid roll");
+      expect(validation.reason).toContain('Invalid roll');
     });
   });
 
-  describe("Convenience Functions", () => {
-    it("calculateSessionVariableReward should work with session data", () => {
+  describe('Convenience Functions', () => {
+    it('calculateSessionVariableReward should work with session data', () => {
       const result = calculateSessionVariableReward(VALID_USER_ID, 100, {
         streakDays: 14,
-        grade: "S",
+        grade: 'S',
         bossActive: true,
         squadMode: true,
         isPremium: false,
       });
 
-      expect(result).toHaveProperty("tier");
-      expect(result).toHaveProperty("items");
-      expect(result).toHaveProperty("rollValue");
-      expect(result.triggeredModifiers).toContain("Streak Bonus (14 days)");
-      expect(result.triggeredModifiers).toContain("S Grade Bonus");
-      expect(result.triggeredModifiers).toContain("Boss Active Bonus");
-      expect(result.triggeredModifiers).toContain("Squad Session Bonus");
+      expect(result).toHaveProperty('tier');
+      expect(result).toHaveProperty('items');
+      expect(result).toHaveProperty('rollValue');
+      expect(result.triggeredModifiers).toContain('Streak Bonus (14 days)');
+      expect(result.triggeredModifiers).toContain('S Grade Bonus');
+      expect(result.triggeredModifiers).toContain('Boss Active Bonus');
+      expect(result.triggeredModifiers).toContain('Squad Session Bonus');
     });
   });
 
-  describe("Expected Value Statistics", () => {
-    it("should calculate expected values for each tier", () => {
+  describe('Expected Value Statistics', () => {
+    it('should calculate expected values for each tier', () => {
       const stats = engine.getExpectedValueStats(100);
 
       for (const stat of stats) {

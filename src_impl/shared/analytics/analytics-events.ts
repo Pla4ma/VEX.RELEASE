@@ -50,6 +50,7 @@ export type SessionEvent = typeof SessionEvents[keyof typeof SessionEvents];
 // ============================================================================
 
 export const ProgressionEvents = {
+  XP_GRANTED: 'xp_granted',
   XP_GAINED: 'xp_gained',
   LEVEL_UP: 'level_up',
   STREAK_UPDATED: 'streak_updated',
@@ -68,9 +69,10 @@ export type ProgressionEvent = typeof ProgressionEvents[keyof typeof Progression
 export const EconomyEvents = {
   // Virtual economy
   REWARD_CLAIMED: 'reward_claimed',
+  CURRENCY_GRANTED: 'currency_granted',
+  CURRENCY_SPENT: 'currency_spent',
   ITEM_PURCHASED: 'item_purchased',
   CURRENCY_EARNED: 'currency_earned',
-  CURRENCY_SPENT: 'currency_spent',
   CURRENCY_CONVERTED: 'currency_converted',
   ITEM_CRAFTED: 'item_crafted',
   ITEM_USED: 'item_used',
@@ -107,6 +109,34 @@ export const EconomyEvents = {
 
 export type EconomyEvent = typeof EconomyEvents[keyof typeof EconomyEvents];
 export type PurchaseEvent = EconomyEvent;  // Alias for monetization clarity
+
+// ============================================================================
+// Reward Events
+// ============================================================================
+
+export const RewardEvents = {
+  REWARD_CLAIMED: 'reward_claimed',
+  REWARD_AVAILABLE: 'reward_available',
+  DAILY_BONUS_CLAIMED: 'daily_bonus_claimed',
+  STREAK_BONUS_CLAIMED: 'streak_bonus_claimed',
+  LEVEL_BONUS_CLAIMED: 'level_bonus_claimed',
+} as const;
+
+export type RewardEvent = typeof RewardEvents[keyof typeof RewardEvents];
+
+// ============================================================================
+// Streak Events
+// ============================================================================
+
+export const StreakEvents = {
+  STREAK_UPDATED: 'streak_updated',
+  STREAK_BROKEN: 'streak_broken',
+  STREAK_FREEZE_USED: 'streak_freeze_used',
+  STREAK_RISK_ACTIVATED: 'streak_risk_activated',
+  STREAK_MILESTONE_REACHED: 'streak_milestone_reached',
+} as const;
+
+export type StreakEvent = typeof StreakEvents[keyof typeof StreakEvents];
 
 // ============================================================================
 // Social Events

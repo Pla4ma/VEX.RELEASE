@@ -9,7 +9,13 @@
  */
 
 import { task } from '@trigger.dev/sdk/v3';
+import * as Sentry from '@sentry/node';
 import { getSupabaseClient } from '../../src/config/supabase';
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  environment: process.env.NODE_ENV,
+});
 
 // ============================================================================
 // Types
@@ -78,7 +84,7 @@ async function fetchWeeklyStats(
     .lte('completed_at', weekEnd.toISOString());
 
   if (sessionsError) {
-    console.error('Error fetching sessions:', sessionsError);
+    Sentry.captureException(sessionsError, { tags: { job: 'weekly-focus-report', operation: 'fetch-sessions' } });
   }
 
   const { data: streakData, error: streakError } = await getSupabaseClient()
@@ -88,7 +94,7 @@ async function fetchWeeklyStats(
     .single();
 
   if (streakError) {
-    console.error('Error fetching streak:', streakError);
+    Sentry.captureException(streakError, { tags: { job: 'weekly-focus-report', operation: 'fetch-streak' } });
   }
 
   const { data: bossDamage, error: bossError } = await getSupabaseClient()
@@ -99,7 +105,7 @@ async function fetchWeeklyStats(
     .lte('created_at', weekEnd.toISOString());
 
   if (bossError) {
-    console.error('Error fetching boss damage:', bossError);
+    Sentry.captureException(bossError, { tags: { job: 'weekly-focus-report', operation: 'fetch-boss-damage' } });
   }
 
   const totalMinutes = (sessions ?? []).reduce(
@@ -158,13 +164,13 @@ async function calculatePercentile(
     }
 
     // Aggregate by user
-    const userMinutes: Record<string, number> = {};
+    const minutesByUser: Record<string, number> = {};
     for (const session of allSessions) {
-      userMinutes[session.user_id] =
-        (userMinutes[session.user_id] || 0) + (session.duration_seconds || 0) / 60;
+      minutesByUser[session.user_id] =
+        (minutesByUser[session.user_id] || 0) + (session.duration_seconds || 0) / 60;
     }
 
-    const allMinutes = Object.values(userMinutes).sort((a, b) => a - b);
+    const allMinutes = Object.values(minutesByUser).sort((a, b) => a - b);
     const totalUsers = allMinutes.length;
 
     if (totalUsers === 0) return 50;
@@ -179,7 +185,7 @@ async function calculatePercentile(
 
     return Math.round((position / totalUsers) * 100);
   } catch (error) {
-    console.error('Error calculating percentile:', error);
+    Sentry.captureException(error, { tags: { job: 'weekly-focus-report', operation: 'calculate-percentile' } });
     return 50;
   }
 }
@@ -281,8 +287,8 @@ export const weeklyReportJob = task({
   description: 'Send weekly focus report notifications every Sunday evening',
   // Run every Sunday at 6 PM
   cron: '0 18 * * 0',
-  run: async () => {
-    console.log('Starting weekly focus report job...');
+  run: async (_payload, io) => {
+    io.logger.info('Starting weekly focus report job');
 
     // Get current week boundaries
     const now = new Date();
@@ -295,7 +301,7 @@ export const weeklyReportJob = task({
       .eq('notifications_enabled', true);
 
     if (usersError || !users) {
-      console.error('Failed to fetch users:', usersError);
+      Sentry.captureException(usersError, { tags: { job: 'weekly-focus-report', operation: 'fetch-users' } });
       return { success: false, error: usersError?.message };
     }
 
@@ -309,7 +315,7 @@ export const weeklyReportJob = task({
 
         // Skip if no activity
         if (currentWeek.sessionsCompleted === 0) {
-          console.log(`Skipping user ${user.id} - no activity`);
+          io.logger.info('Skipping inactive weekly report user', { userId: user.id });
           continue;
         }
 
@@ -319,15 +325,16 @@ export const weeklyReportJob = task({
         // Format report
         const report = formatWeeklyReport(comparison);
 
-        // Send notification (placeholder for actual push notification)
-        console.log(`Would send to ${user.id}:`, report.title);
-
-        // In production:
-        // await sendPushNotification(user.id, {
-        //   title: report.title,
-        //   body: report.body,
-        //   data: report.data,
-        // });
+        await getSupabaseClient().from('notifications').insert({
+          user_id: user.id,
+          type: 'WEEKLY_REPORT',
+          title: report.title,
+          body: report.body,
+          data: report.data,
+          status: 'PENDING',
+          priority: 'NORMAL',
+          created_at: new Date().toISOString(),
+        });
 
         // Record sent
         await getSupabaseClient().from('notifications_sent').insert({
@@ -343,12 +350,12 @@ export const weeklyReportJob = task({
 
         sentCount++;
       } catch (error) {
-        console.error(`Error processing user ${user.id}:`, error);
+        Sentry.captureException(error, { tags: { job: 'weekly-focus-report', operation: 'process-user', userId: user.id } });
         errorCount++;
       }
     }
 
-    console.log(`Weekly report job complete. Sent: ${sentCount}, Errors: ${errorCount}`);
+    io.logger.info('Weekly report job complete', { sent: sentCount, errors: errorCount });
 
     return {
       success: true,

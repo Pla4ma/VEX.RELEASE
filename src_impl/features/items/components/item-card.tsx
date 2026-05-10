@@ -5,12 +5,12 @@
  * Works with enriched inventory items that include definition data.
  */
 
-import React from "react";
-import { View, Text, Pressable, ViewStyle } from "react-native";
+import React from 'react';
+import { View, Text, Pressable, ViewStyle } from 'react-native';
 
-import type { ItemDefinition, ItemRarity } from "../schemas";
-import { getRarityColor, getRarityLabel } from "../../../shared/utils/rarity";
-import { createSheet } from "@/shared/ui/create-sheet";
+import type { ItemDefinition, ItemRarity } from '../schemas';
+import { getRarityColor, getRarityLabel } from '../../../shared/utils/rarity';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 // ============================================================================
 // Types
@@ -38,7 +38,7 @@ interface ItemCardProps {
 export function ItemCard({ item, quantity, isEquipped, onPress, onLongPress, showPrice, price, currency, disabled, selected, style, compact = false }: ItemCardProps) {
   const rarityColor = getRarityColor(item.rarity);
   const rarityLabel = getRarityLabel(item.rarity);
-  const icon = item.iconUrl ?? "📦";
+  const icon = item.iconUrl ?? '📦';
 
   if (compact) {
     return (
@@ -83,7 +83,7 @@ export function ItemCard({ item, quantity, isEquipped, onPress, onLongPress, sho
 
         {showPrice && price !== undefined && (
           <View style={styles.priceContainer}>
-            <Text style={styles.priceIcon}>{currency === "GEMS" ? "💎" : "🪙"}</Text>
+            <Text style={styles.priceIcon}>{currency === 'GEMS' ? '💎' : '🪙'}</Text>
             <Text style={styles.price}>{price.toLocaleString()}</Text>
           </View>
         )}
@@ -111,7 +111,7 @@ interface MiniItemCardProps {
   rarity?: ItemRarity;
 }
 
-export function MiniItemCard({ name, icon, quantity, owned, rarity = "COMMON" }: MiniItemCardProps) {
+export function MiniItemCard({ name, icon, quantity, owned, rarity = 'COMMON' }: MiniItemCardProps) {
   const rarityColor = getRarityColor(rarity);
   const hasEnough = owned >= quantity;
 
@@ -136,20 +136,20 @@ export function MiniItemCard({ name, icon, quantity, owned, rarity = "COMMON" }:
 
 const styles = createSheet({
   card: {
-    flexDirection: "row",
-    backgroundColor: "#1A1A2E",
+    flexDirection: 'row',
+    backgroundColor: '#1A1A2E',
     borderRadius: 16,
-    overflow: "hidden",
+    overflow: 'hidden',
     borderTopWidth: 4,
     elevation: 4,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
   },
   cardSelected: {
     borderWidth: 2,
-    borderColor: "#6366F1",
+    borderColor: '#6366F1',
   },
   cardDisabled: {
     opacity: 0.5,
@@ -159,49 +159,49 @@ const styles = createSheet({
   },
   iconContainer: {
     padding: 16,
-    justifyContent: "center",
-    position: "relative",
+    justifyContent: 'center',
+    position: 'relative',
   },
   icon: {
     fontSize: 40,
   },
   equippedBadge: {
-    position: "absolute",
+    position: 'absolute',
     top: 8,
     right: 8,
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: "#4CAF50",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#4CAF50',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   equippedText: {
     fontSize: 12,
-    fontWeight: "bold",
-    color: "#FFFFFF",
+    fontWeight: 'bold',
+    color: '#FFFFFF',
   },
   infoContainer: {
     flex: 1,
     paddingVertical: 12,
     paddingRight: 16,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   name: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#FFFFFF",
+    fontWeight: '600',
+    color: '#FFFFFF',
     marginBottom: 4,
   },
   rarity: {
     fontSize: 12,
-    fontWeight: "500",
-    textTransform: "uppercase",
+    fontWeight: '500',
+    textTransform: 'uppercase',
     marginBottom: 4,
   },
   priceContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   priceIcon: {
@@ -209,35 +209,35 @@ const styles = createSheet({
   },
   price: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#FFD700",
+    fontWeight: '600',
+    color: '#FFD700',
   },
   quantityBadge: {
-    position: "absolute",
+    position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: "#6366F1",
+    backgroundColor: '#6366F1',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },
   quantityText: {
     fontSize: 12,
-    fontWeight: "bold",
-    color: "#FFFFFF",
+    fontWeight: 'bold',
+    color: '#FFFFFF',
   },
 
   // Compact styles
   compactCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#1A1A2E",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1A1A2E',
     borderRadius: 12,
     padding: 12,
     borderLeftWidth: 4,
   },
   compactCardSelected: {
-    backgroundColor: "#2D2D44",
+    backgroundColor: '#2D2D44',
   },
   compactCardDisabled: {
     opacity: 0.5,
@@ -251,30 +251,30 @@ const styles = createSheet({
   },
   compactName: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#FFFFFF",
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   compactRarity: {
     fontSize: 10,
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
   },
   compactQuantity: {
-    backgroundColor: "#6366F1",
+    backgroundColor: '#6366F1',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
   },
   compactQuantityText: {
     fontSize: 12,
-    fontWeight: "bold",
-    color: "#FFFFFF",
+    fontWeight: 'bold',
+    color: '#FFFFFF',
   },
 
   // Mini card styles
   miniCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#0F0F1A",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#0F0F1A',
     borderRadius: 8,
     padding: 8,
     borderWidth: 1,
@@ -288,16 +288,16 @@ const styles = createSheet({
   },
   miniName: {
     fontSize: 12,
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     marginBottom: 2,
   },
   miniCount: {
     fontSize: 10,
   },
   hasEnough: {
-    color: "#4CAF50",
+    color: '#4CAF50',
   },
   notEnough: {
-    color: "#FF5252",
+    color: '#FF5252',
   },
 });

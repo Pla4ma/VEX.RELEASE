@@ -1,4 +1,4 @@
-import type { z } from "zod";
+import type { z } from 'zod';
 import {
   FocusScoreBandLabelSchema,
   FocusScoreFactorKeySchema,
@@ -8,7 +8,7 @@ import {
   FocusScoreUpdateInputSchema,
   FocusScoreUpdateResultSchema,
   MonthlyFocusReportSummarySchema,
-} from "./schemas";
+} from './schemas';
 
 export type FocusScoreBandLabel = z.infer<typeof FocusScoreBandLabelSchema>;
 export type FocusScoreFactorKey = z.infer<typeof FocusScoreFactorKeySchema>;
@@ -18,3 +18,16 @@ export type FocusScoreRecord = z.infer<typeof FocusScoreRecordSchema>;
 export type FocusScoreUpdateInput = z.infer<typeof FocusScoreUpdateInputSchema>;
 export type FocusScoreUpdateResult = z.infer<typeof FocusScoreUpdateResultSchema>;
 export type MonthlyFocusReportSummary = z.infer<typeof MonthlyFocusReportSummarySchema>;
+
+// New type for FocusScoreDashboardModel
+export interface FocusScoreDashboardModel {
+  current: FocusScoreRecord | null;
+  history: FocusScoreHistoryPoint[];
+  monthlyInput: MonthlyFocusReportSummary | null; // Assuming this will be used later
+  isOffline: boolean;
+  isPending: boolean;
+  isError: boolean;
+  error: Error | null;
+  isRefetching: boolean;
+  refetch: () => void;
+}

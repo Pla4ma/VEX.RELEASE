@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
+import { captureSilentFailure } from '../../../utils/silent-failure';
 /**
  * StreakBrokenModal Component
  *
@@ -16,17 +16,23 @@ import { captureSilentFailure } from "../../../utils/silent-failure";
  * @phase 3C.2, 5.3
  */
 
+<<<<<<< HEAD
 import React from "react";
 import { Modal, Dimensions } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
+=======
+import React from 'react';
+import { Modal, Dimensions } from 'react-native';
+import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withSpring, withSequence, withTiming } from 'react-native-reanimated';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { useState } from "react";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { useState } from 'react';
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export interface StreakBrokenModalProps {
   /** Visible state */ visible: boolean;
@@ -66,7 +72,7 @@ function LossStat({ emoji, value, label, isLoss = false }: { emoji: string; valu
   return (
     <Box alignItems="center" gap="xs">
       <Text fontSize={32}>{emoji}</Text>
-      <Text variant="h3" color={isLoss ? "error.DEFAULT" : "text.primary"} fontWeight="700">
+      <Text variant="h3" color={isLoss ? 'error.DEFAULT' : 'text.primary'} fontWeight="700">
         {value}
       </Text>
       <Text variant="caption" color="text.tertiary">
@@ -101,7 +107,7 @@ function WhatRemains({ longestStreak }: { longestStreak: number }): JSX.Element 
 /**
  * Comeback bonus card
  */
-function ComebackBonus({ bonus }: { bonus: StreakBrokenModalProps["comebackBonus"] }): JSX.Element {
+function ComebackBonus({ bonus }: { bonus: StreakBrokenModalProps['comebackBonus'] }): JSX.Element {
   const { theme } = useTheme();
 
   return (
@@ -113,7 +119,7 @@ function ComebackBonus({ bonus }: { bonus: StreakBrokenModalProps["comebackBonus
         </Text>
       </Box>
       <Text variant="body" color="text.secondary" textAlign="center">
-        Complete sessions in the next {bonus.duration}h to earn{" "}
+        Complete sessions in the next {bonus.duration}h to earn{' '}
         <Text color="accent.orange" fontWeight="700">
           {bonus.xpMultiplier}× XP
         </Text>
@@ -181,7 +187,7 @@ function RestoreStreakCard({ brokenStreakDays, gemsBalance = 0, onRestore, isRes
           <Text variant="caption" color="text.tertiary">
             COST
           </Text>
-          <Text variant="h4" color={canAfford ? "primary.DEFAULT" : "error.DEFAULT"}>
+          <Text variant="h4" color={canAfford ? 'primary.DEFAULT' : 'error.DEFAULT'}>
             {cost} 💎
           </Text>
         </Box>
@@ -189,13 +195,13 @@ function RestoreStreakCard({ brokenStreakDays, gemsBalance = 0, onRestore, isRes
           <Text variant="caption" color="text.tertiary">
             BALANCE
           </Text>
-          <Text variant="body" color={canAfford ? "text.secondary" : "error.DEFAULT"}>
+          <Text variant="body" color={canAfford ? 'text.secondary' : 'error.DEFAULT'}>
             {gemsBalance} 💎
           </Text>
         </Box>
       </Box>
-      <Button variant={canAfford ? "primary" : "secondary"} size="md" fullWidth onPress={onRestore} isLoading={isRestoring} disabled={!canAfford || isRestoring} style={{ marginTop: theme.spacing[2] }} accessibilityLabel="gems`} button" accessibilityRole="button" accessibilityHint="Activates this control">
-        {canAfford ? "💎 Restore Streak" : `Need ${cost} gems`}
+      <Button variant={canAfford ? 'primary' : 'secondary'} size="md" fullWidth onPress={onRestore} isLoading={isRestoring} disabled={!canAfford || isRestoring} style={{ marginTop: theme.spacing[2] }} accessibilityLabel="gems`} button" accessibilityRole="button" accessibilityHint="Activates this control">
+        {canAfford ? '💎 Restore Streak' : `Need ${cost} gems`}
       </Button>
       {!canAfford && (
         <Text variant="caption" color="error.DEFAULT" textAlign="center">
@@ -229,11 +235,11 @@ export function StreakBrokenModal({ visible, brokenStreakDays, lostMultiplier, l
       if (success) {
         onDismiss();
       } else {
-        setRestoreError("Failed to restore streak. Please try again.");
+        setRestoreError('Failed to restore streak. Please try again.');
       }
     } catch (error) {
-      captureSilentFailure(error, { feature: "streaks", operation: "network-fallback", type: "network" });
-      setRestoreError("An error occurred. Please try again.");
+      captureSilentFailure(error, { feature: 'streaks', operation: 'network-fallback', type: 'network' });
+      setRestoreError('An error occurred. Please try again.');
     } finally {
       setIsRestoring(false);
     }
@@ -246,7 +252,7 @@ export function StreakBrokenModal({ visible, brokenStreakDays, lostMultiplier, l
           entering={FadeIn.duration(300)}
           style={{
             width: SCREEN_WIDTH - 40,
-            maxHeight: "80%",
+            maxHeight: '80%',
           }}
         >
           <Box bg="background.secondary" borderRadius="2xl" borderWidth={1} borderColor="border.light" overflow="hidden">

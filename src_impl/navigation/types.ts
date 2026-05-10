@@ -30,6 +30,7 @@ export type RootStackRoute =
   | 'CompanionDetail'
   | 'Comeback'
   | 'StreakFuneral'
+  | 'FocusScoreDashboard'
   | 'PostSessionStory';
 
 /**
@@ -130,6 +131,7 @@ export interface RootStackParams {
   CompanionDetail: undefined;
   Comeback: { comebackState: ComebackState };
   StreakFuneral: { previousStreak: number; diedAt: number };
+  FocusScoreDashboard: undefined;
   PostSessionStory: { sessionId: string; focusScore?: number; purityScore?: number; summary?: import('../session/types').SessionSummary };
 }
 
@@ -210,7 +212,7 @@ export interface MainStackParams {
   Feed: { userId?: string };
   Notifications: undefined;
   Search: { query?: string };
-  Analytics: undefined;
+  Analytics: { month?: string }; // Updated to accept month
   Rankings: undefined;
   ContentStudy: NavigatorScreenParams<ContentStudyStackParamList> | undefined;
   ContentReview: { contentId: string };

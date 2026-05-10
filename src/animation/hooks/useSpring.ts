@@ -41,7 +41,15 @@ interface UseSpringResult {
  */
 export function useSpring(options: UseSpringOptions = {}): UseSpringResult {
   const { initialValue = 0, ...springConfig } = options;
+<<<<<<< HEAD
   const config = useMemo(() => ({ ...defaultSpring, ...springConfig }), [springConfig]);
+=======
+  const config = useMemo(
+    () => ({ ...defaultSpring, ...springConfig }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(springConfig)]
+  );
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
   const value = useSharedValue(initialValue);
 
@@ -79,7 +87,15 @@ export function useSpringStyle(
   options: UseSpringOptions = {}
 ): UseSpringResult {
   const { initialValue = 0, ...springConfig } = options;
+<<<<<<< HEAD
   const config = useMemo(() => ({ ...defaultSpring, ...springConfig }), [springConfig]);
+=======
+  const config = useMemo(
+    () => ({ ...defaultSpring, ...springConfig }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [JSON.stringify(springConfig)]
+  );
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
   const value = useSharedValue(initialValue);
   const animatedStyle = useAnimatedStyle(() => styleFactory(value));

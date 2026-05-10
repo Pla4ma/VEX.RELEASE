@@ -10,18 +10,18 @@
  * @phase 3E.3
  */
 
-import React, { useState, useEffect, useCallback } from "react";
-import { Modal, Dimensions, Pressable } from "react-native";
-import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming, withRepeat, withDelay, runOnJS, useSharedValue } from "react-native-reanimated";
+import React, { useState, useEffect, useCallback } from 'react';
+import { Modal, Dimensions, Pressable } from 'react-native';
+import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming, withRepeat, withDelay, runOnJS, useSharedValue } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import type { ChestRarity } from "../../rewards/service";
-import { getChestAppearance, generateChestContents } from "../../rewards/service";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import type { ChestRarity } from '../../rewards/service';
+import { getChestAppearance, generateChestContents } from '../../rewards/service';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export interface ChestOpeningOverlayProps {
   /** Modal visibility */
@@ -34,7 +34,7 @@ export interface ChestOpeningOverlayProps {
   onChestOpened: (contents: { xp: number; coins: number; gems?: number; item?: string }) => void;
 }
 
-type OpeningPhase = "READY" | "OPENING" | "REVEALING" | "COMPLETE";
+type OpeningPhase = 'READY' | 'OPENING' | 'REVEALING' | 'COMPLETE';
 
 /**
  * Golden particle for legendary chests
@@ -58,13 +58,13 @@ function GoldenParticle({ delay }: { delay: number }): JSX.Element {
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           bottom: -20,
           left: 0,
           width: 8,
           height: 8,
           borderRadius: 4,
-          backgroundColor: "#F59E0B",
+          backgroundColor: '#F59E0B',
         },
         particleStyle,
       ]}
@@ -89,11 +89,11 @@ function LightBurst(): JSX.Element {
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           width: 200,
           height: 200,
           borderRadius: 100,
-          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
         },
         burstStyle,
       ]}
@@ -123,14 +123,14 @@ function FlyingItem({ emoji, value, label, delay, isItem }: { emoji: string; val
     <Animated.View
       style={[
         {
-          position: "absolute",
-          alignItems: "center",
+          position: 'absolute',
+          alignItems: 'center',
           bottom: 150,
         },
         flyStyle,
       ]}
     >
-      <Box width={80} height={80} borderRadius="xl" bg={isItem ? "accent.purple" : "background.secondary"} justifyContent="center" alignItems="center" borderWidth={2} borderColor={isItem ? "accent.purple" : "border.light"}>
+      <Box width={80} height={80} borderRadius="xl" bg={isItem ? 'accent.purple' : 'background.secondary'} justifyContent="center" alignItems="center" borderWidth={2} borderColor={isItem ? 'accent.purple' : 'border.light'}>
         <Text fontSize={40}>{emoji}</Text>
       </Box>
       <Text variant="h4" color="text.primary" fontWeight="700" mt="sm">
@@ -153,17 +153,17 @@ function ChestLid({ rarity, phase }: { rarity: ChestRarity; phase: OpeningPhase 
   const lidStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        rotateX: phase === "OPENING" || phase === "REVEALING" || phase === "COMPLETE" ? withSpring("-110deg", { damping: 10, stiffness: 100 }) : "0deg",
+        rotateX: phase === 'OPENING' || phase === 'REVEALING' || phase === 'COMPLETE' ? withSpring('-110deg', { damping: 10, stiffness: 100 }) : '0deg',
       },
     ],
-    opacity: phase === "REVEALING" || phase === "COMPLETE" ? withTiming(0, { duration: 500 }) : 1,
+    opacity: phase === 'REVEALING' || phase === 'COMPLETE' ? withTiming(0, { duration: 500 }) : 1,
   }));
 
   return (
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
@@ -173,7 +173,7 @@ function ChestLid({ rarity, phase }: { rarity: ChestRarity; phase: OpeningPhase 
           borderTopRightRadius: 16,
           borderWidth: 3,
           borderColor: appearance.color,
-          transformOrigin: "bottom",
+          transformOrigin: 'bottom',
           zIndex: 10,
         },
         lidStyle,
@@ -191,7 +191,7 @@ function ChestLid({ rarity, phase }: { rarity: ChestRarity; phase: OpeningPhase 
  */
 export function ChestOpeningOverlay({ visible, rarity, onClose, onChestOpened }: ChestOpeningOverlayProps): JSX.Element {
   const { theme } = useTheme();
-  const [phase, setPhase] = useState<OpeningPhase>("READY");
+  const [phase, setPhase] = useState<OpeningPhase>('READY');
   const [contents, setContents] = useState<{
     xp: number;
     coins: number;
@@ -200,17 +200,17 @@ export function ChestOpeningOverlay({ visible, rarity, onClose, onChestOpened }:
   } | null>(null);
 
   const appearance = getChestAppearance(rarity);
-  const isLegendary = rarity === "LEGENDARY";
+  const isLegendary = rarity === 'LEGENDARY';
 
   // Screen shake for legendary
   const shakeValue = useSharedValue(0);
 
   const handleOpenChest = useCallback(() => {
-    if (phase !== "READY") {
+    if (phase !== 'READY') {
       return;
     }
 
-    setPhase("OPENING");
+    setPhase('OPENING');
 
     // Trigger screen shake for legendary
     if (isLegendary) {
@@ -227,8 +227,8 @@ export function ChestOpeningOverlay({ visible, rarity, onClose, onChestOpened }:
     }, 500);
 
     // Advance phases
-    setTimeout(() => setPhase("REVEALING"), 600);
-    setTimeout(() => setPhase("COMPLETE"), 2000);
+    setTimeout(() => setPhase('REVEALING'), 600);
+    setTimeout(() => setPhase('COMPLETE'), 2000);
   }, [phase, isLegendary, rarity, shakeValue, onChestOpened]);
 
   const shakeStyle = useAnimatedStyle(() => ({
@@ -238,7 +238,7 @@ export function ChestOpeningOverlay({ visible, rarity, onClose, onChestOpened }:
   // Reset on close
   useEffect(() => {
     if (!visible) {
-      setPhase("READY");
+      setPhase('READY');
       setContents(null);
     }
   }, [visible]);
@@ -252,14 +252,14 @@ export function ChestOpeningOverlay({ visible, rarity, onClose, onChestOpened }:
           {
             flex: 1,
             backgroundColor: `${theme.colors.background.primary}F0`,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
           },
           shakeStyle,
         ]}
       >
         {/* Legendary particles */}
-        {isLegendary && phase === "OPENING" && (
+        {isLegendary && phase === 'OPENING' && (
           <>
             {Array.from({ length: 30 }).map((_, i) => (
               <GoldenParticle key={i} delay={i * 50} />
@@ -270,10 +270,10 @@ export function ChestOpeningOverlay({ visible, rarity, onClose, onChestOpened }:
         {/* Chest Container */}
         <Box justifyContent="center" alignItems="center" position="relative">
           {/* Light burst on opening */}
-          {(phase === "OPENING" || phase === "REVEALING") && <LightBurst />}
+          {(phase === 'OPENING' || phase === 'REVEALING') && <LightBurst />}
 
           {/* Closed/Open Chest */}
-          <Pressable onPress={handleOpenChest} disabled={phase !== "READY"} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
+          <Pressable onPress={handleOpenChest} disabled={phase !== 'READY'} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
             <Box
               width={140}
               height={120}
@@ -297,7 +297,7 @@ export function ChestOpeningOverlay({ visible, rarity, onClose, onChestOpened }:
 
               {/* Chest body */}
               <Box flex={1} justifyContent="center" alignItems="center" pt="xl">
-                {phase === "READY" ? (
+                {phase === 'READY' ? (
                   <>
                     <Text fontSize={48}>{appearance.emoji}</Text>
                     <Text variant="caption" color={appearance.color} fontWeight="700" mt="sm">
@@ -315,7 +315,7 @@ export function ChestOpeningOverlay({ visible, rarity, onClose, onChestOpened }:
           </Pressable>
 
           {/* Flying items */}
-          {phase === "REVEALING" || phase === "COMPLETE" ? (
+          {phase === 'REVEALING' || phase === 'COMPLETE' ? (
             <>
               <FlyingItem emoji="✨" value={`+${contents?.xp}`} label="XP" delay={200} />
               <FlyingItem emoji="🪙" value={`+${contents?.coins}`} label="Coins" delay={400} />
@@ -326,11 +326,11 @@ export function ChestOpeningOverlay({ visible, rarity, onClose, onChestOpened }:
         </Box>
 
         {/* Complete screen */}
-        {phase === "COMPLETE" && (
+        {phase === 'COMPLETE' && (
           <Animated.View
             entering={FadeInUp.duration(500)}
             style={{
-              position: "absolute",
+              position: 'absolute',
               bottom: 100,
               width: SCREEN_WIDTH - 40,
             }}

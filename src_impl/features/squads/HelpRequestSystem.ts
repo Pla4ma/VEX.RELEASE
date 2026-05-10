@@ -19,10 +19,10 @@
  * - notifications (send help alerts to squad members)
  */
 
-import { z } from "zod";
-import { featureFlags } from "../../feature-flags/FeatureFlagEngine";
-import { eventBus } from "../../events";
-import type { Squad, SquadMember } from "./types";
+import { z } from 'zod';
+import { featureFlags } from '../../feature-flags/FeatureFlagEngine';
+import { eventBus } from '../../events';
+import type { Squad, SquadMember } from './types';
 
 // ============================================================================
 // Help Request Constants
@@ -31,11 +31,11 @@ import type { Squad, SquadMember } from "./types";
 export const HELP_CONFIG = {
   // Help request types
   HELP_TYPES: {
-    STRUGGLING: "struggling", // Having trouble focusing
-    STUCK: "stuck", // Stuck on problem/task
-    MOTIVATION: "motivation", // Need motivation boost
-    BREAKTHROUGH: "breakthrough", // Want to share breakthrough
-    ACCOUNTABILITY: "accountability", // Need someone to keep them accountable
+    STRUGGLING: 'struggling', // Having trouble focusing
+    STUCK: 'stuck', // Stuck on problem/task
+    MOTIVATION: 'motivation', // Need motivation boost
+    BREAKTHROUGH: 'breakthrough', // Want to share breakthrough
+    ACCOUNTABILITY: 'accountability', // Need someone to keep them accountable
   },
 
   // Help credits (anti-abuse system)
@@ -45,10 +45,10 @@ export const HELP_CONFIG = {
 
   // Response types
   RESPONSE_TYPES: {
-    ENCOURAGEMENT: "encouragement", // "You can do it!" messages
-    TIP: "tip", // Practical advice
-    JOIN_SESSION: "join_session", // Offer to join parallel session
-    CHECK_IN: "check_in", // "How's it going?" follow-up
+    ENCOURAGEMENT: 'encouragement', // "You can do it!" messages
+    TIP: 'tip', // Practical advice
+    JOIN_SESSION: 'join_session', // Offer to join parallel session
+    CHECK_IN: 'check_in', // "How's it going?" follow-up
   },
 
   // Time limits
@@ -72,12 +72,12 @@ export const HelpRequestSchema = z.object({
   sessionId: z.string().optional(), // Optional: link to active session
 
   // Request details
-  helpType: z.enum(["struggling", "stuck", "motivation", "breakthrough", "accountability"]),
+  helpType: z.enum(['struggling', 'stuck', 'motivation', 'breakthrough', 'accountability']),
   message: z.string().min(1).max(500),
-  urgency: z.enum(["low", "medium", "high"]).default("medium"),
+  urgency: z.enum(['low', 'medium', 'high']).default('medium'),
 
   // Status
-  status: z.enum(["pending", "active", "resolved", "expired"]).default("pending"),
+  status: z.enum(['pending', 'active', 'resolved', 'expired']).default('pending'),
 
   // Timing
   createdAt: z.number(),
@@ -99,11 +99,11 @@ export const HelpResponseSchema = z.object({
   responderId: z.string(),
 
   // Response details
-  responseType: z.enum(["encouragement", "tip", "join_session", "check_in"]),
+  responseType: z.enum(['encouragement', 'tip', 'join_session', 'check_in']),
   message: z.string().min(1).max(1000),
 
   // Status
-  status: z.enum(["sent", "viewed", "helpful", "not_helpful"]).default("sent"),
+  status: z.enum(['sent', 'viewed', 'helpful', 'not_helpful']).default('sent'),
 
   // Timing
   createdAt: z.number(),
@@ -166,16 +166,16 @@ export class HelpRequestService {
    * Check if help request system is enabled
    */
   static isEnabled(): boolean {
-    return featureFlags.isEnabled("help_request_system");
+    return featureFlags.isEnabled('help_request_system');
   }
 
   /**
    * Create a new help request
    */
-  async createHelpRequest(input: { squadId: string; requesterId: string; sessionId?: string; helpType: (typeof HELP_CONFIG.HELP_TYPES)[keyof typeof HELP_CONFIG.HELP_TYPES]; message: string; urgency?: "low" | "medium" | "high"; tags?: string[] }): Promise<{ success: boolean; request?: HelpRequest; error?: string }> {
+  async createHelpRequest(input: { squadId: string; requesterId: string; sessionId?: string; helpType: (typeof HELP_CONFIG.HELP_TYPES)[keyof typeof HELP_CONFIG.HELP_TYPES]; message: string; urgency?: 'low' | 'medium' | 'high'; tags?: string[] }): Promise<{ success: boolean; request?: HelpRequest; error?: string }> {
     // Check feature flag
     if (!HelpRequestService.isEnabled()) {
-      return { success: false, error: "Help request system not enabled" };
+      return { success: false, error: 'Help request system not enabled' };
     }
 
     // Check user credits
@@ -194,7 +194,7 @@ export class HelpRequestService {
     this.helpCredits.set(creditsKey, credits);
 
     if (credits.creditsRemaining < HELP_CONFIG.HELP_COST_CREDITS) {
-      return { success: false, error: "Insufficient help credits" };
+      return { success: false, error: 'Insufficient help credits' };
     }
 
     // Create help request
@@ -206,8 +206,8 @@ export class HelpRequestService {
       sessionId: input.sessionId,
       helpType: input.helpType,
       message: input.message,
-      urgency: input.urgency || "medium",
-      status: "pending",
+      urgency: input.urgency || 'medium',
+      status: 'pending',
       createdAt: now,
       expiresAt: now + HELP_CONFIG.HELP_REQUEST_DURATION_MINUTES * 60 * 1000,
       resolvedAt: null,
@@ -226,15 +226,15 @@ export class HelpRequestService {
     this.helpResponses.set(helpRequest.id, []);
 
     // Update reputation
-    this.updateReputation(input.requesterId, input.squadId, "received");
+    this.updateReputation(input.requesterId, input.squadId, 'received');
 
     // Emit events
-    eventBus.publish("help:request_created", {
+    eventBus.publish('help:request_created', {
       helpRequestId: helpRequest.id,
       squadId: input.squadId,
       requesterId: input.requesterId,
       helpType: input.helpType,
-      urgency: input.urgency || "medium",
+      urgency: input.urgency || 'medium',
     });
 
     // Send notifications to squad members
@@ -249,23 +249,23 @@ export class HelpRequestService {
   async respondToHelpRequest(input: { helpRequestId: string; responderId: string; responseType: (typeof HELP_CONFIG.RESPONSE_TYPES)[keyof typeof HELP_CONFIG.RESPONSE_TYPES]; message: string; isAnonymous?: boolean }): Promise<{ success: boolean; response?: HelpResponse; error?: string }> {
     // Check feature flag
     if (!HelpRequestService.isEnabled()) {
-      return { success: false, error: "Help request system not enabled" };
+      return { success: false, error: 'Help request system not enabled' };
     }
 
     const helpRequest = this.helpRequests.get(input.helpRequestId);
     if (!helpRequest) {
-      return { success: false, error: "Help request not found" };
+      return { success: false, error: 'Help request not found' };
     }
 
     // Check if request is still active
-    if (helpRequest.status !== "pending" && helpRequest.status !== "active") {
-      return { success: false, error: "Help request no longer active" };
+    if (helpRequest.status !== 'pending' && helpRequest.status !== 'active') {
+      return { success: false, error: 'Help request no longer active' };
     }
 
     // Check if expired
     if (Date.now() > helpRequest.expiresAt) {
-      helpRequest.status = "expired";
-      return { success: false, error: "Help request expired" };
+      helpRequest.status = 'expired';
+      return { success: false, error: 'Help request expired' };
     }
 
     // Check if responder is in the same squad
@@ -280,7 +280,7 @@ export class HelpRequestService {
       responderId: input.responderId,
       responseType: input.responseType,
       message: input.message,
-      status: "sent",
+      status: 'sent',
       createdAt: now,
       viewedAt: null,
       isAnonymous: input.isAnonymous || false,
@@ -293,7 +293,7 @@ export class HelpRequestService {
 
     // Update request
     helpRequest.responseCount += 1;
-    helpRequest.status = "active";
+    helpRequest.status = 'active';
     this.helpRequests.set(input.helpRequestId, helpRequest);
 
     // Update responder credits and reputation
@@ -309,10 +309,10 @@ export class HelpRequestService {
     credits.totalHelpGiven += 1;
     this.helpCredits.set(creditsKey, credits);
 
-    this.updateReputation(input.responderId, helpRequest.squadId, "given");
+    this.updateReputation(input.responderId, helpRequest.squadId, 'given');
 
     // Emit events
-    eventBus.publish("help:response_created", {
+    eventBus.publish('help:response_created', {
       helpRequestId: input.helpRequestId,
       responderId: input.responderId,
       responseType: input.responseType,
@@ -333,35 +333,35 @@ export class HelpRequestService {
     const response = responses.find((r) => r.id === input.responseId);
 
     if (!response) {
-      return { success: false, error: "Response not found" };
+      return { success: false, error: 'Response not found' };
     }
 
     const helpRequest = this.helpRequests.get(response.helpRequestId);
     if (!helpRequest || helpRequest.requesterId !== input.raterId) {
-      return { success: false, error: "Only requester can rate responses" };
+      return { success: false, error: 'Only requester can rate responses' };
     }
 
     // Update response status
-    response.status = input.isHelpful ? "helpful" : "not_helpful";
+    response.status = input.isHelpful ? 'helpful' : 'not_helpful';
     response.viewedAt = Date.now();
 
     // Update request helpful count
     if (input.isHelpful) {
       helpRequest.helpfulResponseCount += 1;
-      helpRequest.status = "resolved";
+      helpRequest.status = 'resolved';
       helpRequest.resolvedAt = Date.now();
     }
 
     // Update responder reputation
     if (input.isHelpful) {
-      this.updateReputation(response.responderId, helpRequest.squadId, "helpful");
+      this.updateReputation(response.responderId, helpRequest.squadId, 'helpful');
     }
 
     // Emit event
-    eventBus.publish("help:response_rated", {
+    eventBus.publish('help:response_rated', {
       helpRequestId: response.helpRequestId,
       rating: input.isHelpful ? 5 : 1,
-      feedback: input.isHelpful ? "helpful" : "not helpful",
+      feedback: input.isHelpful ? 'helpful' : 'not helpful',
     });
 
     return { success: true };
@@ -370,7 +370,7 @@ export class HelpRequestService {
   /**
    * Get help requests for a squad
    */
-  getSquadHelpRequests(squadId: string, status?: HelpRequest["status"]): HelpRequest[] {
+  getSquadHelpRequests(squadId: string, status?: HelpRequest['status']): HelpRequest[] {
     const requests = Array.from(this.helpRequests.values()).filter((req) => req.squadId === squadId);
 
     if (status) {
@@ -454,9 +454,9 @@ export class HelpRequestService {
     const now = Date.now();
     const todayStart = new Date().setHours(0, 0, 0, 0);
 
-    const pendingRequests = requests.filter((req) => req.status === "pending").length;
-    const activeRequests = requests.filter((req) => req.status === "active").length;
-    const resolvedToday = requests.filter((req) => req.status === "resolved" && req.resolvedAt && req.resolvedAt >= todayStart).length;
+    const pendingRequests = requests.filter((req) => req.status === 'pending').length;
+    const activeRequests = requests.filter((req) => req.status === 'active').length;
+    const resolvedToday = requests.filter((req) => req.status === 'resolved' && req.resolvedAt && req.resolvedAt >= todayStart).length;
 
     // Calculate average response time
     const allResponses = Array.from(this.helpResponses.values()).flat();
@@ -520,7 +520,7 @@ export class HelpRequestService {
   /**
    * Update user reputation
    */
-  private updateReputation(userId: string, squadId: string, action: "given" | "received" | "helpful"): void {
+  private updateReputation(userId: string, squadId: string, action: 'given' | 'received' | 'helpful'): void {
     const repKey = `${userId}_${squadId}`;
     let reputation = this.helpReputation.get(repKey);
 
@@ -541,15 +541,15 @@ export class HelpRequestService {
     reputation.lastActiveAt = Date.now();
 
     switch (action) {
-      case "given":
+      case 'given':
         reputation.helpGivenCount += 1;
         reputation.reputationScore += HELP_CONFIG.HELP_GIVEN_REP;
         break;
-      case "received":
+      case 'received':
         reputation.helpReceivedCount += 1;
         reputation.reputationScore += HELP_CONFIG.HELP_RECEIVED_REP;
         break;
-      case "helpful":
+      case 'helpful':
         reputation.reputationScore += HELP_CONFIG.HELP_GIVEN_REP * 2; // Bonus for helpful responses
         reputation.helpfulnessRating = Math.min(5, reputation.helpfulnessRating + 0.1);
         break;
@@ -567,16 +567,16 @@ export class HelpRequestService {
    */
   private async notifySquadMembers(helpRequest: HelpRequest): Promise<void> {
     // This would typically fetch squad members and send notifications
-    eventBus.publish("notification:send", {
-      type: "HELP_REQUESTED",
-      title: "Help Requested! 🆘",
+    eventBus.publish('notification:send', {
+      type: 'HELP_REQUESTED',
+      title: 'Help Requested! 🆘',
       body: `${helpRequest.requesterId} needs help with ${helpRequest.helpType}`,
       data: {
         helpRequestId: helpRequest.id,
         helpType: helpRequest.helpType,
         urgency: helpRequest.urgency,
       },
-      priority: helpRequest.urgency === "high" ? "high" : "normal",
+      priority: helpRequest.urgency === 'high' ? 'high' : 'normal',
     });
   }
 
@@ -584,11 +584,11 @@ export class HelpRequestService {
    * Notify requester about new response
    */
   private async notifyRequester(helpRequest: HelpRequest, response: HelpResponse): Promise<void> {
-    eventBus.publish("notification:send", {
+    eventBus.publish('notification:send', {
       userId: helpRequest.requesterId,
-      type: "HELP_RESPONSE",
-      title: "Help Response Received! 💬",
-      body: "Someone responded to your help request",
+      type: 'HELP_RESPONSE',
+      title: 'Help Response Received! 💬',
+      body: 'Someone responded to your help request',
       data: {
         helpRequestId: helpRequest.id,
         responseId: response.id,

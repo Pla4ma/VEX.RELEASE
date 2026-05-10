@@ -1,1 +1,2 @@
-export * from '../../../src_impl/features/progression/repository-prestige';
+export * from '../../../src_impl/features/progression/repository/prestige';
+

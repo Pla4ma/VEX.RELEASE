@@ -16,6 +16,7 @@ export const FocusGoalSchema = z.enum(['WORK', 'STUDY', 'CREATIVE', 'PERSONAL'])
  * Focus duration enum (in minutes)
  */
 export const FocusDurationSchema = z.union([
+  z.literal(10),
   z.literal(15),
   z.literal(25),
   z.literal(45),

@@ -10,26 +10,26 @@
  * @phase 2
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { executeCombatAbility, calculateBossPhase, getPhaseMultiplier, selectAttackPattern, resolveAttackPattern, checkEncounterEnd, COMBAT_ABILITIES, type ActiveEncounter } from "../active-combat-system";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { executeCombatAbility, calculateBossPhase, getPhaseMultiplier, selectAttackPattern, resolveAttackPattern, checkEncounterEnd, COMBAT_ABILITIES, type ActiveEncounter } from '../active-combat-system';
 
 // Mock eventBus
-vi.mock("../../../events", () => ({
+vi.mock('../../../events', () => ({
   eventBus: {
     publish: vi.fn(),
   },
 }));
 
-describe("ActiveCombatSystem", () => {
+describe('ActiveCombatSystem', () => {
   const mockEncounter: ActiveEncounter = {
-    id: "encounter-123",
-    userId: "user-123",
-    bossId: "boss-1",
-    bossName: "Test Boss",
+    id: 'encounter-123',
+    userId: 'user-123',
+    bossId: 'boss-1',
+    bossName: 'Test Boss',
     bossAvatarUrl: null,
     bossMaxHealth: 100,
     bossCurrentHealth: 100,
-    currentPhase: "CALM",
+    currentPhase: 'CALM',
     currentAttackPattern: null,
     attackPatternStartedAt: null,
     attackPatternDurationMs: 30000,
@@ -45,197 +45,197 @@ describe("ActiveCombatSystem", () => {
     totalDamageDealt: 0,
     attacksDodged: 0,
     attacksHit: 0,
-    status: "ACTIVE",
+    status: 'ACTIVE',
   };
 
-  describe("executeCombatAbility", () => {
-    it("Focus Strike ability deals correct base damage", () => {
-      const result = executeCombatAbility(mockEncounter, "focus_strike", 0);
+  describe('executeCombatAbility', () => {
+    it('Focus Strike ability deals correct base damage', () => {
+      const result = executeCombatAbility(mockEncounter, 'focus_strike', 0);
 
       expect(result.success).toBe(true);
       expect(result.damageDealt).toBe(15); // Base damage
       expect(result.energyConsumed).toBe(20);
-      expect(result.message).toContain("Focus Strike dealt 15 damage");
+      expect(result.message).toContain('Focus Strike dealt 15 damage');
     });
 
-    it("Deep Dive ability requires purity/streak >= 3", () => {
+    it('Deep Dive ability requires purity/streak >= 3', () => {
       // With streak 2, should fail
-      const resultLowStreak = executeCombatAbility(mockEncounter, "deep_dive", 2);
+      const resultLowStreak = executeCombatAbility(mockEncounter, 'deep_dive', 2);
       expect(resultLowStreak.success).toBe(false);
-      expect(resultLowStreak.message).toContain("Requires 3 day streak");
+      expect(resultLowStreak.message).toContain('Requires 3 day streak');
 
       // With streak 3, should succeed
-      const resultHighStreak = executeCombatAbility(mockEncounter, "deep_dive", 3);
+      const resultHighStreak = executeCombatAbility(mockEncounter, 'deep_dive', 3);
       expect(resultHighStreak.success).toBe(true);
       expect(resultHighStreak.damageDealt).toBe(35);
     });
 
-    it("Flow State ability requires streak >= 7", () => {
-      const resultLow = executeCombatAbility(mockEncounter, "flow_state", 5);
+    it('Flow State ability requires streak >= 7', () => {
+      const resultLow = executeCombatAbility(mockEncounter, 'flow_state', 5);
       expect(resultLow.success).toBe(false);
-      expect(resultLow.message).toContain("Requires 7 day streak");
+      expect(resultLow.message).toContain('Requires 7 day streak');
 
-      const resultHigh = executeCombatAbility(mockEncounter, "flow_state", 7);
+      const resultHigh = executeCombatAbility(mockEncounter, 'flow_state', 7);
       expect(resultHigh.success).toBe(true);
       expect(resultHigh.damageDealt).toBe(60);
     });
 
-    it("Zen Strike requires streak >= 14", () => {
-      const resultLow = executeCombatAbility(mockEncounter, "zen_strike", 10);
+    it('Zen Strike requires streak >= 14', () => {
+      const resultLow = executeCombatAbility(mockEncounter, 'zen_strike', 10);
       expect(resultLow.success).toBe(false);
-      expect(resultLow.message).toContain("Requires 14 day streak");
+      expect(resultLow.message).toContain('Requires 14 day streak');
 
-      const resultHigh = executeCombatAbility(mockEncounter, "zen_strike", 14);
+      const resultHigh = executeCombatAbility(mockEncounter, 'zen_strike', 14);
       expect(resultHigh.success).toBe(true);
       expect(resultHigh.damageDealt).toBe(150);
     });
 
-    it("Ability cooldown prevents double-activation", () => {
+    it('Ability cooldown prevents double-activation', () => {
       const now = Date.now();
       const encounterWithCooldown = {
         ...mockEncounter,
         abilityCooldowns: { focus_strike: now + 5000 }, // 5 second cooldown remaining
       };
 
-      const result = executeCombatAbility(encounterWithCooldown, "focus_strike", 0, now);
+      const result = executeCombatAbility(encounterWithCooldown, 'focus_strike', 0, now);
 
       expect(result.success).toBe(false);
-      expect(result.message).toBe("Ability on cooldown");
+      expect(result.message).toBe('Ability on cooldown');
     });
 
-    it("Insufficient energy blocks ability use", () => {
+    it('Insufficient energy blocks ability use', () => {
       const lowEnergyEncounter = {
         ...mockEncounter,
         userCurrentFocusEnergy: 10, // Not enough for Focus Strike (20)
       };
 
-      const result = executeCombatAbility(lowEnergyEncounter, "focus_strike", 0);
+      const result = executeCombatAbility(lowEnergyEncounter, 'focus_strike', 0);
 
       expect(result.success).toBe(false);
-      expect(result.message).toBe("Not enough Focus Energy!");
+      expect(result.message).toBe('Not enough Focus Energy!');
     });
 
-    it("Phase multiplier increases damage in ENRAGED phase", () => {
+    it('Phase multiplier increases damage in ENRAGED phase', () => {
       const enragedEncounter = {
         ...mockEncounter,
-        currentPhase: "ENRAGED",
+        currentPhase: 'ENRAGED',
       };
 
-      const result = executeCombatAbility(enragedEncounter, "focus_strike", 0);
+      const result = executeCombatAbility(enragedEncounter, 'focus_strike', 0);
 
       // Base 15 * 1.5 multiplier = 22.5, floored to 22
       expect(result.damageDealt).toBe(22);
-      expect(result.newPhase).toBe("ENRAGED");
+      expect(result.newPhase).toBe('ENRAGED');
     });
 
-    it("Phase transitions from CALM to AGITATED at 70% health", () => {
+    it('Phase transitions from CALM to AGITATED at 70% health', () => {
       const encounter = {
         ...mockEncounter,
         bossCurrentHealth: 69, // Below 70%
       };
 
-      const result = executeCombatAbility(encounter, "focus_strike", 0);
+      const result = executeCombatAbility(encounter, 'focus_strike', 0);
 
-      expect(result.newPhase).toBe("AGITATED");
+      expect(result.newPhase).toBe('AGITATED');
     });
 
-    it("Phase transitions to ENRAGED at 40% health", () => {
+    it('Phase transitions to ENRAGED at 40% health', () => {
       const encounter = {
         ...mockEncounter,
         bossCurrentHealth: 39, // Below 40%
       };
 
-      const result = executeCombatAbility(encounter, "focus_strike", 0);
+      const result = executeCombatAbility(encounter, 'focus_strike', 0);
 
-      expect(result.newPhase).toBe("ENRAGED");
+      expect(result.newPhase).toBe('ENRAGED');
     });
 
-    it("Phase transitions to DESPERATE at 15% health", () => {
+    it('Phase transitions to DESPERATE at 15% health', () => {
       const encounter = {
         ...mockEncounter,
         bossCurrentHealth: 14, // Below 15%
       };
 
-      const result = executeCombatAbility(encounter, "focus_strike", 0);
+      const result = executeCombatAbility(encounter, 'focus_strike', 0);
 
-      expect(result.newPhase).toBe("DESPERATE");
+      expect(result.newPhase).toBe('DESPERATE');
     });
 
-    it("Combo bonus applies for rapid successive attacks", () => {
+    it('Combo bonus applies for rapid successive attacks', () => {
       const now = Date.now();
       const encounterWithRecentAction = {
         ...mockEncounter,
         lastUserActionAt: now - 5000, // 5 seconds ago (< 10s threshold)
       };
 
-      const result = executeCombatAbility(encounterWithRecentAction, "focus_strike", 0, now);
+      const result = executeCombatAbility(encounterWithRecentAction, 'focus_strike', 0, now);
 
       expect(result.comboBonus).toBe(0.2); // 20% combo bonus
     });
 
-    it("No combo bonus for slow attacks (>10s apart)", () => {
+    it('No combo bonus for slow attacks (>10s apart)', () => {
       const now = Date.now();
       const encounterWithOldAction = {
         ...mockEncounter,
         lastUserActionAt: now - 15000, // 15 seconds ago (> 10s threshold)
       };
 
-      const result = executeCombatAbility(encounterWithOldAction, "focus_strike", 0, now);
+      const result = executeCombatAbility(encounterWithOldAction, 'focus_strike', 0, now);
 
       expect(result.comboBonus).toBe(0);
     });
   });
 
-  describe("calculateBossPhase", () => {
-    it("returns CALM at full health", () => {
+  describe('calculateBossPhase', () => {
+    it('returns CALM at full health', () => {
       const phase = calculateBossPhase(100, 100, 0, 3600000);
-      expect(phase).toBe("CALM");
+      expect(phase).toBe('CALM');
     });
 
-    it("returns AGITATED at 50% health", () => {
+    it('returns AGITATED at 50% health', () => {
       const phase = calculateBossPhase(50, 100, 0, 3600000);
-      expect(phase).toBe("AGITATED");
+      expect(phase).toBe('AGITATED');
     });
 
-    it("returns ENRAGED at 25% health", () => {
+    it('returns ENRAGED at 25% health', () => {
       const phase = calculateBossPhase(25, 100, 0, 3600000);
-      expect(phase).toBe("ENRAGED");
+      expect(phase).toBe('ENRAGED');
     });
 
-    it("returns DESPERATE at 10% health", () => {
+    it('returns DESPERATE at 10% health', () => {
       const phase = calculateBossPhase(10, 100, 0, 3600000);
-      expect(phase).toBe("DESPERATE");
+      expect(phase).toBe('DESPERATE');
     });
 
-    it("returns ENRAGED when time is over 80% elapsed", () => {
+    it('returns ENRAGED when time is over 80% elapsed', () => {
       const phase = calculateBossPhase(100, 100, 2900000, 3600000); // >80% time
-      expect(phase).toBe("ENRAGED");
+      expect(phase).toBe('ENRAGED');
     });
   });
 
-  describe("getPhaseMultiplier", () => {
-    it("returns 1.0 for CALM", () => {
-      expect(getPhaseMultiplier("CALM")).toBe(1.0);
+  describe('getPhaseMultiplier', () => {
+    it('returns 1.0 for CALM', () => {
+      expect(getPhaseMultiplier('CALM')).toBe(1.0);
     });
 
-    it("returns 1.2 for AGITATED", () => {
-      expect(getPhaseMultiplier("AGITATED")).toBe(1.2);
+    it('returns 1.2 for AGITATED', () => {
+      expect(getPhaseMultiplier('AGITATED')).toBe(1.2);
     });
 
-    it("returns 1.5 for ENRAGED", () => {
-      expect(getPhaseMultiplier("ENRAGED")).toBe(1.5);
+    it('returns 1.5 for ENRAGED', () => {
+      expect(getPhaseMultiplier('ENRAGED')).toBe(1.5);
     });
 
-    it("returns 2.0 for DESPERATE", () => {
-      expect(getPhaseMultiplier("DESPERATE")).toBe(2.0);
+    it('returns 2.0 for DESPERATE', () => {
+      expect(getPhaseMultiplier('DESPERATE')).toBe(2.0);
     });
   });
 
-  describe("resolveAttackPattern", () => {
-    it("Distraction Wave is dodged by completing sprint", () => {
+  describe('resolveAttackPattern', () => {
+    it('Distraction Wave is dodged by completing sprint', () => {
       const encounter = {
         ...mockEncounter,
-        currentAttackPattern: "DISTRACTION_WAVE",
+        currentAttackPattern: 'DISTRACTION_WAVE',
         attackPatternStartedAt: Date.now() - 35000, // 35s ago (> 30s duration)
       };
 
@@ -245,10 +245,10 @@ describe("ActiveCombatSystem", () => {
       expect(result.hit).toBe(false);
     });
 
-    it("Distraction Wave hits if sprint not completed", () => {
+    it('Distraction Wave hits if sprint not completed', () => {
       const encounter = {
         ...mockEncounter,
-        currentAttackPattern: "DISTRACTION_WAVE",
+        currentAttackPattern: 'DISTRACTION_WAVE',
         attackPatternStartedAt: Date.now() - 35000,
       };
 
@@ -259,10 +259,10 @@ describe("ActiveCombatSystem", () => {
       expect(result.damageTaken).toBe(15);
     });
 
-    it("Procrastination Beam is dodged by not pausing", () => {
+    it('Procrastination Beam is dodged by not pausing', () => {
       const encounter = {
         ...mockEncounter,
-        currentAttackPattern: "PROCRASTINATION_BEAM",
+        currentAttackPattern: 'PROCRASTINATION_BEAM',
         attackPatternStartedAt: Date.now() - 65000, // 65s ago (> 60s duration)
       };
 
@@ -271,10 +271,10 @@ describe("ActiveCombatSystem", () => {
       expect(result.dodged).toBe(true);
     });
 
-    it("No damage if attack pattern still active", () => {
+    it('No damage if attack pattern still active', () => {
       const encounter = {
         ...mockEncounter,
-        currentAttackPattern: "DISTRACTION_WAVE",
+        currentAttackPattern: 'DISTRACTION_WAVE',
         attackPatternStartedAt: Date.now() - 10000, // Only 10s ago (< 30s duration)
       };
 
@@ -285,8 +285,8 @@ describe("ActiveCombatSystem", () => {
     });
   });
 
-  describe("checkEncounterEnd", () => {
-    it("returns victory when boss health is 0", () => {
+  describe('checkEncounterEnd', () => {
+    it('returns victory when boss health is 0', () => {
       const encounter = {
         ...mockEncounter,
         bossCurrentHealth: 0,
@@ -296,12 +296,12 @@ describe("ActiveCombatSystem", () => {
 
       expect(result.ended).toBe(true);
       expect(result.victory).toBe(true);
-      expect(result.reason).toBe("DEFEATED");
-      expect(result.rewards).toContainEqual({ type: "XP", amount: expect.any(Number) });
-      expect(result.rewards).toContainEqual({ type: "COINS", amount: expect.any(Number) });
+      expect(result.reason).toBe('DEFEATED');
+      expect(result.rewards).toContainEqual({ type: 'XP', amount: expect.any(Number) });
+      expect(result.rewards).toContainEqual({ type: 'COINS', amount: expect.any(Number) });
     });
 
-    it("returns timeout when expired", () => {
+    it('returns timeout when expired', () => {
       const encounter = {
         ...mockEncounter,
         expiresAt: Date.now() - 1000, // Already expired
@@ -311,10 +311,10 @@ describe("ActiveCombatSystem", () => {
 
       expect(result.ended).toBe(true);
       expect(result.victory).toBe(false);
-      expect(result.reason).toBe("TIMED_OUT");
+      expect(result.reason).toBe('TIMED_OUT');
     });
 
-    it("returns defeat when focus energy depleted", () => {
+    it('returns defeat when focus energy depleted', () => {
       const encounter = {
         ...mockEncounter,
         userCurrentFocusEnergy: 0,
@@ -324,18 +324,18 @@ describe("ActiveCombatSystem", () => {
 
       expect(result.ended).toBe(true);
       expect(result.victory).toBe(false);
-      expect(result.reason).toBe("ABANDONED");
+      expect(result.reason).toBe('ABANDONED');
     });
 
-    it("returns active when encounter ongoing", () => {
+    it('returns active when encounter ongoing', () => {
       const result = checkEncounterEnd(mockEncounter);
 
       expect(result.ended).toBe(false);
       expect(result.victory).toBe(false);
-      expect(result.reason).toBe("ACTIVE");
+      expect(result.reason).toBe('ACTIVE');
     });
 
-    it("awards gem bonus for dodging 3+ attacks", () => {
+    it('awards gem bonus for dodging 3+ attacks', () => {
       const encounter = {
         ...mockEncounter,
         bossCurrentHealth: 0,
@@ -344,17 +344,17 @@ describe("ActiveCombatSystem", () => {
 
       const result = checkEncounterEnd(encounter);
 
-      const gemReward = result.rewards.find((r) => r.type === "GEMS");
-      expect(gemReward).toEqual({ type: "GEMS", amount: 10 });
+      const gemReward = result.rewards.find((r) => r.type === 'GEMS');
+      expect(gemReward).toEqual({ type: 'GEMS', amount: 10 });
     });
   });
 
-  describe("COMBAT_ABILITIES database", () => {
-    it("has 6 combat abilities", () => {
+  describe('COMBAT_ABILITIES database', () => {
+    it('has 6 combat abilities', () => {
       expect(COMBAT_ABILITIES).toHaveLength(6);
     });
 
-    it("all abilities have required fields", () => {
+    it('all abilities have required fields', () => {
       for (const ability of COMBAT_ABILITIES) {
         expect(ability.id).toBeDefined();
         expect(ability.name).toBeDefined();
@@ -365,11 +365,11 @@ describe("ActiveCombatSystem", () => {
       }
     });
 
-    it("abilities have escalating requirements", () => {
-      const focusStrike = COMBAT_ABILITIES.find((a) => a.id === "focus_strike")!;
-      const deepDive = COMBAT_ABILITIES.find((a) => a.id === "deep_dive")!;
-      const flowState = COMBAT_ABILITIES.find((a) => a.id === "flow_state")!;
-      const zenStrike = COMBAT_ABILITIES.find((a) => a.id === "zen_strike")!;
+    it('abilities have escalating requirements', () => {
+      const focusStrike = COMBAT_ABILITIES.find((a) => a.id === 'focus_strike')!;
+      const deepDive = COMBAT_ABILITIES.find((a) => a.id === 'deep_dive')!;
+      const flowState = COMBAT_ABILITIES.find((a) => a.id === 'flow_state')!;
+      const zenStrike = COMBAT_ABILITIES.find((a) => a.id === 'zen_strike')!;
 
       expect(focusStrike.requiresStreak).toBe(0);
       expect(deepDive.requiresStreak).toBeGreaterThan(focusStrike.requiresStreak);

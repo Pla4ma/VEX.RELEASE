@@ -5,20 +5,20 @@
  * Tests: spend below/above balance, concurrent spends, rate limits
  */
 
-import { describe, it, expect, beforeEach, vi, type MockedFunction } from "vitest";
-import { getOrCreateWallet, hasEnoughBalance, addCurrency, spendCurrency } from "../service";
-import * as repository from "../repository";
-import { eventBus } from "../../../events";
+import { describe, it, expect, beforeEach, vi, type MockedFunction } from 'vitest';
+import { getOrCreateWallet, hasEnoughBalance, addCurrency, spendCurrency } from '../service';
+import * as repository from '../repository';
+import { eventBus } from '../../../events';
 
 // Mock dependencies
-vi.mock("../repository");
-vi.mock("../../../events", () => ({
+vi.mock('../repository');
+vi.mock('../../../events', () => ({
   eventBus: {
     publish: vi.fn(),
   },
 }));
 
-describe("EconomyService - Comprehensive", () => {
+describe('EconomyService - Comprehensive', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -27,11 +27,11 @@ describe("EconomyService - Comprehensive", () => {
   // Spend Below Balance Tests
   // ============================================================================
 
-  describe("spend below balance", () => {
-    it("should succeed when spending COINS below balance", async () => {
+  describe('spend below balance', () => {
+    it('should succeed when spending COINS below balance', async () => {
       vi.mocked(repository.fetchWallet).mockResolvedValue({
-        id: "wallet-1",
-        userId: "user-1",
+        id: 'wallet-1',
+        userId: 'user-1',
         coins: 1000,
         gems: 50,
         seasonal: {},
@@ -45,19 +45,19 @@ describe("EconomyService - Comprehensive", () => {
 
       vi.mocked(repository.updateWalletBalance).mockResolvedValue(undefined);
       vi.mocked(repository.createTransaction).mockResolvedValue({
-        id: "tx-1",
-        walletId: "wallet-1",
-        type: "SPEND",
-        currency: "COINS",
+        id: 'tx-1',
+        walletId: 'wallet-1',
+        type: 'SPEND',
+        currency: 'COINS',
         amount: 100,
       } as any);
 
       const result = await spendCurrency({
-        userId: "user-1",
-        currency: "COINS",
+        userId: 'user-1',
+        currency: 'COINS',
         amount: 100,
-        sink: "SHOP",
-        description: "Buy item",
+        sink: 'SHOP',
+        description: 'Buy item',
       });
 
       expect(result.success).toBe(true);
@@ -65,10 +65,10 @@ describe("EconomyService - Comprehensive", () => {
       expect(result.error).toBeNull();
     });
 
-    it("should succeed when spending GEMS below balance", async () => {
+    it('should succeed when spending GEMS below balance', async () => {
       vi.mocked(repository.fetchWallet).mockResolvedValue({
-        id: "wallet-1",
-        userId: "user-1",
+        id: 'wallet-1',
+        userId: 'user-1',
         coins: 100,
         gems: 100,
         seasonal: {},
@@ -82,19 +82,19 @@ describe("EconomyService - Comprehensive", () => {
 
       vi.mocked(repository.updateWalletBalance).mockResolvedValue(undefined);
       vi.mocked(repository.createTransaction).mockResolvedValue({
-        id: "tx-1",
-        walletId: "wallet-1",
-        type: "SPEND",
-        currency: "GEMS",
+        id: 'tx-1',
+        walletId: 'wallet-1',
+        type: 'SPEND',
+        currency: 'GEMS',
         amount: 10,
       } as any);
 
       const result = await spendCurrency({
-        userId: "user-1",
-        currency: "GEMS",
+        userId: 'user-1',
+        currency: 'GEMS',
         amount: 10,
-        sink: "SHOP",
-        description: "Buy premium item",
+        sink: 'SHOP',
+        description: 'Buy premium item',
       });
 
       expect(result.success).toBe(true);
@@ -106,11 +106,11 @@ describe("EconomyService - Comprehensive", () => {
   // Spend Above Balance Tests (INSUFFICIENT_FUNDS)
   // ============================================================================
 
-  describe("spend above balance", () => {
-    it("should fail with INSUFFICIENT_FUNDS for COINS", async () => {
+  describe('spend above balance', () => {
+    it('should fail with INSUFFICIENT_FUNDS for COINS', async () => {
       vi.mocked(repository.fetchWallet).mockResolvedValue({
-        id: "wallet-1",
-        userId: "user-1",
+        id: 'wallet-1',
+        userId: 'user-1',
         coins: 50,
         gems: 10,
         seasonal: {},
@@ -123,23 +123,23 @@ describe("EconomyService - Comprehensive", () => {
       });
 
       const result = await spendCurrency({
-        userId: "user-1",
-        currency: "COINS",
+        userId: 'user-1',
+        currency: 'COINS',
         amount: 100, // More than balance
-        sink: "SHOP",
-        description: "Buy expensive item",
+        sink: 'SHOP',
+        description: 'Buy expensive item',
       });
 
       expect(result.success).toBe(false);
-      expect(result.error?.code).toBe("INSUFFICIENT_FUNDS");
+      expect(result.error?.code).toBe('INSUFFICIENT_FUNDS');
       expect(result.error?.recoverable).toBe(false);
       expect(repository.updateWalletBalance).not.toHaveBeenCalled();
     });
 
-    it("should fail with INSUFFICIENT_FUNDS for GEMS", async () => {
+    it('should fail with INSUFFICIENT_FUNDS for GEMS', async () => {
       vi.mocked(repository.fetchWallet).mockResolvedValue({
-        id: "wallet-1",
-        userId: "user-1",
+        id: 'wallet-1',
+        userId: 'user-1',
         coins: 1000,
         gems: 5,
         seasonal: {},
@@ -152,16 +152,16 @@ describe("EconomyService - Comprehensive", () => {
       });
 
       const result = await spendCurrency({
-        userId: "user-1",
-        currency: "GEMS",
+        userId: 'user-1',
+        currency: 'GEMS',
         amount: 10, // More than balance
-        sink: "SHOP",
-        description: "Buy premium item",
+        sink: 'SHOP',
+        description: 'Buy premium item',
       });
 
       expect(result.success).toBe(false);
-      expect(result.error?.code).toBe("INSUFFICIENT_FUNDS");
-      expect(result.error?.message).toContain("insufficient");
+      expect(result.error?.code).toBe('INSUFFICIENT_FUNDS');
+      expect(result.error?.message).toContain('insufficient');
     });
   });
 
@@ -169,13 +169,13 @@ describe("EconomyService - Comprehensive", () => {
   // Concurrent Spend Tests (Race Condition)
   // ============================================================================
 
-  describe("concurrent spends", () => {
-    it("should handle concurrent spend attempts - only one succeeds", async () => {
+  describe('concurrent spends', () => {
+    it('should handle concurrent spend attempts - only one succeeds', async () => {
       let currentCoins = 100;
 
       vi.mocked(repository.fetchWallet).mockImplementation(async () => ({
-        id: "wallet-1",
-        userId: "user-1",
+        id: 'wallet-1',
+        userId: 'user-1',
         coins: currentCoins,
         gems: 0,
         seasonal: {},
@@ -197,18 +197,18 @@ describe("EconomyService - Comprehensive", () => {
       // Only one should succeed (balance is 100)
       const [result1, result2] = await Promise.all([
         spendCurrency({
-          userId: "user-1",
-          currency: "COINS",
+          userId: 'user-1',
+          currency: 'COINS',
           amount: 60,
-          sink: "SHOP",
-          description: "Purchase 1",
+          sink: 'SHOP',
+          description: 'Purchase 1',
         }),
         spendCurrency({
-          userId: "user-1",
-          currency: "COINS",
+          userId: 'user-1',
+          currency: 'COINS',
           amount: 60,
-          sink: "SHOP",
-          description: "Purchase 2",
+          sink: 'SHOP',
+          description: 'Purchase 2',
         }),
       ]);
 
@@ -224,10 +224,10 @@ describe("EconomyService - Comprehensive", () => {
       }
     });
 
-    it("should maintain atomicity - no partial transactions", async () => {
+    it('should maintain atomicity - no partial transactions', async () => {
       vi.mocked(repository.fetchWallet).mockResolvedValue({
-        id: "wallet-1",
-        userId: "user-1",
+        id: 'wallet-1',
+        userId: 'user-1',
         coins: 100,
         gems: 50,
         seasonal: {},
@@ -240,20 +240,20 @@ describe("EconomyService - Comprehensive", () => {
       });
 
       // If transaction fails, wallet should not be updated
-      vi.mocked(repository.updateWalletBalance).mockRejectedValue(new Error("DB error"));
+      vi.mocked(repository.updateWalletBalance).mockRejectedValue(new Error('DB error'));
 
       await expect(
         spendCurrency({
-          userId: "user-1",
-          currency: "COINS",
+          userId: 'user-1',
+          currency: 'COINS',
           amount: 50,
-          sink: "SHOP",
-          description: "Test purchase",
+          sink: 'SHOP',
+          description: 'Test purchase',
         }),
       ).rejects.toThrow();
 
       // Verify no event was published on failure
-      expect(eventBus.publish).not.toHaveBeenCalledWith("economy:currency_spent", expect.any(Object));
+      expect(eventBus.publish).not.toHaveBeenCalledWith('economy:currency_spent', expect.any(Object));
     });
   });
 
@@ -261,14 +261,14 @@ describe("EconomyService - Comprehensive", () => {
   // Daily Rate Limit Enforcement Tests
   // ============================================================================
 
-  describe("daily rate limit enforcement", () => {
-    it("should enforce daily spending limit for COINS", async () => {
+  describe('daily rate limit enforcement', () => {
+    it('should enforce daily spending limit for COINS', async () => {
       // Mock wallet with daily spend tracking
-      const today = new Date().toISOString().split("T")[0];
+      const today = new Date().toISOString().split('T')[0];
 
       vi.mocked(repository.fetchWallet).mockResolvedValue({
-        id: "wallet-1",
-        userId: "user-1",
+        id: 'wallet-1',
+        userId: 'user-1',
         coins: 10000,
         gems: 1000,
         seasonal: {},
@@ -288,11 +288,11 @@ describe("EconomyService - Comprehensive", () => {
       // If not implemented, this documents the requirement
 
       const result = await spendCurrency({
-        userId: "user-1",
-        currency: "COINS",
+        userId: 'user-1',
+        currency: 'COINS',
         amount: 200,
-        sink: "SHOP",
-        description: "Large purchase",
+        sink: 'SHOP',
+        description: 'Large purchase',
       });
 
       // If daily limit is enforced, should fail
@@ -301,13 +301,13 @@ describe("EconomyService - Comprehensive", () => {
       expect(result).toBeDefined();
     });
 
-    it("should reset daily limit at midnight", async () => {
-      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split("T")[0];
-      const today = new Date().toISOString().split("T")[0];
+    it('should reset daily limit at midnight', async () => {
+      const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+      const today = new Date().toISOString().split('T')[0];
 
       vi.mocked(repository.fetchWallet).mockResolvedValue({
-        id: "wallet-1",
-        userId: "user-1",
+        id: 'wallet-1',
+        userId: 'user-1',
         coins: 10000,
         gems: 1000,
         seasonal: {},
@@ -324,11 +324,11 @@ describe("EconomyService - Comprehensive", () => {
       });
 
       await spendCurrency({
-        userId: "user-1",
-        currency: "COINS",
+        userId: 'user-1',
+        currency: 'COINS',
         amount: 100,
-        sink: "SHOP",
-        description: "Purchase after reset",
+        sink: 'SHOP',
+        description: 'Purchase after reset',
       });
     });
   });
@@ -337,11 +337,11 @@ describe("EconomyService - Comprehensive", () => {
   // Balance Verification Tests
   // ============================================================================
 
-  describe("balance verification", () => {
-    it("should correctly report hasEnoughBalance", async () => {
+  describe('balance verification', () => {
+    it('should correctly report hasEnoughBalance', async () => {
       vi.mocked(repository.fetchWallet).mockResolvedValue({
-        id: "wallet-1",
-        userId: "user-1",
+        id: 'wallet-1',
+        userId: 'user-1',
         coins: 100,
         gems: 50,
         seasonal: { season1: 200 },
@@ -353,21 +353,21 @@ describe("EconomyService - Comprehensive", () => {
         updatedAt: Date.now(),
       });
 
-      const wallet = await getOrCreateWallet("user-1");
+      const wallet = await getOrCreateWallet('user-1');
 
-      expect(hasEnoughBalance(wallet, "COINS", 50)).toBe(true);
-      expect(hasEnoughBalance(wallet, "COINS", 100)).toBe(true);
-      expect(hasEnoughBalance(wallet, "COINS", 101)).toBe(false);
-      expect(hasEnoughBalance(wallet, "GEMS", 50)).toBe(true);
-      expect(hasEnoughBalance(wallet, "GEMS", 51)).toBe(false);
+      expect(hasEnoughBalance(wallet, 'COINS', 50)).toBe(true);
+      expect(hasEnoughBalance(wallet, 'COINS', 100)).toBe(true);
+      expect(hasEnoughBalance(wallet, 'COINS', 101)).toBe(false);
+      expect(hasEnoughBalance(wallet, 'GEMS', 50)).toBe(true);
+      expect(hasEnoughBalance(wallet, 'GEMS', 51)).toBe(false);
     });
 
-    it("should update balance after successful spend", async () => {
+    it('should update balance after successful spend', async () => {
       let walletCoins = 500;
 
       vi.mocked(repository.fetchWallet).mockImplementation(async () => ({
-        id: "wallet-1",
-        userId: "user-1",
+        id: 'wallet-1',
+        userId: 'user-1',
         coins: walletCoins,
         gems: 100,
         seasonal: {},
@@ -386,11 +386,11 @@ describe("EconomyService - Comprehensive", () => {
       });
 
       const result = await spendCurrency({
-        userId: "user-1",
-        currency: "COINS",
+        userId: 'user-1',
+        currency: 'COINS',
         amount: 100,
-        sink: "SHOP",
-        description: "Test spend",
+        sink: 'SHOP',
+        description: 'Test spend',
       });
 
       expect(result.success).toBe(true);
@@ -402,11 +402,11 @@ describe("EconomyService - Comprehensive", () => {
   // Currency Addition Tests
   // ============================================================================
 
-  describe("add currency", () => {
-    it("should add COINS successfully", async () => {
+  describe('add currency', () => {
+    it('should add COINS successfully', async () => {
       vi.mocked(repository.fetchWallet).mockResolvedValue({
-        id: "wallet-1",
-        userId: "user-1",
+        id: 'wallet-1',
+        userId: 'user-1',
         coins: 100,
         gems: 50,
         seasonal: {},
@@ -421,17 +421,17 @@ describe("EconomyService - Comprehensive", () => {
       vi.mocked(repository.updateWalletBalance).mockResolvedValue(undefined);
 
       const result = await addCurrency({
-        userId: "user-1",
-        currency: "COINS",
+        userId: 'user-1',
+        currency: 'COINS',
         amount: 50,
-        source: "REWARD",
-        description: "Test reward",
+        source: 'REWARD',
+        description: 'Test reward',
         skipEvents: false,
       });
 
       expect(result.newBalance).toBe(150);
       expect(repository.updateWalletBalance).toHaveBeenCalledWith(
-        "user-1",
+        'user-1',
         expect.objectContaining({
           coins: 150,
           totalCoinsEarned: 150,
@@ -439,10 +439,10 @@ describe("EconomyService - Comprehensive", () => {
       );
     });
 
-    it("should add GEMS successfully", async () => {
+    it('should add GEMS successfully', async () => {
       vi.mocked(repository.fetchWallet).mockResolvedValue({
-        id: "wallet-1",
-        userId: "user-1",
+        id: 'wallet-1',
+        userId: 'user-1',
         coins: 100,
         gems: 50,
         seasonal: {},
@@ -457,11 +457,11 @@ describe("EconomyService - Comprehensive", () => {
       vi.mocked(repository.updateWalletBalance).mockResolvedValue(undefined);
 
       const result = await addCurrency({
-        userId: "user-1",
-        currency: "GEMS",
+        userId: 'user-1',
+        currency: 'GEMS',
         amount: 25,
-        source: "SHOP",
-        description: "Gem purchase",
+        source: 'SHOP',
+        description: 'Gem purchase',
         skipEvents: false,
       });
 

@@ -7,22 +7,22 @@
  * - useRecentUnlocks(userId): Last 10 unlocked achievements
  */
 
-import { useQuery } from "@tanstack/react-query";
-import type { Achievement, AchievementCategory, AchievementRarity, UserAchievement } from "./types";
-import { ALL_ACHIEVEMENTS, getAchievementById } from "./definitions";
-import * as repository from "./repository";
+import { useQuery } from '@tanstack/react-query';
+import type { Achievement, AchievementCategory, AchievementRarity, UserAchievement } from './types';
+import { ALL_ACHIEVEMENTS, getAchievementById } from './definitions';
+import * as repository from './repository';
 
 // ============================================================================
 // Query Keys
 // ============================================================================
 
 export const achievementKeys = {
-  all: ["achievements"] as const,
-  byUser: (userId: string) => [...achievementKeys.all, "user", userId] as const,
-  list: (userId: string) => [...achievementKeys.byUser(userId), "list"] as const,
-  detail: (userId: string, achievementId: string) => [...achievementKeys.byUser(userId), "detail", achievementId] as const,
-  recent: (userId: string) => [...achievementKeys.byUser(userId), "recent"] as const,
-  stats: (userId: string) => [...achievementKeys.byUser(userId), "stats"] as const,
+  all: ['achievements'] as const,
+  byUser: (userId: string) => [...achievementKeys.all, 'user', userId] as const,
+  list: (userId: string) => [...achievementKeys.byUser(userId), 'list'] as const,
+  detail: (userId: string, achievementId: string) => [...achievementKeys.byUser(userId), 'detail', achievementId] as const,
+  recent: (userId: string) => [...achievementKeys.byUser(userId), 'recent'] as const,
+  stats: (userId: string) => [...achievementKeys.byUser(userId), 'stats'] as const,
 };
 
 // ============================================================================
@@ -106,7 +106,7 @@ export function useAchievements(userId: string): UseAchievementsResult {
         return achievementsWithStatus;
       } catch (err) {
         // Graceful error - return data: null, error: Error
-        throw err instanceof Error ? err : new Error("Failed to fetch achievements");
+        throw err instanceof Error ? err : new Error('Failed to fetch achievements');
       }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes as specified
@@ -156,7 +156,7 @@ export function useAchievementProgress(userId: string, achievementId: string): U
           completionPercentage,
         };
       } catch (err) {
-        throw err instanceof Error ? err : new Error("Failed to fetch achievement progress");
+        throw err instanceof Error ? err : new Error('Failed to fetch achievement progress');
       }
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -213,7 +213,7 @@ export function useRecentUnlocks(userId: string): UseRecentUnlocksResult {
 
         return recentUnlocks;
       } catch (err) {
-        throw err instanceof Error ? err : new Error("Failed to fetch recent unlocks");
+        throw err instanceof Error ? err : new Error('Failed to fetch recent unlocks');
       }
     },
     staleTime: 2 * 60 * 1000, // 2 minutes for more frequent updates
@@ -334,7 +334,7 @@ export function useAchievementStats(userId: string): {
   const pointsEarned = data.filter((a) => a.isUnlocked).reduce((sum, a) => sum + a.pointValue, 0);
 
   // By category
-  const categories: AchievementCategory[] = ["SESSION", "STREAK", "BOSS", "SOCIAL", "PROGRESSION", "ECONOMY"];
+  const categories: AchievementCategory[] = ['SESSION', 'STREAK', 'BOSS', 'SOCIAL', 'PROGRESSION', 'ECONOMY'];
   const byCategory: Record<AchievementCategory, { total: number; unlocked: number }> = categories.reduce(
     (acc, cat) => {
       const catAchievements = data.filter((a) => a.category === cat);
@@ -348,7 +348,7 @@ export function useAchievementStats(userId: string): {
   );
 
   // By rarity
-  const rarities: AchievementRarity[] = ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"];
+  const rarities: AchievementRarity[] = ['COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY'];
   const byRarity: Record<AchievementRarity, { total: number; unlocked: number }> = rarities.reduce(
     (acc, rarity) => {
       const rarityAchievements = data.filter((a) => a.rarity === rarity);

@@ -5,47 +5,47 @@
  * These values control app behavior and are used throughout.
  */
 
-import { type AppConfig, type AppEnvironment } from "../types/global";
+import { type AppConfig, type AppEnvironment } from '../types/global';
 
 /**
  * Current application environment
  * Override via environment variable ENVIRONMENT
  */
-export const ENVIRONMENT: AppEnvironment = (process.env.ENVIRONMENT as AppEnvironment) || "development";
+export const ENVIRONMENT: AppEnvironment = (process.env.ENVIRONMENT as AppEnvironment) || 'development';
 
 /**
  * Check if running in development mode
  */
-export const IS_DEVELOPMENT = ENVIRONMENT === "development";
+export const IS_DEVELOPMENT = ENVIRONMENT === 'development';
 
 /**
  * Check if running in production mode
  */
-export const IS_PRODUCTION = ENVIRONMENT === "production";
+export const IS_PRODUCTION = ENVIRONMENT === 'production';
 
 /**
  * Check if running in staging mode
  */
-export const IS_STAGING = ENVIRONMENT === "staging";
+export const IS_STAGING = ENVIRONMENT === 'staging';
 
 /**
  * Application metadata
  */
 export const APP_METADATA = {
-  name: "VEX",
-  fullName: "VEX App",
-  tagline: "The ultimate mobile experience",
-  version: "1.0.0",
-  buildNumber: "100",
+  name: 'VEX',
+  fullName: 'VEX App',
+  tagline: 'The ultimate mobile experience',
+  version: '1.0.0',
+  buildNumber: '100',
   bundleId: {
-    ios: "com.vex.app",
-    android: "com.vex.app",
+    ios: 'com.vex.app',
+    android: 'com.vex.app',
   },
   copyright: `© ${new Date().getFullYear()} VEX Inc.`,
-  supportEmail: "support@vex.app",
-  website: "https://vex.app",
-  privacyPolicy: "https://vex.app/privacy",
-  termsOfService: "https://vex.app/terms",
+  supportEmail: 'support@vex.app',
+  website: 'https://vex.app',
+  privacyPolicy: 'https://vex.app/privacy',
+  termsOfService: 'https://vex.app/terms',
 } as const;
 
 /**
@@ -53,24 +53,24 @@ export const APP_METADATA = {
  */
 export const APP_CONFIG: Record<AppEnvironment, AppConfig> = {
   development: {
-    environment: "development",
-    apiUrl: "https://api-dev.vex.app/v1",
+    environment: 'development',
+    apiUrl: 'https://api-dev.vex.app/v1',
     apiTimeout: 30000,
     version: APP_METADATA.version,
     buildNumber: APP_METADATA.buildNumber,
     bundleId: APP_METADATA.bundleId.ios,
   },
   staging: {
-    environment: "staging",
-    apiUrl: "https://api-staging.vex.app/v1",
+    environment: 'staging',
+    apiUrl: 'https://api-staging.vex.app/v1',
     apiTimeout: 30000,
     version: APP_METADATA.version,
     buildNumber: APP_METADATA.buildNumber,
     bundleId: APP_METADATA.bundleId.ios,
   },
   production: {
-    environment: "production",
-    apiUrl: "https://api.vex.app/v1",
+    environment: 'production',
+    apiUrl: 'https://api.vex.app/v1',
     apiTimeout: 30000,
     version: APP_METADATA.version,
     buildNumber: APP_METADATA.buildNumber,
@@ -95,11 +95,11 @@ export const ANIMATION = {
     verySlow: 800,
   },
   easing: {
-    default: "easeInOut",
-    linear: "linear",
-    easeIn: "easeIn",
-    easeOut: "easeOut",
-    bounce: "bounce",
+    default: 'easeInOut',
+    linear: 'linear',
+    easeIn: 'easeIn',
+    easeOut: 'easeOut',
+    bounce: 'bounce',
     spring: {
       stiffness: 100,
       damping: 10,
@@ -172,17 +172,17 @@ export const TIMING = {
  */
 export const DATE_FORMAT = {
   display: {
-    date: "MMM d, yyyy",
-    dateTime: "MMM d, yyyy h:mm a",
-    time: "h:mm a",
-    shortDate: "MM/dd/yy",
-    monthYear: "MMMM yyyy",
-    dayOfWeek: "EEEE",
+    date: 'MMM d, yyyy',
+    dateTime: 'MMM d, yyyy h:mm a',
+    time: 'h:mm a',
+    shortDate: 'MM/dd/yy',
+    monthYear: 'MMMM yyyy',
+    dayOfWeek: 'EEEE',
   },
   api: {
     iso: "yyyy-MM-dd'T'HH:mm:ss.SSSxxx",
-    date: "yyyy-MM-dd",
-    time: "HH:mm:ss",
+    date: 'yyyy-MM-dd',
+    time: 'HH:mm:ss',
   },
 } as const;
 
@@ -214,7 +214,7 @@ export const LIMITS = {
   },
   fileUpload: {
     maxSize: 10 * 1024 * 1024, // 10MB
-    allowedTypes: ["image/jpeg", "image/png", "image/gif", "image/webp"],
+    allowedTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
     maxDimensions: {
       width: 4096,
       height: 4096,
@@ -258,32 +258,32 @@ export const NETWORK = {
  */
 export const ERROR_CODES = {
   // Authentication
-  AUTH_INVALID_CREDENTIALS: "AUTH001",
-  AUTH_TOKEN_EXPIRED: "AUTH002",
-  AUTH_TOKEN_INVALID: "AUTH003",
-  AUTH_UNAUTHORIZED: "AUTH004",
-  AUTH_FORBIDDEN: "AUTH005",
+  AUTH_INVALID_CREDENTIALS: 'AUTH001',
+  AUTH_TOKEN_EXPIRED: 'AUTH002',
+  AUTH_TOKEN_INVALID: 'AUTH003',
+  AUTH_UNAUTHORIZED: 'AUTH004',
+  AUTH_FORBIDDEN: 'AUTH005',
 
   // Network
-  NETWORK_OFFLINE: "NET001",
-  NETWORK_TIMEOUT: "NET002",
-  NETWORK_ERROR: "NET003",
+  NETWORK_OFFLINE: 'NET001',
+  NETWORK_TIMEOUT: 'NET002',
+  NETWORK_ERROR: 'NET003',
 
   // Validation
-  VALIDATION_ERROR: "VAL001",
-  VALIDATION_REQUIRED: "VAL002",
-  VALIDATION_FORMAT: "VAL003",
-  VALIDATION_LENGTH: "VAL004",
+  VALIDATION_ERROR: 'VAL001',
+  VALIDATION_REQUIRED: 'VAL002',
+  VALIDATION_FORMAT: 'VAL003',
+  VALIDATION_LENGTH: 'VAL004',
 
   // Data
-  DATA_NOT_FOUND: "DAT001",
-  DATA_CONFLICT: "DAT002",
-  DATA_TOO_LARGE: "DAT003",
+  DATA_NOT_FOUND: 'DAT001',
+  DATA_CONFLICT: 'DAT002',
+  DATA_TOO_LARGE: 'DAT003',
 
   // System
-  SYSTEM_ERROR: "SYS001",
-  SYSTEM_MAINTENANCE: "SYS002",
-  SYSTEM_RATE_LIMIT: "SYS003",
+  SYSTEM_ERROR: 'SYS001',
+  SYSTEM_MAINTENANCE: 'SYS002',
+  SYSTEM_RATE_LIMIT: 'SYS003',
 } as const;
 
 /**

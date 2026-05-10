@@ -5,23 +5,23 @@
  * Transforms raw session data into emotional narrative beats.
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Story Beat Types
 // ============================================================================
 
 export const StoryBeatTypeSchema = z.enum([
-  "OPENING", // "You entered..."
-  "FOCUS_JOURNEY", // "You stayed focused..."
-  "STREAK_MOMENT", // "You protected your streak..."
-  "BOSS_BATTLE", // "You broke the boss's shield..."
-  "MILESTONE_REACHED", // "Day 7 achieved..."
-  "PERFECTION_MOMENT", // "Zero interruptions..."
-  "COMEBACK_TRIUMPH", // "You returned stronger..."
-  "PROGRESSION_CLIFFHANGER", // "1 session from next tier..."
-  "ACHIEVEMENT_UNLOCK", // Badge earned
-  "CLOSING_REFLECTION", // Final thought
+  'OPENING', // "You entered..."
+  'FOCUS_JOURNEY', // "You stayed focused..."
+  'STREAK_MOMENT', // "You protected your streak..."
+  'BOSS_BATTLE', // "You broke the boss's shield..."
+  'MILESTONE_REACHED', // "Day 7 achieved..."
+  'PERFECTION_MOMENT', // "Zero interruptions..."
+  'COMEBACK_TRIUMPH', // "You returned stronger..."
+  'PROGRESSION_CLIFFHANGER', // "1 session from next tier..."
+  'ACHIEVEMENT_UNLOCK', // Badge earned
+  'CLOSING_REFLECTION', // Final thought
 ]);
 
 // ============================================================================
@@ -29,14 +29,14 @@ export const StoryBeatTypeSchema = z.enum([
 // ============================================================================
 
 export const EmotionalArcSchema = z.enum([
-  "TRIUMPH", // Victory, achievement
-  "RELIEF", // Streak saved, stress released
-  "DETERMINATION", // Coming back, fighting on
-  "WONDER", // Milestone reached, new possibilities
-  "GRATITUDE", // Perfect session, thankful
-  "ANTICIPATION", // Close to next goal
-  "RESILIENCE", // Comeback story
-  "MASTERY", // Skill demonstration
+  'TRIUMPH', // Victory, achievement
+  'RELIEF', // Streak saved, stress released
+  'DETERMINATION', // Coming back, fighting on
+  'WONDER', // Milestone reached, new possibilities
+  'GRATITUDE', // Perfect session, thankful
+  'ANTICIPATION', // Close to next goal
+  'RESILIENCE', // Comeback story
+  'MASTERY', // Skill demonstration
 ]);
 
 // ============================================================================
@@ -50,9 +50,9 @@ export const StoryBeatSchema = z.object({
   headline: z.string().min(1), // "You stayed focused for 25 minutes"
   subtext: z.string().optional(), // Additional context
   emotion: EmotionalArcSchema,
-  visualCue: z.enum(["NONE", "STREAK_FLAME", "BOSS_DAMAGE", "XP_BURST", "BADGE_SHINE", "SHIELD_PROTECTION", "PROGRESS_BAR", "CELEBRATION"]),
+  visualCue: z.enum(['NONE', 'STREAK_FLAME', 'BOSS_DAMAGE', 'XP_BURST', 'BADGE_SHINE', 'SHIELD_PROTECTION', 'PROGRESS_BAR', 'CELEBRATION']),
   durationMs: z.number().int().min(500).default(2500), // How long to show
-  hapticPattern: z.enum(["NONE", "LIGHT", "MEDIUM", "HEAVY", "SUCCESS", "CELEBRATION"]).default("NONE"),
+  hapticPattern: z.enum(['NONE', 'LIGHT', 'MEDIUM', 'HEAVY', 'SUCCESS', 'CELEBRATION']).default('NONE'),
   metadata: z
     .object({
       value: z.number().optional(), // Numeric value (minutes, streak count)
@@ -102,9 +102,9 @@ export const SessionStorySchema = z.object({
   nextSessionHooks: z
     .array(
       z.object({
-        type: z.enum(["STREAK_AT_RISK", "BOSS_ALMOST_DEFEATED", "MILESTONE_APPROACHING", "TIER_UNLOCK_SOON", "PERFECT_RUN_CONTINUING", "COMEBACK_MOMENTUM"]),
+        type: z.enum(['STREAK_AT_RISK', 'BOSS_ALMOST_DEFEATED', 'MILESTONE_APPROACHING', 'TIER_UNLOCK_SOON', 'PERFECT_RUN_CONTINUING', 'COMEBACK_MOMENTUM']),
         description: z.string(),
-        urgency: z.enum(["LOW", "MEDIUM", "HIGH"]).default("LOW"),
+        urgency: z.enum(['LOW', 'MEDIUM', 'HIGH']).default('LOW'),
       }),
     )
     .default([]),
@@ -163,7 +163,7 @@ export const GenerateStoryInputSchema = z.object({
   }),
   userPreferences: z
     .object({
-      preferredTone: z.enum(["ENCOURAGING", "NEUTRAL", "CHALLENGING"]).default("ENCOURAGING"),
+      preferredTone: z.enum(['ENCOURAGING', 'NEUTRAL', 'CHALLENGING']).default('ENCOURAGING'),
       enableHaptics: z.boolean().default(true),
       enableAnimations: z.boolean().default(true),
     })
@@ -222,7 +222,7 @@ export const StorySessionRowSchema = z.object({
 export const StoryAnalyticsEventSchema = z.object({
   storyId: z.string().uuid(),
   userId: z.string().uuid(),
-  eventType: z.enum(["STORY_STARTED", "BEAT_VIEWED", "STORY_COMPLETED", "STORY_SHARED", "STORY_SKIPPED", "BEAT_REPLAYED"]),
+  eventType: z.enum(['STORY_STARTED', 'BEAT_VIEWED', 'STORY_COMPLETED', 'STORY_SHARED', 'STORY_SKIPPED', 'BEAT_REPLAYED']),
   beatType: StoryBeatTypeSchema.optional(),
   timestamp: z.number(),
   metadata: z.record(z.unknown()).optional(),

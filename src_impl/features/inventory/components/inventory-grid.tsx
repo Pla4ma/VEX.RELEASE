@@ -3,15 +3,15 @@
  * Displays inventory items in a grid layout with filtering and sorting
  */
 
-import React, { useState, useCallback, useMemo } from "react";
-import { View, Pressable, Text, RefreshControl } from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { EmptyState } from "../../../components/EmptyState";
-import { getPremiumCardStyle } from "../../../components/premiumStyles";
-import { Skeleton } from "../../../components/ui/Skeleton";
-import { useInventory, useFilteredInventory, inventoryKeys } from "../hooks";
-import type { InventoryItem, InventoryFilter, ItemRarity, ItemType } from "../schemas";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useState, useCallback, useMemo } from 'react';
+import { View, Pressable, Text, RefreshControl } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import { EmptyState } from '../../../components/EmptyState';
+import { getPremiumCardStyle } from '../../../components/premiumStyles';
+import { Skeleton } from '../../../components/ui/Skeleton';
+import { useInventory, useFilteredInventory, inventoryKeys } from '../hooks';
+import type { InventoryItem, InventoryFilter, ItemRarity, ItemType } from '../schemas';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 // ============================================================================
 // Types
@@ -41,27 +41,27 @@ interface InventoryItemCardProps {
 // ============================================================================
 
 const RARITY_COLORS: Record<ItemRarity, string> = {
-  COMMON: "#9CA3AF",
-  UNCOMMON: "#10B981",
-  RARE: "#3B82F6",
-  EPIC: "#8B5CF6",
-  LEGENDARY: "#F59E0B",
+  COMMON: '#9CA3AF',
+  UNCOMMON: '#10B981',
+  RARE: '#3B82F6',
+  EPIC: '#8B5CF6',
+  LEGENDARY: '#F59E0B',
 };
 
 const TYPE_ICONS: Record<ItemType, string> = {
-  CONSUMABLE: "🧪",
-  EQUIPMENT: "⚔️",
-  COSMETIC: "👑",
-  CRAFTING: "🔧",
-  COLLECTIBLE: "🏆",
+  CONSUMABLE: '🧪',
+  EQUIPMENT: '⚔️',
+  COSMETIC: '👑',
+  CRAFTING: '🔧',
+  COLLECTIBLE: '🏆',
 };
 
 function InventoryItemCard({ item, onPress, onLongPress, isSelected, showQuickActions, onQuickUse }: InventoryItemCardProps) {
   // Would fetch item definition in real implementation
-  const itemName = "Item Name"; // Placeholder
-  const itemRarity: ItemRarity = "COMMON";
-  const itemType: ItemType = "CONSUMABLE";
-  const isEquipped = item.status === "EQUIPPED";
+  const itemName = 'Item Name'; // Placeholder
+  const itemRarity: ItemRarity = 'COMMON';
+  const itemType: ItemType = 'CONSUMABLE';
+  const isEquipped = item.status === 'EQUIPPED';
 
   return (
     <Pressable onPress={onPress} onLongPress={onLongPress} style={({ pressed }) => [styles.card, isSelected && styles.cardSelected, isEquipped && styles.cardEquipped, pressed && { opacity: 0.8 }]} accessibilityLabel={`${itemName}, quantity ${item.quantity}`} accessibilityRole="button" accessibilityHint="Activates this control">
@@ -87,7 +87,7 @@ function InventoryItemCard({ item, onPress, onLongPress, isSelected, showQuickAc
         {itemName}
       </Text>
 
-      {showQuickActions && itemType === "CONSUMABLE" && (
+      {showQuickActions && itemType === 'CONSUMABLE' && (
         <Pressable
           onPress={(e) => {
             e.stopPropagation();
@@ -117,8 +117,8 @@ interface FilterBarProps {
 function FilterBar({ filter, onFilterChange }: FilterBarProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const typeOptions: ItemType[] = ["CONSUMABLE", "EQUIPMENT", "COSMETIC", "CRAFTING", "COLLECTIBLE"];
-  const rarityOptions: ItemRarity[] = ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"];
+  const typeOptions: ItemType[] = ['CONSUMABLE', 'EQUIPMENT', 'COSMETIC', 'CRAFTING', 'COLLECTIBLE'];
+  const rarityOptions: ItemRarity[] = ['COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY'];
 
   const toggleType = (type: ItemType) => {
     const current = filter.types ?? [];
@@ -135,7 +135,7 @@ function FilterBar({ filter, onFilterChange }: FilterBarProps) {
   return (
     <View style={styles.filterBar}>
       <Pressable onPress={() => setIsExpanded(!isExpanded)} style={({ pressed }) => [styles.filterToggle, pressed && { opacity: 0.8 }]} accessibilityLabel="Toggle filters button" accessibilityRole="button" accessibilityHint="Activates this control">
-        <Text style={styles.filterToggleText}>{isExpanded ? "▼ Hide Filters" : "▶ Show Filters"}</Text>
+        <Text style={styles.filterToggleText}>{isExpanded ? '▼ Hide Filters' : '▶ Show Filters'}</Text>
       </Pressable>
 
       {isExpanded && (
@@ -173,8 +173,8 @@ export function InventoryGrid({ userId, onItemPress, onItemLongPress, selectedIt
   const [refreshing, setRefreshing] = useState(false);
   const [activeFilter, setActiveFilter] = useState<InventoryFilter>(
     filter ?? {
-      sortBy: "acquiredAt",
-      sortOrder: "desc",
+      sortBy: 'acquiredAt',
+      sortOrder: 'desc',
     },
   );
 
@@ -263,39 +263,39 @@ const styles = createSheet({
   },
   centerContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: 20,
   },
   grid: {
     padding: 8,
   },
   skeletonGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     padding: 8,
   },
   skeletonCard: {
-    width: "23%",
+    width: '23%',
     aspectRatio: 1,
-    margin: "1%",
-    backgroundColor: "#E5E7EB",
+    margin: '1%',
+    backgroundColor: '#E5E7EB',
     borderRadius: 16,
   },
   card: {
-    width: "23%",
-    margin: "1%",
-    backgroundColor: "#FFFFFF",
-    ...getPremiumCardStyle("small"),
+    width: '23%',
+    margin: '1%',
+    backgroundColor: '#FFFFFF',
+    ...getPremiumCardStyle('small'),
     padding: 8,
   },
   cardSelected: {
-    backgroundColor: "#DBEAFE",
+    backgroundColor: '#DBEAFE',
     borderWidth: 2,
-    borderColor: "#3B82F6",
+    borderColor: '#3B82F6',
   },
   cardEquipped: {
-    backgroundColor: "#FEF3C7",
+    backgroundColor: '#FEF3C7',
   },
   rarityBorder: {
     borderWidth: 2,
@@ -304,70 +304,70 @@ const styles = createSheet({
   },
   iconContainer: {
     aspectRatio: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   icon: {
     fontSize: 32,
   },
   quantityBadge: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 4,
     right: 4,
-    backgroundColor: "#374151",
+    backgroundColor: '#374151',
     borderRadius: 10,
     paddingHorizontal: 6,
     paddingVertical: 2,
   },
   quantityText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 10,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   equippedBadge: {
-    position: "absolute",
+    position: 'absolute',
     top: -8,
     left: 0,
     right: 0,
-    backgroundColor: "#F59E0B",
+    backgroundColor: '#F59E0B',
     borderRadius: 4,
     paddingVertical: 2,
   },
   equippedText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 8,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   itemName: {
     fontSize: 10,
-    color: "#374151",
+    color: '#374151',
     marginTop: 4,
-    textAlign: "center",
+    textAlign: 'center',
   },
   quickUseButton: {
-    backgroundColor: "#10B981",
+    backgroundColor: '#10B981',
     borderRadius: 4,
     paddingVertical: 4,
     marginTop: 4,
   },
   quickUseText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 10,
-    fontWeight: "bold",
-    textAlign: "center",
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   filterBar: {
-    backgroundColor: "#F9FAFB",
+    backgroundColor: '#F9FAFB',
     padding: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#E5E7EB",
+    borderBottomColor: '#E5E7EB',
   },
   filterToggle: {
     paddingVertical: 4,
   },
   filterToggleText: {
-    color: "#6B7280",
+    color: '#6B7280',
     fontSize: 14,
   },
   filterPanel: {
@@ -375,14 +375,14 @@ const styles = createSheet({
   },
   filterLabel: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "#374151",
+    fontWeight: '600',
+    color: '#374151',
     marginTop: 8,
     marginBottom: 4,
   },
   filterChips: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 8,
   },
   filterChip: {
@@ -390,42 +390,42 @@ const styles = createSheet({
     paddingVertical: 6,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: "#D1D5DB",
-    backgroundColor: "#FFFFFF",
+    borderColor: '#D1D5DB',
+    backgroundColor: '#FFFFFF',
   },
   filterChipActive: {
-    backgroundColor: "#DBEAFE",
-    borderColor: "#3B82F6",
+    backgroundColor: '#DBEAFE',
+    borderColor: '#3B82F6',
   },
   filterChipText: {
     fontSize: 12,
-    color: "#374151",
+    color: '#374151',
   },
   errorText: {
     fontSize: 16,
-    color: "#EF4444",
+    color: '#EF4444',
     marginBottom: 12,
   },
   retryButton: {
-    backgroundColor: "#3B82F6",
+    backgroundColor: '#3B82F6',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
   },
   retryText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   emptyTitle: {
     fontSize: 18,
-    fontWeight: "600",
-    color: "#374151",
+    fontWeight: '600',
+    color: '#374151',
     marginBottom: 8,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: "#6B7280",
-    textAlign: "center",
+    color: '#6B7280',
+    textAlign: 'center',
   },
 });

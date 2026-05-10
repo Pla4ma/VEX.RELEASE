@@ -36,7 +36,7 @@ export type OfflineQueueEntryInput = Omit<OfflineQueueEntry, 'id' | 'createdAt' 
 };
 
 // ============================================================================
-// In-Memory Queue (Production: Use AsyncStorage/MMKV)
+// In-Memory Queue (Production: Use MMKV/MMKV)
 // ============================================================================
 
 const queue: OfflineQueueEntry[] = [];
@@ -288,3 +288,4 @@ export function resolveConflict(
 }
 
 // End of file
+

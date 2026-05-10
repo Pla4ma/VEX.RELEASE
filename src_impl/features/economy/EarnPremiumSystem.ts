@@ -18,20 +18,20 @@
  * Consumers: paywall screens, achievement notifications, profile screen
  */
 
-import { z } from "zod";
-import * as Sentry from "@sentry/react-native";
+import { z } from 'zod';
+import * as Sentry from '@sentry/react-native';
 
-import { capture } from "../../shared/analytics";
-import { revenueCatService } from "../../shared/monetization/revenuecat-service";
+import { capture } from '../../shared/analytics';
+import { revenueCatService } from '../../shared/monetization/revenuecat-service';
 
 // ============================================================================
 // Types & Schemas
 // ============================================================================
 
 export enum EarnPremiumAchievementType {
-  STREAK_30_DAYS = "STREAK_30_DAYS",
-  ALL_BOSSES_DEFEATED = "ALL_BOSSES_DEFEATED",
-  LEVEL_20 = "LEVEL_20",
+  STREAK_30_DAYS = 'STREAK_30_DAYS',
+  ALL_BOSSES_DEFEATED = 'ALL_BOSSES_DEFEATED',
+  LEVEL_20 = 'LEVEL_20',
 }
 
 export interface EarnPremiumReward {
@@ -86,31 +86,31 @@ export const CheckEligibilityInputSchema = z.object({
 // Reward Definitions
 // ============================================================================
 
-const REWARD_DEFINITIONS: Record<EarnPremiumAchievementType, Omit<EarnPremiumReward, "claimed" | "claimedAt" | "unlockedAt">> = {
+const REWARD_DEFINITIONS: Record<EarnPremiumAchievementType, Omit<EarnPremiumReward, 'claimed' | 'claimedAt' | 'unlockedAt'>> = {
   [EarnPremiumAchievementType.STREAK_30_DAYS]: {
     type: EarnPremiumAchievementType.STREAK_30_DAYS,
     trialDays: 7,
-    title: "30-Day Champion",
-    description: "Maintain a 30-day streak to unlock 7 days of Premium free",
-    icon: "🔥",
+    title: '30-Day Champion',
+    description: 'Maintain a 30-day streak to unlock 7 days of Premium free',
+    icon: '🔥',
   },
   [EarnPremiumAchievementType.ALL_BOSSES_DEFEATED]: {
     type: EarnPremiumAchievementType.ALL_BOSSES_DEFEATED,
     trialDays: 7,
-    title: "Boss Slayer",
-    description: "Defeat all 6 boss tiers to unlock 7 days of Premium free",
-    icon: "⚔️",
+    title: 'Boss Slayer',
+    description: 'Defeat all 6 boss tiers to unlock 7 days of Premium free',
+    icon: '⚔️',
   },
   [EarnPremiumAchievementType.LEVEL_20]: {
     type: EarnPremiumAchievementType.LEVEL_20,
     trialDays: 3,
-    title: "Level 20 Legend",
-    description: "Reach Level 20 to unlock 3 days of Premium free",
-    icon: "🏆",
+    title: 'Level 20 Legend',
+    description: 'Reach Level 20 to unlock 3 days of Premium free',
+    icon: '🏆',
   },
 };
 
-const ALL_BOSS_IDS = ["1", "2", "3", "4", "5", "6"];
+const ALL_BOSS_IDS = ['1', '2', '3', '4', '5', '6'];
 
 // ============================================================================
 // Earn Premium System
@@ -185,16 +185,16 @@ export class EarnPremiumSystem {
 
     // Track analytics for newly unlocked rewards
     for (const reward of newlyUnlocked) {
-      capture("premium_reward_unlocked", {
+      capture('premium_reward_unlocked', {
         user_id: validated.userId,
         achievement_type: reward.type,
         trial_days: reward.trialDays,
       });
 
       Sentry.addBreadcrumb({
-        category: "earn-premium",
+        category: 'earn-premium',
         message: `Premium reward unlocked: ${reward.type}`,
-        level: "info",
+        level: 'info',
         data: {
           userId: validated.userId,
           type: reward.type,
@@ -219,7 +219,7 @@ export class EarnPremiumSystem {
       return {
         success: false,
         status,
-        error: "Reward not found or not yet unlocked",
+        error: 'Reward not found or not yet unlocked',
       };
     }
 
@@ -227,7 +227,7 @@ export class EarnPremiumSystem {
       return {
         success: false,
         status,
-        error: "Reward already claimed",
+        error: 'Reward already claimed',
       };
     }
 
@@ -235,7 +235,7 @@ export class EarnPremiumSystem {
       return {
         success: false,
         status,
-        error: "Reward not yet unlocked",
+        error: 'Reward not yet unlocked',
       };
     }
 
@@ -253,7 +253,7 @@ export class EarnPremiumSystem {
     this.syncTrialWithRevenueCat(status.userId, reward.trialDays);
 
     // Track analytics
-    capture("premium_trial_claimed", {
+    capture('premium_trial_claimed', {
       user_id: status.userId,
       achievement_type: rewardType,
       trial_days: reward.trialDays,
@@ -261,9 +261,9 @@ export class EarnPremiumSystem {
     });
 
     Sentry.addBreadcrumb({
-      category: "earn-premium",
+      category: 'earn-premium',
       message: `Premium trial claimed: ${rewardType}`,
-      level: "info",
+      level: 'info',
       data: {
         userId: status.userId,
         type: rewardType,
@@ -317,16 +317,16 @@ export class EarnPremiumSystem {
     const remaining = this.getTrialTimeRemaining(status);
 
     if (remaining <= 0) {
-      return "Trial expired";
+      return 'Trial expired';
     }
 
     const days = Math.floor(remaining / (24 * 60 * 60 * 1000));
     const hours = Math.floor((remaining % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
 
     if (days > 0) {
-      return `${days} day${days > 1 ? "s" : ""} left`;
+      return `${days} day${days > 1 ? 's' : ''} left`;
     }
-    return `${hours} hour${hours > 1 ? "s" : ""} left`;
+    return `${hours} hour${hours > 1 ? 's' : ''} left`;
   }
 
   /**
@@ -365,7 +365,7 @@ export class EarnPremiumSystem {
       status.trialEndsAt = null;
 
       // Track trial expiration
-      capture("premium_trial_expired", {
+      capture('premium_trial_expired', {
         user_id: status.userId,
       });
     }
@@ -377,9 +377,9 @@ export class EarnPremiumSystem {
       await revenueCatService.syncPurchases();
 
       Sentry.addBreadcrumb({
-        category: "earn-premium",
-        message: "Synced trial with RevenueCat",
-        level: "info",
+        category: 'earn-premium',
+        message: 'Synced trial with RevenueCat',
+        level: 'info',
         data: {
           userId,
           trialDays,
@@ -387,7 +387,7 @@ export class EarnPremiumSystem {
       });
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: "earn-premium", operation: "sync-revenuecat" },
+        tags: { feature: 'earn-premium', operation: 'sync-revenuecat' },
         extra: { userId, trialDays },
       });
     }

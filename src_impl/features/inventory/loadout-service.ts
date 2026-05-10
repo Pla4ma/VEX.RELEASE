@@ -7,17 +7,17 @@
  * @phase 5
  */
 
-import { getUsableConsumables, getActiveBuffs } from "./repository";
-import { LoadoutOptionsSchema, LoadoutItemSchema, ActiveBuffSchema, type InventoryItem, type LoadoutOptions, type LoadoutItem, type ActiveBuff } from "./schemas";
+import { getUsableConsumables, getActiveBuffs } from './repository';
+import { LoadoutOptionsSchema, LoadoutItemSchema, ActiveBuffSchema, type InventoryItem, type LoadoutOptions, type LoadoutItem, type ActiveBuff } from './schemas';
 
 // ============================================================================
 // Compatibility Rules
 // ============================================================================
 
 const MODE_RESTRICTIONS: Record<string, string[]> = {
-  LIGHT_FOCUS: ["DEEP_WORK_BOOST", "SPRINT_BOOST"],
-  DEEP_WORK: ["LIGHT_FOCUS_BOOST"],
-  SPRINT: ["LONG_DURATION_ITEMS"],
+  LIGHT_FOCUS: ['DEEP_WORK_BOOST', 'SPRINT_BOOST'],
+  DEEP_WORK: ['LIGHT_FOCUS_BOOST'],
+  SPRINT: ['LONG_DURATION_ITEMS'],
   CREATIVE: [],
   STUDY: [],
 };
@@ -47,10 +47,10 @@ function checkCompatibility(item: InventoryItem, mode: string, durationSeconds: 
 
   // Check duration restrictions
   if (durationSeconds < DURATION_RESTRICTIONS.SHORT) {
-    if (itemTags.includes("LONG_DURATION_BOOST")) {
+    if (itemTags.includes('LONG_DURATION_BOOST')) {
       return {
         compatible: false,
-        reason: "Too short session for this boost",
+        reason: 'Too short session for this boost',
       };
     }
   }
@@ -59,7 +59,7 @@ function checkCompatibility(item: InventoryItem, mode: string, durationSeconds: 
   if (item.usesRemaining !== null && item.usesRemaining <= 0) {
     return {
       compatible: false,
-      reason: "No uses remaining",
+      reason: 'No uses remaining',
     };
   }
 
@@ -69,7 +69,7 @@ function checkCompatibility(item: InventoryItem, mode: string, durationSeconds: 
 /**
  * Calculate the projected impact of using an item
  */
-function calculateImpact(item: InventoryItem, durationSeconds: number): LoadoutItem["projectedImpact"] {
+function calculateImpact(item: InventoryItem, durationSeconds: number): LoadoutItem['projectedImpact'] {
   const baseMultiplier = 1;
   const metadata = item.metadata ?? {};
 
@@ -140,7 +140,7 @@ function calculateSummary(
  * Get offline restrictions for the session
  */
 function getOfflineRestrictions(): string[] {
-  return ["Wagers require online connection", "Boss bounty claims require sync", "Streak insurance requires verification"];
+  return ['Wagers require online connection', 'Boss bounty claims require sync', 'Streak insurance requires verification'];
 }
 
 // ============================================================================
@@ -166,10 +166,10 @@ export async function buildLoadoutOptions(userId: string, mode: string, duration
     return LoadoutItemSchema.parse({
       id: item.id,
       itemDefinitionId: item.itemDefinitionId,
-      name: (item.metadata?.name as string) ?? "Unknown Item",
-      description: (item.metadata?.description as string) ?? "",
+      name: (item.metadata?.name as string) ?? 'Unknown Item',
+      description: (item.metadata?.description as string) ?? '',
       iconUrl: (item.metadata?.iconUrl as string) ?? undefined,
-      rarity: (item.metadata?.rarity as string) ?? "COMMON",
+      rarity: (item.metadata?.rarity as string) ?? 'COMMON',
       quantity: item.quantity,
       usesRemaining: item.usesRemaining,
       compatible: compatibility.compatible,
@@ -185,8 +185,8 @@ export async function buildLoadoutOptions(userId: string, mode: string, duration
 
     return ActiveBuffSchema.parse({
       id: buff.id,
-      name: (metadata.name as string) ?? "Unknown Buff",
-      description: (metadata.description as string) ?? "",
+      name: (metadata.name as string) ?? 'Unknown Buff',
+      description: (metadata.description as string) ?? '',
       iconUrl: (metadata.iconUrl as string) ?? undefined,
       expiresAt: buff.equippedAt ? (buff.equippedAt as number) + 24 * 60 * 60 * 1000 : null,
       effects: {
@@ -213,9 +213,9 @@ export async function buildLoadoutOptions(userId: string, mode: string, duration
 // Hook for React Components
 // ============================================================================
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 
-const LOADOUT_OPTIONS_KEY = "loadout-options";
+const LOADOUT_OPTIONS_KEY = 'loadout-options';
 
 /**
  * React hook for fetching loadout options

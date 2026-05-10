@@ -10,34 +10,34 @@
  * @phase 1
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { renderHook, waitFor } from "@testing-library/react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import React from "react";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { renderHook, waitFor } from '@testing-library/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React from 'react';
 
 // Mock dependencies
-vi.mock("../repository-daily", () => ({
+vi.mock('../repository/daily', () => ({
   fetchDailyRewardsState: vi.fn(),
   saveDailyRewardClaim: vi.fn(),
 }));
 
-vi.mock("../../../events", () => ({
+vi.mock('../../../events', () => ({
   eventBus: {
     emit: vi.fn(),
   },
 }));
 
-vi.mock("../analytics", () => ({
+vi.mock('../analytics', () => ({
   trackDailyLoginClaimed: vi.fn(),
 }));
 
-import { fetchDailyRewardsState, saveDailyRewardClaim } from "../repository-daily";
-import { eventBus } from "../../../events";
-import { trackDailyLoginClaimed } from "../analytics";
-import { useDailyLoginReward } from "../hooks";
+import { fetchDailyRewardsState, saveDailyRewardClaim } from '../repository/daily';
+import { eventBus } from '../../../events';
+import { trackDailyLoginClaimed } from '../analytics';
+import { useDailyLoginReward } from '../hooks';
 
-describe("useDailyLoginReward", () => {
-  const mockUserId = "user-123";
+describe('useDailyLoginReward', () => {
+  const mockUserId = 'user-123';
   const mockDailyState = {
     user_id: mockUserId,
     current_streak: 3,
@@ -62,8 +62,8 @@ describe("useDailyLoginReward", () => {
     vi.clearAllMocks();
   });
 
-  describe("Query", () => {
-    it("should return null when userId is undefined", async () => {
+  describe('Query', () => {
+    it('should return null when userId is undefined', async () => {
       const { result } = renderHook(() => useDailyLoginReward(undefined), { wrapper });
 
       await waitFor(() => {
@@ -73,7 +73,7 @@ describe("useDailyLoginReward", () => {
       });
     });
 
-    it("should fetch daily reward state when userId is provided", async () => {
+    it('should fetch daily reward state when userId is provided', async () => {
       (fetchDailyRewardsState as ReturnType<typeof vi.fn>).mockResolvedValue({
         data: mockDailyState,
         error: null,
@@ -89,15 +89,15 @@ describe("useDailyLoginReward", () => {
       expect(result.current.dayNumber).toBe(4);
       expect(result.current.reward).toEqual({
         dayNumber: 4,
-        type: "COINS",
+        type: 'COINS',
         amount: 300,
-        label: "300 Coins",
-        icon: "🪙",
+        label: '300 Coins',
+        icon: '🪙',
       });
     });
 
-    it("should handle error state", async () => {
-      const mockError = new Error("Failed to fetch");
+    it('should handle error state', async () => {
+      const mockError = new Error('Failed to fetch');
       (fetchDailyRewardsState as ReturnType<typeof vi.fn>).mockResolvedValue({
         data: null,
         error: mockError,
@@ -111,7 +111,7 @@ describe("useDailyLoginReward", () => {
       });
     });
 
-    it("should show claimed state when user has already claimed today", async () => {
+    it('should show claimed state when user has already claimed today', async () => {
       (fetchDailyRewardsState as ReturnType<typeof vi.fn>).mockResolvedValue({
         data: {
           ...mockDailyState,
@@ -132,7 +132,7 @@ describe("useDailyLoginReward", () => {
     });
   });
 
-  describe("Claim Mutation", () => {
+  describe('Claim Mutation', () => {
     beforeEach(() => {
       (fetchDailyRewardsState as ReturnType<typeof vi.fn>).mockResolvedValue({
         data: mockDailyState,
@@ -140,7 +140,7 @@ describe("useDailyLoginReward", () => {
       });
     });
 
-    it("should successfully claim daily reward", async () => {
+    it('should successfully claim daily reward', async () => {
       (saveDailyRewardClaim as ReturnType<typeof vi.fn>).mockResolvedValue({
         error: null,
       });
@@ -157,23 +157,23 @@ describe("useDailyLoginReward", () => {
         expect.objectContaining({
           user_id: mockUserId,
           day: 4,
-          tier: "DAY_4",
-          items: [{ type: "COINS", amount: 300 }],
+          tier: 'DAY_4',
+          items: [{ type: 'COINS', amount: 300 }],
         }),
       );
 
-      expect(trackDailyLoginClaimed).toHaveBeenCalledWith(mockUserId, 4, "COINS", 300, 4);
+      expect(trackDailyLoginClaimed).toHaveBeenCalledWith(mockUserId, 4, 'COINS', 300, 4);
 
-      expect(eventBus.emit).toHaveBeenCalledWith("rewards:daily_login_claimed", {
+      expect(eventBus.emit).toHaveBeenCalledWith('rewards:daily_login_claimed', {
         userId: mockUserId,
         dayNumber: 4,
-        reward: { type: "COINS", amount: 300 },
+        reward: { type: 'COINS', amount: 300 },
         timestamp: expect.any(Number),
       });
     });
 
-    it("should handle claim errors", async () => {
-      const mockError = new Error("Claim failed");
+    it('should handle claim errors', async () => {
+      const mockError = new Error('Claim failed');
       (saveDailyRewardClaim as ReturnType<typeof vi.fn>).mockResolvedValue({
         error: mockError,
       });
@@ -184,15 +184,15 @@ describe("useDailyLoginReward", () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      await expect(result.current.claim()).rejects.toThrow("Claim failed");
+      await expect(result.current.claim()).rejects.toThrow('Claim failed');
     });
 
-    it("should invalidate query after successful claim", async () => {
+    it('should invalidate query after successful claim', async () => {
       (saveDailyRewardClaim as ReturnType<typeof vi.fn>).mockResolvedValue({
         error: null,
       });
 
-      const invalidateSpy = vi.spyOn(queryClient, "invalidateQueries");
+      const invalidateSpy = vi.spyOn(queryClient, 'invalidateQueries');
 
       const { result } = renderHook(() => useDailyLoginReward(mockUserId), { wrapper });
 
@@ -203,13 +203,13 @@ describe("useDailyLoginReward", () => {
       await result.current.claim();
 
       expect(invalidateSpy).toHaveBeenCalledWith({
-        queryKey: ["daily-login", "user", mockUserId],
+        queryKey: ['daily-login', 'user', mockUserId],
       });
     });
   });
 
-  describe("Reward Day Progression", () => {
-    it("should return day 1 reward for new user", async () => {
+  describe('Reward Day Progression', () => {
+    it('should return day 1 reward for new user', async () => {
       (fetchDailyRewardsState as ReturnType<typeof vi.fn>).mockResolvedValue({
         data: {
           ...mockDailyState,
@@ -226,10 +226,10 @@ describe("useDailyLoginReward", () => {
       });
 
       expect(result.current.dayNumber).toBe(1);
-      expect(result.current.reward?.label).toBe("100 Coins");
+      expect(result.current.reward?.label).toBe('100 Coins');
     });
 
-    it("should return day 7 reward for completed week", async () => {
+    it('should return day 7 reward for completed week', async () => {
       (fetchDailyRewardsState as ReturnType<typeof vi.fn>).mockResolvedValue({
         data: {
           ...mockDailyState,
@@ -246,7 +246,8 @@ describe("useDailyLoginReward", () => {
       });
 
       expect(result.current.dayNumber).toBe(7);
-      expect(result.current.reward?.label).toBe("Premium Chest");
+      expect(result.current.reward?.label).toBe('Premium Chest');
     });
   });
 });
+

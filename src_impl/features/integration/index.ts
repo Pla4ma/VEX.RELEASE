@@ -9,6 +9,7 @@ import { initializeBossRewardsIntegration } from './boss-rewards';
 import { initializeSessionsFeedIntegration } from './sessions-feed';
 import { initializeEconomyFeedIntegration } from './economy-feed';
 import { initializeSocialFeedIntegration } from './social-feed';
+import { initializeFocusScoreIntegration } from '../focus-identity/integration-focus-score';
 
 export interface IntegrationConfig {
   enableProgressionRewards: boolean;
@@ -17,6 +18,7 @@ export interface IntegrationConfig {
   enableSessionsFeed: boolean;
   enableEconomyFeed: boolean;
   enableSocialFeed: boolean;
+  enableFocusIdentity: boolean;
 }
 
 const DEFAULT_CONFIG: IntegrationConfig = {
@@ -26,6 +28,7 @@ const DEFAULT_CONFIG: IntegrationConfig = {
   enableSessionsFeed: true,
   enableEconomyFeed: true,
   enableSocialFeed: true,
+  enableFocusIdentity: true,
 };
 
 let unsubscribers: Array<() => void> = [];
@@ -61,6 +64,10 @@ export function initializeFeatureIntegrations(config: Partial<IntegrationConfig>
 
   if (fullConfig.enableSocialFeed) {
     unsubscribers.push(initializeSocialFeedIntegration());
+  }
+
+  if (fullConfig.enableFocusIdentity) {
+    unsubscribers.push(initializeFocusScoreIntegration());
   }
 
   return cleanupIntegrations;

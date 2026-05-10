@@ -5,8 +5,8 @@
  * Subscriptions handled in integration layer
  */
 
-import { z } from "zod";
-import { MessageCategorySchema, TriggerTypeSchema, RecommendationTypeSchema, CoachUserStateSchema } from "./schemas";
+import { z } from 'zod';
+import { MessageCategorySchema, TriggerTypeSchema, RecommendationTypeSchema, CoachUserStateSchema } from './schemas';
 
 // ============================================================================
 // Event Schemas
@@ -18,7 +18,7 @@ export const CoachMessageGeneratedEventSchema = z.object({
   category: MessageCategorySchema,
   content: z.string(),
   priority: z.number(),
-  deliveryMethod: z.enum(["IN_APP", "PUSH", "BOTH", "DEFERRED"]),
+  deliveryMethod: z.enum(['IN_APP', 'PUSH', 'BOTH', 'DEFERRED']),
   timestamp: z.number(),
 });
 
@@ -56,7 +56,7 @@ export const InterventionTriggeredEventSchema = z.object({
 
 export const BehaviorSignalDetectedEventSchema = z.object({
   userId: z.string().uuid(),
-  signalType: z.enum(["SESSION_FREQUENCY", "SESSION_QUALITY_TREND", "STREAK_MAINTENANCE_RATE", "PREFERRED_TIME_OF_DAY", "FOCUS_DURATION_PREFERENCE", "DIFFICULTY_PREFERENCE", "SOCIAL_ENGAGEMENT", "CHALLENGE_COMPLETION_RATE", "BOSS_PARTICIPATION", "MORNING_PERSON", "NIGHT_OWL", "WEEKEND_WARRIOR", "CONSISTENCY_SCORE", "RESPONSIVENESS_TO_REMINDERS", "COMEBACK_VELOCITY"]),
+  signalType: z.enum(['SESSION_FREQUENCY', 'SESSION_QUALITY_TREND', 'STREAK_MAINTENANCE_RATE', 'PREFERRED_TIME_OF_DAY', 'FOCUS_DURATION_PREFERENCE', 'DIFFICULTY_PREFERENCE', 'SOCIAL_ENGAGEMENT', 'CHALLENGE_COMPLETION_RATE', 'BOSS_PARTICIPATION', 'MORNING_PERSON', 'NIGHT_OWL', 'WEEKEND_WARRIOR', 'CONSISTENCY_SCORE', 'RESPONSIVENESS_TO_REMINDERS', 'COMEBACK_VELOCITY']),
   value: z.number(),
   confidence: z.number(),
   timestamp: z.number(),
@@ -66,7 +66,7 @@ export const StreakRiskDetectedEventSchema = z.object({
   userId: z.string().uuid(),
   currentStreak: z.number(),
   hoursSinceLastSession: z.number(),
-  riskLevel: z.enum(["NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"]),
+  riskLevel: z.enum(['NONE', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL']),
   detectedAt: z.number(),
 });
 
@@ -92,7 +92,7 @@ export const RecommendationGeneratedEventSchema = z.object({
   recommendationId: z.string().uuid(),
   type: RecommendationTypeSchema,
   suggestedDuration: z.number(),
-  suggestedDifficulty: z.enum(["EASY", "NORMAL", "CHALLENGING", "PUSH"]),
+  suggestedDifficulty: z.enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH']),
   reasoning: z.string(),
   generatedAt: z.number(),
 });
@@ -135,18 +135,18 @@ export type CoachPreferencesUpdatedEvent = z.infer<typeof CoachPreferencesUpdate
 // ============================================================================
 
 export const AI_COACH_EVENT_CHANNELS = {
-  MESSAGE_GENERATED: "coach:messageGenerated",
-  MESSAGE_DELIVERED: "coach:messageDelivered",
-  MESSAGE_ACTION_TAKEN: "coach:messageActionTaken",
-  STATE_CHANGED: "coach:stateChanged",
-  INTERVENTION_TRIGGERED: "coach:interventionTriggered",
-  BEHAVIOR_SIGNAL_DETECTED: "coach:behaviorSignalDetected",
-  STREAK_RISK_DETECTED: "coach:streakRiskDetected",
-  COMEBACK_ACTIVATED: "coach:comebackActivated",
-  COMEBACK_COMPLETED: "coach:comebackCompleted",
-  RECOMMENDATION_GENERATED: "coach:recommendationGenerated",
-  DIFFICULTY_ADJUSTED: "coach:difficultyAdjusted",
-  PREFERENCES_UPDATED: "coach:preferencesUpdated",
+  MESSAGE_GENERATED: 'coach:messageGenerated',
+  MESSAGE_DELIVERED: 'coach:messageDelivered',
+  MESSAGE_ACTION_TAKEN: 'coach:messageActionTaken',
+  STATE_CHANGED: 'coach:stateChanged',
+  INTERVENTION_TRIGGERED: 'coach:interventionTriggered',
+  BEHAVIOR_SIGNAL_DETECTED: 'coach:behaviorSignalDetected',
+  STREAK_RISK_DETECTED: 'coach:streakRiskDetected',
+  COMEBACK_ACTIVATED: 'coach:comebackActivated',
+  COMEBACK_COMPLETED: 'coach:comebackCompleted',
+  RECOMMENDATION_GENERATED: 'coach:recommendationGenerated',
+  DIFFICULTY_ADJUSTED: 'coach:difficultyAdjusted',
+  PREFERENCES_UPDATED: 'coach:preferencesUpdated',
 } as const;
 
 // ============================================================================
@@ -231,7 +231,7 @@ export function createCoachMessageGeneratedEvent(userId: string, messageId: stri
     category: MessageCategorySchema.parse(category),
     content,
     priority,
-    deliveryMethod: z.enum(["IN_APP", "PUSH", "BOTH", "DEFERRED"]).parse(deliveryMethod),
+    deliveryMethod: z.enum(['IN_APP', 'PUSH', 'BOTH', 'DEFERRED']).parse(deliveryMethod),
     timestamp: Date.now(),
   };
 }
@@ -251,7 +251,7 @@ export function createStreakRiskDetectedEvent(userId: string, currentStreak: num
     userId,
     currentStreak,
     hoursSinceLastSession,
-    riskLevel: z.enum(["NONE", "LOW", "MEDIUM", "HIGH", "CRITICAL"]).parse(riskLevel),
+    riskLevel: z.enum(['NONE', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).parse(riskLevel),
     detectedAt: Date.now(),
   };
 }
@@ -305,16 +305,16 @@ export function createInterventionExecutedEvent(userId: string, interventionId: 
 export type AICoachEventHandler<T extends keyof AICoachEventPayloadMap> = (payload: AICoachEventPayloadMap[T]) => void | Promise<void>;
 
 export interface AICoachEventHandlers {
-  onMessageGenerated?: AICoachEventHandler<"coach:messageGenerated">;
-  onMessageDelivered?: AICoachEventHandler<"coach:messageDelivered">;
-  onMessageActionTaken?: AICoachEventHandler<"coach:messageActionTaken">;
-  onStateChanged?: AICoachEventHandler<"coach:stateChanged">;
-  onInterventionTriggered?: AICoachEventHandler<"coach:interventionTriggered">;
-  onBehaviorSignalDetected?: AICoachEventHandler<"coach:behaviorSignalDetected">;
-  onStreakRiskDetected?: AICoachEventHandler<"coach:streakRiskDetected">;
-  onComebackActivated?: AICoachEventHandler<"coach:comebackActivated">;
-  onComebackCompleted?: AICoachEventHandler<"coach:comebackCompleted">;
-  onRecommendationGenerated?: AICoachEventHandler<"coach:recommendationGenerated">;
-  onDifficultyAdjusted?: AICoachEventHandler<"coach:difficultyAdjusted">;
-  onPreferencesUpdated?: AICoachEventHandler<"coach:preferencesUpdated">;
+  onMessageGenerated?: AICoachEventHandler<'coach:messageGenerated'>;
+  onMessageDelivered?: AICoachEventHandler<'coach:messageDelivered'>;
+  onMessageActionTaken?: AICoachEventHandler<'coach:messageActionTaken'>;
+  onStateChanged?: AICoachEventHandler<'coach:stateChanged'>;
+  onInterventionTriggered?: AICoachEventHandler<'coach:interventionTriggered'>;
+  onBehaviorSignalDetected?: AICoachEventHandler<'coach:behaviorSignalDetected'>;
+  onStreakRiskDetected?: AICoachEventHandler<'coach:streakRiskDetected'>;
+  onComebackActivated?: AICoachEventHandler<'coach:comebackActivated'>;
+  onComebackCompleted?: AICoachEventHandler<'coach:comebackCompleted'>;
+  onRecommendationGenerated?: AICoachEventHandler<'coach:recommendationGenerated'>;
+  onDifficultyAdjusted?: AICoachEventHandler<'coach:difficultyAdjusted'>;
+  onPreferencesUpdated?: AICoachEventHandler<'coach:preferencesUpdated'>;
 }

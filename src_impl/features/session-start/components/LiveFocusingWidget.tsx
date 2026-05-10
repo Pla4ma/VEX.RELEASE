@@ -7,14 +7,20 @@
  * @phase 10.6
  */
 
+<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import { Pressable } from "react-native";
 import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming, FadeIn } from "react-native-reanimated";
+=======
+import React, { useState, useEffect, useCallback } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming, withDelay, FadeIn } from 'react-native-reanimated';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Avatar } from "../../../components/Avatar";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Avatar } from '../../../components/Avatar';
+import { useTheme } from '../../../theme';
 
 // ============================================================================
 // Types
@@ -30,7 +36,7 @@ export interface LiveFocusingData {
   /** Sample of avatars to display */
   sampleAvatars?: Array<{ url?: string; initials: string }>;
   /** Trend: 'up' | 'down' | 'stable' */
-  trend?: "up" | "down" | "stable";
+  trend?: 'up' | 'down' | 'stable';
   /** Percentage change from last hour */
   trendPercent?: number;
 }
@@ -70,7 +76,7 @@ function PulsingLiveDot(): JSX.Element {
           width: 8,
           height: 8,
           borderRadius: 4,
-          backgroundColor: "#22C55E",
+          backgroundColor: '#22C55E',
         },
         animatedStyle,
       ]}
@@ -108,7 +114,7 @@ function AvatarStack({ avatars, maxDisplay = 4 }: { avatars?: Array<{ url?: stri
               zIndex: displayAvatars.length - index,
             }}
           >
-            <Box width={32} height={32} borderRadius="full" borderWidth={2} borderColor="background.primary" style={{ overflow: "hidden" }}>
+            <Box width={32} height={32} borderRadius="full" borderWidth={2} borderColor="background.primary" style={{ overflow: 'hidden' }}>
               <Avatar size="sm" source={avatar.url ? { uri: avatar.url } : undefined} name={avatar.initials} />
             </Box>
           </Box>
@@ -174,10 +180,10 @@ function useCountUp(target: number, duration: number = 1000): number {
  */
 function formatNumber(num: number): string {
   if (num >= 1000000) {
-    return (num / 1000000).toFixed(1) + "M";
+    return (num / 1000000).toFixed(1) + 'M';
   }
   if (num >= 1000) {
-    return (num / 1000).toFixed(1) + "K";
+    return (num / 1000).toFixed(1) + 'K';
   }
   return num.toLocaleString();
 }
@@ -185,19 +191,28 @@ function formatNumber(num: number): string {
 /**
  * Trend indicator
  */
-function TrendIndicator({ trend, percent }: { trend: "up" | "down" | "stable"; percent?: number }): JSX.Element {
+function TrendIndicator({ trend, percent }: { trend: 'up' | 'down' | 'stable'; percent?: number }): JSX.Element {
   const icons = {
-    up: "📈",
-    down: "📉",
-    stable: "➡️",
+    up: '📈',
+    down: '📉',
+    stable: '➡️',
   };
 
+<<<<<<< HEAD
+=======
+  const colors = {
+    up: '#22C55E',
+    down: '#EF4444',
+    stable: '#94A3B8',
+  };
+
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   return (
     <Box flexDirection="row" alignItems="center" gap="xs">
       <Text fontSize={12}>{icons[trend]}</Text>
       {percent !== undefined && percent > 0 && (
-        <Text fontSize={12} color={trend === "up" ? "success.DEFAULT" : trend === "down" ? "error.DEFAULT" : "text.tertiary"}>
-          {trend === "up" ? "+" : ""}
+        <Text fontSize={12} color={trend === 'up' ? 'success.DEFAULT' : trend === 'down' ? 'error.DEFAULT' : 'text.tertiary'}>
+          {trend === 'up' ? '+' : ''}
           {percent}%
         </Text>
       )}
@@ -247,7 +262,7 @@ export function LiveFocusingWidget({ data, onPress, compact = false, isLoading: 
           borderColor="border.light"
           gap="lg"
           style={{
-            shadowColor: "#000",
+            shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.05,
             shadowRadius: 4,

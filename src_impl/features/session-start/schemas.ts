@@ -10,7 +10,7 @@ export const SessionStakeSchema = z.object({
 
   // User choices
   selectedDurationSeconds: z.number().min(60).max(14400),
-  selectedMode: z.enum(['LIGHT_FOCUS', 'DEEP_WORK', 'SPRINT', 'CREATIVE', 'STUDY']),
+  selectedMode: z.enum(['LIGHT_FOCUS', 'DEEP_WORK', 'SPRINT', 'CREATIVE', 'STUDY', 'STARTER']),
   selectedLoadout: z.array(z.string().uuid()).optional(),
 
   // Boss stakes

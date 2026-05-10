@@ -7,35 +7,35 @@
  * @phase 2 - Deepening: Validation layer
  */
 
-import { z } from "zod";
-import { createDebugger } from "../../../utils/debug";
-import type { FocusGoal, FocusDuration } from "../types";
+import { z } from 'zod';
+import { createDebugger } from '../../../utils/debug';
+import type { FocusGoal, FocusDuration } from '../types';
 
-const debug = createDebugger("onboarding:validation");
+const debug = createDebugger('onboarding:validation');
 
 // ============================================================================
 // Schemas
 // ============================================================================
 
-const ValidGoals = ["WORK", "STUDY", "CREATIVE", "PERSONAL"] as const;
+const ValidGoals = ['WORK', 'STUDY', 'CREATIVE', 'PERSONAL'] as const;
 const ValidDurations = [15, 25, 45, 60] as const;
 
 export const OnboardingGoalSchema = z.enum(ValidGoals, {
-  errorMap: () => ({ message: "Please select a valid focus goal" }),
+  errorMap: () => ({ message: 'Please select a valid focus goal' }),
 });
 
 export const OnboardingDurationSchema = z.number().refine((val): val is FocusDuration => ValidDurations.includes(val as FocusDuration), {
-  message: "Please select a valid focus duration (15, 25, 45, or 60 minutes)",
+  message: 'Please select a valid focus duration (15, 25, 45, or 60 minutes)',
 });
 
 export const OnboardingNameSchema = z
   .string()
-  .min(2, "Name must be at least 2 characters")
-  .max(30, "Name must be 30 characters or less")
-  .regex(/^[a-zA-Z0-9\s_-]+$/, "Name can only contain letters, numbers, spaces, hyphens, and underscores")
+  .min(2, 'Name must be at least 2 characters')
+  .max(30, 'Name must be 30 characters or less')
+  .regex(/^[a-zA-Z0-9\s_-]+$/, 'Name can only contain letters, numbers, spaces, hyphens, and underscores')
   .transform((val) => val.trim());
 
-export const OnboardingStepSchema = z.enum(["WELCOME", "GOAL_SETTING", "FOCUS_TIME", "NAME_SETUP", "FIRST_SESSION_CTA"]);
+export const OnboardingStepSchema = z.enum(['WELCOME', 'GOAL_SETTING', 'FOCUS_TIME', 'NAME_SETUP', 'FIRST_SESSION_CTA']);
 
 export const OnboardingStateSchema = z.object({
   isOnboarded: z.boolean(),
@@ -87,9 +87,9 @@ export const GoalValidators = {
 
     if (!parsed.success) {
       result.errors.push({
-        field: "goal",
-        message: parsed.error.errors[0]?.message || "Invalid goal selected",
-        code: "INVALID_GOAL",
+        field: 'goal',
+        message: parsed.error.errors[0]?.message || 'Invalid goal selected',
+        code: 'INVALID_GOAL',
       });
       return result;
     }
@@ -97,7 +97,7 @@ export const GoalValidators = {
     result.data = parsed.data;
     result.success = true;
 
-    debug.info("Goal validated", { goal: parsed.data });
+    debug.info('Goal validated', { goal: parsed.data });
     return result;
   },
 
@@ -105,17 +105,17 @@ export const GoalValidators = {
     const matches: FocusGoal[] = [];
     const partial = partialGoal.toLowerCase();
 
-    if ("work".includes(partial) || partial.includes("work")) {
-      matches.push("WORK");
+    if ('work'.includes(partial) || partial.includes('work')) {
+      matches.push('WORK');
     }
-    if ("study".includes(partial) || partial.includes("study")) {
-      matches.push("STUDY");
+    if ('study'.includes(partial) || partial.includes('study')) {
+      matches.push('STUDY');
     }
-    if ("creative".includes(partial) || partial.includes("creative")) {
-      matches.push("CREATIVE");
+    if ('creative'.includes(partial) || partial.includes('creative')) {
+      matches.push('CREATIVE');
     }
-    if ("personal".includes(partial) || partial.includes("personal")) {
-      matches.push("PERSONAL");
+    if ('personal'.includes(partial) || partial.includes('personal')) {
+      matches.push('PERSONAL');
     }
 
     return matches;
@@ -131,11 +131,11 @@ export const DurationValidators = {
     };
 
     // Check if it's a valid number
-    if (typeof duration !== "number" || isNaN(duration)) {
+    if (typeof duration !== 'number' || isNaN(duration)) {
       result.errors.push({
-        field: "duration",
-        message: "Duration must be a valid number",
-        code: "INVALID_DURATION_TYPE",
+        field: 'duration',
+        message: 'Duration must be a valid number',
+        code: 'INVALID_DURATION_TYPE',
       });
       return result;
     }
@@ -146,9 +146,9 @@ export const DurationValidators = {
       const closest = ValidDurations.reduce((prev, curr) => (Math.abs(curr - duration) < Math.abs(prev - duration) ? curr : prev));
 
       result.errors.push({
-        field: "duration",
+        field: 'duration',
         message: `Invalid duration. Did you mean ${closest} minutes?`,
-        code: "INVALID_DURATION_VALUE",
+        code: 'INVALID_DURATION_VALUE',
       });
 
       result.suggestions = ValidDurations.map((d) => `${d} minutes`);
@@ -161,19 +161,19 @@ export const DurationValidators = {
     // Add warnings for extreme durations
     if (duration === 15) {
       result.warnings.push({
-        field: "duration",
-        message: "15-minute sessions are great for starting out, but consider longer sessions for deep work",
-        code: "SHORT_DURATION_WARNING",
+        field: 'duration',
+        message: '15-minute sessions are great for starting out, but consider longer sessions for deep work',
+        code: 'SHORT_DURATION_WARNING',
       });
     } else if (duration === 60) {
       result.warnings.push({
-        field: "duration",
-        message: "60-minute sessions require strong focus stamina. Consider starting with 25 or 45 minutes.",
-        code: "LONG_DURATION_WARNING",
+        field: 'duration',
+        message: '60-minute sessions require strong focus stamina. Consider starting with 25 or 45 minutes.',
+        code: 'LONG_DURATION_WARNING',
       });
     }
 
-    debug.info("Duration validated", { duration });
+    debug.info('Duration validated', { duration });
     return result;
   },
 
@@ -196,11 +196,11 @@ export const NameValidators = {
       warnings: [],
     };
 
-    if (typeof name !== "string") {
+    if (typeof name !== 'string') {
       result.errors.push({
-        field: "name",
-        message: "Name must be a string",
-        code: "INVALID_NAME_TYPE",
+        field: 'name',
+        message: 'Name must be a string',
+        code: 'INVALID_NAME_TYPE',
       });
       return result;
     }
@@ -209,27 +209,27 @@ export const NameValidators = {
 
     if (trimmed.length === 0) {
       result.errors.push({
-        field: "name",
-        message: "Name is required",
-        code: "NAME_REQUIRED",
+        field: 'name',
+        message: 'Name is required',
+        code: 'NAME_REQUIRED',
       });
       return result;
     }
 
     if (trimmed.length < 2) {
       result.errors.push({
-        field: "name",
-        message: "Name must be at least 2 characters",
-        code: "NAME_TOO_SHORT",
+        field: 'name',
+        message: 'Name must be at least 2 characters',
+        code: 'NAME_TOO_SHORT',
       });
       return result;
     }
 
     if (trimmed.length > 30) {
       result.errors.push({
-        field: "name",
-        message: "Name must be 30 characters or less",
-        code: "NAME_TOO_LONG",
+        field: 'name',
+        message: 'Name must be 30 characters or less',
+        code: 'NAME_TOO_LONG',
       });
       return result;
     }
@@ -237,9 +237,9 @@ export const NameValidators = {
     // Check for invalid characters
     if (!/^[a-zA-Z0-9\s_-]+$/.test(trimmed)) {
       result.errors.push({
-        field: "name",
-        message: "Name can only contain letters, numbers, spaces, hyphens, and underscores",
-        code: "NAME_INVALID_CHARACTERS",
+        field: 'name',
+        message: 'Name can only contain letters, numbers, spaces, hyphens, and underscores',
+        code: 'NAME_INVALID_CHARACTERS',
       });
       return result;
     }
@@ -250,23 +250,23 @@ export const NameValidators = {
     // Warnings
     if (trimmed.length < 4) {
       result.warnings.push({
-        field: "name",
-        message: "Consider using a longer name for better personalization",
-        code: "NAME_VERY_SHORT",
+        field: 'name',
+        message: 'Consider using a longer name for better personalization',
+        code: 'NAME_VERY_SHORT',
       });
     }
 
     // Check for common test names
-    const testNames = ["test", "user", "name", "abc", "123"];
+    const testNames = ['test', 'user', 'name', 'abc', '123'];
     if (testNames.some((tn) => trimmed.toLowerCase().includes(tn))) {
       result.warnings.push({
-        field: "name",
-        message: "This looks like a test name. Consider using your real name for a better experience.",
-        code: "NAME_LIKE_TEST_DATA",
+        field: 'name',
+        message: 'This looks like a test name. Consider using your real name for a better experience.',
+        code: 'NAME_LIKE_TEST_DATA',
       });
     }
 
-    debug.info("Name validated", { name: trimmed });
+    debug.info('Name validated', { name: trimmed });
     return result;
   },
 
@@ -297,11 +297,11 @@ export function validateOnboardingStep(step: string, data: Record<string, unknow
   };
 
   switch (step) {
-    case "WELCOME":
+    case 'WELCOME':
       // No validation needed for welcome
       break;
 
-    case "GOAL_SETTING":
+    case 'GOAL_SETTING':
       const goalResult = GoalValidators.validate(data.goal);
       if (!goalResult.success) {
         result.success = false;
@@ -309,7 +309,7 @@ export function validateOnboardingStep(step: string, data: Record<string, unknow
       }
       break;
 
-    case "FOCUS_TIME":
+    case 'FOCUS_TIME':
       const durationResult = DurationValidators.validate(data.focusDuration);
       if (!durationResult.success) {
         result.success = false;
@@ -321,15 +321,15 @@ export function validateOnboardingStep(step: string, data: Record<string, unknow
         const recommended = DurationValidators.recommendForGoal(data.goal as FocusGoal);
         if (!recommended.includes(durationResult.data!)) {
           result.warnings.push({
-            field: "focusDuration",
-            message: `For ${data.goal} goals, we recommend ${recommended.slice(0, 2).join(" or ")} minute sessions`,
-            code: "DURATION_NOT_RECOMMENDED_FOR_GOAL",
+            field: 'focusDuration',
+            message: `For ${data.goal} goals, we recommend ${recommended.slice(0, 2).join(' or ')} minute sessions`,
+            code: 'DURATION_NOT_RECOMMENDED_FOR_GOAL',
           });
         }
       }
       break;
 
-    case "NAME_SETUP":
+    case 'NAME_SETUP':
       const nameResult = NameValidators.validate(data.displayName);
       if (!nameResult.success) {
         result.success = false;
@@ -337,15 +337,15 @@ export function validateOnboardingStep(step: string, data: Record<string, unknow
       }
       break;
 
-    case "FIRST_SESSION_CTA":
+    case 'FIRST_SESSION_CTA':
       // Check all previous data is present
-      const requiredFields = ["goal", "focusDuration", "displayName"];
+      const requiredFields = ['goal', 'focusDuration', 'displayName'];
       for (const field of requiredFields) {
         if (!data[field]) {
           result.warnings.push({
             field,
             message: `${field} is missing from onboarding data`,
-            code: "MISSING_ONBOARDING_DATA",
+            code: 'MISSING_ONBOARDING_DATA',
           });
         }
       }
@@ -353,9 +353,9 @@ export function validateOnboardingStep(step: string, data: Record<string, unknow
 
     default:
       result.errors.push({
-        field: "step",
+        field: 'step',
         message: `Unknown onboarding step: ${step}`,
-        code: "UNKNOWN_STEP",
+        code: 'UNKNOWN_STEP',
       });
       result.success = false;
   }
@@ -402,9 +402,9 @@ export function validateCompleteOnboarding(state: Record<string, unknown>): Vali
     const recommended = DurationValidators.recommendForGoal(goalResult.data!);
     if (!recommended.includes(durationResult.data!)) {
       result.warnings.push({
-        field: "consistency",
+        field: 'consistency',
         message: `Your chosen duration may not be optimal for ${goalResult.data} goals`,
-        code: "GOAL_DURATION_MISMATCH",
+        code: 'GOAL_DURATION_MISMATCH',
       });
     }
   }
@@ -418,17 +418,17 @@ export function validateCompleteOnboarding(state: Record<string, unknown>): Vali
 
     if (duration < 5000) {
       result.warnings.push({
-        field: "timing",
-        message: "Onboarding completed very quickly. Make sure you understood all the options.",
-        code: "RAPID_COMPLETION",
+        field: 'timing',
+        message: 'Onboarding completed very quickly. Make sure you understood all the options.',
+        code: 'RAPID_COMPLETION',
       });
     }
 
     if (duration > 30 * 60 * 1000) {
       result.warnings.push({
-        field: "timing",
-        message: "Onboarding took over 30 minutes. You can always change these settings later.",
-        code: "SLOW_COMPLETION",
+        field: 'timing',
+        message: 'Onboarding took over 30 minutes. You can always change these settings later.',
+        code: 'SLOW_COMPLETION',
       });
     }
   }
@@ -442,7 +442,7 @@ export function validateCompleteOnboarding(state: Record<string, unknown>): Vali
     };
   }
 
-  debug.info("Complete onboarding validation", {
+  debug.info('Complete onboarding validation', {
     success: result.success,
     errors: result.errors.length,
     warnings: result.warnings.length,
@@ -457,29 +457,29 @@ export function validateCompleteOnboarding(state: Record<string, unknown>): Vali
 
 export function getNextRecommendedStep(currentStep: string, state: Record<string, unknown>): { step: string; reason: string } | null {
   switch (currentStep) {
-    case "WELCOME":
-      return { step: "GOAL_SETTING", reason: "First, let us understand your focus goals" };
+    case 'WELCOME':
+      return { step: 'GOAL_SETTING', reason: 'First, let us understand your focus goals' };
 
-    case "GOAL_SETTING":
+    case 'GOAL_SETTING':
       if (!state.goal) {
         return null; // Can't proceed without goal
       }
-      return { step: "FOCUS_TIME", reason: "Now let us set your preferred focus duration" };
+      return { step: 'FOCUS_TIME', reason: 'Now let us set your preferred focus duration' };
 
-    case "FOCUS_TIME":
+    case 'FOCUS_TIME':
       if (!state.focusDuration) {
         return null; // Can't proceed without duration
       }
       // Skip name setup if they chose to skip
       if (state.skipName) {
-        return { step: "FIRST_SESSION_CTA", reason: "Ready to start your first session!" };
+        return { step: 'FIRST_SESSION_CTA', reason: 'Ready to start your first session!' };
       }
-      return { step: "NAME_SETUP", reason: "Personalize your experience with a display name" };
+      return { step: 'NAME_SETUP', reason: 'Personalize your experience with a display name' };
 
-    case "NAME_SETUP":
-      return { step: "FIRST_SESSION_CTA", reason: "You are all set! Start your first focus session" };
+    case 'NAME_SETUP':
+      return { step: 'FIRST_SESSION_CTA', reason: 'You are all set! Start your first focus session' };
 
-    case "FIRST_SESSION_CTA":
+    case 'FIRST_SESSION_CTA':
       return null; // End of onboarding
 
     default:
@@ -489,29 +489,29 @@ export function getNextRecommendedStep(currentStep: string, state: Record<string
 
 export function canSkipStep(step: string, state: Record<string, unknown>): { canSkip: boolean; reason: string } {
   switch (step) {
-    case "WELCOME":
-      return { canSkip: true, reason: "You can skip the welcome, but we recommend viewing it" };
+    case 'WELCOME':
+      return { canSkip: true, reason: 'You can skip the welcome, but we recommend viewing it' };
 
-    case "GOAL_SETTING":
-      return { canSkip: false, reason: "A focus goal is required to personalize your experience" };
+    case 'GOAL_SETTING':
+      return { canSkip: false, reason: 'A focus goal is required to personalize your experience' };
 
-    case "FOCUS_TIME":
-      return { canSkip: false, reason: "Focus duration is required for session setup" };
+    case 'FOCUS_TIME':
+      return { canSkip: false, reason: 'Focus duration is required for session setup' };
 
-    case "NAME_SETUP":
+    case 'NAME_SETUP':
       return {
         canSkip: true,
-        reason: "You can skip this and we will use a default name",
+        reason: 'You can skip this and we will use a default name',
       };
 
-    case "FIRST_SESSION_CTA":
+    case 'FIRST_SESSION_CTA':
       return {
         canSkip: true,
-        reason: "You can skip and explore the app first",
+        reason: 'You can skip and explore the app first',
       };
 
     default:
-      return { canSkip: false, reason: "Unknown step" };
+      return { canSkip: false, reason: 'Unknown step' };
   }
 }
 

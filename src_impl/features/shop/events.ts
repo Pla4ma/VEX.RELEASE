@@ -4,7 +4,7 @@
  * Event definitions for in-game shop, virtual economy, and marketplace features.
  */
 
-import { ShopEvent } from "./types";
+import { ShopEvent } from './types';
 
 // Base Event Interface
 export interface BaseShopEvent {
@@ -24,7 +24,7 @@ export interface EventMetadata {
 }
 
 export interface DeviceInfo {
-  type: "mobile" | "tablet" | "desktop" | "web";
+  type: 'mobile' | 'tablet' | 'desktop' | 'web';
   os: string;
   version: string;
   appVersion?: string;
@@ -32,11 +32,11 @@ export interface DeviceInfo {
 
 // Shop Lifecycle Events
 export interface ShopVisitedEvent extends BaseShopEvent {
-  type: "shop_visited";
+  type: 'shop_visited';
   data: {
     shopId: string;
     shopType: string;
-    visitType: "browse" | "search" | "specific" | "promotion";
+    visitType: 'browse' | 'search' | 'specific' | 'promotion';
     enteredAt: Date;
     context: {
       source: string;
@@ -54,7 +54,7 @@ export interface ShopVisitedEvent extends BaseShopEvent {
 }
 
 export interface ShopViewedEvent extends BaseShopEvent {
-  type: "shop_viewed";
+  type: 'shop_viewed';
   data: {
     shopId: string;
     viewDuration: number;
@@ -80,12 +80,12 @@ export interface ShopViewedEvent extends BaseShopEvent {
 }
 
 export interface ShopLeftEvent extends BaseShopEvent {
-  type: "shop_left";
+  type: 'shop_left';
   data: {
     shopId: string;
     leftAt: Date;
     totalDuration: number;
-    reason: "purchase" | "no_purchase" | "timeout" | "error" | "interruption";
+    reason: 'purchase' | 'no_purchase' | 'timeout' | 'error' | 'interruption';
     outcomes: {
       itemsViewed: number;
       itemsAdded: number;
@@ -103,7 +103,7 @@ export interface ShopLeftEvent extends BaseShopEvent {
 
 // Product Events
 export interface ProductViewedEvent extends BaseShopEvent {
-  type: "product_viewed";
+  type: 'product_viewed';
   data: {
     productId: string;
     productName: string;
@@ -133,7 +133,7 @@ export interface ProductViewedEvent extends BaseShopEvent {
 }
 
 export interface ProductAddedToCartEvent extends BaseShopEvent {
-  type: "product_added_to_cart";
+  type: 'product_added_to_cart';
   data: {
     productId: string;
     productName: string;
@@ -162,13 +162,13 @@ export interface ProductAddedToCartEvent extends BaseShopEvent {
 }
 
 export interface ProductRemovedFromCartEvent extends BaseShopEvent {
-  type: "product_removed_from_cart";
+  type: 'product_removed_from_cart';
   data: {
     productId: string;
     productName: string;
     quantity: number;
     removedAt: Date;
-    reason: "change_mind" | "budget" | "found_better" | "technical" | "timeout";
+    reason: 'change_mind' | 'budget' | 'found_better' | 'technical' | 'timeout';
     context: {
       timeInCart: number;
       priceChange: boolean;
@@ -184,13 +184,13 @@ export interface ProductRemovedFromCartEvent extends BaseShopEvent {
 }
 
 export interface ProductWishlistedEvent extends BaseShopEvent {
-  type: "product_wishlisted";
+  type: 'product_wishlisted';
   data: {
     productId: string;
     productName: string;
     productType: string;
     wishlistedAt: Date;
-    reason: "future_purchase" | "price_drop" | "budget" | "research" | "gift";
+    reason: 'future_purchase' | 'price_drop' | 'budget' | 'research' | 'gift';
     context: {
       price: number;
       discount: number;
@@ -207,9 +207,9 @@ export interface ProductWishlistedEvent extends BaseShopEvent {
 
 // Cart Events
 export interface CartUpdatedEvent extends BaseShopEvent {
-  type: "cart_updated";
+  type: 'cart_updated';
   data: {
-    updateType: "add" | "remove" | "modify" | "clear" | "restore";
+    updateType: 'add' | 'remove' | 'modify' | 'clear' | 'restore';
     updatedAt: Date;
     items: {
       productId: string;
@@ -233,10 +233,10 @@ export interface CartUpdatedEvent extends BaseShopEvent {
 }
 
 export interface CartAbandonedEvent extends BaseShopEvent {
-  type: "cart_abandoned";
+  type: 'cart_abandoned';
   data: {
     abandonedAt: Date;
-    abandonmentReason: "timeout" | "price" | "technical" | "distraction" | "decision";
+    abandonmentReason: 'timeout' | 'price' | 'technical' | 'distraction' | 'decision';
     cartValue: number;
     itemCount: number;
     timeSinceLastActivity: number;
@@ -255,10 +255,10 @@ export interface CartAbandonedEvent extends BaseShopEvent {
 }
 
 export interface CartRecoveredEvent extends BaseShopEvent {
-  type: "cart_recovered";
+  type: 'cart_recovered';
   data: {
     recoveredAt: Date;
-    recoveryMethod: "email" | "notification" | "promotion" | "return_visit";
+    recoveryMethod: 'email' | 'notification' | 'promotion' | 'return_visit';
     originalAbandonment: Date;
     timeSinceAbandonment: number;
     incentive: {
@@ -276,7 +276,7 @@ export interface CartRecoveredEvent extends BaseShopEvent {
 
 // Transaction Events
 export interface PurchaseInitiatedEvent extends BaseShopEvent {
-  type: "purchase_initiated";
+  type: 'purchase_initiated';
   data: {
     transactionId: string;
     initiatedAt: Date;
@@ -307,12 +307,12 @@ export interface PurchaseInitiatedEvent extends BaseShopEvent {
 }
 
 export interface PurchaseCompletedEvent extends BaseShopEvent {
-  type: "purchase_completed";
+  type: 'purchase_completed';
   data: {
     transactionId: string;
     completedAt: Date;
     completionTime: number;
-    status: "success" | "failed" | "pending" | "cancelled";
+    status: 'success' | 'failed' | 'pending' | 'cancelled';
     items: {
       productId: string;
       quantity: number;
@@ -342,12 +342,12 @@ export interface PurchaseCompletedEvent extends BaseShopEvent {
 }
 
 export interface PurchaseFailedEvent extends BaseShopEvent {
-  type: "purchase_failed";
+  type: 'purchase_failed';
   data: {
     transactionId: string;
     failedAt: Date;
     failureReason: string;
-    failureType: "payment" | "inventory" | "technical" | "validation" | "fraud";
+    failureType: 'payment' | 'inventory' | 'technical' | 'validation' | 'fraud';
     errorCode: string;
     errorMessage: string;
     items: {
@@ -369,13 +369,13 @@ export interface PurchaseFailedEvent extends BaseShopEvent {
 }
 
 export interface PurchaseRefundedEvent extends BaseShopEvent {
-  type: "purchase_refunded";
+  type: 'purchase_refunded';
   data: {
     transactionId: string;
     refundId: string;
     refundedAt: Date;
     refundReason: string;
-    refundType: "full" | "partial" | "exchange" | "store_credit";
+    refundType: 'full' | 'partial' | 'exchange' | 'store_credit';
     amount: number;
     items: {
       productId: string;
@@ -398,7 +398,7 @@ export interface PurchaseRefundedEvent extends BaseShopEvent {
 
 // Promotion Events
 export interface PromotionViewedEvent extends BaseShopEvent {
-  type: "promotion_viewed";
+  type: 'promotion_viewed';
   data: {
     promotionId: string;
     promotionName: string;
@@ -426,7 +426,7 @@ export interface PromotionViewedEvent extends BaseShopEvent {
 }
 
 export interface PromotionAppliedEvent extends BaseShopEvent {
-  type: "promotion_applied";
+  type: 'promotion_applied';
   data: {
     promotionId: string;
     promotionName: string;
@@ -451,12 +451,12 @@ export interface PromotionAppliedEvent extends BaseShopEvent {
 }
 
 export interface PromotionExpiredEvent extends BaseShopEvent {
-  type: "promotion_expired";
+  type: 'promotion_expired';
   data: {
     promotionId: string;
     promotionName: string;
     expiredAt: Date;
-    reason: "time" | "usage_limit" | "budget" | "manual" | "technical";
+    reason: 'time' | 'usage_limit' | 'budget' | 'manual' | 'technical';
     usage: {
       totalUses: number;
       uniqueUsers: number;
@@ -478,7 +478,7 @@ export interface PromotionExpiredEvent extends BaseShopEvent {
 
 // Recommendation Events
 export interface RecommendationViewedEvent extends BaseShopEvent {
-  type: "recommendation_viewed";
+  type: 'recommendation_viewed';
   data: {
     recommendationId: string;
     recommendationType: string;
@@ -504,7 +504,7 @@ export interface RecommendationViewedEvent extends BaseShopEvent {
 }
 
 export interface RecommendationClickedEvent extends BaseShopEvent {
-  type: "recommendation_clicked";
+  type: 'recommendation_clicked';
   data: {
     recommendationId: string;
     productId: string;
@@ -524,11 +524,11 @@ export interface RecommendationClickedEvent extends BaseShopEvent {
 }
 
 export interface RecommendationFeedbackEvent extends BaseShopEvent {
-  type: "recommendation_feedback";
+  type: 'recommendation_feedback';
   data: {
     recommendationId: string;
     productId: string;
-    feedbackType: "positive" | "negative" | "neutral" | "irrelevant";
+    feedbackType: 'positive' | 'negative' | 'neutral' | 'irrelevant';
     feedbackAt: Date;
     rating?: number;
     comment?: string;
@@ -543,9 +543,9 @@ export interface RecommendationFeedbackEvent extends BaseShopEvent {
 
 // Analytics Events
 export interface ShopAnalyticsEvent extends BaseShopEvent {
-  type: "shop_analytics";
+  type: 'shop_analytics';
   data: {
-    analyticsType: "traffic" | "conversion" | "revenue" | "engagement" | "insights";
+    analyticsType: 'traffic' | 'conversion' | 'revenue' | 'engagement' | 'insights';
     timeframe: string;
     metrics: Record<string, number>;
     dimensions: DynamicRecord;
@@ -557,7 +557,7 @@ export interface ShopAnalyticsEvent extends BaseShopEvent {
     }[];
     trends: {
       metric: string;
-      direction: "up" | "down" | "stable";
+      direction: 'up' | 'down' | 'stable';
       change: number;
       significance: string;
     }[];
@@ -566,7 +566,7 @@ export interface ShopAnalyticsEvent extends BaseShopEvent {
 }
 
 export interface ShopPerformanceReportEvent extends BaseShopEvent {
-  type: "shop_performance_report";
+  type: 'shop_performance_report';
   data: {
     reportPeriod: {
       start: Date;
@@ -608,9 +608,9 @@ export interface ShopPerformanceReportEvent extends BaseShopEvent {
 
 // System Events
 export interface ShopSystemMaintenanceEvent extends BaseShopEvent {
-  type: "shop_system_maintenance";
+  type: 'shop_system_maintenance';
   data: {
-    maintenanceType: "scheduled" | "emergency" | "upgrade" | "migration";
+    maintenanceType: 'scheduled' | 'emergency' | 'upgrade' | 'migration';
     startTime: Date;
     endTime?: Date;
     duration?: number;
@@ -627,12 +627,12 @@ export interface ShopSystemMaintenanceEvent extends BaseShopEvent {
 }
 
 export interface ShopSystemErrorEvent extends BaseShopEvent {
-  type: "shop_system_error";
+  type: 'shop_system_error';
   data: {
-    errorType: "inventory_error" | "payment_error" | "pricing_error" | "system_error";
+    errorType: 'inventory_error' | 'payment_error' | 'pricing_error' | 'system_error';
     errorCode: string;
     errorMessage: string;
-    severity: "low" | "medium" | "high" | "critical";
+    severity: 'low' | 'medium' | 'high' | 'critical';
     context: {
       service: string;
       operation: string;
@@ -651,10 +651,10 @@ export interface ShopSystemErrorEvent extends BaseShopEvent {
 export type ShopEventType = ShopVisitedEvent | ShopViewedEvent | ShopLeftEvent | ProductViewedEvent | ProductAddedToCartEvent | ProductRemovedFromCartEvent | ProductWishlistedEvent | CartUpdatedEvent | CartAbandonedEvent | CartRecoveredEvent | PurchaseInitiatedEvent | PurchaseCompletedEvent | PurchaseFailedEvent | PurchaseRefundedEvent | PromotionViewedEvent | PromotionAppliedEvent | PromotionExpiredEvent | RecommendationViewedEvent | RecommendationClickedEvent | RecommendationFeedbackEvent | ShopAnalyticsEvent | ShopPerformanceReportEvent | ShopSystemMaintenanceEvent | ShopSystemErrorEvent;
 
 // Event Factory Functions
-export function createShopVisitedEvent(userId: string, shopId: string, shopType: string, visitType: "browse" | "search" | "specific" | "promotion", context: DynamicValue, expectations: DynamicValue): ShopVisitedEvent {
+export function createShopVisitedEvent(userId: string, shopId: string, shopType: string, visitType: 'browse' | 'search' | 'specific' | 'promotion', context: DynamicValue, expectations: DynamicValue): ShopVisitedEvent {
   return {
     id: generateEventId(),
-    type: "shop_visited",
+    type: 'shop_visited',
     userId,
     timestamp: new Date(),
     data: {
@@ -665,14 +665,14 @@ export function createShopVisitedEvent(userId: string, shopId: string, shopType:
       context,
       expectations,
     },
-    metadata: createEventMetadata("shop"),
+    metadata: createEventMetadata('shop'),
   };
 }
 
 export function createProductViewedEvent(userId: string, productId: string, productName: string, productType: string, viewDuration: number, context: DynamicValue, interactions: DynamicValue, engagement: DynamicValue): ProductViewedEvent {
   return {
     id: generateEventId(),
-    type: "product_viewed",
+    type: 'product_viewed',
     userId,
     timestamp: new Date(),
     data: {
@@ -685,14 +685,14 @@ export function createProductViewedEvent(userId: string, productId: string, prod
       interactions,
       engagement,
     },
-    metadata: createEventMetadata("shop"),
+    metadata: createEventMetadata('shop'),
   };
 }
 
 export function createProductAddedToCartEvent(userId: string, productId: string, productName: string, quantity: number, price: number, currency: string, context: DynamicValue, cartState: DynamicValue, decision: DynamicValue): ProductAddedToCartEvent {
   return {
     id: generateEventId(),
-    type: "product_added_to_cart",
+    type: 'product_added_to_cart',
     userId,
     timestamp: new Date(),
     data: {
@@ -706,14 +706,14 @@ export function createProductAddedToCartEvent(userId: string, productId: string,
       cartState,
       decision,
     },
-    metadata: createEventMetadata("shop"),
+    metadata: createEventMetadata('shop'),
   };
 }
 
-export function createPurchaseCompletedEvent(userId: string, transactionId: string, completedAt: Date, completionTime: number, status: "success" | "failed" | "pending" | "cancelled", items: DynamicValue[], totals: DynamicValue, payment: DynamicValue, delivery: DynamicValue): PurchaseCompletedEvent {
+export function createPurchaseCompletedEvent(userId: string, transactionId: string, completedAt: Date, completionTime: number, status: 'success' | 'failed' | 'pending' | 'cancelled', items: DynamicValue[], totals: DynamicValue, payment: DynamicValue, delivery: DynamicValue): PurchaseCompletedEvent {
   return {
     id: generateEventId(),
-    type: "purchase_completed",
+    type: 'purchase_completed',
     userId,
     timestamp: new Date(),
     data: {
@@ -726,14 +726,14 @@ export function createPurchaseCompletedEvent(userId: string, transactionId: stri
       payment,
       delivery,
     },
-    metadata: createEventMetadata("shop"),
+    metadata: createEventMetadata('shop'),
   };
 }
 
 export function createPromotionAppliedEvent(userId: string, promotionId: string, promotionName: string, discount: DynamicValue, context: DynamicValue, impact: DynamicValue): PromotionAppliedEvent {
   return {
     id: generateEventId(),
-    type: "promotion_applied",
+    type: 'promotion_applied',
     userId,
     timestamp: new Date(),
     data: {
@@ -744,7 +744,7 @@ export function createPromotionAppliedEvent(userId: string, promotionId: string,
       context,
       impact,
     },
-    metadata: createEventMetadata("shop"),
+    metadata: createEventMetadata('shop'),
   };
 }
 
@@ -756,17 +756,17 @@ function generateEventId(): string {
 function createEventMetadata(source: string): EventMetadata {
   return {
     source,
-    version: "1.0.0",
+    version: '1.0.0',
     platform: getPlatform(),
   };
 }
 
 function getPlatform(): string {
-  if (typeof window !== "undefined") {
-    return "web";
+  if (typeof window !== 'undefined') {
+    return 'web';
   }
   // Add platform detection logic here
-  return "unknown";
+  return 'unknown';
 }
 
 // Event Validation
@@ -781,15 +781,15 @@ export function validateShopEvent(event: ShopEventType): boolean {
 
   // Add specific validation for each event type
   switch (event.type) {
-    case "shop_visited":
+    case 'shop_visited':
       return validateShopVisitedEvent(event as ShopVisitedEvent);
-    case "product_viewed":
+    case 'product_viewed':
       return validateProductViewedEvent(event as ProductViewedEvent);
-    case "product_added_to_cart":
+    case 'product_added_to_cart':
       return validateProductAddedToCartEvent(event as ProductAddedToCartEvent);
-    case "purchase_completed":
+    case 'purchase_completed':
       return validatePurchaseCompletedEvent(event as PurchaseCompletedEvent);
-    case "promotion_applied":
+    case 'promotion_applied':
       return validatePromotionAppliedEvent(event as PromotionAppliedEvent);
     default:
       return true;
@@ -803,17 +803,17 @@ function validateShopVisitedEvent(event: ShopVisitedEvent): boolean {
 
 function validateProductViewedEvent(event: ProductViewedEvent): boolean {
   const { data } = event;
-  return !!(data.productId && data.productName && data.productType && data.viewedAt && typeof data.viewDuration === "number" && data.context && data.interactions && data.engagement);
+  return !!(data.productId && data.productName && data.productType && data.viewedAt && typeof data.viewDuration === 'number' && data.context && data.interactions && data.engagement);
 }
 
 function validateProductAddedToCartEvent(event: ProductAddedToCartEvent): boolean {
   const { data } = event;
-  return !!(data.productId && data.productName && typeof data.quantity === "number" && typeof data.price === "number" && data.currency && data.addedAt && data.context && data.cartState && data.decision);
+  return !!(data.productId && data.productName && typeof data.quantity === 'number' && typeof data.price === 'number' && data.currency && data.addedAt && data.context && data.cartState && data.decision);
 }
 
 function validatePurchaseCompletedEvent(event: PurchaseCompletedEvent): boolean {
   const { data } = event;
-  return !!(data.transactionId && data.completedAt && typeof data.completionTime === "number" && data.status && data.items && data.totals && data.payment && data.delivery);
+  return !!(data.transactionId && data.completedAt && typeof data.completionTime === 'number' && data.status && data.items && data.totals && data.payment && data.delivery);
 }
 
 function validatePromotionAppliedEvent(event: PromotionAppliedEvent): boolean {

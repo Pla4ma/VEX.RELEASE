@@ -21,15 +21,15 @@
  * - Squads (squad activity)
  */
 
-import { eventBus } from "../../events";
+import { eventBus } from '../../events';
 
 // ============================================================================
 // Types
 // ============================================================================
 
-export type NotificationPriority = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
+export type NotificationPriority = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
 
-export type NotificationType = "STREAK_PROTECTION" | "BOSS_OPPORTUNITY" | "STUDY_REMINDER" | "COMEBACK" | "SQUAD_ACTIVITY" | "WEEKLY_GOAL" | "MILESTONE" | "RE_ENGAGEMENT";
+export type NotificationType = 'STREAK_PROTECTION' | 'BOSS_OPPORTUNITY' | 'STUDY_REMINDER' | 'COMEBACK' | 'SQUAD_ACTIVITY' | 'WEEKLY_GOAL' | 'MILESTONE' | 'RE_ENGAGEMENT';
 
 export interface SmartNotification {
   id: string;
@@ -106,8 +106,8 @@ export interface NotificationRule {
 
 // Streak Protection Rule (CRITICAL)
 const STREAK_PROTECTION_RULE: NotificationRule = {
-  type: "STREAK_PROTECTION",
-  priority: "CRITICAL",
+  type: 'STREAK_PROTECTION',
+  priority: 'CRITICAL',
   condition: (ctx) => {
     if (!ctx.streakDays || ctx.hasCompletedSessionToday) {
       return false;
@@ -121,15 +121,15 @@ const STREAK_PROTECTION_RULE: NotificationRule = {
     const hours = Math.ceil(ctx.hoursUntilStreakBreak || 0);
     if (hours <= 1) {
       return {
-        title: "🚨 Streak breaks in 1 hour!",
+        title: '🚨 Streak breaks in 1 hour!',
         body: `Your ${ctx.streakDays}-day streak is about to break. Start a quick session now!`,
-        data: { urgency: "critical", streakDays: ctx.streakDays },
+        data: { urgency: 'critical', streakDays: ctx.streakDays },
       };
     }
     return {
       title: `⏰ ${hours} hours to save your streak`,
       body: `Protect your ${ctx.streakDays}-day streak with a quick focus session.`,
-      data: { urgency: "high", streakDays: ctx.streakDays, hoursRemaining: hours },
+      data: { urgency: 'high', streakDays: ctx.streakDays, hoursRemaining: hours },
     };
   },
   maxPerDay: 2,
@@ -140,8 +140,8 @@ const STREAK_PROTECTION_RULE: NotificationRule = {
 
 // Boss Opportunity Rule (HIGH)
 const BOSS_OPPORTUNITY_RULE: NotificationRule = {
-  type: "BOSS_OPPORTUNITY",
-  priority: "HIGH",
+  type: 'BOSS_OPPORTUNITY',
+  priority: 'HIGH',
   condition: (ctx) => {
     if (!ctx.hasActiveBoss) {
       return false;
@@ -171,8 +171,8 @@ const BOSS_OPPORTUNITY_RULE: NotificationRule = {
 
 // Study Reminder Rule (MEDIUM)
 const STUDY_REMINDER_RULE: NotificationRule = {
-  type: "STUDY_REMINDER",
-  priority: "MEDIUM",
+  type: 'STUDY_REMINDER',
+  priority: 'MEDIUM',
   condition: (ctx) => {
     if (!ctx.hasActiveStudyPlan) {
       return false;
@@ -190,7 +190,7 @@ const STUDY_REMINDER_RULE: NotificationRule = {
     return true;
   },
   message: (ctx) => ({
-    title: "📚 Continue your study plan",
+    title: '📚 Continue your study plan',
     body: `${ctx.studyTasksRemaining} tasks remaining. One session makes real progress.`,
     data: { tasksRemaining: ctx.studyTasksRemaining, progress: ctx.studyPlanProgress },
   }),
@@ -202,8 +202,8 @@ const STUDY_REMINDER_RULE: NotificationRule = {
 
 // Squad Activity Rule (LOW)
 const SQUAD_ACTIVITY_RULE: NotificationRule = {
-  type: "SQUAD_ACTIVITY",
-  priority: "LOW",
+  type: 'SQUAD_ACTIVITY',
+  priority: 'LOW',
   condition: (ctx) => {
     if (ctx.squadMemberCount < 2) {
       return false;
@@ -216,7 +216,7 @@ const SQUAD_ACTIVITY_RULE: NotificationRule = {
   message: (ctx) => {
     const progress = Math.round(ctx.squadWeeklyProgress);
     return {
-      title: "👥 Squad needs you!",
+      title: '👥 Squad needs you!',
       body: `Your squad is at ${progress}% of their weekly goal. Join a session and contribute!`,
       data: { squadProgress: progress },
     };
@@ -229,8 +229,8 @@ const SQUAD_ACTIVITY_RULE: NotificationRule = {
 
 // Comeback Rule (EMOTIONAL - varies by days absent)
 const COMEBACK_RULE: NotificationRule = {
-  type: "COMEBACK",
-  priority: "HIGH",
+  type: 'COMEBACK',
+  priority: 'HIGH',
   condition: (ctx) => {
     // Only for users with some history
     if (!ctx.lastSessionAt) {
@@ -242,21 +242,21 @@ const COMEBACK_RULE: NotificationRule = {
     const days = ctx.daysSinceLastSession;
     if (days <= 3) {
       return {
-        title: "We miss you! 💙",
+        title: 'We miss you! 💙',
         body: "Life happens. When you're ready, your streak can start again.",
         data: { daysAbsent: days },
       };
     }
     if (days <= 7) {
       return {
-        title: "Your progress is waiting 🌱",
-        body: "You were building something great. Ready to continue?",
+        title: 'Your progress is waiting 🌱',
+        body: 'You were building something great. Ready to continue?',
         data: { daysAbsent: days },
       };
     }
     return {
-      title: "Fresh start, same you ✨",
-      body: "New boss available. Perfect time to jump back in!",
+      title: 'Fresh start, same you ✨',
+      body: 'New boss available. Perfect time to jump back in!',
       data: { daysAbsent: days },
     };
   },
@@ -347,13 +347,13 @@ export function evaluateNotificationContext(ctx: NotificationContext): SmartNoti
  */
 function isOptedIn(ctx: NotificationContext, type: NotificationType): boolean {
   switch (type) {
-    case "STREAK_PROTECTION":
+    case 'STREAK_PROTECTION':
       return ctx.notificationPrefs.streakProtectionEnabled;
-    case "BOSS_OPPORTUNITY":
+    case 'BOSS_OPPORTUNITY':
       return ctx.notificationPrefs.bossAlertsEnabled;
-    case "STUDY_REMINDER":
+    case 'STUDY_REMINDER':
       return ctx.notificationPrefs.studyRemindersEnabled;
-    case "SQUAD_ACTIVITY":
+    case 'SQUAD_ACTIVITY':
       return ctx.notificationPrefs.squadActivityEnabled;
     default:
       return true;
@@ -438,7 +438,7 @@ export function sendScheduledNotification(userId: string, notificationId: string
   scheduledNotifications.set(userId, scheduled);
 
   // Publish event
-  eventBus.publish("notification:sent", {
+  eventBus.publish('notification:sent', {
     userId,
     notificationId,
     type: notification.type,
@@ -487,27 +487,27 @@ export interface ReEngagementStage {
 const RE_ENGAGEMENT_STAGES: ReEngagementStage[] = [
   {
     dayThreshold: 3,
-    notificationType: "COMEBACK",
-    title: "We miss you! 💙",
+    notificationType: 'COMEBACK',
+    title: 'We miss you! 💙',
     body: "Life happens. When you're ready, your streak can start again.",
   },
   {
     dayThreshold: 7,
-    notificationType: "RE_ENGAGEMENT",
-    title: "Your progress is waiting 🌱",
-    body: "You were building something great. Ready to continue?",
+    notificationType: 'RE_ENGAGEMENT',
+    title: 'Your progress is waiting 🌱',
+    body: 'You were building something great. Ready to continue?',
   },
   {
     dayThreshold: 14,
-    notificationType: "RE_ENGAGEMENT",
-    title: "Fresh start, same you ✨",
-    body: "New boss available. Perfect time to jump back in!",
+    notificationType: 'RE_ENGAGEMENT',
+    title: 'Fresh start, same you ✨',
+    body: 'New boss available. Perfect time to jump back in!',
   },
   {
     dayThreshold: 30,
-    notificationType: "RE_ENGAGEMENT",
-    title: "Special comeback offer 🎁",
-    body: "We saved your progress. Start a free trial to unlock everything.",
+    notificationType: 'RE_ENGAGEMENT',
+    title: 'Special comeback offer 🎁',
+    body: 'We saved your progress. Start a free trial to unlock everything.',
     offerIncentive: true,
   },
 ];
@@ -539,7 +539,7 @@ export function shouldReEngage(userId: string, daysInactive: number, hasBeenNoti
 
   // Don't re-notify for same stage
   const history = notificationHistory.get(userId) || [];
-  const lastReEngagement = history.filter((n) => n.type === "RE_ENGAGEMENT" || n.type === "COMEBACK").pop();
+  const lastReEngagement = history.filter((n) => n.type === 'RE_ENGAGEMENT' || n.type === 'COMEBACK').pop();
 
   if (lastReEngagement?.sentAt) {
     const daysSinceLast = (Date.now() - lastReEngagement.sentAt) / (1000 * 60 * 60 * 24);
@@ -575,14 +575,14 @@ export function getNotificationAnalytics(userId: string): NotificationAnalytics 
   const byType: Record<string, { sent: number; opened: number; rate: number }> = {};
   const byPriority: Record<string, { sent: number; opened: number; rate: number }> = {};
 
-  for (const type of ["STREAK_PROTECTION", "BOSS_OPPORTUNITY", "STUDY_REMINDER", "COMEBACK", "SQUAD_ACTIVITY"] as NotificationType[]) {
+  for (const type of ['STREAK_PROTECTION', 'BOSS_OPPORTUNITY', 'STUDY_REMINDER', 'COMEBACK', 'SQUAD_ACTIVITY'] as NotificationType[]) {
     const typeNotifications = history.filter((n) => n.type === type);
     const sent = typeNotifications.filter((n) => n.sentAt).length;
     const opened = typeNotifications.filter((n) => n.openedAt).length;
     byType[type] = { sent, opened, rate: sent > 0 ? opened / sent : 0 };
   }
 
-  for (const priority of ["CRITICAL", "HIGH", "MEDIUM", "LOW"] as NotificationPriority[]) {
+  for (const priority of ['CRITICAL', 'HIGH', 'MEDIUM', 'LOW'] as NotificationPriority[]) {
     const priorityNotifications = history.filter((n) => n.priority === priority);
     const sent = priorityNotifications.filter((n) => n.sentAt).length;
     const opened = priorityNotifications.filter((n) => n.openedAt).length;

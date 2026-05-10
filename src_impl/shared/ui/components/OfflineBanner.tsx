@@ -70,7 +70,7 @@ export function OfflineBanner({
     });
 
     // Initial check
-    NetInfo.fetch().then((state) => {
+    NetInfo['fetch']().then((state) => {
       setIsConnected(state.isConnected ?? true);
     });
 

@@ -5,68 +5,68 @@
  * Tests for lightweight accountability groups
  */
 
-import { createSquad, joinSquad, leaveSquad, recordMemberActivity, resetWeeklyProgress, getActivityFeed, recordBossDamageActivity, startSquadBoss, damageSquadBoss, discoverPublicSquads, getUserSquads, getSquad, getSquadSummary, type SimplifiedSquad } from "../SimplifiedSquadSystem";
+import { createSquad, joinSquad, leaveSquad, recordMemberActivity, resetWeeklyProgress, getActivityFeed, recordBossDamageActivity, startSquadBoss, damageSquadBoss, discoverPublicSquads, getUserSquads, getSquad, getSquadSummary, type SimplifiedSquad } from '../SimplifiedSquadSystem';
 
 // Mock eventBus
-jest.mock("../../../events", () => ({
+jest.mock('../../../events', () => ({
   eventBus: {
     publish: jest.fn(),
     subscribe: jest.fn(),
   },
 }));
 
-describe("SimplifiedSquadSystem", () => {
-  const userId = "user-123";
-  const userName = "Test User";
+describe('SimplifiedSquadSystem', () => {
+  const userId = 'user-123';
+  const userName = 'Test User';
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  describe("createSquad", () => {
-    it("should create a new squad with creator as leader", () => {
-      const squad = createSquad(userId, userName, "Test Squad", "Test Description");
+  describe('createSquad', () => {
+    it('should create a new squad with creator as leader', () => {
+      const squad = createSquad(userId, userName, 'Test Squad', 'Test Description');
 
       expect(squad).toBeDefined();
-      expect(squad.name).toBe("Test Squad");
-      expect(squad.description).toBe("Test Description");
+      expect(squad.name).toBe('Test Squad');
+      expect(squad.description).toBe('Test Description');
       expect(squad.createdByUserId).toBe(userId);
     });
 
-    it("should set creator as leader", () => {
-      const squad = createSquad(userId, userName, "Test Squad", "");
+    it('should set creator as leader', () => {
+      const squad = createSquad(userId, userName, 'Test Squad', '');
 
       expect(squad.members.length).toBe(1);
       expect(squad.members[0].userId).toBe(userId);
-      expect(squad.members[0].role).toBe("LEADER");
+      expect(squad.members[0].role).toBe('LEADER');
       expect(squad.members[0].userName).toBe(userName);
     });
 
-    it("should set max members to 10", () => {
-      const squad = createSquad(userId, userName, "Test Squad", "");
+    it('should set max members to 10', () => {
+      const squad = createSquad(userId, userName, 'Test Squad', '');
 
       expect(squad.maxMembers).toBe(10);
     });
 
-    it("should initialize weekly goal", () => {
-      const squad = createSquad(userId, userName, "Test Squad", "");
+    it('should initialize weekly goal', () => {
+      const squad = createSquad(userId, userName, 'Test Squad', '');
 
       expect(squad.weeklyGoal.targetFocusHours).toBe(10); // 10 hours for 1 member
       expect(squad.weeklyGoal.currentTotalHours).toBe(0);
       expect(squad.weeklyGoal.achieved).toBe(false);
     });
 
-    it("should initialize squad streak", () => {
-      const squad = createSquad(userId, userName, "Test Squad", "");
+    it('should initialize squad streak', () => {
+      const squad = createSquad(userId, userName, 'Test Squad', '');
 
       expect(squad.streak.currentWeeks).toBe(0);
       expect(squad.streak.longestWeeks).toBe(0);
       expect(squad.streak.requiresAllMembers).toBe(true);
     });
 
-    it("should set isPublic based on parameter", () => {
-      const privateSquad = createSquad(userId, userName, "Private", "", false);
-      const publicSquad = createSquad(userId, userName, "Public", "", true);
+    it('should set isPublic based on parameter', () => {
+      const privateSquad = createSquad(userId, userName, 'Private', '', false);
+      const publicSquad = createSquad(userId, userName, 'Public', '', true);
 
       expect(privateSquad.isPublic).toBe(false);
       expect(privateSquad.joinCode).toBeDefined(); // Private has join code
@@ -75,116 +75,116 @@ describe("SimplifiedSquadSystem", () => {
       expect(publicSquad.joinCode).toBeNull(); // Public has no join code
     });
 
-    it("should publish squad:created event", () => {
-      const { eventBus } = require("../../../events");
+    it('should publish squad:created event', () => {
+      const { eventBus } = require('../../../events');
 
-      createSquad(userId, userName, "Test Squad", "");
+      createSquad(userId, userName, 'Test Squad', '');
 
-      expect(eventBus.publish).toHaveBeenCalledWith("squad:created", expect.any(Object));
+      expect(eventBus.publish).toHaveBeenCalledWith('squad:created', expect.any(Object));
     });
   });
 
-  describe("joinSquad", () => {
+  describe('joinSquad', () => {
     let squad: SimplifiedSquad;
 
     beforeEach(() => {
-      squad = createSquad(userId, userName, "Test Squad", "", false);
+      squad = createSquad(userId, userName, 'Test Squad', '', false);
     });
 
-    it("should allow joining with correct join code", () => {
-      const result = joinSquad(squad.id, "new-user-1", "New User 1", squad.joinCode!);
+    it('should allow joining with correct join code', () => {
+      const result = joinSquad(squad.id, 'new-user-1', 'New User 1', squad.joinCode!);
 
       expect(result.success).toBe(true);
       expect(result.squad?.members.length).toBe(2);
     });
 
-    it("should reject joining with incorrect join code", () => {
-      const result = joinSquad(squad.id, "new-user-1", "New User 1", "WRONG-CODE");
+    it('should reject joining with incorrect join code', () => {
+      const result = joinSquad(squad.id, 'new-user-1', 'New User 1', 'WRONG-CODE');
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain("Invalid join code");
+      expect(result.error).toContain('Invalid join code');
     });
 
-    it("should reject joining public squad without code", () => {
-      const publicSquad = createSquad(userId, userName, "Public Squad", "", true);
+    it('should reject joining public squad without code', () => {
+      const publicSquad = createSquad(userId, userName, 'Public Squad', '', true);
 
-      const result = joinSquad(publicSquad.id, "new-user-1", "New User 1");
+      const result = joinSquad(publicSquad.id, 'new-user-1', 'New User 1');
 
       expect(result.success).toBe(true);
     });
 
-    it("should reject when squad is full", () => {
+    it('should reject when squad is full', () => {
       // Fill the squad
       for (let i = 0; i < 9; i++) {
         joinSquad(squad.id, `user-${i}`, `User ${i}`, squad.joinCode!);
       }
 
-      const result = joinSquad(squad.id, "one-too-many", "Too Many", squad.joinCode!);
+      const result = joinSquad(squad.id, 'one-too-many', 'Too Many', squad.joinCode!);
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain("full");
+      expect(result.error).toContain('full');
     });
 
-    it("should reject duplicate members", () => {
-      joinSquad(squad.id, "new-user-1", "New User 1", squad.joinCode!);
+    it('should reject duplicate members', () => {
+      joinSquad(squad.id, 'new-user-1', 'New User 1', squad.joinCode!);
 
-      const result = joinSquad(squad.id, "new-user-1", "New User 1", squad.joinCode!);
+      const result = joinSquad(squad.id, 'new-user-1', 'New User 1', squad.joinCode!);
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain("Already a member");
+      expect(result.error).toContain('Already a member');
     });
 
-    it("should update weekly goal target when member joins", () => {
-      joinSquad(squad.id, "new-user-1", "New User 1", squad.joinCode!);
+    it('should update weekly goal target when member joins', () => {
+      joinSquad(squad.id, 'new-user-1', 'New User 1', squad.joinCode!);
 
       const updatedSquad = getSquad(squad.id);
       expect(updatedSquad?.weeklyGoal.targetFocusHours).toBe(16); // 2 members * 8 hours
     });
 
-    it("should set new member role to MEMBER", () => {
-      joinSquad(squad.id, "new-user-1", "New User 1", squad.joinCode!);
+    it('should set new member role to MEMBER', () => {
+      joinSquad(squad.id, 'new-user-1', 'New User 1', squad.joinCode!);
 
       const updatedSquad = getSquad(squad.id);
-      const newMember = updatedSquad?.members.find((m) => m.userId === "new-user-1");
-      expect(newMember?.role).toBe("MEMBER");
+      const newMember = updatedSquad?.members.find((m) => m.userId === 'new-user-1');
+      expect(newMember?.role).toBe('MEMBER');
     });
 
-    it("should publish squad:member_joined event", () => {
-      const { eventBus } = require("../../../events");
+    it('should publish squad:member_joined event', () => {
+      const { eventBus } = require('../../../events');
 
-      joinSquad(squad.id, "new-user-1", "New User 1", squad.joinCode!);
+      joinSquad(squad.id, 'new-user-1', 'New User 1', squad.joinCode!);
 
-      expect(eventBus.publish).toHaveBeenCalledWith("squad:member_joined", expect.any(Object));
+      expect(eventBus.publish).toHaveBeenCalledWith('squad:member_joined', expect.any(Object));
     });
   });
 
-  describe("leaveSquad", () => {
+  describe('leaveSquad', () => {
     let squad: SimplifiedSquad;
 
     beforeEach(() => {
-      squad = createSquad(userId, userName, "Test Squad", "", false);
-      joinSquad(squad.id, "member-1", "Member 1", squad.joinCode!);
+      squad = createSquad(userId, userName, 'Test Squad', '', false);
+      joinSquad(squad.id, 'member-1', 'Member 1', squad.joinCode!);
     });
 
-    it("should remove member from squad", () => {
-      const result = leaveSquad(squad.id, "member-1");
+    it('should remove member from squad', () => {
+      const result = leaveSquad(squad.id, 'member-1');
 
       expect(result).toBe(true);
 
       const updatedSquad = getSquad(squad.id);
       expect(updatedSquad?.members.length).toBe(1);
-      expect(updatedSquad?.members.some((m) => m.userId === "member-1")).toBe(false);
+      expect(updatedSquad?.members.some((m) => m.userId === 'member-1')).toBe(false);
     });
 
-    it("should transfer leadership when leader leaves", () => {
+    it('should transfer leadership when leader leaves', () => {
       leaveSquad(squad.id, userId);
 
       const updatedSquad = getSquad(squad.id);
-      expect(updatedSquad?.members[0].role).toBe("LEADER");
+      expect(updatedSquad?.members[0].role).toBe('LEADER');
     });
 
-    it("should disband squad when last member leaves", () => {
-      leaveSquad(squad.id, "member-1");
+    it('should disband squad when last member leaves', () => {
+      leaveSquad(squad.id, 'member-1');
 
       const result = leaveSquad(squad.id, userId);
       expect(result).toBe(true);
@@ -193,40 +193,40 @@ describe("SimplifiedSquadSystem", () => {
       expect(disbandedSquad).toBeNull();
     });
 
-    it("should publish squad:member_left event", () => {
-      const { eventBus } = require("../../../events");
+    it('should publish squad:member_left event', () => {
+      const { eventBus } = require('../../../events');
 
-      leaveSquad(squad.id, "member-1");
+      leaveSquad(squad.id, 'member-1');
 
-      expect(eventBus.publish).toHaveBeenCalledWith("squad:member_left", expect.any(Object));
+      expect(eventBus.publish).toHaveBeenCalledWith('squad:member_left', expect.any(Object));
     });
 
-    it("should update weekly goal when member leaves", () => {
-      leaveSquad(squad.id, "member-1");
+    it('should update weekly goal when member leaves', () => {
+      leaveSquad(squad.id, 'member-1');
 
       const updatedSquad = getSquad(squad.id);
       expect(updatedSquad?.weeklyGoal.targetFocusHours).toBe(8); // Back to 1 member * 8 hours
     });
 
-    it("should return false for non-existent squad", () => {
-      const result = leaveSquad("non-existent", userId);
+    it('should return false for non-existent squad', () => {
+      const result = leaveSquad('non-existent', userId);
       expect(result).toBe(false);
     });
 
-    it("should return false for non-member", () => {
-      const result = leaveSquad(squad.id, "not-a-member");
+    it('should return false for non-member', () => {
+      const result = leaveSquad(squad.id, 'not-a-member');
       expect(result).toBe(false);
     });
   });
 
-  describe("recordMemberActivity", () => {
+  describe('recordMemberActivity', () => {
     let squad: SimplifiedSquad;
 
     beforeEach(() => {
-      squad = createSquad(userId, userName, "Test Squad", "", false);
+      squad = createSquad(userId, userName, 'Test Squad', '', false);
     });
 
-    it("should update member weekly focus minutes", () => {
+    it('should update member weekly focus minutes', () => {
       recordMemberActivity(squad.id, userId, 30);
 
       const updatedSquad = getSquad(squad.id);
@@ -234,7 +234,7 @@ describe("SimplifiedSquadSystem", () => {
       expect(member?.weeklyFocusMinutes).toBe(30);
     });
 
-    it("should accumulate minutes across multiple sessions", () => {
+    it('should accumulate minutes across multiple sessions', () => {
       recordMemberActivity(squad.id, userId, 30);
       recordMemberActivity(squad.id, userId, 45);
 
@@ -243,14 +243,14 @@ describe("SimplifiedSquadSystem", () => {
       expect(member?.weeklyFocusMinutes).toBe(75);
     });
 
-    it("should update squad weekly goal progress", () => {
+    it('should update squad weekly goal progress', () => {
       recordMemberActivity(squad.id, userId, 60); // 1 hour
 
       const updatedSquad = getSquad(squad.id);
       expect(updatedSquad?.weeklyGoal.currentTotalHours).toBe(1);
     });
 
-    it("should mark goal as achieved when target reached", () => {
+    it('should mark goal as achieved when target reached', () => {
       // Target is 10 hours for 1 member
       recordMemberActivity(squad.id, userId, 600); // 10 hours
 
@@ -258,15 +258,15 @@ describe("SimplifiedSquadSystem", () => {
       expect(updatedSquad?.weeklyGoal.achieved).toBe(true);
     });
 
-    it("should add activity to feed", () => {
+    it('should add activity to feed', () => {
       recordMemberActivity(squad.id, userId, 30);
 
       const updatedSquad = getSquad(squad.id);
       expect(updatedSquad?.recentActivity.length).toBeGreaterThan(0);
-      expect(updatedSquad?.recentActivity[0].type).toBe("SESSION_COMPLETE");
+      expect(updatedSquad?.recentActivity[0].type).toBe('SESSION_COMPLETE');
     });
 
-    it("should mark member as streak contributing", () => {
+    it('should mark member as streak contributing', () => {
       recordMemberActivity(squad.id, userId, 30);
 
       const updatedSquad = getSquad(squad.id);
@@ -274,40 +274,40 @@ describe("SimplifiedSquadSystem", () => {
       expect(member?.streakContributing).toBe(true);
     });
 
-    it("should publish squad:goal_achieved event when goal reached", () => {
-      const { eventBus } = require("../../../events");
+    it('should publish squad:goal_achieved event when goal reached', () => {
+      const { eventBus } = require('../../../events');
 
       recordMemberActivity(squad.id, userId, 600); // 10 hours
 
-      expect(eventBus.publish).toHaveBeenCalledWith("squad:goal_achieved", expect.any(Object));
+      expect(eventBus.publish).toHaveBeenCalledWith('squad:goal_achieved', expect.any(Object));
     });
 
-    it("should throw for non-existent squad", () => {
+    it('should throw for non-existent squad', () => {
       expect(() => {
-        recordMemberActivity("non-existent", userId, 30);
-      }).toThrow("Squad not found");
+        recordMemberActivity('non-existent', userId, 30);
+      }).toThrow('Squad not found');
     });
 
-    it("should throw for non-member", () => {
+    it('should throw for non-member', () => {
       expect(() => {
-        recordMemberActivity(squad.id, "not-a-member", 30);
-      }).toThrow("Not a squad member");
+        recordMemberActivity(squad.id, 'not-a-member', 30);
+      }).toThrow('Not a squad member');
     });
   });
 
-  describe("resetWeeklyProgress", () => {
+  describe('resetWeeklyProgress', () => {
     let squad: SimplifiedSquad;
 
     beforeEach(() => {
-      squad = createSquad(userId, userName, "Test Squad", "", false);
-      joinSquad(squad.id, "member-1", "Member 1", squad.joinCode!);
+      squad = createSquad(userId, userName, 'Test Squad', '', false);
+      joinSquad(squad.id, 'member-1', 'Member 1', squad.joinCode!);
 
       // Complete goal for both members
       recordMemberActivity(squad.id, userId, 600);
-      recordMemberActivity(squad.id, "member-1", 600);
+      recordMemberActivity(squad.id, 'member-1', 600);
     });
 
-    it("should reset all member weekly focus minutes", () => {
+    it('should reset all member weekly focus minutes', () => {
       resetWeeklyProgress(squad.id);
 
       const updatedSquad = getSquad(squad.id);
@@ -316,7 +316,7 @@ describe("SimplifiedSquadSystem", () => {
       }
     });
 
-    it("should reset squad streak if not all members contributed", () => {
+    it('should reset squad streak if not all members contributed', () => {
       // Reset will clear streakContributing
       resetWeeklyProgress(squad.id);
 
@@ -324,14 +324,14 @@ describe("SimplifiedSquadSystem", () => {
       expect(updatedSquad?.streak.currentWeeks).toBe(0);
     });
 
-    it("should reset goal achieved status", () => {
+    it('should reset goal achieved status', () => {
       resetWeeklyProgress(squad.id);
 
       const updatedSquad = getSquad(squad.id);
       expect(updatedSquad?.weeklyGoal.achieved).toBe(false);
     });
 
-    it("should reset streak contributing status", () => {
+    it('should reset streak contributing status', () => {
       resetWeeklyProgress(squad.id);
 
       const updatedSquad = getSquad(squad.id);
@@ -340,108 +340,108 @@ describe("SimplifiedSquadSystem", () => {
       }
     });
 
-    it("should throw for non-existent squad", () => {
+    it('should throw for non-existent squad', () => {
       expect(() => {
-        resetWeeklyProgress("non-existent");
-      }).toThrow("Squad not found");
+        resetWeeklyProgress('non-existent');
+      }).toThrow('Squad not found');
     });
   });
 
-  describe("getActivityFeed", () => {
+  describe('getActivityFeed', () => {
     let squad: SimplifiedSquad;
 
     beforeEach(() => {
-      squad = createSquad(userId, userName, "Test Squad", "", false);
+      squad = createSquad(userId, userName, 'Test Squad', '', false);
       recordMemberActivity(squad.id, userId, 30);
       recordMemberActivity(squad.id, userId, 45);
       recordBossDamageActivity(squad.id, userId, 100);
     });
 
-    it("should return activity for squad", () => {
+    it('should return activity for squad', () => {
       const activity = getActivityFeed(squad.id);
 
       expect(activity.length).toBeGreaterThan(0);
     });
 
-    it("should respect limit parameter", () => {
+    it('should respect limit parameter', () => {
       const activity = getActivityFeed(squad.id, 2);
 
       expect(activity.length).toBe(2);
     });
 
-    it("should return empty array for non-existent squad", () => {
-      const activity = getActivityFeed("non-existent");
+    it('should return empty array for non-existent squad', () => {
+      const activity = getActivityFeed('non-existent');
 
       expect(activity).toEqual([]);
     });
   });
 
-  describe("Squad Boss Battles", () => {
+  describe('Squad Boss Battles', () => {
     let squad: SimplifiedSquad;
 
     beforeEach(() => {
-      squad = createSquad(userId, userName, "Test Squad", "", false);
-      joinSquad(squad.id, "member-1", "Member 1", squad.joinCode!);
-      joinSquad(squad.id, "member-2", "Member 2", squad.joinCode!);
+      squad = createSquad(userId, userName, 'Test Squad', '', false);
+      joinSquad(squad.id, 'member-1', 'Member 1', squad.joinCode!);
+      joinSquad(squad.id, 'member-2', 'Member 2', squad.joinCode!);
     });
 
-    describe("startSquadBoss", () => {
-      it("should start squad boss encounter", () => {
-        const result = startSquadBoss(squad.id, "boss-1", "Test Boss", 1000);
+    describe('startSquadBoss', () => {
+      it('should start squad boss encounter', () => {
+        const result = startSquadBoss(squad.id, 'boss-1', 'Test Boss', 1000);
 
         expect(result.success).toBe(true);
         expect(result.encounter).toBeDefined();
-        expect(result.encounter?.bossId).toBe("boss-1");
-        expect(result.encounter?.status).toBe("ACTIVE");
+        expect(result.encounter?.bossId).toBe('boss-1');
+        expect(result.encounter?.status).toBe('ACTIVE');
       });
 
-      it("should scale health based on squad size", () => {
+      it('should scale health based on squad size', () => {
         // 3 members, base health 1000
         // Expected: 1000 * (1 + 3 * 0.2) = 1600
-        const result = startSquadBoss(squad.id, "boss-1", "Test Boss", 1000);
+        const result = startSquadBoss(squad.id, 'boss-1', 'Test Boss', 1000);
 
         expect(result.encounter?.maxHealth).toBe(1600);
         expect(result.encounter?.healthRemaining).toBe(1600);
       });
 
-      it("should reject if squad already has active boss", () => {
-        startSquadBoss(squad.id, "boss-1", "Boss 1", 1000);
+      it('should reject if squad already has active boss', () => {
+        startSquadBoss(squad.id, 'boss-1', 'Boss 1', 1000);
 
-        const result = startSquadBoss(squad.id, "boss-2", "Boss 2", 1000);
+        const result = startSquadBoss(squad.id, 'boss-2', 'Boss 2', 1000);
 
         expect(result.success).toBe(false);
-        expect(result.error).toContain("already has an active boss");
+        expect(result.error).toContain('already has an active boss');
       });
 
-      it("should set 48-hour expiry", () => {
-        const result = startSquadBoss(squad.id, "boss-1", "Test Boss", 1000);
+      it('should set 48-hour expiry', () => {
+        const result = startSquadBoss(squad.id, 'boss-1', 'Test Boss', 1000);
 
         const expiryHours = (result.encounter!.expiresAt - result.encounter!.startedAt) / (1000 * 60 * 60);
         expect(expiryHours).toBe(48);
       });
 
-      it("should add activity", () => {
-        startSquadBoss(squad.id, "boss-1", "Test Boss", 1000);
+      it('should add activity', () => {
+        startSquadBoss(squad.id, 'boss-1', 'Test Boss', 1000);
 
         const updatedSquad = getSquad(squad.id);
-        const bossActivity = updatedSquad?.recentActivity.find((a) => a.type === "BOSS_DAMAGE");
+        const bossActivity = updatedSquad?.recentActivity.find((a) => a.type === 'BOSS_DAMAGE');
         expect(bossActivity).toBeDefined();
       });
     });
 
-    describe("damageSquadBoss", () => {
+    describe('damageSquadBoss', () => {
       beforeEach(() => {
-        startSquadBoss(squad.id, "boss-1", "Test Boss", 1000);
+        startSquadBoss(squad.id, 'boss-1', 'Test Boss', 1000);
       });
 
-      it("should apply damage to boss", () => {
+      it('should apply damage to boss', () => {
         const result = damageSquadBoss(squad.id, userId, 100);
 
         expect(result.success).toBe(true);
         expect(result.encounter?.healthRemaining).toBe(1500); // 1600 - 100
       });
 
-      it("should track participant damage", () => {
+      it('should track participant damage', () => {
         damageSquadBoss(squad.id, userId, 100);
         damageSquadBoss(squad.id, userId, 50);
 
@@ -449,23 +449,23 @@ describe("SimplifiedSquadSystem", () => {
         expect(result.encounter?.participantDamage[userId]).toBe(175);
       });
 
-      it("should mark as defeated when health reaches 0", () => {
+      it('should mark as defeated when health reaches 0', () => {
         const squadData = getSquad(squad.id);
         const maxHealth = squadData?.activeBossEncounter?.maxHealth || 1600;
 
         const result = damageSquadBoss(squad.id, userId, maxHealth);
 
         expect(result.isDefeated).toBe(true);
-        expect(result.encounter?.status).toBe("DEFEATED");
+        expect(result.encounter?.status).toBe('DEFEATED');
       });
 
-      it("should return false for non-existent squad", () => {
-        const result = damageSquadBoss("non-existent", userId, 100);
+      it('should return false for non-existent squad', () => {
+        const result = damageSquadBoss('non-existent', userId, 100);
 
         expect(result.success).toBe(false);
       });
 
-      it("should return false for non-active encounter", () => {
+      it('should return false for non-active encounter', () => {
         // Defeat the boss first
         const squadData = getSquad(squad.id);
         const maxHealth = squadData?.activeBossEncounter?.maxHealth || 1600;
@@ -478,11 +478,11 @@ describe("SimplifiedSquadSystem", () => {
     });
   });
 
-  describe("Squad Discovery", () => {
-    it("should discover public squads", () => {
-      const publicSquad1 = createSquad(userId, userName, "Public 1", "", true);
-      const publicSquad2 = createSquad(userId, userName, "Public 2", "", true);
-      createSquad(userId, userName, "Private", "", false);
+  describe('Squad Discovery', () => {
+    it('should discover public squads', () => {
+      const publicSquad1 = createSquad(userId, userName, 'Public 1', '', true);
+      const publicSquad2 = createSquad(userId, userName, 'Public 2', '', true);
+      createSquad(userId, userName, 'Private', '', false);
 
       const publicSquads = discoverPublicSquads();
 
@@ -491,8 +491,8 @@ describe("SimplifiedSquadSystem", () => {
       expect(publicSquads.some((s) => s.id === publicSquad2.id)).toBe(true);
     });
 
-    it("should exclude full squads when excludeFull is true", () => {
-      const squad = createSquad(userId, userName, "Almost Full", "", true);
+    it('should exclude full squads when excludeFull is true', () => {
+      const squad = createSquad(userId, userName, 'Almost Full', '', true);
       // Fill it up
       for (let i = 0; i < 9; i++) {
         joinSquad(squad.id, `user-${i}`, `User ${i}`);
@@ -503,10 +503,10 @@ describe("SimplifiedSquadSystem", () => {
     });
   });
 
-  describe("getUserSquads", () => {
-    it("should return squads for user", () => {
-      const squad1 = createSquad(userId, userName, "Squad 1", "");
-      const squad2 = createSquad("other-user", "Other", "Squad 2", "");
+  describe('getUserSquads', () => {
+    it('should return squads for user', () => {
+      const squad1 = createSquad(userId, userName, 'Squad 1', '');
+      const squad2 = createSquad('other-user', 'Other', 'Squad 2', '');
       joinSquad(squad2.id, userId, userName);
 
       const userSquads = getUserSquads(userId);
@@ -516,65 +516,65 @@ describe("SimplifiedSquadSystem", () => {
       expect(userSquads.some((s) => s.id === squad2.id)).toBe(true);
     });
 
-    it("should return empty array for user with no squads", () => {
-      const squads = getUserSquads("no-squads-user");
+    it('should return empty array for user with no squads', () => {
+      const squads = getUserSquads('no-squads-user');
       expect(squads).toEqual([]);
     });
   });
 
-  describe("getSquad", () => {
-    it("should return squad by id", () => {
-      const squad = createSquad(userId, userName, "Test", "");
+  describe('getSquad', () => {
+    it('should return squad by id', () => {
+      const squad = createSquad(userId, userName, 'Test', '');
 
       const retrieved = getSquad(squad.id);
       expect(retrieved?.id).toBe(squad.id);
     });
 
-    it("should return null for non-existent squad", () => {
-      const squad = getSquad("non-existent");
+    it('should return null for non-existent squad', () => {
+      const squad = getSquad('non-existent');
       expect(squad).toBeNull();
     });
   });
 
-  describe("getSquadSummary", () => {
+  describe('getSquadSummary', () => {
     let squad: SimplifiedSquad;
 
     beforeEach(() => {
-      squad = createSquad(userId, userName, "Test Squad", "", false);
-      joinSquad(squad.id, "member-1", "Member 1", squad.joinCode!);
+      squad = createSquad(userId, userName, 'Test Squad', '', false);
+      joinSquad(squad.id, 'member-1', 'Member 1', squad.joinCode!);
     });
 
-    it("should return summary for member", () => {
+    it('should return summary for member', () => {
       const summary = getSquadSummary(squad.id, userId);
 
       expect(summary).not.toBeNull();
       expect(summary?.id).toBe(squad.id);
-      expect(summary?.name).toBe("Test Squad");
+      expect(summary?.name).toBe('Test Squad');
     });
 
-    it("should include member count", () => {
+    it('should include member count', () => {
       const summary = getSquadSummary(squad.id, userId);
       expect(summary?.memberCount).toBe(2);
     });
 
-    it("should indicate if full", () => {
+    it('should indicate if full', () => {
       const summary = getSquadSummary(squad.id, userId);
       expect(summary?.isFull).toBe(false);
     });
 
-    it("should include streak weeks", () => {
+    it('should include streak weeks', () => {
       const summary = getSquadSummary(squad.id, userId);
       expect(summary?.streakWeeks).toBe(0);
     });
 
-    it("should indicate member status", () => {
+    it('should indicate member status', () => {
       const summary = getSquadSummary(squad.id, userId);
       expect(summary?.isMember).toBe(true);
-      expect(summary?.userRole).toBe("LEADER");
+      expect(summary?.userRole).toBe('LEADER');
     });
 
-    it("should return null for non-existent squad", () => {
-      const summary = getSquadSummary("non-existent", userId);
+    it('should return null for non-existent squad', () => {
+      const summary = getSquadSummary('non-existent', userId);
       expect(summary).toBeNull();
     });
   });

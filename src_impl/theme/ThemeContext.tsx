@@ -155,7 +155,15 @@ export function useTheme(): ThemeContextValue {
   const context = useContext(ThemeContext);
 
   if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    const defaultTheme = createTheme('light');
+    return {
+      theme: defaultTheme,
+      mode: 'light',
+      setMode: () => undefined,
+      toggleMode: () => undefined,
+      isDark: false,
+      isSystem: false,
+    };
   }
 
   return context;

@@ -10,16 +10,16 @@
  * @phase 2B - Progression Consolidation
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Core Types
 // ============================================================================
 
-export const JourneyPathSchema = z.enum(["PURITY", "SPEED", "SOCIAL", "BALANCED"]);
+export const JourneyPathSchema = z.enum(['PURITY', 'SPEED', 'SOCIAL', 'BALANCED']);
 export type JourneyPath = z.infer<typeof JourneyPathSchema>;
 
-export const JOURNEY_PATHS: JourneyPath[] = ["PURITY", "SPEED", "SOCIAL", "BALANCED"];
+export const JOURNEY_PATHS: JourneyPath[] = ['PURITY', 'SPEED', 'SOCIAL', 'BALANCED'];
 
 export interface JourneyNode {
   id: string;
@@ -53,10 +53,10 @@ export interface JourneyNode {
 
 export interface JourneyReward {
   id: string;
-  type: "COINS" | "GEMS" | "ITEM" | "COSMETIC" | "BOOST" | "TITLE" | "EMOTE" | "AVATAR_FRAME";
+  type: 'COINS' | 'GEMS' | 'ITEM' | 'COSMETIC' | 'BOOST' | 'TITLE' | 'EMOTE' | 'AVATAR_FRAME';
   amount?: number;
   itemId?: string;
-  rarity: "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+  rarity: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
   name: string;
   description: string;
 }
@@ -111,40 +111,40 @@ export const PATH_CONFIG: Record<
   }
 > = {
   PURITY: {
-    name: "Path of the Purist",
-    description: "For those who value unbroken focus above all",
-    color: "#4ECDC4",
-    icon: "💎",
-    focus: "High-purity sessions",
-    xpBonusSource: "95%+ purity sessions",
-    uniqueRewardType: "purity_cosmetics",
+    name: 'Path of the Purist',
+    description: 'For those who value unbroken focus above all',
+    color: '#4ECDC4',
+    icon: '💎',
+    focus: 'High-purity sessions',
+    xpBonusSource: '95%+ purity sessions',
+    uniqueRewardType: 'purity_cosmetics',
   },
   SPEED: {
-    name: "Path of the Speedster",
-    description: "For those who move fast and break records",
-    color: "#FF6B35",
-    icon: "⚡",
-    focus: "Quick sessions and speed runs",
-    xpBonusSource: "Sub-30min boss defeats",
-    uniqueRewardType: "speed_boosts",
+    name: 'Path of the Speedster',
+    description: 'For those who move fast and break records',
+    color: '#FF6B35',
+    icon: '⚡',
+    focus: 'Quick sessions and speed runs',
+    xpBonusSource: 'Sub-30min boss defeats',
+    uniqueRewardType: 'speed_boosts',
   },
   SOCIAL: {
-    name: "Path of the Connector",
-    description: "For those who thrive in community",
-    color: "#9B59B6",
-    icon: "🤝",
-    focus: "Squad activities and rivals",
-    xpBonusSource: "Squad sessions and raid participation",
-    uniqueRewardType: "social_cosmetics",
+    name: 'Path of the Connector',
+    description: 'For those who thrive in community',
+    color: '#9B59B6',
+    icon: '🤝',
+    focus: 'Squad activities and rivals',
+    xpBonusSource: 'Squad sessions and raid participation',
+    uniqueRewardType: 'social_cosmetics',
   },
   BALANCED: {
-    name: "Path of the Harmonist",
-    description: "For those who walk all paths equally",
-    color: "#95A5A6",
-    icon: "☯️",
-    focus: "All playstyles",
-    xpBonusSource: "Completing daily challenges in all modes",
-    uniqueRewardType: "versatility_badges",
+    name: 'Path of the Harmonist',
+    description: 'For those who walk all paths equally',
+    color: '#95A5A6',
+    icon: '☯️',
+    focus: 'All playstyles',
+    xpBonusSource: 'Completing daily challenges in all modes',
+    uniqueRewardType: 'versatility_badges',
   },
 };
 
@@ -158,15 +158,15 @@ export function generateJourneyMap(seasonId: string): JourneyNode[] {
 
   // Starting hub (Tier 0) - All paths start here
   const startNode: JourneyNode = {
-    id: nodeId("BALANCED", 0),
-    path: "BALANCED",
+    id: nodeId('BALANCED', 0),
+    path: 'BALANCED',
     tier: 0,
-    name: "The Crossroads",
-    description: "Choose your path",
+    name: 'The Crossroads',
+    description: 'Choose your path',
     xpRequired: 0,
     position: { x: 50, y: 0 },
     prevNodeIds: [],
-    nextNodeIds: [nodeId("PURITY", 1), nodeId("SPEED", 1), nodeId("SOCIAL", 1), nodeId("BALANCED", 1)],
+    nextNodeIds: [nodeId('PURITY', 1), nodeId('SPEED', 1), nodeId('SOCIAL', 1), nodeId('BALANCED', 1)],
     rewards: [],
     isMilestone: false,
     isIntersection: true,
@@ -189,8 +189,8 @@ export function generateJourneyMap(seasonId: string): JourneyNode[] {
         description: generateNodeDescription(path, tier),
         xpRequired: calculateNodeXp(tier),
         position: calculateNodePosition(path, tier),
-        prevNodeIds: tier === 1 ? [nodeId("BALANCED", 0)] : [nodeId(path, tier - 1)],
-        nextNodeIds: isIntersection ? [nodeId("PURITY", tier + 1), nodeId("SPEED", tier + 1), nodeId("SOCIAL", tier + 1), nodeId("BALANCED", tier + 1)].filter((id) => id !== nodeId(path, tier + 1) || tier < 50) : tier < 50 ? [nodeId(path, tier + 1)] : [],
+        prevNodeIds: tier === 1 ? [nodeId('BALANCED', 0)] : [nodeId(path, tier - 1)],
+        nextNodeIds: isIntersection ? [nodeId('PURITY', tier + 1), nodeId('SPEED', tier + 1), nodeId('SOCIAL', tier + 1), nodeId('BALANCED', tier + 1)].filter((id) => id !== nodeId(path, tier + 1) || tier < 50) : tier < 50 ? [nodeId(path, tier + 1)] : [],
         rewards: generateNodeRewards(path, tier, isMilestone),
         isMilestone,
         isIntersection,
@@ -218,10 +218,10 @@ export function generateJourneyMap(seasonId: string): JourneyNode[] {
 
 function generateNodeName(path: JourneyPath, tier: number): string {
   const names: Record<JourneyPath, string[]> = {
-    PURITY: ["Crystal Clear", "Focused Mind", "Deep State", "Unbroken Chain", "Enlightenment"],
-    SPEED: ["Quick Start", "Rapid Progress", "Velocity", "Momentum", "Lightspeed"],
-    SOCIAL: ["First Connection", "Growing Circle", "Community", "Leadership", "Legend"],
-    BALANCED: ["First Steps", "Steady Pace", "Equilibrium", "Mastery", "Transcendence"],
+    PURITY: ['Crystal Clear', 'Focused Mind', 'Deep State', 'Unbroken Chain', 'Enlightenment'],
+    SPEED: ['Quick Start', 'Rapid Progress', 'Velocity', 'Momentum', 'Lightspeed'],
+    SOCIAL: ['First Connection', 'Growing Circle', 'Community', 'Leadership', 'Legend'],
+    BALANCED: ['First Steps', 'Steady Pace', 'Equilibrium', 'Mastery', 'Transcendence'],
   };
 
   const tierGroup = Math.floor((tier - 1) / 10);
@@ -265,20 +265,20 @@ function generateNodeRewards(path: JourneyPath, tier: number, isMilestone: boole
   // Base reward every tier
   rewards.push({
     id: `tier_${tier}_base`,
-    type: "COINS",
+    type: 'COINS',
     amount: 100 + tier * 10,
-    rarity: "COMMON",
+    rarity: 'COMMON',
     name: `${PATH_CONFIG[path].name} Token`,
-    description: "Standard path progression reward",
+    description: 'Standard path progression reward',
   });
 
   // Milestone rewards
   if (isMilestone) {
-    const rarity: JourneyReward["rarity"] = tier >= 40 ? "LEGENDARY" : tier >= 30 ? "EPIC" : tier >= 20 ? "RARE" : "UNCOMMON";
+    const rarity: JourneyReward['rarity'] = tier >= 40 ? 'LEGENDARY' : tier >= 30 ? 'EPIC' : tier >= 20 ? 'RARE' : 'UNCOMMON';
 
     rewards.push({
       id: `milestone_${tier}_special`,
-      type: tier % 20 === 0 ? "COSMETIC" : "BOOST",
+      type: tier % 20 === 0 ? 'COSMETIC' : 'BOOST',
       rarity,
       name: `${PATH_CONFIG[path].icon} Milestone ${tier} Reward`,
       description: `Special reward for reaching tier ${tier} on the ${PATH_CONFIG[path].name}`,
@@ -288,9 +288,9 @@ function generateNodeRewards(path: JourneyPath, tier: number, isMilestone: boole
     if (tier === 25 || tier === 50) {
       rewards.push({
         id: `path_exclusive_${tier}`,
-        type: path === "SOCIAL" ? "TITLE" : path === "SPEED" ? "EMOTE" : path === "PURITY" ? "AVATAR_FRAME" : "ITEM",
-        rarity: tier === 50 ? "LEGENDARY" : "EPIC",
-        name: `${PATH_CONFIG[path].icon} ${PATH_CONFIG[path].name} ${tier === 50 ? "Grandmaster" : "Adept"}`,
+        type: path === 'SOCIAL' ? 'TITLE' : path === 'SPEED' ? 'EMOTE' : path === 'PURITY' ? 'AVATAR_FRAME' : 'ITEM',
+        rarity: tier === 50 ? 'LEGENDARY' : 'EPIC',
+        name: `${PATH_CONFIG[path].icon} ${PATH_CONFIG[path].name} ${tier === 50 ? 'Grandmaster' : 'Adept'}`,
         description: `Exclusive to those who reach tier ${tier} on this path`,
       });
     }
@@ -397,17 +397,17 @@ export function switchPath(progress: UserJourneyProgress, targetPath: JourneyPat
   // Can only switch at intersection nodes
   const currentNode = nodes.find((n) => n.id === progress.currentNodeId);
   if (!currentNode) {
-    return { success: false, newProgress: null, error: "Invalid current node", resetXp: 0 };
+    return { success: false, newProgress: null, error: 'Invalid current node', resetXp: 0 };
   }
 
   if (!currentNode.isIntersection) {
-    return { success: false, newProgress: null, error: "Can only switch paths at intersections (Tiers 25 & 50)", resetXp: 0 };
+    return { success: false, newProgress: null, error: 'Can only switch paths at intersections (Tiers 25 & 50)', resetXp: 0 };
   }
 
   // Find target node at same tier on new path
   const targetNode = nodes.find((n) => n.tier === currentNode.tier && n.path === targetPath);
   if (!targetNode) {
-    return { success: false, newProgress: null, error: "Target path not available", resetXp: 0 };
+    return { success: false, newProgress: null, error: 'Target path not available', resetXp: 0 };
   }
 
   // Calculate XP penalty (50% of current path XP is lost/split)
@@ -490,7 +490,7 @@ export function getRecommendedPath(userStats: { avgPurity: number; avgSessionDur
 // Factory Functions
 // ============================================================================
 
-export function createInitialJourneyProgress(userId: string, seasonId: string, initialPath: JourneyPath = "BALANCED"): UserJourneyProgress {
+export function createInitialJourneyProgress(userId: string, seasonId: string, initialPath: JourneyPath = 'BALANCED'): UserJourneyProgress {
   return {
     userId,
     seasonId,

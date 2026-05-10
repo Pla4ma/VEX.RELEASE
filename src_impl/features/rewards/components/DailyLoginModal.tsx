@@ -9,20 +9,20 @@
  * @phase 5C.1
  */
 
-import React, { useState, useEffect, useCallback } from "react";
-import { Modal, Dimensions } from "react-native";
-import Animated, { useAnimatedStyle, withSpring, withTiming, withSequence, withDelay, withRepeat, FadeIn, FadeInUp, FadeOut } from "react-native-reanimated";
+import React, { useState, useEffect, useCallback } from 'react';
+import { Modal, Dimensions } from 'react-native';
+import Animated, { useAnimatedStyle, withSpring, withTiming, withSequence, withDelay, withRepeat, FadeIn, FadeInUp, FadeOut } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 export interface DailyReward {
   day: number;
-  type: "coins" | "gems" | "boost" | "chest";
+  type: 'coins' | 'gems' | 'boost' | 'chest';
   amount: number;
   label: string;
   icon: string;
@@ -47,26 +47,26 @@ export interface DailyLoginModalProps {
  * 7-day reward schedule (rotating)
  */
 const REWARD_SCHEDULE: DailyReward[] = [
-  { day: 1, type: "coins", amount: 50, label: "50 Coins", icon: "🪙" },
-  { day: 2, type: "coins", amount: 75, label: "75 Coins", icon: "🪙" },
-  { day: 3, type: "gems", amount: 5, label: "5 Gems", icon: "💎" },
-  { day: 4, type: "coins", amount: 100, label: "100 Coins", icon: "🪙" },
-  { day: 5, type: "boost", amount: 1, label: "XP Boost", icon: "⚡" },
-  { day: 6, type: "gems", amount: 10, label: "10 Gems", icon: "💎" },
-  { day: 7, type: "chest", amount: 1, label: "Mystery Chest", icon: "🎁" },
+  { day: 1, type: 'coins', amount: 50, label: '50 Coins', icon: '🪙' },
+  { day: 2, type: 'coins', amount: 75, label: '75 Coins', icon: '🪙' },
+  { day: 3, type: 'gems', amount: 5, label: '5 Gems', icon: '💎' },
+  { day: 4, type: 'coins', amount: 100, label: '100 Coins', icon: '🪙' },
+  { day: 5, type: 'boost', amount: 1, label: 'XP Boost', icon: '⚡' },
+  { day: 6, type: 'gems', amount: 10, label: '10 Gems', icon: '💎' },
+  { day: 7, type: 'chest', amount: 1, label: 'Mystery Chest', icon: '🎁' },
 ];
 
 /**
  * Individual day reward item
  */
-function DayRewardItem({ reward, status, index }: { reward: DailyReward; status: "past" | "current" | "future"; index: number }): JSX.Element {
+function DayRewardItem({ reward, status, index }: { reward: DailyReward; status: 'past' | 'current' | 'future'; index: number }): JSX.Element {
   const { theme } = useTheme();
 
   const getStatusColor = () => {
     switch (status) {
-      case "past":
+      case 'past':
         return theme.colors.success.DEFAULT;
-      case "current":
+      case 'current':
         return theme.colors.primary[500];
       default:
         return theme.colors.background.tertiary;
@@ -75,10 +75,10 @@ function DayRewardItem({ reward, status, index }: { reward: DailyReward; status:
 
   const getStatusIcon = () => {
     switch (status) {
-      case "past":
-        return "✓";
-      case "current":
-        return "★";
+      case 'past':
+        return '✓';
+      case 'current':
+        return '★';
       default:
         return `${reward.day}`;
     }
@@ -87,7 +87,7 @@ function DayRewardItem({ reward, status, index }: { reward: DailyReward; status:
   const scaleStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        scale: status === "current" ? withRepeat(withSequence(withSpring(1.05, { damping: 10 }), withSpring(1, { damping: 10 })), -1, true) : 1,
+        scale: status === 'current' ? withRepeat(withSequence(withSpring(1.05, { damping: 10 }), withSpring(1, { damping: 10 })), -1, true) : 1,
       },
     ],
   }));
@@ -98,26 +98,26 @@ function DayRewardItem({ reward, status, index }: { reward: DailyReward; status:
       style={[
         {
           width: (SCREEN_WIDTH - 60) / 7 - 4,
-          alignItems: "center",
-          opacity: status === "future" ? 0.5 : 1,
+          alignItems: 'center',
+          opacity: status === 'future' ? 0.5 : 1,
         },
         scaleStyle,
       ]}
     >
       {/* Day number badge */}
-      <Box width={28} height={28} borderRadius="full" bg={status === "current" ? "primary.500" : "background.tertiary"} justifyContent="center" alignItems="center" mb="xs">
-        <Text fontSize={12} color={status === "current" ? "text.inverse" : "text.tertiary"} fontWeight={status === "current" ? "700" : "400"}>
+      <Box width={28} height={28} borderRadius="full" bg={status === 'current' ? 'primary.500' : 'background.tertiary'} justifyContent="center" alignItems="center" mb="xs">
+        <Text fontSize={12} color={status === 'current' ? 'text.inverse' : 'text.tertiary'} fontWeight={status === 'current' ? '700' : '400'}>
           {getStatusIcon()}
         </Text>
       </Box>
 
       {/* Reward icon */}
-      <Box width={40} height={40} borderRadius="lg" bg={status === "current" ? `${theme.colors.primary[500]}30` : "background.secondary"} borderWidth={status === "current" ? 2 : 0} borderColor={status === "current" ? "primary.500" : undefined} justifyContent="center" alignItems="center">
+      <Box width={40} height={40} borderRadius="lg" bg={status === 'current' ? `${theme.colors.primary[500]}30` : 'background.secondary'} borderWidth={status === 'current' ? 2 : 0} borderColor={status === 'current' ? 'primary.500' : undefined} justifyContent="center" alignItems="center">
         <Text fontSize={20}>{reward.icon}</Text>
       </Box>
 
       {/* Reward label */}
-      <Text variant="caption" color={status === "current" ? "primary.500" : "text.tertiary"} fontWeight={status === "current" ? "600" : "400"} textAlign="center" mt="xs" numberOfLines={1} style={{ fontSize: 10 }}>
+      <Text variant="caption" color={status === 'current' ? 'primary.500' : 'text.tertiary'} fontWeight={status === 'current' ? '600' : '400'} textAlign="center" mt="xs" numberOfLines={1} style={{ fontSize: 10 }}>
         {reward.label}
       </Text>
     </Animated.View>
@@ -149,9 +149,9 @@ function FlyingReward({ reward, onComplete }: { reward: DailyReward; onComplete:
     <Animated.View
       style={[
         {
-          position: "absolute",
-          top: "50%",
-          left: "50%",
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
           marginLeft: -30,
           marginTop: -30,
         },
@@ -235,7 +235,7 @@ export function DailyLoginModal({ visible, currentDay, streakDays, isClaimed, on
               <Box flexDirection="row" justifyContent="space-between">
                 {REWARD_SCHEDULE.map((reward, index) => {
                   const day = index + 1;
-                  const status: "past" | "current" | "future" = day < currentDay ? "past" : day === currentDay ? "current" : "future";
+                  const status: 'past' | 'current' | 'future' = day < currentDay ? 'past' : day === currentDay ? 'current' : 'future';
 
                   return <DayRewardItem key={reward.day} reward={reward} status={status} index={index} />;
                 })}
@@ -254,10 +254,10 @@ export function DailyLoginModal({ visible, currentDay, streakDays, isClaimed, on
                     {currentReward.label}
                   </Text>
                   <Text variant="caption" color="text.tertiary">
-                    {currentReward.type === "coins" && "Spend in the shop"}
-                    {currentReward.type === "gems" && "Premium currency"}
-                    {currentReward.type === "boost" && "2x XP for 1 hour"}
-                    {currentReward.type === "chest" && "Contains random rewards"}
+                    {currentReward.type === 'coins' && 'Spend in the shop'}
+                    {currentReward.type === 'gems' && 'Premium currency'}
+                    {currentReward.type === 'boost' && '2x XP for 1 hour'}
+                    {currentReward.type === 'chest' && 'Contains random rewards'}
                   </Text>
                 </Box>
               </Box>

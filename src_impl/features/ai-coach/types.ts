@@ -25,9 +25,9 @@ export interface CoachPersona {
   defaultEnabled: boolean;
 }
 
-export type VoiceTone = "ENCOURAGING" | "STERN" | "PLAYFUL" | "WISE" | "COMPETITIVE" | "GENTLE";
+export type VoiceTone = 'ENCOURAGING' | 'STERN' | 'PLAYFUL' | 'WISE' | 'COMPETITIVE' | 'GENTLE';
 
-export type CoachStyle = "CHEERLEADER" | "DRILL_SERGEANT" | "FRIEND" | "MENTOR" | "RIVAL" | "MINDFUL";
+export type CoachStyle = 'CHEERLEADER' | 'DRILL_SERGEANT' | 'FRIEND' | 'MENTOR' | 'RIVAL' | 'MINDFUL';
 
 // ============================================================================
 // Coach Content Registry Types
@@ -45,24 +45,24 @@ export interface CoachMessageTemplate {
   cooldownHours: number; // Minimum hours before showing again
 }
 
-export type MessageCategory = "STREAK_RISK" | "SESSION_SUGGESTION" | "MILESTONE_HYPE" | "COMEBACK_SUPPORT" | "POST_FAILURE" | "PROGRESS_REMINDER" | "DIFFICULTY_ADJUST" | "CHALLENGE_PROMPT" | "MOTIVATION_BOOST" | "BREAK_SUGGESTION" | "OVERLOAD_WARNING";
+export type MessageCategory = 'STREAK_RISK' | 'SESSION_SUGGESTION' | 'MILESTONE_HYPE' | 'COMEBACK_SUPPORT' | 'POST_FAILURE' | 'PROGRESS_REMINDER' | 'DIFFICULTY_ADJUST' | 'CHALLENGE_PROMPT' | 'MOTIVATION_BOOST' | 'BREAK_SUGGESTION' | 'OVERLOAD_WARNING';
 
 export interface MessageCondition {
   type: ConditionType;
-  operator: "eq" | "gt" | "lt" | "gte" | "lte" | "in" | "between";
+  operator: 'eq' | 'gt' | 'lt' | 'gte' | 'lte' | 'in' | 'between';
   value: unknown;
   field?: string;
 }
 
-export type ConditionType = "STREAK_DAYS" | "STREAK_RISK_LEVEL" | "SESSIONS_TODAY" | "SESSIONS_WEEK" | "LAST_SESSION_HOURS" | "CURRENT_LEVEL" | "TIME_OF_DAY" | "DAY_OF_WEEK" | "DAYS_INACTIVE" | "HAS_ACTIVE_BOSS" | "IS_PREMIUM" | "PREFERRED_SESSION_TIME" | "AVERAGE_SESSION_QUALITY" | "FAILED_SESSIONS_RECENT";
+export type ConditionType = 'STREAK_DAYS' | 'STREAK_RISK_LEVEL' | 'SESSIONS_TODAY' | 'SESSIONS_WEEK' | 'LAST_SESSION_HOURS' | 'CURRENT_LEVEL' | 'TIME_OF_DAY' | 'DAY_OF_WEEK' | 'DAYS_INACTIVE' | 'HAS_ACTIVE_BOSS' | 'IS_PREMIUM' | 'PREFERRED_SESSION_TIME' | 'AVERAGE_SESSION_QUALITY' | 'FAILED_SESSIONS_RECENT';
 
 // ============================================================================
 // Intervention Types (for repository/interventions.ts)
 // ============================================================================
 
-export type InterventionType = "STREAK_RISK" | "SESSION_SUGGESTION" | "DIFFICULTY_ADJUST" | "MOTIVATION_BOOST" | "CHALLENGE_PROMPT" | "BREAK_SUGGESTION";
+export type InterventionType = 'STREAK_RISK' | 'SESSION_SUGGESTION' | 'DIFFICULTY_ADJUST' | 'MOTIVATION_BOOST' | 'CHALLENGE_PROMPT' | 'BREAK_SUGGESTION';
 
-export type InterventionSeverity = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+export type InterventionSeverity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
 // ============================================================================
 // Behavior Signal Types
@@ -79,13 +79,13 @@ export interface BehaviorSignal {
   expiresAt: number;
 }
 
-export type SignalType = "SESSION_FREQUENCY" | "SESSION_QUALITY_TREND" | "STREAK_MAINTENANCE_RATE" | "PREFERRED_TIME_OF_DAY" | "FOCUS_DURATION_PREFERENCE" | "DIFFICULTY_PREFERENCE" | "SOCIAL_ENGAGEMENT" | "CHALLENGE_COMPLETION_RATE" | "BOSS_PARTICIPATION" | "MORNING_PERSON" | "NIGHT_OWL" | "WEEKEND_WARRIOR" | "CONSISTENCY_SCORE" | "RESPONSIVENESS_TO_REMINDERS" | "COMEBACK_VELOCITY";
+export type SignalType = 'SESSION_FREQUENCY' | 'SESSION_QUALITY_TREND' | 'STREAK_MAINTENANCE_RATE' | 'PREFERRED_TIME_OF_DAY' | 'FOCUS_DURATION_PREFERENCE' | 'DIFFICULTY_PREFERENCE' | 'SOCIAL_ENGAGEMENT' | 'CHALLENGE_COMPLETION_RATE' | 'BOSS_PARTICIPATION' | 'MORNING_PERSON' | 'NIGHT_OWL' | 'WEEKEND_WARRIOR' | 'CONSISTENCY_SCORE' | 'RESPONSIVENESS_TO_REMINDERS' | 'COMEBACK_VELOCITY';
 
 export interface BehaviorProfile {
   userId: string;
   signals: BehaviorSignal[];
   lastUpdated: number;
-  confidenceLevel: "LOW" | "MEDIUM" | "HIGH";
+  confidenceLevel: 'LOW' | 'MEDIUM' | 'HIGH';
   coldStart: boolean;
   dataPoints: number;
 }
@@ -111,11 +111,11 @@ export interface InterventionTrigger {
   threshold?: number;
 }
 
-export type TriggerType = "STREAK_AT_RISK" | "NO_SESSION_24H" | "NO_SESSION_48H" | "NO_SESSION_72H" | "SESSION_ABANDONED" | "LOW_QUALITY_SESSION" | "MILESTONE_REACHED" | "LEVEL_UP" | "BOSS_TIMEOUT_WARNING" | "CHALLENGE_EXPIRING" | "COMEBACK_WINDOW_OPEN" | "DIFFICULTY_MISMATCH" | "OVERLOAD_DETECTED" | "MUTED_USER_REMINDER";
+export type TriggerType = 'STREAK_AT_RISK' | 'NO_SESSION_24H' | 'NO_SESSION_48H' | 'NO_SESSION_72H' | 'SESSION_ABANDONED' | 'LOW_QUALITY_SESSION' | 'MILESTONE_REACHED' | 'LEVEL_UP' | 'BOSS_TIMEOUT_WARNING' | 'CHALLENGE_EXPIRING' | 'COMEBACK_WINDOW_OPEN' | 'DIFFICULTY_MISMATCH' | 'OVERLOAD_DETECTED' | 'MUTED_USER_REMINDER';
 
 export interface InterventionCondition {
   field: string;
-  operator: "eq" | "gt" | "lt" | "gte" | "lte" | "in";
+  operator: 'eq' | 'gt' | 'lt' | 'gte' | 'lte' | 'in';
   value: unknown;
 }
 
@@ -126,9 +126,9 @@ export interface InterventionAction {
   delayMinutes: number;
 }
 
-export type ActionType = "SEND_MESSAGE" | "SEND_PUSH" | "SHOW_MODAL" | "SHOW_BANNER" | "SUGGEST_SESSION" | "ADJUST_DIFFICULTY" | "OFFER_CHALLENGE" | "SCHEDULE_REMINDER" | "ACTIVATE_COMEBACK" | "MUTE_NOTIFICATIONS";
+export type ActionType = 'SEND_MESSAGE' | 'SEND_PUSH' | 'SHOW_MODAL' | 'SHOW_BANNER' | 'SUGGEST_SESSION' | 'ADJUST_DIFFICULTY' | 'OFFER_CHALLENGE' | 'SCHEDULE_REMINDER' | 'ACTIVATE_COMEBACK' | 'MUTE_NOTIFICATIONS';
 
-export type DeliveryMethod = "IN_APP" | "PUSH" | "BOTH" | "DEFERRED";
+export type DeliveryMethod = 'IN_APP' | 'PUSH' | 'BOTH' | 'DEFERRED';
 
 export interface InterventionExecution {
   id: string;
@@ -142,10 +142,10 @@ export interface InterventionExecution {
   effectiveness: number | null; // 0-1, measured by subsequent actions
 }
 
-export type ExecutionStatus = "PENDING" | "EXECUTED" | "SKIPPED" | "FAILED" | "CANCELLED";
+export type ExecutionStatus = 'PENDING' | 'EXECUTED' | 'SKIPPED' | 'FAILED' | 'CANCELLED';
 
 export interface UserResponse {
-  action: "STARTED_SESSION" | "DISMISSED" | "ENGAGED" | "IGNORED" | "MUTED";
+  action: 'STARTED_SESSION' | 'DISMISSED' | 'ENGAGED' | 'IGNORED' | 'MUTED';
   timestamp: number;
   metadata: Record<string, unknown>;
 }
@@ -159,7 +159,7 @@ export interface SessionRecommendation {
   userId: string;
   type: RecommendationType;
   suggestedDuration: number;
-  suggestedDifficulty: "EASY" | "NORMAL" | "CHALLENGING" | "PUSH";
+  suggestedDifficulty: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
   reasoning: string;
   confidence: number;
   basedOn: RecommendationSource[];
@@ -167,11 +167,11 @@ export interface SessionRecommendation {
   status: RecommendationStatus;
 }
 
-export type RecommendationType = "OPTIMAL_TIME" | "STREAK_PROTECTION" | "COMEBACK_BUILDER" | "DIFFICULTY_ADJUST" | "CHALLENGE_SYNC" | "BOSS_PREP" | "HABIT_BUILDER" | "ENERGY_BASED";
+export type RecommendationType = 'OPTIMAL_TIME' | 'STREAK_PROTECTION' | 'COMEBACK_BUILDER' | 'DIFFICULTY_ADJUST' | 'CHALLENGE_SYNC' | 'BOSS_PREP' | 'HABIT_BUILDER' | 'ENERGY_BASED';
 
-export type RecommendationSource = "HISTORICAL_PATTERN" | "STREAK_DATA" | "LEVEL_PROGRESS" | "CHALLENGE_DEADLINE" | "BOSS_STATUS" | "ENERGY_LEVEL" | "TIME_OF_DAY";
+export type RecommendationSource = 'HISTORICAL_PATTERN' | 'STREAK_DATA' | 'LEVEL_PROGRESS' | 'CHALLENGE_DEADLINE' | 'BOSS_STATUS' | 'ENERGY_LEVEL' | 'TIME_OF_DAY';
 
-export type RecommendationStatus = "ACTIVE" | "ACCEPTED" | "REJECTED" | "EXPIRED";
+export type RecommendationStatus = 'ACTIVE' | 'ACCEPTED' | 'REJECTED' | 'EXPIRED';
 
 // ============================================================================
 // Reminder Types
@@ -190,7 +190,7 @@ export interface ReminderPlan {
   opened: boolean;
 }
 
-export type ReminderType = "STREAK_WARNING" | "STREAK_CHECK" | "OPTIMAL_SESSION_TIME" | "CHALLENGE_DEADLINE" | "BOSS_TIMEOUT" | "COMEBACK_OPPORTUNITY" | "MILESTONE_APPROACHING" | "PERSONALIZED_MOTIVATION" | "BREAK_REMINDER";
+export type ReminderType = 'STREAK_WARNING' | 'STREAK_CHECK' | 'OPTIMAL_SESSION_TIME' | 'CHALLENGE_DEADLINE' | 'BOSS_TIMEOUT' | 'COMEBACK_OPPORTUNITY' | 'MILESTONE_APPROACHING' | 'PERSONALIZED_MOTIVATION' | 'BREAK_REMINDER';
 
 // ============================================================================
 // Comeback Engine Types
@@ -210,7 +210,7 @@ export interface ComebackPlan {
   messages: ComebackMessage[];
 }
 
-export type ComebackStatus = "OFFERED" | "ACTIVE" | "COMPLETED" | "EXPIRED" | "DECLINED";
+export type ComebackStatus = 'OFFERED' | 'ACTIVE' | 'COMPLETED' | 'EXPIRED' | 'DECLINED';
 
 export interface ComebackMessage {
   id: string;
@@ -232,7 +232,7 @@ export interface DifficultyProfile {
   adjustmentReason: string | null;
   successRateRecent: number; // 0-1
   successRateOverall: number;
-  trend: "IMPROVING" | "STABLE" | "DECLINING";
+  trend: 'IMPROVING' | 'STABLE' | 'DECLINING';
 }
 
 // ============================================================================
@@ -257,7 +257,7 @@ export interface CoachMessage {
   actionTakenAt: number | null;
 }
 
-export type MessageStatus = "DRAFT" | "SCHEDULED" | "SENT" | "DELIVERED" | "READ" | "DISMISSED" | "EXPIRED";
+export type MessageStatus = 'DRAFT' | 'SCHEDULED' | 'SENT' | 'DELIVERED' | 'READ' | 'DISMISSED' | 'EXPIRED';
 
 export interface CoachHistory {
   userId: string;
@@ -273,7 +273,7 @@ export interface CoachHistory {
 // Coach State Types
 // ============================================================================
 
-export type CoachUserState = "COLD_START" | "LOW_CONFIDENCE" | "HIGH_CONFIDENCE" | "STREAK_AT_RISK" | "COMEBACK_MODE" | "POST_FAILURE_SUPPORT" | "MILESTONE_HYPE" | "OVERLOAD_PROTECTION" | "MUTED_MODE";
+export type CoachUserState = 'COLD_START' | 'LOW_CONFIDENCE' | 'HIGH_CONFIDENCE' | 'STREAK_AT_RISK' | 'COMEBACK_MODE' | 'POST_FAILURE_SUPPORT' | 'MILESTONE_HYPE' | 'OVERLOAD_PROTECTION' | 'MUTED_MODE';
 
 export interface CoachState {
   userId: string;

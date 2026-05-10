@@ -9,9 +9,9 @@
  * - Economy (currency delivery)
  */
 
-import { eventBus } from "../../events";
-import * as repository from "./repository";
-import { CreateRewardInputSchema, ClaimRewardInputSchema, CalculateRewardInputSchema, type Reward, type RewardCalculation, type CreateRewardInput, type ClaimRewardInput, type CalculateRewardInput, type Deliverable } from "./schemas";
+import { eventBus } from '../../events';
+import * as repository from './repository';
+import { CreateRewardInputSchema, ClaimRewardInputSchema, CalculateRewardInputSchema, type Reward, type RewardCalculation, type CreateRewardInput, type ClaimRewardInput, type CalculateRewardInput, type Deliverable } from './schemas';
 
 // ============================================================================
 // Reward Calculator
@@ -21,14 +21,14 @@ export function calculateReward(input: CalculateRewardInput): RewardCalculation 
   const validated = CalculateRewardInputSchema.parse(input);
 
   let finalAmount = validated.baseAmount;
-  const multipliers: RewardCalculation["multipliers"] = [];
-  const bonuses: RewardCalculation["bonuses"] = [];
+  const multipliers: RewardCalculation['multipliers'] = [];
+  const bonuses: RewardCalculation['bonuses'] = [];
 
   // Level bonus (5% per level)
   const levelBonus = validated.userLevel * 0.05;
   if (levelBonus > 0) {
     multipliers.push({
-      source: "Level Bonus",
+      source: 'Level Bonus',
       value: 1 + levelBonus,
       description: `+${Math.floor(levelBonus * 100)}% for level ${validated.userLevel}`,
     });
@@ -39,7 +39,7 @@ export function calculateReward(input: CalculateRewardInput): RewardCalculation 
   if (validated.streakDays >= 7) {
     const streakMultiplier = validated.streakDays >= 30 ? 1.5 : validated.streakDays >= 14 ? 1.25 : 1.1;
     multipliers.push({
-      source: "Streak Bonus",
+      source: 'Streak Bonus',
       value: streakMultiplier,
       description: `${validated.streakDays} day streak`,
     });
@@ -49,7 +49,7 @@ export function calculateReward(input: CalculateRewardInput): RewardCalculation 
   // Squad bonus
   if (validated.squadMultiplier > 1) {
     multipliers.push({
-      source: "Squad Bonus",
+      source: 'Squad Bonus',
       value: validated.squadMultiplier,
       description: `Squad multiplier x${validated.squadMultiplier}`,
     });
@@ -59,9 +59,9 @@ export function calculateReward(input: CalculateRewardInput): RewardCalculation 
   // Boss bonus
   if (validated.bossActive) {
     bonuses.push({
-      source: "Boss Battle",
+      source: 'Boss Battle',
       amount: Math.floor(validated.baseAmount * 0.25),
-      description: "Active boss encounter",
+      description: 'Active boss encounter',
     });
     finalAmount += Math.floor(validated.baseAmount * 0.25);
   }
@@ -85,14 +85,14 @@ export async function createReward(input: CreateRewardInput): Promise<Reward> {
   if (validated.triggerId) {
     const isDuplicate = await repository.checkDuplicateReward(validated.userId, validated.triggerType, validated.triggerId);
     if (isDuplicate) {
-      throw new Error("Duplicate reward: already granted for this trigger");
+      throw new Error('Duplicate reward: already granted for this trigger');
     }
   }
 
   const reward = await repository.createReward(validated.userId, validated.type, validated.amount, validated.triggerType, validated.triggerId || null, validated.expiresAt || null);
 
   // Record ledger entry
-  await repository.recordLedgerEntry(reward.id, "CREATED", {
+  await repository.recordLedgerEntry(reward.id, 'CREATED', {
     type: validated.type,
     amount: validated.amount,
     triggerType: validated.triggerType,
@@ -114,20 +114,20 @@ export async function claimReward(input: ClaimRewardInput): Promise<{
 
   const reward = await repository.fetchReward(validated.rewardId);
   if (!reward) {
-    throw new Error("Reward not found");
+    throw new Error('Reward not found');
   }
 
   if (reward.userId !== validated.userId) {
-    throw new Error("Unauthorized: reward belongs to different user");
+    throw new Error('Unauthorized: reward belongs to different user');
   }
 
-  if (reward.status !== "PENDING") {
+  if (reward.status !== 'PENDING') {
     throw new Error(`Cannot claim reward in ${reward.status} status`);
   }
 
   if (reward.expiresAt && reward.expiresAt < Date.now()) {
     await repository.markRewardExpired(validated.rewardId);
-    throw new Error("Reward has expired");
+    throw new Error('Reward has expired');
   }
 
   // Build deliverables
@@ -151,7 +151,7 @@ export async function claimReward(input: ClaimRewardInput): Promise<{
       deliverable.delivered = true;
       deliverable.deliveredAt = Date.now();
     } catch (error) {
-      errors.push(`Failed to deliver ${deliverable.type}: ${error instanceof Error ? error.message : "Unknown"}`);
+      errors.push(`Failed to deliver ${deliverable.type}: ${error instanceof Error ? error.message : 'Unknown'}`);
     }
   }
 
@@ -159,11 +159,11 @@ export async function claimReward(input: ClaimRewardInput): Promise<{
   const allDelivered = deliverables.every((d) => d.delivered);
   if (allDelivered) {
     await repository.markRewardClaimed(validated.rewardId);
-    await repository.recordLedgerEntry(validated.rewardId, "CLAIMED", {
+    await repository.recordLedgerEntry(validated.rewardId, 'CLAIMED', {
       deliverables: deliverables.map((d) => ({ type: d.type, amount: d.amount })),
     });
 
-    eventBus.publish("reward:claimed", {
+    eventBus.publish('reward:claimed', {
       rewardId: validated.rewardId,
       userId: validated.userId,
       claimedAt: Date.now(),
@@ -172,7 +172,7 @@ export async function claimReward(input: ClaimRewardInput): Promise<{
     });
   } else if (errors.length > 0) {
     await repository.markRewardFailed(validated.rewardId);
-    await repository.recordLedgerEntry(validated.rewardId, "FAILED", { errors });
+    await repository.recordLedgerEntry(validated.rewardId, 'FAILED', { errors });
   }
 
   return {
@@ -184,34 +184,34 @@ export async function claimReward(input: ClaimRewardInput): Promise<{
 
 async function deliverReward(userId: string, deliverable: Deliverable): Promise<void> {
   switch (deliverable.type) {
-    case "XP":
+    case 'XP':
       // Emit event for progression service
-      eventBus.publish("progression:add_xp", {
+      eventBus.publish('progression:add_xp', {
         userId,
         amount: deliverable.amount,
-        source: "REWARD",
+        source: 'REWARD',
       });
       break;
 
-    case "COINS":
-    case "GEMS":
+    case 'COINS':
+    case 'GEMS':
       // Emit event for economy service
-      eventBus.publish("economy:add_currency", {
+      eventBus.publish('economy:add_currency', {
         userId,
         type: deliverable.type,
         amount: deliverable.amount,
-        source: "REWARD",
+        source: 'REWARD',
       });
       break;
 
-    case "SHIELD":
+    case 'SHIELD':
       // Emit event for streaks service
       // Handled by streak shield system
       break;
 
-    case "ITEM":
-    case "COSMETIC":
-    case "TITLE":
+    case 'ITEM':
+    case 'COSMETIC':
+    case 'TITLE':
       // Add to inventory
       break;
 
@@ -220,18 +220,18 @@ async function deliverReward(userId: string, deliverable: Deliverable): Promise<
   }
 }
 
-export function mapRewardTypeToDeliverable(rewardType: string): Deliverable["type"] {
-  const mapping: Record<string, Deliverable["type"]> = {
-    XP: "XP",
-    COINS: "COINS",
-    GEMS: "GEMS",
-    ITEM: "ITEM",
-    COSMETIC: "COSMETIC",
-    TITLE: "TITLE",
-    STREAK_SHIELD: "SHIELD",
-    BOOST: "XP",
+export function mapRewardTypeToDeliverable(rewardType: string): Deliverable['type'] {
+  const mapping: Record<string, Deliverable['type']> = {
+    XP: 'XP',
+    COINS: 'COINS',
+    GEMS: 'GEMS',
+    ITEM: 'ITEM',
+    COSMETIC: 'COSMETIC',
+    TITLE: 'TITLE',
+    STREAK_SHIELD: 'SHIELD',
+    BOOST: 'XP',
   };
-  return mapping[rewardType] || "XP";
+  return mapping[rewardType] || 'XP';
 }
 
 // ============================================================================
@@ -239,7 +239,7 @@ export function mapRewardTypeToDeliverable(rewardType: string): Deliverable["typ
 // ============================================================================
 
 export async function getPendingRewards(userId: string): Promise<Reward[]> {
-  return repository.fetchRewards(userId, "PENDING");
+  return repository.fetchRewards(userId, 'PENDING');
 }
 
 export async function getRewardHistory(userId: string, limit?: number): Promise<Reward[]> {
@@ -259,11 +259,11 @@ export async function getRewardStats(userId: string): Promise<{
 
   return {
     totalRewards: rewards.length,
-    pendingRewards: rewards.filter((r) => r.status === "PENDING").length,
-    claimedRewards: rewards.filter((r) => r.status === "CLAIMED").length,
-    totalXp: rewards.filter((r) => r.status === "CLAIMED" && r.type === "XP").reduce((sum, r) => sum + (r.amount || 0), 0),
-    totalCoins: rewards.filter((r) => r.status === "CLAIMED" && r.type === "COINS").reduce((sum, r) => sum + (r.amount || 0), 0),
-    totalGems: rewards.filter((r) => r.status === "CLAIMED" && r.type === "GEMS").reduce((sum, r) => sum + (r.amount || 0), 0),
+    pendingRewards: rewards.filter((r) => r.status === 'PENDING').length,
+    claimedRewards: rewards.filter((r) => r.status === 'CLAIMED').length,
+    totalXp: rewards.filter((r) => r.status === 'CLAIMED' && r.type === 'XP').reduce((sum, r) => sum + (r.amount || 0), 0),
+    totalCoins: rewards.filter((r) => r.status === 'CLAIMED' && r.type === 'COINS').reduce((sum, r) => sum + (r.amount || 0), 0),
+    totalGems: rewards.filter((r) => r.status === 'CLAIMED' && r.type === 'GEMS').reduce((sum, r) => sum + (r.amount || 0), 0),
   };
 }
 
@@ -276,7 +276,7 @@ export async function processExpiredRewards(): Promise<number> {
 
   for (const reward of expired) {
     await repository.markRewardExpired(reward.id);
-    await repository.recordLedgerEntry(reward.id, "EXPIRED", {
+    await repository.recordLedgerEntry(reward.id, 'EXPIRED', {
       expiredAt: Date.now(),
     });
   }
@@ -288,7 +288,7 @@ export async function processExpiredRewards(): Promise<number> {
 // Mystery Chest System (Phase 3E)
 // ============================================================================
 
-export type ChestRarity = "COMMON" | "UNCOMMON" | "RARE" | "EPIC" | "LEGENDARY";
+export type ChestRarity = 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
 
 export interface MysteryChest {
   id: string;
@@ -371,16 +371,16 @@ export function getChestAppearance(rarity: ChestRarity): {
   label: string;
 } {
   switch (rarity) {
-    case "LEGENDARY":
-      return { emoji: "🟠", color: "#F59E0B", glow: true, label: "Legendary" };
-    case "EPIC":
-      return { emoji: "🟣", color: "#A855F7", glow: true, label: "Epic" };
-    case "RARE":
-      return { emoji: "🔵", color: "#3B82F6", glow: false, label: "Rare" };
-    case "UNCOMMON":
-      return { emoji: "⚪", color: "#22C55E", glow: false, label: "Uncommon" };
+    case 'LEGENDARY':
+      return { emoji: '🟠', color: '#F59E0B', glow: true, label: 'Legendary' };
+    case 'EPIC':
+      return { emoji: '🟣', color: '#A855F7', glow: true, label: 'Epic' };
+    case 'RARE':
+      return { emoji: '🔵', color: '#3B82F6', glow: false, label: 'Rare' };
+    case 'UNCOMMON':
+      return { emoji: '⚪', color: '#22C55E', glow: false, label: 'Uncommon' };
     default:
-      return { emoji: "🟤", color: "#6B7280", glow: false, label: "Common" };
+      return { emoji: '🟤', color: '#6B7280', glow: false, label: 'Common' };
   }
 }
 
@@ -406,8 +406,8 @@ export function generateChestContents(rarity: ChestRarity): {
   return {
     xp: Math.floor((50 + Math.random() * 100) * multiplier),
     coins: Math.floor((20 + Math.random() * 50) * multiplier),
-    ...(rarity !== "COMMON" && rarity !== "UNCOMMON" ? { gems: Math.floor(Math.random() * 5 * multiplier) } : {}),
-    ...(rarity === "EPIC" || rarity === "LEGENDARY" ? { item: `${rarity} Mystery Item` } : {}),
+    ...(rarity !== 'COMMON' && rarity !== 'UNCOMMON' ? { gems: Math.floor(Math.random() * 5 * multiplier) } : {}),
+    ...(rarity === 'EPIC' || rarity === 'LEGENDARY' ? { item: `${rarity} Mystery Item` } : {}),
   };
 }
 

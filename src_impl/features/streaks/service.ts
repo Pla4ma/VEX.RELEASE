@@ -8,10 +8,10 @@
  * - Progression (streak XP bonuses)
  */
 
-import { v4 } from "../../utils/uuid";
-import * as repository from "./repository";
-import { hasUsedStreakRestoreThisMonth } from "./restore-quest";
-import { RecordSessionInputSchema, UseShieldInputSchema, FreezeStreakInputSchema, RestoreStreakInputSchema, ComebackStateSchema, type Streak, type StreakSummary, type StreakMilestone, type StreakEngineResult, type RecordSessionInput, type UseShieldInput, type RestoreStreakInput, type ComebackState, type RiskLevel } from "./schemas";
+import { v4 } from '../../utils/uuid';
+import * as repository from './repository';
+import { hasUsedStreakRestoreThisMonth } from './restore-quest';
+import { RecordSessionInputSchema, UseShieldInputSchema, FreezeStreakInputSchema, RestoreStreakInputSchema, ComebackStateSchema, type Streak, type StreakSummary, type StreakMilestone, type StreakEngineResult, type RecordSessionInput, type UseShieldInput, type RestoreStreakInput, type ComebackState, type RiskLevel } from './schemas';
 
 // ============================================================================
 // Constants
@@ -23,14 +23,14 @@ const STREAK_WINDOW_HOURS = 24; // Hours to maintain streak - CRITICAL: 24h crea
 const MILESTONE_DAYS = [3, 7, 14, 30, 60, 100, 180, 365];
 
 const MILESTONE_REWARDS: Record<number, Partial<StreakMilestone>> = {
-  3: { rewardType: "COINS", rewardAmount: 100, badgeId: "streak-3" },
-  7: { rewardType: "COINS", rewardAmount: 250, badgeId: "streak-7" },
-  14: { rewardType: "GEMS", rewardAmount: 25, badgeId: "streak-14" },
-  30: { rewardType: "STREAK_SHIELD", rewardAmount: 1, badgeId: "streak-30" },
-  60: { rewardType: "GEMS", rewardAmount: 100, badgeId: "streak-60" },
-  100: { rewardType: "GEMS", rewardAmount: 250, badgeId: "streak-100" },
-  180: { rewardType: "GEMS", rewardAmount: 500, badgeId: "streak-180" },
-  365: { rewardType: "GEMS", rewardAmount: 1000, badgeId: "streak-365" },
+  3: { rewardType: 'COINS', rewardAmount: 100, badgeId: 'streak-3' },
+  7: { rewardType: 'COINS', rewardAmount: 250, badgeId: 'streak-7' },
+  14: { rewardType: 'GEMS', rewardAmount: 25, badgeId: 'streak-14' },
+  30: { rewardType: 'STREAK_SHIELD', rewardAmount: 1, badgeId: 'streak-30' },
+  60: { rewardType: 'GEMS', rewardAmount: 100, badgeId: 'streak-60' },
+  100: { rewardType: 'GEMS', rewardAmount: 250, badgeId: 'streak-100' },
+  180: { rewardType: 'GEMS', rewardAmount: 500, badgeId: 'streak-180' },
+  365: { rewardType: 'GEMS', rewardAmount: 1000, badgeId: 'streak-365' },
 };
 
 // ============================================================================
@@ -61,7 +61,7 @@ export async function getStreakSummary(userId: string): Promise<StreakSummary | 
     userId: streak.userId,
     currentDays: streak.currentDays,
     longestDays: streak.longestDays,
-    isAtRisk: riskLevel !== "NONE",
+    isAtRisk: riskLevel !== 'NONE',
     riskLevel,
     nextDeadline,
     frozenUntil: streak.frozenUntil,
@@ -80,7 +80,7 @@ export async function recordSession(input: RecordSessionInput): Promise<StreakEn
   // Check if session qualifies
   if (!isQualifyingSession(validated.duration, validated.qualityScore)) {
     return {
-      action: "ALREADY_TODAY",
+      action: 'ALREADY_TODAY',
       previousStreak: streak.currentDays,
       newStreak: streak.currentDays,
       milestoneReached: null,
@@ -94,7 +94,7 @@ export async function recordSession(input: RecordSessionInput): Promise<StreakEn
   // Already completed today
   if (lastSessionDay === sessionDay) {
     return {
-      action: "ALREADY_TODAY",
+      action: 'ALREADY_TODAY',
       previousStreak: streak.currentDays,
       newStreak: streak.currentDays,
       milestoneReached: null,
@@ -103,14 +103,14 @@ export async function recordSession(input: RecordSessionInput): Promise<StreakEn
   }
 
   // Calculate streak action
-  let action: StreakEngineResult["action"];
+  let action: StreakEngineResult['action'];
   let newStreak = streak.currentDays;
   let shieldUsed = false;
   const hasActiveFreeze = (streak.frozenUntil ?? 0) > validated.completedAt;
 
   if (!lastSessionDay) {
     // First session ever
-    action = "INCREMENTED";
+    action = 'INCREMENTED';
     newStreak = 1;
   } else {
     const yesterday = getCalendarDay(Date.now() - 86400000, streak.timezone);
@@ -118,19 +118,19 @@ export async function recordSession(input: RecordSessionInput): Promise<StreakEn
 
     if (hoursSinceLast < 24 || lastSessionDay === yesterday) {
       // Within streak window, increment
-      action = "INCREMENTED";
+      action = 'INCREMENTED';
       newStreak = streak.currentDays + 1;
     } else if (hasActiveFreeze) {
-      action = "FROZEN";
+      action = 'FROZEN';
       newStreak = streak.currentDays + 1;
     } else if (hoursSinceLast < STREAK_WINDOW_HOURS && streak.shieldsAvailable > 0 && !streak.gracePeriodUsed) {
       // Use shield to protect streak
-      action = "SHIELD_PROTECTED";
+      action = 'SHIELD_PROTECTED';
       shieldUsed = true;
       await applyShieldInternal(validated.userId, streak);
     } else {
       // Streak broken
-      action = "BROKEN";
+      action = 'BROKEN';
       newStreak = 1; // Start new streak
     }
   }
@@ -162,11 +162,11 @@ export function isQualifyingSession(duration: number, qualityScore: number): boo
 }
 
 export function getCalendarDay(timestamp: number, timezone: string): string {
-  return new Date(timestamp).toLocaleDateString("en-US", {
+  return new Date(timestamp).toLocaleDateString('en-US', {
     timeZone: timezone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
   });
 }
 
@@ -185,7 +185,7 @@ export function checkMilestone(streakDays: number): StreakMilestone | null {
     days: streakDays,
     name: `${streakDays} Day Streak`,
     description: `Maintained focus for ${streakDays} consecutive days`,
-    rewardType: reward.rewardType || "COINS",
+    rewardType: reward.rewardType || 'COINS',
     rewardAmount: reward.rewardAmount || 0,
     rewardItemId: null,
     badgeId: reward.badgeId || null,
@@ -248,11 +248,11 @@ export async function restoreStreak(input: RestoreStreakInput): Promise<boolean>
 export async function restoreStreak(userId: string, targetDays: number): Promise<boolean>;
 export async function restoreStreak(inputOrUserId: RestoreStreakInput | string, targetDays?: number): Promise<boolean> {
   const validated =
-    typeof inputOrUserId === "string"
+    typeof inputOrUserId === 'string'
       ? RestoreStreakInputSchema.parse({
           userId: inputOrUserId,
           targetDays,
-          source: "SPECIAL_EVENT",
+          source: 'SPECIAL_EVENT',
         })
       : RestoreStreakInputSchema.parse(inputOrUserId);
   const streak = await getOrCreateStreak(validated.userId);
@@ -284,7 +284,7 @@ export async function detectComeback(userId: string): Promise<ComebackState> {
       streakNow: 0,
       rewardMultiplier: 1,
       streakRestoreEligible: false,
-      message: "Ready when you are.",
+      message: 'Ready when you are.',
     };
   }
 
@@ -312,31 +312,31 @@ export async function detectComeback(userId: string): Promise<ComebackState> {
 
 export function calculateRiskLevel(streak: Streak): RiskLevel {
   if (streak.currentDays === 0) {
-    return "NONE";
+    return 'NONE';
   }
   if ((streak.frozenUntil ?? 0) > Date.now()) {
-    return "NONE";
+    return 'NONE';
   }
   if (!streak.lastQualifyingSessionAt) {
-    return "LOW";
+    return 'LOW';
   }
 
   const hoursSinceLast = (Date.now() - streak.lastQualifyingSessionAt) / (1000 * 60 * 60);
 
   if (hoursSinceLast > 40) {
-    return "CRITICAL";
+    return 'CRITICAL';
   }
   if (hoursSinceLast > 30) {
-    return "HIGH";
+    return 'HIGH';
   }
   if (hoursSinceLast > 22) {
-    return "MEDIUM";
+    return 'MEDIUM';
   }
   if (hoursSinceLast > 18) {
-    return "LOW";
+    return 'LOW';
   }
 
-  return "NONE";
+  return 'NONE';
 }
 
 function calculateNextDeadline(streak: Streak): number | null {
@@ -389,5 +389,5 @@ function getComebackMessage(daysAbsent: number, _streakBefore: number): string {
   if (daysAbsent >= 3) {
     return `Welcome back! You were gone ${daysAbsent} days. Pick up where you left off.`;
   }
-  return "Ready when you are.";
+  return 'Ready when you are.';
 }

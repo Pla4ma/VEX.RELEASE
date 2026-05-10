@@ -1,14 +1,21 @@
-import { captureSilentFailure } from "../../../../utils/silent-failure";
+import { captureSilentFailure } from '../../../../utils/silent-failure';
 /**
  * Error State Components
  *
  * Premium error states with recovery actions and retry logic
  */
 
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import Animated, { Keyframe, FadeIn } from "react-native-reanimated";
 import { createSheet } from "@/shared/ui/create-sheet";
+=======
+import React, { useState } from 'react';
+import { View, Text, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
+import Animated, { Keyframe, FadeIn } from 'react-native-reanimated';
+import { createSheet } from '@/shared/ui/create-sheet';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 // Custom shake animation keyframe
 const Shake = new Keyframe({
@@ -35,7 +42,7 @@ interface ErrorStateProps {
   maxRetries?: number;
 }
 
-export function ErrorState({ title = "Oops! Something went wrong", message, errorCode, onRetry, onDismiss, retryAttempts = 0, maxRetries = 3 }: ErrorStateProps) {
+export function ErrorState({ title = 'Oops! Something went wrong', message, errorCode, onRetry, onDismiss, retryAttempts = 0, maxRetries = 3 }: ErrorStateProps) {
   const [isRetrying, setIsRetrying] = useState(false);
   const [localAttempts, setLocalAttempts] = useState(retryAttempts);
 
@@ -49,7 +56,7 @@ export function ErrorState({ title = "Oops! Something went wrong", message, erro
       await onRetry();
       setLocalAttempts(0);
     } catch (error) {
-      captureSilentFailure(error, { feature: "ai-coach", operation: "ui-fallback", type: "ui" });
+      captureSilentFailure(error, { feature: 'ai-coach', operation: 'ui-fallback', type: 'ui' });
       setLocalAttempts((prev) => prev + 1);
     } finally {
       setIsRetrying(false);
@@ -62,7 +69,7 @@ export function ErrorState({ title = "Oops! Something went wrong", message, erro
   return (
     <Animated.View entering={FadeIn.duration(300)} style={[styles.container, isDegraded && styles.degradedContainer]}>
       <Animated.View entering={Shake.duration(500)}>
-        <Text style={styles.icon}>{isDegraded ? "⚠️" : "😕"}</Text>
+        <Text style={styles.icon}>{isDegraded ? '⚠️' : '😕'}</Text>
       </Animated.View>
 
       <Text style={styles.title}>{title}</Text>
@@ -84,7 +91,7 @@ export function ErrorState({ title = "Oops! Something went wrong", message, erro
       <View style={styles.actions}>
         {canRetry && (
           <Pressable onPress={handleRetry} disabled={isRetrying} style={[styles.retryButton, isRetrying && styles.buttonDisabled]} accessibilityLabel="Retry loading" accessibilityRole="button" accessibilityHint="Activates this control">
-            {isRetrying ? <ActivityIndicator color="#fff" /> : <Text style={styles.retryButtonText}>{isDegraded ? "Try Again" : "Retry"}</Text>}
+            {isRetrying ? <ActivityIndicator color="#fff" /> : <Text style={styles.retryButtonText}>{isDegraded ? 'Try Again' : 'Retry'}</Text>}
           </Pressable>
         )}
 
@@ -123,7 +130,7 @@ export function ValidationErrorState({ field, onDismiss }: { field?: string; onD
   return <ErrorState title="Invalid Input" message={field ? `Please check the ${field} field and try again.` : "Some of the information provided doesn't look right. Please review and try again."} errorCode="VALIDATION_ERROR" onDismiss={onDismiss} />;
 }
 
-export function NotFoundErrorState({ resource = "item", onDismiss }: { resource?: string; onDismiss?: () => void }) {
+export function NotFoundErrorState({ resource = 'item', onDismiss }: { resource?: string; onDismiss?: () => void }) {
   return <ErrorState title="Not Found" message={`The ${resource} you're looking for doesn't exist or has been removed.`} errorCode="NOT_FOUND" onDismiss={onDismiss} />;
 }
 
@@ -132,7 +139,7 @@ export function PermissionErrorState({ onDismiss }: { onDismiss?: () => void }) 
 }
 
 export function RateLimitErrorState({ retryAfter }: { retryAfter?: number }) {
-  return <ErrorState title="Too Many Requests" message={`You've made too many requests. Please wait ${retryAfter ? `${retryAfter} seconds` : "a moment"} before trying again.`} errorCode="RATE_LIMIT" />;
+  return <ErrorState title="Too Many Requests" message={`You've made too many requests. Please wait ${retryAfter ? `${retryAfter} seconds` : 'a moment'} before trying again.`} errorCode="RATE_LIMIT" />;
 }
 
 // Inline error for form fields
@@ -147,22 +154,22 @@ export function InlineError({ message }: { message: string }) {
 
 // Error boundary fallback
 export function ErrorBoundaryFallback({ error, resetError }: { error: Error; resetError: () => void }) {
-  return <ErrorState title="Something Went Wrong" message={error.message || "An unexpected error occurred in the coach component."} errorCode="BOUNDARY_ERROR" onRetry={async () => resetError()} />;
+  return <ErrorState title="Something Went Wrong" message={error.message || 'An unexpected error occurred in the coach component.'} errorCode="BOUNDARY_ERROR" onRetry={async () => resetError()} />;
 }
 
 const styles = createSheet({
   container: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 24,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 12,
     margin: 16,
   },
   degradedContainer: {
-    backgroundColor: "#FFF8E1",
+    backgroundColor: '#FFF8E1',
     borderWidth: 1,
-    borderColor: "#FFD54F",
+    borderColor: '#FFD54F',
   },
   icon: {
     fontSize: 48,
@@ -170,79 +177,79 @@ const styles = createSheet({
   },
   title: {
     fontSize: 18,
-    fontWeight: "700",
-    color: "#1a1a1a",
-    textAlign: "center",
+    fontWeight: '700',
+    color: '#1a1a1a',
+    textAlign: 'center',
     marginBottom: 8,
   },
   message: {
     fontSize: 14,
-    color: "#666",
-    textAlign: "center",
+    color: '#666',
+    textAlign: 'center',
     lineHeight: 20,
     marginBottom: 16,
   },
   errorCodeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 6,
     marginBottom: 16,
   },
   errorCodeLabel: {
     fontSize: 12,
-    color: "#999",
+    color: '#999',
   },
   errorCode: {
     fontSize: 12,
-    color: "#999",
-    fontFamily: "monospace",
-    backgroundColor: "#f5f5f5",
+    color: '#999',
+    fontFamily: 'monospace',
+    backgroundColor: '#f5f5f5',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
   },
   attemptsText: {
     fontSize: 12,
-    color: "#999",
+    color: '#999',
     marginBottom: 12,
   },
   actions: {
     gap: 8,
-    width: "100%",
+    width: '100%',
   },
   retryButton: {
-    backgroundColor: "#FF6B6B",
+    backgroundColor: '#FF6B6B',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
     minWidth: 120,
   },
   retryButtonText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   buttonDisabled: {
     opacity: 0.6,
   },
   dismissButton: {
     paddingVertical: 12,
-    alignItems: "center",
+    alignItems: 'center',
   },
   dismissButtonText: {
-    color: "#666",
+    color: '#666',
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   maxRetriesText: {
     fontSize: 12,
-    color: "#999",
-    textAlign: "center",
+    color: '#999',
+    textAlign: 'center',
     marginTop: 8,
   },
   degradedBadge: {
-    backgroundColor: "#FFD54F",
+    backgroundColor: '#FFD54F',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
@@ -250,15 +257,15 @@ const styles = createSheet({
   },
   degradedBadgeText: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "#333",
+    fontWeight: '600',
+    color: '#333',
   },
   inlineContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 6,
     padding: 8,
-    backgroundColor: "#FFEBEE",
+    backgroundColor: '#FFEBEE',
     borderRadius: 6,
     marginTop: 4,
   },
@@ -267,7 +274,7 @@ const styles = createSheet({
   },
   inlineText: {
     fontSize: 12,
-    color: "#C62828",
+    color: '#C62828',
     flex: 1,
   },
 });

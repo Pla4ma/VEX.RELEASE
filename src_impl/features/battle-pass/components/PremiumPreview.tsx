@@ -9,30 +9,42 @@
  * Answer: YES — they can see exactly what they're not getting.
  */
 
+<<<<<<< HEAD
 import React, { useMemo } from "react";
 import { View, ScrollView } from "react-native";
 import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, interpolate, Extrapolation } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
+=======
+import React, { useMemo } from 'react';
+import { Pressable, StyleSheet, View, ScrollView, Dimensions } from 'react-native';
+import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, interpolate, Extrapolation } from 'react-native-reanimated';
+import { LinearGradient } from 'expo-linear-gradient';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
-import { capture } from "../../../shared/analytics";
-import { EconomyEvents } from "../../../shared/analytics/analytics-events";
-import { usePremiumStatus } from "../../../shared/monetization";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
+import { capture } from '../../../shared/analytics';
+import { EconomyEvents } from '../../../shared/analytics/analytics-events';
+import { usePremiumStatus } from '../../../shared/monetization';
+import { createSheet } from '@/shared/ui/create-sheet';
 
+<<<<<<< HEAD
+=======
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 // Premium gradient
-const PREMIUM_GRADIENT = ["#A855F7", "#EC4899", "#F59E0B"] as const;
-const PREMIUM_GOLD = "#FFD700";
+const PREMIUM_GRADIENT = ['#A855F7', '#EC4899', '#F59E0B'] as const;
+const PREMIUM_GOLD = '#FFD700';
 
 interface PremiumReward {
   tier: number;
   name: string;
   icon: string;
-  type: "gems" | "coins" | "item" | "badge" | "exclusive";
+  type: 'gems' | 'coins' | 'item' | 'badge' | 'exclusive';
   value: string;
-  rarity: "common" | "rare" | "epic" | "legendary";
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
 }
 
 interface PremiumPreviewProps {
@@ -75,8 +87,8 @@ export function PremiumPreview({ currentTier, unlockedPremiumTiers, upcomingRewa
 
   const handleUpgrade = () => {
     capture(EconomyEvents.PAYWALL_VIEWED, {
-      source: "battle_pass_preview",
-      paywall_source: "battle_pass",
+      source: 'battle_pass_preview',
+      paywall_source: 'battle_pass',
       amount: retroactiveValue,
     });
     onUpgrade();
@@ -98,7 +110,7 @@ export function PremiumPreview({ currentTier, unlockedPremiumTiers, upcomingRewa
             </View>
             <View style={styles.headerText}>
               <Text style={styles.headerTitle}>Premium Track Locked</Text>
-              <Text style={styles.headerSubtitle}>{unlockedPremiumTiers > 0 ? `${unlockedPremiumTiers} tiers earned but locked!` : "Unlock 2x rewards on every tier"}</Text>
+              <Text style={styles.headerSubtitle}>{unlockedPremiumTiers > 0 ? `${unlockedPremiumTiers} tiers earned but locked!` : 'Unlock 2x rewards on every tier'}</Text>
             </View>
           </View>
 
@@ -113,7 +125,7 @@ export function PremiumPreview({ currentTier, unlockedPremiumTiers, upcomingRewa
 
       {/* Retroactive Value Banner */}
       {unlockedPremiumTiers > 0 && (
-        <Animated.View entering={FadeIn.duration(400).delay(100)} style={[styles.retroBanner, { backgroundColor: "rgba(255, 215, 0, 0.12)" }]}>
+        <Animated.View entering={FadeIn.duration(400).delay(100)} style={[styles.retroBanner, { backgroundColor: 'rgba(255, 215, 0, 0.12)' }]}>
           <Text style={styles.retroIcon}>💎</Text>
           <View style={styles.retroText}>
             <Text variant="body" fontWeight="700" color="text.primary">
@@ -187,7 +199,7 @@ export function PremiumPreview({ currentTier, unlockedPremiumTiers, upcomingRewa
           accessibilityRole="button"
           accessibilityHint="Activates this control"
         >
-          {unlockedPremiumTiers > 0 ? `Claim ${retroactiveValue}+ Gems Now` : "Unlock Premium Track"}
+          {unlockedPremiumTiers > 0 ? `Claim ${retroactiveValue}+ Gems Now` : 'Unlock Premium Track'}
         </Button>
 
         {unlockedPremiumTiers > 0 && (
@@ -231,10 +243,10 @@ function BlurRewardCard({ reward, index, currentTier }: BlurRewardCardProps) {
 
   // Rarity colors
   const rarityColors = {
-    common: "#94A3B8",
-    rare: "#3B82F6",
-    epic: "#A855F7",
-    legendary: "#FFD700",
+    common: '#94A3B8',
+    rare: '#3B82F6',
+    epic: '#A855F7',
+    legendary: '#FFD700',
   };
 
   const isLocked = reward.tier > currentTier;
@@ -268,11 +280,11 @@ function BlurRewardCard({ reward, index, currentTier }: BlurRewardCardProps) {
 
       {/* Lock icon */}
       <View style={styles.lockContainer}>
-        <View style={[styles.lockCircle, { backgroundColor: "rgba(0,0,0,0.6)" }]}>
+        <View style={[styles.lockCircle, { backgroundColor: 'rgba(0,0,0,0.6)' }]}>
           <Text style={styles.lockIcon}>🔒</Text>
         </View>
         <Text variant="caption" color="text.inverse" style={styles.lockText}>
-          {isLocked ? `Reach Tier ${reward.tier}` : "Premium"}
+          {isLocked ? `Reach Tier ${reward.tier}` : 'Premium'}
         </Text>
       </View>
     </Animated.View>
@@ -286,24 +298,24 @@ const styles = createSheet({
   },
   headerCard: {
     borderRadius: 20,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   headerGradient: {
     padding: 20,
     gap: 12,
   },
   headerContent: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 14,
   },
   crownContainer: {
     width: 48,
     height: 48,
     borderRadius: 14,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: 'rgba(255,255,255,0.2)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   crownEmoji: {
     fontSize: 24,
@@ -313,36 +325,36 @@ const styles = createSheet({
     gap: 4,
   },
   headerTitle: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 20,
-    fontWeight: "800",
+    fontWeight: '800',
   },
   headerSubtitle: {
-    color: "rgba(255,255,255,0.9)",
+    color: 'rgba(255,255,255,0.9)',
     fontSize: 14,
   },
   urgencyBadge: {
-    alignSelf: "flex-start",
-    backgroundColor: "rgba(0,0,0,0.3)",
+    alignSelf: 'flex-start',
+    backgroundColor: 'rgba(0,0,0,0.3)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.3)",
+    borderColor: 'rgba(255,255,255,0.3)',
   },
   urgencyText: {
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   retroBanner: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
     padding: 14,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: "rgba(255, 215, 0, 0.3)",
+    borderColor: 'rgba(255, 215, 0, 0.3)',
   },
   retroIcon: {
     fontSize: 24,
@@ -352,8 +364,8 @@ const styles = createSheet({
     gap: 2,
   },
   missingLabel: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
     marginTop: 8,
   },
@@ -362,7 +374,7 @@ const styles = createSheet({
     height: 1,
   },
   missingText: {
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1,
   },
   rewardsScroll: {
@@ -373,11 +385,11 @@ const styles = createSheet({
     width: 120,
     height: 140,
     borderRadius: 16,
-    overflow: "hidden",
-    position: "relative",
+    overflow: 'hidden',
+    position: 'relative',
   },
   blurOverlay: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
@@ -386,8 +398,8 @@ const styles = createSheet({
   },
   rewardContent: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     gap: 6,
     padding: 12,
   },
@@ -396,16 +408,16 @@ const styles = createSheet({
     opacity: 0.5,
   },
   rewardName: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   lockContainer: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 2,
     gap: 8,
   },
@@ -413,30 +425,30 @@ const styles = createSheet({
     width: 44,
     height: 44,
     borderRadius: 22,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   lockIcon: {
     fontSize: 20,
   },
   lockText: {
     fontSize: 10,
-    fontWeight: "700",
-    textAlign: "center",
+    fontWeight: '700',
+    textAlign: 'center',
     paddingHorizontal: 8,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: 'rgba(0,0,0,0.5)',
     paddingVertical: 4,
     borderRadius: 8,
   },
   statsRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
     padding: 16,
     borderRadius: 16,
   },
   stat: {
-    alignItems: "center",
+    alignItems: 'center',
     gap: 4,
   },
   statDivider: {
@@ -447,13 +459,13 @@ const styles = createSheet({
     gap: 8,
   },
   ctaSubtext: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   trustRow: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   trustText: {
-    textAlign: "center",
+    textAlign: 'center',
   },
 });
 

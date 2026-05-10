@@ -4,14 +4,14 @@
  * Comprehensive tracking for squad engagement and health metrics.
  */
 
-import { eventBus } from "../../events";
-import { type Squad, type SquadMember, type SquadRole } from "./schemas";
+import { eventBus } from '../../events';
+import { type Squad, type SquadMember, type SquadRole } from './schemas';
 
 export const SquadAnalytics = {
   // Lifecycle events
   squadCreated: (squad: Squad, founderId: string) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_created",
+    eventBus.publish('analytics:track', {
+      event: 'squad_created',
       properties: {
         squad_id: squad.id,
         squad_name: squad.name,
@@ -24,9 +24,9 @@ export const SquadAnalytics = {
     });
   },
 
-  squadJoined: (squadId: string, userId: string, role: SquadRole, method: "invite" | "request" | "open") => {
-    eventBus.publish("analytics:track", {
-      event: "squad_member_joined",
+  squadJoined: (squadId: string, userId: string, role: SquadRole, method: 'invite' | 'request' | 'open') => {
+    eventBus.publish('analytics:track', {
+      event: 'squad_member_joined',
       properties: {
         squad_id: squadId,
         user_id: userId,
@@ -38,8 +38,8 @@ export const SquadAnalytics = {
   },
 
   squadLeft: (squadId: string, userId: string, wasFounder: boolean, durationMs: number) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_member_left",
+    eventBus.publish('analytics:track', {
+      event: 'squad_member_left',
       properties: {
         squad_id: squadId,
         user_id: userId,
@@ -52,8 +52,8 @@ export const SquadAnalytics = {
 
   // Engagement events
   sessionStarted: (squadId: string, sessionId: string, participantCount: number, config: unknown) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_session_started",
+    eventBus.publish('analytics:track', {
+      event: 'squad_session_started',
       properties: {
         squad_id: squadId,
         session_id: sessionId,
@@ -65,8 +65,8 @@ export const SquadAnalytics = {
   },
 
   sessionCompleted: (squadId: string, sessionId: string, duration: number, totalFocusTime: number, participantResults: Array<{ userId: string; focusTime: number; completed: boolean }>) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_session_completed",
+    eventBus.publish('analytics:track', {
+      event: 'squad_session_completed',
       properties: {
         squad_id: squadId,
         session_id: sessionId,
@@ -81,8 +81,8 @@ export const SquadAnalytics = {
   },
 
   contributionMade: (squadId: string, userId: string, points: number, source: string, newTotal: number) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_contribution",
+    eventBus.publish('analytics:track', {
+      event: 'squad_contribution',
       properties: {
         squad_id: squadId,
         user_id: userId,
@@ -95,8 +95,8 @@ export const SquadAnalytics = {
   },
 
   synergyLevelUp: (squadId: string, newLevel: number, previousLevel: number, totalPoints: number) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_synergy_level_up",
+    eventBus.publish('analytics:track', {
+      event: 'squad_synergy_level_up',
       properties: {
         squad_id: squadId,
         new_level: newLevel,
@@ -110,8 +110,8 @@ export const SquadAnalytics = {
 
   // Role management events
   roleChanged: (squadId: string, userId: string, previousRole: SquadRole, newRole: SquadRole, changedBy: string) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_role_changed",
+    eventBus.publish('analytics:track', {
+      event: 'squad_role_changed',
       properties: {
         squad_id: squadId,
         user_id: userId,
@@ -126,8 +126,8 @@ export const SquadAnalytics = {
   },
 
   memberKicked: (squadId: string, userId: string, kickedBy: string, reason?: string | null) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_member_kicked",
+    eventBus.publish('analytics:track', {
+      event: 'squad_member_kicked',
       properties: {
         squad_id: squadId,
         user_id: userId,
@@ -140,8 +140,8 @@ export const SquadAnalytics = {
 
   // Invite flow events
   inviteSent: (squadId: string, invitedBy: string, invitedUserId: string, roleOffered: SquadRole) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_invite_sent",
+    eventBus.publish('analytics:track', {
+      event: 'squad_invite_sent',
       properties: {
         squad_id: squadId,
         invited_by: invitedBy,
@@ -152,9 +152,9 @@ export const SquadAnalytics = {
     });
   },
 
-  inviteResponded: (squadId: string, inviteId: string, invitedUserId: string, response: "accepted" | "declined" | "expired", responseTimeMs?: number) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_invite_responded",
+  inviteResponded: (squadId: string, inviteId: string, invitedUserId: string, response: 'accepted' | 'declined' | 'expired', responseTimeMs?: number) => {
+    eventBus.publish('analytics:track', {
+      event: 'squad_invite_responded',
       properties: {
         squad_id: squadId,
         invite_id: inviteId,
@@ -168,8 +168,8 @@ export const SquadAnalytics = {
 
   // Error events
   errorOccurred: (squadId: string | undefined, operation: string, errorCode: string, errorMessage: string, context: Record<string, unknown>) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_error",
+    eventBus.publish('analytics:track', {
+      event: 'squad_error',
       properties: {
         squad_id: squadId,
         operation,
@@ -193,8 +193,8 @@ export const SquadAnalytics = {
       synergyLevel: number;
     },
   ) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_health_check",
+    eventBus.publish('analytics:track', {
+      event: 'squad_health_check',
       properties: {
         squad_id: squadId,
         ...metrics,
@@ -205,8 +205,8 @@ export const SquadAnalytics = {
   },
 
   squadWarViewed: (squadId: string, warId: string, bossName: string, memberCount: number) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_war_viewed",
+    eventBus.publish('analytics:track', {
+      event: 'squad_war_viewed',
       properties: {
         squad_id: squadId,
         war_id: warId,
@@ -218,8 +218,8 @@ export const SquadAnalytics = {
   },
 
   squadWarStartTapped: (squadId: string, warId: string) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_war_start_session_tapped",
+    eventBus.publish('analytics:track', {
+      event: 'squad_war_start_session_tapped',
       properties: {
         squad_id: squadId,
         war_id: warId,
@@ -229,8 +229,8 @@ export const SquadAnalytics = {
   },
 
   squadWarDamageRecorded: (squadId: string, userId: string, damage: number, sessionId: string) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_war_damage_recorded",
+    eventBus.publish('analytics:track', {
+      event: 'squad_war_damage_recorded',
       properties: {
         squad_id: squadId,
         user_id: userId,
@@ -242,8 +242,8 @@ export const SquadAnalytics = {
   },
 
   squadWarRealtimeDegraded: (squadId: string, reason: string) => {
-    eventBus.publish("analytics:track", {
-      event: "squad_war_realtime_degraded",
+    eventBus.publish('analytics:track', {
+      event: 'squad_war_realtime_degraded',
       properties: {
         squad_id: squadId,
         reason,
@@ -255,12 +255,12 @@ export const SquadAnalytics = {
 
 // Helper functions
 function isPromotion(previous: SquadRole, current: SquadRole): boolean {
-  const hierarchy = ["GUEST", "MEMBER", "MODERATOR", "ADMIN", "FOUNDER"];
+  const hierarchy = ['GUEST', 'MEMBER', 'MODERATOR', 'ADMIN', 'FOUNDER'];
   return hierarchy.indexOf(current) > hierarchy.indexOf(previous);
 }
 
 function isDemotion(previous: SquadRole, current: SquadRole): boolean {
-  const hierarchy = ["GUEST", "MEMBER", "MODERATOR", "ADMIN", "FOUNDER"];
+  const hierarchy = ['GUEST', 'MEMBER', 'MODERATOR', 'ADMIN', 'FOUNDER'];
   return hierarchy.indexOf(current) < hierarchy.indexOf(previous);
 }
 
@@ -286,7 +286,7 @@ export async function generateSquadAnalyticsReport(squadId: string): Promise<{
   // This would aggregate data from the analytics events
   // For now, returning placeholder structure
   return {
-    period: "7d",
+    period: '7d',
     memberGrowth: 0,
     activityRate: 0,
     avgSessionTime: 0,

@@ -95,7 +95,7 @@ class HapticEngine {
    * Load configuration from storage
    */
   private async loadConfig(): Promise<void> {
-    // Could load from AsyncStorage or MMKV
+    // Could load from MMKV or MMKV
     // For now, use defaults
   }
 
@@ -316,3 +316,4 @@ export const haptics = {
 };
 
 export default HapticEngine;
+

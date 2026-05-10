@@ -3,7 +3,7 @@
  * Zod schemas for validation at all boundaries
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // Export inferred types for use in other files
 export type AnalyticsMetric = z.infer<typeof AnalyticsMetricSchema>;
@@ -25,34 +25,34 @@ export type DashboardLayout = z.infer<typeof DashboardLayoutSchema>;
 export type DashboardWidget = z.infer<typeof DashboardWidgetSchema>;
 
 // Metric types
-export const AnalyticsMetricSchema = z.enum(["sessions_completed", "sessions_abandoned", "total_focus_time", "average_session_duration", "streak_days", "longest_streak", "xp_earned", "level_progression", "boss_damage_dealt", "bosses_defeated", "rewards_claimed", "coins_earned", "coins_spent", "gems_earned", "gems_spent", "items_crafted", "challenges_completed", "social_interactions", "squad_contributions", "daily_active", "weekly_active", "retention_rate"]);
+export const AnalyticsMetricSchema = z.enum(['sessions_completed', 'sessions_abandoned', 'total_focus_time', 'average_session_duration', 'streak_days', 'longest_streak', 'xp_earned', 'level_progression', 'boss_damage_dealt', 'bosses_defeated', 'rewards_claimed', 'coins_earned', 'coins_spent', 'gems_earned', 'gems_spent', 'items_crafted', 'challenges_completed', 'social_interactions', 'squad_contributions', 'daily_active', 'weekly_active', 'retention_rate']);
 
 // Dimension types for filtering/grouping
-export const AnalyticsDimensionSchema = z.enum(["day_of_week", "hour_of_day", "session_category", "streak_milestone", "boss_type", "item_type", "challenge_difficulty", "social_activity_type", "time_of_day", "device_type"]);
+export const AnalyticsDimensionSchema = z.enum(['day_of_week', 'hour_of_day', 'session_category', 'streak_milestone', 'boss_type', 'item_type', 'challenge_difficulty', 'social_activity_type', 'time_of_day', 'device_type']);
 
 // Trend direction
-export const TrendDirectionSchema = z.enum(["up", "down", "flat", "volatile", "seasonal"]);
+export const TrendDirectionSchema = z.enum(['up', 'down', 'flat', 'volatile', 'seasonal']);
 
 // Time ranges
-export const TimeRangeSchema = z.enum(["today", "yesterday", "last_7_days", "last_30_days", "this_week", "last_week", "this_month", "last_month", "this_year", "last_year", "all_time", "custom"]);
+export const TimeRangeSchema = z.enum(['today', 'yesterday', 'last_7_days', 'last_30_days', 'this_week', 'last_week', 'this_month', 'last_month', 'this_year', 'last_year', 'all_time', 'custom']);
 
 // Insight severity
-export const InsightSeveritySchema = z.enum(["info", "positive", "warning", "critical", "celebration"]);
+export const InsightSeveritySchema = z.enum(['info', 'positive', 'warning', 'critical', 'celebration']);
 
 // Insight types
-export const InsightTypeSchema = z.enum(["milestone_reached", "streak_at_risk", "streak_achieved", "improvement_detected", "decline_detected", "pattern_discovered", "anomaly_detected", "comparison_insight", "recommendation", "achievement_unlocked", "boss_defeated", "level_up", "season_progress"]);
+export const InsightTypeSchema = z.enum(['milestone_reached', 'streak_at_risk', 'streak_achieved', 'improvement_detected', 'decline_detected', 'pattern_discovered', 'anomaly_detected', 'comparison_insight', 'recommendation', 'achievement_unlocked', 'boss_defeated', 'level_up', 'season_progress']);
 
 // Dashboard widget types
-export const DashboardWidgetTypeSchema = z.enum(["line_chart", "bar_chart", "pie_chart", "stat_card", "trend_indicator", "heatmap", "leaderboard", "goal_progress", "comparison_chart", "insight_card", "pattern_list"]);
+export const DashboardWidgetTypeSchema = z.enum(['line_chart', 'bar_chart', 'pie_chart', 'stat_card', 'trend_indicator', 'heatmap', 'leaderboard', 'goal_progress', 'comparison_chart', 'insight_card', 'pattern_list']);
 
 // Export formats
-export const ExportFormatSchema = z.enum(["json", "csv", "xlsx", "pdf"]);
+export const ExportFormatSchema = z.enum(['json', 'csv', 'xlsx', 'pdf']);
 
 // Analytics filter
 export const AnalyticsFilterSchema = z
   .object({
     dimension: AnalyticsDimensionSchema,
-    operator: z.enum(["eq", "ne", "gt", "gte", "lt", "lte", "in", "not_in", "between"]),
+    operator: z.enum(['eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'in', 'not_in', 'between']),
     value: z.union([z.string(), z.number(), z.boolean(), z.array(z.string()), z.array(z.number())]),
   })
   .strict();
@@ -71,7 +71,7 @@ export const AnalyticsDataPointSchema = z
 export const TimeSeriesDataSchema = z
   .object({
     metric: AnalyticsMetricSchema,
-    granularity: z.enum(["hour", "day", "week", "month"]),
+    granularity: z.enum(['hour', 'day', 'week', 'month']),
     points: z.array(AnalyticsDataPointSchema).min(1),
     summary: z
       .object({
@@ -202,7 +202,7 @@ export const ComparativeStatsSchema = z
 export const DetectedPatternSchema = z
   .object({
     id: z.string().uuid(),
-    type: z.enum(["correlation", "anomaly", "cycle", "milestone", "regression"]),
+    type: z.enum(['correlation', 'anomaly', 'cycle', 'milestone', 'regression']),
     metric: AnalyticsMetricSchema,
     description: z.string().min(1).max(1000),
     confidence: z.number().min(0).max(1),
@@ -219,7 +219,7 @@ export const ExportJobSchema = z
   .object({
     id: z.string().uuid(),
     userId: z.string().uuid(),
-    status: z.enum(["pending", "processing", "completed", "failed", "cancelled"]),
+    status: z.enum(['pending', 'processing', 'completed', 'failed', 'cancelled']),
     format: ExportFormatSchema,
     dataTypes: z.array(z.string()).min(1),
     dateRange: z
@@ -246,11 +246,11 @@ export const AnalyticsPreferencesSchema = z
     defaultTimeRange: TimeRangeSchema,
     defaultDashboardId: z.string().uuid(),
     emailReportsEnabled: z.boolean(),
-    emailReportFrequency: z.enum(["daily", "weekly", "monthly", "never"]),
+    emailReportFrequency: z.enum(['daily', 'weekly', 'monthly', 'never']),
     insightNotificationsEnabled: z.boolean(),
     autoRefreshEnabled: z.boolean(),
     autoRefreshInterval: z.number().int().min(5000).max(300000),
-    currencyDisplay: z.enum(["coins", "gems", "both"]),
+    currencyDisplay: z.enum(['coins', 'gems', 'both']),
     timezone: z.string(),
     updatedAt: z.number().int().positive(),
   })
@@ -290,7 +290,7 @@ export const GetAnalyticsDataInputSchema = z
     userId: z.string().uuid(),
     metrics: z.array(AnalyticsMetricSchema).min(1),
     timeRange: TimeRangeSchema,
-    granularity: z.enum(["hour", "day", "week", "month"]),
+    granularity: z.enum(['hour', 'day', 'week', 'month']),
     dimensions: z.array(AnalyticsDimensionSchema).optional(),
     filters: z.array(AnalyticsFilterSchema).optional(),
     includeComparison: z.boolean().optional(),
@@ -356,42 +356,42 @@ export function getTimeRangeDates(range: z.infer<typeof TimeRangeSchema>): { sta
   const oneDay = 24 * 60 * 60 * 1000;
 
   switch (range) {
-    case "today":
+    case 'today':
       return {
         start: new Date(now).setHours(0, 0, 0, 0),
         end: now,
       };
-    case "yesterday":
+    case 'yesterday':
       return {
         start: new Date(now - oneDay).setHours(0, 0, 0, 0),
         end: new Date(now - oneDay).setHours(23, 59, 59, 999),
       };
-    case "last_7_days":
+    case 'last_7_days':
       return {
         start: now - 7 * oneDay,
         end: now,
       };
-    case "last_30_days":
+    case 'last_30_days':
       return {
         start: now - 30 * oneDay,
         end: now,
       };
-    case "this_week":
+    case 'this_week':
       const currentWeekDay = new Date(now).getDay();
       return {
         start: now - currentWeekDay * oneDay,
         end: now,
       };
-    case "this_month":
+    case 'this_month':
       const currentMonthDay = new Date(now).getDate();
       return {
         start: now - (currentMonthDay - 1) * oneDay,
         end: now,
       };
-    case "this_year":
+    case 'this_year':
       const startOfYear = new Date(now).setMonth(0, 1);
       return { start: startOfYear, end: now };
-    case "all_time":
+    case 'all_time':
       return { start: 0, end: now };
     default:
       return { start: now - 7 * oneDay, end: now };

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /**
  * RecentSessionsList Component
  *
@@ -16,28 +17,29 @@ import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
 
+=======
+import React, { useCallback } from 'react';
+import { Pressable } from 'react-native';
+import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import Animated, { FadeIn } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 export interface SessionListItem {
   id: string;
-  duration: number; // in seconds
-  qualityGrade: "S" | "A" | "B" | "C" | "D";
+  duration: number;
+  qualityGrade: 'S' | 'A' | 'B' | 'C' | 'D';
   xpEarned: number;
-  endedAt: string; // ISO date
+  endedAt: string;
   interruptions: number;
 }
-
 export interface RecentSessionsListProps {
   sessions: SessionListItem[];
-  /** Navigate to session history */
   onViewAll?: () => void;
-  /** Navigate to session detail */
   onSessionPress?: (sessionId: string) => void;
-  /** Loading state */
   isLoading?: boolean;
 }
-
-/**
- * Format duration in seconds to readable string
- */
 function formatDuration(seconds: number): string {
   const minutes = Math.floor(seconds / 60);
   if (minutes < 60) {
@@ -47,10 +49,6 @@ function formatDuration(seconds: number): string {
   const remainingMinutes = minutes % 60;
   return remainingMinutes > 0 ? `${hours}h ${remainingMinutes}m` : `${hours}h`;
 }
-
-/**
- * Format time ago from ISO date
- */
 function formatTimeAgo(isoDate: string): string {
   const date = new Date(isoDate);
   const now = new Date();
@@ -58,9 +56,8 @@ function formatTimeAgo(isoDate: string): string {
   const diffMins = Math.floor(diffMs / 60000);
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
-
   if (diffMins < 5) {
-    return "Just now";
+    return 'Just now';
   }
   if (diffMins < 60) {
     return `${diffMins}m ago`;
@@ -69,60 +66,42 @@ function formatTimeAgo(isoDate: string): string {
     return `${diffHours}h ago`;
   }
   if (diffDays === 1) {
-    return "Yesterday";
+    return 'Yesterday';
   }
   if (diffDays < 7) {
     return `${diffDays} days ago`;
   }
-  return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
-
-/**
- * Get color for quality grade
- */
-function getGradeColor(grade: SessionListItem["qualityGrade"], theme: ReturnType<typeof useTheme>["theme"]): string {
+function getGradeColor(grade: SessionListItem['qualityGrade'], theme: ReturnType<typeof useTheme>['theme']): string {
   switch (grade) {
-    case "S":
+    case 'S':
       return theme.colors.accent.purple;
-    case "A":
+    case 'A':
       return theme.colors.success.DEFAULT;
-    case "B":
+    case 'B':
       return theme.colors.info.DEFAULT;
-    case "C":
+    case 'C':
       return theme.colors.text.tertiary;
-    case "D":
+    case 'D':
       return theme.colors.error.DEFAULT;
     default:
       return theme.colors.text.tertiary;
   }
 }
-
-/**
- * Skeleton item for loading state
- */
 function SessionItemSkeleton(): JSX.Element {
   const { theme } = useTheme();
-
   return (
     <Box flexDirection="row" alignItems="center" py="md" px="lg" gap="md">
-      {/* Grade indicator skeleton */}
       <Box width={4} height={40} borderRadius="full" bg={theme.colors.background.tertiary} />
-
-      {/* Content skeleton */}
       <Box flex={1} gap="sm">
         <Box width={80} height={16} borderRadius="sm" bg={theme.colors.background.tertiary} />
         <Box width={120} height={12} borderRadius="sm" bg={theme.colors.background.tertiary} />
       </Box>
-
-      {/* XP skeleton */}
       <Box width={50} height={20} borderRadius="lg" bg={theme.colors.background.tertiary} />
     </Box>
   );
 }
-
-/**
- * Skeleton loading state for entire list
- */
 function RecentSessionsSkeleton(): JSX.Element {
   return (
     <Box>
@@ -132,12 +111,16 @@ function RecentSessionsSkeleton(): JSX.Element {
     </Box>
   );
 }
+<<<<<<< HEAD
 
 /**
  * Empty state when no sessions
  */
 function EmptyState({ onStart: _onStart }: { onStart?: () => void }): JSX.Element {
 
+=======
+function EmptyState(): JSX.Element {
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   return (
     <Animated.View entering={FadeIn.duration(400)}>
       <Box py="xl" px="lg" alignItems="center" justifyContent="center" gap="md">
@@ -152,22 +135,14 @@ function EmptyState({ onStart: _onStart }: { onStart?: () => void }): JSX.Elemen
     </Animated.View>
   );
 }
-
-/**
- * Individual session row item
- */
 function SessionRow({ session, onPress }: { session: SessionListItem; onPress?: () => void }): JSX.Element {
   const { theme } = useTheme();
   const accentColor = getGradeColor(session.qualityGrade, theme);
   const hasInterruptions = session.interruptions > 0;
-
   return (
     <Pressable onPress={onPress} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
       <Box flexDirection="row" alignItems="center" py="md" px="lg" gap="md">
-        {/* Quality accent bar */}
         <Box width={4} height={48} borderRadius="full" bg={accentColor} />
-
-        {/* Session info */}
         <Box flex={1} gap="xs">
           <Box flexDirection="row" alignItems="center" gap="sm">
             <Text variant="body" color="text.primary" fontWeight="600">
@@ -180,24 +155,19 @@ function SessionRow({ session, onPress }: { session: SessionListItem; onPress?: 
               {formatTimeAgo(session.endedAt)}
             </Text>
           </Box>
-
           <Box flexDirection="row" alignItems="center" gap="sm">
-            {/* Grade badge */}
             <Box px="xs" py="xs" borderRadius="sm" bg={`${accentColor}20`}>
               <Text variant="caption" color={accentColor} fontWeight="700">
                 {session.qualityGrade}
               </Text>
             </Box>
-
             {hasInterruptions && (
               <Text variant="caption" color="text.tertiary">
-                {session.interruptions} interruption{session.interruptions > 1 ? "s" : ""}
+                {session.interruptions} interruption{session.interruptions > 1 ? 's' : ''}
               </Text>
             )}
           </Box>
         </Box>
-
-        {/* XP earned */}
         <Box flexDirection="row" alignItems="center" gap="xs" px="sm" py="xs" borderRadius="lg" bg={theme.colors.background.tertiary}>
           <Text fontSize={12}>✨</Text>
           <Text variant="caption" color="text.secondary" fontWeight="600">
@@ -208,17 +178,10 @@ function SessionRow({ session, onPress }: { session: SessionListItem; onPress?: 
     </Pressable>
   );
 }
-
-/**
- * Main recent sessions list component
- */
 export function RecentSessionsList({ sessions, onViewAll, onSessionPress, isLoading = false }: RecentSessionsListProps): JSX.Element {
   const { theme } = useTheme();
-
   const renderItem: ListRenderItem<SessionListItem> = useCallback(({ item }) => <SessionRow session={item} onPress={() => onSessionPress?.(item.id)} />, [onSessionPress]);
-
   const keyExtractor = useCallback((item: SessionListItem) => item.id, []);
-
   if (isLoading) {
     return (
       <Box px="lg" py="md">
@@ -229,7 +192,6 @@ export function RecentSessionsList({ sessions, onViewAll, onSessionPress, isLoad
       </Box>
     );
   }
-
   if (sessions.length === 0) {
     return (
       <Box px="lg" py="md">
@@ -240,10 +202,7 @@ export function RecentSessionsList({ sessions, onViewAll, onSessionPress, isLoad
       </Box>
     );
   }
-
-  // Take only last 5 sessions
   const displaySessions = sessions.slice(0, 5);
-
   return (
     <Animated.View entering={FadeIn.duration(400).delay(300)}>
       <Box px="lg" py="md">
@@ -257,7 +216,6 @@ export function RecentSessionsList({ sessions, onViewAll, onSessionPress, isLoad
             </Text>
           </Pressable>
         </Box>
-
         <Box borderRadius="xl" bg={theme.colors.background.secondary} overflow="hidden">
           <FlashList data={displaySessions} renderItem={renderItem} keyExtractor={keyExtractor} estimatedItemSize={72} scrollEnabled={false} showsVerticalScrollIndicator={false} ItemSeparatorComponent={() => <Box height={1} mx="lg" bg={theme.colors.border.light} />} />
         </Box>
@@ -265,5 +223,4 @@ export function RecentSessionsList({ sessions, onViewAll, onSessionPress, isLoad
     </Animated.View>
   );
 }
-
 export default RecentSessionsList;

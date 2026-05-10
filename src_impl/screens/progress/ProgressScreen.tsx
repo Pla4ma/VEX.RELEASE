@@ -15,8 +15,8 @@ import { useFeatureAccess } from '../../features/liveops-config';
 import { MasteryCard } from '../../features/mastery/components/MasteryCard';
 import { MasteryService } from '../../features/mastery/service';
 import type { MasteryState } from '../../features/mastery/types';
-import { FocusScoreDashboard } from "../../features/focus-identity/components/focus-score-dashboard";
-import { useFocusScoreDashboardModel } from "../../features/focus-identity/hooks-focus-score";
+import { FocusScoreDashboard } from '../../features/focus-identity/components/focus-score-dashboard';
+import { useFocusScoreDashboardModel } from '../../features/focus-identity/hooks-focus-score';
 import { ProgressionDashboard } from '../../features/progression/components';
 // import { LeaderboardView } from '../../features/rankings/components'; // Feature not implemented
 import { useActiveSeason, useUpcomingSeasons } from '../../features/seasons/hooks';

@@ -1,21 +1,21 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { LayoutChangeEvent, StyleSheet, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from "react-native-reanimated";
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { LayoutChangeEvent, StyleSheet, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 
-import { Button } from "../../../components/primitives/Button";
-import { Card } from "../../../components/primitives/Card";
-import { Text } from "../../../components/primitives/Text";
-import { EmptyState, ErrorState, Skeleton } from "../../../shared/ui/state-components";
-import { useAuthStore } from "../../../store";
-import { useTheme } from "../../../theme";
-import { formatRelativeTime } from "../../../utils/date";
-import type { ExtendedRootStackParams } from "../../../navigation/types";
-import { SquadAnalytics } from "../analytics";
-import { loadActiveSquadWar, watchActiveSquadWar } from "../squad-war-service";
-import type { SquadWar, SquadWarMemberStatus } from "../squad-war-types";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { Button } from '../../../components/primitives/Button';
+import { Card } from '../../../components/primitives/Card';
+import { Text } from '../../../components/primitives/Text';
+import { EmptyState, ErrorState, Skeleton } from '../../../shared/ui/state-components';
+import { useAuthStore } from '../../../store';
+import { useTheme } from '../../../theme';
+import { formatRelativeTime } from '../../../utils/date';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { SquadAnalytics } from '../analytics';
+import { loadActiveSquadWar, watchActiveSquadWar } from '../squad-war-service';
+import type { SquadWar, SquadWarMemberStatus } from '../squad-war-types';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -32,12 +32,12 @@ function formatTimeLeft(weekEndsAt: string, now: number): string {
     return `${diffDays} days left`;
   }
   if (diffDays === 1) {
-    return "1 day left";
+    return '1 day left';
   }
   if (diffHours > 1) {
     return `${diffHours}h left`;
   }
-  return "Ending soon";
+  return 'Ending soon';
 }
 
 function formatFocusingDuration(sessionStartedAt: number, now: number): string {
@@ -47,12 +47,12 @@ function formatFocusingDuration(sessionStartedAt: number, now: number): string {
 
 function getHealthColor(healthRatio: number): string {
   if (healthRatio > 0.6) {
-    return "#22C55E";
+    return '#22C55E';
   }
   if (healthRatio >= 0.3) {
-    return "#F59E0B";
+    return '#F59E0B';
   }
-  return "#EF4444";
+  return '#EF4444';
 }
 
 function SquadWarMemberRow({ member, currentUserId, now, textColor, mutedColor }: { member: SquadWarMemberStatus; currentUserId: string | null; now: number; textColor: string; mutedColor: string }) {
@@ -76,10 +76,10 @@ function SquadWarMemberRow({ member, currentUserId, now, textColor, mutedColor }
   return (
     <Animated.View style={[styles.memberRow, rowStyle]}>
       <View style={styles.memberIdentity}>
-        <View style={[styles.memberDot, { backgroundColor: member.isCurrentlyFocusing ? "#22C55E" : "#6B7280" }]} />
+        <View style={[styles.memberDot, { backgroundColor: member.isCurrentlyFocusing ? '#22C55E' : '#6B7280' }]} />
         <View style={styles.memberTextBlock}>
           <Text variant="body" style={[styles.memberName, { color: textColor }]}>
-            {member.userId === currentUserId ? "You" : member.displayName}
+            {member.userId === currentUserId ? 'You' : member.displayName}
           </Text>
           <Text variant="caption" style={{ color: mutedColor }}>
             {statusLabel}
@@ -237,8 +237,8 @@ export function SquadWarHUD({ squadId }: SquadWarHUDProps) {
           style={[
             styles.degradedBanner,
             {
-              backgroundColor: theme.colors.warning.DEFAULT + "14",
-              borderColor: theme.colors.warning.DEFAULT + "33",
+              backgroundColor: theme.colors.warning.DEFAULT + '14',
+              borderColor: theme.colors.warning.DEFAULT + '33',
             },
           ]}
         >
@@ -257,7 +257,7 @@ export function SquadWarHUD({ squadId }: SquadWarHUDProps) {
             {formatTimeLeft(war.weekEndsAt, now)}
           </Text>
         </View>
-        <View style={[styles.multiplierBadge, { backgroundColor: theme.colors.primary[500] + "1A" }]}>
+        <View style={[styles.multiplierBadge, { backgroundColor: theme.colors.primary[500] + '1A' }]}>
           <Text variant="label" style={{ color: theme.colors.primary[500] }}>
             ×{war.rewardMultiplier.toFixed(1)}
           </Text>
@@ -289,8 +289,8 @@ export function SquadWarHUD({ squadId }: SquadWarHUDProps) {
         fullWidth
         onPress={() => {
           SquadAnalytics.squadWarStartTapped(squadId, war.id);
-          navigation.navigate("SessionStack", {
-            screen: "SessionSetup",
+          navigation.navigate('SessionStack', {
+            screen: 'SessionSetup',
             params: {
               warContext: {
                 squadWarId: war.id,
@@ -324,20 +324,20 @@ const styles = createSheet({
     height: 12,
   },
   headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     gap: 12,
   },
   headerTitle: {
     flex: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     gap: 8,
   },
   kicker: {
-    fontWeight: "700",
+    fontWeight: '700',
     letterSpacing: 1,
   },
   multiplierBadge: {
@@ -348,7 +348,7 @@ const styles = createSheet({
   bossName: {
     marginTop: 16,
     marginBottom: 14,
-    fontWeight: "700",
+    fontWeight: '700',
   },
   healthSection: {
     marginBottom: 18,
@@ -357,31 +357,31 @@ const styles = createSheet({
   healthTrack: {
     height: 18,
     borderRadius: 999,
-    overflow: "hidden",
-    position: "relative",
+    overflow: 'hidden',
+    position: 'relative',
   },
   healthFill: {
-    height: "100%",
+    height: '100%',
     borderRadius: 999,
   },
   healthFlash: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: '#FFFFFF',
   },
   memberList: {
     gap: 10,
     marginBottom: 18,
   },
   memberRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     gap: 12,
   },
   memberIdentity: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 10,
   },
   memberDot: {
@@ -393,10 +393,10 @@ const styles = createSheet({
     flex: 1,
   },
   memberName: {
-    fontWeight: "600",
+    fontWeight: '600',
   },
   memberDamage: {
-    fontWeight: "600",
+    fontWeight: '600',
   },
 });
 

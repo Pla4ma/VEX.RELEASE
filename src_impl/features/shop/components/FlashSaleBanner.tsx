@@ -10,6 +10,7 @@
  * - Urgent styling with pulsing animation
  */
 
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { Pressable } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, withSequence, Easing, interpolate } from "react-native-reanimated";
@@ -19,6 +20,17 @@ import { Box, Text } from "../../../components/primitives";
 import { Icon } from "../../../icons";
 import type { FlashSale } from "../FlashSaleSystem";
 import { formatFlashSaleCountdown, getFlashSaleTimeRemaining } from "../FlashSaleSystem";
+=======
+import React, { useState, useEffect } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, withSequence, Easing, interpolate } from 'react-native-reanimated';
+
+import { useTheme } from '../../../theme';
+import { Box, Text, Card } from '../../../components/primitives';
+import { Icon } from '../../../icons';
+import type { FlashSale } from '../FlashSaleSystem';
+import { formatFlashSaleCountdown, getFlashSaleTimeRemaining } from '../FlashSaleSystem';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 interface FlashSaleBannerProps {
   flashSale: FlashSale | null;
@@ -27,7 +39,7 @@ interface FlashSaleBannerProps {
 
 export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({ flashSale, onPress }) => {
   const { theme } = useTheme();
-  const [timeRemaining, setTimeRemaining] = useState("");
+  const [timeRemaining, setTimeRemaining] = useState('');
 
   // Animations
   const pulse = useSharedValue(1);
@@ -77,10 +89,10 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({ flashSale, onP
           borderRadius={16}
           overflow="hidden"
           style={{
-            backgroundColor: "#1A1A2E",
+            backgroundColor: '#1A1A2E',
             borderWidth: 2,
-            borderColor: "#EF4444",
-            shadowColor: "#EF4444",
+            borderColor: '#EF4444',
+            shadowColor: '#EF4444',
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 12,
@@ -91,7 +103,7 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({ flashSale, onP
           <Box
             p={12}
             style={{
-              backgroundColor: "#EF4444",
+              backgroundColor: '#EF4444',
             }}
           >
             <Box flexDirection="row" justifyContent="space-between" alignItems="center">
@@ -102,7 +114,7 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({ flashSale, onP
                       width: 8,
                       height: 8,
                       borderRadius: 4,
-                      backgroundColor: "#FFF",
+                      backgroundColor: '#FFF',
                       marginRight: 8,
                     },
                     shimmerStyle,
@@ -110,8 +122,8 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({ flashSale, onP
                 />
                 <Text
                   style={{
-                    color: "#FFF",
-                    fontWeight: "800",
+                    color: '#FFF',
+                    fontWeight: '800',
                     fontSize: 16,
                     letterSpacing: 1,
                   }}
@@ -126,18 +138,18 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({ flashSale, onP
                 py={4}
                 borderRadius={8}
                 style={{
-                  backgroundColor: "rgba(0, 0, 0, 0.3)",
+                  backgroundColor: 'rgba(0, 0, 0, 0.3)',
                 }}
               >
                 <Box flexDirection="row" alignItems="center">
                   <Icon name="clock" size={12} color="#FFF" />
                   <Text
                     style={{
-                      color: "#FFF",
-                      fontWeight: "700",
+                      color: '#FFF',
+                      fontWeight: '700',
                       fontSize: 14,
                       marginLeft: 4,
-                      fontVariant: ["tabular-nums"],
+                      fontVariant: ['tabular-nums'],
                     }}
                   >
                     {timeRemaining}
@@ -171,7 +183,7 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({ flashSale, onP
                 variant="body"
                 style={{
                   fontSize: 18,
-                  fontWeight: "700",
+                  fontWeight: '700',
                   marginBottom: 4,
                   color: theme.colors.text.primary,
                 }}
@@ -188,7 +200,7 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({ flashSale, onP
                 <Text
                   variant="caption"
                   style={{
-                    textDecorationLine: "line-through",
+                    textDecorationLine: 'line-through',
                     color: theme.colors.text.tertiary,
                     marginRight: 10,
                   }}
@@ -201,16 +213,16 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({ flashSale, onP
                   py={4}
                   borderRadius={8}
                   style={{
-                    backgroundColor: flashSale.currency === "GEMS" ? "#8B5CF6" + "20" : "#F59E0B" + "20",
+                    backgroundColor: flashSale.currency === 'GEMS' ? '#8B5CF6' + '20' : '#F59E0B' + '20',
                   }}
                 >
                   <Box flexDirection="row" alignItems="center">
-                    <Icon name={flashSale.currency === "GEMS" ? "gem" : "coins"} size={14} color={flashSale.currency === "GEMS" ? "#8B5CF6" : "#F59E0B"} />
+                    <Icon name={flashSale.currency === 'GEMS' ? 'gem' : 'coins'} size={14} color={flashSale.currency === 'GEMS' ? '#8B5CF6' : '#F59E0B'} />
                     <Text
                       style={{
-                        fontWeight: "800",
+                        fontWeight: '800',
                         fontSize: 16,
-                        color: flashSale.currency === "GEMS" ? "#8B5CF6" : "#F59E0B",
+                        color: flashSale.currency === 'GEMS' ? '#8B5CF6' : '#F59E0B',
                         marginLeft: 4,
                       }}
                     >
@@ -226,13 +238,13 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({ flashSale, onP
                   py={3}
                   borderRadius={6}
                   style={{
-                    backgroundColor: "#EF4444",
+                    backgroundColor: '#EF4444',
                   }}
                 >
                   <Text
                     style={{
-                      color: "#FFF",
-                      fontWeight: "700",
+                      color: '#FFF',
+                      fontWeight: '700',
                       fontSize: 11,
                     }}
                   >
@@ -252,9 +264,9 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({ flashSale, onP
           <Box
             p={10}
             style={{
-              backgroundColor: "#EF4444" + "10",
+              backgroundColor: '#EF4444' + '10',
               borderTopWidth: 1,
-              borderTopColor: "#EF4444" + "20",
+              borderTopColor: '#EF4444' + '20',
             }}
           >
             <Box flexDirection="row" justifyContent="center" alignItems="center">
@@ -262,8 +274,8 @@ export const FlashSaleBanner: React.FC<FlashSaleBannerProps> = ({ flashSale, onP
               <Text
                 variant="caption"
                 style={{
-                  color: "#EF4444",
-                  fontWeight: "600",
+                  color: '#EF4444',
+                  fontWeight: '600',
                   marginLeft: 6,
                 }}
               >

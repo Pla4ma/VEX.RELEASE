@@ -1,4 +1,4 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
+import { captureSilentFailure } from '../../../utils/silent-failure';
 /**
  * AI Coach Timezone Utilities
  *
@@ -18,7 +18,7 @@ export function getUserTimezone(userId: string): string {
 
   // Could also fetch from user profile if stored
   // For now, use device timezone
-  return deviceTimezone || "UTC";
+  return deviceTimezone || 'UTC';
 }
 
 /**
@@ -29,29 +29,29 @@ export function isValidTimezone(timezone: string): boolean {
     Intl.DateTimeFormat(undefined, { timeZone: timezone });
     return true;
   } catch (error) {
-    captureSilentFailure(error, { feature: "ai-coach", operation: "safe-fallback", type: "data" });
+    captureSilentFailure(error, { feature: 'ai-coach', operation: 'safe-fallback', type: 'data' });
     return false;
   }
 }
 
 function getTimezoneOffsetMinutes(date: Date, timezone: string): number {
-  const parts = new Intl.DateTimeFormat("en-US", {
+  const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: timezone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
     hour12: false,
   }).formatToParts(date);
   const values = new Map(parts.map((part) => [part.type, part.value]));
-  const year = Number(values.get("year"));
-  const month = Number(values.get("month"));
-  const day = Number(values.get("day"));
-  const hour = Number(values.get("hour"));
-  const minute = Number(values.get("minute"));
-  const second = Number(values.get("second"));
+  const year = Number(values.get('year'));
+  const month = Number(values.get('month'));
+  const day = Number(values.get('day'));
+  const hour = Number(values.get('hour'));
+  const minute = Number(values.get('minute'));
+  const second = Number(values.get('second'));
   const asUtc = Date.UTC(year, month - 1, day, hour, minute, second);
   return (asUtc - date.getTime()) / (60 * 1000);
 }
@@ -72,7 +72,7 @@ export function toUTC(date: Date, timezone: string): Date {
  * Convert UTC to local time for display
  */
 export function toLocalTime(date: Date | number, timezone: string): Date {
-  const d = typeof date === "number" ? new Date(date) : date;
+  const d = typeof date === 'number' ? new Date(date) : date;
   const offsetMinutes = getTimezoneOffsetMinutes(d, timezone);
   return new Date(d.getTime() + offsetMinutes * 60 * 1000);
 }
@@ -81,23 +81,23 @@ export function toLocalTime(date: Date | number, timezone: string): Date {
  * Format date in user's timezone
  */
 export function formatInTimezone(date: Date | number, timezone: string, format: string): string {
-  const d = typeof date === "number" ? new Date(date) : date;
-  if (format === "yyyy-MM-dd") {
-    return new Intl.DateTimeFormat("en-CA", {
+  const d = typeof date === 'number' ? new Date(date) : date;
+  if (format === 'yyyy-MM-dd') {
+    return new Intl.DateTimeFormat('en-CA', {
       timeZone: timezone,
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
     }).format(d);
   }
-  if (format === "H") {
-    return new Intl.DateTimeFormat("en-US", {
+  if (format === 'H') {
+    return new Intl.DateTimeFormat('en-US', {
       timeZone: timezone,
-      hour: "numeric",
+      hour: 'numeric',
       hour12: false,
     }).format(d);
   }
-  return new Intl.DateTimeFormat("en-US", { timeZone: timezone }).format(d);
+  return new Intl.DateTimeFormat('en-US', { timeZone: timezone }).format(d);
 }
 
 // ============================================================================
@@ -135,8 +135,8 @@ export function getEndOfDay(timestamp: number, timezone: string): number {
  * Check if two timestamps are on the same day in user's timezone
  */
 export function isSameDay(timestamp1: number, timestamp2: number, timezone: string): boolean {
-  const date1 = formatInTimezone(timestamp1, timezone, "yyyy-MM-dd");
-  const date2 = formatInTimezone(timestamp2, timezone, "yyyy-MM-dd");
+  const date1 = formatInTimezone(timestamp1, timezone, 'yyyy-MM-dd');
+  const date2 = formatInTimezone(timestamp2, timezone, 'yyyy-MM-dd');
   return date1 === date2;
 }
 
@@ -234,15 +234,15 @@ export function scheduleForLocalTime(localHour: number, localMinute: number, tim
 /**
  * Get optimal reminder times based on user's chronotype
  */
-export function getOptimalReminderTimes(chronotype: "morning" | "evening" | "variable", timezone: string): number[] {
+export function getOptimalReminderTimes(chronotype: 'morning' | 'evening' | 'variable', timezone: string): number[] {
   const now = Date.now();
 
   switch (chronotype) {
-    case "morning":
+    case 'morning':
       return [scheduleForLocalTime(8, 0, timezone), scheduleForLocalTime(12, 0, timezone)];
-    case "evening":
+    case 'evening':
       return [scheduleForLocalTime(14, 0, timezone), scheduleForLocalTime(19, 0, timezone)];
-    case "variable":
+    case 'variable':
     default:
       return [scheduleForLocalTime(10, 0, timezone), scheduleForLocalTime(15, 0, timezone), scheduleForLocalTime(20, 0, timezone)];
   }
@@ -265,7 +265,7 @@ export function formatRelativeTime(timestamp: number, timezone: string): string 
   const days = Math.floor(absDiff / (1000 * 60 * 60 * 24));
 
   if (minutes < 1) {
-    return diff > 0 ? "just now" : "just now";
+    return diff > 0 ? 'just now' : 'just now';
   }
   if (minutes < 60) {
     return diff > 0 ? `in ${minutes} min` : `${minutes} min ago`;
@@ -280,18 +280,18 @@ export function formatRelativeTime(timestamp: number, timezone: string): string 
  * Format "time of day" for display
  */
 export function formatTimeOfDay(timestamp: number, timezone: string): string {
-  const hour = parseInt(formatInTimezone(timestamp, timezone, "H"), 10);
+  const hour = parseInt(formatInTimezone(timestamp, timezone, 'H'), 10);
 
   if (hour >= 5 && hour < 12) {
-    return "morning";
+    return 'morning';
   }
   if (hour >= 12 && hour < 17) {
-    return "afternoon";
+    return 'afternoon';
   }
   if (hour >= 17 && hour < 21) {
-    return "evening";
+    return 'evening';
   }
-  return "night";
+  return 'night';
 }
 
 // ============================================================================

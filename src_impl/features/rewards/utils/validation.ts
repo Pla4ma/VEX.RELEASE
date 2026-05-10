@@ -6,25 +6,25 @@
  * @phase 3 - Deepening: Rewards validation
  */
 
-import { z } from "zod";
-import { createDebugger } from "../../../utils/debug";
-import { eventBus } from "../../../events";
+import { z } from 'zod';
+import { createDebugger } from '../../../utils/debug';
+import { eventBus } from '../../../events';
 
-const debug = createDebugger("rewards:validation");
+const debug = createDebugger('rewards:validation');
 
 // ============================================================================
 // Schemas
 // ============================================================================
 
-export const ChestTierSchema = z.enum(["WOOD", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND"]);
+export const ChestTierSchema = z.enum(['WOOD', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'DIAMOND']);
 export type ChestTier = z.infer<typeof ChestTierSchema>;
 
 export const RewardItemSchema = z.object({
   id: z.string(),
-  type: z.enum(["COINS", "GEMS", "XP", "ITEM", "COSMETIC", "BOOST"]),
+  type: z.enum(['COINS', 'GEMS', 'XP', 'ITEM', 'COSMETIC', 'BOOST']),
   amount: z.number().min(0),
   itemId: z.string().optional(),
-  rarity: z.enum(["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY"]).optional(),
+  rarity: z.enum(['COMMON', 'UNCOMMON', 'RARE', 'EPIC', 'LEGENDARY']).optional(),
 });
 
 export type RewardItem = z.infer<typeof RewardItemSchema>;
@@ -72,14 +72,14 @@ export interface ValidationResult<T> {
   data?: T;
   violations: RewardViolation[];
   warnings: RewardWarning[];
-  manipulationRisk: "NONE" | "LOW" | "MEDIUM" | "HIGH";
+  manipulationRisk: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH';
 }
 
 export interface RewardViolation {
-  type: "VALUE_MISMATCH" | "IMPOSSIBLE_DROP" | "RATE_LIMIT" | "DUPLICATE" | "POLICY";
+  type: 'VALUE_MISMATCH' | 'IMPOSSIBLE_DROP' | 'RATE_LIMIT' | 'DUPLICATE' | 'POLICY';
   field: string;
   message: string;
-  severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 }
 
 export interface RewardWarning {
@@ -107,7 +107,7 @@ export function validateChestReward(
     valid: true,
     violations: [],
     warnings: [],
-    manipulationRisk: "NONE",
+    manipulationRisk: 'NONE',
   };
 
   // Schema validation
@@ -115,12 +115,12 @@ export function validateChestReward(
   if (!schemaResult.success) {
     result.valid = false;
     result.violations.push({
-      type: "POLICY",
-      field: "reward",
-      message: "Invalid reward structure",
-      severity: "HIGH",
+      type: 'POLICY',
+      field: 'reward',
+      message: 'Invalid reward structure',
+      severity: 'HIGH',
     });
-    result.manipulationRisk = "HIGH";
+    result.manipulationRisk = 'HIGH';
     return result;
   }
 
@@ -130,12 +130,12 @@ export function validateChestReward(
   const tierRange = TIER_VALUE_RANGES[reward.tier];
   if (reward.totalValue < tierRange.min || reward.totalValue > tierRange.max) {
     result.violations.push({
-      type: "VALUE_MISMATCH",
-      field: "totalValue",
+      type: 'VALUE_MISMATCH',
+      field: 'totalValue',
       message: `Value ${reward.totalValue} outside ${reward.tier} tier range (${tierRange.min}-${tierRange.max})`,
-      severity: "HIGH",
+      severity: 'HIGH',
     });
-    result.manipulationRisk = "HIGH";
+    result.manipulationRisk = 'HIGH';
   }
 
   // Check 2: Item count per tier
@@ -150,28 +150,28 @@ export function validateChestReward(
 
   if (reward.items.length > maxItemsPerTier[reward.tier]) {
     result.violations.push({
-      type: "POLICY",
-      field: "items",
+      type: 'POLICY',
+      field: 'items',
       message: `Too many items for ${reward.tier} chest: ${reward.items.length} > ${maxItemsPerTier[reward.tier]}`,
-      severity: "MEDIUM",
+      severity: 'MEDIUM',
     });
-    result.manipulationRisk = "MEDIUM";
+    result.manipulationRisk = 'MEDIUM';
   }
 
   // Check 3: Drop rate validation for rare tiers
-  if (["PLATINUM", "DIAMOND"].includes(reward.tier)) {
+  if (['PLATINUM', 'DIAMOND'].includes(reward.tier)) {
     const expectedRate = TIER_DROP_RATES[reward.tier];
     const actualRate = 1 / (userHistory.totalChestsOpened + 1);
 
     // If getting rare drops too frequently
     if (userHistory.rareDropsInLast24h > 3) {
       result.violations.push({
-        type: "IMPOSSIBLE_DROP",
-        field: "tier",
+        type: 'IMPOSSIBLE_DROP',
+        field: 'tier',
         message: `Suspicious rare drop frequency: ${userHistory.rareDropsInLast24h} in 24h`,
-        severity: "HIGH",
+        severity: 'HIGH',
       });
-      result.manipulationRisk = "HIGH";
+      result.manipulationRisk = 'HIGH';
     }
   }
 
@@ -179,12 +179,12 @@ export function validateChestReward(
   const recentDuplicate = userHistory.recentChests.find((c) => c.chestId === reward.chestId && c.openedAt > Date.now() - 60000);
   if (recentDuplicate) {
     result.violations.push({
-      type: "DUPLICATE",
-      field: "chestId",
-      message: "Duplicate chest open detected",
-      severity: "CRITICAL",
+      type: 'DUPLICATE',
+      field: 'chestId',
+      message: 'Duplicate chest open detected',
+      severity: 'CRITICAL',
     });
-    result.manipulationRisk = "HIGH";
+    result.manipulationRisk = 'HIGH';
   }
 
   // Check 5: Item rarity distribution
@@ -194,20 +194,20 @@ export function validateChestReward(
   const timeDrift = Date.now() - reward.openedAt;
   if (timeDrift < 0 || timeDrift > 7 * 24 * 60 * 60 * 1000) {
     result.violations.push({
-      type: "POLICY",
-      field: "openedAt",
-      message: "Suspicious chest open timestamp",
-      severity: "MEDIUM",
+      type: 'POLICY',
+      field: 'openedAt',
+      message: 'Suspicious chest open timestamp',
+      severity: 'MEDIUM',
     });
-    result.manipulationRisk = "MEDIUM";
+    result.manipulationRisk = 'MEDIUM';
   }
 
   // Finalize
   if (result.violations.length > 0) {
     result.valid = false;
 
-    eventBus.publish("analytics:track", {
-      event: "reward_validation_alert",
+    eventBus.publish('analytics:track', {
+      event: 'reward_validation_alert',
       properties: {
         userId: reward.userId,
         tier: reward.tier,
@@ -227,7 +227,7 @@ function validateRarityDistribution(reward: ChestReward, result: ValidationResul
   const rarityCounts: Record<string, number> = {};
 
   for (const item of reward.items) {
-    const rarity = item.rarity || "COMMON";
+    const rarity = item.rarity || 'COMMON';
     rarityCounts[rarity] = (rarityCounts[rarity] || 0) + 1;
   }
 
@@ -247,24 +247,24 @@ function validateRarityDistribution(reward: ChestReward, result: ValidationResul
     const maxAllowed = rules[rarity] || 0;
     if (count > maxAllowed) {
       result.violations.push({
-        type: "IMPOSSIBLE_DROP",
-        field: "items.rarity",
+        type: 'IMPOSSIBLE_DROP',
+        field: 'items.rarity',
         message: `Too many ${rarity} items in ${reward.tier} chest: ${count} > ${maxAllowed}`,
-        severity: "MEDIUM",
+        severity: 'MEDIUM',
       });
-      result.manipulationRisk = "MEDIUM";
+      result.manipulationRisk = 'MEDIUM';
     }
   }
 
   // Legendary drops only from Gold+
-  if (rarityCounts.LEGENDARY && !["GOLD", "PLATINUM", "DIAMOND"].includes(reward.tier)) {
+  if (rarityCounts.LEGENDARY && !['GOLD', 'PLATINUM', 'DIAMOND'].includes(reward.tier)) {
     result.violations.push({
-      type: "IMPOSSIBLE_DROP",
-      field: "items.rarity",
+      type: 'IMPOSSIBLE_DROP',
+      field: 'items.rarity',
       message: `Legendary item in ${reward.tier} chest (requires Gold+))`,
-      severity: "HIGH",
+      severity: 'HIGH',
     });
-    result.manipulationRisk = "HIGH";
+    result.manipulationRisk = 'HIGH';
   }
 }
 
@@ -289,19 +289,19 @@ export function validateDailyLogin(
     valid: true,
     violations: [],
     warnings: [],
-    manipulationRisk: "NONE",
+    manipulationRisk: 'NONE',
   };
 
   // Check day is valid (1-7)
   if (claim.day < 1 || claim.day > 7) {
     result.valid = false;
     result.violations.push({
-      type: "POLICY",
-      field: "day",
+      type: 'POLICY',
+      field: 'day',
       message: `Invalid day: ${claim.day} (must be 1-7)`,
-      severity: "HIGH",
+      severity: 'HIGH',
     });
-    result.manipulationRisk = "HIGH";
+    result.manipulationRisk = 'HIGH';
     return result;
   }
 
@@ -313,12 +313,12 @@ export function validateDailyLogin(
     if (lastClaimDate === today) {
       result.valid = false;
       result.violations.push({
-        type: "DUPLICATE",
-        field: "claimedAt",
-        message: "Already claimed today",
-        severity: "HIGH",
+        type: 'DUPLICATE',
+        field: 'claimedAt',
+        message: 'Already claimed today',
+        severity: 'HIGH',
       });
-      result.manipulationRisk = "HIGH";
+      result.manipulationRisk = 'HIGH';
       return result;
     }
 
@@ -326,9 +326,9 @@ export function validateDailyLogin(
     const dayDifference = (today - lastClaimDate) / (24 * 60 * 60 * 1000);
     if (dayDifference > 1) {
       result.warnings.push({
-        field: "consecutiveDays",
+        field: 'consecutiveDays',
         message: `Streak broken: ${dayDifference} days since last claim`,
-        code: "STREAK_BROKEN",
+        code: 'STREAK_BROKEN',
       });
     }
   }
@@ -337,9 +337,9 @@ export function validateDailyLogin(
   const expectedDay = (userHistory.consecutiveDays % 7) + 1;
   if (claim.day !== expectedDay && userHistory.consecutiveDays > 0) {
     result.warnings.push({
-      field: "day",
+      field: 'day',
       message: `Day mismatch: claiming day ${claim.day} but expected day ${expectedDay}`,
-      code: "DAY_MISMATCH",
+      code: 'DAY_MISMATCH',
     });
   }
 
@@ -353,7 +353,7 @@ export function validateDailyLogin(
 export function validateLedgerBalance(
   userId: string,
   ledger: {
-    transactions: { type: "EARN" | "SPEND"; amount: number; timestamp: number }[];
+    transactions: { type: 'EARN' | 'SPEND'; amount: number; timestamp: number }[];
     currentBalance: number;
   },
 ): ValidationResult<{ expectedBalance: number; discrepancy: number }> {
@@ -361,13 +361,13 @@ export function validateLedgerBalance(
     valid: true,
     violations: [],
     warnings: [],
-    manipulationRisk: "NONE",
+    manipulationRisk: 'NONE',
   };
 
   // Calculate expected balance
-  const earned = ledger.transactions.filter((t) => t.type === "EARN").reduce((sum, t) => sum + t.amount, 0);
+  const earned = ledger.transactions.filter((t) => t.type === 'EARN').reduce((sum, t) => sum + t.amount, 0);
 
-  const spent = ledger.transactions.filter((t) => t.type === "SPEND").reduce((sum, t) => sum + t.amount, 0);
+  const spent = ledger.transactions.filter((t) => t.type === 'SPEND').reduce((sum, t) => sum + t.amount, 0);
 
   const expectedBalance = earned - spent;
   const discrepancy = Math.abs(expectedBalance - ledger.currentBalance);
@@ -376,16 +376,16 @@ export function validateLedgerBalance(
 
   if (discrepancy > 0) {
     result.violations.push({
-      type: "VALUE_MISMATCH",
-      field: "balance",
+      type: 'VALUE_MISMATCH',
+      field: 'balance',
       message: `Ledger discrepancy: expected ${expectedBalance}, found ${ledger.currentBalance}`,
-      severity: discrepancy > 1000 ? "CRITICAL" : "HIGH",
+      severity: discrepancy > 1000 ? 'CRITICAL' : 'HIGH',
     });
-    result.manipulationRisk = discrepancy > 1000 ? "HIGH" : "MEDIUM";
+    result.manipulationRisk = discrepancy > 1000 ? 'HIGH' : 'MEDIUM';
     result.valid = false;
 
-    eventBus.publish("analytics:track", {
-      event: "reward_ledger_discrepancy",
+    eventBus.publish('analytics:track', {
+      event: 'reward_ledger_discrepancy',
       properties: {
         userId,
         expectedBalance,

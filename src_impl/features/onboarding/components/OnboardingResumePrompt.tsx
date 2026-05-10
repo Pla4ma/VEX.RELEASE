@@ -7,19 +7,26 @@
  * @phase 2 - Deepening: Abandon recovery UI
  */
 
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import Animated, { FadeIn, FadeInUp, FadeOut } from "react-native-reanimated";
+=======
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import Animated, { FadeIn, FadeInUp, FadeOut } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { Box } from "../../../components/primitives/Box";
-import { useTheme } from "../../../theme";
-import { triggerHapticEvent, HapticEvents } from "../../../constants/haptics";
-import { eventBus } from "../../../events";
-import { OnboardingPersistence, getPartialData, getAbandonCount, isHighAbandonRisk } from "../utils/persistence";
-import type { OnboardingStep } from "../types";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { Text } from '../../../components/primitives/Text';
+import { Button } from '../../../components/primitives/Button';
+import { Box } from '../../../components/primitives/Box';
+import { useTheme } from '../../../theme';
+import { triggerHapticEvent, HapticEvents } from '../../../constants/haptics';
+import { eventBus } from '../../../events';
+import { OnboardingPersistence, getPartialData, getAbandonCount, isHighAbandonRisk } from '../utils/persistence';
+import type { OnboardingStep } from '../types';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface OnboardingResumePromptProps {
   onResume: () => void;
@@ -69,8 +76,8 @@ export function OnboardingResumePrompt({ onResume, onRestart, onDismiss }: Onboa
 
       triggerHapticEvent(HapticEvents.WARNING);
 
-      eventBus.publish("analytics:track", {
-        event: "onboarding_resume_prompt_shown",
+      eventBus.publish('analytics:track', {
+        event: 'onboarding_resume_prompt_shown',
         properties: {
           step,
           stepNumber,
@@ -82,48 +89,48 @@ export function OnboardingResumePrompt({ onResume, onRestart, onDismiss }: Onboa
   }, []);
 
   const getStepNumber = (step: OnboardingStep): number => {
-    const steps: OnboardingStep[] = ["WELCOME", "GOAL_SETTING", "FOCUS_TIME", "NAME_SETUP", "FIRST_SESSION_CTA"];
+    const steps: OnboardingStep[] = ['WELCOME', 'GOAL_SETTING', 'FOCUS_TIME', 'NAME_SETUP', 'FIRST_SESSION_CTA'];
     return steps.indexOf(step);
   };
 
   const getStepLabel = (step: OnboardingStep): string => {
     const labels: Record<OnboardingStep, string> = {
-      WELCOME: "Welcome",
-      GOAL_SETTING: "Goal Setting",
-      FOCUS_TIME: "Focus Duration",
-      NAME_SETUP: "Name Setup",
-      FIRST_SESSION_CTA: "First Session",
+      WELCOME: 'Welcome',
+      GOAL_SETTING: 'Goal Setting',
+      FOCUS_TIME: 'Focus Duration',
+      NAME_SETUP: 'Name Setup',
+      FIRST_SESSION_CTA: 'First Session',
     };
     return labels[step] || step;
   };
 
   const getProgressSummary = (): string => {
     if (!state) {
-      return "";
+      return '';
     }
 
     const completed = [];
     if (state.partialData.goal) {
-      completed.push("goal");
+      completed.push('goal');
     }
     if (state.partialData.focusDuration) {
-      completed.push("focus duration");
+      completed.push('focus duration');
     }
     if (state.partialData.displayName) {
-      completed.push("name");
+      completed.push('name');
     }
 
     if (completed.length === 0) {
       return "You started but didn't complete any steps.";
     }
-    return `You've already set your ${completed.join(", ")}.`;
+    return `You've already set your ${completed.join(', ')}.`;
   };
 
   const handleResume = () => {
-    setSelectedAction("resume");
+    setSelectedAction('resume');
 
-    eventBus.publish("analytics:track", {
-      event: "onboarding_resume_selected",
+    eventBus.publish('analytics:track', {
+      event: 'onboarding_resume_selected',
       properties: {
         step: state?.step,
         abandonCount: state?.abandonCount,
@@ -135,10 +142,10 @@ export function OnboardingResumePrompt({ onResume, onRestart, onDismiss }: Onboa
   };
 
   const handleRestart = () => {
-    setSelectedAction("restart");
+    setSelectedAction('restart');
 
-    eventBus.publish("analytics:track", {
-      event: "onboarding_restart_selected",
+    eventBus.publish('analytics:track', {
+      event: 'onboarding_restart_selected',
       properties: {
         step: state?.step,
         abandonCount: state?.abandonCount,
@@ -151,10 +158,10 @@ export function OnboardingResumePrompt({ onResume, onRestart, onDismiss }: Onboa
   };
 
   const handleDismiss = () => {
-    setSelectedAction("dismiss");
+    setSelectedAction('dismiss');
 
-    eventBus.publish("analytics:track", {
-      event: "onboarding_resume_dismissed",
+    eventBus.publish('analytics:track', {
+      event: 'onboarding_resume_dismissed',
       properties: {
         step: state?.step,
         abandonCount: state?.abandonCount,
@@ -229,11 +236,11 @@ export function OnboardingResumePrompt({ onResume, onRestart, onDismiss }: Onboa
 
             {/* Actions */}
             <Box gap="sm">
-              <Button variant="primary" size="lg" onPress={handleResume} disabled={selectedAction !== null} isLoading={selectedAction === "resume"} accessibilityLabel="Continue Setup → button" accessibilityRole="button" accessibilityHint="Activates this control">
+              <Button variant="primary" size="lg" onPress={handleResume} disabled={selectedAction !== null} isLoading={selectedAction === 'resume'} accessibilityLabel="Continue Setup → button" accessibilityRole="button" accessibilityHint="Activates this control">
                 Continue Setup →
               </Button>
 
-              <Button variant="secondary" size="md" onPress={handleRestart} disabled={selectedAction !== null} isLoading={selectedAction === "restart"} accessibilityLabel="Start Fresh button" accessibilityRole="button" accessibilityHint="Activates this control">
+              <Button variant="secondary" size="md" onPress={handleRestart} disabled={selectedAction !== null} isLoading={selectedAction === 'restart'} accessibilityLabel="Start Fresh button" accessibilityRole="button" accessibilityHint="Activates this control">
                 Start Fresh
               </Button>
 
@@ -258,9 +265,9 @@ const styles = createSheet({
     width: 60,
     height: 60,
     borderRadius: 30,
-    alignItems: "center",
-    justifyContent: "center",
-    alignSelf: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
     marginBottom: 16,
   },
   icon: {
@@ -268,12 +275,12 @@ const styles = createSheet({
   },
   progressBar: {
     height: 6,
-    backgroundColor: "rgba(0,0,0,0.1)",
+    backgroundColor: 'rgba(0,0,0,0.1)',
     borderRadius: 3,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   progressFill: {
-    height: "100%",
+    height: '100%',
     borderRadius: 3,
   },
 });

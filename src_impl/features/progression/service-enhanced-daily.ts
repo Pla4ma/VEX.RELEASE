@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { fetchXpHistory } from './repository';
-import { fetchXpStats } from './repository-enhanced';
+import { fetchXpStats } from './repository/enhanced';
 
 const DailyProgressSchema = z.object({
   date: z.number(),
@@ -75,3 +75,4 @@ export async function getDailyProgress(userId: string): Promise<DailyProgress> {
     });
   }
 }
+

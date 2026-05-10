@@ -10,15 +10,15 @@
  * - Accessible from Home screen
  */
 
-import React, { useState, useEffect, useCallback } from "react";
-import { ScrollView, Pressable, Modal } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from "react-native-reanimated";
+import React, { useState, useEffect, useCallback } from 'react';
+import { ScrollView, Pressable, Modal } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
-import { useTheme } from "../../../theme";
-import { Box, Text, Card } from "../../../components/primitives";
-import { Icon } from "../../../icons";
+import { useTheme } from '../../../theme';
+import { Box, Text, Card } from '../../../components/primitives';
+import { Icon } from '../../../icons';
 
-export type BuffType = "XP_BOOST" | "FOCUS_POTION" | "STREAK_SHIELD" | "COIN_BOOST" | "GEM_BOOST";
+export type BuffType = 'XP_BOOST' | 'FOCUS_POTION' | 'STREAK_SHIELD' | 'COIN_BOOST' | 'GEM_BOOST';
 
 interface ActiveBuff {
   id: string;
@@ -38,11 +38,11 @@ interface ActiveBuffsTrayProps {
 }
 
 const BUFF_CONFIG: Record<BuffType, { icon: string; color: string; label: string }> = {
-  XP_BOOST: { icon: "zap", color: "#F59E0B", label: "XP Boost" },
-  FOCUS_POTION: { icon: "target", color: "#3B82F6", label: "Focus" },
-  STREAK_SHIELD: { icon: "shield", color: "#10B981", label: "Shield" },
-  COIN_BOOST: { icon: "coins", color: "#F59E0B", label: "Coin Boost" },
-  GEM_BOOST: { icon: "gem", color: "#8B5CF6", label: "Gem Boost" },
+  XP_BOOST: { icon: 'zap', color: '#F59E0B', label: 'XP Boost' },
+  FOCUS_POTION: { icon: 'target', color: '#3B82F6', label: 'Focus' },
+  STREAK_SHIELD: { icon: 'shield', color: '#10B981', label: 'Shield' },
+  COIN_BOOST: { icon: 'coins', color: '#F59E0B', label: 'Coin Boost' },
+  GEM_BOOST: { icon: 'gem', color: '#8B5CF6', label: 'Gem Boost' },
 };
 
 const formatTimeRemaining = (expiresAt: number): string => {
@@ -85,11 +85,11 @@ const BuffCard: React.FC<{
           p={8}
           borderRadius={12}
           style={{
-            backgroundColor: config.color + "15",
+            backgroundColor: config.color + '15',
             borderWidth: 1,
-            borderColor: config.color + "40",
+            borderColor: config.color + '40',
             minWidth: 70,
-            alignItems: "center",
+            alignItems: 'center',
           }}
         >
           <Icon name={config.icon} size={18} color={config.color} />
@@ -98,7 +98,7 @@ const BuffCard: React.FC<{
             style={{
               marginTop: 4,
               fontSize: 10,
-              fontWeight: "600",
+              fontWeight: '600',
               color: config.color,
             }}
           >
@@ -118,19 +118,19 @@ const BuffCard: React.FC<{
         style={{
           backgroundColor: theme.colors.background.secondary,
           borderWidth: 2,
-          borderColor: config.color + "30",
+          borderColor: config.color + '30',
           minWidth: 120,
         }}
       >
         <Box flexDirection="row" alignItems="center" mb={8}>
-          <Box width={32} height={32} borderRadius={16} justifyContent="center" alignItems="center" style={{ backgroundColor: config.color + "20" }}>
+          <Box width={32} height={32} borderRadius={16} justifyContent="center" alignItems="center" style={{ backgroundColor: config.color + '20' }}>
             <Icon name={config.icon} size={16} color={config.color} />
           </Box>
           <Box ml={8} flex={1}>
             <Text
               variant="caption"
               style={{
-                fontWeight: "600",
+                fontWeight: '600',
                 color: theme.colors.text.primary,
               }}
             >
@@ -146,7 +146,7 @@ const BuffCard: React.FC<{
           mb={8}
           style={{
             backgroundColor: theme.colors.background.tertiary,
-            overflow: "hidden",
+            overflow: 'hidden',
           }}
         >
           <Box
@@ -210,7 +210,7 @@ export const ActiveBuffsTray: React.FC<ActiveBuffsTrayProps> = ({ buffs, onBuffP
             variant="caption"
             style={{
               marginLeft: 8,
-              fontWeight: "600",
+              fontWeight: '600',
               color: theme.colors.text.secondary,
               letterSpacing: 0.5,
             }}
@@ -231,9 +231,9 @@ export const ActiveBuffsTray: React.FC<ActiveBuffsTrayProps> = ({ buffs, onBuffP
         <Pressable
           style={{
             flex: 1,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            justifyContent: "center",
-            alignItems: "center",
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            justifyContent: 'center',
+            alignItems: 'center',
             padding: 20,
           }}
           onPress={handleCloseModal}
@@ -246,7 +246,7 @@ export const ActiveBuffsTray: React.FC<ActiveBuffsTrayProps> = ({ buffs, onBuffP
               size="lg"
               style={{
                 width: 300,
-                alignItems: "center",
+                alignItems: 'center',
                 padding: 24,
               }}
             >
@@ -258,7 +258,7 @@ export const ActiveBuffsTray: React.FC<ActiveBuffsTrayProps> = ({ buffs, onBuffP
                 alignItems="center"
                 mb={16}
                 style={{
-                  backgroundColor: BUFF_CONFIG[selectedBuff.type].color + "20",
+                  backgroundColor: BUFF_CONFIG[selectedBuff.type].color + '20',
                 }}
               >
                 <Icon name={BUFF_CONFIG[selectedBuff.type].icon} size={32} color={BUFF_CONFIG[selectedBuff.type].color} />
@@ -268,7 +268,7 @@ export const ActiveBuffsTray: React.FC<ActiveBuffsTrayProps> = ({ buffs, onBuffP
                 {BUFF_CONFIG[selectedBuff.type].label}
               </Text>
 
-              <Text variant="body" color="text.secondary" style={{ marginBottom: 16, textAlign: "center" }}>
+              <Text variant="body" color="text.secondary" style={{ marginBottom: 16, textAlign: 'center' }}>
                 {selectedBuff.effectDescription}
               </Text>
 
@@ -277,8 +277,8 @@ export const ActiveBuffsTray: React.FC<ActiveBuffsTrayProps> = ({ buffs, onBuffP
                 borderRadius={8}
                 style={{
                   backgroundColor: theme.colors.background.secondary,
-                  width: "100%",
-                  alignItems: "center",
+                  width: '100%',
+                  alignItems: 'center',
                 }}
               >
                 <Text variant="caption" color="text.secondary">
@@ -302,7 +302,7 @@ export const ActiveBuffsTray: React.FC<ActiveBuffsTrayProps> = ({ buffs, onBuffP
                 accessibilityRole="button"
                 accessibilityHint="Activates this control"
               >
-                <Text style={{ color: "#FFF", fontWeight: "600" }}>Got it</Text>
+                <Text style={{ color: '#FFF', fontWeight: '600' }}>Got it</Text>
               </Pressable>
             </Card>
           )}

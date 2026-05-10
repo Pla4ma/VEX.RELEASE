@@ -154,3 +154,4 @@ export const useCoachStore = create<CoachStore>()(
 export function resetCoachPreferences(): void {
   useCoachStore.getState().resetUI();
 }
+

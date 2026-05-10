@@ -19,9 +19,9 @@
  * - session (session data for creature growth)
  */
 
-import { z } from "zod";
-import { featureFlags } from "../../feature-flags/FeatureFlagEngine";
-import { eventBus } from "../../events";
+import { z } from 'zod';
+import { featureFlags } from '../../feature-flags/FeatureFlagEngine';
+import { eventBus } from '../../events';
 
 // ============================================================================
 // Streak Creature Constants
@@ -31,54 +31,54 @@ export const CREATURE_CONFIG = {
   // Evolution stages
   EVOLUTION_STAGES: {
     EGG: {
-      name: "Focus Egg",
+      name: 'Focus Egg',
       minStreak: 0,
       maxStreak: 2,
-      description: "A mysterious egg that hatches with consistent focus",
-      abilities: ["potential"],
-      personality: ["mysterious"],
-      emoji: "🥚",
-      color: "#E8F4FD",
+      description: 'A mysterious egg that hatches with consistent focus',
+      abilities: ['potential'],
+      personality: ['mysterious'],
+      emoji: '🥚',
+      color: '#E8F4FD',
     },
     BABY: {
-      name: "Focus Sprout",
+      name: 'Focus Sprout',
       minStreak: 3,
       maxStreak: 7,
-      description: "A curious young creature learning to focus",
-      abilities: ["encouragement"],
-      personality: ["playful", "curious"],
-      emoji: "🌱",
-      color: "#C8E6C9",
+      description: 'A curious young creature learning to focus',
+      abilities: ['encouragement'],
+      personality: ['playful', 'curious'],
+      emoji: '🌱',
+      color: '#C8E6C9',
     },
     TEEN: {
-      name: "Focus Companion",
+      name: 'Focus Companion',
       minStreak: 8,
       maxStreak: 14,
-      description: "An energetic companion that loves challenges",
-      abilities: ["motivation_boost", "focus_aid"],
-      personality: ["energetic", "loyal"],
-      emoji: "🦊",
-      color: "#FFE0B2",
+      description: 'An energetic companion that loves challenges',
+      abilities: ['motivation_boost', 'focus_aid'],
+      personality: ['energetic', 'loyal'],
+      emoji: '🦊',
+      color: '#FFE0B2',
     },
     ADULT: {
-      name: "Focus Guardian",
+      name: 'Focus Guardian',
       minStreak: 15,
       maxStreak: 29,
-      description: "A wise guardian that protects your focus",
-      abilities: ["streak_protection", "deep_focus", "wisdom"],
-      personality: ["wise", "protective", "calm"],
-      emoji: "🦉",
-      color: "#E1BEE7",
+      description: 'A wise guardian that protects your focus',
+      abilities: ['streak_protection', 'deep_focus', 'wisdom'],
+      personality: ['wise', 'protective', 'calm'],
+      emoji: '🦉',
+      color: '#E1BEE7',
     },
     EPIC: {
-      name: "Focus Master",
+      name: 'Focus Master',
       minStreak: 30,
       maxStreak: 999,
-      description: "A legendary master of focus and discipline",
-      abilities: ["time_bending", "perfect_clarity", "enlightenment"],
-      personality: ["legendary", "enlightened", "transcendent"],
-      emoji: "🐉",
-      color: "#FFD700",
+      description: 'A legendary master of focus and discipline',
+      abilities: ['time_bending', 'perfect_clarity', 'enlightenment'],
+      personality: ['legendary', 'enlightened', 'transcendent'],
+      emoji: '🐉',
+      color: '#FFD700',
     },
   },
 
@@ -86,76 +86,76 @@ export const CREATURE_CONFIG = {
   PERSONALITY_TRAITS: {
     // Morning person
     EARLY_BIRD: {
-      name: "Early Bird",
-      description: "Loves morning sessions",
-      trigger: "morning_sessions",
-      emoji: "🌅",
+      name: 'Early Bird',
+      description: 'Loves morning sessions',
+      trigger: 'morning_sessions',
+      emoji: '🌅',
     },
     // Night owl
     NIGHT_OWL: {
-      name: "Night Owl",
-      description: "Thrives in evening sessions",
-      trigger: "evening_sessions",
-      emoji: "🌙",
+      name: 'Night Owl',
+      description: 'Thrives in evening sessions',
+      trigger: 'evening_sessions',
+      emoji: '🌙',
     },
     // Consistent
     STEADY: {
-      name: "Steady",
-      description: "Very consistent session times",
-      trigger: "consistent_timing",
-      emoji: "⏰",
+      name: 'Steady',
+      description: 'Very consistent session times',
+      trigger: 'consistent_timing',
+      emoji: '⏰',
     },
     // Intense
     INTENSE: {
-      name: "Intense",
-      description: "Prefers long, deep sessions",
-      trigger: "long_sessions",
-      emoji: "🔥",
+      name: 'Intense',
+      description: 'Prefers long, deep sessions',
+      trigger: 'long_sessions',
+      emoji: '🔥',
     },
     // Social
     SOCIAL: {
-      name: "Social",
-      description: "Enjoys squad sessions",
-      trigger: "squad_sessions",
-      emoji: "👥",
+      name: 'Social',
+      description: 'Enjoys squad sessions',
+      trigger: 'squad_sessions',
+      emoji: '👥',
     },
     // Explorer
     EXPLORER: {
-      name: "Explorer",
-      description: "Loves trying different modes",
-      trigger: "variety_seeker",
-      emoji: "🧭",
+      name: 'Explorer',
+      description: 'Loves trying different modes',
+      trigger: 'variety_seeker',
+      emoji: '🧭',
     },
   },
 
   // Care mechanics
   CARE_ACTIONS: {
     FEED: {
-      name: "Feed",
-      description: "Give your creature focus energy",
+      name: 'Feed',
+      description: 'Give your creature focus energy',
       cost: { focusPoints: 10 },
-      effect: "happiness +20",
+      effect: 'happiness +20',
       cooldown: 4 * 60 * 60 * 1000, // 4 hours
     },
     PLAY: {
-      name: "Play",
-      description: "Play with your creature",
+      name: 'Play',
+      description: 'Play with your creature',
       cost: { coins: 25 },
-      effect: "bond +15",
+      effect: 'bond +15',
       cooldown: 6 * 60 * 60 * 1000, // 6 hours
     },
     TRAIN: {
-      name: "Train",
+      name: 'Train',
       description: "Train your creature's abilities",
       cost: { gems: 5 },
-      effect: "experience +30",
+      effect: 'experience +30',
       cooldown: 8 * 60 * 60 * 1000, // 8 hours
     },
     GROOM: {
-      name: "Groom",
-      description: "Keep your creature healthy",
+      name: 'Groom',
+      description: 'Keep your creature healthy',
       cost: { coins: 10 },
-      effect: "health +25",
+      effect: 'health +25',
       cooldown: 12 * 60 * 60 * 1000, // 12 hours
     },
   },
@@ -179,8 +179,8 @@ export const CREATURE_CONFIG = {
 // Types & Schemas
 // ============================================================================
 
-export const CreatureStageSchema = z.enum(["EGG", "BABY", "TEEN", "ADULT", "EPIC"]);
-export const PersonalityTraitSchema = z.enum(["EARLY_BIRD", "NIGHT_OWL", "STEADY", "INTENSE", "SOCIAL", "EXPLORER"]);
+export const CreatureStageSchema = z.enum(['EGG', 'BABY', 'TEEN', 'ADULT', 'EPIC']);
+export const PersonalityTraitSchema = z.enum(['EARLY_BIRD', 'NIGHT_OWL', 'STEADY', 'INTENSE', 'SOCIAL', 'EXPLORER']);
 
 export const StreakCreatureSchema = z.object({
   id: z.string(),
@@ -222,7 +222,7 @@ export const StreakCreatureSchema = z.object({
   sessionPatterns: z.record(z.number()).default({}), // pattern -> count
 
   // Appearance customization
-  color: z.string().default("#E8F4FD"),
+  color: z.string().default('#E8F4FD'),
   accessories: z.array(z.string()).default([]),
 
   // Metadata
@@ -235,7 +235,7 @@ export const CreatureCareActionSchema = z.object({
   id: z.string(),
   creatureId: z.string(),
   userId: z.string(),
-  action: z.enum(["FEED", "PLAY", "TRAIN", "GROOM"]),
+  action: z.enum(['FEED', 'PLAY', 'TRAIN', 'GROOM']),
   performedAt: z.number(),
   effect: z.record(z.number()),
   cost: z.record(z.number()),
@@ -294,7 +294,7 @@ export class StreakCreatureService {
    * Check if streak creature system is enabled
    */
   static isEnabled(): boolean {
-    return featureFlags.isEnabled("streak_creature_system");
+    return featureFlags.isEnabled('streak_creature_system');
   }
 
   /**
@@ -312,7 +312,7 @@ export class StreakCreatureService {
       id: `creature_${userId}_${now}`,
       userId,
       name: name || this.generateCreatureName(),
-      stage: "EGG",
+      stage: 'EGG',
       level: 1,
       experience: 0,
       evolutionProgress: 0,
@@ -324,8 +324,8 @@ export class StreakCreatureService {
       bond: 0,
       primaryTrait: null,
       secondaryTrait: null,
-      abilities: ["potential"],
-      unlockedAbilities: ["potential"],
+      abilities: ['potential'],
+      unlockedAbilities: ['potential'],
       lastFedAt: null,
       lastPlayedAt: null,
       lastTrainedAt: null,
@@ -341,8 +341,12 @@ export class StreakCreatureService {
     this.creatures.set(userId, creature);
     this.careActions.set(creature.id, []);
 
-    // Event publishing temporarily disabled due to channel type issues
-    // TODO: Fix event channel types and re-enable
+    // Event publishing re-enabled with fixed channel types
+    eventBus.publish('creature:adopted', {
+      userId,
+      creatureId: creature.id,
+      species: creature.species,
+    });
 
     return creature;
   }
@@ -414,8 +418,12 @@ export class StreakCreatureService {
 
     this.creatures.set(userId, creature);
 
-    // Event publishing temporarily disabled due to channel type issues
-    // TODO: Fix event channel types and re-enable
+    // Event publishing re-enabled with fixed channel types
+    eventBus.publish('creature:fed', {
+      userId,
+      creatureId: creature.id,
+      foodType: careAction.metadata?.foodType,
+    });
   }
 
   /**
@@ -423,7 +431,7 @@ export class StreakCreatureService {
    */
   async performCareAction(
     userId: string,
-    action: "FEED" | "PLAY" | "TRAIN" | "GROOM",
+    action: 'FEED' | 'PLAY' | 'TRAIN' | 'GROOM',
   ): Promise<{
     success: boolean;
     creature?: StreakCreature;
@@ -431,7 +439,7 @@ export class StreakCreatureService {
   }> {
     const creature = this.creatures.get(userId);
     if (!creature) {
-      return { success: false, error: "Creature not found" };
+      return { success: false, error: 'Creature not found' };
     }
 
     const actionConfig = CREATURE_CONFIG.CARE_ACTIONS[action];
@@ -447,7 +455,7 @@ export class StreakCreatureService {
     // Check if user can afford the cost
     const canAfford = await this.checkCanAfford(userId, actionConfig.cost);
     if (!canAfford) {
-      return { success: false, error: "Insufficient resources" };
+      return { success: false, error: 'Insufficient resources' };
     }
 
     // Apply the action
@@ -476,8 +484,13 @@ export class StreakCreatureService {
 
     this.creatures.set(userId, creature);
 
-    // Event publishing temporarily disabled due to channel type issues
-    // TODO: Fix event channel types and re-enable
+    // Event publishing re-enabled with fixed channel types
+    eventBus.publish('creature:care_action', {
+      userId,
+      creatureId: creature.id,
+      action: careAction.action,
+      effect: careAction.effect,
+    });
 
     return { success: true, creature };
   }
@@ -506,7 +519,7 @@ export class StreakCreatureService {
       nextEvolution: {
         stage: nextStage || creature.stage,
         progress: creature.evolutionProgress,
-        requirements: nextStage && nextStage !== "EGG" ? (((CREATURE_CONFIG.EVOLUTION_REQUIREMENTS as any)[nextStage] || {}) as Record<string, number>) : {},
+        requirements: nextStage && nextStage !== 'EGG' ? (((CREATURE_CONFIG.EVOLUTION_REQUIREMENTS as any)[nextStage] || {}) as Record<string, number>) : {},
       },
     };
   }
@@ -530,19 +543,23 @@ export class StreakCreatureService {
   async setCreatureNickname(userId: string, nickname: string): Promise<{ success: boolean; error?: string }> {
     const creature = this.creatures.get(userId);
     if (!creature) {
-      return { success: false, error: "Creature not found" };
+      return { success: false, error: 'Creature not found' };
     }
 
     if (nickname.length > 20) {
-      return { success: false, error: "Nickname too long (max 20 characters)" };
+      return { success: false, error: 'Nickname too long (max 20 characters)' };
     }
 
     creature.nickname = nickname;
     creature.updatedAt = Date.now();
     this.creatures.set(userId, creature);
 
-    // Event publishing temporarily disabled due to channel type issues
-    // TODO: Fix event channel types and re-enable
+    // Event publishing re-enabled with fixed channel types
+    eventBus.publish('creature:nickname_set', {
+      userId,
+      creatureId: creature.id,
+      nickname: creature.nickname,
+    });
 
     return { success: true };
   }
@@ -555,8 +572,8 @@ export class StreakCreatureService {
    * Generate random creature name
    */
   private generateCreatureName(): string {
-    const prefixes = ["Focus", "Zen", "Clarity", "Mindful", "Calm", "Bright", "Smart", "Wise"];
-    const suffixes = ["Spirit", "Companion", "Friend", "Guardian", "Helper", "Buddy", "Pal", "Mate"];
+    const prefixes = ['Focus', 'Zen', 'Clarity', 'Mindful', 'Calm', 'Bright', 'Smart', 'Wise'];
+    const suffixes = ['Spirit', 'Companion', 'Friend', 'Guardian', 'Helper', 'Buddy', 'Pal', 'Mate'];
 
     const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
     const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
@@ -641,8 +658,12 @@ export class StreakCreatureService {
     creature.experience = 0;
     creature.bond = Math.min(CREATURE_CONFIG.MAX_BOND, creature.bond + 10);
 
-    // Event publishing temporarily disabled due to channel type issues
-    // TODO: Fix event channel types and re-enable
+    // Event publishing re-enabled with fixed channel types
+    eventBus.publish('creature:level_up', {
+      creatureId: creature.id,
+      newLevel: creature.level,
+      bond: creature.bond,
+    });
   }
 
   /**
@@ -676,10 +697,10 @@ export class StreakCreatureService {
     const nextStage = this.getNextStage(currentStage);
 
     if (!nextStage) {
-      return { evolved: false, message: "Already at final stage" };
+      return { evolved: false, message: 'Already at final stage' };
     }
 
-    const requirements = nextStage !== "EGG" ? (CREATURE_CONFIG.EVOLUTION_REQUIREMENTS as any)[nextStage] : { streak: 0, totalSessions: 0, avgPurity: 0 };
+    const requirements = nextStage !== 'EGG' ? (CREATURE_CONFIG.EVOLUTION_REQUIREMENTS as any)[nextStage] : { streak: 0, totalSessions: 0, avgPurity: 0 };
     const meetsRequirements = creature.currentStreak >= requirements.streak && creature.totalSessions >= requirements.totalSessions && this.getAveragePurity(creature) >= requirements.avgPurity;
 
     if (meetsRequirements) {
@@ -695,14 +716,14 @@ export class StreakCreatureService {
     // Update evolution progress
     creature.evolutionProgress = this.calculateEvolutionProgress(creature, requirements);
 
-    return { evolved: false, message: "Evolution requirements not met yet" };
+    return { evolved: false, message: 'Evolution requirements not met yet' };
   }
 
   /**
    * Get next evolution stage
    */
   private getNextStage(currentStage: CreatureStage): CreatureStage | null {
-    const stages: CreatureStage[] = ["EGG", "BABY", "TEEN", "ADULT", "EPIC"];
+    const stages: CreatureStage[] = ['EGG', 'BABY', 'TEEN', 'ADULT', 'EPIC'];
     const currentIndex = stages.indexOf(currentStage);
     return currentIndex < stages.length - 1 ? stages[currentIndex + 1] : null;
   }
@@ -766,10 +787,10 @@ export class StreakCreatureService {
    */
   private getTraitFromPattern(pattern: string): PersonalityTrait | null {
     const traitMap: Record<string, PersonalityTrait> = {
-      morning_sessions: "EARLY_BIRD",
-      evening_sessions: "NIGHT_OWL",
-      long_sessions: "INTENSE",
-      squad_sessions: "SOCIAL",
+      morning_sessions: 'EARLY_BIRD',
+      evening_sessions: 'NIGHT_OWL',
+      long_sessions: 'INTENSE',
+      squad_sessions: 'SOCIAL',
     };
 
     return traitMap[pattern] || null;
@@ -804,19 +825,19 @@ export class StreakCreatureService {
     const effects: Record<string, number> = {};
 
     switch (action) {
-      case "FEED":
+      case 'FEED':
         creature.happiness = Math.min(CREATURE_CONFIG.MAX_HAPPINESS, creature.happiness + 20);
         effects.happiness = 20;
         break;
-      case "PLAY":
+      case 'PLAY':
         creature.bond = Math.min(CREATURE_CONFIG.MAX_BOND, creature.bond + 15);
         effects.bond = 15;
         break;
-      case "TRAIN":
+      case 'TRAIN':
         creature.experience = Math.min(CREATURE_CONFIG.MAX_EXPERIENCE, creature.experience + 30);
         effects.experience = 30;
         break;
-      case "GROOM":
+      case 'GROOM':
         creature.health = Math.min(CREATURE_CONFIG.MAX_HEALTH, creature.health + 25);
         effects.health = 25;
         break;
@@ -830,13 +851,13 @@ export class StreakCreatureService {
    */
   private getLastActionTime(creature: StreakCreature, action: string): number | null {
     switch (action) {
-      case "FEED":
+      case 'FEED':
         return creature.lastFedAt;
-      case "PLAY":
+      case 'PLAY':
         return creature.lastPlayedAt;
-      case "TRAIN":
+      case 'TRAIN':
         return creature.lastTrainedAt;
-      case "GROOM":
+      case 'GROOM':
         return creature.lastGroomedAt;
       default:
         return null;
@@ -848,16 +869,16 @@ export class StreakCreatureService {
    */
   private setLastActionTime(creature: StreakCreature, action: string, time: number): void {
     switch (action) {
-      case "FEED":
+      case 'FEED':
         creature.lastFedAt = time;
         break;
-      case "PLAY":
+      case 'PLAY':
         creature.lastPlayedAt = time;
         break;
-      case "TRAIN":
+      case 'TRAIN':
         creature.lastTrainedAt = time;
         break;
-      case "GROOM":
+      case 'GROOM':
         creature.lastGroomedAt = time;
         break;
     }
@@ -878,11 +899,11 @@ export class StreakCreatureService {
   private async deductCost(userId: string, cost: Record<string, number>): Promise<void> {
     // This would integrate with economy service
     // For now, just emit an event
-    eventBus.publish("economy:currency_spent", {
+    eventBus.publish('economy:currency_spent', {
       userId,
       currency: Object.keys(cost)[0] as string,
       amount: Object.values(cost)[0],
-      description: "Creature care cost",
+      description: 'Creature care cost',
       newBalance: 0,
     });
   }

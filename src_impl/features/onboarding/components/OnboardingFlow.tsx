@@ -11,8 +11,10 @@ import React from 'react';
 import { View, ActivityIndicator } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 import { useOnboardingProgressState } from '../hooks';
 import { OnboardingNavigator } from './OnboardingNavigator';
+import { FirstResultScreen } from './FirstResultScreen';
 import type { FocusGoal } from '../schemas';
 
 interface OnboardingFlowProps {
@@ -33,6 +35,8 @@ function NotificationPermissionScreen({
 }: {
   onComplete: () => void;
 }): JSX.Element {
+  const { theme } = useTheme();
+
   // Lazy load the actual notification component to avoid circular deps
   const [NotificationCard, setNotificationCard] = React.useState<React.FC<{
     userId: string;
@@ -66,7 +70,7 @@ function NotificationPermissionScreen({
         Enable notifications to protect your streak and get reminded when it matters.
       </Text>
       {/* NotificationCard would be rendered here with userId */}
-      <Text style={{ fontSize: 14, color: '#666', marginTop: 16 }}>
+      <Text style={{ fontSize: 14, color: theme.colors.text.tertiary, marginTop: 16 }}>
         Notification permission screen placeholder
       </Text>
     </View>
@@ -74,25 +78,53 @@ function NotificationPermissionScreen({
 }
 
 /**
- * First Reward Screen (placeholder)
+ * First Result Screen
  */
-function FirstRewardScreen({
+function FirstResultScreen({
   onComplete,
 }: {
   onComplete: () => void;
 }): JSX.Element {
+  // Lazy load the actual first result component
+  const [FirstResult, setFirstResult] = React.useState<React.FC<{
+    userName: string;
+    sessionDuration: number;
+    sessionGrade: string;
+    focusScoreBefore: number;
+    focusScoreAfter: number;
+    xpEarned: number;
+    onComplete: () => void;
+  }> | null>(null);
+
+  React.useEffect(() => {
+    import('./FirstResultScreen')
+      .then((mod) => {
+        setFirstResult(() => mod.FirstResultScreen);
+      })
+      .catch(() => {
+        // Fallback if component not available
+        onComplete();
+      });
+  }, [onComplete]);
+
+  if (!FirstResult) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator />
+      </View>
+    );
+  }
+
   return (
-    <View style={{ flex: 1, padding: 20, justifyContent: 'center', alignItems: 'center' }}>
-      <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 16 }}>
-        First Session Complete!
-      </Text>
-      <Text style={{ fontSize: 16, marginBottom: 24, textAlign: 'center' }}>
-        You have taken the first step. Your focus journey begins now.
-      </Text>
-      <Text onPress={onComplete} style={{ fontSize: 16, color: '#007AFF' }}>
-        Continue
-      </Text>
-    </View>
+    <FirstResult
+      userName="User" // This would come from onboarding state
+      sessionDuration={10}
+      sessionGrade="A"
+      focusScoreBefore={550}
+      focusScoreAfter={560}
+      xpEarned={20}
+      onComplete={onComplete}
+    />
   );
 }
 
@@ -131,10 +163,24 @@ export function OnboardingFlow({
     );
   }
 
-  // Show reward screen after first session but before full completion
+  // Show first result screen after first session but before full completion
   if (state.steps.firstSessionCompleted && !state.steps.rewardSeen) {
     return (
-      <FirstRewardScreen
+      <FirstResultScreen
+        userName={store.displayName || ''}
+        sessionDuration={10} // This would come from session data
+        sessionData={{
+          completedDurationSeconds: 600, // This would come from session data
+          targetDurationSeconds: 600,
+          effectiveFocusedSeconds: 580,
+          pauseCount: 0,
+          interruptionCount: 0,
+          backgroundTimeSeconds: 20,
+          mode: 'STARTER',
+          strictMode: false,
+          isAbandoned: false,
+        }}
+        focusScoreBefore={550} // This would come from user data
         onComplete={() => {
           markRewardSeen();
           onComplete?.();

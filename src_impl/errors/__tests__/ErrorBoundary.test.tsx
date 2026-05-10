@@ -9,14 +9,14 @@
  * - UI states
  */
 
-import React from "react";
-import { render, waitFor, fireEvent } from "@testing-library/react-native";
-import { ErrorBoundary, ErrorCategory } from "../ErrorBoundary";
-import { getAnalyticsService } from "../../analytics/AnalyticsService";
+import React from 'react';
+import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import { ErrorBoundary, ErrorCategory } from '../ErrorBoundary';
+import { getAnalyticsService } from '../../analytics/AnalyticsService';
 
 // Mock dependencies
-jest.mock("../../analytics/AnalyticsService");
-jest.mock("../../utils/debug", () => ({
+jest.mock('../../analytics/AnalyticsService');
+jest.mock('../../utils/debug', () => ({
   createDebugger: () => ({
     debug: jest.fn(),
     info: jest.fn(),
@@ -33,91 +33,91 @@ const mockAnalytics = {
 // Component that throws error
 const ThrowError = ({ shouldThrow }: { shouldThrow: boolean }) => {
   if (shouldThrow) {
-    throw new Error("Test error");
+    throw new Error('Test error');
   }
   return <div>Normal render</div>;
 };
 
 // Component that throws network error
 const ThrowNetworkError = () => {
-  const error = new Error("Network request failed");
-  error.name = "NetworkError";
+  const error = new Error('Network request failed');
+  error.name = 'NetworkError';
   throw error;
 };
 
 // Component that throws auth error
 const ThrowAuthError = () => {
-  const error = new Error("Unauthorized");
-  error.name = "AuthError";
+  const error = new Error('Unauthorized');
+  error.name = 'AuthError';
   throw error;
 };
 
 // Component that throws client error
 const ThrowClientError = () => {
-  const error = new Error("Client error");
+  const error = new Error('Client error');
   throw error;
 };
 
-describe("ErrorBoundary", () => {
+describe('ErrorBoundary', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useRealTimers();
   });
 
-  describe("Error Catching", () => {
-    it("should catch errors in children", () => {
+  describe('Error Catching', () => {
+    it('should catch errors in children', () => {
       const { getByText } = render(
         <ErrorBoundary>
           <ThrowError shouldThrow={true} />
         </ErrorBoundary>,
       );
 
-      expect(getByText("Oops! Something went wrong")).toBeTruthy();
+      expect(getByText('Oops! Something went wrong')).toBeTruthy();
     });
 
-    it("should render children when no error", () => {
+    it('should render children when no error', () => {
       const { getByText } = render(
         <ErrorBoundary>
           <ThrowError shouldThrow={false} />
         </ErrorBoundary>,
       );
 
-      expect(getByText("Normal render")).toBeTruthy();
+      expect(getByText('Normal render')).toBeTruthy();
     });
 
-    it("should categorize network errors", () => {
+    it('should categorize network errors', () => {
       const { getByText } = render(
         <ErrorBoundary>
           <ThrowNetworkError />
         </ErrorBoundary>,
       );
 
-      expect(getByText("Connection lost. Check your internet and try again.")).toBeTruthy();
+      expect(getByText('Connection lost. Check your internet and try again.')).toBeTruthy();
     });
 
-    it("should categorize auth errors", () => {
+    it('should categorize auth errors', () => {
       const { getByText } = render(
         <ErrorBoundary>
           <ThrowAuthError />
         </ErrorBoundary>,
       );
 
-      expect(getByText("Session expired. Please sign in again.")).toBeTruthy();
+      expect(getByText('Session expired. Please sign in again.')).toBeTruthy();
     });
 
-    it("should categorize client errors", () => {
+    it('should categorize client errors', () => {
       const { getByText } = render(
         <ErrorBoundary>
           <ThrowClientError />
         </ErrorBoundary>,
       );
 
-      expect(getByText("An unexpected error occurred. Please restart the app.")).toBeTruthy();
+      expect(getByText('An unexpected error occurred. Please restart the app.')).toBeTruthy();
     });
   });
 
-  describe("Analytics Integration", () => {
-    it("should track errors", () => {
+  describe('Analytics Integration', () => {
+    it('should track errors', () => {
       render(
         <ErrorBoundary>
           <ThrowError shouldThrow={true} />
@@ -125,15 +125,15 @@ describe("ErrorBoundary", () => {
       );
 
       expect(mockAnalytics.track).toHaveBeenCalledWith(
-        "error",
+        'error',
         expect.objectContaining({
-          error: "Test error",
+          error: 'Test error',
           category: expect.any(String),
         }),
       );
     });
 
-    it("should mark client errors as fatal", () => {
+    it('should mark client errors as fatal', () => {
       render(
         <ErrorBoundary>
           <ThrowClientError />
@@ -141,7 +141,7 @@ describe("ErrorBoundary", () => {
       );
 
       expect(mockAnalytics.track).toHaveBeenCalledWith(
-        "error",
+        'error',
         expect.objectContaining({
           fatal: true,
         }),
@@ -149,28 +149,28 @@ describe("ErrorBoundary", () => {
     });
   });
 
-  describe("Retry Logic", () => {
-    it("should show retry button for recoverable errors", () => {
+  describe('Retry Logic', () => {
+    it('should show retry button for recoverable errors', () => {
       const { getByText } = render(
         <ErrorBoundary>
           <ThrowNetworkError />
         </ErrorBoundary>,
       );
 
-      expect(getByText("Try Again")).toBeTruthy();
+      expect(getByText('Try Again')).toBeTruthy();
     });
 
-    it("should not show retry for client errors", () => {
+    it('should not show retry for client errors', () => {
       const { queryByText } = render(
         <ErrorBoundary>
           <ThrowClientError />
         </ErrorBoundary>,
       );
 
-      expect(queryByText("Try Again")).toBeNull();
+      expect(queryByText('Try Again')).toBeNull();
     });
 
-    it("should call onRetry when retry button pressed", () => {
+    it('should call onRetry when retry button pressed', () => {
       const onReset = jest.fn();
       const { getByText } = render(
         <ErrorBoundary onReset={onReset}>
@@ -178,22 +178,22 @@ describe("ErrorBoundary", () => {
         </ErrorBoundary>,
       );
 
-      fireEvent.press(getByText("Try Again"));
+      fireEvent.press(getByText('Try Again'));
       expect(onReset).toHaveBeenCalled();
     });
 
-    it("should track retry count", () => {
+    it('should track retry count', () => {
       const { getByText } = render(
         <ErrorBoundary maxRetries={3}>
           <ThrowNetworkError />
         </ErrorBoundary>,
       );
 
-      fireEvent.press(getByText("Try Again"));
-      expect(getByText("Retry attempt 1 of 3")).toBeTruthy();
+      fireEvent.press(getByText('Try Again'));
+      expect(getByText('Retry attempt 1 of 3')).toBeTruthy();
     });
 
-    it("should show loading state during retry", async () => {
+    it('should show loading state during retry', async () => {
       const onReset = jest.fn().mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
       const { getByText, queryByText } = render(
         <ErrorBoundary onReset={onReset}>
@@ -201,41 +201,41 @@ describe("ErrorBoundary", () => {
         </ErrorBoundary>,
       );
 
-      fireEvent.press(getByText("Try Again"));
+      fireEvent.press(getByText('Try Again'));
 
       // Should show retrying state
       await waitFor(() => {
-        expect(queryByText("Retrying...")).toBeTruthy();
+        expect(queryByText('Retrying...')).toBeTruthy();
       });
     });
   });
 
-  describe("Degraded Mode", () => {
-    it("should show degraded mode option", () => {
+  describe('Degraded Mode', () => {
+    it('should show degraded mode option', () => {
       const { getByText } = render(
         <ErrorBoundary allowDegraded={true}>
           <ThrowNetworkError />
         </ErrorBoundary>,
       );
 
-      expect(getByText("Continue Anyway")).toBeTruthy();
+      expect(getByText('Continue Anyway')).toBeTruthy();
     });
 
-    it("should enter degraded mode on continue", () => {
+    it('should enter degraded mode on continue', () => {
       const { getByText, queryByText } = render(
         <ErrorBoundary allowDegraded={true}>
           <ThrowNetworkError />
         </ErrorBoundary>,
       );
 
-      fireEvent.press(getByText("Continue Anyway"));
+      fireEvent.press(getByText('Continue Anyway'));
 
-      expect(getByText("Running in limited mode")).toBeTruthy();
+      expect(getByText('Running in limited mode')).toBeTruthy();
       // Error UI should be gone
-      expect(queryByText("Oops! Something went wrong")).toBeNull();
+      expect(queryByText('Oops! Something went wrong')).toBeNull();
     });
 
-    it("should render degraded fallback when provided", () => {
+    it('should render degraded fallback when provided', () => {
       const degradedFallback = <div>Custom degraded UI</div>;
       const { getByText } = render(
         <ErrorBoundary allowDegraded={true} degradedFallback={degradedFallback}>
@@ -243,23 +243,23 @@ describe("ErrorBoundary", () => {
         </ErrorBoundary>,
       );
 
-      fireEvent.press(getByText("Continue Anyway"));
-      expect(getByText("Custom degraded UI")).toBeTruthy();
+      fireEvent.press(getByText('Continue Anyway'));
+      expect(getByText('Custom degraded UI')).toBeTruthy();
     });
 
-    it("should not show degraded mode for non-recoverable errors", () => {
+    it('should not show degraded mode for non-recoverable errors', () => {
       const { queryByText } = render(
         <ErrorBoundary allowDegraded={true}>
           <ThrowClientError />
         </ErrorBoundary>,
       );
 
-      expect(queryByText("Continue Anyway")).toBeNull();
+      expect(queryByText('Continue Anyway')).toBeNull();
     });
   });
 
-  describe("Auto-Retry", () => {
-    it("should auto-retry network errors", async () => {
+  describe('Auto-Retry', () => {
+    it('should auto-retry network errors', async () => {
       jest.useFakeTimers();
       const onReset = jest.fn().mockResolvedValue(undefined);
 
@@ -279,7 +279,7 @@ describe("ErrorBoundary", () => {
       jest.useRealTimers();
     });
 
-    it("should not auto-retry client errors", async () => {
+    it('should not auto-retry client errors', async () => {
       jest.useFakeTimers();
       const onReset = jest.fn();
 
@@ -295,9 +295,9 @@ describe("ErrorBoundary", () => {
       jest.useRealTimers();
     });
 
-    it("should stop retrying after max retries", async () => {
+    it('should stop retrying after max retries', async () => {
       jest.useFakeTimers();
-      const onReset = jest.fn().mockRejectedValue(new Error("Retry failed"));
+      const onReset = jest.fn().mockRejectedValue(new Error('Retry failed'));
 
       const { getByText } = render(
         <ErrorBoundary onReset={onReset} maxRetries={2} retryDelay={100}>
@@ -308,13 +308,13 @@ describe("ErrorBoundary", () => {
       // First retry
       jest.advanceTimersByTime(100);
       await waitFor(() => {
-        expect(getByText("Retry attempt 1 of 2")).toBeTruthy();
+        expect(getByText('Retry attempt 1 of 2')).toBeTruthy();
       });
 
       // Second retry
       jest.advanceTimersByTime(200);
       await waitFor(() => {
-        expect(getByText("Retry attempt 2 of 2")).toBeTruthy();
+        expect(getByText('Retry attempt 2 of 2')).toBeTruthy();
       });
 
       // No more retries, should show degraded or error
@@ -324,8 +324,8 @@ describe("ErrorBoundary", () => {
     });
   });
 
-  describe("Custom Fallback", () => {
-    it("should render custom fallback when provided", () => {
+  describe('Custom Fallback', () => {
+    it('should render custom fallback when provided', () => {
       const fallback = <div>Custom error UI</div>;
       const { getByText } = render(
         <ErrorBoundary fallback={fallback}>
@@ -333,12 +333,12 @@ describe("ErrorBoundary", () => {
         </ErrorBoundary>,
       );
 
-      expect(getByText("Custom error UI")).toBeTruthy();
+      expect(getByText('Custom error UI')).toBeTruthy();
     });
   });
 
-  describe("Error Handler Callback", () => {
-    it("should call onError with error details", () => {
+  describe('Error Handler Callback', () => {
+    it('should call onError with error details', () => {
       const onError = jest.fn();
 
       render(
@@ -347,19 +347,19 @@ describe("ErrorBoundary", () => {
         </ErrorBoundary>,
       );
 
-      expect(onError).toHaveBeenCalledWith(expect.objectContaining({ message: "Network request failed" }), expect.objectContaining({ componentStack: expect.any(String) }), "network" as ErrorCategory);
+      expect(onError).toHaveBeenCalledWith(expect.objectContaining({ message: 'Network request failed' }), expect.objectContaining({ componentStack: expect.any(String) }), 'network' as ErrorCategory);
     });
   });
 
-  describe("Edge Cases", () => {
-    it("should handle multiple errors", () => {
+  describe('Edge Cases', () => {
+    it('should handle multiple errors', () => {
       const { getByText, rerender } = render(
         <ErrorBoundary>
           <ThrowError shouldThrow={true} />
         </ErrorBoundary>,
       );
 
-      expect(getByText("Oops! Something went wrong")).toBeTruthy();
+      expect(getByText('Oops! Something went wrong')).toBeTruthy();
 
       // Reset and trigger another error
       rerender(
@@ -369,10 +369,10 @@ describe("ErrorBoundary", () => {
       );
 
       // Should show children again
-      expect(getByText("Normal render")).toBeTruthy();
+      expect(getByText('Normal render')).toBeTruthy();
     });
 
-    it("should cleanup timers on unmount", () => {
+    it('should cleanup timers on unmount', () => {
       jest.useFakeTimers();
       const { unmount } = render(
         <ErrorBoundary retryDelay={5000}>
@@ -388,7 +388,7 @@ describe("ErrorBoundary", () => {
       jest.useRealTimers();
     });
 
-    it("should handle error with null message", () => {
+    it('should handle error with null message', () => {
       const ThrowNullError = () => {
         const error = new Error();
         (error as any).message = null;
@@ -401,7 +401,7 @@ describe("ErrorBoundary", () => {
         </ErrorBoundary>,
       );
 
-      expect(getByText("Something went wrong")).toBeTruthy();
+      expect(getByText('Something went wrong')).toBeTruthy();
     });
   });
 });

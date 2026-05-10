@@ -12,7 +12,7 @@ import Svg, { Path, Line, Text as SvgText, Circle, Defs, LinearGradient, Stop } 
 import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
 import { useTheme } from '../../../theme';
-import { useFocusScoreHistory, useFocusScoreColor } from '../hooks';
+import { useFocusScoreHistory } from '../hooks-focus-score';
 
 interface ScoreHistoryChartProps {
   userId: string;
@@ -29,7 +29,7 @@ export function ScoreHistoryChart({
 }: ScoreHistoryChartProps) {
   const { theme } = useTheme();
   const { width: screenWidth } = useWindowDimensions();
-  const { history, loadingState, error, refresh } = useFocusScoreHistory(userId, days);
+  const { history, loadingState } = useFocusScoreHistory(userId, days);
 
   const chartWidth = screenWidth - 48;
   const padding = { top: 20, right: 40, bottom: 30, left: 40 };
@@ -42,7 +42,7 @@ export function ScoreHistoryChart({
   if (loadingState === 'loading' || loadingState === 'idle') {
     return (
       <Box padding="lg" backgroundColor="surface" borderRadius="lg" style={{ width: '100%' }}>
-        <View style={{ borderRadius: 8, backgroundColor: theme.colors.border.DEFAULT, height }} />
+        <View style={{ borderRadius: theme.spacing[2], backgroundColor: theme.colors.border.DEFAULT, height }} />
       </Box>
     );
   }
@@ -53,7 +53,7 @@ export function ScoreHistoryChart({
   if (loadingState === 'error') {
     return (
       <Box padding="lg" backgroundColor="surface" borderRadius="lg" style={{ width: '100%' }}>
-        <Text variant="body" color="error" style={{ marginBottom: 16 }}>
+        <Text variant="body" color="error" style={{ marginBottom: theme.spacing[4] }}>
           Score History
         </Text>
         <Text variant="caption" color="textMuted">
@@ -69,11 +69,11 @@ export function ScoreHistoryChart({
   if (history.length === 0) {
     return (
       <Box padding="lg" backgroundColor="surface" borderRadius="lg" style={{ width: '100%' }}>
-        <Text variant="body" color="text" style={{ marginBottom: 16 }}>
+        <Text variant="body" color="text" style={{ marginBottom: theme.spacing[4] }}>
           Score History
         </Text>
         <View style={{ alignItems: 'center', paddingVertical: 40 }}>
-          <Text style={{ fontSize: 48, marginBottom: 8 }}>📊</Text>
+          <Text style={{ fontSize: 48, marginBottom: theme.spacing[2] }}>📊</Text>
           <Text variant="caption" color="textMuted">
             No score data yet. Complete sessions to build your history!
           </Text>
@@ -85,19 +85,19 @@ export function ScoreHistoryChart({
   // ============================================================================
   // CHART RENDERING
   // ============================================================================
-  const scores = history.map(h => h.score);
+  const scores = history.map((h: { score: number }) => h.score);
   const minScore = Math.min(...scores, 300);
   const maxScore = Math.max(...scores, 850);
   const scoreRange = maxScore - minScore || 1;
 
   // Scale functions
-  const scaleX = (index: number) =>
+  const scaleX = (index: number): number =>
     padding.left + (index / (history.length - 1 || 1)) * graphWidth;
-  const scaleY = (score: number) =>
+  const scaleY = (score: number): number =>
     padding.top + graphHeight - ((score - minScore) / scoreRange) * graphHeight;
 
   // Generate path
-  const pathD = history.map((point, i) => {
+  const pathD = history.map((point: { score: number }, i: number) => {
     const x = scaleX(i);
     const y = scaleY(point.score);
     return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
@@ -117,7 +117,7 @@ export function ScoreHistoryChart({
 
   return (
     <Box padding="lg" backgroundColor="surface" borderRadius="lg" style={{ width: '100%' }}>
-      <Text variant="heading3" style={{ marginBottom: 16 }}>Score History</Text>
+      <Text variant="heading3" style={{ marginBottom: theme.spacing[4] }}>Score History</Text>
 
       <Svg width={chartWidth} height={height}>
         <Defs>
@@ -169,7 +169,7 @@ export function ScoreHistoryChart({
         />
 
         {/* Data points */}
-        {history.map((point, i) => {
+        {history.map((point: { score: number }, i: number) => {
           const x = scaleX(i);
           const y = scaleY(point.score);
           const isLatest = i === history.length - 1;

@@ -284,10 +284,10 @@ Other gates:
 - `npm run lint`
 - `npm test`
 - `npm run perf:audit`
+- `rg "StyleSheet\.create|FlatList|AsyncStorage|fetch\(" <edited-files>`
 
 Edited-file audits:
 - `rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|@ts-expect-error" <edited-files>`
-- `rg "StyleSheet\.create|FlatList|AsyncStorage|fetch\(" <edited-files>`
 - `rg "#[0-9A-Fa-f]{3,8}|rgb\(" <edited-files>`
 
 ## What Never Ships

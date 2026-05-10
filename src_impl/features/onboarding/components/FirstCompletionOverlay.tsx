@@ -9,12 +9,17 @@
  * @phase 2.7
  */
 
+<<<<<<< HEAD
 import React, { useEffect } from "react";
 import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withRepeat, withSpring, withSequence } from "react-native-reanimated";
+=======
+import React, { useEffect } from 'react';
+import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withRepeat, withSpring, withSequence, withDelay } from 'react-native-reanimated';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
 interface FirstCompletionOverlayProps {
   xpEarned: number;
@@ -45,7 +50,7 @@ function XpOrb({ xp }: { xp: number }): JSX.Element {
       <Animated.View
         style={[
           {
-            position: "absolute",
+            position: 'absolute',
             width: 140,
             height: 140,
             borderRadius: 70,
@@ -63,8 +68,8 @@ function XpOrb({ xp }: { xp: number }): JSX.Element {
             height: 100,
             borderRadius: 50,
             backgroundColor: theme.colors.primary[500],
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
             shadowColor: theme.colors.primary[500],
             shadowOffset: { width: 0, height: 0 },
             shadowOpacity: 0.5,
@@ -83,7 +88,7 @@ function XpOrb({ xp }: { xp: number }): JSX.Element {
       <Animated.View
         entering={FadeInUp.duration(600).delay(800)}
         style={{
-          position: "absolute",
+          position: 'absolute',
           bottom: 10,
         }}
       >
@@ -167,7 +172,7 @@ export function FirstCompletionOverlay({ xpEarned, onComplete }: FirstCompletion
       entering={FadeIn.duration(400)}
       exiting={FadeOut.duration(400)}
       style={{
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
@@ -193,7 +198,7 @@ export function FirstCompletionOverlay({ xpEarned, onComplete }: FirstCompletion
         <TutorialCard />
 
         {/* Continue hint */}
-        <Animated.View entering={FadeIn.duration(400).delay(3000)} style={{ marginTop: "auto", marginBottom: 40 }}>
+        <Animated.View entering={FadeIn.duration(400).delay(3000)} style={{ marginTop: 'auto', marginBottom: 40 }}>
           <Text variant="caption" color="text.tertiary">
             Continuing in a moment...
           </Text>

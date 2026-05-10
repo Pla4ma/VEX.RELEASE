@@ -1,19 +1,29 @@
 /**
- * Accessibility System Core
+ * Accessibility System Barrel
  *
- * Main accessibility system coordination and event handling.
+ * Re-exports the split implementation modules so callers can import from
+ * a single location while each module stays under the 200 line limit.
  */
 
+<<<<<<< HEAD
 import { eventBus } from '../events';
 import { AccessibilityPreferences } from './types';
 import { DEFAULT_ACCESSIBILITY } from './constants';
 
 export { DEFAULT_ACCESSIBILITY, COLOR_BLIND_PALETTES } from './constants';
+=======
+export {
+  DEFAULT_ACCESSIBILITY,
+  COLOR_BLIND_PALETTES,
+} from './constants';
+
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 export {
   calculateContrastRatio,
   checkContrast,
   getAccessibleAlternatives,
 } from './contrast';
+<<<<<<< HEAD
 export {
   getAccessibleAlternatives as getAccessibleColorAlternatives,
 } from './contrast';
@@ -58,11 +68,17 @@ export type {
 export class AccessibilitySystem {
   private preferences: AccessibilityPreferences;
   private initialized = false;
+=======
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-  constructor() {
-    this.preferences = DEFAULT_ACCESSIBILITY;
-  }
+export {
+  getAccessibleColor,
+  getStatusPattern,
+  getColorBlindPalettes,
+  isColorAccessibleForColorBlind,
+} from './color-blind';
 
+<<<<<<< HEAD
   /**
    * Initialize the accessibility system
    */
@@ -107,21 +123,43 @@ export class AccessibilitySystem {
       timestamp: Date.now(),
     });
   }
+=======
+export {
+  announce,
+  getRecentAnnouncements,
+  generateAccessibleLabel,
+  clearOldAnnouncements,
+} from './screen-reader';
 
-  /**
-   * Get current preferences
-   */
-  getPreferences(): AccessibilityPreferences {
-    return { ...this.preferences };
-  }
+export {
+  getAnimationConfig,
+  getAnimationStyles,
+  calculateScaledFontSize,
+  getScaledTypography,
+} from './motion';
 
-  /**
-   * Check if screen reader is enabled
-   */
-  isScreenReaderEnabled(): boolean {
-    return this.preferences.screenReaderOptimized;
-  }
+export {
+  registerFocusableElement,
+  getNextFocusableElement,
+  getPreviousFocusableElement,
+  unregisterFocusableElement,
+  getFocusableElements,
+} from './focus';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
+export {
+  getAccessibilityPreferences,
+  updateAccessibilityPreferences,
+  resetAccessibilityPreferences,
+  detectSystemAccessibility,
+} from './preferences';
+
+export {
+  auditScreen,
+  auditColorContrast,
+} from './audit';
+
+<<<<<<< HEAD
   /**
    * Check if reduced motion is enabled
    */
@@ -182,3 +220,16 @@ export function getAccessibilitySystem(): AccessibilitySystem {
   }
   return accessibilitySystem;
 }
+=======
+export type {
+  AccessibilityPreferences,
+  ColorBlindPalette,
+  ContrastCheck,
+  ScreenReaderAnnouncement,
+  AnimationConfig,
+  ColorBlindType,
+  FocusableElement,
+  AccessibilityIssue,
+  AccessibilityAudit,
+} from './types';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452

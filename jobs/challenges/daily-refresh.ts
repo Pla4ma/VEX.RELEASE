@@ -16,6 +16,7 @@ Sentry.init({
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_KEY!, {
   auth: { persistSession: false },
 });
+const httpRequest = globalThis.fetch.bind(globalThis);
 
 const ChallengePoolItemSchema = z.object({
   id: z.string().min(1),
@@ -99,7 +100,7 @@ async function sendPushNotifications(userIds: string[]): Promise<number> {
   for (const row of data ?? []) {
     const token = (row as { token?: string }).token;
     if (!token) continue;
-    const response = await fetch('https://exp.host/--/api/v2/push/send', {
+    const response = await httpRequest('https://exp.host/--/api/v2/push/send', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

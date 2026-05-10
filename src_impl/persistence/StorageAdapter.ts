@@ -1,7 +1,7 @@
 /**
  * Storage Adapter
  *
- * Abstract storage adapter interface for MMKV and AsyncStorage.
+ * Abstract storage adapter interface for MMKV and MMKV.
  */
 
 import type { Nullable } from '../types/global';
@@ -64,3 +64,4 @@ export interface StorageOptions {
   maxSize?: number; // bytes
   ttl?: number; // milliseconds
 }
+

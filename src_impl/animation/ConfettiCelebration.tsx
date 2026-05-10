@@ -11,13 +11,13 @@
  * - Reduced motion support
  */
 
-import React, { useEffect, useCallback } from "react";
-import { View, Dimensions } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withDecay, withDelay, runOnJS } from "react-native-reanimated";
-import { useReducedMotion } from "@/hooks";
-import { useTheme } from "@/theme";
+import React, { useEffect, useCallback } from 'react';
+import { View, Dimensions } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withDecay, withDelay, runOnJS } from 'react-native-reanimated';
+import { useReducedMotion } from '@/hooks';
+import { useTheme } from '@/theme';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 // ============================================================================
 // Types
@@ -32,7 +32,7 @@ interface ParticleConfig {
   rotation: number;
   velocityX: number;
   velocityY: number;
-  shape: "circle" | "square" | "triangle";
+  shape: 'circle' | 'square' | 'triangle';
   delay: number;
 }
 
@@ -50,14 +50,14 @@ interface ConfettiCelebrationProps {
 // ============================================================================
 
 const DEFAULT_COLORS = [
-  "#4F46E5", // Primary
-  "#10B981", // Success
-  "#F59E0B", // Warning
-  "#EF4444", // Error
-  "#8B5CF6", // Purple
-  "#EC4899", // Pink
-  "#06B6D4", // Cyan
-  "#F97316", // Orange
+  '#4F46E5', // Primary
+  '#10B981', // Success
+  '#F59E0B', // Warning
+  '#EF4444', // Error
+  '#8B5CF6', // Purple
+  '#EC4899', // Pink
+  '#06B6D4', // Cyan
+  '#F97316', // Orange
 ];
 
 const DRAG = 0.98;
@@ -121,7 +121,7 @@ const Particle: React.FC<{
     const color = config.color;
 
     switch (config.shape) {
-      case "circle":
+      case 'circle':
         return (
           <View
             style={{
@@ -132,7 +132,7 @@ const Particle: React.FC<{
             }}
           />
         );
-      case "square":
+      case 'square':
         return (
           <View
             style={{
@@ -142,7 +142,7 @@ const Particle: React.FC<{
             }}
           />
         );
-      case "triangle":
+      case 'triangle':
         return (
           <View
             style={{
@@ -152,8 +152,8 @@ const Particle: React.FC<{
               borderRightWidth: size / 2,
               borderBottomWidth: size,
               borderBottomColor: color,
-              borderLeftColor: "transparent",
-              borderRightColor: "transparent",
+              borderLeftColor: 'transparent',
+              borderRightColor: 'transparent',
             }}
           />
         );
@@ -182,7 +182,7 @@ export const ConfettiCelebration: React.FC<ConfettiCelebrationProps> = ({ active
       rotation: Math.random() * 360,
       velocityX: (Math.random() - 0.5) * 800,
       velocityY: -Math.random() * 600 - 200,
-      shape: ["circle", "square", "triangle"][Math.floor(Math.random() * 3)] as ParticleConfig["shape"],
+      shape: ['circle', 'square', 'triangle'][Math.floor(Math.random() * 3)] as ParticleConfig['shape'],
       delay: Math.random() * 200,
     }));
   }, [particleCount, colors, origin]);
@@ -214,7 +214,7 @@ export const ConfettiCelebration: React.FC<ConfettiCelebrationProps> = ({ active
   }
 
   return (
-    <View style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0 }} pointerEvents="none">
+    <View style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} pointerEvents="none">
       {particles.map((particle) => (
         <Particle key={particle.id} config={particle} onComplete={handleParticleComplete} />
       ))}
@@ -226,6 +226,30 @@ export const ConfettiCelebration: React.FC<ConfettiCelebrationProps> = ({ active
 // Styles
 // ============================================================================
 
-const particleStyle = { position: "absolute" as const };
+const particleStyle = { position: 'absolute' as const };
 
+<<<<<<< HEAD
+=======
+const shapeStyle = {
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.2,
+  shadowRadius: 3,
+  elevation: 3,
+};
+
+const triangleStyle = {
+  width: 0,
+  height: 0,
+  backgroundColor: 'transparent' as const,
+  borderStyle: 'solid' as const,
+  borderLeftColor: 'transparent' as const,
+  borderRightColor: 'transparent' as const,
+  shadowColor: '#000',
+  shadowOffset: { width: 0, height: 2 },
+  shadowOpacity: 0.2,
+  shadowRadius: 3,
+};
+
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 export default ConfettiCelebration;

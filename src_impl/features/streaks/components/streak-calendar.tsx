@@ -3,10 +3,17 @@
  * Visual calendar showing daily focus activity
  */
 
+<<<<<<< HEAD
 import React from "react";
 import { View, Text } from "react-native";
 import { useStreakCalendar } from "../hooks";
 import { createSheet } from "@/shared/ui/create-sheet";
+=======
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { useStreakCalendar } from '../hooks';
+import { createSheet } from '@/shared/ui/create-sheet';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 // ============================================================================
 // Types
@@ -44,7 +51,7 @@ export function StreakCalendar({ userId, month, year, previewCompletedDays, prev
     );
   }
 
-  const monthName = new Date(year, month - 1).toLocaleString("default", { month: "long" });
+  const monthName = new Date(year, month - 1).toLocaleString('default', { month: 'long' });
   const daysInMonth = new Date(year, month, 0).getDate();
   const firstDayOfMonth = new Date(year, month - 1, 1).getDay();
   const completedDaySet = new Set<number>(previewCompletedDays ?? calendar?.days?.map((day) => Number(day)) ?? []);
@@ -79,7 +86,7 @@ export function StreakCalendar({ userId, month, year, previewCompletedDays, prev
 
       {/* Weekday Headers */}
       <View style={styles.weekdays}>
-        {["S", "M", "T", "W", "T", "F", "S"].map((day, i) => (
+        {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
           <Text key={i} style={styles.weekdayText}>
             {day}
           </Text>
@@ -113,16 +120,16 @@ export function StreakCalendar({ userId, month, year, previewCompletedDays, prev
 
 const styles = createSheet({
   container: {
-    backgroundColor: "#1a1a2e",
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
   },
   loadingText: {
-    color: "#9ca3af",
+    color: '#9ca3af',
     fontSize: 14,
   },
   errorText: {
-    color: "#ef4444",
+    color: '#ef4444',
     fontSize: 14,
   },
   header: {
@@ -130,78 +137,78 @@ const styles = createSheet({
   },
   monthName: {
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#f3f4f6",
+    fontWeight: 'bold',
+    color: '#f3f4f6',
     marginBottom: 4,
   },
   stats: {
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   statText: {
     fontSize: 12,
-    color: "#9ca3af",
+    color: '#9ca3af',
   },
   statValue: {
-    color: "#fbbf24",
-    fontWeight: "600",
+    color: '#fbbf24',
+    fontWeight: '600',
   },
   weekdays: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginBottom: 8,
   },
   weekdayText: {
     width: 36,
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 12,
-    color: "#6b7280",
-    fontWeight: "600",
+    color: '#6b7280',
+    fontWeight: '600',
   },
   calendar: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-start',
   },
   day: {
     width: 36,
     height: 36,
     margin: 2,
     borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   dayActive: {
-    backgroundColor: "#3b82f6",
+    backgroundColor: '#3b82f6',
   },
   dayToday: {
     borderWidth: 2,
-    borderColor: "#fbbf24",
+    borderColor: '#fbbf24',
   },
   dayText: {
     fontSize: 14,
-    color: "#9ca3af",
+    color: '#9ca3af',
   },
   dayTextActive: {
-    color: "#ffffff",
-    fontWeight: "600",
+    color: '#ffffff',
+    fontWeight: '600',
   },
   dayDot: {
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: "#22c55e",
+    backgroundColor: '#22c55e',
     marginTop: 2,
   },
   legend: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: "#374151",
+    borderTopColor: '#374151',
   },
   legendItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginRight: 16,
   },
   legendDot: {
@@ -211,13 +218,13 @@ const styles = createSheet({
     marginRight: 6,
   },
   legendActive: {
-    backgroundColor: "#3b82f6",
+    backgroundColor: '#3b82f6',
   },
   legendToday: {
-    backgroundColor: "#fbbf24",
+    backgroundColor: '#fbbf24',
   },
   legendText: {
     fontSize: 12,
-    color: "#9ca3af",
+    color: '#9ca3af',
   },
 });

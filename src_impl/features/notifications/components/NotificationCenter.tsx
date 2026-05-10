@@ -1,18 +1,18 @@
-import React from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React from 'react';
+import { View, Text, Pressable, ScrollView } from 'react-native';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 export interface NotificationItem {
   id: string;
   title: string;
   body: string;
-  type: "urgency" | "social" | "system";
-  priority: "low" | "normal" | "high" | "critical";
+  type: 'urgency' | 'social' | 'system';
+  priority: 'low' | 'normal' | 'high' | 'critical';
   read: boolean;
   timestamp: number;
   action?: {
-    type: "start_session" | "view_boss" | "open_chest" | "dismiss";
+    type: 'start_session' | 'view_boss' | 'open_chest' | 'dismiss';
     payload?: Record<string, unknown>;
   };
 }
@@ -29,54 +29,54 @@ interface NotificationCenterProps {
 const styles = createSheet({
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.5)",
-    justifyContent: "flex-end",
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'flex-end',
   },
   container: {
-    backgroundColor: "#1a1a2e",
+    backgroundColor: '#1a1a2e',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    maxHeight: "80%",
+    maxHeight: '80%',
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#2a2a4e",
+    borderBottomColor: '#2a2a4e',
   },
   title: {
     fontSize: 18,
-    fontWeight: "700",
-    color: "#fff",
+    fontWeight: '700',
+    color: '#fff',
   },
   markAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: "#2a2a4e",
+    backgroundColor: '#2a2a4e',
   },
   markAllText: {
     fontSize: 12,
-    color: "#9E9E9E",
-    fontWeight: "600",
+    color: '#9E9E9E',
+    fontWeight: '600',
   },
   scrollView: {
     maxHeight: 400,
   },
   notificationItem: {
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#2a2a4e",
-    alignItems: "flex-start",
+    borderBottomColor: '#2a2a4e',
+    alignItems: 'flex-start',
   },
   unreadIndicator: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: "#e94560",
+    backgroundColor: '#e94560',
     marginRight: 12,
     marginTop: 6,
   },
@@ -84,7 +84,7 @@ const styles = createSheet({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     marginRight: 12,
     marginTop: 6,
   },
@@ -93,76 +93,76 @@ const styles = createSheet({
   },
   notificationTitle: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#fff",
+    fontWeight: '600',
+    color: '#fff',
     marginBottom: 4,
   },
   notificationBody: {
     fontSize: 14,
-    color: "#9E9E9E",
+    color: '#9E9E9E',
     marginBottom: 8,
     lineHeight: 20,
   },
   meta: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   timestamp: {
     fontSize: 12,
-    color: "#666",
+    color: '#666',
   },
   priorityBadge: {
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
     fontSize: 10,
-    fontWeight: "700",
-    textTransform: "uppercase",
+    fontWeight: '700',
+    textTransform: 'uppercase',
   },
   criticalBadge: {
-    backgroundColor: "#e94560",
-    color: "#fff",
+    backgroundColor: '#e94560',
+    color: '#fff',
   },
   highBadge: {
-    backgroundColor: "#f5a623",
-    color: "#000",
+    backgroundColor: '#f5a623',
+    color: '#000',
   },
   actionButton: {
     marginTop: 8,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: "#e94560",
+    backgroundColor: '#e94560',
     borderRadius: 8,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
   },
   actionButtonText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   emptyState: {
     padding: 40,
-    alignItems: "center",
+    alignItems: 'center',
   },
   emptyText: {
     fontSize: 16,
-    color: "#9E9E9E",
-    textAlign: "center",
+    color: '#9E9E9E',
+    textAlign: 'center',
   },
   closeButton: {
     padding: 16,
-    alignItems: "center",
+    alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: "#2a2a4e",
+    borderTopColor: '#2a2a4e',
   },
   closeButtonText: {
     fontSize: 16,
-    color: "#fff",
-    fontWeight: "600",
+    color: '#fff',
+    fontWeight: '600',
   },
   dismissText: {
-    color: "#666",
+    color: '#666',
     fontSize: 18,
   },
 });
@@ -170,8 +170,8 @@ const styles = createSheet({
 const priorityStyles = {
   critical: styles.criticalBadge,
   high: styles.highBadge,
-  normal: { backgroundColor: "#2a2a4e", color: "#fff" },
-  low: { backgroundColor: "#1a1a2e", color: "#666" },
+  normal: { backgroundColor: '#2a2a4e', color: '#fff' },
+  low: { backgroundColor: '#1a1a2e', color: '#666' },
 };
 
 function formatTimestamp(timestamp: number): string {
@@ -182,7 +182,7 @@ function formatTimestamp(timestamp: number): string {
   const days = Math.floor(diff / 86400000);
 
   if (minutes < 1) {
-    return "Just now";
+    return 'Just now';
   }
   if (minutes < 60) {
     return `${minutes}m ago`;
@@ -243,10 +243,10 @@ export function NotificationCenter({ notifications, onMarkRead, onMarkAllRead, o
                   {notification.action && (
                     <Pressable style={styles.actionButton} onPress={() => onAction(notification)}>
                       <Text style={styles.actionButtonText}>
-                        {notification.action.type === "start_session" && "Start Session"}
-                        {notification.action.type === "view_boss" && "View Boss"}
-                        {notification.action.type === "open_chest" && "Open Chest"}
-                        {notification.action.type === "dismiss" && "Dismiss"}
+                        {notification.action.type === 'start_session' && 'Start Session'}
+                        {notification.action.type === 'view_boss' && 'View Boss'}
+                        {notification.action.type === 'open_chest' && 'Open Chest'}
+                        {notification.action.type === 'dismiss' && 'Dismiss'}
                       </Text>
                     </Pressable>
                   )}
@@ -269,4 +269,4 @@ export function NotificationCenter({ notifications, onMarkRead, onMarkAllRead, o
 }
 
 // Need to import StyleSheet for the overlay spread
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';

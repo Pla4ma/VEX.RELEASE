@@ -96,7 +96,7 @@ const mockWalletRow = {
 // Helper Functions
 // ============================================================================
 
-function setupMockChain(responseChain: Array<{ data?: any; error?: any }>) {
+function setupMockChain(responseChain: Array<{ data?: unknown; error?: unknown }>) {
   let callIndex = 0;
   
   const createMockFn = () => {
@@ -123,7 +123,7 @@ function setupMockChain(responseChain: Array<{ data?: any; error?: any }>) {
 // ============================================================================
 
 describe('squadWarWeeklyReset', () => {
-  let mockIo: any;
+  let mockIo: { runTask: jest.Mock };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -161,7 +161,7 @@ describe('squadWarWeeklyReset', () => {
 
       // Mock the query response
       let queryCallCount = 0;
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         if (queryCallCount === 0) {
           queryCallCount++;
           return Promise.resolve(callback({ data: expiredWars, error: null }));
@@ -170,7 +170,7 @@ describe('squadWarWeeklyReset', () => {
       });
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       expect(mockSupabaseClient.from).toHaveBeenCalledWith('squad_wars');
       expect(mockSupabaseClient.eq).toHaveBeenCalledWith('status', 'active');
@@ -184,7 +184,7 @@ describe('squadWarWeeklyReset', () => {
       mockSupabaseClient.lt.mockReturnValue(mockSupabaseClient);
 
       let queryCallCount = 0;
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         if (queryCallCount === 0) {
           queryCallCount++;
           return Promise.resolve(callback({ data: [], error: null }));
@@ -193,7 +193,7 @@ describe('squadWarWeeklyReset', () => {
       });
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       expect(result.processedWars).toBe(0);
       expect(result.winners).toBe(0);
@@ -212,7 +212,7 @@ describe('squadWarWeeklyReset', () => {
 
       const run = squadWarWeeklyReset.run;
       
-      await expect(run({} as any, mockIo)).rejects.toThrow();
+      await expect(run({}, mockIo)).rejects.toThrow();
     });
   });
 
@@ -244,14 +244,14 @@ describe('squadWarWeeklyReset', () => {
         { data: { id: 'new-war' }, error: null }, // insert new war
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: [], error: null };
         callIndex++;
         return Promise.resolve(callback(response));
       });
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       expect(result.processedWars).toBe(2);
       expect(result.winners).toBe(1);
@@ -275,14 +275,14 @@ describe('squadWarWeeklyReset', () => {
         { data: { id: 'new-war' }, error: null },
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: [], error: null };
         callIndex++;
         return Promise.resolve(callback(response));
       });
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       // Both have same damage, first one processed wins
       expect(result.winners + result.losers).toBe(2);
@@ -293,7 +293,7 @@ describe('squadWarWeeklyReset', () => {
       mockSupabaseClient.update.mockReturnValue(mockSupabaseClient);
 
       let updateCallCount = 0;
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         updateCallCount++;
         if (updateCallCount === 1) {
           return Promise.resolve(callback({ data: [{ ...mockWarRow, total_damage: 10000 }], error: null }));
@@ -302,7 +302,7 @@ describe('squadWarWeeklyReset', () => {
       });
 
       const run = squadWarWeeklyReset.run;
-      await run({} as any, mockIo);
+      await run({}, mockIo);
 
       // Verify status update to 'victory' or 'defeat'
       const updateCalls = mockSupabaseClient.update.mock.calls;
@@ -336,14 +336,14 @@ describe('squadWarWeeklyReset', () => {
         { data: [], error: null }, // active squads
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: [], error: null };
         callIndex++;
         return Promise.resolve(callback(response));
       });
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       expect(result.rewardsGranted).toBeGreaterThan(0);
     });
@@ -369,14 +369,14 @@ describe('squadWarWeeklyReset', () => {
         { data: [], error: null },
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: [], error: null };
         callIndex++;
         return Promise.resolve(callback(response));
       });
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       // Verify coins were granted
       expect(result.rewardsGranted).toBeGreaterThan(0);
@@ -407,14 +407,14 @@ describe('squadWarWeeklyReset', () => {
         { data: [], error: null },
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: [], error: null };
         callIndex++;
         return Promise.resolve(callback(response));
       });
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       expect(result.rewardsGranted).toBe(0);
     });
@@ -437,7 +437,7 @@ describe('squadWarWeeklyReset', () => {
         { data: [], error: null },
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: [], error: null };
         callIndex++;
         return Promise.resolve(callback(response));
@@ -447,7 +447,7 @@ describe('squadWarWeeklyReset', () => {
       mockSupabaseClient.insert.mockReturnValue(mockSupabaseClient);
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       // Verify wallet was created
       expect(mockSupabaseClient.insert).toHaveBeenCalled();
@@ -475,7 +475,7 @@ describe('squadWarWeeklyReset', () => {
         { data: { id: 'new-war-3' }, error: null }, // Insert war 3
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: null, error: null };
         callIndex++;
         return Promise.resolve(callback(response));
@@ -485,7 +485,7 @@ describe('squadWarWeeklyReset', () => {
       mockSupabaseClient.insert.mockReturnValue(mockSupabaseClient);
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       expect(result.nextWarsCreated).toBe(3);
     });
@@ -565,14 +565,14 @@ describe('squadWarWeeklyReset', () => {
         { data: [], error: null },
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: [], error: null };
         callIndex++;
         return Promise.resolve(callback(response));
       });
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       expect(result.notificationsSent).toBeGreaterThan(0);
     });
@@ -604,14 +604,14 @@ describe('squadWarWeeklyReset', () => {
         { data: [], error: null },
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: [], error: null };
         callIndex++;
         return Promise.resolve(callback(response));
       });
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       // Both squads should get notifications (1 winner, 1 loser)
       expect(result.notificationsSent).toBeGreaterThan(0);
@@ -639,14 +639,14 @@ describe('squadWarWeeklyReset', () => {
         { data: [], error: null },
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: [], error: null };
         callIndex++;
         return Promise.resolve(callback(response));
       });
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       expect(result.notificationsSent).toBe(0);
     });
@@ -669,7 +669,7 @@ describe('squadWarWeeklyReset', () => {
         { data: null, error: new Error('Progression update failed') }, // Error here
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: [], error: null };
         callIndex++;
         if (response.error) {
@@ -680,7 +680,7 @@ describe('squadWarWeeklyReset', () => {
 
       const run = squadWarWeeklyReset.run;
       
-      await expect(run({} as any, mockIo)).rejects.toThrow();
+      await expect(run({}, mockIo)).rejects.toThrow();
     });
 
     it('should handle wallet transaction errors', async () => {
@@ -698,7 +698,7 @@ describe('squadWarWeeklyReset', () => {
         { data: null, error: new Error('Wallet fetch failed') },
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: [], error: null };
         callIndex++;
         if (response.error) {
@@ -709,7 +709,7 @@ describe('squadWarWeeklyReset', () => {
 
       const run = squadWarWeeklyReset.run;
       
-      await expect(run({} as any, mockIo)).rejects.toThrow();
+      await expect(run({}, mockIo)).rejects.toThrow();
     });
 
     it('should continue processing other wars if one fails', async () => {
@@ -754,14 +754,14 @@ describe('squadWarWeeklyReset', () => {
         { data: { id: 'new-war-2' }, error: null }, // Insert new war
       ];
 
-      mockSupabaseClient.then = jest.fn((callback: any) => {
+      mockSupabaseClient.then = jest.fn((callback: (value: unknown) => unknown) => {
         const response = responses[callIndex] || { data: [], error: null };
         callIndex++;
         return Promise.resolve(callback(response));
       });
 
       const run = squadWarWeeklyReset.run;
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       // Verify all aspects of the reset
       expect(result.processedWars).toBe(1);
@@ -778,7 +778,7 @@ describe('squadWarWeeklyReset', () => {
         return Promise.resolve({ data: [], error: null });
       });
 
-      const result = await run({} as any, mockIo);
+      const result = await run({}, mockIo);
 
       expect(result).toHaveProperty('processedWars');
       expect(result).toHaveProperty('winners');
@@ -796,3 +796,4 @@ describe('squadWarWeeklyReset', () => {
     });
   });
 });
+

@@ -27,7 +27,7 @@ export function DailyLeaderboard({ squadId, userId }: DailyLeaderboardProps): JS
   const query = useSquadStats(squadId);
   const entries = useMemo(() => {
     const data = query.data;
-    if (!data || typeof data !== 'object' || !Array.isArray(data)) return [];
+    if (!data || typeof data !== 'object' || !Array.isArray(data)) {return [];}
     return data.slice(0, 8);
   }, [query.data]);
 

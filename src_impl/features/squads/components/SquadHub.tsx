@@ -4,14 +4,14 @@
  * Main dashboard for squad management and activities.
  */
 
-import React, { useState, useCallback } from "react";
-import { View, Text, ScrollView, Pressable, Image, ActivityIndicator } from "react-native";
-import { FlashList } from "@shopify/flash-list";
-import { useThemeObject } from "../../../theme";
-import { Card, Button, Avatar, Badge } from "../../../components";
-import { useSquad, useSquadMembers, useSquadPermissions, useStartSquadSession } from "../hooks";
-import { type SquadMemberDetail } from "../schemas";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useState, useCallback } from 'react';
+import { View, Text, ScrollView, Pressable, Image, ActivityIndicator } from 'react-native';
+import { FlashList } from '@shopify/flash-list';
+import { useThemeObject } from '../../../theme';
+import { Card, Button, Avatar, Badge } from '../../../components';
+import { useSquad, useSquadMembers, useSquadPermissions, useStartSquadSession } from '../hooks';
+import { type SquadMemberDetail } from '../schemas';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface SquadHubProps {
   squadId: string;
@@ -33,10 +33,10 @@ export const SquadHub: React.FC<SquadHubProps> = ({ squadId, userId, onInvitePre
     setIsStartingSession(true);
     try {
       await startSession.mutateAsync({
-        name: "Squad Focus",
+        name: 'Squad Focus',
         description: null,
         duration: 1500,
-        category: "focus",
+        category: 'focus',
         maxParticipants: 10,
       });
     } finally {
@@ -93,7 +93,7 @@ export const SquadHub: React.FC<SquadHubProps> = ({ squadId, userId, onInvitePre
           <Badge variant="primary" size="md">{`Level ${squad.synergyLevel}`}</Badge>
         </View>
         <View style={[styles.progressBar, { backgroundColor: theme.colors.background.secondary, height: 8, borderRadius: 4 }]}>
-          <View style={{ width: `${(squad.synergyLevel % 10) * 10}%`, backgroundColor: theme.colors.primary[500], height: "100%", borderRadius: 4 }} />
+          <View style={{ width: `${(squad.synergyLevel % 10) * 10}%`, backgroundColor: theme.colors.primary[500], height: '100%', borderRadius: 4 }} />
         </View>
         <Text style={[styles.progressText, { color: theme.colors.text.secondary }]}>{squad.synergyLevel * 100} points to next level</Text>
         {squad.focusMultiplier > 1 && <Text style={[styles.bonusText, { color: theme.colors.success.DEFAULT }]}>+{Math.round((squad.focusMultiplier - 1) * 100)}% bonus multiplier active</Text>}
@@ -104,14 +104,14 @@ export const SquadHub: React.FC<SquadHubProps> = ({ squadId, userId, onInvitePre
         <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>Actions</Text>
         <View style={styles.actionRow}>
           <Button onPress={handleStartSession} isDisabled={isStartingSession} style={styles.actionButton} variant="primary" accessibilityLabel="Action button" accessibilityRole="button" accessibilityHint="Activates this control">
-            {isStartingSession ? "Starting..." : "Start Squad Session"}
+            {isStartingSession ? 'Starting...' : 'Start Squad Session'}
           </Button>
-          {hasPermission("INVITE_MEMBERS") && (
+          {hasPermission('INVITE_MEMBERS') && (
             <Button variant="secondary" onPress={onInvitePress} style={styles.actionButton} accessibilityLabel="Invite Member button" accessibilityRole="button" accessibilityHint="Activates this control">
               Invite Member
             </Button>
           )}
-          {hasPermission("EDIT_SQUAD") && (
+          {hasPermission('EDIT_SQUAD') && (
             <Button variant="ghost" onPress={onSettingsPress} style={styles.actionButton} accessibilityLabel="Settings button" accessibilityRole="button" accessibilityHint="Activates this control">
               Settings
             </Button>
@@ -155,7 +155,7 @@ export const SquadHub: React.FC<SquadHubProps> = ({ squadId, userId, onInvitePre
               <View style={styles.memberInfo}>
                 <Text style={[styles.memberName, { color: theme.colors.text.primary }]}>{member.displayName}</Text>
                 <Text style={[styles.memberRole, { color: theme.colors.text.secondary }]}>
-                  {member.role} {member.isOnline && "• Online"}
+                  {member.role} {member.isOnline && '• Online'}
                 </Text>
               </View>
               <Badge variant="default" size="sm">
@@ -200,8 +200,8 @@ const styles = createSheet({
     padding: 16,
   },
   headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
   },
   avatar: {
@@ -213,13 +213,13 @@ const styles = createSheet({
     width: 64,
     height: 64,
     borderRadius: 32,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   avatarText: {
     fontSize: 24,
-    fontWeight: "bold",
-    color: "#fff",
+    fontWeight: 'bold',
+    color: '#fff',
   },
   headerInfo: {
     flex: 1,
@@ -227,10 +227,10 @@ const styles = createSheet({
   },
   squadName: {
     fontSize: 20,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   badgeRow: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 8,
   },
   description: {
@@ -242,14 +242,14 @@ const styles = createSheet({
     padding: 16,
   },
   sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 12,
   },
   sectionTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   memberCount: {
     fontSize: 14,
@@ -259,16 +259,16 @@ const styles = createSheet({
   },
   progressText: {
     fontSize: 12,
-    textAlign: "center",
+    textAlign: 'center',
   },
   bonusText: {
     fontSize: 12,
-    textAlign: "center",
+    textAlign: 'center',
     marginTop: 4,
   },
   actionRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 8,
   },
   actionButton: {
@@ -280,23 +280,23 @@ const styles = createSheet({
     gap: 16,
   },
   onlineMemberItem: {
-    alignItems: "center",
-    position: "relative",
+    alignItems: 'center',
+    position: 'relative',
   },
   onlineIndicator: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 16,
     right: -2,
     width: 12,
     height: 12,
     borderRadius: 6,
-    backgroundColor: "#4CAF50",
+    backgroundColor: '#4CAF50',
     borderWidth: 2,
-    borderColor: "#fff",
+    borderColor: '#fff',
   },
   memberRow: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 12,
     paddingVertical: 8,
   },
@@ -305,7 +305,7 @@ const styles = createSheet({
   },
   memberName: {
     fontSize: 14,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   memberRole: {
     fontSize: 12,
@@ -314,23 +314,23 @@ const styles = createSheet({
     marginVertical: 4,
   },
   statsGrid: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginTop: 12,
   },
   statItem: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   statValue: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   statLabel: {
     fontSize: 12,
     marginTop: 4,
   },
   errorText: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 16,
     marginTop: 24,
   },

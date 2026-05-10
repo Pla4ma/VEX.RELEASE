@@ -95,6 +95,7 @@ export interface AnalyticsEventDefinitions {
   };
   'analytics:paywall': {
     userId: string;
+<<<<<<< HEAD
     paywallId?: string;
     event?: string;
     analytics?: unknown;
@@ -110,5 +111,16 @@ export interface AnalyticsEventDefinitions {
     event?: string;
     metrics?: unknown;
     timestamp?: number;
+=======
+    context: string;
+    event: string;
+    analytics: unknown;
+  };
+  'analytics:streak': {
+    userId: string;
+    event: string;
+    streakLength: number;
+    metrics: unknown;
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   };
 }

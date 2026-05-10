@@ -47,6 +47,7 @@ export interface ScreenReaderAnnouncement {
   id: string;
   message: string;
   priority: 'polite' | 'assertive';
+  timestamp: number;
   delay?: number;
   timestamp: number;
 }
@@ -58,7 +59,11 @@ export interface AnimationConfig {
   useNativeDriver?: boolean;
 }
 
+<<<<<<< HEAD
 export type ColorBlindType = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia' | 'achromatopsia';
+=======
+export type ColorBlindType = "none" | "protanopia" | "deuteranopia" | "tritanopia" | "achromatopsia";
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 export interface FocusableElement {
   id: string;
@@ -69,11 +74,19 @@ export interface FocusableElement {
 
 export interface AccessibilityIssue {
   id: string;
+<<<<<<< HEAD
   type: 'focus' | 'label' | 'contrast' | 'motion' | 'screen-reader';
   severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   element: FocusableElement;
   suggestion: string;
+=======
+  type: 'focus' | 'label' | 'contrast' | 'motion' | 'keyboard' | 'semantic' | 'touch' | 'screen-reader';
+  severity: 'critical' | 'high' | 'medium' | 'low';
+  description: string;
+  element?: FocusableElement;
+  suggestion?: string;
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 }
 
 export interface AccessibilityAudit {
@@ -81,3 +94,36 @@ export interface AccessibilityAudit {
   issues: AccessibilityIssue[];
   score: number;
 }
+<<<<<<< HEAD
+=======
+
+export interface AuditableComponentStyle {
+  color?: string;
+  backgroundColor?: string;
+  width?: number;
+  height?: number;
+  minWidth?: number;
+  minHeight?: number;
+  [key: string]: unknown;
+}
+
+export interface AuditableComponentProps {
+  accessible?: boolean;
+  accessibilityLabel?: string;
+  accessibilityRole?: string;
+  accessibilityHint?: string;
+  onPress?: unknown;
+  onLongPress?: unknown;
+  animated?: boolean;
+  useNativeDriver?: boolean;
+  style?: AuditableComponentStyle;
+  children?: unknown;
+  title?: string;
+  [key: string]: unknown;
+}
+
+export interface AuditableComponent {
+  type?: { displayName?: string } | string;
+  props?: AuditableComponentProps;
+}
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452

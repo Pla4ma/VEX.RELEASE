@@ -2,19 +2,19 @@
  * Comprehensive Boss Service Tests
  */
 
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { calculateScaledHealth, calculateDamage, canUserFightBoss, createEncounter, applyDamage, getAvailableBosses } from "../service";
-import * as repository from "../repository";
-import { eventBus } from "../../../events";
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { calculateScaledHealth, calculateDamage, canUserFightBoss, createEncounter, applyDamage, getAvailableBosses } from '../service';
+import * as repository from '../repository';
+import { eventBus } from '../../../events';
 
-vi.mock("../repository");
-vi.mock("../../../events", () => ({
+vi.mock('../repository');
+vi.mock('../../../events', () => ({
   eventBus: {
     publish: vi.fn(),
   },
 }));
 
-describe("Boss Service - Comprehensive", () => {
+describe('Boss Service - Comprehensive', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -23,32 +23,32 @@ describe("Boss Service - Comprehensive", () => {
   // Health Scaling Tests
   // ============================================================================
 
-  describe("calculateScaledHealth", () => {
-    it("should return base health for level 1, solo", () => {
+  describe('calculateScaledHealth', () => {
+    it('should return base health for level 1, solo', () => {
       const result = calculateScaledHealth(1000, 0.1, 1, 1);
       expect(result).toBe(1000);
     });
 
-    it("should scale health with user level", () => {
+    it('should scale health with user level', () => {
       const base = calculateScaledHealth(1000, 0.1, 1, 1);
       const scaled = calculateScaledHealth(1000, 0.1, 10, 1);
       expect(scaled).toBeGreaterThan(base);
     });
 
-    it("should scale health with squad size", () => {
+    it('should scale health with squad size', () => {
       const solo = calculateScaledHealth(1000, 0.1, 5, 1);
       const squad = calculateScaledHealth(1000, 0.1, 5, 3);
       expect(squad).toBeGreaterThan(solo);
     });
 
-    it("should calculate correct scaling formula", () => {
+    it('should calculate correct scaling formula', () => {
       // baseHealth * (1 + (level-1)*0.1) * (1 + (squadSize-1)*0.2)
       // 1000 * (1 + 9*0.1) * (1 + 2*0.2) = 1000 * 1.9 * 1.4 = 2660
       const result = calculateScaledHealth(1000, 0.1, 10, 3);
       expect(result).toBe(2660);
     });
 
-    it("should handle max level scaling", () => {
+    it('should handle max level scaling', () => {
       const result = calculateScaledHealth(1000, 0.1, 100, 1);
       expect(result).toBeGreaterThan(10000);
     });
@@ -58,8 +58,8 @@ describe("Boss Service - Comprehensive", () => {
   // Damage Calculation Tests
   // ============================================================================
 
-  describe("calculateDamage", () => {
-    it("should calculate base damage from duration", () => {
+  describe('calculateDamage', () => {
+    it('should calculate base damage from duration', () => {
       const result = calculateDamage({
         sessionDuration: 60,
         sessionQuality: 100,
@@ -70,7 +70,7 @@ describe("Boss Service - Comprehensive", () => {
       expect(result).toBeGreaterThanOrEqual(1);
     });
 
-    it("should apply quality multiplier", () => {
+    it('should apply quality multiplier', () => {
       const lowQuality = calculateDamage({
         sessionDuration: 60,
         sessionQuality: 0,
@@ -88,7 +88,7 @@ describe("Boss Service - Comprehensive", () => {
       expect(highQuality).toBeGreaterThan(lowQuality);
     });
 
-    it("should apply streak bonus for 7+ days", () => {
+    it('should apply streak bonus for 7+ days', () => {
       const noStreak = calculateDamage({
         sessionDuration: 60,
         sessionQuality: 100,
@@ -106,7 +106,7 @@ describe("Boss Service - Comprehensive", () => {
       expect(weekStreak).toBeGreaterThan(noStreak);
     });
 
-    it("should apply squad multiplier", () => {
+    it('should apply squad multiplier', () => {
       const solo = calculateDamage({
         sessionDuration: 60,
         sessionQuality: 100,
@@ -124,7 +124,7 @@ describe("Boss Service - Comprehensive", () => {
       expect(squad).toBeGreaterThan(solo);
     });
 
-    it("should scale with session duration", () => {
+    it('should scale with session duration', () => {
       const short = calculateDamage({
         sessionDuration: 30,
         sessionQuality: 100,
@@ -147,48 +147,48 @@ describe("Boss Service - Comprehensive", () => {
   // Boss Unlock Tests
   // ============================================================================
 
-  describe("canUserFightBoss", () => {
-    it("should allow level 3 user to fight first boss", async () => {
+  describe('canUserFightBoss', () => {
+    it('should allow level 3 user to fight first boss', async () => {
       const mockTemplate = {
-        id: "boss-1",
-        name: "Test Boss",
+        id: 'boss-1',
+        name: 'Test Boss',
         unlockLevel: 3,
         baseHealth: 1000,
-        rewardType: "COINS",
+        rewardType: 'COINS',
         rewardAmount: 100,
       };
 
       vi.mocked(repository.fetchBossTemplate).mockResolvedValue(mockTemplate);
       vi.mocked(repository.hasDefeatedBoss).mockResolvedValue(false);
 
-      const result = await canUserFightBoss("user-1", "boss-1", 3);
+      const result = await canUserFightBoss('user-1', 'boss-1', 3);
       expect(result.allowed).toBe(true);
     });
 
-    it("should block low level user", async () => {
+    it('should block low level user', async () => {
       const mockTemplate = {
-        id: "boss-1",
-        name: "Test Boss",
+        id: 'boss-1',
+        name: 'Test Boss',
         unlockLevel: 10,
         baseHealth: 1000,
-        rewardType: "COINS",
+        rewardType: 'COINS',
         rewardAmount: 100,
       };
 
       vi.mocked(repository.fetchBossTemplate).mockResolvedValue(mockTemplate);
 
-      const result = await canUserFightBoss("user-1", "boss-1", 5);
+      const result = await canUserFightBoss('user-1', 'boss-1', 5);
       expect(result.allowed).toBe(false);
-      expect(result.reason).toContain("level");
+      expect(result.reason).toContain('level');
     });
 
-    it("should check cooldown", async () => {
+    it('should check cooldown', async () => {
       const mockTemplate = {
-        id: "boss-1",
-        name: "Test Boss",
+        id: 'boss-1',
+        name: 'Test Boss',
         unlockLevel: 1,
         baseHealth: 1000,
-        rewardType: "COINS",
+        rewardType: 'COINS',
         rewardAmount: 100,
       };
 
@@ -196,28 +196,28 @@ describe("Boss Service - Comprehensive", () => {
       vi.mocked(repository.hasDefeatedBoss).mockResolvedValue(true);
       vi.mocked(repository.isBossOnCooldown).mockResolvedValue(true);
 
-      const result = await canUserFightBoss("user-1", "boss-1", 10);
+      const result = await canUserFightBoss('user-1', 'boss-1', 10);
       expect(result.allowed).toBe(false);
-      expect(result.reason).toContain("cooldown");
+      expect(result.reason).toContain('cooldown');
     });
 
-    it("should require previous boss defeat", async () => {
+    it('should require previous boss defeat', async () => {
       const mockTemplate = {
-        id: "boss-2",
-        name: "Boss 2",
+        id: 'boss-2',
+        name: 'Boss 2',
         unlockLevel: 1,
-        requiresBossId: "boss-1",
+        requiresBossId: 'boss-1',
         baseHealth: 1000,
-        rewardType: "COINS",
+        rewardType: 'COINS',
         rewardAmount: 100,
       };
 
       vi.mocked(repository.fetchBossTemplate).mockResolvedValue(mockTemplate);
-      vi.mocked(repository.hasDefeatedBoss).mockImplementation(async (_, bossId) => bossId !== "boss-1");
+      vi.mocked(repository.hasDefeatedBoss).mockImplementation(async (_, bossId) => bossId !== 'boss-1');
 
-      const result = await canUserFightBoss("user-1", "boss-2", 10);
+      const result = await canUserFightBoss('user-1', 'boss-2', 10);
       expect(result.allowed).toBe(false);
-      expect(result.reason).toContain("defeat");
+      expect(result.reason).toContain('defeat');
     });
   });
 
@@ -225,23 +225,23 @@ describe("Boss Service - Comprehensive", () => {
   // Encounter Creation Tests
   // ============================================================================
 
-  describe("createEncounter", () => {
-    it("should create solo encounter", async () => {
+  describe('createEncounter', () => {
+    it('should create solo encounter', async () => {
       const mockTemplate = {
-        id: "boss-1",
-        name: "Test Boss",
+        id: 'boss-1',
+        name: 'Test Boss',
         baseHealth: 1000,
-        rewardType: "COINS",
+        rewardType: 'COINS',
         rewardAmount: 100,
       };
 
       vi.mocked(repository.fetchBossTemplate).mockResolvedValue(mockTemplate);
       vi.mocked(repository.fetchActiveEncounter).mockResolvedValue(null);
       vi.mocked(repository.createEncounter).mockResolvedValue({
-        id: "encounter-1",
-        userId: "user-1",
-        bossId: "boss-1",
-        status: "ACTIVE",
+        id: 'encounter-1',
+        userId: 'user-1',
+        bossId: 'boss-1',
+        status: 'ACTIVE',
         healthRemaining: 1000,
         maxHealth: 1000,
         damageDealt: 0,
@@ -250,58 +250,58 @@ describe("Boss Service - Comprehensive", () => {
       });
 
       const result = await createEncounter({
-        userId: "user-1",
-        bossId: "boss-1",
+        userId: 'user-1',
+        bossId: 'boss-1',
         userLevel: 5,
       });
 
-      expect(result.encounterId).toBe("encounter-1");
-      expect(eventBus.publish).toHaveBeenCalledWith("boss:encounter_created", expect.any(Object));
+      expect(result.encounterId).toBe('encounter-1');
+      expect(eventBus.publish).toHaveBeenCalledWith('boss:encounter_created', expect.any(Object));
     });
 
-    it("should create squad encounter with scaled health", async () => {
+    it('should create squad encounter with scaled health', async () => {
       const mockTemplate = {
-        id: "boss-1",
-        name: "Test Boss",
+        id: 'boss-1',
+        name: 'Test Boss',
         baseHealth: 1000,
-        rewardType: "COINS",
+        rewardType: 'COINS',
         rewardAmount: 100,
       };
 
       vi.mocked(repository.fetchBossTemplate).mockResolvedValue(mockTemplate);
       vi.mocked(repository.fetchActiveEncounter).mockResolvedValue(null);
       vi.mocked(repository.createEncounter).mockImplementation(async (data) => ({
-        id: "encounter-1",
+        id: 'encounter-1',
         ...data,
-        status: "ACTIVE",
+        status: 'ACTIVE',
         damageDealt: 0,
         createdAt: Date.now(),
       }));
 
       const result = await createEncounter({
-        userId: "user-1",
-        bossId: "boss-1",
+        userId: 'user-1',
+        bossId: 'boss-1',
         userLevel: 10,
-        squadId: "squad-1",
+        squadId: 'squad-1',
         squadSize: 3,
       });
 
       expect(result.scaledHealth).toBeGreaterThan(1000); // Scaled for squad
     });
 
-    it("should reject if existing active encounter", async () => {
+    it('should reject if existing active encounter', async () => {
       vi.mocked(repository.fetchActiveEncounter).mockResolvedValue({
-        id: "existing-encounter",
-        status: "ACTIVE",
+        id: 'existing-encounter',
+        status: 'ACTIVE',
       } as any);
 
       await expect(
         createEncounter({
-          userId: "user-1",
-          bossId: "boss-1",
+          userId: 'user-1',
+          bossId: 'boss-1',
           userLevel: 5,
         }),
-      ).rejects.toThrow("existing");
+      ).rejects.toThrow('existing');
     });
   });
 
@@ -309,12 +309,12 @@ describe("Boss Service - Comprehensive", () => {
   // Damage Application Tests
   // ============================================================================
 
-  describe("applyDamage", () => {
-    it("should apply damage and reduce health", async () => {
+  describe('applyDamage', () => {
+    it('should apply damage and reduce health', async () => {
       vi.mocked(repository.fetchActiveEncounter).mockResolvedValue({
-        id: "encounter-1",
-        bossId: "boss-1",
-        status: "ACTIVE",
+        id: 'encounter-1',
+        bossId: 'boss-1',
+        status: 'ACTIVE',
         healthRemaining: 500,
         maxHealth: 1000,
         damageDealt: 500,
@@ -326,9 +326,9 @@ describe("Boss Service - Comprehensive", () => {
       } as any);
 
       const result = await applyDamage({
-        encounterId: "encounter-1",
+        encounterId: 'encounter-1',
         damage: 100,
-        sessionId: "session-1",
+        sessionId: 'session-1',
       });
 
       expect(result.damageDealt).toBe(100);
@@ -336,11 +336,11 @@ describe("Boss Service - Comprehensive", () => {
       expect(result.isDefeated).toBe(false);
     });
 
-    it("should detect boss defeat", async () => {
+    it('should detect boss defeat', async () => {
       vi.mocked(repository.fetchActiveEncounter).mockResolvedValue({
-        id: "encounter-1",
-        bossId: "boss-1",
-        status: "ACTIVE",
+        id: 'encounter-1',
+        bossId: 'boss-1',
+        status: 'ACTIVE',
         healthRemaining: 100,
         maxHealth: 1000,
         damageDealt: 900,
@@ -352,25 +352,25 @@ describe("Boss Service - Comprehensive", () => {
       } as any);
       vi.mocked(repository.markEncounterDefeated).mockResolvedValue({} as any);
       vi.mocked(repository.fetchBossTemplate).mockResolvedValue({
-        rewardType: "COINS",
+        rewardType: 'COINS',
         rewardAmount: 100,
       } as any);
 
       const result = await applyDamage({
-        encounterId: "encounter-1",
+        encounterId: 'encounter-1',
         damage: 150,
-        sessionId: "session-1",
+        sessionId: 'session-1',
       });
 
       expect(result.isDefeated).toBe(true);
-      expect(eventBus.publish).toHaveBeenCalledWith("boss:defeated", expect.any(Object));
+      expect(eventBus.publish).toHaveBeenCalledWith('boss:defeated', expect.any(Object));
     });
 
-    it("should handle encounter timeout", async () => {
+    it('should handle encounter timeout', async () => {
       vi.mocked(repository.fetchActiveEncounter).mockResolvedValue({
-        id: "encounter-1",
-        bossId: "boss-1",
-        status: "ACTIVE",
+        id: 'encounter-1',
+        bossId: 'boss-1',
+        status: 'ACTIVE',
         healthRemaining: 500,
         maxHealth: 1000,
         expiresAt: Date.now() - 1000, // Expired
@@ -379,18 +379,18 @@ describe("Boss Service - Comprehensive", () => {
 
       await expect(
         applyDamage({
-          encounterId: "encounter-1",
+          encounterId: 'encounter-1',
           damage: 100,
-          sessionId: "session-1",
+          sessionId: 'session-1',
         }),
-      ).rejects.toThrow("timeout");
+      ).rejects.toThrow('timeout');
     });
 
-    it("should calculate percent complete", async () => {
+    it('should calculate percent complete', async () => {
       vi.mocked(repository.fetchActiveEncounter).mockResolvedValue({
-        id: "encounter-1",
-        bossId: "boss-1",
-        status: "ACTIVE",
+        id: 'encounter-1',
+        bossId: 'boss-1',
+        status: 'ACTIVE',
         healthRemaining: 600,
         maxHealth: 1000,
         damageDealt: 400,
@@ -402,9 +402,9 @@ describe("Boss Service - Comprehensive", () => {
       } as any);
 
       const result = await applyDamage({
-        encounterId: "encounter-1",
+        encounterId: 'encounter-1',
         damage: 100,
-        sessionId: "session-1",
+        sessionId: 'session-1',
       });
 
       expect(result.percentComplete).toBe(50);
@@ -415,18 +415,18 @@ describe("Boss Service - Comprehensive", () => {
   // Available Bosses Tests
   // ============================================================================
 
-  describe("getAvailableBosses", () => {
-    it("should list all bosses with unlock status", async () => {
+  describe('getAvailableBosses', () => {
+    it('should list all bosses with unlock status', async () => {
       const mockTemplates = [
-        { id: "boss-1", name: "Boss 1", unlockLevel: 1, baseHealth: 1000, rewardType: "COINS", rewardAmount: 100 },
-        { id: "boss-2", name: "Boss 2", unlockLevel: 5, baseHealth: 2000, rewardType: "GEMS", rewardAmount: 10 },
-        { id: "boss-3", name: "Boss 3", unlockLevel: 10, baseHealth: 5000, rewardType: "ITEM", rewardAmount: 1 },
+        { id: 'boss-1', name: 'Boss 1', unlockLevel: 1, baseHealth: 1000, rewardType: 'COINS', rewardAmount: 100 },
+        { id: 'boss-2', name: 'Boss 2', unlockLevel: 5, baseHealth: 2000, rewardType: 'GEMS', rewardAmount: 10 },
+        { id: 'boss-3', name: 'Boss 3', unlockLevel: 10, baseHealth: 5000, rewardType: 'ITEM', rewardAmount: 1 },
       ];
 
       vi.mocked(repository.fetchBossTemplates).mockResolvedValue(mockTemplates);
-      vi.mocked(repository.hasDefeatedBoss).mockImplementation(async (_, bossId) => bossId === "boss-1");
+      vi.mocked(repository.hasDefeatedBoss).mockImplementation(async (_, bossId) => bossId === 'boss-1');
 
-      const results = await getAvailableBosses("user-1", 7);
+      const results = await getAvailableBosses('user-1', 7);
 
       expect(results).toHaveLength(3);
       expect(results[0].unlocked).toBe(true);
@@ -436,15 +436,15 @@ describe("Boss Service - Comprehensive", () => {
       expect(results[1].defeated).toBe(false);
     });
 
-    it("should show locked reason for locked bosses", async () => {
-      const mockTemplates = [{ id: "boss-2", name: "Boss 2", unlockLevel: 10, baseHealth: 2000, rewardType: "COINS", rewardAmount: 100 }];
+    it('should show locked reason for locked bosses', async () => {
+      const mockTemplates = [{ id: 'boss-2', name: 'Boss 2', unlockLevel: 10, baseHealth: 2000, rewardType: 'COINS', rewardAmount: 100 }];
 
       vi.mocked(repository.fetchBossTemplates).mockResolvedValue(mockTemplates);
 
-      const results = await getAvailableBosses("user-1", 5);
+      const results = await getAvailableBosses('user-1', 5);
 
       expect(results[0].unlocked).toBe(false);
-      expect(results[0].lockedReason).toContain("level 10");
+      expect(results[0].lockedReason).toContain('level 10');
     });
   });
 
@@ -452,16 +452,16 @@ describe("Boss Service - Comprehensive", () => {
   // Concurrency Tests
   // ============================================================================
 
-  describe("Concurrency", () => {
-    it("should handle concurrent damage applications", async () => {
+  describe('Concurrency', () => {
+    it('should handle concurrent damage applications', async () => {
       let currentHealth = 500;
 
       vi.mocked(repository.fetchActiveEncounter).mockImplementation(
         async () =>
           ({
-            id: "encounter-1",
-            bossId: "boss-1",
-            status: "ACTIVE",
+            id: 'encounter-1',
+            bossId: 'boss-1',
+            status: 'ACTIVE',
             healthRemaining: currentHealth,
             maxHealth: 1000,
             damageDealt: 500,
@@ -475,7 +475,7 @@ describe("Boss Service - Comprehensive", () => {
       });
 
       // Apply damage from multiple sessions concurrently
-      const results = await Promise.all([applyDamage({ encounterId: "encounter-1", damage: 50, sessionId: "session-1" }), applyDamage({ encounterId: "encounter-1", damage: 50, sessionId: "session-2" }), applyDamage({ encounterId: "encounter-1", damage: 50, sessionId: "session-3" })]);
+      const results = await Promise.all([applyDamage({ encounterId: 'encounter-1', damage: 50, sessionId: 'session-1' }), applyDamage({ encounterId: 'encounter-1', damage: 50, sessionId: 'session-2' }), applyDamage({ encounterId: 'encounter-1', damage: 50, sessionId: 'session-3' })]);
 
       // All should succeed
       expect(results).toHaveLength(3);

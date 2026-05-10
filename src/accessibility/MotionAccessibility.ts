@@ -293,11 +293,19 @@ export class MotionAccessibilityManager {
       case 'linear':
         return Easing.linear;
       case 'ease-in':
+<<<<<<< HEAD
         return Easing.in(Easing.quad);
       case 'ease-out':
         return Easing.out(Easing.quad);
       case 'ease-in-out':
         return Easing.inOut(Easing.quad);
+=======
+        return Easing.in(Easing.ease);
+      case 'ease-out':
+        return Easing.out(Easing.ease);
+      case 'ease-in-out':
+        return Easing.inOut(Easing.ease);
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
       case 'ease-in-quad':
         return Easing.in(Easing.quad);
       case 'ease-out-quad':
@@ -374,10 +382,23 @@ export class MotionAccessibilityManager {
   // ============================================================================
 
   async detectSystemMotionPreferences(): Promise<Partial<MotionPreferences>> {
+<<<<<<< HEAD
     // In a real implementation, this would use platform APIs.
     return {
       reducedMotion: false,
     };
+=======
+    try {
+      // Placeholder for AccessibilityInfo.isReduceMotionEnabled() integration.
+      const reducedMotion = await Promise.resolve(false);
+      return {
+        reducedMotion,
+      };
+    } catch (error) {
+      debug.error('Failed to detect system motion preferences:', error);
+      return {};
+    }
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   }
 
   // ============================================================================
@@ -502,17 +523,26 @@ export function useMotionAccessibility(): MotionPreferences & {
 export function withMotionAccessibility<P extends object>(
   Component: React.ComponentType<P>
 ): React.ComponentType<P> {
+<<<<<<< HEAD
   const MotionAccessibleComponent = (props: P): React.ReactElement => {
+=======
+  const MotionAccessibleComponent = React.forwardRef<unknown, P>((props, ref) => {
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
     const motion = useMotionAccessibility();
 
     return React.createElement(Component, {
       ...props,
       motionAccessibility: motion,
+<<<<<<< HEAD
     });
   };
+=======
+    } as unknown as P);
+  });
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
   MotionAccessibleComponent.displayName = `WithMotionAccessibility(${Component.displayName || Component.name})`;
-  return MotionAccessibleComponent;
+  return MotionAccessibleComponent as unknown as React.ComponentType<P>;
 }
 
 // ============================================================================

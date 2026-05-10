@@ -7,6 +7,7 @@
  */
 
 import React, { useEffect, useRef, useCallback } from 'react';
+<<<<<<< HEAD
 import { View, Dimensions } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, withRepeat, withTiming, withSequence, interpolate, Easing, type SharedValue } from 'react-native-reanimated';
 import { Svg, Circle, RadialGradient, Stop, G } from 'react-native-svg';
@@ -17,6 +18,18 @@ import { getCompanionService, CompanionService } from '../service';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
+=======
+import { View, StyleSheet, Dimensions } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withRepeat, withTiming, withSequence, interpolate, Easing, runOnJS, useAnimatedReaction, type SharedValue } from 'react-native-reanimated';
+import { Svg, Circle, RadialGradient, Stop, G } from 'react-native-svg';
+
+import { Text } from '../../../components/primitives/Text';
+import { CompanionState, CompanionPhase, CompanionMood, CompanionElement, ELEMENT_THEMES } from '../types';
+import { getCompanionService, CompanionService } from '../service';
+import { createSheet } from '@/shared/ui/create-sheet';
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 const COMPANION_SIZE = Math.min(SCREEN_WIDTH * 0.6, 300);
 const PARTICLE_COUNT = 12;
 

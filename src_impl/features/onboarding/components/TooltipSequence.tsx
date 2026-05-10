@@ -8,15 +8,19 @@
  * @phase 2.8
  */
 
-import React, { useState, useCallback } from "react";
-import { Pressable, Dimensions } from "react-native";
-import Animated, { FadeIn, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming } from "react-native-reanimated";
+import React, { useState, useCallback } from 'react';
+import { Pressable, Dimensions } from 'react-native';
+import Animated, { FadeIn, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming } from 'react-native-reanimated';
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
+<<<<<<< HEAD
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
+=======
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 interface TooltipSequenceProps {
   hasStreak: boolean;
@@ -28,9 +32,9 @@ interface Tooltip {
   id: number;
   title: string;
   message: string;
-  target: "streak" | "boss" | "challenges";
+  target: 'streak' | 'boss' | 'challenges';
   position: { x: number; y: number };
-  arrowDirection: "up" | "down" | "left" | "right";
+  arrowDirection: 'up' | 'down' | 'left' | 'right';
 }
 
 /**
@@ -57,7 +61,7 @@ function TooltipBubble({ tooltip, isActive, onDismiss }: { tooltip: Tooltip; isA
       exiting={FadeOut.duration(200)}
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           left: Math.min(tooltip.position.x, SCREEN_WIDTH - 280),
           top: tooltip.position.y,
           width: 260,
@@ -92,22 +96,22 @@ function TooltipBubble({ tooltip, isActive, onDismiss }: { tooltip: Tooltip; isA
         {/* Arrow pointing to target */}
         <Box
           style={{
-            position: "absolute",
-            [tooltip.arrowDirection === "up" ? "bottom" : "top"]: -10,
-            left: "50%",
+            position: 'absolute',
+            [tooltip.arrowDirection === 'up' ? 'bottom' : 'top']: -10,
+            left: '50%',
             marginLeft: -10,
             width: 0,
             height: 0,
-            backgroundColor: "transparent",
-            borderStyle: "solid",
+            backgroundColor: 'transparent',
+            borderStyle: 'solid',
             borderLeftWidth: 10,
             borderRightWidth: 10,
-            borderTopWidth: tooltip.arrowDirection === "up" ? 0 : 10,
-            borderBottomWidth: tooltip.arrowDirection === "up" ? 10 : 0,
-            borderLeftColor: "transparent",
-            borderRightColor: "transparent",
-            borderTopColor: tooltip.arrowDirection === "up" ? theme.colors.primary[500] : "transparent",
-            borderBottomColor: tooltip.arrowDirection === "up" ? "transparent" : theme.colors.primary[500],
+            borderTopWidth: tooltip.arrowDirection === 'up' ? 0 : 10,
+            borderBottomWidth: tooltip.arrowDirection === 'up' ? 10 : 0,
+            borderLeftColor: 'transparent',
+            borderRightColor: 'transparent',
+            borderTopColor: tooltip.arrowDirection === 'up' ? theme.colors.primary[500] : 'transparent',
+            borderBottomColor: tooltip.arrowDirection === 'up' ? 'transparent' : theme.colors.primary[500],
           }}
         />
       </Pressable>
@@ -130,7 +134,7 @@ function TooltipOverlay({ isVisible, onPress }: { isVisible: boolean; onPress: (
       entering={FadeIn.duration(300)}
       exiting={FadeOut.duration(200)}
       style={{
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
@@ -154,31 +158,31 @@ export function TooltipSequence({ hasStreak: _hasStreak, hasBoss, onComplete }: 
   const tooltips: Tooltip[] = [
     {
       id: 1,
-      title: "Build Your Streak",
-      message: "Complete one session per day to build your streak. The longer your streak, the bigger your XP multiplier!",
-      target: "streak",
+      title: 'Build Your Streak',
+      message: 'Complete one session per day to build your streak. The longer your streak, the bigger your XP multiplier!',
+      target: 'streak',
       position: { x: SCREEN_WIDTH / 2 - 130, y: 180 },
-      arrowDirection: "up",
+      arrowDirection: 'up',
     },
     ...(hasBoss
       ? [
           {
             id: 2,
-            title: "Defeat Bosses",
-            message: "Bosses give bonus XP. Each session deals damage. Defeat them before they escape!",
-            target: "boss" as const,
+            title: 'Defeat Bosses',
+            message: 'Bosses give bonus XP. Each session deals damage. Defeat them before they escape!',
+            target: 'boss' as const,
             position: { x: SCREEN_WIDTH / 2 - 130, y: 320 },
-            arrowDirection: "down" as const,
+            arrowDirection: 'down' as const,
           },
         ]
       : []),
     {
       id: hasBoss ? 3 : 2,
-      title: "Complete Challenges",
-      message: "Daily and weekly challenges give bonus rewards. Check back often for new quests!",
-      target: "challenges" as const,
+      title: 'Complete Challenges',
+      message: 'Daily and weekly challenges give bonus rewards. Check back often for new quests!',
+      target: 'challenges' as const,
       position: { x: SCREEN_WIDTH / 2 - 130, y: 450 },
-      arrowDirection: "down" as const,
+      arrowDirection: 'down' as const,
     },
   ];
 

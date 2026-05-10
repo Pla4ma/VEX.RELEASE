@@ -80,9 +80,15 @@ export function useAnalytics(): UseAnalyticsReturn {
 
   // Clear tracked screens on unmount
   useEffect(() => {
+<<<<<<< HEAD
     const trackedScreenKeys = trackedScreens.current;
     return () => {
       trackedScreenKeys.clear();
+=======
+    const screens = trackedScreens.current;
+    return () => {
+      screens.clear();
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
     };
   }, []);
 

@@ -1,19 +1,19 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
+import { captureSilentFailure } from '../../../utils/silent-failure';
 /**
  * Content Review Screen
  * Shows extracted content and allows editing before AI generation
  */
 
-import React, { useCallback } from "react";
-import { View, Text, TextInput, Pressable, ScrollView, ActivityIndicator } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import { ContentStudyStackParamList } from "../types";
-import { useContentReview } from "../hooks";
-import { CONTENT_STATUS_CONFIG, UI_TEXT, ERROR_MESSAGES } from "../constants";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useCallback } from 'react';
+import { View, Text, TextInput, Pressable, ScrollView, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { ContentStudyStackParamList } from '../types';
+import { useContentReview } from '../hooks';
+import { CONTENT_STATUS_CONFIG, UI_TEXT, ERROR_MESSAGES } from '../constants';
+import { createSheet } from '@/shared/ui/create-sheet';
 
-type RouteProps = RouteProp<ContentStudyStackParamList, "ContentReview">;
+type RouteProps = RouteProp<ContentStudyStackParamList, 'ContentReview'>;
 type NavigationProp = {
   navigate: (screen: keyof ContentStudyStackParamList, params?: unknown) => void;
   goBack: () => void;
@@ -31,12 +31,12 @@ export function ContentReviewScreen() {
       const result = await generate();
 
       // Navigate to study plan
-      navigation.navigate("StudyPlan", {
+      navigation.navigate('StudyPlan', {
         generationId: result.generationId,
         contentId: result.contentId,
       });
     } catch (error) {
-      captureSilentFailure(error, { feature: "content-study", operation: "ui-fallback", type: "ui" });
+      captureSilentFailure(error, { feature: 'content-study', operation: 'ui-fallback', type: 'ui' });
       // Error handled in hook
     }
   }, [generate, navigation]);
@@ -161,7 +161,7 @@ export function ContentReviewScreen() {
         {/* Processing message */}
         {isProcessing && (
           <View style={styles.processingNote}>
-            <Text style={styles.processingNoteText}>{isExtracted ? "AI is analyzing your content..." : "Extracting content from source..."}</Text>
+            <Text style={styles.processingNoteText}>{isExtracted ? 'AI is analyzing your content...' : 'Extracting content from source...'}</Text>
           </View>
         )}
       </ScrollView>
@@ -172,7 +172,7 @@ export function ContentReviewScreen() {
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: "#0F0F0F",
+    backgroundColor: '#0F0F0F',
   },
   scrollView: {
     flex: 1,
@@ -185,69 +185,69 @@ const styles = createSheet({
   },
   title: {
     fontSize: 28,
-    fontWeight: "bold",
-    color: "#FFFFFF",
+    fontWeight: 'bold',
+    color: '#FFFFFF',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: "#9CA3AF",
+    color: '#9CA3AF',
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: "#9CA3AF",
+    color: '#9CA3AF',
   },
   statusContainer: {
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    alignItems: "center",
+    alignItems: 'center',
   },
   statusLabel: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     marginTop: 8,
   },
   statusDescription: {
     fontSize: 14,
-    color: "#9CA3AF",
+    color: '#9CA3AF',
     marginTop: 4,
-    textAlign: "center",
+    textAlign: 'center',
   },
   hidden: {
     opacity: 0,
   },
   contentContainer: {
-    backgroundColor: "#1A1A1A",
+    backgroundColor: '#1A1A1A',
     borderRadius: 16,
     marginBottom: 20,
-    overflow: "hidden",
+    overflow: 'hidden',
     borderWidth: 1,
-    borderColor: "#2A2A2A",
+    borderColor: '#2A2A2A',
   },
   contentHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: "#2A2A2A",
+    borderBottomColor: '#2A2A2A',
   },
   contentTitle: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#FFFFFF",
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   contentStats: {
     fontSize: 12,
-    color: "#9CA3AF",
+    color: '#9CA3AF',
   },
   contentScroll: {
     maxHeight: 300,
@@ -255,117 +255,117 @@ const styles = createSheet({
   contentText: {
     fontSize: 14,
     lineHeight: 22,
-    color: "#D1D5DB",
+    color: '#D1D5DB',
     padding: 16,
   },
   contentEditInput: {
     fontSize: 14,
     lineHeight: 22,
-    color: "#FFFFFF",
+    color: '#FFFFFF',
     padding: 16,
     minHeight: 300,
-    textAlignVertical: "top",
+    textAlignVertical: 'top',
   },
   editActions: {
-    flexDirection: "row",
+    flexDirection: 'row',
     padding: 12,
     borderTopWidth: 1,
-    borderTopColor: "#2A2A2A",
+    borderTopColor: '#2A2A2A',
     gap: 12,
   },
   editButton: {
     flex: 1,
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
   editButtonText: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#FFFFFF",
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: "#2A2A2A",
+    backgroundColor: '#2A2A2A',
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
   cancelButtonText: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#9CA3AF",
+    fontWeight: '600',
+    color: '#9CA3AF',
   },
   saveButton: {
     flex: 1,
-    backgroundColor: "#3B82F6",
+    backgroundColor: '#3B82F6',
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
   saveButtonText: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#FFFFFF",
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   generateButton: {
-    backgroundColor: "#3B82F6",
+    backgroundColor: '#3B82F6',
     borderRadius: 12,
     paddingVertical: 18,
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center",
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   generateButtonDisabled: {
     opacity: 0.7,
   },
   generateButtonText: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#FFFFFF",
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
   buttonSpinner: {
     marginRight: 8,
   },
   processingNote: {
     marginTop: 16,
-    alignItems: "center",
+    alignItems: 'center',
   },
   processingNoteText: {
     fontSize: 14,
-    color: "#9CA3AF",
+    color: '#9CA3AF',
   },
   errorContainer: {
-    backgroundColor: "#EF444420",
+    backgroundColor: '#EF444420',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: "#EF444440",
+    borderColor: '#EF444440',
   },
   errorTitle: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#EF4444",
+    fontWeight: '600',
+    color: '#EF4444',
     marginBottom: 8,
   },
   errorText: {
     fontSize: 14,
-    color: "#EF4444",
+    color: '#EF4444',
   },
   retryButton: {
     marginTop: 12,
-    backgroundColor: "#EF444440",
+    backgroundColor: '#EF444440',
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
   },
   retryButtonText: {
     fontSize: 14,
-    fontWeight: "600",
-    color: "#FFFFFF",
+    fontWeight: '600',
+    color: '#FFFFFF',
   },
 });
 

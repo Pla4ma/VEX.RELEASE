@@ -12,7 +12,7 @@
  * - Appointment mechanics to drive engagement
  */
 
-import { z } from "zod";
+import { z } from 'zod';
 
 // ============================================================================
 // Schemas
@@ -24,7 +24,7 @@ export const FlashSaleConfigSchema = z.object({
   maxFlashSalesPerWeek: z.number().min(1).max(7).default(3),
   saleDurationMinutes: z.number().min(30).max(180).default(60),
   discountPercent: z.number().min(10).max(90).default(50),
-  eligibleItemCategories: z.array(z.string()).default(["CONSUMABLE", "EQUIPMENT", "COSMETIC"]),
+  eligibleItemCategories: z.array(z.string()).default(['CONSUMABLE', 'EQUIPMENT', 'COSMETIC']),
   minItemLevel: z.number().min(1).default(1),
   maxItemLevel: z.number().min(1).default(100),
   notificationEnabled: z.boolean().default(true),
@@ -39,7 +39,7 @@ export const FlashSaleSchema = z.object({
   itemDescription: z.string(),
   originalPrice: z.number(),
   discountedPrice: z.number(),
-  currency: z.enum(["COINS", "GEMS"]),
+  currency: z.enum(['COINS', 'GEMS']),
   discountPercent: z.number(),
   startsAt: z.number(),
   endsAt: z.number(),
@@ -113,7 +113,7 @@ export function formatFlashSaleCountdown(ms: number): string {
   const minutes = Math.floor(ms / (1000 * 60));
   const seconds = Math.floor((ms % (1000 * 60)) / 1000);
 
-  return `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
 /**
@@ -169,7 +169,7 @@ export class FlashSaleManager {
       icon: string;
       description: string;
       baseValue: number;
-      currency: "COINS" | "GEMS";
+      currency: 'COINS' | 'GEMS';
     }>,
   ): FlashSale[] {
     const numSales = this.config.minFlashSalesPerWeek + Math.floor(Math.random() * (this.config.maxFlashSalesPerWeek - this.config.minFlashSalesPerWeek + 1));
@@ -300,7 +300,7 @@ export class FlashSaleManager {
     remainingQuantity?: number;
   }> {
     if (!this.currentSale || !this.currentSale.isActive) {
-      return { success: false, error: "Flash sale is not active" };
+      return { success: false, error: 'Flash sale is not active' };
     }
 
     // Simulate purchase (would be replaced with actual API call)

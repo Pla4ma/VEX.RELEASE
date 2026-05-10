@@ -7,15 +7,21 @@
  * @phase 10.5
  */
 
+<<<<<<< HEAD
 import React, { useState, useCallback, useEffect } from "react";
 import { Pressable } from "react-native";
 import Animated, { useAnimatedStyle, withSpring, withSequence, withTiming } from "react-native-reanimated";
+=======
+import React, { useState, useCallback, useEffect } from 'react';
+import { Pressable } from 'react-native';
+import Animated, { useAnimatedStyle, withSpring, withSequence, withTiming, FadeIn, FadeOut } from 'react-native-reanimated';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { Avatar } from "../../../components/Avatar";
-import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { Avatar } from '../../../components/Avatar';
+import { Button } from '../../../components/primitives/Button';
+import { useTheme } from '../../../theme';
 
 // ============================================================================
 // Types
@@ -84,12 +90,12 @@ interface BossSpectatorModeProps {
 // ============================================================================
 
 const CHEER_OPTIONS: Array<{ emoji: string; message: string; sound?: string }> = [
-  { emoji: "🔥", message: "Burn it down!" },
-  { emoji: "⚔️", message: "Strike true!" },
-  { emoji: "💪", message: "You got this!" },
-  { emoji: "🎯", message: "Focus up!" },
-  { emoji: "🌟", message: "Epic battle!" },
-  { emoji: "🍀", message: "Good luck!" },
+  { emoji: '🔥', message: 'Burn it down!' },
+  { emoji: '⚔️', message: 'Strike true!' },
+  { emoji: '💪', message: 'You got this!' },
+  { emoji: '🎯', message: 'Focus up!' },
+  { emoji: '🌟', message: 'Epic battle!' },
+  { emoji: '🍀', message: 'Good luck!' },
 ];
 
 // ============================================================================
@@ -121,7 +127,7 @@ function FloatingCheer({ cheer, onComplete }: { cheer: CheerMessage; onComplete:
     <Animated.View
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           bottom: 100,
           left: `${Math.random() * 60 + 20}%`,
           zIndex: 100,
@@ -135,7 +141,7 @@ function FloatingCheer({ cheer, onComplete }: { cheer: CheerMessage; onComplete:
         borderRadius="full"
         bg="background.secondary"
         style={{
-          shadowColor: "#000",
+          shadowColor: '#000',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.1,
           shadowRadius: 4,
@@ -161,12 +167,12 @@ function BossHealthBar({ current, max, tier }: { current: number; max: number; t
   const percentage = Math.max(0, Math.min(100, (current / max) * 100));
 
   const tierColors = [
-    "#22C55E", // Tier 1 - Green
-    "#3B82F6", // Tier 2 - Blue
-    "#A855F7", // Tier 3 - Purple
-    "#F97316", // Tier 4 - Orange
-    "#EF4444", // Tier 5 - Red
-    "#DC2626", // Tier 6 - Dark Red
+    '#22C55E', // Tier 1 - Green
+    '#3B82F6', // Tier 2 - Blue
+    '#A855F7', // Tier 3 - Purple
+    '#F97316', // Tier 4 - Orange
+    '#EF4444', // Tier 5 - Red
+    '#DC2626', // Tier 6 - Dark Red
   ];
 
   const healthColor = tierColors[tier - 1] ?? tierColors[0];
@@ -186,7 +192,7 @@ function BossHealthBar({ current, max, tier }: { current: number; max: number; t
         </Text>
       </Box>
 
-      <Box height={16} borderRadius="full" bg="background.tertiary" style={{ overflow: "hidden" }}>
+      <Box height={16} borderRadius="full" bg="background.tertiary" style={{ overflow: 'hidden' }}>
         <Animated.View
           style={[
             {
@@ -200,7 +206,7 @@ function BossHealthBar({ current, max, tier }: { current: number; max: number; t
       </Box>
 
       <Text variant="caption" color={healthColor} textAlign="center" fontWeight="600">
-        {percentage > 50 ? "The boss stands strong!" : percentage > 25 ? "The boss is weakening!" : "Victory is near!"}
+        {percentage > 50 ? 'The boss stands strong!' : percentage > 25 ? 'The boss is weakening!' : 'Victory is near!'}
       </Text>
     </Box>
   );
@@ -218,7 +224,7 @@ function EscapeTimer({ seconds }: { seconds: number }): JSX.Element {
     if (hours > 0) {
       return `${hours}h ${minutes}m`;
     }
-    return `${minutes}m ${secs.toString().padStart(2, "0")}s`;
+    return `${minutes}m ${secs.toString().padStart(2, '0')}s`;
   };
 
   const isCritical = seconds < 300; // Less than 5 minutes
@@ -232,7 +238,7 @@ function EscapeTimer({ seconds }: { seconds: number }): JSX.Element {
       py="sm"
       borderRadius="lg"
       style={{
-        backgroundColor: isCritical ? "#EF444420" : "#F59E0B20",
+        backgroundColor: isCritical ? '#EF444420' : '#F59E0B20',
       }}
     >
       <Text fontSize={16}>⏰</Text>
@@ -240,7 +246,7 @@ function EscapeTimer({ seconds }: { seconds: number }): JSX.Element {
         <Text variant="caption" color="text.secondary">
           Escapes in:
         </Text>
-        <Text variant="body" color={isCritical ? "error.DEFAULT" : "warning.DEFAULT"} fontWeight="700">
+        <Text variant="body" color={isCritical ? 'error.DEFAULT' : 'warning.DEFAULT'} fontWeight="700">
           {formatTime(seconds)}
         </Text>
       </Box>
@@ -252,7 +258,7 @@ function EscapeTimer({ seconds }: { seconds: number }): JSX.Element {
  * Contributor list item
  */
 function ContributorRow({ contributor, rank }: { contributor: Contributor; rank: number }): JSX.Element {
-  const rankEmojis = ["🥇", "🥈", "🥉"];
+  const rankEmojis = ['🥇', '🥈', '🥉'];
 
   return (
     <Box flexDirection="row" alignItems="center" gap="md" p="md" borderRadius="lg" bg="background.secondary">
@@ -315,7 +321,7 @@ function CheerSelector({ onCheer }: { onCheer: (cheer: (typeof CHEER_OPTIONS)[0]
               borderRadius="full"
               bg="background.tertiary"
               style={{
-                shadowColor: "#000",
+                shadowColor: '#000',
                 shadowOffset: { width: 0, height: 1 },
                 shadowOpacity: 0.1,
                 shadowRadius: 2,
@@ -397,7 +403,7 @@ export function BossSpectatorMode({ boss, contributors, spectatorUserId, spectat
             alignItems="center"
             bg="background.secondary"
             style={{
-              shadowColor: "#EF4444",
+              shadowColor: '#EF4444',
               shadowOffset: { width: 0, height: 4 },
               shadowOpacity: 0.2,
               shadowRadius: 8,

@@ -10,7 +10,10 @@
  */
 
 import React from 'react';
+<<<<<<< HEAD
 import type { StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-native';
+=======
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 import { createDebugger } from '../utils/debug';
 import {
   getAccessibleColor,
@@ -59,7 +62,19 @@ export interface EnhancedAccessibilityProps {
   accessibilityAutoCorrect?: string;
   accessibilityRequired?: boolean;
   accessibilityInvalid?: boolean;
+<<<<<<< HEAD
   style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
+=======
+
+  // Style overrides applied via contrast enhancement
+  style?: Record<string, unknown>;
+}
+
+interface EnhancementHistoryEntry {
+  timestamp: number;
+  props: string[];
+  enhancements: string[];
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 }
 
 interface EnhancementHistoryEntry {
@@ -157,6 +172,7 @@ export class AccessibilityEnhancer {
     Component: React.ComponentType<P>,
     enhancements?: Partial<EnhancedAccessibilityProps>
   ): React.ComponentType<P> {
+<<<<<<< HEAD
     const EnhancedComponent = (props: P): React.ReactElement => {
       const enhancedProps = this.applyAccessibilityEnhancements(props, enhancements);
 
@@ -165,6 +181,19 @@ export class AccessibilityEnhancer {
 
     EnhancedComponent.displayName = `Enhanced(${Component.displayName || Component.name})`;
     return EnhancedComponent;
+=======
+    const EnhancedComponent = React.forwardRef<unknown, P>((props, ref) => {
+      const enhancedProps = this.applyAccessibilityEnhancements(props, enhancements);
+
+      return React.createElement(Component, {
+        ...enhancedProps,
+        ref,
+      } as P);
+    });
+
+    EnhancedComponent.displayName = `Enhanced(${Component.displayName || Component.name})`;
+    return EnhancedComponent as unknown as React.ComponentType<P>;
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   }
 
   enhanceProps<P extends object>(
@@ -217,6 +246,7 @@ export class AccessibilityEnhancer {
   private getContrastEnhancements<P extends object>(props: P): Partial<EnhancedAccessibilityProps> {
     const enhancements: Partial<EnhancedAccessibilityProps> = {};
 
+<<<<<<< HEAD
     // Check for color props and improve contrast
     const propsWithStyle: PropsWithStyle = props;
     const style = propsWithStyle.style;
@@ -246,12 +276,26 @@ export class AccessibilityEnhancer {
           }
         }
       }
+=======
+    if (!('style' in props) || typeof props.style !== 'object' || props.style === null) {
+      return enhancements;
+    }
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-      // Apply color blind mode colors
-      if (this.config.colorBlindSupport !== 'none') {
-        if (style.color) {
+    const style = props.style as Record<string, unknown>;
+    const styleColor = typeof style.color === 'string' ? style.color : undefined;
+    const styleBackground = typeof style.backgroundColor === 'string' ? style.backgroundColor : undefined;
+
+    if (styleColor && styleBackground) {
+      const contrast = checkContrast(styleColor, styleBackground);
+
+      if (!contrast.passesAA) {
+        const alternatives = getAccessibleAlternatives(styleColor, styleBackground);
+
+        if (alternatives.length > 0) {
           enhancements.style = {
             ...style,
+<<<<<<< HEAD
             color: getAccessibleColor('primary', this.config.colorBlindSupport),
           };
         }
@@ -262,8 +306,32 @@ export class AccessibilityEnhancer {
           enhancements.style = {
             ...currentStyle,
             backgroundColor: getAccessibleColor('secondary', this.config.colorBlindSupport),
+=======
+            color: alternatives[0],
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
           };
+
+          debug.info('Applied contrast enhancement:', {
+            original: styleColor,
+            improved: alternatives[0],
+            ratio: contrast.ratio,
+          });
         }
+      }
+    }
+
+    if (this.config.colorBlindSupport !== 'none') {
+      if (styleColor) {
+        enhancements.style = {
+          ...style,
+          color: getAccessibleColor('primary', this.config.colorBlindSupport),
+        };
+      }
+      if (styleBackground) {
+        enhancements.style = {
+          ...(enhancements.style ?? style),
+          backgroundColor: getAccessibleColor('secondary', this.config.colorBlindSupport),
+        };
       }
     }
 
@@ -308,6 +376,7 @@ export class AccessibilityEnhancer {
   private getScreenReaderEnhancements<P extends object>(props: P): Partial<EnhancedAccessibilityProps> {
     const enhancements: Partial<EnhancedAccessibilityProps> = {};
 
+<<<<<<< HEAD
     // Add semantic roles for common patterns
     const sourceProps: PropsWithStyle = props;
     if ('title' in sourceProps && !('accessibilityRole' in sourceProps)) {
@@ -319,6 +388,19 @@ export class AccessibilityEnhancer {
     if ('children' in sourceProps && typeof sourceProps.children === 'string') {
       const text = sourceProps.children;
       if (text.includes('Loading') || text.includes('Error')) {
+=======
+    if ('title' in props && !('accessibilityRole' in props)) {
+      const title = (props as { title?: unknown }).title;
+      if (typeof title === 'string') {
+        enhancements.accessibilityRole = 'header';
+        enhancements.accessibilityLabel = title;
+      }
+    }
+
+    if ('children' in props) {
+      const children = (props as { children?: unknown }).children;
+      if (typeof children === 'string' && (children.includes('Loading') || children.includes('Error'))) {
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
         enhancements.accessibilityLiveRegion = 'polite';
       }
     }
@@ -383,13 +465,11 @@ export class AccessibilityEnhancer {
     };
 
     this.enhancementHistory.forEach(entry => {
-      // Count enhancement types
-      entry.enhancements.forEach((enhancement: string) => {
+      entry.enhancements.forEach(enhancement => {
         stats.enhancementTypes[enhancement] = (stats.enhancementTypes[enhancement] || 0) + 1;
       });
 
-      // Count component enhancements
-      const componentName = entry.props[0] || 'Unknown';
+      const componentName = entry.props[0] ?? 'Unknown';
       stats.mostEnhancedComponents[componentName] = (stats.mostEnhancedComponents[componentName] || 0) + 1;
     });
 
@@ -438,7 +518,7 @@ export function withAccessibility<P extends object>(
 // ============================================================================
 
 export function useAccessibilityEnhancements(
-  baseProps: Record<string, any>,
+  baseProps: Record<string, unknown>,
   customEnhancements?: Partial<EnhancedAccessibilityProps>
 ): EnhancedAccessibilityProps {
   const [enhancedProps, setEnhancedProps] = React.useState<EnhancedAccessibilityProps>({});

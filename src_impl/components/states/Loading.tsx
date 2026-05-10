@@ -4,24 +4,24 @@
  * Loading state display with various indicators.
  */
 
-import React, { useEffect } from "react";
-import { View, StyleSheet, ActivityIndicator, type ViewStyle } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing } from "react-native-reanimated";
+import React, { useEffect } from 'react';
+import { View, StyleSheet, ActivityIndicator, type ViewStyle } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing } from 'react-native-reanimated';
 
-import { useTheme } from "../../theme";
-import { Box, Text } from "../primitives";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { useTheme } from '../../theme';
+import { Box, Text } from '../primitives';
+import { createSheet } from '@/shared/ui/create-sheet';
+import { useReducedMotion } from '../../hooks/useReducedMotion';
 
 /**
  * Loading variant
  */
-export type LoadingVariant = "spinner" | "dots" | "pulse" | "skeleton";
+export type LoadingVariant = 'spinner' | 'dots' | 'pulse' | 'skeleton';
 
 /**
  * Loading size
  */
-export type LoadingSize = "sm" | "md" | "lg" | "xl";
+export type LoadingSize = 'sm' | 'md' | 'lg' | 'xl';
 
 /**
  * Loading props
@@ -135,7 +135,7 @@ const Pulse: React.FC<{ size: number; color: string }> = ({ size, color }) => {
             height: size,
             borderRadius: size / 2,
             backgroundColor: color,
-            position: "absolute",
+            position: 'absolute',
             top: 0,
             left: 0,
           },
@@ -149,7 +149,7 @@ const Pulse: React.FC<{ size: number; color: string }> = ({ size, color }) => {
 /**
  * Loading component
  */
-export const Loading: React.FC<LoadingProps> = ({ variant = "spinner", size = "md", text, fullScreen = false, style, visible = true, accessibilityLabel }) => {
+export const Loading: React.FC<LoadingProps> = ({ variant = 'spinner', size = 'md', text, fullScreen = false, style, visible = true, accessibilityLabel }) => {
   const { theme } = useTheme();
   const sizeValue = sizeMap[size];
   const color = theme.colors.primary[500];
@@ -160,18 +160,18 @@ export const Loading: React.FC<LoadingProps> = ({ variant = "spinner", size = "m
 
   const renderVariant = () => {
     switch (variant) {
-      case "dots":
+      case 'dots':
         return <Dots size={sizeValue} color={color} />;
-      case "pulse":
+      case 'pulse':
         return <Pulse size={sizeValue} color={color} />;
-      case "spinner":
+      case 'spinner':
       default:
         return <Spinner size={sizeValue} color={color} />;
     }
   };
 
   const content = (
-    <Box justifyContent="center" alignItems="center" style={Object.assign({ gap: theme.spacing[3] }, style || {})} accessible={true} accessibilityRole="progressbar" accessibilityLabel={accessibilityLabel || text || "Loading"}>
+    <Box justifyContent="center" alignItems="center" style={Object.assign({ gap: theme.spacing[3] }, style || {})} accessible={true} accessibilityRole="progressbar" accessibilityLabel={accessibilityLabel || text || 'Loading'}>
       {renderVariant()}
       {text && (
         <Text variant="body" color="text.secondary">
@@ -191,16 +191,16 @@ export const Loading: React.FC<LoadingProps> = ({ variant = "spinner", size = "m
 const styles = createSheet({
   fullScreen: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     zIndex: 100,
   },
   dotsContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   dot: {
-    backgroundColor: "#000",
+    backgroundColor: '#000',
   },
   pulse: {
     opacity: 0.3,

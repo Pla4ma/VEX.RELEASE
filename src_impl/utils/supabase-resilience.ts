@@ -25,7 +25,7 @@ export interface ResilienceOptions {
  * PostgREST code 42501 or generic 403.
  */
 export function isRLSViolation(error: unknown): boolean {
-  if (!error) return false;
+  if (!error) {return false;}
   const code = typeof error === 'object' && error !== null && 'code' in error
     ? String((error as { code?: string }).code ?? '')
     : '';

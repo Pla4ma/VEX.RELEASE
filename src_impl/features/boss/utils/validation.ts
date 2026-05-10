@@ -6,23 +6,23 @@
  * @phase 11 - Deepening: Boss balancing validation
  */
 
-import { z } from "zod";
-import { createDebugger } from "../../../utils/debug";
-import { eventBus } from "../../../events";
+import { z } from 'zod';
+import { createDebugger } from '../../../utils/debug';
+import { eventBus } from '../../../events';
 
-const debug = createDebugger("boss:validation");
+const debug = createDebugger('boss:validation');
 
 // ============================================================================
 // Schemas
 // ============================================================================
 
-export const BossDifficultySchema = z.enum(["EASY", "MEDIUM", "HARD", "NIGHTMARE"]);
+export const BossDifficultySchema = z.enum(['EASY', 'MEDIUM', 'HARD', 'NIGHTMARE']);
 
 export const BossAttackSchema = z.object({
   playerId: z.string(),
   damage: z.number().min(0),
   timestamp: z.number(),
-  attackType: z.enum(["NORMAL", "CRITICAL", "SPECIAL"]),
+  attackType: z.enum(['NORMAL', 'CRITICAL', 'SPECIAL']),
   sessionDuration: z.number().min(0), // seconds
 });
 
@@ -79,7 +79,7 @@ export function validateBossAttack(
 
   // Check 2: Zero damage with long session
   if (attack.damage === 0 && attack.sessionDuration > 300) {
-    result.errors.push("Zero damage despite long session");
+    result.errors.push('Zero damage despite long session');
     result.valid = false;
   }
 
@@ -94,7 +94,7 @@ export function validateBossAttack(
 
   // Check 4: Session duration consistency
   if (attack.sessionDuration < 60) {
-    result.errors.push("Session too short for meaningful damage");
+    result.errors.push('Session too short for meaningful damage');
   }
 
   // Check 5: Rapid attacks (possible automation)
@@ -104,14 +104,14 @@ export function validateBossAttack(
 
     if (timeSinceLast < 10000) {
       // 10 seconds
-      result.errors.push("Attacking too frequently");
+      result.errors.push('Attacking too frequently');
       result.suspicious = true;
     }
   }
 
   // Check 6: Critical hit rate
   const recentAttacks = playerHistory.previousAttacks.slice(-20);
-  const critCount = recentAttacks.filter((a) => a.attackType === "CRITICAL").length;
+  const critCount = recentAttacks.filter((a) => a.attackType === 'CRITICAL').length;
   const critRate = critCount / recentAttacks.length;
 
   if (recentAttacks.length >= 10 && critRate > 0.5) {
@@ -120,8 +120,8 @@ export function validateBossAttack(
   }
 
   if (result.suspicious) {
-    eventBus.publish("analytics:track", {
-      event: "boss_suspicious_attack",
+    eventBus.publish('analytics:track', {
+      event: 'boss_suspicious_attack',
       properties: {
         bossId: boss.id,
         playerId: attack.playerId,
@@ -166,30 +166,30 @@ export function analyzeBossBalance(
   // Check defeat time
   const timeRatio = metrics.avgDefeatTime / boss.targetDuration;
   if (timeRatio < 0.5) {
-    recommendations.push("Boss defeated too quickly - increase health");
+    recommendations.push('Boss defeated too quickly - increase health');
     healthAdjustment += 0.3;
   } else if (timeRatio > 2) {
-    recommendations.push("Boss takes too long - decrease health");
+    recommendations.push('Boss takes too long - decrease health');
     healthAdjustment -= 0.3;
   }
 
   // Check completion rate
   if (completionRate < 0.1) {
-    recommendations.push("Very low completion rate - consider nerfing");
+    recommendations.push('Very low completion rate - consider nerfing');
     healthAdjustment -= 0.2;
   } else if (completionRate > 0.9) {
-    recommendations.push("Too easy - consider buffing");
+    recommendations.push('Too easy - consider buffing');
     healthAdjustment += 0.2;
   }
 
   // Check player count
   if (metrics.avgPlayerCount < boss.minPlayers) {
-    recommendations.push("Not enough players engaging");
+    recommendations.push('Not enough players engaging');
   }
 
   // Check heal efficiency
   if (metrics.healEfficiency < 0.3) {
-    recommendations.push("Healing not effective - review heal mechanics");
+    recommendations.push('Healing not effective - review heal mechanics');
   }
 
   return {
@@ -221,7 +221,7 @@ export function validateBossDefeat(bossId: string, participants: { userId: strin
     if (participationTime < minParticipation) {
       return {
         valid: false,
-        error: "Participant joined too late for credit",
+        error: 'Participant joined too late for credit',
         contributionPercentages,
       };
     }

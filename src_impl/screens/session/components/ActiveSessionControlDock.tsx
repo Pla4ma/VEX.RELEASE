@@ -82,24 +82,24 @@ export const ActiveSessionControlDock: React.FC<ActiveSessionControlDockProps> =
         }}
       >
         <Pressable onPress={onEnd}
-  accessibilityLabel="End button"
+  accessibilityLabel="Quit focus session"
   accessibilityRole="button"
-  accessibilityHint="Activates this control">
+  accessibilityHint="Opens the confirmation to quit this focus session">
           <Box
             style={{
-              minWidth: 84,
+              minWidth: 104,
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: 18,
               borderWidth: 1,
               paddingHorizontal: 18,
               paddingVertical: 14,
-              backgroundColor: withAlpha(themeColors.error, 0.08),
-              borderColor: withAlpha(themeColors.error, 0.18),
+              backgroundColor: withAlpha(themeColors.error, 0.14),
+              borderColor: withAlpha(themeColors.error, 0.32),
             }}
           >
             <Text variant="label" style={{ color: themeColors.error }}>
-              End
+              Quit
             </Text>
           </Box>
         </Pressable>

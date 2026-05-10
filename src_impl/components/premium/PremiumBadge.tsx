@@ -14,21 +14,27 @@
  * Dependencies: shared/monetization/use-revenuecat.ts
  */
 
+<<<<<<< HEAD
 import React from "react";
 import { View, type ViewStyle } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming, withSequence, withDelay } from "react-native-reanimated";
+=======
+import React from 'react';
+import { StyleSheet, View, type ViewStyle } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming, withSequence, withDelay } from 'react-native-reanimated';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-import { Text } from "../primitives/Text";
-import { useTheme } from "../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { Text } from '../primitives/Text';
+import { useTheme } from '../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 // ============================================================================
 // Types
 // ============================================================================
 
 export interface PremiumBadgeProps {
-  size?: "sm" | "md" | "lg";
-  variant?: "default" | "subtle" | "animated";
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'subtle' | 'animated';
   style?: ViewStyle;
   showGlow?: boolean;
 }
@@ -37,7 +43,7 @@ export interface PremiumBadgeProps {
 // Component
 // ============================================================================
 
-export function PremiumBadge({ size = "md", variant = "default", style, showGlow = false }: PremiumBadgeProps): JSX.Element {
+export function PremiumBadge({ size = 'md', variant = 'default', style, showGlow = false }: PremiumBadgeProps): JSX.Element {
   const { theme } = useTheme();
 
   // Animation values
@@ -45,7 +51,7 @@ export function PremiumBadge({ size = "md", variant = "default", style, showGlow
   const glowOpacity = useSharedValue(0);
 
   React.useEffect(() => {
-    if (variant === "animated" || showGlow) {
+    if (variant === 'animated' || showGlow) {
       // Subtle pulse animation
       scale.value = withRepeat(
         withSequence(withTiming(1.05, { duration: 1000 }), withTiming(1, { duration: 1000 })),
@@ -78,9 +84,15 @@ export function PremiumBadge({ size = "md", variant = "default", style, showGlow
   // Variant configurations
   const variantConfig = {
     default: {
+<<<<<<< HEAD
       backgroundColor: theme.colors.primary[500],
       borderColor: theme.colors.primary[400],
       textColor: theme.colors.text.inverse,
+=======
+      backgroundColor: (theme.colors.primary as any)[500],
+      borderColor: (theme.colors.primary as any)[400],
+      textColor: '#FFFFFF',
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
     },
     subtle: {
       backgroundColor: theme.colors.primary[100],
@@ -88,21 +100,27 @@ export function PremiumBadge({ size = "md", variant = "default", style, showGlow
       textColor: theme.colors.primary[700],
     },
     animated: {
+<<<<<<< HEAD
       backgroundColor: theme.colors.primary[500],
       borderColor: theme.colors.warning.light,
       textColor: theme.colors.text.inverse,
+=======
+      backgroundColor: (theme.colors.primary as any)[500],
+      borderColor: (theme.colors.warning as any)?.light || theme.colors.warning.light,
+      textColor: '#FFFFFF',
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
     },
   };
 
   const vConfig = variantConfig[variant];
 
-  const Wrapper = variant === "animated" ? Animated.View : View;
-  const GlowWrapper = variant === "animated" || showGlow ? Animated.View : View;
+  const Wrapper = variant === 'animated' ? Animated.View : View;
+  const GlowWrapper = variant === 'animated' || showGlow ? Animated.View : View;
 
   return (
     <View style={[styles.container, style]}>
       {/* Glow effect */}
-      {(variant === "animated" || showGlow) && (
+      {(variant === 'animated' || showGlow) && (
         <GlowWrapper
           style={[
             styles.glow,
@@ -128,7 +146,7 @@ export function PremiumBadge({ size = "md", variant = "default", style, showGlow
             backgroundColor: vConfig.backgroundColor,
             borderColor: vConfig.borderColor,
           },
-          variant === "animated" && animatedStyle,
+          variant === 'animated' && animatedStyle,
         ]}
       >
         <Text
@@ -152,11 +170,11 @@ export function PremiumBadge({ size = "md", variant = "default", style, showGlow
 // ============================================================================
 
 export interface SupporterBadgeProps {
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   style?: ViewStyle;
 }
 
-export function SupporterBadge({ size = "md", style }: SupporterBadgeProps): JSX.Element {
+export function SupporterBadge({ size = 'md', style }: SupporterBadgeProps): JSX.Element {
   const { theme } = useTheme();
 
   const sizeConfig = {
@@ -223,43 +241,43 @@ export function PremiumXpBonus({ bonus = 0.1, style }: PremiumXpBonusProps): JSX
 
 const styles = createSheet({
   container: {
-    position: "relative",
-    alignItems: "center",
-    justifyContent: "center",
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   glow: {
-    position: "absolute",
+    position: 'absolute',
   },
   badge: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 2,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 4,
     elevation: 3,
   },
   text: {
-    fontWeight: "800",
+    fontWeight: '800',
     letterSpacing: -0.5,
   },
   supporterBadge: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 2,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
   },
   supporterIcon: {
-    fontWeight: "700",
+    fontWeight: '700',
   },
   xpBonusContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -271,7 +289,7 @@ const styles = createSheet({
   },
   xpBonusText: {
     fontSize: 12,
-    fontWeight: "700",
+    fontWeight: '700',
   },
 });
 

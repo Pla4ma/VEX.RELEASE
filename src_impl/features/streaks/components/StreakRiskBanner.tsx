@@ -8,15 +8,21 @@
  * @phase 3C.1
  */
 
+<<<<<<< HEAD
 import React from "react";
 import { Pressable } from "react-native";
 import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming } from "react-native-reanimated";
+=======
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming, withSpring } from 'react-native-reanimated';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
 
-export type StreakRiskLevel = "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+export type StreakRiskLevel = 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
 export interface StreakRiskBannerProps {
   /** Current risk level */
@@ -34,36 +40,36 @@ export interface StreakRiskBannerProps {
 /**
  * Get risk configuration based on level
  */
-function getRiskConfig(riskLevel: StreakRiskLevel, theme: ReturnType<typeof useTheme>["theme"]) {
+function getRiskConfig(riskLevel: StreakRiskLevel, theme: ReturnType<typeof useTheme>['theme']) {
   switch (riskLevel) {
-    case "CRITICAL":
+    case 'CRITICAL':
       return {
         bg: `${theme.colors.error.DEFAULT}30`,
         border: theme.colors.error.DEFAULT,
         text: theme.colors.error.DEFAULT,
-        emoji: "🚨",
-        label: "CRITICAL",
-        message: "LAST CHANCE — Start now!",
+        emoji: '🚨',
+        label: 'CRITICAL',
+        message: 'LAST CHANCE — Start now!',
         pulse: true,
       };
-    case "HIGH":
+    case 'HIGH':
       return {
         bg: `${theme.colors.error.DEFAULT}20`,
         border: theme.colors.error.light,
         text: theme.colors.error.DEFAULT,
-        emoji: "🔥",
-        label: "HIGH RISK",
-        message: "Streak at risk — act now",
+        emoji: '🔥',
+        label: 'HIGH RISK',
+        message: 'Streak at risk — act now',
         pulse: true,
       };
-    case "MEDIUM":
+    case 'MEDIUM':
       return {
         bg: `${theme.colors.warning.DEFAULT}20`,
         border: theme.colors.warning.DEFAULT,
         text: theme.colors.warning.dark,
-        emoji: "⏰",
-        label: "AT RISK",
-        message: "Start a session soon",
+        emoji: '⏰',
+        label: 'AT RISK',
+        message: 'Start a session soon',
         pulse: false,
       };
     default:
@@ -88,7 +94,7 @@ export function StreakRiskBanner({ riskLevel, hoursRemaining, streakDays, sugges
   }));
 
   // Only show for MEDIUM or higher
-  if (riskLevel === "NONE" || riskLevel === "LOW") {
+  if (riskLevel === 'NONE' || riskLevel === 'LOW') {
     return null;
   }
 
@@ -105,7 +111,7 @@ export function StreakRiskBanner({ riskLevel, hoursRemaining, streakDays, sugges
             marginTop: theme.spacing[4],
             borderRadius: 12,
             borderWidth: 2,
-            overflow: "hidden",
+            overflow: 'hidden',
           },
           pulseStyle,
         ]}

@@ -3,9 +3,9 @@
  * Visualizes data density over time (sessions, activity patterns)
  */
 
-import React from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React from 'react';
+import { View, Text, Pressable, ScrollView } from 'react-native';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 interface HeatmapData {
   day: string; // 'Mon', 'Tue', etc.
@@ -18,19 +18,19 @@ interface HeatmapProps {
   title?: string;
   subtitle?: string;
   onCellPress?: (day: string, hour: number, value: number) => void;
-  colorScheme?: "blue" | "green" | "purple";
+  colorScheme?: 'blue' | 'green' | 'purple';
 }
 
-const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const HOURS = Array.from({ length: 24 }, (_, i) => i);
 
 const COLOR_SCHEMES = {
-  blue: ["#eff6ff", "#dbeafe", "#93c5fd", "#3b82f6", "#1e40af"],
-  green: ["#f0fdf4", "#dcfce7", "#86efac", "#22c55e", "#166534"],
-  purple: ["#faf5ff", "#f3e8ff", "#d8b4fe", "#a855f7", "#6b21a8"],
+  blue: ['#eff6ff', '#dbeafe', '#93c5fd', '#3b82f6', '#1e40af'],
+  green: ['#f0fdf4', '#dcfce7', '#86efac', '#22c55e', '#166534'],
+  purple: ['#faf5ff', '#f3e8ff', '#d8b4fe', '#a855f7', '#6b21a8'],
 };
 
-export function Heatmap({ data, title, subtitle, onCellPress, colorScheme = "blue" }: HeatmapProps) {
+export function Heatmap({ data, title, subtitle, onCellPress, colorScheme = 'blue' }: HeatmapProps) {
   const colors = COLOR_SCHEMES[colorScheme];
 
   const getCellValue = (day: string, hour: number): number => {
@@ -44,10 +44,10 @@ export function Heatmap({ data, title, subtitle, onCellPress, colorScheme = "blu
 
   const formatHour = (hour: number): string => {
     if (hour === 0) {
-      return "12am";
+      return '12am';
     }
     if (hour === 12) {
-      return "12pm";
+      return '12pm';
     }
     if (hour < 12) {
       return `${hour}am`;
@@ -132,7 +132,7 @@ function calculatePeakDay(data: HeatmapData[]): string {
     total: data.filter((d) => d.day === day).reduce((sum, d) => sum + d.value, 0),
   }));
   const peak = dayTotals.sort((a, b) => b.total - a.total)[0];
-  return peak?.day ?? "-";
+  return peak?.day ?? '-';
 }
 
 function calculatePeakHour(data: HeatmapData[]): string {
@@ -142,13 +142,13 @@ function calculatePeakHour(data: HeatmapData[]): string {
   }));
   const peak = hourTotals.sort((a, b) => b.total - a.total)[0];
   if (!peak) {
-    return "-";
+    return '-';
   }
   if (peak.hour === 0) {
-    return "12am";
+    return '12am';
   }
   if (peak.hour === 12) {
-    return "12pm";
+    return '12pm';
   }
   if (peak.hour < 12) {
     return `${peak.hour}am`;
@@ -162,7 +162,7 @@ function calculateTotal(data: HeatmapData[]): number {
 
 const styles = createSheet({
   container: {
-    backgroundColor: "#ffffff",
+    backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 16,
     marginHorizontal: 12,
@@ -173,33 +173,33 @@ const styles = createSheet({
   },
   title: {
     fontSize: 18,
-    fontWeight: "700",
-    color: "#111827",
+    fontWeight: '700',
+    color: '#111827',
   },
   subtitle: {
     fontSize: 14,
-    color: "#6b7280",
+    color: '#6b7280',
     marginTop: 4,
   },
   heatmap: {
     gap: 4,
   },
   row: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 4,
   },
   dayLabel: {
     width: 40,
     fontSize: 12,
-    color: "#6b7280",
-    fontWeight: "500",
+    color: '#6b7280',
+    fontWeight: '500',
   },
   hourLabel: {
     width: 32,
     fontSize: 10,
-    color: "#9ca3af",
-    textAlign: "center",
+    color: '#9ca3af',
+    textAlign: 'center',
   },
   cell: {
     width: 12,
@@ -212,22 +212,22 @@ const styles = createSheet({
   },
   activeCell: {
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.1)",
+    borderColor: 'rgba(0,0,0,0.1)',
   },
   intensityIndicator: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.2)",
+    backgroundColor: 'rgba(0,0,0,0.2)',
   },
   legend: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     marginTop: 16,
     gap: 4,
   },
   legendText: {
     fontSize: 12,
-    color: "#9ca3af",
+    color: '#9ca3af',
     marginHorizontal: 8,
   },
   legendCell: {
@@ -236,24 +236,24 @@ const styles = createSheet({
     borderRadius: 4,
   },
   stats: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginTop: 16,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: "#f3f4f6",
+    borderTopColor: '#f3f4f6',
   },
   statItem: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   statValue: {
     fontSize: 16,
-    fontWeight: "700",
-    color: "#111827",
+    fontWeight: '700',
+    color: '#111827',
   },
   statLabel: {
     fontSize: 12,
-    color: "#9ca3af",
+    color: '#9ca3af',
     marginTop: 4,
   },
 });

@@ -22,3 +22,13 @@ export const storage = {
   contains: (key: string): boolean => getMMKV().contains(key),
   getAllKeys: (): string[] => getMMKV().getAllKeys(),
 };
+
+export const mmkvStorage = {
+  getItem: (key: string): string | null => storage.getString(key) ?? null,
+  setItem: (key: string, value: string): void => {
+    storage.set(key, value);
+  },
+  removeItem: (key: string): void => {
+    storage.delete(key);
+  },
+};

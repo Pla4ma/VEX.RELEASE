@@ -8,12 +8,12 @@
  * @phase 11.1
  */
 
-import { z } from "zod";
-import { getSupabaseClient } from "../../config/supabase";
-import { createDebugger } from "../../utils/debug";
-import { dispatchUrgencyNotification, type NotificationContext } from "../notifications/service";
+import { z } from 'zod';
+import { getSupabaseClient } from '../../config/supabase';
+import { createDebugger } from '../../utils/debug';
+import { dispatchUrgencyNotification, type NotificationContext } from '../notifications/service';
 
-const debug = createDebugger("boss:spawn-scheduler");
+const debug = createDebugger('boss:spawn-scheduler');
 
 // ============================================================================
 // Configuration
@@ -73,7 +73,7 @@ export type BossSpawnSchedule = z.infer<typeof BossSpawnScheduleSchema>;
  */
 export function getCurrentHourInTimezone(timezone: string): number {
   const now = new Date();
-  const timeString = now.toLocaleString("en-US", { timeZone: timezone, hour: "numeric", hour12: false });
+  const timeString = now.toLocaleString('en-US', { timeZone: timezone, hour: 'numeric', hour12: false });
   return parseInt(timeString, 10);
 }
 
@@ -82,13 +82,13 @@ export function getCurrentHourInTimezone(timezone: string): number {
  */
 function getTodayAtHour(timezone: string, hour: number): Date {
   const now = new Date();
-  const timeString = now.toLocaleString("en-US", {
+  const timeString = now.toLocaleString('en-US', {
     timeZone: timezone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
   });
-  const [month, day, year] = timeString.split("/").map(Number);
+  const [month, day, year] = timeString.split('/').map(Number);
   return new Date(year, month - 1, day, hour, 0, 0);
 }
 
@@ -126,7 +126,7 @@ export function calculatePrimeTimeWindow(bossTier: number, timezone: string, bos
  * Check if prime time is active for a boss
  */
 export function isPrimeTimeActive(bossTier: number, timezone: string): boolean {
-  const window = calculatePrimeTimeWindow(bossTier, timezone, "");
+  const window = calculatePrimeTimeWindow(bossTier, timezone, '');
   return window.isActive;
 }
 
@@ -153,9 +153,9 @@ export function getPrimeTimeStatusText(window: PrimeTimeWindow): string {
     return `⏰ Prime Time starts in ${formatTimeRemaining(window.timeRemainingMinutes)}`;
   }
   const nextStart = new Date(window.startTime);
-  const timeString = nextStart.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
+  const timeString = nextStart.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
     hour12: true,
   });
   return `Next Prime Time: ${timeString}`;
@@ -181,9 +181,9 @@ export function calculatePrimeTimeXP(baseXP: number, bossTier: number, timezone:
  * Send pre-prime-time notification
  */
 export async function sendPrePrimeTimeNotification(userId: string, bossName: string, bossTier: number, startTime: number): Promise<void> {
-  const startTimeFormatted = new Date(startTime).toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
+  const startTimeFormatted = new Date(startTime).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
     hour12: true,
   });
 
@@ -193,7 +193,7 @@ export async function sendPrePrimeTimeNotification(userId: string, bossName: str
 
   await dispatchUrgencyNotification(context, undefined, 22, 8);
 
-  debug.info("Pre-Prime Time notification sent", {
+  debug.info('Pre-Prime Time notification sent', {
     userId,
     bossName,
     startTime: startTimeFormatted,
@@ -210,7 +210,7 @@ export async function sendPrimeTimeStartNotification(userId: string, bossName: s
 
   await dispatchUrgencyNotification(context, undefined, 22, 8);
 
-  debug.info("Prime Time start notification sent", {
+  debug.info('Prime Time start notification sent', {
     userId,
     bossName,
   });
@@ -221,15 +221,15 @@ export async function sendPrimeTimeStartNotification(userId: string, bossName: s
  */
 export async function checkAndSendPrimeTimeNotifications(): Promise<void> {
   try {
-    const { data: activeEncounters, error } = await getSupabaseClient().from("boss_encounters").select("*, users!inner(timezone)").eq("status", "ACTIVE");
+    const { data: activeEncounters, error } = await getSupabaseClient().from('boss_encounters').select('*, users!inner(timezone)').eq('status', 'ACTIVE');
 
     if (error || !activeEncounters) {
-      debug.warn("Failed to fetch active encounters", error);
+      debug.warn('Failed to fetch active encounters', error);
       return;
     }
 
     for (const encounter of activeEncounters) {
-      const timezone = encounter.users?.timezone || "UTC";
+      const timezone = encounter.users?.timezone || 'UTC';
       const window = calculatePrimeTimeWindow(encounter.boss_tier, timezone, encounter.boss_id);
 
       // Check if we should send pre-notification
@@ -237,7 +237,7 @@ export async function checkAndSendPrimeTimeNotifications(): Promise<void> {
         await sendPrePrimeTimeNotification(encounter.user_id, encounter.boss_name, encounter.boss_tier, window.startTime);
 
         // Mark as sent
-        await getSupabaseClient().from("boss_encounters").update({ pre_notification_sent: true }).eq("id", encounter.id);
+        await getSupabaseClient().from('boss_encounters').update({ pre_notification_sent: true }).eq('id', encounter.id);
       }
 
       // Check if we should send prime time start notification
@@ -245,11 +245,11 @@ export async function checkAndSendPrimeTimeNotifications(): Promise<void> {
         await sendPrimeTimeStartNotification(encounter.user_id, encounter.boss_name, encounter.boss_tier);
 
         // Mark as sent
-        await getSupabaseClient().from("boss_encounters").update({ prime_time_start_notification_sent: true }).eq("id", encounter.id);
+        await getSupabaseClient().from('boss_encounters').update({ prime_time_start_notification_sent: true }).eq('id', encounter.id);
       }
     }
   } catch (error) {
-    debug.error("Error checking prime time notifications", error instanceof Error ? error : undefined);
+    debug.error('Error checking prime time notifications', error instanceof Error ? error : undefined);
   }
 }
 
@@ -257,7 +257,7 @@ export async function checkAndSendPrimeTimeNotifications(): Promise<void> {
 // Hook for React Components
 // ============================================================================
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 
 interface UsePrimeTimeResult {
   window: PrimeTimeWindow | null;
@@ -268,7 +268,7 @@ interface UsePrimeTimeResult {
 /**
  * Hook to track prime time status for a boss
  */
-export function usePrimeTime(bossTier: number, bossId: string, timezone: string = "UTC"): UsePrimeTimeResult {
+export function usePrimeTime(bossTier: number, bossId: string, timezone: string = 'UTC'): UsePrimeTimeResult {
   const [window, setWindow] = useState<PrimeTimeWindow | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 

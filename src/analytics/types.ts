@@ -56,11 +56,16 @@ export interface EngagementMetrics {
   sessionsLast30Days: number;
   totalFocusMinutes: number;
   avgSessionDuration: number;
+<<<<<<< HEAD
   averageSessionDuration: number;
   studyPlansCompleted: number;
   studyPlansStarted: number;
   completionRate: number;
   lastActiveDate: string;
+=======
+  studyPlansCompleted: number;
+  studyPlansStarted: number;
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   bossBattlesCompleted: number;
   streakDays: number;
   weeklyActive: boolean;
@@ -68,11 +73,15 @@ export interface EngagementMetrics {
 }
 
 export interface MonetizationMetrics {
+<<<<<<< HEAD
   userId: string;
+=======
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   totalUsers: number;
   freeUsers: number;
   premiumUsers: number;
   trialUsers: number;
+<<<<<<< HEAD
   isPremium: boolean;
   conversionDate?: string;
   conversionRate: number;
@@ -88,6 +97,14 @@ export interface MonetizationMetrics {
   subscriptionRevenue: number;
   oneTimeRevenue: number;
   refundRate: number;
+=======
+  conversionRate: number;
+  trialConversionRate: number;
+  averageLTV: number;
+  totalRevenue: number;
+  arpu: number;
+  mrr: number;
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 }
 
 export interface PaywallAnalytics {
@@ -130,11 +147,7 @@ export interface VEXDashboard {
     averageCompletionRate: number;
     averageSessionDuration: number;
   };
-  monetization: {
-    totalRevenue: number;
-    premiumConversionRate: number;
-    averageLTV: number;
-  };
+  monetization: MonetizationMetrics;
   trends: {
     weeklyGrowth: number;
     monthlyGrowth: number;

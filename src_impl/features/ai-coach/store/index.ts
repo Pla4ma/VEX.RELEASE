@@ -40,3 +40,4 @@ export { shouldShowMessage, getActiveModalType } from './helpers';
 
 // Re-export store hook and reset function from the main store file
 export { useCoachStore, resetCoachPreferences } from './useCoachStore';
+

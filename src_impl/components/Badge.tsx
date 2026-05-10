@@ -5,21 +5,26 @@
  * Part of the VEX Design System.
  */
 
+<<<<<<< HEAD
 import React from "react";
 import { View, Pressable, StyleProp, ViewStyle, TextStyle } from "react-native";
+=======
+import React from 'react';
+import { View, StyleSheet, Pressable, StyleProp, ViewStyle, TextStyle } from 'react-native';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-import { useTheme } from "../theme";
-import { Text } from "./primitives";
-import { Icon } from "../icons";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { useTheme } from '../theme';
+import { Text } from './primitives';
+import { Icon } from '../icons';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 export interface BadgeProps {
   /** Badge text */
   children: string;
   /** Visual variant */
-  variant?: "default" | "primary" | "success" | "warning" | "error" | "info" | "secondary" | "outline";
+  variant?: 'default' | 'primary' | 'success' | 'warning' | 'error' | 'info' | 'secondary' | 'outline';
   /** Size variant */
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
   /** Left icon name */
   leftIcon?: string;
   /** Right icon name */
@@ -44,51 +49,51 @@ const sizeMap = {
   lg: { paddingVertical: 6, paddingHorizontal: 12, fontSize: 14, iconSize: 14 },
 };
 
-export const Badge: React.FC<BadgeProps> = ({ children, variant = "default", size = "md", leftIcon, rightIcon, onPress, onRemove, disabled = false, fullWidth = false, style, textStyle }) => {
+export const Badge: React.FC<BadgeProps> = ({ children, variant = 'default', size = 'md', leftIcon, rightIcon, onPress, onRemove, disabled = false, fullWidth = false, style, textStyle }) => {
   const { theme } = useTheme();
   const sizeConfig = sizeMap[size];
 
   const getVariantStyles = () => {
     switch (variant) {
-      case "primary":
+      case 'primary':
         return {
           backgroundColor: theme.colors.primary[100],
           borderColor: theme.colors.primary[200],
           textColor: theme.colors.primary[700],
         };
-      case "success":
+      case 'success':
         return {
-          backgroundColor: theme.colors.success.light + "30",
-          borderColor: theme.colors.success.DEFAULT + "40",
+          backgroundColor: theme.colors.success.light + '30',
+          borderColor: theme.colors.success.DEFAULT + '40',
           textColor: theme.colors.success.dark,
         };
-      case "warning":
+      case 'warning':
         return {
-          backgroundColor: theme.colors.warning.light + "30",
-          borderColor: theme.colors.warning.DEFAULT + "40",
+          backgroundColor: theme.colors.warning.light + '30',
+          borderColor: theme.colors.warning.DEFAULT + '40',
           textColor: theme.colors.warning.dark,
         };
-      case "error":
+      case 'error':
         return {
-          backgroundColor: theme.colors.error.light + "30",
-          borderColor: theme.colors.error.DEFAULT + "40",
+          backgroundColor: theme.colors.error.light + '30',
+          borderColor: theme.colors.error.DEFAULT + '40',
           textColor: theme.colors.error.dark,
         };
-      case "info":
+      case 'info':
         return {
-          backgroundColor: theme.colors.info.light + "30",
-          borderColor: theme.colors.info.DEFAULT + "40",
+          backgroundColor: theme.colors.info.light + '30',
+          borderColor: theme.colors.info.DEFAULT + '40',
           textColor: theme.colors.info.dark,
         };
-      case "secondary":
+      case 'secondary':
         return {
           backgroundColor: theme.colors.background.tertiary,
           borderColor: theme.colors.border.DEFAULT,
           textColor: theme.colors.text.secondary,
         };
-      case "outline":
+      case 'outline':
         return {
-          backgroundColor: "transparent",
+          backgroundColor: 'transparent',
           borderColor: theme.colors.border.strong,
           textColor: theme.colors.text.primary,
         };
@@ -110,10 +115,10 @@ export const Badge: React.FC<BadgeProps> = ({ children, variant = "default", siz
         {
           backgroundColor: variantStyles.backgroundColor,
           borderColor: variantStyles.borderColor,
-          borderWidth: variant === "outline" ? 1 : 0,
+          borderWidth: variant === 'outline' ? 1 : 0,
           paddingVertical: sizeConfig.paddingVertical,
           paddingHorizontal: onRemove ? sizeConfig.paddingHorizontal : sizeConfig.paddingHorizontal,
-          borderRadius: size === "sm" ? 4 : size === "md" ? 6 : 8,
+          borderRadius: size === 'sm' ? 4 : size === 'md' ? 6 : 8,
         },
         fullWidth && styles.fullWidth,
         disabled && styles.disabled,
@@ -129,7 +134,7 @@ export const Badge: React.FC<BadgeProps> = ({ children, variant = "default", siz
             {
               fontSize: sizeConfig.fontSize,
               color: variantStyles.textColor,
-              fontWeight: "600",
+              fontWeight: '600',
             },
             textStyle,
           ]}
@@ -156,10 +161,10 @@ export const Badge: React.FC<BadgeProps> = ({ children, variant = "default", siz
           {
             backgroundColor: variantStyles.backgroundColor,
             borderColor: variantStyles.borderColor,
-            borderWidth: variant === "outline" ? 1 : 0,
+            borderWidth: variant === 'outline' ? 1 : 0,
             paddingVertical: sizeConfig.paddingVertical,
             paddingHorizontal: onRemove ? sizeConfig.paddingHorizontal : sizeConfig.paddingHorizontal,
-            borderRadius: size === "sm" ? 4 : size === "md" ? 6 : 8,
+            borderRadius: size === 'sm' ? 4 : size === 'md' ? 6 : 8,
           },
           fullWidth && styles.fullWidth,
           style,
@@ -178,7 +183,7 @@ export const Badge: React.FC<BadgeProps> = ({ children, variant = "default", siz
               {
                 fontSize: sizeConfig.fontSize,
                 color: variantStyles.textColor,
-                fontWeight: "600",
+                fontWeight: '600',
               },
               textStyle,
             ]}
@@ -201,23 +206,23 @@ export const Badge: React.FC<BadgeProps> = ({ children, variant = "default", siz
 
 const styles = createSheet({
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'flex-start',
   },
   fullWidth: {
-    alignSelf: "stretch",
-    justifyContent: "center",
+    alignSelf: 'stretch',
+    justifyContent: 'center',
   },
   content: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   leftIcon: {
     marginRight: 4,
   },
   text: {
-    textAlign: "center" as const,
+    textAlign: 'center' as const,
   },
   rightIcon: {
     marginLeft: 4,

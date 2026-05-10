@@ -11,12 +11,21 @@
  * - Reduced motion support
  */
 
+<<<<<<< HEAD
 import React, { useEffect, useCallback, useState } from 'react';
 import { View, Dimensions } from 'react-native';
 import { useReducedMotion } from '@/hooks';
 import { ConfettiCelebrationProps, ParticleConfig } from './confetti/types';
 import { CONFETTI_COLORS, PARTICLE_SHAPES, DEFAULT_PARTICLE_COUNT, DEFAULT_DURATION } from './confetti/constants';
 import { Particle } from './confetti/Particle';
+=======
+import React, { useEffect, useCallback, useState } from "react";
+import { View, Dimensions } from "react-native";
+import { useReducedMotion } from "@/hooks";
+import { ConfettiCelebrationProps, ParticleConfig } from "./confetti/types";
+import { CONFETTI_COLORS, PARTICLE_SHAPES, DEFAULT_PARTICLE_COUNT, DEFAULT_DURATION } from "./confetti/constants";
+import { Particle } from "./confetti/Particle";
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -60,16 +69,18 @@ export function ConfettiCelebration({
       const newParticles = generateParticles();
       setParticles(newParticles);
 
-      // Auto-cleanup
       const timeout = setTimeout(() => {
         setParticles([]);
         onComplete?.();
       }, duration);
 
       return () => clearTimeout(timeout);
-    } else {
-      setParticles([]);
     }
+<<<<<<< HEAD
+=======
+
+    setParticles([]);
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
     return undefined;
   }, [active, isReducedMotion, generateParticles, duration, onComplete]);
 

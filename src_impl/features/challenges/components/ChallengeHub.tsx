@@ -4,6 +4,7 @@
  * Central hub for all challenge types with filtering and progress overview.
  */
 
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { View, Text, ScrollView, Pressable, ActivityIndicator } from "react-native";
 import { FlashList, type ListRenderItem } from "@shopify/flash-list";
@@ -13,8 +14,19 @@ import { useActiveChallenges, useChallengeSummaries } from "../hooks";
 import { ChallengeCard } from "./ChallengeCard";
 import { type UserChallengeSummary } from "../schemas";
 import { createSheet } from "@/shared/ui/create-sheet";
+=======
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator } from 'react-native';
+import { FlashList, type ListRenderItem } from '@shopify/flash-list';
+import { useThemeObject } from '../../../theme';
+import { Card, Button, Badge, ProgressBar } from '../../../components';
+import { useActiveChallenges, useChallengeSummaries } from '../hooks';
+import { ChallengeCard } from './ChallengeCard';
+import { type UserChallengeSummary } from '../schemas';
+import { createSheet } from '@/shared/ui/create-sheet';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-type ChallengeFilter = "ALL" | "DAILY" | "WEEKLY" | "EVENT" | "COMPLETED";
+type ChallengeFilter = 'ALL' | 'DAILY' | 'WEEKLY' | 'EVENT' | 'COMPLETED';
 
 interface ChallengeHubProps {
   userId: string;
@@ -24,7 +36,12 @@ interface ChallengeHubProps {
 
 export const ChallengeHub: React.FC<ChallengeHubProps> = ({ userId, onChallengePress, onClaimReward }) => {
   const theme = useThemeObject();
+<<<<<<< HEAD
   const [activeFilter, setActiveFilter] = useState<ChallengeFilter>("ALL");
+=======
+  const [activeFilter, setActiveFilter] = useState<ChallengeFilter>('ALL');
+  const [refreshing, setRefreshing] = useState(false);
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
   const { isLoading: isLoadingAll } = useActiveChallenges(userId);
   const { data: challengeSummaries, isLoading: isLoadingSummaries } = useChallengeSummaries(userId);
@@ -37,15 +54,15 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({ userId, onChallengeP
     }
 
     switch (activeFilter) {
-      case "DAILY":
-        return challengeSummaries.filter((c: UserChallengeSummary) => c.type === "DAILY");
-      case "WEEKLY":
-        return challengeSummaries.filter((c: UserChallengeSummary) => c.type === "WEEKLY");
-      case "EVENT":
-        return challengeSummaries.filter((c: UserChallengeSummary) => c.type === "EVENT");
-      case "COMPLETED":
-        return challengeSummaries.filter((c: UserChallengeSummary) => c.status === "COMPLETED" || c.status === "CLAIMED");
-      case "ALL":
+      case 'DAILY':
+        return challengeSummaries.filter((c: UserChallengeSummary) => c.type === 'DAILY');
+      case 'WEEKLY':
+        return challengeSummaries.filter((c: UserChallengeSummary) => c.type === 'WEEKLY');
+      case 'EVENT':
+        return challengeSummaries.filter((c: UserChallengeSummary) => c.type === 'EVENT');
+      case 'COMPLETED':
+        return challengeSummaries.filter((c: UserChallengeSummary) => c.status === 'COMPLETED' || c.status === 'CLAIMED');
+      case 'ALL':
       default:
         return challengeSummaries;
     }
@@ -56,9 +73,9 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({ userId, onChallengeP
       return { total: 0, completed: 0, claimed: 0, available: 0 };
     }
 
-    const completed = challengeSummaries.filter((c: UserChallengeSummary) => c.status === "COMPLETED").length;
-    const claimed = challengeSummaries.filter((c: UserChallengeSummary) => c.status === "CLAIMED").length;
-    const available = challengeSummaries.filter((c: UserChallengeSummary) => c.status === "ACTIVE").length;
+    const completed = challengeSummaries.filter((c: UserChallengeSummary) => c.status === 'COMPLETED').length;
+    const claimed = challengeSummaries.filter((c: UserChallengeSummary) => c.status === 'CLAIMED').length;
+    const available = challengeSummaries.filter((c: UserChallengeSummary) => c.status === 'ACTIVE').length;
 
     return {
       total: challengeSummaries.length,
@@ -114,7 +131,7 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({ userId, onChallengeP
 
       {/* Filter Tabs */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterContainer} contentContainerStyle={styles.filterContent}>
-        {(["ALL", "DAILY", "WEEKLY", "EVENT", "COMPLETED"] as ChallengeFilter[]).map((filter) => (
+        {(['ALL', 'DAILY', 'WEEKLY', 'EVENT', 'COMPLETED'] as ChallengeFilter[]).map((filter) => (
           <Pressable key={filter} style={({ pressed }) => [styles.filterTab, activeFilter === filter && styles.filterTabActive, pressed && { opacity: 0.7 }]} onPress={() => setActiveFilter(filter)} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
             <Text style={[styles.filterText, activeFilter === filter && styles.filterTextActive]}>{filter}</Text>
           </Pressable>
@@ -122,7 +139,7 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({ userId, onChallengeP
       </ScrollView>
 
       {/* Daily Streak Card (only on ALL or DAILY) */}
-      {(activeFilter === "ALL" || activeFilter === "DAILY") && (
+      {(activeFilter === 'ALL' || activeFilter === 'DAILY') && (
         <Card style={styles.streakCard}>
           <View style={styles.streakHeader}>
             <Text style={styles.streakTitle}>🔥 Daily Streak</Text>
@@ -130,7 +147,7 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({ userId, onChallengeP
           </View>
           <Text style={styles.streakDescription}>Complete daily challenges to maintain your streak and earn bonus rewards!</Text>
           <View style={styles.streakDays}>
-            {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => (
+            {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, index) => (
               <View key={index} style={[styles.streakDay, index < 3 && styles.streakDayCompleted]}>
                 <Text style={[styles.streakDayText, index < 3 && styles.streakDayTextCompleted]}>{day}</Text>
               </View>
@@ -141,13 +158,13 @@ export const ChallengeHub: React.FC<ChallengeHubProps> = ({ userId, onChallengeP
 
       {/* Challenge List */}
       <View style={styles.listSection}>
-        <Text style={styles.listTitle}>{activeFilter === "ALL" ? "All Challenges" : `${activeFilter} Challenges`}</Text>
+        <Text style={styles.listTitle}>{activeFilter === 'ALL' ? 'All Challenges' : `${activeFilter} Challenges`}</Text>
 
         {filteredChallenges.length === 0 ? (
           <Card style={styles.emptyCard}>
             <Text style={styles.emptyIcon}>🎯</Text>
             <Text style={styles.emptyTitle}>No challenges found</Text>
-            <Text style={styles.emptyText}>{activeFilter === "COMPLETED" ? "Complete some challenges to see them here!" : "Check back later for new challenges."}</Text>
+            <Text style={styles.emptyText}>{activeFilter === 'COMPLETED' ? 'Complete some challenges to see them here!' : 'Check back later for new challenges.'}</Text>
           </Card>
         ) : (
           <FlashList<UserChallengeSummary> data={filteredChallenges} renderItem={renderChallenge} keyExtractor={(item: UserChallengeSummary) => item.challengeId} estimatedItemSize={168} scrollEnabled={false} />
@@ -165,10 +182,10 @@ const styles = createSheet({
     padding: 16,
   },
   loadingText: {
-    textAlign: "center",
+    textAlign: 'center',
     marginTop: 12,
     fontSize: 14,
-    color: "#666",
+    color: '#666',
   },
   statsCard: {
     padding: 16,
@@ -176,25 +193,25 @@ const styles = createSheet({
   },
   statsTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 12,
   },
   statsGrid: {
-    flexDirection: "row",
-    justifyContent: "space-around",
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     marginBottom: 12,
   },
   statItem: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   statValue: {
     fontSize: 20,
-    fontWeight: "bold",
-    color: "#007AFF",
+    fontWeight: 'bold',
+    color: '#007AFF',
   },
   statLabel: {
     fontSize: 12,
-    color: "#666",
+    color: '#666',
     marginTop: 2,
   },
   overallProgress: {
@@ -211,73 +228,73 @@ const styles = createSheet({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    backgroundColor: "#F0F0F0",
+    backgroundColor: '#F0F0F0',
   },
   filterTabActive: {
-    backgroundColor: "#007AFF",
+    backgroundColor: '#007AFF',
   },
   filterText: {
     fontSize: 13,
-    fontWeight: "500",
-    color: "#666",
+    fontWeight: '500',
+    color: '#666',
   },
   filterTextActive: {
-    color: "#fff",
+    color: '#fff',
   },
   streakCard: {
     padding: 16,
     marginBottom: 12,
-    backgroundColor: "#FFF8E7",
+    backgroundColor: '#FFF8E7',
   },
   streakHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 8,
   },
   streakTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   streakDescription: {
     fontSize: 13,
-    color: "#666",
+    color: '#666',
     marginBottom: 12,
   },
   streakDays: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 8,
   },
   streakDay: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: "#E0E0E0",
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor: '#E0E0E0',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   streakDayCompleted: {
-    backgroundColor: "#FF9500",
+    backgroundColor: '#FF9500',
   },
   streakDayText: {
     fontSize: 12,
-    fontWeight: "600",
-    color: "#666",
+    fontWeight: '600',
+    color: '#666',
   },
   streakDayTextCompleted: {
-    color: "#fff",
+    color: '#fff',
   },
   listSection: {
     marginTop: 8,
   },
   listTitle: {
     fontSize: 18,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 12,
   },
   emptyCard: {
     padding: 32,
-    alignItems: "center",
+    alignItems: 'center',
   },
   emptyIcon: {
     fontSize: 48,
@@ -285,12 +302,12 @@ const styles = createSheet({
   },
   emptyTitle: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     marginBottom: 4,
   },
   emptyText: {
     fontSize: 14,
-    color: "#666",
-    textAlign: "center",
+    color: '#666',
+    textAlign: 'center',
   },
 });

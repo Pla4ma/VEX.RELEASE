@@ -9,10 +9,10 @@
  * - Schemas (validation)
  */
 
-import * as repository from "./repository";
-import { ScheduleReminderInputSchema, ActivateComebackInputSchema, AdjustDifficultyInputSchema, type ReminderPlan, type ReminderType, type ComebackPlan, type ComebackStatus, type DifficultyProfile, type MessageCategory, type ScheduleReminderInput, type ActivateComebackInput, type AdjustDifficultyInput } from "./schemas";
-import { getOrCreateCoachState, updateCoachState } from "./persona-manager";
-import { generateMessage } from "./message-generator";
+import * as repository from './repository';
+import { ScheduleReminderInputSchema, ActivateComebackInputSchema, AdjustDifficultyInputSchema, type ReminderPlan, type ReminderType, type ComebackPlan, type ComebackStatus, type DifficultyProfile, type MessageCategory, type ScheduleReminderInput, type ActivateComebackInput, type AdjustDifficultyInput } from './schemas';
+import { getOrCreateCoachState, updateCoachState } from './persona-manager';
+import { generateMessage } from './message-generator';
 
 // ============================================================================
 // Constants
@@ -39,11 +39,11 @@ export async function scheduleReminder(input: ScheduleReminderInput): Promise<Re
     userId: validated.userId,
     category,
     context: {},
-    preferredDelivery: "PUSH",
+    preferredDelivery: 'PUSH',
   });
 
   if (!message) {
-    throw new Error("Failed to generate reminder message");
+    throw new Error('Failed to generate reminder message');
   }
 
   const savedMessage = await repository.createCoachMessage(message);
@@ -66,15 +66,15 @@ export async function scheduleReminder(input: ScheduleReminderInput): Promise<Re
 
 function reminderTypeToCategory(reminderType: ReminderType): MessageCategory {
   const mapping: Record<ReminderType, MessageCategory> = {
-    STREAK_WARNING: "STREAK_RISK",
-    STREAK_CHECK: "STREAK_RISK",
-    OPTIMAL_SESSION_TIME: "SESSION_SUGGESTION",
-    CHALLENGE_DEADLINE: "CHALLENGE_PROMPT",
-    BOSS_TIMEOUT: "CHALLENGE_PROMPT",
-    COMEBACK_OPPORTUNITY: "COMEBACK_SUPPORT",
-    MILESTONE_APPROACHING: "MILESTONE_HYPE",
-    PERSONALIZED_MOTIVATION: "MOTIVATION_BOOST",
-    BREAK_REMINDER: "BREAK_SUGGESTION",
+    STREAK_WARNING: 'STREAK_RISK',
+    STREAK_CHECK: 'STREAK_RISK',
+    OPTIMAL_SESSION_TIME: 'SESSION_SUGGESTION',
+    CHALLENGE_DEADLINE: 'CHALLENGE_PROMPT',
+    BOSS_TIMEOUT: 'CHALLENGE_PROMPT',
+    COMEBACK_OPPORTUNITY: 'COMEBACK_SUPPORT',
+    MILESTONE_APPROACHING: 'MILESTONE_HYPE',
+    PERSONALIZED_MOTIVATION: 'MOTIVATION_BOOST',
+    BREAK_REMINDER: 'BREAK_SUGGESTION',
   };
 
   return mapping[reminderType];
@@ -94,11 +94,11 @@ export async function activateComeback(input: ActivateComebackInput): Promise<Co
   const existing = await repository.fetchActiveComebackPlan(validated.userId);
   if (existing) {
     // User declined previously, don't offer again
-    if (existing.status === "DECLINED") {
-      throw new Error("Comeback was previously declined");
+    if (existing.status === 'DECLINED') {
+      throw new Error('Comeback was previously declined');
     }
     // Already has active comeback
-    if (existing.status === "ACTIVE") {
+    if (existing.status === 'ACTIVE') {
       return existing;
     }
   }
@@ -109,7 +109,7 @@ export async function activateComeback(input: ActivateComebackInput): Promise<Co
     userId: validated.userId,
     previousStreak: validated.previousStreak,
     daysInactive: validated.daysInactive,
-    status: "OFFERED" as ComebackStatus,
+    status: 'OFFERED' as ComebackStatus,
     startedAt: now,
     expiresAt: now + COMEBACK_EXPIRY_DAYS * 24 * 60 * 60 * 1000,
     sessionsCompleted: 0,
@@ -121,7 +121,7 @@ export async function activateComeback(input: ActivateComebackInput): Promise<Co
   const saved = await repository.upsertComebackPlan(plan);
 
   // Update coach state
-  await updateCoachState(validated.userId, "COMEBACK_MODE", {
+  await updateCoachState(validated.userId, 'COMEBACK_MODE', {
     previousStreak: validated.previousStreak,
     daysInactive: validated.daysInactive,
   });
@@ -131,7 +131,7 @@ export async function activateComeback(input: ActivateComebackInput): Promise<Co
 
 function generateComebackMessages(): Array<{ id: string; day: number; content: string; sent: boolean; sentAt: number | null }> {
   const messages = [
-    { day: 1, content: "Welcome back! 💪 Your comeback story starts today. First session gets {{bonusMultiplier}}x XP!" },
+    { day: 1, content: 'Welcome back! 💪 Your comeback story starts today. First session gets {{bonusMultiplier}}x XP!' },
     { day: 2, content: "Day 2 of your comeback! 🔥 You're rebuilding stronger than before. Keep it up!" },
     { day: 3, content: "Comeback complete! 🎉 You've earned your full {{bonusMultiplier}}x bonus. Your streak is back on track!" },
   ];
@@ -149,7 +149,7 @@ function generateComebackMessages(): Array<{ id: string; day: number; content: s
  * Accept a comeback offer
  */
 export async function acceptComeback(userId: string, planId: string): Promise<ComebackPlan> {
-  const plan = await repository.updateComebackPlanStatus(planId, "ACTIVE");
+  const plan = await repository.updateComebackPlanStatus(planId, 'ACTIVE');
 
   // Send first message immediately
   const firstMessage = plan.messages[0];
@@ -165,7 +165,7 @@ export async function acceptComeback(userId: string, planId: string): Promise<Co
  */
 export async function trackComebackSession(userId: string, sessionCompleted: boolean): Promise<ComebackPlan | null> {
   const plan = await repository.fetchActiveComebackPlan(userId);
-  if (!plan || plan.status !== "ACTIVE") {
+  if (!plan || plan.status !== 'ACTIVE') {
     return null;
   }
 
@@ -174,24 +174,24 @@ export async function trackComebackSession(userId: string, sessionCompleted: boo
 
     if (newCount >= plan.targetSessions) {
       // Comeback complete
-      await repository.updateComebackPlanStatus(plan.id, "COMPLETED", newCount);
+      await repository.updateComebackPlanStatus(plan.id, 'COMPLETED', newCount);
 
       // Exit comeback mode
-      await updateCoachState(userId, "HIGH_CONFIDENCE", { comebackCompleted: true });
+      await updateCoachState(userId, 'HIGH_CONFIDENCE', { comebackCompleted: true });
 
       // Send completion message
       const completionMessage = await generateMessage({
         userId,
-        category: "MILESTONE_HYPE",
+        category: 'MILESTONE_HYPE',
         context: { milestoneDays: plan.targetSessions, comebackMultiplier: plan.bonusMultiplier },
-        preferredDelivery: "BOTH",
+        preferredDelivery: 'BOTH',
       });
 
       if (completionMessage) {
         await repository.createCoachMessage(completionMessage);
       }
     } else {
-      await repository.updateComebackPlanStatus(plan.id, "ACTIVE", newCount);
+      await repository.updateComebackPlanStatus(plan.id, 'ACTIVE', newCount);
 
       // Send next day's message
       const nextMessage = plan.messages[newCount];
@@ -226,7 +226,7 @@ export async function adjustDifficulty(input: AdjustDifficultyInput): Promise<Di
       adjustmentReason: null,
       successRateRecent: 0.8,
       successRateOverall: 0.8,
-      trend: "STABLE",
+      trend: 'STABLE',
     };
   }
 
@@ -244,7 +244,7 @@ export async function adjustDifficulty(input: AdjustDifficultyInput): Promise<Di
     }
   }
 
-  const trend: "IMPROVING" | "STABLE" | "DECLINING" = recommendedDifficulty > profile.currentDifficulty ? "IMPROVING" : recommendedDifficulty < profile.currentDifficulty ? "DECLINING" : "STABLE";
+  const trend: 'IMPROVING' | 'STABLE' | 'DECLINING' = recommendedDifficulty > profile.currentDifficulty ? 'IMPROVING' : recommendedDifficulty < profile.currentDifficulty ? 'DECLINING' : 'STABLE';
 
   const updatedProfile: DifficultyProfile = {
     ...profile,

@@ -10,15 +10,15 @@
  * @phase 1B - Core Loop Surgery
  */
 
-import { eventBus } from "../../events";
-import type { BossEncounter } from "./schemas";
-import type { BossMechanicType } from "../../session/modes-enhanced";
+import { eventBus } from '../../events';
+import type { BossEncounter } from './schemas';
+import type { BossMechanicType } from '../../session/modes-enhanced';
 
 // ============================================================================
 // Phase Configuration Types
 // ============================================================================
 
-export type BossPhase = "PHASE_1" | "PHASE_2" | "PHASE_3" | "ENRAGED" | "EXECUTE";
+export type BossPhase = 'PHASE_1' | 'PHASE_2' | 'PHASE_3' | 'ENRAGED' | 'EXECUTE';
 
 export interface PhaseConfig {
   name: string;
@@ -26,12 +26,12 @@ export interface PhaseConfig {
   mechanic: BossMechanicType;
   mechanicIntensity: number; // 0-1
   playerCanTakeDamage: boolean;
-  playerDamageType: "STREAK_RISK" | "XP_PENALTY" | "COIN_PENALTY" | "NONE";
+  playerDamageType: 'STREAK_RISK' | 'XP_PENALTY' | 'COIN_PENALTY' | 'NONE';
   requiredPurity?: number; // Minimum purity to survive phase
   timeLimit?: number; // Seconds to complete phase (for execute)
   damageMultiplier: number; // Damage dealt TO boss in this phase
   incomingDamageMultiplier: number; // Damage dealt BY boss (if applicable)
-  visualIntensity: "normal" | "intense" | "critical";
+  visualIntensity: 'normal' | 'intense' | 'critical';
   audioCue: string;
 }
 
@@ -53,123 +53,123 @@ export interface BossPhaseState {
 export const BOSS_PHASE_TEMPLATES: Record<string, PhaseConfig[]> = {
   standard: [
     {
-      name: "The Approach",
+      name: 'The Approach',
       healthThreshold: 1.0,
-      mechanic: "REGENERATION",
+      mechanic: 'REGENERATION',
       mechanicIntensity: 0.0,
       playerCanTakeDamage: false,
-      playerDamageType: "NONE",
+      playerDamageType: 'NONE',
       damageMultiplier: 1.0,
       incomingDamageMultiplier: 0.0,
-      visualIntensity: "normal",
-      audioCue: "boss_phase1_start",
+      visualIntensity: 'normal',
+      audioCue: 'boss_phase1_start',
     },
     {
-      name: "The Crucible",
+      name: 'The Crucible',
       healthThreshold: 0.5,
-      mechanic: "FOCUS_SHIELD",
+      mechanic: 'FOCUS_SHIELD',
       mechanicIntensity: 0.5,
       playerCanTakeDamage: true,
-      playerDamageType: "STREAK_RISK",
+      playerDamageType: 'STREAK_RISK',
       requiredPurity: 85,
       damageMultiplier: 1.2,
       incomingDamageMultiplier: 1.0,
-      visualIntensity: "intense",
-      audioCue: "boss_phase2_start",
+      visualIntensity: 'intense',
+      audioCue: 'boss_phase2_start',
     },
     {
-      name: "The Execution",
+      name: 'The Execution',
       healthThreshold: 0.25,
-      mechanic: "FOCUS_SHIELD",
+      mechanic: 'FOCUS_SHIELD',
       mechanicIntensity: 0.8,
       playerCanTakeDamage: true,
-      playerDamageType: "STREAK_RISK",
+      playerDamageType: 'STREAK_RISK',
       requiredPurity: 90,
       timeLimit: 120, // 2 minutes to finish
       damageMultiplier: 1.5,
       incomingDamageMultiplier: 2.0,
-      visualIntensity: "critical",
-      audioCue: "boss_execute_phase",
+      visualIntensity: 'critical',
+      audioCue: 'boss_execute_phase',
     },
   ],
 
   regeneration_boss: [
     {
-      name: "Dormant",
+      name: 'Dormant',
       healthThreshold: 1.0,
-      mechanic: "REGENERATION",
+      mechanic: 'REGENERATION',
       mechanicIntensity: 0.3,
       playerCanTakeDamage: false,
-      playerDamageType: "NONE",
+      playerDamageType: 'NONE',
       damageMultiplier: 1.0,
       incomingDamageMultiplier: 0.0,
-      visualIntensity: "normal",
-      audioCue: "regen_phase1",
+      visualIntensity: 'normal',
+      audioCue: 'regen_phase1',
     },
     {
-      name: "Regenerating Fury",
+      name: 'Regenerating Fury',
       healthThreshold: 0.6,
-      mechanic: "REGENERATION",
+      mechanic: 'REGENERATION',
       mechanicIntensity: 0.7,
       playerCanTakeDamage: true,
-      playerDamageType: "COIN_PENALTY",
+      playerDamageType: 'COIN_PENALTY',
       damageMultiplier: 0.8, // Harder to damage
       incomingDamageMultiplier: 1.0,
-      visualIntensity: "intense",
-      audioCue: "regen_phase2",
+      visualIntensity: 'intense',
+      audioCue: 'regen_phase2',
     },
     {
-      name: "Final Surge",
+      name: 'Final Surge',
       healthThreshold: 0.3,
-      mechanic: "REGENERATION",
+      mechanic: 'REGENERATION',
       mechanicIntensity: 1.0,
       playerCanTakeDamage: true,
-      playerDamageType: "STREAK_RISK",
+      playerDamageType: 'STREAK_RISK',
       timeLimit: 180,
       damageMultiplier: 1.0,
       incomingDamageMultiplier: 1.5,
-      visualIntensity: "critical",
-      audioCue: "regen_phase3",
+      visualIntensity: 'critical',
+      audioCue: 'regen_phase3',
     },
   ],
 
   sprint_boss: [
     {
-      name: "The Race Begins",
+      name: 'The Race Begins',
       healthThreshold: 1.0,
-      mechanic: "COUNTDOWN",
+      mechanic: 'COUNTDOWN',
       mechanicIntensity: 0.0,
       playerCanTakeDamage: false,
-      playerDamageType: "NONE",
+      playerDamageType: 'NONE',
       damageMultiplier: 1.0,
       incomingDamageMultiplier: 0.0,
-      visualIntensity: "normal",
-      audioCue: "sprint_phase1",
+      visualIntensity: 'normal',
+      audioCue: 'sprint_phase1',
     },
     {
-      name: "Accelerating",
+      name: 'Accelerating',
       healthThreshold: 0.75,
-      mechanic: "COUNTDOWN",
+      mechanic: 'COUNTDOWN',
       mechanicIntensity: 0.5,
       playerCanTakeDamage: false,
-      playerDamageType: "NONE",
+      playerDamageType: 'NONE',
       damageMultiplier: 1.1,
       incomingDamageMultiplier: 0.0,
-      visualIntensity: "intense",
-      audioCue: "sprint_phase2",
+      visualIntensity: 'intense',
+      audioCue: 'sprint_phase2',
     },
     {
-      name: "The Finish Line",
+      name: 'The Finish Line',
       healthThreshold: 0.25,
-      mechanic: "COUNTDOWN",
+      mechanic: 'COUNTDOWN',
       mechanicIntensity: 0.8,
       playerCanTakeDamage: true,
-      playerDamageType: "XP_PENALTY",
+      playerDamageType: 'XP_PENALTY',
       timeLimit: 60,
       damageMultiplier: 1.3,
       incomingDamageMultiplier: 1.0,
-      visualIntensity: "critical",
-      audioCue: "sprint_phase3",
+      visualIntensity: 'critical',
+      audioCue: 'sprint_phase3',
     },
   ],
 };
@@ -180,7 +180,7 @@ export const BOSS_PHASE_TEMPLATES: Record<string, PhaseConfig[]> = {
 
 export function createInitialPhaseState(): BossPhaseState {
   return {
-    currentPhase: "PHASE_1",
+    currentPhase: 'PHASE_1',
     previousPhase: null,
     phaseEnteredAt: Date.now(),
     phaseHealthStart: 100,
@@ -200,8 +200,8 @@ export function calculateCurrentPhase(healthPercent: number, phaseConfigs: Phase
     }
   }
 
-  const phaseMap: BossPhase[] = ["PHASE_1", "PHASE_2", "PHASE_3", "ENRAGED"];
-  const targetPhase = phaseMap[targetPhaseIndex] || "PHASE_1";
+  const phaseMap: BossPhase[] = ['PHASE_1', 'PHASE_2', 'PHASE_3', 'ENRAGED'];
+  const targetPhase = phaseMap[targetPhaseIndex] || 'PHASE_1';
   const changed = targetPhase !== currentState.currentPhase;
 
   return {
@@ -220,7 +220,7 @@ export interface PhaseTransitionResult {
   newPhase: BossPhase;
   message: string;
   playerTookDamage: boolean;
-  damageType: "STREAK_RISK" | "XP_PENALTY" | "COIN_PENALTY" | "NONE";
+  damageType: 'STREAK_RISK' | 'XP_PENALTY' | 'COIN_PENALTY' | 'NONE';
   warnings: string[];
 }
 
@@ -238,13 +238,13 @@ export function handlePhaseTransition(encounter: BossEncounter, phaseState: Boss
   }
 
   // Check pause penalties for certain mechanics
-  if (newPhaseConfig.mechanic === "FOCUS_SHIELD" && sessionPauseCount > 0) {
-    warnings.push("WARNING: Shield phase detected pauses. Streak at risk!");
+  if (newPhaseConfig.mechanic === 'FOCUS_SHIELD' && sessionPauseCount > 0) {
+    warnings.push('WARNING: Shield phase detected pauses. Streak at risk!');
     playerTookDamage = true;
   }
 
   // Check regeneration pause penalty
-  if (newPhaseConfig.mechanic === "REGENERATION" && sessionPauseCount > 0) {
+  if (newPhaseConfig.mechanic === 'REGENERATION' && sessionPauseCount > 0) {
     const regenAmount = Math.floor(encounter.maxHealth * 0.05 * sessionPauseCount);
     warnings.push(`Boss regenerated ${regenAmount} HP from pauses!`);
   }
@@ -291,7 +291,7 @@ export function updateExecutePhase(state: ExecutePhaseState, currentPurity: numb
     return {
       state: { ...state, isActive: false, succeeded: false },
       failed: true,
-      reason: "Time expired",
+      reason: 'Time expired',
     };
   }
 
@@ -346,8 +346,8 @@ export function calculateRegeneration(encounter: BossEncounter, sessionPauseCoun
 // Phase Events & Analytics
 // ============================================================================
 
-export function emitPhaseEvent(encounterId: string, userId: string, event: "PHASE_ENTERED" | "PHASE_FAILED" | "EXECUTE_STARTED" | "EXECUTE_FAILED" | "EXECUTE_SUCCEEDED", data: Record<string, unknown>): void {
-  eventBus.publish("boss:phase", {
+export function emitPhaseEvent(encounterId: string, userId: string, event: 'PHASE_ENTERED' | 'PHASE_FAILED' | 'EXECUTE_STARTED' | 'EXECUTE_FAILED' | 'EXECUTE_SUCCEEDED', data: Record<string, unknown>): void {
+  eventBus.publish('boss:phase', {
     encounterId,
     userId,
     event,
@@ -362,11 +362,11 @@ export function emitPhaseEvent(encounterId: string, userId: string, event: "PHAS
 
 export function getPhaseDisplayName(phase: BossPhase): string {
   const names: Record<BossPhase, string> = {
-    PHASE_1: "Phase 1: The Approach",
-    PHASE_2: "Phase 2: The Crucible",
-    PHASE_3: "Phase 3: The Execution",
-    ENRAGED: "ENRAGED!",
-    EXECUTE: "EXECUTE PHASE",
+    PHASE_1: 'Phase 1: The Approach',
+    PHASE_2: 'Phase 2: The Crucible',
+    PHASE_3: 'Phase 3: The Execution',
+    ENRAGED: 'ENRAGED!',
+    EXECUTE: 'EXECUTE PHASE',
   };
   return names[phase];
 }

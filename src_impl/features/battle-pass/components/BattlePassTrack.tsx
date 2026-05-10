@@ -4,10 +4,19 @@
  * Visual tier track showing free and premium rewards.
  */
 
+<<<<<<< HEAD
 import React from "react";
 import { View, Text, Pressable, ScrollView } from "react-native";
 import { Card, Badge, Button } from "../../../components";
 import type { BattlePassTier, UserBattlePass } from "../types";
+=======
+import React from 'react';
+import { View, Text, Pressable, ScrollView } from 'react-native';
+import { useTheme } from '@/theme';
+import { Card, Badge, Button } from '../../../components';
+import type { BattlePassTier, UserBattlePass } from '../types';
+import { createSheet } from '@/shared/ui/create-sheet';
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 interface BattlePassTrackProps {
   tiers: BattlePassTier[];
@@ -161,29 +170,29 @@ const containerStyle = {
 
 const skeletonTrackStyle = {
   height: 400,
-  backgroundColor: "#E0E0E0",
+  backgroundColor: '#E0E0E0',
   borderRadius: 8,
 };
 
 const errorContainerStyle = {
-  alignItems: "center" as const,
+  alignItems: 'center' as const,
   paddingVertical: 24,
 };
 
 const errorTextStyle = {
   marginBottom: 12,
-  color: "#DC2626",
+  color: '#DC2626',
 };
 
 const emptyTextStyle = {
-  textAlign: "center" as const,
-  color: "#6B7280",
+  textAlign: 'center' as const,
+  color: '#6B7280',
 };
 
 const headerStyle = {
-  flexDirection: "row" as const,
-  justifyContent: "space-between" as const,
-  alignItems: "center" as const,
+  flexDirection: 'row' as const,
+  justifyContent: 'space-between' as const,
+  alignItems: 'center' as const,
   marginBottom: 16,
 };
 
@@ -193,12 +202,12 @@ const progressInfoStyle = {
 
 const tierTextStyle = {
   fontSize: 20,
-  fontWeight: "700" as const,
+  fontWeight: '700' as const,
 };
 
 const xpTextStyle = {
   fontSize: 14,
-  color: "#6B7280",
+  color: '#6B7280',
   marginTop: 2,
 };
 
@@ -208,13 +217,13 @@ const xpBarContainerStyle = {
 
 const xpBarTrackStyle = {
   height: 8,
-  backgroundColor: "#E5E7EB",
+  backgroundColor: '#E5E7EB',
   borderRadius: 4,
 };
 
 const xpBarFillStyle = {
-  height: "100%" as const,
-  backgroundColor: "#4F46E5",
+  height: '100%' as const,
+  backgroundColor: '#4F46E5',
   borderRadius: 4,
 };
 
@@ -223,28 +232,28 @@ const tierListStyle = {
 };
 
 const tierRowStyle = {
-  flexDirection: "row" as const,
-  alignItems: "center" as const,
+  flexDirection: 'row' as const,
+  alignItems: 'center' as const,
   paddingVertical: 8,
   borderBottomWidth: 1,
-  borderBottomColor: "#F3F4F6",
+  borderBottomColor: '#F3F4F6',
 };
 
 const tierRowCurrentStyle = {
-  backgroundColor: "#FEF3C7",
+  backgroundColor: '#FEF3C7',
   borderRadius: 8,
   paddingHorizontal: 8,
 };
 
 const tierNumberContainerStyle = {
   width: 40,
-  alignItems: "center" as const,
+  alignItems: 'center' as const,
 };
 
 const tierNumberStyle = {
   fontSize: 16,
-  fontWeight: "700" as const,
-  color: "#374151",
+  fontWeight: '700' as const,
+  color: '#374151',
 };
 
 const rewardContainerStyle = {
@@ -254,15 +263,15 @@ const rewardContainerStyle = {
 
 const rewardBoxStyle = {
   padding: 12,
-  backgroundColor: "#F3F4F6",
+  backgroundColor: '#F3F4F6',
   borderRadius: 8,
-  alignItems: "center" as const,
+  alignItems: 'center' as const,
 };
 
 const premiumBoxStyle = {
-  backgroundColor: "#FDF4FF",
+  backgroundColor: '#FDF4FF',
   borderWidth: 1,
-  borderColor: "#E9D5FF",
+  borderColor: '#E9D5FF',
 };
 
 const premiumBoxLockedStyle = {
@@ -270,28 +279,28 @@ const premiumBoxLockedStyle = {
 };
 
 const rewardBoxClaimableStyle = {
-  backgroundColor: "#D1FAE5",
-  borderColor: "#10B981",
+  backgroundColor: '#D1FAE5',
+  borderColor: '#10B981',
   borderWidth: 2,
 };
 
 const rewardBoxClaimedStyle = {
-  backgroundColor: "#E5E7EB",
+  backgroundColor: '#E5E7EB',
   opacity: 0.7,
 };
 
 const rewardTypeStyle = {
   fontSize: 10,
-  fontWeight: "600" as const,
-  textTransform: "uppercase" as const,
-  color: "#6B7280",
+  fontWeight: '600' as const,
+  textTransform: 'uppercase' as const,
+  color: '#6B7280',
   marginBottom: 4,
 };
 
 const rewardValueStyle = {
   fontSize: 14,
-  fontWeight: "500" as const,
-  color: "#374151",
+  fontWeight: '500' as const,
+  color: '#374151',
   marginBottom: 8,
 };
 

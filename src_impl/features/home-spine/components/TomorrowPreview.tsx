@@ -1,277 +1,108 @@
-/**
- * TomorrowPreview Component
- *
- * Small card at bottom of home screen: "Tomorrow →"
- * Shows: streak status, challenges reset, events
- * Creates appointment mechanics — users plan around it
- *
- * @phase 5A.3
- */
-
-import React from "react";
-import { Pressable, View } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-
-import { Box } from "../../../components/primitives/Box";
-import { Text } from "../../../components/primitives/Text";
-import { useTheme } from "../../../theme";
+import React from 'react';
+import { Pressable } from 'react-native';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { useTheme } from '../../../theme';
+import { TomorrowPreviewCompact } from './TomorrowPreviewCompact';
+import { TomorrowPreviewPersonalized } from './TomorrowPreviewPersonalized';
+import { TomorrowPreviewSession, type TomorrowPreviewSessionProps } from './TomorrowPreviewSession';
 
 export interface TomorrowPreviewProps {
-  /** Whether streak will be active tomorrow (if session today) */
   streakWillContinue: boolean;
-  /** Current streak days */
   currentStreak: number;
-  /** Challenges resetting tomorrow */
   challengesResetting: string[];
-  /** Events tomorrow */
   events: Array<{
-    type: "double_xp" | "squad_war" | "boss_rush" | "season_event" | "power_hour" | "prime_time";
+    type: 'double_xp' | 'squad_war' | 'boss_rush' | 'season_event' | 'power_hour' | 'prime_time';
     name: string;
     time?: string;
   }>;
-  /** Navigate to full calendar */
   onPress: () => void;
-
-  // Phase 11.3 - Personalized preview data
-  /** Boss data for preview (if boss < 25% health) */
-  bossPreview?: {
-    bossName: string;
-    healthPercent: number;
-    rewardName: string;
-    canDefeatTomorrow: boolean;
-  } | null;
-  /** Streak milestone preview (if milestone in 1 day) */
-  streakMilestonePreview?: {
-    days: number;
-    badgeName: string;
-  } | null;
-  /** Power Hour scheduled tomorrow */
-  powerHourPreview?: {
-    day: string;
-    time: string;
-  } | null;
-  /** Rival preview data */
-  rivalPreview?: {
-    rivalName: string;
-    theirMinutes: number;
-    myMinutes: number;
-    gap: number;
-  } | null;
-  /** Daily challenges not yet completed */
+  bossPreview?: { bossName: string; healthPercent: number; rewardName: string; canDefeatTomorrow: boolean } | null;
+  streakMilestonePreview?: { days: number; badgeName: string } | null;
+  powerHourPreview?: { day: string; time: string } | null;
+  rivalPreview?: { rivalName: string; theirMinutes: number; myMinutes: number; gap: number } | null;
   dailyChallengesIncomplete?: boolean;
-  /** Additional XP available tomorrow */
   xpAvailableTomorrow?: number;
 }
 
-/**
- * Tomorrow preview card
- */
-export function TomorrowPreview({
-  streakWillContinue,
-  currentStreak,
-  challengesResetting,
-  events,
-  onPress,
-  // Phase 11.3 personalized data
-  bossPreview,
-  streakMilestonePreview,
-  powerHourPreview,
-  rivalPreview,
-  dailyChallengesIncomplete,
-  xpAvailableTomorrow,
-}: TomorrowPreviewProps): JSX.Element {
+function EventIcon({ type }: { type: TomorrowPreviewProps['events'][number]['type'] }): JSX.Element {
+  return (
+    <Text fontSize={14}>
+      {type === 'double_xp' && '🔥'}
+      {type === 'squad_war' && '⚔️'}
+      {type === 'boss_rush' && '👹'}
+      {type === 'season_event' && '🌙'}
+    </Text>
+  );
+}
+
+export function TomorrowPreview(props: TomorrowPreviewProps): JSX.Element {
   const { theme } = useTheme();
-
-  // Get streak status message
-  const getStreakMessage = () => {
-    if (streakWillContinue) {
-      return {
-        icon: "🔥",
-        text: `Streak continues (${currentStreak + 1} days)`,
-        color: theme.colors.accent.orange,
-      };
-    }
-    return {
-      icon: "⚠️",
-      text: "Streak at risk — focus today!",
-      color: theme.colors.error.DEFAULT,
-    };
-  };
-
-  const streakStatus = getStreakMessage();
-  const hasEvents = events.length > 0;
-  const hasChallenges = challengesResetting.length > 0;
+  const hasEvents = props.events.length > 0;
+  const hasChallenges = props.challengesResetting.length > 0;
+  const streakStatus = props.streakWillContinue
+    ? { icon: '🔥', text: `Streak continues (${props.currentStreak + 1} days)`, color: theme.colors.accent.orange }
+    : { icon: '⚠️', text: 'Streak at risk - focus today!', color: theme.colors.error.DEFAULT };
 
   return (
     <Animated.View entering={FadeInUp.duration(500).delay(400)}>
-      <Pressable onPress={onPress} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
+      <Pressable onPress={props.onPress} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
         <Box m="lg" p="lg" borderRadius="xl" bg="background.secondary" borderWidth={2} borderColor="border.light">
-          {/* Header */}
           <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb="md">
             <Box flexDirection="row" alignItems="center" gap="sm">
               <Text fontSize={20}>➡️</Text>
-              <Text variant="h4" color="text.primary">
-                Tomorrow
-              </Text>
+              <Text variant="h4" color="text.primary">Tomorrow</Text>
             </Box>
-            <Text variant="caption" color="text.tertiary">
-              View calendar ›
-            </Text>
+            <Text variant="caption" color="text.tertiary">View calendar ›</Text>
           </Box>
-
-          {/* Streak status */}
-          <Box flexDirection="row" alignItems="center" gap="sm" mb={hasEvents || hasChallenges ? "md" : undefined}>
+          <Box flexDirection="row" alignItems="center" gap="sm" mb={hasEvents || hasChallenges ? 'md' : undefined}>
             <Text fontSize={20}>{streakStatus.icon}</Text>
-            <Text variant="body" color={streakStatus.color} fontWeight="600">
-              {streakStatus.text}
-            </Text>
+            <Text variant="body" color={streakStatus.color} fontWeight="600">{streakStatus.text}</Text>
           </Box>
-
-          {/* Challenges resetting */}
-          {hasChallenges && (
-            <Box mb={hasEvents ? "md" : undefined}>
+          {hasChallenges ? (
+            <Box mb={hasEvents ? 'md' : undefined}>
               <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
                 <Text fontSize={16}>🔄</Text>
-                <Text variant="caption" color="text.tertiary">
-                  CHALLENGES RESET
-                </Text>
+                <Text variant="caption" color="text.tertiary">CHALLENGES RESET</Text>
               </Box>
-              {challengesResetting.map((challenge, i) => (
-                <Text key={i} variant="bodySmall" color="text.secondary" ml="lg">
-                  • {challenge}
-                </Text>
+              {props.challengesResetting.map((challenge) => (
+                <Text key={challenge} variant="bodySmall" color="text.secondary" ml="lg">• {challenge}</Text>
               ))}
             </Box>
-          )}
-
-          {/* Events */}
-          {hasEvents && (
+          ) : null}
+          {hasEvents ? (
             <Box>
               <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
                 <Text fontSize={16}>📅</Text>
-                <Text variant="caption" color="text.tertiary">
-                  EVENTS
-                </Text>
+                <Text variant="caption" color="text.tertiary">EVENTS</Text>
               </Box>
-              {events.map((event, i) => (
-                <Box key={i} flexDirection="row" alignItems="center" gap="sm" ml="lg">
-                  <Text fontSize={14}>
-                    {event.type === "double_xp" && "🔥"}
-                    {event.type === "squad_war" && "⚔️"}
-                    {event.type === "boss_rush" && "👹"}
-                    {event.type === "season_event" && "🌙"}
-                  </Text>
-                  <Text variant="bodySmall" color="text.secondary">
-                    {event.name}
-                    {event.time && ` (${event.time})`}
-                  </Text>
+              {props.events.map((event) => (
+                <Box key={`${event.type}:${event.name}`} flexDirection="row" alignItems="center" gap="sm" ml="lg">
+                  <EventIcon type={event.type} />
+                  <Text variant="bodySmall" color="text.secondary">{event.name}{event.time ? ` (${event.time})` : ''}</Text>
                 </Box>
               ))}
             </Box>
-          )}
-
-          {/* Phase 11.3 - Personalized Previews */}
-
-          {/* Boss Preview (if < 25% health) */}
-          {bossPreview && (
-            <Box mb="md">
-              <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
-                <Text fontSize={16}>👹</Text>
-                <Text variant="caption" color="text.tertiary">
-                  BOSS ALERT
-                </Text>
-              </Box>
-              <Box flexDirection="row" alignItems="center" gap="sm" ml="lg">
-                <Text variant="bodySmall" color="text.secondary">
-                  {bossPreview.canDefeatTomorrow ? `One good session defeats ${bossPreview.bossName}! Drops: ${bossPreview.rewardName}` : `${bossPreview.bossName} at ${bossPreview.healthPercent.toFixed(0)}% — squad needs your help!`}
-                </Text>
-              </Box>
-            </Box>
-          )}
-
-          {/* Streak Milestone Preview */}
-          {streakMilestonePreview && (
-            <Box mb="md">
-              <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
-                <Text fontSize={16}>🔥</Text>
-                <Text variant="caption" color="text.tertiary">
-                  STREAK MILESTONE
-                </Text>
-              </Box>
-              <Box flexDirection="row" alignItems="center" gap="sm" ml="lg">
-                <Text variant="bodySmall" color="text.secondary">
-                  {streakMilestonePreview.days}-day streak! Claim your {streakMilestonePreview.badgeName}
-                </Text>
-              </Box>
-            </Box>
-          )}
-
-          {/* Power Hour Preview */}
-          {powerHourPreview && (
-            <Box mb="md">
-              <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
-                <Text fontSize={16}>🌟</Text>
-                <Text variant="caption" color="text.tertiary">
-                  POWER HOUR TOMORROW
-                </Text>
-              </Box>
-              <Box flexDirection="row" alignItems="center" gap="sm" ml="lg">
-                <Text variant="bodySmall" color="text.secondary">
-                  {powerHourPreview.day} at {powerHourPreview.time} — Triple XP for 1 hour!
-                </Text>
-              </Box>
-            </Box>
-          )}
-
-          {/* Rival Preview */}
-          {rivalPreview && (
-            <Box mb="md">
-              <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
-                <Text fontSize={16}>⚔️</Text>
-                <Text variant="caption" color="text.tertiary">
-                  RIVAL ALERT
-                </Text>
-              </Box>
-              <Box flexDirection="row" alignItems="center" gap="sm" ml="lg">
-                <Text variant="bodySmall" color="text.secondary">
-                  {rivalPreview.rivalName} is {rivalPreview.gap} min ahead. Close the gap!
-                </Text>
-              </Box>
-            </Box>
-          )}
-
-          {/* Daily Challenges Incomplete */}
-          {dailyChallengesIncomplete && (
-            <Box mb="md">
-              <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
-                <Text fontSize={16}>📋</Text>
-                <Text variant="caption" color="text.tertiary">
-                  CHALLENGES
-                </Text>
-              </Box>
-              <Box flexDirection="row" alignItems="center" gap="sm" ml="lg">
-                <Text variant="bodySmall" color="text.secondary">
-                  New challenges reset at midnight (+{xpAvailableTomorrow ?? 50} more XP available)
-                </Text>
-              </Box>
-            </Box>
-          )}
-
-          {/* Nothing special */}
-          {!hasEvents && !hasChallenges && !bossPreview && !streakMilestonePreview && !powerHourPreview && !rivalPreview && !dailyChallengesIncomplete && streakWillContinue && (
-            <Box flexDirection="row" alignItems="center" gap="sm">
-              <Text fontSize={16}>✨</Text>
-              <Text variant="bodySmall" color="text.tertiary">
-                Quiet day — perfect for building that streak!
-              </Text>
-            </Box>
-          )}
+          ) : null}
+          <TomorrowPreviewPersonalized
+            bossPreview={props.bossPreview}
+            dailyChallengesIncomplete={props.dailyChallengesIncomplete}
+            hasChallenges={hasChallenges}
+            hasEvents={hasEvents}
+            powerHourPreview={props.powerHourPreview}
+            rivalPreview={props.rivalPreview}
+            streakMilestonePreview={props.streakMilestonePreview}
+            streakWillContinue={props.streakWillContinue}
+            xpAvailableTomorrow={props.xpAvailableTomorrow}
+          />
         </Box>
       </Pressable>
     </Animated.View>
   );
 }
 
+<<<<<<< HEAD
 /**
  * Compact tomorrow preview (for minimal home screen space)
  */
@@ -408,4 +239,7 @@ export function TomorrowPreviewSession({ preview, onPress }: TomorrowPreviewSess
   );
 }
 
+=======
+export { TomorrowPreviewCompact, TomorrowPreviewSession, type TomorrowPreviewSessionProps };
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 export default TomorrowPreview;

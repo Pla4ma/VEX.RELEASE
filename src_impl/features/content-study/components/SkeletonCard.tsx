@@ -3,13 +3,13 @@
  * Shimmer loading effect for content study
  */
 
-import React, { useEffect } from "react";
-import { View, StyleSheet, Dimensions, type StyleProp, type ViewStyle } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated";
-import { useTheme } from "../../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React, { useEffect } from 'react';
+import { View, StyleSheet, Dimensions, type StyleProp, type ViewStyle } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import { useTheme } from '../../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
 
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 interface SkeletonProps {
   width?: number | string;
@@ -18,7 +18,7 @@ interface SkeletonProps {
   style?: StyleProp<ViewStyle>;
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({ width = "100%", height = 12, borderRadius = 6, style }) => {
+const Skeleton: React.FC<SkeletonProps> = ({ width = '100%', height = 12, borderRadius = 6, style }) => {
   const { theme } = useTheme();
   const shimmerAnim = useSharedValue(-1);
 
@@ -30,7 +30,7 @@ const Skeleton: React.FC<SkeletonProps> = ({ width = "100%", height = 12, border
     transform: [{ translateX: shimmerAnim.value * SCREEN_WIDTH }],
   }));
 
-  const widthStyle: ViewStyle = { width: width as ViewStyle["width"] };
+  const widthStyle: ViewStyle = { width: width as ViewStyle['width'] };
 
   return (
     <View
@@ -153,12 +153,12 @@ export const ExtractionSkeleton: React.FC = () => {
 
 const styles = createSheet({
   container: {
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   shimmer: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-    width: "30%",
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    width: '30%',
   },
   card: {
     borderRadius: 16,
@@ -166,24 +166,24 @@ const styles = createSheet({
     margin: 16,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   headerText: {
     marginLeft: 12,
     flex: 1,
   },
   statsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 20,
   },
   taskList: {
     marginTop: 12,
   },
   taskItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginTop: 12,
   },
   taskText: {
@@ -205,8 +205,8 @@ const styles = createSheet({
     padding: 16,
   },
   listItem: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
@@ -223,20 +223,20 @@ const styles = createSheet({
     margin: 16,
   },
   extractionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   extractionText: {
     marginLeft: 12,
     flex: 1,
   },
   stages: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 20,
   },
   stage: {
-    alignItems: "center",
+    alignItems: 'center',
   },
 });
 

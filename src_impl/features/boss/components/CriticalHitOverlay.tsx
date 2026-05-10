@@ -6,11 +6,11 @@
  * Also shows near-miss status after session if applicable.
  */
 
-import React, { useEffect } from "react";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming, withRepeat, withSequence, FadeIn, FadeOut } from "react-native-reanimated";
-import { Box, Text } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import { CritStatus, getCritStatusText, bossCritService } from "../critical-hit-system";
+import React, { useEffect } from 'react';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming, withRepeat, withSequence, FadeIn, FadeOut } from 'react-native-reanimated';
+import { Box, Text } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import { CritStatus, getCritStatusText, bossCritService } from '../critical-hit-system';
 
 // ============================================================================
 // Types
@@ -85,7 +85,7 @@ export const CriticalHitOverlay: React.FC<CriticalHitOverlayProps> = ({ sessionI
       exiting={FadeOut}
       style={[
         {
-          position: "absolute",
+          position: 'absolute',
           top: 80,
           left: 16,
           right: 16,
@@ -98,7 +98,7 @@ export const CriticalHitOverlay: React.FC<CriticalHitOverlayProps> = ({ sessionI
       <Animated.View
         style={[
           {
-            position: "absolute",
+            position: 'absolute',
             top: -10,
             left: -10,
             right: -10,
@@ -151,7 +151,7 @@ export const CriticalHitOverlay: React.FC<CriticalHitOverlayProps> = ({ sessionI
             </Animated.Text>
 
             <Text variant="bodySmall" color={theme.colors.text.secondary} mt={1}>
-              {bossName ? `Maintain focus to deal CRITICAL damage to ${bossName}!` : "Maintain focus for 2x damage!"}
+              {bossName ? `Maintain focus to deal CRITICAL damage to ${bossName}!` : 'Maintain focus for 2x damage!'}
             </Text>
 
             <Text variant="caption" color={theme.colors.warning.DEFAULT} mt={1}>

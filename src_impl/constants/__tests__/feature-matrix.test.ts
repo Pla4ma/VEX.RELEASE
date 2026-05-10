@@ -1,214 +1,148 @@
 /**
- * Feature Matrix Tests - PHASE 8 Verification
- * 
- * Tests to verify all optional systems are properly configured for launch.
+ * Feature Flag Matrix Tests
+ *
+ * Tests for PHASE 8 feature flag configuration to ensure:
+ * - Launch-enabled features are enabled by default
+ * - Optional features are disabled by default but can be enabled
+ * - Disabled features are properly disabled
  */
 
-import { describe, it, expect, beforeEach } from '@jest/globals';
-import { 
-  isFeatureEnabled, 
-  isFeatureOptional, 
-  isFeatureDisabled,
-  getLaunchEnabledFeatures,
-  getOptionalFeatures,
-  getDisabledFeatures,
-  FEATURE_FLAGS
-} from '../features';
+import { FEATURE_FLAGS, FEATURE_FLAG_DEFAULTS, FEATURE_GROUPS } from '../features';
 
-describe('Feature Matrix - PHASE 8 Verification', () => {
-  describe('Launch Enabled Features', () => {
-    it('should have all core features enabled for launch', () => {
-      const coreFeatures = [
-        'sessions',
-        'focus-timer', 
-        'streaks',
-        'rewards',
-        'progression',
-        'achievements',
-        'ai-coach',
-        'notifications',
-        'settings',
-        'profile',
-        'analytics',
-        'offline-support'
+describe('Feature Flag Matrix - PHASE 8', () => {
+  describe('Core Features - Launch Enabled by Default', () => {
+    const coreFeatures = [
+      FEATURE_FLAGS.SESSIONS,
+      FEATURE_FLAGS.SESSION_GRADING,
+      FEATURE_FLAGS.FOCUS_SCORE,
+      FEATURE_FLAGS.DAILY_MISSION,
+      FEATURE_FLAGS.COMPANION,
+      FEATURE_FLAGS.STREAKS,
+      FEATURE_FLAGS.COMEBACK_QUEST,
+      FEATURE_FLAGS.BASIC_REWARDS,
+      FEATURE_FLAGS.XP_PROGRESSION,
+      FEATURE_FLAGS.AI_COACH_BASICS,
+      FEATURE_FLAGS.PAYWALL,
+      FEATURE_FLAGS.SETTINGS,
+    ];
+
+    coreFeatures.forEach(feature => {
+      it(`should have ${feature} enabled by default`, () => {
+        expect(FEATURE_FLAG_DEFAULTS[feature]).toBe(true);
+      });
+
+      it(`should include ${feature} in core group`, () => {
+        expect(FEATURE_GROUPS.core).toContain(feature);
+      });
+    });
+  });
+
+  describe('Optional Features - Launch Optional', () => {
+    const optionalFeatures = [
+      FEATURE_FLAGS.BASIC_SOLO_BOSS,
+      FEATURE_FLAGS.BASIC_CHALLENGES,
+      FEATURE_FLAGS.SQUADS_ACCOUNTABILITY,
+      FEATURE_FLAGS.MONTHLY_REPORT,
+    ];
+
+    optionalFeatures.forEach(feature => {
+      it(`should have ${feature} disabled by default (can be enabled if stable)`, () => {
+        expect(FEATURE_FLAG_DEFAULTS[feature]).toBe(false);
+      });
+
+      it(`should include ${feature} in optional group`, () => {
+        expect(FEATURE_GROUPS.optional).toContain(feature);
+      });
+    });
+  });
+
+  describe('Disabled Features - Launch Disabled', () => {
+    const disabledFeatures = [
+      FEATURE_FLAGS.SOCIAL_FEED,
+      FEATURE_FLAGS.DUELS,
+      FEATURE_FLAGS.RANKINGS,
+      FEATURE_FLAGS.SQUAD_WARS,
+      FEATURE_FLAGS.RIVALS,
+      FEATURE_FLAGS.TRADING,
+      FEATURE_FLAGS.EMERGENCY_GEM_SINKS,
+      FEATURE_FLAGS.COMPLEX_CRAFTING,
+      FEATURE_FLAGS.AR_EXPERIMENTAL,
+    ];
+
+    disabledFeatures.forEach(feature => {
+      it(`should have ${feature} disabled by default`, () => {
+        expect(FEATURE_FLAG_DEFAULTS[feature]).toBe(false);
+      });
+
+      it(`should include ${feature} in disabled group`, () => {
+        expect(FEATURE_GROUPS.disabled).toContain(feature);
+      });
+    });
+  });
+
+  describe('Feature Group Completeness', () => {
+    it('should have all features defined in exactly one launch group', () => {
+      const allLaunchFeatures = [
+        ...FEATURE_GROUPS.core,
+        ...FEATURE_GROUPS.optional,
+        ...FEATURE_GROUPS.disabled,
       ];
 
-      coreFeatures.forEach(feature => {
-        expect(isFeatureEnabled(feature)).toBe(true);
-        expect(isFeatureOptional(feature)).toBe(false);
-        expect(isFeatureDisabled(feature)).toBe(false);
-      });
-    });
-
-    it('should have exactly 12 launch-enabled features', () => {
-      const enabledFeatures = getLaunchEnabledFeatures();
-      expect(enabledFeatures).toHaveLength(12);
-      
-      // Verify specific core features are enabled
-      expect(enabledFeatures).toContain('sessions');
-      expect(enabledFeatures).toContain('focus-timer');
-      expect(enabledFeatures).toContain('streaks');
-      expect(enabledFeatures).toContain('rewards');
-      expect(enabledFeatures).toContain('progression');
-      expect(enabledFeatures).toContain('achievements');
-      expect(enabledFeatures).toContain('ai-coach');
-      expect(enabledFeatures).toContain('notifications');
-      expect(enabledFeatures).toContain('settings');
-      expect(enabledFeatures).toContain('profile');
-      expect(enabledFeatures).toContain('analytics');
-      expect(enabledFeatures).toContain('offline-support');
-    });
-  });
-
-  describe('Optional Features', () => {
-    it('should have exactly 4 optional features for PHASE 8', () => {
-      const optionalFeatures = getOptionalFeatures();
-      expect(optionalFeatures).toHaveLength(4);
-      
-      // Verify specific optional features
-      expect(optionalFeatures).toContain('boss');
-      expect(optionalFeatures).toContain('challenges');
-      expect(optionalFeatures).toContain('squads');
-      expect(optionalFeatures).toContain('monthly-report');
-    });
-
-    it('should mark optional features as neither enabled nor disabled', () => {
-      const optionalFeatures = getOptionalFeatures();
-      
-      optionalFeatures.forEach(feature => {
-        expect(isFeatureEnabled(feature)).toBe(false);
-        expect(isFeatureOptional(feature)).toBe(true);
-        expect(isFeatureDisabled(feature)).toBe(false);
-      });
-    });
-  });
-
-  describe('Disabled Features', () => {
-    it('should have exactly 9 disabled features for launch', () => {
-      const disabledFeatures = getDisabledFeatures();
-      expect(disabledFeatures).toHaveLength(9);
-      
-      // Verify specific disabled features
-      expect(disabledFeatures).toContain('social-feed');
-      expect(disabledFeatures).toContain('duels');
-      expect(disabledFeatures).toContain('rankings');
-      expect(disabledFeatures).toContain('squad-wars');
-      expect(disabledFeatures).toContain('rivals');
-      expect(disabledFeatures).toContain('trading');
-      expect(disabledFeatures).toContain('emergency-gem-sinks');
-      expect(disabledFeatures).toContain('complex-crafting');
-      expect(disabledFeatures).toContain('ar-experimental');
-    });
-
-    it('should mark disabled features as explicitly disabled', () => {
-      const disabledFeatures = getDisabledFeatures();
-      
-      disabledFeatures.forEach(feature => {
-        expect(isFeatureEnabled(feature)).toBe(false);
-        expect(isFeatureOptional(feature)).toBe(false);
-        expect(isFeatureDisabled(feature)).toBe(true);
-      });
-    });
-  });
-
-  describe('Feature Flag Configuration', () => {
-    it('should have complete feature flag configuration', () => {
-      expect(Object.keys(FEATURE_FLAGS)).toHaveLength(25); // 12 + 4 + 9 = 25 total features
-      
-      // Verify all features have proper configuration
-      Object.entries(FEATURE_FLAGS).forEach(([key, config]) => {
-        expect(config).toHaveProperty('enabled');
-        expect(config).toHaveProperty('optional');
-        expect(config).toHaveProperty('disabled');
-        expect(config).toHaveProperty('description');
-        expect(config).toHaveProperty('launchScope');
-        
-        // Ensure mutually exclusive states
-        const enabledCount = [config.enabled, config.optional, config.disabled].filter(Boolean).length;
-        expect(enabledCount).toBe(1); // Exactly one state should be true
-      });
-    });
-
-    it('should have proper launch scope descriptions', () => {
-      const enabledFeatures = getLaunchEnabledFeatures();
-      enabledFeatures.forEach(feature => {
-        const config = FEATURE_FLAGS[feature];
-        expect(config.launchScope).toBe('core');
-        expect(config.description).toMatch(/essential|core|feature/);
-      });
-
-      const optionalFeatures = getOptionalFeatures();
-      optionalFeatures.forEach(feature => {
-        const config = FEATURE_FLAGS[feature];
-        expect(config.launchScope).toBe('optional');
-        expect(config.description).toMatch(/optional|variety/);
-      });
-
-      const disabledFeatures = getDisabledFeatures();
-      disabledFeatures.forEach(feature => {
-        const config = FEATURE_FLAGS[feature];
-        expect(config.launchScope).toBe('disabled');
-        expect(config.description).toMatch(/disabled|launch/);
-      });
-    });
-  });
-
-  describe('PHASE 8 Compliance', () => {
-    it('should ensure no banned features are enabled', () => {
-      const bannedFeatures = ['social-feed', 'duels', 'rankings', 'squad-wars', 'rivals', 'trading'];
-      
-      bannedFeatures.forEach(feature => {
-        expect(isFeatureEnabled(feature)).toBe(false);
-        expect(isFeatureDisabled(feature)).toBe(true);
-      });
-    });
-
-    it('should ensure all optional features are properly gated', () => {
-      const optionalFeatures = getOptionalFeatures();
-      
-      optionalFeatures.forEach(feature => {
-        expect(isFeatureOptional(feature)).toBe(true);
-        // Optional features should not be enabled by default
-        expect(isFeatureEnabled(feature)).toBe(false);
-      });
-    });
-
-    it('should verify feature matrix completeness', () => {
-      const allFeatures = Object.keys(FEATURE_FLAGS);
-      const categorizedFeatures = [
-        ...getLaunchEnabledFeatures(),
-        ...getOptionalFeatures(), 
-        ...getDisabledFeatures()
+      const launchFeatureFlags = [
+        ...Object.values(FEATURE_FLAGS).filter(f =>
+          allLaunchFeatures.includes(f)
+        ),
       ];
-      
-      // All features should be categorized
-      expect(allFeatures.sort()).toEqual(categorizedFeatures.sort());
-      expect(allFeatures).toHaveLength(25);
+
+      expect(allLaunchFeatures).toHaveLength(launchFeatureFlags.length);
+
+      // Check for duplicates
+      const uniqueFeatures = new Set(allLaunchFeatures);
+      expect(uniqueFeatures.size).toBe(allLaunchFeatures.length);
     });
 
-    it('should validate feature flag consistency', () => {
-      Object.entries(FEATURE_FLAGS).forEach(([key, config]) => {
-        // Validate boolean states
-        expect(typeof config.enabled).toBe('boolean');
-        expect(typeof config.optional).toBe('boolean');
-        expect(typeof config.disabled).toBe('boolean');
-        
-        // Validate required fields
-        expect(typeof config.description).toBe('string');
-        expect(typeof config.launchScope).toBe('string');
-        
-        // Validate consistency
-        const enabledCount = [config.enabled, config.optional, config.disabled].filter(Boolean).length;
-        expect(enabledCount).toBe(1);
-        
-        // Validate launch scope matches state
-        if (config.enabled) {
-          expect(config.launchScope).toBe('core');
-        } else if (config.optional) {
-          expect(config.launchScope).toBe('optional');
-        } else if (config.disabled) {
-          expect(config.launchScope).toBe('disabled');
-        }
+    it('should have exactly 12 core features', () => {
+      expect(FEATURE_GROUPS.core).toHaveLength(12);
+    });
+
+    it('should have exactly 4 optional features', () => {
+      expect(FEATURE_GROUPS.optional).toHaveLength(4);
+    });
+
+    it('should have exactly 9 disabled features', () => {
+      expect(FEATURE_GROUPS.disabled).toHaveLength(9);
+    });
+  });
+
+  describe('Navigation Safety', () => {
+    it('should not have any disabled features in core navigation paths', () => {
+      const navigationCriticalFeatures = [
+        FEATURE_FLAGS.SESSIONS,
+        FEATURE_FLAGS.SESSION_GRADING,
+        FEATURE_FLAGS.FOCUS_SCORE,
+        FEATURE_FLAGS.DAILY_MISSION,
+        FEATURE_FLAGS.SETTINGS,
+      ];
+
+      navigationCriticalFeatures.forEach(feature => {
+        expect(FEATURE_FLAG_DEFAULTS[feature]).toBe(true);
+        expect(FEATURE_GROUPS.core).toContain(feature);
+      });
+    });
+
+    it('should have social features properly disabled', () => {
+      const socialFeatures = [
+        FEATURE_FLAGS.SOCIAL_FEED,
+        FEATURE_FLAGS.DUELS,
+        FEATURE_FLAGS.RANKINGS,
+        FEATURE_FLAGS.SQUAD_WARS,
+        FEATURE_FLAGS.RIVALS,
+        FEATURE_FLAGS.TRADING,
+      ];
+
+      socialFeatures.forEach(feature => {
+        expect(FEATURE_FLAG_DEFAULTS[feature]).toBe(false);
+        expect(FEATURE_GROUPS.disabled).toContain(feature);
       });
     });
   });

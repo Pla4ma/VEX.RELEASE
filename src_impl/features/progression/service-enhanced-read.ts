@@ -1,5 +1,5 @@
 import { ProgressionSummarySchema, type Progression } from './schemas';
-import { fetchProgressionEnhanced } from './repository-enhanced';
+import { fetchProgressionEnhanced } from './repository/enhanced';
 import { calculateProgressPercent } from './service-enhanced-math';
 
 export async function getProgressionEnhanced(
@@ -37,3 +37,4 @@ export async function getProgressionSummaryEnhanced(userId: string): Promise<{
     ),
   });
 }
+

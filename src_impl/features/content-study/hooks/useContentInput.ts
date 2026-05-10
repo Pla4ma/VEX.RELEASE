@@ -27,6 +27,20 @@ function createInitialContentInputState(): ContentInputState {
   };
 }
 
+function getUserFacingSubmitError(error: unknown): string {
+  if (!(error instanceof Error)) {
+    return ERROR_MESSAGES.DEFAULT;
+  }
+  const lowerMessage = error.message.toLowerCase();
+  if (lowerMessage.includes('row level security') || lowerMessage.includes('storage upload failed')) {
+    return 'Your PDF could not upload because secure study storage is still syncing. Try again in a moment, or paste the text to keep moving.';
+  }
+  if (lowerMessage.includes('validation failed')) {
+    return 'Check the highlighted input and try again.';
+  }
+  return error.message;
+}
+
 export function useContentInput() {
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
@@ -146,7 +160,11 @@ export function useContentInput() {
       const result = await submitMutation.mutateAsync();
       return result;
     } catch (err) {
-      const message = err instanceof Error ? err.message : ERROR_MESSAGES.DEFAULT;
+      const message = getUserFacingSubmitError(err);
+      captureException(
+        err instanceof Error ? err : new Error('Content study submission failed'),
+        { area: 'content-study.submit' }
+      );
       setState((prev) => ({ ...prev, error: message }));
       throw err;
     } finally {

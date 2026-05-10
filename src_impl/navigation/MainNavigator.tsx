@@ -12,7 +12,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { BattlePassTierToastListener } from '../features/battle-pass/components/BattlePassTierToastListener';
-import { initializeFocusScoreIntegration } from "../features/focus-identity/integration-focus-score";
+import { initializeFocusScoreIntegration } from '../features/focus-identity/integration-focus-score';
 import { VexTabBar } from './components/VexTabBar';
 
 import type { MainTabParams } from './types';

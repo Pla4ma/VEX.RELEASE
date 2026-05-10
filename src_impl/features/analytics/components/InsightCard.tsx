@@ -3,11 +3,11 @@
  * Displays analytics insights with severity indicators
  */
 
-import React from "react";
-import { View, Text, Pressable } from "react-native";
-import { InsightSchema } from "../schemas";
-import type { z } from "zod";
-import { createSheet } from "@/shared/ui/create-sheet";
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
+import { InsightSchema } from '../schemas';
+import type { z } from 'zod';
+import { createSheet } from '@/shared/ui/create-sheet';
 
 type Insight = z.infer<typeof InsightSchema>;
 
@@ -20,29 +20,29 @@ interface InsightCardProps {
 
 const SEVERITY_CONFIG: Record<string, { color: string; bgColor: string; icon: string }> = {
   info: {
-    color: "#3b82f6",
-    bgColor: "#dbeafe",
-    icon: "ℹ️",
+    color: '#3b82f6',
+    bgColor: '#dbeafe',
+    icon: 'ℹ️',
   },
   positive: {
-    color: "#10b981",
-    bgColor: "#d1fae5",
-    icon: "✅",
+    color: '#10b981',
+    bgColor: '#d1fae5',
+    icon: '✅',
   },
   warning: {
-    color: "#f59e0b",
-    bgColor: "#fef3c7",
-    icon: "⚠️",
+    color: '#f59e0b',
+    bgColor: '#fef3c7',
+    icon: '⚠️',
   },
   critical: {
-    color: "#ef4444",
-    bgColor: "#fee2e2",
-    icon: "🚨",
+    color: '#ef4444',
+    bgColor: '#fee2e2',
+    icon: '🚨',
   },
   celebration: {
-    color: "#8b5cf6",
-    bgColor: "#ede9fe",
-    icon: "🎉",
+    color: '#8b5cf6',
+    bgColor: '#ede9fe',
+    icon: '🎉',
   },
 };
 
@@ -66,7 +66,7 @@ export function InsightCard({ insight, onPress, onAction, onDismiss }: InsightCa
 
       {insight.metric && (
         <View style={styles.tagContainer}>
-          <View style={[styles.tag, { backgroundColor: severity.color + "30" }]}>
+          <View style={[styles.tag, { backgroundColor: severity.color + '30' }]}>
             <Text style={[styles.tagText, { color: severity.color }]}>{formatMetricName(insight.metric)}</Text>
           </View>
           <Text style={styles.date}>{formatDate(insight.detectedAt)}</Text>
@@ -92,9 +92,9 @@ export function InsightCard({ insight, onPress, onAction, onDismiss }: InsightCa
 
 function formatMetricName(metric: string): string {
   return metric
-    .split("_")
+    .split('_')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
+    .join(' ');
 }
 
 function formatDate(timestamp: number): string {
@@ -105,7 +105,7 @@ function formatDate(timestamp: number): string {
   const days = Math.floor(hours / 24);
 
   if (hours < 1) {
-    return "Just now";
+    return 'Just now';
   }
   if (hours < 24) {
     return `${hours}h ago`;
@@ -118,12 +118,12 @@ function formatDate(timestamp: number): string {
 
 function formatActionLabel(actionType: string): string {
   const labels: Record<string, string> = {
-    start_session: "Start Session",
-    view_progress: "View Progress",
-    check_challenges: "Check Challenges",
-    invite_friends: "Invite Friends",
-    upgrade_plan: "Upgrade Plan",
-    customize_settings: "Settings",
+    start_session: 'Start Session',
+    view_progress: 'View Progress',
+    check_challenges: 'Check Challenges',
+    invite_friends: 'Invite Friends',
+    upgrade_plan: 'Upgrade Plan',
+    customize_settings: 'Settings',
   };
   return labels[actionType] || actionType;
 }
@@ -140,8 +140,8 @@ const styles = createSheet({
     opacity: 0.8,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 8,
   },
   icon: {
@@ -150,7 +150,7 @@ const styles = createSheet({
   },
   title: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
     flex: 1,
   },
   badge: {
@@ -160,9 +160,9 @@ const styles = createSheet({
     marginLeft: 8,
   },
   badgeText: {
-    color: "#ffffff",
+    color: '#ffffff',
     fontSize: 10,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   unreadDot: {
     width: 8,
@@ -172,14 +172,14 @@ const styles = createSheet({
   },
   description: {
     fontSize: 14,
-    color: "#374151",
+    color: '#374151',
     lineHeight: 20,
     marginBottom: 12,
   },
   tagContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   tag: {
     paddingHorizontal: 8,
@@ -188,14 +188,14 @@ const styles = createSheet({
   },
   tagText: {
     fontSize: 12,
-    fontWeight: "500",
+    fontWeight: '500',
   },
   date: {
     fontSize: 12,
-    color: "#9ca3af",
+    color: '#9ca3af',
   },
   actions: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginTop: 12,
     gap: 12,
   },
@@ -204,20 +204,20 @@ const styles = createSheet({
     paddingVertical: 8,
     borderRadius: 20,
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
   },
   actionButtonText: {
-    color: "#ffffff",
-    fontWeight: "600",
+    color: '#ffffff',
+    fontWeight: '600',
     fontSize: 14,
   },
   dismissButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
   dismissText: {
-    fontWeight: "500",
+    fontWeight: '500',
     fontSize: 14,
   },
 });

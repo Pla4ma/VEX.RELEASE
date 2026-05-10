@@ -1,11 +1,11 @@
-import { z } from "zod";
+import { z } from 'zod';
 
-const asRecord = (value: unknown): Record<string, unknown> => (typeof value === "object" && value !== null ? (value as Record<string, unknown>) : {});
+const asRecord = (value: unknown): Record<string, unknown> => (typeof value === 'object' && value !== null ? (value as Record<string, unknown>) : {});
 
 const readString = (row: Record<string, unknown>, ...keys: string[]): string | undefined => {
   for (const key of keys) {
     const value = row[key];
-    if (typeof value === "string" && value.length > 0) {
+    if (typeof value === 'string' && value.length > 0) {
       return value;
     }
   }
@@ -15,10 +15,10 @@ const readString = (row: Record<string, unknown>, ...keys: string[]): string | u
 const readNumber = (row: Record<string, unknown>, ...keys: string[]): number | undefined => {
   for (const key of keys) {
     const value = row[key];
-    if (typeof value === "number" && Number.isFinite(value)) {
+    if (typeof value === 'number' && Number.isFinite(value)) {
       return value;
     }
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       const parsed = Date.parse(value);
       if (!Number.isNaN(parsed)) {
         return parsed;
@@ -35,18 +35,18 @@ const readNumber = (row: Record<string, unknown>, ...keys: string[]): number | u
 const readBoolean = (row: Record<string, unknown>, ...keys: string[]): boolean | undefined => {
   for (const key of keys) {
     const value = row[key];
-    if (typeof value === "boolean") {
+    if (typeof value === 'boolean') {
       return value;
     }
   }
   return undefined;
 };
 
-export const ChallengeTypeSchema = z.enum(["DAILY", "WEEKLY", "EVENT"]);
-export const ChallengeStatusSchema = z.enum(["ACTIVE", "COMPLETED", "CLAIMED", "EXPIRED", "REROLLED", "ABANDONED"]);
-export const ChallengeCategorySchema = z.enum(["SESSIONS", "MINUTES", "STREAK", "BOSS_DAMAGE", "SQUAD_ACTIVITY", "SHOP_PURCHASE", "LEVEL_UP", "ACHIEVEMENT", "SOCIAL"]);
-export const ChallengeDifficultySchema = z.enum(["EASY", "MEDIUM", "HARD", "EXPERT"]);
-export const DailyChallengeTriggerTypeSchema = z.enum(["SESSION_COMPLETED", "MOOD_LOGGED", "STREAK_CHECKED", "PURITY_RECORDED", "STREAK_UPDATED"]);
+export const ChallengeTypeSchema = z.enum(['DAILY', 'WEEKLY', 'EVENT']);
+export const ChallengeStatusSchema = z.enum(['ACTIVE', 'COMPLETED', 'CLAIMED', 'EXPIRED', 'REROLLED', 'ABANDONED']);
+export const ChallengeCategorySchema = z.enum(['SESSIONS', 'MINUTES', 'STREAK', 'BOSS_DAMAGE', 'SQUAD_ACTIVITY', 'SHOP_PURCHASE', 'LEVEL_UP', 'ACHIEVEMENT', 'SOCIAL']);
+export const ChallengeDifficultySchema = z.enum(['EASY', 'MEDIUM', 'HARD', 'EXPERT']);
+export const DailyChallengeTriggerTypeSchema = z.enum(['SESSION_COMPLETED', 'MOOD_LOGGED', 'STREAK_CHECKED', 'PURITY_RECORDED', 'STREAK_UPDATED']);
 
 export const ProgressHistoryEntrySchema = z
   .object({
@@ -68,17 +68,17 @@ const ChallengeShape = z
       .string()
       .nullable()
       .default(null)
-      .transform((value) => value ?? ""),
+      .transform((value) => value ?? ''),
     iconUrl: z.string().nullable().default(null),
     targetValue: z.number().int().positive(),
     targetType: z.string().min(1),
-    rewardType: z.string().min(1).default("XP"),
+    rewardType: z.string().min(1).default('XP'),
     rewardAmount: z.number().int().nonnegative().default(0),
     rewardItemId: z.string().nullable().default(null),
     startAt: z.number().int().nullable().default(null),
     endAt: z.number().int().nullable().default(null),
     isActive: z.boolean().default(true),
-    difficulty: ChallengeDifficultySchema.default("MEDIUM"),
+    difficulty: ChallengeDifficultySchema.default('MEDIUM'),
     xpBonus: z.number().int().nonnegative().default(0),
     createdAt: z.number().int().nonnegative().default(0),
   })
@@ -87,24 +87,24 @@ const ChallengeShape = z
 export const ChallengeSchema = z.preprocess((value) => {
   const row = asRecord(value);
   return {
-    id: readString(row, "id") ?? "",
-    seasonId: readString(row, "seasonId", "season_id") ?? "",
-    type: readString(row, "type") ?? "DAILY",
-    category: readString(row, "category") ?? "SESSIONS",
-    title: readString(row, "title") ?? "",
-    description: readString(row, "description") ?? "",
-    iconUrl: readString(row, "iconUrl", "icon_url") ?? null,
-    targetValue: readNumber(row, "targetValue", "target_value") ?? 1,
-    targetType: readString(row, "targetType", "target_type") ?? "SESSIONS",
-    rewardType: readString(row, "rewardType", "reward_type") ?? "XP",
-    rewardAmount: readNumber(row, "rewardAmount", "reward_amount") ?? 0,
-    rewardItemId: readString(row, "rewardItemId", "reward_item_id") ?? null,
-    startAt: readNumber(row, "startAt", "start_at") ?? null,
-    endAt: readNumber(row, "endAt", "end_at") ?? null,
-    isActive: readBoolean(row, "isActive", "is_active") ?? true,
-    difficulty: readString(row, "difficulty") ?? "MEDIUM",
-    xpBonus: readNumber(row, "xpBonus", "xp_bonus") ?? 0,
-    createdAt: readNumber(row, "createdAt", "created_at") ?? Date.now(),
+    id: readString(row, 'id') ?? '',
+    seasonId: readString(row, 'seasonId', 'season_id') ?? '',
+    type: readString(row, 'type') ?? 'DAILY',
+    category: readString(row, 'category') ?? 'SESSIONS',
+    title: readString(row, 'title') ?? '',
+    description: readString(row, 'description') ?? '',
+    iconUrl: readString(row, 'iconUrl', 'icon_url') ?? null,
+    targetValue: readNumber(row, 'targetValue', 'target_value') ?? 1,
+    targetType: readString(row, 'targetType', 'target_type') ?? 'SESSIONS',
+    rewardType: readString(row, 'rewardType', 'reward_type') ?? 'XP',
+    rewardAmount: readNumber(row, 'rewardAmount', 'reward_amount') ?? 0,
+    rewardItemId: readString(row, 'rewardItemId', 'reward_item_id') ?? null,
+    startAt: readNumber(row, 'startAt', 'start_at') ?? null,
+    endAt: readNumber(row, 'endAt', 'end_at') ?? null,
+    isActive: readBoolean(row, 'isActive', 'is_active') ?? true,
+    difficulty: readString(row, 'difficulty') ?? 'MEDIUM',
+    xpBonus: readNumber(row, 'xpBonus', 'xp_bonus') ?? 0,
+    createdAt: readNumber(row, 'createdAt', 'created_at') ?? Date.now(),
   };
 }, ChallengeShape);
 
@@ -130,20 +130,20 @@ const ChallengeTemplateShape = z
 export const ChallengeTemplateSchema = z.preprocess((value) => {
   const row = asRecord(value);
   return {
-    id: readString(row, "id") ?? "",
-    category: readString(row, "category") ?? "SESSIONS",
-    type: readString(row, "type") ?? "DAILY",
-    titleTemplate: readString(row, "titleTemplate", "title_template") ?? "",
-    descriptionTemplate: readString(row, "descriptionTemplate", "description_template") ?? "",
-    minTarget: readNumber(row, "minTarget", "min_target") ?? 1,
-    maxTarget: readNumber(row, "maxTarget", "max_target") ?? 1,
-    minReward: readNumber(row, "minReward", "min_reward") ?? 0,
-    maxReward: readNumber(row, "maxReward", "max_reward") ?? 0,
-    rewardType: readString(row, "rewardType", "reward_type") ?? "XP",
-    weight: readNumber(row, "weight") ?? 1,
-    minLevel: readNumber(row, "minLevel", "min_level") ?? 1,
-    requiresPremium: readBoolean(row, "requiresPremium", "requires_premium") ?? false,
-    requiresSquad: readBoolean(row, "requiresSquad", "requires_squad") ?? false,
+    id: readString(row, 'id') ?? '',
+    category: readString(row, 'category') ?? 'SESSIONS',
+    type: readString(row, 'type') ?? 'DAILY',
+    titleTemplate: readString(row, 'titleTemplate', 'title_template') ?? '',
+    descriptionTemplate: readString(row, 'descriptionTemplate', 'description_template') ?? '',
+    minTarget: readNumber(row, 'minTarget', 'min_target') ?? 1,
+    maxTarget: readNumber(row, 'maxTarget', 'max_target') ?? 1,
+    minReward: readNumber(row, 'minReward', 'min_reward') ?? 0,
+    maxReward: readNumber(row, 'maxReward', 'max_reward') ?? 0,
+    rewardType: readString(row, 'rewardType', 'reward_type') ?? 'XP',
+    weight: readNumber(row, 'weight') ?? 1,
+    minLevel: readNumber(row, 'minLevel', 'min_level') ?? 1,
+    requiresPremium: readBoolean(row, 'requiresPremium', 'requires_premium') ?? false,
+    requiresSquad: readBoolean(row, 'requiresSquad', 'requires_squad') ?? false,
   };
 }, ChallengeTemplateShape);
 
@@ -153,7 +153,7 @@ const UserChallengeShape = z
     userId: z.string().min(1),
     challengeId: z.string().min(1),
     currentValue: z.number().int().nonnegative().default(0),
-    status: ChallengeStatusSchema.default("ACTIVE"),
+    status: ChallengeStatusSchema.default('ACTIVE'),
     assignedAt: z.number().int().nonnegative().default(0),
     completedAt: z.number().int().nullable().default(null),
     claimedAt: z.number().int().nullable().default(null),
@@ -169,20 +169,20 @@ const UserChallengeShape = z
 export const UserChallengeSchema = z.preprocess((value) => {
   const row = asRecord(value);
   return {
-    id: readString(row, "id") ?? "",
-    userId: readString(row, "userId", "user_id") ?? "",
-    challengeId: readString(row, "challengeId", "challenge_id") ?? "",
-    currentValue: readNumber(row, "currentValue", "current_value") ?? 0,
-    status: readString(row, "status") ?? "ACTIVE",
-    assignedAt: readNumber(row, "assignedAt", "assigned_at") ?? Date.now(),
-    completedAt: readNumber(row, "completedAt", "completed_at") ?? null,
-    claimedAt: readNumber(row, "claimedAt", "claimed_at") ?? null,
-    expiresAt: readNumber(row, "expiresAt", "expires_at") ?? null,
-    rerollCount: readNumber(row, "rerollCount", "reroll_count") ?? 0,
-    rerolledFromId: readString(row, "rerolledFromId", "rerolled_from_id") ?? null,
-    lastProgressAt: readNumber(row, "lastProgressAt", "last_progress_at") ?? null,
+    id: readString(row, 'id') ?? '',
+    userId: readString(row, 'userId', 'user_id') ?? '',
+    challengeId: readString(row, 'challengeId', 'challenge_id') ?? '',
+    currentValue: readNumber(row, 'currentValue', 'current_value') ?? 0,
+    status: readString(row, 'status') ?? 'ACTIVE',
+    assignedAt: readNumber(row, 'assignedAt', 'assigned_at') ?? Date.now(),
+    completedAt: readNumber(row, 'completedAt', 'completed_at') ?? null,
+    claimedAt: readNumber(row, 'claimedAt', 'claimed_at') ?? null,
+    expiresAt: readNumber(row, 'expiresAt', 'expires_at') ?? null,
+    rerollCount: readNumber(row, 'rerollCount', 'reroll_count') ?? 0,
+    rerolledFromId: readString(row, 'rerolledFromId', 'rerolled_from_id') ?? null,
+    lastProgressAt: readNumber(row, 'lastProgressAt', 'last_progress_at') ?? null,
     progressHistory: Array.isArray(row.progressHistory) ? row.progressHistory : Array.isArray(row.progress_history) ? row.progress_history : [],
-    createdAt: readNumber(row, "createdAt", "created_at") ?? Date.now(),
+    createdAt: readNumber(row, 'createdAt', 'created_at') ?? Date.now(),
   };
 }, UserChallengeShape);
 

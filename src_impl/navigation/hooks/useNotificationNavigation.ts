@@ -18,6 +18,10 @@ function getNotificationType(data: Record<string, unknown>): string {
   return typeof data.type === 'string' ? data.type : 'unknown';
 }
 
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
 function navigateFromNotification(
   type: string,
   navigationRef: NavigationContainerRefWithCurrent<ExtendedRootStackParams>,
@@ -78,50 +82,72 @@ export function useNotificationNavigation({
   userId,
 }: UseNotificationNavigationInput): void {
   useEffect(() => {
-    const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
-      const data = response.notification.request.content.data as Record<string, unknown>;
-      const type = getNotificationType(data);
-      const notificationId = response.notification.request.identifier;
+    if (!isAuthenticated || !userId) {
+      return undefined;
+    }
 
-      if (!navigationRef.isReady() || !isAuthenticated || !userId) {
-        return;
-      }
+    try {
+      const subscription = Notifications.addNotificationResponseReceivedListener((response) => {
+        const data = response.notification.request.content.data as Record<string, unknown>;
+        const type = getNotificationType(data);
+        const notificationId = response.notification.request.identifier;
 
-      trackNotificationOpened(type, userId, notificationId);
-      addBreadcrumb(`Navigating from notification: ${type}`, 'navigation.deep_link', {
-        notificationType: type,
-        notificationId,
-        userId,
+        if (!navigationRef.isReady()) {
+          return;
+        }
+
+        trackNotificationOpened(type, userId, notificationId);
+        addBreadcrumb(`Navigating from notification: ${type}`, 'navigation.deep_link', {
+          notificationType: type,
+          notificationId,
+          userId,
+        });
+
+        navigateFromNotification(type, navigationRef);
       });
 
-      navigateFromNotification(type, navigationRef);
-    });
-
-    return () => subscription.remove();
+      return () => subscription.remove();
+    } catch (error) {
+      addBreadcrumb('Notification response listener unavailable', 'notifications.expo_go', {
+        reason: getErrorMessage(error),
+      });
+      return undefined;
+    }
   }, [isAuthenticated, navigationRef, userId]);
 
   useEffect(() => {
-    const subscription = Notifications.addNotificationReceivedListener((notification) => {
-      const data = notification.request.content.data as Record<string, unknown>;
-      const type = getNotificationType(data);
+    if (!isAuthenticated) {
+      return undefined;
+    }
 
-      if (type === 'streak_reminder' || type === 'RETENTION_STREAK_PROTECTION') {
-        eventBus.publish('notification:in_app_banner', {
-          message: notification.request.content.body ?? 'Reminder',
-          type: 'streak',
-          data: { originalNotificationId: notification.request.identifier },
-        });
-      }
+    try {
+      const subscription = Notifications.addNotificationReceivedListener((notification) => {
+        const data = notification.request.content.data as Record<string, unknown>;
+        const type = getNotificationType(data);
 
-      if (type === 'session_prompt') {
-        eventBus.publish('notification:in_app_banner', {
-          message: notification.request.content.body ?? 'Time to focus!',
-          type: 'session',
-          data: { originalNotificationId: notification.request.identifier },
-        });
-      }
-    });
+        if (type === 'streak_reminder' || type === 'RETENTION_STREAK_PROTECTION') {
+          eventBus.publish('notification:in_app_banner', {
+            message: notification.request.content.body ?? 'Reminder',
+            type: 'streak',
+            data: { originalNotificationId: notification.request.identifier },
+          });
+        }
 
-    return () => subscription.remove();
-  }, []);
+        if (type === 'session_prompt') {
+          eventBus.publish('notification:in_app_banner', {
+            message: notification.request.content.body ?? 'Time to focus!',
+            type: 'session',
+            data: { originalNotificationId: notification.request.identifier },
+          });
+        }
+      });
+
+      return () => subscription.remove();
+    } catch (error) {
+      addBreadcrumb('Foreground notification listener unavailable', 'notifications.expo_go', {
+        reason: getErrorMessage(error),
+      });
+      return undefined;
+    }
+  }, [isAuthenticated]);
 }

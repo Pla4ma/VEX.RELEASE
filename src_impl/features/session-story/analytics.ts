@@ -4,7 +4,7 @@
  * Comprehensive analytics tracking for narrative generation, storytelling, and session chronicles features.
  */
 
-import { capture } from "../../shared/analytics/analytics-service";
+import { capture } from '../../shared/analytics/analytics-service';
 
 // ============================================================================
 // STORY LIFECYCLE ANALYTICS
@@ -14,7 +14,7 @@ export function trackStoryGenerated(
   userId: string,
   sessionId: string,
   storyId: string,
-  generationType: "automatic" | "manual" | "hybrid" | "template",
+  generationType: 'automatic' | 'manual' | 'hybrid' | 'template',
   generationTime: number,
   narrative: {
     title: string;
@@ -37,7 +37,7 @@ export function trackStoryGenerated(
     history: string[];
   },
 ): void {
-  capture("session_story_generated", {
+  capture('session_story_generated', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -53,7 +53,7 @@ export function trackStoryStarted(
   userId: string,
   sessionId: string,
   storyId: string,
-  startType: "beginning" | "resume" | "jump_in" | "preview",
+  startType: 'beginning' | 'resume' | 'jump_in' | 'preview',
   chapter: number,
   scene: number,
   context: {
@@ -68,7 +68,7 @@ export function trackStoryStarted(
     outcomes: string[];
   },
 ): void {
-  capture("session_story_started", {
+  capture('session_story_started', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -84,7 +84,7 @@ export function trackStoryProgressed(
   userId: string,
   sessionId: string,
   storyId: string,
-  progressType: "chapter" | "scene" | "event" | "milestone" | "choice",
+  progressType: 'chapter' | 'scene' | 'event' | 'milestone' | 'choice',
   previousProgress: {
     chapter: number;
     scene: number;
@@ -108,7 +108,7 @@ export function trackStoryProgressed(
     skips: number;
   },
 ): void {
-  capture("session_story_progressed", {
+  capture('session_story_progressed', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -125,7 +125,7 @@ export function trackStoryCompleted(
   sessionId: string,
   storyId: string,
   completedAt: Date,
-  completionType: "natural" | "skipped" | "abandoned" | "timeout",
+  completionType: 'natural' | 'skipped' | 'abandoned' | 'timeout',
   totalDuration: number,
   finalProgress: {
     chaptersCompleted: number;
@@ -147,7 +147,7 @@ export function trackStoryCompleted(
     retention: number;
   },
 ): void {
-  capture("session_story_completed", {
+  capture('session_story_completed', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -169,7 +169,7 @@ export function trackNarrativeBranchTaken(
   sessionId: string,
   storyId: string,
   branchId: string,
-  branchType: "choice" | "consequence" | "random" | "conditional",
+  branchType: 'choice' | 'consequence' | 'random' | 'conditional',
   takenAt: Date,
   decision: {
     option: string;
@@ -196,7 +196,7 @@ export function trackNarrativeBranchTaken(
     future: string[];
   },
 ): void {
-  capture("session_story_narrative_branch_taken", {
+  capture('session_story_narrative_branch_taken', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -216,7 +216,7 @@ export function trackNarrativeCharacterIntroduced(
   storyId: string,
   characterId: string,
   characterName: string,
-  characterType: "protagonist" | "antagonist" | "supporting" | "npc" | "mentor" | "companion",
+  characterType: 'protagonist' | 'antagonist' | 'supporting' | 'npc' | 'mentor' | 'companion',
   introducedAt: Date,
   introduction: {
     method: string;
@@ -237,7 +237,7 @@ export function trackNarrativeCharacterIntroduced(
     dynamics: string[];
   },
 ): void {
-  capture("session_story_narrative_character_introduced", {
+  capture('session_story_narrative_character_introduced', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -256,7 +256,7 @@ export function trackNarrativeTwistRevealed(
   sessionId: string,
   storyId: string,
   twistId: string,
-  twistType: "plot" | "character" | "world" | "motivation" | "identity" | "time",
+  twistType: 'plot' | 'character' | 'world' | 'motivation' | 'identity' | 'time',
   revealedAt: Date,
   revelation: {
     method: string;
@@ -283,7 +283,7 @@ export function trackNarrativeTwistRevealed(
     speculation: string[];
   },
 ): void {
-  capture("session_story_narrative_twist_revealed", {
+  capture('session_story_narrative_twist_revealed', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -333,7 +333,7 @@ export function trackStoryChoicePresented(
     warnings: string[];
   },
 ): void {
-  capture("session_story_choice_presented", {
+  capture('session_story_choice_presented', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -372,7 +372,7 @@ export function trackStoryChoiceMade(
     doubts: string[];
   },
 ): void {
-  capture("session_story_choice_made", {
+  capture('session_story_choice_made', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -395,7 +395,7 @@ export function trackStoryChoiceConsequence(
   consequenceId: string,
   triggeredAt: Date,
   consequence: {
-    type: "immediate" | "delayed" | "conditional" | "cumulative";
+    type: 'immediate' | 'delayed' | 'conditional' | 'cumulative';
     description: string;
     severity: string;
     duration: string;
@@ -415,7 +415,7 @@ export function trackStoryChoiceConsequence(
     hinted: boolean;
   },
 ): void {
-  capture("session_story_choice_consequence", {
+  capture('session_story_choice_consequence', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -439,7 +439,7 @@ export function trackCharacterRelationshipChanged(
   storyId: string,
   characterId: string,
   relationshipType: string,
-  changeType: "improved" | "deteriorated" | "transformed" | "revealed" | "ended",
+  changeType: 'improved' | 'deteriorated' | 'transformed' | 'revealed' | 'ended',
   changedAt: Date,
   previousState: {
     level: number;
@@ -464,7 +464,7 @@ export function trackCharacterRelationshipChanged(
     future: string[];
   },
 ): void {
-  capture("session_story_character_relationship_changed", {
+  capture('session_story_character_relationship_changed', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -484,7 +484,7 @@ export function trackCharacterDevelopment(
   sessionId: string,
   storyId: string,
   characterId: string,
-  developmentType: "growth" | "regression" | "transformation" | "revelation" | "redemption",
+  developmentType: 'growth' | 'regression' | 'transformation' | 'revelation' | 'redemption',
   developedAt: Date,
   development: {
     aspect: string;
@@ -510,7 +510,7 @@ export function trackCharacterDevelopment(
     opportunities: string[];
   },
 ): void {
-  capture("session_story_character_development", {
+  capture('session_story_character_development', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -533,7 +533,7 @@ export function trackWorldElementDiscovered(
   sessionId: string,
   storyId: string,
   elementId: string,
-  elementType: "location" | "lore" | "history" | "culture" | "technology" | "magic" | "secret",
+  elementType: 'location' | 'lore' | 'history' | 'culture' | 'technology' | 'magic' | 'secret',
   discoveredAt: Date,
   discovery: {
     method: string;
@@ -555,7 +555,7 @@ export function trackWorldElementDiscovered(
     story: string[];
   },
 ): void {
-  capture("session_story_world_element_discovered", {
+  capture('session_story_world_element_discovered', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -573,7 +573,7 @@ export function trackWorldStateChanged(
   sessionId: string,
   storyId: string,
   stateId: string,
-  changeType: "environmental" | "political" | "social" | "magical" | "technological" | "temporal",
+  changeType: 'environmental' | 'political' | 'social' | 'magical' | 'technological' | 'temporal',
   changedAt: Date,
   change: {
     description: string;
@@ -600,7 +600,7 @@ export function trackWorldStateChanged(
     dangers: string[];
   },
 ): void {
-  capture("session_story_world_state_changed", {
+  capture('session_story_world_state_changed', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -624,7 +624,7 @@ export function trackStoryAchievementUnlocked(
   storyId: string,
   achievementId: string,
   achievementName: string,
-  achievementType: "completion" | "exploration" | "choice" | "relationship" | "discovery" | "mastery",
+  achievementType: 'completion' | 'exploration' | 'choice' | 'relationship' | 'discovery' | 'mastery',
   progress: {
     current: number;
     required: number;
@@ -652,7 +652,7 @@ export function trackStoryAchievementUnlocked(
     public: boolean;
   },
 ): void {
-  capture("session_story_achievement_unlocked", {
+  capture('session_story_achievement_unlocked', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -673,13 +673,13 @@ export function trackStoryMilestoneReached(
   sessionId: string,
   storyId: string,
   milestoneId: string,
-  milestoneType: "chapter" | "plot" | "character" | "world" | "choice" | "time",
+  milestoneType: 'chapter' | 'plot' | 'character' | 'world' | 'choice' | 'time',
   milestoneName: string,
   value: number,
   target: number,
   previousRecord: number,
   improvement: number,
-  significance: "personal" | "story" | "session" | "global",
+  significance: 'personal' | 'story' | 'session' | 'global',
   recognition: {
     badge: string;
     title: string;
@@ -693,7 +693,7 @@ export function trackStoryMilestoneReached(
     unlocks: string[];
   },
 ): void {
-  capture("session_story_milestone_reached", {
+  capture('session_story_milestone_reached', {
     user_id: userId,
     session_id: sessionId,
     story_id: storyId,
@@ -716,7 +716,7 @@ export function trackStoryMilestoneReached(
 
 export function trackStoryDashboardViewed(
   userId: string,
-  dashboardType: "overview" | "story_detail" | "choices" | "characters" | "world",
+  dashboardType: 'overview' | 'story_detail' | 'choices' | 'characters' | 'world',
   filters: {
     timeframe: string;
     genre: string[];
@@ -734,7 +734,7 @@ export function trackStoryDashboardViewed(
     role: string;
   },
 ): void {
-  capture("session_story_dashboard_viewed", {
+  capture('session_story_dashboard_viewed', {
     user_id: userId,
     dashboard_type: dashboardType,
     filters,
@@ -764,7 +764,7 @@ export function trackStoryUserProperties(
     storyComplexityPreference: string;
   },
 ): void {
-  capture("session_story_user_properties", {
+  capture('session_story_user_properties', {
     user_id: userId,
     total_stories: userProperties.totalStories,
     completed_stories: userProperties.completedStories,
@@ -787,7 +787,7 @@ export function trackStoryUserProperties(
 
 export function trackStoryError(
   userId: string,
-  errorType: "generation_error" | "progression_error" | "choice_error" | "analytics_error" | "system_error",
+  errorType: 'generation_error' | 'progression_error' | 'choice_error' | 'analytics_error' | 'system_error',
   errorCode: string,
   errorMessage: string,
   context: {
@@ -798,7 +798,7 @@ export function trackStoryError(
     storyId?: string;
   },
 ): void {
-  capture("session_story_error", {
+  capture('session_story_error', {
     user_id: userId,
     error_type: errorType,
     error_code: errorCode,
@@ -811,8 +811,8 @@ export function trackStoryError(
 // FUNNEL ANALYTICS
 // ============================================================================
 
-export function trackStoryFunnel(userId: string, step: "story_generated" | "story_started" | "first_choice" | "chapter_completed" | "story_completed" | "achievement_unlocked"): void {
-  capture("session_story_funnel", {
+export function trackStoryFunnel(userId: string, step: 'story_generated' | 'story_started' | 'first_choice' | 'chapter_completed' | 'story_completed' | 'achievement_unlocked'): void {
+  capture('session_story_funnel', {
     user_id: userId,
     funnel_step: step,
   });

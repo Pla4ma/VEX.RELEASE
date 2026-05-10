@@ -375,47 +375,47 @@ function DataComponent() {
 
 ## Anti-Patterns to Avoid
 
-### ❌ Don't Use StyleSheet.create (BANNED PATTERN)
+### ❌ Don't Use tokenized styles
 
 ```tsx
-// VIOLATION - This pattern is banned in AGENTS.md
-// const styles = StyleSheet.create({
-//   container: { padding: 16 },
-// });
+// Wrong
+const styles = tokenized styles({
+  container: { padding: 16 },
+});
 
-// CORRECT - Use theme tokens and inline styles
+// Correct
 <View style={{ padding: theme.spacing.md }} />
 ```
 
-### ❌ Don't Hardcode Colors (BANNED PATTERN)
+### ❌ Don't Hardcode Colors
 
 ```tsx
-// VIOLATION - Hardcoded colors are banned in AGENTS.md
-// <Text style={{ color: '#000000' }} />
+// Wrong
+<Text style={{ color: '#000000' }} />
 
-// CORRECT - Always use theme tokens
+// Correct
 <Text style={{ color: theme.colors.text.primary }} />
 ```
 
-### ❌ Don't Use console.log (BANNED PATTERN)
+### ❌ Don't Use debug logger
 
 ```tsx
-// VIOLATION - console.log is banned in AGENTS.md
-// console.log('Debug', value);
+// Wrong
+debug logger('Debug', value);
 
-// CORRECT - Use the debug utility
+// Correct
 import { createDebugger } from '../utils/debug';
 const debug = createDebugger('component:Name');
 debug.log('Debug', value);
 ```
 
-### ❌ Don't Use any (BANNED PATTERN)
+### ❌ Don't Use any
 
 ```tsx
-// VIOLATION - 'any' type is banned in AGENTS.md
-// function process(data: any) { }
+// Wrong
+function process(data: unknown) { }
 
-// CORRECT - Use proper TypeScript types
+// Correct
 function process(data: DataType) { }
 ```
 
@@ -442,3 +442,4 @@ function process(data: DataType) { }
 - [UI_STANDARDS.md](../UI_STANDARDS.md) - Complete standards
 - [Theme Tokens](../theme/tokens/) - All theme values
 - [Primitive Components](./primitives/) - Building blocks
+

@@ -8,12 +8,12 @@
  * The "almost got it" feeling creates urgency to complete similar challenges.
  */
 
-import React, { useEffect } from "react";
-import Animated, { useSharedValue, useAnimatedStyle, withDelay, withSpring, withTiming, withRepeat, withSequence, FadeInUp, FadeIn } from "react-native-reanimated";
-import { Box, Text, Button } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import * as Sentry from "@sentry/react-native";
-import { getAnalyticsService } from "@/analytics/AnalyticsService";
+import React, { useEffect } from 'react';
+import Animated, { useSharedValue, useAnimatedStyle, withDelay, withSpring, withTiming, withRepeat, withSequence, FadeInUp, FadeIn } from 'react-native-reanimated';
+import { Box, Text, Button } from '@/components/primitives';
+import { useTheme } from '@/theme';
+import * as Sentry from '@sentry/react-native';
+import { getAnalyticsService } from '@/analytics/AnalyticsService';
 
 // ============================================================================
 // Types
@@ -51,6 +51,19 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
   // Validate props
   const isValidNearMiss = progressPercent >= NEAR_MISS_THRESHOLD && progressPercent < COMPLETE_THRESHOLD;
 
+<<<<<<< HEAD
+=======
+  if (!isValidNearMiss) {
+    // Log analytics but don't render
+    Sentry.addBreadcrumb({
+      category: 'challenges',
+      message: `NearMissIndicator rendered with invalid progress: ${progressPercent}%`,
+      level: 'warning',
+    });
+    return null;
+  }
+
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   // Animation values
   const pulseOpacity = useSharedValue(0.6);
   const progressWidth = useSharedValue(0);
@@ -99,16 +112,16 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
   // Get encouraging message based on progress
   const getNearMissMessage = (progress: number): string => {
     if (progress >= 95) {
-      return "So close! Just a tiny bit more!";
+      return 'So close! Just a tiny bit more!';
     }
     if (progress >= 90) {
-      return "Almost had it! Next time for sure!";
+      return 'Almost had it! Next time for sure!';
     }
     if (progress >= 85) {
       return "Great effort! You're getting close!";
     }
     if (progress >= 80) {
-      return "Good progress! Keep pushing!";
+      return 'Good progress! Keep pushing!';
     }
     return "Not bad! You'll nail it next time!";
   };
@@ -116,7 +129,7 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
   // Format time until next challenge
   const formatTimeUntil = (hours: number): string => {
     if (hours <= 1) {
-      return "Less than an hour";
+      return 'Less than an hour';
     }
     if (hours < 24) {
       return `${Math.ceil(hours)} hours`;
@@ -124,7 +137,7 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
     const days = Math.floor(hours / 24);
     const remainingHours = Math.ceil(hours % 24);
     if (remainingHours === 0) {
-      return `${days} day${days > 1 ? "s" : ""}`;
+      return `${days} day${days > 1 ? 's' : ''}`;
     }
     return `${days}d ${remainingHours}h`;
   };
@@ -168,7 +181,7 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
 
         {/* Progress bar with pulse at the end */}
         <Box mb={5}>
-          <Box height={12} borderRadius={6} bg={theme.colors.background.tertiary} style={{ overflow: "hidden" }}>
+          <Box height={12} borderRadius={6} bg={theme.colors.background.tertiary} style={{ overflow: 'hidden' }}>
             {/* Background track */}
             <Box position="absolute" top={0} left={0} right={0} bottom={0} bg={theme.colors.background.tertiary} />
 
@@ -176,7 +189,7 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
             <Animated.View
               style={[
                 {
-                  height: "100%",
+                  height: '100%',
                   backgroundColor: theme.colors.error.DEFAULT,
                   borderRadius: 6,
                 },
@@ -188,7 +201,7 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
             <Animated.View
               style={[
                 {
-                  position: "absolute",
+                  position: 'absolute',
                   right: 0,
                   top: -2,
                   bottom: -2,
@@ -226,7 +239,7 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
 
           <Text variant="bodySmall" color={theme.colors.text.secondary}>
             Near-misses like this mean you're on the right track.
-            {userName ? `${userName}, y` : "Y"}ou were just
+            {userName ? `${userName}, y` : 'Y'}ou were just
             {Math.round(100 - progressPercent)}% away from completing this challenge.
           </Text>
         </Box>
@@ -286,18 +299,18 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
  */
 export function trackChallengeNearMiss(challengeId: string, progressPercent: number): void {
   Sentry.addBreadcrumb({
-    category: "challenges",
-    message: "Challenge near-miss recorded",
-    level: "info",
+    category: 'challenges',
+    message: 'Challenge near-miss recorded',
+    level: 'info',
     data: {
       challengeId,
       progressPercent,
       threshold: NEAR_MISS_THRESHOLD,
-      type: "near_miss",
+      type: 'near_miss',
     },
   });
 
-  getAnalyticsService().track("challenge_near_miss", {
+  getAnalyticsService().track('challenge_near_miss', {
     challenge_id: challengeId,
     progress_percent: progressPercent,
     miss_by_percent: 100 - progressPercent,
@@ -311,8 +324,8 @@ export function trackChallengeNearMiss(challengeId: string, progressPercent: num
 /**
  * Hook to determine if a challenge result qualifies as a near-miss
  */
-export function useIsNearMiss(progressPercent: number, status: "completed" | "expired" | "failed"): boolean {
-  return status === "expired" && progressPercent >= NEAR_MISS_THRESHOLD && progressPercent < COMPLETE_THRESHOLD;
+export function useIsNearMiss(progressPercent: number, status: 'completed' | 'expired' | 'failed'): boolean {
+  return status === 'expired' && progressPercent >= NEAR_MISS_THRESHOLD && progressPercent < COMPLETE_THRESHOLD;
 }
 
 // ============================================================================

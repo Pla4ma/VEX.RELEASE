@@ -20,7 +20,7 @@ export const DEFAULT_RETRY_CONFIG: RetryConfig = {
   maxDelayMs: 10000,
   backoffMultiplier: 2,
   jitterFactor: 0.3,
-  retryableErrors: ["NETWORK_ERROR", "TIMEOUT", "RATE_LIMIT", "SERVICE_UNAVAILABLE", "CONNECTION_RESET"],
+  retryableErrors: ['NETWORK_ERROR', 'TIMEOUT', 'RATE_LIMIT', 'SERVICE_UNAVAILABLE', 'CONNECTION_RESET'],
 };
 
 export class RetryableError extends Error {
@@ -30,7 +30,7 @@ export class RetryableError extends Error {
     public retryable: boolean = true,
   ) {
     super(message);
-    this.name = "RetryableError";
+    this.name = 'RetryableError';
   }
 }
 
@@ -40,14 +40,14 @@ export class NonRetryableError extends Error {
     public code: string,
   ) {
     super(message);
-    this.name = "NonRetryableError";
+    this.name = 'NonRetryableError';
   }
 }
 
 /**
  * Execute function with exponential backoff retry
  */
-export async function withRetry<T>(operation: () => Promise<T>, config: Partial<RetryConfig> = {}, context: string = "unknown"): Promise<T> {
+export async function withRetry<T>(operation: () => Promise<T>, config: Partial<RetryConfig> = {}, context: string = 'unknown'): Promise<T> {
   const fullConfig = { ...DEFAULT_RETRY_CONFIG, ...config };
   let lastError: Error | undefined;
 
@@ -118,7 +118,7 @@ function isRetryableError(error: Error, config: RetryConfig): boolean {
   }
 
   // Network errors are generally retryable
-  if (error.message.includes("network") || error.message.includes("timeout") || error.message.includes("ETIMEDOUT") || error.message.includes("ECONNRESET") || error.message.includes("ECONNREFUSED")) {
+  if (error.message.includes('network') || error.message.includes('timeout') || error.message.includes('ETIMEDOUT') || error.message.includes('ECONNRESET') || error.message.includes('ECONNREFUSED')) {
     return true;
   }
 
@@ -130,7 +130,7 @@ function isRetryableError(error: Error, config: RetryConfig): boolean {
  */
 function extractErrorCode(error: Error): string {
   // Check for custom error code property
-  if ("code" in error && typeof error.code === "string") {
+  if ('code' in error && typeof error.code === 'string') {
     return error.code;
   }
 
@@ -140,7 +140,7 @@ function extractErrorCode(error: Error): string {
     return codeMatch[1];
   }
 
-  return "UNKNOWN_ERROR";
+  return 'UNKNOWN_ERROR';
 }
 
 /**
@@ -166,10 +166,10 @@ export const DEFAULT_CIRCUIT_BREAKER_CONFIG: CircuitBreakerConfig = {
   halfOpenMaxCalls: 3,
 };
 
-type CircuitState = "CLOSED" | "OPEN" | "HALF_OPEN";
+type CircuitState = 'CLOSED' | 'OPEN' | 'HALF_OPEN';
 
 export class CircuitBreaker {
-  private state: CircuitState = "CLOSED";
+  private state: CircuitState = 'CLOSED';
   private failureCount = 0;
   private lastFailureTime: number | null = null;
   private halfOpenSuccesses = 0;
@@ -180,9 +180,9 @@ export class CircuitBreaker {
   ) {}
 
   async execute<T>(operation: () => Promise<T>): Promise<T> {
-    if (this.state === "OPEN") {
+    if (this.state === 'OPEN') {
       if (this.shouldAttemptReset()) {
-        this.transitionTo("HALF_OPEN");
+        this.transitionTo('HALF_OPEN');
       } else {
         throw new CircuitBreakerOpenError(`Circuit breaker '${this.name}' is OPEN - too many failures`, this.getTimeUntilReset());
       }
@@ -199,10 +199,10 @@ export class CircuitBreaker {
   }
 
   private onSuccess(): void {
-    if (this.state === "HALF_OPEN") {
+    if (this.state === 'HALF_OPEN') {
       this.halfOpenSuccesses++;
       if (this.halfOpenSuccesses >= this.config.halfOpenMaxCalls) {
-        this.transitionTo("CLOSED");
+        this.transitionTo('CLOSED');
       }
     } else {
       this.failureCount = 0;
@@ -213,10 +213,10 @@ export class CircuitBreaker {
     this.failureCount++;
     this.lastFailureTime = Date.now();
 
-    if (this.state === "HALF_OPEN") {
-      this.transitionTo("OPEN");
+    if (this.state === 'HALF_OPEN') {
+      this.transitionTo('OPEN');
     } else if (this.failureCount >= this.config.failureThreshold) {
-      this.transitionTo("OPEN");
+      this.transitionTo('OPEN');
     }
   }
 
@@ -237,10 +237,10 @@ export class CircuitBreaker {
 
   private transitionTo(newState: CircuitState): void {
     this.state = newState;
-    if (newState === "CLOSED") {
+    if (newState === 'CLOSED') {
       this.failureCount = 0;
       this.halfOpenSuccesses = 0;
-    } else if (newState === "HALF_OPEN") {
+    } else if (newState === 'HALF_OPEN') {
       this.halfOpenSuccesses = 0;
     }
   }
@@ -256,7 +256,7 @@ export class CircuitBreakerOpenError extends Error {
     public timeUntilResetMs: number,
   ) {
     super(message);
-    this.name = "CircuitBreakerOpenError";
+    this.name = 'CircuitBreakerOpenError';
   }
 }
 

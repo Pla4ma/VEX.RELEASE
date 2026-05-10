@@ -3,48 +3,48 @@
  */
 
 export interface SessionEventDefinitions {
-  "session:created": {
+  'session:created': {
     sessionId: string;
     userId: string;
     config: unknown;
     timestamp: number;
   };
-  "session:starting": {
+  'session:starting': {
     sessionId: string;
     countdown: number;
     timestamp: number;
   };
-  "session:started": { sessionId: string; startedAt: number; phase: string };
-  "session:paused": {
+  'session:started': { sessionId: string; startedAt: number; phase: string };
+  'session:paused': {
     sessionId: string;
     pausedAt: number;
     reason?: string;
     userId: string;
   };
-  "session:resumed": {
+  'session:resumed': {
     sessionId: string;
     resumedAt: number;
     pausedDuration: number;
     userId: string;
   };
-  "session:phase:changed": {
+  'session:phase:changed': {
     sessionId: string;
     previousPhase: string;
     newPhase: string;
     timestamp: number;
   };
-  "session:interval:completed": {
+  'session:interval:completed': {
     sessionId: string;
     interval: number;
     totalIntervals: number;
     timestamp: number;
   };
-  "session:completing": {
+  'session:completing': {
     sessionId: string;
     timestamp: number;
     completionPercentage: number;
   };
-  "session:completed": {
+  'session:completed': {
     sessionId: string;
     userId: string;
     summary?: unknown;
@@ -52,169 +52,169 @@ export interface SessionEventDefinitions {
     duration: number;
     quality?: number;
   };
-  "session:partial": {
+  'session:partial': {
     sessionId: string;
     userId: string;
     summary: unknown;
     timestamp: number;
     partialReason: string;
   };
-  "session:abandoned": {
+  'session:abandoned': {
     sessionId: string;
     userId: string;
     abandonedAt: number;
     reason?: string;
     elapsedTime: number;
   };
-  "session:failed": {
+  'session:failed': {
     sessionId: string;
     userId: string;
     error: string;
     timestamp: number;
     canRecover: boolean;
   };
-  "session:tick": {
+  'session:tick': {
     sessionId: string;
     elapsed: number;
     remaining: number;
     percentage: number;
     phase: string;
   };
-  "session:progress": {
+  'session:progress': {
     sessionId: string;
     phase: string;
     interval: number;
     percentage: number;
     timeRemaining: number;
   };
-  "session:interruption": {
+  'session:interruption': {
     sessionId: string;
     interruption: unknown;
     userId: string;
   };
-  "session:interruption:risk": {
+  'session:interruption:risk': {
     sessionId: string;
-    riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+    riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
     timeUntilRisk: number;
     userId: string;
   };
-  "session:backgrounded": {
+  'session:backgrounded': {
     sessionId: string;
     userId: string;
     backgroundedAt: number;
   };
-  "session:foregrounded": {
+  'session:foregrounded': {
     sessionId: string;
     userId: string;
     foregroundedAt: number;
     duration: number;
   };
-  "session:recovery:attempted": {
+  'session:recovery:attempted': {
     sessionId: string;
     recovery: unknown;
     userId: string;
   };
-  "session:recovery:successful": {
+  'session:recovery:successful': {
     sessionId: string;
     userId: string;
     recoveredAt: number;
     recoveredTime: number;
   };
-  "session:recovery:failed": {
+  'session:recovery:failed': {
     sessionId: string;
     userId: string;
     failedAt: number;
     reason: string;
   };
-  "session:score:updated": {
+  'session:score:updated': {
     sessionId: string;
     userId: string;
     score: number;
     previousScore: number;
     reason: string;
   };
-  "session:bonus:earned": {
+  'session:bonus:earned': {
     sessionId: string;
     userId: string;
     type: string;
     amount: number;
     description: string;
   };
-  "session:damage:taken": {
+  'session:damage:taken': {
     sessionId: string;
     userId: string;
     amount: number;
     reason: string;
     remainingHealth?: number;
   };
-  "session:anticheat:flag": {
+  'session:anticheat:flag': {
     sessionId: string;
     userId: string;
     flag: unknown;
   };
-  "session:anticheat:cleared": {
+  'session:anticheat:cleared': {
     sessionId: string;
     userId: string;
     clearedAt: number;
   };
-  "session:sync:started": {
+  'session:sync:started': {
     sessionId: string;
     userId: string;
     timestamp: number;
   };
-  "session:sync:completed": {
+  'session:sync:completed': {
     sessionId: string;
     userId: string;
     timestamp: number;
   };
-  "session:sync:failed": {
+  'session:sync:failed': {
     sessionId: string;
     userId: string;
     error: string;
     timestamp: number;
     willRetry: boolean;
   };
-  "session:combat_initialized": {
+  'session:combat_initialized': {
     encounterId: string;
     bossId: string;
     bossName: string;
     maxHealth: number;
   };
-  "session:combat_attack": {
+  'session:combat_attack': {
     sessionId: string;
     userId: string;
     damage: number;
     target: string;
   };
-  "session:combat_combo": {
+  'session:combat_combo': {
     sessionId: string;
     userId: string;
     comboCount: number;
     damage: number;
   };
-  "session:combat_phase_change": {
+  'session:combat_phase_change': {
     sessionId: string;
     previousPhase: string;
     newPhase: string;
   };
-  "session:combat_near_death": {
+  'session:combat_near_death': {
     sessionId: string;
     userId: string;
     healthPercentage: number;
   };
-  "session:combat_victory": {
+  'session:combat_victory': {
     sessionId: string;
     userId: string;
     bossId: string;
     duration: number;
   };
-  "session:boss_defeated": {
+  'session:boss_defeated': {
     sessionId: string;
     userId: string;
     bossId: string;
     rewards: unknown;
   };
-  "sync:operation_failed": {
+  'sync:operation_failed': {
     operation: {
       id: string;
       type: string;
@@ -225,64 +225,64 @@ export interface SessionEventDefinitions {
     };
     timestamp: number;
   };
-  "session:conflict:detected": {
+  'session:conflict:detected': {
     sessionId: string;
     userId: string;
     localState: unknown;
     remoteState: unknown;
   };
-  "session:conflict:resolved": {
+  'session:conflict:resolved': {
     sessionId: string;
     userId: string;
-    resolution: "LOCAL" | "REMOTE" | "MERGED";
+    resolution: 'LOCAL' | 'REMOTE' | 'MERGED';
     timestamp: number;
   };
-  "session:streak:maintained": {
+  'session:streak:maintained': {
     sessionId: string;
     userId: string;
     streakDays: number;
     timestamp: number;
   };
-  "session:streak:broken": {
+  'session:streak:broken': {
     sessionId: string;
     userId: string;
     previousStreak: number;
     timestamp: number;
   };
-  "session:streak:protected": {
+  'session:streak:protected': {
     sessionId: string;
     userId: string;
     protectionType: string;
     timestamp: number;
   };
-  "session:rewards:calculated": {
+  'session:rewards:calculated': {
     sessionId: string;
     userId: string;
     rewards: unknown;
     timestamp: number;
   };
-  "session:rewards:granted": {
+  'session:rewards:granted': {
     sessionId: string;
     userId: string;
     rewards: unknown;
     timestamp: number;
   };
-  "session:notification": {
+  'session:notification': {
     sessionId: string;
     type: string;
     title: string;
     body: string;
-    priority: "low" | "normal" | "high" | "urgent";
+    priority: 'low' | 'normal' | 'high' | 'urgent';
     data?: Record<string, unknown>;
   };
-  "session:analytics:milestone": {
+  'session:analytics:milestone': {
     sessionId: string;
     userId: string;
     milestone: string;
     value: number;
     timestamp: number;
   };
-  "session:analytics:engagement": {
+  'session:analytics:engagement': {
     sessionId: string;
     userId: string;
     metric: string;
@@ -290,7 +290,7 @@ export interface SessionEventDefinitions {
     timestamp: number;
   };
   // Alias for compatibility with extended properties
-  "sessions:completed": {
+  'sessions:completed': {
     sessionId: string;
     userId: string;
     summary?: unknown;
@@ -305,11 +305,11 @@ export interface SessionEventDefinitions {
     competitiveMode?: boolean;
     leaderboardId?: string;
   };
-  "session:difficulty_selected": {
+  'session:difficulty_selected': {
     difficulty: string;
     timestamp: number;
   };
-  "session:stakes_completed": {
+  'session:stakes_completed': {
     userId: string;
     sessionId: string;
     difficulty: string;
@@ -317,7 +317,7 @@ export interface SessionEventDefinitions {
     winStreakUpdated?: number;
     timestamp?: number;
   };
-  "session:mode_phases": {
+  'session:mode_phases': {
     userId: string;
     sessionId: string;
     mode: string;

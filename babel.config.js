@@ -10,9 +10,32 @@
 
 module.exports = function(api) {
   api.cache(true);
+
+  function vitestMockHoistPlugin({ types: t }) {
+    return {
+      visitor: {
+        CallExpression(path) {
+          const { callee } = path.node;
+          if (
+            t.isMemberExpression(callee) &&
+            t.isIdentifier(callee.object, { name: 'vi' }) &&
+            (
+              t.isIdentifier(callee.property, { name: 'mock' }) ||
+              t.isIdentifier(callee.property, { name: 'unmock' })
+            )
+          ) {
+            callee.object = t.identifier('jest');
+          }
+        },
+      },
+    };
+  }
+
   return {
     presets: ['babel-preset-expo'],
     plugins: [
+      vitestMockHoistPlugin,
+      '@babel/plugin-transform-dynamic-import',
       [
         'module-resolver',
         {

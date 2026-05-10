@@ -14,7 +14,7 @@
  * - Themes (color schemes)
  */
 
-import { eventBus } from "../events";
+import { eventBus } from '../events';
 
 // ============================================================================
 // Accessibility Preferences
@@ -31,7 +31,7 @@ export interface AccessibilityPreferences {
 
   // Visual
   highContrast: boolean;
-  colorBlindMode: "none" | "protanopia" | "deuteranopia" | "tritanopia" | "achromatopsia";
+  colorBlindMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia' | 'achromatopsia';
   textScale: number; // 1.0 = default, up to 2.0
   boldText: boolean;
 
@@ -50,7 +50,7 @@ export const DEFAULT_ACCESSIBILITY: AccessibilityPreferences = {
   reducedMotion: false,
   animationsEnabled: true,
   highContrast: false,
-  colorBlindMode: "none",
+  colorBlindMode: 'none',
   textScale: 1.0,
   boldText: false,
   simplifiedUI: false,
@@ -86,7 +86,7 @@ export function calculateContrastRatio(color1: string, color2: string): number {
 
 function calculateLuminance(color: string): number {
   // Convert hex to RGB
-  const hex = color.replace("#", "");
+  const hex = color.replace('#', '');
   const r = parseInt(hex.substring(0, 2), 16) / 255;
   const g = parseInt(hex.substring(2, 4), 16) / 255;
   const b = parseInt(hex.substring(4, 6), 16) / 255;
@@ -135,7 +135,7 @@ export function getAccessibleAlternatives(targetColor: string, backgroundColor: 
 }
 
 function adjustBrightness(color: string, percent: number): string {
-  const hex = color.replace("#", "");
+  const hex = color.replace('#', '');
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
@@ -149,14 +149,14 @@ function adjustBrightness(color: string, percent: number): string {
   const ng = adjust(g);
   const nb = adjust(b);
 
-  return `#${nr.toString(16).padStart(2, "0")}${ng.toString(16).padStart(2, "0")}${nb.toString(16).padStart(2, "0")}`;
+  return `#${nr.toString(16).padStart(2, '0')}${ng.toString(16).padStart(2, '0')}${nb.toString(16).padStart(2, '0')}`;
 }
 
 // ============================================================================
 // Color Blind Friendly Palettes
 // ============================================================================
 
-export type ColorBlindType = "none" | "protanopia" | "deuteranopia" | "tritanopia" | "achromatopsia";
+export type ColorBlindType = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia' | 'achromatopsia';
 
 export interface ColorBlindPalette {
   type: ColorBlindType;
@@ -179,88 +179,88 @@ export interface ColorBlindPalette {
 
 export const COLOR_BLIND_PALETTES: Record<ColorBlindType, ColorBlindPalette> = {
   none: {
-    type: "none",
-    name: "Standard",
-    description: "Default color vision",
+    type: 'none',
+    name: 'Standard',
+    description: 'Default color vision',
     colors: {
-      primary: "#4299E1",
-      secondary: "#9F7AEA",
-      success: "#48BB78",
-      warning: "#ED8936",
-      error: "#E53E3E",
-      info: "#38B2AC",
+      primary: '#4299E1',
+      secondary: '#9F7AEA',
+      success: '#48BB78',
+      warning: '#ED8936',
+      error: '#E53E3E',
+      info: '#38B2AC',
     },
-    patterns: { success: "✓", warning: "⚠", error: "✕" },
+    patterns: { success: '✓', warning: '⚠', error: '✕' },
   },
   protanopia: {
-    type: "protanopia",
-    name: "Protanopia (Red-Blind)",
-    description: "Cannot perceive red light",
+    type: 'protanopia',
+    name: 'Protanopia (Red-Blind)',
+    description: 'Cannot perceive red light',
     colors: {
-      primary: "#3182CE",
-      secondary: "#805AD5",
-      success: "#38A169",
-      warning: "#D69E2E",
-      error: "#9B2C2C",
-      info: "#2C7A7B",
+      primary: '#3182CE',
+      secondary: '#805AD5',
+      success: '#38A169',
+      warning: '#D69E2E',
+      error: '#9B2C2C',
+      info: '#2C7A7B',
     },
-    patterns: { success: "●", warning: "◐", error: "○" },
+    patterns: { success: '●', warning: '◐', error: '○' },
   },
   deuteranopia: {
-    type: "deuteranopia",
-    name: "Deuteranopia (Green-Blind)",
-    description: "Cannot perceive green light",
+    type: 'deuteranopia',
+    name: 'Deuteranopia (Green-Blind)',
+    description: 'Cannot perceive green light',
     colors: {
-      primary: "#2B6CB0",
-      secondary: "#6B46C1",
-      success: "#276749",
-      warning: "#B7791F",
-      error: "#742A2A",
-      info: "#234E52",
+      primary: '#2B6CB0',
+      secondary: '#6B46C1',
+      success: '#276749',
+      warning: '#B7791F',
+      error: '#742A2A',
+      info: '#234E52',
     },
-    patterns: { success: "●", warning: "◐", error: "○" },
+    patterns: { success: '●', warning: '◐', error: '○' },
   },
   tritanopia: {
-    type: "tritanopia",
-    name: "Tritanopia (Blue-Blind)",
-    description: "Cannot perceive blue light",
+    type: 'tritanopia',
+    name: 'Tritanopia (Blue-Blind)',
+    description: 'Cannot perceive blue light',
     colors: {
-      primary: "#2C5282",
-      secondary: "#553C9A",
-      success: "#2F855A",
-      warning: "#C05621",
-      error: "#9B2C2C",
-      info: "#2C7A7B",
+      primary: '#2C5282',
+      secondary: '#553C9A',
+      success: '#2F855A',
+      warning: '#C05621',
+      error: '#9B2C2C',
+      info: '#2C7A7B',
     },
-    patterns: { success: "●", warning: "◐", error: "○" },
+    patterns: { success: '●', warning: '◐', error: '○' },
   },
   achromatopsia: {
-    type: "achromatopsia",
-    name: "Achromatopsia (Total Color Blind)",
-    description: "Cannot perceive any color",
+    type: 'achromatopsia',
+    name: 'Achromatopsia (Total Color Blind)',
+    description: 'Cannot perceive any color',
     colors: {
-      primary: "#4A5568",
-      secondary: "#718096",
-      success: "#2D3748",
-      warning: "#A0AEC0",
-      error: "#1A202C",
-      info: "#718096",
+      primary: '#4A5568',
+      secondary: '#718096',
+      success: '#2D3748',
+      warning: '#A0AEC0',
+      error: '#1A202C',
+      info: '#718096',
     },
-    patterns: { success: "●", warning: "◐", error: "○" },
+    patterns: { success: '●', warning: '◐', error: '○' },
   },
 };
 
 /**
  * Get accessible color for current color blind mode
  */
-export function getAccessibleColor(colorType: "primary" | "secondary" | "success" | "warning" | "error" | "info", colorBlindMode: ColorBlindType): string {
+export function getAccessibleColor(colorType: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info', colorBlindMode: ColorBlindType): string {
   return COLOR_BLIND_PALETTES[colorBlindMode].colors[colorType];
 }
 
 /**
  * Get pattern indicator for status
  */
-export function getStatusPattern(status: "success" | "warning" | "error", colorBlindMode: ColorBlindType): string {
+export function getStatusPattern(status: 'success' | 'warning' | 'error', colorBlindMode: ColorBlindType): string {
   return COLOR_BLIND_PALETTES[colorBlindMode].patterns[status];
 }
 
@@ -271,7 +271,7 @@ export function getStatusPattern(status: "success" | "warning" | "error", colorB
 export interface ScreenReaderAnnouncement {
   id: string;
   message: string;
-  priority: "polite" | "assertive";
+  priority: 'polite' | 'assertive';
   timestamp: number;
 }
 
@@ -280,7 +280,7 @@ const announcements: ScreenReaderAnnouncement[] = [];
 /**
  * Announce message to screen readers
  */
-export function announce(message: string, priority: "polite" | "assertive" = "polite"): void {
+export function announce(message: string, priority: 'polite' | 'assertive' = 'polite'): void {
   const announcement: ScreenReaderAnnouncement = {
     id: `ann-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     message,
@@ -296,8 +296,8 @@ export function announce(message: string, priority: "polite" | "assertive" = "po
   }
 
   // Map accessibility priorities to event priorities
-  const eventPriority = priority === "assertive" ? "high" : "normal";
-  eventBus.publish("accessibility:announce", { message, priority: eventPriority });
+  const eventPriority = priority === 'assertive' ? 'high' : 'normal';
+  eventBus.publish('accessibility:announce', { message, priority: eventPriority });
 }
 
 /**
@@ -329,7 +329,7 @@ export function generateAccessibleLabel(element: { type: string; text?: string; 
     parts.push(`, double tap to ${element.action}`);
   }
 
-  return parts.join("");
+  return parts.join('');
 }
 
 // ============================================================================
@@ -349,14 +349,14 @@ export function getAnimationConfig(baseDuration: number, reducedMotion: boolean)
   if (reducedMotion) {
     return {
       duration: 0, // Instant transitions
-      easing: "linear",
+      easing: 'linear',
       useReducedMotion: true,
     };
   }
 
   return {
     duration: baseDuration,
-    easing: "ease-in-out",
+    easing: 'ease-in-out',
     useReducedMotion: false,
   };
 }
@@ -364,23 +364,23 @@ export function getAnimationConfig(baseDuration: number, reducedMotion: boolean)
 /**
  * Get animation style object
  */
-export function getAnimationStyles(animation: "fade" | "slide" | "scale" | "none", reducedMotion: boolean): Record<string, string | number> {
-  if (reducedMotion || animation === "none") {
+export function getAnimationStyles(animation: 'fade' | 'slide' | 'scale' | 'none', reducedMotion: boolean): Record<string, string | number> {
+  if (reducedMotion || animation === 'none') {
     return {
-      transition: "none",
-      animation: "none",
+      transition: 'none',
+      animation: 'none',
     };
   }
 
   const configs: Record<string, Record<string, string | number>> = {
     fade: {
-      transition: "opacity 300ms ease-in-out",
+      transition: 'opacity 300ms ease-in-out',
     },
     slide: {
-      transition: "transform 300ms ease-in-out",
+      transition: 'transform 300ms ease-in-out',
     },
     scale: {
-      transition: "transform 300ms ease-in-out, opacity 300ms ease-in-out",
+      transition: 'transform 300ms ease-in-out, opacity 300ms ease-in-out',
     },
   };
 
@@ -431,7 +431,7 @@ export function getScaledTypography(scale: number): Record<string, { fontSize: n
 
 export interface FocusableElement {
   id: string;
-  type: "button" | "link" | "input" | "checkbox" | "radio" | "select" | "heading";
+  type: 'button' | 'link' | 'input' | 'checkbox' | 'radio' | 'select' | 'heading';
   label: string;
   order: number;
 }
@@ -495,7 +495,7 @@ export function updateAccessibilityPreferences(userId: string, updates: Partial<
   const updated = { ...current, ...updates };
   userPreferences.set(userId, updated);
 
-  eventBus.publish("accessibility:preferences_changed", {
+  eventBus.publish('accessibility:preferences_changed', {
     userId,
     preferences: updated,
     changes: Object.keys(updates),
@@ -530,8 +530,8 @@ export interface AccessibilityAudit {
 
 export interface AccessibilityIssue {
   id: string;
-  type: "contrast" | "label" | "touch_target" | "heading" | "focus";
-  severity: "error" | "warning";
+  type: 'contrast' | 'label' | 'touch_target' | 'heading' | 'focus';
+  severity: 'error' | 'warning';
   element: string;
   message: string;
   suggestion: string;
@@ -560,11 +560,11 @@ export function auditScreen(
       if (contrast < 4.5) {
         issues.push({
           id: `contrast-${element.id}`,
-          type: "contrast",
-          severity: "error",
+          type: 'contrast',
+          severity: 'error',
           element: element.id,
           message: `Contrast ratio ${contrast.toFixed(2)} is below WCAG AA (4.5)`,
-          suggestion: getAccessibleAlternatives(element.color, element.backgroundColor, 4.5)[0] ? `Try color: ${getAccessibleAlternatives(element.color, element.backgroundColor, 4.5)[0]}` : "Use a darker foreground or lighter background",
+          suggestion: getAccessibleAlternatives(element.color, element.backgroundColor, 4.5)[0] ? `Try color: ${getAccessibleAlternatives(element.color, element.backgroundColor, 4.5)[0]}` : 'Use a darker foreground or lighter background',
         });
       }
     }
@@ -575,30 +575,30 @@ export function auditScreen(
       if (element.touchSize.width < minSize || element.touchSize.height < minSize) {
         issues.push({
           id: `touch-${element.id}`,
-          type: "touch_target",
-          severity: "warning",
+          type: 'touch_target',
+          severity: 'warning',
           element: element.id,
           message: `Touch target ${element.touchSize.width}x${element.touchSize.height} is below recommended ${minSize}x${minSize}`,
-          suggestion: "Increase touch target to at least 44x44 points",
+          suggestion: 'Increase touch target to at least 44x44 points',
         });
       }
     }
 
     // Check labels
-    if (!element.label && ["button", "link", "input"].includes(element.type)) {
+    if (!element.label && ['button', 'link', 'input'].includes(element.type)) {
       issues.push({
         id: `label-${element.id}`,
-        type: "label",
-        severity: "error",
+        type: 'label',
+        severity: 'error',
         element: element.id,
-        message: "Interactive element missing accessible label",
-        suggestion: "Add an accessibleLabel or aria-label attribute",
+        message: 'Interactive element missing accessible label',
+        suggestion: 'Add an accessibleLabel or aria-label attribute',
       });
     }
   }
 
   // Calculate score (100 - 10 per error, 5 per warning)
-  const score = Math.max(0, 100 - issues.filter((i) => i.severity === "error").length * 10 - issues.filter((i) => i.severity === "warning").length * 5);
+  const score = Math.max(0, 100 - issues.filter((i) => i.severity === 'error').length * 10 - issues.filter((i) => i.severity === 'warning').length * 5);
 
   return {
     screenId,

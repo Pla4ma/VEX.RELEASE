@@ -6,7 +6,7 @@
  */
 
 export interface FocusIdentityEventDefinitions {
-  "focus-identity:score_updated": {
+  'focus-identity:score_updated': {
     userId: string;
     previousScore: number;
     newScore: number;

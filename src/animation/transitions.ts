@@ -28,7 +28,11 @@ type StackCardStyleInterpolator = (props: TransitionParams) => {
 /**
  * Slide from right transition (iOS default)
  */
+<<<<<<< HEAD
 export const slideFromRight: StackCardStyleInterpolator = ({ current, next, inverted: _inverted, layouts: { screen } }: TransitionParams) => {
+=======
+export const slideFromRight: StackCardStyleInterpolator = ({ current, next, layouts: { screen } }: TransitionParams) => {
+>>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   const translateX = current.progress.interpolate({
     inputRange: [0, 1],
     outputRange: [screen.width, 0],

@@ -4,26 +4,26 @@
  * Creates FOMO, drives engagement, monetizes through Premium upgrade
  */
 
-import { eventBus } from "../../events";
-import * as Sentry from "@sentry/react-native";
-import { z } from "zod";
+import { eventBus } from '../../events';
+import * as Sentry from '@sentry/react-native';
+import { z } from 'zod';
 
 // ============================================================================
 // Schemas
 // ============================================================================
 
-export const BattlePassTierSchema = z.enum(["FREE", "PREMIUM"]);
+export const BattlePassTierSchema = z.enum(['FREE', 'PREMIUM']);
 
 export const BattlePassRewardSchema = z.object({
   tier: z.number().int().min(1),
   freeReward: z.object({
-    type: z.enum(["COINS", "GEMS", "XP_BOOST", "STREAK_SHIELD", "CHEST", "COSMETIC", "TITLE"]),
+    type: z.enum(['COINS', 'GEMS', 'XP_BOOST', 'STREAK_SHIELD', 'CHEST', 'COSMETIC', 'TITLE']),
     amount: z.number().int(),
     cosmeticId: z.string().nullable(),
     titleId: z.string().nullable(),
   }),
   premiumReward: z.object({
-    type: z.enum(["COINS", "GEMS", "XP_BOOST", "STREAK_SHIELD", "CHEST", "COSMETIC", "TITLE"]),
+    type: z.enum(['COINS', 'GEMS', 'XP_BOOST', 'STREAK_SHIELD', 'CHEST', 'COSMETIC', 'TITLE']),
     amount: z.number().int(),
     cosmeticId: z.string().nullable(),
     titleId: z.string().nullable(),
@@ -59,13 +59,13 @@ export const UserBattlePassSchema = z.object({
 // ============================================================================
 
 export const CURRENT_SEASON = {
-  id: "season-1-focus-mastery",
+  id: 'season-1-focus-mastery',
   seasonNumber: 1,
-  name: "Focus Mastery",
-  description: "Master your focus and earn exclusive rewards",
+  name: 'Focus Mastery',
+  description: 'Master your focus and earn exclusive rewards',
   startDate: Date.now(),
   endDate: Date.now() + 90 * 24 * 60 * 60 * 1000, // 90 days
-  theme: "cyber-focus",
+  theme: 'cyber-focus',
   maxTier: 50,
   premiumPriceGems: 500,
 };
@@ -81,7 +81,7 @@ function generateTierRewards(maxTier: number) {
 
     // Free rewards (every tier)
     const freeReward = {
-      type: (tier % 5 === 0 ? "CHEST" : "COINS") as "COINS" | "GEMS" | "XP_BOOST" | "STREAK_SHIELD" | "CHEST" | "COSMETIC" | "TITLE",
+      type: (tier % 5 === 0 ? 'CHEST' : 'COINS') as 'COINS' | 'GEMS' | 'XP_BOOST' | 'STREAK_SHIELD' | 'CHEST' | 'COSMETIC' | 'TITLE',
       amount: tier % 5 === 0 ? 1 : 50 + tier * 10,
       cosmeticId: null,
       titleId: null,
@@ -90,17 +90,17 @@ function generateTierRewards(maxTier: number) {
     // Premium rewards (better, plus exclusive cosmetics/titles at milestones)
     let premiumReward;
     if (tier === 1) {
-      premiumReward = { type: "COSMETIC" as const, amount: 1, cosmeticId: "premium-avatar-frame", titleId: null };
+      premiumReward = { type: 'COSMETIC' as const, amount: 1, cosmeticId: 'premium-avatar-frame', titleId: null };
     } else if (tier === 10) {
-      premiumReward = { type: "TITLE" as const, amount: 1, cosmeticId: null, titleId: "focus-apprentice" };
+      premiumReward = { type: 'TITLE' as const, amount: 1, cosmeticId: null, titleId: 'focus-apprentice' };
     } else if (tier === 25) {
-      premiumReward = { type: "COSMETIC" as const, amount: 1, cosmeticId: "premium-theme", titleId: null };
+      premiumReward = { type: 'COSMETIC' as const, amount: 1, cosmeticId: 'premium-theme', titleId: null };
     } else if (tier === 50) {
-      premiumReward = { type: "COSMETIC" as const, amount: 1, cosmeticId: "legendary-pet", titleId: null };
+      premiumReward = { type: 'COSMETIC' as const, amount: 1, cosmeticId: 'legendary-pet', titleId: null };
     } else if (tier % 5 === 0) {
-      premiumReward = { type: "GEMS" as const, amount: 25, cosmeticId: null, titleId: null };
+      premiumReward = { type: 'GEMS' as const, amount: 25, cosmeticId: null, titleId: null };
     } else {
-      premiumReward = { type: "COINS" as const, amount: 100 + tier * 20, cosmeticId: null, titleId: null };
+      premiumReward = { type: 'COINS' as const, amount: 100 + tier * 20, cosmeticId: null, titleId: null };
     }
 
     rewards.push({
@@ -132,7 +132,7 @@ export type UserBattlePass = z.infer<typeof UserBattlePassSchema>;
 export function addXpToBattlePass(
   userBattlePass: UserBattlePass,
   baseXp: number,
-  source: "SESSION_COMPLETE" | "CHALLENGE_COMPLETE" | "STREAK_MILESTONE",
+  source: 'SESSION_COMPLETE' | 'CHALLENGE_COMPLETE' | 'STREAK_MILESTONE',
 ): {
   tiersGained: number;
   newTier: number;
@@ -179,20 +179,20 @@ export function addXpToBattlePass(
 // Reward Claiming
 // ============================================================================
 
-export function canClaimTierReward(userBattlePass: UserBattlePass, tier: number, track: "FREE" | "PREMIUM"): { canClaim: boolean; reason?: string } {
+export function canClaimTierReward(userBattlePass: UserBattlePass, tier: number, track: 'FREE' | 'PREMIUM'): { canClaim: boolean; reason?: string } {
   // Check if tier reached
   if (tier > userBattlePass.currentTier) {
-    return { canClaim: false, reason: "Tier not yet reached" };
+    return { canClaim: false, reason: 'Tier not yet reached' };
   }
 
   // Check if already claimed
   if (userBattlePass.claimedRewards.includes(tier)) {
-    return { canClaim: false, reason: "Reward already claimed" };
+    return { canClaim: false, reason: 'Reward already claimed' };
   }
 
   // Check premium for premium track
-  if (track === "PREMIUM" && !userBattlePass.hasPremium) {
-    return { canClaim: false, reason: "Premium required" };
+  if (track === 'PREMIUM' && !userBattlePass.hasPremium) {
+    return { canClaim: false, reason: 'Premium required' };
   }
 
   return { canClaim: true };
@@ -201,7 +201,7 @@ export function canClaimTierReward(userBattlePass: UserBattlePass, tier: number,
 export function claimTierReward(
   userBattlePass: UserBattlePass,
   tier: number,
-  track: "FREE" | "PREMIUM",
+  track: 'FREE' | 'PREMIUM',
 ): {
   success: boolean;
   reward: { type: string; amount: number; cosmeticId?: string; titleId?: string } | null;
@@ -224,11 +224,11 @@ export function claimTierReward(
       success: false,
       reward: null,
       updatedUserBattlePass: userBattlePass,
-      error: "Invalid tier",
+      error: 'Invalid tier',
     };
   }
 
-  const reward = track === "FREE" ? tierConfig.freeReward : tierConfig.premiumReward;
+  const reward = track === 'FREE' ? tierConfig.freeReward : tierConfig.premiumReward;
 
   const updatedBattlePass: UserBattlePass = {
     ...userBattlePass,
@@ -236,7 +236,7 @@ export function claimTierReward(
   };
 
   // Publish event
-  eventBus.publish("battle_pass:reward_claimed", {
+  eventBus.publish('battle_pass:reward_claimed', {
     userId: userBattlePass.userId,
     tier,
     rewardId: `${tier}`,
@@ -262,7 +262,7 @@ export function claimTierReward(
 
 export function canPurchasePremium(userGems: number, userBattlePass: UserBattlePass): { canPurchase: boolean; reason?: string; price: number } {
   if (userBattlePass.hasPremium) {
-    return { canPurchase: false, reason: "Already have Premium", price: 0 };
+    return { canPurchase: false, reason: 'Already have Premium', price: 0 };
   }
 
   if (userGems < CURRENT_SEASON.premiumPriceGems) {
@@ -275,7 +275,7 @@ export function canPurchasePremium(userGems: number, userBattlePass: UserBattleP
 
   // Check if season expired
   if (Date.now() > CURRENT_SEASON.endDate) {
-    return { canPurchase: false, reason: "Season ended", price: 0 };
+    return { canPurchase: false, reason: 'Season ended', price: 0 };
   }
 
   return { canPurchase: true, price: CURRENT_SEASON.premiumPriceGems };
@@ -320,7 +320,7 @@ export function purchasePremium(
   }
 
   // Publish event
-  eventBus.publish("battle_pass:premium_purchased", {
+  eventBus.publish('battle_pass:premium_purchased', {
     userId: userBattlePass.userId,
     purchaseId: `premium-${Date.now()}`,
     price: check.price,
@@ -328,8 +328,8 @@ export function purchasePremium(
   });
 
   Sentry.addBreadcrumb({
-    category: "battle_pass",
-    message: "Premium purchased",
+    category: 'battle_pass',
+    message: 'Premium purchased',
     data: { userId: userBattlePass.userId, tier: userBattlePass.currentTier },
   });
 
@@ -389,23 +389,23 @@ export function getBattlePassProgress(userBattlePass: UserBattlePass): {
 
 export function formatRewardPreview(reward: { type: string; amount: number }): string {
   const icons: Record<string, string> = {
-    COINS: "🪙",
-    GEMS: "💎",
-    XP_BOOST: "⚡",
-    STREAK_SHIELD: "🛡️",
-    CHEST: "🎁",
-    COSMETIC: "👕",
-    TITLE: "🏆",
+    COINS: '🪙',
+    GEMS: '💎',
+    XP_BOOST: '⚡',
+    STREAK_SHIELD: '🛡️',
+    CHEST: '🎁',
+    COSMETIC: '👕',
+    TITLE: '🏆',
   };
 
-  return `${icons[reward.type] || "🎁"} ${reward.amount} ${reward.type.toLowerCase()}`;
+  return `${icons[reward.type] || '🎁'} ${reward.amount} ${reward.type.toLowerCase()}`;
 }
 
 export function getSeasonEndCountdown(): string {
   const msRemaining = CURRENT_SEASON.endDate - Date.now();
 
   if (msRemaining <= 0) {
-    return "Season ended!";
+    return 'Season ended!';
   }
 
   const days = Math.floor(msRemaining / (24 * 60 * 60 * 1000));
@@ -437,9 +437,9 @@ export async function processSeasonEnd(repository: { fetchAllActivePasses: () =>
     for (const pass of activePasses) {
       for (let tier = 1; tier <= pass.currentTier; tier++) {
         if (!pass.claimedRewards.includes(tier)) {
-          claimTierReward(pass, tier, "FREE");
+          claimTierReward(pass, tier, 'FREE');
           if (pass.hasPremium) {
-            claimTierReward(pass, tier, "PREMIUM");
+            claimTierReward(pass, tier, 'PREMIUM');
           }
           unclaimedCount++;
         }
@@ -450,9 +450,9 @@ export async function processSeasonEnd(repository: { fetchAllActivePasses: () =>
     await repository.archiveSeason(CURRENT_SEASON.id, activePasses);
     await repository.resetUserPasses();
 
-    eventBus.publish("battle_pass:season_ended", {
+    eventBus.publish('battle_pass:season_ended', {
       seasonId: CURRENT_SEASON.id,
-      userId: "system", // System event
+      userId: 'system', // System event
       finalTier: Math.max(...activePasses.map((p) => p.currentTier)),
       timestamp: Date.now(),
     });
@@ -463,7 +463,7 @@ export async function processSeasonEnd(repository: { fetchAllActivePasses: () =>
     };
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: "battle_pass", action: "season_end" },
+      tags: { feature: 'battle_pass', action: 'season_end' },
     });
     throw error;
   }
