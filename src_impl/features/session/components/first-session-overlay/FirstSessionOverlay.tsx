@@ -24,12 +24,7 @@ export function FirstSessionOverlay({
   const { theme } = useTheme();
   const { height, width } = useWindowDimensions();
 
-  // Don't render if all steps completed
-  if (currentStep >= TOOLTIPS.length) {
-    return null;
-  }
-
-  const currentTooltip = TOOLTIPS[currentStep];
+  const currentTooltip = TOOLTIPS[currentStep] ?? TOOLTIPS[TOOLTIPS.length - 1];
   const isLast = currentStep === TOOLTIPS.length - 1;
 
   // Get position for current highlight
@@ -58,6 +53,11 @@ export function FirstSessionOverlay({
   const handleDismiss = useCallback(() => {
     onDismiss();
   }, [onDismiss]);
+
+  // Don't render if all steps completed
+  if (currentStep >= TOOLTIPS.length) {
+    return null;
+  }
 
   return (
     <Box

@@ -12,7 +12,7 @@
  */
 
 import React, { useMemo } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, interpolate, Easing } from "react-native-reanimated";
 import { useStreakCalendar } from "../hooks";
 import { createSheet } from "@/shared/ui/create-sheet";
@@ -162,6 +162,40 @@ export function StreakCalendarEnhanced({ userId, month, year, previewCompletedDa
   const theme = useTheme();
   const { data: calendar, isPending, isError } = useStreakCalendar(userId, month, year);
 
+  // Merge preview data with actual data
+  const dayDataMap = useMemo(() => {
+    const map = new Map<number, DayData>();
+
+    if (previewDayData) {
+      previewDayData.forEach((d) => map.set(d.day, d));
+    } else if (previewCompletedDays) {
+      previewCompletedDays.forEach((day) => {
+        map.set(day, {
+          day,
+          hasSession: true,
+          durationMinutes: 30,
+          isBossDefeatDay: false,
+          isStreakDay: false,
+        });
+      });
+    }
+
+    if (calendar?.days) {
+      calendar.days.forEach((day, index) => {
+        const existing = map.get(Number(day));
+        map.set(Number(day), {
+          day: Number(day),
+          hasSession: true,
+          durationMinutes: calendar.durations?.[index] ?? existing?.durationMinutes ?? 30,
+          isBossDefeatDay: calendar.bossDefeatDays?.includes(Number(day)) ?? existing?.isBossDefeatDay ?? false,
+          isStreakDay: calendar.streakDays?.includes(Number(day)) ?? existing?.isStreakDay ?? false,
+        });
+      });
+    }
+
+    return map;
+  }, [calendar?.bossDefeatDays, calendar?.days, calendar?.durations, calendar?.streakDays, previewCompletedDays, previewDayData]);
+
   if (isPending) {
     return (
       <View style={styles.container}>
@@ -181,42 +215,6 @@ export function StreakCalendarEnhanced({ userId, month, year, previewCompletedDa
   const monthName = new Date(year, month - 1).toLocaleString("default", { month: "long" });
   const daysInMonth = new Date(year, month, 0).getDate();
   const firstDayOfMonth = new Date(year, month - 1, 1).getDay();
-
-  // Merge preview data with actual data
-  const dayDataMap = useMemo(() => {
-    const map = new Map<number, DayData>();
-
-    // Add preview data if available
-    if (previewDayData) {
-      previewDayData.forEach((d) => map.set(d.day, d));
-    } else if (previewCompletedDays) {
-      previewCompletedDays.forEach((day) => {
-        map.set(day, {
-          day,
-          hasSession: true,
-          durationMinutes: 30, // Default assumption
-          isBossDefeatDay: false,
-          isStreakDay: false,
-        });
-      });
-    }
-
-    // Add actual data from calendar
-    if (calendar?.days) {
-      calendar.days.forEach((day, index) => {
-        const existing = map.get(Number(day));
-        map.set(Number(day), {
-          day: Number(day),
-          hasSession: true,
-          durationMinutes: calendar.durations?.[index] ?? 30,
-          isBossDefeatDay: calendar.bossDefeatDays?.includes(Number(day)) ?? false,
-          isStreakDay: calendar.streakDays?.includes(Number(day)) ?? false,
-        });
-      });
-    }
-
-    return map;
-  }, [calendar, previewCompletedDays, previewDayData]);
 
   const today = new Date().getDate();
   const currentMonth = new Date().getMonth() + 1;

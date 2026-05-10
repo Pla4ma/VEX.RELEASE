@@ -9,7 +9,7 @@
  */
 
 import React, { useEffect, useCallback } from "react";
-import { Pressable, Dimensions } from "react-native";
+import { Pressable } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming, withDelay, runOnJS } from "react-native-reanimated";
 import { Box, Text } from "@/components/primitives";
 import { useTheme } from "@/theme";
@@ -20,8 +20,6 @@ import { getAchievementDisplayInfo, getRarityColor } from "../definitions";
 // ============================================================================
 // Constants
 // ============================================================================
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const DISMISS_DURATIONS: Record<AchievementRarity, number> = {
   COMMON: 3500,
@@ -59,6 +57,15 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({ 
   const scale = useSharedValue(0.8);
   const glowOpacity = useSharedValue(0);
 
+  const handleDismiss = useCallback(() => {
+    translateY.value = withTiming(-200, { duration: 300 }, () => {
+      "worklet";
+      runOnJS(onDismiss)();
+    });
+    opacity.value = withTiming(0, { duration: 200 });
+    return; // Explicit return to satisfy all code paths
+  }, [onDismiss, opacity, translateY]);
+
   // Trigger haptic and entrance animation
   useEffect(() => {
     if (visible) {
@@ -89,16 +96,7 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({ 
       scale.value = withTiming(0.8, { duration: 200 });
       return; // Explicit return for else branch
     }
-  }, [visible, achievement.rarity]);
-
-  const handleDismiss = useCallback(() => {
-    translateY.value = withTiming(-200, { duration: 300 }, () => {
-      "worklet";
-      runOnJS(onDismiss)();
-    });
-    opacity.value = withTiming(0, { duration: 200 });
-    return; // Explicit return to satisfy all code paths
-  }, [onDismiss]);
+  }, [achievement.rarity, glowOpacity, handleDismiss, isHighRarity, opacity, scale, translateY, visible]);
 
   const handlePress = useCallback(() => {
     handleDismiss();
@@ -229,45 +227,13 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({ 
  */
 export function useAchievementUnlockToast(
   userId: string,
-  onAchievementPress: (achievementId: string) => void,
+  _onAchievementPress: (achievementId: string) => void,
 ): {
   currentToast: Achievement | null;
   dismissToast: () => void;
 } {
   const [currentToast, setCurrentToast] = React.useState<Achievement | null>(null);
   const toastQueue = React.useRef<Achievement[]>([]);
-
-  // Listen for achievement unlock events
-  React.useEffect(() => {
-    // Subscribe to achievement:unlocked event
-    const handleUnlock = (event: { userId: string; achievementId: string; unlockedAt: number }) => {
-      if (event.userId !== userId) {
-        return;
-      }
-
-      // Get achievement details
-      const { getAchievementById } = require("../definitions");
-      const achievement = getAchievementById(event.achievementId);
-      if (!achievement) {
-        return;
-      }
-
-      // Add to queue
-      toastQueue.current.push(achievement);
-
-      // Show toast if none currently visible
-      if (!currentToast) {
-        showNextToast();
-      }
-    };
-
-    // In a real app, subscribe to event bus
-    // const unsubscribe = eventBus.subscribe('achievement:unlocked', handleUnlock);
-
-    return () => {
-      // unsubscribe();
-    };
-  }, [userId, currentToast]);
 
   const showNextToast = React.useCallback(() => {
     const nextAchievement = toastQueue.current.shift();
@@ -276,6 +242,17 @@ export function useAchievementUnlockToast(
     }
   }, []);
 
+  // Listen for achievement unlock events
+  React.useEffect(() => {
+    // Subscribe to achievement:unlocked event
+    // In a real app, subscribe to event bus
+    // const unsubscribe = eventBus.subscribe('achievement:unlocked', handleUnlock);
+
+    return () => {
+      // unsubscribe();
+    };
+  }, [currentToast, showNextToast, userId]);
+
   const dismissToast = React.useCallback(() => {
     setCurrentToast(null);
     // Show next toast after a short delay
@@ -283,13 +260,6 @@ export function useAchievementUnlockToast(
       showNextToast();
     }, 300);
   }, [showNextToast]);
-
-  const handlePress = React.useCallback(() => {
-    if (currentToast) {
-      onAchievementPress(currentToast.id);
-    }
-    dismissToast();
-  }, [currentToast, onAchievementPress, dismissToast]);
 
   return {
     currentToast,

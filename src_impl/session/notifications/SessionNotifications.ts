@@ -76,7 +76,7 @@ export class SessionNotifications {
     );
   }
 
-  async sendInterruptionWarning(sessionId: string, severity: string, timeRemaining: number): Promise<void> {
+  async sendInterruptionWarning(sessionId: string, severity: string, _timeRemaining: number): Promise<void> {
     if (!this.enabled) {return;}
 
     const titles: Record<string, string> = {
@@ -262,7 +262,7 @@ export class SessionNotifications {
 
   async clearAllNotifications(): Promise<void> {
     // Clear all scheduled notifications
-    for (const [key, timeoutId] of this.scheduledNotifications) {
+    for (const [_key, timeoutId] of this.scheduledNotifications) {
       clearTimeout(timeoutId);
     }
     this.scheduledNotifications.clear();

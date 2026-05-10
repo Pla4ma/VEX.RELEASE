@@ -122,11 +122,11 @@ export const StatusChip: React.FC<{
   const config = STATUS_CONFIG[status];
   const scale = useSharedValue(1);
 
-  if (status === 'idle') {return null;}
-
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
   }));
+
+  if (status === 'idle') {return null;}
 
   const handlePressIn = () => {
     scale.value = withSpring(0.95, { damping: 15, stiffness: 300 });
@@ -329,7 +329,6 @@ export const CardStatusOverlay: React.FC<{
   style?: ViewStyle;
 }> = ({ status, message, onRetry, style }) => {
   const { theme } = useTheme();
-  const config = STATUS_CONFIG[status];
 
   if (status === 'idle' || status === 'success') {return null;}
 

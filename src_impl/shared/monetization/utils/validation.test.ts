@@ -6,7 +6,6 @@
 
 import {
   validatePurchase,
-  validateSubscription,
   verifyReceiptSignature,
   parseReceipt,
   MonetizationValidation,

@@ -8,8 +8,8 @@
  */
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeIn, FadeInRight } from "react-native-reanimated";
+import { Pressable, ScrollView, View } from "react-native";
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeInRight } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { Text } from "../../../components/primitives/Text";
@@ -57,8 +57,6 @@ interface RotatingShopSectionProps {
 }
 
 export function RotatingShopSection({ items, gemBalance, coinBalance, nextRotationAt, onPurchase, onViewDetails }: RotatingShopSectionProps): JSX.Element | null {
-  const { theme } = useTheme();
-  const { colors } = theme;
   const [currentTime, setCurrentTime] = useState(new Date());
 
   // Update countdown timer every second

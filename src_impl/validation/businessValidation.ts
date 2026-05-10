@@ -32,7 +32,7 @@ export interface BusinessContext {
 }
 
 // E-commerce business validation
-export const validateECommerceOrder = (order: DynamicValue, context: BusinessContext): BusinessValidationResult => {
+export const validateECommerceOrder = (order: DynamicValue, _context: BusinessContext): BusinessValidationResult => {
   const errors: string[] = [];
   const warnings: string[] = [];
   const businessRules: string[] = [];
@@ -549,7 +549,7 @@ export const validateRealEstateListing = (listing: DynamicValue, context: Busine
 };
 
 // Education business validation
-export const validateEducationEnrollment = (enrollment: DynamicValue, context: BusinessContext): BusinessValidationResult => {
+export const validateEducationEnrollment = (enrollment: DynamicValue, _context: BusinessContext): BusinessValidationResult => {
   const errors: string[] = [];
   const warnings: string[] = [];
   const businessRules: string[] = [];

@@ -10,7 +10,7 @@
  */
 
 import React, { useMemo } from 'react';
-import { View, ViewStyle, StyleSheet, DimensionValue } from 'react-native';
+import { View, ViewStyle, DimensionValue } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,

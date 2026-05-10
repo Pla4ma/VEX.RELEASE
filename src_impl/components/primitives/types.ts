@@ -4,7 +4,7 @@
  * Shared types for primitive components.
  */
 
-import type { ViewStyle, TextStyle, ImageStyle } from 'react-native';
+import type { ViewStyle } from 'react-native';
 
 /**
  * Spacing value - can be theme token key or number

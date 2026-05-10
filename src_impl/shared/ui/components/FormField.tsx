@@ -18,7 +18,6 @@ import {
   View,
   ViewStyle,
   TextStyle,
-  StyleSheet,
   TextInput,
   TextInputProps,
 } from 'react-native';
@@ -169,16 +168,6 @@ export const FormField: React.FC<FormFieldProps> = ({
     sm: { paddingVertical: 8, paddingHorizontal: 12, fontSize: 14 },
     md: { paddingVertical: 12, paddingHorizontal: 16, fontSize: 16 },
     lg: { paddingVertical: 16, paddingHorizontal: 20, fontSize: 18 },
-  };
-
-  // State colors
-  const stateColors = {
-    default: theme.colors.border.DEFAULT,
-    focused: theme.colors.primary[500],
-    error: theme.colors.error.DEFAULT,
-    success: theme.colors.success.DEFAULT,
-    disabled: theme.colors.border.light,
-    loading: theme.colors.border.light,
   };
 
   const animatedBorderStyle = useAnimatedStyle(() => ({

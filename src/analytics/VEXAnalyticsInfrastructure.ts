@@ -16,7 +16,7 @@
  * - Streaks (survival rate)
  */
 
-import { eventBus } from "../events";
+import { eventBus } from '../events';
 
 // ============================================================================
 // Success Metrics (10/10 Definition)
@@ -25,7 +25,7 @@ import { eventBus } from "../events";
 export interface MetricWithTarget {
   current: number;
   target: number;
-  trend: "up" | "down" | "flat";
+  trend: 'up' | 'down' | 'flat';
 }
 
 export interface VEXSuccessMetrics {
@@ -96,11 +96,11 @@ const retentionCohorts = new Map<string, RetentionCohort>();
 /**
  * Track user retention
  */
-export function trackRetentionEvent(userId: string, event: "first_open" | "session" | "return"): void {
-  const today = new Date().toISOString().split("T")[0];
+export function trackRetentionEvent(userId: string, event: 'first_open' | 'session' | 'return'): void {
+  const today = new Date().toISOString().split('T')[0];
   const userFirstOpen = getUserFirstOpen(userId);
 
-  if (event === "first_open") {
+  if (event === 'first_open') {
     // New cohort
     const cohort = retentionCohorts.get(today) || {
       cohortDate: today,
@@ -138,12 +138,12 @@ export function trackRetentionEvent(userId: string, event: "first_open" | "sessi
   }
 }
 
-function getUserFirstOpen(userId: string): string | null {
+function getUserFirstOpen(_userId: string): string | null {
   // Would integrate with persistent storage
   return null;
 }
 
-function storeUserFirstOpen(userId: string, date: string): void {
+function storeUserFirstOpen(_userId: string, _date: string): void {
   // Would integrate with persistent storage
 }
 
@@ -215,7 +215,7 @@ const engagementData = new Map<string, EngagementMetrics>();
 export function recordEngagementEvent(
   userId: string,
   event: {
-    type: "session_complete" | "plan_start" | "plan_complete" | "boss_defeat" | "streak_milestone";
+    type: 'session_complete' | 'plan_start' | 'plan_complete' | 'boss_defeat' | 'streak_milestone';
     value?: number;
   },
 ): void {
@@ -237,7 +237,7 @@ export function recordEngagementEvent(
   }
 
   switch (event.type) {
-    case "session_complete":
+    case 'session_complete':
       metrics.sessionsLast7Days++;
       metrics.sessionsLast30Days++;
       if (event.value) {
@@ -245,16 +245,16 @@ export function recordEngagementEvent(
         metrics.avgSessionDuration = metrics.totalFocusMinutes / metrics.sessionsLast30Days;
       }
       break;
-    case "plan_start":
+    case 'plan_start':
       metrics.studyPlansStarted++;
       break;
-    case "plan_complete":
+    case 'plan_complete':
       metrics.studyPlansCompleted++;
       break;
-    case "boss_defeat":
+    case 'boss_defeat':
       metrics.bossBattlesCompleted++;
       break;
-    case "streak_milestone":
+    case 'streak_milestone':
       if (event.value) {
         metrics.streakDays = event.value;
       }
@@ -267,7 +267,7 @@ export function recordEngagementEvent(
 
   engagementData.set(userId, metrics);
 
-  eventBus.publish("analytics:engagement", {
+  eventBus.publish('analytics:engagement', {
     userId,
     event: event.type,
     metrics,
@@ -314,7 +314,7 @@ export interface MonetizationMetrics {
   totalRevenue: number;
   subscriptionRevenue: number;
   iapRevenue: number;
-  subscriptionType: "free" | "premium" | "premium_plus";
+  subscriptionType: 'free' | 'premium' | 'premium_plus';
   subscriptionStart?: string;
   subscriptionEnd?: string;
   ltv: number;
@@ -333,7 +333,7 @@ const monetizationData = new Map<string, MonetizationMetrics>();
 export function trackMonetizationEvent(
   userId: string,
   event: {
-    type: "subscription_start" | "subscription_cancel" | "purchase" | "paywall_view" | "paywall_convert";
+    type: 'subscription_start' | 'subscription_cancel' | 'purchase' | 'paywall_view' | 'paywall_convert';
     value?: number;
     productType?: string;
   },
@@ -345,7 +345,7 @@ export function trackMonetizationEvent(
       totalRevenue: 0,
       subscriptionRevenue: 0,
       iapRevenue: 0,
-      subscriptionType: "free",
+      subscriptionType: 'free',
       ltv: 0,
       paywallViews: 0,
       paywallConversions: 0,
@@ -354,8 +354,8 @@ export function trackMonetizationEvent(
   }
 
   switch (event.type) {
-    case "subscription_start":
-      metrics.subscriptionType = event.productType as "premium" | "premium_plus" || "premium";
+    case 'subscription_start':
+      metrics.subscriptionType = event.productType as 'premium' | 'premium_plus' || 'premium';
       metrics.subscriptionStart = new Date().toISOString();
       if (event.value) {
         metrics.subscriptionRevenue += event.value;
@@ -363,19 +363,19 @@ export function trackMonetizationEvent(
       }
       break;
 
-    case "subscription_cancel":
+    case 'subscription_cancel':
       metrics.subscriptionEnd = new Date().toISOString();
-      metrics.subscriptionType = "free";
+      metrics.subscriptionType = 'free';
       break;
 
-    case "purchase":
+    case 'purchase':
       metrics.purchaseCount++;
       metrics.lastPurchaseDate = new Date().toISOString();
       if (!metrics.firstPurchaseDate) {
         metrics.firstPurchaseDate = metrics.lastPurchaseDate;
       }
       if (event.value) {
-        if (event.productType === "subscription") {
+        if (event.productType === 'subscription') {
           metrics.subscriptionRevenue += event.value;
         } else {
           metrics.iapRevenue += event.value;
@@ -384,11 +384,11 @@ export function trackMonetizationEvent(
       }
       break;
 
-    case "paywall_view":
+    case 'paywall_view':
       metrics.paywallViews++;
       break;
 
-    case "paywall_convert":
+    case 'paywall_convert':
       metrics.paywallConversions++;
       break;
   }
@@ -398,7 +398,7 @@ export function trackMonetizationEvent(
 
   monetizationData.set(userId, metrics);
 
-  eventBus.publish("analytics:monetization", {
+  eventBus.publish('analytics:monetization', {
     userId,
     event: event.type,
     metrics,
@@ -424,7 +424,7 @@ export function getMonetizationMetrics(): {
     };
   }
 
-  const premiumUsers = users.filter((user) => user.subscriptionType !== "free");
+  const premiumUsers = users.filter((user) => user.subscriptionType !== 'free');
   const premiumConversionRate = premiumUsers.length / users.length;
 
   const totalRevenue = users.reduce((sum, user) => sum + user.totalRevenue, 0);
@@ -463,7 +463,7 @@ const paywallData = new Map<string, PaywallAnalytics>();
 export function trackPaywallEvent(
   userId: string,
   context: string,
-  event: "view" | "convert" | "dismiss",
+  event: 'view' | 'convert' | 'dismiss',
   value?: number,
 ): void {
   let analytics = paywallData.get(context);
@@ -479,16 +479,16 @@ export function trackPaywallEvent(
   }
 
   switch (event) {
-    case "view":
+    case 'view':
       analytics.views++;
       break;
-    case "convert":
+    case 'convert':
       analytics.conversions++;
       if (value) {
         analytics.revenue += value;
       }
       break;
-    case "dismiss":
+    case 'dismiss':
       // Track dismissals for optimization
       break;
   }
@@ -499,7 +499,7 @@ export function trackPaywallEvent(
 
   paywallData.set(context, analytics);
 
-  eventBus.publish("analytics:paywall", {
+  eventBus.publish('analytics:paywall', {
     userId,
     context,
     event,
@@ -542,7 +542,7 @@ const streakData = new Map<number, StreakSurvivalMetrics>();
 export function trackStreakEvent(
   userId: string,
   event: {
-    type: "streak_start" | "streak_extend" | "streak_break" | "streak_milestone";
+    type: 'streak_start' | 'streak_extend' | 'streak_break' | 'streak_milestone';
     streakLength: number;
     sessionsToday?: number;
     completedToday?: boolean;
@@ -560,14 +560,14 @@ export function trackStreakEvent(
   }
 
   switch (event.type) {
-    case "streak_start":
-    case "streak_extend":
+    case 'streak_start':
+    case 'streak_extend':
       metrics.userCount++;
       break;
-    case "streak_break":
+    case 'streak_break':
       metrics.userCount--;
       break;
-    case "streak_milestone":
+    case 'streak_milestone':
       // Update survival rate based on milestone data
       break;
   }
@@ -580,7 +580,7 @@ export function trackStreakEvent(
 
   streakData.set(event.streakLength, metrics);
 
-  eventBus.publish("analytics:streak", {
+  eventBus.publish('analytics:streak', {
     userId,
     event: event.type,
     streakLength: event.streakLength,
@@ -637,77 +637,77 @@ export function generateDashboardReport(): VEXDashboard {
     day1Retention: {
       current: retentionRates.day1,
       target: TARGET_METRICS.day1Retention.target,
-      trend: "flat", // Would calculate from historical data
+      trend: 'flat', // Would calculate from historical data
     },
     day7Retention: {
       current: retentionRates.day7,
       target: TARGET_METRICS.day7Retention.target,
-      trend: "flat",
+      trend: 'flat',
     },
     day30Retention: {
       current: retentionRates.day30,
       target: TARGET_METRICS.day30Retention.target,
-      trend: "flat",
+      trend: 'flat',
     },
     sessionsPerWeek: {
       current: getAverageSessionsPerWeek(),
       target: TARGET_METRICS.sessionsPerWeek.target,
-      trend: "flat",
+      trend: 'flat',
     },
     studyPlanCompletionRate: {
       current: getStudyPlanCompletionRate(),
       target: TARGET_METRICS.studyPlanCompletionRate.target,
-      trend: "flat",
+      trend: 'flat',
     },
     appStoreRating: {
       current: 4.5, // Would fetch from app store API
       target: TARGET_METRICS.appStoreRating.target,
-      trend: "up",
+      trend: 'up',
     },
     supportTicketsPerWeek: {
       current: 25, // Would fetch from support system
       target: TARGET_METRICS.supportTicketsPerWeek.target,
-      trend: "down",
+      trend: 'down',
     },
     crashFreeRate: {
       current: 0.995, // Would fetch from crash reporting
       target: TARGET_METRICS.crashFreeRate.target,
-      trend: "up",
+      trend: 'up',
     },
     premiumConversionRate: {
       current: monetizationMetrics.premiumConversionRate,
       target: TARGET_METRICS.premiumConversionRate.target,
-      trend: "up",
+      trend: 'up',
     },
     ltv: {
       current: monetizationMetrics.averageLtv,
       target: TARGET_METRICS.ltv.target,
-      trend: "up",
+      trend: 'up',
     },
     paywallConversionRate: {
       current: monetizationMetrics.paywallConversionRate,
       target: TARGET_METRICS.paywallConversionRate.target,
-      trend: "up",
+      trend: 'up',
     },
     npsScore: {
       current: 35, // Would calculate from survey data
       target: TARGET_METRICS.npsScore.target,
-      trend: "up",
+      trend: 'up',
     },
     clarityScore: {
       current: 0.75, // Would calculate from user feedback
       target: TARGET_METRICS.clarityScore.target,
-      trend: "up",
+      trend: 'up',
     },
     helpfulnessScore: {
       current: 0.70, // Would calculate from user feedback
       target: TARGET_METRICS.helpfulnessScore.target,
-      trend: "up",
+      trend: 'up',
     },
     returnIntentScore: {
       current: 0.65, // Would calculate from user feedback
       target: TARGET_METRICS.returnIntentScore.target,
-      trend: "up",
+      trend: 'up',
     },
   };
 

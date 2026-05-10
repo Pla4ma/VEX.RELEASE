@@ -5,7 +5,7 @@
  * Lazy loading, memoization helpers, performance monitoring
  */
 
-import React, { useCallback, useMemo, memo, useRef, useEffect } from 'react';
+import React, { memo, useRef, useEffect } from 'react';
 import { createDebugger } from '../../utils/debug';
 
 const debug = createDebugger('performance');
@@ -80,18 +80,20 @@ export function useDeepMemo<T>(factory: () => T, deps: React.DependencyList): T 
  */
 export function useStableCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,
-  deps: React.DependencyList
+  _deps: React.DependencyList
 ): T {
   const callbackRef = useRef(callback);
+  const stableCallbackRef = useRef<T | null>(null);
 
   useEffect(() => {
     callbackRef.current = callback;
   }, [callback]);
 
-  return useCallback(
-    ((...args) => callbackRef.current(...args)) as T,
-    deps
-  );
+  if (!stableCallbackRef.current) {
+    stableCallbackRef.current = ((...args) => callbackRef.current(...args)) as T;
+  }
+
+  return stableCallbackRef.current;
 }
 
 // ============================================================================
@@ -176,7 +178,7 @@ export function getOptimizedImageUrl(
   originalUrl: string,
   options: ImageOptimizationOptions = {}
 ): string {
-  const { maxWidth = 800, quality = 80, format = 'webp' } = options;
+  const { maxWidth = 800, quality = 80 } = options;
 
   // If using a CDN with image optimization
   if (originalUrl.includes('supabase')) {

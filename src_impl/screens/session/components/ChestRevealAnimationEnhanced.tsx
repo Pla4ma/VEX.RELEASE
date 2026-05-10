@@ -184,6 +184,8 @@ export const ChestRevealAnimationEnhanced: React.FC<ChestRevealProps> = ({
 
   const autoAdvanceTimerRef = useRef<NodeJS.Timeout | null>(null);
   const completedRef = useRef(false);
+  const startOpeningPhaseRef = useRef<() => void>(() => undefined);
+  const animateRewardCountsRef = useRef<() => void>(() => undefined);
 
   // Phase 1: Suspense - Chest appears and glows progressively
   const startSuspensePhase = useCallback(() => {
@@ -235,10 +237,10 @@ export const ChestRevealAnimationEnhanced: React.FC<ChestRevealProps> = ({
     // Auto-advance after 2 seconds
     autoAdvanceTimerRef.current = setTimeout(() => {
       if (!completedRef.current) {
-        startOpeningPhase();
+        startOpeningPhaseRef.current();
       }
     }, 3200);
-  }, []);
+  }, [chestGlow, chestScale, chestShake, config.glowIntensity, config.hasScreenDarken, config.shakeIntensity, config.shakeSpeed, glowPulse, screenDarken]);
 
   // Phase 2: Opening - Chest bursts open
   const startOpeningPhase = useCallback(() => {
@@ -267,7 +269,7 @@ export const ChestRevealAnimationEnhanced: React.FC<ChestRevealProps> = ({
       setPhase('reveal');
       rewardOpacity.value = withTiming(1, { duration: 400 });
       rewardScale.value = withSpring(1, { damping: 12, stiffness: 100 });
-      animateRewardCounts();
+      animateRewardCountsRef.current();
     }, 400);
 
     // Complete
@@ -275,7 +277,9 @@ export const ChestRevealAnimationEnhanced: React.FC<ChestRevealProps> = ({
       setPhase('complete');
       onComplete();
     }, 2500);
-  }, [onComplete]);
+  }, [chestScale, chestShake, onComplete, particlesBurst, rewardOpacity, rewardScale, screenDarken]);
+
+  startOpeningPhaseRef.current = startOpeningPhase;
 
   // Animate reward counts
   const animateRewardCounts = () => {
@@ -300,6 +304,8 @@ export const ChestRevealAnimationEnhanced: React.FC<ChestRevealProps> = ({
     requestAnimationFrame(animate);
   };
 
+  animateRewardCountsRef.current = animateRewardCounts;
+
   // Handle tap to open early
   const handleTap = () => {
     if (canTap && phase === 'suspense') {
@@ -320,7 +326,7 @@ export const ChestRevealAnimationEnhanced: React.FC<ChestRevealProps> = ({
         clearTimeout(autoAdvanceTimerRef.current);
       }
     };
-  }, []);
+  }, [startSuspensePhase]);
 
   // Animated styles
   const chestStyle = useAnimatedStyle(() => ({

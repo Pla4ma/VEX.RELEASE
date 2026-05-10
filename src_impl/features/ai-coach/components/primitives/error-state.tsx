@@ -6,7 +6,7 @@ import { captureSilentFailure } from "../../../../utils/silent-failure";
  */
 
 import React, { useState } from "react";
-import { View, Text, Pressable, StyleSheet, ActivityIndicator } from "react-native";
+import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import Animated, { Keyframe, FadeIn } from "react-native-reanimated";
 import { createSheet } from "@/shared/ui/create-sheet";
 

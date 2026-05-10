@@ -5,7 +5,7 @@
  * Tests for streak states, insurance, recovery mechanics
  */
 
-import { STREAK_STATES, STREAK_MILESTONES, determineStreakState, calculateHoursUntilStreakBreak, getStreakStateInfo, getStreakVisualIndicator, awardInsurance, getAvailableInsuranceCount, getUserInsurance, useInsurance, canUseInsurance, createRecoveryPlan, getRecoveryPlan, progressRecovery, clearRecoveryPlan, checkMilestones, getNextMilestone, getMilestoneProgress, getStreakDisplayText, getStreakCelebrationMessage, type StreakState } from "../StreakEvolutionSystem";
+import { STREAK_STATES, STREAK_MILESTONES, determineStreakState, calculateHoursUntilStreakBreak, getStreakStateInfo, getStreakVisualIndicator, awardInsurance, getAvailableInsuranceCount, getUserInsurance, useInsurance as consumeInsurance, canUseInsurance, createRecoveryPlan, getRecoveryPlan, progressRecovery, clearRecoveryPlan, checkMilestones, getNextMilestone, getMilestoneProgress, getStreakDisplayText, getStreakCelebrationMessage, type StreakState } from "../StreakEvolutionSystem";
 
 // Mock eventBus
 jest.mock("../../../events", () => ({
@@ -184,7 +184,7 @@ describe("StreakEvolutionSystem", () => {
         for (const ins of insurance.insurances) {
           if (ins.status === "active") {
             // Use it to clear it
-            useInsurance(userId, "test-context");
+            consumeInsurance(userId, "test-context");
           }
         }
       }
@@ -236,7 +236,7 @@ describe("StreakEvolutionSystem", () => {
 
       it("should return 0 after using all insurance", () => {
         awardInsurance(userId, "monthly_premium", 1);
-        useInsurance(userId, "test-context");
+        consumeInsurance(userId, "test-context");
 
         const count = getAvailableInsuranceCount(userId);
         expect(count).toBe(0);
@@ -267,14 +267,14 @@ describe("StreakEvolutionSystem", () => {
       it("should use insurance successfully", () => {
         awardInsurance(userId, "monthly_premium", 1);
 
-        const result = useInsurance(userId, "streak_break");
+        const result = consumeInsurance(userId, "streak_break");
 
         expect(result.success).toBe(true);
         expect(result.remainingInsurance).toBe(0);
       });
 
       it("should fail when no insurance available", () => {
-        const result = useInsurance(userId, "streak_break");
+        const result = consumeInsurance(userId, "streak_break");
 
         expect(result.success).toBe(false);
         expect(result.error).toBe("No active insurance available");
@@ -284,7 +284,7 @@ describe("StreakEvolutionSystem", () => {
         const { eventBus } = require("../../../events");
         awardInsurance(userId, "monthly_premium", 1);
 
-        useInsurance(userId, "streak_break");
+        consumeInsurance(userId, "streak_break");
 
         expect(eventBus.publish).toHaveBeenCalledWith("streak:insurance_used", expect.any(Object));
       });
@@ -500,3 +500,4 @@ describe("StreakEvolutionSystem", () => {
     });
   });
 });
+

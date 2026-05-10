@@ -90,11 +90,6 @@ function usePulseAnimation(isCritical: boolean) {
 export function AtRiskBanner({ hoursRemaining, currentStreak, onStartSession, isLoading = false }: AtRiskBannerProps): JSX.Element | null {
   const { theme } = useTheme();
 
-  // Only show when streak is at risk (< 12 hours) and hoursRemaining is known
-  if (hoursRemaining === null || hoursRemaining === undefined || hoursRemaining >= 12 || currentStreak === 0) {
-    return null;
-  }
-
   const { headline, subtext, tone } = useMemo(() => getUrgencyMessage(hoursRemaining, currentStreak), [hoursRemaining, currentStreak]);
 
   const isCritical = tone === "critical";
@@ -105,6 +100,11 @@ export function AtRiskBanner({ hoursRemaining, currentStreak, onStartSession, is
   const backgroundColor = isCritical ? theme.colors.error.DEFAULT : isUrgent ? theme.colors.error.light : theme.colors.warning.DEFAULT;
 
   const textColor = isCritical || isUrgent ? theme.colors.text.inverse : theme.colors.text.primary;
+
+  // Only show when streak is at risk (< 12 hours) and hoursRemaining is known
+  if (hoursRemaining === null || hoursRemaining === undefined || hoursRemaining >= 12 || currentStreak === 0) {
+    return null;
+  }
 
   if (isLoading) {
     return (

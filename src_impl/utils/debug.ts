@@ -8,7 +8,7 @@
  * - Error reporting integration
  */
 
-import { CURRENT_CONFIG, IS_DEVELOPMENT } from '../constants/app';
+import { IS_DEVELOPMENT } from '../constants/app';
 
 // Log levels
 export enum LogLevel {
@@ -60,7 +60,7 @@ function formatMessage(namespace: string, message: string): string {
 /**
  * Send to error reporting service (e.g., Sentry)
  */
-function reportToErrorTracking(level: LogLevel, message: string, error?: Error): void {
+function reportToErrorTracking(level: LogLevel, _message: string, _error?: Error): void {
   // In production, send to error tracking service
   if (!IS_DEVELOPMENT && level >= LogLevel.ERROR) {
     // Example: Sentry.captureException(error);

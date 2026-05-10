@@ -11,15 +11,14 @@
  * - Reduced motion support
  */
 
-import React, { useEffect, useCallback, useState } from "react";
-import { View, Dimensions } from "react-native";
-import { useReducedMotion } from "@/hooks";
-import { useTheme } from "@/theme";
-import { ConfettiCelebrationProps, ParticleConfig } from "./types";
-import { CONFETTI_COLORS, PARTICLE_SHAPES, DEFAULT_PARTICLE_COUNT, DEFAULT_DURATION } from "./constants";
-import { Particle } from "./Particle";
+import React, { useEffect, useCallback, useState } from 'react';
+import { View, Dimensions } from 'react-native';
+import { useReducedMotion } from '@/hooks';
+import { ConfettiCelebrationProps, ParticleConfig } from './confetti/types';
+import { CONFETTI_COLORS, PARTICLE_SHAPES, DEFAULT_PARTICLE_COUNT, DEFAULT_DURATION } from './confetti/constants';
+import { Particle } from './confetti/Particle';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export function ConfettiCelebration({
   active,
@@ -31,15 +30,14 @@ export function ConfettiCelebration({
 }: ConfettiCelebrationProps) {
   const [particles, setParticles] = useState<ParticleConfig[]>([]);
   const isReducedMotion = useReducedMotion();
-  const theme = useTheme();
 
-  const generateParticles = useCallback(() => {
+  const generateParticles = useCallback((): ParticleConfig[] => {
     const newParticles: ParticleConfig[] = [];
-    
+
     for (let i = 0; i < particleCount; i++) {
       const angle = (Math.PI * 2 * i) / particleCount + Math.random() * 0.5;
       const velocity = 15 + Math.random() * 10;
-      
+
       newParticles.push({
         id: Date.now() + i,
         x: origin.x,
@@ -49,11 +47,11 @@ export function ConfettiCelebration({
         rotation: Math.random() * 360,
         velocityX: Math.cos(angle) * velocity,
         velocityY: Math.sin(angle) * velocity - 10,
-        shape: PARTICLE_SHAPES[Math.floor(Math.random() * PARTICLE_SHAPES.length)] as any,
+        shape: PARTICLE_SHAPES[Math.floor(Math.random() * PARTICLE_SHAPES.length)] ?? 'circle',
         delay: Math.random() * 0.5,
       });
     }
-    
+
     return newParticles;
   }, [particleCount, origin, colors]);
 
@@ -72,6 +70,7 @@ export function ConfettiCelebration({
     } else {
       setParticles([]);
     }
+    return undefined;
   }, [active, isReducedMotion, generateParticles, duration, onComplete]);
 
   const handleParticleComplete = useCallback(
@@ -92,7 +91,7 @@ export function ConfettiCelebration({
   }
 
   return (
-    <View style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0 }} pointerEvents="none">
+    <View style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }} pointerEvents="none">
       {particles.map((particle) => (
         <Particle key={particle.id} config={particle} onComplete={handleParticleComplete} />
       ))}

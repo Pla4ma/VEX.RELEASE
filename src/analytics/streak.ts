@@ -21,7 +21,7 @@ let streakMetrics: StreakSurvivalMetrics = {
  */
 export function trackStreakEvent(
   userId: string,
-  event: "start" | "break" | "protect" | "milestone", 
+  event: 'start' | 'break' | 'protect' | 'milestone',
   data?: { length?: number; insuranceUsed?: boolean }
 ): void {
   // Update user context
@@ -30,24 +30,24 @@ export function trackStreakEvent(
   }
 
   switch (event) {
-    case "start":
+    case 'start':
       streakMetrics.currentStreak = 1;
       if (streakMetrics.currentStreak > streakMetrics.longestStreak) {
         streakMetrics.longestStreak = streakMetrics.currentStreak;
       }
       break;
-    case "break":
+    case 'break':
       if (streakMetrics.currentStreak > 0) {
         streakMetrics.streakBreaks++;
         streakMetrics.averageStreakLength = calculateAverageStreakLength();
         streakMetrics.currentStreak = 0;
       }
       break;
-    case "protect":
+    case 'protect':
       // Streak was protected with insurance
       streakMetrics.recoveryRate = calculateRecoveryRate();
       break;
-    case "milestone":
+    case 'milestone':
       if (data?.length) {
         streakMetrics.currentStreak = data.length;
         if (streakMetrics.currentStreak > streakMetrics.longestStreak) {
@@ -92,7 +92,7 @@ function calculateSurvivalRate(): number {
   if (streakMetrics.streakBreaks === 0) {
     return streakMetrics.currentStreak > 0 ? 1.0 : 0.0;
   }
-  
+
   const totalAttempts = streakMetrics.streakBreaks + (streakMetrics.currentStreak > 0 ? 1 : 0);
   return totalAttempts > 0 ? (totalAttempts - streakMetrics.streakBreaks) / totalAttempts : 0;
 }
@@ -104,7 +104,7 @@ function calculateAverageStreakLength(): number {
   if (streakMetrics.streakBreaks === 0) {
     return streakMetrics.currentStreak;
   }
-  
+
   // This is a simplified calculation - in practice would track historical data
   return (streakMetrics.longestStreak + streakMetrics.currentStreak) / 2;
 }
@@ -116,7 +116,7 @@ function calculateRecoveryRate(): number {
   if (streakMetrics.streakBreaks === 0) {
     return 0;
   }
-  
+
   // Simplified: if current streak > 0, user recovered
   return streakMetrics.currentStreak > 0 ? 1.0 : 0.0;
 }

@@ -276,7 +276,6 @@ export function TomorrowPreview({
  * Compact tomorrow preview (for minimal home screen space)
  */
 export function TomorrowPreviewCompact({ streakWillContinue, events, onPress }: { streakWillContinue: boolean; events: TomorrowPreviewProps["events"]; onPress: () => void }): JSX.Element {
-  const { theme } = useTheme();
 
   const eventEmoji = events.length > 0 ? (events[0].type === "double_xp" ? "🔥" : events[0].type === "squad_war" ? "⚔️" : events[0].type === "boss_rush" ? "👹" : "🌙") : null;
 

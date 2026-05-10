@@ -10,7 +10,7 @@
  * - Edit mode to swap featured achievements
  */
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import {
   Pressable,
   ViewStyle,
@@ -206,10 +206,13 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   // Fill slots to exactly 3
-  const slots = [...achievements];
-  while (slots.length < 3) {
-    slots.push(null as unknown as FeaturedAchievement);
-  }
+  const slots = useMemo(() => {
+    const nextSlots: Array<FeaturedAchievement | null> = [...achievements];
+    while (nextSlots.length < 3) {
+      nextSlots.push(null);
+    }
+    return nextSlots;
+  }, [achievements]);
 
   const handleEditToggle = () => {
     setIsEditMode(!isEditMode);

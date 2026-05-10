@@ -14,7 +14,6 @@ import Animated, {
   FadeInUp,
   useAnimatedStyle,
   withSpring,
-  withTiming,
 } from 'react-native-reanimated';
 
 import { Pressable } from 'react-native';
@@ -109,7 +108,6 @@ function GoalCard({
  * Goal selection screen
  */
 export function GoalScreen({ onSelect, onSkip, onBack }: GoalScreenProps & { onBack?: () => void }): JSX.Element {
-  const { theme } = useTheme();
   const [selectedGoal, setSelectedGoal] = useState<FocusGoal | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);
 

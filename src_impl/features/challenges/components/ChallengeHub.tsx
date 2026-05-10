@@ -4,11 +4,11 @@
  * Central hub for all challenge types with filtering and progress overview.
  */
 
-import React, { useState, useCallback } from "react";
-import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator } from "react-native";
+import React, { useState } from "react";
+import { View, Text, ScrollView, Pressable, ActivityIndicator } from "react-native";
 import { FlashList, type ListRenderItem } from "@shopify/flash-list";
 import { useThemeObject } from "../../../theme";
-import { Card, Button, Badge, ProgressBar } from "../../../components";
+import { Card, Badge, ProgressBar } from "../../../components";
 import { useActiveChallenges, useChallengeSummaries } from "../hooks";
 import { ChallengeCard } from "./ChallengeCard";
 import { type UserChallengeSummary } from "../schemas";
@@ -25,18 +25,11 @@ interface ChallengeHubProps {
 export const ChallengeHub: React.FC<ChallengeHubProps> = ({ userId, onChallengePress, onClaimReward }) => {
   const theme = useThemeObject();
   const [activeFilter, setActiveFilter] = useState<ChallengeFilter>("ALL");
-  const [refreshing, setRefreshing] = useState(false);
 
-  const { data: allChallenges, isLoading: isLoadingAll, error, refetch: refetchAll } = useActiveChallenges(userId);
+  const { isLoading: isLoadingAll } = useActiveChallenges(userId);
   const { data: challengeSummaries, isLoading: isLoadingSummaries } = useChallengeSummaries(userId);
 
   const isLoading = isLoadingAll || isLoadingSummaries;
-
-  const handleRefresh = useCallback(async () => {
-    setRefreshing(true);
-    await refetchAll();
-    setRefreshing(false);
-  }, [refetchAll]);
 
   const getFilteredChallenges = (): UserChallengeSummary[] => {
     if (!challengeSummaries) {

@@ -20,23 +20,19 @@ import {
 
 import {
   PrimeTimeEventScheduler,
-  PrimeTimeWindow,
 } from '../retention/PrimeTimeEventScheduler';
 
 import {
   WeeklyRaidSystem,
-  SquadRaidEncounter,
 } from '../features/boss/WeeklyRaidSystem';
 
 // Phase 6 Systems
 import {
   PredictiveInterventionEngine,
-  RiskPrediction,
 } from '../features/ai-coach/PredictiveInterventionEngine';
 
 import {
   AdaptiveDifficultyEngine,
-  DifficultyRating,
 } from '../features/boss/AdaptiveDifficultyEngine';
 
 import {

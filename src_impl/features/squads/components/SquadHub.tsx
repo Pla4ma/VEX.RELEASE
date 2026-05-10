@@ -148,7 +148,7 @@ export const SquadHub: React.FC<SquadHubProps> = ({ squadId, userId, onInvitePre
           <Text style={[styles.sectionTitle, { color: theme.colors.text.primary }]}>Members</Text>
           <Text style={[styles.memberCount, { color: theme.colors.text.secondary }]}>{activeMembers.length} active</Text>
         </View>
-        {activeMembers.map((member, index) => (
+        {activeMembers.map((member, _index) => (
           <React.Fragment key={member.userId}>
             <Pressable style={({ pressed }) => [styles.memberRow, pressed && { opacity: 0.7 }]} onPress={() => onMemberPress?.(member)} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
               <Avatar size="xs" source={member.avatarUrl ? { uri: member.avatarUrl } : undefined} name={member.displayName} />

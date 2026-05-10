@@ -4,9 +4,56 @@
  * Main accessibility system coordination and event handling.
  */
 
-import { eventBus } from "../events";
+import { eventBus } from '../events';
 import { AccessibilityPreferences } from './types';
 import { DEFAULT_ACCESSIBILITY } from './constants';
+
+export { DEFAULT_ACCESSIBILITY, COLOR_BLIND_PALETTES } from './constants';
+export {
+  calculateContrastRatio,
+  checkContrast,
+  getAccessibleAlternatives,
+} from './contrast';
+export {
+  getAccessibleAlternatives as getAccessibleColorAlternatives,
+} from './contrast';
+export {
+  getAccessibleColor,
+  getStatusPattern,
+} from './color-blind';
+export {
+  announce,
+  getRecentAnnouncements,
+  generateAccessibleLabel,
+} from './screen-reader';
+export {
+  getAnimationConfig,
+  getAnimationStyles,
+  calculateScaledFontSize,
+  getScaledTypography,
+} from './motion';
+export {
+  registerFocusableElement,
+  getNextFocusableElement,
+  getPreviousFocusableElement,
+} from './focus';
+export {
+  getAccessibilityPreferences,
+  updateAccessibilityPreferences,
+  detectSystemAccessibility,
+} from './preferences';
+export { auditScreen } from './audit';
+export type {
+  AccessibilityPreferences,
+  ContrastCheck,
+  ColorBlindType,
+  ColorBlindPalette,
+  ScreenReaderAnnouncement,
+  AnimationConfig,
+  FocusableElement,
+  AccessibilityAudit,
+  AccessibilityIssue,
+} from './types';
 
 export class AccessibilitySystem {
   private preferences: AccessibilityPreferences;
@@ -20,20 +67,20 @@ export class AccessibilitySystem {
    * Initialize the accessibility system
    */
   async initialize(): Promise<void> {
-    if (this.initialized) return;
+    if (this.initialized) {return;}
 
     // Load user preferences
     await this.loadPreferences();
-    
+
     // Apply initial settings
     this.applySettings();
-    
+
     // Set up event listeners
     this.setupEventListeners();
-    
+
     this.initialized = true;
-    
-    eventBus.emit('accessibility:initialized', {
+
+    eventBus.publish('accessibility:initialized', {
       preferences: this.preferences,
       timestamp: Date.now(),
     });
@@ -45,15 +92,15 @@ export class AccessibilitySystem {
   async updatePreferences(updates: Partial<AccessibilityPreferences>): Promise<void> {
     const oldPreferences = { ...this.preferences };
     this.preferences = { ...this.preferences, ...updates };
-    
+
     // Save preferences
     await this.savePreferences();
-    
+
     // Apply new settings
     this.applySettings();
-    
+
     // Emit change event
-    eventBus.emit('accessibility:preferences_updated', {
+    eventBus.publish('accessibility:preferences_updated', {
       oldPreferences,
       newPreferences: this.preferences,
       changes: updates,

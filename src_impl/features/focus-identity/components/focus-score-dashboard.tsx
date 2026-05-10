@@ -49,7 +49,7 @@ export function FocusScoreDashboard({ model, onRetry, onStartSession, onOpenMont
     const strongest = [...entries].sort((a, b) => b[1] - a[1])[0];
     const weakest = [...entries].sort((a, b) => a[1] - b[1])[0];
     return { strongest, weakest, entries };
-  }, [model.current]);
+  }, [model]);
 
   if (model.isPending) {
     return loadingSkeleton(theme.spacing[3], theme.colors.border.DEFAULT, theme.colors.background.secondary);

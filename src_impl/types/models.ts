@@ -5,8 +5,6 @@
  * These types represent the domain entities of the application.
  */
 
-import type { DateRange } from './global';
-
 /**
  * Base model interface with common fields
  */

@@ -68,8 +68,6 @@ function RankBadge({ rank }: { rank: number }): JSX.Element {
  * Delta indicator
  */
 function RankDelta({ delta }: { delta: number }): JSX.Element {
-  const { theme } = useTheme();
-
   if (delta === 0) {
     return (
       <Text variant="caption" color="text.tertiary">
@@ -92,8 +90,6 @@ function RankDelta({ delta }: { delta: number }): JSX.Element {
  * MVP badge for #1
  */
 function MVPBadge(): JSX.Element {
-  const { theme } = useTheme();
-
   return (
     <Box px="sm" py="xs" borderRadius="full" bg="accent.purple" flexDirection="row" alignItems="center" gap="xs">
       <Text fontSize={12}>⭐</Text>

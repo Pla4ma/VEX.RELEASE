@@ -548,14 +548,6 @@ export const validateIPAddress = (ip: string, context: 'login' | 'api' | 'admin'
     errors.push('Invalid IP address format');
   }
 
-  // Check for suspicious IP ranges
-  const suspiciousRanges = [
-    '0.0.0.0/8',     // This network
-    '169.254.0.0/16', // Link-local
-    '224.0.0.0/4',    // Multicast
-    '240.0.0.0/4',    // Reserved
-  ];
-
   // Check if IP is in private range (for public services)
   const privateRanges = [
     '10.0.0.0/8',
@@ -595,6 +587,6 @@ export const validateIPAddress = (ip: string, context: 'login' | 'api' | 'admin'
 function isIPInRange(ip: string, range: string): boolean {
   // This is a simplified implementation
   // In production, use a proper IP range library
-  const [network, prefixLength] = range.split('/');
+  const [network] = range.split('/');
   return ip.startsWith(network.split('.')[0]);
 }

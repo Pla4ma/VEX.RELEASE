@@ -81,15 +81,18 @@ const Dots: React.FC<{ size: number; color: string }> = ({ size, color }) => {
   const dotSize = size / 3;
   const gap = dotSize / 2;
 
-  const createDotStyle = (scale: ReturnType<typeof useSharedValue<number>>, delay: number) =>
-    useAnimatedStyle(() => ({
-      transform: [{ scale: scale.value }],
-      opacity: 0.4 + scale.value * 0.6,
-    }));
-
-  const dot1Style = createDotStyle(dot1, 0);
-  const dot2Style = createDotStyle(dot2, 100);
-  const dot3Style = createDotStyle(dot3, 200);
+  const dot1Style = useAnimatedStyle(() => ({
+    transform: [{ scale: dot1.value }],
+    opacity: 0.4 + dot1.value * 0.6,
+  }));
+  const dot2Style = useAnimatedStyle(() => ({
+    transform: [{ scale: dot2.value }],
+    opacity: 0.4 + dot2.value * 0.6,
+  }));
+  const dot3Style = useAnimatedStyle(() => ({
+    transform: [{ scale: dot3.value }],
+    opacity: 0.4 + dot3.value * 0.6,
+  }));
 
   return (
     <View style={[styles.dotsContainer, { gap }]}>

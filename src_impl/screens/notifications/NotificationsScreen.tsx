@@ -376,6 +376,33 @@ export const NotificationsScreen: React.FC = () => {
     return date.toLocaleDateString();
   }, []);
 
+  // Build flat list with section headers
+  const listData = useMemo(() => {
+    const items: NotificationListItem[] = [];
+
+    if (groupedNotifications.today.length > 0) {
+      items.push({ type: 'header', title: 'Today', count: groupedNotifications.today.length });
+      groupedNotifications.today.forEach((n) => items.push({ type: 'notification', data: n }));
+    }
+
+    if (groupedNotifications.yesterday.length > 0) {
+      items.push({ type: 'header', title: 'Yesterday', count: groupedNotifications.yesterday.length });
+      groupedNotifications.yesterday.forEach((n) => items.push({ type: 'notification', data: n }));
+    }
+
+    if (groupedNotifications.thisWeek.length > 0) {
+      items.push({ type: 'header', title: 'This Week', count: groupedNotifications.thisWeek.length });
+      groupedNotifications.thisWeek.forEach((n) => items.push({ type: 'notification', data: n }));
+    }
+
+    if (groupedNotifications.earlier.length > 0) {
+      items.push({ type: 'header', title: 'Earlier', count: groupedNotifications.earlier.length });
+      groupedNotifications.earlier.forEach((n) => items.push({ type: 'notification', data: n }));
+    }
+
+    return items;
+  }, [groupedNotifications]);
+
   // Loading State
   if (isLoading) {
     return (
@@ -534,33 +561,6 @@ export const NotificationsScreen: React.FC = () => {
       </Box>
     );
   };
-
-  // Build flat list with section headers
-  const listData = useMemo(() => {
-    const items: NotificationListItem[] = [];
-
-    if (groupedNotifications.today.length > 0) {
-      items.push({ type: 'header', title: 'Today', count: groupedNotifications.today.length });
-      groupedNotifications.today.forEach((n) => items.push({ type: 'notification', data: n }));
-    }
-
-    if (groupedNotifications.yesterday.length > 0) {
-      items.push({ type: 'header', title: 'Yesterday', count: groupedNotifications.yesterday.length });
-      groupedNotifications.yesterday.forEach((n) => items.push({ type: 'notification', data: n }));
-    }
-
-    if (groupedNotifications.thisWeek.length > 0) {
-      items.push({ type: 'header', title: 'This Week', count: groupedNotifications.thisWeek.length });
-      groupedNotifications.thisWeek.forEach((n) => items.push({ type: 'notification', data: n }));
-    }
-
-    if (groupedNotifications.earlier.length > 0) {
-      items.push({ type: 'header', title: 'Earlier', count: groupedNotifications.earlier.length });
-      groupedNotifications.earlier.forEach((n) => items.push({ type: 'notification', data: n }));
-    }
-
-    return items;
-  }, [groupedNotifications]);
 
   // Empty State
   if (notifications.length === 0) {

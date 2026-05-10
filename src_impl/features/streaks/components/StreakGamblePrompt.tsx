@@ -61,11 +61,11 @@ const GAMBLE_BONUS_XP = 50; // Bonus XP for winning the gamble
 // Component
 // ============================================================================
 
-export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDays, hoursRemaining, shieldsAvailable, userLevel, onUseShield, onGamble, onDismiss, onSessionComplete }) => {
+export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDays, hoursRemaining, shieldsAvailable, userLevel: _userLevel, onUseShield, onGamble, onDismiss, onSessionComplete: _onSessionComplete }) => {
   const { theme } = useTheme();
   const [gambleState, setGambleState] = useState<GambleState>("prompt");
-  const [outcome, setOutcome] = useState<GambleOutcome | null>(null);
-  const [selectedOption, setSelectedOption] = useState<"shield" | "gamble" | null>(null);
+  const [outcome] = useState<GambleOutcome | null>(null);
+  const [, setSelectedOption] = useState<"shield" | "gamble" | null>(null);
 
   // Animation values
   const pulseOpacity = useSharedValue(1);
@@ -94,7 +94,7 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
         shieldsAvailable,
       },
     });
-  }, []);
+  }, [countdownScale, hoursRemaining, pulseOpacity, shakeX, shieldsAvailable, streakDays]);
 
   // Handle user selecting shield option
   const handleUseShield = () => {
@@ -114,35 +114,6 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
     onGamble();
   };
 
-  // Handle session completion (called externally)
-  const handleSessionComplete = (grade: "S" | "A" | "B" | "C" | "D") => {
-    const success = GAMBLE_SUCCESS_GRADES.includes(grade);
-
-    const outcome: GambleOutcome = {
-      success,
-      grade,
-      xpEarned: success ? GAMBLE_BONUS_XP + userLevel * 2 : 0,
-      shieldPreserved: success, // Shield only used if gamble failed
-    };
-
-    setOutcome(outcome);
-    setGambleState(success ? "won" : "lost");
-
-    // Track outcome
-    Sentry.addBreadcrumb({
-      category: "streaks",
-      message: `Streak gamble ${success ? "WON" : "LOST"}`,
-      level: success ? "info" : "warning",
-      data: {
-        grade,
-        streakDays,
-        xpEarned: outcome.xpEarned,
-      },
-    });
-
-    onSessionComplete?.(grade);
-  };
-
   // Animated styles
   const pulseStyle = useAnimatedStyle(() => ({
     opacity: pulseOpacity.value,
@@ -159,14 +130,6 @@ export const StreakGamblePrompt: React.FC<StreakGamblePromptProps> = ({ streakDa
   const countdownStyle = useAnimatedStyle(() => ({
     transform: [{ scale: countdownScale.value }],
   }));
-
-  // Format time remaining
-  const formatTime = (hours: number): string => {
-    if (hours < 1) {
-      return `${Math.ceil(hours * 60)} minutes`;
-    }
-    return `${Math.ceil(hours * 10) / 10} hours`;
-  };
 
   // Calculate risk level text
   const getRiskText = (hours: number): { text: string; color: string } => {

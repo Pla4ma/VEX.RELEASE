@@ -1,0 +1,2 @@
+C:\Users\jonat\CascadeProjects\vex-app-old\src_impl\features\content-study\__tests__\hooks.test.ts:54:25: Parsing error: '>' expected. [Error]
+C:\Users\jonat\CascadeProjects\vex-app-old\src_impl\features\items\__tests__\service.test.ts:27:2: Parsing error: Declaration or statement expected. [Error]

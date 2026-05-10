@@ -5,7 +5,6 @@
  * Handles ticking, progress tracking, and phase transitions.
  */
 
-import { eventBus } from '../../events';
 import { createDebugger } from '../../utils/debug';
 import type { SessionState } from '../types';
 import { TimeCalculator } from '../engines/TimeCalculator';
@@ -204,7 +203,7 @@ export class SessionTimerService {
     nextPhase?: string;
     reason?: string;
   } {
-    const { elapsed, remaining, percentage } = this.calculateProgress(session);
+    const { elapsed, remaining } = this.calculateProgress(session);
 
     // Check for interval completion
     const intervalDuration = session.config.duration / (session.totalIntervals || 1);

@@ -24,14 +24,14 @@ export function updateAccessibilityPreferences(updates: Partial<AccessibilityPre
     ...currentPreferences,
     ...updates,
   };
-  
+
   // Emit preference change event
   if (typeof window !== 'undefined' && window.dispatchEvent) {
     window.dispatchEvent(new CustomEvent('accessibilityPreferencesChanged', {
-      detail: currentPreferences
+      detail: currentPreferences,
     }));
   }
-  
+
   return { ...currentPreferences };
 }
 
@@ -48,7 +48,7 @@ export function resetAccessibilityPreferences(): AccessibilityPreferences {
  */
 export async function detectSystemAccessibility(): Promise<Partial<AccessibilityPreferences>> {
   const detected: Partial<AccessibilityPreferences> = {};
-  
+
   try {
     // Detect reduced motion preference
     if (typeof window !== 'undefined' && window.matchMedia) {
@@ -58,7 +58,7 @@ export async function detectSystemAccessibility(): Promise<Partial<Accessibility
         detected.animationsEnabled = false;
       }
     }
-    
+
     // Detect high contrast preference
     if (typeof window !== 'undefined' && window.matchMedia) {
       const prefersHighContrast = window.matchMedia('(prefers-contrast: high)').matches;
@@ -66,11 +66,11 @@ export async function detectSystemAccessibility(): Promise<Partial<Accessibility
         detected.highContrast = true;
       }
     }
-    
+
   } catch (error) {
     // Failed to detect system accessibility settings
     // Would integrate with proper error handling/logging
   }
-  
+
   return detected;
 }

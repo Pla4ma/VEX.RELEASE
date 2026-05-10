@@ -7,7 +7,7 @@
 export interface MetricWithTarget {
   current: number;
   target: number;
-  trend: "up" | "down" | "flat";
+  trend: 'up' | 'down' | 'flat';
 }
 
 export interface VEXSuccessMetrics {
@@ -54,20 +54,37 @@ export interface EngagementMetrics {
   userId: string;
   sessionsLast7Days: number;
   sessionsLast30Days: number;
+  totalFocusMinutes: number;
+  avgSessionDuration: number;
   averageSessionDuration: number;
   studyPlansCompleted: number;
   studyPlansStarted: number;
   completionRate: number;
   lastActiveDate: string;
+  bossBattlesCompleted: number;
+  streakDays: number;
+  weeklyActive: boolean;
+  powerUser: boolean;
 }
 
 export interface MonetizationMetrics {
   userId: string;
+  totalUsers: number;
+  freeUsers: number;
+  premiumUsers: number;
+  trialUsers: number;
   isPremium: boolean;
   conversionDate?: string;
+  conversionRate: number;
+  premiumConversionRate: number;
+  trialConversionRate: number;
+  averageLTV: number;
   lifetimeValue: number;
   purchases: number;
   totalSpent: number;
+  totalRevenue: number;
+  arpu: number;
+  mrr: number;
   subscriptionRevenue: number;
   oneTimeRevenue: number;
   refundRate: number;

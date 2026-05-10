@@ -10,8 +10,7 @@ import {
   useAnimatedStyle,
   withTiming,
   withSpring,
-  type WithTimingConfig,
-  type WithSpringConfig,
+  withDelay,
   type SharedValue,
 } from 'react-native-reanimated';
 
@@ -90,31 +89,30 @@ export function useSlide(options: UseSlideOptions = {}): UseSlideResult {
     };
   });
 
+  const animateTranslate = useCallback(
+    (target: { x: number; y: number }) => {
+      const animation = useSpringAnimation
+        ? withSpring(target, defaultSpring)
+        : withTiming(target, { duration });
+
+      translate.value = delay > 0 ? withDelay(delay, animation) : animation;
+    },
+    [translate, useSpringAnimation, duration, delay]
+  );
+
   const slideIn = useCallback(() => {
-    if (useSpringAnimation) {
-      translate.value = withSpring({ x: 0, y: 0 }, defaultSpring);
-    } else {
-      translate.value = withTiming({ x: 0, y: 0 }, { duration });
-    }
-  }, [translate, useSpringAnimation, duration]);
+    animateTranslate({ x: 0, y: 0 });
+  }, [animateTranslate]);
 
   const slideOut = useCallback(() => {
-    if (useSpringAnimation) {
-      translate.value = withSpring(initialOffset, defaultSpring);
-    } else {
-      translate.value = withTiming(initialOffset, { duration });
-    }
-  }, [translate, initialOffset, useSpringAnimation, duration]);
+    animateTranslate(initialOffset);
+  }, [animateTranslate, initialOffset]);
 
   const slideTo = useCallback(
     (x: number, y: number) => {
-      if (useSpringAnimation) {
-        translate.value = withSpring({ x, y }, defaultSpring);
-      } else {
-        translate.value = withTiming({ x, y }, { duration });
-      }
+      animateTranslate({ x, y });
     },
-    [translate, useSpringAnimation, duration]
+    [animateTranslate]
   );
 
   return {

@@ -10,15 +10,13 @@
  */
 
 import React, { useEffect, useState, useCallback } from "react";
-import { ScrollView, Dimensions } from "react-native";
-import Animated, { FadeIn, FadeInUp, FadeInDown, useAnimatedStyle, withSpring, withSequence, withTiming, withDelay, withRepeat, interpolate, Extrapolation, runOnJS } from "react-native-reanimated";
+import { ScrollView } from "react-native";
+import Animated, { FadeIn, FadeInUp, FadeInDown, useAnimatedStyle, withSpring, withSequence, withTiming } from "react-native-reanimated";
 
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { Button } from "../../../components/primitives/Button";
 import { useTheme } from "../../../theme";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export interface BossDefeatedScreenProps {
   /** Boss name */

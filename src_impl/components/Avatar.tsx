@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { View, Image, StyleSheet, Pressable, StyleProp, ViewStyle } from "react-native";
+import { View, Image, Pressable, StyleProp, ViewStyle } from "react-native";
 
 import { useTheme } from "../theme";
 import { Text } from "./primitives";

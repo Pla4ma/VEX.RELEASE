@@ -6,12 +6,10 @@
  */
 
 import React from 'react';
-import { View, Pressable } from 'react-native';
+import { View } from 'react-native';
 import Animated, {
   FadeInDown,
   FadeOutUp,
-  withSpring,
-  useAnimatedStyle,
 } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';

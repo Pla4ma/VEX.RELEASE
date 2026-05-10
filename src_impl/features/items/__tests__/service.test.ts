@@ -24,7 +24,7 @@ const mockSupabase = {
   eq: jest.fn().mockReturnThis(),
   single: jest.fn(),
   in: jest.fn().mockReturnThis(),
-} };
+};
 
 (getSupabaseClient as jest.Mock).mockReturnValue(mockSupabase);
 

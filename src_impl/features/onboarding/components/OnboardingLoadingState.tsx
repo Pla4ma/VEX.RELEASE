@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
 
@@ -15,7 +15,7 @@ interface OnboardingLoadingStateProps {
   step?: string;
 }
 
-export function OnboardingLoadingState({ step = 'Loading...' }: OnboardingLoadingStateProps): JSX.Element {
+export function OnboardingLoadingState({ step: _step = 'Loading...' }: OnboardingLoadingStateProps): JSX.Element {
   return (
     <Animated.View entering={FadeIn} style={styles.container}>
       <View style={styles.content}>

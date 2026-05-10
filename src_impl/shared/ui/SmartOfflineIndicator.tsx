@@ -65,6 +65,48 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
   const [opacity] = useState(new RNAnimated.Value(0));
   const [scale] = useState(new RNAnimated.Value(1));
 
+  // Animate indicator out
+  const animateOut = useCallback(() => {
+    RNAnimated.parallel([
+      RNAnimated.spring(translateY, {
+        toValue: -100,
+        useNativeDriver: true,
+        friction: 8,
+      }),
+      RNAnimated.timing(opacity, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [opacity, translateY]);
+
+  // Animate indicator in
+  const animateIn = useCallback(() => {
+    RNAnimated.parallel([
+      RNAnimated.spring(translateY, {
+        toValue: 0,
+        useNativeDriver: true,
+        friction: 8,
+      }),
+      RNAnimated.timing(opacity, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
+
+    // Auto-hide after 3 seconds if no pending items
+    if (syncQueue.length === 0) {
+      setTimeout(() => animateOut(), 3000);
+    }
+  }, [animateOut, opacity, syncQueue.length, translateY]);
+
+  const handleDismiss = useCallback(() => {
+    animateOut();
+    onDismiss?.();
+  }, [animateOut, onDismiss]);
+
   // Monitor connection
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state: NetInfoState) => {
@@ -87,44 +129,7 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
     });
 
     return () => unsubscribe();
-  }, [isConnected]);
-
-  // Animate indicator in
-  const animateIn = useCallback(() => {
-    RNAnimated.parallel([
-      RNAnimated.spring(translateY, {
-        toValue: 0,
-        useNativeDriver: true,
-        friction: 8,
-      }),
-      RNAnimated.timing(opacity, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start();
-
-    // Auto-hide after 3 seconds if no pending items
-    if (syncQueue.length === 0) {
-      setTimeout(() => animateOut(), 3000);
-    }
-  }, [syncQueue.length]);
-
-  // Animate indicator out
-  const animateOut = useCallback(() => {
-    RNAnimated.parallel([
-      RNAnimated.spring(translateY, {
-        toValue: -100,
-        useNativeDriver: true,
-        friction: 8,
-      }),
-      RNAnimated.timing(opacity, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  }, []);
+  }, [animateIn, animateOut, isConnected]);
 
   // Toggle expanded view
   const toggleExpanded = useCallback(() => {
@@ -145,7 +150,7 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
     if (onManualSync) {
       onManualSync();
     }
-  }, [onManualSync]);
+  }, [onManualSync, scale]);
 
   // Format sync queue items by priority
   const highPriority = syncQueue.filter(item => item.priority === 'high');
@@ -230,6 +235,7 @@ export const SmartOfflineIndicator: React.FC<SmartOfflineIndicatorProps> = ({
         {/* Status Bar */}
         <Pressable
           style={({ pressed }) => [styles.statusBar, pressed && { opacity: 0.8 }]}
+          onLongPress={handleDismiss}
           onPress={toggleExpanded}
           accessibilityLabel="Interactive control"
           accessibilityRole="button"

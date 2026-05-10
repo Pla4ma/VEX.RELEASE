@@ -130,8 +130,8 @@ export interface RetryStrategy {
 export interface ApiEndpoint<TRequest, TResponse> {
   method: HttpMethod;
   path: string;
-  requestSchema?: unknown;
-  responseSchema?: unknown;
+  requestSchema?: TRequest extends unknown ? unknown : never;
+  responseSchema?: TResponse extends unknown ? unknown : never;
   cache?: ApiCacheConfig;
   retry?: RetryStrategy;
 }

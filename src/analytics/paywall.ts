@@ -22,7 +22,7 @@ const paywallAnalytics: PaywallAnalytics = {
 /**
  * Track paywall event
  */
-export function trackPaywallEvent(event: "show" | "dismiss" | "convert", context: string, revenue?: number): void {
+export function trackPaywallEvent(event: 'show' | 'dismiss' | 'convert', context: string, revenue?: number): void {
   if (!paywallAnalytics.contexts[context]) {
     paywallAnalytics.contexts[context] = {
       impressions: 0,
@@ -32,16 +32,16 @@ export function trackPaywallEvent(event: "show" | "dismiss" | "convert", context
   }
 
   switch (event) {
-    case "show":
+    case 'show':
       paywallAnalytics.impressions++;
       paywallAnalytics.contexts[context].impressions++;
       break;
-    case "dismiss":
+    case 'dismiss':
       // Track abandonment
-      paywallAnalytics.abandonmentRate = paywallAnalytics.impressions > 0 ? 
+      paywallAnalytics.abandonmentRate = paywallAnalytics.impressions > 0 ?
         (paywallAnalytics.impressions - paywallAnalytics.conversions) / paywallAnalytics.impressions : 0;
       break;
-    case "convert":
+    case 'convert':
       paywallAnalytics.conversions++;
       paywallAnalytics.contexts[context].conversions++;
       if (revenue) {
@@ -57,7 +57,7 @@ export function trackPaywallEvent(event: "show" | "dismiss" | "convert", context
   for (const ctx of Object.keys(paywallAnalytics.contexts)) {
     const data = paywallAnalytics.contexts[ctx];
     const ctxRate = data.impressions > 0 ? data.conversions / data.impressions : 0;
-    
+
     // Update best context if this one is better
     if (ctxRate > paywallAnalytics.conversionRate && data.impressions > 10) {
       paywallAnalytics.bestContext = ctx;

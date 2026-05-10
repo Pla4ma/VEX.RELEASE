@@ -6,7 +6,7 @@
 
 import React, { useEffect, useCallback, type ReactNode } from "react";
 import { View, StyleSheet, TouchableWithoutFeedback, BackHandler, type ViewStyle } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, runOnJS, type SharedValue } from "react-native-reanimated";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, runOnJS } from "react-native-reanimated";
 
 import { useTheme } from "../../theme";
 import { Box, Text } from "../primitives";
@@ -165,6 +165,7 @@ export const Modal: React.FC<ModalProps> = ({ visible, children, title, onClose,
           },
           contentAnimatedStyle,
           style,
+          contentStyle,
         ]}
       >
         {/* Header */}

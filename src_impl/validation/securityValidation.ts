@@ -26,7 +26,7 @@ export interface SecurityConfig {
 }
 
 // XSS (Cross-Site Scripting) validation
-export const validateXSS = (input: string, config: SecurityConfig): SecurityValidationResult => {
+export const validateXSS = (input: string, _config: SecurityConfig): SecurityValidationResult => {
   const errors: string[] = [];
   const warnings: string[] = [];
   const threats: string[] = [];
@@ -583,7 +583,7 @@ export const validateIPAddressSecurity = (ip: string, context: 'client' | 'serve
 export const validateSecurity = (
   data: DynamicValue,
   config: SecurityConfig,
-  context: 'input' | 'output' | 'file' | 'api' = 'input'
+  _context: 'input' | 'output' | 'file' | 'api' = 'input'
 ): SecurityValidationResult => {
   const allErrors: string[] = [];
   const allWarnings: string[] = [];

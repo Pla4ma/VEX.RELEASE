@@ -160,7 +160,18 @@ export interface EventChannels
     SessionStoryEventDefinitions,
     EmotionRetentionEventDefinitions,
     BattlePassEventDefinitions,
-    ProductivityEventDefinitions {}
+    ProductivityEventDefinitions {
+  'accessibility:initialized': {
+    preferences: unknown;
+    timestamp: number;
+  };
+  'accessibility:preferences_updated': {
+    oldPreferences: unknown;
+    newPreferences: unknown;
+    changes: unknown;
+    timestamp: number;
+  };
+}
 
 /**
  * Event channel names as union type

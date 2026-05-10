@@ -7,8 +7,8 @@
  * @phase 1A.6
  */
 
-import React, { useMemo, useCallback } from "react";
-import { Pressable, View } from "react-native";
+import React, { useCallback } from "react";
+import { Pressable } from "react-native";
 import { FlashList, type ListRenderItem } from "@shopify/flash-list";
 import Animated, { FadeIn } from "react-native-reanimated";
 
@@ -136,8 +136,7 @@ function RecentSessionsSkeleton(): JSX.Element {
 /**
  * Empty state when no sessions
  */
-function EmptyState({ onStart }: { onStart?: () => void }): JSX.Element {
-  const { theme } = useTheme();
+function EmptyState({ onStart: _onStart }: { onStart?: () => void }): JSX.Element {
 
   return (
     <Animated.View entering={FadeIn.duration(400)}>

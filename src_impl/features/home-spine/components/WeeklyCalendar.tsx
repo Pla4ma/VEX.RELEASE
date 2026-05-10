@@ -223,7 +223,6 @@ function DayDetailsPopover({ day, onClose }: { day: DayData; onClose: () => void
  * Weekly calendar component
  */
 export function WeeklyCalendar({ days, selectedDay, onDaySelect, currentStreak }: WeeklyCalendarProps): JSX.Element {
-  const { theme } = useTheme();
   const [showDetails, setShowDetails] = useState<Date | null>(null);
 
   const today = new Date();

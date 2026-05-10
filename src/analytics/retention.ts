@@ -11,11 +11,11 @@ const retentionCohorts = new Map<string, RetentionCohort>();
 /**
  * Track user retention
  */
-export function trackRetentionEvent(userId: string, event: "first_open" | "session" | "return"): void {
-  const today = new Date().toISOString().split("T")[0];
+export function trackRetentionEvent(userId: string, event: 'first_open' | 'session' | 'return'): void {
+  const today = new Date().toISOString().split('T')[0];
   const userFirstOpen = getUserFirstOpen(userId);
 
-  if (event === "first_open") {
+  if (event === 'first_open') {
     // New cohort
     const cohort = retentionCohorts.get(today) || {
       cohortDate: today,
@@ -96,12 +96,12 @@ export function getRetentionCohorts(): RetentionCohort[] {
   return Array.from(retentionCohorts.values());
 }
 
-function getUserFirstOpen(userId: string): string | null {
+function getUserFirstOpen(_userId: string): string | null {
   // Would integrate with persistent storage
   return null;
 }
 
-function storeUserFirstOpen(userId: string, date: string): void {
+function storeUserFirstOpen(_userId: string, _date: string): void {
   // Would integrate with persistent storage
 }
 

@@ -9,7 +9,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Pressable } from "react-native";
-import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming, withDelay, interpolate, Extrapolate } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming, withDelay } from "react-native-reanimated";
 
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";

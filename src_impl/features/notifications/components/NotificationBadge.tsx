@@ -83,10 +83,6 @@ export function NotificationBadge({ userId, size = "md" }: NotificationBadgeProp
     };
   }, [userId]);
 
-  if (count === 0) {
-    return null;
-  }
-
   const displayCount = count > 99 ? "99+" : count.toString();
   const isLargeNumber = count > 9;
 
@@ -110,6 +106,10 @@ export function NotificationBadge({ userId, size = "md" }: NotificationBadgeProp
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: withSpring(1, { damping: 12, stiffness: 200 }) }],
   }));
+
+  if (count === 0) {
+    return null;
+  }
 
   return (
     <Animated.View style={animatedStyle}>

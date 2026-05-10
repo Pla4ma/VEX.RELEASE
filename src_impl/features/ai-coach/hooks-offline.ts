@@ -60,12 +60,38 @@ export function useOfflineCoach(userId: string): UseOfflineCoachResult {
     setPendingCount(queue.length);
   }, []);
 
-  // Process queue when coming back online
-  useEffect(() => {
-    if (netInfo.isConnected && !processingRef.current) {
-      processQueue();
+  const processQueue = useCallback(async () => {
+    if (processingRef.current) {
+      return;
     }
-  }, [netInfo.isConnected, netInfo.isInternetReachable]);
+    processingRef.current = true;
+    setIsProcessing(true);
+
+    const queue = getQueue();
+    const remaining: QueuedMutation[] = [];
+
+    for (const mutation of queue) {
+      try {
+        await processMutation(mutation, userId, queryClient);
+      } catch (error) {
+        debug.error("Mutation failed", error instanceof Error ? error : new Error(String(error)));
+
+        // Retry up to MAX_RETRY_ATTEMPTS
+        if (mutation.retryCount < MAX_RETRY_ATTEMPTS) {
+          remaining.push({
+            ...mutation,
+            retryCount: mutation.retryCount + 1,
+          });
+        }
+      }
+    }
+
+    saveQueue(remaining);
+    setPendingCount(remaining.length);
+
+    processingRef.current = false;
+    setIsProcessing(false);
+  }, [userId, queryClient]);
 
   const queueMutation = useCallback(
     (mutation: Omit<QueuedMutation, "id" | "timestamp" | "retryCount">) => {
@@ -101,41 +127,15 @@ export function useOfflineCoach(userId: string): UseOfflineCoachResult {
         processQueue();
       }
     },
-    [netInfo.isConnected],
+    [netInfo.isConnected, processQueue],
   );
 
-  const processQueue = useCallback(async () => {
-    if (processingRef.current) {
-      return;
+  // Process queue when coming back online
+  useEffect(() => {
+    if (netInfo.isConnected && !processingRef.current) {
+      processQueue();
     }
-    processingRef.current = true;
-    setIsProcessing(true);
-
-    const queue = getQueue();
-    const remaining: QueuedMutation[] = [];
-
-    for (const mutation of queue) {
-      try {
-        await processMutation(mutation, userId, queryClient);
-      } catch (error) {
-        debug.error("Mutation failed", error instanceof Error ? error : new Error(String(error)));
-
-        // Retry up to MAX_RETRY_ATTEMPTS
-        if (mutation.retryCount < MAX_RETRY_ATTEMPTS) {
-          remaining.push({
-            ...mutation,
-            retryCount: mutation.retryCount + 1,
-          });
-        }
-      }
-    }
-
-    saveQueue(remaining);
-    setPendingCount(remaining.length);
-
-    processingRef.current = false;
-    setIsProcessing(false);
-  }, [userId, queryClient]);
+  }, [netInfo.isConnected, netInfo.isInternetReachable, processQueue]);
 
   const clearQueue = useCallback(() => {
     offlineStorage.delete(QUEUE_KEY);
@@ -161,7 +161,7 @@ interface UseOptimisticCoachActionResult {
 }
 
 export function useOptimisticCoachAction(userId: string): UseOptimisticCoachActionResult {
-  const offlineCoach = useOfflineCoach(userId);
+  useOfflineCoach(userId);
   const [isPending, setIsPending] = useState(false);
 
   const execute = useCallback(
@@ -184,7 +184,7 @@ export function useOptimisticCoachAction(userId: string): UseOptimisticCoachActi
         setIsPending(false);
       }
     },
-    [offlineCoach, userId],
+    [],
   );
 
   return { execute, isPending };
@@ -273,7 +273,7 @@ export function useOfflinePersonaSelection(userId: string) {
 // Queue Processing Logic
 // ============================================================================
 
-async function processMutation(mutation: QueuedMutation, userId: string, queryClient: ReturnType<typeof useQueryClient>): Promise<void> {
+async function processMutation(mutation: QueuedMutation, userId: string, _queryClient: ReturnType<typeof useQueryClient>): Promise<void> {
   switch (mutation.type) {
     case "MARK_READ":
       await service.markMessageAction({

@@ -128,7 +128,7 @@ export function useHomeReturnReason({
       title: reasonState.title,
       tone: reasonState.tone,
     };
-  }, [activeStudyPlan, canShowExpansionSystems, comebackMessage, nextBestAction.ctaLabel, nextBestAction.description, nextBestAction.title, onContinueStudyPlan, openNextAction, openSetup, primaryRecommendation, updateRecommendationStatus, userId]);
+  }, [activeStudyPlan, canShowExpansionSystems, comebackMessage, nextBestAction, onContinueStudyPlan, openNextAction, openSetup, primaryRecommendation, updateRecommendationStatus, userId]);
 
   return { returnReason };
 }

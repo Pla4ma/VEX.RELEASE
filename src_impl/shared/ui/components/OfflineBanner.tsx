@@ -9,12 +9,16 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import {
-  StyleSheet,
   View,
   Pressable,
-  Animated,
   useWindowDimensions,
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NetInfo, { type NetInfoState } from '@react-native-community/netinfo';
 
@@ -48,7 +52,7 @@ export function OfflineBanner({
   const [isConnected, setIsConnected] = useState<boolean | null>(true);
   const [isDismissed, setIsDismissed] = useState(false);
   const [dismissTimer, setDismissTimer] = useState<NodeJS.Timeout | null>(null);
-  const [slideAnim] = useState(new Animated.Value(-100));
+  const slideAnim = useSharedValue(-100);
 
   // Subscribe to network state
   useEffect(() => {
@@ -83,18 +87,14 @@ export function OfflineBanner({
     const shouldShow = !isConnected && !isDismissed;
 
     if (shouldShow) {
-      Animated.spring(slideAnim, {
-        toValue: 0,
-        useNativeDriver: true,
-        friction: 8,
-        tension: 40,
-      }).start();
+      slideAnim.value = withSpring(0, {
+        damping: 15,
+        stiffness: 150,
+      });
     } else {
-      Animated.timing(slideAnim, {
-        toValue: -100,
+      slideAnim.value = withTiming(-100, {
         duration: 250,
-        useNativeDriver: true,
-      }).start();
+      });
     }
   }, [isConnected, isDismissed, slideAnim]);
 
@@ -122,17 +122,19 @@ export function OfflineBanner({
     setIsDismissed(true);
     onDismiss?.();
 
-    Animated.timing(slideAnim, {
-      toValue: -100,
+    slideAnim.value = withTiming(-100, {
       duration: 250,
-      useNativeDriver: true,
-    }).start();
+    });
 
     capture(FeatureEvents.BANNER_DISMISSED, {
       banner_type: 'offline',
       duration_until_reappear_sec: DISMISS_DURATION / 1000,
     });
   }, [onDismiss, slideAnim]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: slideAnim.value }],
+  }));
 
   // Don't render if connected
   if (isConnected === null || isConnected) {
@@ -147,8 +149,8 @@ export function OfflineBanner({
           width,
           paddingTop: insets.top + 8,
           backgroundColor: colors.error.DEFAULT,
-          transform: [{ translateY: slideAnim }],
         },
+        animatedStyle,
       ]}
     >
       <View style={styles.content}>

@@ -3,16 +3,20 @@
 // Re-enable only when social systems are fully implemented
 
 import React from 'react';
-import { Box, Text } from '../../components/primitives';
 import { LockedFeatureScreen } from '../../components/LockedFeatureScreen';
 
 export const SocialScreen: React.FC = () => {
   return (
     <LockedFeatureScreen
+      feature="social_tab"
+      stage="ENGAGED"
       title="Social Features"
       description="Connect with friends and compete in focus challenges"
-      comingSoonText="Social features will be available in a future update"
-      featureIcon="users"
+      whyItMatters="Social features will be available in a future update."
+      unlockLabel="Coming soon"
+      ctaLabel="Back to focus"
+      icon="users"
+      onPress={() => undefined}
     />
   );
 };

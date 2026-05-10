@@ -93,11 +93,11 @@ export function useReanimated(config: AnimationConfig): AnimationResult {
       default:
         return withTiming(toValue, { duration });
     }
-  }, [config, animatedValue]);
+  }, [config]);
 
   const start = useCallback(() => {
     animatedValue.value = getAnimation();
-  }, [getAnimation, animatedValue]);
+  }, [animatedValue, getAnimation]);
 
   const stop = useCallback(() => {
     animatedValue.value = animatedValue.value;
@@ -213,9 +213,11 @@ export function useCountUp(targetValue: number, duration = 1000) {
         runOnJS(setDisplayValue)(targetValue);
       }
     });
-  }, [targetValue, duration, animatedValue]);
+  }, [animatedValue, targetValue, duration]);
 
   return displayValue;
 }
 
 import React from 'react';
+
+

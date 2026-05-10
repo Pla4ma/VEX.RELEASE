@@ -1,12 +1,12 @@
 /**
  * Motion Accessibility System
- * 
+ *
  * Ensures animations and transitions respect user preferences
  * and provide alternatives for users with vestibular disorders.
  */
 
 import React from 'react';
-import { Animated, Platform, Easing } from 'react-native';
+import { Animated, Easing } from 'react-native';
 import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('motion-accessibility');
@@ -43,7 +43,7 @@ export const DEFAULT_MOTION_PREFERENCES: MotionPreferences = {
 // Motion Animation Types
 // ============================================================================
 
-export type AnimationType = 
+export type AnimationType =
   | 'fade'
   | 'slide'
   | 'scale'
@@ -120,17 +120,17 @@ export class MotionAccessibilityManager {
 
   createAnimatedValue(initialValue: number = 0, key?: string): Animated.Value {
     const animatedValue = new Animated.Value(initialValue);
-    
+
     if (key) {
       this.animationRegistry.set(key, animatedValue);
     }
-    
+
     return animatedValue;
   }
 
   createAnimation(config: AnimationConfig): Animated.CompositeAnimation {
     const adjustedConfig = this.adjustAnimationForAccessibility(config);
-    
+
     debug.debug('Creating animation with accessibility adjustments:', {
       original: config,
       adjusted: adjustedConfig,
@@ -238,7 +238,7 @@ export class MotionAccessibilityManager {
     config: AnimationConfig
   ): Animated.CompositeAnimation {
     const adjustedConfig = this.adjustAnimationForAccessibility(config);
-    
+
     return Animated.timing(fromValue, {
       toValue: toValue,
       duration: adjustedConfig.duration || 300,
@@ -279,7 +279,7 @@ export class MotionAccessibilityManager {
     );
 
     // Disable specific animation types
-    if (!this.preferences.transitionAnimationsEnabled && 
+    if (!this.preferences.transitionAnimationsEnabled &&
         ['slide', 'scale', 'rotate'].includes(config.type)) {
       adjusted.type = 'fade';
       adjusted.duration = Math.min(adjusted.duration, 200);
@@ -293,11 +293,11 @@ export class MotionAccessibilityManager {
       case 'linear':
         return Easing.linear;
       case 'ease-in':
-        return Easing.in;
+        return Easing.in(Easing.quad);
       case 'ease-out':
-        return Easing.out;
+        return Easing.out(Easing.quad);
       case 'ease-in-out':
-        return Easing.inOut;
+        return Easing.inOut(Easing.quad);
       case 'ease-in-quad':
         return Easing.in(Easing.quad);
       case 'ease-out-quad':
@@ -374,18 +374,10 @@ export class MotionAccessibilityManager {
   // ============================================================================
 
   async detectSystemMotionPreferences(): Promise<Partial<MotionPreferences>> {
-    try {
-      // In a real implementation, this would use platform APIs
-      // For React Native: AccessibilityInfo.isReduceMotionEnabled()
-      
-      // For now, return defaults
-      return {
-        reducedMotion: false,
-      };
-    } catch (error) {
-      debug.error('Failed to detect system motion preferences:', error);
-      return {};
-    }
+    // In a real implementation, this would use platform APIs.
+    return {
+      reducedMotion: false,
+    };
   }
 
   // ============================================================================
@@ -400,11 +392,11 @@ export class MotionAccessibilityManager {
       return animation();
     } catch (error) {
       debug.error('Animation creation failed, using fallback:', error);
-      
+
       if (fallback) {
         fallback();
       }
-      
+
       // Return a no-op animation
       return Animated.timing(new Animated.Value(0), {
         toValue: 0,
@@ -510,15 +502,14 @@ export function useMotionAccessibility(): MotionPreferences & {
 export function withMotionAccessibility<P extends object>(
   Component: React.ComponentType<P>
 ): React.ComponentType<P> {
-  const MotionAccessibleComponent = React.forwardRef<any, P>((props, ref) => {
+  const MotionAccessibleComponent = (props: P): React.ReactElement => {
     const motion = useMotionAccessibility();
 
     return React.createElement(Component, {
       ...props,
-      ref,
       motionAccessibility: motion,
     });
-  });
+  };
 
   MotionAccessibleComponent.displayName = `WithMotionAccessibility(${Component.displayName || Component.name})`;
   return MotionAccessibleComponent;

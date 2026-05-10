@@ -9,7 +9,7 @@
  */
 
 import React from "react";
-import Animated, { useAnimatedStyle, withRepeat, withTiming, withSequence, withSpring, interpolateColor } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, withRepeat, withTiming, withSequence, withSpring } from "react-native-reanimated";
 
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
@@ -36,10 +36,6 @@ export function BossNearDeath({ healthPercent, hoursRemaining, bossName, compact
   const isNearDeath = healthPercent <= 15;
   const isCritical = healthPercent <= 10 && hoursRemaining <= 6;
 
-  if (!isNearDeath) {
-    return null;
-  }
-
   const pulseStyle = useAnimatedStyle(() => ({
     borderColor: withRepeat(withSequence(withTiming(theme.colors.error.DEFAULT, { duration: 500 }), withTiming(theme.colors.error.light, { duration: 500 })), -1, true),
     transform: [
@@ -48,6 +44,10 @@ export function BossNearDeath({ healthPercent, hoursRemaining, bossName, compact
       },
     ],
   }));
+
+  if (!isNearDeath) {
+    return null;
+  }
 
   if (compact) {
     return (

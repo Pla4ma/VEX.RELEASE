@@ -6,13 +6,13 @@
  * boss reactions to player focus.
  */
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, StyleSheet, Dimensions } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence, withTiming, withRepeat, interpolate, Easing, runOnJS, Extrapolate } from "react-native-reanimated";
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence, withTiming, interpolate, Easing, Extrapolate } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { Text } from "../../../components/primitives/Text";
-import { RealTimeBossEncounter, CombatEvent, BossCombatState, AttackType, getAttackVisuals } from "../types";
+import { RealTimeBossEncounter, AttackType, getAttackVisuals } from "../types";
 import { RealTimeBossService } from "../service";
 import { createSheet } from "@/shared/ui/create-sheet";
 
@@ -104,7 +104,7 @@ export const RealTimeBossCombat: React.FC<RealTimeBossCombatProps> = ({ encounte
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [bossScale, bossShake, encounter, flashOpacity, onVictory, rageGlow, victoryScale]);
 
   // Process combat ticks
   useEffect(() => {
@@ -119,7 +119,7 @@ export const RealTimeBossCombat: React.FC<RealTimeBossCombatProps> = ({ encounte
         }
       }
     }
-  }, [elapsedSeconds, purityScore, isPaused]);
+  }, [elapsedSeconds, encounter.sessionDuration, healthPercent, isPaused, purityScore]);
 
   // Animated styles
   const bossStyle = useAnimatedStyle(() => {
@@ -249,7 +249,7 @@ export const RealTimeBossCombat: React.FC<RealTimeBossCombatProps> = ({ encounte
 /**
  * Individual damage number animation
  */
-const DamageNumberDisplay: React.FC<{ damage: DamageNumber; bossSize: number }> = ({ damage, bossSize }) => {
+const DamageNumberDisplay: React.FC<{ damage: DamageNumber; bossSize: number }> = ({ damage, bossSize: _bossSize }) => {
   const translateY = useSharedValue(0);
   const opacity = useSharedValue(1);
   const scale = useSharedValue(0.5);
@@ -258,7 +258,7 @@ const DamageNumberDisplay: React.FC<{ damage: DamageNumber; bossSize: number }> 
     translateY.value = withTiming(-80, { duration: 1000, easing: Easing.out(Easing.quad) });
     opacity.value = withTiming(0, { duration: 1000, easing: Easing.in(Easing.quad) });
     scale.value = withSpring(1.2, { damping: 10 });
-  }, []);
+  }, [opacity, scale, translateY]);
 
   const style = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }, { scale: scale.value }],

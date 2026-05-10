@@ -59,6 +59,7 @@ export interface EnhancedAccessibilityProps {
   accessibilityAutoCorrect?: string;
   accessibilityRequired?: boolean;
   accessibilityInvalid?: boolean;
+  style?: React.ComponentProps<any>['style'];
 }
 
 // ============================================================================
@@ -131,21 +132,25 @@ export class AccessibilityEnhancer {
   // Component Enhancement Methods
   // ============================================================================
 
-  enhanceComponent<P extends object>(
-    Component: React.ComponentType<P>,
+  enhanceComponent<C extends React.ComponentType<any>>(
+    Component: C,
     enhancements?: Partial<EnhancedAccessibilityProps>
-  ): React.ComponentType<P> {
-    const EnhancedComponent = React.forwardRef<any, P>((props, ref) => {
-      const enhancedProps = this.applyAccessibilityEnhancements(props, enhancements);
+  ): C {
+    type ComponentProps = React.ComponentProps<C>;
+    type ComponentRef = React.ElementRef<C>;
 
-      return React.createElement(Component, {
-        ...enhancedProps,
-        ref,
-      });
-    });
+    const EnhancedComponent = React.forwardRef<ComponentRef, ComponentProps>(
+      (props, ref) => {
+        const enhancedProps = this.enhanceProps(props, enhancements);
 
+        return React.createElement(Component, {
+          ...(enhancedProps as ComponentProps),
+          ref,
+        });
+      }
+    );
     EnhancedComponent.displayName = `Enhanced(${Component.displayName || Component.name})`;
-    return EnhancedComponent as any;
+    return EnhancedComponent as C;
   }
 
   enhanceProps<P extends object>(
@@ -169,7 +174,7 @@ export class AccessibilityEnhancer {
   // Automatic Enhancement Logic
   // ============================================================================
 
-  private getAutomaticEnhancements<P extends object>(props: P): Partial<EnhancedAccessibilityProps> {
+  private getAutomaticEnhancements<P extends object>(props: P & Partial<EnhancedAccessibilityProps>): Partial<EnhancedAccessibilityProps> {
     const enhancements: Partial<EnhancedAccessibilityProps> = {};
 
     // Auto-contrast fixes
@@ -195,7 +200,7 @@ export class AccessibilityEnhancer {
     return enhancements;
   }
 
-  private getContrastEnhancements<P extends object>(props: P): Partial<EnhancedAccessibilityProps> {
+  private getContrastEnhancements<P extends object>(props: P & Partial<EnhancedAccessibilityProps>): Partial<EnhancedAccessibilityProps> {
     const enhancements: Partial<EnhancedAccessibilityProps> = {};
 
     // Check for color props and improve contrast
@@ -247,7 +252,7 @@ export class AccessibilityEnhancer {
     return enhancements;
   }
 
-  private getFocusEnhancements<P extends object>(props: P): Partial<EnhancedAccessibilityProps> {
+  private getFocusEnhancements<P extends object>(props: P & Partial<EnhancedAccessibilityProps>): Partial<EnhancedAccessibilityProps> {
     const enhancements: Partial<EnhancedAccessibilityProps> = {};
 
     // Auto-add focus management for interactive elements
@@ -264,7 +269,7 @@ export class AccessibilityEnhancer {
     return enhancements;
   }
 
-  private getMotionEnhancements<P extends object>(props: P): Partial<EnhancedAccessibilityProps> {
+  private getMotionEnhancements<P extends object>(props: P & Partial<EnhancedAccessibilityProps>): Partial<EnhancedAccessibilityProps> {
     const enhancements: Partial<EnhancedAccessibilityProps> = {};
 
     // Apply reduced motion preferences
@@ -276,7 +281,7 @@ export class AccessibilityEnhancer {
     return enhancements;
   }
 
-  private getScreenReaderEnhancements<P extends object>(props: P): Partial<EnhancedAccessibilityProps> {
+  private getScreenReaderEnhancements<P extends object>(props: P & Partial<EnhancedAccessibilityProps>): Partial<EnhancedAccessibilityProps> {
     const enhancements: Partial<EnhancedAccessibilityProps> = {};
 
     // Enhanced screen reader support

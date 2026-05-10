@@ -5,7 +5,7 @@
  * qualifying sessions increment streak, non-qualifying don't, comeback offers, milestones
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it } from 'vitest';
 import { setupIntegrationTests, server, http, HttpResponse } from './setup';
 
 // Setup MSW

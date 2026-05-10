@@ -500,7 +500,7 @@ export function usePersistence<T>(config: PersistenceConfig<T>) {
     };
 
     load();
-  }, [config.key]);
+  }, [config]);
 
   const save = React.useCallback(
     async (newData: T) => {

@@ -7,28 +7,24 @@
 
 import React from 'react';
 
-import { describe, it, expect, beforeEach, afterEach, jest } from '@jest/globals';
+import { describe, it, expect, beforeEach, jest } from '@jest/globals';
 import {
   AccessibilityAuditor,
   accessibilityAuditor,
-  type AccessibilityAuditResult,
-  type AccessibilityIssue,
+  type AuditElement,
 } from '../AccessibilityAuditor';
 import {
   AccessibilityEnhancer,
   accessibilityEnhancer,
-  type EnhancedAccessibilityProps,
 } from '../AccessibilityEnhancer';
 import {
   MotionAccessibilityManager,
   motionAccessibilityManager,
-  type MotionPreferences,
 } from '../MotionAccessibility';
 import {
   checkContrast,
   getAccessibleAlternatives,
   getAccessibleColor,
-  type ContrastCheck,
 } from '../AccessibilitySystem';
 
 // Mock localStorage
@@ -54,7 +50,7 @@ Object.defineProperty(window, 'localStorage', {
 
 describe('AccessibilityAuditor', () => {
   let auditor: AccessibilityAuditor;
-  let mockComponent: any;
+  let mockComponent: AuditElement;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -205,6 +201,8 @@ describe('AccessibilityAuditor', () => {
       const history = auditor.getAuditHistory();
 
       expect(history).toHaveLength(2);
+      expect(history).toContain(result1);
+      expect(history).toContain(result2);
       expect(history[0].timestamp).toBeLessThanOrEqual(history[1].timestamp);
     });
 
@@ -244,7 +242,7 @@ describe('AccessibilityAuditor', () => {
 
 describe('AccessibilityEnhancer', () => {
   let enhancer: AccessibilityEnhancer;
-  let mockComponent: React.ComponentType<any>;
+  let mockComponent: React.ComponentType<Record<string, unknown>>;
 
   beforeEach(() => {
     jest.clearAllMocks();

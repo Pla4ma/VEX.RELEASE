@@ -151,7 +151,7 @@ export function ComboMeter({
       cancelAnimation(fireIntensity);
       cancelAnimation(shakeRotation);
     };
-  }, []);
+  }, [fireIntensity, glowIntensity, progressWidth, scale, shakeRotation]);
 
   // Handle milestone detection
   useEffect(() => {

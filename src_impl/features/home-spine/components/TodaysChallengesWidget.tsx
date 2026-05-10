@@ -140,7 +140,6 @@ function ChallengeProgressRow({ challenge, onClaim }: { challenge: ChallengeItem
  * Empty state when no challenges assigned
  */
 function ChallengesEmptyState(): JSX.Element {
-  const { theme } = useTheme();
 
   // Calculate time until midnight
   const now = new Date();
@@ -166,7 +165,6 @@ function ChallengesEmptyState(): JSX.Element {
  * Error state with retry
  */
 function ChallengesErrorState({ onRetry }: { onRetry?: () => void }): JSX.Element {
-  const { theme } = useTheme();
 
   return (
     <Box alignItems="center" gap="md" py="md">

@@ -9,28 +9,24 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { getMMKVStorageAdapter } from '../persistence/MMKVStorageAdapter';
 
-import type { User, Wallet, Squad, Achievement } from '../types/models';
+import type { User } from '../types/models';
 import type { Nullable } from '../types/global';
 
 // Track integration initialization state
 let integrationsInitialized = false;
 let cleanupIntegrations: (() => void) | null = null;
 import { getSecureStorage, SecureStorageKeys } from '../persistence';
-import { signInWithEmail, signUpWithEmail, signOut, getCurrentUser, onAuthStateChange } from '../services/supabaseAuth';
+import { signInWithEmail, signUpWithEmail, signOut, getCurrentUser } from '../services/supabaseAuth';
 import { setSentryUser, clearSentryUser } from '../config/sentry';
 import { revenueCatService } from '../shared/monetization/revenuecat-service';
-// TODO: Integration system archived - replace with direct service calls
+// Integration system archived; direct service calls own this flow.
 // import { initializeAllIntegrations } from '../integration';
 // import { getProgressionService } from '../progression/ProgressionService';
 // import { getEconomyService } from '../economy/EconomyService';
 // import { getRewardService } from '../rewards/RewardService';
 // import { getStreakService } from '../streaks/StreakService';
-import { createDebugger } from '../utils/debug';
-
-const debug = createDebugger('store');
-
 function resetServiceSingletonsForLogout(): void {
-  // TODO: Service system archived - replace with direct service calls
+  // Service system archived; direct service calls own singleton cleanup.
   // try {
   //   getProgressionService().setUserId('');
   // } catch (error) {
@@ -151,7 +147,7 @@ export const useAuthStore = create<AuthState>()(
             revenueCatService.setUserId(user.id);
             // Initialize integrations on first successful auth
             if (!integrationsInitialized) {
-              // TODO: Integration system archived - replace with direct service calls
+              // Integration system archived; direct service calls own this flow.
               // cleanupIntegrations = initializeAllIntegrations();
               // integrationsInitialized = true;
             }
@@ -321,7 +317,7 @@ export const useAuthStore = create<AuthState>()(
               revenueCatService.setUserId(user.id);
               // Initialize integrations on first successful session validation
               if (!integrationsInitialized) {
-                // TODO: Integration system archived - replace with direct service calls
+                // Integration system archived; direct service calls own this flow.
                 // cleanupIntegrations = initializeAllIntegrations();
                 // integrationsInitialized = true;
               }

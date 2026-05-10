@@ -11,7 +11,7 @@ const announcements: ScreenReaderAnnouncement[] = [];
 /**
  * Announce message to screen readers
  */
-export function announce(message: string, priority: "polite" | "assertive" = "polite"): void {
+export function announce(message: string, priority: 'polite' | 'assertive' = 'polite'): void {
   const announcement: ScreenReaderAnnouncement = {
     id: generateId(),
     message,
@@ -27,7 +27,7 @@ export function announce(message: string, priority: "polite" | "assertive" = "po
   }
 
   // Send to React Native
-  if (priority === "assertive") {
+  if (priority === 'assertive') {
     // Use assertive region - would integrate with React Native AccessibilityInfo
     // AccessibilityInfo.announceForAccessibility(message);
   } else {
@@ -55,20 +55,20 @@ export function generateAccessibleLabel(
   description?: string
 ): string {
   const parts = [text];
-  
+
   if (role) {
     parts.push(role);
   }
-  
+
   if (state) {
     parts.push(state);
   }
-  
+
   if (description) {
     parts.push(description);
   }
-  
-  return parts.join(", ");
+
+  return parts.join(', ');
 }
 
 /**
@@ -77,7 +77,7 @@ export function generateAccessibleLabel(
 export function clearOldAnnouncements(maxAge: number = 300000): void { // 5 minutes default
   const now = Date.now();
   const cutoff = now - maxAge;
-  
+
   for (let i = announcements.length - 1; i >= 0; i--) {
     if (announcements[i].timestamp < cutoff) {
       announcements.splice(i, 1);

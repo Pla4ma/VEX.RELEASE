@@ -39,7 +39,7 @@ export function PostSessionStoryScreenContainer(): JSX.Element {
     navigation.navigate('Main', { screen: 'Home' });
   }, [navigation]);
 
-  const handleShare = useCallback((storyData: unknown) => {
+  const handleShare = useCallback((_storyData: unknown) => {
     // Share functionality - would integrate with share API
     // For now, just log or show toast
   }, []);

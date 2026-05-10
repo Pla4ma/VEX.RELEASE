@@ -9,15 +9,14 @@
  * - Gesture-driven transitions
  */
 
-import React, { useEffect, useRef, useCallback } from 'react';
-import { View, ViewStyle, StyleSheet } from 'react-native';
+import React, { useEffect, useCallback } from 'react';
+import { View, ViewStyle } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   withSpring,
-  withDelay,
   interpolate,
   Extrapolation,
   FadeIn,
@@ -81,7 +80,9 @@ export interface TransitionWrapperProps {
 // Animation Configurations
 // ============================================================================
 
-const EASING_MAP: Record<TransitionEasing, any> = {
+type ReanimatedEasingFunction = (value: number) => number;
+
+const EASING_MAP: Record<TransitionEasing, ReanimatedEasingFunction | null> = {
   linear: Easing.linear,
   ease: Easing.ease,
   easeIn: Easing.in(Easing.ease),
@@ -110,7 +111,7 @@ function useTransitionAnimation(
   const progress = useSharedValue(visible ? 1 : 0);
   const isAnimating = useSharedValue(false);
 
-  const { preset, duration = 300, easing = 'ease', springConfig } = config;
+  const { duration = 300, easing = 'ease', springConfig } = config;
 
   useEffect(() => {
     isAnimating.value = true;
@@ -269,7 +270,6 @@ function StaggerContainer({
   children,
   staggerDelay,
   initialDelay = 0,
-  visible,
 }: StaggerContainerProps) {
   const childrenArray = React.Children.toArray(children);
 
@@ -370,7 +370,6 @@ interface LayoutTransitionProps {
 
 export const LayoutTransition: React.FC<LayoutTransitionProps> = ({
   children,
-  layoutId,
   style,
 }) => {
   return (
@@ -383,16 +382,6 @@ export const LayoutTransition: React.FC<LayoutTransitionProps> = ({
 // ============================================================================
 // Gesture-Driven Transition
 // ============================================================================
-
-interface GestureTransitionProps {
-  children: React.ReactNode;
-  onSwipeLeft?: () => void;
-  onSwipeRight?: () => void;
-  onSwipeUp?: () => void;
-  onSwipeDown?: () => void;
-  threshold?: number;
-  style?: ViewStyle;
-}
 
 // Note: Gesture implementation would require react-native-gesture-handler
 // This is a placeholder for the gesture-driven transition pattern

@@ -183,7 +183,6 @@ function getVariantStyles(variant: TextVariant, theme: ReturnType<typeof useThem
  */
 export function Text({ variant = "body", fontSize, fontWeight, weight, lineHeight, letterSpacing, textAlign, textTransform, textDecorationLine, fontStyle, color, flex, opacity, m, mt, mr, mb, ml, mx, my, p, pt, pr, pb, pl, px, py, numberOfLines, ellipsizeMode, children, style, ...props }: TextProps): JSX.Element {
   const { theme } = useTheme();
-  const { fontWeights } = theme;
 
   const variantStyles = getVariantStyles(variant, theme);
 

@@ -6,12 +6,11 @@
  * claim buttons, and preview for premium rewards (if not premium).
  */
 
-import React, { useCallback } from "react";
-import { View, Pressable } from "react-native";
+import React from "react";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { Box, Text, Button } from "@/components/primitives";
 import { useTheme } from "@/theme";
-import type { TierDisplay, TierReward, RewardType, ClaimStatus } from "../types";
+import type { TierDisplay, TierReward, RewardType } from "../types";
 
 // ============================================================================
 // Constants

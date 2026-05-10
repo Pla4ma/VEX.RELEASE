@@ -6,7 +6,6 @@
 import React from 'react';
 import {
   View,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -125,7 +124,7 @@ interface TouchTargetProps {
 export const TouchTarget: React.FC<TouchTargetProps> = ({
   children,
   minSize = 44,
-  onPress,
+  onPress: _onPress,
 }) => {
   return (
     <View

@@ -15,20 +15,20 @@
  * - AI Coach (interventions)
  */
 
-import { eventBus } from "../events";
+import { eventBus } from '../events';
 
 // ============================================================================
 // Experiment Types
 // ============================================================================
 
-export type ExperimentType = "HOME_RECOMMENDATION" | "PAYWALL_TIMING" | "PAYWALL_COPY" | "SESSION_DURATION" | "COACH_FREQUENCY" | "ONBOARDING_FLOW" | "STREAK_UI" | "BOSS_DIFFICULTY";
+export type ExperimentType = 'HOME_RECOMMENDATION' | 'PAYWALL_TIMING' | 'PAYWALL_COPY' | 'SESSION_DURATION' | 'COACH_FREQUENCY' | 'ONBOARDING_FLOW' | 'STREAK_UI' | 'BOSS_DIFFICULTY';
 
 export interface Experiment {
   id: string;
   name: string;
   description: string;
   type: ExperimentType;
-  status: "DRAFT" | "RUNNING" | "PAUSED" | "COMPLETED";
+  status: 'DRAFT' | 'RUNNING' | 'PAUSED' | 'COMPLETED';
   startDate: number;
   endDate?: number;
 
@@ -44,8 +44,8 @@ export interface Experiment {
     userSegments?: string[]; // 'new', 'active', 'churned', etc.
     minSessions?: number;
     maxSessions?: number;
-    platforms?: ("ios" | "android" | "web")[];
-    premiumStatus?: "free" | "premium" | "both";
+    platforms?: ('ios' | 'android' | 'web')[];
+    premiumStatus?: 'free' | 'premium' | 'both';
   };
 
   // Success metrics
@@ -73,164 +73,164 @@ export interface ExperimentAssignment {
 // Predefined Experiments (from Phase 6 plan)
 // ============================================================================
 
-export const PREDEFINED_EXPERIMENTS: Omit<Experiment, "id" | "startDate">[] = [
+export const PREDEFINED_EXPERIMENTS: Omit<Experiment, 'id' | 'startDate'>[] = [
   {
-    name: "Home Recommendation Algorithm",
-    description: "Test different recommendation ranking algorithms",
-    type: "HOME_RECOMMENDATION",
-    status: "DRAFT",
+    name: 'Home Recommendation Algorithm',
+    description: 'Test different recommendation ranking algorithms',
+    type: 'HOME_RECOMMENDATION',
+    status: 'DRAFT',
     controlVariant: {
-      id: "control",
-      name: "Current Algorithm",
-      description: "Existing rule-based recommendations",
-      config: { algorithm: "rule_based", diversityWeight: 0.3 },
+      id: 'control',
+      name: 'Current Algorithm',
+      description: 'Existing rule-based recommendations',
+      config: { algorithm: 'rule_based', diversityWeight: 0.3 },
     },
     treatmentVariants: [
       {
-        id: "ml_ranked",
-        name: "ML Ranked",
-        description: "ML-based ranking with engagement prediction",
-        config: { algorithm: "ml_ranked", diversityWeight: 0.5 },
+        id: 'ml_ranked',
+        name: 'ML Ranked',
+        description: 'ML-based ranking with engagement prediction',
+        config: { algorithm: 'ml_ranked', diversityWeight: 0.5 },
       },
       {
-        id: "popularity_boost",
-        name: "Popularity Boost",
-        description: "Boost recently popular items",
-        config: { algorithm: "popularity_boost", diversityWeight: 0.2 },
+        id: 'popularity_boost',
+        name: 'Popularity Boost',
+        description: 'Boost recently popular items',
+        config: { algorithm: 'popularity_boost', diversityWeight: 0.2 },
       },
     ],
     trafficAllocation: { control: 50, ml_ranked: 25, popularity_boost: 25 },
-    targeting: { userSegments: ["active"], premiumStatus: "both" },
-    primaryMetric: "home_recommendation_click_rate",
-    secondaryMetrics: ["session_start_rate", "study_plan_start_rate"],
+    targeting: { userSegments: ['active'], premiumStatus: 'both' },
+    primaryMetric: 'home_recommendation_click_rate',
+    secondaryMetrics: ['session_start_rate', 'study_plan_start_rate'],
     minSampleSize: 1000,
     minDurationDays: 14,
   },
   {
-    name: "Paywall Timing Optimization",
-    description: "Test when to show paywall for best conversion",
-    type: "PAYWALL_TIMING",
-    status: "DRAFT",
+    name: 'Paywall Timing Optimization',
+    description: 'Test when to show paywall for best conversion',
+    type: 'PAYWALL_TIMING',
+    status: 'DRAFT',
     controlVariant: {
-      id: "control",
-      name: "Current Timing",
-      description: "Show paywall on 2nd study plan attempt",
-      config: { trigger: "second_plan_attempt", delay: 0 },
+      id: 'control',
+      name: 'Current Timing',
+      description: 'Show paywall on 2nd study plan attempt',
+      config: { trigger: 'second_plan_attempt', delay: 0 },
     },
     treatmentVariants: [
       {
-        id: "earlier",
-        name: "Earlier Paywall",
-        description: "Show after first session completion",
-        config: { trigger: "first_session_complete", delay: 0 },
+        id: 'earlier',
+        name: 'Earlier Paywall',
+        description: 'Show after first session completion',
+        config: { trigger: 'first_session_complete', delay: 0 },
       },
       {
-        id: "delayed",
-        name: "Delayed Paywall",
-        description: "Show on 3rd study plan attempt",
-        config: { trigger: "third_plan_attempt", delay: 0 },
+        id: 'delayed',
+        name: 'Delayed Paywall',
+        description: 'Show on 3rd study plan attempt',
+        config: { trigger: 'third_plan_attempt', delay: 0 },
       },
     ],
     trafficAllocation: { control: 34, earlier: 33, delayed: 33 },
-    targeting: { userSegments: ["new"], premiumStatus: "free", maxSessions: 10 },
-    primaryMetric: "paywall_conversion_rate",
-    secondaryMetrics: ["d1_retention", "session_completion_rate"],
+    targeting: { userSegments: ['new'], premiumStatus: 'free', maxSessions: 10 },
+    primaryMetric: 'paywall_conversion_rate',
+    secondaryMetrics: ['d1_retention', 'session_completion_rate'],
     minSampleSize: 500,
     minDurationDays: 7,
   },
   {
-    name: "Paywall Copy Variants",
-    description: "Test different paywall messaging",
-    type: "PAYWALL_COPY",
-    status: "DRAFT",
+    name: 'Paywall Copy Variants',
+    description: 'Test different paywall messaging',
+    type: 'PAYWALL_COPY',
+    status: 'DRAFT',
     controlVariant: {
-      id: "control",
-      name: "Value First",
-      description: "Lead with value proposition",
-      config: { headline: "Study 3x Faster", subtext: "Premium users complete 78% more plans" },
+      id: 'control',
+      name: 'Value First',
+      description: 'Lead with value proposition',
+      config: { headline: 'Study 3x Faster', subtext: 'Premium users complete 78% more plans' },
     },
     treatmentVariants: [
       {
-        id: "social_proof",
-        name: "Social Proof",
-        description: "Emphasize community and popularity",
-        config: { headline: "Join 10,000+ Focus Masters", subtext: "The choice of serious students" },
+        id: 'social_proof',
+        name: 'Social Proof',
+        description: 'Emphasize community and popularity',
+        config: { headline: 'Join 10,000+ Focus Masters', subtext: 'The choice of serious students' },
       },
       {
-        id: "fomo",
-        name: "FOMO",
-        description: "Emphasize missing out",
-        config: { headline: "Do not Miss Your Streak", subtext: "Premium includes streak insurance" },
+        id: 'fomo',
+        name: 'FOMO',
+        description: 'Emphasize missing out',
+        config: { headline: 'Do not Miss Your Streak', subtext: 'Premium includes streak insurance' },
       },
     ],
     trafficAllocation: { control: 34, social_proof: 33, fomo: 33 },
-    targeting: { premiumStatus: "free" },
-    primaryMetric: "paywall_conversion_rate",
-    secondaryMetrics: ["paywall_dismiss_rate", "trial_start_rate"],
+    targeting: { premiumStatus: 'free' },
+    primaryMetric: 'paywall_conversion_rate',
+    secondaryMetrics: ['paywall_dismiss_rate', 'trial_start_rate'],
     minSampleSize: 1000,
     minDurationDays: 14,
   },
   {
-    name: "Default Session Duration",
-    description: "Test optimal default session length",
-    type: "SESSION_DURATION",
-    status: "DRAFT",
+    name: 'Default Session Duration',
+    description: 'Test optimal default session length',
+    type: 'SESSION_DURATION',
+    status: 'DRAFT',
     controlVariant: {
-      id: "control",
-      name: "15 Minutes",
-      description: "Current default",
+      id: 'control',
+      name: '15 Minutes',
+      description: 'Current default',
       config: { defaultDuration: 15, options: [15, 25, 45, 60] },
     },
     treatmentVariants: [
       {
-        id: "short",
-        name: "10 Minutes",
-        description: "Shorter initial commitment",
+        id: 'short',
+        name: '10 Minutes',
+        description: 'Shorter initial commitment',
         config: { defaultDuration: 10, options: [10, 15, 25, 45] },
       },
       {
-        id: "long",
-        name: "25 Minutes",
-        description: "Pomodoro-style default",
+        id: 'long',
+        name: '25 Minutes',
+        description: 'Pomodoro-style default',
         config: { defaultDuration: 25, options: [15, 25, 45, 60] },
       },
     ],
     trafficAllocation: { control: 34, short: 33, long: 33 },
-    targeting: { userSegments: ["new"], premiumStatus: "both" },
-    primaryMetric: "session_completion_rate",
-    secondaryMetrics: ["session_count_week1", "d7_retention"],
+    targeting: { userSegments: ['new'], premiumStatus: 'both' },
+    primaryMetric: 'session_completion_rate',
+    secondaryMetrics: ['session_count_week1', 'd7_retention'],
     minSampleSize: 500,
     minDurationDays: 14,
   },
   {
-    name: "Coach Intervention Frequency",
-    description: "Test how often coach should intervene",
-    type: "COACH_FREQUENCY",
-    status: "DRAFT",
+    name: 'Coach Intervention Frequency',
+    description: 'Test how often coach should intervene',
+    type: 'COACH_FREQUENCY',
+    status: 'DRAFT',
     controlVariant: {
-      id: "control",
-      name: "Current Frequency",
-      description: "Show when relevant",
+      id: 'control',
+      name: 'Current Frequency',
+      description: 'Show when relevant',
       config: { maxInterventionsPerDay: 3, cooldownHours: 4 },
     },
     treatmentVariants: [
       {
-        id: "more_frequent",
-        name: "More Frequent",
-        description: "Up to 5 interventions per day",
+        id: 'more_frequent',
+        name: 'More Frequent',
+        description: 'Up to 5 interventions per day',
         config: { maxInterventionsPerDay: 5, cooldownHours: 2 },
       },
       {
-        id: "less_frequent",
-        name: "Less Frequent",
-        description: "Max 2 interventions per day",
+        id: 'less_frequent',
+        name: 'Less Frequent',
+        description: 'Max 2 interventions per day',
         config: { maxInterventionsPerDay: 2, cooldownHours: 6 },
       },
     ],
     trafficAllocation: { control: 34, more_frequent: 33, less_frequent: 33 },
-    targeting: { premiumStatus: "both", minSessions: 3 },
-    primaryMetric: "intervention_engagement_rate",
-    secondaryMetrics: ["session_start_rate", "coach_persona_satisfaction"],
+    targeting: { premiumStatus: 'both', minSessions: 3 },
+    primaryMetric: 'intervention_engagement_rate',
+    secondaryMetrics: ['session_start_rate', 'coach_persona_satisfaction'],
     minSampleSize: 1000,
     minDurationDays: 21,
   },
@@ -246,7 +246,7 @@ const userAssignments = new Map<string, ExperimentAssignment[]>(); // userId -> 
 /**
  * Create and start experiment
  */
-export function createExperiment(experimentData: Omit<Experiment, "id" | "startDate">): Experiment {
+export function createExperiment(experimentData: Omit<Experiment, 'id' | 'startDate'>): Experiment {
   const id = `exp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   const experiment: Experiment = {
     ...experimentData,
@@ -256,7 +256,7 @@ export function createExperiment(experimentData: Omit<Experiment, "id" | "startD
 
   experiments.set(id, experiment);
 
-  eventBus.publish("experiment:created", { experiment });
+  eventBus.publish('experiment:created', { experiment });
   return experiment;
 }
 
@@ -279,7 +279,7 @@ export function getAllExperiments(): Experiment[] {
  */
 export function getActiveExperiments(): Experiment[] {
   return Array.from(experiments.values()).filter(
-    (exp) => exp.status === "RUNNING"
+    (exp) => exp.status === 'RUNNING'
   );
 }
 
@@ -292,7 +292,7 @@ export function assignUserToExperiment(
   forceVariant?: string
 ): ExperimentAssignment | null {
   const experiment = experiments.get(experimentId);
-  if (!experiment || experiment.status !== "RUNNING") {
+  if (!experiment || experiment.status !== 'RUNNING') {
     return null;
   }
 
@@ -324,7 +324,7 @@ export function assignUserToExperiment(
   // Store assignment
   userAssignments.set(userId, [...existingAssignments, assignment]);
 
-  eventBus.publish("experiment:assigned", { assignment, experiment });
+  eventBus.publish('experiment:assigned', { assignment, experiment });
   return assignment;
 }
 
@@ -374,7 +374,7 @@ export function recordExperimentEvent(
   const assignment = userAssignments
     .get(userId)
     ?.find((a) => a.experimentId === experimentId);
-  
+
   if (!assignment) {
     return;
   }
@@ -384,7 +384,7 @@ export function recordExperimentEvent(
     return;
   }
 
-  eventBus.publish("experiment:event", {
+  eventBus.publish('experiment:event', {
     userId,
     experimentId,
     variantId: assignment.variantId,
@@ -463,17 +463,17 @@ export function completeExperiment(experimentId: string, winner?: string): void 
     return;
   }
 
-  experiment.status = "COMPLETED";
+  experiment.status = 'COMPLETED';
   experiment.endDate = Date.now();
 
-  eventBus.publish("experiment:completed", { experiment, winner });
+  eventBus.publish('experiment:completed', { experiment, winner });
 }
 
 // ============================================================================
 // Helper Functions
 // ============================================================================
 
-function isUserEligibleForExperiment(userId: string, experiment: Experiment): boolean {
+function isUserEligibleForExperiment(_userId: string, _experiment: Experiment): boolean {
   // In a real implementation, this would check user properties
   // For now, assume all users are eligible
   return true;
@@ -522,13 +522,13 @@ export function getUserExperiments(userId: string): ExperimentAssignment[] {
 export function removeUserFromExperiment(userId: string, experimentId: string): boolean {
   const assignments = userAssignments.get(userId) || [];
   const filtered = assignments.filter((a) => a.experimentId !== experimentId);
-  
+
   if (filtered.length === assignments.length) {
     return false; // No assignment found
   }
 
   userAssignments.set(userId, filtered);
-  eventBus.publish("experiment:unassigned", { userId, experimentId });
+  eventBus.publish('experiment:unassigned', { userId, experimentId });
   return true;
 }
 
@@ -537,7 +537,7 @@ export function removeUserFromExperiment(userId: string, experimentId: string): 
  */
 export function clearUserAssignments(userId: string): void {
   userAssignments.delete(userId);
-  eventBus.publish("experiment:assignments_cleared", { userId });
+  eventBus.publish('experiment:assignments_cleared', { userId });
 }
 
 // ============================================================================
@@ -568,7 +568,7 @@ export function getExperimentStats(experimentId: string): {
 
   // Group by date
   const dailyAssignments = allAssignments.reduce((acc, assignment) => {
-    const date = new Date(assignment.assignedAt).toISOString().split("T")[0];
+    const date = new Date(assignment.assignedAt).toISOString().split('T')[0];
     const existing = acc.find((d) => d.date === date);
     if (existing) {
       existing.count++;
@@ -605,8 +605,8 @@ export function getExperimentOverview(): {
 
   return {
     totalExperiments: allExperiments.length,
-    runningExperiments: allExperiments.filter((e) => e.status === "RUNNING").length,
-    completedExperiments: allExperiments.filter((e) => e.status === "COMPLETED").length,
+    runningExperiments: allExperiments.filter((e) => e.status === 'RUNNING').length,
+    completedExperiments: allExperiments.filter((e) => e.status === 'COMPLETED').length,
     totalAssignments: allAssignments.length,
     experimentsByType,
   };

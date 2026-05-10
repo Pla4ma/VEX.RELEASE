@@ -4,7 +4,7 @@
  * React hook for spring animations with Reanimated.
  */
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   useSharedValue,
   useAnimatedStyle,
@@ -41,7 +41,7 @@ interface UseSpringResult {
  */
 export function useSpring(options: UseSpringOptions = {}): UseSpringResult {
   const { initialValue = 0, ...springConfig } = options;
-  const config = { ...defaultSpring, ...springConfig };
+  const config = useMemo(() => ({ ...defaultSpring, ...springConfig }), [springConfig]);
 
   const value = useSharedValue(initialValue);
 
@@ -79,7 +79,7 @@ export function useSpringStyle(
   options: UseSpringOptions = {}
 ): UseSpringResult {
   const { initialValue = 0, ...springConfig } = options;
-  const config = { ...defaultSpring, ...springConfig };
+  const config = useMemo(() => ({ ...defaultSpring, ...springConfig }), [springConfig]);
 
   const value = useSharedValue(initialValue);
   const animatedStyle = useAnimatedStyle(() => styleFactory(value));

@@ -9,7 +9,7 @@
 
 import React, { useEffect } from "react";
 import { Modal, ScrollView, Dimensions } from "react-native";
-import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming, withRepeat, withDelay, runOnJS } from "react-native-reanimated";
+import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withSpring, withSequence, withTiming, withRepeat } from "react-native-reanimated";
 
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
@@ -156,8 +156,6 @@ function StreakFlame({ days }: { days: number }): JSX.Element {
  * Reward item display
  */
 function RewardItem({ emoji, value, label, isNew = false }: { emoji: string; value: string; label: string; isNew?: boolean }): JSX.Element {
-  const { theme } = useTheme();
-
   return (
     <Box alignItems="center" gap="xs">
       <Box position="relative">

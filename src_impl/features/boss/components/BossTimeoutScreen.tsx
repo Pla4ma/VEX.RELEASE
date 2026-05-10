@@ -9,7 +9,7 @@
 
 import React from "react";
 import { ScrollView } from "react-native";
-import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming, withDelay } from "react-native-reanimated";
+import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withSequence, withTiming, withDelay } from "react-native-reanimated";
 
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
@@ -200,8 +200,6 @@ function ConsolationRewards({ consolation }: { consolation: BossTimeoutScreenPro
  * Coach message card
  */
 function CoachMessage({ message }: { message: string }): JSX.Element {
-  const { theme } = useTheme();
-
   return (
     <Animated.View entering={FadeInUp.duration(500).delay(1400)}>
       <Box p="lg" borderRadius="xl" bg="background.secondary" borderWidth={1} borderColor="border.light" flexDirection="row" gap="md" alignItems="flex-start">

@@ -39,7 +39,7 @@ export function ContentReviewScreen() {
       captureSilentFailure(error, { feature: "content-study", operation: "ui-fallback", type: "ui" });
       // Error handled in hook
     }
-  }, [generate, navigation, contentId]);
+  }, [generate, navigation]);
 
   const renderStatus = () => {
     if (!content) {
@@ -368,3 +368,5 @@ const styles = createSheet({
     color: "#FFFFFF",
   },
 });
+
+

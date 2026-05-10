@@ -7,13 +7,13 @@
  */
 
 import React, { useCallback, useMemo } from "react";
-import { View, Pressable, Share } from "react-native";
+import { Share } from "react-native";
 import Animated, { useAnimatedStyle, withSpring } from "react-native-reanimated";
 import { Box, Text, Button } from "@/components/primitives";
 import { useTheme } from "@/theme";
 import type { Achievement } from "../types";
 import { getAchievementDisplayInfo, getRarityColor } from "../definitions";
-import { triggerHaptic, type HapticFeedbackKind } from "@/utils/haptics";
+import { triggerHaptic } from "@/utils/haptics";
 import { createDebugger } from "@/utils/debug";
 
 const debug = createDebugger("achievements:detail-sheet");

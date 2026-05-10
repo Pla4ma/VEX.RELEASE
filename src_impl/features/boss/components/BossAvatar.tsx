@@ -18,7 +18,7 @@ function pickVariant(name: string): BossVariant {
   return 'wraith';
 }
 
-function Wraith({ primaryColor, secondaryColor, glowColor }: BossAvatarProps) {
+function Wraith({ primaryColor: _primaryColor, secondaryColor, glowColor }: BossAvatarProps) {
   return (
     <G>
       <Ellipse cx="100" cy="166" rx="54" ry="14" fill={glowColor} opacity="0.25" />
@@ -35,7 +35,7 @@ function Wraith({ primaryColor, secondaryColor, glowColor }: BossAvatarProps) {
   );
 }
 
-function Behemoth({ primaryColor, secondaryColor, glowColor }: BossAvatarProps) {
+function Behemoth({ primaryColor: _primaryColor, secondaryColor, glowColor }: BossAvatarProps) {
   return (
     <G>
       <Ellipse cx="100" cy="166" rx="58" ry="16" fill={glowColor} opacity="0.2" />
@@ -67,7 +67,7 @@ function Hydra({ primaryColor, secondaryColor, glowColor }: BossAvatarProps) {
 }
 
 export function BossAvatar(props: BossAvatarProps): JSX.Element {
-  const { size = 160, primaryColor, secondaryColor, glowColor } = props;
+  const { size = 160, primaryColor, secondaryColor } = props;
   const variant = pickVariant(props.bossName);
 
   return (

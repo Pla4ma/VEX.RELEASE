@@ -10,7 +10,7 @@
  */
 
 import React, { useMemo } from 'react';
-import { View, ViewStyle, StyleSheet } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInUp,
@@ -21,7 +21,6 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 
-import { useTheme } from '../../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 // ============================================================================
@@ -131,8 +130,6 @@ export const StaggeredEnter: React.FC<StaggeredEnterProps> = ({
   containerStyle,
 }) => {
   const reducedMotion = useReducedMotion();
-  const { theme } = useTheme();
-
   const animatedChildren = useMemo(() => {
     return React.Children.map(children, (child, index) => {
       if (!React.isValidElement(child)) {return child;}
@@ -173,7 +170,7 @@ export interface CardEnterAnimationProps {
 export const CardEnterAnimation: React.FC<CardEnterAnimationProps> = ({
   children,
   index = 0,
-  total = 1,
+  total: _total = 1,
   style,
 }) => {
   const reducedMotion = useReducedMotion();

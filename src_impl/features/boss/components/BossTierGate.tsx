@@ -151,7 +151,7 @@ export interface LockedBossCardProps {
   onNavigateToMastery?: () => void;
 }
 
-export function LockedBossCard({ tier, bossName, userRank, onNavigateToMastery }: LockedBossCardProps): JSX.Element {
+export function LockedBossCard({ tier, bossName, userRank: _userRank, onNavigateToMastery }: LockedBossCardProps): JSX.Element {
   const { theme } = useTheme();
   const requiredRank = getRequiredRankForTier(tier);
   const rankDisplay = getMasteryRankDisplay(requiredRank);

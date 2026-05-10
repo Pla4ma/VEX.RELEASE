@@ -111,6 +111,34 @@ export function useSessionTimer(options: UseSessionTimerOptions): UseSessionTime
   // Timer Logic
   // ============================================================================
 
+  const handleComplete = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
+    setIsRunning(false);
+    setIsPaused(false);
+
+    if (hapticEnabled) {
+      triggerHapticEvent(HapticEvents.SUCCESS);
+    }
+
+    debug.info('Session timer completed');
+
+    eventBus.publish('analytics:track', {
+      event: 'session_timer_completed',
+      properties: {
+        elapsed: elapsedTime,
+        backgroundTime: backgroundTimeRef.current,
+      },
+    });
+
+    if (onComplete) {
+      onComplete();
+    }
+  }, [elapsedTime, hapticEnabled, onComplete]);
+
   const tick = useCallback(() => {
     const now = Date.now();
 
@@ -151,35 +179,7 @@ export function useSessionTimer(options: UseSessionTimerOptions): UseSessionTime
     });
 
     lastTickRef.current = now;
-  }, [duration, onProgress, tickInterval]);
-
-  const handleComplete = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-
-    setIsRunning(false);
-    setIsPaused(false);
-
-    if (hapticEnabled) {
-      triggerHapticEvent(HapticEvents.SUCCESS);
-    }
-
-    debug.info('Session timer completed');
-
-    eventBus.publish('analytics:track', {
-      event: 'session_timer_completed',
-      properties: {
-        elapsed: elapsedTime,
-        backgroundTime: backgroundTimeRef.current,
-      },
-    });
-
-    if (onComplete) {
-      onComplete();
-    }
-  }, [elapsedTime, hapticEnabled, onComplete]);
+  }, [duration, handleComplete, onProgress, setElapsedTime, setRemainingTime, tickInterval]);
 
   // ============================================================================
   // Actions
@@ -205,7 +205,7 @@ export function useSessionTimer(options: UseSessionTimerOptions): UseSessionTime
       event: 'session_timer_started',
       properties: { duration, remaining: remainingTime },
     });
-  }, [duration, hapticEnabled, isRunning, remainingTime, tick]);
+  }, [duration, hapticEnabled, isRunning, remainingTime, tick, tickInterval]);
 
   const pause = useCallback(() => {
     if (!isRunning || isPaused) {return;}
@@ -277,7 +277,7 @@ export function useSessionTimer(options: UseSessionTimerOptions): UseSessionTime
       event: 'session_timer_time_added',
       properties: { added: ms },
     });
-  }, [duration]);
+  }, [duration, setElapsedTime, setRemainingTime]);
 
   const subtractTime = useCallback((ms: number) => {
     setRemainingTime((prev: number | undefined) => Math.max((prev ?? duration) - ms, 0));
@@ -289,7 +289,7 @@ export function useSessionTimer(options: UseSessionTimerOptions): UseSessionTime
       event: 'session_timer_time_subtracted',
       properties: { subtracted: ms },
     });
-  }, [duration]);
+  }, [duration, setElapsedTime, setRemainingTime]);
 
   // ============================================================================
   // App State Handling
@@ -368,7 +368,7 @@ export function useSessionTimer(options: UseSessionTimerOptions): UseSessionTime
     return () => {
       subscription.remove();
     };
-  }, [duration, elapsedTime, handleComplete, isPaused, isRunning, onBackground, onForeground, tick, tickInterval]);
+  }, [duration, elapsedTime, handleComplete, isPaused, isRunning, onBackground, onForeground, setElapsedTime, setRemainingTime, tick, tickInterval]);
 
   // ============================================================================
   // Cleanup

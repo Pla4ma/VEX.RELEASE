@@ -13,15 +13,9 @@
  */
 
 import { createDebugger } from '../utils/debug';
-import { eventBus } from '../events';
-import { 
-  privacyInventory, 
-  type PrivacyComplianceReport 
-} from '../privacy/PrivacyInventory';
-import { 
-  performanceGate, 
-  type PerformanceReport 
-} from '../performance/PerformanceGate';
+import { privacyInventory } from '../privacy/PrivacyInventory';
+import { type PrivacyComplianceLevel } from '../privacy/PrivacyInventory';
+import { performanceGate } from '../performance/PerformanceGate';
 
 const debug = createDebugger('app-store-submission');
 
@@ -235,12 +229,13 @@ export class AppStoreSubmissionPack {
         warnings,
         metadata,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       debug.error('App metadata preparation failed:', error);
 
       return {
         complete: false,
-        issues: [`Metadata preparation failed: ${error.message}`],
+        issues: [`Metadata preparation failed: 
+          ${error instanceof Error ? error.message : 'Unknown error'}`],
         warnings: [],
         metadata: {} as AppStoreMaterials['metadata'],
       };
@@ -432,12 +427,13 @@ Have feedback? Reach out to us at support@vexapp.com`;
         warnings,
         assets,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       debug.error('Visual assets preparation failed:', error);
 
       return {
         complete: false,
-        issues: [`Assets preparation failed: ${error.message}`],
+        issues: [`Assets preparation failed: 
+          ${error instanceof Error ? error.message : 'Unknown error'}`],
         warnings: [],
         assets: {
           screenshots: { iPhone: [], iPad: [], AppleTV: [] },
@@ -519,12 +515,13 @@ Have feedback? Reach out to us at support@vexapp.com`;
         warnings,
         privacyPolicy,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       debug.error('Privacy policy generation failed:', error);
 
       return {
         complete: false,
-        issues: [`Privacy policy generation failed: ${error.message}`],
+        issues: [`Privacy policy generation failed: 
+          ${error instanceof Error ? error.message : 'Unknown error'}`],
         warnings: [],
         privacyPolicy: {
           generated: false,
@@ -624,6 +621,8 @@ Email: privacy@vexapp.com
 
 10. GDPR Compliance
 
+Current compliance status: ${privacyReport.gdprCompliant ? 'Compliant' : 'Requires review'}
+
 If you are located in the European Union, you have additional rights under GDPR:
 - Right to be informed
 - Right of access
@@ -708,12 +707,13 @@ This Privacy Policy is effective as of ${new Date().toLocaleDateString()}.`;
         warnings,
         termsOfService,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       debug.error('Terms of service generation failed:', error);
 
       return {
         complete: false,
-        issues: [`Terms of service generation failed: ${error.message}`],
+        issues: [`Terms of service generation failed: 
+          ${error instanceof Error ? error.message : 'Unknown error'}`],
         warnings: [],
         termsOfService: {
           generated: false,
@@ -917,12 +917,13 @@ These Terms of Service are effective as of ${new Date().toLocaleDateString()}.`;
         issues,
         warnings,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       debug.error('App Store compliance check failed:', error);
 
       return {
         complete: false,
-        issues: [`Compliance check failed: ${error.message}`],
+        issues: [`Compliance check failed: 
+          ${error instanceof Error ? error.message : 'Unknown error'}`],
         warnings: [],
       };
     }
@@ -1016,12 +1017,13 @@ These Terms of Service are effective as of ${new Date().toLocaleDateString()}.`;
         warnings,
         testingAccounts,
       };
-    } catch (error) {
+    } catch (error: unknown) {
       debug.error('Testing accounts setup failed:', error);
 
       return {
         complete: false,
-        issues: [`Testing accounts setup failed: ${error.message}`],
+        issues: [`Testing accounts setup failed: 
+          ${error instanceof Error ? error.message : 'Unknown error'}`],
         warnings: [],
         testingAccounts: {
           demo: { username: '', password: '', description: '' },
@@ -1291,6 +1293,7 @@ These Terms of Service are effective as of ${new Date().toLocaleDateString()}.`;
       ready,
       score,
       issuesCount: allIssues.length,
+      warningsCount: allWarnings.length,
     });
 
     return result;

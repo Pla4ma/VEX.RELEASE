@@ -139,11 +139,14 @@ export function trackRetentionEvent(userId: string, event: "first_open" | "sessi
 }
 
 function getUserFirstOpen(userId: string): string | null {
+  void userId;
   // Would integrate with persistent storage
   return null;
 }
 
 function storeUserFirstOpen(userId: string, date: string): void {
+  void userId;
+  void date;
   // Would integrate with persistent storage
 }
 

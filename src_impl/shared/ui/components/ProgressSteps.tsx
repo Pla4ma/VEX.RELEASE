@@ -11,11 +11,10 @@
  * - Clickable steps for navigation
  */
 
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import {
   View,
   ViewStyle,
-  StyleSheet,
   Pressable,
 } from 'react-native';
 import Animated, {

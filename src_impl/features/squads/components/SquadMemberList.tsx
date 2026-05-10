@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { createSheet } from '@/shared/ui/create-sheet';
 

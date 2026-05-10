@@ -445,13 +445,14 @@ const experimentResults = new Map<string, ExperimentResults>();
  * Record experiment event
  */
 export function recordExperimentEvent(userId: string, experimentId: string, event: { metric: string; value: number }): void {
-  // In real implementation, this would aggregate into results
   const userVariant = getUserVariant(userId, experimentId);
   if (userVariant) {
     eventBus.publish("experiment:event", {
       userId,
       experimentId,
       variantId: userVariant,
+      metric: event.metric,
+      value: event.value,
     });
   }
 }

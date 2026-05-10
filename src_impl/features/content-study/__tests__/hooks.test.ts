@@ -50,9 +50,7 @@ const createTestQueryClient = () =>
 
 const wrapper = ({ children }: { children: React.ReactNode }) => {
   const queryClient = createTestQueryClient();
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+  return React.createElement(QueryClientProvider, { client: queryClient }, children);
 };
 
 describe('contentStudyQueryKeys', () => {

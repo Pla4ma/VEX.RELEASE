@@ -26,12 +26,12 @@ interface PostSessionStoryScreenProps {
 type StoryPhase = "intro" | "beats" | "outro" | "complete";
 
 export const PostSessionStoryScreen: React.FC<PostSessionStoryScreenProps> = ({ story, onComplete, onSkip, onShare, autoAdvance = true }) => {
-  const { theme } = useTheme() as any;
+  const { theme } = useTheme();
   const { isReducedMotion } = useReducedMotion();
 
   const [phase, setPhase] = useState<StoryPhase>("intro");
   const [currentBeatIndex, setCurrentBeatIndex] = useState(-1);
-  const [viewedBeats, setViewedBeats] = useState<Set<number>>(new Set());
+  const [, setViewedBeats] = useState<Set<number>>(new Set());
 
   const scaleValue = useSharedValue(0.8);
   const fadeAnim = useSharedValue(1);
@@ -48,7 +48,7 @@ export const PostSessionStoryScreen: React.FC<PostSessionStoryScreenProps> = ({ 
       isReducedMotion ? 100 : 600,
     );
     return () => clearTimeout(timer);
-  }, []);
+  }, [isReducedMotion, scaleValue]);
 
   const triggerHaptic = useCallback(
     (pattern: StoryBeat["hapticPattern"]) => {
@@ -132,10 +132,6 @@ export const PostSessionStoryScreen: React.FC<PostSessionStoryScreenProps> = ({ 
   };
 
   const emotionColor = currentBeat ? getEmotionColor(currentBeat.emotion) : getEmotionColor(story.overallEmotion);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scaleValue.value }],
-  }));
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.colors.background.primary }}>

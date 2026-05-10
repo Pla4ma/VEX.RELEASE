@@ -129,7 +129,7 @@ export function ShopScreen({ userId, userLevel }: ShopScreenProps) {
     } catch (err) {
       setPurchaseError(err instanceof Error ? err.message : "Unknown error");
     }
-  }, [selectedItem, selectedOffer, userId, initiatePurchase, completePurchase]);
+  }, [completePurchase, initiatePurchase, inventoryQuery, processPayment, selectedItem, selectedOffer, userId, walletQuery]);
 
   const handleCancelPurchase = useCallback(() => {
     setSelectedItem(null);
@@ -157,7 +157,7 @@ export function ShopScreen({ userId, userLevel }: ShopScreenProps) {
   const hasSeasonal = walletQuery.data?.hasSeasonal ?? false;
 
   return (
-    <View style={(styles as any).container}>
+    <View style={styles.container}>
       {/* Currency Bar */}
       <CurrencyDisplay coins={userCoins} gems={userGems} hasSeasonal={hasSeasonal} />
 

@@ -15,7 +15,7 @@
  */
 
 import React from "react";
-import { StyleSheet, View, type ViewStyle } from "react-native";
+import { View, type ViewStyle } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withTiming, withSequence, withDelay } from "react-native-reanimated";
 
 import { Text } from "../primitives/Text";
@@ -78,19 +78,19 @@ export function PremiumBadge({ size = "md", variant = "default", style, showGlow
   // Variant configurations
   const variantConfig = {
     default: {
-      backgroundColor: (theme.colors.primary as any)[500],
-      borderColor: (theme.colors.primary as any)[400],
-      textColor: "#FFFFFF",
+      backgroundColor: theme.colors.primary[500],
+      borderColor: theme.colors.primary[400],
+      textColor: theme.colors.text.inverse,
     },
     subtle: {
-      backgroundColor: (theme.colors.primary as any)[100],
-      borderColor: (theme.colors.primary as any)[200],
-      textColor: (theme.colors.primary as any)[700],
+      backgroundColor: theme.colors.primary[100],
+      borderColor: theme.colors.primary[200],
+      textColor: theme.colors.primary[700],
     },
     animated: {
-      backgroundColor: (theme.colors.primary as any)[500],
-      borderColor: (theme.colors.warning as any)?.light || theme.colors.warning.light,
-      textColor: "#FFFFFF",
+      backgroundColor: theme.colors.primary[500],
+      borderColor: theme.colors.warning.light,
+      textColor: theme.colors.text.inverse,
     },
   };
 
@@ -110,7 +110,7 @@ export function PremiumBadge({ size = "md", variant = "default", style, showGlow
               width: config.glow,
               height: config.glow,
               borderRadius: config.glow / 2,
-              backgroundColor: (theme.colors.primary as any)[400],
+              backgroundColor: theme.colors.primary[400],
             },
             glowStyle,
           ]}
@@ -175,8 +175,8 @@ export function SupporterBadge({ size = "md", style }: SupporterBadgeProps): JSX
           width: config.badge,
           height: config.badge,
           borderRadius: config.badge / 2,
-          backgroundColor: (theme.colors.warning as any)?.DEFAULT || theme.colors.warning.DEFAULT,
-          borderColor: (theme.colors.warning as any)?.light || theme.colors.warning.light,
+          backgroundColor: theme.colors.warning.DEFAULT,
+          borderColor: theme.colors.warning.light,
         },
         style,
       ]}
@@ -205,14 +205,14 @@ export function PremiumXpBonus({ bonus = 0.1, style }: PremiumXpBonusProps): JSX
       style={[
         styles.xpBonusContainer,
         {
-          backgroundColor: (theme.colors.primary as any)[100],
-          borderColor: (theme.colors.primary as any)[300],
+          backgroundColor: theme.colors.primary[100],
+          borderColor: theme.colors.primary[300],
         },
         style,
       ]}
     >
-      <Text style={[styles.xpBonusIcon, { color: (theme.colors.primary as any)[500] }]}>✨</Text>
-      <Text style={[styles.xpBonusText, { color: (theme.colors.primary as any)[700] }]}>+{bonusPercent}% XP</Text>
+      <Text style={[styles.xpBonusIcon, { color: theme.colors.primary[500] }]}>✨</Text>
+      <Text style={[styles.xpBonusText, { color: theme.colors.primary[700] }]}>+{bonusPercent}% XP</Text>
     </View>
   );
 }

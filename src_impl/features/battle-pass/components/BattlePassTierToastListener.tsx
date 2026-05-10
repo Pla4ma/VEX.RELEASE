@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useToast } from '../../../shared/ui/components/Toast';
 import { useAuthStore } from '../../../store';
 import { useActiveSeason } from '../../seasons/hooks';

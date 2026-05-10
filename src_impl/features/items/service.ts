@@ -257,13 +257,13 @@ export async function getEffectMultiplier(userId: string, type: "XP" | "COINS" |
 }
 
 export async function consumeShieldCharge(userId: string): Promise<boolean> {
-  const { useShieldCharge } = await import("./effects");
-  return useShieldCharge(userId);
+  const { useShieldCharge: consumeCharge } = await import("./effects");
+  return consumeCharge(userId);
 }
 
 export async function consumeStreakProtection(userId: string): Promise<boolean> {
-  const { useStreakProtection } = await import("./effects");
-  return useStreakProtection(userId);
+  const { useStreakProtection: consumeProtection } = await import("./effects");
+  return consumeProtection(userId);
 }
 
 // ============================================================================

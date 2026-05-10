@@ -8,9 +8,8 @@
  */
 
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import Animated, { FadeIn, FadeInUp, FadeOut } from "react-native-reanimated";
-import { useNavigation } from "@react-navigation/native";
 
 import { Text } from "../../../components/primitives/Text";
 import { Button } from "../../../components/primitives/Button";
@@ -38,7 +37,6 @@ interface ResumeState {
 
 export function OnboardingResumePrompt({ onResume, onRestart, onDismiss }: OnboardingResumePromptProps): JSX.Element | null {
   const { theme } = useTheme();
-  const navigation = useNavigation();
   const [state, setState] = useState<ResumeState | null>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [selectedAction, setSelectedAction] = useState<string | null>(null);

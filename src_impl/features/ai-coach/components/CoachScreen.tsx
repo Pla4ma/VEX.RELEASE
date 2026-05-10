@@ -6,7 +6,7 @@
  */
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { View, Text, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView, Image } from "react-native";
+import { View, Text, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
 import { FlashList, type FlashListRef, type ListRenderItem } from "@shopify/flash-list";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAnalytics } from "@/shared/analytics";
@@ -17,7 +17,6 @@ const debug = createDebugger("coach:screen");
 
 import { getCoachState, getCoachHistory, askCoachQuestion, getCurrentRecommendation } from "../services/coach-screen-service";
 import type { CoachMessage, CoachState, CoachUserState } from "../types";
-import { getPersonalizedContext } from "../services/coach-memory";
 import { PERSONALITY_METADATA } from "../service/personality-templates";
 import { styles } from "./CoachScreen.styles";
 
@@ -36,12 +35,6 @@ interface ChatMessage {
     actionLabel?: string;
     actionData?: Record<string, unknown>;
   };
-}
-
-interface CoachRecommendation {
-  duration: number;
-  difficulty: string;
-  reasoning: string;
 }
 
 // ============================================================================
@@ -141,7 +134,7 @@ export function CoachScreen(): JSX.Element {
 
       setChatMessages(initialMessages);
     }
-  }, [coachHistory, coachState]);
+  }, [chatMessages.length, coachHistory, coachState]);
 
   // Scroll to bottom when new messages arrive
   useEffect(() => {

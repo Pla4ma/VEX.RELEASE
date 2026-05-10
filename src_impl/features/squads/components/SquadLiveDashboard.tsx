@@ -42,8 +42,6 @@ export interface SquadLiveDashboardProps {
  * Squad streak flame animation
  */
 function SquadStreak({ days }: { days: number }): JSX.Element {
-  const { theme } = useTheme();
-
   const flameStyle = useAnimatedStyle(() => ({
     transform: [
       {

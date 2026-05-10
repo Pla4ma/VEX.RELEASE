@@ -1,11 +1,12 @@
 /**
  * Session Completion Offline Sync Integration
- * 
+ *
  * Integrates the offline sync service with the existing session completion
  * workflow to ensure data is never lost.
  */
 
 import { createDebugger } from '../../utils/debug';
+import { getNetInfoAdapter } from '../../network/NetInfoAdapter';
 import { useNetInfo } from '../../network/useNetInfo';
 import { sessionCompletionOfflineSync } from './offline-sync-service';
 import {
@@ -196,7 +197,7 @@ export async function getPendingSessionCompletionsSummary(): Promise<{
 }> {
   try {
     const diagnostics = sessionCompletionOfflineSync.getDiagnostics();
-    
+
     return {
       count: diagnostics.fallbackEntriesCount,
       oldestEntryAge: diagnostics.oldestEntryAge,
@@ -234,12 +235,13 @@ export interface SessionCompletionHealthCheckResult {
  * Perform health check on session completion sync
  */
 export async function performSessionCompletionHealthCheck(): Promise<SessionCompletionHealthCheckResult> {
-  const { isOnline } = useNetInfo();
+  const networkState = getNetInfoAdapter().getCurrentState();
+  const isOnline = networkState.isConnected && (networkState.isInternetReachable ?? false);
   const diagnostics = sessionCompletionOfflineSync.getDiagnostics();
-  
+
   const now = Date.now();
   const pendingCount = diagnostics.fallbackEntriesCount;
-  const oldestAgeMinutes = diagnostics.oldestEntryAge 
+  const oldestAgeMinutes = diagnostics.oldestEntryAge
     ? Math.floor(diagnostics.oldestEntryAge / (1000 * 60))
     : undefined;
   const minutesSinceLastSync = diagnostics.lastSyncAt
@@ -346,9 +348,9 @@ export class SessionCompletionSyncMonitor {
   private async performHealthCheck(): Promise<void> {
     try {
       const healthStatus = await performSessionCompletionHealthCheck();
-      
+
       // Notify on status change
-      if (!this.lastHealthStatus || 
+      if (!this.lastHealthStatus ||
           healthStatus.status !== this.lastHealthStatus.status ||
           healthStatus.pendingCount !== this.lastHealthStatus.pendingCount) {
         this.options.onHealthStatusChange(healthStatus);

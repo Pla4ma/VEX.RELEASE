@@ -12,11 +12,10 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { View, TextStyle, ViewStyle, StyleSheet } from 'react-native';
+import { View, TextStyle, ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  useDerivedValue,
   withTiming,
   withSpring,
   runOnJS,
@@ -237,12 +236,6 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     return () => clearInterval(updateInterval);
   }, [value, duration, useSpring, springConfig, animatedValue, colorProgress, trend]);
 
-  // Derived formatted value
-  const formattedValue = useDerivedValue(() => {
-    const current = animatedValue.value;
-    return formatNumber(current, variant, decimals, compactThreshold, locale);
-  });
-
   // Animated color based on trend
   const animatedTextStyle = useAnimatedStyle(() => ({
     color: interpolateColor(
@@ -381,7 +374,7 @@ export function useCounterAnimation(
     }, delay);
 
     return () => clearTimeout(startTimeout);
-  }, [target, duration, delay, onComplete]);
+  }, [target, duration, delay, onComplete, value]);
 
   return value;
 }

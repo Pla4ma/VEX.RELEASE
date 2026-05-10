@@ -4,13 +4,13 @@
  * Individual particle component for confetti celebration.
  */
 
-import React, { useEffect } from "react";
-import { View, Dimensions } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withDecay, withDelay, runOnJS } from "react-native-reanimated";
-import { ParticleConfig } from "./types";
-import { particleStyle, shapeStyle, triangleStyle, GRAVITY, FRICTION } from "./constants";
+import React, { useEffect } from 'react';
+import { View, Dimensions } from 'react-native';
+import { useSharedValue, useAnimatedStyle, withSpring, withDecay, withDelay, runOnJS } from 'react-native-reanimated';
+import { ParticleConfig } from './types';
+import { particleStyle, shapeStyle, triangleStyle, FRICTION } from './constants';
 
-const { height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 interface ParticleProps {
   config: ParticleConfig;
@@ -47,8 +47,7 @@ export function Particle({ config, onComplete }: ParticleProps) {
         stiffness: 100,
         mass: 1,
         overshootClamping: true,
-        restDisplacementThreshold: 0.1,
-        restSpeedThreshold: 0.1,
+        energyThreshold: 0.1,
       })
     );
 
@@ -82,7 +81,7 @@ export function Particle({ config, onComplete }: ParticleProps) {
     // Auto-cleanup
     const timeout = setTimeout(handleComplete, (config.delay + 3) * 1000);
     return () => clearTimeout(timeout);
-  }, [config, onComplete]);
+  }, [animatedOpacity, animatedRotation, animatedScale, animatedX, animatedY, config, onComplete]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -104,11 +103,11 @@ export function Particle({ config, onComplete }: ParticleProps) {
     ];
 
     switch (config.shape) {
-      case "circle":
+      case 'circle':
         return <View style={[style, { borderRadius: size / 2 }]} />;
-      case "square":
+      case 'square':
         return <View style={style} />;
-      case "triangle":
+      case 'triangle':
         return (
           <View
             style={[

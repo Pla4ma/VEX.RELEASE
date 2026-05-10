@@ -5,7 +5,7 @@
  * Pure calculation logic.
  */
 
-import type { FocusQualityMetrics, SessionState } from '../../types';
+import type { FocusQualityMetrics } from '../../types';
 
 // ============================================================================
 // Penalty Constants
@@ -267,7 +267,7 @@ export interface AbandonPenaltyResult {
 }
 
 export function calculateAbandonPenalty(input: AbandonPenaltyInput): AbandonPenaltyResult {
-  const { progressPercentage, streakAtRisk, timeInvestedSeconds, hasStreakSave } = input;
+  const { progressPercentage, streakAtRisk, hasStreakSave } = input;
 
   let scorePenalty = 0;
 

@@ -34,6 +34,35 @@ interface FocusScoreDashboardProps {
  */
 export const FocusScoreDashboard: React.FC<FocusScoreDashboardProps> = ({ profile, onPress, compact = false }) => {
   const scale = useSharedValue(1);
+  const bandColor = profile?.band.color ?? "#3B82F6";
+
+  // Animation on mount
+  React.useEffect(() => {
+    scale.value = withSpring(1, { damping: 15 });
+  }, [scale]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  // Chart data (last 30 days)
+  const chartData = useMemo(() => {
+    const scoreHistory = profile?.scoreHistory ?? [];
+    const recent = scoreHistory.slice(-30);
+    return {
+      labels:
+        recent.length > 7
+          ? recent.filter((_, i) => i % 5 === 0).map((h) => h.date.slice(5)) // MM-DD
+          : recent.map((h) => h.date.slice(5)),
+      datasets: [
+        {
+          data: recent.map((h) => h.score),
+          color: () => bandColor,
+          strokeWidth: 2,
+        },
+      ],
+    };
+  }, [bandColor, profile?.scoreHistory]);
 
   // Check if feature is enabled
   if (!featureFlags.isEnabled("focus_score_primary")) {
@@ -48,35 +77,8 @@ export const FocusScoreDashboard: React.FC<FocusScoreDashboardProps> = ({ profil
     );
   }
 
-  const { currentScore, previousScore, band, percentileRank, factors, scoreHistory } = profile;
+  const { currentScore, previousScore, band, percentileRank, factors } = profile;
   const scoreChange = currentScore - previousScore;
-
-  // Animation on mount
-  React.useEffect(() => {
-    scale.value = withSpring(1, { damping: 15 });
-  }, []);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-
-  // Chart data (last 30 days)
-  const chartData = useMemo(() => {
-    const recent = scoreHistory.slice(-30);
-    return {
-      labels:
-        recent.length > 7
-          ? recent.filter((_, i) => i % 5 === 0).map((h) => h.date.slice(5)) // MM-DD
-          : recent.map((h) => h.date.slice(5)),
-      datasets: [
-        {
-          data: recent.map((h) => h.score),
-          color: () => band.color,
-          strokeWidth: 2,
-        },
-      ],
-    };
-  }, [scoreHistory, band.color]);
 
   // Score gauge position (0-100%)
   const gaugePercent = ((currentScore - 300) / (850 - 300)) * 100;

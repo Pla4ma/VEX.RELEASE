@@ -29,7 +29,7 @@ export function getAnimationStyles(reducedMotion: boolean) {
       transition: 'none',
     };
   }
-  
+
   return {
     // Default animation styles
     animationDuration: '300ms',
@@ -42,7 +42,7 @@ export function getAnimationStyles(reducedMotion: boolean) {
  */
 export function calculateScaledFontSize(baseSize: number, textScale: number): number {
   const scaled = baseSize * textScale;
-  
+
   // Clamp to reasonable bounds (0.5x to 3x)
   return Math.max(baseSize * 0.5, Math.min(baseSize * 3, scaled));
 }
@@ -53,7 +53,7 @@ export function calculateScaledFontSize(baseSize: number, textScale: number): nu
 export function getScaledTypography(baseTypography: Record<string, unknown>, textScale: number) {
   return Object.keys(baseTypography).reduce((scaled, key) => {
     const original = baseTypography[key];
-    
+
     if (typeof original === 'object' && original !== null && 'fontSize' in original && typeof (original as any).fontSize === 'number') {
       scaled[key] = {
         ...original,
@@ -62,7 +62,7 @@ export function getScaledTypography(baseTypography: Record<string, unknown>, tex
     } else {
       scaled[key] = original;
     }
-    
+
     return scaled;
   }, {} as Record<string, unknown>);
 }

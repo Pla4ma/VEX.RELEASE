@@ -120,7 +120,7 @@ export function useActiveSessionController(): ActiveSessionController {
       });
     });
     return () => subscription.remove();
-  }, [sessionQuery.backgroundSession, sessionQuery.foregroundSession, sessionQuery.isActive, sessionQuery.session?.id]);
+  }, [sessionQuery]);
 
   useEffect(
     () => () => {
@@ -129,7 +129,7 @@ export function useActiveSessionController(): ActiveSessionController {
         Sentry.captureException(caught, { tags: { feature: 'session-background-unmount' } });
       });
     },
-    [sessionQuery.backgroundSession, sessionQuery.isActive, sessionQuery.session?.id],
+    [sessionQuery],
   );
 
   const handlePauseResume = useCallback(async () => {
@@ -144,7 +144,7 @@ export function useActiveSessionController(): ActiveSessionController {
     } catch (caught) {
       Sentry.captureException(caught, { tags: { feature: 'session-control' } });
     }
-  }, [sessionQuery.isPaused, sessionQuery.pauseSession, sessionQuery.resumeSession]);
+  }, [sessionQuery]);
 
   const handleComplete = useCallback(async () => {
     try {
@@ -187,7 +187,7 @@ export function useActiveSessionController(): ActiveSessionController {
     } catch (caught) {
       Sentry.captureException(caught, { tags: { feature: 'session-complete' } });
     }
-  }, [companion, creativeMood, currentMode, navigation, progressionSummary?.level, sessionId, sessionQuery, streak?.currentDays, userId]);
+  }, [companion, creativeMood, currentMode, navigation, progressionSummary?.level, sessionId, sessionQuery, userId]);
 
   const handleCreativeMoodSelected = useCallback((mood: Mood) => {
     setCreativeMood(mood);
@@ -208,7 +208,7 @@ export function useActiveSessionController(): ActiveSessionController {
       Sentry.captureException(caught, { tags: { feature: 'session-abandon' } });
       setIsExiting(false);
     }
-  }, [navigation, sessionQuery.abandonSession]);
+  }, [navigation, sessionQuery]);
 
   return {
     actions: { handleAbandon, handleComplete, handleCreativeMoodSelected, handlePauseResume, handleSkipCreativeMood, setDismissDegradedState, setShowInterruption, setShowMultiplierInfo },

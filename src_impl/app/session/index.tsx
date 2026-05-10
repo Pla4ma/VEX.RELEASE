@@ -6,28 +6,24 @@
  */
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import { useSession } from '../../session/hooks/useSession';
 import { useSessionStats } from '../../session/hooks/useSession';
 import { ActiveSessionHUD } from '../../session/components/ActiveSessionHUD';
 import { SessionPresets } from '../../session/components/SessionPresets';
-import { SessionEmptyState } from '../../session/components/states/SessionEmptyState';
 import { SessionLoadingState } from '../../session/components/states/SessionLoadingState';
-import { SessionControls } from '../../session/components/SessionControls';
 import type { SessionPreset } from '../../session/types';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 export default function SessionHomeScreen() {
-  const [activeView, setActiveView] = useState<'home' | 'custom'>('home');
+  const [, setActiveView] = useState<'home' | 'custom'>('home');
   const userId = 'current-user'; // In real app, get from auth context
 
   const {
-    session,
     isActive,
     isPaused,
     isLoading,
     error,
-    startSession,
     pauseSession,
     resumeSession,
     abandonSession,
@@ -35,7 +31,7 @@ export default function SessionHomeScreen() {
 
   const stats = useSessionStats(userId);
 
-  const handleSelectPreset = async (preset: SessionPreset) => {
+  const handleSelectPreset = async (_preset: SessionPreset) => {
     // Create and start session from preset
     setActiveView('custom');
   };

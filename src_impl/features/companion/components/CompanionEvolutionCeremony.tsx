@@ -7,14 +7,14 @@
  * @phase 13.2
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Dimensions, Pressable } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, withSequence, withDelay, interpolate, Easing, runOnJS } from "react-native-reanimated";
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, interpolate, Easing } from "react-native-reanimated";
 
 import { Box, Text } from "../../../components/primitives";
 import { useTheme } from "../../../theme";
 import type { CompanionState, CompanionPhase } from "../types";
-import { ELEMENT_THEMES, EVOLUTION_THRESHOLDS } from "../types";
+import { ELEMENT_THEMES } from "../types";
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
 
@@ -67,12 +67,7 @@ export const CompanionEvolutionCeremony: React.FC<CompanionEvolutionCeremonyProp
 
   const themeColors = ELEMENT_THEMES[previousState.element];
 
-  // Run ceremony sequence
-  useEffect(() => {
-    runCeremony();
-  }, []);
-
-  const runCeremony = async () => {
+  const runCeremony = useCallback(async () => {
     // Phase 1: Energy Buildup (1 second)
     setCeremonyPhase("energy-buildup");
     glowOpacity.value = withTiming(1, { duration: 1000, easing: Easing.inOut(Easing.sin) });
@@ -108,7 +103,12 @@ export const CompanionEvolutionCeremony: React.FC<CompanionEvolutionCeremonyProp
 
     // Complete
     setCeremonyPhase("complete");
-  };
+  }, [flashOpacity, glowOpacity, glowScale, newFormOpacity, newFormScale, oldFormOpacity, particleBurst, textOpacity, textScale]);
+
+  // Run ceremony sequence
+  useEffect(() => {
+    runCeremony();
+  }, [runCeremony]);
 
   const handleTap = () => {
     if (ceremonyPhase === "complete") {
@@ -323,7 +323,7 @@ export const CompanionEvolutionCeremony: React.FC<CompanionEvolutionCeremonyProp
 
         {/* Phase indicator dots at bottom */}
         <Box position="absolute" bottom={80} flexDirection="row" gap="sm" zIndex={35}>
-          {(["energy-buildup", "flash", "transformation", "celebration"] as EvolutionPhase[]).map((phase, index) => {
+          {(["energy-buildup", "flash", "transformation", "celebration"] as EvolutionPhase[]).map((phase, _index) => {
             const isActive = ceremonyPhase === phase || (ceremonyPhase === "complete" && phase === "celebration");
             const isPast = ceremonyPhase !== "complete" && ["transformation", "celebration", "complete"].includes(ceremonyPhase) && ["energy-buildup", "flash"].includes(phase);
 

@@ -220,40 +220,6 @@ function recoverFromBackup(): PersistedSessionState | null {
 // Migration
 // ============================================================================
 
-const MIGRATIONS: Record<number, (state: Record<string, unknown>) => Record<string, unknown>> = {
-  1: (state) => ({
-    ...state,
-    version: 2,
-    pauses: state.pauses || 0,
-  }),
-  2: (state) => ({
-    ...state,
-    version: 3,
-    deviceId: state.deviceId || generateDeviceId(),
-  }),
-};
-
-function migrateState(state: Record<string, unknown>): Record<string, unknown> {
-  let currentVersion = (state.version as number) || 1;
-  let migratedState = { ...state };
-
-  while (currentVersion < 3) {
-    const migration = MIGRATIONS[currentVersion];
-    if (migration) {
-      migratedState = migration(migratedState);
-      currentVersion = migratedState.version as number;
-    } else {
-      break;
-    }
-  }
-
-  return migratedState;
-}
-
-function generateDeviceId(): string {
-  return `device_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-}
-
 // ============================================================================
 // Session History (for analytics and recovery)
 // ============================================================================

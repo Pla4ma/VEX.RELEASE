@@ -80,7 +80,7 @@ export interface StreakBonusInput {
 }
 
 export function calculateStreakBonus(input: StreakBonusInput): number {
-  const { currentStreak, basePoints } = input;
+  const { currentStreak } = input;
 
   if (currentStreak <= 1) {
     return BONUS_CONSTANTS.STREAK_BONUS_BASE;

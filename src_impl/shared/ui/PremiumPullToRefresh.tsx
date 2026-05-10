@@ -15,19 +15,23 @@
 import React, { useRef, useState, useCallback } from 'react';
 import {
   View,
-  Animated,
   PanResponder,
-  RefreshControl,
-  ScrollView,
-  Dimensions,
   ActivityIndicator,
 } from 'react-native';
+import Animated, {
+  cancelAnimation,
+  Easing,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { useTheme } from '@/theme';
 import { useReducedMotion } from '@/hooks';
 import { haptics } from '@/shared/feedback';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // ============================================================================
 // Types
@@ -63,13 +67,18 @@ export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
   const [refreshState, setRefreshState] = useState<RefreshState>('idle');
 
   // Animation values
-  const pullY = useRef(new Animated.Value(0)).current;
-  const indicatorRotation = useRef(new Animated.Value(0)).current;
-  const indicatorScale = useRef(new Animated.Value(1)).current;
-  const indicatorOpacity = useRef(new Animated.Value(0)).current;
+  const pullY = useSharedValue(0);
+  const indicatorRotation = useSharedValue(0);
+  const indicatorScale = useSharedValue(1);
+  const indicatorOpacity = useSharedValue(0);
 
   // Track if haptic was triggered
   const hapticTriggered = useRef(false);
+
+  const resetHapticTriggered = useCallback(() => {
+    setRefreshState('idle');
+    hapticTriggered.current = false;
+  }, []);
 
   // Update state based on prop
   React.useEffect(() => {
@@ -82,47 +91,35 @@ export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
   const animateToRefreshing = useCallback(() => {
     setRefreshState('refreshing');
 
-    Animated.parallel([
-      Animated.spring(pullY, {
-        toValue: pullDistance * 0.6,
-        friction: 8,
-        useNativeDriver: true,
-      }),
-      Animated.timing(indicatorOpacity, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    pullY.value = withSpring(pullDistance * 0.6, {
+      damping: 16,
+      stiffness: 150,
+    });
+    indicatorOpacity.value = withTiming(1, { duration: 200 });
 
     // Start rotation animation
-    Animated.loop(
-      Animated.timing(indicatorRotation, {
-        toValue: 1,
+    indicatorRotation.value = withRepeat(
+      withTiming(1, {
         duration: 1000,
-        useNativeDriver: true,
-      })
-    ).start();
+        easing: Easing.linear,
+      }),
+      -1,
+      false
+    );
   }, [pullY, indicatorRotation, indicatorOpacity, pullDistance]);
 
   // Animate back to idle
   const animateToIdle = useCallback(() => {
-    Animated.parallel([
-      Animated.spring(pullY, {
-        toValue: 0,
-        friction: 8,
-        useNativeDriver: true,
-      }),
-      Animated.timing(indicatorOpacity, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      setRefreshState('idle');
-      hapticTriggered.current = false;
+    cancelAnimation(indicatorRotation);
+    indicatorRotation.value = 0;
+    pullY.value = withSpring(0, {
+      damping: 16,
+      stiffness: 150,
     });
-  }, [pullY, indicatorOpacity]);
+    indicatorOpacity.value = withTiming(0, { duration: 200 }, () => {
+      runOnJS(resetHapticTriggered)();
+    });
+  }, [pullY, indicatorRotation, indicatorOpacity, resetHapticTriggered]);
 
   // Handle refresh complete
   const handleRefresh = useCallback(async () => {
@@ -149,13 +146,13 @@ export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
         const easedProgress = 1 - Math.pow(1 - pullProgress, 3); // Ease out cubic
 
         // Update pull position
-        pullY.setValue(easedProgress * pullDistance * 0.8);
+        pullY.value = easedProgress * pullDistance * 0.8;
 
         // Update indicator opacity
-        indicatorOpacity.setValue(Math.min(pullProgress * 1.5, 1));
+        indicatorOpacity.value = Math.min(pullProgress * 1.5, 1);
 
         // Update rotation based on pull
-        indicatorRotation.setValue(pullProgress * 0.5);
+        indicatorRotation.value = pullProgress * 0.5;
 
         // Update state
         if (gestureState.dy >= triggerDistance && refreshState !== 'willRefresh') {
@@ -185,20 +182,23 @@ export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
     })
   ).current;
 
-  // Interpolated rotation for indicator
-  const rotation = indicatorRotation.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  });
-
   // Indicator styles
-  const indicatorStyle = {
+  const indicatorStyle = useAnimatedStyle(() => ({
     transform: [
-      { rotate: rotation },
-      { scale: indicatorScale },
+      { rotate: `${indicatorRotation.value * 360}deg` },
+      { scale: indicatorScale.value },
     ],
-    opacity: indicatorOpacity,
-  };
+    opacity: indicatorOpacity.value,
+  }));
+
+  const indicatorContainerStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: pullY.value }],
+    height: pullY.value,
+  }));
+
+  const contentStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: pullY.value }],
+  }));
 
   // Get indicator content based on state
   const renderIndicator = () => {
@@ -235,10 +235,7 @@ export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
       <Animated.View
         style={[
           styles.indicatorContainer,
-          {
-            transform: [{ translateY: pullY }],
-            height: pullY,
-          },
+          indicatorContainerStyle,
         ]}
       >
         {renderIndicator()}
@@ -246,9 +243,7 @@ export const PremiumPullToRefresh: React.FC<PremiumPullToRefreshProps> = ({
 
       {/* Content */}
       <Animated.View
-        style={{
-          transform: [{ translateY: pullY }],
-        }}
+        style={contentStyle}
       >
         {children}
       </Animated.View>

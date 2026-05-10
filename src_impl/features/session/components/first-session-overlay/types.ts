@@ -2,7 +2,6 @@
  * First Session Overlay Types
  */
 
-import type { ReactNode } from 'react';
 
 export type TooltipTarget = 'timer' | 'quality' | 'boss';
 

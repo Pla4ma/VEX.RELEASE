@@ -306,11 +306,6 @@ export function SquadSyncIndicator({
   const squadCompletionsRef = useRef<Set<string>>(new Set());
   const encouragedMembersRef = useRef<Set<string>>(new Set());
 
-  // Don't render if not squad mode
-  if (!isSquadMode) {
-    return null;
-  }
-
   // Filter out current user
   const otherMembers = members.filter((m) => m.userId !== currentUserId);
 
@@ -423,6 +418,11 @@ export function SquadSyncIndicator({
     }
     return undefined;
   }, [encouragementToast]);
+
+  // Don't render if not squad mode
+  if (!isSquadMode) {
+    return null;
+  }
 
   if (isLoading) {
     return (

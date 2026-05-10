@@ -10,7 +10,7 @@
  */
 
 import React, { useMemo } from "react";
-import { Pressable, StyleSheet, View, ScrollView, Dimensions } from "react-native";
+import { View, ScrollView } from "react-native";
 import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, interpolate, Extrapolation } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -21,8 +21,6 @@ import { capture } from "../../../shared/analytics";
 import { EconomyEvents } from "../../../shared/analytics/analytics-events";
 import { usePremiumStatus } from "../../../shared/monetization";
 import { createSheet } from "@/shared/ui/create-sheet";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 // Premium gradient
 const PREMIUM_GRADIENT = ["#A855F7", "#EC4899", "#F59E0B"] as const;
@@ -57,14 +55,8 @@ export function PremiumPreview({ currentTier, unlockedPremiumTiers, upcomingRewa
   const { colors } = theme;
   const { isPremium } = usePremiumStatus();
 
-  // Don't show for premium users
-  if (isPremium || hasPremium) {
-    return null;
-  }
-
   // Pulsing animation for "Upgrade" CTA
   const pulseScale = useSharedValue(1);
-  const pulseOpacity = useSharedValue(1);
 
   React.useEffect(() => {
     pulseScale.value = withRepeat(withSequence(withTiming(1.05, { duration: 1200 }), withTiming(1, { duration: 1200 })), -1, true);
@@ -89,6 +81,11 @@ export function PremiumPreview({ currentTier, unlockedPremiumTiers, upcomingRewa
     });
     onUpgrade();
   };
+
+  // Don't show for premium users
+  if (isPremium || hasPremium) {
+    return null;
+  }
 
   return (
     <View style={styles.container}>
@@ -222,7 +219,6 @@ function BlurRewardCard({ reward, index, currentTier }: BlurRewardCardProps) {
   const { colors } = theme;
 
   const blurAmount = useSharedValue(0);
-  const lockScale = useSharedValue(1);
 
   React.useEffect(() => {
     // Animate blur intensity

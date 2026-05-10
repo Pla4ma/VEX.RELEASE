@@ -111,7 +111,6 @@ export function FocusTimeScreen({
   onSkip,
   onBack,
 }: FocusTimeScreenProps & { onBack?: () => void }): JSX.Element {
-  const { theme } = useTheme();
   const [selectedDuration, setSelectedDuration] = useState<FocusDuration | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);
 

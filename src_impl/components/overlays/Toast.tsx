@@ -5,8 +5,7 @@
  */
 
 import React, { useEffect, useCallback } from 'react';
-import { View, StyleSheet, type ViewStyle } from 'react-native';
-import type { ViewStyle as RNViewStyle } from 'react-native';
+import { View, type ViewStyle } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,

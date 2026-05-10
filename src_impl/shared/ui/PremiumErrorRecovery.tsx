@@ -12,7 +12,7 @@
  * - Auto-recovery detection
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   View,
   Text,
@@ -119,7 +119,7 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
   const [nextRetryIn, setNextRetryIn] = useState<number | null>(null);
   const [isResolved, setIsResolved] = useState(false);
 
-  const retryConfig = { ...DEFAULT_RETRY_CONFIG, ...customRetryConfig };
+  const retryConfig = useMemo(() => ({ ...DEFAULT_RETRY_CONFIG, ...customRetryConfig }), [customRetryConfig]);
   const errorState = ERROR_MESSAGES[context] || ERROR_MESSAGES.general;
 
   // Animation values
@@ -155,7 +155,7 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
+  }, [shakeAnimation]);
 
   // Auto-retry countdown
   useEffect(() => {

@@ -522,7 +522,7 @@ function MoodDot({ mood, delay }: { mood: CompanionMood; delay: number }): JSX.E
 
   React.useEffect(() => {
     scale.value = withSpring(1, { damping: 12, stiffness: 100 });
-  }, []);
+  }, [scale]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],

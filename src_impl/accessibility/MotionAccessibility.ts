@@ -6,7 +6,8 @@
  */
 
 import React from 'react';
-import { Animated, Platform } from 'react-native';
+import { Animated, Easing } from 'react-native';
+type EasingFunction = (value: number) => number;
 import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('motion-accessibility');
@@ -56,7 +57,7 @@ export interface AnimationConfig {
   type: AnimationType;
   duration: number;
   delay?: number;
-  easing?: string;
+  easing?: EasingFunction;
   useNativeDriver?: boolean;
   reducedMotionAlternative?: 'fade' | 'none' | 'instant';
 }
@@ -362,7 +363,7 @@ export class MotionAccessibilityManager {
   }
 
   resetAnimations(): void {
-    this.animationRegistry.forEach((animatedValue, key) => {
+    this.animationRegistry.forEach((animatedValue, _key) => {
       animatedValue.setValue(0);
     });
     debug.info('All animations reset');

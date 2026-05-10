@@ -109,7 +109,7 @@ export function Icon({
     // Animation would be applied via reanimated here
     // This is a placeholder for the actual animation implementation
     return {};
-  }, [animated, animation]);
+  }, [animated]);
 
   // Render null if icon not found
   if (!iconData || !pathData) {
@@ -156,3 +156,5 @@ export function createIcon(name: string, defaultProps?: Partial<IconProps>) {
     return <Icon name={name} {...defaultProps} {...props} />;
   };
 }
+
+

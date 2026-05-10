@@ -10,7 +10,7 @@
  */
 
 import React, { useEffect } from "react";
-import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withRepeat, withSpring, withSequence, withDelay } from "react-native-reanimated";
+import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withRepeat, withSpring, withSequence } from "react-native-reanimated";
 
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
@@ -99,8 +99,6 @@ function XpOrb({ xp }: { xp: number }): JSX.Element {
  * Tutorial card explaining the loop
  */
 function TutorialCard(): JSX.Element {
-  const { theme } = useTheme();
-
   return (
     <Animated.View entering={FadeInUp.duration(500).delay(400)}>
       <Box p="xl" borderRadius="xl" bg="background.secondary" borderWidth={1} borderColor="border.light" alignItems="center" gap="lg">

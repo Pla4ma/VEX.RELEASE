@@ -266,7 +266,7 @@ export function useStreakRisk(): UseStreakRiskReturn {
         clearInterval(intervalRef.current);
       }
     };
-  }, [userId, streakData?.currentDays]);
+  }, [checkRiskMutation, userId, streakData?.currentDays]);
 
   // ============================================================================
   // Event Listeners

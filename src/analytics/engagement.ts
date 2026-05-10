@@ -15,7 +15,7 @@ const engagementData = new Map<string, EngagementMetrics>();
 export function recordEngagementEvent(
   userId: string,
   event: {
-    type: "session_complete" | "plan_start" | "plan_complete" | "boss_defeat" | "streak_milestone";
+    type: 'session_complete' | 'plan_start' | 'plan_complete' | 'boss_defeat' | 'streak_milestone';
     value?: number;
   },
 ): void {
@@ -27,8 +27,11 @@ export function recordEngagementEvent(
       sessionsLast30Days: 0,
       totalFocusMinutes: 0,
       avgSessionDuration: 0,
+      averageSessionDuration: 0,
       studyPlansCompleted: 0,
       studyPlansStarted: 0,
+      completionRate: 0,
+      lastActiveDate: new Date().toISOString(),
       bossBattlesCompleted: 0,
       streakDays: 0,
       weeklyActive: false,
@@ -37,24 +40,25 @@ export function recordEngagementEvent(
   }
 
   switch (event.type) {
-    case "session_complete":
+    case 'session_complete':
       metrics.sessionsLast7Days++;
       metrics.sessionsLast30Days++;
       if (event.value) {
         metrics.totalFocusMinutes += event.value;
         metrics.avgSessionDuration = metrics.totalFocusMinutes / metrics.sessionsLast30Days;
+        metrics.averageSessionDuration = metrics.avgSessionDuration;
       }
       break;
-    case "plan_start":
+    case 'plan_start':
       metrics.studyPlansStarted++;
       break;
-    case "plan_complete":
+    case 'plan_complete':
       metrics.studyPlansCompleted++;
       break;
-    case "boss_defeat":
+    case 'boss_defeat':
       metrics.bossBattlesCompleted++;
       break;
-    case "streak_milestone":
+    case 'streak_milestone':
       if (event.value) {
         metrics.streakDays = event.value;
       }
@@ -64,10 +68,14 @@ export function recordEngagementEvent(
   // Recalculate segments
   metrics.weeklyActive = metrics.sessionsLast7Days > 0;
   metrics.powerUser = metrics.sessionsLast7Days >= 5;
+  metrics.completionRate = metrics.studyPlansStarted > 0
+    ? metrics.studyPlansCompleted / metrics.studyPlansStarted
+    : 0;
+  metrics.lastActiveDate = new Date().toISOString();
 
   engagementData.set(userId, metrics);
 
-  eventBus.publish("analytics:engagement", {
+  eventBus.publish('analytics:engagement', {
     userId,
     event: event.type,
     metrics,

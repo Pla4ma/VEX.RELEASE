@@ -1,6 +1,6 @@
 /**
  * Accessibility Enhancer
- * 
+ *
  * Automated accessibility improvements and fixes:
  * - Enhanced accessibility props for components
  * - Motion and animation optimizations
@@ -10,11 +10,11 @@
  */
 
 import React from 'react';
-import { Platform } from 'react-native';
+import type { StyleProp, ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { createDebugger } from '../utils/debug';
-import { 
-  getAccessibleColor, 
-  getAccessibleAlternatives, 
+import {
+  getAccessibleColor,
+  getAccessibleAlternatives,
   checkContrast,
   type ColorBlindType,
 } from './AccessibilitySystem';
@@ -32,7 +32,7 @@ export interface EnhancedAccessibilityProps {
   accessibilityHint?: string;
   accessibilityRole?: string;
   accessibilityLiveRegion?: 'none' | 'polite' | 'assertive';
-  
+
   // Enhanced accessibility
   accessibilityDescribedBy?: string;
   accessibilityLabelledBy?: string;
@@ -43,23 +43,45 @@ export interface EnhancedAccessibilityProps {
   accessibilityValueNow?: number;
   accessibilityValueText?: string;
   accessibilityValueStep?: number;
-  
+
   // Focus management
   accessibilityViewIsModal?: boolean;
   accessibilityElementsHidden?: boolean;
   accessibilityIgnoresInvertColors?: boolean;
-  
+
   // Motion and animation
   accessibilityIgnoresPageScaling?: boolean;
   accessibilityReduceMotion?: boolean;
-  
+
   // Screen reader optimizations
   accessibilityLanguage?: string;
   accessibilityAutoComplete?: string;
   accessibilityAutoCorrect?: string;
   accessibilityRequired?: boolean;
   accessibilityInvalid?: boolean;
+  style?: StyleProp<ViewStyle | TextStyle | ImageStyle>;
 }
+
+interface EnhancementHistoryEntry {
+  timestamp: number;
+  props: string[];
+  enhancements: string[];
+}
+
+type PropsWithStyle = {
+  style?: StyleProp<ViewStyle | TextStyle | ImageStyle> & {
+    color?: string;
+    backgroundColor?: string;
+  };
+  title?: unknown;
+  children?: unknown;
+  onPress?: unknown;
+  onLongPress?: unknown;
+  animated?: unknown;
+  useNativeDriver?: unknown;
+  accessibilityRole?: unknown;
+  accessibilityHint?: unknown;
+};
 
 // ============================================================================
 // Accessibility Enhancement Types
@@ -95,7 +117,7 @@ export interface AccessibilityEnhancementConfig {
 export class AccessibilityEnhancer {
   private static instance: AccessibilityEnhancer;
   private config: AccessibilityEnhancementConfig;
-  private enhancementHistory: unknown[] = [];
+  private enhancementHistory: EnhancementHistoryEntry[] = [];
 
   private constructor() {
     this.config = {
@@ -135,17 +157,14 @@ export class AccessibilityEnhancer {
     Component: React.ComponentType<P>,
     enhancements?: Partial<EnhancedAccessibilityProps>
   ): React.ComponentType<P> {
-    const EnhancedComponent = React.forwardRef<any, P>((props, ref) => {
+    const EnhancedComponent = (props: P): React.ReactElement => {
       const enhancedProps = this.applyAccessibilityEnhancements(props, enhancements);
 
-      return React.createElement(Component, {
-        ...enhancedProps,
-        ref,
-      });
-    });
+      return React.createElement(Component, enhancedProps);
+    };
 
     EnhancedComponent.displayName = `Enhanced(${Component.displayName || Component.name})`;
-    return EnhancedComponent as any;
+    return EnhancedComponent;
   }
 
   enhanceProps<P extends object>(
@@ -199,25 +218,26 @@ export class AccessibilityEnhancer {
     const enhancements: Partial<EnhancedAccessibilityProps> = {};
 
     // Check for color props and improve contrast
-    if ('style' in props && typeof props.style === 'object') {
-      const style = props.style as any;
-      
+    const propsWithStyle: PropsWithStyle = props;
+    const style = propsWithStyle.style;
+    if (style && typeof style === 'object' && !Array.isArray(style)) {
+
       if (style.color && style.backgroundColor) {
         const contrast = checkContrast(style.color, style.backgroundColor);
-        
+
         if (!contrast.passesAA) {
           // Suggest better colors
           const alternatives = getAccessibleAlternatives(
             style.color,
             style.backgroundColor
           );
-          
+
           if (alternatives.length > 0) {
             enhancements.style = {
               ...style,
               color: alternatives[0],
             };
-            
+
             debug.info('Applied contrast enhancement:', {
               original: style.color,
               improved: alternatives[0],
@@ -236,8 +256,11 @@ export class AccessibilityEnhancer {
           };
         }
         if (style.backgroundColor) {
+          const currentStyle = enhancements.style && typeof enhancements.style === 'object' && !Array.isArray(enhancements.style)
+            ? enhancements.style
+            : style;
           enhancements.style = {
-            ...enhancements.style || style,
+            ...currentStyle,
             backgroundColor: getAccessibleColor('secondary', this.config.colorBlindSupport),
           };
         }
@@ -251,18 +274,19 @@ export class AccessibilityEnhancer {
     const enhancements: Partial<EnhancedAccessibilityProps> = {};
 
     // Add focus management for interactive elements
-    if ('onPress' in props || 'onLongPress' in props) {
-      if (!('accessible' in props)) {
+    const sourceProps: PropsWithStyle = props;
+    if ('onPress' in sourceProps || 'onLongPress' in sourceProps) {
+      if (!('accessible' in sourceProps)) {
         enhancements.accessible = true;
       }
-      
-      if (!('accessibilityRole' in props)) {
+
+      if (!('accessibilityRole' in sourceProps)) {
         enhancements.accessibilityRole = 'button';
       }
     }
 
     // Add keyboard navigation hints
-    if ('onPress' in props && !('accessibilityHint' in props)) {
+    if ('onPress' in sourceProps && !('accessibilityHint' in sourceProps)) {
       enhancements.accessibilityHint = 'Double tap to activate';
     }
 
@@ -273,7 +297,8 @@ export class AccessibilityEnhancer {
     const enhancements: Partial<EnhancedAccessibilityProps> = {};
 
     // Add reduced motion support for animated elements
-    if ('animated' in props || 'useNativeDriver' in props) {
+    const sourceProps: PropsWithStyle = props;
+    if ('animated' in sourceProps || 'useNativeDriver' in sourceProps) {
       enhancements.accessibilityReduceMotion = true;
     }
 
@@ -284,14 +309,15 @@ export class AccessibilityEnhancer {
     const enhancements: Partial<EnhancedAccessibilityProps> = {};
 
     // Add semantic roles for common patterns
-    if ('title' in props && !('accessibilityRole' in props)) {
+    const sourceProps: PropsWithStyle = props;
+    if ('title' in sourceProps && !('accessibilityRole' in sourceProps)) {
       enhancements.accessibilityRole = 'header';
-      enhancements.accessibilityLabel = props.title as string;
+      enhancements.accessibilityLabel = typeof sourceProps.title === 'string' ? sourceProps.title : undefined;
     }
 
     // Add live region for dynamic content
-    if ('children' in props && typeof props.children === 'string') {
-      const text = props.children as string;
+    if ('children' in sourceProps && typeof sourceProps.children === 'string') {
+      const text = sourceProps.children;
       if (text.includes('Loading') || text.includes('Error')) {
         enhancements.accessibilityLiveRegion = 'polite';
       }
@@ -306,7 +332,7 @@ export class AccessibilityEnhancer {
   ): P & EnhancedAccessibilityProps {
     // Apply automatic enhancements
     const automaticEnhancements = this.getAutomaticEnhancements(props);
-    
+
     // Apply manual enhancements
     const allEnhancements = {
       ...automaticEnhancements,
@@ -320,7 +346,7 @@ export class AccessibilityEnhancer {
         props: Object.keys(props),
         enhancements: Object.keys(allEnhancements),
       });
-      
+
       debug.debug('Applied accessibility enhancements:', {
         component: props,
         enhancements: allEnhancements,
@@ -337,7 +363,7 @@ export class AccessibilityEnhancer {
   // Enhancement History and Analytics
   // ============================================================================
 
-  getEnhancementHistory(): unknown[] {
+  getEnhancementHistory(): EnhancementHistoryEntry[] {
     return [...this.enhancementHistory];
   }
 

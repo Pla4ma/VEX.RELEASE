@@ -6,12 +6,11 @@
  */
 
 import React, { Component, type ReactNode, type ErrorInfo } from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 
 import { useTheme } from '../../../theme';
 import { Text } from '../../../components/primitives';
 import { Button } from '../../../components';
-import { ErrorBoundary } from '../../../errors/ErrorBoundary';
 import { OfflineEmptyState } from './EmptyState';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { createDebugger } from '@/utils/debug';

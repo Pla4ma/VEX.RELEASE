@@ -22,7 +22,6 @@ export function PurchaseErrorState({
   error,
   onRetry,
   onCancel,
-  productName = 'purchase',
 }: PurchaseErrorStateProps): JSX.Element {
   const getErrorMessage = (): string => {
     const message = error.message.toLowerCase();

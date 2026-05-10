@@ -14,9 +14,9 @@
  * Answer: YES — limited time creates urgency, rare items create FOMO
  */
 
-import React, { useEffect, useMemo, useState, useCallback } from "react";
-import { Pressable, StyleSheet, View, Dimensions } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, interpolate, Extrapolation, FadeIn, FadeInRight } from "react-native-reanimated";
+import React, { useEffect, useMemo, useState } from "react";
+import { Pressable, View } from "react-native";
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeInRight } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { Text } from "../../../components/primitives/Text";
@@ -25,8 +25,6 @@ import { capture } from "../../../shared/analytics";
 import { EconomyEvents } from "../../../shared/analytics/analytics-events";
 import { triggerHaptic } from "../../../utils/haptics";
 import { createSheet } from "@/shared/ui/create-sheet";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 // Sale gradient
 const FLASH_SALE_GRADIENT = ["#EF4444", "#F97316", "#F59E0B"] as const;

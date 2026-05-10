@@ -28,7 +28,7 @@ import { GoalScreen } from './GoalScreen';
 import { FocusTimeScreen } from './FocusTimeScreen';
 import { NameScreen } from './NameScreen';
 import { FirstSessionCTA } from './FirstSessionCTA';
-import { OnboardingProgressBar, OnboardingDots } from './OnboardingProgressBar';
+import { OnboardingDots } from './OnboardingProgressBar';
 
 interface OnboardingNavigatorProps {
   /** Navigate to active session */
@@ -45,7 +45,7 @@ export function OnboardingNavigator({
   onBack,
 }: OnboardingNavigatorProps): JSX.Element {
   const store = useOnboardingStore();
-  const progress = useOnboardingProgress();
+  useOnboardingProgress();
 
   const currentStep = store.currentStep;
 

@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { SessionRecommendation, RecommendationType } from '../schemas';
 import { createSheet } from '@/shared/ui/create-sheet';

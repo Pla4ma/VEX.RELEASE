@@ -96,7 +96,7 @@ export class RewardAdapter {
   // Individual Reward Granting
   // ============================================================================
 
-  private async grantXP(amount: number, summary: SessionSummary): Promise<void> {
+  private async grantXP(amount: number, _summary: SessionSummary): Promise<void> {
     eventBus.publish('progression:add_xp', {
       userId: this.userId!,
       amount,
@@ -106,7 +106,7 @@ export class RewardAdapter {
     debug.debug('XP granted: %d', amount);
   }
 
-  private async grantCoins(amount: number, summary: SessionSummary): Promise<void> {
+  private async grantCoins(amount: number, _summary: SessionSummary): Promise<void> {
     eventBus.publish('economy:add_currency', {
       userId: this.userId!,
       type: 'COINS',
@@ -117,7 +117,7 @@ export class RewardAdapter {
     debug.debug('Coins granted: %d', amount);
   }
 
-  private async grantGems(amount: number, summary: SessionSummary): Promise<void> {
+  private async grantGems(amount: number, _summary: SessionSummary): Promise<void> {
     eventBus.publish('economy:add_currency', {
       userId: this.userId!,
       type: 'GEMS',

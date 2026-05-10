@@ -25,10 +25,6 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-  withTiming,
-  runOnJS,
-  interpolate,
-  Extrapolation,
 } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
@@ -188,8 +184,8 @@ export const InteractiveCard: React.FC<InteractiveCardProps> = ({
   ...pressableProps
 }) => {
   const { theme } = useTheme();
-  const [isPressed, setIsPressed] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [, setIsPressed] = useState(false);
+  const [, setIsLoading] = useState(false);
 
   const scale = useSharedValue(1);
   const opacity = useSharedValue(1);
@@ -349,7 +345,6 @@ export const CardSkeleton: React.FC<{
   hasIcon?: boolean;
   style?: ViewStyle;
 }> = ({
-  variant = 'default',
   size = 'md',
   lines = 2,
   hasIcon = true,

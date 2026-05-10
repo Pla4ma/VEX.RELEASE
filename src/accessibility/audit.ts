@@ -14,7 +14,7 @@ import { getFocusableElements } from './focus';
 export function auditScreen(): AccessibilityAudit {
   const issues: AccessibilityIssue[] = [];
   const focusableElements = getFocusableElements();
-  
+
   // Check focus management
   focusableElements.forEach(element => {
     if (!element.accessible || !element.focusable) {
@@ -28,7 +28,7 @@ export function auditScreen(): AccessibilityAudit {
       });
     }
   });
-  
+
   // Check for missing labels (simplified - in real implementation would traverse DOM)
   // This is a placeholder for actual DOM traversal logic
   const unlabeledElements = findUnlabeledElements();
@@ -42,10 +42,10 @@ export function auditScreen(): AccessibilityAudit {
       suggestion: 'Add accessibilityLabel prop',
     });
   });
-  
+
   // Calculate accessibility score (0-100)
   const score = calculateAccessibilityScore(issues, focusableElements.length);
-  
+
   return {
     timestamp: Date.now(),
     issues,
@@ -69,17 +69,17 @@ function findUnlabeledElements(): FocusableElement[] {
  * Calculate accessibility score based on issues
  */
 function calculateAccessibilityScore(issues: AccessibilityIssue[], elementCount: number): number {
-  if (elementCount === 0) return 100;
-  
+  if (elementCount === 0) {return 100;}
+
   const criticalIssues = issues.filter(i => i.severity === 'critical').length;
   const highIssues = issues.filter(i => i.severity === 'high').length;
   const mediumIssues = issues.filter(i => i.severity === 'medium').length;
   const lowIssues = issues.filter(i => i.severity === 'low').length;
-  
+
   // Weight issues by severity
   const weightedIssues = (criticalIssues * 10) + (highIssues * 5) + (mediumIssues * 2) + (lowIssues * 1);
   const maxPossibleScore = elementCount * 10;
-  
+
   const score = Math.max(0, Math.min(100, 100 - (weightedIssues / maxPossibleScore) * 100));
   return Math.round(score);
 }
@@ -89,7 +89,7 @@ function calculateAccessibilityScore(issues: AccessibilityIssue[], elementCount:
  */
 export function auditColorContrast(foreground: string, background: string): AccessibilityIssue | null {
   const contrast = checkContrast(foreground, background);
-  
+
   if (!contrast.passesAA) {
     return {
       id: generateIssueId(),
@@ -100,7 +100,7 @@ export function auditColorContrast(foreground: string, background: string): Acce
       suggestion: 'Increase color contrast to meet WCAG AA standards',
     };
   }
-  
+
   return null;
 }
 

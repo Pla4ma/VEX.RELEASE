@@ -40,13 +40,9 @@ interface NearMissDisplayProps {
 // Main Component: Active Session Overlay
 // ============================================================================
 
-export const CriticalHitOverlay: React.FC<CriticalHitOverlayProps> = ({ sessionId, visible, onDismiss, bossName }) => {
+export const CriticalHitOverlay: React.FC<CriticalHitOverlayProps> = ({ sessionId, visible, onDismiss: _onDismiss, bossName }) => {
   const { theme } = useTheme();
   const status = getCritStatusText(sessionId);
-
-  if (!visible || !status.showOverlay) {
-    return null;
-  }
 
   // Animation values
   const pulseScale = useSharedValue(1);
@@ -65,7 +61,7 @@ export const CriticalHitOverlay: React.FC<CriticalHitOverlayProps> = ({ sessionI
 
     // Mark overlay as shown
     bossCritService.markOverlayShown(sessionId);
-  }, []);
+  }, [glowOpacity, pulseScale, sessionId, shakeX]);
 
   const containerStyle = useAnimatedStyle(() => ({
     transform: [{ scale: pulseScale.value }],
@@ -78,6 +74,10 @@ export const CriticalHitOverlay: React.FC<CriticalHitOverlayProps> = ({ sessionI
   const textShakeStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: shakeX.value }],
   }));
+
+  if (!visible || !status.showOverlay) {
+    return null;
+  }
 
   return (
     <Animated.View
@@ -207,7 +207,7 @@ export const NearMissDisplay: React.FC<NearMissDisplayProps> = ({ nearMissPercen
   useEffect(() => {
     fadeIn.value = withTiming(1, { duration: 400 });
     slideUp.value = withSpring(0, { damping: 12, stiffness: 100 });
-  }, []);
+  }, [fadeIn, slideUp]);
 
   const containerStyle = useAnimatedStyle(() => ({
     opacity: fadeIn.value,
@@ -297,7 +297,7 @@ export const CritStatsBadge: React.FC<CritStatsBadgeProps> = ({ userId }) => {
     if (stats.totalCrits > 0) {
       scaleAnim.value = withSequence(withSpring(1.2, { damping: 10 }), withTiming(1, { duration: 200 }));
     }
-  }, [stats.totalCrits]);
+  }, [scaleAnim, stats.totalCrits]);
 
   const badgeStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scaleAnim.value }],

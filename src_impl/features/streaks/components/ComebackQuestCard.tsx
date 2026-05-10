@@ -124,8 +124,6 @@ function PhoenixBadgePreview(): JSX.Element {
  * Progress bar
  */
 function QuestProgressBar({ progress }: { progress: number }): JSX.Element {
-  const { theme } = useTheme();
-
   return (
     <Box gap="sm">
       <Box flexDirection="row" justifyContent="space-between">
@@ -148,8 +146,6 @@ function QuestProgressBar({ progress }: { progress: number }): JSX.Element {
  * Main Comeback Quest Card
  */
 export function ComebackQuestCard({ quest, progress, onStartSession, onViewDetails }: ComebackQuestCardProps): JSX.Element {
-  const { theme } = useTheme();
-
   const isComplete = progress.currentStage === "COMPLETE";
   const currentQuestNum = progress.currentStage === "QUEST_1" ? 1 : progress.currentStage === "QUEST_2" ? 2 : progress.currentStage === "QUEST_3" ? 3 : 0;
 

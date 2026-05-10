@@ -7,14 +7,12 @@
  * Passes the test: "Would a free user feel like they're missing out?"
  */
 
-import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Pressable,
   ScrollView,
-  StyleSheet,
   View,
-  Dimensions,
 } from 'react-native';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -37,15 +35,12 @@ import { capture } from '../../analytics';
 import {
   usePaywall,
   usePremiumStatus,
-  type PurchasesPackageDisplayInfo,
 } from '../use-revenuecat';
 import { PurchaseEvents, createPaywallProperties, createPurchaseProperties } from '../purchase-events';
-import { CardEnterAnimation, StaggeredEnter } from '../../ui/components/EnterAnimation';
+import { CardEnterAnimation } from '../../ui/components/EnterAnimation';
 import { StatusBanner } from '../../ui/components/StatusFeedback';
 import { useTheme } from '../../../theme';
 import { styles } from './VipPaywallScreen.styles';
-
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // VIP Benefits Configuration
 const VIP_BENEFITS = [
@@ -131,7 +126,6 @@ export function VipPaywallScreen(): JSX.Element {
   } | null>(null);
 
   const source = route.params?.source ?? 'unknown';
-  const gemCount = route.params?.gemCount ?? 0;
 
   // Pulsing animation for VIP crown
   const pulseScale = useSharedValue(1);
@@ -336,8 +330,7 @@ export function VipPaywallScreen(): JSX.Element {
   };
 
   // Render VIP benefit card
-  const BenefitCard = useCallback(
-    ({ benefit, index }: { benefit: typeof VIP_BENEFITS[number]; index: number }) => {
+  function BenefitCard({ benefit, index }: { benefit: typeof VIP_BENEFITS[number]; index: number }): JSX.Element {
       const scale = useSharedValue(1);
 
       const handlePressIn = () => {
@@ -403,9 +396,7 @@ export function VipPaywallScreen(): JSX.Element {
           </Pressable>
         </Animated.View>
       );
-    },
-    [colors]
-  );
+  }
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.background.primary }]}>

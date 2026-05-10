@@ -5,7 +5,7 @@
  * gem purchase via RevenueCat webhook, shop item purchase, insufficient funds
  */
 
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it } from 'vitest';
 import { setupIntegrationTests, server, http, HttpResponse } from './setup';
 
 // Setup MSW

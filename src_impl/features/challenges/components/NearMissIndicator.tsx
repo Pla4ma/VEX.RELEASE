@@ -51,16 +51,6 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
   // Validate props
   const isValidNearMiss = progressPercent >= NEAR_MISS_THRESHOLD && progressPercent < COMPLETE_THRESHOLD;
 
-  if (!isValidNearMiss) {
-    // Log analytics but don't render
-    Sentry.addBreadcrumb({
-      category: "challenges",
-      message: `NearMissIndicator rendered with invalid progress: ${progressPercent}%`,
-      level: "warning",
-    });
-    return null;
-  }
-
   // Animation values
   const pulseOpacity = useSharedValue(0.6);
   const progressWidth = useSharedValue(0);
@@ -81,7 +71,7 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
 
     // Track near-miss analytics
     trackChallengeNearMiss(challengeId, progressPercent);
-  }, []);
+  }, [challengeId, progressPercent, progressWidth, pulseOpacity, shakeX]);
 
   // Animated styles
   const progressStyle = useAnimatedStyle(() => ({
@@ -95,6 +85,16 @@ export const NearMissIndicator: React.FC<NearMissIndicatorProps> = ({ challengeI
   const shakeStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: shakeX.value }],
   }));
+
+  if (!isValidNearMiss) {
+    // Log analytics but don't render
+    Sentry.addBreadcrumb({
+      category: "challenges",
+      message: `NearMissIndicator rendered with invalid progress: ${progressPercent}%`,
+      level: "warning",
+    });
+    return null;
+  }
 
   // Get encouraging message based on progress
   const getNearMissMessage = (progress: number): string => {

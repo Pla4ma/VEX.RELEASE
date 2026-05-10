@@ -45,7 +45,7 @@ export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
       setIsLoading(false);
       setIsSuccess(true);
     }, 1500);
-  }, [password, confirmPassword, token]);
+  }, [password, confirmPassword]);
 
   const handleLogin = useCallback(() => {
     navigation.navigate({ name: 'Login', params: {} });
@@ -156,3 +156,5 @@ export const ResetPasswordScreen: React.FC<Props> = ({ navigation, route }) => {
 };
 
 export default ResetPasswordScreen;
+
+

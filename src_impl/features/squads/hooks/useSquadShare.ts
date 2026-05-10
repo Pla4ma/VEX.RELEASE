@@ -62,7 +62,9 @@ export function useSquadShare(squad: SquadSummary | null | undefined) {
       squad,
       weeklyStats: statsQuery.data ?? getEmptyWeeklyStats(),
     });
-  }, [squad, squadCode, statsQuery.data, statsQuery.isError, statsQuery.isLoading, theme.colors.primary, theme.colors.text, theme.spacing]);
+  }, [squad, statsQuery.data, statsQuery.isError, statsQuery.isLoading, theme.colors.primary, theme.colors.text, theme.spacing]);
 
   return { shareCard, handleShare, isSharing };
 }
+
+

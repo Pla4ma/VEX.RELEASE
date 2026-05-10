@@ -100,7 +100,7 @@ export function useUseItem() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (input: UseItemInput) => service.useItem(input),
+    mutationFn: (input: UseItemInput) => service.applyInventoryItem(input),
     onSuccess: (result, input) => {
       queryClient.invalidateQueries({
         queryKey: inventoryKeys.state(input.userId),

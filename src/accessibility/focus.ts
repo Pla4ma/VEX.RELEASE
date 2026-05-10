@@ -17,7 +17,7 @@ export function registerFocusableElement(element: FocusableElement): void {
   if (existingIndex !== -1) {
     focusableElements.splice(existingIndex, 1);
   }
-  
+
   focusableElements.push(element);
 }
 
@@ -28,16 +28,16 @@ export function getNextFocusableElement(currentId?: string): FocusableElement | 
   if (focusableElements.length === 0) {
     return null;
   }
-  
+
   if (!currentId) {
     return focusableElements[0];
   }
-  
+
   const currentIndex = focusableElements.findIndex(el => el.id === currentId);
   if (currentIndex === -1) {
     return focusableElements[0];
   }
-  
+
   const nextIndex = (currentIndex + 1) % focusableElements.length;
   return focusableElements[nextIndex];
 }
@@ -49,16 +49,16 @@ export function getPreviousFocusableElement(currentId?: string): FocusableElemen
   if (focusableElements.length === 0) {
     return null;
   }
-  
+
   if (!currentId) {
     return focusableElements[focusableElements.length - 1];
   }
-  
+
   const currentIndex = focusableElements.findIndex(el => el.id === currentId);
   if (currentIndex === -1) {
     return focusableElements[focusableElements.length - 1];
   }
-  
+
   const prevIndex = currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
   return focusableElements[prevIndex];
 }

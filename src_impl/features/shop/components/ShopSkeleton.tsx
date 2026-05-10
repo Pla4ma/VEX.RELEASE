@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { CATEGORIES } from './shop-constants';
 import { createSheet } from '@/shared/ui/create-sheet';
 

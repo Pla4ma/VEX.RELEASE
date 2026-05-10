@@ -5,8 +5,8 @@
  */
 
 import React, { forwardRef } from "react";
-import { View, Pressable, StyleSheet, type AccessibilityRole, type AccessibilityState, type StyleProp, type ViewStyle } from "react-native";
-import Animated, { useAnimatedStyle, withSpring, withTiming, interpolate, useSharedValue } from "react-native-reanimated";
+import { View, Pressable, StyleSheet, Image, type AccessibilityRole, type AccessibilityState, type StyleProp, type ViewStyle } from "react-native";
+import Animated, { useAnimatedStyle, withSpring, interpolate, useSharedValue } from "react-native-reanimated";
 import { useTheme } from "../../theme";
 import { createSheet } from "@/shared/ui/create-sheet";
 
@@ -210,7 +210,7 @@ interface CardMediaProps {
 export function CardMedia({ source, aspectRatio = 16 / 9, overlay, style }: CardMediaProps) {
   return (
     <View style={[mediaStyles.container, { aspectRatio }, style]}>
-      {/* Image would go here */}
+      <Image source={source} style={mediaStyles.image} resizeMode="cover" />
       {overlay && <View style={mediaStyles.overlay}>{overlay}</View>}
     </View>
   );
@@ -222,6 +222,11 @@ const mediaStyles = createSheet({
     backgroundColor: "#E5E7EB",
     borderRadius: 8,
     overflow: "hidden",
+  },
+  image: {
+    ...StyleSheet.absoluteFillObject,
+    width: "100%",
+    height: "100%",
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,

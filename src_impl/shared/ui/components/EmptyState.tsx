@@ -9,7 +9,7 @@
  */
 
 import React from 'react';
-import { View, StyleSheet, ViewStyle } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import { useReducedMotion } from 'react-native-reanimated';
 
 import { useTheme } from '../../../theme';

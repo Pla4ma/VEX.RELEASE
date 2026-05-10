@@ -10,7 +10,7 @@
 
 import React, { useState } from "react";
 import { Pressable } from "react-native";
-import Animated, { FadeInUp, useAnimatedStyle, withSpring } from "react-native-reanimated";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
 import { Text } from "../../../components/primitives";
 import { useTheme } from "../../../theme";

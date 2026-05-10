@@ -8,13 +8,12 @@
  */
 
 import React, { useEffect, useMemo } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeIn, FadeInDown } from "react-native-reanimated";
+import { View } from "react-native";
+import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeInDown } from "react-native-reanimated";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { Text } from "../../../components/primitives/Text";
 import { Button } from "../../../components/primitives/Button";
-import { useTheme } from "../../../theme";
 import { capture } from "../../../shared/analytics";
 import { EconomyEvents } from "../../../shared/analytics/analytics-events";
 import { createSheet } from "@/shared/ui/create-sheet";
@@ -41,15 +40,6 @@ interface BattlePassUrgencyBannerProps {
 }
 
 export function BattlePassUrgencyBanner({ daysRemaining, currentTier, totalTiers, unclaimedTiers, hasPremium, freeTierCap = 40, onViewBattlePass, onUpgradeToPremium }: BattlePassUrgencyBannerProps): JSX.Element | null {
-  const { theme } = useTheme();
-  const { colors } = theme;
-
-  // Only show when < 7 days remaining or unclaimed tiers exist
-  const shouldShow = daysRemaining <= 7 || unclaimedTiers > 0;
-
-  if (!shouldShow) {
-    return null;
-  }
 
   // Pulsing animation for high urgency
   const pulseScale = useSharedValue(1);
@@ -99,6 +89,13 @@ export function BattlePassUrgencyBanner({ daysRemaining, currentTier, totalTiers
     });
     onUpgradeToPremium?.();
   };
+
+  // Only show when < 7 days remaining or unclaimed tiers exist
+  const shouldShow = daysRemaining <= 7 || unclaimedTiers > 0;
+
+  if (!shouldShow) {
+    return null;
+  }
 
   return (
     <Animated.View entering={FadeInDown.duration(400)} style={[styles.container, pulseStyle]}>

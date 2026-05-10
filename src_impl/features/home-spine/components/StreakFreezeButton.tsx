@@ -37,11 +37,6 @@ export function StreakFreezeButton({
 }: StreakFreezeButtonProps): JSX.Element | null {
   const { theme } = useTheme();
 
-  // Don't show if neither can freeze nor already frozen
-  if (!canFreeze && !hasFrozenToday) {
-    return null;
-  }
-
   const pulseStyle = useAnimatedStyle(() => ({
     transform: canFreeze
       ? [
@@ -58,6 +53,11 @@ export function StreakFreezeButton({
         ]
       : [],
   }));
+
+  // Don't show if neither can freeze nor already frozen
+  if (!canFreeze && !hasFrozenToday) {
+    return null;
+  }
 
   if (hasFrozenToday) {
     return (

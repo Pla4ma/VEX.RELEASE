@@ -9,7 +9,7 @@
  */
 
 import React from "react";
-import Animated, { useAnimatedStyle, withSpring, withTiming, withRepeat, withSequence } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, withSpring, withRepeat, withSequence } from "react-native-reanimated";
 
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";

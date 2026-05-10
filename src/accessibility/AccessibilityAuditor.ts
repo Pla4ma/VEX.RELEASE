@@ -1,6 +1,6 @@
 /**
  * Accessibility Auditor
- * 
+ *
  * Comprehensive accessibility audit system for WCAG 2.1 AA compliance:
  * - Component-level accessibility checks
  * - Screen-level accessibility validation
@@ -11,17 +11,44 @@
  */
 
 import { createDebugger } from '../utils/debug';
-import { 
-  calculateContrastRatio, 
-  checkContrast, 
-  getAccessibleAlternatives,
-  getAccessibleColor,
-  getStatusPattern,
-  type ContrastCheck,
-  type ColorBlindType,
+import {
+  checkContrast,
 } from './AccessibilitySystem';
 
 const debug = createDebugger('accessibility-auditor');
+
+type AuditableProps = {
+  props?: {
+    accessible?: boolean;
+    accessibilityLabel?: string;
+    accessibilityRole?: string;
+    animated?: boolean;
+    useNativeDriver?: boolean;
+    onPress?: unknown;
+    onLongPress?: unknown;
+    children?: unknown;
+    style?: {
+      color?: string;
+      backgroundColor?: string;
+      width?: number;
+      height?: number;
+      minWidth?: number;
+      minHeight?: number;
+    };
+    [key: string]: unknown;
+  };
+  type?: {
+    displayName?: string;
+  };
+};
+
+function isAuditableElement(value: unknown): value is AuditableProps {
+  return typeof value === 'object' && value !== null;
+}
+
+function getAuditableElement(value: unknown): AuditableProps {
+  return isAuditableElement(value) ? value : {};
+}
 
 // ============================================================================
 // Accessibility Audit Types
@@ -79,7 +106,7 @@ export interface AccessibilityRule {
 // WCAG 2.1 AA Guidelines Reference
 // ============================================================================
 
-const WCAG_GUIDELINES = {
+export const WCAG_GUIDELINES = {
   '1.1.1': 'Non-text Content: All non-text content has a text alternative',
   '1.2.1': 'Audio-only and Video-only: Prerecorded content has alternatives',
   '1.3.1': 'Adaptable: Create content that can be presented in different ways',
@@ -173,7 +200,8 @@ export class AccessibilityAuditor {
   // ============================================================================
 
   async auditComponent(component: unknown, config?: ComponentAccessibilityConfig): Promise<AccessibilityAuditResult> {
-    const componentConfig = config || this.componentConfigs.get(component.type?.displayName) || {
+    const auditableComponent = getAuditableElement(component);
+    const componentConfig = config || this.componentConfigs.get(auditableComponent.type?.displayName || '') || {
       componentName: 'Unknown',
       requiresTesting: false,
     };
@@ -189,13 +217,13 @@ export class AccessibilityAuditor {
     const failedChecks: string[] = [];
 
     // Run all accessibility checks
-    issues.push(...this.checkAccessibilityLabels(component, componentConfig));
-    issues.push(...this.checkFocusManagement(component, componentConfig));
-    issues.push(...this.checkKeyboardNavigation(component, componentConfig));
-    issues.push(...this.checkColorContrast(component, componentConfig));
-    issues.push(...this.checkMotionAccessibility(component, componentConfig));
-    issues.push(...this.checkSemanticHTML(component, componentConfig));
-    issues.push(...this.checkTouchTargets(component, componentConfig));
+    issues.push(...this.checkAccessibilityLabels(auditableComponent, componentConfig));
+    issues.push(...this.checkFocusManagement(auditableComponent, componentConfig));
+    issues.push(...this.checkKeyboardNavigation(auditableComponent, componentConfig));
+    issues.push(...this.checkColorContrast(auditableComponent, componentConfig));
+    issues.push(...this.checkMotionAccessibility(auditableComponent, componentConfig));
+    issues.push(...this.checkSemanticHTML(auditableComponent, componentConfig));
+    issues.push(...this.checkTouchTargets(auditableComponent, componentConfig));
 
     // Categorize issues
     issues.forEach(issue => {
@@ -238,10 +266,10 @@ export class AccessibilityAuditor {
   // Specific Accessibility Checks
   // ============================================================================
 
-  private checkAccessibilityLabels(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkAccessibilityLabels(component: AuditableProps, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
-    if (!config.requiredLabels) return issues;
+    if (!config.requiredLabels) {return issues;}
 
     for (const requiredLabel of config.requiredLabels) {
       if (!component.props || component.props[requiredLabel] === undefined) {
@@ -262,7 +290,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkFocusManagement(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkFocusManagement(component: AuditableProps, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check if component is focusable when it should be
@@ -285,7 +313,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkKeyboardNavigation(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkKeyboardNavigation(component: AuditableProps, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for keyboard navigation support
@@ -306,7 +334,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkColorContrast(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkColorContrast(component: AuditableProps, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check color contrast if style information is available
@@ -338,7 +366,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkMotionAccessibility(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkMotionAccessibility(component: AuditableProps, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for animations that should respect reduced motion
@@ -359,7 +387,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkSemanticHTML(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkSemanticHTML(component: AuditableProps, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for proper accessibility roles
@@ -377,7 +405,7 @@ export class AccessibilityAuditor {
         type: 'warning',
         category: 'semantic',
         severity: 'moderate',
-        message: `Component may have incorrect accessibility role`,
+        message: 'Component may have incorrect accessibility role',
         recommendation: `Set accessibilityRole to one of: ${expectedRole.join(', ')}`,
         element: config.componentName,
         wcagGuideline: '4.1.2',
@@ -388,7 +416,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkTouchTargets(component: unknown, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkTouchTargets(component: AuditableProps, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check minimum touch target size (44x44pt recommended)
@@ -421,9 +449,10 @@ export class AccessibilityAuditor {
 
   private checkScreenStructure(screenElement: unknown): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
+    const element = getAuditableElement(screenElement);
 
     // Check for page title
-    if (!screenElement.props?.accessibilityLabel) {
+    if (!element.props?.accessibilityLabel) {
       issues.push({
         id: 'missing-page-title',
         type: 'error',
@@ -440,7 +469,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkNavigationOrder(screenElement: unknown): AccessibilityIssue[] {
+  private checkNavigationOrder(_screenElement: unknown): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // This would require analyzing the actual focus order
@@ -460,7 +489,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkScreenReaderAnnouncements(screenElement: unknown): AccessibilityIssue[] {
+  private checkScreenReaderAnnouncements(_screenElement: unknown): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for dynamic content that should announce changes
@@ -468,7 +497,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkReducedMotion(screenElement: unknown): AccessibilityIssue[] {
+  private checkReducedMotion(_screenElement: unknown): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check if animations respect reduced motion preferences
@@ -482,17 +511,18 @@ export class AccessibilityAuditor {
 
   private findInteractiveElements(element: unknown): unknown[] {
     const interactive: unknown[] = [];
+    const auditableElement = getAuditableElement(element);
 
     // Recursively find interactive elements
     // This is a simplified implementation
-    if (element.props?.onPress || element.props?.onLongPress || 
-        element.props?.accessibilityRole === 'button' ||
-        element.props?.accessibilityRole === 'link') {
+    if (auditableElement.props?.onPress || auditableElement.props?.onLongPress ||
+        auditableElement.props?.accessibilityRole === 'button' ||
+        auditableElement.props?.accessibilityRole === 'link') {
       interactive.push(element);
     }
 
     // Check children (simplified)
-    if (element.props?.children) {
+    if (auditableElement.props?.children) {
       // In a real implementation, this would handle React.Children properly
     }
 
@@ -543,7 +573,7 @@ export class AccessibilityAuditor {
     };
   }
 
-  private createPassingResult(message: string): AccessibilityAuditResult {
+  private createPassingResult(_message: string): AccessibilityAuditResult {
     return {
       score: 100,
       issues: [],

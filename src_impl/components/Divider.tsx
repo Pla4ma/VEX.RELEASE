@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, StyleSheet, type ViewStyle } from 'react-native';
+import { View, type ViewStyle } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 export interface DividerProps {

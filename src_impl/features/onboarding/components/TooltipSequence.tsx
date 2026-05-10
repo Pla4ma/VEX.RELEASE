@@ -16,7 +16,7 @@ import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface TooltipSequenceProps {
   hasStreak: boolean;
@@ -39,10 +39,6 @@ interface Tooltip {
 function TooltipBubble({ tooltip, isActive, onDismiss }: { tooltip: Tooltip; isActive: boolean; onDismiss: () => void }): JSX.Element | null {
   const { theme } = useTheme();
 
-  if (!isActive) {
-    return <></>;
-  }
-
   const bounceStyle = useAnimatedStyle(() => ({
     transform: [
       {
@@ -50,6 +46,10 @@ function TooltipBubble({ tooltip, isActive, onDismiss }: { tooltip: Tooltip; isA
       },
     ],
   }));
+
+  if (!isActive) {
+    return <></>;
+  }
 
   return (
     <Animated.View
@@ -147,7 +147,7 @@ function TooltipOverlay({ isVisible, onPress }: { isVisible: boolean; onPress: (
 /**
  * Tooltip sequence manager
  */
-export function TooltipSequence({ hasStreak, hasBoss, onComplete }: TooltipSequenceProps): JSX.Element {
+export function TooltipSequence({ hasStreak: _hasStreak, hasBoss, onComplete }: TooltipSequenceProps): JSX.Element {
   const [currentTooltipIndex, setCurrentTooltipIndex] = useState(0);
 
   // Build tooltip list based on user state

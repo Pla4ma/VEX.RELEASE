@@ -6,7 +6,7 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, screen, fireEvent } from '@testing-library/react-native';
 import { View, Text, Pressable, TextInput, ActivityIndicator } from 'react-native';
 
 // Simple test component

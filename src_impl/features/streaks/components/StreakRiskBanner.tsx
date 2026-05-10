@@ -10,7 +10,7 @@
 
 import React from "react";
 import { Pressable } from "react-native";
-import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming, withSpring } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming } from "react-native-reanimated";
 
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
@@ -76,25 +76,25 @@ function getRiskConfig(riskLevel: StreakRiskLevel, theme: ReturnType<typeof useT
  */
 export function StreakRiskBanner({ riskLevel, hoursRemaining, streakDays, suggestedDuration, onStartSession }: StreakRiskBannerProps): JSX.Element | null {
   const { theme } = useTheme();
+  const config = getRiskConfig(riskLevel, theme);
+
+  const pulseStyle = useAnimatedStyle(() => ({
+    transform: [
+      {
+        scale: config?.pulse ? withRepeat(withSequence(withTiming(1, { duration: 800 }), withTiming(1.02, { duration: 800 })), -1, true) : 1,
+      },
+    ],
+    borderColor: config?.pulse ? withRepeat(withSequence(withTiming(config.border, { duration: 500 }), withTiming(`${config.border}80`, { duration: 500 })), -1, true) : config?.border,
+  }));
 
   // Only show for MEDIUM or higher
   if (riskLevel === "NONE" || riskLevel === "LOW") {
     return null;
   }
 
-  const config = getRiskConfig(riskLevel, theme);
   if (!config) {
     return null;
   }
-
-  const pulseStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        scale: config.pulse ? withRepeat(withSequence(withTiming(1, { duration: 800 }), withTiming(1.02, { duration: 800 })), -1, true) : 1,
-      },
-    ],
-    borderColor: config.pulse ? withRepeat(withSequence(withTiming(config.border, { duration: 500 }), withTiming(`${config.border}80`, { duration: 500 })), -1, true) : config.border,
-  }));
 
   return (
     <Pressable onPress={() => onStartSession(suggestedDuration)} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">

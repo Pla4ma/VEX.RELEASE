@@ -15,7 +15,7 @@ export interface AccessibilityPreferences {
 
   // Visual
   highContrast: boolean;
-  colorBlindMode: "none" | "protanopia" | "deuteranopia" | "tritanopia" | "achromatopsia";
+  colorBlindMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia' | 'achromatopsia';
   textScale: number; // 1.0 = default, up to 2.0
   boldText: boolean;
 
@@ -32,18 +32,23 @@ export interface ColorBlindPalette {
   name: string;
   description: string;
   colors: Record<string, string>;
+  patterns: Record<string, string>;
 }
 
 export interface ContrastCheck {
+  foreground: string;
+  background: string;
   ratio: number;
-  passes: boolean;
-  level: 'AA' | 'AAA';
+  passesAA: boolean;
+  passesAAA: boolean;
 }
 
 export interface ScreenReaderAnnouncement {
+  id: string;
   message: string;
   priority: 'polite' | 'assertive';
   delay?: number;
+  timestamp: number;
 }
 
 export interface AnimationConfig {
@@ -53,4 +58,26 @@ export interface AnimationConfig {
   useNativeDriver?: boolean;
 }
 
-export type ColorBlindType = "none" | "protanopia" | "deuteranopia" | "tritanopia" | "achromatopsia";
+export type ColorBlindType = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia' | 'achromatopsia';
+
+export interface FocusableElement {
+  id: string;
+  reactTag: number;
+  accessible: boolean;
+  focusable: boolean;
+}
+
+export interface AccessibilityIssue {
+  id: string;
+  type: 'focus' | 'label' | 'contrast' | 'motion' | 'screen-reader';
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  description: string;
+  element: FocusableElement;
+  suggestion: string;
+}
+
+export interface AccessibilityAudit {
+  timestamp: number;
+  issues: AccessibilityIssue[];
+  score: number;
+}

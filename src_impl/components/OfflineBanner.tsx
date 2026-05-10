@@ -19,7 +19,6 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-import { useTheme } from '../theme';
 import { Box, Text } from './primitives';
 import { Icon } from '../icons';
 
@@ -37,7 +36,6 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
   showSyncPending = true,
   pendingCount = 0,
 }) => {
-  const { theme } = useTheme();
   const [isOffline, setIsOffline] = useState(false);
   const [wasOffline, setWasOffline] = useState(false);
 

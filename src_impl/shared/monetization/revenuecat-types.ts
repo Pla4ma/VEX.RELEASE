@@ -7,11 +7,8 @@
 
 import {
   CustomerInfo,
-  PurchasesError,
   PurchasesOfferings,
-  PurchasesPackage,
   PurchasesOffering,
-  PurchasesStoreProduct,
 } from 'react-native-purchases';
 
 // ============================================================================

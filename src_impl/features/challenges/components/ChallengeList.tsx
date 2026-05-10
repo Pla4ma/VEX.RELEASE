@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import { View, StyleSheet, RefreshControl } from "react-native";
+import { View, RefreshControl } from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import { Text, Card, Button } from "../../../components";
 import { ChallengeCard } from "./ChallengeCard";

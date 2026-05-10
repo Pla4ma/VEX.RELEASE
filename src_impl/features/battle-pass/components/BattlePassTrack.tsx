@@ -6,10 +6,8 @@
 
 import React from "react";
 import { View, Text, Pressable, ScrollView } from "react-native";
-import { useTheme } from "@/theme";
 import { Card, Badge, Button } from "../../../components";
 import type { BattlePassTier, UserBattlePass } from "../types";
-import { createSheet } from "@/shared/ui/create-sheet";
 
 interface BattlePassTrackProps {
   tiers: BattlePassTier[];
@@ -22,7 +20,6 @@ interface BattlePassTrackProps {
 }
 
 export function BattlePassTrack({ tiers, userProgress, onClaimTier, onPurchasePremium, loading, error, onRetry }: BattlePassTrackProps): JSX.Element {
-  const { theme } = useTheme();
   if (loading) {
     return (
       <Card style={containerStyle}>

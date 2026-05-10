@@ -5,7 +5,6 @@
 
 import type { ItemDefinition } from '../../items/schemas';
 import type { LimitedOffer } from '../../economy/schemas';
-import type { ShopCategory } from './shop-constants';
 
 export interface ShopScreenProps {
   userId: string;

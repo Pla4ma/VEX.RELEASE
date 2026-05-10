@@ -74,7 +74,7 @@ export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({ currentStrea
   const renderDayNode = (day: (typeof streakDays)[0], index: number) => {
     const isCompleted = day.completed;
     const isToday = index === streakDays.length - 1;
-    const [flameColor1, flameColor2] = getFlameColor(index, isCompleted);
+    const [flameColor1] = getFlameColor(index, isCompleted);
     const hasMilestone = day.hasMilestone;
 
     return (

@@ -5,7 +5,7 @@
  * session completed → XP calculated → progression updated → level up triggered
  */
 
-import { describe, it, expect, vi, beforeAll, afterEach, afterAll } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { setupIntegrationTests, server, http, HttpResponse } from './setup';
 import { eventBus } from '../../events';
 

@@ -4,7 +4,8 @@
  */
 
 import React, { useMemo } from "react";
-import { View, Text, Animated } from "react-native";
+import { View, Text } from "react-native";
+import Animated from "react-native-reanimated";
 import { createSheet } from "@/shared/ui/create-sheet";
 import type { BossPhase, BossPhaseState } from "../../features/boss/boss-phases";
 
@@ -16,7 +17,7 @@ interface BossPhaseIndicatorProps {
   mechanicTimeRemaining?: number;
 }
 
-export const BossPhaseIndicator: React.FC<BossPhaseIndicatorProps> = ({ phase, phaseState, bossHealthPercent, mechanicActive, mechanicTimeRemaining }) => {
+export const BossPhaseIndicator: React.FC<BossPhaseIndicatorProps> = ({ phase, phaseState: _phaseState, bossHealthPercent, mechanicActive, mechanicTimeRemaining }) => {
   const phaseInfo = useMemo(() => {
     switch (phase) {
       case "PHASE_1":

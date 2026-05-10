@@ -6,12 +6,13 @@
 
 import { ColorBlindType, ColorBlindPalette } from './types';
 import { COLOR_BLIND_PALETTES } from './constants';
+import { checkContrast } from './contrast';
 
 /**
  * Get accessible color for current color blind mode
  */
 export function getAccessibleColor(
-  colorType: "primary" | "secondary" | "success" | "warning" | "error" | "info",
+  colorType: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info',
   colorBlindMode: ColorBlindType
 ): string {
   return COLOR_BLIND_PALETTES[colorBlindMode].colors[colorType];
@@ -21,7 +22,7 @@ export function getAccessibleColor(
  * Get pattern indicator for status
  */
 export function getStatusPattern(
-  status: "success" | "warning" | "error",
+  status: 'success' | 'warning' | 'error',
   colorBlindMode: ColorBlindType
 ): string {
   return COLOR_BLIND_PALETTES[colorBlindMode].patterns[status];
@@ -40,17 +41,17 @@ export function getColorBlindPalettes(): Record<ColorBlindType, ColorBlindPalett
 export function isColorAccessibleForColorBlind(
   color: string,
   colorBlindMode: ColorBlindType,
-  backgroundColor: string = "#FFFFFF"
+  backgroundColor: string = '#FFFFFF'
 ): boolean {
   const palette = COLOR_BLIND_PALETTES[colorBlindMode];
-  
+
   // Check if color is in the accessible palette
   const isAccessibleColor = Object.values(palette.colors).includes(color);
-  
+
   if (isAccessibleColor) {
     return true;
   }
-  
+
   // For non-palette colors, check contrast
   const { passesAA } = checkContrast(color, backgroundColor);
   return passesAA;

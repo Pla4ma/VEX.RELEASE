@@ -196,7 +196,7 @@ export function emitOfflineSyncComplete(synced: number, failed: number): void {
 
 import { useEffect, useCallback, useRef } from "react";
 
-export function useContentStudyEvent<K extends keyof ContentStudyEventMap>(event: K, callback: (data: ContentStudyEventMap[K]) => void, deps: React.DependencyList = []): void {
+export function useContentStudyEvent<K extends keyof ContentStudyEventMap>(event: K, callback: (data: ContentStudyEventMap[K]) => void): void {
   const callbackRef = useRef(callback);
   callbackRef.current = callback;
 
@@ -206,7 +206,7 @@ export function useContentStudyEvent<K extends keyof ContentStudyEventMap>(event
     });
 
     return unsubscribe;
-  }, [event, ...deps]);
+  }, [event]);
 }
 
 export function useContentStudyEvents(
@@ -221,7 +221,7 @@ export function useContentStudyEvents(
     return () => {
       unsubscribes.forEach((unsubscribe) => unsubscribe());
     };
-  }, []);
+  }, [events]);
 }
 
 // ============================================================================

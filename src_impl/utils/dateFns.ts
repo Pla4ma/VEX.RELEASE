@@ -4,7 +4,7 @@
  * Mock implementation of date-fns functions to resolve missing dependency
  */
 
-export const format = (date: Date, formatStr: string): string => {
+export const format = (date: Date, _formatStr: string): string => {
   return date.toISOString();
 };
 

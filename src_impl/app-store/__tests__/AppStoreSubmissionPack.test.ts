@@ -9,10 +9,6 @@
 import { AppStoreSubmissionPack, appStoreSubmissionPack } from '../AppStoreSubmissionPack';
 import { privacyInventory } from '../../privacy/PrivacyInventory';
 import { performanceGate } from '../../performance/PerformanceGate';
-import type {
-  AppStoreSubmissionResult,
-  AppStoreIssue,
-} from '../AppStoreSubmissionPack';
 
 // Mock dependencies
 jest.mock('../../privacy/PrivacyInventory');

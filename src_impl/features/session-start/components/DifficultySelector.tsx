@@ -11,7 +11,7 @@
 
 import React from "react";
 import { View, Pressable } from "react-native";
-import Animated, { useAnimatedStyle, withSpring, interpolate, Extrapolation } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, withSpring } from "react-native-reanimated";
 
 import { useTheme } from "../../../theme";
 import { Text } from "../../../components/primitives/Text";
@@ -99,31 +99,6 @@ export function DifficultySelector({ selected, onChange, disabled = false }: Dif
     justifyContent: "space-between" as const,
     gap: theme.spacing[2],
     paddingHorizontal: theme.spacing[4],
-  };
-
-  const cardStyle = {
-    flex: 1,
-    padding: theme.spacing[3],
-    borderRadius: theme.borderRadius.lg,
-    borderWidth: 2,
-    backgroundColor: theme.colors.background.secondary,
-  };
-
-  const iconStyle = {
-    fontSize: 24,
-    marginBottom: theme.spacing[2],
-  };
-
-  const nameStyle = {
-    marginBottom: theme.spacing[1],
-  };
-
-  const statsStyle = {
-    marginBottom: theme.spacing[2],
-  };
-
-  const descriptionStyle = {
-    opacity: 0.8,
   };
 
   return (

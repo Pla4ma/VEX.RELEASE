@@ -15,7 +15,6 @@ import Animated, {
   useAnimatedStyle,
   withRepeat,
   withTiming,
-  interpolate,
 } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';

@@ -18,7 +18,7 @@ import { captureSilentFailure } from "../../../utils/silent-failure";
 
 import React from "react";
 import { Modal, Dimensions } from "react-native";
-import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withSpring, withSequence, withTiming } from "react-native-reanimated";
+import Animated, { FadeIn } from "react-native-reanimated";
 
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
@@ -63,8 +63,6 @@ export interface StreakBrokenModalProps {
  * Loss stat card
  */
 function LossStat({ emoji, value, label, isLoss = false }: { emoji: string; value: string; label: string; isLoss?: boolean }): JSX.Element {
-  const { theme } = useTheme();
-
   return (
     <Box alignItems="center" gap="xs">
       <Text fontSize={32}>{emoji}</Text>
@@ -128,8 +126,6 @@ function ComebackBonus({ bonus }: { bonus: StreakBrokenModalProps["comebackBonus
  * Coach message
  */
 function CoachMessage({ message }: { message: string }): JSX.Element {
-  const { theme } = useTheme();
-
   return (
     <Box flexDirection="row" gap="md" p="md" borderRadius="lg" bg="background.secondary" alignItems="flex-start">
       <Box width={36} height={36} borderRadius="full" bg="accent.purple" justifyContent="center" alignItems="center">
@@ -213,7 +209,7 @@ function RestoreStreakCard({ brokenStreakDays, gemsBalance = 0, onRestore, isRes
 /**
  * Streak broken modal
  */
-export function StreakBrokenModal({ visible, brokenStreakDays, lostMultiplier, longestStreak, comebackBonus, coachMessage, onStartFresh, onDismiss, userId, onRestoreStreak, gemsBalance = 0, onRestoreStart }: StreakBrokenModalProps): JSX.Element {
+export function StreakBrokenModal({ visible, brokenStreakDays, lostMultiplier, longestStreak, comebackBonus, coachMessage, onStartFresh, onDismiss, userId: _userId, onRestoreStreak, gemsBalance = 0, onRestoreStart }: StreakBrokenModalProps): JSX.Element {
   const { theme } = useTheme();
   const [isRestoring, setIsRestoring] = useState(false);
   const [restoreError, setRestoreError] = useState<string | null>(null);

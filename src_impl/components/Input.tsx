@@ -8,7 +8,6 @@ import React, { useState, useCallback, forwardRef } from 'react';
 import {
   TextInput,
   View,
-  StyleSheet,
   type TextInputProps,
   type ViewStyle,
 } from 'react-native';

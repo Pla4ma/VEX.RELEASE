@@ -10,8 +10,6 @@ import {
   useAnimatedStyle,
   withTiming,
   withSpring,
-  type WithTimingConfig,
-  type WithSpringConfig,
   type SharedValue,
 } from 'react-native-reanimated';
 
@@ -75,7 +73,6 @@ export function useSlide(options: UseSlideOptions = {}): UseSlideResult {
     distance = 100,
     useSpring: useSpringAnimation = false,
     duration = durations.normal,
-    delay = 0,
   } = options;
 
   const initialOffset = getInitialOffset(direction, distance);

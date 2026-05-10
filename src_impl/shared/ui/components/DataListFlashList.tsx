@@ -7,17 +7,15 @@
  * Phase 7A.1 — FlashList migration for performance
  */
 
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   View,
   ViewStyle,
-  StyleSheet,
   RefreshControl,
   ActivityIndicator,
   Pressable,
 } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
-import Animated, { useSharedValue, useAnimatedStyle, interpolate, Extrapolation } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';
 import { EmptyState, ErrorState, Skeleton } from '../state-components';
@@ -76,28 +74,6 @@ export type DataListProps<T> = {
   getItemAccessibilityLabel?: (item: T) => string;
 };
 
-const PullToRefreshIndicator: React.FC<{ progress: number; theme: DynamicValue }> = ({
-  progress,
-  theme,
-}) => {
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        rotate: `${interpolate(progress, [0, 1], [0, 360], Extrapolation.CLAMP)}deg`,
-      },
-    ],
-    opacity: interpolate(progress, [0, 0.5, 1], [0, 1, 1], Extrapolation.CLAMP),
-  }));
-
-  return (
-    <View style={styles.refreshIndicator}>
-      <Animated.View style={animatedStyle}>
-        <View style={[styles.refreshArrow, { borderColor: theme.colors.primary[500] }]} />
-      </Animated.View>
-    </View>
-  );
-};
-
 const ListFooter: React.FC<{ loading: boolean; hasMore?: boolean; theme: DynamicValue }> = ({
   loading,
   hasMore = true,
@@ -131,7 +107,7 @@ export function DataList<T extends DynamicRecord>({
   items,
   sections,
   renderItem,
-  renderSectionHeader,
+  renderSectionHeader: _renderSectionHeader,
   renderEmpty,
   renderFooter,
   keyExtractor,
@@ -383,7 +359,11 @@ const styles = createSheet({
     opacity: 0.7,
   },
   itemLoadingOverlay: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0,0,0,0.3)',

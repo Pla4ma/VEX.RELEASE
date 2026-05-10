@@ -7,9 +7,9 @@
  * @phase 10.6
  */
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { Pressable } from "react-native";
-import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming, withDelay, FadeIn } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, withRepeat, withSequence, withTiming, FadeIn } from "react-native-reanimated";
 
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
@@ -100,7 +100,6 @@ function AvatarStack({ avatars, maxDisplay = 4 }: { avatars?: Array<{ url?: stri
   return (
     <Box flexDirection="row" alignItems="center">
       {displayAvatars.map((avatar, index) => {
-        const offset = index * -8; // Overlap effect
         return (
           <Box
             key={index}
@@ -165,7 +164,7 @@ function useCountUp(target: number, duration: number = 1000): number {
     };
 
     requestAnimationFrame(animate);
-  }, [target, duration]);
+  }, [count, target, duration]);
 
   return count;
 }
@@ -193,12 +192,6 @@ function TrendIndicator({ trend, percent }: { trend: "up" | "down" | "stable"; p
     stable: "➡️",
   };
 
-  const colors = {
-    up: "#22C55E",
-    down: "#EF4444",
-    stable: "#94A3B8",
-  };
-
   return (
     <Box flexDirection="row" alignItems="center" gap="xs">
       <Text fontSize={12}>{icons[trend]}</Text>
@@ -219,8 +212,7 @@ function TrendIndicator({ trend, percent }: { trend: "up" | "down" | "stable"; p
 /**
  * Live Focusing Widget - Social proof on session start
  */
-export function LiveFocusingWidget({ data, onPress, compact = false, isLoading = false }: LiveFocusingWidgetProps): JSX.Element {
-  const { theme } = useTheme();
+export function LiveFocusingWidget({ data, onPress, compact = false, isLoading: _isLoading = false }: LiveFocusingWidgetProps): JSX.Element {
   const animatedCount = useCountUp(data.totalCount);
 
   if (compact) {
@@ -342,8 +334,6 @@ export function LiveFocusingWidget({ data, onPress, compact = false, isLoading =
  * Skeleton loader for live focusing widget
  */
 export function LiveFocusingSkeleton({ compact = false }: { compact?: boolean }): JSX.Element {
-  const { theme } = useTheme();
-
   if (compact) {
     return (
       <Box flexDirection="row" alignItems="center" gap="md" p="md" borderRadius="lg" bg="background.secondary">

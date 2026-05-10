@@ -9,13 +9,12 @@
  * - Auto-dismiss option
  */
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { View, ViewStyle, Pressable } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-  withTiming,
   FadeInUp,
   FadeOutUp,
 } from 'react-native-reanimated';

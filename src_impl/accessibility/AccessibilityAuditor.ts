@@ -12,13 +12,7 @@
 
 import { createDebugger } from '../utils/debug';
 import { 
-  calculateContrastRatio, 
   checkContrast, 
-  getAccessibleAlternatives,
-  getAccessibleColor,
-  getStatusPattern,
-  type ContrastCheck,
-  type ColorBlindType,
 } from './AccessibilitySystem';
 
 const debug = createDebugger('accessibility-auditor');
@@ -69,17 +63,51 @@ export interface ComponentAccessibilityConfig {
 export interface AccessibilityRule {
   id: string;
   description: string;
-  check: (element: any) => AccessibilityIssue | null;
+  check: (element: AuditElement) => AccessibilityIssue | null;
   category: AccessibilityIssue['category'];
   severity: AccessibilityIssue['severity'];
   wcagGuideline: string;
+}
+
+type StyleValue = string | number;
+
+interface AuditElementProps {
+  accessibilityElementsHidden?: boolean;
+  accessibilityHint?: string;
+  accessibilityLabel?: string;
+  accessibilityLiveRegion?: string;
+  accessibilityPlaceholder?: string;
+  accessibilityReduceMotion?: boolean;
+  accessibilityRole?: string;
+  accessibilityViewIsModal?: boolean;
+  accessible?: boolean;
+  animated?: boolean;
+  onKeyDown?: unknown;
+  onPress?: unknown;
+  style?: {
+    backgroundColor?: string;
+    color?: string;
+    height?: StyleValue;
+    width?: StyleValue;
+  };
+  tabIndex?: number;
+}
+
+interface AuditElementType {
+  displayName?: string;
+}
+
+export interface AuditElement {
+  children?: AuditElement[];
+  props?: AuditElementProps;
+  type?: string | AuditElementType;
 }
 
 // ============================================================================
 // WCAG 2.1 AA Guidelines Reference
 // ============================================================================
 
-const WCAG_GUIDELINES = {
+const WCAG_GUIDELINES: Record<string, string> = {
   '1.1.1': 'Non-text Content: All non-text content has a text alternative',
   '1.2.1': 'Audio-only and Video-only: Prerecorded content has alternatives',
   '1.3.1': 'Adaptable: Create content that can be presented in different ways',
@@ -100,7 +128,7 @@ const WCAG_GUIDELINES = {
   '4.1.1': 'Parsing: Content is structured so it can be parsed by assistive technologies',
   '4.1.2': 'Name, Role, Value: Components have name, role, and value',
   '4.1.3': 'Status Properties: States can be programmatically determined',
-} as const;
+} as Record<string, string>;
 
 // ============================================================================
 // Accessibility Auditor Class
@@ -172,9 +200,10 @@ export class AccessibilityAuditor {
   // Main Audit Methods
   // ============================================================================
 
-  async auditComponent(component: any, config?: ComponentAccessibilityConfig): Promise<AccessibilityAuditResult> {
-    const componentConfig = config || this.componentConfigs.get(component.type?.displayName) || {
-      componentName: 'Unknown',
+  async auditComponent(component: AuditElement, config?: ComponentAccessibilityConfig): Promise<AccessibilityAuditResult> {
+    const componentDisplayName = this.getComponentDisplayName(component);
+    const componentConfig = config || (componentDisplayName ? this.componentConfigs.get(componentDisplayName) : undefined) || {
+      componentName: componentDisplayName || 'Unknown',
       requiresTesting: false,
     };
 
@@ -209,7 +238,7 @@ export class AccessibilityAuditor {
     return this.createAuditResult(issues, passedChecks, failedChecks);
   }
 
-  async auditScreen(screenName: string, screenElement: any): Promise<AccessibilityAuditResult> {
+  async auditScreen(screenName: string, screenElement: AuditElement): Promise<AccessibilityAuditResult> {
     debug.info(`Auditing screen: ${screenName}`);
 
     const issues: AccessibilityIssue[] = [];
@@ -239,7 +268,7 @@ export class AccessibilityAuditor {
   // Specific Accessibility Checks
   // ============================================================================
 
-  private checkAccessibilityLabels(component: any, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkAccessibilityLabels(component: AuditElement, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for accessibility labels
@@ -252,7 +281,7 @@ export class AccessibilityAuditor {
         message: 'Interactive element missing accessibility label',
         recommendation: 'Add accessibilityLabel prop to describe the element\'s purpose',
         element: config.componentName,
-        wcagGuideline: WCAG_GUIDELINES['4.1.2'],
+        wcagGuideline: WCAG_GUIDELINES['4.1.2']!,
         automated: true,
       });
     }
@@ -267,7 +296,7 @@ export class AccessibilityAuditor {
         message: 'Element missing accessibility role',
         recommendation: 'Add accessibilityRole prop to define the element\'s purpose',
         element: config.componentName,
-        wcagGuideline: WCAG_GUIDELINES['4.1.2'],
+        wcagGuideline: WCAG_GUIDELINES['4.1.2']!,
         automated: true,
       });
     }
@@ -282,7 +311,7 @@ export class AccessibilityAuditor {
         message: 'Interactive element could benefit from accessibility hint',
         recommendation: 'Add accessibilityHint to explain the result of interaction',
         element: config.componentName,
-        wcagGuideline: WCAG_GUIDELINES['2.5.1'],
+        wcagGuideline: WCAG_GUIDELINES['2.5.1']!,
         automated: true,
       });
     }
@@ -290,7 +319,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkFocusManagement(component: any, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkFocusManagement(component: AuditElement, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check if component can receive focus
@@ -303,7 +332,7 @@ export class AccessibilityAuditor {
         message: 'Interactive element cannot receive focus',
         recommendation: 'Ensure the component is focusable using tabIndex or native focus handling',
         element: config.componentName,
-        wcagGuideline: WCAG_GUIDELINES['2.1.1'],
+        wcagGuideline: WCAG_GUIDELINES['2.1.1']!,
         automated: true,
       });
     }
@@ -311,7 +340,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkKeyboardNavigation(component: any, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkKeyboardNavigation(component: AuditElement, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for keyboard event handlers
@@ -324,7 +353,7 @@ export class AccessibilityAuditor {
         message: 'Interactive element lacks keyboard support',
         recommendation: 'Add keyboard event handlers or ensure component supports keyboard navigation',
         element: config.componentName,
-        wcagGuideline: WCAG_GUIDELINES['2.1.1'],
+        wcagGuideline: WCAG_GUIDELINES['2.1.1']!,
         automated: true,
       });
     }
@@ -332,7 +361,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkColorContrast(component: any, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkColorContrast(component: AuditElement, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check text color contrast
@@ -351,7 +380,7 @@ export class AccessibilityAuditor {
           message: `Insufficient color contrast ratio: ${contrast.ratio.toFixed(2)} (minimum 4.5 required)`,
           recommendation: 'Increase color contrast to meet WCAG AA standards',
           element: config.componentName,
-          wcagGuideline: WCAG_GUIDELINES['1.4.1'],
+          wcagGuideline: WCAG_GUIDELINES['1.4.1']!,
           automated: true,
         });
       }
@@ -360,7 +389,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkMotionAccessibility(component: any, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkMotionAccessibility(component: AuditElement, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for reduced motion support
@@ -373,7 +402,7 @@ export class AccessibilityAuditor {
         message: 'Animation does not respect reduced motion preference',
         recommendation: 'Use useReducedMotion hook to conditionally disable animations',
         element: config.componentName,
-        wcagGuideline: WCAG_GUIDELINES['2.1.2'],
+        wcagGuideline: WCAG_GUIDELINES['2.1.2']!,
         automated: true,
       });
     }
@@ -381,7 +410,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkSemanticHTML(component: any, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkSemanticHTML(component: AuditElement, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for semantic markup
@@ -394,7 +423,7 @@ export class AccessibilityAuditor {
         message: 'Button should have explicit semantic role',
         recommendation: 'Add accessibilityRole="button" to reinforce semantic meaning',
         element: config.componentName,
-        wcagGuideline: WCAG_GUIDELINES['4.1.2'],
+        wcagGuideline: WCAG_GUIDELINES['4.1.2']!,
         automated: true,
       });
     }
@@ -402,13 +431,13 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkTouchTargets(component: any, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
+  private checkTouchTargets(component: AuditElement, config: ComponentAccessibilityConfig): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check minimum touch target size (44x44pt minimum)
     if (component.props?.style?.width && component.props?.style?.height) {
-      const width = parseInt(component.props.style.width);
-      const height = parseInt(component.props.style.height);
+      const width = Number(component.props.style.width);
+      const height = Number(component.props.style.height);
       
       if (width < 44 || height < 44) {
         issues.push({
@@ -419,7 +448,7 @@ export class AccessibilityAuditor {
           message: `Touch target too small: ${width}x${height}px (minimum 44x44px required)`,
           recommendation: 'Increase touch target size to meet accessibility guidelines',
           element: config.componentName,
-          wcagGuideline: WCAG_GUIDELINES['2.5.1'],
+          wcagGuideline: WCAG_GUIDELINES['2.5.1']!,
           automated: true,
         });
       }
@@ -428,7 +457,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkScreenStructure(screenElement: any): AccessibilityIssue[] {
+  private checkScreenStructure(screenElement: AuditElement): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for heading hierarchy
@@ -441,7 +470,7 @@ export class AccessibilityAuditor {
         severity: 'major',
         message: 'Screen has invalid heading hierarchy',
         recommendation: 'Ensure headings follow logical order (h1, h2, h3, etc.)',
-        wcagGuideline: WCAG_GUIDELINES['1.3.1'],
+        wcagGuideline: WCAG_GUIDELINES['1.3.1']!,
         automated: false,
       });
     }
@@ -449,7 +478,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkNavigationOrder(screenElement: any): AccessibilityIssue[] {
+  private checkNavigationOrder(screenElement: AuditElement): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for logical tab order
@@ -462,7 +491,7 @@ export class AccessibilityAuditor {
         severity: 'major',
         message: 'Screen has illogical navigation order',
         recommendation: 'Ensure focusable elements follow logical reading order',
-        wcagGuideline: WCAG_GUIDELINES['2.4.1'],
+        wcagGuideline: WCAG_GUIDELINES['2.4.1']!,
         automated: false,
       });
     }
@@ -470,7 +499,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkScreenReaderAnnouncements(screenElement: any): AccessibilityIssue[] {
+  private checkScreenReaderAnnouncements(screenElement: AuditElement): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for dynamic content announcements
@@ -484,8 +513,8 @@ export class AccessibilityAuditor {
           severity: 'moderate',
           message: 'Dynamic content changes are not announced to screen readers',
           recommendation: 'Add aria-live or accessibilityLiveRegion to dynamic content areas',
-          element: element.type,
-          wcagGuideline: WCAG_GUIDELINES['4.1.3'],
+          element: this.getElementName(element),
+          wcagGuideline: WCAG_GUIDELINES['4.1.3']!,
           automated: true,
         });
       }
@@ -494,7 +523,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkMotionPreferences(screenElement: any): AccessibilityIssue[] {
+  private checkMotionPreferences(screenElement: AuditElement): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for animations that don't respect preferences
@@ -508,8 +537,8 @@ export class AccessibilityAuditor {
           severity: 'moderate',
           message: 'Animation does not respect reduced motion preference',
           recommendation: 'Use useReducedMotion hook to conditionally disable animations',
-          element: element.type,
-          wcagGuideline: WCAG_GUIDELINES['2.1.2'],
+          element: this.getElementName(element),
+          wcagGuideline: WCAG_GUIDELINES['2.1.2']!,
           automated: true,
         });
       }
@@ -518,7 +547,7 @@ export class AccessibilityAuditor {
     return issues;
   }
 
-  private checkColorBlindSupport(screenElement: any): AccessibilityIssue[] {
+  private checkColorBlindSupport(screenElement: AuditElement): AccessibilityIssue[] {
     const issues: AccessibilityIssue[] = [];
 
     // Check for color-only information
@@ -531,8 +560,8 @@ export class AccessibilityAuditor {
         severity: 'critical',
         message: 'Information conveyed only through color',
         recommendation: 'Add text, patterns, or icons to convey information without relying on color',
-        element: element.type,
-        wcagGuideline: WCAG_GUIDELINES['1.4.1'],
+        element: this.getElementName(element),
+        wcagGuideline: WCAG_GUIDELINES['1.4.1']!,
         automated: true,
       });
     });
@@ -544,54 +573,54 @@ export class AccessibilityAuditor {
   // Helper Methods
   // ============================================================================
 
-  private canReceiveFocus(component: any): boolean {
+  private canReceiveFocus(component: AuditElement): boolean {
     return !!(
       component.props?.accessible !== false &&
       (component.props?.tabIndex !== -1 || component.props?.tabIndex === undefined)
     );
   }
 
-  private respectsReducedMotion(component: any): boolean {
+  private respectsReducedMotion(_component: AuditElement): boolean {
     // This would check if component respects reduced motion preference
     // Implementation depends on the specific component structure
     return true; // Placeholder - would check actual implementation
   }
 
-  private findElementsByRole(element: any, role: string): any[] {
+  private findElementsByRole(_element: AuditElement, _role: string): AuditElement[] {
     // Placeholder implementation
     return [];
   }
 
-  private findFocusableElements(element: any): any[] {
+  private findFocusableElements(_element: AuditElement): AuditElement[] {
     // Placeholder implementation
     return [];
   }
 
-  private hasLogicalTabOrder(elements: any[]): boolean {
+  private hasLogicalTabOrder(_elements: AuditElement[]): boolean {
     // Placeholder implementation
     return true;
   }
 
-  private hasLogicalHeadingOrder(headings: any[]): boolean {
+  private hasLogicalHeadingOrder(_headings: AuditElement[]): boolean {
     // Placeholder implementation
     return true;
   }
 
-  private findDynamicElements(element: any): any[] {
+  private findDynamicElements(_element: AuditElement): AuditElement[] {
     // Placeholder implementation
     return [];
   }
 
-  private hasAriaLiveRegion(element: any): boolean {
+  private hasAriaLiveRegion(element: AuditElement): boolean {
     return !!element.props?.accessibilityLiveRegion;
   }
 
-  private findAnimatedElements(element: any): any[] {
+  private findAnimatedElements(_element: AuditElement): AuditElement[] {
     // Placeholder implementation
     return [];
   }
 
-  private findColorOnlyElements(element: any): any[] {
+  private findColorOnlyElements(_element: AuditElement): AuditElement[] {
     // Placeholder implementation
     return [];
   }
@@ -605,7 +634,6 @@ export class AccessibilityAuditor {
     };
 
     // Calculate accessibility score (0-100)
-    const totalIssues = issues.length;
     const criticalWeight = 10;
     const majorWeight = 5;
     const moderateWeight = 2;
@@ -630,7 +658,7 @@ export class AccessibilityAuditor {
     };
   }
 
-  private createPassingResult(reason: string): AccessibilityAuditResult {
+  private createPassingResult(_reason: string): AccessibilityAuditResult {
     return {
       score: 100,
       issues: [],
@@ -639,6 +667,22 @@ export class AccessibilityAuditor {
       summary: { critical: 0, major: 0, moderate: 0, minor: 0 },
       timestamp: Date.now(),
     };
+  }
+
+  private getComponentDisplayName(component: AuditElement): string | undefined {
+    if (typeof component.type === 'string') {
+      return component.type;
+    }
+
+    return component.type?.displayName;
+  }
+
+  private getElementName(element: AuditElement): string | undefined {
+    if (typeof element.type === 'string') {
+      return element.type;
+    }
+
+    return element.type?.displayName;
   }
 
   // ============================================================================

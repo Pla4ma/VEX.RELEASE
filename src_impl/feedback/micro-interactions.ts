@@ -4,13 +4,11 @@
  */
 
 import * as Haptics from 'expo-haptics';
-import Animated, {
-  useSharedValue,
-  useAnimatedStyle,
+import {
+  type SharedValue,
   withSpring,
   withSequence,
   withTiming,
-  interpolate,
 } from 'react-native-reanimated';
 import * as Sentry from '@sentry/react-native';
 import { eventBus } from '@/events';
@@ -71,7 +69,7 @@ export const HAPTIC_PATTERNS = {
 
 export const ANIMATION_PATTERNS = {
   // Button press
-  buttonPress: (scale = useSharedValue(1)) => {
+  buttonPress: (scale: SharedValue<number>) => {
     scale.value = withSequence(
       withSpring(0.95, { stiffness: 400, damping: 15 }),
       withSpring(1, { stiffness: 400, damping: 15 })
@@ -80,7 +78,7 @@ export const ANIMATION_PATTERNS = {
   },
 
   // Success celebration
-  celebration: (translateY = useSharedValue(0), opacity = useSharedValue(0)) => {
+  celebration: (translateY: SharedValue<number>, opacity: SharedValue<number>) => {
     translateY.value = withSequence(
       withSpring(-20, { stiffness: 300, damping: 10 }),
       withSpring(0, { stiffness: 300, damping: 10 })
@@ -93,7 +91,7 @@ export const ANIMATION_PATTERNS = {
   },
 
   // Streak pulse
-  streakPulse: (scale = useSharedValue(1)) => {
+  streakPulse: (scale: SharedValue<number>) => {
     scale.value = withSequence(
       withSpring(1.2, { stiffness: 200, damping: 10 }),
       withSpring(1, { stiffness: 200, damping: 10 }),
@@ -104,7 +102,7 @@ export const ANIMATION_PATTERNS = {
   },
 
   // Damage dealt (to boss)
-  damageImpact: (shake = useSharedValue(0)) => {
+  damageImpact: (shake: SharedValue<number>) => {
     shake.value = withSequence(
       withTiming(5, { duration: 50 }),
       withTiming(-5, { duration: 50 }),
@@ -116,7 +114,7 @@ export const ANIMATION_PATTERNS = {
   },
 
   // Number count-up
-  countUp: (value = useSharedValue(0), target: number) => {
+  countUp: (value: SharedValue<number>, target: number) => {
     value.value = withTiming(target, {
       duration: 1000,
       easing: (x: number) => 1 - Math.pow(1 - x, 3), // Ease out cubic
@@ -125,7 +123,7 @@ export const ANIMATION_PATTERNS = {
   },
 
   // Progress bar fill
-  progressFill: (progress = useSharedValue(0), target: number) => {
+  progressFill: (progress: SharedValue<number>, target: number) => {
     progress.value = withSpring(target, {
       stiffness: 50,
       damping: 15,
@@ -231,7 +229,16 @@ function triggerSound(event: FeedbackEvent): void {
 function triggerVisual(event: FeedbackEvent): void {
   // This would trigger React Native animations
   // The components would listen for these events
-  (eventBus as any).publish('feedback:visual', event);
+  const intensityMap = {
+    LOW: 'low',
+    MEDIUM: 'medium',
+    HIGH: 'high',
+  } satisfies Record<NonNullable<FeedbackEvent['intensity']>, 'low' | 'medium' | 'high'>;
+
+  eventBus.publish('feedback:visual', {
+    ...event,
+    intensity: event.intensity ? intensityMap[event.intensity] : undefined,
+  });
 }
 
 // ============================================================================

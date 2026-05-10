@@ -9,7 +9,7 @@
 
 import React, { useState, useCallback, useEffect } from "react";
 import { Pressable } from "react-native";
-import Animated, { useAnimatedStyle, withSpring, withSequence, withTiming, FadeIn, FadeOut } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, withSpring, withSequence, withTiming } from "react-native-reanimated";
 
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
@@ -158,7 +158,6 @@ function FloatingCheer({ cheer, onComplete }: { cheer: CheerMessage; onComplete:
  * Boss health bar with animated fill
  */
 function BossHealthBar({ current, max, tier }: { current: number; max: number; tier: number }): JSX.Element {
-  const { theme } = useTheme();
   const percentage = Math.max(0, Math.min(100, (current / max) * 100));
 
   const tierColors = [
@@ -301,8 +300,6 @@ function ContributorRow({ contributor, rank }: { contributor: Contributor; rank:
  * Cheer selector buttons
  */
 function CheerSelector({ onCheer }: { onCheer: (cheer: (typeof CHEER_OPTIONS)[0]) => void }): JSX.Element {
-  const { theme } = useTheme();
-
   return (
     <Box gap="sm">
       <Text variant="caption" color="text.secondary" textAlign="center">
