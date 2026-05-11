@@ -42,13 +42,13 @@ export function analyzeSessionData(sessions: SessionData[]): SessionAnalysis {
  * Determine best grade from array of grades
  */
 function determineBestGrade(grades: string[]): 'A+' | 'A' | 'B' | 'C' | 'D' | 'F' {
-  const gradeOrder = ['F', 'D', 'C', 'B', 'A', 'A+'];
-  let bestGrade = 'F';
+  const gradeOrder = ['F', 'D', 'C', 'B', 'A', 'A+'] as const;
+  let bestGrade: 'A+' | 'A' | 'B' | 'C' | 'D' | 'F' = 'F';
 
   for (const grade of grades) {
     const currentIndex = gradeOrder.indexOf(bestGrade);
-    const newIndex = gradeOrder.indexOf(grade);
-    if (newIndex > currentIndex) {
+    const newIndex = gradeOrder.indexOf(grade as typeof gradeOrder[number]);
+    if (newIndex > currentIndex && gradeOrder.includes(grade as typeof gradeOrder[number])) {
       bestGrade = grade as 'A+' | 'A' | 'B' | 'C' | 'D' | 'F';
     }
   }
@@ -144,7 +144,7 @@ function analyzePatterns(sessions: SessionData[]) {
     weakestPattern = 'Limited morning engagement';
   } else if (afternoonSessions / totalSessions < 0.2) {
     weakestPattern = 'Afternoon energy dips';
-  } else if (evenningSessions / totalSessions < 0.2) {
+  } else if (eveningSessions / totalSessions < 0.2) {
     weakestPattern = 'Evening focus challenges';
   }
 

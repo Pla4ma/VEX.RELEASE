@@ -5,7 +5,7 @@
  * Handles active, paused, backgrounded states with precision timing.
  */
 
-import type { TimerState, SessionState, TimerConfig } from '../types';
+import type { TimerState, TimerConfig } from '../types';
 import { createDebugger } from '../../utils/debug';
 
 const debug = createDebugger('session:timer');

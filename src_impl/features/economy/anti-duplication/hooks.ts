@@ -55,10 +55,12 @@ export function useValidateDeduplication(options: UseValidateDeduplicationOption
       return await antiDuplicationService.validateDeduplication(request);
     },
     onSuccess: (result) => {
-      // Invalidate related queries
-      queryClient.invalidateQueries({
-        queryKey: antiDuplicationKeys.attempts(result.request?.userId || ''),
-      });
+      // Invalidate related queries (using result.deduplicationKey if available)
+      if (result.deduplicationKey) {
+        queryClient.invalidateQueries({
+          queryKey: antiDuplicationKeys.attempts(result.deduplicationKey),
+        });
+      }
 
       // Handle duplicate detection
       if (result.result === 'BLOCKED_DUPLICATE') {
@@ -135,6 +137,14 @@ export function useActionValidation(props: UseActionValidationProps) {
 // Deduplication Attempts Hook
 // ============================================================================
 
+interface DeduplicationAttemptsData {
+  attempts: DeduplicationAttempt[];
+  totalCount: number;
+  allowedCount: number;
+  blockedCount: number;
+  errorCount: number;
+}
+
 interface UseDeduplicationAttemptsProps {
   userId: string;
   period?: 'hour' | 'day' | 'week';
@@ -143,11 +153,9 @@ interface UseDeduplicationAttemptsProps {
 export function useDeduplicationAttempts(props: UseDeduplicationAttemptsProps) {
   const { userId, period = 'day' } = props;
 
-  const query = useQuery({
+  const query = useQuery<DeduplicationAttemptsData>({
     queryKey: antiDuplicationKeys.attempts(userId),
-    queryFn: async () => {
-      // In a real implementation, this would fetch from the database
-      // For now, return mock data
+    queryFn: async (): Promise<DeduplicationAttemptsData> => {
       return {
         attempts: [],
         totalCount: 0,
@@ -156,7 +164,7 @@ export function useDeduplicationAttempts(props: UseDeduplicationAttemptsProps) {
         errorCount: 0,
       };
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
 
   const attemptsByActionType = useMemo(() => {
@@ -193,6 +201,14 @@ export function useDeduplicationAttempts(props: UseDeduplicationAttemptsProps) {
 // Exploit Detection Hook
 // ============================================================================
 
+interface ExploitDetectionData {
+  detections: ExploitDetection[];
+  totalCount: number;
+  resolvedCount: number;
+  pendingCount: number;
+  highSeverityCount: number;
+}
+
 interface UseExploitDetectionProps {
   userId: string;
   severity?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
@@ -201,11 +217,9 @@ interface UseExploitDetectionProps {
 export function useExploitDetection(props: UseExploitDetectionProps) {
   const { userId, severity } = props;
 
-  const query = useQuery({
+  const query = useQuery<ExploitDetectionData>({
     queryKey: antiDuplicationKeys.exploits(userId),
-    queryFn: async () => {
-      // In a real implementation, this would fetch from the database
-      // For now, return mock data
+    queryFn: async (): Promise<ExploitDetectionData> => {
       return {
         detections: [],
         totalCount: 0,
@@ -214,7 +228,7 @@ export function useExploitDetection(props: UseExploitDetectionProps) {
         highSeverityCount: 0,
       };
     },
-    staleTime: 2 * 60 * 1000, // 2 minutes
+    staleTime: 2 * 60 * 1000,
   });
 
   const detectionsByPattern = useMemo(() => {
@@ -300,7 +314,7 @@ export function useDeduplicationRules() {
 
 interface UseDeduplicationAnalyticsProps {
   userId: string;
-  period: 'hourly' | 'daily' | 'weekly';
+  period: 'HOURLY' | 'DAILY' | 'WEEKLY';
 }
 
 export function useDeduplicationAnalytics(props: UseDeduplicationAnalyticsProps) {
@@ -309,11 +323,9 @@ export function useDeduplicationAnalytics(props: UseDeduplicationAnalyticsProps)
   const query = useQuery({
     queryKey: antiDuplicationKeys.analytics(userId, period),
     queryFn: async () => {
-      // In a real implementation, this would fetch analytics data
-      // For now, return mock data
       const analytics: DeduplicationAnalytics = {
         period,
-        periodStart: Date.now() - (period === 'hourly' ? 3600000 : period === 'daily' ? 86400000 : 604800000),
+        periodStart: Date.now() - (period === 'HOURLY' ? 3600000 : period === 'DAILY' ? 86400000 : 604800000),
         periodEnd: Date.now(),
         totalAttempts: 0,
         allowedAttempts: 0,

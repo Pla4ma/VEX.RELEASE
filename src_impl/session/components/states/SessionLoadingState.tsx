@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 interface SessionLoadingStateProps {

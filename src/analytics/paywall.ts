@@ -1,106 +1,51 @@
 /**
  * Paywall Analytics
  *
- * Paywall conversion tracking and optimization
+ * Phase 6.2 - Analytics & Experimentation
+ * Tracks paywall performance and conversion metrics.
  */
 
-import { PaywallAnalytics } from './types';
+import { eventBus } from '../events';
+import type { PaywallAnalytics } from './types';
 
-const paywallAnalytics: PaywallAnalytics = {
-  paywallId: 'default',
-  context: 'general',
-  impressions: 0,
-  conversions: 0,
-  conversionRate: 0,
-  revenue: 0,
-  averageTimeToConvert: 0,
-  abandonmentRate: 0,
-  bestContext: '',
-  contexts: {},
-};
+const paywallData = new Map<string, PaywallAnalytics>();
 
-/**
- * Track paywall event
- */
-export function trackPaywallEvent(event: 'show' | 'dismiss' | 'convert', context: string, revenue?: number): void {
-  if (!paywallAnalytics.contexts[context]) {
-    paywallAnalytics.contexts[context] = {
-      impressions: 0,
-      conversions: 0,
-      revenue: 0,
-    };
+export function trackPaywallEvent(
+  userId: string,
+  context: string,
+  event: 'view' | 'convert' | 'dismiss',
+  value?: number
+): void {
+  let analytics = paywallData.get(context);
+  if (!analytics) {
+    analytics = { context, views: 0, conversions: 0, revenue: 0, conversionRate: 0, averageRevenuePerView: 0 };
   }
 
   switch (event) {
-    case 'show':
-      paywallAnalytics.impressions++;
-      paywallAnalytics.contexts[context].impressions++;
-      break;
-    case 'dismiss':
-      // Track abandonment
-      paywallAnalytics.abandonmentRate = paywallAnalytics.impressions > 0 ?
-        (paywallAnalytics.impressions - paywallAnalytics.conversions) / paywallAnalytics.impressions : 0;
+    case 'view':
+      analytics.views++;
       break;
     case 'convert':
-      paywallAnalytics.conversions++;
-      paywallAnalytics.contexts[context].conversions++;
-      if (revenue) {
-        paywallAnalytics.revenue += revenue;
-        paywallAnalytics.contexts[context].revenue += revenue;
-      }
+      analytics.conversions++;
+      if (value) analytics.revenue += value;
+      break;
+    case 'dismiss':
       break;
   }
 
-  // Recalculate rates
-  paywallAnalytics.conversionRate = paywallAnalytics.impressions > 0 ? paywallAnalytics.conversions / paywallAnalytics.impressions : 0;
+  analytics.conversionRate = analytics.views > 0 ? analytics.conversions / analytics.views : 0;
+  analytics.averageRevenuePerView = analytics.views > 0 ? analytics.revenue / analytics.views : 0;
 
-  for (const ctx of Object.keys(paywallAnalytics.contexts)) {
-    const data = paywallAnalytics.contexts[ctx];
-    const ctxRate = data.impressions > 0 ? data.conversions / data.impressions : 0;
+  paywallData.set(context, analytics);
 
-    // Update best context if this one is better
-    if (ctxRate > paywallAnalytics.conversionRate && data.impressions > 10) {
-      paywallAnalytics.bestContext = ctx;
-    }
-  }
+  eventBus.publish('analytics:track', { event: 'analytics:paywall', properties: { userId, context, event, analytics: { ...analytics } } });
 }
 
-/**
- * Get paywall analytics
- */
-export function getPaywallAnalytics(): PaywallAnalytics {
-  return { ...paywallAnalytics };
+export function getPaywallAnalytics(): PaywallAnalytics[] {
+  return Array.from(paywallData.values()).sort((a, b) => b.conversionRate - a.conversionRate);
 }
 
-/**
- * Get best converting paywall context
- */
-export function getBestPaywallContext(): string {
-  let bestContext = '';
-  let bestRate = 0;
-
-  for (const [context, data] of Object.entries(paywallAnalytics.contexts)) {
-    if (data.impressions > 10) {
-      const rate = data.conversions / data.impressions;
-      if (rate > bestRate) {
-        bestRate = rate;
-        bestContext = context;
-      }
-    }
-  }
-
-  return bestContext || 'general';
-}
-
-/**
- * Reset paywall analytics (for testing)
- */
-export function resetPaywallAnalytics(): void {
-  paywallAnalytics.impressions = 0;
-  paywallAnalytics.conversions = 0;
-  paywallAnalytics.conversionRate = 0;
-  paywallAnalytics.revenue = 0;
-  paywallAnalytics.abandonmentRate = 0;
-  paywallAnalytics.bestContext = '';
-  paywallAnalytics.contexts = {};
+export function getBestPaywallContext(): string | null {
+  const analytics = getPaywallAnalytics();
+  return analytics.length > 0 ? analytics[0].context : null;
 }

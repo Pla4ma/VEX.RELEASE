@@ -131,7 +131,6 @@ class RewardService {
    * Generate available rewards based on user state
    */
   private generateRewards(): Reward[] {
-    const now = new Date();
     const rewards: Reward[] = [];
 
     // Daily login reward

@@ -1,15 +1,8 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from 'react-native-reanimated';
 
 import { Box } from '../components/primitives/Box';
 import { Button } from '../components/primitives/Button';
@@ -17,56 +10,12 @@ import { Text } from '../components/primitives/Text';
 import type { ExtendedRootStackParams } from '../navigation/types';
 import { useSessionUIStore } from '../store/session-state';
 import { useTheme } from '../theme';
-import { createSheet } from '@/shared/ui/create-sheet';
+import { Particle } from './ComebackParticles';
 
 type ComebackNavigationProp = NativeStackNavigationProp<ExtendedRootStackParams, 'Comeback'>;
 type ComebackRoute = RouteProp<ExtendedRootStackParams, 'Comeback'>;
 
 const PARTICLE_COUNT = 20;
-
-function Particle({
-  index,
-  left,
-  size,
-  duration,
-  delay,
-  color,
-}: {
-  index: number;
-  left: number;
-  size: number;
-  duration: number;
-  delay: number;
-  color: string;
-}) {
-  const progress = useSharedValue(0);
-
-  useEffect(() => {
-    progress.value = withRepeat(
-      withTiming(1, { duration, easing: Easing.linear }),
-      -1,
-      false,
-    );
-  }, [duration, progress]);
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: 0.2 + (0.5 * (1 - progress.value)),
-    transform: [
-      { translateY: 180 - (progress.value * 560) },
-      { translateX: Math.sin((progress.value * Math.PI * 2) + delay) * 16 },
-    ],
-  }));
-
-  return (
-    <Animated.View
-      style={[
-        styles.particle,
-        animatedStyle,
-        { left, width: size, height: size, borderRadius: size / 2, backgroundColor: color, bottom: -40 + (index * 8) },
-      ]}
-    />
-  );
-}
 
 export function ComebackScreen(): JSX.Element {
   const navigation = useNavigation<ComebackNavigationProp>();
@@ -203,11 +152,5 @@ export function ComebackScreen(): JSX.Element {
     </Box>
   );
 }
-
-const styles = createSheet({
-  particle: {
-    position: 'absolute',
-  },
-});
 
 export default ComebackScreen;

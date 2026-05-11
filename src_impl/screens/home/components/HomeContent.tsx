@@ -30,6 +30,9 @@ import { HomeSessionControl } from './HomeSessionControl';
 import { HomeStatusBanners } from './HomeStatusBanners';
 import { HomeMissionInput } from './HomeMissionInput';
 import { HomeContentLower } from './HomeContentLower';
+import { HomeCompanionWidget } from './HomeCompanionWidget';
+import { useHomeCompanion } from '../hooks/useHomeCompanion';
+import { HomeSectionBoundary } from './HomeSectionBoundary';
 import type { MissionPriorityInput } from '../../../features/daily-mission/types';
 import type { useHomeData } from '../hooks/useHomeData';
 
@@ -62,6 +65,7 @@ interface HomeContentProps {
   placeBountyMutation: HomeData['placeBountyMutation'];
   coinBalance: number | null;
   canShowBossBounties: boolean;
+  primaryRecommendation: HomeController['primaryRecommendation'];
 }
 
 export const HomeContent: React.FC<HomeContentProps> = ({
@@ -79,8 +83,10 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   placeBountyMutation,
   coinBalance,
   canShowBossBounties,
+  primaryRecommendation,
 }) => {
   const navigation = useNavigation<NavigationProp>();
+  const companionStatus = useHomeCompanion(controller.userId, controller.isOnline);
 
   return (
     <HomeMissionInput
@@ -110,30 +116,42 @@ export const HomeContent: React.FC<HomeContentProps> = ({
           />
 
           {/* 1. Focus Score widget */}
-          <HomeFocusScore
-            focusScore={controller.focusScore}
-            isLoading={controller.focusScoreQuery.isLoading}
-            error={controller.focusScoreQuery.error}
-          />
+          <HomeSectionBoundary sectionName="Focus Score">
+            <HomeFocusScore
+              onPress={() => navigation.navigate('FocusScoreDashboard')}
+            />
+          </HomeSectionBoundary>
 
           {/* 2. Daily mission card */}
-          <HomeDailyMission
-            missionInput={missionInput}
-            isLoading={controller.dailyMissionQuery.isLoading}
-            error={controller.dailyMissionQuery.error}
-            onRefresh={() => controller.dailyMissionQuery.refetch()}
-          />
+          <HomeSectionBoundary sectionName="Daily Mission">
+            <HomeDailyMission
+              missionInput={missionInput}
+              onMissionPress={() => navigation.navigate('Challenges')}
+            />
+          </HomeSectionBoundary>
 
           {/* 3. Primary session start control */}
-          <HomeSessionControl
-            hasActiveSession={data.hasActiveSession}
-            isLoading={controller.isLoading}
-            onPress={() => controller.openSetup()}
-            resumeTimeSeconds={data.resumeTimeSeconds}
-            squadMembersFocusing={data.squadMembersFocusing}
-            streakHoursRemaining={data.streakHoursRemaining}
-            streakRiskLevel={controller.streakQuery.data?.riskLevel}
-          />
+          <HomeSectionBoundary sectionName="Session Control">
+            <HomeSessionControl
+              hasActiveSession={data.hasActiveSession}
+              isLoading={controller.isLoading}
+              onPress={() => controller.openSetup()}
+              resumeTimeSeconds={data.resumeTimeSeconds ?? undefined}
+              squadMembersFocusing={data.squadMembersFocusing}
+              streakHoursRemaining={data.streakHoursRemaining ?? undefined}
+              streakRiskLevel={controller.streakQuery.data?.riskLevel}
+              recommendation={primaryRecommendation}
+            />
+          </HomeSectionBoundary>
+
+          {/* 5. Companion status */}
+          <HomeSectionBoundary sectionName="Companion">
+            <HomeCompanionWidget
+              status={companionStatus}
+              onRetry={() => controller.retryAll()}
+              onPress={() => navigation.navigate('CompanionDetail')}
+            />
+          </HomeSectionBoundary>
 
           {/* Urgency banner (if streak at risk) */}
           {streakHoursRemaining !== null && streakHoursRemaining <= 4 && (

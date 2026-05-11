@@ -6,7 +6,7 @@ import { EmptyState } from '../../../components/EmptyState';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { StatusBanner } from '../../../shared/ui/components/StatusFeedback';
 import { useTheme } from '../../../theme';
-import type { FocusScoreDashboardModel } from '../hooks-focus-score';
+import type { FocusScoreDashboardModel } from '../types';
 import { MAX_FOCUS_SCORE } from '../schemas';
 
 interface FocusScoreDashboardProps {
@@ -129,7 +129,7 @@ export function FocusScoreDashboard({ model, onRetry, onStartSession, onOpenMont
       <View style={{ borderWidth: 1, borderColor: theme.colors.border.light, borderRadius: theme.borderRadius.lg, padding: theme.spacing[4], gap: theme.spacing[2], backgroundColor: theme.colors.background.secondary }}>
         <Text variant="h4" color={theme.colors.text.primary}>What changed</Text>
         <Text variant="bodySmall" color={theme.colors.text.secondary}>
-          {model.monthlyInput?.historyPoints[model.monthlyInput.historyPoints.length - 1]?.reason ?? model.current.lastChangeReason}
+          {model.current.lastChangeReason}
         </Text>
         <Text variant="bodySmall" color={theme.colors.text.secondary}>Next target: {nextTarget}</Text>
         <Button

@@ -1,14 +1,14 @@
-import { captureSilentFailure } from '../../utils/silent-failure';
+import { captureSilentFailure } from '../../../utils/silent-failure';
 /**
  * Enhanced Streaks Repository
  * Features: Retry logic, offline queue integration
  */
 
-import { withRetry, RepositoryError, RepositoryErrorCode } from '../../lib/repository/base';
-import { enqueue } from '../../lib/offline/queue';
-import { getSupabaseClient } from '../../config/supabase';
-import { StreakSchema, type Streak } from './schemas';
-import { v4 } from '../../utils/uuid';
+import { withRetry, RepositoryError, RepositoryErrorCode } from '../../../lib/repository/base';
+import { enqueue, type OfflineQueueEntryInput } from '../../../lib/offline/queue';
+import { getSupabaseClient } from '../../../config/supabase';
+import { StreakSchema, type Streak } from '../schemas';
+import { v4 } from '../../../utils/uuid';
 
 const supabase = getSupabaseClient();
 
@@ -17,9 +17,10 @@ const supabase = getSupabaseClient();
 // ============================================================================
 
 export class StreaksRepositoryError extends RepositoryError {
+  public override readonly name = 'StreaksRepositoryError';
+
   constructor(operation: string, error: unknown, code?: RepositoryErrorCode) {
     super(operation, error, code);
-    this.name = 'StreaksRepositoryError';
   }
 }
 
@@ -38,7 +39,9 @@ async function executeWithFallback<T>(operation: string, onlineFn: () => Promise
     const data = await withRetry(operation, onlineFn);
     return { data, error: null, fromCache: false };
   } catch (error) {
-    const repoError = error instanceof RepositoryError ? new StreaksRepositoryError(operation, error.originalError, error.code) : new StreaksRepositoryError(operation, error);
+    const repoError = error instanceof RepositoryError
+      ? new StreaksRepositoryError(operation, error.originalError, error.code)
+      : new StreaksRepositoryError(operation, error instanceof Error ? error : new Error(String(error)));
 
     if (offlineFn) {
       try {
@@ -104,14 +107,15 @@ export async function createStreakEnhanced(streak: Streak): Promise<RepositoryRe
 
 export async function updateStreakEnhanced(userId: string, updates: Partial<Streak>): Promise<RepositoryResult<Streak>> {
   // Queue for offline if needed
-  (enqueue as any)({
+  const queueEntry: OfflineQueueEntryInput = {
     operation: 'UPDATE',
     feature: 'streaks',
-    payload: { userId, updates },
+    payload: { userId, updates } as Record<string, unknown>,
     idempotencyKey: `streak:update:${userId}:${Date.now()}`,
     maxRetries: 5,
     priority: 'high',
-  });
+  };
+  enqueue(queueEntry);
 
   return executeWithFallback('updateStreak', async () => {
     const { data, error } = await supabase
@@ -136,14 +140,15 @@ export async function updateStreakEnhanced(userId: string, updates: Partial<Stre
 // ============================================================================
 
 export async function recordShieldUsageEnhanced(userId: string, shieldData: { usedAt: number; reason: string }): Promise<RepositoryResult<{ id: string }>> {
-  (enqueue as any)({
+  const shieldQueueEntry: OfflineQueueEntryInput = {
     operation: 'UPDATE',
     feature: 'streaks',
-    payload: { userId, shieldData },
+    payload: { userId, shieldData } as Record<string, unknown>,
     idempotencyKey: `shield:use:${userId}:${shieldData.usedAt}`,
     maxRetries: 5,
     priority: 'high',
-  });
+  };
+  enqueue(shieldQueueEntry);
 
   return executeWithFallback('recordShieldUsage', async () => {
     const { data, error } = await supabase
@@ -189,7 +194,7 @@ export async function batchUpdateStreaks(updates: Array<{ userId: string; streak
 // Streak Repair Quest Operations
 // ============================================================================
 
-import { StreakRepairQuestSchema, type StreakRepairQuest } from './schemas-enhanced';
+import { StreakRepairQuestSchema, type StreakRepairQuest } from '../schemas-enhanced';
 
 export async function fetchActiveRepairQuestEnhanced(userId: string): Promise<RepositoryResult<StreakRepairQuest>> {
   return executeWithFallback('fetchActiveRepairQuest', async () => {
@@ -305,7 +310,7 @@ export async function fetchExpiredRepairQuestsEnhanced(): Promise<
 // Risk Monitor Operations
 // ============================================================================
 
-import { StreakRiskStatusSchema, type StreakRiskStatus } from './schemas-enhanced';
+import { StreakRiskStatusSchema, type StreakRiskStatus } from '../schemas-enhanced';
 
 export async function saveRiskStatusEnhanced(status: StreakRiskStatus): Promise<RepositoryResult<StreakRiskStatus>> {
   return executeWithFallback('saveRiskStatus', async () => {

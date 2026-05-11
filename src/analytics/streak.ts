@@ -1,122 +1,49 @@
 /**
  * Streak Analytics
  *
- * Streak survival tracking and metrics
+ * Phase 6.2 - Analytics & Experimentation
+ * Tracks and calculates streak survival metrics.
  */
 
-import { StreakSurvivalMetrics } from './types';
+import { eventBus } from '../events';
+import type { StreakSurvivalMetrics } from './types';
 
-let streakMetrics: StreakSurvivalMetrics = {
-  userId: '',
-  currentStreak: 0,
-  longestStreak: 0,
-  streakBreaks: 0,
-  averageStreakLength: 0,
-  streakSurvivalRate: 0,
-  recoveryRate: 0, // Rate of restarting after break
-};
+const streakData = new Map<number, StreakSurvivalMetrics>();
 
-/**
- * Track streak event
- */
 export function trackStreakEvent(
   userId: string,
-  event: 'start' | 'break' | 'protect' | 'milestone',
-  data?: { length?: number; insuranceUsed?: boolean }
+  event: {
+    type: 'streak_start' | 'streak_extend' | 'streak_break' | 'streak_milestone';
+    streakLength: number;
+    sessionsToday?: number;
+    completedToday?: boolean;
+  }
 ): void {
-  // Update user context
-  if (streakMetrics.userId !== userId) {
-    streakMetrics.userId = userId;
+  let metrics = streakData.get(event.streakLength);
+  if (!metrics) {
+    metrics = { streakLength: event.streakLength, userCount: 0, survivalRate: 0, averageSessionsPerDay: 0, completionRate: 0 };
   }
 
-  switch (event) {
-    case 'start':
-      streakMetrics.currentStreak = 1;
-      if (streakMetrics.currentStreak > streakMetrics.longestStreak) {
-        streakMetrics.longestStreak = streakMetrics.currentStreak;
-      }
+  switch (event.type) {
+    case 'streak_start':
+    case 'streak_extend':
+      metrics.userCount++;
       break;
-    case 'break':
-      if (streakMetrics.currentStreak > 0) {
-        streakMetrics.streakBreaks++;
-        streakMetrics.averageStreakLength = calculateAverageStreakLength();
-        streakMetrics.currentStreak = 0;
-      }
+    case 'streak_break':
+      metrics.userCount--;
       break;
-    case 'protect':
-      // Streak was protected with insurance
-      streakMetrics.recoveryRate = calculateRecoveryRate();
-      break;
-    case 'milestone':
-      if (data?.length) {
-        streakMetrics.currentStreak = data.length;
-        if (streakMetrics.currentStreak > streakMetrics.longestStreak) {
-          streakMetrics.longestStreak = streakMetrics.currentStreak;
-        }
-        // Update average
-        streakMetrics.averageStreakLength = calculateAverageStreakLength();
-      }
+    case 'streak_milestone':
       break;
   }
 
-  // Recalculate rates
-  streakMetrics.streakSurvivalRate = calculateSurvivalRate();
+  const totalUsers = Array.from(streakData.values()).reduce((sum, m) => sum + m.userCount, 0);
+  if (totalUsers > 0) metrics.survivalRate = metrics.userCount / totalUsers;
+
+  streakData.set(event.streakLength, metrics);
+
+  eventBus.publish('analytics:streak', { userId, event: event.type, data: { streakLength: event.streakLength, metrics } });
 }
 
-/**
- * Get streak survival metrics
- */
-export function getStreakSurvivalMetrics(): StreakSurvivalMetrics {
-  return { ...streakMetrics };
-}
-
-/**
- * Reset streak metrics (for testing or new user)
- */
-export function resetStreakMetrics(): void {
-  streakMetrics = {
-    userId: '',
-    currentStreak: 0,
-    longestStreak: 0,
-    streakBreaks: 0,
-    averageStreakLength: 0,
-    streakSurvivalRate: 0,
-    recoveryRate: 0,
-  };
-}
-
-/**
- * Calculate streak survival rate
- */
-function calculateSurvivalRate(): number {
-  if (streakMetrics.streakBreaks === 0) {
-    return streakMetrics.currentStreak > 0 ? 1.0 : 0.0;
-  }
-
-  const totalAttempts = streakMetrics.streakBreaks + (streakMetrics.currentStreak > 0 ? 1 : 0);
-  return totalAttempts > 0 ? (totalAttempts - streakMetrics.streakBreaks) / totalAttempts : 0;
-}
-
-/**
- * Calculate average streak length
- */
-function calculateAverageStreakLength(): number {
-  if (streakMetrics.streakBreaks === 0) {
-    return streakMetrics.currentStreak;
-  }
-
-  // This is a simplified calculation - in practice would track historical data
-  return (streakMetrics.longestStreak + streakMetrics.currentStreak) / 2;
-}
-
-/**
- * Calculate recovery rate (rate of restarting after break)
- */
-function calculateRecoveryRate(): number {
-  if (streakMetrics.streakBreaks === 0) {
-    return 0;
-  }
-
-  // Simplified: if current streak > 0, user recovered
-  return streakMetrics.currentStreak > 0 ? 1.0 : 0.0;
+export function getStreakSurvivalMetrics(): StreakSurvivalMetrics[] {
+  return Array.from(streakData.values()).sort((a, b) => a.streakLength - b.streakLength);
 }

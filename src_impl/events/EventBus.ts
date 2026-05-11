@@ -67,10 +67,10 @@ export class EventBus {
     options: { once?: boolean; priority?: number } = {}
   ): () => void {
     if (this.options.debug) {
-      this.log('subscribe', channel);
+      this.log('subscribe', channel as string);
     }
 
-    return this.emitter.on(channel, handler, options);
+    return this.emitter.on(channel as string, handler, options);
   }
 
   /**
@@ -80,7 +80,7 @@ export class EventBus {
     channel: T,
     handler: EventHandler<EventChannels[T]>
   ): () => void {
-    return this.emitter.once(channel, handler);
+    return this.emitter.once(channel as string, handler);
   }
 
   /**
@@ -90,7 +90,7 @@ export class EventBus {
     channel: T,
     handler?: EventHandler<EventChannels[T]>
   ): void {
-    this.emitter.off(channel, handler);
+    this.emitter.off(channel as string, handler);
   }
 
   /**
@@ -101,15 +101,15 @@ export class EventBus {
     data: EventChannels[T]
   ): void {
     if (this.options.debug) {
-      this.log('publish', channel, data);
+      this.log('publish', channel as string, data);
     }
 
     // Add to history
     if (this.options.enableHistory) {
-      this.addToHistory(channel, data);
+      this.addToHistory(channel as string, data);
     }
 
-    this.emitter.emit(channel, data);
+    this.emitter.emit(channel as string, data);
   }
 
   emit<T extends keyof EventChannels>(
@@ -139,14 +139,14 @@ export class EventBus {
     data: EventChannels[T]
   ): Promise<void> {
     if (this.options.debug) {
-      this.log('publishAsync', channel, data);
+      this.log('publishAsync', channel as string, data);
     }
 
     if (this.options.enableHistory) {
-      this.addToHistory(channel, data);
+      this.addToHistory(channel as string, data);
     }
 
-    await this.emitter.emitAsync(channel, data);
+    await this.emitter.emitAsync(channel as string, data);
   }
 
   /**
@@ -172,14 +172,14 @@ export class EventBus {
    * Check if channel has subscribers
    */
   hasSubscribers<T extends keyof EventChannels>(channel: T): boolean {
-    return this.emitter.hasListeners(channel);
+    return this.emitter.hasListeners(channel as string);
   }
 
   /**
    * Get subscriber count for channel
    */
   subscriberCount<T extends keyof EventChannels>(channel: T): number {
-    return this.emitter.listenerCount(channel);
+    return this.emitter.listenerCount(channel as string);
   }
 
   /**

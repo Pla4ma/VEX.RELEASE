@@ -384,7 +384,7 @@ export function checkAlerts(
  * Create custom dashboard data
  */
 export function createDashboardData(
-  timeRange: '1d' | '7d' | '30d' | '90d'
+  _timeRange: '1d' | '7d' | '30d' | '90d'
 ): {
   revenue: RevenueMetrics;
   retention: RetentionData;

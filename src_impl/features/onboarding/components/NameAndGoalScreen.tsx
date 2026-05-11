@@ -9,7 +9,7 @@
  */
 
 import React, { useState } from 'react';
-import { Pressable } from 'react-native';
+import { Pressable, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import Animated, {
   FadeIn,
   FadeInUp,
@@ -29,9 +29,6 @@ interface NameAndGoalScreenProps {
   onBack?: () => void;
 }
 
-/**
- * Combined name and goal selection screen
- */
 export function NameAndGoalScreen({ onContinue, onSkip, onBack }: NameAndGoalScreenProps): JSX.Element {
   const { theme } = useTheme();
   const [name, setName] = useState('');
@@ -48,94 +45,94 @@ export function NameAndGoalScreen({ onContinue, onSkip, onBack }: NameAndGoalScr
     setSelectedGoal(goal);
     setIsAdvancing(true);
 
-    // Auto-advance after 300ms
     setTimeout(() => {
       onContinue(name.trim(), goal);
     }, 300);
   };
 
   return (
-    <Box flex={1} bg="background.primary" px="lg" py="xl">
-      {/* Header with Back Button */}
-      <Box flexDirection="row" alignItems="center" mb="md">
-        {onBack && (
-          <Pressable onPress={onBack} style={{ marginRight: 12 }}>
-            <Box p="xs">
-              <Text variant="h3" color="text.secondary">‹</Text>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+        <Box flex={1} bg="background.primary" px="lg" py="xl">
+          <Box flexDirection="row" alignItems="center" mb="md">
+            {onBack && (
+              <Pressable onPress={onBack} style={{ marginRight: 12 }}>
+                <Box p="xs">
+                  <Text variant="h3" color="text.secondary">‹</Text>
+                </Box>
+              </Pressable>
+            )}
+          </Box>
+
+          <Animated.View entering={FadeIn.duration(400)}>
+            <Box gap="sm" mb="xl">
+              <Text variant="label" color="primary.500">
+                Step 2 of 5
+              </Text>
+              <Text variant="h2" color="text.primary">
+                {showGoals ? 'What do you mainly want to focus on?' : 'What should we call you?'}
+              </Text>
+              <Text variant="body" color="text.secondary">
+                {showGoals ? 'Pick one — this sets your default session category.' : "This is how you'll appear to your squad."}
+              </Text>
             </Box>
-          </Pressable>
-        )}
-      </Box>
+          </Animated.View>
 
-      {/* Header Content */}
-      <Animated.View entering={FadeIn.duration(400)}>
-        <Box gap="sm" mb="xl">
-          <Text variant="label" color="primary.500">
-            Step 2 of 5
-          </Text>
-          <Text variant="h2" color="text.primary">
-            {showGoals ? 'What do you mainly want to focus on?' : 'What should we call you?'}
-          </Text>
-          <Text variant="body" color="text.secondary">
-            {showGoals ? 'Pick one — this sets your default session category.' : "This is how you'll appear to your squad."}
-          </Text>
-        </Box>
-      </Animated.View>
+          <NameInputSection
+            name={name}
+            setName={setName}
+            isFocused={isFocused}
+            setIsFocused={setIsFocused}
+            showGoals={showGoals}
+          />
 
-      {/* Name Input Section */}
-      <NameInputSection
-        name={name}
-        setName={setName}
-        isFocused={isFocused}
-        setIsFocused={setIsFocused}
-        showGoals={showGoals}
-      />
+          {showGoals && (
+            <Animated.View
+              entering={FadeInUp.duration(500)}
+              style={{ marginTop: theme.spacing[6] }}
+            >
+              <Box
+                flexDirection="row"
+                flexWrap="wrap"
+                gap="md"
+                justifyContent="center"
+              >
+                {GOAL_OPTIONS.map((option, index) => (
+                  <GoalCard
+                    key={option.key}
+                    option={option}
+                    isSelected={selectedGoal === option.key}
+                    onPress={() => handleGoalSelect(option.key)}
+                    index={index}
+                  />
+                ))}
+              </Box>
+            </Animated.View>
+          )}
 
-      {/* Goal Selection Section */}
-      {showGoals && (
-        <Animated.View
-          entering={FadeInUp.duration(500)}
-          style={{ marginTop: theme.spacing[6] }}
-        >
-          <Box
-            flexDirection="row"
-            flexWrap="wrap"
-            gap="md"
-            justifyContent="center"
+          <Box flex={1} minHeight={40} />
+
+          <Animated.View
+            entering={FadeIn.duration(400).delay(500)}
+            style={{ marginTop: 'auto' }}
           >
-            {GOAL_OPTIONS.map((option, index) => (
-              <GoalCard
-                key={option.key}
-                option={option}
-                isSelected={selectedGoal === option.key}
-                onPress={() => handleGoalSelect(option.key)}
-                index={index}
-              />
-            ))}
-          </Box>
-        </Animated.View>
-      )}
-
-      {/* Spacer */}
-      <Box flex={1} minHeight={40} />
-
-      {/* Skip Option */}
-      <Animated.View
-        entering={FadeIn.duration(400).delay(500)}
-        style={{ marginTop: 'auto' }}
-      >
-        <Pressable onPress={onSkip}
-          accessibilityLabel="Skip for now › button"
-          accessibilityRole="button"
-          accessibilityHint="Activates this control">
-          <Box alignItems="center" py="md">
-            <Text variant="bodySmall" color="text.tertiary">
-              Skip for now ›
-            </Text>
-          </Box>
-        </Pressable>
-      </Animated.View>
-    </Box>
+            <Pressable onPress={onSkip}
+              accessibilityLabel="Skip for now › button"
+              accessibilityRole="button"
+              accessibilityHint="Activates this control">
+              <Box alignItems="center" py="md">
+                <Text variant="bodySmall" color="text.tertiary">
+                  Skip for now ›
+                </Text>
+              </Box>
+            </Pressable>
+          </Animated.View>
+        </Box>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 

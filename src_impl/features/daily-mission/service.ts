@@ -5,12 +5,12 @@
  * mission to show the user based on their current state.
  */
 
-import { SessionRecommendationSchema } from './schemas';
 import {
   MissionPriorityInputSchema,
   type MissionPriorityInput,
   type MissionType,
 } from './schemas';
+export type { DailyMission, MissionPriorityInput } from './schemas';
 import { createDailyMission } from './mission-factory';
 import { updateMissionProgress, isMissionExpired, getMissionRemainingHours } from './mission-utils';
 

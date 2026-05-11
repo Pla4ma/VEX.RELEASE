@@ -50,9 +50,9 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   canShowBossBounties,
 }) => {
   const navigation = useNavigation<NavigationProp>();
-  const { isAvailable, isUnlocked, isVisible } = useFeatureGate('challenges');
+  const { isVisible } = useFeatureGate('challenges');
 
-  const todaysChallenges: ChallengeItem[] = isAvailable && isUnlocked && isVisible
+  const todaysChallenges: ChallengeItem[] = isVisible
     ? data.todaysChallenges
     : [];
 
@@ -75,7 +75,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
         challengesRefetch={() => data.challengesQuery.refetch()}
         openSetup={controller.openSetup}
         continueStudyPlan={controller.continueStudyPlan}
-        showToast={data.showToast}
+        showToast={(toastData) => void data.showToast({ type: toastData.type as 'success' | 'error' | 'warning' | 'info', title: toastData.title, message: toastData.message })}
         userId={controller.userId ?? ''}
       />
 

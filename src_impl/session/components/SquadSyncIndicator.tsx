@@ -10,7 +10,6 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { Image, Pressable } from 'react-native';
 import Animated, {
-  FadeIn,
   FadeInUp,
   FadeOut,
   useAnimatedStyle,

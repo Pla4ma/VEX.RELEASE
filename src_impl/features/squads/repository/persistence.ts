@@ -4,9 +4,9 @@
  * Handles offline storage, sync, and conflict resolution.
  */
 
-import { getSupabaseClient } from '../../config/supabase';
-import { SquadRoleSchema, type Squad, type SquadMember, type SquadInvite } from './schemas';
-import { createDebugger } from '../../utils/debug';
+import { getSupabaseClient } from '../../../config/supabase';
+import { SquadRoleSchema, type Squad, type SquadMember, type SquadInvite } from '../schemas';
+import { createDebugger } from '../../../utils/debug';
 
 const debug = createDebugger('squads:persistence');
 

@@ -9,26 +9,16 @@
  * @phase 3A.1
  */
 
-<<<<<<< HEAD
-import React, { useEffect, useState, useCallback } from "react";
-import { ScrollView } from "react-native";
-import Animated, { FadeIn, FadeInUp, FadeInDown, useAnimatedStyle, withSpring, withSequence, withTiming } from "react-native-reanimated";
-=======
 import React, { useEffect, useState, useCallback } from 'react';
 import { ScrollView, Dimensions } from 'react-native';
 import Animated, { FadeIn, FadeInUp, FadeInDown, useAnimatedStyle, withSpring, withSequence, withTiming, withDelay, withRepeat, interpolate, Extrapolation, runOnJS } from 'react-native-reanimated';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme';
 
-<<<<<<< HEAD
-=======
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 export interface BossDefeatedScreenProps {
   /** Boss name */
   bossName: string;

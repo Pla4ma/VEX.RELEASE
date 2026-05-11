@@ -48,7 +48,7 @@ export function createMockNotificationBudget(
     ...overrides,
   });
   budgetStore.set(budget.userId, budget);
-  globalThis.budget = budget;
+  (globalThis as Record<string, unknown>).budget = budget;
   return budget;
 }
 

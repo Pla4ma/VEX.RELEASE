@@ -25,7 +25,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme';
 import { Box, Text, Card } from '../../components/primitives';
 import { Icon } from '../../icons';
-import { useAuthStore, useUIStore } from '../../store';
+import { useAuthStore, useUIStore } from '../../store/index';
 import type { SettingsStackParams } from '../../navigation';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'PrivacySettings'>;
@@ -63,7 +63,7 @@ const VISIBILITY_OPTIONS: VisibilityOption[] = [
 export const PrivacySettingsScreen: React.FC<Props> = ({ navigation }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
-  const { user, logout } = useAuthStore();
+  const { logout } = useAuthStore();
   const { showToast } = useUIStore();
 
   const [visibility, setVisibility] = useState<ProfileVisibility>('public');

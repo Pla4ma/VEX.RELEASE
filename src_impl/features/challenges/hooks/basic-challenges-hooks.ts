@@ -7,6 +7,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../../../store';
 import * as service from '../basic-challenges-service';
+import type { BasicChallengeProgressResult, BasicChallengeClaimResult } from '../basic-challenges-service';
 import { createDebugger } from '../../../utils/debug';
 
 const debug = createDebugger('challenges:hooks');
@@ -87,13 +88,10 @@ export function useUpdateBasicChallengeProgress() {
   const queryClient = useQueryClient();
   const userId = useAuthStore((state) => state.user?.id ?? null);
 
-  return useMutation({
+  return useMutation<BasicChallengeProgressResult, Error, { sessionId: string; sessionDuration: number }>({
     mutationFn: ({
       sessionId,
       sessionDuration,
-    }: {
-      sessionId: string;
-      sessionDuration: number;
     }) => {
       if (!userId) {throw new Error('User not authenticated');}
       return service.updateBasicChallengeProgressFromSession(userId, sessionId, sessionDuration);
@@ -126,8 +124,8 @@ export function useClaimBasicChallengeReward() {
   const queryClient = useQueryClient();
   const userId = useAuthStore((state) => state.user?.id ?? null);
 
-  return useMutation({
-    mutationFn: (challengeType: 'DAILY' | 'WEEKLY') => {
+  return useMutation<BasicChallengeClaimResult, Error, 'DAILY' | 'WEEKLY'>({
+    mutationFn: (challengeType) => {
       if (!userId) {throw new Error('User not authenticated');}
       return service.claimBasicChallengeReward(userId, challengeType);
     },

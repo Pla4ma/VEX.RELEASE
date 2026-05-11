@@ -15,38 +15,65 @@ import { useTheme } from '../../theme';
 export function useFocusIdentity(userId: string) {
   const { score, history, status, error, refetch } = useFocusScore();
 
+  const engine = useMemo(() => new FocusIdentityEngine(userId), [userId]);
+
   // Transform the data to match the expected interface
   const profile: FocusIdentityProfile | null = useMemo(() => {
     if (!score) {return null;}
 
-    return FocusIdentityEngine.createProfile(score.currentScore, {
-      streakInCurrentBand: 0, // Would be calculated from actual data
-      percentileRank: score.percentileRank || 0,
-      isInRecovery: false, // Would be calculated from actual data
-    });
-  }, [score]);
+    const band = engine.getScoreBand(score.currentScore);
+
+    return {
+      userId: score.userId,
+      currentScore: score.currentScore,
+      previousScore: score.previousScore,
+      scoreHistory: [],
+      percentileRank: band.percentile,
+      band,
+      factors: {
+        consistency: { score: score.factors.consistency.score, sessionsLast30Days: 0, targetSessionsPerWeek: 4, actualConsistency: 0, missedDaysLast30Days: 0 },
+        streakStability: { score: score.factors.streakStability.score, currentStreak: 0, longestStreak: 0, averageStreakLength: 0, totalStreaksStarted: 0, streakBreakFrequency: 0 },
+        sessionQuality: { score: score.factors.sessionQuality.score, averageFocusPurity: 0, averageGrade: 'D', perfectSessionsCount: 0, averageSessionDuration: 0 },
+        diversity: { score: score.factors.intentionalDifficulty.score, uniqueSessionModes: 0, uniqueTimeSlots: 0, uniqueDaysOfWeek: 0, weekendSessions: 0, contextVariety: 0 },
+        recency: { score: score.factors.recency.score, daysSinceLastSession: 0, last7DayActivity: 0, last30DayActivity: 0, trendDirection: 'STABLE', velocity: 0 },
+      },
+      identityStatement: engine.getIdentityStatement(band.label, 0),
+      streakInCurrentBand: 0,
+      totalScoreCalculations: 0,
+      firstScoreDate: score.createdAt,
+      isInRecovery: false,
+      recoveryStartDate: null,
+      recoveryProgress: 0,
+      preLapseScore: null,
+      topStrength: 'consistency',
+      topWeakness: 'recency',
+      recommendedActions: [],
+      monthlyReport: null,
+      updatedAt: Date.now(),
+    };
+  }, [score, engine]);
 
   const currentBand: ScoreBand | null = useMemo(() => {
     if (!profile) {return null;}
-    return FocusIdentityEngine.getScoreBand(profile.currentScore);
-  }, [profile]);
+    return engine.getScoreBand(profile.currentScore);
+  }, [profile, engine]);
 
   const scoreChange = useMemo(() => {
     if (!history || history.length < 2) {return 0;}
-    const latest = history[0];
-    const previous = history[1];
+    const latest = history[history.length - 1];
+    const previous = history[history.length - 2];
     return latest.score - previous.score;
   }, [history]);
 
   const loadingState = status;
-  const isRetrying = status === 'loading' && !!score;
+  const isRetrying = status === 'pending' && !!score;
 
   return {
     profile,
     loadingState,
     error,
     isRetrying,
-    retry: refetch,
+    retry: () => void refetch(),
     currentBand,
     scoreChange,
   };
@@ -59,27 +86,28 @@ export function useFocusScoreColor(score: number | null): string {
   const { theme } = useTheme();
 
   return useMemo(() => {
-    if (!score) {return theme.colors.textMuted;}
+    if (!score) {return theme.colors.text.secondary;}
 
-    const band = FocusIdentityEngine.getScoreBand(score);
+    const engine = new FocusIdentityEngine('temp');
+    const band = engine.getScoreBand(score);
 
     switch (band.label) {
-      case 'BRONZE':
+      case 'Building':
         return '#CD7F32';
-      case 'SILVER':
+      case 'Fair':
         return '#C0C0C0';
-      case 'GOLD':
+      case 'Good':
         return '#FFD700';
-      case 'PLATINUM':
+      case 'Strong':
         return '#E5E4E2';
-      case 'DIAMOND':
+      case 'Exceptional':
         return '#B9F2FF';
-      case 'MASTER':
+      case 'Elite':
         return '#9C27B0';
-      case 'GRANDMASTER':
+      case 'Legendary':
         return '#FF1744';
       default:
-        return theme.colors.textMuted;
+        return theme.colors.text.secondary;
     }
   }, [score, theme]);
 }
@@ -94,19 +122,19 @@ export function useIdentityStatement(currentBand: ScoreBand | null, streakInCurr
     const streakText = streakInCurrentBand > 1 ? ` (${streakInCurrentBand} sessions in this band)` : '';
 
     switch (currentBand.label) {
-      case 'BRONZE':
+      case 'Building':
         return `Building the foundation${streakText}`;
-      case 'SILVER':
+      case 'Fair':
         return `Developing consistency${streakText}`;
-      case 'GOLD':
+      case 'Good':
         return `Achieving mastery${streakText}`;
-      case 'PLATINUM':
+      case 'Strong':
         return `Excelling in focus${streakText}`;
-      case 'DIAMOND':
+      case 'Exceptional':
         return `Elite performer${streakText}`;
-      case 'MASTER':
+      case 'Elite':
         return `Focus master${streakText}`;
-      case 'GRANDMASTER':
+      case 'Legendary':
         return `Legendary focus${streakText}`;
       default:
         return 'Continue your journey';

@@ -56,4 +56,11 @@ export interface SessionStoryEventDefinitions {
     timestamp: number;
     metadata?: Record<string, unknown>;
   };
+
+  'narrative:session_complete': {
+    sessionId: string;
+    userId: string;
+    theme: 'triumph' | 'struggle' | 'comeback' | 'mastery' | 'learning';
+    summary: string;
+  };
 }

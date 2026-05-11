@@ -12,7 +12,7 @@
 
 import { CompletionEngine } from './CompletionEngine';
 import { ScoringEngine } from './ScoringEngine';
-import type { SessionState, SessionConfig, FocusQualityMetrics } from '../types';
+import type { SessionState, FocusQualityMetrics } from '../types';
 
 describe('CompletionEngine', () => {
   let scoringEngine: ScoringEngine;
@@ -353,7 +353,6 @@ describe('CompletionEngine', () => {
   describe('edge cases', () => {
     it('should handle zero completion percentage', () => {
       const session = createMockSession({ completionPercentage: 0 });
-      const metrics = createMockMetrics();
 
       const abandonResult = completionEngine.abandonSession(session, 5);
       expect(abandonResult.partialCredit).toBe(false);

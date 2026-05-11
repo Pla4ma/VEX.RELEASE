@@ -19,7 +19,6 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 import { useTheme, ThemeMode } from '../../theme';
 import { Box, Text, Card } from '../../components/primitives';
-import type { ViewStyle } from 'react-native';
 import { Avatar } from '../../components/Avatar';
 import { Badge } from '../../components/Badge';
 import { Icon } from '../../icons';
@@ -57,7 +56,7 @@ export const SettingsScreen: React.FC<Props> = ({ navigation }) => {
   const [bossAlerts, setBossAlerts] = useState(true);
   const [squadNotifications, setSquadNotifications] = useState(true);
   const [rivalNotifications, setRivalNotifications] = useState(true);
-  const [weeklyReport, setWeeklyReport] = useState(true);
+  const [weeklyReport] = useState(true);
   const [coachMessages, setCoachMessages] = useState(true);
   const [achievementUnlocks, setAchievementUnlocks] = useState(true);
 
@@ -386,15 +385,15 @@ export const SettingsScreen: React.FC<Props> = ({ navigation }) => {
         <Card style={{ marginHorizontal: 16, marginBottom: 24 }} size="lg" onPress={() => navigation.navigate('Main', { screen: 'Profile' })}>
           <Box flexDirection="row" alignItems="center" flex={1}>
             <Avatar
-              name={user?.firstName ? `${user.firstName} ${user.lastName || ''}` : 'User'}
+              name={user?.displayName || 'User'}
               size="lg"
             />
             <Box ml={16} flex={1}>
               <Text variant="h3">
-                {user?.firstName || 'User'} {user?.lastName || ''}
+                {user?.displayName || 'User'}
               </Text>
               <Text variant="body" color="text.secondary">
-                {user?.email || 'user@example.com'}
+                {user?.id || 'user@example.com'}
               </Text>
               <Box flexDirection="row" mt={8}>
                 <Badge variant="primary" size="sm" leftIcon="star">

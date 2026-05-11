@@ -43,12 +43,9 @@ export {
 export {
   AccessibilityAuditor,
   accessibilityAuditor,
-  auditComponent,
-  auditScreen as auditScreenAdvanced,
-  type AccessibilityIssue as AuditIssue,
+  type AuditAccessibilityIssue,
   type AccessibilityAuditResult,
   type ComponentAccessibilityConfig,
-  type AccessibilityRule,
 } from './AccessibilityAuditor';
 
 // Accessibility Enhancer
@@ -68,7 +65,6 @@ export {
 
 // Motion Accessibility
 export {
-  MotionAccessibilityManager,
   motionAccessibilityManager,
   createAccessibleAnimation,
   createAccessibleAnimatedValue,

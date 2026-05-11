@@ -1,116 +1,96 @@
 /**
  * Monetization Analytics
  *
- * Revenue tracking and conversion metrics
+ * Phase 6.2 - Analytics & Experimentation
+ * Tracks and calculates monetization metrics.
  */
 
-import { MonetizationMetrics } from './types';
 import { eventBus } from '../events';
+import type { MonetizationMetrics } from './types';
 
-let monetizationMetrics: MonetizationMetrics = {
-  userId: 'aggregate',
-  totalUsers: 0,
-  freeUsers: 0,
-  premiumUsers: 0,
-  trialUsers: 0,
-  conversionRate: 0,
-  premiumConversionRate: 0,
-  trialConversionRate: 0,
-  averageLTV: 0,
-  totalRevenue: 0,
-  arpu: 0, // Average revenue per user
-  mrr: 0, // Monthly recurring revenue
-  isPremium: false,
-  lifetimeValue: 0,
-  purchases: 0,
-  totalSpent: 0,
-  subscriptionRevenue: 0,
-  oneTimeRevenue: 0,
-  refundRate: 0,
-};
+const monetizationData = new Map<string, MonetizationMetrics>();
 
-/**
- * Track monetization event
- */
-export function trackMonetizationEvent(event: {
-  type: 'subscription_start' | 'trial_start' | 'trial_convert' | 'cancellation' | 'renewal';
-  userId: string;
-  value?: number;
-  tier?: 'FREE' | 'PREMIUM'
-}): void {
+export function trackMonetizationEvent(
+  userId: string,
+  event: {
+    type: 'subscription_start' | 'subscription_cancel' | 'purchase' | 'paywall_view' | 'paywall_convert';
+    value?: number;
+    productType?: string;
+  }
+): void {
+  let metrics = monetizationData.get(userId);
+  if (!metrics) {
+    metrics = {
+      userId,
+      totalRevenue: 0,
+      subscriptionRevenue: 0,
+      iapRevenue: 0,
+      subscriptionType: 'free',
+      ltv: 0,
+      paywallViews: 0,
+      paywallConversions: 0,
+      purchaseCount: 0,
+    };
+  }
+
   switch (event.type) {
-    case 'trial_start':
-      monetizationMetrics.trialUsers++;
-      break;
-    case 'trial_convert':
-      monetizationMetrics.trialUsers--;
-      monetizationMetrics.premiumUsers++;
-      monetizationMetrics.freeUsers--;
-      break;
     case 'subscription_start':
-      monetizationMetrics.premiumUsers++;
+      metrics.subscriptionType = event.productType as 'premium' | 'premium_plus' || 'premium';
+      metrics.subscriptionStart = new Date().toISOString();
       if (event.value) {
-        monetizationMetrics.totalRevenue += event.value;
-        monetizationMetrics.mrr += event.value / 12; // Assume annual
+        metrics.subscriptionRevenue += event.value;
+        metrics.totalRevenue += event.value;
       }
       break;
-    case 'cancellation':
-      monetizationMetrics.premiumUsers--;
-      monetizationMetrics.freeUsers++;
+    case 'subscription_cancel':
+      metrics.subscriptionEnd = new Date().toISOString();
+      metrics.subscriptionType = 'free';
+      break;
+    case 'purchase':
+      metrics.purchaseCount++;
+      metrics.lastPurchaseDate = new Date().toISOString();
+      if (!metrics.firstPurchaseDate) metrics.firstPurchaseDate = metrics.lastPurchaseDate;
       if (event.value) {
-        monetizationMetrics.mrr -= event.value / 12;
+        if (event.productType === 'subscription') {
+          metrics.subscriptionRevenue += event.value;
+        } else {
+          metrics.iapRevenue += event.value;
+        }
+        metrics.totalRevenue += event.value;
       }
+      break;
+    case 'paywall_view':
+      metrics.paywallViews++;
+      break;
+    case 'paywall_convert':
+      metrics.paywallConversions++;
       break;
   }
 
-  // Recalculate rates
-  monetizationMetrics.totalUsers = monetizationMetrics.freeUsers + monetizationMetrics.premiumUsers;
-  monetizationMetrics.conversionRate = monetizationMetrics.totalUsers > 0 ? monetizationMetrics.premiumUsers / monetizationMetrics.totalUsers : 0;
-  monetizationMetrics.premiumConversionRate = monetizationMetrics.conversionRate;
-  monetizationMetrics.trialConversionRate = monetizationMetrics.trialUsers > 0 ? monetizationMetrics.premiumUsers / (monetizationMetrics.premiumUsers + monetizationMetrics.trialUsers) : 0;
-  monetizationMetrics.arpu = monetizationMetrics.totalUsers > 0 ? monetizationMetrics.totalRevenue / monetizationMetrics.totalUsers : 0;
-  monetizationMetrics.averageLTV = monetizationMetrics.arpu;
-  monetizationMetrics.lifetimeValue = monetizationMetrics.averageLTV;
-  monetizationMetrics.totalSpent = monetizationMetrics.totalRevenue;
-  monetizationMetrics.subscriptionRevenue = monetizationMetrics.mrr;
+  metrics.ltv = metrics.totalRevenue;
+  monetizationData.set(userId, metrics);
 
-  eventBus.publish('analytics:monetization', {
-    event: event.type,
-    userId: event.userId,
-    metrics: { ...monetizationMetrics },
-  });
+  eventBus.publish('analytics:monetization', { userId, event: event.type, metrics });
 }
 
-/**
- * Get monetization metrics
- */
-export function getMonetizationMetrics(): MonetizationMetrics {
-  return { ...monetizationMetrics };
-}
+export function getMonetizationMetrics(): {
+  premiumConversionRate: number;
+  averageLtv: number;
+  totalRevenue: number;
+  paywallConversionRate: number;
+} {
+  const users = Array.from(monetizationData.values());
+  if (users.length === 0) {
+    return { premiumConversionRate: 0, averageLtv: 0, totalRevenue: 0, paywallConversionRate: 0 };
+  }
 
-/**
- * Reset monetization metrics (for testing)
- */
-export function resetMonetizationMetrics(): void {
-  monetizationMetrics = {
-    userId: 'aggregate',
-    totalUsers: 0,
-    freeUsers: 0,
-    premiumUsers: 0,
-    trialUsers: 0,
-    conversionRate: 0,
-    premiumConversionRate: 0,
-    trialConversionRate: 0,
-    averageLTV: 0,
-    totalRevenue: 0,
-    arpu: 0,
-    mrr: 0,
-    isPremium: false,
-    lifetimeValue: 0,
-    purchases: 0,
-    totalSpent: 0,
-    subscriptionRevenue: 0,
-    oneTimeRevenue: 0,
-    refundRate: 0,
-  };
+  const premiumUsers = users.filter((user) => user.subscriptionType !== 'free');
+  const premiumConversionRate = premiumUsers.length / users.length;
+  const totalRevenue = users.reduce((sum, user) => sum + user.totalRevenue, 0);
+  const averageLtv = totalRevenue / users.length;
+  const totalPaywallViews = users.reduce((sum, user) => sum + user.paywallViews, 0);
+  const totalPaywallConversions = users.reduce((sum, user) => sum + user.paywallConversions, 0);
+  const paywallConversionRate = totalPaywallViews > 0 ? totalPaywallConversions / totalPaywallViews : 0;
+
+  return { premiumConversionRate, averageLtv, totalRevenue, paywallConversionRate };
 }

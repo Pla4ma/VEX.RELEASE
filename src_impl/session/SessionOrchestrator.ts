@@ -285,7 +285,6 @@ export class SessionOrchestrator {
     this.session.remainingTime = remaining;
     this.session.completionPercentage = percentage;
     this.session.effectiveTime = elapsed - (this.session.pausedTime || 0);
-    const totalDuration = this.session.totalDuration;
     const effectiveDuration = this.session.config.duration * 1000;
     const intervalProgress = (elapsed % effectiveDuration) / effectiveDuration;
     const currentInterval = Math.floor(elapsed / effectiveDuration) + 1;
@@ -373,12 +372,12 @@ export class SessionOrchestrator {
     );
   }
   private handleBreakTick(
-    elapsed: number,
-    remaining: number,
-    percentage: number,
+    _elapsed: number,
+    _remaining: number,
+    _percentage: number,
   ): void {
     if (!this.session) {return;}
-    this.session.elapsedTime = (this.session.elapsedTime || 0) + elapsed;
+    this.session.elapsedTime = (this.session.elapsedTime || 0) + _elapsed;
     this.session.updatedAt = Date.now();
   }
   private async handleBreakComplete(): Promise<void> {
@@ -390,8 +389,6 @@ export class SessionOrchestrator {
     if (this.timerEngine) {
       this.timerEngine.destroy();
     }
-    const remainingIntervals =
-      (this.session.totalIntervals || 0) - (this.session.currentInterval || 0);
     const focusDuration = this.session.config.duration * 1000;
     this.timerEngine = new TimerEngine(
       this.session.id,
@@ -414,7 +411,6 @@ export class SessionOrchestrator {
       throw new Error('No active session');
     }
     await this.completeSessionInternal();
-    const session = this.session;
     return this.buildSessionSummary();
   }
   async endSession(_reason?: string): Promise<SessionState> {

@@ -5,31 +5,36 @@
  * Queues mutations when offline, processes when back online
  */
 
-import { useEffect, useCallback, useRef, useState } from 'react';
-import { useNetInfo } from '@react-native-community/netinfo';
-import { MMKV } from 'react-native-mmkv';
-import { useQueryClient } from '@tanstack/react-query';
-import * as service from './service';
-import * as repository from './repository';
-import { type CoachMessage, type CoachState } from './schemas';
-import { COACH_QUERY_KEYS } from './hooks-enhanced';
-import { createDebugger } from '../../utils/debug';
+import { useEffect, useCallback, useRef, useState } from "react";
+import { useNetInfo } from "@react-native-community/netinfo";
+import { MMKV } from "react-native-mmkv";
+import { useQueryClient } from "@tanstack/react-query";
+import * as service from "./service";
+import * as repository from "./repository";
+import { type CoachMessage, type CoachState } from "./schemas";
+import { COACH_QUERY_KEYS } from "./hooks-enhanced";
+import { createDebugger } from "../../utils/debug";
 
-const debug = createDebugger('coach:offline');
+const debug = createDebugger("coach:offline");
 
 // ============================================================================
 // Offline Queue Storage
 // ============================================================================
 
-const offlineStorage = new MMKV({ id: 'coach-offline-queue' });
+const offlineStorage = new MMKV({ id: "coach-offline-queue" });
 
-const QUEUE_KEY = 'coach_mutation_queue';
+const QUEUE_KEY = "coach_mutation_queue";
 const MAX_QUEUE_SIZE = 50;
 const MAX_RETRY_ATTEMPTS = 3;
 
 interface QueuedMutation {
   id: string;
-  type: 'MARK_READ' | 'DISMISS' | 'TAKE_ACTION' | 'SELECT_PERSONA' | 'ACCEPT_RECOMMENDATION';
+  type:
+    | "MARK_READ"
+    | "DISMISS"
+    | "TAKE_ACTION"
+    | "SELECT_PERSONA"
+    | "ACCEPT_RECOMMENDATION";
   payload: Record<string, unknown>;
   timestamp: number;
   retryCount: number;
@@ -42,7 +47,9 @@ interface QueuedMutation {
 interface UseOfflineCoachResult {
   isProcessing: boolean;
   pendingCount: number;
-  queueMutation: (mutation: Omit<QueuedMutation, 'id' | 'timestamp' | 'retryCount'>) => void;
+  queueMutation: (
+    mutation: Omit<QueuedMutation, "id" | "timestamp" | "retryCount">,
+  ) => void;
   processQueue: () => Promise<void>;
   clearQueue: () => void;
 }
@@ -74,7 +81,10 @@ export function useOfflineCoach(userId: string): UseOfflineCoachResult {
       try {
         await processMutation(mutation, userId, queryClient);
       } catch (error) {
-        debug.error("Mutation failed", error instanceof Error ? error : new Error(String(error)));
+        debug.error(
+          "Mutation failed",
+          error instanceof Error ? error : new Error(String(error)),
+        );
 
         // Retry up to MAX_RETRY_ATTEMPTS
         if (mutation.retryCount < MAX_RETRY_ATTEMPTS) {
@@ -94,14 +104,18 @@ export function useOfflineCoach(userId: string): UseOfflineCoachResult {
   }, [userId, queryClient]);
 
   const queueMutation = useCallback(
-    (mutation: Omit<QueuedMutation, 'id' | 'timestamp' | 'retryCount'>) => {
+    (mutation: Omit<QueuedMutation, "id" | "timestamp" | "retryCount">) => {
       const queue = getQueue();
 
       // Check for duplicate mutations
-      const isDuplicate = queue.some((item) => item.type === mutation.type && JSON.stringify(item.payload) === JSON.stringify(mutation.payload));
+      const isDuplicate = queue.some(
+        (item) =>
+          item.type === mutation.type &&
+          JSON.stringify(item.payload) === JSON.stringify(mutation.payload),
+      );
 
       if (isDuplicate) {
-        debug.debug('[OfflineCoach] Duplicate mutation ignored');
+        debug.debug("[OfflineCoach] Duplicate mutation ignored");
         return;
       }
 
@@ -135,38 +149,7 @@ export function useOfflineCoach(userId: string): UseOfflineCoachResult {
     if (netInfo.isConnected && !processingRef.current) {
       processQueue();
     }
-<<<<<<< HEAD
   }, [netInfo.isConnected, netInfo.isInternetReachable, processQueue]);
-=======
-    processingRef.current = true;
-    setIsProcessing(true);
-
-    const queue = getQueue();
-    const remaining: QueuedMutation[] = [];
-
-    for (const mutation of queue) {
-      try {
-        await processMutation(mutation, userId, queryClient);
-      } catch (error) {
-        debug.error('Mutation failed', error instanceof Error ? error : new Error(String(error)));
-
-        // Retry up to MAX_RETRY_ATTEMPTS
-        if (mutation.retryCount < MAX_RETRY_ATTEMPTS) {
-          remaining.push({
-            ...mutation,
-            retryCount: mutation.retryCount + 1,
-          });
-        }
-      }
-    }
-
-    saveQueue(remaining);
-    setPendingCount(remaining.length);
-
-    processingRef.current = false;
-    setIsProcessing(false);
-  }, [userId, queryClient]);
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
   const clearQueue = useCallback(() => {
     offlineStorage.delete(QUEUE_KEY);
@@ -187,16 +170,26 @@ export function useOfflineCoach(userId: string): UseOfflineCoachResult {
 // ============================================================================
 
 interface UseOptimisticCoachActionResult {
-  execute: (action: () => Promise<void>, optimisticUpdate: () => void, rollback: () => void) => void;
+  execute: (
+    action: () => Promise<void>,
+    optimisticUpdate: () => void,
+    rollback: () => void,
+  ) => void;
   isPending: boolean;
 }
 
-export function useOptimisticCoachAction(userId: string): UseOptimisticCoachActionResult {
+export function useOptimisticCoachAction(
+  userId: string,
+): UseOptimisticCoachActionResult {
   useOfflineCoach(userId);
   const [isPending, setIsPending] = useState(false);
 
   const execute = useCallback(
-    async (action: () => Promise<void>, optimisticUpdate: () => void, rollback: () => void) => {
+    async (
+      action: () => Promise<void>,
+      optimisticUpdate: () => void,
+      rollback: () => void,
+    ) => {
       // Apply optimistic update
       optimisticUpdate();
 
@@ -225,49 +218,60 @@ export function useOptimisticCoachAction(userId: string): UseOptimisticCoachActi
 // Specific Offline-Aware Hooks
 // ============================================================================
 
-export function useOfflineCoachMessageActions(userId: string, messageId: string) {
+export function useOfflineCoachMessageActions(
+  userId: string,
+  messageId: string,
+) {
   const { queueMutation, isProcessing } = useOfflineCoach(userId);
   const queryClient = useQueryClient();
 
   const markRead = useCallback(async () => {
     // Optimistic update
-    queryClient.setQueryData(COACH_QUERY_KEYS.messages(userId), (old: { pages: Array<{ messages: CoachMessage[] }> } | undefined) => {
-      if (!old) {
-        return old;
-      }
-      return {
-        ...old,
-        pages: old.pages.map((page) => ({
-          ...page,
-          messages: page.messages.map((m) => (m.id === messageId ? { ...m, readAt: Date.now() } : m)),
-        })),
-      };
-    });
+    queryClient.setQueryData(
+      COACH_QUERY_KEYS.messages(userId),
+      (old: { pages: Array<{ messages: CoachMessage[] }> } | undefined) => {
+        if (!old) {
+          return old;
+        }
+        return {
+          ...old,
+          pages: old.pages.map((page) => ({
+            ...page,
+            messages: page.messages.map((m) =>
+              m.id === messageId ? { ...m, readAt: Date.now() } : m,
+            ),
+          })),
+        };
+      },
+    );
 
     // Queue for server sync
     queueMutation({
-      type: 'MARK_READ',
+      type: "MARK_READ",
       payload: { userId, messageId },
     });
   }, [userId, messageId, queueMutation, queryClient]);
 
   const dismiss = useCallback(async () => {
     // Optimistic update
-    queryClient.setQueryData(COACH_QUERY_KEYS.messages(userId), (old: { pages: Array<{ messages: CoachMessage[] }> } | undefined) => {
-      if (!old) {
-        return old;
-      }
-      return {
-        ...old,
-        pages: old.pages.map((page) => ({
-          ...page,
-          messages: page.messages.filter((m) => m.id !== messageId),
-        })),
-      };
-    });
+    queryClient.setQueryData(
+      COACH_QUERY_KEYS.messages(userId),
+      (old: { pages: Array<{ messages: CoachMessage[] }> } | undefined) => {
+        if (!old) {
+          return old;
+        }
+        return {
+          ...old,
+          pages: old.pages.map((page) => ({
+            ...page,
+            messages: page.messages.filter((m) => m.id !== messageId),
+          })),
+        };
+      },
+    );
 
     queueMutation({
-      type: 'DISMISS',
+      type: "DISMISS",
       payload: { userId, messageId },
     });
   }, [userId, messageId, queueMutation, queryClient]);
@@ -282,15 +286,18 @@ export function useOfflinePersonaSelection(userId: string) {
   const selectPersona = useCallback(
     async (personaId: string) => {
       // Optimistic update
-      queryClient.setQueryData(COACH_QUERY_KEYS.state(userId), (old: CoachState | undefined) => {
-        if (!old) {
-          return old;
-        }
-        return { ...old, personaId };
-      });
+      queryClient.setQueryData(
+        COACH_QUERY_KEYS.state(userId),
+        (old: CoachState | undefined) => {
+          if (!old) {
+            return old;
+          }
+          return { ...old, personaId };
+        },
+      );
 
       queueMutation({
-        type: 'SELECT_PERSONA',
+        type: "SELECT_PERSONA",
         payload: { userId, personaId },
       });
     },
@@ -304,25 +311,29 @@ export function useOfflinePersonaSelection(userId: string) {
 // Queue Processing Logic
 // ============================================================================
 
-async function processMutation(mutation: QueuedMutation, userId: string, _queryClient: ReturnType<typeof useQueryClient>): Promise<void> {
+async function processMutation(
+  mutation: QueuedMutation,
+  userId: string,
+  _queryClient: ReturnType<typeof useQueryClient>,
+): Promise<void> {
   switch (mutation.type) {
-    case 'MARK_READ':
+    case "MARK_READ":
       await service.markMessageAction({
         messageId: mutation.payload.messageId as string,
-        action: 'MARK_READ',
+        action: "MARK_READ",
         metadata: { processedOffline: true },
       });
       break;
 
-    case 'DISMISS':
+    case "DISMISS":
       await service.markMessageAction({
         messageId: mutation.payload.messageId as string,
-        action: 'DISMISS',
+        action: "DISMISS",
         metadata: { processedOffline: true },
       });
       break;
 
-    case 'TAKE_ACTION':
+    case "TAKE_ACTION":
       await service.markMessageAction({
         messageId: mutation.payload.messageId as string,
         action: mutation.payload.action as string,
@@ -330,19 +341,22 @@ async function processMutation(mutation: QueuedMutation, userId: string, _queryC
       });
       break;
 
-    case 'SELECT_PERSONA':
+    case "SELECT_PERSONA":
       await service.updateCoachPreferences({
         userId,
         personaId: mutation.payload.personaId as string,
       });
       break;
 
-    case 'ACCEPT_RECOMMENDATION':
-      await repository.updateRecommendationStatus(mutation.payload.recommendationId as string, 'ACCEPTED');
+    case "ACCEPT_RECOMMENDATION":
+      await repository.updateRecommendationStatus(
+        mutation.payload.recommendationId as string,
+        "ACCEPTED",
+      );
       break;
 
     default:
-      debug.warn('[OfflineCoach] Unknown mutation type:', mutation.type);
+      debug.warn("[OfflineCoach] Unknown mutation type:", mutation.type);
   }
 }
 

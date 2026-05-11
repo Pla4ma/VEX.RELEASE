@@ -3,18 +3,11 @@
  * Shows current boss phase, health thresholds, and phase mechanics
  */
 
-<<<<<<< HEAD
-import React, { useMemo } from "react";
-import { View, Text } from "react-native";
-import Animated from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
-import type { BossPhase, BossPhaseState } from "../../features/boss/boss-phases";
-=======
 import React, { useMemo } from 'react';
-import { View, Text, Animated } from 'react-native';
+import { View, Text } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
 import type { BossPhase, BossPhaseState } from '../../features/boss/boss-phases';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 interface BossPhaseIndicatorProps {
   phase: BossPhase;

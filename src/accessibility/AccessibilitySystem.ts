@@ -5,71 +5,37 @@
  * a single location while each module stays under the 200 line limit.
  */
 
-<<<<<<< HEAD
 import { eventBus } from '../events';
 import { AccessibilityPreferences } from './types';
 import { DEFAULT_ACCESSIBILITY } from './constants';
-
 export { DEFAULT_ACCESSIBILITY, COLOR_BLIND_PALETTES } from './constants';
-=======
-export {
-  DEFAULT_ACCESSIBILITY,
-  COLOR_BLIND_PALETTES,
-} from './constants';
-
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 export {
   calculateContrastRatio,
   checkContrast,
   getAccessibleAlternatives,
 } from './contrast';
-<<<<<<< HEAD
-export {
-  getAccessibleAlternatives as getAccessibleColorAlternatives,
-} from './contrast';
-export {
-  getAccessibleColor,
-  getStatusPattern,
-} from './color-blind';
+
 export {
   announce,
   getRecentAnnouncements,
   generateAccessibleLabel,
+  clearOldAnnouncements,
 } from './screen-reader';
+
 export {
   getAnimationConfig,
   getAnimationStyles,
   calculateScaledFontSize,
   getScaledTypography,
 } from './motion';
+
 export {
   registerFocusableElement,
   getNextFocusableElement,
   getPreviousFocusableElement,
+  unregisterFocusableElement,
+  getFocusableElements,
 } from './focus';
-export {
-  getAccessibilityPreferences,
-  updateAccessibilityPreferences,
-  detectSystemAccessibility,
-} from './preferences';
-export { auditScreen } from './audit';
-export type {
-  AccessibilityPreferences,
-  ContrastCheck,
-  ColorBlindType,
-  ColorBlindPalette,
-  ScreenReaderAnnouncement,
-  AnimationConfig,
-  FocusableElement,
-  AccessibilityAudit,
-  AccessibilityIssue,
-} from './types';
-
-export class AccessibilitySystem {
-  private preferences: AccessibilityPreferences;
-  private initialized = false;
-=======
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 export {
   getAccessibleColor,
@@ -78,7 +44,36 @@ export {
   isColorAccessibleForColorBlind,
 } from './color-blind';
 
-<<<<<<< HEAD
+export {
+  getAccessibilityPreferences,
+  updateAccessibilityPreferences,
+  resetAccessibilityPreferences,
+  detectSystemAccessibility,
+} from './preferences';
+
+export {
+  auditScreen,
+  auditColorContrast,
+} from './audit';
+
+
+
+export type {
+  AccessibilityPreferences,
+  ColorBlindPalette,
+  ContrastCheck,
+  ScreenReaderAnnouncement,
+  AnimationConfig,
+  ColorBlindType,
+  FocusableElement,
+  AccessibilityIssue,
+  AccessibilityAudit,
+} from './types';
+
+export class AccessibilitySystem {
+  private preferences: AccessibilityPreferences = DEFAULT_ACCESSIBILITY;
+  private initialized = false;
+
   /**
    * Initialize the accessibility system
    */
@@ -123,43 +118,7 @@ export {
       timestamp: Date.now(),
     });
   }
-=======
-export {
-  announce,
-  getRecentAnnouncements,
-  generateAccessibleLabel,
-  clearOldAnnouncements,
-} from './screen-reader';
 
-export {
-  getAnimationConfig,
-  getAnimationStyles,
-  calculateScaledFontSize,
-  getScaledTypography,
-} from './motion';
-
-export {
-  registerFocusableElement,
-  getNextFocusableElement,
-  getPreviousFocusableElement,
-  unregisterFocusableElement,
-  getFocusableElements,
-} from './focus';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
-
-export {
-  getAccessibilityPreferences,
-  updateAccessibilityPreferences,
-  resetAccessibilityPreferences,
-  detectSystemAccessibility,
-} from './preferences';
-
-export {
-  auditScreen,
-  auditColorContrast,
-} from './audit';
-
-<<<<<<< HEAD
   /**
    * Check if reduced motion is enabled
    */
@@ -220,16 +179,3 @@ export function getAccessibilitySystem(): AccessibilitySystem {
   }
   return accessibilitySystem;
 }
-=======
-export type {
-  AccessibilityPreferences,
-  ColorBlindPalette,
-  ContrastCheck,
-  ScreenReaderAnnouncement,
-  AnimationConfig,
-  ColorBlindType,
-  FocusableElement,
-  AccessibilityIssue,
-  AccessibilityAudit,
-} from './types';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452

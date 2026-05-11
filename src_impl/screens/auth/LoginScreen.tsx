@@ -7,7 +7,7 @@ import Animated, { FadeInDown } from 'react-native-reanimated';
 import { AppScreen, Box, Button, Card, Text } from '../../components/primitives';
 import { FormField } from '../../shared/ui/components/FormField';
 import { useToast } from '../../shared/ui/components/Toast';
-import { useAuthStore } from '../../store';
+import { useAuthStore } from '../../store/index';
 import { useTheme } from '../../theme';
 import { loginSchema } from '../../validation';
 import type { AuthStackParams } from '../../navigation';

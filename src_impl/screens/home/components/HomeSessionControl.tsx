@@ -7,6 +7,8 @@
 
 import React from 'react';
 import { StartSessionButton } from '../../../features/home-spine/components';
+import { SessionRecommendationCard } from '../../../features/session-recommendation/components/SessionRecommendationCard';
+import type { SessionRecommendation } from '../../../features/session-recommendation/types';
 
 interface HomeSessionControlProps {
   hasActiveSession: boolean;
@@ -15,7 +17,8 @@ interface HomeSessionControlProps {
   resumeTimeSeconds?: number;
   squadMembersFocusing?: number;
   streakHoursRemaining?: number | null;
-  streakRiskLevel?: string;
+  streakRiskLevel?: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  recommendation?: SessionRecommendation | null;
 }
 
 export function HomeSessionControl({
@@ -26,7 +29,20 @@ export function HomeSessionControl({
   squadMembersFocusing,
   streakHoursRemaining,
   streakRiskLevel,
+  recommendation,
 }: HomeSessionControlProps): JSX.Element {
+  if (recommendation && !recommendation.isBlocked) {
+    return (
+      <SessionRecommendationCard
+        recommendation={recommendation}
+        onAccept={onPress}
+        onDismiss={() => {
+          // Recommendation dismissed - analytics handled by SessionRecommendationCard
+        }}
+      />
+    );
+  }
+
   return (
     <StartSessionButton
       hasActiveSession={hasActiveSession}

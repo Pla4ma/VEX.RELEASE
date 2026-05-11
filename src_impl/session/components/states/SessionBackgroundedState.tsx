@@ -8,7 +8,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 
 import { Text } from '../../../components/primitives/Text';

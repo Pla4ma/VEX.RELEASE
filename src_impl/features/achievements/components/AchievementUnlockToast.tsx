@@ -8,35 +8,23 @@
  * Haptic feedback on display.
  */
 
-<<<<<<< HEAD
 import React, { useEffect, useCallback } from "react";
-import { Pressable } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming, withDelay, runOnJS } from "react-native-reanimated";
+import { Pressable, Dimensions } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  withDelay,
+  runOnJS,
+} from "react-native-reanimated";
 import { Box, Text } from "@/components/primitives";
 import { useTheme } from "@/theme";
 import { achievementUnlocked } from "@/utils/haptics";
 import type { Achievement, AchievementRarity } from "../types";
 import { getAchievementDisplayInfo, getRarityColor } from "../definitions";
-=======
-import React, { useEffect, useCallback } from 'react';
-import { Pressable, Dimensions } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming, withDelay, runOnJS } from 'react-native-reanimated';
-import { Box, Text } from '@/components/primitives';
-import { useTheme } from '@/theme';
-import { achievementUnlocked } from '@/utils/haptics';
-import type { Achievement, AchievementRarity } from '../types';
-import { getAchievementDisplayInfo, getRarityColor } from '../definitions';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
-// ============================================================================
-// Constants
-// ============================================================================
-
-<<<<<<< HEAD
-=======
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const DISMISS_DURATIONS: Record<AchievementRarity, number> = {
   COMMON: 3500,
   UNCOMMON: 3500,
@@ -60,12 +48,18 @@ interface AchievementUnlockToastProps {
 // Component
 // ============================================================================
 
-export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({ achievement, onPress, onDismiss, visible }) => {
+export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({
+  achievement,
+  onPress,
+  onDismiss,
+  visible,
+}) => {
   const { theme } = useTheme();
   const display = getAchievementDisplayInfo(achievement, true);
   const rarityColor = getRarityColor(achievement.rarity);
 
-  const isHighRarity = achievement.rarity === 'EPIC' || achievement.rarity === 'LEGENDARY';
+  const isHighRarity =
+    achievement.rarity === "EPIC" || achievement.rarity === "LEGENDARY";
 
   // Animation values
   const translateY = useSharedValue(-200);
@@ -112,20 +106,16 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({ 
       scale.value = withTiming(0.8, { duration: 200 });
       return; // Explicit return for else branch
     }
-<<<<<<< HEAD
-  }, [achievement.rarity, glowOpacity, handleDismiss, isHighRarity, opacity, scale, translateY, visible]);
-=======
-  }, [visible, achievement.rarity]);
-
-  const handleDismiss = useCallback(() => {
-    translateY.value = withTiming(-200, { duration: 300 }, () => {
-      'worklet';
-      runOnJS(onDismiss)();
-    });
-    opacity.value = withTiming(0, { duration: 200 });
-    return; // Explicit return to satisfy all code paths
-  }, [onDismiss]);
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
+  }, [
+    achievement.rarity,
+    glowOpacity,
+    handleDismiss,
+    isHighRarity,
+    opacity,
+    scale,
+    translateY,
+    visible,
+  ]);
 
   const handlePress = useCallback(() => {
     handleDismiss();
@@ -154,7 +144,7 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({ 
     <Animated.View
       style={[
         {
-          position: 'absolute',
+          position: "absolute",
           top: 0,
           left: 16,
           right: 16,
@@ -163,13 +153,18 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({ 
         containerStyle,
       ]}
     >
-      <Pressable onPress={handlePress} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
+      <Pressable
+        onPress={handlePress}
+        accessibilityLabel="Interactive control"
+        accessibilityRole="button"
+        accessibilityHint="Activates this control"
+      >
         {/* Glow effect for EPIC/LEGENDARY */}
         {isHighRarity && (
           <Animated.View
             style={[
               {
-                position: 'absolute',
+                position: "absolute",
                 top: -10,
                 left: -10,
                 right: -10,
@@ -211,21 +206,38 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({ 
                 borderColor: rarityColor,
               }}
             >
-              <Text style={{ fontSize: isHighRarity ? 32 : 28 }}>{display.icon}</Text>
+              <Text style={{ fontSize: isHighRarity ? 32 : 28 }}>
+                {display.icon}
+              </Text>
             </Box>
 
             {/* Content */}
             <Box flex={1}>
-              <Text variant="caption" color={rarityColor} fontWeight="bold" mb={1}>
+              <Text
+                variant="caption"
+                color={rarityColor}
+                fontWeight="bold"
+                mb={1}
+              >
                 🏆 ACHIEVEMENT UNLOCKED
               </Text>
-              <Text variant={isHighRarity ? 'h4' : 'body'} color={theme.colors.text.primary} fontWeight="semibold" numberOfLines={1}>
+              <Text
+                variant={isHighRarity ? "h4" : "body"}
+                color={theme.colors.text.primary}
+                fontWeight="semibold"
+                numberOfLines={1}
+              >
                 {display.title}
               </Text>
             </Box>
 
             {/* Rarity Badge */}
-            <Box px={3} py={1} borderRadius={8} style={{ backgroundColor: `${rarityColor}30` }}>
+            <Box
+              px={3}
+              py={1}
+              borderRadius={8}
+              style={{ backgroundColor: `${rarityColor}30` }}
+            >
               <Text variant="caption" color={rarityColor} fontWeight="bold">
                 {achievement.rarity}
               </Text>
@@ -233,7 +245,7 @@ export const AchievementUnlockToast: React.FC<AchievementUnlockToastProps> = ({ 
           </Box>
 
           {/* Extra flair for LEGENDARY */}
-          {achievement.rarity === 'LEGENDARY' && (
+          {achievement.rarity === "LEGENDARY" && (
             <Box mt={3} alignItems="center">
               <Text variant="caption" color={theme.colors.warning.DEFAULT}>
                 ✨ LEGENDARY RARITY ✨
@@ -261,21 +273,32 @@ export function useAchievementUnlockToast(
   currentToast: Achievement | null;
   dismissToast: () => void;
 } {
-  const [currentToast, setCurrentToast] = React.useState<Achievement | null>(null);
+  const [currentToast, setCurrentToast] = React.useState<Achievement | null>(
+    null,
+  );
   const toastQueue = React.useRef<Achievement[]>([]);
 
-<<<<<<< HEAD
-=======
   // Listen for achievement unlock events
+  const showNextToast = React.useCallback(() => {
+    const nextAchievement = toastQueue.current.shift();
+    if (nextAchievement) {
+      setCurrentToast(nextAchievement);
+    }
+  }, []);
+
   React.useEffect(() => {
     // Subscribe to achievement:unlocked event
-    const handleUnlock = (event: { userId: string; achievementId: string; unlockedAt: number }) => {
+    const handleUnlock = (event: {
+      userId: string;
+      achievementId: string;
+      unlockedAt: number;
+    }) => {
       if (event.userId !== userId) {
         return;
       }
 
       // Get achievement details
-      const { getAchievementById } = require('../definitions');
+      const { getAchievementById } = require("../definitions");
       const achievement = getAchievementById(event.achievementId);
       if (!achievement) {
         return;
@@ -296,26 +319,7 @@ export function useAchievementUnlockToast(
     return () => {
       // unsubscribe();
     };
-  }, [userId, currentToast]);
-
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
-  const showNextToast = React.useCallback(() => {
-    const nextAchievement = toastQueue.current.shift();
-    if (nextAchievement) {
-      setCurrentToast(nextAchievement);
-    }
-  }, []);
-
-  // Listen for achievement unlock events
-  React.useEffect(() => {
-    // Subscribe to achievement:unlocked event
-    // In a real app, subscribe to event bus
-    // const unsubscribe = eventBus.subscribe('achievement:unlocked', handleUnlock);
-
-    return () => {
-      // unsubscribe();
-    };
-  }, [currentToast, showNextToast, userId]);
+  }, [userId, currentToast, showNextToast]);
 
   const dismissToast = React.useCallback(() => {
     setCurrentToast(null);
@@ -341,13 +345,25 @@ interface AchievementToastProviderProps {
   onAchievementPress: (achievementId: string) => void;
 }
 
-export const AchievementToastProvider: React.FC<AchievementToastProviderProps> = ({ children, userId, onAchievementPress }) => {
-  const { currentToast, dismissToast } = useAchievementUnlockToast(userId, onAchievementPress);
+export const AchievementToastProvider: React.FC<
+  AchievementToastProviderProps
+> = ({ children, userId, onAchievementPress }) => {
+  const { currentToast, dismissToast } = useAchievementUnlockToast(
+    userId,
+    onAchievementPress,
+  );
 
   return (
     <Box flex={1}>
       {children}
-      {currentToast && <AchievementUnlockToast achievement={currentToast} onPress={() => onAchievementPress(currentToast.id)} onDismiss={dismissToast} visible={!!currentToast} />}
+      {currentToast && (
+        <AchievementUnlockToast
+          achievement={currentToast}
+          onPress={() => onAchievementPress(currentToast.id)}
+          onDismiss={dismissToast}
+          visible={!!currentToast}
+        />
+      )}
     </Box>
   );
 };

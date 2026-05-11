@@ -14,7 +14,6 @@ import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { useOnboardingProgressState } from '../hooks';
 import { OnboardingNavigator } from './OnboardingNavigator';
-import { FirstResultScreen } from './FirstResultScreen';
 import type { FocusGoal } from '../schemas';
 
 interface OnboardingFlowProps {
@@ -85,24 +84,46 @@ function FirstResultScreen({
 }: {
   onComplete: () => void;
 }): JSX.Element {
-  // Lazy load the actual first result component
   const [FirstResult, setFirstResult] = React.useState<React.FC<{
     userName: string;
     sessionDuration: number;
-    sessionGrade: string;
+    sessionData: {
+      completedDurationSeconds: number;
+      targetDurationSeconds: number;
+      effectiveFocusedSeconds: number;
+      pauseCount: number;
+      interruptionCount: number;
+      backgroundTimeSeconds: number;
+      mode: string;
+      strictMode: boolean;
+      isAbandoned: boolean;
+    };
     focusScoreBefore: number;
-    focusScoreAfter: number;
-    xpEarned: number;
     onComplete: () => void;
   }> | null>(null);
 
   React.useEffect(() => {
     import('./FirstResultScreen')
       .then((mod) => {
-        setFirstResult(() => mod.FirstResultScreen);
+        setFirstResult(() => mod.FirstResultScreen as React.FC<{
+          userName: string;
+          sessionDuration: number;
+          sessionData: {
+            completedDurationSeconds: number;
+            targetDurationSeconds: number;
+            effectiveFocusedSeconds: number;
+            pauseCount: number;
+            interruptionCount: number;
+            backgroundTimeSeconds: number;
+            mode: string;
+            strictMode: boolean;
+            isAbandoned: boolean;
+          };
+          focusScoreBefore: number;
+          onComplete: () => void;
+        }>);
       })
       .catch(() => {
-        // Fallback if component not available
         onComplete();
       });
   }, [onComplete]);
@@ -117,12 +138,20 @@ function FirstResultScreen({
 
   return (
     <FirstResult
-      userName="User" // This would come from onboarding state
+      userName="User"
       sessionDuration={10}
-      sessionGrade="A"
+      sessionData={{
+        completedDurationSeconds: 600,
+        targetDurationSeconds: 600,
+        effectiveFocusedSeconds: 580,
+        pauseCount: 0,
+        interruptionCount: 0,
+        backgroundTimeSeconds: 20,
+        mode: 'STARTER',
+        strictMode: false,
+        isAbandoned: false,
+      }}
       focusScoreBefore={550}
-      focusScoreAfter={560}
-      xpEarned={20}
       onComplete={onComplete}
     />
   );
@@ -167,20 +196,6 @@ export function OnboardingFlow({
   if (state.steps.firstSessionCompleted && !state.steps.rewardSeen) {
     return (
       <FirstResultScreen
-        userName={store.displayName || ''}
-        sessionDuration={10} // This would come from session data
-        sessionData={{
-          completedDurationSeconds: 600, // This would come from session data
-          targetDurationSeconds: 600,
-          effectiveFocusedSeconds: 580,
-          pauseCount: 0,
-          interruptionCount: 0,
-          backgroundTimeSeconds: 20,
-          mode: 'STARTER',
-          strictMode: false,
-          isAbandoned: false,
-        }}
-        focusScoreBefore={550} // This would come from user data
         onComplete={() => {
           markRewardSeen();
           onComplete?.();

@@ -323,15 +323,9 @@ export const CompanionEvolutionCeremony: React.FC<CompanionEvolutionCeremonyProp
 
         {/* Phase indicator dots at bottom */}
         <Box position="absolute" bottom={80} flexDirection="row" gap="sm" zIndex={35}>
-<<<<<<< HEAD
           {(["energy-buildup", "flash", "transformation", "celebration"] as EvolutionPhase[]).map((phase, _index) => {
             const isActive = ceremonyPhase === phase || (ceremonyPhase === "complete" && phase === "celebration");
             const isPast = ceremonyPhase !== "complete" && ["transformation", "celebration", "complete"].includes(ceremonyPhase) && ["energy-buildup", "flash"].includes(phase);
-=======
-          {(['energy-buildup', 'flash', 'transformation', 'celebration'] as EvolutionPhase[]).map((phase, index) => {
-            const isActive = ceremonyPhase === phase || (ceremonyPhase === 'complete' && phase === 'celebration');
-            const isPast = ceremonyPhase !== 'complete' && ['transformation', 'celebration', 'complete'].includes(ceremonyPhase) && ['energy-buildup', 'flash'].includes(phase);
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
             return <Box key={phase} width={8} height={8} borderRadius="full" bg={isActive ? themeColors.primary : isPast ? themeColors.glow : 'background.tertiary'} style={{ opacity: isActive || isPast ? 1 : 0.4 }} />;
           })}

@@ -14,18 +14,21 @@ import {
 } from '../../../features/home-spine/components';
 import { StudyPlanSuggestionCard } from '../../../features/content-study/components/StudyPlanSuggestionCard';
 import { BOUNTY_COST_COINS } from '../../../features/boss/hooks';
+import type { ActiveStudyPlan } from '../../../features/content-study/hooks/helpers';
+import type { UseQueryResult } from '@tanstack/react-query';
+import type { BountyStatus } from '../../../features/boss/BossBountySystem';
 
 interface HomeContextualCardsProps {
-  activeStudyPlan: { nextTask: string | null } | null;
-  comebackData: { streakRestoreEligible?: boolean; streakBefore?: number; rewardMultiplier?: number } | null;
+  activeStudyPlan: ActiveStudyPlan | null | undefined;
+  comebackData: { streakRestoreEligible?: boolean; streakBefore?: number; rewardMultiplier?: number; isComeback?: boolean; daysAbsent?: number; streakNow?: number; message?: string } | null | undefined;
   comebackSessionsCompleted: number;
-  activeBossQuery: { data?: { bossName?: string; percentHealthRemaining?: number; timeRemaining?: number; id?: string }; isLoading: boolean };
-  bountyStatusQuery: { status?: { bountyCount?: number } };
-  placeBountyMutation: { mutate: Function; isPending: boolean; error?: { message?: string } | null };
+  activeBossQuery: UseQueryResult<{ bossName?: string; percentHealthRemaining?: number; timeRemaining?: number; id?: string } | null, Error>;
+  bountyStatusQuery: { status: BountyStatus | null; isLoading: boolean; error: Error | null };
+  placeBountyMutation: { mutate: (vars: { userId: string; encounterId: string }, opts?: { onSuccess?: () => void; onError?: (e: Error) => void }) => void; isPending: boolean; error?: Error | null };
   coinBalance: number;
   canShowBossBounties: boolean;
   todaysChallenges: ChallengeItem[];
-  challengesQueryError: Error | undefined;
+  challengesQueryError: Error | null | undefined;
   challengesQueryIsLoading: boolean;
   handleClaimReward: (challengeId: string) => void;
   challengesRefetch: () => void;
@@ -53,12 +56,12 @@ export function HomeContextualCards({
   continueStudyPlan,
   showToast,
   userId,
-}: HomeContextualCardsProps): JSX.Element {
+}: HomeContextualCardsProps): JSX.Element | null {
   // Determine the ONE contextual card to show (priority order)
   const showStudyPlanCard = activeStudyPlan && activeStudyPlan.nextTask !== null;
   const showComebackCard = comebackData?.streakRestoreEligible ?? false;
   const showBossCard = activeBossQuery.data && !activeBossQuery.isLoading &&
-    activeBossQuery.data.percentHealthRemaining <= 25;
+    (activeBossQuery.data.percentHealthRemaining ?? 100) <= 25;
   const showChallengeCard = todaysChallenges.length > 0 &&
     todaysChallenges.some(c => {
       const percent = (c.currentProgress / c.targetProgress) * 100;

@@ -13,6 +13,7 @@ import { Text } from '../../../components/primitives/Text';
 import { Box } from '../../../components/primitives/Box';
 import { useTheme } from '../../../theme';
 import { useFocusScoreHistory } from '../hooks-focus-score';
+import type { FocusScoreHistoryPoint } from '../types';
 
 interface ScoreHistoryChartProps {
   userId: string;
@@ -29,17 +30,19 @@ export function ScoreHistoryChart({
 }: ScoreHistoryChartProps) {
   const { theme } = useTheme();
   const { width: screenWidth } = useWindowDimensions();
-  const { history, loadingState } = useFocusScoreHistory(userId, days);
+  const { history, status } = useFocusScoreHistory(userId, days);
 
   const chartWidth = screenWidth - 48;
   const padding = { top: 20, right: 40, bottom: 30, left: 40 };
   const graphWidth = chartWidth - padding.left - padding.right;
   const graphHeight = height - padding.top - padding.bottom;
 
+  const safeHistory = history ?? [];
+
   // ============================================================================
   // LOADING STATE
   // ============================================================================
-  if (loadingState === 'loading' || loadingState === 'idle') {
+  if (status === 'pending') {
     return (
       <Box padding="lg" backgroundColor="surface" borderRadius="lg" style={{ width: '100%' }}>
         <View style={{ borderRadius: theme.spacing[2], backgroundColor: theme.colors.border.DEFAULT, height }} />
@@ -50,7 +53,7 @@ export function ScoreHistoryChart({
   // ============================================================================
   // ERROR STATE
   // ============================================================================
-  if (loadingState === 'error') {
+  if (status === 'error') {
     return (
       <Box padding="lg" backgroundColor="surface" borderRadius="lg" style={{ width: '100%' }}>
         <Text variant="body" color="error" style={{ marginBottom: theme.spacing[4] }}>
@@ -66,7 +69,7 @@ export function ScoreHistoryChart({
   // ============================================================================
   // EMPTY STATE
   // ============================================================================
-  if (history.length === 0) {
+  if (safeHistory.length === 0) {
     return (
       <Box padding="lg" backgroundColor="surface" borderRadius="lg" style={{ width: '100%' }}>
         <Text variant="body" color="text" style={{ marginBottom: theme.spacing[4] }}>
@@ -85,29 +88,29 @@ export function ScoreHistoryChart({
   // ============================================================================
   // CHART RENDERING
   // ============================================================================
-  const scores = history.map((h: { score: number }) => h.score);
+  const scores = safeHistory.map((h: FocusScoreHistoryPoint) => h.score);
   const minScore = Math.min(...scores, 300);
   const maxScore = Math.max(...scores, 850);
   const scoreRange = maxScore - minScore || 1;
 
   // Scale functions
   const scaleX = (index: number): number =>
-    padding.left + (index / (history.length - 1 || 1)) * graphWidth;
+    padding.left + (index / (safeHistory.length - 1 || 1)) * graphWidth;
   const scaleY = (score: number): number =>
     padding.top + graphHeight - ((score - minScore) / scoreRange) * graphHeight;
 
   // Generate path
-  const pathD = history.map((point: { score: number }, i: number) => {
+  const pathD = safeHistory.map((point: FocusScoreHistoryPoint, i: number) => {
     const x = scaleX(i);
     const y = scaleY(point.score);
     return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
   }).join(' ');
 
   // Generate area path (for gradient fill)
-  const areaD = `${pathD} L ${scaleX(history.length - 1)} ${padding.top + graphHeight} L ${padding.left} ${padding.top + graphHeight} Z`;
+  const areaD = `${pathD} L ${scaleX(safeHistory.length - 1)} ${padding.top + graphHeight} L ${padding.left} ${padding.top + graphHeight} Z`;
 
   // Latest score color
-  const latestScore = history[history.length - 1]?.score || 550;
+  const latestScore = safeHistory[safeHistory.length - 1]?.score || 550;
   const scoreColor = latestScore >= 800 ? '#FFD700' :
                      latestScore >= 740 ? '#C0C0C0' :
                      latestScore >= 670 ? '#CD7F32' :
@@ -169,10 +172,10 @@ export function ScoreHistoryChart({
         />
 
         {/* Data points */}
-        {history.map((point: { score: number }, i: number) => {
+        {safeHistory.map((point: FocusScoreHistoryPoint, i: number) => {
           const x = scaleX(i);
           const y = scaleY(point.score);
-          const isLatest = i === history.length - 1;
+          const isLatest = i === safeHistory.length - 1;
 
           return (
             <Circle
@@ -188,7 +191,7 @@ export function ScoreHistoryChart({
         })}
 
         {/* X-axis labels (show first, middle, last dates) */}
-        {[0, Math.floor(history.length / 2), history.length - 1].map(i => (
+        {[0, Math.floor(safeHistory.length / 2), safeHistory.length - 1].map(i => (
           <SvgText
             key={i}
             x={scaleX(i)}
@@ -197,7 +200,7 @@ export function ScoreHistoryChart({
             fill="#666"
             textAnchor="middle"
           >
-            {new Date(history[i].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            {new Date(safeHistory[i].timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
           </SvgText>
         ))}
       </Svg>
@@ -206,7 +209,7 @@ export function ScoreHistoryChart({
       <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 12, gap: 8 }}>
         <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: scoreColor }} />
         <Text variant="caption" color="textMuted">
-          Current: {latestScore} ({history.length} days)
+          Current: {latestScore} ({safeHistory.length} days)
         </Text>
       </View>
     </Box>

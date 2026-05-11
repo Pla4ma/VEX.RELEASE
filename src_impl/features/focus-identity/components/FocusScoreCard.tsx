@@ -65,7 +65,7 @@ export function FocusScoreCard({ userId, onPress, size = 'medium', showTrend = t
   // ============================================================================
   // LOADING STATE
   // ============================================================================
-  if (loadingState === 'loading' || loadingState === 'idle') {
+  if (loadingState === 'pending') {
     return (
       <Box padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'} backgroundColor="surface" borderRadius="lg" style={{ width: '100%' }}>
         <View style={{ gap: 12 }}>
@@ -94,7 +94,7 @@ export function FocusScoreCard({ userId, onPress, size = 'medium', showTrend = t
             {error.message}
           </Text>
         )}
-        <Pressable onPress={retry} disabled={isRetrying} style={{ paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8, marginTop: 8, backgroundColor: theme.colors.primary[500] }}>
+        <Pressable onPress={() => void retry?.()} disabled={isRetrying} style={{ paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8, marginTop: 8, backgroundColor: theme.colors.primary[500] }}>
           <Text variant="button" color="background">
             {isRetrying ? 'Retrying...' : 'Try Again'}
           </Text>
@@ -106,7 +106,7 @@ export function FocusScoreCard({ userId, onPress, size = 'medium', showTrend = t
   // ============================================================================
   // RETRYING STATE
   // ============================================================================
-  if (loadingState === 'retrying') {
+  if (isRetrying) {
     return (
       <Box padding={size === 'small' ? 'md' : size === 'large' ? 'xl' : 'lg'} backgroundColor="surface" borderRadius="lg" style={{ width: '100%' }}>
         <Text variant="body" color="textMuted" style={{ textAlign: 'center' }}>

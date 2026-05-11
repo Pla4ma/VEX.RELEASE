@@ -8,16 +8,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import Animated, { interpolate, useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
-
-<<<<<<< HEAD
-import React, { forwardRef } from "react";
-import { View, Pressable, StyleSheet, Image, type AccessibilityRole, type AccessibilityState, type StyleProp, type ViewStyle } from "react-native";
-import Animated, { useAnimatedStyle, withSpring, interpolate, useSharedValue } from "react-native-reanimated";
-import { useTheme } from "../../theme";
-import { createSheet } from "@/shared/ui/create-sheet";
-=======
 import { useTheme } from '../../theme';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 export type CardVariant = 'default' | 'elevated' | 'outlined' | 'ghost' | 'premium' | 'glass';
 export type CardSize = 'sm' | 'md' | 'lg';
@@ -171,37 +162,9 @@ export function CardHeader({ children, action, style }: { children: React.ReactN
 export function CardFooter({ children, style }: { children: React.ReactNode; style?: StyleProp<ViewStyle> }): JSX.Element {
   const { theme } = useTheme();
   return (
-<<<<<<< HEAD
-    <View style={[mediaStyles.container, { aspectRatio }, style]}>
-      <Image source={source} style={mediaStyles.image} resizeMode="cover" />
-      {overlay && <View style={mediaStyles.overlay}>{overlay}</View>}
-    </View>
-  );
-}
-
-const mediaStyles = createSheet({
-  container: {
-    width: "100%",
-    backgroundColor: "#E5E7EB",
-    borderRadius: 8,
-    overflow: "hidden",
-  },
-  image: {
-    ...StyleSheet.absoluteFillObject,
-    width: "100%",
-    height: "100%",
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0,0,0,0.3)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
-=======
-    <View style={[{ alignItems: 'center', borderTopColor: theme.colors.semantic.border, borderTopWidth: 1, flexDirection: 'row', justifyContent: 'flex-end', marginTop: 16, paddingTop: 12 }, style]}>
+    <View style={[{ borderTopColor: theme.colors.semantic.border, borderTopWidth: 1, paddingTop: 12, marginTop: 12 }, style]}>
       {children}
     </View>
   );
 }
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
+    

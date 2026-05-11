@@ -151,7 +151,7 @@ export const FIRST_WEEK_CONFIG: FirstWeekConfig = {
       'Plan your continued journey',
     ],
   },
-} as const satisfies FirstWeekConfigSchema;
+} as const satisfies FirstWeekConfig;
 
 // Helper function to get next session
 export function getNextSession(currentSession: FirstWeekSession): FirstWeekSession | null {

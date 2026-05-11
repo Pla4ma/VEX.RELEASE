@@ -18,7 +18,7 @@ import {
   getTimeRangeDates,
 } from './schemas';
 import { eventBus } from '../../events';
-import { uploadExportData, deleteExportData, StorageError } from './storage';
+import { uploadExportData, deleteExportData, StorageError } from './repository/storage';
 import { withRetry, CircuitBreaker, classifyError } from '../../shared/hardening';
 import * as Sentry from '@sentry/react-native';
 

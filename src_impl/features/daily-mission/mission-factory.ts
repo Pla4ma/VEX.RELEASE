@@ -29,13 +29,13 @@ export function createDailyMission(
     isCompleted: false,
     progress: 0,
     userId,
-    ...additionalData,
+    ..._additionalData,
   };
 
   const mission = DailyMissionSchema.parse(missionData);
   return {
     ...mission,
-    ...getMissionContent(missionType, additionalData),
+    ...getMissionContent(missionType, _additionalData),
   };
 }
 

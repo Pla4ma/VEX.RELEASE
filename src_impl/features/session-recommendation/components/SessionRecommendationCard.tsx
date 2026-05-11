@@ -13,7 +13,7 @@ import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme';
 import type { SessionRecommendation } from '../types';
 
-interface SessionRecommendationCardProps {
+export interface SessionRecommendationCardProps {
   recommendation: SessionRecommendation;
   onAccept?: () => void;
   onDismiss?: () => void;

@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { getSupabaseClient } from '../../config/supabase';
-import { createDebugger } from '../../utils/debug';
+import { getSupabaseClient } from '../../../config/supabase';
+import { createDebugger } from '../../../utils/debug';
 
 const debug = createDebugger('rewards:delivery');
 

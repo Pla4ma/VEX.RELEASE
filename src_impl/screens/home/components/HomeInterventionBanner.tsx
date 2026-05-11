@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { CoachInterventionBanner, type Intervention } from '../../../features/ai-coach/components/CoachInterventionBanner';
+import { CoachInterventionBanner, type InterventionType } from '../../../features/ai-coach/components/CoachInterventionBanner';
 import { trackInterventionActioned } from '../../../features/ai-coach/analytics';
 import { eventBus } from '../../../events';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
@@ -13,7 +13,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
 
 interface HomeInterventionBannerProps {
-  intervention: Intervention | null;
+  intervention: { id: string; type: InterventionType; message: string; actionLabel: string; hoursRemaining?: number; metadata?: Record<string, unknown> } | null;
   interventionLoading: boolean;
   dismissIntervention: (id: string) => void;
   navigation: NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -26,7 +26,7 @@ export function HomeInterventionBanner({
   dismissIntervention,
   navigation,
   userId,
-}: HomeInterventionBannerProps): JSX.Element {
+}: HomeInterventionBannerProps): JSX.Element | null {
   // Handle intervention action
   const handleInterventionAction = React.useCallback((activeIntervention: {
     id: string;
@@ -61,7 +61,7 @@ export function HomeInterventionBanner({
       params: {
         suggestedDurationSeconds:
           activeIntervention.type === 'BOSS_FINISH' ? 45 * 60 : 25 * 60,
-        presetMode: 'FOCUS',
+        presetMode: 'STUDY',
       },
     });
   }, [userId, navigation]);

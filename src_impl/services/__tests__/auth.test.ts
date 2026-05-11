@@ -8,7 +8,7 @@
  * - Session validation
  */
 
-import { AuthService, LoginCredentials, RegisterData } from '../auth';
+import { AuthService, LoginCredentials } from '../auth';
 import { getApiClient } from '../../api/client';
 import { useAuthStore } from '../../store';
 

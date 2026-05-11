@@ -226,7 +226,8 @@ class CurrencyBoundariesValidationCore {
     if (boundary.conditions.minLevel && boundary.conditions.minLevel > request.userLevel) {return null;}
 
     // Check if user has required entitlements
-    if (boundary.conditions.requiredEntitlements?.length > 0 && !request.isPremiumUser) {
+    const requiredEntitlements = boundary.conditions.requiredEntitlements;
+    if (requiredEntitlements && requiredEntitlements.length > 0 && !request.isPremiumUser) {
       return {
         id: crypto.randomUUID(),
         userId: request.userId,

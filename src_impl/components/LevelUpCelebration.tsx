@@ -34,10 +34,7 @@ export const LevelUpCelebration: React.FC<LevelUpCelebrationProps> = ({
 
   const levelStyle = useAnimatedStyle(() => ({ transform: [{ scale: levelScale.value }] }));
 
-<<<<<<< HEAD
   // Guard: don't render if no actual level up occurred
-=======
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   if (newLevel <= oldLevel) {return null;}
 
   return (

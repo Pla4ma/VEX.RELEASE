@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import { useFeatureGate } from '../../../features/feature-gate/hooks';
 import { WeeklyQuestCard } from '../../../features/weekly-quests/components/WeeklyQuestCard';
 
 interface HomeWeeklyQuestProps {
@@ -12,8 +13,12 @@ interface HomeWeeklyQuestProps {
   onPress: () => void;
 }
 
-export function HomeWeeklyQuest({ userId, onPress }: HomeWeeklyQuestProps): JSX.Element {
-  if (!userId) {return null;}
+export function HomeWeeklyQuest({ userId, onPress }: HomeWeeklyQuestProps): JSX.Element | null {
+  const { isVisible } = useFeatureGate('challenges');
+
+  if (!userId || !isVisible) {
+    return null;
+  }
 
   return (
     <WeeklyQuestCard

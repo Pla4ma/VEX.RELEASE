@@ -4,15 +4,9 @@
  * Full-screen modal with animations and gesture support.
  */
 
-<<<<<<< HEAD
-import React, { useEffect, useCallback, type ReactNode } from "react";
-import { View, StyleSheet, TouchableWithoutFeedback, BackHandler, type ViewStyle } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, runOnJS } from "react-native-reanimated";
-=======
 import React, { useEffect, useCallback, type ReactNode } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback, BackHandler, type ViewStyle } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming, withSpring, runOnJS, type SharedValue } from 'react-native-reanimated';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { useTheme } from '../../theme';
 import { Box, Text } from '../primitives';

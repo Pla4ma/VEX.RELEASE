@@ -19,6 +19,7 @@ import type { ExtendedRootStackParams } from '../../navigation/types';
 import type { ActiveIntervention } from '../../features/ai-coach/hooks';
 import { HomeHero } from './HomeScreenVisuals';
 import { HomeContent } from './components/HomeContent';
+import { HomeInterventionBanner } from './components/HomeInterventionBanner';
 import { useHomeData } from './hooks/useHomeData';
 import { readSuggestedDuration, readSuggestedMode } from './utils';
 import { AppScreen } from '../../components/primitives';
@@ -99,8 +100,8 @@ export function HomeScreen(): JSX.Element {
     <AppScreen contentStyle={{ gap: 0, paddingHorizontal: 0, paddingTop: 0 }} padded={false}>
       {/* 1. Identity greeting */}
       <GreetingHeader
-        userName={controller.user?.firstName}
-        avatarUrl={controller.user?.avatar ?? undefined}
+        userName={controller.user?.displayName}
+        avatarUrl={undefined}
         level={controller.progressionQuery.data?.level ?? 1}
         streakDays={controller.currentStreak}
         streakHoursRemaining={data.streakHoursRemaining}
@@ -111,7 +112,31 @@ export function HomeScreen(): JSX.Element {
         unreadNotificationCount={data.unreadNotificationCount}
       />
 
-      <HomeContent navigation={navigation} data={data} />
+      <HomeInterventionBanner
+        intervention={data.intervention}
+        interventionLoading={data.interventionLoading}
+        dismissIntervention={data.dismissIntervention}
+        navigation={navigation}
+        userId={data.controller.userId}
+      />
+
+      <HomeContent
+        controller={data.controller}
+        data={data}
+        handleClaimReward={data.handleClaimReward}
+        streakHoursRemaining={data.streakHoursRemaining ?? 0}
+        canShowWagers={false}
+        activeWagerQuery={data.activeWagerQuery}
+        canShowBattlePass={false}
+        features={data.controller.disclosure?.features}
+        comebackSessionsCompleted={data.comebackSessionsCompleted}
+        activeBossQuery={data.activeBossQuery}
+        bountyStatusQuery={data.bountyStatusQuery}
+        placeBountyMutation={data.placeBountyMutation}
+        coinBalance={data.coinBalance}
+        canShowBossBounties={false}
+        primaryRecommendation={data.controller.primaryRecommendation ?? null}
+      />
     </AppScreen>
   );
 }

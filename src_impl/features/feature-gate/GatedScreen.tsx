@@ -5,14 +5,16 @@
  */
 
 import React from 'react';
-import { FeatureGate, NavigationGate } from './FeatureGate';
+import { FeatureGate } from './FeatureGate';
+import { NavigationGate } from './NavigationGate';
 import type { FeatureKey } from '../liveops-config/feature-access';
+import type { ExtendedRootStackParams } from '../../navigation/types';
 
 interface GatedScreenProps {
   feature: FeatureKey;
   featureName: string;
   children: React.ReactNode;
-  fallbackRoute?: string;
+  fallbackRoute?: keyof ExtendedRootStackParams;
   fallbackAction?: string;
 }
 
@@ -31,7 +33,7 @@ export function GatedScreen({
           featureName={featureName}
           featureReason="currently disabled"
           suggestedAction={fallbackAction}
-          suggestedRoute={fallbackRoute as any}
+          suggestedRoute={fallbackRoute}
         />
       }
     >

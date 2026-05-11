@@ -4,7 +4,7 @@
  * Tests for the timer engine with edge cases and error scenarios.
  */
 
-import { TimerEngine, createTimerEngine } from './TimerEngine';
+import { TimerEngine } from './TimerEngine';
 
 jest.useFakeTimers();
 

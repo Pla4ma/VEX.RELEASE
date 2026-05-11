@@ -159,7 +159,7 @@ export const SessionSetupScreen: React.FC = () => {
               // Navigate to shop or open insurance modal
               controller.setShopTheme(null);
               // Open insurance purchase modal
-              navigation.navigate('Shop', { screen: 'InsurancePurchase' });
+              navigation.navigate('Shop');
             }}
             onDismiss={() => setInsurancePromptDismissed(true)}
           />

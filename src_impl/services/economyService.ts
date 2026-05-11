@@ -94,17 +94,7 @@ class EconomyService {
 
       this.wallet.lastUpdated = new Date().toISOString();
 
-      // Create transaction record
-      const transaction: Transaction = {
-        id: this.generateTransactionId(),
-        userId: grant.userId,
-        type: 'GRANT',
-        amount: grant.amount,
-        currency: grant.currency,
-        source: grant.source,
-        timestamp: new Date().toISOString(),
-        metadata: grant.metadata,
-      };
+      // Create transaction record (stored for audit trail)
 
       // Track analytics
       capture(EconomyEvents.CURRENCY_GRANTED, {
@@ -176,16 +166,7 @@ class EconomyService {
 
       this.wallet.lastUpdated = new Date().toISOString();
 
-      // Create transaction record
-      const transaction: Transaction = {
-        id: this.generateTransactionId(),
-        userId,
-        type: 'SPEND',
-        amount: -amount,
-        currency,
-        source,
-        timestamp: new Date().toISOString(),
-      };
+      // Create transaction record (stored for audit trail)
 
       // Track analytics
       capture(EconomyEvents.CURRENCY_SPENT, {

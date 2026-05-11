@@ -13,6 +13,7 @@ const MODE_LABELS: Record<SessionMode, string> = {
   [SessionMode.CREATIVE]: 'CREATIVE',
   [SessionMode.SPRINT]: 'SPRINT',
   [SessionMode.RECOVERY]: 'RECOVERY',
+  [SessionMode.STARTER]: 'STARTER',
 };
 
 type ModeIndicatorBadgeProps = {

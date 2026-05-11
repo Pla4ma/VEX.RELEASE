@@ -16,7 +16,7 @@
  * @adhd-target visual momentum and milestone celebrations
  */
 
-import React, { useEffect, useRef, useState, useCallback } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Dimensions } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -25,9 +25,7 @@ import Animated, {
   withSpring,
   withSequence,
   withRepeat,
-  Easing,
   interpolate,
-  runOnJS,
   cancelAnimation,
   FadeIn,
   FadeOut,

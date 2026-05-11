@@ -105,6 +105,8 @@ export interface StreakEventDefinitions {
     questId: string;
     daysLost: number;
   };
+  'streak:recovery_plan_created': { userId?: string; planId?: string };
+  'streak:insurance_remaining': { userId?: string; insuranceId?: string; streakDays?: number; source?: string; remainingInsurance?: number };
   'streak:risk_updated': {
     userId: string;
     riskLevel: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';

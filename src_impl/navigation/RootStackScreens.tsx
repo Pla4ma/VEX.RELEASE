@@ -90,12 +90,27 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
               />
               <Stack.Screen
                 name="BattlePass"
-                getComponent={() => require('../features/battle-pass/components').BattlePassTrack}
+                component={() => (
+                  <NavigationGuard featureFlag={FEATURE_FLAGS.SEASON_PASS}>
+                    {require('../features/battle-pass/components').BattlePassTrack()}
+                  </NavigationGuard>
+                )}
               />
-              <Stack.Screen name="Shop" getComponent={() => require('../features/shop').ShopScreen} />
+              <Stack.Screen
+                name="Shop"
+                component={() => (
+                  <NavigationGuard featureFlag={FEATURE_FLAGS.MARKETPLACE}>
+                    {require('../features/shop').ShopScreen()}
+                  </NavigationGuard>
+                )}
+              />
               <Stack.Screen
                 name="Inventory"
-                getComponent={() => require('../features/inventory/components').InventoryGrid}
+                component={() => (
+                  <NavigationGuard featureFlag={FEATURE_FLAGS.MARKETPLACE}>
+                    {require('../features/inventory/components').InventoryGrid()}
+                  </NavigationGuard>
+                )}
               />
               <Stack.Screen
                 name="Analytics"

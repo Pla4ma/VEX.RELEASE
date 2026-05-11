@@ -54,7 +54,10 @@ function MonthlyReportSkeleton(): JSX.Element {
 
 export function MonthlyFocusReport({ userId, onClose, visible }: MonthlyFocusReportProps) {
   const { theme } = useTheme();
-  const { report, loadingState, error, refresh } = useMonthlyReport(userId);
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const { data: report, status: loadingState, error, refetch: refresh } = useMonthlyReport(userId, year, month);
   const [hasPublishedView, setHasPublishedView] = React.useState(false);
 
   // Publish view event once when report loads

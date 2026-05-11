@@ -131,17 +131,12 @@ export async function orchestrateSessionCompletion(
   debug.info('Session completion orchestrated for %s', parsed.sessionId);
 
   // Invalidate relevant queries to update UI
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.session.active() });
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.session.history() });
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.focusScore.current(parsed.userId) });
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.focusScore.history(parsed.userId) });
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.streak(parsed.userId) });
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.progression.xp(parsed.userId) });
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.progression.level(parsed.userId) });
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.rewards.all(parsed.userId) });
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.rewards.pending(parsed.userId) });
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.companion.state(parsed.userId) });
-  void queryClient.invalidateQueries({ queryKey: QueryKeys.dailyMission.current(parsed.userId) });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.session });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.streak });
+  void queryClient.invalidateQueries({ queryKey: QueryKeys.achievements });
+  void queryClient.invalidateQueries({ queryKey: ['wallet', parsed.userId] });
+  void queryClient.invalidateQueries({ queryKey: ['transactions', parsed.userId] });
+  void queryClient.invalidateQueries({ queryKey: ['user', parsed.userId] });
 
   return storyViewModel;
 }

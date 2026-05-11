@@ -82,13 +82,13 @@ export interface TransitionWrapperProps {
 
 type ReanimatedEasingFunction = (value: number) => number;
 
-const EASING_MAP: Record<TransitionEasing, ReanimatedEasingFunction | null> = {
+const EASING_MAP: Record<TransitionEasing, ReanimatedEasingFunction | undefined> = {
   linear: Easing.linear,
   ease: Easing.ease,
   easeIn: Easing.in(Easing.ease),
   easeOut: Easing.out(Easing.ease),
   easeInOut: Easing.inOut(Easing.ease),
-  spring: null, // Spring uses withSpring
+  spring: undefined,
   bounce: Easing.bounce,
 };
 
@@ -136,7 +136,7 @@ function useTransitionAnimation(
     } else {
       progress.value = withTiming(
         targetValue,
-        { duration, easing: easingFn },
+        { duration, easing: easingFn ?? Easing.ease },
         callback
       );
     }

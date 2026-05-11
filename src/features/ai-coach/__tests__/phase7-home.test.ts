@@ -23,7 +23,7 @@ vi.mock('../message-quality-gate', () => ({
 }));
 
 const mockedRepository = vi.mocked(repository);
-const mockedValidateMessageQuality = vi.mocked(validateMessageQuality);
+const mockedValidateMessageQuality = vi.mocked(validateMessageQuality, true);
 
 function mockPassingQualityGate(): void {
   mockedValidateMessageQuality.mockReturnValue({

@@ -6,22 +6,26 @@
 import { useEffect } from 'react';
 import * as Sentry from '@sentry/react-native';
 import { eventBus } from '../../events';
+import { useAuthStore } from '../../store';
 import {
   useBasicSoloBossEncounter,
   useApplyBasicSoloBossDamage,
 } from './hooks/basic-solo-boss-hooks';
 import { calculateBasicSoloBossDamage } from './basic-solo-boss-calculator';
-import { useStreakData } from '../streaks/hooks';
+import { useStreak } from '../streaks/hooks';
 import { trackBossError } from './analytics';
 
 export function useSessionBossIntegration() {
+  const userId = useAuthStore((state) => state.user?.id ?? null);
   const encounterQuery = useBasicSoloBossEncounter();
   const damageMutation = useApplyBasicSoloBossDamage();
-  const { data: streakData } = useStreakData();
+  const { data: streakState } = useStreak(userId);
 
   useEffect(() => {
     const unsubscribe = eventBus.subscribe('session:completed', async (event) => {
-      const { sessionId, duration, quality, userId } = event;
+      const { sessionId, duration, quality, userId: eventUserId } = event;
+
+      void eventUserId;
 
       if (!encounterQuery.data || encounterQuery.data.status !== 'ACTIVE') {
         return;
@@ -30,14 +34,14 @@ export function useSessionBossIntegration() {
       try {
         const damage = calculateBasicSoloBossDamage({
           sessionDurationMinutes: Math.floor(duration / 60),
-          sessionQuality: quality,
-          streakDays: streakData?.currentStreak ?? 0,
+          sessionQuality: quality ?? 0,
+          streakDays: streakState?.currentDays ?? 0,
         });
 
         Sentry.addBreadcrumb({
           category: 'boss',
           message: 'Applying damage from session completion',
-          data: { sessionId, damage, userId },
+          data: { sessionId, damage, userId: userId ?? '' },
           level: 'info',
         });
 
@@ -47,12 +51,12 @@ export function useSessionBossIntegration() {
           damage,
         });
       } catch (error) {
-        trackBossError('sessionBossIntegration', error, userId);
+        trackBossError('sessionBossIntegration', error, userId ?? '');
       }
     });
 
     return unsubscribe;
-  }, [encounterQuery.data, damageMutation, streakData]);
+  }, [encounterQuery.data, damageMutation, streakState, userId]);
 }
 
 export function calculateBossDamageFromSession(sessionData: {

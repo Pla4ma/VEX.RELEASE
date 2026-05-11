@@ -18,9 +18,9 @@ interface SessionPresetsProps {
 }
 
 export const SessionPresets: React.FC<SessionPresetsProps> = ({
-  userId,
+  userId: _userId,
   onSelectPreset,
-  onCreateCustom,
+  onCreateCustom: _onCreateCustom,
 }) => {
   const { presets, createPreset, deletePreset } = useSessionPresets();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);

@@ -137,9 +137,9 @@ export const ProfileScreen: React.FC<Props> = ({ navigation }) => {
             </Box>
           </Box>
           <Box alignItems="center">
-            <Avatar name={user?.firstName ? `${user.firstName} ${user.lastName ?? ''}`.trim() : 'User'} size="xl" status="online" />
-            <Text variant="h2" style={{ color: '#FFF', fontWeight: '800', marginTop: theme.spacing[4] }}>{user?.firstName || 'User'} {user?.lastName || ''}</Text>
-            <Text variant="body" style={{ color: 'rgba(255,255,255,0.78)', marginTop: 4 }}>{user?.email || 'No email available'}</Text>
+            <Avatar name={user?.displayName || 'User'} size="xl" status="online" />
+            <Text variant="h2" style={{ color: '#FFF', fontWeight: '800', marginTop: theme.spacing[4] }}>{user?.displayName || 'User'}</Text>
+            <Text variant="body" style={{ color: 'rgba(255,255,255,0.78)', marginTop: 4 }}>{user?.id || 'No email available'}</Text>
             <Box flexDirection="row" mt={theme.spacing[3]}>
               <Badge variant="primary" size="sm" leftIcon="star">{`Level ${progressionQuery.data?.level ?? 1}`}</Badge>
               <Badge variant="success" size="sm" leftIcon="fire" style={{ marginLeft: 8 }}>{`${streakQuery.data?.currentDays ?? 0} Day Streak`}</Badge>

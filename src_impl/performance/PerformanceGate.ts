@@ -10,8 +10,9 @@
  */
 
 import { createDebugger } from '../utils/debug';
-import { Performance, measureExecutionTime, measureAsyncExecutionTime } from '../utils/performance-monitor';
+import { PerformanceMonitor, measureExecutionTime, measureAsyncExecutionTime } from '../utils/performance-monitor';
 import { eventBus } from '../events';
+import type { EventChannels } from '../events/types';
 
 const debug = createDebugger('performance-gate');
 
@@ -112,14 +113,14 @@ export const DEVELOPMENT_TARGETS: PerformanceTargets = {
 export class PerformanceGate {
   private static instance: PerformanceGate;
   private targets: PerformanceTargets;
-  private performanceMonitor: Performance;
+  private performanceMonitor: PerformanceMonitor;
   private networkMetrics: Array<{ duration: number; timestamp: number }> = [];
   private animationMetrics: Array<{ duration: number; timestamp: number }> = [];
   private bundleSize: number = 0;
 
   private constructor() {
     this.targets = __DEV__ ? DEVELOPMENT_TARGETS : PRODUCTION_TARGETS;
-    this.performanceMonitor = new Performance();
+    this.performanceMonitor = new PerformanceMonitor();
     this.initializeMetricsCollection();
   }
 

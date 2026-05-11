@@ -68,7 +68,7 @@ export function initializeFocusIdentityIntegrations(): () => void {
       currentScore: newScore,
       reason: 'session_completed',
     });
-    eventBus.publish('focus-identity:score_updated', { userId, previousScore, newScore });
+    eventBus.publish('focus-identity:score_updated', { userId, previousScore, newScore, delta: newScore - previousScore, band: newScore >= 580 ? 'Strong' : 'Good', timestamp: Date.now() });
     queryClient.invalidateQueries({ queryKey: ['focus-score', userId, 'current'] });
     queryClient.invalidateQueries({ queryKey: ['focus-score', userId, 'history'] });
   });

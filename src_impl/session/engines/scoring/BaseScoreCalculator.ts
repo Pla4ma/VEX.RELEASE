@@ -37,7 +37,7 @@ export interface BaseScoreResult {
 }
 
 export function calculateBaseScore(input: BaseScoreInput): BaseScoreResult {
-  const { durationSeconds, completionPercentage, effectiveTimeSeconds } = input;
+  const { completionPercentage, effectiveTimeSeconds } = input;
 
   // Check minimum completion threshold
   const meetsMinimumCompletion = completionPercentage >= SCORING_CONSTANTS.MIN_COMPLETION_PERCENTAGE;

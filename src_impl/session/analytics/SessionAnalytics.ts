@@ -7,11 +7,9 @@
 
 import { eventBus } from '../../events';
 import { capture } from '../../shared/analytics/analytics-service';
-import { SessionEvents, ProgressionEvents } from '../../shared/analytics/analytics-events';
+import { SessionEvents } from '../../shared/analytics/analytics-events';
 import type {
-  SessionSummary,
   SessionHistoryEntry,
-  SessionConfig,
   InterruptionRecord,
   AntiCheatFlag,
   RecoveryRecord,

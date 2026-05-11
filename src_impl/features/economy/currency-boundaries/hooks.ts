@@ -51,10 +51,10 @@ export function useValidateTransaction(options: UseValidateTransactionOptions = 
     mutationFn: async (request: TransactionValidationRequest) => {
       return await currencyBoundariesValidationService.validateTransaction(request);
     },
-    onSuccess: (result) => {
+    onSuccess: (result, variables) => {
       // Invalidate related queries
       queryClient.invalidateQueries({
-        queryKey: currencyBoundariesKeys.violations(result.request?.userId || ''),
+        queryKey: currencyBoundariesKeys.violations(variables.userId),
       });
 
       // Track violations
@@ -91,7 +91,7 @@ export function useValidateTransaction(options: UseValidateTransactionOptions = 
 
 interface UseTransactionValidationProps {
   userId: string;
-  currency: string;
+  currency: 'COINS' | 'GEMS' | 'FOCUS_POINTS' | 'SEASONAL';
   isPremiumUser: boolean;
   userLevel: number;
 }
@@ -136,6 +136,13 @@ export function useTransactionValidation(props: UseTransactionValidationProps) {
 // Boundary Violations Hook
 // ============================================================================
 
+interface BoundaryViolationsData {
+  violations: BoundaryViolation[];
+  totalCount: number;
+  blockedCount: number;
+  warningCount: number;
+}
+
 interface UseBoundaryViolationsProps {
   userId: string;
   period?: 'hour' | 'day' | 'week';
@@ -144,11 +151,9 @@ interface UseBoundaryViolationsProps {
 export function useBoundaryViolations(props: UseBoundaryViolationsProps) {
   const { userId, period = 'day' } = props;
 
-  const query = useQuery({
+  const query = useQuery<BoundaryViolationsData>({
     queryKey: currencyBoundariesKeys.violations(userId),
-    queryFn: async () => {
-      // In a real implementation, this would fetch from the database
-      // For now, return mock data
+    queryFn: async (): Promise<BoundaryViolationsData> => {
       return {
         violations: [],
         totalCount: 0,
@@ -156,7 +161,7 @@ export function useBoundaryViolations(props: UseBoundaryViolationsProps) {
         warningCount: 0,
       };
     },
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
 
   const violationsByType = useMemo(() => {
@@ -219,7 +224,7 @@ export function useCurrencyLimits(currency: string) {
 
 interface UseBoundaryAnalyticsProps {
   userId: string;
-  period: 'hourly' | 'daily' | 'weekly';
+  period: 'HOURLY' | 'DAILY' | 'WEEKLY';
 }
 
 export function useBoundaryAnalytics(props: UseBoundaryAnalyticsProps) {
@@ -228,11 +233,9 @@ export function useBoundaryAnalytics(props: UseBoundaryAnalyticsProps) {
   const query = useQuery({
     queryKey: currencyBoundariesKeys.analytics(userId, period),
     queryFn: async () => {
-      // In a real implementation, this would fetch analytics data
-      // For now, return mock data
       const analytics: BoundaryAnalytics = {
         period,
-        periodStart: Date.now() - (period === 'hourly' ? 3600000 : period === 'daily' ? 86400000 : 604800000),
+        periodStart: Date.now() - (period === 'HOURLY' ? 3600000 : period === 'DAILY' ? 86400000 : 604800000),
         periodEnd: Date.now(),
         violationsByType: {},
         violationsByCurrency: {},

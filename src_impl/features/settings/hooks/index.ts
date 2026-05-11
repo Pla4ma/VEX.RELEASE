@@ -211,7 +211,7 @@ export function useUpdateAppearanceSettings(userId: string, options?: Omit<UseMu
 }
 
 // Hook: Get privacy settings
-export function usePrivacySettings(userId: string, options?: Omit<UseQueryOptions<import('./types').PrivacySettings>, 'queryKey' | 'queryFn'>) {
+export function usePrivacySettings(userId: string, options?: Omit<UseQueryOptions<PrivacySettings>, 'queryKey' | 'queryFn'>) {
   return useQuery({
     queryKey: settingsKeys.privacy(userId),
     queryFn: () => service.getPrivacySettings(userId),
@@ -222,7 +222,7 @@ export function usePrivacySettings(userId: string, options?: Omit<UseQueryOption
 }
 
 // Hook: Update privacy settings
-export function useUpdatePrivacySettings(userId: string, options?: Omit<UseMutationOptions<import('./types').PrivacySettings, Error, Partial<import('./types').PrivacySettings>>, 'mutationFn'>) {
+export function useUpdatePrivacySettings(userId: string, options?: Omit<UseMutationOptions<PrivacySettings, Error, Partial<PrivacySettings>>, 'mutationFn'>) {
   const queryClient = useQueryClient();
 
   return useMutation({

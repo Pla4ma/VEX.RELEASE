@@ -5,7 +5,7 @@
  */
 
 import { TimerEngine } from '../TimerEngine';
-import type { TimerConfig, TimerState } from '../../types';
+import type { TimerConfig } from '../../types';
 
 describe('TimerEngine', () => {
   let engine: TimerEngine;

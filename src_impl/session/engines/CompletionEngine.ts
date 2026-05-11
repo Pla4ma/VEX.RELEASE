@@ -14,7 +14,6 @@ import type {
   ScoreCalculation,
   SessionState,
   SessionSummary,
-  SessionConfig,
   SessionStatus,
 } from '../types';
 import { resolveSessionMode } from '../modes';

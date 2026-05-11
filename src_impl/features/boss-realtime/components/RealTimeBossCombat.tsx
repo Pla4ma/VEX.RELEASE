@@ -6,17 +6,6 @@
  * boss reactions to player focus.
  */
 
-<<<<<<< HEAD
-import React, { useEffect, useRef, useState } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence, withTiming, interpolate, Easing, Extrapolate } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
-
-import { Text } from "../../../components/primitives/Text";
-import { RealTimeBossEncounter, AttackType, getAttackVisuals } from "../types";
-import { RealTimeBossService } from "../service";
-import { createSheet } from "@/shared/ui/create-sheet";
-=======
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence, withTiming, withRepeat, interpolate, Easing, runOnJS, Extrapolate } from 'react-native-reanimated';
@@ -26,7 +15,6 @@ import { Text } from '../../../components/primitives/Text';
 import { RealTimeBossEncounter, CombatEvent, BossCombatState, AttackType, getAttackVisuals } from '../types';
 import { RealTimeBossService } from '../service';
 import { createSheet } from '@/shared/ui/create-sheet';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const BOSS_SIZE = Math.min(SCREEN_WIDTH * 0.5, 200);

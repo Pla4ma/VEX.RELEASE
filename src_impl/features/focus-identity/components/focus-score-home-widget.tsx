@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native';
 import { Text } from '@components/primitives/Text'; // Use alias
 import { Skeleton } from '@components/ui/Skeleton'; // Use alias
 import { StatusBanner } from '@/shared/ui/components/StatusFeedback'; // Use alias
-import { useTheme } from '@theme'; // Use alias
+import { useTheme } from '../../../theme'; // Use alias
 import type { FocusScoreDashboardModel } from '../types'; // Import from types.ts
 
 interface FocusScoreHomeWidgetProps {

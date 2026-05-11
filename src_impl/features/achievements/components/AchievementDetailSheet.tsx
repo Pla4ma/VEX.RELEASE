@@ -6,17 +6,6 @@
  * unlock conditions, share button, and special handling for hidden achievements.
  */
 
-<<<<<<< HEAD
-import React, { useCallback, useMemo } from "react";
-import { Share } from "react-native";
-import Animated, { useAnimatedStyle, withSpring } from "react-native-reanimated";
-import { Box, Text, Button } from "@/components/primitives";
-import { useTheme } from "@/theme";
-import type { Achievement } from "../types";
-import { getAchievementDisplayInfo, getRarityColor } from "../definitions";
-import { triggerHaptic } from "@/utils/haptics";
-import { createDebugger } from "@/utils/debug";
-=======
 import React, { useCallback, useMemo } from 'react';
 import { View, Pressable, Share } from 'react-native';
 import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
@@ -26,7 +15,6 @@ import type { Achievement } from '../types';
 import { getAchievementDisplayInfo, getRarityColor } from '../definitions';
 import { triggerHaptic, type HapticFeedbackKind } from '@/utils/haptics';
 import { createDebugger } from '@/utils/debug';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 const debug = createDebugger('achievements:detail-sheet');
 

@@ -171,6 +171,7 @@ export interface EventChannels
     changes: unknown;
     timestamp: number;
   };
+  [key: string]: unknown;
 }
 
 /**

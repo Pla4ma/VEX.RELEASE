@@ -1,12 +1,12 @@
-import { captureSilentFailure } from '../../utils/silent-failure';
+import { captureSilentFailure } from '../../../utils/silent-failure';
 /**
  * Analytics Storage Service
  * Handles file exports to Supabase Storage with chunked uploads,
  * encryption, and virus scanning hooks
  */
 
-import { getSupabaseClient, handleSupabaseError } from '../../config/supabase';
-import { withRetry, withTimeout, CircuitBreaker } from '../../shared/hardening';
+import { getSupabaseClient, handleSupabaseError } from '../../../config/supabase';
+import { withRetry, withTimeout, CircuitBreaker } from '../../../shared/hardening';
 import * as Sentry from '@sentry/react-native';
 
 const supabase = getSupabaseClient();
@@ -124,7 +124,7 @@ export async function uploadExportData(jobId: string, data: unknown, format: 'js
         maxAttempts: 3,
         baseDelayMs: 1000,
         retryableErrors: ['network_error', 'timeout', 'rate_limited'],
-        onRetry: (attempt, error) => {
+        onRetry: (attempt: number, error: Error) => {
           Sentry.addBreadcrumb({
             category: 'storage',
             message: `Retrying upload attempt ${attempt}`,

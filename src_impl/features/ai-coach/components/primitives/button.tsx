@@ -4,19 +4,11 @@
  * Premium buttons with loading, disabled, and success states
  */
 
-<<<<<<< HEAD
-import React from "react";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { Pressable, Text, ActivityIndicator, type GestureResponderEvent, type PressableProps, type ViewStyle, type TextStyle } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated";
-import { useReducedMotion } from "../../../../hooks/useReducedMotion";
-=======
 import React from 'react';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { Pressable, Text, ActivityIndicator, StyleSheet, type GestureResponderEvent, type PressableProps, type ViewStyle, type TextStyle } from 'react-native';
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, withTiming } from 'react-native-reanimated';
 import { useReducedMotion } from '../../../../hooks/useReducedMotion';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 // ============================================================================
 // Types

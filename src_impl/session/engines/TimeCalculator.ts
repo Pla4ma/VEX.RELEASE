@@ -5,7 +5,7 @@
  * No side effects, deterministic, easily testable.
  */
 
-import type { TimeCalculationResult, TimeBreakdown, TimeProgressMetrics } from '../types';
+import type { TimeBreakdown, TimeProgressMetrics } from '../types';
 
 // ============================================================================
 // Constants
@@ -203,9 +203,6 @@ export function calculateCurrentInterval(
   longBreakDuration: number,
   intervalsBeforeLongBreak: number
 ): { interval: number; phase: 'FOCUS' | 'BREAK' | 'LONG_BREAK'; timeInPhase: number } {
-  const cycleDuration = focusDuration + breakDuration;
-  const longBreakCycleDuration = (focusDuration + breakDuration) * (intervalsBeforeLongBreak - 1) + focusDuration + longBreakDuration;
-
   let timeRemaining = elapsed;
   let interval = 1;
   let phase: 'FOCUS' | 'BREAK' | 'LONG_BREAK' = 'FOCUS';

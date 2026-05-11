@@ -7,6 +7,7 @@
 
 import { eventBus } from '../../events';
 import { useBasicChallengesStatus, useUpdateBasicChallengeProgress } from '../challenges/hooks/basic-challenges-hooks';
+import type { BasicChallengeProgressResult } from '../challenges/basic-challenges-service';
 import { useEffect } from 'react';
 import { createDebugger } from '../../utils/debug';
 
@@ -26,9 +27,9 @@ export function useSessionChallengesIntegration() {
 
       try {
         // Update challenge progress based on session completion
-        const result = await progressMutation.mutateAsync({
-          sessionId,
-          sessionDuration: duration,
+        const result: BasicChallengeProgressResult = await progressMutation.mutateAsync({
+          sessionId: sessionId as string,
+          sessionDuration: duration as number,
         });
 
         debug.debug(

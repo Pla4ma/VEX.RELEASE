@@ -8,7 +8,7 @@
  * @phase 1C.6
  */
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import Animated, {
   FadeIn,
   useAnimatedStyle,
@@ -16,7 +16,6 @@ import Animated, {
   withSequence,
   withTiming,
   useSharedValue,
-  interpolateColor,
 } from 'react-native-reanimated';
 
 import { Box } from '../../components/primitives/Box';
@@ -320,7 +319,6 @@ export function QualityIndicator({
   qualityDecreased,
   isLoading = false,
 }: QualityIndicatorProps): JSX.Element {
-  const { theme } = useTheme();
   const config = gradeConfig[grade];
 
   if (isLoading) {

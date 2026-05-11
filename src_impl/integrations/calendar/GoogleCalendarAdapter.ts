@@ -39,12 +39,12 @@ export class GoogleCalendarAdapter {
   async refreshToken(): Promise<boolean> {
     try {
       const response = await getApiClient().post<{ accessToken: string; expiresIn?: number }>('/auth/google/refresh', {
-        data: { refreshToken: this.config.refreshToken },
+        refreshToken: this.config.refreshToken,
       });
 
-      if (response.data?.accessToken) {
-        this.config.accessToken = response.data.accessToken;
-        this.config.expiresAt = Date.now() + (response.data.expiresIn || 3600) * 1000;
+      if (response?.accessToken) {
+        this.config.accessToken = response.accessToken;
+        this.config.expiresAt = Date.now() + (response.expiresIn || 3600) * 1000;
         debug.info('Token refreshed successfully');
         return true;
       }
@@ -89,7 +89,7 @@ export class GoogleCalendarAdapter {
         }
       );
 
-      const events = (response.data as { items?: unknown[] })?.items || [];
+      const events = (response as { items?: unknown[] })?.items || [];
 
       return events.map((event) => this.mapGoogleEvent(event as { id?: string; summary?: string; description?: string; start?: { dateTime?: string; date?: string }; end?: { dateTime?: string; date?: string }; location?: string; colorId?: string }));
     } catch (error) {
@@ -180,7 +180,7 @@ export class GoogleCalendarAdapter {
         }
       );
 
-      return this.mapGoogleEvent(response.data as { id?: string; summary?: string; description?: string; start?: { dateTime?: string; date?: string }; end?: { dateTime?: string; date?: string }; location?: string; colorId?: string });
+      return this.mapGoogleEvent(response as { id?: string; summary?: string; description?: string; start?: { dateTime?: string; date?: string }; end?: { dateTime?: string; date?: string }; location?: string; colorId?: string });
     } catch (error) {
       debug.error('Failed to create focus event:', error);
       throw error;
@@ -232,7 +232,7 @@ export class GoogleCalendarAdapter {
         }
       );
 
-      const calendars = (response.data as { calendars?: Record<string, unknown> })?.calendars || {};
+      const calendars = (response as { calendars?: Record<string, unknown> })?.calendars || {};
       const busySlots: Array<{ start: Date; end: Date }> = [];
 
       Object.values(calendars).forEach((cal: unknown) => {

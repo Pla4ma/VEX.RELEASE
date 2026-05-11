@@ -72,12 +72,11 @@ export type {
 // Hooks
 export {
   useFocusIdentity,
-  useFocusScoreHistory,
   useMonthlyReport,
   useFocusScoreColor,
   useIdentityStatement,
 } from './hooks';
-export { useFocusScore } from './hooks-focus-score'; // Only export useFocusScore
+export { useFocusScore, useFocusScoreHistory, useFocusScoreDashboardModel } from './hooks-focus-score';
 
 // Integration
 export { initializeFocusScoreIntegration } from './integration-focus-score';

@@ -197,19 +197,7 @@ export async function fetchMonthlyFocusReportInput(userId: string, month: string
     }
 
     const monthHistory = (historyRows ?? []).map(mapHistoryRowToPoint);
-    const { data: historyRows, error: historyError } = await supabase
-      .from('focus_score_history')
-      .select('user_id, occurred_at, score, delta, reason')
-      .eq('user_id', userId)
-      .gte('occurred_at', monthStart.toISOString())
-      .lt('occurred_at', monthEnd.toISOString());
-
-    if (historyError) {
-      throw new FocusIdentityRepositoryError('fetchMonthlyFocusReportInput:history-failed', historyError);
-    }
-
-    const monthHistory = (historyRows ?? []).map(mapHistoryRowToPoint);
-    const { data, error } = await supabase
+    const { data: sessionRows, error: sessionError } = await supabase
       .from('sessions')
       .select('duration, effective_duration, quality_score, status, completed_at')
       .eq('user_id', userId)
@@ -217,11 +205,11 @@ export async function fetchMonthlyFocusReportInput(userId: string, month: string
       .gte('completed_at', monthStart.toISOString())
       .lt('completed_at', monthEnd.toISOString());
 
-    if (error) {
-      throw new FocusIdentityRepositoryError('fetchMonthlyFocusReportInput:sessions-failed', error);
+    if (sessionError) {
+      throw new FocusIdentityRepositoryError('fetchMonthlyFocusReportInput:sessions-failed', sessionError);
     }
 
-    const rows = data ?? [];
+    const rows = sessionRows ?? [];
     const totalFocusedMinutes = Math.floor(
       rows.reduce((sum, row) => sum + (typeof row.effective_duration === 'number' ? row.effective_duration : row.duration), 0) / 60,
     );

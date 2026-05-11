@@ -34,10 +34,8 @@ export {
 export {
   checkComebackEligibility,
   createComebackQuest,
-  getActiveComebackQuest,
   updateQuestProgress,
   calculateQuestProgress,
-  useComebackQuest,
   COMEBACK_QUEST_CONFIG,
   type ComebackQuest,
   type ComebackQuestProgress,

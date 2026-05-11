@@ -1,5 +1,8 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
 
 import { Banner } from '../../../components/Banner';
 import { PremiumSurface, SectionHeader } from '../../../components/premium';
@@ -72,6 +75,8 @@ export function HomeSecondaryRail({
     return null;
   }
 
+  const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
+
   return (
     <View style={{ gap: 16 }}>
       <SectionHeader
@@ -81,12 +86,18 @@ export function HomeSecondaryRail({
       />
       {!hasActiveRecommendation ? <GoalCard stage={stage} /> : null}
       {canShowSecondarySystems && features.economy_basic.isUnlocked ? (
-        <PremiumSurface
-          body="Session rewards land here first, then expand into protection, unlocks, and premium depth."
-          eyebrow="Rewards"
-          title={`${wallet?.coins ?? 0} coins${features.economy_advanced.isUnlocked ? ` • ${wallet?.gems ?? 0} gems` : ''}`}
-          tone="info"
-        />
+        <Pressable
+          onPress={() => navigation.navigate('Vault')}
+          accessibilityLabel="Open reward vault"
+          accessibilityRole="button"
+        >
+          <PremiumSurface
+            body="Session rewards land here first, then expand into protection, unlocks, and premium depth."
+            eyebrow="Rewards"
+            title={`${wallet?.coins ?? 0} coins${features.economy_advanced.isUnlocked ? ` • ${wallet?.gems ?? 0} gems` : ''}`}
+            tone="info"
+          />
+        </Pressable>
       ) : null}
       {canShowExpansionSystems && features.content_study.isVisible ? (
         <ContentStudyHeroCard

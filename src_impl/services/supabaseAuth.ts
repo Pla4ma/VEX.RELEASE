@@ -5,7 +5,7 @@
  */
 
 import { getSupabaseClient, handleSupabaseError } from '../config/supabase';
-import type { User as SupabaseUser, AuthError } from '@supabase/supabase-js';
+import type { User as SupabaseUser } from '@supabase/supabase-js';
 import type { User } from '../types/models';
 import { capture } from '../shared/analytics/analytics-service';
 import { AuthEvents } from '../shared/analytics/analytics-events';

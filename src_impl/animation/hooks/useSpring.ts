@@ -42,10 +42,6 @@ interface UseSpringResult {
 export function useSpring(options: UseSpringOptions = {}): UseSpringResult {
   const { initialValue = 0, ...springConfig } = options;
   const config = useMemo(
-<<<<<<< HEAD
-    () => ({ ...defaultSpring, damping: springConfig.damping, mass: springConfig.mass, overshootClamping: springConfig.overshootClamping, stiffness: springConfig.stiffness }),
-    [springConfig.damping, springConfig.mass, springConfig.overshootClamping, springConfig.stiffness],
-=======
     () => ({ ...defaultSpring, ...springConfig }),
     [
       springConfig.damping,
@@ -53,7 +49,6 @@ export function useSpring(options: UseSpringOptions = {}): UseSpringResult {
       springConfig.overshootClamping,
       springConfig.stiffness,
     ]
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   );
 
   const value = useSharedValue(initialValue);
@@ -93,10 +88,6 @@ export function useSpringStyle(
 ): UseSpringResult {
   const { initialValue = 0, ...springConfig } = options;
   const config = useMemo(
-<<<<<<< HEAD
-    () => ({ ...defaultSpring, damping: springConfig.damping, mass: springConfig.mass, overshootClamping: springConfig.overshootClamping, stiffness: springConfig.stiffness }),
-    [springConfig.damping, springConfig.mass, springConfig.overshootClamping, springConfig.stiffness],
-=======
     () => ({ ...defaultSpring, ...springConfig }),
     [
       springConfig.damping,
@@ -104,7 +95,6 @@ export function useSpringStyle(
       springConfig.overshootClamping,
       springConfig.stiffness,
     ]
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   );
 
   const value = useSharedValue(initialValue);

@@ -5,64 +5,39 @@
  * Accessible from home screen, not just push notifications
  */
 
-<<<<<<< HEAD
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import { View, Text, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
-import { FlashList, type FlashListRef, type ListRenderItem } from "@shopify/flash-list";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAnalytics } from "@/shared/analytics";
-import { CoachEvents } from "@/shared/analytics/analytics-events";
-import { createDebugger } from "@/utils/debug";
-
-const debug = createDebugger("coach:screen");
-
-import { getCoachState, getCoachHistory, askCoachQuestion, getCurrentRecommendation } from "../services/coach-screen-service";
-import type { CoachMessage, CoachState, CoachUserState } from "../types";
-import { PERSONALITY_METADATA } from "../service/personality-templates";
-import { styles } from "./CoachScreen.styles";
-=======
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, Text, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform, SafeAreaView, Image } from 'react-native';
 import { FlashList, type FlashListRef, type ListRenderItem } from '@shopify/flash-list';
 import { useAnalytics } from '@/shared/analytics';
 import { CoachEvents } from '@/shared/analytics/analytics-events';
+import { createDebugger } from '@/utils/debug';
+
+const debug = createDebugger('coach:screen');
 
 import { getCurrentRecommendation } from '../services/coach-screen-service';
-import type { CoachMessage, CoachState, CoachUserState } from '../types';
+import type { CoachState, CoachUserState } from '../types';
 import { PERSONALITY_METADATA } from '../service/personality-templates';
 import { useAskCoachQuestionMutation, useCoachScreenState } from '../hooks';
 import { styles } from './CoachScreen.styles';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
-
-// ============================================================================
-// Types
-// ============================================================================
 
 interface ChatMessage {
   id: string;
-  type: 'coach' | 'user' | 'system';
+  type: 'user' | 'coach' | 'system';
   content: string;
   timestamp: number;
   metadata?: {
-    state?: CoachUserState;
     hasAction?: boolean;
     actionLabel?: string;
     actionData?: Record<string, unknown>;
+    state?: CoachUserState;
   };
 }
 
-<<<<<<< HEAD
-// ============================================================================
-// Main Component
-// ============================================================================
-=======
 interface CoachRecommendation {
   duration: number;
   difficulty: string;
   reasoning: string;
 }
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
-
 export function CoachScreen(): JSX.Element {
   const { track } = useAnalytics();
   const flashListRef = useRef<FlashListRef<ChatMessage> | null>(null);

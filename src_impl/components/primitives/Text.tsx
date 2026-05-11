@@ -120,10 +120,7 @@ export function Text({
   ...props
 }: TextProps): JSX.Element {
   const { theme } = useTheme();
-<<<<<<< HEAD
 
-=======
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
   const variantStyles = getVariantStyles(variant, theme);
   const textStyle: TextStyle = {
     fontSize: fontSize ?? variantStyles.fontSize,

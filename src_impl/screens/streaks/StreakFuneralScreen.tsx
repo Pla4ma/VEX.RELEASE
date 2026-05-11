@@ -14,9 +14,7 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-  interpolateColor,
   withSequence,
-  withDelay,
 } from 'react-native-reanimated';
 import {
   useNavigation,

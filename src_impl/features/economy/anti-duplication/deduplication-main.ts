@@ -19,6 +19,7 @@ import type {
   DeduplicationResult,
   DeduplicationRule,
   ExploitDetection,
+  ExploitPattern,
 } from './schemas';
 
 // ============================================================================

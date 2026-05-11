@@ -5,13 +5,8 @@
  * Part of the VEX Design System.
  */
 
-<<<<<<< HEAD
-import React from "react";
-import { View, Pressable, StyleProp, ViewStyle, TextStyle } from "react-native";
-=======
 import React from 'react';
 import { View, StyleSheet, Pressable, StyleProp, ViewStyle, TextStyle } from 'react-native';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { useTheme } from '../theme';
 import { Text } from './primitives';

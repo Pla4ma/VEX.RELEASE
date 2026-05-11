@@ -4,19 +4,12 @@
  * Visual tier track showing free and premium rewards.
  */
 
-<<<<<<< HEAD
-import React from "react";
-import { View, Text, Pressable, ScrollView } from "react-native";
-import { Card, Badge, Button } from "../../../components";
-import type { BattlePassTier, UserBattlePass } from "../types";
-=======
 import React from 'react';
 import { View, Text, Pressable, ScrollView } from 'react-native';
 import { useTheme } from '@/theme';
 import { Card, Badge, Button } from '../../../components';
 import type { BattlePassTier, UserBattlePass } from '../types';
 import { createSheet } from '@/shared/ui/create-sheet';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 interface BattlePassTrackProps {
   tiers: BattlePassTier[];

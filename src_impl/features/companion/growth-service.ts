@@ -88,7 +88,8 @@ export class CompanionGrowthService {
       checkMilestones(this.state, userId, previousLevel, previousSessionCount, previousFocusMinutes, previousPerfectSessions);
     }
 
-    return { leveledUp: true, evolved, newPhase };
+    const leveledUp = this.state.level > previousLevel || evolved;
+    return { leveledUp, evolved, newPhase };
   }
 
   /**
@@ -195,6 +196,4 @@ export class CompanionGrowthService {
     };
     return thresholds[phase];
   }
-
-
 }

@@ -102,7 +102,7 @@ export {
   type UploadResult,
   type DownloadResult,
   type StorageError,
-} from './storage';
+} from './repository/storage';
 
 // Validation
 export {

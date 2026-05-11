@@ -7,18 +7,6 @@
  * @phase 6B.2
  */
 
-<<<<<<< HEAD
-import React, { useEffect, useMemo } from "react";
-import { View } from "react-native";
-import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeInDown } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
-
-import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
-import { capture } from "../../../shared/analytics";
-import { EconomyEvents } from "../../../shared/analytics/analytics-events";
-import { createSheet } from "@/shared/ui/create-sheet";
-=======
 import React, { useEffect, useMemo } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, FadeIn, FadeInDown } from 'react-native-reanimated';
@@ -30,7 +18,6 @@ import { useTheme } from '../../../theme';
 import { capture } from '../../../shared/analytics';
 import { EconomyEvents } from '../../../shared/analytics/analytics-events';
 import { createSheet } from '@/shared/ui/create-sheet';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 const URGENCY_GRADIENT = ['#EF4444', '#F97316', '#F59E0B'] as const;
 

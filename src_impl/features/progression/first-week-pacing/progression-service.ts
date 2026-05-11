@@ -4,12 +4,13 @@
  * Core logic for progressing through the first week arc.
  */
 
-import { getSupabaseClient } from '../../../../config/supabase';
-import { createDebugger } from '../../../../utils/debug';
+import { getSupabaseClient } from '../../../config/supabase';
+import { createDebugger } from '../../../utils/debug';
 import {
   FirstWeekProgressSchema,
   type FirstWeekProgress,
   type FirstWeekSession,
+  type SessionUnlock,
 } from './schemas';
 import { FIRST_WEEK_CONFIG, getNextSession, getSessionNumber } from './config';
 
@@ -139,10 +140,38 @@ function calculateLevelProgress(totalXp: number): number {
 }
 
 /**
+ * Get session unlocks for a given session
+ */
+export function getSessionUnlocks(session: FirstWeekSession): SessionUnlock[] {
+  return FIRST_WEEK_CONFIG.sessionUnlocks[session] || [];
+}
+
+/**
+ * Get XP reward for a given session
+ */
+export function getSessionXpReward(session: FirstWeekSession): number {
+  return FIRST_WEEK_CONFIG.xpRewards[session] || 0;
+}
+
+/**
+ * Get companion reaction for a given session
+ */
+export function getCompanionReaction(session: FirstWeekSession): string {
+  return FIRST_WEEK_CONFIG.companionReactions[session] || '';
+}
+
+/**
+ * Get tutorial steps for a given session
+ */
+export function getTutorialSteps(session: FirstWeekSession): string[] {
+  return FIRST_WEEK_CONFIG.tutorialSteps[session] || [];
+}
+
+/**
  * Check if user is in first week
  */
 export function isInFirstWeek(progress: FirstWeekProgress): boolean {
-  return progress.current_session !== 'COMPLETED';
+  return progress.currentSession !== 'COMPLETED';
 }
 
 /**
@@ -150,5 +179,5 @@ export function isInFirstWeek(progress: FirstWeekProgress): boolean {
  */
 export function getFirstWeekCompletion(progress: FirstWeekProgress): number {
   const totalSessions = 7;
-  return (progress.sessions_completed / totalSessions) * 100;
+  return (progress.sessionsCompleted / totalSessions) * 100;
 }

@@ -7,7 +7,6 @@
 
 import { SessionService } from '../SessionService';
 import { getSessionOrchestrator } from '../SessionOrchestrator';
-import { getSessionRepository } from '../repository/SessionRepository';
 import type { SessionConfig, SessionState } from '../types';
 
 // Mocks

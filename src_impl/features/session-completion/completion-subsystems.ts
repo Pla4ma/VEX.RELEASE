@@ -5,6 +5,7 @@ import type { SessionSummary } from '../../session/types';
 import { getStreakService } from '../../streaks/StreakService';
 import { getCompanionService } from '../companion/service';
 import { FocusIdentityService } from '../focus-identity/FocusIdentityEngine';
+import { trackSessionCompleted } from './analytics';
 import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
 
 type CompletionSubsystemInput = {
@@ -113,17 +114,39 @@ export async function applyCompletionSubsystems(
   });
 
   await runSubsystem(degradedSystems, 'analytics', async () => {
-    Sentry.addBreadcrumb({
-      category: 'session-completion',
-      data: {
-        focusScoreDelta: input.ledger.focusScoreDelta,
-        grade: input.ledger.grade,
-        sessionId: input.ledger.sessionId,
-        xpDelta: input.ledger.xpDelta,
+    const isAbandoned = input.ledger.grade === 'D';
+    const completionType = isAbandoned ? 'abandoned' : 'natural';
+    const efficiency = input.ledger.completedDurationSeconds > 0
+      ? input.ledger.effectiveFocusedSeconds / input.ledger.completedDurationSeconds
+      : 0;
+
+    trackSessionCompleted(
+      input.ledger.userId,
+      input.ledger.sessionId,
+      completionType,
+      input.ledger.completedDurationSeconds,
+      {
+        total: input.ledger.targetDurationSeconds,
+        completed: input.ledger.completedDurationSeconds,
+        failed: 0,
+        skipped: 0,
+        percentage: input.summary.completionPercentage,
       },
-      level: 'info',
-      message: 'vex_session_completed',
-    });
+      {
+        overallScore: input.ledger.gradeScore,
+        accuracy: input.ledger.qualityScore,
+        efficiency: efficiency,
+        speed: 0,
+        consistency: input.ledger.streakResult.newDays,
+      },
+      {
+        success: !isAbandoned,
+        failureReason: isAbandoned ? `Session graded ${input.ledger.grade}` : undefined,
+        completionCriteria: ['target_duration_met'],
+        metCriteria: input.ledger.completedDurationSeconds >= input.ledger.targetDurationSeconds ? ['target_duration_met'] : [],
+        missedCriteria: input.ledger.completedDurationSeconds < input.ledger.targetDurationSeconds ? ['target_duration_not_met'] : [],
+      },
+    );
   });
 
   return {

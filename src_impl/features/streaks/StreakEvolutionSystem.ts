@@ -341,9 +341,8 @@ export function awardInsurance(
 
   eventBus.publish('streak:insurance_awarded', {
     userId,
+    insuranceId: newItems[0]?.id ?? '',
     source,
-    count: toAdd,
-    totalAvailable,
   });
 
   return { success: true, userInsurance: { totalAvailable } };
@@ -384,7 +383,9 @@ export function useInsurance(userId: string, _context: string): { success: boole
 
   eventBus.publish('streak:insurance_used', {
     userId,
-    remainingInsurance: remaining,
+    insuranceId: activeItem.id,
+    streakDays: 0,
+    source: activeItem.source,
   });
 
   return { success: true, remainingInsurance: remaining };
@@ -424,8 +425,7 @@ export function createRecoveryPlan(
 
   eventBus.publish('streak:recovery_plan_created', {
     userId,
-    daysLost,
-    sessionsRequired,
+    planId: userId,
   });
 
   return plan;

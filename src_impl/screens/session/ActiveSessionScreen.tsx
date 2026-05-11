@@ -15,8 +15,8 @@ import { useActiveSessionController } from './hooks/useActiveSessionController';
 import { useStudyQuizBreak } from './hooks/useStudyQuizBreak';
 import { useCoachState } from '../../features/ai-coach/hooks';
 
-const ENABLE_SESSION_COMPANION_LAYER = false;
-const ENABLE_SESSION_COACH_BANNER = false;
+const ENABLE_SESSION_COMPANION_LAYER = true;
+const ENABLE_SESSION_COACH_BANNER = true;
 const ENABLE_SESSION_MODE_OVERLAYS = true;
 const ENABLE_SESSION_HERO = true;
 

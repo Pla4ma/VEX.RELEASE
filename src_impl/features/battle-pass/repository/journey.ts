@@ -3,8 +3,8 @@
  * Supabase integration for branching battle pass
  */
 
-import { supabase } from '../../supabase/client';
-import type { UserJourneyProgress, JourneyPath } from './journey-map';
+import { supabase } from '../../../supabase/client';
+import type { UserJourneyProgress, JourneyPath } from '../journey-map';
 
 const TABLE = 'journey_progress';
 

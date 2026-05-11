@@ -3,8 +3,8 @@
  * Supabase integration for prestige system
  */
 
-import { supabase } from '../../supabase/client';
-import type { PrestigeState } from './prestige-system';
+import { supabase } from '../../../config/supabase';
+import type { PrestigeState } from '../progression/prestige-system';
 
 const TABLE = 'prestige_states';
 

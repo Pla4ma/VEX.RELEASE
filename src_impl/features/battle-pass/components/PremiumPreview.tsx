@@ -9,17 +9,10 @@
  * Answer: YES — they can see exactly what they're not getting.
  */
 
-<<<<<<< HEAD
-import React, { useMemo } from "react";
-import { View, ScrollView } from "react-native";
-import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, interpolate, Extrapolation } from "react-native-reanimated";
-import { LinearGradient } from "expo-linear-gradient";
-=======
 import React, { useMemo } from 'react';
 import { Pressable, StyleSheet, View, ScrollView, Dimensions } from 'react-native';
 import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withRepeat, withSequence, withTiming, interpolate, Extrapolation } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
@@ -29,11 +22,7 @@ import { EconomyEvents } from '../../../shared/analytics/analytics-events';
 import { usePremiumStatus } from '../../../shared/monetization';
 import { createSheet } from '@/shared/ui/create-sheet';
 
-<<<<<<< HEAD
-=======
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 // Premium gradient
 const PREMIUM_GRADIENT = ['#A855F7', '#EC4899', '#F59E0B'] as const;
 const PREMIUM_GOLD = '#FFD700';

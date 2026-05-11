@@ -23,11 +23,13 @@ export type MonthlyFocusReportSummary = z.infer<typeof MonthlyFocusReportSummary
 export interface FocusScoreDashboardModel {
   current: FocusScoreRecord | null;
   history: FocusScoreHistoryPoint[];
-  monthlyInput: MonthlyFocusReportSummary | null; // Assuming this will be used later
+  monthlyInput: MonthlyFocusReportSummary | null;
   isOffline: boolean;
   isPending: boolean;
   isError: boolean;
   error: Error | null;
   isRefetching: boolean;
+  isOptionalDataSyncing: boolean;
+  optionalDataError: Error | null;
   refetch: () => void;
 }

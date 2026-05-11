@@ -27,7 +27,7 @@ import Animated, {
 import { useTheme } from '../../../theme';
 import { Box, Text, Card } from '../../../components/primitives';
 import { Icon } from '../../../icons';
-import { useUIStore } from '../../../store';
+import { useUIStore } from '../../../store/index';
 
 export type CosmeticType = 'avatar-frame' | 'badge' | 'background' | 'title';
 

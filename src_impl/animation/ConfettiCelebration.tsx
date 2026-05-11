@@ -228,8 +228,6 @@ export const ConfettiCelebration: React.FC<ConfettiCelebrationProps> = ({ active
 
 const particleStyle = { position: 'absolute' as const };
 
-<<<<<<< HEAD
-=======
 const shapeStyle = {
   shadowColor: '#000',
   shadowOffset: { width: 0, height: 2 },
@@ -251,5 +249,4 @@ const triangleStyle = {
   shadowRadius: 3,
 };
 
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 export default ConfettiCelebration;

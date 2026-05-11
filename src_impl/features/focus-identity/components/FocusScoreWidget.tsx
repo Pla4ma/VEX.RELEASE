@@ -8,8 +8,8 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParams } from '../../../navigation/types';
 
 const FocusScoreWidgetSkeleton = () => (
-  <Box p="m" bg="surface" borderRadius="m">
-    <Stack space="s">
+  <Box p="md" bg="surface" borderRadius="md">
+    <Stack gap="sm">
       <Skeleton width={80} height={16} />
       <Skeleton width={60} height={24} />
       <Skeleton width={100} height={14} />
@@ -48,7 +48,7 @@ export const FocusScoreWidget = () => {
 
   return (
     <TouchableOpacity onPress={handlePress}>
-        <Stack p="m" space="s">
+        <Stack padding="md" gap="sm">
             <Text>Focus Score</Text>
             <Text>{currentScore}</Text>
             <Text>{band}</Text>

@@ -24,7 +24,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme';
 import { Box, Text, Card } from '../../components/primitives';
 import { Icon } from '../../icons';
-import { useAuthStore, useUIStore } from '../../store';
+import { useAuthStore, useUIStore } from '../../store/index';
 import type { SettingsStackParams } from '../../navigation';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'AccountSettings'>;

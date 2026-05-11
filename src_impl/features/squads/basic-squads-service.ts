@@ -11,6 +11,7 @@ import {
   SquadSchema,
   SquadMemberSchema,
   SquadInviteSchema,
+  SquadWeeklyGoalSchema,
   type Squad,
   type SquadMember,
   type SquadInvite,
@@ -73,7 +74,7 @@ export async function createBasicSquad(
     bannerUrl: null,
     maxMembers: BASIC_SQUAD_CONFIG.maxMembers,
     isPublic: false, // Always private for basic squads
-    joinRequirements: 'invite_only',
+    joinRequirements: 'INVITE_ONLY',
     activeChallengeId: null,
     activeBossId: null,
     bossHealthRemaining: null,
@@ -127,13 +128,14 @@ export async function inviteToBasicSquad(
   const invite = {
     id: `invite-${Date.now()}`,
     squadId,
-    inviterId,
-    inviteeId,
+    invitedBy: inviterId,
+    invitedUserId: inviteeId,
     message: message || 'Join my accountability squad!',
-    roleOffered: 'MEMBER',
-    status: 'PENDING',
+    roleOffered: 'MEMBER' as const,
+    status: 'PENDING' as const,
     expiresAt: Date.now() + (BASIC_SQUAD_CONFIG.inviteExpiryHours * 3600000),
     createdAt: Date.now(),
+    respondedAt: null,
   } as SquadInvite;
 
   eventBus.publish('squad:invite_sent', {
@@ -158,16 +160,17 @@ export async function respondToBasicSquadInvite(
     const invite = {
       id: inviteId,
       squadId: 'squad-123',
-      inviterId: 'founder-123',
-      inviteeId: userId,
+      invitedBy: 'founder-123',
+      invitedUserId: userId,
       message: 'Join my squad!',
-      roleOffered: 'MEMBER',
-      status: 'PENDING',
+      roleOffered: 'MEMBER' as const,
+      status: 'PENDING' as const,
       expiresAt: Date.now() + (72 * 3600000),
       createdAt: Date.now(),
+      respondedAt: null,
     } as SquadInvite;
 
-    if (invite.inviteeId !== userId) {
+    if (invite.invitedUserId !== userId) {
       return { success: false, message: 'This invite is not for you' };
     }
 
@@ -200,10 +203,10 @@ export async function respondToBasicSquadInvite(
       eventBus.publish('squad:member_joined', {
         squadId: invite.squadId,
         userId,
-        inviterId: invite.inviterId,
+        role: invite.roleOffered,
       });
 
-      return { success: true, squad, message: 'Welcome to the squad!' };
+      return { success: true, squad: squad ?? undefined, message: 'Welcome to the squad!' };
     } else {
       return { success: true, message: 'Invite declined' };
     }
@@ -228,11 +231,11 @@ export async function getBasicSquadMemberContributions(
 
   return members.map(member => ({
     userId: member.userId,
-    displayName: member.displayName || 'Anonymous',
+    displayName: 'Anonymous',
     role: member.role,
-    weeklyMinutes: member.weeklyMinutes || 0,
-    weeklySessions: member.weeklySessions || 0,
-    lastActive: member.lastActive || 0,
+    weeklyMinutes: Math.round(member.totalFocusTime / 60),
+    weeklySessions: member.sessionsCompleted,
+    lastActive: member.lastActiveAt,
   })).sort((a, b) => b.weeklyMinutes - a.weeklyMinutes);
 }
 
@@ -248,7 +251,14 @@ export async function updateBasicSquadWeeklyProgress(
 }> {
   // For PHASE 8, we'll use a simplified weekly goal approach
   // The existing repository doesn't have getSquadWeeklyGoal, so we'll use a default
-  const weeklyGoal = {
+  const weeklyGoal: {
+    squadId: string;
+    targetMinutes: number;
+    currentMinutes: number;
+    weekStart: number;
+    resetDay: number;
+    completedAt: number | null;
+  } = {
     squadId,
     targetMinutes: BASIC_SQUAD_CONFIG.weeklyGoalDefaultMinutes,
     currentMinutes: 0,
@@ -275,7 +285,7 @@ export async function updateBasicSquadWeeklyProgress(
   const isCompleted = totalProgress >= weeklyGoal.targetMinutes;
 
   if (isCompleted && !weeklyGoal.completedAt) {
-    weeklyGoal.completedAt = Date.now();
+    weeklyGoal.completedAt = Date.now() as number | null;
 
     eventBus.publish('squad:weekly_goal_completed', {
       squadId,
@@ -376,7 +386,7 @@ export async function getBasicSquadStatus(userId: string): Promise<{
 
   return {
     hasSquad: true,
-    squad,
+    squad: squad ?? undefined,
     isFounder,
     isAdmin,
     memberCount: members.length,

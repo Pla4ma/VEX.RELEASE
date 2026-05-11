@@ -8,15 +8,9 @@
  * @phase 8
  */
 
-<<<<<<< HEAD
-import React, { useState } from "react";
-import { Pressable } from "react-native";
-import Animated, { FadeInUp } from "react-native-reanimated";
-=======
 import React, { useState } from 'react';
 import { Pressable } from 'react-native';
 import Animated, { FadeInUp, useAnimatedStyle, withSpring } from 'react-native-reanimated';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Text } from '../../../components/primitives';
 import { useTheme } from '../../../theme';

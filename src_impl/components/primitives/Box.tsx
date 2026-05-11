@@ -4,13 +4,8 @@
  * Primitive layout component - the building block for all layouts.
  */
 
-<<<<<<< HEAD
-import React, { type ReactNode } from "react";
-import { View, type StyleProp, type ViewProps, type ViewStyle } from "react-native";
-=======
 import React, { type ReactNode } from 'react';
 import { View, type StyleProp, type ViewProps, type ViewStyle } from 'react-native';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { useTheme } from '../../theme';
 import type { SpacingValue, ColorValue } from './types';

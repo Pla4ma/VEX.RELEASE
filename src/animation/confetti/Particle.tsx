@@ -4,19 +4,11 @@
  * Individual particle component for confetti celebration.
  */
 
-<<<<<<< HEAD
 import React, { useEffect } from 'react';
 import { View, Dimensions } from 'react-native';
 import { useSharedValue, useAnimatedStyle, withSpring, withDecay, withDelay, runOnJS } from 'react-native-reanimated';
 import { ParticleConfig } from './types';
 import { particleStyle, shapeStyle, triangleStyle, FRICTION } from './constants';
-=======
-import React, { useEffect } from "react";
-import { View, Dimensions } from "react-native";
-import { useSharedValue, useAnimatedStyle, withSpring, withDecay, withDelay, runOnJS } from "react-native-reanimated";
-import { ParticleConfig } from "./types";
-import { particleStyle, shapeStyle, triangleStyle, FRICTION } from "./constants";
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -55,10 +47,7 @@ export function Particle({ config, onComplete }: ParticleProps) {
         stiffness: 100,
         mass: 1,
         overshootClamping: true,
-<<<<<<< HEAD
         energyThreshold: 0.1,
-=======
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
       })
     );
 
@@ -92,12 +81,7 @@ export function Particle({ config, onComplete }: ParticleProps) {
     // Auto-cleanup
     const timeout = setTimeout(handleComplete, (config.delay + 3) * 1000);
     return () => clearTimeout(timeout);
-<<<<<<< HEAD
   }, [animatedOpacity, animatedRotation, animatedScale, animatedX, animatedY, config, onComplete]);
-=======
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config, onComplete]);
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [

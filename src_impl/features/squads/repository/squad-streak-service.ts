@@ -7,8 +7,8 @@
  * @phase 11.4
  */
 
-import { getSupabaseClient } from '../../config/supabase';
-import { eventBus } from '../../events';
+import { getSupabaseClient } from '../../../config/supabase';
+import { eventBus } from '../../../events';
 
 // Constants
 const QUALIFYING_SESSION_MINUTES = 15; // 15+ min session qualifies

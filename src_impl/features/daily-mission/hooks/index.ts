@@ -7,14 +7,13 @@
 import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '../../../store';
+import type { DailyMission, MissionPriorityInput } from '../schemas';
 import {
   determineMissionType,
   createDailyMission,
   updateMissionProgress,
   isMissionExpired,
   getMissionRemainingHours,
-  type DailyMission,
-  type MissionPriorityInput,
 } from '../service';
 
 /**

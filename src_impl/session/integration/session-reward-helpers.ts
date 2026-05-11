@@ -6,26 +6,7 @@ import {
   getDailyCoinMultiplier,
 } from '../../features/live-ops/daily-modifiers';
 import type { RewardCalculationResult } from './session-reward-types'; export type { RewardCalculationResult } from './session-reward-types';
-
-// Inline SessionSummary type to avoid import issues with minified types file
-interface SessionSummary {
-  sessionId: string;
-  userId: string;
-  sessionMode: string;
-  plannedDuration: number;
-  actualDuration: number;
-  effectiveDuration: number;
-  completionPercentage: number;
-  focusQuality: number;
-  focusPurityScore?: number;
-  interruptions: number;
-  pauses: number;
-  pausedTime: number;
-  streakMaintained: boolean;
-  modeBonus: number;
-  baseScore?: number;
-  createdAt: number;
-}
+import type { SessionSummary } from '../../session/types';
 
 export function calculateRewards(streakDays: number, summary: SessionSummary): RewardCalculationResult {
   const durationMinutes = Math.max(0, Math.floor(summary.effectiveDuration / 60000));

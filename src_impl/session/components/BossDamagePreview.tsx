@@ -8,7 +8,7 @@
  * @phase 1C.5
  */
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { Pressable } from 'react-native';
 import Animated, {
   FadeIn,

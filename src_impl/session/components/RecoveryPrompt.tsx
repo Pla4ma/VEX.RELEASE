@@ -31,7 +31,7 @@ interface RecoveryPromptProps {
 
 export const RecoveryPrompt: React.FC<RecoveryPromptProps> = ({
   isVisible,
-  sessionId,
+  sessionId: _sessionId,
   timeLost,
   onSelect,
   onAbandon,

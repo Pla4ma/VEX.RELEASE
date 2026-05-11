@@ -1,7 +1,6 @@
 import { SessionOrchestrator } from '../SessionOrchestrator';
-import type { SessionConfig, SessionState } from '../types';
+import type { SessionConfig } from '../types';
 const TEST_USER_ID = 'test-user-123';
-const TEST_DEVICE_ID = 'test-device-456';
 const mockConfig: SessionConfig = {
   duration: 60,
   breakDuration: 10,
@@ -225,7 +224,7 @@ describe('SessionOrchestrator', () => {
         enableAntiCheat: false,
       });
       newOrchestrator.setUserId(TEST_USER_ID);
-      const restoredSession = newOrchestrator.getSession();
+      newOrchestrator.getSession();
       newOrchestrator.destroy();
     });
   });

@@ -31,7 +31,11 @@ export function NavigationGate({
   const { theme } = useTheme();
 
   const handleGoBack = () => {
-    navigation.navigate(suggestedRoute);
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      navigation.navigate(suggestedRoute);
+    }
   };
 
   return (

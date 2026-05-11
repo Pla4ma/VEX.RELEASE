@@ -13,8 +13,9 @@ import { Button } from '../../../components/primitives/Button';
 import { ProgressBar } from '../../../components';
 import { useTheme } from '../../../theme';
 import type { DailyMission } from '../schemas';
+import { getMissionRemainingHours } from '../mission-utils';
 
-interface DailyMissionCardProps {
+export interface DailyMissionCardProps {
   mission: DailyMission;
   onPress?: () => void;
   onDismiss?: () => void;

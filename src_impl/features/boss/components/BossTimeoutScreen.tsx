@@ -7,15 +7,9 @@
  * @phase 3A.3
  */
 
-<<<<<<< HEAD
-import React from "react";
-import { ScrollView } from "react-native";
-import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withSequence, withTiming, withDelay } from "react-native-reanimated";
-=======
 import React from 'react';
 import { ScrollView } from 'react-native';
 import Animated, { FadeIn, FadeInUp, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming, withDelay } from 'react-native-reanimated';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';

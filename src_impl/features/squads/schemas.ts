@@ -216,6 +216,16 @@ export const SquadWarSchema = z
     rewardMultiplier: z.number().positive(),
   })
   .strict();
+export const SquadWeeklyGoalSchema = z
+  .object({
+    squadId: z.string().uuid(),
+    targetMinutes: z.number().int().min(0),
+    currentMinutes: z.number().int().min(0).default(0),
+    weekStart: z.number(),
+    resetDay: z.number().int().min(0).max(6),
+    completedAt: z.number().nullable(),
+  })
+  .strict();
 export const RecordSquadWarDamageInputSchema = z
   .object({
     squadId: z.string().uuid(),
@@ -358,4 +368,5 @@ export type KickMemberInput = z.infer<typeof KickMemberInputSchema>;
 export type UpdateMemberRoleInput = z.infer<typeof UpdateMemberRoleInputSchema>;
 export type StartSquadSessionInput = z.infer<typeof StartSquadSessionInputSchema>;
 export type JoinSquadSessionInput = z.infer<typeof JoinSquadSessionInputSchema>;
+export type SquadWeeklyGoal = z.infer<typeof SquadWeeklyGoalSchema>;
 export type RecordSquadWarDamageInput = z.infer<typeof RecordSquadWarDamageInputSchema>;

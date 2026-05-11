@@ -9,7 +9,6 @@
  */
 
 import React, { Component, type ReactNode, type ErrorInfo } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { ErrorBoundary, type ErrorCategory } from './ErrorBoundary';
 import { createDebugger } from '../utils/debug';
 
@@ -148,21 +147,10 @@ export class ScreenErrorBoundary extends Component<ScreenErrorBoundaryProps, Scr
 
   private handleRecovery = (): void => {
     const { config, onRecovery } = this.props;
-    const navigation = useNavigation();
 
     const target = config.recoveryTarget || 'Home';
 
     debug.info(`Navigating to recovery target: ${target}`);
-
-    // Navigate to recovery target
-    if (navigation.canGoBack()) {
-      navigation.goBack();
-    } else {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: target as any }],
-      });
-    }
 
     // Call recovery handler
     onRecovery?.(target);
@@ -176,7 +164,7 @@ export class ScreenErrorBoundary extends Component<ScreenErrorBoundaryProps, Scr
     this.setState({
       hasError: false,
       error: null,
-    } as any);
+    });
   };
 
   private getScreenErrorMessage(category: ErrorCategory): string {
@@ -209,8 +197,8 @@ export class ScreenErrorBoundary extends Component<ScreenErrorBoundaryProps, Scr
     const { error, category, retryCount, isRetrying } = this.state;
 
     // Use custom fallback if provided
-    if (fallback) {
-      return fallback;
+    if (config.fallback) {
+      return config.fallback;
     }
 
     return (

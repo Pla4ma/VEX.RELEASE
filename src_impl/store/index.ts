@@ -17,7 +17,7 @@ let integrationsInitialized = false;
 let cleanupIntegrations: (() => void) | null = null;
 
 import { getSecureStorage, SecureStorageKeys } from '../persistence/SecureStorage';
-import { signInWithEmail, signUpWithEmail, signOut, getCurrentUser, onAuthStateChange } from '../services/supabaseAuth';
+import { signInWithEmail, signUpWithEmail, signOut, getCurrentUser } from '../services/supabaseAuth';
 import { setSentryUser, clearSentryUser, captureException } from '../config/sentry';
 import { revenueCatService } from '../shared/monetization/revenuecat-service';
 import { progressionService } from '../services/progressionService';
@@ -121,8 +121,109 @@ export const useAuthStore = create<AuthState>()(
           });
         },
 
-        loginWithCredentials: async (email: string, password: string) => { return false; },
-        register: async (data) => { return false; },
+        loginWithCredentials: async (email: string, password: string) => {
+          try {
+            set((state) => {
+              state.isLoading = true;
+              state.error = null;
+            });
+
+            const { user, error } = await signInWithEmail(email, password);
+
+            if (error || !user) {
+              set((state) => {
+                state.isLoading = false;
+                state.error = error?.message ?? 'Sign in failed';
+              });
+              return false;
+            }
+
+            set((state) => {
+              state.user = user;
+              state.isAuthenticated = true;
+              state.isLoading = false;
+              state.error = null;
+            });
+
+            setSentryUser(user.id, user.email, user.username);
+
+            try {
+              revenueCatService.setUserId(user.id);
+            } catch (revenueCatError) {
+              debug.error('[AuthStore] Failed to set RevenueCat user ID:', revenueCatError);
+            }
+
+            if (!integrationsInitialized) {
+              progressionService.setUserId(user.id);
+              economyService.setUserId(user.id);
+              rewardService.setUserId(user.id);
+              streakService.setUserId(user.id);
+              integrationsInitialized = true;
+            }
+
+            return true;
+          } catch (err) {
+            set((state) => {
+              state.isLoading = false;
+              state.error = toError(err).message;
+            });
+            captureException(toError(err), { tags: { feature: 'auth-login' } });
+            return false;
+          }
+        },
+        register: async (data) => {
+          try {
+            set((state) => {
+              state.isLoading = true;
+              state.error = null;
+            });
+
+            const { user, error } = await signUpWithEmail(data.email, data.password, {
+              firstName: data.firstName,
+              lastName: data.lastName,
+            });
+
+            if (error || !user) {
+              set((state) => {
+                state.isLoading = false;
+                state.error = error?.message ?? 'Registration failed';
+              });
+              return false;
+            }
+
+            set((state) => {
+              state.user = user;
+              state.isAuthenticated = true;
+              state.isLoading = false;
+              state.error = null;
+            });
+
+            setSentryUser(user.id, user.email, user.username);
+
+            try {
+              revenueCatService.setUserId(user.id);
+            } catch (revenueCatError) {
+              debug.error('[AuthStore] Failed to set RevenueCat user ID:', revenueCatError);
+            }
+
+            if (!integrationsInitialized) {
+              progressionService.setUserId(user.id);
+              economyService.setUserId(user.id);
+              rewardService.setUserId(user.id);
+              streakService.setUserId(user.id);
+              integrationsInitialized = true;
+            }
+
+            return true;
+          } catch (err) {
+            set((state) => {
+              state.isLoading = false;
+              state.error = toError(err).message;
+            });
+            captureException(toError(err), { tags: { feature: 'auth-register' } });
+            return false;
+          }
+        },
 
         clearError: () =>
           set((state) => {

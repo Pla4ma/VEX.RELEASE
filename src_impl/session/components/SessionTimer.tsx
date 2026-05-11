@@ -24,7 +24,6 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
   totalSeconds,
   isPaused,
   size = 'lg',
-  showProgress = true,
 }) => {
   const { theme } = useTheme();
   const progress = Math.min(elapsedSeconds / totalSeconds, 1);
@@ -43,9 +42,8 @@ export const SessionTimer: React.FC<SessionTimerProps> = ({
     hero: { fontSize: 80, strokeWidth: 12, size: 280 },
   };
 
-  const s = sizeStyles[size];
+const s = sizeStyles[size];
   const radius = (s.size - s.strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
   const remainingMinutes = Math.floor(remainingSeconds / 60);
   const remainingDisplaySeconds = remainingSeconds % 60;
   const timerAccessibilityLabel = `Timer: ${remainingMinutes} minutes ${remainingDisplaySeconds} seconds remaining`;

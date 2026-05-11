@@ -4,17 +4,10 @@
  * Premium empty states with illustrations and actions
  */
 
-<<<<<<< HEAD
-import React from "react";
-import { Text, Pressable } from "react-native";
-import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
-=======
 import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 interface EmptyStateProps {
   icon: string;

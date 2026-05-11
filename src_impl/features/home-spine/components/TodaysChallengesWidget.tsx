@@ -5,7 +5,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import { ChallengesEmptyState, ChallengesErrorState, ChallengesWidgetSkeleton } from './TodaysChallengesStates';
+import { ChallengesWidgetSkeleton } from './TodaysChallengesStates';
 export interface ChallengeItem {
   id: string;
   title: string;
@@ -90,51 +90,6 @@ function ChallengeProgressRow({ challenge, onClaim }: { challenge: ChallengeItem
     </Box>
   );
 }
-/**
- * Empty state when no challenges assigned
- */
-function ChallengesEmptyState(): JSX.Element {
-
-  // Calculate time until midnight
-  const now = new Date();
-  const midnight = new Date(now);
-  midnight.setHours(24, 0, 0, 0);
-  const hoursUntilReset = Math.floor((midnight.getTime() - now.getTime()) / (1000 * 60 * 60));
-  const minutesUntilReset = Math.floor(((midnight.getTime() - now.getTime()) % (1000 * 60 * 60)) / (1000 * 60));
-
-  return (
-    <Box alignItems="center" gap="sm" py="md">
-      <Text fontSize={32}>⏳</Text>
-      <Text variant="bodySmall" color="text.secondary" textAlign="center">
-        Challenges reset at midnight
-      </Text>
-      <Text variant="caption" color="text.tertiary">
-        {hoursUntilReset}h {minutesUntilReset}m remaining
-      </Text>
-    </Box>
-  );
-}
-
-/**
- * Error state with retry
- */
-function ChallengesErrorState({ onRetry }: { onRetry?: () => void }): JSX.Element {
-
-  return (
-    <Box alignItems="center" gap="md" py="md">
-      <Text fontSize={32}>⚠️</Text>
-      <Text variant="bodySmall" color="error.DEFAULT" textAlign="center">
-        Couldn't load challenges
-      </Text>
-      {onRetry && (
-        <Button variant="outline" size="sm" onPress={onRetry} accessibilityLabel="Try Again button" accessibilityRole="button" accessibilityHint="Activates this control">
-          Try Again
-        </Button>
-      )}
-    </Box>
-  );
-}
-
 /**
  * Main challenges widget component
  */

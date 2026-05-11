@@ -4,7 +4,7 @@ import { DeepWorkVignette } from '../DeepWorkVignette';
 
 describe('DeepWorkVignette', () => {
   it('renders with pointerEvents none', () => {
-    const { getByTestId } = render(
+    render(
       <DeepWorkVignette />
     );
 

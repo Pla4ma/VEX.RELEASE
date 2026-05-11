@@ -17,7 +17,7 @@ import { Button } from '../../components';
 import { Icon } from '../../icons';
 import { FormField } from '../../shared/ui/components/FormField';
 import { useToast } from '../../shared/ui/components/Toast';
-import { useAuthStore } from '../../store';
+import { useAuthStore } from '../../store/index';
 import { registerSchema, type RegisterFormData } from '../../validation';
 import type { AuthStackParams } from '../../navigation';
 import { scheduleOnboardingNotifications } from '../../features/notifications/retention-strategy';

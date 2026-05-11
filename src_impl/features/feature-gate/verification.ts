@@ -103,12 +103,11 @@ function verifyAnalyticsBlocked(feature: FeatureKey): boolean {
 /**
  * Gets verification summary for Phase 3 exit gate
  */
-export function getPhase3VerificationSummary(): {
+export function getPhase3VerificationSummary(results: FeatureVerificationResult[]): {
   passed: boolean;
-  results: FeatureGateResult[];
+  results: FeatureVerificationResult[];
   failedFeatures: string[];
 } {
-  const results = useFeatureVisibilityGates();
   const failedFeatures = results.filter(result =>
     !result.isHidden ||
     !result.hasNoTab ||

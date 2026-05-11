@@ -137,20 +137,19 @@ export class AccessibilityEnhancer {
     enhancements?: Partial<EnhancedAccessibilityProps>
   ): C {
     type ComponentProps = React.ComponentProps<C>;
-    type ComponentRef = React.ElementRef<C>;
 
-    const EnhancedComponent = React.forwardRef<ComponentRef, ComponentProps>(
+    const EnhancedComponent = React.forwardRef<unknown, ComponentProps>(
       (props, ref) => {
         const enhancedProps = this.enhanceProps(props, enhancements);
 
         return React.createElement(Component, {
           ...(enhancedProps as ComponentProps),
-          ref,
+          ref: ref as React.Ref<C>,
         });
       }
     );
-    EnhancedComponent.displayName = `Enhanced(${Component.displayName || Component.name})`;
-    return EnhancedComponent as C;
+    EnhancedComponent.displayName = `Enhanced(${(Component as { displayName?: string; name?: string }).displayName || (Component as { name?: string }).name || 'Component'})`;
+    return EnhancedComponent as unknown as C;
   }
 
   enhanceProps<P extends object>(

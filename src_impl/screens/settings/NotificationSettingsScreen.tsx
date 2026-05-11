@@ -22,7 +22,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme';
 import { Box, Text, Card } from '../../components/primitives';
 import { Icon } from '../../icons';
-import { useUIStore } from '../../store';
+import { useUIStore } from '../../store/index';
 import type { SettingsStackParams } from '../../navigation';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'NotificationSettings'>;

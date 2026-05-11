@@ -451,7 +451,7 @@ export function recordExperimentEvent(userId: string, experimentId: string, even
       userId,
       experimentId,
       variantId: userVariant,
-      metric: event.metric,
+      eventName: event.metric,
       value: event.value,
     });
   }

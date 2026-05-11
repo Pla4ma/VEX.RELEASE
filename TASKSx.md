@@ -1,4 +1,4 @@
-# VEX 11/10 AI-IDE Implementation Plan
+﻿# VEX 11/10 AI-IDE Implementation Plan
 
 > This document is written for Windsurf or any AI IDE implementing VEX.
 > It is not a human brainstorming roadmap.
@@ -842,10 +842,10 @@ Rules:
 
 VERIFY:
 
-- [ ] First viewport shows score, mission, and start action.
-- [ ] Disabled routes are invisible.
-- [ ] Home section failure does not crash screen.
-- [ ] Home has loading, empty, error, offline, stale, and success states.
+- [x] First viewport shows score, mission, and start action.
+- [x] Disabled routes are invisible.
+- [x] Home section failure does not crash screen.
+- [x] Home has loading, empty, error, offline, stale, and success states.
 
 ### P3-02 - Daily Mission Priority Engine
 
@@ -882,11 +882,11 @@ Mission payload:
 
 VERIFY:
 
-- [ ] Exactly one primary mission appears.
-- [ ] Priority tests cover every branch.
-- [ ] Mission persistence works.
-- [ ] Completion listens to `session:completed`.
-- [ ] Mission analytics fires shown, started, completed, dismissed.
+- [x] Exactly one primary mission appears.
+- [x] Priority tests cover every branch.
+- [x] Mission persistence works.
+- [x] Completion listens to `session:completed`.
+- [x] Mission analytics fires shown, started, completed, dismissed.
 
 ### P3-03 - Recommended Session Engine
 
@@ -921,11 +921,11 @@ Rules:
 
 VERIFY:
 
-- [ ] New users get a safe starter recommendation.
-- [ ] Returning users get history-aware recommendation.
-- [ ] Streak-critical users get recovery-friendly option.
-- [ ] Session starts within 500ms median.
-- [ ] Tests cover sparse data and conflicting signals.
+- [x] New users get a safe starter recommendation.
+- [x] Returning users get history-aware recommendation.
+- [x] Streak-critical users get recovery-friendly option.
+- [x] Session starts within 500ms median.
+- [x] Tests cover sparse data and conflicting signals.
 
 ### P3-04 - Home Feature Visibility Gate
 
@@ -944,22 +944,22 @@ Create or harden feature visibility rules:
 
 VERIFY:
 
-- [ ] Social feed hidden when flag false.
-- [ ] Duels hidden when flag false.
-- [ ] Rankings hidden when flag false.
-- [ ] Squad wars hidden when flag false.
-- [ ] Trading hidden or archived.
-- [ ] Emergency gem sinks hidden or archived.
-- [ ] App works with all optional flags false.
+- [x] Social feed hidden when flag false.
+- [x] Duels hidden when flag false.
+- [x] Rankings hidden when flag false.
+- [x] Squad wars hidden when flag false.
+- [x] Trading hidden or archived.
+- [x] Emergency gem sinks hidden or archived.
+- [x] App works with all optional flags false.
 
 PHASE 3 EXIT GATE:
 
-- [ ] Home communicates one best action.
-- [ ] All disabled feature routes are unreachable.
-- [ ] Recommended session starts in one tap.
-- [ ] Home tests pass.
-- [ ] Typecheck passes.
-- [ ] Verification report updated.
+- [x] Home communicates one best action.
+- [x] All disabled feature routes are unreachable.
+- [x] Recommended session starts in one tap.
+- [x] Home tests pass.
+- [x] Typecheck passes.
+- [x] Verification report updated.
 
 ---
 
@@ -992,11 +992,11 @@ Rules:
 
 VERIFY:
 
-- [ ] New user can start first session within 90 seconds.
-- [ ] Existing onboarded user skips onboarding.
-- [ ] Onboarding state persists.
-- [ ] Accessibility labels exist for every control.
-- [ ] Tests cover completion and skip paths.
+- [x] New user can start first session within 90 seconds.
+- [x] Existing onboarded user skips onboarding.
+- [x] Onboarding state persists.
+- [x] Accessibility labels exist for every control.
+- [x] Tests cover completion and skip paths.
 
 ### P4-02 - Starter Session
 
@@ -1016,10 +1016,10 @@ Starter session:
 
 VERIFY:
 
-- [ ] Starter session begins from onboarding.
-- [ ] Completion updates Focus Score.
-- [ ] First result screen shows score movement.
-- [ ] Abandoning starter session has supportive recovery path.
+- [x] Starter session begins from onboarding.
+- [x] Completion updates Focus Score.
+- [x] First result screen shows score movement.
+- [x] Abandoning starter session has supportive recovery path.
 
 ### P4-03 - First Result Moment
 
@@ -1039,17 +1039,17 @@ First result must show:
 
 VERIFY:
 
-- [ ] First result screen renders without historical data.
-- [ ] Missing optional systems do not break first result.
-- [ ] User lands on Home with updated state.
+- [x] First result screen renders without historical data.
+- [x] Missing optional systems do not break first result.
+- [x] User lands on Home with updated state.
 
 PHASE 4 EXIT GATE:
 
-- [ ] Fresh install activation flow passes end to end.
-- [ ] Onboarding tests pass.
-- [ ] No disabled features shown in onboarding.
-- [ ] Typecheck passes.
-- [ ] Verification report updated.
+- [x] Fresh install activation flow passes end to end.
+- [x] Onboarding tests pass.
+- [x] No disabled features shown in onboarding.
+- [x] Typecheck passes.
+- [x] Verification report updated.
 
 ---
 
@@ -1082,10 +1082,10 @@ Rules:
 
 VERIFY:
 
-- [ ] Companion changes after session completion.
-- [ ] Companion has empty, loading, error, offline, and success states.
-- [ ] Tests cover growth thresholds.
-- [ ] No premium gate blocks basic growth.
+- [x] Companion changes after session completion.
+- [x] Companion has empty, loading, error, offline, and success states.
+- [x] Tests cover growth thresholds.
+- [x] No premium gate blocks basic growth.
 
 ### P5-02 - Streaks Without Shame
 
@@ -1105,10 +1105,10 @@ Rules:
 
 VERIFY:
 
-- [ ] Timezone tests cover boundary cases.
-- [ ] Active, at-risk, grace, broken, and comeback states tested.
-- [ ] Paywall contains no fear streak rescue.
-- [ ] Streak integrates with companion, Focus Score, notifications, and mission.
+- [x] Timezone tests cover boundary cases.
+- [x] Active, at-risk, grace, broken, and comeback states tested.
+- [x] Paywall contains no fear streak rescue.
+- [x] Streak integrates with companion, Focus Score, notifications, and mission.
 
 ### P5-03 - Comeback Quest
 
@@ -1134,10 +1134,10 @@ Quest:
 
 VERIFY:
 
-- [ ] Comeback outranks normal daily mission.
-- [ ] Comeback completion updates Focus Score, XP, companion, and analytics.
-- [ ] Tests cover trigger, completion, expiration, and repeat misses.
-- [ ] Copy has no shame language.
+- [x] Comeback outranks normal daily mission.
+- [x] Comeback completion updates Focus Score, XP, companion, and analytics.
+- [x] Tests cover trigger, completion, expiration, and repeat misses.
+- [x] Copy has no shame language.
 
 ### P5-04 - Monthly Focus Report
 
@@ -1171,19 +1171,19 @@ Premium users:
 
 VERIFY:
 
-- [ ] Report uses real persisted data.
-- [ ] Empty month state is handled.
-- [ ] Free preview is useful and ethical.
-- [ ] Premium gate uses monetization layer only.
-- [ ] Tests cover free, premium, empty, loading, error, and offline.
+- [x] Report uses real persisted data.
+- [x] Empty month state is handled.
+- [x] Free preview is useful and ethical.
+- [x] Premium gate uses monetization layer only.
+- [x] Tests cover free, premium, empty, loading, error, and offline.
 
 PHASE 5 EXIT GATE:
 
-- [ ] Companion, streak, comeback, and report integrate with session completion.
-- [ ] No fear monetization exists.
-- [ ] Tests pass.
-- [ ] Typecheck passes.
-- [ ] Verification report updated.
+- [x] Companion, streak, comeback, and report integrate with session completion.
+- [x] No fear monetization exists.
+- [x] Tests pass.
+- [x] Typecheck passes.
+- [x] Verification report updated.
 
 ---
 
@@ -1215,10 +1215,10 @@ Rules:
 
 VERIFY:
 
-- [ ] Duplicate event replay does not duplicate reward.
-- [ ] Failed delivery captured by Sentry.
-- [ ] Retry succeeds.
-- [ ] Tests cover success, duplicate, failure, retry, and offline.
+- [x] Duplicate event replay does not duplicate reward.
+- [x] Failed delivery captured by Sentry.
+- [x] Retry succeeds.
+- [x] Tests cover success, duplicate, failure, retry, and offline.
 
 ### P6-02 - XP And Level Pacing
 
@@ -1243,10 +1243,10 @@ Rules:
 
 VERIFY:
 
-- [ ] First 7-session progression path is tested or documented.
-- [ ] Level thresholds are deterministic.
-- [ ] Reward amounts are balanced and not excessive.
-- [ ] UI explains unlocks clearly.
+- [x] First 7-session progression path is tested or documented.
+- [x] Level thresholds are deterministic.
+- [x] Reward amounts are balanced and not excessive.
+- [x] UI explains unlocks clearly.
 
 ### P6-03 - Currency And Monetization Boundaries
 
@@ -1270,20 +1270,20 @@ Banned:
 
 VERIFY:
 
-- [ ] Trading disabled or archived.
-- [ ] Emergency gem sinks disabled or archived.
-- [ ] Purchases go through `src/shared/monetization/`.
-- [ ] Wallet transactions are ledgered.
-- [ ] Entitlement tests cover free, premium, expired, restore, and purchase failure.
+- [x] Trading disabled or archived.
+- [x] Emergency gem sinks disabled or archived.
+- [x] Purchases go through `src/shared/monetization/`.
+- [x] Wallet transactions are ledgered.
+- [x] Entitlement tests cover free, premium, expired, restore, and purchase failure.
 
 PHASE 6 EXIT GATE:
 
-- [ ] Reward ledger is idempotent.
-- [ ] Economy has no dark pattern sinks.
-- [ ] Monetization layer owns purchases.
-- [ ] Tests pass.
-- [ ] Typecheck passes.
-- [ ] Verification report updated.
+- [x] Reward ledger is idempotent.
+- [x] Economy has no dark pattern sinks.
+- [x] Monetization layer owns purchases.
+- [x] Tests pass.
+- [x] Typecheck passes.
+- [x] Verification report updated.
 
 ---
 
@@ -1467,11 +1467,11 @@ Launch disabled:
 
 VERIFY:
 
-- [ ] Flags default correctly.
-- [ ] Disabled routes hidden from navigation.
-- [ ] Disabled routes hidden from Home.
-- [ ] Disabled deep links fall back safely.
-- [ ] App works with optional flags false.
+- [x] Flags default correctly.
+- [x] Disabled routes hidden from navigation.
+- [x] Disabled routes hidden from Home.
+- [x] Disabled deep links fall back safely.
+- [x] App works with optional flags false.
 
 ### P8-02 - Basic Solo Boss
 
@@ -1491,11 +1491,11 @@ Launch scope:
 
 VERIFY:
 
-- [ ] Damage calculation tested.
-- [ ] Boss updates from `session:completed`.
-- [ ] Defeat reward ledgered.
-- [ ] Timeout has no fear monetization.
-- [ ] Boss hides if unstable.
+- [x] Damage calculation tested.
+- [x] Boss updates from `session:completed`.
+- [x] Defeat reward ledgered.
+- [x] Timeout has no fear monetization.
+- [x] Boss hides if unstable.
 
 ### P8-03 - Basic Challenges
 
@@ -1513,10 +1513,10 @@ Launch scope:
 
 VERIFY:
 
-- [ ] Challenge progress updates from sessions.
-- [ ] Completion creates ledgered reward.
-- [ ] Empty state has one CTA.
-- [ ] Tests cover expiration, completion, claim, and duplicate claim.
+- [x] Challenge progress updates from sessions.
+- [x] Completion creates ledgered reward.
+- [x] Empty state has one CTA.
+- [x] Tests cover expiration, completion, claim, and duplicate claim.
 
 ### P8-04 - Squads Accountability
 
@@ -1541,19 +1541,19 @@ Banned at launch:
 
 VERIFY:
 
-- [ ] Two-person squad works.
-- [ ] Empty state invites user to create or join.
-- [ ] Sessions contribute to weekly goal.
-- [ ] No global population required.
+- [x] Two-person squad works.
+- [x] Empty state invites user to create or join.
+- [x] Sessions contribute to weekly goal.
+- [x] No global population required.
 
 PHASE 8 EXIT GATE:
 
-- [ ] Optional systems either green or disabled.
-- [ ] No dead navigation.
-- [ ] No empty social surfaces.
-- [ ] Tests pass for enabled optional systems.
-- [ ] Typecheck passes.
-- [ ] Verification report updated.
+- [x] Optional systems either green or disabled.
+- [x] No dead navigation.
+- [x] No empty social surfaces.
+- [x] Tests pass for enabled optional systems.
+- [x] Typecheck passes.
+- [x] Verification report updated.
 
 ---
 

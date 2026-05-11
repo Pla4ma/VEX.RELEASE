@@ -3,8 +3,8 @@
  * Supabase integration for 5-track mastery system
  */
 
-import { supabase } from '../../supabase/client';
-import type { UnifiedMasteryState, MasteryTrack } from './unified-mastery';
+import { supabase } from '../../../config/supabase';
+import type { UnifiedMasteryState, MasteryTrack } from '../progression/unified-mastery';
 
 const TABLE = 'mastery_tracks';
 

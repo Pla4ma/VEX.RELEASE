@@ -190,7 +190,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
             <Text style={styles.emptySubtext}>Change the filters — or go start a new session to add to your history.</Text>
           </View>
         ) : (
-          filteredHistory.map((entry, index) => (
+          filteredHistory.map((entry, _index) => (
             <Pressable
               key={entry.sessionId}
               style={({ pressed }) => [styles.historyItem, pressed && { opacity: 0.8 }]}

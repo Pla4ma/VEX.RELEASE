@@ -45,8 +45,7 @@ export function useMonthlyReportPreview(userId: string, year: number, month: num
 }
 
 export function useCurrentMonthlyReport() {
-  const { user } = useAuth();
-  const userId = user?.id;
+  const { userId } = useAuth();
 
   const now = new Date();
   const year = now.getFullYear();
@@ -56,8 +55,7 @@ export function useCurrentMonthlyReport() {
 }
 
 export function useCurrentMonthlyReportPreview() {
-  const { user } = useAuth();
-  const userId = user?.id;
+  const { userId } = useAuth();
 
   const now = new Date();
   const year = now.getFullYear();

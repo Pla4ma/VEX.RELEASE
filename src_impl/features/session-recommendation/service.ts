@@ -13,6 +13,9 @@ import {
 } from './schemas';
 import { getPriorityRecommendation } from './recommendation-engine';
 
+// Re-export types for consumers
+export type { SessionRecommendation, SessionRecommendationInput };
+
 /**
  * Generates a session recommendation based on user input
  */

@@ -5,17 +5,10 @@ import { captureSilentFailure } from '../../../../utils/silent-failure';
  * Premium error states with recovery actions and retry logic
  */
 
-<<<<<<< HEAD
-import React, { useState } from "react";
-import { View, Text, Pressable, ActivityIndicator } from "react-native";
-import Animated, { Keyframe, FadeIn } from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
-=======
 import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import Animated, { Keyframe, FadeIn } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 // Custom shake animation keyframe
 const Shake = new Keyframe({

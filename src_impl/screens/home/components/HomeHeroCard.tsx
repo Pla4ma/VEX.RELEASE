@@ -20,7 +20,7 @@ interface HomeHeroCardProps {
 export function HomeHeroCard({ recommendation, isLoading, onPressCta, onPressSecondary, userId }: HomeHeroCardProps): JSX.Element {
   const { theme } = useTheme();
   const haptics = useHaptics();
-  const { profile, currentBand } = useFocusIdentity(userId || null);
+  const { profile, currentBand } = useFocusIdentity(userId ?? '');
   const containerStyle = {
       marginHorizontal: theme.spacing[4],
       marginTop: theme.spacing[4],

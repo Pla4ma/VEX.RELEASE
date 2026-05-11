@@ -9,7 +9,7 @@
  * @adhd-target micro-rewards keep engagement high during long sessions
  */
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -17,13 +17,8 @@ import Animated, {
   withTiming,
   withSpring,
   withSequence,
-  withDelay,
   Easing,
-  interpolate,
   runOnJS,
-  cancelAnimation,
-  FadeIn,
-  FadeOut,
 } from 'react-native-reanimated';
 import { useTheme } from '../../theme/ThemeContext';
 import { Text } from '../../components';

@@ -7,15 +7,9 @@
  * @phase 10.5
  */
 
-<<<<<<< HEAD
-import React, { useState, useCallback, useEffect } from "react";
-import { Pressable } from "react-native";
-import Animated, { useAnimatedStyle, withSpring, withSequence, withTiming } from "react-native-reanimated";
-=======
 import React, { useState, useCallback, useEffect } from 'react';
 import { Pressable } from 'react-native';
 import Animated, { useAnimatedStyle, withSpring, withSequence, withTiming, FadeIn, FadeOut } from 'react-native-reanimated';
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';

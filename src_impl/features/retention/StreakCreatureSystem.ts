@@ -345,7 +345,7 @@ export class StreakCreatureService {
     eventBus.publish('creature:adopted', {
       userId,
       creatureId: creature.id,
-      species: creature.species,
+      name: creature.name,
     });
 
     return creature;
@@ -419,10 +419,11 @@ export class StreakCreatureService {
     this.creatures.set(userId, creature);
 
     // Event publishing re-enabled with fixed channel types
-    eventBus.publish('creature:fed', {
+    eventBus.publish('creature:updated', {
       userId,
       creatureId: creature.id,
-      foodType: careAction.metadata?.foodType,
+      stage: creature.stage,
+      level: creature.level,
     });
   }
 

@@ -5,25 +5,16 @@
  */
 
 export interface AccessibilityPreferences {
-  // Screen reader
   screenReaderOptimized: boolean;
   announcementsEnabled: boolean;
-
-  // Motion
   reducedMotion: boolean;
   animationsEnabled: boolean;
-
-  // Visual
   highContrast: boolean;
   colorBlindMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia' | 'achromatopsia';
-  textScale: number; // 1.0 = default, up to 2.0
+  textScale: number;
   boldText: boolean;
-
-  // Cognitive
   simplifiedUI: boolean;
   extendedTimeouts: boolean;
-
-  // Input
   switchControl: boolean;
   voiceControl: boolean;
 }
@@ -49,7 +40,6 @@ export interface ScreenReaderAnnouncement {
   priority: 'polite' | 'assertive';
   timestamp: number;
   delay?: number;
-  timestamp: number;
 }
 
 export interface AnimationConfig {
@@ -59,11 +49,7 @@ export interface AnimationConfig {
   useNativeDriver?: boolean;
 }
 
-<<<<<<< HEAD
 export type ColorBlindType = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia' | 'achromatopsia';
-=======
-export type ColorBlindType = "none" | "protanopia" | "deuteranopia" | "tritanopia" | "achromatopsia";
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 
 export interface FocusableElement {
   id: string;
@@ -72,30 +58,22 @@ export interface FocusableElement {
   focusable: boolean;
 }
 
-export interface AccessibilityIssue {
+export type AccessibilityIssue = AccessibilityIssueBase;
+
+export interface AccessibilityIssueBase {
   id: string;
-<<<<<<< HEAD
-  type: 'focus' | 'label' | 'contrast' | 'motion' | 'screen-reader';
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  description: string;
-  element: FocusableElement;
-  suggestion: string;
-=======
   type: 'focus' | 'label' | 'contrast' | 'motion' | 'keyboard' | 'semantic' | 'touch' | 'screen-reader';
-  severity: 'critical' | 'high' | 'medium' | 'low';
+  severity: 'low' | 'medium' | 'high' | 'critical';
   description: string;
   element?: FocusableElement;
   suggestion?: string;
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
 }
 
 export interface AccessibilityAudit {
   timestamp: number;
-  issues: AccessibilityIssue[];
+  issues: AccessibilityIssueBase[];
   score: number;
 }
-<<<<<<< HEAD
-=======
 
 export interface AuditableComponentStyle {
   color?: string;
@@ -126,4 +104,41 @@ export interface AuditableComponent {
   type?: { displayName?: string } | string;
   props?: AuditableComponentProps;
 }
->>>>>>> f194c8d66eb6369eff18df0a003c89e538923452
+
+export interface AuditAccessibilityIssue {
+  id: string;
+  type: 'error' | 'warning' | 'info';
+  category: 'contrast' | 'focus' | 'keyboard' | 'screen-reader' | 'motion' | 'color' | 'semantic' | 'touch';
+  severity: 'critical' | 'major' | 'moderate' | 'minor';
+  message: string;
+  recommendation: string;
+  element?: string;
+  wcagGuideline: string;
+  automated: boolean;
+}
+
+export interface AccessibilityAuditResult {
+  score: number;
+  issues: AuditAccessibilityIssue[];
+  passedChecks: string[];
+  failedChecks: string[];
+  summary: { critical: number; major: number; moderate: number; minor: number };
+  timestamp: number;
+}
+
+export interface ComponentAccessibilityConfig {
+  componentName: string;
+  requiresTesting: boolean;
+  customRules?: AccessibilityRule[];
+  interactiveElements?: string[];
+  requiredLabels?: string[];
+}
+
+export interface AccessibilityRule {
+  id: string;
+  description: string;
+  check: (element: AuditableComponent) => AuditAccessibilityIssue | null;
+  category: AuditAccessibilityIssue['category'];
+  severity: AuditAccessibilityIssue['severity'];
+  wcagGuideline: string;
+}

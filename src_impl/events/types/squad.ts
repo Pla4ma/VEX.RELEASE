@@ -164,4 +164,22 @@ export interface SquadEventDefinitions {
     message?: string;
     data?: Record<string, unknown>;
   };
+  'squad:invite_sent': {
+    squadId: string;
+    inviterId: string;
+    inviteeId: string;
+    inviteId: string;
+  };
+  'squad:weekly_goal_completed': {
+    squadId: string;
+    totalProgress: number;
+    targetMinutes: number;
+  };
+  'squad:notification': {
+    squadId: string;
+    userId: string;
+    type: string;
+    message: string;
+    data?: Record<string, unknown>;
+  };
 }
