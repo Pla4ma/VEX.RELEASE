@@ -52,7 +52,7 @@ function navigateFromNotification(
     case 'rival_challenge':
     case 'rival_defeated':
     case 'rival_activity':
-      navigationRef.navigate('Rivals');
+      navigationRef.navigate('Main', { screen: 'Home' });
       return;
     case 'squad_war_start':
     case 'squad_war_end':

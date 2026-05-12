@@ -68,14 +68,6 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
                 options={{ animation: 'slide_from_bottom', presentation: 'fullScreenModal' }}
               />
               <Stack.Screen
-                name="Feed"
-                component={() => (
-                  <NavigationGuard featureFlag={FEATURE_FLAGS.SOCIAL_FEED}>
-                    {require('../screens/social/SocialScreen').SocialScreen()}
-                  </NavigationGuard>
-                )}
-              />
-              <Stack.Screen
                 name="Notifications"
                 getComponent={() => require('../screens/notifications/NotificationsScreen').NotificationsScreen}
               />
@@ -125,14 +117,6 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
                 component={() => (
                   <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_CHALLENGES}>
                     {require('../screens/challenges/ChallengesScreen').ChallengesScreen()}
-                  </NavigationGuard>
-                )}
-              />
-              <Stack.Screen
-                name="Rivals"
-                component={() => (
-                  <NavigationGuard featureFlag={FEATURE_FLAGS.RIVALS}>
-                    {require('../screens/RivalsScreen').RivalsScreen()}
                   </NavigationGuard>
                 )}
               />

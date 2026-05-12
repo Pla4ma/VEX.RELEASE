@@ -168,27 +168,19 @@ export interface MainTabParams {
  */
 export type MainStackRoute =
   | 'Boss'
-  | 'Duels'
-  | 'ActiveDuel'
-  | 'DuelResult'
   | 'Guild'
   | 'BattlePass'
-  | 'Crafting'
   | 'Shop'
   | 'Inventory'
-  | 'Feed'
   | 'Notifications'
   | 'Search'
   | 'Analytics'
-  | 'Rankings'
   | 'ContentStudy'
   | 'ContentReview'
   | 'StudyPlan'
   | 'ContentInput'
-  | 'Rivals'
   | 'Coach'
   | 'AICoach'
-  | 'SquadWars'
   | 'Challenges'
   | 'Mastery'
   | 'Vault'
@@ -202,27 +194,19 @@ export type MainStackRoute =
 export interface MainStackParams {
   [key: string]: object | undefined;
   Boss: undefined;
-  Duels: undefined;
-  ActiveDuel: { duelId: string };
-  DuelResult: { duelId: string; winnerId?: string; forfeitBy?: string };
   Guild: { guildId?: string } | undefined;
   BattlePass: undefined;
-  Crafting: undefined;
   Shop: undefined;
   Inventory: undefined;
-  Feed: { userId?: string };
   Notifications: undefined;
   Search: { query?: string };
   Analytics: { month?: string }; // Updated to accept month
-  Rankings: undefined;
   ContentStudy: NavigatorScreenParams<ContentStudyStackParamList> | undefined;
   ContentReview: { contentId: string };
   StudyPlan: { generationId: string; contentId: string };
   ContentInput: undefined;
-  Rivals: undefined;
   Coach: undefined;
   AICoach: undefined;
-  SquadWars: undefined;
   Challenges: undefined;
   Mastery: undefined;
   Vault: undefined;

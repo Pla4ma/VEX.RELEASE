@@ -145,7 +145,7 @@ export const SessionSetupScreen = withScreenErrorBoundary(function _SessionSetup
               if (stakeId === 'boss') {navigation.navigate('Boss');}
               if (stakeId === 'streak') {navigation.navigate('Main', { screen: 'Progress' });}
               if (stakeId === 'challenge') {navigation.navigate('Challenges');}
-              if (stakeId === 'rival') {navigation.navigate('Rivals');}
+              if (stakeId === 'rival') {navigation.navigate('Main', { screen: 'Home' });}
             }}
           />
         </Box>

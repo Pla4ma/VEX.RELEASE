@@ -64,7 +64,7 @@ describe('Notification Routing', () => {
       });
 
       expect(result.success).toBe(true);
-      expect(result.screen).toBe('SquadWars');
+      expect(result.screen).toBe('Home');
     });
 
     it('routes join_duel action', () => {
@@ -74,7 +74,7 @@ describe('Notification Routing', () => {
       });
 
       expect(result.success).toBe(true);
-      expect(result.screen).toBe('Duels');
+      expect(result.screen).toBe('Home');
     });
 
     it('routes view_streak action', () => {

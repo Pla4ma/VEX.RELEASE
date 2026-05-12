@@ -337,7 +337,7 @@ export const NotificationsScreen: React.FC = () => {
         navigation.navigate('Boss' as never);
         break;
       case 'RIVAL':
-        navigation.navigate('Rivals' as never);
+        navigation.navigate('Main', { screen: 'Home' } as never);
         break;
       case 'SQUAD':
         navigation.navigate('Guild' as never);

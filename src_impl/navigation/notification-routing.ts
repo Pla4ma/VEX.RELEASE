@@ -156,8 +156,8 @@ function navigateToSquad(
   navigation: NavigationProp<RootStackParams>,
   _payload?: Record<string, unknown>
 ): NotificationRouteResult {
-  navigateToMainStackScreen(navigation as NavigationProp<MainStackParams>, 'SquadWars');
-  return { success: true, screen: 'SquadWars' };
+  navigateToMainTab(navigation, 'Home');
+  return { success: true, screen: 'Home' };
 }
 
 /**
@@ -167,8 +167,8 @@ function navigateToDuels(
   navigation: NavigationProp<RootStackParams>,
   _payload?: Record<string, unknown>
 ): NotificationRouteResult {
-  navigateToMainStackScreen(navigation as NavigationProp<MainStackParams>, 'Duels');
-  return { success: true, screen: 'Duels' };
+  navigateToMainTab(navigation, 'Home');
+  return { success: true, screen: 'Home' };
 }
 
 /**
