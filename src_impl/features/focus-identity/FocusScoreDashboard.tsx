@@ -6,6 +6,7 @@ import { useNetInfo } from "../../network";
 import { useReducedMotion } from "../../hooks";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RootStackParams } from "../../navigation/types";
+import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
 
 const FocusScoreDashboardSkeleton = () => {
   const { isReducedMotion } = useReducedMotion();
@@ -41,7 +42,7 @@ const FocusScoreDashboardSkeleton = () => {
   );
 };
 
-export const FocusScoreDashboard = () => {
+export const FocusScoreDashboard = withScreenErrorBoundary(function _FocusScoreDashboard(): React.JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const { score, history, status, error, refetch } = useFocusScore();
   const { isOffline } = useNetInfo();
@@ -162,4 +163,4 @@ export const FocusScoreDashboard = () => {
       </Stack>
     </Box>
   );
-};
+}, 'Focus Dashboard');

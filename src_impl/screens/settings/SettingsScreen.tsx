@@ -24,6 +24,7 @@ import { Badge } from '../../components/Badge';
 import { Icon } from '../../icons';
 import { useAuthStore } from '../../store';
 import type { SettingsStackParams } from '../../navigation';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
 type Props = NativeStackScreenProps<SettingsStackParams, 'SettingsMain'>;
 
@@ -46,7 +47,7 @@ interface SettingGroup {
   items: SettingItem[];
 }
 
-export const SettingsScreen: React.FC<Props> = ({ navigation }) => {
+export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({ navigation }: Props): React.JSX.Element {
   const { theme, mode, setMode } = useTheme();
   const insets = useSafeAreaInsets();
   const { user, logout } = useAuthStore();
@@ -450,6 +451,6 @@ export const SettingsScreen: React.FC<Props> = ({ navigation }) => {
       </ScrollView>
     </Box>
   );
-};
+}, 'Settings');
 
 export default SettingsScreen;

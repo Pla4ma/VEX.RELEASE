@@ -6,7 +6,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as service from './service';
-import { useAuth } from '../../../auth/hooks';
+import { useAuth } from '../../../auth/hooks/useAuth';
 import type { FirstWeekProgress, FirstWeekSession } from './schemas';
 
 // ============================================================================
@@ -33,10 +33,10 @@ export function useFirstWeekProgress(userId: string) {
 }
 
 export function useCurrentFirstWeekProgress() {
-  const { user } = useAuth();
-  const userId = user?.id;
+  const auth = useAuth();
+  const userId = (auth.user as { id: string } | null)?.id ?? '';
 
-  return useFirstWeekProgress(userId || '');
+  return useFirstWeekProgress(userId);
 }
 
 // ============================================================================

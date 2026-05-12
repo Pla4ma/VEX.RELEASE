@@ -64,7 +64,7 @@ export async function updateRewardState(
 
   if (state === 'DELIVERED' && timestamp) {
     updateData.delivered_at = timestamp;
-  } else if ((state === 'FAILED' || state === 'PERMANENTLY_FAILED') && timestamp) {
+  } else if ((state === 'FAILED' || state === 'EXPIRED') && timestamp) {
     updateData.failed_at = timestamp;
   }
 

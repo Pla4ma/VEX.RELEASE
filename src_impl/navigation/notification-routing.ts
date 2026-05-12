@@ -270,7 +270,7 @@ export function deepLinkToNotificationAction(
     case 'boss':
       return { type: 'view_boss' };
 
-    case 'duels':
+    case 'squad':
       return {
         type: 'join_duel',
         payload: { duelId: params.duelId },

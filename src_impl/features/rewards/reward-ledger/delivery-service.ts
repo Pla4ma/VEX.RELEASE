@@ -123,7 +123,7 @@ export async function deliverReward(entryId: string): Promise<RewardDeliveryResu
       debug.info('Reward delivered successfully', { entryId, type: rewardEntry.type });
     } else {
       const shouldRetry = attemptCount < rewardEntry.maxAttempts;
-      const nextState = shouldRetry ? 'FAILED' : 'PERMANENTLY_FAILED';
+      const nextState: RewardLedgerState = shouldRetry ? 'FAILED' : 'FAILED';
       const retryAfter = shouldRetry ? now + DEFAULT_RETRY_DELAY : null;
 
       await updateRewardState(entryId, nextState, deliveryResult.errorMessage, null, retryAfter);
@@ -139,7 +139,7 @@ export async function deliverReward(entryId: string): Promise<RewardDeliveryResu
     return RewardDeliveryResultSchema.parse({
       success: deliveryResult.success,
       entryId: rewardEntry.id,
-      state: deliveryResult.success ? 'DELIVERED' : (attemptCount >= rewardEntry.maxAttempts ? 'PERMANENTLY_FAILED' : 'FAILED'),
+      state: deliveryResult.success ? 'DELIVERED' : 'FAILED',
       errorMessage: deliveryResult.errorMessage,
       retryable: attemptCount < rewardEntry.maxAttempts && !deliveryResult.success,
     });

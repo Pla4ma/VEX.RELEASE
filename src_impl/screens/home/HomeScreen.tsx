@@ -23,10 +23,11 @@ import { HomeInterventionBanner } from './components/HomeInterventionBanner';
 import { useHomeData } from './hooks/useHomeData';
 import { readSuggestedDuration, readSuggestedMode } from './utils';
 import { AppScreen } from '../../components/primitives';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-export function HomeScreen(): JSX.Element {
+export const HomeScreen = withScreenErrorBoundary(function _HomeScreen(): JSX.Element {
   const navigation = useNavigation<Nav>();
   const data = useHomeData();
   const { controller, intervention, dismissIntervention, showToast } = data;
@@ -139,6 +140,6 @@ export function HomeScreen(): JSX.Element {
       />
     </AppScreen>
   );
-}
+}, 'Home');
 
 export default HomeScreen;

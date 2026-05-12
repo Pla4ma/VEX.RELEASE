@@ -15,6 +15,7 @@ import { useTheme } from '../../../theme';
 import { useOnboardingProgressState } from '../hooks';
 import { OnboardingNavigator } from './OnboardingNavigator';
 import type { FocusGoal } from '../schemas';
+import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 
 interface OnboardingFlowProps {
   /** Navigate to active session */
@@ -165,7 +166,7 @@ function FirstResultScreen({
  * 2. Show reward screen after first session completion
  * 3. Cannot complete onboarding without first session
  */
-export function OnboardingFlow({
+export const OnboardingFlow = withScreenErrorBoundary(function _OnboardingFlow({
   onStartSession,
   onBack,
   onComplete,
@@ -215,6 +216,6 @@ export function OnboardingFlow({
       onBack={onBack}
     />
   );
-}
+}, 'Onboarding');
 
 export default OnboardingFlow;

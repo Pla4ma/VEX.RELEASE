@@ -28,6 +28,7 @@ import { SessionSetupHeader } from './components/SessionSetupHeader';
 import { useSessionSetupStakes } from './hooks/useSessionSetupStakes';
 import { StreakInsurancePrompt } from '../../features/streaks/components/StreakInsurancePrompt';
 import { useInsuranceStatus, useBalance } from '../../features/economy/hooks';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
@@ -35,7 +36,7 @@ type SessionNavigationProp = CompositeNavigationProp<
 >;
 type SessionSetupRouteProp = RouteProp<SessionStackParams, 'SessionSetup'>;
 
-export const SessionSetupScreen: React.FC = () => {
+export const SessionSetupScreen = withScreenErrorBoundary(function _SessionSetupScreen(): React.JSX.Element {
   const navigation = useNavigation<SessionNavigationProp>();
   const route = useRoute<SessionSetupRouteProp>();
   const controller = useSessionStartController({
@@ -246,6 +247,6 @@ export const SessionSetupScreen: React.FC = () => {
       />
     </Box>
   );
-};
+}, 'Session Setup');
 
 export default SessionSetupScreen;

@@ -7,7 +7,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as queries from './queries';
 import * as service from './service';
-import { useAuth } from '../../../auth/hooks';
+import { useAuth } from '../../../auth/hooks/useAuth';
 
 // ============================================================================
 // Query Keys
@@ -63,21 +63,21 @@ export function useRewardSummary(userId: string) {
 
 export function useCurrentRewardLedger() {
   const { user } = useAuth();
-  const userId = user?.id;
+  const userId = (user as { id?: string } | null)?.id;
 
   return useRewardLedger(userId || '');
 }
 
 export function useCurrentPendingRewards() {
   const { user } = useAuth();
-  const userId = user?.id;
+  const userId = (user as { id?: string } | null)?.id;
 
   return usePendingRewards(userId || '');
 }
 
 export function useCurrentRewardSummary() {
   const { user } = useAuth();
-  const userId = user?.id;
+  const userId = (user as { id?: string } | null)?.id;
 
   return useRewardSummary(userId || '');
 }

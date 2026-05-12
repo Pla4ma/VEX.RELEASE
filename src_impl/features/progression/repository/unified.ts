@@ -4,7 +4,7 @@
  */
 
 import { supabase } from '../../../config/supabase';
-import type { UnifiedMasteryState, MasteryTrack } from '../progression/unified-mastery';
+import type { UnifiedMasteryState, MasteryTrack } from '../unified-mastery';
 
 const TABLE = 'mastery_tracks';
 

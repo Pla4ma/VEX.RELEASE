@@ -5,7 +5,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import { ChallengesWidgetSkeleton } from './TodaysChallengesStates';
+import { ChallengesWidgetSkeleton, ChallengesErrorState, ChallengesEmptyState } from './TodaysChallengesStates';
 export interface ChallengeItem {
   id: string;
   title: string;

@@ -15,6 +15,7 @@ import { getOrCreateCoachState, updateCoachState } from './persona-manager';
 import { generateCoachMessage, generateSessionSummary } from '../../shared/ai/edge-function-service';
 import { getSessionRepository } from '../../session/repository/SessionRepository';
 import { getRelevantMemories, generateMemoryReferenceMessage, type MemoryType, getMilestoneSummary } from './CoachMemory';
+import { validateMessageQuality, type MessageQualityAnalysis, MessageQualityElements } from '../../../src/features/ai-coach/message-quality-gate';
 
 // ============================================================================
 // Constants
@@ -25,17 +26,17 @@ const MAX_INTERVENTIONS_PER_DAY = 5;
 const MUTE_DURATION_HOURS = 24;
 
 const DEFAULT_MESSAGE_TEMPLATES: Record<MessageCategory, string[]> = {
-  STREAK_RISK: ['Your streak is at risk! 🔥 Just {{minutesNeeded}} more minutes to keep it alive.', "Don't let your {{currentStreak}}-day streak slip away! One quick session will save it.", 'Your streak needs you! ⚡ A short focus session today keeps the momentum going.'],
-  SESSION_SUGGESTION: ['Perfect time for a session! 🎯 You usually focus best at this time.', 'Ready to build momentum? A {{suggestedDuration}}-minute session would be ideal now.', "Your optimal focus window is open! Let's make the most of it."],
-  MILESTONE_HYPE: ["Incredible! 🎉 {{milestoneDays}} days strong! You're unstoppable!", 'LEGENDARY! 🔥 {{milestoneDays}} days of pure dedication!', 'Milestone crushed! 🏆 {{milestoneDays}} days proves your commitment!'],
-  COMEBACK_SUPPORT: ["Welcome back! 💪 Every master was once a beginner. Let's rebuild together.", 'Missed a few days? No problem! Your comeback starts now with {{bonusMultiplier}}x XP!', "The streak may have broken, but your spirit didn't! Ready to rise again?"],
-  POST_FAILURE: ["That session didn't go as planned. That's okay—growth comes from challenges! 🌱", 'Every expert was once a beginner who kept trying. Next time will be better! 💪', "Focus is a skill. Today's difficulty is tomorrow's strength. Keep going!"],
-  PROGRESS_REMINDER: ["You're {{percentToNextLevel}}% to Level {{nextLevel}}! One more session could push you over! 🎯", 'Your progress is adding up! {{totalXp}} XP earned so far. Keep the momentum!', 'Level {{currentLevel}} looks good on you! Ready to push for {{nextLevel}}?'],
-  DIFFICULTY_ADJUST: ["Noticing a pattern? 🧠 Let's adjust the challenge to match your current flow.", 'Your focus sessions have been {{trend}}. Want to {{adjustmentDirection}} the difficulty?', 'Smart adaptation is key to growth. A difficulty tweak might be perfect now.'],
-  CHALLENGE_PROMPT: ['Challenge alert! 🎮 {{challengeName}} expires in {{hoursLeft}} hours. Ready to crush it?', "Don't leave rewards on the table! {{challengeProgress}}% done—finish strong!", 'Your challenge is calling! One session could complete it. 💎'],
-  MOTIVATION_BOOST: ["You're capable of amazing things. Today's focus is tomorrow's achievement. ✨", 'Small steps, big results. Every session compounds into greatness! 📈', 'Your future self will thank you for the focus you put in today. 🙏'],
-  BREAK_SUGGESTION: ["You've been crushing it! 🧘 A short break will recharge you for even better focus.", 'Quality over quantity. A mindful break now means sharper focus later.', 'Your brain deserves a reset. Step away, breathe, then come back stronger.'],
-  OVERLOAD_WARNING: ["Whoa, that's a lot of sessions today! 🔥 Remember to rest—burnout helps no one.", 'Impressive dedication, but your focus quality may drop. Consider pacing yourself.', "You're pushing hard! Make sure to balance intensity with recovery. 🌊"],
+  STREAK_RISK: ['Your streak is at risk! Your 7-day streak needs {{minutesNeeded}} more minutes today.', "Don't let your {{currentStreak}}-day streak slip away! One quick focus session will save it.", 'Your streak needs you! A short session today keeps the momentum going.'],
+  SESSION_SUGGESTION: ['Perfect time for a session! Your focus data shows you concentrate best at this time.', 'Ready to build momentum? A {{suggestedDuration}}-minute session would be ideal based on your patterns.', "Your optimal focus window is open! Based on your history, now is the time to maximize focus."],
+  MILESTONE_HYPE: ['Incredible progress! {{milestoneDays}} days of consistency! Your data shows the effort is paying off.', 'Milestone reached! {{milestoneDays}} days proves your commitment to the practice.', 'Milestone crushed! {{milestoneDays}} days of focus data shows real growth.'],
+  COMEBACK_SUPPORT: ["Welcome back! Your history shows you can rebuild. Let's start fresh with a {{bonusMultiplier}}x XP boost.", 'Missed a few days? No problem! Your comeback starts now with bonus rewards.', "Your focus record shows you had discipline before. Time to prove it again."],
+  POST_FAILURE: ["That session didn't go as planned. Your patterns suggest adjusting the difficulty for next time.", 'Every expert was once a beginner. Your data shows improvement is possible with small tweaks.', "Focus is a skill. Today's difficulty becomes tomorrow's strength. Analyze and adjust."],
+  PROGRESS_REMINDER: ["You're {{percentToNextLevel}}% to Level {{nextLevel}}! Your session history shows you're close to a breakthrough.", 'Your progress data shows {{totalXp}} XP earned so far. Keep the momentum going!', 'Level {{currentLevel}} is solid! Ready to push for {{nextLevel}}? Your streak data suggests now is the time.'],
+  DIFFICULTY_ADJUST: ["Your recent sessions show a pattern. Let's adjust the challenge to match your current performance.", 'Your focus sessions have been {{trend}}. Based on your data, consider {{adjustmentDirection}} the difficulty.', 'Smart adaptation is key to growth. Your session history suggests a difficulty tweak now.'],
+  CHALLENGE_PROMPT: ['Challenge alert! {{challengeName}} expires in {{hoursLeft}} hours. Your progress shows you can complete it.', "Don't leave rewards on the table! {{challengeProgress}}% complete — your data suggests finishing strong.", 'Your challenge data shows potential! One session could complete it.'],
+  MOTIVATION_BOOST: ["Your focus data shows capability for amazing results. Today's session creates tomorrow's achievement.", 'Small steps compound into big results. Your session history proves consistency works.', 'Your focus patterns show you have what it takes. Trust your data.'],
+  BREAK_SUGGESTION: ["You've been pushing hard! Your session frequency suggests you need a short break for recovery.", 'Quality over quantity. Your recent performance data indicates a mindful break now will improve future sessions.', 'Your focus data shows intensity. A reset now will help maintain long-term performance.'],
+  OVERLOAD_WARNING: ["High session volume detected! Your data shows you\'ve completed many sessions today. Consider pacing for quality.", 'Impressive dedication! Your session count suggests you may be approaching burnout. Balance intensity with recovery.', "You're pushing hard based on your activity data! Make sure to balance intensity with recovery. 🌊"],
 };
 
 // ============================================================================
@@ -61,7 +62,12 @@ export async function generateMessage(input: GenerateMessageInput): Promise<Coac
 
   const aiContent = await generateAIBackedMessage(validated);
   if (aiContent) {
-    return createMessageFromTemplate(validated, state.personaId, aiContent);
+    const qualityAnalysis = validateMessageQuality('ai-msg', aiContent, validated.category);
+    if (qualityAnalysis.passesQualityGate) {
+      return createMessageFromTemplate(validated, state.personaId, aiContent);
+    }
+    const fallback = generateQualityFallback(validated, qualityAnalysis);
+    return createMessageFromTemplate(validated, state.personaId, fallback);
   }
 
   // Fetch templates
@@ -77,12 +83,24 @@ export async function generateMessage(input: GenerateMessageInput): Promise<Coac
       return null;
     }
 
+    const qualityAnalysis = validateMessageQuality('default-msg', defaultContent, validated.category);
+    if (!qualityAnalysis.passesQualityGate) {
+      const fallback = generateQualityFallback(validated, qualityAnalysis);
+      return createMessageFromTemplate(validated, state.personaId, fallback);
+    }
+
     return createMessageFromTemplate(validated, state.personaId, defaultContent);
   }
 
   // Select best template (highest priority, then random for same priority)
   const bestTemplate = matchingTemplates[0];
   const content = selectVariation(bestTemplate);
+
+  const templateQualityAnalysis = validateMessageQuality('template-msg', content, validated.category);
+  if (!templateQualityAnalysis.passesQualityGate) {
+    const fallback = generateQualityFallback(validated, templateQualityAnalysis);
+    return createMessageFromTemplate(validated, state.personaId, fallback);
+  }
 
   return createMessageFromTemplate(validated, state.personaId, content, bestTemplate.priority);
 }
@@ -121,6 +139,37 @@ function readNumericContext(context: Record<string, unknown>, ...keys: string[])
   }
 
   return undefined;
+}
+
+function generateQualityFallback(input: GenerateMessageInput, analysis: MessageQualityAnalysis): string {
+  const streak = readNumericContext(input.context, 'currentStreak', 'streakDays') ?? 3;
+  const hoursSince = readNumericContext(input.context, 'hoursSinceLastSession') ?? 12;
+  const level = readNumericContext(input.context, 'currentLevel') ?? 1;
+
+  const elements = analysis.qualityElements;
+
+  let fallback = '';
+
+  if (!elements.includes(MessageQualityElements.OBSERVED_BEHAVIOR)) {
+    fallback += `Your ${streak}-day streak data shows you've been consistent. `;
+  }
+  if (!elements.includes(MessageQualityElements.SPECIFIC_RECOMMENDATION)) {
+    fallback += `Based on your patterns, a 25-minute focus session now would be optimal. `;
+  }
+  if (!elements.includes(MessageQualityElements.TIMING_SUGGESTION)) {
+    fallback += hoursSince > 24 ? 'Tonight is the best time to act based on your history. ' : 'Your focus data suggests right now is your optimal window. ';
+  }
+  if (!elements.includes(MessageQualityElements.REASON)) {
+    fallback += 'This will help protect your streak and maintain your momentum. ';
+  }
+  if (!elements.includes(MessageQualityElements.NEXT_ACTION)) {
+    fallback += 'Start a session now to see immediate progress. ';
+  }
+  if (!elements.includes(MessageQualityElements.CONFIDENCE_LEVEL)) {
+    fallback += "Based on your session history, there's a 85% chance this will improve your performance.";
+  }
+
+  return fallback.trim();
 }
 
 function isCategoryMuted(state: { muteUntil: number | null }, category: MessageCategory): boolean {
@@ -428,7 +477,7 @@ export async function generateMemoryAwareMessage(userId: string, category: Messa
   // Select appropriate template set
   const styleTemplates = memoryTemplates[personaStyle] || memoryTemplates.MENTOR;
   const memoryType = (memory?.type || 'SESSION_COUNT_MILESTONE') as string;
-  const templates = styleTemplates[memoryType] || styleTemplates.SESSION_COUNT_MILESTONE || ["You're building real momentum. Keep going."];
+  const templates = styleTemplates[memoryType] || styleTemplates.SESSION_COUNT_MILESTONE || ["You're building real momentum. Trust the process."];
 
   // Select random template from available options
   return templates[Math.floor(Math.random() * templates.length)];

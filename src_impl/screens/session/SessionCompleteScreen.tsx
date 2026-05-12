@@ -11,8 +11,9 @@ import { SessionCompleteState } from './components/SessionCompleteState';
 import { SessionSummaryUnavailable } from './components/SessionSummaryUnavailable';
 import { useAuthStore } from '../../store';
 import type { SessionCompletionNavigationParams } from '../../features/session-completion/schemas';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
-export const SessionCompleteScreen: React.FC = () => {
+export const SessionCompleteScreen = withScreenErrorBoundary(function _SessionCompleteScreen(): React.JSX.Element {
   const { navigation, parsedRoute } = useSessionCompletionRouteState();
 
   if (!parsedRoute.params) {
@@ -25,7 +26,7 @@ export const SessionCompleteScreen: React.FC = () => {
   }
 
   return <SessionCompleteResolved params={parsedRoute.params} />;
-};
+}, 'Session Complete');
 
 function SessionCompleteResolved({
   params,

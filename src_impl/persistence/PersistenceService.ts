@@ -2,7 +2,7 @@
  * Persistence Service
  *
  * Unified persistence layer for all VEX systems.
- * Provides type-safe storage with MMKV (primary) and AsyncStorage (fallback).
+ * Provides type-safe storage with MMKV.
  *
  * Features:
  * - Type-safe storage with Zod validation
@@ -22,6 +22,7 @@
 
 import { z } from 'zod';
 import * as Sentry from '@sentry/react-native';
+import type { MMKV } from 'react-native-mmkv';
 
 // ============================================================================
 // Storage Provider Interface
@@ -42,7 +43,7 @@ export interface StorageProvider {
 // ============================================================================
 
 class MMKVProvider implements StorageProvider {
-  private storage: DynamicValue; // MMKV instance
+  private storage: MMKV | null; // MMKV instance
 
   constructor() {
     // Lazy initialization - MMKV imported dynamically
@@ -65,7 +66,7 @@ class MMKVProvider implements StorageProvider {
       const storage = await this.getStorage();
       const value = storage.getString(key);
       if (!value) {return null;}
-      return (JSON.parse as any)(value) as T;
+      return JSON.parse(value) as T;
     } catch (error) {
       Sentry.captureException(error, {
         tags: { feature: 'persistence', operation: 'getItem' },
@@ -76,7 +77,7 @@ class MMKVProvider implements StorageProvider {
 
   async setItem<T>(key: string, value: T): Promise<void> {
     const storage = await this.getStorage();
-    storage.set(key, (JSON.stringify as any)(value));
+    storage.set(key, JSON.stringify(value));
   }
 
   async removeItem(key: string): Promise<void> {
@@ -107,64 +108,6 @@ class MMKVProvider implements StorageProvider {
   async clear(): Promise<void> {
     const storage = await this.getStorage();
     storage.clearAll();
-  }
-}
-
-// ============================================================================
-// AsyncStorage Provider (Fallback)
-// ============================================================================
-
-class AsyncStorageProvider implements StorageProvider {
-  private async getStorage() {
-    const AsyncStorage = await import('@react-native-async-storage/async-storage');
-    return AsyncStorage.default;
-  }
-
-  async getItem<T>(key: string): Promise<T | null> {
-    try {
-      const storage = await this.getStorage();
-      const value = await storage.getItem(key);
-      if (!value) {return null;}
-      return (JSON.parse as any)(value) as T;
-    } catch (error) {
-      Sentry.captureException(error, {
-        tags: { feature: 'persistence', operation: 'getItem' },
-      });
-      return null;
-    }
-  }
-
-  async setItem<T>(key: string, value: T): Promise<void> {
-    const storage = await this.getStorage();
-    await storage.setItem(key, (JSON.stringify as any)(value));
-  }
-
-  async removeItem(key: string): Promise<void> {
-    const storage = await this.getStorage();
-    await storage.removeItem(key);
-  }
-
-  async getAllKeys(): Promise<string[]> {
-    const storage = await this.getStorage();
-    return Array.from(await storage.getAllKeys());
-  }
-
-  async multiGet(keys: string[]): Promise<[string, unknown][]> {
-    const storage = await this.getStorage();
-    return (storage as any).multiGet(keys).then((items: DynamicValue[]) =>
-      items.map(([key, value]: [string, string]) => [key, value ? (JSON.parse as any)(value) : null])
-    );
-  }
-
-  async multiSet(items: [string, unknown][]): Promise<void> {
-    const storage = await this.getStorage();
-    const serialized = items.map(([key, value]) => [key, (JSON.stringify as any)(value)] as [string, string]);
-    await (storage as any).multiSet(serialized);
-  }
-
-  async clear(): Promise<void> {
-    const storage = await this.getStorage();
-    await storage.clear();
   }
 }
 
@@ -216,13 +159,10 @@ export interface PersistedItem<T> {
 
 class PersistenceService {
   private primary: MMKVProvider;
-  private fallback: AsyncStorageProvider;
-  private useFallback: boolean = false;
   private cache = new Map<string, unknown>();
 
   constructor() {
     this.primary = new MMKVProvider();
-    this.fallback = new AsyncStorageProvider();
   }
 
   // ============================================================================
@@ -235,7 +175,7 @@ class PersistenceService {
       return cached as T;
     }
 
-    const provider = this.useFallback ? this.fallback : this.primary;
+    const provider = this.primary;
 
     try {
       const item = await provider.getItem<PersistedItem<T>>(config.key);
@@ -285,7 +225,7 @@ class PersistenceService {
       expiresAt: config.ttl ? Date.now() + config.ttl : undefined,
     };
 
-    const provider = this.useFallback ? this.fallback : this.primary;
+    const provider = this.primary;
 
     try {
       await provider.setItem(config.key, item);
@@ -300,7 +240,7 @@ class PersistenceService {
   }
 
   async remove<T>(config: PersistenceConfig<T>): Promise<void> {
-    const provider = this.useFallback ? this.fallback : this.primary;
+    const provider = this.primary;
     await provider.removeItem(config.key);
     this.cache.delete(config.key);
   }
@@ -309,7 +249,7 @@ class PersistenceService {
   // Batch Operations
   // ============================================================================
 
-  async multiGet<T extends DynamicRecord>(
+  async multiGet<T extends Record<string, unknown>>(
     configs: { [K in keyof T]: PersistenceConfig<T[K]> }
   ): Promise<{ [K in keyof T]: T[K] | null }> {
     const keys = Object.keys(configs) as (keyof T)[];
@@ -324,7 +264,7 @@ class PersistenceService {
     return results;
   }
 
-  async multiSet<T extends DynamicRecord>(
+  async multiSet<T extends Record<string, unknown>>(
     configs: { [K in keyof T]: PersistenceConfig<T[K]> },
     data: { [K in keyof T]: T[K] }
   ): Promise<void> {
@@ -355,9 +295,9 @@ class PersistenceService {
 
   async migrate<T>(
     config: PersistenceConfig<T>,
-    migrationFn: (oldData: DynamicValue, oldVersion: number) => T
+    migrationFn: (oldData: unknown, oldVersion: number) => T
   ): Promise<void> {
-    const provider = this.useFallback ? this.fallback : this.primary;
+    const provider = this.primary;
     const item = await provider.getItem<PersistedItem<unknown>>(config.key);
 
     if (!item) {return;}
@@ -373,13 +313,13 @@ class PersistenceService {
   // ============================================================================
 
   async clear(): Promise<void> {
-    const provider = this.useFallback ? this.fallback : this.primary;
+    const provider = this.primary;
     await provider.clear();
     this.cache.clear();
   }
 
   async getStorageSize(): Promise<number> {
-    const provider = this.useFallback ? this.fallback : this.primary;
+    const provider = this.primary;
     const keys = await provider.getAllKeys();
     let size = 0;
 

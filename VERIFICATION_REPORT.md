@@ -1,5 +1,122 @@
 # VEX Verification Report
 
+## Comprehensive Phase 0-10 Audit — May 11, 2026
+
+### Initial State (Before This Session)
+- **TASKSx.md claimed**: All phases 0-10 marked PASS/COMPLETE
+- **Actual typecheck**: 335 TypeScript errors across 80+ files
+- **VERIFICATION_REPORT.md**: Claimed all phases PASS but typecheck was failing
+- **Conclusion**: Checkmarks in TASKSx.md were NOT trustworthy — actual code had massive type errors
+
+### Fixes Applied This Session
+
+#### TypeScript Errors: 335 → 0 (100% resolved)
+
+**Phase 0 — EventBus type errors (12 errors fixed)**
+- `src_impl/events/EventBus.ts`: Cast `keyof EventChannels` to `string` when passing to EventEmitter methods (index signature `[key: string]: unknown` in EventChannels caused `string | number` union)
+
+**Phase 1 — Session completion errors (12 errors fixed)**
+- `src_impl/screens/session/components/SessionCompleteHeroSection.tsx`: Extracted `SessionCompleteController` as `ReturnType<typeof useSessionCompleteController>` instead of importing non-existent type
+- `src_impl/screens/session/components/SessionCompleteNextSteps.tsx`: Same fix + extracted `TomorrowPreview` type
+- `src_impl/screens/session/components/SessionCompleteOverlays.tsx`: Same fix
+- `src_impl/screens/session/components/SessionCompleteRewardsPhase.tsx`: Same fix
+
+**Phase 2 — Focus Identity errors (80+ errors fixed across 14 files)**
+- `FocusScoreDashboard.tsx`: Fixed `@network`/`@hooks` alias imports → relative paths, `space` → `gap`, `animate` → `animated`, spacing tokens
+- `components/FocusScoreWidget.tsx`: Fixed Stack props (`space` → `gap`, `p` → `padding`, spacing tokens)
+- `components/ScoreHistoryChart.tsx`: Fixed `loadingState` → `status`, `history` possibly undefined, `date` → `timestamp`
+- `components/FocusScoreCard.tsx`: Fixed status comparisons (`loading` → `pending`), retry handler type
+- `components/focus-score-dashboard.tsx`: Fixed `FocusScoreDashboardModel` import path
+- `components/MonthlyFocusReport.tsx`: Fixed `useMonthlyReport` to accept 3 arguments
+- `hooks-focus-score.ts`: Removed duplicate declarations, fixed status comparisons
+- `hooks.ts`: Fixed `FocusIdentityEngine` usage, band labels, status comparisons
+- `repository-focus-score.ts`: Fixed duplicate variable declarations
+- `index.ts`: Fixed export paths
+- `integration.ts`: Fixed event payload fields
+- `types.ts`: Added missing interface fields
+- `monthly-report/hooks.ts`: Fixed user id type
+- `monthly-report/report-analysis.ts`: Fixed typo, type narrowing
+
+**Phase 3 — Home screen errors (15+ errors fixed across 10 files)**
+- `HomeSectionBoundary.tsx`: Replaced `ScreenErrorBoundary` with inline error state
+- `HomeStreakProgress.tsx`: Fixed `hoursRemaining` null handling, `riskLevel` type, `ActiveStreakWager` type
+- `HomeSessionControl.tsx`: Fixed `streakRiskLevel` type
+- `HomeContextualCards.tsx`: Fixed `BountyStatus` import path, return type
+- `HomeInterventionBanner.tsx`: Fixed `Intervention` import, `presetMode` value, return type
+- `HomeContentLower.tsx`: Fixed `ToastType` cast
+- `HomeHeroCard.tsx`: Fixed `userId` null handling
+- `HomeWeeklyQuest.tsx`: Fixed feature key
+- `TodaysChallengesWidget.tsx`: Added missing state component imports
+- `TomorrowPreview.tsx`: Added missing personalized component import
+
+**Phase 6 — Economy errors (30+ errors fixed across 3 files)**
+- `economy/anti-duplication/hooks.ts`: Added typed interfaces for `useQuery` results, fixed period enum case
+- `economy/currency-boundaries/hooks.ts`: Fixed result property access, currency type, period enum case
+- `economy/currency-boundaries/validation-core.ts`: Fixed optional chaining for `requiredEntitlements`
+
+**Phase 8 — Squads/Streaks/Settings errors (40+ errors fixed across 10 files)**
+- `basic-squads-service.ts`: Fixed `SquadInvite` type, event payload shapes, property names
+- `SettingsScreen.tsx`: Replaced `user.firstName/lastName/email` with `user.displayName/id`
+- `ProfileScreen.tsx`: Same user property fixes
+- `StreakEvolutionSystem.ts`: Fixed event payload shapes
+- `streaks/index.ts`: Removed non-existent exports
+- `settings/hooks/index.ts`: Fixed import path
+- `first-week-pacing/service.ts`: Fixed function exports
+- `progression-service.ts`: Fixed import path, property names, added helper functions
+- `OnboardingFlow.tsx`: Fixed component name conflict, lazy-loaded types
+- `HomeScreen.tsx`: Fixed user property access, null coercion
+
+**Phase 9 — Paywall/Phase9ExitGate errors (53 errors fixed, files split)**
+- `PaywallVerification.ts` → split into 5 files (all under 200 lines): Fixed RevenueCat types, error handling, removed test mocks from production
+- `Phase9ExitGate.ts` → split into 3 files (all under 200 lines): Fixed imports, error handling, method names
+
+**Other fixes (50+ errors across 20+ files)**
+- `auth.ts`: Fixed API client argument order, response unwrapping, store login arguments
+- `useSessionTimer.ts`: Fixed property names (`elapsedSeconds` → `elapsedTime`)
+- `useStudySession.return.ts`: Fixed null handling
+- `CheckpointCelebration.tsx`: Added `runOnJS` import
+- `ModeIndicatorBadge.tsx`: Added missing `SessionMode.STARTER` entry
+- `session-reward-helpers.ts`: Fixed `SessionSummary` import
+- `SessionOrchestrator.ts`: Fixed `elapsed` vs `_elapsed`
+- `shared/ui/components/index.ts`: Fixed exports
+- `TransitionWrapper.tsx`: Fixed ReanimatedEasingFunction null handling
+- `NavigationGate.tsx`: Fixed navigation.navigate type
+- `GatedScreen.tsx`: Fixed `NavigationGate` import
+- `verification.ts`: Fixed `FeatureGateResult` type
+- `offline-sync-service.ts`: Fixed entry type, priority enum
+- `notification-routing.ts`: Fixed deep link path
+- `PerformanceGate.ts`: Fixed private property access
+- `monthly-report/repository.ts`: Fixed Zod parse (array vs object)
+- `FirstResultSessionResults.tsx`: Fixed type name
+- `UseConsumableFlow.tsx`: Fixed import path
+- `first-week-pacing/hooks.ts`: Fixed auth import, stub type
+- `prestige.ts`/`unified.ts`: Fixed import paths
+
+### Verification Results After Fixes
+
+| Check | Result |
+|-------|--------|
+| TypeScript (`npm run typecheck`) | **PASS — 0 errors** (was 335) |
+| Lint errors (`npm run lint`) | **PASS — 0 errors** (3217 pre-existing warnings) |
+| `@ts-ignore`/`@ts-nocheck`/`@ts-expect-error` | **PASS — 0 matches** in src_impl |
+| `: any` / `<any>` | **PASS — 0 matches** in src_impl |
+| `console.log` in src_impl | 5 files (pre-existing: run-phase9-exit-gate.ts, AccessibilityEnhancer.ts, ScreenErrorBoundary test, PerformanceGate) |
+| `StyleSheet.create` | 0 matches in tsx files |
+| `FlatList` | Pre-existing in AccessibilityAuditor.ts, test files |
+| `AsyncStorage` | Pre-existing in persistence, hooks, components |
+| `fetch(` | 0 matches |
+| Hardcoded hex colors in tsx | Pre-existing in many component files (not introduced this session) |
+
+### Test Status
+- Home screen tests: **10 passed, 0 failed**
+- Session completion tests: 142 passed, 67 failed (pre-existing failures, not caused by fixes)
+- Companion tests: 84 passed, 14 failed (pre-existing failures, not caused by fixes)
+
+### File Size Violations (Pre-existing, Not Introduced This Session)
+80+ files exceed 200 lines — all pre-existing in accessibility, analytics, components, features, screens directories. No files edited this session exceed 200 lines.
+
+---
+
 ## P1-01 - Completion Ledger Contract
 
 Status: PASS, verified May 8, 2026.

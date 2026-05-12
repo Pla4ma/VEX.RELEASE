@@ -50,6 +50,33 @@ export async function upsertRewardLedger(
   });
 }
 
+export async function getRewardLedgerById(ledgerId: string): Promise<RewardLedgerRecord> {
+  const { data, error } = await supabase
+    .from('reward_ledger')
+    .select('*')
+    .eq('id', ledgerId)
+    .single();
+
+  if (error) {
+    throw new RewardLedgerRepositoryError('getById', error);
+  }
+
+  return RewardLedgerRecordSchema.parse({
+    id: data.id,
+    userId: data.user_id,
+    idempotencyKey: data.idempotency_key,
+    rewardType: data.reward_type,
+    amount: data.amount,
+    currency: data.currency,
+    status: data.status,
+    sourceEvent: data.source_event,
+    createdAt: data.created_at,
+    deliveredAt: data.delivered_at,
+    failedReason: data.failed_reason,
+    expiresAt: data.expires_at,
+  });
+}
+
 export async function updateRewardLedgerStatus(
   ledgerId: string,
   status: 'delivered' | 'failed' | 'expired',

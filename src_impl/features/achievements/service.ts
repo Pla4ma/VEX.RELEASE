@@ -317,15 +317,6 @@ export function initializeAchievementTracking(): void {
     await updateAchievementProgress(userId, 'BOSS_DEFEAT_UNIQUE', 1, { bossId });
   });
 
-  // Squad war results
-  eventBus.subscribe('squad-war:ended', async (event) => {
-    const { winner, participants } = event;
-    // Award to all participants on winning side
-    for (const userId of participants) {
-      await updateAchievementProgress(userId, 'SQUAD_WAR_WIN', 1);
-    }
-  });
-
   // Duel results
   eventBus.subscribe('duel:completed', async (event) => {
     const { winnerId, challengerId, challengedId } = event;

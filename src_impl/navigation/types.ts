@@ -193,7 +193,8 @@ export type MainStackRoute =
   | 'Mastery'
   | 'Vault'
   | 'Leaderboard'
-  | 'PostSessionStory';
+  | 'PostSessionStory'
+  | 'MonthlyFocusReport';
 
 /**
  * Main stack params for feature module screens
@@ -227,6 +228,7 @@ export interface MainStackParams {
   Vault: undefined;
   Leaderboard: { period?: 'DAILY' | 'WEEKLY' | 'MONTHLY'; scope?: 'GLOBAL' | 'FRIENDS' } | undefined;
   PostSessionStory: { sessionId: string; focusScore?: number; purityScore?: number; summary?: import('../session/types').SessionSummary };
+  MonthlyFocusReport: { month?: number; year?: number } | undefined;
 }
 
 /**

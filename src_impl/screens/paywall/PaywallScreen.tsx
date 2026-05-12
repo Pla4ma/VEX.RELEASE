@@ -25,6 +25,7 @@ import {
   type PaywallPlanSelection,
 } from './paywall-copy';
 import { paywallStyles as styles } from './paywall-styles';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 type PaywallRouteProp = RouteProp<ExtendedRootStackParams, 'Paywall'>;
@@ -35,7 +36,7 @@ function isPlanSelection(
   return Boolean(value && 'packageInfo' in value);
 }
 
-export function PaywallScreen(): JSX.Element {
+export const PaywallScreen = withScreenErrorBoundary(function _PaywallScreen(): JSX.Element {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<PaywallRouteProp>();
   const insets = useSafeAreaInsets();
@@ -173,6 +174,6 @@ export function PaywallScreen(): JSX.Element {
       </ScrollView>
     </View>
   );
-}
+}, 'Paywall');
 
 export default PaywallScreen;

@@ -4,11 +4,10 @@
  * TanStack Query hooks for squad data fetching and mutations.
  */
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery, useMutation, useQueryClient, type UseQueryOptions } from '@tanstack/react-query';
 import * as service from './service';
 import * as repository from './repository';
-import { fetchWarLeaderboard, subscribeToSquadWarDamage } from './squad-war-repository';
 import { createDebugger } from '../../utils/debug';
 import { type Squad, type SquadSummary, type SquadMemberDetail, type SquadInviteDetail, type CreateSquadInput, type UpdateSquadInput, type InviteToSquadInput, type RespondToInviteInput, type LeaveSquadInput, type KickMemberInput, type UpdateMemberRoleInput, type StartSquadSessionInput } from './schemas';
 
@@ -299,38 +298,4 @@ export function useSquadMissions(squadId: string | undefined) {
   });
 }
 
-// Squad War Live Hook
-// ============================================================================
 
-export function useSquadWarLeaderboardLive(warId: string | null) {
-  const queryClient = useQueryClient();
-  const query = useQuery({
-    queryKey: ['squad-war', 'leaderboard', warId],
-    queryFn: () => (warId ? fetchWarLeaderboard(warId) : Promise.resolve([])),
-    enabled: !!warId,
-    staleTime: 30_000,
-  });
-
-  const refreshWar = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ['squad-war', 'leaderboard', warId] });
-  }, [queryClient, warId]);
-
-  useEffect(() => {
-    if (!warId) {return;}
-
-    const intervalId = setInterval(() => {
-      refreshWar();
-    }, 5000);
-
-    const unsubscribe = subscribeToSquadWarDamage(warId, (_fresh: number) => {
-      refreshWar();
-    });
-
-    return () => {
-      clearInterval(intervalId);
-      unsubscribe();
-    };
-  }, [warId, refreshWar]);
-
-  return query;
-}

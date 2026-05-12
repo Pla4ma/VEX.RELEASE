@@ -11,7 +11,7 @@ import { Button } from '../../components/primitives/Button';
 import { Text } from '../../components/primitives/Text';
 import { useActiveBoss } from '../../features/boss/hooks';
 import { useDisclosureAnalytics, useFeatureAccess } from '../../features/liveops-config';
-import { DailyLeaderboard, SquadMissionCard } from '../../features/squads';
+import { SquadMissionCard } from '../../features/squads';
 import { CreateSquadFlow } from '../../features/squads/components/CreateSquadFlow';
 import { SquadShareSheet } from '../../features/squads/components/SquadShareSheet';
 import { useUserSquads } from '../../features/squads/hooks';
@@ -218,7 +218,6 @@ export function SocialScreen(): JSX.Element {
               <Text variant="h4" color={theme.colors.text.primary}>
                 {`Today’s push • ${currentBattleDate}`}
               </Text>
-              {userId ? <DailyLeaderboard squadId={primarySquad.id} userId={userId} /> : null}
               <SquadMissionCard squadId={primarySquad.id} />
             </View>
 

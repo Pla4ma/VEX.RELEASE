@@ -7,7 +7,7 @@
 
 import { z } from 'zod';
 import { createDebugger } from '../../utils/debug';
-import { enqueue, type OfflineQueueEntry, registerProcessor } from '../../lib/offline/queue';
+import { enqueue, type OfflineQueueEntry, type OfflineQueueEntryInput, registerProcessor } from '../../lib/offline/queue';
 import { getNetInfoAdapter, type NetworkState } from '../../network/NetInfoAdapter';
 import {
   CompletionLedgerSchema,
@@ -230,13 +230,11 @@ export class SessionCompletionOfflineSyncService {
       }
 
       // Create offline queue entry
-      const entry: SessionCompletionOfflineEntry = {
-        id: '',
+      const entry: OfflineQueueEntryInput = {
         operation: 'SESSION_COMPLETE',
         feature: 'sessions',
         payload: validated,
         idempotencyKey: validated.idempotencyKey,
-        createdAt: Date.now(),
         retryCount: 0,
         maxRetries,
         priority: 'high',

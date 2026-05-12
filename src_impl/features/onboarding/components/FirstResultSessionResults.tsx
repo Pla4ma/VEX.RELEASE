@@ -9,7 +9,7 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { FocusScoreChange } from './FocusScoreChange';
-import type { GradingResult } from '../../session-completion/grading-schemas';
+import type { SessionGradingResult } from '../../session-completion/grading-schemas';
 
 interface FirstResultSessionResultsProps {
   sessionGrade: string;
@@ -17,7 +17,7 @@ interface FirstResultSessionResultsProps {
   sessionDuration: number;
   focusScoreBefore: number;
   focusScoreAfter: number;
-  gradingResult: GradingResult;
+  gradingResult: SessionGradingResult;
 }
 
 export function FirstResultSessionResults({

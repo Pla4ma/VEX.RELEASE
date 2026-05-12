@@ -73,7 +73,6 @@ export class AchievementEventHandler {
     // Social events
     this.subscribe('squad:joined', this.handleSquadJoined.bind(this));
     this.subscribe('squad:created', this.handleSquadCreated.bind(this));
-    this.subscribe('squad-war:ended', this.handleSquadWarWon.bind(this));
     this.subscribe('duel:completed', this.handleDuelCompleted.bind(this));
     this.subscribe('social:referral-completed', this.handleFriendRecruited.bind(this));
 
@@ -276,17 +275,6 @@ export class AchievementEventHandler {
   private async handleSquadCreated(data: EventChannels['squad:created']): Promise<void> {
     if (data.userId) {
       await this.checkAchievement(data.userId, 'social-create-squad');
-    }
-  }
-
-  /**
-   * Handle squad war win
-   */
-  private async handleSquadWarWon(data: EventChannels['squad-war:ended']): Promise<void> {
-    // Check if user was on winning side
-    const participants = data.participants || [];
-    for (const userId of participants) {
-      await this.checkAchievement(userId, 'social-war-win');
     }
   }
 

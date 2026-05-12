@@ -6,7 +6,20 @@
  */
 
 import React from 'react';
-import { ScreenErrorBoundary, type ScreenErrorConfig } from './ScreenErrorBoundary';
+import { ScreenErrorBoundary } from '../shared/ui/components/ScreenErrorBoundary';
+
+// ============================================================================
+// Screen Error Configuration
+// ============================================================================
+
+export interface ScreenErrorConfig {
+  screenName: string;
+  isCritical: boolean;
+  errorMessages?: Partial<Record<string, string>>;
+  recoveryTarget?: string;
+  preserveState?: boolean;
+  fallback?: React.ReactNode;
+}
 
 // ============================================================================
 // Screen Type Definitions
@@ -162,7 +175,11 @@ export function ScreenErrorWrapper({
   const finalConfig = { ...baseConfig, ...customConfig };
 
   return (
-    <ScreenErrorBoundary config={finalConfig}>
+    <ScreenErrorBoundary
+      screenName={finalConfig.screenName}
+      fallback={finalConfig.fallback}
+      featureTag={`screen-${screenType}`}
+    >
       {children}
     </ScreenErrorBoundary>
   );

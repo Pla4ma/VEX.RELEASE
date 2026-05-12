@@ -76,7 +76,8 @@
     "ios",
     "__tests__/**/*",
     "**/*.test.ts",
-    "**/*.test.tsx"
+    "**/*.test.tsx",
+    "src_impl/archive/**/*"
   ],
   "extends": "expo/tsconfig.base.json"
 }

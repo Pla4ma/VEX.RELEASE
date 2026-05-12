@@ -4,6 +4,7 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
+import { TomorrowPreviewPersonalized } from "./TomorrowPreviewPersonalized";
 
 export interface TomorrowPreviewProps {
   streakWillContinue: boolean;

@@ -117,6 +117,10 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
                 getComponent={() => require('../screens/analytics/AnalyticsScreen').AnalyticsScreen}
               />
               <Stack.Screen
+                name="MonthlyFocusReport"
+                getComponent={() => require('../features/monthly-report/components').MonthlyFocusReportScreen}
+              />
+              <Stack.Screen
                 name="Challenges"
                 component={() => (
                   <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_CHALLENGES}>

@@ -140,7 +140,7 @@ export async function sendCoachNotification(
     return { success: false, reason: 'Generic login reminder suppressed' };
   }
 
-  const budget = await getOrCreateNotificationBudget(userId, { maxDaily: 10 });
+  const budget = await getOrCreateNotificationBudget(userId, { maxDaily: 2 });
   const result = await sendNotificationWithBudget({
     userId,
     priority,

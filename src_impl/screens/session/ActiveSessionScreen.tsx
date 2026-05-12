@@ -14,13 +14,14 @@ import { ActiveSessionModeOverlays } from './components/ActiveSessionModeOverlay
 import { useActiveSessionController } from './hooks/useActiveSessionController';
 import { useStudyQuizBreak } from './hooks/useStudyQuizBreak';
 import { useCoachState } from '../../features/ai-coach/hooks';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
 const ENABLE_SESSION_COMPANION_LAYER = true;
 const ENABLE_SESSION_COACH_BANNER = true;
 const ENABLE_SESSION_MODE_OVERLAYS = true;
 const ENABLE_SESSION_HERO = true;
 
-export const ActiveSessionScreen: React.FC = () => {
+export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessionScreen(): React.JSX.Element | null {
   const controller = useActiveSessionController();
   const { actions, isDegradedSession, metrics, navigation, sessionQuery, showInterruption, showMultiplierInfo, streak, theme, themeBackgroundColor, userId } = controller;
   const { data: coachState } = useCoachState(userId || '');
@@ -180,6 +181,6 @@ export const ActiveSessionScreen: React.FC = () => {
       />
     </Box>
   );
-};
+}, 'Active Session');
 
 export default ActiveSessionScreen;

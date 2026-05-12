@@ -90,34 +90,13 @@ export {
   useUpdateMemberRole,
   useStartSquadSession,
   useSquadPermissions,
-  useSquadWarLeaderboardLive,
 } from './hooks';
-
-export type {
-  SquadWar,
-  SquadWarMemberStatus,
-} from './squad-war-types';
 
 export {
   SquadRepository,
   squadRepository,
   SquadRepositoryError,
 } from './repository/index';
-
-export {
-  getActiveSquadWar,
-  subscribeToSquadWar,
-  recordWarDamage,
-} from './squad-war-repository';
-
-export {
-  loadActiveSquadWar,
-  watchActiveSquadWar,
-  submitSquadWarDamage,
-} from './squad-war-service';
-
-export { SquadWarHUD } from './components/squad-war-hud';
-export { DailyLeaderboard } from './components/DailyLeaderboard';
 export { SquadMissionCard } from './components/SquadMissionCard';
 // Competitive features - temporarily disabled due to missing modules
 // export {
@@ -155,35 +134,4 @@ export type {
   SquadOnboardingState,
 } from './invite-flow';
 
-// Phase 5.1 - Squad System Simplification
-// Re-export with simplified suffix to avoid conflicts with legacy system
-export {
-  createSquad as createSimplifiedSquad,
-  joinSquad as joinSimplifiedSquad,
-  leaveSquad as leaveSimplifiedSquad,
-  recordMemberActivity,
-  resetWeeklyProgress,
-  getActivityFeed,
-  recordBossDamageActivity,
-  startSquadBoss,
-  damageSquadBoss,
-  discoverPublicSquads,
-  getUserSquads as getUserSimplifiedSquads,
-  getSquad as getSimplifiedSquad,
-  getSquadSummary,
-  type SimplifiedSquad,
-  type SquadMember as SimplifiedSquadMember,
-  type WeeklyGoal,
-  type SquadStreak,
-  type SquadActivity as SimplifiedSquadActivity,
-  type SquadBossEncounter,
-} from './SimplifiedSquadSystem';
 
-export async function updateUserContribution(
-  userId: string,
-  squadId: string,
-  contribution: { minutes: number; purityScore: number; streakMultiplier: number },
-): Promise<void> {
-  const { recordMemberActivity } = await import('./SimplifiedSquadSystem');
-  recordMemberActivity(squadId, userId, contribution.minutes);
-}

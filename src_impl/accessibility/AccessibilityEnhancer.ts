@@ -59,7 +59,7 @@ export interface EnhancedAccessibilityProps {
   accessibilityAutoCorrect?: string;
   accessibilityRequired?: boolean;
   accessibilityInvalid?: boolean;
-  style?: React.ComponentProps<any>['style'];
+  style?: React.ComponentProps<React.ComponentType<Record<string, unknown>>>['style'];
 }
 
 // ============================================================================
@@ -69,7 +69,7 @@ export interface EnhancedAccessibilityProps {
 export interface AccessibilityEnhancement {
   type: 'contrast' | 'focus' | 'motion' | 'screen-reader' | 'touch' | 'keyboard';
   priority: 'critical' | 'major' | 'moderate' | 'minor';
-  enhancement: React.ComponentType<any> | EnhancedAccessibilityProps;
+  enhancement: React.ComponentType<Record<string, unknown>> | EnhancedAccessibilityProps;
   description: string;
   wcagGuideline: string;
 }
@@ -96,7 +96,7 @@ export interface AccessibilityEnhancementConfig {
 export class AccessibilityEnhancer {
   private static instance: AccessibilityEnhancer;
   private config: AccessibilityEnhancementConfig;
-  private enhancementHistory: any[] = [];
+  private enhancementHistory: Array<{ timestamp: number; type: string; component: string; applied: boolean; reason?: string }> = [];
 
   private constructor() {
     this.config = {
@@ -132,24 +132,22 @@ export class AccessibilityEnhancer {
   // Component Enhancement Methods
   // ============================================================================
 
-  enhanceComponent<C extends React.ComponentType<any>>(
-    Component: C,
+  enhanceComponent<P extends object>(
+    Component: React.ComponentType<P>,
     enhancements?: Partial<EnhancedAccessibilityProps>
-  ): C {
-    type ComponentProps = React.ComponentProps<C>;
-
-    const EnhancedComponent = React.forwardRef<unknown, ComponentProps>(
+  ): React.ComponentType<P> {
+    const EnhancedComponent = React.forwardRef<unknown, P>(
       (props, ref) => {
         const enhancedProps = this.enhanceProps(props, enhancements);
 
         return React.createElement(Component, {
-          ...(enhancedProps as ComponentProps),
-          ref: ref as React.Ref<C>,
+          ...(enhancedProps as P),
+          ref: ref as React.Ref<React.ComponentType<P>>,
         });
       }
     );
     EnhancedComponent.displayName = `Enhanced(${(Component as { displayName?: string; name?: string }).displayName || (Component as { name?: string }).name || 'Component'})`;
-    return EnhancedComponent as unknown as C;
+    return EnhancedComponent as unknown as React.ComponentType<P>;
   }
 
   enhanceProps<P extends object>(
@@ -202,28 +200,25 @@ export class AccessibilityEnhancer {
   private getContrastEnhancements<P extends object>(props: P & Partial<EnhancedAccessibilityProps>): Partial<EnhancedAccessibilityProps> {
     const enhancements: Partial<EnhancedAccessibilityProps> = {};
 
-    // Check for color props and improve contrast
-    if ('style' in props && typeof props.style === 'object') {
-      const style = props.style as any;
-      
-      if (style.color && style.backgroundColor) {
-        const contrast = checkContrast(style.color, style.backgroundColor);
-        
+    if ('style' in props && typeof props.style === 'object' && props.style !== null) {
+      const style = props.style as Record<string, string>;
+      const color = typeof style['color'] === 'string' ? style['color'] : undefined;
+      const backgroundColor = typeof style['backgroundColor'] === 'string' ? style['backgroundColor'] : undefined;
+
+      if (color && backgroundColor) {
+        const contrast = checkContrast(color, backgroundColor);
+
         if (!contrast.passesAA) {
-          // Suggest better colors
-          const alternatives = getAccessibleAlternatives(
-            style.color,
-            style.backgroundColor
-          );
-          
+          const alternatives = getAccessibleAlternatives(color, backgroundColor);
+
           if (alternatives.length > 0) {
             enhancements.style = {
               ...style,
               color: alternatives[0],
             };
-            
+
             debug.info('Applied contrast enhancement:', {
-              original: style.color,
+              original: color,
               improved: alternatives[0],
               ratio: contrast.ratio,
             });
@@ -231,15 +226,14 @@ export class AccessibilityEnhancer {
         }
       }
 
-      // Apply color blind mode colors
       if (this.config.colorBlindSupport !== 'none') {
-        if (style.color) {
+        if (color) {
           enhancements.style = {
             ...style,
             color: getAccessibleColor('primary', this.config.colorBlindSupport),
           };
         }
-        if (style.backgroundColor) {
+        if (backgroundColor) {
           enhancements.style = {
             ...enhancements.style || style,
             backgroundColor: getAccessibleColor('secondary', this.config.colorBlindSupport),
@@ -261,7 +255,7 @@ export class AccessibilityEnhancer {
       
       // Add focus indicators for better visibility
       if (Platform.OS === 'ios') {
-        enhancements.accessibilityRole = (props as any).accessibilityRole || 'button';
+        enhancements.accessibilityRole = ((props as EnhancedAccessibilityProps).accessibilityRole) || 'button';
       }
     }
 
@@ -287,8 +281,8 @@ export class AccessibilityEnhancer {
     if (props.accessible !== false) {
       // Auto-generate better labels if needed
       if (!props.accessibilityLabel && ('title' in props || 'children' in props)) {
-        const children = (props as any).children;
-        const title = (props as any).title;
+        const children = (props as { children?: React.ReactNode }).children;
+        const title = (props as { title?: string }).title;
         
         enhancements.accessibilityLabel = this.generateAccessibilityLabel({
           children,
@@ -316,9 +310,9 @@ export class AccessibilityEnhancer {
   // ============================================================================
 
   private generateAccessibilityLabel(options: {
-    children?: any;
+    children?: React.ReactNode;
     title?: string;
-    props: any;
+    props: Record<string, unknown>;
   }): string {
     const { children, title, props } = options;
 
@@ -333,19 +327,19 @@ export class AccessibilityEnhancer {
     }
 
     // Generate label from props
-    if (props.placeholder) {
-      return props.placeholder;
+    if (typeof props['placeholder'] === 'string') {
+      return props['placeholder'];
     }
 
-    if (props.value && typeof props.value === 'string') {
-      return props.value;
+    if (typeof props['value'] === 'string') {
+      return props['value'];
     }
 
     // Fallback to generic label
     return 'Interactive element';
   }
 
-  private generateAccessibilityHint(props: any): string {
+  private generateAccessibilityHint(props: Record<string, unknown>): string {
     // Generate hints based on element type and props
     if (props.onPress) {
       return 'Activates this control';
@@ -366,7 +360,7 @@ export class AccessibilityEnhancer {
     return 'Interactive control';
   }
 
-  private inferSemanticRole(props: any): string {
+  private inferSemanticRole(props: Record<string, unknown>): string {
     // Infer semantic role from props and component type
     if (props.onPress) {
       return 'button';
@@ -434,7 +428,7 @@ export class AccessibilityEnhancer {
   // Enhancement History and Analytics
   // ============================================================================
 
-  getEnhancementHistory(): any[] {
+  getEnhancementHistory(): Array<{ timestamp: number; type: string; component: string; applied: boolean; reason?: string }> {
     return [...this.enhancementHistory];
   }
 

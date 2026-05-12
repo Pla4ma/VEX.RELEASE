@@ -2,10 +2,6 @@ import { SessionMode } from '../../modes';
 import type { SessionSummary } from '../../types';
 import { calculateRewards } from '../session-reward-helpers';
 
-jest.mock('../../../features/squads/squad-war-service', () => ({
-  submitSquadWarDamage: jest.fn(),
-}));
-
 function createSummary(overrides: Partial<SessionSummary> = {}): SessionSummary {
   return {
     sessionId: '123e4567-e89b-12d3-a456-426614174002',

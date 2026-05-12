@@ -16,7 +16,7 @@ import Animated, { useSharedValue, useAnimatedStyle, withSpring, withSequence, w
 import { useTheme } from '../../../theme';
 import { Box, Text, Card } from '../../../components/primitives';
 import { Icon } from '../../../icons';
-import { useUIStore } from '../../../store';
+import { useUIStore } from '../../../store/index';
 import type { InventoryItem } from '../types';
 
 type ConsumableType =

@@ -21,8 +21,8 @@ export function useSessionTimer() {
     return () => clearInterval(interval);
   }, [isActive, isPaused]);
 
-  const elapsedTime = currentSession?.elapsedSeconds ?? 0;
-  const expectedDuration = currentSession?.expectedDurationSeconds ?? 0;
+  const elapsedTime = currentSession?.elapsedTime ?? 0;
+  const expectedDuration = currentSession?.config?.duration ?? 0;
   const timeRemaining = Math.max(0, expectedDuration - elapsedTime);
 
   return {

@@ -173,7 +173,7 @@ export function buildReturn(args: BuildReturnArgs) {
 
   const progress = currentSession?.completionPercentage ?? 0;
 
-  const duration = getExpectedDuration(currentSession);
+  const duration = getExpectedDuration(currentSession ?? undefined);
   const elapsed = currentSession?.elapsedTime ?? 0;
   const timeRemaining = duration ? Math.max(0, duration - elapsed) : 0;
 

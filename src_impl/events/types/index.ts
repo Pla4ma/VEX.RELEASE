@@ -38,7 +38,6 @@ import type { MilestoneEventDefinitions } from './milestone';
 import type { SessionEventDefinitions } from './session';
 import type { InventoryEventDefinitions } from './inventory';
 import type { AchievementEventDefinitions } from './achievement';
-import type { SquadWarEventDefinitions } from './squad-war';
 import type { BoostEventDefinitions } from './boost';
 import type { CoachEventDefinitions } from './coach';
 import type { IntegrationEventDefinitions } from './integration';
@@ -92,7 +91,6 @@ export * from './milestone';
 export * from './session';
 export * from './inventory';
 export * from './achievement';
-export * from './squad-war';
 export * from './boost';
 export * from './coach';
 export * from './integration';
@@ -145,7 +143,6 @@ export interface EventChannels
     SessionEventDefinitions,
     InventoryEventDefinitions,
     AchievementEventDefinitions,
-    SquadWarEventDefinitions,
     BoostEventDefinitions,
     CoachEventDefinitions,
     IntegrationEventDefinitions,

@@ -10,7 +10,7 @@
  */
 
 import { createDebugger } from '../utils/debug';
-import { PerformanceMonitor, measureExecutionTime, measureAsyncExecutionTime } from '../utils/performance-monitor';
+import { PerformanceMonitor, measureExecutionTime, measureAsyncExecutionTime, type PerformanceMetrics } from '../utils/performance-monitor';
 import { eventBus } from '../events';
 import type { EventChannels } from '../events/types';
 
@@ -225,7 +225,7 @@ export class PerformanceGate {
     };
   }
 
-  private recordPerformanceMetrics(type: string, metrics: any): void {
+  private recordPerformanceMetrics(type: string, metrics: PerformanceMetrics): void {
     eventBus.publish('performance:metric', {
       type,
       metrics,
@@ -293,7 +293,7 @@ export class PerformanceGate {
     return result;
   }
 
-  private evaluateFPS(metrics: any): {
+  private evaluateFPS(metrics: PerformanceMetrics): {
     current: number;
     average: number;
     target: number;
@@ -304,8 +304,8 @@ export class PerformanceGate {
     const issues: PerformanceIssue[] = [];
     let scorePenalty = 0;
 
-    const currentFps = metrics.fps || 0;
-    const avgFps = metrics.avgFps || 0;
+    const currentFps = metrics.fps;
+    const avgFps = metrics.avgFps;
     const targetFps = this.targets.targetFps;
     const minFps = this.targets.minFps;
 
@@ -347,7 +347,7 @@ export class PerformanceGate {
     };
   }
 
-  private evaluateMemory(metrics: any): {
+  private evaluateMemory(metrics: PerformanceMetrics): {
     current: number;
     limit: number;
     passed: boolean;
@@ -357,7 +357,7 @@ export class PerformanceGate {
     const issues: PerformanceIssue[] = [];
     let scorePenalty = 0;
 
-    const currentMemory = metrics.memoryUsage || 0;
+    const currentMemory = metrics.memoryUsage;
     const maxMemory = this.targets.maxMemoryMb;
 
     // Check memory usage
@@ -553,13 +553,13 @@ export class PerformanceGate {
 
   getDiagnosticInfo(): {
     targets: PerformanceTargets;
-    currentMetrics: any;
+    currentMetrics: PerformanceMetrics;
     isMonitoring: boolean;
   } {
     return {
       targets: this.targets,
       currentMetrics: this.performanceMonitor.getMetrics(),
-      isMonitoring: this.performanceMonitor.isRunning,
+      isMonitoring: this.performanceMonitor['isRunning'],
     };
   }
 

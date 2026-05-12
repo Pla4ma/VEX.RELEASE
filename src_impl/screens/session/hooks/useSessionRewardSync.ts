@@ -8,7 +8,6 @@ import {
   useProgressionSummary,
 } from '../../../features/progression/hooks';
 import { getLevelUpCelebrationRewards } from '../../../features/progression/service';
-import { updateUserContribution } from '../../../features/squads';
 import type { ChestResult } from '../../../features/rewards/chest-engine';
 import type { SessionSummary } from '../../../session/types';
 import { triggerHaptic } from '../../../utils/haptics';
@@ -121,13 +120,6 @@ export function useSessionRewardSync({
           if (attemptIndex > 0 && isMountedRef.current)
             {setRewardCreditStatus('retrying');}
           await creditSessionRewards(userId, chestResult);
-          if (primarySquadId) {
-            await updateUserContribution(userId, primarySquadId, {
-              minutes: Math.round(focusedDuration / 60),
-              purityScore: focusPurityScore,
-              streakMultiplier,
-            });
-          }
           applySessionMastery({
             focusPurityScore,
             focusedDuration,

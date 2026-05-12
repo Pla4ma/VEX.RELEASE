@@ -39,7 +39,7 @@ function mapRowToEntry(row: z.infer<typeof RewardLedgerRowSchema>): RewardLedger
     errorMessage: row.error_message,
     retryAfter: row.retry_after,
     sessionId: row.session_id,
-    metadata: row.metadata,
+    metadata: row.metadata ?? undefined,
   };
 }
 

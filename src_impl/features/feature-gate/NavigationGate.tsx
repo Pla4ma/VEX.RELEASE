@@ -12,6 +12,7 @@ import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
 import { Button } from '../../components/primitives/Button';
 import { useTheme } from '../../theme';
+import { sizing } from '../../theme/tokens/sizing';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 
 interface NavigationGateProps {
@@ -34,7 +35,8 @@ export function NavigationGate({
     if (navigation.canGoBack()) {
       navigation.goBack();
     } else {
-      navigation.navigate(suggestedRoute);
+      const route = suggestedRoute as string;
+      navigation.navigate(route);
     }
   };
 
@@ -47,11 +49,11 @@ export function NavigationGate({
       bg={theme.colors.background.primary}
     >
       <Box
-        maxWidth={300}
+        maxWidth={sizing.width.xl}
         alignItems="center"
         gap="md"
       >
-        <Text fontSize={48}>🔒</Text>
+        <Text fontSize={sizing.icon['2xl']}>🔒</Text>
 
         <Text
           variant="h3"
@@ -65,7 +67,6 @@ export function NavigationGate({
           variant="body"
           color="text.secondary"
           textAlign="center"
-          style={{ lineHeight: 22 }}
         >
           {featureName} is {featureReason.toLowerCase()}.
         </Text>

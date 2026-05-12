@@ -2,7 +2,8 @@
  * Screen Error Boundary
  *
  * Provides error boundary protection for screen components
- * with graceful fallback UI and retry functionality.
+ * with graceful fallback UI, retry functionality, Sentry reporting,
+ * and offline detection.
  */
 
 import React, { Component, type ReactNode, type ErrorInfo } from 'react';
@@ -12,6 +13,8 @@ import { useTheme } from '../../../theme';
 import { Text } from '../../../components/primitives';
 import { Button } from '../../../components';
 import { OfflineEmptyState } from './EmptyState';
+import { captureException } from '../../../config/sentry';
+import { useNetInfo } from '../../../network';
 
 export interface ScreenErrorBoundaryProps {
   children: ReactNode;
@@ -19,6 +22,8 @@ export interface ScreenErrorBoundaryProps {
   fallback?: ReactNode;
   onError?: (error: Error, errorInfo: ErrorInfo) => void;
   allowOffline?: boolean;
+  /** Feature tag for Sentry error grouping */
+  featureTag?: string;
 }
 
 interface ScreenErrorState {
@@ -36,56 +41,63 @@ interface ErrorFallbackProps {
 
 function ErrorFallback({ screenName, error, onRetry, onGoBack }: ErrorFallbackProps): JSX.Element {
   const { theme } = useTheme();
+  const { isOffline } = useNetInfo();
 
-  const message = error?.message?.includes('network') || error?.message?.includes('offline')
+  const message = isOffline
+    ? 'You are offline. Please check your connection and try again.'
+    : error?.message?.includes('network') || error?.message?.includes('fetch') || error?.message?.includes('timeout')
     ? 'Connection lost. Please check your internet and try again.'
-    : error?.message?.includes('auth') || error?.message?.includes('unauthorized')
+    : error?.message?.includes('auth') || error?.message?.includes('unauthorized') || error?.message?.includes('token')
     ? 'Your session expired. Please sign in again.'
     : `We couldn't load ${screenName}. Please try again.`;
+
+  const offlineNotice = isOffline ? ' Retry when reconnected.' : '';
 
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
-      contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', padding: 24 }}
+      contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', padding: theme.spacing[6] }}
     >
-      <Text fontSize={64} style={{ marginBottom: 24 }}>⚠️</Text>
-      <Text variant="h3" textAlign="center" style={{ marginBottom: 12 }}>
-        Something went wrong
+      <Text
+        variant="display"
+        style={{ marginBottom: theme.spacing[6], textAlign: 'center' }}
+      >
+        {isOffline ? '📡' : '⚠️'}
+      </Text>
+      <Text
+        variant="h3"
+        color="text.primary"
+        style={{ marginBottom: theme.spacing[3], textAlign: 'center' }}
+      >
+        {isOffline ? 'You are offline' : 'Something went wrong'}
       </Text>
       <Text
         variant="body"
         color="text.secondary"
-        textAlign="center"
-        style={{ marginBottom: 24, maxWidth: 280, lineHeight: 22 }}
+        style={{ marginBottom: theme.spacing[6], maxWidth: 280, lineHeight: 22, textAlign: 'center' }}
       >
         {message}
+        {offlineNotice}
       </Text>
-      {__DEV__ && error && (
-        <Text
-          variant="caption"
-          color="error.DEFAULT"
-          style={{
-            padding: 12,
-            borderRadius: 8,
-            marginBottom: 24,
-            maxWidth: 280,
-            backgroundColor: theme.colors.background.secondary,
-          }}
-        >
-          {error.message}
-        </Text>
-      )}
-      <Button variant="primary" onPress={onRetry} style={{ width: '100%', maxWidth: 280 }}
+      <Button
+        variant="primary"
+        onPress={onRetry}
+        style={{ width: '100%', maxWidth: 280 }}
         accessibilityLabel="Try Again button"
         accessibilityRole="button"
-        accessibilityHint="Activates this control">
+        accessibilityHint="Retries the screen operation"
+      >
         Try Again
       </Button>
       {onGoBack && (
-        <Button variant="ghost" onPress={onGoBack} style={{ width: '100%', maxWidth: 280, marginTop: 12 }}
+        <Button
+          variant="ghost"
+          onPress={onGoBack}
+          style={{ width: '100%', maxWidth: 280, marginTop: theme.spacing[3] }}
           accessibilityLabel="Go Back button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control">
+          accessibilityHint="Navigates back to the previous screen"
+        >
           Go Back
         </Button>
       )}
@@ -109,6 +121,11 @@ export class ScreenErrorBoundary extends Component<ScreenErrorBoundaryProps, Scr
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    const { featureTag } = this.props;
+    captureException(error, {
+      tags: { feature: featureTag ?? 'screen-error-boundary' },
+      extra: { componentStack: errorInfo.componentStack ?? '' },
+    });
     this.props.onError?.(error, errorInfo);
   }
 
@@ -139,7 +156,7 @@ export class ScreenErrorBoundary extends Component<ScreenErrorBoundaryProps, Scr
 export function withScreenErrorBoundary<P extends object>(
   WrappedComponent: React.ComponentType<P>,
   screenName: string,
-) {
+): (props: P) => JSX.Element {
   return function WithErrorBoundary(props: P): JSX.Element {
     return (
       <ScreenErrorBoundary screenName={screenName}>

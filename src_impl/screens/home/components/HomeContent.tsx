@@ -34,6 +34,7 @@ import { HomeCompanionWidget } from './HomeCompanionWidget';
 import { useHomeCompanion } from '../hooks/useHomeCompanion';
 import { HomeSectionBoundary } from './HomeSectionBoundary';
 import type { MissionPriorityInput } from '../../../features/daily-mission/types';
+import type { SessionRecommendation } from '../../../features/session-recommendation/types';
 import type { useHomeData } from '../hooks/useHomeData';
 
 type HomeData = ReturnType<typeof useHomeData>;
@@ -140,7 +141,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
               squadMembersFocusing={data.squadMembersFocusing}
               streakHoursRemaining={data.streakHoursRemaining ?? undefined}
               streakRiskLevel={controller.streakQuery.data?.riskLevel}
-              recommendation={primaryRecommendation}
+              recommendation={primaryRecommendation as SessionRecommendation | null}
             />
           </HomeSectionBoundary>
 
