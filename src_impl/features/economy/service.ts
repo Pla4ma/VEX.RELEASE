@@ -27,31 +27,9 @@ export {
   handlePurchaseFailure,
 } from './purchase-service';
 
-// Refunds
-export {
-  requestRefund,
-  processRefund,
-  refundPurchase,
-} from './refund-service';
-
-// Currency conversion
-export {
-  getConversionRate,
-  calculateConversion,
-  convertCurrency,
-} from './conversion-service';
-
-// Offers
-export {
-  getActiveOffers,
-  checkOfferEligibility,
-  claimOffer,
-} from './offer-service';
-
 // Analytics
 export {
   getTransactionHistory,
-  getEconomyAnalytics,
 } from './analytics-service';
 
 // Wallet feature integration
@@ -69,8 +47,4 @@ export type {
   WalletTransaction,
   CurrencyType,
   PurchaseResult,
-  PurchaseError,
-  RefundRequest,
-  LimitedOffer,
-  UserOfferClaim,
 } from './schemas';

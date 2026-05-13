@@ -1,0 +1,16 @@
+export type ItemRarity = z.infer<typeof ItemRaritySchema>;
+export type ItemType = z.infer<typeof ItemTypeSchema>;
+export type EquipmentSlot = z.infer<typeof EquipmentSlotSchema>;
+export type ItemEffectType = z.infer<typeof ItemEffectTypeSchema>;
+export type ItemEffect = z.infer<typeof ItemEffectSchema>;
+export type PassiveEffect = z.infer<typeof PassiveEffectSchema>;
+export type Ingredient = z.infer<typeof IngredientSchema>;
+export type CraftingRecipe = z.infer<typeof CraftingRecipeSchema>;
+export type ItemDefinition = z.infer<typeof ItemDefinitionSchema>;
+export type EffectResult = z.infer<typeof EffectResultSchema>;
+export type GetItemDefinitionInput = z.infer<typeof GetItemDefinitionInputSchema>;
+export type ApplyItemEffectInput = z.infer<typeof ApplyItemEffectInputSchema>;
+export type GetItemsByTypeInput = z.infer<typeof GetItemsByTypeInputSchema>;
+export type GetItemsByRarityInput = z.infer<typeof GetItemsByRarityInputSchema>;
+export type DropEntry = z.infer<typeof DropEntrySchema>;
+export type DropTable = z.infer<typeof DropTableSchema>;

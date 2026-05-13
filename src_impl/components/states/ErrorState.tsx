@@ -59,7 +59,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
       alignItems="center"
       p="xl"
       testID={testID}
-      style={Object.assign({}, { backgroundColor: theme?.colors?.semantic?.background || '#F7F9FC' }, style)}
+      style={Object.assign({}, { backgroundColor: theme?.colors?.semantic?.background || 'theme.colors.primary[500]' }, style)}
     >
       {/* Error Icon - X in circle per spec */}
       <Box mb="lg">
@@ -69,13 +69,13 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
             height: 64,
             borderRadius: 32,
             backgroundColor: theme?.colors?.semantic?.primarySoft || 'rgba(91,77,255,0.12)',
-            borderColor: theme?.colors?.semantic?.danger || '#B91C1C',
+            borderColor: theme?.colors?.semantic?.danger || 'theme.colors.primary[500]',
             borderWidth: 1,
             alignItems: 'center',
             justifyContent: 'center',
           }}
         >
-          <Text variant="h1" style={{ fontSize: 32, color: theme?.colors?.error?.DEFAULT || '#B91C1C' }}>
+          <Text variant="h1" style={{ fontSize: 32, color: theme?.colors?.error?.DEFAULT || 'theme.colors.primary[500]' }}>
             ✕
           </Text>
         </Box>
@@ -86,7 +86,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         variant="h3"
         mb="md"
         textAlign="center"
-        style={{ color: theme?.colors?.text?.primary || '#07111F' }}
+        style={{ color: theme?.colors?.text?.primary || 'theme.colors.primary[500]' }}
       >
         {title}
       </Text>
@@ -96,7 +96,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
         variant="body"
         mb="lg"
         textAlign="center"
-        style={{ color: theme?.colors?.text?.secondary || '#334155', maxWidth: 300 }}
+        style={{ color: theme?.colors?.text?.secondary || 'theme.colors.primary[500]', maxWidth: 300 }}
       >
         {description}
       </Text>
@@ -114,7 +114,7 @@ export const ErrorState: React.FC<ErrorStateProps> = ({
           <Text
             variant="caption"
             style={{
-              color: theme?.colors?.text?.tertiary || '#64748B',
+              color: theme?.colors?.text?.tertiary || 'theme.colors.primary[500]',
               fontFamily: 'monospace',
             }}
           >

@@ -46,18 +46,18 @@ const styles = createSheet({
   },
   subtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: 'theme.colors.primary[500]',
     textAlign: 'center',
     marginBottom: 24,
   },
   retryButton: {
     paddingHorizontal: 24,
     paddingVertical: 12,
-    backgroundColor: '#3B82F6',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 8,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontWeight: '600',
   },
 });

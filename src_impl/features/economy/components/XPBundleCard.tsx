@@ -360,3 +360,6 @@ const styles = createSheet({
 });
 
 export default XPBundleCard;
+
+export * from "./XPBundleCard.types";
+export * from "./XPBundleCard.types";

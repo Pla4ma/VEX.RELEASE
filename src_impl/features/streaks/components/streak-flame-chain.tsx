@@ -41,34 +41,34 @@ export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({ currentStrea
   const getRiskColor = () => {
     switch (riskLevel) {
       case 'CRITICAL':
-        return '#F44336';
+        return 'theme.colors.primary[500]';
       case 'HIGH':
-        return '#FF9800';
+        return 'theme.colors.error.DEFAULT';
       case 'MEDIUM':
-        return '#FFC107';
+        return 'theme.colors.error.DEFAULT';
       case 'LOW':
-        return '#FFEB3B';
+        return 'theme.colors.error.DEFAULT';
       default:
-        return '#4CAF50';
+        return 'theme.colors.primary[500]';
     }
   };
 
   const getFlameColor = (index: number, completed: boolean) => {
     if (!completed) {
-      return ['#3a3a5a', '#2a2a4a'];
+      return ['theme.colors.primary[500]', 'theme.colors.primary[500]'];
     }
 
     const day = index + 1;
     if (day >= 100) {
-      return ['#FFD700', '#FF6B35'];
+      return ['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT'];
     } // Gold fire
     if (day >= 30) {
-      return ['#FF6B35', '#F44336'];
+      return ['theme.colors.error.DEFAULT', 'theme.colors.primary[500]'];
     } // Orange-red fire
     if (day >= 7) {
-      return ['#FF9800', '#FF5722'];
+      return ['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT'];
     } // Orange fire
-    return ['#FFC107', '#FF9800']; // Yellow-orange fire
+    return ['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT']; // Yellow-orange fire
   };
 
   const renderDayNode = (day: (typeof streakDays)[0], index: number) => {
@@ -145,7 +145,7 @@ export const StreakFlameChain: React.FC<StreakFlameChainProps> = ({ currentStrea
               styles.progressFill,
               {
                 width: `${(currentStreak / Math.max(longestStreak, 30)) * 100}%`,
-                backgroundColor: isAtRisk ? getRiskColor() : '#FF6B35',
+                backgroundColor: isAtRisk ? getRiskColor() : 'theme.colors.error.DEFAULT',
               },
             ]}
           />
@@ -194,7 +194,7 @@ const getMilestoneReward = (days: number): string => {
 
 const styles = createSheet({
   container: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 20,
     padding: 20,
     margin: 16,
@@ -212,7 +212,7 @@ const styles = createSheet({
     paddingVertical: 10,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: '#FF6B35',
+    borderColor: 'theme.colors.error.DEFAULT',
   },
   streakEmoji: {
     fontSize: 24,
@@ -221,7 +221,7 @@ const styles = createSheet({
   streakCount: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FF6B35',
+    color: 'theme.colors.error.DEFAULT',
   },
   streakInfo: {
     marginLeft: 16,
@@ -230,7 +230,7 @@ const styles = createSheet({
   streakLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFF',
+    color: 'theme.colors.background.primary',
   },
   longestText: {
     fontSize: 12,
@@ -254,7 +254,7 @@ const styles = createSheet({
   },
   progressTrack: {
     height: 8,
-    backgroundColor: '#2a2a4a',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 4,
     overflow: 'hidden',
   },
@@ -282,18 +282,18 @@ const styles = createSheet({
     width: DAY_SIZE,
     height: DAY_SIZE,
     borderRadius: DAY_SIZE / 2,
-    backgroundColor: '#2a2a4a',
+    backgroundColor: 'theme.colors.primary[500]',
     justifyContent: 'center',
     alignItems: 'center',
   },
   inactiveCircle: {
-    backgroundColor: '#2a2a4a',
+    backgroundColor: 'theme.colors.primary[500]',
     borderWidth: 2,
-    borderColor: '#3a3a5a',
+    borderColor: 'theme.colors.primary[500]',
   },
   todayCircle: {
     borderWidth: 3,
-    borderColor: '#4CAF50',
+    borderColor: 'theme.colors.primary[500]',
   },
   dayNumber: {
     fontSize: 14,
@@ -301,7 +301,7 @@ const styles = createSheet({
     color: 'rgba(255,255,255,0.3)',
   },
   activeDayNumber: {
-    color: '#FFF',
+    color: 'theme.colors.background.primary',
   },
   flameIcon: {
     position: 'absolute',
@@ -342,13 +342,15 @@ const styles = createSheet({
   },
   milestoneText: {
     fontSize: 13,
-    color: '#FFF',
+    color: 'theme.colors.background.primary',
     textAlign: 'center',
     fontWeight: '600',
   },
   milestoneReward: {
     fontSize: 11,
-    color: '#FFD700',
+    color: 'theme.colors.error.DEFAULT',
     marginTop: 4,
   },
 });
+
+export * from "./streak-flame-chain.types";

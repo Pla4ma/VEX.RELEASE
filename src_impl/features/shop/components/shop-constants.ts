@@ -23,9 +23,9 @@ export const CATEGORIES: { key: ShopCategory; label: string; icon: string }[] = 
 ];
 
 export const RARITY_COLORS = {
-  COMMON: '#9CA3AF',
-  UNCOMMON: '#10B981',
-  RARE: '#3B82F6',
-  EPIC: '#8B5CF6',
-  LEGENDARY: '#F59E0B',
+  COMMON: 'theme.colors.primary[500]',
+  UNCOMMON: 'theme.colors.primary[500]',
+  RARE: 'theme.colors.primary[500]',
+  EPIC: 'theme.colors.primary[500]',
+  LEGENDARY: 'theme.colors.primary[500]',
 };

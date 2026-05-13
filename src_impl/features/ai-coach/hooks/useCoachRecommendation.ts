@@ -34,13 +34,6 @@ function getLastSessionAt(stats: unknown): number {
   return Date.now() - 7 * 24 * 60 * 60 * 1000;
 }
 
-export interface UseCoachRecommendationReturn {
-  recommendation: CoachRecommendation | null;
-  isLoading: boolean;
-  refresh: () => void;
-  getPersonaName: () => string;
-}
-
 /**
  * Hook that provides coach-powered recommendations for the Home screen
  * Replaces/augments HomeRecommendationEngine with coach intelligence
@@ -221,3 +214,5 @@ export function useCoachHomeRecommendation() {
 }
 
 export default useCoachRecommendation;
+
+export * from "./useCoachRecommendation.types";

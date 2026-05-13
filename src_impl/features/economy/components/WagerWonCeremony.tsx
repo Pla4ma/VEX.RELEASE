@@ -210,3 +210,6 @@ export function WagerWonCeremony({ amount, onComplete, autoDismiss = true, dismi
     </View>
   );
 }
+
+export * from "./WagerWonCeremony.types";
+export * from "./WagerWonCeremony.types";

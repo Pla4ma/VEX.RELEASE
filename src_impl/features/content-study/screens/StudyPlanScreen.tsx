@@ -199,7 +199,7 @@ export function StudyPlanScreen() {
         <Text style={styles.sectionTitle}>{UI_TEXT.SESSION_SECTION}</Text>
         <View style={styles.sessionCard}>
           <View style={styles.sessionRow}>
-            <Icon name="clock" color="#3B82F6" />
+            <Icon name="clock" color="theme.colors.primary[500]" />
             <View style={styles.sessionInfo}>
               <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_DURATION}</Text>
               <Text style={styles.sessionValue}>{formatDuration(plan.recommendedDuration)}</Text>
@@ -207,7 +207,7 @@ export function StudyPlanScreen() {
           </View>
 
           <View style={styles.sessionRow}>
-            <Icon name="trending-up" color="#10B981" />
+            <Icon name="trending-up" color="theme.colors.primary[500]" />
             <View style={styles.sessionInfo}>
               <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_DIFFICULTY}</Text>
               <Text style={styles.sessionValue}>{plan.suggestedDifficulty}</Text>
@@ -215,7 +215,7 @@ export function StudyPlanScreen() {
           </View>
 
           <View style={styles.sessionRow}>
-            <Icon name="target" color="#F59E0B" />
+            <Icon name="target" color="theme.colors.primary[500]" />
             <View style={styles.sessionInfo}>
               <Text style={styles.sessionLabel}>{UI_TEXT.SESSION_FOCUS_AREAS}</Text>
               <View style={styles.focusAreas}>
@@ -259,7 +259,7 @@ export function StudyPlanScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#3B82F6" />
+          <ActivityIndicator size="large" color="theme.colors.primary[500]" />
           <Text style={styles.loadingText}>Loading study plan...</Text>
         </View>
       </SafeAreaView>
@@ -311,7 +311,7 @@ export function StudyPlanScreen() {
       <View style={styles.fabContainer}>
         <Pressable style={({ pressed }) => [styles.fab, isStartingSession && styles.fabDisabled, pressed && { opacity: 0.8 }]} onPress={handleStartSession} disabled={isStartingSession} accessibilityLabel="Start session button" accessibilityRole="button" accessibilityHint="Activates this control">
           {isStartingSession ? (
-            <ActivityIndicator size="small" color="#fff" />
+            <ActivityIndicator size="small" color="theme.colors.background.primary" />
           ) : (
             <>
               <Text style={styles.fabText}>▶</Text>
@@ -327,7 +327,7 @@ export function StudyPlanScreen() {
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#0F0F0F',
+    backgroundColor: 'theme.colors.primary[500]',
   },
   scrollView: {
     flex: 1,
@@ -339,12 +339,12 @@ const styles = createSheet({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: 'theme.colors.primary[500]',
   },
   loadingContainer: {
     flex: 1,
@@ -354,7 +354,7 @@ const styles = createSheet({
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#9CA3AF',
+    color: 'theme.colors.primary[500]',
   },
   errorContainer: {
     flex: 1,
@@ -364,18 +364,18 @@ const styles = createSheet({
   },
   errorText: {
     fontSize: 16,
-    color: '#EF4444',
+    color: 'theme.colors.primary[500]',
     textAlign: 'center',
     marginBottom: 16,
   },
   retryButton: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontWeight: '600',
   },
   section: {
@@ -385,20 +385,20 @@ const styles = createSheet({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     marginBottom: 12,
   },
   summaryCard: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: 'theme.colors.primary[500]',
   },
   summaryText: {
     fontSize: 15,
     lineHeight: 24,
-    color: '#D1D5DB',
+    color: 'theme.colors.primary[500]',
     marginBottom: 16,
   },
   keyConcepts: {
@@ -407,22 +407,22 @@ const styles = createSheet({
     gap: 8,
   },
   conceptTag: {
-    backgroundColor: '#2A2A2A',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
   },
   conceptText: {
     fontSize: 13,
-    color: '#9CA3AF',
+    color: 'theme.colors.primary[500]',
   },
   taskCard: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: 'theme.colors.primary[500]',
   },
   taskHeader: {
     flexDirection: 'row',
@@ -433,8 +433,8 @@ const styles = createSheet({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#3B82F6',
-    color: '#FFFFFF',
+    backgroundColor: 'theme.colors.primary[500]',
+    color: 'theme.colors.background.primary',
     fontSize: 14,
     fontWeight: '600',
     textAlign: 'center',
@@ -453,21 +453,21 @@ const styles = createSheet({
   },
   taskContent: {
     fontSize: 15,
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     lineHeight: 22,
     marginBottom: 8,
   },
   taskEstimate: {
     fontSize: 13,
-    color: '#6B7280',
+    color: 'theme.colors.primary[500]',
   },
   quizCard: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: 'theme.colors.primary[500]',
   },
   quizHeader: {
     flexDirection: 'row',
@@ -477,7 +477,7 @@ const styles = createSheet({
   quizNumber: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#3B82F6',
+    color: 'theme.colors.primary[500]',
     marginRight: 12,
   },
   difficultyBadge: {
@@ -492,7 +492,7 @@ const styles = createSheet({
   },
   quizQuestion: {
     fontSize: 15,
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     lineHeight: 22,
     marginBottom: 12,
   },
@@ -505,59 +505,59 @@ const styles = createSheet({
   },
   optionLabel: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: 'theme.colors.primary[500]',
     width: 24,
   },
   optionText: {
     fontSize: 14,
-    color: '#D1D5DB',
+    color: 'theme.colors.primary[500]',
     flex: 1,
   },
   answerToggle: {
     alignSelf: 'flex-start',
     paddingVertical: 8,
     paddingHorizontal: 12,
-    backgroundColor: '#2A2A2A',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 8,
   },
   answerToggleText: {
     fontSize: 14,
-    color: '#3B82F6',
+    color: 'theme.colors.primary[500]',
     fontWeight: '500',
   },
   answerContainer: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#2A2A2A',
+    borderTopColor: 'theme.colors.primary[500]',
   },
   answerLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: 'theme.colors.primary[500]',
     marginBottom: 4,
   },
   answerText: {
     fontSize: 15,
-    color: '#10B981',
+    color: 'theme.colors.primary[500]',
     fontWeight: '500',
     marginBottom: 12,
   },
   explanationLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: 'theme.colors.primary[500]',
     marginBottom: 4,
   },
   explanationText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: 'theme.colors.primary[500]',
     lineHeight: 20,
   },
   sessionCard: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: 'theme.colors.primary[500]',
   },
   sessionRow: {
     flexDirection: 'row',
@@ -570,13 +570,13 @@ const styles = createSheet({
   },
   sessionLabel: {
     fontSize: 13,
-    color: '#6B7280',
+    color: 'theme.colors.primary[500]',
     marginBottom: 4,
   },
   sessionValue: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
   },
   focusAreas: {
     flexDirection: 'row',
@@ -585,14 +585,14 @@ const styles = createSheet({
     marginTop: 8,
   },
   focusAreaTag: {
-    backgroundColor: '#F59E0B20',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 6,
   },
   focusAreaText: {
     fontSize: 12,
-    color: '#F59E0B',
+    color: 'theme.colors.primary[500]',
   },
   ratingContainer: {
     paddingHorizontal: 20,
@@ -601,7 +601,7 @@ const styles = createSheet({
   },
   ratingTitle: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: 'theme.colors.primary[500]',
     marginBottom: 12,
   },
   ratingStars: {
@@ -613,14 +613,14 @@ const styles = createSheet({
   },
   star: {
     fontSize: 32,
-    color: '#3A3A3A',
+    color: 'theme.colors.primary[500]',
   },
   starFilled: {
-    color: '#F59E0B',
+    color: 'theme.colors.primary[500]',
   },
   ratingThanks: {
     fontSize: 16,
-    color: '#10B981',
+    color: 'theme.colors.primary[500]',
   },
   bottomSpacer: {
     height: 100,
@@ -632,13 +632,13 @@ const styles = createSheet({
     right: 20,
   },
   fab: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 16,
     paddingVertical: 18,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#3B82F6',
+    shadowColor: 'theme.colors.primary[500]',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
@@ -650,10 +650,12 @@ const styles = createSheet({
   fabText: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     marginLeft: 8,
   },
   icon: {
     fontSize: 20,
   },
 });
+
+export * from "./StudyPlanScreen.types";

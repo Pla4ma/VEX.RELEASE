@@ -109,7 +109,7 @@ export function SessionConflictState({
                 bg={selectedOption === 'local' ? 'primary.light' : 'background.secondary'}
                 p="md"
                 borderRadius="lg"
-                style={selectedOption === 'local' ? { width: '100%', borderWidth: 2, borderColor: '#3B82F6' } : { width: '100%' }}
+                style={selectedOption === 'local' ? { width: '100%', borderWidth: 2, borderColor: 'theme.colors.primary[500]' } : { width: '100%' }}
               >
                 <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb="sm">
                   <Text variant="h4">This Device</Text>
@@ -155,7 +155,7 @@ export function SessionConflictState({
                 bg={selectedOption === 'remote' ? 'primary.light' : 'background.secondary'}
                 p="md"
                 borderRadius="lg"
-                style={selectedOption === 'remote' ? { width: '100%', borderWidth: 2, borderColor: '#3B82F6' } : { width: '100%' }}
+                style={selectedOption === 'remote' ? { width: '100%', borderWidth: 2, borderColor: 'theme.colors.primary[500]' } : { width: '100%' }}
               >
                 <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb="sm">
                   <Text variant="h4">{remoteState.deviceName || 'Other Device'}</Text>
@@ -250,7 +250,7 @@ const styles = createSheet({
   },
   selectedCard: {
     borderWidth: 2,
-    borderColor: '#3B82F6',
+    borderColor: 'theme.colors.primary[500]',
   },
   badge: {
     paddingHorizontal: 8,
@@ -258,10 +258,12 @@ const styles = createSheet({
     borderRadius: 4,
   },
   badgeText: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontSize: 10,
     fontWeight: '700',
   },
 });
 
 export default SessionConflictState;
+
+export * from "./SessionConflictState.types";

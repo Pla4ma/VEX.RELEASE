@@ -12,6 +12,7 @@ export const MissionTypeSchema = z.enum([
   'streak-critical',
   'comeback-quest',
   'daily-challenge',
+  'daily-maintenance',
   'boss-fight',
   'companion-care',
   'coach-action',

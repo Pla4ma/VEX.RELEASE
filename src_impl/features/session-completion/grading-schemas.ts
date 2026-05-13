@@ -10,6 +10,7 @@ export const SessionGradingInputSchema = z
     interruptionCount: z.number().int().min(0),
     isAbandoned: z.boolean().default(false),
     isRecoverySession: z.boolean().default(false),
+    isPartialSuccess: z.boolean().default(false),
     mode: SessionModeSchema,
     pauseCount: z.number().int().min(0),
     strictMode: z.boolean(),
@@ -62,8 +63,23 @@ export const AbandonedSessionGradingResultSchema = z
   })
   .strict();
 
+export const PartialSessionGradingResultSchema = z
+  .object({
+    factorBreakdown: z.array(SessionGradeFactorSchema),
+    focusScoreImpactRecommendation: z.number().int(),
+    grade: SessionCompletionGradeSchema,
+    gradeLabel: z.string(),
+    gradeScore: z.number().min(0).max(100),
+    kind: z.literal('partial'),
+    qualityScore: z.number().min(0).max(100),
+    userFacingReason: z.string(),
+    xpQualityMultiplier: z.number().min(0.1).max(3),
+  })
+  .strict();
+
 export const SessionGradingResultSchema = z.union([
   CompletedSessionGradingResultSchema,
   AbandonedSessionGradingResultSchema,
+  PartialSessionGradingResultSchema,
 ]);
 export type SessionGradingResult = z.infer<typeof SessionGradingResultSchema>;

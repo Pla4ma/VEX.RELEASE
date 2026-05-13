@@ -46,7 +46,7 @@ const CONSUMABLE_EFFECTS: Record<string, ConsumableEffect> = {
     label: 'XP Boost',
     description: '+25% XP for 30 minutes',
     icon: 'zap',
-    color: '#F59E0B',
+    color: 'theme.colors.primary[500]',
     duration: 30,
     effectDescription: 'All XP gains increased by 25%',
   },
@@ -55,7 +55,7 @@ const CONSUMABLE_EFFECTS: Record<string, ConsumableEffect> = {
     label: 'Focus Potion',
     description: '+10% session quality for next session',
     icon: 'target',
-    color: '#3B82F6',
+    color: 'theme.colors.primary[500]',
     duration: 60,
     effectDescription: 'Next session gets +10% quality bonus',
   },
@@ -64,7 +64,7 @@ const CONSUMABLE_EFFECTS: Record<string, ConsumableEffect> = {
     label: 'Streak Shield',
     description: 'Protects streak for 24 hours',
     icon: 'shield',
-    color: '#10B981',
+    color: 'theme.colors.primary[500]',
     duration: 1440, // 24 hours
     effectDescription: 'Streak protected from breaking',
   },
@@ -73,7 +73,7 @@ const CONSUMABLE_EFFECTS: Record<string, ConsumableEffect> = {
     label: 'Coin Boost',
     description: '+50% coins for 1 hour',
     icon: 'coins',
-    color: '#F59E0B',
+    color: 'theme.colors.primary[500]',
     duration: 60,
     effectDescription: 'All coin rewards increased by 50%',
   },
@@ -82,7 +82,7 @@ const CONSUMABLE_EFFECTS: Record<string, ConsumableEffect> = {
     label: 'Gem Boost',
     description: 'Double gem drops for 2 hours',
     icon: 'gem',
-    color: '#8B5CF6',
+    color: 'theme.colors.primary[500]',
     duration: 120,
     effectDescription: 'Gem drop rate doubled',
   },
@@ -92,7 +92,7 @@ const CONSUMABLE_EFFECTS: Record<string, ConsumableEffect> = {
     label: 'Void Fragment',
     description: 'Deals 50 extra boss damage next session',
     icon: 'skull', // Using skull icon for void/dark theme
-    color: '#6366F1', // Indigo for rare rarity
+    color: 'theme.colors.primary[500]', // Indigo for rare rarity
     duration: 0, // One-time use, applied immediately on session
     effectDescription: '+50 guaranteed boss damage on next encounter',
   },
@@ -101,7 +101,7 @@ const CONSUMABLE_EFFECTS: Record<string, ConsumableEffect> = {
     label: 'Focus Crystal',
     description: 'Reduces purity threshold for this session',
     icon: 'diamond',
-    color: '#10B981', // Green for uncommon rarity
+    color: 'theme.colors.primary[500]', // Green for uncommon rarity
     duration: 0, // Applies to next session only
     effectDescription: 'Purity threshold reduced by 10 points (easier passing)',
   },
@@ -110,7 +110,7 @@ const CONSUMABLE_EFFECTS: Record<string, ConsumableEffect> = {
     label: 'Chain Breaker',
     description: 'Restores broken SPRINT chain',
     icon: 'link',
-    color: '#6366F1', // Indigo for rare rarity
+    color: 'theme.colors.primary[500]', // Indigo for rare rarity
     duration: 0, // One-time use, immediate effect
     effectDescription: 'Instantly restore your broken SPRINT chain progress',
   },
@@ -275,7 +275,7 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
                 borderRadius={8}
                 mb={16}
                 style={{
-                  backgroundColor: theme.colors.warning[50] || '#FFFBEB',
+                  backgroundColor: theme.colors.warning[50] || 'theme.colors.error.DEFAULT',
                   borderWidth: 1,
                   borderColor: theme.colors.warning.DEFAULT + '30',
                 }}
@@ -348,16 +348,16 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
                         height: 20,
                         borderRadius: 10,
                         borderWidth: 2,
-                        borderColor: '#FFF',
+                        borderColor: 'theme.colors.background.primary',
                         borderTopColor: 'transparent',
                       }}
                     />
                   ) : (
-                    <Icon name="check" size={18} color="#FFF" />
+                    <Icon name="check" size={18} color="theme.colors.background.primary" />
                   )}
                   <Text
                     style={{
-                      color: '#FFF',
+                      color: 'theme.colors.background.primary',
                       fontWeight: '600',
                       fontSize: 16,
                       marginLeft: 8,
@@ -376,3 +376,5 @@ export const UseConsumableFlow: React.FC<UseConsumableFlowProps> = ({ item, item
 };
 
 export default UseConsumableFlow;
+
+export * from "./UseConsumableFlow.types";

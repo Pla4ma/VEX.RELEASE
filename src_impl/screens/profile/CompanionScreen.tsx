@@ -593,3 +593,6 @@ function getElementIcon(element: CompanionElement): string {
 }
 
 export default CompanionScreen;
+
+export * from "./CompanionScreen.types";
+export * from "./CompanionScreen.types";

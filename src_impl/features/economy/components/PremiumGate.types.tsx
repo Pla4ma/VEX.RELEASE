@@ -1,0 +1,1 @@
+export type PremiumGateFeature = 'ai_coach_full_access' | 'ai_coach_persona_drill_sergeant' | 'boss_tier_4' | 'boss_tier_5' | 'boss_tier_6' | 'inventory_expansion' | 'advanced_analytics' | 'content_study' | 'custom_themes' | 'squad_challenges';

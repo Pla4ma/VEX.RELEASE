@@ -29,21 +29,6 @@ import { Box, Text, Card } from '../../../components/primitives';
 import { Icon } from '../../../icons';
 import { useUIStore } from '../../../store/index';
 
-export type CosmeticType = 'avatar-frame' | 'badge' | 'background' | 'title';
-
-export interface CosmeticItem {
-  id: string;
-  name: string;
-  description: string;
-  type: CosmeticType;
-  icon: string;
-  emoji: string;
-  rarity: 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
-  isEquipped: boolean;
-  isOwned: boolean;
-  previewColor?: string;
-}
-
 interface CosmeticEquippingSheetProps {
   type: CosmeticType | null;
   items: CosmeticItem[];
@@ -63,11 +48,11 @@ const TYPE_CONFIG: Record<CosmeticType, { label: string; icon: string }> = {
 };
 
 const RARITY_COLORS: Record<string, string> = {
-  common: '#94A3B8',
-  uncommon: '#22C55E',
-  rare: '#3B82F6',
-  epic: '#A855F7',
-  legendary: '#F59E0B',
+  common: 'theme.colors.primary[500]',
+  uncommon: 'theme.colors.primary[500]',
+  rare: 'theme.colors.primary[500]',
+  epic: 'theme.colors.primary[500]',
+  legendary: 'theme.colors.primary[500]',
 };
 
 const RARITY_ORDER = ['legendary', 'epic', 'rare', 'uncommon', 'common'];
@@ -137,7 +122,7 @@ const CosmeticCard: React.FC<{
                 zIndex: 10,
               }}
             >
-              <Icon name="check" size={14} color="#FFF" />
+              <Icon name="check" size={14} color="theme.colors.background.primary" />
             </Box>
           )}
 
@@ -420,16 +405,16 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
                       height: 20,
                       borderRadius: 10,
                       borderWidth: 2,
-                      borderColor: '#FFF',
+                      borderColor: 'theme.colors.background.primary',
                       borderTopColor: 'transparent',
                     }}
                   />
                 ) : (
-                  <Icon name="check" size={20} color="#FFF" />
+                  <Icon name="check" size={20} color="theme.colors.background.primary" />
                 )}
                 <Text
                   style={{
-                    color: '#FFF',
+                    color: 'theme.colors.background.primary',
                     fontWeight: '700',
                     fontSize: 16,
                     marginLeft: 8,
@@ -451,3 +436,5 @@ export const CosmeticEquippingSheet: React.FC<CosmeticEquippingSheetProps> = ({
 };
 
 export default CosmeticEquippingSheet;
+
+export * from "./CosmeticEquippingSheet.types";

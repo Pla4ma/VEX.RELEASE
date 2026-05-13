@@ -198,3 +198,6 @@ describe('LoginForm Component', () => {
     expect(passwordInput.props.secureTextEntry).toBe(true);
   });
 });
+
+export * from "./component.test.types";
+export * from "./component.test.types";

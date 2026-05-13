@@ -42,7 +42,7 @@ export function RewardsErrorState({ error, onRetry }: RewardsErrorStateProps): J
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: 'theme.colors.primary[500]',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -57,23 +57,23 @@ const styles = createSheet({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#fff',
+    color: 'theme.colors.background.primary',
     marginBottom: 8,
   },
   message: {
     fontSize: 14,
-    color: '#9E9E9E',
+    color: 'theme.colors.primary[500]',
     textAlign: 'center',
     marginBottom: 24,
   },
   button: {
-    backgroundColor: '#e94560',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
   },
   buttonText: {
-    color: '#fff',
+    color: 'theme.colors.background.primary',
     fontSize: 16,
     fontWeight: '600',
   },

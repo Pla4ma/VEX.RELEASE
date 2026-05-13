@@ -57,7 +57,7 @@ export const styles = createSheet({
     gap: 16,
   },
   valueTitle: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontSize: 16,
     fontWeight: '700',
   },
@@ -68,7 +68,7 @@ export const styles = createSheet({
   },
   valueItem: { alignItems: 'center' },
   valueNumber: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontSize: 28,
     fontWeight: '800',
   },
@@ -108,7 +108,7 @@ export const styles = createSheet({
     borderRadius: 12,
   },
   bestValueText: {
-    color: '#000000',
+    color: 'theme.colors.text.primary',
     fontSize: 11,
     fontWeight: '800',
     textTransform: 'uppercase',
@@ -154,7 +154,7 @@ export const styles = createSheet({
     borderRadius: 8,
   },
   highlightBadgeText: {
-    color: '#000000',
+    color: 'theme.colors.text.primary',
     fontSize: 9,
     fontWeight: '800',
     letterSpacing: 0.5,

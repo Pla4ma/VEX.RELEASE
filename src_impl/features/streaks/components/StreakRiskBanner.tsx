@@ -16,21 +16,6 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 
-export type StreakRiskLevel = 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-
-export interface StreakRiskBannerProps {
-  /** Current risk level */
-  riskLevel: StreakRiskLevel;
-  /** Hours remaining until streak breaks */
-  hoursRemaining: number;
-  /** Current streak days */
-  streakDays: number;
-  /** Suggested duration for session (pre-fill) */
-  suggestedDuration: number;
-  /** Navigate to session start */
-  onStartSession: (duration: number) => void;
-}
-
 /**
  * Get risk configuration based on level
  */
@@ -204,3 +189,5 @@ export function StreakCriticalAlert({ hoursRemaining, streakDays, onStartSession
 }
 
 export default StreakRiskBanner;
+
+export * from "./StreakRiskBanner.types";

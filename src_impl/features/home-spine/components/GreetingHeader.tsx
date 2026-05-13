@@ -111,7 +111,7 @@ export function GreetingHeader({
                   <Text
                     variant="caption"
                     style={{
-                      color: '#FFF',
+                      color: 'theme.colors.background.primary',
                       fontSize: 10,
                       fontWeight: '700',
                       lineHeight: 14,

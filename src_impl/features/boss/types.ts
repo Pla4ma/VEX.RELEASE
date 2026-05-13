@@ -35,7 +35,7 @@ export interface BossTemplate {
   };
 }
 
-export type BossRewardType = 'XP' | 'COINS' | 'GEMS' | 'ITEM' | 'COSMETIC' | 'STREAK_SHIELD';
+export type BossRewardType = 'XP' | 'COINS' | 'GEMS' | 'ITEM' | 'COSMETIC' | 'STREAK_SHIELD' | 'VARIABLE_REWARD' | 'INSIGHT' | 'AESTHETIC';
 
 // ============================================================================
 // Boss Encounter Types
@@ -136,6 +136,7 @@ export interface BossReward {
   type: BossRewardType;
   amount: number;
   itemId: string | null;
+  metadata?: Record<string, unknown>;
 }
 
 export interface BossDefeatSummary {

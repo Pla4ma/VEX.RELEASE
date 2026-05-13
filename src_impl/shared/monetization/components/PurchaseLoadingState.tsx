@@ -45,7 +45,7 @@ export function PurchaseLoadingState({ productName = 'Product' }: PurchaseLoadin
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: 'theme.colors.primary[500]',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -58,40 +58,40 @@ const styles = createSheet({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: 'theme.colors.primary[500]',
   },
   skeletonTitle: {
     width: '50%',
     height: 28,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 8,
     marginTop: 24,
   },
   skeletonPrice: {
     width: '30%',
     height: 24,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 8,
     marginTop: 12,
   },
   skeletonLine: {
     width: '90%',
     height: 16,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 4,
     marginTop: 8,
   },
   skeletonButton: {
     width: '80%',
     height: 48,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 12,
     marginTop: 32,
   },
   message: {
     marginTop: 24,
     fontSize: 14,
-    color: '#9E9E9E',
+    color: 'theme.colors.primary[500]',
   },
 });
 

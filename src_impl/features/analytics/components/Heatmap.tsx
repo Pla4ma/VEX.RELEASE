@@ -257,3 +257,6 @@ const styles = createSheet({
     marginTop: 4,
   },
 });
+
+export * from "./Heatmap.types";
+export * from "./Heatmap.types";

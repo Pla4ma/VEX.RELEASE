@@ -1,0 +1,165 @@
+import { createDebugger } from "../../utils/debug";
+
+
+export function createInitialState(context: PaywallContext): PaywallMachineState {
+  return {
+    state: 'idle',
+    context,
+    canDismiss: true,
+    canRestore: true,
+  };
+}
+
+export function transitionPaywallState(current: PaywallMachineState, event: PaywallEvent): PaywallMachineState {
+  debug.info('Paywall transition: %s -> %s', current.state, event.type);
+
+  switch (current.state) {
+    case 'idle':
+      if (event.type === 'TRIGGER') {
+        return {
+          ...current,
+          state: 'loading',
+          context: event.context,
+        };
+      }
+      break;
+
+    case 'loading':
+      if (event.type === 'PRESENT') {
+        return {
+          ...current,
+          state: 'presenting',
+        };
+      }
+      if (event.type === 'LOAD') {
+        return current;
+      }
+      break;
+
+    case 'presenting':
+      if (event.type === 'START_TRIAL') {
+        return {
+          ...current,
+          state: 'trial_started',
+          context: { ...current.context, selectedTier: event.tier },
+        };
+      }
+      if (event.type === 'PURCHASE') {
+        return {
+          ...current,
+          state: 'purchasing',
+          context: { ...current.context, selectedTier: event.tier },
+        };
+      }
+      if (event.type === 'RESTORE') {
+        return {
+          ...current,
+          state: 'restoring',
+        };
+      }
+      if (event.type === 'DISMISS') {
+        return {
+          ...current,
+          state: 'dismissed',
+        };
+      }
+      break;
+
+    case 'trial_started':
+      if (event.type === 'PURCHASE_SUCCESS') {
+        return {
+          ...current,
+          state: 'success',
+        };
+      }
+      if (event.type === 'DISMISS') {
+        return {
+          ...current,
+          state: 'dismissed',
+        };
+      }
+      break;
+
+    case 'purchasing':
+      if (event.type === 'PURCHASE_SUCCESS') {
+        return {
+          ...current,
+          state: 'success',
+        };
+      }
+      if (event.type === 'PURCHASE_FAILED') {
+        return {
+          ...current,
+          state: 'failed',
+          context: { ...current.context, error: event.error },
+        };
+      }
+      break;
+
+    case 'failed':
+      if (event.type === 'PURCHASE') {
+        return {
+          ...current,
+          state: 'purchasing',
+          context: { ...current.context, error: undefined },
+        };
+      }
+      if (event.type === 'DISMISS') {
+        return {
+          ...current,
+          state: 'dismissed',
+        };
+      }
+      break;
+
+    case 'restoring':
+      if (event.type === 'RESTORE_SUCCESS') {
+        return {
+          ...current,
+          state: 'success',
+        };
+      }
+      if (event.type === 'RESTORE_FAILED') {
+        return {
+          ...current,
+          state: 'failed',
+          context: { ...current.context, error: event.error },
+        };
+      }
+      break;
+
+    case 'success':
+    case 'dismissed':
+      // Terminal states - reset to idle
+      if (event.type === 'TRIGGER') {
+        return createInitialState(event.context);
+      }
+      break;
+  }
+
+  // No valid transition
+  return current;
+}
+
+export function getPaywallStateMessage(state: PaywallState): string {
+  switch (state) {
+    case 'idle':
+      return '';
+    case 'loading':
+      return 'Loading...';
+    case 'presenting':
+      return 'Choose your plan';
+    case 'trial_started':
+      return 'Starting your free trial...';
+    case 'purchasing':
+      return 'Processing payment...';
+    case 'success':
+      return 'Welcome to Premium!';
+    case 'failed':
+      return 'Something went wrong. Please try again.';
+    case 'dismissed':
+      return 'Maybe later';
+    case 'restoring':
+      return 'Restoring purchases...';
+  }
+}

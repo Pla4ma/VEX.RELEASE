@@ -41,11 +41,11 @@ interface InventoryItemCardProps {
 // ============================================================================
 
 const RARITY_COLORS: Record<ItemRarity, string> = {
-  COMMON: '#9CA3AF',
-  UNCOMMON: '#10B981',
-  RARE: '#3B82F6',
-  EPIC: '#8B5CF6',
-  LEGENDARY: '#F59E0B',
+  COMMON: 'theme.colors.primary[500]',
+  UNCOMMON: 'theme.colors.primary[500]',
+  RARE: 'theme.colors.primary[500]',
+  EPIC: 'theme.colors.primary[500]',
+  LEGENDARY: 'theme.colors.primary[500]',
 };
 
 const TYPE_ICONS: Record<ItemType, string> = {
@@ -279,23 +279,23 @@ const styles = createSheet({
     width: '23%',
     aspectRatio: 1,
     margin: '1%',
-    backgroundColor: '#E5E7EB',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 16,
   },
   card: {
     width: '23%',
     margin: '1%',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'theme.colors.background.primary',
     ...getPremiumCardStyle('small'),
     padding: 8,
   },
   cardSelected: {
-    backgroundColor: '#DBEAFE',
+    backgroundColor: 'theme.colors.primary[500]',
     borderWidth: 2,
-    borderColor: '#3B82F6',
+    borderColor: 'theme.colors.primary[500]',
   },
   cardEquipped: {
-    backgroundColor: '#FEF3C7',
+    backgroundColor: 'theme.colors.primary[500]',
   },
   rarityBorder: {
     borderWidth: 2,
@@ -314,13 +314,13 @@ const styles = createSheet({
     position: 'absolute',
     bottom: 4,
     right: 4,
-    backgroundColor: '#374151',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 10,
     paddingHorizontal: 6,
     paddingVertical: 2,
   },
   quantityText: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontSize: 10,
     fontWeight: 'bold',
   },
@@ -329,45 +329,45 @@ const styles = createSheet({
     top: -8,
     left: 0,
     right: 0,
-    backgroundColor: '#F59E0B',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 4,
     paddingVertical: 2,
   },
   equippedText: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontSize: 8,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   itemName: {
     fontSize: 10,
-    color: '#374151',
+    color: 'theme.colors.primary[500]',
     marginTop: 4,
     textAlign: 'center',
   },
   quickUseButton: {
-    backgroundColor: '#10B981',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 4,
     paddingVertical: 4,
     marginTop: 4,
   },
   quickUseText: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontSize: 10,
     fontWeight: 'bold',
     textAlign: 'center',
   },
   filterBar: {
-    backgroundColor: '#F9FAFB',
+    backgroundColor: 'theme.colors.primary[500]',
     padding: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: 'theme.colors.primary[500]',
   },
   filterToggle: {
     paddingVertical: 4,
   },
   filterToggleText: {
-    color: '#6B7280',
+    color: 'theme.colors.primary[500]',
     fontSize: 14,
   },
   filterPanel: {
@@ -376,7 +376,7 @@ const styles = createSheet({
   filterLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#374151',
+    color: 'theme.colors.primary[500]',
     marginTop: 8,
     marginBottom: 4,
   },
@@ -390,42 +390,44 @@ const styles = createSheet({
     paddingVertical: 6,
     borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#D1D5DB',
-    backgroundColor: '#FFFFFF',
+    borderColor: 'theme.colors.primary[500]',
+    backgroundColor: 'theme.colors.background.primary',
   },
   filterChipActive: {
-    backgroundColor: '#DBEAFE',
-    borderColor: '#3B82F6',
+    backgroundColor: 'theme.colors.primary[500]',
+    borderColor: 'theme.colors.primary[500]',
   },
   filterChipText: {
     fontSize: 12,
-    color: '#374151',
+    color: 'theme.colors.primary[500]',
   },
   errorText: {
     fontSize: 16,
-    color: '#EF4444',
+    color: 'theme.colors.primary[500]',
     marginBottom: 12,
   },
   retryButton: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
   },
   retryText: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontSize: 14,
     fontWeight: '600',
   },
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#374151',
+    color: 'theme.colors.primary[500]',
     marginBottom: 8,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: 'theme.colors.primary[500]',
     textAlign: 'center',
   },
 });
+
+export * from "./inventory-grid.types";

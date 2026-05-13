@@ -164,6 +164,27 @@ export function calculateSessionGrade(rawInput: SessionGradingInput): SessionGra
     });
   }
 
+  if (input.isPartialSuccess) {
+    const factors = buildFactors(input);
+    const gradeScore = clamp(
+      factors.reduce((sum, factor) => sum + factor.contribution, 0),
+      0,
+      100,
+    );
+    const grade = scoreToGrade(Math.round(gradeScore));
+    return SessionGradingResultSchema.parse({
+      factorBreakdown: factors,
+      focusScoreImpactRecommendation: Math.min(0, gradeToFocusDelta(grade, input.strictMode)),
+      grade,
+      gradeLabel: 'Partial win banked',
+      gradeScore: Math.round(gradeScore),
+      kind: 'partial',
+      qualityScore: Math.round(gradeScore),
+      userFacingReason: 'Graceful exit triggered. Partial focus progress saved.',
+      xpQualityMultiplier: clamp(gradeToXpMultiplier(grade) * 0.4, 0.1, 0.5),
+    });
+  }
+
   const factors = buildFactors(input);
   let gradeScore = clamp(
     factors.reduce((sum, factor) => sum + factor.contribution, 0),

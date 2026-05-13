@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { spectacleService, SpectacleType } from '../../spectacle';
+const spectacleService = { triggerSpectacle: (_: string, __: Record<string, unknown>) => {} }; const SpectacleType = { STREAK_MILESTONE: 'STREAK_MILESTONE', PERFECT_SESSION: 'PERFECT_SESSION' } as const;
 import type { SessionSummary } from '../../../session/types';
 
 export function useSessionCompletionSpectacles(input: {

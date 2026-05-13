@@ -77,7 +77,7 @@ const styles = createSheet({
   label: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#6b7280',
+    color: 'theme.colors.primary[500]',
     marginBottom: 8,
     marginLeft: 4,
   },
@@ -89,14 +89,14 @@ const styles = createSheet({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: 'theme.colors.primary[500]',
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: 'theme.colors.primary[500]',
     marginRight: 8,
   },
   chipActive: {
-    backgroundColor: '#6366f1',
-    borderColor: '#6366f1',
+    backgroundColor: 'theme.colors.primary[500]',
+    borderColor: 'theme.colors.primary[500]',
   },
   chipDisabled: {
     opacity: 0.5,
@@ -104,12 +104,12 @@ const styles = createSheet({
   chipText: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#374151',
+    color: 'theme.colors.primary[500]',
   },
   chipTextActive: {
-    color: '#ffffff',
+    color: 'theme.colors.background.primary',
   },
   chipTextDisabled: {
-    color: '#9ca3af',
+    color: 'theme.colors.primary[500]',
   },
 });

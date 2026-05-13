@@ -103,11 +103,11 @@ export function IconButton({ icon, variant = 'ghost', size = 'md', loading = fal
 // ============================================================================
 
 const variantStyles = {
-  primary: { indicatorColor: '#fff' },
-  secondary: { indicatorColor: '#4ECDC4' },
-  outline: { indicatorColor: '#4ECDC4' },
-  ghost: { indicatorColor: '#4ECDC4' },
-  danger: { indicatorColor: '#fff' },
+  primary: { indicatorColor: 'theme.colors.background.primary' },
+  secondary: { indicatorColor: 'theme.colors.primary[500]' },
+  outline: { indicatorColor: 'theme.colors.primary[500]' },
+  ghost: { indicatorColor: 'theme.colors.primary[500]' },
+  danger: { indicatorColor: 'theme.colors.background.primary' },
 };
 
 const styles = createSheet({
@@ -150,40 +150,40 @@ const styles = createSheet({
 
   // Variants
   primary: {
-    backgroundColor: '#4ECDC4',
+    backgroundColor: 'theme.colors.primary[500]',
   },
   primaryText: {
-    color: '#fff',
+    color: 'theme.colors.background.primary',
   },
 
   secondary: {
-    backgroundColor: '#F0FDFB',
+    backgroundColor: 'theme.colors.primary[500]',
   },
   secondaryText: {
-    color: '#4ECDC4',
+    color: 'theme.colors.primary[500]',
   },
 
   outline: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: '#4ECDC4',
+    borderColor: 'theme.colors.primary[500]',
   },
   outlineText: {
-    color: '#4ECDC4',
+    color: 'theme.colors.primary[500]',
   },
 
   ghost: {
     backgroundColor: 'transparent',
   },
   ghostText: {
-    color: '#666',
+    color: 'theme.colors.primary[500]',
   },
 
   danger: {
-    backgroundColor: '#FF6B6B',
+    backgroundColor: 'theme.colors.error.DEFAULT',
   },
   dangerText: {
-    color: '#fff',
+    color: 'theme.colors.background.primary',
   },
 
   // Icon Button
@@ -205,20 +205,22 @@ const styles = createSheet({
     height: 56,
   },
   primaryIconButton: {
-    backgroundColor: '#4ECDC4',
+    backgroundColor: 'theme.colors.primary[500]',
   },
   secondaryIconButton: {
-    backgroundColor: '#F0FDFB',
+    backgroundColor: 'theme.colors.primary[500]',
   },
   outlineIconButton: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: '#4ECDC4',
+    borderColor: 'theme.colors.primary[500]',
   },
   ghostIconButton: {
     backgroundColor: 'transparent',
   },
   dangerIconButton: {
-    backgroundColor: '#FF6B6B',
+    backgroundColor: 'theme.colors.error.DEFAULT',
   },
 });
+
+export * from "./button.types";

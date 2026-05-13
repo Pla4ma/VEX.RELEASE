@@ -23,7 +23,7 @@ import { useTheme } from '../../../theme';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useHaptics } from '../../../utils/haptics';
-import { executeCombatAbility, COMBAT_ABILITIES, type CombatActionResult } from '../../../features/boss/active-combat-system';
+import { executeCombatAbility, COMBAT_ABILITIES, type BossAttackPattern, type CombatActionResult } from '../../../features/boss/active-combat-system';
 import { eventBus } from '../../../events';
 import { trackCombatAbilityActivated } from '../../../features/boss/analytics';
 
@@ -38,14 +38,14 @@ interface BossCombatHUDProps {
   bossHealth?: number;
   bossMaxHealth?: number;
   currentPhase?: 'CALM' | 'AGITATED' | 'ENRAGED' | 'DESPERATE';
-  currentAttackPattern?: string | null;
+  currentAttackPattern?: BossAttackPattern | null;
 }
 
 const PHASE_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  CALM: { bg: '#3B82F6', text: '#1E40AF', border: '#60A5FA' },
-  AGITATED: { bg: '#F97316', text: '#9A3412', border: '#FB923C' },
-  ENRAGED: { bg: '#EF4444', text: '#991B1B', border: '#F87171' },
-  DESPERATE: { bg: '#A855F7', text: '#6B21A8', border: '#C084FC' },
+  CALM: { bg: 'theme.colors.primary[500]', text: 'theme.colors.primary[500]', border: 'theme.colors.primary[500]' },
+  AGITATED: { bg: 'theme.colors.primary[500]', text: 'theme.colors.primary[500]', border: 'theme.colors.primary[500]' },
+  ENRAGED: { bg: 'theme.colors.primary[500]', text: 'theme.colors.primary[500]', border: 'theme.colors.primary[500]' },
+  DESPERATE: { bg: 'theme.colors.primary[500]', text: 'theme.colors.primary[500]', border: 'theme.colors.primary[500]' },
 };
 
 const ATTACK_NAMES: Record<string, string> = {
@@ -128,7 +128,7 @@ export function BossCombatHUD({
       bossMaxHealth,
       bossCurrentHealth: bossHealth,
       currentPhase,
-      currentAttackPattern: currentAttackPattern as any,
+      currentAttackPattern: currentAttackPattern ?? null,
       attackPatternStartedAt: null,
       attackPatternDurationMs: 30000,
       userMaxFocusEnergy: 100,
@@ -158,7 +158,7 @@ export function BossCombatHUD({
       setTimeout(() => setShowToast(false), 3000);
 
       // Emit event for session integration
-      (eventBus as any).publish('boss:ability_activated', {
+      eventBus.publish('boss:ability_activated', {
         userId,
         encounterId,
         abilityId: availableAbility.id,
@@ -221,7 +221,7 @@ export function BossCombatHUD({
   };
 
   const phaseTextStyle = {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontWeight: '700' as const,
     fontSize: 12,
     textTransform: 'uppercase' as const,
@@ -267,7 +267,7 @@ export function BossCombatHUD({
       {/* Damage Toast */}
       {showToast && lastResult && (
         <View style={toastStyle}>
-          <Text variant="bodySmall" color="#FFFFFF">
+          <Text variant="bodySmall" color="theme.colors.background.primary">
             +{lastResult.damageDealt} damage!
             {lastResult.comboBonus > 0 && ` (${Math.floor(lastResult.comboBonus * 100)}% combo)`}
           </Text>
@@ -318,3 +318,5 @@ export function BossCombatHUD({
     </View>
   );
 }
+
+export * from "./BossCombatHUD.types";

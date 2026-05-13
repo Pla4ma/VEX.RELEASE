@@ -98,8 +98,8 @@ export const XPBoostBanner: React.FC<XPBoostBannerProps> = ({
           flexDirection="row"
           alignItems="center"
           style={{
-            backgroundColor: '#F59E0B',
-            shadowColor: '#F59E0B',
+            backgroundColor: 'theme.colors.primary[500]',
+            shadowColor: 'theme.colors.primary[500]',
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 8,
@@ -117,7 +117,7 @@ export const XPBoostBanner: React.FC<XPBoostBannerProps> = ({
               backgroundColor: 'rgba(255, 255, 255, 0.2)',
             }}
           >
-            <Icon name="zap" size={22} color="#FFF" />
+            <Icon name="zap" size={22} color="theme.colors.background.primary" />
           </Box>
 
           {/* Text Content */}
@@ -125,7 +125,7 @@ export const XPBoostBanner: React.FC<XPBoostBannerProps> = ({
             <Box flexDirection="row" alignItems="center">
               <Text
                 style={{
-                  color: '#FFF',
+                  color: 'theme.colors.background.primary',
                   fontWeight: '700',
                   fontSize: 16,
                 }}
@@ -143,7 +143,7 @@ export const XPBoostBanner: React.FC<XPBoostBannerProps> = ({
               >
                 <Text
                   style={{
-                    color: '#FFF',
+                    color: 'theme.colors.background.primary',
                     fontWeight: '700',
                     fontSize: 12,
                   }}

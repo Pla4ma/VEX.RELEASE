@@ -1,0 +1,9 @@
+export type DeduplicationKey = z.infer<typeof DeduplicationKeySchema>;
+export type DeduplicationRule = z.infer<typeof DeduplicationRuleSchema>;
+export type DeduplicationAttempt = z.infer<typeof DeduplicationAttemptSchema>;
+export type DeduplicationRequest = z.infer<typeof DeduplicationRequestSchema>;
+export type DeduplicationResult = z.infer<typeof DeduplicationResultSchema>;
+export type ExploitPattern = z.infer<typeof ExploitPatternSchema>;
+export type ExploitDetection = z.infer<typeof ExploitDetectionSchema>;
+export type DeduplicationAnalytics = z.infer<typeof DeduplicationAnalyticsSchema>;
+export type AntiDuplicationConfig = z.infer<typeof AntiDuplicationConfigSchema>;

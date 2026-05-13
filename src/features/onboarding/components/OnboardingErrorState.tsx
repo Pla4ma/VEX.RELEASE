@@ -1,2 +1,0 @@
-export * from '../../../../src_impl/features/onboarding/components/OnboardingErrorState';
-export { default } from '../../../../src_impl/features/onboarding/components/OnboardingErrorState';

@@ -105,7 +105,7 @@ export const PdfUploader: React.FC<PdfUploaderProps> = ({ selectedFile, onFileSe
           styles.fileCard,
           {
             backgroundColor: theme.colors.background.secondary,
-            borderColor: isOversized ? theme.colors.error[500] : theme.colors.border?.DEFAULT || '#E2E8F0',
+            borderColor: isOversized ? theme.colors.error[500] : theme.colors.border?.DEFAULT || 'theme.colors.primary[500]',
           },
         ]}
       >

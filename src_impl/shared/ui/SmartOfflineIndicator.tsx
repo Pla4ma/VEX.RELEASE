@@ -477,3 +477,6 @@ const styles = createSheet({
 });
 
 export default SmartOfflineIndicator;
+
+export * from "./SmartOfflineIndicator.types";
+export * from "./SmartOfflineIndicator.types";

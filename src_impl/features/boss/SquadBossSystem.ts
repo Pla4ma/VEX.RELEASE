@@ -21,75 +21,9 @@ import { featureFlags } from '../../feature-flags/FeatureFlagEngine';
 // ============================================================================
 // Types
 // ============================================================================
-
-export interface SquadBossEncounter {
-  id: string;
-  bossId: string;
-  squadId: string;
-  healthRemaining: number;
-  maxHealth: number;
-  status: 'ACTIVE' | 'DEFEATED' | 'TIMEOUT' | 'ABANDONED';
-  startedAt: number;
-  expiresAt: number;
-  defeatedAt: number | null;
-  memberContributions: SquadMemberContribution[];
-  squadDamageTotal: number;
-  lastActivityAt: number;
-}
-
-export interface SquadMemberContribution {
-  userId: string;
-  userName: string;
-  avatarUrl: string | null;
-  damageDealt: number;
-  sessionsContributed: number;
-  lastContributionAt: number;
-  largestSingleHit: number;
-  criticalHits: number;
-  bountyPlaced: boolean;
-}
-
-export interface SquadVictoryCeremony {
-  encounterId: string;
-  bossId: string;
-  bossName: string;
-  defeatedAt: number;
-  squadId: string;
-  mvp: SquadMemberContribution | null;
-  contributions: SquadMemberContribution[];
-  totalSquadDamage: number;
-  victoryMessage: string;
-  sharedRewards: SquadSharedReward[];
-}
-
-export interface SquadSharedReward {
-  userId: string;
-  xpAmount: number;
-  coinAmount: number;
-  cosmeticId: string | null;
-  bonusReward: boolean; // MVP gets bonus
-}
-
-export interface SquadBossInvite {
-  id: string;
-  encounterId: string;
-  squadId: string;
-  invitedByUserId: string;
-  invitedAt: number;
-  expiresAt: number;
-  accepted: boolean;
-  declined: boolean;
-}
-
 // ============================================================================
 // Constants
 // ============================================================================
-
-export const SQUAD_BOSS_HEALTH_MULTIPLIER = 1.5; // 50% more health for squad bosses
-export const SQUAD_BOSS_DURATION_MULTIPLIER = 1.5; // 50% longer duration
-
-export const MVP_BONUS_MULTIPLIER = 1.5; // MVP gets 50% more rewards
-export const PARTICIPATION_THRESHOLD = 0.05; // Must deal at least 5% damage to get rewards
 
 function assertSquadBossEnabled(): void {
   if (!featureFlags.isEnabled('squad_boss_system')) {
@@ -101,60 +35,6 @@ function assertSquadBossEnabled(): void {
 // Squad Boss Creation
 // ============================================================================
 
-/**
- * Calculate scaled health for squad boss
- */
-export function calculateSquadBossHealth(baseHealth: number, squadSize: number): number {
-  const squadMultiplier = 1 + (squadSize - 1) * 0.3; // +30% per additional member
-  return Math.floor(baseHealth * SQUAD_BOSS_HEALTH_MULTIPLIER * squadMultiplier);
-}
-
-/**
- * Create a new squad boss encounter
- */
-export function createSquadBossEncounter(bossId: string, squadId: string, baseHealth: number, baseDuration: number, members: Array<{ userId: string; userName: string; avatarUrl: string | null }>): SquadBossEncounter {
-  assertSquadBossEnabled();
-  const scaledHealth = calculateSquadBossHealth(baseHealth, members.length);
-  const scaledDuration = baseDuration * SQUAD_BOSS_DURATION_MULTIPLIER;
-
-  const now = Date.now();
-
-  const encounter: SquadBossEncounter = {
-    id: generateEncounterId(),
-    bossId,
-    squadId,
-    healthRemaining: scaledHealth,
-    maxHealth: scaledHealth,
-    status: 'ACTIVE',
-    startedAt: now,
-    expiresAt: now + scaledDuration,
-    defeatedAt: null,
-    memberContributions: members.map((m) => ({
-      userId: m.userId,
-      userName: m.userName,
-      avatarUrl: m.avatarUrl,
-      damageDealt: 0,
-      sessionsContributed: 0,
-      lastContributionAt: 0,
-      largestSingleHit: 0,
-      criticalHits: 0,
-      bountyPlaced: false,
-    })),
-    squadDamageTotal: 0,
-    lastActivityAt: now,
-  };
-
-  // Publish event
-  eventBus.publish('boss:squad_encounter_created', {
-    encounterId: encounter.id,
-    squadId,
-    bossId,
-    memberCount: members.length,
-  });
-
-  return encounter;
-}
-
 function generateEncounterId(): string {
   return `squad-boss-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 }
@@ -162,160 +42,12 @@ function generateEncounterId(): string {
 // ============================================================================
 // Damage Application
 // ============================================================================
-
-/**
- * Apply damage from a squad member
- */
-export function applySquadMemberDamage(
-  encounter: SquadBossEncounter,
-  userId: string,
-  damage: number,
-  sessionId: string,
-  wasCritical: boolean = false,
-): {
-  encounter: SquadBossEncounter;
-  contribution: SquadMemberContribution;
-  isDefeated: boolean;
-} {
-  // Find or create contribution record
-  let contribution = encounter.memberContributions.find((c) => c.userId === userId);
-
-  if (!contribution) {
-    contribution = {
-      userId,
-      userName: 'Unknown',
-      avatarUrl: null,
-      damageDealt: 0,
-      sessionsContributed: 0,
-      lastContributionAt: 0,
-      largestSingleHit: 0,
-      criticalHits: 0,
-      bountyPlaced: false,
-    };
-    encounter.memberContributions.push(contribution);
-  }
-
-  // Update contribution stats
-  contribution.damageDealt += damage;
-  contribution.sessionsContributed += 1;
-  contribution.lastContributionAt = Date.now();
-  contribution.largestSingleHit = Math.max(contribution.largestSingleHit, damage);
-  if (wasCritical) {
-    contribution.criticalHits += 1;
-  }
-
-  // Update encounter stats
-  encounter.healthRemaining = Math.max(0, encounter.healthRemaining - damage);
-  encounter.squadDamageTotal += damage;
-  encounter.lastActivityAt = Date.now();
-
-  // Check for defeat
-  const isDefeated = encounter.healthRemaining === 0;
-  if (isDefeated) {
-    encounter.status = 'DEFEATED';
-    encounter.defeatedAt = Date.now();
-  }
-
-  // Publish event
-  eventBus.publish('boss:squad_damage_dealt', {
-    encounterId: encounter.id,
-    userId,
-    damage,
-    healthRemaining: encounter.healthRemaining,
-  });
-
-  return { encounter, contribution, isDefeated };
-}
-
 // ============================================================================
 // MVP Calculation
 // ============================================================================
-
-/**
- * Calculate MVP for squad boss encounter
- */
-export function calculateMVP(contributions: SquadMemberContribution[]): SquadMemberContribution | null {
-  if (contributions.length === 0) {
-    return null;
-  }
-
-  // Score based on multiple factors
-  const scored = contributions.map((c) => ({
-    contribution: c,
-    score: c.damageDealt * 1 + c.sessionsContributed * 10 + c.criticalHits * 50 + (c.bountyPlaced ? 100 : 0),
-  }));
-
-  scored.sort((a, b) => b.score - a.score);
-  return scored[0].contribution;
-}
-
-/**
- * Get member ranking
- */
-export function getMemberRanking(contributions: SquadMemberContribution[]): Array<SquadMemberContribution & { rank: number; damagePercent: number }> {
-  const totalDamage = contributions.reduce((sum, c) => sum + c.damageDealt, 0);
-
-  return contributions
-    .map((c) => ({
-      ...c,
-      rank: 0, // Will be set below
-      damagePercent: totalDamage > 0 ? (c.damageDealt / totalDamage) * 100 : 0,
-    }))
-    .sort((a, b) => b.damageDealt - a.damageDealt)
-    .map((c, index) => ({ ...c, rank: index + 1 }));
-}
-
 // ============================================================================
 // Victory Ceremony
 // ============================================================================
-
-/**
- * Create victory ceremony for defeated squad boss
- */
-export function createVictoryCeremony(encounter: SquadBossEncounter, bossName: string): SquadVictoryCeremony {
-  const mvp = calculateMVP(encounter.memberContributions);
-  const ranking = getMemberRanking(encounter.memberContributions);
-
-  // Generate rewards
-  const sharedRewards: SquadSharedReward[] = encounter.memberContributions
-    .filter((c) => c.damageDealt > 0) // Only participants who dealt damage
-    .map((c) => {
-      const isMVP = mvp?.userId === c.userId;
-      const baseXP = 100;
-      const baseCoins = 50;
-
-      return {
-        userId: c.userId,
-        xpAmount: isMVP ? Math.floor(baseXP * MVP_BONUS_MULTIPLIER) : baseXP,
-        coinAmount: isMVP ? Math.floor(baseCoins * MVP_BONUS_MULTIPLIER) : baseCoins,
-        cosmeticId: isMVP ? 'mvp-badge' : null,
-        bonusReward: isMVP,
-      };
-    });
-
-  const ceremony: SquadVictoryCeremony = {
-    encounterId: encounter.id,
-    bossId: encounter.bossId,
-    bossName,
-    defeatedAt: encounter.defeatedAt || Date.now(),
-    squadId: encounter.squadId,
-    mvp,
-    contributions: ranking,
-    totalSquadDamage: encounter.squadDamageTotal,
-    victoryMessage: generateVictoryMessage(encounter, mvp),
-    sharedRewards,
-  };
-
-  // Publish event
-  eventBus.publish('boss:squad_victory', {
-    encounterId: encounter.id,
-    squadId: encounter.squadId,
-    bossId: encounter.bossId,
-    totalDamage: encounter.squadDamageTotal,
-  });
-
-  return ceremony;
-}
 
 /**
  * Generate victory message based on squad performance
@@ -348,117 +80,12 @@ function formatDamage(damage: number): string {
 // ============================================================================
 // Progress Tracking
 // ============================================================================
-
-/**
- * Get squad progress summary
- */
-export function getSquadProgressSummary(encounter: SquadBossEncounter): {
-  healthPercent: number;
-  timeRemaining: number;
-  topContributor: SquadMemberContribution | null;
-  totalParticipants: number;
-  recentActivity: boolean;
-} {
-  const healthPercent = (encounter.healthRemaining / encounter.maxHealth) * 100;
-  const timeRemaining = Math.max(0, encounter.expiresAt - Date.now());
-  const topContributor = encounter.memberContributions.reduce((top, c) => (c.damageDealt > (top?.damageDealt || 0) ? c : top), null as SquadMemberContribution | null);
-  const totalParticipants = encounter.memberContributions.filter((c) => c.damageDealt > 0).length;
-  const recentActivity = Date.now() - encounter.lastActivityAt < 60 * 60 * 1000; // 1 hour
-
-  return {
-    healthPercent,
-    timeRemaining,
-    topContributor,
-    totalParticipants,
-    recentActivity,
-  };
-}
-
-/**
- * Check if member can join active encounter
- */
-export function canMemberJoin(encounter: SquadBossEncounter, userId: string): boolean {
-  // Check if encounter is active
-  if (encounter.status !== 'ACTIVE') {
-    return false;
-  }
-
-  // Check if not expired
-  if (encounter.expiresAt < Date.now()) {
-    return false;
-  }
-
-  // Check if already a member
-  if (encounter.memberContributions.some((c) => c.userId === userId)) {
-    return true;
-  }
-
-  // New members can join if encounter is recent (< 1 hour old)
-  const isRecent = Date.now() - encounter.startedAt < 60 * 60 * 1000;
-  return isRecent;
-}
-
-/**
- * Add new member to encounter
- */
-export function addMemberToEncounter(encounter: SquadBossEncounter, userId: string, userName: string, avatarUrl: string | null): SquadBossEncounter {
-  if (!canMemberJoin(encounter, userId)) {
-    throw new Error('Cannot join this encounter');
-  }
-
-  // Check if already exists
-  if (encounter.memberContributions.some((c) => c.userId === userId)) {
-    return encounter;
-  }
-
-  encounter.memberContributions.push({
-    userId,
-    userName,
-    avatarUrl,
-    damageDealt: 0,
-    sessionsContributed: 0,
-    lastContributionAt: 0,
-    largestSingleHit: 0,
-    criticalHits: 0,
-    bountyPlaced: false,
-  });
-
-  // Scale health for new member
-  const newHealth = calculateSquadBossHealth(encounter.maxHealth, encounter.memberContributions.length);
-  const healthDelta = newHealth - encounter.maxHealth;
-  encounter.maxHealth = newHealth;
-  encounter.healthRemaining += healthDelta;
-
-  eventBus.publish('boss:squad_member_joined', {
-    encounterId: encounter.id,
-    userId,
-    displayName: userName,
-  });
-
-  return encounter;
-}
-
 // ============================================================================
 // Bounty Integration
 // ============================================================================
-
-/**
- * Record that a member placed a bounty
- */
-export function recordBountyPlaced(encounter: SquadBossEncounter, userId: string): void {
-  const contribution = encounter.memberContributions.find((c) => c.userId === userId);
-  if (contribution) {
-    contribution.bountyPlaced = true;
-  }
-}
-
-/**
- * Get active bounty count for encounter
- */
-export function getActiveBountyCount(encounter: SquadBossEncounter): number {
-  return encounter.memberContributions.filter((c) => c.bountyPlaced).length;
-}
-
 // ============================================================================
 // Exports (types already exported above)
 // ============================================================================
+export * from "./SquadBossSystem.types";
+export * from "./SquadBossSystem.part1";
+export * from "./SquadBossSystem.part2";

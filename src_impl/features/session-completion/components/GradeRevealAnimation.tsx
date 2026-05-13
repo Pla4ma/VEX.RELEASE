@@ -138,7 +138,7 @@ export function GradeRevealAnimation({
       style={[
         {
           alignItems: 'center',
-          backgroundColor: '#000000',
+          backgroundColor: 'theme.colors.text.primary',
           bottom: 0,
           justifyContent: 'center',
           left: 0,
@@ -207,3 +207,5 @@ export function GradeRevealAnimation({
 }
 
 export default GradeRevealAnimation;
+
+export * from "./GradeRevealAnimation.types";

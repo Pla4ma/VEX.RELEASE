@@ -340,3 +340,6 @@ export class CalendarSyncService {
     return free.filter(slot => slot.duration >= 15);
   }
 }
+
+export * from "./CalendarSyncService.types";
+export * from "./CalendarSyncService.types";

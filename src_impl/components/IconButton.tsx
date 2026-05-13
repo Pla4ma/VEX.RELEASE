@@ -67,12 +67,12 @@ export const IconButton: React.FC<IconButtonProps> = ({
 const styles = createSheet({
   button: {
     borderRadius: 8,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: 'theme.colors.primary[500]',
     alignItems: 'center',
     justifyContent: 'center',
   },
   primary: {
-    backgroundColor: '#6366f1',
+    backgroundColor: 'theme.colors.primary[500]',
   },
   ghost: {
     backgroundColor: 'transparent',

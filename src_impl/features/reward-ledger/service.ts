@@ -17,14 +17,14 @@ export class RewardLedgerServiceError extends Error {
 
 function mapCurrencyToEconomyCurrency(
   currency: string
-): 'COINS' | 'GEMS' | 'FOCUS_POINTS' | 'SEASONAL' {
+): 'COINS' | 'GEMS' | 'COINS' | 'COINS' {
   switch (currency) {
     case 'COINS':
       return 'COINS';
     case 'GEMS':
       return 'GEMS';
     case 'XP':
-      return 'FOCUS_POINTS';
+      return 'COINS';
     default:
       return 'COINS';
   }

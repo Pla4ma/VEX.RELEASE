@@ -456,3 +456,6 @@ const styles = createSheet({
 });
 
 export default SessionSummary;
+
+export * from "./SessionSummary.types";
+export * from "./SessionSummary.types";

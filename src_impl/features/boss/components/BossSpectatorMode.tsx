@@ -21,47 +21,6 @@ import { useTheme } from '../../../theme';
 // Types
 // ============================================================================
 
-export interface SpectatorBossData {
-  /** Boss ID */
-  id: string;
-  /** Boss name */
-  name: string;
-  /** Current health points */
-  currentHealth: number;
-  /** Max health points */
-  maxHealth: number;
-  /** Boss tier (1-6) */
-  tier: number;
-  /** Boss icon/emoji */
-  icon: string;
-  /** Time remaining before escape */
-  timeRemainingSeconds: number;
-}
-
-export interface Contributor {
-  /** User ID */
-  userId: string;
-  /** Display name */
-  name: string;
-  /** Avatar URL */
-  avatar?: string;
-  /** Damage dealt */
-  damage: number;
-  /** Session duration contributed */
-  sessionDuration: number;
-  /** Whether currently active */
-  isActive: boolean;
-}
-
-export interface CheerMessage {
-  id: string;
-  userId: string;
-  name: string;
-  emoji: string;
-  message: string;
-  timestamp: number;
-}
-
 interface BossSpectatorModeProps {
   /** Boss data */
   boss: SpectatorBossData;
@@ -456,3 +415,6 @@ export function BossSpectatorMode({ boss, contributors, spectatorUserId, spectat
 }
 
 export default BossSpectatorMode;
+
+export * from "./BossSpectatorMode.types";
+export * from "./BossSpectatorMode.types";

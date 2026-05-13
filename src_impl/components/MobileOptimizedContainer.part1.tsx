@@ -1,0 +1,136 @@
+import React from "react";
+import { View, KeyboardAvoidingView, Platform, ScrollView, Dimensions, StatusBar } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { createSheet } from "@/shared/ui/create-sheet";
+
+
+export const MobileOptimizedContainer: React.FC<MobileOptimizedContainerProps> = ({
+  children,
+  scrollable = true,
+  keyboardAvoiding = true,
+  avoidHeader = true,
+  avoidBottomNav = true,
+  padding = 16,
+  backgroundColor = 'theme.colors.primary[500]',
+}) => {
+  const insets = useSafeAreaInsets();
+
+  // Calculate safe padding for mobile
+  const topPadding = avoidHeader ? Math.max(insets.top, 16) : padding;
+  const bottomPadding = avoidBottomNav ? Math.max(insets.bottom, 16) : padding;
+
+  // Adjust for small screens (iPhone SE, mini)
+  const adjustedPadding = isSmallScreen ? Math.max(padding - 4, 12) : padding;
+
+  const content = (
+    <View
+      style={[
+        styles.container,
+        {
+          paddingTop: topPadding,
+          paddingBottom: bottomPadding,
+          paddingHorizontal: isTablet ? 32 : adjustedPadding,
+          backgroundColor,
+        },
+      ]}
+    >
+      {children}
+    </View>
+  );
+
+  const scrollableContent = scrollable ? (
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={styles.scrollContent}
+      keyboardShouldPersistTaps="handled"
+    >
+      {content}
+    </ScrollView>
+  ) : (
+    content
+  );
+
+  if (keyboardAvoiding && Platform.OS === 'ios') {
+    return (
+      <>
+        <StatusBar barStyle="light-content" />
+        <KeyboardAvoidingView
+          behavior="padding"
+          style={styles.keyboardView}
+          keyboardVerticalOffset={avoidHeader ? 0 : 0}
+        >
+          {scrollableContent}
+        </KeyboardAvoidingView>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <StatusBar barStyle="light-content" />
+      {scrollableContent}
+    </>
+  );
+};
+
+export const TouchTarget: React.FC<TouchTargetProps> = ({
+  children,
+  minSize = 44,
+  onPress: _onPress,
+}) => {
+  return (
+    <View
+      style={{
+        minWidth: minSize,
+        minHeight: minSize,
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      {children}
+    </View>
+  );
+};
+
+export const getResponsiveFontSize = (baseSize: number): number => {
+  if (isSmallScreen) {
+    // Reduce font sizes by ~10% on small screens
+    return Math.round(baseSize * 0.9);
+  }
+  if (isTablet) {
+    // Increase slightly on tablets
+    return Math.round(baseSize * 1.1);
+  }
+  return baseSize;
+};
+
+export const MobileGrid: React.FC<MobileGridProps> = ({
+  children,
+  columns = 2,
+  gap = 12,
+}) => {
+  // Adjust columns based on screen width
+  const actualColumns = isTablet ? Math.min(columns + 1, 4) : columns;
+
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap,
+        marginHorizontal: -gap / 2,
+      }}
+    >
+      {React.Children.map(children, (child) => (
+        <View
+          style={{
+            width: `${100 / actualColumns}%`,
+            paddingHorizontal: gap / 2,
+          }}
+        >
+          {child}
+        </View>
+      ))}
+    </View>
+  );
+};

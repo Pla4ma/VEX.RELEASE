@@ -22,9 +22,6 @@ const debug = createDebugger('feedback:haptics');
 // Types & Configuration
 // ============================================================================
 
-export type HapticIntensity = 'light' | 'medium' | 'heavy';
-export type HapticContext = 'success' | 'error' | 'warning' | 'neutral' | 'selection' | 'impact';
-
 interface HapticConfig {
   enabled: boolean;
   respectBattery: boolean;
@@ -317,3 +314,5 @@ export const haptics = {
 
 export default HapticEngine;
 
+export * from "./HapticEngine.types";
+export * from "./HapticEngine.types";

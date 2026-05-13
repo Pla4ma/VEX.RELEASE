@@ -88,106 +88,6 @@ const identityStorage = new MMKVStorageAdapter('focus-identity');
 // ============================================================================
 // TYPES & SCHEMAS
 // ============================================================================
-
-export interface ScoreBand {
-  min: number;
-  max: number;
-  label: string;
-  title: string;
-  color: string;
-  percentile: number;
-}
-
-export interface FocusScoreFactors {
-  // 35% weight - Most important
-  consistency: {
-    score: number; // 0-100
-    sessionsLast30Days: number;
-    targetSessionsPerWeek: number;
-    actualConsistency: number; // 0-1
-    missedDaysLast30Days: number;
-  };
-
-  // 30% weight
-  streakStability: {
-    score: number;
-    currentStreak: number;
-    longestStreak: number;
-    averageStreakLength: number;
-    totalStreaksStarted: number;
-    streakBreakFrequency: number; // breaks per month
-  };
-
-  // 15% weight
-  sessionQuality: {
-    score: number;
-    averageFocusPurity: number; // 0-100
-    averageGrade: 'S' | 'A' | 'B' | 'C' | 'D';
-    perfectSessionsCount: number;
-    averageSessionDuration: number;
-  };
-
-  // 10% weight
-  diversity: {
-    score: number;
-    uniqueSessionModes: number;
-    uniqueTimeSlots: number; // morning/afternoon/evening
-    uniqueDaysOfWeek: number;
-    weekendSessions: number;
-    contextVariety: number; // locations, contexts
-  };
-
-  // 10% weight
-  recency: {
-    score: number;
-    daysSinceLastSession: number;
-    last7DayActivity: number; // sessions
-    last30DayActivity: number;
-    trendDirection: 'UP' | 'STABLE' | 'DOWN' | 'CONCERNING';
-    velocity: number; // score change rate
-  };
-}
-
-export interface FocusIdentityProfile {
-  userId: string;
-  currentScore: number;
-  previousScore: number;
-  scoreHistory: Array<{ date: string; score: number; reason: string }>;
-  percentileRank: number; // vs all users
-  band: ScoreBand;
-  factors: FocusScoreFactors;
-
-  // Identity reinforcement
-  identityStatement: string; // "You are a disciplined person"
-  streakInCurrentBand: number; // Days at this level
-  totalScoreCalculations: number;
-  firstScoreDate: string;
-
-  // Recovery state
-  isInRecovery: boolean;
-  recoveryStartDate: string | null;
-  recoveryProgress: number; // 0-100
-  preLapseScore: number | null;
-
-  // Insights
-  topStrength: keyof FocusScoreFactors;
-  topWeakness: keyof FocusScoreFactors;
-  recommendedActions: string[];
-
-  // Monthly report
-  monthlyReport: {
-    month: string;
-    startingScore: number;
-    endingScore: number;
-    change: number;
-    sessionsCompleted: number;
-    grade: 'A+' | 'A' | 'B+' | 'B' | 'C' | 'D';
-    highlight: string;
-  } | null;
-
-  updatedAt: number;
-}
-
 const FocusScoreFactorsSchema = z.object({
   consistency: z.object({
     score: z.number().min(0).max(100),
@@ -905,3 +805,5 @@ export class FocusIdentityService {
 }
 
 export default FocusIdentityService;
+
+export * from "./FocusIdentityEngine.types";

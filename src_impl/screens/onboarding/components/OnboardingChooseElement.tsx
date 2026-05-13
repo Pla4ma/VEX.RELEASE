@@ -261,7 +261,7 @@ function ElementCard({ element, isSelected, onSelect, delay }: ElementCardProps)
                 alignItems: 'center',
               }}
             >
-              <Text style={{ color: '#FFF', fontSize: 14 }}>✓</Text>
+              <Text style={{ color: 'theme.colors.background.primary', fontSize: 14 }}>✓</Text>
             </View>
           )}
         </Animated.View>
@@ -302,7 +302,7 @@ function ElementVisual({ element, color }: { element: CompanionElement; color: s
     VOID: (
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: color, opacity: 0.8 }} />
-        <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: '#FFF', position: 'absolute' }} />
+        <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: 'theme.colors.background.primary', position: 'absolute' }} />
       </View>
     ),
     LUMINA: (
@@ -327,3 +327,5 @@ function ElementVisual({ element, color }: { element: CompanionElement; color: s
 }
 
 export default OnboardingChooseElement;
+
+export * from "./OnboardingChooseElement.types";

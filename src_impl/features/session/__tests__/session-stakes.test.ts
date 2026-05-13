@@ -229,7 +229,7 @@ describe('Session Stakes System', () => {
 
       expect(label).toBe('Casual');
       expect(icon).toBe('🌱');
-      expect(color).toBe('#4CAF50');
+      expect(color).toBe('theme.colors.primary[500]');
       expect(riskLevel).toBe('LOW');
     });
 
@@ -238,7 +238,7 @@ describe('Session Stakes System', () => {
 
       expect(label).toBe('Focused');
       expect(icon).toBe('🔥');
-      expect(color).toBe('#FF9800');
+      expect(color).toBe('theme.colors.error.DEFAULT');
       expect(riskLevel).toBe('MEDIUM');
     });
 
@@ -247,7 +247,7 @@ describe('Session Stakes System', () => {
 
       expect(label).toBe('Deep Work');
       expect(icon).toBe('⚡');
-      expect(color).toBe('#9C27B0');
+      expect(color).toBe('theme.colors.primary[500]');
       expect(riskLevel).toBe('HIGH');
     });
   });

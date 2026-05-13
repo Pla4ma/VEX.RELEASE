@@ -55,7 +55,7 @@ export async function ensureNotificationChannel(): Promise<void> {
       description: NOTIFICATION_CONFIG.androidChannelDescription,
       importance: Notifications.AndroidImportance.HIGH,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF6B6B',
+      lightColor: 'theme.colors.error.DEFAULT',
     });
   } catch (error) {
     debug.warn('Notification channel setup failed', error);

@@ -11,12 +11,12 @@ export type ItemRarity = 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY' |
  */
 export function getRarityColor(rarity: ItemRarity): string {
   const colors: Record<ItemRarity, string> = {
-    COMMON: '#9E9E9E',     // Gray
-    UNCOMMON: '#4CAF50',   // Green
-    RARE: '#2196F3',       // Blue
-    EPIC: '#9C27B0',       // Purple
-    LEGENDARY: '#FF9800',  // Orange
-    MYTHIC: '#FFD700',     // Gold
+    COMMON: 'theme.colors.primary[500]',     // Gray
+    UNCOMMON: 'theme.colors.primary[500]',   // Green
+    RARE: 'theme.colors.primary[500]',       // Blue
+    EPIC: 'theme.colors.primary[500]',       // Purple
+    LEGENDARY: 'theme.colors.error.DEFAULT',  // Orange
+    MYTHIC: 'theme.colors.error.DEFAULT',     // Gold
   };
 
   return colors[rarity] ?? colors.COMMON;

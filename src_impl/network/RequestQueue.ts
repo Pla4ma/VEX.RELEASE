@@ -11,20 +11,6 @@ import { createDebugger } from '../utils/debug';
 const debug = createDebugger('network');
 
 /**
- * Queued request
- */
-export interface QueuedRequest {
-  id: string;
-  url: string;
-  method: string;
-  headers: Record<string, string>;
-  body: string | null;
-  timestamp: number;
-  retryCount: number;
-  priority: number;
-}
-
-/**
  * Request queue configuration
  */
 interface RequestQueueConfig {
@@ -214,3 +200,6 @@ export function getRequestQueue(config?: RequestQueueConfig): RequestQueue {
   }
   return requestQueueInstance;
 }
+
+export * from "./RequestQueue.types";
+export * from "./RequestQueue.types";

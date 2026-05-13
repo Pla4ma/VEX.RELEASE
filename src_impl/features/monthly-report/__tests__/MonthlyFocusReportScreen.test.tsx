@@ -22,14 +22,14 @@ jest.mock('../../../theme', () => ({
   useTheme: () => ({
     theme: {
       colors: {
-        primary: { 500: '#4F46E5' },
-        background: { primary: '#F7F9FC' },
-        text: { primary: '#07111F', secondary: '#334155', muted: '#64748B', inverse: '#FFFFFF' },
-        surface: { card: '#FFFFFF' },
-        success: { DEFAULT: '#15803D' },
-        error: { DEFAULT: '#B91C1C' },
-        warning: { DEFAULT: '#92400E' },
-        accent: { purple: '#A855F7', blue: '#3B82F6' },
+        primary: { 500: 'theme.colors.primary[500]' },
+        background: { primary: 'theme.colors.primary[500]' },
+        text: { primary: 'theme.colors.primary[500]', secondary: 'theme.colors.primary[500]', muted: 'theme.colors.primary[500]', inverse: 'theme.colors.background.primary' },
+        surface: { card: 'theme.colors.background.primary' },
+        success: { DEFAULT: 'theme.colors.primary[500]' },
+        error: { DEFAULT: 'theme.colors.primary[500]' },
+        warning: { DEFAULT: 'theme.colors.primary[500]' },
+        accent: { purple: 'theme.colors.primary[500]', blue: 'theme.colors.primary[500]' },
       },
       spacing: { 1: 4, 2: 8, 3: 12, 4: 16, 6: 24, 8: 32 },
       borderRadius: { md: 8, lg: 12, xl: 16, full: 9999 },

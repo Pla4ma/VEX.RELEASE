@@ -331,3 +331,6 @@ const overlayStyle = {
   };
 
 export default CheckpointCelebration;
+
+export * from "./CheckpointCelebration.types";
+export * from "./CheckpointCelebration.types";

@@ -30,15 +30,6 @@ import { createSheet } from '@/shared/ui/create-sheet';
 
 const DISMISS_DURATION = 30 * 1000; // 30 seconds
 
-export interface OfflineBannerProps {
-  /** Custom message to display */
-  message?: string;
-  /** Callback when banner is dismissed */
-  onDismiss?: () => void;
-  /** Callback when banner reappears */
-  onReappear?: () => void;
-}
-
 export function OfflineBanner({
   message = "You're offline. Sessions will sync when reconnected.",
   onDismiss,
@@ -220,10 +211,12 @@ const styles = createSheet({
     justifyContent: 'center',
   },
   dismissText: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontSize: 14,
     fontWeight: '700',
   },
 });
 
 export default OfflineBanner;
+
+export * from "./OfflineBanner.types";

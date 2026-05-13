@@ -9,77 +9,6 @@ import { I18nManager, AccessibilityInfo, Platform } from 'react-native';
 // ============================================================================
 // Localization Structure
 // ============================================================================
-
-export type SupportedLanguage = 'en' | 'es' | 'de' | 'fr' | 'ja' | 'ar' | 'he';
-
-export interface TranslationKeys {
-  // Common
-  'app.name': string;
-  'app.tagline': string;
-  'button.ok': string;
-  'button.cancel': string;
-  'button.confirm': string;
-  'button.back': string;
-  'button.next': string;
-  'button.skip': string;
-  'button.save': string;
-  'button.delete': string;
-  'button.edit': string;
-
-  // Navigation
-  'nav.home': string;
-  'nav.sessions': string;
-  'nav.bosses': string;
-  'nav.squad': string;
-  'nav.profile': string;
-  'nav.settings': string;
-  'nav.shop': string;
-
-  // Session
-  'session.start': string;
-  'session.end': string;
-  'session.pause': string;
-  'session.resume': string;
-  'session.duration': string;
-  'session.quality': string;
-  'session.streak': string;
-  'session.focus_time': string;
-
-  // Boss
-  'boss.spawned': string;
-  'boss.defeated': string;
-  'boss.damage_dealt': string;
-  'boss.time_remaining': string;
-  'boss.escape_warning': string;
-
-  // Squad
-  'squad.war_active': string;
-  'squad.score': string;
-  'squad.members': string;
-  'squad.invite': string;
-  'squad.leave': string;
-
-  // Onboarding
-  'onboarding.welcome': string;
-  'onboarding.focus_mission': string;
-  'onboarding.defeat_distractions': string;
-  'onboarding.join_squad': string;
-  'onboarding.setup_complete': string;
-
-  // Errors
-  'error.generic': string;
-  'error.network': string;
-  'error.retry': string;
-  'error.offline': string;
-
-  // Accessibility
-  'a11y.loading': string;
-  'a11y.success': string;
-  'a11y.error': string;
-  'a11y.button_hint': string;
-  'a11y.progress': string;
-}
-
 const TRANSLATIONS: Record<SupportedLanguage, TranslationKeys> = {
   en: {
     'app.name': 'VEX',
@@ -459,197 +388,18 @@ const TRANSLATIONS: Record<SupportedLanguage, TranslationKeys> = {
 // ============================================================================
 
 let currentLanguage: SupportedLanguage = 'en';
-
-/**
- * Set current language
- */
-export function setLanguage(lang: SupportedLanguage): void {
-  currentLanguage = lang;
-
-  // Enable RTL for specific languages
-  const isRTLLanguage = lang === 'ar' || lang === 'he';
-  I18nManager.allowRTL(isRTLLanguage);
-  I18nManager.forceRTL(isRTLLanguage);
-}
-
-/**
- * Get current language
- */
-export function getLanguage(): SupportedLanguage {
-  return currentLanguage;
-}
-
-/**
- * Translate a key
- */
-export function t(key: keyof TranslationKeys): string {
-  const translation = TRANSLATIONS[currentLanguage];
-  return translation[key] || TRANSLATIONS.en[key] || key;
-}
-
-/**
- * Translate with interpolation
- */
-export function tInterpolated(
-  key: keyof TranslationKeys,
-  values: Record<string, string | number>
-): string {
-  let text = t(key);
-  for (const [k, v] of Object.entries(values)) {
-    text = text.replace(new RegExp(`{{${k}}}`, 'g'), String(v));
-  }
-  return text;
-}
-
 // ============================================================================
 // Accessibility Helpers
 // ============================================================================
-
-/**
- * Screen reader announcement
- */
-export function announce(message: string): void {
-  if (Platform.OS === 'ios') {
-    AccessibilityInfo.announceForAccessibility(message);
-  }
-}
-
-/**
- * Check if screen reader is enabled
- */
-export async function isScreenReaderEnabled(): Promise<boolean> {
-  return await AccessibilityInfo.isScreenReaderEnabled();
-}
-
-/**
- * Get accessibility props for a button
- */
-export function getButtonA11yProps(
-  label: string,
-  hint?: string
-): {
-  accessible: true;
-  accessibilityRole: 'button';
-  accessibilityLabel: string;
-  accessibilityHint?: string;
-} {
-  return {
-    accessible: true,
-    accessibilityRole: 'button',
-    accessibilityLabel: label,
-    accessibilityHint: hint,
-  };
-}
-
-/**
- * Get accessibility props for a progress indicator
- */
-export function getProgressA11yProps(
-  value: number,
-  maximum: number,
-  label: string
-): {
-  accessible: true;
-  accessibilityRole: 'progressbar';
-  accessibilityLabel: string;
-  accessibilityValue: {
-    min: number;
-    max: number;
-    now: number;
-    text: string;
-  };
-} {
-  return {
-    accessible: true,
-    accessibilityRole: 'progressbar',
-    accessibilityLabel: label,
-    accessibilityValue: {
-      min: 0,
-      max: maximum,
-      now: value,
-      text: `${Math.round((value / maximum) * 100)}%`,
-    },
-  };
-}
-
 // ============================================================================
 // RTL Support
 // ============================================================================
-
-/**
- * Check if RTL is enabled
- */
-export function isRTL(): boolean {
-  return I18nManager.isRTL;
-}
-
-/**
- * Get direction-aware styles
- */
-export function getDirectionalStyles<T extends Record<string, unknown>>(
-  styles: T
-): T {
-  if (!isRTL()) {return styles;}
-
-  // Mirror relevant styles for RTL
-  const rtlStyles = { ...styles };
-
-  // Swap left/right margins, paddings, etc.
-  const swapKeys = [
-    ['marginLeft', 'marginRight'],
-    ['paddingLeft', 'paddingRight'],
-    ['borderLeftWidth', 'borderRightWidth'],
-    ['borderLeftColor', 'borderRightColor'],
-    ['left', 'right'],
-  ];
-
-  for (const [left, right] of swapKeys) {
-    if (left in rtlStyles && right in rtlStyles) {
-      const temp = (rtlStyles as Record<string, unknown>)[left];
-      (rtlStyles as Record<string, unknown>)[left] = (rtlStyles as Record<string, unknown>)[right];
-      (rtlStyles as Record<string, unknown>)[right] = temp;
-    }
-  }
-
-  return rtlStyles;
-}
-
 // ============================================================================
 // Dynamic Type Support
 // ============================================================================
-
-/**
- * Get scaled font size based on system settings
- */
-export function getScaledFontSize(baseSize: number): number {
-  // React Native automatically scales fonts based on system settings
-  // This is a placeholder for custom scaling logic if needed
-  return baseSize;
-}
-
-/**
- * Check if large text is enabled
- */
-export async function isBoldTextEnabled(): Promise<boolean> {
-  return await AccessibilityInfo.isBoldTextEnabled();
-}
-
 // ============================================================================
 // WCAG Compliance Helpers
 // ============================================================================
-
-/**
- * Calculate contrast ratio between two colors
- */
-export function getContrastRatio(color1: string, color2: string): number {
-  // Simplified contrast calculation
-  // In production, use a proper color library
-  const luminance1 = getLuminance(color1);
-  const luminance2 = getLuminance(color2);
-  const lighter = Math.max(luminance1, luminance2);
-  const darker = Math.min(luminance1, luminance2);
-  return (lighter + 0.05) / (darker + 0.05);
-}
 
 function getLuminance(color: string): number {
   // Simplified luminance calculation
@@ -661,24 +411,10 @@ function getLuminance(color: string): number {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
-/**
- * Check if colors meet WCAG AA standard
- */
-export function meetsWCAGAA(textColor: string, bgColor: string): boolean {
-  const ratio = getContrastRatio(textColor, bgColor);
-  return ratio >= 4.5; // WCAG AA standard for normal text
-}
-
-/**
- * Check if colors meet WCAG AAA standard
- */
-export function meetsWCAGAAA(textColor: string, bgColor: string): boolean {
-  const ratio = getContrastRatio(textColor, bgColor);
-  return ratio >= 7; // WCAG AAA standard
-}
-
 // ============================================================================
 // Exports
 // ============================================================================
 
 export { TRANSLATIONS };
+export * from "./index.types";
+export * from "./index.part1";

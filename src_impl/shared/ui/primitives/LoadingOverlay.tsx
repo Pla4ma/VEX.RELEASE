@@ -26,60 +26,6 @@ interface LoadingOverlayProps {
   style?: ViewStyle;
 }
 
-export function LoadingOverlay({
-  visible,
-  message = 'Loading...',
-  progress,
-  showProgress = false,
-  blur = true,
-  style,
-}: LoadingOverlayProps) {
-  const fadeStyle = useFadeIn(300);
-  const pulseStyle = usePulseAnimation();
-
-  if (!visible) {return null;}
-
-  return (
-    <Modal
-      transparent
-      visible={visible}
-      animationType="fade"
-      statusBarTranslucent
-    >
-      <Animated.View
-        style={[
-          styles.container,
-          blur && styles.blurBackground,
-          fadeStyle,
-          style,
-        ]}
-      >
-        <View style={styles.content}>
-          <Animated.View style={pulseStyle}>
-            <ActivityIndicator size="large" color="#6366f1" />
-          </Animated.View>
-
-          <Text style={styles.message}>{message}</Text>
-
-          {showProgress && progress !== undefined && (
-            <View style={styles.progressContainer}>
-              <View style={styles.progressBar}>
-                <View
-                  style={[
-                    styles.progressFill,
-                    { width: `${Math.min(100, Math.max(0, progress))}%` },
-                  ]}
-                />
-              </View>
-              <Text style={styles.progressText}>{Math.round(progress)}%</Text>
-            </View>
-          )}
-        </View>
-      </Animated.View>
-    </Modal>
-  );
-}
-
 // Hook for pulse animation
 function usePulseAnimation() {
   const scale = useSharedValue(1);
@@ -107,43 +53,6 @@ interface SectionLoadingProps {
   style?: ViewStyle;
 }
 
-export function SectionLoading({
-  type = 'card',
-  count = 3,
-  style,
-}: SectionLoadingProps) {
-  switch (type) {
-    case 'text':
-      return (
-        <View style={[styles.sectionContainer, style]}>
-          <Skeleton lines={count} height={16} spacing={8} />
-        </View>
-      );
-    case 'card':
-      return (
-        <View style={[styles.sectionContainer, style]}>
-          {Array.from({ length: count }).map((_, i) => (
-            <SkeletonCard key={i} style={styles.sectionItem} />
-          ))}
-        </View>
-      );
-    case 'chart':
-      return (
-        <View style={[styles.sectionContainer, style]}>
-          <Skeleton variant="rounded" height={200} />
-        </View>
-      );
-    case 'list':
-      return (
-        <View style={[styles.sectionContainer, style]}>
-          <SkeletonList count={count} />
-        </View>
-      );
-    default:
-      return null;
-  }
-}
-
 // Progress indicator for long operations
 interface ProgressIndicatorProps {
   progress: number;
@@ -152,52 +61,10 @@ interface ProgressIndicatorProps {
   style?: ViewStyle;
 }
 
-export function ProgressIndicator({
-  progress,
-  message = 'Processing...',
-  submessage,
-  style,
-}: ProgressIndicatorProps) {
-  const fadeStyle = useFadeIn(300);
-
-  return (
-    <Animated.View style={[styles.progressOverlay, style, fadeStyle]}>
-      <View style={styles.progressContent}>
-        <View style={styles.progressBarLarge}>
-          <Animated.View
-            style={[
-              styles.progressFillLarge,
-              { width: `${Math.min(100, Math.max(0, progress))}%` },
-            ]}
-          />
-        </View>
-
-        <Text style={styles.progressMessage}>{message}</Text>
-        {submessage && (
-          <Text style={styles.progressSubmessage}>{submessage}</Text>
-        )}
-
-        <Text style={styles.progressPercentage}>{Math.round(progress)}%</Text>
-      </View>
-    </Animated.View>
-  );
-}
-
 // Inline progress for buttons
 interface ButtonLoadingProps {
   loading: boolean;
   children: React.ReactNode;
-}
-
-export function ButtonLoading({ loading, children }: ButtonLoadingProps) {
-  if (!loading) {return <>{children}</>;}
-
-  return (
-    <View style={styles.buttonLoading}>
-      <ActivityIndicator size="small" color="#6366f1" />
-      <Text style={styles.buttonLoadingText}>Processing...</Text>
-    </View>
-  );
 }
 
 const styles = createSheet({
@@ -217,7 +84,7 @@ const styles = createSheet({
   message: {
     marginTop: 16,
     fontSize: 16,
-    color: '#374151',
+    color: 'theme.colors.primary[500]',
     fontWeight: '500',
   },
   progressContainer: {
@@ -226,19 +93,19 @@ const styles = createSheet({
   },
   progressBar: {
     height: 4,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 2,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#6366f1',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 2,
   },
   progressText: {
     marginTop: 8,
     fontSize: 12,
-    color: '#6b7280',
+    color: 'theme.colors.primary[500]',
     textAlign: 'center',
   },
   sectionContainer: {
@@ -262,32 +129,32 @@ const styles = createSheet({
   progressBarLarge: {
     width: '100%',
     height: 8,
-    backgroundColor: '#e5e7eb',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 4,
     overflow: 'hidden',
     marginBottom: 16,
   },
   progressFillLarge: {
     height: '100%',
-    backgroundColor: '#6366f1',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 4,
   },
   progressMessage: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: 'theme.colors.primary[500]',
     marginBottom: 4,
   },
   progressSubmessage: {
     fontSize: 14,
-    color: '#6b7280',
+    color: 'theme.colors.primary[500]',
     marginBottom: 8,
     textAlign: 'center',
   },
   progressPercentage: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#6366f1',
+    color: 'theme.colors.primary[500]',
   },
   buttonLoading: {
     flexDirection: 'row',
@@ -296,6 +163,9 @@ const styles = createSheet({
   },
   buttonLoadingText: {
     fontSize: 14,
-    color: '#6b7280',
+    color: 'theme.colors.primary[500]',
   },
 });
+
+export * from "./LoadingOverlay.types";
+export * from "./LoadingOverlay.part1";

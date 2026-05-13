@@ -341,3 +341,6 @@ const delay = (ms: number): Promise<void> => {
 };
 
 export default CompanionEvolutionCeremony;
+
+export * from "./CompanionEvolutionCeremony.types";
+export * from "./CompanionEvolutionCeremony.types";

@@ -42,13 +42,13 @@ export function StreakRiskWarning({
   const getColor = () => {
     switch (riskLevel) {
       case 'CRITICAL':
-        return '#f44336';
+        return 'theme.colors.primary[500]';
       case 'HIGH':
-        return '#ff9800';
+        return 'theme.colors.error.DEFAULT';
       case 'MEDIUM':
-        return '#ffc107';
+        return 'theme.colors.error.DEFAULT';
       default:
-        return '#4caf50';
+        return 'theme.colors.primary[500]';
     }
   };
 
@@ -92,7 +92,7 @@ export function StreakRiskWarning({
 
 const styles = createSheet({
   container: {
-    backgroundColor: '#2a2a3e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 12,
     padding: 16,
     margin: 16,
@@ -110,7 +110,7 @@ const styles = createSheet({
   message: {
     flex: 1,
     fontSize: 15,
-    color: '#fff',
+    color: 'theme.colors.background.primary',
     fontWeight: '600',
   },
   button: {
@@ -119,7 +119,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: 'theme.colors.background.primary',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -128,7 +128,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   dismissText: {
-    color: '#666',
+    color: 'theme.colors.primary[500]',
     fontSize: 13,
   },
 });

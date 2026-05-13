@@ -250,3 +250,6 @@ const triangleStyle = {
 };
 
 export default ConfettiCelebration;
+
+export * from "./ConfettiCelebration.types";
+export * from "./ConfettiCelebration.types";

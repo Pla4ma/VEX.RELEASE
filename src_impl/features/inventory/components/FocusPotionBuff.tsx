@@ -49,7 +49,7 @@ export const FocusPotionBuff: React.FC<FocusPotionBuffProps> = ({ style }) => {
     <Animated.View
       style={[
         {
-          shadowColor: '#3B82F6',
+          shadowColor: 'theme.colors.primary[500]',
           shadowOffset: { width: 0, height: 0 },
           shadowRadius: 12,
           elevation: 4,
@@ -64,7 +64,7 @@ export const FocusPotionBuff: React.FC<FocusPotionBuffProps> = ({ style }) => {
         flexDirection="row"
         alignItems="center"
         style={{
-          backgroundColor: '#3B82F6',
+          backgroundColor: 'theme.colors.primary[500]',
         }}
       >
         <Box
@@ -77,13 +77,13 @@ export const FocusPotionBuff: React.FC<FocusPotionBuffProps> = ({ style }) => {
             backgroundColor: 'rgba(255, 255, 255, 0.2)',
           }}
         >
-          <Icon name="target" size={16} color="#FFF" />
+          <Icon name="target" size={16} color="theme.colors.background.primary" />
         </Box>
 
         <Box ml={8}>
           <Text
             style={{
-              color: '#FFF',
+              color: 'theme.colors.background.primary',
               fontWeight: '700',
               fontSize: 12,
             }}

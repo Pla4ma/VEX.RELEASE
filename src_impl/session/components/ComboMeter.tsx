@@ -417,3 +417,6 @@ const warningOverlayStyle = { position: 'absolute' as const, top: -8, left: 0, r
 const warningTextStyle = { textAlign: 'center' as const, fontWeight: '600' as const };
 
 export default ComboMeter;
+
+export * from "./ComboMeter.types";
+export * from "./ComboMeter.types";

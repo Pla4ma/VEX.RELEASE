@@ -1,0 +1,122 @@
+import { getSupabaseClient } from "../../config/supabase";
+import { InventoryItemSchema, type InventoryItem, type ItemStatus, type EquipmentSlot, type AcquisitionSource } from "./schemas";
+
+
+export async function mergeItems(targetItemId: string, sourceItemId: string, quantityToTransfer: number): Promise<void> {
+  // Use RPC for atomic merge operation
+  const { error } = await supabase.rpc('merge_inventory_items', {
+    p_target_item_id: targetItemId,
+    p_source_item_id: sourceItemId,
+    p_quantity: quantityToTransfer,
+  });
+
+  if (error) {
+    throw new RepositoryError('mergeItems', error);
+  }
+}
+
+export async function splitItemStack(itemId: string, splitQuantity: number): Promise<InventoryItem> {
+  const { data, error } = await supabase.rpc('split_inventory_item', {
+    p_item_id: itemId,
+    p_split_quantity: splitQuantity,
+  });
+
+  if (error) {
+    throw new RepositoryError('splitItemStack', error);
+  }
+  return InventoryItemSchema.parse(data);
+}
+
+export async function getInventoryCapacity(userId: string): Promise<{
+  maxSlots: number;
+  usedSlots: number;
+}> {
+  const { data, error } = await supabase.rpc('get_inventory_capacity', {
+    p_user_id: userId,
+  });
+
+  if (error) {
+    throw new RepositoryError('getInventoryCapacity', error);
+  }
+
+  return {
+    maxSlots: data.max_slots,
+    usedSlots: data.used_slots,
+  };
+}
+
+export async function checkInventorySpace(userId: string, requiredSlots: number): Promise<boolean> {
+  const capacity = await getInventoryCapacity(userId);
+  return capacity.maxSlots - capacity.usedSlots >= requiredSlots;
+}
+
+export async function getUsableConsumables(userId: string): Promise<InventoryItem[]> {
+  const { data, error } = await supabase.from('inventory_items').select('*').eq('user_id', userId).eq('status', 'OWNED').is('deleted_at', null).gt('quantity', 0);
+
+  if (error) {
+    throw new RepositoryError('getUsableConsumables', error);
+  }
+  return InventoryItemSchema.array().parse(data ?? []);
+}
+
+export async function getActiveBuffs(userId: string): Promise<InventoryItem[]> {
+  const { data, error } = await supabase.from('inventory_items').select('*').eq('user_id', userId).eq('status', 'EQUIPPED').is('deleted_at', null);
+
+  if (error) {
+    throw new RepositoryError('getActiveBuffs', error);
+  }
+  return InventoryItemSchema.array().parse(data ?? []);
+}
+
+export async function fetchQuickUseSlots(userId: string): Promise<QuickUseSlotData[]> {
+  const { data, error } = await supabase.from('quick_use_slots').select('*').eq('user_id', userId).order('slot_index', { ascending: true });
+
+  if (error) {
+    throw new RepositoryError('fetchQuickUseSlots', error);
+  }
+
+  return (data ?? []).map((row) => ({
+    slotIndex: row.slot_index,
+    itemId: row.item_id,
+  }));
+}
+
+export async function setQuickUseSlot(userId: string, slotIndex: number, itemId: string | null): Promise<void> {
+  const { error } = await supabase.from('quick_use_slots').upsert(
+    {
+      user_id: userId,
+      slot_index: slotIndex,
+      item_id: itemId,
+      updated_at: Date.now(),
+    },
+    {
+      onConflict: 'user_id,slot_index',
+    },
+  );
+
+  if (error) {
+    throw new RepositoryError('setQuickUseSlot', error);
+  }
+}
+
+export async function checkDuplicatePurchaseItem(userId: string, purchaseId: string): Promise<boolean> {
+  const { data, error } = await supabase.from('inventory_items').select('id').eq('user_id', userId).eq('purchase_id', purchaseId).is('deleted_at', null).limit(1);
+
+  if (error) {
+    throw new RepositoryError('checkDuplicatePurchaseItem', error);
+  }
+  return (data ?? []).length > 0;
+}
+
+export async function checkDuplicateItemDefinition(userId: string, itemDefinitionId: string, unique: boolean = false): Promise<boolean> {
+  if (!unique) {
+    return false;
+  }
+
+  const { data, error } = await supabase.from('inventory_items').select('id').eq('user_id', userId).eq('item_definition_id', itemDefinitionId).is('deleted_at', null).limit(1);
+
+  if (error) {
+    throw new RepositoryError('checkDuplicateItemDefinition', error);
+  }
+  return (data ?? []).length > 0;
+}

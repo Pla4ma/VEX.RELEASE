@@ -132,20 +132,20 @@ describe('StreakEvolutionSystem', () => {
     it('should return info for ACTIVE state', () => {
       const info = getStreakStateInfo('ACTIVE');
       expect(info.label).toBe('Active');
-      expect(info.color).toBe('#48BB78');
+      expect(info.color).toBe('theme.colors.primary[500]');
       expect(info.icon).toBeDefined();
     });
 
     it('should return info for AT_RISK state', () => {
       const info = getStreakStateInfo('AT_RISK');
       expect(info.label).toBe('At Risk');
-      expect(info.color).toBe('#ED8936');
+      expect(info.color).toBe('theme.colors.primary[500]');
     });
 
     it('should return info for BROKEN state', () => {
       const info = getStreakStateInfo('BROKEN');
       expect(info.label).toBe('Broken');
-      expect(info.color).toBe('#E53E3E');
+      expect(info.color).toBe('theme.colors.primary[500]');
     });
 
     it('should return default for invalid state', () => {

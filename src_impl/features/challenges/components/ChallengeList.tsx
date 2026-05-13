@@ -128,7 +128,7 @@ const styles = createSheet({
   headerText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: 'theme.colors.primary[500]',
   },
   skeletonCard: {
     padding: 16,
@@ -136,14 +136,14 @@ const styles = createSheet({
   },
   skeletonHeader: {
     height: 20,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 4,
     marginBottom: 12,
     width: '70%',
   },
   skeletonLine: {
     height: 12,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 4,
     marginBottom: 8,
   },
@@ -156,11 +156,11 @@ const styles = createSheet({
     fontSize: 18,
     fontWeight: '700',
     marginBottom: 8,
-    color: '#DC2626',
+    color: 'theme.colors.primary[500]',
   },
   errorMessage: {
     fontSize: 14,
-    color: '#6B7280',
+    color: 'theme.colors.primary[500]',
     textAlign: 'center',
     marginBottom: 16,
   },
@@ -178,7 +178,7 @@ const styles = createSheet({
   },
   emptyText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: 'theme.colors.primary[500]',
     textAlign: 'center',
   },
 });

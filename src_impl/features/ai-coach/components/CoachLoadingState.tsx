@@ -33,7 +33,7 @@ export function CoachLoadingState(): JSX.Element {
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: 'theme.colors.primary[500]',
     padding: 24,
   },
   header: {
@@ -45,13 +45,13 @@ const styles = createSheet({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: 'theme.colors.primary[500]',
     marginRight: 12,
   },
   skeletonName: {
     width: '40%',
     height: 24,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 4,
   },
   messageList: {
@@ -61,13 +61,13 @@ const styles = createSheet({
   skeletonMessage: {
     width: '70%',
     height: 60,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 12,
   },
   loadingText: {
     textAlign: 'center',
     fontSize: 14,
-    color: '#9E9E9E',
+    color: 'theme.colors.primary[500]',
     marginTop: 24,
   },
 });

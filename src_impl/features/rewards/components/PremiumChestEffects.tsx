@@ -23,12 +23,6 @@ import { createSheet } from '@/shared/ui/create-sheet';
 // ============================================================================
 // Types
 // ============================================================================
-
-export interface PremiumChestEffectsProps {
-  children: React.ReactNode;
-  style?: ViewStyle;
-}
-
 // ============================================================================
 // Gold Particle Component
 // ============================================================================
@@ -166,8 +160,8 @@ const styles = createSheet({
   },
   particle: {
     position: 'absolute',
-    backgroundColor: '#FFD700', // Gold color
-    shadowColor: '#FFD700',
+    backgroundColor: 'theme.colors.error.DEFAULT', // Gold color
+    shadowColor: 'theme.colors.error.DEFAULT',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.8,
     shadowRadius: 4,
@@ -184,15 +178,15 @@ const styles = createSheet({
     justifyContent: 'center',
     zIndex: 2,
     borderWidth: 2,
-    borderColor: '#FFFFFF',
-    shadowColor: '#000',
+    borderColor: 'theme.colors.background.primary',
+    shadowColor: 'theme.colors.text.primary',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 4,
   },
   premiumBadgeText: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontSize: 14,
     fontWeight: '800',
   },
@@ -219,3 +213,5 @@ const styles = createSheet({
 });
 
 export default PremiumChestEffects;
+
+export * from "./PremiumChestEffects.types";

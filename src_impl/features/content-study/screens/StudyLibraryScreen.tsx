@@ -177,8 +177,8 @@ function FilterChip({ label, isActive, onPress, icon }: { label: string; isActiv
           borderColor: isActive ? 'transparent' : theme.colors.border.light,
         }}
       >
-        {icon && <Icon name={icon} size={14} color={isActive ? '#FFF' : theme.colors.text.secondary} />}
-        <Text variant="caption" style={{ color: isActive ? '#FFF' : theme.colors.text.secondary, fontWeight: isActive ? '600' : '400' }}>
+        {icon && <Icon name={icon} size={14} color={isActive ? 'theme.colors.background.primary' : theme.colors.text.secondary} />}
+        <Text variant="caption" style={{ color: isActive ? 'theme.colors.background.primary' : theme.colors.text.secondary, fontWeight: isActive ? '600' : '400' }}>
           {label}
         </Text>
       </Box>
@@ -321,3 +321,5 @@ export function StudyLibraryScreen(): JSX.Element {
 }
 
 export default StudyLibraryScreen;
+
+export * from "./StudyLibraryScreen.types";

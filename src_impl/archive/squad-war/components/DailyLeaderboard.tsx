@@ -10,7 +10,7 @@ import { useSquadStats } from '../hooks';
 type DailyLeaderboardProps = { squadId: string; userId: string };
 
 function getAvatarColor(userId: string): string {
-  const palette = ['#2563EB', '#0891B2', '#059669', '#D97706', '#DC2626', '#7C3AED'] as const;
+  const palette = ['theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]'] as const;
   const hash = userId.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
   return palette[hash % palette.length];
 }

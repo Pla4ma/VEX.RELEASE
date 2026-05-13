@@ -197,7 +197,7 @@ export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
               accessibilityLabel="Change Email button"
               accessibilityRole="button"
               accessibilityHint="Activates this control">
-                <Text style={{ color: '#FFF', fontWeight: '600' }}>Change Email</Text>
+                <Text style={{ color: 'theme.colors.background.primary', fontWeight: '600' }}>Change Email</Text>
               </Pressable>
             </Box>
           </Card>
@@ -233,7 +233,7 @@ export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
                 alignItems="center"
                 style={{
                   backgroundColor: twoFactorEnabled
-                    ? theme.colors.success[50] || '#ECFDF5'
+                    ? theme.colors.success[50] || 'theme.colors.primary[500]'
                     : theme.colors.background.secondary,
                 }}
               >
@@ -266,7 +266,7 @@ export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
                   false: theme.colors.background.tertiary,
                   true: theme.colors.success.DEFAULT + '80',
                 }}
-                thumbColor={twoFactorEnabled ? theme.colors.success.DEFAULT : '#FFF'}
+                thumbColor={twoFactorEnabled ? theme.colors.success.DEFAULT : 'theme.colors.background.primary'}
               />
             </Pressable>
           </Card>
@@ -435,13 +435,64 @@ export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
                   accessibilityLabel="Interactive control"
                   accessibilityRole="button"
                   accessibilityHint="Activates this control">
-                    <Text style={{ color: '#FFF', fontWeight: '600' }}>
+                    <Text style={{ color: 'theme.colors.background.primary', fontWeight: '600' }}>
                       {isChangingPassword ? 'Changing...' : 'Change'}
                     </Text>
                   </Pressable>
                 </Box>
               </Box>
             )}
+          </Card>
+        </Box>
+
+        <Box px={16} mb={24}>
+          <Text
+            variant="caption"
+            color="text.secondary"
+            style={{ marginLeft: 12, marginBottom: 8, fontWeight: '600', letterSpacing: 0.5 }}
+          >
+            DANGER ZONE
+          </Text>
+          <Card size="sm" style={{ overflow: 'hidden', borderColor: theme.colors.error.DEFAULT, borderWidth: 1 }}>
+            <Box p={16}>
+              <Text variant="body" color="text.secondary" style={{ marginBottom: 12 }}>
+                Permanently delete your account and all associated data. This action cannot be undone.
+              </Text>
+              <Pressable
+                onPress={() => {
+                  Alert.alert(
+                    'Delete Account',
+                    'Are you absolutely sure? This will permanently delete all your data.',
+                    [
+                      { text: 'Cancel', style: 'cancel' },
+                      {
+                        text: 'Delete Permanently',
+                        style: 'destructive',
+                        onPress: () => {
+                          showToast({
+                            message: 'Account deletion flow started',
+                            type: 'error',
+                            duration: 3000,
+                          });
+                        },
+                      },
+                    ]
+                  );
+                }}
+                style={{
+                  backgroundColor: theme.colors.error.DEFAULT + '15',
+                  paddingVertical: 12,
+                  paddingHorizontal: 16,
+                  borderRadius: 8,
+                  alignItems: 'center',
+                }}
+                accessibilityLabel="Delete Account button"
+                accessibilityRole="button"
+                accessibilityHint="Starts account deletion flow"
+              >
+                <Text style={{ color: theme.colors.error.DEFAULT, fontWeight: '600' }}>Delete Account</Text>
+              </Pressable>
+            </Box>
           </Card>
         </Box>
 
@@ -452,3 +503,5 @@ export const AccountSettingsScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default AccountSettingsScreen;
+
+export * from "./AccountSettingsScreen.types";

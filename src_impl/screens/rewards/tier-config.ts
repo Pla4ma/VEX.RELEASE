@@ -9,27 +9,27 @@ export interface TierConfig {
 
 export const TIER_CONFIG: Record<ChestTier, TierConfig> = {
   WOOD: {
-    colors: ['#8B4513', '#654321'] as const,
+    colors: ['theme.colors.primary[500]', 'theme.colors.primary[500]'] as const,
     emoji: '📦',
     label: 'Wood Chest',
-    glow: '#8B4513',
+    glow: 'theme.colors.primary[500]',
   },
   SILVER: {
-    colors: ['#C0C0C0', '#808080'] as const,
+    colors: ['theme.colors.primary[500]', 'theme.colors.primary[500]'] as const,
     emoji: '🥈',
     label: 'Silver Chest',
-    glow: '#C0C0C0',
+    glow: 'theme.colors.primary[500]',
   },
   GOLD: {
-    colors: ['#FFD700', '#FFA000'] as const,
+    colors: ['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT'] as const,
     emoji: '🏆',
     label: 'Gold Chest',
-    glow: '#FFD700',
+    glow: 'theme.colors.error.DEFAULT',
   },
   LEGENDARY: {
-    colors: ['#FFD700', '#FF6B35', '#8B5CF6'] as const,
+    colors: ['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT', 'theme.colors.primary[500]'] as const,
     emoji: '👑',
     label: 'Legendary Chest',
-    glow: '#FF6B35',
+    glow: 'theme.colors.error.DEFAULT',
   },
 };

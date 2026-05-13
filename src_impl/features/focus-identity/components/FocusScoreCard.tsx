@@ -230,3 +230,6 @@ function getNextBandLabel(currentLabel: string): string {
   };
   return progression[currentLabel] || 'Max';
 }
+
+export * from "./FocusScoreCard.types";
+export * from "./FocusScoreCard.types";

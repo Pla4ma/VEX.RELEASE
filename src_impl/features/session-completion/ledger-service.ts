@@ -25,6 +25,7 @@ const BuildCompletionLedgerInputSchemaBase = z.object({
   timezone: z.string().min(1).default('UTC'),
   userId: z.string().min(1),
   xpDelta: z.number().int().optional(),
+  activeConsumables: z.array(z.string()).default([]),
 });
 
 export type BuildCompletionLedgerInput = {
@@ -48,6 +49,7 @@ export type BuildCompletionLedgerInput = {
   strictMode?: boolean;
   timezone?: string;
   xpDelta?: number;
+  activeConsumables?: string[];
 };
 
 function toLedgerMode(input: SessionSummary): z.infer<typeof CompletionLedgerSchema.shape.mode> {
@@ -72,6 +74,7 @@ export function buildCompletionLedger(rawInput: BuildCompletionLedgerInput): Com
     effectiveFocusedSeconds: input.summary.effectiveDuration,
     interruptionCount,
     isAbandoned: input.isAbandoned,
+    isPartialSuccess: input.summary.status === 'PARTIAL_SUCCESS',
     isRecoverySession: input.isRecoverySession || input.summary.sessionMode === SessionMode.RECOVERY,
     mode: input.summary.sessionMode,
     pauseCount,
@@ -84,9 +87,10 @@ export function buildCompletionLedger(rawInput: BuildCompletionLedgerInput): Com
   const qualityScore = grading.kind === 'completed' ? grading.qualityScore : 20;
   const focusScoreDelta =
     input.focusScoreDelta ?? grading.focusScoreImpactRecommendation;
+  const hasDeepWorkAmplifier = input.activeConsumables?.includes('deep-work-amplifier');
   const xpDelta =
     input.xpDelta ??
-    Math.round(input.summary.xpEarned * grading.xpQualityMultiplier);
+    Math.round(input.summary.xpEarned * (grading.xpQualityMultiplier || 1) * (hasDeepWorkAmplifier ? 2 : 1));
 
   return CompletionLedgerSchema.parse({
     companionReactionId: input.companionReactionId,

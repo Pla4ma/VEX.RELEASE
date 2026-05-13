@@ -21,59 +21,6 @@ import { Text } from '../../../components/primitives/Text';
 import { EmptyState, ErrorState, Skeleton } from '../state-components';
 import { useTheme } from '../../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
-
-export interface DataListItem<T> {
-  id: string;
-  data: T;
-  disabled?: boolean;
-  loading?: boolean;
-}
-
-export interface DataListSection<T> {
-  title: string;
-  data: DataListItem<T>[];
-  key?: string;
-}
-
-export type DataListProps<T> = {
-  items: DataListItem<T>[];
-  sections?: DataListSection<T>[];
-  renderItem: (
-    item: T,
-    index: number,
-    context: {
-      isSelected: boolean;
-      isDragging: boolean;
-      onSelect: () => void;
-    }
-  ) => React.ReactElement;
-  renderSectionHeader?: (section: DataListSection<T>) => React.ReactElement;
-  renderEmpty?: () => React.ReactElement;
-  renderFooter?: () => React.ReactElement;
-  keyExtractor?: (item: T, index: number) => string;
-  loading?: boolean;
-  loadingMore?: boolean;
-  error?: Error | null;
-  refreshing?: boolean;
-  emptyTitle?: string;
-  emptySubtitle?: string;
-  emptyIcon?: string;
-  selectionMode?: 'none' | 'single' | 'multiple';
-  selectedIds?: Set<string>;
-  onSelectionChange?: (ids: Set<string>) => void;
-  onRefresh?: () => void | Promise<void>;
-  onLoadMore?: () => void | Promise<void>;
-  onRetry?: () => void;
-  onItemPress?: (item: T, index: number) => void;
-  estimatedItemSize: number;
-  stickySectionHeadersEnabled?: boolean;
-  showsVerticalScrollIndicator?: boolean;
-  contentContainerStyle?: ViewStyle;
-  style?: ViewStyle;
-  accessibilityLabel?: string;
-  getItemAccessibilityLabel?: (item: T) => string;
-};
-
 const ListFooter: React.FC<{ loading: boolean; hasMore?: boolean; theme: DynamicValue }> = ({
   loading,
   hasMore = true,
@@ -416,3 +363,5 @@ const styles = createSheet({
 });
 
 export default DataList;
+
+export * from "./DataListFlashList.types";

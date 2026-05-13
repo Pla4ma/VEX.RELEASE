@@ -60,7 +60,7 @@ export const SessionEmptyState: React.FC<SessionEmptyStateProps> = ({
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: 'theme.colors.primary[500]',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 32,
@@ -72,12 +72,12 @@ const styles = createSheet({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#fff',
+    color: 'theme.colors.background.primary',
     marginBottom: 12,
   },
   description: {
     fontSize: 16,
-    color: '#9E9E9E',
+    color: 'theme.colors.primary[500]',
     textAlign: 'center',
     marginBottom: 32,
     lineHeight: 22,
@@ -88,31 +88,31 @@ const styles = createSheet({
     marginBottom: 40,
   },
   primaryButton: {
-    backgroundColor: '#e94560',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: '#fff',
+    color: 'theme.colors.background.primary',
     fontSize: 16,
     fontWeight: '600',
   },
   secondaryButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#9E9E9E',
+    borderColor: 'theme.colors.primary[500]',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   secondaryButtonText: {
-    color: '#9E9E9E',
+    color: 'theme.colors.primary[500]',
     fontSize: 16,
     fontWeight: '600',
   },
   tipsContainer: {
-    backgroundColor: '#2a2a3e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 12,
     padding: 20,
     width: '100%',
@@ -120,12 +120,12 @@ const styles = createSheet({
   tipsTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: 'theme.colors.background.primary',
     marginBottom: 12,
   },
   tip: {
     fontSize: 14,
-    color: '#9E9E9E',
+    color: 'theme.colors.primary[500]',
     marginBottom: 8,
     lineHeight: 20,
   },

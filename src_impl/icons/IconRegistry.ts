@@ -367,48 +367,4 @@ const socialIcons: IconCollection = {
   },
 };
 
-/**
- * Combine all icon collections
- */
-export const iconRegistry: IconCollection = {
-  ...appIcons,
-  ...navigationIcons,
-  ...actionIcons,
-  ...statusIcons,
-  ...socialIcons,
-};
-
-/**
- * Get an icon from the registry
- */
-export function getIcon(name: string): IconRegistryEntry | undefined {
-  return iconRegistry[name];
-}
-
-/**
- * Check if an icon exists
- */
-export function hasIcon(name: string): boolean {
-  return name in iconRegistry;
-}
-
-/**
- * Get all icon names
- */
-export function getIconNames(): string[] {
-  return Object.keys(iconRegistry);
-}
-
-/**
- * Register a new icon
- */
-export function registerIcon(name: string, entry: IconRegistryEntry): void {
-  iconRegistry[name] = entry;
-}
-
-/**
- * Register multiple icons
- */
-export function registerIcons(icons: IconCollection): void {
-  Object.assign(iconRegistry, icons);
-}
+export * from "./IconRegistry.part1";

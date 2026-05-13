@@ -444,3 +444,6 @@ ${report.highlight}
     </View>
   );
 }
+
+export * from "./MonthlyFocusReport.types";
+export * from "./MonthlyFocusReport.types";

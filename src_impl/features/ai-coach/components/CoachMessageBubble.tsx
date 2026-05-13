@@ -16,17 +16,6 @@ import { Text } from '../../../components/primitives';
 import { useTheme } from '../../../theme';
 import type { CoachMessage } from '../types';
 
-export interface CoachMessageBubbleProps {
-  /** Message data */
-  message: CoachMessage;
-  /** Whether this is a coach message (left) or user message (right) */
-  isCoach?: boolean;
-  /** Index for stagger animation */
-  index?: number;
-  /** Callback when action button is pressed */
-  onActionPress?: (action: string) => void;
-}
-
 /**
  * Coach message bubble (left-aligned)
  */
@@ -135,15 +124,6 @@ export function CoachMessageBubble({ message, isCoach = true, index = 0, onActio
   );
 }
 
-/**
- * System message bubble (centered, distinct styling)
- * Used for: milestones, streak alerts, notifications
- */
-export interface SystemMessageBubbleProps {
-  message: CoachMessage;
-  index?: number;
-}
-
 export function SystemMessageBubble({ message, index = 0 }: SystemMessageBubbleProps): JSX.Element {
   const { theme } = useTheme();
 
@@ -214,15 +194,6 @@ export function SystemMessageBubble({ message, index = 0 }: SystemMessageBubbleP
   );
 }
 
-/**
- * User message bubble (right-aligned)
- */
-export interface UserMessageBubbleProps {
-  content: string;
-  timestamp: number;
-  index?: number;
-}
-
 export function UserMessageBubble({ content, timestamp, index = 0 }: UserMessageBubbleProps): JSX.Element {
   const { theme } = useTheme();
 
@@ -262,3 +233,5 @@ export function UserMessageBubble({ content, timestamp, index = 0 }: UserMessage
 }
 
 export default CoachMessageBubble;
+
+export * from "./CoachMessageBubble.types";

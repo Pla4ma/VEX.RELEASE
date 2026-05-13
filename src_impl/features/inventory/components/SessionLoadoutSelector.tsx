@@ -25,11 +25,11 @@ interface SessionLoadoutSelectorProps {
  */
 function LoadoutItemCard({ item, isSelected }: { item: LoadoutItem; isSelected: boolean }): JSX.Element {
   const rarityColors: Record<string, string> = {
-    COMMON: '#9CA3AF',
-    UNCOMMON: '#10B981',
-    RARE: '#3B82F6',
-    EPIC: '#8B5CF6',
-    LEGENDARY: '#F59E0B',
+    COMMON: 'theme.colors.primary[500]',
+    UNCOMMON: 'theme.colors.primary[500]',
+    RARE: 'theme.colors.primary[500]',
+    EPIC: 'theme.colors.primary[500]',
+    LEGENDARY: 'theme.colors.primary[500]',
   };
 
   return (
@@ -39,26 +39,26 @@ function LoadoutItemCard({ item, isSelected }: { item: LoadoutItem; isSelected: 
         padding: 12,
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: isSelected ? rarityColors[item.rarity] : '#E5E7EB',
-        backgroundColor: isSelected ? `${rarityColors[item.rarity]}20` : '#FFFFFF',
+        borderColor: isSelected ? rarityColors[item.rarity] : 'theme.colors.primary[500]',
+        backgroundColor: isSelected ? `${rarityColors[item.rarity]}20` : 'theme.colors.background.primary',
         marginBottom: 8,
       }}
     >
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
         <Text style={{ fontWeight: '600', color: rarityColors[item.rarity] }}>{item.name}</Text>
-        <Text style={{ color: '#6B7280' }}>x{item.quantity}</Text>
+        <Text style={{ color: 'theme.colors.primary[500]' }}>x{item.quantity}</Text>
       </View>
 
-      <Text style={{ fontSize: 12, color: '#6B7280', marginTop: 4 }}>{item.description}</Text>
+      <Text style={{ fontSize: 12, color: 'theme.colors.primary[500]', marginTop: 4 }}>{item.description}</Text>
 
-      {!item.compatible && item.incompatibilityReason && <Text style={{ fontSize: 11, color: '#EF4444', marginTop: 4 }}>{item.incompatibilityReason}</Text>}
+      {!item.compatible && item.incompatibilityReason && <Text style={{ fontSize: 11, color: 'theme.colors.primary[500]', marginTop: 4 }}>{item.incompatibilityReason}</Text>}
 
       {item.compatible && (
         <View style={{ flexDirection: 'row', marginTop: 8, gap: 8 }}>
-          {item.projectedImpact.xpMultiplier > 1 && <Text style={{ fontSize: 11, color: '#10B981' }}>+{Math.round((item.projectedImpact.xpMultiplier - 1) * 100)}% XP</Text>}
-          {item.projectedImpact.coinMultiplier > 1 && <Text style={{ fontSize: 11, color: '#F59E0B' }}>+{Math.round((item.projectedImpact.coinMultiplier - 1) * 100)}% Coins</Text>}
-          {item.projectedImpact.streakProtection && <Text style={{ fontSize: 11, color: '#3B82F6' }}>Streak Shield</Text>}
-          {item.projectedImpact.bossDamageBonus > 0 && <Text style={{ fontSize: 11, color: '#EF4444' }}>+{item.projectedImpact.bossDamageBonus} Boss Dmg</Text>}
+          {item.projectedImpact.xpMultiplier > 1 && <Text style={{ fontSize: 11, color: 'theme.colors.primary[500]' }}>+{Math.round((item.projectedImpact.xpMultiplier - 1) * 100)}% XP</Text>}
+          {item.projectedImpact.coinMultiplier > 1 && <Text style={{ fontSize: 11, color: 'theme.colors.primary[500]' }}>+{Math.round((item.projectedImpact.coinMultiplier - 1) * 100)}% Coins</Text>}
+          {item.projectedImpact.streakProtection && <Text style={{ fontSize: 11, color: 'theme.colors.primary[500]' }}>Streak Shield</Text>}
+          {item.projectedImpact.bossDamageBonus > 0 && <Text style={{ fontSize: 11, color: 'theme.colors.primary[500]' }}>+{item.projectedImpact.bossDamageBonus} Boss Dmg</Text>}
         </View>
       )}
     </View>
@@ -75,13 +75,13 @@ function ActiveBuffIndicator({ buff }: { buff: ActiveBuff }): JSX.Element {
         flexDirection: 'row',
         alignItems: 'center',
         padding: 8,
-        backgroundColor: '#FEF3C7',
+        backgroundColor: 'theme.colors.primary[500]',
         borderRadius: 16,
         marginRight: 8,
       }}
     >
-      <Text style={{ fontSize: 12, color: '#92400E' }}>{buff.name}</Text>
-      {buff.effects.xpMultiplier > 1 && <Text style={{ fontSize: 10, color: '#92400E', marginLeft: 4 }}>+{Math.round((buff.effects.xpMultiplier - 1) * 100)}% XP</Text>}
+      <Text style={{ fontSize: 12, color: 'theme.colors.primary[500]' }}>{buff.name}</Text>
+      {buff.effects.xpMultiplier > 1 && <Text style={{ fontSize: 10, color: 'theme.colors.primary[500]', marginLeft: 4 }}>+{Math.round((buff.effects.xpMultiplier - 1) * 100)}% XP</Text>}
     </View>
   );
 }
@@ -99,7 +99,7 @@ export function SessionLoadoutSelector({ userId, mode, duration }: SessionLoadou
     return (
       <View style={{ padding: 16, alignItems: 'center' }}>
         <ActivityIndicator />
-        <Text style={{ marginTop: 8, fontSize: 12, color: '#6B7280' }}>Loading loadout options...</Text>
+        <Text style={{ marginTop: 8, fontSize: 12, color: 'theme.colors.primary[500]' }}>Loading loadout options...</Text>
       </View>
     );
   }
@@ -107,7 +107,7 @@ export function SessionLoadoutSelector({ userId, mode, duration }: SessionLoadou
   if (error) {
     return (
       <View style={{ padding: 16 }}>
-        <Text style={{ color: '#EF4444' }}>Failed to load inventory. Some options may be unavailable.</Text>
+        <Text style={{ color: 'theme.colors.primary[500]' }}>Failed to load inventory. Some options may be unavailable.</Text>
       </View>
     );
   }
@@ -115,7 +115,7 @@ export function SessionLoadoutSelector({ userId, mode, duration }: SessionLoadou
   if (!loadout) {
     return (
       <View style={{ padding: 16 }}>
-        <Text style={{ color: '#6B7280' }}>No loadout data available.</Text>
+        <Text style={{ color: 'theme.colors.primary[500]' }}>No loadout data available.</Text>
       </View>
     );
   }
@@ -141,24 +141,24 @@ export function SessionLoadoutSelector({ userId, mode, duration }: SessionLoadou
       <View
         style={{
           flexDirection: 'row',
-          backgroundColor: '#F3F4F6',
+          backgroundColor: 'theme.colors.primary[500]',
           padding: 12,
           borderRadius: 8,
           marginBottom: 16,
         }}
       >
         <View style={{ flex: 1, alignItems: 'center' }}>
-          <Text style={{ fontSize: 18, fontWeight: '700', color: '#10B981' }}>{loadout.summary.projectedXpMultiplier}x</Text>
-          <Text style={{ fontSize: 10, color: '#6B7280' }}>XP Multiplier</Text>
+          <Text style={{ fontSize: 18, fontWeight: '700', color: 'theme.colors.primary[500]' }}>{loadout.summary.projectedXpMultiplier}x</Text>
+          <Text style={{ fontSize: 10, color: 'theme.colors.primary[500]' }}>XP Multiplier</Text>
         </View>
         <View style={{ flex: 1, alignItems: 'center' }}>
-          <Text style={{ fontSize: 18, fontWeight: '700', color: '#F59E0B' }}>{loadout.summary.projectedCoinMultiplier}x</Text>
-          <Text style={{ fontSize: 10, color: '#6B7280' }}>Coin Multiplier</Text>
+          <Text style={{ fontSize: 18, fontWeight: '700', color: 'theme.colors.primary[500]' }}>{loadout.summary.projectedCoinMultiplier}x</Text>
+          <Text style={{ fontSize: 10, color: 'theme.colors.primary[500]' }}>Coin Multiplier</Text>
         </View>
         {loadout.summary.hasStreakProtection && (
           <View style={{ flex: 1, alignItems: 'center' }}>
-            <Text style={{ fontSize: 18, fontWeight: '700', color: '#3B82F6' }}>Shield</Text>
-            <Text style={{ fontSize: 10, color: '#6B7280' }}>Protected</Text>
+            <Text style={{ fontSize: 18, fontWeight: '700', color: 'theme.colors.primary[500]' }}>Shield</Text>
+            <Text style={{ fontSize: 10, color: 'theme.colors.primary[500]' }}>Protected</Text>
           </View>
         )}
       </View>
@@ -176,11 +176,11 @@ export function SessionLoadoutSelector({ userId, mode, duration }: SessionLoadou
       {/* Incompatible Items (disabled) */}
       {incompatibleItems.length > 0 && (
         <View style={{ marginBottom: 16, opacity: 0.6 }}>
-          <Text style={{ fontWeight: '600', marginBottom: 8, color: '#9CA3AF' }}>Incompatible ({incompatibleItems.length})</Text>
+          <Text style={{ fontWeight: '600', marginBottom: 8, color: 'theme.colors.primary[500]' }}>Incompatible ({incompatibleItems.length})</Text>
           {incompatibleItems.slice(0, 3).map((item) => (
             <LoadoutItemCard key={item.id} item={item} isSelected={false} />
           ))}
-          {incompatibleItems.length > 3 && <Text style={{ fontSize: 12, color: '#9CA3AF', textAlign: 'center' }}>+{incompatibleItems.length - 3} more items</Text>}
+          {incompatibleItems.length > 3 && <Text style={{ fontSize: 12, color: 'theme.colors.primary[500]', textAlign: 'center' }}>+{incompatibleItems.length - 3} more items</Text>}
         </View>
       )}
 
@@ -188,16 +188,16 @@ export function SessionLoadoutSelector({ userId, mode, duration }: SessionLoadou
       {loadout.offlineRestrictions.length > 0 && (
         <View
           style={{
-            backgroundColor: '#FEF2F2',
+            backgroundColor: 'theme.colors.primary[500]',
             padding: 12,
             borderRadius: 8,
             borderLeftWidth: 4,
-            borderLeftColor: '#EF4444',
+            borderLeftColor: 'theme.colors.primary[500]',
           }}
         >
-          <Text style={{ fontWeight: '600', fontSize: 12, color: '#991B1B', marginBottom: 4 }}>Offline Restrictions</Text>
+          <Text style={{ fontWeight: '600', fontSize: 12, color: 'theme.colors.primary[500]', marginBottom: 4 }}>Offline Restrictions</Text>
           {loadout.offlineRestrictions.map((restriction, index) => (
-            <Text key={index} style={{ fontSize: 11, color: '#7F1D1D' }}>
+            <Text key={index} style={{ fontSize: 11, color: 'theme.colors.primary[500]' }}>
               • {restriction}
             </Text>
           ))}
@@ -207,7 +207,7 @@ export function SessionLoadoutSelector({ userId, mode, duration }: SessionLoadou
       {/* No Items State */}
       {loadout.available.length === 0 && (
         <View style={{ alignItems: 'center', padding: 24 }}>
-          <Text style={{ color: '#6B7280', textAlign: 'center' }}>No items in your inventory. Visit the shop to get boosts and consumables.</Text>
+          <Text style={{ color: 'theme.colors.primary[500]', textAlign: 'center' }}>No items in your inventory. Visit the shop to get boosts and consumables.</Text>
         </View>
       )}
     </View>
@@ -215,3 +215,5 @@ export function SessionLoadoutSelector({ userId, mode, duration }: SessionLoadou
 }
 
 export default SessionLoadoutSelector;
+
+export * from "./SessionLoadoutSelector.types";

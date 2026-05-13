@@ -10,6 +10,7 @@ export enum SessionMode {
   SPRINT = 'SPRINT',
   RECOVERY = 'RECOVERY',      // Formerly SPRINT - Short comeback sessions
   STARTER = 'STARTER',       // First-time user sessions - easy and encouraging
+  MAINTENANCE = 'MAINTENANCE', // 5-minute burst sessions to keep streaks alive on busy days
 }
 
 export const SessionModeSchema = z.nativeEnum(SessionMode);
@@ -116,6 +117,15 @@ export const SESSION_MODE_CONFIG: Record<SessionMode, SessionModeConfig> = {
     purityPassThreshold: 50,  // Very easy to pass
     scoringWeights: { consistency: 0.2, depth: 0.1, recovery: 0.7 },
     xpMultiplier: 1.0,  // Full XP for encouragement
+  },
+  [SessionMode.MAINTENANCE]: {
+    bossDamageMultiplier: 0.2,
+    companionBehavior: 'supportive',
+    minimumQualifyingDurationSeconds: 3 * 60,  // 3 minutes min to qualify
+    pausePenaltyMultiplier: 0.0,
+    purityPassThreshold: 50,
+    scoringWeights: { consistency: 0.8, depth: 0.1, recovery: 0.1 },
+    xpMultiplier: 0.2,  // Minimal XP, just to keep streak alive
   },
 };
 

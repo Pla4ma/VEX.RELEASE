@@ -25,34 +25,6 @@ import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme';
 import { eventBus } from '../../events';
 
-export interface SquadMemberSession {
-  userId: string;
-  displayName: string;
-  avatarUrl?: string;
-  isFocusing: boolean;
-  sessionStartedAt: number;
-  elapsedSeconds: number;
-}
-
-export interface SquadSyncIndicatorProps {
-  /** Squad members with session status */
-  members: SquadMemberSession[];
-  /** Whether this is a squad session */
-  isSquadMode: boolean;
-  /** Current user ID to exclude from list */
-  currentUserId: string;
-  /** Squad ID for EventBus subscriptions */
-  squadId?: string;
-  /** Current user name for encouragement messages */
-  currentUserName?: string;
-  /** Callback when member completes session */
-  onMemberComplete?: (memberId: string, memberName: string) => void;
-  /** Callback when encouraging a squadmate */
-  onEncourageMember?: (memberId: string, memberName: string) => void;
-  /** Loading state */
-  isLoading?: boolean;
-}
-
 /**
  * Individual member indicator with encourage action
  */
@@ -534,3 +506,6 @@ export function SquadSyncIndicator({
 }
 
 export default SquadSyncIndicator;
+
+export * from "./SquadSyncIndicator.types";
+export * from "./SquadSyncIndicator.types";

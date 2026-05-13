@@ -15,6 +15,9 @@ export const BossRewardTypeSchema = z.enum([
   'ITEM',
   'COSMETIC',
   'STREAK_SHIELD',
+  'VARIABLE_REWARD',
+  'INSIGHT',
+  'AESTHETIC',
 ]);
 
 export const BossTemplateSchema = z.object({

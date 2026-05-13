@@ -18,40 +18,6 @@ const storageCircuitBreaker = new CircuitBreaker({
   halfOpenMaxCalls: 2,
 });
 
-export interface StorageUploadConfig {
-  bucket: string;
-  path: string;
-  contentType: string;
-  encryption?: {
-    enabled: boolean;
-    algorithm: 'AES-256-GCM';
-  };
-  metadata?: Record<string, string>;
-}
-
-export interface UploadResult {
-  url: string;
-  size: number;
-  checksum: string;
-  uploadedAt: number;
-  expiresAt?: number;
-}
-
-export interface DownloadResult {
-  data: Blob;
-  url: string;
-  contentType: string;
-  size: number;
-  checksum: string;
-}
-
-export interface StorageError extends Error {
-  code: string;
-  bucket?: string;
-  path?: string;
-  retryable: boolean;
-}
-
 class AnalyticsStorageError extends Error implements StorageError {
   constructor(
     message: string,
@@ -66,77 +32,6 @@ class AnalyticsStorageError extends Error implements StorageError {
 }
 
 // Upload data to storage with retry and chunking for large files
-export async function uploadExportData(jobId: string, data: unknown, format: 'json' | 'csv', userId: string): Promise<UploadResult> {
-  return storageCircuitBreaker.execute(async () => {
-    const bucket = 'analytics-exports';
-    const path = `${userId}/${jobId}.${format}`;
-
-    // Serialize data
-    const content = format === 'json' ? JSON.stringify(data, null, 2) : convertToCSV(data);
-
-    const blob = new Blob([content], {
-      type: format === 'json' ? 'application/json' : 'text/csv',
-    });
-
-    const fileSize = blob.size;
-    const checksum = await calculateChecksum(content);
-
-    // For large files, use specialized large file upload
-    if (fileSize > 5 * 1024 * 1024) {
-      return await uploadLargeFile(bucket, path, blob, checksum, jobId);
-    }
-
-    // Standard upload with retry
-    return await withRetry(
-      async () => {
-        const { data: uploadData, error } = await withTimeout(
-          supabase.storage.from(bucket).upload(path, blob, {
-            contentType: format === 'json' ? 'application/json' : 'text/csv',
-            upsert: false,
-            metadata: {
-              jobId,
-              userId,
-              checksum,
-              format,
-              uploadedAt: Date.now().toString(),
-            },
-          }),
-          60000,
-          'Storage upload timeout',
-        );
-
-        if (error) {
-          throw new AnalyticsStorageError(`Upload failed: ${error.message}`, error.name, bucket, path, isRetryableStorageError(error));
-        }
-
-        // Get public URL (or signed URL for private access)
-        const { data: urlData } = await supabase.storage.from(bucket).createSignedUrl(path, 7 * 24 * 60 * 60); // 7 days
-
-        return {
-          url: urlData?.signedUrl || '',
-          size: fileSize,
-          checksum,
-          uploadedAt: Date.now(),
-          expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
-        };
-      },
-      {
-        maxAttempts: 3,
-        baseDelayMs: 1000,
-        retryableErrors: ['network_error', 'timeout', 'rate_limited'],
-        onRetry: (attempt: number, error: Error) => {
-          Sentry.addBreadcrumb({
-            category: 'storage',
-            message: `Retrying upload attempt ${attempt}`,
-            level: 'warning',
-            data: { jobId, error: error.message },
-          });
-        },
-      },
-    );
-  });
-}
-
 // Large file upload with streaming and progress tracking
 async function uploadLargeFile(bucket: string, path: string, blob: Blob, checksum: string, jobId: string, onProgress?: (percent: number) => void): Promise<UploadResult> {
   // For large files, we use resumable upload by splitting into parts
@@ -214,58 +109,7 @@ async function uploadLargeFile(bucket: string, path: string, blob: Blob, checksu
 }
 
 // Download export data
-export async function downloadExportData(jobId: string, userId: string, format: 'json' | 'csv'): Promise<DownloadResult> {
-  return storageCircuitBreaker.execute(async () => {
-    const bucket = 'analytics-exports';
-    const path = `${userId}/${jobId}.${format}`;
-
-    return await withRetry(
-      async () => {
-        const { data, error } = await withTimeout(supabase.storage.from(bucket).download(path), 30000, 'Storage download timeout');
-
-        if (error) {
-          throw new AnalyticsStorageError(`Download failed: ${error.message}`, error.name, bucket, path, isRetryableStorageError(error));
-        }
-
-        if (!data) {
-          throw new AnalyticsStorageError('No data returned from download', 'EMPTY_RESPONSE', bucket, path, false);
-        }
-
-        const content = await data.text();
-        const checksum = await calculateChecksum(content);
-
-        // Get metadata
-        const { data: metadata } = await supabase.storage.from(bucket).getPublicUrl(path);
-
-        return {
-          data,
-          url: metadata?.publicUrl || '',
-          contentType: format === 'json' ? 'application/json' : 'text/csv',
-          size: data.size,
-          checksum,
-        };
-      },
-      {
-        maxAttempts: 3,
-        baseDelayMs: 1000,
-        retryableErrors: ['network_error', 'timeout'],
-      },
-    );
-  });
-}
-
 // Delete export data
-export async function deleteExportData(jobId: string, userId: string, format: 'json' | 'csv'): Promise<void> {
-  const bucket = 'analytics-exports';
-  const path = `${userId}/${jobId}.${format}`;
-
-  const { error } = await supabase.storage.from(bucket).remove([path]);
-
-  if (error) {
-    throw new AnalyticsStorageError(`Delete failed: ${error.message}`, error.name, bucket, path, false);
-  }
-}
-
 // Calculate SHA-256 checksum
 async function calculateChecksum(content: string): Promise<string> {
   const encoder = new TextEncoder();
@@ -322,59 +166,6 @@ function isRetryableStorageError(error: unknown): boolean {
 }
 
 // Get storage metrics
-export async function getStorageMetrics(userId: string): Promise<{
-  totalExports: number;
-  totalSize: number;
-  oldestExport: number | null;
-}> {
-  const bucket = 'analytics-exports';
-  const prefix = `${userId}/`;
-
-  const { data, error } = await supabase.storage.from(bucket).list(prefix);
-
-  if (error || !data) {
-    return { totalExports: 0, totalSize: 0, oldestExport: null };
-  }
-
-  const totalSize = data.reduce((sum, item) => sum + (item.metadata?.size || 0), 0);
-  const timestamps = data.map((item) => (item.created_at ? new Date(item.created_at).getTime() : null)).filter((t): t is number => t !== null);
-
-  return {
-    totalExports: data.length,
-    totalSize,
-    oldestExport: timestamps.length > 0 ? Math.min(...timestamps) : null,
-  };
-}
-
 // Cleanup old exports
-export async function cleanupOldExports(userId: string, maxAgeDays: number = 30): Promise<{ deleted: number; freedSpace: number }> {
-  const bucket = 'analytics-exports';
-  const prefix = `${userId}/`;
-  const cutoff = Date.now() - maxAgeDays * 24 * 60 * 60 * 1000;
-
-  const { data, error } = await supabase.storage.from(bucket).list(prefix);
-
-  if (error || !data) {
-    return { deleted: 0, freedSpace: 0 };
-  }
-
-  const toDelete = data.filter((item) => {
-    const created = item.created_at ? new Date(item.created_at).getTime() : null;
-    return created && created < cutoff;
-  });
-
-  if (toDelete.length === 0) {
-    return { deleted: 0, freedSpace: 0 };
-  }
-
-  const paths = toDelete.map((item) => `${prefix}${item.name}`);
-  const freedSpace = toDelete.reduce((sum, item) => sum + (item.metadata?.size || 0), 0);
-
-  const { error: deleteError } = await supabase.storage.from(bucket).remove(paths);
-
-  if (deleteError) {
-    throw new AnalyticsStorageError(`Cleanup failed: ${deleteError.message}`, deleteError.name, bucket, prefix, true);
-  }
-
-  return { deleted: toDelete.length, freedSpace };
-}
+export * from "./storage.types";
+export * from "./storage.part1";

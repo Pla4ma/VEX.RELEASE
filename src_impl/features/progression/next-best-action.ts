@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import type { FeatureKey } from '../liveops-config/feature-access';
+type FeatureKey = string;
 
 export const NextBestActionInputSchema = z.object({
   completedSessions: z.number().min(0),

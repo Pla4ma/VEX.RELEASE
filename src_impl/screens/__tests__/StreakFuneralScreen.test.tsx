@@ -26,11 +26,11 @@ jest.mock('../../theme', () => ({
   useTheme: () => ({
     theme: {
       colors: {
-        background: { primary: '#000', secondary: '#111', elevated: '#222' },
-        text: { primary: '#fff', secondary: '#999', tertiary: '#666' },
-        border: { light: '#333' },
-        primary: { 500: '#007AFF' },
-        error: { DEFAULT: '#ff0000' },
+        background: { primary: 'theme.colors.text.primary', secondary: 'theme.colors.primary[500]', elevated: 'theme.colors.primary[500]' },
+        text: { primary: 'theme.colors.background.primary', secondary: 'theme.colors.primary[500]', tertiary: 'theme.colors.primary[500]' },
+        border: { light: 'theme.colors.primary[500]' },
+        primary: { 500: 'theme.colors.primary[500]' },
+        error: { DEFAULT: 'theme.colors.error.DEFAULT' },
       },
       spacing: { lg: 16, xl: 24, '2xl': 32 },
     },

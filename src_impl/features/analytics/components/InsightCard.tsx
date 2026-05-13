@@ -221,3 +221,6 @@ const styles = createSheet({
     fontSize: 14,
   },
 });
+
+export * from "./InsightCard.types";
+export * from "./InsightCard.types";

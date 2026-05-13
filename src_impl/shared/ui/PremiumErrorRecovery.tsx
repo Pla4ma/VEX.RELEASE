@@ -479,3 +479,6 @@ const styles = createSheet({
 });
 
 export default PremiumErrorRecovery;
+
+export * from "./PremiumErrorRecovery.types";
+export * from "./PremiumErrorRecovery.types";

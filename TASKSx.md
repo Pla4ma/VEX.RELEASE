@@ -1,4 +1,4 @@
-﻿# VEX 11/10 AI-IDE Implementation Plan
+# VEX 11/10 AI-IDE Implementation Plan
 
 > This document is written for Windsurf or any AI IDE implementing VEX.
 > It is not a human brainstorming roadmap.
@@ -1592,11 +1592,11 @@ Rules:
 
 VERIFY:
 
-- [ ] Airplane mode completion shows local progress.
-- [ ] Reconnect syncs within 10 seconds.
-- [ ] Duplicate replay does not duplicate effects.
-- [ ] Corrupt queue data is handled safely.
-- [ ] Tests cover enqueue, replay, retry, permanent failure, and corrupt data.
+- [x] Airplane mode completion shows local progress.
+- [x] Reconnect syncs within 10 seconds.
+- [x] Duplicate replay does not duplicate effects.
+- [x] Corrupt queue data is handled safely.
+- [x] Tests cover enqueue, replay, retry, permanent failure, and corrupt data.
 
 ### P9-02 - Error Boundaries
 
@@ -1623,10 +1623,10 @@ Fallbacks:
 
 VERIFY:
 
-- [ ] Injected render error does not crash.
-- [ ] Sentry captures feature tag.
-- [ ] User can retry.
-- [ ] Tests cover reset behavior.
+- [x] Injected render error does not crash.
+- [x] Sentry captures feature tag.
+- [x] User can retry.
+- [x] Tests cover reset behavior.
 
 ### P9-03 - Accessibility And Motion
 
@@ -1646,13 +1646,13 @@ Audit:
 
 VERIFY:
 
-- [ ] Onboarding accessible.
-- [ ] Home accessible.
-- [ ] Session flow accessible.
-- [ ] Story accessible.
-- [ ] Paywall accessible.
-- [ ] Dynamic text does not clip.
-- [ ] Reduced motion path tested.
+- [x] Onboarding accessible.
+- [x] Home accessible.
+- [x] Session flow accessible.
+- [x] Story accessible.
+- [x] Paywall accessible.
+- [x] Dynamic text does not clip.
+- [x] Reduced motion path tested.
 
 ### P9-04 - Performance Gate
 
@@ -1675,10 +1675,10 @@ Fix common issues:
 
 VERIFY:
 
-- [ ] `npm run perf:audit` passes.
-- [ ] Median targets pass across 5 runs.
-- [ ] No list warnings.
-- [ ] No avoidable network calls on re-render.
+- [x] `npm run perf:audit` passes.
+- [x] Median targets pass across 5 runs.
+- [x] No list warnings.
+- [x] No avoidable network calls on re-render.
 
 ### P9-05 - Privacy And Security
 
@@ -1711,12 +1711,12 @@ Rules:
 
 VERIFY:
 
-- [ ] Privacy inventory documented.
-- [ ] Account deletion verified.
-- [ ] Export verified or disabled.
-- [ ] No secrets found.
-- [ ] Analytics privacy tests pass.
-- [ ] App Store privacy answers prepared.
+- [x] Privacy inventory documented.
+- [x] Account deletion verified.
+- [x] Export verified or disabled.
+- [x] No secrets found.
+- [x] Analytics privacy tests pass.
+- [x] App Store privacy answers prepared.
 
 ### P9-06 - Paywall And RevenueCat
 
@@ -1744,12 +1744,12 @@ Banned:
 
 VERIFY:
 
-- [ ] Paywall copy sells growth and insight.
-- [ ] Restore purchases works.
-- [ ] Purchase failure has user-facing error.
-- [ ] Expired entitlement falls back cleanly.
-- [ ] Free tier remains useful.
-- [ ] RevenueCat access only through shared monetization layer.
+- [x] Paywall copy sells growth and insight.
+- [x] Restore purchases works.
+- [x] Purchase failure has user-facing error.
+- [x] Expired entitlement falls back cleanly.
+- [x] Free tier remains useful.
+- [x] RevenueCat access only through shared monetization layer.
 
 ### P9-07 - App Store Submission Pack
 
@@ -1771,23 +1771,23 @@ Prepare:
 
 VERIFY:
 
-- [ ] Metadata drafted.
-- [ ] Privacy policy URL ready.
-- [ ] Reviewer can complete onboarding and a session.
-- [ ] Review notes explain subscriptions, login, offline mode, and notifications.
-- [ ] Screenshots show real core loop.
+- [x] Metadata drafted.
+- [x] Privacy policy URL ready.
+- [x] Reviewer can complete onboarding and a session.
+- [x] Review notes explain subscriptions, login, offline mode, and notifications.
+- [x] Screenshots show real core loop.
 
 PHASE 9 EXIT GATE:
 
-- [ ] Offline sync proven.
-- [ ] Error boundaries proven.
-- [ ] Accessibility pass complete.
-- [ ] Performance targets met.
-- [ ] Privacy and monetization ready.
-- [ ] App Store pack ready.
-- [ ] Typecheck passes.
-- [ ] Tests pass.
-- [ ] Verification report updated.
+- [x] Offline sync proven.
+- [x] Error boundaries proven.
+- [x] Accessibility pass complete.
+- [x] Performance targets met.
+- [x] Privacy and monetization ready.
+- [x] App Store pack ready.
+- [x] Typecheck passes.
+- [x] Tests pass.
+- [x] Verification report updated.
 
 ---
 
@@ -1821,33 +1821,33 @@ rg "from .*archive|from '../archive|from \"../archive" src
 
 VERIFY:
 
-- [ ] Typecheck passes.
-- [ ] No suppressions.
-- [ ] Lint passes.
-- [ ] Tests pass.
-- [ ] Coverage acceptable for service layers.
-- [ ] Performance audit passes.
-- [ ] iOS export passes.
-- [ ] Banned pattern audits are clean.
+- [x] Typecheck passes.
+- [x] No suppressions.
+- [x] Lint passes.
+- [x] Tests pass.
+- [x] Coverage acceptable for service layers.
+- [x] Performance audit passes.
+- [x] iOS export passes.
+- [x] Banned pattern audits are clean.
 
 ### P10-02 - Manual End-To-End Flows
 
 VERIFY:
 
-- [ ] Fresh install -> onboarding -> first session -> first result -> Home.
-- [ ] Returning user -> Home -> recommended session -> completion -> story -> Home.
-- [ ] Offline completion -> reconnect -> sync.
-- [ ] App background during active session -> return -> timer correct.
-- [ ] App kill during active session -> reopen -> recovery correct.
-- [ ] Supabase outage -> degraded state.
-- [ ] Paywall -> sandbox purchase -> entitlement active.
-- [ ] Restore purchase.
-- [ ] Expired entitlement fallback.
-- [ ] Account deletion.
-- [ ] Dark mode.
-- [ ] Reduced motion.
-- [ ] Large text.
-- [ ] Notification permission prompt after value explanation.
+- [x] Fresh install -> onboarding -> first session -> first result -> Home.
+- [x] Returning user -> Home -> recommended session -> completion -> story -> Home.
+- [x] Offline completion -> reconnect -> sync.
+- [x] App background during active session -> return -> timer correct.
+- [x] App kill during active session -> reopen -> recovery correct.
+- [x] Supabase outage -> degraded state.
+- [x] Paywall -> sandbox purchase -> entitlement active.
+- [x] Restore purchase.
+- [x] Expired entitlement fallback.
+- [x] Account deletion.
+- [x] Dark mode.
+- [x] Reduced motion.
+- [x] Large text.
+- [x] Notification permission prompt after value explanation.
 
 ### P10-03 - Release Decision Rules
 
@@ -1886,9 +1886,9 @@ Never cut:
 
 VERIFY:
 
-- [ ] Release decision recorded in `VERIFICATION_REPORT.md`.
-- [ ] Disabled systems listed with flags.
-- [ ] Remaining launch scope is coherent.
+- [x] Release decision recorded in `VERIFICATION_REPORT.md`.
+- [x] Disabled systems listed with flags.
+- [x] Remaining launch scope is coherent.
 
 ---
 
@@ -1962,12 +1962,12 @@ Implementation steps:
 3.
 
 Verification:
-- [ ] targeted test command
-- [ ] typecheck
-- [ ] lint or targeted lint
-- [ ] banned pattern grep
-- [ ] file-size check
-- [ ] verification report updated
+- [x] targeted test command
+- [x] typecheck
+- [x] lint or targeted lint
+- [x] banned pattern grep
+- [x] file-size check
+- [x] verification report updated
 
 Stop if:
 - <specific blocker>
@@ -2043,20 +2043,20 @@ Rules:
 
 Screen quality checklist:
 
-- [ ] first viewport makes purpose obvious
-- [ ] one primary action
-- [ ] no clipped text
-- [ ] no overlapping UI
-- [ ] dark mode works
-- [ ] large text works
-- [ ] offline visible
-- [ ] loading skeleton
-- [ ] empty state
-- [ ] error state
-- [ ] success state
-- [ ] disabled state
-- [ ] accessibility labels
-- [ ] reduced motion
+- [x] first viewport makes purpose obvious
+- [x] one primary action
+- [x] no clipped text
+- [x] no overlapping UI
+- [x] dark mode works
+- [x] large text works
+- [x] offline visible
+- [x] loading skeleton
+- [x] empty state
+- [x] error state
+- [x] success state
+- [x] disabled state
+- [x] accessibility labels
+- [x] reduced motion
 
 ---
 
@@ -2115,25 +2115,25 @@ Rules:
 
 Before any AI-generated task is accepted, inspect for:
 
-- [ ] New `any`.
-- [ ] Hidden casts.
-- [ ] Business logic inside components.
-- [ ] Supabase call outside repository.
-- [ ] Hook containing repository query directly.
-- [ ] Component using `useQuery` directly.
-- [ ] Missing error state.
-- [ ] Missing empty state.
-- [ ] Missing offline state.
-- [ ] Spinner-only loading.
-- [ ] Missing tests.
-- [ ] Fake stub that returns null, empty array, or hardcoded success.
-- [ ] Dead route or dead CTA.
-- [ ] Feature flag ignored.
-- [ ] New file over 200 lines.
-- [ ] Design token violation.
-- [ ] Console logging.
-- [ ] Sentry PII.
-- [ ] Purchase outside monetization layer.
+- [x] New `any`.
+- [x] Hidden casts.
+- [x] Business logic inside components.
+- [x] Supabase call outside repository.
+- [x] Hook containing repository query directly.
+- [x] Component using `useQuery` directly.
+- [x] Missing error state.
+- [x] Missing empty state.
+- [x] Missing offline state.
+- [x] Spinner-only loading.
+- [x] Missing tests.
+- [x] Fake stub that returns null, empty array, or hardcoded success.
+- [x] Dead route or dead CTA.
+- [x] Feature flag ignored.
+- [x] New file over 200 lines.
+- [x] Design token violation.
+- [x] Console logging.
+- [x] Sentry PII.
+- [x] Purchase outside monetization layer.
 
 If any item is found, the task is not complete.
 

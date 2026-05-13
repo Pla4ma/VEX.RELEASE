@@ -125,9 +125,9 @@ export function NotificationBadge({ userId, size = 'md' }: NotificationBadgeProp
         alignItems="center"
         px={s.paddingHorizontal}
         style={{
-          backgroundColor: '#EF4444',
+          backgroundColor: 'theme.colors.primary[500]',
           borderWidth: 2,
-          borderColor: '#FFFFFF',
+          borderColor: 'theme.colors.background.primary',
         }}
       >
         <Text fontSize={s.fontSize} color="white" fontWeight="800">
@@ -183,9 +183,9 @@ export function NotificationDot({ userId }: { userId: string }): JSX.Element | n
       height={8}
       borderRadius="full"
       style={{
-        backgroundColor: '#EF4444',
+        backgroundColor: 'theme.colors.primary[500]',
         borderWidth: 1,
-        borderColor: '#FFFFFF',
+        borderColor: 'theme.colors.background.primary',
       }}
     />
   );
@@ -237,3 +237,5 @@ export function useNotificationBadge(userId: string | undefined): {
 }
 
 export default NotificationBadge;
+
+export * from "./NotificationBadge.types";

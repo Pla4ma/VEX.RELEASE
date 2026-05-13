@@ -215,7 +215,7 @@ export const PostSessionStoryScreen: React.FC<PostSessionStoryScreenProps> = ({ 
                     <Text style={{ fontSize: 14, fontWeight: '600', flex: 1, color: theme.colors.text.primary }}>{hook.description}</Text>
                     {hook.urgency === 'HIGH' && (
                       <View style={{ width: 24, height: 24, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginLeft: 12, backgroundColor: theme.colors.error.DEFAULT }}>
-                        <Text style={{ color: '#fff', fontSize: 14, fontWeight: '800' }}>!</Text>
+                        <Text style={{ color: 'theme.colors.background.primary', fontSize: 14, fontWeight: '800' }}>!</Text>
                       </View>
                     )}
                   </View>
@@ -232,7 +232,7 @@ export const PostSessionStoryScreen: React.FC<PostSessionStoryScreenProps> = ({ 
               )}
 
               <Pressable style={{ paddingVertical: 16, borderRadius: 12, alignItems: 'center', backgroundColor: emotionColor }} onPress={handleNext}>
-                <Text style={{ color: '#fff', fontSize: 16, fontWeight: '700' }}>Continue</Text>
+                <Text style={{ color: 'theme.colors.background.primary', fontSize: 16, fontWeight: '700' }}>Continue</Text>
               </Pressable>
             </View>
           </View>
@@ -330,3 +330,5 @@ const StoryBeatView: React.FC<StoryBeatViewProps> = ({ beat, emotionColor, isRed
 };
 
 export default PostSessionStoryScreen;
+
+export * from "./PostSessionStoryScreen.types";

@@ -91,7 +91,7 @@ export function SessionGradeCard({
   return (
     <Box width="100%" minHeight={440} justifyContent="center" alignItems="center" px={24} py={24}>
       <Animated.View entering={FadeIn.duration(220)} style={StyleSheet.absoluteFillObject}>
-        <View style={{ flex: 1, backgroundColor: '#04070D' }} />
+        <View style={{ flex: 1, backgroundColor: 'theme.colors.primary[500]' }} />
       </Animated.View>
       <Animated.View entering={FadeInDown.springify().damping(13).stiffness(180)}>
         <Box px={16} py={10} borderRadius={999} style={{ backgroundColor: withAlpha(theme.colors.primary[500], 0.9) }}>

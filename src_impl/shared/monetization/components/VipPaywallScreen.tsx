@@ -89,8 +89,8 @@ const VIP_BENEFITS = [
 ] as const;
 
 // VIP Gradient Colors
-const VIP_GRADIENT = ['#FFD700', '#FFA500', '#FF6B35'] as const;
-const VIP_ACCENT = '#FFD700';
+const VIP_GRADIENT = ['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT'] as const;
+const VIP_ACCENT = 'theme.colors.error.DEFAULT';
 
 // Mock social proof — replace with real data from Supabase
 const SOCIAL_PROOF = {
@@ -685,3 +685,5 @@ export function VipPaywallScreen(): JSX.Element {
 }
 
 export default VipPaywallScreen;
+
+export * from "./VipPaywallScreen.types";

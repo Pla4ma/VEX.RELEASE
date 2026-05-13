@@ -10,21 +10,6 @@ import type { ChallengeDifficulty } from './schemas';
 // Challenge bank expansion - no external type dependencies
 
 // Extended challenge template for challenge bank entries
-interface ChallengeBankTemplate {
-  id: string;
-  name: string;
-  description: string;
-  type: string;
-  difficulty: string;
-  target: number;
-  timeLimit: number;
-  rewardType: string;
-  rewardAmount: number;
-  tags: string[];
-  seasonal: boolean;
-  seasonWindow?: { startMonth: number; endMonth: number };
-}
-
 // ============================================================================
 // Personal Challenge Templates (Feel tailored to user)
 // ============================================================================
@@ -544,76 +529,10 @@ const SEASONAL_CHALLENGES: ChallengeBankTemplate[] = [
 // ============================================================================
 // Combine All Challenges
 // ============================================================================
-
-export const EXPANDED_CHALLENGE_TEMPLATES: ChallengeBankTemplate[] = [...PERSONAL_CHALLENGES, ...VOLUME_CHALLENGES, ...STREAK_CHALLENGES, ...SEASONAL_CHALLENGES];
-
 // Total count verification
-export const CHALLENGE_COUNT = EXPANDED_CHALLENGE_TEMPLATES.length; // Should be 50+
-
 // ============================================================================
 // Helper Functions
 // ============================================================================
-
-/**
- * Get all challenge templates
- */
-export function getAllChallengeTemplates(): ChallengeBankTemplate[] {
-  return EXPANDED_CHALLENGE_TEMPLATES;
-}
-
-/**
- * Get challenges by type
- */
-export function getChallengesByType(type: string): ChallengeBankTemplate[] {
-  return EXPANDED_CHALLENGE_TEMPLATES.filter((c) => c.type === type);
-}
-
-/**
- * Get challenges by difficulty
- */
-export function getChallengesByDifficulty(difficulty: ChallengeDifficulty): ChallengeBankTemplate[] {
-  return EXPANDED_CHALLENGE_TEMPLATES.filter((c) => c.difficulty === difficulty);
-}
-
-/**
- * Get seasonal challenges for current date
- */
-export function getCurrentSeasonalChallenges(date: Date = new Date()): ChallengeBankTemplate[] {
-  const currentMonth = date.getMonth();
-  return EXPANDED_CHALLENGE_TEMPLATES.filter((c) => c.seasonal && c.seasonWindow && currentMonth >= c.seasonWindow.startMonth && currentMonth <= c.seasonWindow.endMonth);
-}
-
-/**
- * Get non-seasonal challenges
- */
-export function getStandardChallenges(): ChallengeBankTemplate[] {
-  return EXPANDED_CHALLENGE_TEMPLATES.filter((c) => !c.seasonal);
-}
-
-/**
- * Get random challenge set for a user
- */
-export function getRandomChallengeSet(count: number = 3): ChallengeBankTemplate[] {
-  const shuffled = [...EXPANDED_CHALLENGE_TEMPLATES].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
-}
-
-/**
- * Get personalized challenges based on user patterns
- */
-export function getPersonalizedChallenges(preferredTimeOfDay: 'morning' | 'afternoon' | 'evening' | 'night', difficulty: string = 'NORMAL'): ChallengeBankTemplate[] {
-  const timeTags: Record<string, string[]> = {
-    morning: ['morning', 'early-bird'],
-    afternoon: ['afternoon', 'mid-day'],
-    evening: ['evening', 'wind-down'],
-    night: ['night', 'night-owl'],
-  };
-
-  const preferredTags = timeTags[preferredTimeOfDay] || [];
-
-  return EXPANDED_CHALLENGE_TEMPLATES.filter((c) => c.difficulty === difficulty && c.tags?.some((tag) => preferredTags.includes(tag)));
-}
-
 // ============================================================================
 // Exports
 // ============================================================================
@@ -621,3 +540,5 @@ export function getPersonalizedChallenges(preferredTimeOfDay: 'morning' | 'after
 export { PERSONAL_CHALLENGES, VOLUME_CHALLENGES, STREAK_CHALLENGES, SEASONAL_CHALLENGES };
 
 export type { ChallengeBankTemplate };
+export * from "./challenge-bank-expansion.types";
+export * from "./challenge-bank-expansion.part1";

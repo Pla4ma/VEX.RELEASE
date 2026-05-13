@@ -26,7 +26,7 @@ export function TooltipCard({
         padding: theme.spacing[5],
         marginHorizontal: theme.spacing[6],
         maxWidth: 320,
-        shadowColor: '#000',
+        shadowColor: 'theme.colors.text.primary',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,
         shadowRadius: 12,

@@ -26,8 +26,6 @@ const RATE_LIMIT_MS = 48 * 60 * 60 * 1000;
 const STORAGE_KEY = 'vex_contextual_paywall_last_shown';
 const paywallStorage = new MMKVStorageAdapter('contextual-paywall');
 
-export type PaywallTriggerType = 'BOSS_DEFEAT' | 'STREAK_MILESTONE' | 'S_GRADE';
-
 interface ContextualPaywallBannerProps {
   trigger: PaywallTriggerType;
   /** Boss tier to unlock (for BOSS_DEFEAT trigger) */
@@ -243,3 +241,5 @@ export function ContextualPaywallBanner({
 }
 
 export default ContextualPaywallBanner;
+
+export * from "./ContextualPaywallBanner.types";

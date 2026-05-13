@@ -72,15 +72,15 @@ interface UseStreakRiskReturn {
 
 function getFlameColor(healthPercent: number): string {
   if (healthPercent > 75) {
-    return '#4CAF50';
+    return 'theme.colors.primary[500]';
   } // Green - healthy
   if (healthPercent > 50) {
-    return '#FF9800';
+    return 'theme.colors.error.DEFAULT';
   } // Orange - warning
   if (healthPercent > 25) {
-    return '#FF5722';
+    return 'theme.colors.error.DEFAULT';
   } // Deep orange - danger
-  return '#F44336'; // Red - critical
+  return 'theme.colors.primary[500]'; // Red - critical
 }
 
 function getUrgencyLabel(riskLevel: RiskLevel): string {
@@ -378,3 +378,4 @@ export function useFlameHealth(): {
   };
 }
 
+export * from "./useStreakRisk.types";

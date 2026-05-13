@@ -13,12 +13,6 @@ const debug = createDebugger('calendar:google');
 
 const GOOGLE_CALENDAR_BASE_URL = 'https://www.googleapis.com/calendar/v3';
 
-export interface GoogleCalendarConfig {
-  accessToken: string;
-  refreshToken: string;
-  expiresAt: number;
-}
-
 export class GoogleCalendarAdapter {
   private config: GoogleCalendarConfig;
 
@@ -319,3 +313,5 @@ export class GoogleCalendarAdapter {
     return free.filter(slot => slot.duration >= 15); // Minimum 15 min
   }
 }
+
+export * from "./GoogleCalendarAdapter.types";

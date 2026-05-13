@@ -51,17 +51,17 @@ export class ErrorBoundary extends Component<Props, State> {
           justifyContent: 'center',
           alignItems: 'center',
           padding: 24,
-          backgroundColor: '#F7FAFC',
+          backgroundColor: 'theme.colors.primary[500]',
         }}>
           <Text style={{ fontSize: 48, marginBottom: 16 }}>🛠️</Text>
-          <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#2D3748', marginBottom: 8 }}>Something went wrong</Text>
-          <Text style={{ fontSize: 14, color: '#718096', textAlign: 'center', marginBottom: 24 }}>
+          <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'theme.colors.primary[500]', marginBottom: 8 }}>Something went wrong</Text>
+          <Text style={{ fontSize: 14, color: 'theme.colors.primary[500]', textAlign: 'center', marginBottom: 24 }}>
             Don&apos;t worry - your progress is safe. Try again.
           </Text>
           <Pressable
             onPress={this.handleRetry}
             style={({ pressed }) => ({
-              backgroundColor: '#4299E1',
+              backgroundColor: 'theme.colors.primary[500]',
               paddingHorizontal: 24,
               paddingVertical: 12,
               borderRadius: 8,

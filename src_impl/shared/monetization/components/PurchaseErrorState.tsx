@@ -83,7 +83,7 @@ export function PurchaseErrorState({
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: 'theme.colors.primary[500]',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -99,12 +99,12 @@ const styles = createSheet({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#fff',
+    color: 'theme.colors.background.primary',
     marginBottom: 12,
   },
   message: {
     fontSize: 16,
-    color: '#9E9E9E',
+    color: 'theme.colors.primary[500]',
     textAlign: 'center',
     marginBottom: 32,
     lineHeight: 22,
@@ -115,13 +115,13 @@ const styles = createSheet({
     maxWidth: 300,
   },
   primaryButton: {
-    backgroundColor: '#e94560',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: '#fff',
+    color: 'theme.colors.background.primary',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -130,19 +130,19 @@ const styles = createSheet({
     alignItems: 'center',
   },
   secondaryButtonText: {
-    color: '#9E9E9E',
+    color: 'theme.colors.primary[500]',
     fontSize: 14,
   },
   infoContainer: {
     marginTop: 32,
     padding: 16,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 12,
     width: '100%',
   },
   infoText: {
     fontSize: 13,
-    color: '#9E9E9E',
+    color: 'theme.colors.primary[500]',
     textAlign: 'center',
     lineHeight: 18,
   },

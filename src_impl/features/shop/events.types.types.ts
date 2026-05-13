@@ -1,0 +1,633 @@
+export interface BaseShopEvent {
+    id: string;
+    userId: string;
+    timestamp: Date;
+    data: DynamicRecord;
+    metadata: EventMetadata;
+}
+
+export interface EventMetadata {
+    source: string;
+    version: string;
+    platform?: string;
+    deviceInfo?: DeviceInfo;
+    correlationId?: string;
+}
+
+export interface DeviceInfo {
+    type: 'mobile' | 'tablet' | 'desktop' | 'web';
+    os: string;
+    version: string;
+    appVersion?: string;
+}
+
+export interface ShopVisitedEvent extends BaseShopEvent {
+    type: 'shop_visited';
+    data: {
+        shopId: string;
+        shopType: string;
+        visitType: 'browse' | 'search' | 'specific' | 'promotion';
+        enteredAt: Date;
+        context: {
+          source: string;
+          campaign?: string;
+          referral?: string;
+          previousVisit?: Date;
+        };
+        expectations: {
+          budget: number;
+          categories: string[];
+          urgency: string;
+          decisionTime: number;
+        };
+        };
+}
+
+export interface ShopViewedEvent extends BaseShopEvent {
+    type: 'shop_viewed';
+    data: {
+        shopId: string;
+        viewDuration: number;
+        sections: {
+          section: string;
+          timeSpent: number;
+          interactions: number;
+          itemsViewed: number;
+        }[];
+        interactions: {
+          searches: number;
+          filters: number;
+          sorts: number;
+          comparisons: number;
+          shares: number;
+        };
+        context: {
+          device: string;
+          location?: string;
+          sessionDuration: number;
+        };
+        };
+}
+
+export interface ShopLeftEvent extends BaseShopEvent {
+    type: 'shop_left';
+    data: {
+        shopId: string;
+        leftAt: Date;
+        totalDuration: number;
+        reason: 'purchase' | 'no_purchase' | 'timeout' | 'error' | 'interruption';
+        outcomes: {
+          itemsViewed: number;
+          itemsAdded: number;
+          itemsPurchased: number;
+          totalValue: number;
+          satisfaction: number;
+        };
+        nextActions: {
+          returnIntent: string;
+          timeframe: string;
+          reasons: string[];
+        };
+        };
+}
+
+export interface ProductViewedEvent extends BaseShopEvent {
+    type: 'product_viewed';
+    data: {
+        productId: string;
+        productName: string;
+        productType: string;
+        viewedAt: Date;
+        viewDuration: number;
+        context: {
+          source: string;
+          position: number;
+          listType: string;
+          searchTerm?: string;
+        };
+        interactions: {
+          imagesViewed: number;
+          videosWatched: number;
+          reviewsRead: number;
+          detailsExpanded: string[];
+          comparisons: number;
+        };
+        engagement: {
+          addToCart: boolean;
+          wishlist: boolean;
+          share: boolean;
+          inquiry: boolean;
+        };
+        };
+}
+
+export interface ProductAddedToCartEvent extends BaseShopEvent {
+    type: 'product_added_to_cart';
+    data: {
+        productId: string;
+        productName: string;
+        quantity: number;
+        price: number;
+        currency: string;
+        addedAt: Date;
+        context: {
+          source: string;
+          position: number;
+          promotion?: string;
+          bundle?: boolean;
+        };
+        cartState: {
+          previousItems: number;
+          currentItems: number;
+          totalValue: number;
+          budgetRemaining: number;
+        };
+        decision: {
+          timeToDecision: number;
+          alternatives: string[];
+          confidence: number;
+        };
+        };
+}
+
+export interface ProductRemovedFromCartEvent extends BaseShopEvent {
+    type: 'product_removed_from_cart';
+    data: {
+        productId: string;
+        productName: string;
+        quantity: number;
+        removedAt: Date;
+        reason: 'change_mind' | 'budget' | 'found_better' | 'technical' | 'timeout';
+        context: {
+          timeInCart: number;
+          priceChange: boolean;
+          stockChange: boolean;
+          alternative: string;
+        };
+        impact: {
+          cartValue: number;
+          budgetImpact: number;
+          satisfaction: number;
+        };
+        };
+}
+
+export interface ProductWishlistedEvent extends BaseShopEvent {
+    type: 'product_wishlisted';
+    data: {
+        productId: string;
+        productName: string;
+        productType: string;
+        wishlistedAt: Date;
+        reason: 'future_purchase' | 'price_drop' | 'budget' | 'research' | 'gift';
+        context: {
+          price: number;
+          discount: number;
+          stock: string;
+          urgency: string;
+        };
+        notification: {
+          priceAlert: boolean;
+          stockAlert: boolean;
+          promotionAlert: boolean;
+        };
+        };
+}
+
+export interface CartUpdatedEvent extends BaseShopEvent {
+    type: 'cart_updated';
+    data: {
+        updateType: 'add' | 'remove' | 'modify' | 'clear' | 'restore';
+        updatedAt: Date;
+        items: {
+          productId: string;
+          quantity: number;
+          price: number;
+          change: string;
+        }[];
+        totals: {
+          subtotal: number;
+          tax: number;
+          shipping: number;
+          discounts: number;
+          total: number;
+        };
+        context: {
+          promotion?: string;
+          currency: string;
+          location: string;
+        };
+        };
+}
+
+export interface CartAbandonedEvent extends BaseShopEvent {
+    type: 'cart_abandoned';
+    data: {
+        abandonedAt: Date;
+        abandonmentReason: 'timeout' | 'price' | 'technical' | 'distraction' | 'decision';
+        cartValue: number;
+        itemCount: number;
+        timeSinceLastActivity: number;
+        context: {
+          sessionDuration: number;
+          pageViews: number;
+          interactions: number;
+        };
+        recovery: {
+          possible: boolean;
+          methods: string[];
+          incentives: DynamicValue[];
+          timeframe: number;
+        };
+        };
+}
+
+export interface CartRecoveredEvent extends BaseShopEvent {
+    type: 'cart_recovered';
+    data: {
+        recoveredAt: Date;
+        recoveryMethod: 'email' | 'notification' | 'promotion' | 'return_visit';
+        originalAbandonment: Date;
+        timeSinceAbandonment: number;
+        incentive: {
+          type: string;
+          value: number;
+          accepted: boolean;
+        };
+        outcome: {
+          purchased: boolean;
+          conversionTime: number;
+          finalValue: number;
+        };
+        };
+}
+
+export interface PurchaseInitiatedEvent extends BaseShopEvent {
+    type: 'purchase_initiated';
+    data: {
+        transactionId: string;
+        initiatedAt: Date;
+        items: {
+          productId: string;
+          quantity: number;
+          price: number;
+          discount: number;
+        }[];
+        totals: {
+          subtotal: number;
+          tax: number;
+          shipping: number;
+          discounts: number;
+          total: number;
+        };
+        payment: {
+          method: string;
+          currency: string;
+          installments?: number;
+        };
+        context: {
+          device: string;
+          location: string;
+          sessionDuration: number;
+        };
+        };
+}
+
+export interface PurchaseCompletedEvent extends BaseShopEvent {
+    type: 'purchase_completed';
+    data: {
+        transactionId: string;
+        completedAt: Date;
+        completionTime: number;
+        status: 'success' | 'failed' | 'pending' | 'cancelled';
+        items: {
+          productId: string;
+          quantity: number;
+          price: number;
+          discount: number;
+          finalPrice: number;
+        }[];
+        totals: {
+          subtotal: number;
+          tax: number;
+          shipping: number;
+          discounts: number;
+          total: number;
+        };
+        payment: {
+          method: string;
+          status: string;
+          gateway: string;
+          transactionReference?: string;
+        };
+        delivery: {
+          method: string;
+          estimated: Date;
+          tracking?: string;
+        };
+        };
+}
+
+export interface PurchaseFailedEvent extends BaseShopEvent {
+    type: 'purchase_failed';
+    data: {
+        transactionId: string;
+        failedAt: Date;
+        failureReason: string;
+        failureType: 'payment' | 'inventory' | 'technical' | 'validation' | 'fraud';
+        errorCode: string;
+        errorMessage: string;
+        items: {
+          productId: string;
+          quantity: number;
+          price: number;
+        }[];
+        context: {
+          paymentMethod: string;
+          gateway: string;
+          attempts: number;
+        };
+        recovery: {
+          retryable: boolean;
+          alternatives: string[];
+          recommendations: string[];
+        };
+        };
+}
+
+export interface PurchaseRefundedEvent extends BaseShopEvent {
+    type: 'purchase_refunded';
+    data: {
+        transactionId: string;
+        refundId: string;
+        refundedAt: Date;
+        refundReason: string;
+        refundType: 'full' | 'partial' | 'exchange' | 'store_credit';
+        amount: number;
+        items: {
+          productId: string;
+          quantity: number;
+          refundAmount: number;
+          reason: string;
+        }[];
+        processing: {
+          time: number;
+          method: string;
+          status: string;
+        };
+        impact: {
+          customerSatisfaction: number;
+          futurePurchases: string;
+          feedback: string;
+        };
+        };
+}
+
+export interface PromotionViewedEvent extends BaseShopEvent {
+    type: 'promotion_viewed';
+    data: {
+        promotionId: string;
+        promotionName: string;
+        promotionType: string;
+        viewedAt: Date;
+        viewDuration: number;
+        context: {
+          source: string;
+          position: number;
+          relevance: number;
+        };
+        engagement: {
+          clicked: boolean;
+          shared: boolean;
+          saved: boolean;
+          used: boolean;
+        };
+        details: {
+          discount: number;
+          conditions: string[];
+          validity: string;
+          urgency: string;
+        };
+        };
+}
+
+export interface PromotionAppliedEvent extends BaseShopEvent {
+    type: 'promotion_applied';
+    data: {
+        promotionId: string;
+        promotionName: string;
+        appliedAt: Date;
+        transactionId?: string;
+        discount: {
+          type: string;
+          value: number;
+          savings: number;
+        };
+        context: {
+          items: string[];
+          conditions: string[];
+          eligibility: boolean;
+        };
+        impact: {
+          cartValue: number;
+          conversion: boolean;
+          satisfaction: number;
+        };
+        };
+}
+
+export interface PromotionExpiredEvent extends BaseShopEvent {
+    type: 'promotion_expired';
+    data: {
+        promotionId: string;
+        promotionName: string;
+        expiredAt: Date;
+        reason: 'time' | 'usage_limit' | 'budget' | 'manual' | 'technical';
+        usage: {
+          totalUses: number;
+          uniqueUsers: number;
+          totalSavings: number;
+          conversionRate: number;
+        };
+        performance: {
+          effectiveness: number;
+          efficiency: number;
+          roi: number;
+        };
+        insights: {
+          successes: string[];
+          failures: string[];
+          improvements: string[];
+        };
+        };
+}
+
+export interface RecommendationViewedEvent extends BaseShopEvent {
+    type: 'recommendation_viewed';
+    data: {
+        recommendationId: string;
+        recommendationType: string;
+        viewedAt: Date;
+        products: {
+          productId: string;
+          position: number;
+          relevance: number;
+          viewed: boolean;
+        }[];
+        context: {
+          algorithm: string;
+          dataPoints: string[];
+          confidence: number;
+        };
+        engagement: {
+          clicked: number;
+          addedToCart: number;
+          purchased: number;
+          ignored: number;
+        };
+        };
+}
+
+export interface RecommendationClickedEvent extends BaseShopEvent {
+    type: 'recommendation_clicked';
+    data: {
+        recommendationId: string;
+        productId: string;
+        position: number;
+        clickedAt: Date;
+        context: {
+          algorithm: string;
+          relevance: number;
+          factors: string[];
+        };
+        outcome: {
+          addedToCart: boolean;
+          purchased: boolean;
+          timeToAction: number;
+        };
+        };
+}
+
+export interface RecommendationFeedbackEvent extends BaseShopEvent {
+    type: 'recommendation_feedback';
+    data: {
+        recommendationId: string;
+        productId: string;
+        feedbackType: 'positive' | 'negative' | 'neutral' | 'irrelevant';
+        feedbackAt: Date;
+        rating?: number;
+        comment?: string;
+        reasons: string[];
+        context: {
+          purchased: boolean;
+          alternative: string;
+          expectation: string;
+        };
+        };
+}
+
+export interface ShopAnalyticsEvent extends BaseShopEvent {
+    type: 'shop_analytics';
+    data: {
+        analyticsType: 'traffic' | 'conversion' | 'revenue' | 'engagement' | 'insights';
+        timeframe: string;
+        metrics: Record<string, number>;
+        dimensions: DynamicRecord;
+        insights: {
+          type: string;
+          description: string;
+          significance: string;
+          recommendations: string[];
+        }[];
+        trends: {
+          metric: string;
+          direction: 'up' | 'down' | 'stable';
+          change: number;
+          significance: string;
+        }[];
+        generatedAt: Date;
+        };
+}
+
+export interface ShopPerformanceReportEvent extends BaseShopEvent {
+    type: 'shop_performance_report';
+    data: {
+        reportPeriod: {
+          start: Date;
+          end: Date;
+        };
+        overview: {
+          totalVisitors: number;
+          totalPurchases: number;
+          conversionRate: number;
+          averageOrderValue: number;
+          totalRevenue: number;
+          cartAbandonmentRate: number;
+        };
+        traffic: {
+          bySource: DynamicRecord;
+          byDevice: DynamicRecord;
+          byLocation: DynamicRecord;
+          byTime: DynamicRecord;
+        };
+        conversion: {
+          funnel: Array<{ stage: string; users: number; rate: number }>;
+          barriers: Array<{ barrier: string; frequency: number; impact: number }>;
+          optimizers: Array<{ factor: string; improvement: number; confidence: number }>;
+        };
+        revenue: {
+          byProduct: DynamicRecord;
+          byCategory: DynamicRecord;
+          byPromotion: DynamicRecord;
+          byCustomer: DynamicRecord;
+        };
+        insights: {
+          strengths: string[];
+          improvements: string[];
+          opportunities: string[];
+          recommendations: string[];
+        };
+        };
+}
+
+export interface ShopSystemMaintenanceEvent extends BaseShopEvent {
+    type: 'shop_system_maintenance';
+    data: {
+        maintenanceType: 'scheduled' | 'emergency' | 'upgrade' | 'migration';
+        startTime: Date;
+        endTime?: Date;
+        duration?: number;
+        affectedServices: string[];
+        impact: {
+          browsing: boolean;
+          purchasing: boolean;
+          payments: boolean;
+          inventory: boolean;
+        };
+        message: string;
+        initiatedBy: string;
+        };
+}
+
+export interface ShopSystemErrorEvent extends BaseShopEvent {
+    type: 'shop_system_error';
+    data: {
+        errorType: 'inventory_error' | 'payment_error' | 'pricing_error' | 'system_error';
+        errorCode: string;
+        errorMessage: string;
+        severity: 'low' | 'medium' | 'high' | 'critical';
+        context: {
+          service: string;
+          operation: string;
+          userId: string;
+          transactionId?: string;
+          productId?: string;
+        };
+        stackTrace?: string;
+        affectedUsers: number;
+        recoveryAction: string;
+        userImpact: string;
+        };
+}
+
+export type ShopEventType = ShopVisitedEvent | ShopViewedEvent | ShopLeftEvent | ProductViewedEvent | ProductAddedToCartEvent | ProductRemovedFromCartEvent | ProductWishlistedEvent | CartUpdatedEvent | CartAbandonedEvent | CartRecoveredEvent | PurchaseInitiatedEvent | PurchaseCompletedEvent | PurchaseFailedEvent | PurchaseRefundedEvent | PromotionViewedEvent | PromotionAppliedEvent | PromotionExpiredEvent | RecommendationViewedEvent | RecommendationClickedEvent | RecommendationFeedbackEvent | ShopAnalyticsEvent | ShopPerformanceReportEvent | ShopSystemMaintenanceEvent | ShopSystemErrorEvent;

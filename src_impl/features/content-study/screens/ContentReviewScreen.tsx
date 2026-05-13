@@ -119,7 +119,7 @@ export function ContentReviewScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#3B82F6" />
+          <ActivityIndicator size="large" color="theme.colors.primary[500]" />
           <Text style={styles.loadingText}>Loading content...</Text>
         </View>
       </SafeAreaView>
@@ -154,7 +154,7 @@ export function ContentReviewScreen() {
         {/* Generate Button */}
         {canGenerate && !isEditing && (
           <Pressable style={({ pressed }) => [styles.generateButton, isGenerating && styles.generateButtonDisabled, pressed && { opacity: 0.8 }]} onPress={handleGenerate} disabled={isGenerating} accessibilityLabel="Generate button" accessibilityRole="button" accessibilityHint="Activates this control">
-            {isGenerating ? <ActivityIndicator size="small" color="#fff" /> : <Text style={styles.generateButtonText}>{UI_TEXT.GENERATE_BUTTON}</Text>}
+            {isGenerating ? <ActivityIndicator size="small" color="theme.colors.background.primary" /> : <Text style={styles.generateButtonText}>{UI_TEXT.GENERATE_BUTTON}</Text>}
           </Pressable>
         )}
 
@@ -172,7 +172,7 @@ export function ContentReviewScreen() {
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#0F0F0F',
+    backgroundColor: 'theme.colors.primary[500]',
   },
   scrollView: {
     flex: 1,
@@ -186,12 +186,12 @@ const styles = createSheet({
   title: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#9CA3AF',
+    color: 'theme.colors.primary[500]',
   },
   loadingContainer: {
     flex: 1,
@@ -201,7 +201,7 @@ const styles = createSheet({
   loadingText: {
     marginTop: 16,
     fontSize: 16,
-    color: '#9CA3AF',
+    color: 'theme.colors.primary[500]',
   },
   statusContainer: {
     borderRadius: 12,
@@ -217,7 +217,7 @@ const styles = createSheet({
   },
   statusDescription: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: 'theme.colors.primary[500]',
     marginTop: 4,
     textAlign: 'center',
   },
@@ -225,12 +225,12 @@ const styles = createSheet({
     opacity: 0,
   },
   contentContainer: {
-    backgroundColor: '#1A1A1A',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 16,
     marginBottom: 20,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: '#2A2A2A',
+    borderColor: 'theme.colors.primary[500]',
   },
   contentHeader: {
     flexDirection: 'row',
@@ -238,16 +238,16 @@ const styles = createSheet({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#2A2A2A',
+    borderBottomColor: 'theme.colors.primary[500]',
   },
   contentTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
   },
   contentStats: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: 'theme.colors.primary[500]',
   },
   contentScroll: {
     maxHeight: 300,
@@ -255,13 +255,13 @@ const styles = createSheet({
   contentText: {
     fontSize: 14,
     lineHeight: 22,
-    color: '#D1D5DB',
+    color: 'theme.colors.primary[500]',
     padding: 16,
   },
   contentEditInput: {
     fontSize: 14,
     lineHeight: 22,
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     padding: 16,
     minHeight: 300,
     textAlignVertical: 'top',
@@ -270,12 +270,12 @@ const styles = createSheet({
     flexDirection: 'row',
     padding: 12,
     borderTopWidth: 1,
-    borderTopColor: '#2A2A2A',
+    borderTopColor: 'theme.colors.primary[500]',
     gap: 12,
   },
   editButton: {
     flex: 1,
-    backgroundColor: '#2A2A2A',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -283,11 +283,11 @@ const styles = createSheet({
   editButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: '#2A2A2A',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -295,11 +295,11 @@ const styles = createSheet({
   cancelButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#9CA3AF',
+    color: 'theme.colors.primary[500]',
   },
   saveButton: {
     flex: 1,
-    backgroundColor: '#3B82F6',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -307,10 +307,10 @@ const styles = createSheet({
   saveButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
   },
   generateButton: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 12,
     paddingVertical: 18,
     alignItems: 'center',
@@ -323,7 +323,7 @@ const styles = createSheet({
   generateButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
   },
   buttonSpinner: {
     marginRight: 8,
@@ -334,29 +334,29 @@ const styles = createSheet({
   },
   processingNoteText: {
     fontSize: 14,
-    color: '#9CA3AF',
+    color: 'theme.colors.primary[500]',
   },
   errorContainer: {
-    backgroundColor: '#EF444420',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
     borderWidth: 1,
-    borderColor: '#EF444440',
+    borderColor: 'theme.colors.primary[500]',
   },
   errorTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#EF4444',
+    color: 'theme.colors.primary[500]',
     marginBottom: 8,
   },
   errorText: {
     fontSize: 14,
-    color: '#EF4444',
+    color: 'theme.colors.primary[500]',
   },
   retryButton: {
     marginTop: 12,
-    backgroundColor: '#EF444440',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderRadius: 8,
@@ -365,8 +365,8 @@ const styles = createSheet({
   retryButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
   },
 });
 
-
+export * from "./ContentReviewScreen.types";

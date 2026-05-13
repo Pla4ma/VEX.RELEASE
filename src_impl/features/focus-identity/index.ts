@@ -47,8 +47,6 @@ export {
 } from './schemas';
 
 // Repository
-export * as repository from './repository';
-export type { MonthlyReportData } from './repository';
 export * as focusScoreRepository from './repository-focus-score';
 export type {
   AppendFocusScoreHistoryEvent,

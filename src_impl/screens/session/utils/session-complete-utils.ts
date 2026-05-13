@@ -71,10 +71,10 @@ export function formatDuration(durationMs: number): string {
 }
 
 export function getGrade(score: number): { letter: string; color: string; label: string } {
-  if (score >= 900) {return { letter: 'S', color: '#FFD700', label: 'Legendary!' };}
-  if (score >= 800) {return { letter: 'A', color: '#4CAF50', label: 'Excellent!' };}
-  if (score >= 700) {return { letter: 'B', color: '#8BC34A', label: 'Great Job!' };}
-  if (score >= 600) {return { letter: 'C', color: '#FFC107', label: 'Good Effort!' };}
-  if (score >= 500) {return { letter: 'D', color: '#FF9800', label: 'Keep Going!' };}
-  return { letter: 'F', color: '#F44336', label: 'Try Again!' };
+  if (score >= 900) {return { letter: 'S', color: 'theme.colors.error.DEFAULT', label: 'Legendary!' };}
+  if (score >= 800) {return { letter: 'A', color: 'theme.colors.primary[500]', label: 'Excellent!' };}
+  if (score >= 700) {return { letter: 'B', color: 'theme.colors.primary[500]', label: 'Great Job!' };}
+  if (score >= 600) {return { letter: 'C', color: 'theme.colors.error.DEFAULT', label: 'Good Effort!' };}
+  if (score >= 500) {return { letter: 'D', color: 'theme.colors.error.DEFAULT', label: 'Keep Going!' };}
+  return { letter: 'F', color: 'theme.colors.primary[500]', label: 'Try Again!' };
 }

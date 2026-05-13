@@ -64,26 +64,26 @@ export const RewardChest: React.FC<RewardChestProps> = ({ isVisible, rewards, on
   const getChestStyle = () => {
     switch (chestType) {
       case 'LEGENDARY':
-        return { colors: ['#FFD700', '#FF6B35', '#FFD700'], emoji: '👑', borderColor: '#FFD700' };
+        return { colors: ['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT'], emoji: '👑', borderColor: 'theme.colors.error.DEFAULT' };
       case 'GOLD':
-        return { colors: ['#FFD700', '#FFA000'], emoji: '🏆', borderColor: '#FFD700' };
+        return { colors: ['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT'], emoji: '🏆', borderColor: 'theme.colors.error.DEFAULT' };
       case 'SILVER':
-        return { colors: ['#C0C0C0', '#808080'], emoji: '🥈', borderColor: '#C0C0C0' };
+        return { colors: ['theme.colors.primary[500]', 'theme.colors.primary[500]'], emoji: '🥈', borderColor: 'theme.colors.primary[500]' };
       default:
-        return { colors: ['#8B4513', '#654321'], emoji: '📦', borderColor: '#8B4513' };
+        return { colors: ['theme.colors.primary[500]', 'theme.colors.primary[500]'], emoji: '📦', borderColor: 'theme.colors.primary[500]' };
     }
   };
 
   const getRarityStyle = (rarity: string) => {
     switch (rarity) {
       case 'LEGENDARY':
-        return { color: '#FFD700', glow: '#FF6B35', border: '#FFD700' };
+        return { color: 'theme.colors.error.DEFAULT', glow: 'theme.colors.error.DEFAULT', border: 'theme.colors.error.DEFAULT' };
       case 'EPIC':
-        return { color: '#9C27B0', glow: '#E91E63', border: '#9C27B0' };
+        return { color: 'theme.colors.primary[500]', glow: 'theme.colors.primary[500]', border: 'theme.colors.primary[500]' };
       case 'RARE':
-        return { color: '#2196F3', glow: '#03A9F4', border: '#2196F3' };
+        return { color: 'theme.colors.primary[500]', glow: 'theme.colors.primary[500]', border: 'theme.colors.primary[500]' };
       default:
-        return { color: '#9E9E9E', glow: '#BDBDBD', border: '#9E9E9E' };
+        return { color: 'theme.colors.primary[500]', glow: 'theme.colors.primary[500]', border: 'theme.colors.primary[500]' };
     }
   };
 
@@ -184,7 +184,7 @@ export const RewardChest: React.FC<RewardChestProps> = ({ isVisible, rewards, on
 
               {/* Claim Button */}
               <Pressable style={({ pressed }) => [styles.claimButton, pressed && { opacity: 0.8 }]} onPress={onClaim} accessibilityLabel="CLAIM ALL button" accessibilityRole="button" accessibilityHint="Activates this control">
-                <LinearGradient colors={['#4CAF50', '#2E7D32']} style={styles.claimGradient}>
+                <LinearGradient colors={['theme.colors.primary[500]', 'theme.colors.primary[500]']} style={styles.claimGradient}>
                   <Text style={styles.claimText}>CLAIM ALL</Text>
                 </LinearGradient>
               </Pressable>
@@ -215,7 +215,7 @@ const styles = createSheet({
   reasonText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#FFF',
+    color: 'theme.colors.background.primary',
     marginBottom: 40,
     textAlign: 'center',
   },
@@ -242,7 +242,7 @@ const styles = createSheet({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 4,
-    shadowColor: '#000',
+    shadowColor: 'theme.colors.text.primary',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 10,
@@ -263,7 +263,7 @@ const styles = createSheet({
     borderRadius: 12,
   },
   tapText: {
-    color: '#FFF',
+    color: 'theme.colors.background.primary',
     fontSize: 12,
     fontWeight: 'bold',
   },
@@ -275,9 +275,9 @@ const styles = createSheet({
   rewardsTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: 'theme.colors.error.DEFAULT',
     marginBottom: 20,
-    textShadowColor: '#FFD700',
+    textShadowColor: 'theme.colors.error.DEFAULT',
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 20,
   },
@@ -327,7 +327,7 @@ const styles = createSheet({
     borderRadius: 4,
   },
   rarityText: {
-    color: '#FFF',
+    color: 'theme.colors.background.primary',
     fontSize: 8,
     fontWeight: 'bold',
   },
@@ -341,8 +341,10 @@ const styles = createSheet({
     alignItems: 'center',
   },
   claimText: {
-    color: '#FFF',
+    color: 'theme.colors.background.primary',
     fontSize: 16,
     fontWeight: 'bold',
   },
 });
+
+export * from "./reward-chest.types";

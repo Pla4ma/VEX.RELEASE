@@ -1,1 +1,1 @@
-export * from '../../../src_impl/features/session-story/index';
+export * from '../../../src_impl/features/session-story';

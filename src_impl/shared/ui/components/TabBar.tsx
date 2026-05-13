@@ -20,27 +20,6 @@ import type { IconProps } from '../../../icons';
 import { useTheme } from '../../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
 
-export interface TabItem {
-  id: string;
-  label: string;
-  icon?: IconProps['name'];
-  badge?: string | number;
-  disabled?: boolean;
-  disabledReason?: string;
-}
-
-export interface TabBarProps {
-  tabs: TabItem[];
-  activeTab: string;
-  onChange: (tabId: string) => void;
-  orientation?: 'horizontal' | 'vertical';
-  variant?: 'default' | 'pills' | 'underline' | 'buttons';
-  size?: 'sm' | 'md' | 'lg';
-  showLabels?: boolean;
-  scrollable?: boolean;
-  style?: ViewStyle;
-}
-
 interface TabItemProps {
   item: TabItem;
   isActive: boolean;
@@ -102,10 +81,10 @@ const TabItemComponent: React.FC<TabItemProps> = ({
             borderRadius: 999,
           },
           text: {
-            color: isActive ? '#FFFFFF' : theme.colors.text.secondary,
+            color: isActive ? 'theme.colors.background.primary' : theme.colors.text.secondary,
           },
           icon: {
-            color: isActive ? '#FFFFFF' : theme.colors.text.secondary,
+            color: isActive ? 'theme.colors.background.primary' : theme.colors.text.secondary,
           },
         };
       case 'underline':
@@ -332,13 +311,6 @@ export const TabBar: React.FC<TabBarProps> = ({
     </View>
   );
 };
-
-export interface BreadcrumbProps {
-  items: Array<{ label: string; onPress?: () => void }>;
-  separator?: string;
-  style?: ViewStyle;
-}
-
 export const Breadcrumb: React.FC<BreadcrumbProps> = ({
   items,
   separator = '/',
@@ -459,3 +431,5 @@ const styles = createSheet({
 });
 
 export default TabBar;
+
+export * from "./TabBar.types";

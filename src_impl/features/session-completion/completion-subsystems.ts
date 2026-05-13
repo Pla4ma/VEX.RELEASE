@@ -5,8 +5,15 @@ import type { SessionSummary } from '../../session/types';
 import { getStreakService } from '../../streaks/StreakService';
 import { getCompanionService } from '../companion/service';
 import { FocusIdentityService } from '../focus-identity/FocusIdentityEngine';
-import { trackSessionCompleted } from './analytics';
+import { fetchProgressionEnhanced } from '../progression/repository/enhanced';
+import { trackCompletionAnalytics } from './completion-analytics-subsystem';
+import {
+  getJourneyCrossingReward,
+  getJourneyReturnHook,
+  getJourneyState,
+} from './journey-ladder';
 import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
+import { rollSessionVariableReward } from './variable-reward-integration';
 
 type CompletionSubsystemInput = {
   ledger: CompletionLedger;
@@ -49,6 +56,7 @@ export async function applyCompletionSubsystems(
 ): Promise<CompletionSubsystemResult> {
   const degradedSystems: string[] = [];
   let ledger = input.ledger;
+  const previousProgression = await fetchProgressionEnhanced(input.ledger.userId);
 
   await runSubsystem(degradedSystems, 'focus-identity', async () => {
     const service = new FocusIdentityService(input.ledger.userId);
@@ -72,23 +80,72 @@ export async function applyCompletionSubsystems(
   });
 
   await runSubsystem(degradedSystems, 'progression', async () => {
-    await getProgressionService(input.ledger.userId).addXP(input.ledger.xpDelta, 'SESSION_COMPLETE', {
+    const variableReward = rollSessionVariableReward({
+      baseCoins: rewardAmountFor(ledger),
+      grade: ledger.grade,
+      isPremium: false,
+      sessionId: ledger.sessionId,
+      streakDays: ledger.streakResult.newDays,
+      userId: ledger.userId,
+    });
+    const totalXpDelta = input.ledger.xpDelta + variableReward.xpBonus;
+
+    await getProgressionService(input.ledger.userId).addXP(totalXpDelta, 'SESSION_COMPLETE', {
       sessionId: input.ledger.sessionId,
+    });
+    ledger = CompletionLedgerSchema.parse({
+      ...ledger,
+      variableRewardNearMiss: variableReward.isNearMiss,
+      variableRewardTier: variableReward.tier,
+      xpDelta: totalXpDelta,
     });
   });
 
   await runSubsystem(degradedSystems, 'rewards', async () => {
     const rewardAmount = rewardAmountFor(input.ledger);
+    const variableReward = rollSessionVariableReward({
+      baseCoins: rewardAmount,
+      grade: ledger.grade,
+      isPremium: false,
+      sessionId: ledger.sessionId,
+      streakDays: ledger.streakResult.newDays,
+      userId: ledger.userId,
+    });
+    const totalCoins = rewardAmount + variableReward.coinBonus;
     await getRewardService(input.ledger.userId).grantReward(
       'CURRENCY',
       'SESSION_COMPLETE',
-      { baseAmount: rewardAmount },
-      { exactAmount: rewardAmount, sessionId: input.ledger.sessionId },
+      { baseAmount: totalCoins },
+      { exactAmount: totalCoins, sessionId: input.ledger.sessionId },
     );
+
+    const nextProgression = await fetchProgressionEnhanced(input.ledger.userId);
+    const previousTotalXp = previousProgression.data?.totalXp ?? 0;
+    const nextTotalXp = nextProgression.data?.totalXp ?? previousTotalXp;
+    const journeyState = getJourneyState(nextTotalXp);
+    const journeyRewardId = getJourneyCrossingReward(previousTotalXp, nextTotalXp);
+
     ledger = CompletionLedgerSchema.parse({
       ...ledger,
-      rewardIds: [`session-currency:${input.ledger.sessionId}`],
+      journeyChapter: journeyState.chapter,
+      journeyNearMiss: journeyState.isNearMilestone,
+      journeyProgressPercent: journeyState.progressPercent,
+      journeyRung: journeyState.rung,
+      journeyRungLabel: journeyState.rungLabel,
+      rewardIds: [
+        `session-currency:${input.ledger.sessionId}`,
+        ...(variableReward.rewardId ? [variableReward.rewardId] : []),
+        ...(journeyRewardId ? [journeyRewardId] : []),
+      ],
     });
+
+    if (journeyRewardId) {
+      Sentry.addBreadcrumb({
+        category: 'journey-ladder',
+        level: 'info',
+        message: getJourneyReturnHook(journeyState),
+      });
+    }
   });
 
   await runSubsystem(degradedSystems, 'companion', async () => {
@@ -114,39 +171,7 @@ export async function applyCompletionSubsystems(
   });
 
   await runSubsystem(degradedSystems, 'analytics', async () => {
-    const isAbandoned = input.ledger.grade === 'D';
-    const completionType = isAbandoned ? 'abandoned' : 'natural';
-    const efficiency = input.ledger.completedDurationSeconds > 0
-      ? input.ledger.effectiveFocusedSeconds / input.ledger.completedDurationSeconds
-      : 0;
-
-    trackSessionCompleted(
-      input.ledger.userId,
-      input.ledger.sessionId,
-      completionType,
-      input.ledger.completedDurationSeconds,
-      {
-        total: input.ledger.targetDurationSeconds,
-        completed: input.ledger.completedDurationSeconds,
-        failed: 0,
-        skipped: 0,
-        percentage: input.summary.completionPercentage,
-      },
-      {
-        overallScore: input.ledger.gradeScore,
-        accuracy: input.ledger.qualityScore,
-        efficiency: efficiency,
-        speed: 0,
-        consistency: input.ledger.streakResult.newDays,
-      },
-      {
-        success: !isAbandoned,
-        failureReason: isAbandoned ? `Session graded ${input.ledger.grade}` : undefined,
-        completionCriteria: ['target_duration_met'],
-        metCriteria: input.ledger.completedDurationSeconds >= input.ledger.targetDurationSeconds ? ['target_duration_met'] : [],
-        missedCriteria: input.ledger.completedDurationSeconds < input.ledger.targetDurationSeconds ? ['target_duration_not_met'] : [],
-      },
-    );
+    trackCompletionAnalytics({ ledger: input.ledger, summary: input.summary });
   });
 
   return {

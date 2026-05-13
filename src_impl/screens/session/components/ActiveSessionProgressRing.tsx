@@ -162,10 +162,10 @@ export const ActiveSessionProgressRing: React.FC<ActiveSessionProgressRingProps>
             <Svg width={RING_SIZE + 34} height={RING_SIZE + 34}>
               <Defs>
                 <SvgLinearGradient id="perfect-focus-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <Stop offset="0%" stopColor="#FDE68A" />
-                  <Stop offset="35%" stopColor="#F59E0B" />
-                  <Stop offset="68%" stopColor="#F472B6" />
-                  <Stop offset="100%" stopColor="#60A5FA" />
+                  <Stop offset="0%" stopColor="theme.colors.primary[500]" />
+                  <Stop offset="35%" stopColor="theme.colors.primary[500]" />
+                  <Stop offset="68%" stopColor="theme.colors.primary[500]" />
+                  <Stop offset="100%" stopColor="theme.colors.primary[500]" />
                 </SvgLinearGradient>
               </Defs>
               <Circle
@@ -207,3 +207,5 @@ export const ActiveSessionProgressRing: React.FC<ActiveSessionProgressRingProps>
     </Animated.View>
   );
 };
+
+export * from "./ActiveSessionProgressRing.types";

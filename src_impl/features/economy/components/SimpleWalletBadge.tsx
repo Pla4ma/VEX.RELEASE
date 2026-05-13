@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useRef } from 'react';
 import BottomSheet, { BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -21,7 +21,6 @@ export function SimpleWalletBadge({ userId, streak, onPress }: SimpleWalletBadge
   const walletQuery = useWallet(userId);
   const sheetRef = useRef<BottomSheet>(null);
   const wallet = walletQuery.data;
-  const seasonal = useMemo(() => Object.values(wallet?.seasonal ?? {}).reduce((sum, value) => sum + value, 0), [wallet?.seasonal]);
   const coins = wallet?.coins ?? 0;
   const gems = wallet?.gems ?? 0;
 
@@ -42,43 +41,22 @@ export function SimpleWalletBadge({ userId, streak, onPress }: SimpleWalletBadge
             borderWidth: 1,
             borderColor: theme.colors.primary[500],
             borderRadius: 999,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: 'theme.colors.background.primary',
             paddingHorizontal: theme.spacing[3],
             paddingVertical: theme.spacing[2],
             flexDirection: 'row',
             alignItems: 'center',
             gap: 8,
           }}
-
-        accessibilityLabel="Interactive control"
-        accessibilityHint="Activates this control">
+          accessibilityLabel="Open wallet"
+          accessibilityHint="Shows your coin and gem balance"
+        >
           <Text variant="label" color={theme.colors.text.primary}>💰</Text>
-          <AnimatedCounter
-            value={coins}
-            size="sm"
-            color={theme.colors.text.primary}
-            duration={600}
-          />
+          <AnimatedCounter value={coins} size="sm" color={theme.colors.text.primary} duration={600} />
           {streak >= 7 && (
             <>
               <Text variant="label" color={theme.colors.text.primary}>💎</Text>
-              <AnimatedCounter
-                value={gems}
-                size="sm"
-                color={theme.colors.text.primary}
-                duration={600}
-              />
-            </>
-          )}
-          {streak >= 30 && seasonal > 0 && (
-            <>
-              <Text variant="label" color={theme.colors.text.primary}>🌀</Text>
-              <AnimatedCounter
-                value={seasonal}
-                size="sm"
-                color={theme.colors.text.primary}
-                duration={600}
-              />
+              <AnimatedCounter value={gems} size="sm" color={theme.colors.text.primary} duration={600} />
             </>
           )}
         </Pressable>
@@ -96,9 +74,9 @@ export function SimpleWalletBadge({ userId, streak, onPress }: SimpleWalletBadge
         <View style={{ flex: 1, paddingHorizontal: 24, paddingVertical: 12, gap: 16 }}>
           <Text variant="h3" color={theme.colors.text.primary}>How to earn coins</Text>
           {[
-            '✅ Finish a 25m session → +50 coins',
-            '🔥 Maintain a 7-day streak → +200 coins',
-            '⚔️ Help defeat the weekly boss → +100 coins',
+            '\u2705 Finish a 25m session \u2192 +50 coins',
+            '\uD83D\uDD25 Maintain a 7-day streak \u2192 +200 coins',
+            '\u2694\uFE0F Help defeat the weekly boss \u2192 +100 coins',
           ].map((tip) => (
             <View key={tip} style={{ borderWidth: 1, borderColor: theme.colors.border.light, borderRadius: theme.borderRadius.xl, backgroundColor: theme.colors.background.primary, padding: theme.spacing[3] }}>
               <Text variant="bodySmall" color={theme.colors.text.primary}>{tip}</Text>
@@ -110,10 +88,10 @@ export function SimpleWalletBadge({ userId, streak, onPress }: SimpleWalletBadge
               sheetRef.current?.close();
               navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} });
             }}
-
-          accessibilityLabel="Start a session button"
-          accessibilityRole="button"
-          accessibilityHint="Activates this control">
+            accessibilityLabel="Start a session button"
+            accessibilityRole="button"
+            accessibilityHint="Starts a new focus session"
+          >
             Start a session
           </Button>
         </View>

@@ -23,22 +23,22 @@ jest.mock('../../../../theme', () => ({
     theme: {
       colors: {
         background: {
-          secondary: '#F8FAFC',
-          tertiary: '#F1F5F9',
+          secondary: 'theme.colors.primary[500]',
+          tertiary: 'theme.colors.primary[500]',
         },
         border: {
-          DEFAULT: '#CBD5E1',
+          DEFAULT: 'theme.colors.primary[500]',
         },
         text: {
-          primary: '#0F172A',
-          secondary: '#475569',
-          tertiary: '#64748B',
+          primary: 'theme.colors.primary[500]',
+          secondary: 'theme.colors.primary[500]',
+          tertiary: 'theme.colors.primary[500]',
         },
         primary: {
-          500: '#6366F1',
+          500: 'theme.colors.primary[500]',
         },
         success: {
-          500: '#22C55E',
+          500: 'theme.colors.primary[500]',
         },
       },
     },

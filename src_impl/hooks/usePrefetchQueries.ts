@@ -262,3 +262,6 @@ export function createPrefetcher(queryClient: ReturnType<typeof useQueryClient>)
 export { QueryKeys };
 
 export default usePrefetchQueries;
+
+export * from "./usePrefetchQueries.types";
+export * from "./usePrefetchQueries.types";

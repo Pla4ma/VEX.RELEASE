@@ -454,3 +454,6 @@ export const NotificationSettingsScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default NotificationSettingsScreen;
+
+export * from "./NotificationSettingsScreen.types";
+export * from "./NotificationSettingsScreen.types";

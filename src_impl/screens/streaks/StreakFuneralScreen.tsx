@@ -282,3 +282,5 @@ export const StreakFuneralScreen: React.FC = () => {
 };
 
 export default StreakFuneralScreen;
+
+export * from "./StreakFuneralScreen.types";

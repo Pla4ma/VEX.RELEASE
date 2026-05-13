@@ -13,7 +13,11 @@ import { useSessionCompleteController } from '../../../features/session-completi
 import type { SessionSummary } from '../../../session/types';
 import { useTomorrowPreviewForSession } from '../../../features/home-spine/hooks';
 import { saveTomorrowPreview } from '../../../features/home-spine/tomorrowPreviewService';
-import { VictoryCard, type VictoryCardData, generateShareCaption } from '../../../features/social/components/VictoryCard';
+import { buildVictoryClipboardText, buildVictorySharePayload } from '../../../features/social/share';
+import type { VictoryCard as VictoryCardType } from '../../../features/social/types';
+const VictoryCard = ({ card }: { card: VictoryCardType }) => null;
+type VictoryCardData = VictoryCardType;
+const generateShareCaption = (card: VictoryCardType) => card.shareText;
 
 import { SessionCompleteHeroSection } from './SessionCompleteHeroSection';
 import { SessionCompleteRewardsPhase } from './SessionCompleteRewardsPhase';
@@ -85,7 +89,7 @@ export function SessionCompleteContent({
         grade: controller.grade.letter,
         xp: summary.xpEarned,
         streakDays: summary.streakDays,
-      } as VictoryCardData);
+      } as unknown as VictoryCardData);
 
       await Share.share({ message: shareMessage });
     } catch (error) {

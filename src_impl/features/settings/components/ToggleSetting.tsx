@@ -40,9 +40,9 @@ const styles = createSheet({
     justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'theme.colors.background.primary',
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: 'theme.colors.primary[500]',
   },
   content: {
     flex: 1,
@@ -50,11 +50,11 @@ const styles = createSheet({
   },
   label: {
     fontSize: 16,
-    color: '#111827',
+    color: 'theme.colors.primary[500]',
   },
   description: {
     fontSize: 12,
-    color: '#6b7280',
+    color: 'theme.colors.primary[500]',
     marginTop: 4,
   },
   toggle: {
@@ -64,16 +64,16 @@ const styles = createSheet({
     padding: 2,
   },
   toggleActive: {
-    backgroundColor: '#6366f1',
+    backgroundColor: 'theme.colors.primary[500]',
   },
   toggleInactive: {
-    backgroundColor: '#d1d5db',
+    backgroundColor: 'theme.colors.primary[500]',
   },
   toggleKnob: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#ffffff',
+    backgroundColor: 'theme.colors.background.primary',
   },
   knobActive: {
     marginLeft: 'auto',

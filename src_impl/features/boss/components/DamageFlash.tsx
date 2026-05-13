@@ -100,7 +100,7 @@ export function DamageFlash({
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: isCritical ? '#EF4444' : '#F87171', // Red flash
+            backgroundColor: isCritical ? 'theme.colors.primary[500]' : 'theme.colors.primary[500]', // Red flash
           },
           flashStyle,
         ]}
@@ -116,7 +116,7 @@ export function DamageFlash({
         >
           <Text
             variant="h1"
-            color={isCritical ? '#EF4444' : '#FCA5A5'}
+            color={isCritical ? 'theme.colors.primary[500]' : 'theme.colors.error.DEFAULT'}
             fontWeight="900"
             style={{ textShadowColor: 'rgba(0,0,0,0.5)', textShadowRadius: 4 }}
           >
@@ -125,7 +125,7 @@ export function DamageFlash({
           {isCritical && (
             <Text
               variant="caption"
-              color="#EF4444"
+              color="theme.colors.primary[500]"
               textAlign="center"
               fontWeight="700"
             >
@@ -143,7 +143,7 @@ export function DamageFlash({
               position: 'absolute',
               width: '100%',
               height: 2,
-              backgroundColor: '#EF4444',
+              backgroundColor: 'theme.colors.primary[500]',
               top: '40%',
             },
             flashStyle,

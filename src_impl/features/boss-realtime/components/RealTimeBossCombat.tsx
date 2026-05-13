@@ -472,3 +472,6 @@ const styles = createSheet({
     letterSpacing: 1,
   },
 });
+
+export * from "./RealTimeBossCombat.types";
+export * from "./RealTimeBossCombat.types";

@@ -19,27 +19,7 @@ import { EconomyEvents } from '../../../shared/analytics/analytics-events';
 import { triggerHaptic } from '../../../utils/haptics';
 import { createSheet } from '@/shared/ui/create-sheet';
 
-const ROTATION_GRADIENT = ['#3B82F6', '#8B5CF6'] as const;
-
-export interface RotatingShopItem {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  rarity: 'common' | 'rare' | 'epic' | 'legendary';
-  price: {
-    gems?: number;
-    coins?: number;
-  };
-  /** Hours remaining in rotation */
-  hoursRemaining: number;
-  /** Total rotation window in hours */
-  rotationDuration: number;
-  /** How many times this item appears per month */
-  monthlyAppearances: number;
-  /** Discount percentage if any */
-  discount?: number;
-}
+const ROTATION_GRADIENT = ['theme.colors.primary[500]', 'theme.colors.primary[500]'] as const;
 
 interface RotatingShopSectionProps {
   /** Currently available rotating items */
@@ -188,9 +168,9 @@ function RotatingItemCard({ item, index, gemBalance, coinBalance, onPurchase, on
   // Rarity colors
   const rarityColors = {
     common: colors.border.DEFAULT,
-    rare: '#3B82F6',
-    epic: '#8B5CF6',
-    legendary: '#FFD700',
+    rare: 'theme.colors.primary[500]',
+    epic: 'theme.colors.primary[500]',
+    legendary: 'theme.colors.error.DEFAULT',
   };
 
   const handlePress = () => {
@@ -276,12 +256,12 @@ function RotatingItemCard({ item, index, gemBalance, coinBalance, onPurchase, on
           )}
           <View style={styles.priceRow}>
             {item.price.gems && (
-              <Text variant="body" fontWeight="800" color={canAfford ? '#8B5CF6' : 'error.DEFAULT'}>
+              <Text variant="body" fontWeight="800" color={canAfford ? 'theme.colors.primary[500]' : 'error.DEFAULT'}>
                 💎{item.price.gems}
               </Text>
             )}
             {item.price.coins && (
-              <Text variant="body" fontWeight="800" color={canAfford ? '#F59E0B' : 'error.DEFAULT'}>
+              <Text variant="body" fontWeight="800" color={canAfford ? 'theme.colors.primary[500]' : 'error.DEFAULT'}>
                 🪙{item.price.coins}
               </Text>
             )}
@@ -295,7 +275,7 @@ function RotatingItemCard({ item, index, gemBalance, coinBalance, onPurchase, on
           style={[
             styles.purchaseButton,
             {
-              backgroundColor: canAfford ? '#10B981' : colors.background.tertiary,
+              backgroundColor: canAfford ? 'theme.colors.primary[500]' : colors.background.tertiary,
               opacity: canAfford ? 1 : 0.5,
             },
           ]}
@@ -348,10 +328,10 @@ const styles = createSheet({
   countdownText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#3B82F6',
+    color: 'theme.colors.primary[500]',
   },
   urgentText: {
-    color: '#EF4444',
+    color: 'theme.colors.primary[500]',
   },
   urgencyBanner: {
     backgroundColor: 'rgba(239, 68, 68, 0.1)',
@@ -362,7 +342,7 @@ const styles = createSheet({
   },
   urgencyText: {
     fontSize: 13,
-    color: '#EF4444',
+    color: 'theme.colors.primary[500]',
     fontWeight: '600',
     textAlign: 'center',
   },
@@ -396,7 +376,7 @@ const styles = createSheet({
     borderRadius: 12,
   },
   rarityText: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontSize: 10,
     fontWeight: '800',
     letterSpacing: 0.5,
@@ -424,10 +404,10 @@ const styles = createSheet({
   timeText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#6B7280',
+    color: 'theme.colors.primary[500]',
   },
   urgentTime: {
-    color: '#EF4444',
+    color: 'theme.colors.primary[500]',
     fontWeight: '700',
   },
   rareNote: {
@@ -443,13 +423,13 @@ const styles = createSheet({
     paddingBottom: 12,
   },
   discountBadge: {
-    backgroundColor: '#EF4444',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 6,
   },
   discountText: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontSize: 10,
     fontWeight: '700',
   },
@@ -464,7 +444,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   purchaseText: {
-    color: '#FFFFFF',
+    color: 'theme.colors.background.primary',
     fontSize: 14,
     fontWeight: '800',
     letterSpacing: 0.5,
@@ -472,3 +452,5 @@ const styles = createSheet({
 });
 
 export default RotatingShopSection;
+
+export * from "./RotatingShopSection.types";

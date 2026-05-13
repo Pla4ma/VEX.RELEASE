@@ -8,24 +8,11 @@
 import { createDebugger } from '../../utils/debug';
 import type { SessionState } from '../types';
 import { TimeCalculator } from '../engines/TimeCalculator';
-
-export interface TickHandler {
-  (payload: { sessionId: string; timestamp: number; deltaMs: number }): void;
-}
-
 const debug = createDebugger('session:timer');
 
 // ============================================================================
 // Timer Configuration
 // ============================================================================
-
-export interface TimerConfig {
-  tickIntervalMs: number;
-  warningThresholds: number[];
-  autoCompleteOnZero: boolean;
-  trackBackgroundTime: boolean;
-}
-
 const DEFAULT_TIMER_CONFIG: TimerConfig = {
   tickIntervalMs: 1000,
   warningThresholds: [300, 60, 10], // 5min, 1min, 10sec
@@ -278,3 +265,5 @@ export function resetSessionTimerService(): void {
 }
 
 export default SessionTimerService;
+
+export * from "./SessionTimerService.types";

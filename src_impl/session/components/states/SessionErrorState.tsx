@@ -105,7 +105,7 @@ export const SessionErrorState: React.FC<SessionErrorStateProps> = ({
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: 'theme.colors.primary[500]',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 32,
@@ -117,18 +117,18 @@ const styles = createSheet({
   title: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#e94560',
+    color: 'theme.colors.primary[500]',
     marginBottom: 12,
   },
   message: {
     fontSize: 16,
-    color: '#fff',
+    color: 'theme.colors.background.primary',
     textAlign: 'center',
     marginBottom: 20,
     lineHeight: 22,
   },
   errorDetails: {
-    backgroundColor: '#2a2a3e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 8,
     padding: 12,
     marginBottom: 24,
@@ -136,12 +136,12 @@ const styles = createSheet({
   },
   errorCode: {
     fontSize: 12,
-    color: '#f44336',
+    color: 'theme.colors.primary[500]',
     fontWeight: '600',
   },
   errorHint: {
     fontSize: 12,
-    color: '#9E9E9E',
+    color: 'theme.colors.primary[500]',
     marginTop: 4,
   },
   actions: {
@@ -150,26 +150,26 @@ const styles = createSheet({
     marginBottom: 32,
   },
   primaryButton: {
-    backgroundColor: '#e94560',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: '#fff',
+    color: 'theme.colors.background.primary',
     fontSize: 16,
     fontWeight: '600',
   },
   secondaryButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#9E9E9E',
+    borderColor: 'theme.colors.primary[500]',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   secondaryButtonText: {
-    color: '#9E9E9E',
+    color: 'theme.colors.primary[500]',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -178,7 +178,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   supportButtonText: {
-    color: '#666',
+    color: 'theme.colors.primary[500]',
     fontSize: 14,
   },
   recoveryInfo: {
@@ -192,14 +192,16 @@ const styles = createSheet({
   recoveryTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#4CAF50',
+    color: 'theme.colors.primary[500]',
     marginBottom: 4,
   },
   recoveryText: {
     fontSize: 13,
-    color: '#9E9E9E',
+    color: 'theme.colors.primary[500]',
     lineHeight: 18,
   },
 });
 
 export default SessionErrorState;
+
+export * from "./SessionErrorState.types";

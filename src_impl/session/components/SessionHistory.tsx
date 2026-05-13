@@ -350,3 +350,6 @@ const styles = createSheet({
 });
 
 export default SessionHistory;
+
+export * from "./SessionHistory.types";
+export * from "./SessionHistory.types";

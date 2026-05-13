@@ -303,3 +303,6 @@ const styles = createSheet({
     marginBottom: 4,
   },
 });
+
+export * from "./BossPhaseIndicator.types";
+export * from "./BossPhaseIndicator.types";

@@ -26,15 +26,6 @@ import { createSheet } from '@/shared/ui/create-sheet';
 // Types
 // ============================================================================
 
-export type PremiumGateFeature = 'ai_coach_full_access' | 'ai_coach_persona_drill_sergeant' | 'boss_tier_4' | 'boss_tier_5' | 'boss_tier_6' | 'inventory_expansion' | 'advanced_analytics' | 'content_study' | 'custom_themes' | 'squad_challenges';
-
-export interface PremiumGateProps {
-  feature: PremiumGateFeature;
-  description?: string;
-  onClose?: () => void;
-  showCloseButton?: boolean;
-}
-
 interface FeatureGateInfo {
   title: string;
   description: string;
@@ -254,3 +245,6 @@ const styles = createSheet({
 });
 
 export default PremiumGate;
+
+export * from "./PremiumGate.types";
+export * from "./PremiumGate.types";

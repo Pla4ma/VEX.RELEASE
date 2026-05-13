@@ -32,14 +32,6 @@ import { createSheet } from "@/shared/ui/create-sheet";
 // ============================================================================
 // Types
 // ============================================================================
-
-export interface PremiumBadgeProps {
-  size?: "sm" | "md" | "lg";
-  variant?: "default" | "subtle" | "animated";
-  style?: ViewStyle;
-  showGlow?: boolean;
-}
-
 // ============================================================================
 // Component
 // ============================================================================
@@ -171,11 +163,6 @@ export function PremiumBadge({
 // Premium Supporter Achievement Badge
 // ============================================================================
 
-export interface SupporterBadgeProps {
-  size?: "sm" | "md" | "lg";
-  style?: ViewStyle;
-}
-
 export function SupporterBadge({
   size = "md",
   style,
@@ -212,11 +199,6 @@ export function SupporterBadge({
 // ============================================================================
 // Premium XP Bonus Indicator
 // ============================================================================
-
-export interface PremiumXpBonusProps {
-  bonus?: number;
-  style?: ViewStyle;
-}
 
 export function PremiumXpBonus({
   bonus = 0.1,
@@ -306,3 +288,5 @@ const styles = createSheet({
 });
 
 export default PremiumBadge;
+
+export * from "./PremiumBadge.types";

@@ -30,56 +30,6 @@ const debug = createDebugger('coach:recommendation');
 // Types
 // ============================================================================
 
-export type CoachRecommendationType = 'focus_session' | 'study_plan' | 'comeback' | 'protect_streak' | 'boss_battle' | 'study_behind' | 'boss_opportunity' | 'momentum_building' | 'study_plan_complete';
-
-export type UrgencyLevel = 'low' | 'medium' | 'high' | 'critical';
-
-export interface CoachRecommendation {
-  id: string;
-  type: CoachRecommendationType;
-  priority: number; // 1-100, higher = more important
-  urgency: UrgencyLevel;
-  headline: string;
-  subtext: string;
-  ctaText: string;
-  ctaAction: 'start_focus' | 'start_study' | 'view_boss' | 'view_streak' | 'view_progress';
-  ctaParams?: Record<string, unknown>;
-  coachMessage: string; // One line, helpful not pushy
-  reasoning: string; // For analytics/debugging
-  visualCue: 'none' | 'pulse' | 'glow' | 'urgent';
-  expiresAt?: number; // timestamp when this recommendation expires
-}
-
-export interface RecommendationContext {
-  userId: string;
-  currentTime: Date;
-  // Streak data
-  streakDays: number;
-  hasCompletedSessionToday: boolean;
-  hoursUntilStreakBreak: number | null; // null if already broken or protected
-  // Study plan data
-  activeStudyPlan: ActiveStudyPlan | null;
-  studyPlanProgress: number; // 0-1
-  studyPlanDaysBehind: number; // days behind schedule
-  // Boss data
-  activeBoss: {
-    id: string;
-    name: string;
-    healthRemaining: number;
-    maxHealth: number;
-    timeRemaining: number; // hours
-  } | null;
-  // User history
-  totalSessions: number;
-  currentLevel: number;
-  lastSessionTimestamp?: number;
-  daysSinceLastSession: number;
-  // Behavior profile
-  behaviorProfile: BehaviorProfile | null;
-  // Coach preferences
-  coachPersonaId: string;
-}
-
 interface RecommendationRule {
   name: string;
   priority: number;
@@ -90,23 +40,6 @@ interface RecommendationRule {
 // ============================================================================
 // New Persona Types (Phase 2.2)
 // ============================================================================
-
-export type CoachPersonaId = 'mentor' | 'trainer' | 'peer' | 'professor';
-
-export interface CoachPersona {
-  id: CoachPersonaId;
-  name: string;
-  voiceTone: 'ENCOURAGING' | 'STERN' | 'PLAYFUL' | 'WISE' | 'COMPETITIVE' | 'GENTLE';
-  vocabularyTraits: string[];
-  sentenceStructure: 'SHORT_DIRECT' | 'CONVERSATIONAL' | 'MEASURED';
-  guidelines: {
-    maxSentences: number;
-    alwaysActionable: boolean;
-    emotionalIntelligence: boolean;
-    contextAware: boolean;
-  };
-}
-
 const COACH_PERSONAS: Record<CoachPersonaId, CoachPersona> = {
   mentor: {
     id: 'mentor',
@@ -749,131 +682,17 @@ const RECOMMENDATION_RULES: RecommendationRule[] = [
 // ============================================================================
 // Main Service
 // ============================================================================
-
-export class CoachRecommendationService {
-  private context: RecommendationContext;
-
-  constructor(context: RecommendationContext) {
-    this.context = context;
-  }
-
-  /**
-   * Get the coach persona for message generation
-   */
-  private getPersona(): CoachPersona {
-    const personaId = this.context.coachPersonaId as CoachPersonaId;
-    return COACH_PERSONAS[personaId] ?? COACH_PERSONAS.mentor;
-  }
-
-  /**
-   * Generate the best recommendation for current user state
-   */
-  getRecommendation(): CoachRecommendation {
-    const persona = this.getPersona();
-
-    // Find first matching rule (rules are in priority order)
-    for (const rule of RECOMMENDATION_RULES) {
-      try {
-        if (rule.condition(this.context)) {
-          const recommendation = rule.generate(this.context, persona);
-          debug.info('[CoachRecommendationService] Selected: %s', rule.name, { priority: recommendation.priority, type: recommendation.type, urgency: recommendation.urgency });
-          return recommendation;
-        }
-      } catch (error) {
-        debug.error(`Rule ${rule.name} failed`, error instanceof Error ? error : new Error(String(error)));
-      }
-    }
-
-    // Fallback to default
-    const defaultRule = RECOMMENDATION_RULES[RECOMMENDATION_RULES.length - 1];
-    return defaultRule.generate(this.context, persona);
-  }
-
-  /**
-   * Get all applicable recommendations (for debugging/analytics)
-   */
-  getAllApplicable(): CoachRecommendation[] {
-    const persona = this.getPersona();
-    return RECOMMENDATION_RULES.filter((rule) => rule.condition(this.context)).map((rule) => rule.generate(this.context, persona));
-  }
-
-  /**
-   * Check if recommendation should refresh
-   */
-  shouldRefresh(lastRefreshTime: number, currentRec: CoachRecommendation): boolean {
-    const FIVE_MINUTES = 5 * 60 * 1000;
-    const timeSinceRefresh = Date.now() - lastRefreshTime;
-
-    // Refresh if: 5+ minutes passed, or recommendation expired
-    if (timeSinceRefresh > FIVE_MINUTES) {
-      return true;
-    }
-    if (currentRec.expiresAt && Date.now() > currentRec.expiresAt) {
-      return true;
-    }
-
-    // Refresh if high urgency recommendation and time critical
-    if (currentRec.urgency === 'critical' && currentRec.type === 'protect_streak') {
-      const hoursLeft = this.context.hoursUntilStreakBreak ?? 24;
-      // Refresh more frequently as deadline approaches
-      if (hoursLeft <= 1 && timeSinceRefresh > 60000) {
-        return true;
-      } // 1 minute
-      if (hoursLeft <= 2 && timeSinceRefresh > 300000) {
-        return true;
-      } // 5 minutes
-    }
-
-    return false;
-  }
-}
-
 // ============================================================================
 // Factory Functions
 // ============================================================================
-
-export function createCoachRecommendationService(context: RecommendationContext): CoachRecommendationService {
-  return new CoachRecommendationService(context);
-}
-
 // ============================================================================
 // Integration with HomeRecommendationEngine
 // ============================================================================
-
-/**
- * Convert CoachRecommendation to HomeRecommendation format
- * This allows the coach to power the Home screen
- */
-export function convertToHomeRecommendation(coachRec: CoachRecommendation): {
-  id: string;
-  type: string;
-  priority: number;
-  urgency: UrgencyLevel;
-  headline: string;
-  subtext: string;
-  ctaText: string;
-  ctaAction: 'start_focus' | 'start_study' | 'view_boss' | 'view_streak' | 'view_progress';
-  ctaParams?: Record<string, unknown>;
-  aiCoachMessage?: string;
-  visualCue: 'none' | 'pulse' | 'glow' | 'urgent';
-} {
-  return {
-    id: coachRec.id,
-    type: coachRec.type,
-    priority: coachRec.priority,
-    urgency: coachRec.urgency,
-    headline: coachRec.headline,
-    subtext: coachRec.subtext,
-    ctaText: coachRec.ctaText,
-    ctaAction: coachRec.ctaAction,
-    ctaParams: coachRec.ctaParams,
-    aiCoachMessage: coachRec.coachMessage,
-    visualCue: coachRec.visualCue,
-  };
-}
-
 // ============================================================================
 // Exports
 // ============================================================================
 
 export { COACH_PERSONAS };
+export * from "./CoachRecommendationService.types";
+export * from "./CoachRecommendationService.types";
+export * from "./CoachRecommendationService.part1";

@@ -1,0 +1,658 @@
+export interface BaseSessionStoryEvent {
+    id: string;
+    userId: string;
+    sessionId: string;
+    storyId?: string;
+    timestamp: Date;
+    data: DynamicRecord;
+    metadata: EventMetadata;
+}
+
+export interface EventMetadata {
+    source: string;
+    version: string;
+    platform?: string;
+    deviceInfo?: DeviceInfo;
+    correlationId?: string;
+}
+
+export interface DeviceInfo {
+    type: 'mobile' | 'tablet' | 'desktop' | 'web';
+    os: string;
+    version: string;
+    appVersion?: string;
+}
+
+export interface StoryGeneratedEvent extends BaseSessionStoryEvent {
+    type: 'story_generated';
+    data: {
+        storyId: string;
+        generationType: 'automatic' | 'manual' | 'hybrid' | 'template';
+        generatedAt: Date;
+        generationTime: number;
+        narrative: {
+          title: string;
+          genre: string;
+          theme: string;
+          tone: string;
+          length: string;
+        };
+        structure: {
+          chapters: number;
+          scenes: number;
+          characters: number;
+          events: number;
+          choices: number;
+        };
+        personalization: {
+          adapted: boolean;
+          userElements: string[];
+          preferences: string[];
+          history: string[];
+        };
+        };
+}
+
+export interface StoryStartedEvent extends BaseSessionStoryEvent {
+    type: 'story_started';
+    data: {
+        storyId: string;
+        startedAt: Date;
+        startType: 'beginning' | 'resume' | 'jump_in' | 'preview';
+        chapter: number;
+        scene: number;
+        context: {
+          previousSession?: string;
+          bookmark?: string;
+          progress: number;
+        };
+        expectations: {
+          estimatedDuration: number;
+          difficulty: string;
+          engagement: string;
+          outcomes: string[];
+        };
+        };
+}
+
+export interface StoryProgressedEvent extends BaseSessionStoryEvent {
+    type: 'story_progressed';
+    data: {
+        storyId: string;
+        progressType: 'chapter' | 'scene' | 'event' | 'milestone' | 'choice';
+        previousProgress: {
+          chapter: number;
+          scene: number;
+          percentage: number;
+        };
+        currentProgress: {
+          chapter: number;
+          scene: number;
+          percentage: number;
+        };
+        content: {
+          title: string;
+          description: string;
+          significance: string;
+          impact: string;
+        };
+        engagement: {
+          timeSpent: number;
+          interactions: number;
+          choices: number;
+          skips: number;
+        };
+        };
+}
+
+export interface StoryCompletedEvent extends BaseSessionStoryEvent {
+    type: 'story_completed';
+    data: {
+        storyId: string;
+        completedAt: Date;
+        completionType: 'natural' | 'skipped' | 'abandoned' | 'timeout';
+        totalDuration: number;
+        finalProgress: {
+          chaptersCompleted: number;
+          totalChapters: number;
+          scenesCompleted: number;
+          totalScenes: number;
+          percentage: number;
+        };
+        outcomes: {
+          ending: string;
+          achievements: string[];
+          unlocks: string[];
+          rewards: DynamicValue[];
+        };
+        performance: {
+          engagement: number;
+          satisfaction: number;
+          comprehension: number;
+          retention: number;
+        };
+        };
+}
+
+export interface NarrativeBranchTakenEvent extends BaseSessionStoryEvent {
+    type: 'narrative_branch_taken';
+    data: {
+        storyId: string;
+        branchId: string;
+        branchType: 'choice' | 'consequence' | 'random' | 'conditional';
+        takenAt: Date;
+        decision: {
+          option: string;
+          reasoning: string;
+          confidence: number;
+          timeSpent: number;
+        };
+        context: {
+          chapter: number;
+          scene: number;
+          situation: string;
+          characters: string[];
+          stakes: string;
+        };
+        consequences: {
+          immediate: string[];
+          shortTerm: string[];
+          longTerm: string[];
+          hidden: string[];
+        };
+        alternatives: {
+          notTaken: string[];
+          unavailable: string[];
+          future: string[];
+        };
+        };
+}
+
+export interface NarrativeCharacterIntroducedEvent extends BaseSessionStoryEvent {
+    type: 'narrative_character_introduced';
+    data: {
+        storyId: string;
+        characterId: string;
+        characterName: string;
+        characterType: 'protagonist' | 'antagonist' | 'supporting' | 'npc' | 'mentor' | 'companion';
+        introducedAt: Date;
+        introduction: {
+          method: string;
+          context: string;
+          significance: string;
+          role: string;
+        };
+        characteristics: {
+          personality: string[];
+          appearance: string;
+          background: string;
+          motivations: string[];
+          conflicts: string[];
+        };
+        relationships: {
+          withUser: string;
+          withOthers: Record<string, string>;
+          dynamics: string[];
+        };
+        };
+}
+
+export interface NarrativeEventOccurredEvent extends BaseSessionStoryEvent {
+    type: 'narrative_event_occurred';
+    data: {
+        storyId: string;
+        eventId: string;
+        eventType: 'plot' | 'character' | 'world' | 'conflict' | 'resolution' | 'twist';
+        occurredAt: Date;
+        event: {
+          name: string;
+          description: string;
+          significance: string;
+          impact: string;
+        };
+        context: {
+          chapter: number;
+          scene: number;
+          timing: string;
+          triggers: string[];
+        };
+        consequences: {
+          plot: string[];
+          characters: string[];
+          world: string[];
+          user: string[];
+        };
+        foreshadowing: {
+          hints: string[];
+          predictions: string[];
+          misdirection: string[];
+        };
+        };
+}
+
+export interface NarrativeTwistRevealedEvent extends BaseSessionStoryEvent {
+    type: 'narrative_twist_revealed';
+    data: {
+        storyId: string;
+        twistId: string;
+        twistType: 'plot' | 'character' | 'world' | 'motivation' | 'identity' | 'time';
+        revealedAt: Date;
+        revelation: {
+          method: string;
+          timing: string;
+          buildup: string;
+          payoff: string;
+        };
+        impact: {
+          shock: number;
+          surprise: number;
+          satisfaction: number;
+          confusion: number;
+        };
+        context: {
+          expectations: string[];
+          clues: string[];
+          misdirection: string[];
+          foreshadowing: string[];
+        };
+        aftermath: {
+          understanding: number;
+          acceptance: number;
+          reevaluation: number;
+          speculation: string[];
+        };
+        };
+}
+
+export interface StoryChoicePresentedEvent extends BaseSessionStoryEvent {
+    type: 'story_choice_presented';
+    data: {
+        storyId: string;
+        choiceId: string;
+        presentedAt: Date;
+        choice: {
+          title: string;
+          description: string;
+          context: string;
+          stakes: string;
+        };
+        options: {
+          id: string;
+          text: string;
+          description: string;
+          consequences: string[];
+          requirements: string[];
+          hints: string[];
+        }[];
+        constraints: {
+          timeLimit?: number;
+          requirements: string[];
+          restrictions: string[];
+          penalties: string[];
+        };
+        guidance: {
+          hints: string[];
+          recommendations: string[];
+          warnings: string[];
+        };
+        };
+}
+
+export interface StoryChoiceMadeEvent extends BaseSessionStoryEvent {
+    type: 'story_choice_made';
+    data: {
+        storyId: string;
+        choiceId: string;
+        optionId: string;
+        madeAt: Date;
+        decisionTime: number;
+        reasoning: {
+          factors: string[];
+          priorities: string[];
+          emotions: string[];
+          logic: string;
+        };
+        context: {
+          information: string[];
+          uncertainty: number;
+          pressure: number;
+          influence: string[];
+        };
+        confidence: {
+          level: number;
+          justification: string;
+          doubts: string[];
+        };
+        };
+}
+
+export interface StoryChoiceConsequenceEvent extends BaseSessionStoryEvent {
+    type: 'story_choice_consequence';
+    data: {
+        storyId: string;
+        choiceId: string;
+        optionId: string;
+        consequenceId: string;
+        triggeredAt: Date;
+        consequence: {
+          type: 'immediate' | 'delayed' | 'conditional' | 'cumulative';
+          description: string;
+          severity: string;
+          duration: string;
+          scope: string;
+        };
+        effects: {
+          narrative: string[];
+          character: string[];
+          world: string[];
+          user: string[];
+          future: string[];
+        };
+        visibility: {
+          obvious: boolean;
+          hidden: boolean;
+          discovered: boolean;
+          hinted: boolean;
+        };
+        };
+}
+
+export interface CharacterRelationshipChangedEvent extends BaseSessionStoryEvent {
+    type: 'character_relationship_changed';
+    data: {
+        storyId: string;
+        characterId: string;
+        relationshipType: string;
+        changeType: 'improved' | 'deteriorated' | 'transformed' | 'revealed' | 'ended';
+        changedAt: Date;
+        previousState: {
+          level: number;
+          nature: string;
+          dynamics: string[];
+        };
+        currentState: {
+          level: number;
+          nature: string;
+          dynamics: string[];
+        };
+        catalyst: {
+          event: string;
+          choice: string;
+          action: string;
+          revelation: string;
+        };
+        implications: {
+          story: string[];
+          character: string[];
+          user: string[];
+          future: string[];
+        };
+        };
+}
+
+export interface CharacterDevelopmentEvent extends BaseSessionStoryEvent {
+    type: 'character_development';
+    data: {
+        storyId: string;
+        characterId: string;
+        developmentType: 'growth' | 'regression' | 'transformation' | 'revelation' | 'redemption';
+        developedAt: Date;
+        development: {
+          aspect: string;
+          change: string;
+          significance: string;
+          permanence: string;
+        };
+        catalyst: {
+          events: string[];
+          choices: string[];
+          interactions: string[];
+          revelations: string[];
+        };
+        impact: {
+          character: string[];
+          relationships: string[];
+          story: string[];
+          user: string[];
+        };
+        future: {
+          potential: string[];
+          limitations: string[];
+          opportunities: string[];
+        };
+        };
+}
+
+export interface WorldElementDiscoveredEvent extends BaseSessionStoryEvent {
+    type: 'world_element_discovered';
+    data: {
+        storyId: string;
+        elementId: string;
+        elementType: 'location' | 'lore' | 'history' | 'culture' | 'technology' | 'magic' | 'secret';
+        discoveredAt: Date;
+        discovery: {
+          method: string;
+          context: string;
+          significance: string;
+          surprise: number;
+        };
+        element: {
+          name: string;
+          description: string;
+          properties: string[];
+          connections: string[];
+          importance: string;
+        };
+        implications: {
+          understanding: string[];
+          navigation: string[];
+          interaction: string[];
+          story: string[];
+        };
+        };
+}
+
+export interface WorldStateChangedEvent extends BaseSessionStoryEvent {
+    type: 'world_state_changed';
+    data: {
+        storyId: string;
+        stateId: string;
+        changeType: 'environmental' | 'political' | 'social' | 'magical' | 'technological' | 'temporal';
+        changedAt: Date;
+        change: {
+          description: string;
+          magnitude: string;
+          scope: string;
+          permanence: string;
+        };
+        causes: {
+          events: string[];
+          choices: string[];
+          characters: string[];
+          natural: string[];
+        };
+        effects: {
+          immediate: string[];
+          shortTerm: string[];
+          longTerm: string[];
+          cascading: string[];
+        };
+        playerImpact: {
+          access: string[];
+          restrictions: string[];
+          opportunities: string[];
+          dangers: string[];
+        };
+        };
+}
+
+export interface StoryAchievementUnlockedEvent extends BaseSessionStoryEvent {
+    type: 'story_achievement_unlocked';
+    data: {
+        achievementId: string;
+        achievementName: string;
+        achievementType: 'completion' | 'exploration' | 'choice' | 'relationship' | 'discovery' | 'mastery';
+        unlockedAt: Date;
+        storyId: string;
+        progress: {
+          current: number;
+          required: number;
+          percentage: number;
+        };
+        criteria: {
+          type: string;
+          condition: string;
+          value: DynamicValue;
+          met: boolean;
+        }[];
+        rarity: string;
+        points: number;
+        rewards: {
+          experience: number;
+          currency: number;
+          items: DynamicValue[];
+          titles: string[];
+          unlocks: string[];
+        };
+        recognition: {
+          badge: string;
+          celebration: boolean;
+          shareable: boolean;
+          public: boolean;
+        };
+        };
+}
+
+export interface StoryMilestoneReachedEvent extends BaseSessionStoryEvent {
+    type: 'story_milestone_reached';
+    data: {
+        milestoneId: string;
+        milestoneType: 'chapter' | 'plot' | 'character' | 'world' | 'choice' | 'time';
+        milestoneName: string;
+        reachedAt: Date;
+        storyId: string;
+        value: number;
+        target: number;
+        previousRecord: number;
+        improvement: number;
+        significance: 'personal' | 'story' | 'session' | 'global';
+        recognition: {
+          badge: string;
+          title: string;
+          celebration: boolean;
+          shareable: boolean;
+        };
+        rewards: {
+          experience: number;
+          currency: number;
+          items: DynamicValue[];
+          unlocks: string[];
+        };
+        };
+}
+
+export interface StoryAnalyticsEvent extends BaseSessionStoryEvent {
+    type: 'story_analytics';
+    data: {
+        analyticsType: 'engagement' | 'progression' | 'choices' | 'performance' | 'insights';
+        timeframe: string;
+        metrics: Record<string, number>;
+        dimensions: DynamicRecord;
+        insights: {
+          type: string;
+          description: string;
+          significance: string;
+          recommendations: string[];
+        }[];
+        trends: {
+          metric: string;
+          direction: 'up' | 'down' | 'stable';
+          change: number;
+          significance: string;
+        }[];
+        generatedAt: Date;
+        };
+}
+
+export interface StoryPerformanceReportEvent extends BaseSessionStoryEvent {
+    type: 'story_performance_report';
+    data: {
+        reportPeriod: {
+          start: Date;
+          end: Date;
+        };
+        overview: {
+          totalStories: number;
+          completedStories: number;
+          averageCompletion: number;
+          averageEngagement: number;
+          totalChoices: number;
+          averageTimePerStory: number;
+        };
+        engagement: {
+          byGenre: DynamicRecord;
+          byLength: DynamicRecord;
+          byDifficulty: DynamicRecord;
+          byTheme: DynamicRecord;
+        };
+        choices: {
+          patterns: DynamicRecord;
+          preferences: DynamicRecord;
+          consistency: DynamicRecord;
+          diversity: DynamicRecord;
+        };
+        progression: {
+          completionRates: Array<{ date: Date; rate: number }>;
+          engagementScores: Array<{ date: Date; score: number }>;
+          choicePatterns: Array<{ date: Date; pattern: string }>;
+        };
+        insights: {
+          strengths: string[];
+          improvements: string[];
+          opportunities: string[];
+          recommendations: string[];
+        };
+        };
+}
+
+export interface StorySystemMaintenanceEvent extends BaseSessionStoryEvent {
+    type: 'story_system_maintenance';
+    data: {
+        maintenanceType: 'scheduled' | 'emergency' | 'upgrade' | 'migration';
+        startTime: Date;
+        endTime?: Date;
+        duration?: number;
+        affectedServices: string[];
+        impact: {
+          generation: boolean;
+          progression: boolean;
+          choices: boolean;
+          analytics: boolean;
+        };
+        message: string;
+        initiatedBy: string;
+        };
+}
+
+export interface StorySystemErrorEvent extends BaseSessionStoryEvent {
+    type: 'story_system_error';
+    data: {
+        errorType: 'generation_error' | 'progression_error' | 'choice_error' | 'analytics_error' | 'system_error';
+        errorCode: string;
+        errorMessage: string;
+        severity: 'low' | 'medium' | 'high' | 'critical';
+        context: {
+          service: string;
+          operation: string;
+          userId: string;
+          sessionId: string;
+          storyId?: string;
+        };
+        stackTrace?: string;
+        affectedUsers: number;
+        recoveryAction: string;
+        userImpact: string;
+        };
+}
+
+export type SessionStoryEventType = StoryGeneratedEvent | StoryStartedEvent | StoryProgressedEvent | StoryCompletedEvent | NarrativeBranchTakenEvent | NarrativeCharacterIntroducedEvent | NarrativeEventOccurredEvent | NarrativeTwistRevealedEvent | StoryChoicePresentedEvent | StoryChoiceMadeEvent | StoryChoiceConsequenceEvent | CharacterRelationshipChangedEvent | CharacterDevelopmentEvent | WorldElementDiscoveredEvent | WorldStateChangedEvent | StoryAchievementUnlockedEvent | StoryMilestoneReachedEvent | StoryAnalyticsEvent | StoryPerformanceReportEvent | StorySystemMaintenanceEvent | StorySystemErrorEvent;

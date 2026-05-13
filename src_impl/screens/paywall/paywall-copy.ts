@@ -51,37 +51,37 @@ export const FEATURE_HIGHLIGHT_MAP: Record<string, PaywallFeatureHighlight> = {
     title: 'Best Coach',
     benefit: 'Premium unlocks sharper timing, better nudges, and recommendations that fit your rhythm.',
     iconName: 'brain',
-    gradient: ['#4F46E5', '#7C3AED'],
+    gradient: ['theme.colors.primary[500]', 'theme.colors.primary[500]'],
   },
   advanced_analytics: {
     title: 'Best Insight',
     benefit: 'Premium helps you see when your focus is strongest and where momentum starts leaking.',
     iconName: 'bar-chart-3',
-    gradient: ['#0F766E', '#0D9488'],
+    gradient: ['theme.colors.primary[500]', 'theme.colors.primary[500]'],
   },
   content_study: {
     title: 'Best Insight',
     benefit: 'Premium expands VEX into a deeper work tool once your focus habit is taking hold.',
     iconName: 'book-open',
-    gradient: ['#D97706', '#F59E0B'],
+    gradient: ['theme.colors.primary[500]', 'theme.colors.primary[500]'],
   },
   streak_freeze: {
     title: 'Best Continuity',
     benefit: "Premium protects momentum so one rough day doesn't erase progress.",
     iconName: 'shield',
-    gradient: ['#059669', '#10B981'],
+    gradient: ['theme.colors.primary[500]', 'theme.colors.primary[500]'],
   },
   xp_boost: {
     title: 'Reward boost',
     benefit: 'Premium makes strong sessions feel more rewarding without blocking the focus session itself.',
     iconName: 'zap',
-    gradient: ['#4F46E5', '#7C3AED'],
+    gradient: ['theme.colors.primary[500]', 'theme.colors.primary[500]'],
   },
   season_premium_rewards: {
     title: 'Season rewards',
     benefit: 'Premium adds the extra reward track while the free track still keeps seasonal progress useful.',
     iconName: 'award',
-    gradient: ['#0F766E', '#0D9488'],
+    gradient: ['theme.colors.primary[500]', 'theme.colors.primary[500]'],
   },
 };
 

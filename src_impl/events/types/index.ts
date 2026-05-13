@@ -46,15 +46,12 @@ import type { BossEventDefinitions } from './boss';
 import type { LeaderboardEventDefinitions } from './leaderboard';
 import type { CosmeticsEventDefinitions } from './cosmetics';
 import type { EventsEventDefinitions } from './events';
-import type { WeeklyQuestEventDefinitions } from './weekly-quest';
 import type { FocusIdentityEventDefinitions } from './focus-identity';
 import type { NeuroplasticityEventDefinitions } from './neuroplasticity';
 import type { SessionStoryEventDefinitions } from './session-story';
-import type { EmotionRetentionEventDefinitions } from './emotion-retention';
 import type { BattlePassEventDefinitions } from './battle-pass';
 import type { ProductivityEventDefinitions } from './productivity';
 
-export * from './emotion-retention';
 export * from './battle-pass';
 export * from './productivity';
 export * from './base';
@@ -99,11 +96,9 @@ export * from './boss';
 export * from './leaderboard';
 export * from './cosmetics';
 export * from './events';
-export * from './weekly-quest';
 export * from './focus-identity';
 export * from './neuroplasticity';
 export * from './session-story';
-export * from './emotion-retention';
 
 /**
  * Master EventChannels interface combining all domain events
@@ -151,11 +146,9 @@ export interface EventChannels
     LeaderboardEventDefinitions,
     CosmeticsEventDefinitions,
     EventsEventDefinitions,
-    WeeklyQuestEventDefinitions,
     FocusIdentityEventDefinitions,
     NeuroplasticityEventDefinitions,
     SessionStoryEventDefinitions,
-    EmotionRetentionEventDefinitions,
     BattlePassEventDefinitions,
     ProductivityEventDefinitions {
   'accessibility:initialized': {

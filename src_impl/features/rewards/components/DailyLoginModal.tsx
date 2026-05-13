@@ -19,30 +19,6 @@ import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-
-export interface DailyReward {
-  day: number;
-  type: 'coins' | 'gems' | 'boost' | 'chest';
-  amount: number;
-  label: string;
-  icon: string;
-}
-
-export interface DailyLoginModalProps {
-  /** Modal visibility */
-  visible: boolean;
-  /** Current day in streak (1-7) */
-  currentDay: number;
-  /** Login streak days */
-  streakDays: number;
-  /** Whether today's reward already claimed */
-  isClaimed: boolean;
-  /** Claim reward */
-  onClaim: () => void;
-  /** Dismiss modal */
-  onDismiss: () => void;
-}
-
 /**
  * 7-day reward schedule (rotating)
  */
@@ -291,3 +267,5 @@ export function DailyLoginModal({ visible, currentDay, streakDays, isClaimed, on
 }
 
 export default DailyLoginModal;
+
+export * from "./DailyLoginModal.types";

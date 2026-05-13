@@ -107,10 +107,10 @@ const styles = createSheet({
   container: {
     marginHorizontal: 16,
     marginTop: 12,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#e94560',
+    borderColor: 'theme.colors.primary[500]',
     overflow: 'hidden',
   },
   content: {
@@ -151,7 +151,7 @@ const styles = createSheet({
     borderRadius: 8,
   },
   buttonText: {
-    color: '#fff',
+    color: 'theme.colors.background.primary',
     fontSize: 14,
     fontWeight: '600',
   },
@@ -168,7 +168,7 @@ const styles = createSheet({
     paddingVertical: 6,
   },
   warningText: {
-    color: '#e94560',
+    color: 'theme.colors.primary[500]',
     fontSize: 12,
     textAlign: 'center',
   },

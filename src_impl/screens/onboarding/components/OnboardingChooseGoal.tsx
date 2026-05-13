@@ -23,15 +23,6 @@ import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 
-export type OnboardingGoalType = 'deep-work' | 'build-habit' | 'get-done' | 'beat-procrastination';
-
-export interface OnboardingGoal {
-  id: OnboardingGoalType;
-  icon: string;
-  title: string;
-  description: string;
-}
-
 interface OnboardingChooseGoalProps {
   selectedGoal: OnboardingGoalType | null;
   onSelectGoal: (goal: OnboardingGoalType) => void;
@@ -239,3 +230,5 @@ export function OnboardingChooseGoal({
 }
 
 export default OnboardingChooseGoal;
+
+export * from "./OnboardingChooseGoal.types";

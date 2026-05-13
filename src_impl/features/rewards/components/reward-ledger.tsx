@@ -56,15 +56,15 @@ export function RewardLedger({ userId, limit = 20, showClaimButton = true }: Rew
   const getStatusColor = (status: string): string => {
     switch (status) {
       case 'PENDING':
-        return '#fbbf24';
+        return 'theme.colors.primary[500]';
       case 'CLAIMED':
-        return '#22c55e';
+        return 'theme.colors.primary[500]';
       case 'EXPIRED':
-        return '#6b7280';
+        return 'theme.colors.primary[500]';
       case 'FAILED':
-        return '#ef4444';
+        return 'theme.colors.primary[500]';
       default:
-        return '#9ca3af';
+        return 'theme.colors.primary[500]';
     }
   };
 
@@ -156,26 +156,26 @@ export function RewardLedger({ userId, limit = 20, showClaimButton = true }: Rew
 
 const styles = createSheet({
   container: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: 'theme.colors.primary[500]',
     borderRadius: 12,
     padding: 16,
     maxHeight: 500,
   },
   loadingText: {
-    color: '#9ca3af',
+    color: 'theme.colors.primary[500]',
     fontSize: 14,
   },
   errorText: {
-    color: '#ef4444',
+    color: 'theme.colors.primary[500]',
     fontSize: 14,
   },
   emptyText: {
-    color: '#9ca3af',
+    color: 'theme.colors.primary[500]',
     fontSize: 16,
     textAlign: 'center',
   },
   emptySubtext: {
-    color: '#6b7280',
+    color: 'theme.colors.primary[500]',
     fontSize: 12,
     textAlign: 'center',
     marginTop: 4,
@@ -185,7 +185,7 @@ const styles = createSheet({
     justifyContent: 'space-around',
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#374151',
+    borderBottomColor: 'theme.colors.primary[500]',
     marginBottom: 12,
   },
   statItem: {
@@ -194,14 +194,14 @@ const styles = createSheet({
   statValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#f3f4f6',
+    color: 'theme.colors.primary[500]',
   },
   pendingValue: {
-    color: '#fbbf24',
+    color: 'theme.colors.primary[500]',
   },
   statLabel: {
     fontSize: 12,
-    color: '#9ca3af',
+    color: 'theme.colors.primary[500]',
     marginTop: 2,
   },
   list: {
@@ -212,13 +212,13 @@ const styles = createSheet({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#374151',
+    borderBottomColor: 'theme.colors.primary[500]',
   },
   rewardIcon: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#252542',
+    backgroundColor: 'theme.colors.primary[500]',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -238,7 +238,7 @@ const styles = createSheet({
   rewardType: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#f3f4f6',
+    color: 'theme.colors.primary[500]',
     textTransform: 'capitalize',
   },
   statusBadge: {
@@ -253,20 +253,20 @@ const styles = createSheet({
   },
   rewardAmount: {
     fontSize: 12,
-    color: '#9ca3af',
+    color: 'theme.colors.primary[500]',
   },
   rewardSource: {
     fontSize: 11,
-    color: '#6b7280',
+    color: 'theme.colors.primary[500]',
     marginTop: 2,
   },
   expiresText: {
     fontSize: 10,
-    color: '#fbbf24',
+    color: 'theme.colors.primary[500]',
     marginTop: 2,
   },
   claimButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: 'theme.colors.primary[500]',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 6,
@@ -276,8 +276,10 @@ const styles = createSheet({
     opacity: 0.5,
   },
   claimButtonText: {
-    color: '#ffffff',
+    color: 'theme.colors.background.primary',
     fontSize: 12,
     fontWeight: '600',
   },
 });
+
+export * from "./reward-ledger.types";

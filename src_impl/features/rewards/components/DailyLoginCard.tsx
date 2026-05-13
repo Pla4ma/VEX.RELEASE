@@ -208,3 +208,5 @@ export function DailyLoginCard({
     </Animated.View>
   );
 }
+
+export * from "./DailyLoginCard.types";

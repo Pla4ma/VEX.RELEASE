@@ -45,7 +45,7 @@ jest.mock('../../../store/session-state', () => ({
     selector({ showHomeHighlight: mockShowHomeHighlight })),
 }));
 jest.mock('../../../utils/haptics', () => ({ triggerHaptic: jest.fn(() => Promise.resolve()) }));
-jest.mock('../../home/HomeScreenVisuals', () => ({ getHeroGradientColors: () => ['#111111', '#222222'] }));
+jest.mock('../../home/HomeScreenVisuals', () => ({ getHeroGradientColors: () => ['theme.colors.primary[500]', 'theme.colors.primary[500]'] }));
 jest.mock('expo-linear-gradient', () => {
   const ReactRuntime = require('react');
   const { View: MockView } = require('react-native');
@@ -62,11 +62,11 @@ jest.mock('../../../theme', () => ({
     theme: {
       borderRadius: { '3xl': 24 },
       colors: {
-        background: { primary: '#ffffff', secondary: '#f5f5f5' },
-        border: { DEFAULT: '#dddddd' },
-        error: { DEFAULT: '#dc2626' },
-        primary: { 500: '#2563eb' },
-        text: { inverse: '#ffffff', primary: '#111111', secondary: '#666666' },
+        background: { primary: 'theme.colors.background.primary', secondary: 'theme.colors.primary[500]' },
+        border: { DEFAULT: 'theme.colors.primary[500]' },
+        error: { DEFAULT: 'theme.colors.primary[500]' },
+        primary: { 500: 'theme.colors.primary[500]' },
+        text: { inverse: 'theme.colors.background.primary', primary: 'theme.colors.primary[500]', secondary: 'theme.colors.primary[500]' },
       },
       spacing: { 4: 16, 5: 20, 6: 24, 8: 32 },
     },

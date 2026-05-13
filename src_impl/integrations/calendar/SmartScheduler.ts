@@ -299,3 +299,6 @@ export class SmartScheduler {
       .sort((a, b) => a.deadline.getTime() - b.deadline.getTime());
   }
 }
+
+export * from "./SmartScheduler.types";
+export * from "./SmartScheduler.types";

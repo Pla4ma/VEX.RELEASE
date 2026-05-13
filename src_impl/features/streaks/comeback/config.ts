@@ -5,7 +5,7 @@
  */
 
 export const COMEBACK_QUEST_CONFIG = {
-  minDaysAbsent: 3, // Must be absent 3+ days to trigger
+  minDaysAbsent: 2, // Must be absent 2+ days to trigger
   quest1: {
     name: 'First Step',
     description: 'Welcome back! Complete any session to begin your comeback.',
