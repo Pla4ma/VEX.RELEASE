@@ -69,6 +69,7 @@ export function SessionThemeSelector({
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item: SessionTheme) => item.id}
             contentContainerStyle={{ paddingRight: theme.spacing[5] }}
+            estimatedItemSize={132}
             renderItem={({ item }: { item: SessionTheme }) => {
               const isSelected = item.id === selectedThemeId;
               const isOwned = item.isOwned || item.isFree;

@@ -1178,6 +1178,7 @@ export type Database = {
         }
         Returns: Json
       }
+      delete_current_user: { Args: never; Returns: undefined }
       get_season_stats: {
         Args: { p_season_id: string }
         Returns: {

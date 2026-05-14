@@ -91,6 +91,7 @@ export function BattlePassTierTrack({
         keyExtractor={keyExtractor}
         renderItem={renderItem}
         contentContainerStyle={{ paddingHorizontal: 8 }}
+        estimatedItemSize={TIER_ITEM_WIDTH}
       />
     </Box>
   );

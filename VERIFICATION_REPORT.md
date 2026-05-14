@@ -1,5 +1,53 @@
 # VEX Verification Report
 
+## Phase 17 - Final Launch Gate
+
+Status: BLOCKED, verified May 14, 2026. Phase 17 is not complete.
+
+Tasks attempted:
+- P17-01 Required Commands: stopped at `npm test -- --coverage` because the command failed.
+- P17-02 Manual End-To-End Flows: not started because P17-01 is not green.
+- P17-03 Release Decision: not finalized because required commands and manual E2E flows are not green.
+
+Files changed:
+- `src_impl/features/session-completion/__tests__/offline-sync-integration.test.ts`
+- `src_impl/__tests__/setupTests.ts`
+- `src_impl/__tests__/mocks/react-native.ts`
+- `src_impl/api/__tests__/client.test.ts`
+- `src_impl/features/focus-identity/components/MonthlyFocusReport.tsx`
+- `src_impl/features/focus-identity/__tests__/MonthlyFocusReport.test.tsx`
+- `src_impl/features/ai-coach/__tests__/service.test.ts`
+- `src_impl/features/shop/__tests__/hooks.test.ts`
+- `VERIFICATION_REPORT.md`
+
+Evidence:
+- `npm run typecheck -- --pretty false`: PASS, exit 0.
+- `node scripts/check-no-ts-nocheck.js`: PASS, `@ts-nocheck count: 0/56`.
+- `npm run lint`: PASS, exit 0. Output still contains existing warnings, but no lint errors.
+- `npm test -- src_impl/features/session-completion/__tests__/offline-sync-integration.test.ts --runInBand`: PASS, 11 tests. This repaired a stale test that mocked `useNetInfo` while the implementation now reads `NetInfoAdapter`, removed a direct `any` test cast, and updated the ledger fixture to the current Zod schema.
+- `npm test -- src/api/__tests__/client.test.ts --runInBand`: PASS, 5 tests. Updated stale API-client tests to verify the direct HTTP regression firewall instead of raw `fetch` behavior.
+- `npm test -- src_impl/features/focus-identity/__tests__/MonthlyFocusReport.test.tsx --runInBand`: PASS, 7 tests. Updated the suite to current TanStack Query v5 `status/data/refetch` shape, fixed pending-state handling in the component, and wired the bottom Close action through the existing dismiss-event handler.
+- `npm test -- src_impl/features/ai-coach/__tests__/service.test.ts --runInBand`: PASS, 7 tests. Replaced invalid legacy `user-123` fixtures and removed stale assertions against removed service paths.
+- `npm test -- src_impl/features/shop/__tests__/hooks.test.ts --runInBand`: PASS, 5 tests. Updated the stale Supabase-direct hook test to assert hook-to-service wiring through mocked item/economy services.
+- `npm test -- --coverage`: FAIL. Silent JSON evidence captured before cleanup showed 241 failing suites: 111 under `src_impl`, 94 under the stale `src` mirror, 30 under `archive`, 4 under `e2e`, 1 under `jobs`, and 1 under `tmp`. Representative failures include `src_impl/accessibility/__tests__/AccessibilitySystem.test.ts`, `src_impl/navigation/components/__tests__NavigationGuard.test.tsx`, `src_impl/session/services/__tests__/SessionLifecycleService.test.ts`, `src_impl/session/__tests__/SessionOrchestrator.test.ts`, `src_impl/session/engines/CompletionEngine.test.ts`, `src_impl/features/boss/__tests__/BossBountySystem.test.ts`, `src_impl/features/economy/__tests__/service-comprehensive.test.ts`, and `src_impl/features/rewards/__tests__/service-comprehensive.test.ts`.
+- P17 command sequence was stopped at the failing coverage command. Per TASKSxx P17-01 sequencing, `npm run perf:audit`, iOS export, Expo Doctor, production EAS build, banned-pattern audits, manual E2E, and release decision were not advanced in this pass.
+- Edited-file banned-pattern audit for repaired Phase 17 test files: PASS, no matches for `console.`, explicit `any`, TS ignores, `StyleSheet.create`, `FlatList`, `AsyncStorage`, or raw `fetch(` in the edited test files.
+- Edited-file size audit: PASS for repaired Phase 17 files checked so far; the largest touched test file is `src_impl/features/session-completion/__tests__/offline-sync-integration.test.ts` at 198 lines.
+- Fresh post-edit `npm run typecheck -- --pretty false`: PASS, exit 0.
+- Fresh post-edit `npm run lint`: PASS, exit 0.
+- Fresh post-edit edited-file banned-pattern audit: PASS, no matches.
+- Fresh post-edit edited-file size audit: PASS, every Phase 17 edited file remains under 200 lines.
+
+Deferred items:
+- P17-01 remaining commands after coverage failure.
+- P17-02 physical-device/manual E2E flows.
+- P17-03 release decision and disabled-feature visibility confirmation.
+
+Risks:
+- Full Jest coverage is not green, so Phase 17 cannot be marked complete.
+- The active Jest config matches tests outside `src_impl` and also has 111 failing `src_impl` suites, so this is not a narrow Phase 17 repair.
+- Manual App Store, physical-device, RevenueCat sandbox, reviewer-account, support/privacy URL, and production EAS build checks remain unverified.
+
 ## Phase 14 - Personal Bests Registry
 
 Status: PASS, verified May 14, 2026.
@@ -1153,23 +1201,25 @@ Notes:
 
 ## Phase 16 - Launch Hardening
 
-Status: PASS for automated verification, verified May 14, 2026. Manual App Store and physical-device checks remain listed as review risks below.
+Status: PASS, verified May 14, 2026.
 
 Scope completed:
-- P16-01 Offline Sync Reliability: fallback queue parsing now validates with Zod, corrupt queue data is discarded with silent-failure capture, reconnect replay is covered, and duplicate ledger replay is idempotent.
-- P16-02 Error Boundaries: `ScreenErrorBoundary` now classifies network/auth messages case-insensitively and tests capture fallback, retry, Sentry tagging, and HOC behavior.
-- P16-03 Accessibility/Motion: verified through focused error-boundary and paywall render tests; no new React Native `Animated` usage was introduced.
-- P16-04 Performance Gate: `npm run perf:audit` exited 0. It reported two existing warnings in `animation\ConfettiCelebration.tsx` and `app\App.tsx`; no errors.
-- P16-05 Privacy/Security: existing privacy inventory and analytics sanitizer tests pass. Apple privacy guidance was checked against the launch privacy pack.
-- P16-06 Paywall/RevenueCat: VIP paywall copy was rewritten away from daily currency incentives, keeps restore access, and uses the approved purchase failure copy.
-- P16-07 App Store Pack: `APP_STORE_PACK.md` was added with metadata, privacy nutrition notes, reviewer notes, screenshot checklist, and Apple source checks.
+- P16-01 Offline Sync Reliability: fallback queue parsing validates with Zod, corrupt queue data is discarded with silent-failure capture, reconnect replay is covered, and duplicate ledger replay is idempotent.
+- P16-02 Error Boundaries: `ScreenErrorBoundary` classifies network/auth messages case-insensitively and tests cover fallback UI, retry, Sentry tagging, and HOC behavior.
+- P16-03 Accessibility/Motion: corrected FlashList `estimatedItemSize` gaps in edited launch-surface lists and verified no new React Native `Animated` usage or banned accessibility regressions.
+- P16-04 Performance Gate: `npm run perf:audit` exits 0 with 0 errors. It still reports two existing warnings in `animation\ConfettiCelebration.tsx` and `app\App.tsx`.
+- P16-05 Privacy/Security: account deletion is wired Component -> Hook -> Service -> Repository -> Supabase RPC, clears RevenueCat identity, secure auth keys, MMKV auth state, Sentry user state, and emits deletion analytics/event evidence.
+- P16-06 Paywall/RevenueCat: VIP paywall copy sells insight/growth instead of daily currency incentives, keeps restore access, and uses the approved purchase failure copy.
+- P16-07 App Store Pack: `APP_STORE_PACK.md` contains metadata, privacy nutrition notes, reviewer notes, screenshot checklist, accessibility notes, and Apple source checks.
 
 Evidence:
+- `npx supabase db query --linked --file supabase/migrations/202605140004_delete_current_user.sql` exited 0.
+- `npm run types:supabase` exited 0 and regenerated `src_impl/types/supabase.ts` with `delete_current_user`.
 - `npm run typecheck -- --pretty false` exited 0.
-- `npm run lint` exited 0. Output contains existing warnings across the broader repo, but no lint errors.
-- `npm test -- src_impl/features/session-completion/__tests__/offline-sync-service.test.ts src_impl/shared/ui/components/__tests__/ScreenErrorBoundary.test.tsx src_impl/shared/monetization/components/__tests__/VipPaywallCopy.test.ts src_impl/shared/analytics/__tests__/privacy.test.ts src_impl/privacy/__tests__/PrivacyInventory.test.ts src_impl/screens/paywall/__tests__/PaywallScreen.test.tsx --runInBand` passed 6 suites / 24 tests.
+- `npm run lint` exited 0. Output contains existing repo warnings, but no lint errors.
+- `npm test -- src_impl/features/account-deletion/__tests__/service.test.ts src_impl/features/session-completion/__tests__/offline-sync-service.test.ts src_impl/shared/ui/components/__tests__/ScreenErrorBoundary.test.tsx src_impl/shared/monetization/components/__tests__/VipPaywallCopy.test.ts src_impl/screens/paywall/__tests__/PaywallScreen.test.tsx --runInBand` passed 5 suites / 18 tests.
 - `rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|StyleSheet\.create|FlatList|AsyncStorage|fetch\(" src_impl` returned no matches.
-- Edited-scope file-size audit passed: `offline-sync-service.ts` 192, `offline-sync-storage.ts` 107, `offline-sync-service.test.ts` 199, `ScreenErrorBoundary.tsx` 183, `ScreenErrorBoundary.test.tsx` 160, `VipPaywallScreen.tsx` 163, `VipPaywallCopy.test.ts` 17, `PaywallScreen.test.tsx` 169, `APP_STORE_PACK.md` 72.
+- Edited-scope file-size audit passed: all Phase 16 edited files are under 200 lines, including account-deletion files, privacy settings, offline sync, error boundary, paywall, FlashList launch-surface fixes, migration, and `APP_STORE_PACK.md`.
 - `npm run perf:audit` exited 0 with 0 errors and 2 existing warnings.
 
 Apple source checks:
@@ -1179,6 +1229,5 @@ Apple source checks:
 - Upload previews and screenshots: https://developer.apple.com/help/app-store-connect/manage-app-information/upload-app-previews-and-screenshots/
 
 Risks / human review:
-- Physical airplane-mode and background-kill sync testing still needs a real device or simulator session.
-- App Store screenshots, reviewer demo credentials, privacy/support URLs, and RevenueCat product configuration must be verified in the real Apple/RevenueCat consoles before submission.
-- `PrivacySettingsScreen.tsx` still exposes an older scheduled account-deletion UX; backend-backed irreversible account deletion should be confirmed before launch review.
+- Physical airplane-mode, background-kill sync, VoiceOver, Larger Text, Reduced Motion, and Voice Control launch checks still need real device or simulator review.
+- App Store screenshots, reviewer account credentials, support/privacy URLs, and RevenueCat product configuration must be verified in Apple/RevenueCat consoles before upload.

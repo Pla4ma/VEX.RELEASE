@@ -9,6 +9,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { z } from 'zod';
 
 import { GreetingHeader, StartSessionButton } from '../../features/home-spine/components';
 import { CoachInterventionBanner } from '../../features/ai-coach/components/CoachInterventionBanner';
@@ -26,6 +27,34 @@ import { AppScreen } from '../../components/primitives';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
+
+const completionToastSummarySchema = z.object({
+  grade: z.string().optional(),
+  interruptions: z.number().int().nonnegative().optional(),
+  focusQuality: z.number().optional(),
+});
+
+function buildSessionCompleteToast(summary: unknown): { title: string; message: string } {
+  const parsed = completionToastSummarySchema.safeParse(summary);
+  if (!parsed.success) {
+    return { title: 'Session complete.', message: 'Result saved.' };
+  }
+
+  const grade = parsed.data.grade ? `${parsed.data.grade}-grade session.` : 'Session complete.';
+  const interruptions = parsed.data.interruptions ?? 0;
+  if (interruptions > 0) {
+    return {
+      title: grade,
+      message: `${interruptions} interruption${interruptions === 1 ? '' : 's'} kept this from cleaner work.`,
+    };
+  }
+
+  const quality = parsed.data.focusQuality;
+  return {
+    title: grade,
+    message: typeof quality === 'number' ? `${Math.round(quality)} focus quality. Clean session logged.` : 'Clean session logged.',
+  };
+}
 
 export const HomeScreen = withScreenErrorBoundary(function _HomeScreen(): JSX.Element {
   const navigation = useNavigation<Nav>();
@@ -50,10 +79,11 @@ export const HomeScreen = withScreenErrorBoundary(function _HomeScreen(): JSX.El
   useEffect(() => {
     const unsubscribe = eventBus.subscribe('session:completed', (evt) => {
       if (evt.userId !== controller.userId) {return;}
+      const toast = buildSessionCompleteToast(evt.summary);
       showToast({
         type: 'success',
-        title: 'Session complete!',
-        message: 'Great focus work. Your companion is proud.',
+        title: toast.title,
+        message: toast.message,
       });
     });
     return unsubscribe;

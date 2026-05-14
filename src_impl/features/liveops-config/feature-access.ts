@@ -1,3 +1,5 @@
+import { DEFAULT_COPY, DISABLED_FEATURES, FEATURE_COPY, FEATURE_THRESHOLDS } from './feature-access-config';
+
 export type UserExperienceStage =
   | 'NEW_USER'
   | 'ACTIVATING'
@@ -77,54 +79,6 @@ export function getProductTier(stage: UserExperienceStage): ProductTier {
   return 'EXPANSION';
 }
 
-const LOCKED_COPY = {
-  lockedDescription: 'Keep building your core focus loop before this layer opens.',
-  recommendedUnlockMoment: 'Complete three focused sessions',
-  unlockReason: 'Unlocks after your focus habit has a signal.',
-};
-
-const CORE_FEATURES: FeatureKey[] = [
-  'focus_session',
-  'progress_view',
-  'ai_coach_basic',
-  'home_tab',
-  'focus_tab',
-  'profile_tab',
-  'achievements',
-  'content_study',
-  'premium_paywall',
-];
-
-const SECONDARY_FEATURES: FeatureKey[] = [
-  'economy_basic',
-  'boss_tab',
-  'squads',
-  'social_tab',
-  'inventory',
-  'shop',
-  'streak_insurance',
-  'companion_detail',
-  'challenges',
-];
-
-const EXPANSION_FEATURES: FeatureKey[] = [
-  'ai_coach_advanced',
-  'economy_advanced',
-  'boss_bounties',
-  'battle_pass',
-  'content_study_advanced',
-  'quiz_review_mode',
-  'seasonal_features',
-  'advanced_settings',
-];
-
-const DISABLED_FEATURES: FeatureKey[] = [
-  'rivals',
-  'rankings',
-  'wagers',
-  'gems_prominent',
-];
-
 export function buildFeatureAccess(inputs: FeatureAccessInputs): {
   features: FeatureAccessMap;
   productTier: ProductTier;
@@ -132,18 +86,11 @@ export function buildFeatureAccess(inputs: FeatureAccessInputs): {
 } {
   const stage = getStage(inputs.totalCompletedSessions);
   const productTier = getProductTier(stage);
-  const unlocked = new Set<FeatureKey>(CORE_FEATURES);
-
-  if (productTier !== 'CORE') {
-    SECONDARY_FEATURES.forEach((feature) => unlocked.add(feature));
-  }
-  if (productTier === 'EXPANSION') {
-    EXPANSION_FEATURES.forEach((feature) => unlocked.add(feature));
-  }
 
   const accessFor = (feature: FeatureKey): FeatureAccess => ({
-    ...LOCKED_COPY,
-    isUnlocked: unlocked.has(feature),
+    ...DEFAULT_COPY,
+    ...FEATURE_COPY[feature],
+    isUnlocked: !DISABLED_FEATURES.includes(feature) && inputs.totalCompletedSessions >= FEATURE_THRESHOLDS[feature],
     isVisible: !DISABLED_FEATURES.includes(feature),
   });
 

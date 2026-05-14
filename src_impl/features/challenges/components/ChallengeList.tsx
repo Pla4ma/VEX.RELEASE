@@ -95,6 +95,7 @@ export function ChallengeList({ challenges, onClaimChallenge, onRerollChallenge,
       renderItem={renderChallenge}
       keyExtractor={(item: UserChallengeSummary) => item.challengeId}
       contentContainerStyle={styles.listContainer}
+      estimatedItemSize={168}
       refreshControl={onRefresh && <RefreshControl refreshing={!!loading} onRefresh={onRefresh} />}
       ListHeaderComponent={
         <View style={styles.header}>

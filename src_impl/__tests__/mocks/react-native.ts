@@ -16,6 +16,10 @@ export const Alert = {
   alert: jest.fn(),
 };
 
+export const Share = {
+  share: jest.fn(() => Promise.resolve({ action: 'sharedAction' })),
+};
+
 export const StyleSheet = {
   create: <T>(styles: T) => styles,
   flatten: <T>(styles: T) => styles,
@@ -112,6 +116,7 @@ const ReactNative = {
   Switch,
   Modal,
   Alert,
+  Share,
   StyleSheet,
   Platform,
   Dimensions,

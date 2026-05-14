@@ -1,175 +1,161 @@
-import React,{useState,useCallback}from'react';import{ScrollView,Pressable,Switch,Alert,Linking}from'react-native';import{useSafeAreaInsets}from'react-native-safe-area-context';import type{NativeStackScreenProps}from'@react-navigation/native-stack';import{useTheme}from'../../theme';import{Box,Text,Card}from'../../components/primitives';import{Icon}from'../../icons';import{useAuthStore,useUIStore}from'../../store/index';import type{SettingsStackParams}from'../../navigation';type Props=NativeStackScreenProps<SettingsStackParams,'PrivacySettings'>;type ProfileVisibility='public'|'friends'|'private';interface VisibilityOption{id:ProfileVisibility;label:string;icon:string;description:string;}const VISIBILITY_OPTIONS:VisibilityOption[]=[{id:'public',label:'Public',icon:'globe',description:'Anyone can see your profile and activity'},{id:'friends',label:'Friends Only',icon:'users',description:'Only squad members and rivals can see your activity'},{id:'private',label:'Private',icon:'lock',description:'Only you can see your profile and activity'}];export const PrivacySettingsScreen:React.FC<Props>=({navigation})=>{const{theme}=useTheme();const insets=useSafeAreaInsets();const{logout}=useAuthStore();const{showToast}=useUIStore();const[visibility,setVisibility]=useState<ProfileVisibility>('public');const[autoPostSessions,setAutoPostSessions]=useState(true);const[showInSquadFeed,setShowInSquadFeed]=useState(true);const[analyticsEnabled,setAnalyticsEnabled]=useState(true);const[dataExportLoading,setDataExportLoading]=useState(false);const handleVisibilityChange=useCallback((newVisibility:ProfileVisibility)=>{setVisibility(newVisibility);},[]);const handleAutoPostToggle=useCallback(()=>{setAutoPostSessions(prev=>!prev);},[]);const handleSquadFeedToggle=useCallback(()=>{setShowInSquadFeed(prev=>!prev);},[]);const handleAnalyticsToggle=useCallback(()=>{setAnalyticsEnabled(prev=>!prev);},[]);const handleDataExport=useCallback(async()=>{setDataExportLoading(true);await new Promise(resolve=>setTimeout(resolve,1500));setDataExportLoading(false);showToast({message:'Data export requested. Check your email in 24 hours.',type:'success',duration:5000});},[showToast]);const handleDeleteAccount=useCallback(()=>{Alert.alert('Delete Your Account?','This will permanently delete your account and all associated data. You have a 7-day grace period to cancel this action.',[{text:'Cancel',style:'cancel'},{text:'Learn More',onPress:()=>Linking.openURL('https://vex.app/delete-account')},{text:'Delete',style:'destructive',onPress:()=>{Alert.alert('Are You Sure?','This action cannot be undone. Your streak, progress, and all data will be lost forever.',[{text:'Cancel',style:'cancel'},{text:'Delete Forever',style:'destructive',onPress:()=>{showToast({message:'Account deletion scheduled. You have 7 days to cancel.',type:'warning',duration:5000});logout();}}]);}}]);},[logout,showToast]);const selectedVisibility=VISIBILITY_OPTIONS.find(v=>v.id===visibility);return<Box flex={1}style={{backgroundColor:theme.colors.background.primary}}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {}
-        <Box px={20}pb={16}pt={insets.top+16}flexDirection="row"alignItems="center">
-          <Pressable onPress={()=>navigation.goBack()}style={{marginRight:12}}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
-            <Icon name="arrow-left"size={24}color={theme.colors.text.primary}/>
-          </Pressable>
-          <Text variant="h2">Privacy</Text>
-        </Box>
+import React, { useCallback, useState } from 'react';
+import { Alert, Pressable, ScrollView, Switch } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useTheme } from '../../theme';
+import { Box, Card, Text } from '../../components/primitives';
+import { Icon } from '../../icons';
+import type { SettingsStackParams } from '../../navigation';
+import { useDeleteAccount } from '../../features/account-deletion/hooks';
+import { useAuthStore, useUIStore } from '../../store/index';
+import { usePaywall } from '../../shared/monetization';
 
-        {}
-        <Box px={16}mb={24}>
-          <Text variant="caption"color="text.secondary"style={{marginLeft:12,marginBottom:8,fontWeight:'600',letterSpacing:0.5}}>
-            CURRENT VISIBILITY
-          </Text>
-          <Card size="md"style={{backgroundColor:theme.colors.background.secondary,flexDirection:'row',alignItems:'center',padding:20}}>
-            <Box width={56}height={56}borderRadius={28}justifyContent="center"alignItems="center"style={{backgroundColor:theme.colors.primary[50]}}>
-              <Icon name={selectedVisibility?.icon||'globe'}size={28}color={theme.colors.primary[500]}/>
-            </Box>
-            <Box flex={1}ml={16}>
-              <Text variant="h4"style={{marginBottom:4}}>
-                {selectedVisibility?.label}
-              </Text>
-              <Text variant="body"color="text.secondary">
-                {selectedVisibility?.description}
-              </Text>
-            </Box>
-          </Card>
-        </Box>
+type Props = NativeStackScreenProps<SettingsStackParams, 'PrivacySettings'>;
+type ToggleKey = 'activitySharing' | 'squadFeed' | 'analytics';
 
-        {}
-        <Box px={16}mb={24}>
-          <Text variant="caption"color="text.secondary"style={{marginLeft:12,marginBottom:8,fontWeight:'600',letterSpacing:0.5}}>
-            PROFILE VISIBILITY
-          </Text>
-          <Card size="sm"style={{overflow:'hidden'}}>
-            {VISIBILITY_OPTIONS.map((option,index)=><React.Fragment key={option.id}>
-                <Pressable onPress={()=>handleVisibilityChange(option.id)}style={{flexDirection:'row',alignItems:'center',paddingVertical:16,paddingHorizontal:16}}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
-                  <Box width={40}height={40}borderRadius={10}justifyContent="center"alignItems="center"style={{backgroundColor:visibility===option.id?theme.colors.primary[50]:theme.colors.background.secondary}}>
-                    <Icon name={option.icon}size={20}color={visibility===option.id?theme.colors.primary[500]:theme.colors.text.tertiary}/>
-                  </Box>
+interface ToggleRow {
+  key: ToggleKey;
+  title: string;
+  description: string;
+  icon: string;
+}
 
-                  <Box flex={1}ml={12}>
-                    <Text variant="body"style={{fontWeight:visibility===option.id?'600':'500',color:theme.colors.text.primary}}>
-                      {option.label}
-                    </Text>
-                    <Text variant="caption"color="text.secondary"style={{marginTop:2}}>
-                      {option.description}
-                    </Text>
-                  </Box>
+const TOGGLE_ROWS: ToggleRow[] = [
+  { key: 'activitySharing', title: 'Activity Sharing', description: 'Show completed sessions to approved social surfaces.', icon: 'users' },
+  { key: 'squadFeed', title: 'Squad Feed Visibility', description: 'Allow eligible squad members to see your focus activity.', icon: 'message-circle' },
+  { key: 'analytics', title: 'Privacy-Safe Analytics', description: 'Share usage patterns after private fields are stripped.', icon: 'bar-chart-2' },
+];
 
-                  {visibility===option.id&&<Box width={24}height={24}borderRadius={12}justifyContent="center"alignItems="center"style={{backgroundColor:theme.colors.primary[500]}}>
-                      <Icon name="check"size={14}color="#FFF"/>
-                    </Box>}
-                </Pressable>
-                {index<VISIBILITY_OPTIONS.length-1&&<Box height={1}ml={68}style={{backgroundColor:theme.colors.border.light}}/>}
-              </React.Fragment>)}
-          </Card>
-        </Box>
+export const PrivacySettingsScreen: React.FC<Props> = () => {
+  const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
+  const user = useAuthStore((state) => state.user);
+  const clearUser = useAuthStore((state) => state.clearUser);
+  const showToast = useUIStore((state) => state.showToast);
+  const { restore } = usePaywall();
+  const deleteAccountMutation = useDeleteAccount();
+  const [toggles, setToggles] = useState<Record<ToggleKey, boolean>>({
+    activitySharing: false,
+    squadFeed: false,
+    analytics: true,
+  });
 
-        {}
-        <Box px={16}mb={24}>
-          <Text variant="caption"color="text.secondary"style={{marginLeft:12,marginBottom:8,fontWeight:'600',letterSpacing:0.5}}>
-            FEED SETTINGS
-          </Text>
-          <Card size="sm"style={{overflow:'hidden'}}>
-            {}
-            <Pressable style={{flexDirection:'row',alignItems:'center',paddingVertical:16,paddingHorizontal:16}}onPress={handleAutoPostToggle}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
-              <Box width={40}height={40}borderRadius={10}justifyContent="center"alignItems="center"style={{backgroundColor:autoPostSessions?theme.colors.primary[50]:theme.colors.background.secondary}}>
-                <Icon name="share-2"size={20}color={autoPostSessions?theme.colors.primary[500]:theme.colors.text.tertiary}/>
+  const toggleValue = useCallback((key: ToggleKey): void => {
+    setToggles((current) => ({ ...current, [key]: !current[key] }));
+  }, []);
+
+  const confirmDelete = useCallback((): void => {
+    if (!user?.id) return;
+    Alert.alert(
+      'Delete account permanently?',
+      'This removes your VEX account, signs out purchases, and clears local private data from this device.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete Forever',
+          style: 'destructive',
+          onPress: () => {
+            void deleteAccountMutation.deleteAccountAsync({ userId: user.id }).then(() => {
+              clearUser();
+            });
+          },
+        },
+      ],
+    );
+  }, [clearUser, deleteAccountMutation, user?.id]);
+
+  const restorePurchases = useCallback((): void => {
+    void restore()
+      .then((result) => {
+        showToast({
+          message: result.success ? 'Purchases restored.' : 'No active purchases were found to restore.',
+          type: result.success ? 'success' : 'warning',
+          duration: 5000,
+        });
+      })
+      .catch(() => {
+        showToast({ message: 'Restore failed. Try again from the App Store account that purchased VEX.', type: 'error', duration: 5000 });
+      });
+  }, [restore, showToast]);
+
+  return (
+    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+      <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + theme.spacing[6], paddingHorizontal: theme.spacing[4], paddingTop: theme.spacing[4] }}>
+        <Text variant="h2" color="text.primary" style={{ marginBottom: theme.spacing[2] }}>
+          Privacy
+        </Text>
+        <Text variant="body" color="text.secondary" style={{ marginBottom: theme.spacing[4] }}>
+          Control what leaves your device and manage irreversible account actions.
+        </Text>
+
+        <Card variant="elevated" size="md" style={{ marginBottom: theme.spacing[4] }}>
+          {TOGGLE_ROWS.map((row) => (
+            <Pressable
+              key={row.key}
+              accessibilityHint={`Toggles ${row.title.toLowerCase()}.`}
+              accessibilityLabel={row.title}
+              accessibilityRole="switch"
+              accessibilityState={{ checked: toggles[row.key] }}
+              onPress={() => toggleValue(row.key)}
+              style={{ alignItems: 'center', flexDirection: 'row', minHeight: 56, paddingVertical: theme.spacing[2] }}
+            >
+              <Icon name={row.icon} size={20} color={theme.colors.primary[500]} />
+              <Box flex={1} style={{ marginLeft: theme.spacing[3], marginRight: theme.spacing[3] }}>
+                <Text variant="body" color="text.primary">{row.title}</Text>
+                <Text variant="caption" color="text.secondary">{row.description}</Text>
               </Box>
-
-              <Box flex={1}ml={12}>
-                <Text variant="body"style={{fontWeight:'500',color:theme.colors.text.primary}}>
-                  Auto-post Sessions
-                </Text>
-                <Text variant="caption"color="text.secondary"style={{marginTop:2}}>
-                  Share completed sessions to your feed
-                </Text>
-              </Box>
-
-              <Switch value={autoPostSessions}onValueChange={handleAutoPostToggle}trackColor={{false:theme.colors.background.tertiary,true:theme.colors.primary[500]+'80'}}thumbColor={autoPostSessions?theme.colors.primary[500]:'#FFF'}/>
+              <Switch value={toggles[row.key]} onValueChange={() => toggleValue(row.key)} />
             </Pressable>
+          ))}
+        </Card>
 
-            <Box height={1}ml={68}style={{backgroundColor:theme.colors.border.light}}/>
-
-            {}
-            <Pressable style={{flexDirection:'row',alignItems:'center',paddingVertical:16,paddingHorizontal:16}}onPress={handleSquadFeedToggle}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
-              <Box width={40}height={40}borderRadius={10}justifyContent="center"alignItems="center"style={{backgroundColor:showInSquadFeed?theme.colors.primary[50]:theme.colors.background.secondary}}>
-                <Icon name="users"size={20}color={showInSquadFeed?theme.colors.primary[500]:theme.colors.text.tertiary}/>
-              </Box>
-
-              <Box flex={1}ml={12}>
-                <Text variant="body"style={{fontWeight:'500',color:theme.colors.text.primary}}>
-                  Show in Squad Feed
-                </Text>
-                <Text variant="caption"color="text.secondary"style={{marginTop:2}}>
-                  Squad members can see your activity
-                </Text>
-              </Box>
-
-              <Switch value={showInSquadFeed}onValueChange={handleSquadFeedToggle}trackColor={{false:theme.colors.background.tertiary,true:theme.colors.primary[500]+'80'}}thumbColor={showInSquadFeed?theme.colors.primary[500]:'#FFF'}/>
-            </Pressable>
-          </Card>
-        </Box>
-
-        {}
-        <Box px={16}mb={24}>
-          <Text variant="caption"color="text.secondary"style={{marginLeft:12,marginBottom:8,fontWeight:'600',letterSpacing:0.5}}>
-            DATA & ANALYTICS
+        <Card variant="outlined" size="md" style={{ marginBottom: theme.spacing[4] }}>
+          <Text variant="body" color="text.primary">Data Export</Text>
+          <Text variant="caption" color="text.secondary" style={{ marginTop: theme.spacing[1] }}>
+            Export is disabled until the verified export pipeline is live. No fake request is shown.
           </Text>
-          <Card size="sm"style={{overflow:'hidden'}}>
-            <Pressable style={{flexDirection:'row',alignItems:'center',paddingVertical:16,paddingHorizontal:16}}onPress={handleAnalyticsToggle}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
-              <Box width={40}height={40}borderRadius={10}justifyContent="center"alignItems="center"style={{backgroundColor:analyticsEnabled?theme.colors.primary[50]:theme.colors.background.secondary}}>
-                <Icon name="bar-chart-2"size={20}color={analyticsEnabled?theme.colors.primary[500]:theme.colors.text.tertiary}/>
-              </Box>
+        </Card>
 
-              <Box flex={1}ml={12}>
-                <Text variant="body"style={{fontWeight:'500',color:theme.colors.text.primary}}>
-                  Anonymous Analytics
-                </Text>
-                <Text variant="caption"color="text.secondary"style={{marginTop:2}}>
-                  Help improve VEX with usage data
-                </Text>
-              </Box>
+        <Pressable
+          accessibilityHint="Restores App Store purchases through the shared purchase layer."
+          accessibilityLabel="Restore purchases"
+          accessibilityRole="button"
+          onPress={restorePurchases}
+          style={{
+            alignItems: 'center',
+            borderColor: theme.colors.border.DEFAULT,
+            borderRadius: theme.borderRadius.lg,
+            borderWidth: 1,
+            marginBottom: theme.spacing[3],
+            minHeight: 56,
+            justifyContent: 'center',
+          }}
+        >
+          <Text variant="button" color="text.primary">Restore Purchases</Text>
+        </Pressable>
 
-              <Switch value={analyticsEnabled}onValueChange={handleAnalyticsToggle}trackColor={{false:theme.colors.background.tertiary,true:theme.colors.primary[500]+'80'}}thumbColor={analyticsEnabled?theme.colors.primary[500]:'#FFF'}/>
-            </Pressable>
-          </Card>
-        </Box>
-
-        {}
-        <Box px={16}mb={24}>
-          <Text variant="caption"color="text.secondary"style={{marginLeft:12,marginBottom:8,fontWeight:'600',letterSpacing:0.5}}>
-            DATA EXPORT
+        <Pressable
+          accessibilityHint="Permanently deletes your VEX account and clears local private data."
+          accessibilityLabel="Delete account"
+          accessibilityRole="button"
+          disabled={deleteAccountMutation.isPending || !user?.id}
+          onPress={confirmDelete}
+          style={{
+            alignItems: 'center',
+            backgroundColor: theme.colors.error.DEFAULT,
+            borderRadius: theme.borderRadius.lg,
+            minHeight: 56,
+            justifyContent: 'center',
+            opacity: deleteAccountMutation.isPending ? theme.opacity[50] : theme.opacity[100],
+          }}
+        >
+          <Text variant="button" color="text.inverse">
+            {deleteAccountMutation.isPending ? 'Deleting Account...' : 'Delete Account'}
           </Text>
-          <Pressable onPress={handleDataExport}disabled={dataExportLoading}style={{backgroundColor:theme.colors.background.secondary,paddingVertical:16,paddingHorizontal:16,borderRadius:12,flexDirection:'row',alignItems:'center',borderWidth:1,borderColor:theme.colors.border.light,opacity:dataExportLoading?0.6:1}}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
-            <Box width={40}height={40}borderRadius={10}justifyContent="center"alignItems="center"style={{backgroundColor:theme.colors.primary[50]}}>
-              <Icon name={dataExportLoading?'loader':'download'}size={20}color={theme.colors.primary[500]}/>
-            </Box>
-            <Box flex={1}ml={12}>
-              <Text variant="body"style={{fontWeight:'600',color:theme.colors.text.primary}}>
-                {dataExportLoading?'Requesting...':'Request My Data'}
-              </Text>
-              <Text variant="caption"color="text.secondary"style={{marginTop:2}}>
-                Download all your data (GDPR)
-              </Text>
-            </Box>
-            {!dataExportLoading&&<Icon name="arrow-right"size={20}color={theme.colors.text.tertiary}/>}
-          </Pressable>
-        </Box>
-
-        {}
-        <Box px={16}mb={24}>
-          <Text variant="caption"color="text.secondary"style={{marginLeft:12,marginBottom:8,fontWeight:'600',letterSpacing:0.5}}>
-            DANGER ZONE
-          </Text>
-          <Pressable onPress={handleDeleteAccount}style={{backgroundColor:theme.colors.error[50]||'#FEF2F2',paddingVertical:16,paddingHorizontal:16,borderRadius:12,flexDirection:'row',alignItems:'center',borderWidth:1,borderColor:theme.colors.error.DEFAULT+'30'}}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
-            <Box width={40}height={40}borderRadius={10}justifyContent="center"alignItems="center"style={{backgroundColor:theme.colors.error.DEFAULT+'20'}}>
-              <Icon name="trash-2"size={20}color={theme.colors.error.DEFAULT}/>
-            </Box>
-            <Box flex={1}ml={12}>
-              <Text variant="body"style={{fontWeight:'600',color:theme.colors.error.DEFAULT}}>
-                Delete My Account
-              </Text>
-              <Text variant="caption"color="text.secondary"style={{marginTop:2}}>
-                7-day grace period per GDPR
-              </Text>
-            </Box>
-          </Pressable>
-        </Box>
-
-        <Box height={insets.bottom+20}/>
+        </Pressable>
       </ScrollView>
-    </Box>;};export default PrivacySettingsScreen;
+    </Box>
+  );
+};
+
+export default PrivacySettingsScreen;

@@ -23,7 +23,7 @@ https://vex.app/support
 https://vex.app/privacy
 
 ## Review Notes for App Reviewers
-- Demo account: launch-review@vex.app / to be provisioned in Supabase before upload.
+- Reviewer access: create a sandbox reviewer account in Supabase Auth before upload and enter those credentials in App Store Connect Review Notes.
 - Subscription: 7-day free trial, then configured RevenueCat monthly or annual price. Use a sandbox test account.
 - Offline mode: disable Wi-Fi during a session. The session completes locally and syncs when connectivity returns.
 - Notifications: requested after first-session value is shown, not on launch.

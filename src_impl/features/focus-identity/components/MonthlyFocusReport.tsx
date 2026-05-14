@@ -19,7 +19,7 @@ Percentile: Top ${100-percentile}%
 
 ${report.highlight}
 
-#VEX #FocusProductivity`;try{await Share.share({message:shareText,title:'Monthly Focus Report'});if(report){publishMonthlyReportShared(userId,report.month,report.grade);}}catch(_shareError){}};const handleClose=()=>{if(report){publishMonthlyReportDismissed(userId,report.month);}onClose();};if(loadingState==='loading'){return<MonthlyReportSkeleton/>;}if(loadingState==='error'){return<View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor:theme.colors.background.primary,paddingHorizontal:theme.spacing[6]}}>
+#VEX #FocusProductivity`;try{await Share.share({message:shareText,title:'Monthly Focus Report'});if(report){publishMonthlyReportShared(userId,report.month,report.grade);}}catch(_shareError){}};const handleClose=()=>{if(report){publishMonthlyReportDismissed(userId,report.month);}onClose();};if(loadingState==='loading'||loadingState==='pending'){return<MonthlyReportSkeleton/>;}if(loadingState==='error'){return<View style={{flex:1,justifyContent:'center',alignItems:'center',backgroundColor:theme.colors.background.primary,paddingHorizontal:theme.spacing[6]}}>
         <Text variant="heading3"color="error"style={{marginBottom:theme.spacing[4]}}>
           ⚠️ Report Unavailable
         </Text>
@@ -142,7 +142,7 @@ ${report.highlight}
           <Button onPress={handleShare}variant="primary"style={{marginBottom:theme.spacing[4]}}>
             Share Monthly Report
           </Button>
-          <Button onPress={onClose}variant="secondary">
+          <Button onPress={handleClose}variant="secondary">
             Close
           </Button>
         </Animated.View>

@@ -82,21 +82,19 @@ export function ProgressScreen(): JSX.Element {
         <Button variant="outline" onPress={() => void refresh()}
   accessibilityLabel="Refresh stats button"
   accessibilityRole="button"
-  accessibilityHint="Activates this control">Refresh stats</Button>
+  accessibilityHint="Reloads your latest progress stats">Refresh stats</Button>
       </View>
       {masteryState ? <MasteryCard userId={userId} state={masteryState} onStateChange={setMasteryState} /> : null}
-      <View style={{ gap: theme.spacing[3], minHeight: 320 }}>
-        <Text variant="h4" color={theme.colors.text.primary}>Rankings</Text>
-        {!disclosure.features.rankings.isUnlocked ? (
-          <FeatureTeaserCard ctaLabel="Complete another session" description="Your next rank target starts showing up after you have enough data to care." feature="rankings" icon="🏆" onPress={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })} stage={disclosure.stage} title="Rankings" unlockLabel={disclosure.features.rankings.unlockReason} whyItMatters="Instead of a dead leaderboard, we hold rankings back until they can create real ambition." progressLabel="Next target: top 50% after 3 sessions" />
-        ) : disclosure.stage === 'ACTIVATING' ? (
-          <View style={{ borderWidth: 1, borderColor: theme.colors.border.light, backgroundColor: theme.colors.background.secondary, padding: theme.spacing[4], gap: theme.spacing[2], ...getPremiumCardStyle('medium') }}><Text variant="label" color={theme.colors.text.secondary}>Your next rank target</Text><Text variant="h4" color={theme.colors.text.primary}>Keep your streak alive for three more days.</Text><Text variant="bodySmall" color={theme.colors.text.secondary}>We use personal milestones first so this never feels like an empty room.</Text></View>
-        ) : userId ? (
-          <EmptyState icon="🏆" title="Rankings" body="Rankings feature coming soon." />
-        ) : (
-          <EmptyState icon="🏆" title="Sign in to see rankings" body="Your next rank target will appear here once your progress can be compared." />
-        )}
-      </View>
+      {disclosure.features.rankings.isVisible ? (
+        <View style={{ gap: theme.spacing[3], minHeight: 320 }}>
+          <Text variant="h4" color={theme.colors.text.primary}>Rankings</Text>
+          {userId ? (
+            <EmptyState icon="🏆" title="Rankings" body="Your ranking will appear here once this feature is enabled for this season." />
+          ) : (
+            <EmptyState icon="🏆" title="Sign in to see rankings" body="Your next rank target will appear here once your progress can be compared." />
+          )}
+        </View>
+      ) : null}
     </ScrollView>
   );
 }

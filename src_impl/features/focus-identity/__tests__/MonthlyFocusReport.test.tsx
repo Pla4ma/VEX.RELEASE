@@ -1,1 +1,126 @@
-import React from'react';import{render,screen,fireEvent,waitFor}from'@testing-library/react-native';import{MonthlyFocusReport}from'../components/MonthlyFocusReport';import*as hooks from'../hooks';import*as events from'../events';jest.mock('../hooks');jest.mock('../events',()=>({publishMonthlyReportViewed:jest.fn(),publishMonthlyReportShared:jest.fn(),publishMonthlyReportDismissed:jest.fn()}));jest.mock('react-native/Libraries/Share/Share',()=>({share:jest.fn(()=>Promise.resolve({action:'shared'}))}));const mockReport={month:'2025-01',startingScore:650,endingScore:720,change:70,sessionsCompleted:24,grade:'A',highlight:'Outstanding consistency this month!'};describe('MonthlyFocusReport',()=>{const mockOnClose=jest.fn();beforeEach(()=>{jest.clearAllMocks();});it('renders loading skeleton when loading',()=>{(hooks.useMonthlyReport as jest.Mock).mockReturnValue({report:null,loadingState:'loading',error:null,refresh:jest.fn()});render(<MonthlyFocusReport userId="user-123"onClose={mockOnClose}visible={true}/>);expect(screen.getByText('Monthly Focus Report')).toBeTruthy();});it('renders error state with retry button',()=>{const mockRefresh=jest.fn();(hooks.useMonthlyReport as jest.Mock).mockReturnValue({report:null,loadingState:'error',error:new Error('Network error'),refresh:mockRefresh});render(<MonthlyFocusReport userId="user-123"onClose={mockOnClose}visible={true}/>);expect(screen.getByText('⚠️ Report Unavailable')).toBeTruthy();expect(screen.getByText('Network error')).toBeTruthy();const retryButton=screen.getByText('Try Again');fireEvent.press(retryButton);expect(mockRefresh).toHaveBeenCalled();});it('renders empty state when no report available',()=>{(hooks.useMonthlyReport as jest.Mock).mockReturnValue({report:null,loadingState:'success',error:null,refresh:jest.fn()});render(<MonthlyFocusReport userId="user-123"onClose={mockOnClose}visible={true}/>);expect(screen.getByText('No Report Available')).toBeTruthy();expect(screen.getByText('Complete sessions this month to generate your first focus report.')).toBeTruthy();});it('renders report with correct data',()=>{(hooks.useMonthlyReport as jest.Mock).mockReturnValue({report:mockReport,loadingState:'success',error:null,refresh:jest.fn()});render(<MonthlyFocusReport userId="user-123"onClose={mockOnClose}visible={true}/>);expect(screen.getByText('Monthly Focus Report')).toBeTruthy();expect(screen.getByText('24')).toBeTruthy();expect(screen.getByText('Grade A')).toBeTruthy();expect(screen.getByText('+70')).toBeTruthy();});it('publishes view event when report loads',async()=>{(hooks.useMonthlyReport as jest.Mock).mockReturnValue({report:mockReport,loadingState:'success',error:null,refresh:jest.fn()});render(<MonthlyFocusReport userId="user-123"onClose={mockOnClose}visible={true}/>);await waitFor(()=>{expect(events.publishMonthlyReportViewed).toHaveBeenCalledWith('user-123','2025-01','A',70);});});it('publishes dismiss event when closed',()=>{(hooks.useMonthlyReport as jest.Mock).mockReturnValue({report:mockReport,loadingState:'success',error:null,refresh:jest.fn()});render(<MonthlyFocusReport userId="user-123"onClose={mockOnClose}visible={true}/>);const closeButton=screen.getByText('Close');fireEvent.press(closeButton);expect(events.publishMonthlyReportDismissed).toHaveBeenCalledWith('user-123','2025-01');expect(mockOnClose).toHaveBeenCalled();});it('publishes share event when shared',async()=>{(hooks.useMonthlyReport as jest.Mock).mockReturnValue({report:mockReport,loadingState:'success',error:null,refresh:jest.fn()});render(<MonthlyFocusReport userId="user-123"onClose={mockOnClose}visible={true}/>);const shareButton=screen.getByText('Share Monthly Report');fireEvent.press(shareButton);await waitFor(()=>{expect(events.publishMonthlyReportShared).toHaveBeenCalledWith('user-123','2025-01','A',undefined);});});});
+import React from 'react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { Share } from 'react-native';
+
+import { MonthlyFocusReport } from '../components/MonthlyFocusReport';
+
+const mockUseMonthlyReport = jest.fn();
+const mockPublishViewed = jest.fn();
+const mockPublishShared = jest.fn();
+const mockPublishDismissed = jest.fn();
+
+jest.mock('../hooks', () => ({
+  useFocusScoreColor: jest.fn(() => 'goldenrod'),
+  useMonthlyReport: (...args: unknown[]) => mockUseMonthlyReport(...args),
+}));
+
+jest.mock('../events', () => ({
+  publishMonthlyReportViewed: (...args: unknown[]) => mockPublishViewed(...args),
+  publishMonthlyReportShared: (...args: unknown[]) => mockPublishShared(...args),
+  publishMonthlyReportDismissed: (...args: unknown[]) => mockPublishDismissed(...args),
+}));
+
+const mockReport = {
+  month: '2025-01',
+  startingScore: 650,
+  endingScore: 720,
+  change: 70,
+  sessionsCompleted: 24,
+  grade: 'A',
+  highlight: 'Outstanding consistency this month!',
+};
+
+function mockReportState(state: {
+  data: typeof mockReport | null;
+  error: Error | null;
+  status: 'pending' | 'error' | 'success';
+  refetch?: () => void;
+}): void {
+  mockUseMonthlyReport.mockReturnValue({
+    data: state.data,
+    error: state.error,
+    refetch: state.refetch ?? jest.fn(),
+    status: state.status,
+  });
+}
+
+describe('MonthlyFocusReport', () => {
+  const mockOnClose = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Share, 'share').mockResolvedValue({ action: 'sharedAction' });
+  });
+
+  it('renders loading skeleton while the report is pending', () => {
+    mockReportState({ data: null, error: null, status: 'pending' });
+    const { toJSON } = render(<MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />);
+
+    expect(toJSON()).toBeTruthy();
+    expect(screen.queryByText('No Report Available')).toBeNull();
+  });
+
+  it('renders error state with retry button', () => {
+    const mockRefresh = jest.fn();
+    mockReportState({ data: null, error: new Error('Network error'), status: 'error', refetch: mockRefresh });
+
+    render(<MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />);
+
+    expect(screen.getByText(/Report Unavailable/)).toBeTruthy();
+    expect(screen.getByText('Network error')).toBeTruthy();
+    fireEvent.press(screen.getByText('Try Again'));
+    expect(mockRefresh).toHaveBeenCalled();
+  });
+
+  it('renders empty state when no report is available', () => {
+    mockReportState({ data: null, error: null, status: 'success' });
+
+    render(<MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />);
+
+    expect(screen.getByText('No Report Available')).toBeTruthy();
+    expect(screen.getByText('Complete sessions this month to generate your first focus report.')).toBeTruthy();
+  });
+
+  it('renders report data', () => {
+    mockReportState({ data: mockReport, error: null, status: 'success' });
+
+    render(<MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />);
+
+    expect(screen.getByText('Monthly Focus Report')).toBeTruthy();
+    expect(screen.getByText('720')).toBeTruthy();
+    expect(screen.getByText('A')).toBeTruthy();
+    expect(screen.getByText('Sessions completed: 24')).toBeTruthy();
+    expect(screen.getByText('Outstanding consistency this month!')).toBeTruthy();
+  });
+
+  it('publishes view event when report loads', async () => {
+    mockReportState({ data: mockReport, error: null, status: 'success' });
+
+    render(<MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />);
+
+    await waitFor(() => {
+      expect(mockPublishViewed).toHaveBeenCalledWith('user-123', '2025-01', 'A', 70);
+    });
+  });
+
+  it('publishes dismiss event when closed', () => {
+    mockReportState({ data: mockReport, error: null, status: 'success' });
+
+    render(<MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />);
+
+    fireEvent.press(screen.getByText('Close'));
+    expect(mockPublishDismissed).toHaveBeenCalledWith('user-123', '2025-01');
+    expect(mockOnClose).toHaveBeenCalled();
+  });
+
+  it('publishes share event when shared', async () => {
+    mockReportState({ data: mockReport, error: null, status: 'success' });
+
+    render(<MonthlyFocusReport userId="user-123" onClose={mockOnClose} visible />);
+
+    fireEvent.press(screen.getByText('Share Monthly Report'));
+    await waitFor(() => {
+      expect(mockPublishShared).toHaveBeenCalledWith('user-123', '2025-01', 'A');
+    });
+  });
+});
