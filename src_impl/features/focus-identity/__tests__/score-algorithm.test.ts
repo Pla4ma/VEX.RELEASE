@@ -132,4 +132,24 @@ describe('focus score algorithm', () => {
     expect(result.explanations[0]).toContain('Top positive factor');
     expect(result.explanations[1]).toContain('Top negative factor');
   });
+
+  it('keeps factor weights at 100 with contract completion included', () => {
+    const result = calculateFocusScoreUpdate(createInput({ completedContractCount: 3, contractCompletionRate: 1 }));
+    const total = Object.values(result.factors).reduce((sum, factor) => sum + factor.weightPercent, 0);
+    expect(total).toBe(100);
+    expect(result.factors.contractCompletion.score).toBe(100);
+    expect(result.newScore).toBeGreaterThanOrEqual(300);
+    expect(result.newScore).toBeLessThanOrEqual(850);
+  });
+
+  it('does not penalize users with no contracts', () => {
+    const result = calculateFocusScoreUpdate(createInput({ completedContractCount: 0, contractCompletionRate: 0 }));
+    expect(result.factors.contractCompletion.score).toBe(50);
+  });
+
+  it('penalizes missed contracts only after enough contract history exists', () => {
+    const noHistory = calculateFocusScoreUpdate(createInput({ completedContractCount: 0, contractCompletionRate: 0 }));
+    const enoughHistory = calculateFocusScoreUpdate(createInput({ completedContractCount: 3, contractCompletionRate: 0 }));
+    expect(enoughHistory.delta).toBeLessThan(noHistory.delta);
+  });
 });

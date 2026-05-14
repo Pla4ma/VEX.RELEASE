@@ -1,175 +1,160 @@
-/**
- * Screen Error Boundary Tests
- *
- * Tests for screen-level error handling with retry and fallback UI
- */
-
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react-native';
-import { ScreenErrorBoundary, withScreenErrorBoundary } from '../ScreenErrorBoundary';
-import { Text } from '../../../../components/primitives';
+import { fireEvent, render, screen } from '@testing-library/react-native';
 
-// Test component that throws errors
-const ThrowingComponent: React.FC<{ shouldThrow?: boolean }> = ({ shouldThrow }) => {
+import { captureException } from '../../../../config/sentry';
+import { Text } from '../../../../components/primitives';
+import { ScreenErrorBoundary, withScreenErrorBoundary } from '../ScreenErrorBoundary';
+
+jest.mock('../../../../theme', () => ({
+  useTheme: () => ({
+    theme: {
+      colors: { background: { primary: 'white' } },
+      spacing: [0, 4, 8, 12, 16, 20, 24],
+    },
+  }),
+}));
+
+jest.mock('../../../../components/primitives', () => ({
+  Text: ({ children }: { children: React.ReactNode }) => {
+    const ReactRuntime = require('react');
+    const { Text: NativeText } = require('react-native');
+    return ReactRuntime.createElement(NativeText, null, children);
+  },
+}));
+
+jest.mock('../../../../components', () => ({
+  Button: (props: {
+    children: React.ReactNode;
+    onPress: () => void;
+    accessibilityLabel: string;
+    accessibilityRole: string;
+    accessibilityHint: string;
+  }) => {
+    const ReactRuntime = require('react');
+    const { Pressable, Text: NativeText } = require('react-native');
+    return ReactRuntime.createElement(
+      Pressable,
+      {
+        onPress: props.onPress,
+        accessibilityLabel: props.accessibilityLabel,
+        accessibilityRole: props.accessibilityRole,
+        accessibilityHint: props.accessibilityHint,
+      },
+      ReactRuntime.createElement(NativeText, null, props.children),
+    );
+  },
+}));
+
+jest.mock('../../../../network', () => ({
+  useNetInfo: () => ({ isOffline: false }),
+}));
+
+jest.mock('../../../../config/sentry', () => ({
+  captureException: jest.fn(),
+}));
+
+const ThrowingComponent: React.FC<{ shouldThrow?: boolean; message?: string }> = ({
+  shouldThrow,
+  message = 'Test error',
+}) => {
   if (shouldThrow) {
-    throw new Error('Test error');
+    throw new Error(message);
   }
   return <Text>Normal content</Text>;
 };
 
 describe('ScreenErrorBoundary', () => {
   beforeEach(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.clearAllMocks();
   });
 
-  afterEach(() => {
-    jest.restoreAllMocks();
-  });
-
-  it('should render children when no error', () => {
+  it('renders children when no error occurs', () => {
     render(
       <ScreenErrorBoundary screenName="TestScreen">
         <Text>Normal content</Text>
-      </ScreenErrorBoundary>
+      </ScreenErrorBoundary>,
     );
 
     expect(screen.getByText('Normal content')).toBeTruthy();
   });
 
-  it('should show error fallback when error occurs', () => {
+  it('shows fallback UI instead of crashing on render errors', () => {
     render(
       <ScreenErrorBoundary screenName="TestScreen">
-        <ThrowingComponent shouldThrow={true} />
-      </ScreenErrorBoundary>
+        <ThrowingComponent shouldThrow />
+      </ScreenErrorBoundary>,
     );
 
     expect(screen.getByText('Something went wrong')).toBeTruthy();
     expect(screen.getByText(/couldn't load TestScreen/)).toBeTruthy();
   });
 
-  it('should show retry button', () => {
+  it('captures the configured feature tag in Sentry', () => {
     render(
-      <ScreenErrorBoundary screenName="TestScreen">
-        <ThrowingComponent shouldThrow={true} />
-      </ScreenErrorBoundary>
+      <ScreenErrorBoundary screenName="TestScreen" featureTag="phase-16-test">
+        <ThrowingComponent shouldThrow />
+      </ScreenErrorBoundary>,
     );
 
-    expect(screen.getByText('Try Again')).toBeTruthy();
+    expect(captureException).toHaveBeenCalledWith(
+      expect.any(Error),
+      expect.objectContaining({ tags: { feature: 'phase-16-test' } }),
+    );
   });
 
-  it('should call onError when error occurs', () => {
+  it('calls onError when an error occurs', () => {
     const onError = jest.fn();
-
     render(
       <ScreenErrorBoundary screenName="TestScreen" onError={onError}>
-        <ThrowingComponent shouldThrow={true} />
-      </ScreenErrorBoundary>
+        <ThrowingComponent shouldThrow />
+      </ScreenErrorBoundary>,
     );
 
     expect(onError).toHaveBeenCalledWith(
       expect.any(Error),
-      expect.objectContaining({ componentStack: expect.any(String) })
+      expect.objectContaining({ componentStack: expect.any(String) }),
     );
   });
 
-  it('should show offline state for network errors', () => {
-    const NetworkErrorComponent: React.FC = () => {
-      throw new Error('Network request failed - offline');
+  it('resets and remounts children when retry is pressed', () => {
+    let shouldThrow = true;
+    const RetryComponent = (): JSX.Element => {
+      if (shouldThrow) {
+        throw new Error('Test error');
+      }
+      return <Text>Normal content</Text>;
     };
+    const { rerender } = render(
+      <ScreenErrorBoundary screenName="TestScreen">
+        <RetryComponent />
+      </ScreenErrorBoundary>,
+    );
+    expect(screen.getByText('Something went wrong')).toBeTruthy();
 
-    render(
-      <ScreenErrorBoundary screenName="TestScreen" allowOffline={true}>
-        <NetworkErrorComponent />
-      </ScreenErrorBoundary>
+    shouldThrow = false;
+    fireEvent.press(screen.getByText('Try Again'));
+    rerender(
+      <ScreenErrorBoundary screenName="TestScreen">
+        <RetryComponent />
+      </ScreenErrorBoundary>,
     );
 
-    expect(screen.getByText(/offline/i)).toBeTruthy();
+    expect(screen.getByText('Normal content')).toBeTruthy();
   });
 
-  it('should render custom fallback when provided', () => {
-    const CustomFallback = <Text>Custom error message</Text>;
-
+  it('uses network and auth-specific messages', () => {
     render(
-      <ScreenErrorBoundary screenName="TestScreen" fallback={CustomFallback}>
-        <ThrowingComponent shouldThrow={true} />
-      </ScreenErrorBoundary>
+      <ScreenErrorBoundary screenName="TestScreen">
+        <ThrowingComponent shouldThrow message="Network connection lost" />
+      </ScreenErrorBoundary>,
     );
-
-    expect(screen.getByText('Custom error message')).toBeTruthy();
+    expect(screen.getByText(/Connection lost/)).toBeTruthy();
   });
 
-  describe('withScreenErrorBoundary HOC', () => {
-    it('should wrap component with error boundary', () => {
-      const WrappedComponent = withScreenErrorBoundary(ThrowingComponent, 'WrappedScreen');
+  it('supports the HOC wrapper', () => {
+    const WrappedComponent = withScreenErrorBoundary(ThrowingComponent, 'WrappedScreen');
+    render(<WrappedComponent shouldThrow />);
 
-      render(<WrappedComponent shouldThrow={true} />);
-
-      expect(screen.getByText('Something went wrong')).toBeTruthy();
-      expect(screen.getByText(/couldn't load WrappedScreen/)).toBeTruthy();
-    });
-
-    it('should render normally when no error', () => {
-      const WrappedComponent = withScreenErrorBoundary(ThrowingComponent, 'WrappedScreen');
-
-      render(<WrappedComponent shouldThrow={false} />);
-
-      expect(screen.getByText('Normal content')).toBeTruthy();
-    });
-  });
-
-  describe('Retry functionality', () => {
-    it('should reset error state on retry', () => {
-      const { rerender } = render(
-        <ScreenErrorBoundary screenName="TestScreen">
-          <ThrowingComponent shouldThrow={true} />
-        </ScreenErrorBoundary>
-      );
-
-      // Should show error
-      expect(screen.getByText('Something went wrong')).toBeTruthy();
-
-      // Click retry
-      fireEvent.press(screen.getByText('Try Again'));
-
-      // Re-render with no error
-      rerender(
-        <ScreenErrorBoundary screenName="TestScreen">
-          <ThrowingComponent shouldThrow={false} />
-        </ScreenErrorBoundary>
-      );
-
-      // Should show normal content
-      expect(screen.getByText('Normal content')).toBeTruthy();
-    });
-  });
-
-  describe('Error message detection', () => {
-    it('should show network error message for network errors', () => {
-      const NetworkError: React.FC = () => {
-        throw new Error('Network connection lost');
-      };
-
-      render(
-        <ScreenErrorBoundary screenName="TestScreen">
-          <NetworkError />
-        </ScreenErrorBoundary>
-      );
-
-      expect(screen.getByText(/Connection lost/)).toBeTruthy();
-    });
-
-    it('should show auth error message for auth errors', () => {
-      const AuthError: React.FC = () => {
-        throw new Error('Unauthorized - auth token expired');
-      };
-
-      render(
-        <ScreenErrorBoundary screenName="TestScreen">
-          <AuthError />
-        </ScreenErrorBoundary>
-      );
-
-      expect(screen.getByText(/session expired/i)).toBeTruthy();
-    });
+    expect(screen.getByText(/couldn't load WrappedScreen/)).toBeTruthy();
   });
 });

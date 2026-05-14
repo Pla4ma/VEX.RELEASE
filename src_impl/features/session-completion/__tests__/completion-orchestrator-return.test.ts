@@ -5,6 +5,7 @@ import type { CompletionLedger } from '../schemas';
 
 const mockSetCompletionSyncState = jest.fn();
 const mockApplyCompletionSubsystems = jest.fn();
+const mockCheckAndUpdatePersonalBest = jest.fn();
 const mockCreateCompletionLedger = jest.fn();
 const mockGetCompletionLedgerByIdempotencyKey = jest.fn();
 
@@ -21,6 +22,7 @@ jest.mock('../../../events', () => ({
 jest.mock('../../../utils/debug', () => ({
   createDebugger: () => ({
     info: jest.fn(),
+    warn: jest.fn(),
   }),
 }));
 
@@ -48,6 +50,10 @@ jest.mock('../repository', () => ({
 
 jest.mock('../completion-subsystems', () => ({
   applyCompletionSubsystems: (...args: unknown[]) => mockApplyCompletionSubsystems(...args),
+}));
+
+jest.mock('../../personal-bests/service', () => ({
+  checkAndUpdatePersonalBest: (...args: unknown[]) => mockCheckAndUpdatePersonalBest(...args),
 }));
 
 const summary: SessionSummary = {
@@ -120,6 +126,12 @@ describe('orchestrateSessionCompletion story return', () => {
     mockGetCompletionLedgerByIdempotencyKey.mockResolvedValue(null);
     mockCreateCompletionLedger.mockResolvedValue(ledger);
     mockApplyCompletionSubsystems.mockResolvedValue({ degradedSystems: [], ledger });
+    mockCheckAndUpdatePersonalBest.mockResolvedValue({
+      current: null,
+      isNewRecord: false,
+      margin: null,
+      previousBest: null,
+    });
   });
 
   it('returns a post-session story view model after subsystem updates', async () => {
@@ -135,6 +147,31 @@ describe('orchestrateSessionCompletion story return', () => {
     expect(story?.companionReaction.reactionId).toBe('companion-session-complete');
     expect(story?.dailyMission.status).toBe('progressed');
     expect(mockSetCompletionSyncState).toHaveBeenCalledWith(expect.objectContaining({ status: 'synced' }));
+  });
+
+  it('passes a new personal best into the headline reward', async () => {
+    mockCheckAndUpdatePersonalBest.mockResolvedValueOnce({
+      current: { bestPurityScore: 95 },
+      isNewRecord: true,
+      margin: 7,
+      previousBest: 88,
+    });
+
+    const story = await orchestrateSessionCompletion({
+      sessionId: summary.sessionId,
+      summary,
+      timestamp: 3000002,
+      userId: summary.userId,
+    });
+
+    expect(mockCheckAndUpdatePersonalBest).toHaveBeenCalledWith(
+      summary.userId,
+      ledger.mode,
+      ledger.targetDurationSeconds,
+      summary.focusPurityScore,
+      ledger.grade,
+    );
+    expect(story?.headline.type).toBe('personal_best');
   });
 
   it('does not replay subsystems for an already processed idempotency key', async () => {

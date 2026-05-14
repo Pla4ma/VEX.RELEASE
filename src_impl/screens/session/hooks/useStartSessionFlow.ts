@@ -12,6 +12,7 @@ import { SessionMode } from '../../../session/modes';
 import { useSession } from '../../../session/hooks/useSession';
 import { SessionConfigSchema } from '../../../session/types';
 import { sessionStart } from '../../../utils/haptics';
+import { createContract, skipContract } from '../../../features/focus-contract/service';
 import type { PresetWithIcon } from '../utils/session-setup';
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
@@ -19,6 +20,7 @@ type SessionSetupParams = SessionStackParams['SessionSetup'];
 
 type UseStartSessionFlowParams = {
   draftGoal: string | undefined;
+  focusContractText: string | null;
   navigation: SessionNavigationProp;
   params: SessionSetupParams | undefined;
   selectedDurationSeconds: number;
@@ -31,6 +33,7 @@ type UseStartSessionFlowParams = {
 
 export function useStartSessionFlow({
   draftGoal,
+  focusContractText,
   navigation,
   params,
   selectedDurationSeconds,
@@ -129,6 +132,18 @@ export function useStartSessionFlow({
         level: 'info',
       });
       const session = await createSession(config);
+      const contractTask = focusContractText?.trim() ?? '';
+      try {
+        if (contractTask.length >= 3) {
+          await createContract({ sessionId: session.id, taskDescription: contractTask }, userId);
+        } else {
+          await skipContract(session.id, userId);
+        }
+      } catch (error) {
+        Sentry.captureException(error, {
+          tags: { feature: 'focus-contract', operation: 'session-start-create' },
+        });
+      }
       await startSession(0);
 
       started = true;
@@ -164,7 +179,7 @@ export function useStartSessionFlow({
         } catch (error) { captureSilentFailure(error, { feature: 'screens', operation: 'network-fallback', type: 'network' });}
       }
     }
-  }, [createSession, draftGoal, navigation, params, selectedDurationSeconds, selectedPreset, selectedSessionMode, selectedThemeId, selectedThemeOwned, sessionDraftKey, startSession, storage, userId]);
+  }, [createSession, draftGoal, focusContractText, navigation, params, selectedDurationSeconds, selectedPreset, selectedSessionMode, selectedThemeId, selectedThemeOwned, sessionDraftKey, startSession, storage, userId]);
 
   return {
     clearStartError: () => setStartError(null),

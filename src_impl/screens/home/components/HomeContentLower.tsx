@@ -72,7 +72,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
         challengesQueryError={data.challengesQuery.error ?? undefined}
         challengesQueryIsLoading={data.challengesQuery.isLoading}
         handleClaimReward={handleClaimReward}
-        challengesRefetch={() => data.challengesQuery.refetch()}
+        challengesRefetch={() => (data.challengesQuery.refetch)()}
         openSetup={controller.openSetup}
         continueStudyPlan={controller.continueStudyPlan}
         showToast={(toastData) => void data.showToast({ type: toastData.type as 'success' | 'error' | 'warning' | 'info', title: toastData.title, message: toastData.message })}

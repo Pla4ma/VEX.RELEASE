@@ -56,7 +56,7 @@ export const FocusScoreDashboard = withScreenErrorBoundary(function _FocusScoreD
     return (
       <Box p="md" gap="md" alignItems="center">
         <Text color="error">Error: {error?.message}</Text>
-        <Button onPress={() => void refetch()} variant="primary">
+        <Button onPress={() => void (refetch)()} variant="primary">
           Retry
         </Button>
       </Box>

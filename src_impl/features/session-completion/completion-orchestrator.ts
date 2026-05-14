@@ -7,6 +7,8 @@ import { enqueue } from '../../lib/offline/queue';
 import { SessionSummarySchema } from '../../session/types';
 import { useSessionUIStore } from '../../store/session-state';
 import { createDebugger } from '../../utils/debug';
+import { checkAndUpdatePersonalBest } from '../personal-bests/service';
+import { recordCompletionCompanionMemories } from './companion-memory-integration';
 import { applyCompletionSubsystems } from './completion-subsystems';
 import { buildCompletionLedger } from './ledger-service';
 import { createCompletionLedger, getCompletionLedgerByIdempotencyKey } from './repository';
@@ -95,10 +97,19 @@ export async function orchestrateSessionCompletion(
   const subsystemResult = await applyCompletionSubsystems({ ledger: persisted, summary });
   const finalLedger = subsystemResult.ledger;
   const degradedSystems = subsystemResult.degradedSystems;
+  const personalBest = await resolvePersonalBest(parsed.userId, finalLedger, summary);
+  const companionMemories = await recordCompletionCompanionMemories({
+    isPersonalBest: personalBest.isPersonalBest,
+    ledger: finalLedger,
+    summary,
+    userId: parsed.userId,
+  });
 
   const storyViewModel = buildPostSessionStoryViewModel({
+    companionMemory: companionMemories[0] ?? null,
     degradedWarnings: degradedSystems,
     ledger: finalLedger,
+    personalBest,
     summary,
   });
 
@@ -137,8 +148,33 @@ export async function orchestrateSessionCompletion(
   void queryClient.invalidateQueries({ queryKey: ['wallet', parsed.userId] });
   void queryClient.invalidateQueries({ queryKey: ['transactions', parsed.userId] });
   void queryClient.invalidateQueries({ queryKey: ['user', parsed.userId] });
+  void queryClient.invalidateQueries({ queryKey: ['personal-bests'] });
+  void queryClient.invalidateQueries({ queryKey: ['companion-memories', parsed.userId] });
 
   return storyViewModel;
+}
+
+async function resolvePersonalBest(
+  userId: string,
+  ledger: ReturnType<typeof buildCompletionLedger>,
+  summary: z.infer<typeof SessionSummarySchema>,
+): Promise<{ isPersonalBest: boolean; purityScore?: number }> {
+  try {
+    const comparison = await checkAndUpdatePersonalBest(
+      userId,
+      ledger.mode === 'UNKNOWN' ? summary.sessionMode : ledger.mode,
+      ledger.targetDurationSeconds,
+      summary.focusPurityScore ?? ledger.qualityScore,
+      ledger.grade,
+    );
+    return {
+      isPersonalBest: comparison.isNewRecord,
+      purityScore: comparison.current?.bestPurityScore,
+    };
+  } catch (error) {
+    Sentry.captureException(error, { tags: { feature: 'personal-bests', operation: 'completion-check' } });
+    return { isPersonalBest: false };
+  }
 }
 
 export function initializeSessionCompletionOrchestrator(): void {

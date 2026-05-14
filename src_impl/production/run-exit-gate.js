@@ -7,8 +7,12 @@
 
 const { spawn } = require('child_process');
 
+const writeLine = (message = '') => { process.stdout.write(String(message) + '\n'); };
+const writeError = (...messages) => { process.stderr.write(messages.map((message) => message instanceof Error ? message.stack || message.message : String(message)).join(' ') + '\n'); };
+
+
 async function runPhase9ExitGate() {
-  console.log('🚀 Starting PHASE 9 EXIT GATE verification...\n');
+  writeLine('🚀 Starting PHASE 9 EXIT GATE verification...\n');
 
   try {
     // Simulate gate results (TypeScript compilation would be done in CI/CD)
@@ -70,71 +74,71 @@ async function runPhase9ExitGate() {
     };
 
     // Display results
-    console.log('='.repeat(60));
-    console.log('📊 PHASE 9 EXIT GATE RESULTS');
-    console.log('='.repeat(60));
+    writeLine('='.repeat(60));
+    writeLine('📊 PHASE 9 EXIT GATE RESULTS');
+    writeLine('='.repeat(60));
 
-    console.log(`\n🎯 OVERALL STATUS: ${result.passed ? '✅ PASSED' : '❌ FAILED'}`);
-    console.log(`📈 OVERALL SCORE: ${result.score}/100`);
-    console.log(`🚀 DEPLOYMENT READY: ${result.deploymentReady ? '✅ YES' : '❌ NO'}`);
+    writeLine(`\n🎯 OVERALL STATUS: ${result.passed ? '✅ PASSED' : '❌ FAILED'}`);
+    writeLine(`📈 OVERALL SCORE: ${result.score}/100`);
+    writeLine(`🚀 DEPLOYMENT READY: ${result.deploymentReady ? '✅ YES' : '❌ NO'}`);
 
-    console.log('\n📋 DETAILED RESULTS:');
-    console.log('-'.repeat(40));
+    writeLine('\n📋 DETAILED RESULTS:');
+    writeLine('-'.repeat(40));
 
     Object.entries(result.results).forEach(([category, categoryResult]) => {
       const status = categoryResult.status === 'pass' ? '✅' :
                     categoryResult.status === 'warning' ? '⚠️' : '❌';
-      console.log(`${status} ${category.toUpperCase()}: ${categoryResult.status.toUpperCase()} (Score: ${categoryResult.score})`);
+      writeLine(`${status} ${category.toUpperCase()}: ${categoryResult.status.toUpperCase()} (Score: ${categoryResult.score})`);
 
       if (categoryResult.warnings.length > 0) {
-        console.log(`   Warnings: ${categoryResult.warnings.length}`);
+        writeLine(`   Warnings: ${categoryResult.warnings.length}`);
         categoryResult.warnings.slice(0, 2).forEach(warning => {
-          console.log(`   - ${warning}`);
+          writeLine(`   - ${warning}`);
         });
         if (categoryResult.warnings.length > 2) {
-          console.log(`   ... and ${categoryResult.warnings.length - 2} more`);
+          writeLine(`   ... and ${categoryResult.warnings.length - 2} more`);
         }
       }
     });
 
     if (result.recommendations.length > 0) {
-      console.log('\n💡 RECOMMENDATIONS:');
-      console.log('-'.repeat(40));
+      writeLine('\n💡 RECOMMENDATIONS:');
+      writeLine('-'.repeat(40));
       result.recommendations.forEach((rec, index) => {
-        console.log(`${index + 1}. ${rec}`);
+        writeLine(`${index + 1}. ${rec}`);
       });
     }
 
-    console.log('\n' + '='.repeat(60));
+    writeLine('\n' + '='.repeat(60));
 
     if (result.passed && result.deploymentReady) {
-      console.log('🎉 PHASE 9 EXIT GATE PASSED!');
-      console.log('🚀 READY FOR PRODUCTION DEPLOYMENT!');
-      console.log('✅ All production hardening systems verified and operational');
-      console.log('\n🏆 PRODUCTION HARDENING COMPLETE');
-      console.log('   ✅ Offline Sync Reliability');
-      console.log('   ✅ Error Boundaries');
-      console.log('   ✅ Accessibility Compliance');
-      console.log('   ✅ Performance Gates');
-      console.log('   ✅ Privacy & Security');
-      console.log('   ✅ Paywall & Monetization');
-      console.log('   ✅ App Store Submission Pack');
-      console.log('\n🎯 READY FOR PHASE 10 - PRODUCTION LAUNCH');
+      writeLine('🎉 PHASE 9 EXIT GATE PASSED!');
+      writeLine('🚀 READY FOR PRODUCTION DEPLOYMENT!');
+      writeLine('✅ All production hardening systems verified and operational');
+      writeLine('\n🏆 PRODUCTION HARDENING COMPLETE');
+      writeLine('   ✅ Offline Sync Reliability');
+      writeLine('   ✅ Error Boundaries');
+      writeLine('   ✅ Accessibility Compliance');
+      writeLine('   ✅ Performance Gates');
+      writeLine('   ✅ Privacy & Security');
+      writeLine('   ✅ Paywall & Monetization');
+      writeLine('   ✅ App Store Submission Pack');
+      writeLine('\n🎯 READY FOR PHASE 10 - PRODUCTION LAUNCH');
     } else {
-      console.log('❌ PHASE 9 EXIT GATE FAILED!');
-      console.log('🔧 Address blocking issues before deployment');
+      writeLine('❌ PHASE 9 EXIT GATE FAILED!');
+      writeLine('🔧 Address blocking issues before deployment');
     }
 
-    console.log('='.repeat(60));
-    console.log(`📅 Verification completed at: ${new Date(result.timestamp).toISOString()}`);
-    console.log('='.repeat(60));
+    writeLine('='.repeat(60));
+    writeLine(`📅 Verification completed at: ${new Date(result.timestamp).toISOString()}`);
+    writeLine('='.repeat(60));
 
     // Exit with appropriate code
     process.exit(result.passed && result.deploymentReady ? 0 : 1);
     
   } catch (error) {
-    console.error('❌ PHASE 9 EXIT GATE EXECUTION FAILED:', error);
-    console.error('Stack trace:', error.stack);
+    writeError('❌ PHASE 9 EXIT GATE EXECUTION FAILED:', error);
+    writeError('Stack trace:', error.stack);
     process.exit(1);
   }
 }

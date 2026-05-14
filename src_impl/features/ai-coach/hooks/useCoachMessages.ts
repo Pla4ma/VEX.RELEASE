@@ -41,6 +41,6 @@ export function useCoachMessages(userId: string): UseCoachMessagesResult {
     isLoading: query.isLoading,
     isError: query.isError,
     error: query.error as Error | null,
-    refetch: async (options?: RefetchOptions) => query.refetch(options),
+    refetch: async (options?: RefetchOptions) => (query.refetch)(options),
   };
 }

@@ -55,7 +55,7 @@ export function useCoachState(userId: string): UseCoachStateResult {
   });
   const handleRetry = useCallback(() => {
     setIsRetrying(true);
-    query.refetch().finally(() => setIsRetrying(false));
+    (query.refetch)().finally(() => setIsRetrying(false));
   }, [query]);
   return {
     data: query.data ?? null,
@@ -64,7 +64,7 @@ export function useCoachState(userId: string): UseCoachStateResult {
     error: query.error as Error | null,
     isRetrying,
     isDegraded: !network.isConnected || query.status === 'error',
-    refetch: async (options?: RefetchOptions) => query.refetch(options),
+    refetch: async (options?: RefetchOptions) => (query.refetch)(options),
     retry: handleRetry,
   };
 }

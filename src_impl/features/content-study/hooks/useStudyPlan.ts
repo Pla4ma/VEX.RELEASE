@@ -117,8 +117,8 @@ export function useStudyPlan(generationId: string) {
     completeTask: completeTaskMutation.mutate,
     isCompletingTask: completeTaskMutation.isPending,
     refetch: () => {
-      void generationQuery.refetch();
-      void contentQuery.refetch();
+      void (generationQuery.refetch)();
+      void (contentQuery.refetch)();
     },
   };
 }

@@ -62,7 +62,7 @@ export function useSessionCompleteController(input: { sessionId: string; summary
   });
   const focusedDuration = summary.effectiveDuration || summary.actualDuration || summary.plannedDuration;
   const focusPurityScore = summary.focusPurityScore ?? summary.focusQuality ?? 100;
-  const refetchProgressionSummary = useCallback(async () => (await progressionQuery.refetch()).data ?? undefined, [progressionQuery]);
+  const refetchProgressionSummary = useCallback(async () => (await (progressionQuery.refetch)()).data ?? undefined, [progressionQuery]);
   const rewards = useSessionCompleteRewards({
     applySessionMastery,
     focusedDuration,

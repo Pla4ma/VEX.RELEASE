@@ -1,4 +1,3 @@
-import { captureSilentFailure } from '../../../utils/silent-failure';
 import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
@@ -13,8 +12,9 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import { Box, Text } from '../../../components/primitives';
-import { getPremiumCardStyle } from '../../../components/premiumStyles';
+import { getPremiumCardStyle, withAlpha } from '../../../components/premiumStyles';
 import { useTheme } from '../../../theme';
+import { triggerHaptic } from '../../../utils/haptics';
 import { createSheet } from '@/shared/ui/create-sheet';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
@@ -31,26 +31,8 @@ type SessionGradeCardProps = {
   xpEarned: number;
 };
 
-function withAlpha(color: string, alpha: number): string {
-  if (!color.startsWith('#')) {return color;}
-  const hex = color.length === 4 ? color.slice(1).split('').map((part) => `${part}${part}`).join('') : color.slice(1);
-  const [red, green, blue] = [0, 2, 4].map((index) => parseInt(hex.slice(index, index + 2), 16));
-  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
-}
-
 async function pulseCompleteHaptic(): Promise<void> {
-  try {
-    const dynamicImport = new Function('modulePath', 'return import(modulePath);') as (
-      modulePath: string
-    ) => Promise<{
-      impactAsync: (style: unknown) => Promise<void>;
-      ImpactFeedbackStyle: { Medium: unknown };
-    }>;
-    const haptics = await dynamicImport('expo-haptics');
-    await haptics.impactAsync(haptics.ImpactFeedbackStyle.Medium);
-  } catch (error) { captureSilentFailure(error, { feature: 'screens', operation: 'ui-fallback', type: 'ui' });
-    // Haptics are optional at runtime.
-  }
+  await triggerHaptic('impactMedium');
 }
 
 export function SessionGradeCard({
@@ -91,7 +73,7 @@ export function SessionGradeCard({
   return (
     <Box width="100%" minHeight={440} justifyContent="center" alignItems="center" px={24} py={24}>
       <Animated.View entering={FadeIn.duration(220)} style={StyleSheet.absoluteFillObject}>
-        <View style={{ flex: 1, backgroundColor: '#04070D' }} />
+        <View style={{ flex: 1, backgroundColor: theme.colors.background.primary }} />
       </Animated.View>
       <Animated.View entering={FadeInDown.springify().damping(13).stiffness(180)}>
         <Box px={16} py={10} borderRadius={999} style={{ backgroundColor: withAlpha(theme.colors.primary[500], 0.9) }}>

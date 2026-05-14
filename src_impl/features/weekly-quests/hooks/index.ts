@@ -26,7 +26,7 @@ export function useWeeklyQuestState(
     isError: query.isError,
     error: query.error,
     refetch: () => {
-      void query.refetch();
+      void (query.refetch)();
     },
   };
 }

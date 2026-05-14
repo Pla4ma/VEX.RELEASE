@@ -110,7 +110,7 @@ export function ActiveSessionBossCombat({
         <Button
           variant="outline"
           size="sm"
-          onPress={() => void activeBoss.refetch()}
+          onPress={() => void (activeBoss.refetch)()}
           accessibilityLabel="Retry boss combat sync"
           accessibilityHint="Attempts to reload the active boss encounter for this session"
         >
@@ -132,8 +132,8 @@ export function ActiveSessionBossCombat({
           onPress={() => {
             createEncounter.reset();
             setSpawnAttemptedBossId(null);
-            void availableBosses.refetch();
-            void bossTemplates.refetch();
+            void (availableBosses.refetch)();
+            void (bossTemplates.refetch)();
           }}
           accessibilityLabel="Retry boss preparation"
           accessibilityHint="Attempts to reload boss templates and prepare an active encounter"

@@ -9,6 +9,7 @@ import {
   upsertCurrentFocusScore,
 } from './repository-focus-score';
 import { calculateFocusScoreUpdate } from './score-algorithm';
+import { getCompletionSignal } from '../focus-contract/service';
 
 function readGrade(summary: unknown): 'S' | 'A' | 'B' | 'C' | 'D' {
   if (!summary || typeof summary !== 'object') {return 'B';}
@@ -62,12 +63,15 @@ export function initializeFocusScoreIntegration(): () => void {
     try {
       const existing = await fetchCurrentFocusScore(userId);
       const previousScore = existing?.currentScore ?? 550;
+      const contractSignal = await getCompletionSignal(userId, 14);
       const result = calculateFocusScoreUpdate({
         userId,
         previousScore,
         eventType: 'session:completed',
         grade: readGrade(event.summary),
         sessionMode: readSessionMode(event.summary),
+        contractCompletionRate: contractSignal.rate,
+        completedContractCount: contractSignal.completedContractCount,
         occurredAt: new Date(event.timestamp || Date.now()).toISOString(),
         signals: buildSignals(event.summary),
       });

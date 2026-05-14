@@ -12,6 +12,7 @@ type SmartSuggestion = {
 };
 
 type SessionQuickStartCardProps = {
+  contractInput?: React.ReactNode;
   ctaLabel: string;
   customizationLabel: string;
   currentThemeName: string;
@@ -29,6 +30,7 @@ type SessionQuickStartCardProps = {
 };
 
 export function SessionQuickStartCard({
+  contractInput,
   ctaLabel,
   customizationLabel,
   currentThemeName,
@@ -98,6 +100,8 @@ export function SessionQuickStartCard({
             description={smartSuggestion.description}
           />
         ) : null}
+
+        {contractInput}
 
         <Button
           variant="primary"

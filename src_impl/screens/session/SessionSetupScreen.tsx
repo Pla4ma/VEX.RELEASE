@@ -14,19 +14,21 @@ import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme';
 import { SessionStartStatusCard } from '../../features/session-start/components/SessionStartStatusCard';
 import { SessionStakesBriefing } from '../../features/session-start/components/SessionStakesBriefing';
-import { DifficultySelector, type SessionDifficulty } from '../../features/session-start/components/DifficultySelector';
+import type { SessionDifficulty } from '../../features/session-start/components/DifficultySelector';
 import { useSessionStartController } from '../../features/session-start/hooks';
-import { StudyPlanSuggestionCard } from '../../features/content-study/components/StudyPlanSuggestionCard';
 import { SessionMode } from '../../session/modes';
 import { ThemeShopModal } from '../../features/themes/ThemeShopModal';
 import type { ExtendedRootStackParams, SessionStackParams } from '../../navigation/types';
 import type { ActiveStudyPlan } from '../../features/content-study/hooks';
 import { SessionQuickStartCard } from './SessionQuickStartCard';
-import { SessionSetupCustomization } from './components/SessionSetupCustomization';
+import { SessionContractInput } from './components/SessionContractInput';
+import { SessionSetupCustomizationSection } from './components/SessionSetupCustomizationSection';
+import { SessionSetupDifficultyCard } from './components/SessionSetupDifficultyCard';
 import { SessionSetupFooter } from './components/SessionSetupFooter';
 import { SessionSetupHeader } from './components/SessionSetupHeader';
+import { SessionSetupInsuranceCard } from './components/SessionSetupInsuranceCard';
+import { SessionSetupStudyPlanCard } from './components/SessionSetupStudyPlanCard';
 import { useSessionSetupStakes } from './hooks/useSessionSetupStakes';
-import { StreakInsurancePrompt } from '../../features/streaks/components/StreakInsurancePrompt';
 import { useInsuranceStatus, useBalance } from '../../features/economy/hooks';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
@@ -39,22 +41,17 @@ type SessionSetupRouteProp = RouteProp<SessionStackParams, 'SessionSetup'>;
 export const SessionSetupScreen = withScreenErrorBoundary(function _SessionSetupScreen(): React.JSX.Element {
   const navigation = useNavigation<SessionNavigationProp>();
   const route = useRoute<SessionSetupRouteProp>();
+  const [contractText, setContractText] = React.useState('');
   const controller = useSessionStartController({
     navigation,
     routeParams: route.params,
+    focusContractText: contractText.trim().length >= 3 ? contractText : null,
   });
 
-  // Difficulty selection state (default to FOCUSED)
   const [selectedDifficulty, setSelectedDifficulty] = React.useState<SessionDifficulty>('FOCUSED');
-
-  // Streak insurance prompt state
   const [insurancePromptDismissed, setInsurancePromptDismissed] = React.useState(false);
-
-  // Insurance and balance data
   const { status: insuranceStatus } = useInsuranceStatus(controller.userId ?? undefined);
   const { data: coinBalance } = useBalance(controller.userId ?? '', 'COINS');
-
-  // Check if streak insurance prompt should show
   const shouldShowInsurancePrompt = React.useMemo(() => {
     const streakDays = controller.streak?.currentDays ?? 0;
     const hasInsurance = insuranceStatus?.hasActiveInsurance ?? false;
@@ -97,7 +94,7 @@ export const SessionSetupScreen = withScreenErrorBoundary(function _SessionSetup
 
   return (
     <Box flex={1} bg="background.primary">
-      <SessionSetupHeader onBack={() => navigation.goBack()} />
+      <SessionSetupHeader durationSeconds={controller.selectedDurationSeconds} mode={controller.setupState.selectedSessionMode} onBack={() => navigation.goBack()} userId={controller.userId} />
 
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 140 }}>
         <SessionStartStatusCard
@@ -107,15 +104,10 @@ export const SessionSetupScreen = withScreenErrorBoundary(function _SessionSetup
           onDismissStartError={controller.clearStartError}
         />
 
-        {/* Study Plan Suggestion - shown when user has active study plan */}
-        {controller.activeStudyPlan.data && (
-          <Box px="lg" mt="md">
-            <StudyPlanSuggestionCard
-              studyPlan={controller.activeStudyPlan.data}
-              onSelect={handleStudyPlanSelect}
-            />
-          </Box>
-        )}
+        <SessionSetupStudyPlanCard
+          studyPlan={controller.activeStudyPlan.data ?? null}
+          onSelect={handleStudyPlanSelect}
+        />
 
         <SessionQuickStartCard
           ctaLabel={controller.sessionSummary.ctaLabel}
@@ -132,9 +124,14 @@ export const SessionSetupScreen = withScreenErrorBoundary(function _SessionSetup
           presetName={controller.setupState.selectedPreset.name}
           smartSuggestion={controller.setupState.smartSuggestion}
           subtitle={controller.sessionSummary.subtitle}
+          contractInput={
+            <SessionContractInput
+              disabled={controller.isStarting}
+              onChangeText={setContractText}
+              value={contractText}
+            />
+          }
         />
-
-        {/* PHASE 7.1: Session Stakes Briefing - Shows what's at stake before starting */}
         <Box px="lg" mt="md">
           <SessionStakesBriefing
             bossStake={stakes.bossStake}
@@ -150,76 +147,23 @@ export const SessionSetupScreen = withScreenErrorBoundary(function _SessionSetup
           />
         </Box>
 
-        {/* PHASE 6.1: Streak Insurance Prompt - Show for streak >= 3 days without insurance */}
-        {shouldShowInsurancePrompt && (
-          <StreakInsurancePrompt
-            streakDays={controller.streak?.currentDays ?? 0}
-            insuranceCost={200}
-            userCoins={coinBalance ?? 0}
-            onPurchase={() => {
-              // Navigate to shop or open insurance modal
-              controller.setShopTheme(null);
-              // Open insurance purchase modal
-              navigation.navigate('Shop');
-            }}
-            onDismiss={() => setInsurancePromptDismissed(true)}
-          />
-        )}
+        <SessionSetupInsuranceCard
+          coinBalance={coinBalance ?? 0}
+          navigation={navigation}
+          setShopTheme={controller.setShopTheme}
+          shouldShow={shouldShowInsurancePrompt}
+          streakDays={controller.streak?.currentDays ?? 0}
+          onDismiss={() => setInsurancePromptDismissed(true)}
+        />
 
-        {/* PHASE 4: Difficulty Selector with XP Preview */}
-        <Box px="lg" mt="md" mb="md">
-          <Box mb="sm">
-            <Text variant="label" color="text.secondary">
-              Select Difficulty
-            </Text>
-            <Text variant="caption" color="text.tertiary">
-              Estimated XP: {Math.round(
-                (controller.selectedDurationSeconds / 60) * (selectedDifficulty === 'CASUAL' ? 0.5 : selectedDifficulty === 'DEEP_WORK' ? 1.5 : 1.0)
-              )} {selectedDifficulty === 'DEEP_WORK' ? '(1.5× Deep Work bonus)' : selectedDifficulty === 'CASUAL' ? '(0.5× Casual)' : ''}
-            </Text>
-          </Box>
-          <DifficultySelector
-            selected={selectedDifficulty}
-            onChange={setSelectedDifficulty}
-            disabled={controller.isStarting}
-          />
-        </Box>
+        <SessionSetupDifficultyCard
+          disabled={controller.isStarting}
+          selected={selectedDifficulty}
+          selectedDurationSeconds={controller.selectedDurationSeconds}
+          onChange={setSelectedDifficulty}
+        />
 
-        {controller.setupState.showCustomization ? (
-          <SessionSetupCustomization
-            activeChallenges={controller.activeChallenges}
-            filteredPresets={controller.filteredPresets}
-            hasActiveStudyPlan={route.params?.source === 'content-study'}
-            onPressTheme={controller.handleThemePress}
-            onSelectPreset={controller.setupState.setSelectedPreset}
-            onSelectSessionMode={controller.setupState.setSelectedSessionMode}
-            onSelectSmartSuggestion={() => {
-              if (!controller.setupState.smartSuggestion) {
-                return;
-              }
-
-              controller.setupState.setSelectedPreset(controller.setupState.smartSuggestion.preset);
-              controller.setupState.setSelectedCategory(
-                controller.setupState.smartSuggestion.preset.category ?? 'standard',
-              );
-            }}
-            onToggleAdvanced={() => controller.setupState.setShowAdvanced((current) => !current)}
-            onUpdateCategory={controller.setupState.setSelectedCategory}
-            routeSuggestedDifficulty={route.params?.suggestedDifficulty}
-            selectedCategory={controller.setupState.selectedCategory}
-            selectedDurationSeconds={controller.selectedDurationSeconds}
-            selectedPreset={controller.setupState.selectedPreset}
-            selectedSessionMode={controller.setupState.selectedSessionMode}
-            selectedTheme={controller.selectedTheme}
-            selectedThemeId={controller.setupState.selectedThemeId}
-            showAdvanced={controller.setupState.showAdvanced}
-            smartSuggestion={controller.setupState.smartSuggestion}
-            themeQueryError={controller.selectableThemesQuery.isError}
-            themeQueryLoading={controller.selectableThemesQuery.isLoading}
-            themeQueryRetry={() => void controller.selectableThemesQuery.refetch()}
-            themes={controller.userThemes}
-          />
-        ) : null}
+        <SessionSetupCustomizationSection controller={controller} routeParams={route.params} />
 
         <Box height={120} />
       </ScrollView>

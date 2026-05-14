@@ -58,7 +58,7 @@ export function SessionConsequenceCards({
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing[2], marginBottom: theme.spacing[3], paddingHorizontal: theme.spacing[6] }}>
           <Text fontSize={16}>🎯</Text>
           <Text variant="label" color="text.tertiary">
-            SESSION IMPACT
+            ALSO HAPPENED
           </Text>
         </View>
 

@@ -14,7 +14,9 @@ import { ActiveSessionModeOverlays } from './components/ActiveSessionModeOverlay
 import { useActiveSessionController } from './hooks/useActiveSessionController';
 import { useStudyQuizBreak } from './hooks/useStudyQuizBreak';
 import { useCoachState } from '../../features/ai-coach/hooks';
+import { useContractForSession } from '../../features/focus-contract/hooks';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { SessionContractReminder } from './components/SessionContractReminder';
 
 const ENABLE_SESSION_COMPANION_LAYER = true;
 const ENABLE_SESSION_COACH_BANNER = true;
@@ -25,6 +27,7 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
   const controller = useActiveSessionController();
   const { actions, isDegradedSession, metrics, navigation, sessionQuery, showInterruption, showMultiplierInfo, streak, theme, themeBackgroundColor, userId } = controller;
   const { data: coachState } = useCoachState(userId || '');
+  const { contract } = useContractForSession(controller.sessionQuery.session?.id ?? null);
   const outerRadius = metrics.RADIUS + 16;
   const outerCircumference = 2 * Math.PI * outerRadius;
   const outerStrokeDashoffset = outerCircumference * (1 - metrics.dailyProgress / 100);
@@ -80,6 +83,7 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
       ) : null}
 
       <ActiveSessionHeader isPaused={sessionQuery.isPaused} theme={theme} onInterrupt={() => actions.setShowInterruption(true)} />
+      <SessionContractReminder contract={contract} />
 
       {ENABLE_SESSION_MODE_OVERLAYS && (
         <ActiveSessionModeOverlays

@@ -25,6 +25,9 @@ export type {
 } from './types';
 export { EVOLUTION_THRESHOLDS, MOOD_RULES, ELEMENT_THEMES } from './types';
 export type { PersonalityEventType } from './CompanionPersonalityEngine';
+export { useCompanionMemories } from './memory-hooks';
+export { checkAndRecordSessionMemories, getCompanionMemories, maybeCreateMemory } from './memory-service';
+export type { CompanionMemory, CompanionMemoryType } from './memory-types';
 
 // Analytics
 export * as analytics from './analytics';

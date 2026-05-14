@@ -26,8 +26,9 @@ type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 export function useSessionStartController(input: {
   navigation: SessionNavigationProp;
   routeParams: SessionSetupRouteParams | undefined;
+  focusContractText?: string | null;
 }) {
-  const { navigation, routeParams } = input;
+  const { navigation, routeParams, focusContractText = null } = input;
   const { user } = useAuthStore();
   const { isOffline } = useNetInfo();
   const { data: streak } = useStreak(user?.id ?? null);
@@ -85,6 +86,7 @@ export function useSessionStartController(input: {
   );
   const { clearStartError, handleStartSession, isStarting, startError } = useStartSessionFlow({
     draftGoal: setupState.draftGoal,
+    focusContractText,
     navigation,
     params: parsedRoute.params,
     selectedDurationSeconds,

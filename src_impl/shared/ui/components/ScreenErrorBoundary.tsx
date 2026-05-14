@@ -43,11 +43,12 @@ function ErrorFallback({ screenName, error, onRetry, onGoBack }: ErrorFallbackPr
   const { theme } = useTheme();
   const { isOffline } = useNetInfo();
 
+  const errorMessage = error?.message?.toLowerCase() ?? '';
   const message = isOffline
     ? 'You are offline. Please check your connection and try again.'
-    : error?.message?.includes('network') || error?.message?.includes('fetch') || error?.message?.includes('timeout')
+    : errorMessage.includes('network') || errorMessage.includes('fetch') || errorMessage.includes('timeout')
     ? 'Connection lost. Please check your internet and try again.'
-    : error?.message?.includes('auth') || error?.message?.includes('unauthorized') || error?.message?.includes('token')
+    : errorMessage.includes('auth') || errorMessage.includes('unauthorized') || errorMessage.includes('token')
     ? 'Your session expired. Please sign in again.'
     : `We couldn't load ${screenName}. Please try again.`;
 

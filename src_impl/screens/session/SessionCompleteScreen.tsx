@@ -55,7 +55,7 @@ function SessionCompleteResolved({
       <SessionCompleteState
         body="The session is safe, but the result screen needs one more refresh."
         ctaLabel="Retry result"
-        onPress={() => void story.refetch()}
+        onPress={() => void (story.refetch)()}
         title="Your finish is still syncing"
         variant="error"
       />

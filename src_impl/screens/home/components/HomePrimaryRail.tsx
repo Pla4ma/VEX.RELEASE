@@ -77,7 +77,7 @@ export function HomePrimaryRail({
         model={focusModel}
         onPress={onOpenProgress}
         onRetry={() => {
-          void focusModel.refetch();
+          void (focusModel.refetch)();
         }}
       />
       <ProgressPreviewCard

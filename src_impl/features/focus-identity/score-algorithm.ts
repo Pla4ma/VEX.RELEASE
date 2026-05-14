@@ -5,8 +5,9 @@ const FACTOR_WEIGHTS = {
   consistency: 35,
   streakStability: 25,
   sessionQuality: 20,
-  intentionalDifficulty: 10,
-  recency: 10,
+  intentionalDifficulty: 7,
+  contractCompletion: 8,
+  recency: 5,
 } as const;
 
 const FACTOR_LABELS: Record<FocusScoreFactorKey, string> = {
@@ -14,6 +15,7 @@ const FACTOR_LABELS: Record<FocusScoreFactorKey, string> = {
   streakStability: 'Streak stability',
   sessionQuality: 'Session quality',
   intentionalDifficulty: 'Intentional difficulty',
+  contractCompletion: 'Contract completion',
   recency: 'Recency',
 };
 
@@ -81,8 +83,13 @@ function getXpMultiplier(input: FocusScoreUpdateInput): number {
 
 export function calculateFocusScoreUpdate(rawInput: FocusScoreUpdateInput): FocusScoreUpdateResult {
   const input = FocusScoreUpdateInputSchema.parse(rawInput);
+  const contractCompletionScore =
+    (input.completedContractCount ?? 0) >= 3
+      ? Math.round((input.contractCompletionRate ?? 0.5) * 100)
+      : 50;
+  const signals = { ...input.signals, contractCompletion: contractCompletionScore };
   const factorEntries = (Object.keys(FACTOR_WEIGHTS) as FocusScoreFactorKey[]).map((key) => {
-    const score = input.signals[key];
+    const score = signals[key];
     const delta = Math.round((score - 50) / 5);
     return {
       key,
@@ -149,13 +156,19 @@ export function calculateFocusScoreUpdate(rawInput: FocusScoreUpdateInput): Focu
         explanation: factorEntries.find((entry) => entry.key === 'sessionQuality')?.explanation ?? '',
       },
       intentionalDifficulty: {
-        weightPercent: 10,
+        weightPercent: 7,
         score: input.signals.intentionalDifficulty,
         delta: factorEntries.find((entry) => entry.key === 'intentionalDifficulty')?.delta ?? 0,
         explanation: factorEntries.find((entry) => entry.key === 'intentionalDifficulty')?.explanation ?? '',
       },
+      contractCompletion: {
+        weightPercent: 8,
+        score: contractCompletionScore,
+        delta: factorEntries.find((entry) => entry.key === 'contractCompletion')?.delta ?? 0,
+        explanation: factorEntries.find((entry) => entry.key === 'contractCompletion')?.explanation ?? '',
+      },
       recency: {
-        weightPercent: 10,
+        weightPercent: 5,
         score: input.signals.recency,
         delta: factorEntries.find((entry) => entry.key === 'recency')?.delta ?? 0,
         explanation: factorEntries.find((entry) => entry.key === 'recency')?.explanation ?? '',

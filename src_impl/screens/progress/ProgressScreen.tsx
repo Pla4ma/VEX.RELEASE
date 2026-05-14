@@ -58,7 +58,7 @@ export function ProgressScreen(): JSX.Element {
       <View><Text variant="label" color={theme.colors.primary[500]}>Progress</Text><Text variant="h2" color={theme.colors.text.primary}>Your long-term loop.</Text><Text variant="body" color={theme.colors.text.secondary}>We keep this view useful from day one, then let more systems show up as they become emotionally relevant.</Text></View>
       <FocusScoreDashboard
         model={focusDashboardModel}
-        onRetry={() => { void focusDashboardModel.refetch(); }}
+        onRetry={() => { void (focusDashboardModel.refetch)(); }}
         onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })}
         onOpenMonthlyReport={() => navigation.navigate('Paywall', { source: 'focus-monthly-report', gatedFeature: 'monthly_focus_report' })}
       />
@@ -70,7 +70,7 @@ export function ProgressScreen(): JSX.Element {
       ) : null}
       {disclosure.features.battle_pass.isUnlocked && seasonQuery.data ? (
         <>
-          <BattlePassTrack tiers={battlePassTiers.data ?? []} userProgress={battlePassProgress.data ?? null} loading={battlePassTiers.isLoading || battlePassProgress.isLoading} error={(battlePassTiers.error as Error | null) ?? (battlePassProgress.error as Error | null)} onRetry={() => { void Promise.all([battlePassTiers.refetch(), battlePassProgress.refetch()]); }} />
+          <BattlePassTrack tiers={battlePassTiers.data ?? []} userProgress={battlePassProgress.data ?? null} loading={battlePassTiers.isLoading || battlePassProgress.isLoading} error={(battlePassTiers.error as Error | null) ?? (battlePassProgress.error as Error | null)} onRetry={() => { void Promise.all([(battlePassTiers.refetch)(), (battlePassProgress.refetch)()]); }} />
           <View style={{ borderWidth: 1, borderColor: theme.colors.border.light, backgroundColor: theme.colors.background.secondary, padding: theme.spacing[4], gap: theme.spacing[2], ...getPremiumCardStyle('medium') }}><Text variant="label" color={theme.colors.text.secondary}>Season Timer</Text><Text variant="h4" color={theme.colors.text.primary}>{seasonQuery.data.name}</Text><Text variant="body" color={theme.colors.text.secondary}>{daysRemaining === 1 ? '1 day remaining' : `${daysRemaining ?? 0} days remaining`}</Text><Text variant="caption" color={theme.colors.text.tertiary}>{`Ends ${formatDate(seasonQuery.data.endAt)}`}</Text></View>
         </>
       ) : (

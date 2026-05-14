@@ -18,10 +18,11 @@ export const FocusScoreFactorKeySchema = z.enum([
   'streakStability',
   'sessionQuality',
   'intentionalDifficulty',
+  'contractCompletion',
   'recency',
 ]);
 
-const FocusScoreFactorSchema = (weightPercent: 35 | 25 | 20 | 10) =>
+const FocusScoreFactorSchema = (weightPercent: 35 | 25 | 20 | 8 | 7 | 5) =>
   z
     .object({
       weightPercent: z.literal(weightPercent),
@@ -36,8 +37,14 @@ export const FocusScoreFactorsSchema = z
     consistency: FocusScoreFactorSchema(35),
     streakStability: FocusScoreFactorSchema(25),
     sessionQuality: FocusScoreFactorSchema(20),
-    intentionalDifficulty: FocusScoreFactorSchema(10),
-    recency: FocusScoreFactorSchema(10),
+    intentionalDifficulty: FocusScoreFactorSchema(7),
+    contractCompletion: FocusScoreFactorSchema(8).default({
+      weightPercent: 8,
+      score: 50,
+      delta: 0,
+      explanation: 'Contract completion is neutral until enough focus contracts exist.',
+    }),
+    recency: FocusScoreFactorSchema(5),
   })
   .strict()
   .superRefine((value, ctx) => {
@@ -82,6 +89,8 @@ export const FocusScoreUpdateInputSchema = z
     eventType: z.enum(['session:completed', 'session:abandoned', 'streak:updated', 'comeback:completed', 'recovery:session']),
     grade: z.enum(['S', 'A', 'B', 'C', 'D']).optional(),
     sessionMode: z.enum(['deep_work', 'recovery', 'starter', 'standard']).optional(),
+    contractCompletionRate: z.number().min(0).max(1).optional(),
+    completedContractCount: z.number().int().nonnegative().optional(),
     occurredAt: z.string().datetime(),
     signals: z
       .object({
@@ -146,6 +155,7 @@ export function getFocusScoreFactorsWeightTotal(factors: z.infer<typeof FocusSco
     factors.streakStability.weightPercent +
     factors.sessionQuality.weightPercent +
     factors.intentionalDifficulty.weightPercent +
+    factors.contractCompletion.weightPercent +
     factors.recency.weightPercent
   );
 }

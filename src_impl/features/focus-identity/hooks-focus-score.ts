@@ -50,6 +50,6 @@ export function useFocusScoreDashboardModel(userId: string | null, days: number 
     isRefetching: false,
     isOptionalDataSyncing: false,
     optionalDataError: null,
-    refetch: () => void refetch(),
+    refetch: () => void (refetch)(),
   };
 }

@@ -3,42 +3,42 @@ import TestRenderer, { act, type ReactTestRenderer } from 'react-test-renderer';
 import { PaywallScreen } from '../PaywallScreen';
 import { capture } from '../../../shared/analytics';
 import { usePaywall, usePremiumStatus } from '../../../shared/monetization';
-import type {
-  PurchaseResult,
-  PurchasesOfferingDisplayInfo,
-  PurchasesPackageDisplayInfo,
-  RevenueCatError,
-} from '../../../shared/monetization';
+import type { PurchaseResult, PurchasesOfferingDisplayInfo, PurchasesPackageDisplayInfo, RevenueCatError } from '../../../shared/monetization';
 
 const mockGoBack = jest.fn();
 const mockRetry = jest.fn<Promise<void>, []>();
 const mockPurchase = jest.fn<Promise<PurchaseResult>, [PurchasesPackageDisplayInfo]>();
 const mockRestore = jest.fn<Promise<PurchaseResult>, []>();
 const mockRefresh = jest.fn<Promise<void>, []>();
+
 function mockNativeElement(name: string, props: Record<string, unknown>, children?: unknown) {
   return require('react').createElement(name, props, children);
 }
+
 jest.mock('react-native', () => {
-  const makeComponent = (name: string) => ({ children, ...props }: { children?: unknown }) =>
-    mockNativeElement(name, props, children);
+  const makeComponent = (name: string) => ({ children, ...props }: { children?: unknown }) => mockNativeElement(name, props, children);
   return {
+    KeyboardAvoidingView: makeComponent('KeyboardAvoidingView'),
+    Platform: { OS: 'ios', select: (options: Record<string, unknown>) => options.ios ?? options.default },
     Pressable: makeComponent('Pressable'),
     ScrollView: makeComponent('ScrollView'),
+    StyleSheet: { absoluteFillObject: {} },
     Text: makeComponent('Text'),
     View: makeComponent('View'),
   };
 });
+
 jest.mock('react-native-reanimated', () => {
-  const View = ({ children, ...props }: { children?: unknown }) =>
-    mockNativeElement('AnimatedView', props, children);
+  const View = ({ children, ...props }: { children?: unknown }) => mockNativeElement('AnimatedView', props, children);
   const animation = { duration: () => animation, delay: () => animation };
-  return { __esModule: true, default: { View }, FadeInDown: animation };
+  const createAnimatedComponent = (component: unknown) => component;
+  return { __esModule: true, default: { View, createAnimatedComponent }, FadeInDown: animation, createAnimatedComponent };
 });
+
 jest.mock('../../../shared/monetization', () => ({ usePaywall: jest.fn(), usePremiumStatus: jest.fn() }));
 jest.mock('../../../shared/analytics', () => ({ capture: jest.fn() }));
-jest.mock('expo-linear-gradient', () => {
-  return { LinearGradient: ({ children }: { children: ReactNode }) => mockNativeElement('View', {}, children) };
-});
+jest.mock('expo-linear-gradient', () => ({ LinearGradient: ({ children }: { children: ReactNode }) => mockNativeElement('View', {}, children) }));
+jest.mock('expo-status-bar', () => ({ StatusBar: () => mockNativeElement('StatusBar', {}) }));
 jest.mock('react-native-safe-area-context', () => ({ useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }) }));
 jest.mock('@react-navigation/native', () => ({
   ...jest.requireActual('@react-navigation/native'),
@@ -64,29 +64,21 @@ jest.mock('../../../shared/ui/components/EnterAnimation', () => ({
   CardEnterAnimation: ({ children }: { children: ReactNode }) => mockNativeElement('View', {}, children),
   StaggeredEnter: ({ children }: { children: ReactNode }) => mockNativeElement('View', {}, children),
 }));
-jest.mock('../../../icons/components/Icon', () => ({
-  Icon: ({ name }: { name: string }) => mockNativeElement('Text', {}, name),
-}));
-jest.mock('../../../components/primitives/Text', () => ({
-  Text: ({ children }: { children: ReactNode }) => mockNativeElement('Text', {}, children),
-}));
-jest.mock('../../../components/ui/Skeleton', () => ({
-  Skeleton: () => mockNativeElement('View', {}),
-  SkeletonCard: () => mockNativeElement('View', {}),
-}));
+jest.mock('../../../icons/components/Icon', () => ({ Icon: ({ name }: { name: string }) => mockNativeElement('Text', {}, name) }));
+jest.mock('../../../components/primitives/Text', () => ({ Text: ({ children }: { children: ReactNode }) => mockNativeElement('Text', {}, children) }));
+jest.mock('../../../components/ui/Skeleton', () => ({ Skeleton: () => mockNativeElement('View', {}), SkeletonCard: () => mockNativeElement('View', {}) }));
 jest.mock('../../../components/primitives/Button', () => ({
-  Button: ({ children, onPress, accessibilityLabel }: { children: ReactNode; onPress?: () => void; accessibilityLabel?: string }) => (
-    mockNativeElement('Pressable', { accessibilityLabel, accessibilityRole: 'button', onPress }, mockNativeElement('Text', {}, children))
-  ),
+  Button: ({ children, onPress, accessibilityLabel }: { children: ReactNode; onPress?: () => void; accessibilityLabel?: string }) =>
+    mockNativeElement('Pressable', { accessibilityLabel, accessibilityRole: 'button', onPress }, mockNativeElement('Text', {}, children)),
 }));
 jest.mock('../../../shared/ui/components/StatusFeedback', () => ({
-  StatusBanner: ({ message, description, onRetry }: { message: string; description?: string; onRetry?: () => void }) => (
+  StatusBanner: ({ message, description, onRetry }: { message: string; description?: string; onRetry?: () => void }) =>
     mockNativeElement('Pressable', { accessibilityRole: 'button', onPress: onRetry }, [
       mockNativeElement('Text', { key: 'message' }, message),
       description ? mockNativeElement('Text', { key: 'description' }, description) : null,
-    ])
-  ),
+    ]),
 }));
+
 const mockedUsePaywall = jest.mocked(usePaywall);
 const mockedUsePremiumStatus = jest.mocked(usePremiumStatus);
 const mockedCapture = jest.mocked(capture);
@@ -96,28 +88,17 @@ function revenueCatError(code: RevenueCatError['code'], message: string): Revenu
   error.name = 'RevenueCatError';
   return Object.assign(error, { code });
 }
+
 function packageInfo(identifier: string, packageType: string, priceString: string): PurchasesPackageDisplayInfo {
   return {
     identifier,
     packageType,
-    product: {
-      identifier: `product.${identifier}`,
-      description: `${packageType} plan`,
-      title: packageType,
-      price: 1,
-      priceString,
-      currencyCode: 'USD',
-      introPrice: null,
-      discounts: [],
-    },
+    product: { identifier: `product.${identifier}`, description: `${packageType} plan`, title: packageType, price: 1, priceString, currencyCode: 'USD', introPrice: null, discounts: [] },
   };
 }
 
 function mockPaywallState(overrides: Partial<ReturnType<typeof usePaywall>> = {}): void {
-  const packages = [
-    packageInfo('$rc_annual', 'ANNUAL', '$49.99 / year'),
-    packageInfo('$rc_monthly', 'MONTHLY', '$6.99 / month'),
-  ];
+  const packages = [packageInfo('$rc_annual', 'ANNUAL', '$49.99 / year'), packageInfo('$rc_monthly', 'MONTHLY', '$6.99 / month')];
   mockedUsePaywall.mockReturnValue({
     offerings: { identifier: 'default-offering', serverDescription: 'Default', metadata: {}, packages } satisfies PurchasesOfferingDisplayInfo,
     packages,
@@ -146,9 +127,7 @@ describe('PaywallScreen', () => {
     act(() => {
       output = TestRenderer.create(<PaywallScreen />);
     });
-    if (!output) {
-      throw new Error('Paywall did not render');
-    }
+    if (!output) throw new Error('Paywall did not render');
     return output;
   }
 
@@ -158,7 +137,6 @@ describe('PaywallScreen', () => {
 
   it('shows free boundaries and live plans to free users', () => {
     const output = renderPaywall();
-
     expect(containsText(output, 'Core sessions, basic progress, streak building, and earned rewards stay free.')).toBe(true);
     expect(containsText(output, 'Best Insight')).toBe(true);
     expect(containsText(output, 'Annual')).toBe(true);
@@ -168,7 +146,6 @@ describe('PaywallScreen', () => {
   it('shows active premium state for premium users', () => {
     mockedUsePremiumStatus.mockReturnValue({ isPremium: true, isLoading: false, entitlements: [], refresh: mockRefresh });
     const output = renderPaywall();
-
     expect(containsText(output, 'Premium is active')).toBe(true);
     expect(containsText(output, 'Already Premium')).toBe(true);
   });
@@ -176,24 +153,16 @@ describe('PaywallScreen', () => {
   it('does not show fake fallback pricing when offerings are missing', () => {
     mockPaywallState({ offerings: null, packages: [], error: null });
     const output = renderPaywall();
-
     expect(containsText(output, 'Live plans are not available yet')).toBe(true);
     expect(containsText(output, 'Live pricing unavailable')).toBe(false);
   });
 
   it('handles offering load failures with retry', () => {
-    const error = revenueCatError('NETWORK_ERROR', 'Network down');
-    mockPaywallState({ offerings: null, packages: [], error });
-
+    mockPaywallState({ offerings: null, packages: [], error: revenueCatError('NETWORK_ERROR', 'Network down') });
     const output = renderPaywall();
-    const retryButton = output.root
-      .findAllByProps({ accessibilityRole: 'button' })
-      .find((node) => node.props.onPress === mockRetry);
-    if (!retryButton) {
-      throw new Error('Retry button missing');
-    }
+    const retryButton = output.root.findAllByProps({ accessibilityRole: 'button' }).find((node) => node.props.onPress === mockRetry);
+    if (!retryButton) throw new Error('Retry button missing');
     retryButton.props.onPress();
-
     expect(containsText(output, 'Pricing is temporarily unavailable. Your progress is safe.')).toBe(true);
     expect(mockRetry).toHaveBeenCalled();
   });

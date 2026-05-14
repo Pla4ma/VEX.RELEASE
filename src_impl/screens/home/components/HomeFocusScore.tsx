@@ -22,7 +22,7 @@ export function HomeFocusScore({ onPress }: HomeFocusScoreProps): JSX.Element {
     <FocusScoreHomeWidget
       model={focusModel}
       onPress={onPress}
-      onRetry={() => void focusModel.refetch()}
+      onRetry={() => void (focusModel.refetch)()}
     />
   );
 }

@@ -1,6 +1,6 @@
 import { captureSilentFailure } from '../../../utils/silent-failure';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Modal, ScrollView, Share, Platform, View, useWindowDimensions } from 'react-native';
+import { ScrollView, Share } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -9,16 +9,20 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 
 import { sessionComplete } from '../../../utils/haptics';
-import { useSessionCompleteController } from '../../../features/session-completion/hooks';
+import { useSessionCompleteController, useSessionHeadline } from '../../../features/session-completion/hooks';
 import type { SessionSummary } from '../../../session/types';
 import { useTomorrowPreviewForSession } from '../../../features/home-spine/hooks';
+import { useContractForSession, useReflectOnContract } from '../../../features/focus-contract/hooks';
+import type { ReflectionStatus } from '../../../features/focus-contract/types';
 import { saveTomorrowPreview } from '../../../features/home-spine/tomorrowPreviewService';
-import { VictoryCard, type VictoryCardData, generateShareCaption } from '../../../features/social/components/VictoryCard';
+import { type VictoryCardData, generateShareCaption } from '../../../features/social/components/VictoryCard';
 
 import { SessionCompleteHeroSection } from './SessionCompleteHeroSection';
 import { SessionCompleteRewardsPhase } from './SessionCompleteRewardsPhase';
 import { SessionCompleteNextSteps } from './SessionCompleteNextSteps';
 import { SessionCompleteOverlays } from './SessionCompleteOverlays';
+import { SessionContractReflectionCard } from './SessionContractReflectionCard';
+import { SessionHeadlineReward } from './SessionHeadlineReward';
 
 type SessionCompleteContentProps = {
   sessionId: string;
@@ -39,10 +43,16 @@ export function SessionCompleteContent({
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const viewShotRef = useRef<View>(null);
   const [gradeRevealed, setGradeRevealed] = useState(false);
   const [nptDone, setNptDone] = useState(false);
   const controller = useSessionCompleteController({ sessionId, summary });
+  const contractQuery = useContractForSession(sessionId);
+  const reflectContract = useReflectOnContract();
+  const headline = useSessionHeadline({
+    consequences,
+    contractStatus: contractQuery.contract?.completionStatus ?? null,
+    summary,
+  });
   const revealedGradeLetter = controller.grade.letter === 'F' ? 'D' : controller.grade.letter;
 
   const tomorrowPreview = useTomorrowPreviewForSession(
@@ -93,6 +103,13 @@ export function SessionCompleteContent({
     }
   }, [controller.focusedDuration, controller.grade.letter, controller.userId, summary.streakDays, summary.xpEarned]);
 
+  const handleReflectContract = useCallback((status: ReflectionStatus) => {
+    if (!contractQuery.contract) {
+      return;
+    }
+    reflectContract.mutate({ contract: contractQuery.contract, status });
+  }, [contractQuery.contract, reflectContract]);
+
   return (
     <Animated.View
       entering={FadeIn.duration(250)}
@@ -108,6 +125,14 @@ export function SessionCompleteContent({
             }}
             showsVerticalScrollIndicator={false}
           >
+            <SessionHeadlineReward headline={headline} />
+
+            <SessionContractReflectionCard
+              contract={contractQuery.contract}
+              isPending={reflectContract.isPending}
+              onReflect={handleReflectContract}
+            />
+
             <SessionCompleteHeroSection
               controller={controller}
               summary={summary}

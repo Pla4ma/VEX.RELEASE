@@ -47,7 +47,7 @@ export function DailyLeaderboard({ squadId, userId }: DailyLeaderboardProps): JS
           <Text variant="label" color={theme.colors.primary[500]}>Daily Leaderboard</Text>
           <Text variant="bodySmall" color={theme.colors.text.secondary}>Top contributor owns the crown.</Text>
         </View>
-        <Pressable onPress={() => void query.refetch()}
+        <Pressable onPress={() => void (query.refetch)()}
   accessibilityLabel="Refresh button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
