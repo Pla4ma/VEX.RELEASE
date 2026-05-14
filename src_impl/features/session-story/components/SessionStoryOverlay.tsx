@@ -168,7 +168,7 @@ export const SessionStoryOverlay: React.FC<SessionStoryOverlayProps> = ({ sessio
           right: 0,
           bottom: 0,
           zIndex: 100,
-          backgroundColor: theme.colors.background?.primary ?? 'theme.colors.text.primary',
+          backgroundColor: theme.colors.background?.primary ?? '#000',
           paddingTop: insets.top,
           paddingBottom: insets.bottom,
         },
@@ -192,7 +192,7 @@ export const SessionStoryOverlay: React.FC<SessionStoryOverlayProps> = ({ sessio
         </View>
 
         <Pressable onPress={handleSkip} style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
-          <Text style={{ fontSize: 14, fontWeight: '500', color: theme.colors.text?.muted ?? 'theme.colors.primary[500]' }}>Skip Story</Text>
+          <Text style={{ fontSize: 14, fontWeight: '500', color: theme.colors.text?.muted ?? '#888' }}>Skip Story</Text>
         </Pressable>
       </View>
 
@@ -201,7 +201,7 @@ export const SessionStoryOverlay: React.FC<SessionStoryOverlayProps> = ({ sessio
 
       {/* Tap to continue */}
       <Pressable style={{ paddingVertical: 24, alignItems: 'center' }} onPress={handleNext}>
-        <Text style={{ fontSize: 14, fontWeight: '500', color: theme.colors.text?.muted ?? 'theme.colors.primary[500]' }}>Tap to continue</Text>
+        <Text style={{ fontSize: 14, fontWeight: '500', color: theme.colors.text?.muted ?? '#888' }}>Tap to continue</Text>
       </Pressable>
     </Animated.View>
   );
@@ -257,10 +257,10 @@ const StoryBeatCard: React.FC<StoryBeatCardProps> = ({ beat, emotionColor, theme
       </View>
 
       {/* Headline */}
-      <Text style={{ fontSize: 28, fontWeight: '700', textAlign: 'center', marginBottom: 12, lineHeight: 36, color: theme.colors.text?.primary ?? 'theme.colors.background.primary' }}>{beat.headline}</Text>
+      <Text style={{ fontSize: 28, fontWeight: '700', textAlign: 'center', marginBottom: 12, lineHeight: 36, color: theme.colors.text?.primary ?? '#fff' }}>{beat.headline}</Text>
 
       {/* Subtext */}
-      {beat.subtext && <Text style={{ fontSize: 16, textAlign: 'center', lineHeight: 24, marginBottom: 20, color: theme.colors.text?.secondary ?? 'theme.colors.primary[500]' }}>{beat.subtext}</Text>}
+      {beat.subtext && <Text style={{ fontSize: 16, textAlign: 'center', lineHeight: 24, marginBottom: 20, color: theme.colors.text?.secondary ?? '#aaa' }}>{beat.subtext}</Text>}
 
       {/* Context pill */}
       {beat.metadata?.context && (
@@ -273,5 +273,3 @@ const StoryBeatCard: React.FC<StoryBeatCardProps> = ({ beat, emotionColor, theme
 };
 
 export default SessionStoryOverlay;
-
-export * from "./SessionStoryOverlay.types";

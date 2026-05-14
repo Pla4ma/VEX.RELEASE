@@ -18,6 +18,23 @@ import { useTheme } from '../../../theme';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
+export interface StreakMilestoneModalProps {
+  /** Modal visibility */
+  visible: boolean;
+  /** Milestone day */
+  milestone: number;
+  /** Rewards granted */
+  rewards: {
+    coins: number;
+    gems?: number;
+    exclusiveItem?: string;
+  };
+  /** Dismiss modal */
+  onDismiss: () => void;
+  /** Share milestone */
+  onShare?: () => void;
+}
+
 /**
  * Confetti particle
  */
@@ -63,7 +80,7 @@ function ConfettiPiece({ index, color }: { index: number; color: string }): JSX.
  * Confetti burst effect
  */
 function ConfettiBurst({ count = 50 }: { count?: number }): JSX.Element {
-  const colors = ['theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]'];
+  const colors = ['#EF4444', '#22C55E', '#3B82F6', '#F59E0B', '#A855F7', '#EC4899'];
 
   return (
     <>
@@ -101,15 +118,15 @@ function StreakFlame({ days }: { days: number }): JSX.Element {
 
   const getFlameColor = () => {
     if (days >= 100) {
-      return 'theme.colors.primary[500]';
+      return '#F59E0B';
     } // Gold
     if (days >= 60) {
-      return 'theme.colors.primary[500]';
+      return '#A855F7';
     } // Purple
     if (days >= 30) {
-      return 'theme.colors.primary[500]';
+      return '#3B82F6';
     } // Blue
-    return 'theme.colors.primary[500]'; // Red
+    return '#EF4444'; // Red
   };
 
   const size = getFlameSize();
@@ -252,5 +269,3 @@ export function StreakMilestoneModal({ visible, milestone, rewards, onDismiss, o
 }
 
 export default StreakMilestoneModal;
-
-export * from "./StreakMilestoneModal.types";

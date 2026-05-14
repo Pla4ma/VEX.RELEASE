@@ -17,6 +17,7 @@ import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 import { initializeNotifications } from '../features/ai-coach/services';
 import { bootstrapApp } from './bootstrap';
 import { initializeDevContrastChecker } from '../shared/accessibility/contrast-checker';
+import { SpectacleOverlay } from '../features/spectacle/components/SpectacleOverlay';
 
 // Initialize Sentry immediately — wrapped in try/catch since Sentry uses
 // native PlatformConstants which may not be registered in Expo Go.
@@ -69,7 +70,9 @@ export const App: React.FC = () => {
           <ThemeProvider>
             <ErrorBoundary>
               <ToastProvider position="top" maxToasts={3}>
+                <SpectacleOverlay>
                   <RootNavigator />
+                </SpectacleOverlay>
               </ToastProvider>
             </ErrorBoundary>
           </ThemeProvider>

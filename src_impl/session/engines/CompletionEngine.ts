@@ -25,6 +25,25 @@ const debug = createDebugger('session:completion');
 // ============================================================================
 // Completion Result Types
 // ============================================================================
+
+export interface CompletionResult {
+  success: boolean;
+  status: SessionStatus;
+  summary: SessionSummary;
+  rewardsGranted: boolean;
+  streakMaintained: boolean;
+  recoveryAvailable: boolean;
+  error?: string;
+}
+
+export interface AbandonResult {
+  sessionId: string;
+  damage: DamageCalculation;
+  canRecover: boolean;
+  streakBroken: boolean;
+  partialCredit: boolean;
+}
+
 // ============================================================================
 // Completion Engine
 // ============================================================================
@@ -148,56 +167,6 @@ export class CompletionEngine {
       rewardsGranted,
       streakMaintained,
       recoveryAvailable: session.recoveryAttempts < session.maxRecoveryAttempts,
-    };
-  }
-
-  // ============================================================================
-  // Graceful Exit
-  // ============================================================================
-
-  gracefulExit(
-    session: SessionState,
-    focusMetrics: FocusQualityMetrics,
-    userStreak: number,
-    reflection?: string,
-    mood?: 'GREAT' | 'GOOD' | 'OKAY' | 'STRUGGLING' | 'DIFFICULT'
-  ): CompletionResult {
-    const now = Date.now();
-
-    // Update session state
-    session.status = 'PARTIAL_SUCCESS';
-    session.completedAt = now;
-    session.endedAt = now;
-    session.focusQuality = focusMetrics.overallScore;
-
-    // Calculate pro-rated score
-    const scoreCalc = this.scoringEngine.calculateScore(session, focusMetrics);
-    const progressMultiplier = session.completionPercentage / 100;
-    const finalScore = this.scoringEngine.calculateFinalScore(scoreCalc) * progressMultiplier;
-
-    session.baseScore = scoreCalc.basePoints * progressMultiplier;
-
-    // Create summary
-    const summary = this.createSessionSummary(
-      session,
-      scoreCalc,
-      finalScore,
-      focusMetrics,
-      userStreak,
-      reflection || 'Graceful exit triggered. Partial credit banked.',
-      mood
-    );
-
-    debug.info('Session %s gracefully exited (%d%%). Score: %d',
-      session.id, session.completionPercentage, finalScore);
-
-    return {
-      success: true,
-      status: 'PARTIAL_SUCCESS',
-      summary,
-      rewardsGranted: true,
-      streakMaintained: true,
-      recoveryAvailable: false,
     };
   }
 
@@ -426,7 +395,6 @@ export class CompletionEngine {
       mood,
       sessionMode: resolveSessionMode(session.config.sessionMode),
       modeBonus,
-      activeConsumables: session.activeConsumables || [],
 
       createdAt: Date.now(),
     };
@@ -540,5 +508,3 @@ export class CompletionEngine {
 export function createCompletionEngine(scoringEngine: ScoringEngine): CompletionEngine {
   return new CompletionEngine(scoringEngine);
 }
-
-export * from "./CompletionEngine.types";

@@ -11,6 +11,26 @@ import { StreakEvents } from '../shared/analytics/analytics-events';
 
 const debug = createDebugger('streak-service');
 
+export interface StreakData {
+  currentStreak: number;
+  longestStreak: number;
+  lastSessionDate: string | null;
+  streakHistory: {
+    date: string;
+    sessionsCompleted: number;
+    maintained: boolean;
+  }[];
+  isAtRisk: boolean;
+  hoursRemaining: number;
+}
+
+export interface StreakUpdate {
+  newStreak: number;
+  streakMaintained: boolean;
+  streakBroken: boolean;
+  newLongestStreak: boolean;
+}
+
 class StreakService {
   private userId: string = '';
   private streakData: StreakData = {
@@ -288,5 +308,3 @@ class StreakService {
 
 // Singleton instance
 export const streakService = new StreakService();
-
-export * from "./streakService.types";

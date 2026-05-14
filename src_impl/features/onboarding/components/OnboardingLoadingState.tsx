@@ -44,7 +44,7 @@ export function OnboardingLoadingState({ step: _step = 'Loading...' }: Onboardin
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#1a1a2e',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -56,12 +56,12 @@ const styles = createSheet({
   skeletonTitle: {
     width: '50%',
     height: 32,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#2a2a3e',
     borderRadius: 8,
   },
   skeletonLine: {
     height: 20,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#2a2a3e',
     borderRadius: 4,
     width: '90%',
   },
@@ -73,13 +73,13 @@ const styles = createSheet({
   skeletonCard: {
     width: '100%',
     height: 80,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#2a2a3e',
     borderRadius: 12,
   },
   skeletonButton: {
     width: '60%',
     height: 48,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#2a2a3e',
     borderRadius: 12,
     marginTop: 48,
   },

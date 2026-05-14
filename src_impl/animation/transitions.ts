@@ -24,5 +24,183 @@ type StackCardStyleInterpolator = (props: TransitionParams) => {
     transform?: Array<Record<string, unknown>>;
   };
 };
-export * from "./transitions.types";
-export * from "./transitions.part1";
+
+/**
+ * Slide from right transition (iOS default)
+ */
+export const slideFromRight: StackCardStyleInterpolator = ({ current, next, layouts: { screen } }: TransitionParams) => {
+  const translateX = current.progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [screen.width, 0],
+  });
+
+  const progress = next?.progress ?? current.progress;
+  const opacity = progress.interpolate({
+    inputRange: [0, 1, 2],
+    outputRange: [1, 0.8, 0],
+  });
+
+  return {
+    cardStyle: {
+      transform: [{ translateX }],
+      opacity,
+    },
+  };
+};
+
+/**
+ * Slide from bottom transition (modal style)
+ */
+export const slideFromBottom: StackCardStyleInterpolator = ({ current, layouts: { screen } }: Omit<TransitionParams, 'next' | 'inverted'>) => {
+  const translateY = current.progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [screen.height, 0],
+  });
+
+  return {
+    cardStyle: {
+      transform: [{ translateY }],
+    },
+  };
+};
+
+/**
+ * Fade transition
+ */
+export const fadeTransition: StackCardStyleInterpolator = ({ current }: Pick<TransitionParams, 'current'>) => {
+  const opacity = current.progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
+  return {
+    cardStyle: {
+      opacity,
+    },
+  };
+};
+
+/**
+ * Scale transition
+ */
+export const scaleTransition: StackCardStyleInterpolator = ({ current }: Pick<TransitionParams, 'current'>) => {
+  const scale = current.progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.9, 1],
+  });
+
+  const opacity = current.progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
+  return {
+    cardStyle: {
+      transform: [{ scale }],
+      opacity,
+    },
+  };
+};
+
+/**
+ * Shared element transition placeholder
+ */
+export const sharedElementTransition: StackCardStyleInterpolator = ({ current }: Pick<TransitionParams, 'current'>) => {
+  // This is a placeholder - actual implementation requires
+  // react-navigation-shared-element library
+  return {
+    cardStyle: {
+      opacity: current.progress,
+    },
+  };
+};
+
+/**
+ * Transition presets
+ */
+export const transitionPresets = {
+  slideFromRight: {
+    gestureDirection: 'horizontal',
+    transitionSpec: {
+      open: {
+        animation: 'timing',
+        config: {
+          duration: 300,
+          easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+        },
+      },
+      close: {
+        animation: 'timing',
+        config: {
+          duration: 300,
+          easing: Easing.bezier(0.25, 0.1, 0.25, 1),
+        },
+      },
+    },
+    cardStyleInterpolator: slideFromRight,
+  },
+
+  slideFromBottom: {
+    gestureDirection: 'vertical',
+    transitionSpec: {
+      open: {
+        animation: 'timing',
+        config: {
+          duration: 400,
+          easing: Easing.out(Easing.cubic),
+        },
+      },
+      close: {
+        animation: 'timing',
+        config: {
+          duration: 300,
+          easing: Easing.in(Easing.cubic),
+        },
+      },
+    },
+    cardStyleInterpolator: slideFromBottom,
+  },
+
+  fade: {
+    gestureDirection: 'horizontal',
+    transitionSpec: {
+      open: {
+        animation: 'timing',
+        config: {
+          duration: 200,
+          easing: Easing.linear,
+        },
+      },
+      close: {
+        animation: 'timing',
+        config: {
+          duration: 200,
+          easing: Easing.linear,
+        },
+      },
+    },
+    cardStyleInterpolator: fadeTransition,
+  },
+
+  scale: {
+    gestureDirection: 'horizontal',
+    transitionSpec: {
+      open: {
+        animation: 'spring',
+        config: {
+          stiffness: 1000,
+          damping: 50,
+          mass: 1,
+        },
+      },
+      close: {
+        animation: 'timing',
+        config: {
+          duration: 200,
+          easing: Easing.linear,
+        },
+      },
+    },
+    cardStyleInterpolator: scaleTransition,
+  },
+};

@@ -24,7 +24,7 @@ export interface DividerProps {
 export const Divider: React.FC<DividerProps> = ({
   orientation = 'horizontal',
   thickness = 1,
-  color = 'theme.colors.primary[500]',
+  color = '#e2e8f0',
   style,
   spacing = 16,
 }) => {

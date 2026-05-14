@@ -536,6 +536,3 @@ export const CoachSettingsScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default CoachSettingsScreen;
-
-export * from "./CoachSettingsScreen.types";
-export * from "./CoachSettingsScreen.types";

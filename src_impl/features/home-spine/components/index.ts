@@ -9,6 +9,7 @@
 export { GreetingHeader, type GreetingHeaderProps } from './GreetingHeader';
 // PHASE 7.3: StartSessionButton with Final Strike support
 export { StartSessionButton, StartSessionButtonCompact, type StartSessionButtonProps } from './StartSessionButton';
+export { StreakWidget, type StreakWidgetProps } from './StreakWidget';
 // PHASE 7.3: BossPreviewCard with Final Strike support
 export { BossPreviewCard, type BossPreviewCardProps } from './BossPreviewCard';
 export { RecentSessionsList, type RecentSessionsListProps, type SessionListItem } from './RecentSessionsList';

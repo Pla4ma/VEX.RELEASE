@@ -72,8 +72,6 @@ function checkCompatibility(item: InventoryItem, mode: string, durationSeconds: 
 function calculateImpact(item: InventoryItem, durationSeconds: number): LoadoutItem['projectedImpact'] {
   const baseMultiplier = 1;
   const metadata = item.metadata ?? {};
-  const isZenShield = item.itemDefinitionId === 'zen-shield';
-  const isDeepWorkAmplifier = item.itemDefinitionId === 'deep-work-amplifier';
 
   // XP multiplier from item metadata
   const xpBoost = (metadata.xpBoost as number) ?? 0;
@@ -95,7 +93,6 @@ function calculateImpact(item: InventoryItem, durationSeconds: number): LoadoutI
     coinMultiplier,
     streakProtection,
     bossDamageBonus,
-    extraPauses: isZenShield ? 1 : 0,
   };
 }
 
@@ -136,7 +133,6 @@ function calculateSummary(
     projectedXpMultiplier: Math.round(projectedXpMultiplier * 100) / 100,
     projectedCoinMultiplier: Math.round(projectedCoinMultiplier * 100) / 100,
     hasStreakProtection,
-    totalExtraPauses: activeBuffs.reduce((sum, b) => sum + (b.effects.extraPauses || 0), 0),
   };
 }
 
@@ -198,7 +194,6 @@ export async function buildLoadoutOptions(userId: string, mode: string, duration
         coinMultiplier: (effects.coinMultiplier as number) ?? 1,
         streakProtection: (effects.streakProtection as boolean) ?? false,
         bossDamageBonus: (effects.bossDamageBonus as number) ?? 0,
-        extraPauses: (effects.extraPauses as number) ?? 0,
       },
     });
   });

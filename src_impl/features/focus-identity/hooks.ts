@@ -93,19 +93,19 @@ export function useFocusScoreColor(score: number | null): string {
 
     switch (band.label) {
       case 'Building':
-        return 'theme.colors.primary[500]';
+        return '#CD7F32';
       case 'Fair':
-        return 'theme.colors.primary[500]';
+        return '#C0C0C0';
       case 'Good':
-        return 'theme.colors.error.DEFAULT';
+        return '#FFD700';
       case 'Strong':
-        return 'theme.colors.primary[500]';
+        return '#E5E4E2';
       case 'Exceptional':
-        return 'theme.colors.primary[500]';
+        return '#B9F2FF';
       case 'Elite':
-        return 'theme.colors.primary[500]';
+        return '#9C27B0';
       case 'Legendary':
-        return 'theme.colors.error.DEFAULT';
+        return '#FF1744';
       default:
         return theme.colors.text.secondary;
     }

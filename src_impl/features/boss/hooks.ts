@@ -27,21 +27,184 @@ import {
 // ============================================================================
 // Query Keys
 // ============================================================================
+
+export const bossKeys = {
+  all: ['boss'] as const,
+  templates: () => [...bossKeys.all, 'templates'] as const,
+  byUser: (userId: string) => [...bossKeys.all, 'user', userId] as const,
+  active: (userId: string) => [...bossKeys.byUser(userId), 'active'] as const,
+  available: (userId: string) => [...bossKeys.byUser(userId), 'available'] as const,
+  bounty: (encounterId: string, userId: string) =>
+    [...bossKeys.all, 'bounty', encounterId, userId] as const,
+};
+
 // ============================================================================
 // Read Hooks
 // ============================================================================
+
+export function useBossTemplates() {
+  return useQuery({
+    queryKey: bossKeys.templates(),
+    queryFn: () => repository.fetchBossTemplates(),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+}
+
+export function useActiveBoss(userId: string | null, squadId?: string) {
+  return useQuery({
+    queryKey: bossKeys.active(userId || ''),
+    queryFn: () => {
+      if (!userId) {throw new Error('User ID required');}
+      return service.getActiveEncounter(userId, squadId);
+    },
+    enabled: !!userId,
+    refetchInterval: 1000 * 30, // Refetch every 30 seconds for timer updates
+  });
+}
+
+export function useAvailableBosses(userId: string | null, userLevel: number) {
+  return useQuery({
+    queryKey: bossKeys.available(userId || ''),
+    queryFn: () => {
+      if (!userId) {throw new Error('User ID required');}
+      return service.getAvailableBosses(userId, userLevel);
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60,
+  });
+}
+
 // ============================================================================
 // Mutation Hooks
 // ============================================================================
+
+export function useCreateEncounter() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: CreateEncounterInput) => {
+      const validated = CreateEncounterInputSchema.parse(input);
+      return service.createEncounter(validated);
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: bossKeys.active(variables.userId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: bossKeys.available(variables.userId),
+      });
+    },
+  });
+}
+
+export function useApplyDamage() {
+  const queryClient = useQueryClient();
+
+  return useMutation<BossDamageResult, Error, ApplyDamageInput>({
+    mutationFn: async (input) => {
+      const validated = ApplyDamageInputSchema.parse(input);
+      return service.applyDamage(validated);
+    },
+    onSuccess: (data) => {
+      // Get userId from encounter data
+      queryClient.invalidateQueries({
+        queryKey: bossKeys.all,
+      });
+    },
+  });
+}
+
 // ============================================================================
 // Damage Calculator Hook
 // ============================================================================
+
+export function useCalculateDamage() {
+  return {
+    calculate: (input: CalculateDamageInput): number => {
+      const validated = CalculateDamageInputSchema.parse(input);
+      return service.calculateDamage(validated);
+    },
+  };
+}
+
 // ============================================================================
 // Boss Check Hook
 // ============================================================================
+
+export function useCanFightBoss(userId: string | null, bossId: string | null, userLevel: number) {
+  return useQuery({
+    queryKey: [...bossKeys.byUser(userId || ''), 'canFight', bossId],
+    queryFn: async () => {
+      if (!userId || !bossId) {return { allowed: false, reason: 'Missing parameters' };}
+      return service.canUserFightBoss(userId, bossId, userLevel);
+    },
+    enabled: !!userId && !!bossId,
+  });
+}
+
 // ============================================================================
 // Bounty Hooks — Phase 4
 // ============================================================================
+
+/**
+ * Hook to get bounty status for an encounter
+ * Returns active bounty count, canPlaceBounty flag, and loot multiplier
+ */
+export function useBountyStatus(
+  encounterId: string | undefined,
+  userId: string | undefined
+): {
+  status: BountyStatus | null;
+  isLoading: boolean;
+  error: Error | null;
+} {
+  const { data, isLoading, error } = useQuery({
+    queryKey: bossKeys.bounty(encounterId ?? '', userId ?? ''),
+    queryFn: () => {
+      if (!encounterId || !userId) {throw new Error('Encounter ID and User ID required');}
+      return getBountyStatus({ encounterId, userId });
+    },
+    enabled: !!encounterId && !!userId,
+    staleTime: 1000 * 30, // 30 seconds — bounty state can change frequently
+    gcTime: 1000 * 60 * 5,
+  });
+
+  return {
+    status: data ?? null,
+    isLoading,
+    error: error as Error | null,
+  };
+}
+
+/**
+ * Hook to place a bounty on a boss encounter
+ * Costs 50 coins, adds 2× loot multiplier for next damage session
+ */
+export function usePlaceBounty() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (input: PlaceBountyInput) => {
+      return placeBounty(input);
+    },
+    onSuccess: (data, variables) => {
+      // Invalidate bounty status query
+      void queryClient.invalidateQueries({
+        queryKey: bossKeys.bounty(variables.encounterId, variables.userId),
+      });
+      // Invalidate wallet to reflect coin deduction
+      void queryClient.invalidateQueries({
+        queryKey: ['wallet', variables.userId],
+      });
+    },
+    onError: (error) => {
+      Sentry.captureException(error, {
+        tags: { feature: 'boss-bounty', operation: 'place' },
+      });
+    },
+  });
+}
+
 // Re-export bounty constants for convenience
 export { BOUNTY_COST_COINS };
 
@@ -50,4 +213,3 @@ export { BOUNTY_COST_COINS };
 // ============================================================================
 
 export { useActiveBoss as useActiveBossEnhanced, type ActiveBossState, type DamageCalculation, type KillEstimate } from './hooks/useActiveBoss';
-export * from "./hooks.part1";

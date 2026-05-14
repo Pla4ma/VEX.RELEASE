@@ -253,5 +253,3 @@ const styles = createSheet({
 });
 
 export default SessionBackgroundedState;
-
-export * from "./SessionBackgroundedState.types";

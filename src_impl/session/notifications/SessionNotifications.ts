@@ -334,6 +334,3 @@ export function getSessionNotifications(): SessionNotifications {
 }
 
 export default SessionNotifications;
-
-export * from "./SessionNotifications.types";
-export * from "./SessionNotifications.types";

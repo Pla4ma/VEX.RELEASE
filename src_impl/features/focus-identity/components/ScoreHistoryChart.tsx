@@ -111,12 +111,12 @@ export function ScoreHistoryChart({
 
   // Latest score color
   const latestScore = safeHistory[safeHistory.length - 1]?.score || 550;
-  const scoreColor = latestScore >= 800 ? 'theme.colors.error.DEFAULT' :
-                     latestScore >= 740 ? 'theme.colors.primary[500]' :
-                     latestScore >= 670 ? 'theme.colors.primary[500]' :
-                     latestScore >= 580 ? 'theme.colors.primary[500]' :
-                     latestScore >= 500 ? 'theme.colors.primary[500]' :
-                     latestScore >= 420 ? 'theme.colors.error.DEFAULT' : 'theme.colors.error.DEFAULT';
+  const scoreColor = latestScore >= 800 ? '#FFD700' :
+                     latestScore >= 740 ? '#C0C0C0' :
+                     latestScore >= 670 ? '#CD7F32' :
+                     latestScore >= 580 ? '#4CAF50' :
+                     latestScore >= 500 ? '#8BC34A' :
+                     latestScore >= 420 ? '#FFC107' : '#FF9800';
 
   return (
     <Box padding="lg" backgroundColor="surface" borderRadius="lg" style={{ width: '100%' }}>
@@ -141,7 +141,7 @@ export function ScoreHistoryChart({
                 y1={y}
                 x2={chartWidth - padding.right}
                 y2={y}
-                stroke="theme.colors.primary[500]"
+                stroke="#E0E0E0"
                 strokeWidth={1}
                 strokeDasharray="4,4"
               />
@@ -149,7 +149,7 @@ export function ScoreHistoryChart({
                 x={padding.left - 8}
                 y={y + 4}
                 fontSize={10}
-                fill="theme.colors.primary[500]"
+                fill="#666"
                 textAnchor="end"
               >
                 {score}
@@ -183,7 +183,7 @@ export function ScoreHistoryChart({
               cx={x}
               cy={y}
               r={isLatest ? 6 : 4}
-              fill={isLatest ? scoreColor : 'theme.colors.background.primary'}
+              fill={isLatest ? scoreColor : '#fff'}
               stroke={scoreColor}
               strokeWidth={isLatest ? 3 : 2}
             />
@@ -197,7 +197,7 @@ export function ScoreHistoryChart({
             x={scaleX(i)}
             y={height - 8}
             fontSize={10}
-            fill="theme.colors.primary[500]"
+            fill="#666"
             textAnchor="middle"
           >
             {new Date(safeHistory[i].timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
@@ -215,5 +215,3 @@ export function ScoreHistoryChart({
     </Box>
   );
 }
-
-export * from "./ScoreHistoryChart.types";

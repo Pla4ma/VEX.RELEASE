@@ -137,19 +137,19 @@ export function MiniItemCard({ name, icon, quantity, owned, rarity = 'COMMON' }:
 const styles = createSheet({
   card: {
     flexDirection: 'row',
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#1A1A2E',
     borderRadius: 16,
     overflow: 'hidden',
     borderTopWidth: 4,
     elevation: 4,
-    shadowColor: 'theme.colors.text.primary',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
   },
   cardSelected: {
     borderWidth: 2,
-    borderColor: 'theme.colors.primary[500]',
+    borderColor: '#6366F1',
   },
   cardDisabled: {
     opacity: 0.5,
@@ -172,14 +172,14 @@ const styles = createSheet({
     width: 20,
     height: 20,
     borderRadius: 10,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#4CAF50',
     alignItems: 'center',
     justifyContent: 'center',
   },
   equippedText: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: 'theme.colors.background.primary',
+    color: '#FFFFFF',
   },
   infoContainer: {
     flex: 1,
@@ -190,7 +190,7 @@ const styles = createSheet({
   name: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'theme.colors.background.primary',
+    color: '#FFFFFF',
     marginBottom: 4,
   },
   rarity: {
@@ -210,13 +210,13 @@ const styles = createSheet({
   price: {
     fontSize: 14,
     fontWeight: '600',
-    color: 'theme.colors.error.DEFAULT',
+    color: '#FFD700',
   },
   quantityBadge: {
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#6366F1',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -224,20 +224,20 @@ const styles = createSheet({
   quantityText: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: 'theme.colors.background.primary',
+    color: '#FFFFFF',
   },
 
   // Compact styles
   compactCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#1A1A2E',
     borderRadius: 12,
     padding: 12,
     borderLeftWidth: 4,
   },
   compactCardSelected: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#2D2D44',
   },
   compactCardDisabled: {
     opacity: 0.5,
@@ -252,14 +252,14 @@ const styles = createSheet({
   compactName: {
     fontSize: 14,
     fontWeight: '600',
-    color: 'theme.colors.background.primary',
+    color: '#FFFFFF',
   },
   compactRarity: {
     fontSize: 10,
     textTransform: 'uppercase',
   },
   compactQuantity: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#6366F1',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
@@ -267,14 +267,14 @@ const styles = createSheet({
   compactQuantityText: {
     fontSize: 12,
     fontWeight: 'bold',
-    color: 'theme.colors.background.primary',
+    color: '#FFFFFF',
   },
 
   // Mini card styles
   miniCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#0F0F1A',
     borderRadius: 8,
     padding: 8,
     borderWidth: 1,
@@ -288,18 +288,16 @@ const styles = createSheet({
   },
   miniName: {
     fontSize: 12,
-    color: 'theme.colors.background.primary',
+    color: '#FFFFFF',
     marginBottom: 2,
   },
   miniCount: {
     fontSize: 10,
   },
   hasEnough: {
-    color: 'theme.colors.primary[500]',
+    color: '#4CAF50',
   },
   notEnough: {
-    color: 'theme.colors.error.DEFAULT',
+    color: '#FF5252',
   },
 });
-
-export * from "./item-card.types";

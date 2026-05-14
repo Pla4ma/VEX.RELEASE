@@ -20,14 +20,14 @@ const renderWithTheme = (component: React.ReactElement) => {
   return render(
     <ThemeProvider theme={{
       colors: {
-        background: { primary: 'theme.colors.background.primary', secondary: 'theme.colors.primary[500]' },
-        border: { light: 'theme.colors.primary[500]' },
-        text: { primary: 'theme.colors.primary[500]', secondary: 'theme.colors.primary[500]', tertiary: 'theme.colors.primary[500]' },
-        primary: { 500: 'theme.colors.primary[500]' },
-        success: { DEFAULT: 'theme.colors.primary[500]' },
-        error: { DEFAULT: 'theme.colors.primary[500]' },
-        warning: { DEFAULT: 'theme.colors.primary[500]' },
-        info: { DEFAULT: 'theme.colors.primary[500]' },
+        background: { primary: '#fff', secondary: '#f3f4f6' },
+        border: { light: '#e5e7eb' },
+        text: { primary: '#111827', secondary: '#6b7280', tertiary: '#9ca3af' },
+        primary: { 500: '#3b82f6' },
+        success: { DEFAULT: '#22c55e' },
+        error: { DEFAULT: '#ef4444' },
+        warning: { DEFAULT: '#f59e0b' },
+        info: { DEFAULT: '#3b82f6' },
       },
       spacing: { 2: 8, 3: 12, 4: 16 },
       borderRadius: { lg: 8 },

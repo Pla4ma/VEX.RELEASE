@@ -288,6 +288,3 @@ const styles = createSheet({
 });
 
 export default PremiumPullToRefresh;
-
-export * from "./PremiumPullToRefresh.types";
-export * from "./PremiumPullToRefresh.types";

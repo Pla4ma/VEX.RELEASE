@@ -45,7 +45,7 @@ const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     pauseLimit: 'Unlimited',
     xpMultiplier: '50%',
     description: 'Good for maintenance',
-    color: 'theme.colors.primary[500]', // Green
+    color: '#22C55E', // Green
   },
   {
     id: 'FOCUSED',
@@ -54,7 +54,7 @@ const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     pauseLimit: '2 max',
     xpMultiplier: '100%',
     description: 'Standard mode',
-    color: 'theme.colors.primary[500]', // Blue
+    color: '#3B82F6', // Blue
   },
   {
     id: 'DEEP_WORK',
@@ -63,7 +63,7 @@ const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     pauseLimit: '0 pauses',
     xpMultiplier: '150%',
     description: 'Maximum impact',
-    color: 'theme.colors.primary[500]', // Red
+    color: '#EF4444', // Red
   },
 ];
 

@@ -298,6 +298,3 @@ function getShopItemType(itemId: string): 'BOOST' | 'COSMETIC' | 'SHIELD' | 'THE
   }
   return 'COSMETIC';
 }
-
-export * from "./economy-feed.types";
-export * from "./economy-feed.types";

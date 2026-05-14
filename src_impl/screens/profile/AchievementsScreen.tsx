@@ -584,6 +584,3 @@ export const AchievementsScreen: React.FC = () => {
 };
 
 export default AchievementsScreen;
-
-export * from "./AchievementsScreen.types";
-export * from "./AchievementsScreen.types";

@@ -21,6 +21,28 @@ import Animated, {
 import { Box } from '../../components/primitives/Box';
 import { Text } from '../../components/primitives/Text';
 import { useTheme } from '../../theme';
+
+export type QualityGrade = 'S' | 'A' | 'B' | 'C' | 'D';
+
+export interface QualityIndicatorProps {
+  /** Current quality grade */
+  grade: QualityGrade;
+  /** Numeric purity score (0-100) */
+  purityScore: number;
+  /** Estimated XP at current pace */
+  xpEstimate: number;
+  /** XP multiplier from streaks/other bonuses */
+  xpMultiplier: number;
+  /** Whether strict mode is enabled */
+  isStrictMode: boolean;
+  /** Whether session is currently paused (affects grade display) */
+  isPaused: boolean;
+  /** Whether quality decreased recently (trigger animation) */
+  qualityDecreased?: boolean;
+  /** Loading state */
+  isLoading?: boolean;
+}
+
 /**
  * Grade configuration with colors and descriptions
  */
@@ -356,5 +378,3 @@ export function QualityIndicator({
 }
 
 export default QualityIndicator;
-
-export * from "./QualityIndicator.types";

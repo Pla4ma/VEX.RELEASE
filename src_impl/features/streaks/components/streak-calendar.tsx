@@ -113,16 +113,16 @@ export function StreakCalendar({ userId, month, year, previewCompletedDays, prev
 
 const styles = createSheet({
   container: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
   },
   loadingText: {
-    color: 'theme.colors.primary[500]',
+    color: '#9ca3af',
     fontSize: 14,
   },
   errorText: {
-    color: 'theme.colors.primary[500]',
+    color: '#ef4444',
     fontSize: 14,
   },
   header: {
@@ -131,7 +131,7 @@ const styles = createSheet({
   monthName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: 'theme.colors.primary[500]',
+    color: '#f3f4f6',
     marginBottom: 4,
   },
   stats: {
@@ -139,10 +139,10 @@ const styles = createSheet({
   },
   statText: {
     fontSize: 12,
-    color: 'theme.colors.primary[500]',
+    color: '#9ca3af',
   },
   statValue: {
-    color: 'theme.colors.primary[500]',
+    color: '#fbbf24',
     fontWeight: '600',
   },
   weekdays: {
@@ -154,7 +154,7 @@ const styles = createSheet({
     width: 36,
     textAlign: 'center',
     fontSize: 12,
-    color: 'theme.colors.primary[500]',
+    color: '#6b7280',
     fontWeight: '600',
   },
   calendar: {
@@ -171,25 +171,25 @@ const styles = createSheet({
     alignItems: 'center',
   },
   dayActive: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#3b82f6',
   },
   dayToday: {
     borderWidth: 2,
-    borderColor: 'theme.colors.primary[500]',
+    borderColor: '#fbbf24',
   },
   dayText: {
     fontSize: 14,
-    color: 'theme.colors.primary[500]',
+    color: '#9ca3af',
   },
   dayTextActive: {
-    color: 'theme.colors.background.primary',
+    color: '#ffffff',
     fontWeight: '600',
   },
   dayDot: {
     width: 4,
     height: 4,
     borderRadius: 2,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#22c55e',
     marginTop: 2,
   },
   legend: {
@@ -197,7 +197,7 @@ const styles = createSheet({
     marginTop: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: 'theme.colors.primary[500]',
+    borderTopColor: '#374151',
   },
   legendItem: {
     flexDirection: 'row',
@@ -211,15 +211,13 @@ const styles = createSheet({
     marginRight: 6,
   },
   legendActive: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#3b82f6',
   },
   legendToday: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#fbbf24',
   },
   legendText: {
     fontSize: 12,
-    color: 'theme.colors.primary[500]',
+    color: '#9ca3af',
   },
 });
-
-export * from "./streak-calendar.types";

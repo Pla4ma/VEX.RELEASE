@@ -277,6 +277,3 @@ export const AchievementDetailSheet: React.FC<AchievementDetailSheetProps> = ({ 
 // ============================================================================
 
 export default AchievementDetailSheet;
-
-export * from "./AchievementDetailSheet.types";
-export * from "./AchievementDetailSheet.types";

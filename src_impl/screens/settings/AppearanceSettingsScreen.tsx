@@ -515,6 +515,3 @@ export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default AppearanceSettingsScreen;
-
-export * from "./AppearanceSettingsScreen.types";
-export * from "./AppearanceSettingsScreen.types";

@@ -219,5 +219,3 @@ export const OnboardingFlow = withScreenErrorBoundary(function _OnboardingFlow({
 }, 'Onboarding');
 
 export default OnboardingFlow;
-
-export * from "./OnboardingFlow.types";

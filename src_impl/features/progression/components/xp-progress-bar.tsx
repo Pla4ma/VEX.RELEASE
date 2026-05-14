@@ -66,15 +66,15 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({ currentXp, thresho
 
   const getTierColor = (lvl: number): [string, string] => {
     if (lvl >= 50) {
-      return ['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT'];
+      return ['#FFD700', '#FFA500'];
     } // Gold
     if (lvl >= 25) {
-      return ['theme.colors.primary[500]', 'theme.colors.primary[500]'];
+      return ['#C0C0C0', '#808080'];
     } // Silver
     if (lvl >= 10) {
-      return ['theme.colors.primary[500]', 'theme.colors.primary[500]'];
+      return ['#CD7F32', '#8B4513'];
     } // Bronze
-    return ['theme.colors.primary[500]', 'theme.colors.primary[500]']; // Green
+    return ['#4CAF50', '#2E7D32']; // Green
   };
 
   const [startColor, endColor] = getTierColor(level);
@@ -90,9 +90,9 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({ currentXp, thresho
       {/* Level Badge */}
       <View style={styles.levelBadgeContainer}>
         <Svg width={56} height={56}>
-          <Circle cx={28} cy={28} r={26} fill="theme.colors.primary[500]" stroke={startColor} strokeWidth={3} />
+          <Circle cx={28} cy={28} r={26} fill="#1a1a2e" stroke={startColor} strokeWidth={3} />
           <G>
-            <SvgText x={28} y={24} textAnchor="middle" fill="theme.colors.background.primary" fontSize={10} fontWeight="600">
+            <SvgText x={28} y={24} textAnchor="middle" fill="#fff" fontSize={10} fontWeight="600">
               LV
             </SvgText>
             <SvgText x={28} y={42} textAnchor="middle" fill={startColor} fontSize={18} fontWeight="bold">
@@ -106,7 +106,7 @@ export const XpProgressBar: React.FC<XpProgressBarProps> = ({ currentXp, thresho
       <View style={styles.barContainer}>
         {/* Background Track */}
         <View style={[styles.track, { width: BAR_WIDTH }]}>
-          <LinearGradient colors={['theme.colors.primary[500]', 'theme.colors.primary[500]']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
+          <LinearGradient colors={['#2a2a4a', '#1a1a2e']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={StyleSheet.absoluteFill} />
         </View>
 
         {/* Progress Fill */}
@@ -175,7 +175,7 @@ const styles = createSheet({
     height: BAR_HEIGHT,
     borderRadius: 12,
     overflow: 'hidden',
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#1a1a2e',
   },
   progressFill: {
     position: 'absolute',
@@ -237,18 +237,18 @@ const styles = createSheet({
     position: 'absolute',
     right: 10,
     top: -30,
-    backgroundColor: 'theme.colors.error.DEFAULT',
+    backgroundColor: '#FFD700',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
-    shadowColor: 'theme.colors.error.DEFAULT',
+    shadowColor: '#FFD700',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 10,
     elevation: 5,
   },
   levelUpText: {
-    color: 'theme.colors.primary[500]',
+    color: '#1a1a2e',
     fontWeight: 'bold',
     fontSize: 11,
   },
@@ -258,5 +258,3 @@ const styles = createSheet({
     color: 'rgba(255,255,255,0.5)',
   },
 });
-
-export * from "./xp-progress-bar.types";

@@ -57,7 +57,7 @@ describe('SettingsValidation', () => {
     });
 
     it('should validate accent color', () => {
-      const result = validateSettingValue('appearance.accentColor', 'theme.colors.primary[500]', 'appearance');
+      const result = validateSettingValue('appearance.accentColor', '#6366f1', 'appearance');
       expect(result.valid).toBe(true);
     });
 

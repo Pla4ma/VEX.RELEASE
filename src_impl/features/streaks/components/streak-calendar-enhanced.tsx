@@ -66,12 +66,12 @@ function getIntensityColor(durationMinutes: number, theme: DynamicValue): string
 
 function getFlameGradient(durationMinutes: number): [string, string] {
   if (durationMinutes < 30) {
-    return ['theme.colors.primary[500]', 'theme.colors.primary[500]'];
+    return ['#fbbf24', '#f59e0b'];
   } // Yellow flame
   if (durationMinutes < 60) {
-    return ['theme.colors.primary[500]', 'theme.colors.primary[500]'];
+    return ['#f59e0b', '#ef4444'];
   } // Orange-red flame
-  return ['theme.colors.primary[500]', 'theme.colors.primary[500]']; // Deep red flame
+  return ['#ef4444', '#dc2626']; // Deep red flame
 }
 
 // ============================================================================
@@ -271,8 +271,8 @@ export function StreakCalendarEnhanced({ userId, month, year, previewCompletedDa
         <View style={styles.legendRow}>
           <View style={styles.legendItem}>
             <View style={styles.legendGradientBox}>
-              <View style={[styles.legendDot, { backgroundColor: 'theme.colors.primary[500]' }]} />
-              <View style={[styles.legendDot, { backgroundColor: 'theme.colors.primary[500]' }]} />
+              <View style={[styles.legendDot, { backgroundColor: '#fbbf24' }]} />
+              <View style={[styles.legendDot, { backgroundColor: '#ef4444' }]} />
             </View>
             <Text style={styles.legendText}>Focus intensity</Text>
           </View>
@@ -296,23 +296,23 @@ export function StreakCalendarEnhanced({ userId, month, year, previewCompletedDa
 
 const styles = createSheet({
   container: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#1a1a2e',
     borderRadius: 16,
     padding: 20,
-    shadowColor: 'theme.colors.text.primary',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
   },
   loadingText: {
-    color: 'theme.colors.primary[500]',
+    color: '#9ca3af',
     fontSize: 14,
     textAlign: 'center',
     fontStyle: 'italic',
   },
   errorText: {
-    color: 'theme.colors.primary[500]',
+    color: '#ef4444',
     fontSize: 14,
     textAlign: 'center',
   },
@@ -322,7 +322,7 @@ const styles = createSheet({
   monthName: {
     fontSize: 20,
     fontWeight: '700',
-    color: 'theme.colors.primary[500]',
+    color: '#f3f4f6',
     marginBottom: 8,
   },
   statsRow: {
@@ -331,10 +331,10 @@ const styles = createSheet({
   },
   statText: {
     fontSize: 14,
-    color: 'theme.colors.primary[500]',
+    color: '#9ca3af',
   },
   statValueHighlight: {
-    color: 'theme.colors.primary[500]',
+    color: '#fbbf24',
     fontWeight: '700',
     fontSize: 16,
   },
@@ -344,11 +344,11 @@ const styles = createSheet({
   },
   subStat: {
     fontSize: 12,
-    color: 'theme.colors.primary[500]',
+    color: '#6b7280',
   },
   subStatSeparator: {
     fontSize: 12,
-    color: 'theme.colors.primary[500]',
+    color: '#6b7280',
     marginHorizontal: 8,
   },
   weekdays: {
@@ -357,13 +357,13 @@ const styles = createSheet({
     marginBottom: 12,
     paddingBottom: 8,
     borderBottomWidth: 1,
-    borderBottomColor: 'theme.colors.primary[500]',
+    borderBottomColor: '#374151',
   },
   weekdayText: {
     width: 40,
     textAlign: 'center',
     fontSize: 11,
-    color: 'theme.colors.primary[500]',
+    color: '#6b7280',
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -380,7 +380,7 @@ const styles = createSheet({
     borderRadius: 12,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#262642',
   },
   dayEmpty: {
     width: 40,
@@ -389,27 +389,27 @@ const styles = createSheet({
   },
   dayToday: {
     borderWidth: 2,
-    borderColor: 'theme.colors.primary[500]',
-    shadowColor: 'theme.colors.primary[500]',
+    borderColor: '#fbbf24',
+    shadowColor: '#fbbf24',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 4,
   },
   dayText: {
     fontSize: 13,
-    color: 'theme.colors.primary[500]',
+    color: '#6b7280',
     fontWeight: '500',
   },
   dayTextActive: {
-    color: 'theme.colors.background.primary',
+    color: '#ffffff',
     fontWeight: '600',
   },
   dayTextStreak: {
-    color: 'theme.colors.background.primary',
+    color: '#ffffff',
     fontWeight: '700',
   },
   dayTextToday: {
-    color: 'theme.colors.primary[500]',
+    color: '#fbbf24',
     fontWeight: '700',
   },
   todayContainer: {
@@ -423,7 +423,7 @@ const styles = createSheet({
     height: 48,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: 'theme.colors.primary[500]',
+    borderColor: '#fbbf24',
     backgroundColor: 'transparent',
   },
   fireIndicator: {
@@ -438,7 +438,7 @@ const styles = createSheet({
     marginTop: 20,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: 'theme.colors.primary[500]',
+    borderTopColor: '#374151',
   },
   legendRow: {
     flexDirection: 'row',
@@ -463,13 +463,13 @@ const styles = createSheet({
     gap: 2,
   },
   legendToday: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#fbbf24',
     borderWidth: 1,
-    borderColor: 'theme.colors.primary[500]',
+    borderColor: '#fbbf24',
   },
   legendText: {
     fontSize: 11,
-    color: 'theme.colors.primary[500]',
+    color: '#9ca3af',
   },
   legendEmoji: {
     fontSize: 12,
@@ -478,5 +478,3 @@ const styles = createSheet({
 });
 
 export default StreakCalendarEnhanced;
-
-export * from "./streak-calendar-enhanced.types";

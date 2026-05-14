@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import type { SessionSummary } from '../../session/types';
 import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
-import { getJourneyReturnHook, getJourneyState } from './journey-ladder';
 
 export const PostSessionStoryViewModelSchema = z
   .object({
@@ -29,21 +28,13 @@ export const PostSessionStoryViewModelSchema = z
     }),
     pendingSync: z.boolean(),
     rewardReveal: z.object({
-      nearMiss: z.boolean(),
       rewardIds: z.array(z.string()),
-      tier: z.string(),
     }),
     sessionId: z.string().uuid(),
     streakState: z.object({
       action: z.string(),
       newDays: z.number().int().min(0),
       previousDays: z.number().int().min(0),
-    }),
-    journey: z.object({
-      chapter: z.number().int().min(1),
-      progressPercent: z.number().min(0).max(100),
-      returnHook: z.string(),
-      rungLabel: z.string(),
     }),
     xpProgress: z.object({
       xpDelta: z.number().int(),
@@ -59,7 +50,6 @@ export function buildPostSessionStoryViewModel(input: {
 }): PostSessionStoryViewModel {
   const ledger = CompletionLedgerSchema.parse(input.ledger);
   const degradedWarnings = Array.from(new Set(input.degradedWarnings));
-  const journeyState = getJourneyState(ledger.xpDelta + ledger.gradeScore * 10);
   return PostSessionStoryViewModelSchema.parse({
     companionReaction: { reactionId: ledger.companionReactionId },
     dailyMission: ledger.dailyMissionResult,
@@ -81,26 +71,9 @@ export function buildPostSessionStoryViewModel(input: {
       route: 'Home',
     },
     pendingSync: ledger.offlineSyncStatus === 'pending_sync',
-    rewardReveal: {
-      nearMiss: ledger.variableRewardNearMiss,
-      rewardIds: ledger.rewardIds,
-      tier: ledger.variableRewardTier,
-    },
+    rewardReveal: { rewardIds: ledger.rewardIds },
     sessionId: input.summary.sessionId,
     streakState: ledger.streakResult,
-    journey: {
-      chapter: ledger.journeyChapter,
-      progressPercent: ledger.journeyProgressPercent,
-      returnHook: getJourneyReturnHook({
-        ...journeyState,
-        chapter: ledger.journeyChapter,
-        isNearMilestone: ledger.journeyNearMiss,
-        progressPercent: ledger.journeyProgressPercent,
-        rung: ledger.journeyRung,
-        rungLabel: ledger.journeyRungLabel,
-      }),
-      rungLabel: ledger.journeyRungLabel,
-    },
     xpProgress: { xpDelta: ledger.xpDelta },
   });
 }

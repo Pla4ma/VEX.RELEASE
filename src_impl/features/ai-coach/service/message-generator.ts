@@ -425,6 +425,3 @@ function logGenerationError(userId: string, category: MessageCategory, error: un
   // Implementation would log to Sentry/analytics
   // Sentry.captureException(error, { extra: { userId, category } });
 }
-
-export * from "./message-generator.types";
-export * from "./message-generator.types";

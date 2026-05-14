@@ -34,6 +34,13 @@ export type ChallengeCompletion = z.infer<typeof ChallengeCompletionSchema>;
 // Completion Validation
 // ============================================================================
 
+export interface CompletionValidationResult {
+  valid: boolean;
+  errors: string[];
+  suspicious: boolean;
+  estimatedLegitimateTime?: number;
+}
+
 /**
  * Validate challenge completion
  */
@@ -120,6 +127,13 @@ export function validateChallengeCompletion(
 // Challenge Balancing
 // ============================================================================
 
+export interface DifficultyMetrics {
+  completionRate: number;
+  avgTimeSpent: number;
+  avgAttempts: number;
+  abandonmentRate: number;
+}
+
 /**
  * Analyze challenge difficulty and suggest balancing
  */
@@ -184,5 +198,3 @@ export const ChallengeValidation = {
 };
 
 export default ChallengeValidation;
-
-export * from "./validation.types";

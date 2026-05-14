@@ -250,5 +250,3 @@ export function useSessionRewardSync({
     rewardCreditStatus,
   };
 }
-
-export * from "./useSessionRewardSync.types";

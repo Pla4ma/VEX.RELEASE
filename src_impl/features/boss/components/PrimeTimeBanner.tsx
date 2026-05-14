@@ -229,6 +229,3 @@ export function PrePrimeTimeBanner({ window, bossName, onPress }: Omit<PrimeTime
 }
 
 export default PrimeTimeBanner;
-
-export * from "./PrimeTimeBanner.types";
-export * from "./PrimeTimeBanner.types";

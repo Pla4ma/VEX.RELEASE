@@ -22,6 +22,18 @@ import type { ChestRarity } from '../../rewards/service';
 import { getChestAppearance, generateChestContents } from '../../rewards/service';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+export interface ChestOpeningOverlayProps {
+  /** Modal visibility */
+  visible: boolean;
+  /** Chest rarity */
+  rarity: ChestRarity;
+  /** Called when overlay closes */
+  onClose: () => void;
+  /** Called when chest is opened (to update inventory) */
+  onChestOpened: (contents: { xp: number; coins: number; gems?: number; item?: string }) => void;
+}
+
 type OpeningPhase = 'READY' | 'OPENING' | 'REVEALING' | 'COMPLETE';
 
 /**
@@ -52,7 +64,7 @@ function GoldenParticle({ delay }: { delay: number }): JSX.Element {
           width: 8,
           height: 8,
           borderRadius: 4,
-          backgroundColor: 'theme.colors.primary[500]',
+          backgroundColor: '#F59E0B',
         },
         particleStyle,
       ]}
@@ -334,5 +346,3 @@ export function ChestOpeningOverlay({ visible, rarity, onClose, onChestOpened }:
 }
 
 export default ChestOpeningOverlay;
-
-export * from "./ChestOpeningOverlay.types";

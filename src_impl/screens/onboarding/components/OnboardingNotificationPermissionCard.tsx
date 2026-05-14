@@ -220,4 +220,3 @@ const styles = createSheet({
   },
 });
 
-export * from "./OnboardingNotificationPermissionCard.types";

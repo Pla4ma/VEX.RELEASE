@@ -29,6 +29,54 @@ import { eventBus } from '../../events';
 // ============================================================================
 // Difficulty Types
 // ============================================================================
+
+export type DifficultyRating = 'EASY' | 'NORMAL' | 'HARD' | 'EXTREME';
+
+export interface UserPerformanceMetrics {
+  userId: string;
+
+  // Last 7 days
+  sessionsAttempted: number;
+  sessionsCompleted: number;
+  completionRate: number; // 0-1
+
+  // Quality metrics
+  averagePurity: number; // 0-100
+  averageGrade: 'S' | 'A' | 'B' | 'C' | 'D';
+  perfectSessions: number;
+
+  // Trend
+  trendDirection: 'improving' | 'stable' | 'declining';
+  consistencyScore: number; // 0-100
+
+  // Boss-specific
+  bossDefeatRate: number; // 0-1
+  averageBossDamage: number;
+
+  lastUpdated: number;
+}
+
+export interface AdaptiveBossConfig {
+  baseHealth: number;
+  healthMultiplier: number;
+  attackFrequency: number; // attacks per 10 min
+  purityThreshold: number; // 0-100
+  timeLimit: number; // seconds
+  recommendedMode: 'FLOW' | 'CHALLENGE' | 'RECOVERY';
+}
+
+export interface DifficultyAdjustment {
+  reason: string;
+  previousRating: DifficultyRating;
+  newRating: DifficultyRating;
+  changes: {
+    healthChange: number; // percentage
+    attackFreqChange: number;
+    purityThresholdChange: number;
+  };
+  messageToUser: string;
+}
+
 // ============================================================================
 // Adaptive Difficulty Engine
 // ============================================================================
@@ -478,5 +526,3 @@ export function getAdaptiveDifficultyEngine(): AdaptiveDifficultyEngine {
   }
   return engine;
 }
-
-export * from "./AdaptiveDifficultyEngine.types";

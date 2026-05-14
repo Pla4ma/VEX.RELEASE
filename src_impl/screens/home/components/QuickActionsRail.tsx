@@ -30,21 +30,21 @@ const QUICK_ACTIONS: QuickAction[] = [
     id: 'focus',
     icon: 'target',
     label: 'Focus',
-    color: 'theme.colors.primary[500]', // Blue
+    color: '#3B82F6', // Blue
     action: 'focus',
   },
   {
     id: 'study',
     icon: 'book-open',
     label: 'Study',
-    color: 'theme.colors.primary[500]', // Indigo
+    color: '#6366F1', // Indigo
     action: 'study',
   },
   {
     id: 'boss',
     icon: 'zap',
     label: 'Boss',
-    color: 'theme.colors.primary[500]', // Purple
+    color: '#7C3AED', // Purple
     action: 'boss',
   },
 ];

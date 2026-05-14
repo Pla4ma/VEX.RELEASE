@@ -28,7 +28,6 @@ interface BuildViewModelInput {
   focusInterruptions: number;
   startedAt: number;
   isOffline: boolean;
-  activeConsumables?: string[];
 }
 
 interface SessionCapabilities {
@@ -36,27 +35,21 @@ interface SessionCapabilities {
   canComplete: boolean;
   canAbandon: boolean;
   canBackground: boolean;
-  canGracefulExit: boolean;
 }
 
 export function buildSessionCapabilities(
   input: BuildViewModelInput
 ): SessionCapabilities {
   const config = getActiveSessionConfig(input.mode);
-  const hasZenShield = input.activeConsumables?.includes('zen-shield');
-  const maxPauses = config.maxPauses + (hasZenShield ? 1 : 0);
 
   return {
     canPause:
       config.allowPauses &&
       input.elapsedSeconds >= config.minFocusSecondsBeforePause &&
-      input.pauseCount < maxPauses,
+      input.pauseCount < config.maxPauses,
     canComplete: input.elapsedSeconds >= 60,
     canAbandon: input.status === 'ACTIVE' || input.status === 'PAUSED',
     canBackground: canBackground(input.mode, input.backgroundTimeSeconds),
-    canGracefulExit:
-      (input.status === 'ACTIVE' || input.status === 'PAUSED') &&
-      input.elapsedSeconds / input.totalSeconds >= 0.5,
   };
 }
 
@@ -116,10 +109,7 @@ export function buildSessionViewModel(
     canPause: capabilities.canPause,
     canComplete: capabilities.canComplete,
     canAbandon: capabilities.canAbandon,
-    canGracefulExit: capabilities.canGracefulExit,
     isOffline: input.isOffline,
-    activeConsumables: input.activeConsumables || [],
-    metadata: {},
   };
 }
 

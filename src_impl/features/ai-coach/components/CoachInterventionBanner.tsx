@@ -18,6 +18,7 @@ import { Text } from '../../../components';
 import { MMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 
 // Phase 2.3 - New intervention types added
+export type InterventionType = 'BURNOUT' | 'PLATEAU' | 'STREAK_RISK' | 'BOSS_FINISH' | 'STUDY_BEHIND' | 'BOSS_OPPORTUNITY' | 'MOMENTUM_BUILDING' | 'COMEBACK_READY' | 'STUDY_PLAN_COMPLETE';
 
 interface Intervention {
   id: string;
@@ -286,6 +287,3 @@ export function CoachInterventionBanner({ intervention, coachName, coachAvatar, 
     </Animated.View>
   );
 }
-
-export * from "./CoachInterventionBanner.types";
-export * from "./CoachInterventionBanner.types";

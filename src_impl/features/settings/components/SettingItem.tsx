@@ -37,25 +37,25 @@ const styles = createSheet({
     justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    backgroundColor: 'theme.colors.background.primary',
+    backgroundColor: '#ffffff',
     borderBottomWidth: 1,
-    borderBottomColor: 'theme.colors.primary[500]',
+    borderBottomColor: '#e5e7eb',
   },
   content: {
     flex: 1,
   },
   label: {
     fontSize: 16,
-    color: 'theme.colors.primary[500]',
+    color: '#111827',
   },
   value: {
     fontSize: 14,
-    color: 'theme.colors.primary[500]',
+    color: '#6b7280',
     marginTop: 4,
   },
   arrow: {
     fontSize: 18,
-    color: 'theme.colors.primary[500]',
+    color: '#9ca3af',
     marginLeft: 8,
   },
 });

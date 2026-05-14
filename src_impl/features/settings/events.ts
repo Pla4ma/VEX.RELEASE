@@ -20,6 +20,27 @@ interface SettingsResetEvent {
 }
 
 /**
+ * Initialize settings event handlers
+ */
+export function initializeSettingsEventHandlers(): () => void {
+  // Listen for settings changes
+  const changeUnsubscribe = eventBus.subscribe('settings:change', (event: SettingsChangeEvent) => {
+    handleSettingChange(event);
+  });
+
+  // Listen for settings reset
+  const resetUnsubscribe = eventBus.subscribe('settings:reset', (event) => {
+    handleSettingsReset(event as SettingsResetEvent);
+  });
+
+  // Return cleanup function
+  return () => {
+    changeUnsubscribe();
+    resetUnsubscribe();
+  };
+}
+
+/**
  * Handle a setting change event
  */
 function handleSettingChange(event: SettingsChangeEvent): void {
@@ -226,6 +247,34 @@ function applyPrivacySideEffect(key: string, value: unknown): void {
   }
 }
 
-export * from "./events.types";
-export * from "./events.types";
-export * from "./events.part1";
+/**
+ * Emit a settings change event
+ */
+export function emitSettingChange(key: string, value: unknown, previousValue?: unknown): void {
+  eventBus.publish('settings:change', {
+    key,
+    value,
+    previousValue,
+  });
+}
+
+/**
+ * Emit a settings reset event
+ */
+export function emitSettingsReset(category?: SettingCategory): void {
+  eventBus.publish('settings:reset', {
+    category,
+  });
+}
+
+/**
+ * Track settings analytics
+ */
+export function trackSettingsAnalytics(action: 'change' | 'reset' | 'export' | 'import' | 'sync', metadata?: Record<string, unknown>): void {
+  Sentry.addBreadcrumb({
+    category: 'settings_analytics',
+    message: `Settings action: ${action}`,
+    level: 'info',
+    data: metadata,
+  });
+}

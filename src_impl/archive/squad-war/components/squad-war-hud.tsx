@@ -401,6 +401,3 @@ const styles = createSheet({
 });
 
 export default SquadWarHUD;
-
-export * from "./squad-war-hud.types";
-export * from "./squad-war-hud.types";

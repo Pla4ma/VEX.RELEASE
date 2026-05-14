@@ -426,6 +426,3 @@ export function useSessionTimer(options: UseSessionTimerOptions): UseSessionTime
 // ============================================================================
 
 export default useSessionTimer;
-
-export * from "./useSessionTimer.types";
-export * from "./useSessionTimer.types";

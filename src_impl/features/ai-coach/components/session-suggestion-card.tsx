@@ -17,14 +17,14 @@ export interface SessionSuggestionCardProps {
 }
 
 const TYPE_CONFIG: Record<RecommendationType, { icon: string; title: string; color: string }> = {
-  OPTIMAL_TIME: { icon: '🎯', title: 'Perfect Timing', color: 'theme.colors.primary[500]' },
-  STREAK_PROTECTION: { icon: '🔥', title: 'Save Your Streak', color: 'theme.colors.error.DEFAULT' },
-  COMEBACK_BUILDER: { icon: '💪', title: 'Comeback Time', color: 'theme.colors.primary[500]' },
-  DIFFICULTY_ADJUST: { icon: '⚙️', title: 'Smart Adjustment', color: 'theme.colors.primary[500]' },
-  CHALLENGE_SYNC: { icon: '🎮', title: 'Challenge Ready', color: 'theme.colors.primary[500]' },
-  BOSS_PREP: { icon: '⚔️', title: 'Boss Battle Prep', color: 'theme.colors.primary[500]' },
-  HABIT_BUILDER: { icon: '📅', title: 'Build The Habit', color: 'theme.colors.primary[500]' },
-  ENERGY_BASED: { icon: '⚡', title: 'Energy Match', color: 'theme.colors.primary[500]' },
+  OPTIMAL_TIME: { icon: '🎯', title: 'Perfect Timing', color: '#4ECDC4' },
+  STREAK_PROTECTION: { icon: '🔥', title: 'Save Your Streak', color: '#FC8181' },
+  COMEBACK_BUILDER: { icon: '💪', title: 'Comeback Time', color: '#68D391' },
+  DIFFICULTY_ADJUST: { icon: '⚙️', title: 'Smart Adjustment', color: '#A0AEC0' },
+  CHALLENGE_SYNC: { icon: '🎮', title: 'Challenge Ready', color: '#F6AD55' },
+  BOSS_PREP: { icon: '⚔️', title: 'Boss Battle Prep', color: '#9F7AEA' },
+  HABIT_BUILDER: { icon: '📅', title: 'Build The Habit', color: '#63B3ED' },
+  ENERGY_BASED: { icon: '⚡', title: 'Energy Match', color: '#F6E05E' },
 };
 
 export function SessionSuggestionCard({
@@ -88,13 +88,13 @@ export function SessionSuggestionCard({
 
 const styles = createSheet({
   container: {
-    backgroundColor: 'theme.colors.background.primary',
+    backgroundColor: '#FFF',
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 16,
     marginVertical: 8,
     borderWidth: 2,
-    shadowColor: 'theme.colors.text.primary',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -118,12 +118,12 @@ const styles = createSheet({
   },
   confidence: {
     fontSize: 12,
-    color: 'theme.colors.primary[500]',
+    color: '#666',
   },
   reasoning: {
     fontSize: 15,
     lineHeight: 22,
-    color: 'theme.colors.primary[500]',
+    color: '#333',
     marginBottom: 16,
   },
   details: {
@@ -132,20 +132,20 @@ const styles = createSheet({
     marginBottom: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: 'theme.colors.primary[500]',
+    borderTopColor: '#F0F0F0',
   },
   detailItem: {
     flex: 1,
   },
   detailLabel: {
     fontSize: 12,
-    color: 'theme.colors.primary[500]',
+    color: '#666',
     marginBottom: 4,
   },
   detailValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'theme.colors.primary[500]',
+    color: '#333',
   },
   actions: {
     flexDirection: 'row',
@@ -160,7 +160,7 @@ const styles = createSheet({
     justifyContent: 'center',
   },
   acceptButtonText: {
-    color: 'theme.colors.background.primary',
+    color: '#FFF',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -173,7 +173,7 @@ const styles = createSheet({
     justifyContent: 'center',
   },
   dismissButtonText: {
-    color: 'theme.colors.primary[500]',
+    color: '#666',
     fontSize: 16,
     fontWeight: '500',
   },

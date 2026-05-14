@@ -393,5 +393,3 @@ export function getSessionRepository(userId?: string): SessionRepository {
   }
   return repositoryInstance;
 }
-
-export * from "./SessionRepository.types";

@@ -5,7 +5,8 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as service from '../service';
-import type { CurrencyType, TransactionSource, AddCurrencyInput, SpendCurrencyInput, InitiatePurchaseInput } from '../schemas';
+import { checkInsuranceStatus, purchaseInsurance, type InsuranceStatus, type PurchaseInsuranceInput } from '../StreakInsurance';
+import type { CurrencyType, TransactionSource, AddCurrencyInput, SpendCurrencyInput, InitiatePurchaseInput, ConvertCurrencyInput } from '../schemas';
 
 // ============================================================================
 // Query Keys
@@ -17,6 +18,14 @@ export const economyKeys = {
   balance: (userId: string, currency?: CurrencyType) => [...economyKeys.all, 'balance', userId, currency] as const,
   transactions: (userId: string, filters?: Record<string, unknown>) => [...economyKeys.all, 'transactions', userId, filters] as const,
   purchase: (purchaseId: string) => [...economyKeys.all, 'purchase', purchaseId] as const,
+  offers: (userId: string, userLevel: number) => [...economyKeys.all, 'offers', userId, userLevel] as const,
+  analytics: (userId: string, period: string) => [...economyKeys.all, 'analytics', userId, period] as const,
+};
+
+// Wager keys removed - gambling dark patterns archived
+
+export const insuranceKeys = {
+  status: (userId: string) => [...economyKeys.all, 'insurance', 'status', userId] as const,
 };
 
 // ============================================================================
@@ -33,9 +42,54 @@ export function useWallet(userId: string) {
   });
 }
 
+// useActiveWager hook removed - gambling dark patterns archived
+
 // ============================================================================
-// Transaction Queries
+// Insurance Hooks (Phase 3)
 // ============================================================================
+
+export function useInsuranceStatus(userId: string | undefined): {
+  status: InsuranceStatus | null;
+  isLoading: boolean;
+  isPending: boolean;
+  isError: boolean;
+  error: Error | null;
+  refetch: () => void;
+} {
+  const query = useQuery({
+    queryKey: insuranceKeys.status(userId ?? ''),
+    queryFn: () => checkInsuranceStatus({ userId: userId! }),
+    enabled: Boolean(userId),
+    staleTime: 2 * 60 * 1000, // 2 min - insurance status changes rarely
+    gcTime: 10 * 60 * 1000,
+  });
+  return {
+    status: query.data ?? null,
+    isLoading: query.isLoading,
+    isPending: query.isPending,
+    isError: query.isError,
+    error: query.error instanceof Error ? query.error : null,
+    refetch: query.refetch,
+  };
+}
+
+export function usePurchaseInsurance() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: PurchaseInsuranceInput) => purchaseInsurance(input),
+    onSuccess: (_, variables) => {
+      void queryClient.invalidateQueries({
+        queryKey: insuranceKeys.status(variables.userId),
+      });
+      void queryClient.invalidateQueries({
+        queryKey: economyKeys.wallet(variables.userId),
+      });
+      void queryClient.invalidateQueries({
+        queryKey: economyKeys.balance(variables.userId, 'GEMS'),
+      });
+    },
+  });
+}
 
 export function useWalletSummary(userId: string) {
   return useQuery({
@@ -51,9 +105,13 @@ export function useBalance(userId: string, currency: CurrencyType) {
     queryKey: economyKeys.balance(userId, currency),
     queryFn: () => service.getBalance(userId, currency),
     enabled: Boolean(userId),
-    staleTime: 1000 * 10,
+    staleTime: 1000 * 10, // 10 seconds - balance changes frequently
   });
 }
+
+// ============================================================================
+// Transaction Queries
+// ============================================================================
 
 export function useTransactionHistory(
   userId: string,
@@ -71,6 +129,19 @@ export function useTransactionHistory(
     queryFn: () => service.getTransactionHistory(userId, options),
     enabled: Boolean(userId),
     staleTime: 1000 * 60, // 1 minute
+  });
+}
+
+// ============================================================================
+// Offer Queries
+// ============================================================================
+
+export function useActiveOffers(userId: string, userLevel: number) {
+  return useQuery({
+    queryKey: economyKeys.offers(userId, userLevel),
+    queryFn: () => service.getActiveOffers(userLevel),
+    enabled: Boolean(userId),
+    staleTime: 1000 * 60 * 5, // 5 minutes - offers don't change often
   });
 }
 
@@ -153,5 +224,62 @@ export function useCompletePurchaseDelivery() {
         queryKey: economyKeys.purchase(variables.purchaseId),
       });
     },
+  });
+}
+
+export function useRequestRefund() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ purchaseId, userId, reason }: { purchaseId: string; userId: string; reason: string }) => service.requestRefund(purchaseId, userId, reason),
+    onSuccess: (result) => {
+      queryClient.invalidateQueries({
+        queryKey: economyKeys.purchase(result.purchaseId),
+      });
+    },
+  });
+}
+
+export function useConvertCurrency() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (input: ConvertCurrencyInput) => service.convertCurrency(input),
+    onSuccess: (result, input) => {
+      queryClient.invalidateQueries({
+        queryKey: economyKeys.wallet(input.userId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: economyKeys.balance(input.userId, input.fromCurrency),
+      });
+      queryClient.invalidateQueries({
+        queryKey: economyKeys.balance(input.userId, input.toCurrency),
+      });
+    },
+  });
+}
+
+export function useClaimOffer() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ offerId, userId, purchaseId }: { offerId: string; userId: string; purchaseId: string; userLevel: number }) => service.claimOffer(offerId, userId, purchaseId),
+    onSuccess: (result, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: economyKeys.offers(variables.userId, variables.userLevel),
+      });
+    },
+  });
+}
+
+// ============================================================================
+// Analytics Queries
+// ============================================================================
+
+export function useEconomyAnalytics(userId: string, period: 'DAILY' | 'WEEKLY' | 'MONTHLY', periodStart: number, periodEnd: number) {
+  return useQuery({
+    queryKey: economyKeys.analytics(userId, `${period}_${periodStart}_${periodEnd}`),
+    queryFn: () => service.getEconomyAnalytics(userId, period, periodStart, periodEnd),
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }

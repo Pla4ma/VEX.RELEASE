@@ -405,6 +405,3 @@ const styles = createSheet({
 });
 
 export default ActiveSessionHUD;
-
-export * from "./ActiveSessionHUD.types";
-export * from "./ActiveSessionHUD.types";

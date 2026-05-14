@@ -454,6 +454,3 @@ export const SettingsScreen = withScreenErrorBoundary(function _SettingsScreen({
 }, 'Settings');
 
 export default SettingsScreen;
-
-export * from "./SettingsScreen.types";
-export * from "./SettingsScreen.types";

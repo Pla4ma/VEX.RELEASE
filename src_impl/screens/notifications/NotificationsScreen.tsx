@@ -626,6 +626,3 @@ export const NotificationsScreen: React.FC = () => {
 };
 
 export default NotificationsScreen;
-
-export * from "./NotificationsScreen.types";
-export * from "./NotificationsScreen.types";

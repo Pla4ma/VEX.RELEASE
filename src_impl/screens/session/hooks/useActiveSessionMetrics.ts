@@ -207,5 +207,3 @@ export function useActiveSessionMetrics({
     ...animations,
   };
 }
-
-export * from "./useActiveSessionMetrics.types";

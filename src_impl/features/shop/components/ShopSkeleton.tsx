@@ -73,12 +73,12 @@ const styles = createSheet({
     borderRadius: 12,
   },
   skeleton: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#E5E7EB',
   },
   skeletonText: {
     width: '60%',
     height: 12,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#D1D5DB',
     borderRadius: 4,
     marginTop: 8,
   },

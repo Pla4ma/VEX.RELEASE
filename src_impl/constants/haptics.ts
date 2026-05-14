@@ -14,6 +14,32 @@ import { triggerHaptic, type HapticFeedbackKind } from '../utils/haptics';
 // ============================================================================
 // Haptic Event Types
 // ============================================================================
+
+export type HapticEvent =
+  | 'SESSION_START'
+  | 'SESSION_COMPLETE'
+  | 'SESSION_PAUSE'
+  | 'SESSION_RESUME'
+  | 'LEVEL_UP'
+  | 'BOSS_HIT'
+  | 'BOSS_DEFEATED'
+  | 'STREAK_MILESTONE'
+  | 'STREAK_BREAK'
+  | 'STREAK_SAVED'
+  | 'REWARD_CLAIM'
+  | 'CHEST_OPEN'
+  | 'CRITICAL_HIT'
+  | 'RARE_LOOT'
+  | 'LEGENDARY_LOOT'
+  | 'PURCHASE_SUCCESS'
+  | 'PURCHASE_ERROR'
+  | 'BUTTON_PRESS'
+  | 'SELECTION_CHANGE'
+  | 'ERROR'
+  | 'SUCCESS'
+  | 'WARNING'
+  | 'ACHIEVEMENT_UNLOCKED';
+
 // ============================================================================
 // Haptic Event Constants
 // ============================================================================
@@ -177,5 +203,3 @@ export const HAPTIC_LEVEL_UP = HapticEvents.LEVEL_UP;
 
 /** @deprecated Use HapticEvents.PURCHASE_SUCCESS */
 export const HAPTIC_PURCHASE_SUCCESS = HapticEvents.PURCHASE_SUCCESS;
-
-export * from "./haptics.types";

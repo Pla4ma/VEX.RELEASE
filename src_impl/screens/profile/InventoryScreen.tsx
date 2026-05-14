@@ -79,7 +79,7 @@ const InventoryHeader: React.FC<{
           >
             <Box flexDirection="row" alignItems="center" gap={2}>
               <Text style={{ fontSize: 16 }}>⚔️</Text>
-              <Text variant="body" color="theme.colors.background.primary" fontWeight="bold">
+              <Text variant="body" color="#FFFFFF" fontWeight="bold">
                 {equippedCount} Equipped
               </Text>
             </Box>
@@ -131,7 +131,7 @@ const TabBar: React.FC<{
                     <Text style={{ fontSize: 16 }}>{tab.icon}</Text>
                     <Text
                       variant="body"
-                      color={isActive ? 'theme.colors.background.primary' : theme.colors.text.secondary}
+                      color={isActive ? '#FFFFFF' : theme.colors.text.secondary}
                       fontWeight={isActive ? 'semibold' : 'normal'}
                     >
                       {tab.label}
@@ -143,7 +143,7 @@ const TabBar: React.FC<{
                         borderRadius={8}
                         bg={isActive ? 'rgba(255,255,255,0.3)' : theme.colors.background.secondary}
                       >
-                        <Text variant="caption" color={isActive ? 'theme.colors.background.primary' : theme.colors.text.tertiary}>
+                        <Text variant="caption" color={isActive ? '#FFFFFF' : theme.colors.text.tertiary}>
                           {count}
                         </Text>
                       </Box>
@@ -268,7 +268,7 @@ const EquipmentLoadoutPanel: React.FC<{
                   accessibilityLabel="× button"
                   accessibilityRole="button"
                   accessibilityHint="Activates this control">
-                    <Text style={{ fontSize: 12, color: 'theme.colors.background.primary' }}>×</Text>
+                    <Text style={{ fontSize: 12, color: '#FFFFFF' }}>×</Text>
                   </Pressable>
                 </Box>
               </Animated.View>
@@ -511,5 +511,3 @@ export const InventoryScreen: React.FC = () => {
 };
 
 export default InventoryScreen;
-
-export * from "./InventoryScreen.types";

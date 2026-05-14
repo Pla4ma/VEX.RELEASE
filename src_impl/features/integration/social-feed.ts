@@ -441,6 +441,3 @@ function getNotificationBody(activity: SocialActivity): string {
 function generateId(): string {
   return crypto.randomUUID();
 }
-
-export * from "./social-feed.types";
-export * from "./social-feed.types";

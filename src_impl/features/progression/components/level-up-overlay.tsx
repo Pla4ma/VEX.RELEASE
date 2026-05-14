@@ -52,7 +52,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({ isVisible, previ
         x: Math.random() * width,
         y: -20 - Math.random() * 100,
         rotation: Math.random() * 360,
-        color: ['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT', 'theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]'][Math.floor(Math.random() * 5)],
+        color: ['#FFD700', '#FF6B35', '#4CAF50', '#2196F3', '#9C27B0'][Math.floor(Math.random() * 5)],
         size: 5 + Math.random() * 10,
       }));
       setConfetti(pieces);
@@ -92,18 +92,18 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({ isVisible, previ
 
   const getTierColor = (level: number): [string, string] => {
     if (level >= 100) {
-      return ['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT'];
+      return ['#FFD700', '#FF6B35'];
     }
     if (level >= 50) {
-      return ['theme.colors.primary[500]', 'theme.colors.primary[500]'];
+      return ['#9C27B0', '#E91E63'];
     }
     if (level >= 25) {
-      return ['theme.colors.primary[500]', 'theme.colors.primary[500]'];
+      return ['#2196F3', '#03A9F4'];
     }
     if (level >= 10) {
-      return ['theme.colors.primary[500]', 'theme.colors.primary[500]'];
+      return ['#4CAF50', '#8BC34A'];
     }
-    return ['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT'];
+    return ['#FF9800', '#FFC107'];
   };
 
   const [startColor, endColor] = getTierColor(newLevel);
@@ -120,7 +120,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({ isVisible, previ
     <Modal visible={isVisible} transparent animationType="fade" onRequestClose={onContinue}>
       <View style={styles.container}>
         {/* Background */}
-        <LinearGradient colors={['theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]']} style={styles.background} />
+        <LinearGradient colors={['#1a1a2e', '#0f0f1e', '#1a1a2e']} style={styles.background} />
 
         {/* Confetti */}
         {showConfetti &&
@@ -196,7 +196,7 @@ export const LevelUpOverlay: React.FC<LevelUpOverlayProps> = ({ isVisible, previ
 
           {/* Continue Button */}
           <Pressable style={({ pressed }) => [styles.continueButton, pressed && { opacity: 0.8 }]} onPress={onContinue} accessibilityLabel="AWESOME! 🎉 button" accessibilityRole="button" accessibilityHint="Activates this control">
-            <LinearGradient colors={['theme.colors.error.DEFAULT', 'theme.colors.error.DEFAULT']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.continueGradient}>
+            <LinearGradient colors={['#FFD700', '#FF6B35']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={styles.continueGradient}>
               <Text style={styles.continueText}>AWESOME! 🎉</Text>
             </LinearGradient>
           </Pressable>
@@ -237,7 +237,7 @@ const styles = createSheet({
     borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: 'theme.colors.error.DEFAULT',
+    shadowColor: '#FFD700',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.8,
     shadowRadius: 20,
@@ -252,7 +252,7 @@ const styles = createSheet({
   levelNumber: {
     fontSize: 48,
     fontWeight: 'bold',
-    color: 'theme.colors.background.primary',
+    color: '#FFF',
     textShadowColor: 'rgba(0,0,0,0.3)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
@@ -260,8 +260,8 @@ const styles = createSheet({
   levelUpText: {
     fontSize: 36,
     fontWeight: 'bold',
-    color: 'theme.colors.error.DEFAULT',
-    textShadowColor: 'theme.colors.error.DEFAULT',
+    color: '#FFD700',
+    textShadowColor: '#FFD700',
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 20,
     marginBottom: 16,
@@ -278,7 +278,7 @@ const styles = createSheet({
   },
   arrow: {
     fontSize: 24,
-    color: 'theme.colors.error.DEFAULT',
+    color: '#FFD700',
     marginHorizontal: 12,
   },
   newLevel: {
@@ -328,7 +328,7 @@ const styles = createSheet({
   rewardAmount: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'theme.colors.background.primary',
+    color: '#FFF',
   },
   rewardType: {
     fontSize: 10,
@@ -361,14 +361,14 @@ const styles = createSheet({
   },
   unlockText: {
     fontSize: 14,
-    color: 'theme.colors.background.primary',
+    color: '#FFF',
     fontWeight: '500',
   },
   continueButton: {
     width: 200,
     borderRadius: 12,
     overflow: 'hidden',
-    shadowColor: 'theme.colors.error.DEFAULT',
+    shadowColor: '#FFD700',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 20,
@@ -379,10 +379,8 @@ const styles = createSheet({
     alignItems: 'center',
   },
   continueText: {
-    color: 'theme.colors.background.primary',
+    color: '#FFF',
     fontSize: 18,
     fontWeight: 'bold',
   },
 });
-
-export * from "./level-up-overlay.types";

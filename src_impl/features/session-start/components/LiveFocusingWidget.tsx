@@ -20,6 +20,21 @@ import { useTheme } from '../../../theme';
 // Types
 // ============================================================================
 
+export interface LiveFocusingData {
+  /** Total number of people currently focusing */
+  totalCount: number;
+  /** Number of friends currently focusing */
+  friendsCount: number;
+  /** Number of squad members currently focusing */
+  squadCount: number;
+  /** Sample of avatars to display */
+  sampleAvatars?: Array<{ url?: string; initials: string }>;
+  /** Trend: 'up' | 'down' | 'stable' */
+  trend?: 'up' | 'down' | 'stable';
+  /** Percentage change from last hour */
+  trendPercent?: number;
+}
+
 interface LiveFocusingWidgetProps {
   /** Live data from server/realtime connection */
   data: LiveFocusingData;
@@ -55,7 +70,7 @@ function PulsingLiveDot(): JSX.Element {
           width: 8,
           height: 8,
           borderRadius: 4,
-          backgroundColor: 'theme.colors.primary[500]',
+          backgroundColor: '#22C55E',
         },
         animatedStyle,
       ]}
@@ -178,9 +193,9 @@ function TrendIndicator({ trend, percent }: { trend: 'up' | 'down' | 'stable'; p
   };
 
   const colors = {
-    up: 'theme.colors.primary[500]',
-    down: 'theme.colors.primary[500]',
-    stable: 'theme.colors.primary[500]',
+    up: '#22C55E',
+    down: '#EF4444',
+    stable: '#94A3B8',
   };
   return (
     <Box flexDirection="row" alignItems="center" gap="xs">
@@ -237,7 +252,7 @@ export function LiveFocusingWidget({ data, onPress, compact = false, isLoading: 
           borderColor="border.light"
           gap="lg"
           style={{
-            shadowColor: 'theme.colors.text.primary',
+            shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.05,
             shadowRadius: 4,
@@ -372,5 +387,3 @@ export function LiveFocusingSkeleton({ compact = false }: { compact?: boolean })
 }
 
 export default LiveFocusingWidget;
-
-export * from "./LiveFocusingWidget.types";

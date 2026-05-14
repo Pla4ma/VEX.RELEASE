@@ -242,6 +242,3 @@ const styles = createSheet({
 });
 
 export default SessionControls;
-
-export * from "./SessionControls.types";
-export * from "./SessionControls.types";

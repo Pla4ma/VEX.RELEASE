@@ -1,48 +1,93 @@
-import { z } from 'zod';
+import {
+  MessageQualityAnalysisSchema,
+  MessageQualityElements,
+  type MessageQualityAnalysis,
+} from './message-quality-schema';
+import {
+  calculateQualityConfidence,
+  detectGenericPatterns,
+  detectQualityElements,
+  determineSuggestedAction,
+} from './message-quality-scoring';
 
-export enum MessageQualityElements {
-  Clarity = 'clarity',
-  Personalization = 'personalization',
-  Actionability = 'actionability',
-  OBSERVED_BEHAVIOR = 'observed_behavior',
-  SPECIFIC_RECOMMENDATION = 'specific_recommendation',
-  TIMING_SUGGESTION = 'timing_suggestion',
-  REASON = 'reason',
-  NEXT_ACTION = 'next_action',
-  CONFIDENCE_LEVEL = 'confidence_level',
-}
-
-export type MessageQualityAnalysis = {
-  issues: string[];
-  passesQualityGate: boolean;
-  qualityElements: MessageQualityElements[];
-  score: number;
-};
-
-const InputSchema = z.object({
-  category: z.string().min(1),
-  content: z.string().min(1),
-  id: z.string().min(1),
-});
+export {
+  MessageQualityAnalysisSchema,
+  MessageQualityElements,
+  MessageQualityElementValues,
+  type MessageQualityAnalysis,
+  type MessageQualityElement,
+} from './message-quality-schema';
+export {
+  APPROVED_MESSAGE_EXAMPLES,
+  REJECTED_MESSAGE_EXAMPLES,
+} from './message-quality-examples';
 
 export function validateMessageQuality(
-  id: string,
+  messageId: string,
   content: string,
-  category: string,
+  category: string
 ): MessageQualityAnalysis {
-  InputSchema.parse({ category, content, id });
-  const issues: string[] = [];
-  if (content.trim().length < 18) {
-    issues.push('Message too short');
-  }
-  if (!/[.!?]$/.test(content.trim())) {
-    issues.push('Missing sentence ending');
-  }
-  const score = Math.max(0, 100 - issues.length * 25);
-  return {
-    issues,
-    passesQualityGate: score >= 60,
-    qualityElements: [MessageQualityElements.Clarity, MessageQualityElements.Actionability],
-    score,
-  };
+  const normalizedContent = content.length > 1000 ? content.slice(0, 1000) : content;
+  const genericAnalysis = detectGenericPatterns(normalizedContent);
+  const qualityElements = detectQualityElements(normalizedContent);
+  const passesQualityGate = !genericAnalysis.isGeneric && qualityElements.length >= 2;
+  const confidence = calculateQualityConfidence(
+    genericAnalysis.isGeneric,
+    qualityElements.length,
+    normalizedContent.length
+  );
+  const suggestedAction = determineSuggestedAction(
+    genericAnalysis.isGeneric,
+    qualityElements.length,
+    confidence
+  );
+
+  return MessageQualityAnalysisSchema.parse({
+    messageId,
+    content: normalizedContent,
+    category,
+    qualityElements,
+    isGeneric: genericAnalysis.isGeneric,
+    genericReasons: genericAnalysis.reasons,
+    passesQualityGate,
+    confidence,
+    suggestedAction,
+  });
+}
+
+export function createMockQualityAnalysis(
+  overrides: Partial<MessageQualityAnalysis> = {}
+): MessageQualityAnalysis {
+  return MessageQualityAnalysisSchema.parse({
+    messageId: generateMockUUID(),
+    content: 'Your strongest sessions this week started after 8 PM. Try a 25-minute Recovery session tonight.',
+    category: 'STREAK_RISK',
+    qualityElements: [
+      MessageQualityElements.REASON,
+      MessageQualityElements.CONFIDENCE_LEVEL,
+      MessageQualityElements.OBSERVED_BEHAVIOR,
+    ],
+    isGeneric: false,
+    genericReasons: [],
+    passesQualityGate: true,
+    confidence: 0.85,
+    suggestedAction: 'approve',
+    ...overrides,
+  });
+}
+
+export function batchValidateMessages(
+  messages: Array<{ id: string; content: string; category: string }>
+): MessageQualityAnalysis[] {
+  return messages.map((message) =>
+    validateMessageQuality(message.id, message.content, message.category)
+  );
+}
+
+function generateMockUUID(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = Math.floor(Math.random() * 16);
+    const v = c === 'x' ? r : 8 + (r % 4);
+    return v.toString(16);
+  });
 }

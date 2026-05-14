@@ -361,6 +361,3 @@ export const SessionHistoryScreen: React.FC = () => {
 };
 
 export default SessionHistoryScreen;
-
-export * from "./SessionHistoryScreen.types";
-export * from "./SessionHistoryScreen.types";

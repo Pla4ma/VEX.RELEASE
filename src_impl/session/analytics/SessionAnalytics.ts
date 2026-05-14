@@ -85,8 +85,8 @@ export class SessionAnalytics {
       // Track session started with PostHog
       capture(SessionEvents.SESSION_STARTED, {
         session_id: data.sessionId,
-        user_id: data.userId,
-        session_type: data.config?.mode || 'focus',
+        user_id: (data as any).userId,
+        session_type: (data as any).config?.mode || 'focus',
         started_at: data.startedAt,
       });
       this.track('session_started', {
@@ -98,17 +98,17 @@ export class SessionAnalytics {
 
     eventBus.subscribe('session:completed', (data) => {
       if (!data) {return;}
-      const durationSeconds = data.duration || data.summary?.effectiveDuration || 0;
-      const completionPercentage = data.summary?.completionPercentage || 100;
+      const durationSeconds = data.duration || (data as any).summary?.effectiveDuration || 0;
+      const completionPercentage = (data as any).summary?.completionPercentage || 100;
       // Track session completed with PostHog
       capture(SessionEvents.SESSION_COMPLETED, {
         session_id: data.sessionId,
         user_id: data.userId,
         duration_seconds: durationSeconds,
         completion_percentage: completionPercentage,
-        session_type: data.summary?.sessionType || 'focus',
-        xp_earned: data.summary?.xpEarned || 0,
-        coins_earned: data.summary?.coinsEarned || 0,
+        session_type: (data as any).summary?.sessionType || 'focus',
+        xp_earned: (data as any).summary?.xpEarned || 0,
+        coins_earned: (data as any).summary?.coinsEarned || 0,
       });
       this.track('session_completed', {
         sessionId: data.sessionId,
@@ -122,7 +122,7 @@ export class SessionAnalytics {
       if (!data) {return;}
       const elapsedSeconds = data.elapsedTime || 0;
       // Calculate completion percentage if not provided
-      const totalDuration = data.totalDuration || data.config?.duration || 0;
+      const totalDuration = (data as any).totalDuration || (data as any).config?.duration || 0;
       const completionPercentage = totalDuration > 0
         ? Math.round((elapsedSeconds / totalDuration) * 100)
         : 0;
@@ -133,7 +133,7 @@ export class SessionAnalytics {
         reason: data.reason || 'unknown',
         elapsed_seconds: elapsedSeconds,
         completion_percentage: completionPercentage,
-        purity_score: data.purityScore || 0,
+        purity_score: (data as any).purityScore || 0,
       });
       this.track('session_abandoned', {
         sessionId: data.sessionId,
@@ -420,6 +420,3 @@ export function getSessionAnalytics(): SessionAnalytics {
 }
 
 export default SessionAnalytics;
-
-export * from "./SessionAnalytics.types";
-export * from "./SessionAnalytics.types";

@@ -128,14 +128,14 @@ export const SearchScreen: React.FC = () => {
             <Icon
               name={item.icon}
               size={16}
-              color={activeCategory === item.id ? 'theme.colors.background.primary' : theme.colors.text.secondary}
+              color={activeCategory === item.id ? '#FFF' : theme.colors.text.secondary}
               style={{ marginRight: 6 }}
             />
             <Text
               variant="caption"
               style={{
                 fontWeight: '600',
-                color: activeCategory === item.id ? 'theme.colors.background.primary' : theme.colors.text.secondary,
+                color: activeCategory === item.id ? '#FFF' : theme.colors.text.secondary,
               }}
             >
               {item.label}
@@ -167,7 +167,7 @@ export const SearchScreen: React.FC = () => {
             alignItems: 'center',
             paddingVertical: 12,
             borderBottomWidth: 1,
-            borderBottomColor: 'theme.colors.primary[500]',
+            borderBottomColor: '#E2E8F0',
           }}
           onPress={() => {
             setQuery(search);
@@ -316,5 +316,3 @@ export const SearchScreen: React.FC = () => {
 };
 
 export default SearchScreen;
-
-export * from "./SearchScreen.types";

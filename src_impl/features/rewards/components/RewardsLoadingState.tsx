@@ -40,7 +40,7 @@ export function RewardsLoadingState(): JSX.Element {
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#1a1a2e',
     padding: 24,
   },
   header: {
@@ -49,14 +49,14 @@ const styles = createSheet({
   skeletonTitle: {
     width: '50%',
     height: 32,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#2a2a3e',
     borderRadius: 8,
     marginBottom: 8,
   },
   skeletonSubtitle: {
     width: '70%',
     height: 20,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#2a2a3e',
     borderRadius: 4,
   },
   chestsGrid: {
@@ -68,7 +68,7 @@ const styles = createSheet({
   skeletonChest: {
     width: '45%',
     aspectRatio: 1,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#2a2a3e',
     borderRadius: 12,
   },
   inventorySection: {
@@ -77,21 +77,21 @@ const styles = createSheet({
   skeletonSectionTitle: {
     width: '40%',
     height: 24,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#2a2a3e',
     borderRadius: 4,
     marginBottom: 8,
   },
   skeletonItem: {
     width: '100%',
     height: 60,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#2a2a3e',
     borderRadius: 8,
   },
   message: {
     marginTop: 32,
     textAlign: 'center',
     fontSize: 14,
-    color: 'theme.colors.primary[500]',
+    color: '#9E9E9E',
   },
 });
 

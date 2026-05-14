@@ -18,6 +18,42 @@ const questStorage = new MMKVStorageAdapter('personal-quests');
 // ============================================================================
 // Types
 // ============================================================================
+
+export type QuestType = 'PEAK_TIME_FOCUS' | 'BEAT_PERSONAL_BEST' | 'NO_PAUSE_CHALLENGE' | 'STREAK_PROTECTION' | 'QUALITY_GRADE_TARGET' | 'DURATION_MILESTONE' | 'BOSS_DAMAGE_DEALT' | 'RIVAL_OUTFOCUS' | 'SQUAD_SUPPORT';
+
+export interface PersonalQuest {
+  id: string;
+  userId: string;
+  type: QuestType;
+  title: string;
+  description: string;
+  target: number;
+  current: number;
+  unit: string;
+  rewardXp: number;
+  rewardBonus: number; // multiplier (1.5 = 150%)
+  expiresAt: number;
+  completedAt: number | null;
+  createdAt: number;
+  reasoning: string; // Why this quest was generated for this user
+}
+
+export interface UserPatterns {
+  peakFocusHour: number | null;
+  avgSessionDuration: number;
+  maxSessionDuration: number;
+  daysSinceNoPauseSession: number;
+  currentStreak: number;
+  lastQualityGrade: string;
+  avgQualityScore: number;
+  sessionsThisWeek: number;
+  preferredSessionTimes: number[]; // hours of day
+  commonPauseReasons: string[];
+  lastBossEncounter: number | null; // timestamp
+  rivalStatus: 'AHEAD' | 'BEHIND' | 'NONE';
+  squadContribution: number; // minutes contributed this week
+}
+
 const PersonalQuestSchema = z.object({
   id: z.string(),
   userId: z.string(),
@@ -42,6 +78,59 @@ function getQuestStorageKey(userId: string): string {
 // ============================================================================
 // Quest Generation Logic
 // ============================================================================
+
+export async function analyzeUserPatterns(userId: string): Promise<UserPatterns> {
+  return {
+    peakFocusHour: 20, // 8 PM
+    avgSessionDuration: 32,
+    maxSessionDuration: 60,
+    daysSinceNoPauseSession: 5,
+    currentStreak: 7,
+    lastQualityGrade: 'B',
+    avgQualityScore: 75,
+    sessionsThisWeek: 12,
+    preferredSessionTimes: [8, 13, 20], // 8am, 1pm, 8pm
+    commonPauseReasons: ['distraction', 'notification'],
+    lastBossEncounter: Date.now() - 86400000, // yesterday
+    rivalStatus: 'BEHIND',
+    squadContribution: 180, // 3 hours this week
+  };
+}
+
+/**
+ * Generate quest based on user patterns
+ */
+export function generateQuestFromPatterns(userId: string, patterns: UserPatterns): PersonalQuest {
+  const now = Date.now();
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
+
+  // Determine which quest type to generate based on patterns
+  const questType = selectQuestType(patterns);
+
+  switch (questType) {
+    case 'PEAK_TIME_FOCUS':
+      return generatePeakTimeQuest(userId, patterns, endOfDay.getTime());
+
+    case 'BEAT_PERSONAL_BEST':
+      return generatePersonalBestQuest(userId, patterns, endOfDay.getTime());
+
+    case 'NO_PAUSE_CHALLENGE':
+      return generateNoPauseQuest(userId, patterns, endOfDay.getTime());
+
+    case 'QUALITY_GRADE_TARGET':
+      return generateQualityQuest(userId, patterns, endOfDay.getTime());
+
+    case 'BOSS_DAMAGE_DEALT':
+      return generateBossQuest(userId, patterns, endOfDay.getTime());
+
+    case 'RIVAL_OUTFOCUS':
+      return generateRivalQuest(userId, patterns, endOfDay.getTime());
+
+    default:
+      return generateDefaultQuest(userId, patterns, endOfDay.getTime());
+  }
+}
 
 /**
  * Select quest type based on user patterns
@@ -234,12 +323,125 @@ function generateDefaultQuest(userId: string, patterns: UserPatterns, expiresAt:
 // ============================================================================
 // Quest as Chat Message
 // ============================================================================
+
+/**
+ * Convert a quest to a coach chat message
+ */
+export function questToCoachMessage(quest: PersonalQuest, persona: 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT' = 'MENTOR'): string {
+  const introTexts: Record<string, string> = {
+    MENTOR: "I've been reviewing your progress, and I have a personalized challenge for you today.",
+    CHEERLEADER: "Hey champion! 🎉 I've got a SPECIAL challenge just for YOU today!",
+    DRILL_SERGEANT: 'Your objective for today. Pay attention.',
+  };
+
+  return `${introTexts[persona]}
+
+**${quest.title}**
+${quest.description}
+
+🏆 Reward: ${quest.rewardXp} XP (${Math.round(quest.rewardBonus * 100)}% bonus!)
+⏰ Expires: Midnight
+
+${quest.reasoning}`;
+}
+
 // ============================================================================
 // Quest Progress Tracking
 // ============================================================================
+
+/**
+ * Update quest progress based on session completion
+ */
+export function updateQuestProgress(
+  quest: PersonalQuest,
+  sessionData: {
+    duration: number;
+    qualityScore: number;
+    pauses: number;
+    damageDealt?: number;
+    completedAt: number;
+  },
+): PersonalQuest {
+  let newCurrent = quest.current;
+
+  switch (quest.type) {
+    case 'PEAK_TIME_FOCUS':
+    case 'BEAT_PERSONAL_BEST':
+    case 'NO_PAUSE_CHALLENGE':
+      if (quest.type === 'NO_PAUSE_CHALLENGE' && sessionData.pauses === 0) {
+        newCurrent = sessionData.duration;
+      } else if (quest.type !== 'NO_PAUSE_CHALLENGE') {
+        newCurrent = sessionData.duration;
+      }
+      break;
+
+    case 'QUALITY_GRADE_TARGET':
+      newCurrent = sessionData.qualityScore;
+      break;
+
+    case 'BOSS_DAMAGE_DEALT':
+      newCurrent = sessionData.damageDealt || 0;
+      break;
+
+    case 'RIVAL_OUTFOCUS':
+    case 'DURATION_MILESTONE':
+      newCurrent += sessionData.duration;
+      break;
+  }
+
+  const completed = newCurrent >= quest.target;
+
+  return {
+    ...quest,
+    current: Math.min(newCurrent, quest.target),
+    completedAt: completed ? sessionData.completedAt : null,
+  };
+}
+
+/**
+ * Check if quest is completed
+ */
+export function isQuestCompleted(quest: PersonalQuest): boolean {
+  return quest.current >= quest.target || quest.completedAt !== null;
+}
+
+/**
+ * Format quest progress for display
+ */
+export function formatQuestProgress(quest: PersonalQuest): string {
+  const percent = Math.min(100, Math.round((quest.current / quest.target) * 100));
+  return `${quest.current}/${quest.target} ${quest.unit} (${percent}%)`;
+}
+
 // ============================================================================
 // Main Export Functions
 // ============================================================================
+
+/**
+ * Generate a new daily quest for user
+ * Called once per day (e.g., at midnight or first app open)
+ */
+export async function generateDailyQuest(userId: string): Promise<PersonalQuest> {
+  const patterns = await analyzeUserPatterns(userId);
+  const quest = generateQuestFromPatterns(userId, patterns);
+  questStorage.setItemSync(getQuestStorageKey(userId), JSON.stringify(quest));
+  return quest;
+}
+
+export async function getActiveQuest(userId: string): Promise<PersonalQuest | null> {
+  const raw = questStorage.getItemSync(getQuestStorageKey(userId));
+  if (!raw) {
+    return null;
+  }
+
+  const parsed = PersonalQuestSchema.safeParse(JSON.parse(raw));
+  if (!parsed.success || parsed.data.expiresAt <= Date.now()) {
+    return null;
+  }
+
+  return parsed.data as PersonalQuest;
+}
+
 export default {
   generateDailyQuest,
   getActiveQuest,
@@ -248,6 +450,3 @@ export default {
   formatQuestProgress,
   questToCoachMessage,
 };
-
-export * from "./PersonalQuestGenerator.types";
-export * from "./PersonalQuestGenerator.part1";

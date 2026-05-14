@@ -34,6 +34,44 @@ import { createSheet } from '@/shared/ui/create-sheet';
 // ============================================================================
 // Types
 // ============================================================================
+
+export type StepStatus = 'pending' | 'active' | 'completed' | 'error' | 'disabled';
+
+export interface Step {
+  id: string;
+  title: string;
+  description?: string;
+  icon?: string;
+  status: StepStatus;
+  errorMessage?: string;
+  disabled?: boolean;
+}
+
+export interface ProgressStepsProps {
+  steps: Step[];
+  currentStep: number;
+  orientation?: 'horizontal' | 'vertical';
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'numbers' | 'dots';
+  showDescriptions?: boolean;
+  allowClick?: boolean;
+  onStepPress?: (stepIndex: number, step: Step) => void;
+  style?: ViewStyle;
+}
+
+export interface StepIndicatorProps {
+  status: StepStatus;
+  index: number;
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'numbers' | 'dots';
+  icon?: string;
+  title?: string;
+  description?: string;
+  showDescription?: boolean;
+  onPress?: () => void;
+  disabled?: boolean;
+}
+
 // ============================================================================
 // Step Indicator Component
 // ============================================================================
@@ -90,19 +128,19 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
         return {
           background: theme.colors.success.DEFAULT,
           border: theme.colors.success.DEFAULT,
-          text: 'theme.colors.background.primary',
+          text: '#FFFFFF',
         };
       case 'active':
         return {
           background: theme.colors.primary[500],
           border: theme.colors.primary[500],
-          text: 'theme.colors.background.primary',
+          text: '#FFFFFF',
         };
       case 'error':
         return {
           background: theme.colors.error.DEFAULT,
           border: theme.colors.error.DEFAULT,
-          text: 'theme.colors.background.primary',
+          text: '#FFFFFF',
         };
       case 'disabled':
         return {
@@ -124,10 +162,10 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
   // Render content based on variant and status
   const renderContent = () => {
     if (status === 'completed' && !icon) {
-      return <Icon name="check" size={iconSize} color="theme.colors.background.primary" />;
+      return <Icon name="check" size={iconSize} color="#FFFFFF" />;
     }
     if (status === 'error') {
-      return <Icon name="alert-circle" size={iconSize} color="theme.colors.background.primary" />;
+      return <Icon name="alert-circle" size={iconSize} color="#FFFFFF" />;
     }
     if (icon) {
       return <Icon name={icon} size={iconSize} color={colors.text} />;
@@ -389,7 +427,7 @@ const styles = createSheet({
     textAlign: 'center',
   },
   connector: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#E5E7EB',
   },
   connectorHorizontal: {
     flex: 1,
@@ -406,5 +444,3 @@ const styles = createSheet({
 });
 
 export default ProgressSteps;
-
-export * from "./ProgressSteps.types";

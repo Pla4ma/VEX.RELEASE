@@ -28,6 +28,16 @@ import { useTheme } from '../../../theme';
 import { Box, Text, Card } from '../../../components/primitives';
 import { Icon } from '../../../icons';
 
+export interface FeaturedAchievement {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  emoji: string;
+  unlockedAt: number;
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+}
+
 interface AchievementShowcaseProps {
   achievements: FeaturedAchievement[];
   onReorder?: (newOrder: FeaturedAchievement[]) => void;
@@ -37,10 +47,10 @@ interface AchievementShowcaseProps {
 }
 
 const RARITY_COLORS = {
-  common: 'theme.colors.primary[500]',
-  rare: 'theme.colors.primary[500]',
-  epic: 'theme.colors.primary[500]',
-  legendary: 'theme.colors.primary[500]',
+  common: '#94A3B8',
+  rare: '#3B82F6',
+  epic: '#A855F7',
+  legendary: '#F59E0B',
 };
 
 const LockedSlot: React.FC<{
@@ -264,7 +274,7 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
               borderRadius={8}
               style={{
                 backgroundColor: isEditMode
-                  ? theme.colors.success[50] || 'theme.colors.primary[500]'
+                  ? theme.colors.success[50] || '#ECFDF5'
                   : theme.colors.background.secondary,
                 borderWidth: 1,
                 borderColor: isEditMode
@@ -355,5 +365,3 @@ export const AchievementShowcase: React.FC<AchievementShowcaseProps> = ({
 };
 
 export default AchievementShowcase;
-
-export * from "./AchievementShowcase.types";

@@ -63,7 +63,7 @@ function StatBox({
   highlight?: 'positive' | 'negative';
 }) {
   const highlightColor =
-    highlight === 'positive' ? 'theme.colors.primary[500]' : highlight === 'negative' ? 'theme.colors.primary[500]' : undefined;
+    highlight === 'positive' ? '#10b981' : highlight === 'negative' ? '#ef4444' : undefined;
 
   return (
     <View style={styles.statBox}>
@@ -96,11 +96,11 @@ function formatValue(value: number, metric: string): string {
 
 const styles = createSheet({
   container: {
-    backgroundColor: 'theme.colors.background.primary',
+    backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
-    shadowColor: 'theme.colors.text.primary',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     elevation: 2,
@@ -108,7 +108,7 @@ const styles = createSheet({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'theme.colors.primary[500]',
+    color: '#111827',
     marginBottom: 12,
   },
   stats: {
@@ -117,34 +117,34 @@ const styles = createSheet({
     gap: 12,
   },
   statBox: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#f3f4f6',
     borderRadius: 8,
     padding: 12,
     minWidth: 80,
   },
   statLabel: {
     fontSize: 12,
-    color: 'theme.colors.primary[500]',
+    color: '#6b7280',
     marginBottom: 4,
   },
   statValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: 'theme.colors.primary[500]',
+    color: '#111827',
   },
   dataPreview: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: 'theme.colors.primary[500]',
+    borderTopColor: '#e5e7eb',
   },
   previewText: {
     fontSize: 12,
-    color: 'theme.colors.primary[500]',
+    color: '#9ca3af',
   },
   emptyText: {
     textAlign: 'center',
-    color: 'theme.colors.primary[500]',
+    color: '#9ca3af',
     padding: 24,
   },
 });

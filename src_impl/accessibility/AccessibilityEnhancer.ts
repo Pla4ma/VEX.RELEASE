@@ -24,9 +24,71 @@ const debug = createDebugger('accessibility-enhancer');
 // ============================================================================
 // Enhanced Accessibility Props
 // ============================================================================
+
+export interface EnhancedAccessibilityProps {
+  // Basic accessibility
+  accessible?: boolean;
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+  accessibilityRole?: string;
+  accessibilityLiveRegion?: 'none' | 'polite' | 'assertive';
+  
+  // Enhanced accessibility
+  accessibilityDescribedBy?: string;
+  accessibilityLabelledBy?: string;
+  accessibilityExpanded?: boolean;
+  accessibilitySelected?: boolean;
+  accessibilityValueMax?: number;
+  accessibilityValueMin?: number;
+  accessibilityValueNow?: number;
+  accessibilityValueText?: string;
+  accessibilityValueStep?: number;
+  
+  // Focus management
+  accessibilityViewIsModal?: boolean;
+  accessibilityElementsHidden?: boolean;
+  accessibilityIgnoresInvertColors?: boolean;
+  
+  // Motion and animation
+  accessibilityIgnoresPageScaling?: boolean;
+  accessibilityReduceMotion?: boolean;
+  
+  // Screen reader optimizations
+  accessibilityLanguage?: string;
+  accessibilityAutoComplete?: string;
+  accessibilityAutoCorrect?: string;
+  accessibilityRequired?: boolean;
+  accessibilityInvalid?: boolean;
+  style?: React.ComponentProps<React.ComponentType<Record<string, unknown>>>['style'];
+}
+
 // ============================================================================
 // Accessibility Enhancement Types
 // ============================================================================
+
+export interface AccessibilityEnhancement {
+  type: 'contrast' | 'focus' | 'motion' | 'screen-reader' | 'touch' | 'keyboard';
+  priority: 'critical' | 'major' | 'moderate' | 'minor';
+  enhancement: React.ComponentType<Record<string, unknown>> | EnhancedAccessibilityProps;
+  description: string;
+  wcagGuideline: string;
+}
+
+export interface AccessibilityEnhancementConfig {
+  /** Enable automatic contrast improvements */
+  autoContrastFixes: boolean;
+  /** Enable automatic focus management */
+  autoFocusManagement: boolean;
+  /** Enable motion optimizations */
+  motionOptimizations: boolean;
+  /** Enable screen reader optimizations */
+  screenReaderOptimizations: boolean;
+  /** Color blind mode support */
+  colorBlindSupport: ColorBlindType;
+  /** Custom enhancement rules */
+  customEnhancements?: AccessibilityEnhancement[];
+}
+
 // ============================================================================
 // Accessibility Enhancer Class
 // ============================================================================
@@ -445,5 +507,3 @@ export class AccessibilityEnhancer {
 // ============================================================================
 
 export const accessibilityEnhancer = AccessibilityEnhancer.getInstance();
-
-export * from "./AccessibilityEnhancer.types";

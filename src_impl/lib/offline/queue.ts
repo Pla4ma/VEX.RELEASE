@@ -11,7 +11,30 @@ import { getConnectionState, subscribeToConnectionChanges, type ConnectionState 
 // ============================================================================
 // Queue Entry Schema
 // ============================================================================
+
+export const OfflineQueueEntrySchema = z.object({
+  id: z.string().uuid(),
+  operation: z.enum(['CREATE', 'UPDATE', 'DELETE', 'XP_ADD', 'REWARD_CLAIM', 'STREAK_RECORD', 'SESSION_COMPLETE']),
+  feature: z.enum(['progression', 'streaks', 'rewards', 'boss', 'sessions']),
+  payload: z.record(z.unknown()),
+  idempotencyKey: z.string(),
+  createdAt: z.number(),
+  retryCount: z.number().default(0),
+  maxRetries: z.number().default(3),
+  priority: z.enum(['high', 'normal', 'low', 'critical']).default('normal'),
+  dependsOn: z.string().uuid().optional(),
+  error: z.string().optional(),
+}).strict();
+
+export type OfflineQueueEntry = z.infer<typeof OfflineQueueEntrySchema>;
+
 // Input type for enqueue - fields with defaults are optional
+export type OfflineQueueEntryInput = Omit<OfflineQueueEntry, 'id' | 'createdAt' | 'retryCount' | 'maxRetries' | 'priority'> & {
+  retryCount?: number;
+  maxRetries?: number;
+  priority?: 'high' | 'normal' | 'low';
+};
+
 // ============================================================================
 // In-Memory Queue (Production: Use MMKV/MMKV)
 // ============================================================================
@@ -23,9 +46,100 @@ const listeners: Set<(queue: OfflineQueueEntry[]) => void> = new Set();
 // ============================================================================
 // Queue Operations
 // ============================================================================
+
+export function enqueue(entry: OfflineQueueEntryInput): OfflineQueueEntry {
+  const fullEntry: OfflineQueueEntry = {
+    ...entry,
+    retryCount: entry.retryCount ?? 0,
+    maxRetries: entry.maxRetries ?? 3,
+    priority: entry.priority ?? 'normal',
+    id: v4(),
+    createdAt: Date.now(),
+  };
+
+  // Deduplication: Check for existing entry with same idempotency key
+  const existingIndex = queue.findIndex(e => e.idempotencyKey === entry.idempotencyKey);
+  if (existingIndex >= 0) {
+    // Update existing entry if it's newer
+    if (entry.payload && typeof entry.payload === 'object') {
+      queue[existingIndex] = { ...queue[existingIndex], ...fullEntry };
+      notifyListeners();
+      return queue[existingIndex];
+    }
+    return queue[existingIndex];
+  }
+
+  // Insert by priority
+  const priorityOrder: Record<string, number> = { high: 0, normal: 1, low: 2 };
+  const insertIndex = queue.findIndex(
+    e => priorityOrder[e.priority] > priorityOrder[entry.priority || 'normal']
+  );
+
+  if (insertIndex === -1) {
+    queue.push(fullEntry);
+  } else {
+    queue.splice(insertIndex, 0, fullEntry);
+  }
+
+  notifyListeners();
+  return fullEntry;
+}
+
+export function dequeue(entryId: string): OfflineQueueEntry | undefined {
+  const index = queue.findIndex(e => e.id === entryId);
+  if (index === -1) {return undefined;}
+
+  const entry = queue[index];
+  queue.splice(index, 1);
+  processingSet.delete(entryId);
+  notifyListeners();
+  return entry;
+}
+
+export function getQueue(): readonly OfflineQueueEntry[] {
+  return Object.freeze([...queue]);
+}
+
+export function getQueueLength(): number {
+  return queue.length;
+}
+
+export function clearQueue(): void {
+  queue.length = 0;
+  processingSet.clear();
+  notifyListeners();
+}
+
+export function updateEntry(entryId: string, updates: Partial<OfflineQueueEntry>): void {
+  const index = queue.findIndex(e => e.id === entryId);
+  if (index !== -1) {
+    queue[index] = { ...queue[index], ...updates };
+    notifyListeners();
+  }
+}
+
+export function markProcessing(entryId: string): boolean {
+  if (processingSet.has(entryId)) {return false;}
+  processingSet.add(entryId);
+  return true;
+}
+
+export function unmarkProcessing(entryId: string): void {
+  processingSet.delete(entryId);
+}
+
+export function isProcessing(entryId: string): boolean {
+  return processingSet.has(entryId);
+}
+
 // ============================================================================
 // Subscriptions
 // ============================================================================
+
+export function subscribe(callback: (queue: OfflineQueueEntry[]) => void): () => void {
+  listeners.add(callback);
+  return () => listeners.delete(callback);
+}
 
 function notifyListeners(): void {
   const snapshot = [...queue];
@@ -35,13 +149,105 @@ function notifyListeners(): void {
 // ============================================================================
 // Queue Processor
 // ============================================================================
+
+export type QueueProcessor = (entry: OfflineQueueEntry) => Promise<void>;
+
 const processors: Map<string, QueueProcessor> = new Map();
+
+export function registerProcessor(
+  feature: string,
+  operation: string,
+  processor: QueueProcessor
+): void {
+  processors.set(`${feature}:${operation}`, processor);
+}
+
+export function unregisterProcessor(feature: string, operation: string): void {
+  processors.delete(`${feature}:${operation}`);
+}
+
+export async function processEntry(entry: OfflineQueueEntry): Promise<void> {
+  const processor = processors.get(`${entry.feature}:${entry.operation}`);
+
+  if (!processor) {
+    throw new Error(`No processor registered for ${entry.feature}:${entry.operation}`);
+  }
+
+  // Check dependencies
+  if (entry.dependsOn) {
+    const dependency = queue.find(e => e.id === entry.dependsOn);
+    if (dependency) {
+      throw new Error(`Dependency not yet processed: ${entry.dependsOn}`);
+    }
+  }
+
+  if (!markProcessing(entry.id)) {
+    throw new Error(`Entry ${entry.id} is already being processed`);
+  }
+
+  try {
+    await processor(entry);
+    dequeue(entry.id);
+  } catch (error) {
+    unmarkProcessing(entry.id);
+
+    const newRetryCount = entry.retryCount + 1;
+    if (newRetryCount >= entry.maxRetries) {
+      updateEntry(entry.id, {
+        retryCount: newRetryCount,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+      // Move to dead letter queue (in production)
+    } else {
+      updateEntry(entry.id, {
+        retryCount: newRetryCount,
+        error: error instanceof Error ? error.message : 'Unknown error',
+      });
+    }
+
+    throw error;
+  }
+}
+
 // ============================================================================
 // Auto-Processing
 // ============================================================================
 
 let autoProcessInterval: ReturnType<typeof setInterval> | null = null;
 let isAutoProcessingEnabled = false;
+
+export function startAutoProcessing(intervalMs: number = 5000): void {
+  if (isAutoProcessingEnabled) {return;}
+
+  isAutoProcessingEnabled = true;
+
+  // Process immediately if online
+  if (getConnectionState() === 'online') {
+    processQueue();
+  }
+
+  // Subscribe to connection changes
+  subscribeToConnectionChanges((state) => {
+    if (state === 'online') {
+      processQueue();
+    }
+  });
+
+  // Periodic check
+  autoProcessInterval = setInterval(() => {
+    if (getConnectionState() === 'online' && queue.length > 0) {
+      processQueue();
+    }
+  }, intervalMs);
+}
+
+export function stopAutoProcessing(): void {
+  isAutoProcessingEnabled = false;
+  if (autoProcessInterval) {
+    clearInterval(autoProcessInterval);
+    autoProcessInterval = null;
+  }
+}
 
 async function processQueue(): Promise<void> {
   const entriesToProcess = queue.filter(e => !isProcessing(e.id));
@@ -58,7 +264,28 @@ async function processQueue(): Promise<void> {
 // ============================================================================
 // Conflict Resolution
 // ============================================================================
+
+export interface ConflictResolution {
+  strategy: 'client-wins' | 'server-wins' | 'merge' | 'manual';
+  resolvedData?: Record<string, unknown>;
+}
+
+export function resolveConflict(
+  serverData: Record<string, unknown>,
+  clientData: Record<string, unknown>,
+  strategy: ConflictResolution['strategy']
+): Record<string, unknown> {
+  switch (strategy) {
+    case 'client-wins':
+      return { ...serverData, ...clientData, _resolvedAt: Date.now() };
+    case 'server-wins':
+      return { ...serverData, _resolvedAt: Date.now() };
+    case 'merge':
+      return { ...serverData, ...clientData, _resolvedAt: Date.now() };
+    default:
+      throw new Error('Manual conflict resolution required');
+  }
+}
+
 // End of file
-export * from "./queue.types";
-export * from "./queue.part1";
-export * from "./queue.part2";
+

@@ -96,23 +96,23 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
         px={16}
         py={12}
         style={{
-          backgroundColor: isOffline ? 'theme.colors.primary[500]' : 'theme.colors.primary[500]',
+          backgroundColor: isOffline ? '#FEF3C7' : '#DCFCE7',
           borderBottomWidth: 1,
-          borderBottomColor: isOffline ? 'theme.colors.error.DEFAULT' : 'theme.colors.primary[500]',
+          borderBottomColor: isOffline ? '#FCD34D' : '#86EFAC',
         }}
       >
         <Box flexDirection="row" alignItems="center" justifyContent="center">
           <Icon
             name={isOffline ? 'wifi-off' : 'wifi'}
             size={16}
-            color={isOffline ? 'theme.colors.primary[500]' : 'theme.colors.primary[500]'}
+            color={isOffline ? '#D97706' : '#16A34A'}
           />
           <Text
             variant="caption"
             style={{
               marginLeft: 8,
               fontWeight: '600',
-              color: isOffline ? 'theme.colors.primary[500]' : 'theme.colors.primary[500]',
+              color: isOffline ? '#92400E' : '#166534',
             }}
           >
             {isOffline ? message : 'Back online — syncing changes...'}
@@ -125,12 +125,12 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
               py={2}
               borderRadius={10}
               style={{
-                backgroundColor: 'theme.colors.primary[500]',
+                backgroundColor: '#D97706',
               }}
             >
               <Text
                 style={{
-                  color: 'theme.colors.background.primary',
+                  color: '#FFF',
                   fontSize: 11,
                   fontWeight: '700',
                 }}

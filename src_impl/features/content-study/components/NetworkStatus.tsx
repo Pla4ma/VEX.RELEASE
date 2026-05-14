@@ -49,13 +49,13 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
         <Icon
           name={isOffline ? 'wifi-off' : 'alert-triangle'}
           size="sm"
-          color="theme.colors.background.primary"
+          color="#FFFFFF"
         />
         <View style={styles.textContainer}>
-          <Text style={[styles.title, { color: 'theme.colors.background.primary' }]}>
+          <Text style={[styles.title, { color: '#FFFFFF' }]}>
             {isOffline ? 'Offline Mode' : 'Slow Connection'}
           </Text>
-          <Text style={[styles.description, { color: 'theme.colors.background.primary' }]}>
+          <Text style={[styles.description, { color: '#FFFFFF' }]}>
             {isOffline
               ? pendingSyncCount
                 ? `${pendingSyncCount} items queued for sync`
@@ -69,7 +69,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
             accessibilityLabel="Sync button"
             accessibilityRole="button"
             accessibilityHint="Activates this control">
-            <Text style={[styles.actionText, { color: 'theme.colors.background.primary' }]}>
+            <Text style={[styles.actionText, { color: '#FFFFFF' }]}>
               Sync
             </Text>
           </Pressable>
@@ -83,7 +83,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
             <Icon
               name="x"
               size="sm"
-              color="theme.colors.background.primary"
+              color="#FFFFFF"
             />
           </Pressable>
         )}

@@ -71,7 +71,7 @@ export function WeeklyReportCard({ totalMinutes, sessionsCompleted, xpEarned, st
         bg="background.secondary"
         gap="lg"
         style={{
-          shadowColor: 'theme.colors.text.primary',
+          shadowColor: '#000',
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.05,
           shadowRadius: 8,
@@ -225,7 +225,7 @@ export function WeeklyReportCompact({
         bg="background.secondary"
         style={{
           borderLeftWidth: 4,
-          borderLeftColor: isImprovement ? 'theme.colors.primary[500]' : 'theme.colors.primary[500]',
+          borderLeftColor: isImprovement ? '#22C55E' : '#F59E0B',
         }}
       >
         <Text fontSize={24}>📊</Text>
@@ -245,5 +245,3 @@ export function WeeklyReportCompact({
 }
 
 export default WeeklyReportCard;
-
-export * from "./WeeklyReportCard.types";

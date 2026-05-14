@@ -11,6 +11,33 @@ import { EconomyEvents } from '../shared/analytics/analytics-events';
 
 const debug = createDebugger('economy-service');
 
+export interface CurrencyGrant {
+  userId: string;
+  amount: number;
+  currency: 'COINS' | 'GEMS' | 'SPECIAL';
+  source: 'SESSION_COMPLETE' | 'DAILY_LOGIN' | 'ACHIEVEMENT' | 'PURCHASE' | 'STREAK_BONUS';
+  metadata?: Record<string, unknown>;
+}
+
+export interface Transaction {
+  id: string;
+  userId: string;
+  type: 'GRANT' | 'SPEND' | 'PURCHASE';
+  amount: number;
+  currency: 'COINS' | 'GEMS' | 'SPECIAL';
+  source: string;
+  timestamp: string;
+  metadata?: Record<string, unknown>;
+}
+
+export interface Wallet {
+  userId: string;
+  coins: number;
+  gems: number;
+  special: number;
+  lastUpdated: string;
+}
+
 class EconomyService {
   private userId: string = '';
   private wallet: Wallet = {
@@ -198,5 +225,3 @@ class EconomyService {
 
 // Singleton instance
 export const economyService = new EconomyService();
-
-export * from "./economyService.types";

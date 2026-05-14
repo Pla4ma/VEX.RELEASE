@@ -59,6 +59,68 @@ export const SessionConfigSchema = z.object({
 });
 
 export type SessionConfig = z.infer<typeof SessionConfigSchema>;
+
+export interface SessionState {
+  id: string;
+  userId: string;
+  status: SessionStatus;
+  phase: SessionPhase;
+  config: SessionConfig;
+
+  // Timing
+  remainingTime: number;
+  totalDuration: number;
+  elapsedTime: number;
+  effectiveTime: number;
+  pausedTime: number;
+  totalPausedTime: number;
+  totalBackgroundTime: number;
+
+  // Intervals
+  currentInterval: number;
+  totalIntervals: number;
+  intervalsCompleted: number;
+
+  // Interruptions
+  interruptions: number;
+  pauses: number;
+  backgroundTime: number;
+
+  // Scoring
+  baseScore: number;
+  timeBonus: number;
+  streakBonus: number;
+  focusQuality: number;
+  completionPercentage: number;
+  damagePoints: number;
+  penaltyMultiplier: number;
+
+  // Recovery
+  recoveryAttempts: number;
+  maxRecoveryAttempts: number;
+  canRecover: boolean;
+
+  // State tracking
+  conflictStatus: 'NONE' | 'DETECTED' | 'RESOLVED';
+  storageStatus: 'HEALTHY' | 'CORRUPTED' | 'MISSING';
+  deviceId: string;
+  appVersion: string;
+  osVersion: string;
+  antiCheatStatus: 'CLEAN' | 'SUSPICIOUS' | 'FLAGGED';
+  antiCheatFlags: string[];
+
+  // Timestamps
+  createdAt: number;
+  updatedAt: number;
+  startedAt?: number;
+  pausedAt?: number;
+  resumedAt?: number;
+  completedAt?: number;
+
+  // Dirty flag for persistence
+  isDirty: boolean;
+}
+
 // ============================================================================
 // Boss Types (Consolidated from multiple files)
 // ============================================================================
@@ -92,12 +154,181 @@ export const CombatAbilitySchema = z.object({
 });
 
 export type CombatAbility = z.infer<typeof CombatAbilitySchema>;
+
+export interface BossEncounter {
+  id: string;
+  userId: string;
+  bossId: string;
+  bossName: string;
+  bossAvatarUrl: string | null;
+
+  // Health
+  bossMaxHealth: number;
+  bossCurrentHealth: number;
+  percentHealthRemaining: number;
+
+  // Combat State
+  currentPhase: BossPhase;
+  currentAttackPattern: BossAttackPattern | null;
+  attackPatternStartedAt: number | null;
+  attackPatternDurationMs: number;
+
+  // User Resources
+  userMaxFocusEnergy: number;
+  userCurrentFocusEnergy: number;
+  userFocusEnergyRegenRate: number;
+
+  // Abilities & Cooldowns
+  availableAbilities: CombatAbility[];
+  abilityCooldowns: Record<string, number>;
+
+  // Timers
+  encounterStartedAt: number;
+  expiresAt: number;
+  lastUserActionAt: number | null;
+
+  // Session Tracking
+  sessionCount: number;
+  totalDamageDealt: number;
+  attacksDodged: number;
+  attacksHit: number;
+
+  // Status
+  status: 'ACTIVE' | 'VICTORY' | 'DEFEAT' | 'TIMED_OUT';
+
+  // Tier
+  tier: BossTier;
+}
+
+export interface BossState {
+  encounter: BossEncounter | null;
+  damageThisSession: DamageCalculation;
+  estimatedKill: KillEstimate;
+  combatState: 'ENCOUNTER_START' | 'COMBAT_ACTIVE' | 'BOSS_RAGE' | 'NEAR_DEATH' | 'VICTORY';
+  showDamageFlash: boolean;
+  recentDamage: number;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+export interface DamageCalculation {
+  baseDamage: number;
+  purityMultiplier: number;
+  streakMultiplier: number;
+  totalDamage: number;
+  damagePerMinute: number;
+}
+
+export interface KillEstimate {
+  willDefeat: boolean;
+  sessionsRemaining: number;
+  minutesRemaining: number;
+  percentDamage: number;
+}
+
 // ============================================================================
 // Combat System Types
 // ============================================================================
+
+export interface CombatActionResult {
+  success: boolean;
+  damageDealt: number;
+  energyConsumed: number;
+  bossHealthRemaining: number;
+  newPhase: BossPhase;
+  comboBonus: number;
+  message: string;
+}
+
+export interface ActiveEncounter {
+  id: string;
+  userId: string;
+  bossId: string;
+  bossName: string;
+  bossAvatarUrl: string | null;
+
+  // Health
+  bossMaxHealth: number;
+  bossCurrentHealth: number;
+
+  // Combat State
+  currentPhase: BossPhase;
+  currentAttackPattern: BossAttackPattern | null;
+  attackPatternStartedAt: number | null;
+  attackPatternDurationMs: number;
+
+  // User Resources
+  userMaxFocusEnergy: number;
+  userCurrentFocusEnergy: number;
+  userFocusEnergyRegenRate: number;
+
+  // Abilities & Cooldowns
+  availableAbilities: CombatAbility[];
+  abilityCooldowns: Record<string, number>;
+
+  // Timers
+  encounterStartedAt: number;
+  expiresAt: number;
+  lastUserActionAt: number | null;
+
+  // Session Tracking
+  sessionCount: number;
+  totalDamageDealt: number;
+  attacksDodged: number;
+  attacksHit: number;
+
+  status: 'ACTIVE' | 'VICTORY' | 'DEFEAT' | 'TIMED_OUT';
+}
+
 // ============================================================================
 // Session Summary Types
 // ============================================================================
+
+export interface SessionSummary {
+  sessionId: string;
+  userId: string;
+
+  // Basic metrics
+  duration: number;
+  actualDuration?: number;
+  effectiveDuration: number;
+  completionPercentage: number;
+
+  // Quality metrics
+  focusQuality: number;
+  purityScore: number;
+  focusPurityScore?: number;
+  interruptions: number;
+
+  // Scoring
+  baseScore: number;
+  finalScore: number;
+  grade: string;
+
+  // Progression
+  xpEarned: number;
+  levelUp: boolean;
+  newLevel?: number;
+
+  // Boss damage
+  bossDamageDealt: number;
+  bossDefeated: boolean;
+
+  // Timestamps
+  startedAt: number;
+  completedAt: number;
+
+  // Flags
+  wasAbandoned: boolean;
+  hadInterruptions: boolean;
+  usedRecovery: boolean;
+
+  // Streak properties (added for session-completion integration)
+  streakIncreased?: boolean;
+  streakDays?: number;
+  streakBonus?: number;
+}
+
 // ============================================================================
 // Re-exports for backward compatibility
 // ============================================================================
@@ -106,5 +337,3 @@ export type CombatAbility = z.infer<typeof CombatAbilitySchema>;
 export type LegacySessionState = SessionState;
 export type LegacyBossState = BossState;
 export type LegacyBossEncounter = BossEncounter;
-
-export * from "./consolidated.types";

@@ -119,7 +119,7 @@ function SuccessAnimation(): JSX.Element {
           width={80}
           height={80}
           borderRadius="full"
-          bg="theme.colors.primary[500]"
+          bg="#22C55E30"
           justifyContent="center"
           alignItems="center"
         >
@@ -246,5 +246,3 @@ export function OnboardingPermissions({
 }
 
 export default OnboardingPermissions;
-
-export * from "./OnboardingPermissions.types";

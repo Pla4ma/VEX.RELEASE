@@ -121,14 +121,14 @@ export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#1a1a2e',
     padding: 24,
   },
   warningBanner: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'theme.colors.error.DEFAULT',
+    backgroundColor: '#FFA500',
     paddingVertical: 12,
     borderRadius: 8,
     marginBottom: 24,
@@ -138,25 +138,25 @@ const styles = createSheet({
     marginRight: 8,
   },
   warningText: {
-    color: 'theme.colors.text.primary',
+    color: '#000',
     fontSize: 16,
     fontWeight: '700',
   },
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: 'theme.colors.background.primary',
+    color: '#fff',
     textAlign: 'center',
     marginBottom: 8,
   },
   reason: {
     fontSize: 14,
-    color: 'theme.colors.primary[500]',
+    color: '#9E9E9E',
     textAlign: 'center',
     marginBottom: 24,
   },
   featuresContainer: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#2a2a3e',
     borderRadius: 12,
     padding: 16,
     marginBottom: 24,
@@ -164,7 +164,7 @@ const styles = createSheet({
   featuresTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: 'theme.colors.primary[500]',
+    color: '#9E9E9E',
     marginBottom: 12,
     textTransform: 'uppercase',
   },
@@ -173,7 +173,7 @@ const styles = createSheet({
     alignItems: 'flex-start',
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: 'theme.colors.primary[500]',
+    borderBottomColor: '#3a3a4e',
   },
   featureIcon: {
     fontSize: 16,
@@ -185,15 +185,15 @@ const styles = createSheet({
   },
   featureName: {
     fontSize: 15,
-    color: 'theme.colors.background.primary',
+    color: '#fff',
   },
   featureUnavailable: {
-    color: 'theme.colors.primary[500]',
+    color: '#9E9E9E',
     textDecorationLine: 'line-through',
   },
   featureReason: {
     fontSize: 12,
-    color: 'theme.colors.error.DEFAULT',
+    color: '#FFA500',
     marginTop: 2,
   },
   actions: {
@@ -201,26 +201,26 @@ const styles = createSheet({
     marginBottom: 24,
   },
   primaryButton: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#e94560',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: 'theme.colors.background.primary',
+    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
   },
   secondaryButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: 'theme.colors.primary[500]',
+    borderColor: '#9E9E9E',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   secondaryButtonText: {
-    color: 'theme.colors.primary[500]',
+    color: '#9E9E9E',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -229,7 +229,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   endButtonText: {
-    color: 'theme.colors.primary[500]',
+    color: '#e94560',
     fontSize: 14,
   },
   explanation: {
@@ -242,16 +242,14 @@ const styles = createSheet({
   explanationTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: 'theme.colors.error.DEFAULT',
+    color: '#FFA500',
     marginBottom: 8,
   },
   explanationText: {
     fontSize: 13,
-    color: 'theme.colors.primary[500]',
+    color: '#9E9E9E',
     lineHeight: 18,
   },
 });
 
 export default SessionDegradedState;
-
-export * from "./SessionDegradedState.types";

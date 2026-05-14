@@ -74,9 +74,9 @@ interface TierConfig {
 
 const TIER_CONFIGS: Record<ChestTier, TierConfig> = {
   common: {
-    color: 'theme.colors.primary[500]',
-    glowColor: 'theme.colors.primary[500]',
-    bgColor: 'theme.colors.primary[500]',
+    color: '#9CA3AF',
+    glowColor: '#D1D5DB',
+    bgColor: '#4B5563',
     shakeIntensity: 2,
     shakeSpeed: 400,
     glowIntensity: 0.3,
@@ -85,9 +85,9 @@ const TIER_CONFIGS: Record<ChestTier, TierConfig> = {
     label: 'COMMON',
   },
   uncommon: {
-    color: 'theme.colors.primary[500]',
-    glowColor: 'theme.colors.primary[500]',
-    bgColor: 'theme.colors.primary[500]',
+    color: '#22C55E',
+    glowColor: '#86EFAC',
+    bgColor: '#166534',
     shakeIntensity: 3,
     shakeSpeed: 350,
     glowIntensity: 0.5,
@@ -96,9 +96,9 @@ const TIER_CONFIGS: Record<ChestTier, TierConfig> = {
     label: 'UNCOMMON',
   },
   rare: {
-    color: 'theme.colors.primary[500]',
-    glowColor: 'theme.colors.primary[500]',
-    bgColor: 'theme.colors.primary[500]',
+    color: '#3B82F6',
+    glowColor: '#60A5FA',
+    bgColor: '#1D4ED8',
     shakeIntensity: 5,
     shakeSpeed: 300,
     glowIntensity: 0.7,
@@ -107,9 +107,9 @@ const TIER_CONFIGS: Record<ChestTier, TierConfig> = {
     label: 'RARE',
   },
   epic: {
-    color: 'theme.colors.primary[500]',
-    glowColor: 'theme.colors.primary[500]',
-    bgColor: 'theme.colors.primary[500]',
+    color: '#A855F7',
+    glowColor: '#C084FC',
+    bgColor: '#7C3AED',
     shakeIntensity: 8,
     shakeSpeed: 250,
     glowIntensity: 0.85,
@@ -118,9 +118,9 @@ const TIER_CONFIGS: Record<ChestTier, TierConfig> = {
     label: 'EPIC',
   },
   legendary: {
-    color: 'theme.colors.primary[500]',
-    glowColor: 'theme.colors.primary[500]',
-    bgColor: 'theme.colors.primary[500]',
+    color: '#F97316',
+    glowColor: '#FDBA74',
+    bgColor: '#EA580C',
     shakeIntensity: 12,
     shakeSpeed: 200,
     glowIntensity: 1,
@@ -382,7 +382,7 @@ export const ChestRevealAnimationEnhanced: React.FC<ChestRevealProps> = ({
                 left: 0,
                 right: 0,
                 bottom: 0,
-                backgroundColor: 'theme.colors.text.primary',
+                backgroundColor: '#000000',
               },
               screenDarkenStyle,
             ]}
@@ -697,5 +697,3 @@ const RewardBox: React.FC<RewardBoxProps> = ({ label, value, color, icon }) => {
 // Export tier mapper for convenience
 export { mapVariableRewardTier, TIER_CONFIGS };
 export default ChestRevealAnimationEnhanced;
-
-export * from "./ChestRevealAnimationEnhanced.types";

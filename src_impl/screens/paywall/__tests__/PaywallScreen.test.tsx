@@ -49,13 +49,13 @@ jest.mock('../../../theme', () => ({
   useTheme: () => ({
     theme: {
       colors: {
-        background: { primary: 'theme.colors.background.primary', secondary: 'theme.colors.primary[500]', tertiary: 'theme.colors.primary[500]' },
-        primary: { 500: 'theme.colors.primary[500]' },
-        success: { 500: 'theme.colors.primary[500]', DEFAULT: 'theme.colors.primary[500]' },
-        warning: { DEFAULT: 'theme.colors.primary[500]' },
-        error: { DEFAULT: 'theme.colors.primary[500]' },
-        text: { primary: 'theme.colors.primary[500]', secondary: 'theme.colors.primary[500]', tertiary: 'theme.colors.primary[500]', inverse: 'theme.colors.background.primary' },
-        border: { DEFAULT: 'theme.colors.primary[500]' },
+        background: { primary: '#ffffff', secondary: '#f5f5f5', tertiary: '#eeeeee' },
+        primary: { 500: '#2563eb' },
+        success: { 500: '#16a34a', DEFAULT: '#16a34a' },
+        warning: { DEFAULT: '#f59e0b' },
+        error: { DEFAULT: '#dc2626' },
+        text: { primary: '#111111', secondary: '#666666', tertiary: '#999999', inverse: '#ffffff' },
+        border: { DEFAULT: '#d4d4d4' },
       },
     },
   }),

@@ -9,7 +9,6 @@ export const SessionStatusSchema = z.enum([
   'PAUSED',
   'DEGRADED',
   'COMPLETED',
-  'PARTIAL_SUCCESS',
   'ABANDONED',
   'RECOVERING',
 ]);
@@ -53,9 +52,7 @@ export const SessionViewModelSchema = z.object({
   canPause: z.boolean(),
   canComplete: z.boolean(),
   canAbandon: z.boolean(),
-  canGracefulExit: z.boolean(),
   isOffline: z.boolean(),
-  activeConsumables: z.array(z.string()).default([]),
   metadata: z.record(z.unknown()).optional(),
 }).strict();
 

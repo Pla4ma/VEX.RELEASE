@@ -76,7 +76,7 @@ export const StreakShieldIndicator: React.FC<StreakShieldIndicatorProps> = ({
           bottom: -config.container * 0.2,
           right: -config.container * 0.2,
           zIndex: 10,
-          shadowColor: 'theme.colors.primary[500]',
+          shadowColor: '#10B981',
           shadowOffset: { width: 0, height: 2 },
           shadowRadius: 6,
           elevation: 4,
@@ -92,12 +92,12 @@ export const StreakShieldIndicator: React.FC<StreakShieldIndicatorProps> = ({
           justifyContent="center"
           alignItems="center"
           style={{
-            backgroundColor: 'theme.colors.primary[500]',
+            backgroundColor: '#10B981',
             borderWidth: 2,
-            borderColor: 'theme.colors.background.primary',
+            borderColor: '#FFF',
           }}
         >
-          <Icon name="shield" size={config.icon} color="theme.colors.background.primary" />
+          <Icon name="shield" size={config.icon} color="#FFF" />
         </Box>
       </Animated.View>
     </Animated.View>

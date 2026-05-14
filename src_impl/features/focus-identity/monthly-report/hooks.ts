@@ -99,13 +99,13 @@ export function useMonthlyReportGrade(grade: string | undefined) {
 
 function getGradeColor(grade?: string): string {
   switch (grade) {
-    case 'A+': return 'theme.colors.error.DEFAULT';
-    case 'A': return 'theme.colors.error.DEFAULT';
-    case 'B': return 'theme.colors.error.DEFAULT';
-    case 'C': return 'theme.colors.primary[500]';
-    case 'D': return 'theme.colors.primary[500]';
-    case 'F': return 'theme.colors.primary[500]';
-    default: return 'theme.colors.primary[500]';
+    case 'A+': return '#FF1744';
+    case 'A': return '#FF6B35';
+    case 'B': return '#FFD700';
+    case 'C': return '#4CAF50';
+    case 'D': return '#2196F3';
+    case 'F': return '#9E9E9E';
+    default: return '#9E9E9E';
   }
 }
 

@@ -19,6 +19,18 @@ import { useTheme } from '../../../theme';
 import { Box, Text, Card } from '../../../components/primitives';
 import { Icon } from '../../../icons';
 
+export interface FeaturedItem {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  emoji: string;
+  originalPrice: number;
+  discountedPrice: number;
+  currency: 'COINS' | 'GEMS';
+  rarity: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
+}
+
 interface FeaturedShopSectionProps {
   items: FeaturedItem[];
   onItemPress: (item: FeaturedItem) => void;
@@ -54,11 +66,11 @@ const formatTimeRemaining = (targetTime: number): string => {
 };
 
 const RARITY_COLORS: Record<string, string> = {
-  COMMON: 'theme.colors.primary[500]',
-  UNCOMMON: 'theme.colors.primary[500]',
-  RARE: 'theme.colors.primary[500]',
-  EPIC: 'theme.colors.primary[500]',
-  LEGENDARY: 'theme.colors.primary[500]',
+  COMMON: '#94A3B8',
+  UNCOMMON: '#22C55E',
+  RARE: '#3B82F6',
+  EPIC: '#A855F7',
+  LEGENDARY: '#F59E0B',
 };
 
 const FeaturedItemCard: React.FC<{
@@ -102,7 +114,7 @@ const FeaturedItemCard: React.FC<{
         {
           width: 160,
           marginRight: 12,
-          shadowColor: isLastChance ? 'theme.colors.primary[500]' : rarityColor,
+          shadowColor: isLastChance ? '#EF4444' : rarityColor,
           shadowOffset: { width: 0, height: 4 },
           shadowRadius: 12,
           elevation: 4,
@@ -117,7 +129,7 @@ const FeaturedItemCard: React.FC<{
             style={{
               padding: 12,
               borderWidth: 2,
-              borderColor: isLastChance ? 'theme.colors.primary[500]' : rarityColor + '50',
+              borderColor: isLastChance ? '#EF4444' : rarityColor + '50',
             }}
           >
             {/* Discount Badge */}
@@ -129,13 +141,13 @@ const FeaturedItemCard: React.FC<{
               py={4}
               borderRadius={10}
               style={{
-                backgroundColor: 'theme.colors.primary[500]',
+                backgroundColor: '#EF4444',
                 zIndex: 10,
               }}
             >
               <Text
                 style={{
-                  color: 'theme.colors.background.primary',
+                  color: '#FFF',
                   fontWeight: '800',
                   fontSize: 12,
                 }}
@@ -188,11 +200,11 @@ const FeaturedItemCard: React.FC<{
                 {item.originalPrice}
               </Text>
               <Box flexDirection="row" alignItems="center">
-                <Icon name={item.currency === 'GEMS' ? 'gem' : 'coins'} size={14} color={item.currency === 'GEMS' ? 'theme.colors.primary[500]' : 'theme.colors.primary[500]'} />
+                <Icon name={item.currency === 'GEMS' ? 'gem' : 'coins'} size={14} color={item.currency === 'GEMS' ? '#8B5CF6' : '#F59E0B'} />
                 <Text
                   style={{
                     fontWeight: '700',
-                    color: item.currency === 'GEMS' ? 'theme.colors.primary[500]' : 'theme.colors.primary[500]',
+                    color: item.currency === 'GEMS' ? '#8B5CF6' : '#F59E0B',
                     marginLeft: 4,
                   }}
                 >
@@ -210,16 +222,16 @@ const FeaturedItemCard: React.FC<{
                 borderRadius={8}
                 alignSelf="center"
                 style={{
-                  backgroundColor: 'theme.colors.primary[500]' + '20',
+                  backgroundColor: '#EF4444' + '20',
                   borderWidth: 1,
-                  borderColor: 'theme.colors.primary[500]',
+                  borderColor: '#EF4444',
                 }}
               >
                 <Box flexDirection="row" alignItems="center">
-                  <Icon name="alert-circle" size={12} color="theme.colors.primary[500]" />
+                  <Icon name="alert-circle" size={12} color="#EF4444" />
                   <Text
                     style={{
-                      color: 'theme.colors.primary[500]',
+                      color: '#EF4444',
                       fontWeight: '600',
                       fontSize: 11,
                       marginLeft: 4,
@@ -274,10 +286,10 @@ export const FeaturedShopSection: React.FC<FeaturedShopSectionProps> = ({ items,
             alignItems="center"
             mr={10}
             style={{
-              backgroundColor: 'theme.colors.primary[500]' + '20',
+              backgroundColor: '#F59E0B' + '20',
             }}
           >
-            <Icon name="star" size={18} color="theme.colors.primary[500]" />
+            <Icon name="star" size={18} color="#F59E0B" />
           </Box>
           <Box>
             <Text variant="h4" style={{ marginBottom: 2 }}>
@@ -295,19 +307,19 @@ export const FeaturedShopSection: React.FC<FeaturedShopSectionProps> = ({ items,
           py={6}
           borderRadius={8}
           style={{
-            backgroundColor: isLastChance ? 'theme.colors.primary[500]' + '15' : theme.colors.background.secondary,
+            backgroundColor: isLastChance ? '#EF4444' + '15' : theme.colors.background.secondary,
             borderWidth: 1,
-            borderColor: isLastChance ? 'theme.colors.primary[500]' + '30' : theme.colors.border.light,
+            borderColor: isLastChance ? '#EF4444' + '30' : theme.colors.border.light,
           }}
         >
           <Box flexDirection="row" alignItems="center">
-            <Icon name="clock" size={12} color={isLastChance ? 'theme.colors.primary[500]' : theme.colors.text.tertiary} />
+            <Icon name="clock" size={12} color={isLastChance ? '#EF4444' : theme.colors.text.tertiary} />
             <Text
               variant="caption"
               style={{
                 marginLeft: 4,
                 fontWeight: '600',
-                color: isLastChance ? 'theme.colors.primary[500]' : theme.colors.text.secondary,
+                color: isLastChance ? '#EF4444' : theme.colors.text.secondary,
               }}
             >
               Resets in {timeRemaining}
@@ -327,5 +339,3 @@ export const FeaturedShopSection: React.FC<FeaturedShopSectionProps> = ({ items,
 };
 
 export default FeaturedShopSection;
-
-export * from "./FeaturedShopSection.types";

@@ -295,6 +295,3 @@ const styles = createSheet({
     textAlign: 'center',
   },
 });
-
-export * from "./ChallengeHub.types";
-export * from "./ChallengeHub.types";

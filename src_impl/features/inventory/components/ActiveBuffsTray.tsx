@@ -18,6 +18,8 @@ import { useTheme } from '../../../theme';
 import { Box, Text, Card } from '../../../components/primitives';
 import { Icon } from '../../../icons';
 
+export type BuffType = 'XP_BOOST' | 'FOCUS_POTION' | 'STREAK_SHIELD' | 'COIN_BOOST' | 'GEM_BOOST';
+
 interface ActiveBuff {
   id: string;
   type: BuffType;
@@ -36,11 +38,11 @@ interface ActiveBuffsTrayProps {
 }
 
 const BUFF_CONFIG: Record<BuffType, { icon: string; color: string; label: string }> = {
-  XP_BOOST: { icon: 'zap', color: 'theme.colors.primary[500]', label: 'XP Boost' },
-  FOCUS_POTION: { icon: 'target', color: 'theme.colors.primary[500]', label: 'Focus' },
-  STREAK_SHIELD: { icon: 'shield', color: 'theme.colors.primary[500]', label: 'Shield' },
-  COIN_BOOST: { icon: 'coins', color: 'theme.colors.primary[500]', label: 'Coin Boost' },
-  GEM_BOOST: { icon: 'gem', color: 'theme.colors.primary[500]', label: 'Gem Boost' },
+  XP_BOOST: { icon: 'zap', color: '#F59E0B', label: 'XP Boost' },
+  FOCUS_POTION: { icon: 'target', color: '#3B82F6', label: 'Focus' },
+  STREAK_SHIELD: { icon: 'shield', color: '#10B981', label: 'Shield' },
+  COIN_BOOST: { icon: 'coins', color: '#F59E0B', label: 'Coin Boost' },
+  GEM_BOOST: { icon: 'gem', color: '#8B5CF6', label: 'Gem Boost' },
 };
 
 const formatTimeRemaining = (expiresAt: number): string => {
@@ -300,7 +302,7 @@ export const ActiveBuffsTray: React.FC<ActiveBuffsTrayProps> = ({ buffs, onBuffP
                 accessibilityRole="button"
                 accessibilityHint="Activates this control"
               >
-                <Text style={{ color: 'theme.colors.background.primary', fontWeight: '600' }}>Got it</Text>
+                <Text style={{ color: '#FFF', fontWeight: '600' }}>Got it</Text>
               </Pressable>
             </Card>
           )}
@@ -311,5 +313,3 @@ export const ActiveBuffsTray: React.FC<ActiveBuffsTrayProps> = ({ buffs, onBuffP
 };
 
 export default ActiveBuffsTray;
-
-export * from "./ActiveBuffsTray.types";

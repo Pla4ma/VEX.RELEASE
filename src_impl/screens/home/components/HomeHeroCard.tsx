@@ -26,7 +26,7 @@ export function HomeHeroCard({ recommendation, isLoading, onPressCta, onPressSec
       marginTop: theme.spacing[4],
       borderRadius: theme.borderRadius.xl,
       overflow: 'hidden' as const,
-      shadowColor: 'theme.colors.text.primary',
+      shadowColor: '#000',
       shadowOffset: { width: 0, height: 10 },
       shadowOpacity: 0.15,
       shadowRadius: 20,
@@ -147,7 +147,7 @@ export function HomeHeroCard({ recommendation, isLoading, onPressCta, onPressSec
               alignItems: 'center',
             }}
           >
-            <Text variant="caption" color="theme.colors.background.primary">
+            <Text variant="caption" color="#FFFFFF">
               Focus Score: {profile.currentScore}
             </Text>
           </View>
@@ -155,16 +155,16 @@ export function HomeHeroCard({ recommendation, isLoading, onPressCta, onPressSec
         {/* Header with icon and headline */}
         <View style={headerStyle}>
           <View style={iconContainerStyle}>
-            <Icon name={icon} size={24} color="theme.colors.background.primary" />
+            <Icon name={icon} size={24} color="#FFFFFF" />
           </View>
           <View style={headlineStyle}>
-            <Text variant="h3" color="theme.colors.background.primary">
+            <Text variant="h3" color="#FFFFFF">
               {recommendation.headline}
             </Text>
           </View>
         </View>
         {/* Subtext */}
-        <Text variant="body" color="theme.colors.background.primary" style={subtextStyle}>
+        <Text variant="body" color="#FFFFFF" style={subtextStyle}>
           {recommendation.subtext}
         </Text>
         {/* AI Coach message (if present) */}

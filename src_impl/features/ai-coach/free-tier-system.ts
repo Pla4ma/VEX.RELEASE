@@ -16,27 +16,350 @@ import type { MasteryRank } from '../progression/unified-mastery';
 // ============================================================================
 // Coach Persona System
 // ============================================================================
+
+export const CoachPersonaSchema = z.enum([
+  'SUPPORTIVE', // Default free - encouraging, gentle
+  'ANALYTICAL', // Premium - data-driven insights
+  'STRICT', // Unlocked at Adept - tough love
+  'ZEN', // Unlocked at Expert - mindfulness focus
+  'ENTHUSIASTIC', // Unlocked at Master - high energy
+  'DRILL_SERGEANT', // Unlocked at Grandmaster - intense motivation
+]);
+
+export type CoachPersona = z.infer<typeof CoachPersonaSchema>;
+
+export interface CoachPersonaConfig {
+  id: CoachPersona;
+  name: string;
+  description: string;
+  unlockRequirement: {
+    type: 'FREE' | 'PREMIUM' | 'MASTERY_RANK';
+    value?: string;
+  };
+  messageStyle: 'gentle' | 'direct' | 'analytical' | 'energetic' | 'challenging';
+  avatarUrl: string;
+  colorTheme: string;
+  freeFeatures: string[];
+  premiumFeatures: string[];
+}
+
+export const COACH_PERSONAS: Record<CoachPersona, CoachPersonaConfig> = {
+  SUPPORTIVE: {
+    id: 'SUPPORTIVE',
+    name: 'Alex',
+    description: 'Your encouraging companion for focus journey',
+    unlockRequirement: { type: 'FREE' },
+    messageStyle: 'gentle',
+    avatarUrl: 'coaches/supportive.png',
+    colorTheme: '#4ECDC4',
+    freeFeatures: ['Basic reminders', 'Streak warnings', 'Simple tips', 'Session complete summary'],
+    premiumFeatures: ['Deep analytics', 'Voice messages', 'Custom schedules'],
+  },
+
+  ANALYTICAL: {
+    id: 'ANALYTICAL',
+    name: 'Sage',
+    description: 'Data-driven insights to optimize your focus',
+    unlockRequirement: { type: 'PREMIUM' },
+    messageStyle: 'analytical',
+    avatarUrl: 'coaches/analytical.png',
+    colorTheme: '#4169E1',
+    freeFeatures: [],
+    premiumFeatures: ['Pattern analysis', 'Predictive insights', 'Optimal timing suggestions', 'Performance breakdowns'],
+  },
+
+  STRICT: {
+    id: 'STRICT',
+    name: 'Victor',
+    description: 'Tough love accountability partner',
+    unlockRequirement: { type: 'MASTERY_RANK', value: 'ADEPT' },
+    messageStyle: 'challenging',
+    avatarUrl: 'coaches/strict.png',
+    colorTheme: '#FF6B35',
+    freeFeatures: ['Accountability checks', 'Direct feedback', 'Challenge prompts'],
+    premiumFeatures: ['Custom challenge creation', 'Advanced accountability'],
+  },
+
+  ZEN: {
+    id: 'ZEN',
+    name: 'Mira',
+    description: 'Mindfulness and flow state guide',
+    unlockRequirement: { type: 'MASTERY_RANK', value: 'EXPERT' },
+    messageStyle: 'gentle',
+    avatarUrl: 'coaches/zen.png',
+    colorTheme: '#9B59B6',
+    freeFeatures: ['Breathing exercises', 'Mindfulness tips', 'Flow state guidance'],
+    premiumFeatures: ['Meditation integration', 'Advanced mindfulness'],
+  },
+
+  ENTHUSIASTIC: {
+    id: 'ENTHUSIASTIC',
+    name: 'Zoe',
+    description: 'High-energy motivation machine',
+    unlockRequirement: { type: 'MASTERY_RANK', value: 'MASTER' },
+    messageStyle: 'energetic',
+    avatarUrl: 'coaches/enthusiastic.png',
+    colorTheme: '#FFD700',
+    freeFeatures: ['Motivation boosts', 'Celebration messages', 'Energy nudges'],
+    premiumFeatures: ['Personal hype videos', 'Custom celebrations'],
+  },
+
+  DRILL_SERGEANT: {
+    id: 'DRILL_SERGEANT',
+    name: 'Sergeant Stone',
+    description: 'Ultimate discipline enforcer',
+    unlockRequirement: { type: 'MASTERY_RANK', value: 'GRANDMASTER' },
+    messageStyle: 'challenging',
+    avatarUrl: 'coaches/drill.png',
+    colorTheme: '#8B0000',
+    freeFeatures: ['Discipline drills', 'No-excuses mode', 'Intensity protocols'],
+    premiumFeatures: ['Boot camp programs', 'Extreme accountability'],
+  },
+};
+
 // ============================================================================
 // Free Tier Features
 // ============================================================================
+
+export interface FreeTierFeatures {
+  // Session reminders
+  dailyReminders: boolean;
+  streakRiskWarnings: boolean;
+  sessionStartPrompts: boolean;
+
+  // Basic analytics
+  weeklySummary: boolean;
+  streakStatus: boolean;
+  simpleProgress: boolean;
+
+  // Tips
+  dailyTip: boolean;
+  modeSuggestions: boolean;
+  basicBossStrategies: boolean;
+
+  // Quests
+  activeQuests: CoachQuest[];
+  questSlots: number; // Free users get 1 slot
+}
+
+export interface CoachQuest {
+  id: string;
+  title: string;
+  description: string;
+  requirement: {
+    type: 'SESSION_COUNT' | 'PURITY_THRESHOLD' | 'STREAK_DAYS' | 'BOSS_DEFEAT';
+    value: number;
+    details?: Record<string, unknown>;
+  };
+  reward: {
+    coins: number;
+    xp?: number;
+    itemId?: string;
+  };
+  progress: number;
+  completed: boolean;
+  expiresAt: number;
+}
+
 // ============================================================================
 // Quest Generation
 // ============================================================================
+
+export function generateDailyQuest(userLevel: number, streakDays: number): CoachQuest {
+  const questTypes: CoachQuest['requirement']['type'][] = ['SESSION_COUNT', 'PURITY_THRESHOLD', 'STREAK_DAYS', 'BOSS_DEFEAT'];
+
+  const type = questTypes[Math.floor(Math.random() * questTypes.length)];
+
+  const templates: Record<CoachQuest['requirement']['type'], Partial<CoachQuest>> = {
+    SESSION_COUNT: {
+      title: 'Daily Discipline',
+      description: `Complete ${userLevel >= 10 ? 3 : 2} focus sessions today`,
+      requirement: { type: 'SESSION_COUNT', value: userLevel >= 10 ? 3 : 2 },
+      reward: { coins: 100 + userLevel * 10 },
+    },
+    PURITY_THRESHOLD: {
+      title: 'Crystal Focus',
+      description: 'Complete a session with 90%+ purity',
+      requirement: { type: 'PURITY_THRESHOLD', value: 90 },
+      reward: { coins: 150, xp: 50 },
+    },
+    STREAK_DAYS: {
+      title: 'Streak Guardian',
+      description: `Maintain your ${streakDays} day streak`,
+      requirement: { type: 'STREAK_DAYS', value: 1 },
+      reward: { coins: 50 * Math.min(10, streakDays) },
+    },
+    BOSS_DEFEAT: {
+      title: 'Boss Hunter',
+      description: 'Defeat any boss today',
+      requirement: { type: 'BOSS_DEFEAT', value: 1 },
+      reward: { coins: 200, xp: 100 },
+    },
+  };
+
+  const template = templates[type];
+
+  return {
+    id: `quest_${Date.now()}`,
+    title: template.title || '',
+    description: template.description || '',
+    requirement: template.requirement || { type, value: 1 },
+    reward: template.reward || { coins: 100 },
+    progress: 0,
+    completed: false,
+    expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+  };
+}
+
 // ============================================================================
 // Free vs Premium Feature Matrix
 // ============================================================================
+
+export const COACH_FEATURE_MATRIX = {
+  // Session Interventions
+  basicReminders: { free: true, premium: true },
+  smartTiming: { free: false, premium: true },
+  interruptionRecovery: { free: true, premium: true },
+  voiceInterventions: { free: false, premium: true },
+
+  // Analytics
+  weeklySummary: { free: true, premium: true },
+  detailedBreakdown: { free: false, premium: true },
+  trendAnalysis: { free: false, premium: true },
+  predictiveInsights: { free: false, premium: true },
+
+  // Personalization
+  basicPersona: { free: true, premium: true },
+  allPersonas: { free: false, premium: true },
+  customPersona: { free: false, premium: true },
+  personalityTraining: { free: false, premium: true },
+
+  // Recommendations
+  modeSuggestions: { free: true, premium: true },
+  durationOptimization: { free: false, premium: true },
+  bossStrategies: { free: true, premium: true },
+  advancedTactics: { free: false, premium: true },
+
+  // Quests
+  dailyQuest: { free: true, premium: true },
+  questSlots: { free: 1, premium: 3 },
+  customQuests: { free: false, premium: true },
+  questRewards: { free: 'standard', premium: 'enhanced' },
+
+  // Communication
+  textMessages: { free: true, premium: true },
+  voiceMessages: { free: false, premium: true },
+  videoMessages: { free: false, premium: true },
+  liveChat: { free: false, premium: true },
+};
+
+export function canUseFeature(feature: keyof typeof COACH_FEATURE_MATRIX, isPremium: boolean): boolean {
+  const config = COACH_FEATURE_MATRIX[feature];
+
+  if (typeof config.free === 'boolean') {
+    return config.free || isPremium;
+  }
+
+  if (typeof config.free === 'number') {
+    return true; // Quantified features are available, just limited
+  }
+
+  return isPremium;
+}
+
 // ============================================================================
 // Persona Unlock Logic
 // ============================================================================
+
+export function getUnlockedPersonas(isPremium: boolean, masteryRank: MasteryRank): CoachPersona[] {
+  const unlocked: CoachPersona[] = ['SUPPORTIVE'];
+
+  if (isPremium) {
+    unlocked.push('ANALYTICAL');
+  }
+
+  const rankOrder: MasteryRank[] = ['APPRENTICE', 'ADEPT', 'EXPERT', 'MASTER', 'GRANDMASTER'];
+  const userRankIndex = rankOrder.indexOf(masteryRank);
+
+  if (userRankIndex >= 1) {
+    unlocked.push('STRICT');
+  }
+  if (userRankIndex >= 2) {
+    unlocked.push('ZEN');
+  }
+  if (userRankIndex >= 3) {
+    unlocked.push('ENTHUSIASTIC');
+  }
+  if (userRankIndex >= 4) {
+    unlocked.push('DRILL_SERGEANT');
+  }
+
+  return unlocked;
+}
+
 // ============================================================================
 // Free Tier Tips Database
 // ============================================================================
+
+export const FREE_TIPS: string[] = ['Start with a 25-minute session to build momentum', 'Your phone is the #1 distraction. Put it in another room.', 'Take 3 deep breaths before starting your session', 'The first 5 minutes are hardest. Push through!', 'Use Deep Work mode for complex tasks', 'A 7-day streak unlocks bonus rewards', 'Defeating bosses earns coins for upgrades', 'Your purity score affects damage dealt', 'Try different session modes to find your style', 'Consistency beats intensity - show up every day', 'Use the Pomodoro technique: 25 min work, 5 min break', 'Clear your workspace before starting', 'Set one clear goal for each session', 'Track your energy levels throughout the day', 'Join a squad for bonus XP and accountability', "Don't break the chain - any session counts", 'Use Light Focus mode on low-energy days', 'The best time to start was yesterday. The second best is now.', 'Focus is a muscle - it gets stronger with practice', 'Celebrate small wins to build momentum'];
+
+export function getRandomTip(): string {
+  return FREE_TIPS[Math.floor(Math.random() * FREE_TIPS.length)];
+}
+
 // ============================================================================
 // Factory Functions
 // ============================================================================
+
+export function createInitialFreeTier(): FreeTierFeatures {
+  return {
+    dailyReminders: true,
+    streakRiskWarnings: true,
+    sessionStartPrompts: true,
+    weeklySummary: true,
+    streakStatus: true,
+    simpleProgress: true,
+    dailyTip: true,
+    modeSuggestions: true,
+    basicBossStrategies: true,
+    activeQuests: [],
+    questSlots: 1,
+  };
+}
+
 // ============================================================================
 // Migration from Premium-Only
 // ============================================================================
-export * from "./free-tier-system.types";
-export * from "./free-tier-system.part1";
-export * from "./free-tier-system.part2";
+
+export function migrateToFreeTierSystem(
+  hadCoachAccess: boolean,
+  userLevel: number,
+): {
+  freeFeatures: FreeTierFeatures;
+  unlockedPersonas: CoachPersona[];
+  isPremium: boolean;
+} {
+  const freeFeatures = createInitialFreeTier();
+
+  // If they had premium, keep premium status
+  const isPremium = hadCoachAccess;
+
+  // Determine mastery rank based on level (migration approximation)
+  let rank: MasteryRank = 'APPRENTICE';
+  if (userLevel >= 40) {
+    rank = 'GRANDMASTER';
+  } else if (userLevel >= 30) {
+    rank = 'MASTER';
+  } else if (userLevel >= 20) {
+    rank = 'EXPERT';
+  } else if (userLevel >= 10) {
+    rank = 'ADEPT';
+  }
+
+  const unlockedPersonas = getUnlockedPersonas(isPremium, rank);
+
+  // Add starter quest
+  freeFeatures.activeQuests.push(generateDailyQuest(userLevel, 0));
+
+  return { freeFeatures, unlockedPersonas, isPremium };
+}

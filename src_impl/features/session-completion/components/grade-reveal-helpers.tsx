@@ -4,11 +4,11 @@ import Animated, { useAnimatedStyle, type SharedValue } from 'react-native-reani
 export const PARTICLE_COUNT = 12;
 
 export const GRADE_REVEAL_COLORS: Record<string, string> = {
-  A: 'theme.colors.primary[500]',
-  B: 'theme.colors.primary[500]',
-  C: 'theme.colors.primary[500]',
-  D: 'theme.colors.primary[500]',
-  S: 'theme.colors.error.DEFAULT',
+  A: '#22C55E',
+  B: '#3B82F6',
+  C: '#94A3B8',
+  D: '#EF4444',
+  S: '#FFD700',
 };
 
 export function hexToRgba(color: string, alpha: number): string {

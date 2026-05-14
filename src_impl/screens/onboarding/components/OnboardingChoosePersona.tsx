@@ -24,6 +24,17 @@ import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 
+export type CoachPersonaType = 'cheerleader' | 'mentor' | 'drill-sergeant';
+
+export interface CoachPersona {
+  id: CoachPersonaType;
+  icon: string;
+  name: string;
+  description: string;
+  examples: string[];
+  color: string;
+}
+
 interface OnboardingChoosePersonaProps {
   selectedPersona: CoachPersonaType | null;
   onSelectPersona: (persona: CoachPersonaType) => void;
@@ -41,7 +52,7 @@ const PERSONAS: CoachPersona[] = [
       '"You\'re absolutely crushing this! 🔥"',
       '"I knew you had it in you! Keep going!"',
     ],
-    color: 'theme.colors.primary[500]', // Amber
+    color: '#F59E0B', // Amber
   },
   {
     id: 'mentor',
@@ -52,7 +63,7 @@ const PERSONAS: CoachPersona[] = [
       '"Small steps lead to big progress."',
       '"Your consistency is building something great."',
     ],
-    color: 'theme.colors.primary[500]', // Blue
+    color: '#3B82F6', // Blue
   },
   {
     id: 'drill-sergeant',
@@ -63,7 +74,7 @@ const PERSONAS: CoachPersona[] = [
       '"Excuses don\'t build empires. Focus!"',
       '"You asked for this. Now deliver."',
     ],
-    color: 'theme.colors.primary[500]', // Red
+    color: '#EF4444', // Red
   },
 ];
 
@@ -274,5 +285,3 @@ export function OnboardingChoosePersona({
 }
 
 export default OnboardingChoosePersona;
-
-export * from "./OnboardingChoosePersona.types";

@@ -203,7 +203,7 @@ const styles = createSheet({
   thumbnail: {
     width: '100%',
     height: 160,
-    backgroundColor: 'theme.colors.text.primary',
+    backgroundColor: '#000',
   },
   previewInfo: {
     padding: 12,

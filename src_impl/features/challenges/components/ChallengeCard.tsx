@@ -218,6 +218,3 @@ const styles = createSheet({
     padding: 4,
   },
 });
-
-export * from "./ChallengeCard.types";
-export * from "./ChallengeCard.types";

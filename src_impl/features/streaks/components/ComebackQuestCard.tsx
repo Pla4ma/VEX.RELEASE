@@ -265,5 +265,3 @@ export function ComebackQuestCompact({ progress, onPress }: { progress: Comeback
 }
 
 export default ComebackQuestCard;
-
-export * from "./ComebackQuestCard.types";

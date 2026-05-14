@@ -3,10 +3,10 @@ export type GradientState = { top: string; middle: string; bottom: string };
 
 export const DAILY_GOAL_SECONDS = 2 * 60 * 60;
 export const PERFECT_PARTICLE_COUNT = 8;
-const WARNING_GRADIENT = ['theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]'] as const;
-const FOCUS_GRADIENT = ['theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]'] as const;
-const ELITE_GRADIENT = ['theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]'] as const;
-const BREAK_GRADIENT = ['theme.colors.primary[500]', 'theme.colors.primary[500]', 'theme.colors.primary[500]'] as const;
+const WARNING_GRADIENT = ['#140E11', '#231817', '#090B12'] as const;
+const FOCUS_GRADIENT = ['#111827', '#172033', '#0A0F1A'] as const;
+const ELITE_GRADIENT = ['#091427', '#101A31', '#050914'] as const;
+const BREAK_GRADIENT = ['#072226', '#0E2A2E', '#051417'] as const;
 
 export const formatTime = (seconds: number): string =>
   `${Math.floor(seconds / 60)

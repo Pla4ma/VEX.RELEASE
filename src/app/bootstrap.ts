@@ -1,4 +1,7 @@
 import { initializeSessionCompletionOrchestrator } from '../session/integration/SessionCompletionOrchestrator';
+import { initializeSessionBossIntegration } from '../session/integration/SessionBossIntegration';
+import { initializeStreakInsuranceIntegration } from '../integration/streak-insurance';
+import { initializeWeeklyQuestIntegration } from '../features/weekly-quests/integration';
 import { getNetInfoAdapter } from '../network';
 import { getQueueLength, startAutoProcessing } from '../lib/offline/queue';
 import { createDebugger } from '../utils/debug';
@@ -31,6 +34,9 @@ export const bootstrapApp = (): void => {
     enableOfflineQueue: true,
   });
   initializeSessionCompletionOrchestrator();
+  initializeSessionBossIntegration();
+  initializeStreakInsuranceIntegration();
+  initializeWeeklyQuestIntegration();
   const netInfo = getNetInfoAdapter();
   void netInfo.initialize();
   debug.info('Offline sync queue size at boot: %d', getQueueLength());

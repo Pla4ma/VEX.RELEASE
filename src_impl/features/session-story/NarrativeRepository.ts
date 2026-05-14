@@ -36,6 +36,12 @@ const SessionNarrativeDBSchema = z.object({
   heroQuote: z.string(),
 });
 
+export interface RepositoryError {
+  code: 'NOT_FOUND' | 'SAVE_FAILED' | 'LOAD_FAILED' | 'VALIDATION_ERROR' | 'NETWORK_ERROR';
+  message: string;
+  retryable: boolean;
+}
+
 export class NarrativeRepository {
   private cache: Map<string, { data: SessionNarrative; timestamp: number }> = new Map();
   private userNarratives: Map<string, string[]> = new Map(); // userId -> sessionIds
@@ -265,5 +271,3 @@ export function getNarrativeRepository(): NarrativeRepository {
   }
   return repository;
 }
-
-export * from "./NarrativeRepository.types";

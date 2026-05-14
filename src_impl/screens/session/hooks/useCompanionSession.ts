@@ -198,5 +198,3 @@ export function useCompanionSession(input: UseCompanionSessionInput): UseCompani
 
   return { completeCompanionSession, eventLabel, isLoaded, sessionProgress, state };
 }
-
-export * from "./useCompanionSession.types";

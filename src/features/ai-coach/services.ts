@@ -1,1 +1,0 @@
-export { initializeNotifications } from '../../../src_impl/features/ai-coach/services/notification-service';

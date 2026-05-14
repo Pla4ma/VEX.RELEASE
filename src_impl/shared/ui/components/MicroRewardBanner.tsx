@@ -26,18 +26,35 @@ import { triggerHaptic } from '../../../utils/haptics';
 // ============================================================================
 // Types
 // ============================================================================
+
+export type RewardType = 'xp' | 'coins' | 'gems' | 'streak' | 'level' | 'achievement' | 'milestone';
+
+export interface MicroRewardBannerProps {
+  type: RewardType;
+  amount?: number;
+  label?: string;
+  description?: string;
+  icon?: string;
+  onPress?: () => void;
+  onDismiss?: () => void;
+  autoDismiss?: boolean;
+  autoDismissDelay?: number;
+  style?: ViewStyle;
+  showOnce?: boolean;
+}
+
 // ============================================================================
 // Reward Configurations
 // ============================================================================
 
 const REWARD_CONFIG: Record<RewardType, { icon: string; color: string; label: string }> = {
-  xp: { icon: '⭐', color: 'theme.colors.primary[500]', label: 'XP Gained' },
-  coins: { icon: '🪙', color: 'theme.colors.primary[500]', label: 'Coins' },
-  gems: { icon: '💎', color: 'theme.colors.primary[500]', label: 'Gems' },
-  streak: { icon: '🔥', color: 'theme.colors.primary[500]', label: 'Streak' },
-  level: { icon: '📈', color: 'theme.colors.primary[500]', label: 'Level Up' },
-  achievement: { icon: '🏆', color: 'theme.colors.primary[500]', label: 'Achievement' },
-  milestone: { icon: '🎯', color: 'theme.colors.primary[500]', label: 'Milestone' },
+  xp: { icon: '⭐', color: '#6366F1', label: 'XP Gained' },
+  coins: { icon: '🪙', color: '#EAB308', label: 'Coins' },
+  gems: { icon: '💎', color: '#3B82F6', label: 'Gems' },
+  streak: { icon: '🔥', color: '#F97316', label: 'Streak' },
+  level: { icon: '📈', color: '#22C55E', label: 'Level Up' },
+  achievement: { icon: '🏆', color: '#A855F7', label: 'Achievement' },
+  milestone: { icon: '🎯', color: '#EC4899', label: 'Milestone' },
 };
 
 // ============================================================================
@@ -191,6 +208,16 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
 // ============================================================================
 // Compact Version for Inline Use
 // ============================================================================
+
+export interface CompactRewardBadgeProps {
+  /** Type of reward */
+  type: RewardType;
+  /** Amount to display */
+  amount: number;
+  /** Custom styles */
+  style?: ViewStyle;
+}
+
 export const CompactRewardBadge: React.FC<CompactRewardBadgeProps> = ({
   type,
   amount,
@@ -226,5 +253,3 @@ export const CompactRewardBadge: React.FC<CompactRewardBadgeProps> = ({
 };
 
 export default MicroRewardBanner;
-
-export * from "./MicroRewardBanner.types";

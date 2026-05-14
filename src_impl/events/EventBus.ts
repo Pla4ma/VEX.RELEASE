@@ -240,6 +240,3 @@ export class EventBus {
  * Global event bus instance
  */
 export const eventBus = EventBus.getInstance();
-
-export * from "./EventBus.types";
-export * from "./EventBus.types";

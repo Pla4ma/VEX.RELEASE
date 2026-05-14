@@ -318,6 +318,3 @@ const styles = createSheet({
 });
 
 export default InterruptionWarning;
-
-export * from "./InterruptionWarning.types";
-export * from "./InterruptionWarning.types";

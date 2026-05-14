@@ -1,9 +1,0 @@
-export type LoginFormData = z.infer<typeof loginSchema>;
-export type RegisterFormData = z.infer<typeof registerSchema>;
-export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
-export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
-export type UserProfileFormData = z.infer<typeof userProfileSchema>;
-export type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
-export type NotificationSettingsFormData = z.infer<typeof notificationSettingsSchema>;
-export type PrivacySettingsFormData = z.infer<typeof privacySettingsSchema>;
-export type SearchQueryFormData = z.infer<typeof searchQuerySchema>;

@@ -133,13 +133,13 @@ export function useRetryFailedRewards() {
 
 export function useRewardStateColor(state: string) {
   const colors = {
-    PENDING: 'theme.colors.error.DEFAULT',
-    DELIVERED: 'theme.colors.primary[500]',
-    FAILED: 'theme.colors.primary[500]',
-    EXPIRED: 'theme.colors.primary[500]',
-    RETRYING: 'theme.colors.primary[500]',
+    PENDING: '#FFA500',
+    DELIVERED: '#4CAF50',
+    FAILED: '#F44336',
+    EXPIRED: '#9E9E9E',
+    RETRYING: '#2196F3',
   };
-  return colors[state as keyof typeof colors] || 'theme.colors.primary[500]';
+  return colors[state as keyof typeof colors] || '#9E9E9E';
 }
 
 export function useRewardTypeIcon(type: string) {

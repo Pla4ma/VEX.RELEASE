@@ -17,6 +17,8 @@ import { trackPersonalityResponse } from './analytics';
 
 const debug = createDebugger('companion-personality');
 
+export type PersonalityEventType = 'BOSS_DEFEATED' | 'S_GRADE_SESSION' | 'STREAK_MILESTONE' | 'STREAK_BROKEN' | 'COMEBACK' | 'LEVEL_UP' | 'PERFECT_SESSION';
+
 interface PersonalityResponse {
   animation: 'victory' | 'celebration' | 'sympathy' | 'welcome' | 'growth' | 'excited';
   dialogue: string[];
@@ -166,6 +168,12 @@ const RESPONSES: Record<PersonalityEventType, PersonalityResponse[]> = {
     },
   ],
 };
+
+export interface CompanionPersonalityState {
+  currentResponse: ActiveResponse | null;
+  responseHistory: ActiveResponse[];
+  isAnimating: boolean;
+}
 
 class CompanionPersonalityEngine {
   private state: CompanionPersonalityState = {
@@ -325,6 +333,3 @@ export function resetCompanionPersonalityEngine(): void {
   }
   instance = null;
 }
-
-export * from "./CompanionPersonalityEngine.types";
-export * from "./CompanionPersonalityEngine.types";

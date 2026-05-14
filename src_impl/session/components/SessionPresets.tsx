@@ -31,7 +31,7 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
   const categories = ['All', 'Focus', 'Study', 'Work', 'Creative', 'Health'];
 
   const filteredPresets = selectedCategory && selectedCategory !== 'All'
-    ? presets.filter((p: SessionPreset) => p.category === selectedCategory || (selectedCategory === 'Focus' && !p.category))
+    ? presets.filter(p => p.category === selectedCategory || (selectedCategory === 'Focus' && !p.category))
     : presets;
 
   const handleCreatePreset = () => {
@@ -83,7 +83,7 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
       {/* Presets Grid */}
       <ScrollView style={styles.presetsContainer}>
         <View style={styles.grid}>
-          {filteredPresets.map((preset: SessionPreset) => (
+          {filteredPresets.map(preset => (
             <Pressable
               key={preset.id}
               style={({ pressed }) => [styles.presetCard, pressed && { opacity: 0.8 }]}
@@ -348,6 +348,3 @@ const styles = createSheet({
 });
 
 export default SessionPresets;
-
-export * from "./SessionPresets.types";
-export * from "./SessionPresets.types";

@@ -11,12 +11,12 @@ interface FailedRewardCardProps {
 
 const styles = createSheet({
   container: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#1a1a2e',
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
     borderLeftWidth: 4,
-    borderLeftColor: 'theme.colors.primary[500]',
+    borderLeftColor: '#e94560',
   },
   header: {
     flexDirection: 'row',
@@ -27,27 +27,27 @@ const styles = createSheet({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'theme.colors.background.primary',
+    color: '#fff',
   },
   amount: {
     fontSize: 18,
     fontWeight: '700',
-    color: 'theme.colors.primary[500]',
+    color: '#e94560',
   },
   source: {
     fontSize: 14,
-    color: 'theme.colors.primary[500]',
+    color: '#9E9E9E',
     marginBottom: 4,
   },
   errorMessage: {
     fontSize: 14,
-    color: 'theme.colors.primary[500]',
+    color: '#e94560',
     marginBottom: 12,
     fontStyle: 'italic',
   },
   attempts: {
     fontSize: 12,
-    color: 'theme.colors.primary[500]',
+    color: '#666',
     marginBottom: 12,
   },
   actions: {
@@ -56,7 +56,7 @@ const styles = createSheet({
     gap: 8,
   },
   retryButton: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#e94560',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
@@ -64,7 +64,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   retryButtonText: {
-    color: 'theme.colors.background.primary',
+    color: '#fff',
     fontSize: 14,
     fontWeight: '600',
   },
@@ -74,7 +74,7 @@ const styles = createSheet({
     borderRadius: 8,
   },
   dismissButtonText: {
-    color: 'theme.colors.primary[500]',
+    color: '#9E9E9E',
     fontSize: 14,
   },
 });

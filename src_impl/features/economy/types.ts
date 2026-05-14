@@ -14,7 +14,7 @@
 // Currency Types
 // ============================================================================
 
-export type CurrencyType = 'COINS' | 'GEMS';
+export type CurrencyType = 'COINS' | 'GEMS' | 'FOCUS_POINTS' | 'SEASONAL';
 
 export interface CurrencyAmount {
   currency: CurrencyType;
@@ -30,6 +30,8 @@ export interface Wallet {
   userId: string;
   coins: number;
   gems: number;
+  focusPoints: number; // New: simplified focus-based currency
+  seasonal: Record<string, number>;
   totalCoinsEarned: number;
   totalCoinsSpent: number;
   totalGemsEarned: number;
@@ -41,6 +43,8 @@ export interface Wallet {
 export interface WalletSummary {
   coins: number;
   gems: number;
+  focusPoints: number;
+  seasonal: Record<string, number>;
 }
 
 // ============================================================================
@@ -191,4 +195,88 @@ export interface EconomyAnalytics {
   craftingSuccesses: number;
 }
 
+// ============================================================================
+// Currency Conversion
+// ============================================================================
 
+export interface CurrencyConversion {
+  id: string;
+  userId: string;
+  fromCurrency: CurrencyType;
+  fromAmount: number;
+  toCurrency: CurrencyType;
+  toAmount: number;
+  exchangeRate: number;
+  fee: number;
+  createdAt: number;
+}
+
+// ============================================================================
+// Price History
+// ============================================================================
+
+export interface PricePoint {
+  timestamp: number;
+  price: CurrencyAmount;
+  reason: string | null;
+}
+
+export interface ItemPriceHistory {
+  itemId: string;
+  pricePoints: PricePoint[];
+  currentPrice: CurrencyAmount;
+  lowestPrice: CurrencyAmount;
+  highestPrice: CurrencyAmount;
+}
+
+// ============================================================================
+// Offer System
+// ============================================================================
+
+export type OfferType = 'FLASH_SALE' | 'BUNDLE' | 'DAILY_DEAL' | 'FIRST_PURCHASE' | 'VIP_EXCLUSIVE' | 'SEASONAL';
+
+export type OfferStatus = 'SCHEDULED' | 'ACTIVE' | 'EXPIRED' | 'SOLD_OUT';
+
+export interface LimitedOffer {
+  id: string;
+  type: OfferType;
+  name: string;
+  description: string;
+
+  // Items included
+  itemIds: string[];
+  bonusItemIds: string[];
+
+  // Pricing
+  originalPrice: CurrencyAmount;
+  discountedPrice: CurrencyAmount;
+  discountPercent: number;
+
+  // Availability
+  status: OfferStatus;
+  startAt: number;
+  endAt: number;
+  maxPurchases: number | null; // null = unlimited
+  currentPurchases: number;
+
+  // Targeting
+  minLevel: number;
+  maxLevel: number | null;
+  requiredItems: string[]; // Must own these items
+  excludedItems: string[]; // Cannot own these items
+
+  // Display
+  badgeText: string | null;
+  timerDisplay: boolean;
+  priority: number;
+
+  createdAt: number;
+}
+
+export interface UserOfferClaim {
+  id: string;
+  offerId: string;
+  userId: string;
+  purchaseId: string;
+  claimedAt: number;
+}

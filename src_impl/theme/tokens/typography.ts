@@ -17,7 +17,7 @@ export const fontWeights: FontWeights = {
 };
 
 const baseTextStyle: TextStyle = {
-  color: 'theme.colors.primary[500]',
+  color: '#F8FAFC',
   fontFamily: fontFamilies.primary,
   fontWeight: fontWeights.regular,
 };

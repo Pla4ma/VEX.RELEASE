@@ -249,6 +249,3 @@ const styles = createSheet({
     color: '#9ca3af',
   },
 });
-
-export * from "./MetricSelector.types";
-export * from "./MetricSelector.types";

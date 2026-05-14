@@ -59,7 +59,7 @@ describe('AccessibilityAuditor', () => {
       type: 'Button',
       props: {
         accessibilityLabel: 'Test Button',
-        style: { color: 'theme.colors.text.primary', backgroundColor: 'theme.colors.background.primary' },
+        style: { color: '#000000', backgroundColor: '#FFFFFF' },
       },
     };
   });
@@ -96,7 +96,7 @@ describe('AccessibilityAuditor', () => {
         ...mockComponent,
         props: {
           ...mockComponent.props,
-          style: { color: 'theme.colors.primary[500]', backgroundColor: 'theme.colors.background.primary' },
+          style: { color: '#999999', backgroundColor: '#FFFFFF' },
         },
       };
 
@@ -259,7 +259,7 @@ describe('AccessibilityEnhancer', () => {
 
     it('should apply contrast enhancements', () => {
       const props = {
-        style: { color: 'theme.colors.primary[500]', backgroundColor: 'theme.colors.background.primary' },
+        style: { color: '#999999', backgroundColor: '#FFFFFF' },
       };
 
       const enhancedProps = enhancer.enhanceProps(props, {
@@ -477,7 +477,7 @@ describe('MotionAccessibility', () => {
 describe('AccessibilitySystem Integration', () => {
   describe('Color Contrast Checking', () => {
     it('should calculate contrast ratio correctly', () => {
-      const contrast = checkContrast('theme.colors.text.primary', 'theme.colors.background.primary');
+      const contrast = checkContrast('#000000', '#FFFFFF');
 
       expect(contrast.ratio).toBeCloseTo(21, 1);
       expect(contrast.passesAA).toBe(true);
@@ -485,7 +485,7 @@ describe('AccessibilitySystem Integration', () => {
     });
 
     it('should fail insufficient contrast', () => {
-      const contrast = checkContrast('theme.colors.primary[500]', 'theme.colors.background.primary');
+      const contrast = checkContrast('#999999', '#FFFFFF');
 
       expect(contrast.ratio).toBeLessThan(4.5);
       expect(contrast.passesAA).toBe(false);
@@ -493,7 +493,7 @@ describe('AccessibilitySystem Integration', () => {
     });
 
     it('should provide accessible alternatives', () => {
-      const alternatives = getAccessibleAlternatives('theme.colors.primary[500]', 'theme.colors.background.primary');
+      const alternatives = getAccessibleAlternatives('#999999', '#FFFFFF');
 
       expect(alternatives).toBeInstanceOf(Array);
       expect(alternatives.length).toBeGreaterThan(0);
@@ -516,7 +516,7 @@ describe('AccessibilitySystem Integration', () => {
           accessibilityLabel: 'Accessible Button',
           accessibilityRole: 'button',
           accessibilityHint: 'Activates this control',
-          style: { color: 'theme.colors.text.primary', backgroundColor: 'theme.colors.background.primary' },
+          style: { color: '#000000', backgroundColor: '#FFFFFF' },
         },
       };
 
@@ -533,7 +533,7 @@ describe('AccessibilitySystem Integration', () => {
         type: 'Button',
         props: {
           // Missing accessibility label
-          style: { color: 'theme.colors.primary[500]', backgroundColor: 'theme.colors.background.primary' },
+          style: { color: '#999999', backgroundColor: '#FFFFFF' },
         },
       };
 

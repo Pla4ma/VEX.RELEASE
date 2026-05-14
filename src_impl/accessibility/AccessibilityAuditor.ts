@@ -20,6 +20,55 @@ const debug = createDebugger('accessibility-auditor');
 // ============================================================================
 // Accessibility Audit Types
 // ============================================================================
+
+export interface AccessibilityIssue {
+  id: string;
+  type: 'error' | 'warning' | 'info';
+  category: 'contrast' | 'focus' | 'keyboard' | 'screen-reader' | 'motion' | 'color' | 'semantic' | 'touch';
+  severity: 'critical' | 'major' | 'moderate' | 'minor';
+  message: string;
+  recommendation: string;
+  element?: string;
+  wcagGuideline: string;
+  automated: boolean; // Can be automatically detected
+}
+
+export interface AccessibilityAuditResult {
+  score: number; // 0-100
+  issues: AccessibilityIssue[];
+  passedChecks: string[];
+  failedChecks: string[];
+  summary: {
+    critical: number;
+    major: number;
+    moderate: number;
+    minor: number;
+  };
+  timestamp: number;
+}
+
+export interface ComponentAccessibilityConfig {
+  /** Component name for identification */
+  componentName: string;
+  /** Whether component requires accessibility testing */
+  requiresTesting: boolean;
+  /** Custom accessibility rules for this component */
+  customRules?: AccessibilityRule[];
+  /** Expected interactive elements */
+  interactiveElements?: string[];
+  /** Required accessibility labels */
+  requiredLabels?: string[];
+}
+
+export interface AccessibilityRule {
+  id: string;
+  description: string;
+  check: (element: AuditElement) => AccessibilityIssue | null;
+  category: AccessibilityIssue['category'];
+  severity: AccessibilityIssue['severity'];
+  wcagGuideline: string;
+}
+
 type StyleValue = string | number;
 
 interface AuditElementProps {
@@ -46,6 +95,12 @@ interface AuditElementProps {
 
 interface AuditElementType {
   displayName?: string;
+}
+
+export interface AuditElement {
+  children?: AuditElement[];
+  props?: AuditElementProps;
+  type?: string | AuditElementType;
 }
 
 // ============================================================================
@@ -680,6 +735,3 @@ export class AccessibilityAuditor {
 // ============================================================================
 
 export const accessibilityAuditor = new AccessibilityAuditor();
-
-export * from "./AccessibilityAuditor.types";
-export * from "./AccessibilityAuditor.types";

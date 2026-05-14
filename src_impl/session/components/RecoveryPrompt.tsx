@@ -268,6 +268,3 @@ const styles = createSheet({
 });
 
 export default RecoveryPrompt;
-
-export * from "./RecoveryPrompt.types";
-export * from "./RecoveryPrompt.types";

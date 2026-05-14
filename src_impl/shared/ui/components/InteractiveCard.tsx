@@ -40,6 +40,47 @@ import { createSheet } from '@/shared/ui/create-sheet';
 type CardVariant = 'default' | 'elevated' | 'outlined' | 'ghost';
 type CardSize = 'sm' | 'md' | 'lg';
 type CardState = 'default' | 'loading' | 'disabled' | 'error' | 'selected';
+
+export interface InteractiveCardProps extends Omit<PressableProps, 'onPress' | 'style'> {
+  // Core
+  children: React.ReactNode;
+  onPress?: () => void | Promise<void>;
+  onLongPress?: () => void;
+
+  // Appearance
+  variant?: CardVariant;
+  size?: CardSize;
+  style?: ViewStyle;
+
+  // States
+  state?: CardState;
+  loadingMessage?: string;
+  disabledReason?: string;
+  errorMessage?: string;
+  onRetry?: () => void;
+
+  // Visual elements
+  icon?: string;
+  badge?: string | number;
+  badgeColor?: string;
+
+  // Selection
+  selected?: boolean;
+  selectionIcon?: string;
+
+  // Accessibility
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
+
+  // Interactions
+  hapticOnPress?: boolean;
+  scaleOnPress?: number;
+
+  // Layout
+  fullWidth?: boolean;
+  aspectRatio?: number;
+}
+
 // ============================================================================
 // State Overlay Components
 // ============================================================================
@@ -108,7 +149,7 @@ const SelectedOverlay: React.FC<{ icon?: string; theme: DynamicValue }> = ({
   theme,
 }) => (
   <View style={[styles.selectedIndicator, { backgroundColor: theme.colors.success.DEFAULT }]}>
-    <Icon name={icon} size="sm" color="theme.colors.background.primary" />
+    <Icon name={icon} size="sm" color="#FFFFFF" />
   </View>
 );
 
@@ -432,5 +473,3 @@ const styles = createSheet({
 });
 
 export default InteractiveCard;
-
-export * from "./InteractiveCard.types";

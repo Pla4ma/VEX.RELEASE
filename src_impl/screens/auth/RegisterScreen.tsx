@@ -278,7 +278,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
                   alignItems: 'center',
                 }}
               >
-                {agreeToTerms && <Icon name="check" size={14} color="theme.colors.background.primary" />}
+                {agreeToTerms && <Icon name="check" size={14} color="#FFF" />}
               </View>
               <Text variant="bodySmall" color="text.secondary" style={{ flex: 1 }}>
                 I agree to the Terms of Service and Privacy Policy
@@ -322,5 +322,3 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default RegisterScreen;
-
-export * from "./RegisterScreen.types";

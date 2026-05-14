@@ -238,5 +238,3 @@ export function OnboardingWelcome({ onContinue }: OnboardingWelcomeProps): JSX.E
 }
 
 export default OnboardingWelcome;
-
-export * from "./OnboardingWelcome.types";

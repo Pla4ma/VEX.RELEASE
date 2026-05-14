@@ -31,6 +31,29 @@ export type ToastType = 'info' | 'success' | 'warning' | 'error';
  * Toast position
  */
 export type ToastPosition = 'top' | 'bottom' | 'center';
+
+/**
+ * Toast props
+ */
+export interface ToastProps {
+  /** Toast message */
+  message: string;
+  /** Toast type */
+  type?: ToastType;
+  /** Toast position */
+  position?: ToastPosition;
+  /** Whether toast is visible */
+  visible: boolean;
+  /** Auto hide duration (ms) */
+  duration?: number;
+  /** Called when toast hides */
+  onHide?: () => void;
+  /** Custom icon */
+  icon?: IconName;
+  /** Custom style */
+  style?: ViewStyle;
+}
+
 /**
  * Icon mapping for toast types
  */
@@ -189,5 +212,3 @@ const styles = createSheet({
 });
 
 export default Toast;
-
-export * from "./Toast.types";

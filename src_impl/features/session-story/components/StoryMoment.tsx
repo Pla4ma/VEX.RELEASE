@@ -79,7 +79,7 @@ export const StoryMoment: React.FC<StoryMomentProps> = ({ story, onComplete, onS
       style={[
         {
           flex: 1,
-          backgroundColor: theme.colors.background?.primary ?? 'theme.colors.text.primary',
+          backgroundColor: theme.colors.background?.primary ?? '#000',
           paddingTop: insets.top,
           paddingBottom: insets.bottom,
         },
@@ -105,7 +105,7 @@ export const StoryMoment: React.FC<StoryMomentProps> = ({ story, onComplete, onS
                 width: 6,
                 height: 6,
                 borderRadius: 3,
-                backgroundColor: index <= currentBeatIndex ? (theme.colors.primary?.[500] ?? 'theme.colors.background.primary') : (theme.colors.border?.DEFAULT ?? 'theme.colors.primary[500]'),
+                backgroundColor: index <= currentBeatIndex ? (theme.colors.primary?.[500] ?? '#fff') : (theme.colors.border?.DEFAULT ?? '#333'),
               }}
             />
           ))}
@@ -117,7 +117,7 @@ export const StoryMoment: React.FC<StoryMomentProps> = ({ story, onComplete, onS
               style={{
                 fontSize: 14,
                 fontWeight: '500',
-                color: theme.colors.text?.muted ?? 'theme.colors.primary[500]',
+                color: theme.colors.text?.muted ?? '#888',
               }}
             >
               Skip
@@ -145,7 +145,7 @@ export const StoryMoment: React.FC<StoryMomentProps> = ({ story, onComplete, onS
           style={{
             fontSize: 14,
             fontWeight: '500',
-            color: theme.colors.text?.muted ?? 'theme.colors.primary[500]',
+            color: theme.colors.text?.muted ?? '#888',
           }}
         >
           {isLastBeat ? 'Tap to finish' : 'Tap to continue'}
@@ -185,16 +185,16 @@ const StoryBeatContent: React.FC<StoryBeatContentProps> = ({ beat, theme }) => {
   // Get emotion color
   const getEmotionColor = (emotion: StoryBeat['emotion']): string => {
     const colors: Record<string, string> = {
-      TRIUMPH: theme.colors.success?.DEFAULT ?? 'theme.colors.primary[500]',
-      MASTERY: theme.colors.primary?.[500] ?? 'theme.colors.primary[500]',
-      RESILIENCE: theme.colors.warning?.DEFAULT ?? 'theme.colors.primary[500]',
-      DETERMINATION: theme.colors.info?.DEFAULT ?? 'theme.colors.primary[500]',
-      ANTICIPATION: theme.colors.primary?.[400] ?? 'theme.colors.primary[500]',
-      WONDER: theme.colors.primary?.[400] ?? 'theme.colors.primary[500]',
-      GRATITUDE: theme.colors.success?.DEFAULT ?? 'theme.colors.primary[500]',
-      RELIEF: theme.colors.success?.DEFAULT ?? 'theme.colors.primary[500]',
+      TRIUMPH: theme.colors.success?.DEFAULT ?? '#22c55e',
+      MASTERY: theme.colors.primary?.[500] ?? '#3b82f6',
+      RESILIENCE: theme.colors.warning?.DEFAULT ?? '#f59e0b',
+      DETERMINATION: theme.colors.info?.DEFAULT ?? '#3b82f6',
+      ANTICIPATION: theme.colors.primary?.[400] ?? '#60a5fa',
+      WONDER: theme.colors.primary?.[400] ?? '#60a5fa',
+      GRATITUDE: theme.colors.success?.DEFAULT ?? '#22c55e',
+      RELIEF: theme.colors.success?.DEFAULT ?? '#22c55e',
     };
-    return colors[emotion] ?? theme.colors.primary?.[500] ?? 'theme.colors.primary[500]';
+    return colors[emotion] ?? theme.colors.primary?.[500] ?? '#3b82f6';
   };
 
   const emotionColor = getEmotionColor(beat.emotion);
@@ -224,7 +224,7 @@ const StoryBeatContent: React.FC<StoryBeatContentProps> = ({ beat, theme }) => {
           textAlign: 'center',
           marginBottom: 12,
           lineHeight: 36,
-          color: theme.colors.text?.primary ?? 'theme.colors.background.primary',
+          color: theme.colors.text?.primary ?? '#fff',
         }}
       >
         {beat.headline}
@@ -238,7 +238,7 @@ const StoryBeatContent: React.FC<StoryBeatContentProps> = ({ beat, theme }) => {
             textAlign: 'center',
             lineHeight: 24,
             marginBottom: 20,
-            color: theme.colors.text?.secondary ?? 'theme.colors.primary[500]',
+            color: theme.colors.text?.secondary ?? '#aaa',
           }}
         >
           {beat.subtext}
@@ -263,5 +263,3 @@ const StoryBeatContent: React.FC<StoryBeatContentProps> = ({ beat, theme }) => {
 };
 
 export default StoryMoment;
-
-export * from "./StoryMoment.types";

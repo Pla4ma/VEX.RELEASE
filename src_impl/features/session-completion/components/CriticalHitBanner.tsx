@@ -16,6 +16,13 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 
+export interface CriticalHitBannerProps {
+  /** XP amount (will show 3x) */
+  xpAmount: number;
+  /** Called when reveal animation completes */
+  onRevealComplete: () => void;
+}
+
 /**
  * Lightning bolt animation
  */
@@ -203,5 +210,3 @@ export function CriticalHitBanner({ xpAmount, onRevealComplete }: CriticalHitBan
 }
 
 export default CriticalHitBanner;
-
-export * from "./CriticalHitBanner.types";

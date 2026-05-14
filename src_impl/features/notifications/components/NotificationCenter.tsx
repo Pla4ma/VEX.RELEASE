@@ -3,6 +3,20 @@ import { View, Text, Pressable, ScrollView } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
 
+export interface NotificationItem {
+  id: string;
+  title: string;
+  body: string;
+  type: 'urgency' | 'social' | 'system';
+  priority: 'low' | 'normal' | 'high' | 'critical';
+  read: boolean;
+  timestamp: number;
+  action?: {
+    type: 'start_session' | 'view_boss' | 'open_chest' | 'dismiss';
+    payload?: Record<string, unknown>;
+  };
+}
+
 interface NotificationCenterProps {
   notifications: NotificationItem[];
   onMarkRead: (id: string) => void;
@@ -19,7 +33,7 @@ const styles = createSheet({
     justifyContent: 'flex-end',
   },
   container: {
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#1a1a2e',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     maxHeight: '80%',
@@ -30,22 +44,22 @@ const styles = createSheet({
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'theme.colors.primary[500]',
+    borderBottomColor: '#2a2a4e',
   },
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: 'theme.colors.background.primary',
+    color: '#fff',
   },
   markAllButton: {
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 8,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#2a2a4e',
   },
   markAllText: {
     fontSize: 12,
-    color: 'theme.colors.primary[500]',
+    color: '#9E9E9E',
     fontWeight: '600',
   },
   scrollView: {
@@ -55,14 +69,14 @@ const styles = createSheet({
     flexDirection: 'row',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: 'theme.colors.primary[500]',
+    borderBottomColor: '#2a2a4e',
     alignItems: 'flex-start',
   },
   unreadIndicator: {
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#e94560',
     marginRight: 12,
     marginTop: 6,
   },
@@ -80,12 +94,12 @@ const styles = createSheet({
   notificationTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: 'theme.colors.background.primary',
+    color: '#fff',
     marginBottom: 4,
   },
   notificationBody: {
     fontSize: 14,
-    color: 'theme.colors.primary[500]',
+    color: '#9E9E9E',
     marginBottom: 8,
     lineHeight: 20,
   },
@@ -96,7 +110,7 @@ const styles = createSheet({
   },
   timestamp: {
     fontSize: 12,
-    color: 'theme.colors.primary[500]',
+    color: '#666',
   },
   priorityBadge: {
     paddingHorizontal: 8,
@@ -107,23 +121,23 @@ const styles = createSheet({
     textTransform: 'uppercase',
   },
   criticalBadge: {
-    backgroundColor: 'theme.colors.primary[500]',
-    color: 'theme.colors.background.primary',
+    backgroundColor: '#e94560',
+    color: '#fff',
   },
   highBadge: {
-    backgroundColor: 'theme.colors.primary[500]',
-    color: 'theme.colors.text.primary',
+    backgroundColor: '#f5a623',
+    color: '#000',
   },
   actionButton: {
     marginTop: 8,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: 'theme.colors.primary[500]',
+    backgroundColor: '#e94560',
     borderRadius: 8,
     alignSelf: 'flex-start',
   },
   actionButtonText: {
-    color: 'theme.colors.background.primary',
+    color: '#fff',
     fontSize: 14,
     fontWeight: '600',
   },
@@ -133,22 +147,22 @@ const styles = createSheet({
   },
   emptyText: {
     fontSize: 16,
-    color: 'theme.colors.primary[500]',
+    color: '#9E9E9E',
     textAlign: 'center',
   },
   closeButton: {
     padding: 16,
     alignItems: 'center',
     borderTopWidth: 1,
-    borderTopColor: 'theme.colors.primary[500]',
+    borderTopColor: '#2a2a4e',
   },
   closeButtonText: {
     fontSize: 16,
-    color: 'theme.colors.background.primary',
+    color: '#fff',
     fontWeight: '600',
   },
   dismissText: {
-    color: 'theme.colors.primary[500]',
+    color: '#666',
     fontSize: 18,
   },
 });
@@ -156,8 +170,8 @@ const styles = createSheet({
 const priorityStyles = {
   critical: styles.criticalBadge,
   high: styles.highBadge,
-  normal: { backgroundColor: 'theme.colors.primary[500]', color: 'theme.colors.background.primary' },
-  low: { backgroundColor: 'theme.colors.primary[500]', color: 'theme.colors.primary[500]' },
+  normal: { backgroundColor: '#2a2a4e', color: '#fff' },
+  low: { backgroundColor: '#1a1a2e', color: '#666' },
 };
 
 function formatTimestamp(timestamp: number): string {
@@ -256,5 +270,3 @@ export function NotificationCenter({ notifications, onMarkRead, onMarkAllRead, o
 
 // Need to import StyleSheet for the overlay spread
 import { StyleSheet } from 'react-native';
-
-export * from "./NotificationCenter.types";

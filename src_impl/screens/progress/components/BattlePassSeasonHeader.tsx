@@ -40,7 +40,7 @@ export function BattlePassSeasonHeader({
           borderRadius="lg"
           bg={isUrgent ? theme.colors.error.DEFAULT : theme.colors.primary[500]}
         >
-          <Text variant="caption" color="theme.colors.background.primary" fontWeight="bold">
+          <Text variant="caption" color="#FFFFFF" fontWeight="bold">
             {isUrgent ? '⏰ ' : ''}{daysRemaining} days left
           </Text>
         </Box>

@@ -25,8 +25,8 @@ export interface ProgressBarProps {
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
   progress,
-  backgroundColor = 'theme.colors.primary[500]',
-  fillColor = 'theme.colors.primary[500]',
+  backgroundColor = '#E0E0E0',
+  fillColor = '#007AFF',
   height = 8,
   borderRadius = 4,
   style,

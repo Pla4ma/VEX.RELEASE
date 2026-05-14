@@ -441,6 +441,3 @@ export function createTimerEngine(
 ): TimerEngine {
   return new TimerEngine(sessionId, duration, config, callbacks);
 }
-
-export * from "./TimerEngine.types";
-export * from "./TimerEngine.types";

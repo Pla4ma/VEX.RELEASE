@@ -426,6 +426,3 @@ function getStateColor(state?: CoachUserState | null): string {
 }
 
 export default CoachScreen;
-
-export * from "./CoachScreen.types";
-export * from "./CoachScreen.types";

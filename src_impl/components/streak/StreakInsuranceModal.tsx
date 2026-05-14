@@ -251,6 +251,3 @@ const tokenOptionStyle = { flexDirection: 'row' as const, backgroundColor: '#EBF
 const closeButtonStyle = { padding: 16, alignItems: 'center' as const, borderTopWidth: 1, borderTopColor: '#E2E8F0' };
 
 const closeTextStyle = { color: '#718096', fontSize: 14 };
-
-export * from "./StreakInsuranceModal.types";
-export * from "./StreakInsuranceModal.types";

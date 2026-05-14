@@ -5,7 +5,38 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import * as Haptics from '../../../utils/haptics';
-
+export interface BossPreviewCardProps {
+  /** Boss name */
+  bossName: string;
+  /** Boss health percentage (0-100) */
+  healthPercent: number;
+  /** Hours remaining until boss escapes */
+  hoursRemaining: number;
+  /** Estimated damage this session would deal */
+  estimatedDamage?: number;
+  /** Boss tier/rarity */
+  tier: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY';
+  /** Boss avatar/icon URL */
+  bossIcon?: string;
+  /** Whether this session would defeat the boss */
+  wouldDefeat?: boolean;
+  /** Navigate to boss detail screen */
+  onPress?: () => void;
+  /** Loading state */
+  isLoading?: boolean;
+  /** PHASE 7.3: Final Strike mode (1-15% health) - triggers urgent UI */
+  isFinalStrike?: boolean;
+  /** PHASE 12.1: Boss taunt message based on health */
+  taunt?: string;
+  /** Boss Bounty — Phase 4 */
+  activeBountyCount?: number;
+  maxBounties?: number;
+  onPlaceBounty?: () => void;
+  isPlacingBounty?: boolean;
+  bountyError?: string | null;
+  coinBalance?: number;
+  BOUNTY_COST?: number;
+}
 function BossPreviewSkeleton(): JSX.Element {
   const { theme } = useTheme();
   return (
@@ -26,25 +57,25 @@ function TierBadge({ tier }: { tier: BossPreviewCardProps['tier'] }): JSX.Elemen
     switch (tier) {
       case 'LEGENDARY':
         return {
-          color: 'theme.colors.primary[500]', // Amber
+          color: '#F59E0B', // Amber
           bg: 'rgba(245, 158, 11, 0.2)',
           label: 'LEGENDARY',
         };
       case 'EPIC':
         return {
-          color: 'theme.colors.primary[500]', // Purple
+          color: '#A855F7', // Purple
           bg: 'rgba(168, 85, 247, 0.2)',
           label: 'EPIC',
         };
       case 'RARE':
         return {
-          color: 'theme.colors.primary[500]', // Blue
+          color: '#3B82F6', // Blue
           bg: 'rgba(59, 130, 246, 0.2)',
           label: 'RARE',
         };
       case 'UNCOMMON':
         return {
-          color: 'theme.colors.primary[500]', // Green
+          color: '#22C55E', // Green
           bg: 'rgba(34, 197, 94, 0.2)',
           label: 'UNCOMMON',
         };
@@ -350,5 +381,3 @@ export function BossPreviewCard({ bossName, healthPercent, hoursRemaining, estim
   );
 }
 export default BossPreviewCard;
-
-export * from "./BossPreviewCard.types";

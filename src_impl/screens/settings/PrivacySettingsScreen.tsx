@@ -608,6 +608,3 @@ export const PrivacySettingsScreen: React.FC<Props> = ({ navigation }) => {
 };
 
 export default PrivacySettingsScreen;
-
-export * from "./PrivacySettingsScreen.types";
-export * from "./PrivacySettingsScreen.types";

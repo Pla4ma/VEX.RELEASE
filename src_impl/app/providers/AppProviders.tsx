@@ -17,6 +17,7 @@ import { getNetInfoAdapter } from '../../network';
 import { getSecureStorage } from '../../persistence';
 import { addBreadcrumb, captureException } from '../../config/sentry';
 import { initializeSessionStoryEngine } from '../../features/session-story';
+import { initializeEmotionRetention } from '../../features/emotion-retention';
 
 interface AppProvidersProps {
   children: React.ReactNode;
@@ -35,7 +36,8 @@ const initializeServices = async () => {
     const cleanupStoryEngine = initializeSessionStoryEngine();
 
     // Initialize emotion retention engine — tracks emotional state for retention
-    const cleanupEmotionEngine = () => {};
+    const cleanupEmotionEngine = initializeEmotionRetention();
+
     addBreadcrumb('Core providers initialized', 'app.providers');
 
     return () => {

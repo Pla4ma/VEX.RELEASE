@@ -27,6 +27,17 @@ import type { MMKV } from 'react-native-mmkv';
 // ============================================================================
 // Storage Provider Interface
 // ============================================================================
+
+export interface StorageProvider {
+  getItem<T>(key: string): Promise<T | null>;
+  setItem<T>(key: string, value: T): Promise<void>;
+  removeItem(key: string): Promise<void>;
+  getAllKeys(): Promise<string[]>;
+  multiGet(keys: string[]): Promise<[string, unknown][]>;
+  multiSet(items: [string, unknown][]): Promise<void>;
+  clear(): Promise<void>;
+}
+
 // ============================================================================
 // MMKV Provider (Primary - fast, encrypted)
 // ============================================================================
@@ -103,6 +114,48 @@ class MMKVProvider implements StorageProvider {
 // ============================================================================
 // Persistence Service
 // ============================================================================
+
+export type StorageKey =
+  // Boss System
+  | 'boss:phase_states'
+  | 'boss:taunt_history'
+  // Premium System
+  | 'premium:subscriptions'
+  | 'premium:paywall_history'
+  // Shop System
+  | 'shop:wallets'
+  | 'shop:transactions'
+  | 'shop:inventories'
+  // Squad System
+  | 'squads:data'
+  | 'squads:activity'
+  // Notification System
+  | 'notifications:history'
+  | 'notifications:scheduled'
+  | 'notifications:preferences'
+  // Onboarding System
+  | 'onboarding:states'
+  | 'onboarding:feature_unlocks'
+  // Analytics
+  | 'analytics:metrics'
+  | 'analytics:experiments'
+  // Accessibility
+  | 'accessibility:preferences';
+
+export interface PersistenceConfig<T> {
+  key: StorageKey;
+  schema: z.ZodType<T>;
+  encrypted?: boolean;
+  ttl?: number; // Time to live in milliseconds
+  version?: number; // For migrations
+}
+
+export interface PersistedItem<T> {
+  data: T;
+  version: number;
+  savedAt: number;
+  expiresAt?: number;
+}
 
 class PersistenceService {
   private primary: MMKVProvider;
@@ -273,7 +326,7 @@ class PersistenceService {
     for (const key of keys) {
       const value = await provider.getItem<string>(key);
       if (value) {
-        size += key.length + JSON.stringify(value).length;
+        size += key.length + (JSON.stringify as any)(value).length;
       }
     }
 
@@ -286,18 +339,129 @@ class PersistenceService {
 // ============================================================================
 
 // Schema imports - using z.any() for problematic schemas
+
+export const PersistenceConfigs = {
+  // Boss System
+  bossPhaseStates: {
+    key: 'boss:phase_states' as StorageKey,
+    schema: z.record(z.any()),
+    version: 1,
+  },
+
+  // Premium System
+  subscriptions: {
+    key: 'premium:subscriptions' as StorageKey,
+    schema: z.record(z.any()),
+    version: 1,
+    encrypted: true,
+  },
+
+  paywallHistory: {
+    key: 'premium:paywall_history' as StorageKey,
+    schema: z.array(z.any()), // PaywallShowRecord
+    version: 1,
+  },
+
+  // Shop System
+  wallets: {
+    key: 'shop:wallets' as StorageKey,
+    schema: z.record(z.any()),
+    version: 1,
+    encrypted: true,
+  },
+
+  transactions: {
+    key: 'shop:transactions' as StorageKey,
+    schema: z.array(z.any()),
+    version: 1,
+  },
+
+  inventories: {
+    key: 'shop:inventories' as StorageKey,
+    schema: z.record(z.any()), // UserInventory
+    version: 1,
+  },
+
+  // Squad System
+  squads: {
+    key: 'squads:data' as StorageKey,
+    schema: z.record(z.any()),
+    version: 1,
+  },
+
+  // Notification System
+  notificationHistory: {
+    key: 'notifications:history' as StorageKey,
+    schema: z.array(z.any()),
+    version: 1,
+  },
+
+  scheduledNotifications: {
+    key: 'notifications:scheduled' as StorageKey,
+    schema: z.array(z.any()),
+    version: 1,
+  },
+
+  // Onboarding System
+  onboardingStates: {
+    key: 'onboarding:states' as StorageKey,
+    schema: z.record(z.any()),
+    version: 1,
+  },
+};
+
 // ============================================================================
 // Singleton Instance
 // ============================================================================
+
+export const persistence = new PersistenceService();
+
 // ============================================================================
 // React Hook
 // ============================================================================
+
+export function usePersistence<T>(config: PersistenceConfig<T>) {
+  const [data, setData] = React.useState<T | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<Error | null>(null);
+
+  React.useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        const result = await persistence.get(config);
+        setData(result);
+        setError(null);
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Unknown error'));
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, [config]);
+
+  const save = React.useCallback(
+    async (newData: T) => {
+      try {
+        await persistence.set(config, newData);
+        setData(newData);
+        return true;
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error('Save failed'));
+        return false;
+      }
+    },
+    [config]
+  );
+
+  return { data, loading, error, save, refresh: () => persistence.get(config) };
+}
+
 // ============================================================================
 // Exports (types already exported above)
 // ============================================================================
 
 // Need to import React for the hook
 import React from 'react';
-
-export * from "./PersistenceService.types";
-export * from "./PersistenceService.part1";

@@ -6,28 +6,394 @@
 import { z } from 'zod';
 
 // Export inferred types for use in other files
+export type AnalyticsMetric = z.infer<typeof AnalyticsMetricSchema>;
+export type AnalyticsDimension = z.infer<typeof AnalyticsDimensionSchema>;
+export type TrendDirection = z.infer<typeof TrendDirectionSchema>;
+export type TimeRange = z.infer<typeof TimeRangeSchema>;
+export type InsightSeverity = z.infer<typeof InsightSeveritySchema>;
+export type InsightType = z.infer<typeof InsightTypeSchema>;
+export type DashboardWidgetType = z.infer<typeof DashboardWidgetTypeSchema>;
+export type ExportFormat = z.infer<typeof ExportFormatSchema>;
+export type AnalyticsFilter = z.infer<typeof AnalyticsFilterSchema>;
+export type TrendAnalysis = z.infer<typeof TrendAnalysisSchema>;
+export type Insight = z.infer<typeof InsightSchema>;
+export type DetectedPattern = z.infer<typeof DetectedPatternSchema>;
+export type ComparativeStats = z.infer<typeof ComparativeStatsSchema>;
+export type AggregatedStats = z.infer<typeof AggregatedStatsSchema>;
+export type ExportJob = z.infer<typeof ExportJobSchema>;
+export type DashboardLayout = z.infer<typeof DashboardLayoutSchema>;
+export type DashboardWidget = z.infer<typeof DashboardWidgetSchema>;
+
 // Metric types
+export const AnalyticsMetricSchema = z.enum(['sessions_completed', 'sessions_abandoned', 'total_focus_time', 'average_session_duration', 'streak_days', 'longest_streak', 'xp_earned', 'level_progression', 'boss_damage_dealt', 'bosses_defeated', 'rewards_claimed', 'coins_earned', 'coins_spent', 'gems_earned', 'gems_spent', 'items_crafted', 'challenges_completed', 'social_interactions', 'squad_contributions', 'daily_active', 'weekly_active', 'retention_rate']);
+
 // Dimension types for filtering/grouping
+export const AnalyticsDimensionSchema = z.enum(['day_of_week', 'hour_of_day', 'session_category', 'streak_milestone', 'boss_type', 'item_type', 'challenge_difficulty', 'social_activity_type', 'time_of_day', 'device_type']);
+
 // Trend direction
+export const TrendDirectionSchema = z.enum(['up', 'down', 'flat', 'volatile', 'seasonal']);
+
 // Time ranges
+export const TimeRangeSchema = z.enum(['today', 'yesterday', 'last_7_days', 'last_30_days', 'this_week', 'last_week', 'this_month', 'last_month', 'this_year', 'last_year', 'all_time', 'custom']);
+
 // Insight severity
+export const InsightSeveritySchema = z.enum(['info', 'positive', 'warning', 'critical', 'celebration']);
+
 // Insight types
+export const InsightTypeSchema = z.enum(['milestone_reached', 'streak_at_risk', 'streak_achieved', 'improvement_detected', 'decline_detected', 'pattern_discovered', 'anomaly_detected', 'comparison_insight', 'recommendation', 'achievement_unlocked', 'boss_defeated', 'level_up', 'season_progress']);
+
 // Dashboard widget types
+export const DashboardWidgetTypeSchema = z.enum(['line_chart', 'bar_chart', 'pie_chart', 'stat_card', 'trend_indicator', 'heatmap', 'leaderboard', 'goal_progress', 'comparison_chart', 'insight_card', 'pattern_list']);
+
 // Export formats
+export const ExportFormatSchema = z.enum(['json', 'csv', 'xlsx', 'pdf']);
+
 // Analytics filter
+export const AnalyticsFilterSchema = z
+  .object({
+    dimension: AnalyticsDimensionSchema,
+    operator: z.enum(['eq', 'ne', 'gt', 'gte', 'lt', 'lte', 'in', 'not_in', 'between']),
+    value: z.union([z.string(), z.number(), z.boolean(), z.array(z.string()), z.array(z.number())]),
+  })
+  .strict();
+
 // Time series data point
+export const AnalyticsDataPointSchema = z
+  .object({
+    timestamp: z.number().int().positive(),
+    value: z.number(),
+    dimension: z.string().optional(),
+    metadata: z.record(z.unknown()).optional(),
+  })
+  .strict();
+
 // Time series data
+export const TimeSeriesDataSchema = z
+  .object({
+    metric: AnalyticsMetricSchema,
+    granularity: z.enum(['hour', 'day', 'week', 'month']),
+    points: z.array(AnalyticsDataPointSchema).min(1),
+    summary: z
+      .object({
+        total: z.number(),
+        average: z.number(),
+        min: z.number(),
+        max: z.number(),
+        change: z.number(),
+        changePercent: z.number(),
+      })
+      .strict(),
+  })
+  .strict();
+
 // Trend analysis
+export const TrendAnalysisSchema = z
+  .object({
+    metric: AnalyticsMetricSchema,
+    direction: TrendDirectionSchema,
+    strength: z.number().min(0).max(1),
+    changePercent: z.number(),
+    confidence: z.number().min(0).max(1),
+    points: z.array(AnalyticsDataPointSchema),
+    projectedNext: z.number(),
+    seasonalityDetected: z.boolean(),
+    outliers: z.array(AnalyticsDataPointSchema),
+  })
+  .strict();
+
 // Insight schema
+export const InsightSchema = z
+  .object({
+    id: z.string().uuid(),
+    userId: z.string().uuid(),
+    type: InsightTypeSchema,
+    severity: InsightSeveritySchema,
+    title: z.string().min(1).max(200),
+    description: z.string().min(1).max(2000),
+    metric: AnalyticsMetricSchema,
+    detectedAt: z.number().int().positive(),
+    expiresAt: z.number().int().positive(),
+    isRead: z.boolean(),
+    isActioned: z.boolean(),
+    actionType: z.string().optional(),
+    actionPayload: z.record(z.unknown()).optional(),
+    relatedMetrics: z.array(AnalyticsMetricSchema),
+  })
+  .strict();
+
 // Dashboard widget
+export const DashboardWidgetSchema = z
+  .object({
+    id: z.string().uuid(),
+    userId: z.string().uuid(),
+    type: DashboardWidgetTypeSchema,
+    title: z.string().min(1).max(100),
+    position: z
+      .object({
+        x: z.number().int().min(0),
+        y: z.number().int().min(0),
+        w: z.number().int().min(1).max(12),
+        h: z.number().int().min(1).max(12),
+      })
+      .strict(),
+    config: z
+      .object({
+        metric: AnalyticsMetricSchema.optional(),
+        dimension: AnalyticsDimensionSchema.optional(),
+        timeRange: TimeRangeSchema.optional(),
+        comparisonEnabled: z.boolean().optional(),
+        filters: z.array(AnalyticsFilterSchema).optional(),
+        colorScheme: z.string().optional(),
+        showLegend: z.boolean().optional(),
+        showGrid: z.boolean().optional(),
+      })
+      .strict(),
+    isVisible: z.boolean(),
+    createdAt: z.number().int().positive(),
+    updatedAt: z.number().int().positive(),
+  })
+  .strict();
+
 // Dashboard layout
+export const DashboardLayoutSchema = z
+  .object({
+    id: z.string().uuid(),
+    userId: z.string().uuid(),
+    name: z.string().min(1).max(100),
+    isDefault: z.boolean(),
+    widgets: z.array(DashboardWidgetSchema),
+    createdAt: z.number().int().positive(),
+    updatedAt: z.number().int().positive(),
+  })
+  .strict();
+
 // Comparative stats
+export const ComparativeStatsSchema = z
+  .object({
+    metric: AnalyticsMetricSchema,
+    currentPeriod: z
+      .object({
+        value: z.number(),
+        startDate: z.number().int().positive(),
+        endDate: z.number().int().positive(),
+      })
+      .strict(),
+    previousPeriod: z
+      .object({
+        value: z.number(),
+        startDate: z.number().int().positive(),
+        endDate: z.number().int().positive(),
+      })
+      .strict(),
+    change: z.number(),
+    changePercent: z.number(),
+    isSignificant: z.boolean(),
+    benchmark: z
+      .object({
+        value: z.number(),
+        label: z.string(),
+      })
+      .strict()
+      .optional(),
+  })
+  .strict();
+
 // Detected pattern
+export const DetectedPatternSchema = z
+  .object({
+    id: z.string().uuid(),
+    type: z.enum(['correlation', 'anomaly', 'cycle', 'milestone', 'regression']),
+    metric: AnalyticsMetricSchema,
+    description: z.string().min(1).max(1000),
+    confidence: z.number().min(0).max(1),
+    detectedAt: z.number().int().positive(),
+    startDate: z.number().int().positive(),
+    endDate: z.number().int().positive(),
+    relatedEvents: z.array(z.string()),
+    recommendations: z.array(z.string()),
+  })
+  .strict();
+
 // Export job
+export const ExportJobSchema = z
+  .object({
+    id: z.string().uuid(),
+    userId: z.string().uuid(),
+    status: z.enum(['pending', 'processing', 'completed', 'failed', 'cancelled']),
+    format: ExportFormatSchema,
+    dataTypes: z.array(z.string()).min(1),
+    dateRange: z
+      .object({
+        start: z.number().int().positive(),
+        end: z.number().int().positive(),
+      })
+      .strict(),
+    filters: z.array(AnalyticsFilterSchema).optional(),
+    fileUrl: z.string().url().optional(),
+    fileSize: z.number().int().positive().optional(),
+    errorMessage: z.string().optional(),
+    progress: z.number().min(0).max(100),
+    createdAt: z.number().int().positive(),
+    completedAt: z.number().int().positive().optional(),
+    expiresAt: z.number().int().positive().optional(),
+  })
+  .strict();
+
 // Analytics preferences
+export const AnalyticsPreferencesSchema = z
+  .object({
+    userId: z.string().uuid(),
+    defaultTimeRange: TimeRangeSchema,
+    defaultDashboardId: z.string().uuid(),
+    emailReportsEnabled: z.boolean(),
+    emailReportFrequency: z.enum(['daily', 'weekly', 'monthly', 'never']),
+    insightNotificationsEnabled: z.boolean(),
+    autoRefreshEnabled: z.boolean(),
+    autoRefreshInterval: z.number().int().min(5000).max(300000),
+    currencyDisplay: z.enum(['coins', 'gems', 'both']),
+    timezone: z.string(),
+    updatedAt: z.number().int().positive(),
+  })
+  .strict();
+
 // Aggregated stats
+export const AggregatedStatsSchema = z
+  .object({
+    userId: z.string().uuid(),
+    period: TimeRangeSchema,
+    generatedAt: z.number().int().positive(),
+    metrics: z.record(
+      z
+        .object({
+          value: z.number(),
+          previousValue: z.number(),
+          changePercent: z.number(),
+          trend: TrendDirectionSchema,
+        })
+        .strict(),
+    ),
+    insights: z.array(InsightSchema),
+    patterns: z.array(DetectedPatternSchema),
+    topPerforming: z
+      .object({
+        dayOfWeek: z.number().int().min(0).max(6),
+        hourOfDay: z.number().int().min(0).max(23),
+        category: z.string(),
+      })
+      .strict(),
+  })
+  .strict();
+
 // Input schemas
+export const GetAnalyticsDataInputSchema = z
+  .object({
+    userId: z.string().uuid(),
+    metrics: z.array(AnalyticsMetricSchema).min(1),
+    timeRange: TimeRangeSchema,
+    granularity: z.enum(['hour', 'day', 'week', 'month']),
+    dimensions: z.array(AnalyticsDimensionSchema).optional(),
+    filters: z.array(AnalyticsFilterSchema).optional(),
+    includeComparison: z.boolean().optional(),
+  })
+  .strict();
+
+export const CreateInsightInputSchema = z
+  .object({
+    userId: z.string().uuid(),
+    type: InsightTypeSchema,
+    severity: InsightSeveritySchema,
+    title: z.string().min(1).max(200),
+    description: z.string().min(1).max(2000),
+    metric: AnalyticsMetricSchema,
+    expiresInDays: z.number().int().min(1).max(365).default(30),
+    actionType: z.string().optional(),
+    actionPayload: z.record(z.unknown()).optional(),
+    relatedMetrics: z.array(AnalyticsMetricSchema).default([]),
+  })
+  .strict();
+
+export const CreateExportJobInputSchema = z
+  .object({
+    userId: z.string().uuid(),
+    format: ExportFormatSchema,
+    dataTypes: z.array(z.string()).min(1),
+    dateRange: z
+      .object({
+        start: z.number().int().positive(),
+        end: z.number().int().positive(),
+      })
+      .strict(),
+    filters: z.array(AnalyticsFilterSchema).optional(),
+  })
+  .strict();
+
+export const UpdateDashboardWidgetInputSchema = z
+  .object({
+    widgetId: z.string().uuid(),
+    userId: z.string().uuid(),
+    updates: z
+      .object({
+        title: z.string().min(1).max(100).optional(),
+        position: z
+          .object({
+            x: z.number().int().min(0),
+            y: z.number().int().min(0),
+            w: z.number().int().min(1).max(12),
+            h: z.number().int().min(1).max(12),
+          })
+          .strict()
+          .optional(),
+        config: z.record(z.unknown()).optional(),
+        isVisible: z.boolean().optional(),
+      })
+      .strict(),
+  })
+  .strict();
+
 // Time range to date conversion
-export * from "./schemas.types";
-export * from "./schemas.part1";
-export * from "./schemas.part2";
+export function getTimeRangeDates(range: z.infer<typeof TimeRangeSchema>): { start: number; end: number } {
+  const now = Date.now();
+  const oneDay = 24 * 60 * 60 * 1000;
+
+  switch (range) {
+    case 'today':
+      return {
+        start: new Date(now).setHours(0, 0, 0, 0),
+        end: now,
+      };
+    case 'yesterday':
+      return {
+        start: new Date(now - oneDay).setHours(0, 0, 0, 0),
+        end: new Date(now - oneDay).setHours(23, 59, 59, 999),
+      };
+    case 'last_7_days':
+      return {
+        start: now - 7 * oneDay,
+        end: now,
+      };
+    case 'last_30_days':
+      return {
+        start: now - 30 * oneDay,
+        end: now,
+      };
+    case 'this_week':
+      const currentWeekDay = new Date(now).getDay();
+      return {
+        start: now - currentWeekDay * oneDay,
+        end: now,
+      };
+    case 'this_month':
+      const currentMonthDay = new Date(now).getDate();
+      return {
+        start: now - (currentMonthDay - 1) * oneDay,
+        end: now,
+      };
+    case 'this_year':
+      const startOfYear = new Date(now).setMonth(0, 1);
+      return { start: startOfYear, end: now };
+    case 'all_time':
+      return { start: 0, end: now };
+    default:
+      return { start: now - 7 * oneDay, end: now };
+  }
+}

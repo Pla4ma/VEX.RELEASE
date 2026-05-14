@@ -62,6 +62,61 @@ const SessionNotesSchema = z
 // Behavior Modeling
 // ============================================================================
 
+/**
+ * Process a new behavior signal
+ */
+export async function processBehaviorSignal(input: ProcessBehaviorSignalInput): Promise<BehaviorProfile> {
+  const validated = ProcessBehaviorSignalInputSchema.parse(input);
+
+  const signal: BehaviorSignal = {
+    id: v4(),
+    userId: validated.userId,
+    signalType: validated.signalType,
+    value: validated.value,
+    confidence: calculateSignalConfidence(validated.signalType, validated.value),
+    timestamp: Date.now(),
+    metadata: validated.metadata || {},
+    expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000, // 30 days
+  };
+
+  await repository.addBehaviorSignal(signal);
+
+  // Rebuild profile with new signal
+  const profile = await buildBehaviorProfile(validated.userId);
+
+  // Update state if confidence level changed
+  await updateStateFromProfile(validated.userId, profile);
+
+  return profile;
+}
+
+/**
+ * Build or refresh behavior profile from signals
+ */
+export async function buildBehaviorProfile(userId: string): Promise<BehaviorProfile> {
+  const signals = await repository.fetchRecentBehaviorSignals(userId, 50);
+  const existingProfile = await repository.fetchBehaviorProfile(userId);
+
+  const dataPoints = signals.length;
+  const coldStart = dataPoints < 5;
+  const confidenceLevel = calculateConfidenceLevel(dataPoints);
+
+  // Aggregate signals into profile
+  const aggregatedSignals = aggregateSignals(signals);
+
+  const profile: BehaviorProfile = {
+    userId,
+    signals: aggregatedSignals,
+    lastUpdated: Date.now(),
+    confidenceLevel,
+    coldStart,
+    dataPoints,
+  };
+
+  await repository.upsertBehaviorProfile(profile);
+  return profile;
+}
+
 function calculateSignalConfidence(signalType: SignalType, _value: number): number {
   // Different signals have different inherent confidence levels
   const baseConfidence: Record<SignalType, number> = {
@@ -134,6 +189,31 @@ async function updateStateFromProfile(userId: string, profile: BehaviorProfile):
   }
 }
 
+/**
+ * Detect if streak is at risk and update state
+ */
+export async function detectStreakRisk(userId: string, hoursSinceLastSession: number, currentStreak: number): Promise<boolean> {
+  if (currentStreak === 0) {
+    return false;
+  }
+
+  const riskLevel = calculateRiskLevel(hoursSinceLastSession);
+  const isAtRisk = riskLevel !== 'NONE';
+
+  if (isAtRisk) {
+    const state = await getOrCreateCoachState(userId);
+    if (state.currentState !== 'STREAK_AT_RISK' && state.currentState !== 'COMEBACK_MODE') {
+      await updateCoachState(userId, 'STREAK_AT_RISK', {
+        riskLevel,
+        hoursSinceLastSession,
+        currentStreak,
+      });
+    }
+  }
+
+  return isAtRisk;
+}
+
 function calculateRiskLevel(hoursSinceLastSession: number): 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' {
   if (hoursSinceLastSession > RISK_LEVEL_THRESHOLDS.CRITICAL) {
     return 'CRITICAL';
@@ -153,6 +233,29 @@ function calculateRiskLevel(hoursSinceLastSession: number): 'NONE' | 'LOW' | 'ME
 // ============================================================================
 // Session Recommendations
 // ============================================================================
+
+/**
+ * Create a personalized session recommendation
+ */
+export async function createRecommendation(input: CreateRecommendationInput): Promise<SessionRecommendation | null> {
+  const validated = CreateRecommendationInputSchema.parse(input);
+  const profile = await repository.fetchBehaviorProfile(validated.userId);
+
+  const recommendation = await buildRecommendation(validated, profile);
+  if (!recommendation) {
+    return null;
+  }
+
+  // Expire any existing active recommendations of same type
+  const existing = await repository.fetchRecommendations(validated.userId);
+  const sameType = existing.filter((r) => r.recommendationType === validated.type);
+
+  for (const old of sameType) {
+    await repository.updateRecommendationStatus(old.id, 'EXPIRED');
+  }
+
+  return repository.createRecommendation(recommendation);
+}
 
 async function buildRecommendation(input: CreateRecommendationInput, profile: BehaviorProfile | null): Promise<SessionRecommendation | null> {
   const sources: Array<'HISTORICAL_PATTERN' | 'STREAK_DATA' | 'LEVEL_PROGRESS' | 'CHALLENGE_DEADLINE' | 'BOSS_STATUS' | 'ENERGY_LEVEL' | 'TIME_OF_DAY'> = [];
@@ -275,6 +378,27 @@ async function generateRecommendationReasoning(input: CreateRecommendationInput,
     captureSilentFailure(error, { feature: 'ai-coach', operation: 'ui-fallback', type: 'ui' });
     return null;
   }
+}
+
+export async function generateSessionSummary(
+  userId: string,
+  context: {
+    sessionCount: number;
+    totalFocusMinutes: number;
+    averageQuality: number;
+    streakDays: number;
+    xpEarned: number;
+    challengesCompleted: number;
+    bossDamageDealt?: number;
+    preferredTimeOfDay?: string;
+    consistencyScore?: number;
+  },
+): Promise<GenerateSessionSummaryResponse> {
+  const enrichedContext = await enrichSessionSummaryContext(userId, context);
+  return generateAISessionSummary({
+    userId,
+    context: enrichedContext,
+  });
 }
 
 async function enrichSessionSummaryContext(
@@ -400,5 +524,32 @@ function resolveRiskLevel(hoursSinceLastSession: number): 'low' | 'medium' | 'hi
 // ============================================================================
 // Challenge Suggestions
 // ============================================================================
-export * from "./session-analyzer.types";
-export * from "./session-analyzer.part1";
+
+/**
+ * Suggest challenges based on user profile
+ */
+export async function suggestChallenges(userId: string): Promise<{
+  suggestedChallenges: Array<{
+    challengeId: string;
+    reason: string;
+    matchScore: number;
+  }>;
+}> {
+  const profile = await repository.fetchBehaviorProfile(userId);
+
+  // Simplified - would integrate with challenges feature
+  const suggestions: Array<{ challengeId: string; reason: string; matchScore: number }> = [];
+
+  if (profile) {
+    const consistencySignal = profile.signals.find((s) => s.signalType === 'CONSISTENCY_SCORE');
+    if (consistencySignal && consistencySignal.value > 0.7) {
+      suggestions.push({
+        challengeId: 'streak-master',
+        reason: 'Your consistency shows you can maintain streaks!',
+        matchScore: 0.9,
+      });
+    }
+  }
+
+  return { suggestedChallenges: suggestions };
+}
