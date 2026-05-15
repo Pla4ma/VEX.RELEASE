@@ -120,6 +120,17 @@ export async function applyCompletionSubsystems(
       ? input.ledger.effectiveFocusedSeconds / input.ledger.completedDurationSeconds
       : 0;
 
+    Sentry.addBreadcrumb({
+      category: 'session-completion',
+      message: 'vex_session_completed',
+      level: 'info',
+      data: {
+        grade: input.ledger.grade,
+        sessionId: input.ledger.sessionId,
+        userId: input.ledger.userId,
+      },
+    });
+
     trackSessionCompleted(
       input.ledger.userId,
       input.ledger.sessionId,

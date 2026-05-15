@@ -97,3 +97,20 @@ export const SessionCompletionReturnPlanSchema = z
 export type SessionCompletionReturnPlan = z.infer<
   typeof SessionCompletionReturnPlanSchema
 >;
+
+export const PostSessionNextActionSchema = z
+  .object({
+    ctaLabel: z.string().min(1),
+    id: z.string().min(1),
+    reason: z.string().min(1),
+    routeParams: z
+      .object({
+        presetMode: z.enum(['LIGHT_FOCUS', 'DEEP_WORK', 'SPRINT', 'CREATIVE', 'STUDY']),
+        recommendationId: z.string().min(1),
+        suggestedDifficulty: z.enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH']),
+        suggestedDurationSeconds: z.number().int().min(60),
+      })
+      .strict(),
+  })
+  .strict();
+export type PostSessionNextAction = z.infer<typeof PostSessionNextActionSchema>;

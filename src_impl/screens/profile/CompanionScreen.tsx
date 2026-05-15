@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Dimensions, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Animated, { FadeIn, FadeInUp, useReducedMotion } from 'react-native-reanimated';
 import { Box, Card, Text } from '../../components/primitives';
 import { ErrorState } from '../../components/states/ErrorState';
@@ -9,7 +11,8 @@ import { loadCompanionState, loadRecentSessionMoods } from '../../features/compa
 import { useCompanionMemories } from '../../features/companion/memory-hooks';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme';
-import { CompanionMemoryTimeline } from './components/CompanionMemoryTimeline';
+import { CompanionMemoryTimeline } from '../../features/companion/components/CompanionMemoryTimeline';
+import type { ExtendedRootStackParams } from '../../navigation/types';
 import {
   CompanionScreenSkeleton,
   ELEMENT_LORE,
@@ -36,6 +39,7 @@ type LoadState =
 
 export function CompanionScreen(): JSX.Element {
   const { theme } = useTheme();
+  const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const reducedMotion = useReducedMotion();
   const { user } = useAuthStore();
   const userId = user?.id ?? null;
@@ -167,6 +171,7 @@ export function CompanionScreen(): JSX.Element {
           isPending={memories.isPending}
           memories={memories.data}
           onRetry={memories.refetch}
+          onStartFocus={() => navigation.navigate({ name: 'SessionSetup', params: {} })}
         />
       </Box>
     </ScrollView>

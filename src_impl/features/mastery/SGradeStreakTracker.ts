@@ -20,7 +20,7 @@ const SGRADE_STREAK_KEY = 'vex:mastery:s-grade-streak';
 // Schema for S-grade streak data
 const SGradeStreakDataSchema = z.object({
   count: z.number().int().min(0).default(0),
-  lastSessionId: z.string().uuid().optional(),
+  lastSessionId: z.string().min(1).optional(),
   lastUpdatedAt: z.number().optional(),
 });
 

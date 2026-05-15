@@ -250,7 +250,7 @@ CREATE TABLE trading_listings (
 
 CREATE INDEX idx_trading_listings_seller ON trading_listings(seller_id, sold) WHERE sold = FALSE;
 CREATE INDEX idx_trading_listings_active ON trading_listings(expires_at, sold) 
-  WHERE sold = FALSE AND expires_at > NOW();
+  WHERE sold = FALSE;
 
 -- ============================================================================
 -- 7. DAILY DUNGEONS
@@ -431,7 +431,7 @@ CREATE TABLE coach_quests (
 );
 
 CREATE INDEX idx_coach_quests_user_active ON coach_quests(user_id, completed, expires_at) 
-  WHERE completed = FALSE AND expires_at > NOW();
+  WHERE completed = FALSE;
 
 -- ============================================================================
 -- 11. USER COACH PREFERENCES

@@ -30,6 +30,17 @@ export function selectHeadlineReward(consequences: HeadlineRewardConsequences): 
     });
   }
 
+  if (personalBest?.isPersonalBest) {
+    const purity = personalBest.purityScore ?? summary.focusPurityScore ?? 0;
+    return reward({
+      type: 'personal_best',
+      title: `Personal best. ${purity} purity in ${modeLabel(summary.sessionMode)}.`,
+      body: 'You beat your own record for this session type.',
+      iconName: 'trophy',
+      value: `${purity} purity`,
+    });
+  }
+
   if (streak && STREAK_MILESTONES.has(streak.currentDays) && streak.previousDays < streak.currentDays) {
     return reward({
       type: 'streak_milestone',
@@ -77,17 +88,6 @@ export function selectHeadlineReward(consequences: HeadlineRewardConsequences): 
       body: 'This session finished an active challenge.',
       iconName: 'target',
       value: 'Challenge complete',
-    });
-  }
-
-  if (personalBest?.isPersonalBest) {
-    const purity = personalBest.purityScore ?? summary.focusPurityScore ?? 0;
-    return reward({
-      type: 'personal_best',
-      title: `Personal best. ${purity} purity in ${modeLabel(summary.sessionMode)}.`,
-      body: 'You beat your own record for this session type.',
-      iconName: 'trophy',
-      value: `${purity} purity`,
     });
   }
 

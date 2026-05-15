@@ -63,4 +63,5 @@ describe('session-completion service', () => {
     expect(plan.nextSessionLabel).toBe('Bank another block');
     expect(plan.returnReasonBody).toContain('progress signal');
   });
+
 });

@@ -1,4 +1,4 @@
-CREATE TABLE companion_memories (
+CREATE TABLE IF NOT EXISTS companion_memories (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   type TEXT NOT NULL,
@@ -15,8 +15,9 @@ CREATE TABLE companion_memories (
 
 ALTER TABLE companion_memories ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "user owns memories" ON companion_memories;
 CREATE POLICY "user owns memories" ON companion_memories
   FOR ALL USING (auth.uid() = user_id);
 
-CREATE INDEX idx_companion_memories_user
+CREATE INDEX IF NOT EXISTS idx_companion_memories_user
   ON companion_memories(user_id, created_at DESC);

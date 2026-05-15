@@ -7,8 +7,7 @@
  * @phase 3
  */
 
--- Enable RLS
-ALTER TABLE IF NOT EXISTS auth.users ENABLE ROW LEVEL SECURITY;
+-- auth.users RLS is managed by Supabase Auth.
 
 -- ============================================================================
 -- Study Circles Core Tables
@@ -224,7 +223,7 @@ CREATE TRIGGER update_study_circles_updated_at
 
 CREATE TRIGGER update_circle_weekly_checks_updated_at
   BEFORE UPDATE ON circle_weekly_checks
-  FOR EACH ROW EXECUTE FUNCTION update_study_weekly_checks_updated_at_column();
+  FOR EACH ROW EXECUTE FUNCTION update_circle_weekly_checks_updated_at_column();
 
 -- Update circle member count
 CREATE OR REPLACE FUNCTION update_circle_member_count()

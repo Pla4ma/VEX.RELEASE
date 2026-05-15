@@ -9,7 +9,11 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 
 import { sessionComplete } from '../../../utils/haptics';
-import { useSessionCompleteController, useSessionHeadline } from '../../../features/session-completion/hooks';
+import {
+  useSessionCompleteController,
+  useSessionHeadline,
+  useSessionRewardPriority,
+} from '../../../features/session-completion/hooks';
 import type { SessionSummary } from '../../../session/types';
 import { useTomorrowPreviewForSession } from '../../../features/home-spine/hooks';
 import { useContractForSession, useReflectOnContract } from '../../../features/focus-contract/hooks';
@@ -23,6 +27,7 @@ import { SessionCompleteNextSteps } from './SessionCompleteNextSteps';
 import { SessionCompleteOverlays } from './SessionCompleteOverlays';
 import { SessionContractReflectionCard } from './SessionContractReflectionCard';
 import { SessionHeadlineReward } from './SessionHeadlineReward';
+import { SessionRewardPriorityRows } from './SessionRewardPriorityRows';
 
 type SessionCompleteContentProps = {
   sessionId: string;
@@ -49,6 +54,11 @@ export function SessionCompleteContent({
   const contractQuery = useContractForSession(sessionId);
   const reflectContract = useReflectOnContract();
   const headline = useSessionHeadline({
+    consequences,
+    contractStatus: contractQuery.contract?.completionStatus ?? null,
+    summary,
+  });
+  const rewardPriority = useSessionRewardPriority({
     consequences,
     contractStatus: contractQuery.contract?.completionStatus ?? null,
     summary,
@@ -126,6 +136,7 @@ export function SessionCompleteContent({
             showsVerticalScrollIndicator={false}
           >
             <SessionHeadlineReward headline={headline} />
+            <SessionRewardPriorityRows priority={rewardPriority} />
 
             <SessionContractReflectionCard
               contract={contractQuery.contract}

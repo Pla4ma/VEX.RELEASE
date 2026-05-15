@@ -207,21 +207,25 @@ ALTER TABLE study_generations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE study_packs ENABLE ROW LEVEL SECURITY;
 
 -- Study Content Policies
+DROP POLICY IF EXISTS "Users can only access own study content" ON study_content;
 CREATE POLICY "Users can only access own study content"
   ON study_content FOR ALL
   USING (user_id = auth.uid());
 
 -- Study Generations Policies
+DROP POLICY IF EXISTS "Users can only access own study generations" ON study_generations;
 CREATE POLICY "Users can only access own study generations"
   ON study_generations FOR ALL
   USING (user_id = auth.uid());
 
 -- Study Packs Policies
+DROP POLICY IF EXISTS "Users can only access own study packs" ON study_packs;
 CREATE POLICY "Users can only access own study packs"
   ON study_packs FOR ALL
   USING (user_id = auth.uid());
 
 -- Storage Policies
+DROP POLICY IF EXISTS "Users can only access own study files" ON storage.objects;
 CREATE POLICY "Users can only access own study files"
   ON storage.objects FOR ALL
   USING (bucket_id = 'study-content' AND auth.uid()::text = (storage.foldername(name))[1]);

@@ -5,6 +5,7 @@ import { Skeleton } from '@components/ui/Skeleton'; // Use alias
 import { StatusBanner } from '@/shared/ui/components/StatusFeedback'; // Use alias
 import { useTheme } from '../../../theme'; // Use alias
 import type { FocusScoreDashboardModel } from '../types'; // Import from types.ts
+import { getMinTouchTargetStyle } from '../../../utils/touchTarget';
 
 interface FocusScoreHomeWidgetProps {
   model: FocusScoreDashboardModel;
@@ -62,7 +63,7 @@ export function FocusScoreHomeWidget({ model, onPress, onRetry }: FocusScoreHome
         accessibilityLabel="Open focus score dashboard"
         accessibilityRole="button"
         accessibilityHint="Opens the full focus dashboard with trends and factor details"
-        style={{ borderWidth: 1, borderColor: theme.colors.border.light, borderRadius: theme.borderRadius.lg, backgroundColor: theme.colors.background.secondary, padding: theme.spacing[4], gap: theme.spacing[1] }}
+        style={{ ...getMinTouchTargetStyle(), borderWidth: 1, borderColor: theme.colors.border.light, borderRadius: theme.borderRadius.lg, backgroundColor: theme.colors.background.secondary, padding: theme.spacing[4], gap: theme.spacing[1] }}
       >
         <Text variant="label" color={theme.colors.text.secondary}>Focus Score</Text>
         <Text variant="h3" color={theme.colors.text.primary}>{model.current.currentScore} · {model.current.band}</Text>

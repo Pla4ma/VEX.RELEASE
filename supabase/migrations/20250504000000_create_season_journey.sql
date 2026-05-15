@@ -7,8 +7,7 @@
  * @phase 3
  */
 
--- Enable RLS
-ALTER TABLE IF NOT EXISTS auth.users ENABLE ROW LEVEL SECURITY;
+-- auth.users RLS is managed by Supabase Auth.
 
 -- ============================================================================
 -- Season Journey Core Tables

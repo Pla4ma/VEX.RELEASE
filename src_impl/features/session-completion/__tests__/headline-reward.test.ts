@@ -48,6 +48,14 @@ describe('selectHeadlineReward', () => {
     expect(select({ personalBest: { isPersonalBest: true } }).type).toBe('personal_best');
   });
 
+  it('selects personal_best ahead of level and streak rewards', () => {
+    expect(select({
+      personalBest: { isPersonalBest: true, purityScore: 94 },
+      streak: { currentDays: 7, previousDays: 6, streakSaved: false },
+      summary: { ...baseConsequences.summary, previousLevel: 4, newLevel: 5 },
+    }).type).toBe('personal_best');
+  });
+
   it('selects comeback_complete when the comeback quest finished', () => {
     expect(select({ comeback: { isComplete: true } }).type).toBe('comeback_complete');
   });

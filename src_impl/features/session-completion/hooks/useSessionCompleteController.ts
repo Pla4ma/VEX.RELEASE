@@ -4,7 +4,6 @@ import * as Sentry from "@sentry/react-native";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
 import { useProgressionSummary } from "../../progression/hooks";
 import { useStreakMultiplier } from "../../streaks/hooks";
 import { useUserSquads } from "../../squads/hooks";
@@ -16,18 +15,11 @@ import { useSessionUIStore } from "../../../store/session-state";
 import { useToast } from "../../../shared/ui/components/Toast";
 import { useTheme } from "../../../theme";
 import { formatDuration } from "../../../screens/session/utils";
-import {
-  getChestTierDisplay,
-  getGradeDisplay,
-  getPurityDisplay,
-} from "../../../screens/session/utils/session-complete-display";
+import { getChestTierDisplay, getGradeDisplay, getPurityDisplay } from "../../../screens/session/utils/session-complete-display";
 import { useSessionMastery } from "../../../screens/session/hooks/useSessionMastery";
 import { useSessionCompleteRewards } from "../../../screens/session/hooks/useSessionCompleteRewards";
 import { useSessionCompleteStudyProgress } from "../../../screens/session/hooks/useSessionCompleteStudyProgress";
-import {
-  buildSessionCompletionHero,
-  buildSessionCompletionReturnPlan,
-} from "../service";
+import { buildPostSessionNextAction, buildSessionCompletionHero, buildSessionCompletionReturnPlan } from "../service";
 import { useHomeReturnCompletionSync } from "./useHomeReturnCompletionSync";
 import { useSessionCompletionSpectacles } from "./useSessionCompletionSpectacles";
 
@@ -42,13 +34,9 @@ export function useSessionCompleteController(input: {
   const { theme } = useTheme();
   const { user } = useAuthStore();
   const { show: showToast } = useToast();
-  const showHomeHighlight = useSessionUIStore(
-    (state) => state.showHomeHighlight,
-  );
+  const showHomeHighlight = useSessionUIStore((state) => state.showHomeHighlight);
   const scrollRef = useRef<ScrollView>(null);
-  const [selectedMood, setSelectedMood] = useState<
-    "BAD" | "GOOD" | "GREAT" | "NEUTRAL" | "TERRIBLE" | null
-  >(null);
+  const [selectedMood, setSelectedMood] = useState<"BAD" | "GOOD" | "GREAT" | "NEUTRAL" | "TERRIBLE" | null>(null);
   const [reflection, setReflection] = useState("");
   const userId = user?.id ?? "";
   const syncHomeReturn = useHomeReturnCompletionSync({
@@ -59,8 +47,7 @@ export function useSessionCompleteController(input: {
   const progressionQuery = useProgressionSummary(userId || null);
   const squadsQuery = useUserSquads(userId || undefined);
   const streakQuery = useStreakMultiplier(userId || null);
-  const { masteryState, setMasteryState, applySessionMastery } =
-    useSessionMastery(userId, showToast);
+  const { masteryState, setMasteryState, applySessionMastery } = useSessionMastery(userId, showToast);
   const sessionEntryQuery = useQuery({
     enabled: Boolean(userId && sessionId),
     queryFn: async () => {
@@ -75,14 +62,10 @@ export function useSessionCompleteController(input: {
     notes: sessionEntryQuery.data?.config.notes,
     tags: sessionEntryQuery.data?.config.tags,
   });
-  const focusedDuration =
-    summary.effectiveDuration ||
-    summary.actualDuration ||
-    summary.plannedDuration;
-  const focusPurityScore =
-    summary.focusPurityScore ?? summary.focusQuality ?? 100;
+  const focusedDuration = summary.effectiveDuration || summary.actualDuration || summary.plannedDuration;
+  const focusPurityScore = summary.focusPurityScore ?? summary.focusQuality ?? 100;
   const refetchProgressionSummary = useCallback(
-    async () => (await progressionQuery.refetch()).data ?? undefined,
+    async () => (await progressionQuery['refetch']()).data ?? undefined,
     [progressionQuery],
   );
   const rewards = useSessionCompleteRewards({
@@ -98,30 +81,32 @@ export function useSessionCompleteController(input: {
     summary,
     userId,
   });
-  const hero = useMemo(
-    () =>
-      buildSessionCompletionHero({
-        focusedDurationLabel: formatDuration(focusedDuration),
-        interruptions: summary.interruptions,
-        streakIncreased: summary.streakIncreased ?? false,
-      }),
-    [focusedDuration, summary.interruptions, summary.streakIncreased],
-  );
-  const returnPlan = useMemo(
-    () =>
-      buildSessionCompletionReturnPlan({
-        completionPercentage: summary.completionPercentage,
-        hasStudyFollowUp: Boolean(studyProgressState.studyProgress),
-        streakDays: summary.streakDays ?? 0,
-        streakIncreased: summary.streakIncreased ?? false,
-      }),
-    [
-      studyProgressState.studyProgress,
-      summary.completionPercentage,
-      summary.streakDays,
-      summary.streakIncreased,
-    ],
-  );
+  const hero = useMemo(() => buildSessionCompletionHero({
+    focusedDurationLabel: formatDuration(focusedDuration),
+    interruptions: summary.interruptions,
+    streakIncreased: summary.streakIncreased ?? false,
+  }), [focusedDuration, summary.interruptions, summary.streakIncreased]);
+  const returnPlan = useMemo(() => buildSessionCompletionReturnPlan({
+    completionPercentage: summary.completionPercentage,
+    hasStudyFollowUp: Boolean(studyProgressState.studyProgress),
+    streakDays: summary.streakDays ?? 0,
+    streakIncreased: summary.streakIncreased ?? false,
+  }), [
+    studyProgressState.studyProgress,
+    summary.completionPercentage,
+    summary.streakDays,
+    summary.streakIncreased,
+  ]);
+  const nextAction = useMemo(() => {
+    try {
+      return buildPostSessionNextAction({ summary });
+    } catch (error) {
+      Sentry.captureException(error, {
+        tags: { feature: "session-completion", operation: "next-action" },
+      });
+      return null;
+    }
+  }, [summary]);
   const finishSession = useCallback(
     (skipped: boolean) => {
       Sentry.addBreadcrumb({
@@ -145,31 +130,19 @@ export function useSessionCompleteController(input: {
       });
       navigation.navigate({ name: "Main", params: {} });
     },
-    [
-      navigation,
-      reflection,
-      returnPlan,
-      selectedMood,
-      showHomeHighlight,
-      syncHomeReturn,
-    ],
+    [navigation, reflection, returnPlan, selectedMood, showHomeHighlight, syncHomeReturn],
   );
   const grade = getGradeDisplay(summary.finalScore ?? 0, theme);
   const purity = getPurityDisplay(focusPurityScore, theme);
-  const chestTier = rewards.chestResult
-    ? getChestTierDisplay(rewards.chestResult.tier, theme)
-    : null;
-  const levelMetric =
-    !progressionQuery.error && progressionQuery.data
-      ? {
-          accent: theme.colors.primary[500],
-          id: "level",
-          label: "Level XP",
-          progress: progressionQuery.data.progressPercent / 100,
-          reward: `+${rewards.chestResult?.xpReward ?? summary.xpEarned} XP`,
-          value: `Level ${progressionQuery.data.level} ${progressionQuery.data.xp}/${progressionQuery.data.nextLevelThreshold} XP`,
-        }
-      : null;
+  const chestTier = rewards.chestResult ? getChestTierDisplay(rewards.chestResult.tier, theme) : null;
+  const levelMetric = !progressionQuery.error && progressionQuery.data ? {
+    accent: theme.colors.primary[500],
+    id: "level",
+    label: "Level XP",
+    progress: progressionQuery.data.progressPercent / 100,
+    reward: `+${rewards.chestResult?.xpReward ?? summary.xpEarned} XP`,
+    value: `Level ${progressionQuery.data.level} ${progressionQuery.data.xp}/${progressionQuery.data.nextLevelThreshold} XP`,
+  } : null;
 
   useEffect(() => {
     Sentry.addBreadcrumb({
@@ -189,23 +162,14 @@ export function useSessionCompleteController(input: {
   }, [rewards.revealStage]);
 
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        navigation.navigate({ name: "Main", params: {} });
-        return true;
-      },
-    );
-
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", () => {
+      navigation.navigate({ name: "Main", params: {} });
+      return true;
+    });
     return () => backHandler.remove();
   }, [navigation]);
 
-  useSessionCompletionSpectacles({
-    focusPurityScore,
-    sessionId,
-    summary,
-    userId,
-  });
+  useSessionCompletionSpectacles({ focusPurityScore, sessionId, summary, userId });
 
   return {
     chestTier,
@@ -218,6 +182,7 @@ export function useSessionCompleteController(input: {
     levelMetric,
     masteryState,
     navigation,
+    nextAction,
     progressionError: progressionQuery.error,
     progressionLoading: progressionQuery.isLoading,
     purity,

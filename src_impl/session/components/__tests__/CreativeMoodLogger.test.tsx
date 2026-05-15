@@ -7,7 +7,12 @@ describe('CreativeMoodLogger', () => {
   const mockOnSkip = jest.fn();
 
   beforeEach(() => {
+    jest.useFakeTimers();
     jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   it('renders when isVisible is true', () => {

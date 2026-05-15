@@ -47,7 +47,6 @@ export function Particle({ config, onComplete }: ParticleProps) {
         stiffness: 100,
         mass: 1,
         overshootClamping: true,
-        energyThreshold: 0.1,
       })
     );
 

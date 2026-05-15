@@ -40,11 +40,11 @@ jest.mock('../../../theme', () => ({
       },
       fontWeights: { regular: '400', medium: '500', semibold: '600', bold: '700' },
       colors: {
-        border: { light: '#ccc' },
-        background: { secondary: '#111' },
-        surface: { selected: '#222' },
-        status: { error: '#300', warning: '#330', success: '#030', info: '#003' },
-        text: { primary: '#fff', secondary: '#aaa' },
+        border: { light: 'lightgray' },
+        background: { secondary: 'black' },
+        surface: { selected: 'dimgray' },
+        status: { error: 'maroon', warning: 'olive', success: 'green', info: 'navy' },
+        text: { primary: 'white', secondary: 'silver' },
       },
     },
   }),
@@ -119,6 +119,38 @@ describe('FocusScoreHomeWidget', () => {
     fireEvent.press(screen.getByLabelText('Open focus score dashboard'));
     expect(onPress).toHaveBeenCalled();
     expect(screen.getByText('640 · Strong')).toBeTruthy();
+  });
+
+  it('keeps the dashboard tap target at least 44 points tall', () => {
+    const screen = render(
+      <FocusScoreHomeWidget
+        model={model({
+          current: {
+            id: '123e4567-e89b-12d3-a456-426614174111',
+            userId: '123e4567-e89b-12d3-a456-426614174000',
+            currentScore: 640,
+            previousScore: 630,
+            band: 'Strong',
+            factors: {
+              consistency: { weightPercent: 35, score: 82, delta: 5, explanation: 'Good consistency.' },
+              streakStability: { weightPercent: 25, score: 72, delta: 2, explanation: 'Stable streak.' },
+              sessionQuality: { weightPercent: 20, score: 87, delta: 4, explanation: 'Quality up.' },
+              intentionalDifficulty: { weightPercent: 10, score: 61, delta: 1, explanation: 'Balanced challenge.' },
+              recency: { weightPercent: 10, score: 78, delta: 2, explanation: 'Recent sessions.' },
+            },
+            updatedAt: '2026-05-06T10:00:00.000Z',
+            createdAt: '2026-05-01T10:00:00.000Z',
+            lastChangeReason: 'Session quality improved',
+          },
+        })}
+        onPress={jest.fn()}
+        onRetry={jest.fn()}
+      />,
+    );
+
+    expect(screen.getByLabelText('Open focus score dashboard').props.style).toEqual(
+      expect.objectContaining({ minHeight: 44, minWidth: 44 }),
+    );
   });
 
   it('renders offline state', () => {

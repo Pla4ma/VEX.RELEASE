@@ -57,18 +57,18 @@ export function SessionCompleteFooter({
         )}
         <Box flexDirection="row" gap={3}>
           <Box flex={1}>
-            <Button variant="outline" size="lg" fullWidth onPress={onStartNextSession}
-  accessibilityLabel="Action button"
+            <Button size="lg" fullWidth onPress={onStartNextSession}
+  accessibilityLabel={nextSessionLabel}
   accessibilityRole="button"
-  accessibilityHint="Activates this control">
+  accessibilityHint="Opens setup with the recommended next focus session">
               {nextSessionLabel}
             </Button>
           </Box>
           <Box flex={1}>
-            <Button size="lg" fullWidth onPress={onOpenReflection}
-  accessibilityLabel="Action button"
+            <Button variant="outline" size="lg" fullWidth onPress={onOpenReflection}
+  accessibilityLabel={homeCtaLabel}
   accessibilityRole="button"
-  accessibilityHint="Activates this control">
+  accessibilityHint="Opens the completion reflection and return options">
               {homeCtaLabel}
             </Button>
           </Box>

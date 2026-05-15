@@ -133,11 +133,25 @@ describe('headline reward view model', () => {
     const viewModel = buildPostSessionStoryViewModel({
       degradedWarnings: [],
       ledger,
-      personalBest: { isPersonalBest: true, purityScore: 91 },
+      personalBest: {
+        achievedAt: '2026-05-14T12:00:00.000Z',
+        durationBucket: '15',
+        isPersonalBest: true,
+        previousBest: 82,
+        purityScore: 91,
+        sessionMode: 'SPRINT',
+      },
       summary,
     });
 
     expect(viewModel.headline.type).toBe('personal_best');
     expect(viewModel.headline.title).toBe('Personal best. 91 purity in Sprint.');
+    expect(viewModel.personalBestProof).toEqual({
+      achievedAt: '2026-05-14T12:00:00.000Z',
+      durationBucket: '15',
+      mode: 'SPRINT',
+      newValue: 91,
+      oldValue: 82,
+    });
   });
 });

@@ -33,6 +33,15 @@ export const PostSessionStoryViewModelSchema = z
       score: z.number().min(0).max(100),
     }),
     headline: HeadlineRewardSchema,
+    personalBestProof: z
+      .object({
+        achievedAt: z.string().datetime(),
+        durationBucket: z.string().min(1),
+        mode: z.string().min(1),
+        newValue: z.number().min(0).max(100),
+        oldValue: z.number().min(0).max(100).nullable(),
+      })
+      .nullable(),
     nextActionCta: z.object({
       label: z.string(),
       route: z.enum(['Home', 'SessionSetup']),
@@ -57,7 +66,14 @@ export type PostSessionStoryViewModel = z.infer<typeof PostSessionStoryViewModel
 export function buildPostSessionStoryViewModel(input: {
   degradedWarnings: string[];
   ledger: CompletionLedger;
-  personalBest?: { isPersonalBest: boolean; purityScore?: number };
+  personalBest?: {
+    achievedAt?: string;
+    durationBucket?: string;
+    isPersonalBest: boolean;
+    previousBest?: number | null;
+    purityScore?: number;
+    sessionMode?: string;
+  };
   companionMemory?: CompanionMemory | null;
   summary: SessionSummary;
 }): PostSessionStoryViewModel {
@@ -104,6 +120,15 @@ export function buildPostSessionStoryViewModel(input: {
       score: ledger.gradeScore,
     },
     headline,
+    personalBestProof: input.personalBest?.isPersonalBest && input.personalBest.purityScore !== undefined
+      ? {
+          achievedAt: input.personalBest.achievedAt ?? new Date(ledger.completedAt).toISOString(),
+          durationBucket: input.personalBest.durationBucket ?? 'unknown',
+          mode: input.personalBest.sessionMode ?? input.summary.sessionMode ?? ledger.mode,
+          newValue: input.personalBest.purityScore,
+          oldValue: input.personalBest.previousBest ?? null,
+        }
+      : null,
     nextActionCta: {
       label: degradedWarnings.length > 0 ? 'Return home safely' : 'Continue on home',
       route: 'Home',

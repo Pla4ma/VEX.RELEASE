@@ -71,10 +71,13 @@ export function SessionCompleteNextSteps({
       <SessionCompleteFooter
         bottomInset={bottomInset}
         homeCtaLabel={controller.returnPlan.homeCtaLabel}
-        nextSessionLabel={controller.returnPlan.nextSessionLabel}
+        nextSessionLabel={controller.nextAction?.ctaLabel ?? controller.returnPlan.nextSessionLabel}
         onOpenReflection={onOpenReflection}
         onStartNextSession={() =>
-          controller.navigation.navigate({ name: 'SessionSetup', params: {} })
+          controller.navigation.navigate({
+            name: 'SessionSetup',
+            params: controller.nextAction?.routeParams ?? {},
+          })
         }
         onShare={onShare}
         showCtas={controller.rewards.showCtas}

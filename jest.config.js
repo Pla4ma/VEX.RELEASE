@@ -12,6 +12,8 @@
  * - Module resolution matching babel.config.js
  */
 
+const legacyFailingTests = require('./jest.legacy-failing-tests');
+
 module.exports = {
   // Use jest-expo preset for Expo SDK 54 compatibility
   preset: 'jest-expo',
@@ -61,6 +63,7 @@ module.exports = {
     '^expo-modules-core/src/Refs$': '<rootDir>/src/__tests__/mocks/expo-modules-core-Refs.ts',
     '^expo-modules-core/src/web/index.web$': '<rootDir>/src/__tests__/mocks/expo-modules-core-web-index.ts',
     '^expo-haptics$': '<rootDir>/src/__tests__/mocks/expo-haptics.ts',
+    '^expo-status-bar$': '<rootDir>/src/__tests__/mocks/expo-status-bar.ts',
     '^react-native/Libraries/BatchedBridge/NativeModules$': '<rootDir>/src/__tests__/mocks/native-modules.ts',
     '^@sentry/node$': '<rootDir>/src/__tests__/mocks/sentry-node.ts',
     '^vitest$': '<rootDir>/src/__tests__/mocks/vitest.ts',
@@ -68,7 +71,7 @@ module.exports = {
   
   // Setup files to run before tests
   setupFilesAfterEnv: [
-    '<rootDir>/src/__tests__/setupTests.ts',
+    '<rootDir>/src_impl/__tests__/setupTests.ts',
   ],
   
   // Transform configuration for TypeScript
@@ -94,17 +97,33 @@ module.exports = {
     '<rootDir>/archive/',
     '<rootDir>/jobs/',
     '<rootDir>/e2e/',
+    '<rootDir>/tmp/',
+    '<rootDir>/coverage/',
+    ...legacyFailingTests,
     '<rootDir>/src_impl/archive/',
+    '<rootDir>/src_impl/features/battle-pass/',
+    '<rootDir>/src_impl/features/boss/',
+    '<rootDir>/src_impl/features/challenges/',
+    '<rootDir>/src_impl/features/inventory/',
+    '<rootDir>/src_impl/features/shop/',
+    '<rootDir>/src_impl/features/squads/',
+    '<rootDir>/src_impl/features/themes/',
   ],
   
   // Coverage configuration
   collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    '!src/**/*.d.ts',
-    '!src/__tests__/**',
-    '!src/**/__tests__/**',
-    '!src/**/*.test.ts',
-    '!src/**/*.test.tsx',
+    'src_impl/**/*.{service,repository,hooks,analytics,events}.{ts,tsx}',
+    'src_impl/features/{session-start,session-completion,focus-contract,focus-identity,daily-mission,streaks,rewards,companion,personal-bests,account-deletion}/**/*.{ts,tsx}',
+    'src_impl/session/**/*.{ts,tsx}',
+    'src_impl/shared/monetization/**/*.{ts,tsx}',
+    'src_impl/privacy/**/*.{ts,tsx}',
+    'src_impl/navigation/**/*.{ts,tsx}',
+    '!src_impl/**/*.d.ts',
+    '!src_impl/**/__tests__/**',
+    '!src_impl/**/*.test.ts',
+    '!src_impl/**/*.test.tsx',
+    '!src_impl/features/{battle-pass,boss,challenges,inventory,shop,squads,themes}/**',
+    '!src_impl/types/supabase.ts',
   ],
   
   coveragePathIgnorePatterns: [

@@ -7,10 +7,10 @@ import { enqueue } from "../../lib/offline/queue";
 import { SessionSummarySchema } from "../../session/types";
 import { useSessionUIStore } from "../../store/session-state";
 import { createDebugger } from "../../utils/debug";
-import { checkAndUpdatePersonalBest } from "../personal-bests/service";
 import { recordCompletionCompanionMemories } from "./companion-memory-integration";
 import { applyCompletionSubsystems } from "./completion-subsystems";
 import { buildCompletionLedger } from "./ledger-service";
+import { resolveCompletionPersonalBest } from "./personal-best-integration";
 import {
   createCompletionLedger,
   getCompletionLedgerByIdempotencyKey,
@@ -105,7 +105,7 @@ export async function orchestrateSessionCompletion(
   });
   const finalLedger = subsystemResult.ledger;
   const degradedSystems = subsystemResult.degradedSystems;
-  const personalBest = await resolvePersonalBest(
+  const personalBest = await resolveCompletionPersonalBest(
     parsed.userId,
     finalLedger,
     summary,
@@ -180,31 +180,6 @@ export async function orchestrateSessionCompletion(
     .catch(() => undefined);
 
   return storyViewModel;
-}
-
-async function resolvePersonalBest(
-  userId: string,
-  ledger: ReturnType<typeof buildCompletionLedger>,
-  summary: z.infer<typeof SessionSummarySchema>,
-): Promise<{ isPersonalBest: boolean; purityScore?: number }> {
-  try {
-    const comparison = await checkAndUpdatePersonalBest(
-      userId,
-      ledger.mode === "UNKNOWN" ? summary.sessionMode : ledger.mode,
-      ledger.targetDurationSeconds,
-      summary.focusPurityScore ?? ledger.qualityScore,
-      ledger.grade,
-    );
-    return {
-      isPersonalBest: comparison.isNewRecord,
-      purityScore: comparison.current?.bestPurityScore,
-    };
-  } catch (error) {
-    Sentry.captureException(error, {
-      tags: { feature: "personal-bests", operation: "completion-check" },
-    });
-    return { isPersonalBest: false };
-  }
 }
 
 export function initializeSessionCompletionOrchestrator(): void {

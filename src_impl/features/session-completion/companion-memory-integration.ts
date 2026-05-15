@@ -13,7 +13,7 @@ export async function recordCompletionCompanionMemories(input: {
 }): Promise<CompanionMemory[]> {
   try {
     const companion = await loadCompanionState(input.userId);
-    return checkAndRecordSessionMemories({
+    return await checkAndRecordSessionMemories({
       grade: input.ledger.grade,
       isPersonalBest: input.isPersonalBest,
       session: {

@@ -50,6 +50,8 @@ export const HeadlineRewardConsequencesSchema = z
       .optional(),
     summary: z.object({
       coinsEarned: z.number(),
+      focusScoreBandChanged: z.boolean().optional(),
+      focusScoreDelta: z.number().int().optional(),
       focusPurityScore: z.number().optional(),
       gemsEarned: z.number(),
       newLevel: z.number().int().min(1),

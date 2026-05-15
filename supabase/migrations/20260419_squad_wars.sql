@@ -38,6 +38,8 @@ create index if not exists idx_squad_war_damage_war_id on public.squad_war_damag
 create index if not exists idx_squad_war_damage_squad_id on public.squad_war_damage(squad_id);
 create index if not exists idx_squad_war_damage_user_id on public.squad_war_damage(user_id);
 
+alter table public.squad_members add column if not exists is_active boolean not null default true;
+
 alter table public.squad_wars enable row level security;
 alter table public.squad_war_damage enable row level security;
 

@@ -37,6 +37,7 @@ afterAll(() => server?.close());
 const mockChain = () => ({
   duration: jest.fn(function duration(this: unknown) { return this; }),
   delay: jest.fn(function delay(this: unknown) { return this; }),
+  springify: jest.fn(function springify(this: unknown) { return this; }),
 });
 
 try {

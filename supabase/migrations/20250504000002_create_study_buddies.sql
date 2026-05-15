@@ -7,8 +7,7 @@
  * @phase 3
  */
 
--- Enable RLS
-ALTER TABLE IF NOT EXISTS auth.users ENABLE ROW LEVEL SECURITY;
+-- auth.users RLS is managed by Supabase Auth.
 
 -- ============================================================================
 -- Study Buddies Core Tables
@@ -29,7 +28,7 @@ CREATE TABLE IF NOT EXISTS study_buddies (
   end_reason TEXT CHECK (end_reason IN ('MUTUAL_AGREEMENT', 'TIMEOUT', 'USER_INITIATED', 'GOAL_COMPLETED', 'PREFERENCE_CHANGE')),
   
   -- Shared goal (replaces stakes)
-  shared_goal_id UUID REFERENCES study_buddy_shared_goals(id) ON DELETE SET NULL,
+  shared_goal_id UUID,
   
   -- Mutual stats (no winner/loser)
   mutual_stats JSONB DEFAULT '{}',
