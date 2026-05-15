@@ -167,4 +167,4 @@ export function CardFooter({ children, style }: { children: React.ReactNode; sty
     </View>
   );
 }
-    
+

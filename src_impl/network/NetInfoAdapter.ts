@@ -53,7 +53,7 @@ export class NetInfoAdapter {
       }) as () => void;
 
       // Get initial state
-      const initialState = await NetInfo['fetch']();
+      const initialState = await NetInfo.fetch();
       this.handleNetworkChange(initialState);
     } catch (error) {
       debug.error('Failed to initialize NetInfo:', error as Error);

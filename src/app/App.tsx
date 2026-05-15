@@ -5,66 +5,66 @@
  */
 
 import React from 'react';
+import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ThemeProvider } from '../theme';
-import { RootNavigator } from '../navigation/RootNavigator';
-import { ErrorBoundary } from '../errors/ErrorBoundary';
-import { ToastProvider } from '../shared/ui/components/Toast';
+
 import { QueryProvider } from '../api';
 import { initSentry } from '../config/sentry';
-import { initializeRevenueCat } from '../shared/monetization/revenuecat-service';
-import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
+import { ErrorBoundary } from '../errors/ErrorBoundary';
 import { initializeNotifications } from '../features/ai-coach/services';
-import { bootstrapApp } from './bootstrap';
+import { RootNavigator } from '../navigation/RootNavigator';
+import { initializeRevenueCat } from '../shared/monetization/revenuecat-service';
+import { ToastProvider } from '../shared/ui/components/Toast';
 import { initializeDevContrastChecker } from '../shared/accessibility/contrast-checker';
 import { SpectacleOverlay } from '../features/spectacle/components/SpectacleOverlay';
+import { ThemeProvider } from '../theme';
+import { bootstrapApp } from './bootstrap';
 
-// Initialize Sentry immediately — wrapped in try/catch since Sentry uses
-// native PlatformConstants which may not be registered in Expo Go.
+const rootViewStyle: StyleProp<ViewStyle> = { flex: 1 };
+
 try {
   initSentry();
-} catch (e) {
-  // Sentry unavailable in Expo Go — continue without it
+} catch {
+  // Sentry unavailable in Expo Go.
 }
 
-// Initialize RevenueCat (pass null for userId - will be set after login)
-// react-native-purchases is shimmed in Expo Go, so this is safe but no-op.
-void initializeRevenueCat(null);
+initializeRevenueCat(null).catch(() => undefined);
 
 try {
   initializeNotifications();
-} catch (e) {
-  // Notifications may not be fully available in Expo Go
+} catch {
+  // Notifications may not be available in Expo Go.
 }
 
 bootstrapApp();
 
 try {
   initializeDevContrastChecker();
-} catch (e) {
-  // Accessibility checker unavailable — non-critical
+} catch {
+  // Accessibility checker unavailable — non-critical.
 }
 
-
-// Conditionally import GestureHandler for native only
-let GestureHandlerRootView: React.FC<{ children: React.ReactNode; style?: StyleProp<ViewStyle> }> = ({ children }) => <>{children}</>;
+let GestureHandlerRootView: React.FC<{
+  children: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
+}> = ({ children }) => <>{children}</>;
 
 if (Platform.OS !== 'web') {
   try {
     const gestureHandler = require('react-native-gesture-handler');
-    GestureHandlerRootView = gestureHandler.GestureHandlerRootView || (({ children, style }) => <View style={style}>{children}</View>);
-  } catch (e) {
-    // Fallback to View wrapper if not available
-    GestureHandlerRootView = ({ children, style }) => <View style={style}>{children}</View>;
+    GestureHandlerRootView =
+      gestureHandler.GestureHandlerRootView ||
+      (({ children, style }) => <View style={style}>{children}</View>);
+  } catch {
+    GestureHandlerRootView = ({ children, style }) => (
+      <View style={style}>{children}</View>
+    );
   }
 }
 
-/**
- * Root App component
- */
 export const App: React.FC = () => {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={rootViewStyle}>
       <SafeAreaProvider>
         <QueryProvider>
           <ThemeProvider>

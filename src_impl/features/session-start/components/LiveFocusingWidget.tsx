@@ -1,26 +1,26 @@
-import React,{useState,useEffect,useCallback}from'react';import{Pressable}from'react-native';import Animated,{useAnimatedStyle,withRepeat,withSequence,withTiming,withDelay,FadeIn}from'react-native-reanimated';import{Box}from'../../../components/primitives/Box';import{Text}from'../../../components/primitives/Text';import{Avatar}from'../../../components/Avatar';import{useTheme}from'../../../theme';export interface LiveFocusingData{totalCount:number;friendsCount:number;squadCount:number;sampleAvatars?:Array<{url?:string;initials:string;}>;trend?:'up'|'down'|'stable';trendPercent?:number;}interface LiveFocusingWidgetProps{data:LiveFocusingData;onPress?:()=>void;compact?:boolean;isLoading?:boolean;}function PulsingLiveDot():JSX.Element{const animatedStyle=useAnimatedStyle(()=>({transform:[{scale:withRepeat(withSequence(withTiming(1,{duration:1000}),withTiming(1.5,{duration:1000})),-1,true)}],opacity:withRepeat(withSequence(withTiming(1,{duration:1000}),withTiming(0.5,{duration:1000})),-1,true)}));return<Animated.View style={[{width:8,height:8,borderRadius:4,backgroundColor:'#22C55E'},animatedStyle]}/>;}function AvatarStack({avatars,maxDisplay=4}:{avatars?:Array<{url?:string;initials:string;}>;maxDisplay?:number;}):JSX.Element{const{theme}=useTheme();if(!avatars||avatars.length===0){return<Box flexDirection="row"alignItems="center">
+import React,{useState,useEffect,useCallback}from'react'; import{Pressable}from'react-native'; import Animated,{useAnimatedStyle,withRepeat,withSequence,withTiming,withDelay,FadeIn}from'react-native-reanimated'; import{Box}from'../../../components/primitives/Box'; import{Text}from'../../../components/primitives/Text'; import{Avatar}from'../../../components/Avatar'; import{useTheme}from'../../../theme'; export interface LiveFocusingData{totalCount:number;friendsCount:number;squadCount:number;sampleAvatars?:Array<{url?:string;initials:string;}>;trend?:'up'|'down'|'stable';trendPercent?:number;}interface LiveFocusingWidgetProps{data:LiveFocusingData;onPress?:()=>void;compact?:boolean;isLoading?:boolean;}function PulsingLiveDot():JSX.Element{const animatedStyle = useAnimatedStyle(()=>({transform:[{scale:withRepeat(withSequence(withTiming(1,{duration:1000}),withTiming(1.5,{duration:1000})),-1,true)}],opacity:withRepeat(withSequence(withTiming(1,{duration:1000}),withTiming(0.5,{duration:1000})),-1,true)})); return<Animated.View style={[{width:8,height:8,borderRadius:4,backgroundColor:'#22C55E'},animatedStyle]}/>;}function AvatarStack({avatars,maxDisplay = 4}:{avatars?:Array<{url?:string;initials:string;}>;maxDisplay?:number;}):JSX.Element{const{theme} = useTheme(); if(!avatars || avatars.length === 0){return<Box flexDirection="row"alignItems="center">
         <Box width={32}height={32}borderRadius="full"justifyContent="center"alignItems="center"style={{backgroundColor:theme.colors.background.tertiary}}>
           <Text fontSize={14}>👤</Text>
         </Box>
-      </Box>;}const displayAvatars=avatars.slice(0,maxDisplay);const remaining=avatars.length-maxDisplay;return<Box flexDirection="row"alignItems="center">
-      {displayAvatars.map((avatar,index)=>{return<Box key={index}style={{marginLeft:index===0?0:-8,zIndex:displayAvatars.length-index}}>
+      </Box>;}const displayAvatars = avatars.slice(0,maxDisplay); const remaining = avatars.length - maxDisplay; return<Box flexDirection="row"alignItems="center">
+      {displayAvatars.map((avatar,index)=>{return<Box key={index}style={{marginLeft:index === 0 ? 0 : -8,zIndex:displayAvatars.length - index}}>
             <Box width={32}height={32}borderRadius="full"borderWidth={2}borderColor="background.primary"style={{overflow:'hidden'}}>
-              <Avatar size="sm"source={avatar.url?{uri:avatar.url}:undefined}name={avatar.initials}/>
+              <Avatar size="sm"source={avatar.url ? {uri:avatar.url} : undefined}name={avatar.initials}/>
             </Box>
           </Box>;})}
 
-      {remaining>0&&<Box width={32}height={32}borderRadius="full"justifyContent="center"alignItems="center"style={{marginLeft:-8,backgroundColor:theme.colors.background.tertiary,borderWidth:2,borderColor:theme.colors.background.primary}}>
+      {remaining > 0 && <Box width={32}height={32}borderRadius="full"justifyContent="center"alignItems="center"style={{marginLeft:-8,backgroundColor:theme.colors.background.tertiary,borderWidth:2,borderColor:theme.colors.background.primary}}>
           <Text variant="caption"color="text.primary"fontWeight="600">
             +{remaining}
           </Text>
         </Box>}
-    </Box>;}function useCountUp(target:number,duration:number=1000):number{const[count,setCount]=useState(0);useEffect(()=>{const startTime=Date.now();const startValue=count;const animate=()=>{const elapsed=Date.now()-startTime;const progress=Math.min(elapsed/duration,1);const easeOut=1-Math.pow(1-progress,3);const current=Math.floor(startValue+(target-startValue)*easeOut);setCount(current);if(progress<1){requestAnimationFrame(animate);}};requestAnimationFrame(animate);},[count,target,duration]);return count;}function formatNumber(num:number):string{if(num>=1000000){return(num/1000000).toFixed(1)+'M';}if(num>=1000){return(num/1000).toFixed(1)+'K';}return num.toLocaleString();}function TrendIndicator({trend,percent}:{trend:'up'|'down'|'stable';percent?:number;}):JSX.Element{const icons={up:'📈',down:'📉',stable:'➡️'};const colors={up:'#22C55E',down:'#EF4444',stable:'#94A3B8'};return<Box flexDirection="row"alignItems="center"gap="xs">
+    </Box>;}function useCountUp(target:number,duration:number = 1000):number{const[count,setCount] = useState(0); useEffect(()=>{const startTime = Date.now(); const startValue = count; const animate = ()=>{const elapsed = Date.now() - startTime; const progress = Math.min(elapsed / duration,1); const easeOut = 1 - Math.pow(1 - progress,3); const current = Math.floor(startValue + (target - startValue) * easeOut); setCount(current); if(progress < 1){requestAnimationFrame(animate);}}; requestAnimationFrame(animate);},[count,target,duration]); return count;}function formatNumber(num:number):string{if(num >= 1000000){return(num / 1000000).toFixed(1) + 'M';}if(num >= 1000){return(num / 1000).toFixed(1) + 'K';}return num.toLocaleString();}function TrendIndicator({trend,percent}:{trend:'up'|'down'|'stable';percent?:number;}):JSX.Element{const icons = {up:'📈',down:'📉',stable:'➡️'}; const colors = {up:'#22C55E',down:'#EF4444',stable:'#94A3B8'}; return<Box flexDirection="row"alignItems="center"gap="xs">
       <Text fontSize={12}>{icons[trend]}</Text>
-      {percent!==undefined&&percent>0&&<Text fontSize={12}color={trend==='up'?'success.DEFAULT':trend==='down'?'error.DEFAULT':'text.tertiary'}>
-          {trend==='up'?'+':''}
+      {percent !== undefined && percent > 0 && <Text fontSize={12}color={trend === 'up' ? 'success.DEFAULT' : trend === 'down' ? 'error.DEFAULT' : 'text.tertiary'}>
+          {trend === 'up' ? '+' : ''}
           {percent}%
         </Text>}
-    </Box>;}export function LiveFocusingWidget({data,onPress,compact=false,isLoading:_isLoading=false}:LiveFocusingWidgetProps):JSX.Element{const animatedCount=useCountUp(data.totalCount);if(compact){return<Pressable onPress={onPress}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
+    </Box>;}export function LiveFocusingWidget({data,onPress,compact = false,isLoading:_isLoading = false}:LiveFocusingWidgetProps):JSX.Element{const animatedCount = useCountUp(data.totalCount); if(compact){return<Pressable onPress={onPress}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
         <Box flexDirection="row"alignItems="center"gap="md"p="md"borderRadius="lg"bg="background.secondary">
           <PulsingLiveDot/>
           <Box flex={1}>
@@ -28,8 +28,8 @@ import React,{useState,useEffect,useCallback}from'react';import{Pressable}from'r
               {formatNumber(animatedCount)} people focusing
             </Text>
             <Text variant="caption"color="text.secondary">
-              {data.friendsCount>0&&`${data.friendsCount} friends • `}
-              {data.squadCount>0&&`${data.squadCount} squad `}
+              {data.friendsCount > 0 && `${data.friendsCount} friends • `}
+              {data.squadCount > 0 && `${data.squadCount} squad `}
               Join them!
             </Text>
           </Box>
@@ -46,7 +46,7 @@ import React,{useState,useEffect,useCallback}from'react';import{Pressable}from'r
                 LIVE NOW
               </Text>
             </Box>
-            {data.trend&&<TrendIndicator trend={data.trend}percent={data.trendPercent}/>}
+            {data.trend && <TrendIndicator trend={data.trend}percent={data.trendPercent}/>}
           </Box>
 
           {}
@@ -94,7 +94,7 @@ import React,{useState,useEffect,useCallback}from'react';import{Pressable}from'r
 
             <Box alignItems="center">
               <Text fontSize={20}fontWeight="700"color="text.primary">
-                {formatNumber(data.totalCount-data.friendsCount-data.squadCount)}
+                {formatNumber(data.totalCount - data.friendsCount - data.squadCount)}
               </Text>
               <Text variant="caption"color="text.tertiary">
                 Global
@@ -110,14 +110,14 @@ import React,{useState,useEffect,useCallback}from'react';import{Pressable}from'r
           </Box>
         </Box>
       </Pressable>
-    </Animated.View>;}export function LiveFocusingSkeleton({compact=false}:{compact?:boolean;}):JSX.Element{if(compact){return<Box flexDirection="row"alignItems="center"gap="md"p="md"borderRadius="lg"bg="background.secondary">
+    </Animated.View>;}export function LiveFocusingSkeleton({compact = false}:{compact?:boolean;}):JSX.Element{if(compact){return<Box flexDirection="row"alignItems="center"gap="md"p="md"borderRadius="lg"bg="background.secondary">
         <Box width={8}height={8}borderRadius="full"bg="background.tertiary"/>
         <Box flex={1}gap="xs">
           <Box width={150}height={16}borderRadius="sm"bg="background.tertiary"/>
           <Box width={100}height={12}borderRadius="sm"bg="background.tertiary"/>
         </Box>
         <Box flexDirection="row">
-          {[1,2,3].map(i=><Box key={i}width={32}height={32}borderRadius="full"bg="background.tertiary"style={{marginLeft:i===1?0:-8}}/>)}
+          {[1,2,3].map(i=><Box key={i}width={32}height={32}borderRadius="full"bg="background.tertiary"style={{marginLeft:i === 1 ? 0 : -8}}/>)}
         </Box>
       </Box>;}return<Box p="xl"borderRadius="xl"bg="background.secondary"borderWidth={1}borderColor="border.light"gap="lg">
       <Box flexDirection="row"justifyContent="space-between">

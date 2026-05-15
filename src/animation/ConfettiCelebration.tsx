@@ -11,19 +11,19 @@
  * - Reduced motion support
  */
 
-import React, { useEffect, useCallback, useState } from "react";
-import { View, Dimensions } from "react-native";
-import { useReducedMotion } from "@/hooks";
-import { ConfettiCelebrationProps, ParticleConfig } from "./confetti/types";
+import React, { useEffect, useCallback, useState } from 'react';
+import { View, Dimensions } from 'react-native';
+import { useReducedMotion } from '@/hooks';
+import { ConfettiCelebrationProps, ParticleConfig } from './confetti/types';
 import {
   CONFETTI_COLORS,
   PARTICLE_SHAPES,
   DEFAULT_PARTICLE_COUNT,
   DEFAULT_DURATION,
-} from "./confetti/constants";
-import { Particle } from "./confetti/Particle";
+} from './confetti/constants';
+import { Particle } from './confetti/Particle';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("window");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export function ConfettiCelebration({
   active,
@@ -54,7 +54,7 @@ export function ConfettiCelebration({
         velocityY: Math.sin(angle) * velocity - 10,
         shape:
           PARTICLE_SHAPES[Math.floor(Math.random() * PARTICLE_SHAPES.length)] ??
-          "circle",
+          'circle',
         delay: Math.random() * 0.5,
       });
     }
@@ -98,7 +98,7 @@ export function ConfettiCelebration({
 
   return (
     <View
-      style={{ position: "absolute", left: 0, right: 0, top: 0, bottom: 0 }}
+      style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}
       pointerEvents="none"
     >
       {particles.map((particle) => (

@@ -9,9 +9,9 @@
  * @phase 4
  */
 
-import React from "react";
-import { View, Pressable } from "react-native";
-import Animated, { useAnimatedStyle, withSpring } from "react-native-reanimated";
+import React from 'react';
+import { View, Pressable } from 'react-native';
+import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
 import { useTheme } from '../../../theme';
 import { Text } from '../../../components/primitives/Text';

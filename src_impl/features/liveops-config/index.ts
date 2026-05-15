@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import * as Sentry from '@sentry/react-native';
 
-import { useSessionHistory } from '../../session/hooks/useSession';
+import { useSessionStats } from '../../session/hooks/useSession';
 import { useAuthStore } from '../../store';
 import {
   buildFeatureAccess,
@@ -32,35 +32,47 @@ export interface FeatureAccessResult {
 
 export function useFeatureAccess(): FeatureAccessResult {
   const userId = useAuthStore((state) => state.user?.id ?? '');
-  const history = useSessionHistory(userId, 25);
-  const completedSessions = history.history.length;
+  const stats = useSessionStats(userId);
+  const completedSessions = stats.stats?.completedSessions ?? 0;
   const access = useMemo(
     () => buildFeatureAccess({ totalCompletedSessions: completedSessions }),
     [completedSessions],
   );
 
   return {
-    error: history.error,
+    error: null,
     features: access.features,
     inputs: { totalCompletedSessions: completedSessions },
-    isLoading: history.isLoading,
+    isLoading: stats.isLoading,
     productTier: access.productTier,
-    refetchAll: history.refresh,
+    refetchAll: stats.refresh,
     stage: access.stage,
   };
 }
 
 export function useDisclosureAnalytics(): {
-  trackFeatureUnlocked: (feature: FeatureKey, stage: UserExperienceStage) => void;
-  trackFeatureTeaserViewed: (feature: FeatureKey, stage: UserExperienceStage) => void;
+  trackFeatureUnlocked: (
+    feature: FeatureKey,
+    stage: UserExperienceStage,
+  ) => void;
+  trackFeatureTeaserViewed: (
+    feature: FeatureKey,
+    stage: UserExperienceStage,
+  ) => void;
   trackFirstSessionStarted: (userId: string | null, source: string) => void;
-  trackLockedFeatureScreenViewed: (feature: FeatureKey, stage: UserExperienceStage) => void;
+  trackLockedFeatureScreenViewed: (
+    feature: FeatureKey,
+    stage: UserExperienceStage,
+  ) => void;
   trackNextBestActionPressed: (
     stage: UserExperienceStage,
     completedSessions: number,
   ) => void;
   trackSessionMilestone: (userId: string, count: number) => void;
-  trackSocialEmptyStateViewed: (surface: string, stage: UserExperienceStage) => void;
+  trackSocialEmptyStateViewed: (
+    surface: string,
+    stage: UserExperienceStage,
+  ) => void;
   trackTeaserCtaPressed: (
     feature: FeatureKey,
     label: string,

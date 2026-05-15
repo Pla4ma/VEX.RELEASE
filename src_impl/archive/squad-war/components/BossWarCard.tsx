@@ -1,9 +1,9 @@
-import React from'react';import{Pressable}from'react-native';import Animated,{FadeInUp}from'react-native-reanimated';import{Box}from'../../../components/primitives/Box';import{Text}from'../../../components/primitives/Text';import{Button}from'../../../components/primitives/Button';import{useTheme}from'../../../theme';import{BossAvatar}from'../../boss/components/BossAvatar';export interface BossWarCardProps{bossName:string;bossTier:'NORMAL'|'ELITE'|'LEGENDARY';bossHealthPercent:number;hoursRemaining:number;squadDamage:number;userContribution:number;participantCount:number;onJoinWar:()=>void;onViewDetails?:()=>void;isLoading?:boolean;}function formatTimeRemaining(hours:number):string{if(hours<=0){return'Ending soon!';}if(hours<1){return'Less than 1h';}if(hours===1){return'1h remaining';}if(hours<24){return`${Math.floor(hours)}h remaining`;}const days=Math.floor(hours/24);return`${days} day${days>1?'s':''} left`;}function getTierColor(tier:BossWarCardProps['bossTier']):string{switch(tier){case'LEGENDARY':return'#F59E0B';case'ELITE':return'#8B5CF6';default:return'#3B82F6';}}export function BossWarCard({bossName,bossTier,bossHealthPercent,hoursRemaining,squadDamage,userContribution,participantCount,onJoinWar,onViewDetails,isLoading=false}:BossWarCardProps):JSX.Element|null{const{theme}=useTheme();const tierColor=getTierColor(bossTier);const isUrgent=hoursRemaining<4;const isCritical=bossHealthPercent<10;if(isLoading){return<Box mx="lg"mb="md"p="lg"borderRadius="xl"bg={theme.colors.background.tertiary}>
+import React from'react'; import{Pressable}from'react-native'; import Animated,{FadeInUp}from'react-native-reanimated'; import{Box}from'../../../components/primitives/Box'; import{Text}from'../../../components/primitives/Text'; import{Button}from'../../../components/primitives/Button'; import{useTheme}from'../../../theme'; import{BossAvatar}from'../../boss/components/BossAvatar'; export interface BossWarCardProps{bossName:string;bossTier:'NORMAL'|'ELITE'|'LEGENDARY';bossHealthPercent:number;hoursRemaining:number;squadDamage:number;userContribution:number;participantCount:number;onJoinWar:()=>void;onViewDetails?:()=>void;isLoading?:boolean;}function formatTimeRemaining(hours:number):string{if(hours <= 0){return'Ending soon!';}if(hours < 1){return'Less than 1h';}if(hours === 1){return'1h remaining';}if(hours < 24){return`${Math.floor(hours)}h remaining`;}const days = Math.floor(hours / 24); return`${days} day${days > 1 ? 's' : ''} left`;}function getTierColor(tier:BossWarCardProps['bossTier']):string{switch(tier){case'LEGENDARY':return'#F59E0B'; case'ELITE':return'#8B5CF6'; default:return'#3B82F6';}}export function BossWarCard({bossName,bossTier,bossHealthPercent,hoursRemaining,squadDamage,userContribution,participantCount,onJoinWar,onViewDetails,isLoading = false}:BossWarCardProps):JSX.Element|null{const{theme} = useTheme(); const tierColor = getTierColor(bossTier); const isUrgent = hoursRemaining < 4; const isCritical = bossHealthPercent < 10; if(isLoading){return<Box mx="lg"mb="md"p="lg"borderRadius="xl"bg={theme.colors.background.tertiary}>
         <Box height={20}width="60%"bg={theme.colors.background.secondary}borderRadius="sm"/>
         <Box height={80}width="100%"bg={theme.colors.background.secondary}borderRadius="lg"mt="md"/>
       </Box>;}return<Animated.View entering={FadeInUp.duration(400).delay(200)}>
       <Pressable onPress={onViewDetails}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
-        <Box mx="lg"mb="md"p="lg"borderRadius="xl"bg={theme.colors.background.secondary}borderWidth={2}borderColor={isCritical?theme.colors.error.DEFAULT:tierColor}style={{shadowColor:tierColor,shadowOffset:{width:0,height:4},shadowOpacity:isUrgent?0.4:0.2,shadowRadius:isUrgent?16:8,elevation:isUrgent?6:3}}>
+        <Box mx="lg"mb="md"p="lg"borderRadius="xl"bg={theme.colors.background.secondary}borderWidth={2}borderColor={isCritical ? theme.colors.error.DEFAULT : tierColor}style={{shadowColor:tierColor,shadowOffset:{width:0,height:4},shadowOpacity:isUrgent ? 0.4 : 0.2,shadowRadius:isUrgent ? 16 : 8,elevation:isUrgent ? 6 : 3}}>
           {}
           <Box flexDirection="row"justifyContent="space-between"alignItems="center"mb="md">
             <Box flexDirection="row"alignItems="center"gap="sm">
@@ -12,8 +12,8 @@ import React from'react';import{Pressable}from'react-native';import Animated,{Fa
                   {bossTier}
                 </Text>
               </Box>
-              <Text variant="caption"color={isUrgent?theme.colors.error.DEFAULT:theme.colors.text.secondary}fontWeight={isUrgent?'600':'400'}>
-                {isUrgent?'⏰ ':''}
+              <Text variant="caption"color={isUrgent ? theme.colors.error.DEFAULT : theme.colors.text.secondary}fontWeight={isUrgent ? '600' : '400'}>
+                {isUrgent ? '⏰ ' : ''}
                 {formatTimeRemaining(hoursRemaining)}
               </Text>
             </Box>
@@ -39,7 +39,7 @@ import React from'react';import{Pressable}from'react-native';import Animated,{Fa
 
             {}
             <Box alignItems="center">
-              <Text variant="h3"color={bossHealthPercent<25?theme.colors.error.DEFAULT:tierColor}fontWeight="800">
+              <Text variant="h3"color={bossHealthPercent < 25 ? theme.colors.error.DEFAULT : tierColor}fontWeight="800">
                 {Math.round(bossHealthPercent)}%
               </Text>
               <Text variant="caption"color="text.tertiary">
@@ -51,7 +51,7 @@ import React from'react';import{Pressable}from'react-native';import Animated,{Fa
           {}
           <Box mb="md">
             <Box height={12}borderRadius="full"bg={theme.colors.background.tertiary}overflow="hidden">
-              <Box width={`${bossHealthPercent}%`}height="100%"borderRadius="full"bg={bossHealthPercent<25?theme.colors.error.DEFAULT:tierColor}style={{shadowColor:bossHealthPercent<25?theme.colors.error.DEFAULT:tierColor,shadowOffset:{width:0,height:0},shadowOpacity:0.5,shadowRadius:4}}/>
+              <Box width={`${bossHealthPercent}%`}height="100%"borderRadius="full"bg={bossHealthPercent < 25 ? theme.colors.error.DEFAULT : tierColor}style={{shadowColor:bossHealthPercent < 25 ? theme.colors.error.DEFAULT : tierColor,shadowOffset:{width:0,height:0},shadowOpacity:0.5,shadowRadius:4}}/>
             </Box>
           </Box>
 
@@ -79,8 +79,8 @@ import React from'react';import{Pressable}from'react-native';import Animated,{Fa
           </Box>
 
           {}
-          <Button variant={isCritical?'primary':'secondary'}size="lg"fullWidth onPress={onJoinWar}accessibilityLabel="Action button"accessibilityRole="button"accessibilityHint="Activates this control">
-            {isCritical?'⚔️ Join Final Push!':'⚔️ Join War'}
+          <Button variant={isCritical ? 'primary' : 'secondary'}size="lg"fullWidth onPress={onJoinWar}accessibilityLabel="Action button"accessibilityRole="button"accessibilityHint="Activates this control">
+            {isCritical ? '⚔️ Join Final Push!' : '⚔️ Join War'}
           </Button>
         </Box>
       </Pressable>

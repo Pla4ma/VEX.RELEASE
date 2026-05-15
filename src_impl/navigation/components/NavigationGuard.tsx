@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, type TextStyle, type ViewStyle } from 'react-native';
+
 import { useFeatureFlags } from '../../hooks/useFeatureFlags';
 
 interface NavigationGuardProps {
@@ -20,30 +20,11 @@ export const NavigationGuard: React.FC<NavigationGuardProps> = ({
   fallback,
 }) => {
   const { isEnabled } = useFeatureFlags();
-
   const isFeatureEnabled = isEnabled(featureFlag);
 
   if (!isFeatureEnabled) {
-    return fallback ?? (
-      <View style={styles.container}>
-        <Text style={styles.text}>Feature not available</Text>
-      </View>
-    );
+    return fallback ?? null;
   }
 
   return <>{children}</>;
-};
-
-const styles: { container: ViewStyle; text: TextStyle } = {
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
-  },
-  text: {
-    fontSize: 16,
-    textAlign: 'center',
-    opacity: 0.6,
-  },
 };

@@ -10,11 +10,11 @@ export class AccountDeletionRepositoryError extends Error {
 export async function deleteCurrentUser(): Promise<void> {
   const supabase = getSupabaseClient();
   const { error } = await supabase.rpc('delete_current_user');
-  if (error) throw new AccountDeletionRepositoryError('deleteCurrentUser', error);
+  if (error) {throw new AccountDeletionRepositoryError('deleteCurrentUser', error);}
 }
 
 export async function signOutCurrentSession(): Promise<void> {
   const supabase = getSupabaseClient();
   const { error } = await supabase.auth.signOut();
-  if (error) throw new AccountDeletionRepositoryError('signOutCurrentSession', error);
+  if (error) {throw new AccountDeletionRepositoryError('signOutCurrentSession', error);}
 }

@@ -5,56 +5,24 @@
  */
 
 import { createDebugger } from '../utils/debug';
-import { DEFAULT_MOTION_PREFERENCES, type MotionPreferences, type AnimationConfig } from './motion-preferences';
-import { adjustAnimationForAccessibility, createAnimationType } from './animation-utils';
+import {
+  DEFAULT_MOTION_PREFERENCES,
+  type MotionPreferences,
+  type AnimationConfig,
+} from './motion-preferences';
+import {
+  adjustAnimationForAccessibility,
+  createAnimationType,
+} from './animation-utils';
+import {
+  createAnimatedValue,
+  createTiming,
+  easingOut,
+  type AnimatedValue,
+  type CompositeAnimation,
+} from './motion-animation-stubs';
 
 const debug = createDebugger('motion-accessibility');
-
-interface AnimatedValue {
-  setValue(value: number): void;
-  setOffset(value: number): void;
-  flattenOffset(): void;
-  extractOffset(): void;
-  addListener(cb: (v: { value: number }) => void): string;
-  removeListener(id: string): void;
-  removeAllListeners(): void;
-  stopAnimation(cb?: (v: number) => void): void;
-  resetAnimation(cb?: (v: number) => void): void;
-  animate(config: Record<string, unknown>, callback?: (result: { finished: boolean }) => void): void;
-  hasListeners(): boolean;
-  interpolate(config: { inputRange: number[]; outputRange: (number | string)[] }): never;
-}
-interface CompositeAnimation {
-  start(callback?: (result: { finished: boolean }) => void): void;
-  stop(): void;
-  reset(): void;
-}
-
-function createAnimatedValue(initialValue: number = 0): AnimatedValue {
-  let value = initialValue;
-  let hasListenersFlag = false;
-  const listeners: Array<{ id: string; cb: (v: { value: number }) => void }> = [];
-  return {
-    setValue(v: number): void { value = v; },
-    setOffset(_v: number): void { /* noop */ },
-    flattenOffset(): void { /* noop */ },
-    extractOffset(): void { /* noop */ },
-    addListener(cb: (v: { value: number }) => void): string { const id = `l_${listeners.length}`; listeners.push({ id, cb }); hasListenersFlag = listeners.length > 0; return id; },
-    removeListener(id: string): void { const idx = listeners.findIndex(l => l.id === id); if (idx >= 0) { listeners.splice(idx, 1); hasListenersFlag = listeners.length > 0; } },
-    removeAllListeners(): void { listeners.length = 0; hasListenersFlag = false; },
-    stopAnimation(cb?: (v: number) => void): void { cb?.(value); },
-    resetAnimation(cb?: (v: number) => void): void { cb?.(value); },
-    animate(_config: Record<string, unknown>, callback?: (result: { finished: boolean }) => void): void { callback?.({ finished: true }); },
-    hasListeners(): boolean { return hasListenersFlag; },
-    interpolate(): never { throw new Error('Stub'); },
-  };
-}
-function createTiming(value: AnimatedValue, config: Record<string, unknown>): CompositeAnimation {
-  void value; void config;
-  return { start(cb?: (result: { finished: boolean }) => void): void { cb?.({ finished: true }); }, stop(): void { /* noop */ }, reset(): void { /* noop */ } };
-}
-function createEasingOut(easing: unknown): unknown { void easing; return { easing: 'cubic' }; }
-const EasingOut = createEasingOut;
 
 export class MotionAccessibilityManager {
   private static instance: MotionAccessibilityManager;
@@ -90,7 +58,9 @@ export class MotionAccessibilityManager {
   }
 
   setAnimationDurationMultiplier(multiplier: number): void {
-    this.updatePreferences({ animationDurationMultiplier: Math.max(0.1, multiplier) });
+    this.updatePreferences({
+      animationDurationMultiplier: Math.max(0.1, multiplier),
+    });
   }
 
   enableParallax(enabled: boolean): void {
@@ -103,30 +73,50 @@ export class MotionAccessibilityManager {
 
   createAnimatedValue(initialValue: number = 0, key?: string): AnimatedValue {
     const animatedValue = createAnimatedValue(initialValue);
-    if (key) { this.animationRegistry.set(key, animatedValue); }
+    if (key) {
+      this.animationRegistry.set(key, animatedValue);
+    }
     return animatedValue;
   }
 
   createAnimation(config: AnimationConfig): CompositeAnimation {
-    const adjustedConfig = adjustAnimationForAccessibility(config, this.preferences);
+    const adjustedConfig = adjustAnimationForAccessibility(
+      config,
+      this.preferences,
+    );
     const animatedValue = this.getOrCreateAnimatedValue(config.type);
-    return createAnimationType(adjustedConfig.type, animatedValue, adjustedConfig);
+    return createAnimationType(
+      adjustedConfig.type,
+      animatedValue,
+      adjustedConfig,
+    );
   }
 
-  createTransition(fromValue: AnimatedValue, toValue: AnimatedValue, config: AnimationConfig): CompositeAnimation {
-    const adjustedConfig = adjustAnimationForAccessibility(config, this.preferences);
+  createTransition(
+    fromValue: AnimatedValue,
+    toValue: AnimatedValue,
+    config: AnimationConfig,
+  ): CompositeAnimation {
+    const adjustedConfig = adjustAnimationForAccessibility(
+      config,
+      this.preferences,
+    );
 
     return createTiming(fromValue, {
       toValue: toValue as unknown as number,
       duration: adjustedConfig.duration || 300,
       delay: adjustedConfig.delay || 0,
-      easing: EasingOut,
+      easing: easingOut(),
       useNativeDriver: adjustedConfig.useNativeDriver !== false,
     });
   }
 
-  triggerHapticFeedback(type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error'): void {
-    if (!this.preferences.hapticFeedbackEnabled) { return; }
+  triggerHapticFeedback(
+    type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error',
+  ): void {
+    if (!this.preferences.hapticFeedbackEnabled) {
+      return;
+    }
     debug.debug(`Haptic feedback triggered: ${type}`);
   }
 
@@ -140,17 +130,31 @@ export class MotionAccessibilityManager {
     }
   }
 
-  createSafeAnimation(animationFn: () => CompositeAnimation, fallback?: () => void): CompositeAnimation {
+  createSafeAnimation(
+    animationFn: () => CompositeAnimation,
+    fallback?: () => void,
+  ): CompositeAnimation {
     try {
       return animationFn();
     } catch (error) {
       debug.error('Animation creation failed, using fallback:', error);
-      if (fallback) { fallback(); }
-      return createTiming(createAnimatedValue(0), { toValue: 0, duration: 0, useNativeDriver: true });
+      if (fallback) {
+        fallback();
+      }
+      return createTiming(createAnimatedValue(0), {
+        toValue: 0,
+        duration: 0,
+        useNativeDriver: true,
+      });
     }
   }
 
-  getPerformanceStats(): { totalAnimations: number; activeAnimations: number; averageDuration: number; reducedMotionUsage: number } {
+  getPerformanceStats(): {
+    totalAnimations: number;
+    activeAnimations: number;
+    averageDuration: number;
+    reducedMotionUsage: number;
+  } {
     return {
       totalAnimations: this.animationRegistry.size,
       activeAnimations: 0,
@@ -196,4 +200,5 @@ export class MotionAccessibilityManager {
   }
 }
 
-export const motionAccessibilityManager = MotionAccessibilityManager.getInstance();
+export const motionAccessibilityManager =
+  MotionAccessibilityManager.getInstance();

@@ -1,1 +1,0 @@
-1266 C:\Users\jonat\CascadeProjects\vex-app-old\src_impl\types\supabase.ts

@@ -14,7 +14,7 @@ declare global {
 global.__TEST__ = true;
 
 // Suppress specific console warnings during tests
-const testConsole = globalThis['console'];
+const testConsole = globalThis.console;
 const originalConsoleError = testConsole.error;
 const originalConsoleWarn = testConsole.warn;
 

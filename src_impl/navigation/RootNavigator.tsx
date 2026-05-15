@@ -4,20 +4,32 @@
  * Root navigation container for auth, onboarding, tabs, and feature stacks.
  */
 
-import React, { useEffect, useState } from 'react';
-import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from "@react-navigation/native";
 
-import { useAuthStore } from '../store';
-import { useTheme } from '../theme';
-import { useOnboardingStore } from '../onboarding';
+import { useAuthStore } from "../store";
+import { useTheme } from "../theme";
+import { useOnboardingStore } from "../onboarding";
 
-import { RootLoadingShell } from './components/RootLoadingShell';
-import { RootCrashBoundary } from './components/RootCrashBoundary';
-import { useNotificationNavigation } from './hooks/useNotificationNavigation';
-import { useStreakFuneralNavigation } from './hooks/useStreakFuneralNavigation';
-import { RootStackScreens } from './RootStackScreens';
+import { RootLoadingShell } from "./components/RootLoadingShell";
+import { RootCrashBoundary } from "./components/RootCrashBoundary";
+import { useNotificationNavigation } from "./hooks/useNotificationNavigation";
+import { useStreakFuneralNavigation } from "./hooks/useStreakFuneralNavigation";
+import { RootStackScreens } from "./RootStackScreens";
 
-import type { ExtendedRootStackParams } from './types';
+import type { ExtendedRootStackParams } from "./types";
+
+function readOnboardingCompletedAt(user: unknown): string | null {
+  if (!user || typeof user !== "object" || !("onboardingCompletedAt" in user)) {
+    return null;
+  }
+
+  const value = user.onboardingCompletedAt;
+  return typeof value === "string" ? value : null;
+}
 
 export const RootNavigator: React.FC = () => {
   const { isAuthenticated, isLoading, checkAuth, user } = useAuthStore();
@@ -25,17 +37,33 @@ export const RootNavigator: React.FC = () => {
   const [isNavigationReady, setIsNavigationReady] = useState(false);
   const { theme, isDark } = useTheme();
   const navigationRef = useNavigationContainerRef<ExtendedRootStackParams>();
-  const { completedAt, isOnboarded } = useOnboardingStore((state) => ({
+  const {
+    canCompleteForUser,
+    completedAt,
+    completedForUserId,
+    isOnboarded,
+    resetOnboarding,
+    setCompletionFromBackend,
+  } = useOnboardingStore((state) => ({
+    canCompleteForUser: state.canCompleteForUser,
     completedAt: state.completedAt,
+    completedForUserId: state.completedForUserId,
     isOnboarded: state.isOnboarded,
+    resetOnboarding: state.resetOnboarding,
+    setCompletionFromBackend: state.setCompletionFromBackend,
   }));
-  const userCreatedAt = user?.createdAt ? Date.parse(user.createdAt) : null;
-  const hasCompletedOnboarding = Boolean(
+
+  const hasCompletedOnboarding = useMemo(
+    () => canCompleteForUser(user?.id),
+    [canCompleteForUser, user?.id],
+  );
+
+  const hasStaleOnboardingState = Boolean(
     user?.id &&
     isOnboarded &&
-    completedAt &&
-    (!userCreatedAt || completedAt >= userCreatedAt)
+    (!completedAt || !completedForUserId || completedForUserId !== user.id),
   );
+  const backendOnboardingCompletedAt = readOnboardingCompletedAt(user);
 
   useEffect(() => {
     const init = async (): Promise<void> => {
@@ -43,8 +71,30 @@ export const RootNavigator: React.FC = () => {
       setIsReady(true);
     };
 
-    void init();
+    init().catch(() => undefined);
   }, [checkAuth]);
+
+  useEffect(() => {
+    if (!hasStaleOnboardingState) {
+      return;
+    }
+
+    if (user?.id && backendOnboardingCompletedAt) {
+      const backendCompletedAt = Date.parse(backendOnboardingCompletedAt);
+      if (!Number.isNaN(backendCompletedAt) && backendCompletedAt > 0) {
+        setCompletionFromBackend(user.id, backendCompletedAt);
+        return;
+      }
+    }
+
+    resetOnboarding();
+  }, [
+    hasStaleOnboardingState,
+    resetOnboarding,
+    setCompletionFromBackend,
+    backendOnboardingCompletedAt,
+    user?.id,
+  ]);
 
   useStreakFuneralNavigation({
     hasCompletedOnboarding,
@@ -90,7 +140,7 @@ export const RootNavigator: React.FC = () => {
           textPrimary: theme.colors.semantic.textPrimary,
           textSecondary: theme.colors.semantic.textSecondary,
         }}
-        resetKey={`${user?.id ?? 'signed-out'}:${hasCompletedOnboarding ? 'main' : 'setup'}`}
+        resetKey={`${user?.id ?? "signed-out"}:${hasCompletedOnboarding ? "main" : "setup"}`}
       >
         <RootStackScreens
           hasCompletedOnboarding={hasCompletedOnboarding}

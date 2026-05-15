@@ -49,7 +49,7 @@ export function trackMonetizationEvent(
     case 'purchase':
       metrics.purchaseCount++;
       metrics.lastPurchaseDate = new Date().toISOString();
-      if (!metrics.firstPurchaseDate) metrics.firstPurchaseDate = metrics.lastPurchaseDate;
+      if (!metrics.firstPurchaseDate) {metrics.firstPurchaseDate = metrics.lastPurchaseDate;}
       if (event.value) {
         if (event.productType === 'subscription') {
           metrics.subscriptionRevenue += event.value;

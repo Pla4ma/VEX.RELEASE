@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 
+import { buildCorsHeaders } from '../_shared/cors.ts';
 import {
   AIRequestSchema,
   type AIRequest,
@@ -17,12 +18,6 @@ import {
   USER_PROMPT_TEMPLATES,
 } from '../../../src/shared/ai/ai-constants.ts';
 
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-};
-
 const ROUTE_BY_SLUG: Record<string, AIRequest['requestType']> = {
   'coach-message': 'GENERATE_COACH_MESSAGE',
   'session-summary': 'GENERATE_SESSION_SUMMARY',
@@ -33,9 +28,87 @@ const ROUTE_BY_SLUG: Record<string, AIRequest['requestType']> = {
 
 const httpRequest = globalThis.fetch.bind(globalThis);
 
+async function verifyAuthorizedUser(request: Request): Promise<
+  | {
+      ok: true;
+      userId: string;
+    }
+  | {
+      ok: false;
+      response: Response;
+    }
+> {
+  const authorization = request.headers.get('authorization');
+  const apiKey = request.headers.get('apikey');
+
+  if (!authorization || !apiKey) {
+    return {
+      ok: false,
+      response: jsonResponse({ error: 'Unauthorized' }, 401, request),
+    };
+  }
+
+  const token = authorization.replace('Bearer ', '').trim();
+  if (!token) {
+    return {
+      ok: false,
+      response: jsonResponse(
+        { error: 'Invalid authorization token' },
+        401,
+        request,
+      ),
+    };
+  }
+
+  const supabaseUrl = Deno.env.get('SUPABASE_URL');
+  const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    return {
+      ok: false,
+      response: jsonResponse(
+        { error: 'Server auth is not configured' },
+        500,
+        request,
+      ),
+    };
+  }
+
+  const authResponse = await httpRequest(`${supabaseUrl}/auth/v1/user`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      apikey: supabaseAnonKey,
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!authResponse.ok) {
+    return {
+      ok: false,
+      response: jsonResponse({ error: 'Unauthorized' }, 401, request),
+    };
+  }
+
+  const userPayload = (await authResponse.json()) as { id?: string };
+  if (!userPayload.id) {
+    return {
+      ok: false,
+      response: jsonResponse({ error: 'Unauthorized' }, 401, request),
+    };
+  }
+
+  return { ok: true, userId: userPayload.id };
+}
+
 serve(async (request) => {
   if (request.method === 'OPTIONS') {
-    return new Response('ok', { headers: corsHeaders });
+    return new Response('ok', { headers: buildCorsHeaders(request) });
+  }
+
+  const auth = await verifyAuthorizedUser(request);
+  if (!auth.ok) {
+    return auth.response;
   }
 
   if (request.method !== 'POST') {
@@ -43,7 +116,8 @@ serve(async (request) => {
       {
         error: 'Method not allowed',
       },
-      405
+      405,
+      request,
     );
   }
 
@@ -55,7 +129,8 @@ serve(async (request) => {
       {
         error: 'Unknown AI endpoint',
       },
-      404
+      404,
+      request,
     );
   }
 
@@ -68,7 +143,8 @@ serve(async (request) => {
         {
           error: 'Invalid AI request payload',
         },
-        400
+        400,
+        request,
       );
     }
 
@@ -77,29 +153,44 @@ serve(async (request) => {
         {
           error: `Route expects ${expectedRequestType}, received ${parsedRequest.data.requestType}`,
         },
-        400
+        400,
+        request,
+      );
+    }
+
+    if (parsedRequest.data.userId !== auth.userId) {
+      return jsonResponse(
+        {
+          error: 'Forbidden: request user does not match auth token',
+        },
+        403,
+        request,
       );
     }
 
     const response = await generateAIResponse(parsedRequest.data);
-    return jsonResponse(response, 200);
+    return jsonResponse(response, 200, request);
   } catch (error) {
     if (error instanceof SyntaxError) {
       return jsonResponse(
         {
           error: 'Invalid JSON payload',
         },
-        400
+        400,
+        request,
       );
     }
 
-    const fallbackResponse = buildFallbackResponse({
-      requestType: expectedRequestType,
-      userId: crypto.randomUUID(),
-      context: {},
-    } as AIRequest, error instanceof Error ? error.message : 'Unknown AI error');
+    const fallbackResponse = buildFallbackResponse(
+      {
+        requestType: expectedRequestType,
+        userId: crypto.randomUUID(),
+        context: {},
+      } as AIRequest,
+      error instanceof Error ? error.message : 'Unknown AI error',
+    );
 
-    return jsonResponse(fallbackResponse, 200);
+    return jsonResponse(fallbackResponse, 200, request);
   }
 });
 
@@ -142,7 +233,7 @@ async function generateAIResponse(request: AIRequest): Promise<AIResponse> {
     return buildFallbackResponse(
       request,
       error instanceof Error ? error.message : 'Gemini API failure',
-      Date.now() - startedAt
+      Date.now() - startedAt,
     );
   }
 }
@@ -186,7 +277,7 @@ async function callGemini(params: {
             safetySettings: SAFETY_SETTINGS,
           }),
           signal: controller.signal,
-        }
+        },
       );
 
       clearTimeout(timeout);
@@ -196,7 +287,9 @@ async function callGemini(params: {
       }
 
       const payload = (await response.json()) as GeminiAPIResponse;
-      const content = payload.candidates?.[0]?.content?.parts?.map((part) => part.text).join('\n');
+      const content = payload.candidates?.[0]?.content?.parts
+        ?.map((part) => part.text)
+        .join('\n');
 
       if (!content) {
         throw new Error('Gemini returned no content');
@@ -212,8 +305,9 @@ async function callGemini(params: {
       }
 
       const delay = Math.min(
-        RETRY_CONFIG.INITIAL_DELAY_MS * RETRY_CONFIG.BACKOFF_MULTIPLIER ** (attempt - 1),
-        RETRY_CONFIG.MAX_DELAY_MS
+        RETRY_CONFIG.INITIAL_DELAY_MS *
+          RETRY_CONFIG.BACKOFF_MULTIPLIER ** (attempt - 1),
+        RETRY_CONFIG.MAX_DELAY_MS,
       );
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
@@ -228,7 +322,8 @@ function sanitizeContent(content: string): string {
 
 function resolveModel(requestType: AIRequest['requestType']): string {
   const envOverride =
-    requestType === 'GENERATE_SESSION_SUMMARY' || requestType === 'GENERATE_WEEKLY_REFLECTION'
+    requestType === 'GENERATE_SESSION_SUMMARY' ||
+    requestType === 'GENERATE_WEEKLY_REFLECTION'
       ? Deno.env.get('GEMINI_MODEL_PRO')
       : Deno.env.get('GEMINI_MODEL_FLASH');
 
@@ -252,7 +347,9 @@ function resolveTimeout(requestType: AIRequest['requestType']): number {
   }
 }
 
-function resolveGenerationConfig(requestType: AIRequest['requestType']): Record<string, number> {
+function resolveGenerationConfig(
+  requestType: AIRequest['requestType'],
+): Record<string, number> {
   switch (requestType) {
     case 'GENERATE_COACH_MESSAGE':
       return GENERATION_CONFIG.COACH_MESSAGE;
@@ -308,7 +405,9 @@ function renderPromptTemplate(request: AIRequest): string {
   let rendered = template;
 
   Object.entries(values).forEach(([key, value]) => {
-    const renderedValue = Array.isArray(value) ? value.join(', ') : String(value ?? '');
+    const renderedValue = Array.isArray(value)
+      ? value.join(', ')
+      : String(value ?? '');
     rendered = rendered.replaceAll(`{{${key}}}`, renderedValue);
     rendered = rendered.replaceAll(`{{${camelCaseAlias(key)}}}`, renderedValue);
   });
@@ -320,13 +419,16 @@ function renderPromptTemplate(request: AIRequest): string {
 }
 
 function camelCaseAlias(key: string): string {
-  if (key === 'averageSessionQuality') return 'averageQuality';
-  if (key === 'totalFocusHours') return 'totalFocusHours';
-  if (key === 'totalFocusMinutes') return 'totalFocusHours';
+  if (key === 'averageSessionQuality') {return 'averageQuality';}
+  if (key === 'totalFocusHours') {return 'totalFocusHours';}
+  if (key === 'totalFocusMinutes') {return 'totalFocusHours';}
   return key;
 }
 
-function buildStructuredData(request: AIRequest, content: string): Record<string, unknown> | undefined {
+function buildStructuredData(
+  request: AIRequest,
+  content: string,
+): Record<string, unknown> | undefined {
   switch (request.requestType) {
     case 'GENERATE_COACH_MESSAGE':
       return {
@@ -343,14 +445,20 @@ function buildStructuredData(request: AIRequest, content: string): Record<string
         message: content,
         progressPercent: Math.min(
           100,
-          Math.round((((request.context as Record<string, number>).sessionsCompleted ?? 0) / 3) * 100)
+          Math.round(
+            (((request.context as Record<string, number>).sessionsCompleted ??
+              0) /
+              3) *
+              100,
+          ),
         ),
         encouragement: 'Fresh starts count.',
       };
     case 'GENERATE_STREAK_RISK_NUDGE':
       return {
         urgencyMessage: content,
-        streakCount: (request.context as Record<string, number>).currentStreak ?? 0,
+        streakCount:
+          (request.context as Record<string, number>).currentStreak ?? 0,
         suggestedDuration: 15,
         emoji: '🔥',
       };
@@ -359,7 +467,8 @@ function buildStructuredData(request: AIRequest, content: string): Record<string
         headline: 'Week at a glance',
         wins: [content],
         reflection: 'Momentum compounds when you keep showing up.',
-        nextWeekGoal: 'Protect the streak and finish one more session than last week.',
+        nextWeekGoal:
+          'Protect the streak and finish one more session than last week.',
         encouragement: 'You are building a repeatable focus habit.',
       };
     default:
@@ -370,12 +479,15 @@ function buildStructuredData(request: AIRequest, content: string): Record<string
 function buildFallbackResponse(
   request: AIRequest,
   errorMessage: string,
-  processingTimeMs: number = 0
+  processingTimeMs: number = 0,
 ): AIResponse {
   const fallbackContent = (() => {
     switch (request.requestType) {
       case 'GENERATE_COACH_MESSAGE': {
-        const category = String((request.context as Record<string, string>).category ?? 'MOTIVATION_BOOST');
+        const category = String(
+          (request.context as Record<string, string>).category ??
+            'MOTIVATION_BOOST',
+        );
         const options =
           FALLBACK_CONTENT.COACH_MESSAGE[
             category as keyof typeof FALLBACK_CONTENT.COACH_MESSAGE
@@ -385,13 +497,17 @@ function buildFallbackResponse(
       case 'GENERATE_SESSION_SUMMARY':
         return FALLBACK_CONTENT.SESSION_SUMMARY.daily[0];
       case 'GENERATE_COMEBACK_PROMPT': {
-        const comebackDay = Number((request.context as Record<string, number>).comebackDay ?? 1);
-        if (comebackDay >= 3) return FALLBACK_CONTENT.COMEBACK_PROMPT.day3;
-        if (comebackDay === 2) return FALLBACK_CONTENT.COMEBACK_PROMPT.day2;
+        const comebackDay = Number(
+          (request.context as Record<string, number>).comebackDay ?? 1,
+        );
+        if (comebackDay >= 3) {return FALLBACK_CONTENT.COMEBACK_PROMPT.day3;}
+        if (comebackDay === 2) {return FALLBACK_CONTENT.COMEBACK_PROMPT.day2;}
         return FALLBACK_CONTENT.COMEBACK_PROMPT.day1;
       }
       case 'GENERATE_STREAK_RISK_NUDGE': {
-        const riskLevel = String((request.context as Record<string, string>).riskLevel ?? 'medium');
+        const riskLevel = String(
+          (request.context as Record<string, string>).riskLevel ?? 'medium',
+        );
         return (
           FALLBACK_CONTENT.STREAK_RISK_NUDGE[
             riskLevel as keyof typeof FALLBACK_CONTENT.STREAK_RISK_NUDGE
@@ -423,11 +539,15 @@ function buildFallbackResponse(
   } as AIResponse;
 }
 
-function jsonResponse(payload: unknown, status: number): Response {
+function jsonResponse(
+  payload: unknown,
+  status: number,
+  request: Request,
+): Response {
   return new Response(JSON.stringify(payload), {
     status,
     headers: {
-      ...corsHeaders,
+      ...buildCorsHeaders(request),
       'Content-Type': 'application/json',
     },
   });

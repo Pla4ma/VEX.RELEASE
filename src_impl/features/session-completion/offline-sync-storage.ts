@@ -63,7 +63,7 @@ class FallbackStorageManager {
 
   removeEntry(sessionId: string): boolean {
     const index = this.storage.entries.findIndex((entry) => entry.payload.sessionId === sessionId);
-    if (index < 0) return false;
+    if (index < 0) {return false;}
     this.storage.entries.splice(index, 1);
     this.saveToStorage();
     return true;

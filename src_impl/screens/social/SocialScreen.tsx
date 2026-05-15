@@ -1,5 +1,5 @@
-import React,{useEffect,useRef}from'react';import{Pressable,ScrollView,View}from'react-native';import BottomSheet from'@gorhom/bottom-sheet';import{useNavigation}from'@react-navigation/native';import type{NativeStackNavigationProp}from'@react-navigation/native-stack';import{useSafeAreaInsets}from'react-native-safe-area-context';import{LockedFeatureScreen}from'../../components/LockedFeatureScreen';import{getPremiumCardStyle}from'../../components/premiumStyles';import{Button}from'../../components/primitives/Button';import{Text}from'../../components/primitives/Text';import{useActiveBoss}from'../../features/boss/hooks';import{useDisclosureAnalytics,useFeatureAccess}from'../../features/liveops-config';import{SquadMissionCard}from'../../features/squads';import{CreateSquadFlow}from'../../features/squads/components/CreateSquadFlow';import{SquadShareSheet}from'../../features/squads/components/SquadShareSheet';import{useUserSquads}from'../../features/squads/hooks';import{useSquadWeeklyStats}from'../../features/squads/hooks/useSquadWeeklyStats';import type{ExtendedRootStackParams}from'../../navigation/types';import{useAuthStore}from'../../store';import{useTheme}from'../../theme';type Nav=NativeStackNavigationProp<ExtendedRootStackParams>;const emptyWeeklyStats={totalSessions:0,totalFocusMinutes:0,activeMemberCount:0};const currentBattleDate=new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric'}).format(new Date());export function SocialScreen():JSX.Element{const{theme}=useTheme();const insets=useSafeAreaInsets();const navigation=useNavigation<Nav>();const analytics=useDisclosureAnalytics();const disclosure=useFeatureAccess();const userId=useAuthStore(state=>state.user?.id);const squadsQuery=useUserSquads(userId??undefined);const activeBossQuery=useActiveBoss(userId??null);const primarySquad=squadsQuery.data?.[0]??null;const weeklyStatsQuery=useSquadWeeklyStats(primarySquad?.id);const shareSheetRef=useRef<BottomSheet>(null);const createSheetRef=useRef<BottomSheet>(null);const weeklyStats=weeklyStatsQuery.data??emptyWeeklyStats;useEffect(()=>{if(!disclosure.features.social_tab.isUnlocked){analytics.trackSocialEmptyStateViewed('social_preview',disclosure.stage);}},[analytics,disclosure.features.social_tab.isUnlocked,disclosure.stage]);if(!disclosure.features.social_tab.isUnlocked){return<LockedFeatureScreen ctaLabel="Finish another session"description="VEX Social unlocks after your personal focus loop has some real momentum."feature="social_tab"icon="⚔️"onPress={()=>navigation.navigate('SessionStack',{screen:'SessionSetup',params:{}})}progressLabel={disclosure.features.social_tab.recommendedUnlockMoment}stage={disclosure.stage}title="Accountability arrives a little later"unlockLabel={disclosure.features.social_tab.unlockReason}whyItMatters="Social works best when it feels like support for your habit, not noise before your habit exists."/>;}return<>
-      <ScrollView style={{flex:1,backgroundColor:theme.colors.background.primary}}contentContainerStyle={{paddingTop:insets.top+theme.spacing[5],paddingBottom:theme.spacing[10],paddingHorizontal:theme.spacing[5],gap:theme.spacing[4]}}showsVerticalScrollIndicator={false}>
+import React,{useEffect,useRef}from'react'; import{Pressable,ScrollView,View}from'react-native'; import BottomSheet from'@gorhom/bottom-sheet'; import{useNavigation}from'@react-navigation/native'; import type{NativeStackNavigationProp}from'@react-navigation/native-stack'; import{useSafeAreaInsets}from'react-native-safe-area-context'; import{LockedFeatureScreen}from'../../components/LockedFeatureScreen'; import{getPremiumCardStyle}from'../../components/premiumStyles'; import{Button}from'../../components/primitives/Button'; import{Text}from'../../components/primitives/Text'; import{useActiveBoss}from'../../features/boss/hooks'; import{useDisclosureAnalytics,useFeatureAccess}from'../../features/liveops-config'; import{SquadMissionCard}from'../../features/squads'; import{CreateSquadFlow}from'../../features/squads/components/CreateSquadFlow'; import{SquadShareSheet}from'../../features/squads/components/SquadShareSheet'; import{useUserSquads}from'../../features/squads/hooks'; import{useSquadWeeklyStats}from'../../features/squads/hooks/useSquadWeeklyStats'; import type{ExtendedRootStackParams}from'../../navigation/types'; import{useAuthStore}from'../../store'; import{useTheme}from'../../theme'; type Nav=NativeStackNavigationProp<ExtendedRootStackParams>;const emptyWeeklyStats = {totalSessions:0,totalFocusMinutes:0,activeMemberCount:0}; const currentBattleDate = new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric'}).format(new Date()); export function SocialScreen():JSX.Element{const{theme} = useTheme(); const insets = useSafeAreaInsets(); const navigation = useNavigation<Nav>(); const analytics = useDisclosureAnalytics(); const disclosure = useFeatureAccess(); const userId = useAuthStore(state=>state.user?.id); const squadsQuery = useUserSquads(userId ?? undefined); const activeBossQuery = useActiveBoss(userId ?? null); const primarySquad = squadsQuery.data?.[0] ?? null; const weeklyStatsQuery = useSquadWeeklyStats(primarySquad?.id); const shareSheetRef = useRef<BottomSheet>(null); const createSheetRef = useRef<BottomSheet>(null); const weeklyStats = weeklyStatsQuery.data ?? emptyWeeklyStats; useEffect(()=>{if(!disclosure.features.social_tab.isUnlocked){analytics.trackSocialEmptyStateViewed('social_preview',disclosure.stage);}},[analytics,disclosure.features.social_tab.isUnlocked,disclosure.stage]); if(!disclosure.features.social_tab.isUnlocked){return<LockedFeatureScreen ctaLabel="Finish another session"description="VEX Social unlocks after your personal focus loop has some real momentum."feature="social_tab"icon="⚔️"onPress={()=>navigation.navigate('SessionStack',{screen:'SessionSetup',params:{}})}progressLabel={disclosure.features.social_tab.recommendedUnlockMoment}stage={disclosure.stage}title="Accountability arrives a little later"unlockLabel={disclosure.features.social_tab.unlockReason}whyItMatters="Social works best when it feels like support for your habit, not noise before your habit exists."/>;}return<>
+      <ScrollView style={{flex:1,backgroundColor:theme.colors.background.primary}}contentContainerStyle={{paddingTop:insets.top + theme.spacing[5],paddingBottom:theme.spacing[10],paddingHorizontal:theme.spacing[5],gap:theme.spacing[4]}}showsVerticalScrollIndicator={false}>
         <View style={{gap:theme.spacing[2]}}>
           <Text variant="label"color={theme.colors.primary[500]}>
             Accountability
@@ -12,19 +12,19 @@ import React,{useEffect,useRef}from'react';import{Pressable,ScrollView,View}from
           </Text>
         </View>
 
-        {squadsQuery.isLoading?<View style={{padding:theme.spacing[4],...getPremiumCardStyle('medium')}}>
+        {squadsQuery.isLoading ? <View style={{padding:theme.spacing[4],...getPremiumCardStyle('medium')}}>
             <Text variant="bodySmall"color={theme.colors.text.secondary}>
               Loading your accountability layer...
             </Text>
-          </View>:null}
+          </View> : null}
 
-        {squadsQuery.error instanceof Error?<View style={{padding:theme.spacing[4],...getPremiumCardStyle('medium')}}>
+        {squadsQuery.error instanceof Error ? <View style={{padding:theme.spacing[4],...getPremiumCardStyle('medium')}}>
             <Text variant="bodySmall"color={theme.colors.error.DEFAULT}>
               {squadsQuery.error.message}
             </Text>
-          </View>:null}
+          </View> : null}
 
-        {!primarySquad&&!squadsQuery.isLoading?<>
+        {!primarySquad && !squadsQuery.isLoading ? <>
             <View style={{borderWidth:1,borderColor:theme.colors.border.light,backgroundColor:theme.colors.background.secondary,padding:theme.spacing[4],gap:theme.spacing[3],...getPremiumCardStyle('large')}}>
               <Text variant="label"color={theme.colors.primary[500]}>
                 Start with one squad
@@ -40,9 +40,9 @@ import React,{useEffect,useRef}from'react';import{Pressable,ScrollView,View}from
               </Button>
             </View>
             <SquadMissionCard/>
-          </>:null}
+          </> : null}
 
-        {primarySquad?<>
+        {primarySquad ? <>
             <View style={{borderWidth:1,borderColor:theme.colors.border.light,backgroundColor:theme.colors.background.secondary,padding:theme.spacing[4],gap:theme.spacing[3],...getPremiumCardStyle('large')}}>
               <Text variant="label"color={theme.colors.primary[500]}>
                 Primary Squad
@@ -54,26 +54,26 @@ import React,{useEffect,useRef}from'react';import{Pressable,ScrollView,View}from
                 {`${primarySquad.memberCount}/${primarySquad.maxMembers} members • ${primarySquad.focusMultiplier.toFixed(1)}x focus multiplier`}
               </Text>
 
-              {weeklyStatsQuery.isLoading?<Text variant="bodySmall"color={theme.colors.text.secondary}>
+              {weeklyStatsQuery.isLoading ? <Text variant="bodySmall"color={theme.colors.text.secondary}>
                   Loading this week&apos;s momentum...
-                </Text>:null}
-              {weeklyStatsQuery.error instanceof Error?<Text variant="bodySmall"color={theme.colors.error.DEFAULT}>
+                </Text> : null}
+              {weeklyStatsQuery.error instanceof Error ? <Text variant="bodySmall"color={theme.colors.error.DEFAULT}>
                   {weeklyStatsQuery.error.message}
-                </Text>:null}
-              {!weeklyStatsQuery.isLoading&&!(weeklyStatsQuery.error instanceof Error)?<View style={{gap:theme.spacing[2]}}>
+                </Text> : null}
+              {!weeklyStatsQuery.isLoading && !(weeklyStatsQuery.error instanceof Error) ? <View style={{gap:theme.spacing[2]}}>
                   <Text variant="bodySmall"color={theme.colors.text.primary}>
                     {`${weeklyStats.totalSessions} sessions logged this week`}
                   </Text>
                   <Text variant="bodySmall"color={theme.colors.text.primary}>
-                    {`${Math.round(weeklyStats.totalFocusMinutes/60)} total focus hours`}
+                    {`${Math.round(weeklyStats.totalFocusMinutes / 60)} total focus hours`}
                   </Text>
                   <Text variant="bodySmall"color={theme.colors.text.primary}>
                     {`${weeklyStats.activeMemberCount} active members`}
                   </Text>
-                  {weeklyStats.activeMemberCount===0?<Text variant="bodySmall"color={theme.colors.text.secondary}>
+                  {weeklyStats.activeMemberCount === 0 ? <Text variant="bodySmall"color={theme.colors.text.secondary}>
                       No one has logged a session yet this week. Be the one who starts the push.
-                    </Text>:null}
-                </View>:null}
+                    </Text> : null}
+                </View> : null}
 
               <View style={{flexDirection:'row',gap:theme.spacing[3],flexWrap:'wrap'}}>
                 <Button variant="outline"onPress={()=>navigation.navigate('Guild',{guildId:primarySquad.id})}accessibilityLabel="Open squad button"accessibilityRole="button"accessibilityHint="Activates this control">
@@ -92,7 +92,7 @@ import React,{useEffect,useRef}from'react';import{Pressable,ScrollView,View}from
               <SquadMissionCard squadId={primarySquad.id}/>
             </View>
 
-            {activeBossQuery.data?<Pressable onPress={()=>navigation.navigate('Boss')}style={{borderWidth:1,borderColor:theme.colors.primary[500],backgroundColor:theme.colors.background.secondary,padding:theme.spacing[4],gap:theme.spacing[2],...getPremiumCardStyle('medium')}}accessibilityLabel="Boss is live Even one focused session moves the encounter forward. button"accessibilityRole="button"accessibilityHint="Activates this control">
+            {activeBossQuery.data ? <Pressable onPress={()=>navigation.navigate('Boss')}style={{borderWidth:1,borderColor:theme.colors.primary[500],backgroundColor:theme.colors.background.secondary,padding:theme.spacing[4],gap:theme.spacing[2],...getPremiumCardStyle('medium')}}accessibilityLabel="Boss is live Even one focused session moves the encounter forward. button"accessibilityRole="button"accessibilityHint="Activates this control">
                 <Text variant="label"color={theme.colors.primary[500]}>
                   Boss is live
                 </Text>
@@ -102,7 +102,7 @@ import React,{useEffect,useRef}from'react';import{Pressable,ScrollView,View}from
                 <Text variant="bodySmall"color={theme.colors.text.secondary}>
                   Even one focused session moves the encounter forward.
                 </Text>
-              </Pressable>:null}
+              </Pressable> : null}
 
             <View style={{borderWidth:1,borderColor:theme.colors.border.light,backgroundColor:theme.colors.background.secondary,padding:theme.spacing[4],gap:theme.spacing[3],...getPremiumCardStyle('medium')}}>
               <Text variant="label"color={theme.colors.text.secondary}>
@@ -115,9 +115,9 @@ import React,{useEffect,useRef}from'react';import{Pressable,ScrollView,View}from
                 Feed feature removed for simplified launch. Focus on your squad missions.
               </Text>
             </View>
-          </>:null}
+          </> : null}
       </ScrollView>
 
       <SquadShareSheet bottomSheetRef={shareSheetRef}squad={primarySquad}weeklyStats={weeklyStats}/>
-      {userId?<CreateSquadFlow bottomSheetRef={createSheetRef}userId={userId}/>:null}
+      {userId ? <CreateSquadFlow bottomSheetRef={createSheetRef}userId={userId}/> : null}
     </>;}export default SocialScreen;

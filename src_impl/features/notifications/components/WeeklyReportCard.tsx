@@ -1,4 +1,4 @@
-import React from'react';import{Pressable}from'react-native';import Animated,{FadeInUp}from'react-native-reanimated';import{Box}from'../../../components/primitives/Box';import{Text}from'../../../components/primitives/Text';import{Button}from'../../../components/primitives/Button';import{useTheme}from'../../../theme';interface WeeklyReportCardProps{totalMinutes:number;sessionsCompleted:number;xpEarned:number;streakDays:number;bossDamageDealt:number;bestSession:{duration:number;grade:string;}|null;comparison:{changeMinutes:number;changePercent:number;percentile:number;};onViewAnalytics:()=>void;onShare?:()=>void;}function formatNumber(num:number):string{if(num>=1000){return`${(num/1000).toFixed(1)}K`;}return num.toString();}export function WeeklyReportCard({totalMinutes,sessionsCompleted,xpEarned,streakDays,bossDamageDealt,bestSession,comparison,onViewAnalytics,onShare}:WeeklyReportCardProps):JSX.Element{const{theme}=useTheme();const isImprovement=comparison.changePercent>=0;const trendEmoji=isImprovement?'📈':'📉';return<Animated.View entering={FadeInUp.duration(400)}>
+import React from'react'; import{Pressable}from'react-native'; import Animated,{FadeInUp}from'react-native-reanimated'; import{Box}from'../../../components/primitives/Box'; import{Text}from'../../../components/primitives/Text'; import{Button}from'../../../components/primitives/Button'; import{useTheme}from'../../../theme'; interface WeeklyReportCardProps{totalMinutes:number;sessionsCompleted:number;xpEarned:number;streakDays:number;bossDamageDealt:number;bestSession:{duration:number;grade:string;}|null;comparison:{changeMinutes:number;changePercent:number;percentile:number;};onViewAnalytics:()=>void;onShare?:()=>void;}function formatNumber(num:number):string{if(num >= 1000){return`${(num / 1000).toFixed(1)}K`;}return num.toString();}export function WeeklyReportCard({totalMinutes,sessionsCompleted,xpEarned,streakDays,bossDamageDealt,bestSession,comparison,onViewAnalytics,onShare}:WeeklyReportCardProps):JSX.Element{const{theme} = useTheme(); const isImprovement = comparison.changePercent >= 0; const trendEmoji = isImprovement ? '📈' : '📉'; return<Animated.View entering={FadeInUp.duration(400)}>
       <Box p="xl"borderRadius="xl"bg="background.secondary"gap="lg"style={{shadowColor:'#000',shadowOffset:{width:0,height:2},shadowOpacity:0.05,shadowRadius:8,elevation:2}}>
         {}
         <Box alignItems="center"gap="sm">
@@ -22,15 +22,15 @@ import React from'react';import{Pressable}from'react-native';import Animated,{Fa
         </Box>
 
         {}
-        <Box flexDirection="row"alignItems="center"justifyContent="center"gap="md"p="md"borderRadius="lg"style={{backgroundColor:isImprovement?`${theme.colors.success.DEFAULT}15`:`${theme.colors.warning.DEFAULT}15`}}>
+        <Box flexDirection="row"alignItems="center"justifyContent="center"gap="md"p="md"borderRadius="lg"style={{backgroundColor:isImprovement ? `${theme.colors.success.DEFAULT}15` : `${theme.colors.warning.DEFAULT}15`}}>
           <Text fontSize={24}>{trendEmoji}</Text>
           <Box>
-            <Text variant="body"color={isImprovement?'success.DEFAULT':'warning.DEFAULT'}fontWeight="700">
-              {isImprovement?'+':''}
+            <Text variant="body"color={isImprovement ? 'success.DEFAULT' : 'warning.DEFAULT'}fontWeight="700">
+              {isImprovement ? '+' : ''}
               {comparison.changePercent}% vs last week
             </Text>
             <Text variant="caption"color="text.secondary">
-              {Math.abs(comparison.changeMinutes)} minutes {isImprovement?'more':'less'}
+              {Math.abs(comparison.changeMinutes)} minutes {isImprovement ? 'more' : 'less'}
             </Text>
           </Box>
         </Box>
@@ -82,7 +82,7 @@ import React from'react';import{Pressable}from'react-native';import Animated,{Fa
         </Box>
 
         {}
-        {bestSession&&<Box flexDirection="row"alignItems="center"gap="md"p="md"borderRadius="lg"bg="background.tertiary">
+        {bestSession && <Box flexDirection="row"alignItems="center"gap="md"p="md"borderRadius="lg"bg="background.tertiary">
             <Text fontSize={32}>⭐</Text>
             <Box flex={1}>
               <Text variant="body"color="text.primary"fontWeight="600">
@@ -100,20 +100,20 @@ import React from'react';import{Pressable}from'react-native';import Animated,{Fa
             View Full Analytics
           </Button>
 
-          {onShare&&<Button variant="secondary"size="md"onPress={onShare}fullWidth accessibilityLabel="Share My Week button"accessibilityRole="button"accessibilityHint="Activates this control">
+          {onShare && <Button variant="secondary"size="md"onPress={onShare}fullWidth accessibilityLabel="Share My Week button"accessibilityRole="button"accessibilityHint="Activates this control">
               Share My Week
             </Button>}
         </Box>
       </Box>
-    </Animated.View>;}export function WeeklyReportCompact({totalMinutes,changePercent,onPress}:Pick<WeeklyReportCardProps,'totalMinutes'|'onViewAnalytics'>&{changePercent:number;onPress:()=>void;}):JSX.Element{const isImprovement=changePercent>=0;return<Pressable onPress={onPress}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
-      <Box flexDirection="row"alignItems="center"gap="md"p="md"borderRadius="lg"bg="background.secondary"style={{borderLeftWidth:4,borderLeftColor:isImprovement?'#22C55E':'#F59E0B'}}>
+    </Animated.View>;}export function WeeklyReportCompact({totalMinutes,changePercent,onPress}:Pick<WeeklyReportCardProps,'totalMinutes'|'onViewAnalytics'>&{changePercent:number;onPress:()=>void;}):JSX.Element{const isImprovement = changePercent >= 0; return<Pressable onPress={onPress}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
+      <Box flexDirection="row"alignItems="center"gap="md"p="md"borderRadius="lg"bg="background.secondary"style={{borderLeftWidth:4,borderLeftColor:isImprovement ? '#22C55E' : '#F59E0B'}}>
         <Text fontSize={24}>📊</Text>
         <Box flex={1}>
           <Text variant="body"color="text.primary"fontWeight="600">
             {totalMinutes}m this week
           </Text>
-          <Text variant="caption"color={isImprovement?'success.DEFAULT':'warning.DEFAULT'}>
-            {isImprovement?'+':''}
+          <Text variant="caption"color={isImprovement ? 'success.DEFAULT' : 'warning.DEFAULT'}>
+            {isImprovement ? '+' : ''}
             {changePercent}% vs last week
           </Text>
         </Box>

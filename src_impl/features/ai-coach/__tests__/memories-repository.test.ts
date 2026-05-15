@@ -38,7 +38,7 @@ function setupBuilder(singleResponse: unknown, orderResponse?: unknown): {
     order: jest.fn(() => orderResponse ?? singleResponse),
     update: jest.fn(() => builder),
   };
-  jest.mocked(supabase['from']).mockReturnValue(builder);
+  jest.mocked(supabase.from).mockReturnValue(builder);
   return { update: builder.update };
 }
 

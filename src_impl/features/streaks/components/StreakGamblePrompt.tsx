@@ -1,4 +1,4 @@
-import React,{useEffect,useState}from'react';import Animated,{useSharedValue,useAnimatedStyle,withSpring,withTiming,withRepeat,withSequence,FadeIn,FadeInUp,runOnJS}from'react-native-reanimated';import{Box,Text,Button}from'@/components/primitives';import{useTheme}from'@/theme';import*as Sentry from'@sentry/react-native';import{getAnalyticsService}from'@/analytics/AnalyticsService';interface StreakGamblePromptProps{streakDays:number;hoursRemaining:number;shieldsAvailable:number;userLevel:number;onUseShield:()=>void;onGamble:()=>void;onDismiss:()=>void;onSessionComplete?:(grade:'S'|'A'|'B'|'C'|'D')=>void;}type GambleState='prompt'|'gambling'|'won'|'lost';interface GambleOutcome{success:boolean;grade:string;xpEarned:number;shieldPreserved:boolean;}const CRITICAL_HOURS_THRESHOLD=3;const GAMBLE_SUCCESS_GRADES=['S','A'];const GAMBLE_BONUS_XP=50;export const StreakGamblePrompt:React.FC<StreakGamblePromptProps>=({streakDays,hoursRemaining,shieldsAvailable,userLevel:_userLevel,onUseShield,onGamble,onDismiss,onSessionComplete:_onSessionComplete})=>{const{theme}=useTheme();const[gambleState,setGambleState]=useState<GambleState>('prompt');const[outcome,setOutcome]=useState<GambleOutcome|null>(null);const[selectedOption,setSelectedOption]=useState<'shield'|'gamble'|null>(null);const pulseOpacity=useSharedValue(1);const shakeX=useSharedValue(0);const glowScale=useSharedValue(1);const countdownScale=useSharedValue(1);useEffect(()=>{pulseOpacity.value=withRepeat(withSequence(withTiming(0.6,{duration:600}),withTiming(1,{duration:600})),-1,true);shakeX.value=withRepeat(withSequence(withTiming(-2,{duration:100}),withTiming(2,{duration:100}),withTiming(0,{duration:100})),-1,true);countdownScale.value=withRepeat(withSequence(withTiming(1.05,{duration:1000}),withTiming(1,{duration:1000})),-1,true);Sentry.addBreadcrumb({category:'streaks',message:'Streak gamble prompt shown',level:'warning',data:{streakDays,hoursRemaining,shieldsAvailable}});},[countdownScale,hoursRemaining,pulseOpacity,shakeX,shieldsAvailable,streakDays]);const handleUseShield=()=>{setSelectedOption('shield');glowScale.value=withSpring(1.2,{damping:10},()=>{glowScale.value=withTiming(1,{duration:200});runOnJS(onUseShield)();});};const handleGamble=()=>{setSelectedOption('gamble');setGambleState('gambling');onGamble();};const handleSessionComplete=(grade:'S'|'A'|'B'|'C'|'D')=>{const success=GAMBLE_SUCCESS_GRADES.includes(grade);const outcome:GambleOutcome={success,grade,xpEarned:success?GAMBLE_BONUS_XP+_userLevel*2:0,shieldPreserved:success};setOutcome(outcome);setGambleState(success?'won':'lost');Sentry.addBreadcrumb({category:'streaks',message:`Streak gamble ${success?'WON':'LOST'}`,level:success?'info':'warning',data:{grade,streakDays,xpEarned:outcome.xpEarned}});_onSessionComplete?.(grade);};const pulseStyle=useAnimatedStyle(()=>({opacity:pulseOpacity.value}));const shakeStyle=useAnimatedStyle(()=>({transform:[{translateX:shakeX.value}]}));const glowStyle=useAnimatedStyle(()=>({transform:[{scale:glowScale.value}]}));const countdownStyle=useAnimatedStyle(()=>({transform:[{scale:countdownScale.value}]}));const getRiskText=(hours:number):{text:string;color:string;}=>{if(hours<1){return{text:'CRITICAL - About to break!',color:theme.colors.error.DEFAULT};}if(hours<2){return{text:'HIGH RISK',color:theme.colors.error.DEFAULT};}return{text:'AT RISK',color:theme.colors.warning.DEFAULT};};const riskInfo=getRiskText(hoursRemaining);if(gambleState==='prompt'){return<Animated.View entering={FadeInUp.springify()}>
+import React,{useEffect,useState}from'react'; import Animated,{useSharedValue,useAnimatedStyle,withSpring,withTiming,withRepeat,withSequence,FadeIn,FadeInUp,runOnJS}from'react-native-reanimated'; import{Box,Text,Button}from'@/components/primitives'; import{useTheme}from'@/theme'; import*as Sentry from'@sentry/react-native'; import{getAnalyticsService}from'@/analytics/AnalyticsService'; interface StreakGamblePromptProps{streakDays:number;hoursRemaining:number;shieldsAvailable:number;userLevel:number;onUseShield:()=>void;onGamble:()=>void;onDismiss:()=>void;onSessionComplete?:(grade:'S'|'A'|'B'|'C'|'D')=>void;}type GambleState='prompt'|'gambling'|'won'|'lost';interface GambleOutcome{success:boolean;grade:string;xpEarned:number;shieldPreserved:boolean;}const CRITICAL_HOURS_THRESHOLD = 3; const GAMBLE_SUCCESS_GRADES = ['S','A']; const GAMBLE_BONUS_XP = 50; export const StreakGamblePrompt:React.FC<StreakGamblePromptProps> = ({streakDays,hoursRemaining,shieldsAvailable,userLevel:_userLevel,onUseShield,onGamble,onDismiss,onSessionComplete:_onSessionComplete})=>{const{theme} = useTheme(); const[gambleState,setGambleState] = useState<GambleState>('prompt'); const[outcome,setOutcome] = useState<GambleOutcome|null>(null); const[selectedOption,setSelectedOption] = useState<'shield'|'gamble'|null>(null); const pulseOpacity = useSharedValue(1); const shakeX = useSharedValue(0); const glowScale = useSharedValue(1); const countdownScale = useSharedValue(1); useEffect(()=>{pulseOpacity.value = withRepeat(withSequence(withTiming(0.6,{duration:600}),withTiming(1,{duration:600})),-1,true); shakeX.value = withRepeat(withSequence(withTiming(-2,{duration:100}),withTiming(2,{duration:100}),withTiming(0,{duration:100})),-1,true); countdownScale.value = withRepeat(withSequence(withTiming(1.05,{duration:1000}),withTiming(1,{duration:1000})),-1,true); Sentry.addBreadcrumb({category:'streaks',message:'Streak gamble prompt shown',level:'warning',data:{streakDays,hoursRemaining,shieldsAvailable}});},[countdownScale,hoursRemaining,pulseOpacity,shakeX,shieldsAvailable,streakDays]); const handleUseShield = ()=>{setSelectedOption('shield'); glowScale.value = withSpring(1.2,{damping:10},()=>{glowScale.value = withTiming(1,{duration:200}); runOnJS(onUseShield)();});}; const handleGamble = ()=>{setSelectedOption('gamble'); setGambleState('gambling'); onGamble();}; const handleSessionComplete = (grade:'S'|'A'|'B'|'C'|'D')=>{const success = GAMBLE_SUCCESS_GRADES.includes(grade); const outcome:GambleOutcome = {success,grade,xpEarned:success ? GAMBLE_BONUS_XP + _userLevel * 2 : 0,shieldPreserved:success}; setOutcome(outcome); setGambleState(success ? 'won' : 'lost'); Sentry.addBreadcrumb({category:'streaks',message:`Streak gamble ${success ? 'WON' : 'LOST'}`,level:success ? 'info' : 'warning',data:{grade,streakDays,xpEarned:outcome.xpEarned}}); _onSessionComplete?.(grade);}; const pulseStyle = useAnimatedStyle(()=>({opacity:pulseOpacity.value})); const shakeStyle = useAnimatedStyle(()=>({transform:[{translateX:shakeX.value}]})); const glowStyle = useAnimatedStyle(()=>({transform:[{scale:glowScale.value}]})); const countdownStyle = useAnimatedStyle(()=>({transform:[{scale:countdownScale.value}]})); const getRiskText = (hours:number):{text:string;color:string;}=>{if(hours < 1){return{text:'CRITICAL - About to break!',color:theme.colors.error.DEFAULT};}if(hours < 2){return{text:'HIGH RISK',color:theme.colors.error.DEFAULT};}return{text:'AT RISK',color:theme.colors.warning.DEFAULT};}; const riskInfo = getRiskText(hoursRemaining); if(gambleState === 'prompt'){return<Animated.View entering={FadeInUp.springify()}>
         <Box p={5}borderRadius={20}bg={theme.colors.background.secondary}style={{borderWidth:3,borderColor:theme.colors.error.DEFAULT,shadowColor:theme.colors.error.DEFAULT,shadowOffset:{width:0,height:0},shadowOpacity:0.3,shadowRadius:20,elevation:10}}>
           {}
           <Box alignItems="center"mb={4}>
@@ -11,7 +11,7 @@ import React,{useEffect,useState}from'react';import Animated,{useSharedValue,use
             <Box flexDirection="row"alignItems="baseline"gap={1}mt={2}>
               <Animated.View style={countdownStyle}>
                 <Text variant="hero"color={theme.colors.error.DEFAULT}>
-                  {Math.ceil(hoursRemaining*10)/10}h
+                  {Math.ceil(hoursRemaining * 10) / 10}h
                 </Text>
               </Animated.View>
               <Text variant="body"color={theme.colors.text.secondary}>
@@ -41,7 +41,7 @@ import React,{useEffect,useState}from'react';import Animated,{useSharedValue,use
           <Box gap={3}>
             {}
             <Animated.View style={glowStyle}>
-              <Button variant="primary"size="lg"fullWidth onPress={handleUseShield}disabled={shieldsAvailable===0}accessibilityLabel="Action button"accessibilityRole="button"accessibilityHint="Activates this control">
+              <Button variant="primary"size="lg"fullWidth onPress={handleUseShield}disabled={shieldsAvailable === 0}accessibilityLabel="Action button"accessibilityRole="button"accessibilityHint="Activates this control">
                 <Box flexDirection="row"alignItems="center"gap={2}>
                   <Text style={{fontSize:20}}>🛡️</Text>
                   <Box alignItems="flex-start">
@@ -49,7 +49,7 @@ import React,{useEffect,useState}from'react';import Animated,{useSharedValue,use
                       Use Streak Shield
                     </Text>
                     <Text color={theme.colors.text.inverse}variant="caption"opacity={0.8}>
-                      {shieldsAvailable>0?`Save streak guaranteed (${shieldsAvailable} available)`:'No shields available'}
+                      {shieldsAvailable > 0 ? `Save streak guaranteed (${shieldsAvailable} available)` : 'No shields available'}
                     </Text>
                   </Box>
                 </Box>
@@ -98,7 +98,7 @@ import React,{useEffect,useState}from'react';import Animated,{useSharedValue,use
             </Button>
           </Box>
         </Box>
-      </Animated.View>;}if(gambleState==='gambling'){return<Animated.View entering={FadeIn}>
+      </Animated.View>;}if(gambleState === 'gambling'){return<Animated.View entering={FadeIn}>
         <Box p={5}borderRadius={20}bg={theme.colors.background.secondary}style={{borderWidth:2,borderColor:theme.colors.warning.DEFAULT}}>
           <Box alignItems="center">
             <Text style={{fontSize:48}}>🎲</Text>
@@ -117,7 +117,7 @@ import React,{useEffect,useState}from'react';import Animated,{useSharedValue,use
             </Box>
           </Box>
         </Box>
-      </Animated.View>;}if(gambleState==='won'&&outcome){return<Animated.View entering={FadeInUp.springify()}>
+      </Animated.View>;}if(gambleState === 'won' && outcome){return<Animated.View entering={FadeInUp.springify()}>
         <Box p={5}borderRadius={20}bg={theme.colors.background.secondary}style={{borderWidth:3,borderColor:theme.colors.success.DEFAULT}}>
           <Box alignItems="center">
             <Text style={{fontSize:56}}>🏆</Text>
@@ -138,7 +138,7 @@ import React,{useEffect,useState}from'react';import Animated,{useSharedValue,use
                   +{outcome.xpEarned} Bonus XP
                 </Text>
               </Box>
-              {outcome.shieldPreserved&&<Text variant="bodySmall"color={theme.colors.success.DEFAULT}mt={1}>
+              {outcome.shieldPreserved && <Text variant="bodySmall"color={theme.colors.success.DEFAULT}mt={1}>
                   🛡️ Shield preserved for future use
                 </Text>}
             </Box>
@@ -150,7 +150,7 @@ import React,{useEffect,useState}from'react';import Animated,{useSharedValue,use
             </Box>
           </Box>
         </Box>
-      </Animated.View>;}if(gambleState==='lost'&&outcome){return<Animated.View entering={FadeInUp.springify()}>
+      </Animated.View>;}if(gambleState === 'lost' && outcome){return<Animated.View entering={FadeInUp.springify()}>
         <Box p={5}borderRadius={20}bg={theme.colors.background.secondary}style={{borderWidth:2,borderColor:theme.colors.error.DEFAULT}}>
           <Box alignItems="center">
             <Text style={{fontSize:48}}>💔</Text>
@@ -181,4 +181,4 @@ import React,{useEffect,useState}from'react';import Animated,{useSharedValue,use
             </Box>
           </Box>
         </Box>
-      </Animated.View>;}return null;};export function trackStreakGambleDecision(userId:string,decision:'shield'|'gamble'|'dismiss',streakDays:number,hoursRemaining:number):void{Sentry.addBreadcrumb({category:'streaks',message:`Streak gamble decision: ${decision}`,level:'info',data:{userId,decision,streakDays,hoursRemaining}});getAnalyticsService().track('streak_gamble_decision',{user_id:userId,decision,streak_days:streakDays,hours_remaining:hoursRemaining});}export function useShouldShowGamblePrompt(hoursRemaining:number,shieldsAvailable:number,hasPromptedToday:boolean):boolean{return hoursRemaining<CRITICAL_HOURS_THRESHOLD&&(shieldsAvailable>0||!hasPromptedToday)&&!hasPromptedToday;}export default StreakGamblePrompt;export{CRITICAL_HOURS_THRESHOLD,GAMBLE_SUCCESS_GRADES,GAMBLE_BONUS_XP};
+      </Animated.View>;}return null;}; export function trackStreakGambleDecision(userId:string,decision:'shield'|'gamble'|'dismiss',streakDays:number,hoursRemaining:number):void{Sentry.addBreadcrumb({category:'streaks',message:`Streak gamble decision: ${decision}`,level:'info',data:{userId,decision,streakDays,hoursRemaining}}); getAnalyticsService().track('streak_gamble_decision',{user_id:userId,decision,streak_days:streakDays,hours_remaining:hoursRemaining});}export function useShouldShowGamblePrompt(hoursRemaining:number,shieldsAvailable:number,hasPromptedToday:boolean):boolean{return hoursRemaining < CRITICAL_HOURS_THRESHOLD && (shieldsAvailable > 0 || !hasPromptedToday) && !hasPromptedToday;}export default StreakGamblePrompt; export{CRITICAL_HOURS_THRESHOLD,GAMBLE_SUCCESS_GRADES,GAMBLE_BONUS_XP};

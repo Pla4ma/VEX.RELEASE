@@ -56,7 +56,7 @@ export class Phase9ExitGate {
   }
 
   static getInstance(): Phase9ExitGate {
-    if (!Phase9ExitGate.instance) Phase9ExitGate.instance = new Phase9ExitGate();
+    if (!Phase9ExitGate.instance) {Phase9ExitGate.instance = new Phase9ExitGate();}
     return Phase9ExitGate.instance;
   }
 
@@ -80,9 +80,9 @@ export class Phase9ExitGate {
   private identifyBlockingIssues(results: Phase9ExitGateResult['results']): Phase9BlockingIssue[] {
     const issues: Phase9BlockingIssue[] = [];
     for (const [category, result] of Object.entries(results)) {
-      if (result.status === 'fail') issues.push({ id: `${category}-critical-failure`, category: category as Phase9BlockingIssue['category'], severity: 'critical', message: `${category} verification failed critically`, impact: 'Blocks production deployment', recommendation: `Fix all ${category} issues before deployment`, estimatedFixTime: '2-4 hours' });
+      if (result.status === 'fail') {issues.push({ id: `${category}-critical-failure`, category: category as Phase9BlockingIssue['category'], severity: 'critical', message: `${category} verification failed critically`, impact: 'Blocks production deployment', recommendation: `Fix all ${category} issues before deployment`, estimatedFixTime: '2-4 hours' });}
       const minScore = this.config.minimumScores[category as keyof typeof this.config.minimumScores];
-      if (result.score < minScore) issues.push({ id: `${category}-score-below-minimum`, category: category as Phase9BlockingIssue['category'], severity: 'major', message: `${category} score (${result.score}) below minimum (${minScore})`, impact: 'Reduces deployment confidence', recommendation: `Improve ${category} to meet minimum score`, estimatedFixTime: '1-2 hours' });
+      if (result.score < minScore) {issues.push({ id: `${category}-score-below-minimum`, category: category as Phase9BlockingIssue['category'], severity: 'major', message: `${category} score (${result.score}) below minimum (${minScore})`, impact: 'Reduces deployment confidence', recommendation: `Improve ${category} to meet minimum score`, estimatedFixTime: '1-2 hours' });}
     }
     return issues;
   }
@@ -90,11 +90,11 @@ export class Phase9ExitGate {
   private generateRecommendations(results: Phase9ExitGateResult['results'], blockingIssues: Phase9BlockingIssue[]): string[] {
     const recs: string[] = [];
     for (const [category, result] of Object.entries(results)) {
-      if (result.status === 'fail') recs.push(`URGENT: Fix critical ${category} issues`);
-      else if (result.status === 'warning') recs.push(`Review ${category} warnings`);
-      if (result.score < 85) recs.push(`Improve ${category} score from ${result.score} to 85+`);
+      if (result.status === 'fail') {recs.push(`URGENT: Fix critical ${category} issues`);}
+      else if (result.status === 'warning') {recs.push(`Review ${category} warnings`);}
+      if (result.score < 85) {recs.push(`Improve ${category} score from ${result.score} to 85+`);}
     }
-    for (const issue of blockingIssues) recs.push(issue.recommendation);
+    for (const issue of blockingIssues) {recs.push(issue.recommendation);}
     if (blockingIssues.length === 0) { recs.push('All systems ready for production deployment'); recs.push('Proceed with final deployment checklist'); }
     else { recs.push('Address all blocking issues before deployment'); recs.push('Re-run exit gate after fixing issues'); }
     return recs;

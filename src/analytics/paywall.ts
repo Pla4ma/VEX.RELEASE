@@ -27,7 +27,7 @@ export function trackPaywallEvent(
       break;
     case 'convert':
       analytics.conversions++;
-      if (value) analytics.revenue += value;
+      if (value) {analytics.revenue += value;}
       break;
     case 'dismiss':
       break;

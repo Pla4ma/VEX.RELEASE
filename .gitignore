@@ -17,5 +17,11 @@ ios/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+coverage/
+tmp/
+.codex-*.txt
+.codex-*.json
+type_errors.txt
+.eslint-errors.json
 
 supabase/.temp/

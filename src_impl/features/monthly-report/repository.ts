@@ -24,7 +24,7 @@ interface SessionRow {
 }
 
 function computeBestFocusWindow(sessions: SessionRow[]): string {
-  if (sessions.length === 0) return 'No data';
+  if (sessions.length === 0) {return 'No data';}
 
   const hourBuckets = new Map<number, { count: number; gradeSum: number }>();
   const gradeValues: Record<string, number> = { S: 6, A: 5, B: 4, C: 3, D: 2, F: 1 };

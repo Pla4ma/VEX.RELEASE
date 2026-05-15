@@ -1,12 +1,12 @@
-import{captureSilentFailure}from'../../../utils/silent-failure';import React from'react';import{Modal,Dimensions}from'react-native';import Animated,{FadeIn,FadeInUp,useAnimatedStyle,withSpring,withSequence,withTiming}from'react-native-reanimated';import{Box}from'../../../components/primitives/Box';import{Text}from'../../../components/primitives/Text';import{Button}from'../../../components/primitives/Button';import{useTheme}from'../../../theme';import{useState}from'react';const{width:SCREEN_WIDTH}=Dimensions.get('window');export interface StreakBrokenModalProps{visible:boolean;brokenStreakDays:number;lostMultiplier:number;longestStreak:number;comebackBonus:{xpMultiplier:number;duration:number;};coachMessage:string;onStartFresh:()=>void;onDismiss:()=>void;userId:string;onRestoreStreak?:(costGems:number)=>Promise<boolean>;gemsBalance?:number;onRestoreStart?:()=>void;}function LossStat({emoji,value,label,isLoss=false}:{emoji:string;value:string;label:string;isLoss?:boolean;}):JSX.Element{return<Box alignItems="center"gap="xs">
+import{captureSilentFailure}from'../../../utils/silent-failure'; import React from'react'; import{Modal,Dimensions}from'react-native'; import Animated,{FadeIn,FadeInUp,useAnimatedStyle,withSpring,withSequence,withTiming}from'react-native-reanimated'; import{Box}from'../../../components/primitives/Box'; import{Text}from'../../../components/primitives/Text'; import{Button}from'../../../components/primitives/Button'; import{useTheme}from'../../../theme'; import{useState}from'react'; const{width:SCREEN_WIDTH} = Dimensions.get('window'); export interface StreakBrokenModalProps{visible:boolean;brokenStreakDays:number;lostMultiplier:number;longestStreak:number;comebackBonus:{xpMultiplier:number;duration:number;};coachMessage:string;onStartFresh:()=>void;onDismiss:()=>void;userId:string;onRestoreStreak?:(costGems:number)=>Promise<boolean>;gemsBalance?:number;onRestoreStart?:()=>void;}function LossStat({emoji,value,label,isLoss = false}:{emoji:string;value:string;label:string;isLoss?:boolean;}):JSX.Element{return<Box alignItems="center"gap="xs">
       <Text fontSize={32}>{emoji}</Text>
-      <Text variant="h3"color={isLoss?'error.DEFAULT':'text.primary'}fontWeight="700">
+      <Text variant="h3"color={isLoss ? 'error.DEFAULT' : 'text.primary'}fontWeight="700">
         {value}
       </Text>
       <Text variant="caption"color="text.tertiary">
         {label}
       </Text>
-    </Box>;}function WhatRemains({longestStreak}:{longestStreak:number;}):JSX.Element{const{theme}=useTheme();return<Box p="lg"borderRadius="xl"bg={`${theme.colors.success[500]}15`}borderWidth={1}borderColor="success.DEFAULT"alignItems="center"gap="sm">
+    </Box>;}function WhatRemains({longestStreak}:{longestStreak:number;}):JSX.Element{const{theme} = useTheme(); return<Box p="lg"borderRadius="xl"bg={`${theme.colors.success[500]}15`}borderWidth={1}borderColor="success.DEFAULT"alignItems="center"gap="sm">
       <Text fontSize={32}>🏆</Text>
       <Text variant="h4"color="text.primary">
         Your record stands
@@ -17,7 +17,7 @@ import{captureSilentFailure}from'../../../utils/silent-failure';import React fro
       <Text variant="caption"color="success.DEFAULT"fontWeight="600">
         Nothing can take that away!
       </Text>
-    </Box>;}function ComebackBonus({bonus}:{bonus:StreakBrokenModalProps['comebackBonus'];}):JSX.Element{const{theme}=useTheme();return<Box p="lg"borderRadius="xl"bg={`${theme.colors.accent.orange}15`}borderWidth={1}borderColor="accent.orange"alignItems="center"gap="sm">
+    </Box>;}function ComebackBonus({bonus}:{bonus:StreakBrokenModalProps['comebackBonus'];}):JSX.Element{const{theme} = useTheme(); return<Box p="lg"borderRadius="xl"bg={`${theme.colors.accent.orange}15`}borderWidth={1}borderColor="accent.orange"alignItems="center"gap="sm">
       <Box flexDirection="row"alignItems="center"gap="sm">
         <Text fontSize={24}>⚡</Text>
         <Text variant="h4"color="accent.orange">
@@ -42,7 +42,7 @@ import{captureSilentFailure}from'../../../utils/silent-failure';import React fro
           {message}
         </Text>
       </Box>
-    </Box>;}function calculateRestoreCost(streakDays:number):number{if(streakDays<7){return 100;}if(streakDays<30){return 200;}return 500;}function RestoreStreakCard({brokenStreakDays,gemsBalance=0,onRestore,isRestoring}:{brokenStreakDays:number;gemsBalance:number;onRestore:()=>void;isRestoring:boolean;}):JSX.Element|null{const{theme}=useTheme();const cost=calculateRestoreCost(brokenStreakDays);const canAfford=gemsBalance>=cost;return<Box p="lg"borderRadius="xl"bg={`${theme.colors.primary[500]}15`}borderWidth={1}borderColor="primary.DEFAULT"gap="sm">
+    </Box>;}function calculateRestoreCost(streakDays:number):number{if(streakDays < 7){return 100;}if(streakDays < 30){return 200;}return 500;}function RestoreStreakCard({brokenStreakDays,gemsBalance = 0,onRestore,isRestoring}:{brokenStreakDays:number;gemsBalance:number;onRestore:()=>void;isRestoring:boolean;}):JSX.Element|null{const{theme} = useTheme(); const cost = calculateRestoreCost(brokenStreakDays); const canAfford = gemsBalance >= cost; return<Box p="lg"borderRadius="xl"bg={`${theme.colors.primary[500]}15`}borderWidth={1}borderColor="primary.DEFAULT"gap="sm">
       <Box flexDirection="row"alignItems="center"gap="sm">
         <Text fontSize={24}>💎</Text>
         <Text variant="h4"color="primary.DEFAULT">
@@ -57,7 +57,7 @@ import{captureSilentFailure}from'../../../utils/silent-failure';import React fro
           <Text variant="caption"color="text.tertiary">
             COST
           </Text>
-          <Text variant="h4"color={canAfford?'primary.DEFAULT':'error.DEFAULT'}>
+          <Text variant="h4"color={canAfford ? 'primary.DEFAULT' : 'error.DEFAULT'}>
             {cost} 💎
           </Text>
         </Box>
@@ -65,20 +65,20 @@ import{captureSilentFailure}from'../../../utils/silent-failure';import React fro
           <Text variant="caption"color="text.tertiary">
             BALANCE
           </Text>
-          <Text variant="body"color={canAfford?'text.secondary':'error.DEFAULT'}>
+          <Text variant="body"color={canAfford ? 'text.secondary' : 'error.DEFAULT'}>
             {gemsBalance} 💎
           </Text>
         </Box>
       </Box>
-      <Button variant={canAfford?'primary':'secondary'}size="md"fullWidth onPress={onRestore}isLoading={isRestoring}disabled={!canAfford||isRestoring}style={{marginTop:theme.spacing[2]}}accessibilityLabel="gems`} button"accessibilityRole="button"accessibilityHint="Activates this control">
-        {canAfford?'💎 Restore Streak':`Need ${cost} gems`}
+      <Button variant={canAfford ? 'primary' : 'secondary'}size="md"fullWidth onPress={onRestore}isLoading={isRestoring}disabled={!canAfford || isRestoring}style={{marginTop:theme.spacing[2]}}accessibilityLabel="gems`} button"accessibilityRole="button"accessibilityHint="Activates this control">
+        {canAfford ? '💎 Restore Streak' : `Need ${cost} gems`}
       </Button>
-      {!canAfford&&<Text variant="caption"color="error.DEFAULT"textAlign="center">
+      {!canAfford && <Text variant="caption"color="error.DEFAULT"textAlign="center">
           Not enough gems to restore
         </Text>}
-    </Box>;}export function StreakBrokenModal({visible,brokenStreakDays,lostMultiplier,longestStreak,comebackBonus,coachMessage,onStartFresh,onDismiss,userId:_userId,onRestoreStreak,gemsBalance=0,onRestoreStart}:StreakBrokenModalProps):JSX.Element{const{theme}=useTheme();const[isRestoring,setIsRestoring]=useState(false);const[restoreError,setRestoreError]=useState<string|null>(null);const handleRestore=async()=>{if(!onRestoreStreak){return;}const cost=calculateRestoreCost(brokenStreakDays);setIsRestoring(true);setRestoreError(null);onRestoreStart?.();try{const success=await onRestoreStreak(cost);if(success){onDismiss();}else{setRestoreError('Failed to restore streak. Please try again.');}}catch(error){captureSilentFailure(error,{feature:'streaks',operation:'network-fallback',type:'network'});setRestoreError('An error occurred. Please try again.');}finally{setIsRestoring(false);}};return<Modal visible={visible}transparent animationType="fade"statusBarTranslucent>
+    </Box>;}export function StreakBrokenModal({visible,brokenStreakDays,lostMultiplier,longestStreak,comebackBonus,coachMessage,onStartFresh,onDismiss,userId:_userId,onRestoreStreak,gemsBalance = 0,onRestoreStart}:StreakBrokenModalProps):JSX.Element{const{theme} = useTheme(); const[isRestoring,setIsRestoring] = useState(false); const[restoreError,setRestoreError] = useState<string|null>(null); const handleRestore = async()=>{if(!onRestoreStreak){return;}const cost = calculateRestoreCost(brokenStreakDays); setIsRestoring(true); setRestoreError(null); onRestoreStart?.(); try{const success = await onRestoreStreak(cost); if(success){onDismiss();}else{setRestoreError('Failed to restore streak. Please try again.');}}catch(error){captureSilentFailure(error,{feature:'streaks',operation:'network-fallback',type:'network'}); setRestoreError('An error occurred. Please try again.');}finally{setIsRestoring(false);}}; return<Modal visible={visible}transparent animationType="fade"statusBarTranslucent>
       <Box flex={1}bg={`${theme.colors.background.primary}95`}justifyContent="center"alignItems="center"px="lg">
-        <Animated.View entering={FadeIn.duration(300)}style={{width:SCREEN_WIDTH-40,maxHeight:'80%'}}>
+        <Animated.View entering={FadeIn.duration(300)}style={{width:SCREEN_WIDTH - 40,maxHeight:'80%'}}>
           <Box bg="background.secondary"borderRadius="2xl"borderWidth={1}borderColor="border.light"overflow="hidden">
             {}
             <Box bg={`${theme.colors.error.DEFAULT}15`}p="xl"alignItems="center"gap="sm">
@@ -108,8 +108,8 @@ import{captureSilentFailure}from'../../../utils/silent-failure';import React fro
               <CoachMessage message={coachMessage}/>
 
               {}
-              {onRestoreStreak&&<RestoreStreakCard brokenStreakDays={brokenStreakDays}gemsBalance={gemsBalance}onRestore={handleRestore}isRestoring={isRestoring}/>}
-              {restoreError&&<Box p="md"bg={`${theme.colors.error.DEFAULT}15`}borderRadius="lg">
+              {onRestoreStreak && <RestoreStreakCard brokenStreakDays={brokenStreakDays}gemsBalance={gemsBalance}onRestore={handleRestore}isRestoring={isRestoring}/>}
+              {restoreError && <Box p="md"bg={`${theme.colors.error.DEFAULT}15`}borderRadius="lg">
                   <Text color="error.DEFAULT"variant="body"textAlign="center">
                     {restoreError}
                   </Text>

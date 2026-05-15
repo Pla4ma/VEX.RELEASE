@@ -1,16 +1,16 @@
-import React,{useEffect,useState}from'react';import{Pressable}from'react-native';import Animated,{FadeIn,FadeInUp,useAnimatedStyle,useSharedValue,withSpring}from'react-native-reanimated';import{Box}from'../../../components/primitives/Box';import{Text}from'../../../components/primitives/Text';import{useTheme}from'../../../theme';import type{FocusDuration,DurationOption}from'../schemas';import{DURATION_OPTIONS}from'../service';interface FocusTimeScreenProps{onSelect:(duration:FocusDuration)=>void;onSkip:()=>void;}function DurationCard({option,isSelected,onPress,index}:{option:DurationOption;isSelected:boolean;onPress:()=>void;index:number;}):JSX.Element{const{theme}=useTheme();const scale=useSharedValue(1);useEffect(()=>{scale.value=withSpring(isSelected?0.95:1,{damping:15,stiffness:150});},[isSelected,scale]);const animatedStyle=useAnimatedStyle(()=>({transform:[{scale:scale.value}]}));const backgroundColor=isSelected?theme.colors.accent.purple:theme.colors.background.secondary;const borderColor=isSelected?theme.colors.accent.purple:theme.colors.border.light;return<Animated.View entering={FadeInUp.duration(400).delay(200+index*100)}style={{flex:1,minWidth:'45%'}}>
+import React,{useEffect,useState}from'react'; import{Pressable}from'react-native'; import Animated,{FadeIn,FadeInUp,useAnimatedStyle,useSharedValue,withSpring}from'react-native-reanimated'; import{Box}from'../../../components/primitives/Box'; import{Text}from'../../../components/primitives/Text'; import{useTheme}from'../../../theme'; import type{FocusDuration,DurationOption}from'../schemas'; import{DURATION_OPTIONS}from'../service'; interface FocusTimeScreenProps{onSelect:(duration:FocusDuration)=>void;onSkip:()=>void;}function DurationCard({option,isSelected,onPress,index}:{option:DurationOption;isSelected:boolean;onPress:()=>void;index:number;}):JSX.Element{const{theme} = useTheme(); const scale = useSharedValue(1); useEffect(()=>{scale.value = withSpring(isSelected ? 0.95 : 1,{damping:15,stiffness:150});},[isSelected,scale]); const animatedStyle = useAnimatedStyle(()=>({transform:[{scale:scale.value}]})); const backgroundColor = isSelected ? theme.colors.accent.purple : theme.colors.background.secondary; const borderColor = isSelected ? theme.colors.accent.purple : theme.colors.border.light; return<Animated.View entering={FadeInUp.duration(400).delay(200 + index * 100)}style={{flex:1,minWidth:'45%'}}>
       <Pressable onPress={onPress}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
         <Animated.View style={[{padding:theme.spacing[6],borderRadius:16,borderWidth:2,alignItems:'center',justifyContent:'center',gap:theme.spacing[3],minHeight:120,backgroundColor,borderColor},animatedStyle]}>
           <Text fontSize={32}>{option.emoji}</Text>
-          <Text variant="h3"color={isSelected?'text.inverse':'text.primary'}fontWeight="700">
+          <Text variant="h3"color={isSelected ? 'text.inverse' : 'text.primary'}fontWeight="700">
             {option.label}
           </Text>
         </Animated.View>
       </Pressable>
-    </Animated.View>;}export function FocusTimeScreen({onSelect,onSkip,onBack}:FocusTimeScreenProps&{onBack?:()=>void;}):JSX.Element{const[selectedDuration,setSelectedDuration]=useState<FocusDuration|null>(null);const[isAdvancing,setIsAdvancing]=useState(false);const handleSelect=(duration:FocusDuration)=>{if(isAdvancing){return;}setSelectedDuration(duration);setIsAdvancing(true);setTimeout(()=>{onSelect(duration);},300);};return<Box flex={1}bg="background.primary"px="lg"py="xl">
+    </Animated.View>;}export function FocusTimeScreen({onSelect,onSkip,onBack}:FocusTimeScreenProps&{onBack?:()=>void;}):JSX.Element{const[selectedDuration,setSelectedDuration] = useState<FocusDuration|null>(null); const[isAdvancing,setIsAdvancing] = useState(false); const handleSelect = (duration:FocusDuration)=>{if(isAdvancing){return;}setSelectedDuration(duration); setIsAdvancing(true); setTimeout(()=>{onSelect(duration);},300);}; return<Box flex={1}bg="background.primary"px="lg"py="xl">
       {}
       <Box flexDirection="row"alignItems="center"mb="md">
-        {onBack&&<Pressable onPress={onBack}style={{marginRight:12}}>
+        {onBack && <Pressable onPress={onBack}style={{marginRight:12}}>
             <Box p="xs">
               <Text variant="h3"color="text.secondary">‹</Text>
             </Box>
@@ -34,7 +34,7 @@ import React,{useEffect,useState}from'react';import{Pressable}from'react-native'
 
       {}
       <Box flexDirection="row"flexWrap="wrap"gap="md"justifyContent="center">
-        {DURATION_OPTIONS.map((option,index)=><DurationCard key={option.value}option={option}isSelected={selectedDuration===option.value}onPress={()=>handleSelect(option.value)}index={index}/>)}
+        {DURATION_OPTIONS.map((option,index)=><DurationCard key={option.value}option={option}isSelected={selectedDuration === option.value}onPress={()=>handleSelect(option.value)}index={index}/>)}
       </Box>
 
       {}

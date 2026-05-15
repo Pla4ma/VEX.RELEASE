@@ -8,12 +8,13 @@
  */
 
 // Types are exported from schemas (single source of truth)
-export * from './schemas';
-export * from './store';
-export * from './service';
-export * from './components';
-export * from './repository';
-export * from './utils';
+export * from "./schemas";
+export * from "./store";
+export * from "./store-hooks";
+export * from "./service";
+export * from "./components";
+export * from "./repository";
+export * from "./utils";
 
 // Phase 5.3 - Progressive Onboarding
 export {
@@ -38,4 +39,4 @@ export {
   type FeatureUnlockGate,
   type OnboardingProgress,
   type StepContent,
-} from './ProgressiveOnboarding';
+} from "./ProgressiveOnboarding";

@@ -6,6 +6,3 @@
 
 // AI Integration (Server-side Gemini)
 export * as ai from './ai';
-
-// Retrieval Integration (Server-side Pinecone)
-export * as retrieval from './retrieval';

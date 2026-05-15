@@ -37,7 +37,7 @@ export function trackStreakEvent(
   }
 
   const totalUsers = Array.from(streakData.values()).reduce((sum, m) => sum + m.userCount, 0);
-  if (totalUsers > 0) metrics.survivalRate = metrics.userCount / totalUsers;
+  if (totalUsers > 0) {metrics.survivalRate = metrics.userCount / totalUsers;}
 
   streakData.set(event.streakLength, metrics);
 

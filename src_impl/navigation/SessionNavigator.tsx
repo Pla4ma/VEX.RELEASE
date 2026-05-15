@@ -5,9 +5,10 @@
  * Manages the complete session flow: Setup → Active → Complete.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+import { initializeSessionRuntime } from '../app/bootstrap';
 import type { SessionStackParams } from './types';
 
 const Stack = createNativeStackNavigator<SessionStackParams>();
@@ -16,6 +17,10 @@ const Stack = createNativeStackNavigator<SessionStackParams>();
  * Session navigator - Core Focus Loop
  */
 export const SessionNavigator: React.FC = () => {
+  useEffect(() => {
+    initializeSessionRuntime();
+  }, []);
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -25,20 +30,30 @@ export const SessionNavigator: React.FC = () => {
     >
       <Stack.Screen
         name="SessionSetup"
-        getComponent={() => require('../screens/session/SessionSetupScreen').SessionSetupScreen}
+        getComponent={() =>
+          require('../screens/session/SessionSetupScreen').SessionSetupScreen
+        }
       />
       <Stack.Screen
         name="ActiveSession"
-        getComponent={() => require('../screens/session/ActiveSessionScreen').ActiveSessionScreen}
+        getComponent={() =>
+          require('../screens/session/ActiveSessionScreen').ActiveSessionScreen
+        }
         options={{ gestureEnabled: false }}
       />
       <Stack.Screen
         name="SessionComplete"
-        getComponent={() => require('../screens/session/SessionCompleteScreen').SessionCompleteScreen}
+        getComponent={() =>
+          require('../screens/session/SessionCompleteScreen')
+            .SessionCompleteScreen
+        }
       />
       <Stack.Screen
         name="SessionHistory"
-        getComponent={() => require('../screens/session/SessionHistoryScreen').SessionHistoryScreen}
+        getComponent={() =>
+          require('../screens/session/SessionHistoryScreen')
+            .SessionHistoryScreen
+        }
       />
     </Stack.Navigator>
   );

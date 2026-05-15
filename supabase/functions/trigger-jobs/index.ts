@@ -1,17 +1,27 @@
 /**
  * Trigger.dev Edge Function Entry Point
- * 
+ *
  * Supabase Edge Function that serves as the webhook handler for Trigger.dev jobs.
  * Deploy with: supabase functions deploy trigger-jobs
  */
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { configure, handleRequest } from 'npm:@trigger.dev/sdk@latest';
+import {
+  buildCorsHeaders,
+  withCorsHeaders,
+  jsonWithCors,
+} from '../_shared/cors.ts';
 
 type TriggerLogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 function resolveTriggerLogLevel(value: string | null): TriggerLogLevel {
-  return value === 'debug' || value === 'info' || value === 'warn' || value === 'error' ? value : 'info';
+  return value === 'debug' ||
+    value === 'info' ||
+    value === 'warn' ||
+    value === 'error'
+    ? value
+    : 'info';
 }
 
 // Configure Trigger.dev SDK
@@ -34,11 +44,7 @@ import '../../../jobs/seasons/finalize-season.ts';
  */
 serve(async (req) => {
   // CORS headers for webhook access
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  };
+  const corsHeaders = buildCorsHeaders(req);
 
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
@@ -48,26 +54,17 @@ serve(async (req) => {
   try {
     // Let Trigger.dev handle the request
     const response = await handleRequest(req);
-    
+
     // Add CORS headers to response
-    Object.entries(corsHeaders).forEach(([key, value]) => {
-      response.headers.set(key, value);
-    });
-    
-    return response;
+    return withCorsHeaders(response, corsHeaders);
   } catch (error) {
-    return new Response(
-      JSON.stringify({
+    return jsonWithCors(
+      req,
+      {
         error: 'Internal server error',
         message: error instanceof Error ? error.message : String(error),
-      }),
-      {
-        status: 500,
-        headers: {
-          ...corsHeaders,
-          'Content-Type': 'application/json',
-        },
-      }
+      },
+      500,
     );
   }
 });

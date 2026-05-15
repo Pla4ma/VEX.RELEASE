@@ -26,7 +26,7 @@ export class CircuitBreaker {
   ) {}
 
   canExecute(): boolean {
-    if (this.state === CircuitState.CLOSED) return true;
+    if (this.state === CircuitState.CLOSED) {return true;}
     if (this.state === CircuitState.OPEN) {
       if (Date.now() >= this.nextAttempt) {
         this.state = CircuitState.HALF_OPEN;

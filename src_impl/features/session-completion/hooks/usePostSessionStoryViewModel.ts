@@ -9,15 +9,16 @@ import {
 } from '../story-view-model-service';
 
 export function usePostSessionStoryViewModel(input: {
+  enabled?: boolean;
   sessionId: string;
   summary: SessionSummary;
   userId: string | null;
 }) {
   const { isOnline } = useNetInfo();
-  const { sessionId, summary, userId } = input;
+  const { enabled = true, sessionId, summary, userId } = input;
 
   const query = useQuery<PostSessionStoryViewModel | null, Error>({
-    enabled: Boolean(sessionId),
+    enabled: enabled && Boolean(sessionId),
     queryFn: async () => {
       const ledger = await getCompletionLedgerBySessionId(sessionId);
       if (!ledger) {

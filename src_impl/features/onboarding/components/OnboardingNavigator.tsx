@@ -7,12 +7,13 @@
  * @phase 2.1
  */
 
-import React, { useCallback } from 'react';
-import { View } from 'react-native';
+import React, { useCallback } from "react";
+import { View } from "react-native";
 
-import { Box } from '../../../components/primitives/Box';
-import { useOnboardingStore, useOnboardingProgress } from '../store';
-import type { FocusGoal } from '../schemas';
+import { Box } from "../../../components/primitives/Box";
+import { useOnboardingStore } from "../store";
+import { useOnboardingProgress } from "../store-hooks";
+import type { FocusGoal } from "../schemas";
 import {
   saveGoal,
   saveDisplayName,
@@ -21,16 +22,19 @@ import {
   skipOnboarding,
   completeOnboarding,
   getFirstSessionConfig,
-} from '../service';
-import { WelcomeScreen } from './WelcomeScreen';
-import { NameAndGoalScreen } from './NameAndGoalScreen';
-import { CompanionRevealScreen } from './CompanionRevealScreen';
-import { FirstSessionSetup } from './FirstSessionSetup';
-import { OnboardingProgressBar, OnboardingDots } from './OnboardingProgressBar';
+} from "../service";
+import { WelcomeScreen } from "./WelcomeScreen";
+import { NameAndGoalScreen } from "./NameAndGoalScreen";
+import { CompanionRevealScreen } from "./CompanionRevealScreen";
+import { FirstSessionSetup } from "./FirstSessionSetup";
+import { OnboardingProgressBar, OnboardingDots } from "./OnboardingProgressBar";
 
 interface OnboardingNavigatorProps {
   /** Navigate to active session */
-  onStartSession: (config: { duration: number; category: FocusGoal | null }) => void;
+  onStartSession: (config: {
+    duration: number;
+    category: FocusGoal | null;
+  }) => void;
   /** Navigate back to auth/previous screen */
   onBack?: () => void;
 }
@@ -54,11 +58,14 @@ export function OnboardingNavigator({
   }, [store]);
 
   // Step 1: Name and Goal Selection
-  const handleNameAndGoalContinue = useCallback((name: string, goal: FocusGoal) => {
-    if (saveDisplayName(name)) {
-      saveGoal(goal);
-    }
-  }, []);
+  const handleNameAndGoalContinue = useCallback(
+    (name: string, goal: FocusGoal) => {
+      if (saveDisplayName(name)) {
+        saveGoal(goal);
+      }
+    },
+    [],
+  );
 
   const handleNameAndGoalSkip = useCallback(() => {
     skipOnboarding();
@@ -70,10 +77,13 @@ export function OnboardingNavigator({
   }, []);
 
   // Step 3: First Session Setup
-  const handleSessionStart = useCallback((config: { duration: number; category: FocusGoal | null }) => {
-    completeOnboarding();
-    onStartSession(config);
-  }, [onStartSession]);
+  const handleSessionStart = useCallback(
+    (config: { duration: number; category: FocusGoal | null }) => {
+      completeOnboarding();
+      onStartSession(config);
+    },
+    [onStartSession],
+  );
 
   const handleSessionBack = useCallback(() => {
     goToPreviousStep();
@@ -95,16 +105,16 @@ export function OnboardingNavigator({
       case 2:
         return (
           <CompanionRevealScreen
-            userName={store.displayName || ''}
+            userName={store.displayName || ""}
             onContinue={handleCompanionContinue}
             onBack={goToPreviousStep}
           />
         );
       case 3:
         return (
-            <FirstSessionSetup
-              userName={store.displayName || ''}
-              goal={store.goal}
+          <FirstSessionSetup
+            userName={store.displayName || ""}
+            goal={store.goal}
             onStartSession={handleSessionStart}
             onBack={handleSessionBack}
           />

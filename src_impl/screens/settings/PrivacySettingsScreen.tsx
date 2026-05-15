@@ -45,7 +45,7 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
   }, []);
 
   const confirmDelete = useCallback((): void => {
-    if (!user?.id) return;
+    if (!user?.id) {return;}
     Alert.alert(
       'Delete account permanently?',
       'This removes your VEX account, signs out purchases, and clears local private data from this device.',

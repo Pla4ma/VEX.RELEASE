@@ -1,12 +1,13 @@
-import React, { useMemo } from "react";
-import { useNavigation } from "@react-navigation/native";
-import { useFocusScore } from "./hooks-focus-score";
-import { Box, Text, Stack, Button, Skeleton } from "@components/primitives";
-import { useNetInfo } from "../../network";
-import { useReducedMotion } from "../../hooks";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { RootStackParams } from "../../navigation/types";
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
+import React, { useMemo } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { useFocusScore } from './hooks-focus-score';
+import { Box, Text, Stack, Button, Skeleton } from '@components/primitives';
+import { useNetInfo } from '../../network';
+import { useReducedMotion } from '../../hooks';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParams } from '../../navigation/types';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import type { FocusScoreHistoryPoint } from './types';
 
 const FocusScoreDashboardSkeleton = () => {
   const { isReducedMotion } = useReducedMotion();
@@ -42,17 +43,32 @@ const FocusScoreDashboardSkeleton = () => {
   );
 };
 
+function formatDelta(delta: number): string {
+  return `${delta >= 0 ? '+' : ''}${delta}`;
+}
+
+function formatFactorName(key: string): string {
+  return key.replace(/([A-Z])/g, ' $1').replace(/^./, (char) => char.toUpperCase());
+}
+
+function formatHistoryPoint(point: FocusScoreHistoryPoint): string {
+  const date = new Date(point.timestamp);
+  const month = date.getUTCMonth() + 1;
+  const day = date.getUTCDate();
+  const year = date.getUTCFullYear();
+  return `${month}/${day}/${year}: ${point.score} (${formatDelta(point.delta)})`;
+}
+
 export const FocusScoreDashboard = withScreenErrorBoundary(function _FocusScoreDashboard(): React.JSX.Element {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const { score, history, status, error, refetch } = useFocusScore();
+  const { score, history, status, error, refetch, isRefetching } = useFocusScore();
   const { isOffline } = useNetInfo();
-  const isRefetching = status === "pending";
 
-  if (status === "pending") {
+  if (status === 'pending') {
     return <FocusScoreDashboardSkeleton />;
   }
 
-  if (status === "error") {
+  if (status === 'error') {
     return (
       <Box p="md" gap="md" alignItems="center">
         <Text color="error">Error: {error?.message}</Text>
@@ -79,9 +95,19 @@ export const FocusScoreDashboard = withScreenErrorBoundary(function _FocusScoreD
     );
   }
 
-  const { currentScore, band, lastChangeReason, factors, previousScore } =
+  const {
+    currentScore,
+    band,
+    lastChangeReason,
+    factors,
+    previousScore,
+    topPositiveFactor,
+    topNegativeFactor,
+  } =
     score;
   const delta = currentScore - previousScore;
+  const positiveFactor = topPositiveFactor ? factors[topPositiveFactor] : null;
+  const negativeFactor = topNegativeFactor ? factors[topNegativeFactor] : null;
 
   return (
     <Box p="md">
@@ -90,9 +116,8 @@ export const FocusScoreDashboard = withScreenErrorBoundary(function _FocusScoreD
           <Text variant="h3">Focus Score</Text>
           <Text variant="h1">{currentScore}</Text>
           <Text variant="h4">{band}</Text>
-          <Text color={delta >= 0 ? "success" : "error"}>
-            {delta >= 0 ? "+" : ""}
-            {delta} since last session
+          <Text color={delta >= 0 ? 'success' : 'error'}>
+            {formatDelta(delta)} since last session
           </Text>
           {isRefetching && (
             <Text color="textMuted" variant="caption">
@@ -113,8 +138,7 @@ export const FocusScoreDashboard = withScreenErrorBoundary(function _FocusScoreD
                   flexDirection="row"
                   justifyContent="space-between"
                 >
-                  <Text>{new Date(point.timestamp).toLocaleDateString()}</Text>
-                  <Text fontWeight="bold">{point.score}</Text>
+                  <Text>{formatHistoryPoint(point)}</Text>
                 </Box>
               ))
             ) : (
@@ -146,12 +170,14 @@ export const FocusScoreDashboard = withScreenErrorBoundary(function _FocusScoreD
             What Changed
           </Text>
           <Text>{lastChangeReason}</Text>
+          {positiveFactor && <Text>{`Strongest: ${positiveFactor.explanation}`}</Text>}
+          {negativeFactor && <Text>{`Weakest: ${negativeFactor.explanation}`}</Text>}
         </Box>
 
         <Box>
           <Button
             onPress={() =>
-              navigation.navigate("Analytics", {
+              navigation.navigate('Analytics', {
                 month: new Date().toISOString().slice(0, 7),
               })
             }

@@ -2,61 +2,54 @@
  * Main Navigator - Launch Structure (V2)
  *
  * Bottom tab navigator: Home / Focus / Progress / Profile
- * - Home now features AI-powered recommendation engine
- * - Focus provides quick session start
- * - Progress shows long-term stats
- * - Profile contains personal settings and premium
  */
 
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React from "react";
+import {
+  createBottomTabNavigator,
+  type BottomTabBarProps,
+} from "@react-navigation/bottom-tabs";
 
-import { BattlePassTierToastListener } from '../features/battle-pass/components/BattlePassTierToastListener';
-import { initializeFocusScoreIntegration } from '../features/focus-identity/integration-focus-score';
-import { VexTabBar } from './components/VexTabBar';
-
-import type { MainTabParams } from './types';
+import { HomeScreen } from "../screens/home/HomeScreen";
+import { FocusScreen } from "../screens/home/FocusScreen";
+import { ProgressScreen } from "../screens/progress/ProgressScreen";
+import { ProfileScreen } from "../screens/profile/ProfileScreen";
+import { VexTabBar } from "./components/VexTabBar";
+import type { MainTabParams } from "./types";
 
 const Tab = createBottomTabNavigator<MainTabParams>();
+const ProfileTabScreen = ProfileScreen as React.ComponentType<object>;
 
-/**
- * Main navigator component - Launch structure (V2 with recommendation engine)
- */
+function renderVexTabBar(props: BottomTabBarProps): React.JSX.Element {
+  return <VexTabBar {...props} />;
+}
+
 export const MainNavigator: React.FC = () => {
-  React.useEffect(() => {
-    const cleanup = initializeFocusScoreIntegration();
-    return cleanup;
-  }, []);
-
   return (
-    <>
-      <BattlePassTierToastListener />
-      <Tab.Navigator
-        tabBar={(props) => <VexTabBar {...props} />}
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-        <Tab.Screen
-          name="Home"
-          getComponent={() => require('../screens/home/HomeScreen').HomeScreen}
-        />
-        <Tab.Screen
-          name="Focus"
-          options={{ title: 'Focus' }}
-          getComponent={() => require('../screens/home/FocusScreen').FocusScreen}
-        />
-        <Tab.Screen
-          name="Progress"
-          options={{ title: 'Progress' }}
-          getComponent={() => require('../screens/progress/ProgressScreen').ProgressScreen}
-        />
-        <Tab.Screen
-          name="Profile"
-          getComponent={() => require('../screens/profile/ProfileScreen').ProfileScreen}
-        />
-      </Tab.Navigator>
-    </>
+    <Tab.Navigator
+      tabBar={renderVexTabBar}
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen
+        name="Focus"
+        component={FocusScreen}
+        options={{ title: "Focus" }}
+      />
+      <Tab.Screen
+        name="Progress"
+        component={ProgressScreen}
+        options={{ title: "Progress" }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileTabScreen}
+        options={{ title: "Profile" }}
+        initialParams={{ userId: undefined, tab: "stats" }}
+      />
+    </Tab.Navigator>
   );
 };
 

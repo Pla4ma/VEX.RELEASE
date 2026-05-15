@@ -3,6 +3,7 @@ import { z } from 'npm:zod';
 
 import { configure } from 'npm:@trigger.dev/sdk@latest';
 import { finalizeSeasonTask } from '../../../jobs/seasons/finalize-season.ts';
+import { buildCorsHeaders, jsonWithCors } from '../_shared/cors.ts';
 
 configure({
   apiKey: Deno.env.get('TRIGGER_SECRET_KEY')!,
@@ -16,11 +17,7 @@ const BodySchema = z.object({
 });
 
 serve(async (req) => {
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  };
+  const corsHeaders = buildCorsHeaders(req);
 
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
@@ -32,25 +29,15 @@ serve(async (req) => {
       idempotencyKey: `season-finalize:${body.seasonId}`,
     });
 
-    return new Response(JSON.stringify({ success: true, runId: handle.id }), {
-      headers: {
-        ...corsHeaders,
-        'Content-Type': 'application/json',
-      },
-    });
+    return jsonWithCors(req, { success: true, runId: handle.id }, 200);
   } catch (error) {
-    return new Response(
-      JSON.stringify({
+    return jsonWithCors(
+      req,
+      {
         success: false,
         message: error instanceof Error ? error.message : String(error),
-      }),
-      {
-        status: 500,
-        headers: {
-          ...corsHeaders,
-          'Content-Type': 'application/json',
-        },
-      }
+      },
+      500,
     );
   }
 });

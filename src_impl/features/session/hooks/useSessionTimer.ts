@@ -12,7 +12,7 @@ export function useSessionTimer() {
   const [currentTime, setCurrentTime] = useState(Date.now());
 
   useEffect(() => {
-    if (!isActive || isPaused) return;
+    if (!isActive || isPaused) {return;}
 
     const interval = setInterval(() => {
       setCurrentTime(Date.now());

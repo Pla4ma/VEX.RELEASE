@@ -44,9 +44,9 @@ export class ApiClient {
   setAuthProvider(provider: AuthProvider): void {
     this.authProvider = provider;
     this.addRequestInterceptor(async (config) => {
-      if (config.skipAuth || !this.authProvider) return config;
+      if (config.skipAuth || !this.authProvider) {return config;}
       const token = await this.authProvider.getAccessToken();
-      if (token) config.headers = { ...config.headers, Authorization: `Bearer ${token}` };
+      if (token) {config.headers = { ...config.headers, Authorization: `Bearer ${token}` };}
       return config;
     });
   }
@@ -61,13 +61,13 @@ export class ApiClient {
 
   private async runRequestInterceptors(config: ApiRequestConfig): Promise<ApiRequestConfig> {
     let result = config;
-    for (const interceptor of this.requestInterceptors) result = await interceptor(result);
+    for (const interceptor of this.requestInterceptors) {result = await interceptor(result);}
     return result;
   }
 
   private async runResponseInterceptors(response: Response): Promise<Response> {
     let result = response;
-    for (const interceptor of this.responseInterceptors) result = await interceptor(result);
+    for (const interceptor of this.responseInterceptors) {result = await interceptor(result);}
     return result;
   }
 
@@ -75,7 +75,7 @@ export class ApiClient {
     const url = new URL(endpoint, this.config.baseURL);
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) url.searchParams.append(key, String(value));
+        if (value !== undefined && value !== null) {url.searchParams.append(key, String(value));}
       });
     }
     return url.toString();
@@ -103,7 +103,7 @@ export class ApiClient {
   }
 
   private async executeRequest<T>(endpoint: string, config: ApiRequestConfig): Promise<ApiResponse<T>> {
-    if (!this.circuitBreaker.canExecute()) throw this.createError('CIRCUIT_OPEN', 'Service temporarily unavailable', 503);
+    if (!this.circuitBreaker.canExecute()) {throw this.createError('CIRCUIT_OPEN', 'Service temporarily unavailable', 503);}
 
     const url = this.buildURL(endpoint, config.params);
     const controller = new AbortController();
@@ -118,7 +118,7 @@ export class ApiClient {
       };
 
       const fetchConfig: RequestInit = { method: config.method ?? 'GET', headers, signal: controller.signal };
-      if (config.data && config.method !== 'GET') fetchConfig.body = JSON.stringify(config.data);
+      if (config.data && config.method !== 'GET') {fetchConfig.body = JSON.stringify(config.data);}
 
       debug.debug('API Request: %s %s', fetchConfig.method, url);
       let response = await fetch(url, fetchConfig);
@@ -142,7 +142,7 @@ export class ApiClient {
       return result;
     } catch (error) {
       this.circuitBreaker.recordFailure();
-      if (error instanceof Error && error.name === 'AbortError') throw this.createError('TIMEOUT', 'Request timeout', 408);
+      if (error instanceof Error && error.name === 'AbortError') {throw this.createError('TIMEOUT', 'Request timeout', 408);}
       throw error;
     } finally { clearTimeout(timeoutId); }
   }
@@ -155,9 +155,9 @@ export class ApiClient {
       try { return await this.executeRequest<T>(endpoint, config); }
       catch (error) {
         lastError = error as Error;
-        if (attempt === maxRetries) break;
+        if (attempt === maxRetries) {break;}
         const apiError = this.isApiError(lastError) ? lastError : this.createError('UNKNOWN', lastError.message, 0);
-        if (!isRetryableError(apiError)) break;
+        if (!isRetryableError(apiError)) {break;}
         const delay = calculateBackoff(attempt, this.config.retryDelay);
         debug.debug('Retrying request in %dms (attempt %d/%d)', delay, attempt + 1, maxRetries + 1);
         await new Promise(resolve => setTimeout(resolve, delay));
@@ -167,7 +167,7 @@ export class ApiClient {
   }
 
   private async executeWithDeduplication<T>(endpoint: string, config: ApiRequestConfig): Promise<ApiResponse<T>> {
-    if (!config.deduplicate) return this.executeWithRetry<T>(endpoint, config);
+    if (!config.deduplicate) {return this.executeWithRetry<T>(endpoint, config);}
     const key = `${config.method ?? 'GET'}:${endpoint}:${JSON.stringify(config.params ?? {})}:${JSON.stringify(config.data ?? {})}`;
     return this.deduplicator.deduplicate(key, () => this.executeWithRetry<T>(endpoint, config));
   }
@@ -207,7 +207,7 @@ export class ApiClient {
 let apiClientInstance: ApiClient | null = null;
 
 export function getApiClient(): ApiClient {
-  if (!apiClientInstance) apiClientInstance = new ApiClient();
+  if (!apiClientInstance) {apiClientInstance = new ApiClient();}
   return apiClientInstance;
 }
 

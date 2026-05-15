@@ -5,12 +5,17 @@
  * @phase 2
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 /**
  * Focus goal enum
  */
-export const FocusGoalSchema = z.enum(['WORK', 'STUDY', 'CREATIVE', 'PERSONAL']);
+export const FocusGoalSchema = z.enum([
+  "WORK",
+  "STUDY",
+  "CREATIVE",
+  "PERSONAL",
+]);
 
 /**
  * Focus duration enum (in minutes)
@@ -27,11 +32,11 @@ export const FocusDurationSchema = z.union([
  * Onboarding step enum
  */
 export const OnboardingStepSchema = z.enum([
-  'WELCOME',
-  'GOAL_SETTING',
-  'FOCUS_TIME',
-  'NAME_SETUP',
-  'FIRST_SESSION_CTA',
+  "WELCOME",
+  "GOAL_SETTING",
+  "FOCUS_TIME",
+  "NAME_SETUP",
+  "FIRST_SESSION_CTA",
 ]);
 
 /**
@@ -45,6 +50,7 @@ export const OnboardingStateSchema = z.object({
   displayName: z.string().min(1).nullable(),
   startedAt: z.number().nullable(),
   completedAt: z.number().nullable(),
+  completedForUserId: z.string().min(1).nullable(),
 });
 
 /**
@@ -80,29 +86,31 @@ export const TooltipStateSchema = z.object({
 // Onboarding State Machine Schema (Phase 3)
 // ============================================================================
 
-export const OnboardingProgressSchema = z.object({
-  userId: z.string().uuid(),
-  status: z.enum(['IN_PROGRESS', 'FIRST_SESSION_IN_PROGRESS', 'COMPLETED']),
+export const OnboardingProgressSchema = z
+  .object({
+    userId: z.string().uuid(),
+    status: z.enum(["IN_PROGRESS", "FIRST_SESSION_IN_PROGRESS", "COMPLETED"]),
 
-  steps: z.object({
-    profileStarted: z.boolean(),
-    goalSelected: z.boolean(),
-    firstSessionStarted: z.boolean(),
-    firstSessionCompleted: z.boolean(),
-    rewardSeen: z.boolean(),
-  }),
+    steps: z.object({
+      profileStarted: z.boolean(),
+      goalSelected: z.boolean(),
+      firstSessionStarted: z.boolean(),
+      firstSessionCompleted: z.boolean(),
+      rewardSeen: z.boolean(),
+    }),
 
-  firstSession: z.object({
-    sessionId: z.string().uuid().optional(),
-    startedAt: z.number().optional(),
-    completedAt: z.number().optional(),
-  }),
+    firstSession: z.object({
+      sessionId: z.string().uuid().optional(),
+      startedAt: z.number().optional(),
+      completedAt: z.number().optional(),
+    }),
 
-  permissions: z.object({
-    notificationAsked: z.boolean(),
-    notificationGranted: z.boolean(),
-  }),
-}).strict();
+    permissions: z.object({
+      notificationAsked: z.boolean(),
+      notificationGranted: z.boolean(),
+    }),
+  })
+  .strict();
 
 export type OnboardingProgress = z.infer<typeof OnboardingProgressSchema>;
 
@@ -121,9 +129,25 @@ export type OnboardingGoal = FocusGoal;
 /**
  * Onboarding goals constant for UI
  */
-export const ONBOARDING_GOALS: Array<{ id: FocusGoal; label: string; description: string }> = [
-  { id: 'WORK', label: 'Work', description: 'Focus on professional tasks' },
-  { id: 'STUDY', label: 'Study', description: 'Learn and absorb new information' },
-  { id: 'CREATIVE', label: 'Creative', description: 'Create, design, or build something' },
-  { id: 'PERSONAL', label: 'Personal', description: 'Personal growth and organization' },
+export const ONBOARDING_GOALS: Array<{
+  id: FocusGoal;
+  label: string;
+  description: string;
+}> = [
+  { id: "WORK", label: "Work", description: "Focus on professional tasks" },
+  {
+    id: "STUDY",
+    label: "Study",
+    description: "Learn and absorb new information",
+  },
+  {
+    id: "CREATIVE",
+    label: "Creative",
+    description: "Create, design, or build something",
+  },
+  {
+    id: "PERSONAL",
+    label: "Personal",
+    description: "Personal growth and organization",
+  },
 ];

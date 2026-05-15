@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
-import { useSessionUIStore } from '../../../store/session-state';
+import { useSessionUIStore } from "../../../store/session-state";
 import {
   getNextCompletionSyncState,
   invalidateCompletionReturnUserQueries,
-} from '../home-return-sync';
+} from "../home-return-sync";
 
 export function useCompletionSyncAutoRepair(input: {
   isOnline: boolean;
@@ -13,15 +13,21 @@ export function useCompletionSyncAutoRepair(input: {
 }): void {
   const queryClient = useQueryClient();
   const completionSync = useSessionUIStore((state) => state.completionSync);
-  const setCompletionSyncState = useSessionUIStore((state) => state.setCompletionSyncState);
+  const setCompletionSyncState = useSessionUIStore(
+    (state) => state.setCompletionSyncState,
+  );
 
   useEffect(() => {
-    if (!input.isOnline || !input.userId || completionSync.status !== 'pending_sync') {
+    if (
+      !input.isOnline ||
+      !input.userId ||
+      completionSync.status !== "pending_sync"
+    ) {
       return;
     }
 
     let cancelled = false;
-    void invalidateCompletionReturnUserQueries({ queryClient, userId: input.userId })
+    invalidateCompletionReturnUserQueries({ queryClient, userId: input.userId })
       .then(() => {
         if (!cancelled) {
           setCompletionSyncState(
@@ -48,5 +54,11 @@ export function useCompletionSyncAutoRepair(input: {
     return () => {
       cancelled = true;
     };
-  }, [completionSync, input.isOnline, input.userId, queryClient, setCompletionSyncState]);
+  }, [
+    completionSync,
+    input.isOnline,
+    input.userId,
+    queryClient,
+    setCompletionSyncState,
+  ]);
 }

@@ -8,7 +8,7 @@
 import { server } from '../mocks/server';
 import { http, HttpResponse } from 'msw';
 
-const request = globalThis['fetch'].bind(globalThis);
+const request = globalThis.fetch.bind(globalThis);
 
 describe('Service Function Example Tests', () => {
   beforeEach(() => {

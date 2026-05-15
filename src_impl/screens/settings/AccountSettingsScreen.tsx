@@ -1,7 +1,7 @@
-import React,{useState,useCallback}from'react';import{ScrollView,Pressable,Switch,Alert,TextInput}from'react-native';import{useSafeAreaInsets}from'react-native-safe-area-context';import type{NativeStackScreenProps}from'@react-navigation/native-stack';import{useTheme}from'../../theme';import{Box,Text,Card}from'../../components/primitives';import{Icon}from'../../icons';import{useAuthStore,useUIStore}from'../../store/index';import type{SettingsStackParams}from'../../navigation';type Props=NativeStackScreenProps<SettingsStackParams,'AccountSettings'>;export const AccountSettingsScreen:React.FC<Props>=({navigation})=>{const{theme}=useTheme();const insets=useSafeAreaInsets();const{user}=useAuthStore();const{showToast}=useUIStore();const[twoFactorEnabled,setTwoFactorEnabled]=useState(false);const[currentPassword,setCurrentPassword]=useState('');const[newPassword,setNewPassword]=useState('');const[confirmPassword,setConfirmPassword]=useState('');const[showPasswordFields,setShowPasswordFields]=useState(false);const[isChangingPassword,setIsChangingPassword]=useState(false);const handleTwoFactorToggle=useCallback(()=>{if(!twoFactorEnabled){Alert.alert('Enable Two-Factor Authentication?','You will need an authenticator app like Google Authenticator or Authy.',[{text:'Cancel',style:'cancel'},{text:'Enable',onPress:()=>{setTwoFactorEnabled(true);showToast({message:'2FA enabled. Please set up in your authenticator app.',type:'success',duration:5000});}}]);}else{Alert.alert('Disable Two-Factor Authentication?','This makes your account less secure. Are you sure?',[{text:'Cancel',style:'cancel'},{text:'Disable',style:'destructive',onPress:()=>{setTwoFactorEnabled(false);showToast({message:'2FA has been disabled',type:'warning',duration:3000});}}]);}},[twoFactorEnabled,showToast]);const handleChangePassword=useCallback(async()=>{if(!currentPassword||!newPassword||!confirmPassword){showToast({message:'Please fill in all password fields',type:'error',duration:3000});return;}if(newPassword!==confirmPassword){showToast({message:'New passwords do not match',type:'error',duration:3000});return;}if(newPassword.length<8){showToast({message:'Password must be at least 8 characters',type:'error',duration:3000});return;}setIsChangingPassword(true);await new Promise(resolve=>setTimeout(resolve,1500));setIsChangingPassword(false);setCurrentPassword('');setNewPassword('');setConfirmPassword('');setShowPasswordFields(false);showToast({message:'Password changed successfully',type:'success',duration:3000});},[currentPassword,newPassword,confirmPassword,showToast]);const handleChangeEmail=useCallback(()=>{Alert.alert('Change Email Address','A verification link will be sent to your new email address.',[{text:'Cancel',style:'cancel'},{text:'Continue',onPress:()=>{showToast({message:'Email change flow started',type:'info',duration:3000});}}]);},[showToast]);return<Box flex={1}style={{backgroundColor:theme.colors.background.primary}}>
+import React,{useState,useCallback}from'react'; import{ScrollView,Pressable,Switch,Alert,TextInput}from'react-native'; import{useSafeAreaInsets}from'react-native-safe-area-context'; import type{NativeStackScreenProps}from'@react-navigation/native-stack'; import{useTheme}from'../../theme'; import{Box,Text,Card}from'../../components/primitives'; import{Icon}from'../../icons'; import{useAuthStore,useUIStore}from'../../store/index'; import type{SettingsStackParams}from'../../navigation'; type Props=NativeStackScreenProps<SettingsStackParams,'AccountSettings'>;export const AccountSettingsScreen:React.FC<Props> = ({navigation})=>{const{theme} = useTheme(); const insets = useSafeAreaInsets(); const{user} = useAuthStore(); const{showToast} = useUIStore(); const[twoFactorEnabled,setTwoFactorEnabled] = useState(false); const[currentPassword,setCurrentPassword] = useState(''); const[newPassword,setNewPassword] = useState(''); const[confirmPassword,setConfirmPassword] = useState(''); const[showPasswordFields,setShowPasswordFields] = useState(false); const[isChangingPassword,setIsChangingPassword] = useState(false); const handleTwoFactorToggle = useCallback(()=>{if(!twoFactorEnabled){Alert.alert('Enable Two-Factor Authentication?','You will need an authenticator app like Google Authenticator or Authy.',[{text:'Cancel',style:'cancel'},{text:'Enable',onPress:()=>{setTwoFactorEnabled(true); showToast({message:'2FA enabled. Please set up in your authenticator app.',type:'success',duration:5000});}}]);}else{Alert.alert('Disable Two-Factor Authentication?','This makes your account less secure. Are you sure?',[{text:'Cancel',style:'cancel'},{text:'Disable',style:'destructive',onPress:()=>{setTwoFactorEnabled(false); showToast({message:'2FA has been disabled',type:'warning',duration:3000});}}]);}},[twoFactorEnabled,showToast]); const handleChangePassword = useCallback(async()=>{if(!currentPassword || !newPassword || !confirmPassword){showToast({message:'Please fill in all password fields',type:'error',duration:3000}); return;}if(newPassword !== confirmPassword){showToast({message:'New passwords do not match',type:'error',duration:3000}); return;}if(newPassword.length < 8){showToast({message:'Password must be at least 8 characters',type:'error',duration:3000}); return;}setIsChangingPassword(true); await new Promise(resolve=>setTimeout(resolve,1500)); setIsChangingPassword(false); setCurrentPassword(''); setNewPassword(''); setConfirmPassword(''); setShowPasswordFields(false); showToast({message:'Password changed successfully',type:'success',duration:3000});},[currentPassword,newPassword,confirmPassword,showToast]); const handleChangeEmail = useCallback(()=>{Alert.alert('Change Email Address','A verification link will be sent to your new email address.',[{text:'Cancel',style:'cancel'},{text:'Continue',onPress:()=>{showToast({message:'Email change flow started',type:'info',duration:3000});}}]);},[showToast]); return<Box flex={1}style={{backgroundColor:theme.colors.background.primary}}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {}
-        <Box px={20}pb={16}pt={insets.top+16}flexDirection="row"alignItems="center">
+        <Box px={20}pb={16}pt={insets.top + 16}flexDirection="row"alignItems="center">
           <Pressable onPress={()=>navigation.goBack()}style={{marginRight:12}}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
             <Icon name="arrow-left"size={24}color={theme.colors.text.primary}/>
           </Pressable>
@@ -19,7 +19,7 @@ import React,{useState,useCallback}from'react';import{ScrollView,Pressable,Switc
                 Current Email
               </Text>
               <Text variant="body"style={{fontWeight:'500',marginBottom:12}}>
-                {user?.email||'user@example.com'}
+                {user?.email || 'user@example.com'}
               </Text>
               <Pressable onPress={handleChangeEmail}style={{backgroundColor:theme.colors.primary[500],paddingVertical:12,paddingHorizontal:16,borderRadius:8,alignItems:'center'}}accessibilityLabel="Change Email button"accessibilityRole="button"accessibilityHint="Activates this control">
                 <Text style={{color:'#FFF',fontWeight:'600'}}>Change Email</Text>
@@ -35,8 +35,8 @@ import React,{useState,useCallback}from'react';import{ScrollView,Pressable,Switc
           </Text>
           <Card size="sm"style={{overflow:'hidden'}}>
             <Pressable style={{flexDirection:'row',alignItems:'center',paddingVertical:16,paddingHorizontal:16}}onPress={handleTwoFactorToggle}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
-              <Box width={40}height={40}borderRadius={10}justifyContent="center"alignItems="center"style={{backgroundColor:twoFactorEnabled?theme.colors.success[50]||'#ECFDF5':theme.colors.background.secondary}}>
-                <Icon name="shield"size={20}color={twoFactorEnabled?theme.colors.success.DEFAULT:theme.colors.text.tertiary}/>
+              <Box width={40}height={40}borderRadius={10}justifyContent="center"alignItems="center"style={{backgroundColor:twoFactorEnabled ? theme.colors.success[50] || '#ECFDF5' : theme.colors.background.secondary}}>
+                <Icon name="shield"size={20}color={twoFactorEnabled ? theme.colors.success.DEFAULT : theme.colors.text.tertiary}/>
               </Box>
 
               <Box flex={1}ml={12}>
@@ -44,11 +44,11 @@ import React,{useState,useCallback}from'react';import{ScrollView,Pressable,Switc
                   Two-Factor Authentication
                 </Text>
                 <Text variant="caption"color="text.secondary"style={{marginTop:2}}>
-                  {twoFactorEnabled?'Enabled':'Add extra security'}
+                  {twoFactorEnabled ? 'Enabled' : 'Add extra security'}
                 </Text>
               </Box>
 
-              <Switch value={twoFactorEnabled}onValueChange={handleTwoFactorToggle}trackColor={{false:theme.colors.background.tertiary,true:theme.colors.success.DEFAULT+'80'}}thumbColor={twoFactorEnabled?theme.colors.success.DEFAULT:'#FFF'}/>
+              <Switch value={twoFactorEnabled}onValueChange={handleTwoFactorToggle}trackColor={{false:theme.colors.background.tertiary,true:theme.colors.success.DEFAULT + '80'}}thumbColor={twoFactorEnabled ? theme.colors.success.DEFAULT : '#FFF'}/>
             </Pressable>
           </Card>
         </Box>
@@ -59,7 +59,7 @@ import React,{useState,useCallback}from'react';import{ScrollView,Pressable,Switc
             PASSWORD
           </Text>
           <Card size="sm"style={{overflow:'hidden'}}>
-            {!showPasswordFields?<Pressable onPress={()=>setShowPasswordFields(true)}style={{flexDirection:'row',alignItems:'center',paddingVertical:16,paddingHorizontal:16}}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
+            {!showPasswordFields ? <Pressable onPress={()=>setShowPasswordFields(true)}style={{flexDirection:'row',alignItems:'center',paddingVertical:16,paddingHorizontal:16}}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
                 <Box width={40}height={40}borderRadius={10}justifyContent="center"alignItems="center"style={{backgroundColor:theme.colors.background.secondary}}>
                   <Icon name="lock"size={20}color={theme.colors.text.tertiary}/>
                 </Box>
@@ -74,7 +74,7 @@ import React,{useState,useCallback}from'react';import{ScrollView,Pressable,Switc
                 </Box>
 
                 <Icon name="arrow-right"size={20}color={theme.colors.text.tertiary}/>
-              </Pressable>:<Box p={16}>
+              </Pressable> : <Box p={16}>
                 <Text variant="body"style={{fontWeight:'600',marginBottom:16,color:theme.colors.text.primary}}>
                   Change Password
                 </Text>
@@ -106,9 +106,9 @@ import React,{useState,useCallback}from'react';import{ScrollView,Pressable,Switc
                       Cancel
                     </Text>
                   </Pressable>
-                  <Pressable onPress={handleChangePassword}disabled={isChangingPassword}style={{flex:1,backgroundColor:theme.colors.primary[500],paddingVertical:12,borderRadius:8,alignItems:'center',marginLeft:8,opacity:isChangingPassword?0.7:1}}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
+                  <Pressable onPress={handleChangePassword}disabled={isChangingPassword}style={{flex:1,backgroundColor:theme.colors.primary[500],paddingVertical:12,borderRadius:8,alignItems:'center',marginLeft:8,opacity:isChangingPassword ? 0.7 : 1}}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
                     <Text style={{color:'#FFF',fontWeight:'600'}}>
-                      {isChangingPassword?'Changing...':'Change'}
+                      {isChangingPassword ? 'Changing...' : 'Change'}
                     </Text>
                   </Pressable>
                 </Box>
@@ -116,6 +116,6 @@ import React,{useState,useCallback}from'react';import{ScrollView,Pressable,Switc
           </Card>
         </Box>
 
-        <Box height={insets.bottom+20}/>
+        <Box height={insets.bottom + 20}/>
       </ScrollView>
-    </Box>;};export default AccountSettingsScreen;
+    </Box>;}; export default AccountSettingsScreen;

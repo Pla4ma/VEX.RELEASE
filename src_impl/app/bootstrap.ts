@@ -1,11 +1,6 @@
-import { initializeSessionCompletionOrchestrator } from '../session/integration/SessionCompletionOrchestrator';
-import { initializeSessionBossIntegration } from '../session/integration/SessionBossIntegration';
-import { initializeStreakInsuranceIntegration } from '../integration/streak-insurance';
-import { initializeWeeklyQuestIntegration } from '../features/weekly-quests/integration';
 import { getNetInfoAdapter } from '../network';
 import { getQueueLength, startAutoProcessing } from '../lib/offline/queue';
 import { createDebugger } from '../utils/debug';
-import { configureProgressionService } from '../features/progression/service-enhanced';
 import {
   analyticsService,
   capture,
@@ -14,7 +9,29 @@ import {
 } from '../shared/analytics';
 
 let bootstrapped = false;
+let sessionRuntimeInitialized = false;
 const debug = createDebugger('app:bootstrap');
+
+function initializeCoreSystems(): void {
+  initializeAnalyticsEventBridge();
+  analyticsService.initialize().then((enabled) => {
+    if (enabled) {
+      capture(ProductAnalyticsEvents.APP_OPENED, { source: 'bootstrap' });
+    }
+  });
+}
+
+export const initializeSessionRuntime = (): void => {
+  if (sessionRuntimeInitialized) {
+    return;
+  }
+
+  sessionRuntimeInitialized = true;
+  const netInfo = getNetInfoAdapter();
+  netInfo.initialize();
+  debug.info('Offline sync queue size at runtime init: %d', getQueueLength());
+  startAutoProcessing();
+};
 
 export const bootstrapApp = (): void => {
   if (bootstrapped) {
@@ -22,25 +39,7 @@ export const bootstrapApp = (): void => {
   }
 
   bootstrapped = true;
-  initializeAnalyticsEventBridge();
-  void analyticsService.initialize().then((enabled) => {
-    if (enabled) {
-      capture(ProductAnalyticsEvents.APP_OPENED, { source: 'bootstrap' });
-    }
-  });
-  configureProgressionService({
-    maxLevel: 100,
-    prestigeEnabled: true,
-    enableOfflineQueue: true,
-  });
-  initializeSessionCompletionOrchestrator();
-  initializeSessionBossIntegration();
-  initializeStreakInsuranceIntegration();
-  initializeWeeklyQuestIntegration();
-  const netInfo = getNetInfoAdapter();
-  void netInfo.initialize();
-  debug.info('Offline sync queue size at boot: %d', getQueueLength());
-  startAutoProcessing();
+  initializeCoreSystems();
 };
 
 export const bootstrapDevelopment = (): void => {

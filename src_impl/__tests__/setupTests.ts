@@ -127,17 +127,17 @@ try {
 declare global { var __TEST__: boolean; }
 global.__TEST__ = true;
 
-const testConsole = globalThis['console'];
+const testConsole = globalThis.console;
 const originalConsoleError = testConsole.error;
 const originalConsoleWarn = testConsole.warn;
 
 testConsole.error = (...args: unknown[]) => {
-  if (typeof args[0] === 'string' && /Warning.*not wrapped in act|Native module cannot be null/.test(args[0])) return;
+  if (typeof args[0] === 'string' && /Warning.*not wrapped in act|Native module cannot be null/.test(args[0])) {return;}
   originalConsoleError.call(testConsole, ...args);
 };
 
 testConsole.warn = (...args: unknown[]) => {
-  if (typeof args[0] === 'string' && /has been renamed/.test(args[0])) return;
+  if (typeof args[0] === 'string' && /has been renamed/.test(args[0])) {return;}
   originalConsoleWarn.call(testConsole, ...args);
 };
 

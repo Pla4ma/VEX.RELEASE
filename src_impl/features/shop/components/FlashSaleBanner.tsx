@@ -1,4 +1,4 @@
-import React,{useState,useEffect}from"react";import{Pressable}from"react-native";import Animated,{useSharedValue,useAnimatedStyle,withRepeat,withTiming,withSequence,Easing,interpolate}from"react-native-reanimated";import{useTheme}from"../../../theme";import{Box,Text}from"../../../components/primitives";import{Icon}from"../../../icons";import type{FlashSale}from"../FlashSaleSystem";import{formatFlashSaleCountdown,getFlashSaleTimeRemaining}from"../FlashSaleSystem";interface FlashSaleBannerProps{flashSale:FlashSale|null;onPress:()=>void;}export const FlashSaleBanner:React.FC<FlashSaleBannerProps>=({flashSale,onPress})=>{const{theme}=useTheme();const[timeRemaining,setTimeRemaining]=useState('');const pulse=useSharedValue(1);const shimmer=useSharedValue(0);React.useEffect(()=>{if(flashSale){pulse.value=withRepeat(withSequence(withTiming(1.02,{duration:500,easing:Easing.inOut(Easing.ease)}),withTiming(1,{duration:500,easing:Easing.inOut(Easing.ease)})),-1,true);shimmer.value=withRepeat(withTiming(1,{duration:2000,easing:Easing.linear}),-1,false);const interval=setInterval(()=>{const remaining=getFlashSaleTimeRemaining(flashSale);setTimeRemaining(formatFlashSaleCountdown(remaining));},1000);const initialRemaining=getFlashSaleTimeRemaining(flashSale);setTimeRemaining(formatFlashSaleCountdown(initialRemaining));return()=>clearInterval(interval);}return undefined;},[flashSale,pulse,shimmer]);const animatedStyle=useAnimatedStyle(()=>({transform:[{scale:pulse.value}]}));const shimmerStyle=useAnimatedStyle(()=>({opacity:interpolate(shimmer.value,[0,0.5,1],[0.3,0.6,0.3])}));if(!flashSale){return null;}return<Animated.View style={animatedStyle}>
+import React,{useState,useEffect}from'react'; import{Pressable}from'react-native'; import Animated,{useSharedValue,useAnimatedStyle,withRepeat,withTiming,withSequence,Easing,interpolate}from'react-native-reanimated'; import{useTheme}from'../../../theme'; import{Box,Text}from'../../../components/primitives'; import{Icon}from'../../../icons'; import type{FlashSale}from'../FlashSaleSystem'; import{formatFlashSaleCountdown,getFlashSaleTimeRemaining}from'../FlashSaleSystem'; interface FlashSaleBannerProps{flashSale:FlashSale|null;onPress:()=>void;}export const FlashSaleBanner:React.FC<FlashSaleBannerProps> = ({flashSale,onPress})=>{const{theme} = useTheme(); const[timeRemaining,setTimeRemaining] = useState(''); const pulse = useSharedValue(1); const shimmer = useSharedValue(0); React.useEffect(()=>{if(flashSale){pulse.value = withRepeat(withSequence(withTiming(1.02,{duration:500,easing:Easing.inOut(Easing.ease)}),withTiming(1,{duration:500,easing:Easing.inOut(Easing.ease)})),-1,true); shimmer.value = withRepeat(withTiming(1,{duration:2000,easing:Easing.linear}),-1,false); const interval = setInterval(()=>{const remaining = getFlashSaleTimeRemaining(flashSale); setTimeRemaining(formatFlashSaleCountdown(remaining));},1000); const initialRemaining = getFlashSaleTimeRemaining(flashSale); setTimeRemaining(formatFlashSaleCountdown(initialRemaining)); return()=>clearInterval(interval);}return undefined;},[flashSale,pulse,shimmer]); const animatedStyle = useAnimatedStyle(()=>({transform:[{scale:pulse.value}]})); const shimmerStyle = useAnimatedStyle(()=>({opacity:interpolate(shimmer.value,[0,0.5,1],[0.3,0.6,0.3])})); if(!flashSale){return null;}return<Animated.View style={animatedStyle}>
       <Pressable onPress={onPress}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
         <Box mx={16}mb={20}borderRadius={16}overflow="hidden"style={{backgroundColor:'#1A1A2E',borderWidth:2,borderColor:'#EF4444',shadowColor:'#EF4444',shadowOffset:{width:0,height:4},shadowOpacity:0.3,shadowRadius:12,elevation:6}}>
           {}
@@ -46,10 +46,10 @@ import React,{useState,useEffect}from"react";import{Pressable}from"react-native"
                   {flashSale.originalPrice}
                 </Text>
 
-                <Box px={10}py={4}borderRadius={8}style={{backgroundColor:flashSale.currency==='GEMS'?'#8B5CF6'+'20':'#F59E0B'+'20'}}>
+                <Box px={10}py={4}borderRadius={8}style={{backgroundColor:flashSale.currency === 'GEMS' ? '#8B5CF6' + '20' : '#F59E0B' + '20'}}>
                   <Box flexDirection="row"alignItems="center">
-                    <Icon name={flashSale.currency==='GEMS'?'gem':'coins'}size={14}color={flashSale.currency==='GEMS'?'#8B5CF6':'#F59E0B'}/>
-                    <Text style={{fontWeight:'800',fontSize:16,color:flashSale.currency==='GEMS'?'#8B5CF6':'#F59E0B',marginLeft:4}}>
+                    <Icon name={flashSale.currency === 'GEMS' ? 'gem' : 'coins'}size={14}color={flashSale.currency === 'GEMS' ? '#8B5CF6' : '#F59E0B'}/>
+                    <Text style={{fontWeight:'800',fontSize:16,color:flashSale.currency === 'GEMS' ? '#8B5CF6' : '#F59E0B',marginLeft:4}}>
                       {flashSale.discountedPrice}
                     </Text>
                   </Box>
@@ -71,7 +71,7 @@ import React,{useState,useEffect}from"react";import{Pressable}from"react-native"
           </Box>
 
           {}
-          <Box p={10}style={{backgroundColor:'#EF4444'+'10',borderTopWidth:1,borderTopColor:'#EF4444'+'20'}}>
+          <Box p={10}style={{backgroundColor:'#EF4444' + '10',borderTopWidth:1,borderTopColor:'#EF4444' + '20'}}>
             <Box flexDirection="row"justifyContent="center"alignItems="center">
               <Icon name="alert-circle"size={14}color="#EF4444"/>
               <Text variant="caption"style={{color:'#EF4444',fontWeight:'600',marginLeft:6}}>
@@ -81,4 +81,4 @@ import React,{useState,useEffect}from"react";import{Pressable}from"react-native"
           </Box>
         </Box>
       </Pressable>
-    </Animated.View>;};export default FlashSaleBanner;
+    </Animated.View>;}; export default FlashSaleBanner;

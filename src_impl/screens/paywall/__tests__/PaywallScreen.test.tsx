@@ -127,7 +127,7 @@ describe('PaywallScreen', () => {
     act(() => {
       output = TestRenderer.create(<PaywallScreen />);
     });
-    if (!output) throw new Error('Paywall did not render');
+    if (!output) {throw new Error('Paywall did not render');}
     return output;
   }
 
@@ -161,7 +161,7 @@ describe('PaywallScreen', () => {
     mockPaywallState({ offerings: null, packages: [], error: revenueCatError('NETWORK_ERROR', 'Network down') });
     const output = renderPaywall();
     const retryButton = output.root.findAllByProps({ accessibilityRole: 'button' }).find((node) => node.props.onPress === mockRetry);
-    if (!retryButton) throw new Error('Retry button missing');
+    if (!retryButton) {throw new Error('Retry button missing');}
     retryButton.props.onPress();
     expect(containsText(output, 'Pricing is temporarily unavailable. Your progress is safe.')).toBe(true);
     expect(mockRetry).toHaveBeenCalled();

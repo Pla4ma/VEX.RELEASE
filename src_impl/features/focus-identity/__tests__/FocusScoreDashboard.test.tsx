@@ -85,7 +85,7 @@ describe('FocusScoreDashboard', () => {
     const { getByText, queryByText } = render(<FocusScoreDashboard />);
     expect(getByText('750')).toBeTruthy();
     expect(getByText('Elite')).toBeTruthy();
-    expect(getByText('+10')).toBeTruthy();
+    expect(getByText('+10 since last session')).toBeTruthy();
     expect(getByText('Great session!')).toBeTruthy();
     expect(getByText('Strongest: Session quality is a clear strength right now.')).toBeTruthy();
     expect(getByText('Weakest: Intentional difficulty is helping your score stay stable.')).toBeTruthy();

@@ -12,7 +12,9 @@ import { useFeatureFlags } from '../../../hooks/useFeatureFlags';
 jest.mock('../../../hooks/useFeatureFlags');
 
 describe('NavigationGuard', () => {
-  const mockUseFeatureFlags = useFeatureFlags as jest.MockedFunction<typeof useFeatureFlags>;
+  const mockUseFeatureFlags = useFeatureFlags as jest.MockedFunction<
+    typeof useFeatureFlags
+  >;
 
   beforeEach(() => {
     mockUseFeatureFlags.mockReturnValue({
@@ -35,7 +37,7 @@ describe('NavigationGuard', () => {
     render(
       <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}>
         <div testID="protected-content">Protected Content</div>
-      </NavigationGuard>
+      </NavigationGuard>,
     );
 
     expect(screen.getByTestId('protected-content')).toBeTruthy();
@@ -54,11 +56,10 @@ describe('NavigationGuard', () => {
     render(
       <NavigationGuard featureFlag={FEATURE_FLAGS.BASIC_SOLO_BOSS}>
         <div testID="protected-content">Protected Content</div>
-      </NavigationGuard>
+      </NavigationGuard>,
     );
 
     expect(screen.queryByTestId('protected-content')).toBeFalsy();
-    expect(screen.getByText('Feature not available')).toBeTruthy();
     expect(mockIsEnabled).toHaveBeenCalledWith(FEATURE_FLAGS.BASIC_SOLO_BOSS);
   });
 
@@ -77,11 +78,10 @@ describe('NavigationGuard', () => {
         fallback={<div testID="custom-fallback">Custom Fallback</div>}
       >
         <div testID="protected-content">Protected Content</div>
-      </NavigationGuard>
+      </NavigationGuard>,
     );
 
     expect(screen.queryByTestId('protected-content')).toBeFalsy();
     expect(screen.getByTestId('custom-fallback')).toBeTruthy();
-    expect(screen.queryByText('Feature not available')).toBeFalsy();
   });
 });
