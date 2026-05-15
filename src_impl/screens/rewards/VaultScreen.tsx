@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 /**
  * VaultScreen
  *
@@ -159,4 +160,4 @@ export function VaultScreen({ userId }: VaultScreenProps): JSX.Element {
   );
 }
 
-export default VaultScreen;
+export default withScreenErrorBoundary(VaultScreen, 'Vault');

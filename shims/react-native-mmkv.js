@@ -14,6 +14,10 @@
 
 import * as React from 'react';
 
+if (process.env.NODE_ENV === 'production') {
+  throw new Error('Production build cannot use the react-native-mmkv shim.');
+}
+
 // ---------------------------------------------------------------------------
 // In-memory store registry
 // ---------------------------------------------------------------------------

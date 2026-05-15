@@ -13,6 +13,10 @@
 
 'use strict';
 
+if (process.env.NODE_ENV === 'production') {
+  throw new Error('Production build cannot use the Sentry shim.');
+}
+
 const noop = () => {};
 const noopAsync = async () => {};
 

@@ -1,4 +1,4 @@
-import type { FeatureAccess, FeatureKey } from './feature-access';
+import type { FeatureAccess, FeatureKey, FeatureReleaseState } from './feature-access';
 
 type FeatureCopy = Pick<
   FeatureAccess,
@@ -19,6 +19,59 @@ export const DISABLED_FEATURES: FeatureKey[] = [
   'shop',
   'streak_insurance',
 ];
+
+export const FEATURE_RELEASE_STATES: Record<FeatureKey, FeatureReleaseState> = {
+  achievements: 'progressive',
+  advanced_settings: 'progressive',
+  ai_coach_advanced: 'progressive',
+  ai_coach_basic: 'core',
+  battle_pass: 'disabled_beta',
+  boss_bounties: 'disabled_beta',
+  boss_tab: 'progressive',
+  challenges: 'progressive',
+  companion_detail: 'progressive',
+  content_study: 'progressive',
+  content_study_advanced: 'progressive',
+  economy_advanced: 'disabled_beta',
+  economy_basic: 'progressive',
+  focus_session: 'core',
+  focus_tab: 'core',
+  gems_prominent: 'disabled_beta',
+  home_tab: 'core',
+  inventory: 'disabled_beta',
+  premium_paywall: 'teased_only',
+  profile_tab: 'core',
+  progress_view: 'core',
+  quiz_review_mode: 'progressive',
+  rankings: 'disabled_beta',
+  rivals: 'disabled_beta',
+  seasonal_features: 'progressive',
+  shop: 'disabled_beta',
+  social_tab: 'disabled_beta',
+  squads: 'disabled_beta',
+  streak_insurance: 'disabled_beta',
+  wagers: 'disabled_beta',
+};
+
+export const FEATURE_TEASER_STARTS: Partial<Record<FeatureKey, number>> = {
+  companion_detail: 2,
+  challenges: 1,
+  economy_basic: 4,
+  boss_tab: 5,
+  ai_coach_advanced: 6,
+  content_study: 10,
+  quiz_review_mode: 9,
+};
+
+export const FEATURE_PRIORITIES: Partial<Record<FeatureKey, number>> = {
+  companion_detail: 1,
+  challenges: 2,
+  content_study: 3,
+  boss_tab: 4,
+  ai_coach_advanced: 5,
+  economy_basic: 6,
+  quiz_review_mode: 7,
+};
 
 export const DEFAULT_COPY: FeatureCopy = {
   lockedDescription:

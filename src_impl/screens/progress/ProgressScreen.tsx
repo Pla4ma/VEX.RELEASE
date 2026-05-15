@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -18,6 +19,7 @@ import type { MasteryState } from '../../features/mastery/types';
 import { FocusScoreDashboard } from '../../features/focus-identity/components/focus-score-dashboard';
 import { useFocusScoreDashboardModel } from '../../features/focus-identity/hooks-focus-score';
 import { ProgressionDashboard } from '../../features/progression/components';
+import { WeeklyFocusCardSection } from '../../features/social/weekly-focus-card';
 // import { LeaderboardView } from '../../features/rankings/components'; // Feature not implemented
 import { useActiveSeason, useUpcomingSeasons } from '../../features/seasons/hooks';
 import { useSessionStats } from '../../session/hooks/useSession';
@@ -63,6 +65,11 @@ export function ProgressScreen(): JSX.Element {
         onOpenMonthlyReport={() => navigation.navigate('Paywall', { source: 'focus-monthly-report', gatedFeature: 'monthly_focus_report' })}
       />
       {userId ? (
+        <WeeklyFocusCardSection
+          onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })}
+        />
+      ) : null}
+      {userId ? (
         <ProgressionDashboard
           userId={userId}
           onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })}
@@ -99,4 +106,4 @@ export function ProgressScreen(): JSX.Element {
   );
 }
 
-export default ProgressScreen;
+export default withScreenErrorBoundary(ProgressScreen, 'Progress');

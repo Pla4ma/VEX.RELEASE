@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 /**
  * Forgot Password Screen
  *
@@ -193,4 +194,4 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default ForgotPasswordScreen;
+export default withScreenErrorBoundary(ForgotPasswordScreen, 'ForgotPassword');

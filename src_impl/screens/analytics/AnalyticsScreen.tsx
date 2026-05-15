@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useEffect, useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -94,4 +95,4 @@ const styles = createSheet({
   },
 });
 
-export default AnalyticsScreen;
+export default withScreenErrorBoundary(AnalyticsScreen, 'Analytics');

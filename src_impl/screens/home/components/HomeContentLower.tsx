@@ -51,6 +51,13 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
 }) => {
   const navigation = useNavigation<NavigationProp>();
   const { isVisible } = useFeatureGate('challenges');
+  const openChallenges = (): void => {
+    if (features.challenges.isUnlocked) {
+      navigation.navigate('Challenges');
+      return;
+    }
+    controller.openSetup();
+  };
 
   const todaysChallenges: ChallengeItem[] = isVisible
     ? data.todaysChallenges
@@ -58,32 +65,35 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
 
   return (
     <>
-      {/* ONE contextual card (priority order) */}
-      <HomeContextualCards
-        activeStudyPlan={controller.activeStudyPlanQuery.data}
-        comebackData={controller.comebackQuery.data}
-        comebackSessionsCompleted={comebackSessionsCompleted}
-        activeBossQuery={activeBossQuery}
-        bountyStatusQuery={bountyStatusQuery}
-        placeBountyMutation={placeBountyMutation}
-        coinBalance={coinBalance ?? 0}
-        canShowBossBounties={canShowBossBounties}
-        todaysChallenges={todaysChallenges}
-        challengesQueryError={data.challengesQuery.error ?? undefined}
-        challengesQueryIsLoading={data.challengesQuery.isLoading}
-        handleClaimReward={handleClaimReward}
-        challengesRefetch={() => (data.challengesQuery.refetch)()}
-        openSetup={controller.openSetup}
-        continueStudyPlan={controller.continueStudyPlan}
-        showToast={(toastData) => void data.showToast({ type: toastData.type as 'success' | 'error' | 'warning' | 'info', title: toastData.title, message: toastData.message })}
-        userId={controller.userId ?? ''}
-      />
+      {controller.shouldShowSecondarySystems ? (
+        <HomeContextualCards
+          activeStudyPlan={controller.activeStudyPlanQuery.data}
+          comebackData={controller.comebackQuery.data}
+          comebackSessionsCompleted={comebackSessionsCompleted}
+          activeBossQuery={activeBossQuery}
+          bountyStatusQuery={bountyStatusQuery}
+          placeBountyMutation={placeBountyMutation}
+          coinBalance={coinBalance ?? 0}
+          canShowBossBounties={canShowBossBounties}
+          todaysChallenges={todaysChallenges}
+          challengesQueryError={data.challengesQuery.error ?? undefined}
+          challengesQueryIsLoading={data.challengesQuery.isLoading}
+          handleClaimReward={handleClaimReward}
+          challengesRefetch={() => (data.challengesQuery.refetch)()}
+          openSetup={controller.openSetup}
+          continueStudyPlan={controller.continueStudyPlan}
+          showToast={(toastData) => void data.showToast({ type: toastData.type as 'success' | 'error' | 'warning' | 'info', title: toastData.title, message: toastData.message })}
+          userId={controller.userId ?? ''}
+        />
+      ) : null}
 
       {/* Weekly Quest Card */}
-      <HomeWeeklyQuest
-        userId={controller.userId ?? ''}
-        onPress={() => navigation.navigate('Challenges')}
-      />
+      {controller.shouldShowSecondarySystems && features.challenges.isUnlocked ? (
+        <HomeWeeklyQuest
+          userId={controller.userId ?? ''}
+          onPress={openChallenges}
+        />
+      ) : null}
 
       {/* 5. Streak/progress strip */}
       <HomeStreakProgress
@@ -97,29 +107,31 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
       />
 
       {/* 6. Secondary optional rail */}
-      <HomeSecondaryRail
-        activePlan={controller.activeStudyPlanQuery.data ?? null}
-        battlePass={canShowBattlePass ? (controller.battlePassQuery.data ?? null) : null}
-        canShowExpansionSystems={false}
-        canShowSecondarySystems={controller.shouldShowSecondarySystems}
-        comebackMessage={controller.comebackQuery.data?.isComeback ? controller.comebackQuery.data.message : null}
-        features={features}
-        hasActiveRecommendation={Boolean(controller.primaryRecommendation)}
-        hasStudyError={Boolean(controller.activeStudyPlanQuery.error)}
-        history={controller.historyQuery.history}
-        isFirstRun={controller.isFirstRun}
-        isStudyLoading={controller.activeStudyPlanQuery.isLoading}
-        onContinueStudyPlan={controller.continueStudyPlan}
-        onOpenProgress={controller.openProgress}
-        onOpenSetup={() => controller.openSetup()}
-        onOpenSocial={controller.openSocial}
-        onRetryStudyPlan={controller.activeStudyPlanQuery.refetch}
-        onStartStudy={controller.openContentStudy}
-        seasonIsVisible={false}
-        socialSummary="Social features are now in your Profile"
-        stage={controller.disclosure.stage}
-        wallet={controller.walletQuery.data ?? null}
-      />
+      {controller.shouldShowSecondarySystems ? (
+        <HomeSecondaryRail
+          activePlan={controller.activeStudyPlanQuery.data ?? null}
+          battlePass={canShowBattlePass ? (controller.battlePassQuery.data ?? null) : null}
+          canShowExpansionSystems={false}
+          canShowSecondarySystems={controller.shouldShowSecondarySystems}
+          comebackMessage={controller.comebackQuery.data?.isComeback ? controller.comebackQuery.data.message : null}
+          features={features}
+          hasActiveRecommendation={Boolean(controller.primaryRecommendation)}
+          hasStudyError={Boolean(controller.activeStudyPlanQuery.error)}
+          history={controller.historyQuery.history}
+          isFirstRun={controller.isFirstRun}
+          isStudyLoading={controller.activeStudyPlanQuery.isLoading}
+          onContinueStudyPlan={controller.continueStudyPlan}
+          onOpenProgress={controller.openProgress}
+          onOpenSetup={() => controller.openSetup()}
+          onOpenSocial={controller.openSocial}
+          onRetryStudyPlan={controller.activeStudyPlanQuery.refetch}
+          onStartStudy={controller.openContentStudy}
+          seasonIsVisible={false}
+          socialSummary="Social features are now in your Profile"
+          stage={controller.disclosure.stage}
+          wallet={controller.walletQuery.data ?? null}
+        />
+      ) : null}
     </>
   );
 };

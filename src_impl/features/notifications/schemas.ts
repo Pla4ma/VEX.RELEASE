@@ -48,8 +48,34 @@ export const ChallengeExpiryCandidateSchema = z.object({
   expiresAt: z.number().int().positive(),
 }).strict();
 
+export const NotificationCenterTypeSchema = z.enum([
+  'ACHIEVEMENT',
+  'STREAK_RISK',
+  'BOSS',
+  'SQUAD',
+  'RIVAL',
+  'COACH',
+  'REWARD',
+  'LEVEL_UP',
+]);
+
+export const NotificationCenterItemSchema = z.object({
+  id: z.string().min(1),
+  type: NotificationCenterTypeSchema,
+  title: z.string(),
+  message: z.string(),
+  timestamp: z.number().int(),
+  read: z.boolean(),
+  avatar: z.string().optional(),
+  actionText: z.string().optional(),
+  actionRoute: z.string().optional(),
+  actionParams: z.record(z.unknown()).optional(),
+}).strict();
+
 export type RetentionReminderType = z.infer<typeof RetentionReminderTypeSchema>;
 export type ReminderPlanInput = z.infer<typeof ReminderPlanInputSchema>;
 export type ReminderPlanRow = z.infer<typeof ReminderPlanRowSchema>;
 export type RetentionUserProfile = z.infer<typeof RetentionUserProfileSchema>;
 export type ChallengeExpiryCandidate = z.infer<typeof ChallengeExpiryCandidateSchema>;
+export type NotificationCenterType = z.infer<typeof NotificationCenterTypeSchema>;
+export type NotificationCenterItem = z.infer<typeof NotificationCenterItemSchema>;

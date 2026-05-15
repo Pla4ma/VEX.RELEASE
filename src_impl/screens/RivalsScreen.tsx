@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../shared/ui/components/ScreenErrorBoundary';
 import React from 'react';
 import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -91,4 +92,4 @@ export function RivalsScreen(): JSX.Element {
   );
 }
 
-export default RivalsScreen;
+export default withScreenErrorBoundary(RivalsScreen, 'Rivals');

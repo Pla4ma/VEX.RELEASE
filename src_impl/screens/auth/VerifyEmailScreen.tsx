@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 /**
  * Verify Email Screen
  *
@@ -177,4 +178,4 @@ export const VerifyEmailScreen: React.FC<Props> = ({ navigation, route }) => {
   );
 };
 
-export default VerifyEmailScreen;
+export default withScreenErrorBoundary(VerifyEmailScreen, 'VerifyEmail');

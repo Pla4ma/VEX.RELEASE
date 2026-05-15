@@ -138,8 +138,14 @@ export const HomeScreen = withScreenErrorBoundary(function _HomeScreen(): JSX.El
         streakHoursRemaining={data.streakHoursRemaining}
         isLoading={controller.isLoading}
         companionMood={data.companionMood}
-        onPressCompanion={() => navigation.navigate('CompanionDetail')}
-        onPressNotifications={() => navigation.navigate('Notifications' as never)}
+        onPressCompanion={() => {
+          if (controller.disclosure.features.companion_detail.isUnlocked) {
+            navigation.navigate('CompanionDetail');
+            return;
+          }
+          controller.openSetup();
+        }}
+        onPressNotifications={() => navigation.navigate('Notifications')}
         unreadNotificationCount={data.unreadNotificationCount}
       />
 

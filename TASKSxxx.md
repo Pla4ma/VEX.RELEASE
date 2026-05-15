@@ -789,15 +789,15 @@ rg "supabase\.(from|rpc)\(" src_impl/features -g "*.ts" -g "*.tsx" -l
 
 **Steps:**
 
-- [ ] Repository queries only the required session, focus score, and streak data.
-- [ ] Service computes total minutes, sessions, score delta, current band, best session, streak days, and one insight.
-- [ ] Zod schema owns the output type.
-- [ ] Empty week returns an honest empty summary, not fake zeros dressed as progress.
-- [ ] Tests cover normal week, empty week, and missing focus score.
+- [x] Repository queries only the required session, focus score, and streak data.
+- [x] Service computes total minutes, sessions, score delta, current band, best session, streak days, and one insight.
+- [x] Zod schema owns the output type.
+- [x] Empty week returns an honest empty summary, not fake zeros dressed as progress.
+- [x] Tests cover normal week, empty week, and missing focus score.
 
 **Exit Gate:**
 
-- [ ] Weekly summary is deterministic and test-covered.
+- [x] Weekly summary is deterministic and test-covered.
 
 ### P8-02 - Shareable Card Component
 
@@ -809,17 +809,17 @@ rg "supabase\.(from|rpc)\(" src_impl/features -g "*.ts" -g "*.tsx" -l
 
 **Steps:**
 
-- [ ] Render a compact card with week range, minutes, sessions, score delta, band, best session, and insight.
-- [ ] Share via React Native `Share.share()` text summary.
-- [ ] Do not add image-sharing dependencies.
-- [ ] If `react-native-view-shot` already exists, image share can be considered; it is not in the current dependencies and must not be added for launch.
-- [ ] Use tokens only.
-- [ ] Add all UI states and accessibility.
+- [x] Render a compact card with week range, minutes, sessions, score delta, band, best session, and insight.
+- [x] Share via React Native `Share.share()` text summary.
+- [x] Do not add image-sharing dependencies.
+- [x] If `react-native-view-shot` already exists, image share can be considered; it is not in the current dependencies and must not be added for launch.
+- [x] Use tokens only.
+- [x] Add all UI states and accessibility.
 
 **Exit Gate:**
 
-- [ ] User can share weekly progress from Progress.
-- [ ] Sharing failure shows a friendly error and captures unexpected errors.
+- [x] User can share weekly progress from Progress.
+- [x] Sharing failure shows a friendly error and captures unexpected errors.
 
 ---
 

@@ -1,19 +1,19 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { CompanionDetailScreen } from "../screens/companion/CompanionDetailScreen";
-import { BossScreen } from "../screens/boss/BossScreen";
-import { NotificationsScreen } from "../screens/notifications/NotificationsScreen";
-import { SearchScreen } from "../screens/search/SearchScreen";
+import CompanionDetailScreen from "../screens/companion/CompanionDetailScreen";
+import BossScreen from "../screens/boss/BossScreen";
+import NotificationsScreen from "../screens/notifications/NotificationsScreen";
+import SearchScreen from "../screens/search/SearchScreen";
 import { SquadRouteHub } from "../features/squads/components";
-import { BattlePassScreen } from "../screens/progress/BattlePassScreen";
-import { AnalyticsScreen } from "../screens/analytics/AnalyticsScreen";
+import BattlePassScreen from "../screens/progress/BattlePassScreen";
+import AnalyticsScreen from "../screens/analytics/AnalyticsScreen";
 import { MonthlyFocusReportScreen } from "../features/monthly-report/components";
-import { ChallengesScreen } from "../screens/challenges/ChallengesScreen";
+import ChallengesScreen from "../screens/challenges/ChallengesScreen";
 import { CoachScreen } from "../features/ai-coach/components/CoachScreen";
-import { MasteryScreen } from "../screens/profile/MasteryScreen";
-import { InventoryScreen } from "../screens/profile/InventoryScreen";
-import { VaultScreen } from "../screens/rewards/VaultScreen";
+import MasteryScreen from "../screens/profile/MasteryScreen";
+import InventoryScreen from "../screens/profile/InventoryScreen";
+import VaultScreen from "../screens/rewards/VaultScreen";
 import { ContentStudyNavigator } from "./ContentStudyNavigator";
 import { ShopScreen } from "../features/shop";
 import { useAuthStore } from "../store";
@@ -59,9 +59,7 @@ export function RootStackFeatureRoutes({
 
       {show.boss ? <Stack.Screen name="Boss" component={BossScreen} /> : null}
 
-      {show.advanced ? (
-        <Stack.Screen name="Notifications" component={NotificationsScreen} />
-      ) : null}
+      <Stack.Screen name="Notifications" component={NotificationsScreen} />
 
       {show.advanced ? (
         <Stack.Screen name="Search" component={SearchScreen} />

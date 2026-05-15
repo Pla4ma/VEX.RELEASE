@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useMemo } from "react";
 import { View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -114,4 +115,4 @@ export function FocusScreen(): JSX.Element {
   );
 }
 
-export default FocusScreen;
+export default withScreenErrorBoundary(FocusScreen, 'Focus');

@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback, useState } from 'react';
 import { Alert, Pressable, ScrollView, Switch } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -158,4 +159,4 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
   );
 };
 
-export default PrivacySettingsScreen;
+export default withScreenErrorBoundary(PrivacySettingsScreen, 'PrivacySettings');

@@ -3,6 +3,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.49.8';
 import { z } from 'https://esm.sh/zod@3.22.4';
 
 import { buildCorsHeaders } from '../_shared/cors.ts';
+import { verifyAuthorizedUser } from '../_shared/auth.ts';
 
 const PersonaSchema = z.enum([
   'CHEERLEADER',
@@ -25,7 +26,7 @@ const CoachPayloadSchema = z
     tone: z.string().min(1).max(50),
     urgency: z.enum(['low', 'medium', 'high', 'critical']),
     actionLabel: z.string().min(1).max(60).optional(),
-    actionRoute: z.string().min(1).max(120).optional(),
+    actionRoute: z.enum(['SessionSetup', 'Progress', 'Settings']).optional(),
   })
   .strict();
 const CoachContextSchema = z
@@ -110,25 +111,13 @@ type GeminiResponse = {
 const httpRequest = globalThis.fetch.bind(globalThis);
 
 serve(async (request) => {
-  const authorization = request.headers.get('authorization');
-  const apiKey = request.headers.get('apikey');
-
   if (request.method === 'OPTIONS') {
     return new Response('ok', { headers: buildCorsHeaders(request) });
   }
 
-  if (!authorization || !apiKey) {
-    return respond(
-      buildError(
-        'GENERATE_COACH_MESSAGE',
-        Date.now(),
-        'UNAUTHORIZED',
-        'Unauthorized',
-        false,
-      ),
-      401,
-      request,
-    );
+  const auth = await verifyAuthorizedUser(request, respond);
+  if (!auth.ok) {
+    return auth.response;
   }
 
   if (request.method !== 'POST') {
@@ -158,6 +147,19 @@ serve(async (request) => {
         false,
       ),
       400,
+      request,
+    );
+  }
+  if (parsed.data.userId !== auth.userId) {
+    return respond(
+      buildError(
+        parsed.data.requestType,
+        startedAt,
+        'FORBIDDEN',
+        'Request user does not match auth token',
+        false,
+      ),
+      403,
       request,
     );
   }
@@ -255,7 +257,7 @@ async function isRateLimited(userId: string): Promise<boolean> {
     return false;
   }
   const supabase = createClient(url, serviceRoleKey);
-  const oneHourAgo = Date.now() - 60 * 60 * 1000;
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
   const { count, error } = await supabase
     .from('coach_messages')
     .select('id', { count: 'exact', head: true })

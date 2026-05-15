@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 /**
  * BattlePassScreen
  *
@@ -150,4 +151,4 @@ export const BattlePassScreen: React.FC = () => {
   );
 };
 
-export default BattlePassScreen;
+export default withScreenErrorBoundary(BattlePassScreen, 'BattlePass');

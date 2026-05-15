@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -130,4 +131,4 @@ export const LoginScreen: React.FC<Props> = ({ navigation, route }) => {
   );
 };
 
-export default LoginScreen;
+export default withScreenErrorBoundary(LoginScreen, 'Login');

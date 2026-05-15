@@ -1,23 +1,3 @@
-/**
- * HomeContent Component - Phase 3 Information Architecture
- *
- * Implements the exact Home order required for launch:
- * 1. Focus Score widget
- * 2. one daily mission card
- * 3. primary session start control
- * 4. companion status (already in greeting)
- * 5. streak/progress strip
- * 6. secondary optional rail
- *
- * Rules:
- * - One primary CTA above the fold
- * - No disabled feature cards
- * - No empty social surfaces
- * - No generic marketing explanations
- * - Stale data must be labeled
- * - Offline mode must be visible and calm
- */
-
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { AtRiskBanner } from '../../../features/home-spine/components';
@@ -88,6 +68,20 @@ export const HomeContent: React.FC<HomeContentProps> = ({
 }) => {
   const navigation = useNavigation<NavigationProp>();
   const companionStatus = useHomeCompanion(controller.userId, controller.isOnline);
+  const openChallenges = (): void => {
+    if (controller.disclosure.features.challenges.isUnlocked) {
+      navigation.navigate('Challenges');
+      return;
+    }
+    controller.openSetup();
+  };
+  const openCompanion = (): void => {
+    if (controller.disclosure.features.companion_detail.isUnlocked) {
+      navigation.navigate('CompanionDetail');
+      return;
+    }
+    controller.openSetup();
+  };
 
   return (
     <HomeMissionInput
@@ -123,13 +117,14 @@ export const HomeContent: React.FC<HomeContentProps> = ({
             />
           </HomeSectionBoundary>
 
-          {/* 2. Daily mission card */}
-          <HomeSectionBoundary sectionName="Daily Mission">
-            <HomeDailyMission
-              missionInput={missionInput}
-              onMissionPress={() => navigation.navigate('Challenges')}
-            />
-          </HomeSectionBoundary>
+          {controller.shouldShowSecondarySystems && controller.disclosure.features.challenges.isUnlocked ? (
+            <HomeSectionBoundary sectionName="Daily Mission">
+              <HomeDailyMission
+                missionInput={missionInput}
+                onMissionPress={openChallenges}
+              />
+            </HomeSectionBoundary>
+          ) : null}
 
           {/* 3. Primary session start control */}
           <HomeSectionBoundary sectionName="Session Control">
@@ -145,14 +140,15 @@ export const HomeContent: React.FC<HomeContentProps> = ({
             />
           </HomeSectionBoundary>
 
-          {/* 5. Companion status */}
-          <HomeSectionBoundary sectionName="Companion">
-            <HomeCompanionWidget
-              status={companionStatus}
-              onRetry={() => controller.retryAll()}
-              onPress={() => navigation.navigate('CompanionDetail')}
-            />
-          </HomeSectionBoundary>
+          {controller.disclosure.features.companion_detail.isUnlocked ? (
+            <HomeSectionBoundary sectionName="Companion">
+              <HomeCompanionWidget
+                status={companionStatus}
+                onRetry={() => controller.retryAll()}
+                onPress={openCompanion}
+              />
+            </HomeSectionBoundary>
+          ) : null}
 
           {/* Urgency banner (if streak at risk) */}
           {streakHoursRemaining !== null && streakHoursRemaining <= 4 && (

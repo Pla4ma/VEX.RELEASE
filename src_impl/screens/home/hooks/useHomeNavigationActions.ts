@@ -19,11 +19,13 @@ export function useHomeNavigationActions(input: {
     ) => void;
   };
   completedSessions: number;
+  canNavigateContentStudy: boolean;
+  canNavigateSocial: boolean;
   navigation: HomeNavigation;
   stage: UserExperienceStage;
   userId: string;
 }) {
-  const { activeStudyPlan, analytics, completedSessions, navigation, stage, userId } = input;
+  const { activeStudyPlan, analytics, canNavigateContentStudy, canNavigateSocial, completedSessions, navigation, stage, userId } = input;
 
   const openSetup = useCallback((params?: SessionStackParams['SessionSetup']) => {
     if (userId && completedSessions === 0) {
@@ -38,15 +40,19 @@ export function useHomeNavigationActions(input: {
     [navigation],
   );
   const openSocial = useCallback(
-    () => navigation.navigate('Main', { screen: 'Profile', params: { tab: 'social' } }),
-    [navigation],
+    () => navigation.navigate('Main', canNavigateSocial ? { screen: 'Profile', params: { tab: 'social' } } : { screen: 'Profile', params: { tab: 'stats' } }),
+    [canNavigateSocial, navigation],
   );
-  const openContentStudy = useCallback(
-    () => navigation.navigate('ContentStudy'),
-    [navigation],
-  );
+  const openContentStudy = useCallback(() => {
+    if (!canNavigateContentStudy) {
+      openSetup();
+      return;
+    }
+    navigation.navigate('ContentStudy');
+  }, [canNavigateContentStudy, navigation, openSetup]);
   const continueStudyPlan = useCallback(() => {
-    if (!activeStudyPlan) {
+    if (!activeStudyPlan || !canNavigateContentStudy) {
+      openContentStudy();
       return;
     }
 
@@ -57,7 +63,7 @@ export function useHomeNavigationActions(input: {
         contentId: activeStudyPlan.contentId,
       },
     });
-  }, [activeStudyPlan, navigation]);
+  }, [activeStudyPlan, canNavigateContentStudy, navigation, openContentStudy]);
   const openNextAction = useCallback(() => {
     analytics.trackNextBestActionPressed(stage, completedSessions);
     openSetup();

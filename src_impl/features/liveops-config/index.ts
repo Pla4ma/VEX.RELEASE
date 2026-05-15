@@ -13,12 +13,15 @@ import {
 
 export type {
   FeatureAccess,
+  FeatureAvailability,
+  FeatureAvailabilityState,
   FeatureAccessInputs,
   FeatureAccessMap,
   FeatureKey,
   ProductTier,
   UserExperienceStage,
 } from './feature-access';
+export { getFeatureAvailability } from './feature-access';
 
 export interface FeatureAccessResult {
   error: Error | null;

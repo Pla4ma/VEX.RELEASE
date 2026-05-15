@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Dimensions, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -178,4 +179,4 @@ export function CompanionScreen(): JSX.Element {
   );
 }
 
-export default CompanionScreen;
+export default withScreenErrorBoundary(CompanionScreen, 'Companion');

@@ -8,14 +8,14 @@ import { useAuthStore } from '../../../store';
 import { contentStudyQueryKeys } from './queryKeys';
 import { resolveActiveStudyPlan, type ActiveStudyPlan } from './helpers';
 
-export function useActiveStudyPlan() {
+export function useActiveStudyPlan(options: { enabled?: boolean } = {}) {
   const { user } = useAuthStore();
   const userId = user?.id ?? '';
 
   return useQuery<ActiveStudyPlan | null>({
     queryKey: contentStudyQueryKeys.activePlan(userId),
     queryFn: resolveActiveStudyPlan,
-    enabled: !!userId,
+    enabled: Boolean(userId) && options.enabled !== false,
     staleTime: 1000 * 60, // 1 minute
     refetchInterval: 1000 * 60, // Refetch every minute
   });

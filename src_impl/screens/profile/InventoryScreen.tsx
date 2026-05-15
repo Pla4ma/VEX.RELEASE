@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React,{useState,useCallback,useMemo}from'react'; import{Pressable,ScrollView,View}from'react-native'; import Animated,{FadeInUp}from'react-native-reanimated'; import{Box,Text,Button,Skeleton}from'@/components/primitives'; import{useTheme}from'@/theme'; import{FlashList}from'@shopify/flash-list'; import{useInventory,useFilteredInventory,inventoryKeys,useInventoryStats}from'@/features/inventory/hooks'; import type{InventoryItem,InventoryFilter,ItemType}from'@/features/inventory/schemas'; import{useQueryClient}from'@tanstack/react-query'; import{InventoryGrid}from'@/features/inventory/components/inventory-grid'; type TabType='ALL'|ItemType;const TABS:{id:TabType;label:string;icon:string;}[] = [{id:'ALL',label:'All',icon:'🎒'},{id:'CONSUMABLE',label:'Consumables',icon:'🧪'},{id:'EQUIPMENT',label:'Equipment',icon:'⚔️'},{id:'COSMETIC',label:'Cosmetics',icon:'👑'},{id:'CRAFTING',label:'Crafting',icon:'🔧'}]; const InventoryHeader:React.FC<{totalItems:number;uniqueItems:number;equippedCount:number;}> = ({totalItems,uniqueItems,equippedCount})=>{const{theme} = useTheme(); return<Box p={4}bg={theme.colors.background.secondary}>
       <Box flexDirection="row"justifyContent="space-between"alignItems="center">
         <Box>
@@ -129,4 +130,4 @@ import React,{useState,useCallback,useMemo}from'react'; import{Pressable,ScrollV
 
       {}
       <ItemDetailModal item={selectedItem}visible={!!selectedItem}onClose={handleCloseModal}/>
-    </Box>;}; export default InventoryScreen;
+    </Box>;}; export default withScreenErrorBoundary(InventoryScreen, 'Inventory');

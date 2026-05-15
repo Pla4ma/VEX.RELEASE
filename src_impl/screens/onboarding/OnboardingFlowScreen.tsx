@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useIsFocused, useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -191,3 +192,4 @@ export function OnboardingFlowScreen(): JSX.Element {
     </OnboardingFlowLayout>
   );
 }
+export default withScreenErrorBoundary(OnboardingFlowScreen, 'OnboardingFlow');

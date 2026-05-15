@@ -492,3 +492,238 @@ rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|@ts-expect-error|StyleSheet\.
 **Risks:**
 
 - The compact proof card is available as a feature component and the proof payload is present in the story view model; manual visual QA was not run in this environment.
+
+## Phase 7 - Companion Memory Timeline
+
+**Status:** PASS
+**Date:** 2026-05-15
+**Branch/Commit:** working tree / uncommitted
+
+**Commands run:**
+
+```powershell
+npm test -- src_impl/features/companion/__tests__/memory-timeline.test.ts --runInBand
+npm test -- src_impl/features/companion/__tests__/memory-timeline.test.ts src_impl/features/companion/__tests__/memory-service.test.ts src_impl/features/session-completion/__tests__/headline-view-model.test.ts --runInBand
+npx tsc --noEmit --pretty false
+rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|@ts-expect-error|StyleSheet\.create|FlatList|AsyncStorage|fetch\(|#[0-9A-Fa-f]{3,8}|rgb\(" <Phase 7 files>
+```
+
+**Actual output summary:**
+
+- TDD RED: `memory-timeline.test.ts` first failed because `companion-memory-groups` did not exist.
+- Tests: PASS. Companion memory timeline/service and session story tests passed 3 suites / 8 tests.
+- TypeScript: PASS after typing the FlashList key extractor.
+- Banned pattern audit for Phase 7 scope: PASS. The `rg` command returned no matches.
+- File-size audit for Phase 7 scope: PASS. All edited Phase 7 files are under 200 lines.
+
+**Files changed:**
+
+- `TASKSxxx.md`
+- `VERIFICATION_REPORT.md`
+- `src_impl/features/companion/components/CompanionMemoryTimeline.tsx`
+- `src_impl/features/companion/components/CompanionMemoryItem.tsx`
+- `src_impl/features/companion/components/companion-memory-groups.ts`
+- `src_impl/features/companion/__tests__/memory-timeline.test.ts`
+- `src_impl/screens/profile/CompanionScreen.tsx`
+
+**Evidence:**
+
+- P7-01: Existing session completion flow calls `recordCompletionCompanionMemories`, which writes through `companion/memory-service.ts` -> `memory-repository.ts`. Memory schema includes title, body, type, created date, session date, session ID, and user ID.
+- P7-02: Companion screen now uses the feature-owned memory timeline. Timeline fetches through hook/service/repository, uses FlashList with `estimatedItemSize={120}`, groups Today/Yesterday/This Week/Earlier, and includes loading, error, empty CTA, offline, and success states.
+
+**Deferrals or flags:**
+
+- None.
+
+**Risks:**
+
+- Manual device QA was not run in this environment; evidence is from tests, TypeScript, and static audit.
+
+## Phase 8 - Weekly Focus Card
+
+**Status:** PASS
+**Date:** 2026-05-15
+**Branch/Commit:** working tree / uncommitted
+
+**Commands run:**
+
+```powershell
+npm test -- src_impl/features/social/weekly-focus-card/__tests__/service.test.ts --runInBand
+npx tsc --noEmit --pretty false
+rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|@ts-expect-error|StyleSheet\.create|FlatList|AsyncStorage|fetch\(|#[0-9A-Fa-f]{3,8}|rgb\(" src_impl/features/social/weekly-focus-card src_impl/screens/progress/ProgressScreen.tsx
+rg "\.from\(" src_impl/features/social/weekly-focus-card -n
+```
+
+**Actual output summary:**
+
+- Initial generated test FAIL: Vitest mocks were used under Jest, so repository mocks were not functions.
+- Initial TypeScript FAIL: `WeeklyFocusCard.tsx` imported React Native `Text` while using VEX primitive props and imported a nonexistent `haptics` export.
+- Tests: PASS. Weekly summary service test passed 1 suite / 4 tests.
+- TypeScript: PASS. `npx tsc --noEmit --pretty false` exited 0 after replacing the generated component and splitting pure service logic.
+- Banned pattern audit for Phase 8 scope: PASS. The `rg` command returned no matches.
+- Supabase access audit: PASS. `.from(...)` appears only in `weekly-focus-card/repository.ts`.
+- File-size audit for Phase 8 scope: PASS. All weekly focus card files and `ProgressScreen.tsx` are under 200 lines.
+
+**Files changed:**
+
+- `TASKSxxx.md`
+- `VERIFICATION_REPORT.md`
+- `src_impl/features/social/weekly-focus-card/__tests__/service.test.ts`
+- `src_impl/features/social/weekly-focus-card/components/WeeklyFocusCard.tsx`
+- `src_impl/features/social/weekly-focus-card/components/WeeklyFocusCardSection.tsx`
+- `src_impl/features/social/weekly-focus-card/hooks.ts`
+- `src_impl/features/social/weekly-focus-card/index.ts`
+- `src_impl/features/social/weekly-focus-card/repository.ts`
+- `src_impl/features/social/weekly-focus-card/schemas.ts`
+- `src_impl/features/social/weekly-focus-card/service.ts`
+- `src_impl/screens/progress/ProgressScreen.tsx`
+
+**Evidence:**
+
+- P8-01: Repository reads only `sessions`, `focus_scores`, and `streaks`. Service exposes a pure Zod-backed `buildWeeklyFocusSummary` and repository-backed `computeWeeklySummary`; tests cover normal week, empty week, missing focus score, and insight selection.
+- P8-02: Progress screen renders `WeeklyFocusCardSection`. Card renders week range, minutes, sessions, score delta, band, streak days, best session, and insight; shares text with `Share.share`; does not add image dependencies; handles loading, error retry, empty CTA, success, and share failure with Sentry plus a user-facing toast.
+
+**Deferrals or flags:**
+
+- None.
+
+**Risks:**
+
+- Manual share-sheet/device QA was not run in this environment; evidence is from TypeScript, service tests, and static UI audit.
+
+## Phase 4-8 Final Verification
+
+**Status:** PASS
+**Date:** 2026-05-15
+**Branch/Commit:** working tree / uncommitted
+
+**Commands run:**
+
+```powershell
+npm run typecheck -- --pretty false
+npm run lint
+npm test -- src_impl/features/session-completion/__tests__/reward-priority.test.ts src_impl/features/session-completion/__tests__/headline-reward.test.ts src_impl/features/focus-contract/__tests__/service.test.ts src_impl/features/focus-contract/__tests__/repository.test.ts src_impl/features/personal-bests/__tests__/service.test.ts src_impl/features/personal-bests/__tests__/repository.test.ts src_impl/features/session-completion/__tests__/headline-view-model.test.ts src_impl/features/session-completion/__tests__/completion-orchestrator-return.test.ts src_impl/features/companion/__tests__/memory-timeline.test.ts src_impl/features/companion/__tests__/memory-service.test.ts src_impl/features/social/weekly-focus-card/__tests__/service.test.ts --runInBand
+rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|StyleSheet\.create|FlatList|AsyncStorage|fetch\(" src_impl
+```
+
+**Actual output summary:**
+
+- TypeScript: PASS. `npm run typecheck -- --pretty false` exited 0.
+- Lint: PASS. `npm run lint` exited 0 with existing warnings and 0 errors.
+- Relevant tests: PASS. 11 suites passed, 69 tests passed.
+- Banned pattern audit: PASS. The requested `rg` command returned no matches.
+- File-size audit: PASS. Every edited `src_impl` file in Phase 4-8 scope is under 200 lines.
+
+**Risks:**
+
+- Manual physical-device QA, share-sheet QA, and offline end-to-end QA were not run in this environment.
+
+## Phase 9 - Production Hardening
+
+**Status:** PARTIAL
+**Date:** 2026-05-15
+**Branch/Commit:** working tree / uncommitted
+
+**Commands run:**
+
+```powershell
+Get-ChildItem src_impl\screens -Recurse -Filter "*Screen.tsx" | Select-Object -ExpandProperty FullName
+rg "withScreenErrorBoundary" src_impl\screens -g "*.tsx" -l
+npm test -- src_impl/__tests__/screen-error-boundary-audit.test.ts --runInBand
+npm run typecheck -- --pretty false
+npm run lint -- --quiet
+npm test -- src_impl/__tests__/screen-error-boundary-audit.test.ts src_impl/screens/paywall/__tests__/PaywallScreen.test.tsx --runInBand
+rg "getSupabaseClient\(\)|supabase\.(from|rpc)|\.from\(" src_impl\screens -g "*.tsx" -n
+rg "\.subscribe\(" src_impl -g "*.ts" -g "*.tsx" -n
+rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|StyleSheet\.create|FlatList|AsyncStorage|fetch\(" src_impl
+Get-ChildItem -Path src,src_impl -Recurse -Include *.ts,*.tsx | Where-Object { ($_.FullName -notmatch "\\__tests__\\") -and ($_.FullName -notmatch "\\types\\supabase\.ts$") -and ((Get-Content $_.FullName | Measure-Object -Line).Lines -gt 200) }
+```
+
+**Actual output summary:**
+
+- Error boundary audit: PASS. Added `src_impl/__tests__/screen-error-boundary-audit.test.ts`; RED first reported 31 missing screen wrappers, GREEN passes after wrapping every `src_impl/screens/**/*Screen.tsx` with `withScreenErrorBoundary`.
+- TypeScript: PASS. `npm run typecheck -- --pretty false` exited 0 after fixing wrapper imports and navigator default imports.
+- Lint: PASS. `npm run lint -- --quiet` exited 0.
+- Relevant tests: PASS. Screen-boundary audit and Paywall restore coverage passed 2 suites / 5 tests.
+- Direct screen Supabase access: PASS for actual Supabase calls. Notifications screen data access moved into `features/notifications/repository.ts` and `service.ts`; remaining `.from(` matches are `Array.from`.
+- Banned pattern audit: PASS. Exact requested `rg` command returned no matches in `src_impl`.
+- Subscription audit: PARTIAL. Notification realtime subscription now returns a cleanup function that calls `unsubscribe()`. Existing broader event subscriptions were listed for review; physical 30-minute Active Session profiling was not run.
+- RevenueCat restore: PARTIAL. Paywall restore remains wired through `shared/monetization` and tested. Settings reachability/reinstall sandbox restore were not physically verified.
+- Offline/accessibility/privacy: PARTIAL. Existing code paths were audited statically where touched, but airplane-mode, VoiceOver, App Store Connect privacy-label, account deletion, and Sentry privacy behavior require device/account verification.
+- File-size gate: FAIL for final all-source gate due to pre-existing oversized files outside this Phase 9 edit scope, including `src_impl/store/index.ts`, `src_impl/performance/PerformanceGate.ts`, `src_impl/screens/session/ActiveSessionScreen.tsx`, and `src_impl/screens/session/SessionSetupScreen.tsx`.
+
+**Files changed:**
+
+- `src_impl/__tests__/screen-error-boundary-audit.test.ts`
+- `src_impl/features/notifications/repository.ts`
+- `src_impl/features/notifications/schemas.ts`
+- `src_impl/features/notifications/service.ts`
+- `src_impl/navigation/AuthNavigator.tsx`
+- `src_impl/navigation/MainNavigator.tsx`
+- `src_impl/navigation/OnboardingNavigator.tsx`
+- `src_impl/navigation/SettingsNavigator.tsx`
+- `src_impl/navigation/root-stack-authenticated-routes.tsx`
+- `src_impl/navigation/root-stack-feature-routes.tsx`
+- `src_impl/screens/**/*Screen.tsx` wrapper/default-export updates for screens missing boundaries
+
+**Deferrals or flags:**
+
+- Physical-device QA is still required for offline session flow, VoiceOver, restore purchases sandbox, and 30-minute Active Session profiling.
+- App Store Connect privacy-label verification still requires account access.
+
+**Risks:**
+
+- P9 cannot be marked PASS until physical-device and account-dependent checks are completed.
+- P10 static file-size gate remains blocked by existing over-200 files outside this edit scope.
+
+## Phase 10 - Final Launch Gate
+
+**Status:** FAIL
+**Date:** 2026-05-15
+**Branch/Commit:** working tree / uncommitted
+
+**Commands run:**
+
+```powershell
+npm run types:supabase
+npm run typecheck -- --pretty false
+npm run lint -- --quiet
+npm test -- src_impl/__tests__/screen-error-boundary-audit.test.ts src_impl/screens/paywall/__tests__/PaywallScreen.test.tsx --runInBand
+rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|@ts-expect-error" src src_impl -g "*.ts" -g "*.tsx"
+rg "StyleSheet\.create|FlatList[^A-Za-z]|AsyncStorage|fetch\(" src src_impl -g "*.ts" -g "*.tsx"
+rg "#[0-9A-Fa-f]{3,8}|rgb\(" src src_impl -g "*.ts" -g "*.tsx"
+Get-ChildItem -Path src,src_impl -Recurse -Include *.ts,*.tsx | Where-Object { ($_.FullName -notmatch "\\__tests__\\") -and ($_.FullName -notmatch "\\types\\supabase\.ts$") -and ((Get-Content $_.FullName | Measure-Object -Line).Lines -gt 200) }
+```
+
+**Actual output summary:**
+
+- Supabase type generation: PASS. `npm run types:supabase` regenerated `src_impl/types/supabase.ts`.
+- TypeScript: PASS. `npm run typecheck -- --pretty false` exited 0.
+- Lint: PASS. `npm run lint -- --quiet` exited 0.
+- Relevant tests: PASS. Screen boundary and paywall tests passed 2 suites / 5 tests.
+- Banned pattern scan: FAIL for full `src` + `src_impl`. Existing matches remain in non-edited legacy areas, including `src/api/api-client.ts` raw `fetch`, `src/persistence/AsyncStorageAdapter.ts`, hardcoded color tokens in accessibility/boss/mastery/notification/session-completion components, and additional legacy pattern matches.
+- File-size scan: FAIL. Existing non-generated files over 200 lines remain:
+  - `src_impl/features/economy/anti-duplication/hooks.ts` (400)
+  - `src_impl/features/onboarding/utils/persistence.ts` (274)
+  - `src_impl/features/onboarding/utils/validation.ts` (466)
+  - `src_impl/features/session-completion/offline-sync-service.ts` (283)
+  - `src_impl/feedback/micro-interactions.ts` (207)
+  - `src_impl/navigation/components/VexTabBar.tsx` (216)
+  - `src_impl/performance/PerformanceGate.ts` (463)
+  - `src_impl/screens/session/ActiveSessionScreen.tsx` (231)
+  - `src_impl/screens/session/SessionSetupScreen.tsx` (228)
+  - `src_impl/store/index.ts` (440)
+  - `src_impl/types/models.ts` (251)
+- P10-02/P10-03/P10-04 physical-device, App Store package, production EAS build, submit, TestFlight install, and App Review submission were not run because they require device/account/App Store access and P10-01 static verification is not green.
+
+**Files changed:**
+
+- Same Phase 9 code files plus regenerated `src_impl/types/supabase.ts`.
+
+**Deferrals or flags:**
+
+- None added.
+
+**Risks:**
+
+- Release candidate is not launch-gate clean. The static gate must be fixed before physical release-candidate submission can be honestly marked complete.

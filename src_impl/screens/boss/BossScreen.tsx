@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -129,4 +130,4 @@ export const BossScreen = (): JSX.Element => {
   );
 };
 
-export default BossScreen;
+export default withScreenErrorBoundary(BossScreen, 'Boss');

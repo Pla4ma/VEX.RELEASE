@@ -1,4 +1,11 @@
-import { DEFAULT_COPY, DISABLED_FEATURES, FEATURE_COPY, FEATURE_THRESHOLDS } from './feature-access-config';
+import {
+  DEFAULT_COPY,
+  FEATURE_COPY,
+  FEATURE_PRIORITIES,
+  FEATURE_RELEASE_STATES,
+  FEATURE_TEASER_STARTS,
+  FEATURE_THRESHOLDS,
+} from './feature-access-config';
 
 export type UserExperienceStage =
   | 'NEW_USER'
@@ -7,6 +14,13 @@ export type UserExperienceStage =
   | 'POWER_USER';
 
 export type ProductTier = 'CORE' | 'SECONDARY' | 'EXPANSION';
+export type FeatureReleaseState =
+  | 'core'
+  | 'progressive'
+  | 'teased_only'
+  | 'disabled_beta'
+  | 'internal_only'
+  | 'archived';
 
 export type FeatureKey =
   | 'focus_session'
@@ -48,6 +62,7 @@ export interface FeatureAccess {
   unlockReason: string;
   isTeased?: boolean;
   priority?: number;
+  releaseState: FeatureReleaseState;
 }
 
 export type FeatureAccessMap = Record<FeatureKey, FeatureAccess>;
@@ -87,12 +102,23 @@ export function buildFeatureAccess(inputs: FeatureAccessInputs): {
   const stage = getStage(inputs.totalCompletedSessions);
   const productTier = getProductTier(stage);
 
-  const accessFor = (feature: FeatureKey): FeatureAccess => ({
-    ...DEFAULT_COPY,
-    ...FEATURE_COPY[feature],
-    isUnlocked: !DISABLED_FEATURES.includes(feature) && inputs.totalCompletedSessions >= FEATURE_THRESHOLDS[feature],
-    isVisible: !DISABLED_FEATURES.includes(feature),
-  });
+  const accessFor = (feature: FeatureKey): FeatureAccess => {
+    const releaseState = FEATURE_RELEASE_STATES[feature];
+    const disabled = releaseState === 'disabled_beta' || releaseState === 'archived' || releaseState === 'internal_only';
+    const threshold = FEATURE_THRESHOLDS[feature];
+    const isUnlocked = !disabled && releaseState !== 'teased_only' && inputs.totalCompletedSessions >= threshold;
+    const teaserStart = FEATURE_TEASER_STARTS[feature];
+    const isTeased = !disabled && !isUnlocked && typeof teaserStart === 'number' && inputs.totalCompletedSessions >= teaserStart;
+    return {
+      ...DEFAULT_COPY,
+      ...FEATURE_COPY[feature],
+      isUnlocked,
+      isVisible: !disabled,
+      isTeased,
+      priority: FEATURE_PRIORITIES[feature] ?? 99,
+      releaseState,
+    };
+  };
 
   const features: FeatureAccessMap = {
     achievements: accessFor('achievements'),
@@ -129,3 +155,6 @@ export function buildFeatureAccess(inputs: FeatureAccessInputs): {
 
   return { features, productTier, stage };
 }
+
+export { getFeatureAvailability } from './feature-availability';
+export type { FeatureAvailability, FeatureAvailabilityState } from './feature-availability';

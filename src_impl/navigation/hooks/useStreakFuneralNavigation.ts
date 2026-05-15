@@ -66,8 +66,13 @@ export function useStreakFuneralNavigation({
       return;
     }
 
+    const previousStreak = state.currentStreak === 1 ? (state.longestStreak > 1 ? state.longestStreak : 0) : 0;
+    if (previousStreak < 3) {
+      return;
+    }
+
     setStreakFuneralData({
-      previousStreak: state.currentStreak === 1 ? (state.longestStreak > 1 ? state.longestStreak : 0) : 0,
+      previousStreak,
       diedAt: state.lastStreakDiedAt,
     });
     setShowStreakFuneral(true);
@@ -82,6 +87,10 @@ export function useStreakFuneralNavigation({
   useEffect(() => {
     const unsubscribe = eventBus.subscribe('streak:funeral_ready', (data) => {
       if (!isStreakFuneralEvent(data) || data.userId !== userId) {
+        return;
+      }
+
+      if (data.previousStreak < 3) {
         return;
       }
 

@@ -9,11 +9,11 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { SettingsScreen } from '../screens/settings/SettingsScreen';
-import { NotificationSettingsScreen } from '../screens/settings/NotificationSettingsScreen';
-import { AppearanceSettingsScreen } from '../screens/settings/AppearanceSettingsScreen';
-import { CoachSettingsScreen } from '../screens/settings/CoachSettingsScreen';
-import { PrivacySettingsScreen } from '../screens/settings/PrivacySettingsScreen';
-import { AccountSettingsScreen } from '../screens/settings/AccountSettingsScreen';
+import NotificationSettingsScreen from '../screens/settings/NotificationSettingsScreen';
+import AppearanceSettingsScreen from '../screens/settings/AppearanceSettingsScreen';
+import CoachSettingsScreen from '../screens/settings/CoachSettingsScreen';
+import PrivacySettingsScreen from '../screens/settings/PrivacySettingsScreen';
+import AccountSettingsScreen from '../screens/settings/AccountSettingsScreen';
 import type { SettingsStackParams } from './types';
 
 const Stack = createNativeStackNavigator<SettingsStackParams>();

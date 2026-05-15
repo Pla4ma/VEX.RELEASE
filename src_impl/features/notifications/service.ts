@@ -19,3 +19,22 @@ export async function registerPushToken(input: {
     tokenInput.platform,
   );
 }
+
+export async function getNotificationCenterItems(userId: string): Promise<repository.NotificationCenterItem[]> {
+  const validatedUserId = UserIdSchema.parse(userId);
+  return repository.fetchNotificationCenterItems(validatedUserId);
+}
+
+export async function markNotificationRead(userId: string, notificationId: string): Promise<void> {
+  await repository.markNotificationRead(UserIdSchema.parse(userId), z.string().min(1).parse(notificationId));
+}
+
+export async function markAllNotificationsRead(userId: string): Promise<void> {
+  await repository.markAllNotificationsRead(UserIdSchema.parse(userId));
+}
+
+export function subscribeToNotificationCenter(userId: string, onChange: () => void): () => void {
+  return repository.subscribeToNotificationCenter(UserIdSchema.parse(userId), onChange);
+}
+
+export type { NotificationCenterItem } from './schemas';

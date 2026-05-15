@@ -6,6 +6,10 @@
 
 'use strict';
 
+if (process.env.NODE_ENV === 'production') {
+  throw new Error('Production build cannot use the RevenueCat shim.');
+}
+
 const UNAVAILABLE_ERROR = {
   message: 'RevenueCat is not available in Expo Go. Use a custom dev client.',
   code: 'CONFIGURATION_ERROR',

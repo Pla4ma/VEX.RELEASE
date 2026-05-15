@@ -22,26 +22,28 @@ export function useHomeData() {
   const insets = useSafeAreaInsets();
   const controller = useHomeScreenController();
   const { show: showToast } = useToast();
-  const challengesQuery = useActiveChallenges(controller.userId);
+  const challengesQuery = useActiveChallenges(controller.userId, {
+    enabled: controller.runtime.canQueryChallenges,
+  });
   const claimRewardMutation = useClaimChallengeReward();
   const freezeStreakMutation = useFreezeStreak();
   const {
     intervention,
     isLoading: interventionLoading,
     dismiss: dismissIntervention,
-  } = useActiveIntervention(controller.userId || undefined);
+  } = useActiveIntervention(controller.runtime.canQueryCoach ? controller.userId || undefined : undefined);
   const activeBossQuery = controller.activeBossQuery;
   const coinBalance = controller.walletQuery.data?.coins ?? 0;
   const activeWagerQuery = { wager: null };
   const bountyStatusQuery = useBountyStatus(
-    activeBossQuery.data?.id,
+    controller.runtime.canQueryBoss ? activeBossQuery.data?.id : undefined,
     controller.userId || undefined
   );
   const placeBountyMutation = usePlaceBounty();
   const savedPreview = useSavedTomorrowPreview(controller.userId ?? '');
   const displayedInterventionIdRef = useRef<string | null>(null);
-  const squadMembersFocusing = useSquadMembersFocusing(controller.userId || undefined);
-  const { count: unreadNotificationCount } = useNotificationBadge(controller.userId);
+  const squadMembersFocusing = useSquadMembersFocusing(controller.runtime.canQuerySquads ? controller.userId || undefined : undefined);
+  const { count: unreadNotificationCount } = useNotificationBadge(controller.runtime.canQueryNotifications ? controller.userId : undefined);
   const todaysChallenges: ChallengeItem[] = useMemo(() => {
     if (!challengesQuery.data) {return [];}
     return challengesQuery.data

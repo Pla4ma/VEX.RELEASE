@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../shared/ui/components/ScreenErrorBoundary';
 import React, { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
 import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
@@ -153,4 +154,4 @@ export function ComebackScreen(): JSX.Element {
   );
 }
 
-export default ComebackScreen;
+export default withScreenErrorBoundary(ComebackScreen, 'Comeback');

@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box, Button, Text } from '../../components/primitives';
@@ -87,4 +88,4 @@ export function CompanionDetailScreen(): JSX.Element {
   );
 }
 
-export default CompanionDetailScreen;
+export default withScreenErrorBoundary(CompanionDetailScreen, 'CompanionDetail');

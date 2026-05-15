@@ -11,9 +11,9 @@ import {
 } from "@react-navigation/bottom-tabs";
 
 import { HomeScreen } from "../screens/home/HomeScreen";
-import { FocusScreen } from "../screens/home/FocusScreen";
-import { ProgressScreen } from "../screens/progress/ProgressScreen";
-import { ProfileScreen } from "../screens/profile/ProfileScreen";
+import FocusScreen from "../screens/home/FocusScreen";
+import ProgressScreen from "../screens/progress/ProgressScreen";
+import ProfileScreen from "../screens/profile/ProfileScreen";
 import { VexTabBar } from "./components/VexTabBar";
 import type { MainTabParams } from "./types";
 

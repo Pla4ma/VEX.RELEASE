@@ -1,3 +1,4 @@
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import React, { useCallback } from 'react';
 
 import { Box, Text } from '../../components/primitives';
@@ -65,4 +66,4 @@ export function ChallengesScreen(): JSX.Element {
   return <ChallengeHub userId={userId} onClaimReward={handleClaimReward} />;
 }
 
-export default ChallengesScreen;
+export default withScreenErrorBoundary(ChallengesScreen, 'Challenges');

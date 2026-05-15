@@ -22,6 +22,7 @@ import { useSessionHistory } from '../../../session/hooks/useSession';
 import { useAuthStore } from '../../../store';
 import { useSessionUIStore } from '../../../store/session-state';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { buildHomeFeatureRuntime } from './home-feature-runtime';
 import { buildDisplayedReturnReason, getFocusedMinutesForToday, getNextUnlockFeature } from './home-controller-helpers';
 import { useHomeAnalyticsEffects } from './useHomeAnalyticsEffects';
 import { useHomeNavigationActions } from './useHomeNavigationActions';
@@ -35,26 +36,28 @@ export function useHomeScreenController() {
   const clearHomeHighlight = useSessionUIStore((state) => state.clearHomeHighlight);
   const userId = user?.id ?? '';
   const disclosure = useFeatureAccess();
+  const runtime = useMemo(() => buildHomeFeatureRuntime(disclosure.features, disclosure.productTier), [disclosure.features, disclosure.productTier]);
   const analytics = useDisclosureAnalytics();
   const streakQuery = useStreakSummary(userId);
   const progressionQuery = useProgressionSummary(userId);
   const historyQuery = useSessionHistory(userId, 5);
-  const squadsQuery = useUserSquads(userId || undefined, { staleTime: 1000 * 60 * 5 });
-  const activeStudyPlanQuery = useActiveStudyPlan();
-  const walletQuery = useWallet(userId);
-  const comebackQuery = useComebackState(userId);
-  const activeBossQuery = useActiveBoss(userId || null);
+  const squadsQuery = useUserSquads(userId || undefined, { enabled: runtime.canQuerySquads, staleTime: 1000 * 60 * 5 });
+  const activeStudyPlanQuery = useActiveStudyPlan({ enabled: runtime.canQueryStudy });
+  const walletQuery = useWallet(userId, { enabled: runtime.canQueryEconomy });
+  const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
+  const activeBossQuery = useActiveBoss(runtime.canQueryBoss ? userId || null : null);
   const createRecommendation = useCreateRecommendation();
   const updateRecommendationStatus = useUpdateRecommendationStatus();
   const activeSeasonQuery = useQuery({
     queryKey: seasonKeys.active(),
     queryFn: () => seasonService.getActiveSeason(),
+    enabled: runtime.canQuerySeasons,
     staleTime: 1000 * 60 * 10,
   });
   const battlePassQuery = useQuery({
     queryKey: battlePassKeys.userSummary(userId, activeSeasonQuery.data?.id ?? ''),
     queryFn: () => battlePassService.getUserBattlePassSummary(userId, activeSeasonQuery.data?.id ?? ''),
-    enabled: Boolean(userId && activeSeasonQuery.data?.id && !activeSeasonQuery.isLoading),
+    enabled: runtime.canQueryBattlePass && Boolean(userId && activeSeasonQuery.data?.id && !activeSeasonQuery.isLoading),
     staleTime: 1000 * 60 * 2,
   });
   const currentStreak = streakQuery.data?.currentDays ?? 0;
@@ -62,23 +65,19 @@ export function useHomeScreenController() {
   const latestSession = historyQuery.history[0] ?? null;
   const todayFocusMinutes = historyQuery.history.reduce((sum, entry) => sum + getFocusedMinutesForToday(entry), 0);
   const progressPercent = Math.min(100, Math.round((todayFocusMinutes / 120) * 100));
-  const shouldShowSecondarySystems = disclosure.productTier !== 'CORE';
-  const shouldShowExpansionSystems = disclosure.productTier === 'EXPANSION';
+  const shouldShowSecondarySystems = runtime.shouldShowSecondarySystems;
+  const shouldShowExpansionSystems = runtime.shouldShowExpansionSystems;
   const nextUnlockFeature = useMemo(() => getNextUnlockFeature(disclosure.features), [disclosure.features]);
   const nextBestAction = getNextBestAction({
     completedSessions: disclosure.inputs.totalCompletedSessions,
     currentStreak,
     nextUnlockFeature,
   });
-  const isCoreLoading =
-    disclosure.isLoading ||
-    activeSeasonQuery.isLoading ||
-    battlePassQuery.isLoading ||
-    activeStudyPlanQuery.isLoading;
+  const isCoreLoading = disclosure.isLoading;
   const recommendationsQuery = useQuery({
     queryKey: ['coach', 'recommendations', userId],
     queryFn: () => coachRepository.fetchActiveRecommendations(userId),
-    enabled: Boolean(userId) && !isCoreLoading,
+    enabled: runtime.canQueryCoach && Boolean(userId) && !isCoreLoading,
     staleTime: 1000 * 60 * 5,
   });
   const primaryRecommendation = useMemo<SessionRecommendation | null>(
@@ -113,6 +112,7 @@ export function useHomeScreenController() {
         }
       : null,
     analytics,
+    canNavigateContentStudy: disclosure.features.content_study.isUnlocked, canNavigateSocial: disclosure.features.social_tab.isUnlocked,
     completedSessions: disclosure.inputs.totalCompletedSessions,
     navigation,
     stage: disclosure.stage,
@@ -177,6 +177,7 @@ export function useHomeScreenController() {
     homeSpine,
     returnReason: displayedReturnReason,
     disclosure,
+    runtime,
     streakQuery,
     progressionQuery,
     historyQuery,

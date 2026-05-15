@@ -10,6 +10,10 @@
 
 import * as React from 'react';
 
+if (process.env.NODE_ENV === 'production') {
+  throw new Error('Production build cannot use the PostHog shim.');
+}
+
 const noop = () => {};
 const noopAsync = async () => {};
 
