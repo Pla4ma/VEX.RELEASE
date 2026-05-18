@@ -36,21 +36,69 @@ export const OnboardingStepSchema = z.enum([
   "GOAL_SETTING",
   "FOCUS_TIME",
   "NAME_SETUP",
+  "MOTIVATION_STYLE",
   "FIRST_SESSION_CTA",
 ]);
+
+/**
+ * Coach persona type (chosen during onboarding or defaulted)
+ */
+export const CoachPersonaSchema = z.enum([
+  "cheerleader",
+  "mentor",
+  "drill-sergeant",
+]);
+
+/**
+ * Companion element type for onboarding (chosen during onboarding or defaulted)
+ */
+export const OnboardingElementSchema = z.enum([
+  "FLAME",
+  "WAVE",
+  "TERRA",
+  "ZEPHYR",
+  "VOID",
+  "LUMINA",
+]);
+
+/**
+ * Motivation profile types derived from onboarding choices
+ */
+export const MotivationProfileTypeSchema = z.enum([
+  "calm",
+  "friendly",
+  "game_like",
+  "competitive",
+  "intense",
+  "student",
+  "creator",
+  "worker",
+]);
+
+/**
+ * Motivation profile — derived from goal + persona + element choices
+ */
+export const MotivationProfileSchema = z.object({
+  primary: MotivationProfileTypeSchema,
+  secondary: z.array(MotivationProfileTypeSchema),
+});
 
 /**
  * Onboarding state schema (for Zustand/MMKV persistence)
  */
 export const OnboardingStateSchema = z.object({
   isOnboarded: z.boolean(),
-  currentStep: z.number().int().min(0).max(4),
+  currentStep: z.number().int().min(0).max(5),
   goal: FocusGoalSchema.nullable(),
   focusDuration: FocusDurationSchema.nullable(),
   displayName: z.string().min(1).nullable(),
   startedAt: z.number().nullable(),
   completedAt: z.number().nullable(),
   completedForUserId: z.string().min(1).nullable(),
+  persona: CoachPersonaSchema.nullable(),
+  element: OnboardingElementSchema.nullable(),
+  motivationProfile: MotivationProfileSchema.nullable(),
+  explicitMotivationStyle: MotivationProfileTypeSchema.nullable(),
 });
 
 /**
@@ -122,32 +170,10 @@ export type OnboardingState = z.infer<typeof OnboardingStateSchema>;
 export type GoalOption = z.infer<typeof GoalOptionSchema>;
 export type DurationOption = z.infer<typeof DurationOptionSchema>;
 export type TooltipState = z.infer<typeof TooltipStateSchema>;
+export type CoachPersona = z.infer<typeof CoachPersonaSchema>;
+export type OnboardingElement = z.infer<typeof OnboardingElementSchema>;
+export type MotivationProfileType = z.infer<typeof MotivationProfileTypeSchema>;
+export type MotivationProfile = z.infer<typeof MotivationProfileSchema>;
 
 // Type alias for backward compatibility
 export type OnboardingGoal = FocusGoal;
-
-/**
- * Onboarding goals constant for UI
- */
-export const ONBOARDING_GOALS: Array<{
-  id: FocusGoal;
-  label: string;
-  description: string;
-}> = [
-  { id: "WORK", label: "Work", description: "Focus on professional tasks" },
-  {
-    id: "STUDY",
-    label: "Study",
-    description: "Learn and absorb new information",
-  },
-  {
-    id: "CREATIVE",
-    label: "Creative",
-    description: "Create, design, or build something",
-  },
-  {
-    id: "PERSONAL",
-    label: "Personal",
-    description: "Personal growth and organization",
-  },
-];

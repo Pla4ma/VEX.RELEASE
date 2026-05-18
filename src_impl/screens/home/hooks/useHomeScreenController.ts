@@ -3,17 +3,12 @@ import { useNavigation } from '@react-navigation/native';
 import { useQuery } from '@tanstack/react-query';
 import { useCreateRecommendation, useUpdateRecommendationStatus, type SessionRecommendation } from '../../../features/ai-coach';
 import * as coachRepository from '../../../features/ai-coach/repository';
-import { battlePassKeys } from '../../../features/battle-pass/hooks';
-import * as battlePassService from '../../../features/battle-pass/service';
 import { useActiveStudyPlan } from '../../../features/content-study';
-import { useWallet } from '../../../features/economy/hooks';
 import { useActiveBoss } from '../../../features/boss/hooks';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import { useDisclosureAnalytics, useFeatureAccess } from '../../../features/liveops-config';
 import { getNextBestAction } from '../../../features/progression';
 import { useProgressionSummary } from '../../../features/progression/hooks';
-import { seasonKeys } from '../../../features/seasons/hooks';
-import * as seasonService from '../../../features/seasons/service';
 import { useComebackState, useStreakSummary } from '../../../features/streaks/hooks';
 import { useUserSquads } from '../../../features/squads/hooks';
 import { useNetInfo } from '../../../network';
@@ -43,23 +38,10 @@ export function useHomeScreenController() {
   const historyQuery = useSessionHistory(userId, 5);
   const squadsQuery = useUserSquads(userId || undefined, { enabled: runtime.canQuerySquads, staleTime: 1000 * 60 * 5 });
   const activeStudyPlanQuery = useActiveStudyPlan({ enabled: runtime.canQueryStudy });
-  const walletQuery = useWallet(userId, { enabled: runtime.canQueryEconomy });
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
   const activeBossQuery = useActiveBoss(runtime.canQueryBoss ? userId || null : null);
   const createRecommendation = useCreateRecommendation();
   const updateRecommendationStatus = useUpdateRecommendationStatus();
-  const activeSeasonQuery = useQuery({
-    queryKey: seasonKeys.active(),
-    queryFn: () => seasonService.getActiveSeason(),
-    enabled: runtime.canQuerySeasons,
-    staleTime: 1000 * 60 * 10,
-  });
-  const battlePassQuery = useQuery({
-    queryKey: battlePassKeys.userSummary(userId, activeSeasonQuery.data?.id ?? ''),
-    queryFn: () => battlePassService.getUserBattlePassSummary(userId, activeSeasonQuery.data?.id ?? ''),
-    enabled: runtime.canQueryBattlePass && Boolean(userId && activeSeasonQuery.data?.id && !activeSeasonQuery.isLoading),
-    staleTime: 1000 * 60 * 2,
-  });
   const currentStreak = streakQuery.data?.currentDays ?? 0;
   const currentXp = progressionQuery.data?.xp ?? 0;
   const latestSession = historyQuery.history[0] ?? null;
@@ -182,10 +164,7 @@ export function useHomeScreenController() {
     progressionQuery,
     historyQuery,
     squadsQuery,
-    activeSeasonQuery,
-    battlePassQuery,
     activeStudyPlanQuery,
-    walletQuery,
     comebackQuery,
     activeBossQuery,
     shouldShowSecondarySystems,

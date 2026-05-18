@@ -16,10 +16,26 @@ import type {
   NotificationActionType,
   NotificationRouteResult,
 } from './notification-routing-types';
+import { getFeatureAvailability } from '../features/liveops-config/feature-availability';
+import type { FeatureAccess } from '../features/liveops-config/feature-access';
+
+export interface FeatureAccessCheck {
+  boss_tab: FeatureAccess;
+  shop: FeatureAccess;
+  ai_coach_advanced: FeatureAccess;
+  achievements: FeatureAccess;
+  squads: FeatureAccess;
+}
+
+function isFeatureGated(feature: FeatureAccess): boolean {
+  const availability = getFeatureAvailability(feature);
+  return !availability.canNavigate || !availability.canRegisterRoute;
+}
 
 export function routeNotificationAction(
   navigation: NavigationProp<RootStackParams> | null | undefined,
   action: NotificationAction,
+  featureAccess?: Partial<FeatureAccessCheck>,
 ): NotificationRouteResult {
   if (!navigation) {
     return { success: false, error: 'Navigation not available' };
@@ -29,6 +45,9 @@ export function routeNotificationAction(
     case 'start_session':
       return navigateToSessionSetup(navigation, action.payload);
     case 'view_boss':
+      if (featureAccess?.boss_tab && isFeatureGated(featureAccess.boss_tab)) {
+        return { success: false, error: 'Boss feature not yet unlocked', screen: 'Home' };
+      }
       navigateToMainRoot(navigation, 'Boss');
       return { success: true, screen: 'Boss' };
     case 'open_chest':
@@ -42,6 +61,9 @@ export function routeNotificationAction(
       navigateToMainTab(navigation, 'Home');
       return { success: true, screen: 'Streak' };
     case 'open_shop':
+      if (featureAccess?.shop && isFeatureGated(featureAccess.shop)) {
+        return { success: false, error: 'Shop feature not yet unlocked', screen: 'Home' };
+      }
       navigateToMainRoot(navigation, 'Shop');
       return { success: true, screen: 'Shop' };
     case 'view_profile':
@@ -50,6 +72,9 @@ export function routeNotificationAction(
       });
       return { success: true, screen: 'Profile' };
     case 'open_coach':
+      if (featureAccess?.ai_coach_advanced && isFeatureGated(featureAccess.ai_coach_advanced)) {
+        return { success: false, error: 'AI Coach not yet unlocked', screen: 'Home' };
+      }
       navigateToMainRoot(navigation, 'AICoach');
       return { success: true, screen: 'AICoach' };
     case 'accept_invite':

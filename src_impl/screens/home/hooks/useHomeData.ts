@@ -6,21 +6,18 @@ import {
 } from '../../../features/challenges/hooks';
 import { useSquadMembersFocusing } from '../../../features/squads/hooks';
 import { useFreezeStreak } from '../../../features/streaks/hooks';
-import {
-  useBountyStatus,
-  usePlaceBounty,
-} from '../../../features/boss/hooks';
 import { useSavedTomorrowPreview } from '../../../features/home-spine/hooks';
 import { useActiveIntervention } from '../../../features/ai-coach/hooks';
 import { useNotificationBadge } from '../../../features/notifications/components/NotificationBadge';
 import { useToast } from '../../../shared/ui/components/Toast';
-import { useHomeScreenController } from './useHomeScreenController';
+import { useHomeViewModel } from './useHomeViewModel';
 import type { ChallengeItem, SessionListItem } from '../../../features/home-spine/components';
 import { getQualityGrade, getHomeCompanionMood } from '../utils';
 import { createHomeDailyDungeon } from './home-daily-dungeon';
 export function useHomeData() {
   const insets = useSafeAreaInsets();
-  const controller = useHomeScreenController();
+  const viewModel = useHomeViewModel();
+  const controller = viewModel.controller;
   const { show: showToast } = useToast();
   const challengesQuery = useActiveChallenges(controller.userId, {
     enabled: controller.runtime.canQueryChallenges,
@@ -32,14 +29,6 @@ export function useHomeData() {
     isLoading: interventionLoading,
     dismiss: dismissIntervention,
   } = useActiveIntervention(controller.runtime.canQueryCoach ? controller.userId || undefined : undefined);
-  const activeBossQuery = controller.activeBossQuery;
-  const coinBalance = controller.walletQuery.data?.coins ?? 0;
-  const activeWagerQuery = { wager: null };
-  const bountyStatusQuery = useBountyStatus(
-    controller.runtime.canQueryBoss ? activeBossQuery.data?.id : undefined,
-    controller.userId || undefined
-  );
-  const placeBountyMutation = usePlaceBounty();
   const savedPreview = useSavedTomorrowPreview(controller.userId ?? '');
   const displayedInterventionIdRef = useRef<string | null>(null);
   const squadMembersFocusing = useSquadMembersFocusing(controller.runtime.canQuerySquads ? controller.userId || undefined : undefined);
@@ -173,11 +162,6 @@ export function useHomeData() {
     intervention,
     interventionLoading,
     dismissIntervention,
-    activeBossQuery,
-    coinBalance,
-    activeWagerQuery,
-    bountyStatusQuery,
-    placeBountyMutation,
     savedPreview,
     displayedInterventionIdRef,
     squadMembersFocusing,

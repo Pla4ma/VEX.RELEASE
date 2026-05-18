@@ -20,13 +20,27 @@ const AIRequestTypeSchema = z.enum([
   'GENERATE_STREAK_RISK_NUDGE',
   'GENERATE_WEEKLY_REFLECTION',
 ]);
+const AIActionIntentSchema = z.enum([
+  'START_SESSION',
+  'VIEW_PROGRESS',
+  'VIEW_SETTINGS',
+  'START_COMEBACK',
+  'VIEW_BOSS',
+  'VIEW_CHALLENGES',
+  'VIEW_SQUAD',
+  'VIEW_SHOP',
+  'OPEN_COACH',
+  'OPEN_CONTENT_STUDY',
+  'NONE',
+]);
+
 const CoachPayloadSchema = z
   .object({
     message: z.string().min(1).max(1000),
     tone: z.string().min(1).max(50),
     urgency: z.enum(['low', 'medium', 'high', 'critical']),
     actionLabel: z.string().min(1).max(60).optional(),
-    actionRoute: z.enum(['SessionSetup', 'Progress', 'Settings']).optional(),
+    action: AIActionIntentSchema.optional(),
   })
   .strict();
 const CoachContextSchema = z
@@ -237,7 +251,7 @@ function buildPrompt(request: AIRequest): {
         )
         .join('; ') || 'none';
     return {
-      system: `You are VEX AI Coach in ${persona} persona. Use the user level, streak, persona, and last three session outcomes. Return ONLY valid JSON with keys message, tone, urgency, optional actionLabel, optional actionRoute. Keep the message concise and mobile-friendly.`,
+      system: `You are VEX AI Coach in ${persona} persona. Use the user level, streak, persona, and last three session outcomes. Return ONLY valid JSON with keys message, tone, urgency, optional actionLabel, optional action (one of: START_SESSION, VIEW_PROGRESS, VIEW_SETTINGS, START_COMEBACK, VIEW_BOSS, VIEW_CHALLENGES, VIEW_SQUAD, VIEW_SHOP, OPEN_COACH, OPEN_CONTENT_STUDY, NONE). Keep the message concise and mobile-friendly.`,
       user: `Category=${request.context.category}. Level=${request.context.currentLevel ?? 1}. Streak=${request.context.currentStreak ?? 0}. HoursSinceLastSession=${request.context.hoursSinceLastSession ?? 0}. DaysInactive=${request.context.daysInactive ?? 0}. Recent3=${recentOutcomes}.`,
       maxOutputTokens: 150,
     };

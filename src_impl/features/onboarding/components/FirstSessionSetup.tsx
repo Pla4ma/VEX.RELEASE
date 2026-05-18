@@ -72,7 +72,7 @@ export function FirstSessionSetup({ userName, goal, onStartSession, onBack }: Fi
       <Animated.View entering={FadeIn.duration(400)}>
         <Box gap="sm" mb="xl">
           <Text variant="label" color="primary.500">
-            Step 4 of 5
+            Step 3 of 4
           </Text>
           <Text variant="h2" color="text.primary">
             Let's do your first session, {displayName}!

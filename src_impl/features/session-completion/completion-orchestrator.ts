@@ -42,6 +42,7 @@ export async function orchestrateSessionCompletion(
   const parsed = SessionCompletedEventSchema.parse(event);
   const summary = SessionSummarySchema.parse(parsed.summary);
   const isOnline = getConnectionState() !== "offline";
+  // LAYER 1: Local completion receipt — always succeeds
   const ledger = buildCompletionLedger({
     completedAt: parsed.timestamp ?? Date.now(),
     offlineSyncStatus: isOnline ? "synced" : "pending_sync",
@@ -52,6 +53,7 @@ export async function orchestrateSessionCompletion(
   });
   const key = ledger.idempotencyKey;
 
+  // LAYER 1: Idempotency guard — never process the same completion twice
   if (processedIdempotencyKeys.has(key)) {
     return null;
   }
@@ -73,6 +75,7 @@ export async function orchestrateSessionCompletion(
   }
   processedIdempotencyKeys.add(key);
 
+  // LAYER 2: Persist session — Supabase primary, offline queue fallback
   let persisted = ledger;
   if (isOnline) {
     try {
@@ -99,6 +102,7 @@ export async function orchestrateSessionCompletion(
   }
 
   const sessionUIStore = useSessionUIStore.getState();
+  // LAYER 3: XP / streak / progression / rewards — required for user payoff
   const subsystemResult = await applyCompletionSubsystems({
     ledger: persisted,
     summary,
@@ -110,6 +114,7 @@ export async function orchestrateSessionCompletion(
     finalLedger,
     summary,
   );
+  // LAYER 4: Optional companion memories
   const companionMemories = await recordCompletionCompanionMemories({
     isPersonalBest: personalBest.isPersonalBest,
     ledger: finalLedger,
@@ -117,6 +122,7 @@ export async function orchestrateSessionCompletion(
     userId: parsed.userId,
   });
 
+  // LAYER 5: Story view model + analytics + query invalidation — optional/post-hoc
   const storyViewModel = buildPostSessionStoryViewModel({
     companionMemory: companionMemories[0] ?? null,
     degradedWarnings: degradedSystems,

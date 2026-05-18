@@ -16,6 +16,10 @@ export type {
   RouteParams,
 } from './types';
 
+// Safe navigation
+export { openFeature, resolveFeatureRoute } from './openFeature';
+export type { OpenFeatureResult } from './openFeature';
+
 // Navigators
 export { RootNavigator } from './RootNavigator';
 export { MainNavigator } from './MainNavigator';

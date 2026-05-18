@@ -8,6 +8,7 @@ export { OnboardingNavigator } from './OnboardingNavigator';
 export { OnboardingProgressBar, OnboardingDots } from './OnboardingProgressBar';
 export { WelcomeScreen } from './WelcomeScreen';
 export { NameAndGoalScreen } from './NameAndGoalScreen';
+export { MotivationScreen } from './MotivationScreen';
 export { CompanionRevealScreen } from './CompanionRevealScreen';
 export { FirstSessionSetup } from './FirstSessionSetup';
 export { FirstResultScreen } from './FirstResultScreen';

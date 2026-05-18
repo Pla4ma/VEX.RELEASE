@@ -11,6 +11,9 @@ export type { EventHandler } from './EventEmitter';
 // Event Bus
 export { EventBus, eventBus } from './EventBus';
 
+// Safety
+export { subscribeIdempotent, resetIdempotency } from './event-safety';
+
 // Types
 export type {
   EventChannels,

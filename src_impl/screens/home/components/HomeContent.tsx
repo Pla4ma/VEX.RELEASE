@@ -36,16 +36,8 @@ interface HomeContentProps {
   data: HomeData;
   handleClaimReward: (rewardId: string) => void;
   streakHoursRemaining: number;
-  canShowWagers: boolean;
-  activeWagerQuery: HomeData['activeWagerQuery'];
-  canShowBattlePass: boolean;
   features: HomeController['disclosure']['features'];
   comebackSessionsCompleted: number;
-  activeBossQuery: HomeData['activeBossQuery'];
-  bountyStatusQuery: HomeData['bountyStatusQuery'];
-  placeBountyMutation: HomeData['placeBountyMutation'];
-  coinBalance: number | null;
-  canShowBossBounties: boolean;
   primaryRecommendation: HomeController['primaryRecommendation'];
 }
 
@@ -54,16 +46,8 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   data,
   handleClaimReward,
   streakHoursRemaining,
-  canShowWagers,
-  activeWagerQuery,
-  canShowBattlePass,
   features,
   comebackSessionsCompleted,
-  activeBossQuery,
-  bountyStatusQuery,
-  placeBountyMutation,
-  coinBalance,
-  canShowBossBounties,
   primaryRecommendation,
 }) => {
   const navigation = useNavigation<NavigationProp>();
@@ -85,8 +69,8 @@ export const HomeContent: React.FC<HomeContentProps> = ({
 
   return (
     <HomeMissionInput
-      activeBossQuery={activeBossQuery}
-      canShowBossBounties={canShowBossBounties}
+      activeBossQuery={{ data: null }}
+      canShowBossBounties={false}
       companionMood={data.companionMood}
       controller={controller}
       intervention={data.intervention}
@@ -165,16 +149,8 @@ export const HomeContent: React.FC<HomeContentProps> = ({
             data={data}
             handleClaimReward={handleClaimReward}
             streakHoursRemaining={streakHoursRemaining}
-            canShowWagers={canShowWagers}
-            activeWagerQuery={activeWagerQuery}
-            canShowBattlePass={canShowBattlePass}
             features={features}
             comebackSessionsCompleted={comebackSessionsCompleted}
-            activeBossQuery={activeBossQuery}
-            bountyStatusQuery={bountyStatusQuery}
-            placeBountyMutation={placeBountyMutation}
-            coinBalance={coinBalance}
-            canShowBossBounties={canShowBossBounties}
           />
         </StaggeredEnter>
       )}

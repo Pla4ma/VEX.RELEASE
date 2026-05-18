@@ -481,6 +481,9 @@ function buildFallbackResponse(
   errorMessage: string,
   processingTimeMs: number = 0,
 ): AIResponse {
+  const contextData = request.context as Record<string, unknown>;
+  const hasContext = Object.keys(contextData).filter((k) => contextData[k] !== undefined && contextData[k] !== null).length > 0;
+
   const fallbackContent = (() => {
     switch (request.requestType) {
       case 'GENERATE_COACH_MESSAGE': {
@@ -524,7 +527,7 @@ function buildFallbackResponse(
   return {
     success: true,
     requestType: request.requestType,
-    content: fallbackContent,
+    content: hasContext ? fallbackContent : '',
     metadata: {
       model: 'fallback',
       processingTimeMs,
@@ -535,7 +538,7 @@ function buildFallbackResponse(
       message: errorMessage,
       retryable: true,
     },
-    structuredData: buildStructuredData(request, fallbackContent),
+    structuredData: hasContext ? buildStructuredData(request, fallbackContent) : undefined,
   } as AIResponse;
 }
 

@@ -13,11 +13,9 @@ import { Button } from "../../components/primitives/Button";
 import { Text } from "../../components/primitives/Text";
 
 import { SessionStartStatusCard } from "../../features/session-start/components/SessionStartStatusCard";
-import { SessionStakesBriefing } from "../../features/session-start/components/SessionStakesBriefing";
 import type { SessionDifficulty } from "../../features/session-start/components/DifficultySelector";
 import { useSessionStartController } from "../../features/session-start/hooks";
 import { SessionMode } from "../../session/modes";
-import { ThemeShopModal } from "../../features/themes/ThemeShopModal";
 import type {
   ExtendedRootStackParams,
   SessionStackParams,
@@ -29,10 +27,9 @@ import { SessionSetupCustomizationSection } from "./components/SessionSetupCusto
 import { SessionSetupDifficultyCard } from "./components/SessionSetupDifficultyCard";
 import { SessionSetupFooter } from "./components/SessionSetupFooter";
 import { SessionSetupHeader } from "./components/SessionSetupHeader";
-import { SessionSetupInsuranceCard } from "./components/SessionSetupInsuranceCard";
+import { SessionSetupStakesCard } from "./components/SessionSetupStakesCard";
 import { SessionSetupStudyPlanCard } from "./components/SessionSetupStudyPlanCard";
 import { useSessionSetupStakes } from "./hooks/useSessionSetupStakes";
-import { useInsuranceStatus, useBalance } from "../../features/economy/hooks";
 import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
 
 type SessionNavigationProp = CompositeNavigationProp<
@@ -54,21 +51,6 @@ export const SessionSetupScreen = withScreenErrorBoundary(
 
     const [selectedDifficulty, setSelectedDifficulty] =
       React.useState<SessionDifficulty>("FOCUSED");
-    const [insurancePromptDismissed, setInsurancePromptDismissed] =
-      React.useState(false);
-    const { status: insuranceStatus } = useInsuranceStatus(
-      controller.userId ?? undefined,
-    );
-    const { data: coinBalance } = useBalance(controller.userId ?? "", "COINS");
-    const shouldShowInsurancePrompt = React.useMemo(() => {
-      const streakDays = controller.streak?.currentDays ?? 0;
-      const hasInsurance = insuranceStatus?.hasActiveInsurance ?? false;
-      return streakDays >= 3 && !hasInsurance && !insurancePromptDismissed;
-    }, [
-      controller.streak?.currentDays,
-      insuranceStatus?.hasActiveInsurance,
-      insurancePromptDismissed,
-    ]);
 
     const stakes = useSessionSetupStakes({
       currentStreakDays: controller.streak?.currentDays ?? null,
@@ -162,37 +144,7 @@ export const SessionSetupScreen = withScreenErrorBoundary(
               />
             }
           />
-          <Box px="lg" mt="md">
-            <SessionStakesBriefing
-              bossStake={stakes.bossStake}
-              streakStake={stakes.streakStake}
-              challengeStake={stakes.challengeStake}
-              rivalStake={stakes.rivalStake}
-              onStakePress={(stakeId) => {
-                if (stakeId === "boss") {
-                  navigation.navigate("Boss");
-                }
-                if (stakeId === "streak") {
-                  navigation.navigate("Main", { screen: "Progress" });
-                }
-                if (stakeId === "challenge") {
-                  navigation.navigate("Challenges");
-                }
-                if (stakeId === "rival") {
-                  navigation.navigate("Main", { screen: "Home" });
-                }
-              }}
-            />
-          </Box>
-
-          <SessionSetupInsuranceCard
-            coinBalance={coinBalance ?? 0}
-            navigation={navigation}
-            setShopTheme={controller.setShopTheme}
-            shouldShow={shouldShowInsurancePrompt}
-            streakDays={controller.streak?.currentDays ?? 0}
-            onDismiss={() => setInsurancePromptDismissed(true)}
-          />
+          <SessionSetupStakesCard stakes={stakes} />
 
           <SessionSetupDifficultyCard
             disabled={controller.isStarting}
@@ -229,15 +181,6 @@ export const SessionSetupScreen = withScreenErrorBoundary(
           />
         ) : null}
 
-        <ThemeShopModal
-          userId={controller.userId}
-          isVisible={controller.shopTheme !== null}
-          theme={controller.shopTheme}
-          streak={controller.streak ?? null}
-          onClose={() => controller.setShopTheme(null)}
-          onPurchased={controller.setupState.setSelectedThemeId}
-          onGetCoins={() => controller.setShopTheme(null)}
-        />
       </Box>
     );
   },

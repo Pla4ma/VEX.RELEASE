@@ -2,10 +2,8 @@ import {
   DEFAULT_COPY,
   FEATURE_COPY,
   FEATURE_PRIORITIES,
-  FEATURE_RELEASE_STATES,
-  FEATURE_TEASER_STARTS,
-  FEATURE_THRESHOLDS,
 } from './feature-access-config';
+import { computeFeatureAccess } from './feature-resolution';
 
 export type UserExperienceStage =
   | 'NEW_USER'
@@ -13,7 +11,12 @@ export type UserExperienceStage =
   | 'ENGAGED'
   | 'POWER_USER';
 
-export type ProductTier = 'CORE' | 'SECONDARY' | 'EXPANSION';
+export type ProductTier =
+  | 'CORE_EXECUTION'
+  | 'COACHING'
+  | 'STUDY_OS'
+  | 'RPG_DEPTH'
+  | 'SOCIAL_DEPTH';
 export type FeatureReleaseState =
   | 'core'
   | 'progressive'
@@ -61,37 +64,65 @@ export interface FeatureAccess {
   recommendedUnlockMoment: string;
   unlockReason: string;
   isTeased?: boolean;
+  isDegraded?: boolean;
   priority?: number;
   releaseState: FeatureReleaseState;
+  acceleratingProfiles?: MotivationProfileType[];
+  restrictingProfiles?: MotivationProfileType[];
 }
 
 export type FeatureAccessMap = Record<FeatureKey, FeatureAccess>;
 
-export interface FeatureAccessInputs {
-  totalCompletedSessions: number;
+export type MotivationProfileType =
+  | 'calm'
+  | 'friendly'
+  | 'game_like'
+  | 'competitive'
+  | 'intense'
+  | 'student'
+  | 'creator'
+  | 'worker';
+
+export interface MotivationProfile {
+  primary: MotivationProfileType;
+  secondary: MotivationProfileType[];
 }
 
+export interface FeatureAccessInputs {
+  totalCompletedSessions: number;
+  motivationProfile?: MotivationProfile;
+  degradedFeatures?: Set<FeatureKey>;
+}
+
+const FEATURE_BUILD_ORDER: FeatureKey[] = [
+  'focus_session', 'home_tab', 'focus_tab', 'profile_tab',
+  'progress_view', 'ai_coach_basic',
+  'companion_detail', 'challenges', 'economy_basic',
+  'achievements', 'boss_tab', 'ai_coach_advanced',
+  'content_study', 'quiz_review_mode', 'advanced_settings',
+  'seasonal_features', 'content_study_advanced',
+  'premium_paywall', 'social_tab', 'inventory',
+  'economy_advanced', 'shop', 'boss_bounties', 'rankings',
+  'rivals', 'battle_pass', 'squads',
+  'wagers', 'streak_insurance', 'gems_prominent',
+];
+
 export function getStage(totalCompletedSessions: number): UserExperienceStage {
-  if (totalCompletedSessions <= 0) {
-    return 'NEW_USER';
-  }
-  if (totalCompletedSessions < 3) {
-    return 'ACTIVATING';
-  }
-  if (totalCompletedSessions < 10) {
-    return 'ENGAGED';
-  }
+  if (totalCompletedSessions <= 0) return 'NEW_USER';
+  if (totalCompletedSessions < 3) return 'ACTIVATING';
+  if (totalCompletedSessions < 10) return 'ENGAGED';
   return 'POWER_USER';
 }
 
-export function getProductTier(stage: UserExperienceStage): ProductTier {
-  if (stage === 'NEW_USER' || stage === 'ACTIVATING') {
-    return 'CORE';
-  }
-  if (stage === 'ENGAGED') {
-    return 'SECONDARY';
-  }
-  return 'EXPANSION';
+export function getProductTier(
+  stage: UserExperienceStage,
+  totalCompletedSessions: number,
+): ProductTier {
+  if (totalCompletedSessions >= 40) return 'SOCIAL_DEPTH';
+  if (totalCompletedSessions >= 20) return 'RPG_DEPTH';
+  if (totalCompletedSessions >= 10) return 'STUDY_OS';
+  if (stage === 'ENGAGED') return 'COACHING';
+  return 'CORE_EXECUTION';
 }
 
 export function buildFeatureAccess(inputs: FeatureAccessInputs): {
@@ -100,61 +131,40 @@ export function buildFeatureAccess(inputs: FeatureAccessInputs): {
   stage: UserExperienceStage;
 } {
   const stage = getStage(inputs.totalCompletedSessions);
-  const productTier = getProductTier(stage);
+  const productTier = getProductTier(stage, inputs.totalCompletedSessions);
+  const profile = inputs.motivationProfile;
+  const degraded = inputs.degradedFeatures ?? new Set<FeatureKey>();
 
-  const accessFor = (feature: FeatureKey): FeatureAccess => {
-    const releaseState = FEATURE_RELEASE_STATES[feature];
-    const disabled = releaseState === 'disabled_beta' || releaseState === 'archived' || releaseState === 'internal_only';
-    const threshold = FEATURE_THRESHOLDS[feature];
-    const isUnlocked = !disabled && releaseState !== 'teased_only' && inputs.totalCompletedSessions >= threshold;
-    const teaserStart = FEATURE_TEASER_STARTS[feature];
-    const isTeased = !disabled && !isUnlocked && typeof teaserStart === 'number' && inputs.totalCompletedSessions >= teaserStart;
-    return {
+  const features = {} as FeatureAccessMap;
+  const unlockedSoFar = new Set<FeatureKey>();
+
+  for (const key of FEATURE_BUILD_ORDER) {
+    const resolved = computeFeatureAccess({
+      feature: key,
+      sessions: inputs.totalCompletedSessions,
+      profile,
+      unlockedFeatures: unlockedSoFar,
+    });
+    const isDegraded = degraded.has(key);
+
+    features[key] = {
       ...DEFAULT_COPY,
-      ...FEATURE_COPY[feature],
-      isUnlocked,
-      isVisible: !disabled,
-      isTeased,
-      priority: FEATURE_PRIORITIES[feature] ?? 99,
-      releaseState,
+      ...FEATURE_COPY[key],
+      isUnlocked: resolved.isUnlocked,
+      isVisible: resolved.isVisible,
+      isTeased: resolved.isTeased,
+      isDegraded,
+      priority: FEATURE_PRIORITIES[key] ?? 99,
+      releaseState: resolved.releaseState,
     };
-  };
 
-  const features: FeatureAccessMap = {
-    achievements: accessFor('achievements'),
-    advanced_settings: accessFor('advanced_settings'),
-    ai_coach_advanced: accessFor('ai_coach_advanced'),
-    ai_coach_basic: accessFor('ai_coach_basic'),
-    battle_pass: accessFor('battle_pass'),
-    boss_bounties: accessFor('boss_bounties'),
-    boss_tab: accessFor('boss_tab'),
-    challenges: accessFor('challenges'),
-    companion_detail: accessFor('companion_detail'),
-    content_study: accessFor('content_study'),
-    content_study_advanced: accessFor('content_study_advanced'),
-    economy_advanced: accessFor('economy_advanced'),
-    economy_basic: accessFor('economy_basic'),
-    focus_session: accessFor('focus_session'),
-    focus_tab: accessFor('focus_tab'),
-    gems_prominent: accessFor('gems_prominent'),
-    home_tab: accessFor('home_tab'),
-    inventory: accessFor('inventory'),
-    premium_paywall: accessFor('premium_paywall'),
-    profile_tab: accessFor('profile_tab'),
-    progress_view: accessFor('progress_view'),
-    quiz_review_mode: accessFor('quiz_review_mode'),
-    rankings: accessFor('rankings'),
-    rivals: accessFor('rivals'),
-    seasonal_features: accessFor('seasonal_features'),
-    shop: accessFor('shop'),
-    social_tab: accessFor('social_tab'),
-    squads: accessFor('squads'),
-    streak_insurance: accessFor('streak_insurance'),
-    wagers: accessFor('wagers'),
-  };
+    if (resolved.isUnlocked && !isDegraded) {
+      unlockedSoFar.add(key);
+    }
+  }
 
   return { features, productTier, stage };
 }
 
-export { getFeatureAvailability } from './feature-availability';
+export { getFeatureAvailability, isFeatureAvailableForNavigation, isFeatureAvailableForQueries } from './feature-availability';
 export type { FeatureAvailability, FeatureAvailabilityState } from './feature-availability';

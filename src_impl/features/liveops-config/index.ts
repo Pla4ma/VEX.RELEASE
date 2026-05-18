@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import * as Sentry from '@sentry/react-native';
 
 import { useSessionStats } from '../../session/hooks/useSession';
 import { useAuthStore } from '../../store';
+import { useOnboardingStore } from '../onboarding/store';
 import {
   buildFeatureAccess,
   type FeatureAccessMap,
@@ -18,10 +18,23 @@ export type {
   FeatureAccessInputs,
   FeatureAccessMap,
   FeatureKey,
+  MotivationProfile,
+  MotivationProfileType,
   ProductTier,
   UserExperienceStage,
+  FeatureReleaseState,
 } from './feature-access';
-export { getFeatureAvailability } from './feature-access';
+export {
+  getProductTier,
+  getStage,
+  getFeatureAvailability,
+  isFeatureAvailableForNavigation,
+  isFeatureAvailableForQueries,
+} from './feature-access';
+export { FEATURE_DEPENDENCIES } from './feature-dependencies';
+export { featureHealthRegistry } from './feature-health';
+export type { FeatureHealthCheck, FeatureHealthStatus } from './feature-health';
+export { useDisclosureAnalytics } from './feature-analytics';
 
 export interface FeatureAccessResult {
   error: Error | null;
@@ -33,13 +46,22 @@ export interface FeatureAccessResult {
   stage: UserExperienceStage;
 }
 
-export function useFeatureAccess(): FeatureAccessResult {
+export function useFeatureAccess(
+  degradedFeatures?: Set<FeatureKey>,
+): FeatureAccessResult {
   const userId = useAuthStore((state) => state.user?.id ?? '');
   const stats = useSessionStats(userId);
   const completedSessions = stats.stats?.completedSessions ?? 0;
+  const motivationProfile = useOnboardingStore((state) => state.motivationProfile);
+
   const access = useMemo(
-    () => buildFeatureAccess({ totalCompletedSessions: completedSessions }),
-    [completedSessions],
+    () =>
+      buildFeatureAccess({
+        totalCompletedSessions: completedSessions,
+        motivationProfile: motivationProfile ?? undefined,
+        degradedFeatures,
+      }),
+    [completedSessions, motivationProfile, degradedFeatures],
   );
 
   return {
@@ -51,141 +73,4 @@ export function useFeatureAccess(): FeatureAccessResult {
     refetchAll: stats.refresh,
     stage: access.stage,
   };
-}
-
-export function useDisclosureAnalytics(): {
-  trackFeatureUnlocked: (
-    feature: FeatureKey,
-    stage: UserExperienceStage,
-  ) => void;
-  trackFeatureTeaserViewed: (
-    feature: FeatureKey,
-    stage: UserExperienceStage,
-  ) => void;
-  trackFirstSessionStarted: (userId: string | null, source: string) => void;
-  trackLockedFeatureScreenViewed: (
-    feature: FeatureKey,
-    stage: UserExperienceStage,
-  ) => void;
-  trackNextBestActionPressed: (
-    stage: UserExperienceStage,
-    completedSessions: number,
-  ) => void;
-  trackSessionMilestone: (userId: string, count: number) => void;
-  trackSocialEmptyStateViewed: (
-    surface: string,
-    stage: UserExperienceStage,
-  ) => void;
-  trackTeaserCtaPressed: (
-    feature: FeatureKey,
-    label: string,
-    stage: UserExperienceStage,
-  ) => void;
-  // Onboarding tracking
-  trackOnboardingStarted: (userId: string) => void;
-  trackOnboardingFirstSessionCompleted: (userId: string) => void;
-  trackOnboardingCompleted: (userId: string) => void;
-  trackOnboardingGoalSet: (userId: string, goal: unknown) => void;
-} {
-  return useMemo(
-    () => ({
-      trackFeatureUnlocked(feature, stage) {
-        Sentry.addBreadcrumb({
-          category: 'liveops-config',
-          data: { feature, stage },
-          level: 'info',
-          message: 'Feature unlocked',
-        });
-      },
-      trackFeatureTeaserViewed(feature, stage) {
-        Sentry.addBreadcrumb({
-          category: 'liveops-config',
-          data: { feature, stage },
-          level: 'info',
-          message: 'Feature teaser viewed',
-        });
-      },
-      trackFirstSessionStarted(userId, source) {
-        Sentry.addBreadcrumb({
-          category: 'home',
-          data: { source, userId },
-          level: 'info',
-          message: 'First session started',
-        });
-      },
-      trackLockedFeatureScreenViewed(feature, stage) {
-        Sentry.addBreadcrumb({
-          category: 'liveops-config',
-          data: { feature, stage },
-          level: 'info',
-          message: 'Locked feature screen viewed',
-        });
-      },
-      trackNextBestActionPressed(stage, completedSessions) {
-        Sentry.addBreadcrumb({
-          category: 'home',
-          data: { completedSessions, stage },
-          level: 'info',
-          message: 'Next best action pressed',
-        });
-      },
-      trackSessionMilestone(userId, count) {
-        Sentry.addBreadcrumb({
-          category: 'home',
-          data: { count, userId },
-          level: 'info',
-          message: 'Session milestone reached',
-        });
-      },
-      trackSocialEmptyStateViewed(surface, stage) {
-        Sentry.addBreadcrumb({
-          category: 'liveops-config',
-          data: { stage, surface },
-          level: 'info',
-          message: 'Social empty state viewed',
-        });
-      },
-      trackTeaserCtaPressed(feature, label, stage) {
-        Sentry.addBreadcrumb({
-          category: 'liveops-config',
-          data: { feature, label, stage },
-          level: 'info',
-          message: 'Feature teaser CTA pressed',
-        });
-      },
-      trackOnboardingStarted(userId) {
-        Sentry.addBreadcrumb({
-          category: 'onboarding',
-          data: { userId },
-          level: 'info',
-          message: 'Onboarding started',
-        });
-      },
-      trackOnboardingFirstSessionCompleted(userId) {
-        Sentry.addBreadcrumb({
-          category: 'onboarding',
-          data: { userId },
-          level: 'info',
-          message: 'First session completed during onboarding',
-        });
-      },
-      trackOnboardingCompleted(userId) {
-        Sentry.addBreadcrumb({
-          category: 'onboarding',
-          data: { userId },
-          level: 'info',
-          message: 'Onboarding completed',
-        });
-      },
-      trackOnboardingGoalSet(userId, goal) {
-        Sentry.addBreadcrumb({
-          category: 'onboarding',
-          data: { goal, userId },
-          level: 'info',
-          message: 'Onboarding goal set',
-        });
-      },
-    }),
-    [],
-  );
 }

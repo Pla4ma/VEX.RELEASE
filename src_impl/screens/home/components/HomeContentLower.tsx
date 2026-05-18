@@ -21,16 +21,8 @@ interface HomeContentLowerProps {
   data: HomeData;
   handleClaimReward: (rewardId: string) => void;
   streakHoursRemaining: number;
-  canShowWagers: boolean;
-  activeWagerQuery: HomeData['activeWagerQuery'];
-  canShowBattlePass: boolean;
   features: HomeController['disclosure']['features'];
   comebackSessionsCompleted: number;
-  activeBossQuery: HomeData['activeBossQuery'];
-  bountyStatusQuery: HomeData['bountyStatusQuery'];
-  placeBountyMutation: HomeData['placeBountyMutation'];
-  coinBalance: number | null;
-  canShowBossBounties: boolean;
 }
 
 export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
@@ -38,16 +30,8 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   data,
   handleClaimReward,
   streakHoursRemaining,
-  canShowWagers,
-  activeWagerQuery,
-  canShowBattlePass,
   features,
   comebackSessionsCompleted,
-  activeBossQuery,
-  bountyStatusQuery,
-  placeBountyMutation,
-  coinBalance,
-  canShowBossBounties,
 }) => {
   const navigation = useNavigation<NavigationProp>();
   const { isVisible } = useFeatureGate('challenges');
@@ -70,11 +54,6 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
           activeStudyPlan={controller.activeStudyPlanQuery.data}
           comebackData={controller.comebackQuery.data}
           comebackSessionsCompleted={comebackSessionsCompleted}
-          activeBossQuery={activeBossQuery}
-          bountyStatusQuery={bountyStatusQuery}
-          placeBountyMutation={placeBountyMutation}
-          coinBalance={coinBalance ?? 0}
-          canShowBossBounties={canShowBossBounties}
           todaysChallenges={todaysChallenges}
           challengesQueryError={data.challengesQuery.error ?? undefined}
           challengesQueryIsLoading={data.challengesQuery.isLoading}
@@ -103,15 +82,12 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
         longestStreak={controller.streakQuery.data?.longestDays}
         isLoading={controller.streakQuery.isLoading}
         userId={controller.userId ?? undefined}
-        activeWager={canShowWagers ? activeWagerQuery.wager : undefined}
       />
 
       {/* 6. Secondary optional rail */}
       {controller.shouldShowSecondarySystems ? (
         <HomeSecondaryRail
           activePlan={controller.activeStudyPlanQuery.data ?? null}
-          battlePass={canShowBattlePass ? (controller.battlePassQuery.data ?? null) : null}
-          canShowExpansionSystems={false}
           canShowSecondarySystems={controller.shouldShowSecondarySystems}
           comebackMessage={controller.comebackQuery.data?.isComeback ? controller.comebackQuery.data.message : null}
           features={features}
@@ -123,13 +99,9 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
           onContinueStudyPlan={controller.continueStudyPlan}
           onOpenProgress={controller.openProgress}
           onOpenSetup={() => controller.openSetup()}
-          onOpenSocial={controller.openSocial}
           onRetryStudyPlan={controller.activeStudyPlanQuery.refetch}
           onStartStudy={controller.openContentStudy}
-          seasonIsVisible={false}
-          socialSummary="Social features are now in your Profile"
           stage={controller.disclosure.stage}
-          wallet={controller.walletQuery.data ?? null}
         />
       ) : null}
     </>

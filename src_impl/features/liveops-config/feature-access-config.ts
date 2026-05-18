@@ -5,6 +5,9 @@ type FeatureCopy = Pick<
   'lockedDescription' | 'recommendedUnlockMoment' | 'unlockReason'
 >;
 
+export { FEATURE_MOTIVATION_PROFILES } from './feature-motivation-config';
+export type { MotivationProfileConfig } from './feature-motivation-config';
+
 export const DISABLED_FEATURES: FeatureKey[] = [
   'squads',
   'social_tab',
@@ -16,6 +19,7 @@ export const DISABLED_FEATURES: FeatureKey[] = [
   'boss_bounties',
   'economy_advanced',
   'inventory',
+  'seasonal_features',
   'shop',
   'streak_insurance',
 ];
@@ -45,7 +49,7 @@ export const FEATURE_RELEASE_STATES: Record<FeatureKey, FeatureReleaseState> = {
   quiz_review_mode: 'progressive',
   rankings: 'disabled_beta',
   rivals: 'disabled_beta',
-  seasonal_features: 'progressive',
+  seasonal_features: 'disabled_beta',
   shop: 'disabled_beta',
   social_tab: 'disabled_beta',
   squads: 'disabled_beta',
@@ -55,11 +59,11 @@ export const FEATURE_RELEASE_STATES: Record<FeatureKey, FeatureReleaseState> = {
 
 export const FEATURE_TEASER_STARTS: Partial<Record<FeatureKey, number>> = {
   companion_detail: 2,
-  challenges: 1,
-  economy_basic: 4,
+  challenges: 3,
   boss_tab: 5,
+  premium_paywall: 5,
   ai_coach_advanced: 6,
-  content_study: 10,
+  content_study: 8,
   quiz_review_mode: 9,
 };
 
@@ -74,10 +78,9 @@ export const FEATURE_PRIORITIES: Partial<Record<FeatureKey, number>> = {
 };
 
 export const DEFAULT_COPY: FeatureCopy = {
-  lockedDescription:
-    'This layer opens after the core session loop has enough signal.',
+  lockedDescription: 'This layer opens after your focus rhythm is strong enough.',
   recommendedUnlockMoment: 'Keep completing focused sessions',
-  unlockReason: 'Unlocks when it has enough context to matter.',
+  unlockReason: 'Unlocks when your consistency proves the habit is real.',
 };
 
 export const FEATURE_THRESHOLDS: Record<FeatureKey, number> = {
@@ -88,24 +91,24 @@ export const FEATURE_THRESHOLDS: Record<FeatureKey, number> = {
   battle_pass: Number.POSITIVE_INFINITY,
   boss_bounties: Number.POSITIVE_INFINITY,
   boss_tab: 7,
-  challenges: 1,
+  challenges: 5,
   companion_detail: 3,
   content_study: 12,
   content_study_advanced: 18,
   economy_advanced: Number.POSITIVE_INFINITY,
-  economy_basic: 5,
+  economy_basic: 8,
   focus_session: 0,
   focus_tab: 0,
   gems_prominent: Number.POSITIVE_INFINITY,
   home_tab: 0,
   inventory: Number.POSITIVE_INFINITY,
-  premium_paywall: 3,
+  premium_paywall: 7,
   profile_tab: 0,
   progress_view: 0,
   quiz_review_mode: 10,
   rankings: Number.POSITIVE_INFINITY,
   rivals: Number.POSITIVE_INFINITY,
-  seasonal_features: 15,
+  seasonal_features: Number.POSITIVE_INFINITY,
   shop: Number.POSITIVE_INFINITY,
   social_tab: Number.POSITIVE_INFINITY,
   squads: Number.POSITIVE_INFINITY,
@@ -122,45 +125,45 @@ export const FEATURE_COPY: Partial<Record<FeatureKey, FeatureCopy>> = {
       'Returns after the core loop is stable and useful.',
   },
   boss_tab: {
-    lockedDescription:
-      'Boss fights work best once sessions already feel normal. Build the habit first, then add the fight.',
+    lockedDescription: 'Boss fights transform your focus progress into a visible challenge. Build the habit first, then see your consistency become a victory.',
     recommendedUnlockMoment: 'After session 7',
-    unlockReason: 'Unlocks after 7 sessions as a concrete midgame target.',
+    unlockReason: 'Unlocks after 7 sessions so your focus history has real weight behind it.',
   },
   challenges: {
-    lockedDescription:
-      'Daily challenges need one completed session so the app can point you at the next useful push.',
-    recommendedUnlockMoment: 'After your first session',
-    unlockReason: 'Unlocks after 1 session.',
+    lockedDescription: 'Daily challenges turn your next focus milestone into a concrete target. A few sessions first let the app point you at the right push.',
+    recommendedUnlockMoment: 'After session 5',
+    unlockReason: 'Unlocks after 5 sessions when patterns are clear.',
   },
   companion_detail: {
-    lockedDescription:
-      'Companion detail opens once there is enough history for it to reflect your real work.',
+    lockedDescription: 'Your companion reflects your real focus journey. A few sessions give it enough history to be meaningful.',
     recommendedUnlockMoment: 'After session 3',
-    unlockReason: 'Unlocks after 3 sessions.',
+    unlockReason: 'Unlocks after 3 sessions so your companion has real data to work with.',
   },
   economy_basic: {
-    lockedDescription:
-      'XP and progress come first. Currency stays quiet during beta.',
-    recommendedUnlockMoment: 'After session 5',
-    unlockReason: 'Unlocks after 5 sessions.',
+    lockedDescription: 'Points and progress tracking stay quiet while the focus habit forms.',
+    recommendedUnlockMoment: 'After session 8',
+    unlockReason: 'Unlocks after 8 sessions when focus is the proven baseline.',
   },
   inventory: {
-    lockedDescription:
-      'Inventory is paused for beta so focus sessions stay simple.',
+    lockedDescription: 'Customization stays hidden so focus sessions remain the only thing that matters.',
     recommendedUnlockMoment: 'Not in beta',
-    unlockReason: 'Returns after rewards prove they help the focus loop.',
+    unlockReason: 'Returns after the focus loop proves it can carry extra layers.',
   },
   shop: {
-    lockedDescription:
-      'The shop is paused for beta so the app proves value before monetization.',
+    lockedDescription: 'The shop stays closed so the app proves value before offering extras.',
     recommendedUnlockMoment: 'Not in beta',
-    unlockReason: 'Returns after the core focus loop is working.',
+    unlockReason: 'Returns after the core focus loop is undeniably working.',
+  },
+  premium_paywall: {
+    lockedDescription:
+      'Premium features stay quiet until your habit proves it deserves extras.',
+    recommendedUnlockMoment: 'After session 7',
+    unlockReason:
+      'Shows up when you trust VEX enough to consider going deeper.',
   },
   streak_insurance: {
-    lockedDescription:
-      'Streak recovery is gentle in beta: comeback sessions, rhythm recovery, and restart support.',
+    lockedDescription: 'Streak recovery is gentle: comeback sessions, rhythm recovery, and fresh starts.',
     recommendedUnlockMoment: 'Not in beta',
-    unlockReason: 'Insurance-style recovery is paused until tested.',
+    unlockReason: 'Recovery tools unlock when needed, not before.',
   },
 };

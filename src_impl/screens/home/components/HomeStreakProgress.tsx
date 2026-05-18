@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { StreakWidget } from '../../../features/home-spine/components';
-import type { ActiveStreakWager } from '../../../features/home-spine/components/streak-widget-types';
 
 interface HomeStreakProgressProps {
   currentDays: number;
@@ -16,7 +15,6 @@ interface HomeStreakProgressProps {
   longestStreak?: number;
   isLoading?: boolean;
   userId?: string;
-  activeWager?: ActiveStreakWager | null;
 }
 
 export function HomeStreakProgress({
@@ -26,7 +24,6 @@ export function HomeStreakProgress({
   longestStreak,
   isLoading,
   userId,
-  activeWager,
 }: HomeStreakProgressProps): JSX.Element {
   return (
     <StreakWidget
@@ -37,7 +34,7 @@ export function HomeStreakProgress({
       longestStreak={longestStreak ?? 0}
       isLoading={isLoading ?? false}
       userId={userId}
-      activeWager={activeWager}
+      activeWager={null}
     />
   );
 }

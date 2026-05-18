@@ -162,16 +162,8 @@ export const HomeScreen = withScreenErrorBoundary(function _HomeScreen(): JSX.El
         data={data}
         handleClaimReward={data.handleClaimReward}
         streakHoursRemaining={data.streakHoursRemaining ?? 0}
-        canShowWagers={false}
-        activeWagerQuery={data.activeWagerQuery}
-        canShowBattlePass={false}
         features={data.controller.disclosure?.features}
         comebackSessionsCompleted={data.comebackSessionsCompleted}
-        activeBossQuery={data.activeBossQuery}
-        bountyStatusQuery={data.bountyStatusQuery}
-        placeBountyMutation={data.placeBountyMutation}
-        coinBalance={data.coinBalance}
-        canShowBossBounties={false}
         primaryRecommendation={data.controller.primaryRecommendation ?? null}
       />
     </AppScreen>

@@ -70,13 +70,13 @@ export function NameAndGoalScreen({ onContinue, onSkip, onBack }: NameAndGoalScr
           <Animated.View entering={FadeIn.duration(400)}>
             <Box gap="sm" mb="xl">
               <Text variant="label" color="primary.500">
-                Step 2 of 5
+                Step 1 of 4
               </Text>
               <Text variant="h2" color="text.primary">
                 {showGoals ? 'What do you mainly want to focus on?' : 'What should we call you?'}
               </Text>
               <Text variant="body" color="text.secondary">
-                {showGoals ? 'Pick one — this sets your default session category.' : "This is how you'll appear to your squad."}
+                {showGoals ? 'Pick one — this sets your default session category.' : 'What should your focus companion call you?'}
               </Text>
             </Box>
           </Animated.View>

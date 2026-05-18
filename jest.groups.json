@@ -1,0 +1,125 @@
+{
+  "groups": {
+    "core-loop": {
+      "description": "Session start, execution, completion, and progress tracking",
+      "required": true,
+      "patterns": [
+        "src_impl/session/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/session-start/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/session-completion/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/session-events/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/progression/**/__tests__/**/*.service.test.{ts,tsx}"
+      ]
+    },
+    "progressive-unlock": {
+      "description": "Feature unlocking, gating, and pacing contracts",
+      "required": true,
+      "patterns": [
+        "src_impl/features/liveops-config/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/constants/__tests__/feature-matrix.test.ts",
+        "src_impl/features/__tests__/FeatureFlagService.test.ts",
+        "src_impl/feature-flags/__tests__/**/*.test.{ts,tsx}"
+      ]
+    },
+    "session-completion": {
+      "description": "Session completion flows, offline sync, ledger, grading",
+      "required": true,
+      "patterns": [
+        "src_impl/features/session-completion/**/__tests__/**/*.test.{ts,tsx}"
+      ]
+    },
+    "offline-sync": {
+      "description": "Offline queue, sync, recovery, and idempotency",
+      "required": true,
+      "patterns": [
+        "src_impl/features/session-completion/**/__tests__/offline*.test.{ts,tsx}",
+        "src_impl/features/session-completion/**/__tests__/home-return-sync.test.ts"
+      ]
+    },
+    "auth-onboarding": {
+      "description": "Login, registration, onboarding flow, and auth state",
+      "required": true,
+      "patterns": [
+        "src_impl/services/__tests__/auth.test.ts",
+        "src_impl/features/onboarding/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/store/__tests__/auth-store.test.ts",
+        "src_impl/screens/onboarding/**/__tests__/**/*.test.{ts,tsx}"
+      ]
+    },
+    "monetization": {
+      "description": "Paywall, purchases, entitlements, wallet, economy",
+      "required": true,
+      "patterns": [
+        "src_impl/features/monetization/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/economy/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/shared/monetization/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/shop/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/wallet/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/battle-pass/**/__tests__/**/*.test.{ts,tsx}"
+      ]
+    },
+    "ai-backend": {
+      "description": "AI coach, recommendations, memories, quota, routing",
+      "required": false,
+      "patterns": [
+        "src_impl/features/ai-coach/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/shared/ai/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/api/__tests__/**/*.test.{ts,tsx}"
+      ]
+    },
+    "feature-systems": {
+      "description": "Individual features: boss, companion, rewards, streaks, etc.",
+      "required": false,
+      "patterns": [
+        "src_impl/features/focus-identity/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/rewards/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/boss/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/companion/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/squads/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/streaks/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/content-study/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/seasons/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/home-spine/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/monthly-report/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/challenges/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/weekly-quests/**/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/features/mastery/**/__tests__/**/*.test.{ts,tsx}"
+      ]
+    },
+    "legacy": {
+      "description": "Archive tests for abandoned features - do not block",
+      "required": false,
+      "patterns": [
+        "archive/**/*.test.{ts,tsx}",
+        "src_impl/archive/**/*.test.{ts,tsx}"
+      ]
+    },
+    "infrastructure": {
+      "description": "Integration audits, cross-system tests, utilities",
+      "required": false,
+      "patterns": [
+        "src_impl/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/utils/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/store/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/persistence/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/navigation/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/shared/analytics/__tests__/**/*.test.{ts,tsx}",
+        "src_impl/shared/ui/__tests__/**/*.test.{ts,tsx}"
+      ]
+    },
+    "e2e": {
+      "description": "End-to-end flows via Detox and Playwright",
+      "required": false,
+      "patterns": [
+        "src_impl/e2e/**/*.test.{ts,tsx}",
+        "e2e/**/*.test.{ts,tsx}"
+      ]
+    }
+  },
+  "rules": {
+    "blocking": ["core-loop", "progressive-unlock", "session-completion", "offline-sync"],
+    "non-blocking": ["legacy"],
+    "ci-required": ["core-loop", "progressive-unlock", "session-completion", "offline-sync", "auth-onboarding", "monetization"],
+    "ci-optional": ["ai-backend", "feature-systems", "infrastructure"]
+  }
+}

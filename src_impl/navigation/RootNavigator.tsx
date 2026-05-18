@@ -13,12 +13,14 @@ import {
 import { useAuthStore } from "../store";
 import { useTheme } from "../theme";
 import { useOnboardingStore } from "../onboarding";
+import { useFeatureAccess } from "../features/liveops-config";
 
 import { RootLoadingShell } from "./components/RootLoadingShell";
 import { RootCrashBoundary } from "./components/RootCrashBoundary";
 import { useNotificationNavigation } from "./hooks/useNotificationNavigation";
 import { useStreakFuneralNavigation } from "./hooks/useStreakFuneralNavigation";
 import { RootStackScreens } from "./RootStackScreens";
+import { useSessionStats } from "../session/hooks/useSession";
 
 import type { ExtendedRootStackParams } from "./types";
 
@@ -52,6 +54,10 @@ export const RootNavigator: React.FC = () => {
     resetOnboarding: state.resetOnboarding,
     setCompletionFromBackend: state.setCompletionFromBackend,
   }));
+
+  const sessionStats = useSessionStats(user?.id ?? '');
+  const totalCompletedSessions = sessionStats.stats?.completedSessions ?? 0;
+  const featureAccess = useFeatureAccess();
 
   const hasCompletedOnboarding = useMemo(
     () => canCompleteForUser(user?.id),
@@ -102,10 +108,12 @@ export const RootNavigator: React.FC = () => {
     isNavigationReady,
     isReady,
     navigationRef,
+    totalCompletedSessions,
     userId: user?.id,
   });
 
   useNotificationNavigation({
+    featureAccess: featureAccess.features,
     isAuthenticated,
     navigationRef,
     userId: user?.id,

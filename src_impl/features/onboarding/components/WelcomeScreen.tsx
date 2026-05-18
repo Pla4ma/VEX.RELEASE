@@ -131,7 +131,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
           </Box>
         </Animated.View>
 
-        {/* Headline */}
+        {/* Core Identity Sentence — the one thing VEX stands for */}
         <Animated.View
           entering={FadeInUp.duration(500).delay(400)}
           style={{ width: '100%' }}
@@ -143,12 +143,12 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
               textAlign="center"
               fontWeight="800"
             >
-              Your Focus Score{'\n'}starts at 550
+              One focused session.{'\n'}Rewarding enough{'\n'}to come back tomorrow.
             </Text>
           </Box>
         </Animated.View>
 
-        {/* Value Prop - 3 lines */}
+        {/* Value Prop */}
         <Animated.View
           entering={FadeInUp.duration(500).delay(600)}
           style={{ width: '100%' }}
@@ -159,14 +159,14 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
               color="text.secondary"
               textAlign="center"
             >
-              Every session proves your focus grows.
+              Your Focus Score starts at 550.
             </Text>
             <Text
               variant="body"
               color="text.tertiary"
               textAlign="center"
             >
-              Start above average. Level up from there.
+              Every session builds proof of your consistency. Start above average and grow from there.
             </Text>
           </Box>
         </Animated.View>

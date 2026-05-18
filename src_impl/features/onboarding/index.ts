@@ -7,14 +7,16 @@
  * @phase 2
  */
 
-// Types are exported from schemas (single source of truth)
 export * from "./schemas";
+export * from "./constants";
 export * from "./store";
 export * from "./store-hooks";
 export * from "./service";
 export * from "./components";
 export * from "./repository";
 export * from "./utils";
+export * from "./language-tier";
+export * from "./reward-alignment";
 
 // Phase 5.3 - Progressive Onboarding
 export {
