@@ -29,7 +29,7 @@ export function ensureUUID(userId: string): string {
 }
 
 export function todayKey(): string {
-  return new Date().toISOString().split('T')[0];
+  return new Date().toISOString().split('T')[0] ?? 'unknown';
 }
 
 export function createMockNotificationBudget(

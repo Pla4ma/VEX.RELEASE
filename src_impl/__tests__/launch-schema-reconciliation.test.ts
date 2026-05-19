@@ -20,6 +20,9 @@ const requiredTables = [
   'reminder_plans',
   'push_tokens',
   'purchase_attempts',
+  'companion_promises',
+  'companion_memories',
+  'focus_contracts',
 ];
 
 const sourceRoot = join(process.cwd(), 'src_impl');
@@ -51,11 +54,29 @@ function committedTables(): string[] {
   )].map((match) => match[1]).sort();
 }
 
+function createTablePattern(table: string): RegExp {
+  return new RegExp(`create\\s+table\\s+if\\s+not\\s+exists\\s+(?:public\\.)?${table}\\b`);
+}
+
+function enableRlsPattern(table: string): RegExp {
+  return new RegExp(`alter\\s+table\\s+(?:public\\.)?${table}\\s+enable\\s+row\\s+level\\s+security`);
+}
+
 describe('launch schema reconciliation migration', () => {
   it('keeps Supabase queries out of screen components', () => {
     const screens = readFiles(join(sourceRoot, 'screens'), /\.tsx?$/);
 
     expect(screens.match(/supabase\.(from|rpc)\(/g) ?? []).toEqual([]);
+  });
+
+  it('keeps notification components out of Supabase transport', () => {
+    const notificationComponents = readFiles(
+      join(sourceRoot, 'features', 'notifications', 'components'),
+      /\.tsx?$/,
+    );
+
+    expect(notificationComponents.match(/getSupabaseClient|\.from\(|\.channel\(/g) ?? [])
+      .toEqual([]);
   });
 
   it('keeps every referenced Supabase table in committed SQL', () => {
@@ -65,11 +86,11 @@ describe('launch schema reconciliation migration', () => {
   });
 
   it('declares launch-critical repository tables', () => {
-    const sql = readFileSync(migrationPath, 'utf8').toLowerCase();
+    const sql = readFiles(migrationsRoot, /\.sql$/).toLowerCase();
 
     for (const table of requiredTables) {
-      expect(sql).toContain(`create table if not exists public.${table}`);
-      expect(sql).toContain(`alter table public.${table} enable row level security`);
+      expect(sql).toMatch(createTablePattern(table));
+      expect(sql).toMatch(enableRlsPattern(table));
     }
   });
 

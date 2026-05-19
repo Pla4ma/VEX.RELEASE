@@ -1,7 +1,122 @@
-import React,{useState,useEffect}from'react'; import Animated,{useAnimatedStyle,withSpring}from'react-native-reanimated'; import{Box}from'../../../components/primitives/Box'; import{Text}from'../../../components/primitives/Text'; import{getSupabaseClient}from'../../../config/supabase'; import{createDebugger}from'../../../utils/debug'; const debug = createDebugger('notifications:badge'); interface NotificationBadgeProps{userId:string;size?:'sm'|'md';}async function fetchUnreadCount(userId:string):Promise<number>{try{const{count,error} = await getSupabaseClient().from('notifications').select('*',{count:'exact',head:true}).eq('user_id',userId).eq('read',false); if(error){debug.warn('Failed to fetch unread count',error); return 0;}return count ?? 0;}catch(error){debug.error('Error fetching unread count',error instanceof Error ? error : undefined); return 0;}}export function NotificationBadge({userId,size = 'md'}:NotificationBadgeProps):JSX.Element|null{const[count,setCount] = useState(0); useEffect(()=>{const loadCount = async()=>{const unreadCount = await fetchUnreadCount(userId); setCount(unreadCount);}; loadCount();},[userId]); useEffect(()=>{const subscription = getSupabaseClient().channel('notifications-badge').on('postgres_changes',{event:'*',schema:'public',table:'notifications',filter:`user_id=eq.${userId}`},()=>{fetchUnreadCount(userId).then(setCount);}).subscribe(); return()=>{subscription.unsubscribe();};},[userId]); if(count === 0){return null;}const displayCount = count > 99 ? '99+' : count.toString(); const isLargeNumber = count > 9; const sizeMap = {sm:{minWidth:isLargeNumber ? 18 : 16,height:16,fontSize:10,paddingHorizontal:isLargeNumber ? 4 : 0},md:{minWidth:isLargeNumber ? 22 : 18,height:18,fontSize:12,paddingHorizontal:isLargeNumber ? 5 : 0}}; const s = sizeMap[size]; const animatedStyle = useAnimatedStyle(()=>({transform:[{scale:withSpring(1,{damping:12,stiffness:200})}]})); if(count === 0){return null;}return<Animated.View style={animatedStyle}>
-      <Box minWidth={s.minWidth}height={s.height}borderRadius="full"justifyContent="center"alignItems="center"px={s.paddingHorizontal}style={{backgroundColor:'#EF4444',borderWidth:2,borderColor:'#FFFFFF'}}>
-        <Text fontSize={s.fontSize}color="white"fontWeight="800">
-          {displayCount}
+import React from 'react';
+import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
+
+import { Box } from '../../../components/primitives/Box';
+import { Text } from '../../../components/primitives/Text';
+import { borderRadius, fontWeights, sizing, spacing, typography } from '../../../theme/tokens';
+import { useUnreadNotificationsCount as useUnreadCountQuery } from '../hooks';
+
+interface NotificationBadgeProps {
+  userId: string;
+  size?: 'sm' | 'md';
+}
+
+interface BadgeMetrics {
+  minWidth: number;
+  height: number;
+  fontSize: number;
+  paddingHorizontal: number;
+  borderWidth: number;
+}
+
+const badgeMetrics = {
+  sm: {
+    minWidth: sizing.icon.sm,
+    height: sizing.icon.sm,
+    fontSize: typography.ui.overline.fontSize ?? 11,
+    paddingHorizontal: spacing[1],
+    borderWidth: spacing[0],
+  },
+  md: {
+    minWidth: sizing.icon.md,
+    height: sizing.icon.md,
+    fontSize: typography.ui.caption.fontSize ?? 12,
+    paddingHorizontal: spacing[1],
+    borderWidth: spacing[1],
+  },
+} satisfies Record<NonNullable<NotificationBadgeProps['size']>, BadgeMetrics>;
+
+function useBadgeCount(userId: string | undefined): {
+  count: number;
+  hasUnread: boolean;
+} {
+  const query = useUnreadCountQuery(userId ?? null);
+  const count = query.data ?? 0;
+
+  return {
+    count,
+    hasUnread: count > 0,
+  };
+}
+
+function formatBadgeCount(count: number): string {
+  return count > 99 ? '99+' : String(count);
+}
+
+export function NotificationBadge({
+  userId,
+  size = 'md',
+}: NotificationBadgeProps): JSX.Element | null {
+  const { count, hasUnread } = useBadgeCount(userId);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: withSpring(1, { damping: 12, stiffness: 200 }) }],
+  }));
+
+  if (!hasUnread) {
+    return null;
+  }
+
+  const metrics = badgeMetrics[size];
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <Box
+        minWidth={metrics.minWidth}
+        height={metrics.height}
+        borderRadius={borderRadius.full}
+        justifyContent="center"
+        alignItems="center"
+        px={metrics.paddingHorizontal}
+        backgroundColor="semantic.danger"
+        borderWidth={metrics.borderWidth}
+        borderColor="semantic.surface"
+      >
+        <Text
+          fontSize={metrics.fontSize}
+          color="text.inverse"
+          fontWeight={fontWeights.heavy}
+        >
+          {formatBadgeCount(count)}
         </Text>
       </Box>
-    </Animated.View>;}export function NotificationDot({userId}:{userId:string;}):JSX.Element|null{const[hasUnread,setHasUnread] = useState(false); useEffect(()=>{const loadUnread = async()=>{const count = await fetchUnreadCount(userId); setHasUnread(count > 0);}; loadUnread(); const subscription = getSupabaseClient().channel('notifications-dot').on('postgres_changes',{event:'*',schema:'public',table:'notifications',filter:`user_id=eq.${userId}`},()=>{fetchUnreadCount(userId).then(count=>setHasUnread(count > 0));}).subscribe(); return()=>{subscription.unsubscribe();};},[userId]); if(!hasUnread){return null;}return<Box width={8}height={8}borderRadius="full"style={{backgroundColor:'#EF4444',borderWidth:1,borderColor:'#FFFFFF'}}/>;}export function useNotificationBadge(userId:string|undefined):{count:number;hasUnread:boolean;}{const[count,setCount] = useState(0); useEffect(()=>{if(!userId){return;}const loadCount = async()=>{const unreadCount = await fetchUnreadCount(userId); setCount(unreadCount);}; loadCount(); const subscription = getSupabaseClient().channel('notifications-hook').on('postgres_changes',{event:'*',schema:'public',table:'notifications',filter:`user_id=eq.${userId}`},()=>{fetchUnreadCount(userId).then(setCount);}).subscribe(); return()=>{subscription.unsubscribe();};},[userId]); return{count,hasUnread:count > 0};}export default NotificationBadge;
+    </Animated.View>
+  );
+}
+
+export function NotificationDot({ userId }: { userId: string }): JSX.Element | null {
+  const { hasUnread } = useBadgeCount(userId);
+
+  if (!hasUnread) {
+    return null;
+  }
+
+  return (
+    <Box
+      width={sizing.icon.xs}
+      height={sizing.icon.xs}
+      borderRadius={borderRadius.full}
+      backgroundColor="semantic.danger"
+      borderWidth={spacing[0]}
+      borderColor="semantic.surface"
+    />
+  );
+}
+
+export function useNotificationBadge(userId: string | undefined): {
+  count: number;
+  hasUnread: boolean;
+} {
+  return useBadgeCount(userId);
+}
+
+export default NotificationBadge;

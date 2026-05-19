@@ -1,5 +1,3 @@
-import type { DistractionManagement, ErgonomicImprovement } from './types';
-
 export interface ChallengeInfo {
   id: string;
   name: string;
@@ -142,7 +140,7 @@ export interface PostureExercise {
 export interface ErgonomicAssessment {
   score: number; // 0-100
   issues: ErgonomicIssue[];
-  improvements: ErgonomicImprovement[];
+  improvements: Record<string, unknown>[];
 }
 
 export interface ErgonomicIssue {

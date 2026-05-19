@@ -3,8 +3,6 @@
  *
  * Types for session initialization, preparation, and startup experiences.
  */
-import type { BriefingSession, ComfortSetup, DistractionManagement, EquipmentCheck, LightingSetup, OrientationContent, OrientationProgress, ReadinessAssessment, SessionConfiguration, SessionContext, SessionGoal, SessionMood, SoundSetup, StartExperience, TemperatureSetup } from './types';
-
 export interface SessionEnvironment {
   type: 'physical' | 'virtual' | 'hybrid';
   setup: EnvironmentSetup;
@@ -15,12 +13,12 @@ export interface SessionEnvironment {
 export interface EnvironmentSetup {
   workspace: string;
   equipment: string[];
-  configuration: Record<string, any>;
-  lighting: LightingSetup;
-  sound: SoundSetup;
-  temperature: TemperatureSetup;
-  comfort: ComfortSetup;
-  distractions: DistractionManagement;
+  configuration: Record<string, unknown>;
+  lighting: Record<string, unknown>;
+  sound: Record<string, unknown>;
+  temperature: Record<string, unknown>;
+  comfort: Record<string, unknown>;
+  distractions: Record<string, unknown>;
 }
 
 export interface EnvironmentConditions {
@@ -46,13 +44,13 @@ export interface SessionStart {
   initiatedAt: Date;
   startedAt: Date;
   preparation: SessionPreparation;
-  configuration: SessionConfiguration;
+  configuration: Record<string, unknown>;
   environment: SessionEnvironment;
-  context: SessionContext;
-  goals: SessionGoal[];
-  mood: SessionMood;
-  readiness: ReadinessAssessment;
-  experience: StartExperience;
+  context: Record<string, unknown>;
+  goals: Record<string, unknown>[];
+  mood: Record<string, unknown>;
+  readiness: Record<string, unknown>;
+  experience: Record<string, unknown>;
 }
 
 export type StartType = 'manual' | 'scheduled' | 'auto' | 'quick_start' | 'tutorial' | 'challenge' | 'social' | 'guided';
@@ -64,8 +62,8 @@ export interface SessionPreparation {
   setup: SetupProcess;
   calibration: CalibrationSession;
   orientation: OrientationSession;
-  briefing: BriefingSession;
-  equipment: EquipmentCheck;
+  briefing: Record<string, unknown>;
+  equipment: Record<string, unknown>;
   environment: EnvironmentSetup;
 }
 
@@ -163,8 +161,8 @@ export interface CalibrationAdjustment {
 export interface OrientationSession {
   enabled: boolean;
   type: OrientationType;
-  content: OrientationContent;
-  progress: OrientationProgress;
+  content: Record<string, unknown>;
+  progress: Record<string, unknown>;
   completed: boolean;
   understanding: number; // 0-100
 }

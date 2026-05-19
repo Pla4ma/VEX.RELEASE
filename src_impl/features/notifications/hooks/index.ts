@@ -1,4 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as service from '../service';
 
 export const notificationKeys = {
@@ -7,7 +8,8 @@ export const notificationKeys = {
 };
 
 export function useUnreadNotificationsCount(userId: string | null) {
-  return useQuery({
+  const queryClient = useQueryClient();
+  const query = useQuery({
     queryKey: notificationKeys.unreadCount(userId || ''),
     queryFn: () => {
       if (!userId) {
@@ -19,4 +21,18 @@ export function useUnreadNotificationsCount(userId: string | null) {
     staleTime: 1000 * 30,
     refetchInterval: 1000 * 60,
   });
+
+  useEffect(() => {
+    if (!userId) {
+      return undefined;
+    }
+
+    return service.subscribeToNotificationCenter(userId, () => {
+      void queryClient.invalidateQueries({
+        queryKey: notificationKeys.unreadCount(userId),
+      });
+    });
+  }, [queryClient, userId]);
+
+  return query;
 }

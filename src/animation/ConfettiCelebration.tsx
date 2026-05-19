@@ -47,7 +47,7 @@ export function ConfettiCelebration({
         id: Date.now() + i,
         x: origin.x,
         y: origin.y,
-        color: colors[Math.floor(Math.random() * colors.length)],
+        color: colors[Math.floor(Math.random() * colors.length)] ?? '#FF6B6B',
         size: 8 + Math.random() * 8,
         rotation: Math.random() * 360,
         velocityX: Math.cos(angle) * velocity,

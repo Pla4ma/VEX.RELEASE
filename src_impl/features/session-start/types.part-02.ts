@@ -1,5 +1,3 @@
-import type { BriefingStrategy, BriefingTip, ChallengeInfo } from './types';
-
 export interface OrientationContent {
   sections: OrientationSection[];
   interactive: boolean;
@@ -30,8 +28,8 @@ export interface BriefingSession {
   type: BriefingType;
   objectives: BriefingObjective[];
   context: BriefingContext;
-  strategy: BriefingStrategy;
-  tips: BriefingTip[];
+  strategy: Record<string, unknown>;
+  tips: Record<string, unknown>[];
   completed: boolean;
 }
 
@@ -52,7 +50,7 @@ export interface BriefingContext {
   previousSession: SessionContext;
   currentStreak: number;
   recentPerformance: PerformanceSummary;
-  upcomingChallenges: ChallengeInfo[];
+  upcomingChallenges: Record<string, unknown>[];
   socialContext: SocialContext;
 }
 

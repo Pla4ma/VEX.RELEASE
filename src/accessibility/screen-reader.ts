@@ -79,7 +79,8 @@ export function clearOldAnnouncements(maxAge: number = 300000): void { // 5 minu
   const cutoff = now - maxAge;
 
   for (let i = announcements.length - 1; i >= 0; i--) {
-    if (announcements[i].timestamp < cutoff) {
+    const a = announcements[i];
+    if (a && a.timestamp < cutoff) {
       announcements.splice(i, 1);
     }
   }

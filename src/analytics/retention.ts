@@ -13,11 +13,12 @@ export function trackRetentionEvent(
   userId: string,
   event: 'first_open' | 'session' | 'return'
 ): void {
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split('T')[0] ?? new Date().toISOString().slice(0, 10);
   const userFirstOpen = getUserFirstOpen(userId);
 
   if (event === 'first_open') {
-    const cohort = retentionCohorts.get(today) || {
+    const existing = retentionCohorts.get(today);
+    const cohort: RetentionCohort = existing ?? {
       cohortDate: today,
       cohortSize: 0,
       day1: 0,

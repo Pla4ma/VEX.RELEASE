@@ -71,11 +71,11 @@ export interface TimingConfig {
 
 export function createTiming(
   duration: number,
-  easing: EasingFunction = easings.ease
+  easing: EasingFunction | undefined = easings.ease
 ): TimingConfig {
   return {
     duration,
-    easing,
+    easing: easing ?? (easings.ease ?? ((t: number) => t)),
   };
 }
 

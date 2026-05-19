@@ -176,7 +176,7 @@ export function getExperimentStats(experimentId: string): {
   });
 
   const dailyAssignments = allAssignments.reduce((acc, assignment) => {
-    const date = new Date(assignment.assignedAt).toISOString().split('T')[0];
+    const date = new Date(assignment.assignedAt).toISOString().split('T')[0] ?? '';
     const existing = acc.find((d) => d.date === date);
     if (existing) { existing.count++; } else { acc.push({ date, count: 1 }); }
     return acc;

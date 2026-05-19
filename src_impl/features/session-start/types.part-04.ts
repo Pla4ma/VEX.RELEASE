@@ -1,5 +1,3 @@
-import type { MoodFactor, MoodTracking } from './types';
-
 export interface ErgonomicImprovement {
   area: string;
   improvement: string;
@@ -128,7 +126,7 @@ export interface SessionMood {
   target: MoodState;
   assessment: MoodAssessment;
   strategies: MoodStrategy[];
-  tracking: MoodTracking;
+  tracking: Record<string, unknown>;
 }
 
 export interface MoodState {
@@ -144,7 +142,7 @@ export interface MoodAssessment {
   method: AssessmentMethod;
   accuracy: number; // 0-100
   confidence: number; // 0-100
-  factors: MoodFactor[];
+  factors: Record<string, unknown>[];
   recommendations: string[];
 }
 

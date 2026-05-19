@@ -83,6 +83,30 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_quota_log: {
+        Row: {
+          category: string
+          created_at: string
+          id: string
+          token_count: number
+          user_id: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          id?: string
+          token_count?: number
+          user_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          id?: string
+          token_count?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       analytics_events: {
         Row: {
           created_at: string
@@ -999,6 +1023,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      companion_promises: {
+        Row: {
+          copy_seed: Json
+          created_at: string
+          fulfilled_at: string | null
+          fulfilled_session_id: string | null
+          id: string
+          missed_at: string | null
+          promised_for: string
+          recommended_duration_minutes: number
+          recommended_mode: string
+          recovery_session_id: string | null
+          source_session_id: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          window_end: string
+          window_start: string
+        }
+        Insert: {
+          copy_seed?: Json
+          created_at?: string
+          fulfilled_at?: string | null
+          fulfilled_session_id?: string | null
+          id?: string
+          missed_at?: string | null
+          promised_for: string
+          recommended_duration_minutes: number
+          recommended_mode: string
+          recovery_session_id?: string | null
+          source_session_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          window_end: string
+          window_start: string
+        }
+        Update: {
+          copy_seed?: Json
+          created_at?: string
+          fulfilled_at?: string | null
+          fulfilled_session_id?: string | null
+          id?: string
+          missed_at?: string | null
+          promised_for?: string
+          recommended_duration_minutes?: number
+          recommended_mode?: string
+          recovery_session_id?: string | null
+          source_session_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          window_end?: string
+          window_start?: string
+        }
+        Relationships: []
       }
       conversations: {
         Row: {

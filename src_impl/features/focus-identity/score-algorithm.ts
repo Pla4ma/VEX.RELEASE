@@ -121,8 +121,8 @@ export function calculateFocusScoreUpdate(rawInput: FocusScoreUpdateInput): Focu
   }
 
   const newScore = clampScore(input.previousScore + delta);
-  const topPositive = [...factorEntries].sort((a, b) => b.delta - a.delta)[0];
-  const topNegative = [...factorEntries].sort((a, b) => a.delta - b.delta)[0];
+  const topPositive = [...factorEntries].sort((a, b) => b.delta - a.delta)[0]!;
+  const topNegative = [...factorEntries].sort((a, b) => a.delta - b.delta)[0]!;
   const userFacingReason = delta >= 0
     ? `Clean momentum. ${FACTOR_LABELS[topPositive.key]} pushed your Focus Score forward.`
     : `Momentum dipped. ${FACTOR_LABELS[topNegative.key]} was the biggest drag this session.`;

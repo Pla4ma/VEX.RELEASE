@@ -47,5 +47,5 @@ export function getPaywallAnalytics(): PaywallAnalytics[] {
 
 export function getBestPaywallContext(): string | null {
   const analytics = getPaywallAnalytics();
-  return analytics.length > 0 ? analytics[0].context : null;
+  return analytics.length > 0 ? (analytics[0]?.context ?? null) : null;
 }

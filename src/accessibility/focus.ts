@@ -30,16 +30,16 @@ export function getNextFocusableElement(currentId?: string): FocusableElement | 
   }
 
   if (!currentId) {
-    return focusableElements[0];
+    return focusableElements[0] ?? null;
   }
 
   const currentIndex = focusableElements.findIndex(el => el.id === currentId);
   if (currentIndex === -1) {
-    return focusableElements[0];
+    return focusableElements[0] ?? null;
   }
 
   const nextIndex = (currentIndex + 1) % focusableElements.length;
-  return focusableElements[nextIndex];
+  return focusableElements[nextIndex] ?? null;
 }
 
 /**
@@ -51,16 +51,16 @@ export function getPreviousFocusableElement(currentId?: string): FocusableElemen
   }
 
   if (!currentId) {
-    return focusableElements[focusableElements.length - 1];
+    return focusableElements[focusableElements.length - 1] ?? null;
   }
 
   const currentIndex = focusableElements.findIndex(el => el.id === currentId);
   if (currentIndex === -1) {
-    return focusableElements[focusableElements.length - 1];
+    return focusableElements[focusableElements.length - 1] ?? null;
   }
 
   const prevIndex = currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
-  return focusableElements[prevIndex];
+  return focusableElements[prevIndex] ?? null;
 }
 
 /**

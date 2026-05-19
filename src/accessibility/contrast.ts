@@ -27,7 +27,7 @@ function calculateLuminance(color: string): number {
   const b = parseInt(hex.substring(4, 6), 16) / 255;
 
   // Calculate luminance
-  const [lr, lg, lb] = [r, g, b].map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+  const [lr = 0, lg = 0, lb = 0] = [r, g, b].map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
 
   return 0.2126 * lr + 0.7152 * lg + 0.0722 * lb;
 }

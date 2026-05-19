@@ -33,7 +33,23 @@ export function SocialScreen(): JSX.Element {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<Nav>();
-  const analytics = useDisclosureAnalytics();
+  useDisclosureAnalytics();
+  const shareSheetRef = useRef<BottomSheet>(null);
+  const createSheetRef = useRef<BottomSheet>(null);
+  const userId = useAuthStore((state) => state.user?.id);
+  const featureAccess = useFeatureAccess();
+  const squadAvailability = getFeatureAvailability(featureAccess.features.squads);
+  const bossAvailability = getFeatureAvailability(featureAccess.features.boss_tab);
+  const canNavigateSquads = squadAvailability.canNavigate;
+  const canNavigateBoss = bossAvailability.canNavigate;
+  const squadsQuery = useUserSquads(squadAvailability.canQuery ? userId : undefined);
+  const primarySquad = squadsQuery.data?.[0] ?? null;
+  const weeklyStatsQuery = useSquadWeeklyStats(primarySquad?.id);
+  const weeklyStats = weeklyStatsQuery.data ?? emptyWeeklyStats;
+  const activeBossQuery = useActiveBoss(
+    bossAvailability.canQuery ? userId ?? null : null,
+    primarySquad?.id,
+  );
 
   return (
     <>

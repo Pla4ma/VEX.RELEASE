@@ -22,6 +22,6 @@ export interface SessionStartEvent {
   userId: string;
   sessionId: string;
   startId: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   timestamp: Date;
 }

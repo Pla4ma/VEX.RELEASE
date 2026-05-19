@@ -1,8 +1,6 @@
-import type { ExperienceImprovement, MoodState } from './types';
-
 export interface MoodTracking {
-  baseline: MoodState;
-  current: MoodState;
+  baseline: Record<string, unknown>;
+  current: Record<string, unknown>;
   trend: 'improving' | 'stable' | 'declining';
   volatility: number; // 0-100
   patterns: MoodPattern[];
@@ -97,7 +95,7 @@ export interface StartExperience {
   immersion: ImmersionLevel;
   satisfaction: SatisfactionLevel;
   feedback: ExperienceFeedback;
-  improvements: ExperienceImprovement[];
+  improvements: Record<string, unknown>[];
 }
 
 export interface FlowState {
