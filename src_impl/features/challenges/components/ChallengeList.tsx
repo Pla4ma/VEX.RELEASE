@@ -11,6 +11,8 @@ import { Text, Card, Button } from '../../../components';
 import { ChallengeCard } from './ChallengeCard';
 import type { UserChallengeSummary } from '../schemas';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface ChallengeListProps {
   challenges: UserChallengeSummary[];
@@ -129,7 +131,7 @@ const styles = createSheet({
   headerText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: launchColors.hex_6b7280,
   },
   skeletonCard: {
     padding: 16,
@@ -137,14 +139,14 @@ const styles = createSheet({
   },
   skeletonHeader: {
     height: 20,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: launchColors.hex_e0e0e0,
     borderRadius: 4,
     marginBottom: 12,
     width: '70%',
   },
   skeletonLine: {
     height: 12,
-    backgroundColor: '#E0E0E0',
+    backgroundColor: launchColors.hex_e0e0e0,
     borderRadius: 4,
     marginBottom: 8,
   },
@@ -157,11 +159,11 @@ const styles = createSheet({
     fontSize: 18,
     fontWeight: '700',
     marginBottom: 8,
-    color: '#DC2626',
+    color: launchColors.hex_dc2626,
   },
   errorMessage: {
     fontSize: 14,
-    color: '#6B7280',
+    color: launchColors.hex_6b7280,
     textAlign: 'center',
     marginBottom: 16,
   },
@@ -179,7 +181,7 @@ const styles = createSheet({
   },
   emptyText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: launchColors.hex_6b7280,
     textAlign: 'center',
   },
 });

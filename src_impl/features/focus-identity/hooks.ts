@@ -8,6 +8,8 @@ import { useMemo } from 'react';
 import { useFocusScore } from './hooks-focus-score';
 import { FocusIdentityEngine, type ScoreBand, type FocusIdentityProfile } from './FocusIdentityEngine';
 import { useTheme } from '../../theme';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 /**
  * Hook for accessing focus identity data and state
@@ -60,8 +62,8 @@ export function useFocusIdentity(userId: string) {
 
   const scoreChange = useMemo(() => {
     if (!history || history.length < 2) {return 0;}
-    const latest = history[history.length - 1];
-    const previous = history[history.length - 2];
+    const latest = history[history.length - 1]!;
+    const previous = history[history.length - 2]!;
     return latest.score - previous.score;
   }, [history]);
 
@@ -93,19 +95,19 @@ export function useFocusScoreColor(score: number | null): string {
 
     switch (band.label) {
       case 'Building':
-        return '#CD7F32';
+        return launchColors.hex_cd7f32;
       case 'Fair':
-        return '#C0C0C0';
+        return launchColors.hex_c0c0c0;
       case 'Good':
-        return '#FFD700';
+        return launchColors.hex_ffd700;
       case 'Strong':
-        return '#E5E4E2';
+        return launchColors.hex_e5e4e2;
       case 'Exceptional':
-        return '#B9F2FF';
+        return launchColors.hex_b9f2ff;
       case 'Elite':
-        return '#9C27B0';
+        return launchColors.hex_9c27b0;
       case 'Legendary':
-        return '#FF1744';
+        return launchColors.hex_ff1744;
       default:
         return theme.colors.text.secondary;
     }

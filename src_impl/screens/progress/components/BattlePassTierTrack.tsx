@@ -14,6 +14,8 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { useTheme } from '@/theme';
 import type { BattlePassTier } from '@/features/battle-pass/types';
 import { BattlePassTierCard } from './BattlePassTierCard';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 type TrackType = 'FREE' | 'PREMIUM';
 
@@ -124,7 +126,7 @@ export function BattlePassTrackTabs({
         >
           <Text
             variant="body"
-            color={activeTrack === 'FREE' ? '#FFFFFF' : theme.colors.text.secondary}
+            color={activeTrack === 'FREE' ? launchColors.hex_ffffff : theme.colors.text.secondary}
             fontWeight={activeTrack === 'FREE' ? 'bold' : 'normal'}
           >
             Free Track
@@ -152,7 +154,7 @@ export function BattlePassTrackTabs({
         >
           <Text
             variant="body"
-            color={activeTrack === 'PREMIUM' && hasPremium ? '#FFFFFF' : theme.colors.text.secondary}
+            color={activeTrack === 'PREMIUM' && hasPremium ? launchColors.hex_ffffff : theme.colors.text.secondary}
             fontWeight={activeTrack === 'PREMIUM' ? 'bold' : 'normal'}
           >
             {hasPremium ? '👑 Premium' : '🔒 Premium'}

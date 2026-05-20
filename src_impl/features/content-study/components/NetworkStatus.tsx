@@ -10,6 +10,8 @@ import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { Icon } from '../../../icons';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface NetworkStatusProps {
   isOffline: boolean;
@@ -49,13 +51,13 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
         <Icon
           name={isOffline ? 'wifi-off' : 'alert-triangle'}
           size="sm"
-          color="#FFFFFF"
+          color={launchColors.hex_ffffff}
         />
         <View style={styles.textContainer}>
-          <Text style={[styles.title, { color: '#FFFFFF' }]}>
+          <Text style={[styles.title, { color: launchColors.hex_ffffff }]}>
             {isOffline ? 'Offline Mode' : 'Slow Connection'}
           </Text>
-          <Text style={[styles.description, { color: '#FFFFFF' }]}>
+          <Text style={[styles.description, { color: launchColors.hex_ffffff }]}>
             {isOffline
               ? pendingSyncCount
                 ? `${pendingSyncCount} items queued for sync`
@@ -69,7 +71,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
             accessibilityLabel="Sync button"
             accessibilityRole="button"
             accessibilityHint="Activates this control">
-            <Text style={[styles.actionText, { color: '#FFFFFF' }]}>
+            <Text style={[styles.actionText, { color: launchColors.hex_ffffff }]}>
               Sync
             </Text>
           </Pressable>
@@ -83,7 +85,7 @@ export const NetworkStatus: React.FC<NetworkStatusProps> = ({
             <Icon
               name="x"
               size="sm"
-              color="#FFFFFF"
+              color={launchColors.hex_ffffff}
             />
           </Pressable>
         )}
@@ -152,7 +154,7 @@ const styles = createSheet({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 6,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    backgroundColor: launchColors.rgb_255_255_255_0_2,
   },
   actionText: {
     fontSize: 13,

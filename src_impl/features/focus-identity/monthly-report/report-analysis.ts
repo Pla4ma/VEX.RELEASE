@@ -92,7 +92,7 @@ function findBestFocusWindow(sessions: SessionData[]) {
   for (const [key, data] of windowPerformance.entries()) {
     const averagePurity = data.totalPurity / data.count;
     if (averagePurity > bestWindow.averagePurity) {
-      const [dayOfWeek, timeRange] = key.split(' ');
+      const [dayOfWeek = 'Monday', timeRange = '9:00 AM - 10:00 AM'] = key.split(' ');
       bestWindow = { dayOfWeek, timeRange, averagePurity };
     }
   }

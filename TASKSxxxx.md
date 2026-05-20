@@ -857,27 +857,27 @@ By the end of this phase:
 
 ### Phase 2 Deep Work
 
-- [ ] Create an integrity backlog from scan results, grouped by:
+- [x] Create an integrity backlog from scan results, grouped by:
   - launch blocker.
   - required before touching feature.
   - safe to fix after launch only if hidden.
-- [ ] For each `any` or dynamic alias:
+- [x] For each `any` or dynamic alias:
   - identify the real domain object.
   - add or reuse a Zod schema.
   - infer the type.
   - parse at boundary.
   - remove unsafe cast.
-- [ ] For each oversized file:
+- [x] For each oversized file:
   - identify responsibilities.
   - extract pure helpers first.
   - extract UI sections second.
   - extract side-effect orchestration last.
   - add tests around changed service logic.
-- [ ] For each hardcoded color:
+- [x] For each hardcoded color:
   - find the closest existing token.
   - add a token only if the design system truly lacks it.
   - test dark mode.
-- [ ] For each direct Supabase call outside repository:
+- [x] For each direct Supabase call outside repository:
   - move query to owning feature repository.
   - expose service method.
   - wire hook.
@@ -896,22 +896,22 @@ Avoid broad refactors that do not help the May 30 launch.
 
 ### Phase 2 Anti-Regression Checks
 
-- [ ] Existing tests still pass after file splits.
-- [ ] Public exports remain compatible unless all callers are updated.
-- [ ] No feature behavior changes during pure formatting/minified expansion.
-- [ ] No UI layout changes from token replacement except intended theme consistency.
-- [ ] No new dependency is introduced.
+- [x] Existing tests still pass after file splits.
+- [x] Public exports remain compatible unless all callers are updated.
+- [x] No feature behavior changes during pure formatting/minified expansion.
+- [x] No UI layout changes from token replacement except intended theme consistency.
+- [x] No new dependency is introduced.
 
 ### P2-01 TypeScript Zero
 
-- [ ] Run:
+- [x] Run:
 
 ```powershell
 npx tsc --noEmit --pretty false 2>&1 | Tee-Object -FilePath ts-errors.txt
 ```
 
-- [ ] Fix every error.
-- [ ] Known issue to verify: invalid Reanimated spring config key `energyThreshold`.
+- [x] Fix every error.
+- [x] Known issue to verify: invalid Reanimated spring config key `energyThreshold`.
 
 Exit gate: TypeScript exits zero.
 
@@ -927,27 +927,27 @@ Files previously identified as compressed or unreadable:
 
 Tasks:
 
-- [ ] Reformat into readable TypeScript.
-- [ ] Keep behavior unchanged first.
-- [ ] Add or update tests only after behavior is understandable.
-- [ ] Keep each file under 200 lines by splitting if needed.
+- [x] Reformat into readable TypeScript.
+- [x] Keep behavior unchanged first.
+- [x] Add or update tests only after behavior is understandable.
+- [x] Keep each file under 200 lines by splitting if needed.
 
 Exit gate: no production file is a single compressed line.
 
 ### P2-03 Remove Banned Type Escapes
 
-- [ ] Remove all `DynamicRecord`, `DynamicValue`, and `DynamicItem`.
-- [ ] Replace each with a real interface or Zod-inferred type.
-- [ ] Replace `z.any()` with specific schema types or `z.unknown()` plus narrowing.
-- [ ] Remove `as any`.
+- [x] Remove all `DynamicRecord`, `DynamicValue`, and `DynamicItem`.
+- [x] Replace each with a real interface or Zod-inferred type.
+- [x] Replace `z.any()` with specific schema types or `z.unknown()` plus narrowing.
+- [x] Remove `as any`.
 
 Exit gate: banned type scan returns zero production matches.
 
 ### P2-04 Remove Hardcoded UI Values
 
-- [ ] Replace hardcoded hex/rgb colors with design tokens.
-- [ ] Replace hardcoded spacing, radius, and font sizes where touched.
-- [ ] Confirm dark mode still renders correctly.
+- [x] Replace hardcoded hex/rgb colors with design tokens.
+- [x] Replace hardcoded spacing, radius, and font sizes where touched.
+- [x] Confirm dark mode still renders correctly.
 
 Known files to review:
 
@@ -968,14 +968,14 @@ Exit gate: color scan returns zero production matches except generated or docume
 
 ### P2-05 Architecture Violation Scan
 
-- [ ] Run:
+- [x] Run:
 
 ```powershell
 rg "supabase\.from|supabase\.rpc|supabase\.channel" src_impl/screens src_impl/components -g "*.ts" -g "*.tsx" -n
 ```
 
-- [ ] Move any query/subscription to the owning feature repository or event layer.
-- [ ] Confirm every realtime subscription has cleanup.
+- [x] Move any query/subscription to the owning feature repository or event layer.
+- [x] Confirm every realtime subscription has cleanup.
 
 Exit gate: zero direct Supabase access in screens/components.
 
@@ -1312,27 +1312,27 @@ Do not show these above the fold together:
 
 ### Phase 4 Deep Work
 
-- [ ] Inventory every home card/module.
+- [x] Inventory every home card/module.
 - [ ] Assign each module a job:
   - start session.
   - explain why now.
   - show recent progress.
   - recover risk.
   - optional exploration.
-- [ ] Remove or move modules with duplicate jobs.
-- [ ] Define new-user home:
+- [x] Remove or move modules with duplicate jobs.
+- [x] Define new-user home:
   - no fake focus score.
   - no empty boss/challenge noise.
   - one first-session CTA.
-- [ ] Define returning-user home:
+- [x] Define returning-user home:
   - promise/streak/recommendation priority.
   - recent progress.
   - one contextual module.
-- [ ] Define offline home:
+- [x] Define offline home:
   - show offline banner.
   - allow local session start if supported.
   - avoid actions that require network unless disabled with explanation.
-- [ ] Define premium user home:
+- [x] Define premium user home:
   - no irrelevant premium upsell.
   - premium value appears as improved insight/protection, not clutter.
 
@@ -1349,10 +1349,10 @@ Do not show these above the fold together:
 
 ### P4-01 Priority Service
 
-- [ ] Read `src_impl/features/home-spine/priority-service.ts`.
-- [ ] Confirm it produces exactly one primary action.
-- [ ] Add `COMPANION_PROMISE` and `PROMISE_RECOVERY`.
-- [ ] Unit test all priority cases.
+- [x] Read `src_impl/features/home-spine/priority-service.ts`.
+- [x] Confirm it produces exactly one primary action.
+- [x] Add `COMPANION_PROMISE` and `PROMISE_RECOVERY`.
+- [x] Unit test all priority cases.
 
 Priority order:
 
@@ -1369,9 +1369,9 @@ Exit gate: tests prove deterministic priority selection.
 
 ### P4-02 Hero Card
 
-- [ ] `HomeHeroCard` renders one primary CTA.
-- [ ] Secondary CTA is optional and never competes visually.
-- [ ] CTA copy matches the selected priority.
+- [x] `HomeHeroCard` renders one primary CTA.
+- [x] Secondary CTA is optional and never competes visually.
+- [x] CTA copy matches the selected priority.
 
 Copy:
 
@@ -1397,9 +1397,9 @@ Above the fold should contain:
 
 Tasks:
 
-- [ ] Remove boss and challenge from showing simultaneously.
-- [ ] Move shop, battle pass, analytics, and social prompts below fold or to tabs.
-- [ ] Hide incomplete P2 surfaces by feature flag.
+- [x] Remove boss and challenge from showing simultaneously.
+- [x] Move shop, battle pass, analytics, and social prompts below fold or to tabs.
+- [x] Hide incomplete P2 surfaces by feature flag.
 
 Exit gate: standard iPhone viewport shows one clear primary action and no more than three secondary cards.
 
@@ -1486,24 +1486,24 @@ Optional beats must not crowd the core story.
 
 ### Phase 5 Deep Work
 
-- [ ] Build a story beat model instead of hardcoding JSX branches.
-- [ ] Define beat priority:
+- [x] Build a story beat model instead of hardcoding JSX branches.
+- [x] Define beat priority:
   - session result.
   - grade explanation.
   - promise/contract outcome.
   - companion memory.
   - personal best.
   - next session.
-- [ ] Ensure each beat has:
+- [x] Ensure each beat has:
   - title.
   - one-sentence body.
   - optional metric.
   - optional companion line.
   - accessibility label.
-- [ ] Create fallback copy for missing optional data.
-- [ ] Confirm rewards are already saved before story claims them.
-- [ ] Confirm story can render if companion memory fails.
-- [ ] Confirm story can render offline from local completion state.
+- [x] Create fallback copy for missing optional data.
+- [x] Confirm rewards are already saved before story claims them.
+- [x] Confirm story can render if companion memory fails.
+- [x] Confirm story can render offline from local completion state.
 
 ### Phase 5 Copy Bar
 
@@ -1532,14 +1532,14 @@ Better:
 
 ### P5-01 Navigation Proof
 
-- [ ] Search:
+- [x] Search:
 
 ```powershell
 rg "PostSessionStory" src_impl -g "*.ts" -g "*.tsx" -n
 ```
 
-- [ ] Confirm session completion navigates to story with session ID.
-- [ ] If not, wire navigation in the completion flow.
+- [x] Confirm session completion navigates to story with session ID.
+- [x] If not, wire navigation in the completion flow.
 
 Exit gate: completing a session opens the story screen.
 
@@ -1556,9 +1556,9 @@ Story must include:
 
 Tasks:
 
-- [ ] Build these in service/view-model layer, not JSX.
-- [ ] Parse all external data through Zod schemas.
-- [ ] Add tests for full, partial, and missing data.
+- [x] Build these in service/view-model layer, not JSX.
+- [x] Parse all external data through Zod schemas.
+- [x] Add tests for full, partial, and missing data.
 
 Exit gate: story view model test covers all required beats.
 
@@ -1566,20 +1566,20 @@ Exit gate: story view model test covers all required beats.
 
 The story screen must include:
 
-- [ ] Loading skeleton.
-- [ ] Error state with retry.
-- [ ] Empty fallback if no story exists.
-- [ ] Offline degraded banner.
-- [ ] Success story.
-- [ ] Reduced-motion behavior.
+- [x] Loading skeleton.
+- [x] Error state with retry.
+- [x] Empty fallback if no story exists.
+- [x] Offline degraded banner.
+- [x] Success story.
+- [x] Reduced-motion behavior.
 
 Exit gate: every state is reachable in development test setup.
 
 ### P5-04 Next Session CTA
 
-- [ ] If story has next-session recommendation, CTA opens `SessionSetup` with duration/mode prefilled.
-- [ ] If no recommendation, CTA returns home.
-- [ ] Secondary share CTA only appears when share handler is available.
+- [x] If story has next-session recommendation, CTA opens `SessionSetup` with duration/mode prefilled.
+- [x] If no recommendation, CTA returns home.
+- [x] Secondary share CTA only appears when share handler is available.
 
 Exit gate: CTA navigation works on device.
 
@@ -1667,39 +1667,39 @@ After session:
 
 ### Phase 6 Deep Work
 
-- [ ] Confirm contract schema is clear and not overbuilt.
-- [ ] Confirm contract creation is optional.
-- [ ] Confirm session can start without contract.
-- [ ] Confirm reminder timing uses session progress, not arbitrary timers.
-- [ ] Confirm reminder is not repeated after dismissal.
-- [ ] Confirm reflection state is saved once.
-- [ ] Confirm contract reflection updates story view model.
-- [ ] Confirm contract failure cannot block session reward persistence.
+- [x] Confirm contract schema is clear and not overbuilt.
+- [x] Confirm contract creation is optional.
+- [x] Confirm session can start without contract.
+- [x] Confirm reminder timing uses session progress, not arbitrary timers.
+- [x] Confirm reminder is not repeated after dismissal.
+- [x] Confirm reflection state is saved once.
+- [x] Confirm contract reflection updates story view model.
+- [x] Confirm contract failure cannot block session reward persistence.
 
 ### Phase 6 Edge Cases
 
-- [ ] User starts session without contract.
-- [ ] User creates contract then cancels setup.
-- [ ] User completes session before first reminder.
-- [ ] User backgrounds app during reminder window.
-- [ ] User skips reflection.
-- [ ] Reflection save fails.
-- [ ] Contract row exists but session row is missing.
-- [ ] Reduced motion enabled.
+- [x] User starts session without contract.
+- [x] User creates contract then cancels setup.
+- [x] User completes session before first reminder.
+- [x] User backgrounds app during reminder window.
+- [x] User skips reflection.
+- [x] Reflection save fails.
+- [x] Contract row exists but session row is missing.
+- [x] Reduced motion enabled.
 
 ### P6-01 Contract Creation
 
-- [ ] Confirm setup can create a focus contract.
-- [ ] Confirm contract persistence goes through repository.
-- [ ] Confirm active session can read the current contract through a hook.
+- [x] Confirm setup can create a focus contract.
+- [x] Confirm contract persistence goes through repository.
+- [x] Confirm active session can read the current contract through a hook.
 
 Exit gate: a contract created in setup appears during the active session.
 
 ### P6-02 Contract Reminder
 
-- [ ] Reminder appears only when a contract exists.
-- [ ] Reminder appears once near the first 10% and once near the last 10%.
-- [ ] Reminder respects reduced motion.
+- [x] Reminder appears only when a contract exists.
+- [x] Reminder appears once near the first 10% and once near the last 10%.
+- [x] Reminder respects reduced motion.
 
 Exit gate: reminder timing verified manually.
 
@@ -1717,9 +1717,9 @@ Options:
 
 Tasks:
 
-- [ ] Call `reflectOnContract` from completion flow.
-- [ ] Show companion response from service copy.
-- [ ] Capture errors in Sentry and show retry/fallback.
+- [x] Call `reflectOnContract` from completion flow.
+- [x] Show companion response from service copy.
+- [x] Capture errors in Sentry and show retry/fallback.
 
 Exit gate: reflection is saved and visible in post-session story.
 
@@ -1786,15 +1786,15 @@ By the end of this phase:
 
 ### Phase 7 Deep Work
 
-- [ ] Inventory all existing paywall triggers.
-- [ ] Remove or suppress triggers that compete with completion story.
-- [ ] Add trigger cooldown so user is not repeatedly shown paywall.
-- [ ] Confirm free vs premium entitlement source.
-- [ ] Confirm paywall can render offline or shows a useful fallback.
-- [ ] Confirm restore purchases is visible from paywall and settings/profile if applicable.
-- [ ] Confirm purchase success updates entitlement and returns to the correct screen.
-- [ ] Confirm purchase failure preserves session state.
-- [ ] Confirm paywall analytics distinguish:
+- [x] Inventory all existing paywall triggers.
+- [x] Remove or suppress triggers that compete with completion story.
+- [x] Add trigger cooldown so user is not repeatedly shown paywall.
+- [x] Confirm free vs premium entitlement source.
+- [x] Confirm paywall can render offline or shows a useful fallback.
+- [x] Confirm restore purchases is visible from paywall and settings/profile if applicable.
+- [x] Confirm purchase success updates entitlement and returns to the correct screen.
+- [x] Confirm purchase failure preserves session state.
+- [x] Confirm paywall analytics distinguish:
   - viewed.
   - dismissed.
   - purchase started.
@@ -1846,19 +1846,19 @@ Copy:
 
 Tasks:
 
-- [ ] Use existing shared monetization layer only.
-- [ ] Do not call RevenueCat directly.
-- [ ] Do not block access to earned session results.
-- [ ] Restore purchases remains visible and functional.
+- [x] Use existing shared monetization layer only.
+- [x] Do not call RevenueCat directly.
+- [x] Do not block access to earned session results.
+- [x] Restore purchases remains visible and functional.
 
 Exit gate: sandbox user sees paywall at the correct moment and can dismiss without breaking flow.
 
 ### P7-02 Paywall Failure States
 
-- [ ] Purchase failure shows user-facing error.
-- [ ] Restore failure shows user-facing error.
-- [ ] Network failure shows retry.
-- [ ] Unexpected errors are captured in Sentry.
+- [x] Purchase failure shows user-facing error.
+- [x] Restore failure shows user-facing error.
+- [x] Network failure shows retry.
+- [x] Unexpected errors are captured in Sentry.
 
 Exit gate: all purchase paths tested in sandbox or documented if App Store sandbox blocks testing.
 
@@ -1915,7 +1915,7 @@ By the end of this phase:
 
 ### Phase 8 Deep Work
 
-- [ ] Audit every P2 surface for:
+- [x] Audit every P2 surface for:
   - real data.
   - loading state.
   - empty state.
@@ -1924,15 +1924,15 @@ By the end of this phase:
   - accessibility.
   - navigation entry point.
   - tests.
-- [ ] Decide `SHIP` or `HIDE` for each P2 feature.
-- [ ] Remove P2 modules from home unless they support the primary action.
-- [ ] Ensure hidden features do not leave:
+- [x] Decide `SHIP` or `HIDE` for each P2 feature.
+- [x] Remove P2 modules from home unless they support the primary action.
+- [x] Ensure hidden features do not leave:
   - dead routes.
   - menu items.
   - push notification targets.
   - deep links.
   - analytics events implying visibility.
-- [ ] Confirm shipped P2 surfaces make the app feel calmer or more meaningful.
+- [x] Confirm shipped P2 surfaces make the app feel calmer or more meaningful.
 
 ### Phase 8 Personal Best Rules
 
@@ -1995,10 +1995,10 @@ Better:
 
 Ship only if:
 
-- [ ] Detection is already reliable.
-- [ ] Post-session story can show a personal best beat.
-- [ ] Beat includes category, old value, and new value.
-- [ ] Tests cover new personal best and no personal best.
+- [x] Detection is already reliable.
+- [x] Post-session story can show a personal best beat.
+- [x] Beat includes category, old value, and new value.
+- [x] Tests cover new personal best and no personal best.
 
 Exit gate: personal best celebration appears after a real qualifying session.
 
@@ -2006,10 +2006,10 @@ Exit gate: personal best celebration appears after a real qualifying session.
 
 Ship only if:
 
-- [ ] Home widget uses live hook data.
-- [ ] Dashboard loads real history.
-- [ ] New users see a useful empty state, not zero pretending to be a score.
-- [ ] Score updates after completed sessions.
+- [x] Home widget uses live hook data.
+- [x] Dashboard loads real history.
+- [x] New users see a useful empty state, not zero pretending to be a score.
+- [x] Score updates after completed sessions.
 
 Exit gate: test user with 3+ sessions sees a non-static score.
 
@@ -2017,9 +2017,9 @@ Exit gate: test user with 3+ sessions sees a non-static score.
 
 Ship only if:
 
-- [ ] Memory copy is based on actual session facts.
-- [ ] Memory is not repeated too often.
-- [ ] Memory never exposes private or sensitive content unexpectedly.
+- [x] Memory copy is based on actual session facts.
+- [x] Memory is not repeated too often.
+- [x] Memory never exposes private or sensitive content unexpectedly.
 
 Exit gate: three completed sessions produce varied, accurate companion messages.
 
@@ -2254,7 +2254,7 @@ By the end of this phase:
   - status.
   - verification link/evidence.
   - cut decision if hidden.
-- [ ] Run full static verification.
+- [x] Run full static verification.
 - [ ] Run full manual E2E.
 - [ ] Review Sentry for new errors after E2E.
 - [ ] Review Supabase for duplicate completion/reward rows after E2E.

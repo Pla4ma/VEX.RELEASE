@@ -11,6 +11,8 @@ import { Pressable } from 'react-native';
 import { Box, Text, Button } from '@/components/primitives';
 import { useTheme } from '@/theme';
 import type { BattlePassTier, RewardType } from '@/features/battle-pass/types';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 type TrackType = 'FREE' | 'PREMIUM';
 
@@ -39,10 +41,10 @@ const REWARD_ICONS: Record<RewardType, string> = {
 };
 
 const RARITY_COLORS: Record<string, string> = {
-  common: '#94A3B8',
-  rare: '#3B82F6',
-  epic: '#A855F7',
-  legendary: '#FFD700',
+  common: launchColors.hex_94a3b8,
+  rare: launchColors.hex_3b82f6,
+  epic: launchColors.hex_a855f7,
+  legendary: launchColors.hex_ffd700,
 };
 
 export function BattlePassTierCard({
@@ -109,7 +111,7 @@ export function BattlePassTierCard({
         >
           <Text
             variant="caption"
-            color={isCurrent || isUnlocked ? '#FFFFFF' : theme.colors.text.tertiary}
+            color={isCurrent || isUnlocked ? launchColors.hex_ffffff : theme.colors.text.tertiary}
             fontWeight="bold"
           >
             {tierNumber}
@@ -160,7 +162,7 @@ export function BattlePassTierCard({
               alignItems="center"
               justifyContent="center"
             >
-              <Text style={{ fontSize: 12, color: '#FFFFFF' }}>✓</Text>
+              <Text style={{ fontSize: 12, color: launchColors.hex_ffffff }}>✓</Text>
             </Box>
           )}
         </Box>

@@ -1,200 +1,22 @@
-export type MasteryRank =
-  | 'APPRENTICE'
-  | 'ADEPT'
-  | 'EXPERT'
-  | 'MASTER'
-  | 'GRANDMASTER';
-export interface MasteryState {
-  userId: string;
-  totalMasteryPoints: number;
-  rank: MasteryRank;
-  techniques: {
-    durationMastery: number;
-    purityMastery: number;
-    consistencyMastery: number;
-    comebackMastery: number;
-    bossMastery: number;
-  };
-  activeChallenges: MasteryChallenge[];
-  unlockedFeatures: string[];
-  updatedAt: number;
-}
-export interface MasteryChallenge {
-  id: string;
-  technique: keyof MasteryState['techniques'];
-  title: string;
-  description: string;
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'ELITE';
-  target: number;
-  current: number;
-  unit: string;
-  masteryPoints: number;
-  status: 'ACTIVE' | 'COMPLETED' | 'CLAIMED';
-  completedAt: number | null;
-}
-export const MASTERY_RANK_THRESHOLDS: Record<MasteryRank, number> = {
-  APPRENTICE: 0,
-  ADEPT: 10,
-  EXPERT: 25,
-  MASTER: 50,
-  GRANDMASTER: 100,
-};
-export function calculateTechniqueXp(
-  sessionMinutes: number,
-  purityScore: number,
-  wasInterrupted: boolean,
-  streakDays: number,
-  bossDefeated: boolean,
-  bossHealthPercent: number,
-): Record<keyof MasteryState['techniques'], number> {
-  return {
-    durationMastery: wasInterrupted
-      ? 0
-      : Math.floor(sessionMinutes * (purityScore / 100)),
-    purityMastery: purityScore >= 90 ? Math.floor(purityScore / 10) : 0,
-    consistencyMastery: streakDays > 0 ? 2 : 0,
-    comebackMastery: streakDays === 1 ? 10 : 0,
-    bossMastery: bossDefeated
-      ? Math.floor(20 * (1 + (1 - bossHealthPercent)))
-      : 0,
-  };
-}
-
+import { launchColors } from '@theme/tokens/launch-colors'; export type MasteryRank = | 'APPRENTICE' | 'ADEPT' | 'EXPERT' | 'MASTER' | 'GRANDMASTER'; export interface MasteryState { userId: string; totalMasteryPoints: number; rank: MasteryRank; techniques: { durationMastery: number; purityMastery: number; consistencyMastery: number; comebackMastery: number; bossMastery: number; }; activeChallenges: MasteryChallenge[]; unlockedFeatures: string[]; updatedAt: number; } export interface MasteryChallenge { id: string; technique: keyof MasteryState['techniques']; title: string; description: string; difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'ELITE'; target: number; current: number; unit: string; masteryPoints: number; status: 'ACTIVE' | 'COMPLETED' | 'CLAIMED'; completedAt: number | null; } export const MASTERY_RANK_THRESHOLDS: Record<MasteryRank, number> = { APPRENTICE: 0, ADEPT: 10, EXPERT: 25, MASTER: 50, GRANDMASTER: 100, }; export function calculateTechniqueXp( sessionMinutes: number, purityScore: number, wasInterrupted: boolean, streakDays: number, bossDefeated: boolean, bossHealthPercent: number, ): Record<keyof MasteryState['techniques'], number> { return { durationMastery: wasInterrupted ? 0 : Math.floor(sessionMinutes * (purityScore / 100)), purityMastery: purityScore >= 90 ? Math.floor(purityScore / 10) : 0, consistencyMastery: streakDays > 0 ? 2 : 0, comebackMastery: streakDays === 1 ? 10 : 0, bossMastery: bossDefeated ? Math.floor(20 * (1 + (1 - bossHealthPercent))) : 0, }; }
 type TechniqueKey = keyof MasteryState['techniques'];
-
-type ChallengeTemplate = {
-  title: string;
-  description: string;
-  target: number;
-  unit: string;
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'ELITE';
-  points: number;
-};
-
-export function generateMasteryChallenges(
-  techniques: MasteryState['techniques'],
-  _currentRank: MasteryRank,
-): MasteryChallenge[] {
-  const challenges: MasteryChallenge[] = [];
-  const techniqueEntries = Object.entries(techniques) as [TechniqueKey, number][];
-  const lowestTechnique = techniqueEntries.sort((a, b) => a[1] - b[1])[0];
-  if (!lowestTechnique) return challenges;
-
-  const techKey = lowestTechnique[0];
-  const techLevel = lowestTechnique[1];
-  if (!techKey || techLevel === undefined) return challenges;
-
-  const challengeTemplates: Record<TechniqueKey, ChallengeTemplate[]> = {
-    durationMastery: [
-      { title: 'Deep Focus', description: 'Complete a 45-minute session without pausing', target: 45, unit: 'minutes', difficulty: 'MEDIUM', points: 5 },
-      { title: 'Marathon', description: 'Complete a 90-minute session with 90%+ purity', target: 90, unit: 'minutes', difficulty: 'HARD', points: 10 },
-      { title: 'Iron Will', description: 'Complete 3 sessions of 60+ minutes with zero pauses this week', target: 3, unit: 'sessions', difficulty: 'ELITE', points: 15 },
-      { title: 'The Long Haul', description: 'Maintain 85%+ purity for a full 60-minute session', target: 60, unit: 'minutes', difficulty: 'HARD', points: 8 },
-      { title: 'Sprint Endurance', description: 'Complete 4 consecutive sprints (25 min each) without breaks between', target: 4, unit: 'sprints', difficulty: 'ELITE', points: 12 },
-    ],
-    purityMastery: [
-      { title: 'Crystal Clear', description: 'Achieve 95%+ purity in a 30+ minute session', target: 95, unit: '% purity', difficulty: 'MEDIUM', points: 5 },
-      { title: 'Perfect Streak', description: 'Complete 3 perfect sessions (95%+ purity) in a row', target: 3, unit: 'sessions', difficulty: 'HARD', points: 10 },
-      { title: 'Enlightened', description: 'Maintain 90%+ average purity for 7 consecutive days', target: 7, unit: 'days', difficulty: 'ELITE', points: 15 },
-      { title: 'Flawless Victory', description: 'Achieve 100% purity (zero pauses) in a 45+ minute session', target: 1, unit: 'session', difficulty: 'ELITE', points: 20 },
-      { title: 'Pure Consistency', description: 'Achieve S grade in 5 consecutive sessions', target: 5, unit: 'sessions', difficulty: 'HARD', points: 12 },
-    ],
-    consistencyMastery: [
-      { title: 'Daily Grind', description: 'Complete a qualifying session (15+ min, 50+ quality) every day for 5 days', target: 5, unit: 'days', difficulty: 'EASY', points: 3 },
-      { title: 'Two Weeks Strong', description: 'Maintain a 14-day streak with no breaks', target: 14, unit: 'days', difficulty: 'MEDIUM', points: 5 },
-      { title: 'Monthly Master', description: 'Hit a 30-day streak with at least 20 qualifying sessions', target: 30, unit: 'days', difficulty: 'HARD', points: 10 },
-      { title: 'Quality Streak', description: 'Maintain a 7-day streak where every session is A grade or higher', target: 7, unit: 'days', difficulty: 'HARD', points: 8 },
-      { title: 'Centurion', description: 'Achieve a 100-day streak (one missed day allowed with shield)', target: 100, unit: 'days', difficulty: 'ELITE', points: 25 },
-    ],
-    comebackMastery: [
-      { title: 'Resilience', description: 'Recover from a broken streak and complete a session within 24 hours', target: 1, unit: 'comeback', difficulty: 'EASY', points: 3 },
-      { title: 'Phoenix Rising', description: 'Achieve a 7-day streak after breaking a 14+ day streak', target: 7, unit: 'days', difficulty: 'MEDIUM', points: 5 },
-      { title: 'Unbreakable', description: 'Reach a 30-day streak after losing a 30+ day streak before', target: 30, unit: 'days', difficulty: 'HARD', points: 10 },
-      { title: 'Stronger Than Before', description: 'Beat your previous longest streak after a break', target: 1, unit: 'record', difficulty: 'HARD', points: 8 },
-      { title: 'True Grit', description: 'Complete 3 sessions in the first 3 days after a streak break', target: 3, unit: 'sessions', difficulty: 'MEDIUM', points: 6 },
-    ],
-    bossMastery: [
-      { title: 'Boss Slayer', description: 'Defeat a boss in under 50% of the expected session time', target: 50, unit: '% time', difficulty: 'MEDIUM', points: 5 },
-      { title: 'Speed Kill', description: 'Defeat a boss in under 25% of expected time with 90%+ purity', target: 25, unit: '% time', difficulty: 'HARD', points: 10 },
-      { title: 'Combo Master', description: 'Achieve a 5x damage combo during a boss fight', target: 5, unit: 'combo', difficulty: 'ELITE', points: 15 },
-      { title: 'Critical Striker', description: 'Land 3 critical hits in a single boss encounter', target: 3, unit: 'crits', difficulty: 'HARD', points: 8 },
-      { title: 'Boss Berserker', description: 'Defeat 3 bosses in a single week', target: 3, unit: 'bosses', difficulty: 'ELITE', points: 12 },
-    ],
-  };
-
-  let targetDifficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'ELITE';
-  if (techLevel < 5) {
-    targetDifficulty = 'EASY';
-  } else if (techLevel < 15) {
-    targetDifficulty = 'MEDIUM';
-  } else if (techLevel < 25) {
-    targetDifficulty = 'HARD';
-  } else {
-    targetDifficulty = 'ELITE';
-  }
-
-  const templates = challengeTemplates[techKey];
-  if (!templates) return challenges;
-
-  const matchingTemplate =
-    templates.find((t) => t.difficulty === targetDifficulty) ?? templates[0];
-  if (!matchingTemplate) return challenges;
-
-  challenges.push({
+type ChallengeTemplate = { title: string; description: string; target: number; unit: string; difficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'ELITE'; points: number; };
+export function generateMasteryChallenges( techniques: MasteryState['techniques'], _currentRank: MasteryRank, ): MasteryChallenge[] { const challenges: MasteryChallenge[] = []; const techniqueEntries = Object.entries(techniques) as [TechniqueKey, number][]; const lowestTechnique = techniqueEntries.sort((a, b) => a[1] - b[1])[0]; if (!lowestTechnique) return challenges;
+const techKey = lowestTechnique[0]; const techLevel = lowestTechnique[1]; if (!techKey || techLevel === undefined) return challenges;
+const challengeTemplates: Record<TechniqueKey, ChallengeTemplate[]> = { durationMastery: [ { title: 'Deep Focus', description: 'Complete a 45-minute session without pausing', target: 45, unit: 'minutes', difficulty: 'MEDIUM', points: 5 }, { title: 'Marathon', description: 'Complete a 90-minute session with 90%+ purity', target: 90, unit: 'minutes', difficulty: 'HARD', points: 10 }, { title: 'Iron Will', description: 'Complete 3 sessions of 60+ minutes with zero pauses this week', target: 3, unit: 'sessions', difficulty: 'ELITE', points: 15 }, { title: 'The Long Haul', description: 'Maintain 85%+ purity for a full 60-minute session', target: 60, unit: 'minutes', difficulty: 'HARD', points: 8 }, { title: 'Sprint Endurance', description: 'Complete 4 consecutive sprints (25 min each) without breaks between', target: 4, unit: 'sprints', difficulty: 'ELITE', points: 12 }, ], purityMastery: [ { title: 'Crystal Clear', description: 'Achieve 95%+ purity in a 30+ minute session', target: 95, unit: '% purity', difficulty: 'MEDIUM', points: 5 }, { title: 'Perfect Streak', description: 'Complete 3 perfect sessions (95%+ purity) in a row', target: 3, unit: 'sessions', difficulty: 'HARD', points: 10 }, { title: 'Enlightened', description: 'Maintain 90%+ average purity for 7 consecutive days', target: 7, unit: 'days', difficulty: 'ELITE', points: 15 }, { title: 'Flawless Victory', description: 'Achieve 100% purity (zero pauses) in a 45+ minute session', target: 1, unit: 'session', difficulty: 'ELITE', points: 20 }, { title: 'Pure Consistency', description: 'Achieve S grade in 5 consecutive sessions', target: 5, unit: 'sessions', difficulty: 'HARD', points: 12 }, ], consistencyMastery: [ { title: 'Daily Grind', description: 'Complete a qualifying session (15+ min, 50+ quality) every day for 5 days', target: 5, unit: 'days', difficulty: 'EASY', points: 3 }, { title: 'Two Weeks Strong', description: 'Maintain a 14-day streak with no breaks', target: 14, unit: 'days', difficulty: 'MEDIUM', points: 5 }, { title: 'Monthly Master', description: 'Hit a 30-day streak with at least 20 qualifying sessions', target: 30, unit: 'days', difficulty: 'HARD', points: 10 }, { title: 'Quality Streak', description: 'Maintain a 7-day streak where every session is A grade or higher', target: 7, unit: 'days', difficulty: 'HARD', points: 8 }, { title: 'Centurion', description: 'Achieve a 100-day streak (one missed day allowed with shield)', target: 100, unit: 'days', difficulty: 'ELITE', points: 25 }, ], comebackMastery: [ { title: 'Resilience', description: 'Recover from a broken streak and complete a session within 24 hours', target: 1, unit: 'comeback', difficulty: 'EASY', points: 3 }, { title: 'Phoenix Rising', description: 'Achieve a 7-day streak after breaking a 14+ day streak', target: 7, unit: 'days', difficulty: 'MEDIUM', points: 5 }, { title: 'Unbreakable', description: 'Reach a 30-day streak after losing a 30+ day streak before', target: 30, unit: 'days', difficulty: 'HARD', points: 10 }, { title: 'Stronger Than Before', description: 'Beat your previous longest streak after a break', target: 1, unit: 'record', difficulty: 'HARD', points: 8 }, { title: 'True Grit', description: 'Complete 3 sessions in the first 3 days after a streak break', target: 3, unit: 'sessions', difficulty: 'MEDIUM', points: 6 }, ], bossMastery: [ { title: 'Boss Slayer', description: 'Defeat a boss in under 50% of the expected session time', target: 50, unit: '% time', difficulty: 'MEDIUM', points: 5 }, { title: 'Speed Kill', description: 'Defeat a boss in under 25% of expected time with 90%+ purity', target: 25, unit: '% time', difficulty: 'HARD', points: 10 }, { title: 'Combo Master', description: 'Achieve a 5x damage combo during a boss fight', target: 5, unit: 'combo', difficulty: 'ELITE', points: 15 }, { title: 'Critical Striker', description: 'Land 3 critical hits in a single boss encounter', target: 3, unit: 'crits', difficulty: 'HARD', points: 8 }, { title: 'Boss Berserker', description: 'Defeat 3 bosses in a single week', target: 3, unit: 'bosses', difficulty: 'ELITE', points: 12 }, ], };
+let targetDifficulty: 'EASY' | 'MEDIUM' | 'HARD' | 'ELITE'; if (techLevel < 5) { targetDifficulty = 'EASY'; } else if (techLevel < 15) { targetDifficulty = 'MEDIUM'; } else if (techLevel < 25) { targetDifficulty = 'HARD'; } else { targetDifficulty = 'ELITE'; }
+const templates = challengeTemplates[techKey]; if (!templates) return challenges;
+const matchingTemplate = templates.find((t) => t.difficulty === targetDifficulty) ?? templates[0]; if (!matchingTemplate) return challenges;
+challenges.push({
     id: `mastery_${techKey}_${Date.now()}`,
-    technique: techKey,
-    title: matchingTemplate.title,
-    description: matchingTemplate.description,
-    difficulty: matchingTemplate.difficulty,
-    target: matchingTemplate.target,
-    current: 0,
-    unit: matchingTemplate.unit,
-    masteryPoints: matchingTemplate.points,
-    status: 'ACTIVE',
-    completedAt: null,
-  });
-
-  const filteredEntries = techniqueEntries.filter((t) => t[0] !== techKey);
-  const randomIndex = Math.floor(Math.random() * 4);
-  const otherTechnique = filteredEntries[randomIndex];
-  if (!otherTechnique) return challenges;
-
-  const otherKey = otherTechnique[0];
-  if (!otherKey) return challenges;
-
-  const otherTemplates = challengeTemplates[otherKey];
-  if (!otherTemplates) return challenges;
-
-  const otherTemplate =
-    otherTemplates[Math.floor(Math.random() * otherTemplates.length)];
-  if (!otherTemplate) return challenges;
-
-  challenges.push({
+technique: techKey, title: matchingTemplate.title, description: matchingTemplate.description, difficulty: matchingTemplate.difficulty, target: matchingTemplate.target, current: 0, unit: matchingTemplate.unit, masteryPoints: matchingTemplate.points, status: 'ACTIVE', completedAt: null, });
+const filteredEntries = techniqueEntries.filter((t) => t[0] !== techKey); const randomIndex = Math.floor(Math.random() * 4); const otherTechnique = filteredEntries[randomIndex]; if (!otherTechnique) return challenges;
+const otherKey = otherTechnique[0]; if (!otherKey) return challenges;
+const otherTemplates = challengeTemplates[otherKey]; if (!otherTemplates) return challenges;
+const otherTemplate = otherTemplates[Math.floor(Math.random() * otherTemplates.length)]; if (!otherTemplate) return challenges;
+challenges.push({
     id: `mastery_${otherKey}_${Date.now()}_2`,
-    technique: otherKey,
-    title: otherTemplate.title,
-    description: otherTemplate.description,
-    difficulty: otherTemplate.difficulty,
-    target: otherTemplate.target,
-    current: 0,
-    unit: otherTemplate.unit,
-    masteryPoints: otherTemplate.points,
-    status: 'ACTIVE',
-    completedAt: null,
-  });
-  return challenges;
-}
-
+technique: otherKey, title: otherTemplate.title, description: otherTemplate.description, difficulty: otherTemplate.difficulty, target: otherTemplate.target, current: 0, unit: otherTemplate.unit, masteryPoints: otherTemplate.points, status: 'ACTIVE', completedAt: null, }); return challenges; }
 type RankDisplay = { title: string; color: string; icon: string };
-
-const RANK_DISPLAYS: Record<MasteryRank, RankDisplay> = {
-  APPRENTICE: { title: 'Apprentice', color: '#8B4513', icon: '\uD83C\uDF31' },
-  ADEPT: { title: 'Adept', color: '#4A5568', icon: '\u2694\uFE0F' },
-  EXPERT: { title: 'Expert', color: '#4169E1', icon: '\uD83D\uDEE1\uFE0F' },
-  MASTER: { title: 'Master', color: '#9400D3', icon: '\uD83D\uDC51' },
-  GRANDMASTER: { title: 'Grandmaster', color: '#FFD700', icon: '\u2B50' },
-};
-
-export function getMasteryRankDisplay(rank: MasteryRank): RankDisplay {
-  return RANK_DISPLAYS[rank] ?? RANK_DISPLAYS.APPRENTICE;
-}
+const RANK_DISPLAYS: Record<MasteryRank, RankDisplay> = { APPRENTICE: { title: 'Apprentice', color: launchColors.hex_8b4513, icon: '\uD83C\uDF31' }, ADEPT: { title: 'Adept', color: launchColors.hex_4a5568, icon: '\u2694\uFE0F' }, EXPERT: { title: 'Expert', color: launchColors.hex_4169e1, icon: '\uD83D\uDEE1\uFE0F' }, MASTER: { title: 'Master', color: launchColors.hex_9400d3, icon: '\uD83D\uDC51' }, GRANDMASTER: { title: 'Grandmaster', color: launchColors.hex_ffd700, icon: '\u2B50' }, };
+export function getMasteryRankDisplay(rank: MasteryRank): RankDisplay { return RANK_DISPLAYS[rank] ?? RANK_DISPLAYS.APPRENTICE; }

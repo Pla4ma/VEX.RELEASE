@@ -6,6 +6,8 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface SliderSettingProps {
   label: string;
@@ -49,13 +51,13 @@ const styles = createSheet({
     justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    backgroundColor: '#ffffff',
+    backgroundColor: launchColors.hex_ffffff,
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: launchColors.hex_e5e7eb,
   },
   label: {
     fontSize: 16,
-    color: '#111827',
+    color: launchColors.hex_111827,
   },
   sliderContainer: {
     flexDirection: 'row',
@@ -66,18 +68,18 @@ const styles = createSheet({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: launchColors.hex_f3f4f6,
     alignItems: 'center',
     justifyContent: 'center',
   },
   sliderButtonText: {
     fontSize: 18,
-    color: '#374151',
+    color: launchColors.hex_374151,
     fontWeight: '600',
   },
   sliderValue: {
     fontSize: 16,
-    color: '#111827',
+    color: launchColors.hex_111827,
     minWidth: 40,
     textAlign: 'center',
   },

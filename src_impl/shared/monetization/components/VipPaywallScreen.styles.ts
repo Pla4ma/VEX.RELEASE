@@ -1,4 +1,6 @@
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const styles = createSheet({
   screen: { flex: 1 },
@@ -46,7 +48,7 @@ export const styles = createSheet({
     paddingVertical: 10,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(255, 215, 0, 0.3)',
+    borderColor: launchColors.rgb_255_215_0_0_3,
   },
   socialProofIcon: { fontSize: 16 },
 
@@ -57,7 +59,7 @@ export const styles = createSheet({
     gap: 16,
   },
   valueTitle: {
-    color: '#FFFFFF',
+    color: launchColors.hex_ffffff,
     fontSize: 16,
     fontWeight: '700',
   },
@@ -68,12 +70,12 @@ export const styles = createSheet({
   },
   valueItem: { alignItems: 'center' },
   valueNumber: {
-    color: '#FFFFFF',
+    color: launchColors.hex_ffffff,
     fontSize: 28,
     fontWeight: '800',
   },
   valueLabel: {
-    color: 'rgba(255,255,255,0.8)',
+    color: launchColors.rgb_255_255_255_0_8,
     fontSize: 12,
     fontWeight: '600',
     marginTop: 2,
@@ -81,10 +83,10 @@ export const styles = createSheet({
   valueDivider: {
     width: 1,
     height: 40,
-    backgroundColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: launchColors.rgb_255_255_255_0_3,
   },
   valueFootnote: {
-    color: 'rgba(255,255,255,0.9)',
+    color: launchColors.rgb_255_255_255_0_9,
     fontSize: 13,
     textAlign: 'center',
   },
@@ -108,7 +110,7 @@ export const styles = createSheet({
     borderRadius: 12,
   },
   bestValueText: {
-    color: '#000000',
+    color: launchColors.hex_000000,
     fontSize: 11,
     fontWeight: '800',
     textTransform: 'uppercase',
@@ -154,7 +156,7 @@ export const styles = createSheet({
     borderRadius: 8,
   },
   highlightBadgeText: {
-    color: '#000000',
+    color: launchColors.hex_000000,
     fontSize: 9,
     fontWeight: '800',
     letterSpacing: 0.5,

@@ -10,6 +10,8 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface StreakRiskWarningProps {
   streak: number;
@@ -42,13 +44,13 @@ export function StreakRiskWarning({
   const getColor = () => {
     switch (riskLevel) {
       case 'CRITICAL':
-        return '#f44336';
+        return launchColors.hex_f44336;
       case 'HIGH':
-        return '#ff9800';
+        return launchColors.hex_ff9800;
       case 'MEDIUM':
-        return '#ffc107';
+        return launchColors.hex_ffc107;
       default:
-        return '#4caf50';
+        return launchColors.hex_4caf50;
     }
   };
 
@@ -92,7 +94,7 @@ export function StreakRiskWarning({
 
 const styles = createSheet({
   container: {
-    backgroundColor: '#2a2a3e',
+    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 12,
     padding: 16,
     margin: 16,
@@ -110,7 +112,7 @@ const styles = createSheet({
   message: {
     flex: 1,
     fontSize: 15,
-    color: '#fff',
+    color: launchColors.hex_fff,
     fontWeight: '600',
   },
   button: {
@@ -119,7 +121,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: launchColors.hex_fff,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -128,7 +130,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   dismissText: {
-    color: '#666',
+    color: launchColors.hex_666,
     fontSize: 13,
   },
 });

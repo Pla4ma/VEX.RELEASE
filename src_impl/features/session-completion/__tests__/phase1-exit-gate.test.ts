@@ -25,6 +25,13 @@ jest.mock('../../../store/session-state', () => ({
   useSessionUIStore: { getState: () => ({ setCompletionSyncState: mockSetCompletionSyncState }) },
 }));
 jest.mock('../../../utils/debug', () => ({ createDebugger: () => ({ info: jest.fn() }) }));
+jest.mock('../../companion-promise/service', () => ({
+  processCompletedSessionPromise: jest.fn().mockResolvedValue({
+    createdPromise: null,
+    fulfilledPromise: null,
+    missedPromise: null,
+  }),
+}));
 jest.mock('../repository', () => ({
   createCompletionLedger: (...args: unknown[]) => mockCreateLedger(...args),
   getCompletionLedgerByIdempotencyKey: (...args: unknown[]) => mockFindLedger(...args),

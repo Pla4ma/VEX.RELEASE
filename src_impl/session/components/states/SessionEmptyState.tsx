@@ -8,6 +8,8 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface SessionEmptyStateProps {
   onCreateSession?: () => void;
@@ -60,7 +62,7 @@ export const SessionEmptyState: React.FC<SessionEmptyStateProps> = ({
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: launchColors.hex_1a1a2e,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 32,
@@ -72,12 +74,12 @@ const styles = createSheet({
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#fff',
+    color: launchColors.hex_fff,
     marginBottom: 12,
   },
   description: {
     fontSize: 16,
-    color: '#9E9E9E',
+    color: launchColors.hex_9e9e9e,
     textAlign: 'center',
     marginBottom: 32,
     lineHeight: 22,
@@ -88,31 +90,31 @@ const styles = createSheet({
     marginBottom: 40,
   },
   primaryButton: {
-    backgroundColor: '#e94560',
+    backgroundColor: launchColors.hex_e94560,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: '#fff',
+    color: launchColors.hex_fff,
     fontSize: 16,
     fontWeight: '600',
   },
   secondaryButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#9E9E9E',
+    borderColor: launchColors.hex_9e9e9e,
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
   },
   secondaryButtonText: {
-    color: '#9E9E9E',
+    color: launchColors.hex_9e9e9e,
     fontSize: 16,
     fontWeight: '600',
   },
   tipsContainer: {
-    backgroundColor: '#2a2a3e',
+    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 12,
     padding: 20,
     width: '100%',
@@ -120,12 +122,12 @@ const styles = createSheet({
   tipsTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: launchColors.hex_fff,
     marginBottom: 12,
   },
   tip: {
     fontSize: 14,
-    color: '#9E9E9E',
+    color: launchColors.hex_9e9e9e,
     marginBottom: 8,
     lineHeight: 20,
   },

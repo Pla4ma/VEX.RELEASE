@@ -181,8 +181,8 @@ export function calculateSessionGrade(rawInput: SessionGradingInput): SessionGra
   const roundedScore = Math.round(gradeScore);
   const grade = scoreToGrade(roundedScore);
   const sortedFactors = [...factors].sort((a, b) => b.score - a.score);
-  const strongest = sortedFactors[0];
-  const weakest = sortedFactors[sortedFactors.length - 1];
+  const strongest = sortedFactors[0]!;
+  const weakest = sortedFactors[sortedFactors.length - 1]!;
   const userFacingReason = `${strongest.label} held up well. ${weakest.label} was the main drag.`;
 
   return SessionGradingResultSchema.parse({

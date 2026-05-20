@@ -99,3 +99,21 @@ export {
   type PaywallMoment,
   type PaywallTriggerCondition,
   } from './ContextualPaywall';
+
+export {
+  STREAK_SHIELD_COOLDOWN_MS,
+  STREAK_SHIELD_COPY,
+  assessStreakShieldMoment,
+  buildStreakShieldMoment,
+  createStreakShieldRecord,
+} from './service';
+export { useStreakShieldMoment } from './hooks';
+export type {
+  StreakShieldCopy,
+  StreakShieldMoment,
+  StreakShieldMomentInput,
+  StreakShieldMomentReason,
+  StreakShieldMomentResult,
+  StreakShieldRecord,
+  StreakShieldRouteParams,
+} from './types';

@@ -15,6 +15,9 @@ import {
   type CoachState,
   type CoachUserState,
   type UpdateCoachPreferencesInput,
+  type BehaviorProfile,
+  type BehaviorSignal,
+  type SignalType,
 } from './schemas';
 
 // ============================================================================
@@ -23,6 +26,7 @@ import {
 
 const DEFAULT_PERSONA_ID = 'encouraging-mentor';
 const COLD_START_THRESHOLD_DAYS = 7;
+const HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS = 20;
 
 // ============================================================================
 // Coach Persona Management
@@ -53,9 +57,7 @@ export async function getOrCreateCoachState(userId: string): Promise<CoachState>
   let state = await repository.fetchCoachState(userId);
 
   if (!state) {
-    // Import dynamically to avoid circular dependency
-    const { buildBehaviorProfile } = await import('./session-analyzer');
-    const behaviorProfile = await buildBehaviorProfile(userId);
+    const behaviorProfile = await buildBehaviorProfileForState(userId);
 
     state = {
       userId,
@@ -74,6 +76,40 @@ export async function getOrCreateCoachState(userId: string): Promise<CoachState>
   }
 
   return state;
+}
+
+async function buildBehaviorProfileForState(
+  userId: string,
+): Promise<BehaviorProfile> {
+  const signals = await repository.fetchRecentBehaviorSignals(userId, 50);
+  const dataPoints = signals.length;
+  const profile: BehaviorProfile = {
+    userId,
+    signals: aggregateSignals(signals),
+    lastUpdated: Date.now(),
+    confidenceLevel: calculateConfidenceLevel(dataPoints),
+    coldStart: dataPoints < 5,
+    dataPoints,
+  };
+  await repository.upsertBehaviorProfile(profile);
+  return profile;
+}
+
+function calculateConfidenceLevel(dataPoints: number): 'LOW' | 'MEDIUM' | 'HIGH' {
+  if (dataPoints < 10) return 'LOW';
+  if (dataPoints < HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS) return 'MEDIUM';
+  return 'HIGH';
+}
+
+function aggregateSignals(signals: BehaviorSignal[]): BehaviorSignal[] {
+  const grouped = new Map<SignalType, BehaviorSignal>();
+  for (const signal of signals) {
+    const existing = grouped.get(signal.signalType);
+    if (!existing || signal.timestamp > existing.timestamp) {
+      grouped.set(signal.signalType, signal);
+    }
+  }
+  return Array.from(grouped.values());
 }
 
 /**

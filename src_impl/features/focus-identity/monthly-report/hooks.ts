@@ -7,6 +7,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as service from './service';
 import { useAuth } from '../../../auth/hooks/useAuth';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 // ============================================================================
 // Query Keys
@@ -99,13 +101,13 @@ export function useMonthlyReportGrade(grade: string | undefined) {
 
 function getGradeColor(grade?: string): string {
   switch (grade) {
-    case 'A+': return '#FF1744';
-    case 'A': return '#FF6B35';
-    case 'B': return '#FFD700';
-    case 'C': return '#4CAF50';
-    case 'D': return '#2196F3';
-    case 'F': return '#9E9E9E';
-    default: return '#9E9E9E';
+    case 'A+': return launchColors.hex_ff1744;
+    case 'A': return launchColors.hex_ff6b35;
+    case 'B': return launchColors.hex_ffd700;
+    case 'C': return launchColors.hex_4caf50;
+    case 'D': return launchColors.hex_2196f3;
+    case 'F': return launchColors.hex_9e9e9e;
+    default: return launchColors.hex_9e9e9e;
   }
 }
 

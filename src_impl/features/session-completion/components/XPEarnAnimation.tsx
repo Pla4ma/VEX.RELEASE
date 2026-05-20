@@ -1,17 +1,17 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from "react";
 import Animated, {
   Easing,
   FadeInUp,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { Box, Text } from '../../../components/primitives';
-import { getPremiumCardStyle } from '../../../components/premiumStyles';
-import { AnimatedCounter } from '../../../shared/ui/components/AnimatedCounter';
-import type { SessionSummary } from '../../../session/types';
-import { useTheme } from '../../../theme';
+import { Box, Text } from "../../../components/primitives";
+import { getPremiumCardStyle } from "../../../components/premiumStyles";
+import { AnimatedCounter } from "../../../shared/ui/components/AnimatedCounter";
+import type { SessionSummary } from "../../../session/types";
+import { useTheme } from "../../../theme";
 
 type XPEarnAnimationProps = {
   levelProgress: number | null;
@@ -25,32 +25,45 @@ type XpLineItem = {
   label: string;
 };
 
+type BonusEntry = { type: string; amount: number };
+
 function getBonusAmount(summary: SessionSummary, keyword: string): number {
   return (summary.bonuses || [])
-    .filter((bonus: DynamicValue) => bonus.type.toLowerCase().includes(keyword))
-    .reduce((total: number, bonus: DynamicValue) => total + bonus.amount, 0);
+    .filter((bonus: BonusEntry) => bonus.type.toLowerCase().includes(keyword))
+    .reduce((total: number, bonus: BonusEntry) => total + bonus.amount, 0);
 }
 
-function buildXpLineItems(summary: SessionSummary, totalXp: number): XpLineItem[] {
-  const qualityBonus = (summary.finalScore ?? 0) >= 800
-    ? Math.max(0, Math.round(totalXp * 0.08))
-    : 0;
-  const squadBonus = getBonusAmount(summary, 'squad');
-  const knownBonuses = (summary.streakBonus ?? 0) + summary.modeBonus + qualityBonus + squadBonus;
+function buildXpLineItems(
+  summary: SessionSummary,
+  totalXp: number,
+): XpLineItem[] {
+  const qualityBonus =
+    (summary.finalScore ?? 0) >= 800
+      ? Math.max(0, Math.round(totalXp * 0.08))
+      : 0;
+  const squadBonus = getBonusAmount(summary, "squad");
+  const knownBonuses =
+    (summary.streakBonus ?? 0) + summary.modeBonus + qualityBonus + squadBonus;
   const baseXp = Math.max(0, totalXp - knownBonuses);
-  const items: XpLineItem[] = [{ amount: baseXp, id: 'base', label: 'Base XP' }];
+  const items: XpLineItem[] = [
+    { amount: baseXp, id: "base", label: "Base XP" },
+  ];
 
   if ((summary.streakBonus ?? 0) > 0) {
-    items.push({ amount: summary.streakBonus ?? 0, id: 'streak', label: 'Streak Bonus' });
+    items.push({
+      amount: summary.streakBonus ?? 0,
+      id: "streak",
+      label: "Streak Bonus",
+    });
   }
   if (summary.modeBonus > 0) {
-    items.push({ amount: summary.modeBonus, id: 'mode', label: 'Mode Bonus' });
+    items.push({ amount: summary.modeBonus, id: "mode", label: "Mode Bonus" });
   }
   if (qualityBonus > 0) {
-    items.push({ amount: qualityBonus, id: 'quality', label: 'Quality Bonus' });
+    items.push({ amount: qualityBonus, id: "quality", label: "Quality Bonus" });
   }
   if (squadBonus > 0) {
-    items.push({ amount: squadBonus, id: 'squad', label: 'Squad Bonus' });
+    items.push({ amount: squadBonus, id: "squad", label: "Squad Bonus" });
   }
 
   return items;
@@ -63,7 +76,10 @@ export function XPEarnAnimation({
 }: XPEarnAnimationProps): JSX.Element {
   const { theme } = useTheme();
   const progress = useSharedValue(0);
-  const items = useMemo(() => buildXpLineItems(summary, totalXp), [summary, totalXp]);
+  const items = useMemo(
+    () => buildXpLineItems(summary, totalXp),
+    [summary, totalXp],
+  );
   const targetProgress = Math.max(0, Math.min(1, levelProgress ?? 0));
 
   useEffect(() => {
@@ -85,7 +101,7 @@ export function XPEarnAnimation({
           backgroundColor: theme.colors.background.secondary,
           borderColor: theme.colors.border.light,
           borderWidth: 1,
-          ...getPremiumCardStyle('large'),
+          ...getPremiumCardStyle("large"),
         }}
       >
         <Text variant="label" color={theme.colors.primary[400]}>
@@ -101,11 +117,19 @@ export function XPEarnAnimation({
               entering={FadeInUp.delay(index * 80).duration(260)}
               key={item.id}
             >
-              <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+              <Box
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
                 <Text variant="body" color={theme.colors.text.secondary}>
                   {item.label}
                 </Text>
-                <Text variant="body" color={theme.colors.text.primary} fontWeight="800">
+                <Text
+                  variant="body"
+                  color={theme.colors.text.primary}
+                  fontWeight="800"
+                >
                   +{item.amount}
                 </Text>
               </Box>
@@ -140,7 +164,7 @@ export function XPEarnAnimation({
               {
                 backgroundColor: theme.colors.primary[500],
                 borderRadius: theme.borderRadius.full,
-                height: '100%',
+                height: "100%",
               },
               fillStyle,
             ]}

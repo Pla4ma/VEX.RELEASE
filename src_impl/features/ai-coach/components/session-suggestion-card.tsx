@@ -9,6 +9,8 @@ import { View, Text, Pressable } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { SessionRecommendation, RecommendationType } from '../schemas';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export interface SessionSuggestionCardProps {
   recommendation: SessionRecommendation;
@@ -17,14 +19,14 @@ export interface SessionSuggestionCardProps {
 }
 
 const TYPE_CONFIG: Record<RecommendationType, { icon: string; title: string; color: string }> = {
-  OPTIMAL_TIME: { icon: '🎯', title: 'Perfect Timing', color: '#4ECDC4' },
-  STREAK_PROTECTION: { icon: '🔥', title: 'Save Your Streak', color: '#FC8181' },
-  COMEBACK_BUILDER: { icon: '💪', title: 'Comeback Time', color: '#68D391' },
-  DIFFICULTY_ADJUST: { icon: '⚙️', title: 'Smart Adjustment', color: '#A0AEC0' },
-  CHALLENGE_SYNC: { icon: '🎮', title: 'Challenge Ready', color: '#F6AD55' },
-  BOSS_PREP: { icon: '⚔️', title: 'Boss Battle Prep', color: '#9F7AEA' },
-  HABIT_BUILDER: { icon: '📅', title: 'Build The Habit', color: '#63B3ED' },
-  ENERGY_BASED: { icon: '⚡', title: 'Energy Match', color: '#F6E05E' },
+  OPTIMAL_TIME: { icon: '🎯', title: 'Perfect Timing', color: launchColors.hex_4ecdc4 },
+  STREAK_PROTECTION: { icon: '🔥', title: 'Save Your Streak', color: launchColors.hex_fc8181 },
+  COMEBACK_BUILDER: { icon: '💪', title: 'Comeback Time', color: launchColors.hex_68d391 },
+  DIFFICULTY_ADJUST: { icon: '⚙️', title: 'Smart Adjustment', color: launchColors.hex_a0aec0 },
+  CHALLENGE_SYNC: { icon: '🎮', title: 'Challenge Ready', color: launchColors.hex_f6ad55 },
+  BOSS_PREP: { icon: '⚔️', title: 'Boss Battle Prep', color: launchColors.hex_9f7aea },
+  HABIT_BUILDER: { icon: '📅', title: 'Build The Habit', color: launchColors.hex_63b3ed },
+  ENERGY_BASED: { icon: '⚡', title: 'Energy Match', color: launchColors.hex_f6e05e },
 };
 
 export function SessionSuggestionCard({
@@ -88,13 +90,13 @@ export function SessionSuggestionCard({
 
 const styles = createSheet({
   container: {
-    backgroundColor: '#FFF',
+    backgroundColor: launchColors.hex_fff,
     borderRadius: 16,
     padding: 20,
     marginHorizontal: 16,
     marginVertical: 8,
     borderWidth: 2,
-    shadowColor: '#000',
+    shadowColor: launchColors.hex_000,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -118,12 +120,12 @@ const styles = createSheet({
   },
   confidence: {
     fontSize: 12,
-    color: '#666',
+    color: launchColors.hex_666,
   },
   reasoning: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#333',
+    color: launchColors.hex_333,
     marginBottom: 16,
   },
   details: {
@@ -132,20 +134,20 @@ const styles = createSheet({
     marginBottom: 16,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#F0F0F0',
+    borderTopColor: launchColors.hex_f0f0f0,
   },
   detailItem: {
     flex: 1,
   },
   detailLabel: {
     fontSize: 12,
-    color: '#666',
+    color: launchColors.hex_666,
     marginBottom: 4,
   },
   detailValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: launchColors.hex_333,
   },
   actions: {
     flexDirection: 'row',
@@ -160,7 +162,7 @@ const styles = createSheet({
     justifyContent: 'center',
   },
   acceptButtonText: {
-    color: '#FFF',
+    color: launchColors.hex_fff,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -173,7 +175,7 @@ const styles = createSheet({
     justifyContent: 'center',
   },
   dismissButtonText: {
-    color: '#666',
+    color: launchColors.hex_666,
     fontSize: 16,
     fontWeight: '500',
   },

@@ -4,6 +4,7 @@ import {
   getRelevantMemories,
   getMilestoneSummary,
 } from './CoachMemory';
+import type { MessageCategory } from './types';
 
 export const MEMORY_MESSAGE_TEMPLATES: Record<
   string,
@@ -109,7 +110,7 @@ export const MEMORY_MESSAGE_TEMPLATES: Record<
 
 export async function generateMemoryAwareMessage(
   userId: string,
-  category: string,
+  category: MessageCategory,
   _personaId: string,
   _baseContext: Record<string, unknown>,
 ): Promise<string | null> {

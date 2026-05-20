@@ -1,3 +1,4 @@
+import { launchColors } from '@theme/tokens/launch-colors';
 /**
  * Focus Techniques Configuration
  *
@@ -41,7 +42,7 @@ export const FOCUS_TECHNIQUES: Record<FocusTechnique, FocusTechniqueConfig> = {
     minDuration: 15 * 60,
     maxDuration: 45 * 60,
     icon: 'timer',
-    color: '#FF6B6B',
+    color: launchColors.hex_ff6b6b,
     bestFor: ['tasks', 'studying', 'writing', 'beginners'],
   },
   FLOWTIME: {
@@ -56,7 +57,7 @@ export const FOCUS_TECHNIQUES: Record<FocusTechnique, FocusTechniqueConfig> = {
     minDuration: 20 * 60,
     maxDuration: 90 * 60,
     icon: 'wave',
-    color: '#4ECDC4',
+    color: launchColors.hex_4ecdc4,
     bestFor: ['creative work', 'coding', 'design', 'experienced users'],
   },
   ULTRADIAN: {
@@ -71,7 +72,7 @@ export const FOCUS_TECHNIQUES: Record<FocusTechnique, FocusTechniqueConfig> = {
     minDuration: 45 * 60,
     maxDuration: 60 * 60,
     icon: 'pulse',
-    color: '#95E1D3',
+    color: launchColors.hex_95e1d3,
     bestFor: ['sustained focus', 'deep work', 'professionals'],
   },
   DEEP_WORK: {
@@ -86,7 +87,7 @@ export const FOCUS_TECHNIQUES: Record<FocusTechnique, FocusTechniqueConfig> = {
     minDuration: 60 * 60,
     maxDuration: 120 * 60,
     icon: 'brain',
-    color: '#A8E6CF',
+    color: launchColors.hex_a8e6cf,
     bestFor: ['complex problems', 'learning', 'research', 'writing'],
   },
   CUSTOM: {
@@ -101,7 +102,7 @@ export const FOCUS_TECHNIQUES: Record<FocusTechnique, FocusTechniqueConfig> = {
     minDuration: 5 * 60,
     maxDuration: 180 * 60,
     icon: 'settings',
-    color: '#FFD93D',
+    color: launchColors.hex_ffd93d,
     bestFor: ['personal preference', 'experimenting'],
   },
 };

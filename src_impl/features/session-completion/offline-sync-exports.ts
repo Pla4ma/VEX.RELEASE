@@ -1,7 +1,6 @@
-import { SessionCompletionOfflineSyncService } from './offline-sync-service';
+import { sessionCompletionOfflineSync } from './offline-sync-service';
 import { getNetInfoAdapter } from '../../network/NetInfoAdapter';
 
-export const sessionCompletionOfflineSync = new SessionCompletionOfflineSyncService();
 export const offlineSyncService = sessionCompletionOfflineSync;
 
 export function useSessionCompletionOfflineSync(): {

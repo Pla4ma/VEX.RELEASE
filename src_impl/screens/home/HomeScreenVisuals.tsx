@@ -18,15 +18,15 @@ import { SimpleWalletBadge } from '../../features/economy/components/SimpleWalle
 import { getPremiumCardStyle } from '../../components/premiumStyles';
 import { useTheme } from '../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
-const WHITE = 'rgba(255,255,255,0.96)';
-const WHITE_MUTED = 'rgba(255,255,255,0.72)';
-const WHITE_SOFT = 'rgba(255,255,255,0.18)';
-const CTA_GRADIENT = ['#7C3AED', '#4F46E5'] as const;
+import { launchColors } from '@theme/tokens/launch-colors';
+
+const WHITE_MUTED = launchColors.rgb_255_255_255_0_72;
+const WHITE_SOFT = launchColors.rgb_255_255_255_0_18;
 export function getHeroGradientColors(streak: number): readonly [string, string] {
-  if (streak >= 30) {return ['#0d1b2a', '#1b4332'];}
-  if (streak >= 7) {return ['#1a0533', '#6b0f1a'];}
-  if (streak >= 1) {return ['#0f3460', '#533483'];}
-  return ['#1a1a2e', '#16213e'];
+  if (streak >= 30) {return [launchColors.hex_0d1b2a, launchColors.hex_1b4332];}
+  if (streak >= 7) {return [launchColors.hex_1a0533, launchColors.hex_6b0f1a];}
+  if (streak >= 1) {return [launchColors.hex_0f3460, launchColors.hex_533483];}
+  return [launchColors.hex_1a1a2e, launchColors.hex_16213e];
 }
 export function HomeHero({
   currentStreak,
@@ -73,7 +73,7 @@ export function HomeHero({
       ) : null}
       <View style={[styles.heroColumn, { gap: theme.spacing[3] }]}>
         <Text variant="label" color={WHITE_MUTED} style={styles.eyebrow}>VEX</Text>
-        <Text variant="h2" color={WHITE}>{userFirstName ? `Welcome back, ${userFirstName}` : 'Ready to lock in?'}</Text>
+        <Text variant="h2" color={theme.colors.text.inverse}>{userFirstName ? `Welcome back, ${userFirstName}` : 'Ready to lock in?'}</Text>
         {isLoading ? (
           <View style={{ gap: theme.spacing[2] }}>
             <Skeleton width={80} height={14} />
@@ -85,7 +85,7 @@ export function HomeHero({
         ) : (
           <>
             <Text variant="label" color={WHITE_MUTED}>Today</Text>
-            <Text color={WHITE} style={styles.focusValue}>{formatMinutes(todayFocusMinutes)}</Text>
+            <Text color={theme.colors.text.inverse} style={styles.focusValue}>{formatMinutes(todayFocusMinutes)}</Text>
             <StreakBadge days={currentStreak} isAtRisk={isAtRisk} variant="glass" />
           </>
         )}
@@ -97,8 +97,8 @@ export function HomeHero({
             <Skeleton width={88} height={14} />
           </View>
         ) : isFirstRun ? (
-          <View style={[styles.onboardPanel, getPremiumCardStyle('medium'), { backgroundColor: WHITE_SOFT, borderColor: 'rgba(255,255,255,0.22)' }]}>
-            <Text variant="h4" color={WHITE}>Welcome to VEX</Text>
+          <View style={[styles.onboardPanel, getPremiumCardStyle('medium'), { backgroundColor: WHITE_SOFT, borderColor: launchColors.rgb_255_255_255_0_22 }]}>
+            <Text variant="h4" color={theme.colors.text.inverse}>Welcome to VEX</Text>
             <Text variant="bodySmall" color={WHITE_MUTED}>Build your first streak, earn your first XP, and watch this space turn into your daily focus snapshot.</Text>
           </View>
         ) : (
@@ -141,7 +141,7 @@ export function GradientStartButton({
   return (
     <Animated.View style={animatedStyle}>
       <LinearGradient
-        colors={[...CTA_GRADIENT]}
+        colors={[theme.colors.primary[600] ?? launchColors.hex_7c3aed, theme.colors.primary[500] ?? launchColors.hex_4f46e5]}
         style={[
           styles.ctaGradient,
           {
@@ -153,7 +153,7 @@ export function GradientStartButton({
       >
         <Text variant="label" color={WHITE_MUTED}>{eyebrow}</Text>
         <View style={{ gap: theme.spacing[2] }}>
-          <Text variant="h4" color={WHITE}>{title}</Text>
+          <Text variant="h4" color={theme.colors.text.inverse}>{title}</Text>
           <Text variant="bodySmall" color={WHITE_MUTED}>{body}</Text>
         </View>
         <Button

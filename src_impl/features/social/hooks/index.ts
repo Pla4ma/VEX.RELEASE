@@ -38,12 +38,13 @@ function updateCachedReaction(
       items: page.items.map((item) => {
         if (item.id !== input.postId) {return item;}
         const counts = { ...item.reactionCounts };
-        if (item.userReaction)
-          {counts[item.userReaction] = Math.max(
+        if (item.userReaction) {
+          counts[item.userReaction] = Math.max(
             0,
-            counts[item.userReaction] - 1,
-          );}
-        counts[input.reaction] += 1;
+            (counts[item.userReaction] ?? 0) - 1,
+          );
+        }
+        counts[input.reaction] = (counts[input.reaction] ?? 0) + 1;
         return {
           ...item,
           reactionCounts: counts,
@@ -136,10 +137,10 @@ export function useSubscribeToFeed(userId: string | undefined): void {
                     pageParams: [null],
                   };
                 }
-                const [first, ...rest] = current.pages;
+                const firstPage = current.pages[0]!;
                 return {
-                  ...current,
-                  pages: [{ ...first, items: [post, ...first.items] }, ...rest],
+                  pageParams: current.pageParams,
+                  pages: [{ ...firstPage, items: [post, ...firstPage.items] }, ...current.pages.slice(1)],
                 };
               },
             );

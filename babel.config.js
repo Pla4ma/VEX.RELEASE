@@ -35,7 +35,6 @@ module.exports = function(api) {
     presets: ['babel-preset-expo'],
     plugins: [
       vitestMockHoistPlugin,
-      '@babel/plugin-transform-dynamic-import',
       [
         'module-resolver',
         {
@@ -68,6 +67,7 @@ module.exports = function(api) {
           },
         },
       ],
+      'react-native-reanimated/plugin',
     ],
   };
 };

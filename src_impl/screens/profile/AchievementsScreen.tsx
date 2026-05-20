@@ -1,5 +1,7 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import React,{useState,useCallback,useMemo}from'react'; import{View,Pressable}from'react-native'; import Animated,{FadeInUp,FadeIn}from'react-native-reanimated'; import{FlashList}from'@shopify/flash-list'; import{Box,Text}from'@/components/primitives'; import{Skeleton}from'@/shared/ui/primitives'; import{useTheme}from'@/theme'; import{useAchievements,useAchievementStats,achievementKeys}from'@/features/achievements/hooks'; import{ALL_ACHIEVEMENTS,getRarityColor,getAchievementDisplayInfo}from'@/features/achievements/definitions'; import type{Achievement,AchievementCategory,AchievementRarity}from'@/features/achievements/types'; import{useQueryClient}from'@tanstack/react-query'; type FilterType='ALL'|'UNLOCKED'|'LOCKED';type SortType='RARITY'|'RECENT'|'CATEGORY';type CategoryItem={id:AchievementCategory|'ALL';label:string;icon:string;};interface AchievementWithStatus extends Achievement{progress:number;isUnlocked:boolean;unlockedAt?:number;completionPercentage:number;}const CATEGORIES:CategoryItem[] = [{id:'ALL',label:'All',icon:'🏆'},{id:'SESSION',label:'Session',icon:'📚'},{id:'STREAK',label:'Streak',icon:'🔥'},{id:'BOSS',label:'Boss',icon:'⚔️'},{id:'SOCIAL',label:'Social',icon:'👥'},{id:'PROGRESSION',label:'Progression',icon:'📈'}]; const RARITY_ORDER:AchievementRarity[] = ['LEGENDARY','EPIC','RARE','UNCOMMON','COMMON']; const CATEGORY_ORDER:AchievementCategory[] = ['SESSION','STREAK','BOSS','SOCIAL','PROGRESSION','ECONOMY']; const AchievementsHeader:React.FC<{total:number;unlocked:number;totalPoints:number;pointsEarned:number;}> = ({total,unlocked,totalPoints,pointsEarned})=>{const{theme} = useTheme(); const percentage = total > 0 ? Math.round(unlocked / total * 100) : 0; return<Box p={4}bg={theme.colors.background.secondary}mb={4}>
+import React,{useState,useCallback,useMemo}from'react'; import{View,Pressable}from'react-native'; import Animated,{FadeInUp,FadeIn}from'react-native-reanimated'; import{FlashList}from'@shopify/flash-list'; import{Box,Text}from'@/components/primitives'; import{Skeleton}from'@/shared/ui/primitives'; import{useTheme}from'@/theme'; import{useAchievements,useAchievementStats,achievementKeys}from'@/features/achievements/hooks'; import{ALL_ACHIEVEMENTS,getRarityColor,getAchievementDisplayInfo}from'@/features/achievements/definitions'; import type{Achievement,AchievementCategory,AchievementRarity}from'@/features/achievements/types'; import{useQueryClient}from'@tanstack/react-query';
+import { launchColors } from '@theme/tokens/launch-colors';
+ type FilterType='ALL'|'UNLOCKED'|'LOCKED';type SortType='RARITY'|'RECENT'|'CATEGORY';type CategoryItem={id:AchievementCategory|'ALL';label:string;icon:string;};interface AchievementWithStatus extends Achievement{progress:number;isUnlocked:boolean;unlockedAt?:number;completionPercentage:number;}const CATEGORIES:CategoryItem[] = [{id:'ALL',label:'All',icon:'🏆'},{id:'SESSION',label:'Session',icon:'📚'},{id:'STREAK',label:'Streak',icon:'🔥'},{id:'BOSS',label:'Boss',icon:'⚔️'},{id:'SOCIAL',label:'Social',icon:'👥'},{id:'PROGRESSION',label:'Progression',icon:'📈'}]; const RARITY_ORDER:AchievementRarity[] = ['LEGENDARY','EPIC','RARE','UNCOMMON','COMMON']; const CATEGORY_ORDER:AchievementCategory[] = ['SESSION','STREAK','BOSS','SOCIAL','PROGRESSION','ECONOMY']; const AchievementsHeader:React.FC<{total:number;unlocked:number;totalPoints:number;pointsEarned:number;}> = ({total,unlocked,totalPoints,pointsEarned})=>{const{theme} = useTheme(); const percentage = total > 0 ? Math.round(unlocked / total * 100) : 0; return<Box p={4}bg={theme.colors.background.secondary}mb={4}>
       <Box flexDirection="row"alignItems="center"justifyContent="space-between">
         <Box>
           <Text variant="h2"color={theme.colors.text.primary}>
@@ -37,7 +39,7 @@ import React,{useState,useCallback,useMemo}from'react'; import{View,Pressable}fr
               <Box px={4}py={2}mx={2}borderRadius={20}bg={isSelected ? theme.colors.primary[500] : theme.colors.background.tertiary}style={{opacity:isSelected ? 1 : 0.7}}>
                 <Box flexDirection="row"alignItems="center"gap={2}>
                   <Text style={{fontSize:16}}>{item.icon}</Text>
-                  <Text variant="body"color={isSelected ? '#FFFFFF' : theme.colors.text.secondary}fontWeight={isSelected ? 'semibold' : 'normal'}>
+                  <Text variant="body"color={isSelected ? launchColors.hex_ffffff : theme.colors.text.secondary}fontWeight={isSelected ? 'semibold' : 'normal'}>
                     {item.label}
                   </Text>
                 </Box>
@@ -48,7 +50,7 @@ import React,{useState,useCallback,useMemo}from'react'; import{View,Pressable}fr
       <Box flexDirection="row"gap={2}>
         {(['ALL','UNLOCKED','LOCKED']as FilterType[]).map(f=><Pressable key={f}onPress={()=>onFilterChange(f)}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
             <Box px={3}py={1}borderRadius={12}bg={filter === f ? theme.colors.accent.purple : 'transparent'}style={{borderWidth:1,borderColor:filter === f ? theme.colors.primary[500] : theme.colors.border.DEFAULT}}>
-              <Text variant="caption"color={filter === f ? '#FFFFFF' : theme.colors.text.secondary}>
+              <Text variant="caption"color={filter === f ? launchColors.hex_ffffff : theme.colors.text.secondary}>
                 {f === 'ALL' ? 'All' : f === 'UNLOCKED' ? 'Unlocked' : 'Locked'}
               </Text>
             </Box>
@@ -58,7 +60,7 @@ import React,{useState,useCallback,useMemo}from'react'; import{View,Pressable}fr
       {}
       <Box flexDirection="row"alignItems="center"gap={2}>
         <Text variant="caption"color={theme.colors.text.tertiary}>Sort:</Text>
-        <Pressable onPress={()=>{const sorts:SortType[] = ['RARITY','RECENT','CATEGORY']; const currentIndex = sorts.indexOf(sort); const nextIndex = (currentIndex + 1) % sorts.length; onSortChange(sorts[nextIndex]);}}accessibilityLabel="↕️ button"accessibilityRole="button"accessibilityHint="Activates this control">
+        <Pressable onPress={()=>{const sorts:SortType[] = ['RARITY','RECENT','CATEGORY']; const currentIndex = sorts.indexOf(sort); const nextIndex = currentIndex === -1 ? 0 : (currentIndex + 1) % sorts.length; onSortChange(sorts[nextIndex]!);}}accessibilityLabel="↕️ button"accessibilityRole="button"accessibilityHint="Activates this control">
           <Box flexDirection="row"alignItems="center"gap={1}>
             <Text variant="caption"color={theme.colors.primary[500]}>
               {sort === 'RARITY' ? 'Rarity' : sort === 'RECENT' ? 'Recent' : 'Category'}

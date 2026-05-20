@@ -9,6 +9,8 @@ import { View, Text } from 'react-native';
 import { z } from 'zod';
 import { TimeSeriesDataSchema } from '../schemas';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 type TimeSeriesData = z.infer<typeof TimeSeriesDataSchema>;
 
@@ -46,7 +48,7 @@ export function TimeSeriesChart({ data, height = 220 }: TimeSeriesChartProps) {
       <View style={styles.dataPreview}>
         <Text style={styles.previewText}>
           {data.points.length} data points • Last updated{' '}
-          {new Date(data.points[data.points.length - 1].timestamp).toLocaleDateString()}
+          {new Date(data.points[data.points.length - 1]!.timestamp).toLocaleDateString()}
         </Text>
       </View>
     </View>
@@ -63,7 +65,7 @@ function StatBox({
   highlight?: 'positive' | 'negative';
 }) {
   const highlightColor =
-    highlight === 'positive' ? '#10b981' : highlight === 'negative' ? '#ef4444' : undefined;
+    highlight === 'positive' ? launchColors.hex_10b981 : highlight === 'negative' ? launchColors.hex_ef4444 : undefined;
 
   return (
     <View style={styles.statBox}>
@@ -96,11 +98,11 @@ function formatValue(value: number, metric: string): string {
 
 const styles = createSheet({
   container: {
-    backgroundColor: '#ffffff',
+    backgroundColor: launchColors.hex_ffffff,
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
-    shadowColor: '#000',
+    shadowColor: launchColors.hex_000,
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     elevation: 2,
@@ -108,7 +110,7 @@ const styles = createSheet({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: launchColors.hex_111827,
     marginBottom: 12,
   },
   stats: {
@@ -117,34 +119,34 @@ const styles = createSheet({
     gap: 12,
   },
   statBox: {
-    backgroundColor: '#f3f4f6',
+    backgroundColor: launchColors.hex_f3f4f6,
     borderRadius: 8,
     padding: 12,
     minWidth: 80,
   },
   statLabel: {
     fontSize: 12,
-    color: '#6b7280',
+    color: launchColors.hex_6b7280,
     marginBottom: 4,
   },
   statValue: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#111827',
+    color: launchColors.hex_111827,
   },
   dataPreview: {
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
+    borderTopColor: launchColors.hex_e5e7eb,
   },
   previewText: {
     fontSize: 12,
-    color: '#9ca3af',
+    color: launchColors.hex_9ca3af,
   },
   emptyText: {
     textAlign: 'center',
-    color: '#9ca3af',
+    color: launchColors.hex_9ca3af,
     padding: 24,
   },
 });

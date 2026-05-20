@@ -1,4 +1,5 @@
 import type { ChestReward } from './variable-reward-system';
+import { lightColors } from '@/theme/tokens/colors';
 
 export interface ChestDropConfig {
   name: string;
@@ -11,7 +12,7 @@ export interface ChestDropConfig {
 export const CHEST_DROP_TABLES: Record<string, ChestDropConfig> = {
   COMMON: {
     name: 'Common Chest',
-    color: '#9E9E9E',
+    color: lightColors.text.disabled,
     guaranteedRewards: [{ type: 'COINS', minAmount: 25, maxAmount: 75 }],
     bonusRolls: 1,
     dropTable: [
@@ -22,7 +23,7 @@ export const CHEST_DROP_TABLES: Record<string, ChestDropConfig> = {
   },
   RARE: {
     name: 'Rare Chest',
-    color: '#2196F3',
+    color: lightColors.accent.blue,
     guaranteedRewards: [{ type: 'COINS', minAmount: 100, maxAmount: 200 }],
     bonusRolls: 2,
     dropTable: [
@@ -34,7 +35,7 @@ export const CHEST_DROP_TABLES: Record<string, ChestDropConfig> = {
   },
   EPIC: {
     name: 'Epic Chest',
-    color: '#9C27B0',
+    color: lightColors.accent.purple,
     guaranteedRewards: [
       { type: 'COINS', minAmount: 300, maxAmount: 500 },
       { type: 'GEMS', minAmount: 20, maxAmount: 30 },
@@ -50,7 +51,7 @@ export const CHEST_DROP_TABLES: Record<string, ChestDropConfig> = {
   },
   LEGENDARY: {
     name: 'Legendary Chest',
-    color: '#FF9800',
+    color: lightColors.accent.orange,
     guaranteedRewards: [
       { type: 'COINS', minAmount: 1000, maxAmount: 2000 },
       { type: 'GEMS', minAmount: 100, maxAmount: 150 },
@@ -66,7 +67,7 @@ export const CHEST_DROP_TABLES: Record<string, ChestDropConfig> = {
   },
   MYTHIC: {
     name: 'Mythic Chest',
-    color: '#F44336',
+    color: lightColors.accent.pink,
     guaranteedRewards: [
       { type: 'COINS', minAmount: 5000, maxAmount: 10000 },
       { type: 'GEMS', minAmount: 500, maxAmount: 1000 },
@@ -93,10 +94,10 @@ export const CHEST_ICONS: Record<string, string> = {
 };
 
 export const MULTIPLIER_DISPLAYS: Record<number, { text: string; color: string; celebration: string }> = {
-  2: { text: '2X BONUS!', color: '#4CAF50', celebration: 'Nice!' },
-  3: { text: '3X BONUS!', color: '#2196F3', celebration: 'Great!' },
-  5: { text: '5X JACKPOT!', color: '#9C27B0', celebration: 'Amazing!' },
-  10: { text: '10X LEGENDARY!', color: '#FF9800', celebration: 'INCREDIBLE!' },
+  2: { text: '2X BONUS!', color: lightColors.success[500], celebration: 'Nice!' },
+  3: { text: '3X BONUS!', color: lightColors.accent.blue, celebration: 'Great!' },
+  5: { text: '5X JACKPOT!', color: lightColors.accent.purple, celebration: 'Amazing!' },
+  10: { text: '10X LEGENDARY!', color: lightColors.accent.orange, celebration: 'INCREDIBLE!' },
 };
 
 export const RARITY_VALUE: Record<string, number> = {

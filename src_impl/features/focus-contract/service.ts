@@ -19,6 +19,7 @@ import * as repository from './repository';
 import type { FocusContract, FocusContractInput, ReflectionStatus } from './types';
 
 const UserIdSchema = z.string().uuid();
+export type ContractReminderStage = 'early' | 'late';
 
 export function getReflectionCopy(status: ReflectionStatus): string {
   if (status === 'done') {
@@ -121,4 +122,21 @@ export async function getContractForSession(
     z.string().uuid().parse(sessionId),
     UserIdSchema.parse(userId),
   );
+}
+
+export function getContractReminderStage(
+  contract: FocusContract | null,
+  progressPercentage: number,
+): ContractReminderStage | null {
+  if (!contract) {
+    return null;
+  }
+  const progress = Math.max(0, Math.min(100, progressPercentage));
+  if (progress >= 10 && progress <= 20) {
+    return 'early';
+  }
+  if (progress >= 90) {
+    return 'late';
+  }
+  return null;
 }

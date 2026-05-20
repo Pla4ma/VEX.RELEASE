@@ -50,6 +50,10 @@ export function ProgressScreen(): JSX.Element {
     openSession();
   };
 
+  const retryFocusDashboard = (): void => {
+    focusDashboardModel.refetch?.();
+  };
+
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
@@ -71,7 +75,7 @@ export function ProgressScreen(): JSX.Element {
 
       <FocusScoreDashboard
         model={focusDashboardModel}
-        onRetry={() => { void focusDashboardModel.refetch(); }}
+        onRetry={retryFocusDashboard}
         onStartSession={openSession}
         onOpenMonthlyReport={() => navigation.navigate('Paywall', {
           source: 'focus-monthly-report',

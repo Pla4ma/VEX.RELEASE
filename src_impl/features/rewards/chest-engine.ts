@@ -76,12 +76,12 @@ function randomInt(min: number, max: number): number {
 }
 
 function randomSymbol(): (typeof SLOT_SYMBOLS)[number] {
-  return SLOT_SYMBOLS[randomInt(0, SLOT_SYMBOLS.length - 1)];
+  return SLOT_SYMBOLS[randomInt(0, SLOT_SYMBOLS.length - 1)]!;
 }
 
 function randomDifferentSymbol(excluded: string[]): (typeof SLOT_SYMBOLS)[number] {
   const choices = SLOT_SYMBOLS.filter((symbol) => !excluded.includes(symbol));
-  return choices[randomInt(0, choices.length - 1)];
+  return choices[randomInt(0, choices.length - 1)]!;
 }
 
 function rollTier(input: ChestRollInput): ChestTier {

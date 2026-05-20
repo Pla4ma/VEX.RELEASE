@@ -9,6 +9,8 @@ import type { Streak } from '../streaks/schemas';
 import { usePurchaseTheme } from './hooks';
 import { canPurchaseTheme } from './service';
 import type { SessionTheme } from './session-themes';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface ThemeShopModalProps {
   userId: string;
@@ -38,7 +40,7 @@ export function ThemeShopModal({
       return { allowed: false, message: null };
     }
 
-    return canPurchaseTheme((theme as any).id, streak);
+    return canPurchaseTheme(theme.id, streak);
   }, [streak, theme]);
 
   if (!theme) {
@@ -46,9 +48,9 @@ export function ThemeShopModal({
   }
 
   const balance = walletQuery.data?.coins ?? 0;
-  const canAfford = balance >= (theme as any).coinCost;
+  const canAfford = balance >= theme.coinCost;
   const showInsufficientCoins =
-    errorMessage === 'Not enough coins' || (!canAfford && !(theme as any).isFree);
+    errorMessage === 'Not enough coins' || (!canAfford && !theme.isFree);
 
   const handleBuy = async (): Promise<void> => {
     if (!theme) {
@@ -58,7 +60,7 @@ export function ThemeShopModal({
     setErrorMessage(null);
     const result = await purchaseThemeMutation.mutateAsync({
       userId,
-      themeId: (theme as any).id,
+      themeId: theme.id,
       streak,
     });
 
@@ -67,7 +69,7 @@ export function ThemeShopModal({
       return;
     }
 
-    onPurchased((theme as any).id);
+    onPurchased(theme.id);
     onClose();
   };
 
@@ -75,7 +77,7 @@ export function ThemeShopModal({
     <Modal
       visible={isVisible}
       onClose={onClose}
-      title={(theme as any).name}
+      title={theme.name}
       contentStyle={{ paddingBottom: 0 }}
     >
       <Box gap="md">
@@ -84,14 +86,14 @@ export function ThemeShopModal({
             width={56}
             height={56}
             borderRadius={999}
-            style={{ backgroundColor: (theme as any).previewColor }}
+            style={{ backgroundColor: theme.previewColor }}
           />
           <Box flex={1}>
             <Text variant="body" color="text.secondary">
-              {(theme as any).description}
+              {theme.description}
             </Text>
             <Text variant="label" mt="sm">
-              {(theme as any).isFree ? 'Free unlock' : `${(theme as any).coinCost} coins`}
+              {theme.isFree ? 'Free unlock' : `${theme.coinCost} coins`}
             </Text>
           </Box>
         </Box>
@@ -100,9 +102,9 @@ export function ThemeShopModal({
           p="md"
           borderRadius={16}
           style={{
-            backgroundColor: (theme as any).backgroundTint === 'transparent'
-              ? 'rgba(99, 102, 241, 0.08)'
-              : (theme as any).backgroundTint,
+            backgroundColor: theme.backgroundTint === 'transparent'
+              ? launchColors.rgb_99_102_241_0_08
+              : theme.backgroundTint,
           }}
         >
           <Text variant="caption" color="text.secondary">
@@ -144,7 +146,7 @@ export function ThemeShopModal({
         accessibilityLabel="coins`} button"
         accessibilityRole="button"
         accessibilityHint="Activates this control">
-          {(theme as any).isFree ? 'Unlock Theme' : `Buy for ${(theme as any).coinCost} coins`}
+          {theme.isFree ? 'Unlock Theme' : `Buy for ${theme.coinCost} coins`}
         </Button>
 
         {showInsufficientCoins ? (

@@ -1,141 +1,141 @@
-/**
- * Home Priority Schemas (Phase 4)
- *
- * Zod schemas for the Home Decision Engine priority model.
- * Home answers "why start now?" in 3 seconds.
- *
- * @phase 4
- */
-
 import { z } from 'zod';
 
-// ============================================================================
-// Home Priority Schema
-// ============================================================================
-
 export const HomePriorityTypeSchema = z.enum([
-  'FIRST_SESSION',
   'STREAK_CRITICAL',
-  'BOSS_FINAL_STRIKE',
-  'COMEBACK',
-  'STUDY_PLAN_DUE',
-  'COACH_INTERVENTION',
-  'DAILY_GOAL',
+  'COMPANION_PROMISE',
+  'PROMISE_RECOVERY',
+  'STREAK_AT_RISK',
+  'RECOMMENDED_SESSION',
+  'CHALLENGE_NEAR_DONE',
+  'BOSS_ACTIVE',
+  'DEFAULT_SESSION',
 ]);
 
 export type HomePriorityType = z.infer<typeof HomePriorityTypeSchema>;
 
 export const HomePriorityCTAActionSchema = z.enum([
-  'START_SESSION',
-  'VIEW_BOSS',
-  'CLAIM_REWARD',
-  'VIEW_STREAK',
-  'VIEW_STUDY_PLAN',
-  'VIEW_COACH',
+  'OPEN_BOSS',
+  'OPEN_CHALLENGES',
+  'OPEN_SESSION_SETUP',
 ]);
 
 export type HomePriorityCTAAction = z.infer<typeof HomePriorityCTAActionSchema>;
 
 export const HomePriorityCTASchema = z.object({
-  text: z.string(),
   action: HomePriorityCTAActionSchema,
   params: z.record(z.unknown()).optional(),
+  text: z.string(),
 }).strict();
 
 export type HomePriorityCTA = z.infer<typeof HomePriorityCTASchema>;
 
 export const HomePrimaryPrioritySchema = z.object({
+  cta: HomePriorityCTASchema,
+  reason: z.string(),
   type: HomePriorityTypeSchema,
   urgency: z.number().min(0).max(100),
-  reason: z.string(),
-  cta: HomePriorityCTASchema,
 }).strict();
 
 export type HomePrimaryPriority = z.infer<typeof HomePrimaryPrioritySchema>;
 
 export const HomeStakesSchema = z.object({
-  what: z.string(),
   atRisk: z.string().optional(),
   potentialGain: z.string().optional(),
+  what: z.string(),
 }).strict();
 
 export type HomeStakes = z.infer<typeof HomeStakesSchema>;
 
 export const HomeProgressSchema = z.object({
-  todayMinutes: z.number(),
   dailyGoalMinutes: z.number(),
   streakDays: z.number(),
+  todayMinutes: z.number(),
 }).strict();
 
 export type HomeProgress = z.infer<typeof HomeProgressSchema>;
 
 export const HomeSecondaryActionSchema = z.object({
-  type: z.string(),
-  title: z.string(),
   onPress: z.function(),
+  title: z.string(),
+  type: z.string(),
 }).strict();
 
 export type HomeSecondaryAction = z.infer<typeof HomeSecondaryActionSchema>;
 
 export const HomePrioritySchema = z.object({
   primary: HomePrimaryPrioritySchema,
-  stakes: HomeStakesSchema,
   progress: HomeProgressSchema,
   secondary: z.array(HomeSecondaryActionSchema).max(3),
+  stakes: HomeStakesSchema,
 }).strict();
 
 export type HomePriority = z.infer<typeof HomePrioritySchema>;
 
-// ============================================================================
-// Context Snapshot Schema (for priority calculation)
-// ============================================================================
+const PromiseModeSchema = z.enum([
+  'FOCUS',
+  'RECOVERY',
+  'STUDY',
+  'BOSS_PREP',
+  'HABIT_BUILD',
+]);
+
+const CompanionPromiseStateSchema = z.object({
+  kind: z.enum(['hidden', 'offline', 'pending', 'fulfilled', 'missed']),
+  targetDurationMinutes: z.number().int().positive().optional(),
+  targetMode: PromiseModeSchema.optional(),
+}).strict();
+
+const HomeChallengeSignalSchema = z.object({
+  id: z.string().uuid().optional(),
+  isNearDone: z.boolean(),
+  progressPercent: z.number().min(0).max(100),
+  title: z.string().optional(),
+}).strict();
+
+const HomeRecommendationSignalSchema = z.object({
+  hasActive: z.boolean(),
+  id: z.string().uuid().optional(),
+  suggestedDurationSeconds: z.number().int().positive().optional(),
+  suggestedMode: PromiseModeSchema.optional(),
+}).strict();
 
 export const HomeContextSnapshotSchema = z.object({
   userId: z.string().uuid(),
   timestamp: z.number(),
-
-  // Onboarding status
-  onboarding: z.object({
-    isComplete: z.boolean(),
-    firstSessionCompleted: z.boolean(),
-  }),
-
-  // Streak status
-  streak: z.object({
-    currentDays: z.number(),
-    isAtRisk: z.boolean(),
-    hoursRemaining: z.number().optional(),
-    isComeback: z.boolean(),
-  }),
-
-  // Boss status
   boss: z.object({
     hasActiveEncounter: z.boolean(),
     healthRemaining: z.number().optional(),
-    maxHealth: z.number().optional(),
     isFinalStrike: z.boolean(),
-  }),
-
-  // Study plan status
-  studyPlan: z.object({
-    hasActivePlan: z.boolean(),
-    dueToday: z.boolean(),
-    itemsDue: z.number(),
-  }),
-
-  // Coach status
+    maxHealth: z.number().optional(),
+  }).strict(),
+  challenge: HomeChallengeSignalSchema,
   coach: z.object({
     hasIntervention: z.boolean(),
-    interventionType: z.string().optional(),
     hoursRemaining: z.number().optional(),
-  }),
-
-  // Daily progress
+    interventionType: z.string().optional(),
+  }).strict(),
+  companionPromise: CompanionPromiseStateSchema,
   daily: z.object({
-    minutesFocused: z.number(),
     goalMinutes: z.number(),
+    minutesFocused: z.number(),
     sessionsCompleted: z.number(),
-  }),
+  }).strict(),
+  onboarding: z.object({
+    firstSessionCompleted: z.boolean(),
+    isComplete: z.boolean(),
+  }).strict(),
+  recommendation: HomeRecommendationSignalSchema,
+  streak: z.object({
+    currentDays: z.number(),
+    hoursRemaining: z.number().optional(),
+    isAtRisk: z.boolean(),
+    isComeback: z.boolean(),
+  }).strict(),
+  studyPlan: z.object({
+    dueToday: z.boolean(),
+    hasActivePlan: z.boolean(),
+    itemsDue: z.number(),
+  }).strict(),
 }).strict();
 
 export type HomeContextSnapshot = z.infer<typeof HomeContextSnapshotSchema>;

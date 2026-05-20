@@ -9,6 +9,8 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface SquadCardProps {
   name: string;
@@ -60,7 +62,7 @@ export function SquadCard({
 
 const styles = createSheet({
   container: {
-    backgroundColor: '#2a2a3e',
+    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 12,
     padding: 16,
   },
@@ -73,7 +75,7 @@ const styles = createSheet({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#3a3a4e',
+    backgroundColor: launchColors.hex_3a3a4e,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -87,11 +89,11 @@ const styles = createSheet({
   name: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#fff',
+    color: launchColors.hex_fff,
   },
   description: {
     fontSize: 14,
-    color: '#9E9E9E',
+    color: launchColors.hex_9e9e9e,
     marginTop: 2,
   },
   stats: {
@@ -104,11 +106,11 @@ const styles = createSheet({
   statValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: launchColors.hex_fff,
   },
   statLabel: {
     fontSize: 12,
-    color: '#666',
+    color: launchColors.hex_666,
     marginTop: 2,
   },
 });

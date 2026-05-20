@@ -10,6 +10,8 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface ProgressionErrorStateProps {
   error: Error;
@@ -42,7 +44,7 @@ export function ProgressionErrorState({ error, onRetry }: ProgressionErrorStateP
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: launchColors.hex_1a1a2e,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -57,23 +59,23 @@ const styles = createSheet({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#fff',
+    color: launchColors.hex_fff,
     marginBottom: 8,
   },
   message: {
     fontSize: 14,
-    color: '#9E9E9E',
+    color: launchColors.hex_9e9e9e,
     textAlign: 'center',
     marginBottom: 24,
   },
   button: {
-    backgroundColor: '#e94560',
+    backgroundColor: launchColors.hex_e94560,
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
   },
   buttonText: {
-    color: '#fff',
+    color: launchColors.hex_fff,
     fontSize: 16,
     fontWeight: '600',
   },

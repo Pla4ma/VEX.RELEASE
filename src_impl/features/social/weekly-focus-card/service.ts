@@ -26,8 +26,8 @@ function getWeekRange(weekOffset: number): { weekStartDate: string; weekEndDate:
   sunday.setDate(monday.getDate() + 6);
   sunday.setHours(23, 59, 59, 999);
   return {
-    weekStartDate: monday.toISOString().split('T')[0],
-    weekEndDate: sunday.toISOString().split('T')[0],
+    weekStartDate: monday.toISOString().split('T')[0]!,
+    weekEndDate: sunday.toISOString().split('T')[0]!,
   };
 }
 

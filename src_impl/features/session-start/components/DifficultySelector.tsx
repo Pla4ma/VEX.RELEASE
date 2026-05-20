@@ -18,6 +18,8 @@ import { Text } from '../../../components/primitives/Text';
 import { useHaptics } from '../../../utils/haptics';
 import { eventBus } from '../../../events';
 import * as Sentry from '@sentry/react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export type SessionDifficulty = 'CASUAL' | 'FOCUSED' | 'DEEP_WORK';
 
@@ -45,7 +47,7 @@ const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     pauseLimit: 'Unlimited',
     xpMultiplier: '50%',
     description: 'Good for maintenance',
-    color: '#22C55E', // Green
+    color: launchColors.hex_22c55e, // Green
   },
   {
     id: 'FOCUSED',
@@ -54,7 +56,7 @@ const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     pauseLimit: '2 max',
     xpMultiplier: '100%',
     description: 'Standard mode',
-    color: '#3B82F6', // Blue
+    color: launchColors.hex_3b82f6, // Blue
   },
   {
     id: 'DEEP_WORK',
@@ -63,7 +65,7 @@ const DIFFICULTY_OPTIONS: DifficultyOption[] = [
     pauseLimit: '0 pauses',
     xpMultiplier: '150%',
     description: 'Maximum impact',
-    color: '#EF4444', // Red
+    color: launchColors.hex_ef4444, // Red
   },
 ];
 

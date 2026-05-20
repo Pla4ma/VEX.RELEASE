@@ -65,7 +65,7 @@ export class CompanionGrowthService {
 
     if (minutesInPhase >= currentThreshold && this.state.phase !== 'TRANSCENDENT') {
       const previousPhase = this.state.phase;
-      this.state.phase = phases[phases.indexOf(this.state.phase) + 1];
+      this.state.phase = phases[phases.indexOf(this.state.phase) + 1]!;
       this.state.level = 1;
       evolved = true;
       newPhase = this.state.phase;

@@ -22,6 +22,8 @@ import Animated, {
 import { useTheme } from '../../../theme';
 import { Box } from '../../../components/primitives';
 import { Icon } from '../../../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface StreakShieldIndicatorProps {
   size?: 'sm' | 'md' | 'lg';
@@ -76,7 +78,7 @@ export const StreakShieldIndicator: React.FC<StreakShieldIndicatorProps> = ({
           bottom: -config.container * 0.2,
           right: -config.container * 0.2,
           zIndex: 10,
-          shadowColor: '#10B981',
+          shadowColor: launchColors.hex_10b981,
           shadowOffset: { width: 0, height: 2 },
           shadowRadius: 6,
           elevation: 4,
@@ -92,12 +94,12 @@ export const StreakShieldIndicator: React.FC<StreakShieldIndicatorProps> = ({
           justifyContent="center"
           alignItems="center"
           style={{
-            backgroundColor: '#10B981',
+            backgroundColor: launchColors.hex_10b981,
             borderWidth: 2,
-            borderColor: '#FFF',
+            borderColor: launchColors.hex_fff,
           }}
         >
-          <Icon name="shield" size={config.icon} color="#FFF" />
+          <Icon name="shield" size={config.icon} color={launchColors.hex_fff} />
         </Box>
       </Animated.View>
     </Animated.View>

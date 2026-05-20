@@ -3,7 +3,6 @@ import { Modal } from 'react-native';
 import type BottomSheet from '@gorhom/bottom-sheet';
 import { LevelUpCelebration } from '../../../components/LevelUpCelebration';
 import { GradeRevealAnimation } from '../../../features/session-completion/components/GradeRevealAnimation';
-import { ContextualPaywallBanner } from '../../../shared/monetization/components/ContextualPaywallBanner';
 import { SessionReflectionSheet } from './SessionReflectionSheet';
 import { GRADE_REVEAL_COLORS } from '../../../features/session-completion/components/grade-reveal-helpers';
 import { useSessionCompleteController } from '../../../features/session-completion/hooks';
@@ -37,19 +36,6 @@ export function SessionCompleteOverlays({
           onComplete={onGradeRevealComplete}
         />
       ) : null}
-
-      {gradeRevealed && controller.grade.letter === 'S' && (
-        <ContextualPaywallBanner
-          trigger="S_GRADE"
-          bonusXp={Math.floor((controller.rewards.chestResult?.xpReward ?? summary.xpEarned) * 0.1)}
-          onOpenPaywall={() =>
-            controller.navigation.navigate('Paywall', {
-              source: 's_grade_session',
-              gatedFeature: 'xp_boost',
-            })
-          }
-        />
-      )}
 
       <Modal
         transparent

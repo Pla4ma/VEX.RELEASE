@@ -8,6 +8,8 @@ import React from 'react';
 import { View, Text, Pressable, StyleSheet } from 'react-native';
 import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface EmptyStateProps {
   icon: string;
@@ -104,13 +106,13 @@ const styles = createSheet({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1a1a1a',
+    color: launchColors.hex_1a1a1a,
     textAlign: 'center',
     marginBottom: 8,
   },
   message: {
     fontSize: 16,
-    color: '#666',
+    color: launchColors.hex_666,
     textAlign: 'center',
     lineHeight: 22,
     marginBottom: 24,
@@ -122,14 +124,14 @@ const styles = createSheet({
     maxWidth: 280,
   },
   primaryButton: {
-    backgroundColor: '#4ECDC4',
+    backgroundColor: launchColors.hex_4ecdc4,
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
     alignItems: 'center',
   },
   primaryButtonText: {
-    color: '#fff',
+    color: launchColors.hex_fff,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -140,10 +142,10 @@ const styles = createSheet({
     borderRadius: 12,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: launchColors.hex_ddd,
   },
   secondaryButtonText: {
-    color: '#666',
+    color: launchColors.hex_666,
     fontSize: 16,
     fontWeight: '500',
   },

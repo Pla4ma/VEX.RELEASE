@@ -1,4 +1,6 @@
 import type { UrgencyLevel } from '../services/HomeRecommendationEngine';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export function getHeroIcon(type: string): string {
   if (type === 'focus_session') { return 'target'; }
@@ -10,23 +12,23 @@ export function getHeroIcon(type: string): string {
   return 'play';
 }
 
-export function getHeroUrgencyColor(urgency: UrgencyLevel, theme: { colors: { primary: Record<number, string> } }): string {
-  if (urgency === 'critical') { return '#EF4444'; }
-  if (urgency === 'high') { return '#F59E0B'; }
-  if (urgency === 'medium') { return theme.colors.primary[400] ?? '#6366F1'; }
+export function getHeroUrgencyColor(urgency: UrgencyLevel, theme: { colors: { error: Record<number, string>; primary: Record<number, string>; warning: Record<number, string> } }): string {
+  if (urgency === 'critical') { return theme.colors.error[500] ?? launchColors.hex_ef4444; }
+  if (urgency === 'high') { return theme.colors.warning[500] ?? launchColors.hex_f59e0b; }
+  if (urgency === 'medium') { return theme.colors.primary[400] ?? launchColors.hex_6366f1; }
   return 'transparent';
 }
 
 export function getHeroGradientColors(
   urgency: UrgencyLevel,
   type: string,
-  theme: { colors: { primary: Record<number, string> } }
+  theme: { colors: { error: Record<number, string>; primary: Record<number, string>; success: Record<number, string>; warning: Record<number, string> } }
 ): [string, string] {
-  if (urgency === 'critical') { return ['#DC2626', '#991B1B']; }
-  if (urgency === 'high') { return ['#F59E0B', '#D97706']; }
-  if (urgency === 'medium') { return [theme.colors.primary[500] ?? '#6366F1', theme.colors.primary[700] ?? '#4338CA']; }
-  if (type === 'study_plan') { return ['#6366F1', '#4F46E5']; }
-  if (type === 'boss_battle') { return ['#7C3AED', '#6D28D9']; }
-  if (type === 'comeback') { return ['#10B981', '#059669']; }
-  return [theme.colors.primary[500] ?? '#6366F1', theme.colors.primary[700] ?? '#4338CA'];
+  if (urgency === 'critical') { return [theme.colors.error[500] ?? launchColors.hex_dc2626, theme.colors.error[700] ?? launchColors.hex_991b1b]; }
+  if (urgency === 'high') { return [theme.colors.warning[500] ?? launchColors.hex_f59e0b, theme.colors.warning[700] ?? launchColors.hex_d97706]; }
+  if (urgency === 'medium') { return [theme.colors.primary[500] ?? launchColors.hex_6366f1, theme.colors.primary[700] ?? launchColors.hex_4338ca]; }
+  if (type === 'study_plan') { return [theme.colors.primary[500] ?? launchColors.hex_6366f1, theme.colors.primary[600] ?? launchColors.hex_4f46e5]; }
+  if (type === 'boss_battle') { return [theme.colors.primary[600] ?? launchColors.hex_7c3aed, theme.colors.primary[700] ?? launchColors.hex_6d28d9]; }
+  if (type === 'comeback') { return [theme.colors.success[500] ?? launchColors.hex_10b981, theme.colors.success[700] ?? launchColors.hex_059669]; }
+  return [theme.colors.primary[500] ?? launchColors.hex_6366f1, theme.colors.primary[700] ?? launchColors.hex_4338ca];
 }

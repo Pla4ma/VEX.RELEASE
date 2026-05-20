@@ -18,6 +18,8 @@ import {
 import { paywallStyles as styles } from './paywall-styles';
 
 type PaywallHeroProps = {
+  contextBody?: string;
+  contextHeadline?: string;
   featureHighlight: PaywallFeatureHighlight | undefined;
   isPremium: boolean;
   showBoundary: boolean;
@@ -26,6 +28,8 @@ type PaywallHeroProps = {
 };
 
 export function PaywallHero({
+  contextBody,
+  contextHeadline,
   featureHighlight,
   isPremium,
   showBoundary,
@@ -52,7 +56,21 @@ export function PaywallHero({
         </Button>
       </View>
 
-      {featureHighlight ? (
+      {contextHeadline && contextBody ? (
+        <CardEnterAnimation>
+          <LinearGradient
+            colors={[theme.colors.primary[500], theme.colors.warning.DEFAULT]}
+            style={styles.heroCard}
+          >
+            <Text style={[styles.heroTitle, { color: theme.colors.text.inverse }]}>
+              {contextHeadline}
+            </Text>
+            <Text style={[styles.heroCopy, { color: theme.colors.text.inverse }]}>
+              {contextBody}
+            </Text>
+          </LinearGradient>
+        </CardEnterAnimation>
+      ) : featureHighlight ? (
         <Animated.View entering={FadeInDown.duration(320)}>
           <LinearGradient colors={[...featureHighlight.gradient]} style={styles.featureCard}>
             <View

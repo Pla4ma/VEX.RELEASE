@@ -118,5 +118,5 @@ export function useNextSession(progress: FirstWeekProgress | null | undefined): 
     return null;
   }
 
-  return sessions[currentIndex + 1];
+  return sessions[currentIndex + 1] ?? null;
 }

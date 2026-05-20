@@ -5,6 +5,8 @@
 
 import { Dimensions } from 'react-native';
 import type { ItemType } from '../../items/schemas';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 const { width } = Dimensions.get('window');
 
@@ -23,9 +25,9 @@ export const CATEGORIES: { key: ShopCategory; label: string; icon: string }[] = 
 ];
 
 export const RARITY_COLORS = {
-  COMMON: '#9CA3AF',
-  UNCOMMON: '#10B981',
-  RARE: '#3B82F6',
-  EPIC: '#8B5CF6',
-  LEGENDARY: '#F59E0B',
+  COMMON: launchColors.hex_9ca3af,
+  UNCOMMON: launchColors.hex_10b981,
+  RARE: launchColors.hex_3b82f6,
+  EPIC: launchColors.hex_8b5cf6,
+  LEGENDARY: launchColors.hex_f59e0b,
 };

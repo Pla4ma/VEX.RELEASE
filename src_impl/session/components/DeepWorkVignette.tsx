@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 /**
  * DeepWorkVignette
@@ -12,7 +14,7 @@ export function DeepWorkVignette(): JSX.Element {
   return (
     <View pointerEvents="none" style={StyleSheet.absoluteFillObject}>
       <LinearGradient
-        colors={['rgba(0,0,0,0.45)', 'transparent', 'transparent', 'rgba(0,0,0,0.35)']}
+        colors={[launchColors.rgb_0_0_0_0_45, 'transparent', 'transparent', launchColors.rgb_0_0_0_0_35]}
         locations={[0, 0.25, 0.75, 1]}
         style={StyleSheet.absoluteFillObject}
       />

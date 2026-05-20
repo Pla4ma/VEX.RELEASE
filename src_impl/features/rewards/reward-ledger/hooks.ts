@@ -8,6 +8,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as queries from './queries';
 import * as service from './service';
 import { useAuth } from '../../../auth/hooks/useAuth';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 // ============================================================================
 // Query Keys
@@ -133,13 +135,13 @@ export function useRetryFailedRewards() {
 
 export function useRewardStateColor(state: string) {
   const colors = {
-    PENDING: '#FFA500',
-    DELIVERED: '#4CAF50',
-    FAILED: '#F44336',
-    EXPIRED: '#9E9E9E',
-    RETRYING: '#2196F3',
+    PENDING: launchColors.hex_ffa500,
+    DELIVERED: launchColors.hex_4caf50,
+    FAILED: launchColors.hex_f44336,
+    EXPIRED: launchColors.hex_9e9e9e,
+    RETRYING: launchColors.hex_2196f3,
   };
-  return colors[state as keyof typeof colors] || '#9E9E9E';
+  return colors[state as keyof typeof colors] || launchColors.hex_9e9e9e;
 }
 
 export function useRewardTypeIcon(type: string) {

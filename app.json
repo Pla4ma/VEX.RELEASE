@@ -12,7 +12,7 @@
   ],
   "ios": {
     "supportsTablet": true,
-    "bundleIdentifier": "com.vex.app",
+    "bundleIdentifier": "com.jonathan.vex",
     "infoPlist": {
       "ITSAppUsesNonExemptEncryption": false
     },
@@ -52,7 +52,7 @@
     }
   },
   "android": {
-    "package": "com.vex.app"
+    "package": "com.jonathan.vex"
   },
   "web": {
     "bundler": "metro",

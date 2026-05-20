@@ -24,7 +24,7 @@ export function FirstSessionOverlay({
   const { theme } = useTheme();
   const { height, width } = useWindowDimensions();
 
-  const currentTooltip = TOOLTIPS[currentStep] ?? TOOLTIPS[TOOLTIPS.length - 1];
+  const currentTooltip = TOOLTIPS[currentStep] ?? TOOLTIPS[TOOLTIPS.length - 1]!;
   const isLast = currentStep === TOOLTIPS.length - 1;
 
   // Get position for current highlight

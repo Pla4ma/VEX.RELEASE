@@ -5,11 +5,12 @@ import type { RootStackParams } from '../../../navigation/types';
 import { useFeatureGate } from '../../../features/feature-gate/hooks';
 import { HomeSecondaryRail } from './HomeSecondaryRail';
 import { HomeStreakProgress } from './HomeStreakProgress';
-import { HomeWeeklyQuest } from './HomeWeeklyQuest';
-
+import { HomeDailyMission } from './HomeDailyMission';
+import { HomeFocusScore } from './HomeFocusScore';
 import { HomeContextualCards } from './HomeContextualCards';
 import type { ChallengeItem } from '../../../features/home-spine/components';
 import type { useHomeData } from '../hooks/useHomeData';
+import type { MissionPriorityInput } from '../../../features/daily-mission/types';
 
 type HomeData = ReturnType<typeof useHomeData>;
 type HomeController = HomeData['controller'];
@@ -19,6 +20,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParams>;
 interface HomeContentLowerProps {
   controller: HomeController;
   data: HomeData;
+  missionInput: Partial<MissionPriorityInput>;
   handleClaimReward: (rewardId: string) => void;
   streakHoursRemaining: number;
   features: HomeController['disclosure']['features'];
@@ -28,6 +30,7 @@ interface HomeContentLowerProps {
 export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   controller,
   data,
+  missionInput,
   handleClaimReward,
   streakHoursRemaining,
   features,
@@ -49,6 +52,15 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
 
   return (
     <>
+      <HomeFocusScore onPress={() => navigation.navigate('FocusScoreDashboard')} />
+
+      {controller.shouldShowSecondarySystems && features.challenges.isUnlocked ? (
+        <HomeDailyMission
+          missionInput={missionInput}
+          onMissionPress={openChallenges}
+        />
+      ) : null}
+
       {controller.shouldShowSecondarySystems ? (
         <HomeContextualCards
           activeStudyPlan={controller.activeStudyPlanQuery.data}
@@ -65,24 +77,6 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
           userId={controller.userId ?? ''}
         />
       ) : null}
-
-      {/* Weekly Quest Card */}
-      {controller.shouldShowSecondarySystems && features.challenges.isUnlocked ? (
-        <HomeWeeklyQuest
-          userId={controller.userId ?? ''}
-          onPress={openChallenges}
-        />
-      ) : null}
-
-      {/* 5. Streak/progress strip */}
-      <HomeStreakProgress
-        currentDays={controller.currentStreak}
-        hoursRemaining={streakHoursRemaining}
-        riskLevel={controller.streakQuery.data?.riskLevel}
-        longestStreak={controller.streakQuery.data?.longestDays}
-        isLoading={controller.streakQuery.isLoading}
-        userId={controller.userId ?? undefined}
-      />
 
       {/* 6. Secondary optional rail */}
       {controller.shouldShowSecondarySystems ? (

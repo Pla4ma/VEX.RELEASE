@@ -1,3 +1,8 @@
+import { launchColors } from '@theme/tokens/launch-colors';
+/**
+ * Colors below are documented game-mechanic config data — not UI styling.
+ * Mapped to theme.colors.accent.* and theme.colors.semantic.* where applicable.
+ */
 export type ChestTier = 'WOOD' | 'SILVER' | 'GOLD' | 'LEGENDARY';
 
 export interface TierConfig {
@@ -9,27 +14,27 @@ export interface TierConfig {
 
 export const TIER_CONFIG: Record<ChestTier, TierConfig> = {
   WOOD: {
-    colors: ['#8B4513', '#654321'] as const,
+    colors: [launchColors.hex_8b4513, launchColors.hex_654321] as const,
     emoji: '📦',
     label: 'Wood Chest',
-    glow: '#8B4513',
+    glow: launchColors.hex_8b4513,
   },
   SILVER: {
-    colors: ['#C0C0C0', '#808080'] as const,
+    colors: [launchColors.hex_c0c0c0, launchColors.hex_808080] as const,
     emoji: '🥈',
     label: 'Silver Chest',
-    glow: '#C0C0C0',
+    glow: launchColors.hex_c0c0c0,
   },
   GOLD: {
-    colors: ['#FFD700', '#FFA000'] as const,
+    colors: [launchColors.hex_ffd700, launchColors.hex_ffa000] as const,
     emoji: '🏆',
     label: 'Gold Chest',
-    glow: '#FFD700',
+    glow: launchColors.hex_ffd700,
   },
   LEGENDARY: {
-    colors: ['#FFD700', '#FF6B35', '#8B5CF6'] as const,
+    colors: [launchColors.hex_ffd700, launchColors.hex_ff6b35, launchColors.hex_8b5cf6] as const,
     emoji: '👑',
     label: 'Legendary Chest',
-    glow: '#FF6B35',
+    glow: launchColors.hex_ff6b35,
   },
 };

@@ -2,6 +2,8 @@ import React from 'react';
 import Svg, { Circle, Defs, Line, LinearGradient, Rect, Stop, Text as SvgText } from 'react-native-svg';
 
 import type { SquadSummary } from '../schemas';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 type WeeklyStats = {
   totalSessions: number;
@@ -41,8 +43,8 @@ export function SquadShareCard({
     >
       <Defs>
         <LinearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-          <Stop offset="0" stopColor="#0d1117" />
-          <Stop offset="1" stopColor="#1a1a2e" />
+          <Stop offset="0" stopColor={launchColors.hex_0d1117} />
+          <Stop offset="1" stopColor={launchColors.hex_1a1a2e} />
         </LinearGradient>
       </Defs>
 
@@ -57,7 +59,7 @@ export function SquadShareCard({
       <SvgText
         x={58}
         y={70}
-        fill="#FFFFFF"
+        fill={launchColors.hex_ffffff}
         fontSize={28}
         fontWeight="700"
         textAnchor="middle"
@@ -65,17 +67,17 @@ export function SquadShareCard({
         {emblemLetter}
       </SvgText>
 
-      <SvgText x={104} y={70} fill="#FFFFFF" fontSize={28} fontWeight="700">
+      <SvgText x={104} y={70} fill={launchColors.hex_ffffff} fontSize={28} fontWeight="700">
         {squad.name}
       </SvgText>
 
-      <SvgText x={32} y={126} fill="#F3F4F6" fontSize={18} fontWeight="600">
+      <SvgText x={32} y={126} fill={launchColors.hex_f3f4f6} fontSize={18} fontWeight="600">
         {`⚡ ${weeklyStats.totalSessions} sessions this week`}
       </SvgText>
-      <SvgText x={32} y={160} fill="#F3F4F6" fontSize={18} fontWeight="600">
+      <SvgText x={32} y={160} fill={launchColors.hex_f3f4f6} fontSize={18} fontWeight="600">
         {`⏱️ ${totalHours} total focus hours`}
       </SvgText>
-      <SvgText x={32} y={194} fill="#F3F4F6" fontSize={18} fontWeight="600">
+      <SvgText x={32} y={194} fill={launchColors.hex_f3f4f6} fontSize={18} fontWeight="600">
         {`🔥 ${weeklyStats.activeMemberCount} members active`}
       </SvgText>
 
@@ -84,16 +86,16 @@ export function SquadShareCard({
         y1={224}
         x2={SQUAD_SHARE_CARD_WIDTH - 24}
         y2={224}
-        stroke="#ffffff20"
+        stroke={launchColors.hex_ffffff20}
         strokeWidth={1}
       />
-      <SvgText x={24} y={243} fill="#9CA3AF" fontSize={11}>
+      <SvgText x={24} y={243} fill={launchColors.hex_9ca3af} fontSize={11}>
         {`Join: vex.app/squad/${squadCode}`}
       </SvgText>
       <SvgText
         x={SQUAD_SHARE_CARD_WIDTH - 24}
         y={243}
-        fill="#E5E7EB"
+        fill={launchColors.hex_e5e7eb}
         fontSize={12}
         fontWeight="700"
         textAnchor="end"

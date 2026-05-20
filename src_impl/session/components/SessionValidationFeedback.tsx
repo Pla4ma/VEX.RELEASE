@@ -17,6 +17,8 @@ import { Button } from '../../components/primitives/Button';
 import { useTheme } from '../../theme';
 import type { ValidationError, ValidationWarning } from '../utils/validation';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface SessionValidationFeedbackProps {
   errors: ValidationError[];
@@ -40,11 +42,11 @@ export function SessionValidationFeedback({
   }
 
   // Group errors by field
-  const errorsByField = errors.reduce((acc, error) => {
+  const errorsByField = errors.reduce<Record<string, ValidationError[]>>((acc, error) => {
     if (!acc[error.field]) {acc[error.field] = [];}
-    acc[error.field].push(error);
+    acc[error.field]!.push(error);
     return acc;
-  }, {} as Record<string, ValidationError[]>);
+  }, {});
 
   if (compact) {
     return (
@@ -186,7 +188,7 @@ const styles = createSheet({
     marginTop: 12,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.1)',
+    borderTopColor: launchColors.rgb_0_0_0_0_1,
   },
   bullet: {
     marginRight: 8,

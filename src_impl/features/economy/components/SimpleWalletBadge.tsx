@@ -11,6 +11,8 @@ import { AnimatedCounter } from '../../../shared/ui/components/AnimatedCounter';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import { useTheme } from '../../../theme';
 import { useWallet } from '../hooks';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 type SimpleWalletBadgeProps = { userId: string; streak: number; onPress: () => void };
@@ -42,7 +44,7 @@ export function SimpleWalletBadge({ userId, streak, onPress }: SimpleWalletBadge
             borderWidth: 1,
             borderColor: theme.colors.primary[500],
             borderRadius: 999,
-            backgroundColor: '#FFFFFF',
+            backgroundColor: launchColors.hex_ffffff,
             paddingHorizontal: theme.spacing[3],
             paddingVertical: theme.spacing[2],
             flexDirection: 'row',

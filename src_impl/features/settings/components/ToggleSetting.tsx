@@ -6,6 +6,8 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface ToggleSettingProps {
   label: string;
@@ -40,9 +42,9 @@ const styles = createSheet({
     justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    backgroundColor: '#ffffff',
+    backgroundColor: launchColors.hex_ffffff,
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: launchColors.hex_e5e7eb,
   },
   content: {
     flex: 1,
@@ -50,11 +52,11 @@ const styles = createSheet({
   },
   label: {
     fontSize: 16,
-    color: '#111827',
+    color: launchColors.hex_111827,
   },
   description: {
     fontSize: 12,
-    color: '#6b7280',
+    color: launchColors.hex_6b7280,
     marginTop: 4,
   },
   toggle: {
@@ -64,16 +66,16 @@ const styles = createSheet({
     padding: 2,
   },
   toggleActive: {
-    backgroundColor: '#6366f1',
+    backgroundColor: launchColors.hex_6366f1,
   },
   toggleInactive: {
-    backgroundColor: '#d1d5db',
+    backgroundColor: launchColors.hex_d1d5db,
   },
   toggleKnob: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: '#ffffff',
+    backgroundColor: launchColors.hex_ffffff,
   },
   knobActive: {
     marginLeft: 'auto',

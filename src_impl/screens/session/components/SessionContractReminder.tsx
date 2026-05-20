@@ -7,24 +7,32 @@ import { useTheme } from '../../../theme';
 import { triggerHaptic } from '../../../utils/haptics';
 import { getMinTouchTargetStyle, StandardHitSlops } from '../../../utils/touchTarget';
 import type { FocusContract } from '../../../features/focus-contract/types';
+import { getContractReminderStage, type ContractReminderStage } from '../../../features/focus-contract/service';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 
 type SessionContractReminderProps = {
   contract: FocusContract | null;
+  progressPercentage: number;
 };
 
 export function SessionContractReminder({
   contract,
+  progressPercentage,
 }: SessionContractReminderProps): React.JSX.Element | null {
   const { theme } = useTheme();
-  const [dismissed, setDismissed] = React.useState(false);
+  const { isReducedMotion } = useReducedMotion();
+  const [dismissedStages, setDismissedStages] = React.useState<ContractReminderStage[]>([]);
+  const stage = getContractReminderStage(contract, progressPercentage);
 
-  if (!contract || dismissed) {
+  if (!contract || !stage || dismissedStages.includes(stage)) {
     return null;
   }
 
   const handleDismiss = (): void => {
-    setDismissed(true);
-    void triggerHaptic('impactLight');
+    setDismissedStages((current) => Array.from(new Set([...current, stage])));
+    if (!isReducedMotion) {
+      void triggerHaptic('impactLight');
+    }
   };
 
   return (
@@ -38,7 +46,8 @@ export function SessionContractReminder({
         alignItems="center"
         p="sm"
       >
-        <Text variant="caption" color="text.secondary" numberOfLines={1} flex={1}>
+        <Text variant="caption" color="text.secondary" numberOfLines={2} flex={1}>
+          {stage === 'early' ? 'You chose ' : 'Final stretch for '}
           {contract.taskDescription}
         </Text>
         <Pressable

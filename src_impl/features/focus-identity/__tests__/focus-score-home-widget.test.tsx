@@ -88,6 +88,15 @@ describe('FocusScoreHomeWidget', () => {
     expect(screen.getByText('Focus Score is unavailable')).toBeTruthy();
   });
 
+  it('renders honest empty copy for new users', () => {
+    const screen = render(
+      <FocusScoreHomeWidget model={model()} onPress={jest.fn()} onRetry={jest.fn()} />,
+    );
+
+    expect(screen.getByText('Focus Score needs three sessions')).toBeTruthy();
+    expect(screen.getByText('Finish three sessions and VEX will start reading your focus rhythm.')).toBeTruthy();
+  });
+
   it('renders success and supports tap navigation', () => {
     const onPress = jest.fn();
     const screen = render(

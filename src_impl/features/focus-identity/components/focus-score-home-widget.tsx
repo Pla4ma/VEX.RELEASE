@@ -40,8 +40,8 @@ export function FocusScoreHomeWidget({ model, onPress, onRetry }: FocusScoreHome
     return (
       <StatusBanner
         status="offline"
-        message="Focus Score starts after your first session"
-        description="Finish one session and this widget becomes your daily identity card."
+        message="Focus Score needs three sessions"
+        description="Finish three sessions and VEX will start reading your focus rhythm."
       />
     );
   }

@@ -21,6 +21,8 @@ import Animated, {
 
 import { Box, Text } from './primitives';
 import { Icon } from '../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface OfflineBannerProps {
   /** Custom message to display when offline */
@@ -96,23 +98,23 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
         px={16}
         py={12}
         style={{
-          backgroundColor: isOffline ? '#FEF3C7' : '#DCFCE7',
+          backgroundColor: isOffline ? launchColors.hex_fef3c7 : launchColors.hex_dcfce7,
           borderBottomWidth: 1,
-          borderBottomColor: isOffline ? '#FCD34D' : '#86EFAC',
+          borderBottomColor: isOffline ? launchColors.hex_fcd34d : launchColors.hex_86efac,
         }}
       >
         <Box flexDirection="row" alignItems="center" justifyContent="center">
           <Icon
             name={isOffline ? 'wifi-off' : 'wifi'}
             size={16}
-            color={isOffline ? '#D97706' : '#16A34A'}
+            color={isOffline ? launchColors.hex_d97706 : launchColors.hex_16a34a}
           />
           <Text
             variant="caption"
             style={{
               marginLeft: 8,
               fontWeight: '600',
-              color: isOffline ? '#92400E' : '#166534',
+              color: isOffline ? launchColors.hex_92400e : launchColors.hex_166534,
             }}
           >
             {isOffline ? message : 'Back online — syncing changes...'}
@@ -125,12 +127,12 @@ export const OfflineBanner: React.FC<OfflineBannerProps> = ({
               py={2}
               borderRadius={10}
               style={{
-                backgroundColor: '#D97706',
+                backgroundColor: launchColors.hex_d97706,
               }}
             >
               <Text
                 style={{
-                  color: '#FFF',
+                  color: launchColors.hex_fff,
                   fontSize: 11,
                   fontWeight: '700',
                 }}

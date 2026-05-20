@@ -116,6 +116,7 @@ type PaywallFooterActionsProps = {
   hasLivePackages: boolean;
   isLoading: boolean;
   isPremium: boolean;
+  primaryCtaLabel?: string;
   plans: readonly PaywallPlanSelection[];
   onPurchase: (plan: PaywallPlanSelection | undefined) => void;
   onRestore: () => void;
@@ -125,6 +126,7 @@ export function PaywallFooterActions({
   hasLivePackages,
   isLoading,
   isPremium,
+  primaryCtaLabel,
   plans,
   onPurchase,
   onRestore,
@@ -134,6 +136,7 @@ export function PaywallFooterActions({
   const ctaLabel = introPrice
     ? `Try Free for ${introPrice.periodNumberOfUnits} ${introPrice.periodUnit?.toLowerCase() === 'day' ? 'Days' : introPrice.periodUnit}`
     : 'Continue with Annual';
+  const primaryLabel = primaryCtaLabel ?? ctaLabel;
 
   return (
     <View style={styles.footerActions}>
@@ -146,7 +149,7 @@ export function PaywallFooterActions({
           accessibilityRole="button"
           accessibilityHint="Starts the store purchase flow for the annual plan."
         >
-          {ctaLabel}
+          {primaryLabel}
         </Button>
       ) : null}
       {isPremium ? (

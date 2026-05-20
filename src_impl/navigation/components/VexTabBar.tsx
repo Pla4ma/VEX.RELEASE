@@ -2,13 +2,7 @@ import React, { useEffect } from "react";
 import { Pressable, View } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withSequence,
-  withSpring,
-  withTiming,
-} from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withSequence, withSpring, withTiming } from "react-native-reanimated";
 import { Icon } from "../../icons";
 import { Text } from "../../components/primitives/Text";
 import { useTheme } from "../../theme";
@@ -34,15 +28,7 @@ interface TabButtonProps {
   isActiveTab: boolean;
 }
 
-function TabButton({
-  route,
-  focused,
-  color,
-  label,
-  onPress,
-  onLongPress,
-  isActiveTab,
-}: TabButtonProps) {
+function TabButton({ route, focused, color, label, onPress, onLongPress, isActiveTab }: TabButtonProps) {
   const { theme } = useTheme();
   const bounce = useSharedValue(1);
   const labelProgress = useSharedValue(focused ? 1 : 0);
@@ -86,62 +72,30 @@ function TabButton({
   }));
 
   const handlePress = () => {
-    bounce.value = withSequence(
-      withTiming(0.85, { duration: 80 }),
-      withSpring(1, { damping: 10, stiffness: 200 }),
-    );
+    bounce.value = withSequence(withTiming(0.85, { duration: 80 }), withSpring(1, { damping: 10, stiffness: 200 }));
     onPress();
   };
 
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityState={{ selected: focused }}
-      onLongPress={onLongPress}
-      onPress={handlePress}
-      style={styles.pressable}
-      accessibilityLabel={`${label} tab`}
-      accessibilityHint={`Navigate to ${label}`}
-    >
+    <Pressable accessibilityRole="button" accessibilityState={{ selected: focused }} onLongPress={onLongPress} onPress={handlePress} style={styles.pressable} accessibilityLabel={`${label} tab`} accessibilityHint={`Navigate to ${label}`}>
       <View style={styles.item}>
         <View style={styles.iconShell}>
           <Animated.View style={iconStyle}>
-            <Icon
-              color={color}
-              name={ICONS[route.name as keyof typeof ICONS]}
-              size={24}
-              variant={focused ? "solid" : "outline"}
-            />
+            <Icon color={color} name={ICONS[route.name as keyof typeof ICONS]} size={24} variant={focused ? "solid" : "outline"} />
           </Animated.View>
         </View>
         <Animated.View style={labelStyle}>
-          <Text
-            color={
-              focused ? theme.colors.text.primary : theme.colors.text.tertiary
-            }
-            style={styles.label}
-            variant="caption"
-          >
+          <Text color={focused ? theme.colors.text.primary : theme.colors.text.tertiary} style={styles.label} variant="caption">
             {label}
           </Text>
         </Animated.View>
-        <Animated.View
-          style={[
-            styles.indicator,
-            { backgroundColor: theme.colors.primary[500] },
-            indicatorStyle,
-          ]}
-        />
+        <Animated.View style={[styles.indicator, { backgroundColor: theme.colors.primary[500] }, indicatorStyle]} />
       </View>
     </Pressable>
   );
 }
 
-export function VexTabBar({
-  state,
-  descriptors,
-  navigation,
-}: BottomTabBarProps): JSX.Element {
+export function VexTabBar({ state, descriptors, navigation }: BottomTabBarProps): JSX.Element {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const userId = useAuthStore((store) => store.user?.id ?? null);
@@ -167,11 +121,8 @@ export function VexTabBar({
       ]}
     >
       {state.routes.map((route) => {
-        const focused =
-          state.index === state.routes.findIndex((r) => r.key === route.key);
-        const color = focused
-          ? theme.colors.semantic.tabActive
-          : theme.colors.semantic.tabInactive;
+        const focused = state.index === state.routes.findIndex((r) => r.key === route.key);
+        const color = focused ? theme.colors.semantic.tabActive : theme.colors.semantic.tabInactive;
         const onPress = () => {
           const event = navigation.emit({
             type: "tabPress",
@@ -182,20 +133,7 @@ export function VexTabBar({
             navigation.navigate(route.name);
           }
         };
-        return (
-          <TabButton
-            color={color}
-            focused={focused}
-            isActiveTab={focused}
-            key={route.key}
-            label={descriptors[route.key]?.options.title ?? route.name}
-            onLongPress={() =>
-              navigation.emit({ type: "tabLongPress", target: route.key })
-            }
-            onPress={onPress}
-            route={route}
-          />
-        );
+        return <TabButton color={color} focused={focused} isActiveTab={focused} key={route.key} label={descriptors[route.key]?.options.title ?? route.name} onLongPress={() => navigation.emit({ type: "tabLongPress", target: route.key })} onPress={onPress} route={route} />;
       })}
     </View>
   );

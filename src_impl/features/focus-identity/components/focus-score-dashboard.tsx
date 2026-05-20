@@ -68,8 +68,8 @@ export function FocusScoreDashboard({ model, onRetry, onStartSession, onOpenMont
     return (
       <EmptyState
         icon="◎"
-        title="Your Focus Score starts after session one"
-        body="Complete one focused session and VEX will unlock your signal map, score trend, and next target."
+        title="Your Focus Score needs three sessions"
+        body="Finish three sessions and VEX will start reading your focus rhythm."
         actionLabel="Start session"
         onAction={onStartSession}
       />
@@ -123,8 +123,8 @@ export function FocusScoreDashboard({ model, onRetry, onStartSession, onOpenMont
             </View>
           </View>
         ))}
-        <Text variant="bodySmall" color={theme.colors.text.secondary}>Strongest pattern: {strongestWeakest?.strongest[0]}</Text>
-        <Text variant="bodySmall" color={theme.colors.text.secondary}>Weakest pattern: {strongestWeakest?.weakest[0]}</Text>
+        <Text variant="bodySmall" color={theme.colors.text.secondary}>Strongest pattern: {strongestWeakest?.strongest?.[0] ?? '—'}</Text>
+        <Text variant="bodySmall" color={theme.colors.text.secondary}>Weakest pattern: {strongestWeakest?.weakest?.[0] ?? '—'}</Text>
       </View>
       <View style={{ borderWidth: 1, borderColor: theme.colors.border.light, borderRadius: theme.borderRadius.lg, padding: theme.spacing[4], gap: theme.spacing[2], backgroundColor: theme.colors.background.secondary }}>
         <Text variant="h4" color={theme.colors.text.primary}>What changed</Text>

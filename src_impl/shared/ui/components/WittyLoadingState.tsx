@@ -96,8 +96,8 @@ const wittyMessages: Record<LoadingContext, string[]> = {
 };
 
 function getRandomMessage(context: LoadingContext): string {
-  const messages = wittyMessages[context] || wittyMessages.default;
-  return messages[Math.floor(Math.random() * messages.length)];
+  const messages: string[] = wittyMessages[context] ?? wittyMessages.default;
+  return messages[Math.floor(Math.random() * messages.length)]!;
 }
 
 export function WittyLoadingState({

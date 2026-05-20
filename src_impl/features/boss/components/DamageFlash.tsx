@@ -18,6 +18,8 @@ import Animated, {
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export interface DamageFlashProps {
   /** Damage amount to display */
@@ -100,7 +102,7 @@ export function DamageFlash({
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: isCritical ? '#EF4444' : '#F87171', // Red flash
+            backgroundColor: isCritical ? launchColors.hex_ef4444 : launchColors.hex_f87171, // Red flash
           },
           flashStyle,
         ]}
@@ -112,20 +114,20 @@ export function DamageFlash({
           px="lg"
           py="md"
           borderRadius="xl"
-          bg="rgba(0,0,0,0.6)"
+          bg={launchColors.rgb_0_0_0_0_6}
         >
           <Text
             variant="h1"
-            color={isCritical ? '#EF4444' : '#FCA5A5'}
+            color={isCritical ? launchColors.hex_ef4444 : launchColors.hex_fca5a5}
             fontWeight="900"
-            style={{ textShadowColor: 'rgba(0,0,0,0.5)', textShadowRadius: 4 }}
+            style={{ textShadowColor: launchColors.rgb_0_0_0_0_5, textShadowRadius: 4 }}
           >
             -{damage}
           </Text>
           {isCritical && (
             <Text
               variant="caption"
-              color="#EF4444"
+              color={launchColors.hex_ef4444}
               textAlign="center"
               fontWeight="700"
             >
@@ -143,7 +145,7 @@ export function DamageFlash({
               position: 'absolute',
               width: '100%',
               height: 2,
-              backgroundColor: '#EF4444',
+              backgroundColor: launchColors.hex_ef4444,
               top: '40%',
             },
             flashStyle,

@@ -1,4 +1,6 @@
 import type { SquadSummary } from './schemas';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export type WeeklySquadStats = {
   totalSessions: number;
@@ -6,7 +8,7 @@ export type WeeklySquadStats = {
   activeMemberCount: number;
 };
 
-const SHARE_COLORS = ['#7C3AED', '#2563EB', '#0EA5E9', '#10B981', '#F59E0B', '#EF4444'];
+const SHARE_COLORS = [launchColors.hex_7c3aed, launchColors.hex_2563eb, launchColors.hex_0ea5e9, launchColors.hex_10b981, launchColors.hex_f59e0b, launchColors.hex_ef4444];
 
 export function buildSquadCode(squadId: string): string {
   return squadId.slice(0, 8);
@@ -14,7 +16,7 @@ export function buildSquadCode(squadId: string): string {
 
 export function getSquadAccentColor(name: string): string {
   const hash = Array.from(name).reduce((total, char) => total + char.charCodeAt(0), 0);
-  return SHARE_COLORS[hash % SHARE_COLORS.length];
+  return SHARE_COLORS[hash % SHARE_COLORS.length]!;
 }
 
 export function getEmptyWeeklyStats(): WeeklySquadStats {

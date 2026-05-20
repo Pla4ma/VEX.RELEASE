@@ -41,7 +41,8 @@ export class HomeRecommendationEngine {
         debug.error(`[HomeRecommendationEngine] Rule ${rule.name} failed`, toError(error));
       }
     }
-    return RECOMMENDATION_RULES[RECOMMENDATION_RULES.length - 1].generate(this.context);
+    const fallbackRule = RECOMMENDATION_RULES[RECOMMENDATION_RULES.length - 1]!;
+    return fallbackRule.generate(this.context);
   }
 
   getAllApplicable(): HomeRecommendation[] {

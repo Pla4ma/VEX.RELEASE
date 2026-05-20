@@ -1,5 +1,7 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import React,{useState,useCallback}from'react'; import{ScrollView,Pressable,View}from'react-native'; import{useSafeAreaInsets}from'react-native-safe-area-context'; import type{NativeStackScreenProps}from'@react-navigation/native-stack'; import{useTheme,ThemeMode}from'../../theme'; import{Box,Text,Card}from'../../components/primitives'; import{Icon}from'../../icons'; import type{SettingsStackParams}from'../../navigation'; type Props=NativeStackScreenProps<SettingsStackParams,'AppearanceSettings'>;type FontSize='small'|'medium'|'large';type TimerFormat='countdown'|'countup';type AccentColor='indigo'|'purple'|'blue'|'green'|'orange'|'pink'|'red'|'teal';interface ThemeOption{id:ThemeMode;label:string;icon:string;}interface AccentColorOption{id:AccentColor;hex:string;}interface FontSizeOption{id:FontSize;label:string;sampleSize:number;}interface TimerFormatOption{id:TimerFormat;label:string;preview:string;}const THEME_OPTIONS:ThemeOption[] = [{id:'dark',label:'Dark',icon:'moon'},{id:'light',label:'Light',icon:'sun'},{id:'system',label:'System',icon:'monitor'}]; const ACCENT_COLORS:AccentColorOption[] = [{id:'indigo',hex:'#6366F1'},{id:'purple',hex:'#A855F7'},{id:'blue',hex:'#3B82F6'},{id:'green',hex:'#10B981'},{id:'orange',hex:'#F97316'},{id:'pink',hex:'#EC4899'},{id:'red',hex:'#EF4444'},{id:'teal',hex:'#14B8A6'}]; const FONT_SIZE_OPTIONS:FontSizeOption[] = [{id:'small',label:'Small',sampleSize:14},{id:'medium',label:'Medium',sampleSize:16},{id:'large',label:'Large',sampleSize:18}]; const TIMER_FORMAT_OPTIONS:TimerFormatOption[] = [{id:'countdown',label:'Countdown',preview:'24:59'},{id:'countup',label:'Count Up',preview:'00:01'}]; export const AppearanceSettingsScreen:React.FC<Props> = ({navigation})=>{const{theme,mode,setMode} = useTheme(); const insets = useSafeAreaInsets(); const[selectedTheme,setSelectedTheme] = useState<ThemeMode>(mode); const[accentColor,setAccentColor] = useState<AccentColor>('indigo'); const[fontSize,setFontSize] = useState<FontSize>('medium'); const[timerFormat,setTimerFormat] = useState<TimerFormat>('countdown'); const handleThemeChange = useCallback((newTheme:ThemeMode)=>{setSelectedTheme(newTheme); setMode(newTheme);},[setMode]); const handleAccentColorChange = useCallback((color:AccentColor)=>{setAccentColor(color);},[]); const handleFontSizeChange = useCallback((size:FontSize)=>{setFontSize(size);},[]); const handleTimerFormatChange = useCallback((format:TimerFormat)=>{setTimerFormat(format);},[]); const getFontSizeMultiplier = ():number=>{switch(fontSize){case'small':return 0.875; case'large':return 1.125; default:return 1;}}; return<Box flex={1}style={{backgroundColor:theme.colors.background.primary}}>
+import React,{useState,useCallback}from'react'; import{ScrollView,Pressable,View}from'react-native'; import{useSafeAreaInsets}from'react-native-safe-area-context'; import type{NativeStackScreenProps}from'@react-navigation/native-stack'; import{useTheme,ThemeMode}from'../../theme'; import{Box,Text,Card}from'../../components/primitives'; import{Icon}from'../../icons'; import type{SettingsStackParams}from'../../navigation';
+import { launchColors } from '@theme/tokens/launch-colors';
+ type Props=NativeStackScreenProps<SettingsStackParams,'AppearanceSettings'>;type FontSize='small'|'medium'|'large';type TimerFormat='countdown'|'countup';type AccentColor='indigo'|'purple'|'blue'|'green'|'orange'|'pink'|'red'|'teal';interface ThemeOption{id:ThemeMode;label:string;icon:string;}interface AccentColorOption{id:AccentColor;hex:string;}interface FontSizeOption{id:FontSize;label:string;sampleSize:number;}interface TimerFormatOption{id:TimerFormat;label:string;preview:string;}const THEME_OPTIONS:ThemeOption[] = [{id:'dark',label:'Dark',icon:'moon'},{id:'light',label:'Light',icon:'sun'},{id:'system',label:'System',icon:'monitor'}]; const ACCENT_COLORS:AccentColorOption[] = [{id:'indigo',hex:launchColors.hex_6366f1},{id:'purple',hex:launchColors.hex_a855f7},{id:'blue',hex:launchColors.hex_3b82f6},{id:'green',hex:launchColors.hex_10b981},{id:'orange',hex:launchColors.hex_f97316},{id:'pink',hex:launchColors.hex_ec4899},{id:'red',hex:launchColors.hex_ef4444},{id:'teal',hex:launchColors.hex_14b8a6}]; const FONT_SIZE_OPTIONS:FontSizeOption[] = [{id:'small',label:'Small',sampleSize:14},{id:'medium',label:'Medium',sampleSize:16},{id:'large',label:'Large',sampleSize:18}]; const TIMER_FORMAT_OPTIONS:TimerFormatOption[] = [{id:'countdown',label:'Countdown',preview:'24:59'},{id:'countup',label:'Count Up',preview:'00:01'}]; export const AppearanceSettingsScreen:React.FC<Props> = ({navigation})=>{const{theme,mode,setMode} = useTheme(); const insets = useSafeAreaInsets(); const[selectedTheme,setSelectedTheme] = useState<ThemeMode>(mode); const[accentColor,setAccentColor] = useState<AccentColor>('indigo'); const[fontSize,setFontSize] = useState<FontSize>('medium'); const[timerFormat,setTimerFormat] = useState<TimerFormat>('countdown'); const handleThemeChange = useCallback((newTheme:ThemeMode)=>{setSelectedTheme(newTheme); setMode(newTheme);},[setMode]); const handleAccentColorChange = useCallback((color:AccentColor)=>{setAccentColor(color);},[]); const handleFontSizeChange = useCallback((size:FontSize)=>{setFontSize(size);},[]); const handleTimerFormatChange = useCallback((format:TimerFormat)=>{setTimerFormat(format);},[]); const getFontSizeMultiplier = ():number=>{switch(fontSize){case'small':return 0.875; case'large':return 1.125; default:return 1;}}; return<Box flex={1}style={{backgroundColor:theme.colors.background.primary}}>
       <ScrollView showsVerticalScrollIndicator={false}>
         {}
         <Box px={20}pb={16}pt={insets.top + 16}flexDirection="row"alignItems="center">
@@ -16,7 +18,7 @@ import React,{useState,useCallback}from'react'; import{ScrollView,Pressable,View
           </Text>
           <Card size="md"style={{backgroundColor:theme.colors.background.secondary,alignItems:'center',justifyContent:'center',paddingVertical:32}}>
             <Box width={60}height={60}borderRadius={30}justifyContent="center"alignItems="center"mb={16}style={{backgroundColor:ACCENT_COLORS.find(c=>c.id === accentColor)?.hex || theme.colors.primary[500]}}>
-              <Icon name="timer"size={28}color="#FFF"/>
+              <Icon name="timer"size={28}color={launchColors.hex_fff}/>
             </Box>
             <Text variant="h3"style={{fontSize:36 * getFontSizeMultiplier(),fontWeight:'700',color:theme.colors.text.primary}}>
               {TIMER_FORMAT_OPTIONS.find(f=>f.id === timerFormat)?.preview || '24:59'}
@@ -46,7 +48,7 @@ import React,{useState,useCallback}from'react'; import{ScrollView,Pressable,View
                   </Box>
 
                   {selectedTheme === option.id && <Box width={24}height={24}borderRadius={12}justifyContent="center"alignItems="center"style={{backgroundColor:theme.colors.primary[500]}}>
-                      <Icon name="check"size={14}color="#FFF"/>
+                      <Icon name="check"size={14}color={launchColors.hex_fff}/>
                     </Box>}
                 </Pressable>
                 {index < THEME_OPTIONS.length - 1 && <Box height={1}ml={68}style={{backgroundColor:theme.colors.border.light}}/>}
@@ -62,7 +64,7 @@ import React,{useState,useCallback}from'react'; import{ScrollView,Pressable,View
           <Card size="sm"style={{padding:16}}>
             <Box flexDirection="row"flexWrap="wrap"justifyContent="space-between">
               {ACCENT_COLORS.map(color=><Pressable key={color.id}onPress={()=>handleAccentColorChange(color.id)}style={{width:64,height:64,borderRadius:16,marginBottom:12,justifyContent:'center',alignItems:'center',backgroundColor:color.hex,borderWidth:accentColor === color.id ? 3 : 0,borderColor:theme.colors.text.primary}}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
-                  {accentColor === color.id && <Icon name="check"size={24}color="#FFF"/>}
+                  {accentColor === color.id && <Icon name="check"size={24}color={launchColors.hex_fff}/>}
                 </Pressable>)}
             </Box>
           </Card>
@@ -89,7 +91,7 @@ import React,{useState,useCallback}from'react'; import{ScrollView,Pressable,View
                   </Box>
 
                   {fontSize === option.id && <Box width={24}height={24}borderRadius={12}justifyContent="center"alignItems="center"style={{backgroundColor:theme.colors.primary[500]}}>
-                      <Icon name="check"size={14}color="#FFF"/>
+                      <Icon name="check"size={14}color={launchColors.hex_fff}/>
                     </Box>}
                 </Pressable>
                 {index < FONT_SIZE_OPTIONS.length - 1 && <Box height={1}ml={68}style={{backgroundColor:theme.colors.border.light}}/>}
@@ -118,7 +120,7 @@ import React,{useState,useCallback}from'react'; import{ScrollView,Pressable,View
                   </Box>
 
                   {timerFormat === option.id && <Box width={24}height={24}borderRadius={12}justifyContent="center"alignItems="center"style={{backgroundColor:theme.colors.primary[500]}}>
-                      <Icon name="check"size={14}color="#FFF"/>
+                      <Icon name="check"size={14}color={launchColors.hex_fff}/>
                     </Box>}
                 </Pressable>
                 {index < TIMER_FORMAT_OPTIONS.length - 1 && <Box height={1}ml={68}style={{backgroundColor:theme.colors.border.light}}/>}

@@ -46,7 +46,13 @@ export const routeParamSchemas = {
     year: z.number().int().min(2020).max(2100).optional(),
   }).strict().optional(),
   Onboarding: z.object({ step: z.number().int().nonnegative().optional() }).strict(),
-  Paywall: z.object({ source: optionalShortText, gatedFeature: optionalShortText }).strict(),
+  Paywall: z.object({
+    contextBody: optionalShortText,
+    contextCta: optionalShortText,
+    contextHeadline: optionalShortText,
+    gatedFeature: optionalShortText,
+    source: optionalShortText,
+  }).strict(),
   PostSessionStory: z.object({
     sessionId: uuidish,
     focusScore: z.number().optional(),

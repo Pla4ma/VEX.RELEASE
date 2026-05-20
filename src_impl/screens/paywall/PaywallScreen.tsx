@@ -28,7 +28,12 @@ import { paywallStyles as styles } from './paywall-styles';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
-type PaywallRouteProp = RouteProp<ExtendedRootStackParams, 'Paywall'>;
+type PaywallRouteParams = ExtendedRootStackParams['Paywall'] & {
+  contextBody?: string;
+  contextCta?: string;
+  contextHeadline?: string;
+};
+type PaywallRouteProp = RouteProp<ExtendedRootStackParams & { Paywall: PaywallRouteParams }, 'Paywall'>;
 
 function isPlanSelection(
   value: PaywallPlanSelection | PurchasesPackageDisplayInfo | undefined,
@@ -47,6 +52,9 @@ export const PaywallScreen = withScreenErrorBoundary(function _PaywallScreen(): 
 
   const source = route.params?.source ?? 'unknown';
   const gatedFeature = route.params?.gatedFeature ?? 'premium_access';
+  const contextBody = route.params?.contextBody;
+  const contextCta = route.params?.contextCta;
+  const contextHeadline = route.params?.contextHeadline;
   const featureHighlight = FEATURE_HIGHLIGHT_MAP[gatedFeature];
   const hasLivePackages = packages.length > 0;
   const packageSelection = useMemo(() => buildPackageSelection(packages), [packages]);
@@ -138,6 +146,8 @@ export const PaywallScreen = withScreenErrorBoundary(function _PaywallScreen(): 
       >
         <StaggeredEnter direction="up" speed="normal" staggerDelay={80} containerStyle={styles.content}>
           <PaywallHero
+            contextBody={contextBody}
+            contextHeadline={contextHeadline}
             featureHighlight={featureHighlight}
             isPremium={isPremium}
             showBoundary={!isLoading && !error}
@@ -166,6 +176,7 @@ export const PaywallScreen = withScreenErrorBoundary(function _PaywallScreen(): 
             hasLivePackages={hasLivePackages}
             isLoading={isLoading}
             isPremium={isPremium}
+            primaryCtaLabel={contextCta}
             plans={packageSelection}
             onPurchase={handlePurchase}
             onRestore={handleRestore}

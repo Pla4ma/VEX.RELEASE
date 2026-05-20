@@ -7,6 +7,8 @@ import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme';
 import { useMasteryRankUpSpectacle } from '../../spectacle/hooks';
 import { getMasteryRankDisplay } from '../types';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export function MasteryRankUpOverlay(): JSX.Element | null {
   const { theme } = useTheme();
@@ -26,7 +28,7 @@ export function MasteryRankUpOverlay(): JSX.Element | null {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0,0,0,0.85)',
+        backgroundColor: launchColors.rgb_0_0_0_0_85,
         justifyContent: 'center',
         alignItems: 'center',
         zIndex: 1000,

@@ -25,16 +25,14 @@ export function SessionContractReflectionCard({
   isPending,
 }: SessionContractReflectionCardProps): React.JSX.Element | null {
   const { theme } = useTheme();
-  const [selectedStatus, setSelectedStatus] = React.useState<ReflectionStatus | null>(
-    contract?.completionStatus && contract.completionStatus !== 'skipped' ? contract.completionStatus : null,
-  );
+  const reflectedStatus =
+    contract?.completionStatus && contract.completionStatus !== 'skipped' ? contract.completionStatus : null;
 
   if (!contract) {
     return null;
   }
 
   const handleReflect = (status: ReflectionStatus): void => {
-    setSelectedStatus(status);
     void triggerHaptic(status === 'done' ? 'success' : 'impactLight');
     onReflect(status);
   };
@@ -55,19 +53,19 @@ export function SessionContractReflectionCard({
             key={option.status}
             accessibilityHint={option.hint}
             accessibilityLabel={`Focus contract reflection: ${option.label}`}
-            disabled={isPending}
+            disabled={isPending || Boolean(reflectedStatus)}
             haptic="none"
             mb="sm"
             onPress={() => handleReflect(option.status)}
-            variant={selectedStatus === option.status ? 'primary' : 'outline'}
+            variant={reflectedStatus === option.status ? 'primary' : 'outline'}
           >
             {option.label}
           </Button>
         ))}
       </Box>
-      {selectedStatus ? (
+      {reflectedStatus ? (
         <Text variant="caption" color="text.secondary" mt="md">
-          {getReflectionCopy(selectedStatus)}
+          {getReflectionCopy(reflectedStatus)}
         </Text>
       ) : null}
     </Box>

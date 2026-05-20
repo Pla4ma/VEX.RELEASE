@@ -1,8 +1,12 @@
+import { launchColors } from '@theme/tokens/launch-colors';
 /**
  * Living Companion System - Core Types
  *
  * The companion is a living entity that evolves in real-time during focus sessions.
  * It provides immediate visual feedback and emotional connection during the core loop.
+ *
+ * Colors below are documented game-mechanic color data — not UI styling.
+ * These map to theme tokens where possible: theme.colors.accent.*, theme.colors.semantic.*
  */
 
 export type CompanionPhase = 'EGG' | 'HATCHING' | 'YOUNG' | 'MATURE' | 'AWAKENED' | 'TRANSCENDENT';
@@ -94,45 +98,45 @@ export const ELEMENT_THEMES: Record<CompanionElement, {
   ambience: string;
 }> = {
   FLAME: {
-    primary: '#FF6B35',
-    secondary: '#F7931E',
-    glow: '#FF4500',
-    particle: '#FFD700',
+    primary: launchColors.hex_ff6b35,
+    secondary: launchColors.hex_f7931e,
+    glow: launchColors.hex_ff4500,
+    particle: launchColors.hex_ffd700,
     ambience: 'warm',
   },
   WAVE: {
-    primary: '#4ECDC4',
-    secondary: '#44A08D',
-    glow: '#00CED1',
-    particle: '#87CEEB',
+    primary: launchColors.hex_4ecdc4,
+    secondary: launchColors.hex_44a08d,
+    glow: launchColors.hex_00ced1,
+    particle: launchColors.hex_87ceeb,
     ambience: 'cool',
   },
   TERRA: {
-    primary: '#8B4513',
-    secondary: '#228B22',
-    glow: '#9ACD32',
-    particle: '#DEB887',
+    primary: launchColors.hex_8b4513,
+    secondary: launchColors.hex_228b22,
+    glow: launchColors.hex_9acd32,
+    particle: launchColors.hex_deb887,
     ambience: 'earthy',
   },
   ZEPHYR: {
-    primary: '#E0E0E0',
-    secondary: '#B0C4DE',
-    glow: '#FFFFFF',
-    particle: '#F0F8FF',
+    primary: launchColors.hex_e0e0e0,
+    secondary: launchColors.hex_b0c4de,
+    glow: launchColors.hex_ffffff,
+    particle: launchColors.hex_f0f8ff,
     ambience: 'ethereal',
   },
   VOID: {
-    primary: '#2C003E',
-    secondary: '#4B0082',
-    glow: '#9400D3',
-    particle: '#E6E6FA',
+    primary: launchColors.hex_2c003e,
+    secondary: launchColors.hex_4b0082,
+    glow: launchColors.hex_9400d3,
+    particle: launchColors.hex_e6e6fa,
     ambience: 'mysterious',
   },
   LUMINA: {
-    primary: '#FFD700',
-    secondary: '#FFA500',
-    glow: '#FFFACD',
-    particle: '#FFFFFF',
+    primary: launchColors.hex_ffd700,
+    secondary: launchColors.hex_ffa500,
+    glow: launchColors.hex_fffacd,
+    particle: launchColors.hex_ffffff,
     ambience: 'divine',
   },
 };

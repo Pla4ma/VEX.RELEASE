@@ -10,6 +10,8 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { FlashList, type ListRenderItem } from '@shopify/flash-list';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface SquadMember {
   userId: string;
@@ -27,13 +29,13 @@ export function SquadMemberList({ members }: SquadMemberListProps): JSX.Element 
   const getRoleColor = (role: string) => {
     switch (role) {
       case 'FOUNDER':
-        return '#FFD700';
+        return launchColors.hex_ffd700;
       case 'LEADER':
-        return '#C0C0C0';
+        return launchColors.hex_c0c0c0;
       case 'ELITE':
-        return '#CD7F32';
+        return launchColors.hex_cd7f32;
       default:
-        return '#9E9E9E';
+        return launchColors.hex_9e9e9e;
     }
   };
 
@@ -71,13 +73,13 @@ const styles = createSheet({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#2a2a3e',
+    borderBottomColor: launchColors.hex_2a2a3e,
   },
   avatar: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#3a3a4e',
+    backgroundColor: launchColors.hex_3a3a4e,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -91,7 +93,7 @@ const styles = createSheet({
   name: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: launchColors.hex_fff,
   },
   role: {
     fontSize: 12,

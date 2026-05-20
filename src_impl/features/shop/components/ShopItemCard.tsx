@@ -9,6 +9,8 @@ import type { ItemDefinition } from '../../items/schemas';
 import type { LimitedOffer } from '../../economy/schemas';
 import { RARITY_COLORS, ITEM_WIDTH } from './shop-constants';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface ShopItemCardProps {
   item: ItemDefinition;
@@ -91,7 +93,7 @@ const styles = createSheet({
   iconContainer: {
     width: '100%',
     aspectRatio: 1,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: launchColors.hex_f3f4f6,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
@@ -103,13 +105,13 @@ const styles = createSheet({
     position: 'absolute',
     top: -8,
     right: -8,
-    backgroundColor: '#EF4444',
+    backgroundColor: launchColors.hex_ef4444,
     borderRadius: 12,
     paddingHorizontal: 6,
     paddingVertical: 2,
   },
   discountText: {
-    color: '#FFFFFF',
+    color: launchColors.hex_ffffff,
     fontSize: 10,
     fontWeight: '700',
   },
@@ -118,13 +120,13 @@ const styles = createSheet({
     top: '50%',
     left: '50%',
     transform: [{ translateX: -25 }, { translateY: -10 }],
-    backgroundColor: 'rgba(0,0,0,0.7)',
+    backgroundColor: launchColors.rgb_0_0_0_0_7,
     borderRadius: 8,
     paddingHorizontal: 8,
     paddingVertical: 4,
   },
   levelLockText: {
-    color: '#FFFFFF',
+    color: launchColors.hex_ffffff,
     fontSize: 12,
     fontWeight: '600',
   },
@@ -141,7 +143,7 @@ const styles = createSheet({
   originalPrice: {
     fontSize: 11,
     textDecorationLine: 'line-through',
-    color: '#9CA3AF',
+    color: launchColors.hex_9ca3af,
   },
   priceRow: {
     flexDirection: 'row',
@@ -156,19 +158,19 @@ const styles = createSheet({
     fontWeight: '700',
   },
   priceUnaffordable: {
-    color: '#EF4444',
+    color: launchColors.hex_ef4444,
   },
   limitedBadge: {
     position: 'absolute',
     top: 4,
     left: 4,
-    backgroundColor: '#8B5CF6',
+    backgroundColor: launchColors.hex_8b5cf6,
     borderRadius: 4,
     paddingHorizontal: 4,
     paddingVertical: 2,
   },
   limitedText: {
-    color: '#FFFFFF',
+    color: launchColors.hex_ffffff,
     fontSize: 9,
     fontWeight: '700',
   },

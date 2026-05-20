@@ -6,6 +6,8 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface SettingItemProps {
   label: string;
@@ -37,25 +39,25 @@ const styles = createSheet({
     justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    backgroundColor: '#ffffff',
+    backgroundColor: launchColors.hex_ffffff,
     borderBottomWidth: 1,
-    borderBottomColor: '#e5e7eb',
+    borderBottomColor: launchColors.hex_e5e7eb,
   },
   content: {
     flex: 1,
   },
   label: {
     fontSize: 16,
-    color: '#111827',
+    color: launchColors.hex_111827,
   },
   value: {
     fontSize: 14,
-    color: '#6b7280',
+    color: launchColors.hex_6b7280,
     marginTop: 4,
   },
   arrow: {
     fontSize: 18,
-    color: '#9ca3af',
+    color: launchColors.hex_9ca3af,
     marginLeft: 8,
   },
 });

@@ -23,6 +23,13 @@ jest.mock('../../../rewards/RewardService', () => ({
 jest.mock('../../../store/session-state', () => ({
   useSessionUIStore: { getState: jest.fn().mockReturnValue({ setCompletionSyncState: jest.fn() }) },
 }));
+jest.mock('../../companion-promise/service', () => ({
+  processCompletedSessionPromise: jest.fn().mockResolvedValue({
+    createdPromise: null,
+    fulfilledPromise: null,
+    missedPromise: null,
+  }),
+}));
 jest.mock('../repository', () => ({
   createCompletionLedger: jest.fn(),
   getCompletionLedgerByIdempotencyKey: jest.fn().mockResolvedValue(null),

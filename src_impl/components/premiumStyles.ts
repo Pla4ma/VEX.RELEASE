@@ -1,4 +1,6 @@
 import type { ViewStyle } from 'react-native';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export type PremiumCardSize = 'small' | 'medium' | 'large' | 'hero';
 
@@ -10,7 +12,7 @@ const PREMIUM_RADII: Record<PremiumCardSize, number> = {
 };
 
 export const premiumCardShadow: ViewStyle = {
-  shadowColor: '#000',
+  shadowColor: launchColors.hex_000,
   shadowOffset: { width: 0, height: 8 },
   shadowOpacity: 0.08,
   shadowRadius: 16,

@@ -52,6 +52,7 @@ describe('companion memory service', () => {
     expect(result).toEqual(created);
     expect(repository.createMemory).toHaveBeenCalledWith(
       expect.objectContaining({
+        body: 'You reached grade A with 90% purity. Your companion kept the clean finish.',
         grade: 'A',
         purityScore: 90,
         sessionId,
@@ -141,6 +142,27 @@ describe('companion memory service', () => {
     expect(result.map((memory) => memory.type)).toEqual([
       'first_session',
       'first_30_day_streak',
+    ]);
+    expect(result[0]?.body).toContain('2026-05-14');
+    expect(result[1]?.body).toContain('Day 30');
+  });
+
+  it('varies memory copy from session facts across repeated completions', async () => {
+    jest.mocked(repository.hasMemory).mockResolvedValue(false);
+    jest.mocked(repository.createMemory).mockImplementation(async (memory) => ({
+      ...memory,
+      createdAt: '2026-05-14T12:00:00.000Z',
+      id: '123e4567-e89b-12d3-a456-426614174555',
+    }));
+
+    const first = await maybeCreateMemory(userId, 'first_session', baseContext);
+    const clean = await maybeCreateMemory(userId, 'first_s_grade', baseContext);
+    const best = await maybeCreateMemory(userId, 'personal_best_broken', baseContext);
+
+    expect([first?.body, clean?.body, best?.body]).toEqual([
+      'You finished your first session on 2026-05-14 with grade A. This is where the record begins.',
+      'You reached grade A with 90% purity. Your companion kept the clean finish.',
+      'You moved a saved mark to 90% purity. Your ceiling changed because this session proved it.',
     ]);
   });
 });

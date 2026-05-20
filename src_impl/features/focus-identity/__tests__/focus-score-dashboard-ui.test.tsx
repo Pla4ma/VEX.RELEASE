@@ -70,6 +70,8 @@ describe('FocusScoreDashboard UI states', () => {
     );
     fireEvent.press(screen.getByText('Start session'));
     expect(onStartSession).toHaveBeenCalled();
+    expect(screen.getByText('Your Focus Score needs three sessions')).toBeTruthy();
+    expect(screen.getByText('Finish three sessions and VEX will start reading your focus rhythm.')).toBeTruthy();
   });
 
   it('renders success and monthly report CTA', () => {

@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const NarrativeBeatSchema = z.object({
   id: z.string(),
@@ -50,9 +52,9 @@ export interface FinalStats {
 }
 
 export const THEME_COLORS: Record<NarrativeTheme, string> = {
-  triumph: '#10B981',
-  struggle: '#F59E0B',
-  comeback: '#EF4444',
-  mastery: '#8B5CF6',
-  learning: '#3B82F6',
+  triumph: launchColors.hex_10b981,
+  struggle: launchColors.hex_f59e0b,
+  comeback: launchColors.hex_ef4444,
+  mastery: launchColors.hex_8b5cf6,
+  learning: launchColors.hex_3b82f6,
 };

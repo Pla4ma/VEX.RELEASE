@@ -2,9 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useNetInfo } from '../../../network';
 import type { SessionSummary } from '../../../session/types';
-import { getCompletionLedgerBySessionId } from '../repository';
 import {
-  buildPostSessionStoryViewModel,
+  getPostSessionStoryViewModel,
   type PostSessionStoryViewModel,
 } from '../story-view-model-service';
 
@@ -19,17 +18,7 @@ export function usePostSessionStoryViewModel(input: {
 
   const query = useQuery<PostSessionStoryViewModel | null, Error>({
     enabled: enabled && Boolean(sessionId),
-    queryFn: async () => {
-      const ledger = await getCompletionLedgerBySessionId(sessionId);
-      if (!ledger) {
-        return null;
-      }
-      return buildPostSessionStoryViewModel({
-        degradedWarnings: ledger.degradedSystems,
-        ledger,
-        summary,
-      });
-    },
+    queryFn: async () => getPostSessionStoryViewModel({ sessionId, summary, userId }),
     queryKey: ['session-completion', 'story-view-model', userId, sessionId],
     staleTime: 30_000,
   });

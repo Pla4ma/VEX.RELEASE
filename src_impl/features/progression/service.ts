@@ -18,5 +18,5 @@ export { getProgressionServiceConfig } from './service-enhanced-config';
 import { configureProgressionService as configureSvc } from './service-enhanced';
 
 export function initializeProgressionService() {
-  configureSvc({} as any);
+  configureSvc({});
 }

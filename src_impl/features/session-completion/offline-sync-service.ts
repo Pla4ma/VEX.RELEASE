@@ -132,6 +132,8 @@ export class SessionCompletionOfflineSyncService {
   }
 }
 
-export { sessionCompletionOfflineSync, offlineSyncService, useSessionCompletionOfflineSync } from './offline-sync-exports';
+export const sessionCompletionOfflineSync = new SessionCompletionOfflineSyncService();
+export const offlineSyncService = sessionCompletionOfflineSync;
+export { useSessionCompletionOfflineSync } from './offline-sync-exports';
 export type { SessionCompletionSyncOptions, OfflineSyncReport, QueueResult, SyncStatusResult, ForceRetryResult, DiagnosticsResult } from './offline-sync-types';
 export { SessionCompletionOfflineSyncError } from './offline-sync-types';

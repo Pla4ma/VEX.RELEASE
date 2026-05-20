@@ -3,6 +3,7 @@ import * as repository from '../repository';
 import {
   createContract,
   getCompletionRate,
+  getContractReminderStage,
   reflectOnContract,
   skipContract,
   getReflectionCopy,
@@ -97,5 +98,14 @@ describe('focus-contract service', () => {
     jest.mocked(repository.getContractCompletionRate).mockResolvedValue(1);
 
     await expect(getCompletionRate(userId, 14)).resolves.toBe(1);
+  });
+
+  it('shows contract reminders only in early and late progress windows', () => {
+    expect(getContractReminderStage(null, 10)).toBeNull();
+    expect(getContractReminderStage(contract, 5)).toBeNull();
+    expect(getContractReminderStage(contract, 10)).toBe('early');
+    expect(getContractReminderStage(contract, 50)).toBeNull();
+    expect(getContractReminderStage(contract, 90)).toBe('late');
+    expect(getContractReminderStage(contract, 100)).toBe('late');
   });
 });

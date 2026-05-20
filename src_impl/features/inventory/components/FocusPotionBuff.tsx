@@ -22,6 +22,8 @@ import Animated, {
 import { useTheme } from '../../../theme';
 import { Box, Text } from '../../../components/primitives';
 import { Icon } from '../../../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface FocusPotionBuffProps {
   style?: ViewStyle;
@@ -49,7 +51,7 @@ export const FocusPotionBuff: React.FC<FocusPotionBuffProps> = ({ style }) => {
     <Animated.View
       style={[
         {
-          shadowColor: '#3B82F6',
+          shadowColor: launchColors.hex_3b82f6,
           shadowOffset: { width: 0, height: 0 },
           shadowRadius: 12,
           elevation: 4,
@@ -64,7 +66,7 @@ export const FocusPotionBuff: React.FC<FocusPotionBuffProps> = ({ style }) => {
         flexDirection="row"
         alignItems="center"
         style={{
-          backgroundColor: '#3B82F6',
+          backgroundColor: launchColors.hex_3b82f6,
         }}
       >
         <Box
@@ -74,16 +76,16 @@ export const FocusPotionBuff: React.FC<FocusPotionBuffProps> = ({ style }) => {
           justifyContent="center"
           alignItems="center"
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+            backgroundColor: launchColors.rgb_255_255_255_0_2,
           }}
         >
-          <Icon name="target" size={16} color="#FFF" />
+          <Icon name="target" size={16} color={launchColors.hex_fff} />
         </Box>
 
         <Box ml={8}>
           <Text
             style={{
-              color: '#FFF',
+              color: launchColors.hex_fff,
               fontWeight: '700',
               fontSize: 12,
             }}
@@ -92,7 +94,7 @@ export const FocusPotionBuff: React.FC<FocusPotionBuffProps> = ({ style }) => {
           </Text>
           <Text
             style={{
-              color: 'rgba(255, 255, 255, 0.85)',
+              color: launchColors.rgb_255_255_255_0_85,
               fontSize: 11,
             }}
           >

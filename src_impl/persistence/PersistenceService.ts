@@ -1,8 +1,6 @@
-import React from 'react';
-import { z } from 'zod';
-import * as Sentry from '@sentry/react-native';
-import { MMKVProvider } from './MMKVProvider';
-
+import { z } from "zod";
+import * as Sentry from "@sentry/react-native";
+import { MMKVProvider } from "./MMKVProvider";
 export interface StorageProvider {
   getItem<T>(key: string): Promise<T | null>;
   setItem<T>(key: string, value: T): Promise<void>;
@@ -12,26 +10,24 @@ export interface StorageProvider {
   multiSet(items: [string, unknown][]): Promise<void>;
   clear(): Promise<void>;
 }
-
 export type StorageKey =
-  | 'boss:phase_states'
-  | 'boss:taunt_history'
-  | 'premium:subscriptions'
-  | 'premium:paywall_history'
-  | 'shop:wallets'
-  | 'shop:transactions'
-  | 'shop:inventories'
-  | 'squads:data'
-  | 'squads:activity'
-  | 'notifications:history'
-  | 'notifications:scheduled'
-  | 'notifications:preferences'
-  | 'onboarding:states'
-  | 'onboarding:feature_unlocks'
-  | 'analytics:metrics'
-  | 'analytics:experiments'
-  | 'accessibility:preferences';
-
+  | "boss:phase_states"
+  | "boss:taunt_history"
+  | "premium:subscriptions"
+  | "premium:paywall_history"
+  | "shop:wallets"
+  | "shop:transactions"
+  | "shop:inventories"
+  | "squads:data"
+  | "squads:activity"
+  | "notifications:history"
+  | "notifications:scheduled"
+  | "notifications:preferences"
+  | "onboarding:states"
+  | "onboarding:feature_unlocks"
+  | "analytics:metrics"
+  | "analytics:experiments"
+  | "accessibility:preferences";
 export interface PersistenceConfig<T> {
   key: StorageKey;
   schema: z.ZodType<T>;
@@ -39,26 +35,21 @@ export interface PersistenceConfig<T> {
   ttl?: number;
   version?: number;
 }
-
 interface PersistedItem<T> {
   data: T;
   version: number;
   savedAt: number;
   expiresAt?: number;
 }
-
 class PersistenceService {
   private primary: MMKVProvider;
   private cache = new Map<string, unknown>();
-
   constructor() {
     this.primary = new MMKVProvider();
   }
-
   async get<T>(config: PersistenceConfig<T>): Promise<T | null> {
     const cached = this.cache.get(config.key);
     if (cached !== undefined) return cached as T;
-
     try {
       const item = await this.primary.getItem<PersistedItem<T>>(config.key);
       if (!item) return null;
@@ -69,7 +60,7 @@ class PersistenceService {
       const parsed = config.schema.safeParse(item.data);
       if (!parsed.success) {
         Sentry.captureException(parsed.error, {
-          tags: { feature: 'persistence', operation: 'validate' },
+          tags: { feature: "persistence", operation: "validate" },
           extra: { key: config.key },
         });
         return null;
@@ -78,17 +69,18 @@ class PersistenceService {
       return parsed.data;
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: 'persistence', operation: 'get' },
+        tags: { feature: "persistence", operation: "get" },
         extra: { key: config.key },
       });
       return null;
     }
   }
-
   async set<T>(config: PersistenceConfig<T>, data: T): Promise<void> {
     const parsed = config.schema.safeParse(data);
     if (!parsed.success) {
-      throw new Error(`Invalid data for ${config.key}: ${parsed.error.message}`);
+      throw new Error(
+        `Invalid data for ${config.key}: ${parsed.error.message}`,
+      );
     }
     const item: PersistedItem<T> = {
       data,
@@ -101,27 +93,28 @@ class PersistenceService {
       this.cache.set(config.key, data);
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: 'persistence', operation: 'set' },
+        tags: { feature: "persistence", operation: "set" },
         extra: { key: config.key },
       });
       throw error;
     }
   }
-
   async remove<T>(config: PersistenceConfig<T>): Promise<void> {
     await this.primary.removeItem(config.key);
     this.cache.delete(config.key);
   }
-
-  async multiGet<T extends Record<string, unknown>>(
-    configs: { [K in keyof T]: PersistenceConfig<T[K]> },
-  ): Promise<{ [K in keyof T]: T[K] | null }> {
+  async multiGet<T extends Record<string, unknown>>(configs: {
+    [K in keyof T]: PersistenceConfig<T[K]>;
+  }): Promise<{ [K in keyof T]: T[K] | null }> {
     const keys = Object.keys(configs) as (keyof T)[];
     const results = {} as { [K in keyof T]: T[K] | null };
-    await Promise.all(keys.map(async (key) => { results[key] = await this.get(configs[key]); }));
+    await Promise.all(
+      keys.map(async (key) => {
+        results[key] = await this.get(configs[key]);
+      }),
+    );
     return results;
   }
-
   async multiSet<T extends Record<string, unknown>>(
     configs: { [K in keyof T]: PersistenceConfig<T[K]> },
     data: { [K in keyof T]: T[K] },
@@ -132,10 +125,12 @@ class PersistenceService {
       }),
     );
   }
-
-  invalidateCache(key: StorageKey): void { this.cache.delete(key); }
-  invalidateAllCache(): void { this.cache.clear(); }
-
+  invalidateCache(key: StorageKey): void {
+    this.cache.delete(key);
+  }
+  invalidateAllCache(): void {
+    this.cache.clear();
+  }
   async migrate<T>(
     config: PersistenceConfig<T>,
     migrationFn: (oldData: unknown, oldVersion: number) => T,
@@ -146,12 +141,10 @@ class PersistenceService {
       await this.set(config, migrationFn(item.data, item.version));
     }
   }
-
   async clear(): Promise<void> {
     await this.primary.clear();
     this.cache.clear();
   }
-
   async getStorageSize(): Promise<number> {
     const keys = await this.primary.getAllKeys();
     let size = 0;
@@ -162,59 +155,6 @@ class PersistenceService {
     return size;
   }
 }
-
-export const PersistenceConfigs = {
-  bossPhaseStates: { key: 'boss:phase_states' as StorageKey, schema: z.record(z.unknown()), version: 1 },
-  subscriptions: { key: 'premium:subscriptions' as StorageKey, schema: z.record(z.unknown()), version: 1, encrypted: true },
-  paywallHistory: { key: 'premium:paywall_history' as StorageKey, schema: z.array(z.unknown()), version: 1 },
-  wallets: { key: 'shop:wallets' as StorageKey, schema: z.record(z.unknown()), version: 1, encrypted: true },
-  transactions: { key: 'shop:transactions' as StorageKey, schema: z.array(z.unknown()), version: 1 },
-  inventories: { key: 'shop:inventories' as StorageKey, schema: z.record(z.unknown()), version: 1 },
-  squads: { key: 'squads:data' as StorageKey, schema: z.record(z.unknown()), version: 1 },
-  notificationHistory: { key: 'notifications:history' as StorageKey, schema: z.array(z.unknown()), version: 1 },
-  scheduledNotifications: { key: 'notifications:scheduled' as StorageKey, schema: z.array(z.unknown()), version: 1 },
-  onboardingStates: { key: 'onboarding:states' as StorageKey, schema: z.record(z.unknown()), version: 1 },
-};
-
 export const persistence = new PersistenceService();
-
-export function usePersistence<T>(config: PersistenceConfig<T>): {
-  data: T | null;
-  loading: boolean;
-  error: Error | null;
-  save: (newData: T) => Promise<boolean>;
-  refresh: () => Promise<T | null>;
-} {
-  const [data, setData] = React.useState<T | null>(null);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<Error | null>(null);
-
-  React.useEffect(() => {
-    const load = async (): Promise<void> => {
-      try {
-        setLoading(true);
-        const result = await persistence.get(config);
-        setData(result);
-        setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err : new Error('Unknown error'));
-      } finally {
-        setLoading(false);
-      }
-    };
-    void load();
-  }, [config]);
-
-  const save = React.useCallback(async (newData: T): Promise<boolean> => {
-    try {
-      await persistence.set(config, newData);
-      setData(newData);
-      return true;
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('Save failed'));
-      return false;
-    }
-  }, [config]);
-
-  return { data, loading, error, save, refresh: () => persistence.get(config) };
-}
+export { PersistenceConfigs } from "./PersistenceConfigs";
+export { usePersistence } from "./usePersistence";

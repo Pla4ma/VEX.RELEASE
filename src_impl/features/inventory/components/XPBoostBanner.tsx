@@ -23,6 +23,8 @@ import Animated, {
 import { useTheme } from '../../../theme';
 import { Box, Text } from '../../../components/primitives';
 import { Icon } from '../../../icons';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface XPBoostBannerProps {
   expiresAt: number;
@@ -98,8 +100,8 @@ export const XPBoostBanner: React.FC<XPBoostBannerProps> = ({
           flexDirection="row"
           alignItems="center"
           style={{
-            backgroundColor: '#F59E0B',
-            shadowColor: '#F59E0B',
+            backgroundColor: launchColors.hex_f59e0b,
+            shadowColor: launchColors.hex_f59e0b,
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 8,
@@ -114,10 +116,10 @@ export const XPBoostBanner: React.FC<XPBoostBannerProps> = ({
             justifyContent="center"
             alignItems="center"
             style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              backgroundColor: launchColors.rgb_255_255_255_0_2,
             }}
           >
-            <Icon name="zap" size={22} color="#FFF" />
+            <Icon name="zap" size={22} color={launchColors.hex_fff} />
           </Box>
 
           {/* Text Content */}
@@ -125,7 +127,7 @@ export const XPBoostBanner: React.FC<XPBoostBannerProps> = ({
             <Box flexDirection="row" alignItems="center">
               <Text
                 style={{
-                  color: '#FFF',
+                  color: launchColors.hex_fff,
                   fontWeight: '700',
                   fontSize: 16,
                 }}
@@ -138,12 +140,12 @@ export const XPBoostBanner: React.FC<XPBoostBannerProps> = ({
                 py={2}
                 borderRadius={8}
                 style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.25)',
+                  backgroundColor: launchColors.rgb_255_255_255_0_25,
                 }}
               >
                 <Text
                   style={{
-                    color: '#FFF',
+                    color: launchColors.hex_fff,
                     fontWeight: '700',
                     fontSize: 12,
                   }}
@@ -154,7 +156,7 @@ export const XPBoostBanner: React.FC<XPBoostBannerProps> = ({
             </Box>
             <Text
               style={{
-                color: 'rgba(255, 255, 255, 0.9)',
+                color: launchColors.rgb_255_255_255_0_9,
                 fontSize: 13,
                 marginTop: 2,
               }}
@@ -164,7 +166,7 @@ export const XPBoostBanner: React.FC<XPBoostBannerProps> = ({
           </Box>
 
           {/* Arrow */}
-          <Icon name="arrow-right" size={20} color="rgba(255, 255, 255, 0.8)" />
+          <Icon name="arrow-right" size={20} color={launchColors.rgb_255_255_255_0_8} />
         </Box>
       </Pressable>
     </Animated.View>

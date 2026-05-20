@@ -12,6 +12,8 @@ import { View, Text, Pressable } from 'react-native';
 import Animated, { FadeInUp, FadeOut } from 'react-native-reanimated';
 import { useTheme } from '../../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface StreakInsurancePromptProps {
   streakDays: number;
@@ -107,10 +109,10 @@ const styles = createSheet({
   container: {
     marginHorizontal: 16,
     marginTop: 12,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: launchColors.hex_1a1a2e,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#e94560',
+    borderColor: launchColors.hex_e94560,
     overflow: 'hidden',
   },
   content: {
@@ -123,7 +125,7 @@ const styles = createSheet({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: 'rgba(233, 69, 96, 0.2)',
+    backgroundColor: launchColors.rgb_233_69_96_0_2,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -151,7 +153,7 @@ const styles = createSheet({
     borderRadius: 8,
   },
   buttonText: {
-    color: '#fff',
+    color: launchColors.hex_fff,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -163,12 +165,12 @@ const styles = createSheet({
     fontSize: 12,
   },
   warningBanner: {
-    backgroundColor: 'rgba(233, 69, 96, 0.1)',
+    backgroundColor: launchColors.rgb_233_69_96_0_1,
     paddingHorizontal: 16,
     paddingVertical: 6,
   },
   warningText: {
-    color: '#e94560',
+    color: launchColors.hex_e94560,
     fontSize: 12,
     textAlign: 'center',
   },

@@ -17,6 +17,8 @@ import { useHaptics } from '../../../utils/haptics';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface MiniBossPreviewProps {
   userId: string;
@@ -42,7 +44,7 @@ export function MiniBossPreview({ userId }: MiniBossPreviewProps): JSX.Element |
     width: 48,
     height: 48,
     borderRadius: theme.borderRadius.lg,
-    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    backgroundColor: launchColors.rgb_239_68_68_0_1,
     justifyContent: 'center' as const,
     alignItems: 'center' as const,
     marginRight: theme.spacing[3],

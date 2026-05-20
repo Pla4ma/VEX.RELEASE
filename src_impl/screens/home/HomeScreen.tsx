@@ -164,7 +164,6 @@ export const HomeScreen = withScreenErrorBoundary(function _HomeScreen(): JSX.El
         streakHoursRemaining={data.streakHoursRemaining ?? 0}
         features={data.controller.disclosure?.features}
         comebackSessionsCompleted={data.comebackSessionsCompleted}
-        primaryRecommendation={data.controller.primaryRecommendation ?? null}
       />
     </AppScreen>
   );

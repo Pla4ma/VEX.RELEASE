@@ -6,6 +6,8 @@
 import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface ShopErrorProps {
   error: Error;
@@ -46,18 +48,18 @@ const styles = createSheet({
   },
   subtitle: {
     fontSize: 14,
-    color: '#6B7280',
+    color: launchColors.hex_6b7280,
     textAlign: 'center',
     marginBottom: 24,
   },
   retryButton: {
     paddingHorizontal: 24,
     paddingVertical: 12,
-    backgroundColor: '#3B82F6',
+    backgroundColor: launchColors.hex_3b82f6,
     borderRadius: 8,
   },
   retryButtonText: {
-    color: '#FFFFFF',
+    color: launchColors.hex_ffffff,
     fontWeight: '600',
   },
 });

@@ -9,6 +9,8 @@
 import React from 'react';
 import { Box, Text } from '@/components/primitives';
 import { useTheme } from '@/theme';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface BattlePassSeasonHeaderProps {
   seasonName: string;
@@ -40,7 +42,7 @@ export function BattlePassSeasonHeader({
           borderRadius="lg"
           bg={isUrgent ? theme.colors.error.DEFAULT : theme.colors.primary[500]}
         >
-          <Text variant="caption" color="#FFFFFF" fontWeight="bold">
+          <Text variant="caption" color={launchColors.hex_ffffff} fontWeight="bold">
             {isUrgent ? '⏰ ' : ''}{daysRemaining} days left
           </Text>
         </Box>

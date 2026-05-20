@@ -8,25 +8,53 @@ import type {
 
 export function buildStakes(
   priority: HomePrimaryPriority,
-  snapshot: HomeContextSnapshot
+  snapshot: HomeContextSnapshot,
 ): HomeStakes {
   switch (priority.type) {
-    case 'FIRST_SESSION':
-      return { what: 'First session completion', atRisk: 'Momentum delay', potentialGain: 'Unlock full app experience' };
     case 'STREAK_CRITICAL':
-      return { what: `${snapshot.streak.currentDays}-day streak`, atRisk: 'Streak reset to 0', potentialGain: 'Keep your momentum alive' };
-    case 'BOSS_FINAL_STRIKE':
-      return { what: 'Boss defeat opportunity', atRisk: 'Boss escapes, no rewards', potentialGain: 'XP, coins, and bragging rights' };
-    case 'COMEBACK':
-      return { what: 'Streak rebuild in progress', potentialGain: 'Double XP during comeback' };
-    case 'COACH_INTERVENTION':
-      return { what: 'AI Coach guidance', potentialGain: 'Optimized path to your goal' };
-    case 'STUDY_PLAN_DUE':
-      return { what: `${snapshot.studyPlan.itemsDue} study items`, atRisk: 'Falling behind schedule', potentialGain: 'Stay on track with your plan' };
-    case 'DAILY_GOAL':
-      return { what: 'Daily focus goal', potentialGain: 'Build consistent habit' };
-    default:
-      return { what: 'Daily focus session' };
+      return {
+        atRisk: 'Your streak resets if today ends cold.',
+        potentialGain: 'You keep the thread alive with one clean session.',
+        what: `${snapshot.streak.currentDays}-day streak`,
+      };
+    case 'COMPANION_PROMISE':
+      return {
+        atRisk: 'The promise thread goes quiet if you skip it.',
+        potentialGain: 'You keep continuity between yesterday and today.',
+        what: 'Companion promise',
+      };
+    case 'PROMISE_RECOVERY':
+      return {
+        potentialGain: 'A small recovery session turns yesterday into context instead of drift.',
+        what: 'Recovery session',
+      };
+    case 'STREAK_AT_RISK':
+      return {
+        atRisk: 'Momentum weakens if today stays empty.',
+        potentialGain: 'A short session protects the habit before it becomes urgent.',
+        what: 'Today’s habit loop',
+      };
+    case 'RECOMMENDED_SESSION':
+      return {
+        potentialGain: 'VEX already found the cleanest next move for this moment.',
+        what: 'Recommended session',
+      };
+    case 'CHALLENGE_NEAR_DONE':
+      return {
+        atRisk: 'The challenge loses its edge if you leave it hanging.',
+        potentialGain: 'You close out a nearly finished challenge today.',
+        what: snapshot.challenge.title ?? 'Daily challenge',
+      };
+    case 'BOSS_ACTIVE':
+      return {
+        potentialGain: 'Another session chips away at the active boss run.',
+        what: 'Boss run',
+      };
+    case 'DEFAULT_SESSION':
+      return {
+        potentialGain: 'A clean start keeps the app honest and calm.',
+        what: 'Focus session',
+      };
   }
 }
 
@@ -38,33 +66,32 @@ export function buildProgress(snapshot: HomeContextSnapshot): HomeProgress {
   };
 }
 
-function createSecondaryAction(
-  type: string,
-  title: string
-): HomeSecondaryAction {
-  return { type, title, onPress: () => undefined };
+function createSecondaryAction(type: string, title: string): HomeSecondaryAction {
+  return { onPress: () => undefined, title, type };
 }
 
 export function buildSecondaryActions(
-  sortedPriorities: HomePrimaryPriority[]
+  orderedPriorities: HomePrimaryPriority[],
 ): HomeSecondaryAction[] {
-  const actions: HomeSecondaryAction[] = [];
-  for (const priority of sortedPriorities.slice(1, 4)) {
-    if (priority.type === 'STREAK_CRITICAL') {
-      actions.push(createSecondaryAction('streak', 'View streak details'));
+  const actions = orderedPriorities.slice(1).flatMap((priority) => {
+    switch (priority.type) {
+      case 'COMPANION_PROMISE':
+        return [createSecondaryAction('promise', 'Promise thread is waiting')];
+      case 'PROMISE_RECOVERY':
+        return [createSecondaryAction('recovery', 'Recovery session is available')];
+      case 'STREAK_AT_RISK':
+      case 'STREAK_CRITICAL':
+        return [createSecondaryAction('streak', 'Review streak status')];
+      case 'RECOMMENDED_SESSION':
+        return [createSecondaryAction('recommendation', 'See the recommended session')];
+      case 'CHALLENGE_NEAR_DONE':
+        return [createSecondaryAction('challenge', 'Finish your daily challenge')];
+      case 'BOSS_ACTIVE':
+        return [createSecondaryAction('boss', 'Continue the active boss run')];
+      default:
+        return [];
     }
-    if (priority.type === 'BOSS_FINAL_STRIKE') {
-      actions.push(createSecondaryAction('boss', 'Check boss health'));
-    }
-    if (priority.type === 'STUDY_PLAN_DUE') {
-      actions.push(createSecondaryAction('study', 'View study plan'));
-    }
-    if (priority.type === 'COACH_INTERVENTION') {
-      actions.push(createSecondaryAction('coach', 'AI Coach tip'));
-    }
-    if (priority.type === 'COMEBACK') {
-      actions.push(createSecondaryAction('comeback', 'Comeback boost active'));
-    }
-  }
+  });
+
   return actions.slice(0, 3);
 }

@@ -7,6 +7,8 @@ import React from 'react';
 import { View } from 'react-native';
 import { CATEGORIES } from './shop-constants';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export function ShopSkeleton(): React.ReactElement {
   return (
@@ -73,12 +75,12 @@ const styles = createSheet({
     borderRadius: 12,
   },
   skeleton: {
-    backgroundColor: '#E5E7EB',
+    backgroundColor: launchColors.hex_e5e7eb,
   },
   skeletonText: {
     width: '60%',
     height: 12,
-    backgroundColor: '#D1D5DB',
+    backgroundColor: launchColors.hex_d1d5db,
     borderRadius: 4,
     marginTop: 8,
   },

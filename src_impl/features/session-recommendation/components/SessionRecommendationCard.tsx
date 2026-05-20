@@ -32,9 +32,9 @@ export function SessionRecommendationCard({
     const colors: Record<string, string> = {
       'FOCUS': theme.colors.primary[500],
       'RECOVERY': theme.colors.success[500],
-      'STUDY': theme.colors.accent.blue[500],
-      'BOSS_PREP': theme.colors.error[500],
-      'HABIT_BUILD': theme.colors.accent.purple[500],
+      'STUDY': theme.colors.accent.blue?.[500] ?? theme.colors.primary[500],
+      'BOSS_PREP': theme.colors.error?.[500] ?? theme.colors.primary[500],
+      'HABIT_BUILD': theme.colors.accent.purple?.[500] ?? theme.colors.primary[500],
     };
     return colors[mode] || theme.colors.primary[500];
   };

@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export const CreatureStageSchema = z.enum(['EGG', 'BABY', 'TEEN', 'ADULT', 'EPIC']);
 export const PersonalityTraitSchema = z.enum(['EARLY_BIRD', 'NIGHT_OWL', 'STEADY', 'INTENSE', 'SOCIAL', 'EXPLORER']);
@@ -27,7 +29,7 @@ export const StreakCreatureSchema = z.object({
   lastTrainedAt: z.number().nullable().default(null),
   lastGroomedAt: z.number().nullable().default(null),
   sessionPatterns: z.record(z.number()).default({}),
-  color: z.string().default('#E8F4FD'),
+  color: z.string().default(launchColors.hex_e8f4fd),
   accessories: z.array(z.string()).default([]),
   createdAt: z.number(),
   updatedAt: z.number(),
@@ -86,11 +88,11 @@ export interface CreatureStats {
 
 export const CREATURE_CONFIG = {
   EVOLUTION_STAGES: {
-    EGG: { name: 'Focus Egg', minStreak: 0, maxStreak: 2, description: 'A mysterious egg that hatches with consistent focus', abilities: ['potential'], personality: ['mysterious'], emoji: '\uD83E\uDD5A', color: '#E8F4FD' },
-    BABY: { name: 'Focus Sprout', minStreak: 3, maxStreak: 7, description: 'A curious young creature learning to focus', abilities: ['encouragement'], personality: ['playful', 'curious'], emoji: '\uD83C\uDF31', color: '#C8E6C9' },
-    TEEN: { name: 'Focus Companion', minStreak: 8, maxStreak: 14, description: 'An energetic companion that loves challenges', abilities: ['motivation_boost', 'focus_aid'], personality: ['energetic', 'loyal'], emoji: '\uD83E\uDD8A', color: '#FFE0B2' },
-    ADULT: { name: 'Focus Guardian', minStreak: 15, maxStreak: 29, description: 'A wise guardian that protects your focus', abilities: ['streak_protection', 'deep_focus', 'wisdom'], personality: ['wise', 'protective', 'calm'], emoji: '\uD83E\uDD89', color: '#E1BEE7' },
-    EPIC: { name: 'Focus Master', minStreak: 30, maxStreak: 999, description: 'A legendary master of focus and discipline', abilities: ['time_bending', 'perfect_clarity', 'enlightenment'], personality: ['legendary', 'enlightened', 'transcendent'], emoji: '\uD83D\uDC09', color: '#FFD700' },
+    EGG: { name: 'Focus Egg', minStreak: 0, maxStreak: 2, description: 'A mysterious egg that hatches with consistent focus', abilities: ['potential'], personality: ['mysterious'], emoji: '\uD83E\uDD5A', color: launchColors.hex_e8f4fd },
+    BABY: { name: 'Focus Sprout', minStreak: 3, maxStreak: 7, description: 'A curious young creature learning to focus', abilities: ['encouragement'], personality: ['playful', 'curious'], emoji: '\uD83C\uDF31', color: launchColors.hex_c8e6c9 },
+    TEEN: { name: 'Focus Companion', minStreak: 8, maxStreak: 14, description: 'An energetic companion that loves challenges', abilities: ['motivation_boost', 'focus_aid'], personality: ['energetic', 'loyal'], emoji: '\uD83E\uDD8A', color: launchColors.hex_ffe0b2 },
+    ADULT: { name: 'Focus Guardian', minStreak: 15, maxStreak: 29, description: 'A wise guardian that protects your focus', abilities: ['streak_protection', 'deep_focus', 'wisdom'], personality: ['wise', 'protective', 'calm'], emoji: '\uD83E\uDD89', color: launchColors.hex_e1bee7 },
+    EPIC: { name: 'Focus Master', minStreak: 30, maxStreak: 999, description: 'A legendary master of focus and discipline', abilities: ['time_bending', 'perfect_clarity', 'enlightenment'], personality: ['legendary', 'enlightened', 'transcendent'], emoji: '\uD83D\uDC09', color: launchColors.hex_ffd700 },
   },
   PERSONALITY_TRAITS: {
     EARLY_BIRD: { name: 'Early Bird', description: 'Loves morning sessions', trigger: 'morning_sessions', emoji: '\uD83C\uDF05' },

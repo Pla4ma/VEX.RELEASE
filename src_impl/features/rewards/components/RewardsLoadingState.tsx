@@ -10,6 +10,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 export function RewardsLoadingState(): JSX.Element {
   return (
@@ -40,7 +42,7 @@ export function RewardsLoadingState(): JSX.Element {
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: launchColors.hex_1a1a2e,
     padding: 24,
   },
   header: {
@@ -49,14 +51,14 @@ const styles = createSheet({
   skeletonTitle: {
     width: '50%',
     height: 32,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 8,
     marginBottom: 8,
   },
   skeletonSubtitle: {
     width: '70%',
     height: 20,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 4,
   },
   chestsGrid: {
@@ -68,7 +70,7 @@ const styles = createSheet({
   skeletonChest: {
     width: '45%',
     aspectRatio: 1,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 12,
   },
   inventorySection: {
@@ -77,21 +79,21 @@ const styles = createSheet({
   skeletonSectionTitle: {
     width: '40%',
     height: 24,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 4,
     marginBottom: 8,
   },
   skeletonItem: {
     width: '100%',
     height: 60,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 8,
   },
   message: {
     marginTop: 32,
     textAlign: 'center',
     fontSize: 14,
-    color: '#9E9E9E',
+    color: launchColors.hex_9e9e9e,
   },
 });
 

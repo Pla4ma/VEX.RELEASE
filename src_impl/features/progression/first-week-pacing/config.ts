@@ -172,7 +172,7 @@ export function getNextSession(currentSession: FirstWeekSession): FirstWeekSessi
     return null;
   }
 
-  return sessions[currentIndex + 1];
+  return sessions[currentIndex + 1] ?? null;
 }
 
 // Helper function to get session number

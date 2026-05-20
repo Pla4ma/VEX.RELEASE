@@ -6,6 +6,8 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface CurrencyDisplayProps {
   coins: number;
@@ -16,16 +18,16 @@ interface CurrencyDisplayProps {
 export function CurrencyDisplay({ coins, gems, hasSeasonal }: CurrencyDisplayProps): React.ReactElement {
   return (
     <View style={styles.currencyBar}>
-      <View style={[styles.currencyBadge, { backgroundColor: '#F59E0B' }]}>
+      <View style={[styles.currencyBadge, { backgroundColor: launchColors.hex_f59e0b }]}>
         <Text style={styles.currencyIcon}>🪙</Text>
         <Text style={styles.currencyValue}>{coins.toLocaleString()}</Text>
       </View>
-      <View style={[styles.currencyBadge, { backgroundColor: '#3B82F6' }]}>
+      <View style={[styles.currencyBadge, { backgroundColor: launchColors.hex_3b82f6 }]}>
         <Text style={styles.currencyIcon}>💎</Text>
         <Text style={styles.currencyValue}>{gems.toLocaleString()}</Text>
       </View>
       {hasSeasonal && (
-        <View style={[styles.currencyBadge, { backgroundColor: '#8B5CF6' }]}>
+        <View style={[styles.currencyBadge, { backgroundColor: launchColors.hex_8b5cf6 }]}>
           <Text style={styles.currencyIcon}>✨</Text>
           <Text style={styles.currencyValue}>Active</Text>
         </View>
@@ -53,7 +55,7 @@ const styles = createSheet({
     fontSize: 14,
   },
   currencyValue: {
-    color: '#FFFFFF',
+    color: launchColors.hex_ffffff,
     fontWeight: '600',
     fontSize: 14,
   },

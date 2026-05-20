@@ -1,4 +1,6 @@
-import React,{useEffect,useState}from'react'; import{Pressable}from'react-native'; import Animated,{useAnimatedStyle,withRepeat,withSequence,withTiming,withDelay,interpolate,Extrapolate}from'react-native-reanimated'; import{Box}from'../../../components/primitives/Box'; import{Text}from'../../../components/primitives/Text'; import{Button}from'../../../components/primitives/Button'; import{useTheme}from'../../../theme'; import{type PrimeTimeWindow,formatTimeRemaining}from'../BossSpawnScheduler'; interface PrimeTimeBannerProps{window:PrimeTimeWindow;bossName:string;onPress:()=>void;compact?:boolean;}function useGlowAnimation():ReturnType<typeof useAnimatedStyle>{return useAnimatedStyle(()=>({shadowOpacity:withRepeat(withSequence(withTiming(0.3,{duration:1000}),withTiming(0.6,{duration:1000})),-1,true),transform:[{scale:withRepeat(withSequence(withTiming(1,{duration:1000}),withTiming(1.02,{duration:1000})),-1,true)}]}));}function LightningAnimation():JSX.Element{const animatedStyle = useAnimatedStyle(()=>({opacity:withRepeat(withSequence(withTiming(0,{duration:100}),withTiming(1,{duration:100}),withTiming(0,{duration:100}),withDelay(800,withTiming(0,{duration:100}))),-1,false),transform:[{translateX:withRepeat(withSequence(withTiming(-2,{duration:50}),withTiming(2,{duration:50}),withTiming(0,{duration:50})),-1,false)}]})); return<Animated.View style={animatedStyle}>
+import React,{useEffect,useState}from'react'; import{Pressable}from'react-native'; import Animated,{useAnimatedStyle,withRepeat,withSequence,withTiming,withDelay,interpolate,Extrapolate}from'react-native-reanimated'; import{Box}from'../../../components/primitives/Box'; import{Text}from'../../../components/primitives/Text'; import{Button}from'../../../components/primitives/Button'; import{useTheme}from'../../../theme'; import{type PrimeTimeWindow,formatTimeRemaining}from'../BossSpawnScheduler';
+import { launchColors } from '@theme/tokens/launch-colors';
+ interface PrimeTimeBannerProps{window:PrimeTimeWindow;bossName:string;onPress:()=>void;compact?:boolean;}function useGlowAnimation():ReturnType<typeof useAnimatedStyle>{return useAnimatedStyle(()=>({shadowOpacity:withRepeat(withSequence(withTiming(0.3,{duration:1000}),withTiming(0.6,{duration:1000})),-1,true),transform:[{scale:withRepeat(withSequence(withTiming(1,{duration:1000}),withTiming(1.02,{duration:1000})),-1,true)}]}));}function LightningAnimation():JSX.Element{const animatedStyle = useAnimatedStyle(()=>({opacity:withRepeat(withSequence(withTiming(0,{duration:100}),withTiming(1,{duration:100}),withTiming(0,{duration:100}),withDelay(800,withTiming(0,{duration:100}))),-1,false),transform:[{translateX:withRepeat(withSequence(withTiming(-2,{duration:50}),withTiming(2,{duration:50}),withTiming(0,{duration:50})),-1,false)}]})); return<Animated.View style={animatedStyle}>
       <Text fontSize={24}>⚡</Text>
     </Animated.View>;}export function PrimeTimeBanner({window,bossName,onPress,compact = false}:PrimeTimeBannerProps):JSX.Element{const{theme} = useTheme(); const glowStyle = useGlowAnimation(); const[displayTime,setDisplayTime] = useState(window.timeRemainingMinutes); useEffect(()=>{setDisplayTime(window.timeRemainingMinutes); const interval = setInterval(()=>{setDisplayTime(prev=>Math.max(0,prev - 1));},60000); return()=>clearInterval(interval);},[window.timeRemainingMinutes]); if(compact){return<Pressable onPress={onPress}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control">
         <Animated.View style={glowStyle}>
@@ -26,7 +28,7 @@ import React,{useEffect,useState}from'react'; import{Pressable}from'react-native
                 PRIME TIME ACTIVE
               </Text>
             </Box>
-            <Box px="md"py="xs"borderRadius="full"style={{backgroundColor:'rgba(255,255,255,0.3)'}}>
+            <Box px="md"py="xs"borderRadius="full"style={{backgroundColor:launchColors.rgb_255_255_255_0_3}}>
               <Text variant="caption"color="white"fontWeight="700">
                 2× XP
               </Text>
@@ -44,7 +46,7 @@ import React,{useEffect,useState}from'react'; import{Pressable}from'react-native
           </Box>
 
           {}
-          <Box flexDirection="row"alignItems="center"justifyContent="center"gap="sm"mb="lg"p="md"borderRadius="lg"style={{backgroundColor:'rgba(0,0,0,0.2)'}}>
+          <Box flexDirection="row"alignItems="center"justifyContent="center"gap="sm"mb="lg"p="md"borderRadius="lg"style={{backgroundColor:launchColors.rgb_0_0_0_0_2}}>
             <Text fontSize={32}>⏰</Text>
             <Text fontSize={36}fontWeight="900"color="white">
               {formatTimeRemaining(displayTime)}

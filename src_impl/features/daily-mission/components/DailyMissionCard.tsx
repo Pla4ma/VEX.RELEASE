@@ -46,12 +46,12 @@ export function DailyMissionCard({ mission, onPress, onDismiss }: DailyMissionCa
       'first-session': theme.colors.primary[500],
       'sync-repair': theme.colors.warning[500],
       'streak-critical': theme.colors.error[500],
-      'comeback-quest': theme.colors.accent.purple[500],
+      'comeback-quest': theme.colors.accent.purple[500]!,
       'daily-challenge': theme.colors.success[500],
       'boss-fight': theme.colors.error[500],
-      'companion-care': theme.colors.accent.blue[500],
+      'companion-care': theme.colors.accent.blue[500]!,
       'coach-action': theme.colors.primary[500],
-      'squad-goal': theme.colors.accent.green[500],
+      'squad-goal': theme.colors.accent.green[500]!,
       'default-focus': theme.colors.primary[500],
     };
     return colors[type] || theme.colors.primary[500];

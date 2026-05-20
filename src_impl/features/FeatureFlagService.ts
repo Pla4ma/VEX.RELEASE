@@ -6,20 +6,8 @@ import { eventBus } from "../events";
 import { createDebugger } from "../utils/debug";
 import type { Nullable } from "../types/global";
 import { defaultFlags } from "./featureFlagDefaults";
-import {
-  loadFlagsFromStorage,
-  loadOverridesFromStorage,
-  startFetchTimer,
-} from "./featureFlagStorage";
-import {
-  fetchAndApplyRemote,
-  setFlagOverride,
-  clearSingleOverride,
-  clearAllOverridesFn,
-  updateFlagInStore,
-  registerFlagInStore,
-  hashString,
-} from "./featureFlagMutations";
+import { loadFlagsFromStorage, loadOverridesFromStorage, startFetchTimer } from "./featureFlagStorage";
+import { fetchAndApplyRemote, setFlagOverride, clearSingleOverride, clearAllOverridesFn, updateFlagInStore, registerFlagInStore, hashString } from "./featureFlagMutations";
 
 const debug = createDebugger("features");
 
@@ -68,37 +56,21 @@ export class FeatureFlagService {
     Object.values(defaultFlags).forEach((flag) => {
       this.flags.set(flag.key, { ...flag });
     });
-    await loadFlagsFromStorage(
-      this.storage,
-      this.flags,
-      this.config.storageKey,
-    );
+    await loadFlagsFromStorage(this.storage, this.flags, this.config.storageKey);
     if (this.config.enableOverrides) {
-      await loadOverridesFromStorage(
-        this.storage,
-        this.overrides,
-        this.config.storageKey,
-      );
+      await loadOverridesFromStorage(this.storage, this.overrides, this.config.storageKey);
     }
     this.startRemoteFetch();
     this.initialized = true;
   }
 
   private startRemoteFetch(): void {
-    this.fetchTimer = startFetchTimer(
-      this.config.remoteFetchInterval,
-      () => this.fetchRemote(),
-    );
+    this.fetchTimer = startFetchTimer(this.config.remoteFetchInterval, () => this.fetchRemote());
   }
 
   async fetchRemote(): Promise<void> {
     try {
-      this.lastFetchAt = await fetchAndApplyRemote(
-        this.flags,
-        this.storage,
-        this.config.storageKey,
-        this.lastFetchAt,
-      );
+      this.lastFetchAt = await fetchAndApplyRemote(this.flags, this.storage, this.config.storageKey, this.lastFetchAt);
       debug.info("Feature flags updated from remote");
     } catch (error) {
       debug.error("Failed to fetch remote feature flags", error as Error);
@@ -148,31 +120,15 @@ export class FeatureFlagService {
   }
 
   async setOverride(key: string, value: FeatureFlagValue): Promise<void> {
-    await setFlagOverride(
-      this.overrides,
-      this.storage,
-      this.config.storageKey,
-      this.config.enableOverrides,
-      key,
-      value,
-    );
+    await setFlagOverride(this.overrides, this.storage, this.config.storageKey, this.config.enableOverrides, key, value);
   }
 
   async clearOverride(key: string): Promise<void> {
-    await clearSingleOverride(
-      this.overrides,
-      this.storage,
-      this.config.storageKey,
-      key,
-    );
+    await clearSingleOverride(this.overrides, this.storage, this.config.storageKey, key);
   }
 
   async clearAllOverrides(): Promise<void> {
-    await clearAllOverridesFn(
-      this.overrides,
-      this.storage,
-      this.config.storageKey,
-    );
+    await clearAllOverridesFn(this.overrides, this.storage, this.config.storageKey);
   }
 
   getAll(): Record<string, FeatureFlag> {
@@ -183,26 +139,12 @@ export class FeatureFlagService {
     return Array.from(this.flags.keys()).filter((key) => this.isEnabled(key));
   }
 
-  async updateFlag(
-    flag: Partial<FeatureFlag> & { key: string },
-  ): Promise<void> {
-    await updateFlagInStore(
-      this.flags,
-      this.storage,
-      this.config.storageKey,
-      flag,
-    );
+  async updateFlag(flag: Partial<FeatureFlag> & { key: string }): Promise<void> {
+    await updateFlagInStore(this.flags, this.storage, this.config.storageKey, flag);
   }
 
-  async registerFlag(
-    flag: Omit<FeatureFlag, "createdAt" | "updatedAt">,
-  ): Promise<void> {
-    await registerFlagInStore(
-      this.flags,
-      this.storage,
-      this.config.storageKey,
-      flag,
-    );
+  async registerFlag(flag: Omit<FeatureFlag, "createdAt" | "updatedAt">): Promise<void> {
+    await registerFlagInStore(this.flags, this.storage, this.config.storageKey, flag);
   }
 
   setUserId(userId: string): void {
@@ -218,9 +160,7 @@ export class FeatureFlagService {
 
 let featureFlagServiceInstance: FeatureFlagService | null = null;
 
-export function getFeatureFlagService(
-  config?: FeatureFlagConfig,
-): FeatureFlagService {
+export function getFeatureFlagService(config?: FeatureFlagConfig): FeatureFlagService {
   if (!featureFlagServiceInstance) {
     featureFlagServiceInstance = new FeatureFlagService(config);
   }

@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, Pressable } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
 import type { RewardDelivery } from '../delivery-tracking';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface FailedRewardCardProps {
   delivery: RewardDelivery;
@@ -11,12 +13,12 @@ interface FailedRewardCardProps {
 
 const styles = createSheet({
   container: {
-    backgroundColor: '#1a1a2e',
+    backgroundColor: launchColors.hex_1a1a2e,
     borderRadius: 12,
     padding: 16,
     marginVertical: 8,
     borderLeftWidth: 4,
-    borderLeftColor: '#e94560',
+    borderLeftColor: launchColors.hex_e94560,
   },
   header: {
     flexDirection: 'row',
@@ -27,27 +29,27 @@ const styles = createSheet({
   title: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#fff',
+    color: launchColors.hex_fff,
   },
   amount: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#e94560',
+    color: launchColors.hex_e94560,
   },
   source: {
     fontSize: 14,
-    color: '#9E9E9E',
+    color: launchColors.hex_9e9e9e,
     marginBottom: 4,
   },
   errorMessage: {
     fontSize: 14,
-    color: '#e94560',
+    color: launchColors.hex_e94560,
     marginBottom: 12,
     fontStyle: 'italic',
   },
   attempts: {
     fontSize: 12,
-    color: '#666',
+    color: launchColors.hex_666,
     marginBottom: 12,
   },
   actions: {
@@ -56,7 +58,7 @@ const styles = createSheet({
     gap: 8,
   },
   retryButton: {
-    backgroundColor: '#e94560',
+    backgroundColor: launchColors.hex_e94560,
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 8,
@@ -64,7 +66,7 @@ const styles = createSheet({
     alignItems: 'center',
   },
   retryButtonText: {
-    color: '#fff',
+    color: launchColors.hex_fff,
     fontSize: 14,
     fontWeight: '600',
   },
@@ -74,7 +76,7 @@ const styles = createSheet({
     borderRadius: 8,
   },
   dismissButtonText: {
-    color: '#9E9E9E',
+    color: launchColors.hex_9e9e9e,
     fontSize: 14,
   },
 });

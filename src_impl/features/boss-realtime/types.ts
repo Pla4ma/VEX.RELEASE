@@ -1,3 +1,4 @@
+import { launchColors } from '@theme/tokens/launch-colors';
 /**
  * Real-time Boss Combat System
  *
@@ -152,7 +153,7 @@ export function getAttackVisuals(type: AttackType): {
   switch (type) {
     case 'FINISHING_BLOW':
       return {
-        color: '#FF0000',
+        color: launchColors.hex_ff0000,
         size: 3,
         shakeIntensity: 1,
         particleCount: 50,
@@ -160,7 +161,7 @@ export function getAttackVisuals(type: AttackType): {
       };
     case 'STREAK_COMBO':
       return {
-        color: '#FFD700',
+        color: launchColors.hex_ffd700,
         size: 2.5,
         shakeIntensity: 0.7,
         particleCount: 30,
@@ -168,7 +169,7 @@ export function getAttackVisuals(type: AttackType): {
       };
     case 'CRITICAL_FOCUS':
       return {
-        color: '#FF6B35',
+        color: launchColors.hex_ff6b35,
         size: 2,
         shakeIntensity: 0.5,
         particleCount: 20,
@@ -176,7 +177,7 @@ export function getAttackVisuals(type: AttackType): {
       };
     case 'PURE_STRIKE':
       return {
-        color: '#00CED1',
+        color: launchColors.hex_00ced1,
         size: 1.5,
         shakeIntensity: 0.3,
         particleCount: 15,
@@ -184,7 +185,7 @@ export function getAttackVisuals(type: AttackType): {
       };
     default:
       return {
-        color: '#FFFFFF',
+        color: launchColors.hex_ffffff,
         size: 1,
         shakeIntensity: 0.1,
         particleCount: 5,

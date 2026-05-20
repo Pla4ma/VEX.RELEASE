@@ -22,7 +22,7 @@ export async function maybeCreateMemory(
   }
   const copy = COMPANION_MEMORY_COPY[type];
   const created = await repository.createMemory({
-    body: copy.body,
+    body: buildMemoryBody(type, parsedContext),
     grade: parsedContext.grade,
     purityScore: parsedContext.purityScore,
     sessionDate: parsedContext.sessionDate,
@@ -92,4 +92,26 @@ function buildMemoryContext(input: CheckSessionMemoriesInput): MemoryContext {
     sessionId: input.session.sessionId,
     streakDay: input.streakDay,
   };
+}
+
+function buildMemoryBody(type: CompanionMemoryType, context: MemoryContext): string {
+  const purity = context.purityScore === null ? null : `${Math.round(context.purityScore)}% purity`;
+  const gradeText = `grade ${context.grade}`;
+  if (type === 'first_session') {
+    return `You finished your first session on ${context.sessionDate} with ${gradeText}. This is where the record begins.`;
+  }
+  if (type === 'first_s_grade') {
+    return purity
+      ? `You reached ${gradeText} with ${purity}. Your companion kept the clean finish.`
+      : `You reached ${gradeText}. Your companion kept the clean finish.`;
+  }
+  if (type === 'first_7_day_streak' || type === 'first_30_day_streak') {
+    return `Day ${context.streakDay} landed with ${gradeText}. The chain has real proof behind it.`;
+  }
+  if (type === 'personal_best_broken') {
+    return purity
+      ? `You moved a saved mark to ${purity}. Your ceiling changed because this session proved it.`
+      : 'You moved a saved mark. Your ceiling changed because this session proved it.';
+  }
+  return COMPANION_MEMORY_COPY[type].body;
 }

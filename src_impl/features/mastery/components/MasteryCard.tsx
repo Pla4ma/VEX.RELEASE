@@ -7,17 +7,19 @@ import { MasteryService } from '../service';
 import type { MasteryState } from '../types';
 import { MasteryRankBadge } from './MasteryRankBadge';
 import { TechniqueBar } from './TechniqueBar';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 type Props = { userId: string; state: MasteryState; onStateChange?: (state: MasteryState) => void };
 
 const TECHNIQUES = [
   { key: 'durationMastery', label: 'Duration Focus' },
-  { key: 'purityMastery', label: 'Purity', color: '#10B981' },
-  { key: 'consistencyMastery', label: 'Consistency', color: '#F59E0B' },
-  { key: 'comebackMastery', label: 'Comeback', color: '#EF4444' },
-  { key: 'bossMastery', label: 'Boss Damage', color: '#8B5CF6' },
+  { key: 'purityMastery', label: 'Purity', color: launchColors.hex_10b981 },
+  { key: 'consistencyMastery', label: 'Consistency', color: launchColors.hex_f59e0b },
+  { key: 'comebackMastery', label: 'Comeback', color: launchColors.hex_ef4444 },
+  { key: 'bossMastery', label: 'Boss Damage', color: launchColors.hex_8b5cf6 },
 ] as const;
-const difficultyColors = { EASY: '#10B981', MEDIUM: '#3B82F6', HARD: '#F59E0B', ELITE: '#8B5CF6' } as const;
+const difficultyColors = { EASY: launchColors.hex_10b981, MEDIUM: launchColors.hex_3b82f6, HARD: launchColors.hex_f59e0b, ELITE: launchColors.hex_8b5cf6 } as const;
 
 export function MasteryCard({ userId, state, onStateChange }: Props): JSX.Element {
   const { theme } = useTheme();

@@ -1,14 +1,10 @@
-import {
-  checkBossFinalStrike,
-  checkDailyGoal,
-  checkFirstSession,
-  checkStreakCritical,
-  getPriorityCandidates,
-} from '../priority-checkers';
 import { buildProgress, buildSecondaryActions, buildStakes } from '../priority-builders';
+import { checkDefaultSession, checkStreakCritical, getPriorityCandidates } from '../priority-checkers';
 import type { HomeContextSnapshot } from '../priority-schemas';
 
-function createSnapshot(overrides: Partial<HomeContextSnapshot> = {}): HomeContextSnapshot {
+function createSnapshot(
+  overrides: Partial<HomeContextSnapshot> = {},
+): HomeContextSnapshot {
   return {
     boss: {
       hasActiveEncounter: false,
@@ -16,10 +12,21 @@ function createSnapshot(overrides: Partial<HomeContextSnapshot> = {}): HomeConte
       isFinalStrike: false,
       maxHealth: undefined,
     },
+    challenge: {
+      id: undefined,
+      isNearDone: false,
+      progressPercent: 0,
+      title: undefined,
+    },
     coach: {
       hasIntervention: false,
       hoursRemaining: undefined,
       interventionType: undefined,
+    },
+    companionPromise: {
+      kind: 'hidden',
+      targetDurationMinutes: undefined,
+      targetMode: undefined,
     },
     daily: {
       goalMinutes: 60,
@@ -29,6 +36,12 @@ function createSnapshot(overrides: Partial<HomeContextSnapshot> = {}): HomeConte
     onboarding: {
       firstSessionCompleted: true,
       isComplete: true,
+    },
+    recommendation: {
+      hasActive: false,
+      id: undefined,
+      suggestedDurationSeconds: undefined,
+      suggestedMode: undefined,
     },
     streak: {
       currentDays: 5,
@@ -47,55 +60,12 @@ function createSnapshot(overrides: Partial<HomeContextSnapshot> = {}): HomeConte
   };
 }
 
-describe('home priority checkers', () => {
-  it('prioritizes first session before other daily work', () => {
-    const snapshot = createSnapshot({
-      onboarding: { firstSessionCompleted: false, isComplete: false },
-    });
-
-    expect(checkFirstSession(snapshot)?.type).toBe('FIRST_SESSION');
-    expect(getPriorityCandidates(snapshot)[0]?.type).toBe('FIRST_SESSION');
-  });
-
-  it('raises critical streak urgency as the deadline approaches', () => {
-    const snapshot = createSnapshot({
-      streak: {
-        currentDays: 12,
-        hoursRemaining: 1,
-        isAtRisk: true,
-        isComeback: false,
-      },
-    });
-
-    const priority = checkStreakCritical(snapshot);
-
-    expect(priority?.type).toBe('STREAK_CRITICAL');
-    expect(priority?.urgency).toBe(95);
-    expect(priority?.cta.action).toBe('VIEW_STREAK');
-  });
-
-  it('surfaces boss final strike above normal daily goal work', () => {
-    const snapshot = createSnapshot({
-      boss: {
-        hasActiveEncounter: true,
-        healthRemaining: 100,
-        isFinalStrike: true,
-        maxHealth: 1000,
-      },
-    });
-
-    expect(checkBossFinalStrike(snapshot)?.urgency).toBeGreaterThan(
-      checkDailyGoal(snapshot)?.urgency ?? 0
-    );
-  });
-});
-
 describe('home priority builders', () => {
-  it('builds daily progress and streak stakes for the selected priority', () => {
+  it('builds daily progress and streak stakes for a streak-critical state', () => {
     const snapshot = createSnapshot({
       streak: {
         currentDays: 7,
-        hoursRemaining: 2,
+        hoursRemaining: 1,
         isAtRisk: true,
         isComeback: false,
       },
@@ -113,24 +83,36 @@ describe('home priority builders', () => {
       todayMinutes: 15,
     });
     expect(buildStakes(primary, snapshot)).toEqual({
-      atRisk: 'Streak reset to 0',
-      potentialGain: 'Keep your momentum alive',
+      atRisk: 'Your streak resets if today ends cold.',
+      potentialGain: 'You keep the thread alive with one clean session.',
       what: '7-day streak',
     });
   });
 
-  it('keeps secondary actions capped and ordered by sorted priority inputs', () => {
+  it('keeps secondary actions capped and in the same order as priority selection', () => {
     const snapshot = createSnapshot({
       boss: {
         hasActiveEncounter: true,
-        healthRemaining: 100,
-        isFinalStrike: true,
-        maxHealth: 1000,
+        healthRemaining: 40,
+        isFinalStrike: false,
+        maxHealth: 100,
       },
-      coach: {
-        hasIntervention: true,
-        hoursRemaining: 3,
-        interventionType: 'STREAK_AT_RISK',
+      challenge: {
+        id: 'challenge-1',
+        isNearDone: true,
+        progressPercent: 80,
+        title: 'Finish today',
+      },
+      companionPromise: {
+        kind: 'pending',
+        targetDurationMinutes: 20,
+        targetMode: 'FOCUS',
+      },
+      recommendation: {
+        hasActive: true,
+        id: 'rec-1',
+        suggestedDurationSeconds: 1800,
+        suggestedMode: undefined,
       },
       streak: {
         currentDays: 8,
@@ -138,18 +120,20 @@ describe('home priority builders', () => {
         isAtRisk: true,
         isComeback: false,
       },
-      studyPlan: {
-        dueToday: true,
-        hasActivePlan: true,
-        itemsDue: 2,
-      },
     });
-    const sorted = getPriorityCandidates(snapshot).sort((a, b) => b.urgency - a.urgency);
 
-    expect(buildSecondaryActions(sorted).map((action) => action.type)).toEqual([
-      'boss',
-      'study',
-      'coach',
+    expect(buildSecondaryActions(getPriorityCandidates(snapshot)).map((action) => action.type)).toEqual([
+      'promise',
+      'streak',
+      'recommendation',
     ]);
+  });
+
+  it('uses the default session when no higher signal exists', () => {
+    const priority = checkDefaultSession(createSnapshot());
+
+    expect(priority.type).toBe('DEFAULT_SESSION');
+    expect(priority.cta.text).toBe('Start Focus');
+    expect(priority.cta.action).toBe('OPEN_SESSION_SETUP');
   });
 });

@@ -80,8 +80,8 @@ try {
     withSequence: jest.fn((...animations: number[]) => animations[animations.length - 1]),
     withRepeat: jest.fn((animation: number) => animation),
     interpolate: jest.fn((value: number, input: number[], output: number[]) => {
-      const [inMin, inMax] = [input[0], input[input.length - 1]];
-      const [outMin, outMax] = [output[0], output[output.length - 1]];
+      const [inMin, inMax] = [input[0]!, input[input.length - 1]!];
+      const [outMin, outMax] = [output[0]!, output[output.length - 1]!];
       return outMin + ((value - inMin) / (inMax - inMin)) * (outMax - outMin);
     }),
     Gesture: {

@@ -1,5 +1,7 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import React,{useState,useCallback,useMemo}from'react'; import{Pressable,ScrollView,View}from'react-native'; import Animated,{FadeInUp}from'react-native-reanimated'; import{Box,Text,Button,Skeleton}from'@/components/primitives'; import{useTheme}from'@/theme'; import{FlashList}from'@shopify/flash-list'; import{useInventory,useFilteredInventory,inventoryKeys,useInventoryStats}from'@/features/inventory/hooks'; import type{InventoryItem,InventoryFilter,ItemType}from'@/features/inventory/schemas'; import{useQueryClient}from'@tanstack/react-query'; import{InventoryGrid}from'@/features/inventory/components/inventory-grid'; type TabType='ALL'|ItemType;const TABS:{id:TabType;label:string;icon:string;}[] = [{id:'ALL',label:'All',icon:'🎒'},{id:'CONSUMABLE',label:'Consumables',icon:'🧪'},{id:'EQUIPMENT',label:'Equipment',icon:'⚔️'},{id:'COSMETIC',label:'Cosmetics',icon:'👑'},{id:'CRAFTING',label:'Crafting',icon:'🔧'}]; const InventoryHeader:React.FC<{totalItems:number;uniqueItems:number;equippedCount:number;}> = ({totalItems,uniqueItems,equippedCount})=>{const{theme} = useTheme(); return<Box p={4}bg={theme.colors.background.secondary}>
+import React,{useState,useCallback,useMemo}from'react'; import{Pressable,ScrollView,View}from'react-native'; import Animated,{FadeInUp}from'react-native-reanimated'; import{Box,Text,Button,Skeleton}from'@/components/primitives'; import{useTheme}from'@/theme'; import{FlashList}from'@shopify/flash-list'; import{useInventory,useFilteredInventory,inventoryKeys,useInventoryStats}from'@/features/inventory/hooks'; import type{InventoryItem,InventoryFilter,ItemType}from'@/features/inventory/schemas'; import{useQueryClient}from'@tanstack/react-query'; import{InventoryGrid}from'@/features/inventory/components/inventory-grid';
+import { launchColors } from '@theme/tokens/launch-colors';
+ type TabType='ALL'|ItemType;const TABS:{id:TabType;label:string;icon:string;}[] = [{id:'ALL',label:'All',icon:'🎒'},{id:'CONSUMABLE',label:'Consumables',icon:'🧪'},{id:'EQUIPMENT',label:'Equipment',icon:'⚔️'},{id:'COSMETIC',label:'Cosmetics',icon:'👑'},{id:'CRAFTING',label:'Crafting',icon:'🔧'}]; const InventoryHeader:React.FC<{totalItems:number;uniqueItems:number;equippedCount:number;}> = ({totalItems,uniqueItems,equippedCount})=>{const{theme} = useTheme(); return<Box p={4}bg={theme.colors.background.secondary}>
       <Box flexDirection="row"justifyContent="space-between"alignItems="center">
         <Box>
           <Text variant="caption"color={theme.colors.text.tertiary}mb={1}>
@@ -16,7 +18,7 @@ import React,{useState,useCallback,useMemo}from'react'; import{Pressable,ScrollV
         {equippedCount > 0 && <Box px={3}py={2}borderRadius={12}bg={theme.colors.primary[500]}>
             <Box flexDirection="row"alignItems="center"gap={2}>
               <Text style={{fontSize:16}}>⚔️</Text>
-              <Text variant="body"color="#FFFFFF"fontWeight="bold">
+              <Text variant="body"color={theme.colors.text.inverse}fontWeight="bold">
                 {equippedCount} Equipped
               </Text>
             </Box>
@@ -29,11 +31,11 @@ import React,{useState,useCallback,useMemo}from'react'; import{Pressable,ScrollV
                 <Box px={4}py={2}borderRadius={20}bg={isActive ? theme.colors.primary[500] : theme.colors.background.tertiary}style={{opacity:isActive ? 1 : 0.7}}>
                   <Box flexDirection="row"alignItems="center"gap={2}>
                     <Text style={{fontSize:16}}>{tab.icon}</Text>
-                    <Text variant="body"color={isActive ? '#FFFFFF' : theme.colors.text.secondary}fontWeight={isActive ? 'semibold' : 'normal'}>
+                    <Text variant="body"color={isActive ? theme.colors.text.inverse : theme.colors.text.secondary}fontWeight={isActive ? 'semibold' : 'normal'}>
                       {tab.label}
                     </Text>
-                    {count > 0 && <Box px={2}py={0.5}borderRadius={8}bg={isActive ? 'rgba(255,255,255,0.3)' : theme.colors.background.secondary}>
-                        <Text variant="caption"color={isActive ? '#FFFFFF' : theme.colors.text.tertiary}>
+                    {count > 0 && <Box px={2}py={0.5}borderRadius={8}bg={isActive ? launchColors.rgb_255_255_255_0_3 : theme.colors.background.secondary}>
+                        <Text variant="caption"color={isActive ? theme.colors.text.inverse : theme.colors.text.tertiary}>
                           {count}
                         </Text>
                       </Box>}
@@ -76,7 +78,7 @@ import React,{useState,useCallback,useMemo}from'react'; import{Pressable,ScrollV
                 <Box flex={1}borderRadius={8}bg={theme.colors.background.tertiary}alignItems="center"justifyContent="center"style={{borderWidth:2,borderColor:theme.colors.primary[500]}}>
                   <Text style={{fontSize:24}}>⚔️</Text>
                   <Pressable onPress={()=>onUnequip(item.id)}style={{position:'absolute',top:-4,right:-4,width:20,height:20,backgroundColor:theme.colors.error.DEFAULT,borderRadius:10,alignItems:'center',justifyContent:'center'}}accessibilityLabel="× button"accessibilityRole="button"accessibilityHint="Activates this control">
-                    <Text style={{fontSize:12,color:'#FFFFFF'}}>×</Text>
+                    <Text style={{fontSize:12,color:theme.colors.text.inverse}}>×</Text>
                   </Pressable>
                 </Box>
               </Animated.View>)}
@@ -84,7 +86,7 @@ import React,{useState,useCallback,useMemo}from'react'; import{Pressable,ScrollV
             {Array.from({length:Math.max(0,5 - equippedItems.length)}).map((_,i)=><Box key={`empty-${i}`}width="18%"aspectRatio={1}borderRadius={8}borderWidth={1}borderColor={theme.colors.border.DEFAULT}bg={theme.colors.background.tertiary}style={{opacity:0.5}}/>)}
           </Box>}
       </Box>
-    </Box>;}; const ItemDetailModal:React.FC<{item:InventoryItem|null;visible:boolean;onClose:()=>void;onUse?:()=>void;onEquip?:()=>void;onUnequip?:()=>void;}> = ({item,visible,onClose,onUse,onEquip,onUnequip})=>{if(!visible || !item){return null;}return<View style={{position:'absolute',top:0,left:0,right:0,bottom:0,backgroundColor:'rgba(0,0,0,0.5)',justifyContent:'flex-end'}}>
+    </Box>;}; const ItemDetailModal:React.FC<{item:InventoryItem|null;visible:boolean;onClose:()=>void;onUse?:()=>void;onEquip?:()=>void;onUnequip?:()=>void;}> = ({item,visible,onClose,onUse,onEquip,onUnequip})=>{if(!visible || !item){return null;}return<View style={{position:'absolute',top:0,left:0,right:0,bottom:0,backgroundColor:launchColors.rgb_0_0_0_0_5,justifyContent:'flex-end'}}>
       <Pressable onPress={onClose}style={{flex:1}}accessibilityLabel="Interactive control"accessibilityRole="button"accessibilityHint="Activates this control"/>
       <Box bg="white"style={{borderTopLeftRadius:24,borderTopRightRadius:24,minHeight:300,padding:20}}>
         <Text>Item Detail for {item.id}</Text>

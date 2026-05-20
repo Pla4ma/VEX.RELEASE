@@ -3,58 +3,18 @@ import type { SessionSummary } from '../../../session/types';
 import { orchestrateSessionCompletion } from '../completion-orchestrator';
 import type { CompletionLedger } from '../schemas';
 
-const mockSetCompletionSyncState = jest.fn();
-const mockApplyCompletionSubsystems = jest.fn();
-const mockCheckAndUpdatePersonalBest = jest.fn();
-const mockCreateCompletionLedger = jest.fn();
-const mockGetCompletionLedgerByIdempotencyKey = jest.fn();
+const mockSetCompletionSyncState = jest.fn(); const mockApplyCompletionSubsystems = jest.fn(); const mockCheckAndUpdatePersonalBest = jest.fn(); const mockCreateCompletionLedger = jest.fn(); const mockGetCompletionLedgerByIdempotencyKey = jest.fn();
+jest.mock('@sentry/react-native', () => ({ captureException: jest.fn() }));
+jest.mock('../../../events', () => ({ eventBus: { subscribe: jest.fn() } }));
+jest.mock('../../../utils/debug', () => ({ createDebugger: () => ({ info: jest.fn(), warn: jest.fn() }) }));
+jest.mock('../../../lib/repository/base', () => ({ getConnectionState: jest.fn(() => 'online') }));
+jest.mock('../../../lib/offline/queue', () => ({ enqueue: jest.fn() }));
+jest.mock('../../../store/session-state', () => ({ useSessionUIStore: { getState: jest.fn(() => ({ setCompletionSyncState: mockSetCompletionSyncState })) } }));
+jest.mock('../../companion-promise/service', () => ({ processCompletedSessionPromise: jest.fn().mockResolvedValue({ createdPromise: null, fulfilledPromise: null, missedPromise: null }) }));
 
-jest.mock('@sentry/react-native', () => ({
-  captureException: jest.fn(),
-}));
-
-jest.mock('../../../events', () => ({
-  eventBus: {
-    subscribe: jest.fn(),
-  },
-}));
-
-jest.mock('../../../utils/debug', () => ({
-  createDebugger: () => ({
-    info: jest.fn(),
-    warn: jest.fn(),
-  }),
-}));
-
-jest.mock('../../../lib/repository/base', () => ({
-  getConnectionState: jest.fn(() => 'online'),
-}));
-
-jest.mock('../../../lib/offline/queue', () => ({
-  enqueue: jest.fn(),
-}));
-
-jest.mock('../../../store/session-state', () => ({
-  useSessionUIStore: {
-    getState: jest.fn(() => ({
-      setCompletionSyncState: mockSetCompletionSyncState,
-    })),
-  },
-}));
-
-jest.mock('../repository', () => ({
-  createCompletionLedger: (...args: unknown[]) => mockCreateCompletionLedger(...args),
-  getCompletionLedgerByIdempotencyKey: (...args: unknown[]) =>
-    mockGetCompletionLedgerByIdempotencyKey(...args),
-}));
-
-jest.mock('../completion-subsystems', () => ({
-  applyCompletionSubsystems: (...args: unknown[]) => mockApplyCompletionSubsystems(...args),
-}));
-
-jest.mock('../../personal-bests/service', () => ({
-  checkAndUpdatePersonalBest: (...args: unknown[]) => mockCheckAndUpdatePersonalBest(...args),
-}));
+jest.mock('../repository', () => ({ createCompletionLedger: (...args: unknown[]) => mockCreateCompletionLedger(...args), getCompletionLedgerByIdempotencyKey: (...args: unknown[]) => mockGetCompletionLedgerByIdempotencyKey(...args) }));
+jest.mock('../completion-subsystems', () => ({ applyCompletionSubsystems: (...args: unknown[]) => mockApplyCompletionSubsystems(...args) }));
+jest.mock('../../personal-bests/service', () => ({ checkAndUpdatePersonalBest: (...args: unknown[]) => mockCheckAndUpdatePersonalBest(...args) }));
 
 const summary: SessionSummary = {
   actualDuration: 1500,
@@ -126,15 +86,12 @@ describe('orchestrateSessionCompletion story return', () => {
     mockGetCompletionLedgerByIdempotencyKey.mockResolvedValue(null);
     mockCreateCompletionLedger.mockResolvedValue(ledger);
     mockApplyCompletionSubsystems.mockResolvedValue({ degradedSystems: [], ledger });
-    mockCheckAndUpdatePersonalBest.mockResolvedValue({
-      current: null,
-      isNewRecord: false,
-      margin: null,
-      previousBest: null,
-    });
+    mockCheckAndUpdatePersonalBest.mockResolvedValue({ current: null, isNewRecord: false, margin: null, previousBest: null });
   });
 
   it('returns a post-session story view model after subsystem updates', async () => {
+    const { processCompletedSessionPromise } = require('../../companion-promise/service');
+    processCompletedSessionPromise.mockResolvedValueOnce({ createdPromise: { createdAt: '2026-05-20T12:00:00.000Z', fulfilledAt: null, id: '550e8400-e29b-41d4-a716-446655440090', missedAt: null, sourceSessionId: summary.sessionId, status: 'pending', targetDate: '2026-05-21', targetDurationMinutes: 25, targetMode: 'FOCUS', userId: summary.userId }, fulfilledPromise: null, missedPromise: null });
     const story = await orchestrateSessionCompletion({
       sessionId: summary.sessionId,
       summary,
@@ -145,6 +102,7 @@ describe('orchestrateSessionCompletion story return', () => {
     expect(story?.gradeCard.grade).toBe('A');
     expect(story?.rewardReveal.rewardIds).toEqual(ledger.rewardIds);
     expect(story?.companionReaction.reactionId).toBe('companion-session-complete');
+    expect(story?.companionPromise).toMatchObject({ status: 'pending', targetMode: 'FOCUS' });
     expect(story?.dailyMission.status).toBe('progressed');
     expect(mockSetCompletionSyncState).toHaveBeenCalledWith(expect.objectContaining({ status: 'synced' }));
   });

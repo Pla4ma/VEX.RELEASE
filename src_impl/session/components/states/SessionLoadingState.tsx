@@ -7,6 +7,8 @@
 import React from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { createSheet } from '@/shared/ui/create-sheet';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 interface SessionLoadingStateProps {
   message?: string;
@@ -17,7 +19,7 @@ export const SessionLoadingState: React.FC<SessionLoadingStateProps> = ({
 }) => {
   return (
     <View style={styles.container}>
-      <ActivityIndicator size="large" color="#e94560" />
+      <ActivityIndicator size="large" color={launchColors.hex_e94560} />
       <Text style={styles.message}>{message}</Text>
 
       {/* Skeleton placeholders */}
@@ -37,7 +39,7 @@ export const SessionLoadingState: React.FC<SessionLoadingStateProps> = ({
 const styles = createSheet({
   container: {
     flex: 1,
-    backgroundColor: '#1a1a2e',
+    backgroundColor: launchColors.hex_1a1a2e,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
@@ -45,7 +47,7 @@ const styles = createSheet({
   message: {
     marginTop: 16,
     fontSize: 16,
-    color: '#9E9E9E',
+    color: launchColors.hex_9e9e9e,
   },
   skeletonContainer: {
     width: '100%',
@@ -55,7 +57,7 @@ const styles = createSheet({
   skeletonTimer: {
     width: '60%',
     height: 60,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 8,
     alignSelf: 'center',
   },
@@ -67,13 +69,13 @@ const styles = createSheet({
   skeletonStat: {
     width: '25%',
     height: 50,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 8,
   },
   skeletonButton: {
     width: '50%',
     height: 48,
-    backgroundColor: '#2a2a3e',
+    backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 12,
     alignSelf: 'center',
     marginTop: 16,

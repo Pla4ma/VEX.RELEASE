@@ -1,109 +1,169 @@
-import type {
-  HomeContextSnapshot,
-  HomePrimaryPriority,
-} from './priority-schemas';
+import type { HomeContextSnapshot, HomePrimaryPriority } from './priority-schemas';
 
-export function checkFirstSession(snapshot: HomeContextSnapshot): HomePrimaryPriority | null {
-  if (snapshot.onboarding.isComplete && snapshot.onboarding.firstSessionCompleted) {
-    return null;
-  }
+function mapPromiseModeToPresetMode(
+  mode: HomeContextSnapshot['companionPromise']['targetMode'],
+): 'DEEP_WORK' | 'LIGHT_FOCUS' | 'SPRINT' | 'STUDY' {
+  if (mode === 'RECOVERY') { return 'LIGHT_FOCUS'; }
+  if (mode === 'STUDY') { return 'STUDY'; }
+  if (mode === 'HABIT_BUILD') { return 'SPRINT'; }
+  return 'DEEP_WORK';
+}
+
+function buildSessionPriority(
+  type: HomePrimaryPriority['type'],
+  urgency: number,
+  reason: string,
+  text: string,
+  params?: Record<string, unknown>,
+): HomePrimaryPriority {
   return {
-    type: 'FIRST_SESSION',
-    urgency: 100,
-    reason: "You're one session away from building momentum",
-    cta: { text: 'Start Your First Session', action: 'START_SESSION', params: { isFirstSession: true } },
+    cta: { action: 'OPEN_SESSION_SETUP', params, text },
+    reason,
+    type,
+    urgency,
   };
 }
 
-export function checkStreakCritical(snapshot: HomeContextSnapshot): HomePrimaryPriority | null {
+export function checkStreakCritical(
+  snapshot: HomeContextSnapshot,
+): HomePrimaryPriority | null {
+  const hoursRemaining = snapshot.streak.hoursRemaining;
+  if (!snapshot.streak.isAtRisk || typeof hoursRemaining !== 'number' || hoursRemaining > 2) {
+    return null;
+  }
+  return buildSessionPriority(
+    'STREAK_CRITICAL',
+    100,
+    `Your ${snapshot.streak.currentDays}-day streak is close to breaking.`,
+    'Save Your Streak',
+    { presetMode: 'LIGHT_FOCUS', suggestedDurationSeconds: 15 * 60 },
+  );
+}
+
+export function checkCompanionPromise(
+  snapshot: HomeContextSnapshot,
+): HomePrimaryPriority | null {
+  if (snapshot.companionPromise.kind !== 'pending') {
+    return null;
+  }
+  const duration = snapshot.companionPromise.targetDurationMinutes ?? 15;
+  return buildSessionPriority(
+    'COMPANION_PROMISE',
+    95,
+    `Keep the thread alive with ${duration} focused minutes today.`,
+    'Keep Your Promise',
+    {
+      presetMode: mapPromiseModeToPresetMode(snapshot.companionPromise.targetMode),
+      suggestedDurationSeconds: duration * 60,
+    },
+  );
+}
+
+export function checkPromiseRecovery(
+  snapshot: HomeContextSnapshot,
+): HomePrimaryPriority | null {
+  if (snapshot.companionPromise.kind !== 'missed') {
+    return null;
+  }
+  return buildSessionPriority(
+    'PROMISE_RECOVERY',
+    90,
+    'Yesterday slipped. A small clean session rebuilds the thread.',
+    'Start Fresh Today',
+    { presetMode: 'LIGHT_FOCUS', suggestedDurationSeconds: 10 * 60 },
+  );
+}
+
+export function checkStreakAtRisk(
+  snapshot: HomeContextSnapshot,
+): HomePrimaryPriority | null {
   if (!snapshot.streak.isAtRisk) {
     return null;
   }
-  const hoursRemaining = snapshot.streak.hoursRemaining ?? 4;
-  const urgency = hoursRemaining < 2 ? 95 : hoursRemaining < 4 ? 85 : 75;
-  return {
-    type: 'STREAK_CRITICAL',
-    urgency,
-    reason: `Your ${snapshot.streak.currentDays}-day streak expires in ${hoursRemaining} hours`,
-    cta: { text: 'Save Your Streak', action: 'VIEW_STREAK' },
-  };
+  return buildSessionPriority(
+    'STREAK_AT_RISK',
+    85,
+    'A short focus block keeps today from turning into recovery tomorrow.',
+    'Protect Today',
+    { presetMode: 'LIGHT_FOCUS', suggestedDurationSeconds: 15 * 60 },
+  );
 }
 
-export function checkBossFinalStrike(snapshot: HomeContextSnapshot): HomePrimaryPriority | null {
-  if (!snapshot.boss.hasActiveEncounter || !snapshot.boss.isFinalStrike) {
+export function checkRecommendedSession(
+  snapshot: HomeContextSnapshot,
+): HomePrimaryPriority | null {
+  if (!snapshot.recommendation.hasActive) {
+    return null;
+  }
+  return buildSessionPriority(
+    'RECOMMENDED_SESSION',
+    70,
+    'VEX already has a strong next session ready for this moment.',
+    'Start Recommended Session',
+    {
+      recommendationId: snapshot.recommendation.id,
+      suggestedDurationSeconds: snapshot.recommendation.suggestedDurationSeconds,
+    },
+  );
+}
+
+export function checkChallengeNearDone(
+  snapshot: HomeContextSnapshot,
+): HomePrimaryPriority | null {
+  if (!snapshot.challenge.isNearDone) {
     return null;
   }
   return {
-    type: 'BOSS_FINAL_STRIKE',
-    urgency: 90,
-    reason: 'One more session to defeat the boss',
-    cta: { text: 'Defeat Boss', action: 'VIEW_BOSS' },
+    cta: { action: 'OPEN_CHALLENGES', text: "Finish Today's Challenge" },
+    reason: `${Math.round(snapshot.challenge.progressPercent)}% done. Finish the job while it still feels easy.`,
+    type: 'CHALLENGE_NEAR_DONE',
+    urgency: 60,
   };
 }
 
-export function checkComeback(snapshot: HomeContextSnapshot): HomePrimaryPriority | null {
-  if (!snapshot.streak.isComeback) {
+export function checkBossActive(
+  snapshot: HomeContextSnapshot,
+): HomePrimaryPriority | null {
+  if (!snapshot.boss.hasActiveEncounter) {
     return null;
   }
   return {
-    type: 'COMEBACK',
-    urgency: 80,
-    reason: "You're rebuilding your streak - day 1 matters most",
-    cta: { text: 'Start Comeback Session', action: 'START_SESSION', params: { isComeback: true } },
+    cta: { action: 'OPEN_BOSS', text: 'Continue Focus Battle' },
+    reason: 'Your boss run is already in motion. One more clean rep pushes it forward.',
+    type: 'BOSS_ACTIVE',
+    urgency: 50,
   };
 }
 
-export function checkCoachIntervention(snapshot: HomeContextSnapshot): HomePrimaryPriority | null {
-  if (!snapshot.coach.hasIntervention) {
-    return null;
-  }
-  const hoursRemaining = snapshot.coach.hoursRemaining ?? 4;
-  const reason = snapshot.coach.interventionType === 'STREAK_AT_RISK'
-    ? 'Your streak is at risk - the AI Coach has a suggestion'
-    : 'The AI Coach has personalized guidance for you';
-  return {
-    type: 'COACH_INTERVENTION',
-    urgency: hoursRemaining < 2 ? 75 : 60,
-    reason,
-    cta: { text: 'View Coach Tip', action: 'VIEW_COACH' },
-  };
+export function checkDefaultSession(
+  snapshot: HomeContextSnapshot,
+): HomePrimaryPriority {
+  const isNewUser = !snapshot.onboarding.firstSessionCompleted;
+  return buildSessionPriority(
+    'DEFAULT_SESSION',
+    10,
+    isNewUser
+      ? 'Start one clean session. The rest of home will get smarter after that.'
+      : 'Start the next focus block without overthinking the setup.',
+    'Start Focus',
+    {
+      presetMode: isNewUser ? 'SPRINT' : 'DEEP_WORK',
+      suggestedDurationSeconds: isNewUser ? 10 * 60 : 25 * 60,
+    },
+  );
 }
 
-export function checkStudyPlanDue(snapshot: HomeContextSnapshot): HomePrimaryPriority | null {
-  if (!snapshot.studyPlan.hasActivePlan || !snapshot.studyPlan.dueToday) {
-    return null;
-  }
-  return {
-    type: 'STUDY_PLAN_DUE',
-    urgency: snapshot.studyPlan.itemsDue > 1 ? 70 : 60,
-    reason: `${snapshot.studyPlan.itemsDue} study item${snapshot.studyPlan.itemsDue > 1 ? 's' : ''} due today`,
-    cta: { text: 'View Study Plan', action: 'VIEW_STUDY_PLAN' },
-  };
-}
-
-export function checkDailyGoal(snapshot: HomeContextSnapshot): HomePrimaryPriority | null {
-  const progress = snapshot.daily.minutesFocused / snapshot.daily.goalMinutes;
-  if (progress >= 1) {
-    return null;
-  }
-  const remaining = snapshot.daily.goalMinutes - snapshot.daily.minutesFocused;
-  const urgency = progress > 0.5 ? 50 : progress > 0.25 ? 40 : 30;
-  return {
-    type: 'DAILY_GOAL',
-    urgency,
-    reason: `${Math.ceil(remaining)} minutes to hit your daily goal`,
-    cta: { text: 'Continue Session', action: 'START_SESSION' },
-  };
-}
-
-export function getPriorityCandidates(snapshot: HomeContextSnapshot): HomePrimaryPriority[] {
+export function getPriorityCandidates(
+  snapshot: HomeContextSnapshot,
+): HomePrimaryPriority[] {
   return [
-    checkFirstSession(snapshot),
     checkStreakCritical(snapshot),
-    checkBossFinalStrike(snapshot),
-    checkComeback(snapshot),
-    checkCoachIntervention(snapshot),
-    checkStudyPlanDue(snapshot),
-    checkDailyGoal(snapshot),
+    checkCompanionPromise(snapshot),
+    checkPromiseRecovery(snapshot),
+    checkStreakAtRisk(snapshot),
+    checkRecommendedSession(snapshot),
+    checkChallengeNearDone(snapshot),
+    checkBossActive(snapshot),
+    checkDefaultSession(snapshot),
   ].filter((priority): priority is HomePrimaryPriority => priority !== null);
 }

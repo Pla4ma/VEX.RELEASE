@@ -17,6 +17,8 @@ import { Button } from '../../../components/primitives/Button';
 import { Box } from '../../../components/primitives/Box';
 import { useTheme } from '../../../theme';
 import { DifficultySuggestion } from '../service/adaptiveDifficulty';
+import { launchColors } from '@theme/tokens/launch-colors';
+
 
 type SessionDifficulty = 'CASUAL' | 'FOCUSED' | 'INTENSE';
 
@@ -93,7 +95,7 @@ export function AdaptiveDifficultyBanner({
             gap: theme.spacing[4],
             marginBottom: theme.spacing[3],
             padding: theme.spacing[3],
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            backgroundColor: launchColors.rgb_255_255_255_0_1,
             borderRadius: theme.borderRadius.md,
           }}
         >
@@ -153,7 +155,7 @@ export function AdaptiveDifficultyBanner({
               marginLeft: theme.spacing[2],
               width: 60,
               height: 4,
-              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              backgroundColor: launchColors.rgb_255_255_255_0_2,
               borderRadius: 2,
               overflow: 'hidden',
             }}
