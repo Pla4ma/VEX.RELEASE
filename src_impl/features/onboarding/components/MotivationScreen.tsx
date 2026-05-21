@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import { Pressable } from 'react-native';
-import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, {
+  FadeIn,
+  FadeInUp,
+  useAnimatedStyle,
+  withSpring,
+} from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
@@ -13,60 +18,36 @@ interface MotivationScreenProps {
 }
 
 interface MotivationOption {
+  description: string;
   key: MotivationProfileType;
   label: string;
-  emoji: string;
-  description: string;
-  tier: 'gentle' | 'intense';
+  shortLabel: string;
 }
 
 const MOTIVATION_OPTIONS: MotivationOption[] = [
-  {
-    key: 'calm', label: 'Calm', emoji: '🌿',
-    description: 'Gentle focus, low pressure. Progress at your own pace.',
-    tier: 'gentle',
-  },
-  {
-    key: 'friendly', label: 'Encouraging', emoji: '🤝',
-    description: 'Friendly support and positive reinforcement.',
-    tier: 'gentle',
-  },
-  {
-    key: 'game_like', label: 'Game-like', emoji: '🎮',
-    description: 'Boss fights, XP, and unlocks make focus feel like progress.',
-    tier: 'intense',
-  },
-  {
-    key: 'competitive', label: 'Competitive', emoji: '🏆',
-    description: 'Challenges, leaderboards, and proving your best.',
-    tier: 'intense',
-  },
-  {
-    key: 'intense', label: 'Intense', emoji: '⚔️',
-    description: 'High stakes, maximum drive. Every session is a test.',
-    tier: 'intense',
-  },
-  {
-    key: 'student', label: 'Study-focused', emoji: '📚',
-    description: 'Structure, learning tools, and deep comprehension.',
-    tier: 'gentle',
-  },
+  { key: 'calm', label: 'Calm', shortLabel: 'Calm', description: 'Gentle focus, low pressure.' },
+  { key: 'student', label: 'Study-focused', shortLabel: 'Study', description: 'Structure and learning tools.' },
+  { key: 'game_like', label: 'Game-like', shortLabel: 'Game', description: 'Progress feels visual and alive.' },
+  { key: 'coach_led', label: 'Coach-led', shortLabel: 'Coach', description: 'Direct guidance and a clear next move.' },
+  { key: 'intense', label: 'Intense', shortLabel: 'Drive', description: 'High drive and fewer soft edges.' },
 ];
 
 function MotivationCard({
-  option, isSelected, onPress, index,
+  index,
+  isSelected,
+  onPress,
+  option,
 }: {
-  option: MotivationOption;
+  index: number;
   isSelected: boolean;
   onPress: () => void;
-  index: number;
+  option: MotivationOption;
 }): JSX.Element {
   const { theme } = useTheme();
-
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: withSpring(isSelected ? 0.96 : 1, { damping: 15, stiffness: 150 }) }],
     backgroundColor: isSelected ? theme.colors.primary[500] : theme.colors.background.secondary,
     borderColor: isSelected ? theme.colors.primary[500] : theme.colors.border.light,
+    transform: [{ scale: withSpring(isSelected ? 0.96 : 1, { damping: 15, stiffness: 150 }) }],
   }));
 
   return (
@@ -79,15 +60,17 @@ function MotivationCard({
       >
         <Animated.View
           style={[{
-            padding: theme.spacing[4],
-            borderRadius: 14,
-            borderWidth: 2,
             alignItems: 'center',
+            borderRadius: theme.borderRadius.lg,
+            borderWidth: 2,
             gap: theme.spacing[1],
             minHeight: 120,
+            padding: theme.spacing[4],
           }, animatedStyle]}
         >
-          <Text fontSize={28}>{option.emoji}</Text>
+          <Text variant="label" color={isSelected ? 'text.inverse' : 'text.secondary'}>
+            {option.shortLabel}
+          </Text>
           <Text variant="h4" color={isSelected ? 'text.inverse' : 'text.primary'} fontWeight="600">
             {option.label}
           </Text>
@@ -106,12 +89,11 @@ function MotivationCard({
 }
 
 export function MotivationScreen({ onSelect, onBack }: MotivationScreenProps): JSX.Element {
-  const { theme } = useTheme();
-  const [selectedStyle, setSelectedStyle] = useState<MotivationProfileType | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);
+  const [selectedStyle, setSelectedStyle] = useState<MotivationProfileType | null>(null);
 
-  const handleSelect = (style: MotivationProfileType) => {
-    if (isAdvancing) return;
+  const handleSelect = (style: MotivationProfileType): void => {
+    if (isAdvancing) { return; }
     setSelectedStyle(style);
     setIsAdvancing(true);
     setTimeout(() => { onSelect(style); }, 400);
@@ -120,21 +102,24 @@ export function MotivationScreen({ onSelect, onBack }: MotivationScreenProps): J
   return (
     <Box flex={1} bg="background.primary" px="lg" py="xl">
       <Box flexDirection="row" alignItems="center" mb="md">
-        {onBack && (
-          <Pressable onPress={onBack} style={{ marginRight: 12 }}>
-            <Box p="xs"><Text variant="h3" color="text.secondary">‹</Text></Box>
+        {onBack ? (
+          <Pressable
+            onPress={onBack}
+            accessibilityLabel="Go back"
+            accessibilityRole="button"
+            accessibilityHint="Returns to the previous onboarding screen"
+          >
+            <Box p="xs"><Text variant="h3" color="text.secondary">Back</Text></Box>
           </Pressable>
-        )}
+        ) : null}
       </Box>
 
       <Animated.View entering={FadeIn.duration(400)}>
         <Box gap="sm" mb="lg">
-          <Text variant="label" color="primary.500">Step 2 of 4</Text>
-          <Text variant="h2" color="text.primary">
-            How should VEX motivate you?
-          </Text>
+          <Text variant="label" color="primary.500">Step 1 of 2</Text>
+          <Text variant="h2" color="text.primary">How should VEX motivate you?</Text>
           <Text variant="body" color="text.secondary">
-            This controls what VEX sounds like, which features open first, and how rewards feel. You can change this later.
+            One choice personalizes Home, your coach tone, and what VEX hints at first.
           </Text>
         </Box>
       </Animated.View>
@@ -143,22 +128,24 @@ export function MotivationScreen({ onSelect, onBack }: MotivationScreenProps): J
         {MOTIVATION_OPTIONS.map((option, index) => (
           <MotivationCard
             key={option.key}
-            option={option}
+            index={index}
             isSelected={selectedStyle === option.key}
             onPress={() => handleSelect(option.key)}
-            index={index}
+            option={option}
           />
         ))}
       </Box>
 
       <Box flex={1} minHeight={20} />
       <Animated.View entering={FadeIn.duration(400).delay(300)} style={{ marginTop: 'auto' }}>
-        <Pressable onPress={() => handleSelect('friendly')}
-          accessibilityLabel="Skip and use default motivation style"
+        <Pressable
+          onPress={() => handleSelect('coach_led')}
+          accessibilityLabel="Use coach-led motivation style"
           accessibilityRole="button"
-          accessibilityHint="Activates this control">
+          accessibilityHint="Applies a balanced coach style and continues to the first session"
+        >
           <Box alignItems="center" py="md">
-            <Text variant="bodySmall" color="text.tertiary">Skip for now ›</Text>
+            <Text variant="bodySmall" color="text.tertiary">Use the balanced coach style</Text>
           </Box>
         </Pressable>
       </Animated.View>

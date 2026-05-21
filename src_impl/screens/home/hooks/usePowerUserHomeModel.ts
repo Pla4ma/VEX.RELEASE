@@ -8,6 +8,7 @@ import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import { useCreateRecommendation, useUpdateRecommendationStatus, type SessionRecommendation } from '../../../features/ai-coach';
 import * as coachRepository from '../../../features/ai-coach/repository';
 import { useActiveStudyPlan } from '../../../features/content-study';
+import { buildLearningSessionParams, useLearningExecutionLayer } from '../../../features/learning-execution';
 import { useActiveBoss } from '../../../features/boss/hooks';
 import { useComebackState } from '../../../features/streaks/hooks';
 import { useUserSquads } from '../../../features/squads/hooks';
@@ -58,6 +59,7 @@ export function usePowerUserHomeModel(input: PowerUserModelInput): HomeViewModel
   const createRecommendation = useCreateRecommendation();
   const updateRecommendationStatus = useUpdateRecommendationStatus();
   const activeStudyPlanQuery = useActiveStudyPlan({ enabled: runtime.canQueryStudy });
+  const learningExecutionLayer = useLearningExecutionLayer(activeStudyPlanQuery.data ?? null);
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
   const activeBossQuery = useActiveBoss(runtime.canQueryBoss ? userId || null : null);
   const squadsQuery = useUserSquads(userId || undefined, { enabled: runtime.canQuerySquads, staleTime: 1000 * 60 * 5 });
@@ -95,13 +97,9 @@ export function usePowerUserHomeModel(input: PowerUserModelInput): HomeViewModel
     navigation.navigate('ContentStudy');
   }, [canNavigateContentStudy, navigation, openSetup]);
   const continueStudyPlan = useCallback(() => {
-    const plan = activeStudyPlanQuery.data as Record<string, unknown> | undefined;
-    if (!plan || !canNavigateContentStudy) { openContentStudy(); return; }
-    navigation.navigate('ContentStudy', {
-      screen: 'StudyPlan',
-      params: { generationId: plan.generationId as string ?? '', contentId: plan.contentId as string ?? '' },
-    });
-  }, [activeStudyPlanQuery.data, canNavigateContentStudy, navigation, openContentStudy]);
+    if (!learningExecutionLayer.target) { openContentStudy(); return; }
+    openSetup(buildLearningSessionParams(learningExecutionLayer.target));
+  }, [learningExecutionLayer.target, openContentStudy, openSetup]);
   const openNextAction = useCallback(() => {
     analytics.trackNextBestActionPressed(disclosure.stage, disclosure.inputs.totalCompletedSessions);
     openSetup();
@@ -172,6 +170,7 @@ export function usePowerUserHomeModel(input: PowerUserModelInput): HomeViewModel
     historyQuery: historyQuery as SessionHistoryResult,
     squadsQuery: squadsQuery as UseQueryResult,
     activeStudyPlanQuery: activeStudyPlanQuery as UseQueryResult,
+    learningExecutionLayer,
     comebackQuery: comebackQuery as UseQueryResult,
     activeBossQuery: activeBossQuery as UseQueryResult,
     recommendationsQuery: recommendationsQuery as UseQueryResult,

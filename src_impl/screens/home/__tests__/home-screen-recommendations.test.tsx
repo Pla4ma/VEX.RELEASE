@@ -8,8 +8,10 @@ type HomeData = {
   controller: {
     activeStudyPlanQuery: { data: null };
     currentStreak: number;
+    disclosure: { features: { companion_detail: { isUnlocked: boolean } } };
     isLoading: boolean;
     isOnline: boolean;
+    openSetup: () => void;
     primaryRecommendation: {
       id: string;
       reasoning: string;
@@ -109,8 +111,10 @@ function createHomeData(): HomeData {
     controller: {
       activeStudyPlanQuery: { data: null },
       currentStreak: 5,
+      disclosure: { features: { companion_detail: { isUnlocked: false } } },
       isLoading: false,
       isOnline: true,
+      openSetup: jest.fn(),
       primaryRecommendation: {
         id: 'rec-1',
         reasoning: '6 PM is your best focus window.',

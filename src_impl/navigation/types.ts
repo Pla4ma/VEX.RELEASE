@@ -46,7 +46,9 @@ export interface SessionStackParams {
     selectedThemeId?: string;
     sessionCategory?: string;
     sessionTags?: string[];
-    source?: 'content-study' | 'onboarding_first_session';
+    learningExecutionLabel?: string;
+    learningExecutionTaskId?: string;
+    source?: 'content-study' | 'learning-execution' | 'onboarding_first_session';
     studyPlanId?: string;
     suggestedDifficulty?: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
     suggestedDurationSeconds?: number;

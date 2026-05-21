@@ -1,22 +1,18 @@
-/**
- * Coach Screen Service
- *
- * Service layer for the Coach Screen UI
- * Handles fetching coach state, history, and processing questions
- */
-
-import { type CoachState, type CoachUserState, type CoachMessage } from '../types';
-
-// ============================================================================
-// Types
-// ============================================================================
+import {
+  FALLBACK_HOME_MESSAGES,
+  resolveCoachActionIntent,
+  type CoachActionIntent,
+} from '../../coach-presence';
+import { ACTION_LABELS } from '../../coach-presence/copy';
+import { getAvailabilityFor } from '../../liveops-config';
+import { type CoachMessage, type CoachState } from '../types';
 
 export interface CoachQuestionResponse {
   message: string;
   hasAction: boolean;
   actionLabel?: string;
   actionData?: {
-    type: 'START_SESSION' | 'VIEW_STREAK' | 'VIEW_PROGRESS' | 'NONE';
+    type: CoachActionIntent;
     duration?: number;
     difficulty?: string;
   };
@@ -28,135 +24,110 @@ export interface CoachRecommendation {
   reasoning: string;
 }
 
-// ============================================================================
-// Service Functions
-// ============================================================================
-
-/**
- * Get current coach state for the user
- */
 export async function getCoachState(): Promise<CoachState> {
-  // In production, this would fetch from Supabase or local state
-  // For now, return mock state
   return {
-    userId: 'current-user',
-    currentState: 'HIGH_CONFIDENCE' as CoachUserState,
-    previousState: null,
-    stateEnteredAt: Date.now(),
-    personaId: 'FRIEND',
     behaviorProfile: null,
-    lastInterventionAt: null,
+    currentState: 'HIGH_CONFIDENCE',
     interventionsToday: 0,
+    lastInterventionAt: null,
     muteUntil: null,
+    personaId: 'FRIEND',
+    previousState: null,
     reduceNotifications: false,
+    stateEnteredAt: Date.now(),
+    userId: 'current-user',
   };
 }
 
-/**
- * Get coach message history
- */
 export async function getCoachHistory(): Promise<{ messages: CoachMessage[] }> {
-  // In production, fetch from repository
-  return {
-    messages: [],
-  };
+  return { messages: [] };
 }
 
-/**
- * Ask the coach a question
- * This would integrate with the edge function
- */
 export async function askCoachQuestion(question: string): Promise<CoachQuestionResponse> {
-  // In production, this calls the Supabase edge function
-  // For now, provide contextual responses based on question content
-
   const lowerQuestion = question.toLowerCase();
+  const featureAvailability = {
+    focus: getAvailabilityFor('focus_session'),
+    progress: getAvailabilityFor('progress_view'),
+    study: getAvailabilityFor('content_study'),
+  };
 
-  // Session-related questions
-  if (lowerQuestion.includes('session') || lowerQuestion.includes('focus') || lowerQuestion.includes('start')) {
+  if (lowerQuestion.includes('study')) {
+    const intent = resolveCoachActionIntent({ featureAvailability, requestedIntent: 'START_STUDY_SESSION' });
     return {
-      message: "Based on your patterns, a 25-minute session would be perfect right now. You've had great success with this duration before!",
+      actionData: { difficulty: 'NORMAL', duration: 25, type: intent },
+      actionLabel: ACTION_LABELS[intent],
       hasAction: true,
-      actionLabel: 'Start 25-min Session',
-      actionData: {
-        type: 'START_SESSION',
-        duration: 25,
-        difficulty: 'NORMAL',
-      },
+      message: intent === 'START_STUDY_SESSION'
+        ? 'Your study thread is ready. Start the next block.'
+        : 'Study is not open yet. Start one clean focus block.',
     };
   }
 
-  // Streak-related questions
-  if (lowerQuestion.includes('streak') || lowerQuestion.includes('daily')) {
-    return {
-      message: "Your streak is looking strong! You've maintained great consistency. Remember, it's about progress, not perfection.",
-      hasAction: true,
-      actionLabel: 'View Streak',
-      actionData: {
-        type: 'VIEW_STREAK',
-      },
-    };
-  }
-
-  // Progress-related questions
   if (lowerQuestion.includes('progress') || lowerQuestion.includes('level') || lowerQuestion.includes('xp')) {
+    const intent = resolveCoachActionIntent({ featureAvailability, requestedIntent: 'REVIEW_PROGRESS' });
     return {
-      message: "You're making solid progress! Each session is building toward your goals. Keep the momentum going!",
+      actionData: { type: intent },
+      actionLabel: ACTION_LABELS[intent],
       hasAction: true,
-      actionLabel: 'View Progress',
-      actionData: {
-        type: 'VIEW_PROGRESS',
-      },
+      message: intent === 'REVIEW_PROGRESS'
+        ? 'Your progress has the next signal. Review it, then move.'
+        : 'Progress view is locked. Start the next focus block.',
     };
   }
 
-  // Motivation/default
+  if (lowerQuestion.includes('session') || lowerQuestion.includes('focus') || lowerQuestion.includes('start')) {
+    const intent = resolveCoachActionIntent({ featureAvailability, requestedIntent: 'START_SESSION' });
+    return {
+      actionData: { difficulty: 'NORMAL', duration: 25, type: intent },
+      actionLabel: ACTION_LABELS[intent],
+      hasAction: true,
+      message: 'Your next focus block is the move. Start simple.',
+    };
+  }
+
   return {
-    message: "I'm here to support your focus journey! Whether it's starting a session, checking your streak, or just getting a motivational boost — just let me know what you need.",
-    hasAction: false,
+    actionData: { difficulty: 'NORMAL', duration: 25, type: 'START_SESSION' },
+    actionLabel: ACTION_LABELS.START_SESSION,
+    hasAction: true,
+    message: FALLBACK_HOME_MESSAGES.CALM,
   };
 }
 
-/**
- * Get current recommendation based on coach state
- */
 export function getCurrentRecommendation(state?: CoachState): CoachRecommendation | null {
-  if (!state) {return null;}
+  if (!state) {
+    return null;
+  }
 
   switch (state.currentState) {
     case 'STREAK_AT_RISK':
       return {
-        duration: 15,
         difficulty: 'EASY',
-        reasoning: 'Your streak needs attention soon. A quick 15-minute session will protect it without overwhelming you.',
+        duration: 15,
+        reasoning: 'Your streak needs a small block. Start the shortest safe session.',
       };
-
     case 'COLD_START':
       return {
-        duration: 20,
         difficulty: 'NORMAL',
-        reasoning: "Let's ease you in with a 20-minute session. Perfect for building momentum without pressure.",
+        duration: 20,
+        reasoning: 'First rhythm matters. Start with one clear block.',
       };
-
     case 'HIGH_CONFIDENCE':
       return {
-        duration: 45,
         difficulty: 'CHALLENGING',
-        reasoning: "You're in the zone! A 45-minute challenging session will maximize your productive flow.",
+        duration: 45,
+        reasoning: 'Your rhythm is warm. Use one deeper block.',
       };
-
     case 'COMEBACK_MODE':
       return {
-        duration: 25,
         difficulty: 'NORMAL',
-        reasoning: 'Welcome back! A 25-minute session is the perfect way to restart your momentum.',
+        duration: 25,
+        reasoning: 'The return starts small. Bank one steady block.',
       };
-
     default:
       return {
-        duration: 25,
         difficulty: 'NORMAL',
-        reasoning: 'Based on your patterns, a 25-minute session would be ideal right now.',
+        duration: 25,
+        reasoning: 'One clean block is the next move.',
       };
   }
 }

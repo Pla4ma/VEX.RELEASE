@@ -13,6 +13,7 @@ import { HomeContextualCards } from './HomeContextualCards';
 import type { ChallengeItem } from '../../../features/home-spine/components';
 import type { useHomeData } from '../hooks/useHomeData';
 import type { MissionPriorityInput } from '../../../features/daily-mission/types';
+import { buildLearningSessionParams } from '../../../features/learning-execution';
 
 type HomeData = ReturnType<typeof useHomeData>;
 type NavigationProp = NativeStackNavigationProp<RootStackParams>;
@@ -49,6 +50,10 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
 
   const todaysChallenges: ChallengeItem[] = isAvailable ? data.todaysChallenges : [];
   const challengeAvailability = getFeatureAvailability(features.challenges);
+  const startLearningTarget = (): void => {
+    const target = controller.learningExecutionLayer.target;
+    controller.openSetup(target ? buildLearningSessionParams(target) : undefined);
+  };
 
   return (
     <>
@@ -61,6 +66,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
       {controller.shouldShowSecondarySystems ? (
         <HomeContextualCards
           activeStudyPlan={controller.activeStudyPlanQuery.data as unknown as ActiveStudyPlan | null | undefined}
+          learningCopy={controller.learningExecutionLayer.copy}
           comebackData={controller.comebackQuery.data as unknown as Record<string, unknown> | null | undefined}
           comebackSessionsCompleted={comebackSessionsCompleted}
           todaysChallenges={todaysChallenges}
@@ -69,7 +75,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
           handleClaimReward={handleClaimReward}
           challengesRefetch={() => data.challengesQuery.refetch()}
           openSetup={controller.openSetup}
-          continueStudyPlan={controller.continueStudyPlan}
+          startLearningTarget={startLearningTarget}
           showToast={(toastData) => void data.showToast({ type: toastData.type as 'success' | 'error' | 'warning' | 'info', title: toastData.title, message: toastData.message })}
           userId={controller.userId ?? ''}
         />
@@ -86,7 +92,8 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
           history={controller.historyQuery.history}
           isFirstRun={controller.isFirstRun}
           isStudyLoading={controller.activeStudyPlanQuery.isLoading}
-          onContinueStudyPlan={controller.continueStudyPlan}
+          learningCopy={controller.learningExecutionLayer.copy}
+          onContinueStudyPlan={startLearningTarget}
           onOpenProgress={controller.openProgress}
           onOpenSetup={() => controller.openSetup()}
           onRetryStudyPlan={controller.activeStudyPlanQuery.refetch}

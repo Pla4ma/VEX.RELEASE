@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 
 import type { UserExperienceStage } from '../../../features/liveops-config';
+import { buildLearningSessionParams } from '../../../features/learning-execution';
+import type { LearningSessionTarget } from '../../../features/learning-execution';
 import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -11,6 +13,7 @@ export function useHomeNavigationActions(input: {
     contentId: string;
     generationId: string;
   } | null;
+  learningTarget: LearningSessionTarget | null;
   analytics: {
     trackFirstSessionStarted: (userId: string, source: string) => void;
     trackNextBestActionPressed: (
@@ -25,7 +28,7 @@ export function useHomeNavigationActions(input: {
   stage: UserExperienceStage;
   userId: string;
 }) {
-  const { activeStudyPlan, analytics, canNavigateContentStudy, canNavigateSocial, completedSessions, navigation, stage, userId } = input;
+  const { activeStudyPlan, analytics, canNavigateContentStudy, canNavigateSocial, completedSessions, learningTarget, navigation, stage, userId } = input;
 
   const openSetup = useCallback((params?: SessionStackParams['SessionSetup']) => {
     if (userId && completedSessions === 0) {
@@ -51,6 +54,10 @@ export function useHomeNavigationActions(input: {
     navigation.navigate('ContentStudy');
   }, [canNavigateContentStudy, navigation, openSetup]);
   const continueStudyPlan = useCallback(() => {
+    if (learningTarget) {
+      openSetup(buildLearningSessionParams(learningTarget));
+      return;
+    }
     if (!activeStudyPlan || !canNavigateContentStudy) {
       openContentStudy();
       return;
@@ -63,7 +70,7 @@ export function useHomeNavigationActions(input: {
         contentId: activeStudyPlan.contentId,
       },
     });
-  }, [activeStudyPlan, canNavigateContentStudy, navigation, openContentStudy]);
+  }, [activeStudyPlan, canNavigateContentStudy, learningTarget, navigation, openContentStudy, openSetup]);
   const openNextAction = useCallback(() => {
     analytics.trackNextBestActionPressed(stage, completedSessions);
     openSetup();

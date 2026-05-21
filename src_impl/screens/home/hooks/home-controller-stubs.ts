@@ -1,6 +1,7 @@
 import type { UseQueryResult } from '@tanstack/react-query';
 import type { HomeReturnReason } from './useHomeReturnReason';
 import type { SessionRecommendation } from '../../../features/ai-coach';
+import type { LearningExecutionLayer } from '../../../features/learning-execution';
 
 export function createStubQuery(): UseQueryResult {
   const stub = {
@@ -77,3 +78,21 @@ export function stubPrimaryRecommendation(): SessionRecommendation | null {
   return null;
 }
 
+export function stubLearningExecutionLayer(): LearningExecutionLayer {
+  return {
+    copy: {
+      completionTitle: 'Deep work plan advanced',
+      emptyCta: 'Build a deep work path',
+      emptyTitle: 'Attach the next work target',
+      homeCta: 'Start deep work',
+      homeTitle: 'Deep Work Plan',
+      layerName: 'Deep Work Plan',
+      setupCta: 'Start deep work block',
+      setupEyebrow: 'Deep Work Plan',
+    },
+    dataModelImpact:
+      'LearningExecutionLayer reuses content, generation, task, and session ids; only route metadata and adaptive copy are added.',
+    persona: 'work',
+    target: null,
+  };
+}

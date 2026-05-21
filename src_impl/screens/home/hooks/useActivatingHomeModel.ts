@@ -16,7 +16,7 @@ import type { ExtendedRootStackParams, SessionStackParams } from '../../../navig
 import { getFocusedMinutesForToday, getNextUnlockFeature, buildDisplayedReturnReason } from './home-controller-helpers';
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
 import type { HomeReturnReason } from './useHomeReturnReason';
-import { createStubQuery, stubNavigationActions } from './home-controller-stubs';
+import { createStubQuery, stubLearningExecutionLayer, stubNavigationActions } from './home-controller-stubs';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -142,6 +142,7 @@ export function useActivatingHomeModel(input: ActivatingModelInput): HomeViewMod
     historyQuery: historyQuery as SessionHistoryResult,
     squadsQuery: createStubQuery() as UseQueryResult,
     activeStudyPlanQuery: createStubQuery() as UseQueryResult,
+    learningExecutionLayer: stubLearningExecutionLayer(),
     comebackQuery: createStubQuery() as UseQueryResult,
     activeBossQuery: createStubQuery() as UseQueryResult,
     recommendationsQuery: recommendationsQuery as UseQueryResult,

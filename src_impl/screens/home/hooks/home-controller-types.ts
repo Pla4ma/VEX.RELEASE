@@ -7,6 +7,7 @@ import type { HomeFeatureRuntime } from './home-feature-runtime';
 import type { HomeReturnReason } from './useHomeReturnReason';
 import type { SessionRecommendation } from '../../../features/ai-coach';
 import type { HomeSpineModel } from '../../../features/home-spine/schemas';
+import type { LearningExecutionLayer } from '../../../features/learning-execution';
 import type { SessionHistoryEntry } from '../../../session/types';
 
 export interface SessionHistoryResult {
@@ -41,6 +42,7 @@ export interface HomeController {
   historyQuery: SessionHistoryResult;
   squadsQuery: UseQueryResult;
   activeStudyPlanQuery: UseQueryResult;
+  learningExecutionLayer: LearningExecutionLayer;
   comebackQuery: UseQueryResult;
   activeBossQuery: UseQueryResult;
   recommendationsQuery: UseQueryResult;
@@ -66,4 +68,3 @@ export interface HomeController {
   retryAll: () => Promise<unknown>;
   features: FeatureAccessMap;
 }
-

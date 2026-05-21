@@ -58,9 +58,12 @@ export function useStartSessionFlow({
       const sessionTags = Array.from(new Set([...(selectedPreset.tags || []), ...(params?.sessionTags ?? [])]));
       const notesPayload: Record<string, unknown> = {};
 
-      if (params?.source === 'content-study') {
+      if (params?.source === 'content-study' || params?.source === 'learning-execution') {
         if (!sessionTags.includes('content-study')) {
           sessionTags.push('content-study');
+        }
+        if (params.source === 'learning-execution' && !sessionTags.includes('learning-execution')) {
+          sessionTags.push('learning-execution');
         }
         if (params.studyPlanId && !sessionTags.includes(params.studyPlanId)) {
           sessionTags.push(params.studyPlanId);
@@ -74,6 +77,8 @@ export function useStartSessionFlow({
         notesPayload.contentId = params.contentId;
         notesPayload.studyPlanId = params.studyPlanId ?? params.generationId;
         notesPayload.focusAreas = params.focusAreas;
+        notesPayload.learningExecutionLabel = params.learningExecutionLabel;
+        notesPayload.learningExecutionTaskId = params.learningExecutionTaskId;
       }
 
       if (selectedThemeId && selectedThemeOwned) {

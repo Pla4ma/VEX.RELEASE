@@ -13,9 +13,11 @@ import {
 } from '../../../features/home-spine/components';
 import { StudyPlanSuggestionCard } from '../../../features/content-study/components/StudyPlanSuggestionCard';
 import type { ActiveStudyPlan } from '../../../features/content-study/hooks/helpers';
+import type { LearningExecutionCopy } from '../../../features/learning-execution';
 
 interface HomeContextualCardsProps {
   activeStudyPlan: ActiveStudyPlan | null | undefined;
+  learningCopy: LearningExecutionCopy;
   comebackData: { streakRestoreEligible?: boolean; streakBefore?: number; rewardMultiplier?: number; isComeback?: boolean; daysAbsent?: number; streakNow?: number; message?: string } | null | undefined;
   comebackSessionsCompleted: number;
   todaysChallenges: ChallengeItem[];
@@ -24,13 +26,14 @@ interface HomeContextualCardsProps {
   handleClaimReward: (challengeId: string) => void;
   challengesRefetch: () => void;
   openSetup: () => void;
-  continueStudyPlan: () => void;
+  startLearningTarget: () => void;
   showToast: (data: { type: string; title: string; message?: string }) => void;
   userId: string;
 }
 
 export function HomeContextualCards({
   activeStudyPlan,
+  learningCopy,
   comebackData,
   comebackSessionsCompleted,
   todaysChallenges,
@@ -39,7 +42,7 @@ export function HomeContextualCards({
   handleClaimReward,
   challengesRefetch,
   openSetup,
-  continueStudyPlan,
+  startLearningTarget,
   showToast,
   userId,
 }: HomeContextualCardsProps): JSX.Element | null {
@@ -55,8 +58,9 @@ export function HomeContextualCards({
   if (showStudyPlanCard) {
     return (
       <StudyPlanSuggestionCard
+        copy={learningCopy}
         studyPlan={activeStudyPlan}
-        onSelect={continueStudyPlan}
+        onSelect={startLearningTarget}
       />
     );
   }

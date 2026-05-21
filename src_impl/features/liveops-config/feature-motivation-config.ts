@@ -47,7 +47,7 @@ export const FEATURE_MOTIVATION_PROFILES: Partial<
     restrictVisibilityMin: 8,
   },
   ai_coach_advanced: {
-    accelerate: ['student', 'worker', 'intense'],
+    accelerate: ['student', 'worker', 'coach_led', 'intense'],
     accelerateOffset: 2,
     restrict: ['calm'],
     restrictOffset: 3,

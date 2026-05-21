@@ -6,6 +6,7 @@ export type LanguageTier = z.infer<typeof LanguageTierSchema>;
 
 const TIER_MAP: Record<MotivationProfileType, LanguageTier> = {
   calm: 'gentle',
+  coach_led: 'gentle',
   friendly: 'gentle',
   student: 'gentle',
   creator: 'gentle',

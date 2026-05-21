@@ -68,6 +68,7 @@ export const MotivationProfileTypeSchema = z.enum([
   "calm",
   "friendly",
   "game_like",
+  "coach_led",
   "competitive",
   "intense",
   "student",

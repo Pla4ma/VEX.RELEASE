@@ -15,8 +15,11 @@ type HomeData = {
   controller: {
     activeStudyPlanQuery: { data: { title: string } | null };
     currentStreak: number;
+    disclosure: { features: { companion_detail: { isUnlocked: boolean } } };
     isLoading: boolean;
     isOnline: boolean;
+    learningExecutionLayer: { copy: { homeCta: string; homeTitle: string; layerName: string } };
+    openSetup: () => void;
     primaryRecommendation: Recommendation | null;
     progressionQuery: { data: { level: number } };
     user: { avatar: string | null; firstName: string };
@@ -78,7 +81,7 @@ jest.mock('../components/HomeContent', () => ({
       !controller.isOnline ? ReactRuntime.createElement(Text, null, 'Offline mode') : null,
       ReactRuntime.createElement(Text, null, 'Focus Score'),
       ReactRuntime.createElement(Text, null, 'Daily Mission'),
-      ReactRuntime.createElement(Text, null, 'Start Study Plan'),
+      ReactRuntime.createElement(Text, null, `Start ${controller.learningExecutionLayer.copy.layerName}`),
       controller.primaryRecommendation
         ? ReactRuntime.createElement(Text, null, controller.primaryRecommendation.reasoning)
         : null,
@@ -86,11 +89,11 @@ jest.mock('../components/HomeContent', () => ({
         ? ReactRuntime.createElement(
             Text,
             null,
-            `ACTIVE STUDY PLAN: "${controller.activeStudyPlanQuery.data.title}"`
+            `${controller.learningExecutionLayer.copy.homeTitle}: "${controller.activeStudyPlanQuery.data.title}"`
           )
         : null,
       controller.activeStudyPlanQuery.data
-        ? ReactRuntime.createElement(Text, null, 'Continue Study')
+        ? ReactRuntime.createElement(Text, null, controller.learningExecutionLayer.copy.homeCta)
         : null
     );
   },
@@ -102,8 +105,17 @@ function createHomeData(overrides: Partial<HomeData['controller']> = {}): HomeDa
     controller: {
       activeStudyPlanQuery: { data: null },
       currentStreak: 5,
+      disclosure: { features: { companion_detail: { isUnlocked: false } } },
       isLoading: false,
       isOnline: true,
+      learningExecutionLayer: {
+        copy: {
+          homeCta: 'Start deep work',
+          homeTitle: 'Deep Work Plan',
+          layerName: 'Deep Work Plan',
+        },
+      },
+      openSetup: jest.fn(),
       primaryRecommendation: {
         id: 'rec-1',
         reasoning: '6 PM is your best focus window.',
@@ -134,7 +146,7 @@ describe('HomeScreen command center', () => {
 
     expect(screen.getByText('Focus Score')).toBeTruthy();
     expect(screen.getByText('Daily Mission')).toBeTruthy();
-    expect(screen.getByText('Start Study Plan')).toBeTruthy();
+    expect(screen.getByText('Start Deep Work Plan')).toBeTruthy();
     expect(screen.getByText('6 PM is your best focus window.')).toBeTruthy();
   });
 
@@ -145,8 +157,8 @@ describe('HomeScreen command center', () => {
 
     render(<HomeScreen />);
 
-    expect(screen.getByText('ACTIVE STUDY PLAN: "React Deep Dive"')).toBeTruthy();
-    expect(screen.getByText('Continue Study')).toBeTruthy();
+    expect(screen.getByText('Deep Work Plan: "React Deep Dive"')).toBeTruthy();
+    expect(screen.getByText('Start deep work')).toBeTruthy();
     expect(screen.queryByText('Trading')).toBeNull();
     expect(screen.queryByText('Emergency Gem')).toBeNull();
   });

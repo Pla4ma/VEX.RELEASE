@@ -32,7 +32,7 @@ export async function selectHomePriority(
   userId: string,
   featureAccess?: FeatureAccessMap,
 ): Promise<HomePriority> {
-  const snapshot = await buildHomeContextSnapshot(userId);
+  const snapshot = await buildHomeContextSnapshot(userId, featureAccess);
   const ordered = rankHomePriorityCandidates(snapshot, featureAccess);
   const primary = pickHomePrimaryPriority(snapshot, featureAccess);
 

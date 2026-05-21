@@ -161,7 +161,7 @@ export function checkDefaultSession(
     isNewUser
       ? 'Start one clean session. The rest of home will get smarter after that.'
       : 'Start the next focus block without overthinking the setup.',
-    'Start Focus',
+    isNewUser ? 'Start First Session' : 'Start Focus',
     {
       presetMode: isNewUser ? 'SPRINT' : 'DEEP_WORK',
       suggestedDurationSeconds: isNewUser ? 10 * 60 : 25 * 60,

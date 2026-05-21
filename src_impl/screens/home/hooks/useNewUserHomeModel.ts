@@ -16,6 +16,7 @@ import {
   stubNavigationActions,
   stubCoachMutations,
   stubHomeReturnReason,
+  stubLearningExecutionLayer,
   stubPrimaryRecommendation,
 } from './home-controller-stubs';
 
@@ -100,6 +101,7 @@ export function useNewUserHomeModel(input: NewUserModelInput): HomeViewModel & {
     historyQuery: historyQuery as SessionHistoryResult,
     squadsQuery: createStubQuery() as UseQueryResult,
     activeStudyPlanQuery: createStubQuery() as UseQueryResult,
+    learningExecutionLayer: stubLearningExecutionLayer(),
     comebackQuery: createStubQuery() as UseQueryResult,
     activeBossQuery: createStubQuery() as UseQueryResult,
     recommendationsQuery: createStubQuery() as UseQueryResult,

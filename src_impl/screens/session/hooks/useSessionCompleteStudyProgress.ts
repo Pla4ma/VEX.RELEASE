@@ -5,6 +5,7 @@ import {
   useActiveStudyPlan,
   useCompleteStudyPlanTask,
 } from '../../../features/content-study';
+import { useLearningExecutionLayer } from '../../../features/learning-execution';
 
 type ContentStudySessionMeta = {
   generationId: string | null;
@@ -36,7 +37,9 @@ function parseContentStudySessionMeta(
   notes?: string,
   tags?: string[],
 ): ContentStudySessionMeta {
-  const isContentStudy = Boolean(tags?.includes('content-study'));
+  const isContentStudy = Boolean(
+    tags?.includes('content-study') || tags?.includes('learning-execution'),
+  );
 
   if (!notes) {
     return { generationId: null, isContentStudy };
@@ -60,6 +63,7 @@ export function useSessionCompleteStudyProgress({
   const [dismissedStudyPrompt, setDismissedStudyPrompt] = useState(false);
   const activeStudyPlanQuery = useActiveStudyPlan();
   const completeStudyTaskMutation = useCompleteStudyPlanTask();
+  const learningExecution = useLearningExecutionLayer(activeStudyPlanQuery.data ?? null);
 
   const sessionStudyMeta = useMemo(
     () => parseContentStudySessionMeta(notes, tags),
@@ -83,7 +87,7 @@ export function useSessionCompleteStudyProgress({
 
     // Calculate next session goal (fallback to next task or estimate)
     const nextGoal = {
-      topic: activePlan.nextTask?.content ?? 'Continue studying',
+      topic: activePlan.nextTask?.content ?? learningExecution.copy.homeCta,
       suggestedDurationMinutes: activePlan.nextTask?.estimatedMinutes ?? 25,
     };
 
@@ -103,8 +107,8 @@ export function useSessionCompleteStudyProgress({
       },
       onSkip: () => setDismissedStudyPrompt(true),
       progress: activePlan.progressPercent / 100,
-      progressLabel: `Task ${activePlan.completedTasks + 1}/${activePlan.totalTasks} completed`,
-      taskLabel: `Task ${activePlan.completedTasks + 1}/${activePlan.totalTasks}`,
+      progressLabel: `${learningExecution.copy.completionTitle}: ${activePlan.completedTasks}/${activePlan.totalTasks}`,
+      taskLabel: `Step ${activePlan.completedTasks + 1}/${activePlan.totalTasks}`,
       taskTitle: nextTask.content,
       // Enhanced study progress details (10.2)
       planTitle: activePlan.title,
@@ -118,6 +122,8 @@ export function useSessionCompleteStudyProgress({
     activeStudyPlanQuery.data,
     completeStudyTaskMutation,
     dismissedStudyPrompt,
+    learningExecution.copy.completionTitle,
+    learningExecution.copy.homeCta,
     sessionStudyMeta.generationId,
     sessionStudyMeta.isContentStudy,
   ]);

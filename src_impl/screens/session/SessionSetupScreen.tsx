@@ -31,6 +31,7 @@ import { SessionSetupStakesCard } from "./components/SessionSetupStakesCard";
 import { SessionSetupStudyPlanCard } from "./components/SessionSetupStudyPlanCard";
 import { useSessionSetupStakes } from "./hooks/useSessionSetupStakes";
 import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
+import { buildLearningSessionParams } from "../../features/learning-execution";
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
@@ -59,11 +60,16 @@ export const SessionSetupScreen = withScreenErrorBoundary(
     });
 
     const handleStudyPlanSelect = (studyPlan: ActiveStudyPlan) => {
-      // Auto-select STUDY mode
-      controller.setupState.setSelectedSessionMode(SessionMode.STUDY);
-      // Set custom duration from study plan
+      const target = controller.learningExecutionLayer.target;
+      if (target) {
+        navigation.setParams(buildLearningSessionParams(target));
+      }
+      controller.setupState.setSelectedSessionMode(
+        target?.persona === "creative" ? SessionMode.CREATIVE :
+          target?.persona === "student" || target?.persona === "learning"
+            ? SessionMode.STUDY : SessionMode.DEEP_WORK,
+      );
       controller.setupState.setCustomDuration(studyPlan.remainingMinutes);
-      // Expand customization to show the selection
       controller.setupState.setShowCustomization(true);
     };
 
@@ -113,6 +119,7 @@ export const SessionSetupScreen = withScreenErrorBoundary(
           />
 
           <SessionSetupStudyPlanCard
+            copy={controller.learningExecutionLayer.copy}
             studyPlan={controller.activeStudyPlan.data ?? null}
             onSelect={handleStudyPlanSelect}
           />

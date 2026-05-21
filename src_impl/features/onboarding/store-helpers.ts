@@ -106,7 +106,7 @@ export function deriveMotivationProfile(
       break;
     case 'mentor':
     default:
-      secondary.push('calm');
+      secondary.push('coach_led');
       break;
   }
 

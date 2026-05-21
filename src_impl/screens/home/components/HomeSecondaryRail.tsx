@@ -8,6 +8,7 @@ import {
   type UserExperienceStage,
 } from '../../../features/liveops-config';
 import type { SessionHistoryEntry } from '../../../session/types';
+import type { LearningExecutionCopy } from '../../../features/learning-execution';
 import {
   ContentStudyHeroCard,
   HistoryCard,
@@ -31,6 +32,7 @@ interface HomeSecondaryRailProps {
   history: SessionHistoryEntry[];
   isFirstRun: boolean;
   isStudyLoading: boolean;
+  learningCopy: LearningExecutionCopy;
   onContinueStudyPlan: () => void;
   onOpenProgress: () => void;
   onOpenSetup: () => void;
@@ -49,6 +51,7 @@ export function HomeSecondaryRail({
   isFirstRun,
   hasStudyError,
   isStudyLoading,
+  learningCopy,
   onContinueStudyPlan,
   onOpenProgress,
   onOpenSetup,
@@ -67,7 +70,7 @@ export function HomeSecondaryRail({
       <SectionHeader
         eyebrow="Execution record"
         title="Keep the loop moving"
-        body="Study, coaching, and progress stay tied to completed focus sessions."
+        body={`${learningCopy.layerName}, coaching, and progress stay tied to completed focus sessions.`}
       />
       {!hasActiveRecommendation ? <GoalCard stage={stage} /> : null}
       {studyAvailability.canRenderEntryPoint ? (
@@ -75,6 +78,7 @@ export function HomeSecondaryRail({
           activePlan={activePlan}
           hasError={hasStudyError}
           isLoading={isStudyLoading}
+          copy={learningCopy}
           onContinue={onContinueStudyPlan}
           onRetry={() => void onRetryStudyPlan()}
           onSeeHowItWorks={onOpenProgress}

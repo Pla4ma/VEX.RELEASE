@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCreateRecommendation, useUpdateRecommendationStatus, type SessionRecommendation } from '../../../features/ai-coach';
 import * as coachRepository from '../../../features/ai-coach/repository';
 import { useActiveStudyPlan } from '../../../features/content-study';
+import { useLearningExecutionLayer } from '../../../features/learning-execution';
 import { useActiveBoss } from '../../../features/boss/hooks';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
 import { getFeatureAvailability, isFeatureAvailableForNavigation, useDisclosureAnalytics, useFeatureAccess } from '../../../features/liveops-config';
@@ -31,13 +32,22 @@ export function useHomeScreenController() {
   const clearHomeHighlight = useSessionUIStore((state) => state.clearHomeHighlight);
   const userId = user?.id ?? '';
   const disclosure = useFeatureAccess();
-  const runtime = useMemo(() => buildHomeFeatureRuntime(disclosure.features, disclosure.productTier), [disclosure.features, disclosure.productTier]);
+  const runtime = useMemo(
+    () => buildHomeFeatureRuntime({
+      features: disclosure.features,
+      productTier: disclosure.productTier,
+      totalSessions: disclosure.inputs.totalCompletedSessions,
+    }),
+    [disclosure.features, disclosure.inputs.totalCompletedSessions, disclosure.productTier],
+  );
   const analytics = useDisclosureAnalytics();
-  const streakQuery = useStreakSummary(userId);
-  const progressionQuery = useProgressionSummary(userId);
+  const canQueryProgressSignals = disclosure.inputs.totalCompletedSessions > 0;
+  const streakQuery = useStreakSummary(canQueryProgressSignals ? userId : null);
+  const progressionQuery = useProgressionSummary(canQueryProgressSignals ? userId : null);
   const historyQuery = useSessionHistory(userId, 5);
   const squadsQuery = useUserSquads(userId || undefined, { enabled: runtime.canQuerySquads, staleTime: 1000 * 60 * 5 });
   const activeStudyPlanQuery = useActiveStudyPlan({ enabled: runtime.canQueryStudy });
+  const learningExecutionLayer = useLearningExecutionLayer(activeStudyPlanQuery.data ?? null);
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
   const activeBossQuery = useActiveBoss(runtime.canQueryBoss ? userId || null : null);
   const createRecommendation = useCreateRecommendation();
@@ -97,6 +107,7 @@ export function useHomeScreenController() {
     canNavigateContentStudy: isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.content_study)),
     canNavigateSocial: isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.social_tab)),
     completedSessions: disclosure.inputs.totalCompletedSessions,
+    learningTarget: learningExecutionLayer.target,
     navigation,
     stage: disclosure.stage,
     userId,
@@ -166,6 +177,7 @@ export function useHomeScreenController() {
     historyQuery,
     squadsQuery,
     activeStudyPlanQuery,
+    learningExecutionLayer,
     comebackQuery,
     activeBossQuery,
     shouldShowSecondarySystems,

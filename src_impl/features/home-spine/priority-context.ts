@@ -5,6 +5,11 @@ import { getHomePromiseState } from '../companion-promise/service';
 import { onboardingRepository } from '../onboarding/repository';
 import { fetchStreak } from '../streaks/repository';
 import {
+  getFeatureAvailability,
+  isFeatureAvailableForQueries,
+  type FeatureAccessMap,
+} from '../liveops-config';
+import {
   HomeContextSnapshotSchema,
   type HomeContextSnapshot,
 } from './priority-schemas';
@@ -53,8 +58,13 @@ function findNearDoneChallenge(
 
 export async function buildHomeContextSnapshot(
   userId: string,
+  featureAccess?: FeatureAccessMap,
 ): Promise<HomeContextSnapshot> {
   const timeZone = getTimeZone();
+  const canQuery = (key: keyof FeatureAccessMap): boolean => {
+    if (!featureAccess) { return true; }
+    return isFeatureAvailableForQueries(getFeatureAvailability(featureAccess[key]));
+  };
   const [
     progressState,
     streak,
@@ -65,13 +75,13 @@ export async function buildHomeContextSnapshot(
   ] = await Promise.all([
     onboardingRepository.getProgress(userId),
     fetchStreak(userId).catch((): null => null),
-    fetchActiveEncounter(userId).catch((): null => null),
-    getHomePromiseState(userId, true, timeZone).catch(() => ({
+    canQuery('boss_tab') ? fetchActiveEncounter(userId).catch((): null => null) : Promise.resolve(null),
+    canQuery('companion_detail') ? getHomePromiseState(userId, true, timeZone).catch(() => ({
       kind: 'hidden' as const,
       showOfflineBanner: false,
-    })),
-    fetchActiveRecommendations(userId, 1).catch(() => []),
-    fetchActiveChallengeDetails(userId).catch(() => []),
+    })) : Promise.resolve({ kind: 'hidden' as const, showOfflineBanner: false }),
+    canQuery('ai_coach_advanced') ? fetchActiveRecommendations(userId, 1).catch(() => []) : Promise.resolve([]),
+    canQuery('challenges') ? fetchActiveChallengeDetails(userId).catch(() => []) : Promise.resolve([]),
   ]);
   const activeRecommendation = recommendations.find(
     (recommendation) => recommendation.status === 'ACTIVE' && recommendation.expiresAt > Date.now(),

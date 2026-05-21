@@ -14,18 +14,21 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import type { ActiveStudyPlan } from '../hooks/helpers';
+import type { LearningExecutionCopy } from '../../learning-execution';
 
 export interface StudyPlanSuggestionCardProps {
   /** The active study plan from useActiveStudyPlan */
   studyPlan: ActiveStudyPlan;
   /** Callback when user selects this study plan suggestion */
   onSelect: (studyPlan: ActiveStudyPlan) => void;
+  copy?: LearningExecutionCopy;
 }
 
 /**
  * Individual study plan suggestion card
  */
 export function StudyPlanSuggestionCard({
+  copy,
   studyPlan,
   onSelect,
 }: StudyPlanSuggestionCardProps): JSX.Element {
@@ -44,6 +47,9 @@ export function StudyPlanSuggestionCard({
   };
 
   const progressText = `${studyPlan.completedTasks}/${studyPlan.totalTasks} tasks completed (${studyPlan.progressPercent}%)`;
+  const layerName = copy?.layerName ?? 'Study OS';
+  const title = copy ? `${copy.homeTitle}: ${studyPlan.title}` : `Continue studying ${studyPlan.title}`;
+  const modeLabel = copy?.layerName ?? 'STUDY mode';
 
   return (
     <Animated.View
@@ -52,9 +58,9 @@ export function StudyPlanSuggestionCard({
     >
       <Pressable
         onPress={handlePress}
-        accessibilityLabel={`Continue studying ${studyPlan.title}`}
+        accessibilityLabel={`${copy?.homeCta ?? 'Continue studying'} ${studyPlan.title}`}
         accessibilityRole="button"
-        accessibilityHint={`Auto-selects STUDY mode with ${studyPlan.remainingMinutes} minutes recommended duration`}
+        accessibilityHint={`Starts ${layerName} with ${studyPlan.remainingMinutes} minutes recommended duration`}
       >
         <Box
           flexDirection="row"
@@ -81,7 +87,7 @@ export function StudyPlanSuggestionCard({
           {/* Content */}
           <Box flex={1} gap="xs">
             <Text variant="body" color="text.primary" fontWeight="600">
-              Continue studying {studyPlan.title}
+              {title}
             </Text>
             {studyPlan.nextTask && (
               <Text variant="caption" color="text.secondary" numberOfLines={1}>
@@ -106,7 +112,7 @@ export function StudyPlanSuggestionCard({
                 bg={theme.colors.background.tertiary}
               >
                 <Text variant="caption" color="info.DEFAULT" fontSize={10}>
-                  STUDY mode
+                  {modeLabel}
                 </Text>
               </Box>
             </Box>

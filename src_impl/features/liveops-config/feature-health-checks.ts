@@ -14,6 +14,35 @@ const healthChecks: FeatureHealthCheck[] = [
     },
   },
   {
+    id: 'content_study_storage',
+    feature: 'content_study',
+    label: 'Content Study - Supabase Storage',
+    dependency: 'study-content-storage',
+    cacheMs: 120_000,
+    check: () => {
+      const hasSupabase =
+        Boolean(process.env.EXPO_PUBLIC_SUPABASE_URL) &&
+        Boolean(process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY);
+      return hasSupabase ? 'healthy' : 'unavailable';
+    },
+  },
+  {
+    id: 'content_study_rate_limits',
+    feature: 'content_study',
+    label: 'Content Study - rate limits',
+    dependency: 'rate_limits',
+    cacheMs: 300_000,
+    check: () => 'healthy',
+  },
+  {
+    id: 'content_study_privacy_disclosure',
+    feature: 'content_study',
+    label: 'Content Study - privacy disclosure',
+    dependency: 'privacy_disclosure',
+    cacheMs: 300_000,
+    check: () => 'healthy',
+  },
+  {
     id: 'ai_coach_advanced_quota',
     feature: 'ai_coach_advanced',
     label: 'AI Coach Advanced — quota check',

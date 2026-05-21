@@ -2023,3 +2023,53 @@ PASS. Phase 2 Integrity Sprint gates are complete.
 **Risks for human review:**
 - `useHomePriority` now performs a second home-priority read path in parallel with existing controller queries; the logic is deterministic, but the extra query load should be watched during broader Phase 9/10 performance verification.
 - Phase 4 static verification is complete, but the task packet’s screenshot/device exit gates still require human-run evidence before a full visual PASS is claimed.
+
+## 2026-05-21 - Adaptive Learning Execution Layer
+
+**Scope verified:**
+- Added one shared `learning-execution` layer over existing content-study/session systems.
+- Adaptive naming map covers Student, Work/Productivity, Creative, Personal Growth, and Learning.
+- Home and Session Setup use the adaptive layer copy and route plan/task context into focus sessions.
+- Session Completion recognizes tied learning/content sessions and uses generic plan wording for non-student contexts.
+- Content Study health now includes AI, Supabase storage config, rate-limit readiness, and privacy disclosure checks.
+
+**Commands run:**
+- `npm run typecheck -- --pretty false`: PASS, exited 0.
+- `npm test -- src_impl/features/learning-execution/__tests__/service.test.ts src_impl/features/session-completion/__tests__/learning-execution-return-plan.test.ts src_impl/features/session-start/__tests__/service.test.ts src_impl/features/home-spine/__tests__/service.test.ts src_impl/features/liveops-config/__tests__/feature-health.test.ts src_impl/screens/home/__tests__/home-screen-command.test.tsx src_impl/screens/home/__tests__/home-screen-recommendations.test.tsx --runInBand`: PASS, 7 suites / 31 tests passed.
+- Edited-scope file-size audit over `git diff --name-only -- src_impl`: PASS, no edited file exceeded 200 lines.
+- Edited-scope banned-pattern audit for `console.`, `any`, ts-ignore/ts-nocheck, `StyleSheet.create`, `FlatList`, `AsyncStorage`, and raw `fetch(`: PASS, zero matches.
+
+**Notes:**
+- `TASK 4` was blank in the prompt, so no fourth task scope was inferred.
+- The workspace had pre-existing unrelated changes before this pass; this entry records only the adaptive learning/session integration verification.
+
+## 2026-05-21 - Coach Presence Unification
+
+**Scope verified:**
+- Added `coach-presence` as the shared model for AI Coach copy, companion visual reaction, action intent, memory summary, completion reflection, and motivation style adaptation.
+- Home companion context now renders as one Coach Presence surface.
+- Session Completion hero reflection now comes from Coach Presence.
+- Coach chat service now returns short Coach Presence-style messages and whitelisted action intents only.
+- Architecture, memory plan, integration plan, risks, copy rules, and test plan are documented in `docs/coach-presence-architecture.md`.
+
+**Commands run:**
+- `npm test -- src_impl/features/coach-presence/__tests__/service.test.ts --runInBand`: PASS, 1 suite / 4 tests passed.
+- `npm run typecheck`: PASS, exited 0.
+- `npm test -- src_impl/features/ai-coach/__tests__/service.test.ts src_impl/features/session-completion/__tests__/service.test.ts src_impl/features/coach-presence/__tests__/service.test.ts --runInBand`: PASS for runnable suites, 2 suites / 11 tests passed.
+- `npm test -- --runTestsByPath src_impl/features/session-completion/__tests__/service.test.ts --runInBand`: Jest reported no tests found because this path is excluded by the current Jest configuration.
+- Edited-scope file-size audit over Coach Presence, Home, AI Coach, and Session Completion files: PASS, no touched file exceeded 200 lines.
+
+## 2026-05-21 - Adaptive Visual Motivation and Personalization Resolver
+
+**Scope verified:**
+- Added `personalization` as the central resolver for Home layout, coach tone, study naming, boss intensity, completion sequence, premium timing, route gates, behavior adaptation, and public v1 feature state.
+- Wired `home-experience` model construction through the resolver while preserving the existing Day 0 Home contract.
+- Gated `MiniBossPreview` so unavailable boss state does not query or navigate.
+- Documented boss intensity, completion choreography, premium strategy, visual layer split, behavior adaptation, and public v1 scope in `docs/product/vex-adaptive-home-personalization-v1.md`.
+- Fixed the `coach-screen-service` typecheck failure by importing `ACTION_LABELS` from the same direct `coach-presence/copy` source used by the working presence service.
+
+**Commands run:**
+- `npm test -- src_impl/features/personalization/__tests__/service.test.ts src_impl/features/home-experience/__tests__/service.test.ts src_impl/screens/home/hooks/__tests__/home-feature-runtime.test.ts --runInBand`: PASS, 3 suites / 17 tests passed.
+- `npm run typecheck -- --pretty false`: PASS, exited 0.
+- Edited-scope banned-pattern audit for `console.`, `any`, ts-ignore/ts-nocheck, `StyleSheet.create`, `FlatList`, `AsyncStorage`, and raw `fetch(`: PASS, zero matches.
+- Edited-scope file-size audit over personalization, Home experience, MiniBossPreview, coach screen service, and the product doc: PASS, all audited files are under 200 lines.

@@ -8,6 +8,7 @@ import { useNetInfo } from '../../network';
 import type { SessionStackParams } from '../../navigation/types';
 import { useAuthStore } from '../../store';
 import { useActiveStudyPlan } from '../content-study/hooks';
+import { useLearningExecutionLayer } from '../learning-execution';
 import {
   parseSessionSetupParams,
   buildSessionStartHero,
@@ -33,6 +34,7 @@ export function useSessionStartController(input: {
   const { isOffline } = useNetInfo();
   const { data: streak } = useStreak(user?.id ?? null);
   const activeStudyPlan = useActiveStudyPlan();
+  const learningExecutionLayer = useLearningExecutionLayer(activeStudyPlan.data ?? null);
   const [shopTheme, setShopTheme] = useState<SessionTheme | null>(null);
   const parsedRoute = useMemo(() => parseSessionSetupParams(routeParams), [routeParams]);
   const userId = user?.id ?? '';
@@ -114,6 +116,7 @@ export function useSessionStartController(input: {
     handleStartSession,
     handleThemePress,
     isStarting,
+    learningExecutionLayer,
     offlineMessage,
     parsedRoute,
     selectableThemesQuery,

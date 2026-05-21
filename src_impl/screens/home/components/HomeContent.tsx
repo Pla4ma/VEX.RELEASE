@@ -10,13 +10,12 @@ import type { CompletionSyncState } from '../../../store/session-state';
 import { HomeStatusBanners } from './HomeStatusBanners';
 import { HomeMissionInput } from './HomeMissionInput';
 import { HomeContentLower } from './HomeContentLower';
-import { HomeCompanionWidget } from './HomeCompanionWidget';
-import { useHomeCompanion } from '../hooks/useHomeCompanion';
 import { HomeSectionBoundary } from './HomeSectionBoundary';
 import { HomeHeroSection } from './HomeHeroSection';
 import { HomeStreakProgress } from './HomeStreakProgress';
 import { HomeWeeklyQuest } from './HomeWeeklyQuest';
-import { useCompanionPromise } from '../../../features/companion-promise/hooks';
+import { HomeCompanionSection } from './HomeCompanionSection';
+import { HomeExperiencePrelude, useHomeExperienceModel } from '../../../features/home-experience';
 import type { MissionPriorityInput } from '../../../features/daily-mission/types';
 import type { useHomeData } from '../hooks/useHomeData';
 
@@ -48,8 +47,8 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   comebackSessionsCompleted,
 }) => {
   const navigation = useNavigation<NavigationProp>();
-  const companionStatus = useHomeCompanion(controller.userId, controller.isOnline);
-  const companionPromise = useCompanionPromise();
+  const homeExperience = useHomeExperienceModel(controller.disclosure.inputs.totalCompletedSessions);
+  const isDayZero = homeExperience.stage === 'STAGE_0';
   const openChallenges = (): void => {
     const challengesAccess = controller.disclosure.features.challenges;
     if (isFeatureAvailableForNavigation(getFeatureAvailability(challengesAccess))) {
@@ -66,9 +65,6 @@ export const HomeContent: React.FC<HomeContentProps> = ({
     }
     controller.openSetup();
   };
-  const showCompanionContext = companionPromise.data.kind !== 'pending'
-    && companionPromise.data.kind !== 'missed';
-
   const weeklyQuestAvailability = getFeatureAvailability(features.challenges);
 
   return (
@@ -98,27 +94,34 @@ export const HomeContent: React.FC<HomeContentProps> = ({
           />
 
           <HomeSectionBoundary sectionName="Hero Action">
+            <HomeExperiencePrelude model={homeExperience} />
             <HomeHeroSection controller={controller} />
           </HomeSectionBoundary>
 
-          {controller.disclosure.features.companion_detail.isUnlocked && showCompanionContext ? (
-            <HomeSectionBoundary sectionName="Companion">
-              <HomeCompanionWidget
-                status={companionStatus}
-                onRetry={() => controller.retryAll()}
-                onPress={openCompanion}
-              />
-            </HomeSectionBoundary>
+          {!isDayZero && controller.disclosure.features.companion_detail.isUnlocked ? (
+            <HomeCompanionSection
+              currentStreakDays={controller.currentStreak}
+              features={features}
+              highFocusStreak={controller.currentStreak}
+              isOnline={controller.isOnline}
+              onAction={() => controller.openSetup()}
+              onPress={openCompanion}
+              onRetry={() => controller.retryAll()}
+              totalSessions={controller.disclosure.inputs.totalCompletedSessions}
+              userId={controller.userId}
+            />
           ) : null}
 
-          <HomeStreakProgress
-            currentDays={controller.currentStreak}
-            hoursRemaining={streakHoursRemaining}
-            riskLevel={(controller.streakQuery.data as Record<string, unknown> | undefined)?.riskLevel as 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | undefined}
-            longestStreak={(controller.streakQuery.data as Record<string, unknown> | undefined)?.longestDays as number | undefined}
-            isLoading={controller.streakQuery.isLoading}
-            userId={controller.userId ?? undefined}
-          />
+          {!isDayZero ? (
+            <HomeStreakProgress
+              currentDays={controller.currentStreak}
+              hoursRemaining={streakHoursRemaining}
+              riskLevel={(controller.streakQuery.data as Record<string, unknown> | undefined)?.riskLevel as 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | undefined}
+              longestStreak={(controller.streakQuery.data as Record<string, unknown> | undefined)?.longestDays as number | undefined}
+              isLoading={controller.streakQuery.isLoading}
+              userId={controller.userId ?? undefined}
+            />
+          ) : null}
 
           {controller.shouldShowSecondarySystems && weeklyQuestAvailability.canRenderEntryPoint ? (
             <HomeWeeklyQuest
@@ -138,15 +141,17 @@ export const HomeContent: React.FC<HomeContentProps> = ({
             />
           )}
 
-          <HomeContentLower
-            controller={controller}
-            data={data}
-            missionInput={missionInput}
-            handleClaimReward={handleClaimReward}
-            streakHoursRemaining={streakHoursRemaining}
-            features={features}
-            comebackSessionsCompleted={comebackSessionsCompleted}
-          />
+          {!isDayZero ? (
+            <HomeContentLower
+              controller={controller}
+              data={data}
+              missionInput={missionInput}
+              handleClaimReward={handleClaimReward}
+              streakHoursRemaining={streakHoursRemaining}
+              features={features}
+              comebackSessionsCompleted={comebackSessionsCompleted}
+            />
+          ) : null}
         </StaggeredEnter>
       )}
     </HomeMissionInput>

@@ -77,6 +77,7 @@ export type MotivationProfileType =
   | 'calm'
   | 'friendly'
   | 'game_like'
+  | 'coach_led'
   | 'competitive'
   | 'intense'
   | 'student'

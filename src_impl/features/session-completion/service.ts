@@ -92,14 +92,14 @@ export function buildSessionCompletionReturnPlan(input: {
   if (hasStudyFollowUp) {
     return SessionCompletionReturnPlanSchema.parse({
       highlightMessage:
-        'Home will bring your active study plan back to the front so this session keeps compounding.',
-      highlightTitle: 'Study momentum saved',
+        'Home will bring your active execution plan back to the front so this session keeps compounding.',
+      highlightTitle: 'Plan momentum saved',
       highlightTone: 'info',
       homeCtaLabel: 'Continue on home',
       nextSessionLabel: 'Start another session',
       returnReasonBody:
-        'Return home and keep moving through the plan while the material is still fresh.',
-      returnReasonTitle: 'Your study follow-up is already queued',
+        'Return home and keep moving through the plan while the context is still fresh.',
+      returnReasonTitle: 'Your follow-up is already queued',
     });
   }
 

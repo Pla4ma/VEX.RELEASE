@@ -6,11 +6,9 @@ import { useOnboardingStore } from '../store';
 import { useOnboardingProgress } from '../store-hooks';
 import type { FocusGoal, MotivationProfileType } from '../schemas';
 import {
-  saveGoal, saveDisplayName, goToNextStep, goToPreviousStep,
-  skipOnboarding, completeOnboarding,
+  goToNextStep, goToPreviousStep, completeOnboarding,
 } from '../service';
 import { WelcomeScreen } from './WelcomeScreen';
-import { NameAndGoalScreen } from './NameAndGoalScreen';
 import { MotivationScreen } from './MotivationScreen';
 import { FirstSessionSetup } from './FirstSessionSetup';
 import { OnboardingDots } from './OnboardingProgressBar';
@@ -29,12 +27,6 @@ export function OnboardingNavigator({ onStartSession, onBack }: OnboardingNaviga
     store.startOnboarding();
     goToNextStep();
   }, [store]);
-
-  const handleNameAndGoalContinue = useCallback((name: string, goal: FocusGoal) => {
-    if (saveDisplayName(name)) saveGoal(goal);
-  }, []);
-
-  const handleNameAndGoalSkip = useCallback(() => { skipOnboarding(); }, []);
 
   const handleMotivationSelect = useCallback((style: MotivationProfileType) => {
     store.setExplicitMotivationStyle(style);
@@ -55,16 +47,9 @@ export function OnboardingNavigator({ onStartSession, onBack }: OnboardingNaviga
     switch (currentStep) {
       case 0: return <WelcomeScreen onStart={handleWelcomeStart} />;
       case 1: return (
-        <NameAndGoalScreen
-          onContinue={handleNameAndGoalContinue}
-          onSkip={handleNameAndGoalSkip}
-          onBack={onBack}
-        />
-      );
-      case 2: return (
         <MotivationScreen onSelect={handleMotivationSelect} onBack={goToPreviousStep} />
       );
-      case 3: return (
+      case 2: return (
         <FirstSessionSetup
           userName={store.displayName || ''} goal={store.goal}
           onStartSession={handleSessionStart} onBack={handleSessionBack}
@@ -74,12 +59,12 @@ export function OnboardingNavigator({ onStartSession, onBack }: OnboardingNaviga
     }
   };
 
-  const showProgress = currentStep > 0 && currentStep < 4;
+  const showProgress = currentStep > 0 && currentStep < 3;
 
   return (
     <View style={{ flex: 1 }}>
       {showProgress && (
-        <OnboardingDots currentStep={currentStep - 1} totalSteps={4} />
+        <OnboardingDots currentStep={currentStep - 1} totalSteps={2} />
       )}
       <Box flex={1}>{renderStep()}</Box>
     </View>

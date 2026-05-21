@@ -124,7 +124,7 @@ export function buildHomeReturnReasonState(input: {
 
     return HomeReturnReasonStateSchema.parse({
       body: `You have ${parsed.activeStudyPlan.remainingMinutes} minutes left across ${remainingTasks} tasks.`,
-      ctaLabel: 'Continue study plan',
+      ctaLabel: 'Continue plan',
       eyebrow: 'Return reason',
       intent: 'continue-study-plan',
       source: 'study-plan',

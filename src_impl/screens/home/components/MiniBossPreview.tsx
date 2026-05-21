@@ -30,8 +30,10 @@ export function MiniBossPreview({ userId }: MiniBossPreviewProps): JSX.Element |
   const { theme } = useTheme();
   const haptics = useHaptics();
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
-  const { data: boss } = useActiveBoss(userId || null);
   const { features } = useFeatureAccess();
+  const bossAvailability = getFeatureAvailability(features.boss_tab);
+  const canQueryBoss = bossAvailability.canQuery && Boolean(userId);
+  const { data: boss } = useActiveBoss(canQueryBoss ? userId : null);
 
   const containerStyle = {
     flexDirection: 'row' as const,
@@ -90,7 +92,7 @@ export function MiniBossPreview({ userId }: MiniBossPreviewProps): JSX.Element |
   const healthPercent = Math.round((boss.healthRemaining / boss.maxHealth) * 100);
 
   const handlePress = () => {
-    if (!isFeatureAvailableForNavigation(getFeatureAvailability(features.boss_tab))) {
+    if (!isFeatureAvailableForNavigation(bossAvailability)) {
       return;
     }
     haptics.medium();
