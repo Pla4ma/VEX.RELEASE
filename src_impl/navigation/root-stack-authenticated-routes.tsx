@@ -9,6 +9,7 @@ import StreakFuneralScreen from "../screens/streaks/StreakFuneralScreen";
 import ComebackScreen from "../screens/ComebackScreen";
 import { RootStackFeatureRoutes } from "./root-stack-feature-routes";
 import type { ExtendedRootStackParams } from "./types";
+import type { FeatureAccessMap } from "../features/liveops-config";
 import type { RootExposureFlags } from "./feature-exposure";
 
 type RootStack = ReturnType<
@@ -17,10 +18,12 @@ type RootStack = ReturnType<
 
 export function RootStackAuthenticatedRoutes({
   hasCompletedOnboarding,
+  features,
   show,
   Stack,
 }: {
   hasCompletedOnboarding: boolean;
+  features: FeatureAccessMap;
   show: RootExposureFlags;
   Stack: RootStack;
 }): React.JSX.Element {
@@ -59,7 +62,7 @@ export function RootStackAuthenticatedRoutes({
         }}
       />
 
-      <RootStackFeatureRoutes show={show} Stack={Stack} />
+      <RootStackFeatureRoutes features={features} Stack={Stack} />
     </>
   );
 }

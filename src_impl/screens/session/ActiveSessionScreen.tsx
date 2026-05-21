@@ -7,6 +7,7 @@ import { InterruptionWarning } from "../../session/components/InterruptionWarnin
 import { resolveSessionMode, SessionMode } from "../../session/modes";
 import { ActiveSessionBackground } from "./components/ActiveSessionBackground";
 import { ActiveSessionControlDock } from "./components/ActiveSessionControlDock";
+import { ActiveSessionControlRecovery } from "./components/ActiveSessionControlRecovery";
 import { ActiveSessionGuardStates } from "./components/ActiveSessionGuardStates";
 import { ActiveSessionHeader } from "./components/ActiveSessionHeader";
 import { ActiveSessionHero } from "./components/ActiveSessionHero";
@@ -113,6 +114,16 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
           withAlpha={metrics.withAlpha}
         />
       )}
+
+      {controller.controlFailure ? (
+        <ActiveSessionControlRecovery
+          failure={controller.controlFailure}
+          onDismiss={actions.clearControlFailure}
+          onRetry={() => {
+            actions.retryControlFailure().catch(() => undefined);
+          }}
+        />
+      ) : null}
 
       <ActiveSessionControlDock
         completionPercentage={sessionQuery.completionPercentage}

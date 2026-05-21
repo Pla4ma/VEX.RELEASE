@@ -18,6 +18,7 @@ export type OnboardingDraft = {
   displayName?: string;
   starterPresetId?: string;
   element?: OnboardingElement;
+  explicitMotivationStyle?: MotivationProfileType;
   personaId?: CoachPersona;
   squadId?: string | null;
 };

@@ -2,34 +2,83 @@
  * Feature Gate Hooks
  *
  * Provides hooks for feature gating throughout the app.
+ * All checks go through getFeatureAvailability — never isUnlocked/isVisible alone.
  */
 
 import { useMemo } from 'react';
 import { useFeatureAccess } from '../liveops-config/hooks/useFeatureAccess';
+import { getFeatureAvailability } from '../liveops-config/feature-availability';
+import type { FeatureAvailability } from '../liveops-config/feature-availability';
 import type { FeatureKey } from '../liveops-config/feature-access';
 
+export type FeatureGateMode =
+  | 'entryPoint'
+  | 'navigation'
+  | 'query'
+  | 'route'
+  | 'event'
+  | 'notification';
+
+function resolveAvailable(availability: FeatureAvailability, mode?: FeatureGateMode): boolean {
+  if (mode === 'entryPoint') {
+    return availability.canRenderEntryPoint;
+  }
+  if (mode === 'navigation') {
+    return availability.canNavigate && availability.canRegisterRoute;
+  }
+  if (mode === 'query') {
+    return availability.canQuery && availability.canUseBackend;
+  }
+  if (mode === 'route') {
+    return availability.canRegisterRoute;
+  }
+  if (mode === 'event') {
+    return availability.canSubscribeToEvents;
+  }
+  if (mode === 'notification') {
+    return availability.canShowNotification;
+  }
+  return availability.state === 'unlocked' || availability.state === 'degraded';
+}
+
+export interface UseFeatureGateResult {
+  isAvailable: boolean;
+  availability: FeatureAvailability;
+  isUnlocked: boolean;
+  isVisible: boolean;
+  isDegraded: boolean;
+  lockedDescription: string;
+  unlockReason: string;
+  recommendedUnlockMoment: string;
+}
+
 /**
- * Hook for checking if a feature is available
+ * Hook for checking if a feature is available.
+ *
+ * When mode is provided, checks the specific FeatureAvailability gate.
+ * Without mode, requires state === 'unlocked' (including degraded).
  */
-export function useFeatureGate(feature: FeatureKey, options: {
-  requireUnlocked?: boolean;
-  requireVisible?: boolean;
-} = {}) {
-  const { requireUnlocked = true, requireVisible = true } = options;
+export function useFeatureGate(
+  feature: FeatureKey,
+  mode?: FeatureGateMode,
+): UseFeatureGateResult {
   const { features } = useFeatureAccess();
   const featureAccess = features[feature];
-
-  const isAvailable = useMemo(() => {
-    return (
-      (!requireUnlocked || featureAccess.isUnlocked) &&
-      (!requireVisible || featureAccess.isVisible)
-    );
-  }, [featureAccess, requireUnlocked, requireVisible]);
+  const availability = useMemo(
+    () => getFeatureAvailability(featureAccess),
+    [featureAccess],
+  );
+  const isAvailable = useMemo(
+    () => resolveAvailable(availability, mode),
+    [availability, mode],
+  );
 
   return {
     isAvailable,
+    availability,
     isUnlocked: featureAccess.isUnlocked,
     isVisible: featureAccess.isVisible,
+    isDegraded: availability.state === 'degraded',
     lockedDescription: featureAccess.lockedDescription,
     unlockReason: featureAccess.unlockReason,
     recommendedUnlockMoment: featureAccess.recommendedUnlockMoment,
@@ -37,40 +86,42 @@ export function useFeatureGate(feature: FeatureKey, options: {
 }
 
 /**
- * Hook for checking multiple features at once
+ * Hook for checking multiple features at once.
  */
-export function useMultiFeatureGate(featureKeys: FeatureKey[], options: {
-  requireAll?: boolean;
-  requireUnlocked?: boolean;
-  requireVisible?: boolean;
-} = {}) {
-  const { requireAll = true, requireUnlocked = true, requireVisible = true } = options;
+export function useMultiFeatureGate(
+  featureKeys: FeatureKey[],
+  options: {
+    requireAll?: boolean;
+    mode?: FeatureGateMode;
+  } = {},
+) {
+  const { requireAll = true } = options;
   const { features: featureAccessMap } = useFeatureAccess();
 
   const featureStates = useMemo(() => {
     return featureKeys.map((featureKey) => {
-      const featureAccess = featureAccessMap[featureKey];
+      const availability = getFeatureAvailability(featureAccessMap[featureKey]);
       return {
         feature: featureKey,
-        isAvailable: (!requireUnlocked || featureAccess.isUnlocked) &&
-                   (!requireVisible || featureAccess.isVisible),
-        isUnlocked: featureAccess.isUnlocked,
-        isVisible: featureAccess.isVisible,
+        isAvailable: resolveAvailable(availability, options.mode),
+        availability,
+        isUnlocked: featureAccessMap[featureKey].isUnlocked,
+        isVisible: featureAccessMap[featureKey].isVisible,
       };
     });
-  }, [featureAccessMap, featureKeys, requireUnlocked, requireVisible]);
+  }, [featureAccessMap, featureKeys, options.mode]);
 
   const isAvailable = useMemo(() => {
     if (requireAll) {
-      return featureStates.every(state => state.isAvailable);
+      return featureStates.every((state) => state.isAvailable);
     }
-    return featureStates.some(state => state.isAvailable);
+    return featureStates.some((state) => state.isAvailable);
   }, [featureStates, requireAll]);
 
   return {
     isAvailable,
     featureStates,
-    availableFeatures: featureStates.filter(state => state.isAvailable).map(state => state.feature),
-    unavailableFeatures: featureStates.filter(state => !state.isAvailable).map(state => state.feature),
+    availableFeatures: featureStates.filter((s) => s.isAvailable).map((s) => s.feature),
+    unavailableFeatures: featureStates.filter((s) => !s.isAvailable).map((s) => s.feature),
   };
 }

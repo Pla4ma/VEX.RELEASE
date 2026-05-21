@@ -18,6 +18,8 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import { launchColors } from '@theme/tokens/launch-colors';
+import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../../features/liveops-config';
+import { useFeatureAccess } from '../../../features/liveops-config';
 
 
 interface MiniBossPreviewProps {
@@ -29,6 +31,7 @@ export function MiniBossPreview({ userId }: MiniBossPreviewProps): JSX.Element |
   const haptics = useHaptics();
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const { data: boss } = useActiveBoss(userId || null);
+  const { features } = useFeatureAccess();
 
   const containerStyle = {
     flexDirection: 'row' as const,
@@ -87,6 +90,9 @@ export function MiniBossPreview({ userId }: MiniBossPreviewProps): JSX.Element |
   const healthPercent = Math.round((boss.healthRemaining / boss.maxHealth) * 100);
 
   const handlePress = () => {
+    if (!isFeatureAvailableForNavigation(getFeatureAvailability(features.boss_tab))) {
+      return;
+    }
     haptics.medium();
     navigation.navigate('Boss');
   };

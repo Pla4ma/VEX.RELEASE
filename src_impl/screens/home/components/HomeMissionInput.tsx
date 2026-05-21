@@ -8,9 +8,7 @@ import React from 'react';
 import type { MissionPriorityInput } from '../../../features/daily-mission/types';
 import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
 import type { ChallengeItem } from '../../../features/home-spine/components';
-import type { useHomeScreenController } from '../hooks/useHomeScreenController';
-
-type HomeController = ReturnType<typeof useHomeScreenController>;
+import type { HomeController } from '../hooks/home-controller-types';
 
 interface ActiveBossMissionQuery {
   data?: {
@@ -46,9 +44,9 @@ export function HomeMissionInput({
 
   const missionInput: Partial<MissionPriorityInput> = {
     isFirstSession: controller.isFirstRun,
-    hasPendingSyncRepair: controller.completionSync.status === 'failed_sync',
+    hasPendingSyncRepair: (controller.completionSync as { status: string }).status === 'failed_sync',
     isStreakCritical: streakHoursRemaining !== null && streakHoursRemaining <= 4,
-    hasComebackQuest: controller.comebackQuery.data?.streakRestoreEligible ?? false,
+    hasComebackQuest: (controller.comebackQuery.data as Record<string, unknown> | undefined)?.streakRestoreEligible as boolean ?? false,
     hasActiveDailyChallenge: todaysChallenges.length > 0 && hasOpenDailyChallenge,
     isBossNearDefeat: (activeBossQuery.data?.percentHealthRemaining ?? 100) <= 25,
     isBossEnabled: canShowBossBounties,

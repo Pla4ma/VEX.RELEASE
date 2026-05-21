@@ -5,8 +5,10 @@ import type { SessionSummary } from '../../session/types';
 import { getStreakService } from '../../streaks/StreakService';
 import { getCompanionService } from '../companion/service';
 import { FocusIdentityService } from '../focus-identity/FocusIdentityEngine';
-import { trackSessionCompleted } from './analytics';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
+import { trackCompletionAnalytics } from './completion-analytics';
 import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
+import { SUBSYSTEM_META, type SubsystemMeta, type SubsystemKind } from './subsystem-meta';
 
 type CompletionSubsystemInput = {
   ledger: CompletionLedger;
@@ -17,6 +19,19 @@ type CompletionSubsystemResult = {
   degradedSystems: string[];
   ledger: CompletionLedger;
 };
+
+export { SUBSYSTEM_META };
+export type { SubsystemKind, SubsystemMeta };
+
+function subsystemShouldRun(meta: SubsystemMeta): boolean {
+  if (meta.kind === 'CORE_REQUIRED' || meta.kind === 'REQUIRED' || meta.kind === 'ANALYTICS_ONLY') {
+    return true;
+  }
+  if (meta.kind === 'FEATURE_DEPENDENT' && meta.featureKey) {
+    return getAvailabilityFor(meta.featureKey).canSubscribeToEvents;
+  }
+  return false;
+}
 
 function rewardAmountFor(ledger: CompletionLedger): number {
   return Math.max(1, Math.floor(ledger.xpDelta / 10));
@@ -37,10 +52,15 @@ async function runSubsystem(
   }
 }
 
-function withDegradedSystems(ledger: CompletionLedger, degradedSystems: string[]): CompletionLedger {
+function withDegradedSystems(
+  ledger: CompletionLedger,
+  degradedSystems: string[],
+): CompletionLedger {
   return CompletionLedgerSchema.parse({
     ...ledger,
-    degradedSystems: Array.from(new Set([...ledger.degradedSystems, ...degradedSystems])),
+    degradedSystems: Array.from(
+      new Set([...ledger.degradedSystems, ...degradedSystems]),
+    ),
   });
 }
 
@@ -64,7 +84,9 @@ export async function applyCompletionSubsystems(
       ...ledger,
       streakResult: {
         action:
-          result.currentStreak > input.ledger.streakResult.previousDays ? 'extended' : 'maintained',
+          result.currentStreak > input.ledger.streakResult.previousDays
+            ? 'extended'
+            : 'maintained',
         newDays: result.currentStreak,
         previousDays: input.ledger.streakResult.previousDays,
       },
@@ -72,9 +94,11 @@ export async function applyCompletionSubsystems(
   });
 
   await runSubsystem(degradedSystems, 'progression', async () => {
-    await getProgressionService(input.ledger.userId).addXP(input.ledger.xpDelta, 'SESSION_COMPLETE', {
-      sessionId: input.ledger.sessionId,
-    });
+    await getProgressionService(input.ledger.userId).addXP(
+      input.ledger.xpDelta,
+      'SESSION_COMPLETE',
+      { sessionId: input.ledger.sessionId },
+    );
   });
 
   await runSubsystem(degradedSystems, 'rewards', async () => {
@@ -91,73 +115,41 @@ export async function applyCompletionSubsystems(
     });
   });
 
-  await runSubsystem(degradedSystems, 'companion', async () => {
-    const minutes = Math.max(1, Math.round(input.ledger.effectiveFocusedSeconds / 60));
-    const result = getCompanionService().completeSession(minutes, input.ledger.qualityScore);
-    ledger = CompletionLedgerSchema.parse({
-      ...ledger,
-      companionReactionId: result.evolved
-        ? `companion-evolved:${result.newPhase ?? 'unknown'}`
-        : 'companion-session-complete',
+  if (subsystemShouldRun(SUBSYSTEM_META.companion!)) {
+    await runSubsystem(degradedSystems, 'companion', async () => {
+      const minutes = Math.max(
+        1,
+        Math.round(input.ledger.effectiveFocusedSeconds / 60),
+      );
+      const result = getCompanionService().completeSession(
+        minutes,
+        input.ledger.qualityScore,
+      );
+      ledger = CompletionLedgerSchema.parse({
+        ...ledger,
+        companionReactionId: result.evolved
+          ? `companion-evolved:${result.newPhase ?? 'unknown'}`
+          : 'companion-session-complete',
+      });
     });
-  });
+  }
 
-  await runSubsystem(degradedSystems, 'daily-mission', async () => {
-    ledger = CompletionLedgerSchema.parse({
-      ...ledger,
-      dailyMissionResult: {
-        missionId: 'daily-focus-session',
-        progressDelta: input.summary.actualDuration > 0 ? 1 : 0,
-        status: input.summary.actualDuration > 0 ? 'progressed' : 'unchanged',
-      },
+  if (subsystemShouldRun(SUBSYSTEM_META['daily-mission']!)) {
+    await runSubsystem(degradedSystems, 'daily-mission', async () => {
+      ledger = CompletionLedgerSchema.parse({
+        ...ledger,
+        dailyMissionResult: {
+          missionId: 'daily-focus-session',
+          progressDelta: input.summary.actualDuration > 0 ? 1 : 0,
+          status:
+            input.summary.actualDuration > 0 ? 'progressed' : 'unchanged',
+        },
+      });
     });
-  });
+  }
 
   await runSubsystem(degradedSystems, 'analytics', async () => {
-    const isAbandoned = input.ledger.grade === 'D';
-    const completionType = isAbandoned ? 'abandoned' : 'natural';
-    const efficiency = input.ledger.completedDurationSeconds > 0
-      ? input.ledger.effectiveFocusedSeconds / input.ledger.completedDurationSeconds
-      : 0;
-
-    Sentry.addBreadcrumb({
-      category: 'session-completion',
-      message: 'vex_session_completed',
-      level: 'info',
-      data: {
-        grade: input.ledger.grade,
-        sessionId: input.ledger.sessionId,
-        userId: input.ledger.userId,
-      },
-    });
-
-    trackSessionCompleted(
-      input.ledger.userId,
-      input.ledger.sessionId,
-      completionType,
-      input.ledger.completedDurationSeconds,
-      {
-        total: input.ledger.targetDurationSeconds,
-        completed: input.ledger.completedDurationSeconds,
-        failed: 0,
-        skipped: 0,
-        percentage: input.summary.completionPercentage,
-      },
-      {
-        overallScore: input.ledger.gradeScore,
-        accuracy: input.ledger.qualityScore,
-        efficiency: efficiency,
-        speed: 0,
-        consistency: input.ledger.streakResult.newDays,
-      },
-      {
-        success: !isAbandoned,
-        failureReason: isAbandoned ? `Session graded ${input.ledger.grade}` : undefined,
-        completionCriteria: ['target_duration_met'],
-        metCriteria: input.ledger.completedDurationSeconds >= input.ledger.targetDurationSeconds ? ['target_duration_met'] : [],
-        missedCriteria: input.ledger.completedDurationSeconds < input.ledger.targetDurationSeconds ? ['target_duration_not_met'] : [],
-      },
-    );
+    trackCompletionAnalytics(input.ledger, input.summary);
   });
 
   return {

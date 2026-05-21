@@ -55,27 +55,33 @@ export function buildHomeFeatureRuntime(
 ): HomeFeatureRuntime {
   const resolved = resolveRuntimeInput(input, productTier);
   const { features } = resolved;
+  const battlePass = getFeatureAvailability(features.battle_pass);
+  const boss = getFeatureAvailability(features.boss_tab);
   const challenges = getFeatureAvailability(features.challenges);
   const study = getFeatureAvailability(features.content_study);
   const coach = getFeatureAvailability(features.ai_coach_advanced);
   const comeback = getFeatureAvailability(features.companion_detail);
-  const canShowStudyDepth =
-    resolved.productTier === 'STUDY_OS' ||
-    resolved.productTier === 'RPG_DEPTH' ||
-    resolved.productTier === 'SOCIAL_DEPTH';
+  const economy = getFeatureAvailability(features.economy_basic);
+  const seasonal = getFeatureAvailability(features.seasonal_features);
+  const squads = getFeatureAvailability(features.squads);
+  const canShowStudyDepth = study.canRenderEntryPoint;
 
   return {
-    canQueryBattlePass: false,
-    canQueryBoss: false,
+    canQueryBattlePass: battlePass.canQuery,
+    canQueryBoss: boss.canQuery,
     canQueryChallenges: challenges.canQuery,
     canQueryCoach: coach.canQuery,
     canQueryComeback: comeback.canQuery,
-    canQueryEconomy: false,
+    canQueryEconomy: economy.canQuery,
     canQueryNotifications: challenges.canQuery,
-    canQuerySeasons: false,
-    canQuerySquads: false,
+    canQuerySeasons: seasonal.canQuery,
+    canQuerySquads: squads.canQuery,
     canQueryStudy: study.canQuery,
     shouldShowExpansionSystems: canShowStudyDepth,
-    shouldShowSecondarySystems: resolved.productTier !== 'CORE_EXECUTION',
+    shouldShowSecondarySystems:
+      challenges.canRenderEntryPoint ||
+      coach.canRenderEntryPoint ||
+      comeback.canRenderEntryPoint ||
+      study.canRenderEntryPoint,
   };
 }

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { styles } from '../styles';
-import { STARTER_PRESETS } from './onboarding-flow-data';
+import { getStarterPresetsForDisplay } from './starter-presets';
 
 type StarterStepProps = {
   starterPresetId: string | undefined;
@@ -13,6 +13,8 @@ type StarterStepProps = {
 
 export function StarterStep({ starterPresetId, onSelectPreset }: StarterStepProps): JSX.Element {
   const { theme } = useTheme();
+  const [showMoreOptions, setShowMoreOptions] = useState(starterPresetId === 'deep');
+  const presets = getStarterPresetsForDisplay(showMoreOptions);
 
   return (
     <View style={styles.section}>
@@ -23,7 +25,7 @@ export function StarterStep({ starterPresetId, onSelectPreset }: StarterStepProp
         You can tune everything later. Right now the fastest value is one completed session.
       </Text>
       <View style={styles.choiceGrid}>
-        {STARTER_PRESETS.map((preset) => {
+        {presets.map((preset) => {
           const isSelected = starterPresetId === preset.id;
           return (
             <Pressable
@@ -55,6 +57,18 @@ export function StarterStep({ starterPresetId, onSelectPreset }: StarterStepProp
           );
         })}
       </View>
+      {!showMoreOptions ? (
+        <Pressable
+          onPress={() => setShowMoreOptions(true)}
+          accessibilityLabel="Show longer first-session options"
+          accessibilityRole="button"
+          accessibilityHint="Reveals longer starter sessions for users who already have more time"
+        >
+          <Text style={[styles.stepSubtitle, { color: theme.colors.primary[500] }]}>
+            More options
+          </Text>
+        </Pressable>
+      ) : null}
     </View>
   );
 }

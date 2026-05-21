@@ -108,13 +108,20 @@ const HOME_PRIORITY_KEY = 'home-priority';
  *
  * Answers "why start now?" in 3 seconds by selecting the most
  * urgent action from the priority model.
+ *
+ * Feature-dependent candidates are filtered before ranking:
+ * BOSS_ACTIVE only exists if boss_tab canNavigate && canRegisterRoute.
+ * CHALLENGE_NEAR_DONE only exists if challenges canNavigate && canRegisterRoute.
  */
-export function useHomePriority(userId: string | null | undefined) {
+export function useHomePriority(
+  userId: string | null | undefined,
+  featureAccess?: import('../liveops-config').FeatureAccessMap,
+) {
   return useQuery<HomePriority>({
     queryKey: [HOME_PRIORITY_KEY, userId],
-    queryFn: () => selectHomePriority(userId!),
+    queryFn: () => selectHomePriority(userId!, featureAccess),
     enabled: !!userId,
-    staleTime: 1000 * 30, // 30 seconds - priority can change quickly
+    staleTime: 1000 * 30,
     refetchOnWindowFocus: true,
   });
 }

@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import { useSessionCompletionRouteState } from '../../features/session-completion/route';
 import {
   usePostSessionStoryViewModel,
+  useRecoveredSessionCompletion,
   useSessionCompletionConsequences,
 } from '../../features/session-completion/hooks';
 import { SessionCompleteContent } from './components/SessionCompleteContent';
@@ -14,12 +15,30 @@ import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorB
 export const SessionCompleteScreen = withScreenErrorBoundary(
   function _SessionCompleteScreen(): React.JSX.Element {
     const { navigation, parsedRoute } = useSessionCompletionRouteState();
+    const recoveredCompletion = useRecoveredSessionCompletion(
+      parsedRoute.recoverySessionId,
+    );
 
     if (!parsedRoute.params) {
+      if (recoveredCompletion.data) {
+        return <SessionCompleteResolved params={recoveredCompletion.data} />;
+      }
+
       return (
         <SessionSummaryUnavailable
-          message={parsedRoute.warningMessage ?? undefined}
+          message={
+            recoveredCompletion.isPending && parsedRoute.recoverySessionId
+              ? 'VEX is rebuilding this win from your saved completion record.'
+              : parsedRoute.warningMessage ?? undefined
+          }
           onDone={() => navigation.navigate({ name: 'Main', params: {} })}
+          onRetry={
+            parsedRoute.recoverySessionId && recoveredCompletion.isError
+              ? () => {
+                  void recoveredCompletion.refetch();
+                }
+              : undefined
+          }
         />
       );
     }

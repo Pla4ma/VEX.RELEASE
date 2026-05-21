@@ -6,23 +6,22 @@
  * All content rendering moved to HomeContent component.
  */
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { z } from 'zod';
 
-import { GreetingHeader, StartSessionButton } from '../../features/home-spine/components';
-import { CoachInterventionBanner } from '../../features/ai-coach/components/CoachInterventionBanner';
+import { GreetingHeader } from '../../features/home-spine/components';
 import { trackInterventionDisplayed, trackInterventionActioned } from '../../features/ai-coach/analytics';
 import { eventBus } from '../../events';
 import { useCompletionSyncAutoRepair } from '../../features/session-completion/hooks';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import type { ActiveIntervention } from '../../features/ai-coach/hooks';
-import { HomeHero } from './HomeScreenVisuals';
+import type { HomeController } from './hooks/home-controller-types';
 import { HomeContent } from './components/HomeContent';
 import { HomeInterventionBanner } from './components/HomeInterventionBanner';
 import { useHomeData } from './hooks/useHomeData';
-import { readSuggestedDuration, readSuggestedMode } from './utils';
+import { buildInterventionSessionParams } from './buildInterventionSessionParams';
 import { AppScreen } from '../../components/primitives';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 
@@ -59,14 +58,14 @@ function buildSessionCompleteToast(summary: unknown): { title: string; message: 
 export const HomeScreen = withScreenErrorBoundary(function _HomeScreen(): JSX.Element {
   const navigation = useNavigation<Nav>();
   const data = useHomeData();
-  const { controller, intervention, dismissIntervention, showToast } = data;
+  const controller: HomeController = data.controller;
+  const { intervention, dismissIntervention, showToast } = data;
   const displayedInterventionIdRef = useRef<string | null>(null);
   useCompletionSyncAutoRepair({
     isOnline: controller.isOnline,
     userId: controller.userId,
   });
 
-  // Track intervention display
   useEffect(() => {
     if (!controller.userId || !intervention || displayedInterventionIdRef.current === intervention.id) {
       return;
@@ -75,7 +74,6 @@ export const HomeScreen = withScreenErrorBoundary(function _HomeScreen(): JSX.El
     trackInterventionDisplayed(controller.userId, intervention.type, intervention.hoursRemaining);
   }, [controller.userId, intervention]);
 
-  // Post-session celebration toast
   useEffect(() => {
     const unsubscribe = eventBus.subscribe('session:completed', (evt) => {
       if (evt.userId !== controller.userId) {return;}
@@ -117,13 +115,11 @@ export const HomeScreen = withScreenErrorBoundary(function _HomeScreen(): JSX.El
       actionLabel: activeIntervention.actionLabel,
     });
 
+    const { suggestedDurationSeconds, presetMode } = buildInterventionSessionParams(normalized);
+
     navigation.navigate('SessionStack', {
       screen: 'SessionSetup',
-      params: {
-        suggestedDurationSeconds:
-          activeIntervention.type === 'BOSS_FINISH' ? 45 * 60 : readSuggestedDuration(normalized),
-        presetMode: readSuggestedMode(normalized),
-      },
+      params: { suggestedDurationSeconds, presetMode },
     });
   }, [controller.userId, navigation]);
 
@@ -131,9 +127,9 @@ export const HomeScreen = withScreenErrorBoundary(function _HomeScreen(): JSX.El
     <AppScreen contentStyle={{ gap: 0, paddingHorizontal: 0, paddingTop: 0 }} padded={false}>
       {/* 1. Identity greeting */}
       <GreetingHeader
-        userName={controller.user?.displayName}
+        userName={(controller.user as Record<string, unknown> | null)?.displayName as string | undefined}
         avatarUrl={undefined}
-        level={controller.progressionQuery.data?.level ?? 1}
+        level={(controller.progressionQuery.data as Record<string, unknown> | undefined)?.level as number ?? 1}
         streakDays={controller.currentStreak}
         streakHoursRemaining={data.streakHoursRemaining}
         isLoading={controller.isLoading}
@@ -154,15 +150,15 @@ export const HomeScreen = withScreenErrorBoundary(function _HomeScreen(): JSX.El
         interventionLoading={data.interventionLoading}
         dismissIntervention={data.dismissIntervention}
         navigation={navigation}
-        userId={data.controller.userId}
+        userId={controller.userId}
       />
 
       <HomeContent
-        controller={data.controller}
+        controller={controller}
         data={data}
         handleClaimReward={data.handleClaimReward}
         streakHoursRemaining={data.streakHoursRemaining ?? 0}
-        features={data.controller.disclosure?.features}
+        features={controller.disclosure.features}
         comebackSessionsCompleted={data.comebackSessionsCompleted}
       />
     </AppScreen>

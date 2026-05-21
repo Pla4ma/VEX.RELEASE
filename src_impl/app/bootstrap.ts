@@ -7,6 +7,7 @@ import {
   initializeAnalyticsEventBridge,
   ProductAnalyticsEvents,
 } from '../shared/analytics';
+import { initializeSessionCompletionOrchestrator } from '../features/session-completion/completion-orchestrator';
 
 let bootstrapped = false;
 let sessionRuntimeInitialized = false;
@@ -40,6 +41,7 @@ export const bootstrapApp = (): void => {
 
   bootstrapped = true;
   initializeCoreSystems();
+  initializeSessionCompletionOrchestrator();
 };
 
 export const bootstrapDevelopment = (): void => {

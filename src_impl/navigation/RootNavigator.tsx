@@ -14,6 +14,7 @@ import { useAuthStore } from "../store";
 import { useTheme } from "../theme";
 import { useOnboardingStore } from "../onboarding";
 import { useFeatureAccess } from "../features/liveops-config";
+import { useFeatureHealth } from "../features/liveops-config/hooks/useFeatureHealth";
 
 import { RootLoadingShell } from "./components/RootLoadingShell";
 import { RootCrashBoundary } from "./components/RootCrashBoundary";
@@ -57,7 +58,8 @@ export const RootNavigator: React.FC = () => {
 
   const sessionStats = useSessionStats(user?.id ?? '');
   const totalCompletedSessions = sessionStats.stats?.completedSessions ?? 0;
-  const featureAccess = useFeatureAccess();
+  const { degradedFeatures } = useFeatureHealth();
+  const featureAccess = useFeatureAccess(degradedFeatures);
 
   const hasCompletedOnboarding = useMemo(
     () => canCompleteForUser(user?.id),

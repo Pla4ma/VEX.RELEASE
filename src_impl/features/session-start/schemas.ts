@@ -79,7 +79,9 @@ export type SessionStake = z.infer<typeof SessionStakeSchema>;
 // ============================================================================
 
 export const SessionSetupNavigationParamsSchema = z.object({
+  presetDuration: z.number().int().positive().optional(),
   presetId: z.string().optional(),
+  presetMode: z.enum(['LIGHT_FOCUS', 'DEEP_WORK', 'SPRINT', 'CREATIVE', 'STUDY', 'RECOVERY']).optional(),
   selectedThemeId: z.string().optional(),
   goal: z.string().optional(),
   suggestedDurationSeconds: z.number().int().positive().optional(),
@@ -121,6 +123,19 @@ export const SessionStartHeroSchema = z.object({
 });
 
 export type SessionStartHero = z.infer<typeof SessionStartHeroSchema>;
+
+export const FocusModeCardSchema = z.object({
+  accessibilityHint: z.string().min(1),
+  accessibilityLabel: z.string().min(1),
+  body: z.string().min(1),
+  ctaLabel: z.string().min(1),
+  durationSeconds: z.number().int().min(60).max(3600),
+  id: z.string().min(1),
+  mode: z.enum(['LIGHT_FOCUS', 'DEEP_WORK', 'SPRINT', 'CREATIVE', 'STUDY', 'RECOVERY']),
+  title: z.string().min(1),
+});
+
+export type FocusModeCard = z.infer<typeof FocusModeCardSchema>;
 
 // ============================================================================
 // Adaptive Difficulty Suggestion Schemas (BONUS PHASE)

@@ -6,7 +6,7 @@ const optionalShortText = z.string().max(1000).optional();
 export const sessionSetupParamsSchema = z.object({
   presetId: optionalShortText,
   presetDuration: z.number().positive().optional(),
-  presetMode: z.enum(['LIGHT_FOCUS', 'DEEP_WORK', 'SPRINT', 'CREATIVE', 'STUDY']).optional(),
+  presetMode: z.enum(['LIGHT_FOCUS', 'DEEP_WORK', 'SPRINT', 'CREATIVE', 'STUDY', 'RECOVERY']).optional(),
   selectedThemeId: optionalShortText,
   goal: optionalShortText,
   suggestedDurationSeconds: z.number().positive().optional(),

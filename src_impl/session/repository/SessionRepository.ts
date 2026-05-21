@@ -2,6 +2,12 @@ import { getMMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 import type { SessionState, SessionHistoryEntry, SessionSummary } from '../types';
 import { createDebugger } from '../../utils/debug';
 import { calculateSessionStreaks } from './SessionStreakCalculator';
+import {
+  parseSessionHistoryJson,
+  parseSessionStateJson,
+  parseSessionSummaryMapJson,
+  parseSyncQueueJson,
+} from './SessionRepositoryParsers';
 const debug = createDebugger('session:repository');
 
 interface MMKVInstance { getString(key: string): string | undefined; set(key: string, value: string): void; delete(key: string): void; }
@@ -24,7 +30,7 @@ export class SessionRepository {
   private initStorage(): void {
     try {
       const { MMKV } = require('react-native-mmkv');
-      this.mmkv = new MMKV({ id: 'session-storage', encryptionKey: 'session-encryption-key' }); this.useMMKV = true;
+      this.mmkv = new MMKV({ id: 'session-storage' }); this.useMMKV = true;
     } catch (error) { debug.warn('MMKV init failed', error instanceof Error ? error : new Error(String(error))); this.useMMKV = false; }
   }
 
@@ -50,7 +56,7 @@ export class SessionRepository {
     if (!this.userId) return null;
     try {
       const data = await this.getString(STORAGE_KEYS.activeSession(this.userId));
-      if (data) { const session = JSON.parse(data) as SessionState; return session; }
+      if (data) { return parseSessionStateJson(data); }
     } catch (error) { debug.error('Failed to load active session', error instanceof Error ? error : new Error(String(error))); }
     return null;
   }
@@ -70,7 +76,7 @@ export class SessionRepository {
     if (!this.userId) return [];
     try {
       const data = await this.getString(STORAGE_KEYS.sessionHistory(this.userId));
-      if (data) return (JSON.parse(data) as SessionHistoryEntry[]).slice(0, limit);
+      if (data) return parseSessionHistoryJson(data, limit);
     } catch (error) { debug.error('Failed to load history', error instanceof Error ? error : new Error(String(error))); }
     return [];
   }
@@ -93,7 +99,7 @@ export class SessionRepository {
     if (!this.userId) return null;
     try {
       const data = await this.getString(STORAGE_KEYS.sessionSummaries(this.userId));
-      if (data) { const summaries = JSON.parse(data) as Record<string, SessionSummary>; return summaries[sessionId] || null; }
+      if (data) { const summaries = parseSessionSummaryMapJson(data); return summaries[sessionId] || null; }
     } catch (error) { debug.error('Failed to load summary', error instanceof Error ? error : new Error(String(error))); }
     return null;
   }
@@ -102,7 +108,7 @@ export class SessionRepository {
     const uid = this.requireUserId();
     try {
       const data = await this.getString(STORAGE_KEYS.sessionSummaries(uid));
-      const summaries: Record<string, SessionSummary> = data ? JSON.parse(data) : {};
+      const summaries: Record<string, SessionSummary> = data ? parseSessionSummaryMapJson(data) : {};
       summaries[summary.sessionId] = summary;
       await this.setString(STORAGE_KEYS.sessionSummaries(uid), JSON.stringify(summaries));
     } catch (error) { debug.error('Failed to save summary', error instanceof Error ? error : new Error(String(error))); throw error; }
@@ -112,7 +118,7 @@ export class SessionRepository {
     if (!this.userId) return [];
     try {
       const data = await this.getString(STORAGE_KEYS.sessionSummaries(this.userId));
-      if (data) return Object.values(JSON.parse(data) as Record<string, SessionSummary>);
+      if (data) return Object.values(parseSessionSummaryMapJson(data));
     } catch (error) { debug.error('Failed to load summaries', error instanceof Error ? error : new Error(String(error))); }
     return [];
   }
@@ -121,7 +127,7 @@ export class SessionRepository {
     if (!this.userId) return;
     try {
       const data = await this.getString(STORAGE_KEYS.syncQueue(this.userId));
-      const queue: string[] = data ? JSON.parse(data) : [];
+      const queue: string[] = data ? parseSyncQueueJson(data) : [];
       if (!queue.includes(sessionId)) { queue.push(sessionId); await this.setString(STORAGE_KEYS.syncQueue(this.userId), JSON.stringify(queue)); }
     } catch (error) { debug.error('Failed to add to sync queue', error instanceof Error ? error : new Error(String(error))); }
   }
@@ -136,7 +142,7 @@ export class SessionRepository {
 
   async getSyncQueue(): Promise<string[]> {
     if (!this.userId) return [];
-    try { const data = await this.getString(STORAGE_KEYS.syncQueue(this.userId)); return data ? JSON.parse(data) : []; }
+    try { const data = await this.getString(STORAGE_KEYS.syncQueue(this.userId)); return data ? parseSyncQueueJson(data) : []; }
     catch (error) { debug.error('Failed to get sync queue', error instanceof Error ? error : new Error(String(error))); return []; }
   }
 

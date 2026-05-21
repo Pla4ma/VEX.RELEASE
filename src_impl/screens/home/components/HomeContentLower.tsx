@@ -3,8 +3,10 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParams } from '../../../navigation/types';
 import { useFeatureGate } from '../../../features/feature-gate/hooks';
+import { getFeatureAvailability } from '../../../features/liveops-config';
+import type { HomeController } from '../hooks/home-controller-types';
+import type { ActiveStudyPlan } from '../../../features/content-study';
 import { HomeSecondaryRail } from './HomeSecondaryRail';
-import { HomeStreakProgress } from './HomeStreakProgress';
 import { HomeDailyMission } from './HomeDailyMission';
 import { HomeFocusScore } from './HomeFocusScore';
 import { HomeContextualCards } from './HomeContextualCards';
@@ -13,8 +15,6 @@ import type { useHomeData } from '../hooks/useHomeData';
 import type { MissionPriorityInput } from '../../../features/daily-mission/types';
 
 type HomeData = ReturnType<typeof useHomeData>;
-type HomeController = HomeData['controller'];
-
 type NavigationProp = NativeStackNavigationProp<RootStackParams>;
 
 interface HomeContentLowerProps {
@@ -23,7 +23,7 @@ interface HomeContentLowerProps {
   missionInput: Partial<MissionPriorityInput>;
   handleClaimReward: (rewardId: string) => void;
   streakHoursRemaining: number;
-  features: HomeController['disclosure']['features'];
+  features: HomeController['features'];
   comebackSessionsCompleted: number;
 }
 
@@ -37,40 +37,37 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   comebackSessionsCompleted,
 }) => {
   const navigation = useNavigation<NavigationProp>();
-  const { isVisible } = useFeatureGate('challenges');
+  const { isAvailable } = useFeatureGate('challenges', 'entryPoint');
+  const { isAvailable: canNavChallenges } = useFeatureGate('challenges', 'navigation');
   const openChallenges = (): void => {
-    if (features.challenges.isUnlocked) {
+    if (canNavChallenges) {
       navigation.navigate('Challenges');
       return;
     }
     controller.openSetup();
   };
 
-  const todaysChallenges: ChallengeItem[] = isVisible
-    ? data.todaysChallenges
-    : [];
+  const todaysChallenges: ChallengeItem[] = isAvailable ? data.todaysChallenges : [];
+  const challengeAvailability = getFeatureAvailability(features.challenges);
 
   return (
     <>
       <HomeFocusScore onPress={() => navigation.navigate('FocusScoreDashboard')} />
 
-      {controller.shouldShowSecondarySystems && features.challenges.isUnlocked ? (
-        <HomeDailyMission
-          missionInput={missionInput}
-          onMissionPress={openChallenges}
-        />
+      {controller.shouldShowSecondarySystems && challengeAvailability.canRenderEntryPoint ? (
+        <HomeDailyMission missionInput={missionInput} onMissionPress={openChallenges} />
       ) : null}
 
       {controller.shouldShowSecondarySystems ? (
         <HomeContextualCards
-          activeStudyPlan={controller.activeStudyPlanQuery.data}
-          comebackData={controller.comebackQuery.data}
+          activeStudyPlan={controller.activeStudyPlanQuery.data as unknown as ActiveStudyPlan | null | undefined}
+          comebackData={controller.comebackQuery.data as unknown as Record<string, unknown> | null | undefined}
           comebackSessionsCompleted={comebackSessionsCompleted}
           todaysChallenges={todaysChallenges}
           challengesQueryError={data.challengesQuery.error ?? undefined}
           challengesQueryIsLoading={data.challengesQuery.isLoading}
           handleClaimReward={handleClaimReward}
-          challengesRefetch={() => (data.challengesQuery.refetch)()}
+          challengesRefetch={() => data.challengesQuery.refetch()}
           openSetup={controller.openSetup}
           continueStudyPlan={controller.continueStudyPlan}
           showToast={(toastData) => void data.showToast({ type: toastData.type as 'success' | 'error' | 'warning' | 'info', title: toastData.title, message: toastData.message })}
@@ -78,12 +75,11 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
         />
       ) : null}
 
-      {/* 6. Secondary optional rail */}
       {controller.shouldShowSecondarySystems ? (
         <HomeSecondaryRail
-          activePlan={controller.activeStudyPlanQuery.data ?? null}
+          activePlan={controller.activeStudyPlanQuery.data as unknown as { completedTasks: number; progressPercent: number; remainingMinutes: number; title: string; totalTasks: number } | null}
           canShowSecondarySystems={controller.shouldShowSecondarySystems}
-          comebackMessage={controller.comebackQuery.data?.isComeback ? controller.comebackQuery.data.message : null}
+          comebackMessage={(controller.comebackQuery.data as Record<string, unknown> | undefined)?.isComeback ? ((controller.comebackQuery.data as Record<string, unknown> | undefined)?.message as string ?? null) : null}
           features={features}
           hasActiveRecommendation={Boolean(controller.primaryRecommendation)}
           hasStudyError={Boolean(controller.activeStudyPlanQuery.error)}

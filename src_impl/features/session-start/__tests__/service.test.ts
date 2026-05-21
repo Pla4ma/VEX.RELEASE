@@ -1,6 +1,7 @@
 import {
   buildSessionStartHero,
   buildSessionStartSummary,
+  buildFocusModeCards,
   getOfflineSessionStartMessage,
   parseSessionSetupParams,
   shouldAutoApplySmartSuggestion,
@@ -94,5 +95,18 @@ describe('session-start service', () => {
 
     expect(comebackHero.eyebrow).toBe('Comeback Session');
     expect(onboardingHero.eyebrow).toBe('First Session');
+  });
+
+  it('builds mode-specific focus tab cards without pushing 60-minute first choices', () => {
+    const cards = buildFocusModeCards({ streakDays: 0 });
+
+    expect(cards.map((card) => card.mode)).toEqual([
+      'SPRINT',
+      'LIGHT_FOCUS',
+      'STUDY',
+      'RECOVERY',
+    ]);
+    expect(cards.every((card) => card.durationSeconds <= 25 * 60)).toBe(true);
+    expect(cards[0]?.accessibilityLabel).toContain('15 minute sprint');
   });
 });

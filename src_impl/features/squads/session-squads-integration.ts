@@ -8,6 +8,9 @@
 import { eventBus } from '../../events';
 import { useBasicSquadsStatus, useUpdateBasicSquadWeeklyProgress } from './hooks/basic-squads-hooks';
 import { useEffect } from 'react';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
+
+const FEATURE_KEY = 'squads' as const;
 
 // ============================================================================
 // Session to Squads Progress Integration
@@ -20,6 +23,9 @@ export function useSessionSquadsIntegration() {
   useEffect(() => {
     // Listen for session completion events
     const unsubscribe = eventBus.subscribe('session:completed', async (event) => {
+      const availability = getAvailabilityFor(FEATURE_KEY);
+      if (!availability.canSubscribeToEvents) return;
+
       const { duration } = event;
 
       // Only update squad progress if user is in a squad

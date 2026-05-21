@@ -5,6 +5,7 @@ import { Text } from '../../../components/primitives/Text';
 import { ONBOARDING_GOALS, type OnboardingGoal } from '../../../features/onboarding';
 import { useTheme } from '../../../theme';
 import { styles } from '../styles';
+import { OnboardingAdaptationPreview } from './OnboardingAdaptationPreview';
 
 type GoalStepProps = {
   goal: OnboardingGoal | undefined;
@@ -50,6 +51,7 @@ export function GoalStep({ goal, onSelectGoal }: GoalStepProps): JSX.Element {
           );
         })}
       </View>
+      <OnboardingAdaptationPreview goal={goal} motivationStyle={undefined} />
     </View>
   );
 }

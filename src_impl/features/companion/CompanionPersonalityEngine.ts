@@ -1,10 +1,12 @@
 import { eventBus } from '../../events/EventBus';
 import { createDebugger } from '../../utils/debug';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
 import { trackPersonalityResponse } from './analytics';
 import type { PersonalityEventType, ActiveResponse, CompanionPersonalityState } from './personality-responses';
 import { RESPONSES } from './personality-responses';
 
 const debug = createDebugger('companion-personality');
+const FEATURE_KEY = 'companion_detail' as const;
 
 export type { PersonalityEventType, ActiveResponse, CompanionPersonalityState };
 
@@ -19,6 +21,11 @@ class CompanionPersonalityEngine {
   private unsubscribeFunctions: Array<() => void> = [];
 
   initialize(): void {
+    const availability = getAvailabilityFor(FEATURE_KEY);
+    if (!availability.canSubscribeToEvents) {
+      debug.info('CompanionPersonalityEngine skipped — feature not available');
+      return;
+    }
     this.unsubscribeFunctions = [
       eventBus.subscribe('boss:defeated', this.wrapHandler(this.handleBossDefeated.bind(this))),
       eventBus.subscribe('session:completed', this.wrapHandler(this.handleSessionCompleted.bind(this))),

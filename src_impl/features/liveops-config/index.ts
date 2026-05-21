@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 
 import { useSessionStats } from '../../session/hooks/useSession';
 import { useAuthStore } from '../../store';
@@ -10,6 +10,7 @@ import {
   type ProductTier,
   type UserExperienceStage,
 } from './feature-access';
+import { setFeatureAccessMap } from './feature-access-store';
 
 export type {
   FeatureAccess,
@@ -34,7 +35,9 @@ export {
 export { FEATURE_DEPENDENCIES } from './feature-dependencies';
 export { featureHealthRegistry } from './feature-health';
 export type { FeatureHealthCheck, FeatureHealthStatus } from './feature-health';
+export { registerFeatureHealthChecks } from './feature-health-checks';
 export { useDisclosureAnalytics } from './feature-analytics';
+export { setFeatureAccessMap, getFeatureAccessMap, getAvailabilityFor } from './feature-access-store';
 
 export interface FeatureAccessResult {
   error: Error | null;
@@ -63,6 +66,10 @@ export function useFeatureAccess(
       }),
     [completedSessions, motivationProfile, degradedFeatures],
   );
+
+  useEffect(() => {
+    setFeatureAccessMap(access.features);
+  }, [access.features]);
 
   return {
     error: null,

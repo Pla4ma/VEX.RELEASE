@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
+import { useReducedMotion } from '../../../hooks/useReducedMotion';
 import { useTheme } from '../../../theme';
 import { getHeroGradientColors } from '../../home/HomeScreenVisuals';
 import { styles } from '../styles';
@@ -32,17 +33,21 @@ export function LauncherStep({
 }: LauncherStepProps): JSX.Element {
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
+  const { isReducedMotion } = useReducedMotion();
   const stepPadding = { paddingBottom: insets.bottom + theme.spacing[6], paddingTop: theme.spacing[6] };
+  const riseIn = isReducedMotion ? undefined : FadeInUp.duration(500);
+  const titleIn = isReducedMotion ? undefined : FadeInUp.delay(150).duration(500);
+  const actionIn = isReducedMotion ? undefined : FadeInDown.delay(500).duration(500);
 
   if (hasSeenFirstWin) {
     return (
       <View style={[styles.fullStepSection, stepPadding]}>
-        <Animated.View entering={FadeInUp.duration(500)}>
+        <Animated.View entering={riseIn}>
           <Text style={[styles.lockInTitle, styles.centerText, { color: theme.colors.text.primary }]}>
             Your first win is saved.
           </Text>
         </Animated.View>
-        <Animated.View entering={FadeInUp.delay(150).duration(500)}>
+        <Animated.View entering={titleIn}>
           <Text style={[styles.lockInBody, styles.centerText, { color: theme.colors.text.secondary }]}>
             VEX can now show streaks, rewards, and the next best focus action from real progress.
           </Text>
@@ -50,7 +55,7 @@ export function LauncherStep({
         <View style={styles.celebrationStats}>
           {['1 day streak started', `${firstSessionXp} XP earned`, 'Session 1 complete'].map((stat, index) => (
             <Animated.View
-              entering={FadeInUp.delay(250 + index * 80).duration(450)}
+              entering={isReducedMotion ? undefined : FadeInUp.delay(250 + index * 80).duration(450)}
               key={stat}
               style={[
                 styles.celebrationStatCard,
@@ -61,7 +66,7 @@ export function LauncherStep({
             </Animated.View>
           ))}
         </View>
-        <Animated.View entering={FadeInDown.delay(500).duration(500)} style={styles.fullWidth}>
+        <Animated.View entering={actionIn} style={styles.fullWidth}>
           <Button fullWidth onPress={() => onFinishOnboarding('Your first session is saved. Keep the streak alive from Home.')} isDisabled={isFinishing} isLoading={isFinishing} accessibilityLabel="Enter VEX" accessibilityRole="button" accessibilityHint="Opens the VEX home screen">
             Enter VEX
           </Button>
@@ -85,11 +90,8 @@ export function LauncherStep({
           {selectedPreset ? `Start ${selectedPreset.durationLabel} Session` : 'Start Session'}
         </Button>
       </View>
-      <Button variant="ghost" onPress={() => onFinishOnboarding('Start your first session from Home when you are ready.')} isDisabled={isFinishing || isLaunchingSession} isLoading={isFinishing} accessibilityLabel="Skip first session for now" accessibilityRole="button" accessibilityHint="Finishes onboarding and opens Home without starting a session">
-        Skip first session for now
-      </Button>
       <Text style={[styles.progressHint, { color: theme.colors.text.secondary }]}>
-        Completing the first session starts your streak and unlocks useful progress feedback.
+        Home opens after the first win so your streak, rewards, and tomorrow promise start from real progress.
       </Text>
     </View>
   );

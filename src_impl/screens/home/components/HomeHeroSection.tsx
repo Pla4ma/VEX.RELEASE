@@ -6,11 +6,11 @@ import { z } from 'zod';
 import { ErrorState } from '../../../components/states/ErrorState';
 import { useHomePriority } from '../../../features/home-spine/hooks';
 import type { HomePrimaryPriority, HomeStakes } from '../../../features/home-spine/priority-schemas';
+import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../../features/liveops-config';
 import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
-import type { useHomeScreenController } from '../hooks/useHomeScreenController';
+import type { HomeController } from '../hooks/home-controller-types';
 import { HomeHeroCard } from './HomeHeroCard';
 
-type HomeController = ReturnType<typeof useHomeScreenController>;
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
 const SessionSetupParamsSchema = z.object({
@@ -19,9 +19,7 @@ const SessionSetupParamsSchema = z.object({
   suggestedDurationSeconds: z.number().int().positive().optional(),
 }).strict();
 
-function toSessionSetupParams(
-  params: Record<string, unknown> | undefined,
-): SessionStackParams['SessionSetup'] {
+function toSessionSetupParams(params: Record<string, unknown> | undefined): SessionStackParams['SessionSetup'] {
   return SessionSetupParamsSchema.parse(params ?? {});
 }
 
@@ -48,7 +46,7 @@ export function HomeHeroSection({
   controller,
 }: HomeHeroSectionProps): JSX.Element {
   const navigation = useNavigation<NavigationProp>();
-  const priorityQuery = useHomePriority(controller.userId);
+  const priorityQuery = useHomePriority(controller.userId, controller.disclosure.features);
   const priority = priorityQuery.data?.primary ?? null;
   const stakes: HomeStakes | null = priorityQuery.data?.stakes ?? null;
   const effectivePriority = priority && !controller.isOnline
@@ -60,18 +58,24 @@ export function HomeHeroSection({
       return;
     }
     if (effectivePriority.cta.action === 'OPEN_BOSS') {
-      navigation.navigate('Boss');
+      const bossAccess = controller.disclosure.features.boss_tab;
+      if (isFeatureAvailableForNavigation(getFeatureAvailability(bossAccess))) {
+        navigation.navigate('Boss');
+        return;
+      }
+      controller.openSetup();
       return;
     }
     if (effectivePriority.cta.action === 'OPEN_CHALLENGES') {
-      if (controller.disclosure.features.challenges.isUnlocked) {
+      const challengesAccess = controller.disclosure.features.challenges;
+      if (isFeatureAvailableForNavigation(getFeatureAvailability(challengesAccess))) {
         navigation.navigate('Challenges');
         return;
       }
       controller.openSetup();
       return;
     }
-    controller.openSetup(toSessionSetupParams(effectivePriority.cta.params));
+    controller.openSetup(toSessionSetupParams(effectivePriority.cta.params as Record<string, unknown> | undefined));
   };
 
   if (priorityQuery.isError) {
@@ -81,8 +85,7 @@ export function HomeHeroSection({
         description="VEX could not choose the next move yet. Pull once more and the path will settle."
         retryLabel="Retry Home Action"
         onRetry={() => {
-          const rerun = priorityQuery.refetch;
-          void rerun();
+          void priorityQuery.refetch();
         }}
       />
     );

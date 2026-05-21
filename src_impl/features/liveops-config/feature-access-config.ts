@@ -43,7 +43,7 @@ export const FEATURE_RELEASE_STATES: Record<FeatureKey, FeatureReleaseState> = {
   gems_prominent: 'disabled_beta',
   home_tab: 'core',
   inventory: 'disabled_beta',
-  premium_paywall: 'teased_only',
+  premium_paywall: 'disabled_beta',
   profile_tab: 'core',
   progress_view: 'core',
   quiz_review_mode: 'progressive',
@@ -59,9 +59,8 @@ export const FEATURE_RELEASE_STATES: Record<FeatureKey, FeatureReleaseState> = {
 
 export const FEATURE_TEASER_STARTS: Partial<Record<FeatureKey, number>> = {
   companion_detail: 2,
-  challenges: 3,
+  challenges: 4,
   boss_tab: 5,
-  premium_paywall: 5,
   ai_coach_advanced: 6,
   content_study: 8,
   quiz_review_mode: 9,
@@ -102,7 +101,7 @@ export const FEATURE_THRESHOLDS: Record<FeatureKey, number> = {
   gems_prominent: Number.POSITIVE_INFINITY,
   home_tab: 0,
   inventory: Number.POSITIVE_INFINITY,
-  premium_paywall: 7,
+  premium_paywall: Number.POSITIVE_INFINITY,
   profile_tab: 0,
   progress_view: 0,
   quiz_review_mode: 10,
@@ -125,12 +124,12 @@ export const FEATURE_COPY: Partial<Record<FeatureKey, FeatureCopy>> = {
       'Returns after the core loop is stable and useful.',
   },
   boss_tab: {
-    lockedDescription: 'Boss fights transform your focus progress into a visible challenge. Build the habit first, then see your consistency become a victory.',
-    recommendedUnlockMoment: 'After session 7',
-    unlockReason: 'Unlocks after 7 sessions so your focus history has real weight behind it.',
+    lockedDescription: 'Bosses stay quiet until focus is the obvious center. When they appear, damage only means minutes focused.',
+    recommendedUnlockMoment: 'After session 7, later for calm or study-focused styles',
+    unlockReason: 'Unlocks after enough sessions for boss progress to reinforce focus instead of competing with it.',
   },
   challenges: {
-    lockedDescription: 'Daily challenges turn your next focus milestone into a concrete target. A few sessions first let the app point you at the right push.',
+    lockedDescription: 'Challenges turn the next focus or study target into one concrete action.',
     recommendedUnlockMoment: 'After session 5',
     unlockReason: 'Unlocks after 5 sessions when patterns are clear.',
   },
@@ -156,10 +155,10 @@ export const FEATURE_COPY: Partial<Record<FeatureKey, FeatureCopy>> = {
   },
   premium_paywall: {
     lockedDescription:
-      'Premium features stay quiet until your habit proves it deserves extras.',
-    recommendedUnlockMoment: 'After session 7',
+      'Premium stays hidden until live subscriptions, entitlements, and real premium value are ready.',
+    recommendedUnlockMoment: 'Not in beta',
     unlockReason:
-      'Shows up when you trust VEX enough to consider going deeper.',
+      'Appears only after the core loop proves value and RevenueCat is fully configured.',
   },
   streak_insurance: {
     lockedDescription: 'Streak recovery is gentle: comeback sessions, rhythm recovery, and fresh starts.',

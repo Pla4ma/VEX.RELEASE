@@ -41,14 +41,14 @@ export function buildStakes(
       };
     case 'CHALLENGE_NEAR_DONE':
       return {
-        atRisk: 'The challenge loses its edge if you leave it hanging.',
-        potentialGain: 'You close out a nearly finished challenge today.',
-        what: snapshot.challenge.title ?? 'Daily challenge',
+        atRisk: 'The next focus target stays open.',
+        potentialGain: 'You turn a nearly finished challenge into completed focus time.',
+        what: snapshot.challenge.title ?? 'Focus target',
       };
     case 'BOSS_ACTIVE':
       return {
-        potentialGain: 'Another session chips away at the active boss run.',
-        what: 'Boss run',
+        potentialGain: 'Another focus session becomes visible boss progress.',
+        what: 'Focus engine',
       };
     case 'DEFAULT_SESSION':
       return {
@@ -85,9 +85,9 @@ export function buildSecondaryActions(
       case 'RECOMMENDED_SESSION':
         return [createSecondaryAction('recommendation', 'See the recommended session')];
       case 'CHALLENGE_NEAR_DONE':
-        return [createSecondaryAction('challenge', 'Finish your daily challenge')];
+        return [createSecondaryAction('challenge', 'Start the target session')];
       case 'BOSS_ACTIVE':
-        return [createSecondaryAction('boss', 'Continue the active boss run')];
+        return [createSecondaryAction('boss', 'Turn focus into boss progress')];
       default:
         return [];
     }

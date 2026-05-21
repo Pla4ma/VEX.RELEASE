@@ -110,6 +110,7 @@ export function createStoreActions(
         displayName: state.displayName ?? undefined,
         starterPresetId: undefined,
         element: state.element ?? undefined,
+        explicitMotivationStyle: state.explicitMotivationStyle ?? undefined,
         personaId: state.persona ?? undefined,
         squadId: null,
       };
@@ -127,18 +128,27 @@ export function createStoreActions(
       }
       if (draft.focusDuration) updates.focusDuration = draft.focusDuration;
       if (draft.displayName) updates.displayName = draft.displayName;
+      if (draft.explicitMotivationStyle) {
+        updates.explicitMotivationStyle = draft.explicitMotivationStyle;
+        updates.motivationProfile = deriveMotivationProfile(
+          updates.goal ?? store.goal,
+          updates.persona ?? store.persona,
+          updates.element ?? store.element,
+          draft.explicitMotivationStyle,
+        );
+      }
       if (draft.personaId) {
         updates.persona = draft.personaId;
         updates.motivationProfile = deriveMotivationProfile(
           updates.goal ?? store.goal, draft.personaId,
-          draft.element ?? store.element, store.explicitMotivationStyle,
+          draft.element ?? store.element, updates.explicitMotivationStyle ?? store.explicitMotivationStyle,
         );
       }
       if (draft.element) {
         updates.element = draft.element;
         updates.motivationProfile = deriveMotivationProfile(
           updates.goal ?? store.goal, updates.persona ?? store.persona,
-          draft.element, store.explicitMotivationStyle,
+          draft.element, updates.explicitMotivationStyle ?? store.explicitMotivationStyle,
         );
       }
       if (Object.keys(updates).length > 0) set(updates);

@@ -11,24 +11,38 @@ import {
 import { generateSessionRecommendation } from '../session-recommendation/service';
 import type { SessionMode as RecommendationMode } from '../session-recommendation/types';
 import type { SessionSummary } from '../../session/types';
+import { z } from 'zod';
 
 export { buildCompletionLedger, type BuildCompletionLedgerInput } from './ledger-service';
 export { calculateSessionGrade } from './grading-service';
+export {
+  buildSessionSummaryFromCompletionLedger,
+  recoverSessionCompletionParams,
+} from './recovery-service';
 export type { SessionGradingInput, SessionGradingResult } from './grading-schemas';
+
+const RecoverableSessionRouteSchema = z
+  .object({ sessionId: z.string().uuid() })
+  .passthrough();
 
 export function parseSessionCompletionParams(input: unknown): {
   params: SessionCompletionNavigationParams | null;
+  recoverySessionId: string | null;
   warningMessage: string | null;
 } {
   const result = SessionCompletionNavigationParamsSchema.safeParse(input);
   if (result.success) {
-    return { params: result.data, warningMessage: null };
+    return { params: result.data, recoverySessionId: null, warningMessage: null };
   }
+  const recoverable = RecoverableSessionRouteSchema.safeParse(input);
 
   return {
     params: null,
+    recoverySessionId: recoverable.success ? recoverable.data.sessionId : null,
     warningMessage:
-      'We could not restore the finished session summary, so we sent you back to a safe exit.',
+      recoverable.success
+        ? 'We could not read the finished session summary, so VEX is trying to rebuild it from your saved completion record.'
+        : 'We could not restore the finished session summary, so we sent you back to a safe exit.',
   };
 }
 

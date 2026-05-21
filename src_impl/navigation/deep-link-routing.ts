@@ -62,7 +62,13 @@ export function deepLinkToNavigationParams(
     case 'invite':
       return { screen: 'Main', params: { screen: 'Profile' } };
     case 'study':
-      return { screen: 'Main', params: { screen: 'ContentStudy' } };
+      return {
+        screen: 'SessionStack',
+        params: {
+          screen: 'SessionSetup',
+          params: { presetMode: 'STUDY', source: 'content-study' },
+        },
+      };
     case 'coach':
       return { screen: 'Main', params: { screen: 'AICoach' } };
     case 'shop':

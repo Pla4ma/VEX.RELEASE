@@ -6,7 +6,7 @@ import * as coachRepository from '../../../features/ai-coach/repository';
 import { useActiveStudyPlan } from '../../../features/content-study';
 import { useActiveBoss } from '../../../features/boss/hooks';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
-import { useDisclosureAnalytics, useFeatureAccess } from '../../../features/liveops-config';
+import { getFeatureAvailability, isFeatureAvailableForNavigation, useDisclosureAnalytics, useFeatureAccess } from '../../../features/liveops-config';
 import { getNextBestAction } from '../../../features/progression';
 import { useProgressionSummary } from '../../../features/progression/hooks';
 import { useComebackState, useStreakSummary } from '../../../features/streaks/hooks';
@@ -94,7 +94,8 @@ export function useHomeScreenController() {
         }
       : null,
     analytics,
-    canNavigateContentStudy: disclosure.features.content_study.isUnlocked, canNavigateSocial: disclosure.features.social_tab.isUnlocked,
+    canNavigateContentStudy: isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.content_study)),
+    canNavigateSocial: isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.social_tab)),
     completedSessions: disclosure.inputs.totalCompletedSessions,
     navigation,
     stage: disclosure.stage,

@@ -44,6 +44,7 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
       {isAuthenticated ? (
         <>
           <RootStackAuthenticatedRoutes
+            features={features}
             hasCompletedOnboarding={hasCompletedOnboarding}
             show={show}
             Stack={Stack}

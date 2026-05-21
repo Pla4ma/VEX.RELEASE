@@ -55,8 +55,8 @@ function toLedgerMode(input: SessionSummary): z.infer<typeof CompletionLedgerSch
   return parsed.success ? parsed.data : SessionMode.FLOW;
 }
 
-function createIdempotencyKey(sessionId: string, completedAt: number): string {
-  return `${sessionId}:${completedAt}`;
+function createIdempotencyKey(sessionId: string): string {
+  return `${sessionId}:completed`;
 }
 
 export function buildCompletionLedger(rawInput: BuildCompletionLedgerInput): CompletionLedger {
@@ -101,7 +101,7 @@ export function buildCompletionLedger(rawInput: BuildCompletionLedgerInput): Com
     grade,
     gradeScore,
     idempotencyKey:
-      input.idempotencyKey ?? createIdempotencyKey(input.sessionId, completedAt),
+      input.idempotencyKey ?? createIdempotencyKey(input.sessionId),
     interruptionCount,
     ledgerId: crypto.randomUUID(),
     mode: toLedgerMode(input.summary),

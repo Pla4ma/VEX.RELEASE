@@ -159,21 +159,18 @@ describe('OnboardingFlowScreen', () => {
     });
   });
 
-  it('can skip the first session while safely persisting defaults', () => {
+  it('does not expose a no-proof exit before the first session is completed', () => {
     const tree = renderer.create(<OnboardingFlowScreen />);
 
     pressByText(tree.root, 'Build consistency');
     pressByText(tree.root, 'Continue');
     pressByText(tree.root, 'Continue');
-    pressByText(tree.root, 'Skip first session for now');
 
-    expect(mockCompleteOnboarding).toHaveBeenCalledWith('user-1', {
-      element: 'LUMINA',
-      goal: 'build_consistency',
-      personaId: 'mentor',
-      squadId: null,
-      starterPresetId: 'quick',
-    });
-    expect(mockReplace).toHaveBeenCalledWith('Main', expect.objectContaining({ screen: 'Home' }));
+    const skipControls = tree.root.findAllByType(Text).filter((node) =>
+      textFromChildren(node.props.children) === 'Skip first session for now',
+    );
+    expect(skipControls).toHaveLength(0);
+    expect(mockCompleteOnboarding).not.toHaveBeenCalled();
+    expect(mockReplace).not.toHaveBeenCalled();
   });
 });

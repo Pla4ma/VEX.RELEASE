@@ -2,6 +2,8 @@ import { SessionMode } from '../../../session/modes';
 import type { SessionSummary } from '../../../session/types';
 import { applyCompletionSubsystems } from '../completion-subsystems';
 import type { CompletionLedger } from '../schemas';
+import { setFeatureAccessMap } from '../../liveops-config/feature-access-store';
+import type { FeatureAccessMap } from '../../liveops-config/feature-access';
 
 const mockOrder: string[] = [];
 const mockCaptureException = jest.fn();
@@ -51,6 +53,10 @@ jest.mock('../../../features/companion/service', () => ({
   getCompanionService: jest.fn(() => ({ completeSession: mockCompleteSession })),
 }));
 
+jest.mock('../analytics', () => ({
+  trackSessionCompleted: jest.fn(),
+}));
+
 const baseLedger: CompletionLedger = {
   companionReactionId: null,
   completedAt: 2000000,
@@ -62,7 +68,7 @@ const baseLedger: CompletionLedger = {
   focusScoreDelta: 8,
   grade: 'A',
   gradeScore: 88,
-  idempotencyKey: '550e8400-e29b-41d4-a716-446655440000:2000000',
+  idempotencyKey: '550e8400-e29b-41d4-a716-446655440000:completed',
   interruptionCount: 0,
   ledgerId: '550e8400-e29b-41d4-a716-446655440001',
   mode: SessionMode.FLOW,
@@ -119,6 +125,24 @@ describe('applyCompletionSubsystems', () => {
   beforeEach(() => {
     mockOrder.length = 0;
     jest.clearAllMocks();
+    setFeatureAccessMap({
+      companion_detail: {
+        isUnlocked: true,
+        isVisible: true,
+        lockedDescription: '',
+        recommendedUnlockMoment: '',
+        unlockReason: 'test',
+        releaseState: 'core',
+      },
+      challenges: {
+        isUnlocked: true,
+        isVisible: true,
+        lockedDescription: '',
+        recommendedUnlockMoment: '',
+        unlockReason: 'test',
+        releaseState: 'core',
+      },
+    } as FeatureAccessMap);
   });
 
   it('updates core systems in completion order and enriches the ledger', async () => {
@@ -159,5 +183,34 @@ describe('applyCompletionSubsystems', () => {
     expect(result.degradedSystems).toContain('focus-identity');
     expect(mockOrder).toEqual(['focus-identity', 'streak', 'progression', 'rewards', 'companion']);
     expect(result.ledger.rewardIds).toEqual([`session-currency:${baseLedger.sessionId}`]);
+  });
+
+  it('skips feature-dependent subsystems when feature is locked', async () => {
+    setFeatureAccessMap({
+      companion_detail: {
+        isUnlocked: false,
+        isVisible: false,
+        lockedDescription: 'locked',
+        recommendedUnlockMoment: '',
+        unlockReason: '',
+        releaseState: 'progressive',
+      },
+      challenges: {
+        isUnlocked: false,
+        isVisible: false,
+        lockedDescription: 'locked',
+        recommendedUnlockMoment: '',
+        unlockReason: '',
+        releaseState: 'progressive',
+      },
+    } as FeatureAccessMap);
+
+    const result = await applyCompletionSubsystems({ ledger: baseLedger, summary: baseSummary });
+
+    expect(result.degradedSystems).toEqual([]);
+    expect(mockOrder).toEqual(['focus-identity', 'streak', 'progression', 'rewards']);
+    expect(result.ledger.companionReactionId).toBeNull();
+    expect(result.ledger.dailyMissionResult.status).toBe('unchanged');
+    expect(mockCompleteSession).not.toHaveBeenCalled();
   });
 });

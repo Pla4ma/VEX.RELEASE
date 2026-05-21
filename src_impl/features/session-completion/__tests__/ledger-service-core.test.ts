@@ -50,7 +50,7 @@ describe('buildCompletionLedger core contract', () => {
     expect(ledger.grade).toBeDefined();
   });
 
-  it('uses provided idempotency key and creates different generated keys by completion time', () => {
+  it('uses provided idempotency key and generates session-bound keys', () => {
     const custom = buildCompletionLedger({
       idempotencyKey: 'custom-key-123',
       sessionId: '550e8400-e29b-41d4-a716-446655440002',
@@ -69,9 +69,18 @@ describe('buildCompletionLedger core contract', () => {
       summary: createSessionSummary(),
       userId: USER_ID,
     });
+    const different = buildCompletionLedger({
+      sessionId: '550e8400-e29b-41d4-a716-446655440004',
+      summary: createSessionSummary(),
+      userId: USER_ID,
+    });
 
     expect(custom.idempotencyKey).toBe('custom-key-123');
-    expect(first.idempotencyKey).not.toBe(second.idempotencyKey);
+    // Same sessionId produces same idempotency key regardless of completedAt
+    expect(first.idempotencyKey).toBe(second.idempotencyKey);
+    expect(first.idempotencyKey).toContain(':completed');
+    // Different sessionId produces different key
+    expect(first.idempotencyKey).not.toBe(different.idempotencyKey);
   });
 
   it('uses custom timezone and optional integration outputs', () => {

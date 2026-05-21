@@ -1,10 +1,6 @@
 import { eventBus } from "../../events";
 import * as Sentry from "@sentry/react-native";
-import {
-  CHEST_DROP_TABLES,
-  MYSTERY_MULTIPLIER_TABLE,
-  RARITY_VALUE,
-} from "./chest-config";
+import { CHEST_DROP_TABLES, MYSTERY_MULTIPLIER_TABLE, RARITY_VALUE } from "./chest-config";
 import {
   ChestSchema,
   MysteryMultiplierSchema,
@@ -13,12 +9,7 @@ import {
   type ChestType,
   type MysteryMultiplier,
 } from "./variable-reward-schemas";
-export {
-  formatChestOpeningSequence,
-  getChestDisplay,
-  getMultiplierDisplay,
-  trackChestAnalytics,
-} from "./variable-reward-display";
+export { formatChestOpeningSequence, getChestDisplay, getMultiplierDisplay, trackChestAnalytics } from "./variable-reward-display";
 export {
   ChestRewardSchema,
   ChestSchema,

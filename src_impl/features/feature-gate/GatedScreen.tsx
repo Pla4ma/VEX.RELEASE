@@ -2,6 +2,7 @@
  * GatedScreen Component
  *
  * Wraps a screen component with feature gating and navigation fallback.
+ * Uses 'navigation' mode to check canNavigate && canRegisterRoute.
  */
 
 import React from 'react';
@@ -28,6 +29,7 @@ export function GatedScreen({
   return (
     <FeatureGate
       feature={feature}
+      mode="navigation"
       fallback={
         <NavigationGate
           featureName={featureName}

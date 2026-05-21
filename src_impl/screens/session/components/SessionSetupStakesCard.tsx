@@ -8,7 +8,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Box } from '../../../components/primitives/Box';
 import { SessionStakesBriefing } from '../../../features/session-start/components/SessionStakesBriefing';
 import { useFeatureAccess } from '../../../features/liveops-config';
-import { getFeatureAvailability } from '../../../features/liveops-config/feature-availability';
+import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../../features/liveops-config/feature-availability';
 import type {
   ExtendedRootStackParams,
   SessionStackParams,
@@ -40,7 +40,7 @@ export function SessionSetupStakesCard({
         onStakePress={(stakeId) => {
           if (
             stakeId === 'boss' &&
-            getFeatureAvailability(disclosure.features.boss_tab).canNavigate
+            isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.boss_tab))
           ) {
             navigation.navigate('Boss');
           }
@@ -49,7 +49,7 @@ export function SessionSetupStakesCard({
           }
           if (
             stakeId === 'challenge' &&
-            getFeatureAvailability(disclosure.features.challenges).canNavigate
+            isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.challenges))
           ) {
             navigation.navigate('Challenges');
           }

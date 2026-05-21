@@ -1,9 +1,3 @@
-/**
- * HomeInterventionBanner Component
- *
- * Renders the coach intervention banner in the Home screen.
- */
-
 import React from 'react';
 import { CoachInterventionBanner, type InterventionType } from '../../../features/ai-coach/components/CoachInterventionBanner';
 import { trackInterventionActioned } from '../../../features/ai-coach/analytics';
@@ -11,6 +5,7 @@ import { eventBus } from '../../../events';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
+import { buildInterventionSessionParams } from '../buildInterventionSessionParams';
 
 interface HomeInterventionBannerProps {
   intervention: { id: string; type: InterventionType; message: string; actionLabel: string; hoursRemaining?: number; metadata?: Record<string, unknown> } | null;
@@ -27,7 +22,6 @@ export function HomeInterventionBanner({
   navigation,
   userId,
 }: HomeInterventionBannerProps): JSX.Element | null {
-  // Handle intervention action
   const handleInterventionAction = React.useCallback((activeIntervention: {
     id: string;
     type: string;
@@ -56,13 +50,11 @@ export function HomeInterventionBanner({
       actionLabel: activeIntervention.actionLabel,
     });
 
+    const { suggestedDurationSeconds, presetMode } = buildInterventionSessionParams(normalized);
+
     navigation.navigate('SessionStack', {
       screen: 'SessionSetup',
-      params: {
-        suggestedDurationSeconds:
-          activeIntervention.type === 'BOSS_FINISH' ? 45 * 60 : 25 * 60,
-        presetMode: 'STUDY',
-      },
+      params: { suggestedDurationSeconds, presetMode },
     });
   }, [userId, navigation]);
 

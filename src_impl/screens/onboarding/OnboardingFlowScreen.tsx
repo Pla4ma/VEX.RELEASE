@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useIsFocused, useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import * as Sentry from '@sentry/react-native';
-
 import { useDisclosureAnalytics } from '../../features/liveops-config';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { ONBOARDING_GOALS, useOnboardingStore, type OnboardingGoal } from '../../features/onboarding';
@@ -16,6 +15,7 @@ import {
   DEFAULT_PERSONA_ID,
   GoalStep,
   LauncherStep,
+  MotivationStyleStep,
   OnboardingFlowLayout,
   SignedOutOnboardingState,
   STARTER_PRESETS,
@@ -45,10 +45,12 @@ export function OnboardingFlowScreen(): JSX.Element {
   const draft = useOnboardingStore((state) => (userId ? state.getDraft(userId) : undefined));
   const saveDraft = useOnboardingStore((state) => state.saveDraft);
   const completeOnboarding = useOnboardingStore((state) => state.completeOnboarding);
+  const setExplicitMotivationStyle = useOnboardingStore((state) => state.setExplicitMotivationStyle);
   const showHomeHighlight = useSessionUIStore((state) => state.showHomeHighlight);
   const disclosureAnalytics = useDisclosureAnalytics();
   const [step, setStep] = useState(clampStep(route.params?.step));
   const [goal, setGoal] = useState<OnboardingGoal | undefined>(draft?.goal);
+  const [motivationStyle, setMotivationStyle] = useState(draft?.explicitMotivationStyle);
   const [starterPresetId, setStarterPresetId] = useState<string | undefined>(
     draft?.starterPresetId ?? STARTER_PRESETS[0]?.id,
   );
@@ -73,12 +75,13 @@ export function OnboardingFlowScreen(): JSX.Element {
     }
     saveDraft(userId, {
       element: DEFAULT_COMPANION_ELEMENT,
+      explicitMotivationStyle: motivationStyle,
       goal,
       personaId: DEFAULT_PERSONA_ID,
       squadId: null,
       starterPresetId,
     });
-  }, [goal, saveDraft, starterPresetId, userId]);
+  }, [goal, motivationStyle, saveDraft, starterPresetId, userId]);
 
   useEffect(() => {
     if (!userId || startedTrackedRef.current) {
@@ -116,9 +119,7 @@ export function OnboardingFlowScreen(): JSX.Element {
       return;
     }
     setIsFinishing(true);
-    setFinishError(null);
-    completedRef.current = true;
-
+    setFinishError(null); completedRef.current = true;
     try {
       completeOnboarding();
       disclosureAnalytics.trackOnboardingCompleted(userId);
@@ -135,22 +136,22 @@ export function OnboardingFlowScreen(): JSX.Element {
       });
       completedRef.current = false;
       setFinishError('We could not finish setup right now. Please try once more.');
-    } finally {
-      setIsFinishing(false);
-    }
+    } finally { setIsFinishing(false); }
   }, [completeOnboarding, disclosureAnalytics, goal, navigation, showHomeHighlight, starterPresetId, userId]);
 
   const handleSelectGoal = useCallback((nextGoal: OnboardingGoal): void => {
     setGoal(nextGoal);
-    if (userId) {
-      disclosureAnalytics.trackOnboardingGoalSet(userId, nextGoal);
-    }
+    if (userId) { disclosureAnalytics.trackOnboardingGoalSet(userId, nextGoal); }
   }, [disclosureAnalytics, userId]);
 
+  const handleSelectMotivationStyle = useCallback((style: typeof motivationStyle): void => {
+    if (!style) { return; }
+    setMotivationStyle(style);
+    setExplicitMotivationStyle(style);
+  }, [setExplicitMotivationStyle]);
+
   const handleStartFirstSession = useCallback((): void => {
-    if (!selectedPreset) {
-      return;
-    }
+    if (!selectedPreset) { return; }
     setIsLaunchingSession(true);
     triggerHaptic('impactMedium').catch(() => undefined);
     disclosureAnalytics.trackFirstSessionStarted(userId, 'onboarding');
@@ -166,19 +167,17 @@ export function OnboardingFlowScreen(): JSX.Element {
   }
 
   return (
-    <OnboardingFlowLayout
-      finishError={finishError}
-      isContinueDisabled={(step === 0 && !goal) || isFinishing}
-      isFinishing={isFinishing}
-      lastStepIndex={LAST_STEP_INDEX}
-      onBack={() => setStep(step - 1)}
-      onContinue={() => setStep(step + 1)}
-      onRetryFinish={() => { finishOnboarding().catch(() => undefined); }}
-      step={step}
-    >
+    <OnboardingFlowLayout finishError={finishError}
+      isContinueDisabled={(step === 0 && !goal) || (step === 1 && !motivationStyle) || isFinishing}
+      isFinishing={isFinishing} lastStepIndex={LAST_STEP_INDEX}
+      onBack={() => setStep(step - 1)} onContinue={() => setStep(step + 1)}
+      onRetryFinish={() => { finishOnboarding().catch(() => undefined); }} step={step}>
       {step === 0 ? <GoalStep goal={goal} onSelectGoal={handleSelectGoal} /> : null}
-      {step === 1 ? <StarterStep starterPresetId={starterPresetId} onSelectPreset={setStarterPresetId} /> : null}
-      {step === 2 ? (
+      {step === 1 ? (
+        <MotivationStyleStep goal={goal} motivationStyle={motivationStyle} onSelectStyle={handleSelectMotivationStyle} />
+      ) : null}
+      {step === 2 ? <StarterStep starterPresetId={starterPresetId} onSelectPreset={setStarterPresetId} /> : null}
+      {step === 3 ? (
         <LauncherStep
           firstSessionXp={historyQuery.history[0]?.summary?.xpEarned ?? 50}
           hasSeenFirstWin={hasSeenFirstWin}

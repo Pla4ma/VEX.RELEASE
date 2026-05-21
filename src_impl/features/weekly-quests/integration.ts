@@ -4,9 +4,12 @@ import { eventBus } from '../../events';
 import { calculateBossDamage } from '../../session/integration/SessionBossIntegration';
 import { SessionSummarySchema } from '../../session/types';
 import { createDebugger } from '../../utils/debug';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
 import { recordWeeklyQuestSessionSafely } from './service';
 
 const debug = createDebugger('weekly-quests:integration');
+
+const FEATURE_KEY = 'challenges' as const;
 
 const SessionCompletedEventSchema = z.object({
   sessionId: z.string(),
@@ -21,6 +24,13 @@ export function initializeWeeklyQuestIntegration(): () => void {
     return () => undefined;
   }
   initialized = true;
+
+  const availability = getAvailabilityFor(FEATURE_KEY);
+  if (!availability.canSubscribeToEvents) {
+    debug.info('Weekly quest integration skipped — feature not available');
+    return () => undefined;
+  }
+
   return eventBus.subscribe('session:completed', (rawEvent) => {
     const parsed = SessionCompletedEventSchema.safeParse(rawEvent);
     if (!parsed.success) {

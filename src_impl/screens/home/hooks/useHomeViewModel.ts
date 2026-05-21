@@ -1,39 +1,70 @@
-import { useHomeScreenController } from './useHomeScreenController';
+import { useMemo } from 'react';
+import { useNetInfo } from '../../../network';
+import { useFeatureAccess, useDisclosureAnalytics } from '../../../features/liveops-config';
+import { useStreakSummary } from '../../../features/streaks/hooks';
+import { useProgressionSummary } from '../../../features/progression/hooks';
+import { useSessionHistory } from '../../../session/hooks/useSession';
+import { useAuthStore } from '../../../store';
+import { buildHomeFeatureRuntime } from './home-feature-runtime';
+import { useNewUserHomeModel } from './useNewUserHomeModel';
+import { useActivatingHomeModel } from './useActivatingHomeModel';
+import { useEngagedHomeModel } from './useEngagedHomeModel';
+import { usePowerUserHomeModel } from './usePowerUserHomeModel';
+import { useHomeAnalyticsEffects } from './useHomeAnalyticsEffects';
 import type { HomeViewModel } from './home-view-model';
+import type { HomeController } from './home-controller-types';
 
-/**
- * Single entry point for the home screen's view model.
- *
- * Components consume this hook — never useHomeScreenController directly.
- * Internally, this can dispatch to stage-specific models
- * (useNewUserHomeModel, useActivatingHomeModel, useEngagedHomeModel,
- * usePowerUserHomeModel) as those are implemented.
- *
- * Future: Each stage model will only import and query features relevant
- * to that stage, reducing bundle and mental complexity.
- */
 export function useHomeViewModel(): HomeViewModel & {
-  controller: ReturnType<typeof useHomeScreenController>;
+  controller: HomeController;
 } {
-  const controller = useHomeScreenController();
+  const { isOnline } = useNetInfo();
+  const { user } = useAuthStore();
+  const userId = user?.id ?? '';
+  const disclosure = useFeatureAccess();
+  const runtime = useMemo(
+    () => buildHomeFeatureRuntime(disclosure.features, disclosure.productTier),
+    [disclosure.features, disclosure.productTier],
+  );
+  const analytics = useDisclosureAnalytics();
 
-  return {
-    userId: controller.userId,
-    isOnline: controller.isOnline,
-    isLoading: controller.isLoading,
-    isFirstRun: controller.isFirstRun,
-    loadError: controller.loadError,
-    currentStreak: controller.currentStreak,
-    currentXp: controller.currentXp,
-    todayFocusMinutes: controller.todayFocusMinutes,
-    progressPercent: controller.progressPercent,
-    primaryRecommendation: controller.primaryRecommendation,
-    homeSpine: controller.homeSpine,
-    returnReason: controller.returnReason,
-    stage: controller.disclosure.stage,
-    productTier: controller.disclosure.productTier,
-    features: controller.disclosure.features,
-    runtime: controller.runtime,
-    controller,
+  const streakQuery = useStreakSummary(userId);
+  const progressionQuery = useProgressionSummary(userId);
+  const historyQuery = useSessionHistory(userId, 5);
+
+  useHomeAnalyticsEffects({
+    analytics,
+    features: disclosure.features as Record<string, { isUnlocked: boolean }>,
+    stage: disclosure.stage,
+    totalCompletedSessions: disclosure.inputs.totalCompletedSessions,
+    userId,
+  });
+
+  const sharedInput = {
+    analytics,
+    disclosure,
+    historyQuery,
+    isOnline,
+    progressionQuery,
+    runtime,
+    streakQuery,
+    userId,
   };
+
+  const newUserModel = useNewUserHomeModel(sharedInput);
+  const activatingModel = useActivatingHomeModel(sharedInput);
+  const engagedModel = useEngagedHomeModel(sharedInput);
+  const powerUserModel = usePowerUserHomeModel(sharedInput);
+
+  switch (disclosure.stage) {
+    case 'NEW_USER':
+      return newUserModel;
+    case 'ACTIVATING':
+      return activatingModel;
+    case 'ENGAGED':
+      return engagedModel;
+    case 'POWER_USER':
+      return powerUserModel;
+    default:
+      return newUserModel;
+  }
 }

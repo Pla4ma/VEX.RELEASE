@@ -11,13 +11,15 @@ import { useActiveIntervention } from '../../../features/ai-coach/hooks';
 import { useNotificationBadge } from '../../../features/notifications/components/NotificationBadge';
 import { useToast } from '../../../shared/ui/components/Toast';
 import { useHomeViewModel } from './useHomeViewModel';
+import type { HomeController } from './home-controller-types';
 import type { ChallengeItem, SessionListItem } from '../../../features/home-spine/components';
 import { getQualityGrade, getHomeCompanionMood } from '../utils';
 import { createHomeDailyDungeon } from './home-daily-dungeon';
+
 export function useHomeData() {
   const insets = useSafeAreaInsets();
   const viewModel = useHomeViewModel();
-  const controller = viewModel.controller;
+  const controller: HomeController = viewModel.controller;
   const { show: showToast } = useToast();
   const challengesQuery = useActiveChallenges(controller.userId, {
     enabled: controller.runtime.canQueryChallenges,
@@ -36,9 +38,9 @@ export function useHomeData() {
   const todaysChallenges: ChallengeItem[] = useMemo(() => {
     if (!challengesQuery.data) {return [];}
     return challengesQuery.data
-      .filter((item) => item.challenge.type === 'DAILY')
+      .filter((item: { challenge: { type: string } }) => item.challenge.type === 'DAILY')
       .slice(0, 3)
-      .map((item) => ({
+      .map((item: { userChallenge: { id: string; currentValue: number; status: string; expiresAt: number | null }; challenge: { title: string; description: string; targetValue: number; rewardAmount: number; rewardType: string } }) => ({
         id: item.userChallenge.id,
         title: item.challenge.title,
         description: item.challenge.description,
@@ -53,18 +55,19 @@ export function useHomeData() {
           : 0,
       }));
   }, [challengesQuery.data]);
+  const streakData = controller.streakQuery.data as { nextDeadline?: number } | undefined;
   const streakHoursRemaining = useMemo(() => {
-    if (!controller.streakQuery.data?.nextDeadline) {return null;}
-    return Math.max(0, Math.floor((controller.streakQuery.data.nextDeadline - Date.now()) / (1000 * 60 * 60)));
-  }, [controller.streakQuery.data?.nextDeadline]);
+    if (!streakData?.nextDeadline) {return null;}
+    return Math.max(0, Math.floor((streakData.nextDeadline - Date.now()) / (1000 * 60 * 60)));
+  }, [streakData?.nextDeadline]);
   const hasActiveSession = useMemo(() => {
-    const latest = controller.historyQuery.history[0];
+    const latest = controller.historyQuery.history[0] as { status?: string } | undefined;
     if (!latest) {return false;}
     return latest.status === 'ACTIVE' || latest.status === 'PAUSED';
   }, [controller.historyQuery.history]);
   const resumeTimeSeconds = useMemo(() => {
     if (!hasActiveSession) {return null;}
-    const latest = controller.historyQuery.history[0];
+    const latest = controller.historyQuery.history[0] as { endedAt?: number; startedAt?: number } | undefined;
     if (!latest) {return null;}
     if (latest.endedAt && latest.startedAt) {
       return Math.floor((latest.endedAt - latest.startedAt) / 1000);
@@ -72,7 +75,7 @@ export function useHomeData() {
     return null;
   }, [hasActiveSession, controller.historyQuery.history]);
   const recentSessions = useMemo<SessionListItem[]>(() => {
-    return controller.historyQuery.history.flatMap((entry) => {
+    return controller.historyQuery.history.flatMap((entry: { endedAt?: number; startedAt?: number; sessionId: string; summary?: { focusPurityScore?: number; focusQuality?: number; xpEarned?: number; interruptions?: number } }) => {
       if (!entry.endedAt || !entry.startedAt) {return [];}
       const durationSeconds = Math.max(0, Math.floor((entry.endedAt - entry.startedAt) / 1000));
       const summary = entry.summary;
@@ -86,10 +89,11 @@ export function useHomeData() {
       }];
     }).slice(0, 5);
   }, [controller.historyQuery.history]);
+  const comebackData = controller.comebackQuery.data as { streakRestoreEligible?: boolean } | undefined;
   const comebackSessionsCompleted = useMemo(() => {
-    if (!controller.comebackQuery.data?.streakRestoreEligible) {return 0;}
-    return controller.historyQuery.history.filter((entry) => entry.status === 'COMPLETED').length;
-  }, [controller.comebackQuery.data?.streakRestoreEligible, controller.historyQuery.history]);
+    if (!comebackData?.streakRestoreEligible) {return 0;}
+    return controller.historyQuery.history.filter((entry: { status: string }) => entry.status === 'COMPLETED').length;
+  }, [comebackData?.streakRestoreEligible, controller.historyQuery.history]);
   const companionMood = useMemo(
     () => getHomeCompanionMood(controller.historyQuery.history, controller.currentStreak),
     [controller.currentStreak, controller.historyQuery.history]
@@ -106,16 +110,16 @@ export function useHomeData() {
     claimRewardMutation.mutate(
       { userId: controller.userId, challengeId },
       {
-        onSuccess: (result) => {
+        onSuccess: (result: { rewards: Array<{ amount: number; type: string }> }) => {
           const rewardText = result.rewards
-            .map((reward) => `+${reward.amount} ${reward.type}`)
+            .map((reward: { amount: number; type: string }) => `+${reward.amount} ${reward.type}`)
             .join(', ');
           showToast({
             type: 'success',
             title: `Reward claimed! ${rewardText}`,
           });
         },
-        onError: (error) => {
+        onError: (error: unknown) => {
           showToast({
             type: 'error',
             title: 'Reward claim failed',
@@ -139,7 +143,7 @@ export function useHomeData() {
           message: 'Your streak freeze is active for today.',
         });
       },
-      onError: (error) => {
+      onError: (error: unknown) => {
         showToast({
           type: 'error',
           title: 'Could not freeze streak',
@@ -149,9 +153,9 @@ export function useHomeData() {
     });
   }, [controller.userId, freezeStreakMutation, showToast]);
   const dailyDungeon = useMemo(() => {
-    if (!controller.userId) {return null;}
+    if (!controller.userId || !controller.runtime.canQueryChallenges) {return null;}
     return createHomeDailyDungeon(controller.userId);
-  }, [controller.userId]);
+  }, [controller.runtime.canQueryChallenges, controller.userId]);
   return {
     insets,
     controller,

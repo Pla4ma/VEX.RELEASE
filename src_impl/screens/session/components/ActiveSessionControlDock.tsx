@@ -47,9 +47,9 @@ export const ActiveSessionControlDock: React.FC<ActiveSessionControlDockProps> =
     <Box px="lg" pb="xl">
       {completionPercentage >= 80 ? (
         <Pressable onPress={onComplete}
-  accessibilityLabel="Interactive control"
+  accessibilityLabel={completionPercentage >= 100 ? 'Complete focus session' : 'Finish focus session early'}
   accessibilityRole="button"
-  accessibilityHint="Activates this control">
+  accessibilityHint="Ends this session and opens the completion reward screen">
           <Box
             mb="md"
             px="lg"
@@ -104,9 +104,9 @@ export const ActiveSessionControlDock: React.FC<ActiveSessionControlDockProps> =
           </Box>
         </Pressable>
         <Pressable onPress={onPauseResume}
-  accessibilityLabel="Interactive control"
+  accessibilityLabel={isPaused ? 'Resume focus timer' : 'Pause focus timer'}
   accessibilityRole="button"
-  accessibilityHint="Activates this control">
+  accessibilityHint={isPaused ? 'Restarts the active focus timer' : 'Pauses the active focus timer'}>
           <Box
             style={{
               width: 64,
@@ -143,9 +143,9 @@ export const ActiveSessionControlDock: React.FC<ActiveSessionControlDockProps> =
             </Animated.View>
           ) : null}
           <Pressable onPress={onToggleMultiplierInfo}
-  accessibilityLabel="x`} button"
+  accessibilityLabel="Show streak multiplier details"
   accessibilityRole="button"
-  accessibilityHint="Activates this control">
+  accessibilityHint="Explains how your current streak changes session rewards">
             <Box
               style={{
                 minWidth: 84,

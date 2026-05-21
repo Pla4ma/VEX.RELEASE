@@ -1,14 +1,137 @@
-import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary"; import React, { useCallback, useState } from "react"; import { Pressable } from "react-native"; import { FlashList } from "@shopify/flash-list"; import { useNavigation } from "@react-navigation/native"; import type { NativeStackNavigationProp } from "@react-navigation/native-stack"; import type { SessionStackParams } from "../../navigation/types"; import Animated, { FadeInUp } from "react-native-reanimated"; import { Text } from "../../components/primitives/Text"; import { Box } from "../../components/primitives/Box"; import { Button } from "../../components/primitives/Button"; import { FeatureScreen } from "../../components/primitives"; import { Icon } from "../../icons"; import { useTheme } from "../../theme"; import { useSessionHistory } from "../../session/hooks/useSession"; import type { SessionHistoryEntry as BaseSessionHistoryEntry, SessionConfig } from "../../session/types"; import { SessionMode } from "../../session/modes";
-const makeConfig = (duration: number): SessionConfig => ({ duration, breakDuration: 300, longBreakDuration: 900, intervals: 4, longBreakInterval: 4, sessionMode: SessionMode.LIGHT_FOCUS, soundEnabled: true, vibrationEnabled: true, dndEnabled: false, strictMode: false, autoStartBreaks: false, autoStartNextInterval: false, adaptiveMode: false, focusScorePrimary: true, difficultyLevel: "MEDIUM" as const, tags: [], }); type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>; interface SessionHistoryEntry extends BaseSessionHistoryEntry { id: string; name?: string; finalScore: number; effectiveDuration: number; streakMaintained: boolean; xpEarned: number; coinsEarned: number; achievements: string[]; completedAt: number | null; startedAt: number; config: SessionConfig; } interface HistoryItemProps { entry: SessionHistoryEntry; onPress: (entry: SessionHistoryEntry) => void; } const HistoryItem: React.FC<HistoryItemProps> = ({ entry, onPress }) => { const { theme } = useTheme(); const formatDate = (timestamp: number): string => { const date = new Date(timestamp); return date.toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", }); }; const formatDuration = (seconds: number): string => { const mins = Math.floor(seconds / 60); if (mins >= 60) { const hours = Math.floor(mins / 60); const remainingMins = mins % 60;
-      return `${hours}h ${remainingMins}m`;
+import React, { useCallback, useMemo, useState } from 'react';
+import { FlashList } from '@shopify/flash-list';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { Box } from '../../components/primitives/Box';
+import { FeatureScreen } from '../../components/primitives';
+import { Text } from '../../components/primitives/Text';
+import { ErrorState } from '../../components/states/ErrorState';
+import {
+  HistoryFilterTabs,
+  type HistoryFilter,
+} from '../../features/session-history/components/HistoryFilterTabs';
+import { HistoryItem } from '../../features/session-history/components/HistoryItem';
+import { HistoryStats } from '../../features/session-history/components/HistoryStats';
+import {
+  HistoryEmptyState,
+  HistorySkeleton,
+} from '../../features/session-history/components/HistoryStates';
+import { useSessionHistoryRecords } from '../../features/session-history/hooks';
+import type { SessionHistoryItem } from '../../features/session-history/types';
+import type { SessionStackParams } from '../../navigation/types';
+import { useNetInfo } from '../../network/useNetInfo';
+import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { useAuthStore } from '../../store';
+import { useTheme } from '../../theme';
+import { sizing } from '../../theme/tokens/sizing';
+
+type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
+
+function useFilteredHistory(
+  items: SessionHistoryItem[],
+  filter: HistoryFilter,
+): SessionHistoryItem[] {
+  return useMemo(() => {
+    return items.filter((entry) => {
+      if (filter === 'completed') {
+        return entry.status === 'COMPLETED';
+      }
+      if (filter === 'unfinished') {
+        return entry.status !== 'COMPLETED';
+      }
+      return true;
+    });
+  }, [filter, items]);
 }
-    return `${mins}m`;
-}; const getStatusColor = (status: string): string => { switch (status) { case "COMPLETED": return theme.colors.success.DEFAULT; case "ABANDONED": return theme.colors.error.DEFAULT; case "PARTIAL": return theme.colors.warning.DEFAULT; default: return theme.colors.text.secondary; } }; const getGrade = (score: number): string => { if (score >= 900) { return "S"; } if (score >= 800) { return "A"; } if (score >= 700) { return "B"; } if (score >= 600) { return "C"; } if (score >= 500) { return "D"; } return "F"; }; return ( <Pressable onPress={() => onPress(entry)} style={{ width: "100%" }} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control"> <Box flexDirection="row" alignItems="center" p="md" bg="background.secondary" borderRadius="lg" mb="sm"> {} <Box width={50} height={50} borderRadius="full" justifyContent="center" alignItems="center" style={{
-            backgroundColor: `${getStatusColor(entry.status)}20`,
-borderWidth: 2, borderColor: getStatusColor(entry.status), }} mr="md" > <Text variant="h4" color={getStatusColor(entry.status)}> {getGrade(entry.finalScore)} </Text> </Box>
-{} <Box flex={1}> <Text variant="body" fontWeight="600" color="text.primary"> {entry.name || "Focus Session"} </Text> <Text variant="caption" color="text.secondary"> {formatDate(entry.startedAt)} </Text> </Box>
-{} <Box alignItems="flex-end"> <Text variant="body" fontWeight="600" color="text.primary"> {formatDuration(entry.effectiveDuration)} </Text> <Text variant="caption" color="text.secondary"> {entry.finalScore} pts </Text> </Box>
-{} {entry.streakMaintained && ( <Box ml="sm"> <Text variant="h4">🔥</Text> </Box> )} </Box> </Pressable> ); }; export const SessionHistoryScreen: React.FC = () => { const navigation = useNavigation<SessionNavigationProp>(); const { theme } = useTheme(); const userId = "current-user"; const [history, setHistory] = useState<SessionHistoryEntry[]>([ { id: "1", userId, sessionId: "session-1", name: "Deep Work Session", startedAt: Date.now() - 86400000, completedAt: Date.now() - 86000000, status: "COMPLETED", finalScore: 850, effectiveDuration: 3600, streakMaintained: true, xpEarned: 100, coinsEarned: 50, achievements: [], createdAt: Date.now() - 86400000, config: makeConfig(3600), }, { id: "2", userId, sessionId: "session-2", name: "Quick Focus", startedAt: Date.now() - 172800000, completedAt: Date.now() - 171600000, status: "COMPLETED", finalScore: 720, effectiveDuration: 1500, streakMaintained: true, xpEarned: 50, coinsEarned: 25, achievements: [], createdAt: Date.now() - 172800000, config: makeConfig(1500), }, { id: "3", userId, sessionId: "session-3", name: "Study Session", startedAt: Date.now() - 259200000, completedAt: null, status: "ABANDONED", finalScore: 300, effectiveDuration: 600, streakMaintained: false, xpEarned: 10, coinsEarned: 0, achievements: [], createdAt: Date.now() - 259200000, config: makeConfig(1800), }, ]); const [filter, setFilter] = useState<"all" | "completed" | "abandoned">("all"); const filteredHistory = history.filter((entry) => { if (filter === "all") { return true; } return entry.status.toLowerCase() === filter; }); const handleItemPress = useCallback( (entry: SessionHistoryEntry) => { if (entry.summary) { navigation.navigate("SessionComplete", { sessionId: entry.sessionId, summary: entry.summary, }); } }, [navigation], ); const renderItem = useCallback( ({ item, index }: { item: SessionHistoryEntry; index: number }) => ( <Animated.View entering={FadeInUp.delay(index * 50)}> <HistoryItem entry={item} onPress={handleItemPress} /> </Animated.View> ), [handleItemPress], ); return ( <FeatureScreen title="Session History" showBackButton={true}> {} <Box p="lg" pb="sm"> <Box flexDirection="row" bg="background.secondary" borderRadius="lg" p="xs"> {(["all", "completed", "abandoned"] as const).map((f) => ( <Pressable key={f} onPress={() => setFilter(f)} style={{ flex: 1, alignItems: "center", paddingVertical: 8, borderRadius: 8, ...(filter === f && { backgroundColor: theme.colors.primary[500], }), }} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control" > <Text variant="caption" fontWeight="600" color={filter === f ? "text.inverse" : "text.secondary"} textTransform="capitalize"> {f} </Text> </Pressable> ))} </Box> </Box>
-{} <Box p="lg" pt="sm"> <Box flexDirection="row" bg="background.secondary" borderRadius="lg" p="md"> <Box flex={1} alignItems="center"> <Text variant="h4" color="primary.500"> {history.filter((h) => h.status === "COMPLETED").length} </Text> <Text variant="caption" color="text.secondary"> Completed </Text> </Box> <Box flex={1} alignItems="center"> <Text variant="h4" color="warning.DEFAULT"> {Math.floor(history.reduce((acc, h) => acc + h.effectiveDuration, 0) / 3600)} </Text> <Text variant="caption" color="text.secondary"> Hours </Text> </Box> <Box flex={1} alignItems="center"> <Text variant="h4" color="success.DEFAULT"> {Math.round(history.reduce((acc, h) => acc + h.finalScore, 0) / history.length) || 0} </Text> <Text variant="caption" color="text.secondary"> Avg Score </Text> </Box> </Box> </Box>
-{} <Box flex={1} p="lg" pt="sm"> {filteredHistory.length > 0 ? ( <FlashList data={filteredHistory} renderItem={renderItem} keyExtractor={(item: SessionHistoryEntry) => item.sessionId} showsVerticalScrollIndicator={false} contentContainerStyle={{ padding: 16, gap: 12 }} estimatedItemSize={80} /> ) : ( <Box flex={1} justifyContent="center" alignItems="center"> <Text variant="h3" mb="md"> 📭 </Text> <Text variant="body" color="text.secondary" textAlign="center"> No sessions found </Text> <Text variant="caption" color="text.tertiary" textAlign="center" mt="sm"> Complete your first focus session to see it here </Text> </Box> )} </Box>
-{} <Box p="lg" pb="xl"> <Button variant="primary" size="lg" fullWidth onPress={() => navigation.navigate({ name: "SessionSetup", params: {} })} accessibilityLabel="Start New Session button" accessibilityRole="button" accessibilityHint="Activates this control"> Start New Session </Button> </Box> </FeatureScreen> ); }; export default withScreenErrorBoundary(SessionHistoryScreen, "SessionHistory");
+
+function SessionHistoryScreen(): JSX.Element {
+  const navigation = useNavigation<SessionNavigationProp>();
+  const { theme } = useTheme();
+  const { isOffline } = useNetInfo();
+  const { user } = useAuthStore();
+  const userId = user?.id ?? null;
+  const [filter, setFilter] = useState<HistoryFilter>('all');
+  const history = useSessionHistoryRecords(userId);
+  const filteredHistory = useFilteredHistory(history.data.items, filter);
+
+  const handleItemPress = useCallback(
+    (entry: SessionHistoryItem) => {
+      if (entry.summary) {
+        navigation.navigate('SessionComplete', {
+          sessionId: entry.sessionId,
+          summary: entry.summary,
+        });
+      }
+    },
+    [navigation],
+  );
+
+  const renderItem = useCallback(
+    ({ item, index }: { item: SessionHistoryItem; index: number }) => (
+      <HistoryItem entry={item} index={index} onPress={handleItemPress} />
+    ),
+    [handleItemPress],
+  );
+
+  if (!userId) {
+    return (
+      <ErrorState
+        title="Your focus record is locked"
+        description="Sign in again and VEX will load the sessions tied to your account."
+      />
+    );
+  }
+
+  return (
+    <FeatureScreen title="Session History" showBackButton>
+      {isOffline && (
+        <Box bg="warning.DEFAULT" p="sm">
+          <Text variant="caption" color="text.inverse" textAlign="center">
+            Offline. VEX will refresh your focus record when the connection returns.
+          </Text>
+        </Box>
+      )}
+
+      <Box p="lg" pb="sm">
+        <HistoryFilterTabs filter={filter} onChange={setFilter} />
+      </Box>
+
+      <Box p="lg" pt="sm">
+        <HistoryStats stats={history.data.stats} />
+      </Box>
+
+      {history.isPending ? <HistorySkeleton /> : null}
+
+      {history.isError ? (
+        <ErrorState
+          title="VEX could not load your record yet"
+          description="Your sessions are still yours. Retry in a moment and VEX will pull the latest history."
+          retryLabel="Retry History"
+          onRetry={history.refetch}
+        />
+      ) : null}
+
+      {!history.isPending && !history.isError && filteredHistory.length === 0 ? (
+        <HistoryEmptyState
+          onStart={() => navigation.navigate({ name: 'SessionSetup', params: {} })}
+        />
+      ) : null}
+
+      {!history.isPending && !history.isError && filteredHistory.length > 0 ? (
+        <Box flex={1}>
+          <FlashList
+            contentContainerStyle={{ padding: theme.spacing[4] }}
+            data={filteredHistory}
+            estimatedItemSize={sizing.height['2xl'] + theme.spacing[6]}
+            keyExtractor={(item: SessionHistoryItem) => item.sessionId}
+            renderItem={renderItem}
+            showsVerticalScrollIndicator={false}
+          />
+        </Box>
+      ) : null}
+    </FeatureScreen>
+  );
+}
+
+export default withScreenErrorBoundary(SessionHistoryScreen, 'SessionHistory');

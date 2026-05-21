@@ -8,49 +8,50 @@ import ChallengesScreen from "../screens/challenges/ChallengesScreen";
 import { CoachScreen } from "../features/ai-coach/components/CoachScreen";
 import MasteryScreen from "../screens/profile/MasteryScreen";
 import { ContentStudyNavigator } from "./ContentStudyNavigator";
+import { canRegisterFeatureRoute } from "./feature-route-registry";
 
 import type { ExtendedRootStackParams } from "./types";
-import type { RootExposureFlags } from "./feature-exposure";
+import type { FeatureAccessMap } from "../features/liveops-config";
 
 type RootStack = ReturnType<
   typeof createNativeStackNavigator<ExtendedRootStackParams>
 >;
 
 interface RootStackFeatureRoutesProps {
-  show: RootExposureFlags;
+  features: FeatureAccessMap;
   Stack: RootStack;
 }
 
 export function RootStackFeatureRoutes({
-  show,
+  features,
   Stack,
 }: RootStackFeatureRoutesProps): React.JSX.Element {
   return (
     <>
-      {show.companion ? (
+      {canRegisterFeatureRoute(features, "CompanionDetail") ? (
         <Stack.Screen
           name="CompanionDetail"
           component={CompanionDetailScreen}
         />
       ) : null}
 
-      {show.boss ? <Stack.Screen name="Boss" component={BossScreen} /> : null}
+      {canRegisterFeatureRoute(features, "Boss") ? <Stack.Screen name="Boss" component={BossScreen} /> : null}
 
       <Stack.Screen name="Notifications" component={NotificationsScreen} />
 
-      {show.challenges ? (
+      {canRegisterFeatureRoute(features, "Challenges") ? (
         <Stack.Screen name="Challenges" component={ChallengesScreen} />
       ) : null}
 
-      {show.coach ? (
+      {canRegisterFeatureRoute(features, "AICoach") ? (
         <Stack.Screen name="AICoach" component={CoachScreen} />
       ) : null}
 
-      {show.mastery ? (
+      {canRegisterFeatureRoute(features, "Mastery") ? (
         <Stack.Screen name="Mastery" component={MasteryScreen} />
       ) : null}
 
-      {show.study ? (
+      {canRegisterFeatureRoute(features, "ContentStudy") ? (
         <Stack.Screen name="ContentStudy" component={ContentStudyNavigator} />
       ) : null}
     </>

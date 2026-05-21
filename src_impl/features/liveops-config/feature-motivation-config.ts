@@ -42,7 +42,9 @@ export const FEATURE_MOTIVATION_PROFILES: Partial<
     accelerate: ['game_like', 'intense', 'competitive'],
     accelerateOffset: 2,
     restrict: ['calm'],
-    restrictOffset: 3,
+    restrictOffset: 5,
+    restrictVisibility: true,
+    restrictVisibilityMin: 8,
   },
   ai_coach_advanced: {
     accelerate: ['student', 'worker', 'intense'],
@@ -55,6 +57,8 @@ export const FEATURE_MOTIVATION_PROFILES: Partial<
     accelerateOffset: 1,
     restrict: ['calm', 'friendly'],
     restrictOffset: 2,
+    restrictVisibility: true,
+    restrictVisibilityMin: 12,
   },
   companion_detail: {
     accelerate: ['friendly', 'calm', 'student'],

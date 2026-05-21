@@ -18,6 +18,7 @@ import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { resolveMonthlyReportAction } from './progress-actions';
 
 const formatHours = (totalMilliseconds: number): string =>
   `${(totalMilliseconds / 3600000).toFixed(totalMilliseconds >= 36000000 ? 0 : 1)}h`;
@@ -31,6 +32,9 @@ export function ProgressScreen(): JSX.Element {
   const focusDashboardModel = useFocusScoreDashboardModel(userId || null, 30);
   const { stats, isLoading: isStatsLoading, refresh } = useSessionStats(userId);
   const canOpenStudy = disclosure.features.content_study.isUnlocked;
+  const monthlyReportAction = resolveMonthlyReportAction(
+    disclosure.features.premium_paywall,
+  );
 
   const statCards = [
     { label: 'Focus Hours', value: stats ? formatHours(stats.totalFocusTime) : '--' },
@@ -77,10 +81,16 @@ export function ProgressScreen(): JSX.Element {
         model={focusDashboardModel}
         onRetry={retryFocusDashboard}
         onStartSession={openSession}
-        onOpenMonthlyReport={() => navigation.navigate('Paywall', {
-          source: 'focus-monthly-report',
-          gatedFeature: 'monthly_focus_report',
-        })}
+        onOpenMonthlyReport={() => {
+          if (monthlyReportAction === 'paywall') {
+            navigation.navigate('Paywall', {
+              source: 'focus-monthly-report',
+              gatedFeature: 'monthly_focus_report',
+            });
+            return;
+          }
+          openSession();
+        }}
       />
 
       {userId ? <ProgressionDashboard userId={userId} onStartSession={openSession} /> : null}

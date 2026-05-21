@@ -10,8 +10,10 @@ import { useBasicChallengesStatus, useUpdateBasicChallengeProgress } from '../ch
 import type { BasicChallengeProgressResult } from '../challenges/basic-challenges-service';
 import { useEffect } from 'react';
 import { createDebugger } from '../../utils/debug';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
 
 const debug = createDebugger('challenges:session-integration');
+const FEATURE_KEY = 'challenges' as const;
 
 // ============================================================================
 // Session to Challenges Progress Integration
@@ -23,6 +25,9 @@ export function useSessionChallengesIntegration() {
   useEffect(() => {
     // Listen for session completion events
     const unsubscribe = eventBus.subscribe('session:completed', async (event) => {
+      const availability = getAvailabilityFor(FEATURE_KEY);
+      if (!availability.canSubscribeToEvents) return;
+
       const { sessionId, duration } = event;
 
       try {

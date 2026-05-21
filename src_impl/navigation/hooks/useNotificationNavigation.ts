@@ -6,7 +6,6 @@ import { addBreadcrumb } from '../../config/sentry';
 import { eventBus } from '../../events';
 import { trackNotificationOpened } from '../../features/notifications/analytics';
 import type { FeatureAccessMap } from '../../features/liveops-config/feature-access';
-import { getFeatureAvailability } from '../../features/liveops-config/feature-availability';
 import { routeNotificationAction } from '../notification-routing-core';
 import type { NotificationAction } from '../notification-routing-types';
 
@@ -53,69 +52,49 @@ function navigateFromNotification(
     case 'streak_reminder':
     case 'session_prompt':
     case 'RETENTION_STREAK_PROTECTION':
-      navigationRef.navigate('SessionStack', { screen: 'SessionSetup', params: {} });
+      routeNotificationAction(navigationRef, { type: 'start_session' }, featureAccess ?? undefined);
       return;
     case 'challenge_reminder':
     case 'level_up':
     case 'RETENTION_CHALLENGE_EXPIRY':
-      navigationRef.navigate('Main', { screen: 'Progress' });
+      routeNotificationAction(navigationRef, { type: 'view_progress' }, featureAccess ?? undefined);
       return;
-    case 'boss_timeout_warning': {
-      if (featureAccess?.boss_tab) {
-        const avail = getFeatureAvailability(featureAccess.boss_tab);
-        if (!avail.canNavigate) { navigationRef.navigate('Main', { screen: 'Home' }); return; }
-      }
-      navigationRef.navigate('Guild');
+    case 'boss_timeout_warning':
+      routeNotificationAction(navigationRef, { type: 'view_boss' }, featureAccess ?? undefined);
       return;
-    }
     case 'welcome_back':
     case 'comeback':
     case 'RETENTION_RE_ENGAGEMENT':
-      navigationRef.navigate('Main', { screen: 'Home' });
+      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined);
       return;
     case 'boss_encounter':
-    case 'boss_defeated': {
-      if (featureAccess?.boss_tab) {
-        const avail = getFeatureAvailability(featureAccess.boss_tab);
-        if (!avail.canNavigate) { navigationRef.navigate('Main', { screen: 'Home' }); return; }
-      }
-      navigationRef.navigate('Boss');
+    case 'boss_defeated':
+      routeNotificationAction(navigationRef, { type: 'view_boss' }, featureAccess ?? undefined);
       return;
-    }
     case 'rival_challenge':
     case 'rival_defeated':
     case 'rival_activity':
-      navigationRef.navigate('Main', { screen: 'Home' });
+      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined);
       return;
     case 'squad_war_start':
     case 'squad_war_end':
-    case 'squad_war_reminder': {
-      if (featureAccess?.squads) {
-        const avail = getFeatureAvailability(featureAccess.squads);
-        if (!avail.canNavigate) { navigationRef.navigate('Main', { screen: 'Home' }); return; }
-      }
-      navigationRef.navigate('Guild');
+    case 'squad_war_reminder':
+      routeNotificationAction(navigationRef, { type: 'view_squad' }, featureAccess ?? undefined);
       return;
-    }
     case 'achievement_unlocked':
     case 'achievement_milestone':
-      navigationRef.navigate('Main', { screen: 'Profile', params: { tab: 'achievements' } });
+      routeNotificationAction(navigationRef, { type: 'view_profile' }, featureAccess ?? undefined);
       return;
     case 'streak_risk':
     case 'streak_at_risk':
-      navigationRef.navigate('Main', { screen: 'Home' });
+      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined);
       eventBus.publish('streak:show_risk_banner', { priority: 'high' });
       return;
-    case 'mastery_rank_up': {
-      if (featureAccess?.achievements) {
-        const avail = getFeatureAvailability(featureAccess.achievements);
-        if (!avail.canNavigate) { navigationRef.navigate('Main', { screen: 'Home' }); return; }
-      }
-      navigationRef.navigate('Mastery');
+    case 'mastery_rank_up':
+      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Mastery' } }, featureAccess ?? undefined);
       return;
-    }
     default:
-      navigationRef.navigate('Main', { screen: 'Home' });
+      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined);
   }
 }
 

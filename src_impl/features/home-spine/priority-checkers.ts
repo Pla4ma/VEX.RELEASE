@@ -1,4 +1,6 @@
 import type { HomeContextSnapshot, HomePrimaryPriority } from './priority-schemas';
+import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../liveops-config';
+import type { FeatureAccessMap } from '../liveops-config';
 
 function mapPromiseModeToPresetMode(
   mode: HomeContextSnapshot['companionPromise']['targetMode'],
@@ -109,13 +111,20 @@ export function checkRecommendedSession(
 
 export function checkChallengeNearDone(
   snapshot: HomeContextSnapshot,
+  featureAccess?: FeatureAccessMap,
 ): HomePrimaryPriority | null {
   if (!snapshot.challenge.isNearDone) {
     return null;
   }
+  if (featureAccess) {
+    const availability = getFeatureAvailability(featureAccess.challenges);
+    if (!isFeatureAvailableForNavigation(availability)) {
+      return null;
+    }
+  }
   return {
-    cta: { action: 'OPEN_CHALLENGES', text: "Finish Today's Challenge" },
-    reason: `${Math.round(snapshot.challenge.progressPercent)}% done. Finish the job while it still feels easy.`,
+    cta: { action: 'OPEN_CHALLENGES', text: 'Start Target Session' },
+    reason: `${Math.round(snapshot.challenge.progressPercent)}% done. The challenge is just the wrapper; one focused block is the move.`,
     type: 'CHALLENGE_NEAR_DONE',
     urgency: 60,
   };
@@ -123,13 +132,20 @@ export function checkChallengeNearDone(
 
 export function checkBossActive(
   snapshot: HomeContextSnapshot,
+  featureAccess?: FeatureAccessMap,
 ): HomePrimaryPriority | null {
   if (!snapshot.boss.hasActiveEncounter) {
     return null;
   }
+  if (featureAccess) {
+    const availability = getFeatureAvailability(featureAccess.boss_tab);
+    if (!isFeatureAvailableForNavigation(availability)) {
+      return null;
+    }
+  }
   return {
-    cta: { action: 'OPEN_BOSS', text: 'Continue Focus Battle' },
-    reason: 'Your boss run is already in motion. One more clean rep pushes it forward.',
+    cta: { action: 'OPEN_BOSS', text: 'Start Focus Session' },
+    reason: 'Boss damage only comes from focused minutes. One clean session moves the bar.',
     type: 'BOSS_ACTIVE',
     urgency: 50,
   };
@@ -155,6 +171,7 @@ export function checkDefaultSession(
 
 export function getPriorityCandidates(
   snapshot: HomeContextSnapshot,
+  featureAccess?: FeatureAccessMap,
 ): HomePrimaryPriority[] {
   return [
     checkStreakCritical(snapshot),
@@ -162,8 +179,8 @@ export function getPriorityCandidates(
     checkPromiseRecovery(snapshot),
     checkStreakAtRisk(snapshot),
     checkRecommendedSession(snapshot),
-    checkChallengeNearDone(snapshot),
-    checkBossActive(snapshot),
+    checkChallengeNearDone(snapshot, featureAccess),
+    checkBossActive(snapshot, featureAccess),
     checkDefaultSession(snapshot),
   ].filter((priority): priority is HomePrimaryPriority => priority !== null);
 }

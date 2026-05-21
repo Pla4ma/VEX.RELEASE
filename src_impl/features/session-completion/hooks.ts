@@ -4,3 +4,4 @@ export { useSessionCompletionConsequences } from './hooks/useSessionCompletionCo
 export { useSessionHeadline, useSessionRewardPriority } from './hooks/useSessionHeadline';
 export { useHomeReturnCompletionSync } from './hooks/useHomeReturnCompletionSync';
 export { useCompletionSyncAutoRepair } from './hooks/useCompletionSyncAutoRepair';
+export { useRecoveredSessionCompletion } from './hooks/useRecoveredSessionCompletion';

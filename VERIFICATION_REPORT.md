@@ -1,5 +1,68 @@
 # VEX Verification Report
 
+## Trust, Activation, and Completion Recovery Slice
+
+**Status:** PASS  
+**Date:** 2026-05-21  
+**Verifier:** Codex
+
+### Scope Completed
+- Replaced generic login-first impression with an auth value preview that shows the daily focus loop, payoff, and progress promise before credential friction.
+- Reduced signup UI to email/password while preserving validation, password confirmation internally, and terms enforcement.
+- Removed the onboarding escape hatch that let users finish before a first session; onboarding now requires the starter-session proof path.
+- Added visible onboarding adaptation previews for goal and motivation style choices.
+- Hid 60-minute starter sessions behind explicit "More options" so first-session defaults stay completion-friendly.
+- Rebuilt the Focus tab around mode presets instead of duplicating Home's generic launcher.
+- Replaced Profile's hardcoded achievement cards with real achievement-query projection.
+- Added completion recovery from the saved completion ledger when route summary params are missing or invalid.
+- Added inline active-session control recovery for pause, complete, and abandon failures.
+- Prevented Progress from routing to disabled-beta premium paywall surfaces.
+- Brought touched production file-size offenders under 200 lines and removed an RN Animated import from `AchievementShowcase`.
+
+### Commands Run
+- `npm run typecheck -- --pretty false`
+- `npm run lint`
+- `npm test -- src_impl/validation/__tests__/auth-schemas.test.ts src_impl/screens/onboarding/components/__tests__/LauncherStep.test.tsx src_impl/features/session-start/__tests__/service.test.ts src_impl/screens/profile/__tests__/profile-achievements.test.ts src_impl/features/session-completion/__tests__/recovery-route.test.ts src_impl/screens/session/utils/__tests__/active-session-control-failure.test.ts src_impl/screens/progress/__tests__/progress-actions.test.ts src_impl/screens/onboarding/components/__tests__/onboarding-adaptation-preview.test.ts src_impl/screens/onboarding/components/__tests__/starter-presets.test.ts src_impl/navigation/__tests__/route-param-schemas.test.ts --runInBand`
+- `rg "console\.|: any\b|<any>|@ts-ignore|@ts-nocheck|StyleSheet\.create|FlatList|AsyncStorage|fetch\(" src_impl`
+- Full non-test production file-size audit excluding generated `src_impl/types/supabase.ts`.
+
+### Command Output Summary
+| Command | Exit code | Result | Notes |
+|---|---:|---|---|
+| TypeScript | 0 | PASS | `tsc --noEmit --pretty false` completed with 0 errors. |
+| Lint | 0 | PASS | Exits 0; existing warnings remain. |
+| Relevant Jest | 0 | PASS | 10 suites / 25 tests passed. |
+| Banned pattern audit | 0 | PASS_WITH_FALSE_POSITIVES | Only `refetch()` matches from the broad `fetch\(` pattern. No raw `fetch(` call was introduced. |
+| File-size audit | 0 | PASS | No non-test production `src_impl` file over 200 lines excluding generated Supabase types. |
+
+## Onboarding Motivation + Feature Availability Unification
+
+**Status:** PASS  
+**Date:** 2026-05-21  
+**Verifier:** Codex
+
+### Scope Completed
+- Added an explicit onboarding motivation-style step for Calm, Friendly, Game-like, Intense, and Study-focused.
+- Persisted `explicitMotivationStyle` in onboarding drafts and recomputed `motivationProfile` when selected.
+- Added a typed feature route registry and derived route registration/navigation safety from `FeatureAvailability`.
+- Routed notification actions and custom notification screens through `FeatureAvailability`.
+- Tuned game-heavy systems so boss/challenge/economy exposure is delayed or hidden for calm styles, and game copy maps back to focus sessions.
+- Kept premium disabled until real monetization readiness is proven, avoiding fake premium exposure.
+
+### Commands Run
+- `npm test -- --runTestsByPath src_impl/navigation/__tests__/notification-routing.test.ts src_impl/navigation/__tests__/feature-route-registry.test.ts src_impl/features/liveops-config/__tests__/progressive-unlock-behavior.test.ts --runInBand`
+- `npm run typecheck -- --pretty false`
+- `npm run lint -- --quiet`
+- Edited-file 200-line audit
+
+### Command Output Summary
+| Command | Exit code | Result | Notes |
+|---|---:|---|---|
+| Focused Jest | 0 | PASS | 3 suites / 18 tests passed. |
+| TypeScript | 0 | PASS | `tsc --noEmit` completed with 0 errors. |
+| Lint | 0 | PASS | ESLint quiet mode completed with 0 errors. |
+| Edited-file line audit | 0 | PASS | No edited file exceeded 200 lines. |
+
 ## Phase 9/10 - Production Hardening and Final Launch Gate
 
 **Status:** PARTIAL - static gates pass; device and external-service proof blocked  

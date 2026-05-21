@@ -21,12 +21,14 @@ export {
 export { OnboardingPermissions } from './OnboardingPermissions';
 export { RevealStep } from './RevealStep';
 export { GoalStep } from './GoalStep';
+export { MotivationStyleStep } from './MotivationStyleStep';
 export { StarterStep } from './StarterStep';
 export { LauncherStep } from './LauncherStep';
 export { OnboardingFlowLayout, SignedOutOnboardingState } from './OnboardingFlowLayout';
 export {
   DEFAULT_COMPANION_ELEMENT,
   DEFAULT_PERSONA_ID,
+  MOTIVATION_STYLE_OPTIONS,
   STARTER_PRESETS,
   STEP_TITLES,
   type StarterPreset,
