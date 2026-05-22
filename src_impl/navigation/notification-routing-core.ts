@@ -14,6 +14,7 @@ import type {
   NotificationSafeIntent,
   SafeNotificationResolution,
 } from './notification-routing-types';
+import { isPublicV1Hidden } from '../features/liveops-config/public-v1-feature-map';
 
 export type FeatureAccessCheck = Partial<FeatureAccessMap>;
 
@@ -53,6 +54,9 @@ export function resolveNotificationAction(
     case 'view_streak':
       return { intent: 'START_SESSION', params: action.payload };
     case 'view_boss': {
+      if (isPublicV1Hidden('boss_tab')) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Boss feature is not available in public v1' };
+      }
       const bossAvailable = canUseFeature(featureAccess, 'boss_tab');
       if (!bossAvailable) {
         return { intent: 'OPEN_HOME', fallbackReason: 'Boss feature is not available yet' };
@@ -62,6 +66,9 @@ export function resolveNotificationAction(
     }
     case 'view_squad':
     case 'join_duel': {
+      if (isPublicV1Hidden('squads')) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Squads are not available in public v1' };
+      }
       const squadsAvailable = canUseFeature(featureAccess, 'squads');
       if (!squadsAvailable) {
         return { intent: 'OPEN_HOME', fallbackReason: 'Squads are not available yet' };
@@ -69,25 +76,19 @@ export function resolveNotificationAction(
       return { intent: 'OPEN_HOME', fallbackReason: 'Squad actions redirect to Home while social is limited' };
     }
     case 'open_shop': {
+      if (isPublicV1Hidden('shop')) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Shop is not available in public v1' };
+      }
       const shopAvailable = canUseFeature(featureAccess, 'shop');
       if (!shopAvailable) {
         return { intent: 'OPEN_HOME', fallbackReason: 'Shop is not available' };
       }
       return { intent: 'OPEN_HOME', fallbackReason: 'Shop redirects to Home' };
     }
-    case 'view_profile':
-    case 'accept_invite':
-      return { intent: 'OPEN_PROGRESS' };
-    case 'view_progress':
-      return { intent: 'OPEN_PROGRESS' };
-    case 'open_coach': {
-      const coachAvailable = canUseFeature(featureAccess, 'ai_coach_advanced');
-      if (!coachAvailable) {
-        return { intent: 'OPEN_HOME', fallbackReason: 'Coach is not available yet' };
-      }
-      return { intent: 'OPEN_COACH' };
-    }
     case 'open_chest':
+      if (isPublicV1Hidden('inventory')) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Chests are not available in public v1' };
+      }
       return { intent: 'OPEN_HOME', fallbackReason: 'Chest opening redirects to Home' };
     case 'custom': {
       const screen = toOptionalString(action.payload?.screen);
@@ -116,8 +117,12 @@ export function getAvailableNotificationFilters(
     return ['start_session', 'view_progress', 'view_profile', 'custom'];
   }
   const filters: NotificationActionType[] = ['start_session', 'view_progress', 'view_profile'];
-  if (canUseFeature(featureAccess, 'ai_coach_advanced')) filters.push('open_coach');
-  if (canUseFeature(featureAccess, 'boss_tab')) filters.push('view_boss');
+  if (canUseFeature(featureAccess, 'ai_coach_advanced') && !isPublicV1Hidden('ai_coach_advanced')) {
+    filters.push('open_coach');
+  }
+  if (canUseFeature(featureAccess, 'boss_tab') && !isPublicV1Hidden('boss_tab')) {
+    filters.push('view_boss');
+  }
   return filters.concat('custom');
 }
 

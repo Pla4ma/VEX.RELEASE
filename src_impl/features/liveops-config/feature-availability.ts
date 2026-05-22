@@ -70,8 +70,22 @@ export function getFeatureAvailability(feature: FeatureAccess): FeatureAvailabil
   }
 
   if (feature.isUnlocked) {
+    if (feature.isDegraded === true) {
+      return {
+        state: 'degraded',
+        canRenderEntryPoint: true,
+        canNavigate: false,
+        canQuery: false,
+        canUseBackend: false,
+        canRegisterRoute: true,
+        canSubscribeToEvents: false,
+        canShowNotification: false,
+        reason: feature.unlockReason,
+      };
+    }
+
     return {
-      state: feature.isDegraded === true ? 'degraded' : 'unlocked',
+      state: 'unlocked',
       canRenderEntryPoint: true,
       canNavigate: true,
       canQuery: true,

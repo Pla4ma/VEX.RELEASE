@@ -26,6 +26,7 @@ interface HomeContentLowerProps {
   streakHoursRemaining: number;
   features: HomeController['features'];
   comebackSessionsCompleted: number;
+  surfaceMap?: import('../../../features/home-experience/surface-decision-schemas').HomeSurfaceMap;
 }
 
 export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
@@ -36,20 +37,31 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   streakHoursRemaining,
   features,
   comebackSessionsCompleted,
+  surfaceMap,
 }) => {
   const navigation = useNavigation<NavigationProp>();
   const { isAvailable } = useFeatureGate('challenges', 'entryPoint');
   const { isAvailable: canNavChallenges } = useFeatureGate('challenges', 'navigation');
   const openChallenges = (): void => {
-    if (canNavChallenges) {
-      navigation.navigate('Challenges');
-      return;
-    }
+    if (canNavChallenges) { navigation.navigate('Challenges'); return; }
     controller.openSetup();
   };
 
+  const sm = surfaceMap;
+  const showSecondary = sm
+    ? sm.challenge_teaser !== 'hidden' || sm.boss_teaser !== 'hidden' || sm.study_layer !== 'hidden'
+    : controller.shouldShowSecondarySystems;
+  const showDailyMission = sm
+    ? sm.challenge_teaser !== 'hidden' && sm.challenge_teaser !== 'blocked'
+    : controller.shouldShowSecondarySystems && getFeatureAvailability(features.challenges).canRenderEntryPoint;
+  const showContextualCards = sm
+    ? sm.study_layer !== 'hidden' || sm.boss_teaser !== 'hidden'
+    : controller.shouldShowSecondarySystems;
+  const showSecondaryRail = sm
+    ? sm.study_layer !== 'hidden' && sm.study_layer !== 'blocked'
+    : controller.shouldShowSecondarySystems;
+
   const todaysChallenges: ChallengeItem[] = isAvailable ? data.todaysChallenges : [];
-  const challengeAvailability = getFeatureAvailability(features.challenges);
   const startLearningTarget = (): void => {
     const target = controller.learningExecutionLayer.target;
     controller.openSetup(target ? buildLearningSessionParams(target) : undefined);
@@ -59,11 +71,11 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
     <>
       <HomeFocusScore onPress={() => navigation.navigate('FocusScoreDashboard')} />
 
-      {controller.shouldShowSecondarySystems && challengeAvailability.canRenderEntryPoint ? (
+      {showDailyMission ? (
         <HomeDailyMission missionInput={missionInput} onMissionPress={openChallenges} />
       ) : null}
 
-      {controller.shouldShowSecondarySystems ? (
+      {showContextualCards ? (
         <HomeContextualCards
           activeStudyPlan={controller.activeStudyPlanQuery.data as unknown as ActiveStudyPlan | null | undefined}
           learningCopy={controller.learningExecutionLayer.copy}
@@ -81,7 +93,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
         />
       ) : null}
 
-      {controller.shouldShowSecondarySystems ? (
+      {showSecondaryRail ? (
         <HomeSecondaryRail
           activePlan={controller.activeStudyPlanQuery.data as unknown as { completedTasks: number; progressPercent: number; remainingMinutes: number; title: string; totalTasks: number } | null}
           canShowSecondarySystems={controller.shouldShowSecondarySystems}

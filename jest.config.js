@@ -48,6 +48,7 @@ module.exports = {
     '^@a11y/(.*)$': '<rootDir>/src_impl/a11y/$1',
     '^@events/(.*)$': '<rootDir>/src_impl/events/$1',
     '^@analytics/(.*)$': '<rootDir>/src_impl/analytics/$1',
+    '^react-native-gesture-handler$': '<rootDir>/__mocks__/react-native-gesture-handler.js',
     '^@featureFlags/(.*)$': '<rootDir>/src_impl/featureFlags/$1',
     '^@settings/(.*)$': '<rootDir>/src_impl/settings/$1',
     '^@persistence/(.*)$': '<rootDir>/src_impl/persistence/$1',

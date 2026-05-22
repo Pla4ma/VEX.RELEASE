@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useSyncExternalStore } from 'react';
 
 import { useSessionStats } from '../../session/hooks/useSession';
 import { useAuthStore } from '../../store';
@@ -10,7 +10,11 @@ import {
   type ProductTier,
   type UserExperienceStage,
 } from './feature-access';
-import { setFeatureAccessMap } from './feature-access-store';
+import {
+  getDegradedFeatures,
+  setFeatureAccessMap,
+  subscribeToDegradedFeatures,
+} from './feature-access-store';
 
 export type {
   FeatureAccess,
@@ -55,22 +59,25 @@ export interface FeatureAccessResult {
  * Degraded features come from the central store (populated by useFeatureHealth).
  * No parameter needed — every call site sees the same health-adjusted map.
  */
-export function useFeatureAccess(
-  _degradedFeatures?: Set<FeatureKey>,
-): FeatureAccessResult {
+export function useFeatureAccess(): FeatureAccessResult {
   const userId = useAuthStore((state) => state.user?.id ?? '');
   const stats = useSessionStats(userId);
   const completedSessions = stats.stats?.completedSessions ?? 0;
   const motivationProfile = useOnboardingStore((state) => state.motivationProfile);
+  const degradedFeatures = useSyncExternalStore(
+    subscribeToDegradedFeatures,
+    getDegradedFeatures,
+    getDegradedFeatures,
+  );
 
   const access = useMemo(
     () =>
       buildFeatureAccess({
         totalCompletedSessions: completedSessions,
         motivationProfile: motivationProfile ?? undefined,
-        degradedFeatures: _degradedFeatures,
+        degradedFeatures,
       }),
-    [completedSessions, motivationProfile, _degradedFeatures],
+    [completedSessions, motivationProfile, degradedFeatures],
   );
 
   useEffect(() => {

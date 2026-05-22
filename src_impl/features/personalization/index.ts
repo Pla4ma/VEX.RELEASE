@@ -1,7 +1,9 @@
 export { trackVexExperienceResolved } from './analytics';
 export { validatePersonalizationEvent } from './events';
-export { useResolvedVexExperience } from './hooks';
+export { useResolvedVexExperience, useResolvedVexExperienceRuntime } from './hooks';
+export type { VexExperienceRuntimeInput } from './hooks';
 export { resolveFirstWeekExperience } from './first-week-service';
+export { useFirstWeekExperience } from './useFirstWeekExperience';
 export { resolveVexExperience } from './service';
 export type { PersonalizationEvent } from './events';
 export type {

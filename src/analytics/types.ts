@@ -5,8 +5,6 @@
  * Core type definitions for the analytics system.
  */
 
-import { eventBus } from '../events';
-
 // ============================================================================
 // Success Metrics (10/10 Definition)
 // ============================================================================

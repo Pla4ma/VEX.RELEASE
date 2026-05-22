@@ -2,7 +2,7 @@
  * BossScreen — Progressive unlock & product intensity.
  *
  * Queries only run when FeatureAvailability allows.
- * Intensity adapts to user motivation style.
+ * Intensity comes from the canonical VexExperience — no duplicate resolution.
  * Squad content hidden unless squads are explicitly enabled.
  * Boss damage maps directly to focus/study sessions — no economy/shop dependency.
  */
@@ -13,15 +13,13 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { LockedFeatureScreen } from '../../components/LockedFeatureScreen';
 import { useFeatureAccess, getFeatureAvailability, isFeatureAvailableForNavigation } from '../../features/liveops-config';
-import { useOnboardingStore } from '../../features/onboarding/store';
+import { useResolvedVexExperience } from '../../features/personalization';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { BossScreenContent } from './BossScreenContent';
 import { useAuthStore } from '../../store';
 import { useTheme } from '../../theme';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
-
-type BossIntensity = 'subtle' | 'game-like' | 'intense';
 
 const nextResetLabel = (): string => {
   const now = new Date();
@@ -33,52 +31,48 @@ const nextResetLabel = (): string => {
   return `${d}d ${h}h`;
 };
 
-function resolveBossIntensity(motivationStyle: string | null): BossIntensity {
-  switch (motivationStyle) {
-    case 'game_like':
-    case 'competitive':
-      return 'game-like';
-    case 'intense':
-      return 'intense';
-    default:
-      return 'subtle';
-  }
-}
-
-function getSubtleCopy(intensity: BossIntensity): { title: string; description: string } {
-  if (intensity === 'subtle') {
-    return {
-      title: 'Focus Momentum',
-      description: 'Each session you complete adds to your momentum. A quiet marker tracks the focus you have already earned.',
-    };
-  }
-  if (intensity === 'game-like') {
-    return {
-      title: 'Boss Battle',
-      description: 'Your focus sessions push the creature back, one block at a time. Every minute focused counts as damage.',
-    };
-  }
-  return {
+const BOSS_COPY: Record<string, { title: string; description: string }> = {
+  subtle: {
+    title: 'Focus Momentum',
+    description: 'Each session you complete adds to your momentum. A quiet marker tracks the focus you have already earned.',
+  },
+  'game-like': {
+    title: 'Boss Battle',
+    description: 'Your focus sessions push the creature back, one block at a time. Every minute focused counts as damage.',
+  },
+  intense: {
     title: 'Boss Battle — Full Assault',
     description: 'Every session hits harder. Longer sessions deal critical damage. Your streak multiplies everything. Press the attack.',
-  };
+  },
+};
+
+function getBossCopy(bossIntensity: string): { title: string; description: string } {
+  return BOSS_COPY[bossIntensity] ?? BOSS_COPY.subtle!;
+}
+
+type BossIntensity = 'subtle' | 'game-like' | 'intense';
+
+function toScreenIntensity(intensity: string): BossIntensity {
+  if (intensity === 'game-like' || intensity === 'intense' || intensity === 'subtle') return intensity;
+  return 'subtle';
 }
 
 const BossFallback: React.FC<{
-  intensity: BossIntensity;
+  intensity: string;
   onStartSession: () => void;
   unlockReason: string;
   stage: string;
   resetLabel: string;
 }> = ({ intensity, onStartSession, unlockReason, stage, resetLabel }) => {
   const { theme } = useTheme();
-  const copy = getSubtleCopy(intensity);
+  const copy = getBossCopy(intensity);
+  const isSubtle = intensity === 'subtle';
   return (
     <LockedFeatureScreen
       ctaLabel="Start a focus session"
       description={copy.description}
       feature="boss_tab"
-      icon={intensity === 'subtle' ? '📊' : '🐉'}
+      icon={isSubtle ? '\u{1F4CA}' : '\u{1F409}'}
       onPress={onStartSession}
       progressLabel={resetLabel}
       stage={stage as 'NEW_USER' | 'ACTIVATING' | 'ENGAGED' | 'POWER_USER'}
@@ -94,14 +88,37 @@ export const BossScreen = (): JSX.Element => {
   const navigation = useNavigation<Nav>();
   const disclosure = useFeatureAccess();
   const userId = useAuthStore((state) => state.user?.id ?? null);
-  const explicitStyle = useOnboardingStore((state) => state.explicitMotivationStyle);
+
+  const resolved = useResolvedVexExperience({
+    behaviorStats: {
+      totalCompletedSessions: disclosure.inputs.totalCompletedSessions,
+      abandonedSessionDurations: [],
+      bossChallengeEngagement: 'none',
+      coachInteractions: 0,
+      comebackSessions: 0,
+      completedSessionDurations: [],
+      completionStreak: 0,
+      ignoredFeatures: [],
+      mostSuccessfulTimeOfDay: null,
+      preferredSessionMode: null,
+      premiumFeatureAttempts: [],
+      studyUsageRatio: 0,
+    },
+    featureAvailability: {
+      boss: disclosure.features.boss_tab.isUnlocked,
+      challenges: disclosure.features.challenges.isUnlocked,
+      premium: disclosure.features.premium_paywall.isUnlocked,
+      study: disclosure.features.content_study.isUnlocked,
+    },
+  });
+
+  const bossIntensity = resolved.bossIntensity;
 
   const bossAvailability = getFeatureAvailability(disclosure.features.boss_tab);
   const squadsAvailability = getFeatureAvailability(disclosure.features.squads);
   const canQueryBoss = bossAvailability.canQuery && bossAvailability.canUseBackend;
   const canNavigateBoss = isFeatureAvailableForNavigation(bossAvailability);
   const canShowSquads = squadsAvailability.canRenderEntryPoint && squadsAvailability.canQuery;
-  const bossIntensity = resolveBossIntensity(explicitStyle);
 
   const [resetLabel, setResetLabel] = useState(nextResetLabel());
 
@@ -110,11 +127,10 @@ export const BossScreen = (): JSX.Element => {
     return () => clearInterval(id);
   }, []);
 
-  // === GATE: Locked or degraded — show fallback before any queries ===
   if (!canNavigateBoss || disclosure.features.boss_tab.releaseState === 'disabled_beta') {
     return (
       <BossFallback
-        intensity={bossIntensity}
+        intensity={toScreenIntensity(bossIntensity)}
         onStartSession={() => navigation.navigate('SessionStack', { screen: 'SessionSetup', params: {} })}
         unlockReason={disclosure.features.boss_tab.unlockReason}
         stage={disclosure.stage}
@@ -123,12 +139,11 @@ export const BossScreen = (): JSX.Element => {
     );
   }
 
-  // === Only call queries when canQueryBoss is true ===
   return (
     <BossScreenContent
       canQueryBoss={canQueryBoss}
       canShowSquads={canShowSquads}
-      bossIntensity={bossIntensity}
+      bossIntensity={toScreenIntensity(bossIntensity)}
       userId={userId}
       navigation={navigation}
       resetLabel={resetLabel}

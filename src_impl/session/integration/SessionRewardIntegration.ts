@@ -33,6 +33,8 @@ export interface RewardIntegrationConfig {
   enableSeasonChallengeProgress: boolean;
   enableAchievementChecks: boolean;
   enableMilestoneTracking: boolean;
+  autoHandleRecoveryRewards: boolean;
+  autoHandleAbandonmentPartialCredit: boolean;
 }
 
 const DEFAULT_CONFIG: RewardIntegrationConfig = {
@@ -47,6 +49,8 @@ const DEFAULT_CONFIG: RewardIntegrationConfig = {
   enableSeasonChallengeProgress: true,
   enableAchievementChecks: true,
   enableMilestoneTracking: true,
+  autoHandleRecoveryRewards: false,
+  autoHandleAbandonmentPartialCredit: false,
 };
 
 export class SessionRewardIntegration {
@@ -173,6 +177,10 @@ export class SessionRewardIntegration {
   }
 
   private async handlePartialCompletion(sessionId: string, userId: string, recoveredTime: number): Promise<void> {
+    if (!this.config.autoHandleRecoveryRewards) {
+      debug.debug('Recovery rewards disabled — skipping partial completion for session %s', sessionId);
+      return;
+    }
     debug.info('Processing partial completion for session %s', sessionId);
     const partialXp = Math.floor(recoveredTime / 60) * 5;
     publishXp(userId, partialXp, 'session_recovery');
@@ -180,6 +188,10 @@ export class SessionRewardIntegration {
   }
 
   private async handleAbandonment(sessionId: string, userId: string, elapsedTime: number): Promise<void> {
+    if (!this.config.autoHandleAbandonmentPartialCredit) {
+      debug.debug('Abandonment partial credit disabled — skipping for session %s', sessionId);
+      return;
+    }
     debug.info('Processing abandonment for session %s', sessionId);
     const partialXp = elapsedTime >= 300 ? Math.floor(elapsedTime / 60) * 3 : 0;
     if (partialXp > 0) {

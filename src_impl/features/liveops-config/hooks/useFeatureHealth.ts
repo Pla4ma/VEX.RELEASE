@@ -2,10 +2,17 @@ import { useEffect, useState } from 'react';
 
 import { featureHealthRegistry } from '../feature-health';
 import { registerFeatureHealthChecks } from '../feature-health-checks';
-import { setDegradedFeatures } from '../feature-access-store';
+import { setDegradedFeatures as setGlobalDegradedFeatures } from '../feature-access-store';
 import type { FeatureKey } from '../feature-access';
 
 let registered = false;
+const CRITICAL_FEATURES_ON_HEALTH_ERROR: FeatureKey[] = [
+  'ai_coach_advanced',
+  'content_study',
+  'content_study_advanced',
+  'premium_paywall',
+  'boss_tab',
+];
 
 function ensureRegistered(): void {
   if (!registered) {
@@ -23,7 +30,7 @@ export function useFeatureHealth(): {
   degradedFeatures: Set<FeatureKey>;
   isPolling: boolean;
 } {
-  const [degradedFeatures, setDegradedFeatures] = useState<Set<FeatureKey>>(new Set());
+  const [degradedFeatures, setLocalDegradedFeatures] = useState<Set<FeatureKey>>(new Set());
   const [isPolling, setIsPolling] = useState(false);
 
   useEffect(() => {
@@ -37,13 +44,14 @@ export function useFeatureHealth(): {
         const unhealthy = await featureHealthRegistry.getUnhealthyFeatures();
         const unhealthySet = new Set(unhealthy);
         if (!cancelled) {
-          setDegradedFeatures(unhealthySet);
-          setDegradedFeatures(unhealthySet);
+          setLocalDegradedFeatures(unhealthySet);
+          setGlobalDegradedFeatures(unhealthySet);
         }
       } catch {
         if (!cancelled) {
-          setDegradedFeatures(new Set());
-          setDegradedFeatures(new Set());
+          const safeFallback = new Set<FeatureKey>(CRITICAL_FEATURES_ON_HEALTH_ERROR);
+          setLocalDegradedFeatures(safeFallback);
+          setGlobalDegradedFeatures(safeFallback);
         }
       } finally {
         if (!cancelled) {

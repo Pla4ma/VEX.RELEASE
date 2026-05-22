@@ -7,5 +7,6 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'react-hooks/rules-of-hooks': 'warn',
     'no-new-func': 'warn',
+    'react-native/no-inline-styles': 'off',
   },
 };

@@ -1,12 +1,12 @@
 /**
  * HomeScreenInner — Shared UI rendering for all stages.
  *
- * Renders the Home screen with the controller and data from the stage-specific container.
+ * Accepts stage-specific data via a minimal common interface.
+ * Wires controller + data to the existing HomeContent component.
  */
 import React, { useEffect, useRef, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { z } from 'zod';
 
 import { GreetingHeader } from '../../../features/home-spine/components';
 import { HomeContent } from '../components/HomeContent';
@@ -16,38 +16,73 @@ import { trackInterventionDisplayed, trackInterventionActioned } from '../../../
 import { eventBus } from '../../../events';
 import { buildInterventionSessionParams } from '../buildInterventionSessionParams';
 import { AppScreen } from '../../../components/primitives';
+import { useHomeSurfaceMap } from '../hooks/useHomeSurfaceMap';
+import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { HomeController } from '../hooks/home-controller-types';
 import type { HomeViewModel } from '../hooks/home-view-model';
 import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
+import type { ChallengeItem, SessionListItem } from '../../../features/home-spine/components';
+import type { CompletionSyncState } from '../../../store/session-state';
+import { getFeatureAvailability } from '../../../features/liveops-config';
+import type { FeatureAccessMap } from '../../../features/liveops-config/feature-access';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-const completionToastSummarySchema = z.object({
-  grade: z.string().optional(),
-  interruptions: z.number().int().nonnegative().optional(),
-  focusQuality: z.number().optional(),
-});
-
-function buildToast(summary: unknown): { title: string; message: string } {
-  const parsed = completionToastSummarySchema.safeParse(summary);
-  if (!parsed.success) return { title: 'Session complete.', message: 'Result saved.' };
-  const grade = parsed.data.grade ? `${parsed.data.grade}-grade session.` : 'Session complete.';
-  const interruptions = parsed.data.interruptions ?? 0;
-  if (interruptions > 0) return { title: grade, message: `${interruptions} interruption${interruptions === 1 ? '' : 's'} kept this from cleaner work.` };
-  return { title: grade, message: 'Result saved.' };
+export interface HomeDataProps {
+  controller: HomeController;
+  intervention: ActiveIntervention | null;
+  interventionLoading: boolean;
+  dismissIntervention: (id: string) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  showToast: (opts: any) => any;
+  streakHoursRemaining: number | null;
+  companionMood: string;
+  unreadNotificationCount: number;
+  todaysChallenges: ChallengeItem[];
+  recentSessions: SessionListItem[];
+  comebackSessionsCompleted: number;
+  hasActiveSession: boolean;
+  resumeTimeSeconds: number | null;
+  savedPreview: Record<string, unknown> | null;
+  squadMembersFocusing: number | Array<Record<string, unknown>>;
+  handleClaimReward: (id: string) => void;
+  handleFreezeStreak: () => void;
+  challengesQuery: { data: unknown; isLoading: boolean; isError: boolean; error: Error | null; refetch: () => Promise<unknown> };
+  claimRewardMutation: { mutate: (input: unknown, opts?: unknown) => unknown; isPending: boolean };
+  freezeStreakMutation: { mutate: (input: unknown, opts?: unknown) => unknown; isPending: boolean };
+  displayedInterventionIdRef: React.MutableRefObject<string | null>;
 }
 
 interface HomeScreenInnerProps {
   model: HomeViewModel & { controller: HomeController };
-  data: ReturnType<typeof import('../hooks/useHomeData').useHomeData>;
+  data: HomeDataProps;
 }
 
 export function HomeScreenInner({ model, data }: HomeScreenInnerProps): JSX.Element {
   const navigation = useNavigation<Nav>();
   const controller = model.controller;
-  const { intervention, dismissIntervention, showToast, streakHoursRemaining, companionMood, unreadNotificationCount } = data;
-  const displayedInterventionIdRef = useRef<string | null>(null);
+  const {
+    intervention,
+    dismissIntervention,
+    showToast,
+    streakHoursRemaining,
+    companionMood,
+    unreadNotificationCount,
+    hasActiveSession,
+    recentSessions,
+    comebackSessionsCompleted,
+    handleClaimReward,
+    handleFreezeStreak,
+    todaysChallenges,
+    challengesQuery,
+    claimRewardMutation,
+    freezeStreakMutation,
+    savedPreview,
+    squadMembersFocusing,
+    interventionLoading,
+    displayedInterventionIdRef,
+  } = data;
 
   useCompletionSyncAutoRepair({ isOnline: controller.isOnline, userId: controller.userId });
 
@@ -55,10 +90,10 @@ export function HomeScreenInner({ model, data }: HomeScreenInnerProps): JSX.Elem
     if (!controller.userId || !intervention || displayedInterventionIdRef.current === intervention.id) return;
     displayedInterventionIdRef.current = intervention.id;
     trackInterventionDisplayed(controller.userId, intervention.type, intervention.hoursRemaining);
-  }, [controller.userId, intervention]);
+  }, [controller.userId, intervention, displayedInterventionIdRef]);
 
   useEffect(() => {
-    const unsubscribe = eventBus.subscribe('session:completed', (evt) => {
+    const unsubscribe = eventBus.subscribe('session:completed', (evt: Record<string, unknown>) => {
       if (evt.userId !== controller.userId) return;
       const toast = buildToast(evt.summary);
       showToast({ type: 'success', title: toast.title, message: toast.message });
@@ -74,56 +109,74 @@ export function HomeScreenInner({ model, data }: HomeScreenInnerProps): JSX.Elem
         message: '',
         priority: 0,
         metadata: active.metadata ?? {},
-        type:
-          active.type === 'BURNOUT' || active.type === 'PLATEAU' || active.type === 'STREAK_RISK' || active.type === 'BOSS_FINISH'
-            ? active.type
-            : 'STREAK_RISK',
+        type: ['BURNOUT', 'PLATEAU', 'STREAK_RISK', 'BOSS_FINISH'].includes(active.type)
+          ? (active.type as ActiveIntervention['type'])
+          : 'STREAK_RISK',
+        hoursRemaining: 1,
       };
-      trackInterventionActioned(controller.userId, normalized.type, active.actionLabel);
-      eventBus.publish('coach:intervention_actioned', {
-        userId: controller.userId, interventionId: active.id, type: normalized.type, actionLabel: active.actionLabel,
-      });
-      const { suggestedDurationSeconds, presetMode } = buildInterventionSessionParams(normalized);
-      navigation.navigate('SessionStack', { screen: 'SessionSetup', params: { suggestedDurationSeconds, presetMode } });
+      dismissIntervention(normalized.id);
+      trackInterventionActioned(controller.userId, normalized.type, normalized.actionLabel);
+      const params = buildInterventionSessionParams(normalized);
+      navigation.navigate('SessionStack', { screen: 'SessionSetup', params });
     },
-    [controller.userId, navigation],
+    [controller.userId, dismissIntervention, navigation],
   );
 
+  const features = controller.disclosure?.features as FeatureAccessMap | undefined ?? {} as FeatureAccessMap;
+  const safeStreakHours = streakHoursRemaining ?? 0;
+
+  const surfaceMap: HomeSurfaceMap = useHomeSurfaceMap({
+    completedSessions: controller.disclosure.inputs.totalCompletedSessions,
+    motivationStyle: undefined,
+    primaryGoal: undefined,
+    bossEngagement: 'none',
+    studyUsageRatio: 0,
+    coachInteractions: 0,
+    hasActiveStudyPlan: Boolean((controller.activeStudyPlanQuery?.data as Record<string, unknown> | null) != null),
+    hasActiveRecommendation: Boolean(controller.primaryRecommendation),
+    hasActiveBoss: Boolean((controller.activeBossQuery?.data as unknown) != null),
+    isFirstSession: controller.isFirstRun,
+    completionStreak: controller.currentStreak,
+    featureAccess: controller.disclosure,
+  });
+
   return (
-    <AppScreen contentStyle={{ gap: 0, paddingHorizontal: 0, paddingTop: 0 }} padded={false}>
-      <GreetingHeader
-        userName={(controller.user as Record<string, unknown> | null)?.displayName as string | undefined}
-        avatarUrl={undefined}
-        level={(controller.progressionQuery.data as Record<string, unknown> | undefined)?.level as number ?? 1}
-        streakDays={controller.currentStreak}
-        streakHoursRemaining={streakHoursRemaining}
-        isLoading={controller.isLoading}
-        companionMood={companionMood}
-        onPressCompanion={() => {
-          if (controller.disclosure.features.companion_detail.isUnlocked) {
-            navigation.navigate('CompanionDetail');
-            return;
-          }
-          controller.openSetup();
-        }}
-        onPressNotifications={() => navigation.navigate('Notifications')}
-        unreadNotificationCount={unreadNotificationCount}
-      />
-      <HomeInterventionBanner
-        intervention={intervention}
-        interventionLoading={data.interventionLoading}
-        dismissIntervention={dismissIntervention}
-        navigation={navigation}
-        userId={controller.userId}
-      />
+    <AppScreen scroll padded>
+      {intervention && (
+        <HomeInterventionBanner
+          intervention={intervention as { id: string; type: import('../../../features/ai-coach/components/CoachInterventionBanner').InterventionType; message: string; actionLabel: string; hoursRemaining?: number; metadata?: Record<string, unknown> }}
+          interventionLoading={interventionLoading}
+          dismissIntervention={dismissIntervention}
+          navigation={navigation}
+          userId={controller.userId ?? ''}
+        />
+      )}
       <HomeContent
         controller={controller}
-        data={data}
-        handleClaimReward={data.handleClaimReward}
-        streakHoursRemaining={streakHoursRemaining ?? 0}
-        features={controller.disclosure.features}
-        comebackSessionsCompleted={data.comebackSessionsCompleted}
+        data={data as unknown as ReturnType<typeof import('../hooks/useHomeData').useHomeData>}
+        comebackSessionsCompleted={comebackSessionsCompleted ?? 0}
+        features={features}
+        handleClaimReward={handleClaimReward}
+        streakHoursRemaining={safeStreakHours}
+        surfaceMap={surfaceMap}
       />
     </AppScreen>
   );
+}
+
+import { z } from 'zod';
+
+const completionToastSummarySchema = z.object({
+  grade: z.string().optional(),
+  interruptions: z.number().int().nonnegative().optional(),
+  focusQuality: z.number().optional(),
+});
+
+function buildToast(summary: unknown): { title: string; message: string } {
+  const parsed = completionToastSummarySchema.safeParse(summary);
+  if (!parsed.success) return { title: 'Session complete.', message: 'Result saved.' };
+  const grade = parsed.data.grade ? `${parsed.data.grade}-grade session.` : 'Session complete.';
+  const interruptions = parsed.data.interruptions ?? 0;
+  if (interruptions > 0) return { title: grade, message: `${interruptions} interruption${interruptions === 1 ? '' : 's'} kept this from cleaner work.` };
+  return { title: grade, message: 'Result saved.' };
 }

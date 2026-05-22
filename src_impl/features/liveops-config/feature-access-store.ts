@@ -5,6 +5,7 @@ let _featureAccessMap: FeatureAccessMap | null = null;
 
 /** Centralized degraded features — written by useFeatureHealth, read by useFeatureAccess. */
 let _degradedFeatures: Set<FeatureKey> = new Set();
+const degradedFeatureListeners = new Set<() => void>();
 
 export function setFeatureAccessMap(map: FeatureAccessMap): void {
   _featureAccessMap = map;
@@ -16,10 +17,20 @@ export function getFeatureAccessMap(): FeatureAccessMap | null {
 
 export function setDegradedFeatures(features: Set<FeatureKey>): void {
   _degradedFeatures = features;
+  for (const listener of degradedFeatureListeners) {
+    listener();
+  }
 }
 
 export function getDegradedFeatures(): Set<FeatureKey> {
   return _degradedFeatures;
+}
+
+export function subscribeToDegradedFeatures(listener: () => void): () => void {
+  degradedFeatureListeners.add(listener);
+  return () => {
+    degradedFeatureListeners.delete(listener);
+  };
 }
 
 export function getAvailabilityFor(key: FeatureKey): FeatureAvailability {

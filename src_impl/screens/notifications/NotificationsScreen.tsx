@@ -1,103 +1,513 @@
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import{captureSilentFailure}from'../../utils/silent-failure'; import React,{useState,useEffect,useCallback,useMemo}from'react'; import{Pressable,RefreshControl}from'react-native'; import{useSafeAreaInsets}from'react-native-safe-area-context'; import{FlashList,type ListRenderItem}from'@shopify/flash-list'; import{useNavigation}from'@react-navigation/native'; import type{NativeStackNavigationProp}from'@react-navigation/native-stack'; import{useTheme}from'../../theme'; import{Box,Text,Button,Card}from'../../components/primitives'; import{Avatar}from'../../components/Avatar'; import{ErrorState}from'../../components/states'; import{Skeleton,SkeletonList}from'../../shared/ui/primitives'; import{createDebugger}from'../../utils/debug'; import{useAuthStore}from'../../store'; import * as notificationService from '../../features/notifications/service'; import type{ExtendedRootStackParams}from'../../navigation/types';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { Pressable, RefreshControl } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { FlashList } from '@shopify/flash-list';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useTheme } from '../../theme';
+import { Box, Text, Button, Card } from '../../components/primitives';
+import { Avatar } from '../../components/Avatar';
+import { ErrorState } from '../../components/states';
+import { Skeleton, SkeletonList } from '../../shared/ui/primitives';
+import { createDebugger } from '../../utils/debug';
+import { useAuthStore } from '../../store';
+import * as notificationService from '../../features/notifications/service';
+import type { ExtendedRootStackParams } from '../../navigation/types';
 import { launchColors } from '@theme/tokens/launch-colors';
- const debug = createDebugger('notifications:screen'); type Nav=NativeStackNavigationProp<ExtendedRootStackParams>;type NotificationType='ACHIEVEMENT'|'STREAK_RISK'|'BOSS'|'SQUAD'|'RIVAL'|'COACH'|'REWARD'|'LEVEL_UP';type Notification = notificationService.NotificationCenterItem;const NOTIFICATION_CONFIG:Record<NotificationType,{icon:string;color:string;bgColor:string;}> = {ACHIEVEMENT:{icon:'🏆',color:launchColors.hex_eab308,bgColor:launchColors.hex_fef9c3},STREAK_RISK:{icon:'🔥',color:launchColors.hex_ef4444,bgColor:launchColors.hex_fee2e2},BOSS:{icon:'💀',color:launchColors.hex_a855f7,bgColor:launchColors.hex_f3e8ff},SQUAD:{icon:'🛡️',color:launchColors.hex_3b82f6,bgColor:launchColors.hex_dbeafe},RIVAL:{icon:'⚔️',color:launchColors.hex_ef4444,bgColor:launchColors.hex_fee2e2},COACH:{icon:'💬',color:launchColors.hex_22c55e,bgColor:launchColors.hex_dcfce7},REWARD:{icon:'🎁',color:launchColors.hex_f59e0b,bgColor:launchColors.hex_fef3c7},LEVEL_UP:{icon:'⭐',color:launchColors.hex_8b5cf6,bgColor:launchColors.hex_ede9fe}}; interface GroupedNotifications{today:Notification[];yesterday:Notification[];thisWeek:Notification[];earlier:Notification[];}type NotificationListItem={type:'header'|'notification';data?:Notification;title?:string;count?:number;};const FILTERS:Array<{id:'all'|NotificationType;label:string;}> = [{id:'all',label:'All'},{id:'ACHIEVEMENT',label:'Achievements'},{id:'STREAK_RISK',label:'Streaks'},{id:'BOSS',label:'Bosses'},{id:'RIVAL',label:'Rivals'}]; function groupNotificationsByTime(notifications:Notification[]):GroupedNotifications{const now = new Date(); const today = new Date(now.getFullYear(),now.getMonth(),now.getDate()); const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1); const thisWeekStart = new Date(today); thisWeekStart.setDate(thisWeekStart.getDate() - thisWeekStart.getDay()); return notifications.reduce((groups,notification)=>{const date = new Date(notification.timestamp); const notificationDay = new Date(date.getFullYear(),date.getMonth(),date.getDate()); if(notificationDay.getTime() === today.getTime()){groups.today.push(notification);}else if(notificationDay.getTime() === yesterday.getTime()){groups.yesterday.push(notification);}else if(notificationDay >= thisWeekStart){groups.thisWeek.push(notification);}else{groups.earlier.push(notification);}return groups;},{today:[],yesterday:[],thisWeek:[],earlier:[]}as GroupedNotifications);}async function fetchNotifications(userId:string):Promise<Notification[]>{return notificationService.getNotificationCenterItems(userId);}async function markNotificationAsRead(userId:string,notificationId:string):Promise<void>{await notificationService.markNotificationRead(userId,notificationId);}async function markAllNotificationsAsRead(userId:string):Promise<void>{await notificationService.markAllNotificationsRead(userId);}export const NotificationsScreen:React.FC = ()=>{const{theme} = useTheme(); const insets = useSafeAreaInsets(); const navigation = useNavigation<Nav>(); const{user} = useAuthStore(); const userId = user?.id ?? ''; const[notifications,setNotifications] = useState<Notification[]>([]); const[isLoading,setIsLoading] = useState(true); const[isRefreshing,setIsRefreshing] = useState(false); const[error,setError] = useState<Error|null>(null); const[activeFilter,setActiveFilter] = useState<'all'|NotificationType>('all'); const loadNotifications = useCallback(async(showLoading = true)=>{if(!userId){setIsLoading(false); return;}if(showLoading){setIsLoading(true);}setError(null); try{const data = await fetchNotifications(userId); setNotifications(data);}catch(err){debug.error('Failed to load notifications',err as Error); setError(err instanceof Error ? err : new Error('Failed to load notifications'));}finally{setIsLoading(false); setIsRefreshing(false);}},[userId]); useEffect(()=>{loadNotifications();},[loadNotifications]); useEffect(()=>{if(!userId){return;}const unsubscribe = notificationService.subscribeToNotificationCenter(userId,()=>{loadNotifications(false);}); return unsubscribe;},[userId,loadNotifications]); const filteredNotifications = useMemo(()=>{return activeFilter === 'all' ? notifications : notifications.filter(n=>n.type === activeFilter);},[notifications,activeFilter]); const groupedNotifications = useMemo(()=>{return groupNotificationsByTime(filteredNotifications);},[filteredNotifications]); const unreadCount = useMemo(()=>{return notifications.filter(n=>!n.read).length;},[notifications]); const handleMarkAsRead = useCallback(async(id:string)=>{if(!userId){return;}setNotifications(prev=>prev.map(n=>n.id === id ? {...n,read:true} : n)); await markNotificationAsRead(userId,id);},[userId]); const handleMarkAllAsRead = useCallback(async()=>{if(!userId){return;}setNotifications(prev=>prev.map(n=>({...n,read:true}))); await markAllNotificationsAsRead(userId);},[userId]); const handleNotificationPress = useCallback(async(notification:Notification)=>{if(!notification.read){await handleMarkAsRead(notification.id);}const{type,actionRoute,actionParams} = notification; if(actionRoute){try{navigation.navigate(String(actionRoute),actionParams ?? {}); return;}catch(error){captureSilentFailure(error,{feature:'screens',operation:'ui-fallback',type:'ui'}); debug.warn('Navigation failed for route:',actionRoute);}}switch(type){case'ACHIEVEMENT':navigation.navigate('Main',{screen:'Profile',params:{tab:'achievements'}}); break; case'STREAK_RISK':navigation.navigate('Main',{screen:'Home'}); break; case'BOSS':navigation.navigate('Boss'as never); break; case'RIVAL':navigation.navigate('Main',{screen:'Home'}as never); break; case'SQUAD':navigation.navigate('Guild'as never); break; case'COACH':navigation.navigate('AICoach'as never); break; case'LEVEL_UP':navigation.navigate('Main',{screen:'Progress'}); break; case'REWARD':break; default:break;}},[handleMarkAsRead,navigation]); const handleRefresh = useCallback(()=>{setIsRefreshing(true); loadNotifications(false);},[loadNotifications]); const formatTime = useCallback((timestamp:number)=>{const date = new Date(timestamp); const now = new Date(); const diff = now.getTime() - date.getTime(); const minutes = Math.floor(diff / 60000); const hours = Math.floor(minutes / 60); const days = Math.floor(hours / 24); if(minutes < 1){return'Just now';}if(minutes < 60){return`${minutes}m ago`;}if(hours < 24){return`${hours}h ago`;}if(days < 7){return`${days}d ago`;}return date.toLocaleDateString();},[]); const listData = useMemo(()=>{const items:NotificationListItem[] = []; if(groupedNotifications.today.length > 0){items.push({type:'header',title:'Today',count:groupedNotifications.today.length}); groupedNotifications.today.forEach(n=>items.push({type:'notification',data:n}));}if(groupedNotifications.yesterday.length > 0){items.push({type:'header',title:'Yesterday',count:groupedNotifications.yesterday.length}); groupedNotifications.yesterday.forEach(n=>items.push({type:'notification',data:n}));}if(groupedNotifications.thisWeek.length > 0){items.push({type:'header',title:'This Week',count:groupedNotifications.thisWeek.length}); groupedNotifications.thisWeek.forEach(n=>items.push({type:'notification',data:n}));}if(groupedNotifications.earlier.length > 0){items.push({type:'header',title:'Earlier',count:groupedNotifications.earlier.length}); groupedNotifications.earlier.forEach(n=>items.push({type:'notification',data:n}));}return items;},[groupedNotifications]); if(isLoading){return<Box flex={1}style={{backgroundColor:theme.colors.background.primary}}>
-        {}
-        <Box px={20}pb={12}pt={insets.top + 16}>
+import {
+  routeNotificationAction,
+  getAvailableNotificationFilters,
+} from '../../navigation/notification-routing-core';
+import type { NotificationAction, NotificationActionType } from '../../navigation/notification-routing-types';
+
+const debug = createDebugger('notifications:screen');
+
+type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
+
+type NotificationType =
+  | 'ACHIEVEMENT'
+  | 'STREAK_RISK'
+  | 'BOSS'
+  | 'SQUAD'
+  | 'RIVAL'
+  | 'COACH'
+  | 'REWARD'
+  | 'LEVEL_UP';
+
+type Notification = notificationService.NotificationCenterItem;
+
+interface GroupedNotifications {
+  today: Notification[];
+  yesterday: Notification[];
+  thisWeek: Notification[];
+  earlier: Notification[];
+}
+
+type NotificationListItem = {
+  type: 'header' | 'notification';
+  data?: Notification;
+  title?: string;
+  count?: number;
+};
+
+const NOTIFICATION_CONFIG: Record<
+  NotificationType,
+  { icon: string; color: string; bgColor: string }
+> = {
+  ACHIEVEMENT: { icon: '\u{1F3C6}', color: launchColors.hex_eab308, bgColor: launchColors.hex_fef9c3 },
+  STREAK_RISK: { icon: '\u{1F525}', color: launchColors.hex_ef4444, bgColor: launchColors.hex_fee2e2 },
+  BOSS: { icon: '\u{1F480}', color: launchColors.hex_a855f7, bgColor: launchColors.hex_f3e8ff },
+  SQUAD: { icon: '\u{1F6E1}', color: launchColors.hex_3b82f6, bgColor: launchColors.hex_dbeafe },
+  RIVAL: { icon: '\u{2694}', color: launchColors.hex_ef4444, bgColor: launchColors.hex_fee2e2 },
+  COACH: { icon: '\u{1F4AC}', color: launchColors.hex_22c55e, bgColor: launchColors.hex_dcfce7 },
+  REWARD: { icon: '\u{1F381}', color: launchColors.hex_f59e0b, bgColor: launchColors.hex_fef3c7 },
+  LEVEL_UP: { icon: '\u{2B50}', color: launchColors.hex_8b5cf6, bgColor: launchColors.hex_ede9fe },
+};
+
+const NOTIFICATION_TYPE_TO_SAFE_ACTION: Record<NotificationType, NotificationActionType> = {
+  ACHIEVEMENT: 'view_profile',
+  STREAK_RISK: 'view_streak',
+  BOSS: 'view_boss',
+  SQUAD: 'view_squad',
+  RIVAL: 'join_duel',
+  COACH: 'open_coach',
+  REWARD: 'view_progress',
+  LEVEL_UP: 'view_progress',
+};
+
+const HIDDEN_FILTER_TYPES: NotificationType[] = ['SQUAD', 'RIVAL'];
+
+function mapToNotificationAction(notification: Notification): NotificationAction {
+  if (notification.actionRoute) {
+    return { type: 'custom', payload: { screen: notification.actionRoute, params: notification.actionParams } };
+  }
+  const type = notification.type as NotificationType;
+  const mappedType = NOTIFICATION_TYPE_TO_SAFE_ACTION[type] ?? 'custom';
+  return { type: mappedType, payload: notification.actionParams as Record<string, unknown> | undefined };
+}
+
+function groupNotificationsByTime(notifications: Notification[]): GroupedNotifications {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const thisWeekStart = new Date(today);
+  thisWeekStart.setDate(thisWeekStart.getDate() - thisWeekStart.getDay());
+  return notifications.reduce(
+    (groups, notification) => {
+      const date = new Date(notification.timestamp);
+      const notificationDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+      if (notificationDay.getTime() === today.getTime()) {
+        groups.today.push(notification);
+      } else if (notificationDay.getTime() === yesterday.getTime()) {
+        groups.yesterday.push(notification);
+      } else if (notificationDay >= thisWeekStart) {
+        groups.thisWeek.push(notification);
+      } else {
+        groups.earlier.push(notification);
+      }
+      return groups;
+    },
+    { today: [], yesterday: [], thisWeek: [], earlier: [] } as GroupedNotifications,
+  );
+}
+
+export const NotificationsScreen: React.FC = () => {
+  const { theme } = useTheme();
+  const insets = useSafeAreaInsets();
+  const navigation = useNavigation<Nav>();
+  const { user } = useAuthStore();
+  const userId = user?.id ?? '';
+
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+  const [activeFilter, setActiveFilter] = useState<'all' | NotificationType>('all');
+
+  const availableFilterTypes = useMemo(() => {
+    const safeFilters = getAvailableNotificationFilters();
+    const filterTypes: ('all' | NotificationType)[] = ['all'];
+    safeFilters.forEach((safeType) => {
+      const matchingNotifType = Object.entries(NOTIFICATION_TYPE_TO_SAFE_ACTION).find(
+        ([, v]) => v === safeType,
+      );
+      if (matchingNotifType && !HIDDEN_FILTER_TYPES.includes(matchingNotifType[0] as NotificationType)) {
+        filterTypes.push(matchingNotifType[0] as NotificationType);
+      }
+    });
+    return filterTypes;
+  }, []);
+
+  const FILTER_LABELS: Record<string, string> = {
+    all: 'All',
+    ACHIEVEMENT: 'Achievements',
+    STREAK_RISK: 'Streaks',
+    BOSS: 'Momentum',
+    COACH: 'Coach',
+    REWARD: 'Progress',
+    LEVEL_UP: 'Levels',
+  };
+
+  const loadNotifications = useCallback(
+    async (showLoading = true) => {
+      if (!userId) {
+        setIsLoading(false);
+        return;
+      }
+      if (showLoading) setIsLoading(true);
+      setError(null);
+      try {
+        const data = await notificationService.getNotificationCenterItems(userId);
+        setNotifications(data);
+      } catch (err) {
+        debug.error('Failed to load notifications', err as Error);
+        setError(err instanceof Error ? err : new Error('Failed to load notifications'));
+      } finally {
+        setIsLoading(false);
+        setIsRefreshing(false);
+      }
+    },
+    [userId],
+  );
+
+  useEffect(() => {
+    loadNotifications();
+  }, [loadNotifications]);
+
+  useEffect(() => {
+    if (!userId) return;
+    const unsubscribe = notificationService.subscribeToNotificationCenter(userId, () => {
+      loadNotifications(false);
+    });
+    return unsubscribe;
+  }, [userId, loadNotifications]);
+
+  const filteredNotifications = useMemo(
+    () => (activeFilter === 'all' ? notifications : notifications.filter((n) => n.type === activeFilter)),
+    [notifications, activeFilter],
+  );
+
+  const groupedNotifications = useMemo(
+    () => groupNotificationsByTime(filteredNotifications),
+    [filteredNotifications],
+  );
+
+  const unreadCount = useMemo(
+    () => notifications.filter((n) => !n.read).length,
+    [notifications],
+  );
+
+  const handleMarkAsRead = useCallback(
+    async (id: string) => {
+      if (!userId) return;
+      setNotifications((prev) => prev.map((n) => (n.id === id ? { ...n, read: true } : n)));
+      await notificationService.markNotificationRead(userId, id);
+    },
+    [userId],
+  );
+
+  const handleMarkAllAsRead = useCallback(async () => {
+    if (!userId) return;
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+    await notificationService.markAllNotificationsRead(userId);
+  }, [userId]);
+
+  const handleNotificationPress = useCallback(
+    async (notification: Notification) => {
+      if (!notification.read) {
+        await handleMarkAsRead(notification.id);
+      }
+      const action = mapToNotificationAction(notification);
+      const result = routeNotificationAction(navigation, action);
+      if (!result.success) {
+        debug.warn('Notification routing blocked:', result.error);
+      }
+    },
+    [handleMarkAsRead, navigation],
+  );
+
+  const handleRefresh = useCallback(() => {
+    setIsRefreshing(true);
+    loadNotifications(false);
+  }, [loadNotifications]);
+
+  const formatTime = useCallback((timestamp: number) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    if (minutes < 1) return 'Just now';
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    if (days < 7) return `${days}d ago`;
+    return date.toLocaleDateString();
+  }, []);
+
+  const listData = useMemo(() => {
+    const items: NotificationListItem[] = [];
+    if (groupedNotifications.today.length > 0) {
+      items.push({ type: 'header', title: 'Today', count: groupedNotifications.today.length });
+      groupedNotifications.today.forEach((n) => items.push({ type: 'notification', data: n }));
+    }
+    if (groupedNotifications.yesterday.length > 0) {
+      items.push({ type: 'header', title: 'Yesterday', count: groupedNotifications.yesterday.length });
+      groupedNotifications.yesterday.forEach((n) => items.push({ type: 'notification', data: n }));
+    }
+    if (groupedNotifications.thisWeek.length > 0) {
+      items.push({ type: 'header', title: 'This Week', count: groupedNotifications.thisWeek.length });
+      groupedNotifications.thisWeek.forEach((n) => items.push({ type: 'notification', data: n }));
+    }
+    if (groupedNotifications.earlier.length > 0) {
+      items.push({ type: 'header', title: 'Earlier', count: groupedNotifications.earlier.length });
+      groupedNotifications.earlier.forEach((n) => items.push({ type: 'notification', data: n }));
+    }
+    return items;
+  }, [groupedNotifications]);
+
+  if (isLoading) {
+    return (
+      <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+        <Box px={20} pb={12} pt={insets.top + 16}>
           <Box mb={16}>
-            <Skeleton width={150}height={28}variant="text"/>
+            <Skeleton width={150} height={28} variant="text" />
           </Box>
-          {}
-          <Box flexDirection="row"gap={8}>
-            <Skeleton width={50}height={28}variant="rounded"/>
-            <Skeleton width={80}height={28}variant="rounded"/>
-            <Skeleton width={70}height={28}variant="rounded"/>
-            <Skeleton width={60}height={28}variant="rounded"/>
+          <Box flexDirection="row" gap={8}>
+            <Skeleton width={50} height={28} variant="rounded" />
+            <Skeleton width={80} height={28} variant="rounded" />
+            <Skeleton width={70} height={28} variant="rounded" />
+            <Skeleton width={60} height={28} variant="rounded" />
           </Box>
         </Box>
-        {}
-        <Box px={16}pt={12}>
-          <SkeletonList count={6}/>
+        <Box px={16} pt={12}>
+          <SkeletonList count={6} />
         </Box>
-      </Box>;}if(error){return<Box flex={1}style={{backgroundColor:theme.colors.background.primary}}>
-        <Box px={20}pb={12}pt={insets.top + 16}>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+        <Box px={20} pb={12} pt={insets.top + 16}>
           <Text variant="h1">Notifications</Text>
         </Box>
-        <ErrorState title="Failed to load notifications"description={error.message}onRetry={()=>loadNotifications()}retryLabel="Try Again"/>
-      </Box>;}const renderHeader = ()=><Box px={20}pb={12}pt={insets.top + 16}>
-      <Box flexDirection="row"justifyContent="space-between"alignItems="center"mb={16}>
+        <ErrorState
+          title="Failed to load notifications"
+          description={error.message}
+          onRetry={() => loadNotifications()}
+          retryLabel="Try Again"
+        />
+      </Box>
+    );
+  }
+
+  const renderHeader = () => (
+    <Box px={20} pb={12} pt={insets.top + 16}>
+      <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb={16}>
         <Text variant="h1">Notifications</Text>
-        {unreadCount > 0 && <Pressable onPress={handleMarkAllAsRead}accessibilityLabel="Mark all read button"accessibilityRole="button"accessibilityHint="Activates this control">
-            <Text variant="caption"style={{color:theme.colors.primary[500]}}>
+        {unreadCount > 0 && (
+          <Pressable
+            onPress={handleMarkAllAsRead}
+            accessibilityLabel="Mark all read button"
+            accessibilityRole="button"
+            accessibilityHint="Marks all notifications as read"
+          >
+            <Text variant="caption" style={{ color: theme.colors.primary[500] }}>
               Mark all read
             </Text>
-          </Pressable>}
+          </Pressable>
+        )}
       </Box>
-
-      {}
-      <Box flexDirection="row"gap={8}>
-        {FILTERS.map(filter=><Pressable key={filter.id}style={{paddingHorizontal:12,paddingVertical:6,borderRadius:16,backgroundColor:activeFilter === filter.id ? theme.colors.primary[500] : theme.colors.background.secondary}}onPress={()=>setActiveFilter(filter.id)}accessibilityLabel={`Filter by ${filter.label}`}accessibilityRole="button"accessibilityHint={`Show only ${filter.label} notifications`}accessibilityState={{selected:activeFilter === filter.id}}>
-            <Text variant="caption"style={{fontWeight:'600',color:activeFilter === filter.id ? launchColors.hex_fff : theme.colors.text.secondary}}>
-              {filter.label}
+      <Box flexDirection="row" gap={8}>
+        {availableFilterTypes.map((filter) => (
+          <Pressable
+            key={filter}
+            style={{
+              paddingHorizontal: 12,
+              paddingVertical: 6,
+              borderRadius: 16,
+              backgroundColor:
+                activeFilter === filter
+                  ? theme.colors.primary[500]
+                  : theme.colors.background.secondary,
+            }}
+            onPress={() => setActiveFilter(filter)}
+            accessibilityLabel={`Filter by ${FILTER_LABELS[filter] ?? filter}`}
+            accessibilityRole="button"
+            accessibilityHint={`Show only ${FILTER_LABELS[filter] ?? filter} notifications`}
+            accessibilityState={{ selected: activeFilter === filter }}
+          >
+            <Text
+              variant="caption"
+              style={{
+                fontWeight: '600',
+                color: activeFilter === filter ? launchColors.hex_fff : theme.colors.text.secondary,
+              }}
+            >
+              {FILTER_LABELS[filter] ?? filter}
             </Text>
-          </Pressable>)}
+          </Pressable>
+        ))}
       </Box>
-    </Box>; const renderNotification = ({item}:{item:Notification;})=>{const config = NOTIFICATION_CONFIG[item.type]; return<Card interactive style={{opacity:item.read ? 0.8 : 1,backgroundColor:item.read ? undefined : launchColors.hex_eef2ff20}}size="md"onPress={()=>handleNotificationPress(item)}accessibilityLabel={`${item.title}: ${item.message}`}accessibilityRole="button"accessibilityHint={`${item.read ? 'Read' : 'Unread'} notification. Tap to view details.`}accessibilityState={{selected:!item.read}}>
-        <Box flexDirection="row"alignItems="flex-start">
-          {}
-          {item.avatar ? <Avatar name={item.avatar}size="md"/> : <Box width={44}height={44}borderRadius={12}justifyContent="center"alignItems="center"style={{backgroundColor:config.bgColor}}>
-              <Text fontSize={20}color={config.color}>{config.icon}</Text>
-            </Box>}
+    </Box>
+  );
 
-          {}
-          <Box flex={1}ml={12}>
-            <Box flexDirection="row"justifyContent="space-between"alignItems="flex-start">
-              <Text variant="body"style={{fontWeight:'600',flex:1}}>
+  const renderNotification = ({ item }: { item: Notification }) => {
+    const config = NOTIFICATION_CONFIG[item.type];
+    return (
+      <Card
+        interactive
+        style={{
+          opacity: item.read ? 0.8 : 1,
+          backgroundColor: item.read ? undefined : launchColors.hex_eef2ff20,
+        }}
+        size="md"
+        onPress={() => handleNotificationPress(item)}
+        accessibilityLabel={`${item.title}: ${item.message}`}
+        accessibilityRole="button"
+        accessibilityHint={`${item.read ? 'Read' : 'Unread'} notification. Tap to view details.`}
+        accessibilityState={{ selected: !item.read }}
+      >
+        <Box flexDirection="row" alignItems="flex-start">
+          {item.avatar ? (
+            <Avatar name={item.avatar} size="md" />
+          ) : (
+            <Box
+              width={44}
+              height={44}
+              borderRadius={12}
+              justifyContent="center"
+              alignItems="center"
+              style={{ backgroundColor: config.bgColor }}
+            >
+              <Text fontSize={20} color={config.color}>
+                {config.icon}
+              </Text>
+            </Box>
+          )}
+          <Box flex={1} ml={12}>
+            <Box flexDirection="row" justifyContent="space-between" alignItems="flex-start">
+              <Text variant="body" style={{ fontWeight: '600', flex: 1 }}>
                 {item.title}
               </Text>
-              <Text variant="caption"color="text.tertiary">
+              <Text variant="caption" color="text.tertiary">
                 {formatTime(item.timestamp)}
               </Text>
             </Box>
-            <Text variant="bodySmall"color="text.secondary"style={{marginTop:2}}>
+            <Text variant="bodySmall" color="text.secondary" style={{ marginTop: 2 }}>
               {item.message}
             </Text>
-
-            {}
-            {item.actionText && <Button variant="ghost"size="sm"style={{alignSelf:'flex-start',marginTop:4,paddingHorizontal:0}}accessibilityLabel="Action button"accessibilityRole="button"accessibilityHint="Activates this control">
+            {item.actionText && (
+              <Button
+                variant="ghost"
+                size="sm"
+                style={{ alignSelf: 'flex-start', marginTop: 4, paddingHorizontal: 0 }}
+                accessibilityLabel="Action button"
+                accessibilityRole="button"
+                accessibilityHint="Activates this control"
+              >
                 {item.actionText}
-              </Button>}
+              </Button>
+            )}
           </Box>
-
-          {}
-          {!item.read && <Box width={8}height={8}borderRadius={4}ml={8}mt={6}style={{backgroundColor:theme.colors.primary[500]}}/>}
+          {!item.read && (
+            <Box
+              width={8}
+              height={8}
+              borderRadius={4}
+              ml={8}
+              mt={6}
+              style={{ backgroundColor: theme.colors.primary[500] }}
+            />
+          )}
         </Box>
-      </Card>;}; const renderSectionHeader = (title:string,count:number)=>{if(count === 0){return null;}return<Box px={4}py={8}>
-        <Text variant="caption"color="text.tertiary"style={{fontWeight:'600',textTransform:'uppercase'}}>
+      </Card>
+    );
+  };
+
+  const renderSectionHeader = (title: string, count: number) => {
+    if (count === 0) return null;
+    return (
+      <Box px={4} py={8}>
+        <Text
+          variant="caption"
+          color="text.tertiary"
+          style={{ fontWeight: '600', textTransform: 'uppercase' }}
+        >
           {title}
         </Text>
-      </Box>;}; if(notifications.length === 0){return<Box flex={1}style={{backgroundColor:theme.colors.background.primary}}>
+      </Box>
+    );
+  };
+
+  if (notifications.length === 0) {
+    return (
+      <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
         {renderHeader()}
-        <Box flex={1}alignItems="center"justifyContent="center"px={24}>
-          <Text fontSize={48}>🔔</Text>
-          <Text variant="h4"mt={4}>No notifications yet</Text>
-          <Text variant="body"color="text.secondary"mt={2}textAlign="center">
-            You'll hear when something happens. Check back later for achievements, streak alerts, and more.
+        <Box flex={1} alignItems="center" justifyContent="center" px={24}>
+          <Text fontSize={48}>{'\u{1F514}'}</Text>
+          <Text variant="h4" mt={4}>
+            No notifications yet
+          </Text>
+          <Text variant="body" color="text.secondary" mt={2} textAlign="center">
+            You'll hear when something happens. Check back later for achievements, streak alerts,
+            and more.
           </Text>
         </Box>
-      </Box>;}if(filteredNotifications.length === 0){return<Box flex={1}style={{backgroundColor:theme.colors.background.primary}}>
+      </Box>
+    );
+  }
+
+  if (filteredNotifications.length === 0) {
+    return (
+      <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
         {renderHeader()}
-        <Box flex={1}alignItems="center"justifyContent="center"px={24}>
-          <Text fontSize={48}color={theme.colors.text.tertiary}>⌕</Text>
-          <Text variant="h4"style={{marginTop:16,textAlign:'center'}}>
-            No {activeFilter === 'all' ? '' : activeFilter} notifications
+        <Box flex={1} alignItems="center" justifyContent="center" px={24}>
+          <Text fontSize={48} color={theme.colors.text.tertiary}>
+            {'\u{2315}'}
           </Text>
-          <Text variant="body"color="text.secondary"style={{marginTop:8,textAlign:'center'}}>
+          <Text variant="h4" style={{ marginTop: 16, textAlign: 'center' }}>
+            No {activeFilter === 'all' ? '' : ` ${FILTER_LABELS[activeFilter] ?? activeFilter}`}{' '}
+            notifications
+          </Text>
+          <Text variant="body" color="text.secondary" style={{ marginTop: 8, textAlign: 'center' }}>
             Try selecting a different filter
           </Text>
         </Box>
-      </Box>;}return<Box flex={1}style={{backgroundColor:theme.colors.background.primary}}>
-      {renderHeader()}
+      </Box>
+    );
+  }
 
-      <FlashList data={listData}keyExtractor={(item:NotificationListItem,index:number)=>item.type === 'header' ? `header-${item.title}-${index}` : item.data!.id}contentContainerStyle={{padding:16,paddingTop:0}}estimatedItemSize={80}renderItem={({item}:{item:NotificationListItem;})=>{if(item.type === 'header'){return renderSectionHeader(item.title!,item.count!);}return renderNotification({item:item.data!});}}refreshControl={<RefreshControl refreshing={isRefreshing}onRefresh={handleRefresh}tintColor={theme.colors.primary[500]}/>}/>
-    </Box>;}; export default withScreenErrorBoundary(NotificationsScreen, 'Notifications');
+  return (
+    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
+      {renderHeader()}
+      <FlashList
+        data={listData}
+        keyExtractor={(item: NotificationListItem, index: number) =>
+          item.type === 'header' ? `header-${item.title}-${index}` : item.data!.id
+        }
+        contentContainerStyle={{ padding: 16, paddingTop: 0 }}
+        estimatedItemSize={80}
+        renderItem={({ item }: { item: NotificationListItem }) => {
+          if (item.type === 'header') {
+            return renderSectionHeader(item.title!, item.count!);
+          }
+          return renderNotification({ item: item.data! });
+        }}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={handleRefresh}
+            tintColor={theme.colors.primary[500]}
+          />
+        }
+      />
+    </Box>
+  );
+};
+
+export default withScreenErrorBoundary(NotificationsScreen, 'Notifications');

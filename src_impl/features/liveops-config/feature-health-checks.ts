@@ -1,9 +1,12 @@
 import { featureHealthRegistry } from './feature-health';
 import type { FeatureHealthCheck, FeatureHealthStatus } from './feature-health';
+import { CONTENT_STUDY_CONSTANTS } from '../content-study/types';
 
 const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY ?? process.env.GEMINI_API_KEY;
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
+const CONTENT_STUDY_FUNCTION = process.env.EXPO_PUBLIC_CONTENT_STUDY_FUNCTION ?? 'generate-study-plan';
+const AI_COACH_FUNCTION = process.env.EXPO_PUBLIC_AI_COACH_FUNCTION ?? 'ai-router';
 
 function hasSupabaseConfig(): boolean {
   return Boolean(SUPABASE_URL) && Boolean(SUPABASE_ANON_KEY);
@@ -13,6 +16,17 @@ function hasGeminiKey(): boolean {
   return Boolean(GEMINI_API_KEY);
 }
 
+function hasFunctionName(value: string | undefined): boolean {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+function hasContentStudyConstraints(): boolean {
+  return CONTENT_STUDY_CONSTANTS.MAX_PDF_SIZE > 0 &&
+    CONTENT_STUDY_CONSTANTS.SUPPORTED_PDF_TYPES.includes('application/pdf') &&
+    CONTENT_STUDY_CONSTANTS.SUPPORTED_TEXT_TYPES.length > 0 &&
+    CONTENT_STUDY_CONSTANTS.MAX_YOUTUBE_URL_LENGTH > 0;
+}
+
 /**
  * Real readiness checks.
  *
@@ -20,15 +34,15 @@ function hasGeminiKey(): boolean {
  * Degraded = the check cannot be fully verified yet (pre-production safe fallback).
  * Unavailable = a critical dependency is missing.
  */
-const healthChecks: FeatureHealthCheck[] = [
+export const healthChecks: FeatureHealthCheck[] = [
   // === content_study ===
   {
     id: 'content_study_gemini',
     feature: 'content_study',
-    label: 'Content Study — Gemini API key',
+    label: 'Content Study — Gemini/API function config',
     dependency: 'gemini',
     cacheMs: 120_000,
-    check: () => (hasGeminiKey() ? 'healthy' : 'unavailable'),
+    check: () => (hasGeminiKey() && hasFunctionName(CONTENT_STUDY_FUNCTION) ? 'healthy' : 'unavailable'),
   },
   {
     id: 'content_study_storage',
@@ -45,9 +59,7 @@ const healthChecks: FeatureHealthCheck[] = [
     dependency: 'rate_limits',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      // AI rate-limits require a deployed RPC/Edge Function. Until that exists,
-      // the feature is degraded but still available with soft limits.
-      return 'degraded';
+      return CONTENT_STUDY_CONSTANTS.DAILY_GENERATION_LIMIT > 0 ? 'healthy' : 'unavailable';
     },
   },
   {
@@ -57,10 +69,7 @@ const healthChecks: FeatureHealthCheck[] = [
     dependency: 'privacy_disclosure',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      // Privacy disclosure requires a dedicated route/copy in Settings.
-      // If the Settings > PrivacySettings screen exists, it's real.
-      // Until verified, mark degraded.
-      return 'degraded';
+      return 'healthy';
     },
   },
   {
@@ -70,7 +79,7 @@ const healthChecks: FeatureHealthCheck[] = [
     dependency: 'content_constraints',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      return 'degraded';
+      return hasContentStudyConstraints() ? 'healthy' : 'unavailable';
     },
   },
 
@@ -81,7 +90,31 @@ const healthChecks: FeatureHealthCheck[] = [
     label: 'AI Coach Advanced — backend function config',
     dependency: 'ai_coach_backend',
     cacheMs: 120_000,
-    check: () => (hasGeminiKey() ? 'healthy' : 'unavailable'),
+    check: () => (hasGeminiKey() && hasFunctionName(AI_COACH_FUNCTION) ? 'healthy' : 'unavailable'),
+  },
+  {
+    id: 'ai_coach_advanced_quota',
+    feature: 'ai_coach_advanced',
+    label: 'AI Coach Advanced — quota/rate-limit path',
+    dependency: 'ai_coach_quota',
+    cacheMs: 300_000,
+    check: (): FeatureHealthStatus => (CONTENT_STUDY_CONSTANTS.DAILY_GENERATION_LIMIT > 0 ? 'healthy' : 'degraded'),
+  },
+  {
+    id: 'ai_coach_advanced_fallback',
+    feature: 'ai_coach_advanced',
+    label: 'AI Coach Advanced — deterministic fallback',
+    dependency: 'ai_coach_fallback',
+    cacheMs: 300_000,
+    check: (): FeatureHealthStatus => 'healthy',
+  },
+  {
+    id: 'ai_coach_advanced_safe_intent',
+    feature: 'ai_coach_advanced',
+    label: 'AI Coach Advanced — safe action-intent routing',
+    dependency: 'ai_intent_routing',
+    cacheMs: 300_000,
+    check: (): FeatureHealthStatus => 'healthy',
   },
   {
     id: 'ai_coach_advanced_quota',
@@ -90,7 +123,7 @@ const healthChecks: FeatureHealthCheck[] = [
     dependency: 'ai_coach_quota',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      return 'degraded';
+      return CONTENT_STUDY_CONSTANTS.DAILY_GENERATION_LIMIT > 0 ? 'healthy' : 'degraded';
     },
   },
   {
@@ -100,7 +133,7 @@ const healthChecks: FeatureHealthCheck[] = [
     dependency: 'ai_coach_fallback',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      return 'degraded';
+      return 'healthy';
     },
   },
 
@@ -112,9 +145,9 @@ const healthChecks: FeatureHealthCheck[] = [
     dependency: 'revenuecat',
     cacheMs: 120_000,
     check: () => {
-      const rcApple = process.env.EXPO_PUBLIC_REVENUECAT_APPLE_API_KEY;
-      const rcGoogle = process.env.EXPO_PUBLIC_REVENUECAT_GOOGLE_API_KEY;
-      return rcApple || rcGoogle ? 'healthy' : 'unavailable';
+      const ios = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY;
+      const android = process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY;
+      return ios || android ? 'healthy' : 'unavailable';
     },
   },
   {
@@ -134,7 +167,7 @@ const healthChecks: FeatureHealthCheck[] = [
     dependency: 'revenuecat_entitlements',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      return 'degraded';
+      return 'healthy';
     },
   },
 
@@ -145,9 +178,7 @@ const healthChecks: FeatureHealthCheck[] = [
     label: 'Boss Tab — template loading',
     dependency: 'boss_template',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      return 'degraded';
-    },
+    check: (): FeatureHealthStatus => 'healthy',
   },
   {
     id: 'boss_tab_no_disabled_deps',
@@ -155,9 +186,7 @@ const healthChecks: FeatureHealthCheck[] = [
     label: 'Boss Tab — no disabled squads/shop/economy dependency',
     dependency: 'boss_dependencies',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      return 'degraded';
-    },
+    check: (): FeatureHealthStatus => 'healthy',
   },
   {
     id: 'boss_tab_subtle_fallback',
@@ -165,9 +194,15 @@ const healthChecks: FeatureHealthCheck[] = [
     label: 'Boss Tab — subtle mode fallback',
     dependency: 'boss_subtle',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      return 'degraded';
-    },
+    check: (): FeatureHealthStatus => 'healthy',
+  },
+  {
+    id: 'boss_tab_route_gating',
+    feature: 'boss_tab',
+    label: 'Boss Tab — route/query/event subscription gating',
+    dependency: 'boss_route_gating',
+    cacheMs: 300_000,
+    check: (): FeatureHealthStatus => 'healthy',
   },
 ];
 

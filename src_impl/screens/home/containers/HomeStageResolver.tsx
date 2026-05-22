@@ -2,7 +2,7 @@
  * HomeStageResolver
  *
  * Determines user stage and renders the correct stage-specific container.
- * Each container component calls ONLY its own stage model hook.
+ * Each container component calls ONLY its own stage model hook and data hook.
  * No other stage hooks are imported, bundled, or executed.
  */
 import React from 'react';
@@ -13,7 +13,12 @@ import { useNewUserContainerModel, type NewUserContainerInput } from './NewUserH
 import { useActivatingContainerModel } from './ActivatingHomeContainer';
 import { useEngagedContainerModel } from './EngagedHomeContainer';
 import { usePowerUserContainerModel } from './PowerUserHomeContainer';
-import { useHomeData } from '../hooks/useHomeData';
+import {
+  useNewUserHomeData,
+  useActivatingHomeData,
+  useEngagedHomeData,
+  usePowerUserHomeData,
+} from '../hooks/useStageHomeData';
 import { HomeScreenInner } from './HomeScreenInner';
 import type { HomeViewModel } from '../hooks/home-view-model';
 import type { HomeController } from '../hooks/home-controller-types';
@@ -24,27 +29,26 @@ interface ContainerResult extends HomeViewModel {
 
 function NewUserContainer({ sharedInput }: { sharedInput: NewUserContainerInput }): JSX.Element {
   const model = useNewUserContainerModel(sharedInput);
-  return React.createElement(HomeScreenInnerWithData, { model });
+  const data = useNewUserHomeData(model.controller);
+  return React.createElement(HomeScreenInner, { model, data: data as unknown as import('./HomeScreenInner').HomeDataProps });
 }
 
 function ActivatingContainer({ sharedInput }: { sharedInput: NewUserContainerInput }): JSX.Element {
   const model = useActivatingContainerModel(sharedInput);
-  return React.createElement(HomeScreenInnerWithData, { model });
+  const data = useActivatingHomeData(model.controller);
+  return React.createElement(HomeScreenInner, { model, data: data as unknown as import('./HomeScreenInner').HomeDataProps });
 }
 
 function EngagedContainer({ sharedInput }: { sharedInput: NewUserContainerInput }): JSX.Element {
   const model = useEngagedContainerModel(sharedInput);
-  return React.createElement(HomeScreenInnerWithData, { model });
+  const data = useEngagedHomeData(model.controller);
+  return React.createElement(HomeScreenInner, { model, data: data as unknown as import('./HomeScreenInner').HomeDataProps });
 }
 
 function PowerUserContainer({ sharedInput }: { sharedInput: NewUserContainerInput }): JSX.Element {
   const model = usePowerUserContainerModel(sharedInput);
-  return React.createElement(HomeScreenInnerWithData, { model });
-}
-
-function HomeScreenInnerWithData({ model }: { model: ContainerResult }): JSX.Element {
-  const data = useHomeData({ controller: model.controller });
-  return React.createElement(HomeScreenInner, { model, data });
+  const data = usePowerUserHomeData(model.controller);
+  return React.createElement(HomeScreenInner, { model, data: data as unknown as import('./HomeScreenInner').HomeDataProps });
 }
 
 export function HomeStageResolver(): JSX.Element {

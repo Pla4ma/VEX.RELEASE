@@ -16,6 +16,7 @@ import { HomeStreakProgress } from './HomeStreakProgress';
 import { HomeWeeklyQuest } from './HomeWeeklyQuest';
 import { HomeCompanionSection } from './HomeCompanionSection';
 import { HomeExperiencePrelude, useHomeExperienceModel } from '../../../features/home-experience';
+import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { MissionPriorityInput } from '../../../features/daily-mission/types';
 import type { useHomeData } from '../hooks/useHomeData';
 
@@ -36,6 +37,7 @@ interface HomeContentProps {
   features: HomeController['features'];
   handleClaimReward: (rewardId: string) => void;
   streakHoursRemaining: number;
+  surfaceMap?: HomeSurfaceMap;
 }
 
 export const HomeContent: React.FC<HomeContentProps> = ({
@@ -45,10 +47,27 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   streakHoursRemaining,
   features,
   comebackSessionsCompleted,
+  surfaceMap,
 }) => {
   const navigation = useNavigation<NavigationProp>();
   const homeExperience = useHomeExperienceModel(controller.disclosure.inputs.totalCompletedSessions);
   const isDayZero = homeExperience.stage === 'STAGE_0';
+
+  const sm = surfaceMap;
+  const showCompanion = sm
+    ? sm.companion_thread !== 'hidden' && sm.companion_thread !== 'blocked'
+    : !isDayZero && controller.disclosure.features.companion_detail.isUnlocked;
+  const showStreak = sm
+    ? sm.progress_proof !== 'hidden'
+    : !isDayZero;
+  const showWeeklyQuest = sm
+    ? sm.weekly_quest !== 'hidden' && sm.weekly_quest !== 'blocked'
+    : controller.shouldShowSecondarySystems && getFeatureAvailability(features.challenges).canRenderEntryPoint;
+  const showLowerContent = sm
+    ? sm.boss_teaser !== 'hidden' || sm.challenge_teaser !== 'hidden' || sm.study_layer !== 'hidden'
+    : !isDayZero;
+  const showAtRiskBanner = streakHoursRemaining !== null && streakHoursRemaining <= 4;
+
   const openChallenges = (): void => {
     const challengesAccess = controller.disclosure.features.challenges;
     if (isFeatureAvailableForNavigation(getFeatureAvailability(challengesAccess))) {
@@ -65,7 +84,6 @@ export const HomeContent: React.FC<HomeContentProps> = ({
     }
     controller.openSetup();
   };
-  const weeklyQuestAvailability = getFeatureAvailability(features.challenges);
 
   return (
     <HomeMissionInput
@@ -98,7 +116,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
             <HomeHeroSection controller={controller} />
           </HomeSectionBoundary>
 
-          {!isDayZero && controller.disclosure.features.companion_detail.isUnlocked ? (
+          {showCompanion ? (
             <HomeCompanionSection
               currentStreakDays={controller.currentStreak}
               features={features}
@@ -112,7 +130,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
             />
           ) : null}
 
-          {!isDayZero ? (
+          {showStreak ? (
             <HomeStreakProgress
               currentDays={controller.currentStreak}
               hoursRemaining={streakHoursRemaining}
@@ -123,7 +141,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
             />
           ) : null}
 
-          {controller.shouldShowSecondarySystems && weeklyQuestAvailability.canRenderEntryPoint ? (
+          {showWeeklyQuest ? (
             <HomeWeeklyQuest
               features={features}
               onPress={openChallenges}
@@ -132,7 +150,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
             />
           ) : null}
 
-          {streakHoursRemaining !== null && streakHoursRemaining <= 4 && (
+          {showAtRiskBanner && (
             <AtRiskBanner
               hoursRemaining={streakHoursRemaining}
               currentStreak={controller.currentStreak}
@@ -141,7 +159,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
             />
           )}
 
-          {!isDayZero ? (
+          {showLowerContent ? (
             <HomeContentLower
               controller={controller}
               data={data}
@@ -150,6 +168,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
               streakHoursRemaining={streakHoursRemaining}
               features={features}
               comebackSessionsCompleted={comebackSessionsCompleted}
+              surfaceMap={surfaceMap}
             />
           ) : null}
         </StaggeredEnter>
