@@ -14,6 +14,11 @@ export {
   getCoachPresenceMessage,
 } from './message-library';
 export {
+  getCoachPresenceMessage as getCoachPresenceMessageEnriched,
+  type CoachPresenceContext,
+  type CoachPresenceMessageOutput,
+} from './copy-service';
+export {
   buildCoachPresence,
   buildCompletionCoachPresence,
   resolveCoachActionIntent,

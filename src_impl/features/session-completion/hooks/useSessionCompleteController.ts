@@ -53,7 +53,11 @@ export function useSessionCompleteController(input: { sessionId: string; summary
   });
   const syncHomeReturn = useHomeReturnCompletionSync({ sessionId, summary, userId });
   const progressionQuery = useProgressionSummary(userId || null);
-  const squadsQuery = useUserSquads(userId || undefined);
+  const squadsAvailability = getFeatureAvailability(disclosure.features.squads);
+  const squadsQuery = useUserSquads(
+    squadsAvailability.canQuery ? (userId || undefined) : undefined,
+    { enabled: squadsAvailability.canQuery, staleTime: 1000 * 60 * 5 },
+  );
   const streakQuery = useStreakMultiplier(userId || null);
   const { masteryState, setMasteryState, applySessionMastery } = useSessionMastery(userId, showToast);
 

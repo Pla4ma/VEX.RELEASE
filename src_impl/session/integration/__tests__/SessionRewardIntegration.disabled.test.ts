@@ -65,7 +65,7 @@ describe('SessionRewardIntegration - disabled (all flags false)', () => {
     mockedEventBus.subscribe.mockReturnValue(jest.fn());
   });
 
-  it('should return early when all legacy flags are false', async () => {
+  it('should NOT subscribe to any event when fully disabled', () => {
     new SessionRewardIntegration({
       autoGrantRewards: false,
       autoUpdateStreak: false,
@@ -75,31 +75,11 @@ describe('SessionRewardIntegration - disabled (all flags false)', () => {
       autoUpdateAnalytics: false,
       enableAchievementChecks: false,
       enableMilestoneTracking: false,
+      autoHandleRecoveryRewards: false,
+      autoHandleAbandonmentPartialCredit: false,
     });
 
-    const handler = mockedEventBus.subscribe.mock.calls.find(
-      (call) => call[0] === 'session:completed'
-    )?.[1];
-
-    expect(handler).toBeDefined();
-
-    await handler?.({
-      sessionId: 'test-session-id',
-      userId: 'test-user-id',
-      summary: createMockSummary(),
-    });
-
-    expect(helpers.calculateRewards).not.toHaveBeenCalled();
-    expect(helpers.grantRewards).not.toHaveBeenCalled();
-    expect(helpers.recordSquadWarDamageIfNeeded).not.toHaveBeenCalled();
-    expect(helpers.updateStreak).not.toHaveBeenCalled();
-    expect(helpers.publishAnalytics).not.toHaveBeenCalled();
-    expect(helpers.publishAchievements).not.toHaveBeenCalled();
-    expect(helpers.publishMilestones).not.toHaveBeenCalled();
-    expect(helpers.publishSocialActivity).not.toHaveBeenCalled();
-    expect(helpers.publishChallengeProgress).not.toHaveBeenCalled();
-    expect(helpers.publishXp).not.toHaveBeenCalled();
-    expect(mockedEventBus.publish).not.toHaveBeenCalledWith('session:rewards:calculated', expect.anything());
+    expect(mockedEventBus.subscribe).not.toHaveBeenCalled();
   });
 
   it('should deduplicate via in-memory Set when enabled', async () => {

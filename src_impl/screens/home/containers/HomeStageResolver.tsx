@@ -13,12 +13,10 @@ import { useNewUserContainerModel, type NewUserContainerInput } from './NewUserH
 import { useActivatingContainerModel } from './ActivatingHomeContainer';
 import { useEngagedContainerModel } from './EngagedHomeContainer';
 import { usePowerUserContainerModel } from './PowerUserHomeContainer';
-import {
-  useNewUserHomeData,
-  useActivatingHomeData,
-  useEngagedHomeData,
-  usePowerUserHomeData,
-} from '../hooks/useStageHomeData';
+import { useNewUserHomeData } from '../hooks/useNewUserHomeData';
+import { useActivatingHomeData } from '../hooks/useActivatingHomeData';
+import { useEngagedHomeData } from '../hooks/useEngagedHomeData';
+import { usePowerUserHomeData } from '../hooks/usePowerUserHomeData';
 import { HomeScreenInner } from './HomeScreenInner';
 import type { HomeViewModel } from '../hooks/home-view-model';
 import type { HomeController } from '../hooks/home-controller-types';

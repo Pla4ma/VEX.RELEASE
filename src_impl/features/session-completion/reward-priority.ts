@@ -152,11 +152,11 @@ export function buildSessionRewardPriority(
     });
   }
 
-  if (summary.coinsEarned > 0 || summary.gemsEarned > 0 || summary.xpEarned > 0) {
+  if (summary.xpEarned > 0) {
     rewards.push({
-      detail: `+${summary.xpEarned} XP, +${summary.coinsEarned} coins, +${summary.gemsEarned} gems`,
+      detail: `+${summary.xpEarned} XP`,
       kind: 'xp',
-      label: 'Session rewards',
+      label: 'Session XP earned',
       priority: 'standard',
     });
   }

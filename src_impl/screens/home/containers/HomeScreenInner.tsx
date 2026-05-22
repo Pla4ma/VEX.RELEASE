@@ -17,6 +17,7 @@ import { eventBus } from '../../../events';
 import { buildInterventionSessionParams } from '../buildInterventionSessionParams';
 import { AppScreen } from '../../../components/primitives';
 import { useHomeSurfaceMap } from '../hooks/useHomeSurfaceMap';
+import { useHomeResolvedExperience } from '../hooks/useHomeResolvedExperience';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { HomeController } from '../hooks/home-controller-types';
@@ -26,6 +27,8 @@ import type { ChallengeItem, SessionListItem } from '../../../features/home-spin
 import type { CompletionSyncState } from '../../../store/session-state';
 import { getFeatureAvailability } from '../../../features/liveops-config';
 import type { FeatureAccessMap } from '../../../features/liveops-config/feature-access';
+import { useOnboardingStore } from '../../../features/onboarding/store';
+import type { MotivationProfileType } from '../../../features/liveops-config/feature-access';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -125,19 +128,25 @@ export function HomeScreenInner({ model, data }: HomeScreenInnerProps): JSX.Elem
   const features = controller.disclosure?.features as FeatureAccessMap | undefined ?? {} as FeatureAccessMap;
   const safeStreakHours = streakHoursRemaining ?? 0;
 
+  const explicitStyle = useOnboardingStore((s) => s.explicitMotivationStyle);
+  const { resolvedExperience, firstWeekExperience } = useHomeResolvedExperience(controller);
+
   const surfaceMap: HomeSurfaceMap = useHomeSurfaceMap({
     completedSessions: controller.disclosure.inputs.totalCompletedSessions,
-    motivationStyle: undefined,
-    primaryGoal: undefined,
-    bossEngagement: 'none',
-    studyUsageRatio: 0,
-    coachInteractions: 0,
+    motivationStyle: (explicitStyle as MotivationProfileType) ?? undefined,
+    primaryGoal: resolvedExperience.home.sections.includes('study_layer') ? 'study' : 'focus',
+    bossEngagement: firstWeekExperience.bossIntensity === 'visible' ? 'high'
+      : firstWeekExperience.bossIntensity === 'tiny_tease' ? 'low'
+      : 'none',
+    studyUsageRatio: (controller.activeStudyPlanQuery?.data as Record<string, unknown> | null) != null ? 0.4 : 0,
+    coachInteractions: firstWeekExperience.coachMessageType === 'comeback' ? 1 : 0,
     hasActiveStudyPlan: Boolean((controller.activeStudyPlanQuery?.data as Record<string, unknown> | null) != null),
     hasActiveRecommendation: Boolean(controller.primaryRecommendation),
     hasActiveBoss: Boolean((controller.activeBossQuery?.data as unknown) != null),
     isFirstSession: controller.isFirstRun,
     completionStreak: controller.currentStreak,
     featureAccess: controller.disclosure,
+    firstWeek: firstWeekExperience,
   });
 
   return (

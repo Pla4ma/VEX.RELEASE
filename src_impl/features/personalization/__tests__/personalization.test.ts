@@ -303,15 +303,15 @@ describe('Personalization v3 — resolveVexExperience', () => {
       expect(result.home.studyName).toBe('Learning OS');
     });
 
-    it('personal growth user sees Growth Plan', () => {
+    it('personal growth user sees Growth Path', () => {
       const profile = makeProfile({
         primaryGoal: 'personal',
         motivationStyle: 'calm',
-        studyLayerName: 'Growth Plan',
+        studyLayerName: 'Growth Path',
       });
       const result = resolveVexExperience(profile, makeStats(), defaultAvailability);
-      expect(result.studyLayerLabel).toBe('Growth Plan');
-      expect(result.home.studyName).toBe('Growth Plan');
+      expect(result.studyLayerLabel).toBe('Growth Path');
+      expect(result.home.studyName).toBe('Growth Path');
     });
   });
 });

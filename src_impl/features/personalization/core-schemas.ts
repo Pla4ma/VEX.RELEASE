@@ -27,7 +27,7 @@ export const StudyLayerNameSchema = z.enum([
   'Deep Work Plan',
   'Learning OS',
   'Project Focus Path',
-  'Growth Plan',
+  'Growth Path',
 ]);
 
 export const BossIntensitySchema = z.enum(['subtle', 'standard', 'game-like', 'intense']);

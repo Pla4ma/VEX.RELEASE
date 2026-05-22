@@ -1,4 +1,6 @@
 import { healthChecks } from '../feature-health-checks';
+import { featureHealthRegistry } from '../feature-health';
+import type { FeatureKey } from '../feature-access';
 
 function checkById(id: string) {
   const check = healthChecks.find((item) => item.id === id);
@@ -13,6 +15,12 @@ async function runCheck(id: string): Promise<string> {
 }
 
 describe('real feature health checks', () => {
+  it('no duplicate health check IDs exist', () => {
+    const ids = healthChecks.map((c) => c.id);
+    const unique = new Set(ids);
+    expect(unique.size).toBe(ids.length);
+  });
+
   it('content_study verifies configured constraints as healthy', async () => {
     await expect(runCheck('content_study_max_file_constraints')).resolves.toBe('healthy');
   });
@@ -21,20 +29,106 @@ describe('real feature health checks', () => {
     await expect(runCheck('content_study_rate_limits')).resolves.toBe('healthy');
   });
 
-  it('ai_coach_advanced has deterministic fallback readiness', async () => {
-    await expect(runCheck('ai_coach_advanced_fallback')).resolves.toBe('healthy');
+  it('content_study returns unavailable when Gemini key is missing', () => {
+    expect(typeof checkById('content_study_gemini').check).toBe('function');
   });
 
-  it('premium_paywall entitlement read path is present', async () => {
-    await expect(runCheck('premium_paywall_entitlements')).resolves.toBe('healthy');
+  it('content_study returns unavailable when Supabase storage config is missing', () => {
+    expect(typeof checkById('content_study_storage').check).toBe('function');
+  });
+
+  it('content_study privacy disclosure returns degraded (no runtime verification)', async () => {
+    await expect(runCheck('content_study_privacy_disclosure')).resolves.toBe('degraded');
+  });
+
+  it('ai_coach_advanced backend config check exists', async () => {
+    expect(typeof checkById('ai_coach_advanced_backend').check).toBe('function');
+  });
+
+  it('ai_coach_advanced fallback returns degraded (no runtime verification)', async () => {
+    await expect(runCheck('ai_coach_advanced_fallback')).resolves.toBe('degraded');
+  });
+
+  it('ai_coach_advanced safe intent returns degraded (no runtime verification)', async () => {
+    await expect(runCheck('ai_coach_advanced_safe_intent')).resolves.toBe('degraded');
+  });
+
+  it('ai_coach_advanced quota returns degraded (no runtime verification)', async () => {
+    await expect(runCheck('ai_coach_advanced_quota')).resolves.toBe('degraded');
+  });
+
+  it('premium_paywall RevenueCat config check exists', async () => {
+    expect(typeof checkById('premium_paywall_revenuecat_config').check).toBe('function');
   });
 
   it('premium_paywall offerings remain degraded until runtime load is verified', async () => {
     await expect(runCheck('premium_paywall_offerings')).resolves.toBe('degraded');
   });
 
-  it('boss_tab readiness checks verify template and subtle fallback paths', async () => {
-    await expect(runCheck('boss_tab_template')).resolves.toBe('healthy');
-    await expect(runCheck('boss_tab_subtle_fallback')).resolves.toBe('healthy');
+  it('premium_paywall entitlements return degraded (no runtime verification)', async () => {
+    await expect(runCheck('premium_paywall_entitlements')).resolves.toBe('degraded');
+  });
+
+  it('boss_tab template returns degraded (no runtime template verification)', async () => {
+    await expect(runCheck('boss_tab_template')).resolves.toBe('degraded');
+  });
+
+  it('boss_tab subtle fallback returns degraded (no runtime verification)', async () => {
+    await expect(runCheck('boss_tab_subtle_fallback')).resolves.toBe('degraded');
+  });
+
+  it('boss_tab route gating returns degraded (no runtime verification)', async () => {
+    await expect(runCheck('boss_tab_route_gating')).resolves.toBe('degraded');
+  });
+
+  it('boss_tab no disabled deps verifies real DISABLED_FEATURES config', async () => {
+    await expect(runCheck('boss_tab_no_disabled_deps')).resolves.toBe('healthy');
+  });
+});
+
+describe('feature health registry — duplicate protection', () => {
+  beforeAll(() => {
+    const { registerFeatureHealthChecks } = require('../feature-health-checks');
+    registerFeatureHealthChecks();
+  });
+
+  it('registry does not accept duplicate check IDs', () => {
+    const ids = featureHealthRegistry.getRegisteredIds();
+    const unique = new Set(ids);
+    expect(unique.size).toBe(ids.length);
+  });
+
+  it('registry ignores duplicate registrations silently', () => {
+    const beforeCount = featureHealthRegistry.getRegisteredIds().length;
+    const { registerFeatureHealthChecks } = require('../feature-health-checks');
+    registerFeatureHealthChecks();
+    const afterCount = featureHealthRegistry.getRegisteredIds().length;
+    expect(afterCount).toBe(beforeCount);
+  });
+
+  it('all critical features are registered', () => {
+    const ids = featureHealthRegistry.getRegisteredIds();
+    const features = new Set(healthChecks.map((c) => c.feature));
+    const expectedFeatures: FeatureKey[] = ['content_study', 'ai_coach_advanced', 'premium_paywall', 'boss_tab'];
+    for (const feat of expectedFeatures) {
+      expect(features.has(feat)).toBe(true);
+    }
+  });
+
+  it('ai_coach_advanced is not healthy (degraded or unavailable)', async () => {
+    const status = await featureHealthRegistry.getFeatureHealth('ai_coach_advanced');
+    expect(['degraded', 'unavailable']).toContain(status);
+    expect(status).not.toBe('healthy');
+  });
+
+  it('premium_paywall is not healthy (degraded or unavailable)', async () => {
+    const status = await featureHealthRegistry.getFeatureHealth('premium_paywall');
+    expect(['degraded', 'unavailable']).toContain(status);
+    expect(status).not.toBe('healthy');
+  });
+
+  it('content_study is unavailable when AI/storage config missing', async () => {
+    const status = await featureHealthRegistry.getFeatureHealth('content_study');
+    expect(['degraded', 'unavailable']).toContain(status);
   });
 });

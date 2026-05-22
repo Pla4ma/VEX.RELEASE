@@ -1,6 +1,6 @@
 import { eventBus } from "../../events"; import { capture } from "../../shared/analytics/analytics-service";
 import { SessionEvents } from "../../shared/analytics/analytics-events"; import type { SessionHistoryEntry, InterruptionRecord, AntiCheatFlag, RecoveryRecord } from "../types";
-import { createDebugger } from "../../utils/debug"; const debug = createDebugger("session:analytics"); interface SessionAnalyticsEvent { eventName: string; userId: string;
+import { createDebugger } from "../../utils/debug"; const debug = createDebugger("session:analytics"); let orchestratorHandlesCompletion = false; export function setOrchestratorHandlesCompletion(v: boolean): void { orchestratorHandlesCompletion = v; } interface SessionAnalyticsEvent { eventName: string; userId: string;
 sessionId?: string; timestamp: number; properties: Record<string, unknown>; } interface EngagementMetrics { totalSessions: number; completedSessions: number;
 abandonedSessions: number; completionRate: number; avgSessionDuration: number; totalFocusTime: number; } interface PatternMetrics { bestTimeOfDay: number; bestDayOfWeek: number;
 avgInterruptionsPerSession: number; recoverySuccessRate: number; avgFocusQuality: number; } export class SessionAnalytics { private userId: string | null = null;
@@ -9,7 +9,7 @@ setUserId(userId: string): void { this.userId = userId; this.setupEventListeners
 eventBus.subscribe("session:created", (data) => { if (!data) { return; } this.track("session_created", { sessionId: data.sessionId, userId: data.userId, config: data.config,
 timestamp: data.timestamp, }); }); eventBus.subscribe("session:started", (data) => { if (!data) { return; } capture(SessionEvents.SESSION_STARTED, { session_id: data.sessionId,
 user_id: this.userId ?? "", session_type: "focus", started_at: data.startedAt, }); this.track("session_started", { sessionId: data.sessionId, startedAt: data.startedAt,
-phase: data.phase, }); }); eventBus.subscribe("session:completed", (data) => { if (!data) { return; }
+phase: data.phase, }); }); eventBus.subscribe("session:completed", (data) => { if (!data) { return; } if (orchestratorHandlesCompletion) { return; }
 const summary = data.summary && typeof data.summary === "object" ? (data.summary as Record<string, unknown>) : {};
 const durationSeconds = data.duration || (typeof summary.effectiveDuration === "number" ? summary.effectiveDuration : 0);
 const completionPercentage = typeof summary.completionPercentage === "number" ? summary.completionPercentage : 100;

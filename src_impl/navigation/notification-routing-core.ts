@@ -1,10 +1,8 @@
 import {
   getFeatureAvailability,
   isFeatureAvailableForNavigation,
-  type FeatureAccessMap,
   type FeatureKey,
 } from '../features/liveops-config';
-import type { DeepLinkPath } from './deep-link-types';
 import { getFeatureForRoute } from './feature-route-registry';
 import type { SessionStackParams } from './types';
 import type {
@@ -12,11 +10,12 @@ import type {
   NotificationActionType,
   NotificationRouteResult,
   NotificationSafeIntent,
-  SafeNotificationResolution,
 } from './notification-routing-types';
+import type { SafeNotificationResolution } from './notification-routing-types';
 import { isPublicV1Hidden } from '../features/liveops-config/public-v1-feature-map';
+import { canUseFeature, type FeatureAccessCheck } from './notification-filters';
 
-export type FeatureAccessCheck = Partial<FeatureAccessMap>;
+export type { FeatureAccessCheck } from './notification-filters';
 
 interface NotificationNavigation {
   navigate(screen: string, params?: object | undefined): void;
@@ -24,16 +23,6 @@ interface NotificationNavigation {
 
 const ALLOWED_MAIN_TAB_SCREENS = new Set(['Home', 'Progress', 'Profile']);
 const ALLOWED_ROOT_SCREENS = new Set(['ContentStudy', 'AICoach', 'Mastery']);
-const DISABLED_FILTER_TYPES: NotificationActionType[] = ['view_squad', 'join_duel', 'open_shop', 'open_chest', 'view_streak'];
-
-function canUseFeature(
-  featureAccess: FeatureAccessCheck | undefined,
-  feature: FeatureKey | null,
-): boolean {
-  if (!feature) return true;
-  const access = featureAccess?.[feature];
-  return access ? isFeatureAvailableForNavigation(getFeatureAvailability(access)) : false;
-}
 
 function blocked(screen: string): NotificationRouteResult {
   return { success: false, error: `${screen} is not available yet`, screen: 'Home' };
@@ -90,6 +79,21 @@ export function resolveNotificationAction(
         return { intent: 'OPEN_HOME', fallbackReason: 'Chests are not available in public v1' };
       }
       return { intent: 'OPEN_HOME', fallbackReason: 'Chest opening redirects to Home' };
+    case 'open_coach': {
+      if (isPublicV1Hidden('ai_coach_advanced')) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Coach is not available in public v1' };
+      }
+      const coachAvailable = canUseFeature(featureAccess, 'ai_coach_advanced');
+      if (!coachAvailable) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'AICoach is not available yet' };
+      }
+      return { intent: 'OPEN_COACH', params: action.payload };
+    }
+    case 'view_progress':
+    case 'accept_invite':
+      return { intent: 'OPEN_PROGRESS', params: action.payload };
+    case 'view_profile':
+      return { intent: 'OPEN_HOME', params: action.payload };
     case 'custom': {
       const screen = toOptionalString(action.payload?.screen);
       if (!screen) return { intent: 'OPEN_HOME' };
@@ -110,21 +114,7 @@ export function resolveNotificationAction(
  * Returns the list of notification filter types that should be shown
  * given the current feature availability.
  */
-export function getAvailableNotificationFilters(
-  featureAccess?: FeatureAccessCheck,
-): NotificationActionType[] {
-  if (!featureAccess) {
-    return ['start_session', 'view_progress', 'view_profile', 'custom'];
-  }
-  const filters: NotificationActionType[] = ['start_session', 'view_progress', 'view_profile'];
-  if (canUseFeature(featureAccess, 'ai_coach_advanced') && !isPublicV1Hidden('ai_coach_advanced')) {
-    filters.push('open_coach');
-  }
-  if (canUseFeature(featureAccess, 'boss_tab') && !isPublicV1Hidden('boss_tab')) {
-    filters.push('view_boss');
-  }
-  return filters.concat('custom');
-}
+export { getAvailableNotificationFilters } from './notification-filters';
 
 function navigateFromSafeIntent(
   navigation: NotificationNavigation,
@@ -177,35 +167,7 @@ export function routeNotificationAction(
   return navigateFromSafeIntent(navigation, resolved.intent, resolved.params ?? action.payload, featureAccess);
 }
 
-export function deepLinkToNotificationAction(
-  path: DeepLinkPath,
-  params: Record<string, string>,
-): NotificationAction {
-  switch (path) {
-    case 'session':
-      return { type: 'start_session', payload: { presetId: params.presetId } };
-    case 'boss':
-      return { type: 'view_boss' };
-    case 'duels':
-      return { type: 'join_duel', payload: { duelId: params.duelId } };
-    case 'squad':
-      return { type: 'view_squad', payload: { squadId: params.squadId } };
-    case 'profile':
-      return { type: 'view_profile', payload: { userId: params.userId } };
-    case 'invite':
-      return { type: 'accept_invite', payload: { inviteCode: params.code } };
-    case 'study':
-      return { type: 'start_session', payload: { presetMode: 'STUDY', source: 'content-study' } };
-    case 'settings':
-      return { type: 'view_progress' };
-    case 'coach':
-      return { type: 'open_coach' };
-    case 'shop':
-      return { type: 'open_shop' };
-    default:
-      return { type: 'custom', payload: { screen: path, params } };
-  }
-}
+export { deepLinkToNotificationAction } from './notification-deep-link';
 
 const validTypes: NotificationActionType[] = [
   'start_session', 'view_boss', 'open_chest', 'view_squad', 'join_duel',

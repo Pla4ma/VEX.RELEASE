@@ -47,7 +47,7 @@ export const SUBSYSTEM_META: Record<string, SubsystemMeta> = {
     kind: 'CORE_REQUIRED',
     canRunWhenLocked: true,
     blocksCompletion: false,
-    fallbackBehavior: 'Currency not granted; marked as degraded, repair available.',
+    fallbackBehavior: 'XP reward not granted; marked as degraded, retry available.',
   },
   companion: {
     label: 'companion',

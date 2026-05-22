@@ -56,16 +56,16 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   const sm = surfaceMap;
   const showCompanion = sm
     ? sm.companion_thread !== 'hidden' && sm.companion_thread !== 'blocked'
-    : !isDayZero && controller.disclosure.features.companion_detail.isUnlocked;
+    : false;
   const showStreak = sm
     ? sm.progress_proof !== 'hidden'
-    : !isDayZero;
+    : false;
   const showWeeklyQuest = sm
     ? sm.weekly_quest !== 'hidden' && sm.weekly_quest !== 'blocked'
-    : controller.shouldShowSecondarySystems && getFeatureAvailability(features.challenges).canRenderEntryPoint;
+    : false;
   const showLowerContent = sm
     ? sm.boss_teaser !== 'hidden' || sm.challenge_teaser !== 'hidden' || sm.study_layer !== 'hidden'
-    : !isDayZero;
+    : false;
   const showAtRiskBanner = streakHoursRemaining !== null && streakHoursRemaining <= 4;
 
   const openChallenges = (): void => {

@@ -3,7 +3,6 @@ import { Pressable, View } from 'react-native';
 
 import { Text } from '../../components/primitives';
 import type { BossEncounterSummary, BossTemplate } from '../../features/boss/schemas';
-import type { SquadSummary } from '../../features/squads/schemas';
 import { useSessionHistory } from '../../session/hooks/useSession';
 import { useTheme } from '../../theme';
 
@@ -16,11 +15,9 @@ const ATTACK_PRESETS = [
 type BossIntensity = 'subtle' | 'game-like' | 'intense';
 
 type BossScreenSectionsProps = {
-  activeSquad?: SquadSummary;
   bossIntensity?: BossIntensity;
   encounter: BossEncounterSummary;
   onLaunchAttack: (minutes: number) => void;
-  onOpenSquad: () => void;
   progressionLevel: number;
   streakMultiplier: number;
   template?: BossTemplate;
@@ -82,10 +79,8 @@ function formatDuration(seconds: number): string {
 }
 
 export function BossScreenSections({
-  activeSquad,
   bossIntensity = 'subtle',
   onLaunchAttack,
-  onOpenSquad,
   streakMultiplier,
   userDamage,
   userId,
@@ -162,16 +157,6 @@ export function BossScreenSections({
           );
         })}
       </View>
-
-      {activeSquad ? (
-        <View style={cardStyle(theme)}>
-          <Text variant="h4" color={theme.colors.text.primary}>Squad Momentum</Text>
-          <Text variant="bodySmall" color={theme.colors.text.secondary}>{`${activeSquad.name} is available for this boss.`}</Text>
-          <Pressable onPress={onOpenSquad} accessibilityLabel="Open squad" accessibilityRole="button" accessibilityHint="Opens squad details." style={{ minHeight: 44 }}>
-            <Text variant="label" color={theme.colors.text.primary}>Open squad</Text>
-          </Pressable>
-        </View>
-      ) : null}
     </>
   );
 }

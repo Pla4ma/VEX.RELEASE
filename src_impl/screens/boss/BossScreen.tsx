@@ -3,7 +3,7 @@
  *
  * Queries only run when FeatureAvailability allows.
  * Intensity comes from the canonical VexExperience — no duplicate resolution.
- * Squad content hidden unless squads are explicitly enabled.
+ * Squad content removed for public v1.
  * Boss damage maps directly to focus/study sessions — no economy/shop dependency.
  */
 import React, { useEffect, useState } from 'react';
@@ -12,8 +12,12 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
 import { LockedFeatureScreen } from '../../components/LockedFeatureScreen';
-import { useFeatureAccess, getFeatureAvailability, isFeatureAvailableForNavigation } from '../../features/liveops-config';
-import { useResolvedVexExperience } from '../../features/personalization';
+import {
+  useFeatureAccess, getFeatureAvailability, isFeatureAvailableForNavigation,
+} from '../../features/liveops-config';
+import { getDegradedFeatures } from '../../features/liveops-config/feature-access-store';
+import { useResolvedVexExperienceRuntime } from '../../features/personalization';
+import { useStreakSummary } from '../../features/streaks/hooks';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { BossScreenContent } from './BossScreenContent';
 import { useAuthStore } from '../../store';
@@ -89,16 +93,22 @@ export const BossScreen = (): JSX.Element => {
   const disclosure = useFeatureAccess();
   const userId = useAuthStore((state) => state.user?.id ?? null);
 
-  const resolved = useResolvedVexExperience({
+  const streakQuery = useStreakSummary(userId);
+  const completionStreak = (streakQuery.data as { currentStreak?: number } | undefined)?.currentStreak ?? 0;
+  const degradedFeatures = getDegradedFeatures();
+  const bossIgnored = degradedFeatures.has('boss_tab');
+
+  const resolved = useResolvedVexExperienceRuntime({
     behaviorStats: {
       totalCompletedSessions: disclosure.inputs.totalCompletedSessions,
       abandonedSessionDurations: [],
-      bossChallengeEngagement: 'none',
+      bossChallengeEngagement: bossIgnored ? 'none'
+        : disclosure.features.boss_tab.isUnlocked ? 'medium' : 'none',
       coachInteractions: 0,
       comebackSessions: 0,
       completedSessionDurations: [],
-      completionStreak: 0,
-      ignoredFeatures: [],
+      completionStreak,
+      ignoredFeatures: bossIgnored ? ['boss_tab'] : [],
       mostSuccessfulTimeOfDay: null,
       preferredSessionMode: null,
       premiumFeatureAttempts: [],
@@ -115,10 +125,8 @@ export const BossScreen = (): JSX.Element => {
   const bossIntensity = resolved.bossIntensity;
 
   const bossAvailability = getFeatureAvailability(disclosure.features.boss_tab);
-  const squadsAvailability = getFeatureAvailability(disclosure.features.squads);
   const canQueryBoss = bossAvailability.canQuery && bossAvailability.canUseBackend;
   const canNavigateBoss = isFeatureAvailableForNavigation(bossAvailability);
-  const canShowSquads = squadsAvailability.canRenderEntryPoint && squadsAvailability.canQuery;
 
   const [resetLabel, setResetLabel] = useState(nextResetLabel());
 
@@ -142,7 +150,6 @@ export const BossScreen = (): JSX.Element => {
   return (
     <BossScreenContent
       canQueryBoss={canQueryBoss}
-      canShowSquads={canShowSquads}
       bossIntensity={toScreenIntensity(bossIntensity)}
       userId={userId}
       navigation={navigation}

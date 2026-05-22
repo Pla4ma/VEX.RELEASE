@@ -148,7 +148,7 @@ describe('applyCompletionSubsystems', () => {
     expect(mockOrder).toEqual(['focus-identity', 'streak', 'progression', 'rewards', 'companion']);
     expect(result.degradedSystems).toEqual([]);
     expect(result.ledger.streakResult.newDays).toBe(5);
-    expect(result.ledger.rewardIds).toEqual([`session-currency:${baseLedger.sessionId}`]);
+    expect(result.ledger.rewardIds).toEqual([`session-xp:${baseLedger.sessionId}`]);
     expect(result.ledger.companionReactionId).toBe('companion-session-complete');
     expect(result.ledger.dailyMissionResult.status).toBe('progressed');
     expect(mockAddBreadcrumb).toHaveBeenCalledWith(expect.objectContaining({ message: 'vex_session_completed' }));
@@ -182,7 +182,7 @@ describe('applyCompletionSubsystems', () => {
 
     expect(result.degradedSystems).toContain('focus-identity');
     expect(mockOrder).toEqual(['focus-identity', 'streak', 'progression', 'rewards', 'companion']);
-    expect(result.ledger.rewardIds).toEqual([`session-currency:${baseLedger.sessionId}`]);
+    expect(result.ledger.rewardIds).toEqual([`session-xp:${baseLedger.sessionId}`]);
   });
 
   it('skips feature-dependent subsystems when feature is locked', async () => {

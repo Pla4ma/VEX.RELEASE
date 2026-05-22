@@ -104,19 +104,21 @@ export async function applyCompletionSubsystems(
     );
   });
 
-  await runSubsystem(degradedSystems, 'rewards', async () => {
-    const rewardAmount = rewardAmountFor(input.ledger);
-    await getRewardService(input.ledger.userId).grantReward(
-      'CURRENCY',
-      'SESSION_COMPLETE',
-      { baseAmount: rewardAmount },
-      { exactAmount: rewardAmount, sessionId: input.ledger.sessionId },
-    );
-    ledger = CompletionLedgerSchema.parse({
-      ...ledger,
-      rewardIds: [`session-currency:${input.ledger.sessionId}`],
+  if (subsystemShouldRun(SUBSYSTEM_META.rewards!)) {
+    await runSubsystem(degradedSystems, 'rewards', async () => {
+      const rewardAmount = rewardAmountFor(input.ledger);
+      await getRewardService(input.ledger.userId).grantReward(
+        'XP',
+        'SESSION_COMPLETE',
+        { baseAmount: rewardAmount },
+        { exactAmount: rewardAmount, sessionId: input.ledger.sessionId },
+      );
+      ledger = CompletionLedgerSchema.parse({
+        ...ledger,
+        rewardIds: [`session-xp:${input.ledger.sessionId}`],
+      });
     });
-  });
+  }
 
   if (subsystemShouldRun(SUBSYSTEM_META.companion!)) {
     await runSubsystem(degradedSystems, 'companion', async () => {

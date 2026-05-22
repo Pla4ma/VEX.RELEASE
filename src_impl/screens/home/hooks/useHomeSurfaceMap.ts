@@ -65,7 +65,7 @@ export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap
           primaryGoal === 'creative' || primaryGoal === 'personal' || primaryGoal === 'learning'
         ) ? primaryGoal : 'focus',
         gamificationIntensity: safeStyle === 'game_like' || safeStyle === 'intense' ? 'strong' : 'medium',
-        studyLayerName: 'Study OS',
+        studyLayerName: input.firstWeek?.studyLayerLabel ?? 'Study OS',
         userStage: completedSessions === 0 ? 'new' : completedSessions < 3 ? 'activating' : completedSessions < 10 ? 'engaged' : 'power',
       },
       behaviorStats: {
@@ -82,6 +82,7 @@ export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap
       hasActiveRecommendation,
       hasActiveBoss,
       isFirstSession,
+      firstWeekPhase: input.firstWeek,
     });
   }, [
     completedSessions,
@@ -96,5 +97,6 @@ export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap
     isFirstSession,
     completionStreak,
     featureAccess.features,
+    input.firstWeek,
   ]);
 }

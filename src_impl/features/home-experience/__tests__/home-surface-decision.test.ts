@@ -31,7 +31,7 @@ const calmProfile = {
   motivationStyle: 'calm' as const,
   primaryGoal: 'personal' as const,
   gamificationIntensity: 'minimal' as const,
-  studyLayerName: 'Growth Plan',
+  studyLayerName: 'Growth Path',
   userStage: 'new' as const,
 };
 

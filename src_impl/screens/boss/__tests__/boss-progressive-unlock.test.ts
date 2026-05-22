@@ -4,6 +4,7 @@ import { buildFeatureAccess } from '../../../features/liveops-config/feature-acc
 import type { FeatureKey } from '../../../features/liveops-config/feature-access';
 import { getFeatureAvailability } from '../../../features/liveops-config/feature-availability';
 import { getBossScreenCopy } from '../BossScreenSections';
+import { isPublicV1Hidden } from '../../../features/liveops-config/public-v1-feature-map';
 
 function resolveBossIntensity(style: string | null): string {
   switch (style) {
@@ -63,5 +64,110 @@ describe('BossScreen progressive unlock', () => {
   it('uses boss health copy only for game-like or intense users', () => {
     expect(getBossScreenCopy('game-like').title).toContain('Boss');
     expect(getBossScreenCopy('intense').intro).toContain('work stays the center');
+  });
+});
+
+describe('Public v1 boss squad/community removal', () => {
+  it('squads are hidden in public v1 feature map', () => {
+    expect(isPublicV1Hidden('squads')).toBe(true);
+  });
+
+  it('boss_bounties are hidden in public v1', () => {
+    expect(isPublicV1Hidden('boss_bounties')).toBe(true);
+  });
+
+  it('boss_tab is progressive (not hidden) in public v1', () => {
+    expect(isPublicV1Hidden('boss_tab')).toBe(false);
+  });
+
+  it('shop, inventory, economy_advanced are hidden in public v1', () => {
+    expect(isPublicV1Hidden('shop')).toBe(true);
+    expect(isPublicV1Hidden('inventory')).toBe(true);
+    expect(isPublicV1Hidden('economy_advanced')).toBe(true);
+  });
+});
+
+describe('Boss intensity based on user motivation and behavior', () => {
+  it('calm user renders subtle momentum language', () => {
+    const copy = getBossScreenCopy('subtle');
+    expect(copy.actionLabel).toBe('Start focus block');
+    expect(copy.metricLabel).toBe('Momentum earned');
+  });
+
+  it('game-like user renders boss health language', () => {
+    const copy = getBossScreenCopy('game-like');
+    expect(copy.metricLabel).toBe('Total damage');
+    expect(copy.title).toBe('Boss Health');
+  });
+
+  it('intense user renders full boss language', () => {
+    const copy = getBossScreenCopy('intense');
+    expect(copy.actionLabel).toBe('Start focused push');
+    expect(copy.title).toBe('Boss Focus');
+  });
+
+  it('degraded boss with ignored feature lowers availability', () => {
+    const features = buildFeatureAccess({
+      degradedFeatures: new Set<FeatureKey>(['boss_tab']),
+      totalCompletedSessions: 15,
+    });
+    const availability = getFeatureAvailability(features.features.boss_tab);
+
+    expect(availability.canNavigate).toBe(false);
+    expect(availability.canQuery).toBe(false);
+  });
+
+  it('study-heavy user copy emphasizes focus over boss combat', () => {
+    const subtleCopy = getBossScreenCopy('subtle');
+    expect(subtleCopy.intro).toContain('moves this marker forward');
+    expect(subtleCopy.intro).not.toMatch(/damage|attack|combat|health/i);
+  });
+});
+
+describe('BossScreen personal boss focus (no squad)', () => {
+  it('boss damage calculation uses streak multiplier', () => {
+    const { estimateDamage } = require('../BossScreenSections');
+    const damage = estimateDamage(25, 2.0);
+    expect(damage).toBeGreaterThan(0);
+    expect(typeof damage).toBe('number');
+  });
+
+  it('boss attack preset labels are personal (not squad-related)', () => {
+    const subtleCopy = getBossScreenCopy('subtle');
+    expect(subtleCopy.actionLabel).not.toMatch(/squad|team|guild|social/i);
+
+    const gameLikeCopy = getBossScreenCopy('game-like');
+    expect(gameLikeCopy.actionLabel).not.toMatch(/squad|team|guild|social/i);
+
+    const intenseCopy = getBossScreenCopy('intense');
+    expect(intenseCopy.actionLabel).not.toMatch(/squad|team|guild|social/i);
+  });
+});
+
+describe('BossScreenContent public v1 squad-free', () => {
+  it('BossScreenContent does not import or reference squads', () => {
+    const fs = require('fs');
+    const path = require('path');
+    const contentPath = path.resolve(__dirname, '..', 'BossScreenContent.tsx');
+    const content = fs.readFileSync(contentPath, 'utf-8');
+
+    expect(content).not.toMatch(/useUserSquads/);
+    expect(content).not.toMatch(/squads/i);
+    expect(content).not.toMatch(/Guild/);
+    expect(content).not.toMatch(/canShowSquads/);
+    expect(content).not.toMatch(/activeSquad/);
+    expect(content).not.toMatch(/Squad Momentum/);
+    expect(content).not.toMatch(/Find a squad/);
+  });
+
+  it('BossScreenSections does not reference squad props', () => {
+    const fs = require('fs');
+    const path = require('path');
+    const contentPath = path.resolve(__dirname, '..', 'BossScreenSections.tsx');
+    const content = fs.readFileSync(contentPath, 'utf-8');
+
+    expect(content).not.toMatch(/activeSquad/);
+    expect(content).not.toMatch(/onOpenSquad/);
+    expect(content).not.toMatch(/squads/i);
   });
 });

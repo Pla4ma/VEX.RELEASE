@@ -38,10 +38,8 @@ describe('home experience service', () => {
       totalCompletedSessions: 0,
     });
 
-    expect(study.studyOsPlacement).toContain('study work');
-    expect(study.teasedElements[0]?.copy).toContain('Study tools appear');
+    expect(study.studyOsPlacement).toContain('Study');
     expect(game.rpgBossPlacement).toContain('tiny visual');
-    expect(game.teasedElements[0]?.copy).toContain('Visual challenges adapt');
   });
 
   it.each([

@@ -6,112 +6,29 @@ import { FlashList } from '@shopify/flash-list';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useTheme } from '../../theme';
-import { Box, Text, Button, Card } from '../../components/primitives';
-import { Avatar } from '../../components/Avatar';
-import { ErrorState } from '../../components/states';
-import { Skeleton, SkeletonList } from '../../shared/ui/primitives';
+import { Box, Text } from '../../components/primitives';
 import { createDebugger } from '../../utils/debug';
 import { useAuthStore } from '../../store';
 import * as notificationService from '../../features/notifications/service';
 import type { ExtendedRootStackParams } from '../../navigation/types';
-import { launchColors } from '@theme/tokens/launch-colors';
+import { routeNotificationAction, getAvailableNotificationFilters } from '../../navigation/notification-routing-core';
+import { useFeatureAccess } from '../../features/liveops-config';
+import { useOnboardingStore } from '../../features/onboarding/store';
 import {
-  routeNotificationAction,
-  getAvailableNotificationFilters,
-} from '../../navigation/notification-routing-core';
-import type { NotificationAction, NotificationActionType } from '../../navigation/notification-routing-types';
+  NOTIFICATION_TYPE_TO_SAFE_ACTION, groupNotificationsByTime,
+  isNotificationTypeFilterable, mapToNotificationAction,
+} from './NotificationScreenConfig';
+import type { NotificationType, Notification, NotificationListItem } from './NotificationScreenConfig';
+import {
+  NotificationLoadingState, NotificationErrorState,
+  NotificationEmptyState, NotificationFilteredEmptyState,
+} from './NotificationStateViews';
+import {
+  NotificationFilterBar, NotificationCard, NotificationSectionHeader,
+} from './NotificationComponents';
 
 const debug = createDebugger('notifications:screen');
-
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
-
-type NotificationType =
-  | 'ACHIEVEMENT'
-  | 'STREAK_RISK'
-  | 'BOSS'
-  | 'SQUAD'
-  | 'RIVAL'
-  | 'COACH'
-  | 'REWARD'
-  | 'LEVEL_UP';
-
-type Notification = notificationService.NotificationCenterItem;
-
-interface GroupedNotifications {
-  today: Notification[];
-  yesterday: Notification[];
-  thisWeek: Notification[];
-  earlier: Notification[];
-}
-
-type NotificationListItem = {
-  type: 'header' | 'notification';
-  data?: Notification;
-  title?: string;
-  count?: number;
-};
-
-const NOTIFICATION_CONFIG: Record<
-  NotificationType,
-  { icon: string; color: string; bgColor: string }
-> = {
-  ACHIEVEMENT: { icon: '\u{1F3C6}', color: launchColors.hex_eab308, bgColor: launchColors.hex_fef9c3 },
-  STREAK_RISK: { icon: '\u{1F525}', color: launchColors.hex_ef4444, bgColor: launchColors.hex_fee2e2 },
-  BOSS: { icon: '\u{1F480}', color: launchColors.hex_a855f7, bgColor: launchColors.hex_f3e8ff },
-  SQUAD: { icon: '\u{1F6E1}', color: launchColors.hex_3b82f6, bgColor: launchColors.hex_dbeafe },
-  RIVAL: { icon: '\u{2694}', color: launchColors.hex_ef4444, bgColor: launchColors.hex_fee2e2 },
-  COACH: { icon: '\u{1F4AC}', color: launchColors.hex_22c55e, bgColor: launchColors.hex_dcfce7 },
-  REWARD: { icon: '\u{1F381}', color: launchColors.hex_f59e0b, bgColor: launchColors.hex_fef3c7 },
-  LEVEL_UP: { icon: '\u{2B50}', color: launchColors.hex_8b5cf6, bgColor: launchColors.hex_ede9fe },
-};
-
-const NOTIFICATION_TYPE_TO_SAFE_ACTION: Record<NotificationType, NotificationActionType> = {
-  ACHIEVEMENT: 'view_profile',
-  STREAK_RISK: 'view_streak',
-  BOSS: 'view_boss',
-  SQUAD: 'view_squad',
-  RIVAL: 'join_duel',
-  COACH: 'open_coach',
-  REWARD: 'view_progress',
-  LEVEL_UP: 'view_progress',
-};
-
-const HIDDEN_FILTER_TYPES: NotificationType[] = ['SQUAD', 'RIVAL'];
-
-function mapToNotificationAction(notification: Notification): NotificationAction {
-  if (notification.actionRoute) {
-    return { type: 'custom', payload: { screen: notification.actionRoute, params: notification.actionParams } };
-  }
-  const type = notification.type as NotificationType;
-  const mappedType = NOTIFICATION_TYPE_TO_SAFE_ACTION[type] ?? 'custom';
-  return { type: mappedType, payload: notification.actionParams as Record<string, unknown> | undefined };
-}
-
-function groupNotificationsByTime(notifications: Notification[]): GroupedNotifications {
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-  const thisWeekStart = new Date(today);
-  thisWeekStart.setDate(thisWeekStart.getDate() - thisWeekStart.getDay());
-  return notifications.reduce(
-    (groups, notification) => {
-      const date = new Date(notification.timestamp);
-      const notificationDay = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-      if (notificationDay.getTime() === today.getTime()) {
-        groups.today.push(notification);
-      } else if (notificationDay.getTime() === yesterday.getTime()) {
-        groups.yesterday.push(notification);
-      } else if (notificationDay >= thisWeekStart) {
-        groups.thisWeek.push(notification);
-      } else {
-        groups.earlier.push(notification);
-      }
-      return groups;
-    },
-    { today: [], yesterday: [], thisWeek: [], earlier: [] } as GroupedNotifications,
-  );
-}
 
 export const NotificationsScreen: React.FC = () => {
   const { theme } = useTheme();
@@ -119,6 +36,8 @@ export const NotificationsScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
   const { user } = useAuthStore();
   const userId = user?.id ?? '';
+  const disclosure = useFeatureAccess();
+  const motivationStyle = useOnboardingStore((state) => state.explicitMotivationStyle);
 
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -127,61 +46,38 @@ export const NotificationsScreen: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<'all' | NotificationType>('all');
 
   const availableFilterTypes = useMemo(() => {
-    const safeFilters = getAvailableNotificationFilters();
-    const filterTypes: ('all' | NotificationType)[] = ['all'];
+    const safeFilters = getAvailableNotificationFilters(disclosure.features);
+    const types: ('all' | NotificationType)[] = ['all'];
     safeFilters.forEach((safeType) => {
-      const matchingNotifType = Object.entries(NOTIFICATION_TYPE_TO_SAFE_ACTION).find(
-        ([, v]) => v === safeType,
-      );
-      if (matchingNotifType && !HIDDEN_FILTER_TYPES.includes(matchingNotifType[0] as NotificationType)) {
-        filterTypes.push(matchingNotifType[0] as NotificationType);
+      const entry = Object.entries(NOTIFICATION_TYPE_TO_SAFE_ACTION).find(([, v]) => v === safeType);
+      if (entry) {
+        const notifType = entry[0] as NotificationType;
+        if (isNotificationTypeFilterable(notifType, disclosure.features)) types.push(notifType);
       }
     });
-    return filterTypes;
-  }, []);
-
-  const FILTER_LABELS: Record<string, string> = {
-    all: 'All',
-    ACHIEVEMENT: 'Achievements',
-    STREAK_RISK: 'Streaks',
-    BOSS: 'Momentum',
-    COACH: 'Coach',
-    REWARD: 'Progress',
-    LEVEL_UP: 'Levels',
-  };
+    return types;
+  }, [disclosure.features]);
 
   const loadNotifications = useCallback(
     async (showLoading = true) => {
-      if (!userId) {
-        setIsLoading(false);
-        return;
-      }
+      if (!userId) { setIsLoading(false); return; }
       if (showLoading) setIsLoading(true);
       setError(null);
       try {
-        const data = await notificationService.getNotificationCenterItems(userId);
-        setNotifications(data);
+        setNotifications(await notificationService.getNotificationCenterItems(userId));
       } catch (err) {
         debug.error('Failed to load notifications', err as Error);
         setError(err instanceof Error ? err : new Error('Failed to load notifications'));
-      } finally {
-        setIsLoading(false);
-        setIsRefreshing(false);
-      }
+      } finally { setIsLoading(false); setIsRefreshing(false); }
     },
     [userId],
   );
 
-  useEffect(() => {
-    loadNotifications();
-  }, [loadNotifications]);
+  useEffect(() => { loadNotifications(); }, [loadNotifications]);
 
   useEffect(() => {
     if (!userId) return;
-    const unsubscribe = notificationService.subscribeToNotificationCenter(userId, () => {
-      loadNotifications(false);
-    });
-    return unsubscribe;
+    return notificationService.subscribeToNotificationCenter(userId, () => loadNotifications(false));
   }, [userId, loadNotifications]);
 
   const filteredNotifications = useMemo(
@@ -189,15 +85,8 @@ export const NotificationsScreen: React.FC = () => {
     [notifications, activeFilter],
   );
 
-  const groupedNotifications = useMemo(
-    () => groupNotificationsByTime(filteredNotifications),
-    [filteredNotifications],
-  );
-
-  const unreadCount = useMemo(
-    () => notifications.filter((n) => !n.read).length,
-    [notifications],
-  );
+  const grouped = useMemo(() => groupNotificationsByTime(filteredNotifications), [filteredNotifications]);
+  const unreadCount = useMemo(() => notifications.filter((n) => !n.read).length, [notifications]);
 
   const handleMarkAsRead = useCallback(
     async (id: string) => {
@@ -216,295 +105,84 @@ export const NotificationsScreen: React.FC = () => {
 
   const handleNotificationPress = useCallback(
     async (notification: Notification) => {
-      if (!notification.read) {
-        await handleMarkAsRead(notification.id);
-      }
+      if (!notification.read) await handleMarkAsRead(notification.id);
       const action = mapToNotificationAction(notification);
-      const result = routeNotificationAction(navigation, action);
-      if (!result.success) {
-        debug.warn('Notification routing blocked:', result.error);
-      }
+      const result = routeNotificationAction(navigation, action, disclosure.features, motivationStyle);
+      if (!result.success) debug.warn('Notification routing blocked:', result.error);
     },
-    [handleMarkAsRead, navigation],
+    [handleMarkAsRead, navigation, disclosure.features, motivationStyle],
   );
 
-  const handleRefresh = useCallback(() => {
-    setIsRefreshing(true);
-    loadNotifications(false);
-  }, [loadNotifications]);
+  const handleRefresh = useCallback(() => { setIsRefreshing(true); loadNotifications(false); }, [loadNotifications]);
 
   const formatTime = useCallback((timestamp: number) => {
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-    if (minutes < 1) return 'Just now';
-    if (minutes < 60) return `${minutes}m ago`;
-    if (hours < 24) return `${hours}h ago`;
+    const diff = Date.now() - new Date(timestamp).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return 'Just now';
+    if (mins < 60) return `${mins}m ago`;
+    const hrs = Math.floor(mins / 60);
+    if (hrs < 24) return `${hrs}h ago`;
+    const days = Math.floor(hrs / 24);
     if (days < 7) return `${days}d ago`;
-    return date.toLocaleDateString();
+    return new Date(timestamp).toLocaleDateString();
   }, []);
 
   const listData = useMemo(() => {
     const items: NotificationListItem[] = [];
-    if (groupedNotifications.today.length > 0) {
-      items.push({ type: 'header', title: 'Today', count: groupedNotifications.today.length });
-      groupedNotifications.today.forEach((n) => items.push({ type: 'notification', data: n }));
-    }
-    if (groupedNotifications.yesterday.length > 0) {
-      items.push({ type: 'header', title: 'Yesterday', count: groupedNotifications.yesterday.length });
-      groupedNotifications.yesterday.forEach((n) => items.push({ type: 'notification', data: n }));
-    }
-    if (groupedNotifications.thisWeek.length > 0) {
-      items.push({ type: 'header', title: 'This Week', count: groupedNotifications.thisWeek.length });
-      groupedNotifications.thisWeek.forEach((n) => items.push({ type: 'notification', data: n }));
-    }
-    if (groupedNotifications.earlier.length > 0) {
-      items.push({ type: 'header', title: 'Earlier', count: groupedNotifications.earlier.length });
-      groupedNotifications.earlier.forEach((n) => items.push({ type: 'notification', data: n }));
-    }
+    const addGroup = (title: string, data: Notification[]) => {
+      if (data.length > 0) {
+        items.push({ type: 'header', title, count: data.length });
+        data.forEach((n) => items.push({ type: 'notification', data: n }));
+      }
+    };
+    addGroup('Today', grouped.today);
+    addGroup('Yesterday', grouped.yesterday);
+    addGroup('This Week', grouped.thisWeek);
+    addGroup('Earlier', grouped.earlier);
     return items;
-  }, [groupedNotifications]);
+  }, [grouped]);
 
-  if (isLoading) {
-    return (
-      <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
-        <Box px={20} pb={12} pt={insets.top + 16}>
-          <Box mb={16}>
-            <Skeleton width={150} height={28} variant="text" />
-          </Box>
-          <Box flexDirection="row" gap={8}>
-            <Skeleton width={50} height={28} variant="rounded" />
-            <Skeleton width={80} height={28} variant="rounded" />
-            <Skeleton width={70} height={28} variant="rounded" />
-            <Skeleton width={60} height={28} variant="rounded" />
-          </Box>
-        </Box>
-        <Box px={16} pt={12}>
-          <SkeletonList count={6} />
-        </Box>
-      </Box>
-    );
-  }
+  const bg = theme.colors.background.primary;
+  const inset = insets.top;
 
-  if (error) {
-    return (
-      <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
-        <Box px={20} pb={12} pt={insets.top + 16}>
-          <Text variant="h1">Notifications</Text>
-        </Box>
-        <ErrorState
-          title="Failed to load notifications"
-          description={error.message}
-          onRetry={() => loadNotifications()}
-          retryLabel="Try Again"
-        />
-      </Box>
-    );
-  }
+  if (isLoading) return <NotificationLoadingState insetsTop={inset} backgroundColor={bg} />;
+  if (error) return <NotificationErrorState insetsTop={inset} backgroundColor={bg} message={error.message} onRetry={() => loadNotifications()} />;
 
-  const renderHeader = () => (
-    <Box px={20} pb={12} pt={insets.top + 16}>
+  const header = (
+    <Box px={20} pb={12} pt={inset + 16}>
       <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb={16}>
         <Text variant="h1">Notifications</Text>
         {unreadCount > 0 && (
-          <Pressable
-            onPress={handleMarkAllAsRead}
-            accessibilityLabel="Mark all read button"
-            accessibilityRole="button"
-            accessibilityHint="Marks all notifications as read"
-          >
-            <Text variant="caption" style={{ color: theme.colors.primary[500] }}>
-              Mark all read
-            </Text>
+          <Pressable onPress={handleMarkAllAsRead}
+            accessibilityLabel="Mark all read button" accessibilityRole="button"
+            accessibilityHint="Marks all notifications as read">
+            <Text variant="caption" style={{ color: theme.colors.primary[500] }}>Mark all read</Text>
           </Pressable>
         )}
       </Box>
-      <Box flexDirection="row" gap={8}>
-        {availableFilterTypes.map((filter) => (
-          <Pressable
-            key={filter}
-            style={{
-              paddingHorizontal: 12,
-              paddingVertical: 6,
-              borderRadius: 16,
-              backgroundColor:
-                activeFilter === filter
-                  ? theme.colors.primary[500]
-                  : theme.colors.background.secondary,
-            }}
-            onPress={() => setActiveFilter(filter)}
-            accessibilityLabel={`Filter by ${FILTER_LABELS[filter] ?? filter}`}
-            accessibilityRole="button"
-            accessibilityHint={`Show only ${FILTER_LABELS[filter] ?? filter} notifications`}
-            accessibilityState={{ selected: activeFilter === filter }}
-          >
-            <Text
-              variant="caption"
-              style={{
-                fontWeight: '600',
-                color: activeFilter === filter ? launchColors.hex_fff : theme.colors.text.secondary,
-              }}
-            >
-              {FILTER_LABELS[filter] ?? filter}
-            </Text>
-          </Pressable>
-        ))}
-      </Box>
+      <NotificationFilterBar availableFilterTypes={availableFilterTypes} activeFilter={activeFilter}
+        onFilterChange={setActiveFilter} primaryColor={theme.colors.primary[500]}
+        secondaryBg={theme.colors.background.secondary} textSecondary={theme.colors.text.secondary} />
     </Box>
   );
 
-  const renderNotification = ({ item }: { item: Notification }) => {
-    const config = NOTIFICATION_CONFIG[item.type];
-    return (
-      <Card
-        interactive
-        style={{
-          opacity: item.read ? 0.8 : 1,
-          backgroundColor: item.read ? undefined : launchColors.hex_eef2ff20,
-        }}
-        size="md"
-        onPress={() => handleNotificationPress(item)}
-        accessibilityLabel={`${item.title}: ${item.message}`}
-        accessibilityRole="button"
-        accessibilityHint={`${item.read ? 'Read' : 'Unread'} notification. Tap to view details.`}
-        accessibilityState={{ selected: !item.read }}
-      >
-        <Box flexDirection="row" alignItems="flex-start">
-          {item.avatar ? (
-            <Avatar name={item.avatar} size="md" />
-          ) : (
-            <Box
-              width={44}
-              height={44}
-              borderRadius={12}
-              justifyContent="center"
-              alignItems="center"
-              style={{ backgroundColor: config.bgColor }}
-            >
-              <Text fontSize={20} color={config.color}>
-                {config.icon}
-              </Text>
-            </Box>
-          )}
-          <Box flex={1} ml={12}>
-            <Box flexDirection="row" justifyContent="space-between" alignItems="flex-start">
-              <Text variant="body" style={{ fontWeight: '600', flex: 1 }}>
-                {item.title}
-              </Text>
-              <Text variant="caption" color="text.tertiary">
-                {formatTime(item.timestamp)}
-              </Text>
-            </Box>
-            <Text variant="bodySmall" color="text.secondary" style={{ marginTop: 2 }}>
-              {item.message}
-            </Text>
-            {item.actionText && (
-              <Button
-                variant="ghost"
-                size="sm"
-                style={{ alignSelf: 'flex-start', marginTop: 4, paddingHorizontal: 0 }}
-                accessibilityLabel="Action button"
-                accessibilityRole="button"
-                accessibilityHint="Activates this control"
-              >
-                {item.actionText}
-              </Button>
-            )}
-          </Box>
-          {!item.read && (
-            <Box
-              width={8}
-              height={8}
-              borderRadius={4}
-              ml={8}
-              mt={6}
-              style={{ backgroundColor: theme.colors.primary[500] }}
-            />
-          )}
-        </Box>
-      </Card>
-    );
-  };
-
-  const renderSectionHeader = (title: string, count: number) => {
-    if (count === 0) return null;
-    return (
-      <Box px={4} py={8}>
-        <Text
-          variant="caption"
-          color="text.tertiary"
-          style={{ fontWeight: '600', textTransform: 'uppercase' }}
-        >
-          {title}
-        </Text>
-      </Box>
-    );
-  };
-
-  if (notifications.length === 0) {
-    return (
-      <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
-        {renderHeader()}
-        <Box flex={1} alignItems="center" justifyContent="center" px={24}>
-          <Text fontSize={48}>{'\u{1F514}'}</Text>
-          <Text variant="h4" mt={4}>
-            No notifications yet
-          </Text>
-          <Text variant="body" color="text.secondary" mt={2} textAlign="center">
-            You'll hear when something happens. Check back later for achievements, streak alerts,
-            and more.
-          </Text>
-        </Box>
-      </Box>
-    );
-  }
-
-  if (filteredNotifications.length === 0) {
-    return (
-      <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
-        {renderHeader()}
-        <Box flex={1} alignItems="center" justifyContent="center" px={24}>
-          <Text fontSize={48} color={theme.colors.text.tertiary}>
-            {'\u{2315}'}
-          </Text>
-          <Text variant="h4" style={{ marginTop: 16, textAlign: 'center' }}>
-            No {activeFilter === 'all' ? '' : ` ${FILTER_LABELS[activeFilter] ?? activeFilter}`}{' '}
-            notifications
-          </Text>
-          <Text variant="body" color="text.secondary" style={{ marginTop: 8, textAlign: 'center' }}>
-            Try selecting a different filter
-          </Text>
-        </Box>
-      </Box>
-    );
-  }
+  if (notifications.length === 0) return <NotificationEmptyState backgroundColor={bg} headerElement={header} />;
+  if (filteredNotifications.length === 0) return <NotificationFilteredEmptyState backgroundColor={bg} headerElement={header} activeFilter={activeFilter} />;
 
   return (
-    <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
-      {renderHeader()}
+    <Box flex={1} style={{ backgroundColor: bg }}>
+      {header}
       <FlashList
         data={listData}
         keyExtractor={(item: NotificationListItem, index: number) =>
-          item.type === 'header' ? `header-${item.title}-${index}` : item.data!.id
-        }
+          item.type === 'header' ? `header-${item.title}-${index}` : item.data!.id}
         contentContainerStyle={{ padding: 16, paddingTop: 0 }}
         estimatedItemSize={80}
         renderItem={({ item }: { item: NotificationListItem }) => {
-          if (item.type === 'header') {
-            return renderSectionHeader(item.title!, item.count!);
-          }
-          return renderNotification({ item: item.data! });
+          if (item.type === 'header') return <NotificationSectionHeader title={item.title!} count={item.count!} />;
+          return <NotificationCard item={item.data!} onPress={handleNotificationPress} formatTime={formatTime} primaryColor={theme.colors.primary[500]} />;
         }}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={handleRefresh}
-            tintColor={theme.colors.primary[500]}
-          />
-        }
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} tintColor={theme.colors.primary[500]} />}
       />
     </Box>
   );

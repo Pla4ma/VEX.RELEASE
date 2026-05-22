@@ -61,6 +61,16 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
     ? sm.study_layer !== 'hidden' && sm.study_layer !== 'blocked'
     : controller.shouldShowSecondarySystems;
 
+  const stage = controller.disclosure.stage;
+  const isActivating = stage === 'ACTIVATING' || stage === 'NEW_USER';
+  const showFocusScore = sm
+    ? (sm as Record<string, string>).focus_score !== 'hidden' && (sm as Record<string, string>).focus_score !== 'blocked'
+    : false;
+  const handleFocusScorePress = (): void => {
+    if (isActivating) return;
+    navigation.navigate('FocusScoreDashboard');
+  };
+
   const todaysChallenges: ChallengeItem[] = isAvailable ? data.todaysChallenges : [];
   const startLearningTarget = (): void => {
     const target = controller.learningExecutionLayer.target;
@@ -69,7 +79,9 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
 
   return (
     <>
-      <HomeFocusScore onPress={() => navigation.navigate('FocusScoreDashboard')} />
+      {showFocusScore ? (
+        <HomeFocusScore onPress={handleFocusScorePress} />
+      ) : null}
 
       {showDailyMission ? (
         <HomeDailyMission missionInput={missionInput} onMissionPress={openChallenges} />

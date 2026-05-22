@@ -4,6 +4,7 @@ export const HomeSurfaceKeySchema = z.enum([
   'start_session',
   'coach_presence',
   'progress_proof',
+  'focus_score',
   'study_layer',
   'companion_thread',
   'boss_teaser',
@@ -31,6 +32,14 @@ export type HomeSurfaceDecision = z.infer<typeof HomeSurfaceDecisionSchema>;
 export const HomeSurfaceMapSchema = z.record(HomeSurfaceKeySchema, HomeSurfaceDecisionSchema);
 
 export type HomeSurfaceMap = z.infer<typeof HomeSurfaceMapSchema>;
+
+const FirstWeekPhaseSchema = z.object({
+  allowedHomeSurfaces: z.array(z.string().min(1)),
+  bossIntensity: z.enum(['hidden', 'subtle', 'tiny_tease', 'visible']),
+  premiumMoment: z.enum(['none', 'soft_tease', 'weekly_value', 'hidden']),
+  spotlightSurface: z.enum(['none', 'progress_proof', 'study_deep_work_path', 'tiny_boss_teaser', 'weekly_insight']),
+  studyLayerLabel: z.string().min(1),
+}).partial().optional();
 
 export const SurfaceDecisionInputSchema = z.object({
   featureAvailability: z.object({
@@ -62,4 +71,5 @@ export const SurfaceDecisionInputSchema = z.object({
   hasActiveRecommendation: z.boolean(),
   hasActiveBoss: z.boolean(),
   isFirstSession: z.boolean(),
+  firstWeekPhase: FirstWeekPhaseSchema,
 });

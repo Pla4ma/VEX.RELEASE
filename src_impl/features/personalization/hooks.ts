@@ -57,7 +57,7 @@ function resolveStudyLayerName(goal: string | null, motivationStyle: MotivationS
   if (goal === 'WORK' || motivationStyle === 'intense') return 'Deep Work Plan';
   if (goal === 'CREATIVE') return 'Project Focus Path';
   if (goal === 'LEARNING') return 'Learning OS';
-  if (goal === 'PERSONAL' || motivationStyle === 'calm') return 'Growth Plan';
+  if (goal === 'PERSONAL' || motivationStyle === 'calm') return 'Growth Path';
   if (motivationStyle === 'coach_led') return 'Deep Work Plan';
   if (motivationStyle === 'game_like') return 'Deep Work Plan';
   return 'Deep Work Plan';

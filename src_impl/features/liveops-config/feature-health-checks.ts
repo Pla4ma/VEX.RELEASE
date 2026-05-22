@@ -1,6 +1,7 @@
 import { featureHealthRegistry } from './feature-health';
 import type { FeatureHealthCheck, FeatureHealthStatus } from './feature-health';
 import { CONTENT_STUDY_CONSTANTS } from '../content-study/types';
+import { DISABLED_FEATURES } from './feature-access-config';
 
 const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY ?? process.env.GEMINI_API_KEY;
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
@@ -27,11 +28,16 @@ function hasContentStudyConstraints(): boolean {
     CONTENT_STUDY_CONSTANTS.MAX_YOUTUBE_URL_LENGTH > 0;
 }
 
+function bossHasNoDisabledDeps(): boolean {
+  const disabled = new Set(DISABLED_FEATURES);
+  return disabled.has('squads') && disabled.has('shop') && disabled.has('economy_advanced');
+}
+
 /**
  * Real readiness checks.
  *
  * Healthy = a real dependency was verified and is working.
- * Degraded = the check cannot be fully verified yet (pre-production safe fallback).
+ * Degraded = the check cannot be fully verified yet.
  * Unavailable = a critical dependency is missing.
  */
 export const healthChecks: FeatureHealthCheck[] = [
@@ -68,9 +74,7 @@ export const healthChecks: FeatureHealthCheck[] = [
     label: 'Content Study — privacy disclosure route',
     dependency: 'privacy_disclosure',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      return 'healthy';
-    },
+    check: (): FeatureHealthStatus => 'degraded',
   },
   {
     id: 'content_study_max_file_constraints',
@@ -98,7 +102,7 @@ export const healthChecks: FeatureHealthCheck[] = [
     label: 'AI Coach Advanced — quota/rate-limit path',
     dependency: 'ai_coach_quota',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => (CONTENT_STUDY_CONSTANTS.DAILY_GENERATION_LIMIT > 0 ? 'healthy' : 'degraded'),
+    check: (): FeatureHealthStatus => 'degraded',
   },
   {
     id: 'ai_coach_advanced_fallback',
@@ -106,7 +110,7 @@ export const healthChecks: FeatureHealthCheck[] = [
     label: 'AI Coach Advanced — deterministic fallback',
     dependency: 'ai_coach_fallback',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'healthy',
+    check: (): FeatureHealthStatus => 'degraded',
   },
   {
     id: 'ai_coach_advanced_safe_intent',
@@ -114,27 +118,7 @@ export const healthChecks: FeatureHealthCheck[] = [
     label: 'AI Coach Advanced — safe action-intent routing',
     dependency: 'ai_intent_routing',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'healthy',
-  },
-  {
-    id: 'ai_coach_advanced_quota',
-    feature: 'ai_coach_advanced',
-    label: 'AI Coach Advanced — quota/rate-limit path',
-    dependency: 'ai_coach_quota',
-    cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      return CONTENT_STUDY_CONSTANTS.DAILY_GENERATION_LIMIT > 0 ? 'healthy' : 'degraded';
-    },
-  },
-  {
-    id: 'ai_coach_advanced_fallback',
-    feature: 'ai_coach_advanced',
-    label: 'AI Coach Advanced — deterministic fallback',
-    dependency: 'ai_coach_fallback',
-    cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      return 'healthy';
-    },
+    check: (): FeatureHealthStatus => 'degraded',
   },
 
   // === premium_paywall ===
@@ -156,9 +140,7 @@ export const healthChecks: FeatureHealthCheck[] = [
     label: 'Premium Paywall — offerings/products loadable',
     dependency: 'revenuecat_offerings',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      return 'degraded';
-    },
+    check: (): FeatureHealthStatus => 'degraded',
   },
   {
     id: 'premium_paywall_entitlements',
@@ -166,9 +148,7 @@ export const healthChecks: FeatureHealthCheck[] = [
     label: 'Premium Paywall — entitlements readable',
     dependency: 'revenuecat_entitlements',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      return 'healthy';
-    },
+    check: (): FeatureHealthStatus => 'degraded',
   },
 
   // === boss_tab ===
@@ -178,7 +158,7 @@ export const healthChecks: FeatureHealthCheck[] = [
     label: 'Boss Tab — template loading',
     dependency: 'boss_template',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'healthy',
+    check: (): FeatureHealthStatus => 'degraded',
   },
   {
     id: 'boss_tab_no_disabled_deps',
@@ -186,7 +166,9 @@ export const healthChecks: FeatureHealthCheck[] = [
     label: 'Boss Tab — no disabled squads/shop/economy dependency',
     dependency: 'boss_dependencies',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'healthy',
+    check: (): FeatureHealthStatus => {
+      return bossHasNoDisabledDeps() ? 'healthy' : 'degraded';
+    },
   },
   {
     id: 'boss_tab_subtle_fallback',
@@ -194,7 +176,7 @@ export const healthChecks: FeatureHealthCheck[] = [
     label: 'Boss Tab — subtle mode fallback',
     dependency: 'boss_subtle',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'healthy',
+    check: (): FeatureHealthStatus => 'degraded',
   },
   {
     id: 'boss_tab_route_gating',
@@ -202,7 +184,7 @@ export const healthChecks: FeatureHealthCheck[] = [
     label: 'Boss Tab — route/query/event subscription gating',
     dependency: 'boss_route_gating',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'healthy',
+    check: (): FeatureHealthStatus => 'degraded',
   },
 ];
 

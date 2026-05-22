@@ -84,7 +84,7 @@ export function buildHomeExperienceModel(input: HomeExperienceInput): HomeExperi
       preferredTone: input.explicitMotivationStyle === 'intense' ? 'direct' : input.explicitMotivationStyle === 'coach_led' ? 'strategic' : 'soft',
       gamificationIntensity: input.explicitMotivationStyle === 'game_like' || input.explicitMotivationStyle === 'intense' ? 'strong' : 'minimal',
       coachMode: input.explicitMotivationStyle === 'study_focused' ? 'study_tutor' : input.explicitMotivationStyle === 'intense' ? 'tactical' : input.explicitMotivationStyle === 'game_like' ? 'game_guide' : input.explicitMotivationStyle === 'coach_led' ? 'mentor' : 'reflection',
-      studyLayerName: input.explicitMotivationStyle === 'study_focused' ? 'Study OS' : input.explicitMotivationStyle === 'calm' ? 'Growth Plan' : 'Deep Work Plan',
+      studyLayerName: input.explicitMotivationStyle === 'study_focused' ? 'Study OS' : input.explicitMotivationStyle === 'calm' ? 'Growth Path' : 'Deep Work Plan',
       defaultSessionDuration: 25,
       defaultSessionMode: input.explicitMotivationStyle === 'study_focused' ? 'STUDY' : 'FOCUS',
       userStage: 'new',

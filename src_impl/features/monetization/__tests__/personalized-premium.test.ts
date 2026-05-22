@@ -1,0 +1,163 @@
+import { resolvePersonalizedPremium } from '../personalized-premium';
+import type { PremiumPersonalizationInput } from '../personalized-premium';
+
+function makeInput(overrides: Partial<PremiumPersonalizationInput> = {}): PremiumPersonalizationInput {
+  return {
+    billingConfigured: true,
+    completedSessions: 0,
+    primaryGoal: 'focus',
+    motivationStyle: 'calm',
+    studyUsageRatio: 0,
+    hasTriedAdvancedStudy: false,
+    hasTriedWeeklyReport: false,
+    hasTriedVisualIdentity: false,
+    currentStreakDays: 0,
+    daysSinceOnboarding: 0,
+    ...overrides,
+  };
+}
+
+describe('resolvePersonalizedPremium', () => {
+  it('no premium on Day 0', () => {
+    const result = resolvePersonalizedPremium(makeInput({ completedSessions: 0 }));
+    expect(result.triggerMoment).toBe('none');
+    expect(result.canShowPaywall).toBe(false);
+  });
+
+  it('no premium before 5 sessions', () => {
+    const result = resolvePersonalizedPremium(makeInput({ completedSessions: 3 }));
+    expect(result.triggerMoment).toBe('none');
+    expect(result.canShowPaywall).toBe(false);
+  });
+
+  it('premium hidden if RevenueCat degraded', () => {
+    const result = resolvePersonalizedPremium(makeInput({
+      billingConfigured: false,
+      completedSessions: 10,
+    }));
+    expect(result.triggerMoment).toBe('hidden_billing_unavailable');
+    expect(result.canShowPaywall).toBe(false);
+    expect(result.noFakeBillingChecklist).toContain('Do not render purchasable plans without RevenueCat packages.');
+  });
+
+  it('premium appears after value (5+ sessions)', () => {
+    const result = resolvePersonalizedPremium(makeInput({ completedSessions: 5 }));
+    expect(result.triggerMoment).toBe('session_value');
+    expect(result.canShowPaywall).toBe(true);
+  });
+
+  it('basic loop remains free', () => {
+    const result = resolvePersonalizedPremium(makeInput({ completedSessions: 10 }));
+    expect(result.freeFeatures).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('Start and complete'),
+        expect.stringContaining('streak and progress'),
+        expect.stringContaining('Coach Presence'),
+        expect.stringContaining('companion'),
+      ]),
+    );
+    expect(result.freeFeatures).not.toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('Deep Coach Memory'),
+      ]),
+    );
+  });
+
+  it('no fake premium copy', () => {
+    const result = resolvePersonalizedPremium(makeInput({ completedSessions: 10 }));
+    expect(result.premiumHeadline).not.toMatch(/unlock now|upgrade now|limited time|cheap/i);
+    expect(result.premiumBody).not.toMatch(/unlock now|upgrade now|cheap/i);
+    expect(result.noFakeBillingChecklist).toHaveLength(4);
+  });
+
+  it('premium features list is comprehensive', () => {
+    const result = resolvePersonalizedPremium(makeInput({ completedSessions: 10 }));
+    expect(result.premiumFeatures).toHaveLength(5);
+    expect(result.premiumFeatures[0]).toContain('Deep Coach Memory');
+    expect(result.premiumFeatures[1]).toContain('Study');
+    expect(result.premiumFeatures[2]).toContain('Personal Progress Intelligence');
+    expect(result.premiumFeatures[3]).toContain('Visual Identity');
+    expect(result.premiumFeatures[4]).toContain('Premium Session Modes');
+  });
+
+  it('free vs pro matrix includes all 5 rows', () => {
+    const result = resolvePersonalizedPremium(makeInput({ completedSessions: 10 }));
+    expect(result.freeVsProMatrix).toHaveLength(5);
+    result.freeVsProMatrix.forEach((row) => {
+      expect(row.free).toBeTruthy();
+      expect(row.pro).toBeTruthy();
+      expect(row.pro.length).toBeGreaterThan(row.free.length);
+    });
+  });
+
+  it('high intent triggers premium regardless of session count', () => {
+    const result = resolvePersonalizedPremium(makeInput({
+      completedSessions: 7,
+      hasTriedAdvancedStudy: true,
+    }));
+    expect(result.triggerMoment).toBe('advanced_study');
+    expect(result.canShowPaywall).toBe(true);
+    expect(result.premiumHeadline).toContain('study system');
+  });
+
+  it('weekly intelligence intent triggers premium', () => {
+    const result = resolvePersonalizedPremium(makeInput({
+      completedSessions: 7,
+      hasTriedWeeklyReport: true,
+    }));
+    expect(result.triggerMoment).toBe('weekly_intelligence');
+  });
+
+  it('custom identity intent triggers premium', () => {
+    const result = resolvePersonalizedPremium(makeInput({
+      completedSessions: 7,
+      hasTriedVisualIdentity: true,
+    }));
+    expect(result.triggerMoment).toBe('custom_identity');
+  });
+
+  it('personalized headline for calm users', () => {
+    const result = resolvePersonalizedPremium(makeInput({
+      completedSessions: 10,
+      motivationStyle: 'calm',
+    }));
+    expect(result.premiumHeadline).toContain('learn');
+    expect(result.premiumBody).toContain('quietly');
+  });
+
+  it('personalized headline for study users', () => {
+    const result = resolvePersonalizedPremium(makeInput({
+      completedSessions: 10,
+      primaryGoal: 'study',
+      motivationStyle: 'study_focused',
+      hasTriedAdvancedStudy: true,
+    }));
+    expect(result.premiumHeadline).toContain('study');
+  });
+
+  it('personalized headline for intense users', () => {
+    const result = resolvePersonalizedPremium(makeInput({
+      completedSessions: 10,
+      motivationStyle: 'intense',
+    }));
+    expect(result.premiumHeadline).toContain('momentum');
+  });
+
+  it('deep coach memory trigger for strong streaks with study', () => {
+    const result = resolvePersonalizedPremium(makeInput({
+      completedSessions: 12,
+      currentStreakDays: 12,
+      studyUsageRatio: 0.4,
+      primaryGoal: 'learning',
+    }));
+    expect(result.triggerMoment).toBe('deep_coach_memory');
+  });
+
+  it('deep work plan personalized trigger for heavy study users', () => {
+    const result = resolvePersonalizedPremium(makeInput({
+      completedSessions: 8,
+      studyUsageRatio: 0.6,
+    }));
+    expect(result.triggerMoment).toBe('deep_work_plan_personalized');
+  });
+});

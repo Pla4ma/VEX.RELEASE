@@ -45,6 +45,9 @@ class FeatureHealthRegistry {
   private cache = new Map<string, { status: FeatureHealthStatus; timestamp: number }>();
 
   register(check: FeatureHealthCheck): void {
+    if (this.checks.has(check.id)) {
+      return;
+    }
     this.checks.set(check.id, check);
   }
 
@@ -114,6 +117,10 @@ class FeatureHealthRegistry {
     } else {
       this.cache.clear();
     }
+  }
+
+  getRegisteredIds(): string[] {
+    return Array.from(this.checks.keys());
   }
 
   private async getCachedOrCheck(
