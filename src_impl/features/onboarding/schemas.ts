@@ -71,6 +71,7 @@ export const MotivationProfileTypeSchema = z.enum([
   "coach_led",
   "competitive",
   "intense",
+  "study_focused",
   "student",
   "creator",
   "worker",
@@ -100,6 +101,10 @@ export const OnboardingStateSchema = z.object({
   element: OnboardingElementSchema.nullable(),
   motivationProfile: MotivationProfileSchema.nullable(),
   explicitMotivationStyle: MotivationProfileTypeSchema.nullable(),
+  profileStepsCompleted: z.boolean(),
+  firstSessionStarted: z.boolean(),
+  firstSessionCompleted: z.boolean(),
+  homePreviewEntered: z.boolean(),
 });
 
 /**

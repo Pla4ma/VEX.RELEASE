@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { featureHealthRegistry } from '../feature-health';
 import { registerFeatureHealthChecks } from '../feature-health-checks';
+import { setDegradedFeatures } from '../feature-access-store';
 import type { FeatureKey } from '../feature-access';
 
 let registered = false;
@@ -13,6 +14,11 @@ function ensureRegistered(): void {
   }
 }
 
+/**
+ * Polls feature health and writes degraded features to the central store.
+ * Every useFeatureAccess() call reads from this same store,
+ * ensuring consistent feature states everywhere.
+ */
 export function useFeatureHealth(): {
   degradedFeatures: Set<FeatureKey>;
   isPolling: boolean;
@@ -29,11 +35,14 @@ export function useFeatureHealth(): {
       setIsPolling(true);
       try {
         const unhealthy = await featureHealthRegistry.getUnhealthyFeatures();
+        const unhealthySet = new Set(unhealthy);
         if (!cancelled) {
-          setDegradedFeatures(new Set(unhealthy));
+          setDegradedFeatures(unhealthySet);
+          setDegradedFeatures(unhealthySet);
         }
       } catch {
         if (!cancelled) {
+          setDegradedFeatures(new Set());
           setDegradedFeatures(new Set());
         }
       } finally {

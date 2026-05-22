@@ -23,6 +23,11 @@ export interface OnboardingActions {
   resetOnboarding: () => void;
   canSkipCurrentStep: () => boolean;
   canCompleteForUser: (userId: string | null | undefined) => boolean;
+  canPreviewHome: (userId: string | null | undefined) => boolean;
+  markProfileStepsComplete: () => void;
+  markFirstSessionStarted: () => void;
+  markFirstSessionCompleted: () => void;
+  markHomePreviewEntered: () => void;
   setCompletionFromBackend: (userId: string, completedAt: number) => void;
   getDraft: (userId: string) => import('./store-helpers').OnboardingDraft | undefined;
   saveDraft: (userId: string, draft: import('./store-helpers').OnboardingDraft) => void;
@@ -35,6 +40,8 @@ const initialState: OnboardingState = {
   displayName: null, startedAt: null, completedAt: null,
   completedForUserId: null, persona: null, element: null,
   motivationProfile: null, explicitMotivationStyle: null,
+  profileStepsCompleted: false, firstSessionStarted: false,
+  firstSessionCompleted: false, homePreviewEntered: false,
 };
 
 const mmkvStorage = getMMKVStorageAdapter();

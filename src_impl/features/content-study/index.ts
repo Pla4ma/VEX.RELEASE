@@ -50,3 +50,7 @@ export { ContentInputScreen, ContentReviewScreen, StudyPlanScreen, StudyLibraryS
 
 // Integration
 export { initializeContentStudy, trackContentStudyScreenView, prepareContentStudySession, verifyContentStudyIntegration } from './integration';
+
+// Visibility Gate
+export { buildContentStudyVisibility } from './content-study-visibility';
+export type { ContentStudyVisibility } from './content-study-visibility';

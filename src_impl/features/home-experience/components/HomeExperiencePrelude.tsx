@@ -8,7 +8,7 @@ import type { ExplicitMotivationStyle, HomeExperienceModel } from '../schemas';
 
 const OPTIONS: Array<{ label: string; value: ExplicitMotivationStyle }> = [
   { label: 'Calm', value: 'calm' },
-  { label: 'Study-focused', value: 'student' },
+  { label: 'Study-focused', value: 'study_focused' },
   { label: 'Game-like', value: 'game_like' },
   { label: 'Coach-led', value: 'coach_led' },
   { label: 'Intense', value: 'intense' },

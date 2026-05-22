@@ -7,12 +7,15 @@ import type { ExplicitMotivationStyle, HomeExperienceModel } from './schemas';
 function toExplicitStyle(style: string | null): ExplicitMotivationStyle | null {
   if (
     style === 'calm' ||
-    style === 'student' ||
+    style === 'study_focused' ||
     style === 'game_like' ||
     style === 'coach_led' ||
     style === 'intense'
   ) {
     return style;
+  }
+  if (style === 'student') {
+    return 'study_focused';
   }
   return null;
 }

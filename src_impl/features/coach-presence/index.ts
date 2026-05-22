@@ -9,6 +9,11 @@ export {
   STYLE_ADAPTATION,
 } from './copy';
 export {
+  COACH_PRESENCE_MESSAGE_CONTEXTS,
+  COACH_PRESENCE_MESSAGE_STYLES,
+  getCoachPresenceMessage,
+} from './message-library';
+export {
   buildCoachPresence,
   buildCompletionCoachPresence,
   resolveCoachActionIntent,

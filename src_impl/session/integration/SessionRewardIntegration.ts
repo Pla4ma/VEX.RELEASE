@@ -51,6 +51,7 @@ const DEFAULT_CONFIG: RewardIntegrationConfig = {
 
 export class SessionRewardIntegration {
   private config: RewardIntegrationConfig;
+  private processedSessionIds = new Set<string>();
 
   constructor(config: Partial<RewardIntegrationConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -74,6 +75,33 @@ export class SessionRewardIntegration {
   }
 
   private async handleSessionCompleted(sessionId: string, userId: string, sessionData: SessionSummary): Promise<void> {
+    const allLegacySideEffectsDisabled =
+      !this.config.autoGrantRewards &&
+      !this.config.autoUpdateStreak &&
+      !this.config.autoAddXP &&
+      !this.config.autoCreateSocialActivity &&
+      !this.config.enableSeasonChallengeProgress &&
+      !this.config.autoUpdateAnalytics &&
+      !this.config.enableAchievementChecks &&
+      !this.config.enableMilestoneTracking;
+
+    if (allLegacySideEffectsDisabled) {
+      debug.debug(
+        'SessionRewardIntegration: all legacy side effects delegated to completion orchestrator — skipping session %s',
+        sessionId
+      );
+      return;
+    }
+
+    if (this.processedSessionIds.has(sessionId)) {
+      debug.debug(
+        'SessionRewardIntegration: session %s already processed by legacy integration — skipping',
+        sessionId
+      );
+      return;
+    }
+    this.processedSessionIds.add(sessionId);
+
     debug.info('Processing rewards for completed session %s', sessionId);
     const summary: SessionSummary = {
       ...sessionData,

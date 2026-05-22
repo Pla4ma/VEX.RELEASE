@@ -14,12 +14,12 @@ import { PurchaseEvents, createPaywallProperties } from '../purchase-events';
 import { usePaywall, usePremiumStatus } from '../use-revenuecat';
 
 const VIP_BENEFITS = [
-  ['Unlimited AI coach conversations', 'Ask for strategy, reflection, and next-session guidance whenever you need it.'],
-  ['Monthly Focus Report', 'See your focus windows, session patterns, and what changed this month.'],
-  ['Advanced analytics', 'Find when you focus best and which session types actually work for you.'],
-  ['Premium companion cosmetics', 'Customize companion elements and visual themes.'],
-  ['Cosmetic season track access', 'Earn premium seasonal looks while core progress stays free.'],
-  ['Extra personal quests', 'Get more targeted quests based on your real focus history.'],
+  ['Deep Coach Memory', 'VEX remembers patterns, comeback style, best focus windows, and preferred push style.'],
+  ['Monthly Focus Report', 'See rhythm, focus risk, recovery plans, and what changed this month.'],
+  ['Progress Intelligence', 'Find when you focus best and which session types actually work for you.'],
+  ['Advanced Study / Deep Work OS', 'Turn study, learning, and projects into review loops and smart next actions.'],
+  ['Visual Identity', 'Shape companion forms, focus worlds, atmospheres, and premium animations.'],
+  ['Premium Session Modes', 'Use Exam Sprint, Deep Work, Calm Reset, Boss Focus, Comeback, and Review modes.'],
 ] as const;
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -72,7 +72,7 @@ export function VipPaywallScreen(): JSX.Element {
     const result = await purchase(selectedPackage);
     if (result.success) {
       await refresh();
-      setStatusMessage({ tone: 'celebration', title: 'Welcome to VIP', body: 'Your coaching, reports, analytics, and personalization are active.' });
+      setStatusMessage({ tone: 'celebration', title: 'Premium is active', body: 'Deeper coach memory, reports, and progress intelligence are active.' });
       navigation.goBack();
       return;
     }
@@ -121,10 +121,10 @@ export function VipPaywallScreen(): JSX.Element {
       <ScrollView contentContainerStyle={{ paddingTop: insets.top + spacing[5], paddingBottom: insets.bottom + spacing[8], paddingHorizontal: spacing[5], gap: spacing[4] }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: spacing[4] }}>
           <View style={{ flex: 1, gap: spacing[2] }}>
-            <Text variant="caption" color="text.secondary">VEX VIP</Text>
-            <Text variant="h1" color="text.primary">{isPremium ? 'You are VIP' : 'Unlock deeper insight'}</Text>
+            <Text variant="caption" color="text.secondary">VEX Premium</Text>
+            <Text variant="h1" color="text.primary">{isPremium ? 'Premium is active' : 'Turn sessions into a system'}</Text>
             <Text variant="body" color="text.secondary">
-              {isPremium ? 'Your premium growth tools are active.' : 'Premium adds coaching, reports, analytics, and personalization. The free focus loop stays useful.'}
+              {isPremium ? 'Your deeper execution tools are active.' : 'Premium adds deeper coach memory, progress intelligence, and advanced work systems. The free focus loop stays useful.'}
             </Text>
           </View>
           <Button variant="ghost" onPress={handleClose} size="sm" accessibilityLabel="Close VIP paywall" accessibilityRole="button" accessibilityHint="Closes this screen.">Close</Button>

@@ -8,6 +8,19 @@ import { queryClient } from '../../../api/QueryProvider';
 jest.mock('../repository-focus-score');
 jest.mock('../analytics');
 jest.mock('../../../api/QueryProvider');
+jest.mock('../../liveops-config/feature-access-store', () => ({
+  getAvailabilityFor: jest.fn().mockReturnValue({
+    state: 'unlocked',
+    canRenderEntryPoint: true,
+    canNavigate: true,
+    canQuery: true,
+    canRegisterRoute: true,
+    canSubscribeToEvents: true,
+    canExpose: true,
+    canShowTeaser: false,
+    snapshot: {},
+  }),
+}));
 
 describe('Focus Identity Integration', () => {
   let cleanup: () => void;

@@ -30,7 +30,7 @@ describe('home experience service', () => {
 
   it('personalizes the first teaser by motivation style', () => {
     const study = buildHomeExperienceModel({
-      explicitMotivationStyle: 'student',
+      explicitMotivationStyle: 'study_focused',
       totalCompletedSessions: 0,
     });
     const game = buildHomeExperienceModel({

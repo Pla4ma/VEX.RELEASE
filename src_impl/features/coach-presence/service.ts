@@ -165,6 +165,7 @@ const toneMap: Record<
   Pick<CoachPresence['tone'], 'intensity' | 'personality'>
 > = {
   CALM: { intensity: 'low', personality: 'steady' },
+  FRIENDLY: { intensity: 'medium', personality: 'warm' },
   COACH_LED: { intensity: 'medium', personality: 'directive' },
   GAME_LIKE: { intensity: 'medium', personality: 'playful' },
   INTENSE: { intensity: 'high', personality: 'sharp' },
@@ -185,6 +186,12 @@ function getVisualState(
     level: companion?.level ?? 1,
     mood: companion?.currentMood ?? 'FOCUSED',
     phase: companion?.phase ?? 'YOUNG',
-    reaction: style === 'INTENSE' ? 'ready' : style === 'GAME_LIKE' ? 'celebrating' : 'steady',
+    reaction: style === 'INTENSE'
+      ? 'ready'
+      : style === 'GAME_LIKE'
+        ? 'celebrating'
+        : style === 'FRIENDLY'
+          ? 'focused'
+          : 'steady',
   };
 }

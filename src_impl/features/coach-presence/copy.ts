@@ -23,6 +23,7 @@ export const ACTION_LABELS: Record<CoachActionIntent, string> = {
 
 export const STYLE_ADAPTATION: Record<CoachPresenceMotivationStyle, string> = {
   CALM: 'Low pressure, clear next step.',
+  FRIENDLY: 'Warm continuity with one clear next move.',
   COACH_LED: 'Direct guidance without extra talk.',
   GAME_LIKE: 'Progress framed as a clean move.',
   INTENSE: 'Sharper language, still controlled.',
@@ -31,6 +32,7 @@ export const STYLE_ADAPTATION: Record<CoachPresenceMotivationStyle, string> = {
 
 export const FALLBACK_HOME_MESSAGES: Record<CoachPresenceMotivationStyle, string> = {
   CALM: 'Your rhythm is warm. One clean block next.',
+  FRIENDLY: 'The next block has a clear shape. Start there.',
   COACH_LED: 'Next rep is clear. Start the block.',
   GAME_LIKE: 'Your streak has a lane. Bank the next block.',
   INTENSE: 'Window is open. Take the block now.',
@@ -39,6 +41,7 @@ export const FALLBACK_HOME_MESSAGES: Record<CoachPresenceMotivationStyle, string
 
 export const PROGRESS_REACTIONS: Record<CoachPresenceMotivationStyle, string> = {
   CALM: 'The pattern is becoming easier to return to.',
+  FRIENDLY: 'The pattern is starting to feel easier to pick up.',
   COACH_LED: 'The last finish gives us the next cue.',
   GAME_LIKE: 'The run has momentum. Spend it well.',
   INTENSE: 'Momentum is live. Do not drift.',

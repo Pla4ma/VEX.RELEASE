@@ -61,6 +61,9 @@ export const CompanionPromiseRepositoryRowSchema = z.object({
   recommended_mode: z.string().min(1),
   source_session_id: z.string().uuid().nullable(),
   status: z.string().min(1),
+  target_date: z.string(),
+  target_duration_minutes: z.number().int().min(1),
+  target_mode: z.string().min(1),
   user_id: z.string().min(1),
 }).passthrough();
 

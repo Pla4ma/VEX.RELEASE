@@ -8,6 +8,7 @@ const TIER_MAP: Record<MotivationProfileType, LanguageTier> = {
   calm: 'gentle',
   coach_led: 'gentle',
   friendly: 'gentle',
+  study_focused: 'gentle',
   student: 'gentle',
   creator: 'gentle',
   worker: 'gentle',

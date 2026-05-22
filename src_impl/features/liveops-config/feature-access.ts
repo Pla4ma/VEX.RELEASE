@@ -80,6 +80,7 @@ export type MotivationProfileType =
   | 'coach_led'
   | 'competitive'
   | 'intense'
+  | 'study_focused'
   | 'student'
   | 'creator'
   | 'worker';

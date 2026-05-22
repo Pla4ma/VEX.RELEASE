@@ -14,6 +14,7 @@ import { RootStackAuthenticatedRoutes } from "./root-stack-authenticated-routes"
 
 interface RootStackScreensProps {
   hasCompletedOnboarding: boolean;
+  canShowHomePreview: boolean;
   isAuthenticated: boolean;
 }
 
@@ -21,14 +22,17 @@ const Stack = createNativeStackNavigator<ExtendedRootStackParams>();
 
 export const RootStackScreens: React.FC<RootStackScreensProps> = ({
   hasCompletedOnboarding,
+  canShowHomePreview,
   isAuthenticated,
 }) => {
   const { features } = useFeatureAccess();
   const { isEnabled } = useFeatureFlags();
   const show = buildRootExposureFlags({ features, isEnabled });
 
+  const showApp = isAuthenticated && (hasCompletedOnboarding || canShowHomePreview);
+
   const navigatorKey = isAuthenticated
-    ? hasCompletedOnboarding
+    ? showApp
       ? "app"
       : "onboarding"
     : "auth";
@@ -46,6 +50,7 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
           <RootStackAuthenticatedRoutes
             features={features}
             hasCompletedOnboarding={hasCompletedOnboarding}
+            canShowHomePreview={canShowHomePreview}
             show={show}
             Stack={Stack}
           />

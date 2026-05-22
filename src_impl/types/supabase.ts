@@ -1038,6 +1038,9 @@ export type Database = {
           recovery_session_id: string | null
           source_session_id: string | null
           status: string
+          target_date: string
+          target_duration_minutes: number
+          target_mode: string
           updated_at: string
           user_id: string
           window_end: string
@@ -1056,6 +1059,9 @@ export type Database = {
           recovery_session_id?: string | null
           source_session_id?: string | null
           status?: string
+          target_date: string
+          target_duration_minutes: number
+          target_mode: string
           updated_at?: string
           user_id: string
           window_end: string
@@ -1074,6 +1080,9 @@ export type Database = {
           recovery_session_id?: string | null
           source_session_id?: string | null
           status?: string
+          target_date?: string
+          target_duration_minutes?: number
+          target_mode?: string
           updated_at?: string
           user_id?: string
           window_end?: string

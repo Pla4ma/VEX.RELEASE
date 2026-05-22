@@ -90,7 +90,7 @@ export function deriveMotivationProfile(
   }
 
   const primaryMap: Record<string, MotivationProfileType> = {
-    STUDY: 'student', WORK: 'worker', CREATIVE: 'creator', PERSONAL: 'calm',
+    STUDY: 'study_focused', WORK: 'worker', CREATIVE: 'creator', PERSONAL: 'calm',
   };
   const primary = goal ? (primaryMap[goal] ?? 'calm') : 'calm';
 
@@ -130,7 +130,7 @@ export function deriveMotivationProfile(
       if (!secondary.includes('competitive')) secondary.push('competitive');
       break;
     case 'LUMINA':
-      if (!secondary.includes('student')) secondary.push('student');
+      if (!secondary.includes('study_focused')) secondary.push('study_focused');
       break;
   }
 

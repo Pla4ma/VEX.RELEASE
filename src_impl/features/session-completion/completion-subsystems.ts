@@ -4,7 +4,7 @@ import { getRewardService } from '../../rewards/RewardService';
 import type { SessionSummary } from '../../session/types';
 import { getStreakService } from '../../streaks/StreakService';
 import { getCompanionService } from '../companion/service';
-import { FocusIdentityService } from '../focus-identity/FocusIdentityEngine';
+import { updateFocusScoreFromSessionCompletion } from '../focus-identity/update-focus-score.helper';
 import { getAvailabilityFor } from '../liveops-config/feature-access-store';
 import { trackCompletionAnalytics } from './completion-analytics';
 import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
@@ -71,10 +71,13 @@ export async function applyCompletionSubsystems(
   let ledger = input.ledger;
 
   await runSubsystem(degradedSystems, 'focus-identity', async () => {
-    const service = new FocusIdentityService(input.ledger.userId);
-    await service.updateScore('SESSION_COMPLETE', {
+    await updateFocusScoreFromSessionCompletion(input.ledger.userId, {
       grade: input.ledger.grade,
-      streakLength: input.ledger.streakResult.newDays,
+      streakDays: input.ledger.streakResult.newDays,
+      quality: input.ledger.qualityScore,
+      interruptions: input.summary.interruptions,
+      sessionMode: input.summary.sessionMode,
+      completedAt: new Date(input.ledger.completedAt).toISOString(),
     });
   });
 

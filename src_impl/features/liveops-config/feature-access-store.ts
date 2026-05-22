@@ -1,8 +1,10 @@
-import type { FeatureAccessMap } from './feature-access';
+import type { FeatureAccessMap, FeatureKey } from './feature-access';
 import { getFeatureAvailability, type FeatureAvailability } from './feature-availability';
-import type { FeatureKey } from './feature-access';
 
 let _featureAccessMap: FeatureAccessMap | null = null;
+
+/** Centralized degraded features — written by useFeatureHealth, read by useFeatureAccess. */
+let _degradedFeatures: Set<FeatureKey> = new Set();
 
 export function setFeatureAccessMap(map: FeatureAccessMap): void {
   _featureAccessMap = map;
@@ -10,6 +12,14 @@ export function setFeatureAccessMap(map: FeatureAccessMap): void {
 
 export function getFeatureAccessMap(): FeatureAccessMap | null {
   return _featureAccessMap;
+}
+
+export function setDegradedFeatures(features: Set<FeatureKey>): void {
+  _degradedFeatures = features;
+}
+
+export function getDegradedFeatures(): Set<FeatureKey> {
+  return _degradedFeatures;
 }
 
 export function getAvailabilityFor(key: FeatureKey): FeatureAvailability {

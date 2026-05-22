@@ -58,6 +58,21 @@ describe('CoachPresence service', () => {
     expect(presence.nextAction.intent).toBe('START_STUDY_SESSION');
   });
 
+  it('supports friendly motivation as a warm unified coach presence', () => {
+    const presence = buildCoachPresence({
+      companion: { element: 'EMBER', level: 2, mood: 'READY', phase: 'YOUNG' },
+      featureAvailability: { focus: unlockedAvailability, progress: unlockedAvailability, study: unlockedAvailability },
+      memorySummary: { companionMemoryCount: 2, coachMemoryCount: 2, latestMemory: 'Morning starts have worked.' },
+      motivationStyle: 'FRIENDLY',
+      progress: { currentStreakDays: 1, highFocusStreak: 0, totalSessions: 3 },
+      surface: 'HOME',
+    });
+
+    expect(presence.tone.personality).toBe('warm');
+    expect(presence.visualCompanionState.reaction).toBe('focused');
+    expect(presence.message).toContain('next block');
+  });
+
   it('does not suggest locked study or progress actions', () => {
     expect(resolveCoachActionIntent({
       requestedIntent: 'START_STUDY_SESSION',

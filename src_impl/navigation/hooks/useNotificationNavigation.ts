@@ -5,9 +5,11 @@ import * as Notifications from 'expo-notifications';
 import { addBreadcrumb } from '../../config/sentry';
 import { eventBus } from '../../events';
 import { trackNotificationOpened } from '../../features/notifications/analytics';
+import { useOnboardingStore } from '../../features/onboarding/store';
 import type { FeatureAccessMap } from '../../features/liveops-config/feature-access';
 import { routeNotificationAction } from '../notification-routing-core';
 import type { NotificationAction } from '../notification-routing-types';
+import { getAvailableNotificationFilters } from '../notification-routing-core';
 
 import type { ExtendedRootStackParams } from '../types';
 
@@ -47,54 +49,55 @@ function navigateFromNotification(
   type: string,
   navigationRef: NavigationContainerRefWithCurrent<ExtendedRootStackParams>,
   featureAccess?: FeatureAccessMap | null,
+  motivationStyle?: string | null,
 ): void {
   switch (type) {
     case 'streak_reminder':
     case 'session_prompt':
     case 'RETENTION_STREAK_PROTECTION':
-      routeNotificationAction(navigationRef, { type: 'start_session' }, featureAccess ?? undefined);
+      routeNotificationAction(navigationRef, { type: 'start_session' }, featureAccess ?? undefined, motivationStyle);
       return;
     case 'challenge_reminder':
     case 'level_up':
     case 'RETENTION_CHALLENGE_EXPIRY':
-      routeNotificationAction(navigationRef, { type: 'view_progress' }, featureAccess ?? undefined);
+      routeNotificationAction(navigationRef, { type: 'view_progress' }, featureAccess ?? undefined, motivationStyle);
       return;
     case 'boss_timeout_warning':
-      routeNotificationAction(navigationRef, { type: 'view_boss' }, featureAccess ?? undefined);
+      routeNotificationAction(navigationRef, { type: 'view_boss' }, featureAccess ?? undefined, motivationStyle);
       return;
     case 'welcome_back':
     case 'comeback':
     case 'RETENTION_RE_ENGAGEMENT':
-      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined);
+      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined, motivationStyle);
       return;
     case 'boss_encounter':
     case 'boss_defeated':
-      routeNotificationAction(navigationRef, { type: 'view_boss' }, featureAccess ?? undefined);
+      routeNotificationAction(navigationRef, { type: 'view_boss' }, featureAccess ?? undefined, motivationStyle);
       return;
     case 'rival_challenge':
     case 'rival_defeated':
     case 'rival_activity':
-      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined);
+      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined, motivationStyle);
       return;
     case 'squad_war_start':
     case 'squad_war_end':
     case 'squad_war_reminder':
-      routeNotificationAction(navigationRef, { type: 'view_squad' }, featureAccess ?? undefined);
+      routeNotificationAction(navigationRef, { type: 'view_squad' }, featureAccess ?? undefined, motivationStyle);
       return;
     case 'achievement_unlocked':
     case 'achievement_milestone':
-      routeNotificationAction(navigationRef, { type: 'view_profile' }, featureAccess ?? undefined);
+      routeNotificationAction(navigationRef, { type: 'view_profile' }, featureAccess ?? undefined, motivationStyle);
       return;
     case 'streak_risk':
     case 'streak_at_risk':
-      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined);
+      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined, motivationStyle);
       eventBus.publish('streak:show_risk_banner', { priority: 'high' });
       return;
     case 'mastery_rank_up':
-      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Mastery' } }, featureAccess ?? undefined);
+      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Mastery' } }, featureAccess ?? undefined, motivationStyle);
       return;
     default:
-      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined);
+      routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined, motivationStyle);
   }
 }
 
@@ -104,6 +107,8 @@ export function useNotificationNavigation({
   navigationRef,
   userId,
 }: UseNotificationNavigationInput): void {
+  const motivationStyle = useOnboardingStore((state) => state.explicitMotivationStyle);
+
   useEffect(() => {
     if (!isAuthenticated || !userId) {
       return undefined;
@@ -126,7 +131,7 @@ export function useNotificationNavigation({
           userId,
         });
 
-        navigateFromNotification(type, navigationRef, featureAccess);
+        navigateFromNotification(type, navigationRef, featureAccess, motivationStyle);
       });
 
       return () => subscription.remove();
@@ -136,7 +141,7 @@ export function useNotificationNavigation({
       });
       return undefined;
     }
-  }, [featureAccess, isAuthenticated, navigationRef, userId]);
+  }, [featureAccess, isAuthenticated, navigationRef, userId, motivationStyle]);
 
   useEffect(() => {
     if (!isAuthenticated) {

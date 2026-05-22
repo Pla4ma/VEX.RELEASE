@@ -37,7 +37,7 @@ export { featureHealthRegistry } from './feature-health';
 export type { FeatureHealthCheck, FeatureHealthStatus } from './feature-health';
 export { registerFeatureHealthChecks } from './feature-health-checks';
 export { useDisclosureAnalytics } from './feature-analytics';
-export { setFeatureAccessMap, getFeatureAccessMap, getAvailabilityFor } from './feature-access-store';
+export { setFeatureAccessMap, getFeatureAccessMap, getAvailabilityFor, getDegradedFeatures, setDegradedFeatures } from './feature-access-store';
 
 export interface FeatureAccessResult {
   error: Error | null;
@@ -49,8 +49,14 @@ export interface FeatureAccessResult {
   stage: UserExperienceStage;
 }
 
+/**
+ * useFeatureAccess — Single source of truth for feature availability.
+ *
+ * Degraded features come from the central store (populated by useFeatureHealth).
+ * No parameter needed — every call site sees the same health-adjusted map.
+ */
 export function useFeatureAccess(
-  degradedFeatures?: Set<FeatureKey>,
+  _degradedFeatures?: Set<FeatureKey>,
 ): FeatureAccessResult {
   const userId = useAuthStore((state) => state.user?.id ?? '');
   const stats = useSessionStats(userId);
@@ -62,9 +68,9 @@ export function useFeatureAccess(
       buildFeatureAccess({
         totalCompletedSessions: completedSessions,
         motivationProfile: motivationProfile ?? undefined,
-        degradedFeatures,
+        degradedFeatures: _degradedFeatures,
       }),
-    [completedSessions, motivationProfile, degradedFeatures],
+    [completedSessions, motivationProfile, _degradedFeatures],
   );
 
   useEffect(() => {

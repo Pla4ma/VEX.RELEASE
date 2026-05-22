@@ -13,13 +13,33 @@ import {
   isCompletionValidForUser,
   type OnboardingDraft,
 } from './store-helpers';
+import { useAuthStore } from '../../store';
 
 const initialState: OnboardingState = {
   isOnboarded: false, currentStep: 0, goal: null, focusDuration: null,
   displayName: null, startedAt: null, completedAt: null,
   completedForUserId: null, persona: null, element: null,
   motivationProfile: null, explicitMotivationStyle: null,
+  profileStepsCompleted: false, firstSessionStarted: false,
+  firstSessionCompleted: false, homePreviewEntered: false,
 };
+
+function getCurrentUserIdForBool(): string | null {
+  return useAuthStore.getState().user?.id ?? null;
+}
+
+/** Mark profile steps as complete when advancing to or past step 5 (FIRST_SESSION_CTA). */
+function advanceStepWithCompletionCheck(
+  set: (partial: Partial<OnboardingStore>) => void,
+  get: () => OnboardingStore,
+  targetStep: number,
+): void {
+  const updates: Partial<OnboardingState> = { currentStep: targetStep };
+  if (targetStep >= 5) {
+    updates.profileStepsCompleted = true;
+  }
+  set(updates);
+}
 
 export function createStoreActions(
   set: (partial: Partial<OnboardingStore>) => void,
@@ -39,14 +59,14 @@ export function createStoreActions(
       const profile = deriveMotivationProfile(goal, store.persona, store.element, store.explicitMotivationStyle);
       set({ goal, motivationProfile: profile });
       setTimeout(() => {
-        set({ currentStep: Math.min(5, get().currentStep + 1) });
+        advanceStepWithCompletionCheck(set, get, Math.min(5, get().currentStep + 1));
       }, 300);
     },
 
     setFocusDuration: (focusDuration: FocusDuration) => {
       set({ focusDuration });
       setTimeout(() => {
-        set({ currentStep: Math.min(5, get().currentStep + 1) });
+        advanceStepWithCompletionCheck(set, get, Math.min(5, get().currentStep + 1));
       }, 300);
     },
 
@@ -80,7 +100,9 @@ export function createStoreActions(
 
     nextStep: () => {
       const { currentStep } = get();
-      if (currentStep < 5) set({ currentStep: currentStep + 1 });
+      if (currentStep < 5) {
+        advanceStepWithCompletionCheck(set, get, currentStep + 1);
+      }
     },
 
     previousStep: () => {
@@ -88,15 +110,30 @@ export function createStoreActions(
       if (currentStep > 0) set({ currentStep: currentStep - 1 });
     },
 
-    skipOnboarding: () => set({ ...mergeOnboardingCompletion(true, Date.now()) }),
+    skipOnboarding: () => set({ ...mergeOnboardingCompletion(true, Date.now()), profileStepsCompleted: true }),
 
-    completeOnboarding: () => set({ ...mergeOnboardingCompletion(true, Date.now()) }),
+    completeOnboarding: () => set({ ...mergeOnboardingCompletion(true, Date.now()), profileStepsCompleted: true }),
 
     resetOnboarding: () => set(initialState),
 
     canSkipCurrentStep: () => get().currentStep >= 1,
 
     canCompleteForUser: (userId: string | null | undefined) => isCompletionValidForUser(get(), userId),
+
+    /** Home Preview: allowed when profile steps are done, even without first session. */
+    canPreviewHome: (userId: string | null | undefined) => {
+      if (!userId) return false;
+      const state = get();
+      return state.profileStepsCompleted && !state.isOnboarded;
+    },
+
+    markProfileStepsComplete: () => set({ profileStepsCompleted: true }),
+
+    markFirstSessionStarted: () => set({ firstSessionStarted: true }),
+
+    markFirstSessionCompleted: () => set({ firstSessionCompleted: true, isOnboarded: true, completedAt: Date.now(), completedForUserId: getCurrentUserIdForBool() }),
+
+    markHomePreviewEntered: () => set({ homePreviewEntered: true }),
 
     setCompletionFromBackend: (userId: string, completedAt: number) => {
       set({ completedAt, completedForUserId: userId, isOnboarded: true });

@@ -7,15 +7,6 @@ jest.mock('../../../utils/debug', () => ({
 }));
 jest.mock('../../../lib/repository/base', () => ({ getConnectionState: jest.fn().mockReturnValue('online') }));
 jest.mock('../../../lib/offline/queue', () => ({ enqueue: jest.fn() }));
-jest.mock('../../../progression/ProgressionService', () => ({
-  getProgressionService: jest.fn().mockReturnValue({ addXP: jest.fn().mockResolvedValue(undefined) }),
-}));
-jest.mock('../../../streaks/StreakService', () => ({
-  getStreakService: jest.fn().mockReturnValue({ recordSession: jest.fn().mockResolvedValue(undefined) }),
-}));
-jest.mock('../../../rewards/RewardService', () => ({
-  getRewardService: jest.fn().mockReturnValue({ grantReward: jest.fn().mockResolvedValue(undefined) }),
-}));
 jest.mock('../../../store/session-state', () => ({
   useSessionUIStore: { getState: jest.fn().mockReturnValue({ setCompletionSyncState: jest.fn() }) },
 }));
@@ -30,6 +21,45 @@ jest.mock('../repository', () => ({
   createCompletionLedger: jest.fn(),
   getCompletionLedgerByIdempotencyKey: jest.fn(),
 }));
+jest.mock('../completion-subsystems', () => ({
+  applyCompletionSubsystems: jest.fn(),
+}));
+jest.mock('../companion-memory-integration', () => ({
+  recordCompletionCompanionMemories: jest.fn().mockResolvedValue([]),
+}));
+jest.mock('../story-view-model-service', () => ({
+  buildPostSessionStoryViewModel: jest.fn((input: Record<string, unknown>) => input),
+}));
+jest.mock('../ledger-service', () => ({
+  buildCompletionLedger: jest.fn((input: Record<string, unknown>) => ({
+    companionReactionId: null,
+    completedAt: (input as { completedAt?: number }).completedAt ?? Date.now(),
+    completedDurationSeconds: 1500,
+    createdAt: (input as { completedAt?: number }).completedAt ?? Date.now(),
+    dailyMissionResult: { missionId: null, progressDelta: 0, status: 'unchanged' as const },
+    degradedSystems: [],
+    effectiveFocusedSeconds: 1400,
+    focusScoreDelta: 8,
+    grade: 'A',
+    gradeScore: 88,
+    idempotencyKey: `${(input as { sessionId: string }).sessionId}:${(input as { completedAt?: number }).completedAt ?? Date.now()}`,
+    interruptionCount: 0,
+    ledgerId: '550e8400-e29b-41d4-a716-446655440001',
+    mode: 'FLOW' as const,
+    offlineSyncStatus: (input as { offlineSyncStatus?: string }).offlineSyncStatus ?? 'synced',
+    pauseCount: 0,
+    qualityScore: 88,
+    rewardIds: [],
+    sessionId: (input as { sessionId: string }).sessionId,
+    startedAt: Date.now() - 1500000,
+    streakResult: { action: 'extended' as const, newDays: 5, previousDays: 4 },
+    strictMode: false,
+    targetDurationSeconds: 1500,
+    timezone: (input as { timezone?: string }).timezone ?? 'UTC',
+    userId: (input as { userId: string }).userId,
+    xpDelta: 120,
+  })),
+}));
 
 describe('orchestrateSessionCompletion flow', () => {
   beforeEach(() => {
@@ -39,12 +69,14 @@ describe('orchestrateSessionCompletion flow', () => {
 
   it('creates ledger and updates all systems for normal completion', async () => {
     const { createCompletionLedger: persist, getCompletionLedgerByIdempotencyKey } = require('../repository');
-    const { getProgressionService } = require('../../../progression/ProgressionService');
-    const { getStreakService } = require('../../../streaks/StreakService');
-    const { getRewardService } = require('../../../rewards/RewardService');
+    const { applyCompletionSubsystems } = require('../completion-subsystems');
 
     getCompletionLedgerByIdempotencyKey.mockResolvedValue(null);
     persist.mockResolvedValue(createCompletionLedger());
+    applyCompletionSubsystems.mockResolvedValue({
+      degradedSystems: [],
+      ledger: createCompletionLedger(),
+    });
 
     await orchestrateSessionCompletion({
       sessionId: SESSION_ID,
@@ -53,9 +85,7 @@ describe('orchestrateSessionCompletion flow', () => {
     });
 
     expect(persist).toHaveBeenCalled();
-    expect(getProgressionService).toHaveBeenCalledWith(USER_ID);
-    expect(getStreakService).toHaveBeenCalledWith(USER_ID);
-    expect(getRewardService).toHaveBeenCalledWith(USER_ID);
+    expect(applyCompletionSubsystems).toHaveBeenCalled();
   });
 
   it('skips processing for duplicate idempotency key', async () => {
@@ -83,7 +113,6 @@ describe('orchestrateSessionCompletion flow', () => {
     const { getConnectionState } = require('../../../lib/repository/base');
     const { enqueue } = require('../../../lib/offline/queue');
     const { getCompletionLedgerByIdempotencyKey } = require('../repository');
-    const { useSessionUIStore } = require('../../../store/session-state');
 
     getConnectionState.mockReturnValue('offline');
     getCompletionLedgerByIdempotencyKey.mockResolvedValue(null);
@@ -98,8 +127,5 @@ describe('orchestrateSessionCompletion flow', () => {
       feature: 'sessions',
       operation: 'CREATE',
     }));
-    expect(useSessionUIStore.getState().setCompletionSyncState).toHaveBeenCalledWith(
-      expect.objectContaining({ status: 'pending_sync' }),
-    );
   });
 });

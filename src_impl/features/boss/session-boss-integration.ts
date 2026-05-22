@@ -13,8 +13,15 @@ import {
 } from './hooks/basic-solo-boss-hooks';
 import { calculateBasicSoloBossDamage } from './basic-solo-boss-calculator';
 import { useStreak } from '../streaks/hooks';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
 import { trackBossError } from './analytics';
 
+/**
+ * Non-canonical boss integration hook.
+ * The canonical boss damage path is SessionBossIntegration.ts.
+ * This hook must NOT auto-subscribe to session:completed when boss_tab is
+ * locked, hidden, or degraded. Use FeatureAvailability gating.
+ */
 export function useSessionBossIntegration() {
   const userId = useAuthStore((state) => state.user?.id ?? null);
   const encounterQuery = useBasicSoloBossEncounter();
@@ -22,6 +29,11 @@ export function useSessionBossIntegration() {
   const { data: streakState } = useStreak(userId);
 
   useEffect(() => {
+    const availability = getAvailabilityFor('boss_tab');
+    if (!availability.canSubscribeToEvents) {
+      return;
+    }
+
     const unsubscribe = eventBus.subscribe('session:completed', async (event) => {
       const { sessionId, duration, quality, userId: eventUserId } = event;
 
@@ -40,7 +52,7 @@ export function useSessionBossIntegration() {
 
         Sentry.addBreadcrumb({
           category: 'boss',
-          message: 'Applying damage from session completion',
+          message: 'Applying damage from session completion (non-canonical path)',
           data: { sessionId, damage, userId: userId ?? '' },
           level: 'info',
         });

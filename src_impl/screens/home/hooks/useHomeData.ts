@@ -1,5 +1,4 @@
 import { useMemo, useRef, useCallback } from 'react';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   useActiveChallenges,
   useClaimChallengeReward,
@@ -10,37 +9,41 @@ import { useSavedTomorrowPreview } from '../../../features/home-spine/hooks';
 import { useActiveIntervention } from '../../../features/ai-coach/hooks';
 import { useNotificationBadge } from '../../../features/notifications/components/NotificationBadge';
 import { useToast } from '../../../shared/ui/components/Toast';
-import { useHomeViewModel } from './useHomeViewModel';
 import type { HomeController } from './home-controller-types';
 import type { ChallengeItem, SessionListItem } from '../../../features/home-spine/components';
-import { getQualityGrade, getHomeCompanionMood } from '../utils';
-import { createHomeDailyDungeon } from './home-daily-dungeon';
+import { getQualityGrade, getHomeCompanionMood } from '../../../screens/home/utils';
 
-export function useHomeData() {
-  const insets = useSafeAreaInsets();
-  const viewModel = useHomeViewModel();
-  const controller: HomeController = viewModel.controller;
+interface UseHomeDataInput {
+  controller: HomeController;
+}
+
+export function useHomeData(input: UseHomeDataInput) {
+  const { controller } = input;
   const { show: showToast } = useToast();
-  const challengesQuery = useActiveChallenges(controller.userId, {
-    enabled: controller.runtime.canQueryChallenges,
-  });
+  const challengesQuery = useActiveChallenges(controller.userId, { enabled: controller.runtime.canQueryChallenges });
   const claimRewardMutation = useClaimChallengeReward();
   const freezeStreakMutation = useFreezeStreak();
-  const {
-    intervention,
-    isLoading: interventionLoading,
-    dismiss: dismissIntervention,
-  } = useActiveIntervention(controller.runtime.canQueryCoach ? controller.userId || undefined : undefined);
+  const { intervention, isLoading: interventionLoading, dismiss: dismissIntervention } = useActiveIntervention(
+    controller.runtime.canQueryCoach ? controller.userId || undefined : undefined,
+  );
   const savedPreview = useSavedTomorrowPreview(controller.userId ?? '');
   const displayedInterventionIdRef = useRef<string | null>(null);
-  const squadMembersFocusing = useSquadMembersFocusing(controller.runtime.canQuerySquads ? controller.userId || undefined : undefined);
-  const { count: unreadNotificationCount } = useNotificationBadge(controller.runtime.canQueryNotifications ? controller.userId : undefined);
+  const squadMembersFocusing = useSquadMembersFocusing(
+    controller.runtime.canQuerySquads ? controller.userId || undefined : undefined,
+  );
+  const { count: unreadNotificationCount } = useNotificationBadge(
+    controller.runtime.canQueryNotifications ? controller.userId : undefined,
+  );
   const todaysChallenges: ChallengeItem[] = useMemo(() => {
-    if (!challengesQuery.data) {return [];}
-    return challengesQuery.data
-      .filter((item: { challenge: { type: string } }) => item.challenge.type === 'DAILY')
+    const data = challengesQuery.data as Array<{
+      challenge: { type: string; title: string; description: string; targetValue: number; rewardAmount: number; rewardType: string };
+      userChallenge: { id: string; currentValue: number; status: string; expiresAt: number | null };
+    }> | undefined;
+    if (!data) return [];
+    return data
+      .filter((item) => item.challenge.type === 'DAILY')
       .slice(0, 3)
-      .map((item: { userChallenge: { id: string; currentValue: number; status: string; expiresAt: number | null }; challenge: { title: string; description: string; targetValue: number; rewardAmount: number; rewardType: string } }) => ({
+      .map((item) => ({
         id: item.userChallenge.id,
         title: item.challenge.title,
         description: item.challenge.description,
@@ -57,31 +60,32 @@ export function useHomeData() {
   }, [challengesQuery.data]);
   const streakData = controller.streakQuery.data as { nextDeadline?: number } | undefined;
   const streakHoursRemaining = useMemo(() => {
-    if (!streakData?.nextDeadline) {return null;}
+    if (!streakData?.nextDeadline) return null;
     return Math.max(0, Math.floor((streakData.nextDeadline - Date.now()) / (1000 * 60 * 60)));
   }, [streakData?.nextDeadline]);
   const hasActiveSession = useMemo(() => {
     const latest = controller.historyQuery.history[0] as { status?: string } | undefined;
-    if (!latest) {return false;}
+    if (!latest) return false;
     return latest.status === 'ACTIVE' || latest.status === 'PAUSED';
   }, [controller.historyQuery.history]);
   const resumeTimeSeconds = useMemo(() => {
-    if (!hasActiveSession) {return null;}
+    if (!hasActiveSession) return null;
     const latest = controller.historyQuery.history[0] as { endedAt?: number; startedAt?: number } | undefined;
-    if (!latest) {return null;}
+    if (!latest) return null;
     if (latest.endedAt && latest.startedAt) {
       return Math.floor((latest.endedAt - latest.startedAt) / 1000);
     }
     return null;
   }, [hasActiveSession, controller.historyQuery.history]);
-  const recentSessions = useMemo<SessionListItem[]>(() => {
-    return controller.historyQuery.history.flatMap((entry: { endedAt?: number; startedAt?: number; sessionId: string; summary?: { focusPurityScore?: number; focusQuality?: number; xpEarned?: number; interruptions?: number } }) => {
-      if (!entry.endedAt || !entry.startedAt) {return [];}
+  const recentSessions: SessionListItem[] = useMemo(() => {
+    return (controller.historyQuery.history as Array<{
+      sessionId: string; endedAt?: number; startedAt?: number; summary?: { focusPurityScore?: number; focusQuality?: number; xpEarned?: number; interruptions?: number };
+    }>).flatMap((entry) => {
+      if (!entry.endedAt || !entry.startedAt) return [];
       const durationSeconds = Math.max(0, Math.floor((entry.endedAt - entry.startedAt) / 1000));
       const summary = entry.summary;
       return [{
-        id: entry.sessionId,
-        duration: durationSeconds,
+        id: entry.sessionId, duration: durationSeconds,
         qualityGrade: getQualityGrade(summary?.focusPurityScore ?? summary?.focusQuality ?? 0),
         xpEarned: summary?.xpEarned ?? 0,
         endedAt: new Date(entry.endedAt).toISOString(),
@@ -91,73 +95,54 @@ export function useHomeData() {
   }, [controller.historyQuery.history]);
   const comebackData = controller.comebackQuery.data as { streakRestoreEligible?: boolean } | undefined;
   const comebackSessionsCompleted = useMemo(() => {
-    if (!comebackData?.streakRestoreEligible) {return 0;}
-    return controller.historyQuery.history.filter((entry: { status: string }) => entry.status === 'COMPLETED').length;
+    if (!comebackData?.streakRestoreEligible) return 0;
+    return (controller.historyQuery.history as Array<{ status: string }>).filter((entry) => entry.status === 'COMPLETED').length;
   }, [comebackData?.streakRestoreEligible, controller.historyQuery.history]);
   const companionMood = useMemo(
-    () => getHomeCompanionMood(controller.historyQuery.history, controller.currentStreak),
-    [controller.currentStreak, controller.historyQuery.history]
+    () => getHomeCompanionMood(controller.historyQuery.history as unknown as Parameters<typeof getHomeCompanionMood>[0], controller.currentStreak),
+    [controller.currentStreak, controller.historyQuery.history],
   );
-  const handleClaimReward = useCallback((challengeId: string) => {
-    if (!controller.userId) {
-      showToast({
-        type: 'error',
-        title: 'Sign in required',
-        message: 'You need an active profile to claim challenge rewards.',
-      });
-      return;
-    }
-    claimRewardMutation.mutate(
-      { userId: controller.userId, challengeId },
-      {
-        onSuccess: (result: { rewards: Array<{ amount: number; type: string }> }) => {
-          const rewardText = result.rewards
-            .map((reward: { amount: number; type: string }) => `+${reward.amount} ${reward.type}`)
-            .join(', ');
-          showToast({
-            type: 'success',
-            title: `Reward claimed! ${rewardText}`,
-          });
-        },
-        onError: (error: unknown) => {
-          showToast({
-            type: 'error',
-            title: 'Reward claim failed',
-            message: error instanceof Error ? error.message : 'Try again when your connection is stable.',
-            action: {
-              label: 'Retry',
-              onPress: () => handleClaimReward(challengeId),
-            },
-          });
-        },
+  const handleClaimReward = useCallback(
+    (challengeId: string) => {
+      if (!controller.userId) {
+        showToast({ type: 'error', title: 'Sign in required', message: 'You need an active profile to claim challenge rewards.' });
+        return;
       }
-    );
-  }, [claimRewardMutation, controller.userId, showToast]);
+      claimRewardMutation.mutate(
+        { userId: controller.userId, challengeId },
+        {
+          onSuccess: (result: { rewards: Array<{ amount: number; type: string }> }) => {
+            const rewardText = result.rewards.map((reward) => `+${reward.amount} ${reward.type}`).join(', ');
+            showToast({ type: 'success', title: `Reward claimed! ${rewardText}` });
+          },
+          onError: (error: unknown) => {
+            showToast({
+              type: 'error', title: 'Reward claim failed',
+              message: error instanceof Error ? error.message : 'Try again when your connection is stable.',
+              action: { label: 'Retry', onPress: () => handleClaimReward(challengeId) },
+            });
+          },
+        },
+      );
+    },
+    [claimRewardMutation, controller.userId, showToast],
+  );
   const handleFreezeStreak = useCallback(() => {
-    if (!controller.userId) {return;}
+    if (!controller.userId) return;
     freezeStreakMutation.mutate(controller.userId, {
       onSuccess: () => {
-        showToast({
-          type: 'success',
-          title: 'Streak protected',
-          message: 'Your streak freeze is active for today.',
-        });
+        showToast({ type: 'success', title: 'Streak protected', message: 'Your streak freeze is active for today.' });
       },
       onError: (error: unknown) => {
         showToast({
-          type: 'error',
-          title: 'Could not freeze streak',
+          type: 'error', title: 'Could not freeze streak',
           message: error instanceof Error ? error.message : 'Try again before your streak expires.',
         });
       },
     });
   }, [controller.userId, freezeStreakMutation, showToast]);
-  const dailyDungeon = useMemo(() => {
-    if (!controller.userId || !controller.runtime.canQueryChallenges) {return null;}
-    return createHomeDailyDungeon(controller.userId);
-  }, [controller.runtime.canQueryChallenges, controller.userId]);
+
   return {
-    insets,
     controller,
     showToast,
     challengesQuery,
@@ -177,7 +162,6 @@ export function useHomeData() {
     recentSessions,
     comebackSessionsCompleted,
     companionMood,
-    dailyDungeon,
     handleClaimReward,
     handleFreezeStreak,
   };

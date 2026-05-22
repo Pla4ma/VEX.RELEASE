@@ -56,6 +56,13 @@ export {
   type PremiumEntitlementId,
 } from './entitlements';
 
+export {
+  resolvePremiumStrategy,
+  type PremiumHighIntentAction,
+  type PremiumStrategy,
+  type PremiumStrategyInput,
+} from './premium-strategy';
+
 // Event exports
 export {
   PurchaseEvents,

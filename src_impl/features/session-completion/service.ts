@@ -12,6 +12,7 @@ import { generateSessionRecommendation } from '../session-recommendation/service
 import type { SessionMode as RecommendationMode } from '../session-recommendation/types';
 import type { SessionSummary } from '../../session/types';
 import { z } from 'zod';
+import { extractStudyContextFromSession, hasActiveStudyFollowUp, type SessionStudyContext } from './study-context';
 
 export { buildCompletionLedger, type BuildCompletionLedgerInput } from './ledger-service';
 export { calculateSessionGrade } from './grading-service';
@@ -71,9 +72,12 @@ export function buildSessionCompletionReturnPlan(input: {
   hasStudyFollowUp: boolean;
   streakDays: number;
   streakIncreased: boolean;
+  studyContext?: SessionStudyContext;
 }): SessionCompletionReturnPlan {
   const { completionPercentage, hasStudyFollowUp, streakDays, streakIncreased } =
     input;
+
+  const studyLabel = input.studyContext?.learningExecutionLabel ?? 'plan';
 
   if (streakIncreased) {
     return SessionCompletionReturnPlanSchema.parse({
@@ -92,7 +96,7 @@ export function buildSessionCompletionReturnPlan(input: {
   if (hasStudyFollowUp) {
     return SessionCompletionReturnPlanSchema.parse({
       highlightMessage:
-        'Home will bring your active execution plan back to the front so this session keeps compounding.',
+        `Home will bring your active ${studyLabel} back to the front so this session keeps compounding.`,
       highlightTitle: 'Plan momentum saved',
       highlightTone: 'info',
       homeCtaLabel: 'Continue on home',

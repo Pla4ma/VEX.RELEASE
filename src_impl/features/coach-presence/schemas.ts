@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const CoachPresenceMotivationStyleSchema = z.enum([
   'CALM',
+  'FRIENDLY',
   'STUDY_FOCUSED',
   'GAME_LIKE',
   'COACH_LED',
@@ -27,7 +28,7 @@ export const CoachPresenceSurfaceSchema = z.enum([
 export const CoachPresenceToneSchema = z
   .object({
     motivationStyle: CoachPresenceMotivationStyleSchema,
-    personality: z.enum(['steady', 'studious', 'playful', 'directive', 'sharp']),
+    personality: z.enum(['steady', 'warm', 'studious', 'playful', 'directive', 'sharp']),
     intensity: z.enum(['low', 'medium', 'high']),
   })
   .strict();

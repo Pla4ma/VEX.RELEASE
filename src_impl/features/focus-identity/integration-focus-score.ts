@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/react-native';
 import { queryClient } from '../../api';
 import { eventBus } from '../../events';
 import { capture } from '../../shared/analytics/analytics-service';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
 import { focusScoreKeys } from './focus-score-query-keys';
 import {
   appendFocusScoreHistory,
@@ -56,6 +57,11 @@ function buildSignals(summary: unknown): {
 }
 
 export function initializeFocusScoreIntegration(): () => void {
+  const availability = getAvailabilityFor('focus_session');
+  if (!availability.canSubscribeToEvents) {
+    return () => {};
+  }
+
   const unsubscribe = eventBus.subscribe('session:completed', async (event) => {
     const userId = event.userId;
     if (!userId) {return;}

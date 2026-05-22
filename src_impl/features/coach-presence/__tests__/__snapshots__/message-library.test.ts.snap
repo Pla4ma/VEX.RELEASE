@@ -1,0 +1,169 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CoachPresence message library covers every required context and tone variant: ai_fallback_unavailable:calm 1`] = `"Start with the last rhythm that worked. One clean block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: ai_fallback_unavailable:coach_led 1`] = `"Start the saved plan. I will adjust after the block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: ai_fallback_unavailable:friendly 1`] = `"Use the saved next step. We will tune it after."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: ai_fallback_unavailable:game_like 1`] = `"Run the saved mission. Progress still counts."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: ai_fallback_unavailable:intense 1`] = `"Start the saved target. No drift."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: ai_fallback_unavailable:study_focused 1`] = `"Use the saved study step. Review first."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: calm_user_completion:calm 1`] = `"You finished without forcing it. Let the next block stay simple."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: calm_user_completion:coach_led 1`] = `"Next block is clear. Start it clean."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: calm_user_completion:friendly 1`] = `"Nice, the next block has a clear shape."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: calm_user_completion:game_like 1`] = `"The run is live. Bank the next block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: calm_user_completion:intense 1`] = `"Momentum is open. Take the next block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: calm_user_completion:study_focused 1`] = `"Keep the thread warm. Review, then continue."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: comeback_session:calm 1`] = `"That return counted. Keep the next block small."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: comeback_session:coach_led 1`] = `"Reset the rhythm. Twenty minutes is enough."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: comeback_session:friendly 1`] = `"You came back. Set one easy follow-up."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: comeback_session:game_like 1`] = `"The run is back in motion. Bank one clean block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: comeback_session:intense 1`] = `"Reset complete. Take the next target before it cools."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: comeback_session:study_focused 1`] = `"Return block saved. Review before adding new material."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: day_0_after_motivation:calm 1`] = `"VEX will stay quiet and clear. Start one clean block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: day_0_after_motivation:coach_led 1`] = `"I will keep the plan direct. Start the first block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: day_0_after_motivation:friendly 1`] = `"Your setup is ready. Start with one focused block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: day_0_after_motivation:game_like 1`] = `"First mission is simple: finish one clean block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: day_0_after_motivation:intense 1`] = `"Setup is done. Prove the first block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: day_0_after_motivation:study_focused 1`] = `"Your study rhythm starts with one review-ready block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: first_session_completion:calm 1`] = `"First session is real now. Tomorrow starts with one clean block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: first_session_completion:coach_led 1`] = `"First proof logged. Tomorrow, repeat the clean start."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: first_session_completion:friendly 1`] = `"First finish saved. Come back to the next small step."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: first_session_completion:game_like 1`] = `"First run banked. Tomorrow starts the next mark."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: first_session_completion:intense 1`] = `"First proof logged. Repeat it tomorrow."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: first_session_completion:study_focused 1`] = `"First study proof is in. Queue the next review block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: first_session_start:calm 1`] = `"Keep the target small. Finish the first block clean."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: first_session_start:coach_led 1`] = `"Start the timer. Protect the target."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: first_session_start:friendly 1`] = `"Begin with the work in front of you."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: first_session_start:game_like 1`] = `"Mission one: finish the block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: first_session_start:intense 1`] = `"Timer on. Nothing extra."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: first_session_start:study_focused 1`] = `"Start with the material you can review after."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: game_like_user_completion:calm 1`] = `"Your rhythm is here. Start one clean block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: game_like_user_completion:coach_led 1`] = `"Next block is clear. Start it clean."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: game_like_user_completion:friendly 1`] = `"Nice, the next block has a clear shape."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: game_like_user_completion:game_like 1`] = `"Damage landed. Spend the momentum on one more clean run."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: game_like_user_completion:intense 1`] = `"Damage landed. Press the next target while it is warm."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: game_like_user_completion:study_focused 1`] = `"Keep the thread warm. Review, then continue."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: long_session:calm 1`] = `"Long block held. Make the next move lighter."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: long_session:coach_led 1`] = `"Long block complete. Recover, then choose the next target."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: long_session:friendly 1`] = `"That was a long hold. Give the next step room."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: long_session:game_like 1`] = `"Big run banked. Cool down before the next push."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: long_session:intense 1`] = `"Long hold complete. Recover fast, then reset the target."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: long_session:study_focused 1`] = `"Long study block held. Review before adding more."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: low_energy_day:calm 1`] = `"Low energy, still finished. Recovery is the next action."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: low_energy_day:coach_led 1`] = `"Energy was low. Keep the next block short."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: low_energy_day:friendly 1`] = `"You still landed the block. Take the easy next step."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: low_energy_day:game_like 1`] = `"Low-energy run banked. Keep the next mission light."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: low_energy_day:intense 1`] = `"Low energy noted. Short target next."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: low_energy_day:study_focused 1`] = `"Low energy study counts. Review only next."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: missed_day_recovery:calm 1`] = `"You are not behind. Start with one clean session."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: missed_day_recovery:coach_led 1`] = `"Reset the rhythm. Start one contained block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: missed_day_recovery:friendly 1`] = `"Come back small. One block is enough."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: missed_day_recovery:game_like 1`] = `"The run is not over. One clean block restarts motion."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: missed_day_recovery:intense 1`] = `"No speech. Reset with one block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: missed_day_recovery:study_focused 1`] = `"Do one review block before new material."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: next_action_tomorrow:calm 1`] = `"Tomorrow, start with the smallest useful block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: next_action_tomorrow:coach_led 1`] = `"Tomorrow opens with the next clear target."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: next_action_tomorrow:friendly 1`] = `"Tomorrow has one simple first move."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: next_action_tomorrow:game_like 1`] = `"Tomorrow starts the next run."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: next_action_tomorrow:intense 1`] = `"Tomorrow, take the first target immediately."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: next_action_tomorrow:study_focused 1`] = `"Tomorrow, review the thread before new work."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: short_session:calm 1`] = `"Short block landed. Let it lower the next start."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: short_session:coach_led 1`] = `"Short block saved. Stack one controlled follow-up."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: short_session:friendly 1`] = `"Small finish saved. One more would fit."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: short_session:game_like 1`] = `"Quick run banked. Stack the next mark."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: short_session:intense 1`] = `"Short block saved. Do not drift."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: short_session:study_focused 1`] = `"Short review counted. Queue the next pass."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: strong_streak:calm 1`] = `"Your rhythm is stable. Protect the next clean start."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: strong_streak:coach_led 1`] = `"Consistency is visible. Repeat the start."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: strong_streak:friendly 1`] = `"The pattern is showing. Keep the next step easy."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: strong_streak:game_like 1`] = `"The run has teeth. One more block adds damage."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: strong_streak:intense 1`] = `"Streak is live. Use it now."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: strong_streak:study_focused 1`] = `"Study rhythm is forming. Review, then continue."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: study_user_completion:calm 1`] = `"Your rhythm is here. Start one clean block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: study_user_completion:coach_led 1`] = `"Next block is clear. Start it clean."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: study_user_completion:friendly 1`] = `"Nice, the next block has a clear shape."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: study_user_completion:game_like 1`] = `"The run is live. Bank the next block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: study_user_completion:intense 1`] = `"Momentum is open. Take the next block."`;
+
+exports[`CoachPresence message library covers every required context and tone variant: study_user_completion:study_focused 1`] = `"Study thread stayed alive. Queue the next review pass."`;

@@ -3,4 +3,5 @@ export type {
   HomeExperienceModel,
   HomeExperienceStage,
   HomeSection,
+  HomeSpotlightSystem,
 } from './schemas';

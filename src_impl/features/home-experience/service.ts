@@ -40,7 +40,7 @@ function copyForStyle(style: ExplicitMotivationStyle | null): {
   unlock: string;
 } {
   switch (style) {
-    case 'student':
+    case 'study_focused':
       return {
         coach: 'I will keep this structured and help you protect the next study block.',
         study: 'Study OS sits as the work mode when you choose study work.',
@@ -83,18 +83,19 @@ function profileForStyle(
   style: ExplicitMotivationStyle | null,
 ): VexPersonalizationProfile {
   const motivationStyle = style ?? 'calm';
+  const studyLayerName = motivationStyle === 'study_focused' ? 'Study OS' as const
+    : motivationStyle === 'calm' ? 'Growth Plan' as const
+    : 'Deep Work Plan' as const;
+  const isStudy = motivationStyle === 'study_focused';
   return {
-    coachMode: motivationStyle === 'student' ? 'study' : 'reflective',
-    defaultSessionDuration: 25,
-    defaultSessionMode: motivationStyle === 'student' ? 'STUDY' : 'FOCUS',
-    featureIntensityMap: {},
-    gamificationIntensity: motivationStyle === 'game_like'
-      ? 'game-like'
-      : motivationStyle === 'intense' ? 'intense' : 'subtle',
+    primaryGoal: isStudy ? 'study' : 'work',
     motivationStyle,
-    preferredTone: motivationStyle === 'intense' ? 'direct' : 'calm',
-    primaryGoal: motivationStyle === 'student' ? 'STUDY' : 'WORK',
-    studyLayerName: motivationStyle === 'student' ? 'Study OS' : 'Deep Work OS',
+    preferredTone: motivationStyle === 'intense' ? 'direct' : motivationStyle === 'coach_led' ? 'strategic' : 'soft',
+    gamificationIntensity: motivationStyle === 'game_like' || motivationStyle === 'intense' ? 'strong' : 'minimal',
+    coachMode: motivationStyle === 'study_focused' ? 'study_tutor' : motivationStyle === 'intense' ? 'tactical' : motivationStyle === 'game_like' ? 'game_guide' : motivationStyle === 'coach_led' ? 'mentor' : 'reflection',
+    studyLayerName,
+    defaultSessionDuration: 25,
+    defaultSessionMode: isStudy ? 'STUDY' : 'FOCUS',
     userStage: 'new',
   };
 }
@@ -116,6 +117,23 @@ function behaviorForSessions(totalCompletedSessions: number): BehaviorStats {
   };
 }
 
+function resolveSpotlight(
+  style: ExplicitMotivationStyle | null,
+  stage: HomeExperienceStage,
+  totalSessions: number,
+): 'none' | 'study' | 'coach' | 'boss_progress' | 'progress_rhythm' | 'companion' {
+  if (stage === 'STAGE_0') return 'none';
+  if (stage === 'STAGE_1') return 'progress_rhythm';
+  switch (style) {
+    case 'study_focused': return 'study';
+    case 'coach_led': return 'coach';
+    case 'game_like': return totalSessions >= 5 ? 'boss_progress' : 'progress_rhythm';
+    case 'intense': return totalSessions >= 3 ? 'boss_progress' : 'progress_rhythm';
+    case 'calm': return 'progress_rhythm';
+    default: return 'companion';
+  }
+}
+
 export function buildHomeExperienceModel(input: HomeExperienceInput): HomeExperienceModel {
   const stage = getHomeStage(input.totalCompletedSessions);
   const copy = copyForStyle(input.explicitMotivationStyle);
@@ -133,6 +151,8 @@ export function buildHomeExperienceModel(input: HomeExperienceInput): HomeExperi
   const visibleSections: HomeSection[] = stage === 'STAGE_0'
     ? ['motivation_style', 'coach_line', 'primary_session', 'single_evolution_teaser']
     : ['coach_line', 'primary_session', 'session_reflection', 'progress_signal'];
+
+  const spotlight = resolveSpotlight(input.explicitMotivationStyle, stage, input.totalCompletedSessions);
 
   return HomeExperienceModelSchema.parse({
     aiCoachMessageStyle: resolved.home.coachCopy || copy.coach,
@@ -157,6 +177,7 @@ export function buildHomeExperienceModel(input: HomeExperienceInput): HomeExperi
       ? 'A tiny visual wrapper only; no boss route or query.'
       : 'Adaptive challenge hint after progress context exists.',
     secondaryCta: stage === 'STAGE_0' ? 'Choose style' : 'Review progress',
+    spotlight,
     stage,
     studyOsPlacement: copy.study,
     teasedElements: [copy.teaser],

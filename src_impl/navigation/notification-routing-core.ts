@@ -11,6 +11,8 @@ import type {
   NotificationAction,
   NotificationActionType,
   NotificationRouteResult,
+  NotificationSafeIntent,
+  SafeNotificationResolution,
 } from './notification-routing-types';
 
 export type FeatureAccessCheck = Partial<FeatureAccessMap>;
@@ -19,125 +21,155 @@ interface NotificationNavigation {
   navigate(screen: string, params?: object | undefined): void;
 }
 
-const CUSTOM_MAIN_TAB_SCREENS = new Set(['Home', 'Progress', 'Profile']);
-const CUSTOM_ROOT_SCREENS = new Set(['ContentStudy', 'AICoach', 'Mastery']);
+const ALLOWED_MAIN_TAB_SCREENS = new Set(['Home', 'Progress', 'Profile']);
+const ALLOWED_ROOT_SCREENS = new Set(['ContentStudy', 'AICoach', 'Mastery']);
+const DISABLED_FILTER_TYPES: NotificationActionType[] = ['view_squad', 'join_duel', 'open_shop', 'open_chest', 'view_streak'];
 
 function canUseFeature(
   featureAccess: FeatureAccessCheck | undefined,
   feature: FeatureKey | null,
 ): boolean {
-  if (!feature) {
-    return true;
-  }
+  if (!feature) return true;
   const access = featureAccess?.[feature];
-  return access
-    ? isFeatureAvailableForNavigation(getFeatureAvailability(access))
-    : false;
+  return access ? isFeatureAvailableForNavigation(getFeatureAvailability(access)) : false;
 }
 
 function blocked(screen: string): NotificationRouteResult {
   return { success: false, error: `${screen} is not available yet`, screen: 'Home' };
 }
 
+/**
+ * Resolves a notification action to a safe intent.
+ * Safe intents are never raw route strings — they represent user-facing actions.
+ * The actual route mapping happens after FeatureAvailability checks.
+ */
+export function resolveNotificationAction(
+  action: NotificationAction,
+  featureAccess?: FeatureAccessCheck,
+  motivationStyle?: string | null,
+): SafeNotificationResolution {
+  switch (action.type) {
+    case 'start_session':
+    case 'view_streak':
+      return { intent: 'START_SESSION', params: action.payload };
+    case 'view_boss': {
+      const bossAvailable = canUseFeature(featureAccess, 'boss_tab');
+      if (!bossAvailable) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Boss feature is not available yet' };
+      }
+      const isGameUser = motivationStyle === 'game_like' || motivationStyle === 'intense';
+      return { intent: 'OPEN_BOSS', params: { subtle: !isGameUser } };
+    }
+    case 'view_squad':
+    case 'join_duel': {
+      const squadsAvailable = canUseFeature(featureAccess, 'squads');
+      if (!squadsAvailable) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Squads are not available yet' };
+      }
+      return { intent: 'OPEN_HOME', fallbackReason: 'Squad actions redirect to Home while social is limited' };
+    }
+    case 'open_shop': {
+      const shopAvailable = canUseFeature(featureAccess, 'shop');
+      if (!shopAvailable) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Shop is not available' };
+      }
+      return { intent: 'OPEN_HOME', fallbackReason: 'Shop redirects to Home' };
+    }
+    case 'view_profile':
+    case 'accept_invite':
+      return { intent: 'OPEN_PROGRESS' };
+    case 'view_progress':
+      return { intent: 'OPEN_PROGRESS' };
+    case 'open_coach': {
+      const coachAvailable = canUseFeature(featureAccess, 'ai_coach_advanced');
+      if (!coachAvailable) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Coach is not available yet' };
+      }
+      return { intent: 'OPEN_COACH' };
+    }
+    case 'open_chest':
+      return { intent: 'OPEN_HOME', fallbackReason: 'Chest opening redirects to Home' };
+    case 'custom': {
+      const screen = toOptionalString(action.payload?.screen);
+      if (!screen) return { intent: 'OPEN_HOME' };
+      if (!ALLOWED_MAIN_TAB_SCREENS.has(screen) && !ALLOWED_ROOT_SCREENS.has(screen)) {
+        return { intent: 'OPEN_HOME', fallbackReason: `Screen ${screen} is not whitelisted` };
+      }
+      if (!canUseFeature(featureAccess, getFeatureForRoute(screen))) {
+        return { intent: 'OPEN_HOME', fallbackReason: `${screen} is not available yet` };
+      }
+      return { intent: 'OPEN_HOME', params: action.payload };
+    }
+    default:
+      return { intent: 'OPEN_HOME' };
+  }
+}
+
+/**
+ * Returns the list of notification filter types that should be shown
+ * given the current feature availability.
+ */
+export function getAvailableNotificationFilters(
+  featureAccess?: FeatureAccessCheck,
+): NotificationActionType[] {
+  if (!featureAccess) {
+    return ['start_session', 'view_progress', 'view_profile', 'custom'];
+  }
+  const filters: NotificationActionType[] = ['start_session', 'view_progress', 'view_profile'];
+  if (canUseFeature(featureAccess, 'ai_coach_advanced')) filters.push('open_coach');
+  if (canUseFeature(featureAccess, 'boss_tab')) filters.push('view_boss');
+  return filters.concat('custom');
+}
+
+function navigateFromSafeIntent(
+  navigation: NotificationNavigation,
+  intent: NotificationSafeIntent,
+  params?: Record<string, unknown>,
+  featureAccess?: FeatureAccessCheck,
+): NotificationRouteResult {
+  switch (intent) {
+    case 'START_SESSION':
+      return navigateToSessionSetup(navigation, params);
+    case 'OPEN_BOSS': {
+      if (!canUseFeature(featureAccess, 'boss_tab')) return blocked('Boss');
+      navigation.navigate('Boss', undefined);
+      return { success: true, screen: 'Boss' };
+    }
+    case 'OPEN_PROGRESS':
+      navigation.navigate('Main', { screen: 'Progress' });
+      return { success: true, screen: 'Progress' };
+    case 'OPEN_COACH': {
+      if (!canUseFeature(featureAccess, 'ai_coach_advanced')) return blocked('AICoach');
+      navigation.navigate('AICoach', undefined);
+      return { success: true, screen: 'AICoach' };
+    }
+    case 'OPEN_STUDY_LAYER': {
+      if (!canUseFeature(featureAccess, 'content_study')) return blocked('ContentStudy');
+      navigation.navigate('ContentStudy', undefined);
+      return { success: true, screen: 'ContentStudy' };
+    }
+    case 'OPEN_SETTINGS':
+      navigation.navigate('Settings', {});
+      return { success: true, screen: 'Settings' };
+    case 'OPEN_HOME':
+    default:
+      navigation.navigate('Main', { screen: 'Home' });
+      return { success: true, screen: 'Home' };
+  }
+}
+
 export function routeNotificationAction(
   navigation: NotificationNavigation | null | undefined,
   action: NotificationAction,
   featureAccess?: FeatureAccessCheck,
+  motivationStyle?: string | null,
 ): NotificationRouteResult {
   if (!navigation) {
     return { success: false, error: 'Navigation not available' };
   }
 
-  switch (action.type) {
-    case 'start_session':
-      return navigateToSessionSetup(navigation, action.payload);
-    case 'view_boss':
-      return navigateFeatureRoot(navigation, 'Boss', 'boss_tab', featureAccess);
-    case 'open_chest':
-    case 'view_streak':
-      navigation.navigate('Main', { screen: 'Profile' });
-      return { success: true, screen: 'Profile' };
-    case 'view_squad':
-    case 'join_duel':
-      navigation.navigate('Main', { screen: 'Home' });
-      return { success: true, screen: 'Home' };
-    case 'open_shop':
-      return navigateFeatureRoot(navigation, 'Shop', 'shop', featureAccess);
-    case 'view_profile':
-      navigation.navigate('Main', {
-        screen: 'Profile',
-        params: { userId: toOptionalString(action.payload?.userId) },
-      });
-      return { success: true, screen: 'Profile' };
-    case 'open_coach':
-      return navigateFeatureRoot(navigation, 'AICoach', 'ai_coach_advanced', featureAccess);
-    case 'accept_invite':
-      navigation.navigate('Main', { screen: 'Profile' });
-      return { success: true, screen: 'Profile' };
-    case 'view_progress':
-      navigation.navigate('Main', { screen: 'Progress' });
-      return { success: true, screen: 'Progress' };
-    case 'custom':
-      return handleCustomAction(navigation, action.payload, featureAccess);
-    default:
-      return {
-        success: false,
-        error: `Unknown notification action type: ${String(Reflect.get(action, 'type'))}`,
-      };
-  }
-}
-
-function navigateFeatureRoot(
-  navigation: NotificationNavigation,
-  screen: string,
-  feature: FeatureKey,
-  featureAccess: FeatureAccessCheck | undefined,
-): NotificationRouteResult {
-  if (!canUseFeature(featureAccess, feature)) {
-    return blocked(screen);
-  }
-  navigation.navigate(screen, undefined);
-  return { success: true, screen };
-}
-
-function navigateToSessionSetup(
-  navigation: NotificationNavigation,
-  payload?: Record<string, unknown>,
-): NotificationRouteResult {
-  const params: SessionStackParams['SessionSetup'] = {
-    presetId: toOptionalString(payload?.presetId),
-    comebackMultiplier: toOptionalNumber(payload?.comebackMultiplier),
-    presetMode: payload?.presetMode === 'STUDY' ? 'STUDY' : undefined,
-    source: payload?.source === 'content-study' ? 'content-study' : undefined,
-  };
-  navigation.navigate('SessionStack', { screen: 'SessionSetup', params });
-  return { success: true, screen: 'SessionSetup' };
-}
-
-function handleCustomAction(
-  navigation: NotificationNavigation,
-  payload?: Record<string, unknown>,
-  featureAccess?: FeatureAccessCheck,
-): NotificationRouteResult {
-  const screen = toOptionalString(payload?.screen);
-  if (!screen) {
-    return { success: false, error: 'Custom action missing screen' };
-  }
-  if (!CUSTOM_MAIN_TAB_SCREENS.has(screen) && !CUSTOM_ROOT_SCREENS.has(screen)) {
-    return { success: false, error: `Custom action screen not whitelisted: ${screen}` };
-  }
-  if (!canUseFeature(featureAccess, getFeatureForRoute(screen))) {
-    return blocked(screen);
-  }
-  if (screen === 'Home' || screen === 'Progress' || screen === 'Profile') {
-    navigation.navigate('Main', { screen });
-    return { success: true, screen };
-  }
-  if (screen === 'ContentStudy' || screen === 'AICoach' || screen === 'Mastery') {
-    navigation.navigate(screen, undefined);
-    return { success: true, screen };
-  }
-  return { success: false, error: `Custom action screen not routable: ${screen}` };
+  const resolved = resolveNotificationAction(action, featureAccess, motivationStyle);
+  return navigateFromSafeIntent(navigation, resolved.intent, resolved.params ?? action.payload, featureAccess);
 }
 
 export function deepLinkToNotificationAction(
@@ -177,11 +209,23 @@ const validTypes: NotificationActionType[] = [
 ];
 
 export function isValidNotificationAction(action: unknown): action is NotificationAction {
-  if (!action || typeof action !== 'object' || !('type' in action)) {
-    return false;
-  }
+  if (!action || typeof action !== 'object' || !('type' in action)) return false;
   const type = Reflect.get(action, 'type');
   return validTypes.some((validType) => validType === type);
+}
+
+function navigateToSessionSetup(
+  navigation: NotificationNavigation,
+  payload?: Record<string, unknown>,
+): NotificationRouteResult {
+  const params: SessionStackParams['SessionSetup'] = {
+    presetId: toOptionalString(payload?.presetId),
+    comebackMultiplier: toOptionalNumber(payload?.comebackMultiplier),
+    presetMode: payload?.presetMode === 'STUDY' ? 'STUDY' : undefined,
+    source: payload?.source === 'content-study' ? 'content-study' : undefined,
+  };
+  navigation.navigate('SessionStack', { screen: 'SessionSetup', params });
+  return { success: true, screen: 'SessionSetup' };
 }
 
 function toOptionalString(value: unknown): string | undefined {

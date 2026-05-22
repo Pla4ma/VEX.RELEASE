@@ -1,7 +1,15 @@
 import { eventBus } from '../../events';
 import { queryClient } from '../../api/QueryProvider';
+import { getAvailabilityFor } from '../liveops-config/feature-access-store';
 import * as repository from './repository-focus-score';
 import * as analytics from './analytics';
+
+/**
+ * DEPRECATED: Non-canonical focus-identity integration.
+ * The canonical focus score update path is through the session-completion
+ * orchestrator's completion-subsystems.ts -> FocusIdentityService.updateScore().
+ * This integration must only run when the orchestrator is not active.
+ */
 
 type SessionCompletedEvent = {
   userId?: string;
@@ -29,6 +37,11 @@ function scoreDeltaForGrade(grade: string | undefined): number {
 }
 
 export function initializeFocusIdentityIntegrations(): () => void {
+  const availability = getAvailabilityFor('focus_session');
+  if (!availability.canSubscribeToEvents) {
+    return () => {};
+  }
+
   return eventBus.subscribe('session:completed', async (event: SessionCompletedEvent) => {
     const userId = resolveUserId(event);
     if (!userId) {

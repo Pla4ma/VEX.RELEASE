@@ -6,6 +6,7 @@ import { consumeBountiesOnDamage } from '../../features/boss/BossBountySystem';
 import { recordBountyLootBoost } from '../../features/boss/bounty-loot-boost';
 import { applyDamage, getActiveEncounter } from '../../features/boss/service';
 import { getDailyBossDamageMultiplier } from '../../features/live-ops/daily-modifiers';
+import { getAvailabilityFor } from '../../features/liveops-config/feature-access-store';
 import { SessionSummarySchema } from '../types';
 import { getSessionModeConfig, getSprintChainMultiplier, resolveSessionMode, SessionMode } from '../modes';
 import { createDebugger } from '../../utils/debug';
@@ -64,6 +65,12 @@ export function calculateBossDamage(
 }
 
 export function initializeSessionBossIntegration(): () => void {
+  const availability = getAvailabilityFor('boss_tab');
+  if (!availability.canSubscribeToEvents) {
+    debug.info('SessionBossIntegration skipped — boss_tab feature cannot subscribe to events (state: %s)', availability.state);
+    return () => {};
+  }
+
   const unsubscribe = eventBus.subscribe('session:completed', async (rawEvent) => {
     const parsedEvent = SessionCompletedEventSchema.safeParse(rawEvent);
     if (!parsedEvent.success) {

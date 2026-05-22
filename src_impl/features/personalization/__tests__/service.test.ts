@@ -23,22 +23,15 @@ function profile(
   motivationStyle: VexPersonalizationProfile['motivationStyle'],
   overrides: Partial<VexPersonalizationProfile> = {},
 ): VexPersonalizationProfile {
-  const gamificationIntensity = motivationStyle === 'game_like'
-    ? 'game-like'
-    : motivationStyle === 'intense'
-      ? 'intense'
-      : 'subtle';
-
   return {
-    coachMode: 'reflective',
-    defaultSessionDuration: 25,
-    defaultSessionMode: 'FOCUS',
-    featureIntensityMap: {},
-    gamificationIntensity,
+    primaryGoal: motivationStyle === 'study_focused' ? 'study' : 'work',
     motivationStyle,
-    preferredTone: motivationStyle === 'intense' ? 'direct' : 'calm',
-    primaryGoal: motivationStyle === 'student' ? 'STUDY' : 'WORK',
-    studyLayerName: motivationStyle === 'student' ? 'Study OS' : 'Deep Work OS',
+    preferredTone: motivationStyle === 'intense' ? 'direct' : motivationStyle === 'coach_led' ? 'strategic' : 'soft',
+    gamificationIntensity: motivationStyle === 'game_like' || motivationStyle === 'intense' ? 'strong' : 'minimal',
+    coachMode: motivationStyle === 'study_focused' ? 'study_tutor' : motivationStyle === 'intense' ? 'tactical' : motivationStyle === 'game_like' ? 'game_guide' : motivationStyle === 'coach_led' ? 'mentor' : 'reflection',
+    studyLayerName: motivationStyle === 'study_focused' ? 'Study OS' : 'Deep Work Plan',
+    defaultSessionDuration: 25,
+    defaultSessionMode: motivationStyle === 'study_focused' ? 'STUDY' : 'FOCUS',
     userStage: 'new',
     ...overrides,
   };
@@ -112,7 +105,7 @@ describe('resolveVexExperience', () => {
   });
 
   it('orders completion as core, coach, progress, contextual systems, next action', () => {
-    const experience = resolveVexExperience(profile('student'), stats({
+    const experience = resolveVexExperience(profile('study_focused'), stats({
       completedSessionDurations: [25, 25, 45],
       studyUsageRatio: 0.7,
       totalCompletedSessions: 6,
@@ -146,10 +139,10 @@ describe('resolveVexExperience', () => {
   });
 
   it('delays premium until value is experienced and keeps the execution loop free', () => {
-    const early = resolveVexExperience(profile('student'), stats({
+    const early = resolveVexExperience(profile('study_focused'), stats({
       totalCompletedSessions: 2,
     }), available);
-    const ready = resolveVexExperience(profile('student'), stats({
+    const ready = resolveVexExperience(profile('study_focused'), stats({
       premiumFeatureAttempts: ['weekly_intelligence'],
       totalCompletedSessions: 7,
     }), available);

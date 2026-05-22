@@ -42,6 +42,7 @@ export const RootNavigator: React.FC = () => {
   const navigationRef = useNavigationContainerRef<ExtendedRootStackParams>();
   const {
     canCompleteForUser,
+    canPreviewHome,
     completedAt,
     completedForUserId,
     isOnboarded,
@@ -49,6 +50,7 @@ export const RootNavigator: React.FC = () => {
     setCompletionFromBackend,
   } = useOnboardingStore((state) => ({
     canCompleteForUser: state.canCompleteForUser,
+    canPreviewHome: state.canPreviewHome,
     completedAt: state.completedAt,
     completedForUserId: state.completedForUserId,
     isOnboarded: state.isOnboarded,
@@ -58,12 +60,18 @@ export const RootNavigator: React.FC = () => {
 
   const sessionStats = useSessionStats(user?.id ?? '');
   const totalCompletedSessions = sessionStats.stats?.completedSessions ?? 0;
-  const { degradedFeatures } = useFeatureHealth();
-  const featureAccess = useFeatureAccess(degradedFeatures);
+  useFeatureHealth();
+  const featureAccess = useFeatureAccess();
 
   const hasCompletedOnboarding = useMemo(
     () => canCompleteForUser(user?.id),
     [canCompleteForUser, user?.id],
+  );
+
+  /** Home Preview: profile steps done but first session not yet completed. */
+  const canShowHomePreview = useMemo(
+    () => canPreviewHome(user?.id),
+    [canPreviewHome, user?.id],
   );
 
   const hasStaleOnboardingState = Boolean(
@@ -154,6 +162,7 @@ export const RootNavigator: React.FC = () => {
       >
         <RootStackScreens
           hasCompletedOnboarding={hasCompletedOnboarding}
+          canShowHomePreview={canShowHomePreview}
           isAuthenticated={isAuthenticated}
         />
       </RootCrashBoundary>

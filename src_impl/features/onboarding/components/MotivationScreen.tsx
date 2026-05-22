@@ -26,7 +26,7 @@ interface MotivationOption {
 
 const MOTIVATION_OPTIONS: MotivationOption[] = [
   { key: 'calm', label: 'Calm', shortLabel: 'Calm', description: 'Gentle focus, low pressure.' },
-  { key: 'student', label: 'Study-focused', shortLabel: 'Study', description: 'Structure and learning tools.' },
+  { key: 'study_focused', label: 'Study-focused', shortLabel: 'Study', description: 'Structure and learning tools.' },
   { key: 'game_like', label: 'Game-like', shortLabel: 'Game', description: 'Progress feels visual and alive.' },
   { key: 'coach_led', label: 'Coach-led', shortLabel: 'Coach', description: 'Direct guidance and a clear next move.' },
   { key: 'intense', label: 'Intense', shortLabel: 'Drive', description: 'High drive and fewer soft edges.' },

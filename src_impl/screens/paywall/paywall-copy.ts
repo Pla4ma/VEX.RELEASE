@@ -4,9 +4,9 @@ import { launchColors } from '@theme/tokens/launch-colors';
 
 export const VALUE_PROPOSITION = 'Premium adds depth after the core focus loop is useful.';
 export const FREE_BOUNDARY_COPY =
-  'Core sessions, basic progress, streak building, and earned rewards stay free.';
+  'Core sessions, basic progress, streak building, and basic Coach Presence stay free.';
 export const PREMIUM_BOUNDARY_COPY =
-  'Premium adds advanced coaching, deeper insights, and continuity tools for users who already rely on VEX.';
+  'Premium adds deeper coach memory, progress intelligence, and execution tools for users who already rely on VEX.';
 
 const FALLBACK_PRICING = {
   monthly: 'Live pricing unavailable',
@@ -16,28 +16,28 @@ const FALLBACK_PRICING = {
 export const PREMIUM_FEATURES = [
   {
     iconName: 'check',
-    title: 'Advanced AI Coach',
-    description: 'Personalized guidance that adapts to your focus patterns',
-  },
-  {
-    iconName: 'shield',
-    title: 'Streak Protection',
-    description: 'Safeguard your progress against unexpected interruptions',
-  },
-  {
-    iconName: 'bar-chart-3',
-    title: 'Deep Analytics',
-    description: 'Insights on when you focus best and how to improve',
-  },
-  {
-    iconName: 'sparkles',
-    title: 'Priority Support',
-    description: 'Get help faster when you need it most',
+    title: 'Deep Coach Memory',
+    description: 'VEX remembers patterns, comeback style, best focus windows, and preferred push style',
   },
   {
     iconName: 'book-open',
-    title: 'Exclusive Content',
-    description: 'Premium challenges and study materials',
+    title: 'Advanced Study / Deep Work OS',
+    description: 'Turn sessions into review loops, project breakdowns, quizzes, and smart next actions',
+  },
+  {
+    iconName: 'bar-chart-3',
+    title: 'Progress Intelligence',
+    description: 'See rhythm, focus risk, recovery plans, and consistency forecasts',
+  },
+  {
+    iconName: 'sparkles',
+    title: 'Visual Identity',
+    description: 'Shape companion forms, focus worlds, session atmospheres, and premium animations',
+  },
+  {
+    iconName: 'zap',
+    title: 'Premium Session Modes',
+    description: 'Use Exam Sprint, Deep Work, Calm Reset, Boss Focus, Comeback, and Review modes',
   },
 ];
 
@@ -50,38 +50,38 @@ export type PaywallFeatureHighlight = {
 
 export const FEATURE_HIGHLIGHT_MAP: Record<string, PaywallFeatureHighlight> = {
   ai_coach_full_access: {
-    title: 'Best Coach',
-    benefit: 'Premium unlocks sharper timing, better nudges, and recommendations that fit your rhythm.',
+    title: 'Deeper Coach Memory',
+    benefit: 'Let VEX learn your rhythm deeply and turn sessions into a full execution system.',
     iconName: 'brain',
     gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
   },
   advanced_analytics: {
-    title: 'Best Insight',
-    benefit: 'Premium helps you see when your focus is strongest and where momentum starts leaking.',
+    title: 'Progress Intelligence',
+    benefit: 'See your best rhythm, focus risk, recovery plan, and consistency forecast.',
     iconName: 'bar-chart-3',
     gradient: [launchColors.hex_0f766e, launchColors.hex_0d9488],
   },
   content_study: {
-    title: 'Best Insight',
-    benefit: 'Premium expands VEX into a deeper work tool once your focus habit is taking hold.',
+    title: 'Advanced Study / Deep Work',
+    benefit: 'Break projects, study loops, and review sessions into smart next actions.',
     iconName: 'book-open',
     gradient: [launchColors.hex_d97706, launchColors.hex_f59e0b],
   },
   streak_freeze: {
-    title: 'Best Continuity',
-    benefit: "Premium protects momentum so one rough day doesn't erase progress.",
+    title: 'Recovery Planning',
+    benefit: 'Build a recovery plan that helps you return without shame or backlog pressure.',
     iconName: 'shield',
     gradient: [launchColors.hex_059669, launchColors.hex_10b981],
   },
   xp_boost: {
-    title: 'Reward boost',
-    benefit: 'Premium makes strong sessions feel more rewarding without blocking the focus session itself.',
+    title: 'Premium Session Modes',
+    benefit: 'Choose deeper session modes when the basic loop is already working.',
     iconName: 'zap',
     gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
   },
   season_premium_rewards: {
-    title: 'Season rewards',
-    benefit: 'Premium adds the extra reward track while the free track still keeps seasonal progress useful.',
+    title: 'Visual Identity',
+    benefit: 'Shape the companion, atmosphere, and focus world without changing core progress.',
     iconName: 'award',
     gradient: [launchColors.hex_0f766e, launchColors.hex_0d9488],
   },

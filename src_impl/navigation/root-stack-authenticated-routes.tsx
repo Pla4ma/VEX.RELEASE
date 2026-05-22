@@ -18,16 +18,20 @@ type RootStack = ReturnType<
 
 export function RootStackAuthenticatedRoutes({
   hasCompletedOnboarding,
+  canShowHomePreview,
   features,
   show,
   Stack,
 }: {
   hasCompletedOnboarding: boolean;
+  canShowHomePreview: boolean;
   features: FeatureAccessMap;
   show: RootExposureFlags;
   Stack: RootStack;
 }): React.JSX.Element {
-  if (!hasCompletedOnboarding) {
+  const showApp = hasCompletedOnboarding || canShowHomePreview;
+
+  if (!showApp) {
     return <Stack.Screen name="Onboarding" component={OnboardingNavigator} />;
   }
 

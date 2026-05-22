@@ -8,9 +8,6 @@ import type { FeatureAccessMap } from '../../liveops-config/feature-access';
 const mockOrder: string[] = [];
 const mockCaptureException = jest.fn();
 const mockAddBreadcrumb = jest.fn();
-const mockUpdateScore = jest.fn(async (): Promise<void> => {
-  mockOrder.push('focus-identity');
-});
 const mockRecordSession = jest.fn(async (): Promise<{ currentStreak: number }> => {
   mockOrder.push('streak');
   return { currentStreak: 5 };
@@ -31,10 +28,10 @@ jest.mock('@sentry/react-native', () => ({
   captureException: (...args: unknown[]) => mockCaptureException(...args),
 }));
 
-jest.mock('../../../features/focus-identity/FocusIdentityEngine', () => ({
-  FocusIdentityService: jest.fn().mockImplementation(() => ({
-    updateScore: mockUpdateScore,
-  })),
+jest.mock('../../../features/focus-identity/update-focus-score.helper', () => ({
+  updateFocusScoreFromSessionCompletion: jest.fn(async (): Promise<void> => {
+    mockOrder.push('focus-identity');
+  }),
 }));
 
 jest.mock('../../../progression/ProgressionService', () => ({
@@ -173,7 +170,10 @@ describe('applyCompletionSubsystems', () => {
   });
 
   it('captures Focus Score failure and still awards downstream systems', async () => {
-    mockUpdateScore.mockImplementationOnce(async (): Promise<void> => {
+    const { updateFocusScoreFromSessionCompletion } = jest.requireMock(
+      '../../../features/focus-identity/update-focus-score.helper'
+    );
+    (updateFocusScoreFromSessionCompletion as jest.Mock).mockImplementationOnce(async (): Promise<void> => {
       mockOrder.push('focus-identity');
       throw new Error('focus unavailable');
     });
