@@ -5,6 +5,8 @@ import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { useOnboardingStore } from '../../onboarding/store';
 import type { ExplicitMotivationStyle, HomeExperienceModel } from '../schemas';
+import type { FirstWeekExperience } from '../../personalization/first-week-schemas';
+import type { HomeSurfaceMap } from '../surface-decision-schemas';
 
 const OPTIONS: Array<{ label: string; value: ExplicitMotivationStyle }> = [
   { label: 'Calm', value: 'calm' },
@@ -16,20 +18,48 @@ const OPTIONS: Array<{ label: string; value: ExplicitMotivationStyle }> = [
 
 interface HomeExperiencePreludeProps {
   model: HomeExperienceModel;
+  firstWeekExperience?: FirstWeekExperience;
+  surfaceMap?: HomeSurfaceMap;
 }
 
-export function HomeExperiencePrelude({ model }: HomeExperiencePreludeProps): JSX.Element {
+export function HomeExperiencePrelude({
+  model,
+  firstWeekExperience,
+  surfaceMap,
+}: HomeExperiencePreludeProps): JSX.Element {
   const { theme } = useTheme();
   const selected = useOnboardingStore((state) => state.explicitMotivationStyle);
   const setStyle = useOnboardingStore((state) => state.setExplicitMotivationStyle);
 
+  const showMotivationPicker = firstWeekExperience
+    ? firstWeekExperience.allowedHomeSurfaces.includes('motivation_confirmation' as never)
+    : model.visibleSections.includes('motivation_style');
+  const showEvolutionTeaser =
+    firstWeekExperience
+      ? firstWeekExperience.unlockTease !== null && firstWeekExperience.currentDayStage !== 'POST_DAY_7'
+      : model.teasedElements.length > 0;
+  const showCoachLine = firstWeekExperience
+    ? firstWeekExperience.allowedHomeSurfaces.includes('coach_presence_line' as never)
+    : true;
+  const isBossVisible =
+    firstWeekExperience
+      ? firstWeekExperience.bossIntensity !== 'hidden' &&
+        surfaceMap
+        ? surfaceMap.boss_teaser !== 'hidden' && surfaceMap.boss_teaser !== 'blocked'
+        : false
+      : false;
+
+  const teaseCopy = firstWeekExperience?.unlockTease ?? model.teasedElements[0]?.copy;
+
   return (
     <View style={{ gap: theme.spacing[3] }}>
-      <View style={{ gap: theme.spacing[1] }}>
-        <Text variant="label" color="text.secondary">AI Coach</Text>
-        <Text variant="body" color="text.primary">{model.aiCoachMessageStyle}</Text>
-      </View>
-      {model.visibleSections.includes('motivation_style') ? (
+      {showCoachLine ? (
+        <View style={{ gap: theme.spacing[1] }}>
+          <Text variant="label" color="text.secondary">AI Coach</Text>
+          <Text variant="body" color="text.primary">{model.aiCoachMessageStyle}</Text>
+        </View>
+      ) : null}
+      {showMotivationPicker ? (
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing[2] }}>
           {OPTIONS.map((option) => (
             <Pressable
@@ -60,16 +90,36 @@ export function HomeExperiencePrelude({ model }: HomeExperiencePreludeProps): JS
           ))}
         </View>
       ) : null}
-      <View
-        style={{
-          backgroundColor: theme.colors.background.secondary,
-          borderRadius: theme.borderRadius.lg,
-          padding: theme.spacing[4],
-        }}
-      >
-        <Text variant="label" color="text.secondary">Next evolution</Text>
-        <Text variant="body" color="text.primary">{model.teasedElements[0]?.copy}</Text>
-      </View>
+      {showEvolutionTeaser ? (
+        <View
+          style={{
+            backgroundColor: theme.colors.background.secondary,
+            borderRadius: theme.borderRadius.lg,
+            padding: theme.spacing[4],
+          }}
+        >
+          <Text variant="label" color="text.secondary">Next evolution</Text>
+          <Text variant="body" color="text.primary">
+            {teaseCopy}
+          </Text>
+        </View>
+      ) : null}
+      {isBossVisible ? (
+        <View
+          style={{
+            backgroundColor: theme.colors.background.secondary,
+            borderRadius: theme.borderRadius.lg,
+            padding: theme.spacing[4],
+          }}
+          accessibilityLabel="Boss teaser active"
+          accessibilityRole="text"
+        >
+          <Text variant="label" color="text.secondary">Challenge forming</Text>
+          <Text variant="body" color="text.primary">
+            {model.rpgBossPlacement}
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { View, Pressable, ActivityIndicator, Animated } from 'react-native';
+import { View, Pressable, ActivityIndicator } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { Text } from '../../../components/primitives/Text';
 import { Button } from '../../../components/primitives/Button';
 import { useTheme } from '../../../theme';
@@ -17,9 +18,13 @@ export const PdfUploader: React.FC<PdfUploaderProps> = ({
 }) => {
   const { theme } = useTheme();
   const [isPicking, setIsPicking] = useState(false);
-  const progressAnim = React.useRef(new Animated.Value(0)).current;
+  const progressAnim = useSharedValue(0);
 
-  React.useEffect(() => { Animated.timing(progressAnim, { toValue: uploadProgress, duration: 300, useNativeDriver: false }).start(); }, [uploadProgress, progressAnim]);
+  React.useEffect(() => { progressAnim.value = withTiming(uploadProgress, { duration: 300 }); }, [uploadProgress, progressAnim]);
+
+  const progressWidthStyle = useAnimatedStyle(() => ({
+    width: `${progressAnim.value}%`,
+  }));
 
   const pickDocument = useCallback(async () => {
     if (disabled || isPicking) return;
@@ -53,7 +58,7 @@ export const PdfUploader: React.FC<PdfUploaderProps> = ({
             <Text style={[styles.fileMeta, { color: theme.colors.text.muted }]}>{formatFileSize(selectedFile.size)}{isOversized && <Text style={{ color: theme.colors.error[500] }}> (exceeds {formatFileSize(maxSize)} limit)</Text>}</Text>
           </View>
         </View>
-        {uploadProgress > 0 && uploadProgress < 100 && <View style={styles.progressContainer}><View style={[styles.progressBar, { backgroundColor: theme.colors.background.primary }]}><Animated.View style={[styles.progressFill, { backgroundColor: theme.colors.primary[500], width: progressAnim.interpolate({ inputRange: [0, 100], outputRange: ['0%', '100%'] }) }]} /></View><Text style={[styles.progressText, { color: theme.colors.text.muted }]}>{uploadProgress}%</Text></View>}
+        {uploadProgress > 0 && uploadProgress < 100 && <View style={styles.progressContainer}><View style={[styles.progressBar, { backgroundColor: theme.colors.background.primary }]}><Animated.View style={[styles.progressFill, { backgroundColor: theme.colors.primary[500] }, progressWidthStyle]} /></View><Text style={[styles.progressText, { color: theme.colors.text.muted }]}>{uploadProgress}%</Text></View>}
         {uploadError && <View style={styles.errorContainer}><Text style={[styles.errorText, { color: theme.colors.error[500] }]}>{uploadError}</Text>{onRetry && <Pressable onPress={onRetry} accessibilityLabel="Retry button" accessibilityRole="button" accessibilityHint="Activates this control"><Text style={[styles.retryText, { color: theme.colors.primary[500] }]}>Retry</Text></Pressable>}</View>}
         {!uploadError && !validation.isValid && <View style={styles.errorContainer}>{validation.errors.map((error, index) => <Text key={index} style={[styles.errorText, { color: theme.colors.error[500] }]}>{error.message}</Text>)}</View>}
         {validation.warnings.length > 0 && <View style={styles.warningContainer}>{validation.warnings.slice(0, 1).map((warning, index) => <Text key={index} style={[styles.warningText, { color: theme.colors.warning[500] }]}>{warning.message}</Text>)}</View>}

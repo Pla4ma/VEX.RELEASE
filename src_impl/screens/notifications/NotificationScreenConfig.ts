@@ -46,7 +46,7 @@ export const NOTIFICATION_CONFIG: Record<
 };
 
 export const NOTIFICATION_TYPE_TO_SAFE_ACTION: Record<NotificationType, NotificationActionType> = {
-  ACHIEVEMENT: 'view_profile',
+  ACHIEVEMENT: 'view_progress',
   STREAK_RISK: 'view_streak',
   BOSS: 'view_boss',
   SQUAD: 'view_squad',

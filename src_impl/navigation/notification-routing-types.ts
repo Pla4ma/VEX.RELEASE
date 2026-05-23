@@ -8,6 +8,7 @@ export type NotificationSafeIntent =
   | 'OPEN_HOME'
   | 'START_SESSION'
   | 'OPEN_PROGRESS'
+  | 'OPEN_PROFILE'
   | 'OPEN_COACH'
   | 'OPEN_STUDY_LAYER'
   | 'OPEN_BOSS'

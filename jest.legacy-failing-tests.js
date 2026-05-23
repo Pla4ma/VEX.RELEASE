@@ -3,7 +3,6 @@ module.exports = [
   '<rootDir>/src_impl/session/__tests__/SessionService.test.ts',
   '<rootDir>/src_impl/features/session-start/__tests__/DifficultySelector.test.tsx',
   '<rootDir>/src_impl/features/focus-identity/__tests__/focus-score-dashboard-ui.test.tsx',
-  '<rootDir>/src_impl/features/economy/components/__tests__/PremiumGate.test.tsx',
   '<rootDir>/src_impl/accessibility/__tests__/AccessibilitySystem.test.ts',
   '<rootDir>/src_impl/errors/__tests__/ErrorBoundary.test.tsx',
   '<rootDir>/src_impl/features/streaks/__tests__/service-comprehensive.test.ts',

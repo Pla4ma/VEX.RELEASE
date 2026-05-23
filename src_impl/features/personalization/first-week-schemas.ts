@@ -82,6 +82,7 @@ export const FirstWeekInputSchema = z.object({
     'study',
     'work',
     'creative',
+    'personal',
     'personal_growth',
     'learning',
   ]),

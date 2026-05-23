@@ -19,11 +19,40 @@ import type {
   MotivationStyle,
 } from '../../../features/personalization/schemas';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
+import type { SessionHistoryEntry } from '../../../session/types';
 import type { HomeController } from './home-controller-types';
 
 export interface HomeResolvedExperience {
   resolvedExperience: VexExperience;
   firstWeekExperience: FirstWeekExperience;
+  personalizationProfile: {
+    motivationStyle: MotivationStyle;
+    primaryGoal: string;
+    gamificationIntensity: 'minimal' | 'medium' | 'strong';
+    studyLayerName: string;
+    userStage: 'new' | 'activating' | 'engaged' | 'power';
+  };
+  behaviorStats: {
+    totalCompletedSessions: number;
+    studyUsageRatio: number;
+    bossChallengeEngagement: 'none' | 'low' | 'medium' | 'high';
+    coachInteractions: number;
+    comebackSessions: number;
+    ignoredFeatures: string[];
+    premiumFeatureAttempts: string[];
+    completionStreak: number;
+  };
+}
+
+interface SessionEntry {
+  status?: string;
+  duration?: number;
+  effectiveDuration?: number;
+  mode?: string;
+  endedAt?: number;
+  startTime?: number;
+  focusQuality?: number;
+  config?: { sessionMode?: string; studyPlanId?: string };
 }
 
 export function useHomeResolvedExperience(controller: HomeController): HomeResolvedExperience {
@@ -54,6 +83,10 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
   const latestEndedAt = (controller.latestSession as Record<string, unknown> | null)?.endedAt as number | undefined;
   const daysSinceLastSession = latestEndedAt != null ? computeDaysSinceTimestamp(latestEndedAt) : null;
 
+  const sessionHistory = (controller.historyQuery as unknown as { history?: SessionEntry[] }).history ?? [];
+  const completedSessions = sessionHistory.filter((s) => s.status === 'COMPLETED');
+  const abandonedSessions = sessionHistory.filter((s) => s.status === 'ABANDONED');
+
   const featureAvailability: FeatureAvailabilitySnapshot = {
     boss: Boolean(features.boss_tab?.isUnlocked),
     challenges: Boolean(features.challenges?.isUnlocked),
@@ -63,17 +96,17 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
 
   const behaviorStats: BehaviorStats = {
     totalCompletedSessions,
-    abandonedSessionDurations: [],
-    bossChallengeEngagement: hasActiveBoss ? 'medium' : 'none',
+    abandonedSessionDurations: computeAbandonedDurations(abandonedSessions),
+    bossChallengeEngagement: computeBossEngagement(controller, hasActiveBoss),
     coachInteractions: computeCoachInteractions(controller),
     comebackSessions: computeComebackSessions(controller),
-    completedSessionDurations: [],
+    completedSessionDurations: computeCompletedDurations(completedSessions),
     completionStreak: controller.currentStreak,
     ignoredFeatures: [],
-    mostSuccessfulTimeOfDay: null,
-    preferredSessionMode: null,
+    mostSuccessfulTimeOfDay: computeBestTimeOfDay(completedSessions),
+    preferredSessionMode: computePreferredMode(completedSessions),
     premiumFeatureAttempts: [],
-    studyUsageRatio: computeStudyUsageRatio(totalCompletedSessions, hasActiveStudyPlan),
+    studyUsageRatio: computeStudyUsageRatio(completedSessions, totalCompletedSessions),
   };
 
   const vexInput: VexExperienceRuntimeInput = {
@@ -100,10 +133,36 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
     },
   });
 
+  const canonicalProfile = useMemo(() => ({
+    motivationStyle,
+    primaryGoal,
+    gamificationIntensity: (
+      motivationStyle === 'game_like' || motivationStyle === 'intense' ? 'strong'
+      : motivationStyle === 'calm' ? 'minimal' : 'medium'
+    ) as 'minimal' | 'medium' | 'strong',
+    studyLayerName: firstWeekExperience.studyLayerLabel,
+    userStage: totalCompletedSessions === 0 ? 'new'
+      : totalCompletedSessions < 3 ? 'activating'
+      : totalCompletedSessions < 10 ? 'engaged' : 'power',
+  } as const), [motivationStyle, primaryGoal, firstWeekExperience.studyLayerLabel, totalCompletedSessions]);
+
+  const canonicalBehavior = useMemo(() => ({
+    totalCompletedSessions,
+    studyUsageRatio: behaviorStats.studyUsageRatio,
+    bossChallengeEngagement: behaviorStats.bossChallengeEngagement,
+    coachInteractions: behaviorStats.coachInteractions,
+    comebackSessions: behaviorStats.comebackSessions,
+    ignoredFeatures: behaviorStats.ignoredFeatures,
+    premiumFeatureAttempts: behaviorStats.premiumFeatureAttempts,
+    completionStreak: behaviorStats.completionStreak,
+  } as const), [totalCompletedSessions, behaviorStats]);
+
   return useMemo(() => ({
     resolvedExperience,
     firstWeekExperience,
-  }), [resolvedExperience, firstWeekExperience]);
+    personalizationProfile: canonicalProfile,
+    behaviorStats: canonicalBehavior,
+  }), [resolvedExperience, firstWeekExperience, canonicalProfile, canonicalBehavior]);
 }
 
 function normalizeMotivationStyle(style: string | null): MotivationStyle {
@@ -125,7 +184,8 @@ function resolvePrimaryGoal(goal: string | null): string {
     case 'STUDY': return 'study';
     case 'WORK': return 'work';
     case 'CREATIVE': return 'creative';
-    case 'PERSONAL': return 'personal_growth';
+    case 'LEARNING': return 'learning';
+    case 'PERSONAL': return 'personal';
     default: return 'focus';
   }
 }
@@ -134,16 +194,102 @@ function computeDaysSinceTimestamp(ts: number): number {
   return Math.max(0, Math.floor((Date.now() - ts) / (1000 * 60 * 60 * 24)));
 }
 
-function computeStudyUsageRatio(
-  totalCompleted: number, hasActiveStudyPlan: boolean,
-): number {
-  if (totalCompleted === 0) return 0;
-  if (hasActiveStudyPlan) return 0.4;
-  return 0;
+function computeCompletedDurations(sessions: SessionEntry[]): number[] {
+  return sessions
+    .map((s) => s.effectiveDuration ?? s.duration ?? 0)
+    .filter((d) => d > 0);
 }
 
-function computeCoachInteractions(_controller: HomeController): number {
-  return 0;
+function computeAbandonedDurations(sessions: SessionEntry[]): number[] {
+  return sessions
+    .map((s) => s.effectiveDuration ?? s.duration ?? 0)
+    .filter((d) => d > 0);
+}
+
+const VALID_SESSION_MODES = ['FOCUS', 'STUDY', 'DEEP_WORK', 'SPRINT', 'CREATIVE', 'RECOVERY'] as const;
+type ValidSessionMode = typeof VALID_SESSION_MODES[number];
+
+function computePreferredMode(sessions: SessionEntry[]): ValidSessionMode | null {
+  const recent = sessions.slice(-10);
+  if (recent.length === 0) return null;
+  const modeCounts = new Map<string, number>();
+  for (const s of recent) {
+    const mode = s.mode ?? s.config?.sessionMode;
+    if (mode) {
+      modeCounts.set(mode, (modeCounts.get(mode) ?? 0) + 1);
+    }
+  }
+  if (modeCounts.size === 0) return null;
+  const entries = Array.from(modeCounts.entries()).sort((a, b) => b[1] - a[1]);
+  const best = entries[0]?.[0];
+  if (!best) return null;
+  return (VALID_SESSION_MODES as readonly string[]).includes(best)
+    ? (best as ValidSessionMode)
+    : null;
+}
+
+function computeBestTimeOfDay(sessions: SessionEntry[]): string | null {
+  const qualitySessions = sessions.filter(
+    (s) => typeof s.focusQuality === 'number' && typeof s.startTime === 'number',
+  );
+  if (qualitySessions.length < 3) return null;
+
+  qualitySessions.sort((a, b) => (b.focusQuality ?? 0) - (a.focusQuality ?? 0));
+  const top = qualitySessions.slice(0, Math.min(3, qualitySessions.length));
+  const avgHour = top.reduce((sum, s) => {
+    const date = new Date((s.startTime ?? 0) * 1000);
+    return sum + date.getHours();
+  }, 0) / top.length;
+
+  const hour = Math.round(avgHour);
+  if (hour < 6) return 'early_morning';
+  if (hour < 12) return 'morning';
+  if (hour < 17) return 'afternoon';
+  if (hour < 21) return 'evening';
+  return 'night';
+}
+
+function computeStudyUsageRatio(
+  completedSessions: SessionEntry[],
+  totalCompleted: number,
+): number {
+  if (totalCompleted === 0 || completedSessions.length === 0) return 0;
+  const studySessions = completedSessions.filter(
+    (s) =>
+      s.mode === 'STUDY' ||
+      s.config?.sessionMode === 'STUDY' ||
+      Boolean(s.config?.studyPlanId),
+  );
+  return Math.min(1, studySessions.length / totalCompleted);
+}
+
+function computeCoachInteractions(controller: HomeController): number {
+  let count = 0;
+  if (controller.primaryRecommendation) count += 1;
+  const recsData = controller.recommendationsQuery?.data as
+    | { items?: Array<{ status?: string }> }
+    | Array<{ status?: string }>
+    | undefined;
+  if (recsData) {
+    const items = Array.isArray(recsData) ? recsData : recsData.items ?? [];
+    count += items.filter((r) => r.status === 'ACCEPTED').length;
+  }
+  return count;
+}
+
+function computeBossEngagement(
+  controller: HomeController,
+  hasActiveBoss: boolean,
+): 'none' | 'low' | 'medium' | 'high' {
+  if (!hasActiveBoss) return 'none';
+  const bossData = controller.activeBossQuery?.data as
+    | { damageTaken?: number; maxHealth?: number; encounters?: number }
+    | undefined;
+  if (!bossData) return 'low';
+  const encounterCount = bossData.encounters ?? 0;
+  if (encounterCount >= 3) return 'high';
+  if (encounterCount >= 1) return 'medium';
+  return 'low';
 }
 
 function computeComebackSessions(controller: HomeController): number {

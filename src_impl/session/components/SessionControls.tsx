@@ -26,10 +26,10 @@ import { launchColors } from '@theme/tokens/launch-colors';
               This will count as a failed session and may affect your streak. Are you sure?
             </Text>
             <View style={styles.modalButtons}>
-              <Pressable style={({pressed})=>[styles.modalButton,styles.cancelButton,pressed && {opacity:0.8}]}onPress={()=>setShowConfirmAbandon(false)}accessibilityLabel="Continue Session button"accessibilityRole="button"accessibilityHint="Activates this control">
+              <Pressable style={({pressed})=>[styles.modalButton,styles.cancelButton,pressed && {opacity:0.8}]}onPress={()=>setShowConfirmAbandon(false)}accessibilityLabel="Continue Session"accessibilityRole="button"accessibilityHint="Cancels abandonment and continues the session">
                 <Text style={styles.cancelButtonText}>Continue Session</Text>
               </Pressable>
-              <Pressable style={({pressed})=>[styles.modalButton,styles.confirmAbandonButton,pressed && {opacity:0.8}]}onPress={handleAbandon}accessibilityLabel="Yes, Abandon button"accessibilityRole="button"accessibilityHint="Activates this control">
+              <Pressable style={({pressed})=>[styles.modalButton,styles.confirmAbandonButton,pressed && {opacity:0.8}]}onPress={handleAbandon}accessibilityLabel="Yes, Abandon"accessibilityRole="button"accessibilityHint="Confirms abandoning this session permanently">
                 <Text style={styles.buttonText}>Yes, Abandon</Text>
               </Pressable>
             </View>

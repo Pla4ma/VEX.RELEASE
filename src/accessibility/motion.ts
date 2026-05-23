@@ -50,14 +50,19 @@ export function calculateScaledFontSize(baseSize: number, textScale: number): nu
 /**
  * Get scaled typography configuration
  */
+interface TypographyEntry {
+  fontSize?: number;
+  [key: string]: unknown;
+}
+
 export function getScaledTypography(baseTypography: Record<string, unknown>, textScale: number) {
   return Object.keys(baseTypography).reduce((scaled, key) => {
-    const original = baseTypography[key];
+    const original = baseTypography[key] as TypographyEntry | undefined;
 
-    if (typeof original === 'object' && original !== null && 'fontSize' in original && typeof (original as any).fontSize === 'number') {
+    if (original && typeof original.fontSize === 'number') {
       scaled[key] = {
         ...original,
-        fontSize: calculateScaledFontSize((original as any).fontSize, textScale),
+        fontSize: calculateScaledFontSize(original.fontSize, textScale),
       };
     } else {
       scaled[key] = original;

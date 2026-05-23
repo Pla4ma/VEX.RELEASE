@@ -5,6 +5,7 @@ export const HomeSurfaceKeySchema = z.enum([
   'coach_presence',
   'progress_proof',
   'focus_score',
+  'progress_detail',
   'study_layer',
   'companion_thread',
   'boss_teaser',
@@ -41,6 +42,13 @@ const FirstWeekPhaseSchema = z.object({
   studyLayerLabel: z.string().min(1),
 }).partial().optional();
 
+export const DegradedFeatureSchema = z.enum([
+  'content_study',
+  'ai_coach_advanced',
+  'premium_paywall',
+  'boss_tab',
+]);
+
 export const SurfaceDecisionInputSchema = z.object({
   featureAvailability: z.object({
     boss: z.boolean(),
@@ -72,4 +80,5 @@ export const SurfaceDecisionInputSchema = z.object({
   hasActiveBoss: z.boolean(),
   isFirstSession: z.boolean(),
   firstWeekPhase: FirstWeekPhaseSchema,
+  degradedFeatures: z.array(DegradedFeatureSchema).default([]),
 });

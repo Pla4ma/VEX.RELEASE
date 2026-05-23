@@ -21,7 +21,7 @@ export function getAvailableNotificationFilters(
   featureAccess?: FeatureAccessCheck,
 ): NotificationActionType[] {
   if (!featureAccess) {
-    return ['start_session', 'view_progress', 'view_profile', 'custom'];
+    return ['start_session', 'view_progress', 'view_profile'];
   }
   const filters: NotificationActionType[] = ['start_session', 'view_progress', 'view_profile'];
   if (canUseFeature(featureAccess, 'ai_coach_advanced') && !isPublicV1Hidden('ai_coach_advanced')) {
@@ -30,5 +30,5 @@ export function getAvailableNotificationFilters(
   if (canUseFeature(featureAccess, 'boss_tab') && !isPublicV1Hidden('boss_tab')) {
     filters.push('view_boss');
   }
-  return filters.concat('custom');
+  return filters;
 }

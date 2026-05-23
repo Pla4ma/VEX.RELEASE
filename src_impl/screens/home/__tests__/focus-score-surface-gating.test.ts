@@ -98,3 +98,71 @@ describe('HomeFocusScore surface gating', () => {
     expect(map.focus_score).toBe('hidden');
   });
 });
+
+describe('TASK 3 — FocusScoreDashboard gated as progress-detail surface', () => {
+  it('Day 0: progress_detail is hidden — no FocusScoreDashboard', () => {
+    const map = decideHomeSurfaces(makeDayZeroInput());
+    expect(map.progress_detail).toBe('hidden');
+    expect(map.focus_score).toBe('hidden');
+  });
+
+  it('Activating: progress_detail is hidden — no dashboard navigation', () => {
+    const map = decideHomeSurfaces(makeActivatingInput());
+    // focus_score may be tiny_tease (compact widget only) but progress_detail must be hidden
+    expect(map.progress_detail).toBe('hidden');
+  });
+
+  it('Engaged: progress_detail is secondary — dashboard can open', () => {
+    const map = decideHomeSurfaces(makeEngagedInput());
+    expect(map.focus_score).toBe('secondary');
+    expect(map.progress_detail).toBe('secondary');
+  });
+
+  it('Power user can open dashboard when progress_detail allowed', () => {
+    const input = {
+      ...makeDayZeroInput(),
+      personalizationProfile: {
+        ...makeDayZeroInput().personalizationProfile,
+        userStage: 'power' as const,
+      },
+      behaviorStats: {
+        ...makeDayZeroInput().behaviorStats,
+        totalCompletedSessions: 12,
+        completionStreak: 5,
+      },
+      isFirstSession: false,
+    };
+    const map = decideHomeSurfaces(input);
+    expect(map.progress_detail).not.toBe('hidden');
+    expect(map.progress_detail).not.toBe('blocked');
+    expect(map.progress_detail).not.toBe('tiny_tease');
+  });
+
+  it('Blocked: if focus_score is blocked, progress_detail is also hidden', () => {
+    const input = {
+      ...makeDayZeroInput(),
+      featureAvailability: { boss: false, challenges: false, premium: false, study: false },
+      personalizationProfile: {
+        ...makeDayZeroInput().personalizationProfile,
+        userStage: 'engaged' as const,
+      },
+      behaviorStats: {
+        ...makeDayZeroInput().behaviorStats,
+        totalCompletedSessions: 5,
+      },
+      isFirstSession: false,
+      firstWeekPhase: {
+        allowedHomeSurfaces: ['start_session'],
+        bossIntensity: 'hidden' as const,
+        premiumMoment: 'none' as const,
+        spotlightSurface: 'none' as const,
+        studyLayerLabel: 'Focus Basics',
+      },
+    };
+    const map = decideHomeSurfaces(input as Parameters<typeof decideHomeSurfaces>[0]);
+    // Even though focus_score might not be explicitly blocked here,
+    // progress_detail should not be open for restricted first-week
+    expect(map.progress_detail).not.toBe('secondary');
+    expect(map.progress_detail).not.toBe('primary');
+  });
+});

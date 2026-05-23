@@ -47,6 +47,9 @@ export function getRewardService(userId?: string): RewardService {
     setUserId(nextUserId): void {
       activeUserId = nextUserId;
     },
+    // grantReward is receipt-only — it creates a reward ledger entry for display/analytics.
+    // Actual XP mutation is owned by ProgressionService.addXP.
+    // 'XP' reward type creates a receipt; it does NOT mutate user XP/progression.
     async grantReward(type, triggerType, calculation, options): Promise<void> {
       if (!activeUserId) {
         return;

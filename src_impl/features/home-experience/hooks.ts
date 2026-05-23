@@ -3,6 +3,8 @@ import { useMemo } from 'react';
 import { useOnboardingStore } from '../onboarding/store';
 import { buildHomeExperienceModel } from './service';
 import type { ExplicitMotivationStyle, HomeExperienceModel } from './schemas';
+import type { VexExperience } from '../personalization/schemas';
+import type { FirstWeekExperience } from '../personalization/first-week-schemas';
 
 function toExplicitStyle(style: string | null): ExplicitMotivationStyle | null {
   if (
@@ -20,13 +22,19 @@ function toExplicitStyle(style: string | null): ExplicitMotivationStyle | null {
   return null;
 }
 
-export function useHomeExperienceModel(totalCompletedSessions: number): HomeExperienceModel {
+export function useHomeExperienceModel(
+  totalCompletedSessions: number,
+  resolvedExperience?: VexExperience,
+  firstWeekExperience?: FirstWeekExperience,
+): HomeExperienceModel {
   const explicitStyle = useOnboardingStore((state) => state.explicitMotivationStyle);
   return useMemo(
     () => buildHomeExperienceModel({
       explicitMotivationStyle: toExplicitStyle(explicitStyle),
       totalCompletedSessions,
+      resolvedExperience,
+      firstWeekExperience,
     }),
-    [explicitStyle, totalCompletedSessions],
+    [explicitStyle, totalCompletedSessions, resolvedExperience, firstWeekExperience],
   );
 }

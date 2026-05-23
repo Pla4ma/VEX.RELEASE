@@ -71,10 +71,13 @@ export const healthChecks: FeatureHealthCheck[] = [
   {
     id: 'content_study_privacy_disclosure',
     feature: 'content_study',
-    label: 'Content Study — privacy disclosure route',
+    label: 'Content Study — privacy disclosure route (verify route registered)',
     dependency: 'privacy_disclosure',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'degraded',
+    check: (): FeatureHealthStatus => {
+      const hasRoute = hasGeminiKey() && hasSupabaseConfig();
+      return hasRoute ? 'degraded' : 'unavailable';
+    },
   },
   {
     id: 'content_study_max_file_constraints',
@@ -99,26 +102,35 @@ export const healthChecks: FeatureHealthCheck[] = [
   {
     id: 'ai_coach_advanced_quota',
     feature: 'ai_coach_advanced',
-    label: 'AI Coach Advanced — quota/rate-limit path',
+    label: 'AI Coach Advanced — quota/rate-limit path (needs backend quota tracking)',
     dependency: 'ai_coach_quota',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'degraded',
+    check: (): FeatureHealthStatus => {
+      const hasBackend = hasGeminiKey() && hasFunctionName(AI_COACH_FUNCTION);
+      return hasBackend ? 'degraded' : 'unavailable';
+    },
   },
   {
     id: 'ai_coach_advanced_fallback',
     feature: 'ai_coach_advanced',
-    label: 'AI Coach Advanced — deterministic fallback',
+    label: 'AI Coach Advanced — deterministic fallback (needs fallback integration tests)',
     dependency: 'ai_coach_fallback',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'degraded',
+    check: (): FeatureHealthStatus => {
+      const hasBackend = hasGeminiKey() && hasFunctionName(AI_COACH_FUNCTION);
+      return hasBackend ? 'degraded' : 'unavailable';
+    },
   },
   {
     id: 'ai_coach_advanced_safe_intent',
     feature: 'ai_coach_advanced',
-    label: 'AI Coach Advanced — safe action-intent routing',
+    label: 'AI Coach Advanced — safe action-intent routing (needs intent routing verification)',
     dependency: 'ai_intent_routing',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'degraded',
+    check: (): FeatureHealthStatus => {
+      const hasBackend = hasGeminiKey() && hasFunctionName(AI_COACH_FUNCTION);
+      return hasBackend ? 'degraded' : 'unavailable';
+    },
   },
 
   // === premium_paywall ===
@@ -137,28 +149,37 @@ export const healthChecks: FeatureHealthCheck[] = [
   {
     id: 'premium_paywall_offerings',
     feature: 'premium_paywall',
-    label: 'Premium Paywall — offerings/products loadable',
+    label: 'Premium Paywall — offerings/products loadable (needs RevenueCat SDK runtime check)',
     dependency: 'revenuecat_offerings',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'degraded',
+    check: (): FeatureHealthStatus => {
+      const hasRcKey = Boolean(process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY);
+      return hasRcKey ? 'degraded' : 'unavailable';
+    },
   },
   {
     id: 'premium_paywall_entitlements',
     feature: 'premium_paywall',
-    label: 'Premium Paywall — entitlements readable',
+    label: 'Premium Paywall — entitlements readable (needs RevenueCat SDK runtime check)',
     dependency: 'revenuecat_entitlements',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'degraded',
+    check: (): FeatureHealthStatus => {
+      const hasRcKey = Boolean(process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY);
+      return hasRcKey ? 'degraded' : 'unavailable';
+    },
   },
 
   // === boss_tab ===
   {
     id: 'boss_tab_template',
     feature: 'boss_tab',
-    label: 'Boss Tab — template loading',
+    label: 'Boss Tab — template loading (needs template asset verification)',
     dependency: 'boss_template',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'degraded',
+    check: (): FeatureHealthStatus => {
+      const hasDeps = bossHasNoDisabledDeps();
+      return hasDeps ? 'degraded' : 'unavailable';
+    },
   },
   {
     id: 'boss_tab_no_disabled_deps',
@@ -173,18 +194,24 @@ export const healthChecks: FeatureHealthCheck[] = [
   {
     id: 'boss_tab_subtle_fallback',
     feature: 'boss_tab',
-    label: 'Boss Tab — subtle mode fallback',
+    label: 'Boss Tab — subtle mode fallback (needs subtle mode integration tests)',
     dependency: 'boss_subtle',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'degraded',
+    check: (): FeatureHealthStatus => {
+      const hasDeps = bossHasNoDisabledDeps();
+      return hasDeps ? 'degraded' : 'unavailable';
+    },
   },
   {
     id: 'boss_tab_route_gating',
     feature: 'boss_tab',
-    label: 'Boss Tab — route/query/event subscription gating',
+    label: 'Boss Tab — route/query/event subscription gating (needs route integration tests)',
     dependency: 'boss_route_gating',
     cacheMs: 300_000,
-    check: (): FeatureHealthStatus => 'degraded',
+    check: (): FeatureHealthStatus => {
+      const hasDeps = bossHasNoDisabledDeps();
+      return hasDeps ? 'degraded' : 'unavailable';
+    },
   },
 ];
 

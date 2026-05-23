@@ -1,31 +1,232 @@
-import React from'react'; import{Pressable,StyleSheet,View}from'react-native'; import{useNavigation}from'@react-navigation/native'; import type{NativeStackNavigationProp}from'@react-navigation/native-stack'; import{LinearGradient}from'expo-linear-gradient'; import Animated,{FadeInUp}from'react-native-reanimated'; import{Button}from'../../../components/primitives/Button'; import{Text}from'../../../components/primitives/Text'; import{Icon}from'../../../icons/components/Icon'; import type{ExtendedRootStackParams}from'../../../navigation/types'; import{useTheme}from'../../../theme'; import{createSheet}from'@/shared/ui/create-sheet';
+import React from 'react';
+import { Pressable, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { LinearGradient } from 'expo-linear-gradient';
+import Animated, { FadeInUp } from 'react-native-reanimated';
+import { Button } from '../../../components/primitives/Button';
+import { Text } from '../../../components/primitives/Text';
+import { Icon } from '../../../icons/components/Icon';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { useTheme } from '../../../theme';
+import { createSheet } from '@/shared/ui/create-sheet';
 import { launchColors } from '@theme/tokens/launch-colors';
- export type PremiumGateFeature='ai_coach_full_access'|'ai_coach_persona_drill_sergeant'|'boss_tier_4'|'boss_tier_5'|'boss_tier_6'|'inventory_expansion'|'advanced_analytics'|'content_study'|'custom_themes'|'squad_challenges'; export interface PremiumGateProps{feature:PremiumGateFeature;description?:string;onClose?:()=>void;showCloseButton?:boolean;}interface FeatureGateInfo{title:string;description:string;unlocks:string[];icon:string;gradient:readonly[string,string];}const FEATURE_GATE_MAP:Record<PremiumGateFeature,FeatureGateInfo> = {ai_coach_full_access:{title:'Unlock the Full AI Coach',description:'Premium unlocks the strongest coaching layer: sharper timing, better nudges, and recommendations that actually fit your rhythm.',unlocks:['Personalized session timing','Smart nudges and reminders','Pattern-based recommendations','All 3 coach personas'],icon:'🧠',gradient:[launchColors.hex_4f46e5,launchColors.hex_7c3aed]},ai_coach_persona_drill_sergeant:{title:'Unlock the Drill Sergeant',description:'The Drill Sergeant persona is only available with Premium. Get intense, zero-tolerance coaching when you need maximum accountability.',unlocks:['Drill Sergeant persona','Zero-tolerance mode','Maximum accountability'],icon:'💀',gradient:[launchColors.hex_dc2626,launchColors.hex_991b1b]},boss_tier_4:{title:'Unlock Boss Tier 4',description:'The Perfectionist boss awaits Premium users. Defeat it to unlock Tier 5 and the ultimate challenge.',unlocks:['The Perfectionist boss','Tier 4 rewards','Path to Tier 5'],icon:'🐉',gradient:[launchColors.hex_059669,launchColors.hex_10b981]},boss_tier_5:{title:'Unlock Boss Tier 5',description:'Master of Multitasking is a Premium-only boss. Can you focus long enough to defeat it?',unlocks:['Master of Multitasking boss','Tier 5 rewards','Path to Tier 6'],icon:'👹',gradient:[launchColors.hex_7c2d12,launchColors.hex_9a3412]},boss_tier_6:{title:'Unlock the Final Boss',description:'Burnout Beast is the ultimate squad boss raid, exclusively for Premium users who have conquered all before it.',unlocks:['Burnout Beast raid boss','Legendary rewards','Squad raid mode'],icon:'🔥',gradient:[launchColors.hex_1e1b4b,launchColors.hex_312e81]},inventory_expansion:{title:'Expand Your Inventory',description:'Premium unlocks 500 inventory slots so you can collect every cosmetic, ingredient, and legendary item.',unlocks:['500 inventory slots','More storage space','Collect everything'],icon:'🎒',gradient:[launchColors.hex_d97706,launchColors.hex_f59e0b]},advanced_analytics:{title:'Unlock Advanced Analytics',description:'Premium gives you deeper insights into when you focus best and where your momentum starts leaking.',unlocks:['Focus pattern analysis','Productivity insights','Trend reports'],icon:'📊',gradient:[launchColors.hex_0f766e,launchColors.hex_0d9488]},content_study:{title:'Unlock Content Study',description:'Premium expands VEX into a deeper work tool once your focus habit is already taking hold.',unlocks:['Study session mode','Content focus tracking','Learning analytics'],icon:'📚',gradient:[launchColors.hex_be185d,launchColors.hex_db2777]},custom_themes:{title:'Unlock Custom Themes',description:'Premium lets you personalize VEX with exclusive themes and accent colors.',unlocks:['Exclusive themes','Custom accent colors','Premium backgrounds'],icon:'🎨',gradient:[launchColors.hex_4338ca,launchColors.hex_6366f1]},squad_challenges:{title:'Unlock Squad Challenges',description:'Premium unlocks advanced squad challenge modes for competitive focus with your team.',unlocks:['Advanced challenges','Squad competitions','Team leaderboards'],icon:'🏆',gradient:[launchColors.hex_047857,launchColors.hex_059669]}}; type NavigationProp=NativeStackNavigationProp<ExtendedRootStackParams>;export function PremiumGate({feature,description,onClose,showCloseButton = true}:PremiumGateProps):JSX.Element{const navigation = useNavigation<NavigationProp>(); const{theme} = useTheme(); const featureInfo = FEATURE_GATE_MAP[feature]; const handleUpgrade = ()=>{navigation.navigate('Paywall',{source:`premium_gate_${feature}`,gatedFeature:feature});}; return<Animated.View entering={FadeInUp.duration(300)}style={styles.container}>
-      <LinearGradient colors={[...featureInfo.gradient]}style={styles.header}>
+
+export type PremiumGateFeature =
+  | 'deep_coach_memory'
+  | 'progress_intelligence'
+  | 'advanced_study_os'
+  | 'premium_session_modes'
+  | 'visual_identity'
+  | 'recovery_planning';
+
+export interface PremiumGateProps {
+  feature: PremiumGateFeature;
+  description?: string;
+  onClose?: () => void;
+  showCloseButton?: boolean;
+}
+
+interface FeatureGateInfo {
+  title: string;
+  description: string;
+  unlocks: string[];
+  icon: string;
+  gradient: readonly [string, string];
+}
+
+const FEATURE_GATE_MAP: Record<PremiumGateFeature, FeatureGateInfo> = {
+  deep_coach_memory: {
+    title: 'Unlock Deep Coach Memory',
+    description:
+      'VEX learns your patterns, best focus windows, comeback style, and preferred push intensity — then adapts every session to you.',
+    unlocks: [
+      'Pattern-based session timing',
+      'Comeback style memory',
+      'Best focus window detection',
+      'Adaptive push intensity',
+    ],
+    icon: '\uD83E\uDDE0',
+    gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
+  },
+  progress_intelligence: {
+    title: 'Unlock Progress Intelligence',
+    description:
+      'See your rhythm, focus risk, recovery plans, and consistency forecasts — not just streaks.',
+    unlocks: [
+      'Weekly execution report',
+      'Focus risk detection',
+      'Recovery planning',
+      'Consistency forecasting',
+    ],
+    icon: '\uD83D\uDCCA',
+    gradient: [launchColors.hex_0f766e, launchColors.hex_0d9488],
+  },
+  advanced_study_os: {
+    title: 'Unlock Advanced Study / Deep Work',
+    description:
+      'Turn sessions into review loops, project breakdowns, quizzes, and smart next actions from your own content.',
+    unlocks: [
+      'Content-based session generation',
+      'Review loops and quizzes',
+      'Project breakdowns',
+      'Smart next-action engine',
+    ],
+    icon: '\uD83D\uDCD6',
+    gradient: [launchColors.hex_d97706, launchColors.hex_f59e0b],
+  },
+  premium_session_modes: {
+    title: 'Unlock Premium Session Modes',
+    description:
+      'Exam Sprint, Deep Work, Calm Reset, Comeback Mode, and Review Mode — deeper tools when the basic loop works.',
+    unlocks: [
+      'Exam Sprint mode',
+      'Calm Reset mode',
+      'Comeback Mode',
+      'Review Mode',
+    ],
+    icon: '\u26A1',
+    gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
+  },
+  visual_identity: {
+    title: 'Unlock Visual Identity',
+    description:
+      'Shape companion forms, focus worlds, session atmospheres, and premium animations without changing core progress.',
+    unlocks: [
+      'Companion form customization',
+      'Focus world themes',
+      'Session atmospheres',
+      'Premium animations',
+    ],
+    icon: '\u2728',
+    gradient: [launchColors.hex_0f766e, launchColors.hex_0d9488],
+  },
+  recovery_planning: {
+    title: 'Unlock Recovery Planning',
+    description:
+      'Build a recovery plan that helps you return without shame or backlog pressure after missed sessions.',
+    unlocks: [
+      'Personalized recovery path',
+      'Gentle return scheduling',
+      'Backlog-free restart',
+      'Progress preservation',
+    ],
+    icon: '\uD83D\uDEE1\uFE0F',
+    gradient: [launchColors.hex_059669, launchColors.hex_10b981],
+  },
+};
+
+export function PremiumGate({
+  feature,
+  description,
+  onClose,
+  showCloseButton = true,
+}: PremiumGateProps) {
+  const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
+  const { theme } = useTheme();
+  const featureInfo = FEATURE_GATE_MAP[feature];
+
+  function handleUpgrade() {
+    navigation.navigate('Paywall', {
+      source: 'feature_gate',
+      gatedFeature: feature,
+    });
+  }
+
+  return (
+    <Animated.View entering={FadeInUp.duration(400)} style={styles.container}>
+      <LinearGradient colors={[...featureInfo.gradient]} style={styles.header}>
         <Text style={styles.icon}>{featureInfo.icon}</Text>
         <Text style={styles.title}>{featureInfo.title}</Text>
-        <Text style={styles.description}>{description ?? featureInfo.description}</Text>
+        <Text style={styles.description}>
+          {description ?? featureInfo.description}
+        </Text>
       </LinearGradient>
 
-      <View style={[styles.unlocksSection,{backgroundColor:theme.colors.background.secondary,borderColor:theme.colors.border.DEFAULT}]}>
-        <Text style={[styles.unlocksTitle,{color:theme.colors.text.primary}]}>Premium unlocks:</Text>
-        {featureInfo.unlocks.map((unlock,index)=><View key={index}style={styles.unlockRow}>
-            <Icon name="check-circle"size={16}color={theme.colors.success[500]}style={styles.checkIcon}/>
-            <Text style={[styles.unlockText,{color:theme.colors.text.secondary}]}>{unlock}</Text>
-          </View>)}
+      <View
+        style={[
+          styles.unlocksSection,
+          {
+            backgroundColor: theme.colors.background.secondary,
+            borderColor: theme.colors.border.DEFAULT,
+          },
+        ]}
+      >
+        <Text style={[styles.unlocksTitle, { color: theme.colors.text.primary }]}>
+          Premium unlocks:
+        </Text>
+        {featureInfo.unlocks.map((unlock, index) => (
+          <View key={index} style={styles.unlockRow}>
+            <Icon
+              name="check-circle"
+              size={16}
+              color={theme.colors.success[500]}
+              style={styles.checkIcon}
+            />
+            <Text style={[styles.unlockText, { color: theme.colors.text.secondary }]}>
+              {unlock}
+            </Text>
+          </View>
+        ))}
       </View>
 
       <View style={styles.actions}>
-        <Button variant="primary"size="lg"onPress={handleUpgrade}accessibilityLabel="Upgrade to Premium button"accessibilityRole="button"accessibilityHint="Activates this control">
-          Upgrade to Premium
+        <Button
+          variant="primary"
+          size="lg"
+          onPress={handleUpgrade}
+          accessibilityLabel="Upgrade to Premium button"
+          accessibilityRole="button"
+          accessibilityHint="Opens the premium upgrade screen"
+        >
+          See Premium
         </Button>
 
-        {showCloseButton && onClose && <Button variant="ghost"size="sm"onPress={onClose}accessibilityLabel="Maybe later button"accessibilityRole="button"accessibilityHint="Activates this control">
+        {showCloseButton && onClose && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onPress={onClose}
+            accessibilityLabel="Maybe later button"
+            accessibilityRole="button"
+            accessibilityHint="Dismisses the premium gate"
+          >
             Maybe later
-          </Button>}
+          </Button>
+        )}
       </View>
+    </Animated.View>
+  );
+}
 
-      <Pressable style={styles.earnOption}onPress={handleUpgrade}accessibilityLabel="Or earn Premium free through achievements → button"accessibilityRole="button"accessibilityHint="Activates this control">
-        <Text style={[styles.earnText,{color:theme.colors.text.tertiary}]}>Or earn Premium free through achievements →</Text>
-      </Pressable>
-    </Animated.View>;}const styles = createSheet({container:{borderRadius:24,overflow:'hidden',margin:16},header:{padding:24,alignItems:'center',gap:12},icon:{fontSize:48},title:{color:launchColors.hex_ffffff,fontSize:22,fontWeight:'800',textAlign:'center'},description:{color:launchColors.rgb_255_255_255_0_9,fontSize:15,lineHeight:22,textAlign:'center'},unlocksSection:{padding:20,borderBottomWidth:1,borderLeftWidth:1,borderRightWidth:1,gap:12},unlocksTitle:{fontSize:16,fontWeight:'700',marginBottom:4},unlockRow:{flexDirection:'row',alignItems:'center',gap:10},checkIcon:{marginTop:1},unlockText:{fontSize:14,lineHeight:20},actions:{backgroundColor:launchColors.hex_ffffff,padding:20,gap:12},earnOption:{backgroundColor:launchColors.hex_f3f4f6,padding:16,alignItems:'center'},earnText:{fontSize:13,fontWeight:'500'}}); export default PremiumGate;
+const styles = createSheet({
+  container: { borderRadius: 24, overflow: 'hidden', margin: 16 },
+  header: { padding: 24, alignItems: 'center', gap: 12 },
+  icon: { fontSize: 48 },
+  title: {
+    color: launchColors.hex_ffffff,
+    fontSize: 22,
+    fontWeight: '800',
+    textAlign: 'center',
+  },
+  description: {
+    color: launchColors.rgb_255_255_255_0_9,
+    fontSize: 15,
+    lineHeight: 22,
+    textAlign: 'center',
+  },
+  unlocksSection: {
+    padding: 20,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+    gap: 12,
+  },
+  unlocksTitle: { fontSize: 16, fontWeight: '700', marginBottom: 4 },
+  unlockRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  checkIcon: { marginTop: 1 },
+  unlockText: { fontSize: 14, lineHeight: 20 },
+  actions: { backgroundColor: launchColors.hex_ffffff, padding: 20, gap: 12 },
+});
+
+export default PremiumGate;

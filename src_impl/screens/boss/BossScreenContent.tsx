@@ -35,11 +35,11 @@ export function BossScreenContent({
   userId,
 }: BossScreenContentProps): JSX.Element {
   const bossQuery = useActiveBoss(canQueryBoss ? userId : null);
-  const templatesQuery = useBossTemplates();
+  const templatesQuery = useBossTemplates({ enabled: canQueryBoss });
   const progressionQuery = useProgressionSummary(userId);
   const streakQuery = useStreakMultiplier(userId);
 
-  if (bossQuery.isPending || templatesQuery.isPending) {
+  if (bossQuery.isPending || (canQueryBoss && templatesQuery.isPending)) {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background.primary }}>
         <ScrollView contentContainerStyle={{ padding: theme.spacing[5], gap: theme.spacing[4] }}>

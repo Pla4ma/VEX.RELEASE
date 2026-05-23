@@ -4,6 +4,7 @@ import {
   orchestrateSessionCompletion,
 } from '../completion-orchestrator';
 import { createCompletionLedger, createSessionSummary, SESSION_ID, USER_ID } from './ledger-test-utils';
+import { queryClient } from '../../../api/QueryProvider';
 
 jest.mock('../../../events', () => ({ eventBus: { emit: jest.fn(), subscribe: jest.fn() } }));
 jest.mock('../../../utils/debug', () => ({
@@ -33,6 +34,16 @@ jest.mock('../../companion-promise/service', () => ({
 jest.mock('../repository', () => ({
   createCompletionLedger: jest.fn(),
   getCompletionLedgerByIdempotencyKey: jest.fn().mockResolvedValue(null),
+}));
+jest.mock('../../../api/QueryProvider', () => ({
+  queryClient: { invalidateQueries: jest.fn().mockResolvedValue(undefined) },
+  QueryKeys: {
+    session: ['session'],
+    streak: ['streak'],
+    achievements: ['achievements'],
+    wallet: (userId: string) => ['wallet', userId],
+    transactions: (userId: string) => ['transactions', userId],
+  },
 }));
 
 describe('orchestrateSessionCompletion edge cases', () => {
@@ -84,5 +95,47 @@ describe('orchestrateSessionCompletion edge cases', () => {
     if ((eventBus.subscribe as jest.Mock).mock.calls.length === 1) {
       expect(eventBus.subscribe).toHaveBeenCalledWith('session:completed', expect.any(Function));
     }
+  });
+});
+
+describe('public v1 invalidation protection', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    require('../repository').createCompletionLedger.mockResolvedValue(createCompletionLedger());
+  });
+
+  it('does not invalidate economy wallet queries after completion', async () => {
+    const sessionId = 'a1e8400e-e29b-41d4-a716-446655440001';
+    await orchestrateSessionCompletion({
+      sessionId,
+      summary: createSessionSummary({ sessionId }),
+      userId: USER_ID,
+    });
+
+    const invalidateMock = (queryClient.invalidateQueries as jest.Mock);
+    const allKeys = invalidateMock.mock.calls.flatMap(
+      (call: unknown[]) => ((call[0] as { queryKey: unknown })?.queryKey as Array<string | number>) ?? [],
+    );
+
+    expect(allKeys).not.toContain('wallet');
+    expect(allKeys).not.toContain('transactions');
+  });
+
+  it('still invalidates XP/progress queries after completion', async () => {
+    const sessionId = 'b2e8400e-e29b-41d4-a716-446655440002';
+    await orchestrateSessionCompletion({
+      sessionId,
+      summary: createSessionSummary({ sessionId }),
+      userId: USER_ID,
+    });
+
+    const invalidateMock = (queryClient.invalidateQueries as jest.Mock);
+    const allKeys = invalidateMock.mock.calls.flatMap(
+      (call: unknown[]) => ((call[0] as { queryKey: unknown })?.queryKey as Array<string | number>) ?? [],
+    );
+
+    expect(allKeys).toContain('session');
+    expect(allKeys).toContain('streak');
+    expect(allKeys).toContain('achievements');
   });
 });

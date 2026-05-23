@@ -54,13 +54,11 @@ export function useSessionRewardSync(input: SessionRewardSyncInput) {
     setRewardCreditError(null);
 
     try {
+      // Public v1: only invalidate progression. Economy wallet/transactions are hidden.
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['progression', input.userId] }),
-        queryClient.invalidateQueries({ queryKey: ['economy', input.userId] }),
         queryClient.invalidateQueries({ queryKey: progressionKeys.byUser(input.userId) }),
         queryClient.invalidateQueries({ queryKey: progressionKeys.summary(input.userId) }),
-        queryClient.invalidateQueries({ queryKey: economyKeys.all }),
-        queryClient.invalidateQueries({ queryKey: economyKeys.wallet(input.userId) }),
       ]);
 
       await input.refetchProgressionSummary();

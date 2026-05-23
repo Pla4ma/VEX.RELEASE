@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import { Text } from '../../components/primitives';
 import type { BossEncounterSummary, BossTemplate } from '../../features/boss/schemas';
+import { trackBossCTAClicked } from '../../features/boss/analytics';
 import { useSessionHistory } from '../../session/hooks/useSession';
 import { useTheme } from '../../theme';
 
@@ -90,6 +91,14 @@ export function BossScreenSections({
   const [selectedMinutes, setSelectedMinutes] = useState<number>(25);
   const copy = getBossScreenCopy(bossIntensity);
 
+  const handleLaunchAttack = useCallback(
+    (minutes: number) => {
+      trackBossCTAClicked(userId, minutes, bossIntensity);
+      onLaunchAttack(minutes);
+    },
+    [onLaunchAttack, userId, bossIntensity],
+  );
+
   const recentSessions = useMemo(() => historyQuery.history
     .filter((entry) => entry.endedAt && entry.startedAt)
     .slice(0, 3)
@@ -138,7 +147,7 @@ export function BossScreenSections({
           return (
             <Pressable
               key={preset.minutes}
-              onPress={() => selected ? onLaunchAttack(preset.minutes) : setSelectedMinutes(preset.minutes)}
+              onPress={() => selected ? handleLaunchAttack(preset.minutes) : setSelectedMinutes(preset.minutes)}
               accessibilityLabel={preset.label}
               accessibilityRole="button"
               accessibilityHint="Starts a focus session with this duration."

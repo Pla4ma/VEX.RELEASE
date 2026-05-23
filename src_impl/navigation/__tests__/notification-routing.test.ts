@@ -177,6 +177,25 @@ describe('Notification Safe Intents', () => {
       expect(result.intent).toBe('OPEN_PROGRESS');
     });
 
+    it('view_profile → OPEN_PROFILE (not Home, not social tab)', () => {
+      const result = resolveNotificationAction({ type: 'view_profile' });
+      expect(result.intent).toBe('OPEN_PROFILE');
+    });
+
+    it('ACHIEVEMENT routes to Progress via view_progress', () => {
+      const result = resolveNotificationAction({ type: 'view_progress' });
+      expect(result.intent).toBe('OPEN_PROGRESS');
+    });
+
+    it('hidden social features never route from notification', () => {
+      const features = makeFeatureAccess(10).features;
+      const result = resolveNotificationAction(
+        { type: 'view_squad' },
+        features,
+      );
+      expect(result.intent).toBe('OPEN_HOME');
+    });
+
     it('unknown action type → OPEN_HOME fallback', () => {
       const result = resolveNotificationAction({
         type: 'custom',
@@ -232,9 +251,17 @@ describe('Notification Safe Intents', () => {
       expect(filters).not.toContain('join_duel');
     });
 
-    it('always includes custom at the end', () => {
+    it('never includes custom as a user-facing filter', () => {
       const filters = getAvailableNotificationFilters();
-      expect(filters[filters.length - 1]).toBe('custom');
+      expect(filters).not.toContain('custom');
+    });
+
+    it('custom route action still supported for whitelisted legacy payloads', () => {
+      const result = resolveNotificationAction({
+        type: 'custom',
+        payload: { screen: 'Home' },
+      });
+      expect(result.intent).toBe('OPEN_HOME');
     });
   });
 

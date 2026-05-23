@@ -93,7 +93,7 @@ export function resolveNotificationAction(
     case 'accept_invite':
       return { intent: 'OPEN_PROGRESS', params: action.payload };
     case 'view_profile':
-      return { intent: 'OPEN_HOME', params: action.payload };
+      return { intent: 'OPEN_PROFILE', params: action.payload };
     case 'custom': {
       const screen = toOptionalString(action.payload?.screen);
       if (!screen) return { intent: 'OPEN_HOME' };
@@ -133,6 +133,9 @@ function navigateFromSafeIntent(
     case 'OPEN_PROGRESS':
       navigation.navigate('Main', { screen: 'Progress' });
       return { success: true, screen: 'Progress' };
+    case 'OPEN_PROFILE':
+      navigation.navigate('Main', { screen: 'Profile' });
+      return { success: true, screen: 'Profile' };
     case 'OPEN_COACH': {
       if (!canUseFeature(featureAccess, 'ai_coach_advanced')) return blocked('AICoach');
       navigation.navigate('AICoach', undefined);

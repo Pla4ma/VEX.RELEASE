@@ -14,6 +14,7 @@ import { HomeInterventionBanner } from '../components/HomeInterventionBanner';
 import { useCompletionSyncAutoRepair } from '../../../features/session-completion/hooks';
 import { trackInterventionDisplayed, trackInterventionActioned } from '../../../features/ai-coach/analytics';
 import { eventBus } from '../../../events';
+import { getOrchestratorHandlesCompletion } from '../../../session/analytics/SessionAnalytics';
 import { buildInterventionSessionParams } from '../buildInterventionSessionParams';
 import { AppScreen } from '../../../components/primitives';
 import { useHomeSurfaceMap } from '../hooks/useHomeSurfaceMap';
@@ -27,8 +28,7 @@ import type { ChallengeItem, SessionListItem } from '../../../features/home-spin
 import type { CompletionSyncState } from '../../../store/session-state';
 import { getFeatureAvailability } from '../../../features/liveops-config';
 import type { FeatureAccessMap } from '../../../features/liveops-config/feature-access';
-import { useOnboardingStore } from '../../../features/onboarding/store';
-import type { MotivationProfileType } from '../../../features/liveops-config/feature-access';
+import type { ToastOptions } from '../../../shared/ui/components/Toast';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -37,8 +37,7 @@ export interface HomeDataProps {
   intervention: ActiveIntervention | null;
   interventionLoading: boolean;
   dismissIntervention: (id: string) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  showToast: (opts: any) => any;
+  showToast: (opts: ToastOptions) => string;
   streakHoursRemaining: number | null;
   companionMood: string;
   unreadNotificationCount: number;
@@ -96,6 +95,7 @@ export function HomeScreenInner({ model, data }: HomeScreenInnerProps): JSX.Elem
   }, [controller.userId, intervention, displayedInterventionIdRef]);
 
   useEffect(() => {
+    if (getOrchestratorHandlesCompletion()) return;
     const unsubscribe = eventBus.subscribe('session:completed', (evt: Record<string, unknown>) => {
       if (evt.userId !== controller.userId) return;
       const toast = buildToast(evt.summary);
@@ -128,23 +128,15 @@ export function HomeScreenInner({ model, data }: HomeScreenInnerProps): JSX.Elem
   const features = controller.disclosure?.features as FeatureAccessMap | undefined ?? {} as FeatureAccessMap;
   const safeStreakHours = streakHoursRemaining ?? 0;
 
-  const explicitStyle = useOnboardingStore((s) => s.explicitMotivationStyle);
-  const { resolvedExperience, firstWeekExperience } = useHomeResolvedExperience(controller);
+  const { resolvedExperience, firstWeekExperience, personalizationProfile, behaviorStats } = useHomeResolvedExperience(controller);
 
   const surfaceMap: HomeSurfaceMap = useHomeSurfaceMap({
-    completedSessions: controller.disclosure.inputs.totalCompletedSessions,
-    motivationStyle: (explicitStyle as MotivationProfileType) ?? undefined,
-    primaryGoal: resolvedExperience.home.sections.includes('study_layer') ? 'study' : 'focus',
-    bossEngagement: firstWeekExperience.bossIntensity === 'visible' ? 'high'
-      : firstWeekExperience.bossIntensity === 'tiny_tease' ? 'low'
-      : 'none',
-    studyUsageRatio: (controller.activeStudyPlanQuery?.data as Record<string, unknown> | null) != null ? 0.4 : 0,
-    coachInteractions: firstWeekExperience.coachMessageType === 'comeback' ? 1 : 0,
+    personalizationProfile,
+    behaviorStats,
     hasActiveStudyPlan: Boolean((controller.activeStudyPlanQuery?.data as Record<string, unknown> | null) != null),
     hasActiveRecommendation: Boolean(controller.primaryRecommendation),
     hasActiveBoss: Boolean((controller.activeBossQuery?.data as unknown) != null),
     isFirstSession: controller.isFirstRun,
-    completionStreak: controller.currentStreak,
     featureAccess: controller.disclosure,
     firstWeek: firstWeekExperience,
   });
@@ -168,6 +160,8 @@ export function HomeScreenInner({ model, data }: HomeScreenInnerProps): JSX.Elem
         handleClaimReward={handleClaimReward}
         streakHoursRemaining={safeStreakHours}
         surfaceMap={surfaceMap}
+        resolvedExperience={resolvedExperience}
+        firstWeekExperience={firstWeekExperience}
       />
     </AppScreen>
   );

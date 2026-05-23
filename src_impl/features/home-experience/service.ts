@@ -5,12 +5,14 @@ import {
   type HomeExperienceStage,
   type HomeSection,
 } from './schemas';
-import { resolveVexExperience } from '../personalization';
-import type { BehaviorStats, FeatureAvailabilitySnapshot } from '../personalization';
+import type { VexExperience } from '../personalization';
+import type { FirstWeekExperience } from '../personalization/first-week-schemas';
 
 interface HomeExperienceInput {
   explicitMotivationStyle: ExplicitMotivationStyle | null;
   totalCompletedSessions: number;
+  resolvedExperience?: VexExperience;
+  firstWeekExperience?: FirstWeekExperience;
 }
 
 const DAY_ZERO_HIDDEN: HomeSection[] = [
@@ -27,32 +29,6 @@ export function getHomeStage(totalCompletedSessions: number): HomeExperienceStag
   if (totalCompletedSessions <= 4) return 'STAGE_2';
   if (totalCompletedSessions <= 9) return 'STAGE_3';
   return 'STAGE_4';
-}
-
-function makeBehaviorStats(totalCompletedSessions: number): BehaviorStats {
-  return {
-    abandonedSessionDurations: [],
-    bossChallengeEngagement: 'none',
-    coachInteractions: 0,
-    comebackSessions: 0,
-    completedSessionDurations: [],
-    completionStreak: 0,
-    ignoredFeatures: [],
-    mostSuccessfulTimeOfDay: null,
-    preferredSessionMode: null,
-    premiumFeatureAttempts: [],
-    studyUsageRatio: 0,
-    totalCompletedSessions,
-  };
-}
-
-function makeFeatureAvailability(stage: HomeExperienceStage): FeatureAvailabilitySnapshot {
-  return {
-    boss: stage !== 'STAGE_0',
-    challenges: stage !== 'STAGE_0',
-    premium: stage === 'STAGE_3' || stage === 'STAGE_4',
-    study: stage !== 'STAGE_0',
-  };
 }
 
 function resolveSpotlight(
@@ -72,26 +48,58 @@ function resolveSpotlight(
   }
 }
 
+function getCoachCopy(
+  resolved: VexExperience | undefined,
+  fw: FirstWeekExperience | undefined,
+): string {
+  if (fw?.comebackState !== 'none') {
+    return fw?.primaryMessage ?? 'You are not behind. Start with one clean session.';
+  }
+  return resolved?.home.coachCopy ?? 'Start with one clean block and let VEX adjust around you.';
+}
+
+function getPremiumCopy(
+  resolved: VexExperience | undefined,
+  fw: FirstWeekExperience | undefined,
+): string {
+  if (fw && (fw.premiumMoment === 'none' || fw.premiumMoment === 'hidden')) {
+    return 'Premium appears after VEX has shown real personal value.';
+  }
+  return resolved?.premium.copy ?? 'Premium appears after VEX has shown real personal value.';
+}
+
+function getStudyLabel(
+  _resolved: VexExperience | undefined,
+  fw: FirstWeekExperience | undefined,
+  style: ExplicitMotivationStyle | null,
+): string {
+  if (fw?.studyLayerLabel) return fw.studyLayerLabel;
+  if (style === 'study_focused') return 'Study OS';
+  return 'Deep Work Plan';
+}
+
+function getBossPlacement(
+  _resolved: VexExperience | undefined,
+  fw: FirstWeekExperience | undefined,
+  isDayZero: boolean,
+): string {
+  if (isDayZero && fw?.bossIntensity !== 'hidden') {
+    return 'A tiny visual wrapper only; no boss route or query.';
+  }
+  if (fw?.bossIntensity === 'hidden') {
+    return 'Boss surface blocked during first-week phase.';
+  }
+  return 'Adaptive challenge hint after progress context exists.';
+}
+
 export function buildHomeExperienceModel(input: HomeExperienceInput): HomeExperienceModel {
   const stage = getHomeStage(input.totalCompletedSessions);
-  const availability = makeFeatureAvailability(stage);
-  const stats = makeBehaviorStats(input.totalCompletedSessions);
+  const resolved = input.resolvedExperience;
+  const fw = input.firstWeekExperience;
 
-  const resolved = resolveVexExperience(
-    {
-      primaryGoal: input.explicitMotivationStyle === 'study_focused' ? 'study' : 'work',
-      motivationStyle: input.explicitMotivationStyle ?? 'calm',
-      preferredTone: input.explicitMotivationStyle === 'intense' ? 'direct' : input.explicitMotivationStyle === 'coach_led' ? 'strategic' : 'soft',
-      gamificationIntensity: input.explicitMotivationStyle === 'game_like' || input.explicitMotivationStyle === 'intense' ? 'strong' : 'minimal',
-      coachMode: input.explicitMotivationStyle === 'study_focused' ? 'study_tutor' : input.explicitMotivationStyle === 'intense' ? 'tactical' : input.explicitMotivationStyle === 'game_like' ? 'game_guide' : input.explicitMotivationStyle === 'coach_led' ? 'mentor' : 'reflection',
-      studyLayerName: input.explicitMotivationStyle === 'study_focused' ? 'Study OS' : input.explicitMotivationStyle === 'calm' ? 'Growth Path' : 'Deep Work Plan',
-      defaultSessionDuration: 25,
-      defaultSessionMode: input.explicitMotivationStyle === 'study_focused' ? 'STUDY' : 'FOCUS',
-      userStage: 'new',
-    },
-    stats,
-    availability,
-  );
+  const coachCopy = getCoachCopy(resolved, fw);
+  const premiumCopy = getPremiumCopy(resolved, fw);
+  const studyLabel = getStudyLabel(resolved, fw, input.explicitMotivationStyle);
 
   const isDayZero = stage === 'STAGE_0';
   const visibleSections: HomeSection[] = isDayZero
@@ -100,8 +108,14 @@ export function buildHomeExperienceModel(input: HomeExperienceInput): HomeExperi
 
   const spotlight = resolveSpotlight(input.explicitMotivationStyle, stage, input.totalCompletedSessions);
 
+  const primaryCta = fw?.primaryCTA.label ?? (isDayZero ? 'Start First Session' : 'Start Next Session');
+  const secondaryCta = fw?.secondaryCTA?.label ?? (isDayZero ? 'Choose style' : 'Review progress');
+  const unlockCopy = fw?.unlockTease && fw.premiumMoment !== 'none' && fw.premiumMoment !== 'hidden'
+    ? fw.unlockTease
+    : premiumCopy;
+
   return HomeExperienceModelSchema.parse({
-    aiCoachMessageStyle: resolved.home.coachCopy,
+    aiCoachMessageStyle: coachCopy,
     allowedQueries: isDayZero
       ? ['session_stats', 'onboarding_state', 'home_priority_minimal']
       : ['session_stats', 'onboarding_state', 'home_priority', 'streak_summary'],
@@ -115,19 +129,17 @@ export function buildHomeExperienceModel(input: HomeExperienceInput): HomeExperi
     mustNotRun: isDayZero
       ? ['boss_query', 'challenge_query', 'study_plan_query', 'squad_query', 'locked_route_registration']
       : ['locked_route_registration'],
-    primaryCta: isDayZero ? 'Start First Session' : 'Start Next Session',
+    primaryCta,
     progressPlacement: isDayZero
       ? 'Hidden until the first completed session creates a real signal.'
       : 'One compact signal below the action.',
-    rpgBossPlacement: isDayZero
-      ? 'A tiny visual wrapper only; no boss route or query.'
-      : 'Adaptive challenge hint after progress context exists.',
-    secondaryCta: isDayZero ? 'Choose style' : 'Review progress',
+    rpgBossPlacement: getBossPlacement(resolved, fw, isDayZero),
+    secondaryCta,
     spotlight,
     stage,
-    studyOsPlacement: resolved.studyLayerLabel ?? 'Deep Work Plan',
-    teasedElements: [{ system: stage === 'STAGE_0' ? 'companion' : 'progress', copy: resolved.premium.copy }],
-    unlockPathCopy: resolved.premium.copy,
+    studyOsPlacement: studyLabel,
+    teasedElements: [{ system: stage === 'STAGE_0' ? 'companion' : 'progress', copy: unlockCopy }],
+    unlockPathCopy: unlockCopy,
     visibleSections,
   });
 }

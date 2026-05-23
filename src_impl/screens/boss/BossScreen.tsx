@@ -18,6 +18,11 @@ import {
 import { getDegradedFeatures } from '../../features/liveops-config/feature-access-store';
 import { useResolvedVexExperienceRuntime } from '../../features/personalization';
 import { useStreakSummary } from '../../features/streaks/hooks';
+import { trackBossRouteOpened } from '../../features/boss/analytics';
+import {
+  useBossEngagementSignals,
+  type BossEngagementInputs,
+} from '../../features/boss/boss-engagement-signals';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { BossScreenContent } from './BossScreenContent';
 import { useAuthStore } from '../../store';
@@ -98,12 +103,22 @@ export const BossScreen = (): JSX.Element => {
   const degradedFeatures = getDegradedFeatures();
   const bossIgnored = degradedFeatures.has('boss_tab');
 
+  const bossEngagementInputs: BossEngagementInputs = {
+    bossIgnored,
+    bossUnlocked: disclosure.features.boss_tab.isUnlocked,
+    canQueryBoss: false,
+    bossRouteOpenedCount: 0,
+    bossCTAClickedCount: 0,
+    bossDamageEventsCount: 0,
+    recentSessionsWithBossProgress: 0,
+  };
+
+  const bossEngagement = useBossEngagementSignals(bossEngagementInputs);
+
   const resolved = useResolvedVexExperienceRuntime({
     behaviorStats: {
-      totalCompletedSessions: disclosure.inputs.totalCompletedSessions,
       abandonedSessionDurations: [],
-      bossChallengeEngagement: bossIgnored ? 'none'
-        : disclosure.features.boss_tab.isUnlocked ? 'medium' : 'none',
+      bossChallengeEngagement: bossEngagement,
       coachInteractions: 0,
       comebackSessions: 0,
       completedSessionDurations: [],
@@ -113,6 +128,7 @@ export const BossScreen = (): JSX.Element => {
       preferredSessionMode: null,
       premiumFeatureAttempts: [],
       studyUsageRatio: 0,
+      totalCompletedSessions: disclosure.inputs.totalCompletedSessions,
     },
     featureAvailability: {
       boss: disclosure.features.boss_tab.isUnlocked,
@@ -133,6 +149,10 @@ export const BossScreen = (): JSX.Element => {
   useEffect(() => {
     const id = setInterval(() => setResetLabel(nextResetLabel()), 60000);
     return () => clearInterval(id);
+  }, []);
+
+  useEffect(() => {
+    trackBossRouteOpened(userId, bossIntensity, canQueryBoss);
   }, []);
 
   if (!canNavigateBoss || disclosure.features.boss_tab.releaseState === 'disabled_beta') {

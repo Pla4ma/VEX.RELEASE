@@ -16,6 +16,7 @@ import {
   trackDifficultySuggestionDismissed,
 } from '../analytics';
 import type { DifficultySuggestion, SessionDifficulty } from '../schemas';
+import { MMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
 
 // Local type definition for session data
 interface SessionData {
@@ -35,6 +36,7 @@ interface UseAdaptiveDifficultyReturn {
 }
 
 const STORAGE_KEY_PREFIX = 'adaptive_difficulty_dismissed_';
+const dismissStorage = new MMKVStorageAdapter('adaptive-difficulty');
 
 export function useAdaptiveDifficulty(
   userId: string | null,
@@ -51,7 +53,7 @@ export function useAdaptiveDifficulty(
       return;
     }
 
-    const stored = localStorage.getItem(STORAGE_KEY_PREFIX + userId);
+    const stored = dismissStorage.getItemSync(STORAGE_KEY_PREFIX + userId);
     if (stored) {
       setDismissedAt(parseInt(stored, 10));
     }
@@ -113,7 +115,7 @@ export function useAdaptiveDifficulty(
         });
       }
 
-      localStorage.setItem(STORAGE_KEY_PREFIX + userId, now.toString());
+      dismissStorage.setItemSync(STORAGE_KEY_PREFIX + userId, now.toString());
     } catch (error) {
       Sentry.captureException(error, {
         tags: { feature: 'session-start', operation: 'persist-difficulty-dismissal' },

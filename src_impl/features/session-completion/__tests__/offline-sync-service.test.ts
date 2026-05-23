@@ -1,3 +1,5 @@
+const mockStorage: Record<string, string> = {};
+
 import { SessionCompletionRepositoryError, createCompletionLedger, updateCompletionSyncStatus } from '../repository';
 import { SessionCompletionOfflineSyncService, sessionCompletionOfflineSync } from '../offline-sync-service';
 import { enqueue, type OfflineQueueEntry } from '../../../lib/offline/queue';
@@ -27,6 +29,18 @@ jest.mock('../../../network/NetInfoAdapter', () => ({
 }));
 jest.mock('../../../utils/silent-failure');
 
+jest.mock('../../../persistence/MMKVStorageAdapter', () => ({
+  MMKVStorageAdapter: jest.fn().mockImplementation(() => ({
+    getItemSync: jest.fn((key: string) => mockStorage[key] ?? null),
+    setItemSync: jest.fn((key: string, value: string) => {
+      mockStorage[key] = value;
+    }),
+    removeItemSync: jest.fn((key: string) => {
+      delete mockStorage[key];
+    }),
+  })),
+}));
+
 const createLedgerMock = jest.mocked(createCompletionLedger);
 const updateSyncMock = jest.mocked(updateCompletionSyncStatus);
 const enqueueMock = jest.mocked(enqueue);
@@ -42,7 +56,6 @@ const networkState: NetworkState = {
 };
 
 let networkCallback: NetworkChangeCallback | null = null;
-let storage: Record<string, string>;
 
 function ledger(overrides: Partial<CompletionLedger> = {}): CompletionLedger {
   return {
@@ -93,22 +106,10 @@ function queueEntry(payload: CompletionLedger): OfflineQueueEntry {
 describe('SessionCompletionOfflineSyncService', () => {
   beforeAll(() => {
     jest.useFakeTimers();
-    Object.defineProperty(window, 'localStorage', {
-      value: {
-        getItem: jest.fn((key: string) => storage[key] ?? null),
-        setItem: jest.fn((key: string, value: string) => {
-          storage[key] = value;
-        }),
-        removeItem: jest.fn((key: string) => {
-          delete storage[key];
-        }),
-      },
-      configurable: true,
-    });
   });
 
   beforeEach(() => {
-    storage = {};
+    Object.keys(mockStorage).forEach((k) => delete mockStorage[k]);
     networkCallback = null;
     networkState.isConnected = false;
     networkState.isInternetReachable = false;
@@ -140,7 +141,7 @@ describe('SessionCompletionOfflineSyncService', () => {
       idempotencyKey: payload.idempotencyKey,
       payload,
     }));
-    expect(JSON.parse(storage[storageKey]).entries).toHaveLength(1);
+    expect(JSON.parse(mockStorage[storageKey]).entries).toHaveLength(1);
     service.cleanup();
   });
 
@@ -161,7 +162,7 @@ describe('SessionCompletionOfflineSyncService', () => {
 
     expect(createLedgerMock).toHaveBeenCalledWith(payload);
     expect(updateSyncMock).toHaveBeenCalledWith(payload.ledgerId, 'synced');
-    expect(JSON.parse(storage[storageKey]).entries).toHaveLength(0);
+    expect(JSON.parse(mockStorage[storageKey]).entries).toHaveLength(0);
     service.cleanup();
   });
 
@@ -181,7 +182,7 @@ describe('SessionCompletionOfflineSyncService', () => {
   });
 
   it('discards corrupt fallback queue data and captures it', () => {
-    storage[storageKey] = JSON.stringify({
+    mockStorage[storageKey] = JSON.stringify({
       entries: [{ id: 'not-a-uuid', operation: 'SESSION_COMPLETE' }],
       lastSyncAt: 1,
     });

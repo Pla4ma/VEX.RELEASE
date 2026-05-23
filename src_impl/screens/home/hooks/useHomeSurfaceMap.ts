@@ -2,51 +2,62 @@
  * useHomeSurfaceMap — wires decideHomeSurfaces into Home rendering.
  *
  * Consumed by Home containers to drive surface visibility.
- * Replaces scattered feature checks inside presentation components.
+ * Accepts canonical personalizationProfile and behaviorStats from
+ * useHomeResolvedExperience — never derives profiles from guesses.
  */
 import { useMemo } from 'react';
 import { decideHomeSurfaces } from '../../../features/home-experience/home-surface-decision';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
-import type { MotivationProfileType } from '../../../features/liveops-config/feature-access';
 
 interface UseHomeSurfaceMapInput {
-  completedSessions: number;
-  motivationStyle?: MotivationProfileType;
-  primaryGoal?: string;
-  bossEngagement: 'none' | 'low' | 'medium' | 'high';
-  studyUsageRatio: number;
-  coachInteractions: number;
+  personalizationProfile: {
+    motivationStyle: string;
+    primaryGoal: string;
+    gamificationIntensity: 'minimal' | 'medium' | 'strong';
+    studyLayerName: string;
+    userStage: 'new' | 'activating' | 'engaged' | 'power';
+  };
+  behaviorStats: {
+    totalCompletedSessions: number;
+    studyUsageRatio: number;
+    bossChallengeEngagement: 'none' | 'low' | 'medium' | 'high';
+    coachInteractions: number;
+    comebackSessions: number;
+    ignoredFeatures: string[];
+    premiumFeatureAttempts: string[];
+    completionStreak: number;
+  };
   hasActiveStudyPlan: boolean;
   hasActiveRecommendation: boolean;
   hasActiveBoss: boolean;
   isFirstSession: boolean;
-  completionStreak: number;
   featureAccess: FeatureAccessResult;
   firstWeek?: FirstWeekExperience;
 }
 
 export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap {
   const {
-    completedSessions,
-    motivationStyle,
-    primaryGoal,
-    bossEngagement,
-    studyUsageRatio,
-    coachInteractions,
+    personalizationProfile: p,
+    behaviorStats: b,
     hasActiveStudyPlan,
     hasActiveRecommendation,
     hasActiveBoss,
     isFirstSession,
-    completionStreak,
     featureAccess,
   } = input;
 
-  const safeStyle = motivationStyle ?? 'friendly';
+  const safeStyle = p.motivationStyle;
 
   return useMemo(() => {
     const fa = featureAccess.features;
+
+    const degradedFeatures: Array<'content_study' | 'ai_coach_advanced' | 'premium_paywall' | 'boss_tab'> = [];
+    if (fa.content_study?.isDegraded) degradedFeatures.push('content_study');
+    if (fa.ai_coach_advanced?.isDegraded) degradedFeatures.push('ai_coach_advanced');
+    if (fa.premium_paywall?.isDegraded) degradedFeatures.push('premium_paywall');
+    if (fa.boss_tab?.isDegraded) degradedFeatures.push('boss_tab');
 
     return decideHomeSurfaces({
       featureAvailability: {
@@ -59,44 +70,48 @@ export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap
         motivationStyle: (
           safeStyle === 'calm' || safeStyle === 'friendly' || safeStyle === 'coach_led' ||
           safeStyle === 'game_like' || safeStyle === 'intense' || safeStyle === 'study_focused'
-        ) ? safeStyle : 'friendly',
+        ) ? safeStyle as 'calm' | 'friendly' | 'coach_led' | 'game_like' | 'intense' | 'study_focused' : 'friendly',
         primaryGoal: (
-          primaryGoal === 'focus' || primaryGoal === 'study' || primaryGoal === 'work' ||
-          primaryGoal === 'creative' || primaryGoal === 'personal' || primaryGoal === 'learning'
-        ) ? primaryGoal : 'focus',
-        gamificationIntensity: safeStyle === 'game_like' || safeStyle === 'intense' ? 'strong' : 'medium',
-        studyLayerName: input.firstWeek?.studyLayerLabel ?? 'Study OS',
-        userStage: completedSessions === 0 ? 'new' : completedSessions < 3 ? 'activating' : completedSessions < 10 ? 'engaged' : 'power',
+          p.primaryGoal === 'focus' || p.primaryGoal === 'study' || p.primaryGoal === 'work' ||
+          p.primaryGoal === 'creative' || p.primaryGoal === 'personal' || p.primaryGoal === 'learning'
+        ) ? p.primaryGoal as 'focus' | 'study' | 'work' | 'creative' | 'personal' | 'learning' : 'focus',
+        gamificationIntensity: p.gamificationIntensity,
+        studyLayerName: input.firstWeek?.studyLayerLabel ?? p.studyLayerName,
+        userStage: p.userStage,
       },
       behaviorStats: {
-        totalCompletedSessions: completedSessions,
-        studyUsageRatio,
-        bossChallengeEngagement: bossEngagement,
-        coachInteractions,
-        comebackSessions: 0,
-        ignoredFeatures: [],
-        premiumFeatureAttempts: [],
-        completionStreak,
+        totalCompletedSessions: b.totalCompletedSessions,
+        studyUsageRatio: b.studyUsageRatio,
+        bossChallengeEngagement: b.bossChallengeEngagement,
+        coachInteractions: b.coachInteractions,
+        comebackSessions: b.comebackSessions,
+        ignoredFeatures: b.ignoredFeatures,
+        premiumFeatureAttempts: b.premiumFeatureAttempts,
+        completionStreak: b.completionStreak,
       },
       hasActiveStudyPlan,
       hasActiveRecommendation,
       hasActiveBoss,
       isFirstSession,
       firstWeekPhase: input.firstWeek,
+      degradedFeatures,
     });
   }, [
-    completedSessions,
+    b.totalCompletedSessions,
     safeStyle,
-    primaryGoal,
-    bossEngagement,
-    studyUsageRatio,
-    coachInteractions,
+    p.primaryGoal,
+    b.bossChallengeEngagement,
+    b.studyUsageRatio,
+    b.coachInteractions,
     hasActiveStudyPlan,
     hasActiveRecommendation,
     hasActiveBoss,
     isFirstSession,
-    completionStreak,
+    b.completionStreak,
     featureAccess.features,
     input.firstWeek,
+    p.gamificationIntensity,
+    p.studyLayerName,
+    p.userStage,
   ]);
 }

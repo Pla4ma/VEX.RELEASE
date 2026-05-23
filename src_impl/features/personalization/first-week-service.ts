@@ -35,6 +35,7 @@ function resolveStudyLabel(goal: FirstWeekResolverInput['primaryGoal']): FirstWe
     case 'study': return 'Study OS';
     case 'learning': return 'Learning OS';
     case 'creative': return 'Project Focus Path';
+    case 'personal':
     case 'personal_growth': return 'Growth Path';
     default: return 'Deep Work Plan';
   }

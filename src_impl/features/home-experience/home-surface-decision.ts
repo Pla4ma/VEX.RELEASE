@@ -21,6 +21,7 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
     coach_presence: 'hidden',
     progress_proof: 'hidden',
     focus_score: 'hidden',
+    progress_detail: 'hidden',
     study_layer: 'hidden',
     companion_thread: 'hidden',
     boss_teaser: 'hidden',
@@ -55,6 +56,12 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
   if (!isDayZero) {
     map.progress_proof = 'secondary';
     map.focus_score = isNew ? 'tiny_tease' : isEngaged ? 'secondary' : 'secondary';
+  }
+
+  // progress_detail: only opens full dashboard navigation, not the widget
+  // Hidden for Day 0/Activating, gated same as focus_score but never shows tiny_tease
+  if (!isDayZero && !isNew) {
+    map.progress_detail = isEngaged ? 'secondary' : 'secondary';
   }
 
   map.unlock_strip = isDayZero ? 'tiny_tease' : isNew ? 'secondary' : 'hidden';
@@ -200,6 +207,37 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
       if (!fwAllowedSurfaces.includes('companion_continuity')) {
         map.companion_thread = 'hidden';
       }
+      // progress_detail: hidden unless allowed surfaces include progress_proof
+      if (
+        !fwAllowedSurfaces.includes('progress_proof') &&
+        !fwAllowedSurfaces.includes('weekly_insight')
+      ) {
+        map.progress_detail = 'hidden';
+      }
+    }
+  }
+
+  // --- DEGRADED FEATURE SURFACE BLOCKS: block unsafe surfaces for degraded features ---
+  const degradedFeatures = parsed.degradedFeatures ?? [];
+
+  if (degradedFeatures.includes('content_study')) {
+    const currentStudy = map.study_layer as HomeSurfaceDecision;
+    map.study_layer = currentStudy !== 'hidden' ? 'blocked' : 'hidden';
+  }
+  if (degradedFeatures.includes('ai_coach_advanced')) {
+    const currentCoach = map.coach_presence as HomeSurfaceDecision;
+    if (currentCoach !== 'hidden') {
+      map.coach_presence = currentCoach === 'spotlight' ? 'secondary' : currentCoach;
+    }
+  }
+  if (degradedFeatures.includes('premium_paywall')) {
+    map.premium_tease = 'hidden';
+  }
+  if (degradedFeatures.includes('boss_tab')) {
+    map.boss_full_cta = 'blocked';
+    const currentBossCompact = map.boss_compact as HomeSurfaceDecision;
+    if (currentBossCompact !== 'hidden') {
+      map.boss_compact = currentBossCompact === 'spotlight' ? 'secondary' : currentBossCompact;
     }
   }
 

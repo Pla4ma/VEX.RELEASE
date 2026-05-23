@@ -9,6 +9,10 @@ import { getAvailabilityFor } from '../liveops-config/feature-access-store';
 import { trackCompletionAnalytics } from './completion-analytics';
 import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
 import { SUBSYSTEM_META, type SubsystemMeta, type SubsystemKind } from './subsystem-meta';
+import { enqueue } from '../../lib/offline/queue';
+import { createDebugger } from '../../utils/debug';
+
+const debug = createDebugger('session-completion:subsystems');
 
 type CompletionSubsystemInput = {
   ledger: CompletionLedger;
@@ -82,26 +86,61 @@ export async function applyCompletionSubsystems(
   });
 
   await runSubsystem(degradedSystems, 'streak', async () => {
-    const result = await getStreakService(input.ledger.userId).recordSession();
-    ledger = CompletionLedgerSchema.parse({
-      ...ledger,
-      streakResult: {
-        action:
-          result.currentStreak > input.ledger.streakResult.previousDays
-            ? 'extended'
-            : 'maintained',
-        newDays: result.currentStreak,
-        previousDays: input.ledger.streakResult.previousDays,
-      },
-    });
+    try {
+      const result = await getStreakService(input.ledger.userId).recordSession();
+      ledger = CompletionLedgerSchema.parse({
+        ...ledger,
+        streakResult: {
+          action:
+            result.currentStreak > input.ledger.streakResult.previousDays
+              ? 'extended'
+              : 'maintained',
+          newDays: result.currentStreak,
+          previousDays: input.ledger.streakResult.previousDays,
+        },
+      });
+    } catch (error) {
+      enqueue({
+        feature: 'streaks',
+        idempotencyKey: `streak-record:${input.ledger.sessionId}`,
+        operation: 'STREAK_RECORD',
+        payload: {
+          userId: input.ledger.userId,
+          sessionId: input.ledger.sessionId,
+          completedAt: input.ledger.completedAt,
+        },
+        priority: 'high',
+      });
+      debug.warn('Streak record failed, enqueued for offline retry');
+      throw error;
+    }
   });
 
+  // ProgressionService owns XP mutation — it directly increments user XP in the progression table.
+  // RewardService.grantReward('XP', ...) is receipt-only — it creates a reward ledger entry for
+  // display/analytics, NOT a second XP mutation. The two are complementary, not duplicative.
   await runSubsystem(degradedSystems, 'progression', async () => {
-    await getProgressionService(input.ledger.userId).addXP(
-      input.ledger.xpDelta,
-      'SESSION_COMPLETE',
-      { sessionId: input.ledger.sessionId },
-    );
+    try {
+      await getProgressionService(input.ledger.userId).addXP(
+        input.ledger.xpDelta,
+        'SESSION_COMPLETE',
+        { sessionId: input.ledger.sessionId },
+      );
+    } catch (error) {
+      enqueue({
+        feature: 'progression',
+        idempotencyKey: `xp-add:${input.ledger.sessionId}`,
+        operation: 'XP_ADD',
+        payload: {
+          userId: input.ledger.userId,
+          amount: input.ledger.xpDelta,
+          sessionId: input.ledger.sessionId,
+        },
+        priority: 'high',
+      });
+      debug.warn('XP grant failed, enqueued for offline retry');
+      throw error;
+    }
   });
 
   if (subsystemShouldRun(SUBSYSTEM_META.rewards!)) {
@@ -139,15 +178,18 @@ export async function applyCompletionSubsystems(
     });
   }
 
+  // V1 NOTE: Daily mission progress is calculated locally from session data.
+  // The full mission service/repository integration is deferred until the challenges
+  // feature graduates from progressive to included status.
   if (subsystemShouldRun(SUBSYSTEM_META['daily-mission']!)) {
     await runSubsystem(degradedSystems, 'daily-mission', async () => {
+      const progressDelta = input.summary.actualDuration > 0 ? 1 : 0;
       ledger = CompletionLedgerSchema.parse({
         ...ledger,
         dailyMissionResult: {
-          missionId: 'daily-focus-session',
-          progressDelta: input.summary.actualDuration > 0 ? 1 : 0,
-          status:
-            input.summary.actualDuration > 0 ? 'progressed' : 'unchanged',
+          missionId: `daily-focus:${new Date(input.ledger.completedAt).toISOString().split('T')[0]}`,
+          progressDelta,
+          status: progressDelta > 0 ? 'progressed' : 'unchanged',
         },
       });
     });

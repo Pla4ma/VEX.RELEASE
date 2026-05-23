@@ -42,6 +42,7 @@ export const bootstrapApp = (): void => {
   bootstrapped = true;
   initializeCoreSystems();
   initializeSessionCompletionOrchestrator();
+  initializeSessionRuntime();
 };
 
 export const bootstrapDevelopment = (): void => {

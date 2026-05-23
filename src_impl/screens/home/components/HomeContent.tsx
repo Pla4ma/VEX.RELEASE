@@ -17,6 +17,8 @@ import { HomeWeeklyQuest } from './HomeWeeklyQuest';
 import { HomeCompanionSection } from './HomeCompanionSection';
 import { HomeExperiencePrelude, useHomeExperienceModel } from '../../../features/home-experience';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
+import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
+import type { VexExperience } from '../../../features/personalization/schemas';
 import type { MissionPriorityInput } from '../../../features/daily-mission/types';
 import type { useHomeData } from '../hooks/useHomeData';
 
@@ -38,6 +40,8 @@ interface HomeContentProps {
   handleClaimReward: (rewardId: string) => void;
   streakHoursRemaining: number;
   surfaceMap?: HomeSurfaceMap;
+  resolvedExperience?: VexExperience;
+  firstWeekExperience?: FirstWeekExperience;
 }
 
 export const HomeContent: React.FC<HomeContentProps> = ({
@@ -48,9 +52,15 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   features,
   comebackSessionsCompleted,
   surfaceMap,
+  resolvedExperience,
+  firstWeekExperience,
 }) => {
   const navigation = useNavigation<NavigationProp>();
-  const homeExperience = useHomeExperienceModel(controller.disclosure.inputs.totalCompletedSessions);
+  const homeExperience = useHomeExperienceModel(
+    controller.disclosure.inputs.totalCompletedSessions,
+    resolvedExperience,
+    firstWeekExperience,
+  );
   const isDayZero = homeExperience.stage === 'STAGE_0';
 
   const sm = surfaceMap;
@@ -67,6 +77,22 @@ export const HomeContent: React.FC<HomeContentProps> = ({
     ? sm.boss_teaser !== 'hidden' || sm.challenge_teaser !== 'hidden' || sm.study_layer !== 'hidden'
     : false;
   const showAtRiskBanner = streakHoursRemaining !== null && streakHoursRemaining <= 4;
+
+  const isActivating =
+    controller.disclosure.stage === 'NEW_USER' || controller.disclosure.stage === 'ACTIVATING';
+  const missionSurfacesAllowed = sm
+    ? sm.challenge_teaser !== 'hidden' && sm.challenge_teaser !== 'blocked'
+    : false;
+  const weeklyQuestAllowed = sm
+    ? sm.weekly_quest !== 'hidden' && sm.weekly_quest !== 'blocked'
+    : false;
+  const bossSurfaceActive = sm
+    ? sm.boss_compact !== 'hidden' && sm.boss_compact !== 'blocked'
+    : false;
+  const useMissionWrapper =
+    !isDayZero && !isActivating
+      ? missionSurfacesAllowed || weeklyQuestAllowed || bossSurfaceActive
+      : false;
 
   const openChallenges = (): void => {
     const challengesAccess = controller.disclosure.features.challenges;
@@ -85,94 +111,108 @@ export const HomeContent: React.FC<HomeContentProps> = ({
     controller.openSetup();
   };
 
-  return (
-    <HomeMissionInput
-      activeBossQuery={{ data: null }}
-      canShowBossBounties={false}
-      companionMood={data.companionMood}
-      controller={controller}
-      intervention={data.intervention}
-      interventionLoading={data.interventionLoading}
-      streakHoursRemaining={streakHoursRemaining}
-      todaysChallenges={data.todaysChallenges}
+  const renderInnerContent = (missionInput: Partial<MissionPriorityInput> = {}): JSX.Element => (
+    <StaggeredEnter
+      containerStyle={staggeredEnterStyle.container}
+      direction="up"
+      initialDelay={100}
+      speed="normal"
+      staggerDelay={60}
     >
-      {(missionInput: Partial<MissionPriorityInput>) => (
-        <StaggeredEnter
-          containerStyle={staggeredEnterStyle.container}
-          direction="up"
-          initialDelay={100}
-          speed="normal"
-          staggerDelay={60}
-        >
-          <HomeStatusBanners
-            isOnline={controller.isOnline}
-            completionSync={controller.completionSync as CompletionSyncState}
-            loadError={controller.loadError}
-            onRetry={controller.retryAll}
-          />
+      <HomeStatusBanners
+        isOnline={controller.isOnline}
+        completionSync={controller.completionSync as CompletionSyncState}
+        loadError={controller.loadError}
+        onRetry={controller.retryAll}
+      />
 
-          <HomeSectionBoundary sectionName="Hero Action">
-            <HomeExperiencePrelude model={homeExperience} />
-            <HomeHeroSection controller={controller} />
-          </HomeSectionBoundary>
+      <HomeSectionBoundary sectionName="Hero Action">
+        <HomeExperiencePrelude
+          model={homeExperience}
+          firstWeekExperience={firstWeekExperience}
+          surfaceMap={surfaceMap}
+        />
+        <HomeHeroSection
+          controller={controller}
+          surfaceMap={surfaceMap}
+          firstWeekExperience={firstWeekExperience}
+        />
+      </HomeSectionBoundary>
 
-          {showCompanion ? (
-            <HomeCompanionSection
-              currentStreakDays={controller.currentStreak}
-              features={features}
-              highFocusStreak={controller.currentStreak}
-              isOnline={controller.isOnline}
-              onAction={() => controller.openSetup()}
-              onPress={openCompanion}
-              onRetry={() => controller.retryAll()}
-              totalSessions={controller.disclosure.inputs.totalCompletedSessions}
-              userId={controller.userId}
-            />
-          ) : null}
+      {showCompanion ? (
+        <HomeCompanionSection
+          currentStreakDays={controller.currentStreak}
+          features={features}
+          highFocusStreak={controller.currentStreak}
+          isOnline={controller.isOnline}
+          onAction={() => controller.openSetup()}
+          onPress={openCompanion}
+          onRetry={() => controller.retryAll()}
+          totalSessions={controller.disclosure.inputs.totalCompletedSessions}
+          userId={controller.userId}
+        />
+      ) : null}
 
-          {showStreak ? (
-            <HomeStreakProgress
-              currentDays={controller.currentStreak}
-              hoursRemaining={streakHoursRemaining}
-              riskLevel={(controller.streakQuery.data as Record<string, unknown> | undefined)?.riskLevel as 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | undefined}
-              longestStreak={(controller.streakQuery.data as Record<string, unknown> | undefined)?.longestDays as number | undefined}
-              isLoading={controller.streakQuery.isLoading}
-              userId={controller.userId ?? undefined}
-            />
-          ) : null}
+      {showStreak ? (
+        <HomeStreakProgress
+          currentDays={controller.currentStreak}
+          hoursRemaining={streakHoursRemaining}
+          riskLevel={(controller.streakQuery.data as Record<string, unknown> | undefined)?.riskLevel as 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL' | undefined}
+          longestStreak={(controller.streakQuery.data as Record<string, unknown> | undefined)?.longestDays as number | undefined}
+          isLoading={controller.streakQuery.isLoading}
+          userId={controller.userId ?? undefined}
+        />
+      ) : null}
 
-          {showWeeklyQuest ? (
-            <HomeWeeklyQuest
-              features={features}
-              onPress={openChallenges}
-              onOpenSetup={() => controller.openSetup()}
-              userId={controller.userId ?? ''}
-            />
-          ) : null}
+      {showWeeklyQuest ? (
+        <HomeWeeklyQuest
+          features={features}
+          onPress={openChallenges}
+          onOpenSetup={() => controller.openSetup()}
+          userId={controller.userId ?? ''}
+        />
+      ) : null}
 
-          {showAtRiskBanner && (
-            <AtRiskBanner
-              hoursRemaining={streakHoursRemaining}
-              currentStreak={controller.currentStreak}
-              onStartSession={() => controller.openSetup()}
-              isLoading={controller.streakQuery.isLoading}
-            />
-          )}
-
-          {showLowerContent ? (
-            <HomeContentLower
-              controller={controller}
-              data={data}
-              missionInput={missionInput}
-              handleClaimReward={handleClaimReward}
-              streakHoursRemaining={streakHoursRemaining}
-              features={features}
-              comebackSessionsCompleted={comebackSessionsCompleted}
-              surfaceMap={surfaceMap}
-            />
-          ) : null}
-        </StaggeredEnter>
+      {showAtRiskBanner && (
+        <AtRiskBanner
+          hoursRemaining={streakHoursRemaining}
+          currentStreak={controller.currentStreak}
+          onStartSession={() => controller.openSetup()}
+          isLoading={controller.streakQuery.isLoading}
+        />
       )}
-    </HomeMissionInput>
+
+      {showLowerContent ? (
+        <HomeContentLower
+          controller={controller}
+          data={data}
+          missionInput={missionInput}
+          handleClaimReward={handleClaimReward}
+          streakHoursRemaining={streakHoursRemaining}
+          features={features}
+          comebackSessionsCompleted={comebackSessionsCompleted}
+          surfaceMap={surfaceMap}
+        />
+      ) : null}
+    </StaggeredEnter>
   );
+
+  if (useMissionWrapper) {
+    return (
+      <HomeMissionInput
+        activeBossQuery={{ data: null }}
+        canShowBossBounties={false}
+        companionMood={data.companionMood}
+        controller={controller}
+        intervention={data.intervention}
+        interventionLoading={data.interventionLoading}
+        streakHoursRemaining={streakHoursRemaining}
+        todaysChallenges={data.todaysChallenges}
+      >
+        {renderInnerContent}
+      </HomeMissionInput>
+    );
+  }
+
+  return renderInnerContent();
 };

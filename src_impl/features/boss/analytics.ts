@@ -107,3 +107,45 @@ export function trackCombatAbilityActivated(
     },
   });
 }
+
+export function trackBossRouteOpened(
+  userId: string | null,
+  bossIntensity: string,
+  canQueryBoss: boolean,
+): void {
+  Sentry.addBreadcrumb({
+    category: 'boss',
+    message: 'Boss route opened',
+    data: { userId, bossIntensity, canQueryBoss },
+    level: 'info',
+  });
+  eventBus.publish('analytics:track', {
+    event: 'boss_route_opened',
+    properties: { userId, bossIntensity, canQueryBoss },
+  });
+}
+
+export function trackBossCTAClicked(
+  userId: string | null,
+  minutes: number,
+  bossIntensity: string,
+): void {
+  Sentry.addBreadcrumb({
+    category: 'boss',
+    message: 'Boss CTA clicked',
+    data: { userId, minutes, bossIntensity },
+    level: 'info',
+  });
+}
+
+export function trackBossSurfaceDismissed(
+  userId: string | null,
+  reason: string,
+): void {
+  Sentry.addBreadcrumb({
+    category: 'boss',
+    message: 'Boss surface dismissed',
+    data: { userId, reason },
+    level: 'info',
+  });
+}

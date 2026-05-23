@@ -168,13 +168,41 @@ describe('notification routing — product journey', () => {
       expect(result.intent).toBe('OPEN_PROGRESS');
     });
 
-    it('view_profile resolves to OPEN_HOME', () => {
+    it('view_profile resolves to OPEN_PROFILE (not social tab)', () => {
       const result = resolveNotificationAction(
         { type: 'view_profile' },
         hiddenFeatureAccess,
         'calm',
       );
+      expect(result.intent).toBe('OPEN_PROFILE');
+    });
+
+    it('ACHIEVEMENT notification routes to Progress', () => {
+      const result = resolveNotificationAction(
+        { type: 'view_progress' },
+        hiddenFeatureAccess,
+        'calm',
+      );
+      expect(result.intent).toBe('OPEN_PROGRESS');
+    });
+
+    it('view_profile does not route to social tab', () => {
+      const result = resolveNotificationAction(
+        { type: 'view_profile' },
+        hiddenFeatureAccess,
+        'calm',
+      );
+      expect(result.intent).not.toBe('OPEN_HOME');
+    });
+
+    it('hidden social features never route from notification', () => {
+      const result = resolveNotificationAction(
+        { type: 'view_squad' },
+        hiddenFeatureAccess,
+        'calm',
+      );
       expect(result.intent).toBe('OPEN_HOME');
+      expect(result.fallbackReason).toBeDefined();
     });
 
     it('accept_invite resolves to OPEN_PROGRESS', () => {

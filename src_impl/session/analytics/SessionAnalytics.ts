@@ -1,6 +1,6 @@
 import { eventBus } from "../../events"; import { capture } from "../../shared/analytics/analytics-service";
 import { SessionEvents } from "../../shared/analytics/analytics-events"; import type { SessionHistoryEntry, InterruptionRecord, AntiCheatFlag, RecoveryRecord } from "../types";
-import { createDebugger } from "../../utils/debug"; const debug = createDebugger("session:analytics"); let orchestratorHandlesCompletion = false; export function setOrchestratorHandlesCompletion(v: boolean): void { orchestratorHandlesCompletion = v; } interface SessionAnalyticsEvent { eventName: string; userId: string;
+import { createDebugger } from "../../utils/debug"; const debug = createDebugger("session:analytics"); let orchestratorHandlesCompletion = false; export function setOrchestratorHandlesCompletion(v: boolean): void { orchestratorHandlesCompletion = v; } export function getOrchestratorHandlesCompletion(): boolean { return orchestratorHandlesCompletion; } interface SessionAnalyticsEvent { eventName: string; userId: string;
 sessionId?: string; timestamp: number; properties: Record<string, unknown>; } interface EngagementMetrics { totalSessions: number; completedSessions: number;
 abandonedSessions: number; completionRate: number; avgSessionDuration: number; totalFocusTime: number; } interface PatternMetrics { bestTimeOfDay: number; bestDayOfWeek: number;
 avgInterruptionsPerSession: number; recoverySuccessRate: number; avgFocusQuality: number; } export class SessionAnalytics { private userId: string | null = null;

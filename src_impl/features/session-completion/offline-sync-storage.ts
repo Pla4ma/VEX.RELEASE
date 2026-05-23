@@ -2,10 +2,13 @@ import { z } from 'zod';
 import { captureSilentFailure } from '../../utils/silent-failure';
 import { createDebugger } from '../../utils/debug';
 import { CompletionLedgerSchema } from './schemas';
+import { MMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
 
 const debug = createDebugger('session-completion:offline-sync-storage');
-const LOCAL_STORAGE_KEY = 'vex_session_completion_fallback';
+const STORAGE_KEY = 'vex_session_completion_fallback';
 const MAX_FALLBACK_ENTRIES = 100;
+
+const storage = new MMKVStorageAdapter('session-completion-offline');
 
 export const SessionCompletionOfflineEntrySchema = z.object({
   id: z.string().uuid(),
@@ -85,7 +88,7 @@ class FallbackStorageManager {
 
   private loadFromStorage(): void {
     try {
-      const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const stored = storage.getItemSync(STORAGE_KEY);
       this.storage = stored ? FallbackStorageSchema.parse(JSON.parse(stored)) : { entries: [], lastSyncAt: 0 };
     } catch (error) {
       captureSilentFailure(error, { feature: 'session-completion', operation: 'offline-fallback-parse', type: 'data' });
@@ -97,7 +100,7 @@ class FallbackStorageManager {
 
   private saveToStorage(): void {
     try {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.storage));
+      storage.setItemSync(STORAGE_KEY, JSON.stringify(this.storage));
     } catch (error) {
       debug.warn('Failed to save fallback storage:', error);
     }

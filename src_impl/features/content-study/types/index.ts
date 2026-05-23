@@ -70,7 +70,7 @@ export interface LocalCacheEntry<T> {
   cachedAt: number;
   expiresAt: number;
   etag?: string;
-  source: 'memory' | 'localStorage' | 'indexedDB';
+  source: 'memory' | 'mmkv' | 'indexedDB';
 }
 
 export interface SyncQueueItem {

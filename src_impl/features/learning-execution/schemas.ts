@@ -22,7 +22,7 @@ export const LearningExecutionCopySchema = z.object({
 export const ContentStudyGateInputSchema = z.object({
   aiConfigured: z.boolean(),
   featureHealth: z.enum(['healthy', 'degraded', 'unavailable']),
-  goal: z.enum(['WORK', 'STUDY', 'CREATIVE', 'PERSONAL']).nullable(),
+  goal: z.enum(['WORK', 'STUDY', 'CREATIVE', 'PERSONAL', 'LEARNING']).nullable(),
   hasPrivacyDisclosure: z.boolean(),
   rateLimitsConfigured: z.boolean(),
   storageConfigured: z.boolean(),

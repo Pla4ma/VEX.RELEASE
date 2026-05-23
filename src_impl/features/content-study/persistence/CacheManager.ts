@@ -56,7 +56,7 @@ export class CacheManager {
       cachedAt: now,
       expiresAt: now + (options.ttlMs || 5 * 60 * 1000),
       etag: options.etag,
-      source: 'localStorage',
+      source: 'mmkv',
     };
 
     this.memoryCache.set(key, entry);

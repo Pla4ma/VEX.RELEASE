@@ -29,7 +29,7 @@ export interface UseFirstWeekInput {
 }
 
 const VALID_STYLES = ['calm', 'friendly', 'coach_led', 'study_focused', 'game_like', 'intense'] as const;
-const VALID_GOALS = ['focus', 'study', 'work', 'creative', 'personal_growth', 'learning'] as const;
+const VALID_GOALS = ['focus', 'study', 'work', 'creative', 'personal', 'personal_growth', 'learning'] as const;
 
 export function computeFirstWeekExperience(input: UseFirstWeekInput): FirstWeekExperience {
   const {

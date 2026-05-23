@@ -47,6 +47,8 @@ const DEFAULT_CONFIG: RewardIntegrationConfig = {
 export class SessionRewardIntegration {
   private config: RewardIntegrationConfig;
   private processedSessionIds = new Set<string>();
+  private static readonly MAX_PROCESSED_IDS = 500;
+  private unsubscribeFns: Array<() => void> = [];
 
   constructor(config: Partial<RewardIntegrationConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
@@ -58,36 +60,57 @@ export class SessionRewardIntegration {
   }
 
   private setupEventListeners(): void {
+    this.teardownEventListeners();
+
     if (this.isFullyDisabled()) {
       debug.info('SessionRewardIntegration: fully disabled — not subscribing to any session events');
       return;
     }
 
     if (hasCompletionSideEffects(this.config)) {
-      eventBus.subscribe('session:completed', (data) => {
-        if (!data) { return; }
-        const summary = SessionSummarySchema.safeParse(data.summary);
-        if (summary.success) {
-          void this.handleCompleted(data.sessionId, data.userId, summary.data);
-        }
-      });
+      this.unsubscribeFns.push(
+        eventBus.subscribe('session:completed', (data) => {
+          if (!data) { return; }
+          const summary = SessionSummarySchema.safeParse(data.summary);
+          if (summary.success) {
+            void this.handleCompleted(data.sessionId, data.userId, summary.data);
+          }
+        })
+      );
     }
 
     if (this.config.autoHandleRecoveryRewards) {
-      eventBus.subscribe('session:recovery:successful', (data) => {
-        if (data) { void handlePartialCompletion(this.config, data.sessionId, data.userId, data.recoveredTime || 0); }
-      });
+      this.unsubscribeFns.push(
+        eventBus.subscribe('session:recovery:successful', (data) => {
+          if (data) { void handlePartialCompletion(this.config, data.sessionId, data.userId, data.recoveredTime || 0); }
+        })
+      );
     }
 
     if (this.config.autoHandleAbandonmentPartialCredit) {
-      eventBus.subscribe('session:abandoned', (data) => {
-        if (data) { void handleAbandonment(this.config, data.sessionId, data.userId, data.elapsedTime || 0); }
-      });
+      this.unsubscribeFns.push(
+        eventBus.subscribe('session:abandoned', (data) => {
+          if (data) { void handleAbandonment(this.config, data.sessionId, data.userId, data.elapsedTime || 0); }
+        })
+      );
     }
+  }
+
+  private teardownEventListeners(): void {
+    for (const unsubscribe of this.unsubscribeFns) {
+      unsubscribe();
+    }
+    this.unsubscribeFns = [];
+  }
+
+  destroy(): void {
+    this.teardownEventListeners();
+    debug.info('SessionRewardIntegration destroyed');
   }
 
   updateConfig(config: Partial<RewardIntegrationConfig>): void {
     this.config = { ...this.config, ...config };
+    this.setupEventListeners();
   }
 
   private async handleCompleted(sessionId: string, userId: string, sessionData: SessionSummary): Promise<void> {
@@ -96,6 +119,15 @@ export class SessionRewardIntegration {
       return;
     }
     this.processedSessionIds.add(sessionId);
+    if (this.processedSessionIds.size > SessionRewardIntegration.MAX_PROCESSED_IDS) {
+      let count = 0;
+      const toRemove = Math.floor(this.processedSessionIds.size * 0.5);
+      for (const id of this.processedSessionIds) {
+        if (count >= toRemove) { break; }
+        this.processedSessionIds.delete(id);
+        count += 1;
+      }
+    }
     await handleSessionCompleted(this.config, sessionId, userId, sessionData);
   }
 }

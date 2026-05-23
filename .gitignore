@@ -27,4 +27,5 @@ tmp/
 type_errors.txt
 .eslint-errors.json
 
+.commandcode/
 supabase/.temp/

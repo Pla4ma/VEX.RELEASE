@@ -12,7 +12,7 @@ import type {
   LearningSessionTarget,
 } from './types';
 
-type Goal = 'WORK' | 'STUDY' | 'CREATIVE' | 'PERSONAL' | null;
+type Goal = 'WORK' | 'STUDY' | 'CREATIVE' | 'PERSONAL' | 'LEARNING' | null;
 type Motivation = 'student' | 'creator' | 'worker' | string | null | undefined;
 
 const copyMap: Record<LearningExecutionPersona, LearningExecutionCopy> = {
@@ -73,6 +73,7 @@ export function resolveLearningExecutionPersona(input: {
   motivationPrimary?: Motivation;
 }): LearningExecutionPersona {
   if (input.goal === 'STUDY') { return 'student'; }
+  if (input.goal === 'LEARNING') { return 'learning'; }
   if (input.goal === 'WORK') { return 'work'; }
   if (input.goal === 'CREATIVE') { return 'creative'; }
   if (input.goal === 'PERSONAL') { return 'growth'; }
@@ -95,7 +96,7 @@ export function buildContentStudyGate(input: unknown) {
     parsed.storageConfigured &&
     parsed.rateLimitsConfigured &&
     parsed.hasPrivacyDisclosure;
-  const isStudyGoal = parsed.goal === 'STUDY';
+  const isStudyGoal = parsed.goal === 'STUDY' || parsed.goal === 'LEARNING';
 
   if (parsed.featureHealth !== 'healthy' || !configured) {
     return ContentStudyGateSchema.parse({
