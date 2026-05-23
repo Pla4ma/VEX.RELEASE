@@ -5,6 +5,7 @@ import { MainNavigator } from "./MainNavigator";
 import { OnboardingNavigator } from "./OnboardingNavigator";
 import { SettingsNavigator } from "./SettingsNavigator";
 import { PaywallScreen } from "../screens/paywall/PaywallScreen";
+import { VipPaywallScreen } from "../shared/monetization";
 import StreakFuneralScreen from "../screens/streaks/StreakFuneralScreen";
 import ComebackScreen from "../screens/ComebackScreen";
 import { RootStackFeatureRoutes } from "./root-stack-feature-routes";
@@ -47,6 +48,11 @@ export function RootStackAuthenticatedRoutes({
       <Stack.Screen
         name="Paywall"
         component={PaywallScreen}
+        options={{ animation: "slide_from_bottom", presentation: "modal" }}
+      />
+      <Stack.Screen
+        name="VipPaywall"
+        component={VipPaywallScreen}
         options={{ animation: "slide_from_bottom", presentation: "modal" }}
       />
       <Stack.Screen

@@ -1,13 +1,90 @@
-import{useEffect,useState,useCallback,useRef}from'react'; import{getSupabaseClient}from'../../../config/supabase'; import{eventBus}from'../../../events'; export interface SquadMemberPresence{userId:string;displayName:string;avatarUrl?:string;isFocusing:boolean;sessionId?:string;progressPercent:number;elapsedSeconds:number;sessionDuration:number;startedAt:number;}export interface SquadPresenceState{members:SquadMemberPresence[];focusingCount:number;isLoading:boolean;error:Error|null;}interface RawSessionData{id:string;user_id:string;status:string;elapsed_seconds:number;config?:{duration?:number;};started_at:string;users?:Array<{id:string;display_name:string;avatar_url?:string;}>;}export function useSquadLivePresence(squadId:string|undefined,excludeUserId?:string):SquadPresenceState{const[members,setMembers] = useState<SquadMemberPresence[]>([]); const[isLoading,setIsLoading] = useState(true); const[error,setError] = useState<Error|null>(null); const channelRef = useRef<ReturnType<ReturnType<typeof getSupabaseClient>['channel']>|null>(null); const supabase = getSupabaseClient(); const fetchSquadPresence = useCallback(async()=>{if(!squadId){setMembers([]); setIsLoading(false); return;}try{setIsLoading(true); setError(null); const{data:memberData,error:memberError} = await supabase.from('squad_members').select('user_id').eq('squad_id',squadId).eq('is_active',true); if(memberError){throw memberError;}const memberIds = (memberData || []).map((row:{user_id:string;})=>row.user_id).filter((id:string)=>id !== excludeUserId); if(memberIds.length === 0){setMembers([]); setIsLoading(false); return;}const{data:sessionData,error:sessionError} = await supabase.from('sessions').select(`
-          id,
-          user_id,
-          status,
-          elapsed_seconds,
-          config,
-          started_at,
-          users:user_id (
-            id,
-            display_name,
-            avatar_url
-          )
-        `).in('user_id',memberIds).eq('status','ACTIVE'); if(sessionError){throw sessionError;}const presenceData:SquadMemberPresence[] = (sessionData || []).map((row:RawSessionData)=>{const duration = row.config?.duration || 1800; const progressPercent = Math.min(100,Math.round(row.elapsed_seconds / duration * 100)); const userInfo = row.users?.[0]; return{userId:row.user_id,displayName:userInfo?.display_name || 'Unknown',avatarUrl:userInfo?.avatar_url,isFocusing:true,sessionId:row.id,progressPercent,elapsedSeconds:row.elapsed_seconds,sessionDuration:duration,startedAt:new Date(row.started_at).getTime()};}); setMembers(presenceData);}catch(err){const error = err instanceof Error ? err : new Error(String(err)); setError(error); eventBus.publish('analytics:track',{event:'squad_presence_fetch_error',properties:{squadId,error:error.message}});}finally{setIsLoading(false);}},[squadId,excludeUserId,supabase]); useEffect(()=>{if(!squadId){setMembers([]); setIsLoading(false); return;}fetchSquadPresence(); const channel = supabase.channel(`squad_presence:${squadId}`).on('postgres_changes',{event:'*',schema:'public',table:'sessions'},()=>{fetchSquadPresence();}).subscribe(status=>{if(status === 'SUBSCRIBED'){eventBus.publish('analytics:track',{event:'squad_presence_subscribed',properties:{squadId}});}}); channelRef.current = channel; return()=>{if(channelRef.current){channelRef.current.unsubscribe(); channelRef.current = null;}};},[squadId,fetchSquadPresence,supabase]); const focusingCount = members.filter(m=>m.isFocusing).length; return{members,focusingCount,isLoading,error};}export default useSquadLivePresence;
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { eventBus } from '../../../events';
+import {
+  fetchSquadMemberPresence,
+  subscribeToSquadPresence,
+  type SquadMemberPresence,
+} from '../repository';
+
+export type { SquadMemberPresence };
+
+export interface SquadPresenceState {
+  members: SquadMemberPresence[];
+  focusingCount: number;
+  isLoading: boolean;
+  error: Error | null;
+}
+
+export function useSquadLivePresence(
+  squadId: string | undefined,
+  excludeUserId?: string,
+): SquadPresenceState {
+  const [members, setMembers] = useState<SquadMemberPresence[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const channelRef = useRef<ReturnType<typeof subscribeToSquadPresence> | null>(null);
+
+  const fetchPresence = useCallback(async () => {
+    if (!squadId) {
+      setMembers([]);
+      setIsLoading(false);
+      return;
+    }
+    try {
+      setIsLoading(true);
+      setError(null);
+      const presenceData = await fetchSquadMemberPresence(squadId, excludeUserId);
+      setMembers(presenceData);
+    } catch (err) {
+      const wrapped = err instanceof Error ? err : new Error(String(err));
+      setError(wrapped);
+      eventBus.publish('analytics:track', {
+        event: 'squad_presence_fetch_error',
+        properties: { squadId, error: wrapped.message },
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [squadId, excludeUserId]);
+
+  useEffect(() => {
+    if (!squadId) {
+      setMembers([]);
+      setIsLoading(false);
+      return;
+    }
+
+    fetchPresence();
+
+    const channel = subscribeToSquadPresence(
+      squadId,
+      (updatedMembers) => {
+        setMembers(updatedMembers);
+      },
+      excludeUserId,
+    );
+
+    channel.subscribe((status) => {
+      if (status === 'SUBSCRIBED') {
+        eventBus.publish('analytics:track', {
+          event: 'squad_presence_subscribed',
+          properties: { squadId },
+        });
+      }
+    });
+
+    channelRef.current = channel;
+
+    return () => {
+      if (channelRef.current) {
+        channelRef.current.unsubscribe();
+        channelRef.current = null;
+      }
+    };
+  }, [squadId, fetchPresence, excludeUserId]);
+
+  const focusingCount = members.filter((m) => m.isFocusing).length;
+  return { members, focusingCount, isLoading, error };
+}
+
+export default useSquadLivePresence;

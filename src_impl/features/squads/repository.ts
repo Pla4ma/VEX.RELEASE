@@ -159,3 +159,12 @@ export async function fetchUserSquads(userId: string): Promise<SquadSummary[]> {
 export async function fetchRecommendedSquads(userId: string): Promise<SquadSummary[]> {
   return fetchPublicSquads({ limit: 10 });
 }
+
+export {
+  type SquadMemberPresence,
+  fetchSquadMemberPresence,
+  subscribeToSquadPresence,
+  lookupInviteByJoinCode,
+  createSquadJoinRequest,
+  createSquadSynergy,
+} from './repository/squad-extended-queries';

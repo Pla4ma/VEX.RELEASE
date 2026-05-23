@@ -28,7 +28,7 @@ function hasContentStudyConstraints(): boolean {
     CONTENT_STUDY_CONSTANTS.MAX_YOUTUBE_URL_LENGTH > 0;
 }
 
-function bossHasNoDisabledDeps(): boolean {
+function bossPublicV1ForbiddenDepsAreDisabled(): boolean {
   const disabled = new Set(DISABLED_FEATURES);
   return disabled.has('squads') && disabled.has('shop') && disabled.has('economy_advanced');
 }
@@ -177,18 +177,18 @@ export const healthChecks: FeatureHealthCheck[] = [
     dependency: 'boss_template',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      const hasDeps = bossHasNoDisabledDeps();
+      const hasDeps = bossPublicV1ForbiddenDepsAreDisabled();
       return hasDeps ? 'degraded' : 'unavailable';
     },
   },
   {
     id: 'boss_tab_no_disabled_deps',
     feature: 'boss_tab',
-    label: 'Boss Tab — no disabled squads/shop/economy dependency',
+    label: 'Boss Tab — public V1 forbidden deps (squads/shop/economy) are disabled',
     dependency: 'boss_dependencies',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      return bossHasNoDisabledDeps() ? 'healthy' : 'degraded';
+      return bossPublicV1ForbiddenDepsAreDisabled() ? 'healthy' : 'degraded';
     },
   },
   {
@@ -198,7 +198,7 @@ export const healthChecks: FeatureHealthCheck[] = [
     dependency: 'boss_subtle',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      const hasDeps = bossHasNoDisabledDeps();
+      const hasDeps = bossPublicV1ForbiddenDepsAreDisabled();
       return hasDeps ? 'degraded' : 'unavailable';
     },
   },
@@ -209,7 +209,7 @@ export const healthChecks: FeatureHealthCheck[] = [
     dependency: 'boss_route_gating',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      const hasDeps = bossHasNoDisabledDeps();
+      const hasDeps = bossPublicV1ForbiddenDepsAreDisabled();
       return hasDeps ? 'degraded' : 'unavailable';
     },
   },

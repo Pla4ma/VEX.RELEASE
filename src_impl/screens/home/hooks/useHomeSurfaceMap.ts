@@ -82,6 +82,10 @@ export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap
       behaviorStats: {
         totalCompletedSessions: b.totalCompletedSessions,
         studyUsageRatio: b.studyUsageRatio,
+        deepWorkUsageRatio: (b as Record<string, unknown>).deepWorkUsageRatio as number ?? 0,
+        learningUsageRatio: (b as Record<string, unknown>).learningUsageRatio as number ?? 0,
+        projectFocusUsageRatio: (b as Record<string, unknown>).projectFocusUsageRatio as number ?? 0,
+        structuredExecutionUsageRatio: (b as Record<string, unknown>).structuredExecutionUsageRatio as number ?? 0,
         bossChallengeEngagement: b.bossChallengeEngagement,
         coachInteractions: b.coachInteractions,
         comebackSessions: b.comebackSessions,

@@ -71,6 +71,21 @@ export const HomePrioritySchema = z.object({
 
 export type HomePriority = z.infer<typeof HomePrioritySchema>;
 
+export const ProductContextSchema = z.object({
+  surfaceMap: z.record(z.string().min(1), z.enum(['hidden', 'tiny_tease', 'spotlight', 'secondary', 'primary', 'blocked'])).optional(),
+  firstWeekExperience: z.object({
+    bossIntensity: z.enum(['hidden', 'subtle', 'tiny_tease', 'visible']),
+    currentDayStage: z.string().min(1),
+    premiumMoment: z.enum(['none', 'soft_tease', 'weekly_value', 'hidden']),
+    allowedHomeSurfaces: z.array(z.string().min(1)),
+  }).strict().optional(),
+  motivationStyle: z.enum(['calm', 'friendly', 'coach_led', 'game_like', 'intense', 'study_focused']).optional(),
+  userStage: z.enum(['new', 'activating', 'engaged', 'power']).optional(),
+  totalCompletedSessions: z.number().int().min(0).optional(),
+}).partial();
+
+export type ProductContext = z.infer<typeof ProductContextSchema>;
+
 const PromiseModeSchema = z.enum([
   'FOCUS',
   'RECOVERY',

@@ -6,7 +6,7 @@
  * Squad content removed for public v1.
  * Boss damage maps directly to focus/study sessions — no economy/shop dependency.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -23,6 +23,7 @@ import {
   useBossEngagementSignals,
   type BossEngagementInputs,
 } from '../../features/boss/boss-engagement-signals';
+import { useBossEngagementSummary } from '../../features/boss/hooks/useBossEngagementSummary';
 import type { ExtendedRootStackParams } from '../../navigation/types';
 import { BossScreenContent } from './BossScreenContent';
 import { useAuthStore } from '../../store';
@@ -103,14 +104,16 @@ export const BossScreen = (): JSX.Element => {
   const degradedFeatures = getDegradedFeatures();
   const bossIgnored = degradedFeatures.has('boss_tab');
 
+  const bossEngagementSummary = useBossEngagementSummary(userId);
+
   const bossEngagementInputs: BossEngagementInputs = {
     bossIgnored,
     bossUnlocked: disclosure.features.boss_tab.isUnlocked,
     canQueryBoss: false,
-    bossRouteOpenedCount: 0,
-    bossCTAClickedCount: 0,
-    bossDamageEventsCount: 0,
-    recentSessionsWithBossProgress: 0,
+    bossRouteOpenedCount: bossEngagementSummary.bossRouteOpenedCount,
+    bossCTAClickedCount: bossEngagementSummary.bossCTAClickedCount,
+    bossDamageEventsCount: bossEngagementSummary.bossDamageEventsCount,
+    recentSessionsWithBossProgress: bossEngagementSummary.recentSessionsWithBossProgress,
   };
 
   const bossEngagement = useBossEngagementSignals(bossEngagementInputs);
@@ -151,9 +154,14 @@ export const BossScreen = (): JSX.Element => {
     return () => clearInterval(id);
   }, []);
 
+  const trackedOpenRef = useRef(false);
+
   useEffect(() => {
+    if (!userId) return;
+    if (trackedOpenRef.current) return;
+    trackedOpenRef.current = true;
     trackBossRouteOpened(userId, bossIntensity, canQueryBoss);
-  }, []);
+  }, [userId, bossIntensity, canQueryBoss]);
 
   if (!canNavigateBoss || disclosure.features.boss_tab.releaseState === 'disabled_beta') {
     return (

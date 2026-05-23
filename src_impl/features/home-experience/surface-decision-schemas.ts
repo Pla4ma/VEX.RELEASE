@@ -68,6 +68,10 @@ export const SurfaceDecisionInputSchema = z.object({
   behaviorStats: z.object({
     totalCompletedSessions: z.number().int().min(0),
     studyUsageRatio: z.number().min(0).max(1),
+    deepWorkUsageRatio: z.number().min(0).max(1).optional().default(0),
+    learningUsageRatio: z.number().min(0).max(1).optional().default(0),
+    projectFocusUsageRatio: z.number().min(0).max(1).optional().default(0),
+    structuredExecutionUsageRatio: z.number().min(0).max(1).optional().default(0),
     bossChallengeEngagement: z.enum(['none', 'low', 'medium', 'high']),
     coachInteractions: z.number().int().min(0),
     comebackSessions: z.number().int().min(0),

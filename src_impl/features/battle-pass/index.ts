@@ -1,5 +1,10 @@
 /**
  * Battle Pass Feature - Barrel Export
+ *
+ * DEFERRED_PUBLIC_V1: Battle Pass is disabled in public V1 (see PUBLIC_V1_FEATURE_MAP).
+ * No route, Home card, notification, or completion reward uses battle pass.
+ * PremiumPreview and other components are deactivated.
+ * This code remains for internal reference only.
  */
 
 export type {

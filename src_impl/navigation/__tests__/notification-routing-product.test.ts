@@ -303,4 +303,54 @@ describe('notification routing — product journey', () => {
       expect(result.intent).toBe('START_SESSION');
     });
   });
+
+  describe('custom notification always routes Home (Option A)', () => {
+    it('custom unknown screen → Home', () => {
+      const result = resolveNotificationAction(
+        { type: 'custom', payload: { screen: 'UnknownScreen' } },
+        availableFeatureAccess,
+        'calm',
+      );
+      expect(result.intent).toBe('OPEN_HOME');
+    });
+
+    it('custom Boss screen → Home (not raw Boss route)', () => {
+      const result = resolveNotificationAction(
+        { type: 'custom', payload: { screen: 'Boss' } },
+        availableFeatureAccess,
+        'game_like',
+      );
+      expect(result.intent).toBe('OPEN_HOME');
+      expect(result.fallbackReason).toBeDefined();
+    });
+
+    it('custom Guild/Shop/Inventory → Home', () => {
+      for (const screen of ['Guild', 'Shop', 'Inventory']) {
+        const result = resolveNotificationAction(
+          { type: 'custom', payload: { screen } },
+          availableFeatureAccess,
+          'calm',
+        );
+        expect(result.intent).toBe('OPEN_HOME');
+      }
+    });
+
+    it('custom whitelisted Home screen → Home (not arbitrary navigate)', () => {
+      const result = resolveNotificationAction(
+        { type: 'custom', payload: { screen: 'Home' } },
+        availableFeatureAccess,
+        'calm',
+      );
+      expect(result.intent).toBe('OPEN_HOME');
+    });
+
+    it('no raw route strings navigate directly', () => {
+      const result = resolveNotificationAction(
+        { type: 'custom', payload: { screen: 'Progress' } },
+        availableFeatureAccess,
+        'calm',
+      );
+      expect(result.intent).toBe('OPEN_HOME');
+    });
+  });
 });

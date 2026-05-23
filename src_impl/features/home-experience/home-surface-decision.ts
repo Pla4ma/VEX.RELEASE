@@ -74,6 +74,20 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
     || p.primaryGoal === 'learning'
     || b.studyUsageRatio >= 0.35;
 
+  const structuredExecutionRatio = (b as { structuredExecutionUsageRatio?: number }).structuredExecutionUsageRatio ?? b.studyUsageRatio;
+
+  const isStructuredExecutionUser = structuredExecutionRatio >= 0.35
+    || p.primaryGoal === 'work'
+    || p.primaryGoal === 'creative'
+    || p.primaryGoal === 'learning'
+    || isStudyUser;
+
+  const studyLayerLabel = isStudyUser
+    ? p.studyLayerName
+    : (p.primaryGoal === 'work' || p.primaryGoal === 'creative') ? 'Deep Work Plan'
+    : p.primaryGoal === 'learning' ? 'Learning OS'
+    : p.studyLayerName;
+
   const isGameLikeUser = p.motivationStyle === 'game_like'
     || p.motivationStyle === 'intense'
     || p.gamificationIntensity === 'strong';
@@ -81,7 +95,18 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
   const isCalmUser = p.motivationStyle === 'calm';
 
   if (isStudyUser && parsed.featureAvailability.study) {
-    spotlightCandidates.push({ key: 'study_layer', priority: 10 });
+    if (!b.ignoredFeatures.includes('study_layer')) {
+      spotlightCandidates.push({ key: 'study_layer', priority: 10 });
+    } else {
+      map.study_layer = 'tiny_tease';
+    }
+  } else if (isStructuredExecutionUser && parsed.featureAvailability.study && !isDayZero) {
+    if (!b.ignoredFeatures.includes('study_layer')) {
+      spotlightCandidates.push({ key: 'study_layer', priority: 7 });
+      if (p.primaryGoal === 'learning') {
+        map.study_layer = 'secondary';
+      }
+    }
   }
 
   if (isGameLikeUser && parsed.featureAvailability.boss && b.bossChallengeEngagement !== 'none' && b.totalCompletedSessions > 0) {
@@ -142,18 +167,33 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
     map.boss_teaser = 'hidden';
   }
 
-  if (b.bossChallengeEngagement === 'none' && b.totalCompletedSessions > 0 && !isCalmUser) {
+  const bossIgnored = b.ignoredFeatures.includes('boss_compact')
+    || b.ignoredFeatures.includes('boss_tab')
+    || b.ignoredFeatures.includes('boss_full_cta');
+
+  if (bossIgnored && b.bossChallengeEngagement !== 'high') {
+    map.boss_compact = 'hidden';
+    map.boss_teaser = 'hidden';
+    map.boss_full_cta = 'blocked';
+  }
+
+  if (b.bossChallengeEngagement === 'none' && b.totalCompletedSessions > 0 && !isCalmUser && !bossIgnored) {
     map.boss_teaser = map.boss_teaser === 'hidden' ? 'tiny_tease' : map.boss_teaser;
   }
 
-  if (b.bossChallengeEngagement === 'high' && !isCalmUser && isEngaged) {
+  if (b.bossChallengeEngagement === 'high' && !isCalmUser && isEngaged && !bossIgnored) {
     if (map.boss_compact !== 'spotlight') {
       map.boss_compact = parsed.featureAvailability.boss ? 'secondary' : 'hidden';
     }
   }
 
   // --- Premium rules: cannot be spotlight before value is proven ---
-  if (b.totalCompletedSessions < 5 && b.premiumFeatureAttempts.length === 0) {
+  const premiumIgnored = b.ignoredFeatures.includes('premium_tease')
+    || b.ignoredFeatures.includes('premium_paywall');
+
+  if (premiumIgnored) {
+    map.premium_tease = 'hidden';
+  } else if (b.totalCompletedSessions < 5 && b.premiumFeatureAttempts.length === 0) {
     map.premium_tease = 'hidden';
   } else if (b.premiumFeatureAttempts.length > 0 && b.totalCompletedSessions >= 5) {
     map.premium_tease = 'tiny_tease';

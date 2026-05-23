@@ -94,16 +94,18 @@ export function resolveNotificationAction(
       return { intent: 'OPEN_PROGRESS', params: action.payload };
     case 'view_profile':
       return { intent: 'OPEN_PROFILE', params: action.payload };
+    // custom always returns OPEN_HOME (Option A — safest public v1):
+    // No raw route strings from notification payloads are allowed to navigate directly.
+    // All real notification routes must use explicit safe action types (start_session, view_boss, etc.).
+    // The whitelist check below exists as a defense-in-depth audit trail but does not change
+    // the routing outcome — custom screens always fall back to Home.
     case 'custom': {
       const screen = toOptionalString(action.payload?.screen);
       if (!screen) return { intent: 'OPEN_HOME' };
       if (!ALLOWED_MAIN_TAB_SCREENS.has(screen) && !ALLOWED_ROOT_SCREENS.has(screen)) {
         return { intent: 'OPEN_HOME', fallbackReason: `Screen ${screen} is not whitelisted` };
       }
-      if (!canUseFeature(featureAccess, getFeatureForRoute(screen))) {
-        return { intent: 'OPEN_HOME', fallbackReason: `${screen} is not available yet` };
-      }
-      return { intent: 'OPEN_HOME', params: action.payload };
+      return { intent: 'OPEN_HOME', fallbackReason: 'custom type always routes Home in public v1' };
     }
     default:
       return { intent: 'OPEN_HOME' };

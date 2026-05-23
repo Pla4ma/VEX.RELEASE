@@ -10,8 +10,9 @@ import { useSavedTomorrowPreview } from '../../../features/home-spine/hooks';
 import { useActiveIntervention } from '../../../features/ai-coach/hooks';
 import { useNotificationBadge } from '../../../features/notifications/components/NotificationBadge';
 import { useToast } from '../../../shared/ui/components/Toast';
+import type { PowerUserHomeData } from './home-data-types';
 
-export function usePowerUserHomeData(controller: HomeController) {
+export function usePowerUserHomeData(controller: HomeController): PowerUserHomeData {
   const base = useBaseHomeData(controller);
   const features = controller.features;
   const challengeAvail = getFeatureAvailability(features.challenges);
@@ -107,8 +108,8 @@ export function usePowerUserHomeData(controller: HomeController) {
     controller,
     showToast,
     challengesQuery,
-    claimRewardMutation,
-    freezeStreakMutation,
+    claimRewardMutation: claimRewardMutation as unknown as PowerUserHomeData['claimRewardMutation'],
+    freezeStreakMutation: { mutate: () => {}, isPending: false },
     intervention,
     interventionLoading,
     dismissIntervention,

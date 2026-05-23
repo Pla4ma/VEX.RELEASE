@@ -12,6 +12,15 @@ import {
   type VexExperienceRuntimeInput,
 } from '../../../features/personalization';
 import { useFirstWeekExperience } from '../../../features/personalization/useFirstWeekExperience';
+import {
+  getBehaviorSignals,
+  recordBehaviorSignal,
+} from '../../../features/personalization/behavior-signal-store';
+import { resolveUserBehaviorSignals } from '../../../features/personalization/behavior-resolver';
+import type {
+  BehaviorSignal,
+  BehaviorResolverInput,
+} from '../../../features/personalization/behavior-signal-schemas';
 import type {
   VexExperience,
   FeatureAvailabilitySnapshot,
@@ -21,6 +30,8 @@ import type {
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { SessionHistoryEntry } from '../../../session/types';
 import type { HomeController } from './home-controller-types';
+
+export { recordBehaviorSignal };
 
 export interface HomeResolvedExperience {
   resolvedExperience: VexExperience;
@@ -35,6 +46,10 @@ export interface HomeResolvedExperience {
   behaviorStats: {
     totalCompletedSessions: number;
     studyUsageRatio: number;
+    deepWorkUsageRatio: number;
+    learningUsageRatio: number;
+    projectFocusUsageRatio: number;
+    structuredExecutionUsageRatio: number;
     bossChallengeEngagement: 'none' | 'low' | 'medium' | 'high';
     coachInteractions: number;
     comebackSessions: number;
@@ -94,19 +109,64 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
     study: Boolean(features.content_study?.isUnlocked),
   };
 
+  const resolvedBehaviorSignals = useMemo(() => {
+    const recentSignals: BehaviorSignal[] = getBehaviorSignals(controller.userId, {
+      maxAgeMs: 7 * 24 * 60 * 60 * 1000,
+      maxSignals: 20,
+    });
+
+    const studySessions = completedSessions.filter(
+      (s) => s.mode === 'STUDY' || s.config?.sessionMode === 'STUDY' || Boolean(s.config?.studyPlanId),
+    ).length;
+
+    const deepWorkSessions = completedSessions.filter(
+      (s) => s.mode === 'DEEP_WORK' || s.config?.sessionMode === 'DEEP_WORK',
+    ).length;
+
+    const learningSessions = completedSessions.filter(
+      (s) => s.mode === 'LEARNING' || s.config?.sessionMode === 'LEARNING',
+    ).length;
+
+    const creativeSessions = completedSessions.filter(
+      (s) => s.mode === 'CREATIVE' || s.config?.sessionMode === 'CREATIVE',
+    ).length;
+
+    const resolverInput: BehaviorResolverInput = {
+      recentSignals,
+      recentSessions: {
+        completedSessions: completedSessions.length,
+        studySessions,
+        deepWorkSessions,
+        learningSessions,
+        creativeSessions,
+        totalSessions: sessionHistory.length,
+        preferredMode: computePreferredMode(completedSessions),
+        bestTimeOfDay: computeBestTimeOfDay(completedSessions),
+      },
+      firstWeekExperience: {
+        stage: totalCompletedSessions === 0 ? 'DAY_0_NOT_STARTED' : 'POST_DAY_7',
+        isDayZero: totalCompletedSessions === 0,
+      },
+    };
+
+    return resolveUserBehaviorSignals(resolverInput);
+  }, [controller.userId, completedSessions, sessionHistory, totalCompletedSessions]);
+
   const behaviorStats: BehaviorStats = {
     totalCompletedSessions,
     abandonedSessionDurations: computeAbandonedDurations(abandonedSessions),
-    bossChallengeEngagement: computeBossEngagement(controller, hasActiveBoss),
-    coachInteractions: computeCoachInteractions(controller),
+    bossChallengeEngagement: resolvedBehaviorSignals.bossEngagement as 'none' | 'low' | 'medium' | 'high',
+    coachInteractions: Math.max(computeCoachInteractions(controller), resolvedBehaviorSignals.coachInteractions),
     comebackSessions: computeComebackSessions(controller),
     completedSessionDurations: computeCompletedDurations(completedSessions),
     completionStreak: controller.currentStreak,
-    ignoredFeatures: [],
-    mostSuccessfulTimeOfDay: computeBestTimeOfDay(completedSessions),
-    preferredSessionMode: computePreferredMode(completedSessions),
-    premiumFeatureAttempts: [],
-    studyUsageRatio: computeStudyUsageRatio(completedSessions, totalCompletedSessions),
+    ignoredFeatures: resolvedBehaviorSignals.ignoredFeatures,
+    mostSuccessfulTimeOfDay: resolvedBehaviorSignals.mostSuccessfulTimeOfDay ?? computeBestTimeOfDay(completedSessions),
+    preferredSessionMode: resolvedBehaviorSignals.preferredSessionMode as ValidSessionMode | null ?? computePreferredMode(completedSessions),
+    premiumFeatureAttempts: resolvedBehaviorSignals.premiumFeatureAttempts,
+    studyUsageRatio: resolvedBehaviorSignals.studyUsageRatio > 0
+      ? resolvedBehaviorSignals.studyUsageRatio
+      : computeStudyUsageRatio(completedSessions, totalCompletedSessions),
   };
 
   const vexInput: VexExperienceRuntimeInput = {
@@ -149,13 +209,17 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
   const canonicalBehavior = useMemo(() => ({
     totalCompletedSessions,
     studyUsageRatio: behaviorStats.studyUsageRatio,
+    deepWorkUsageRatio: resolvedBehaviorSignals.deepWorkUsageRatio,
+    learningUsageRatio: resolvedBehaviorSignals.learningUsageRatio,
+    projectFocusUsageRatio: resolvedBehaviorSignals.projectFocusUsageRatio,
+    structuredExecutionUsageRatio: resolvedBehaviorSignals.structuredExecutionUsageRatio,
     bossChallengeEngagement: behaviorStats.bossChallengeEngagement,
     coachInteractions: behaviorStats.coachInteractions,
     comebackSessions: behaviorStats.comebackSessions,
     ignoredFeatures: behaviorStats.ignoredFeatures,
     premiumFeatureAttempts: behaviorStats.premiumFeatureAttempts,
     completionStreak: behaviorStats.completionStreak,
-  } as const), [totalCompletedSessions, behaviorStats]);
+  } as const), [totalCompletedSessions, behaviorStats, resolvedBehaviorSignals]);
 
   return useMemo(() => ({
     resolvedExperience,

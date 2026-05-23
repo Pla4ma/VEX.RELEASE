@@ -4,10 +4,12 @@ import {
   SessionNarrativeDBSchema,
   toDBFormat,
   fromDBFormat,
-  persistToDatabase,
-  loadFromDatabase,
-  loadUserNarrativesFromDB,
 } from './narrative-db-mapper';
+import {
+  persistNarrativeToDB,
+  loadNarrativeFromDB,
+  loadUserNarrativesFromDB,
+} from './NarrativeQueries';
 
 export interface RepositoryError {
   code: 'NOT_FOUND' | 'SAVE_FAILED' | 'LOAD_FAILED' | 'VALIDATION_ERROR' | 'NETWORK_ERROR';
@@ -31,7 +33,7 @@ export class NarrativeRepository {
     try {
       const dbNarrative = toDBFormat(narrative);
       SessionNarrativeDBSchema.parse(dbNarrative);
-      await persistToDatabase(dbNarrative);
+      await persistNarrativeToDB(dbNarrative);
 
       this.cache.set(narrative.sessionId, {
         data: narrative,
@@ -70,7 +72,7 @@ export class NarrativeRepository {
     }
 
     try {
-      const dbData = await loadFromDatabase(sessionId);
+      const dbData = await loadNarrativeFromDB(sessionId);
       if (!dbData) {
         return {
           success: false,

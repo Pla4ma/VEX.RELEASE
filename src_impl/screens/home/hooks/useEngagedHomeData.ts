@@ -6,8 +6,9 @@ import { getFeatureAvailability } from '../../../features/liveops-config';
 import { useActiveChallenges, useClaimChallengeReward } from '../../../features/challenges/hooks';
 import { useActiveIntervention } from '../../../features/ai-coach/hooks';
 import { useToast } from '../../../shared/ui/components/Toast';
+import type { EngagedHomeData } from './home-data-types';
 
-export function useEngagedHomeData(controller: HomeController) {
+export function useEngagedHomeData(controller: HomeController): EngagedHomeData {
   const base = useBaseHomeData(controller);
   const features = controller.features;
   const challengeAvail = getFeatureAvailability(features.challenges);
@@ -82,7 +83,7 @@ export function useEngagedHomeData(controller: HomeController) {
     controller,
     showToast,
     challengesQuery,
-    claimRewardMutation,
+    claimRewardMutation: claimRewardMutation as unknown as EngagedHomeData['claimRewardMutation'],
     freezeStreakMutation: { mutate: () => {}, isPending: false },
     intervention,
     interventionLoading,

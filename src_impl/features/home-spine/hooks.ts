@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { buildHomeSpineModel } from './service';
-import { selectHomePriority } from './priority-service';
-import type { HomePriority } from './priority-schemas';
+import { selectHomePriority, type SelectHomePriorityInput } from './priority-service';
+import type { HomePriority, ProductContext } from './priority-schemas';
 export { useSavedTomorrowPreview } from './hooks/useSavedTomorrowPreview';
 
 export { useStreakDefense, type StreakDefenseState } from './hooks/useStreakDefense';
@@ -103,23 +103,21 @@ export function useHomeSpineModel(input: HomeSpineInput): HomeSpineModel {
 
 const HOME_PRIORITY_KEY = 'home-priority';
 
-/**
- * Hook to fetch and cache the current home priority
- *
- * Answers "why start now?" in 3 seconds by selecting the most
- * urgent action from the priority model.
- *
- * Feature-dependent candidates are filtered before ranking:
- * BOSS_ACTIVE only exists if boss_tab canNavigate && canRegisterRoute.
- * CHALLENGE_NEAR_DONE only exists if challenges canNavigate && canRegisterRoute.
- */
 export function useHomePriority(
   userId: string | null | undefined,
   featureAccess?: import('../liveops-config').FeatureAccessMap,
+  productContext?: ProductContext,
 ) {
   return useQuery<HomePriority>({
-    queryKey: [HOME_PRIORITY_KEY, userId],
-    queryFn: () => selectHomePriority(userId!, featureAccess),
+    queryKey: [HOME_PRIORITY_KEY, userId, productContext?.userStage, productContext?.totalCompletedSessions],
+    queryFn: () => {
+      const input: SelectHomePriorityInput = {
+        userId: userId!,
+        featureAccess,
+        productContext,
+      };
+      return selectHomePriority(input);
+    },
     enabled: !!userId,
     staleTime: 1000 * 30,
     refetchOnWindowFocus: true,

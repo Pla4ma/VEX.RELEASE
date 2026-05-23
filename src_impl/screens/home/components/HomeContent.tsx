@@ -8,7 +8,6 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { HomeController } from '../hooks/home-controller-types';
 import type { CompletionSyncState } from '../../../store/session-state';
 import { HomeStatusBanners } from './HomeStatusBanners';
-import { HomeMissionInput } from './HomeMissionInput';
 import { HomeContentLower } from './HomeContentLower';
 import { HomeSectionBoundary } from './HomeSectionBoundary';
 import { HomeHeroSection } from './HomeHeroSection';
@@ -19,8 +18,8 @@ import { HomeExperiencePrelude, useHomeExperienceModel } from '../../../features
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { VexExperience } from '../../../features/personalization/schemas';
-import type { MissionPriorityInput } from '../../../features/daily-mission/types';
 import type { useHomeData } from '../hooks/useHomeData';
+import { useOptionalMissionInput, shouldComputeMissionInput } from '../hooks/useOptionalMissionInput';
 
 type HomeData = ReturnType<typeof useHomeData>;
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -80,19 +79,20 @@ export const HomeContent: React.FC<HomeContentProps> = ({
 
   const isActivating =
     controller.disclosure.stage === 'NEW_USER' || controller.disclosure.stage === 'ACTIVATING';
-  const missionSurfacesAllowed = sm
-    ? sm.challenge_teaser !== 'hidden' && sm.challenge_teaser !== 'blocked'
-    : false;
-  const weeklyQuestAllowed = sm
-    ? sm.weekly_quest !== 'hidden' && sm.weekly_quest !== 'blocked'
-    : false;
-  const bossSurfaceActive = sm
-    ? sm.boss_compact !== 'hidden' && sm.boss_compact !== 'blocked'
-    : false;
-  const useMissionWrapper =
-    !isDayZero && !isActivating
-      ? missionSurfacesAllowed || weeklyQuestAllowed || bossSurfaceActive
-      : false;
+
+  const useMission =
+    shouldComputeMissionInput(sm, isDayZero, isActivating);
+
+  const { missionInput } = useOptionalMissionInput({
+    controller,
+    surfaceMap: sm,
+    todaysChallenges: data.todaysChallenges,
+    streakHoursRemaining,
+    bossPercentHealthRemaining: (controller.activeBossQuery.data as { percentHealthRemaining?: number } | undefined)?.percentHealthRemaining,
+    intervention: data.intervention,
+    interventionLoading: data.interventionLoading,
+    companionMood: data.companionMood,
+  });
 
   const openChallenges = (): void => {
     const challengesAccess = controller.disclosure.features.challenges;
@@ -111,7 +111,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
     controller.openSetup();
   };
 
-  const renderInnerContent = (missionInput: Partial<MissionPriorityInput> = {}): JSX.Element => (
+  return (
     <StaggeredEnter
       containerStyle={staggeredEnterStyle.container}
       direction="up"
@@ -186,7 +186,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
         <HomeContentLower
           controller={controller}
           data={data}
-          missionInput={missionInput}
+          missionInput={useMission ? missionInput : {}}
           handleClaimReward={handleClaimReward}
           streakHoursRemaining={streakHoursRemaining}
           features={features}
@@ -196,23 +196,4 @@ export const HomeContent: React.FC<HomeContentProps> = ({
       ) : null}
     </StaggeredEnter>
   );
-
-  if (useMissionWrapper) {
-    return (
-      <HomeMissionInput
-        activeBossQuery={{ data: null }}
-        canShowBossBounties={false}
-        companionMood={data.companionMood}
-        controller={controller}
-        intervention={data.intervention}
-        interventionLoading={data.interventionLoading}
-        streakHoursRemaining={streakHoursRemaining}
-        todaysChallenges={data.todaysChallenges}
-      >
-        {renderInnerContent}
-      </HomeMissionInput>
-    );
-  }
-
-  return renderInnerContent();
 };

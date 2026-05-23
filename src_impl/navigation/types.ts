@@ -17,7 +17,8 @@ export type RootStackRoute =
   | 'Comeback'
   | 'StreakFuneral'
   | 'FocusScoreDashboard'
-  | 'PostSessionStory';
+  | 'PostSessionStory'
+  | 'VipPaywall';
 export type AuthStackRoute = 'Login' | 'Register' | 'ForgotPassword' | 'ResetPassword' | 'VerifyEmail';
 export type MainTabRoute = 'Home' | 'Focus' | 'Progress' | 'Profile';
 export type SettingsStackRoute =

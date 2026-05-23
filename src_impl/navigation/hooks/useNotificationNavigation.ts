@@ -12,6 +12,62 @@ import type { NotificationAction } from '../notification-routing-types';
 import { getAvailableNotificationFilters } from '../notification-routing-core';
 
 import type { ExtendedRootStackParams } from '../types';
+import { isPublicV1Hidden } from '../../features/liveops-config/public-v1-feature-map';
+import type { FeatureKey } from '../../features/liveops-config/feature-access';
+
+const HIDDEN_V1_NOTIFICATION_TYPES = new Set([
+  'squad_war_start',
+  'squad_war_end',
+  'squad_war_reminder',
+  'rival_challenge',
+  'rival_defeated',
+  'rival_activity',
+  'shop_new_items',
+  'shop_sale',
+  'inventory_update',
+  'battle_pass_tier',
+  'battle_pass_expiry',
+  'wager_result',
+  'guild_event',
+]);
+
+const HIDDEN_V1_TYPE_FALLBACK_ROUTES: Record<string, string> = {
+  squad_war_start: 'Home',
+  squad_war_end: 'Home',
+  squad_war_reminder: 'Home',
+  rival_challenge: 'Home',
+  rival_defeated: 'Home',
+  rival_activity: 'Home',
+  shop_new_items: 'Home',
+  shop_sale: 'Home',
+  inventory_update: 'Home',
+  battle_pass_tier: 'Home',
+  battle_pass_expiry: 'Home',
+  wager_result: 'Home',
+  guild_event: 'Home',
+};
+
+function isHiddenV1Type(notificationType: string): boolean {
+  return HIDDEN_V1_NOTIFICATION_TYPES.has(notificationType);
+}
+
+const HIDDEN_V1_FEATURE_KEYS: FeatureKey[] = [
+  'squads',
+  'rivals',
+  'shop',
+  'inventory',
+  'battle_pass',
+  'wagers',
+  'gems_prominent',
+];
+
+function isNotificationTypeHiddenByV1FeatureMap(notificationType: string): boolean {
+  const key = HIDDEN_V1_FEATURE_KEYS.find((fk) => {
+    return notificationType.startsWith(fk.replace(/_/g, '_')) || notificationType.includes(fk);
+  });
+  if (!key) return false;
+  return isPublicV1Hidden(key);
+}
 
 interface UseNotificationNavigationInput {
   featureAccess?: FeatureAccessMap | null;
@@ -51,6 +107,14 @@ function navigateFromNotification(
   featureAccess?: FeatureAccessMap | null,
   motivationStyle?: string | null,
 ): void {
+  if (isHiddenV1Type(type) || isNotificationTypeHiddenByV1FeatureMap(type)) {
+    addBreadcrumb(`Blocked hidden v1 notification type: ${type}`, 'notifications.hidden_block', {
+      notificationType: type,
+    });
+    routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined, motivationStyle);
+    return;
+  }
+
   switch (type) {
     case 'streak_reminder':
     case 'session_prompt':

@@ -19,6 +19,7 @@ import { buildInterventionSessionParams } from '../buildInterventionSessionParam
 import { AppScreen } from '../../../components/primitives';
 import { useHomeSurfaceMap } from '../hooks/useHomeSurfaceMap';
 import { useHomeResolvedExperience } from '../hooks/useHomeResolvedExperience';
+import { useInterventionVisibility } from '../hooks/useInterventionVisibility';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import type { HomeController } from '../hooks/home-controller-types';
@@ -141,11 +142,33 @@ export function HomeScreenInner({ model, data }: HomeScreenInnerProps): JSX.Elem
     firstWeek: firstWeekExperience,
   });
 
+  const { canShowBanner: showIntervention, interventionType } = useInterventionVisibility({
+    intervention,
+    interventionLoading,
+    surfaceMap,
+    firstWeekExperience,
+    features,
+    totalCompletedSessions: controller.disclosure.inputs.totalCompletedSessions,
+  });
+
+  const interventionBannerProps = showIntervention && intervention
+    ? {
+        id: intervention.id,
+        type: (['BURNOUT', 'PLATEAU', 'STREAK_RISK', 'BOSS_FINISH'].includes(intervention.type)
+          ? intervention.type
+          : 'STREAK_RISK') as import('../../../features/ai-coach/components/CoachInterventionBanner').InterventionType,
+        message: interventionType === 'soft' ? `${intervention.message} (gentle reminder)` : intervention.message,
+        actionLabel: intervention.actionLabel ?? 'Start session',
+        hoursRemaining: intervention.hoursRemaining,
+        metadata: intervention.metadata as Record<string, unknown> | undefined,
+      }
+    : null;
+
   return (
     <AppScreen scroll padded>
-      {intervention && (
+      {interventionBannerProps && (
         <HomeInterventionBanner
-          intervention={intervention as { id: string; type: import('../../../features/ai-coach/components/CoachInterventionBanner').InterventionType; message: string; actionLabel: string; hoursRemaining?: number; metadata?: Record<string, unknown> }}
+          intervention={interventionBannerProps}
           interventionLoading={interventionLoading}
           dismissIntervention={dismissIntervention}
           navigation={navigation}

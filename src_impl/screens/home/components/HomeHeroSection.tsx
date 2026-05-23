@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { z } from 'zod';
 
 import { ErrorState } from '../../../components/states/ErrorState';
 import { useHomePriority } from '../../../features/home-spine/hooks';
-import type { HomePrimaryPriority, HomeStakes } from '../../../features/home-spine/priority-schemas';
+import type { HomePrimaryPriority, HomeStakes, ProductContext } from '../../../features/home-spine/priority-schemas';
 import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../../features/liveops-config';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
@@ -52,7 +52,28 @@ export function HomeHeroSection({
   firstWeekExperience,
 }: HomeHeroSectionProps): JSX.Element {
   const navigation = useNavigation<NavigationProp>();
-  const priorityQuery = useHomePriority(controller.userId, controller.disclosure.features);
+
+  const productContext = useMemo<ProductContext>(() => {
+    if (!surfaceMap && !firstWeekExperience) return {};
+    return {
+      surfaceMap: surfaceMap as ProductContext['surfaceMap'],
+      firstWeekExperience: firstWeekExperience
+        ? {
+            bossIntensity: firstWeekExperience.bossIntensity,
+            currentDayStage: firstWeekExperience.currentDayStage,
+            premiumMoment: firstWeekExperience.premiumMoment,
+            allowedHomeSurfaces: firstWeekExperience.allowedHomeSurfaces,
+          }
+        : undefined,
+      userStage: controller.disclosure.inputs.totalCompletedSessions === 0 ? 'new'
+        : controller.disclosure.inputs.totalCompletedSessions < 3 ? 'activating'
+        : controller.disclosure.inputs.totalCompletedSessions < 10 ? 'engaged'
+        : 'power',
+      totalCompletedSessions: controller.disclosure.inputs.totalCompletedSessions,
+    };
+  }, [surfaceMap, firstWeekExperience, controller.disclosure.inputs.totalCompletedSessions]);
+
+  const priorityQuery = useHomePriority(controller.userId, controller.disclosure.features, productContext);
   const priority = priorityQuery.data?.primary ?? null;
   const stakes: HomeStakes | null = priorityQuery.data?.stakes ?? null;
   const effectivePriority = priority && !controller.isOnline

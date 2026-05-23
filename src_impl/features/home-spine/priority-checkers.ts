@@ -1,4 +1,4 @@
-import type { HomeContextSnapshot, HomePrimaryPriority } from './priority-schemas';
+import type { HomeContextSnapshot, HomePrimaryPriority, ProductContext } from './priority-schemas';
 import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../liveops-config';
 import type { FeatureAccessMap } from '../liveops-config';
 
@@ -112,6 +112,7 @@ export function checkRecommendedSession(
 export function checkChallengeNearDone(
   snapshot: HomeContextSnapshot,
   featureAccess?: FeatureAccessMap,
+  productContext?: ProductContext,
 ): HomePrimaryPriority | null {
   if (!snapshot.challenge.isNearDone) {
     return null;
@@ -119,6 +120,14 @@ export function checkChallengeNearDone(
   if (featureAccess) {
     const availability = getFeatureAvailability(featureAccess.challenges);
     if (!isFeatureAvailableForNavigation(availability)) {
+      return null;
+    }
+  }
+  if (productContext?.surfaceMap) {
+    const challengeBlocked =
+      (productContext.surfaceMap.challenge_teaser === 'hidden' || productContext.surfaceMap.challenge_teaser === 'blocked') &&
+      (productContext.surfaceMap.weekly_quest === 'hidden' || productContext.surfaceMap.weekly_quest === 'blocked');
+    if (challengeBlocked) {
       return null;
     }
   }
@@ -133,6 +142,7 @@ export function checkChallengeNearDone(
 export function checkBossActive(
   snapshot: HomeContextSnapshot,
   featureAccess?: FeatureAccessMap,
+  productContext?: ProductContext,
 ): HomePrimaryPriority | null {
   if (!snapshot.boss.hasActiveEncounter) {
     return null;
@@ -141,6 +151,24 @@ export function checkBossActive(
     const availability = getFeatureAvailability(featureAccess.boss_tab);
     if (!isFeatureAvailableForNavigation(availability)) {
       return null;
+    }
+  }
+  if (productContext) {
+    if (productContext.firstWeekExperience) {
+      if (productContext.firstWeekExperience.bossIntensity === 'hidden') {
+        return null;
+      }
+    }
+    if (productContext.totalCompletedSessions !== undefined && productContext.totalCompletedSessions === 0) {
+      return null;
+    }
+    if (productContext.surfaceMap) {
+      const bossBlocked =
+        (productContext.surfaceMap.boss_compact === 'hidden' || productContext.surfaceMap.boss_compact === 'blocked') &&
+        (productContext.surfaceMap.boss_full_cta === 'hidden' || productContext.surfaceMap.boss_full_cta === 'blocked');
+      if (bossBlocked) {
+        return null;
+      }
     }
   }
   return {
@@ -172,6 +200,7 @@ export function checkDefaultSession(
 export function getPriorityCandidates(
   snapshot: HomeContextSnapshot,
   featureAccess?: FeatureAccessMap,
+  productContext?: ProductContext,
 ): HomePrimaryPriority[] {
   return [
     checkStreakCritical(snapshot),
@@ -179,8 +208,8 @@ export function getPriorityCandidates(
     checkPromiseRecovery(snapshot),
     checkStreakAtRisk(snapshot),
     checkRecommendedSession(snapshot),
-    checkChallengeNearDone(snapshot, featureAccess),
-    checkBossActive(snapshot, featureAccess),
+    checkChallengeNearDone(snapshot, featureAccess, productContext),
+    checkBossActive(snapshot, featureAccess, productContext),
     checkDefaultSession(snapshot),
   ].filter((priority): priority is HomePrimaryPriority => priority !== null);
 }
