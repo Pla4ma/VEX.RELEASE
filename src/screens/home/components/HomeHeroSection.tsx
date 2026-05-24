@@ -138,7 +138,7 @@ export function HomeHeroSection({
       }
     }
 
-    controller.openSetup(toSessionSetupParams(params));
+    controller.openSetup(toSessionSetupParams(params) as unknown as Record<string, unknown>);
   };
 
   if (priorityQuery.isError) {

@@ -6,7 +6,6 @@ import { getSessionRepository } from "./repository/SessionRepository";
 import { getSessionEventEmitter } from "./SessionEventEmitter";
 import { getRewardAdapter } from "./integration/RewardAdapter";
 import { getPresetService } from "./presets";
-import { getSessionRewardIntegration } from "./integration/SessionRewardIntegration";
 import { SessionMode } from "./modes";
 import type {
   SessionState,
@@ -44,17 +43,6 @@ export class SessionService {
     this.orchestrator = getSessionOrchestrator({
       timerConfig: this.options.timerConfig,
       enableAntiCheat: this.options.enableAntiCheat,
-    });
-    this.setupEventListeners();
-    getSessionRewardIntegration({
-      autoGrantRewards: false,
-      autoUpdateStreak: false,
-      autoAddXP: false,
-      autoCreateSocialActivity: false,
-      enableSeasonChallengeProgress: false,
-      autoUpdateAnalytics: false,
-      enableAchievementChecks: false,
-      enableMilestoneTracking: false,
     });
     debug.info("SessionService initialized");
   }
@@ -237,7 +225,6 @@ export class SessionService {
   async deletePreset(presetId: string): Promise<void> {
     return this.presetService.deletePreset(presetId);
   }
-  private setupEventListeners(): void {}
   private trackAnalytics(
     event: string,
     properties: Record<string, unknown>,

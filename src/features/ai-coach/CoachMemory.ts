@@ -60,18 +60,32 @@ export async function storeMemory(
 }
 
 export async function getUserMemories(userId: string): Promise<CoachMemory[]> {
-  return repoGetMemoriesByUser(userId);
+  try {
+    return await repoGetMemoriesByUser(userId);
+  } catch (error) {
+    debug.warn('[CoachMemory] Failed to fetch memories, returning empty:', error);
+    return [];
+  }
 }
 
 export async function getMemoriesByType(
   userId: string,
   type: MemoryType,
 ): Promise<CoachMemory[]> {
-  return repoGetMemoriesByType(userId, type);
+  try {
+    return await repoGetMemoriesByType(userId, type);
+  } catch (error) {
+    debug.warn('[CoachMemory] Failed to fetch memories by type, returning empty:', error);
+    return [];
+  }
 }
 
 export async function markMemoryReferenced(memoryId: string): Promise<void> {
-  await repoMarkMemoryReferenced(memoryId);
+  try {
+    await repoMarkMemoryReferenced(memoryId);
+  } catch (error) {
+    debug.warn('[CoachMemory] Failed to mark memory referenced:', error);
+  }
 }
 
 export async function storeOnboardingGoal(userId: string, goal: string): Promise<CoachMemory> {

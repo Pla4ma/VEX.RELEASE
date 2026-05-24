@@ -85,6 +85,10 @@ export function useStartSessionFlow({
         notesPayload.selectedThemeId = selectedThemeId;
       }
 
+      if (selectedSessionMode === SessionMode.STUDY && draftGoal?.trim()) {
+        notesPayload.studyTarget = draftGoal.trim();
+      }
+
       if (params?.comebackMultiplier && params.comebackMultiplier > 1) {
         if (!sessionTags.includes('comeback-session')) {
           sessionTags.push('comeback-session');

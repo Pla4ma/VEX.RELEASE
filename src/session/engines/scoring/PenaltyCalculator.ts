@@ -1,30 +1,15 @@
 import type { FocusQualityMetrics } from "../../types";
 import { PENALTY_CONSTANTS, severityRankings } from "./penalty-constants";
 import type {
-  PausePenaltyInput,
-  InterruptionSeverity,
-  InterruptionPenaltyInput,
-  QualityPenaltyInput,
-  AntiCheatViolationType,
-  AntiCheatPenaltyInput,
-  AbandonPenaltyInput,
-  AbandonPenaltyResult,
-  TotalPenaltyInput,
+  PausePenaltyInput, InterruptionSeverity, InterruptionPenaltyInput,
+  QualityPenaltyInput, AntiCheatViolationType, AntiCheatPenaltyInput,
+  AbandonPenaltyInput, AbandonPenaltyResult, TotalPenaltyInput,
 } from "./penalty-types";
 
-export { PENALTY_CONSTANTS, severityRankings } from "./penalty-constants";
-
-export type {
-  PausePenaltyInput,
-  InterruptionSeverity,
-  InterruptionPenaltyInput,
-  QualityPenaltyInput,
-  AntiCheatViolationType,
-  AntiCheatPenaltyInput,
-  AbandonPenaltyInput,
-  AbandonPenaltyResult,
-  TotalPenaltyInput,
-} from "./penalty-types";
+export { PENALTY_CONSTANTS, severityRankings };
+export type { PausePenaltyInput, InterruptionSeverity, InterruptionPenaltyInput,
+  QualityPenaltyInput, AntiCheatViolationType, AntiCheatPenaltyInput,
+  AbandonPenaltyInput, AbandonPenaltyResult, TotalPenaltyInput };
 
 export function calculatePausePenalty(input: PausePenaltyInput): number {
   const { pauseCount, totalPauseDurationSeconds } = input;
@@ -75,9 +60,7 @@ export function calculateInterruptionPenalty(input: InterruptionPenaltyInput): {
   };
 }
 
-export function getSeverityFromTimeLost(
-  timeLostSeconds: number,
-): InterruptionSeverity {
+export function getSeverityFromTimeLost(timeLostSeconds: number): InterruptionSeverity {
   if (timeLostSeconds > 300) return "CRITICAL";
   if (timeLostSeconds > 120) return "MAJOR";
   if (timeLostSeconds > 30) return "MODERATE";

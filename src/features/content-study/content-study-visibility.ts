@@ -27,14 +27,26 @@ interface ContentStudyVisibilityInput {
   canUseBackend: boolean;
 }
 
+function canUseContentStudyBackend(input: ContentStudyVisibilityInput): boolean {
+  return input.featureHealth === 'healthy' &&
+    input.aiConfigured &&
+    input.storageConfigured &&
+    input.rateLimitsConfigured &&
+    input.hasPrivacyDisclosure &&
+    input.canNavigate &&
+    input.canQuery &&
+    input.canUseBackend;
+}
+
 export function buildContentStudyVisibility(input: ContentStudyVisibilityInput): ContentStudyVisibility {
   const isStudyFocused = input.motivationStyle === 'study_focused' || input.motivationStyle === 'student';
   const isStudyGoal = input.primaryGoal === 'STUDY' || input.primaryGoal === 'study';
   const isLearningGoal = input.primaryGoal === 'LEARNING' || input.primaryGoal === 'learning';
   const isHighStudyIntent = isStudyFocused || isStudyGoal || isLearningGoal || input.studyUsageRatio >= 0.35;
   const isDayZero = input.totalCompletedSessions === 0;
-  const isConfigured = input.aiConfigured && input.storageConfigured && input.rateLimitsConfigured && input.hasPrivacyDisclosure;
-  const isHealthy = input.featureHealth === 'healthy' && isConfigured;
+  const canRunBackend = canUseContentStudyBackend(input);
+  const hasStudyPath = input.totalCompletedSessions >= 3 || input.studyUsageRatio >= 0.35;
+  const canShowUpload = canRunBackend && isHighStudyIntent && hasStudyPath;
 
   if (!input.canRenderEntryPoint) {
     return ContentStudyVisibilitySchema.parse({
@@ -44,17 +56,6 @@ export function buildContentStudyVisibility(input: ContentStudyVisibilityInput):
       canRunBackend: false,
       fallbackLabel: null,
       restrictionReason: 'content_study entry point is gated by feature availability',
-    });
-  }
-
-  if (input.featureHealth === 'degraded' || !isConfigured) {
-    return ContentStudyVisibilitySchema.parse({
-      canShowTeaser: false,
-      canShowUploadEntry: false,
-      canNavigateToUpload: false,
-      canRunBackend: false,
-      fallbackLabel: 'VEX is working to restore content features. Start a normal session in the meantime.',
-      restrictionReason: 'Content study backend is degraded or misconfigured',
     });
   }
 
@@ -69,17 +70,25 @@ export function buildContentStudyVisibility(input: ContentStudyVisibilityInput):
     });
   }
 
-  const canRunBackend = isHealthy && input.canQuery && input.canUseBackend;
-  const canNavigateToUpload = isHealthy && input.canNavigate;
+  if (input.featureHealth === 'degraded' || !canRunBackend) {
+    return ContentStudyVisibilitySchema.parse({
+      canShowTeaser: isHighStudyIntent,
+      canShowUploadEntry: false,
+      canNavigateToUpload: false,
+      canRunBackend: false,
+      fallbackLabel: 'Start a study session. VEX can restore content tools when the backend is ready.',
+      restrictionReason: 'Content study backend is degraded or misconfigured',
+    });
+  }
 
   if (isDayZero && isHighStudyIntent) {
     return ContentStudyVisibilitySchema.parse({
       canShowTeaser: true,
-      canShowUploadEntry: true,
-      canNavigateToUpload,
+      canShowUploadEntry: false,
+      canNavigateToUpload: false,
       canRunBackend,
-      fallbackLabel: null,
-      restrictionReason: null,
+      fallbackLabel: 'Start with a study target and one focused block.',
+      restrictionReason: 'Content upload unlocks after study intent is proven',
     });
   }
 
@@ -97,20 +106,20 @@ export function buildContentStudyVisibility(input: ContentStudyVisibilityInput):
   if (isHighStudyIntent) {
     return ContentStudyVisibilitySchema.parse({
       canShowTeaser: true,
-      canShowUploadEntry: true,
-      canNavigateToUpload,
+      canShowUploadEntry: canShowUpload,
+      canNavigateToUpload: canShowUpload,
       canRunBackend,
-      fallbackLabel: null,
-      restrictionReason: null,
+      fallbackLabel: canShowUpload ? null : 'Keep using study sessions. Content tools unlock after a few focused blocks.',
+      restrictionReason: canShowUpload ? null : 'Study Path not ready for Content Study upload',
     });
   }
 
   return ContentStudyVisibilitySchema.parse({
-    canShowTeaser: true,
-    canShowUploadEntry: isHealthy,
-    canNavigateToUpload,
+    canShowTeaser: false,
+    canShowUploadEntry: false,
+    canNavigateToUpload: false,
     canRunBackend,
-    fallbackLabel: isHealthy ? 'Build a deep work path' : 'Start a normal focus session. Content tools will return.',
-    restrictionReason: isHealthy ? null : 'Backend unavailable for non-study users',
+    fallbackLabel: 'Build a deep work path',
+    restrictionReason: 'Content Study is hidden for non-study users',
   });
 }

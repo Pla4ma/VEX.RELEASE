@@ -1,406 +1,109 @@
-import type {
-  SessionState,
-  ScoreCalculation,
-  DamageCalculation,
-  FocusQualityMetrics,
-} from "../types";
+import type { SessionState, ScoreCalculation, DamageCalculation, FocusQualityMetrics } from "../types";
+import { getSessionModeConfig, resolveSessionMode } from "../modes";
+import { BonusCalculator } from "./scoring/BonusCalculator";
+import { calculateDamage } from "./DamageCalculator";
 import {
-  getSessionModeConfig,
-  getSprintChainMultiplier,
-  resolveSessionMode,
-  SessionMode,
-} from "../modes";
+  QUALITY_THRESHOLDS,
+  calculateTimeMultiplier,
+  calculateQualityMultiplier,
+  calculateModeBonus,
+  calculateComebackBonus,
+  calculatePausePenalty,
+  calculateModePausePenalty,
+  calculateInterruptionPenalty,
+  calculateQualityPenalty,
+  calculateAntiCheatPenalty,
+  calculateConsistencyScore,
+  calculateRecoveryScore,
+} from "./scoring/scoring-helpers";
 import { createDebugger } from "../../utils/debug";
+
 const debug = createDebugger("session:scoring");
 const BASE_SCORE_PER_MINUTE = 25;
 const MIN_COMPLETION_FOR_CREDIT = 0.5;
-const STREAK_MULTIPLIERS: Record<number, number> = {
-  0: 1,
-  1: 1,
-  2: 1.1,
-  3: 1.15,
-  7: 1.25,
-  14: 1.35,
-  30: 1.5,
-  60: 1.75,
-  90: 2,
-  180: 2.5,
-  365: 3,
-};
-const QUALITY_THRESHOLDS = {
-  EXCELLENT: 95,
-  GOOD: 80,
-  AVERAGE: 60,
-  POOR: 40,
-  BAD: 20,
-};
+
 export class ScoringEngine {
   private userStreak: number = 0;
   private userLevel: number = 1;
+
   setUserStats(streak: number, level: number): void {
     this.userStreak = streak;
     this.userLevel = level;
   }
-  getUserLevel(): number {
-    return this.userLevel;
-  }
-  calculateScore(
-    session: SessionState,
-    focusMetrics: FocusQualityMetrics,
-  ): ScoreCalculation {
-    const duration = session.config.duration;
-    const effectiveTime = session.effectiveTime;
+  getUserLevel(): number { return this.userLevel; }
+
+  calculateScore(session: SessionState, focusMetrics: FocusQualityMetrics): ScoreCalculation {
     const completionPercentage = session.completionPercentage;
-    const interruptions = session.interruptions;
-    const pauses = session.pauses;
-    const mode = resolveSessionMode(session.config.sessionMode);
-    const modeConfig = getSessionModeConfig(mode);
-    const basePoints = Math.floor((duration / 60) * BASE_SCORE_PER_MINUTE);
-    const timeMultiplier = this.calculateTimeMultiplier(completionPercentage);
-    const streakMultiplier = this.getStreakMultiplier();
-    const qualityMultiplier = this.calculateQualityMultiplier(
-      focusMetrics,
-      modeConfig.purityPassThreshold,
-    );
-    const comebackMultiplier = this.getComebackMultiplier(session);
-    const timeBonus = this.calculateTimeBonus(duration, completionPercentage);
-    const streakBonus = this.calculateStreakBonus(basePoints, streakMultiplier);
-    const qualityBonus = this.calculateQualityBonus(focusMetrics);
-    const intervalBonus = this.calculateIntervalBonus(session);
-    const modeBonus = this.calculateModeBonus(
-      session,
-      focusMetrics,
-      basePoints,
-    );
-    const pausePenalty =
-      this.calculatePausePenalty(pauses, duration) *
-        modeConfig.pausePenaltyMultiplier +
-      this.calculateModePausePenalty(session);
-    const interruptionPenalty =
-      this.calculateInterruptionPenalty(interruptions);
-    const qualityPenalty = this.calculateQualityPenalty(focusMetrics);
-    const antiCheatPenalty = this.calculateAntiCheatPenalty(session);
-    const penaltyMultiplier = Math.max(
-      0,
-      1 -
-        (pausePenalty +
-          interruptionPenalty +
-          qualityPenalty +
-          antiCheatPenalty) /
-          Math.max(1, basePoints),
-    );
-    const comebackBonus = this.calculateComebackBonus(
+    const modeConfig = getSessionModeConfig(session.config.sessionMode);
+    const basePoints = Math.floor((session.config.duration / 60) * BASE_SCORE_PER_MINUTE);
+
+    const timeMultiplier = calculateTimeMultiplier(completionPercentage);
+    const streakMultiplier = BonusCalculator.getStreakMultiplier(this.userStreak);
+    const qualityMultiplier = calculateQualityMultiplier(focusMetrics, modeConfig.purityPassThreshold);
+    const comebackMultiplier = Math.min(3, Math.max(1, session.config.comebackMultiplier ?? 1));
+
+    const timeBonus = BonusCalculator.calculateTimeBonus({
+      plannedDuration: session.config.duration,
+      actualDuration: session.effectiveTime,
+      completionPercentage,
+    });
+    const streakBonus = BonusCalculator.calculateStreakBonus({ currentStreak: this.userStreak, basePoints });
+    const qualityBonus = BonusCalculator.calculateQualityBonus({
+      focusMetrics, interruptions: session.interruptions, pauses: session.pauses,
+    });
+    const intervalBonus = BonusCalculator.calculateIntervalBonus({
+      completedIntervals: session.intervalsCompleted,
+      totalIntervals: session.totalIntervals,
+      allIntervalsCompleted: session.intervalsCompleted >= session.totalIntervals,
+    });
+    const modeBonus = calculateModeBonus(session, focusMetrics, basePoints);
+
+    const pausePenalty = calculatePausePenalty(session.pauses, session.config.duration) * modeConfig.pausePenaltyMultiplier
+      + calculateModePausePenalty(session);
+    const interruptionPenalty = calculateInterruptionPenalty(session.interruptions);
+    const qualityPenalty = calculateQualityPenalty(focusMetrics);
+    const antiCheatPenalty = calculateAntiCheatPenalty(session);
+
+    const penaltyMultiplier = Math.max(0, 1 - (pausePenalty + interruptionPenalty + qualityPenalty + antiCheatPenalty) / Math.max(1, basePoints));
+    const comebackBonus = calculateComebackBonus(
       Math.round(basePoints * modeConfig.xpMultiplier),
       timeBonus + streakBonus + qualityBonus + intervalBonus,
-      timeMultiplier,
-      streakMultiplier,
-      qualityMultiplier,
-      penaltyMultiplier,
-      comebackMultiplier,
+      timeMultiplier, streakMultiplier, qualityMultiplier, penaltyMultiplier, comebackMultiplier,
     );
-    const bonusPoints =
-      timeBonus +
-      streakBonus +
-      qualityBonus +
-      intervalBonus +
-      comebackBonus +
-      modeBonus;
+
+    const bonusPoints = timeBonus + streakBonus + qualityBonus + intervalBonus + comebackBonus + modeBonus;
     const calculation: ScoreCalculation = {
       basePoints: Math.round(basePoints * modeConfig.xpMultiplier),
-      timeMultiplier,
-      streakMultiplier,
-      qualityMultiplier,
-      penaltyMultiplier,
-      comebackMultiplier,
-      bonusPoints,
-      isPerfect: false,
-      timeBonus,
-      streakBonus,
-      qualityBonus,
-      intervalBonus: intervalBonus + modeBonus,
-      comebackBonus,
-      pausePenalty,
-      interruptionPenalty,
-      qualityPenalty,
-      antiCheatPenalty,
+      timeMultiplier, streakMultiplier, qualityMultiplier, penaltyMultiplier, comebackMultiplier,
+      bonusPoints, isPerfect: false,
+      timeBonus, streakBonus, qualityBonus, intervalBonus: intervalBonus + modeBonus,
+      comebackBonus, pausePenalty, interruptionPenalty, qualityPenalty, antiCheatPenalty,
     };
+
     const finalScore = this.calculateFinalScore(calculation);
-    const focusQualityScore = focusMetrics.overallScore;
-    calculation.isPerfect =
-      finalScore >= 95 &&
-      pauses === 0 &&
-      effectiveTime >= 30 * 60 &&
-      focusQualityScore >= 95;
+    calculation.isPerfect = finalScore >= 95 && session.pauses === 0 && session.effectiveTime >= 30 * 60 && focusMetrics.overallScore >= 95;
     debug.info(
-      "Score calculated for session %s: base=%d, multipliers=%sx%sx%s, penalty=%s, isPerfect=%s",
-      session.id,
-      basePoints,
-      timeMultiplier,
-      streakMultiplier,
-      qualityMultiplier,
-      penaltyMultiplier,
-      calculation.isPerfect,
+      "Score calculated for session %s: base=%d, time=%s, streak=%s, quality=%s, penalty=%s, bonus=%d, final=%d, isPerfect=%s",
+      session.id, calculation.basePoints,
+      calculation.timeMultiplier.toFixed(2), calculation.streakMultiplier.toFixed(2),
+      calculation.qualityMultiplier.toFixed(2), calculation.penaltyMultiplier.toFixed(2),
+      calculation.bonusPoints, finalScore, calculation.isPerfect,
     );
     return calculation;
   }
-  calculateFinalScore(calculation: ScoreCalculation): number {
-    const baseWithMultipliers =
-      calculation.basePoints *
-      calculation.timeMultiplier *
-      calculation.streakMultiplier *
-      calculation.qualityMultiplier;
-    const withPenalties = baseWithMultipliers * calculation.penaltyMultiplier;
-    const withBonuses = withPenalties + calculation.bonusPoints;
-    return Math.max(0, Math.round(withBonuses));
+
+  calculateFinalScore(calc: ScoreCalculation): number {
+    const base = calc.basePoints * calc.timeMultiplier * calc.streakMultiplier * calc.qualityMultiplier;
+    return Math.max(0, Math.round(base * calc.penaltyMultiplier + calc.bonusPoints));
   }
-  private calculateTimeMultiplier(completionPercentage: number): number {
-    if (completionPercentage >= 100) {
-      return 1.5;
-    }
-    if (completionPercentage >= 90) {
-      return 1.3;
-    }
-    if (completionPercentage >= 75) {
-      return 1.15;
-    }
-    if (completionPercentage >= 50) {
-      return 1;
-    }
-    if (completionPercentage >= 25) {
-      return 0.7;
-    }
-    return 0.5;
+
+  calculateDamage(session: SessionState, reason: "ABANDON" | "INTERRUPTION" | "TIMEOUT" | "ANTI_CHEAT"): DamageCalculation {
+    return calculateDamage(session, this.userStreak, reason);
   }
-  private getStreakMultiplier(): number {
-    let multiplier = 1;
-    for (const [streakDays, mult] of Object.entries(STREAK_MULTIPLIERS)) {
-      if (this.userStreak >= parseInt(streakDays)) {
-        multiplier = mult;
-      }
-    }
-    return multiplier;
-  }
-  private getComebackMultiplier(session: SessionState): number {
-    return Math.min(3, Math.max(1, session.config.comebackMultiplier ?? 1));
-  }
-  private calculateQualityMultiplier(
-    focusMetrics: FocusQualityMetrics,
-    passThreshold = QUALITY_THRESHOLDS.AVERAGE,
-  ): number {
-    const score = focusMetrics.overallScore;
-    if (score >= QUALITY_THRESHOLDS.EXCELLENT) {
-      return 1.5;
-    }
-    if (score >= QUALITY_THRESHOLDS.GOOD) {
-      return 1.3;
-    }
-    if (score >= passThreshold) {
-      return 1.1;
-    }
-    if (score >= QUALITY_THRESHOLDS.POOR) {
-      return 0.9;
-    }
-    if (score >= QUALITY_THRESHOLDS.BAD) {
-      return 0.7;
-    }
-    return 0.5;
-  }
-  private calculateTimeBonus(
-    duration: number,
-    completionPercentage: number,
-  ): number {
-    const durationBonus = Math.floor((duration / 300) * 5);
-    const completionBonus =
-      completionPercentage >= 100
-        ? 50
-        : completionPercentage >= 90
-          ? 30
-          : completionPercentage >= 75
-            ? 15
-            : 0;
-    return durationBonus + completionBonus;
-  }
-  private calculateStreakBonus(
-    basePoints: number,
-    streakMultiplier: number,
-  ): number {
-    if (streakMultiplier > 1) {
-      return Math.floor(basePoints * (streakMultiplier - 1) * 0.5);
-    }
-    return 0;
-  }
-  private calculateQualityBonus(focusMetrics: FocusQualityMetrics): number {
-    const score = focusMetrics.overallScore;
-    if (score >= QUALITY_THRESHOLDS.EXCELLENT) {
-      return 100;
-    }
-    if (score >= QUALITY_THRESHOLDS.GOOD) {
-      return 50;
-    }
-    if (score >= QUALITY_THRESHOLDS.AVERAGE) {
-      return 20;
-    }
-    return 0;
-  }
-  private calculateIntervalBonus(session: SessionState): number {
-    const intervalsCompleted = session.intervalsCompleted;
-    if (intervalsCompleted >= 8) {
-      return 80;
-    }
-    if (intervalsCompleted >= 4) {
-      return 40;
-    }
-    if (intervalsCompleted >= 2) {
-      return 15;
-    }
-    return 0;
-  }
-  private calculateModeBonus(
-    session: SessionState,
-    focusMetrics: FocusQualityMetrics,
-    basePoints: number,
-  ): number {
-    const mode = resolveSessionMode(session.config.sessionMode);
-    if (mode === SessionMode.CHALLENGE && focusMetrics.consistencyScore >= 90) {
-      return Math.round(this.calculateQualityBonus(focusMetrics) * 0.3);
-    }
-    if (mode === SessionMode.STUDY) {
-      return (
-        (session.config.quizBonusPoints ?? 0) +
-        this.getCompletedQuizBonus(session)
-      );
-    }
-    if (mode === SessionMode.CREATIVE) {
-      return session.config.creativeMoodBonus ?? 0;
-    }
-    if (mode === SessionMode.SPRINT) {
-      const chainMultiplier = getSprintChainMultiplier(
-        session.config.sprintChainCount ?? 1,
-      );
-      return Math.round(basePoints * (chainMultiplier - 1));
-    }
-    return 0;
-  }
-  private getCompletedQuizBonus(session: SessionState): number {
-    const rawCompleted = session.metadata?.studyQuizCorrectAnswers;
-    return typeof rawCompleted === "number" ? Math.max(0, rawCompleted * 5) : 0;
-  }
-  private calculateComebackBonus(
-    basePoints: number,
-    baseBonusPoints: number,
-    timeMultiplier: number,
-    streakMultiplier: number,
-    qualityMultiplier: number,
-    penaltyMultiplier: number,
-    comebackMultiplier: number,
-  ): number {
-    if (comebackMultiplier <= 1) {
-      return 0;
-    }
-    const subtotal =
-      basePoints *
-        timeMultiplier *
-        streakMultiplier *
-        qualityMultiplier *
-        penaltyMultiplier +
-      baseBonusPoints;
-    return Math.max(0, Math.round(subtotal * (comebackMultiplier - 1)));
-  }
-  private calculatePausePenalty(pauses: number, duration: number): number {
-    const freePauses = 2;
-    const penalizedPauses = Math.max(0, pauses - freePauses);
-    const durationFactor = Math.min(1, duration / 3600);
-    return penalizedPauses * 5 * (1 + durationFactor);
-  }
-  private calculateModePausePenalty(session: SessionState): number {
-    const mode = resolveSessionMode(session.config.sessionMode);
-    if (mode !== SessionMode.CHALLENGE) {
-      return 0;
-    }
-    return session.pausedTime > 30000
-      ? Math.max(30, (session.baseScore ?? 0) * 0.25)
-      : 0;
-  }
-  private calculateInterruptionPenalty(interruptions: number): number {
-    return interruptions * 15;
-  }
-  private calculateQualityPenalty(focusMetrics: FocusQualityMetrics): number {
-    if (focusMetrics.overallScore < QUALITY_THRESHOLDS.BAD) {
-      return 30;
-    }
-    if (focusMetrics.overallScore < QUALITY_THRESHOLDS.POOR) {
-      return 15;
-    }
-    return 0;
-  }
-  private calculateAntiCheatPenalty(session: SessionState): number {
-    switch (session.antiCheatStatus) {
-      case "FAILED":
-        return session.baseScore * 0.5;
-      case "FLAGGED":
-        return session.baseScore * 0.2;
-      case "WARNING":
-        return session.baseScore * 0.05;
-      default:
-        return 0;
-    }
-  }
-  calculateDamage(
-    session: SessionState,
-    reason: "ABANDON" | "INTERRUPTION" | "TIMEOUT" | "ANTI_CHEAT",
-  ): DamageCalculation {
-    const baseDamage = session.baseScore * 0.1;
-    let pauseDamage = 0;
-    let interruptionDamage = 0;
-    let abandonDamage = 0;
-    let antiCheatDamage = 0;
-    switch (reason) {
-      case "ABANDON":
-        abandonDamage = baseDamage * 3;
-        pauseDamage = session.pauses * 2;
-        interruptionDamage = session.interruptions * 5;
-        break;
-      case "INTERRUPTION":
-        interruptionDamage = baseDamage * 2;
-        pauseDamage = session.pauses;
-        break;
-      case "TIMEOUT":
-        abandonDamage = baseDamage * 2;
-        pauseDamage = session.pauses * 1.5;
-        break;
-      case "ANTI_CHEAT":
-        antiCheatDamage = baseDamage * 5;
-        break;
-    }
-    const streakProtection = this.userStreak > 7;
-    const mitigation = streakProtection ? 0.5 : 0;
-    const totalDamage =
-      (baseDamage +
-        pauseDamage +
-        interruptionDamage +
-        abandonDamage +
-        antiCheatDamage) *
-      (1 - mitigation);
-    const finalPenalty = Math.min(1, totalDamage / (session.baseScore || 1));
-    return {
-      baseDamage,
-      pauseDamage,
-      interruptionDamage,
-      abandonDamage,
-      antiCheatDamage,
-      mitigation,
-      streakProtection,
-      totalDamage,
-      finalPenalty,
-    };
-  }
+
   calculateFocusQuality(
     session: SessionState,
-    interruptions: Array<{
-      duration: number;
-      severity: string;
-      autoRecovered?: boolean;
-    }>,
+    interruptions: Array<{ duration: number; severity: string; autoRecovered?: boolean }>,
   ): FocusQualityMetrics {
     const now = Date.now();
     const sessionDuration = session.config.duration * 1000;
@@ -408,104 +111,53 @@ export class ScoringEngine {
     let timeInDeepFocus = sessionDuration;
     let timeInShallowFocus = 0;
     let timeDistracted = 0;
-    const focusSegments: Array<{
-      startAt: number;
-      endAt: number;
-      duration: number;
-      quality: number;
-    }> = [];
-    for (const interruption of interruptions) {
-      const duration = interruption.duration;
-      if (
-        interruption.severity === "CRITICAL" ||
-        interruption.severity === "MAJOR"
-      ) {
-        timeDistracted += duration;
-        timeInDeepFocus -= duration;
-      } else if (interruption.severity === "MODERATE") {
-        timeInShallowFocus += duration;
-        timeInDeepFocus -= duration;
+
+    for (const it of interruptions) {
+      if (it.severity === "CRITICAL" || it.severity === "MAJOR") {
+        timeDistracted += it.duration;
+        timeInDeepFocus -= it.duration;
+      } else if (it.severity === "MODERATE") {
+        timeInShallowFocus += it.duration;
+        timeInDeepFocus -= it.duration;
       } else {
-        timeInShallowFocus += duration * 0.5;
-        timeInDeepFocus -= duration * 0.5;
+        timeInShallowFocus += it.duration * 0.5;
+        timeInDeepFocus -= it.duration * 0.5;
       }
     }
     timeInDeepFocus = Math.max(0, timeInDeepFocus);
-    const consistencyScore = this.calculateConsistencyScore(
-      interruptions,
-      sessionDuration,
-    );
+    const consistencyScore = calculateConsistencyScore(interruptions, sessionDuration);
     const depthScore = Math.min(100, (timeInDeepFocus / sessionDuration) * 100);
-    const recoveryScore = this.calculateRecoveryScore(interruptions);
+    const recoveryScore = calculateRecoveryScore(interruptions);
     const overallScore = Math.round(
       consistencyScore * modeConfig.scoringWeights.consistency +
-        depthScore * modeConfig.scoringWeights.depth +
-        recoveryScore * modeConfig.scoringWeights.recovery,
+      depthScore * modeConfig.scoringWeights.depth +
+      recoveryScore * modeConfig.scoringWeights.recovery,
     );
     return {
-      sessionId: session.id,
-      timeInDeepFocus,
-      timeInShallowFocus,
-      timeDistracted,
-      focusSegments,
-      consistencyScore,
-      depthScore,
-      recoveryScore,
-      overallScore,
-      calculatedAt: now,
+      sessionId: session.id, timeInDeepFocus, timeInShallowFocus, timeDistracted,
+      focusSegments: [], consistencyScore, depthScore, recoveryScore, overallScore, calculatedAt: now,
     };
   }
+
   calculateFocusPurityScore(session: SessionState): number {
     const sessionStart = session.startedAt ?? session.createdAt;
     const sessionEnd = session.endedAt ?? Date.now();
     const totalSessionTime = Math.max(0, sessionEnd - sessionStart);
     const elapsedFocusTime = Math.max(0, totalSessionTime - session.pausedTime);
-    if (totalSessionTime <= 0) {
-      return 100;
-    }
-    return Math.round((elapsedFocusTime / totalSessionTime) * 100);
+    return totalSessionTime <= 0 ? 100 : Math.round((elapsedFocusTime / totalSessionTime) * 100);
   }
-  private calculateConsistencyScore(
-    interruptions: Array<{ duration: number }>,
-    totalDuration: number,
-  ): number {
-    if (interruptions.length === 0) {
-      return 100;
-    }
-    const interruptionPenalty = interruptions.length * 10;
-    const totalInterruptionTime = interruptions.reduce(
-      (sum, i) => sum + i.duration,
-      0,
-    );
-    const timePenalty = (totalInterruptionTime / totalDuration) * 50;
-    return Math.max(0, Math.round(100 - interruptionPenalty - timePenalty));
-  }
-  private calculateRecoveryScore(
-    interruptions: Array<{ autoRecovered?: boolean }>,
-  ): number {
-    if (interruptions.length === 0) {
-      return 100;
-    }
-    const recoveredCount = interruptions.filter((i) => i.autoRecovered).length;
-    return Math.round((recoveredCount / interruptions.length) * 100);
-  }
+
   isEligibleForRewards(completionPercentage: number): boolean {
     return completionPercentage >= MIN_COMPLETION_FOR_CREDIT * 100;
   }
-  getCompletionTier(
-    completionPercentage: number,
-  ): "NONE" | "PARTIAL" | "FULL" | "PERFECT" {
-    if (completionPercentage >= 100) {
-      return "PERFECT";
-    }
-    if (completionPercentage >= 90) {
-      return "FULL";
-    }
-    if (completionPercentage >= MIN_COMPLETION_FOR_CREDIT * 100) {
-      return "PARTIAL";
-    }
+
+  getCompletionTier(completionPercentage: number): "NONE" | "PARTIAL" | "FULL" | "PERFECT" {
+    if (completionPercentage >= 100) return "PERFECT";
+    if (completionPercentage >= 90) return "FULL";
+    if (completionPercentage >= MIN_COMPLETION_FOR_CREDIT * 100) return "PARTIAL";
     return "NONE";
   }
+
   serializeCalculation(calculation: ScoreCalculation): Record<string, number> {
     return {
       basePoints: calculation.basePoints,
@@ -527,6 +179,7 @@ export class ScoringEngine {
     };
   }
 }
+
 export function createScoringEngine(): ScoringEngine {
   return new ScoringEngine();
 }

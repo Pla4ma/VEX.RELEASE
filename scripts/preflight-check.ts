@@ -118,6 +118,13 @@ function checkStyleSheetCreate(content: string): string | null {
   return null;
 }
 
+function checkPartNFiles(filePath: string): string | null {
+  if (/\.part-\d+\.tsx?$/.test(filePath)) {
+    return 'Uses .part-N.ts pattern — decompose by domain instead';
+  }
+  return null;
+}
+
 function checkAnyTypes(content: string): string | null {
   const matches = content.match(PATTERNS.anyType);
   if (matches && matches.length > 0) {
@@ -150,6 +157,9 @@ function checkFile(filePath: string): CheckResult {
 
   const anyIssue = checkAnyTypes(content);
   if (anyIssue) issues.push(anyIssue);
+
+  const partNIssue = checkPartNFiles(filePath);
+  if (partNIssue) issues.push(partNIssue);
 
   return { file: relativePath, issues };
 }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Pressable } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { Box } from '../../../components/primitives/Box';
 import { Button } from '../../../components/primitives/Button';
@@ -8,6 +7,7 @@ import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { SessionMode } from '../../../session/modes';
 import type { FirstSessionPersonalization } from '../hooks/useFirstSessionPersonalization';
+import { CoachLine, CompanionVisual, StudyTarget } from './FirstSessionOptionalCards';
 
 type FirstSessionSetupCardProps = {
   personalization: FirstSessionPersonalization;
@@ -16,84 +16,16 @@ type FirstSessionSetupCardProps = {
 };
 
 const FIRST_SESSION_MODES = [
-  { mode: SessionMode.STUDY, label: 'Study', icon: 'open-book', description: 'With material to review' },
-  { mode: SessionMode.LIGHT_FOCUS, label: 'Focus', icon: 'target', description: 'Standard focused work' },
-  { mode: SessionMode.DEEP_WORK, label: 'Deep Work', icon: 'brain', description: 'No interruptions, high intensity' },
+  { mode: SessionMode.STUDY, label: 'Study', description: 'With material to review' },
+  { mode: SessionMode.LIGHT_FOCUS, label: 'Focus', description: 'Standard focused work' },
+  { mode: SessionMode.DEEP_WORK, label: 'Deep Work', description: 'No interruptions, high intensity' },
 ] as const;
 
-function CoachLine({ text }: { text: string }): JSX.Element | null {
-  const { theme } = useTheme();
-  if (!text) return null;
-
-  return (
-    <Box
-      p="md"
-      mt="md"
-      bg="background.secondary"
-      borderRadius="lg"
-      borderWidth={1}
-      borderColor="border.light"
-    >
-      <Text variant="caption" color="text.secondary" textAlign="center">
-        {text}
-      </Text>
-    </Box>
-  );
-}
-
-function CompanionVisual({ element }: { element: string | null }): JSX.Element | null {
-  if (!element) return null;
-
-  const elementEmoji: Record<string, string> = {
-    FLAME: '🔥',
-    WAVE: '🌊',
-    TERRA: '🌍',
-    ZEPHYR: '💨',
-    VOID: '🌑',
-    LUMINA: '✨',
-  };
-
-  return (
-    <Box alignItems="center" py="md">
-      <Text fontSize={40}>{elementEmoji[element] ?? '💎'}</Text>
-      <Text variant="caption" color="text.tertiary" mt="xs">
-        Your companion is ready
-      </Text>
-    </Box>
-  );
-}
-
-function StudyTarget({
-  visible,
-  target,
-  onChange,
-}: {
-  visible: boolean;
-  target: string;
-  onChange: (value: string) => void;
-}): JSX.Element | null {
-  if (!visible) return null;
-
-  return (
-    <Animated.View entering={FadeInDown.duration(250)}>
-      <Box
-        p="md"
-        mt="md"
-        bg="background.secondary"
-        borderRadius="lg"
-        borderWidth={1}
-        borderColor="border.light"
-      >
-        <Text variant="label" color="text.secondary" mb="sm">
-          What are you studying today?
-        </Text>
-        <Text variant="body" color="text.primary">
-          {target || 'Tap to set a study target'}
-        </Text>
-      </Box>
-    </Animated.View>
-  );
-}
+const MODE_EMOJI: Record<string, string> = {
+  [SessionMode.STUDY]: '📚',
+  [SessionMode.LIGHT_FOCUS]: '🎯',
+  [SessionMode.DEEP_WORK]: '🧠',
+};
 
 export function FirstSessionSetupCard({
   personalization,
@@ -101,8 +33,7 @@ export function FirstSessionSetupCard({
   onStart,
 }: FirstSessionSetupCardProps): JSX.Element {
   const { theme } = useTheme();
-  const defaultMode = personalization.defaultMode;
-  const [selectedMode, setSelectedMode] = useState<SessionMode>(defaultMode);
+  const [selectedMode, setSelectedMode] = useState<SessionMode>(personalization.defaultMode);
   const [studyTarget, setStudyTarget] = useState('');
   const showStudyTarget = selectedMode === SessionMode.STUDY;
 
@@ -168,7 +99,7 @@ export function FirstSessionSetupCard({
                     justifyContent="center"
                     alignItems="center"
                   >
-                    <Text fontSize={20}>{item.icon === 'open-book' ? '📚' : item.icon === 'target' ? '🎯' : '🧠'}</Text>
+                    <Text fontSize={20}>{MODE_EMOJI[item.mode] ?? '🎯'}</Text>
                   </Box>
                   <Box flex={1}>
                     <Text variant="label" color="text.primary">
@@ -223,9 +154,9 @@ export function FirstSessionSetupCard({
         <CompanionVisual element={personalization.companionElement} />
 
         <StudyTarget
+          onChangeText={setStudyTarget}
           visible={showStudyTarget}
           target={studyTarget}
-          onChange={setStudyTarget}
         />
 
         <CoachLine text={personalization.coachLine} />

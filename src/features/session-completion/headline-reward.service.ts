@@ -114,7 +114,9 @@ export function selectHeadlineReward(consequences: HeadlineRewardConsequences): 
   return reward({
     type: 'xp_earned',
     title: `+${summary.xpEarned} XP. Session complete.`,
-    body: `You also earned ${summary.coinsEarned} coins and ${summary.gemsEarned} gems.`,
+    body: summary.focusPurityScore
+      ? `Focus purity: ${summary.focusPurityScore}%. Keep building the rhythm.`
+      : 'Your progress is locked in. Keep building the rhythm.',
     iconName: 'zap',
     value: `+${summary.xpEarned} XP`,
   });

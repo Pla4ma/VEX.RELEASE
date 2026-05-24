@@ -7,7 +7,13 @@ import { useState, useCallback, useEffect } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../../../store';
 import { captureException } from '../../../config/sentry';
-import { fetchContentById, updateContentText, generateStudyPlan, pollContentStatus } from '../ContentStudyService';
+import {
+  buildContentStudyTimeoutFallback,
+  fetchContentById,
+  updateContentText,
+  generateStudyPlan,
+  pollContentStatus,
+} from '../ContentStudyService';
 import { ContentReviewState } from '../types';
 import { ERROR_MESSAGES } from '../constants';
 import { contentStudyQueryKeys } from './queryKeys';
@@ -84,6 +90,12 @@ export function useContentReview(contentId: string) {
           area: 'content-study.review.poll',
           contentId,
         });
+        const fallback = buildContentStudyTimeoutFallback();
+        setState((prev) => ({
+          ...prev,
+          error: fallback.body,
+          isExtracting: false,
+        }));
       }
     }, 2000);
 

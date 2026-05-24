@@ -62,6 +62,14 @@ const statusResponseSchema = z.object({
 
 const feedbackResponseSchema = z.object({ success: z.boolean() });
 
+export const ContentStudyTimeoutFallbackSchema = z.object({
+  body: z.string().min(1),
+  ctaLabel: z.string().min(1),
+  title: z.string().min(1),
+}).strict();
+
+export type ContentStudyTimeoutFallback = z.infer<typeof ContentStudyTimeoutFallbackSchema>;
+
 function normalizeError(error: unknown, code: ContentStudyErrorCode, message: string) {
   if (error instanceof Error) {
     return buildError(code, error.message || message, { cause: error.name }, true);
@@ -167,6 +175,14 @@ export async function updateContentText(contentId: string, editedText: string) {
 
 export async function deleteContent(contentId: string) {
   await deleteContentRecord(contentId);
+}
+
+export function buildContentStudyTimeoutFallback(): ContentStudyTimeoutFallback {
+  return ContentStudyTimeoutFallbackSchema.parse({
+    body: 'Start a focused study session now. VEX can retry content generation when service health recovers.',
+    ctaLabel: 'Start study session',
+    title: 'Content generation is still warming up',
+  });
 }
 
 export async function pollContentStatus(contentId: string, onUpdate?: (status: Awaited<ReturnType<typeof getContentStatus>>) => void) {

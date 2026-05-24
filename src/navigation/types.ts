@@ -30,31 +30,59 @@ export type SettingsStackRoute =
 export type SessionStackRoute = 'SessionSetup' | 'ActiveSession' | 'SessionComplete' | 'SessionHistory';
 export type SessionSetupMode = 'LIGHT_FOCUS' | 'DEEP_WORK' | 'SPRINT' | 'CREATIVE' | 'STUDY' | 'RECOVERY';
 
+/** Grouped sub-types for documentation and future refactoring. Flat params still supported. */
+export interface ComebackContext {
+  comebackMessage?: string;
+  comebackMultiplier?: number;
+  comebackQuest?: { requiredSessions: number; streakBefore: number } | null;
+}
+
+export interface StudyContext {
+  contentId?: string;
+  focusAreas?: string[];
+  generationId?: string;
+  goal?: string;
+  studyPlanId?: string;
+  suggestedDifficulty?: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
+  suggestedDurationSeconds?: number;
+}
+
+export interface WarContext {
+  warContext?: { squadId: string; squadWarId: string } | null;
+}
+
+export interface SessionSetupParams {
+  // Flat params (existing callers)
+  comebackMessage?: string;
+  comebackMultiplier?: number;
+  comebackQuest?: { requiredSessions: number; streakBefore: number } | null;
+  contentId?: string;
+  focusAreas?: string[];
+  generationId?: string;
+  goal?: string;
+  presetDuration?: number;
+  presetId?: string;
+  presetMode?: SessionSetupMode;
+  recommendationId?: string;
+  selectedThemeId?: string;
+  sessionCategory?: string;
+  sessionTags?: string[];
+  learningExecutionLabel?: string;
+  learningExecutionTaskId?: string;
+  source?: 'content-study' | 'learning-execution' | 'onboarding_first_session';
+  studyPlanId?: string;
+  suggestedDifficulty?: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
+  suggestedDurationSeconds?: number;
+  warContext?: { squadId: string; squadWarId: string } | null;
+  // Grouped access (preferred for new code)
+  comeback?: ComebackContext;
+  study?: StudyContext;
+  war?: WarContext;
+}
+
 export interface SessionStackParams {
   [key: string]: object | undefined;
-  SessionSetup: {
-    comebackMessage?: string;
-    comebackMultiplier?: number;
-    comebackQuest?: { requiredSessions: number; streakBefore: number } | null;
-    contentId?: string;
-    focusAreas?: string[];
-    generationId?: string;
-    goal?: string;
-    presetDuration?: number;
-    presetId?: string;
-    presetMode?: SessionSetupMode;
-    recommendationId?: string;
-    selectedThemeId?: string;
-    sessionCategory?: string;
-    sessionTags?: string[];
-    learningExecutionLabel?: string;
-    learningExecutionTaskId?: string;
-    source?: 'content-study' | 'learning-execution' | 'onboarding_first_session';
-    studyPlanId?: string;
-    suggestedDifficulty?: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
-    suggestedDurationSeconds?: number;
-    warContext?: { squadId: string; squadWarId: string } | null;
-  };
+  SessionSetup: SessionSetupParams;
   ActiveSession: { selectedThemeId?: string; sessionId: string };
   SessionComplete: { sessionId: string; summary: unknown };
   SessionHistory: undefined;
@@ -103,52 +131,34 @@ export interface MainTabParams {
 export type MainStackRoute =
   | 'Boss'
   | 'Guild'
-  | 'BattlePass'
   | 'Shop'
   | 'Inventory'
   | 'Notifications'
-  | 'Search'
-  | 'Analytics'
   | 'ContentStudy'
-  | 'ContentReview'
-  | 'StudyPlan'
-  | 'ContentInput'
-  | 'Coach'
   | 'AICoach'
   | 'Challenges'
   | 'Mastery'
-  | 'Vault'
-  | 'Leaderboard'
-  | 'PostSessionStory'
-  | 'MonthlyFocusReport';
+  | 'CompanionDetail'
+  | 'PostSessionStory';
 
 export interface MainStackParams {
   [key: string]: object | undefined;
   Boss: undefined;
   Guild: { guildId?: string } | undefined;
-  BattlePass: undefined;
   Shop: undefined;
   Inventory: undefined;
   Notifications: undefined;
-  Search: { query?: string };
-  Analytics: { month?: string };
   ContentStudy: NavigatorScreenParams<ContentStudyStackParamList> | undefined;
-  ContentReview: { contentId: string };
-  StudyPlan: { contentId: string; generationId: string };
-  ContentInput: undefined;
-  Coach: undefined;
   AICoach: undefined;
   Challenges: undefined;
   Mastery: undefined;
-  Vault: undefined;
-  Leaderboard: { period?: 'DAILY' | 'WEEKLY' | 'MONTHLY'; scope?: 'GLOBAL' | 'FRIENDS' } | undefined;
+  CompanionDetail: undefined;
   PostSessionStory: {
     focusScore?: number;
     purityScore?: number;
     sessionId: string;
     summary?: import('../session/types').SessionSummary;
   };
-  MonthlyFocusReport: { month?: number; year?: number } | undefined;
 }
 
 export interface SettingsStackParams {

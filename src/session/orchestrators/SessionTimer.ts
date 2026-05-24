@@ -16,7 +16,7 @@ export function handleTimerTick(
   if (orch.config.enableAntiCheat) {
     const v = orch.antiCheatEngine.validateTick(elapsed, Date.now());
     if (!v.valid) {
-      orch.handleAntiCheatViolationOrigin(v.warning || "Invalid tick");
+      orch.handleAntiCheatViolation(v.warning || "Invalid tick");
       return;
     }
   }

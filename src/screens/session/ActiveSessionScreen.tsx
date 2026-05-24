@@ -16,8 +16,15 @@ import { useActiveSessionController } from "./hooks/useActiveSessionController";
 import { useStudyQuizBreak } from "./hooks/useStudyQuizBreak";
 import { useCoachState } from "../../features/ai-coach/hooks";
 import { useContractForSession } from "../../features/focus-contract/hooks";
+import { useOnboardingStore } from "../../features/onboarding/store";
 import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
 import { SessionContractReminder } from "./components/SessionContractReminder";
+import {
+  getActiveSessionTargetLabel,
+  normalizeActiveSessionGoal,
+  normalizeActiveSessionMotivationStyle,
+  resolveActiveSessionDisplayPolicy,
+} from "./utils/active-session-display-policy";
 
 const ENABLE_SESSION_COMPANION_LAYER = true;
 const ENABLE_SESSION_COACH_BANNER = true;
@@ -28,12 +35,26 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
   const controller = useActiveSessionController();
   const { actions, isDegradedSession, metrics, navigation, sessionQuery, showInterruption, showMultiplierInfo, streak, theme, themeBackgroundColor, userId } = controller;
   const { data: coachState } = useCoachState(userId || "");
+  const motivationStyle = useOnboardingStore((state) => state.explicitMotivationStyle);
+  const primaryGoal = useOnboardingStore((state) => state.goal);
   const { contract } = useContractForSession(controller.sessionQuery.session?.id ?? null);
   const outerRadius = metrics.RADIUS + 16;
   const outerCircumference = 2 * Math.PI * outerRadius;
   const outerStrokeDashoffset = outerCircumference * (1 - metrics.dailyProgress / 100);
   const currentMode = resolveSessionMode(sessionQuery.session?.config.sessionMode);
-  const studyQuizBreak = useStudyQuizBreak({ currentMode, sessionQuery });
+  const plannedQuizBreakOptedIn = false;
+  const focusStage = showInterruption ? "interruption" : sessionQuery.isPaused ? "paused" : "active";
+  const displayPolicy = resolveActiveSessionDisplayPolicy({
+    bossIntensity: undefined,
+    firstWeekStage: undefined,
+    focusStage,
+    motivationStyle: normalizeActiveSessionMotivationStyle(motivationStyle),
+    plannedQuizBreakOptedIn,
+    primaryGoal: normalizeActiveSessionGoal(primaryGoal),
+    sessionMode: currentMode,
+    studyLayerLabel: getActiveSessionTargetLabel(primaryGoal, currentMode),
+  });
+  const studyQuizBreak = useStudyQuizBreak({ currentMode, plannedQuizBreakOptedIn, sessionQuery });
   const shouldShowGuardState = !userId || sessionQuery.isLoading || !controller.companion.isLoaded || Boolean(sessionQuery.error) || !sessionQuery.session || isDegradedSession;
 
   if (shouldShowGuardState) {
@@ -48,15 +69,16 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
     <Box flex={1} bg="background.primary" style={{ backgroundColor: themeBackgroundColor }}>
       <ActiveSessionBackground accentOverlay={metrics.withAlpha(metrics.phaseAccent, 0.06)} colors={[metrics.gradientState.top, metrics.gradientState.middle, metrics.gradientState.bottom]} />
 
-      {currentMode === SessionMode.DEEP_WORK && <DeepWorkVignette />}
+      {currentMode === SessionMode.DEEP_WORK && focusStage !== "active" ? <DeepWorkVignette /> : null}
 
-      {ENABLE_SESSION_COMPANION_LAYER && controller.companion.state && currentMode !== SessionMode.DEEP_WORK ? <CompanionSessionLayer companionState={controller.companion.state} elapsedSeconds={sessionQuery.elapsedSeconds} eventLabel={controller.companion.eventLabel} isPaused={sessionQuery.isPaused} purityScore={metrics.purityScore} sessionProgress={controller.companion.sessionProgress} totalSeconds={Math.max(activeSession.config.duration, sessionQuery.elapsedSeconds + sessionQuery.remainingSeconds, 1)} /> : null}
+      {ENABLE_SESSION_COMPANION_LAYER && displayPolicy.showCompanionLayer && controller.companion.state && currentMode !== SessionMode.DEEP_WORK ? <CompanionSessionLayer companionState={controller.companion.state} elapsedSeconds={sessionQuery.elapsedSeconds} eventLabel={controller.companion.eventLabel} isPaused={sessionQuery.isPaused} purityScore={metrics.purityScore} sessionProgress={controller.companion.sessionProgress} totalSeconds={Math.max(activeSession.config.duration, sessionQuery.elapsedSeconds + sessionQuery.remainingSeconds, 1)} /> : null}
 
       <ActiveSessionHeader isPaused={sessionQuery.isPaused} theme={theme} onInterrupt={() => actions.setShowInterruption(true)} />
-      <SessionContractReminder contract={contract} progressPercentage={sessionQuery.completionPercentage} />
+      {displayPolicy.showContractReminder ? <SessionContractReminder contract={contract} progressPercentage={sessionQuery.completionPercentage} /> : null}
 
-      {ENABLE_SESSION_MODE_OVERLAYS && (
+      {ENABLE_SESSION_MODE_OVERLAYS && displayPolicy.showModeOverlay ? (
         <ActiveSessionModeOverlays
+          allowStudyQuizBreak={plannedQuizBreakOptedIn}
           chainCount={activeSession.config.sprintChainCount ?? 0}
           completionPercentage={sessionQuery.completionPercentage}
           currentMode={currentMode}
@@ -73,10 +95,10 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
             studyQuizBreak.finishQuizBreak();
           }}
         />
-      )}
+      ) : null}
 
       {/* Coach Session Banner - Phase 6.5 */}
-      {ENABLE_SESSION_COACH_BANNER && coachState && <CoachSessionBanner coachName="Coach" personaStyle={coachState.currentState === "OVERLOAD_PROTECTION" ? "DRILL_SERGEANT" : "MENTOR"} elapsedSeconds={sessionQuery.elapsedSeconds} isPaused={sessionQuery.isPaused} />}
+      {ENABLE_SESSION_COACH_BANNER && displayPolicy.showCoachBanner && coachState ? <CoachSessionBanner coachName="Coach" personaStyle={coachState.currentState === "OVERLOAD_PROTECTION" ? "DRILL_SERGEANT" : "MENTOR"} elapsedSeconds={sessionQuery.elapsedSeconds} isPaused={sessionQuery.isPaused} /> : null}
 
       {ENABLE_SESSION_HERO && (
         <ActiveSessionHero
@@ -87,6 +109,7 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
           animatedCircleProps={metrics.animatedCircleProps}
           completionPercentage={sessionQuery.completionPercentage}
           dailyProgress={metrics.dailyProgress}
+          displayPolicy={displayPolicy}
           elapsedSeconds={sessionQuery.elapsedSeconds}
           glowStyle={metrics.glowStyle}
           labelColor={metrics.labelColor}
@@ -103,6 +126,7 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
           remainingSeconds={sessionQuery.remainingSeconds}
           rotatingPerfectFocusStyle={metrics.rotatingPerfectFocusStyle}
           streakMultiplier={metrics.streakMultiplier}
+          studyTargetLabel={getActiveSessionTargetLabel(primaryGoal, currentMode)}
           themeColors={{
             error: theme.colors.error.DEFAULT,
             inverse: theme.colors.text.inverse,

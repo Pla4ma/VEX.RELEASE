@@ -11,5 +11,8 @@ export {
   fetchGenerationById,
   updateContentText,
   deleteContent,
+  buildContentStudyTimeoutFallback,
   pollContentStatus,
 } from './service';
+
+export type { ContentStudyTimeoutFallback } from './service';

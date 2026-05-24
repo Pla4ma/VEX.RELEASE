@@ -84,6 +84,7 @@ export class SessionLifecycleService {
       modeBonus: 0,
       conflictStatus: "NONE" as const,
       storageStatus: "HEALTHY" as const,
+      syncStatus: "IDLE" as const,
       totalBackgroundTime: 0,
       totalPausedTime: 0,
       canRecover: false,

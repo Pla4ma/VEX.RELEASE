@@ -14,7 +14,7 @@ function hasSupabaseConfig(): boolean {
 }
 
 function hasGeminiKey(): boolean {
-  return Boolean(GEMINI_API_KEY);
+  return hasFunctionName(CONTENT_STUDY_FUNCTION) || hasFunctionName(AI_COACH_FUNCTION);
 }
 
 function hasFunctionName(value: string | undefined): boolean {

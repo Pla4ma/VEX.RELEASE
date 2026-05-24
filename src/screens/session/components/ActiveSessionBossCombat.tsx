@@ -9,6 +9,8 @@ import { RealTimeBossCombat } from '../../../features/boss-realtime/components/R
 import { useProgressionSummary } from '../../../features/progression/hooks';
 import { useMidSessionEvents } from '../../../features/session-events';
 import { useTheme } from '../../../theme';
+import { useFeatureAccess } from '../../../features/liveops-config';
+import { getFeatureAvailability } from '../../../features/liveops-config/feature-availability';
 import { buildSessionBossCombatEncounter } from '../utils/session-boss-combat';
 
 type ActiveSessionBossCombatProps = {
@@ -28,6 +30,12 @@ export function ActiveSessionBossCombat({
   sessionId,
   userId,
 }: ActiveSessionBossCombatProps): JSX.Element | null {
+  const featureAccess = useFeatureAccess();
+  const bossAvail = getFeatureAvailability(featureAccess.features.boss_tab);
+  if (!bossAvail.canRenderEntryPoint || !bossAvail.canQuery) {
+    return null;
+  }
+
   const { theme } = useTheme();
   const progressionSummary = useProgressionSummary(userId || null);
   const userLevel = progressionSummary.data?.level;

@@ -16,7 +16,7 @@ export async function createSession(
   if (!orch.userId) throw new Error("SessionOrchestrator: No user set");
   const sessionId = uuidv4();
   const now = Date.now();
-  orch.session = {
+  const session: SessionState = {
     id: sessionId, userId: orch.userId, status: "PREPARING", phase: "PREPARATION", config,
     remainingTime: config.duration * 1000, totalDuration: config.duration * 1000,
     elapsedTime: 0, effectiveTime: 0, effectiveDuration: 0, actualDuration: 0,
@@ -26,20 +26,21 @@ export async function createSession(
     baseScore: 0, finalScore: 0, timeBonus: 0, streakBonus: 0,
     focusQuality: 100, completionPercentage: 0, streakMaintained: false,
     damagePoints: 0, penaltyMultiplier: 1, recoveryAttempts: 0, maxRecoveryAttempts: 3,
-    canRecover: true, conflictStatus: "NONE", storageStatus: "HEALTHY",
+    canRecover: true, conflictStatus: "NONE", storageStatus: "HEALTHY", syncStatus: "IDLE" as const,
     deviceId: orch.getDeviceFingerprint(), appVersion: "1.0.0",
     osVersion: Platform.Version.toString(),
     antiCheatStatus: "CLEAN", antiCheatFlags: [],
     createdAt: now, updatedAt: now, isDirty: true, isOnline: true, modeBonus: 0,
   };
+  orch.session = session;
   if (orch.config.enableAntiCheat) {
     orch.antiCheatEngine.initialize(sessionId, orch.getDeviceFingerprint());
   }
   orch.eventEmitter.attach(sessionId, orch.userId);
-  await persistence.saveSessionState(orch.session, orch.repository);
+  await persistence.saveSessionState(session, orch.repository);
   orch.eventEmitter.emitSessionCreated(config);
   debug.info("Session created: %s", sessionId);
-  return orch.session;
+  return session;
 }
 
 export function loadActiveSession(orch: SessionOrchestrator): void {

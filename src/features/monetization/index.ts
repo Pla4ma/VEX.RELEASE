@@ -4,6 +4,18 @@
  * Phase 10 - Monetization
  */
 
+// Canonical Tier Definitions (single source of truth)
+export {
+  TIERS,
+  FREE_FEATURE_STRS,
+  PREMIUM_FEATURE_STRS,
+  hasFeature,
+  getMaxActiveStudyPlans,
+  type TierId,
+  type TierDefinition,
+  type TierFeatureKey,
+} from './tier-definitions';
+
 // Value Ladder
 export {
   calculateLadderPosition,
@@ -56,19 +68,16 @@ export {
   type TrustSignalConfig,
 } from './purchase-trust';
 
-// Phase 4.1 - Premium Experience & Paywall Strategy
+// Premium Experience & Paywall Strategy
 export {
-  FREE_TIER,
-  PREMIUM_TIER,
-  TIER_DEFINITIONS,
   FEATURE_GATES,
   hasFeatureAccess,
   canCreateStudyPlan,
-  canJoinSquad,
   getRemainingStudyPlanSlots,
   getFeatureGate,
   shouldShowPaywall,
   getPaywallContext,
+  PAYWALL_CONTEXTS,
   setUserSubscription,
   getUserSubscription,
   getUserTier,
@@ -76,8 +85,6 @@ export {
   isInTrial,
   getTrialDaysRemaining,
   type SubscriptionTier,
-  type TierFeatures,
-  type TierDefinition,
   type FeatureGate,
   type PaywallContextType,
   type PaywallContextData,
@@ -98,7 +105,7 @@ export {
   shouldPreventPaywall,
   type PaywallMoment,
   type PaywallTriggerCondition,
-  } from './ContextualPaywall';
+} from './ContextualPaywall';
 
 export {
   STREAK_SHIELD_COOLDOWN_MS,

@@ -7,6 +7,8 @@ function makeContext(overrides: Partial<CoachPresenceContext> = {}): CoachPresen
     primaryGoal: 'focus',
     firstWeekStage: null,
     latestSession: null,
+    memoryConfidence: 'none',
+    sessionMode: 'inactive',
     comebackState: null,
     studyLayerLabel: null,
     bossIntensity: null,
@@ -31,6 +33,8 @@ describe('getCoachPresenceMessage', () => {
       motivationStyle: 'STUDY_FOCUSED',
       primaryGoal: 'study',
       studyLayerLabel: 'Study OS',
+      memoryConfidence: 'weak',
+      latestSession: { durationMinutes: 22, focusPurityScore: 81, isComeback: false, mode: 'STUDY' },
     }));
     expect(result.tone).toBe('studious');
     expect(result.safeIntent).toBe('START_STUDY_SESSION');
@@ -48,7 +52,11 @@ describe('getCoachPresenceMessage', () => {
   });
 
   it('coach-led tone', () => {
-    const result = getCoachPresenceMessage(makeContext({ motivationStyle: 'COACH_LED' }));
+    const result = getCoachPresenceMessage(makeContext({
+      motivationStyle: 'COACH_LED',
+      memoryConfidence: 'weak',
+      latestSession: { durationMinutes: 18, focusPurityScore: 78, isComeback: false, mode: 'FOCUS' },
+    }));
     expect(result.tone).toBe('direct');
     expect(result.visualMood).toBe('ready');
     expect(result.message).toContain('block');
@@ -107,6 +115,7 @@ describe('getCoachPresenceMessage', () => {
   it('premium moment soft tease', () => {
     const result = getCoachPresenceMessage(makeContext({
       motivationStyle: 'COACH_LED',
+      memoryConfidence: 'strong',
       premiumMoment: 'soft_tease',
     }));
     expect(result.message).toContain('Pro');
@@ -145,4 +154,5 @@ describe('getCoachPresenceMessage', () => {
     expect(result.visualMood).toBe('ready');
     expect(result.message.length).toBeLessThanOrEqual(96);
   });
+
 });

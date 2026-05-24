@@ -7,7 +7,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as queries from './queries';
 import * as service from './service';
-import { useAuth } from '../../../auth/hooks/useAuth';
+import { useAuthStore } from '../../../store';
 import { launchColors } from '@theme/tokens/launch-colors';
 
 
@@ -64,24 +64,24 @@ export function useRewardSummary(userId: string) {
 }
 
 export function useCurrentRewardLedger() {
-  const { user } = useAuth();
-  const userId = (user as { id?: string } | null)?.id;
+  const user = useAuthStore((state) => state.user);
+  const userId = user?.id;
 
-  return useRewardLedger(userId || '');
+  return useRewardLedger(userId ?? '');
 }
 
 export function useCurrentPendingRewards() {
-  const { user } = useAuth();
-  const userId = (user as { id?: string } | null)?.id;
+  const user = useAuthStore((state) => state.user);
+  const userId = user?.id;
 
-  return usePendingRewards(userId || '');
+  return usePendingRewards(userId ?? '');
 }
 
 export function useCurrentRewardSummary() {
-  const { user } = useAuth();
-  const userId = (user as { id?: string } | null)?.id;
+  const user = useAuthStore((state) => state.user);
+  const userId = user?.id;
 
-  return useRewardSummary(userId || '');
+  return useRewardSummary(userId ?? '');
 }
 
 // ============================================================================
@@ -94,7 +94,6 @@ export function useCreateReward() {
   return useMutation({
     mutationFn: service.createRewardEntry,
     onSuccess: (data, variables) => {
-      // Invalidate related queries
       queryClient.invalidateQueries({
         queryKey: rewardLedgerKeys.byUser(variables.userId),
       });
@@ -108,7 +107,6 @@ export function useDeliverReward() {
   return useMutation({
     mutationFn: service.deliverReward,
     onSuccess: (data, entryId) => {
-      // Extract userId from the result or refetch all
       queryClient.invalidateQueries({
         queryKey: rewardLedgerKeys.all,
       });

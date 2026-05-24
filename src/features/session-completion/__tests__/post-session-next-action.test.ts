@@ -18,6 +18,24 @@ describe('post-session next action', () => {
     expect(action.routeParams.recommendationId).toBe(action.id);
   });
 
+  it('creates next study action when completed session has study target', () => {
+    const action = buildPostSessionNextAction({
+      studyContext: {
+        source: 'direct',
+        studyTarget: 'calculus exam review',
+      },
+      summary: createSessionSummary({
+        plannedDuration: 1500,
+        sessionId: SESSION_ID,
+        userId: '550e8400-e29b-41d4-a716-446655440099',
+      }),
+    });
+
+    expect(action.ctaLabel).toBe('Review next');
+    expect(action.reason).toContain('calculus exam review');
+    expect(action.routeParams.presetMode).toBe('STUDY');
+  });
+
   it('throws for invalid recommendation input so callers can fall back', () => {
     expect(() =>
       buildPostSessionNextAction({

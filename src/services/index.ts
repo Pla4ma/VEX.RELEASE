@@ -4,7 +4,6 @@
  * Shared services for the VEX application.
  */
 
-export * from './auth';
 export * from './supabaseAuth';
 export {
   initializePresence,

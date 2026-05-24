@@ -108,6 +108,8 @@ export const SessionSetupNavigationParamsSchema = z.object({
   sessionTags: z.array(z.string()).optional(),
 });
 
+export const SESSION_SETUP_SOURCE_ONBOARDING = 'onboarding_first_session';
+
 export type SessionSetupNavigationParams = z.infer<typeof SessionSetupNavigationParamsSchema>;
 
 export const SessionStartSummarySchema = z.object({

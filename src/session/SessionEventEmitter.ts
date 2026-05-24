@@ -1,583 +1,190 @@
 import { eventBus } from "../events";
-import type { SessionEventPayload } from "./types/events";
+import type { SessionEventChannels, SessionEventChannel } from "./types/events";
 import type {
-  SessionState,
   SessionSummary,
   InterruptionRecord,
   RecoveryRecord,
   AntiCheatFlag,
+  SessionState,
 } from "./types";
 import { createDebugger } from "../utils/debug";
+
 const debug = createDebugger("session:events");
+
+type Payload<E extends SessionEventChannel> = Omit<SessionEventChannels[E], "sessionId" | "userId" | "timestamp">;
+type PartialPayload<E extends SessionEventChannel> = Partial<Omit<SessionEventChannels[E], "sessionId" | "userId">>;
+
 export class SessionEventEmitter {
   private sessionId: string | null = null;
   private userId: string | null = null;
+
   attach(sessionId: string, userId: string): void {
     this.sessionId = sessionId;
     this.userId = userId;
     debug.debug("SessionEventEmitter attached to session %s", sessionId);
   }
+
   detach(): void {
     this.sessionId = null;
     this.userId = null;
     debug.debug("SessionEventEmitter detached");
   }
-  emitSessionCreated(
-    config: SessionEventPayload<"session:created">["config"],
+
+  private emit<E extends SessionEventChannel>(
+    channel: E,
+    payload: PartialPayload<E>
   ): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:created", {
+    if (!this.sessionId) return;
+    eventBus.publish(channel as never, {
       sessionId: this.sessionId,
       userId: this.userId,
-      config,
       timestamp: Date.now(),
-    });
+      ...payload,
+    } as never);
+  }
+
+  // --- named methods for ergonomic call-sites ---
+  emitSessionCreated(config: Payload<"session:created">["config"]): void {
+    this.emit("session:created", { config });
     debug.debug("Session created event emitted: %s", this.sessionId);
   }
   emitSessionStarting(countdown: number): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:starting", {
-      sessionId: this.sessionId,
-      countdown,
-      timestamp: Date.now(),
-    });
-    debug.debug(
-      "Session starting event emitted: %s (countdown: %d)",
-      this.sessionId,
-      countdown,
-    );
+    this.emit("session:starting", { countdown });
+    debug.debug("Session starting event emitted: %s (countdown: %d)", this.sessionId, countdown);
   }
   emitSessionStarted(phase: string): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:started", {
-      sessionId: this.sessionId,
-      startedAt: Date.now(),
-      phase,
-    });
+    this.emit("session:started", { startedAt: Date.now(), phase });
     debug.info("Session started event emitted: %s", this.sessionId);
   }
   emitSessionPaused(reason?: string): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:paused", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      pausedAt: Date.now(),
-      reason,
-    });
+    this.emit("session:paused", { pausedAt: Date.now(), reason });
     debug.debug("Session paused event emitted: %s", this.sessionId);
   }
   emitSessionResumed(pausedDuration: number): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:resumed", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      resumedAt: Date.now(),
-      pausedDuration,
-    });
-    debug.debug(
-      "Session resumed event emitted: %s (paused for %dms)",
-      this.sessionId,
-      pausedDuration,
-    );
+    this.emit("session:resumed", { resumedAt: Date.now(), pausedDuration });
+    debug.debug("Session resumed event emitted: %s", this.sessionId);
   }
   emitPhaseChanged(previousPhase: string, newPhase: string): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:phase:changed", {
-      sessionId: this.sessionId,
-      previousPhase,
-      newPhase,
-      timestamp: Date.now(),
-    });
-    debug.debug(
-      "Phase changed event emitted: %s -> %s",
-      previousPhase,
-      newPhase,
-    );
+    this.emit("session:phase:changed", { previousPhase, newPhase });
+    debug.debug("Phase changed: %s -> %s", previousPhase, newPhase);
   }
   emitIntervalCompleted(interval: number, totalIntervals: number): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:interval:completed", {
-      sessionId: this.sessionId,
-      interval,
-      totalIntervals,
-      timestamp: Date.now(),
-    });
-    debug.debug(
-      "Interval completed event emitted: %d/%d",
-      interval,
-      totalIntervals,
-    );
+    this.emit("session:interval:completed", { interval, totalIntervals });
+    debug.debug("Interval completed: %d/%d", interval, totalIntervals);
   }
   emitSessionCompleting(completionPercentage: number): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:completing", {
-      sessionId: this.sessionId,
-      timestamp: Date.now(),
-      completionPercentage,
-    });
-    debug.debug("Session completing event emitted: %s", this.sessionId);
+    this.emit("session:completing", { completionPercentage });
+    debug.debug("Session completing: %s", this.sessionId);
   }
   emitSessionCompleted(summary: SessionSummary): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:completed", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      summary,
-      timestamp: Date.now(),
-      duration: summary.effectiveDuration,
-    });
-    debug.info(
-      "Session completed event emitted: %s, Score: %d",
-      this.sessionId,
-      summary.finalScore,
-    );
+    this.emit("session:completed", { summary });
+    debug.info("Session completed: %s, Score: %d", this.sessionId, summary.finalScore);
   }
   emitSessionPartial(summary: SessionSummary, partialReason: string): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:partial", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      summary,
-      timestamp: Date.now(),
-      partialReason,
-    });
-    debug.info(
-      "Session partial event emitted: %s, Completion: %d%%",
-      this.sessionId,
-      summary.completionPercentage,
-    );
+    this.emit("session:partial", { summary, partialReason });
+    debug.info("Session partial: %s, Completion: %d%%", this.sessionId, summary.completionPercentage);
   }
-  emitSessionAbandoned(
-    abandonedAt: number,
-    reason?: string,
-    elapsedTime: number = 0,
-  ): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:abandoned", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      abandonedAt,
-      reason,
-      elapsedTime,
-    });
-    debug.warn(
-      "Session abandoned event emitted: %s (reason: %s)",
-      this.sessionId,
-      reason || "none",
-    );
+  emitSessionAbandoned(abandonedAt: number, reason?: string, elapsedTime: number = 0): void {
+    this.emit("session:abandoned", { abandonedAt, reason, elapsedTime });
+    debug.warn("Session abandoned: %s (reason: %s)", this.sessionId, reason || "none");
   }
   emitSessionFailed(error: string, canRecover: boolean = true): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:failed", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      error,
-      timestamp: Date.now(),
-      canRecover,
-    });
-    debug.error(
-      "Session failed event emitted: %s (error: %s)",
-      new Error(error),
-      this.sessionId,
-    );
+    this.emit("session:failed", { error, canRecover });
+    debug.error("Session failed: %s (error: %s)", this.sessionId, error);
   }
-  emitTick(
-    elapsed: number,
-    remaining: number,
-    percentage: number,
-    phase: string,
-  ): void {
-    if (!this.sessionId) {
-      return;
-    }
-    eventBus.publish("session:tick", {
-      sessionId: this.sessionId,
-      elapsed,
-      remaining,
-      percentage,
-      phase,
-    });
+  emitTick(elapsed: number, remaining: number, percentage: number, phase: string): void {
+    this.emit("session:tick", { elapsed, remaining, percentage, phase });
   }
-  emitProgress(
-    phase: string,
-    interval: number,
-    percentage: number,
-    timeRemaining: number,
-  ): void {
-    if (!this.sessionId) {
-      return;
-    }
-    eventBus.publish("session:progress", {
-      sessionId: this.sessionId,
-      phase,
-      interval,
-      percentage,
-      timeRemaining,
-    });
+  emitProgress(phase: string, interval: number, percentage: number, timeRemaining: number): void {
+    this.emit("session:progress", { phase, interval, percentage, timeRemaining });
   }
   emitInterruption(interruption: InterruptionRecord): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:interruption", {
-      sessionId: this.sessionId,
-      interruption,
-      userId: this.userId,
-    });
-    debug.warn(
-      "Interruption event emitted: %s (type: %s)",
-      this.sessionId,
-      interruption.type,
-    );
+    this.emit("session:interruption", { interruption });
+    debug.warn("Interruption: %s (type: %s)", this.sessionId, interruption.type);
   }
-  emitInterruptionRisk(
-    riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL",
-    timeUntilRisk: number,
-  ): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:interruption:risk", {
-      sessionId: this.sessionId,
-      riskLevel,
-      timeUntilRisk,
-      userId: this.userId,
-    });
-    debug.debug(
-      "Interruption risk event emitted: %s (%s, %dms until risk)",
-      this.sessionId,
-      riskLevel,
-      timeUntilRisk,
-    );
+  emitInterruptionRisk(riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL", timeUntilRisk: number): void {
+    this.emit("session:interruption:risk", { riskLevel, timeUntilRisk });
+    debug.debug("Interruption risk: %s", this.sessionId);
   }
   emitBackgrounded(backgroundedAt: number): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:backgrounded", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      backgroundedAt,
-    });
-    debug.debug("Session backgrounded event emitted: %s", this.sessionId);
+    this.emit("session:backgrounded", { backgroundedAt });
+    debug.debug("Session backgrounded: %s", this.sessionId);
   }
   emitForegrounded(foregroundedAt: number, duration: number): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:foregrounded", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      foregroundedAt,
-      duration,
-    });
-    debug.debug(
-      "Session foregrounded event emitted: %s (duration: %dms)",
-      this.sessionId,
-      duration,
-    );
+    this.emit("session:foregrounded", { foregroundedAt, duration });
+    debug.debug("Session foregrounded: %s", this.sessionId);
   }
   emitRecoveryAttempted(recovery: RecoveryRecord): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:recovery:attempted", {
-      sessionId: this.sessionId,
-      recovery,
-      userId: this.userId,
-    });
-    debug.info(
-      "Recovery attempted event emitted: %s (type: %s, success: %s)",
-      this.sessionId,
-      recovery.type,
-      recovery.success,
-    );
+    this.emit("session:recovery:attempted", { recovery });
+    debug.info("Recovery attempted: %s", this.sessionId);
   }
   emitRecoverySuccessful(recoveredAt: number, recoveredTime: number): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:recovery:successful", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      recoveredAt,
-      recoveredTime,
-    });
-    debug.info("Recovery successful event emitted: %s", this.sessionId);
+    this.emit("session:recovery:successful", { recoveredAt, recoveredTime });
+    debug.info("Recovery successful: %s", this.sessionId);
   }
   emitRecoveryFailed(failedAt: number, reason: string): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:recovery:failed", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      failedAt,
-      reason,
-    });
-    debug.error(
-      "Recovery failed event emitted: %s (reason: %s)",
-      new Error(reason),
-      this.sessionId,
-    );
+    this.emit("session:recovery:failed", { failedAt, reason });
+    debug.error("Recovery failed: %s (reason: %s)", this.sessionId, reason);
   }
   emitScoreUpdated(score: number, previousScore: number, reason: string): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:score:updated", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      score,
-      previousScore,
-      reason,
-    });
-    debug.debug(
-      "Score updated event emitted: %s (%d -> %d, reason: %s)",
-      this.sessionId,
-      previousScore,
-      score,
-      reason,
-    );
+    this.emit("session:score:updated", { score, previousScore, reason });
+    debug.debug("Score updated: %s (%d -> %d)", this.sessionId, previousScore, score);
   }
   emitBonusEarned(type: string, amount: number, description: string): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:bonus:earned", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      type,
-      amount,
-      description,
-    });
-    debug.info(
-      "Bonus earned event emitted: %s (%s: %d)",
-      this.sessionId,
-      type,
-      amount,
-    );
+    this.emit("session:bonus:earned", { type, amount, description });
+    debug.info("Bonus earned: %s (%s: %d)", this.sessionId, type, amount);
   }
-  emitDamageTaken(
-    amount: number,
-    reason: string,
-    remainingHealth?: number,
-  ): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:damage:taken", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      amount,
-      reason,
-      remainingHealth,
-    });
-    debug.warn(
-      "Damage taken event emitted: %s (%d, reason: %s)",
-      this.sessionId,
-      amount,
-      reason,
-    );
+  emitDamageTaken(amount: number, reason: string, remainingHealth?: number): void {
+    this.emit("session:damage:taken", { amount, reason, remainingHealth });
+    debug.warn("Damage taken: %s (%d)", this.sessionId, amount);
   }
   emitAntiCheatFlag(flag: AntiCheatFlag): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:anticheat:flag", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      flag,
-    });
-    debug.error(
-      "Anti-cheat flag event emitted: %s (%s: %s)",
-      new Error(`AntiCheat ${flag.type}`),
-      this.sessionId,
-      flag.severity,
-    );
+    this.emit("session:anticheat:flag", { flag });
+    debug.error("Anti-cheat flag: %s (%s)", this.sessionId, flag.severity);
   }
   emitAntiCheatCleared(clearedAt: number): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:anticheat:cleared", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      clearedAt,
-    });
-    debug.info("Anti-cheat cleared event emitted: %s", this.sessionId);
+    this.emit("session:anticheat:cleared", { clearedAt });
+    debug.info("Anti-cheat cleared: %s", this.sessionId);
   }
   emitSyncStarted(): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:sync:started", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      timestamp: Date.now(),
-    });
-    debug.debug("Sync started event emitted: %s", this.sessionId);
+    this.emit("session:sync:started", {});
+    debug.debug("Sync started: %s", this.sessionId);
   }
   emitSyncCompleted(): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:sync:completed", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      timestamp: Date.now(),
-    });
-    debug.debug("Sync completed event emitted: %s", this.sessionId);
+    this.emit("session:sync:completed", {});
+    debug.debug("Sync completed: %s", this.sessionId);
   }
   emitSyncFailed(error: string, willRetry: boolean): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:sync:failed", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      error,
-      timestamp: Date.now(),
-      willRetry,
-    });
-    debug.error(
-      "Sync failed event emitted: %s (error: %s, retry: %s)",
-      new Error(error),
-      this.sessionId,
-      willRetry,
-    );
+    this.emit("session:sync:failed", { error, willRetry });
+    debug.error("Sync failed: %s (error: %s)", this.sessionId, error);
   }
-  emitConflictDetected(
-    localState: SessionState,
-    remoteState: SessionState,
-  ): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:conflict:detected", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      localState,
-      remoteState,
-    });
-    debug.warn("Conflict detected event emitted: %s", this.sessionId);
+  emitConflictDetected(localState: SessionState, remoteState: SessionState): void {
+    this.emit("session:conflict:detected", { localState, remoteState });
+    debug.warn("Conflict detected: %s", this.sessionId);
   }
   emitConflictResolved(resolution: "LOCAL" | "REMOTE" | "MERGED"): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:conflict:resolved", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      resolution,
-      timestamp: Date.now(),
-    });
-    debug.info(
-      "Conflict resolved event emitted: %s (resolution: %s)",
-      this.sessionId,
-      resolution,
-    );
+    this.emit("session:conflict:resolved", { resolution });
+    debug.info("Conflict resolved: %s (result: %s)", this.sessionId, resolution);
   }
   emitStreakMaintained(streakDays: number): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:streak:maintained", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      streakDays,
-      timestamp: Date.now(),
-    });
-    debug.info(
-      "Streak maintained event emitted: %s (%d days)",
-      this.sessionId,
-      streakDays,
-    );
+    this.emit("session:streak:maintained", { streakDays });
+    debug.info("Streak maintained: %s (%d days)", this.sessionId, streakDays);
   }
   emitStreakBroken(previousStreak: number): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:streak:broken", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      previousStreak,
-      timestamp: Date.now(),
-    });
-    debug.warn(
-      "Streak broken event emitted: %s (was %d days)",
-      this.sessionId,
-      previousStreak,
-    );
+    this.emit("session:streak:broken", { previousStreak });
+    debug.warn("Streak broken: %s (was %d days)", this.sessionId, previousStreak);
   }
   emitStreakProtected(protectionType: string): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:streak:protected", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      protectionType,
-      timestamp: Date.now(),
-    });
-    debug.info(
-      "Streak protected event emitted: %s (type: %s)",
-      this.sessionId,
-      protectionType,
-    );
+    this.emit("session:streak:protected", { protectionType });
+    debug.info("Streak protected: %s (type: %s)", this.sessionId, protectionType);
   }
-  emitRewardsCalculated(rewards: {
-    xp: number;
-    coins: number;
-    gems: number;
-    bonuses: string[];
-  }): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:rewards:calculated", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      rewards,
-      timestamp: Date.now(),
-    });
-    debug.info("Rewards calculated event emitted: %s", this.sessionId);
+  emitRewardsCalculated(rewards: { xp: number; coins: number; gems: number; bonuses: string[] }): void {
+    this.emit("session:rewards:calculated", { rewards });
+    debug.info("Rewards calculated: %s", this.sessionId);
   }
   emitRewardsGranted(rewards: unknown): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:rewards:granted", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      rewards,
-      timestamp: Date.now(),
-    });
-    debug.info("Rewards granted event emitted: %s", this.sessionId);
+    this.emit("session:rewards:granted", { rewards });
+    debug.info("Rewards granted: %s", this.sessionId);
   }
   emitNotification(
     type: string,
@@ -586,60 +193,29 @@ export class SessionEventEmitter {
     priority: "low" | "normal" | "high" | "urgent" = "normal",
     data?: Record<string, unknown>,
   ): void {
-    if (!this.sessionId) {
-      return;
-    }
+    if (!this.sessionId) return;
     eventBus.publish("session:notification", {
       sessionId: this.sessionId,
-      type,
-      title,
-      body,
-      priority,
-      data,
+      type, title, body, priority, data,
     });
-    debug.debug("Notification event emitted: %s (%s)", this.sessionId, type);
+    debug.debug("Notification: %s (%s)", this.sessionId, type);
   }
   emitAnalyticsMilestone(milestone: string, value: number): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:analytics:milestone", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      milestone,
-      value,
-      timestamp: Date.now(),
-    });
-    debug.debug(
-      "Analytics milestone event emitted: %s (%s: %d)",
-      this.sessionId,
-      milestone,
-      value,
-    );
+    this.emit("session:analytics:milestone", { milestone, value });
+    debug.debug("Analytics milestone: %s (%s: %d)", this.sessionId, milestone, value);
   }
   emitAnalyticsEngagement(metric: string, value: number): void {
-    if (!this.sessionId || !this.userId) {
-      return;
-    }
-    eventBus.publish("session:analytics:engagement", {
-      sessionId: this.sessionId,
-      userId: this.userId,
-      metric,
-      value,
-      timestamp: Date.now(),
-    });
-    debug.debug(
-      "Analytics engagement event emitted: %s (%s: %d)",
-      this.sessionId,
-      metric,
-      value,
-    );
+    this.emit("session:analytics:engagement", { metric, value });
+    debug.debug("Analytics engagement: %s (%s: %d)", this.sessionId, metric, value);
   }
 }
+
 export function createSessionEventEmitter(): SessionEventEmitter {
   return new SessionEventEmitter();
 }
+
 let globalEmitter: SessionEventEmitter | null = null;
+
 export function getSessionEventEmitter(): SessionEventEmitter {
   if (!globalEmitter) {
     globalEmitter = new SessionEventEmitter();

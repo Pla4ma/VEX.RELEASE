@@ -32,7 +32,7 @@ export function useStudySession() {
 
   const currentSessionQuery = useQuery({
     queryKey: studySessionKeys.current(),
-    queryFn: () => orchestrator.getSessionState(),
+    queryFn: () => orchestrator.getSession(),
     refetchInterval: 1000,
   });
 

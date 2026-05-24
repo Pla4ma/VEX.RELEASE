@@ -1,16 +1,20 @@
 import { z } from 'zod';
-import type { CoachPresenceMotivationStyle } from './schemas';
+import type { CoachMemoryConfidence, CoachPresenceMotivationStyle } from './schemas';
+
+const LatestSessionSchema = z.object({
+  durationMinutes: z.number().int().min(0),
+  focusPurityScore: z.number().min(0).max(100),
+  mode: z.string().min(1),
+  isComeback: z.boolean(),
+}).strict();
 
 const CoachPresenceContextSchema = z.object({
   motivationStyle: z.enum(['CALM', 'FRIENDLY', 'STUDY_FOCUSED', 'GAME_LIKE', 'COACH_LED', 'INTENSE']),
   primaryGoal: z.enum(['focus', 'study', 'work', 'creative', 'personal', 'learning']),
   firstWeekStage: z.string().min(1).nullable(),
-  latestSession: z.object({
-    durationMinutes: z.number().int().min(0),
-    focusPurityScore: z.number().min(0).max(100),
-    mode: z.string().min(1),
-    isComeback: z.boolean(),
-  }).nullable(),
+  latestSession: LatestSessionSchema.nullable(),
+  memoryConfidence: z.enum(['none', 'weak', 'medium', 'strong']),
+  sessionMode: z.enum(['inactive', 'active_focus', 'active_paused', 'active_risk', 'completed']),
   comebackState: z.enum(['none', 'missed_1_day', 'missed_2_3_days', 'missed_week', 'returning_after_long_gap']).nullable(),
   studyLayerLabel: z.string().min(1).nullable(),
   bossIntensity: z.enum(['hidden', 'subtle', 'tiny_tease', 'visible', 'standard', 'game-like', 'intense']).nullable(),
@@ -25,16 +29,14 @@ const CoachPresenceMessageOutputSchema = z.object({
   visualMood: z.enum(['steady', 'focused', 'celebrating', 'recovering', 'ready']),
   safeIntent: z.enum(['START_SESSION', 'START_STUDY_SESSION', 'REVIEW_PROGRESS', 'TAKE_BREAK', 'CONTINUE_PLAN', 'REFLECT']),
   optionalActionLabel: z.string().min(1).max(32).nullable(),
+  shouldShow: z.boolean(),
+  displayMode: z.enum(['quiet', 'welcome', 'reflection', 'pattern', 'intervention']),
 }).strict();
 
 export type CoachPresenceContext = z.infer<typeof CoachPresenceContextSchema>;
 export type CoachPresenceMessageOutput = z.infer<typeof CoachPresenceMessageOutputSchema>;
 
-type ToneResult = CoachPresenceMessageOutput['tone'];
-type MoodResult = CoachPresenceMessageOutput['visualMood'];
-type IntentResult = CoachPresenceMessageOutput['safeIntent'];
-
-const TONE_MAP: Record<CoachPresenceMotivationStyle, ToneResult> = {
+const TONE_MAP: Record<CoachPresenceMotivationStyle, CoachPresenceMessageOutput['tone']> = {
   CALM: 'calm',
   FRIENDLY: 'warm',
   COACH_LED: 'direct',
@@ -43,7 +45,7 @@ const TONE_MAP: Record<CoachPresenceMotivationStyle, ToneResult> = {
   STUDY_FOCUSED: 'studious',
 };
 
-const MOOD_MAP: Record<CoachPresenceMotivationStyle, MoodResult> = {
+const MOOD_MAP: Record<CoachPresenceMotivationStyle, CoachPresenceMessageOutput['visualMood']> = {
   CALM: 'steady',
   FRIENDLY: 'focused',
   COACH_LED: 'ready',
@@ -52,110 +54,118 @@ const MOOD_MAP: Record<CoachPresenceMotivationStyle, MoodResult> = {
   STUDY_FOCUSED: 'steady',
 };
 
-function resolveIntent(ctx: CoachPresenceContext): IntentResult {
-  if (ctx.completionContext === 'comeback' || ctx.comebackState && ctx.comebackState !== 'none') {
-    return ctx.primaryGoal === 'study' || ctx.primaryGoal === 'learning' ? 'START_STUDY_SESSION' : 'START_SESSION';
-  }
+function styleMessage(style: CoachPresenceMotivationStyle, messages: Record<CoachPresenceMotivationStyle, string>): string {
+  return messages[style];
+}
+
+function resolveIntent(ctx: CoachPresenceContext): CoachPresenceMessageOutput['safeIntent'] {
+  if (ctx.completionContext === 'low_energy') return 'TAKE_BREAK';
   if (ctx.primaryGoal === 'study' || ctx.primaryGoal === 'learning') return 'START_STUDY_SESSION';
   return 'START_SESSION';
 }
 
 function resolveActionLabel(ctx: CoachPresenceContext): string | null {
-  if (ctx.primaryGoal === 'study' || ctx.primaryGoal === 'learning') return 'Next study block';
   if (ctx.completionContext === 'low_energy') return 'Take a break';
   if (ctx.comebackState && ctx.comebackState !== 'none') return 'Start small';
+  if (ctx.primaryGoal === 'study' || ctx.primaryGoal === 'learning') return 'Next study block';
   return 'Start focus';
 }
 
-function buildMessage(ctx: CoachPresenceContext): string {
-  if (!ctx.aiAvailable) {
-    return styleMessage(ctx.motivationStyle, {
-      CALM: 'Start with the last rhythm that worked. One clean block.',
-      COACH_LED: 'Start the saved plan. I will adjust after the block.',
-      FRIENDLY: 'Use the saved next step. We will tune it after.',
-      GAME_LIKE: 'Run the saved mission. Progress still counts.',
-      INTENSE: 'Start the saved target. No drift.',
-      STUDY_FOCUSED: 'Use the saved study step. Review first.',
-    });
-  }
+function getDisplayMode(ctx: CoachPresenceContext): CoachPresenceMessageOutput['displayMode'] {
+  if (ctx.sessionMode === 'active_focus' && ctx.motivationStyle === 'CALM') return 'quiet';
+  if (ctx.sessionMode === 'active_paused' || ctx.sessionMode === 'active_risk') return 'intervention';
+  if (ctx.memoryConfidence === 'none') return 'welcome';
+  if (ctx.memoryConfidence === 'weak') return 'reflection';
+  return 'pattern';
+}
 
-  if (ctx.completionContext === 'first_session') {
-    return styleMessage(ctx.motivationStyle, {
-      CALM: 'First session is real now. Tomorrow starts with one clean block.',
-      COACH_LED: 'First proof logged. Tomorrow, repeat the clean start.',
-      FRIENDLY: 'First finish saved. Come back to the next small step.',
-      GAME_LIKE: 'First run banked. Tomorrow starts the next mark.',
-      INTENSE: 'First proof logged. Repeat it tomorrow.',
-      STUDY_FOCUSED: 'First study proof is in. Queue the next review block.',
-    });
-  }
+function getConfidence(sessionCount: number): CoachMemoryConfidence {
+  if (sessionCount <= 0) return 'none';
+  if (sessionCount < 3) return 'weak';
+  if (sessionCount < 5) return 'medium';
+  return 'strong';
+}
 
-  if (ctx.completionContext === 'comeback') {
-    return 'That return counted. Keep the next block small.';
-  }
+export function getCoachMemoryConfidence(sessionCount: number, syncAvailable: boolean): CoachMemoryConfidence {
+  if (!syncAvailable) return 'none';
+  return getConfidence(sessionCount);
+}
 
-  if (ctx.completionContext === 'streak_recovery') {
-    return 'The chain is breathing again. Protect it next.';
-  }
-
-  if (ctx.completionContext === 'high_focus') {
-    return 'High-focus rhythm is showing. Use it once more.';
-  }
-
-  if (ctx.completionContext === 'low_energy') {
-    return 'Low-energy day, still banked. Recover with care.';
-  }
-
-  if (ctx.completionContext === 'study') {
-    return ctx.motivationStyle === 'STUDY_FOCUSED'
-      ? 'Study thread stayed alive. Queue the next review pass.'
-      : 'Study block finished. Keep the thread warm.';
-  }
-
-  if (ctx.completionContext === 'short') {
-    return 'Short block landed. Stack one more easy rep.';
-  }
-
-  if (ctx.completionContext === 'long') {
-    return 'Long block held. Let the next move be lighter.';
-  }
-
-  if (ctx.comebackState && ctx.comebackState !== 'none') {
-    return styleMessage(ctx.motivationStyle, {
-      CALM: 'You are not behind. Start with one clean session.',
-      COACH_LED: 'Reset the rhythm. Twenty minutes is enough.',
-      FRIENDLY: 'Come back small. One block is enough.',
-      GAME_LIKE: 'The run is not over. One clean block restarts motion.',
-      INTENSE: 'No speech. Reset with one block.',
-      STUDY_FOCUSED: 'Do one review block before adding new material.',
-    });
-  }
-
-  if (ctx.premiumMoment && ctx.premiumMoment !== 'none' && ctx.premiumMoment !== 'hidden') {
-    return 'Your rhythm is forming. See what VEX Pro can learn from it.';
-  }
-
+function buildDayZeroMessage(ctx: CoachPresenceContext): string {
+  if (!ctx.aiAvailable) return 'Coach memory is offline. Start one clean block.';
   return styleMessage(ctx.motivationStyle, {
-    CALM: 'Your rhythm is warm. One clean block next.',
-    COACH_LED: 'Next rep is clear. Start the block.',
-    FRIENDLY: 'The next block has a clear shape. Start there.',
-    GAME_LIKE: 'Your streak has a lane. Bank the next block.',
-    INTENSE: 'Window is open. Take the block now.',
-    STUDY_FOCUSED: 'Your study block is ready. Start there.',
+    CALM: 'Welcome. Start one clean block; I will learn from real sessions.',
+    COACH_LED: 'Start the first block. I will coach from real proof after.',
+    FRIENDLY: 'Welcome in. Finish one block and I will shape the next step from it.',
+    GAME_LIKE: 'First mission: finish one block. Memory starts after that.',
+    INTENSE: 'No history yet. Prove the first block.',
+    STUDY_FOCUSED: 'Start one review-ready block. Study memory begins after it.',
   });
 }
 
-function styleMessage(style: CoachPresenceMotivationStyle, messages: Record<CoachPresenceMotivationStyle, string>): string {
-  return messages[style];
+function buildSessionMessage(ctx: CoachPresenceContext): string | null {
+  if (!ctx.latestSession || ctx.memoryConfidence === 'none') return null;
+  if (ctx.latestSession.isComeback || ctx.comebackState && ctx.comebackState !== 'none') {
+    return `Your last session was a ${ctx.latestSession.durationMinutes}-min return. Keep the next block small.`;
+  }
+  if (ctx.latestSession.mode === 'STUDY') {
+    return `Your last session was ${ctx.latestSession.durationMinutes} min of study. Review next.`;
+  }
+  return `Your last session was ${ctx.latestSession.durationMinutes} min at ${Math.round(ctx.latestSession.focusPurityScore)} focus.`;
+}
+
+function buildPatternMessage(ctx: CoachPresenceContext): string | null {
+  if (ctx.memoryConfidence === 'none' || ctx.memoryConfidence === 'weak') return null;
+  if (ctx.memoryConfidence === 'medium') {
+    return ctx.primaryGoal === 'study'
+      ? 'I noticed your study rhythm forming. Review before adding more.'
+      : 'I noticed your start pattern forming. Repeat the clean opening.';
+  }
+  return styleMessage(ctx.motivationStyle, {
+    CALM: 'You usually restart best from one quiet block.',
+    COACH_LED: 'You usually move after a clear target. Start there.',
+    FRIENDLY: 'You usually build momentum from one simple next step.',
+    GAME_LIKE: 'You usually bank the run by taking the next small mission.',
+    INTENSE: 'You usually respond to a clear target. Take it.',
+    STUDY_FOCUSED: 'You usually hold study better when review comes first.',
+  });
+}
+
+function buildActiveMessage(ctx: CoachPresenceContext): string | null {
+  if (ctx.sessionMode === 'active_focus' && ctx.motivationStyle === 'CALM') return null;
+  if (ctx.sessionMode === 'active_paused') return 'Session paused. Resume when ready.';
+  if (ctx.sessionMode === 'active_risk') return ctx.motivationStyle === 'INTENSE'
+    ? 'Distraction. Recover the block now.'
+    : 'Interruption noticed. Return with one clean breath.';
+  return null;
+}
+
+function buildMessage(ctx: CoachPresenceContext): string {
+  const active = buildActiveMessage(ctx);
+  if (active) return active;
+  if (ctx.completionContext === 'first_session') return 'First session is real now. Choose the next block.';
+  if (ctx.completionContext === 'comeback') return 'That return counted. Keep the next block small.';
+  if (ctx.completionContext === 'low_energy') return 'Low-energy day, still banked. Recover with care.';
+  if (ctx.comebackState && ctx.comebackState !== 'none') {
+    return 'You are not behind. Start with one clean session.';
+  }
+  if (ctx.memoryConfidence === 'none') return buildDayZeroMessage(ctx);
+  if (ctx.premiumMoment && ctx.premiumMoment !== 'none' && ctx.premiumMoment !== 'hidden' && ctx.memoryConfidence === 'strong') {
+    return 'Your rhythm is real now. VEX Pro can go deeper with it.';
+  }
+  return buildPatternMessage(ctx) ?? buildSessionMessage(ctx) ?? buildDayZeroMessage(ctx);
 }
 
 export function getCoachPresenceMessage(rawContext: unknown): CoachPresenceMessageOutput {
   const ctx = CoachPresenceContextSchema.parse(rawContext);
-  const message = buildMessage(ctx);
-  const tone = TONE_MAP[ctx.motivationStyle];
-  const visualMood = MOOD_MAP[ctx.motivationStyle];
-  const safeIntent = resolveIntent(ctx);
-  const optionalActionLabel = resolveActionLabel(ctx);
-
-  return CoachPresenceMessageOutputSchema.parse({ message, tone, visualMood, safeIntent, optionalActionLabel });
+  const displayMode = getDisplayMode(ctx);
+  return CoachPresenceMessageOutputSchema.parse({
+    message: buildMessage(ctx),
+    tone: TONE_MAP[ctx.motivationStyle],
+    visualMood: MOOD_MAP[ctx.motivationStyle],
+    safeIntent: resolveIntent(ctx),
+    optionalActionLabel: resolveActionLabel(ctx),
+    shouldShow: displayMode !== 'quiet',
+    displayMode,
+  });
 }

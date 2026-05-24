@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
-import { useAuth } from '../../../auth/hooks/useAuth';
+import { useAuthStore } from '../../../store';
 import { getRepairQuestStatus } from '../streak-repair-quest';
 import { RepairQuestStatusOutputSchema } from '../schemas-enhanced';
 import type { RepairQuestStatusOutput } from '../schemas-enhanced';
@@ -22,7 +22,7 @@ export function useRepairQuestStatus(): Pick<
   | 'progressPercent'
   | 'hoursRemaining'
 > {
-  const { userId } = useAuth();
+  const userId = useAuthStore((state) => state.userId);
   const {
     data: status,
     isLoading: isStatusLoading,

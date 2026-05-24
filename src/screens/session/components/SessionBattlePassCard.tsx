@@ -9,12 +9,20 @@ import { Box, Text } from '../../../components/primitives';
 import { useBattlePassDisplay, useUserBattlePassSummary } from '../../../features/battle-pass/hooks';
 import { useActiveSeason } from '../../../features/seasons/hooks';
 import { useTheme } from '../../../theme';
+import { useFeatureAccess } from '../../../features/liveops-config';
+import { getFeatureAvailability } from '../../../features/liveops-config/feature-availability';
 
 function clamp(value: number) {
   return Math.max(0, Math.min(1, value));
 }
 
 export function SessionBattlePassCard({ sessionBattlePassXp, userId }: { sessionBattlePassXp: number; userId: string }) {
+  const featureAccess = useFeatureAccess();
+  const battlePassAvail = getFeatureAvailability(featureAccess.features.battle_pass);
+  if (!battlePassAvail.canRenderEntryPoint) {
+    return null;
+  }
+
   const { theme } = useTheme();
   const { data: activeSeason, isLoading: isSeasonLoading } = useActiveSeason();
   const summaryQuery = useUserBattlePassSummary(userId, activeSeason?.id ?? '');

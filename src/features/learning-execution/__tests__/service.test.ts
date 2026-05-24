@@ -22,7 +22,7 @@ describe('learning execution service', () => {
     expect(joined.toLowerCase()).not.toMatch(/study|quiz|homework/);
   });
 
-  it('allows healthy student content upload early', () => {
+  it('keeps healthy student content upload out of Day 0', () => {
     expect(
       buildContentStudyGate({
         aiConfigured: true,
@@ -33,7 +33,10 @@ describe('learning execution service', () => {
         storageConfigured: true,
         totalCompletedSessions: 0,
       }),
-    ).toEqual({ fallback: null, showUploadEntry: true });
+    ).toEqual({
+      fallback: 'Start with a study target and one focused block.',
+      showUploadEntry: false,
+    });
   });
 
   it('does not show upload study wording to non-students on day zero', () => {
@@ -49,6 +52,21 @@ describe('learning execution service', () => {
 
     expect(gate.showUploadEntry).toBe(false);
     expect(gate.fallback).toBe('Attach a goal to your session');
+  });
+
+  it('unlocks content upload after Study Path is established', () => {
+    const gate = buildContentStudyGate({
+      aiConfigured: true,
+      featureHealth: 'healthy',
+      goal: 'STUDY',
+      hasPrivacyDisclosure: true,
+      rateLimitsConfigured: true,
+      storageConfigured: true,
+      totalCompletedSessions: 3,
+    });
+
+    expect(gate.showUploadEntry).toBe(true);
+    expect(gate.fallback).toBeNull();
   });
 
   it('uses a graceful fallback when content study is degraded', () => {
@@ -92,11 +110,12 @@ describe('learning execution service', () => {
   });
 
   describe('adaptive naming: all five personae', () => {
-    it('STUDY goal → student persona, Study OS label', () => {
+    it('STUDY goal maps to simple Study label', () => {
       expect(resolveLearningExecutionPersona({ goal: 'STUDY' })).toBe('student');
       const copy = buildLearningExecutionCopy({ persona: 'student' });
-      expect(copy.layerName).toBe('Study OS');
-      expect(copy.homeTitle).toBe('Study OS');
+      expect(copy.layerName).toBe('Study');
+      expect(copy.homeTitle).toBe('Study');
+      expect(copy.emptyCta).toBe('Start study session');
     });
 
     it('LEARNING goal → learning persona, Learning OS label', () => {
@@ -131,7 +150,7 @@ describe('learning execution service', () => {
   describe('school-only copy does not leak to non-study users', () => {
     it('study user copy allows school wording', () => {
       const copy = buildLearningExecutionCopy({ persona: 'student' });
-      expect(copy.layerName).toBe('Study OS');
+      expect(copy.layerName).toBe('Study');
     });
 
     it('work user copy has no quiz/homework/chapter references', () => {
@@ -160,7 +179,7 @@ describe('learning execution service', () => {
   });
 
   describe('LEARNING goal content study gate', () => {
-    it('allows content upload for LEARNING users', () => {
+    it('delays content upload for LEARNING users on Day 0', () => {
       const gate = buildContentStudyGate({
         aiConfigured: true,
         featureHealth: 'healthy',
@@ -171,8 +190,8 @@ describe('learning execution service', () => {
         totalCompletedSessions: 0,
       });
 
-      expect(gate.showUploadEntry).toBe(true);
-      expect(gate.fallback).toBeNull();
+      expect(gate.showUploadEntry).toBe(false);
+      expect(gate.fallback).toContain('study target');
     });
   });
 });

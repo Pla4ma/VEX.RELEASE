@@ -2,8 +2,6 @@ import { z } from "zod";
 
 import { eventBus } from "../../events";
 import { applyBossDamageRules } from "../../features/boss/damage-rules";
-import { consumeBountiesOnDamage } from "../../features/boss/BossBountySystem";
-import { recordBountyLootBoost } from "../../features/boss/bounty-loot-boost";
 import { applyDamage, getActiveEncounter } from "../../features/boss/service";
 import { getDailyBossDamageMultiplier } from "../../features/live-ops/daily-modifiers";
 import { getAvailabilityFor } from "../../features/liveops-config/feature-access-store";
@@ -129,27 +127,6 @@ export function initializeSessionBossIntegration(): () => void {
           sessionId,
           damage,
         });
-
-        const bountyBoost = consumeBountiesOnDamage(activeEncounter.id, damage);
-        if (bountyBoost.consumedCount > 0) {
-          recordBountyLootBoost({
-            userId,
-            sessionId,
-            encounterId: activeEncounter.id,
-            lootMultiplier: bountyBoost.lootMultiplier,
-            consumedCount: bountyBoost.consumedCount,
-          });
-          eventBus.publish("analytics:track", {
-            event: "boss_bounty_loot_boost_armed",
-            properties: {
-              userId,
-              sessionId,
-              encounterId: activeEncounter.id,
-              consumedCount: bountyBoost.consumedCount,
-              lootMultiplier: bountyBoost.lootMultiplier,
-            },
-          });
-        }
       } catch (error) {
         debug.error(
           "Failed to apply boss damage from session completion",

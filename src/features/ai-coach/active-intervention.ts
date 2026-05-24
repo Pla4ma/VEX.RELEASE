@@ -28,9 +28,15 @@ export function buildActiveIntervention(input: {
   state: CoachState | null | undefined;
   profile: BehaviorProfile | null | undefined;
   messages: CoachMessage[] | null | undefined;
+  sessionMode?: 'active_focus' | 'active_paused' | 'active_risk' | 'inactive';
+  motivationStyle?: 'CALM' | 'FRIENDLY' | 'STUDY_FOCUSED' | 'GAME_LIKE' | 'COACH_LED' | 'INTENSE';
 }): ActiveIntervention | null {
   const { userId, state, profile, messages } = input;
   if (!userId || !state || !profile) {return null;}
+
+  if (input.sessionMode === 'active_focus' && input.motivationStyle === 'CALM') {
+    return null;
+  }
 
   if (state.currentState === 'STREAK_AT_RISK') {
     const rawHours = getSignalValue(profile, 'LAST_SESSION_HOURS');

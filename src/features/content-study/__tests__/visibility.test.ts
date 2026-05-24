@@ -21,7 +21,7 @@ function baseInput() {
 
 describe('ContentStudyVisibility', () => {
   describe('student user', () => {
-    it('sees content study upload on Day 0', () => {
+    it('sees simple study session, not upload, on Day 0', () => {
       const result = buildContentStudyVisibility({
         ...baseInput(),
         motivationStyle: 'study_focused',
@@ -29,8 +29,9 @@ describe('ContentStudyVisibility', () => {
       });
 
       expect(result.canShowTeaser).toBe(true);
-      expect(result.canShowUploadEntry).toBe(true);
-      expect(result.canNavigateToUpload).toBe(true);
+      expect(result.canShowUploadEntry).toBe(false);
+      expect(result.canNavigateToUpload).toBe(false);
+      expect(result.fallbackLabel).toContain('study target');
     });
 
     it('sees content study when engaged', () => {
@@ -38,7 +39,7 @@ describe('ContentStudyVisibility', () => {
         ...baseInput(),
         motivationStyle: 'study_focused',
         primaryGoal: 'study',
-        totalCompletedSessions: 5,
+        totalCompletedSessions: 3,
         studyUsageRatio: 0.8,
       });
 
@@ -60,7 +61,7 @@ describe('ContentStudyVisibility', () => {
       expect(result.fallbackLabel).toBe('Attach a target to your session');
     });
 
-    it('sees lighter wording after sessions', () => {
+    it('stays on deep work path after sessions', () => {
       const result = buildContentStudyVisibility({
         ...baseInput(),
         motivationStyle: 'coach_led',
@@ -68,13 +69,14 @@ describe('ContentStudyVisibility', () => {
         totalCompletedSessions: 4,
       });
 
-      expect(result.canShowTeaser).toBe(true);
-      expect(result.canShowUploadEntry).toBe(true);
+      expect(result.canShowTeaser).toBe(false);
+      expect(result.canShowUploadEntry).toBe(false);
+      expect(result.fallbackLabel).toBe('Build a deep work path');
     });
   });
 
   describe('learning user', () => {
-    it('sees content study early', () => {
+    it('sees Study Session before Content Study unlock', () => {
       const result = buildContentStudyVisibility({
         ...baseInput(),
         motivationStyle: 'study_focused',
@@ -83,7 +85,7 @@ describe('ContentStudyVisibility', () => {
       });
 
       expect(result.canShowTeaser).toBe(true);
-      expect(result.canShowUploadEntry).toBe(true);
+      expect(result.canShowUploadEntry).toBe(false);
     });
   });
 
@@ -99,7 +101,7 @@ describe('ContentStudyVisibility', () => {
 
       expect(result.canShowUploadEntry).toBe(false);
       expect(result.canRunBackend).toBe(false);
-      expect(result.fallbackLabel).toContain('restore content');
+      expect(result.fallbackLabel).toContain('Start a study session');
     });
 
     it('allows normal session via fallback', () => {
@@ -110,7 +112,7 @@ describe('ContentStudyVisibility', () => {
         featureHealth: 'degraded',
       });
 
-      expect(result.fallbackLabel).toContain('Start a normal session');
+      expect(result.fallbackLabel).toContain('Start a study session');
     });
   });
 
@@ -157,7 +159,7 @@ describe('ContentStudyVisibility', () => {
       });
 
       expect(result.canShowTeaser).toBe(true);
-      expect(result.canShowUploadEntry).toBe(true);
+      expect(result.canShowUploadEntry).toBe(false);
       expect(result.canNavigateToUpload).toBe(false);
     });
 
@@ -172,6 +174,7 @@ describe('ContentStudyVisibility', () => {
       });
 
       expect(result.canRunBackend).toBe(false);
+      expect(result.canShowUploadEntry).toBe(false);
     });
   });
 

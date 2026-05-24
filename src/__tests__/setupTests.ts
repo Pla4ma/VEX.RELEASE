@@ -107,6 +107,7 @@ try {
 try {
   jest.mock('expo-secure-store', () => ({ getItemAsync: jest.fn(() => Promise.resolve(null)), setItemAsync: jest.fn(() => Promise.resolve()), deleteItemAsync: jest.fn(() => Promise.resolve()) }));
   jest.mock('expo-linear-gradient', () => ({ LinearGradient: 'LinearGradient' }));
+  jest.mock('expo-document-picker', () => ({ getDocumentAsync: jest.fn(() => Promise.resolve({ canceled: true, assets: [] })), DocumentPicker: { types: jest.fn(() => 'application/pdf') }, isCanceled: jest.fn(() => false) }));
   jest.mock('@react-native-async-storage/async-storage', () => ({ setItem: jest.fn(() => Promise.resolve()), getItem: jest.fn(() => Promise.resolve(null)), removeItem: jest.fn(() => Promise.resolve()), mergeItem: jest.fn(() => Promise.resolve()), clear: jest.fn(() => Promise.resolve()), getAllKeys: jest.fn(() => Promise.resolve([])), multiGet: jest.fn(() => Promise.resolve([])), multiSet: jest.fn(() => Promise.resolve()), multiRemove: jest.fn(() => Promise.resolve()), multiMerge: jest.fn(() => Promise.resolve()) }));
   jest.mock('@react-native-community/netinfo', () => ({ addEventListener: jest.fn(() => jest.fn()), fetch: jest.fn(() => Promise.resolve({ type: 'wifi', isConnected: true, isInternetReachable: true })), useNetInfo: jest.fn(() => ({ type: 'wifi', isConnected: true, isInternetReachable: true })) }));
 } catch (error) {

@@ -84,7 +84,7 @@ export function useSessionCompleteController(input: { sessionId: string; summary
         study: getFeatureAvailability(disclosure.features.content_study),
       },
       memorySummary: coachMemoryQuery.data ?? {
-        coachMemoryCount: 0, companionMemoryCount: 0, latestMemory: null,
+        coachMemoryCount: 0, companionMemoryCount: 0, latestMemory: null, syncAvailable: false,
       },
       motivationStyle: mapCompletionMotivationStyle(motivationProfile?.primary),
       summary: {

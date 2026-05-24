@@ -4,7 +4,6 @@ import { Box, Button, Text } from '../../../components/primitives';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
 import { Icon } from '../../../icons';
 import { useTheme } from '../../../theme';
-import { SessionBattlePassCard } from './SessionBattlePassCard';
 
 type ProgressMetric = {
   id: string;
@@ -18,12 +17,10 @@ type ProgressMetric = {
 };
 
 type SessionProgressionCardProps = {
-  coinsEarned: number;
   isRewardSyncing: boolean;
   levelMetric: ProgressMetric | null;
   rewardCreditStatus: 'idle' | 'crediting' | 'success' | 'retrying' | 'failed';
   rewardError: string | null;
-  sessionBattlePassXp: number;
   streakLabel: string;
   streakIncreased: boolean;
   studyProgress: {
@@ -46,7 +43,6 @@ type SessionProgressionCardProps = {
       suggestedDurationMinutes: number;
     } | null;
   } | null;
-  userId: string;
   onRetryRewards: () => void;
   onStartNewSession: () => void;
 };
@@ -72,9 +68,13 @@ function MetricRow({ metric, delay }: { metric: ProgressMetric; delay: number })
   );
 }
 
-export function SessionProgressionCard({ coinsEarned, isRewardSyncing, levelMetric, rewardCreditStatus, rewardError, sessionBattlePassXp, streakLabel, streakIncreased, studyProgress, userId, onRetryRewards, onStartNewSession: _onStartNewSession }: SessionProgressionCardProps) {
+function isProgressMetric(metric: ProgressMetric | null): metric is ProgressMetric {
+  return metric !== null;
+}
+
+export function SessionProgressionCard({ isRewardSyncing, levelMetric, rewardCreditStatus, rewardError, streakLabel, streakIncreased, studyProgress, onRetryRewards, onStartNewSession: _onStartNewSession }: SessionProgressionCardProps) {
   const { theme } = useTheme();
-  const metrics = [levelMetric].filter(Boolean) as ProgressMetric[];
+  const metrics = [levelMetric].filter(isProgressMetric);
   const rewardStatusMessage = rewardCreditStatus === 'crediting' ? 'Saving rewards...' : rewardCreditStatus === 'retrying' ? 'Retrying reward sync...' : rewardCreditStatus === 'success' ? 'Rewards saved' : rewardCreditStatus === 'failed' ? 'Rewards are waiting to sync' : null;
   const rewardStatusColor = rewardCreditStatus === 'success' ? theme.colors.success.DEFAULT : rewardCreditStatus === 'failed' ? theme.colors.warning.DEFAULT : theme.colors.text.secondary;
 
@@ -87,8 +87,6 @@ export function SessionProgressionCard({ coinsEarned, isRewardSyncing, levelMetr
       </Animated.View>
       {metrics.length > 0 ? metrics.map((metric, index) => <MetricRow key={metric.id} metric={metric} delay={index * 150} />) : <Animated.View entering={FadeInUp.delay(150).springify()}><Box p={18} style={{ backgroundColor: theme.colors.background.secondary, borderWidth: 1, borderColor: theme.colors.border.light, ...getPremiumCardStyle('medium') }}><Text variant="body" color={theme.colors.text.secondary}>Progression data is syncing. Your rewards are still safe.</Text></Box></Animated.View>}
       <Animated.View entering={FadeInUp.delay(150).springify()}><Box p={18} style={{ backgroundColor: theme.colors.background.secondary, borderWidth: 1, borderColor: theme.colors.border.light, ...getPremiumCardStyle('medium') }}><Box flexDirection="row" alignItems="center" justifyContent="space-between"><Text variant="h4" color={theme.colors.text.primary}>Streak {streakLabel}</Text>{streakIncreased ? <Box px={10} py={4} borderRadius={999} style={{ backgroundColor: theme.colors.warning.DEFAULT }}><Text variant="caption" color={theme.colors.text.inverse}>+1</Text></Box> : null}</Box></Box></Animated.View>
-      <Animated.View entering={FadeInUp.delay(300).springify()}><Box p={18} style={{ backgroundColor: theme.colors.background.secondary, borderWidth: 1, borderColor: theme.colors.border.light, ...getPremiumCardStyle('medium') }}><Box flexDirection="row" alignItems="center" justifyContent="space-between"><Box flexDirection="row" alignItems="center" gap={10}><Icon name="gift" size={18} color={theme.colors.warning.light} /><Text variant="label" color={theme.colors.text.secondary}>Coins Earned</Text></Box><Text variant="body" color={theme.colors.text.primary} fontWeight="800">+{coinsEarned} coins</Text></Box></Box></Animated.View>
-      <Animated.View entering={FadeInUp.delay(450).springify()}><SessionBattlePassCard sessionBattlePassXp={sessionBattlePassXp} userId={userId} /></Animated.View>
       {studyProgress ? <Animated.View entering={FadeInUp.delay(600).springify()}><Box p={18} style={{ backgroundColor: `${theme.colors.primary[500]}08`, borderWidth: 1, borderColor: theme.colors.primary[500], ...getPremiumCardStyle('medium') }}>
         {/* Header with Plan Title */}
         <Box flexDirection="row" alignItems="center" justifyContent="space-between" mb={12}>
@@ -151,7 +149,7 @@ export function SessionProgressionCard({ coinsEarned, isRewardSyncing, levelMetr
   accessibilityHint="Activates this control">Skip</Button>
         </Box>
       </Box></Animated.View> : null}
-      {isRewardSyncing || rewardError ? <Animated.View entering={FadeInUp.delay(750).springify()}><Box alignItems="center" gap={8}>{isRewardSyncing ? <Text variant="caption" color={theme.colors.text.secondary}>Applying chest rewards...</Text> : null}{rewardError ? <Text variant="caption" color={theme.colors.error.DEFAULT}>{rewardError}</Text> : null}{rewardError ? <Button variant="outline" size="sm" onPress={onRetryRewards}
+      {isRewardSyncing || rewardError ? <Animated.View entering={FadeInUp.delay(750).springify()}><Box alignItems="center" gap={8}>{isRewardSyncing ? <Text variant="caption" color={theme.colors.text.secondary}>Applying rewards...</Text> : null}{rewardError ? <Text variant="caption" color={theme.colors.error.DEFAULT}>{rewardError}</Text> : null}{rewardError ? <Button variant="outline" size="sm" onPress={onRetryRewards}
   accessibilityLabel="Retry Rewards button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">Retry Rewards</Button> : null}</Box></Animated.View> : null}

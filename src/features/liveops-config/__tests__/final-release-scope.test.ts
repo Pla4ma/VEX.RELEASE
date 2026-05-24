@@ -12,9 +12,9 @@ import {
   isPublicV1Hidden,
   isPublicV1Included,
   getPublicV1Status,
-} from '../../features/liveops-config/public-v1-feature-map';
-import { DISABLED_FEATURES, FEATURE_RELEASE_STATES } from '../../features/liveops-config/feature-access-config';
-import type { FeatureKey } from '../../features/liveops-config/feature-access';
+} from '../public-v1-feature-map';
+import { DISABLED_FEATURES, FEATURE_RELEASE_STATES } from '../feature-access-config';
+import type { FeatureKey } from '../feature-access';
 
 const ARCHIVED_FEATURES: FeatureKey[] = [
   'shop',

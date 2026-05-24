@@ -8,14 +8,15 @@ type SessionQuery = ReturnType<typeof useSession>;
 
 export function useStudyQuizBreak(input: {
   currentMode: SessionMode;
+  plannedQuizBreakOptedIn: boolean;
   sessionQuery: SessionQuery;
 }) {
-  const { currentMode, sessionQuery } = input;
+  const { currentMode, plannedQuizBreakOptedIn, sessionQuery } = input;
   const [quizBreakKey, setQuizBreakKey] = useState<string | null>(null);
   const [completedQuizBreaks, setCompletedQuizBreaks] = useState<string[]>([]);
 
   useEffect(() => {
-    if (currentMode !== SessionMode.STUDY || !sessionQuery.isActive || sessionQuery.isPaused) {
+    if (!plannedQuizBreakOptedIn || currentMode !== SessionMode.STUDY || !sessionQuery.isActive || sessionQuery.isPaused) {
       return;
     }
 
@@ -33,7 +34,7 @@ export function useStudyQuizBreak(input: {
     sessionQuery.pauseSession('study_quiz').catch((caught) => {
       Sentry.captureException(caught, { tags: { feature: 'study-quiz-break' } });
     });
-  }, [completedQuizBreaks, currentMode, quizBreakKey, sessionQuery]);
+  }, [completedQuizBreaks, currentMode, plannedQuizBreakOptedIn, quizBreakKey, sessionQuery]);
 
   const finishQuizBreak = (correctAnswers?: number): void => {
     if (typeof correctAnswers === 'number') {

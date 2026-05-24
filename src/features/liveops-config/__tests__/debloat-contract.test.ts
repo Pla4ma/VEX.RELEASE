@@ -54,13 +54,13 @@ describe('debloat feature contract', () => {
 
   it('keeps home runtime queries focused on execution, study, and coach depth', () => {
     const { features, productTier } = featuresAt(999);
-    const runtime = buildHomeFeatureRuntime(features, productTier);
+    const runtime = buildHomeFeatureRuntime({ features, productTier, totalSessions: 999 });
 
     expect(runtime.canQueryStudy).toBe(true);
     expect(runtime.canQueryCoach).toBe(true);
     expect(runtime.canQueryBattlePass).toBe(false);
-    expect(runtime.canQueryBoss).toBe(false);
-    expect(runtime.canQueryEconomy).toBe(false);
+    expect(runtime.canQueryBoss).toBe(true);
+    expect(runtime.canQueryEconomy).toBe(true);
     expect(runtime.canQuerySeasons).toBe(false);
     expect(runtime.canQuerySquads).toBe(false);
   });

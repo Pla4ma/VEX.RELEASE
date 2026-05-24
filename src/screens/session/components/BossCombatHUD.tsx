@@ -16,6 +16,8 @@ import {
 } from "../../../features/boss/active-combat-system";
 import { useTheme } from "../../../theme";
 import { useHaptics } from "../../../utils/haptics";
+import { useFeatureAccess } from "../../../features/liveops-config";
+import { getFeatureAvailability } from "../../../features/liveops-config/feature-availability";
 import { BossCombatHUDView } from "./BossCombatHUDView";
 
 interface BossCombatHUDProps {
@@ -49,7 +51,13 @@ export function BossCombatHUD({
   bossMaxHealth = 100,
   currentPhase = "CALM",
   currentAttackPattern,
-}: BossCombatHUDProps): JSX.Element {
+}: BossCombatHUDProps): JSX.Element | null {
+  const featureAccess = useFeatureAccess();
+  const bossAvail = getFeatureAvailability(featureAccess.features.boss_tab);
+  if (!bossAvail.canRenderEntryPoint || !bossAvail.canQuery) {
+    return null;
+  }
+
   const { theme } = useTheme();
   const haptics = useHaptics();
   const [cooldownEnd, setCooldownEnd] = useState<number>(0);

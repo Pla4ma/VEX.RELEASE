@@ -47,14 +47,14 @@ const copyMap: Record<LearningExecutionPersona, LearningExecutionCopy> = {
     setupEyebrow: 'Learning OS',
   }),
   student: LearningExecutionCopySchema.parse({
-    completionTitle: 'Study OS progress updated',
-    emptyCta: 'Upload study content',
-    emptyTitle: 'Turn material into a Study OS plan',
-    homeCta: 'Continue Study OS',
-    homeTitle: 'Study OS',
-    layerName: 'Study OS',
+    completionTitle: 'Study progress updated',
+    emptyCta: 'Start study session',
+    emptyTitle: 'Set a study target and start a focused block',
+    homeCta: 'Continue study',
+    homeTitle: 'Study',
+    layerName: 'Study',
     setupCta: 'Start study session',
-    setupEyebrow: 'Study OS',
+    setupEyebrow: 'Study',
   }),
   work: LearningExecutionCopySchema.parse({
     completionTitle: 'Deep work plan advanced',
@@ -105,16 +105,16 @@ export function buildContentStudyGate(input: unknown) {
     });
   }
 
-  if (!isStudyGoal && parsed.totalCompletedSessions === 0) {
+  if (parsed.totalCompletedSessions < 3) {
     return ContentStudyGateSchema.parse({
-      fallback: 'Attach a goal to your session',
+      fallback: isStudyGoal ? 'Start with a study target and one focused block.' : 'Attach a goal to your session',
       showUploadEntry: false,
     });
   }
 
   return ContentStudyGateSchema.parse({
-    fallback: null,
-    showUploadEntry: isStudyGoal || parsed.totalCompletedSessions > 0,
+    fallback: isStudyGoal ? null : 'Build a deep work path',
+    showUploadEntry: isStudyGoal,
   });
 }
 

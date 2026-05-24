@@ -1,17 +1,11 @@
 import type { FeatureAvailability } from '../liveops-config';
 import type { CompanionState } from '../companion/types';
-import {
-  ACTION_LABELS,
-  FALLBACK_HOME_MESSAGES,
-  PROGRESS_REACTIONS,
-  STYLE_ADAPTATION,
-  getCompletionMessage,
-} from './copy';
+import { ACTION_LABELS, PROGRESS_REACTIONS, STYLE_ADAPTATION } from './copy';
+import { getCoachMemoryConfidence, getCoachPresenceMessage } from './copy-service';
 import {
   CoachPresenceMemorySummarySchema,
   CoachPresenceProgressInputSchema,
   CoachPresenceSchema,
-  CoachPresenceSurfaceSchema,
   CompletionPresenceSummarySchema,
   type CoachActionIntent,
   type CoachPresence,
@@ -48,16 +42,10 @@ export function resolveCoachActionIntent(input: {
   requestedIntent: CoachActionIntent;
   featureAvailability: PresenceAvailability;
 }): CoachActionIntent {
-  if (
-    input.requestedIntent === 'START_STUDY_SESSION' &&
-    input.featureAvailability.study.canNavigate
-  ) {
+  if (input.requestedIntent === 'START_STUDY_SESSION' && input.featureAvailability.study.canNavigate) {
     return 'START_STUDY_SESSION';
   }
-  if (
-    input.requestedIntent === 'REVIEW_PROGRESS' &&
-    input.featureAvailability.progress.canNavigate
-  ) {
+  if (input.requestedIntent === 'REVIEW_PROGRESS' && input.featureAvailability.progress.canNavigate) {
     return 'REVIEW_PROGRESS';
   }
   if (
@@ -75,52 +63,82 @@ export function resolveCoachActionIntent(input: {
 export function buildCoachPresence(input: BuildPresenceInput): CoachPresence {
   const progress = CoachPresenceProgressInputSchema.parse(input.progress);
   const memorySummary = CoachPresenceMemorySummarySchema.parse(input.memorySummary);
-  const surface = CoachPresenceSurfaceSchema.parse(input.surface);
-  const requestedIntent = getRequestedIntent(input.motivationStyle);
+  const memoryConfidence = getCoachMemoryConfidence(
+    progress.totalSessions,
+    memorySummary.syncAvailable,
+  );
+  const resolved = getCoachPresenceMessage({
+    aiAvailable: memorySummary.syncAvailable,
+    bossIntensity: null,
+    comebackState: null,
+    completionContext: null,
+    firstWeekStage: progress.totalSessions === 0 ? 'day_0' : null,
+    latestSession: null,
+    memoryConfidence,
+    motivationStyle: input.motivationStyle,
+    premiumMoment: progress.totalSessions >= 5 ? 'soft_tease' : 'none',
+    primaryGoal: input.motivationStyle === 'STUDY_FOCUSED' ? 'study' : 'focus',
+    sessionMode: 'inactive',
+    studyLayerLabel: input.motivationStyle === 'STUDY_FOCUSED' ? 'Study' : null,
+  });
   const intent = resolveCoachActionIntent({
     featureAvailability: input.featureAvailability,
-    requestedIntent,
+    requestedIntent: resolved.safeIntent,
   });
 
   return CoachPresenceSchema.parse({
-    id: `coach-presence:${surface.toLowerCase()}`,
+    id: `coach-presence:${input.surface.toLowerCase()}`,
+    memoryConfidence,
     memorySummary,
-    message: buildHomeMessage(input.motivationStyle, progress),
+    message: resolved.message,
     motivationStyleAdaptation: STYLE_ADAPTATION[input.motivationStyle],
-    nextAction: {
-      intent,
-      label: ACTION_LABELS[intent],
-      reason: getActionReason(intent, input.motivationStyle),
-    },
+    nextAction: { intent, label: ACTION_LABELS[intent], reason: getActionReason(intent, input.motivationStyle) },
     progressReaction: PROGRESS_REACTIONS[input.motivationStyle],
-    sessionReflection: memorySummary.latestMemory ?? 'Your last finish is saved.',
+    sessionReflection: resolved.message,
     tone: getTone(input.motivationStyle),
     visualCompanionState: getVisualState(input.companion, input.motivationStyle),
   });
 }
 
-export function buildCompletionCoachPresence(
-  input: CompletionPresenceInput,
-): CoachPresence {
+export function buildCompletionCoachPresence(input: CompletionPresenceInput): CoachPresence {
   const summary = CompletionPresenceSummarySchema.parse(input.summary);
+  const memorySummary = CoachPresenceMemorySummarySchema.parse(input.memorySummary);
+  const memoryConfidence = getCoachMemoryConfidence(summary.isFirstSession ? 1 : 3, memorySummary.syncAvailable);
+  const reflection = getCoachPresenceMessage({
+    aiAvailable: memorySummary.syncAvailable,
+    bossIntensity: null,
+    comebackState: summary.isComeback ? 'missed_1_day' : null,
+    completionContext: summary.isFirstSession ? 'first_session' : summary.isComeback ? 'comeback' : null,
+    firstWeekStage: summary.isFirstSession ? 'after_session_1' : null,
+    latestSession: {
+      durationMinutes: summary.durationMinutes,
+      focusPurityScore: summary.focusPurityScore,
+      isComeback: summary.isComeback,
+      mode: summary.sessionMode,
+    },
+    memoryConfidence,
+    motivationStyle: input.motivationStyle,
+    premiumMoment: 'none',
+    primaryGoal: summary.sessionMode === 'STUDY' ? 'study' : 'focus',
+    sessionMode: 'completed',
+    studyLayerLabel: summary.sessionMode === 'STUDY' ? 'Study' : null,
+  });
   const base = buildCoachPresence({
     companion: null,
     featureAvailability: input.featureAvailability,
-    memorySummary: input.memorySummary,
+    memorySummary,
     motivationStyle: input.motivationStyle,
     progress: {
       currentStreakDays: summary.streakDays,
       highFocusStreak: summary.isHighFocusStreak ? 1 : 0,
-      totalSessions: summary.isFirstSession ? 1 : 2,
+      totalSessions: summary.isFirstSession ? 1 : 3,
     },
     surface: 'SESSION_SETUP',
   });
-  const reflection = getCompletionMessage(input.motivationStyle, summary);
-
   return CoachPresenceSchema.parse({
     ...base,
     id: 'coach-presence:session-completion',
-    message: reflection,
+    message: reflection.message,
     nextAction: {
       intent: resolveCoachActionIntent({
         featureAvailability: input.featureAvailability,
@@ -129,34 +147,13 @@ export function buildCompletionCoachPresence(
       label: summary.sessionMode === 'STUDY' ? 'Next study block' : 'Next focus',
       reason: summary.focusPurityScore >= 90 ? 'The rhythm is warm.' : 'Keep the next move simple.',
     },
-    sessionReflection: reflection,
+    sessionReflection: reflection.message,
   });
 }
 
-function getRequestedIntent(style: CoachPresenceMotivationStyle): CoachActionIntent {
-  return style === 'STUDY_FOCUSED' ? 'START_STUDY_SESSION' : 'START_SESSION';
-}
-
-function buildHomeMessage(
-  style: CoachPresenceMotivationStyle,
-  progress: CoachPresenceProgressInput,
-): string {
-  if (progress.currentStreakDays > 1 && style === 'CALM') {
-    return `${progress.currentStreakDays}-day rhythm is warm. One clean block next.`;
-  }
-  if (progress.highFocusStreak > 0) {
-    return 'High-focus streak is showing. Use the next block.';
-  }
-  return FALLBACK_HOME_MESSAGES[style];
-}
-
 function getActionReason(intent: CoachActionIntent, style: CoachPresenceMotivationStyle): string {
-  if (intent === 'START_STUDY_SESSION') {
-    return 'Your study context is ready.';
-  }
-  if (intent === 'REVIEW_PROGRESS') {
-    return 'Progress is the clearest next signal.';
-  }
+  if (intent === 'START_STUDY_SESSION') return 'Your study context is ready.';
+  if (intent === 'REVIEW_PROGRESS') return 'Progress is the clearest next signal.';
   return STYLE_ADAPTATION[style];
 }
 
@@ -173,25 +170,19 @@ const toneMap: Record<
 };
 
 function getTone(style: CoachPresenceMotivationStyle): CoachPresence['tone'] {
-  const tone = toneMap[style];
-  return { motivationStyle: style, ...tone };
+  return { motivationStyle: style, ...toneMap[style] };
 }
 
 function getVisualState(
   companion: BuildPresenceInput['companion'],
   style: CoachPresenceMotivationStyle,
 ): CoachPresenceVisualState {
+  const reaction = style === 'INTENSE' ? 'ready' : style === 'GAME_LIKE' ? 'celebrating' : style === 'FRIENDLY' ? 'focused' : 'steady';
   return {
     element: companion?.element ?? 'LUMINA',
     level: companion?.level ?? 1,
     mood: companion?.currentMood ?? 'FOCUSED',
     phase: companion?.phase ?? 'YOUNG',
-    reaction: style === 'INTENSE'
-      ? 'ready'
-      : style === 'GAME_LIKE'
-        ? 'celebrating'
-        : style === 'FRIENDLY'
-          ? 'focused'
-          : 'steady',
+    reaction,
   };
 }

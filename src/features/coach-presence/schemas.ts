@@ -48,8 +48,11 @@ export const CoachPresenceMemorySummarySchema = z
     coachMemoryCount: z.number().int().min(0),
     companionMemoryCount: z.number().int().min(0),
     latestMemory: z.string().min(1).nullable(),
+    syncAvailable: z.boolean().default(true),
   })
   .strict();
+
+export const CoachMemoryConfidenceSchema = z.enum(['none', 'weak', 'medium', 'strong']);
 
 export const CoachPresenceActionSchema = z
   .object({
@@ -69,6 +72,7 @@ export const CoachPresenceSchema = z
     sessionReflection: z.string().min(1).max(120),
     progressReaction: z.string().min(1).max(96),
     memorySummary: CoachPresenceMemorySummarySchema,
+    memoryConfidence: CoachMemoryConfidenceSchema,
     motivationStyleAdaptation: z.string().min(1).max(96),
   })
   .strict();
@@ -101,6 +105,7 @@ export type CoachPresenceSurface = z.infer<typeof CoachPresenceSurfaceSchema>;
 export type CoachPresenceTone = z.infer<typeof CoachPresenceToneSchema>;
 export type CoachPresenceVisualState = z.infer<typeof CoachPresenceVisualStateSchema>;
 export type CoachPresenceMemorySummary = z.infer<typeof CoachPresenceMemorySummarySchema>;
+export type CoachMemoryConfidence = z.infer<typeof CoachMemoryConfidenceSchema>;
 export type CoachPresenceAction = z.infer<typeof CoachPresenceActionSchema>;
 export type CoachPresence = z.infer<typeof CoachPresenceSchema>;
 export type CoachPresenceProgressInput = z.infer<typeof CoachPresenceProgressInputSchema>;

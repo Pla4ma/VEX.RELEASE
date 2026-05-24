@@ -6,11 +6,11 @@ Always use `rtk` (bash) for every command. Never use task agents, explore agents
 ---
 
 ## STACK — EXACT VERSIONS, NO SUBSTITUTIONS
-- Expo SDK 54 (managed workflow)
-- TypeScript 5.x — strict: true, noImplicitAny, strictNullChecks, noUncheckedIndexedAccess
+- Expo SDK 56 (managed workflow)
+- TypeScript 6.0.3 — strict: true, noImplicitAny, strictNullChecks, noUncheckedIndexedAccess
 - TanStack Query v5 — server state only
 - Zustand — persistent client state only
-- Zod — schemas are the source of truth, all tyAnimated pes inferred via z.infer<>
+- Zod — schemas are the source of truth, all types inferred via z.infer<>
 - React Navigation v6 — fully typed, all routes in RootStackParamList
 - Reanimated 3 — the ONLY animation library. Never use from react-native.
 - Supabase — Postgres + Auth + Realtime + Storage
@@ -82,7 +82,7 @@ type Input = z.infer<typeof InputSchema>
 - `console.log` — use logger or Sentry breadcrumbs
 - `@ts-nocheck` or `@ts-ignore`
 - `// TODO` in shipped code — implement it or delete it
-- `Animated` from react-native — use Reanimated 3 only
+- `Animated` from react-native — use Reanimated 4.3.1 only
 - `StyleSheet.create` — use inline styles with theme tokens
 - `FlatList` — use FlashList with estimatedItemSize set to the actual item height
 - `AsyncStorage` — use MMKV for non-sensitive, SecureStorage for sensitive
@@ -92,6 +92,7 @@ type Input = z.infer<typeof InputSchema>
 - Hardcoded colors, spacing, font sizes, or border radii — always use src/theme/tokens/
 - Stub implementations that look complete but aren't wired
 - Features that only handle the success/happy path
+- `.part-N.ts` files — never create `types.part-01.ts`, `analytics.part-03.ts`, etc. Decompose by domain (e.g. `story.ts`, `narrative.ts`, `events.ts`), not by line count.
 
 ---
 
@@ -123,7 +124,7 @@ Every data-driven component ships with all of these:
 Additional UI rules:
 - All interactive elements: accessibilityLabel, accessibilityRole, accessibilityHint — always.
 - Minimum touch target: 44×44 points. Use src/utils/touchTarget.ts.
-- All animations: Reanimated 3 only. useSharedValue, useAnimatedStyle, withSpring, withTiming.
+- All animations: Reanimated 4.3.1 only. useSharedValue, useAnimatedStyle, withSpring, withTiming.
 - All lists: FlashList with estimatedItemSize set to the actual measured item height.
 - Check useReducedMotion() before playing any animation — skip or simplify if true.
 - All form screens: KeyboardAvoidingView + ScrollView.

@@ -9,6 +9,15 @@ const nativeModules = {
   },
   Linking: {},
   UIManager: {},
+  KeyboardObserver: {
+    addListener: () => {},
+    removeListeners: () => {},
+  },
+  DeviceEventManager: {
+    registerBackButtonListener: () => {},
+    unregisterBackButtonListener: () => {},
+    invokeDefaultBackPressHandler: () => {},
+  },
 };
 
 export default nativeModules;

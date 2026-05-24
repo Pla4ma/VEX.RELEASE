@@ -6,7 +6,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as service from './service';
-import { useAuth } from '../../../auth/hooks/useAuth';
+import { useAuthStore } from '../../../store';
 import { launchColors } from '@theme/tokens/launch-colors';
 
 
@@ -47,7 +47,7 @@ export function useMonthlyReportPreview(userId: string, year: number, month: num
 }
 
 export function useCurrentMonthlyReport() {
-  const { userId } = useAuth();
+  const userId = useAuthStore((state) => state.userId);
 
   const now = new Date();
   const year = now.getFullYear();
@@ -57,7 +57,7 @@ export function useCurrentMonthlyReport() {
 }
 
 export function useCurrentMonthlyReportPreview() {
-  const { userId } = useAuth();
+  const userId = useAuthStore((state) => state.userId);
 
   const now = new Date();
   const year = now.getFullYear();

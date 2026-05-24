@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { FREE_FEATURE_STRS, PREMIUM_FEATURE_STRS } from './tier-definitions';
 
 const PremiumPersonalizationInputSchema = z.object({
   billingConfigured: z.boolean(),
@@ -43,23 +44,6 @@ const NO_FAKE_BILLING = [
   'Show unavailable or coming-soon state instead of fake premium.',
 ];
 
-const FREE_FEATURES = [
-  'Start and complete focus sessions',
-  'Basic streak and progress tracking',
-  'Basic Coach Presence — daily reflection',
-  'Basic companion visual',
-  'Basic Study / Deep Work entry',
-  'Subtle boss momentum visual',
-];
-
-const PREMIUM_FEATURES = [
-  'Deep Coach Memory — remembers patterns, best focus times, comeback style, preferred push style',
-  'Advanced Study / Deep Work OS — content generation, review loops, quizzes, project breakdowns, smart next actions',
-  'Personal Progress Intelligence — weekly execution report, best rhythm, risk/recovery insights, consistency map',
-  'Visual Identity — companion forms, boss skins, focus worlds, premium session atmospheres',
-  'Premium Session Modes — Exam Sprint, Deep Work, Calm Reset, Boss Focus, Comeback Mode, Review Mode',
-];
-
 function buildFreeVsProMatrix(input: PremiumPersonalizationInput): Array<{ free: string; pro: string }> {
   const studyLabel = input.primaryGoal === 'study' || input.primaryGoal === 'learning' ? 'Study OS' : 'Deep Work Plan';
   return [
@@ -74,7 +58,6 @@ function buildFreeVsProMatrix(input: PremiumPersonalizationInput): Array<{ free:
 function resolveTriggerMoment(input: PremiumPersonalizationInput): PremiumPersonalizationOutput['triggerMoment'] {
   if (!input.billingConfigured) return 'hidden_billing_unavailable';
   if (input.completedSessions < 5) return 'none';
-
   if (input.hasTriedAdvancedStudy) return 'advanced_study';
   if (input.hasTriedWeeklyReport) return 'weekly_intelligence';
   if (input.hasTriedVisualIdentity) return 'custom_identity';
@@ -111,7 +94,6 @@ function getPersonalizedBody(input: PremiumPersonalizationInput): string {
 
 export function resolvePersonalizedPremium(rawInput: unknown): PremiumPersonalizationOutput {
   const input = PremiumPersonalizationInputSchema.parse(rawInput);
-
   const triggerMoment = resolveTriggerMoment(input);
   const canShowPaywall = triggerMoment !== 'hidden_billing_unavailable' && triggerMoment !== 'none';
 
@@ -121,8 +103,8 @@ export function resolvePersonalizedPremium(rawInput: unknown): PremiumPersonaliz
     freeVsProMatrix: buildFreeVsProMatrix(input),
     premiumHeadline: getPersonalizedHeadline(input),
     premiumBody: getPersonalizedBody(input),
-    freeFeatures: FREE_FEATURES,
-    premiumFeatures: PREMIUM_FEATURES,
+    freeFeatures: FREE_FEATURE_STRS,
+    premiumFeatures: PREMIUM_FEATURE_STRS,
     noFakeBillingChecklist: NO_FAKE_BILLING,
   });
 }

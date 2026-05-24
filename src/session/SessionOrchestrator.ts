@@ -91,10 +91,20 @@ export class SessionOrchestrator {
   private _deviceFingerprint: string = "";
 
   constructor(config: OrchestratorConfig = {}) {
-    this.config = { enableAntiCheat: true, enableAutoRecovery: true, enableBackgroundTracking: true, pauseOnBackground: true, pauseThreshold: 5000, ...config };
-    this.scoringEngine = new ScoringEngine(); this.completionEngine = new CompletionEngine(this.scoringEngine);
-    this.antiCheatEngine = new AntiCheatEngine(); this.eventEmitter = new SessionEventEmitter();
-    this.focusMetrics = createEmptyFocusMetrics(); loadActiveSession(this);
+    this.config = {
+      enableAntiCheat: true,
+      enableAutoRecovery: true,
+      enableBackgroundTracking: true,
+      pauseOnBackground: true,
+      pauseThreshold: 5000,
+      ...config,
+    };
+    this.scoringEngine = new ScoringEngine();
+    this.completionEngine = new CompletionEngine(this.scoringEngine);
+    this.antiCheatEngine = new AntiCheatEngine();
+    this.eventEmitter = new SessionEventEmitter();
+    this.focusMetrics = createEmptyFocusMetrics();
+    loadActiveSession(this);
     debug.info("SessionOrchestrator initialized");
   }
 
@@ -112,23 +122,55 @@ export class SessionOrchestrator {
     await persistence.saveSessionState(this.session, this.repository);
   }
 
-  finalizeSession = (summary: SessionSummary) => { doFinalizeSession(this, summary); };
-  finalizeAbandonedSession = () => { doFinalizeAbandonedSession(this); };
+  finalizeSession(summary: SessionSummary): void {
+    doFinalizeSession(this, summary);
+  }
+
+  finalizeAbandonedSession(): void {
+    doFinalizeAbandonedSession(this);
+  }
 
   // ═══ Public API ═══════════════════════════════════════════
 
-  setUserId(id: string): void { this.userId = id; this.repository.setUserId(id); this.scoringEngine.setUserStats(0, 1); debug.info("SessionOrchestrator user set: %s", id); }
-  createSession = (config: SessionConfig) => createSession(this, config);
+  setUserId(id: string): void {
+    this.userId = id;
+    this.repository.setUserId(id);
+    this.scoringEngine.setUserStats(0, 1);
+    debug.info("SessionOrchestrator user set: %s", id);
+  }
 
-  cancelStart(): void { if (this.countdownActive) { this.countdownActive = false; if (this.session) this.session.status = "PREPARING"; } }
+  createSession(config: SessionConfig): Promise<SessionState> {
+    return createSession(this, config);
+  }
+
+  cancelStart(): void {
+    if (this.countdownActive) {
+      this.countdownActive = false;
+      if (this.session) this.session.status = "PREPARING";
+    }
+  }
 
   // ── Lifecycle ────────────────────────────────────────────
 
-  startSession = (cd: number = 0) => startSession(this, cd);
-  pauseSession = (r?: string) => pauseSession(this, r);
-  resumeSession = () => resumeSession(this);
-  backgroundSession = () => backgroundSession(this);
-  foregroundSession = () => foregroundSession(this);
+  startSession(countdown: number = 0): Promise<SessionState> {
+    return startSession(this, countdown);
+  }
+
+  pauseSession(reason?: string): Promise<SessionState> {
+    return pauseSession(this, reason);
+  }
+
+  resumeSession(): Promise<SessionState> {
+    return resumeSession(this);
+  }
+
+  backgroundSession(): Promise<void> {
+    return backgroundSession(this);
+  }
+
+  foregroundSession(): Promise<void> {
+    return foregroundSession(this);
+  }
 
   // ── Timer handlers (called by TimerEngine) ───────────────
 
@@ -136,23 +178,34 @@ export class SessionOrchestrator {
     doHandleTimerTick(this, elapsed, remaining, percentage);
   }
 
-  handleTimerWarning(sec: number): void { handleTimerWarning(this, sec); }
+  handleTimerWarning(sec: number): void {
+    handleTimerWarning(this, sec);
+  }
 
-  handleTimerComplete: () => Promise<void> = async () => {
+  async handleTimerComplete(): Promise<void> {
     if (!this.session) return;
     if ((this.session.currentInterval || 0) >= (this.session.totalIntervals || 0)) {
       await completeSessionInternal(this);
     } else {
       await startBreak(this);
     }
-  };
+  }
 
-  startBreak = () => startBreak(this);
+  startBreak(): Promise<void> {
+    return startBreak(this);
+  }
 
-  handleBreakTick(elapsed: number, ..._r: unknown[]): void { handleBreakTick(this, elapsed); }
+  handleBreakTick(elapsed: number): void {
+    handleBreakTick(this, elapsed);
+  }
 
-  handleBreakComplete = () => doHandleBreakComplete(this);
-  endBreak = () => { doEndBreak(this); };
+  handleBreakComplete(): Promise<void> {
+    return doHandleBreakComplete(this);
+  }
+
+  endBreak(): void {
+    doEndBreak(this);
+  }
 
   // ── Completion ───────────────────────────────────────────
 
@@ -163,46 +216,88 @@ export class SessionOrchestrator {
     return this.lastSessionSummary;
   }
 
-  endSession = async (_reason?: string): Promise<SessionState> => {
+  async endSession(_reason?: string): Promise<SessionState> {
     if (!this.session) throw new Error("No active session");
     await completeSessionInternal(this);
     const s = this.getSession();
     if (!s) throw new Error("Failed to get session state");
     return s;
-  };
+  }
 
-  abandonSession = (r?: string) => abandonSession(this, r);
+  abandonSession(reason?: string): Promise<void> {
+    return abandonSession(this, reason);
+  }
 
   // ── Recovery ─────────────────────────────────────────────
 
-  attemptRecovery = (t: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT") => attemptRecovery(this, t);
-  completeLastInterruption = (d: number) => completeLastInterruption(this, d);
-  recordInterruption = (type: InterruptionType, sev: InterruptionSeverity = "MODERATE") => recordInterruption(this, type, sev);
-  handleAntiCheatViolationOrigin = (w: string) => { handleAntiCheatViolation(this, w); };
-  handleAntiCheatViolation(w: string): void { handleAntiCheatViolation(this, w); }
-  logInterruption = (t: string, d?: Record<string, unknown>) => { logInterruption(this, t, d); };
-  logRecovery = (t: string, d?: Record<string, unknown>) => { logRecovery(this, t, d); };
+  attemptRecovery(type: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT"): Promise<boolean> {
+    return attemptRecovery(this, type);
+  }
+
+  completeLastInterruption(duration: number): void {
+    completeLastInterruption(this, duration);
+  }
+
+  recordInterruption(
+    type: InterruptionType,
+    severity: InterruptionSeverity = "MODERATE",
+  ): void {
+    recordInterruption(this, type, severity);
+  }
+
+  handleAntiCheatViolation(warning: string): void {
+    handleAntiCheatViolation(this, warning);
+  }
+
+  logInterruption(type: string, data?: Record<string, unknown>): void {
+    logInterruption(this, type, data);
+  }
+
+  logRecovery(type: string, data?: Record<string, unknown>): void {
+    logRecovery(this, type, data);
+  }
 
   // ── Accessors ────────────────────────────────────────────
 
-  getSessionState = this.getSession;
-  getActiveSession = (): SessionState | null => { debug.info("getActiveSession"); return this.getSession(); };
-  getTimerState = () => getTimerState(this);
-  getRemainingSeconds = () => getRemainingSeconds(this);
-  getElapsedSeconds = () => getElapsedSeconds(this);
-  getPercentageComplete = () => getPercentageComplete(this);
-  isSessionActive = () => this.isActive;
-  isPaused = () => isPaused(this);
-  getCurrentPurityScore = () => getCurrentPurityScore(this);
-  getPurityLabel = () => getPurityLabel(this);
-  getInterruptions = () => getInterruptions(this);
-  getRecoveries = () => getRecoveries(this);
-  applyStudyQuizBonus = (n: number) => { applyStudyQuizBonus(this, n); };
-  updateFocusQuality = (q: number) => { updateFocusQuality(this, q); };
-  addDocument = (id: string) => { addDocument(this, id); };
-  removeDocument = (id: string) => { removeDocument(this, id); };
-  getSessionHistory = (l: number = 10) => getSessionHistory(this, l);
-  getSessionStats = () => getSessionStats(this);
+  getActiveSession(): SessionState | null {
+    debug.info("getActiveSession");
+    return this.getSession();
+  }
+
+  getTimerState() { return getTimerState(this); }
+  getRemainingSeconds() { return getRemainingSeconds(this); }
+  getElapsedSeconds() { return getElapsedSeconds(this); }
+  getPercentageComplete() { return getPercentageComplete(this); }
+  isSessionActive(): boolean { return this.isActive; }
+  isPaused(): boolean { return isPaused(this); }
+  getCurrentPurityScore(): number { return getCurrentPurityScore(this); }
+  getPurityLabel(): "Elite" | "Good" | "Okay" | "Distracted" { return getPurityLabel(this); }
+  getInterruptions(): InterruptionRecord[] { return getInterruptions(this); }
+  getRecoveries(): RecoveryRecord[] { return getRecoveries(this); }
+
+  applyStudyQuizBonus(correct: number): void {
+    applyStudyQuizBonus(this, correct);
+  }
+
+  updateFocusQuality(quality: number): void {
+    updateFocusQuality(this, quality);
+  }
+
+  addDocument(docId: string): void {
+    addDocument(this, docId);
+  }
+
+  removeDocument(docId: string): void {
+    removeDocument(this, docId);
+  }
+
+  getSessionHistory(limit: number = 10): Promise<SessionState[]> {
+    return getSessionHistory(this, limit);
+  }
+
+  getSessionStats() {
+    return getSessionStats(this);
+  }
 
   destroy(): void {
     this.timerEngine?.destroy();

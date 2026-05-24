@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import * as Sentry from '@sentry/react-native';
-import { useAuth } from '../../../auth/hooks/useAuth';
+import { useAuthStore } from '../../../store';
 import { useOfflineAwareMutation } from '../../../shared/hooks/useOfflineAwareMutation';
 import { useAnalytics } from '../../../analytics/hooks/useAnalytics';
 import { eventBus } from '../../../events';
@@ -23,7 +23,7 @@ const STALE_TIME = 5 * 60 * 1000;
 const GC_TIME = 10 * 60 * 1000;
 
 export function useStreakRepairQuest(): UseStreakRepairQuestReturn {
-  const { userId } = useAuth();
+  const userId = useAuthStore((state) => state.userId);
   const queryClient = useQueryClient();
   const { track } = useAnalytics();
 

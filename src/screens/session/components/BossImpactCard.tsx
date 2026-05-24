@@ -13,8 +13,6 @@ interface BossImpactCardProps {
   damageDealt: number;
   wasDefeated: boolean;
   hadCriticalHit: boolean;
-  bountyConsumedCount?: number;
-  bountyLootMultiplier?: number;
 }
 
 export function BossImpactCard({
@@ -24,8 +22,6 @@ export function BossImpactCard({
   damageDealt,
   wasDefeated,
   hadCriticalHit,
-  bountyConsumedCount,
-  bountyLootMultiplier,
 }: BossImpactCardProps): JSX.Element {
   const { theme } = useTheme();
   const healthAnim = useSharedValue(healthBefore);
@@ -53,7 +49,7 @@ export function BossImpactCard({
       }}
     >
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing[2], marginBottom: theme.spacing[2] }}>
-        <Text fontSize={24}>{wasDefeated ? '🏆' : '🐲'}</Text>
+        <Text fontSize={24}>{wasDefeated ? '\u{1F3C6}' : '\u{1F432}'}</Text>
         <Text variant="body" fontWeight="700" color="text.primary">
           {wasDefeated ? 'BOSS DEFEATED!' : bossName}
         </Text>
@@ -87,7 +83,7 @@ export function BossImpactCard({
       <Text variant="caption" color="text.secondary">
         {wasDefeated
           ? `You dealt ${damageDealt} damage and defeated the boss!`
-          : `${healthAfter.toFixed(0)}% health remaining • ${damageDealt} damage dealt`}
+          : `${healthAfter.toFixed(0)}% health remaining \u2022 ${damageDealt} damage dealt`}
       </Text>
 
       {hadCriticalHit && (
@@ -102,28 +98,9 @@ export function BossImpactCard({
             borderRadius: theme.borderRadius.md,
           }}
         >
-          <Text fontSize={16}>⚡</Text>
+          <Text fontSize={16}>{'\u26A1'}</Text>
           <Text variant="caption" color="warning.DEFAULT" fontWeight="600">
             Critical Hit!
-          </Text>
-        </View>
-      )}
-
-      {bountyConsumedCount && bountyConsumedCount > 0 && (
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: theme.spacing[1],
-            marginTop: theme.spacing[2],
-            padding: theme.spacing[2],
-            backgroundColor: `${theme.colors.warning[500]}15`,
-            borderRadius: theme.borderRadius.md,
-          }}
-        >
-          <Text fontSize={16}>🎯</Text>
-          <Text variant="caption" color="warning.500" fontWeight="600">
-            Bounty × {bountyConsumedCount} — {bountyLootMultiplier ?? 2}× loot applied
           </Text>
         </View>
       )}

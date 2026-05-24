@@ -1,1 +1,334 @@
-import{FREE_TIER,PREMIUM_TIER,FEATURE_GATES,hasFeatureAccess,canCreateStudyPlan,canJoinSquad,getRemainingStudyPlanSlots,getFeatureGate,shouldShowPaywall,getPaywallContext,setUserSubscription,getUserSubscription,getUserTier,isPremium,isInTrial,getTrialDaysRemaining,TIER_DEFINITIONS,type SubscriptionTier}from'../PremiumTierSystem'; jest.mock('../../../events',()=>({eventBus:{publish:jest.fn(),subscribe:jest.fn()}})); describe('PremiumTierSystem',()=>{beforeEach(()=>{jest.clearAllMocks();}); describe('FREE_TIER',()=>{it('should have correct tier name',()=>{expect(FREE_TIER.name).toBe('Free'); expect(FREE_TIER.tier).toBe('FREE');}); it('should limit study plans to 1',()=>{expect(FREE_TIER.features.maxActiveStudyPlans).toBe(1);}); it('should limit squads to 3',()=>{expect(FREE_TIER.features.maxSquads).toBe(3);}); it('should not include AI features',()=>{expect(FREE_TIER.features.advancedAI).toBe(false); expect(FREE_TIER.features.aiStudyPlans).toBe(false);}); it('should not include premium features',()=>{expect(FREE_TIER.features.studyAnalytics).toBe(false); expect(FREE_TIER.features.bossBounties).toBe(false); expect(FREE_TIER.features.streakInsurance).toBe(false);}); it('should have a price of 0',()=>{expect(FREE_TIER.price.monthly).toBe(0); expect(FREE_TIER.price.yearly).toBe(0);});}); describe('PREMIUM_TIER',()=>{it('should have correct tier name',()=>{expect(PREMIUM_TIER.name).toBe('Premium'); expect(PREMIUM_TIER.tier).toBe('PREMIUM');}); it('should have unlimited study plans',()=>{expect(PREMIUM_TIER.features.maxActiveStudyPlans).toBeNull();}); it('should have unlimited squads',()=>{expect(PREMIUM_TIER.features.maxSquads).toBeNull();}); it('should include all AI features',()=>{expect(PREMIUM_TIER.features.advancedAI).toBe(true); expect(PREMIUM_TIER.features.aiStudyPlans).toBe(true);}); it('should include all premium features',()=>{expect(PREMIUM_TIER.features.studyAnalytics).toBe(true); expect(PREMIUM_TIER.features.bossBounties).toBe(true); expect(PREMIUM_TIER.features.streakInsurance).toBe(true); expect(PREMIUM_TIER.features.personalitySelection).toBe(true); expect(PREMIUM_TIER.features.prioritySupport).toBe(true);}); it('should have correct pricing',()=>{expect(PREMIUM_TIER.price.monthly).toBe(9.99); expect(PREMIUM_TIER.price.yearly).toBe(59.99);}); it('should have 7-day trial',()=>{expect(PREMIUM_TIER.trialDays).toBe(7);});}); describe('TIER_DEFINITIONS',()=>{it('should contain both tiers',()=>{expect(TIER_DEFINITIONS.FREE).toBeDefined(); expect(TIER_DEFINITIONS.PREMIUM).toBeDefined();}); it('should have FREE as first tier',()=>{expect(TIER_DEFINITIONS[0]).toBe(FREE_TIER);}); it('should have PREMIUM as second tier',()=>{expect(TIER_DEFINITIONS[1]).toBe(PREMIUM_TIER);});}); describe('FEATURE_GATES',()=>{it('should have feature gate for each premium feature',()=>{const features = FEATURE_GATES.map(g=>g.feature); expect(features).toContain('aiStudyPlans'); expect(features).toContain('advancedAI'); expect(features).toContain('bossBounties'); expect(features).toContain('studyAnalytics');}); it('should have correct paywall contexts',()=>{const aiGate = FEATURE_GATES.find(g=>g.feature === 'aiStudyPlans'); expect(aiGate?.paywallContext).toBe('ADVANCED_AI'); const bountyGate = FEATURE_GATES.find(g=>g.feature === 'bossBounties'); expect(bountyGate?.paywallContext).toBe('BOSS_BOUNTY');}); it('should have limit-based gates for numeric features',()=>{const studyPlanGate = FEATURE_GATES.find(g=>g.feature === 'maxActiveStudyPlans'); expect(studyPlanGate?.type).toBe('LIMIT'); expect(studyPlanGate?.paywallContext).toBe('STUDY_PLAN_LIMIT');});}); describe('hasFeatureAccess',()=>{it('should grant FREE tier access to free features',()=>{expect(hasFeatureAccess('FREE','basicSessions')).toBe(true);}); it('should deny FREE tier access to AI features',()=>{expect(hasFeatureAccess('FREE','aiStudyPlans')).toBe(false); expect(hasFeatureAccess('FREE','advancedAI')).toBe(false);}); it('should grant PREMIUM tier access to all features',()=>{expect(hasFeatureAccess('PREMIUM','aiStudyPlans')).toBe(true); expect(hasFeatureAccess('PREMIUM','advancedAI')).toBe(true); expect(hasFeatureAccess('PREMIUM','bossBounties')).toBe(true);}); it('should handle numeric limits correctly',()=>{expect(hasFeatureAccess('FREE','maxActiveStudyPlans')).toBe(1); expect(hasFeatureAccess('PREMIUM','maxActiveStudyPlans')).toBe(true);});}); describe('canCreateStudyPlan',()=>{it('should allow FREE user with 0 plans',()=>{expect(canCreateStudyPlan('FREE',0)).toBe(true);}); it('should allow FREE user with 1 plan (at limit)',()=>{expect(canCreateStudyPlan('FREE',1)).toBe(false);}); it('should deny FREE user with 1 plan',()=>{expect(canCreateStudyPlan('FREE',1)).toBe(false);}); it('should allow PREMIUM user regardless of count',()=>{expect(canCreateStudyPlan('PREMIUM',0)).toBe(true); expect(canCreateStudyPlan('PREMIUM',5)).toBe(true); expect(canCreateStudyPlan('PREMIUM',100)).toBe(true);});}); describe('canJoinSquad',()=>{it('should allow FREE user with 0 squads',()=>{expect(canJoinSquad('FREE',0)).toBe(true);}); it('should allow FREE user with 2 squads',()=>{expect(canJoinSquad('FREE',2)).toBe(true);}); it('should deny FREE user with 3 squads (at limit)',()=>{expect(canJoinSquad('FREE',3)).toBe(false);}); it('should allow PREMIUM user regardless of count',()=>{expect(canJoinSquad('PREMIUM',0)).toBe(true); expect(canJoinSquad('PREMIUM',10)).toBe(true);});}); describe('getRemainingStudyPlanSlots',()=>{it('should return 1 for FREE user with 0 plans',()=>{expect(getRemainingStudyPlanSlots('FREE',0)).toBe(1);}); it('should return 0 for FREE user with 1 plan',()=>{expect(getRemainingStudyPlanSlots('FREE',1)).toBe(0);}); it('should return null (unlimited) for PREMIUM user',()=>{expect(getRemainingStudyPlanSlots('PREMIUM',5)).toBeNull();});}); describe('getFeatureGate',()=>{it('should return gate for existing feature',()=>{const gate = getFeatureGate('aiStudyPlans'); expect(gate).not.toBeNull(); expect(gate?.feature).toBe('aiStudyPlans');}); it('should return null for non-existent feature',()=>{const gate = getFeatureGate('nonExistentFeature'as any); expect(gate).toBeNull();});}); describe('shouldShowPaywall',()=>{it('should not show paywall for FREE user on free feature',()=>{const result = shouldShowPaywall('FREE','basicSessions'); expect(result.show).toBe(false); expect(result.context).toBeNull();}); it('should show paywall for FREE user on premium feature',()=>{const result = shouldShowPaywall('FREE','aiStudyPlans'); expect(result.show).toBe(true); expect(result.context).toBe('ADVANCED_AI');}); it('should not show paywall for PREMIUM user on any feature',()=>{const result = shouldShowPaywall('PREMIUM','aiStudyPlans'); expect(result.show).toBe(false); expect(result.context).toBeNull();}); it('should show STUDY_PLAN_LIMIT context for plan limit',()=>{const result = shouldShowPaywall('FREE','maxActiveStudyPlans'); expect(result.show).toBe(true); expect(result.context).toBe('STUDY_PLAN_LIMIT');});}); describe('getPaywallContext',()=>{it('should return context for STUDY_PLAN_LIMIT',()=>{const context = getPaywallContext('STUDY_PLAN_LIMIT'); expect(context).not.toBeNull(); expect(context?.title).toContain('Plan'); expect(context?.icon).toBe('📚');}); it('should return context for BOSS_BOUNTY',()=>{const context = getPaywallContext('BOSS_BOUNTY'); expect(context?.icon).toBe('⚔️');}); it('should return context with value proposition',()=>{const context = getPaywallContext('STREAK_INSURANCE'); expect(context?.valueProp).toBeDefined(); expect(context?.stats).toBeDefined();}); it('should return null for unknown context',()=>{const context = getPaywallContext('UNKNOWN_CONTEXT'as any); expect(context).toBeNull();});}); describe('User Subscription Management',()=>{const userId = 'test-user-123'; beforeEach(()=>{setUserSubscription({userId,tier:'FREE',isActive:true,startedAt:Date.now()});}); describe('setUserSubscription',()=>{it('should store subscription',()=>{const subscription = {userId,tier:'PREMIUM'as SubscriptionTier,isActive:true,startedAt:Date.now()}; setUserSubscription(subscription); const retrieved = getUserSubscription(userId); expect(retrieved?.tier).toBe('PREMIUM');}); it('should publish event on new subscription',()=>{const{eventBus} = require('../../../events'); setUserSubscription({userId,tier:'PREMIUM',isActive:true,startedAt:Date.now()}); expect(eventBus.publish).toHaveBeenCalledWith('subscription:changed',expect.any(Object));});}); describe('getUserSubscription',()=>{it('should return null for unknown user',()=>{const subscription = getUserSubscription('unknown-user'); expect(subscription).toBeNull();}); it('should return subscription for known user',()=>{setUserSubscription({userId,tier:'PREMIUM',isActive:true,startedAt:Date.now()}); const subscription = getUserSubscription(userId); expect(subscription).not.toBeNull(); expect(subscription?.userId).toBe(userId);});}); describe('getUserTier',()=>{it('should return FREE for free user',()=>{const tier = getUserTier(userId); expect(tier).toBe('FREE');}); it('should return PREMIUM for premium user',()=>{setUserSubscription({userId,tier:'PREMIUM',isActive:true,startedAt:Date.now()}); const tier = getUserTier(userId); expect(tier).toBe('PREMIUM');}); it('should return FREE for unknown user',()=>{const tier = getUserTier('unknown-user'); expect(tier).toBe('FREE');});}); describe('isPremium',()=>{it('should return false for FREE user',()=>{expect(isPremium(userId)).toBe(false);}); it('should return true for PREMIUM user',()=>{setUserSubscription({userId,tier:'PREMIUM',isActive:true,startedAt:Date.now()}); expect(isPremium(userId)).toBe(true);}); it('should return false for inactive premium',()=>{setUserSubscription({userId,tier:'PREMIUM',isActive:false,startedAt:Date.now()}); expect(isPremium(userId)).toBe(false);});}); describe('isInTrial',()=>{it('should return false for non-trial user',()=>{expect(isInTrial(userId)).toBe(false);}); it('should return true for trial user',()=>{setUserSubscription({userId,tier:'PREMIUM',isActive:true,startedAt:Date.now(),trialEndsAt:Date.now() + 7 * 24 * 60 * 60 * 1000}); expect(isInTrial(userId)).toBe(true);}); it('should return false for expired trial',()=>{setUserSubscription({userId,tier:'PREMIUM',isActive:true,startedAt:Date.now() - 14 * 24 * 60 * 60 * 1000,trialEndsAt:Date.now() - 7 * 24 * 60 * 60 * 1000}); expect(isInTrial(userId)).toBe(false);});}); describe('getTrialDaysRemaining',()=>{it('should return 0 for non-trial user',()=>{expect(getTrialDaysRemaining(userId)).toBe(0);}); it('should return correct days for trial user',()=>{const trialEndsAt = Date.now() + 3 * 24 * 60 * 60 * 1000 + 12 * 60 * 60 * 1000; setUserSubscription({userId,tier:'PREMIUM',isActive:true,startedAt:Date.now(),trialEndsAt}); expect(getTrialDaysRemaining(userId)).toBe(3);}); it('should return 0 for expired trial',()=>{setUserSubscription({userId,tier:'PREMIUM',isActive:true,startedAt:Date.now(),trialEndsAt:Date.now() - 24 * 60 * 60 * 1000}); expect(getTrialDaysRemaining(userId)).toBe(0);});});});});
+import {
+  TIERS,
+  FEATURE_GATES,
+  hasFeatureAccess,
+  canCreateStudyPlan,
+  getRemainingStudyPlanSlots,
+  getFeatureGate,
+  shouldShowPaywall,
+  getPaywallContext,
+  setUserSubscription,
+  getUserSubscription,
+  getUserTier,
+  isPremium,
+  isInTrial,
+  getTrialDaysRemaining,
+  type SubscriptionTier,
+} from '../PremiumTierSystem';
+
+jest.mock('../../../events', () => ({
+  eventBus: { publish: jest.fn(), subscribe: jest.fn() },
+}));
+
+describe('PremiumTierSystem', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('TIERS', () => {
+    it('has correct tier names', () => {
+      expect(TIERS.free.name).toBe('Free');
+      expect(TIERS.free.id).toBe('free');
+      expect(TIERS.premium.name).toBe('Premium');
+      expect(TIERS.premium.id).toBe('premium');
+    });
+
+    it('free tier does not include premium features', () => {
+      expect(TIERS.free.features.deepCoachMemory).toBe(false);
+      expect(TIERS.free.features.advancedStudyOS).toBe(false);
+      expect(TIERS.free.features.progressIntelligence).toBe(false);
+      expect(TIERS.free.features.visualIdentity).toBe(false);
+      expect(TIERS.free.features.premiumSessionModes).toBe(false);
+      expect(TIERS.free.features.recoveryPlanning).toBe(false);
+    });
+
+    it('free tier has no price', () => {
+      expect(TIERS.free.monthlyPrice).toBeNull();
+      expect(TIERS.free.yearlyPrice).toBeNull();
+    });
+
+    it('free tier highlights exclude game economy', () => {
+      const joined = TIERS.free.highlightedFeatures.join(' ');
+      expect(joined).not.toMatch(/coin|gem|inventory|battle pass|chest|shop/i);
+    });
+
+    it('premium tier includes all features', () => {
+      expect(TIERS.premium.features.deepCoachMemory).toBe(true);
+      expect(TIERS.premium.features.advancedStudyOS).toBe(true);
+      expect(TIERS.premium.features.progressIntelligence).toBe(true);
+      expect(TIERS.premium.features.visualIdentity).toBe(true);
+      expect(TIERS.premium.features.premiumSessionModes).toBe(true);
+      expect(TIERS.premium.features.recoveryPlanning).toBe(true);
+    });
+
+    it('premium tier has correct pricing', () => {
+      expect(TIERS.premium.monthlyPrice).toBe(9.99);
+      expect(TIERS.premium.yearlyPrice).toBe(59.99);
+    });
+
+    it('premium tier has 7-day trial', () => {
+      expect(TIERS.premium.trialDays).toBe(7);
+    });
+
+    it('premium tier description excludes game economy', () => {
+      const joined = TIERS.premium.description + TIERS.premium.highlightedFeatures.join(' ');
+      expect(joined).not.toMatch(/coin|gem|battle pass|chest|shop|squads|boss tiers/i);
+    });
+  });
+
+  describe('FEATURE_GATES', () => {
+    it('has feature gate for each premium feature', () => {
+      const features = FEATURE_GATES.map((g) => g.feature);
+      expect(features).toContain('deepCoachMemory');
+      expect(features).toContain('advancedStudyOS');
+      expect(features).toContain('progressIntelligence');
+      expect(features).toContain('visualIdentity');
+      expect(features).toContain('premiumSessionModes');
+      expect(features).toContain('recoveryPlanning');
+    });
+
+    it('has correct paywall contexts', () => {
+      const coachGate = FEATURE_GATES.find((g) => g.feature === 'deepCoachMemory');
+      expect(coachGate?.paywallContext).toBe('DEEP_COACH_MEMORY');
+      const studyGate = FEATURE_GATES.find((g) => g.feature === 'advancedStudyOS');
+      expect(studyGate?.paywallContext).toBe('ADVANCED_STUDY_OS');
+    });
+
+    it('has plan limit gate', () => {
+      const planGate = FEATURE_GATES.find((g) => g.feature === 'maxActiveStudyPlans');
+      expect(planGate?.paywallContext).toBe('STUDY_PLAN_LIMIT');
+    });
+
+    it('has no game economy paywall contexts', () => {
+      const contexts = FEATURE_GATES.map((g) => g.paywallContext);
+      expect(contexts).not.toContain('BOSS_BOUNTY');
+      expect(contexts).not.toContain('STREAK_INSURANCE');
+      expect(contexts).not.toContain('SQUAD_LIMIT');
+      expect(contexts).not.toContain('EXCLUSIVE_COSMETIC');
+    });
+  });
+
+  describe('PAYWALL_CONTEXTS', () => {
+    it('has context for each premium feature type', () => {
+      const ctx = getPaywallContext('DEEP_COACH_MEMORY');
+      expect(ctx.title).toContain('Coach');
+      expect(ctx.headline).toBeTruthy();
+    });
+
+    it('all context copy excludes economy language', () => {
+      const allContexts = ['DEEP_COACH_MEMORY', 'ADVANCED_STUDY_OS',
+        'PROGRESS_INTELLIGENCE', 'VISUAL_IDENTITY',
+        'PREMIUM_SESSION_MODES', 'RECOVERY_PLANNING', 'STUDY_PLAN_LIMIT'] as const;
+      for (const ctx of allContexts) {
+        const data = getPaywallContext(ctx);
+        const joined = [data.headline, data.subtext, data.benefit1, data.benefit2].join(' ');
+        expect(joined).not.toMatch(/coin|gem|inventory|battle pass|chest|squad|raid|shop/i);
+      }
+    });
+  });
+
+  describe('hasFeatureAccess', () => {
+    it('grants free tier access to free features', () => {
+      expect(hasFeatureAccess('free', 'advancedStudyAI')).toBe(false);
+      expect(hasFeatureAccess('free', 'premiumSupport')).toBe(false);
+    });
+
+    it('denies free tier access to premium features', () => {
+      expect(hasFeatureAccess('free', 'deepCoachMemory')).toBe(false);
+      expect(hasFeatureAccess('free', 'advancedStudyOS')).toBe(false);
+    });
+
+    it('grants premium tier access to all features', () => {
+      expect(hasFeatureAccess('premium', 'deepCoachMemory')).toBe(true);
+      expect(hasFeatureAccess('premium', 'advancedStudyOS')).toBe(true);
+      expect(hasFeatureAccess('premium', 'progressIntelligence')).toBe(true);
+    });
+  });
+
+  describe('canCreateStudyPlan', () => {
+    it('allows free user with 0 plans', () => {
+      expect(canCreateStudyPlan('free', 0)).toBe(true);
+    });
+
+    it('denies free user with 1 plan (at limit)', () => {
+      expect(canCreateStudyPlan('free', 1)).toBe(false);
+    });
+
+    it('allows premium user regardless of count', () => {
+      expect(canCreateStudyPlan('premium', 0)).toBe(true);
+      expect(canCreateStudyPlan('premium', 5)).toBe(true);
+      expect(canCreateStudyPlan('premium', 100)).toBe(true);
+    });
+  });
+
+  describe('getRemainingStudyPlanSlots', () => {
+    it('returns 1 for free user with 0 plans', () => {
+      expect(getRemainingStudyPlanSlots('free', 0)).toBe(1);
+    });
+
+    it('returns 0 for free user with 1 plan', () => {
+      expect(getRemainingStudyPlanSlots('free', 1)).toBe(0);
+    });
+
+    it('returns Infinity for premium user', () => {
+      expect(getRemainingStudyPlanSlots('premium', 5)).toBe(Infinity);
+    });
+  });
+
+  describe('shouldShowPaywall', () => {
+    it('does not show paywall for free user on free-accessible feature', () => {
+      const result = shouldShowPaywall('free', 'deepCoachMemory');
+      expect(result.show).toBe(true);
+      expect(result.context).toBe('DEEP_COACH_MEMORY');
+    });
+
+    it('does not show paywall for premium user on any feature', () => {
+      const result = shouldShowPaywall('premium', 'deepCoachMemory');
+      expect(result.show).toBe(false);
+      expect(result.context).toBeNull();
+    });
+  });
+
+  describe('User Subscription Management', () => {
+    const userId = 'test-user-123';
+
+    beforeEach(() => {
+      setUserSubscription({
+        userId,
+        tier: 'free',
+        startedAt: Date.now(),
+        expiresAt: null,
+        isTrial: false,
+        trialEndsAt: null,
+        autoRenew: false,
+        platform: 'ios',
+      });
+    });
+
+    describe('setUserSubscription', () => {
+      it('stores subscription', () => {
+        const subscription = {
+          userId,
+          tier: 'premium' as SubscriptionTier,
+          startedAt: Date.now(),
+          expiresAt: null,
+          isTrial: false,
+          trialEndsAt: null,
+          autoRenew: true,
+          platform: 'ios' as const,
+        };
+        setUserSubscription(subscription);
+        const retrieved = getUserSubscription(userId);
+        expect(retrieved?.tier).toBe('premium');
+      });
+
+      it('publishes event on new subscription', () => {
+        const { eventBus } = require('../../../events');
+        setUserSubscription({
+          userId,
+          tier: 'premium',
+          startedAt: Date.now(),
+          expiresAt: null,
+          isTrial: false,
+          trialEndsAt: null,
+          autoRenew: true,
+          platform: 'ios',
+        });
+        expect(eventBus.publish).toHaveBeenCalledWith(
+          'subscription:changed',
+          expect.any(Object),
+        );
+      });
+    });
+
+    describe('getUserSubscription', () => {
+      it('returns null for unknown user', () => {
+        const subscription = getUserSubscription('unknown-user');
+        expect(subscription).toBeNull();
+      });
+    });
+
+    describe('getUserTier', () => {
+      it('defaults to free for unknown user', () => {
+        const tier = getUserTier('unknown-user');
+        expect(tier).toBe('free');
+      });
+    });
+
+    describe('isPremium', () => {
+      it('returns false for free user', () => {
+        expect(isPremium(userId)).toBe(false);
+      });
+
+      it('returns true for premium user', () => {
+        setUserSubscription({
+          userId,
+          tier: 'premium',
+          startedAt: Date.now(),
+          expiresAt: null,
+          isTrial: false,
+          trialEndsAt: null,
+          autoRenew: true,
+          platform: 'ios',
+        });
+        expect(isPremium(userId)).toBe(true);
+      });
+    });
+
+    describe('isInTrial', () => {
+      it('returns false for non-trial user', () => {
+        expect(isInTrial(userId)).toBe(false);
+      });
+
+      it('returns true for trial user', () => {
+        setUserSubscription({
+          userId,
+          tier: 'premium',
+          startedAt: Date.now(),
+          expiresAt: null,
+          isTrial: true,
+          trialEndsAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+          autoRenew: true,
+          platform: 'ios',
+        });
+        expect(isInTrial(userId)).toBe(true);
+      });
+
+      it('returns false for expired trial', () => {
+        setUserSubscription({
+          userId,
+          tier: 'premium',
+          startedAt: Date.now() - 14 * 24 * 60 * 60 * 1000,
+          expiresAt: null,
+          isTrial: true,
+          trialEndsAt: Date.now() - 7 * 24 * 60 * 60 * 1000,
+          autoRenew: true,
+          platform: 'ios',
+        });
+        expect(isInTrial(userId)).toBe(false);
+      });
+    });
+
+    describe('getTrialDaysRemaining', () => {
+      it('returns 0 for non-trial user', () => {
+        expect(getTrialDaysRemaining(userId)).toBe(0);
+      });
+
+      it('returns correct days for trial user', () => {
+        const trialEndsAt =
+          Date.now() + 3 * 24 * 60 * 60 * 1000 + 12 * 60 * 60 * 1000;
+        setUserSubscription({
+          userId,
+          tier: 'premium',
+          startedAt: Date.now(),
+          expiresAt: null,
+          isTrial: true,
+          trialEndsAt,
+          autoRenew: true,
+          platform: 'ios',
+        });
+        expect(getTrialDaysRemaining(userId)).toBe(3);
+      });
+    });
+  });
+});

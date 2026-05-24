@@ -36,8 +36,8 @@ describe('Feature Health Integration', () => {
         totalCompletedSessions: 20,
         degradedFeatures: new Set<FeatureKey>(['premium_paywall']),
       });
-      // premium_paywall is disabled_beta so isUnlocked is false
-      // but isDegraded still marks it
+      // premium_paywall is progressive, unlocked at 5+ sessions
+      // isDegraded still marks it even when unlocked
       expect(result.features.premium_paywall.isDegraded).toBe(true);
     });
 

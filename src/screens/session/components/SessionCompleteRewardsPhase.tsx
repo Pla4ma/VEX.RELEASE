@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Box } from '../../../components/primitives/Box';
-import { ChestRevealAnimationEnhanced, mapVariableRewardTier } from './ChestRevealAnimationEnhanced';
 import { XPEarnAnimation } from '../../../features/session-completion/components/XPEarnAnimation';
 import { SessionCompletionRewardsSection } from './SessionCompletionRewardsSection';
 import { CompanionGrowthSection } from './CompanionGrowthSection';
 import { SessionCompletionFollowThrough } from './SessionCompletionFollowThrough';
 import { useSessionCompleteController } from '../../../features/session-completion/hooks';
+import type { CompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
 import type { SessionSummary } from '../../../session/types';
+import { SessionPremiumChestCard } from './SessionPremiumChestCard';
 
 type SessionCompleteController = ReturnType<typeof useSessionCompleteController>;
 
@@ -22,7 +23,10 @@ interface SessionCompleteRewardsPhaseProps {
   controller: SessionCompleteController;
   summary: SessionSummary;
   sessionId: string;
+  policy: CompletionExperiencePolicy;
   nptDone: boolean;
+  onOpenInventory?: () => void;
+  onOpenShop?: () => void;
   onNptDone: () => void;
 }
 
@@ -30,31 +34,52 @@ export function SessionCompleteRewardsPhase({
   controller,
   summary,
   sessionId,
+  policy,
   nptDone,
+  onOpenInventory,
+  onOpenShop,
   onNptDone,
 }: SessionCompleteRewardsPhaseProps): JSX.Element | null {
+  const creditedHiddenChestRef = useRef(false);
+  const hidden = policy.hiddenCompletionSurfaces;
+
+  useEffect(() => {
+    if (
+      hidden.includes('chest_reward_animation') &&
+      controller.rewards.revealStage >= 1 &&
+      !creditedHiddenChestRef.current
+    ) {
+      creditedHiddenChestRef.current = true;
+      void controller.rewards.actions.handleRevealComplete();
+    }
+  }, [controller.rewards.actions, controller.rewards.revealStage, hidden]);
+
   if (controller.rewards.revealStage < 1) {
     return null;
   }
 
   return (
     <>
-      <Box px={6}>
-        <ChestRevealAnimationEnhanced
-          tier={mapVariableRewardTier(
-            (controller.rewards.chestResult?.tier?.toUpperCase() as import('../../../features/rewards/VariableRewardEngine').VariableRewardTier) ?? 'COMMON'
-          )}
-          rewards={{
-            xp: controller.rewards.chestResult?.xpReward ?? summary.xpEarned ?? 0,
-            coins: controller.rewards.chestResult?.coinReward ?? 0,
-            gems: controller.rewards.chestResult?.gemReward ?? 0,
+      {!hidden.includes('chest_reward_animation') ? (
+        <SessionPremiumChestCard
+          chestResult={controller.rewards.chestResult}
+          isOpened={controller.rewards.revealStage >= 2}
+          summary={summary}
+          onOpen={() => {
+            controller.rewards.actions.handleChestOpen();
+            void controller.rewards.actions.handleRevealComplete();
           }}
-          onComplete={() => void controller.rewards.actions.handleRevealComplete()}
-          onOpenEarly={controller.rewards.actions.handleChestOpen}
+          onOpenInventory={
+            hidden.includes('shop_inventory_prompts') ? undefined : onOpenInventory
+          }
+          onOpenShop={
+            hidden.includes('shop_inventory_prompts') ? undefined : onOpenShop
+          }
         />
-      </Box>
+      ) : null}
 
-      {controller.rewards.revealStage >= 2 ? (
+      {controller.rewards.revealStage >= 2 ||
+      hidden.includes('chest_reward_animation') ? (
         <>
           <Box px={6} pt={7}>
             <XPEarnAnimation
@@ -69,22 +94,27 @@ export function SessionCompleteRewardsPhase({
             progressionError={controller.progressionError}
             progressionLoading={controller.progressionLoading}
             rewards={controller.rewards}
+            hiddenSurfaces={hidden}
             setMasteryState={controller.setMasteryState}
-            studyProgress={controller.studyProgress}
+            studyProgress={
+              hidden.includes('study_progress_card') ? null : controller.studyProgress
+            }
             summary={summary}
             userId={controller.userId}
             onStartNewSession={() =>
               controller.navigation.navigate({ name: 'SessionSetup', params: {} })
             }
           />
-          <Box px={6}>
+          {!hidden.includes('companion_growth_card') ? (
+            <Box px={6}>
             <CompanionGrowthSection
               sessionId={sessionId}
               summary={summary}
               theme={controller.theme}
               userId={controller.userId}
             />
-          </Box>
+            </Box>
+          ) : null}
 
           {!nptDone && controller.userId && (
             <NeuroplasticityMicroInterventionCard
@@ -95,7 +125,9 @@ export function SessionCompleteRewardsPhase({
             />
           )}
 
-          <SessionCompletionFollowThrough summary={summary} />
+          {!hidden.includes('follow_through_cards') ? (
+            <SessionCompletionFollowThrough summary={summary} />
+          ) : null}
         </>
       ) : null}
     </>

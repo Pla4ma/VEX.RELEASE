@@ -5,12 +5,13 @@ import { Banner } from '../../../components/Banner';
 import { Box } from '../../../components/primitives';
 import { MasteryCard } from '../../../features/mastery/components/MasteryCard';
 import type { MasteryState } from '../../../features/mastery/types';
+import type { CompletionSurface } from '../../../features/session-completion/completion-experience-policy';
 import type { SessionSummary } from '../../../session/types';
 import type { StudyProgressCardData } from '../hooks/useSessionCompleteStudyProgress';
-import { getSessionBattlePassXp } from '../utils/session-complete-display';
 import { SessionProgressionCard } from './SessionProgressionCard';
 
 type SessionCompletionRewardsSectionProps = {
+  hiddenSurfaces: CompletionSurface[];
   levelMetric: {
     accent: string;
     id: string;
@@ -41,6 +42,7 @@ type SessionCompletionRewardsSectionProps = {
 };
 
 export function SessionCompletionRewardsSection({
+  hiddenSurfaces,
   levelMetric,
   masteryState,
   progressionError,
@@ -72,7 +74,7 @@ export function SessionCompletionRewardsSection({
               description={
                 rewards.rewardCreditStatus === 'retrying'
                   ? 'We are retrying the reward sync in the background.'
-                  : 'Your XP, coins, and streak updates are being locked in.'
+                  : 'Your XP and streak updates are being locked in.'
               }
               variant="info"
             />
@@ -80,7 +82,6 @@ export function SessionCompletionRewardsSection({
         ) : null}
 
         <SessionProgressionCard
-          coinsEarned={rewards.chestResult?.coinReward ?? summary.coinsEarned}
           isRewardSyncing={
             rewards.rewardCreditStatus === 'crediting' ||
             rewards.rewardCreditStatus === 'retrying' ||
@@ -89,16 +90,14 @@ export function SessionCompletionRewardsSection({
           levelMetric={progressionError ? null : levelMetric}
           rewardCreditStatus={rewards.rewardCreditStatus}
           rewardError={rewards.rewardCreditError}
-          sessionBattlePassXp={getSessionBattlePassXp(summary)}
           streakIncreased={summary.streakIncreased}
           streakLabel={`${summary.streakDays} Day Streak`}
           studyProgress={studyProgress}
-          userId={userId}
           onRetryRewards={() => void rewards.actions.applyChestRewards()}
           onStartNewSession={onStartNewSession}
         />
 
-        {masteryState ? (
+        {masteryState && !hiddenSurfaces.includes('mastery_card') ? (
           <Animated.View entering={FadeInUp.delay(500).duration(420)}>
             <Box pt={5}>
               <MasteryCard

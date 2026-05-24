@@ -14,6 +14,12 @@ const EMPTY_MEMORY: CoachPresenceMemorySummary = {
   coachMemoryCount: 0,
   companionMemoryCount: 0,
   latestMemory: null,
+  syncAvailable: true,
+};
+
+const UNAVAILABLE_MEMORY: CoachPresenceMemorySummary = {
+  ...EMPTY_MEMORY,
+  syncAvailable: false,
 };
 
 export interface UseCoachPresenceInput {
@@ -42,7 +48,7 @@ export function useCoachPresence(input: UseCoachPresenceInput): {
     queryKey: ['coach-presence', 'memory-summary', input.userId],
     staleTime: 300000,
   });
-  const fallbackMemory = enabled ? undefined : EMPTY_MEMORY;
+  const fallbackMemory = enabled ? UNAVAILABLE_MEMORY : EMPTY_MEMORY;
   const memorySummary = memoryQuery.data ?? fallbackMemory;
   const data = memorySummary
     ? buildCoachPresence({
@@ -66,8 +72,8 @@ export function useCoachPresence(input: UseCoachPresenceInput): {
   return {
     data,
     error: memoryQuery.error,
-    isError: memoryQuery.isError,
-    isPending: memoryQuery.isPending && enabled,
+    isError: false,
+    isPending: false,
     refetch: () => {
       void memoryQuery.refetch();
     },

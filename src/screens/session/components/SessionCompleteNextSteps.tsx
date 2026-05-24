@@ -17,7 +17,7 @@ interface SessionCompleteNextStepsProps {
   sessionId: string;
   tomorrowPreview: TomorrowPreview | null;
   bottomInset: number;
-  onShare: () => void;
+  onShare?: () => void;
   onOpenReflection: () => void;
 }
 

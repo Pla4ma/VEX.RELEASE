@@ -158,4 +158,17 @@ describe('buildActiveIntervention', () => {
 
     expect(result).toBeNull();
   });
+
+  it('does not interrupt active calm focus', () => {
+    const result = buildActiveIntervention({
+      userId: USER_ID,
+      state: makeState('STREAK_AT_RISK'),
+      profile: makeProfile([makeSignal('LAST_SESSION_HOURS', 47)]),
+      messages: [makeBossMessage()],
+      sessionMode: 'active_focus',
+      motivationStyle: 'CALM',
+    });
+
+    expect(result).toBeNull();
+  });
 });
