@@ -1,1 +1,8 @@
-export * from '../../../../src_impl/screens/progress/components/index';
+/**
+ * Progress Screen Components
+ */
+
+export { BattlePassSeasonHeader } from './BattlePassSeasonHeader';
+export { BattlePassXPProgress } from './BattlePassXPProgress';
+export { BattlePassTierCard } from './BattlePassTierCard';
+export { BattlePassTierTrack, BattlePassTrackTabs } from './BattlePassTierTrack';

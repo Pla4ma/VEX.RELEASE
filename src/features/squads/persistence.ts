@@ -1,1 +1,1 @@
-export * from '../../../src_impl/features/squads/persistence';
+export * from './repository/persistence';

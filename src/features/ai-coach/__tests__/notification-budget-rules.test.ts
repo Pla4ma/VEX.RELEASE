@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from '@jest/globals';
 import {
   canSendNotification,
   createMockNotificationBudget,
@@ -13,7 +13,7 @@ describe('Notification budget rules', () => {
   let mockRequest: NotificationRequest;
 
   beforeEach(() => {
-    vi.useRealTimers();
+    jest.useRealTimers();
     mockBudget = createMockNotificationBudget('user-123');
     mockRequest = createMockNotificationRequest('user-123');
   });

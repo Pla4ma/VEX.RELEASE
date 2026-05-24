@@ -1,1 +1,4 @@
-export * from '../../../../src_impl/screens/session/hooks/useSessionCompleteController';
+export {
+  useSessionCompleteController,
+} from '../../../features/session-completion/hooks';
+export { useSessionCompletionRouteState } from '../../../features/session-completion/route';

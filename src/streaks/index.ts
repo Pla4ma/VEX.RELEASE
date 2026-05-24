@@ -1,1 +1,1 @@
-export * from '../../src_impl/streaks/index';
+export * from './StreakService';

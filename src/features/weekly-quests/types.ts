@@ -1,1 +1,6 @@
-export * from '../../../src_impl/features/weekly-quests/types';
+export type {
+  WeeklyQuestSessionInput,
+  WeeklyQuestState,
+  WeeklyQuestStep,
+  WeeklyQuestStepId,
+} from './schemas';

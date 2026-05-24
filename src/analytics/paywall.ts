@@ -1,51 +1,70 @@
-/**
- * Paywall Analytics
- *
- * Phase 6.2 - Analytics & Experimentation
- * Tracks paywall performance and conversion metrics.
- */
-
-import { eventBus } from '../events';
-import type { PaywallAnalytics } from './types';
-
-const paywallData = new Map<string, PaywallAnalytics>();
-
-export function trackPaywallEvent(
-  userId: string,
-  context: string,
-  event: 'view' | 'convert' | 'dismiss',
-  value?: number
-): void {
-  let analytics = paywallData.get(context);
-  if (!analytics) {
-    analytics = { context, views: 0, conversions: 0, revenue: 0, conversionRate: 0, averageRevenuePerView: 0 };
-  }
-
-  switch (event) {
-    case 'view':
-      analytics.views++;
-      break;
-    case 'convert':
-      analytics.conversions++;
-      if (value) {analytics.revenue += value;}
-      break;
-    case 'dismiss':
-      break;
-  }
-
-  analytics.conversionRate = analytics.views > 0 ? analytics.conversions / analytics.views : 0;
-  analytics.averageRevenuePerView = analytics.views > 0 ? analytics.revenue / analytics.views : 0;
-
-  paywallData.set(context, analytics);
-
-  eventBus.publish('analytics:track', { event: 'analytics:paywall', properties: { userId, context, event, analytics: { ...analytics } } });
+export interface PaywallAnalytics {
+  totalShows: number;
+  totalDismisses: number;
+  totalConversions: number;
+  conversionRate: number;
+  byContext: Record<
+    string,
+    { shows: number; conversions: number; rate: number }
+  >;
 }
 
-export function getPaywallAnalytics(): PaywallAnalytics[] {
-  return Array.from(paywallData.values()).sort((a, b) => b.conversionRate - a.conversionRate);
+const paywallAnalytics: PaywallAnalytics = {
+  totalShows: 0,
+  totalDismisses: 0,
+  totalConversions: 0,
+  conversionRate: 0,
+  byContext: {},
+};
+
+export function trackPaywallEvent(
+  event: "show" | "dismiss" | "convert",
+  context: string,
+): void {
+  if (!paywallAnalytics.byContext[context]) {
+    paywallAnalytics.byContext[context] = { shows: 0, conversions: 0, rate: 0 };
+  }
+  const data = paywallAnalytics.byContext[context];
+  if (!data) {
+    return;
+  }
+  switch (event) {
+    case "show":
+      paywallAnalytics.totalShows++;
+      data.shows++;
+      break;
+    case "dismiss":
+      paywallAnalytics.totalDismisses++;
+      break;
+    case "convert":
+      paywallAnalytics.totalConversions++;
+      data.conversions++;
+      break;
+  }
+  paywallAnalytics.conversionRate =
+    paywallAnalytics.totalShows > 0
+      ? paywallAnalytics.totalConversions / paywallAnalytics.totalShows
+      : 0;
+  for (const ctx of Object.keys(paywallAnalytics.byContext)) {
+    const ctxData = paywallAnalytics.byContext[ctx];
+    if (ctxData) {
+      ctxData.rate = ctxData.shows > 0 ? ctxData.conversions / ctxData.shows : 0;
+    }
+  }
+}
+
+export function getPaywallAnalytics(): PaywallAnalytics {
+  return { ...paywallAnalytics };
 }
 
 export function getBestPaywallContext(): string | null {
-  const analytics = getPaywallAnalytics();
-  return analytics.length > 0 ? (analytics[0]?.context ?? null) : null;
+  let bestContext: string | null = null;
+  let bestRate = 0;
+  for (const [context, data] of Object.entries(paywallAnalytics.byContext)) {
+    if (data.rate > bestRate && data.shows > 10) {
+      bestRate = data.rate;
+      bestContext = context;
+    }
+  }
+  return bestContext;
 }

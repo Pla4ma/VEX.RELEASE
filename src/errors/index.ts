@@ -1,1 +1,5 @@
-export * from '../../src_impl/errors/index';
+/**
+ * Error Handling System Export
+ */
+
+export { ErrorBoundary, setupGlobalErrorHandler, setupRejectionHandler } from './ErrorBoundary';

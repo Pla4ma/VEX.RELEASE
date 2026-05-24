@@ -1,1 +1,33 @@
-export * from '../../../../src_impl/features/shop/components/shop-constants';
+/**
+ * Shop Constants
+ * Shared constants for the shop screen
+ */
+
+import { Dimensions } from 'react-native';
+import type { ItemType } from '../../items/schemas';
+import { launchColors } from '@theme/tokens/launch-colors';
+
+
+const { width } = Dimensions.get('window');
+
+export const ITEMS_PER_ROW = 3;
+export const ITEM_WIDTH = (width - 48) / ITEMS_PER_ROW;
+
+export type ShopCategory = 'ALL' | ItemType | 'OFFERS';
+
+export const CATEGORIES: { key: ShopCategory; label: string; icon: string }[] = [
+  { key: 'ALL', label: 'All', icon: '🛍️' },
+  { key: 'CONSUMABLE', label: 'Items', icon: '🧪' },
+  { key: 'EQUIPMENT', label: 'Gear', icon: '⚔️' },
+  { key: 'COSMETIC', label: 'Style', icon: '👑' },
+  { key: 'CRAFTING', label: 'Craft', icon: '🔧' },
+  { key: 'OFFERS', label: 'Deals', icon: '🔥' },
+];
+
+export const RARITY_COLORS = {
+  COMMON: launchColors.hex_9ca3af,
+  UNCOMMON: launchColors.hex_10b981,
+  RARE: launchColors.hex_3b82f6,
+  EPIC: launchColors.hex_8b5cf6,
+  LEGENDARY: launchColors.hex_f59e0b,
+};

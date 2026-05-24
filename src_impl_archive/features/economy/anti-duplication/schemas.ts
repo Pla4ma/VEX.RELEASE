@@ -1,0 +1,152 @@
+import { z } from "zod";
+export const DeduplicationKeySchema = z.object({
+  id: z.string().uuid(),
+  userId: z.string().uuid(),
+  actionType: z.enum(["SESSION_COMPLETE", "DAILY_LOGIN", "STREAK_MILESTONE", "ACHIEVEMENT_UNLOCK", "BOSS_DEFEAT", "LEVEL_UP", "QUEST_COMPLETE", "CHALLENGE_COMPLETE", "SQUAD_JOIN", "PURCHASE_COMPLETE", "REWARD_CLAIM"]),
+  contextKey: z.string(),
+  contextData: z.record(z.unknown()).optional(),
+  timeWindow: z.number().min(0),
+  expiresAt: z.number().optional(),
+  source: z.string(),
+  sourceId: z.string().nullable(),
+  metadata: z.record(z.unknown()).nullable(),
+  isUsed: z.boolean(),
+  usedAt: z.number().nullable(),
+  attempts: z.number().min(0),
+  createdAt: z.number(),
+  updatedAt: z.number(),
+});
+export type DeduplicationKey = z.infer<typeof DeduplicationKeySchema>;
+export const DeduplicationRuleSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  description: z.string(),
+  actionType: z.enum(["SESSION_COMPLETE", "DAILY_LOGIN", "STREAK_MILESTONE", "ACHIEVEMENT_UNLOCK", "BOSS_DEFEAT", "LEVEL_UP", "QUEST_COMPLETE", "CHALLENGE_COMPLETE", "SQUAD_JOIN", "PURCHASE_COMPLETE", "REWARD_CLAIM"]),
+  keyTemplate: z.string(),
+  keyVariables: z.array(z.string()),
+  timeWindow: z.number().min(0),
+  resetSchedule: z.enum(["NONE", "DAILY", "WEEKLY", "MONTHLY"]).optional(),
+  conditions: z.object({
+    minLevel: z.number().min(1).nullable(),
+    maxLevel: z.number().nullable(),
+    requiredEntitlements: z.array(z.string()).optional(),
+    excludedFromEvents: z.boolean().optional(),
+  }),
+  actions: z.object({
+    blockDuplicate: z.boolean(),
+    warnOnAttempt: z.boolean(),
+    logAttempt: z.boolean(),
+    customMessage: z.string().nullable(),
+  }),
+  isActive: z.boolean(),
+  priority: z.number().min(1),
+});
+export type DeduplicationRule = z.infer<typeof DeduplicationRuleSchema>;
+export const DeduplicationAttemptSchema = z.object({
+  id: z.string().uuid(),
+  userId: z.string().uuid(),
+  actionType: z.enum(["SESSION_COMPLETE", "DAILY_LOGIN", "STREAK_MILESTONE", "ACHIEVEMENT_UNLOCK", "BOSS_DEFEAT", "LEVEL_UP", "QUEST_COMPLETE", "CHALLENGE_COMPLETE", "SQUAD_JOIN", "PURCHASE_COMPLETE", "REWARD_CLAIM"]),
+  contextKey: z.string(),
+  result: z.enum(["ALLOWED", "BLOCKED_DUPLICATE", "BLOCKED_RULE", "ERROR"]),
+  reason: z.string().nullable(),
+  source: z.string(),
+  sourceId: z.string().nullable(),
+  metadata: z.record(z.unknown()).nullable(),
+  createdAt: z.number(),
+});
+export type DeduplicationAttempt = z.infer<typeof DeduplicationAttemptSchema>;
+export const DeduplicationRequestSchema = z.object({
+  userId: z.string().uuid(),
+  actionType: z.enum(["SESSION_COMPLETE", "DAILY_LOGIN", "STREAK_MILESTONE", "ACHIEVEMENT_UNLOCK", "BOSS_DEFEAT", "LEVEL_UP", "QUEST_COMPLETE", "CHALLENGE_COMPLETE", "SQUAD_JOIN", "PURCHASE_COMPLETE", "REWARD_CLAIM"]),
+  contextData: z.record(z.unknown()),
+  source: z.string(),
+  sourceId: z.string().nullable(),
+  metadata: z.record(z.unknown()).nullable(),
+  userLevel: z.number().min(1),
+  isPremiumUser: z.boolean(),
+});
+export type DeduplicationRequest = z.infer<typeof DeduplicationRequestSchema>;
+export const DeduplicationResultSchema = z.object({
+  allowed: z.boolean(),
+  deduplicationKey: z.string().nullable(),
+  result: z.enum(["ALLOWED", "BLOCKED_DUPLICATE", "BLOCKED_RULE", "ERROR"]),
+  reason: z.string().nullable(),
+  warningMessage: z.string().nullable(),
+  existingKey: DeduplicationKeySchema.nullable(),
+  ruleApplied: DeduplicationRuleSchema.nullable(),
+  requiresPremium: z.boolean(),
+  premiumUpgradeMessage: z.string().nullable(),
+});
+export type DeduplicationResult = z.infer<typeof DeduplicationResultSchema>;
+export const ExploitPatternSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  description: z.string(),
+  pattern: z.enum(["RAPID_REPEAT_ACTIONS", "SIMULTANEOUS_SESSIONS", "TIME_TRAVEL", "UNREALISTIC_PROGRESS", "DUPLICATE_CONTEXT_KEYS", "MANIPULATED_METADATA"]),
+  criteria: z.object({
+    timeWindow: z.number().min(60),
+    maxAttempts: z.number().min(1),
+    actionTypes: z.array(z.string()),
+    minLevel: z.number().nullable(),
+    suspiciousThreshold: z.number().min(0).max(1),
+  }),
+  actions: z.object({
+    block: z.boolean(),
+    flagForReview: z.boolean(),
+    temporaryRestriction: z.boolean(),
+    notifyAdmins: z.boolean(),
+    customMessage: z.string().nullable(),
+  }),
+  isActive: z.boolean(),
+  priority: z.number().min(1),
+});
+export type ExploitPattern = z.infer<typeof ExploitPatternSchema>;
+export const ExploitDetectionSchema = z.object({
+  id: z.string().uuid(),
+  userId: z.string().uuid(),
+  patternId: z.string().uuid(),
+  patternName: z.string(),
+  triggerAction: z.string(),
+  triggerContext: z.string(),
+  triggerData: z.record(z.unknown()),
+  confidence: z.number().min(0).max(1),
+  severity: z.enum(["LOW", "MEDIUM", "HIGH", "CRITICAL"]),
+  actionsTaken: z.array(z.string()),
+  status: z.enum(["DETECTED", "REVIEWING", "RESOLVED", "FALSE_POSITIVE"]),
+  resolvedAt: z.number().nullable(),
+  resolutionNotes: z.string().nullable(),
+  createdAt: z.number(),
+  updatedAt: z.number(),
+});
+export type ExploitDetection = z.infer<typeof ExploitDetectionSchema>;
+export const DeduplicationAnalyticsSchema = z.object({
+  period: z.enum(["HOURLY", "DAILY", "WEEKLY"]),
+  periodStart: z.number(),
+  periodEnd: z.number(),
+  totalAttempts: z.number(),
+  allowedAttempts: z.number(),
+  blockedDuplicates: z.number(),
+  blockedByRules: z.number(),
+  errors: z.number(),
+  attemptsByActionType: z.record(z.number()),
+  freeUserAttempts: z.number(),
+  premiumUserAttempts: z.number(),
+  exploitsDetected: z.number(),
+  exploitsResolved: z.number(),
+  averageValidationTime: z.number(),
+});
+export type DeduplicationAnalytics = z.infer<typeof DeduplicationAnalyticsSchema>;
+export const AntiDuplicationConfigSchema = z.object({
+  enableDeduplication: z.boolean(),
+  enableExploitDetection: z.boolean(),
+  enableAnalytics: z.boolean(),
+  defaultRules: z.array(DeduplicationRuleSchema),
+  exploitPatterns: z.array(ExploitPatternSchema),
+  keyRetentionDays: z.number().min(1),
+  attemptRetentionDays: z.number().min(1),
+  cleanupIntervalHours: z.number().min(1),
+  maxValidationTime: z.number().min(100),
+  enableCaching: z.boolean(),
+  cacheTTL: z.number().min(60),
+});
+export type AntiDuplicationConfig = z.infer<typeof AntiDuplicationConfigSchema>;

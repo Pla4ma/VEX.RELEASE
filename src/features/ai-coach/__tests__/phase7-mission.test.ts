@@ -1,14 +1,14 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from '@jest/globals';
 import { createMockCoachInput } from '../input-contract';
 import { convertSuggestionToMission, generateMissionSuggestion } from '../phase7-integration';
 import type { CoachSuggestion } from '../phase7-schemas';
 import { validateMessageQuality } from '../message-quality-gate';
 import { eventBus } from '../../../events';
 
-vi.mock('../../../events', () => ({ eventBus: { publish: vi.fn() } }));
+jest.mock('../../../events', () => ({ eventBus: { publish: jest.fn() } }));
 
-vi.mock('../message-quality-gate', () => ({
-  validateMessageQuality: vi.fn(() => ({
+jest.mock('../message-quality-gate', () => ({
+  validateMessageQuality: jest.fn(() => ({
     messageId: 'test',
     content: 'Your 5-day streak is at risk. Try a 25-minute session tonight.',
     category: 'SESSION_SUGGESTION',
@@ -21,12 +21,12 @@ vi.mock('../message-quality-gate', () => ({
   })),
 }));
 
-const mockedValidateMessageQuality = vi.mocked(validateMessageQuality);
-const mockedPublish = vi.mocked(eventBus.publish);
+const mockedValidateMessageQuality = jest.mocked(validateMessageQuality);
+const mockedPublish = jest.mocked(eventBus.publish);
 
 describe('Phase 7 mission integration', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
   it('generates mission suggestion when coach should intervene', async () => {

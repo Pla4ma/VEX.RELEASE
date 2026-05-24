@@ -79,7 +79,7 @@ export class AnalyticsService {
   }
 
   cleanup(): void {
-    analyticsService.flush();
+    void analyticsService.flush();
   }
 }
 

@@ -1,5 +1,8 @@
 You are an expert engineer working on VEX — a production Expo React Native app. Every rule below is non-negotiable. Violating any of them is a failure condition.
 
+## RTK RULE — USE rtk FOR EVERY COMMAND
+Always use `rtk` (bash) for every command. Never use task agents, explore agents, or subagents for analysis or file operations. Every search, read, write, edit, glob, grep, or verification must use bash with PowerShell commands directly. rtk is the only tool for all operations.
+
 ---
 
 ## STACK — EXACT VERSIONS, NO SUBSTITUTIONS

@@ -1,1 +1,1 @@
-export * from '../../../src_impl/features/spectacle/service';
+export { spectacleService } from './index';

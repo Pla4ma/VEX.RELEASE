@@ -7,7 +7,6 @@
 import { useCallback } from 'react';
 import { AccessibilityInfo } from 'react-native';
 
-
 /**
  * Accessibility hook return type
  */
@@ -36,7 +35,7 @@ export function useAccessibility(): UseAccessibilityReturn {
   /**
    * Announce message to screen reader
    */
-  const announceMessage = useCallback((message: string): void => {
+  const announce = useCallback((message: string): void => {
     AccessibilityInfo.announceForAccessibility(message);
   }, []);
 
@@ -49,7 +48,7 @@ export function useAccessibility(): UseAccessibilityReturn {
 
   return {
     isScreenReaderEnabled,
-    announce: announceMessage,
+    announce,
     setFocus,
   };
 }

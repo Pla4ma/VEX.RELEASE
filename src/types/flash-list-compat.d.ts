@@ -1,1 +1,7 @@
-export * from '../../src_impl/types/flash-list-compat.d';
+import '@shopify/flash-list';
+
+declare module '@shopify/flash-list' {
+  interface FlashListProps<T> {
+    estimatedItemSize?: T extends unknown ? number : never;
+  }
+}

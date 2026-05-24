@@ -1,1 +1,6 @@
-export * from '../../../src_impl/icons/components/index';
+/**
+ * Icon Components Export
+ */
+
+export { Icon, createIcon } from './Icon';
+export { IconButton, createIconButton } from './IconButton';

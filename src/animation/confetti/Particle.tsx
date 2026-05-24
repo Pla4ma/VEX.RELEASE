@@ -5,8 +5,8 @@
  */
 
 import React, { useEffect } from 'react';
-import { View, Dimensions } from 'react-native';
-import { useSharedValue, useAnimatedStyle, withSpring, withDecay, withDelay, runOnJS } from 'react-native-reanimated';
+import { Dimensions } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, withSpring, withDecay, withDelay, runOnJS } from 'react-native-reanimated';
 import { ParticleConfig } from './types';
 import { particleStyle, shapeStyle, triangleStyle, FRICTION } from './constants';
 
@@ -94,35 +94,29 @@ export function Particle({ config, onComplete }: ParticleProps) {
 
   const renderShape = () => {
     const size = config.size;
-    const style = [
-      particleStyle,
-      shapeStyle,
-      { width: size, height: size, backgroundColor: config.color },
-      animatedStyle,
-    ];
 
     switch (config.shape) {
       case 'circle':
-        return <View style={[style, { borderRadius: size / 2 }]} />;
+        return <Animated.View style={[particleStyle, shapeStyle, { width: size, height: size, backgroundColor: config.color, borderRadius: size / 2 }, animatedStyle]} />;
       case 'square':
-        return <View style={style} />;
+        return <Animated.View style={[particleStyle, shapeStyle, { width: size, height: size, backgroundColor: config.color }, animatedStyle]} />;
       case 'triangle':
         return (
-          <View
+          <Animated.View
             style={[
               triangleStyle,
               {
-                ...animatedStyle,
                 borderLeftWidth: size / 2,
                 borderRightWidth: size / 2,
                 borderBottomWidth: size,
                 borderBottomColor: config.color,
               },
+              animatedStyle,
             ]}
           />
         );
       default:
-        return <View style={[style, { borderRadius: size / 2 }]} />;
+        return <Animated.View style={[particleStyle, shapeStyle, { width: size, height: size, backgroundColor: config.color, borderRadius: size / 2 }, animatedStyle]} />;
     }
   };
 

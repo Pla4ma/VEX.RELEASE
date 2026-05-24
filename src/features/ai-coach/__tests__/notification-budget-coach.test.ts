@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from '@jest/globals';
 import {
   canSendNotification,
   createMockNotificationBudget,
@@ -11,13 +11,13 @@ import {
 function mockCurrentHour(hour: number): void {
   const date = new Date('2026-05-07T00:00:00.000Z');
   date.setHours(hour, 0, 0, 0);
-  vi.useFakeTimers();
-  vi.setSystemTime(date);
+  jest.useFakeTimers();
+  jest.setSystemTime(date);
 }
 
 describe('Notification budget coach and integration flows', () => {
   beforeEach(() => {
-    vi.useRealTimers();
+    jest.useRealTimers();
   });
 
   it('sends specific coach notifications and suppresses generic login reminders', async () => {

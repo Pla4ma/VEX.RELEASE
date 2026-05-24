@@ -1,1 +1,1 @@
-export * from '../../../src_impl/features/rewards/repository/delivery-tracking';
+export * from './repository/delivery-tracking';

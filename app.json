@@ -11,7 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#0A0A0A"
     },
-    "sdkVersion": "54.0.0",
+    "sdkVersion": "56.0.0",
     "platforms": [
       "ios",
       "android",
@@ -71,6 +71,17 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "newArchEnabled": true
+          },
+          "android": {
+            "newArchEnabled": true
+          }
+        }
+      ],
       "expo-secure-store",
       [
         "expo-notifications",
@@ -85,7 +96,8 @@
           "project": "vexx",
           "organization": "nueroflow"
         }
-      ]
+      ],
+      "expo-status-bar"
     ],
     "extra": {
       "eas": {

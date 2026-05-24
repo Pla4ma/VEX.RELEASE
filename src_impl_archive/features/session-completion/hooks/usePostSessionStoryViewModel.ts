@@ -1,0 +1,34 @@
+import { useQuery } from '@tanstack/react-query';
+
+import { useNetInfo } from '../../../network';
+import type { SessionSummary } from '../../../session/types';
+import {
+  getPostSessionStoryViewModel,
+  type PostSessionStoryViewModel,
+} from '../story-view-model-service';
+
+export function usePostSessionStoryViewModel(input: {
+  enabled?: boolean;
+  sessionId: string;
+  summary: SessionSummary;
+  userId: string | null;
+}) {
+  const { isOnline } = useNetInfo();
+  const { enabled = true, sessionId, summary, userId } = input;
+
+  const query = useQuery<PostSessionStoryViewModel | null, Error>({
+    enabled: enabled && Boolean(sessionId),
+    queryFn: async () => getPostSessionStoryViewModel({ sessionId, summary, userId }),
+    queryKey: ['session-completion', 'story-view-model', userId, sessionId],
+    staleTime: 30_000,
+  });
+
+  return {
+    data: query.data ?? null,
+    error: query.error,
+    isError: query.isError,
+    isOffline: !isOnline,
+    isPending: query.isPending,
+    refetch: query.refetch,
+  };
+}

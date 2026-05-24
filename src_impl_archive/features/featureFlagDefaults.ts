@@ -1,0 +1,66 @@
+import type { FeatureFlag } from "./FeatureFlagService";
+
+const now = Date.now();
+
+export const defaultFlags: Record<string, FeatureFlag> = {
+  new_design: {
+    key: "new_design",
+    value: false,
+    description: "Enable new UI design",
+    enabled: true,
+    rolloutPercentage: 0,
+    requiresAuth: false,
+    createdAt: now,
+    updatedAt: now,
+  },
+  dark_mode: {
+    key: "dark_mode",
+    value: true,
+    description: "Enable dark mode support",
+    enabled: true,
+    rolloutPercentage: 100,
+    requiresAuth: false,
+    createdAt: now,
+    updatedAt: now,
+  },
+  push_notifications: {
+    key: "push_notifications",
+    value: true,
+    description: "Enable push notifications",
+    enabled: true,
+    rolloutPercentage: 100,
+    requiresAuth: true,
+    createdAt: now,
+    updatedAt: now,
+  },
+  offline_mode: {
+    key: "offline_mode",
+    value: false,
+    description: "Enable offline mode",
+    enabled: false,
+    rolloutPercentage: 0,
+    requiresAuth: false,
+    createdAt: now,
+    updatedAt: now,
+  },
+  advanced_search: {
+    key: "advanced_search",
+    value: false,
+    description: "Enable advanced search filters",
+    enabled: true,
+    rolloutPercentage: 10,
+    requiresAuth: false,
+    createdAt: now,
+    updatedAt: now,
+  },
+  beta_features: {
+    key: "beta_features",
+    value: false,
+    description: "Enable beta features",
+    enabled: true,
+    rolloutPercentage: 0,
+    requiresAuth: true,
+    createdAt: now,
+    updatedAt: now,
+  },
+};

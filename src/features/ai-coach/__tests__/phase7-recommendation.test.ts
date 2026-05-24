@@ -1,9 +1,9 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from '@jest/globals';
 import { createMockCoachInput } from '../input-contract';
 import { generateSessionRecommendation } from '../phase7-integration';
 
-vi.mock('../message-quality-gate', () => ({
-  validateMessageQuality: vi.fn(() => ({
+jest.mock('../message-quality-gate', () => ({
+  validateMessageQuality: jest.fn(() => ({
     messageId: 'test',
     content: 'Your strongest sessions use this pattern. Try it today.',
     category: 'SESSION_SUGGESTION',

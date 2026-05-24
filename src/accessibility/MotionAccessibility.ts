@@ -1,23 +1,26 @@
 /**
- * Motion Accessibility System
+ * MotionAccessibility — Re-export barrel
  *
- * Ensures animations and transitions respect user preferences
- * and provide alternatives for users with vestibular disorders.
+ * Re-exports the canonical motion accessibility system from the shared
+ * accessibility layer. All animation types and values use the stub-based
+ * interface (Reanimated 3 compatible), not react-native Animated.
  *
- * This file re-exports from modular files for backward compatibility.
- * New code should import directly from the modular files.
+ * @deprecated Import directly from '@/accessibility/motion-manager' for new code.
  */
 
-export type { AnimationType } from './motion-preferences';
-export { DEFAULT_MOTION_PREFERENCES } from './motion-preferences';
-export type { MotionPreferences, AnimationConfig } from './motion-preferences';
-export { motionAccessibilityManager } from './motion-manager';
 export {
-  useMotionAccessibility,
-  withMotionAccessibility,
-  ACCESSIBLE_ANIMATION_PRESETS,
-  createAccessibleAnimation,
-  createAccessibleAnimatedValue,
-  setReducedMotion,
-  triggerHapticFeedback,
-} from './motion-hooks';
+  MotionAccessibilityManager,
+  motionAccessibilityManager,
+} from '../../src/accessibility/motion-manager';
+
+export {
+  type MotionPreferences,
+  DEFAULT_MOTION_PREFERENCES,
+  type AnimationType,
+  type AnimationConfig,
+} from '../../src/accessibility/motion-preferences';
+
+export {
+  type AnimatedValue,
+  type CompositeAnimation,
+} from '../../src/accessibility/motion-animation-stubs';

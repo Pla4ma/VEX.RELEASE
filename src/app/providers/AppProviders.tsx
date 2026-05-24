@@ -57,11 +57,11 @@ const initializeServices = async () => {
  * Root provider component
  *
  * Provider order (important):
-1. GestureHandlerRootView - gesture system
-2. SafeAreaProvider - safe area insets
-3. QueryProvider - data fetching with network awareness
-4. ThemeProvider - styling
-5. ErrorBoundary - error handling
+ 1. GestureHandlerRootView - gesture system
+ 2. SafeAreaProvider - safe area insets
+ 3. QueryProvider - data fetching with network awareness
+ 4. ThemeProvider - styling
+ 5. ErrorBoundary - error handling
  */
 export const AppProviders: React.FC<AppProvidersProps> = ({ children }) => {
   useEffect(() => {

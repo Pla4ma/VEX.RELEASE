@@ -97,44 +97,7 @@ export const QueryKeys = {
   // Auth
   auth: ['auth'] as const,
   user: (userId: string) => ['user', userId] as const,
-  session: {
-    _def: ['session'] as const,
-    active: () => [...QueryKeys.session._def, 'active'] as const,
-    history: () => [...QueryKeys.session._def, 'history'] as const,
-  },
-
-  // Focus Identity
-  focusScore: {
-    _def: ['focusScore'] as const,
-    current: (userId: string) => [...QueryKeys.focusScore._def, 'current', userId] as const,
-    history: (userId: string) => [...QueryKeys.focusScore._def, 'history', userId] as const,
-  },
-
-  // Rewards
-  rewards: {
-    _def: ['rewards'] as const,
-    all: (userId: string) => [...QueryKeys.rewards._def, 'all', userId] as const,
-    pending: (userId: string) => [...QueryKeys.rewards._def, 'pending', userId] as const,
-  },
-
-  // Companion
-  companion: {
-    _def: ['companion'] as const,
-    state: (userId: string) => [...QueryKeys.companion._def, 'state', userId] as const,
-  },
-
-  // Daily Mission
-  dailyMission: {
-    _def: ['dailyMission'] as const,
-    current: (userId: string) => [...QueryKeys.dailyMission._def, 'current', userId] as const,
-  },
-
-  // Progression (general)
-  progression: {
-    _def: ['progression'] as const,
-    xp: (userId: string) => [...QueryKeys.progression._def, 'xp', userId] as const,
-    level: (userId: string) => [...QueryKeys.progression._def, 'level', userId] as const,
-  },
+  session: ['session'] as const,
 
   // Content
   feed: (filters?: string) => ['feed', filters] as const,

@@ -1,1 +1,1 @@
-export * from '../../src_impl/progression/index';
+export * from './ProgressionService';

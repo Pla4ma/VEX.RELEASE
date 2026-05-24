@@ -4,16 +4,16 @@
  * Main application component that wraps all providers and renders the root navigator.
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Platform, View, type StyleProp, type ViewStyle } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { QueryProvider } from '../api';
 import { initSentry } from '../config/sentry';
 import { ErrorBoundary } from '../errors/ErrorBoundary';
-import { initializeNotifications } from '../features/ai-coach/services';
+
 import { RootNavigator } from '../navigation/RootNavigator';
-import { initializeRevenueCat } from '../shared/monetization/revenuecat-service';
+
 import { ToastProvider } from '../shared/ui/components/Toast';
 import { initializeDevContrastChecker } from '../shared/accessibility/contrast-checker';
 import { SpectacleOverlay } from '../features/spectacle/components/SpectacleOverlay';
@@ -22,26 +22,22 @@ import { bootstrapApp } from './bootstrap';
 
 const rootViewStyle: StyleProp<ViewStyle> = { flex: 1 };
 
-try {
-  initSentry();
-} catch {
-  // Sentry unavailable in Expo Go.
-}
+function useAppRuntimeBootstrap(): void {
+  useEffect(() => {
+    try {
+      initSentry();
+    } catch {
+      // Sentry unavailable in Expo Go.
+    }
 
-initializeRevenueCat(null).catch(() => undefined);
+    bootstrapApp();
 
-try {
-  initializeNotifications();
-} catch {
-  // Notifications may not be available in Expo Go.
-}
-
-bootstrapApp();
-
-try {
-  initializeDevContrastChecker();
-} catch {
-  // Accessibility checker unavailable — non-critical.
+    try {
+      initializeDevContrastChecker();
+    } catch {
+      // Accessibility checker unavailable — non-critical.
+    }
+  }, []);
 }
 
 let GestureHandlerRootView: React.FC<{
@@ -63,6 +59,8 @@ if (Platform.OS !== 'web') {
 }
 
 export const App: React.FC = () => {
+  useAppRuntimeBootstrap();
+
   return (
     <GestureHandlerRootView style={rootViewStyle}>
       <SafeAreaProvider>

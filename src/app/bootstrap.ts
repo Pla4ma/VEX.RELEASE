@@ -7,23 +7,38 @@ import {
   initializeAnalyticsEventBridge,
   ProductAnalyticsEvents,
 } from '../shared/analytics';
+import { initializeSessionCompletionOrchestrator } from '../features/session-completion/completion-orchestrator';
+import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors';
+import { IS_DEVELOPMENT } from '../constants/app';
 
 let bootstrapped = false;
+let sessionRuntimeInitialized = false;
 const debug = createDebugger('app:bootstrap');
 
 function initializeCoreSystems(): void {
+  if (!IS_DEVELOPMENT) {
+    setupGlobalErrorHandler();
+    setupRejectionHandler();
+  }
   initializeAnalyticsEventBridge();
   analyticsService.initialize().then((enabled) => {
     if (enabled) {
       capture(ProductAnalyticsEvents.APP_OPENED, { source: 'bootstrap' });
     }
   });
+}
 
+export const initializeSessionRuntime = (): void => {
+  if (sessionRuntimeInitialized) {
+    return;
+  }
+
+  sessionRuntimeInitialized = true;
   const netInfo = getNetInfoAdapter();
   netInfo.initialize();
-  debug.info('Offline sync queue size at boot: %d', getQueueLength());
+  debug.info('Offline sync queue size at runtime init: %d', getQueueLength());
   startAutoProcessing();
-}
+};
 
 export const bootstrapApp = (): void => {
   if (bootstrapped) {
@@ -32,6 +47,8 @@ export const bootstrapApp = (): void => {
 
   bootstrapped = true;
   initializeCoreSystems();
+  initializeSessionCompletionOrchestrator();
+  initializeSessionRuntime();
 };
 
 export const bootstrapDevelopment = (): void => {

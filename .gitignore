@@ -29,3 +29,14 @@ type_errors.txt
 
 .commandcode/
 supabase/.temp/
+*.backup
+
+# Binary data files - never commit
+data/state_store.db/
+data/stream_store/
+data/__tmp_prettier_input.tsx
+data/jest-results.json
+
+# AI/config noise
+.trae/
+.replit

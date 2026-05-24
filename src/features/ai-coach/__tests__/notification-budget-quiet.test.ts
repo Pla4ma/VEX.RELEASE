@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from '@jest/globals';
 import {
   canSendNotification,
   createMockNotificationBudget,
@@ -9,13 +9,13 @@ import {
 function mockCurrentHour(hour: number): void {
   const date = new Date('2026-05-07T00:00:00.000Z');
   date.setHours(hour, 0, 0, 0);
-  vi.useFakeTimers();
-  vi.setSystemTime(date);
+  jest.useFakeTimers();
+  jest.setSystemTime(date);
 }
 
 describe('Notification budget quiet hours and suppression', () => {
   beforeEach(() => {
-    vi.useRealTimers();
+    jest.useRealTimers();
   });
 
   it('blocks during quiet hours and allows outside quiet hours', async () => {

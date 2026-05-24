@@ -1,2 +1,247 @@
-export * from '../../../src_impl/session/engines/TimeCalculator';
-export { default } from '../../../src_impl/session/engines/TimeCalculator';
+import type { TimeBreakdown, TimeProgressMetrics } from "../types";
+export const TIME_CONSTANTS = {
+  MILLISECONDS_PER_SECOND: 1000,
+  SECONDS_PER_MINUTE: 60,
+  MINUTES_PER_HOUR: 60,
+  HOURS_PER_DAY: 24,
+  MAX_SESSION_DURATION_SECONDS: 28800,
+  MIN_SESSION_DURATION_SECONDS: 60,
+  DEFAULT_WARNING_THRESHOLDS: [300, 60, 10],
+} as const;
+export function calculateElapsedTime(
+  startTime: number,
+  currentTime: number,
+  pausedDuration: number = 0,
+): number {
+  if (startTime <= 0) {
+    return 0;
+  }
+  if (currentTime < startTime) {
+    return 0;
+  }
+  const rawElapsed = Math.floor(
+    (currentTime - startTime) / TIME_CONSTANTS.MILLISECONDS_PER_SECOND,
+  );
+  return Math.max(0, rawElapsed - pausedDuration);
+}
+export function calculateRemainingTime(
+  duration: number,
+  elapsedTime: number,
+): number {
+  const remaining = duration - elapsedTime;
+  return Math.max(0, remaining);
+}
+export function calculateCompletionPercentage(
+  elapsed: number,
+  duration: number,
+): number {
+  if (duration <= 0) {
+    return 0;
+  }
+  const percentage = (elapsed / duration) * 100;
+  return Math.min(100, Math.max(0, percentage));
+}
+export function calculateEffectiveTime(
+  elapsed: number,
+  interruptions: number,
+  interruptionPenaltySeconds: number = 30,
+): number {
+  const penalty = interruptions * interruptionPenaltySeconds;
+  return Math.max(0, elapsed - penalty);
+}
+export function breakdownDuration(totalSeconds: number): TimeBreakdown {
+  const hours = Math.floor(
+    totalSeconds /
+      (TIME_CONSTANTS.SECONDS_PER_MINUTE * TIME_CONSTANTS.MINUTES_PER_HOUR),
+  );
+  const remainingAfterHours =
+    totalSeconds %
+    (TIME_CONSTANTS.SECONDS_PER_MINUTE * TIME_CONSTANTS.MINUTES_PER_HOUR);
+  const minutes = Math.floor(
+    remainingAfterHours / TIME_CONSTANTS.SECONDS_PER_MINUTE,
+  );
+  const seconds = remainingAfterHours % TIME_CONSTANTS.SECONDS_PER_MINUTE;
+  return {
+    hours,
+    minutes,
+    seconds,
+    totalSeconds,
+    formatted: formatDuration(hours, minutes, seconds),
+  };
+}
+export function formatDuration(
+  hours: number,
+  minutes: number,
+  seconds: number,
+): string {
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  if (hours > 0) {
+    return `${hours}:${pad(minutes)}:${pad(seconds)}`;
+  }
+  return `${pad(minutes)}:${pad(seconds)}`;
+}
+export function formatDurationLong(totalSeconds: number): string {
+  const breakdown = breakdownDuration(totalSeconds);
+  const parts: string[] = [];
+  if (breakdown.hours > 0) {
+    parts.push(`${breakdown.hours}h`);
+  }
+  if (breakdown.minutes > 0) {
+    parts.push(`${breakdown.minutes}m`);
+  }
+  if (breakdown.seconds > 0 || parts.length === 0) {
+    parts.push(`${breakdown.seconds}s`);
+  }
+  return parts.join(" ");
+}
+export function calculateProgressMetrics(
+  elapsed: number,
+  remaining: number,
+  duration: number,
+  phase: string,
+  interval: number,
+): TimeProgressMetrics {
+  const percentage = calculateCompletionPercentage(elapsed, duration);
+  const isComplete = percentage >= 100;
+  const isNearComplete = remaining <= 60;
+  const progressRatio = duration > 0 ? elapsed / duration : 0;
+  return {
+    elapsed,
+    remaining,
+    duration,
+    percentage,
+    isComplete,
+    isNearComplete,
+    progressRatio,
+    phase,
+    interval,
+    estimatedCompletionTime:
+      Date.now() + remaining * TIME_CONSTANTS.MILLISECONDS_PER_SECOND,
+  };
+}
+export function shouldTriggerWarning(
+  remaining: number,
+  previousRemaining: number,
+  thresholds: readonly number[] = TIME_CONSTANTS.DEFAULT_WARNING_THRESHOLDS,
+): number | null {
+  for (const threshold of thresholds) {
+    if (previousRemaining > threshold && remaining <= threshold) {
+      return threshold;
+    }
+  }
+  return null;
+}
+export function getTimeStatus(
+  elapsed: number,
+  duration: number,
+  isPaused: boolean,
+): "PENDING" | "ACTIVE" | "PAUSED" | "COMPLETE" | "OVERDUE" {
+  if (elapsed <= 0 && !isPaused) {
+    return "PENDING";
+  }
+  if (isPaused) {
+    return "PAUSED";
+  }
+  if (elapsed >= duration) {
+    return "COMPLETE";
+  }
+  if (elapsed > duration * 1.5) {
+    return "OVERDUE";
+  }
+  return "ACTIVE";
+}
+export function validateDuration(duration: number): {
+  valid: boolean;
+  error?: string;
+} {
+  if (!Number.isFinite(duration)) {
+    return { valid: false, error: "Duration must be a finite number" };
+  }
+  if (duration < TIME_CONSTANTS.MIN_SESSION_DURATION_SECONDS) {
+    return {
+      valid: false,
+      error: `Duration must be at least ${TIME_CONSTANTS.MIN_SESSION_DURATION_SECONDS} seconds`,
+    };
+  }
+  if (duration > TIME_CONSTANTS.MAX_SESSION_DURATION_SECONDS) {
+    return {
+      valid: false,
+      error: `Duration cannot exceed ${TIME_CONSTANTS.MAX_SESSION_DURATION_SECONDS} seconds (8 hours)`,
+    };
+  }
+  return { valid: true };
+}
+export function validateTimestamp(timestamp: number): {
+  valid: boolean;
+  error?: string;
+} {
+  if (!Number.isFinite(timestamp)) {
+    return { valid: false, error: "Timestamp must be a finite number" };
+  }
+  const now = Date.now();
+  const oneYearAgo = now - 365 * 24 * 60 * 60 * 1000;
+  const oneYearFromNow = now + 365 * 24 * 60 * 60 * 1000;
+  if (timestamp < oneYearAgo) {
+    return { valid: false, error: "Timestamp is too far in the past" };
+  }
+  if (timestamp > oneYearFromNow) {
+    return { valid: false, error: "Timestamp is too far in the future" };
+  }
+  return { valid: true };
+}
+export function calculateCurrentInterval(
+  elapsed: number,
+  focusDuration: number,
+  breakDuration: number,
+  longBreakDuration: number,
+  intervalsBeforeLongBreak: number,
+): {
+  interval: number;
+  phase: "FOCUS" | "BREAK" | "LONG_BREAK";
+  timeInPhase: number;
+} {
+  let timeRemaining = elapsed;
+  let interval = 1;
+  let phase: "FOCUS" | "BREAK" | "LONG_BREAK" = "FOCUS";
+  let timeInPhase = 0;
+  while (timeRemaining > 0) {
+    const isLongBreakInterval =
+      interval % intervalsBeforeLongBreak === 0 && interval > 0;
+    if (timeRemaining >= focusDuration) {
+      timeRemaining -= focusDuration;
+      interval++;
+      const currentBreakDuration = isLongBreakInterval
+        ? longBreakDuration
+        : breakDuration;
+      if (timeRemaining >= currentBreakDuration) {
+        timeRemaining -= currentBreakDuration;
+      } else {
+        phase = isLongBreakInterval ? "LONG_BREAK" : "BREAK";
+        timeInPhase = timeRemaining;
+        timeRemaining = 0;
+      }
+    } else {
+      phase = "FOCUS";
+      timeInPhase = timeRemaining;
+      timeRemaining = 0;
+    }
+  }
+  return { interval: Math.max(1, interval), phase, timeInPhase };
+}
+export const TimeCalculator = {
+  calculateElapsedTime,
+  calculateRemainingTime,
+  calculateCompletionPercentage,
+  calculateEffectiveTime,
+  breakdownDuration,
+  formatDuration,
+  formatDurationLong,
+  calculateProgressMetrics,
+  shouldTriggerWarning,
+  getTimeStatus,
+  validateDuration,
+  validateTimestamp,
+  calculateCurrentInterval,
+  constants: TIME_CONSTANTS,
+};
+export default TimeCalculator;

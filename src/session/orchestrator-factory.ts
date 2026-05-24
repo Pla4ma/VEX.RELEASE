@@ -1,1 +1,5 @@
-export * from '../../src_impl/session/orchestrator-factory';
+export {
+  SessionOrchestrator,
+  getSessionOrchestrator,
+  createSessionOrchestrator,
+} from "./SessionOrchestrator";

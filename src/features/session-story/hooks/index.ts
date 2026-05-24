@@ -1,1 +1,7 @@
-export * from '../../../../src_impl/features/session-story/hooks/index';
+/**
+ * Session Story Hooks
+ *
+ * @phase 17.2
+ */
+
+export { useSessionStory } from './useSessionStory';

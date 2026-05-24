@@ -1,1 +1,15 @@
-export * from '../../../src_impl/__tests__/mocks/expo-haptics';
+export enum ImpactFeedbackStyle {
+  Light = 'light',
+  Medium = 'medium',
+  Heavy = 'heavy',
+}
+
+export enum NotificationFeedbackType {
+  Success = 'success',
+  Warning = 'warning',
+  Error = 'error',
+}
+
+export const impactAsync = jest.fn(() => Promise.resolve());
+export const notificationAsync = jest.fn(() => Promise.resolve());
+export const selectionAsync = jest.fn(() => Promise.resolve());

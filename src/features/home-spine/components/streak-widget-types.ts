@@ -1,1 +1,5 @@
-export * from '../../../../src_impl/features/home-spine/components/streak-widget-types';
+export interface ActiveStreakWager {
+  currentProgress: number;
+  progressUnit: string;
+  target: number;
+}

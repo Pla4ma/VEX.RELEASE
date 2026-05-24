@@ -1,1 +1,1 @@
-export * from '../../../src_impl/session/integration/SessionCompletionOrchestrator';
+export { initializeSessionCompletionOrchestrator } from "../../features/session-completion/completion-orchestrator";

@@ -1,1 +1,419 @@
-export * from '../../../src_impl/session/antiCheat/AntiCheatEngine';
+import type { SessionState, AntiCheatFlag } from "../types";
+import { createDebugger } from "../../utils/debug";
+const debug = createDebugger("session:anticheat");
+const THRESHOLDS = {
+  MAX_TIME_JUMP: 30000,
+  MIN_TICK_INTERVAL: 900,
+  MAX_TICK_INTERVAL: 1100,
+  MAX_SESSION_DURATION: 8 * 60 * 60 * 1000,
+  MIN_SESSION_DURATION: 60 * 1000,
+  MAX_COMPLETION_SPEED: 1.5,
+  MAX_PAUSE_RATIO: 0.7,
+  MIN_FOCUS_VARIANCE: 0.1,
+};
+export class AntiCheatEngine {
+  private flags: AntiCheatFlag[] = [];
+  private sessionId: string | null = null;
+  private tickHistory: Array<{ timestamp: number; elapsed: number }> = [];
+  private lastTickTime: number = 0;
+  private deviceFingerprint: string | null = null;
+  private backgroundSwitches: number = 0;
+  private manualPauses: number = 0;
+  private suspendedCount: number = 0;
+  private uninterruptedFocusAccumulatedMs: number = 0;
+  private uninterruptedFocusStartedAt: number | null = null;
+  initialize(sessionId: string, deviceFingerprint: string): void {
+    this.sessionId = sessionId;
+    this.deviceFingerprint = deviceFingerprint;
+    this.flags = [];
+    this.tickHistory = [];
+    this.lastTickTime = 0;
+    this.backgroundSwitches = 0;
+    this.manualPauses = 0;
+    this.suspendedCount = 0;
+    this.uninterruptedFocusAccumulatedMs = 0;
+    this.uninterruptedFocusStartedAt = null;
+    debug.info("AntiCheatEngine initialized for session %s", sessionId);
+  }
+  validateTick(
+    elapsed: number,
+    timestamp: number,
+  ): { valid: boolean; warning?: string } {
+    if (!this.sessionId) {
+      return { valid: false, warning: "Engine not initialized" };
+    }
+    if (!this.uninterruptedFocusStartedAt) {
+      this.uninterruptedFocusStartedAt = timestamp;
+    }
+    if (this.lastTickTime > 0) {
+      const timeSinceLastTick = timestamp - this.lastTickTime;
+      if (timeSinceLastTick < 0) {
+        this.flagViolation("TIME_MANIPULATION", "CRITICAL", {
+          reason: "Negative time delta detected",
+          lastTick: this.lastTickTime,
+          currentTick: timestamp,
+          delta: timeSinceLastTick,
+        });
+        return { valid: false, warning: "Time manipulation detected" };
+      }
+      if (timeSinceLastTick < THRESHOLDS.MIN_TICK_INTERVAL) {
+        this.flagViolation("TIME_MANIPULATION", "WARNING", {
+          reason: "Tick interval too short",
+          expected: THRESHOLDS.MIN_TICK_INTERVAL,
+          actual: timeSinceLastTick,
+        });
+        return { valid: false, warning: "Suspicious tick timing" };
+      }
+      if (timeSinceLastTick > THRESHOLDS.MAX_TICK_INTERVAL * 2) {
+        if (timeSinceLastTick > THRESHOLDS.MAX_TIME_JUMP) {
+          this.flagViolation("TIME_MANIPULATION", "MODERATE", {
+            reason: "Large time gap between ticks",
+            gap: timeSinceLastTick,
+          });
+        }
+      }
+    }
+    if (this.tickHistory.length > 0) {
+      const lastElapsed =
+        this.tickHistory[this.tickHistory.length - 1]!.elapsed;
+      const elapsedDelta = elapsed - lastElapsed;
+      if (elapsedDelta < 0) {
+        this.flagViolation("TIME_MANIPULATION", "CRITICAL", {
+          reason: "Elapsed time decreased",
+          previous: lastElapsed,
+          current: elapsed,
+        });
+        return { valid: false, warning: "Time regression detected" };
+      }
+      if (elapsedDelta > THRESHOLDS.MAX_TIME_JUMP) {
+        this.flagViolation("TIME_MANIPULATION", "MODERATE", {
+          reason: "Elapsed time jumped too far",
+          delta: elapsedDelta,
+        });
+      }
+    }
+    this.tickHistory.push({ timestamp, elapsed });
+    this.lastTickTime = timestamp;
+    if (this.tickHistory.length > 1000) {
+      this.tickHistory = this.tickHistory.slice(-500);
+    }
+    return { valid: true };
+  }
+  recordManualPause(): void {
+    this.manualPauses++;
+    this.endCurrentFocusSegment(Date.now());
+  }
+  recordBackgroundSwitch(): void {
+    this.backgroundSwitches++;
+    this.endCurrentFocusSegment(Date.now());
+  }
+  recordSuspension(durationMs: number): void {
+    if (durationMs > 30000) {
+      this.suspendedCount = 1;
+      this.endCurrentFocusSegment(Date.now());
+    }
+  }
+  getCurrentPurityScore(): number {
+    const uninterruptedFocusMs =
+      this.uninterruptedFocusAccumulatedMs +
+      (this.uninterruptedFocusStartedAt
+        ? Math.max(0, Date.now() - this.uninterruptedFocusStartedAt)
+        : 0);
+    const uninterruptedBonus = Math.floor(uninterruptedFocusMs / 60000) * 2;
+    const score =
+      100 -
+      this.backgroundSwitches * 8 -
+      this.manualPauses * 5 -
+      (this.suspendedCount > 0 ? 15 : 0) +
+      uninterruptedBonus;
+    return Math.max(0, Math.min(100, score));
+  }
+  getPurityLabel(): "Elite" | "Good" | "Okay" | "Distracted" {
+    const purityScore = this.getCurrentPurityScore();
+    if (purityScore >= 90) {
+      return "Elite";
+    }
+    if (purityScore >= 70) {
+      return "Good";
+    }
+    if (purityScore >= 45) {
+      return "Okay";
+    }
+    return "Distracted";
+  }
+  validateSession(session: SessionState): {
+    valid: boolean;
+    flags: AntiCheatFlag[];
+  } {
+    if (!this.sessionId) {
+      return { valid: false, flags: [] };
+    }
+    if (session.endedAt && session.startedAt) {
+      const realDuration = session.endedAt - session.startedAt;
+      if (realDuration > THRESHOLDS.MAX_SESSION_DURATION) {
+        this.flagViolation("IMPOSSIBLE_DURATION", "CRITICAL", {
+          duration: realDuration,
+          maxAllowed: THRESHOLDS.MAX_SESSION_DURATION,
+        });
+      }
+      if (
+        realDuration < THRESHOLDS.MIN_SESSION_DURATION &&
+        session.completionPercentage > 50
+      ) {
+        this.flagViolation("RAPID_COMPLETION", "CRITICAL", {
+          duration: realDuration,
+          completion: session.completionPercentage,
+        });
+      }
+      const expectedDuration = session.config.duration * 1000;
+      if (session.completionPercentage >= 100) {
+        const speedRatio = expectedDuration / session.effectiveTime;
+        if (speedRatio > THRESHOLDS.MAX_COMPLETION_SPEED) {
+          this.flagViolation("RAPID_COMPLETION", "MODERATE", {
+            speedRatio,
+            expectedDuration,
+            actualEffectiveTime: session.effectiveTime,
+          });
+        }
+      }
+    }
+    const totalTime =
+      (session.endedAt || Date.now()) - (session.startedAt || Date.now());
+    const pauseRatio = totalTime > 0 ? session.pausedTime / totalTime : 0;
+    if (
+      pauseRatio > THRESHOLDS.MAX_PAUSE_RATIO &&
+      session.completionPercentage >= 90
+    ) {
+      this.flagViolation("SUSPICIOUS_PATTERN", "WARNING", {
+        reason: "High pause ratio with high completion",
+        pauseRatio,
+        completion: session.completionPercentage,
+      });
+    }
+    this.validateDataConsistency(session);
+    this.validateTickPatterns();
+    return { valid: this.getSeverity() !== "CRITICAL", flags: this.flags };
+  }
+  private validateDataConsistency(session: SessionState): void {
+    const expectedTotal = session.elapsedTime + session.remainingTime;
+    const actualTotal = session.config.duration * 1000;
+    if (Math.abs(expectedTotal - actualTotal) > 1000) {
+      this.flagViolation("INCONSISTENT_DATA", "MODERATE", {
+        reason: "Time accounting mismatch",
+        expectedTotal,
+        actualTotal,
+        elapsed: session.elapsedTime,
+        remaining: session.remainingTime,
+      });
+    }
+    if (session.intervalsCompleted > 0) {
+      const expectedTimeFromIntervals =
+        session.intervalsCompleted * session.config.duration * 1000;
+      const timeDiscrepancy = Math.abs(
+        session.effectiveTime - expectedTimeFromIntervals,
+      );
+      if (timeDiscrepancy > session.config.duration * 1000 * 0.5) {
+        this.flagViolation("INCONSISTENT_DATA", "WARNING", {
+          reason: "Interval count does not match elapsed time",
+          intervals: session.intervalsCompleted,
+          expectedTime: expectedTimeFromIntervals,
+          actualTime: session.effectiveTime,
+        });
+      }
+    }
+    if (session.pauses > 0 && session.pausedTime < 5000) {
+      this.flagViolation("SUSPICIOUS_PATTERN", "WARNING", {
+        reason: "Multiple pauses with minimal pause time",
+        pauses: session.pauses,
+        pausedTime: session.pausedTime,
+      });
+    }
+  }
+  private validateTickPatterns(): void {
+    if (this.tickHistory.length < 10) {
+      return;
+    }
+    const intervals: number[] = [];
+    for (let i = 1; i < this.tickHistory.length; i++) {
+      intervals.push(
+        this.tickHistory[i]!.timestamp - this.tickHistory[i - 1]!.timestamp,
+      );
+    }
+    const variance = this.calculateVariance(intervals);
+    const mean = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+    const coefficientOfVariation = variance / mean;
+    if (
+      coefficientOfVariation < THRESHOLDS.MIN_FOCUS_VARIANCE &&
+      intervals.length > 30
+    ) {
+      this.flagViolation("AUTOMATION_DETECTED", "CRITICAL", {
+        reason: "Tick intervals too consistent",
+        coefficientOfVariation,
+        sampleSize: intervals.length,
+      });
+    }
+  }
+  private calculateVariance(values: number[]): number {
+    const mean = values.reduce((a, b) => a + b, 0) / values.length;
+    const squaredDiffs = values.map((v) => Math.pow(v - mean, 2));
+    return squaredDiffs.reduce((a, b) => a + b, 0) / values.length;
+  }
+  validateDeviceChange(newFingerprint: string): {
+    valid: boolean;
+    changed: boolean;
+  } {
+    if (!this.deviceFingerprint) {
+      return { valid: true, changed: false };
+    }
+    if (newFingerprint !== this.deviceFingerprint) {
+      this.flagViolation("DEVICE_CHANGE", "WARNING", {
+        previousDevice: this.deviceFingerprint,
+        newDevice: newFingerprint,
+      });
+      return { valid: true, changed: true };
+    }
+    return { valid: true, changed: false };
+  }
+  private flagViolation(
+    type: AntiCheatFlag["type"],
+    severity: AntiCheatFlag["severity"],
+    evidence: Record<string, unknown>,
+  ): void {
+    if (!this.sessionId) {
+      return;
+    }
+    const flag: AntiCheatFlag = {
+      id: `flag-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      sessionId: this.sessionId,
+      type,
+      severity,
+      detectedAt: Date.now(),
+      evidence,
+      actionTaken: "NONE",
+    };
+    this.flags.push(flag);
+    debug.warn("Anti-cheat flag raised: %s (%s)", type, severity);
+  }
+  getFlags(): AntiCheatFlag[] {
+    return [...this.flags];
+  }
+  getSeverity(): "CLEAN" | "WARNING" | "MODERATE" | "CRITICAL" {
+    if (this.flags.length === 0) {
+      return "CLEAN";
+    }
+    const hasCritical = this.flags.some((f) => f.severity === "CRITICAL");
+    const hasModerate = this.flags.some((f) => f.severity === "MODERATE");
+    const hasWarning = this.flags.some((f) => f.severity === "WARNING");
+    if (hasCritical) {
+      return "CRITICAL";
+    }
+    if (hasModerate) {
+      return "MODERATE";
+    }
+    if (hasWarning) {
+      return "WARNING";
+    }
+    return "CLEAN";
+  }
+  getStatus(): "CLEAN" | "WARNING" | "FLAGGED" | "FAILED" | "INVALIDATED" {
+    const severity = this.getSeverity();
+    switch (severity) {
+      case "CLEAN":
+        return "CLEAN";
+      case "WARNING":
+        return "WARNING";
+      case "MODERATE":
+        return "FLAGGED";
+      case "CRITICAL":
+        if (this.flags.length > 5) {
+          return "INVALIDATED";
+        }
+        return "FAILED";
+      default:
+        return "CLEAN";
+    }
+  }
+  takeAction(): {
+    action: AntiCheatFlag["actionTaken"];
+    scoreReduction: number;
+    shouldInvalidate: boolean;
+  } {
+    const status = this.getStatus();
+    switch (status) {
+      case "FAILED":
+        return {
+          action: "SESSION_INVALIDATED",
+          scoreReduction: 1,
+          shouldInvalidate: true,
+        };
+      case "FLAGGED":
+        return {
+          action: "SCORE_REDUCED",
+          scoreReduction: 0.3,
+          shouldInvalidate: false,
+        };
+      case "WARNING":
+        return {
+          action: "FLAGGED",
+          scoreReduction: 0.05,
+          shouldInvalidate: false,
+        };
+      default:
+        return { action: "NONE", scoreReduction: 0, shouldInvalidate: false };
+    }
+  }
+  flagDeviceChange(oldHash: string, newHash: string): void {
+    if (!this.sessionId) {
+      return;
+    }
+    this.flagViolation("DEVICE_CHANGE", "WARNING", {
+      reason: "Device fingerprint changed during session",
+      oldHash,
+      newHash,
+      timestamp: Date.now(),
+    });
+    debug.warn("Device change flagged for session %s", this.sessionId);
+  }
+  applyActions(): void {
+    const action = this.takeAction();
+    this.flags = this.flags.map((flag) => ({
+      ...flag,
+      actionTaken: action.action,
+    }));
+    debug.info(
+      "Anti-cheat actions applied: %s, reduction: %d%%",
+      action.action,
+      action.scoreReduction * 100,
+    );
+  }
+  reset(): void {
+    this.flags = [];
+    this.tickHistory = [];
+    this.lastTickTime = 0;
+    this.backgroundSwitches = 0;
+    this.manualPauses = 0;
+    this.suspendedCount = 0;
+    this.uninterruptedFocusAccumulatedMs = 0;
+    this.uninterruptedFocusStartedAt = null;
+    debug.info("AntiCheatEngine reset");
+  }
+  destroy(): void {
+    this.reset();
+    this.sessionId = null;
+    this.deviceFingerprint = null;
+    debug.info("AntiCheatEngine destroyed");
+  }
+  private endCurrentFocusSegment(timestamp: number): void {
+    if (!this.uninterruptedFocusStartedAt) {
+      return;
+    }
+    this.uninterruptedFocusAccumulatedMs += Math.max(
+      0,
+      timestamp - this.uninterruptedFocusStartedAt,
+    );
+    this.uninterruptedFocusStartedAt = null;
+  }
+}
+export function createAntiCheatEngine(): AntiCheatEngine {
+  return new AntiCheatEngine();
+}

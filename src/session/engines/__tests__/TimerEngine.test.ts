@@ -1,1 +1,204 @@
-export * from '../../../../src_impl/session/engines/__tests__/TimerEngine.test';
+import { TimerEngine } from "../TimerEngine";
+import type { TimerConfig } from "../../types";
+describe("TimerEngine", () => {
+  let engine: TimerEngine;
+  let tickCallback: jest.Mock;
+  let completeCallback: jest.Mock;
+  let warningCallback: jest.Mock;
+  const defaultConfig: TimerConfig = {
+    duration: 60,
+    breakDuration: 10,
+    longBreakDuration: 20,
+    intervals: 4,
+    longBreakInterval: 4,
+    soundEnabled: false,
+    vibrationEnabled: false,
+    dndEnabled: false,
+    strictMode: false,
+    autoStartBreaks: false,
+    autoStartPomodoros: false,
+    tickInterval: 100,
+    warningSeconds: [10, 5, 1],
+  };
+  beforeEach(() => {
+    jest.useFakeTimers();
+    tickCallback = jest.fn();
+    completeCallback = jest.fn();
+    warningCallback = jest.fn();
+    engine = new TimerEngine(defaultConfig, {
+      onTick: tickCallback,
+      onComplete: completeCallback,
+      onWarning: warningCallback,
+    });
+  });
+  afterEach(() => {
+    engine.destroy();
+    jest.useRealTimers();
+  });
+  describe("Initialization", () => {
+    it("should initialize with correct state", () => {
+      const state = engine.getState();
+      expect(state.isRunning).toBe(false);
+      expect(state.isPaused).toBe(false);
+      expect(state.elapsedTime).toBe(0);
+      expect(state.remainingTime).toBe(defaultConfig.duration);
+    });
+    it("should accept custom config", () => {
+      const customConfig = { ...defaultConfig, duration: 120 };
+      const customEngine = new TimerEngine(customConfig, {});
+      expect(customEngine.getState().remainingTime).toBe(120);
+      customEngine.destroy();
+    });
+  });
+  describe("Timer Control", () => {
+    it("should start the timer", () => {
+      engine.start();
+      const state = engine.getState();
+      expect(state.isRunning).toBe(true);
+      expect(state.isPaused).toBe(false);
+    });
+    it("should pause the timer", () => {
+      engine.start();
+      engine.pause();
+      const state = engine.getState();
+      expect(state.isRunning).toBe(false);
+      expect(state.isPaused).toBe(true);
+    });
+    it("should resume the timer", () => {
+      engine.start();
+      engine.pause();
+      engine.resume();
+      const state = engine.getState();
+      expect(state.isRunning).toBe(true);
+      expect(state.isPaused).toBe(false);
+    });
+    it("should not start if already running", () => {
+      engine.start();
+      const result = engine.start();
+      expect(result).toBe(false);
+    });
+  });
+  describe("Timer Tick", () => {
+    it("should call onTick callback", () => {
+      engine.start();
+      jest.advanceTimersByTime(100);
+      expect(tickCallback).toHaveBeenCalled();
+    });
+    it("should update elapsed time", () => {
+      engine.start();
+      jest.advanceTimersByTime(1000);
+      const state = engine.getState();
+      expect(state.elapsedTime).toBeGreaterThan(0);
+    });
+    it("should update remaining time", () => {
+      engine.start();
+      const initialRemaining = engine.getState().remainingTime;
+      jest.advanceTimersByTime(1000);
+      const state = engine.getState();
+      expect(state.remainingTime).toBeLessThan(initialRemaining);
+    });
+    it("should not tick when paused", () => {
+      engine.start();
+      jest.advanceTimersByTime(500);
+      const elapsedBeforePause = engine.getState().elapsedTime;
+      engine.pause();
+      jest.advanceTimersByTime(1000);
+      const elapsedAfterWait = engine.getState().elapsedTime;
+      expect(elapsedAfterWait).toBe(elapsedBeforePause);
+    });
+  });
+  describe("Timer Completion", () => {
+    it("should call onComplete when timer expires", () => {
+      engine.start();
+      jest.advanceTimersByTime(defaultConfig.duration * 1000 + 100);
+      expect(completeCallback).toHaveBeenCalled();
+    });
+    it("should stop running after completion", () => {
+      engine.start();
+      jest.advanceTimersByTime(defaultConfig.duration * 1000 + 100);
+      expect(engine.getState().isRunning).toBe(false);
+    });
+    it("should have zero remaining time after completion", () => {
+      engine.start();
+      jest.advanceTimersByTime(defaultConfig.duration * 1000 + 100);
+      expect(engine.getState().remainingTime).toBe(0);
+    });
+  });
+  describe("Warning Callbacks", () => {
+    it("should call onWarning at warning thresholds", () => {
+      engine.start();
+      jest.advanceTimersByTime((defaultConfig.duration - 10) * 1000);
+      expect(warningCallback).toHaveBeenCalledWith(10);
+    });
+    it("should call onWarning multiple times for multiple thresholds", () => {
+      engine.start();
+      jest.advanceTimersByTime(defaultConfig.duration * 1000);
+      expect(warningCallback).toHaveBeenCalledTimes(
+        defaultConfig.warningSeconds!.length,
+      );
+    });
+  });
+  describe("Reset and Cleanup", () => {
+    it("should reset timer state", () => {
+      engine.start();
+      jest.advanceTimersByTime(5000);
+      engine.reset();
+      const state = engine.getState();
+      expect(state.isRunning).toBe(false);
+      expect(state.elapsedTime).toBe(0);
+      expect(state.remainingTime).toBe(defaultConfig.duration);
+    });
+    it("should destroy timer and callbacks", () => {
+      engine.start();
+      engine.destroy();
+      jest.advanceTimersByTime(1000);
+      expect(tickCallback).not.toHaveBeenCalledTimes(2);
+    });
+  });
+  describe("Edge Cases", () => {
+    it("should handle rapid start/pause cycles", () => {
+      engine.start();
+      engine.pause();
+      engine.resume();
+      engine.pause();
+      engine.resume();
+      expect(engine.getState().isRunning).toBe(true);
+    });
+    it("should handle zero duration config", () => {
+      const zeroConfig = { ...defaultConfig, duration: 0 };
+      const zeroEngine = new TimerEngine(zeroConfig, {
+        onComplete: completeCallback,
+      });
+      zeroEngine.start();
+      jest.advanceTimersByTime(100);
+      expect(completeCallback).toHaveBeenCalled();
+      zeroEngine.destroy();
+    });
+    it("should handle pause before start", () => {
+      const result = engine.pause();
+      expect(result).toBe(false);
+    });
+    it("should handle resume before start", () => {
+      const result = engine.resume();
+      expect(result).toBe(false);
+    });
+  });
+  describe("Background/Foreground", () => {
+    it("should track background time", () => {
+      engine.start();
+      engine.background();
+      jest.advanceTimersByTime(5000);
+      engine.foreground();
+      expect(engine.getState().backgroundTime).toBeGreaterThan(0);
+    });
+    it("should not tick while in background", () => {
+      engine.start();
+      const elapsedBeforeBackground = engine.getState().elapsedTime;
+      engine.background();
+      jest.advanceTimersByTime(5000);
+      engine.foreground();
+      const elapsedAfterForeground = engine.getState().elapsedTime;
+      expect(elapsedAfterForeground).toBe(elapsedBeforeBackground);
+    });
+  });
+});

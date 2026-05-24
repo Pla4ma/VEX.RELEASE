@@ -1,1 +1,6 @@
-export * from '../../../../src_impl/features/social/services/index';
+/**
+ * Social Services Barrel Export
+ */
+
+export * from './activity';
+export * from './messaging';

@@ -41,7 +41,15 @@ interface UseSpringResult {
  */
 export function useSpring(options: UseSpringOptions = {}): UseSpringResult {
   const { initialValue = 0, ...springConfig } = options;
-  const config = useMemo(() => ({ ...defaultSpring, ...springConfig }), [springConfig]);
+  const config = useMemo(
+    () => ({ ...defaultSpring, ...springConfig }),
+    [
+      springConfig.damping,
+      springConfig.mass,
+      springConfig.overshootClamping,
+      springConfig.stiffness,
+    ]
+  );
 
   const value = useSharedValue(initialValue);
 
@@ -75,11 +83,19 @@ export function useSpring(options: UseSpringOptions = {}): UseSpringResult {
  * Hook for spring with custom animated style
  */
 export function useSpringStyle(
-  styleFactory: (val: SharedValue<number>) => ReturnType<typeof useAnimatedStyle>,
+  styleFactory: (val: SharedValue<number>) => Record<string, unknown>,
   options: UseSpringOptions = {}
 ): UseSpringResult {
   const { initialValue = 0, ...springConfig } = options;
-  const config = useMemo(() => ({ ...defaultSpring, ...springConfig }), [springConfig]);
+  const config = useMemo(
+    () => ({ ...defaultSpring, ...springConfig }),
+    [
+      springConfig.damping,
+      springConfig.mass,
+      springConfig.overshootClamping,
+      springConfig.stiffness,
+    ]
+  );
 
   const value = useSharedValue(initialValue);
   const animatedStyle = useAnimatedStyle(() => styleFactory(value));

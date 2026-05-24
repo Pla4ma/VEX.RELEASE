@@ -1,1 +1,8 @@
-export * from '../../../src_impl/events/types/cache';
+/**
+ * Cache Events
+ */
+
+export interface CacheEventDefinitions {
+  'cache:clear': { reason?: string };
+  'cache:invalidate': { key: string };
+}

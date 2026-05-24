@@ -9,7 +9,7 @@ import { Easing } from 'react-native-reanimated';
 /**
  * Easing functions from Reanimated
  */
-export const easings: Record<string, EasingFunction> = {
+export const easings = {
   linear: (t: number) => t,
   ease: Easing.bezier(0.25, 0.1, 0.25, 1) as unknown as EasingFunction,
   easeIn: Easing.in(Easing.ease) as unknown as EasingFunction,
@@ -71,11 +71,11 @@ export interface TimingConfig {
 
 export function createTiming(
   duration: number,
-  easing: EasingFunction | undefined = easings.ease
+  easing: EasingFunction = easings.ease
 ): TimingConfig {
   return {
     duration,
-    easing: easing ?? (easings.ease ?? ((t: number) => t)),
+    easing,
   };
 }
 

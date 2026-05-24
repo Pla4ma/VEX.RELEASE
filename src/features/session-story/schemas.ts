@@ -1,1 +1,179 @@
-export * from '../../../src_impl/features/session-story/schemas';
+import { z } from "zod";
+export const StoryBeatTypeSchema = z.enum(["OPENING", "FOCUS_JOURNEY", "STREAK_MOMENT", "BOSS_BATTLE", "MILESTONE_REACHED", "PERFECTION_MOMENT", "COMEBACK_TRIUMPH", "PROGRESSION_CLIFFHANGER", "ACHIEVEMENT_UNLOCK", "CLOSING_REFLECTION"]);
+export const EmotionalArcSchema = z.enum(["TRIUMPH", "RELIEF", "DETERMINATION", "WONDER", "GRATITUDE", "ANTICIPATION", "RESILIENCE", "MASTERY"]);
+export const StoryBeatSchema = z.object({
+  id: z.string().uuid(),
+  type: StoryBeatTypeSchema,
+  sequenceOrder: z.number().int().min(0),
+  headline: z.string().min(1),
+  subtext: z.string().optional(),
+  emotion: EmotionalArcSchema,
+  visualCue: z.enum(["NONE", "STREAK_FLAME", "BOSS_DAMAGE", "XP_BURST", "BADGE_SHINE", "SHIELD_PROTECTION", "PROGRESS_BAR", "CELEBRATION"]),
+  durationMs: z.number().int().min(500).default(2500),
+  hapticPattern: z.enum(["NONE", "LIGHT", "MEDIUM", "HEAVY", "SUCCESS", "CELEBRATION"]).default("NONE"),
+  metadata: z
+    .object({
+      value: z.number().optional(),
+      comparison: z.string().optional(),
+      context: z.string().optional(),
+    })
+    .optional(),
+});
+export const SessionStorySchema = z.object({
+  id: z.string().uuid(),
+  sessionId: z.string().uuid(),
+  userId: z.string().uuid(),
+  createdAt: z.number(),
+  title: z.string().min(1),
+  subtitle: z.string().optional(),
+  overallEmotion: EmotionalArcSchema,
+  beats: z.array(StoryBeatSchema).min(1),
+  totalBeats: z.number().int().min(1),
+  sessionContext: z.object({
+    durationMinutes: z.number().positive(),
+    focusScore: z.number().min(0).max(100),
+    streakDays: z.number().int().min(0),
+    interruptions: z.number().int().min(0),
+    pauses: z.number().int().min(0),
+    sessionMode: z.string(),
+    bossDamageDealt: z.number().int().min(0).default(0),
+    bossDefeated: z.boolean().default(false),
+    milestoneReached: z.number().int().optional(),
+    xpEarned: z.number().int().min(0),
+    isPerfectSession: z.boolean().default(false),
+    isComeback: z.boolean().default(false),
+    daysAbsent: z.number().int().min(0).default(0),
+  }),
+  nextSessionHooks: z
+    .array(
+      z.object({
+        type: z.enum(["STREAK_AT_RISK", "BOSS_ALMOST_DEFEATED", "MILESTONE_APPROACHING", "TIER_UNLOCK_SOON", "PERFECT_RUN_CONTINUING", "COMEBACK_MOMENTUM"]),
+        description: z.string(),
+        urgency: z.enum(["LOW", "MEDIUM", "HIGH"]).default("LOW"),
+      }),
+    )
+    .default([]),
+  viewedAt: z.number().nullable().default(null),
+  sharedAt: z.number().nullable().default(null),
+  completionRate: z.number().min(0).max(100).default(0),
+});
+export const GenerateStoryInputSchema = z.object({
+  sessionId: z.string().uuid(),
+  userId: z.string().uuid(),
+  sessionSummary: z.object({
+    duration: z.number().positive(),
+    effectiveDuration: z.number().positive(),
+    focusQuality: z.number().min(0).max(100),
+    focusPurityScore: z.number().min(0).max(100).optional(),
+    interruptions: z.number().int().min(0),
+    pauses: z.number().int().min(0),
+    streakDays: z.number().int().min(0),
+    streakMaintained: z.boolean(),
+    sessionMode: z.string(),
+    completionPercentage: z.number().min(0).max(100),
+    finalScore: z.number().min(0),
+  }),
+  bossContext: z
+    .object({
+      encounterId: z.string().uuid().optional(),
+      bossName: z.string().optional(),
+      damageDealt: z.number().int().min(0).default(0),
+      healthRemaining: z.number().int().min(0).optional(),
+      maxHealth: z.number().int().positive().optional(),
+      defeated: z.boolean().default(false),
+    })
+    .optional(),
+  streakContext: z.object({
+    previousStreak: z.number().int().min(0),
+    newStreak: z.number().int().min(0),
+    isMilestone: z.boolean().default(false),
+    milestoneDay: z.number().int().optional(),
+    wasProtected: z.boolean().default(false),
+    isComeback: z.boolean().default(false),
+    daysAbsent: z.number().int().min(0).default(0),
+  }),
+  progressionContext: z.object({
+    xpEarned: z.number().int().min(0),
+    currentLevel: z.number().int().min(1),
+    xpToNextLevel: z.number().int().min(0),
+    tierProgress: z.number().min(0).max(100),
+    sessionsToNextTier: z.number().int().min(0),
+  }),
+  userPreferences: z
+    .object({
+      preferredTone: z.enum(["ENCOURAGING", "NEUTRAL", "CHALLENGING"]).default("ENCOURAGING"),
+      enableHaptics: z.boolean().default(true),
+      enableAnimations: z.boolean().default(true),
+    })
+    .optional(),
+});
+export const StoryTemplateSchema = z.object({
+  id: z.string().uuid(),
+  beatType: StoryBeatTypeSchema,
+  condition: z.object({
+    minDuration: z.number().optional(),
+    maxInterruptions: z.number().optional(),
+    minStreak: z.number().optional(),
+    maxStreak: z.number().optional(),
+    requiresBossDamage: z.boolean().optional(),
+    requiresPerfection: z.boolean().optional(),
+    requiresComeback: z.boolean().optional(),
+    requiresMilestone: z.boolean().optional(),
+  }),
+  priority: z.number().int().min(0).default(0),
+  variations: z
+    .array(
+      z.object({
+        headline: z.string(),
+        subtext: z.string().optional(),
+        emotion: EmotionalArcSchema,
+        visualCue: StoryBeatSchema.shape.visualCue,
+      }),
+    )
+    .min(1),
+});
+export const StorySessionRowSchema = z.object({
+  id: z.string().uuid(),
+  session_id: z.string().uuid(),
+  user_id: z.string().uuid(),
+  story_data: z.string(),
+  viewed: z.boolean().default(false),
+  viewed_at: z.number().nullable().default(null),
+  completion_rate: z.number().min(0).max(100).default(0),
+  created_at: z.number(),
+});
+export const StoryAnalyticsEventSchema = z.object({
+  storyId: z.string().uuid(),
+  userId: z.string().uuid(),
+  eventType: z.enum(["STORY_STARTED", "BEAT_VIEWED", "STORY_COMPLETED", "STORY_SHARED", "STORY_SKIPPED", "BEAT_REPLAYED"]),
+  beatType: StoryBeatTypeSchema.optional(),
+  timestamp: z.number(),
+  metadata: z.record(z.unknown()).optional(),
+});
+export type StoryBeatType = z.infer<typeof StoryBeatTypeSchema>;
+export type EmotionalArc = z.infer<typeof EmotionalArcSchema>;
+export type StoryBeat = z.infer<typeof StoryBeatSchema>;
+export type SessionStory = z.infer<typeof SessionStorySchema>;
+export type GenerateStoryInput = z.infer<typeof GenerateStoryInputSchema>;
+export type StoryTemplate = z.infer<typeof StoryTemplateSchema>;
+export type StorySessionRow = z.infer<typeof StorySessionRowSchema>;
+export type StoryAnalyticsEvent = z.infer<typeof StoryAnalyticsEventSchema>;
+export const STORY_BEAT_DURATIONS = {
+  QUICK: 1500,
+  STANDARD: 2500,
+  DRAMATIC: 4000,
+  CELEBRATION: 6000,
+} as const;
+export const STORY_PRIORITIES = {
+  OPENING: 0,
+  PERFECTION_MOMENT: 100,
+  BOSS_DEFEAT: 95,
+  MILESTONE_REACHED: 90,
+  COMEBACK_TRIUMPH: 85,
+  STREAK_MOMENT: 80,
+  BOSS_BATTLE: 70,
+  FOCUS_JOURNEY: 60,
+  ACHIEVEMENT_UNLOCK: 50,
+  PROGRESSION_CLIFFHANGER: 40,
+  CLOSING_REFLECTION: 10,
+} as const;

@@ -1,1 +1,8 @@
-export * from '../../src_impl/shared/index';
+/**
+ * Shared Module Exports
+ *
+ * Centralized exports for shared utilities across the app.
+ */
+
+// AI Integration (Server-side Gemini)
+export * as ai from './ai';

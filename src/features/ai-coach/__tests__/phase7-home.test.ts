@@ -1,15 +1,15 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from '@jest/globals';
 import { getHomeCoachSuggestion } from '../phase7-integration';
 import * as repository from '../repository';
 import { validateMessageQuality } from '../message-quality-gate';
 
-vi.mock('../repository', () => ({
-  fetchCoachState: vi.fn(),
-  fetchRecentMessages: vi.fn(),
+jest.mock('../repository', () => ({
+  fetchCoachState: jest.fn(),
+  fetchRecentMessages: jest.fn(),
 }));
 
-vi.mock('../message-quality-gate', () => ({
-  validateMessageQuality: vi.fn(() => ({
+jest.mock('../message-quality-gate', () => ({
+  validateMessageQuality: jest.fn(() => ({
     messageId: 'test',
     content: 'Your 5-day streak is at risk. Try a 25-minute session tonight.',
     category: 'STREAK_RISK',
@@ -22,8 +22,8 @@ vi.mock('../message-quality-gate', () => ({
   })),
 }));
 
-const mockedRepository = vi.mocked(repository);
-const mockedValidateMessageQuality = vi.mocked(validateMessageQuality, true);
+const mockedRepository = jest.mocked(repository);
+const mockedValidateMessageQuality = jest.mocked(validateMessageQuality, true);
 
 function mockPassingQualityGate(): void {
   mockedValidateMessageQuality.mockReturnValue({
@@ -51,7 +51,7 @@ function mockCoachState(currentState: string): void {
 
 describe('Phase 7 home screen integration', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
     mockPassingQualityGate();
   });
 

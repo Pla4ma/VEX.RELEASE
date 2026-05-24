@@ -1,54 +1,132 @@
-/**
- * Dashboard Analytics
- *
- * Phase 6.2 - Analytics & Experimentation
- * Generates comprehensive dashboard reports.
- */
+import { calculateRetentionRates } from "./VEXAnalyticsInfrastructure";
+import {
+  getAverageSessionsPerWeek,
+  getStudyPlanCompletionRate,
+  calculatePowerUserPercentage,
+} from "./engagement";
+import {
+  getMonetizationMetrics,
+  type MonetizationMetrics,
+} from "./monetization";
+import { getPaywallAnalytics, type PaywallAnalytics } from "./paywall";
+import {
+  getStreakSurvivalMetrics,
+  type StreakSurvivalMetrics,
+} from "./streaks";
+import { TARGET_METRICS, type VEXSuccessMetrics } from "./VEXAnalyticsInfrastructure.types";
 
-import { TARGET_METRICS } from './types';
-import type { VEXDashboard } from './types';
-import { calculateRetentionRates } from './retention';
-import { getAverageSessionsPerWeek, getStudyPlanCompletionRate } from './engagement';
-import { getMonetizationMetrics } from './monetization';
-import { getPaywallAnalytics } from './paywall';
-import { getStreakSurvivalMetrics } from './streak';
+export interface VEXDashboard {
+  generatedAt: number;
+  successMetrics: VEXSuccessMetrics;
+  retention: ReturnType<typeof calculateRetentionRates>;
+  engagement: {
+    avgSessionsPerWeek: number;
+    studyPlanCompletionRate: number;
+    powerUserPercentage: number;
+  };
+  monetization: MonetizationMetrics;
+  paywall: PaywallAnalytics;
+  streaks: StreakSurvivalMetrics;
+  trends: {
+    dayOverDay: Record<string, number>;
+    weekOverWeek: Record<string, number>;
+  };
+}
 
 export function generateDashboardReport(): VEXDashboard {
-  const retentionRates = calculateRetentionRates();
+  const retention = calculateRetentionRates();
+  const engagement = {
+    avgSessionsPerWeek: getAverageSessionsPerWeek(),
+    studyPlanCompletionRate: getStudyPlanCompletionRate(),
+    powerUserPercentage: calculatePowerUserPercentage(),
+  };
   const monetizationMetrics = getMonetizationMetrics();
   const paywallAnalytics = getPaywallAnalytics();
-  const streakSurvival = getStreakSurvivalMetrics();
-
-  const metrics = {
-    day1Retention: { current: retentionRates.day1, target: TARGET_METRICS.day1Retention.target, trend: 'flat' as const },
-    day7Retention: { current: retentionRates.day7, target: TARGET_METRICS.day7Retention.target, trend: 'flat' as const },
-    day30Retention: { current: retentionRates.day30, target: TARGET_METRICS.day30Retention.target, trend: 'flat' as const },
-    sessionsPerWeek: { current: getAverageSessionsPerWeek(), target: TARGET_METRICS.sessionsPerWeek.target, trend: 'flat' as const },
-    studyPlanCompletionRate: { current: getStudyPlanCompletionRate(), target: TARGET_METRICS.studyPlanCompletionRate.target, trend: 'flat' as const },
-    appStoreRating: { current: 4.5, target: TARGET_METRICS.appStoreRating.target, trend: 'up' as const },
-    supportTicketsPerWeek: { current: 25, target: TARGET_METRICS.supportTicketsPerWeek.target, trend: 'down' as const },
-    crashFreeRate: { current: 0.995, target: TARGET_METRICS.crashFreeRate.target, trend: 'up' as const },
-    premiumConversionRate: { current: monetizationMetrics.premiumConversionRate, target: TARGET_METRICS.premiumConversionRate.target, trend: 'up' as const },
-    ltv: { current: monetizationMetrics.averageLtv, target: TARGET_METRICS.ltv.target, trend: 'up' as const },
-    paywallConversionRate: { current: monetizationMetrics.paywallConversionRate, target: TARGET_METRICS.paywallConversionRate.target, trend: 'up' as const },
-    npsScore: { current: 35, target: TARGET_METRICS.npsScore.target, trend: 'up' as const },
-    clarityScore: { current: 0.75, target: TARGET_METRICS.clarityScore.target, trend: 'up' as const },
-    helpfulnessScore: { current: 0.70, target: TARGET_METRICS.helpfulnessScore.target, trend: 'up' as const },
-    returnIntentScore: { current: 0.65, target: TARGET_METRICS.returnIntentScore.target, trend: 'up' as const },
-  };
-
-  return {
-    timestamp: Date.now(),
-    metrics,
-    retention: retentionRates,
-    engagement: {
-      sessionsPerWeek: getAverageSessionsPerWeek(),
-      studyPlanCompletionRate: getStudyPlanCompletionRate(),
-      weeklyActiveUsers: 0,
-      powerUsers: 0,
+  const successMetrics: VEXSuccessMetrics = {
+    day1Retention: {
+      current: retention.day1,
+      target: TARGET_METRICS.day1Retention.target,
+      trend: "flat",
     },
+    day7Retention: {
+      current: retention.day7,
+      target: TARGET_METRICS.day7Retention.target,
+      trend: "flat",
+    },
+    day30Retention: {
+      current: retention.day30,
+      target: TARGET_METRICS.day30Retention.target,
+      trend: "flat",
+    },
+    sessionsPerWeek: {
+      current: engagement.avgSessionsPerWeek,
+      target: TARGET_METRICS.sessionsPerWeek.target,
+      trend: "flat",
+    },
+    studyPlanCompletionRate: {
+      current: engagement.studyPlanCompletionRate,
+      target: TARGET_METRICS.studyPlanCompletionRate.target,
+      trend: "flat",
+    },
+    appStoreRating: {
+      current: 0,
+      target: TARGET_METRICS.appStoreRating.target,
+      trend: "flat",
+    },
+    supportTicketsPerWeek: {
+      current: 0,
+      target: TARGET_METRICS.supportTicketsPerWeek.target,
+      trend: "flat",
+    },
+    crashFreeRate: {
+      current: 0.98,
+      target: TARGET_METRICS.crashFreeRate.target,
+      trend: "flat",
+    },
+    premiumConversionRate: {
+      current: monetizationMetrics.conversionRate,
+      target: TARGET_METRICS.premiumConversionRate.target,
+      trend: "flat",
+    },
+    ltv: {
+      current: monetizationMetrics.averageLTV,
+      target: TARGET_METRICS.ltv.target,
+      trend: "flat",
+    },
+    paywallConversionRate: {
+      current: paywallAnalytics.conversionRate,
+      target: TARGET_METRICS.paywallConversionRate.target,
+      trend: "flat",
+    },
+    npsScore: {
+      current: 0,
+      target: TARGET_METRICS.npsScore.target,
+      trend: "flat",
+    },
+    clarityScore: {
+      current: 0,
+      target: TARGET_METRICS.clarityScore.target,
+      trend: "flat",
+    },
+    helpfulnessScore: {
+      current: 0,
+      target: TARGET_METRICS.helpfulnessScore.target,
+      trend: "flat",
+    },
+    returnIntentScore: {
+      current: 0,
+      target: TARGET_METRICS.returnIntentScore.target,
+      trend: "flat",
+    },
+  };
+  return {
+    generatedAt: Date.now(),
+    successMetrics,
+    retention,
+    engagement,
     monetization: monetizationMetrics,
-    topPaywalls: paywallAnalytics.slice(0, 5),
-    streakSurvival: streakSurvival.slice(0, 10),
+    paywall: paywallAnalytics,
+    streaks: getStreakSurvivalMetrics(),
+    trends: { dayOverDay: {}, weekOverWeek: {} },
   };
 }
