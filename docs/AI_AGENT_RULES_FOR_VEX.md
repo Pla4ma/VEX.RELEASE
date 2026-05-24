@@ -5,8 +5,9 @@ AI agents must read this file, `docs/VEX_FINAL_RELEASE_SCOPE.md`, and
 
 ## Source Of Truth
 
-src/ is the canonical implementation. src_impl_archive/ is archived historical
-code only — do not edit, import, or target it. All production code, tests,
+src/ is the canonical implementation. src_impl_archive/ was deleted after
+verification confirmed no runtime, build, test, or config dependency. Source
+migration from src_impl to src/ is complete. All production code, tests,
 lint, and typecheck commands must target src/.
 
 ## Product Identity

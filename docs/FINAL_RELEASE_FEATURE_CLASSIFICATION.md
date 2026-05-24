@@ -101,10 +101,13 @@ Test-only or historical. Cannot affect runtime.
 
 | Feature | Location | Notes |
 |---------|----------|-------|
-| src_impl_archive | src_impl_archive/ | Archived historical code |
 | archive | archive/ | Archived code |
 | docs/archive | docs/archive/ | Historical docs |
 | __tests__ in archived features | Test files for archived features | Keep for reference |
+
+> **Note:** `src_impl_archive/` was deleted 2026-05-23 after verification confirmed
+> no runtime, build, test, or config dependency. Source migration from `src_impl`
+> to `src/` is complete.
 
 ## Runtime Enforcement
 

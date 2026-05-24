@@ -2,8 +2,9 @@
  * Final Release Source Truth Test
  *
  * Verifies:
- * - src/ is canonical, src_impl_archive/ is archived
- * - No production import references src_impl_archive
+ * - src/ is canonical
+ * - src_impl_archive/ was deleted (source migration complete)
+ * - No production import references src_impl or src_impl_archive
  * - Docs use final-release language
  */
 
@@ -37,13 +38,8 @@ describe('Source Truth — src is canonical', () => {
     expect(existsSync(SRC)).toBe(true);
   });
 
-  it('src_impl_archive/ README states it is archived code', () => {
-    const readmePath = join(ARCHIVE, 'README.md');
-    expect(existsSync(readmePath)).toBe(true);
-    const content = readFileSync(readmePath, 'utf8');
-    expect(content).toContain('ARCHIVED HISTORICAL CODE');
-    expect(content).toContain('DO NOT EDIT');
-    expect(content).toContain('DO NOT IMPORT');
+  it('src_impl_archive/ does not exist — source migration complete', () => {
+    expect(existsSync(ARCHIVE)).toBe(false);
   });
 
   it('no production file in src/ imports from src_impl_archive', () => {
@@ -109,7 +105,6 @@ describe('Docs — final release language', () => {
     );
     expect(content).toContain('VEX_FINAL_RELEASE_SCOPE.md');
     expect(content).toContain('src/ is the canonical');
-    expect(content).toContain('src_impl_archive/ is archived');
   });
 
   it('VEX_PUBLIC_V1_SCOPE.md no longer exists', () => {
