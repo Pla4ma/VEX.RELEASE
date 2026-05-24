@@ -6,7 +6,7 @@ import {
   type FirstWeekStage,
 } from './first-week-schemas';
 
-const PUBLIC_V1_HIDDEN: FirstWeekExperience['hiddenSurfaces'] = [
+const FINAL_RELEASE_HIDDEN: FirstWeekExperience['hiddenSurfaces'] = [
   'boss_full',
   'shop',
   'inventory',
@@ -122,7 +122,7 @@ export function resolveFirstWeekExperience(rawInput: FirstWeekResolverInput): Fi
     comebackState,
     completionEmphasis: 'confirmation_coach_progress_next_action',
     currentDayStage,
-    hiddenSurfaces: PUBLIC_V1_HIDDEN,
+    hiddenSurfaces: FINAL_RELEASE_HIDDEN,
     notificationAllowedTypes: ['gentle_return', 'coach_check_in', 'progress_milestone'],
     premiumMoment,
     primaryCTA: {

@@ -43,7 +43,7 @@ requirements: { premiumOnly: true }, addedAt: Date.now(), }, { id: "premium-boss
 description: "Exclusive boss battle themes for Premium members", category: "PREMIUM", rarity: "LEGENDARY", icon: "👑", price: { currency: "GEMS", amount: 0 },
 requirements: { premiumOnly: true }, addedAt: Date.now(), }, { id: "premium-session-bg", name: "Premium Session Backgrounds",
 description: "New backgrounds added monthly for Premium members", category: "PREMIUM", rarity: "LEGENDARY", icon: "🎨", price: { currency: "GEMS", amount: 0 },
-requirements: { premiumOnly: true }, addedAt: Date.now(), }, { id: "premium-beta-access", name: "Beta Feature Access", description: "Try new features before everyone else",
+requirements: { premiumOnly: true }, addedAt: Date.now(), }, { id: "premium-preview-access", name: "Preview Feature Access", description: "Try new features before everyone else",
 category: "PREMIUM", rarity: "EPIC", icon: "🔮", price: { currency: "GEMS", amount: 0 }, requirements: { premiumOnly: true }, addedAt: Date.now(), }, ];
 const inventories = new Map<string, UserInventory>(); const allItems = [...COSMETIC_ITEMS, ...UTILITY_ITEMS, ...PREMIUM_ITEMS];
 export function getAvailableItems(userId: string, isPremium: boolean): Record<ShopCategory, ShopItem[]> { const userInventory = getUserInventory(userId);

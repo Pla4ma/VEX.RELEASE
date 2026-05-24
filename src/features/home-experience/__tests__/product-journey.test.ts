@@ -449,7 +449,7 @@ describe('product journey — feature degraded', () => {
   });
 });
 
-describe('product journey — public v1 hidden features', () => {
+describe('product journey — final release hidden features', () => {
   it('does not expose shop inventory battle_pass social squads rivals', () => {
     const model = buildHomeExperienceModel({
       explicitMotivationStyle: null,

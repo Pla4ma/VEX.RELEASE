@@ -10,7 +10,7 @@ checkRisk: () => Promise<void>; refresh: () => Promise<void>; retry: () => void;
 notificationSent: boolean; } function getFlameColor(healthPercent: number): string { if (healthPercent > 75) { return launchColors.hex_4caf50; } if (healthPercent > 50) {
 return launchColors.hex_ff9800; } if (healthPercent > 25) { return launchColors.hex_ff5722; } return launchColors.hex_f44336; }
 function getUrgencyLabel(riskLevel: RiskLevel): string { const labels: Record<RiskLevel, string> = { NONE: "Safe", LOW: "Stable", MEDIUM: "Warning", HIGH: "Urgent",
-CRITICAL: "CRITICAL", }; return labels[riskLevel]; } export function useStreakRisk(): UseStreakRiskReturn { const userId = useAuthStore((state) => state.userId); const queryClient = useQueryClient();
+CRITICAL: "CRITICAL", }; return labels[riskLevel]; } export function useStreakRisk(): UseStreakRiskReturn { const userId = useAuthStore((state) => state.user?.id); const queryClient = useQueryClient();
 const { track } = useAnalytics(); const intervalRef = useRef<NodeJS.Timeout | null>(null); const [isChecking, setIsChecking] = useState(false); const { data: streakData,
 isLoading: isStreakLoading, error: streakError, refetch: refetchStreak, } = useQuery({ queryKey: QUERY_KEYS.streak(userId || ""), queryFn: async () => { if (!userId) { return null;
 } const result = await fetchStreakEnhanced(userId); if (result.error) { throw result.error; } return result.data; }, enabled: !!userId, staleTime: STALE_TIME, retry: 3, }); const {

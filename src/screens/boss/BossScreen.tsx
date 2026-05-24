@@ -3,7 +3,7 @@
  *
  * Queries only run when FeatureAvailability allows.
  * Intensity comes from the canonical VexExperience — no duplicate resolution.
- * Squad content removed for public v1.
+ * Squad content removed for final release.
  * Boss damage maps directly to focus/study sessions — no economy/shop dependency.
  */
 import React, { useEffect, useRef, useState } from 'react';
@@ -163,7 +163,7 @@ export const BossScreen = (): JSX.Element => {
     trackBossRouteOpened(userId, bossIntensity, canQueryBoss);
   }, [userId, bossIntensity, canQueryBoss]);
 
-  if (!canNavigateBoss || disclosure.features.boss_tab.releaseState === 'disabled_beta') {
+  if (!canNavigateBoss || disclosure.features.boss_tab.releaseState === 'final_release_deactivated') {
     return (
       <BossFallback
         intensity={toScreenIntensity(bossIntensity)}

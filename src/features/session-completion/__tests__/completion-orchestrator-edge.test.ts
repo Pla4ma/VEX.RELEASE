@@ -98,7 +98,7 @@ describe('orchestrateSessionCompletion edge cases', () => {
   });
 });
 
-describe('public v1 invalidation protection', () => {
+describe('final release invalidation protection', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     require('../repository').createCompletionLedger.mockResolvedValue(createCompletionLedger());

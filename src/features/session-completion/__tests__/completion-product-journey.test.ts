@@ -44,43 +44,43 @@ describe('completion product journey', () => {
     setFeatureAccessMap({
       companion_detail: {
         isUnlocked: true, isVisible: true, lockedDescription: '',
-        recommendedUnlockMoment: '', unlockReason: 'test', releaseState: 'core',
+        recommendedUnlockMoment: '', unlockReason: 'test', releaseState: 'final_release_core',
       },
       challenges: {
         isUnlocked: true, isVisible: true, lockedDescription: '',
-        recommendedUnlockMoment: '', unlockReason: 'test', releaseState: 'core',
+        recommendedUnlockMoment: '', unlockReason: 'test', releaseState: 'final_release_core',
       },
       boss_tab: {
         isUnlocked: false, isVisible: false, lockedDescription: '',
-        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'disabled_beta',
+        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'final_release_deactivated',
       },
       shop: {
         isUnlocked: false, isVisible: false, lockedDescription: '',
-        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'disabled_beta',
+        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'final_release_deactivated',
       },
       inventory: {
         isUnlocked: false, isVisible: false, lockedDescription: '',
-        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'disabled_beta',
+        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'final_release_deactivated',
       },
       battle_pass: {
         isUnlocked: false, isVisible: false, lockedDescription: '',
-        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'disabled_beta',
+        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'final_release_deactivated',
       },
       squads: {
         isUnlocked: false, isVisible: false, lockedDescription: '',
-        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'disabled_beta',
+        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'final_release_deactivated',
       },
       rivals: {
         isUnlocked: false, isVisible: false, lockedDescription: '',
-        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'disabled_beta',
+        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'final_release_deactivated',
       },
       social_tab: {
         isUnlocked: false, isVisible: false, lockedDescription: '',
-        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'disabled_beta',
+        recommendedUnlockMoment: '', unlockReason: '', releaseState: 'final_release_deactivated',
       },
       content_study: {
         isUnlocked: true, isVisible: true, lockedDescription: '',
-        recommendedUnlockMoment: '', unlockReason: 'test', releaseState: 'core',
+        recommendedUnlockMoment: '', unlockReason: 'test', releaseState: 'final_release_core',
       },
     } as FeatureAccessMap);
   });
@@ -170,7 +170,7 @@ describe('completion product journey', () => {
     });
   });
 
-  describe('public v1 no hidden feature leakage from completion', () => {
+  describe('final release no hidden feature leakage from completion', () => {
     it('no shop/inventory/battle_pass CTA in completion rewards', async () => {
       const ledger = createCompletionLedger();
       const summary = createSessionSummary();

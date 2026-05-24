@@ -7,12 +7,14 @@ import { StudyQuizBreak } from '../../../features/session/StudyQuizBreak';
 import { CreativeMoodLogger, type Mood } from '../../../session/components/CreativeMoodLogger';
 import { ModeIndicatorBadge } from '../../../session/components/ModeIndicatorBadge';
 import { SessionMode } from '../../../session/modes';
+import type { ActiveSessionDisplayPolicy } from '../utils/active-session-display-policy';
 
 type ActiveSessionModeOverlaysProps = {
   allowStudyQuizBreak: boolean;
   chainCount: number;
   completionPercentage: number;
   currentMode: SessionMode;
+  displayPolicy: ActiveSessionDisplayPolicy;
   isPaused: boolean;
   onCloseQuiz: (correctAnswers: number) => void;
   onCreativeMoodSelected?: (mood: Mood) => void;
@@ -24,6 +26,10 @@ type ActiveSessionModeOverlaysProps = {
 };
 
 export function ActiveSessionModeOverlays(props: ActiveSessionModeOverlaysProps): JSX.Element {
+  if (!props.displayPolicy.showModeOverlay) {
+    return <></>;
+  }
+
   return (
     <>
       <ModeOverlay {...props} />

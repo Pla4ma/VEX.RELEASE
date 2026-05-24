@@ -7,27 +7,14 @@ import { SessionCompletionFollowThrough } from './SessionCompletionFollowThrough
 import { useSessionCompleteController } from '../../../features/session-completion/hooks';
 import type { CompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
 import type { SessionSummary } from '../../../session/types';
-import { SessionPremiumChestCard } from './SessionPremiumChestCard';
 
 type SessionCompleteController = ReturnType<typeof useSessionCompleteController>;
-
-// Neuroplasticity micro intervention - stubbed
-const NeuroplasticityMicroInterventionCard = (_props: {
-  userId: string;
-  sessionDurationSeconds: number;
-  onComplete: () => void;
-  onSkip: () => void;
-}) => null;
 
 interface SessionCompleteRewardsPhaseProps {
   controller: SessionCompleteController;
   summary: SessionSummary;
   sessionId: string;
   policy: CompletionExperiencePolicy;
-  nptDone: boolean;
-  onOpenInventory?: () => void;
-  onOpenShop?: () => void;
-  onNptDone: () => void;
 }
 
 export function SessionCompleteRewardsPhase({
@@ -35,10 +22,6 @@ export function SessionCompleteRewardsPhase({
   summary,
   sessionId,
   policy,
-  nptDone,
-  onOpenInventory,
-  onOpenShop,
-  onNptDone,
 }: SessionCompleteRewardsPhaseProps): JSX.Element | null {
   const creditedHiddenChestRef = useRef(false);
   const hidden = policy.hiddenCompletionSurfaces;
@@ -60,24 +43,6 @@ export function SessionCompleteRewardsPhase({
 
   return (
     <>
-      {!hidden.includes('chest_reward_animation') ? (
-        <SessionPremiumChestCard
-          chestResult={controller.rewards.chestResult}
-          isOpened={controller.rewards.revealStage >= 2}
-          summary={summary}
-          onOpen={() => {
-            controller.rewards.actions.handleChestOpen();
-            void controller.rewards.actions.handleRevealComplete();
-          }}
-          onOpenInventory={
-            hidden.includes('shop_inventory_prompts') ? undefined : onOpenInventory
-          }
-          onOpenShop={
-            hidden.includes('shop_inventory_prompts') ? undefined : onOpenShop
-          }
-        />
-      ) : null}
-
       {controller.rewards.revealStage >= 2 ||
       hidden.includes('chest_reward_animation') ? (
         <>
@@ -85,7 +50,7 @@ export function SessionCompleteRewardsPhase({
             <XPEarnAnimation
               levelProgress={controller.levelMetric?.progress ?? null}
               summary={summary}
-              totalXp={controller.rewards.chestResult?.xpReward ?? summary.xpEarned ?? 0}
+              totalXp={summary.xpEarned ?? 0}
             />
           </Box>
           <SessionCompletionRewardsSection
@@ -115,15 +80,6 @@ export function SessionCompleteRewardsPhase({
             />
             </Box>
           ) : null}
-
-          {!nptDone && controller.userId && (
-            <NeuroplasticityMicroInterventionCard
-              userId={controller.userId}
-              sessionDurationSeconds={summary.effectiveDuration}
-              onComplete={onNptDone}
-              onSkip={onNptDone}
-            />
-          )}
 
           {!hidden.includes('follow_through_cards') ? (
             <SessionCompletionFollowThrough summary={summary} />

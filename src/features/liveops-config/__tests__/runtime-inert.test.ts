@@ -13,15 +13,15 @@ function featuresAt(sessions: number, degradedKeys?: FeatureKey[]): FeatureAcces
   return buildFeatureAccess({ totalCompletedSessions: sessions, degradedFeatures: degraded }).features;
 }
 
-const ALL_HIDDEN_PUBLIC_V1: FeatureKey[] = [
+const ALL_HIDDEN_FINAL_RELEASE: FeatureKey[] = [
   'battle_pass', 'squads', 'shop', 'inventory', 'social_tab',
   'rivals', 'rankings', 'wagers', 'streak_insurance', 'gems_prominent',
-  'boss_bounties', 'economy_advanced',
+  'boss_bounties', 'economy_advanced', 'economy_basic',
 ];
 
 const HIDDEN_BOOT_FEATURES: FeatureKey[] = [
   'battle_pass', 'squads', 'shop', 'inventory', 'rivals', 'rankings',
-  'wagers', 'economy_advanced', 'social_tab',
+  'wagers', 'economy_advanced', 'economy_basic', 'social_tab',
 ];
 
 // ============================================================
@@ -100,10 +100,10 @@ describe('Hidden economy inert', () => {
     }
   });
 
-  it('economy_advanced always blocked (economy_basic unlocks late)', () => {
+  it('spendable economy stays blocked for final release', () => {
     const features = featuresAt(50);
     const basicAvail = getFeatureAvailability(features.economy_basic);
-    expect(basicAvail.canQuery).toBe(true);
+    expect(basicAvail.canQuery).toBe(false);
 
     const advancedAvail = getFeatureAvailability(features.economy_advanced);
     expect(advancedAvail.canQuery).toBe(false);
@@ -291,7 +291,7 @@ describe('FeatureAvailability blocks query + subscription (not only UI)', () => 
       'canUseBackend', 'canRegisterRoute', 'canSubscribeToEvents', 'canShowNotification',
     ];
 
-    for (const key of ALL_HIDDEN_PUBLIC_V1) {
+    for (const key of ALL_HIDDEN_FINAL_RELEASE) {
       const avail = getFeatureAvailability(features[key]);
       for (const gate of gates) {
         expect(avail[gate]).toBe(false);
@@ -301,7 +301,7 @@ describe('FeatureAvailability blocks query + subscription (not only UI)', () => 
 
   it('all hidden features remain blocked at session 50 (never unlock)', () => {
     const features = featuresAt(50);
-    for (const key of ALL_HIDDEN_PUBLIC_V1) {
+    for (const key of ALL_HIDDEN_FINAL_RELEASE) {
       const avail = getFeatureAvailability(features[key]);
       expect(avail.canQuery).toBe(false);
       expect(avail.canNavigate).toBe(false);

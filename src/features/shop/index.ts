@@ -2,7 +2,7 @@
  * Shop Feature
  * Export all shop-related modules
  *
- * DEFERRED_PUBLIC_V1: Shop is disabled in public V1 (see PUBLIC_V1_FEATURE_MAP).
+ * FINAL_RELEASE_DEACTIVATED: Shop is disabled in final release (see FINAL_RELEASE_FEATURE_MAP).
  * No route, Home card, notification, or completion reward uses shop.
  * This code remains for internal reference only.
  */

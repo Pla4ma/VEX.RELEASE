@@ -39,7 +39,7 @@ export interface FeedbackSource {
   incorporation: number; // 0-100
 }
 
-export type FeedbackType = 'beta_reader' | 'editor' | 'workshop' | 'professional' | 'peer' | 'self';
+export type FeedbackType = 'preview_reader' | 'editor' | 'workshop' | 'professional' | 'peer' | 'self';
 
 export interface MajorChange {
   change: string;

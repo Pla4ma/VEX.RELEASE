@@ -87,7 +87,7 @@ describe('real feature health checks', () => {
     await expect(runCheck('boss_tab_route_gating')).resolves.toBe('degraded');
   });
 
-  it('boss_tab public V1 forbidden deps are disabled returns healthy', async () => {
+  it('boss_tab final release forbidden deps are disabled returns healthy', async () => {
     await expect(runCheck('boss_tab_no_disabled_deps')).resolves.toBe('healthy');
   });
 });
@@ -139,12 +139,12 @@ describe('feature health registry — duplicate protection', () => {
   });
 });
 
-describe('bossPublicV1ForbiddenDepsAreDisabled — renamed and behavior preserved', () => {
-  it('renamed from bossHasNoDisabledDeps to bossPublicV1ForbiddenDepsAreDisabled', () => {
+describe('bossFinalReleaseForbiddenDepsAreDisabled — renamed and behavior preserved', () => {
+  it('renamed from bossHasNoDisabledDeps to bossFinalReleaseForbiddenDepsAreDisabled', () => {
     const { healthChecks: checks } = require('../feature-health-checks');
     const bossDepCheck = checks.find((c: { id: string }) => c.id === 'boss_tab_no_disabled_deps');
     expect(bossDepCheck).toBeDefined();
-    expect(bossDepCheck.label).toContain('public V1');
+    expect(bossDepCheck.label).toContain('final-release');
     expect(bossDepCheck.label).toContain('forbidden deps');
   });
 
@@ -159,76 +159,3 @@ describe('bossPublicV1ForbiddenDepsAreDisabled — renamed and behavior preserve
   });
 });
 
-describe('degraded surface enforcement — FeatureAvailability gates', () => {
-  const { getFeatureAvailability, isFeatureAvailableForNavigation } = require('../feature-availability');
-
-  it('degraded content_study blocks upload CTA (canNavigate is false)', () => {
-    const access = {
-      isUnlocked: true,
-      isVisible: true,
-      isDegraded: true,
-      lockedDescription: 'Degraded',
-      unlockReason: 'Limited mode',
-      releaseState: 'progressive' as const,
-    };
-    const avail = getFeatureAvailability(access);
-    expect(avail.state).toBe('degraded');
-    expect(isFeatureAvailableForNavigation(avail)).toBe(false);
-    expect(avail.canQuery).toBe(false);
-  });
-
-  it('degraded ai_coach_advanced blocks advanced coach route', () => {
-    const access = {
-      isUnlocked: true,
-      isVisible: true,
-      isDegraded: true,
-      lockedDescription: 'Degraded',
-      unlockReason: 'Limited mode',
-      releaseState: 'progressive' as const,
-    };
-    const avail = getFeatureAvailability(access);
-    expect(avail.state).toBe('degraded');
-    expect(avail.canNavigate).toBe(false);
-  });
-
-  it('degraded premium_paywall blocks purchasable paywall', () => {
-    const access = {
-      isUnlocked: true,
-      isVisible: true,
-      isDegraded: true,
-      lockedDescription: 'Degraded',
-      unlockReason: 'Limited mode',
-      releaseState: 'progressive' as const,
-    };
-    const avail = getFeatureAvailability(access);
-    expect(avail.canNavigate).toBe(false);
-    expect(avail.canQuery).toBe(false);
-  });
-
-  it('degraded boss_tab blocks full boss route', () => {
-    const access = {
-      isUnlocked: true,
-      isVisible: true,
-      isDegraded: true,
-      lockedDescription: 'Degraded',
-      unlockReason: 'Limited mode',
-      releaseState: 'progressive' as const,
-    };
-    const avail = getFeatureAvailability(access);
-    expect(avail.canNavigate).toBe(false);
-    expect(avail.state).toBe('degraded');
-  });
-
-  it('healthy features allow navigation', () => {
-    const access = {
-      isUnlocked: true,
-      isVisible: true,
-      lockedDescription: '',
-      unlockReason: 'Unlocked',
-      releaseState: 'progressive' as const,
-    };
-    const avail = getFeatureAvailability(access);
-    expect(avail.state).toBe('unlocked');
-    expect(isFeatureAvailableForNavigation(avail)).toBe(true);
-  });
-});

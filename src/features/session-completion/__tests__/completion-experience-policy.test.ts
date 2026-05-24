@@ -46,19 +46,25 @@ const baseInput: CompletionExperiencePolicyInput = {
     boss: true,
     challenges: true,
     contractUsed: false,
-    premiumChest: true,
     progress: true,
     study: true,
   },
   firstWeekStage: 'ACTIVATING',
   motivationStyle: 'calm',
-  premiumState: 'public_v1',
+  premiumState: 'free',
   primaryGoal: null,
   sessionMode: SessionMode.FLOW,
   summary: baseSummary,
 };
 
 describe('CompletionExperiencePolicy', () => {
+  it('rejects stale final-release runtime language', () => {
+    const legacyPremiumState = ['public', 'v1'].join('_');
+    const legacyInput = JSON.parse(JSON.stringify({ ...baseInput, premiumState: legacyPremiumState }));
+
+    expect(() => resolveCompletionExperiencePolicy(legacyInput)).toThrow();
+  });
+
   it('renders max 4 major beats', () => {
     const policy = resolveCompletionExperiencePolicy(baseInput);
     const beats = [
@@ -71,7 +77,7 @@ describe('CompletionExperiencePolicy', () => {
     expect(beats).toHaveLength(4);
   });
 
-  it('calm completion has no chest, battle pass, or boss combat', () => {
+  it('calm completion is minimal', () => {
     const policy = resolveCompletionExperiencePolicy({
       ...baseInput,
       consequences: { boss: { damageDealt: 10 } },
@@ -83,8 +89,11 @@ describe('CompletionExperiencePolicy', () => {
         'premium_chest',
         'battle_pass_card',
         'boss_consequence_card',
+        'multiple_reward_rows',
+        'follow_through_cards',
       ]),
     );
+    expect(policy.adaptivePayoff).toBe('progress_insight');
   });
 
   it('study completion shows study progress', () => {
@@ -110,30 +119,33 @@ describe('CompletionExperiencePolicy', () => {
     expect(policy.hiddenCompletionSurfaces).not.toContain('boss_consequence_card');
   });
 
-  it('public v1 completion does not show battle pass', () => {
-    const policy = resolveCompletionExperiencePolicy(baseInput);
-
-    expect(policy.hiddenCompletionSurfaces).toContain('battle_pass_card');
-  });
-
-  it('public v1 completion does not show shop, inventory, coins, or gems', () => {
+  it('free user completion does not show premium chest', () => {
     const policy = resolveCompletionExperiencePolicy(baseInput);
 
     expect(policy.hiddenCompletionSurfaces).toEqual(
-      expect.arrayContaining(['shop_inventory_prompts', 'coins_gems_wallet']),
+      expect.arrayContaining(['premium_chest', 'chest_reward_animation']),
     );
+    expect(policy.adaptivePayoff).not.toBe('premium_chest');
   });
 
-  it('premium chest is one adaptive payoff for strong premium sessions', () => {
+  it('premium user completion does not show chest by default', () => {
     const policy = resolveCompletionExperiencePolicy({
       ...baseInput,
       premiumState: 'premium',
     });
 
-    expect(policy.adaptivePayoff).toBe('premium_chest');
-    expect(policy.hiddenCompletionSurfaces).not.toContain('premium_chest');
-    expect(policy.hiddenCompletionSurfaces).not.toContain('chest_reward_animation');
-    expect(policy.hiddenCompletionSurfaces).not.toContain('shop_inventory_prompts');
+    expect(policy.hiddenCompletionSurfaces).toEqual(
+      expect.arrayContaining(['premium_chest', 'chest_reward_animation']),
+    );
+    expect(policy.adaptivePayoff).not.toBe('premium_chest');
+  });
+
+  it('completion does not expose shop, inventory, coins, or gems', () => {
+    const policy = resolveCompletionExperiencePolicy(baseInput);
+
+    expect(policy.hiddenCompletionSurfaces).toEqual(
+      expect.arrayContaining(['shop_inventory_prompts', 'coins_gems_wallet']),
+    );
   });
 
   it('rival and squad consequences are hidden', () => {
@@ -147,10 +159,19 @@ describe('CompletionExperiencePolicy', () => {
     );
   });
 
-  it('completion still gives XP, streak, and progress', () => {
+  it('completion does not render stub neuroplasticity card', () => {
     const policy = resolveCompletionExperiencePolicy(baseInput);
 
+    expect(policy.hiddenCompletionSurfaces).not.toContain('neuroplasticity_card');
+    expect(policy.adaptivePayoff).not.toBe('neuroplasticity_card');
+  });
+
+  it('completion still gives XP, streak, and progress exactly once', () => {
+    const policy = resolveCompletionExperiencePolicy(baseInput);
+    const beats = [policy.heroBeat, policy.progressBeat, policy.reflectionBeat];
+
     expect(policy.progressBeat.kind).toBe('xp_streak_progress');
+    expect(beats.filter((beat) => beat.kind === 'xp_streak_progress')).toHaveLength(1);
   });
 
   it('duplicate completion event does not duplicate reward surfaces', () => {

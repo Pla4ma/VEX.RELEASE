@@ -18,7 +18,7 @@ export type UserTier = z.infer<typeof UserTierSchema>;
 
 export const FeatureStageSchema = z.enum([
   'alpha',
-  'beta',
+  'preview',
   'early_access',
   'general',
   'deprecated',

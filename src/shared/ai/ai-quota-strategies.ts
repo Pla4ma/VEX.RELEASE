@@ -45,8 +45,8 @@ export const CATEGORY_FEATURE_STAGES: Record<string, string> = {
   comeback_prompt: 'general',
   streak_nudge: 'general',
   weekly_reflection: 'early_access',
-  content_study_generation: 'beta',
-  quiz_generation: 'beta',
+  content_study_generation: 'preview',
+  quiz_generation: 'preview',
 };
 
 export const HOURLY_WINDOW_MS = 60 * 60 * 1000;

@@ -8,7 +8,6 @@ import {
   ProductAnalyticsEvents,
 } from '../shared/analytics';
 import { initializeSessionCompletionOrchestrator } from '../features/session-completion/completion-orchestrator';
-import { initializeSessionStoryEngine } from '../features/session-story/SessionStoryEngine';
 import { initializeEmotionRetention } from '../features/emotion-retention';
 import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors';
 import { IS_DEVELOPMENT } from '../constants/app';
@@ -50,7 +49,6 @@ export const bootstrapApp = (): void => {
   bootstrapped = true;
   initializeCoreSystems();
   initializeSessionCompletionOrchestrator();
-  initializeSessionStoryEngine();
   initializeEmotionRetention();
   initializeSessionRuntime();
 };

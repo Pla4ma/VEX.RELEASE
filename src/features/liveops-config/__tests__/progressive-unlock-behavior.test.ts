@@ -125,7 +125,12 @@ describe('Progressive unlock behavior', () => {
     const unlocked = buildFeatureAccess({ totalCompletedSessions: 7 }).features;
     const nav = { navigate: jest.fn() };
 
-    expect(routeNotificationAction(nav, { type: 'view_boss' }, locked).success).toBe(false);
-    expect(routeNotificationAction(nav, { type: 'view_boss' }, unlocked).success).toBe(true);
+    // When boss is locked, notification falls back to Home (success) — not Boss
+    const lockedResult = routeNotificationAction(nav, { type: 'view_boss' }, locked);
+    expect(lockedResult.success).toBe(true);
+    expect(lockedResult.screen).toBe('Home');
+    const unlockedResult = routeNotificationAction(nav, { type: 'view_boss' }, unlocked);
+    expect(unlockedResult.success).toBe(true);
+    expect(unlockedResult.screen).toBe('Boss');
   });
 });

@@ -1,8 +1,7 @@
-import { useMemo } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useProgressionSummary } from '../../../features/progression/hooks';
 import type { SessionSummary } from '../../../session/types';
-import { useSessionCompleteChest } from './useSessionCompleteChest';
 import { useSessionRewardSync } from './useSessionRewardSync';
 type ProgressionSummaryData = NonNullable<
   ReturnType<typeof useProgressionSummary>['data']
@@ -44,22 +43,12 @@ export function useSessionCompleteRewards({
     type: 'error' | 'success';
   }) => void;
 }) {
-  const optimisticXpReward = useMemo(() => summary.xpEarned, [summary.xpEarned]);
-
-  const chest = useSessionCompleteChest({
-    focusedDuration,
-    focusPurityScore,
-    sessionId,
-    summary,
-    userId,
-  });
+  const [revealStage, setRevealStage] = useState(0);
 
   const syncedRewardState = useSessionRewardSync({
     applySessionMastery,
-    chestResult: chest.chestResult,
     focusPurityScore,
     focusedDuration,
-    optimisticXpReward: chest.chestResult?.xpReward ?? optimisticXpReward,
     primarySquadId,
     progressionSummary,
     refetchProgressionSummary,
@@ -68,23 +57,28 @@ export function useSessionCompleteRewards({
     summary,
     userId,
   });
+  const handleRevealComplete = useCallback(async (): Promise<void> => {
+    setRevealStage(2);
+    await syncedRewardState.actions.applyCompletionRewards();
+  }, [syncedRewardState.actions]);
+
+  useEffect(() => {
+    const revealTimer = setTimeout(() => setRevealStage(1), 1200);
+
+    return () => {
+      clearTimeout(revealTimer);
+    };
+  }, []);
 
   return {
     actions: {
       ...syncedRewardState.actions,
-      handleChestOpen: chest.actions.handleChestOpen,
-      handleRevealComplete: () =>
-        chest.actions.handleRevealComplete(
-          syncedRewardState.actions.applyChestRewards,
-        ),
-      prepareChest: chest.actions.prepareChest,
+      handleRevealComplete,
     },
-    chestError: chest.chestError,
-    chestResult: chest.chestResult,
     levelUpCelebration: syncedRewardState.levelUpCelebration,
     rewardCreditError: syncedRewardState.rewardCreditError,
     rewardCreditStatus: syncedRewardState.rewardCreditStatus,
-    revealStage: chest.revealStage,
-    showCtas: chest.showCtas,
+    revealStage,
+    showCtas: revealStage >= 2,
   };
 }

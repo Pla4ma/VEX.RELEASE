@@ -41,8 +41,17 @@ const mockChain = () => ({
 });
 
 try {
-  jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
-  jest.mock('react-native/src/private/animated/NativeAnimatedHelper', () => ({}));
+  jest.mock('react-native/src/private/animated/NativeAnimatedHelper', () => ({
+    __esModule: true,
+    default: { API: { flushQueue: jest.fn(), createAnimatedNode: jest.fn(), getValue: jest.fn(), setAnimatedNodeValue: jest.fn(), connectAnimatedNodes: jest.fn(), disconnectAnimatedNodes: jest.fn(), startAnimatingNode: jest.fn(), stopAnimation: jest.fn(), setAnimatedNodeOffset: jest.fn(), flattenAnimatedNodeOffset: jest.fn(), connectAnimatedNodeToView: jest.fn(), disconnectAnimatedNodeFromView: jest.fn(), extractAnimatedNodeOffset: jest.fn(), dropAnimatedNode: jest.fn(), addAnimatedEventToView: jest.fn(), removeAnimatedEventFromView: jest.fn(), restoreDefaultValues: jest.fn(), disableQueue: jest.fn(), startListeningToAnimatedNodeValue: jest.fn(() => ({ addListener: jest.fn(() => ({ remove: jest.fn() })), remove: jest.fn() })), stopListeningToAnimatedNodeValue: jest.fn() }, nativeEventEmitter: { addListener: jest.fn(() => ({ remove: jest.fn() })), remove: jest.fn() }, shouldUseNativeDriver: jest.fn((config: Record<string, unknown>) => config.useNativeDriver === true), assertNativeAnimatedModule: jest.fn(), generateNewAnimationId: jest.fn(() => 1), generateNewNodeTag: jest.fn(() => 1), shouldSignalBatch: jest.fn(() => false), transformDataType: jest.fn((v: unknown) => v) },
+    API: { flushQueue: jest.fn(), createAnimatedNode: jest.fn(), getValue: jest.fn(), setAnimatedNodeValue: jest.fn(), connectAnimatedNodes: jest.fn(), disconnectAnimatedNodes: jest.fn(), startAnimatingNode: jest.fn(), stopAnimation: jest.fn(), setAnimatedNodeOffset: jest.fn(), flattenAnimatedNodeOffset: jest.fn(), connectAnimatedNodeToView: jest.fn(), disconnectAnimatedNodeFromView: jest.fn(), extractAnimatedNodeOffset: jest.fn(), dropAnimatedNode: jest.fn(), addAnimatedEventToView: jest.fn(), removeAnimatedEventFromView: jest.fn(), restoreDefaultValues: jest.fn(), disableQueue: jest.fn(), startListeningToAnimatedNodeValue: jest.fn(() => ({ addListener: jest.fn(() => ({ remove: jest.fn() })), remove: jest.fn() })), stopListeningToAnimatedNodeValue: jest.fn() },
+    shouldUseNativeDriver: jest.fn((config: Record<string, unknown>) => config.useNativeDriver === true),
+    assertNativeAnimatedModule: jest.fn(),
+    generateNewAnimationId: jest.fn(() => 1),
+    generateNewNodeTag: jest.fn(() => 1),
+    shouldSignalBatch: jest.fn(() => false),
+    transformDataType: jest.fn((v: unknown) => v),
+  }));
 } catch (error) {
   recordSetupFallback(error);
 }
@@ -134,7 +143,7 @@ const originalConsoleError = testConsole.error;
 const originalConsoleWarn = testConsole.warn;
 
 testConsole.error = (...args: unknown[]) => {
-  if (typeof args[0] === 'string' && /Warning.*not wrapped in act|Native module cannot be null/.test(args[0])) {return;}
+  if (typeof args[0] === 'string' && /Warning.*not wrapped in act|Native module cannot be null|TurboModuleRegistry\.getEnforcing/.test(args[0])) {return;}
   originalConsoleError.call(testConsole, ...args);
 };
 

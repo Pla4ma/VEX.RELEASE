@@ -4,7 +4,7 @@ import { buildFeatureAccess } from '../../../features/liveops-config/feature-acc
 import type { FeatureKey } from '../../../features/liveops-config/feature-access';
 import { getFeatureAvailability } from '../../../features/liveops-config/feature-availability';
 import { getBossScreenCopy } from '../BossScreenSections';
-import { isPublicV1Hidden } from '../../../features/liveops-config/public-v1-feature-map';
+import { isFeatureHidden } from '../../../features/liveops-config/final-release-feature-map';
 
 function resolveBossIntensity(style: string | null): string {
   switch (style) {
@@ -37,7 +37,7 @@ describe('BossScreen progressive unlock', () => {
     expect(getFeatureAvailability(features.features.boss_tab).state).toBe('degraded');
   });
 
-  it('maps motivation styles to public v1 boss intensity', () => {
+  it('maps motivation styles to final release boss intensity', () => {
     expect(resolveBossIntensity('calm')).toBe('subtle');
     expect(resolveBossIntensity('friendly')).toBe('subtle');
     expect(resolveBossIntensity('study_focused')).toBe('subtle');
@@ -67,23 +67,23 @@ describe('BossScreen progressive unlock', () => {
   });
 });
 
-describe('Public v1 boss squad/community removal', () => {
-  it('squads are hidden in public v1 feature map', () => {
-    expect(isPublicV1Hidden('squads')).toBe(true);
+describe('Final Release boss squad/community removal', () => {
+  it('squads are hidden in final release feature map', () => {
+    expect(isFeatureHidden('squads')).toBe(true);
   });
 
-  it('boss_bounties are hidden in public v1', () => {
-    expect(isPublicV1Hidden('boss_bounties')).toBe(true);
+  it('boss_bounties are hidden in final release', () => {
+    expect(isFeatureHidden('boss_bounties')).toBe(true);
   });
 
-  it('boss_tab is progressive (not hidden) in public v1', () => {
-    expect(isPublicV1Hidden('boss_tab')).toBe(false);
+  it('boss_tab is progressive (not hidden) in final release', () => {
+    expect(isFeatureHidden('boss_tab')).toBe(false);
   });
 
-  it('shop, inventory, economy_advanced are hidden in public v1', () => {
-    expect(isPublicV1Hidden('shop')).toBe(true);
-    expect(isPublicV1Hidden('inventory')).toBe(true);
-    expect(isPublicV1Hidden('economy_advanced')).toBe(true);
+  it('shop, inventory, economy_advanced are hidden in final release', () => {
+    expect(isFeatureHidden('shop')).toBe(true);
+    expect(isFeatureHidden('inventory')).toBe(true);
+    expect(isFeatureHidden('economy_advanced')).toBe(true);
   });
 });
 
@@ -144,7 +144,7 @@ describe('BossScreen personal boss focus (no squad)', () => {
   });
 });
 
-describe('BossScreenContent public v1 squad-free', () => {
+describe('BossScreenContent final release squad-free', () => {
   it('BossScreenContent does not import or reference squads', () => {
     const fs = require('fs');
     const path = require('path');

@@ -63,3 +63,14 @@ export function canNavigateToRegisteredRoute(
   }
   return isFeatureAvailableForNavigation(getFeatureAvailability(features[feature]));
 }
+
+const ARCHIVED_ROUTE_SET: ReadonlySet<string> = new Set([
+  'Guild',
+  'Shop',
+  'Inventory',
+  'PostSessionStory',
+]);
+
+export function CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION(route: string): boolean {
+  return !ARCHIVED_ROUTE_SET.has(route);
+}

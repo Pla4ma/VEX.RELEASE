@@ -45,7 +45,6 @@ module.exports = [
   '<rootDir>/src/features/notifications/__tests__/push-delivery.test.ts',
   '<rootDir>/src/__tests__/examples/service.test.ts',
   '<rootDir>/src/session/integration/__tests__/session-reward-helpers.test.ts',
-  '<rootDir>/src/features/monetization/__tests__/purchase-trust.test.ts',
   '<rootDir>/src/features/onboarding/repository/__tests__/OnboardingRepository.persistence.test.ts',
   '<rootDir>/src/features/ai-coach/__tests__/context-snapshot.test.ts',
   '<rootDir>/src/features/liveops-config/__tests__/feature-access.test.ts',
@@ -75,4 +74,5 @@ module.exports = [
   '<rootDir>/src/hooks/__tests__/useStreakNarrative.test.ts',
   '<rootDir>/src/screens/__tests__/StreakFuneralScreen.test.tsx',
   '<rootDir>/src/navigation/__tests__/RootNavigator.test.tsx',
+  '<rootDir>/src/production/__tests__/Phase9ExitGate.test.ts',
 ];

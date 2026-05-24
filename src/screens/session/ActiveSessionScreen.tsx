@@ -82,6 +82,7 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
           chainCount={activeSession.config.sprintChainCount ?? 0}
           completionPercentage={sessionQuery.completionPercentage}
           currentMode={currentMode}
+          displayPolicy={displayPolicy}
           isPaused={sessionQuery.isPaused}
           quizBreakKey={studyQuizBreak.quizBreakKey}
           remainingSeconds={sessionQuery.remainingSeconds}

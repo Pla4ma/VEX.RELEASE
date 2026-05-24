@@ -3,7 +3,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { AuthNavigator } from "./AuthNavigator";
 import { SessionNavigator } from "./SessionNavigator";
-import { PostSessionStoryScreenContainer } from "../features/session-story/screens/PostSessionStoryScreenContainer";
 
 import { useFeatureAccess } from "../features/liveops-config";
 import { useFeatureFlags } from "../hooks/useFeatureFlags";
@@ -64,14 +63,6 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
             }}
           />
 
-          <Stack.Screen
-            name="PostSessionStory"
-            component={PostSessionStoryScreenContainer}
-            options={{
-              animation: "slide_from_bottom",
-              presentation: "fullScreenModal",
-            }}
-          />
         </>
       ) : (
         <Stack.Screen name="Auth" component={AuthNavigator} />

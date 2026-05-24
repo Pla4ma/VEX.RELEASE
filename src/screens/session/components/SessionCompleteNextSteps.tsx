@@ -1,11 +1,9 @@
 import React from 'react';
 import { Box } from '../../../components/primitives/Box';
-import { Button } from '../../../components/primitives/Button';
 import { SessionCompleteFooter } from './SessionCompleteFooter';
 import { SessionReturnReasonCard } from './SessionReturnReasonCard';
 import { TomorrowPreviewSession } from '../../../features/home-spine/components/TomorrowPreview';
 import { useSessionCompleteController } from '../../../features/session-completion/hooks';
-import type { SessionSummary } from '../../../session/types';
 import { TomorrowPreviewData } from '../../../features/home-spine/tomorrowPreviewService';
 
 type SessionCompleteController = ReturnType<typeof useSessionCompleteController>;
@@ -13,8 +11,6 @@ type TomorrowPreview = TomorrowPreviewData;
 
 interface SessionCompleteNextStepsProps {
   controller: SessionCompleteController;
-  summary: SessionSummary;
-  sessionId: string;
   tomorrowPreview: TomorrowPreview | null;
   bottomInset: number;
   onShare?: () => void;
@@ -23,8 +19,6 @@ interface SessionCompleteNextStepsProps {
 
 export function SessionCompleteNextSteps({
   controller,
-  summary,
-  sessionId,
   tomorrowPreview,
   bottomInset,
   onShare,
@@ -40,21 +34,6 @@ export function SessionCompleteNextSteps({
               controller.navigation.navigate({ name: 'Home', params: {} });
             }}
           />
-        </Box>
-      )}
-
-      {controller.rewards.showCtas && (
-        <Box px={6} mt={6}>
-          <Button
-            variant="secondary"
-            onPress={() =>
-              controller.navigation.navigate('PostSessionStory', { sessionId, summary })
-            }
-            accessibilityLabel="View your session story"
-            accessibilityRole="button"
-          >
-            View Session Story
-          </Button>
         </Box>
       )}
 

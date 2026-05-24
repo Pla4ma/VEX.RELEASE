@@ -19,39 +19,23 @@ import { useHaptics } from "../../../utils/haptics";
 import { useFeatureAccess } from "../../../features/liveops-config";
 import { getFeatureAvailability } from "../../../features/liveops-config/feature-availability";
 import { BossCombatHUDView } from "./BossCombatHUDView";
-
-interface BossCombatHUDProps {
-  encounterId: string;
-  userId: string;
-  sessionProgress: number;
-  purityScore: number;
-  currentMode: string;
-  isPaused: boolean;
-  userStreakDays?: number;
-  bossHealth?: number;
-  bossMaxHealth?: number;
-  currentPhase?: "CALM" | "AGITATED" | "ENRAGED" | "DESPERATE";
-  currentAttackPattern?: string | null;
-}
-
-const ATTACK_NAMES: Record<string, string> = {
-  DISTRACTION_WAVE: "Distraction Wave",
-  PROCRASTINATION_BEAM: "Procrastination Beam",
-  NOTIFICATION_BLAST: "Notification Blast",
-  SOCIAL_MEDIA_TRAP: "Social Media Trap",
-  MULTITASKING_TEMPEST: "Multitasking Tempest",
-};
+import { ATTACK_NAMES, type BossCombatHUDProps } from "./BossCombatHUDConfig";
 
 export function BossCombatHUD({
   encounterId,
   userId,
   isPaused,
+  displayPolicy,
   userStreakDays = 0,
   bossHealth = 100,
   bossMaxHealth = 100,
   currentPhase = "CALM",
   currentAttackPattern,
 }: BossCombatHUDProps): JSX.Element | null {
+  if (!displayPolicy.showBossHUD) {
+    return null;
+  }
+
   const featureAccess = useFeatureAccess();
   const bossAvail = getFeatureAvailability(featureAccess.features.boss_tab);
   if (!bossAvail.canRenderEntryPoint || !bossAvail.canQuery) {

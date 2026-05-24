@@ -1,8 +1,8 @@
 /**
- * Boss-Rewards Integration (Public v1)
+ * Boss-Rewards Integration (Final Release)
  *
  * Wires boss defeat events to reward creation.
- * Public v1: XP only — no coins, gems, items, or squad rewards.
+ * Final Release: XP only — no coins, gems, items, or squad rewards.
  */
 
 import { eventBus } from '../../events/EventBus';

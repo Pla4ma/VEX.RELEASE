@@ -2,15 +2,15 @@ import * as Sentry from "@sentry/react-native";
 import { z } from "zod";
 
 import { eventBus } from "../../events";
-import { queryClient, QueryKeys } from "../../api/QueryProvider";
 import { getConnectionState } from "../../lib/repository/base";
 import { enqueue } from "../../lib/offline/queue";
 import { SessionSummarySchema } from "../../session/types";
-import { useSessionUIStore } from "../../store/session-state";
 import { createDebugger } from "../../utils/debug";
 import { processCompletedSessionPromise } from "../companion-promise/service";
 import { recordCompletionCompanionMemories } from "./companion-memory-integration";
 import { setOrchestratorHandlesCompletion } from "../../session/analytics/SessionAnalytics";
+import { invalidateCompletionQueries } from "./completion-query-invalidation";
+import { setCompletionSyncState } from "./completion-sync-state";
 import { applyCompletionSubsystems } from "./completion-subsystems";
 import { buildCompletionLedger } from "./ledger-service";
 import { resolveCompletionPersonalBest } from "./personal-best-integration";
@@ -58,13 +58,7 @@ export async function orchestrateSessionCompletion(
   const existing = await getCompletionLedgerByIdempotencyKey(key);
   if (existing) {
     markKeyProcessed(key);
-    useSessionUIStore.getState().setCompletionSyncState({
-      ledgerId: existing.ledgerId,
-      message: null,
-      repairCtaLabel: null,
-      status: "synced",
-      updatedAt: Date.now(),
-    });
+    setCompletionSyncState(existing.ledgerId, [], false);
     return buildPostSessionStoryViewModel({
       degradedWarnings: existing.degradedSystems,
       ledger: existing,
@@ -118,8 +112,6 @@ export async function orchestrateSessionCompletion(
     });
   }
 
-  const sessionUIStore = useSessionUIStore.getState();
-
   // LAYER 3: XP / streak / progression / rewards — required for user payoff
   const subsystemResult = await applyCompletionSubsystems({
     ledger: persisted,
@@ -166,39 +158,11 @@ export async function orchestrateSessionCompletion(
     summary,
   });
 
-function setSyncState(
-  store: ReturnType<typeof useSessionUIStore.getState>,
-  ledgerId: string,
-  degradedSystems: readonly string[],
-  pendingSync: boolean,
-): void {
-  if (pendingSync) {
-    store.setCompletionSyncState({
-      ledgerId, message: "One session is saved offline. It will sync when you reconnect.",
-      repairCtaLabel: null, status: "pending_sync", updatedAt: Date.now(),
-    });
-  } else if (degradedSystems.length > 0) {
-    store.setCompletionSyncState({
-      ledgerId, message: "Session completion synced, but some rewards need repair.",
-      repairCtaLabel: "Repair now", status: "failed_sync", updatedAt: Date.now(),
-    });
-  } else {
-    store.setCompletionSyncState({
-      ledgerId, message: null, repairCtaLabel: null, status: "synced", updatedAt: Date.now(),
-    });
-  }
-}
-
-  setSyncState(sessionUIStore, finalLedger.ledgerId, degradedSystems, storyViewModel.pendingSync);
+  setCompletionSyncState(finalLedger.ledgerId, degradedSystems, storyViewModel.pendingSync);
 
   debug.info("Session completion orchestrated for %s", parsed.sessionId);
 
-  const keys = [QueryKeys.session, QueryKeys.streak, QueryKeys.achievements,
-    ["user", parsed.userId], ["personal-bests"],
-    ["companion-memories", parsed.userId], ["companion-promise", "home", parsed.userId]];
-  for (const k of keys) {
-    queryClient.invalidateQueries({ queryKey: k }).catch(() => undefined);
-  }
+  invalidateCompletionQueries(parsed.userId);
 
   return storyViewModel;
 }

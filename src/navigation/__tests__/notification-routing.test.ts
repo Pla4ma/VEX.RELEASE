@@ -1,12 +1,12 @@
 /**
- * Notification routing tests — safe intents, feature gating, public v1 enforcement.
+ * Notification routing tests — safe intents, feature gating, final release enforcement.
  *
  * Verifies:
  * - arbitrary actionRoute cannot navigate to disabled route
  * - BOSS notification falls back if boss route unavailable
  * - coach notification routes only when AICoach available
  * - SQUAD notification falls back while social disabled
- * - squad/rival filters hidden in public v1
+ * - squad/rival filters hidden in final release
  * - AICoach notification uses safe action intent
  * - notification filters adapt to available feature set
  * - calm user boss notification falls back to subtle
@@ -244,7 +244,7 @@ describe('Notification Safe Intents', () => {
       }
     });
 
-    it('squad and rival filters never appear in public v1', () => {
+    it('squad and rival filters never appear in final release', () => {
       const features = makeFeatureAccess(30).features;
       const filters = getAvailableNotificationFilters(features);
       expect(filters).not.toContain('view_squad');

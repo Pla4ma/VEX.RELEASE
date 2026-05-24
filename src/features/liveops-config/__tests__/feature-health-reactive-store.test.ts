@@ -61,8 +61,9 @@ describe('feature health reactive store', () => {
     });
     const availability = getFeatureAvailability(access.features.premium_paywall);
 
-    expect(availability.state).toBe('disabled');
-    expect(availability.canRenderEntryPoint).toBe(false);
+    expect(availability.state).toBe('degraded');
+    expect(availability.canRenderEntryPoint).toBe(true);
     expect(availability.canNavigate).toBe(false);
+    expect(availability.canQuery).toBe(false);
   });
 });

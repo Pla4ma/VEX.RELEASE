@@ -2,46 +2,31 @@ import { featureHealthRegistry } from './feature-health';
 import type { FeatureHealthCheck, FeatureHealthStatus } from './feature-health';
 import { CONTENT_STUDY_CONSTANTS } from '../content-study/types';
 import { DISABLED_FEATURES } from './feature-access-config';
-
 const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY ?? process.env.GEMINI_API_KEY;
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
 const CONTENT_STUDY_FUNCTION = process.env.EXPO_PUBLIC_CONTENT_STUDY_FUNCTION ?? 'generate-study-plan';
 const AI_COACH_FUNCTION = process.env.EXPO_PUBLIC_AI_COACH_FUNCTION ?? 'ai-router';
-
 function hasSupabaseConfig(): boolean {
   return Boolean(SUPABASE_URL) && Boolean(SUPABASE_ANON_KEY);
 }
-
 function hasGeminiKey(): boolean {
   return hasFunctionName(CONTENT_STUDY_FUNCTION) || hasFunctionName(AI_COACH_FUNCTION);
 }
-
 function hasFunctionName(value: string | undefined): boolean {
   return typeof value === 'string' && value.trim().length > 0;
 }
-
 function hasContentStudyConstraints(): boolean {
   return CONTENT_STUDY_CONSTANTS.MAX_PDF_SIZE > 0 &&
     CONTENT_STUDY_CONSTANTS.SUPPORTED_PDF_TYPES.includes('application/pdf') &&
     CONTENT_STUDY_CONSTANTS.SUPPORTED_TEXT_TYPES.length > 0 &&
     CONTENT_STUDY_CONSTANTS.MAX_YOUTUBE_URL_LENGTH > 0;
 }
-
-function bossPublicV1ForbiddenDepsAreDisabled(): boolean {
+function bossFinalReleaseForbiddenDepsAreDisabled(): boolean {
   const disabled = new Set(DISABLED_FEATURES);
   return disabled.has('squads') && disabled.has('shop') && disabled.has('economy_advanced');
 }
-
-/**
- * Real readiness checks.
- *
- * Healthy = a real dependency was verified and is working.
- * Degraded = the check cannot be fully verified yet.
- * Unavailable = a critical dependency is missing.
- */
 export const healthChecks: FeatureHealthCheck[] = [
-  // === content_study ===
   {
     id: 'content_study_gemini',
     feature: 'content_study',
@@ -89,8 +74,6 @@ export const healthChecks: FeatureHealthCheck[] = [
       return hasContentStudyConstraints() ? 'healthy' : 'unavailable';
     },
   },
-
-  // === ai_coach_advanced ===
   {
     id: 'ai_coach_advanced_backend',
     feature: 'ai_coach_advanced',
@@ -132,8 +115,6 @@ export const healthChecks: FeatureHealthCheck[] = [
       return hasBackend ? 'degraded' : 'unavailable';
     },
   },
-
-  // === premium_paywall ===
   {
     id: 'premium_paywall_revenuecat_config',
     feature: 'premium_paywall',
@@ -168,8 +149,6 @@ export const healthChecks: FeatureHealthCheck[] = [
       return hasRcKey ? 'degraded' : 'unavailable';
     },
   },
-
-  // === boss_tab ===
   {
     id: 'boss_tab_template',
     feature: 'boss_tab',
@@ -177,18 +156,18 @@ export const healthChecks: FeatureHealthCheck[] = [
     dependency: 'boss_template',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      const hasDeps = bossPublicV1ForbiddenDepsAreDisabled();
+      const hasDeps = bossFinalReleaseForbiddenDepsAreDisabled();
       return hasDeps ? 'degraded' : 'unavailable';
     },
   },
   {
     id: 'boss_tab_no_disabled_deps',
     feature: 'boss_tab',
-    label: 'Boss Tab — public V1 forbidden deps (squads/shop/economy) are disabled',
+    label: 'Boss Tab — final-release forbidden deps (squads/shop/economy) are disabled',
     dependency: 'boss_dependencies',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      return bossPublicV1ForbiddenDepsAreDisabled() ? 'healthy' : 'degraded';
+      return bossFinalReleaseForbiddenDepsAreDisabled() ? 'healthy' : 'degraded';
     },
   },
   {
@@ -198,7 +177,7 @@ export const healthChecks: FeatureHealthCheck[] = [
     dependency: 'boss_subtle',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      const hasDeps = bossPublicV1ForbiddenDepsAreDisabled();
+      const hasDeps = bossFinalReleaseForbiddenDepsAreDisabled();
       return hasDeps ? 'degraded' : 'unavailable';
     },
   },
@@ -209,14 +188,11 @@ export const healthChecks: FeatureHealthCheck[] = [
     dependency: 'boss_route_gating',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
-      const hasDeps = bossPublicV1ForbiddenDepsAreDisabled();
+      const hasDeps = bossFinalReleaseForbiddenDepsAreDisabled();
       return hasDeps ? 'degraded' : 'unavailable';
     },
   },
 ];
-
 export function registerFeatureHealthChecks(): void {
-  for (const check of healthChecks) {
-    featureHealthRegistry.register(check);
-  }
+  for (const check of healthChecks) featureHealthRegistry.register(check);
 }

@@ -12,7 +12,7 @@ import type { NotificationAction } from '../notification-routing-types';
 import { getAvailableNotificationFilters } from '../notification-routing-core';
 
 import type { ExtendedRootStackParams } from '../types';
-import { isPublicV1Hidden } from '../../features/liveops-config/public-v1-feature-map';
+import { isFeatureHidden } from '../../features/liveops-config/final-release-feature-map';
 import type { FeatureKey } from '../../features/liveops-config/feature-access';
 
 const HIDDEN_V1_NOTIFICATION_TYPES = new Set([
@@ -66,7 +66,7 @@ function isNotificationTypeHiddenByV1FeatureMap(notificationType: string): boole
     return notificationType.startsWith(fk.replace(/_/g, '_')) || notificationType.includes(fk);
   });
   if (!key) return false;
-  return isPublicV1Hidden(key);
+  return isFeatureHidden(key);
 }
 
 interface UseNotificationNavigationInput {
@@ -108,7 +108,7 @@ function navigateFromNotification(
   motivationStyle?: string | null,
 ): void {
   if (isHiddenV1Type(type) || isNotificationTypeHiddenByV1FeatureMap(type)) {
-    addBreadcrumb(`Blocked hidden v1 notification type: ${type}`, 'notifications.hidden_block', {
+    addBreadcrumb(`Blocked hidden final-release notification type: ${type}`, 'notifications.hidden_block', {
       notificationType: type,
     });
     routeNotificationAction(navigationRef, { type: 'custom', payload: { screen: 'Home' } }, featureAccess ?? undefined, motivationStyle);

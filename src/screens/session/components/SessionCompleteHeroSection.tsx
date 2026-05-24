@@ -57,7 +57,7 @@ export function SessionCompleteHeroSection({
         purityLabel={controller.purity.label}
         purityScore={controller.focusPurityScore}
         width={width}
-        xpEarned={controller.rewards.chestResult?.xpReward ?? summary.xpEarned ?? 0}
+        xpEarned={summary.xpEarned ?? 0}
       />
 
       <PerfectSessionBanner isPerfect={summary.isPerfect ?? false} />

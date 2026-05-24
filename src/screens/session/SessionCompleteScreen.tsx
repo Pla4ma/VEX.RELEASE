@@ -1,8 +1,7 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { useSessionCompletionRouteState } from '../../features/session-completion/route';
 import {
-  usePostSessionStoryViewModel,
   useRecoveredSessionCompletion,
   useSessionCompletionConsequences,
 } from '../../features/session-completion/hooks';
@@ -55,25 +54,6 @@ function SessionCompleteResolved({
 }): JSX.Element {
   const { user } = useAuthStore();
   const userId = user?.id ?? null;
-
-  const shouldWarmDeepSystems = useMemo(
-    () =>
-      (params.summary.actualDuration ??
-        params.summary.effectiveDuration ??
-        0) >=
-      10 * 60,
-    [params.summary.actualDuration, params.summary.effectiveDuration],
-  );
-
-  // Keep deep systems warm in background for meaningful sessions only.
-  // Short sessions stay focused on instant completion feedback.
-  usePostSessionStoryViewModel({
-    enabled: shouldWarmDeepSystems,
-    sessionId: params.sessionId,
-    summary: params.summary,
-    userId,
-  });
-
   const consequences = useSessionCompletionConsequences({
     summary: params.summary,
     userId,

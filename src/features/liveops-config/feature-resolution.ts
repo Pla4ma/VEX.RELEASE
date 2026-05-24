@@ -89,13 +89,13 @@ export function computeFeatureAccess(input: FeatureAccessInput): {
   const { feature, sessions, profile, unlockedFeatures } = input;
   const releaseState = FEATURE_RELEASE_STATES[feature];
   const disabled =
-    releaseState === 'disabled_beta' ||
+    releaseState === 'final_release_deactivated' ||
     releaseState === 'archived' ||
-    releaseState === 'internal_only';
+    releaseState === 'final_release_internal';
 
   const baseThreshold = FEATURE_THRESHOLDS[feature];
   const threshold = resolveEffectiveThreshold(feature, baseThreshold, profile);
-  const thresholdMet = !disabled && releaseState !== 'teased_only' && sessions >= threshold;
+  const thresholdMet = !disabled && sessions >= threshold;
   const depsSatisfied = unlockedFeatures
     ? checkDependenciesSatisfied(feature, unlockedFeatures)
     : true;

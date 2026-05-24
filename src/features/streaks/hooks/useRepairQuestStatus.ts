@@ -22,7 +22,7 @@ export function useRepairQuestStatus(): Pick<
   | 'progressPercent'
   | 'hoursRemaining'
 > {
-  const userId = useAuthStore((state) => state.userId);
+  const userId = useAuthStore((state) => state.user?.id);
   const {
     data: status,
     isLoading: isStatusLoading,

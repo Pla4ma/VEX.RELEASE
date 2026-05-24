@@ -1,89 +1,63 @@
 import {
-  PUBLIC_V1_FEATURE_MAP,
-  isPublicV1Hidden,
-  getPublicV1Status,
-} from '../public-v1-feature-map';
-import { FEATURE_ROUTE_REGISTRY } from '../../../navigation/feature-route-registry';
+  FINAL_RELEASE_FEATURE_MAP,
+  isFeatureHidden,
+  getFeatureStatus,
+} from '../final-release-feature-map';
 import { DISABLED_FEATURES, FEATURE_RELEASE_STATES } from '../feature-access-config';
 import type { FeatureKey } from '../feature-access';
 
-const DEFERRED_PUBLIC_V1_FEATURES: FeatureKey[] = [
+const FINAL_RELEASE_DEACTIVATED_FEATURES: FeatureKey[] = [
   'shop',
   'inventory',
   'battle_pass',
   'gems_prominent',
+  'economy_basic',
   'economy_advanced',
   'streak_insurance',
 ];
 
-describe('Deferred Public V1 — route registry excludes economy/shop/battle-pass', () => {
-  it('FEATURE_ROUTE_REGISTRY excludes shop', () => {
-    const routeFeatures = FEATURE_ROUTE_REGISTRY.map((r) => r.feature);
-    expect(routeFeatures).not.toContain('shop');
-  });
 
-  it('FEATURE_ROUTE_REGISTRY excludes inventory', () => {
-    const routeFeatures = FEATURE_ROUTE_REGISTRY.map((r) => r.feature);
-    expect(routeFeatures).not.toContain('inventory');
-  });
-
-  it('FEATURE_ROUTE_REGISTRY excludes battle_pass', () => {
-    const routeFeatures = FEATURE_ROUTE_REGISTRY.map((r) => r.feature);
-    expect(routeFeatures).not.toContain('battle_pass');
-  });
-
-  it('FEATURE_ROUTE_REGISTRY excludes gems_prominent', () => {
-    const routeFeatures = FEATURE_ROUTE_REGISTRY.map((r) => r.feature);
-    expect(routeFeatures).not.toContain('gems_prominent');
-  });
-
-  it('FEATURE_ROUTE_REGISTRY excludes economy_advanced', () => {
-    const routeFeatures = FEATURE_ROUTE_REGISTRY.map((r) => r.feature);
-    expect(routeFeatures).not.toContain('economy_advanced');
-  });
-});
-
-describe('Deferred Public V1 — all deferred features are hidden', () => {
-  for (const feature of DEFERRED_PUBLIC_V1_FEATURES) {
-    it(`${feature} has status 'hidden' in PUBLIC_V1_FEATURE_MAP`, () => {
-      expect(getPublicV1Status(feature)).toBe('hidden');
+describe('Final Release Deactivated — all deferred features are hidden', () => {
+  for (const feature of FINAL_RELEASE_DEACTIVATED_FEATURES) {
+    it(`${feature} has status 'hidden' in FINAL_RELEASE_FEATURE_MAP`, () => {
+      expect(getFeatureStatus(feature)).toBe('hidden');
     });
   }
 
-  for (const feature of DEFERRED_PUBLIC_V1_FEATURES) {
+  for (const feature of FINAL_RELEASE_DEACTIVATED_FEATURES) {
     it(`${feature} is in DISABLED_FEATURES`, () => {
       expect(DISABLED_FEATURES).toContain(feature);
     });
   }
 
-  for (const feature of DEFERRED_PUBLIC_V1_FEATURES) {
-    it(`${feature} release state is disabled_beta or archived`, () => {
-      expect(['disabled_beta', 'archived']).toContain(FEATURE_RELEASE_STATES[feature]);
+  for (const feature of FINAL_RELEASE_DEACTIVATED_FEATURES) {
+    it(`${feature} release state is final_release_deactivated or archived`, () => {
+      expect(['final_release_deactivated', 'archived']).toContain(FEATURE_RELEASE_STATES[feature]);
     });
   }
 });
 
-describe('Deferred Public V1 — completion does not award premium currency', () => {
-  it('gems_prominent is hidden in public V1', () => {
-    expect(isPublicV1Hidden('gems_prominent')).toBe(true);
+describe('Final Release Deactivated — completion does not award premium currency', () => {
+  it('gems_prominent is hidden in final release', () => {
+    expect(isFeatureHidden('gems_prominent')).toBe(true);
   });
 
-  it('shop is hidden in public V1', () => {
-    expect(isPublicV1Hidden('shop')).toBe(true);
+  it('shop is hidden in final release', () => {
+    expect(isFeatureHidden('shop')).toBe(true);
   });
 
-  it('economy_advanced is hidden in public V1', () => {
-    expect(isPublicV1Hidden('economy_advanced')).toBe(true);
+  it('economy_advanced is hidden in final release', () => {
+    expect(isFeatureHidden('economy_advanced')).toBe(true);
   });
 
-  it('streak_insurance is hidden in public V1', () => {
-    expect(isPublicV1Hidden('streak_insurance')).toBe(true);
+  it('streak_insurance is hidden in final release', () => {
+    expect(isFeatureHidden('streak_insurance')).toBe(true);
   });
 });
 
-describe('Deferred Public V1 — premium copy does not reference chests/gems/inventory/battle-pass', () => {
+describe('Final Release Deactivated — premium copy does not reference chests/gems/inventory/battle-pass', () => {
   it('premium_paywall note does not mention shop/gems/inventory/battle-pass', () => {
-    const premiumEntry = PUBLIC_V1_FEATURE_MAP.premium_paywall;
+    const premiumEntry = FINAL_RELEASE_FEATURE_MAP.premium_paywall;
     expect(premiumEntry).toBeDefined();
     const note = premiumEntry.note ?? '';
     expect(note).not.toContain('shop');
@@ -94,28 +68,28 @@ describe('Deferred Public V1 — premium copy does not reference chests/gems/inv
   });
 
   it('battle_pass copy does not appear in premium copy', () => {
-    const bpEntry = PUBLIC_V1_FEATURE_MAP.battle_pass;
+    const bpEntry = FINAL_RELEASE_FEATURE_MAP.battle_pass;
     expect(bpEntry).toBeDefined();
     expect(bpEntry.status).toBe('hidden');
   });
 
   it('shop copy does not appear in premium copy', () => {
-    const shopEntry = PUBLIC_V1_FEATURE_MAP.shop;
+    const shopEntry = FINAL_RELEASE_FEATURE_MAP.shop;
     expect(shopEntry).toBeDefined();
     expect(shopEntry.status).toBe('hidden');
   });
 });
 
-describe('Deferred Public V1 — notification filters exclude deferred features', () => {
+describe('Final Release Deactivated — notification filters exclude deferred features', () => {
   it('deferred features cannot show notifications by FeatureAvailability', () => {
     const { getFeatureAvailability } = require('../feature-availability');
-    for (const feature of DEFERRED_PUBLIC_V1_FEATURES) {
+    for (const feature of FINAL_RELEASE_DEACTIVATED_FEATURES) {
       const access = {
         isUnlocked: false,
         isVisible: false,
-        lockedDescription: 'Hidden in public V1',
+        lockedDescription: 'Hidden in final release',
         unlockReason: '',
-        releaseState: 'disabled_beta' as const,
+        releaseState: 'final_release_deactivated' as const,
       };
       const avail = getFeatureAvailability(access);
       expect(avail.canShowNotification).toBe(false);
@@ -123,17 +97,12 @@ describe('Deferred Public V1 — notification filters exclude deferred features'
   });
 });
 
-describe('Deferred Public V1 — all deferred features classified', () => {
-  it('all DEFERRED_PUBLIC_V1 files exist in src with deferred marker', () => {
-    expect(DEFERRED_PUBLIC_V1_FEATURES).toHaveLength(6);
-  });
-
-  it('economy_advanced cannot register route', () => {
-    const routeFeatures = FEATURE_ROUTE_REGISTRY.map((r) => r.feature);
-    expect(routeFeatures).not.toContain('economy_advanced');
+describe('Final Release Deactivated — all deferred features classified', () => {
+  it('all FINAL_RELEASE_DEACTIVATED files exist in src with deferred marker', () => {
+    expect(FINAL_RELEASE_DEACTIVATED_FEATURES).toHaveLength(7);
   });
 
   it('streak_insurance is not part of any completion flow', () => {
-    expect(isPublicV1Hidden('streak_insurance')).toBe(true);
+    expect(isFeatureHidden('streak_insurance')).toBe(true);
   });
 });

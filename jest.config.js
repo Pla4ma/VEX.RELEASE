@@ -42,14 +42,14 @@ module.exports = {
     '^expo-modules-core/src/web/index.web$': '<rootDir>/src/__tests__/mocks/expo-modules-core-web-index.ts',
     '^expo-haptics$': '<rootDir>/src/__tests__/mocks/expo-haptics.ts',
     '^expo-status-bar$': '<rootDir>/src/__tests__/mocks/expo-status-bar.ts',
-    '^react-native/Libraries/BatchedBridge/NativeModules$': '<rootDir>/src/__tests__/mocks/native-modules.ts',
+    '^react-native/Libraries/Animated/NativeAnimatedHelper$': '<rootDir>/src/__tests__/mocks/native-animated-helper.ts',
     '^@sentry/node$': '<rootDir>/src/__tests__/mocks/sentry-node.ts',
   },
   setupFiles: ['<rootDir>/src/__tests__/setupNativeBridge.js'],
   setupFilesAfterEnv: ['<rootDir>/src/__tests__/setupTests.ts'],
   transform: { '^.+\\.(mjs|js|jsx|ts|tsx)$': 'babel-jest' },
   transformIgnorePatterns: [
-    'node_modules/(?!((react-native|@react-native|@react-navigation|@gorhom|react-native-reanimated|react-native-gesture-handler|react-native-svg|styled-components|@tanstack|expo|expo-modules-core|@expo|expo-document-picker|msw|@mswjs|@open-draft|rettime|until-async|headers-polyfill|outvariant|strict-event-emitter|is-node-process|graphql)/))',
+    'node_modules/(?!((react-native|@react-native|@react-navigation|@gorhom|react-native-reanimated|react-native-gesture-handler|react-native-svg|styled-components|@tanstack|expo|expo-modules-core|@expo|expo-document-picker|msw|@mswjs|@open-draft|rettime|until-async|headers-polyfill|outvariant|strict-event-emitter|is-node-process|graphql|@revenuecat)/))',
   ],
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.test.ts',

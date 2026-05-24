@@ -105,7 +105,7 @@ describe('PremiumGate', () => {
     });
   });
 
-  describe('public v1 premium language', () => {
+  describe('final release premium language', () => {
     it('has no shop/inventory/squad/raid/battle pass language', () => {
       const { queryByText } = renderPremiumGate('deep_coach_memory');
       expect(queryByText(/inventory/i)).toBeNull();

@@ -59,8 +59,14 @@ describe('Progressive Unlock — Locked Before Threshold', () => {
   });
 
   it('features unlock at their configured threshold', () => {
+    // Some features have dependency chains — need enough sessions for all deps
+    const sessionOverride: Partial<Record<FeatureKey, number>> = {
+      quiz_review_mode: 12,    // needs content_study (threshold 12)
+      content_study_advanced: 18, // needs content_study (12) + ai_coach_advanced (8)
+    };
+
     for (const feature of PROGRESSIVELY_UNLOCKED) {
-      const threshold = FEATURE_THRESHOLDS[feature] ?? 0;
+      const threshold = sessionOverride[feature] ?? FEATURE_THRESHOLDS[feature] ?? 0;
       const result = buildFeatureAccess({
         totalCompletedSessions: threshold,
       });
@@ -113,8 +119,6 @@ describe('Core Features — Always Available', () => {
     'profile_tab',
     'progress_view',
     'ai_coach_basic',
-    'economy_basic',
-    'companion_detail',
   ];
 
   it('core features are available at session 0', () => {
@@ -123,10 +127,6 @@ describe('Core Features — Always Available', () => {
     });
 
     for (const feature of coreFeatures) {
-      if (result.features[feature]?.isVisible === false) {
-        // Some features like companion_detail are visible but not unlocked at 0
-        continue;
-      }
       expect(result.features[feature]!.isUnlocked).toBe(true);
     }
   });

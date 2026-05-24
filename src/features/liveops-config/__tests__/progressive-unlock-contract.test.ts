@@ -53,7 +53,7 @@ const INTENSE_PROFILE: MotivationProfile = {
 
 describe("FeatureAvailability contract", () => {
   describe("disabled state", () => {
-    it("returns all-false for disabled_beta features at any session count", () => {
+    it("returns all-false for final_release_deactivated features at any session count", () => {
       const avail = availabilityFor(0, "battle_pass");
       expect(avail.state).toBe("disabled");
       expect(avail.canRenderEntryPoint).toBe(false);
@@ -65,7 +65,7 @@ describe("FeatureAvailability contract", () => {
       expect(avail.canShowNotification).toBe(false);
     });
 
-    it("returns all-false for disabled_beta features even at 999 sessions", () => {
+    it("returns all-false for final_release_deactivated features even at 999 sessions", () => {
       const avail = availabilityFor(999, "squads");
       expect(avail.state).toBe("disabled");
       expect(avail.canRegisterRoute).toBe(false);
@@ -176,12 +176,20 @@ describe("motivation profile effects", () => {
   });
 
   it("delays Challenges for calm profile (5→8)", () => {
-    // Calm primary → restrict offset 3, threshold = 5+3=8, teaser at 3
+    // Calm primary → restrictVisibility=true, restrictVisibilityMin=8, restrictOffset=5, threshold=5+5=10
+    // At 5 sessions: feature is disabled (hidden entirely until 8 sessions)
     const avail5 = availabilityFor(5, "challenges", CALM_PROFILE);
-    expect(avail5.state).toBe("teased");
+    expect(avail5.state).toBe("disabled");
 
+    // At 8 sessions: visible now (restrictVisibilityMin met), teaser at 8, threshold 10 → still teased
     const avail8 = availabilityFor(8, "challenges", CALM_PROFILE);
-    expect(avail8.state).toBe("unlocked");
+    // teaser starts at 8 for default profile, but calm adds 5 offset
+    // threshold now 10, teaser start still 4 → after visibility restored at 8, sessions(8) >= teaser(4) → teased
+    expect(avail8.state).toBe("teased");
+
+    // At 10 sessions: threshold met → unlocked
+    const avail10 = availabilityFor(10, "challenges", CALM_PROFILE);
+    expect(avail10.state).toBe("unlocked");
   });
 
   it("accelerates Companion for calm and student profiles (3→2)", () => {
@@ -280,8 +288,9 @@ describe("challenges unlock timing", () => {
     expect(avail.canNavigate).toBe(false);
   });
 
-  it("teases at 3 sessions", () => {
-    const avail = availabilityFor(3, "challenges");
+  it("teases at 4 sessions", () => {
+    // FEATURE_TEASER_STARTS[challenges] = 4
+    const avail = availabilityFor(4, "challenges");
     expect(avail.state).toBe("teased");
     expect(avail.canRenderEntryPoint).toBe(true);
     expect(avail.canNavigate).toBe(false);
@@ -327,7 +336,7 @@ describe("intent-based feature gating", () => {
 // ============================================================================
 
 describe("route registration contract", () => {
-  it("does not register routes for disabled beta features", () => {
+  it("does not register routes for final-release deactivated features", () => {
     const { features } = buildFeatureAccess({ totalCompletedSessions: 99 });
     const show = buildRootExposureFlags({ features, isEnabled: allFlagsOn });
 
@@ -412,7 +421,7 @@ describe("query gating contract", () => {
     const { features, productTier } = buildFeatureAccess({
       totalCompletedSessions: 5,
     });
-    const runtime = buildHomeFeatureRuntime(features, productTier);
+    const runtime = buildHomeFeatureRuntime({ features, productTier, totalSessions: 5 });
     expect(runtime.canQueryChallenges).toBe(true);
   });
 
@@ -514,7 +523,7 @@ describe("first 7 days journey", () => {
     expect(features.challenges.isUnlocked).toBe(true);
     expect(features.companion_detail.isUnlocked).toBe(true);
     expect(features.boss_tab.isUnlocked).toBe(true);
-    expect(features.economy_basic.isUnlocked).toBe(true);
+    expect(features.economy_basic.isUnlocked).toBe(false);
     expect(features.achievements.isUnlocked).toBe(true);
     expect(features.ai_coach_advanced.isUnlocked).toBe(true);
     expect(features.content_study.isUnlocked).toBe(true);
@@ -522,7 +531,7 @@ describe("first 7 days journey", () => {
     expect(features.advanced_settings.isUnlocked).toBe(true);
     expect(features.seasonal_features.isUnlocked).toBe(false);
 
-    // Disabled beta features stay locked
+    // Final-release deactivated features stay locked
     expect(features.battle_pass.isUnlocked).toBe(false);
     expect(features.shop.isUnlocked).toBe(false);
   });
@@ -538,9 +547,11 @@ describe("single source of truth", () => {
       totalCompletedSessions: 10,
       motivationProfile: GAMER_PROFILE,
     });
-    const runtime = buildHomeFeatureRuntime(features, productTier);
+    const runtime = buildHomeFeatureRuntime({ features, productTier, totalSessions: 10 });
 
-    expect(runtime.canQueryBoss).toBe(false);
+    // Gamer at 10 sessions — boss unlocks at 5 (7-2), challenges at 3 (5-2)
+    const bossAvail = getFeatureAvailability(features.boss_tab);
+    expect(runtime.canQueryBoss).toBe(bossAvail.canQuery);
 
     const challengesAvail = getFeatureAvailability(features.challenges);
     expect(runtime.canQueryChallenges).toBe(challengesAvail.canQuery);

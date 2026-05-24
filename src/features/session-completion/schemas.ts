@@ -114,3 +114,29 @@ export const PostSessionNextActionSchema = z
   })
   .strict();
 export type PostSessionNextAction = z.infer<typeof PostSessionNextActionSchema>;
+
+export const CompletionReflectionInputSchema = z
+  .object({
+    bossIntensity: z.enum(['hidden', 'visible', 'high']).nullable().optional(),
+    firstWeekStage: z.string().nullable().optional(),
+    motivationStyle: z.string().nullable().optional(),
+    primaryGoal: z.string().nullable().optional(),
+    progressLabel: z.string().nullable().optional(),
+    sessionSummary: SessionSummarySchema,
+    streakDays: z.number().int().min(0).nullable().optional(),
+    studyTarget: z.string().nullable().optional(),
+  })
+  .strict();
+export type CompletionReflectionInput = z.infer<
+  typeof CompletionReflectionInputSchema
+>;
+
+export const CompletionReflectionSchema = z
+  .object({
+    adaptivePayoff: z.string().nullable(),
+    nextAction: z.string().min(1),
+    reflection: z.string().min(1),
+    tone: z.enum(['calm', 'coach', 'study', 'intense']),
+  })
+  .strict();
+export type CompletionReflection = z.infer<typeof CompletionReflectionSchema>;

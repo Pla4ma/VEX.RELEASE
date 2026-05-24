@@ -106,6 +106,24 @@ class FeatureHealthRegistry {
     return Array.from(results);
   }
 
+  /**
+   * Returns unhealthy features, filtered by the provided set.
+   * Only checks for features in the allowed set are executed.
+   */
+  async getUnhealthyFeaturesFiltered(allowedFeatures: ReadonlySet<FeatureKey>): Promise<FeatureKey[]> {
+    const results = new Set<FeatureKey>();
+    for (const check of this.checks.values()) {
+      if (!allowedFeatures.has(check.feature)) {
+        continue;
+      }
+      const status = await this.getCachedOrCheck(check);
+      if (status !== 'healthy') {
+        results.add(check.feature);
+      }
+    }
+    return Array.from(results);
+  }
+
   invalidateCache(feature?: FeatureKey): void {
     if (feature) {
       for (const [id, entry] of this.cache) {

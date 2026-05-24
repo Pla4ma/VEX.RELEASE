@@ -55,6 +55,7 @@ export const routeParamSchemas = {
     gatedFeature: optionalShortText,
     source: optionalShortText,
   }).strict(),
+  /** @archived — PostSessionStory route deactivated in final-release. */
   PostSessionStory: z.object({
     sessionId: uuidish,
     focusScore: z.number().optional(),

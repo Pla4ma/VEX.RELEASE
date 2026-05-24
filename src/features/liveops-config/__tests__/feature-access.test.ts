@@ -11,7 +11,7 @@ describe('buildFeatureAccess', () => {
     // Challenges now unlock at 5 (was 1)
     expect(afterOne.challenges.isUnlocked).toBe(false);
     expect(afterThree.companion_detail.isUnlocked).toBe(true);
-    expect(afterFive.economy_basic.isUnlocked).toBe(true);
+    expect(afterFive.economy_basic.isUnlocked).toBe(false);
     expect(afterFive.challenges.isUnlocked).toBe(true);
     expect(afterSeven.boss_tab.isUnlocked).toBe(true);
     expect(afterFifteen.ai_coach_advanced.isUnlocked).toBe(true);

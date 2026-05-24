@@ -3,15 +3,16 @@ import { useEffect, useState } from 'react';
 import { featureHealthRegistry } from '../feature-health';
 import { registerFeatureHealthChecks } from '../feature-health-checks';
 import { setDegradedFeatures as setGlobalDegradedFeatures } from '../feature-access-store';
+import { shouldRunHealthCheck } from '../feature-health-policy';
 import type { FeatureKey } from '../feature-access';
 
 let registered = false;
-const CRITICAL_FEATURES_ON_HEALTH_ERROR: FeatureKey[] = [
-  'ai_coach_advanced',
+const ALL_CHECKABLE_FEATURES: FeatureKey[] = [
   'content_study',
   'content_study_advanced',
   'premium_paywall',
   'boss_tab',
+  'ai_coach_advanced',
 ];
 
 function ensureRegistered(): void {
@@ -21,12 +22,20 @@ function ensureRegistered(): void {
   }
 }
 
+function getEligibleFeatures(totalCompletedSessions: number): Set<FeatureKey> {
+  const eligible = ALL_CHECKABLE_FEATURES.filter((f) =>
+    shouldRunHealthCheck(f, totalCompletedSessions),
+  );
+  return new Set(eligible);
+}
+
 /**
  * Polls feature health and writes degraded features to the central store.
- * Every useFeatureAccess() call reads from this same store,
- * ensuring consistent feature states everywhere.
+ * Policy: only checks features that pass shouldRunHealthCheck() —
+ * deactivated features are never polled. Proximity-gated features
+ * are only checked after the user reaches the teaser session count.
  */
-export function useFeatureHealth(): {
+export function useFeatureHealth(totalCompletedSessions: number): {
   degradedFeatures: Set<FeatureKey>;
   isPolling: boolean;
 } {
@@ -36,12 +45,13 @@ export function useFeatureHealth(): {
   useEffect(() => {
     ensureRegistered();
 
+    const eligible = getEligibleFeatures(totalCompletedSessions);
     let cancelled = false;
 
     async function poll(): Promise<void> {
       setIsPolling(true);
       try {
-        const unhealthy = await featureHealthRegistry.getUnhealthyFeatures();
+        const unhealthy = await featureHealthRegistry.getUnhealthyFeaturesFiltered(eligible);
         const unhealthySet = new Set(unhealthy);
         if (!cancelled) {
           setLocalDegradedFeatures(unhealthySet);
@@ -49,9 +59,8 @@ export function useFeatureHealth(): {
         }
       } catch {
         if (!cancelled) {
-          const safeFallback = new Set<FeatureKey>(CRITICAL_FEATURES_ON_HEALTH_ERROR);
-          setLocalDegradedFeatures(safeFallback);
-          setGlobalDegradedFeatures(safeFallback);
+          setLocalDegradedFeatures(eligible);
+          setGlobalDegradedFeatures(eligible);
         }
       } finally {
         if (!cancelled) {
@@ -72,7 +81,8 @@ export function useFeatureHealth(): {
       cancelled = true;
       clearInterval(interval);
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalCompletedSessions]);
 
   return { degradedFeatures, isPolling };
 }

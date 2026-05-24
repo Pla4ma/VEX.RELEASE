@@ -1,6 +1,6 @@
 import type { NotificationAction, NotificationActionType } from '../../navigation/notification-routing-types';
 import { launchColors } from '@theme/tokens/launch-colors';
-import { isPublicV1Hidden } from '../../features/liveops-config/public-v1-feature-map';
+import { isFeatureHidden } from '../../features/liveops-config/final-release-feature-map';
 import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../features/liveops-config/feature-availability';
 import type { FeatureAccessMap } from '../../features/liveops-config/feature-access';
 import type { NotificationCenterItem } from '../../features/notifications/service';
@@ -56,7 +56,7 @@ export const NOTIFICATION_TYPE_TO_SAFE_ACTION: Record<NotificationType, Notifica
   LEVEL_UP: 'view_progress',
 };
 
-const PUBLIC_V1_HIDDEN_NOTIFICATION_TYPES: NotificationType[] = ['SQUAD', 'RIVAL'];
+const FINAL_RELEASE_HIDDEN_NOTIFICATION_TYPES: NotificationType[] = ['SQUAD', 'RIVAL'];
 
 export const FILTER_LABELS: Record<string, string> = {
   all: 'All',
@@ -98,14 +98,14 @@ export function isNotificationTypeFilterable(
   type: NotificationType,
   features: FeatureAccessMap,
 ): boolean {
-  if (PUBLIC_V1_HIDDEN_NOTIFICATION_TYPES.includes(type)) return false;
+  if (FINAL_RELEASE_HIDDEN_NOTIFICATION_TYPES.includes(type)) return false;
   if (type === 'BOSS') {
-    if (isPublicV1Hidden('boss_tab')) return false;
+    if (isFeatureHidden('boss_tab')) return false;
     const bossAvailability = getFeatureAvailability(features.boss_tab);
     return bossAvailability.canShowNotification || isFeatureAvailableForNavigation(bossAvailability);
   }
   if (type === 'COACH') {
-    if (isPublicV1Hidden('ai_coach_advanced')) return false;
+    if (isFeatureHidden('ai_coach_advanced')) return false;
     const coachAvailability = getFeatureAvailability(features.ai_coach_advanced);
     return coachAvailability.canShowNotification || isFeatureAvailableForNavigation(coachAvailability);
   }

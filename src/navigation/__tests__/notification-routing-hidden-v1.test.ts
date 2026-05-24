@@ -1,5 +1,5 @@
 /**
- * Hidden public-v1 notification type suppression tests.
+ * Hidden final-release notification type suppression tests.
  *
  * Verifies:
  * - squad push notification is blocked before route
@@ -18,7 +18,7 @@ function makeFeatureAccess(sessions: number): { features: FeatureAccessMap } {
   return buildFeatureAccess({ totalCompletedSessions: sessions });
 }
 
-describe('hidden public-v1 notification type suppression', () => {
+describe('hidden final-release notification type suppression', () => {
   describe('squad notifications are blocked', () => {
     it('view_squad routes to OPEN_HOME', () => {
       const features = makeFeatureAccess(10).features;

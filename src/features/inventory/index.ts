@@ -2,7 +2,7 @@
  * Inventory Feature
  * Export all inventory-related modules
  *
- * DEFERRED_PUBLIC_V1: Inventory is disabled in public V1 (see PUBLIC_V1_FEATURE_MAP).
+ * FINAL_RELEASE_DEACTIVATED: Inventory is disabled in final release (see FINAL_RELEASE_FEATURE_MAP).
  * No route, Home card, notification, or completion reward uses inventory.
  * This code remains for internal reference only.
  */

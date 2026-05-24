@@ -17,8 +17,10 @@ export type RootStackRoute =
   | 'Comeback'
   | 'StreakFuneral'
   | 'FocusScoreDashboard'
-  | 'PostSessionStory'
   | 'VipPaywall';
+
+/** ARCHIVED routes — keep in type space for migration safety but NOT registered. */
+export type ArchivedRootStackRoute = 'PostSessionStory';
 export type AuthStackRoute = 'Login' | 'Register' | 'ForgotPassword' | 'ResetPassword' | 'VerifyEmail';
 export type MainTabRoute = 'Home' | 'Focus' | 'Progress' | 'Profile';
 export type SettingsStackRoute =
@@ -101,6 +103,7 @@ export interface RootStackParams {
   Comeback: { comebackState: ComebackState };
   StreakFuneral: { diedAt: number; previousStreak: number };
   FocusScoreDashboard: undefined;
+  /** @archived — PostSessionStory route deactivated in final-release. Kept for migration safety. */
   PostSessionStory: {
     focusScore?: number;
     purityScore?: number;
@@ -130,29 +133,38 @@ export interface MainTabParams {
 
 export type MainStackRoute =
   | 'Boss'
-  | 'Guild'
-  | 'Shop'
-  | 'Inventory'
+  | /** @archived — Guild route deactivated in final-release */
+  'Guild'
+  | /** @archived — Shop route deactivated in final-release */
+  'Shop'
+  | /** @archived — Inventory route deactivated in final-release */
+  'Inventory'
   | 'Notifications'
   | 'ContentStudy'
   | 'AICoach'
   | 'Challenges'
   | 'Mastery'
-  | 'CompanionDetail'
-  | 'PostSessionStory';
+  | 'CompanionDetail';
+
+/** ARCHIVED — kept for migration safety, not registered. */
+export type ArchivedMainStackRoute = 'Guild' | 'Shop' | 'Inventory' | 'PostSessionStory';
 
 export interface MainStackParams {
   [key: string]: object | undefined;
   Boss: undefined;
-  Guild: { guildId?: string } | undefined;
-  Shop: undefined;
-  Inventory: undefined;
   Notifications: undefined;
   ContentStudy: NavigatorScreenParams<ContentStudyStackParamList> | undefined;
   AICoach: undefined;
   Challenges: undefined;
   Mastery: undefined;
   CompanionDetail: undefined;
+  /** @archived — Guild route deactivated in final-release. Kept for migration safety. */
+  Guild: { guildId?: string } | undefined;
+  /** @archived — Shop route deactivated in final-release. Kept for migration safety. */
+  Shop: undefined;
+  /** @archived — Inventory route deactivated in final-release. Kept for migration safety. */
+  Inventory: undefined;
+  /** @archived — PostSessionStory route deactivated in final-release. Kept for migration safety. */
   PostSessionStory: {
     focusScore?: number;
     purityScore?: number;

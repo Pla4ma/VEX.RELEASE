@@ -600,7 +600,7 @@ describe('Group 7 — Release Truth', () => {
     expect(violations).toEqual([]);
   });
 
-  it('7c: disabled beta features never visible at any session count', () => {
+  it('7c: final-release deactivated features never visible at any session count', () => {
     for (const sessions of [0, 1, 5, 10, 50, 100, 999]) {
       const features = accessFor(sessions);
       HIDDEN_FEATURE_KEYS.forEach((key) => {
@@ -693,7 +693,7 @@ describe('Consolidation — No regression', () => {
     expect(exp.hiddenSystems).toContain('squads');
   });
 
-  it('all disabled beta features confirmed inaccessible at every tested session count', () => {
+  it('all final-release deactivated features confirmed inaccessible at every tested session count', () => {
     const sessionCounts = [0, 1, 3, 5, 7, 10, 15, 20, 50, 100, 500, 999];
 
     for (const sessions of sessionCounts) {

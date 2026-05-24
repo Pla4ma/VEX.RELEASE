@@ -155,7 +155,7 @@ describe('resolveVexExperience', () => {
     );
   });
 
-  it('defines public v1 as polished core with unfinished economies disabled', () => {
+  it('defines final release as polished core with unfinished economies disabled', () => {
     const experience = resolveVexExperience(profile('intense'), stats({
       totalCompletedSessions: 20,
     }), available);

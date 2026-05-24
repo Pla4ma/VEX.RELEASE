@@ -129,7 +129,7 @@ describe('applyCompletionSubsystems', () => {
         lockedDescription: '',
         recommendedUnlockMoment: '',
         unlockReason: 'test',
-        releaseState: 'core',
+        releaseState: 'final_release_core',
       },
       challenges: {
         isUnlocked: true,
@@ -137,7 +137,7 @@ describe('applyCompletionSubsystems', () => {
         lockedDescription: '',
         recommendedUnlockMoment: '',
         unlockReason: 'test',
-        releaseState: 'core',
+        releaseState: 'final_release_core',
       },
     } as FeatureAccessMap);
   });
@@ -193,7 +193,7 @@ describe('applyCompletionSubsystems', () => {
         lockedDescription: 'locked',
         recommendedUnlockMoment: '',
         unlockReason: '',
-        releaseState: 'progressive',
+        releaseState: 'final_release_progressive',
       },
       challenges: {
         isUnlocked: false,
@@ -201,7 +201,7 @@ describe('applyCompletionSubsystems', () => {
         lockedDescription: 'locked',
         recommendedUnlockMoment: '',
         unlockReason: '',
-        releaseState: 'progressive',
+        releaseState: 'final_release_progressive',
       },
     } as FeatureAccessMap);
 

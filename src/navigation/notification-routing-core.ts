@@ -12,7 +12,7 @@ import type {
   NotificationSafeIntent,
 } from './notification-routing-types';
 import type { SafeNotificationResolution } from './notification-routing-types';
-import { isPublicV1Hidden } from '../features/liveops-config/public-v1-feature-map';
+import { isFeatureHidden } from '../features/liveops-config/final-release-feature-map';
 import { canUseFeature, type FeatureAccessCheck } from './notification-filters';
 
 export type { FeatureAccessCheck } from './notification-filters';
@@ -43,8 +43,8 @@ export function resolveNotificationAction(
     case 'view_streak':
       return { intent: 'START_SESSION', params: action.payload };
     case 'view_boss': {
-      if (isPublicV1Hidden('boss_tab')) {
-        return { intent: 'OPEN_HOME', fallbackReason: 'Boss feature is not available in public v1' };
+      if (isFeatureHidden('boss_tab')) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Boss feature is not available in final release' };
       }
       const bossAvailable = canUseFeature(featureAccess, 'boss_tab');
       if (!bossAvailable) {
@@ -55,8 +55,8 @@ export function resolveNotificationAction(
     }
     case 'view_squad':
     case 'join_duel': {
-      if (isPublicV1Hidden('squads')) {
-        return { intent: 'OPEN_HOME', fallbackReason: 'Squads are not available in public v1' };
+      if (isFeatureHidden('squads')) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Squads are not available in final release' };
       }
       const squadsAvailable = canUseFeature(featureAccess, 'squads');
       if (!squadsAvailable) {
@@ -65,8 +65,8 @@ export function resolveNotificationAction(
       return { intent: 'OPEN_HOME', fallbackReason: 'Squad actions redirect to Home while social is limited' };
     }
     case 'open_shop': {
-      if (isPublicV1Hidden('shop')) {
-        return { intent: 'OPEN_HOME', fallbackReason: 'Shop is not available in public v1' };
+      if (isFeatureHidden('shop')) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Shop is not available in final release' };
       }
       const shopAvailable = canUseFeature(featureAccess, 'shop');
       if (!shopAvailable) {
@@ -75,13 +75,13 @@ export function resolveNotificationAction(
       return { intent: 'OPEN_HOME', fallbackReason: 'Shop redirects to Home' };
     }
     case 'open_chest':
-      if (isPublicV1Hidden('inventory')) {
-        return { intent: 'OPEN_HOME', fallbackReason: 'Chests are not available in public v1' };
+      if (isFeatureHidden('inventory')) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Chests are not available in final release' };
       }
       return { intent: 'OPEN_HOME', fallbackReason: 'Chest opening redirects to Home' };
     case 'open_coach': {
-      if (isPublicV1Hidden('ai_coach_advanced')) {
-        return { intent: 'OPEN_HOME', fallbackReason: 'Coach is not available in public v1' };
+      if (isFeatureHidden('ai_coach_advanced')) {
+        return { intent: 'OPEN_HOME', fallbackReason: 'Coach is not available in final release' };
       }
       const coachAvailable = canUseFeature(featureAccess, 'ai_coach_advanced');
       if (!coachAvailable) {
@@ -94,7 +94,7 @@ export function resolveNotificationAction(
       return { intent: 'OPEN_PROGRESS', params: action.payload };
     case 'view_profile':
       return { intent: 'OPEN_PROFILE', params: action.payload };
-    // custom always returns OPEN_HOME (Option A — safest public v1):
+    // custom always returns OPEN_HOME (Option A — safest final release):
     // No raw route strings from notification payloads are allowed to navigate directly.
     // All real notification routes must use explicit safe action types (start_session, view_boss, etc.).
     // The whitelist check below exists as a defense-in-depth audit trail but does not change
@@ -105,7 +105,7 @@ export function resolveNotificationAction(
       if (!ALLOWED_MAIN_TAB_SCREENS.has(screen) && !ALLOWED_ROOT_SCREENS.has(screen)) {
         return { intent: 'OPEN_HOME', fallbackReason: `Screen ${screen} is not whitelisted` };
       }
-      return { intent: 'OPEN_HOME', fallbackReason: 'custom type always routes Home in public v1' };
+      return { intent: 'OPEN_HOME', fallbackReason: 'custom type always routes Home in final release' };
     }
     default:
       return { intent: 'OPEN_HOME' };

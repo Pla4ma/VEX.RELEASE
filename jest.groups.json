@@ -46,15 +46,22 @@
         "src/screens/onboarding/**/__tests__/**/*.test.{ts,tsx}"
       ]
     },
-    "monetization": {
-      "description": "Paywall, purchases, entitlements, wallet, economy",
-      "required": true,
+    "premium-billing": {
+      "description": "RevenueCat purchases, entitlements, paywall gating, purchase trust, privacy/metadata. Required only when premium is active.",
+      "required": false,
       "patterns": [
         "src/features/monetization/**/__tests__/**/*.test.{ts,tsx}",
+        "src/shared/monetization/**/__tests__/**/*.test.{ts,tsx}"
+      ]
+    },
+    "archived-economy": {
+      "description": "Archived economy systems: shop, wallet, inventory, battle-pass, premium chests, earn/spend/convert currency engine. Must not block final release.",
+      "required": false,
+      "patterns": [
         "src/features/economy/**/__tests__/**/*.test.{ts,tsx}",
-        "src/shared/monetization/**/__tests__/**/*.test.{ts,tsx}",
         "src/features/shop/**/__tests__/**/*.test.{ts,tsx}",
         "src/features/wallet/**/__tests__/**/*.test.{ts,tsx}",
+        "src/features/inventory/**/__tests__/**/*.test.{ts,tsx}",
         "src/features/battle-pass/**/__tests__/**/*.test.{ts,tsx}"
       ]
     },
@@ -117,9 +124,31 @@
     }
   },
   "rules": {
-    "blocking": ["core-loop", "progressive-unlock", "session-completion", "offline-sync"],
-    "non-blocking": ["legacy"],
-    "ci-required": ["core-loop", "progressive-unlock", "session-completion", "offline-sync", "auth-onboarding", "monetization"],
-    "ci-optional": ["ai-backend", "feature-systems", "infrastructure"]
+    "blocking": [
+      "core-loop",
+      "progressive-unlock",
+      "session-completion",
+      "offline-sync",
+      "auth-onboarding"
+    ],
+    "non-blocking": [
+      "archived-economy",
+      "legacy"
+    ],
+    "ci-required": [
+      "core-loop",
+      "progressive-unlock",
+      "session-completion",
+      "offline-sync",
+      "auth-onboarding",
+      "premium-billing"
+    ],
+    "ci-optional": [
+      "archived-economy",
+      "ai-backend",
+      "feature-systems",
+      "infrastructure",
+      "e2e"
+    ]
   }
 }

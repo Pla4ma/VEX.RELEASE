@@ -808,7 +808,7 @@ const PROGRESSION_TIERS = {
   8: {
     level: 30,
     name: 'Grandmaster',
-    unlocks: ['Mentor mode', 'Exclusive titles', 'Beta features'],
+    unlocks: ['Mentor mode', 'Exclusive titles', 'Preview features'],
   },
 } as const;
 

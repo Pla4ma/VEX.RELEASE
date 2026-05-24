@@ -50,5 +50,58 @@ global.__turboModuleProxy = (name) => {
       removeListeners: () => {},
     };
   }
+  if (name === 'ImageLoader') {
+    return {
+      getConstants: () => ({
+        cacheSize: 100,
+        maxContentLengthMultiplier: 1.5,
+        forceCache: false,
+      }),
+      getSize: () => Promise.resolve({ width: 100, height: 100 }),
+      getSizeWithHeaders: () => Promise.resolve({ width: 100, height: 100 }),
+      prefetchImage: () => Promise.resolve(true),
+      prefetchImageWithMetadata: () => Promise.resolve(true),
+      queryCache: () => Promise.resolve({}),
+      abortRequest: () => {},
+    };
+  }
+  if (name === 'ImageEditingManager') {
+    return {
+      cropImage: () => Promise.resolve({ uri: 'test://cropped.png', width: 100, height: 100 }),
+    };
+  }
+  if (name === 'BlobModule') {
+    return {
+      addNetworkingHandler: () => {},
+      removeNetworkingHandler: () => {},
+      sendOverSocket: () => {},
+      createFromParts: () => ({ blobId: 'test-blob', offset: 0, size: 0 }),
+      release: () => {},
+      getConstants: () => ({ BLOB_URI_SCHEME: 'blob', BLOB_URI_HOST: null }),
+    };
+  }
+  if (name === 'Networking') {
+    return {
+      sendRequest: () => {},
+      abortRequest: () => {},
+      getConstants: () => ({}),
+    };
+  }
+  if (name === 'WebSocketModule') {
+    return {
+      connect: () => {},
+      send: () => {},
+      sendBinary: () => {},
+      ping: () => {},
+      close: () => {},
+      getConstants: () => ({}),
+    };
+  }
+  if (name === 'FileReaderModule') {
+    return {
+      readAsDataURL: () => Promise.resolve('data:'),
+      readAsText: () => Promise.resolve(''),
+    };
+  }
   return null;
 };

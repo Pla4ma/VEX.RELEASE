@@ -34,7 +34,7 @@ Generated: 2026-05-24
 | 14 | **Focus Contracts** | — | ✅ `focus_contracts` | — | ✅ | ✅ | ✅ | ❌ | 🔒 (task descriptions) |
 | 15 | **Personal Bests** | — | ✅ `personal_bests` | — | ✅ | ✅ | ✅ | ✅ | 🔒 (session data) |
 
-## Phase 1 — Public v1 Core Persistence Requirements
+## Phase 1 — Final Release Core Persistence Requirements
 
 | Requirement | Status | Detail |
 |-------------|--------|--------|

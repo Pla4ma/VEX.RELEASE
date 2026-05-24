@@ -52,7 +52,7 @@ export interface FeatureAvailability {
 export function getFeatureAvailability(feature: FeatureAccess): FeatureAvailability {
   const disabled =
     !feature.isVisible ||
-    feature.releaseState === 'disabled_beta' ||
+    feature.releaseState === 'final_release_deactivated' ||
     feature.releaseState === 'archived';
 
   if (disabled) {

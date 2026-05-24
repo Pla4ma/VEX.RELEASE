@@ -53,10 +53,10 @@ export const defaultFlags: Record<string, FeatureFlag> = {
     createdAt: now,
     updatedAt: now,
   },
-  beta_features: {
-    key: "beta_features",
+  preview_features: {
+    key: "preview_features",
     value: false,
-    description: "Enable beta features",
+    description: "Enable preview features",
     enabled: true,
     rolloutPercentage: 0,
     requiresAuth: true,

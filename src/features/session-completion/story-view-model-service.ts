@@ -8,6 +8,7 @@ import type { CompanionPromise } from '../companion-promise/types';
 import { getRecentPromises } from '../companion-promise/repository';
 import { getContractForSession } from '../focus-contract/service';
 import type { FocusContract } from '../focus-contract/types';
+import { buildCompletionReflection } from './completion-reflection-service';
 import { getCompletionLedgerBySessionId } from './repository';
 import {
   PostSessionStoryViewModelSchema,
@@ -28,34 +29,6 @@ function buildGradeBody(ledger: CompletionLedger): string {
     return `Your grade is ${ledger.grade} because ${ledger.interruptionCount} interruption${ledger.interruptionCount === 1 ? '' : 's'} pulled on the session.`;
   }
   return `Your grade is ${ledger.grade} because ${ledger.pauseCount} pause${ledger.pauseCount === 1 ? '' : 's'} softened the pace.`;
-}
-
-function buildMeaningBody(
-  ledger: CompletionLedger,
-  promise: CompanionPromise | null | undefined,
-  contract: FocusContract | null | undefined,
-): string {
-  if (contract?.completionStatus === 'done') {
-    return `You followed through on ${contract.taskDescription}.`;
-  }
-  if (contract?.completionStatus === 'partial') {
-    return `You stayed with part of ${contract.taskDescription}. That still counts.`;
-  }
-  if (contract?.completionStatus === 'not_done') {
-    return `You named ${contract.taskDescription}. Next time, make the target smaller.`;
-  }
-  if (promise?.status === 'fulfilled') {
-    return 'You kept the promise window and turned yesterday into a real follow-through.';
-  }
-  if (promise?.status === 'missed') {
-    return 'Today still counts. This finish gives tomorrow a cleaner place to restart.';
-  }
-  if (ledger.streakResult.newDays > ledger.streakResult.previousDays) {
-    return `Your streak moved to day ${ledger.streakResult.newDays} and the rhythm stayed intact.`;
-  }
-  return ledger.focusScoreDelta >= 0
-    ? `This session lifted your Focus Score by ${ledger.focusScoreDelta}.`
-    : `This session still held the thread, even with a Focus Score dip of ${Math.abs(ledger.focusScoreDelta)}.`;
 }
 
 function buildCompanionBeat(memory: CompanionMemory | null | undefined, reactionId: string | null) {
@@ -92,6 +65,12 @@ export function buildPostSessionStoryViewModel(input: {
 }): PostSessionStoryViewModel {
   const ledger = CompletionLedgerSchema.parse(input.ledger);
   const degradedWarnings = Array.from(new Set(input.degradedWarnings));
+  const reflection = buildCompletionReflection({
+    primaryGoal: input.summary.sessionMode === 'STUDY' ? 'STUDY' : null,
+    progressLabel: ledger.focusScoreDelta >= 0 ? `+${ledger.focusScoreDelta} Focus Score` : `${ledger.focusScoreDelta} Focus Score`,
+    sessionSummary: input.summary,
+    streakDays: ledger.streakResult.newDays,
+  });
   const nextAction = (() => {
     try {
       return buildPostSessionNextAction({ summary: input.summary });
@@ -114,10 +93,10 @@ export function buildPostSessionStoryViewModel(input: {
   const beats = [
     { accessibilityLabel: `Result beat. You focused for ${formatMinutes(ledger.effectiveFocusedSeconds)}.`, body: `You protected ${formatMinutes(ledger.effectiveFocusedSeconds)} in ${input.summary.sessionMode ?? ledger.mode}.`, companionLine: null, id: 'result', kind: 'result' as const, metric: { label: 'Focused', value: formatMinutes(ledger.effectiveFocusedSeconds) }, title: `You focused for ${formatMinutes(ledger.effectiveFocusedSeconds)}.` },
     { accessibilityLabel: `Grade beat. ${buildGradeBody(ledger)}`, body: buildGradeBody(ledger), companionLine: null, id: 'grade', kind: 'grade' as const, metric: { label: 'Grade', value: `${ledger.grade} · ${ledger.gradeScore}` }, title: `Grade ${ledger.grade}` },
-    { accessibilityLabel: `Meaning beat. ${buildMeaningBody(ledger, input.companionPromise, input.focusContract)}`, body: buildMeaningBody(ledger, input.companionPromise, input.focusContract), companionLine: null, id: 'meaning', kind: 'meaning' as const, metric: { label: 'Focus Score', value: ledger.focusScoreDelta >= 0 ? `+${ledger.focusScoreDelta}` : `${ledger.focusScoreDelta}` }, title: 'What changed today' },
+    { accessibilityLabel: `Meaning beat. ${reflection.reflection}`, body: reflection.reflection, companionLine: null, id: 'meaning', kind: 'meaning' as const, metric: { label: 'Focus Score', value: ledger.focusScoreDelta >= 0 ? `+${ledger.focusScoreDelta}` : `${ledger.focusScoreDelta}` }, title: 'What changed today' },
     buildCompanionBeat(input.companionMemory, ledger.companionReactionId),
     personalBestProof ? { accessibilityLabel: `Personal best beat. Purity reached ${personalBestProof.newValue}.`, body: personalBestBody ?? 'You set a cleaner mark than your last saved best.', companionLine: null, id: 'personal-best', kind: 'personal_best' as const, metric: { label: 'Purity record', value: personalBestProof.oldValue === null ? `${personalBestProof.newValue}` : `${personalBestProof.oldValue} -> ${personalBestProof.newValue}` }, title: 'This one raised your ceiling.' } : null,
-    { accessibilityLabel: `Tomorrow beat. ${nextAction?.reason ?? 'Home will hold the next safe move.'}`, body: input.companionPromise ? `Tomorrow, ${input.companionPromise.targetDurationMinutes} minutes in ${input.companionPromise.targetMode.toLowerCase()} is enough to keep the thread alive.` : nextAction?.reason ?? 'Home will hold the next safe move for you.', companionLine: input.companionPromise?.status === 'missed' ? 'Yesterday got away. Start small and rebuild the thread.' : null, id: 'tomorrow', kind: 'tomorrow' as const, metric: input.companionPromise ? { label: 'Tomorrow', value: `${input.companionPromise.targetDurationMinutes}m` } : { label: 'Next mode', value: nextAction?.routeParams?.presetMode ?? 'HOME' }, title: 'Tomorrow already has a shape.' },
+    { accessibilityLabel: `Tomorrow beat. ${reflection.nextAction}`, body: input.companionPromise ? `Tomorrow, ${input.companionPromise.targetDurationMinutes} minutes in ${input.companionPromise.targetMode.toLowerCase()} is enough to keep the thread alive.` : reflection.nextAction, companionLine: input.companionPromise?.status === 'missed' ? 'Yesterday got away. Start small and rebuild the thread.' : null, id: 'tomorrow', kind: 'tomorrow' as const, metric: input.companionPromise ? { label: 'Tomorrow', value: `${input.companionPromise.targetDurationMinutes}m` } : { label: 'Next mode', value: nextAction?.routeParams?.presetMode ?? 'HOME' }, title: 'Tomorrow already has a shape.' },
   ].filter(Boolean);
   const headline = selectHeadlineReward({
     streak: { currentDays: ledger.streakResult.newDays, previousDays: ledger.streakResult.previousDays, streakSaved: ledger.streakResult.action === 'saved_by_insurance' },

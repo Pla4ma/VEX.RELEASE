@@ -22,7 +22,7 @@ import { useSessionCompleteRewards } from '../../../screens/session/hooks/useSes
 import { useSessionCompleteStudyProgress } from '../../../screens/session/hooks/useSessionCompleteStudyProgress';
 import { useSessionMastery } from '../../../screens/session/hooks/useSessionMastery';
 import { formatDuration } from '../../../screens/session/utils';
-import { getChestTierDisplay, getGradeDisplay, getPurityDisplay } from '../../../screens/session/utils/session-complete-display';
+import { getGradeDisplay, getPurityDisplay } from '../../../screens/session/utils/session-complete-display';
 import { buildPostSessionNextAction, buildSessionCompletionHero, buildSessionCompletionReturnPlan } from '../service';
 import { useHomeReturnCompletionSync } from './useHomeReturnCompletionSync';
 import { useSessionCompletionSpectacles } from './useSessionCompletionSpectacles';
@@ -157,14 +157,13 @@ export function useSessionCompleteController(input: { sessionId: string; summary
   }, [navigation, reflection, returnPlan, selectedMood, showHomeHighlight, syncHomeReturn]);
   const grade = getGradeDisplay(summary.finalScore ?? 0, theme);
   const purity = getPurityDisplay(focusPurityScore, theme);
-  const chestTier = rewards.chestResult ? getChestTierDisplay(rewards.chestResult.tier, theme) : null;
   const levelMetric = !progressionQuery.error && progressionQuery.data
     ? {
         accent: theme.colors.primary[500],
         id: 'level',
         label: 'Level XP',
         progress: progressionQuery.data.progressPercent / 100,
-        reward: `+${rewards.chestResult?.xpReward ?? summary.xpEarned} XP`,
+        reward: `+${summary.xpEarned ?? 0} XP`,
         value: `Level ${progressionQuery.data.level} ${progressionQuery.data.xp}/${progressionQuery.data.nextLevelThreshold} XP`,
       }
     : null;
@@ -186,7 +185,7 @@ export function useSessionCompleteController(input: { sessionId: string; summary
 
   useSessionCompletionSpectacles({ focusPurityScore, sessionId, summary, userId });
 
-  return { chestTier, coachPresence, finishSession, focusPurityScore, focusedDuration, formatDuration, grade, hero, levelMetric, masteryState, navigation, nextAction, progressionError: progressionQuery.error, progressionLoading: progressionQuery.isLoading, purity, reflection, returnPlan, rewards, scrollRef, selectedMood, setMasteryState, setReflection, setSelectedMood, studyProgress: studyProgressState.studyProgress, summary, theme, userId };
+  return { coachPresence, finishSession, focusPurityScore, focusedDuration, formatDuration, grade, hero, levelMetric, masteryState, navigation, nextAction, progressionError: progressionQuery.error, progressionLoading: progressionQuery.isLoading, purity, reflection, returnPlan, rewards, scrollRef, selectedMood, setMasteryState, setReflection, setSelectedMood, studyProgress: studyProgressState.studyProgress, summary, theme, userId };
 }
 
 function mapCompletionMotivationStyle(input: string | undefined): CoachPresenceMotivationStyle {

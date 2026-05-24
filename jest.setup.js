@@ -6,9 +6,6 @@
 
 import '@testing-library/jest-native/extend-expect';
 
-// Mock react-native modules
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
-
 // Setup global test utilities
 global.__TEST__ = true;
 

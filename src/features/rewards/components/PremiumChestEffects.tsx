@@ -1,6 +1,6 @@
 /**
- * DEFERRED_PUBLIC_V1: PremiumChestEffects is disabled in public V1.
- * Premium chests and premium currency are hidden per PUBLIC_V1_FEATURE_MAP.
+ * FINAL_RELEASE_DEACTIVATED: PremiumChestEffects is disabled in final release.
+ * Premium chests and premium currency are hidden per FINAL_RELEASE_FEATURE_MAP.
  * This component remains for internal reference only.
  */
 import React from'react'; import{StyleSheet,View,type ViewStyle}from'react-native'; import Animated,{useSharedValue,useAnimatedStyle,withRepeat,withSequence,withTiming,withDelay,FadeIn}from'react-native-reanimated'; import{Text}from'../../../components/primitives/Text'; import{useTheme}from'../../../theme'; import{usePremiumStatus}from'../../../shared/monetization'; import{createSheet}from'@/shared/ui/create-sheet';

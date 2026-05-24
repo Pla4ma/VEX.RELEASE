@@ -22,7 +22,7 @@ describe('debloat feature contract', () => {
     expect(featuresAt(20).productTier).toBe('RPG_DEPTH');
   });
 
-  it('keeps disabled beta features fully unavailable at high session counts', () => {
+  it('keeps final-release deactivated features fully unavailable at high session counts', () => {
     const { features } = featuresAt(999);
     const disabled: FeatureKey[] = [
       'battle_pass',
@@ -60,7 +60,7 @@ describe('debloat feature contract', () => {
     expect(runtime.canQueryCoach).toBe(true);
     expect(runtime.canQueryBattlePass).toBe(false);
     expect(runtime.canQueryBoss).toBe(true);
-    expect(runtime.canQueryEconomy).toBe(true);
+    expect(runtime.canQueryEconomy).toBe(false);
     expect(runtime.canQuerySeasons).toBe(false);
     expect(runtime.canQuerySquads).toBe(false);
   });

@@ -16,7 +16,6 @@ import { ErrorBoundary } from '../../errors';
 import { getNetInfoAdapter } from '../../network';
 import { getSecureStorage } from '../../persistence';
 import { addBreadcrumb, captureException } from '../../config/sentry';
-import { initializeSessionStoryEngine } from '../../features/session-story';
 import { initializeEmotionRetention } from '../../features/emotion-retention';
 
 interface AppProvidersProps {
@@ -32,16 +31,12 @@ const initializeServices = async () => {
     await netInfo.initialize();
     getSecureStorage();
 
-    // Initialize story engine — subscribes to session:completed events
-    const cleanupStoryEngine = initializeSessionStoryEngine();
-
     // Initialize emotion retention engine — tracks emotional state for retention
     const cleanupEmotionEngine = initializeEmotionRetention();
 
     addBreadcrumb('Core providers initialized', 'app.providers');
 
     return () => {
-      cleanupStoryEngine?.();
       cleanupEmotionEngine?.();
     };
   } catch (error) {

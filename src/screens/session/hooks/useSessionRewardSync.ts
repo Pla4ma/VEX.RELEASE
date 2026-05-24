@@ -2,9 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import * as Sentry from '@sentry/react-native';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { economyKeys } from '../../../features/economy/hooks';
 import { progressionKeys, useProgressionSummary } from '../../../features/progression/hooks';
-import type { ChestResult } from '../../../features/rewards/chest-engine';
 import type { SessionSummary } from '../../../session/types';
 import { triggerHaptic } from '../../../utils/haptics';
 
@@ -20,10 +18,8 @@ interface SessionRewardSyncInput {
     isMounted: boolean;
     streakDays: number;
   }) => unknown;
-  chestResult: ChestResult | null;
   focusedDuration: number;
   focusPurityScore: number;
-  optimisticXpReward: number;
   primarySquadId: string | null;
   progressionSummary: ProgressionSummaryData | undefined;
   refetchProgressionSummary: () => Promise<ProgressionSummaryData | undefined>;
@@ -45,8 +41,8 @@ export function useSessionRewardSync(input: SessionRewardSyncInput) {
   const [rewardCreditError, setRewardCreditError] = useState<string | null>(null);
   const [levelUpCelebration, setLevelUpCelebration] = useState<CelebrationState>(null);
 
-  const applyChestRewards = useCallback(async (): Promise<void> => {
-    if (!input.userId || !input.chestResult) {
+  const applyCompletionRewards = useCallback(async (): Promise<void> => {
+    if (!input.userId) {
       return;
     }
 
@@ -54,7 +50,6 @@ export function useSessionRewardSync(input: SessionRewardSyncInput) {
     setRewardCreditError(null);
 
     try {
-      // Public v1: only invalidate progression. Economy wallet/transactions are hidden.
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ['progression', input.userId] }),
         queryClient.invalidateQueries({ queryKey: progressionKeys.byUser(input.userId) }),
@@ -94,7 +89,7 @@ export function useSessionRewardSync(input: SessionRewardSyncInput) {
   }, []);
 
   return {
-    actions: { applyChestRewards, setLevelUpCelebration },
+    actions: { applyCompletionRewards, setLevelUpCelebration },
     levelUpCelebration,
     rewardCreditError,
     rewardCreditStatus,

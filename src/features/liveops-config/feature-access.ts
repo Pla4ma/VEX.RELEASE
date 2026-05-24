@@ -18,11 +18,10 @@ export type ProductTier =
   | 'RPG_DEPTH'
   | 'SOCIAL_DEPTH';
 export type FeatureReleaseState =
-  | 'core'
-  | 'progressive'
-  | 'teased_only'
-  | 'disabled_beta'
-  | 'internal_only'
+  | 'final_release_core'
+  | 'final_release_progressive'
+  | 'final_release_internal'
+  | 'final_release_deactivated'
   | 'archived';
 
 export type FeatureKey =

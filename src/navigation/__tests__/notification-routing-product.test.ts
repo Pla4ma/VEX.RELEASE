@@ -8,7 +8,7 @@ const hiddenFeatureAccess: Partial<FeatureAccessMap> = {
     lockedDescription: 'Shop not available',
     recommendedUnlockMoment: '',
     unlockReason: '',
-    releaseState: 'disabled_beta',
+    releaseState: 'final_release_deactivated',
   },
   squads: {
     isUnlocked: false,
@@ -16,7 +16,7 @@ const hiddenFeatureAccess: Partial<FeatureAccessMap> = {
     lockedDescription: 'Squads not available',
     recommendedUnlockMoment: '',
     unlockReason: '',
-    releaseState: 'disabled_beta',
+    releaseState: 'final_release_deactivated',
   },
   boss_tab: {
     isUnlocked: false,
@@ -24,7 +24,7 @@ const hiddenFeatureAccess: Partial<FeatureAccessMap> = {
     lockedDescription: 'Boss not available',
     recommendedUnlockMoment: '',
     unlockReason: '',
-    releaseState: 'disabled_beta',
+    releaseState: 'final_release_deactivated',
   },
   ai_coach_advanced: {
     isUnlocked: false,
@@ -32,7 +32,7 @@ const hiddenFeatureAccess: Partial<FeatureAccessMap> = {
     lockedDescription: 'Advanced coach not available',
     recommendedUnlockMoment: '',
     unlockReason: '',
-    releaseState: 'disabled_beta',
+    releaseState: 'final_release_deactivated',
   },
 };
 
@@ -43,7 +43,7 @@ const availableFeatureAccess: Partial<FeatureAccessMap> = {
     lockedDescription: '',
     recommendedUnlockMoment: '',
     unlockReason: '',
-    releaseState: 'core',
+    releaseState: 'final_release_core',
   },
   ai_coach_advanced: {
     isUnlocked: true,
@@ -51,7 +51,7 @@ const availableFeatureAccess: Partial<FeatureAccessMap> = {
     lockedDescription: '',
     recommendedUnlockMoment: '',
     unlockReason: '',
-    releaseState: 'core',
+    releaseState: 'final_release_core',
   },
   content_study: {
     isUnlocked: true,
@@ -59,7 +59,7 @@ const availableFeatureAccess: Partial<FeatureAccessMap> = {
     lockedDescription: '',
     recommendedUnlockMoment: '',
     unlockReason: '',
-    releaseState: 'core',
+    releaseState: 'final_release_core',
   },
 };
 

@@ -78,7 +78,6 @@ describe('Docs — final release language', () => {
       'utf8',
     );
     expect(content).toContain('Final Release');
-    expect(content).not.toContain('Public V1 Includes');
     expect(content).toContain('Final Release Includes');
   });
 
@@ -107,7 +106,7 @@ describe('Docs — final release language', () => {
     expect(content).toContain('src/ is the canonical');
   });
 
-  it('VEX_PUBLIC_V1_SCOPE.md no longer exists', () => {
-    expect(existsSync(join(docsDir, 'VEX_PUBLIC_V1_SCOPE.md'))).toBe(false);
+  it('legacy V1 scope doc no longer exists', () => {
+    expect(existsSync(join(docsDir, 'FINAL_RELEASE_SCOPE.md'))).toBe(false);
   });
 });

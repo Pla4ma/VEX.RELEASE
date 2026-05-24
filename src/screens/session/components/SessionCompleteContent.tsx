@@ -3,9 +3,6 @@ import { ScrollView } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
 import Animated, { FadeIn } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { ExtendedRootStackParams } from '../../../navigation/types';
 
 import { sessionComplete } from '../../../utils/haptics';
 import { type CompletionSurface, resolveCompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
@@ -48,10 +45,8 @@ export function SessionCompleteContent({
   consequences,
 }: SessionCompleteContentProps) {
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [gradeRevealed, setGradeRevealed] = useState(false);
-  const [nptDone, setNptDone] = useState(false);
   const controller = useSessionCompleteController({ sessionId, summary });
   const contractQuery = useContractForSession(sessionId);
   const featureAccess = useFeatureAccess();
@@ -75,13 +70,12 @@ export function SessionCompleteContent({
       boss: featureAccess.features.boss_tab.isVisible,
       challenges: featureAccess.features.challenges.isVisible,
       contractUsed: Boolean(contractQuery.contract),
-      premiumChest: true,
       progress: featureAccess.features.progress_view.isVisible,
       study: featureAccess.features.content_study.isVisible,
     },
     firstWeekStage: featureAccess.stage,
     motivationStyle: motivationProfile?.primary ?? 'calm',
-    premiumState: premiumStatus.isPremium ? 'premium' : 'public_v1',
+    premiumState: premiumStatus.isPremium ? 'premium' : 'free',
     primaryGoal,
     sessionMode: summary.sessionMode,
     summary,
@@ -168,16 +162,10 @@ export function SessionCompleteContent({
               summary={summary}
               sessionId={sessionId}
               policy={policy}
-              nptDone={nptDone}
-              onOpenInventory={featureAccess.features.inventory.isVisible ? () => navigation.navigate('Inventory') : undefined}
-              onOpenShop={featureAccess.features.shop.isVisible ? () => navigation.navigate('Shop') : undefined}
-              onNptDone={() => setNptDone(true)}
             />
 
             <SessionCompleteNextSteps
               controller={controller}
-              summary={summary}
-              sessionId={sessionId}
               tomorrowPreview={tomorrowPreview}
               bottomInset={Math.max(insets.bottom, controller.theme.spacing[4])}
               onShare={undefined}

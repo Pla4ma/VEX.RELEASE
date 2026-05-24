@@ -57,9 +57,9 @@ export const RootNavigator: React.FC = () => {
     setCompletionFromBackend: state.setCompletionFromBackend,
   }));
 
-  useFeatureHealth();
   const featureAccess = useFeatureAccess();
   const totalCompletedSessions = featureAccess.inputs.totalCompletedSessions;
+  useFeatureHealth(totalCompletedSessions);
 
   const hasCompletedOnboarding = useMemo(
     () => canCompleteForUser(user?.id),

@@ -20,7 +20,6 @@ const PrimaryGoalSchema = z.enum(['WORK', 'STUDY', 'CREATIVE', 'PERSONAL']).null
 const AdaptivePayoffSchema = z.enum([
   'study_progress',
   'boss_damage',
-  'premium_chest',
   'coach_next_action',
   'progress_insight',
 ]);
@@ -76,14 +75,13 @@ const CompletionExperiencePolicyInputSchema = z
         boss: z.boolean(),
         challenges: z.boolean(),
         contractUsed: z.boolean(),
-        premiumChest: z.boolean(),
         progress: z.boolean(),
         study: z.boolean(),
       })
       .strict(),
     firstWeekStage: z.string().nullable(),
     motivationStyle: MotivationStyleSchema,
-    premiumState: z.enum(['public_v1', 'premium']),
+    premiumState: z.enum(['free', 'premium']),
     primaryGoal: PrimaryGoalSchema,
     sessionMode: SessionModeSchema,
     summary: SessionSummarySchema,
@@ -124,14 +122,6 @@ function resolveAdaptivePayoff(
   if (isGame && hasBoss && input.featureAvailability.boss) {
     return 'boss_damage';
   }
-  if (
-    input.premiumState === 'premium' &&
-    input.featureAvailability.premiumChest &&
-    input.summary.completionPercentage >= 100 &&
-    input.summary.xpEarned >= 80
-  ) {
-    return 'premium_chest';
-  }
   if (style === 'coach_led') {
     return 'coach_next_action';
   }
@@ -139,13 +129,14 @@ function resolveAdaptivePayoff(
 }
 
 export function resolveCompletionExperiencePolicy(
-  rawInput: CompletionExperiencePolicyInput,
+  rawInput: unknown,
 ): CompletionExperiencePolicy {
   const input = CompletionExperiencePolicyInputSchema.parse(rawInput);
   const adaptivePayoff = resolveAdaptivePayoff(input);
   const hiddenCompletionSurfaces: CompletionSurface[] = [
     'battle_pass_card',
     'premium_chest',
+    'coins_gems_wallet',
     'shop_inventory_prompts',
     'rival_consequence_cards',
     'squad_consequence_cards',
@@ -155,23 +146,14 @@ export function resolveCompletionExperiencePolicy(
     'follow_through_cards',
     'mastery_card',
     'companion_growth_card',
+    'contract_reflection_card',
   ];
 
-  if (adaptivePayoff === 'premium_chest') {
-    hiddenCompletionSurfaces.splice(hiddenCompletionSurfaces.indexOf('premium_chest'), 1);
-    hiddenCompletionSurfaces.splice(hiddenCompletionSurfaces.indexOf('chest_reward_animation'), 1);
-    hiddenCompletionSurfaces.splice(hiddenCompletionSurfaces.indexOf('shop_inventory_prompts'), 1);
-  } else {
-    pushHidden(hiddenCompletionSurfaces, 'coins_gems_wallet');
-  }
   if (adaptivePayoff !== 'boss_damage') {
     pushHidden(hiddenCompletionSurfaces, 'boss_consequence_card');
   }
   if (!input.featureAvailability.challenges || !input.consequences?.challenge) {
     pushHidden(hiddenCompletionSurfaces, 'challenge_consequence_card');
-  }
-  if (!input.featureAvailability.contractUsed) {
-    pushHidden(hiddenCompletionSurfaces, 'contract_reflection_card');
   }
   if (adaptivePayoff !== 'study_progress') {
     pushHidden(hiddenCompletionSurfaces, 'study_progress_card');

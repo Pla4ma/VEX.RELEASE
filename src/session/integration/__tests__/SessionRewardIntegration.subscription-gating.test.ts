@@ -136,7 +136,7 @@ describe("SessionRewardIntegration — subscription gating", () => {
     expect(subscribedEvents).toHaveLength(1);
   });
 
-  it("public v1 config has zero legacy subscriptions", () => {
+  it("final release config has zero legacy subscriptions", () => {
     new SessionRewardIntegration(ALL_DISABLED);
     expect(mockedEventBus.subscribe).not.toHaveBeenCalled();
   });

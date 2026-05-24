@@ -8,15 +8,15 @@ const makeFeature = (overrides: Partial<FeatureAccess>): FeatureAccess => ({
   isVisible: false,
   key: 'premium_paywall',
   lockedDescription: 'Premium is hidden.',
-  recommendedUnlockMoment: 'Not in beta',
-  releaseState: 'disabled_beta',
+  recommendedUnlockMoment: 'Not part of final release',
+  releaseState: 'final_release_deactivated',
   requiredSessions: 0,
   unlockReason: 'Unavailable.',
   ...overrides,
 });
 
 describe('resolveMonthlyReportAction', () => {
-  it('does not route to paywall when premium is disabled beta', () => {
+  it('does not route to paywall when premium is final-release deactivated', () => {
     expect(resolveMonthlyReportAction(makeFeature({}))).toBe('start-session');
   });
 
@@ -26,7 +26,7 @@ describe('resolveMonthlyReportAction', () => {
         makeFeature({
           isUnlocked: true,
           isVisible: true,
-          releaseState: 'core',
+          releaseState: 'final_release_core',
         }),
       ),
     ).toBe('paywall');

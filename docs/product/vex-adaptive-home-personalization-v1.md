@@ -1,4 +1,4 @@
-# VEX Adaptive Home, Completion, Premium, and Public v1
+# VEX Adaptive Home, Completion, Premium, and Final Release
 
 Date: 2026-05-21
 
@@ -157,7 +157,7 @@ Rules:
 - Store only summaries, not raw sensitive work content.
 - Privacy copy: "VEX uses session summaries to personalize suggestions. You can reset this at any time."
 
-## Public v1 Scope
+## Final Release Scope
 
 Included:
 - Motivation-style onboarding

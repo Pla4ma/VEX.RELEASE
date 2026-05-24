@@ -24,12 +24,8 @@ type SessionCompletionRewardsSectionProps = {
   progressionLoading: boolean;
   rewards: {
     actions: {
-      applyChestRewards: () => Promise<void>;
+      applyCompletionRewards: () => Promise<void>;
     };
-    chestResult: {
-      coinReward: number;
-      xpReward: number;
-    } | null;
     rewardCreditError: string | null;
     rewardCreditStatus: 'crediting' | 'failed' | 'idle' | 'retrying' | 'success';
   };
@@ -63,7 +59,7 @@ export function SessionCompletionRewardsSection({
               title="Rewards couldn't save right now - we'll retry automatically"
               variant="warning"
               actionText="Retry"
-              onAction={() => void rewards.actions.applyChestRewards()}
+              onAction={() => void rewards.actions.applyCompletionRewards()}
             />
           </Box>
         ) : rewards.rewardCreditStatus === 'crediting' ||
@@ -93,7 +89,7 @@ export function SessionCompletionRewardsSection({
           streakIncreased={summary.streakIncreased}
           streakLabel={`${summary.streakDays} Day Streak`}
           studyProgress={studyProgress}
-          onRetryRewards={() => void rewards.actions.applyChestRewards()}
+          onRetryRewards={() => void rewards.actions.applyCompletionRewards()}
           onStartNewSession={onStartNewSession}
         />
 
