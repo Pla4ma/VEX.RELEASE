@@ -1,14 +1,20 @@
 # AI Agent Rules For VEX
 
-AI agents must read this file, `docs/VEX_PUBLIC_V1_SCOPE.md`, and
+AI agents must read this file, `docs/VEX_FINAL_RELEASE_SCOPE.md`, and
 `docs/ARCHIVED_FEATURES_DO_NOT_REVIVE.md` before editing app behavior.
+
+## Source Of Truth
+
+src/ is the canonical implementation. src_impl_archive/ is archived historical
+code only — do not edit, import, or target it. All production code, tests,
+lint, and typecheck commands must target src/.
 
 ## Product Identity
 
-VEX is a premium personal execution OS. The app should feel shaped around the
-user, but it must stay quiet, useful, and honest. The public V1 promise is:
-start focused work, complete it, see progress, get one next action, and return
-tomorrow.
+VEX is a personalized Study + Focus execution OS. The app should feel shaped
+around the user, but it must stay quiet, useful, and honest. The final release
+promise is: start focused work, complete it, see progress, get one next action,
+and return tomorrow.
 
 ## Architecture Rules
 

@@ -1,4 +1,4 @@
-# VEX Public V1 Scope
+# VEX Final Release Scope
 
 AI agents must read this file before editing Home, navigation, onboarding,
 session completion, premium, notifications, Coach Presence, Study/Deep Work,
@@ -6,7 +6,7 @@ Boss, or feature availability.
 
 ## Product Identity
 
-VEX helps users focus and actually do their work. The first public version is a
+VEX is a personalized Study + Focus execution OS. The final release is a
 personal execution loop, not a social game, economy, or feature museum.
 
 Primary loop:
@@ -18,7 +18,7 @@ Primary loop:
 5. Coach Presence reflects, progress updates, and one next action appears.
 6. User has a clear reason to return tomorrow.
 
-## Public V1 Includes
+## Final Release Includes
 
 - Onboarding and motivation style selection.
 - Adaptive Home with one primary CTA.
@@ -32,9 +32,9 @@ Primary loop:
 - Sentry-backed error capture.
 - RevenueCat-backed premium only when live billing is configured.
 
-## Public V1 Hides Or Defers
+## Final Release Excludes
 
-These systems are out of scope unless the user directly asks to revive one:
+These systems are archived/deactivated. Do not revive unless the user directly asks for that exact system by name:
 
 - shop
 - inventory
@@ -64,12 +64,12 @@ points, event subscriptions, and background work.
 
 - Home has one primary CTA.
 - Early Home has at most one spotlight.
+- Home must never route to unavailable features.
 - Coach and companion appear as one Coach Presence surface.
 - Boss is subtle for calm/study users and visible only for game-like/intense or
   later-stage users.
 - Study language adapts by primary goal:
   Study OS, Deep Work Plan, Learning OS, Project Focus Path, or Growth Path.
-- Home must never route to unavailable features.
 
 ## Completion Source Of Truth
 
@@ -97,3 +97,14 @@ Premium sells deeper personalization:
 Never show fake billing, fake premium, fake plans, premium currency, or cheap
 "upgrade now" copy. If billing is not live, hide premium or show a clear
 unavailable state.
+
+## Archived Feature Runtime Rules
+
+Every archived/deactivated feature must be fully inert at runtime:
+- Must not register routes.
+- Must not render Home cards.
+- Must not trigger notifications.
+- Must not appear in session completion.
+- Must not run active queries or subscriptions.
+- Must not affect loading state.
+- Must not appear in onboarding or Coach recommendations.

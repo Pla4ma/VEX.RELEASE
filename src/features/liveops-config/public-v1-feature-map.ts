@@ -1,16 +1,22 @@
 /**
- * Public V1 Feature Map — single source of truth for App Store release scope.
+ * Final Release Feature Map — single source of truth for release scope.
  *
  * Every system must check this map before registering routes, rendering cards,
  * querying, subscribing to events, or scheduling notifications.
  *
  * This map complements FeatureAvailability — hidden features here are ALWAYS hidden
  * regardless of FeatureAvailability state.
+ *
+ * @deprecated Filename retained as public-v1-feature-map.ts to avoid breaking imports.
+ *   Internals renamed to Final Release. Rename file in a follow-up cleanup pass.
  */
 
 import type { FeatureKey } from './feature-access';
 
 export type PublicV1Status = 'included' | 'progressive' | 'hidden' | 'premium_gated';
+
+/** @deprecated Use FinalReleaseFeatureEntry */
+export type FinalReleaseStatus = PublicV1Status;
 
 export interface PublicV1FeatureEntry {
   status: PublicV1Status;
@@ -19,7 +25,12 @@ export interface PublicV1FeatureEntry {
   note?: string;
 }
 
+/** Alias for PublicV1FeatureEntry */
+export type FinalReleaseFeatureEntry = PublicV1FeatureEntry;
+
+/** @deprecated Use FINAL_RELEASE_FEATURE_MAP */
 export const PUBLIC_V1_FEATURE_MAP: Record<FeatureKey, PublicV1FeatureEntry> = {
+
   focus_session: { status: 'included', label: 'Focus Sessions' },
   progress_view: { status: 'included', label: 'Progress View' },
   home_tab: { status: 'included', label: 'Home Tab' },
@@ -86,6 +97,7 @@ export const PUBLIC_V1_FEATURE_MAP: Record<FeatureKey, PublicV1FeatureEntry> = {
   gems_prominent: { status: 'hidden', label: 'Premium Currency' },
 };
 
+/** @deprecated Use FINAL_RELEASE_INCLUDED_SYSTEMS */
 export const PUBLIC_V1_INCLUDED_SYSTEMS = [
   'motivation_onboarding',
   'adaptive_home',
@@ -98,6 +110,7 @@ export const PUBLIC_V1_INCLUDED_SYSTEMS = [
   'basic_settings_privacy',
 ] as const;
 
+/** @deprecated Use FINAL_RELEASE_HIDDEN_SYSTEMS */
 export const PUBLIC_V1_HIDDEN_SYSTEMS = [
   'shop',
   'inventory',
@@ -126,14 +139,26 @@ export const APP_STORE_READINESS_CHECKLIST = [
   { item: 'No archived feature routes', required: true },
 ] as const;
 
+/** Alias for APP_STORE_READINESS_CHECKLIST — final release naming */
+export const FINAL_RELEASE_READINESS_CHECKLIST = APP_STORE_READINESS_CHECKLIST;
+
+/** @deprecated Use isFeatureHidden */
 export function isPublicV1Hidden(feature: FeatureKey): boolean {
   return PUBLIC_V1_FEATURE_MAP[feature]?.status === 'hidden';
 }
 
+export const isFeatureHidden = isPublicV1Hidden;
+
+/** @deprecated Use isFeatureIncluded */
 export function isPublicV1Included(feature: FeatureKey): boolean {
   return PUBLIC_V1_FEATURE_MAP[feature]?.status === 'included';
 }
 
+export const isFeatureIncluded = isPublicV1Included;
+
+/** @deprecated Use getFeatureStatus */
 export function getPublicV1Status(feature: FeatureKey): PublicV1Status {
   return PUBLIC_V1_FEATURE_MAP[feature]?.status ?? 'hidden';
 }
+
+export const getFeatureStatus = getPublicV1Status;

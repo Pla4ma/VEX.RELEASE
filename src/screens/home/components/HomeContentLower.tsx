@@ -47,6 +47,10 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
     controller.openSetup();
   };
 
+  const stage = controller.disclosure.stage;
+  const isDayZero = controller.disclosure.inputs.totalCompletedSessions === 0;
+  if (isDayZero) return null;
+
   const sm = surfaceMap;
   const showSecondary = sm
     ? sm.challenge_teaser !== 'hidden' || sm.boss_teaser !== 'hidden' || sm.study_layer !== 'hidden'
@@ -61,7 +65,6 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
     ? sm.study_layer !== 'hidden' && sm.study_layer !== 'blocked'
     : controller.shouldShowSecondarySystems;
 
-  const stage = controller.disclosure.stage;
   const isNewOrActivating = stage === 'ACTIVATING' || stage === 'NEW_USER';
   const showFocusScore = sm
     ? (sm as Record<string, string>).focus_score !== 'hidden' && (sm as Record<string, string>).focus_score !== 'blocked'

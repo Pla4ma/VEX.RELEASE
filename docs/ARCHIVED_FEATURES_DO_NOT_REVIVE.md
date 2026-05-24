@@ -5,8 +5,8 @@ routing, completion, premium, economy, social, or Boss systems.
 
 ## Rule
 
-Do not reintroduce archived systems into public V1 unless the user directly
-requests that exact system by name in the current task.
+Do not reintroduce archived systems into the final release unless the user
+directly requests that exact system by name in the current task.
 
 Archived systems must not appear in:
 
@@ -33,7 +33,7 @@ Archived systems must not appear in:
 
 ## Boss Boundaries
 
-Boss public V1 is personal focus momentum only.
+Boss final release is personal focus momentum only.
 
 Allowed:
 
@@ -57,7 +57,7 @@ Not allowed:
 ## Premium Boundaries
 
 Premium may deepen the execution system, but it cannot pretend that archived
-economy features are valuable public V1 content.
+economy features are valuable final-release content.
 
 Do not use:
 

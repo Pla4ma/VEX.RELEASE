@@ -1,5 +1,10 @@
 # VEX Verification Report
 
+> **Note (2026-05-23):** Historical entries below reference `src_impl` — the former
+> implementation path. `src/` is now the canonical implementation. `src_impl_archive/`
+> is archived historical code only. See `docs/VEX_FINAL_RELEASE_SCOPE.md` and
+> `docs/AI_AGENT_RULES_FOR_VEX.md` for current source-of-truth rules.
+
 ## Trust, Activation, and Completion Recovery Slice
 
 **Status:** PASS  

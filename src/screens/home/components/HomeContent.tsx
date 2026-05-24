@@ -72,9 +72,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   const showWeeklyQuest = sm
     ? sm.weekly_quest !== 'hidden' && sm.weekly_quest !== 'blocked'
     : false;
-  const showLowerContent = sm
-    ? sm.boss_teaser !== 'hidden' || sm.challenge_teaser !== 'hidden' || sm.study_layer !== 'hidden'
-    : false;
+  const showLowerContent = isDayZero ? false : sm ? sm.boss_teaser !== 'hidden' || sm.challenge_teaser !== 'hidden' || sm.study_layer !== 'hidden' : false;
   const showAtRiskBanner = streakHoursRemaining !== null && streakHoursRemaining <= 4;
 
   const isActivating =
