@@ -46,7 +46,7 @@ export function useBaseHomeData(controller: HomeController) {
 
   const companionMood = useMemo(
     () => getHomeCompanionMood(
-      controller.historyQuery.history as unknown as Parameters<typeof getHomeCompanionMood>[0],
+      controller.historyQuery.history,
       controller.currentStreak,
     ),
     [controller.currentStreak, controller.historyQuery.history],

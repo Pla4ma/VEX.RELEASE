@@ -89,7 +89,7 @@ class FeatureHealthRegistry {
    */
   async shouldDegrade(feature: FeatureKey): Promise<boolean> {
     const status = await this.getFeatureHealth(feature);
-    return status === 'unavailable';
+    return status !== 'healthy';
   }
 
   /**

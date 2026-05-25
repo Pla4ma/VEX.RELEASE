@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useSyncExternalStore } from 'react';
+import { useMemo, useSyncExternalStore } from 'react';
 
 import { useSessionStats } from '../../session/hooks/useSession';
 import { useAuthStore } from '../../store';
@@ -30,6 +30,7 @@ export type {
   FeatureReleaseState,
 } from './feature-access';
 export {
+  buildFeatureAccess,
   getProductTier,
   getStage,
   getFeatureAvailability,
@@ -81,9 +82,7 @@ export function useFeatureAccess(): FeatureAccessResult {
     [completedSessions, motivationProfile, degradedFeatures],
   );
 
-  useEffect(() => {
-    setFeatureAccessMap(access.features);
-  }, [access.features]);
+  setFeatureAccessMap(access.features);
 
   return {
     error: null,

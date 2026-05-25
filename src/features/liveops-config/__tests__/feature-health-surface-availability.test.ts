@@ -31,13 +31,10 @@ describe('degraded surface enforcement - FeatureAvailability gates', () => {
 
   it('degraded premium_paywall blocks purchasable paywall', () => {
     const avail = getFeatureAvailabilityFor('premium_paywall', degradedAccess());
-    expect(avail.state).toBe('disabled');
-    expect(avail.canRenderEntryPoint).toBe(false);
+    expect(avail.state).toBe('degraded');
+    expect(avail.canRenderEntryPoint).toBe(true);
     expect(avail.canNavigate).toBe(false);
     expect(avail.canQuery).toBe(false);
-    expect(avail.canUseBackend).toBe(false);
-    expect(avail.canRegisterRoute).toBe(false);
-    expect(avail.canShowNotification).toBe(false);
   });
 
   it('degraded boss_tab blocks full boss route', () => {

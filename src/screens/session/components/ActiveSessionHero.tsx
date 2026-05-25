@@ -3,35 +3,24 @@ import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons';
 import { ActiveSessionProgressRing } from './ActiveSessionProgressRing';
-import { formatTime, type PurityLabel } from '../utils/active-session';
-import type { ActiveSessionDisplayPolicy } from '../utils/active-session-display-policy';
+import { formatTime } from '../utils/active-session';
+import type { SharedValue } from 'react-native-reanimated';
+import type { ActiveSessionHeroViewModel } from '../utils/active-session-hero-view-model';
 
 type ActiveSessionHeroProps = {
+  viewModel: ActiveSessionHeroViewModel;
   CIRCUMFERENCE: number;
   RADIUS: number;
   RING_SIZE: number;
   STROKE_WIDTH: number;
   animatedCircleProps: React.ComponentProps<typeof ActiveSessionProgressRing>['animatedCircleProps'];
-  completionPercentage: number;
   dailyProgress: number;
-  displayPolicy: ActiveSessionDisplayPolicy;
-  elapsedSeconds: number;
   glowStyle: React.ComponentProps<typeof ActiveSessionProgressRing>['glowStyle'];
   labelColor: string;
-  momentumScores: number[];
   outerStrokeDashoffset: number;
-  perfectFocusActive: boolean;
   perfectFocusBurst: React.ComponentProps<typeof ActiveSessionProgressRing>['perfectFocusBurst'];
-  phaseAccent: string;
-  phaseIcon: 'clock' | 'target';
-  phaseLabel: string;
   pulseStyle: React.ComponentProps<typeof ActiveSessionProgressRing>['pulseStyle'];
-  purityLabel: PurityLabel;
-  purityScore: number;
-  remainingSeconds: number;
   rotatingPerfectFocusStyle: React.ComponentProps<typeof ActiveSessionProgressRing>['rotatingPerfectFocusStyle'];
-  streakMultiplier: number;
-  studyTargetLabel: string;
   themeColors: {
     error: string;
     inverse: string;
@@ -39,49 +28,56 @@ type ActiveSessionHeroProps = {
     success: string;
     warning: string;
   };
-  todayFocusSeconds: number;
   withAlpha: (color: string, alpha: number) => string;
 };
 
-export const ActiveSessionHero: React.FC<ActiveSessionHeroProps> = (props) => (
+export const ActiveSessionHero: React.FC<ActiveSessionHeroProps> = ({ viewModel, CIRCUMFERENCE, RADIUS, RING_SIZE, STROKE_WIDTH, animatedCircleProps, dailyProgress, glowStyle, labelColor, outerStrokeDashoffset, perfectFocusBurst, pulseStyle, rotatingPerfectFocusStyle, themeColors, withAlpha }) => (
   <Box flex={1} justifyContent="center" alignItems="center" px="lg">
     <Box alignItems="center">
-      <SessionTargetBadge {...props} />
-      <FocusSignalPills {...props} />
-      <ActiveSessionProgressRing
-        CIRCUMFERENCE={props.CIRCUMFERENCE}
-        RADIUS={props.RADIUS}
-        RING_SIZE={props.RING_SIZE}
-        STROKE_WIDTH={props.STROKE_WIDTH}
-        animatedCircleProps={props.animatedCircleProps}
-        completionPercentage={props.completionPercentage}
-        glowStyle={props.glowStyle}
-        outerStrokeDashoffset={props.outerStrokeDashoffset}
-        perfectFocusActive={props.displayPolicy.showPurityScore ? props.perfectFocusActive : false}
-        perfectFocusBurst={props.perfectFocusBurst}
-        phaseAccent={props.phaseAccent}
-        pulseStyle={props.pulseStyle}
-        purityLabel={props.purityLabel}
-        purityScore={props.purityScore}
-        remainingSeconds={props.remainingSeconds}
-        rotatingPerfectFocusStyle={props.rotatingPerfectFocusStyle}
-        showPurityScore={props.displayPolicy.showPurityScore}
-        streakMultiplier={props.streakMultiplier}
-        themeColors={{
-          inverse: props.themeColors.inverse,
-          primary300: props.themeColors.primary300,
-          warning: props.themeColors.warning,
-        }}
-        withAlpha={props.withAlpha}
+      <SessionTargetBadge
+        phaseIcon={viewModel.phaseIcon}
+        phaseLabel={viewModel.phaseLabel}
+        phaseAccent={viewModel.phaseAccent}
+        studyTargetLabel={viewModel.studyTargetLabel}
+        withAlpha={withAlpha}
       />
-      <MomentumDots {...props} />
-      <DailyProgress {...props} />
-      <SessionStats {...props} />
+      <FocusSignalPill signalPill={viewModel.signalPill} themeColors={themeColors} withAlpha={withAlpha} />
+      <ActiveSessionProgressRing
+        CIRCUMFERENCE={CIRCUMFERENCE}
+        RADIUS={RADIUS}
+        RING_SIZE={RING_SIZE}
+        STROKE_WIDTH={STROKE_WIDTH}
+        animatedCircleProps={animatedCircleProps}
+        completionPercentage={viewModel.completionPercentage}
+        glowStyle={glowStyle}
+        outerStrokeDashoffset={outerStrokeDashoffset}
+        perfectFocusActive={viewModel.perfectFocusActive}
+        perfectFocusBurst={perfectFocusBurst}
+        phaseAccent={viewModel.phaseAccent}
+        pulseStyle={pulseStyle}
+        purityLabel={viewModel.purityLabel}
+        purityScore={viewModel.purityScore}
+        remainingSeconds={viewModel.remainingSeconds}
+        rotatingPerfectFocusStyle={rotatingPerfectFocusStyle}
+        showPurityScore={viewModel.showPurityScore}
+        streakMultiplier={viewModel.streakMultiplier}
+        themeColors={{ inverse: themeColors.inverse, primary300: themeColors.primary300, warning: themeColors.warning }}
+        withAlpha={withAlpha}
+      />
+      <MomentumDots momentumScores={viewModel.momentumScores} themeColors={themeColors} />
+      <DailyProgress dailyProgress={viewModel.dailyProgress} todayFocusSeconds={viewModel.todayFocusSeconds} />
+      <SessionStats heroDensity={viewModel.heroDensity} elapsedSeconds={viewModel.elapsedSeconds} completionPercentage={viewModel.completionPercentage} labelColor={labelColor} />
     </Box>
   </Box>
 );
 
-function SessionTargetBadge(props: ActiveSessionHeroProps): React.JSX.Element {
+function SessionTargetBadge(props: {
+  phaseIcon: 'clock' | 'target';
+  phaseLabel: string;
+  phaseAccent: string;
+  studyTargetLabel: string | null;
+  withAlpha: (color: string, alpha: number) => string;
+}): React.JSX.Element {
   return (
     <>
       <Box
@@ -103,7 +99,7 @@ function SessionTargetBadge(props: ActiveSessionHeroProps): React.JSX.Element {
           {props.phaseLabel}
         </Text>
       </Box>
-      {props.displayPolicy.showStudyTarget ? (
+      {props.studyTargetLabel ? (
         <Text variant="body" color="text.primary" textAlign="center" mb="md">
           {props.studyTargetLabel}
         </Text>
@@ -112,50 +108,38 @@ function SessionTargetBadge(props: ActiveSessionHeroProps): React.JSX.Element {
   );
 }
 
-function FocusSignalPills(props: ActiveSessionHeroProps): React.JSX.Element | null {
-  if (props.displayPolicy.showBossTinyIndicator) {
-    return (
-      <SignalPill color={props.themeColors.error} withAlpha={props.withAlpha}>
-        Challenge waiting
-      </SignalPill>
-    );
-  }
-  if (props.perfectFocusActive && props.displayPolicy.heroDensity !== 'minimal') {
-    return (
-      <SignalPill color={props.themeColors.warning} withAlpha={props.withAlpha}>
-        Clean focus
-      </SignalPill>
-    );
-  }
-  return null;
-}
-
-function SignalPill(props: {
-  children: string;
-  color: string;
+function FocusSignalPill(props: {
+  signalPill: { type: 'boss' | 'focus'; label: string } | null;
+  themeColors: { error: string; warning: string };
   withAlpha: (color: string, alpha: number) => string;
-}): React.JSX.Element {
+}): React.JSX.Element | null {
+  if (!props.signalPill) {return null;}
+  const color = props.signalPill.type === 'boss' ? props.themeColors.error : props.themeColors.warning;
   return (
     <Box alignSelf="center" mb="md" px="md" py="xs" borderRadius="full" style={{
-      backgroundColor: props.withAlpha(props.color, 0.12),
+      backgroundColor: props.withAlpha(color, 0.12),
       borderWidth: 1,
-      borderColor: props.withAlpha(props.color, 0.28),
+      borderColor: props.withAlpha(color, 0.28),
     }}>
-      <Text variant="caption" style={{ color: props.color, fontWeight: '700' }}>
-        {props.children}
+      <Text variant="caption" style={{ color, fontWeight: '700' }}>
+        {props.signalPill.label}
       </Text>
     </Box>
   );
 }
 
-function MomentumDots(props: ActiveSessionHeroProps): React.JSX.Element | null {
-  if (!props.displayPolicy.showMomentumScore) {return null;}
+function MomentumDots(props: {
+  momentumScores: number[] | null;
+  themeColors: { success: string; warning: string; error: string };
+}): React.JSX.Element | null {
+  if (!props.momentumScores) {return null;}
+  const scores = props.momentumScores;
   return (
     <Box flexDirection="row" alignItems="center" justifyContent="center" gap="sm" mt="lg">
-      {props.momentumScores.length > 0 ? props.momentumScores.map((score, index) => (
+      {scores.length > 0 ? scores.map((score, index) => (
         <Box key={`momentum-${index}`} width={8} height={8} borderRadius="full" style={{
           backgroundColor: score >= 70 ? props.themeColors.success : score >= 45 ? props.themeColors.warning : props.themeColors.error,
-          opacity: 0.45 + ((index + 1) / props.momentumScores.length) * 0.55,
+          opacity: 0.45 + ((index + 1) / scores.length) * 0.55,
         }} />
       )) : (
         <Text variant="caption" color="text.secondary">
@@ -166,8 +150,11 @@ function MomentumDots(props: ActiveSessionHeroProps): React.JSX.Element | null {
   );
 }
 
-function DailyProgress(props: ActiveSessionHeroProps): React.JSX.Element | null {
-  if (!props.displayPolicy.showDailyProgress) {return null;}
+function DailyProgress(props: {
+  dailyProgress: number | null;
+  todayFocusSeconds: number | null;
+}): React.JSX.Element | null {
+  if (props.dailyProgress === null || props.todayFocusSeconds === null) {return null;}
   return (
     <Text variant="caption" color="text.secondary" textAlign="center" mt="sm">
       {`${formatTime(props.todayFocusSeconds)} today - ${Math.round(props.dailyProgress)}% of 2h goal`}
@@ -175,8 +162,13 @@ function DailyProgress(props: ActiveSessionHeroProps): React.JSX.Element | null 
   );
 }
 
-function SessionStats(props: ActiveSessionHeroProps): React.JSX.Element | null {
-  if (props.displayPolicy.heroDensity === 'minimal') {return null;}
+function SessionStats(props: {
+  heroDensity: 'minimal' | 'standard' | 'rich';
+  elapsedSeconds: number;
+  completionPercentage: number;
+  labelColor: string;
+}): React.JSX.Element | null {
+  if (props.heroDensity === 'minimal') {return null;}
   return (
     <Box flexDirection="row" justifyContent="center" gap="xl" mt="xl">
       <Stat label="Elapsed" value={formatTime(props.elapsedSeconds)} />

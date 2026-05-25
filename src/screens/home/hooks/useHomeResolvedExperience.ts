@@ -23,6 +23,10 @@ import type {
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { SessionHistoryEntry } from '../../../session/types';
 import type { HomeController } from './home-controller-types';
+import type { LaneProfile } from '../../../features/lane-engine/types';
+import { resolveInitialLane } from '../../../features/lane-engine/service';
+
+const VALID_GOALS = ['focus', 'study', 'work', 'creative', 'personal', 'learning'] as const;
 import {
   normalizeMotivationStyle,
   resolvePrimaryGoal,
@@ -42,6 +46,7 @@ export { recordBehaviorSignal };
 export interface HomeResolvedExperience {
   resolvedExperience: VexExperience;
   firstWeekExperience: FirstWeekExperience;
+  laneProfile: LaneProfile;
   personalizationProfile: {
     motivationStyle: MotivationStyle;
     primaryGoal: string;
@@ -124,7 +129,7 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
   const latestEndedAt = latestSession?.endedAt;
   const daysSinceLastSession = latestEndedAt != null ? computeDaysSinceTimestamp(latestEndedAt) : null;
 
-  const sessionHistory = (controller.historyQuery as unknown as { history?: SessionEntry[] }).history ?? [];
+  const sessionHistory = controller.historyQuery.history ?? [];
   const completedSessions = sessionHistory.filter((s) => s.status === 'COMPLETED');
   const abandonedSessions = sessionHistory.filter((s) => s.status === 'ABANDONED');
 
@@ -146,9 +151,7 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
     const deepWorkCount = completedSessions.filter(
       (s) => s.mode === 'DEEP_WORK' || s.config?.sessionMode === 'DEEP_WORK',
     ).length;
-    const learningCount = completedSessions.filter(
-      (s) => s.mode === 'LEARNING' || s.config?.sessionMode === 'LEARNING',
-    ).length;
+    const learningCount = 0;
     const creativeCount = completedSessions.filter(
       (s) => s.mode === 'CREATIVE' || s.config?.sessionMode === 'CREATIVE',
     ).length;
@@ -192,6 +195,14 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
 
   const vexInput: VexExperienceRuntimeInput = { behaviorStats, featureAvailability };
   const resolvedExperience = useResolvedVexExperienceRuntime(vexInput);
+
+  const laneProfile: LaneProfile = useMemo(() => resolveInitialLane({
+    primaryGoal: (VALID_GOALS as readonly string[]).includes(primaryGoal) ? primaryGoal as 'focus' | 'study' | 'work' | 'creative' | 'personal' | 'learning' : null,
+    motivationStyle,
+    manualOverride: null,
+    observedAt: Date.now(),
+    sessionMode: behaviorStats.preferredSessionMode ?? undefined,
+  }), [primaryGoal, motivationStyle, behaviorStats.preferredSessionMode]);
 
   const firstWeekExperience = useFirstWeekExperience({
     completedSessions: totalCompletedSessions,
@@ -245,7 +256,8 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
   return useMemo(() => ({
     resolvedExperience,
     firstWeekExperience,
+    laneProfile,
     personalizationProfile: canonicalProfile,
     behaviorStats: canonicalBehavior,
-  }), [resolvedExperience, firstWeekExperience, canonicalProfile, canonicalBehavior]);
+  }), [resolvedExperience, firstWeekExperience, laneProfile, canonicalProfile, canonicalBehavior]);
 }

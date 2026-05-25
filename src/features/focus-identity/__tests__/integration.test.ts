@@ -34,33 +34,23 @@ describe('Focus Identity Integration', () => {
     cleanup();
   });
 
-  it('should update focus score on session:completed event', async () => {
-    const ledger = {
+  it('should NOT subscribe to session:completed after architecture change — orchestrator owns focus score update', async () => {
+    const eventBusSpy = jest.spyOn(eventBus, 'subscribe');
+
+    await eventBus.publish('session:completed', {
       userId: 'user-123',
-      grade: 'A',
-      mode: 'deep_work',
-      completedAt: new Date().toISOString(),
-    };
-
-    (repository.fetchCurrentFocusScore as jest.Mock).mockResolvedValue({
-      currentScore: 600,
+      ledger: { userId: 'user-123', grade: 'A', mode: 'deep_work', completedAt: new Date().toISOString() },
     });
-    (repository.upsertCurrentFocusScore as jest.Mock).mockResolvedValue({});
-    (repository.appendFocusScoreHistory as jest.Mock).mockResolvedValue({});
 
-    const eventBusSpy = jest.spyOn(eventBus, 'publish');
-
-    await eventBus.publish('session:completed', { userId: 'user-123', ledger });
-
-    // Need to wait for async operations to complete
     await new Promise(process.nextTick);
 
-    expect(repository.fetchCurrentFocusScore).toHaveBeenCalledWith('user-123');
-    expect(repository.upsertCurrentFocusScore).toHaveBeenCalled();
-    expect(repository.appendFocusScoreHistory).toHaveBeenCalled();
-    expect(analytics.trackFocusScoreChanged).toHaveBeenCalled();
-    expect(eventBusSpy).toHaveBeenCalledWith('focus-identity:score_updated', expect.any(Object));
-    expect(queryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['focus-score', 'user-123', 'current'] });
-    expect(queryClient.invalidateQueries).toHaveBeenCalledWith({ queryKey: ['focus-score', 'user-123', 'history'] });
+    expect(repository.fetchCurrentFocusScore).not.toHaveBeenCalled();
+    expect(repository.upsertCurrentFocusScore).not.toHaveBeenCalled();
+    expect(eventBusSpy).not.toHaveBeenCalledWith('focus-identity:score_updated', expect.any(Object));
+  });
+
+  it('cleanup function is a no-op (integration permanently disabled)', () => {
+    const fn = initializeFocusIdentityIntegrations();
+    expect(() => fn()).not.toThrow();
   });
 });

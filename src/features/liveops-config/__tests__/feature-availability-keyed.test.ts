@@ -30,7 +30,7 @@ describe('keyed FeatureAvailability', () => {
     const files = [
       'src/navigation/feature-route-registry.ts',
       'src/navigation/feature-exposure/feature-exposure.ts',
-      'src/navigation/root-stack-authenticated-routes.tsx',
+      'src/navigation/premium-route-gating.ts',
       'src/navigation/notification-filters.ts',
       'src/screens/notifications/NotificationScreenConfig.ts',
       'src/hooks/usePrefetchQueries.ts',
@@ -51,9 +51,8 @@ describe('keyed FeatureAvailability', () => {
 
     expect(generic.state).toBe('degraded');
     expect(generic.canRenderEntryPoint).toBe(true);
-    expect(premium.state).toBe('disabled');
-    expect(premium.canRenderEntryPoint).toBe(false);
-    expect(premium.canRegisterRoute).toBe(false);
+    expect(premium.state).toBe('degraded');
+    expect(premium.canRenderEntryPoint).toBe(true);
   });
 
   it('boss degraded keeps subtle fallback surface but blocks route', () => {

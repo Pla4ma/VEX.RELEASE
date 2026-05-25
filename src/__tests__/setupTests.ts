@@ -113,6 +113,25 @@ try {
   recordSetupFallback(error);
 }
 
+jest.mock('react-native-purchases', () => {
+  return {
+    __esModule: true,
+    default: {
+      configure: jest.fn(),
+      setLogLevel: jest.fn(),
+      addCustomerInfoUpdateListener: jest.fn(),
+      getCustomerInfo: jest.fn(() => Promise.resolve({ entitlements: { active: {} } })),
+      getOfferings: jest.fn(() => Promise.resolve({ current: null })),
+      purchasePackage: jest.fn(() => Promise.resolve({ customerInfo: { entitlements: { active: {} } } })),
+      restorePurchases: jest.fn(() => Promise.resolve({ entitlements: { active: {} } })),
+      logIn: jest.fn(() => Promise.resolve({ customerInfo: {} })),
+      logOut: jest.fn(() => Promise.resolve()),
+    },
+    LOG_LEVEL: { DEBUG: 0, ERROR: 1 },
+    PURCHASES_ERROR_CODE: { PURCHASE_CANCELLED_ERROR: 'PURCHASE_CANCELLED_ERROR' }
+  };
+});
+
 try {
   jest.mock('expo-secure-store', () => ({ getItemAsync: jest.fn(() => Promise.resolve(null)), setItemAsync: jest.fn(() => Promise.resolve()), deleteItemAsync: jest.fn(() => Promise.resolve()) }));
   jest.mock('expo-linear-gradient', () => ({ LinearGradient: 'LinearGradient' }));

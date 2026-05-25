@@ -132,4 +132,17 @@ describe('resolveUserBehaviorSignals', () => {
     expect(serialized).not.toMatch(/password|secret|token|api.?key/i);
     expect(serialized).not.toMatch(/content|message.*body|ai.*message|document/i);
   });
+
+  it('accepts 2026 personalization signal taxonomy', () => {
+    const result = BehaviorSignalSchema.parse({
+      userId: '550e8400-e29b-41d4-a716-446655440000',
+      surfaceKey: 'rescue_cta',
+      signalType: 'rescue_started',
+      source: 'session_completion',
+      timestamp: Date.now(),
+      metadata: { sessionCount: 3 },
+    });
+
+    expect(result.signalType).toBe('rescue_started');
+  });
 });

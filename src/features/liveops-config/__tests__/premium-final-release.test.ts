@@ -7,52 +7,15 @@ import {
   VALUE_PROPOSITION,
 } from '../../../screens/paywall/paywall-copy';
 import { resolveMonthlyReportAction } from '../../../screens/progress/progress-actions';
-import { buildPremiumCompletionReward } from '../../session-completion/premium-completion-reward';
 import { buildFeatureAccess } from '../feature-access';
 import { getFeatureAvailabilityFor } from '../feature-availability';
 import { canRegisterPremiumPaywallRoute } from '../../../navigation/premium-route-gating';
-import type { SessionSummary } from '../../../session/types';
 
-function premiumAccess(degraded = false) {
+function premiumAccess(degraded = false, sessions = 40) {
   return buildFeatureAccess({
-    totalCompletedSessions: 5,
+    totalCompletedSessions: sessions,
     degradedFeatures: degraded ? new Set(['premium_paywall']) : new Set(),
   }).features;
-}
-
-function makeSummary(xpEarned: number): SessionSummary {
-  return {
-    actualDuration: 1500,
-    baseScore: 80,
-    bonuses: [],
-    coinsEarned: 0,
-    completionPercentage: 100,
-    createdAt: 1,
-    damageTaken: 0,
-    effectiveDuration: 1500,
-    finalScore: 90,
-    focusQuality: 90,
-    gemsEarned: 0,
-    interruptions: 0,
-    modeBonus: 0,
-    pausedDuration: 0,
-    pausedTime: 0,
-    pauses: 0,
-    penaltiesApplied: [],
-    plannedDuration: 1500,
-    sessionId: 'session-1',
-    sessionMode: 'LIGHT_FOCUS',
-    status: 'COMPLETED',
-    streakDays: 1,
-    streakIncreased: true,
-    streakMaintained: true,
-    timeBonus: 0,
-    userId: 'user-1',
-    userLevel: 1,
-    vsAverage: 0,
-    vsBest: 0,
-    xpEarned,
-  };
 }
 
 describe('premium final-release truth', () => {
@@ -85,13 +48,21 @@ describe('premium final-release truth', () => {
     );
 
     expect(source).not.toContain('SessionPremiumChestCard');
+    expect(source).not.toContain('SessionPremiumInsightCard');
   });
 
-  it('RevenueCat healthy plus eligible user can register paywall route', () => {
+  it('RevenueCat healthy plus eligible user (40+ sessions) can register paywall route', () => {
     const features = premiumAccess(false);
 
     expect(features.premium_paywall.isUnlocked).toBe(true);
     expect(canRegisterPremiumPaywallRoute(features)).toBe(true);
+  });
+
+  it('below 40 sessions: premium not unlocked even without degraded', () => {
+    const features = premiumAccess(false, 25);
+
+    expect(features.premium_paywall.isUnlocked).toBe(false);
+    expect(canRegisterPremiumPaywallRoute(features)).toBe(false);
   });
 
   it('premium copy excludes economy language', () => {
@@ -115,18 +86,5 @@ describe('premium final-release truth', () => {
 
     expect(focusAvailability.canNavigate).toBe(true);
     expect(FREE_BOUNDARY_COPY).toContain('Core sessions');
-  });
-
-  it('completion premium moment uses insight and memory copy only', () => {
-    const reward = buildPremiumCompletionReward({
-      chestResult: null,
-      summary: makeSummary(40),
-    });
-    const copy = `${reward.title} ${reward.description} ${reward.cta}`.toLowerCase();
-
-    expect(copy).toContain('coach memory');
-    for (const banned of ['open chest', 'go to shop', 'view inventory']) {
-      expect(copy).not.toContain(banned);
-    }
   });
 });

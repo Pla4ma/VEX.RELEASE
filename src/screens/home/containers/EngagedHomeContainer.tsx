@@ -42,7 +42,7 @@ export function useEngagedContainerModel(input: EngagedContainerInput): HomeView
   const { analytics, disclosure, historyQuery, isOnline, progressionQuery, runtime, streakQuery, userId } = input;
   const navigation = useNavigation<Nav>();
   const homeHighlight = useSessionUIStore((s) => s.homeHighlight);
-  const completionSync = useSessionUIStore((s) => s.completionSync) as unknown;
+  const completionSync = useSessionUIStore((s) => s.completionSync);
   const clearHomeHighlight = useSessionUIStore((s) => s.clearHomeHighlight);
 
   const streakData = streakQuery.data as Record<string, unknown> | undefined;

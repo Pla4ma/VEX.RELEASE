@@ -18,35 +18,29 @@ import { useActivatingHomeData } from '../hooks/useActivatingHomeData';
 import { useEngagedHomeData } from '../hooks/useEngagedHomeData';
 import { usePowerUserHomeData } from '../hooks/usePowerUserHomeData';
 import { HomeScreenInner } from './HomeScreenInner';
-import type { HomeViewModel } from '../hooks/home-view-model';
-import type { HomeController } from '../hooks/home-controller-types';
-
-interface ContainerResult extends HomeViewModel {
-  controller: HomeController;
-}
 
 function NewUserContainer({ sharedInput }: { sharedInput: NewUserContainerInput }): JSX.Element {
   const model = useNewUserContainerModel(sharedInput);
   const data = useNewUserHomeData(model.controller);
-  return React.createElement(HomeScreenInner, { model, data: data as unknown as import('./HomeScreenInner').HomeDataProps });
+  return React.createElement(HomeScreenInner, { model, data });
 }
 
 function ActivatingContainer({ sharedInput }: { sharedInput: NewUserContainerInput }): JSX.Element {
   const model = useActivatingContainerModel(sharedInput);
   const data = useActivatingHomeData(model.controller);
-  return React.createElement(HomeScreenInner, { model, data: data as unknown as import('./HomeScreenInner').HomeDataProps });
+  return React.createElement(HomeScreenInner, { model, data });
 }
 
 function EngagedContainer({ sharedInput }: { sharedInput: NewUserContainerInput }): JSX.Element {
   const model = useEngagedContainerModel(sharedInput);
   const data = useEngagedHomeData(model.controller);
-  return React.createElement(HomeScreenInner, { model, data: data as unknown as import('./HomeScreenInner').HomeDataProps });
+  return React.createElement(HomeScreenInner, { model, data });
 }
 
 function PowerUserContainer({ sharedInput }: { sharedInput: NewUserContainerInput }): JSX.Element {
   const model = usePowerUserContainerModel(sharedInput);
   const data = usePowerUserHomeData(model.controller);
-  return React.createElement(HomeScreenInner, { model, data: data as unknown as import('./HomeScreenInner').HomeDataProps });
+  return React.createElement(HomeScreenInner, { model, data });
 }
 
 export function HomeStageResolver(): JSX.Element {

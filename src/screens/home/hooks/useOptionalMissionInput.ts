@@ -52,7 +52,7 @@ export function buildMissionPriorityInput(params: BuildMissionInputParams): Part
   return {
     isFirstSession: controller.isFirstRun,
     hasPendingSyncRepair:
-      (controller.completionSync as { status: string }).status === 'failed_sync',
+      controller.completionSync.status === 'failed_sync',
     isStreakCritical: streakHoursRemaining !== null && streakHoursRemaining <= 4,
     hasComebackQuest:
       (controller.comebackQuery.data as Record<string, unknown> | undefined)

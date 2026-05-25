@@ -25,6 +25,7 @@ import {
   normalizeActiveSessionMotivationStyle,
   resolveActiveSessionDisplayPolicy,
 } from "./utils/active-session-display-policy";
+import { buildActiveSessionHeroViewModel } from "./utils/active-session-hero-view-model";
 
 const ENABLE_SESSION_COMPANION_LAYER = true;
 const ENABLE_SESSION_COACH_BANNER = true;
@@ -54,6 +55,24 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
     sessionMode: currentMode,
     studyLayerLabel: getActiveSessionTargetLabel(primaryGoal, currentMode),
   });
+  const heroViewModel = buildActiveSessionHeroViewModel({
+    completionPercentage: sessionQuery.completionPercentage,
+    dailyProgress: metrics.dailyProgress,
+    displayPolicy,
+    elapsedSeconds: sessionQuery.elapsedSeconds,
+    momentumScores: metrics.momentumScores,
+    perfectFocusActive: metrics.perfectFocusActive,
+    phaseAccent: metrics.phaseAccent,
+    phaseIcon: metrics.phaseInfo.icon,
+    phaseLabel: metrics.phaseInfo.label,
+    purityLabel: metrics.purityLabel,
+    purityScore: metrics.purityScore,
+    remainingSeconds: sessionQuery.remainingSeconds,
+    streakMultiplier: metrics.streakMultiplier,
+    studyTargetLabel: getActiveSessionTargetLabel(primaryGoal, currentMode),
+    todayFocusSeconds: metrics.todayFocusSeconds,
+  });
+
   const studyQuizBreak = useStudyQuizBreak({ currentMode, plannedQuizBreakOptedIn, sessionQuery });
   const shouldShowGuardState = !userId || sessionQuery.isLoading || !controller.companion.isLoaded || Boolean(sessionQuery.error) || !sessionQuery.session || isDegradedSession;
 
@@ -103,31 +122,19 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
 
       {ENABLE_SESSION_HERO && (
         <ActiveSessionHero
+          viewModel={heroViewModel}
           CIRCUMFERENCE={metrics.CIRCUMFERENCE}
           RADIUS={metrics.RADIUS}
           RING_SIZE={metrics.RING_SIZE}
           STROKE_WIDTH={metrics.STROKE_WIDTH}
           animatedCircleProps={metrics.animatedCircleProps}
-          completionPercentage={sessionQuery.completionPercentage}
           dailyProgress={metrics.dailyProgress}
-          displayPolicy={displayPolicy}
-          elapsedSeconds={sessionQuery.elapsedSeconds}
           glowStyle={metrics.glowStyle}
           labelColor={metrics.labelColor}
-          momentumScores={metrics.momentumScores}
           outerStrokeDashoffset={outerStrokeDashoffset}
-          perfectFocusActive={metrics.perfectFocusActive}
           perfectFocusBurst={metrics.perfectFocusBurst}
-          phaseAccent={metrics.phaseAccent}
-          phaseIcon={metrics.phaseInfo.icon}
-          phaseLabel={metrics.phaseInfo.label}
           pulseStyle={metrics.pulseStyle}
-          purityLabel={metrics.purityLabel}
-          purityScore={metrics.purityScore}
-          remainingSeconds={sessionQuery.remainingSeconds}
           rotatingPerfectFocusStyle={metrics.rotatingPerfectFocusStyle}
-          streakMultiplier={metrics.streakMultiplier}
-          studyTargetLabel={getActiveSessionTargetLabel(primaryGoal, currentMode)}
           themeColors={{
             error: theme.colors.error.DEFAULT,
             inverse: theme.colors.text.inverse,
@@ -135,7 +142,6 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
             success: theme.colors.success.DEFAULT,
             warning: theme.colors.warning.light,
           }}
-          todayFocusSeconds={metrics.todayFocusSeconds}
           withAlpha={metrics.withAlpha}
         />
       )}

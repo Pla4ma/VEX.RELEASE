@@ -43,7 +43,7 @@ ${colors.bold}${colors.cyan}╔════════════════�
   console.log(`${colors.bold}1. SESSION COMPLETE → ECONOMY CHAIN${colors.reset}`);
 
   const sessionCompleteChest = readFile(
-    path.join(__dirname, '../src/screens/session/hooks/useSessionCompleteChest.ts')
+    path.join(__dirname, '../archive/economy-chest/hooks/useSessionCompleteChest.ts')
   );
   const sessionRewardSync = readFile(
     path.join(__dirname, '../src/screens/session/hooks/useSessionRewardSync.ts')

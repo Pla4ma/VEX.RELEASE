@@ -83,7 +83,7 @@ export function useEngagedHomeData(controller: HomeController): EngagedHomeData 
     controller,
     showToast,
     challengesQuery,
-    claimRewardMutation: claimRewardMutation as unknown as EngagedHomeData['claimRewardMutation'],
+    claimRewardMutation: claimRewardMutation as EngagedHomeData['claimRewardMutation'],
     freezeStreakMutation: { mutate: () => {}, isPending: false },
     intervention,
     interventionLoading,

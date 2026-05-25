@@ -74,7 +74,7 @@ describe('FirstSessionPersonalization - pure logic', () => {
   it('returns default Focus mode when no onboarding data', () => {
     const result = computePersonalization({ goal: null, focusDuration: null, element: null, motivationProfile: null });
     expect(result.defaultMode).toBe('LIGHT_FOCUS');
-    expect(result.suggestedDurationMinutes).toBe(25);
+    expect(result.suggestedDurationMinutes).toBe(20);
     expect(result.companionElement).toBeNull();
     expect(result.showBossTease).toBe(false);
   });

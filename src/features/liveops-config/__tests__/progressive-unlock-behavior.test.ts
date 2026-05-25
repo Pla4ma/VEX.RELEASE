@@ -114,10 +114,10 @@ describe('Progressive unlock behavior', () => {
   });
 
   it('keeps premium gated behind session minimum and RevenueCat availability', () => {
-    // premium_paywall is progressive: unlocked at 5+ sessions, but isDegraded
+    // premium_paywall is progressive: threshold 40 sessions, isDegraded
     // flag blocks it until RevenueCat billing is live
-    expect(availabilityFor(3, 'premium_paywall').state).toBe('locked');
-    expect(availabilityFor(10, 'premium_paywall').state).toBe('unlocked');
+    expect(availabilityFor(10, 'premium_paywall').state).toBe('locked');
+    expect(availabilityFor(40, 'premium_paywall').state).toBe('unlocked');
   });
 
   it('gates notification routes through FeatureAvailability', () => {

@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { LaneProfileSchema, LaneSchema } from '../lane-engine/schemas';
+
 export const FirstWeekStageSchema = z.enum([
   'DAY_0_NOT_STARTED',
   'DAY_0_FIRST_SESSION_STARTED',
@@ -86,6 +88,7 @@ export const FirstWeekInputSchema = z.object({
     'personal_growth',
     'learning',
   ]),
+  laneProfile: LaneProfileSchema.optional(),
 }).strict();
 
 export const FirstWeekExperienceSchema = z.object({
@@ -96,6 +99,9 @@ export const FirstWeekExperienceSchema = z.object({
   completionEmphasis: z.string().min(1),
   currentDayStage: FirstWeekStageSchema,
   hiddenSurfaces: z.array(HiddenFirstWeekSurfaceSchema),
+  lane: LaneSchema,
+  laneConfidence: z.number().min(0).max(1),
+  laneStageTheme: z.string().min(1),
   notificationAllowedTypes: z.array(z.string().min(1)),
   premiumMoment: z.enum(['none', 'soft_tease', 'weekly_value', 'hidden']),
   primaryCTA: z.object({
@@ -108,6 +114,11 @@ export const FirstWeekExperienceSchema = z.object({
     label: z.string().min(1),
   }).nullable(),
   spotlightSurface: z.enum(['none', 'progress_proof', 'study_deep_work_path', 'tiny_boss_teaser', 'weekly_insight']),
+  blockedSurfaceReasons: z.array(z.string().min(1)),
+  firstWeekExperiment: z.object({
+    title: z.string().min(1),
+    action: z.string().min(1),
+  }).strict().nullable(),
   studyLayerLabel: z.enum([
     'Study OS',
     'Deep Work Plan',
@@ -115,6 +126,7 @@ export const FirstWeekExperienceSchema = z.object({
     'Project Focus Path',
     'Growth Path',
   ]),
+  unlockExplanation: z.string().min(1),
   unlockTease: z.string().min(1).nullable(),
 }).strict();
 

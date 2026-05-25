@@ -51,18 +51,62 @@ jest.mock('../../../events', () => ({
 jest.mock('../../../shared/ui/components/Toast', () => ({
   useToast: () => ({ show: jest.fn() }),
 }));
+jest.mock('../../../shared/ui/components/ScreenErrorBoundary', () => ({
+  ScreenErrorBoundary: ({ children }: { children: React.ReactNode }) => children,
+  withScreenErrorBoundary: (Component: React.ComponentType<unknown>) => Component,
+  default: ({ children }: { children: React.ReactNode }) => children,
+}));
+jest.mock('../../../network', () => ({
+  useNetInfo: () => ({ isOffline: false, isConnected: true }),
+}));
 jest.mock('../../../components/primitives', () => ({
   AppScreen: ({ children }: { children: React.ReactNode }) => {
     const ReactRuntime = require('react');
     const { View } = require('react-native');
     return ReactRuntime.createElement(View, null, children);
   },
+  Text: ({ children, ...props }: { children: React.ReactNode } & Record<string, unknown>) => {
+    const ReactRuntime = require('react');
+    const { Text: RNText } = require('react-native');
+    return ReactRuntime.createElement(RNText, props, children);
+  },
+}));
+jest.mock('../../../components', () => ({
+  Button: ({ children, onPress }: { children: React.ReactNode; onPress?: () => void }) => {
+    const ReactRuntime = require('react');
+    const { Pressable, Text } = require('react-native');
+    return ReactRuntime.createElement(Pressable, { onPress }, ReactRuntime.createElement(Text, null, children));
+  },
+}));
+jest.mock('../../../config/sentry', () => ({
+  captureException: jest.fn(),
+}));
+jest.mock('../../../shared/ui/components/EmptyState', () => ({
+  OfflineEmptyState: () => null,
 }));
 jest.mock('../../../features/home-spine/components', () => ({
   GreetingHeader: () => null,
   StartSessionButton: () => null,
 }));
 jest.mock('../hooks/useHomeData', () => ({ useHomeData: () => mockHomeData }));
+jest.mock('../hooks/useHomeViewModel', () => ({
+  useHomeViewModel: () => ({
+    isLoading: false,
+    isOnline: true,
+    intervention: null,
+    stage: 'ENGAGED',
+  }),
+}));
+jest.mock('../containers/HomeStageResolver', () => {
+  const Rn = require('react');
+  const { View } = require('react-native');
+  return {
+    HomeStageResolver: (): JSX.Element => {
+      const { HomeContent } = require('../components/HomeContent');
+      return Rn.createElement(View, null, Rn.createElement(HomeContent, { data: mockHomeData }));
+    },
+  };
+});
 jest.mock('../components/HomeContent', () => ({
   HomeContent: ({ data }: { data: HomeData }) => {
     const ReactRuntime = require('react');

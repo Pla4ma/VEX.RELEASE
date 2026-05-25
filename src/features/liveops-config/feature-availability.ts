@@ -81,7 +81,7 @@ function resolveFeatureAvailability(
 
   if (feature.isUnlocked) {
     if (feature.isDegraded === true) {
-      if (key === 'premium_paywall') {
+      if (feature.disableOnDegraded) {
         return {
           state: 'disabled',
           canRenderEntryPoint: false,

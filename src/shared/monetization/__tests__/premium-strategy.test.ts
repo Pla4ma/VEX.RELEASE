@@ -7,9 +7,9 @@ describe('resolvePremiumStrategy', () => {
     expect(strategy.freeFeatures).toEqual(
       expect.arrayContaining([
         expect.stringContaining('Start and complete'),
-        expect.stringContaining('streak and progress'),
+        expect.stringContaining('rhythm and progress'),
         expect.stringContaining('Coach Presence'),
-        expect.stringContaining('companion'),
+        expect.stringContaining('lane personalization'),
       ]),
     );
   });
@@ -31,18 +31,18 @@ describe('resolvePremiumStrategy', () => {
 
     expect(strategy.canShowPaywall).toBe(true);
     expect(strategy.paywallHeadline).toContain('execution system');
-    expect(strategy.paywallBody).toContain('Deep Coach Memory');
+    expect(strategy.paywallBody).toContain('deeper memory');
     expect(strategy.paywallBody).not.toMatch(/upgrade now|unlock now/i);
   });
 
-  it('does not show premium before 5 sessions', () => {
-    const strategy = resolvePremiumStrategy({ billingConfigured: true, completedSessions: 2 });
+  it('does not show premium before 40 sessions', () => {
+    const strategy = resolvePremiumStrategy({ billingConfigured: true, completedSessions: 25 });
     expect(strategy.triggerMoment).toBe('none');
     expect(strategy.canShowPaywall).toBe(false);
   });
 
-  it('shows premium after 5 sessions', () => {
-    const strategy = resolvePremiumStrategy({ billingConfigured: true, completedSessions: 5 });
+  it('shows premium after 40 sessions', () => {
+    const strategy = resolvePremiumStrategy({ billingConfigured: true, completedSessions: 40 });
     expect(strategy.triggerMoment).toBe('after_value');
     expect(strategy.canShowPaywall).toBe(true);
   });
@@ -55,6 +55,21 @@ describe('resolvePremiumStrategy', () => {
     });
     expect(strategy.triggerMoment).toBe('advanced_study');
     expect(strategy.canShowPaywall).toBe(true);
+  });
+
+  it('blocks premium on Day 0 and after repeated dismissals', () => {
+    expect(resolvePremiumStrategy({
+      billingConfigured: true,
+      completedSessions: 0,
+      highIntentAction: 'advanced_study',
+    }).canShowPaywall).toBe(false);
+
+    expect(resolvePremiumStrategy({
+      billingConfigured: true,
+      completedSessions: 10,
+      highIntentAction: 'weekly_intelligence',
+      paywallDismissals: 2,
+    }).triggerMoment).toBe('none');
   });
 
   it('does not paywall basic sessions', () => {

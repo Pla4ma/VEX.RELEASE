@@ -209,6 +209,8 @@ export interface SessionEventChannels {
     sessionId: string;
     userId: string;
     rewards: { xp: number; coins: number; gems: number; bonuses: string[] };
+    challengesProgressed: Array<{ challengeId: string; progress: number }>;
+    milestoneReached: string | null;
     timestamp: number;
   };
   "session:rewards:granted": {

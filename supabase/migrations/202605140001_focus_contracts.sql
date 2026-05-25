@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS public.focus_contracts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  session_id UUID NOT NULL REFERENCES public.user_sessions(id) ON DELETE CASCADE,
+  session_id UUID NOT NULL REFERENCES public.sessions(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   task_description TEXT NOT NULL CHECK (char_length(task_description) BETWEEN 3 AND 80),
   completion_status TEXT CHECK (completion_status IN ('done', 'partial', 'not_done', 'skipped')) DEFAULT NULL,

@@ -1,5 +1,11 @@
 import { z } from 'zod';
 import type { HomeSurfaceDecision, HomeSurfaceKey, HomeSurfaceMap } from './surface-decision-schemas';
+import {
+  ALL_HOME_SURFACE_KEYS,
+  BLOCKED_ON_DAY0,
+  DAY0_PERMITTED,
+  FULL_FEATURE_CARD_SURFACES,
+} from './day0-surface-constants';
 
 export const Day0PolicyLimitSchema = z.object({
   maxVisibleSurfaces: z.number().int().positive(),
@@ -22,35 +28,6 @@ export const DEFAULT_DAY0_POLICY: Day0PolicyLimits = {
   noPremium: true,
   noSocialEconomyBattlePass: true,
 };
-
-const BLOCKED_ON_DAY0: HomeSurfaceKey[] = [
-  'progress_proof',
-  'focus_score',
-  'progress_detail',
-  'boss_compact',
-  'boss_full_cta',
-  'challenge_teaser',
-  'premium_tease',
-  'weekly_quest',
-];
-
-const FULL_FEATURE_CARD_SURFACES: HomeSurfaceKey[] = [
-  'study_layer',
-  'boss_compact',
-  'boss_full_cta',
-  'challenge_teaser',
-  'weekly_quest',
-  'progress_detail',
-];
-
-const DAY0_PERMITTED: HomeSurfaceKey[] = [
-  'start_session',
-  'coach_presence',
-  'unlock_strip',
-  'study_layer',
-  'boss_teaser',
-  'companion_thread',
-];
 
 function surfacePriority(value: HomeSurfaceDecision): number {
   switch (value) {
@@ -79,14 +56,8 @@ export function enforceDay0SurfacePolicy(
   limits: Day0PolicyLimits = DEFAULT_DAY0_POLICY,
 ): Day0PolicyResult {
   const violations: string[] = [];
-  const allKeys: HomeSurfaceKey[] = [
-    'start_session', 'coach_presence', 'progress_proof', 'focus_score',
-    'progress_detail', 'study_layer', 'companion_thread', 'boss_teaser',
-    'boss_compact', 'boss_full_cta', 'challenge_teaser', 'unlock_strip',
-    'premium_tease', 'weekly_quest',
-  ];
   const corrected: Record<HomeSurfaceKey, HomeSurfaceDecision> = {} as Record<HomeSurfaceKey, HomeSurfaceDecision>;
-  for (const key of allKeys) {
+  for (const key of ALL_HOME_SURFACE_KEYS) {
     corrected[key] = map[key] ?? 'hidden';
   }
 

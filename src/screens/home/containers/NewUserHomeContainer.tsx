@@ -57,15 +57,15 @@ export function useNewUserContainerModel(input: NewUserContainerInput): HomeView
 
   const navigation = useNavigation<Nav>();
   const homeHighlight = useSessionUIStore((state) => state.homeHighlight);
-  const completionSync = useSessionUIStore((state) => state.completionSync) as unknown;
+  const completionSync = useSessionUIStore((state) => state.completionSync);
   const clearHomeHighlight = useSessionUIStore((state) => state.clearHomeHighlight);
 
   const streakData = streakQuery.data as Record<string, unknown> | undefined;
   const progData = progressionQuery.data as Record<string, unknown> | undefined;
   const currentStreak = (streakData?.currentDays as number | undefined) ?? 0;
   const currentXp = (progData?.xp as number | undefined) ?? 0;
-  const todayFocusMinutes = (historyQuery.history as unknown as Array<Record<string, unknown>>).reduce(
-    (sum: number, entry) => sum + getFocusedMinutesForToday(entry as unknown as Parameters<typeof getFocusedMinutesForToday>[0]),
+  const todayFocusMinutes = historyQuery.history.reduce(
+    (sum: number, entry) => sum + getFocusedMinutesForToday(entry),
     0,
   );
   const progressPercent = Math.min(100, Math.round((todayFocusMinutes / 120) * 100));
@@ -147,7 +147,7 @@ export function useNewUserContainerModel(input: NewUserContainerInput): HomeView
     currentXp,
     todayFocusMinutes,
     progressPercent,
-    latestSession: (historyQuery.history[0] ?? null) as unknown as HomeController['latestSession'],
+    latestSession: historyQuery.history[0] ?? null,
     primaryRecommendation: null,
     homeSpine,
     returnReason: stubHomeReturnReason,
@@ -155,7 +155,7 @@ export function useNewUserContainerModel(input: NewUserContainerInput): HomeView
     runtime,
     streakQuery: streakQuery as UseQueryResult,
     progressionQuery: progressionQuery as UseQueryResult,
-    historyQuery: historyQuery as unknown as HomeController['historyQuery'],
+    historyQuery,
     squadsQuery: createStubQuery() as UseQueryResult,
     activeStudyPlanQuery: createStubQuery() as UseQueryResult,
     learningExecutionLayer: stubLearningExecutionLayer(),

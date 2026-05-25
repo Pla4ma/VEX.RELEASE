@@ -79,8 +79,56 @@ describe('final-release completion payoff', () => {
       'utf8',
     );
 
-    expect(content).not.toMatch(/SessionChestCard|SessionPremiumChestCard|useSessionCompleteChest/);
+    expect(content).not.toMatch(/SessionChestCard|SessionPremiumChestCard|SessionPremiumInsightCard|useSessionCompleteChest/);
     expect(content).not.toMatch(/onOpenShop|onOpenInventory/);
+  });
+
+  it('all active completion files have zero chest-engine imports', () => {
+    const root = process.cwd();
+    const completionFiles = [
+      'src/screens/session/components/SessionCompleteContent.tsx',
+      'src/screens/session/components/SessionCompleteRewardsPhase.tsx',
+      'src/screens/session/components/SessionCompletionRewardsSection.tsx',
+      'src/features/session-completion/hooks/useSessionCompleteController.ts',
+      'src/screens/session/hooks/useSessionCompleteRewards.ts',
+      'src/screens/session/hooks/useSessionRewardSync.ts',
+      'src/features/session-completion/completion-orchestrator.ts',
+      'src/features/session-completion/completion-subsystems.ts',
+      'src/features/session-completion/completion-experience-policy.ts',
+      'src/features/session-completion/adaptive-payoff-service.ts',
+    ];
+
+    for (const file of completionFiles) {
+      const source = readFileSync(path.join(root, file), 'utf8');
+      expect(source).not.toMatch(/from.*chest-engine/);
+    }
+  });
+
+  it('active completion files have no shop/inventory imports', () => {
+    const root = process.cwd();
+    const completionFiles = [
+      'src/screens/session/components/SessionCompleteContent.tsx',
+      'src/screens/session/components/SessionCompleteRewardsPhase.tsx',
+      'src/screens/session/components/SessionCompletionRewardsSection.tsx',
+      'src/features/session-completion/hooks/useSessionCompleteController.ts',
+      'src/screens/session/hooks/useSessionCompleteRewards.ts',
+      'src/screens/session/hooks/useSessionRewardSync.ts',
+    ];
+
+    for (const file of completionFiles) {
+      const source = readFileSync(path.join(root, file), 'utf8');
+      expect(source).not.toMatch(/from.*\/shop\b|from.*\/inventory\b/);
+    }
+  });
+
+  it('no active route points to VaultScreen', () => {
+    const root = process.cwd();
+    const routeRegistry = readFileSync(
+      path.join(root, 'src/navigation/feature-route-registry.ts'),
+      'utf8',
+    );
+    const vaultInRegistry = /route:\s*'Vault'/.test(routeRegistry);
+    expect(vaultInRegistry).toBe(false);
   });
 
   it('study user gets study payoff', () => {

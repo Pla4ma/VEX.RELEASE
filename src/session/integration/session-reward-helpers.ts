@@ -29,15 +29,15 @@ export async function recordSquadWarDamageIfNeeded(
 export function updateStreak(
   userId: string,
   summary: SessionSummary,
-  rewards: RewardCalculationResult,
-): void {
+  rewards: Pick<RewardCalculationResult, 'streakDays'>,
+): { streakIncreased: boolean } {
   if (!summary.streakMaintained) {
     eventBus.publish("streak:broken", {
       userId,
       previousStreak: rewards.streakDays,
       wasComeback: false,
     });
-    return;
+    return { streakIncreased: false };
   }
   const newStreak = rewards.streakDays + 1;
   eventBus.publish("streak:updated", {
@@ -51,7 +51,7 @@ export function updateStreak(
       milestone: newStreak,
     });
   }
-  rewards.streakIncreased = true;
+  return { streakIncreased: true };
 }
 export function publishXp(
   userId: string,
@@ -107,8 +107,9 @@ export function publishSocialActivity(
 export function publishChallengeProgress(
   userId: string,
   summary: SessionSummary,
-  rewards: RewardCalculationResult,
-): void {
+  rewards: Pick<RewardCalculationResult, 'streakDays' | 'streakIncreased'>,
+): { challengesProgressed: Array<{ challengeId: string; progress: number }> } {
+  const progressed: Array<{ challengeId: string; progress: number }> = [];
   eventBus.publish("challenge:progress", {
     userId,
     challengeId: "daily_focus_time",
@@ -116,9 +117,7 @@ export function publishChallengeProgress(
     target: 3600000,
     percent: (summary.effectiveDuration / 3600000) * 100,
   });
-  rewards.challengesProgressed = [
-    { challengeId: "daily_focus_time", progress: summary.effectiveDuration },
-  ];
+  progressed.push({ challengeId: "daily_focus_time", progress: summary.effectiveDuration });
   if (rewards.streakIncreased) {
     eventBus.publish("challenge:progress", {
       userId,
@@ -137,21 +136,23 @@ export function publishChallengeProgress(
       percent: 10,
     });
   }
+  return { challengesProgressed: progressed };
 }
 export function publishAchievements(
   userId: string,
   summary: SessionSummary,
-  rewards: RewardCalculationResult,
-): void {
+  rewards: Pick<RewardCalculationResult, 'streakDays'>,
+): { achievementsUnlocked: string[] } {
+  const unlocked: string[] = [];
   if (summary.completionPercentage >= 100) {
-    rewards.achievementsUnlocked.push("first_complete_session");
+    unlocked.push("first_complete_session");
     eventBus.publish("achievement:unlock", {
       achievementId: "first_complete_session",
       userId,
     });
   }
   if (rewards.streakDays >= 7) {
-    rewards.achievementsUnlocked.push("week_warrior");
+    unlocked.push("week_warrior");
     eventBus.publish("achievements:unlock_badge", {
       userId,
       badgeId: "week_warrior",
@@ -159,17 +160,17 @@ export function publishAchievements(
     });
   }
   if (summary.interruptions === 0 && summary.pauses === 0) {
-    rewards.achievementsUnlocked.push("laser_focus");
+    unlocked.push("laser_focus");
   }
+  return { achievementsUnlocked: unlocked };
 }
 export function publishMilestones(
   userId: string,
   summary: SessionSummary,
-  rewards: RewardCalculationResult,
-): void {
+  _rewards: RewardCalculationResult,
+): { milestoneReached: string | null } {
   const totalFocusHours = Math.floor(summary.effectiveDuration / 3600000);
   if (totalFocusHours >= 100) {
-    rewards.milestoneReached = "100_hours_focused";
     eventBus.publish("session:analytics:milestone", {
       sessionId: "",
       userId,
@@ -177,5 +178,7 @@ export function publishMilestones(
       value: totalFocusHours,
       timestamp: Date.now(),
     });
+    return { milestoneReached: "100_hours_focused" };
   }
+  return { milestoneReached: null };
 }

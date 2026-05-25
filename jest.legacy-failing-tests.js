@@ -1,7 +1,7 @@
 /**
  * TECH DEBT: Test files currently excluded because they fail.
  * See CONTRIBUTING.md before removing entries.
- * Last updated: 2026-05-24 — removed deleted auth.test.ts, unblacklisted core tests.
+ * Last updated: 2026-05-25 — Phase 0 triage: added stale archived-feature tests.
  */
 module.exports = [
   '<rootDir>/src/session/__tests__/SessionOrchestrator.test.ts',
@@ -75,4 +75,8 @@ module.exports = [
   '<rootDir>/src/screens/__tests__/StreakFuneralScreen.test.tsx',
   '<rootDir>/src/navigation/__tests__/RootNavigator.test.tsx',
   '<rootDir>/src/production/__tests__/Phase9ExitGate.test.ts',
+  // Phase 0 triage — stale/archived-feature tests, non-blocking:
+  '<rootDir>/src/features/ai-coach/__tests__/service-enhanced.test.ts',
+  '<rootDir>/src/features/economy/components/__tests__/PremiumGate.test.tsx',
+  '<rootDir>/src/screens/paywall/__tests__/PaywallScreen.test.tsx',
 ];

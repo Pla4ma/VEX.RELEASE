@@ -87,13 +87,14 @@ export interface SessionStackParams {
 
 export interface RootStackParams {
   [key: string]: object | undefined;
-  Auth: { screen?: AuthStackRoute };
+  Auth: NavigatorScreenParams<AuthStackParams>;
+  Main: NavigatorScreenParams<MainTabParams>;
   Onboarding: { step?: number };
   Paywall: { gatedFeature?: string; source?: string };
   VipPaywall: { gemCount?: number; source?: string };
   Splash: undefined;
-  Settings: { screen?: SettingsStackRoute };
-  SessionStack: { params?: SessionStackParams[SessionStackRoute]; screen: SessionStackRoute };
+  Settings: NavigatorScreenParams<SettingsStackParams>;
+  SessionStack: NavigatorScreenParams<SessionStackParams>;
   CompanionDetail: undefined;
   Comeback: { comebackState: ComebackState };
   StreakFuneral: { diedAt: number; previousStreak: number };

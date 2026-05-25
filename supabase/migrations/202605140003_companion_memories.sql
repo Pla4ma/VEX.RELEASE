@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS companion_memories (
   type TEXT NOT NULL,
   title TEXT NOT NULL,
   body TEXT NOT NULL,
-  session_id UUID REFERENCES public.user_sessions(id) ON DELETE SET NULL,
+  session_id UUID REFERENCES public.sessions(id) ON DELETE SET NULL,
   session_date DATE NOT NULL,
   grade TEXT DEFAULT NULL,
   purity_score NUMERIC(5,2) DEFAULT NULL,

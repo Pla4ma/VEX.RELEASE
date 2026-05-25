@@ -68,6 +68,7 @@ const ARCHIVED_ROUTE_SET: ReadonlySet<string> = new Set([
   'Guild',
   'Shop',
   'Inventory',
+  'Vault',
   'PostSessionStory',
 ]);
 

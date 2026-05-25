@@ -13,6 +13,14 @@ export const BehaviorSignalTypeSchema = z.enum([
   'coach_surface_clicked',
   'notification_opened',
   'notification_dismissed',
+  'rescue_started',
+  'avoidance_reported',
+  'friction_accepted',
+  'friction_rejected',
+  'reflection_submitted',
+  'import_used',
+  'unlock_regret',
+  'lane_mismatch_reported',
 ]);
 
 export type BehaviorSignalType = z.infer<typeof BehaviorSignalTypeSchema>;

@@ -40,7 +40,7 @@ export function useNewUserHomeModel(input: NewUserModelInput): HomeViewModel & {
 
   const navigation = useNavigation<Nav>();
   const homeHighlight = useSessionUIStore((state) => state.homeHighlight);
-  const completionSync = useSessionUIStore((state) => state.completionSync) as unknown;
+  const completionSync = useSessionUIStore((state) => state.completionSync);
   const clearHomeHighlight = useSessionUIStore((state) => state.clearHomeHighlight);
 
   const streakData = streakQuery.data as Record<string, unknown> | undefined;

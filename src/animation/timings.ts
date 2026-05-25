@@ -4,46 +4,46 @@
  * Predefined timing functions and durations for animations.
  */
 
-import { Easing } from 'react-native-reanimated';
+import { Easing, type EasingFunction, type EasingFunctionFactory } from 'react-native-reanimated';
 
 /**
  * Easing functions from Reanimated
  */
 export const easings = {
   linear: (t: number) => t,
-  ease: Easing.bezier(0.25, 0.1, 0.25, 1) as unknown as EasingFunction,
-  easeIn: Easing.in(Easing.ease) as unknown as EasingFunction,
-  easeOut: Easing.out(Easing.ease) as unknown as EasingFunction,
-  easeInOut: Easing.inOut(Easing.ease) as unknown as EasingFunction,
+  ease: Easing.bezier(0.25, 0.1, 0.25, 1),
+  easeIn: Easing.in(Easing.ease),
+  easeOut: Easing.out(Easing.ease),
+  easeInOut: Easing.inOut(Easing.ease),
 
   // Quadratic
-  quadIn: Easing.in(Easing.quad) as unknown as EasingFunction,
-  quadOut: Easing.out(Easing.quad) as unknown as EasingFunction,
-  quadInOut: Easing.inOut(Easing.quad) as unknown as EasingFunction,
+  quadIn: Easing.in(Easing.quad),
+  quadOut: Easing.out(Easing.quad),
+  quadInOut: Easing.inOut(Easing.quad),
 
   // Cubic
-  cubicIn: Easing.in(Easing.cubic) as unknown as EasingFunction,
-  cubicOut: Easing.out(Easing.cubic) as unknown as EasingFunction,
-  cubicInOut: Easing.inOut(Easing.cubic) as unknown as EasingFunction,
+  cubicIn: Easing.in(Easing.cubic),
+  cubicOut: Easing.out(Easing.cubic),
+  cubicInOut: Easing.inOut(Easing.cubic),
 
   // Quartic (using poly as quart doesn't exist in Reanimated 3)
-  quartIn: Easing.in(Easing.poly(4)) as unknown as EasingFunction,
-  quartOut: Easing.out(Easing.poly(4)) as unknown as EasingFunction,
-  quartInOut: Easing.inOut(Easing.poly(4)) as unknown as EasingFunction,
+  quartIn: Easing.in(Easing.poly(4)),
+  quartOut: Easing.out(Easing.poly(4)),
+  quartInOut: Easing.inOut(Easing.poly(4)),
 
   // Quintic (using poly as quint doesn't exist in Reanimated 3)
-  quintIn: Easing.in(Easing.poly(5)) as unknown as EasingFunction,
-  quintOut: Easing.out(Easing.poly(5)) as unknown as EasingFunction,
-  quintInOut: Easing.inOut(Easing.poly(5)) as unknown as EasingFunction,
+  quintIn: Easing.in(Easing.poly(5)),
+  quintOut: Easing.out(Easing.poly(5)),
+  quintInOut: Easing.inOut(Easing.poly(5)),
 
   // Special
-  bounce: Easing.bounce as unknown as EasingFunction,
-  elastic: Easing.elastic(1) as unknown as EasingFunction,
-  back: Easing.back(1.7) as unknown as EasingFunction,
+  bounce: Easing.bounce,
+  elastic: Easing.elastic(1),
+  back: Easing.back(1.7),
 
   // iOS-style
-  iosSpring: Easing.bezier(0.5, 1.2, 0.3, 1) as unknown as EasingFunction,
-  material: Easing.bezier(0.4, 0, 0.2, 1) as unknown as EasingFunction,
+  iosSpring: Easing.bezier(0.5, 1.2, 0.3, 1),
+  material: Easing.bezier(0.4, 0, 0.2, 1),
 };
 
 /**
@@ -62,16 +62,14 @@ export const durations = {
 /**
  * Create a timing configuration
  */
-export type EasingFunction = (t: number) => number;
-
 export interface TimingConfig {
   duration: number;
-  easing: EasingFunction;
+  easing: EasingFunction | EasingFunctionFactory;
 }
 
 export function createTiming(
   duration: number,
-  easing: EasingFunction = easings.ease
+  easing: EasingFunction | EasingFunctionFactory = easings.ease
 ): TimingConfig {
   return {
     duration,

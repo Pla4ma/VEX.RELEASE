@@ -2,13 +2,14 @@ export type PremiumHighIntentAction =
   | 'deep_coach_memory'
   | 'advanced_study'
   | 'weekly_intelligence'
-  | 'visual_identity'
-  | 'premium_mode';
+  | 'memory_console'
+  | 'calendar_intelligence';
 
 export interface PremiumStrategyInput {
   billingConfigured: boolean;
   completedSessions: number;
   highIntentAction?: PremiumHighIntentAction;
+  paywallDismissals?: number;
 }
 
 export interface PremiumStrategy {
@@ -25,27 +26,27 @@ export interface PremiumStrategy {
 
 const FREE_FEATURES = [
   'Start and complete focus sessions',
-  'Basic streak and progress tracking',
+  'Basic rhythm and progress tracking',
   'Basic Coach Presence (daily reflection)',
-  'Basic companion visual',
+  'Basic lane personalization',
   'Basic Study / Deep Work entry',
-  'Subtle boss momentum visual (if part of your identity)',
+  'Rescue mode',
 ];
 
 const PREMIUM_FEATURES = [
-  'Deep Coach Memory — remembers patterns, best focus times, comeback style',
-  'Advanced Study / Deep Work OS — content generation, review loops, smart actions',
-  'Personal Progress Intelligence — weekly execution report, rhythm insights',
-  'Visual Identity — companion forms, focus worlds, premium atmospheres',
-  'Premium Session Modes — Exam Sprint, Deep Work, Calm Reset, Boss Focus',
+  'Deep Coach Memory - remembers patterns, best focus times, comeback style',
+  'Advanced Study / Deep Work OS - content generation, review loops, smart actions',
+  'Personal Progress Intelligence - weekly execution report and rhythm insights',
+  'Memory Console - editable long memory with source, confidence, expiry',
+  'Calendar Intelligence - focus windows, quiet planning, deadline-aware scheduling',
 ];
 
 const FREE_VS_PRO_MATRIX: Array<{ free: string; pro: string }> = [
-  { free: 'Start and complete sessions', pro: 'Premium session modes (Exam Sprint, Deep Work, Calm Reset)' },
-  { free: 'Basic streak and progress', pro: 'Weekly execution report with rhythm and consistency map' },
-  { free: 'Daily Coach Presence reflection', pro: 'Deep Coach Memory — remembers your patterns and best times' },
-  { free: 'Basic Study / Deep Work entry', pro: 'Content generation, review loops, quizzes, project breakdowns' },
-  { free: 'Subtle momentum visual', pro: 'Full visual identity — companion forms, focus worlds, atmospheres' },
+  { free: 'Start and complete sessions', pro: 'Deeper personalization from real behavior' },
+  { free: 'Basic rhythm and progress', pro: 'Weekly execution report with rhythm and consistency map' },
+  { free: 'Daily Coach Presence reflection', pro: 'Deep Coach Memory remembers patterns and best times' },
+  { free: 'Basic Study / Deep Work entry', pro: 'Imports, review loops, quizzes, and project breakdowns' },
+  { free: 'Rescue mode', pro: 'Personalized recovery timing and weekly planning' },
 ];
 
 const ENTITLEMENT_ARCHITECTURE = [
@@ -59,25 +60,36 @@ const NO_FAKE_BILLING = [
   'Do not render purchasable plans without RevenueCat packages.',
   'Do not mark premium active without an active entitlement.',
   'Do not paywall the basic focus loop.',
+  'Do not sell streak saves, coins, gems, shop power, or paid failure recovery.',
   'Show unavailable or coming-soon state instead of fake premium.',
 ];
 
+function hiddenStrategy(triggerMoment: PremiumStrategy['triggerMoment'], headline: string): PremiumStrategy {
+  return {
+    canShowPaywall: false,
+    entitlementArchitecture: ENTITLEMENT_ARCHITECTURE,
+    freeFeatures: FREE_FEATURES,
+    noFakeBillingChecklist: NO_FAKE_BILLING,
+    paywallBody: 'Premium appears after VEX proves useful and live billing is healthy.',
+    paywallHeadline: headline,
+    premiumFeatures: PREMIUM_FEATURES,
+    triggerMoment,
+    freeVsProMatrix: FREE_VS_PRO_MATRIX,
+  };
+}
+
 export function resolvePremiumStrategy(input: PremiumStrategyInput): PremiumStrategy {
   if (!input.billingConfigured) {
-    return {
-      canShowPaywall: false,
-      entitlementArchitecture: ENTITLEMENT_ARCHITECTURE,
-      freeFeatures: FREE_FEATURES,
-      noFakeBillingChecklist: NO_FAKE_BILLING,
-      paywallBody: 'Premium appears when live billing and real premium value are ready. Keep building your rhythm.',
-      paywallHeadline: 'Premium is not available yet',
-      premiumFeatures: PREMIUM_FEATURES,
-      triggerMoment: 'hidden_billing_unavailable',
-      freeVsProMatrix: FREE_VS_PRO_MATRIX,
-    };
+    return hiddenStrategy('hidden_billing_unavailable', 'Premium is not available yet');
+  }
+  if ((input.paywallDismissals ?? 0) >= 2) {
+    return hiddenStrategy('none', 'Premium waits until there is real value');
+  }
+  if (input.completedSessions === 0) {
+    return hiddenStrategy('none', 'Premium waits until there is real value');
   }
 
-  const hasValue = input.completedSessions >= 5;
+  const hasValue = input.completedSessions >= 40;
   const triggerMoment = input.highIntentAction ?? (hasValue ? 'after_value' : 'none');
   const canShowPaywall = triggerMoment !== 'none';
 
@@ -86,8 +98,8 @@ export function resolvePremiumStrategy(input: PremiumStrategyInput): PremiumStra
     entitlementArchitecture: ENTITLEMENT_ARCHITECTURE,
     freeFeatures: FREE_FEATURES,
     noFakeBillingChecklist: NO_FAKE_BILLING,
-    paywallBody: 'VEX Pro turns your sessions into a full execution system. Deep Coach Memory remembers your patterns. Study OS builds from your content. Weekly intelligence maps your rhythm.',
-    paywallHeadline: 'Turn your sessions into a full execution system',
+    paywallBody: 'VEX Pro adds deeper memory, Study OS depth, weekly intelligence, calendar planning, and quiet recovery automation.',
+    paywallHeadline: 'Turn your rhythm into a personal execution system',
     premiumFeatures: PREMIUM_FEATURES,
     triggerMoment,
     freeVsProMatrix: FREE_VS_PRO_MATRIX,

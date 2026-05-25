@@ -1,5 +1,6 @@
 import type { HomeSurfaceDecision, HomeSurfaceKey } from './surface-decision-schemas';
 import type { SurfaceDecisionInputSchema } from './surface-decision-schemas';
+import { applyLaneSurfaces } from './lane-surface-helpers';
 import type { z } from 'zod';
 
 type SurfaceDecisionInput = z.infer<typeof SurfaceDecisionInputSchema>;
@@ -15,6 +16,7 @@ function isStudyCueUser(
   b: BehaviorStats,
 ): boolean {
   return p.motivationStyle === 'study_focused'
+    || p.motivationStyle === 'student'
     || p.primaryGoal === 'study'
     || p.primaryGoal === 'learning'
     || parsed.hasActiveStudyPlan
@@ -22,7 +24,7 @@ function isStudyCueUser(
     || b.learningUsageRatio >= 0.35;
 }
 
-function emptyMap(): SurfaceMap {
+export function createEmptyHomeSurfaceMap(): SurfaceMap {
   return {
     start_session: 'primary',
     coach_presence: 'hidden',
@@ -38,6 +40,14 @@ function emptyMap(): SurfaceMap {
     unlock_strip: 'hidden',
     premium_tease: 'hidden',
     weekly_quest: 'hidden',
+    study_os: 'hidden',
+    run_board: 'hidden',
+    project_thread: 'hidden',
+    today_strip: 'hidden',
+    rescue_cta: 'hidden',
+    memory_insight: 'hidden',
+    weekly_intelligence: 'hidden',
+    focus_window: 'hidden',
   };
 }
 
@@ -48,12 +58,13 @@ export function setupDay0Surfaces(
   fwProvided: boolean,
   fw: NonNullable<SurfaceDecisionInput['firstWeekPhase']>,
 ): SurfaceMap {
-  const map = emptyMap();
+  const map = createEmptyHomeSurfaceMap();
 
   map.coach_presence = 'tiny_tease';
   map.unlock_strip = 'tiny_tease';
 
   const isStudyUser = isStudyCueUser(parsed, p, b);
+  applyLaneSurfaces(map, parsed, p, b, true, false);
 
   // On Day 0, only study-focused users get study_layer as tiny_tease (not spotlight)
   if (isStudyUser && parsed.featureAvailability.study) {
@@ -103,6 +114,7 @@ export function setupDay0Surfaces(
 
   return map;
 }
+
 
 export function selectSpotlight(
   map: SurfaceMap,

@@ -136,7 +136,7 @@ export function HomeScreenInner({ model, data }: HomeScreenInnerProps): JSX.Elem
     behaviorStats,
     hasActiveStudyPlan: Boolean((controller.activeStudyPlanQuery?.data as Record<string, unknown> | null) != null),
     hasActiveRecommendation: Boolean(controller.primaryRecommendation),
-    hasActiveBoss: Boolean((controller.activeBossQuery?.data as unknown) != null),
+    hasActiveBoss: controller.activeBossQuery?.data != null,
     isFirstSession: controller.isFirstRun,
     featureAccess: controller.disclosure,
     firstWeek: firstWeekExperience,

@@ -9,6 +9,7 @@ import type { SessionRecommendation } from '../../../features/ai-coach';
 import type { HomeSpineModel } from '../../../features/home-spine/schemas';
 import type { LearningExecutionLayer } from '../../../features/learning-execution';
 import type { SessionHistoryEntry } from '../../../session/types';
+import type { CompletionSyncState, HomeHighlight } from '../../../store/session-state';
 
 export interface SessionHistoryResult {
   history: SessionHistoryEntry[];
@@ -24,8 +25,8 @@ export interface HomeController {
   isLoading: boolean;
   isFirstRun: boolean;
   loadError: Error | null;
-  homeHighlight: unknown;
-  completionSync: unknown;
+  homeHighlight: HomeHighlight | null;
+  completionSync: CompletionSyncState;
   clearHomeHighlight: () => void;
   currentStreak: number;
   currentXp: number;

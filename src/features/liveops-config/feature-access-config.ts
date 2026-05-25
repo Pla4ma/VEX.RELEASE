@@ -102,7 +102,7 @@ export const FEATURE_THRESHOLDS: Record<FeatureKey, number> = {
   gems_prominent: Number.POSITIVE_INFINITY,
   home_tab: 0,
   inventory: Number.POSITIVE_INFINITY,
-  premium_paywall: 5,
+  premium_paywall: 40,
   profile_tab: 0,
   progress_view: 0,
   quiz_review_mode: 10,
@@ -156,10 +156,10 @@ export const FEATURE_COPY: Partial<Record<FeatureKey, FeatureCopy>> = {
   },
   premium_paywall: {
     lockedDescription:
-      'Premium stays hidden until live subscriptions, entitlements, and real premium value are ready.',
-    recommendedUnlockMoment: 'Not part of final release',
+      'Premium becomes visible after enough sessions prove the core habit is real.',
+    recommendedUnlockMoment: 'After 40 completed sessions',
     unlockReason:
-      'Appears only after the core loop proves value and RevenueCat is fully configured.',
+      'Appears when your focus rhythm is proven and RevenueCat billing is healthy.',
   },
   streak_insurance: {
     lockedDescription: 'Streak recovery is gentle: comeback sessions, rhythm recovery, and fresh starts.',

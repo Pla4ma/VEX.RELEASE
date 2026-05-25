@@ -1,5 +1,3 @@
-import type { ChestTier } from '../../../features/rewards/chest-engine';
-import type { SessionSummary } from '../../../session/types';
 import type { Theme } from '../../../theme/types';
 
 type DisplayState = { label: string; color: string };
@@ -19,15 +17,4 @@ export function getPurityDisplay(score: number, theme: Theme): DisplayState {
   return { label: 'Distracted', color: theme.colors.error.light };
 }
 
-export function getChestTierDisplay(tier: ChestTier, theme: Theme): DisplayState {
-  if (tier === 'legendary') {return { label: 'LEGENDARY CHEST', color: theme.colors.warning.light };}
-  if (tier === 'epic') {return { label: 'EPIC CHEST', color: theme.colors.primary[400] };}
-  if (tier === 'rare') {return { label: 'RARE CHEST', color: theme.colors.info.light };}
-  return { label: 'COMMON CHEST', color: theme.colors.text.secondary };
-}
 
-export function getSessionBattlePassXp(summary: SessionSummary): number {
-  const quality = summary.focusPurityScore ?? summary.focusQuality ?? 0;
-  const minutes = Math.max(0, Math.floor(summary.effectiveDuration / 60000));
-  return Math.max(0, Math.floor(minutes * (quality / 100)));
-}

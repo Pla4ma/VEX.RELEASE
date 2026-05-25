@@ -36,6 +36,8 @@ describe('resolveFirstWeekExperience', () => {
       expect.arrayContaining(['boss_full', 'shop', 'inventory', 'squads', 'premium_hard_sell']),
     );
     expect(result.bossIntensity).toBe('hidden');
+    expect(result.lane).toBe('minimal_normal');
+    expect(result.laneStageTheme).toBe('first_clean_session');
     expect(result.premiumMoment).toBe('none');
   });
 
@@ -48,8 +50,38 @@ describe('resolveFirstWeekExperience', () => {
 
     expect(result.currentDayStage).toBe('DAY_0_NOT_STARTED');
     expect(result.spotlightSurface).toBe('tiny_boss_teaser');
+    expect(result.lane).toBe('game_like');
     expect(result.bossIntensity).toBe('tiny_tease');
     expect(result.allowedHomeSurfaces).not.toContain('boss_full');
+  });
+
+  it('sets Day 0 lane surfaces for all four lanes', () => {
+    const cases: Array<{
+      primaryGoal: FirstWeekResolverInput['primaryGoal'];
+      motivationStyle: FirstWeekResolverInput['motivationStyle'];
+      lane: string;
+      theme: string;
+    }> = [
+      { primaryGoal: 'study', motivationStyle: 'study_focused', lane: 'student', theme: 'first_study_block' },
+      { primaryGoal: 'work', motivationStyle: 'game_like', lane: 'game_like', theme: 'first_focus_run' },
+      { primaryGoal: 'creative', motivationStyle: 'coach_led', lane: 'deep_creative', theme: 'first_project_block' },
+      { primaryGoal: 'personal', motivationStyle: 'calm', lane: 'minimal_normal', theme: 'first_clean_session' },
+    ];
+
+    for (const item of cases) {
+      const result = resolveFirstWeekExperience({
+        ...baseInput,
+        primaryGoal: item.primaryGoal,
+        motivationStyle: item.motivationStyle,
+        featureAvailability: { ...baseInput.featureAvailability, boss: true },
+      });
+
+      expect(result.lane).toBe(item.lane);
+      expect(result.laneStageTheme).toBe(item.theme);
+      expect(result.allowedHomeSurfaces).toContain('start_session');
+      expect(result.allowedHomeSurfaces).not.toContain('boss_full');
+      expect(result.hiddenSurfaces).toContain('wagers');
+    }
   });
 
   it('uses session count before calendar age when data conflicts', () => {
@@ -75,7 +107,25 @@ describe('resolveFirstWeekExperience', () => {
 
     expect(result.currentDayStage).toBe('DAY_5_PATH_FORMING');
     expect(result.studyLayerLabel).toBe('Learning OS');
+    expect(result.spotlightSurface).toBe('study_deep_work_path');
+    expect(result.unlockExplanation).toMatch(/path/i);
     expect(result.premiumMoment).toBe('soft_tease');
+    expect(result.hiddenSurfaces).toContain('premium_hard_sell');
+  });
+
+  it('builds lane-aware Day 7 weekly intelligence without hard premium sell', () => {
+    const result = resolveFirstWeekExperience({
+      ...baseInput,
+      completedSessions: 7,
+      daysSinceOnboarding: 7,
+      primaryGoal: 'creative',
+      motivationStyle: 'coach_led',
+    });
+
+    expect(result.currentDayStage).toBe('DAY_7_DEEPER_MODE');
+    expect(result.spotlightSurface).toBe('weekly_insight');
+    expect(result.lane).toBe('deep_creative');
+    expect(result.firstWeekExperiment?.action).toMatch(/next move/i);
     expect(result.hiddenSurfaces).toContain('premium_hard_sell');
   });
 
@@ -90,6 +140,7 @@ describe('resolveFirstWeekExperience', () => {
 
     expect(result.comebackState).toBe('missed_week');
     expect(result.primaryMessage).toContain('Reset');
+    expect(result.lane).toBe('minimal_normal');
     expect(result.primaryMessage).not.toMatch(/failed|behind|lost/i);
     expect(result.allowedHomeSurfaces).toContain('recovery_cta');
   });

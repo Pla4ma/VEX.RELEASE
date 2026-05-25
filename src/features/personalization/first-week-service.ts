@@ -5,6 +5,10 @@ import {
   type FirstWeekResolverInput,
   type FirstWeekStage,
 } from './first-week-schemas';
+import { resolveInitialLane } from '../lane-engine/service';
+import type { LaneProfile } from '../lane-engine/types';
+import type { PrimaryGoal } from './core-schemas';
+import { resolveFirstWeekExperiment, resolveLaneCopy } from './first-week-lane-copy';
 
 const FINAL_RELEASE_HIDDEN: FirstWeekExperience['hiddenSurfaces'] = [
   'boss_full',
@@ -41,6 +45,10 @@ function resolveStudyLabel(goal: FirstWeekResolverInput['primaryGoal']): FirstWe
   }
 }
 
+function toLaneGoal(goal: FirstWeekResolverInput['primaryGoal']): PrimaryGoal {
+  return goal === 'personal_growth' ? 'personal' : goal;
+}
+
 function resolveComeback(days: number | null): FirstWeekExperience['comebackState'] {
   if (days === null || days <= 1) return 'none';
   if (days === 2) return 'missed_1_day';
@@ -61,6 +69,7 @@ function resolveSurfaces(
   stage: FirstWeekStage,
   input: FirstWeekResolverInput,
   comeback: FirstWeekExperience['comebackState'],
+  laneProfile: LaneProfile,
 ): FirstWeekExperience['allowedHomeSurfaces'] {
   if (comeback !== 'none') {
     return ['coach_presence_line', 'recovery_cta', 'start_session'];
@@ -72,10 +81,7 @@ function resolveSurfaces(
       'start_session',
       'tiny_unlock_preview',
     ];
-    if (
-      input.featureAvailability.boss &&
-      (input.motivationStyle === 'game_like' || input.motivationStyle === 'intense')
-    ) {
+    if (input.featureAvailability.boss && laneProfile.primaryLane === 'game_like') {
       base.push('tiny_boss_teaser');
     }
     return base;
@@ -99,19 +105,41 @@ function resolvePremiumMoment(input: FirstWeekResolverInput, stage: FirstWeekSta
   return 'none';
 }
 
+function resolveLaneProfile(input: FirstWeekResolverInput): LaneProfile {
+  if (input.laneProfile) return input.laneProfile;
+  return resolveInitialLane({
+    primaryGoal: toLaneGoal(input.primaryGoal),
+    motivationStyle: input.motivationStyle,
+  });
+}
+
+function resolveBlockedReasons(profile: LaneProfile): string[] {
+  const lane = profile.primaryLane;
+  if (lane === 'student') return ['Day 0 blocks boss, economy, and hard premium surfaces for study users.'];
+  if (lane === 'game_like') return ['Game-like Day 0 allows only tiny run/boss preview; economy stays hidden.'];
+  if (lane === 'deep_creative') return ['Creative lane blocks combat and school deadline UI unless explicitly relevant.'];
+  return ['Minimal lane blocks boss, challenge board, companion animation, premium, and economy surfaces.'];
+}
+
 export function resolveFirstWeekExperience(rawInput: FirstWeekResolverInput): FirstWeekExperience {
   const input = FirstWeekInputSchema.parse(rawInput);
   const currentDayStage = resolveStage(input);
   const comebackState = resolveComeback(input.daysSinceLastSession);
-  const allowedHomeSurfaces = resolveSurfaces(currentDayStage, input, comebackState);
-  const isGameUser = input.motivationStyle === 'game_like' || input.motivationStyle === 'intense';
+  const laneProfile = resolveLaneProfile(input);
+  const allowedHomeSurfaces = resolveSurfaces(currentDayStage, input, comebackState, laneProfile);
   const studyLayerLabel = resolveStudyLabel(input.primaryGoal);
   const premiumMoment = resolvePremiumMoment(input, currentDayStage);
+  const defaultMessage = comebackState !== 'none'
+    ? resolveComebackMessage(input.motivationStyle)
+    : input.completedSessions === 0
+      ? 'VEX is shaped around one clean first block.'
+      : 'Your rhythm is forming. Start the next clean block.';
+  const laneCopy = resolveLaneCopy(currentDayStage, laneProfile, defaultMessage);
   const bossIntensity = allowedHomeSurfaces.includes('tiny_boss_teaser')
     ? 'tiny_tease'
-    : input.completedSessions > 0 && input.featureAvailability.boss && isGameUser
+    : input.completedSessions > 0 && input.featureAvailability.boss && laneProfile.primaryLane === 'game_like'
       ? 'visible'
-      : input.completedSessions > 0 && input.featureAvailability.boss
+      : input.completedSessions > 0 && input.featureAvailability.boss && laneProfile.primaryLane !== 'minimal_normal'
         ? 'subtle'
         : 'hidden';
 
@@ -123,6 +151,9 @@ export function resolveFirstWeekExperience(rawInput: FirstWeekResolverInput): Fi
     completionEmphasis: 'confirmation_coach_progress_next_action',
     currentDayStage,
     hiddenSurfaces: FINAL_RELEASE_HIDDEN,
+    lane: laneProfile.primaryLane,
+    laneConfidence: laneProfile.confidence,
+    laneStageTheme: laneCopy.laneStageTheme,
     notificationAllowedTypes: ['gentle_return', 'coach_check_in', 'progress_milestone'],
     premiumMoment,
     primaryCTA: {
@@ -131,11 +162,7 @@ export function resolveFirstWeekExperience(rawInput: FirstWeekResolverInput): Fi
         : 'START_SESSION',
       label: input.completedSessions === 0 ? 'Start first session' : 'Start next session',
     },
-    primaryMessage: comebackState !== 'none'
-      ? resolveComebackMessage(input.motivationStyle)
-      : input.completedSessions === 0
-        ? 'VEX is shaped around one clean first block.'
-        : 'Your rhythm is forming. Start the next clean block.',
+    primaryMessage: laneCopy.primaryMessage,
     secondaryCTA: input.completedSessions >= 2
       ? { intent: 'OPEN_PROGRESS', label: 'Review progress' }
       : null,
@@ -148,7 +175,10 @@ export function resolveFirstWeekExperience(rawInput: FirstWeekResolverInput): Fi
           : input.completedSessions > 0
             ? 'progress_proof'
             : 'none',
+    blockedSurfaceReasons: resolveBlockedReasons(laneProfile),
+    firstWeekExperiment: resolveFirstWeekExperiment(laneProfile.primaryLane, currentDayStage),
     studyLayerLabel,
+    unlockExplanation: laneCopy.unlockExplanation,
     unlockTease: input.completedSessions === 0
       ? 'VEX opens one layer at a time after real sessions.'
       : null,

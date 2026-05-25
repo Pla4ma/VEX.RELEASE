@@ -42,7 +42,7 @@ export function useCoachState(userId: string): UseCoachStateResult {
     queryKey: COACH_QUERY_KEYS.state(userId),
     queryFn: async () => {
       if (!network.isConnected) {
-        return store as unknown as CoachState;
+        return {userId,currentState:'MUTED_MODE',previousState:null,stateEnteredAt:Date.now(),personaId:store.selectedPersona??'FRIEND',behaviorProfile:null,lastInterventionAt:null,interventionsToday:0,muteUntil:null,reduceNotifications:store.reduceNotifications} satisfies CoachState;
       }
       return service.getOrCreateCoachState(userId);
     },
@@ -61,7 +61,7 @@ export function useCoachState(userId: string): UseCoachStateResult {
     data: query.data ?? null,
     isLoading: query.isLoading,
     isError: query.isError,
-    error: query.error as Error | null,
+    error: query.error,
     isRetrying,
     isDegraded: !network.isConnected || query.status === 'error',
     refetch: async (options?: RefetchOptions) => (query.refetch)(options),

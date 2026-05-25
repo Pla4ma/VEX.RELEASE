@@ -5,6 +5,7 @@ import TestRenderer, {
 } from 'react-test-renderer';
 
 import { ActiveSessionHero } from '../ActiveSessionHero';
+import type { ActiveSessionHeroViewModel } from '../../utils/active-session-hero-view-model';
 import type { ActiveSessionDisplayPolicy } from '../../utils/active-session-display-policy';
 
 jest.mock('../../../../components/primitives/Box', () => {
@@ -34,6 +35,7 @@ jest.mock('../ActiveSessionProgressRing', () => {
     ),
   };
 });
+
 const basePolicy: ActiveSessionDisplayPolicy = {
   heroDensity: 'minimal',
   showBossHUD: false,
@@ -48,41 +50,48 @@ const basePolicy: ActiveSessionDisplayPolicy = {
   showStudyTarget: false,
 };
 
-function renderHero(
-  displayPolicy: ActiveSessionDisplayPolicy,
-  perfectFocusActive = false,
-): ReactTestRendererJSON | ReactTestRendererJSON[] | null {
+function buildViewModel(overrides: Partial<ActiveSessionHeroViewModel> = {}): ActiveSessionHeroViewModel {
+  return {
+    phaseIcon: 'clock',
+    phaseLabel: 'Focus',
+    phaseAccent: 'blue',
+    studyTargetLabel: null,
+    completionPercentage: 42,
+    elapsedSeconds: 120,
+    remainingSeconds: 600,
+    signalPill: null,
+    momentumScores: null,
+    dailyProgress: null,
+    todayFocusSeconds: null,
+    showPurityScore: false,
+    perfectFocusActive: false,
+    purityScore: 95,
+    purityLabel: 'Elite',
+    streakMultiplier: 1,
+    heroDensity: 'minimal',
+    ...overrides,
+  };
+}
+
+function renderHero(viewModel: ActiveSessionHeroViewModel): ReactTestRendererJSON | ReactTestRendererJSON[] | null {
   let renderer: ReactTestRenderer | null = null;
   TestRenderer.act(() => {
     renderer = TestRenderer.create(
       <ActiveSessionHero
+        viewModel={viewModel}
         CIRCUMFERENCE={100}
         RADIUS={40}
         RING_SIZE={120}
         STROKE_WIDTH={8}
         animatedCircleProps={{}}
-        completionPercentage={42}
         dailyProgress={50}
-        displayPolicy={displayPolicy}
-        elapsedSeconds={120}
         glowStyle={{ elevation: 0, shadowColor: 'transparent', shadowOpacity: 0, shadowRadius: 0 }}
         labelColor="green"
-        momentumScores={[]}
         outerStrokeDashoffset={0}
-        perfectFocusActive={perfectFocusActive}
         perfectFocusBurst={{ value: 0 }}
-        phaseAccent="blue"
-        phaseIcon="clock"
-        phaseLabel="Focus"
         pulseStyle={{}}
-        purityLabel="Clean"
-        purityScore={95}
-        remainingSeconds={600}
         rotatingPerfectFocusStyle={{}}
-        streakMultiplier={1}
-        studyTargetLabel="Study target"
         themeColors={{ error: 'red', inverse: 'white', primary300: 'blue', success: 'green', warning: 'orange' }}
-        todayFocusSeconds={3600}
         withAlpha={(color) => color}
       />,
     );
@@ -106,81 +115,89 @@ function hasText(
   return node.children?.some((child) => hasText(child, text)) ?? false;
 }
 
-describe('active session focus sanctuary components', () => {
-  it('ActiveSessionHero respects every displayPolicy flag', () => {
-    const hidden = renderHero(basePolicy);
-    expect(hasText(hidden, 'Purity Score')).toBe(false);
-    expect(hasText(hidden, 'Calibrating momentum...')).toBe(false);
-    expect(hasText(hidden, '60:00 today - 50% of 2h goal')).toBe(false);
-    expect(hasText(hidden, 'Challenge waiting')).toBe(false);
-    expect(hasText(hidden, 'Clean focus')).toBe(false);
-    expect(hasText(hidden, 'Study target')).toBe(false);
+describe('ActiveSessionHero sanctuary', () => {
+  it('calm active focus renders no game-like metrics', () => {
+    const vm = buildViewModel();
+    const hero = renderHero(vm);
 
-    const visible = renderHero({
-      ...basePolicy,
-      heroDensity: 'standard',
-      showBossTinyIndicator: true,
-      showDailyProgress: true,
-      showMomentumScore: true,
-      showPurityScore: true,
-      showStudyTarget: true,
-    });
-    expect(hasText(visible, 'Purity Score')).toBe(true);
-    expect(hasText(visible, 'Calibrating momentum...')).toBe(true);
-    expect(hasText(visible, '60:00 today - 50% of 2h goal')).toBe(true);
-    expect(hasText(visible, 'Challenge waiting')).toBe(true);
-    expect(hasText(visible, 'Study target')).toBe(true);
-  });
-
-  it('calm active focus renders no signal pill unless necessary', () => {
-    const hero = renderHero({
-      ...basePolicy,
-      heroDensity: 'minimal',
-      showBossTinyIndicator: false,
-    });
-    // minimal density + no boss indicator = no signal pill
+    expect(hasText(hero, 'Purity Score')).toBe(false);
+    expect(hasText(hero, 'Calibrating momentum...')).toBe(false);
     expect(hasText(hero, 'Challenge waiting')).toBe(false);
-    // perfectFocusActive defaults to false in renderHero
     expect(hasText(hero, 'Clean focus')).toBe(false);
+    expect(hasText(hero, 'Study target')).toBe(false);
+    expect(hasText(hero, 'Timer Ring')).toBe(true);
   });
 
-  it('game-like active focus can show tiny boss signal', () => {
-    const hero = renderHero({
-      ...basePolicy,
-      heroDensity: 'minimal',
-      showBossTinyIndicator: true,
+  it('study active hero shows study target', () => {
+    const vm = buildViewModel({
+      studyTargetLabel: 'Study Session',
     });
-    expect(hasText(hero, 'Challenge waiting')).toBe(true);
-    expect(hasText(hero, 'Clean focus')).toBe(false);
-  });
+    const hero = renderHero(vm);
 
-  it('study active focus shows study target', () => {
-    const hero = renderHero({
-      ...basePolicy,
-      showStudyTarget: true,
-    });
-    expect(hasText(hero, 'Study target')).toBe(true);
-  });
-
-  it('daily progress hidden during active focus', () => {
-    const hero = renderHero({
-      ...basePolicy,
-      showDailyProgress: false,
-    });
-    expect(hasText(hero, '60:00 today - 50% of 2h goal')).toBe(false);
-  });
-
-  it('momentum dots hidden during active focus', () => {
-    const hero = renderHero({
-      ...basePolicy,
-      showMomentumScore: false,
-    });
+    expect(hasText(hero, 'Study Session')).toBe(true);
+    expect(hasText(hero, 'Challenge waiting')).toBe(false);
     expect(hasText(hero, 'Calibrating momentum...')).toBe(false);
   });
 
+  it('game-like hero shows boss signal pill', () => {
+    const vm = buildViewModel({
+      signalPill: { type: 'boss', label: 'Challenge waiting' },
+    });
+    const hero = renderHero(vm);
+
+    expect(hasText(hero, 'Challenge waiting')).toBe(true);
+    expect(hasText(hero, 'Calibrating momentum...')).toBe(false);
+  });
+
+  it('paused hero can show daily progress and momentum', () => {
+    const vm = buildViewModel({
+      heroDensity: 'standard',
+      dailyProgress: 50,
+      todayFocusSeconds: 3600,
+      momentumScores: [75, 80, 85],
+    });
+    const hero = renderHero(vm);
+
+    expect(hasText(hero, '60:00 today - 50% of 2h goal')).toBe(true);
+    expect(hasText(hero, 'Elapsed')).toBe(true);
+    expect(hasText(hero, 'Complete')).toBe(true);
+  });
+
+  it('paused hero shows empty momentum calibrating when scores empty', () => {
+    const vm = buildViewModel({
+      heroDensity: 'standard',
+      momentumScores: [],
+    });
+    const hero = renderHero(vm);
+    expect(hasText(hero, 'Calibrating momentum...')).toBe(true);
+  });
+
+  it('minimal density hides session stats', () => {
+    const vm = buildViewModel({
+      heroDensity: 'minimal',
+      dailyProgress: null,
+      todayFocusSeconds: null,
+    });
+    const hero = renderHero(vm);
+
+    expect(hasText(hero, '60:00 today - 50% of 2h goal')).toBe(false);
+    expect(hasText(hero, 'Elapsed')).toBe(false);
+  });
+
   it('completion effects stay hidden when purity HUD is disabled', () => {
-    const hero = renderHero(basePolicy, true);
+    const vm = buildViewModel({
+      perfectFocusActive: false,
+      showPurityScore: false,
+    });
+    const hero = renderHero(vm);
+
     expect(hasText(hero, 'Completion Aura')).toBe(false);
     expect(hasText(hero, 'Timer Ring')).toBe(true);
+  });
+
+  it('props reduced — no displayPolicy, momentumScores, purityScore, streakMultiplier, todayFocusSeconds passed directly', () => {
+    const vm = buildViewModel();
+    expect(typeof vm).toBe('object');
+    expect(vm.heroDensity).toBe('minimal');
   });
 });

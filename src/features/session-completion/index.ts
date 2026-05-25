@@ -21,6 +21,7 @@ export type {
 export {
   buildSessionCompletionHero,
   buildSessionCompletionReturnPlan,
+  buildCompletionPersonalization,
   parseSessionCompletionParams,
 } from './service';
 

@@ -1,16 +1,29 @@
 import { decideHomeSurfaces } from '../home-surface-decision';
 import { buildHomeExperienceModel } from '../service';
 import type { HomeSurfaceMap } from '../surface-decision-schemas';
+import type { z } from 'zod';
+import type { SurfaceDecisionInputSchema } from '../surface-decision-schemas';
+
+type MotivationStyle = z.infer<typeof SurfaceDecisionInputSchema>['personalizationProfile']['motivationStyle'];
+type PrimaryGoal = z.infer<typeof SurfaceDecisionInputSchema>['personalizationProfile']['primaryGoal'];
+type GamificationIntensity = z.infer<typeof SurfaceDecisionInputSchema>['personalizationProfile']['gamificationIntensity'];
 
 const featureAvailability = { boss: true, challenges: true, premium: true, study: true };
 
-const baseProfile = {
-  motivationStyle: 'friendly' as const,
-  primaryGoal: 'focus' as const,
-  gamificationIntensity: 'medium' as const,
-  studyLayerName: 'Focus Plan',
-  userStage: 'new' as const,
-};
+function profile(
+  motivationStyle: MotivationStyle = 'friendly',
+  primaryGoal: PrimaryGoal = 'focus',
+  studyLayerName = 'Focus Plan',
+  gamificationIntensity: GamificationIntensity = 'medium',
+) {
+  return {
+    motivationStyle,
+    primaryGoal,
+    gamificationIntensity,
+    studyLayerName,
+    userStage: 'new' as const,
+  };
+}
 
 function baseStats() {
   return {
@@ -27,13 +40,13 @@ function baseStats() {
 }
 
 function decideDay0(
-  profile: typeof baseProfile,
+  prof: ReturnType<typeof profile>,
   overrides: Partial<ReturnType<typeof baseStats>> = {},
   hasActiveStudyPlan = false,
 ): HomeSurfaceMap {
   return decideHomeSurfaces({
     featureAvailability,
-    personalizationProfile: profile,
+    personalizationProfile: prof,
     behaviorStats: { ...baseStats(), ...overrides },
     hasActiveStudyPlan,
     hasActiveRecommendation: false,
@@ -48,56 +61,42 @@ function visibleCount(map: HomeSurfaceMap): number {
 
 describe('Day 0 Study/Focus identity', () => {
   it('study user gets tiny Study cue', () => {
-    const map = decideDay0({
-      ...baseProfile,
-      motivationStyle: 'study_focused',
-      primaryGoal: 'study',
-      studyLayerName: 'Study OS',
-    });
+    const map = decideDay0(profile('study_focused', 'study', 'Study OS'));
     expect(map.study_layer).toBe('tiny_tease');
     expect(map.start_session).toBe('primary');
   });
 
   it('learning user gets tiny Learning cue', () => {
-    const map = decideDay0({
-      ...baseProfile,
-      primaryGoal: 'learning',
-      studyLayerName: 'Learning Plan',
-    });
+    const map = decideDay0(profile('friendly', 'learning', 'Learning Plan'));
     expect(map.study_layer).toBe('tiny_tease');
   });
 
   it('explicit study intent gets tiny cue without full Study OS card', () => {
-    const map = decideDay0(baseProfile, {}, true);
+    const map = decideDay0(profile(), {}, true);
     expect(map.study_layer).toBe('tiny_tease');
     expect(map.study_layer).not.toBe('secondary');
     expect(map.study_layer).not.toBe('primary');
   });
 
   it('non-study user does not see Study clutter', () => {
-    const map = decideDay0(baseProfile);
+    const map = decideDay0(profile());
     expect(map.study_layer).toBe('hidden');
   });
 
   it('game-like user can get tiny boss cue', () => {
-    const map = decideDay0({
-      ...baseProfile,
-      motivationStyle: 'game_like',
-      primaryGoal: 'work',
-      gamificationIntensity: 'strong',
-      studyLayerName: 'Deep Work Plan',
-    }, { bossChallengeEngagement: 'medium' });
+    const map = decideDay0(
+      profile('game_like', 'work', 'Deep Work Plan', 'strong'),
+      { bossChallengeEngagement: 'medium' },
+    );
     expect(map.boss_teaser).toBe('tiny_tease');
     expect(map.boss_compact).toBe('hidden');
   });
 
   it('never shows premium, social, shop, economy, or content upload on Day 0', () => {
-    const map = decideDay0({
-      ...baseProfile,
-      motivationStyle: 'study_focused',
-      primaryGoal: 'study',
-      studyLayerName: 'Study OS',
-    }, { bossChallengeEngagement: 'medium' });
+    const map = decideDay0(
+      profile('study_focused', 'study', 'Study OS'),
+      { bossChallengeEngagement: 'medium' },
+    );
     const model = buildHomeExperienceModel({
       explicitMotivationStyle: 'study_focused',
       totalCompletedSessions: 0,
@@ -109,15 +108,54 @@ describe('Day 0 Study/Focus identity', () => {
   });
 
   it('keeps Day 0 capped with one primary CTA and no spotlight', () => {
-    const map = decideDay0({
-      ...baseProfile,
-      motivationStyle: 'study_focused',
-      primaryGoal: 'study',
-      gamificationIntensity: 'strong',
-      studyLayerName: 'Study OS',
-    }, { bossChallengeEngagement: 'medium' });
+    const map = decideDay0(
+      profile('study_focused', 'study', 'Study OS', 'strong'),
+      { bossChallengeEngagement: 'medium' },
+    );
     expect(visibleCount(map)).toBeLessThanOrEqual(7);
     expect(Object.values(map).filter((value) => value === 'primary')).toHaveLength(1);
+    expect(Object.values(map).filter((value) => value === 'spotlight')).toHaveLength(0);
+  });
+
+  it('student motivation style gets study_layer as tiny_tease on Day 0', () => {
+    const map = decideDay0(profile('student', 'study', 'Study OS'));
+    expect(map.study_layer).toBe('tiny_tease');
+    expect(map.start_session).toBe('primary');
+  });
+
+  it('student + learning goal gets study_layer tiny_tease on Day 0', () => {
+    const map = decideDay0(profile('student', 'learning', 'Learning Plan'));
+    expect(map.study_layer).toBe('tiny_tease');
+  });
+
+  it('student style with work goal still gets study cue (student identity)', () => {
+    const map = decideDay0(profile('student', 'work', 'Deep Work Plan'));
+    expect(map.study_layer).toBe('tiny_tease');
+  });
+
+  it('day 0 study-focused user cannot open ContentStudy', () => {
+    const model = buildHomeExperienceModel({
+      explicitMotivationStyle: 'study_focused',
+      totalCompletedSessions: 0,
+    });
+    expect(model.allowedRoutes).not.toContain('ContentStudy');
+    expect(model.mustNotRun).toContain('study_plan_query');
+  });
+
+  it('day 0 study-focused user gets simple SessionSetup route', () => {
+    const model = buildHomeExperienceModel({
+      explicitMotivationStyle: 'study_focused',
+      totalCompletedSessions: 0,
+    });
+    expect(model.allowedRoutes).toContain('SessionStack.SessionSetup');
+  });
+
+  it('day 0 Home for student stays under density cap', () => {
+    const map = decideDay0(
+      profile('student', 'study', 'Study OS', 'strong'),
+      { bossChallengeEngagement: 'medium' },
+    );
+    expect(visibleCount(map)).toBeLessThanOrEqual(7);
     expect(Object.values(map).filter((value) => value === 'spotlight')).toHaveLength(0);
   });
 });

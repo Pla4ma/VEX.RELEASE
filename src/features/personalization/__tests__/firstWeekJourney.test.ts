@@ -170,14 +170,14 @@ describe('FirstWeekExperience product journey', () => {
       expect(result.bossIntensity).toBe('hidden');
     });
 
-    it('non-game user — boss is subtle not prominent', () => {
+    it('minimal user — boss stays hidden', () => {
       const result = computeFirstWeekRuntime(baseInput({
         motivationStyle: 'calm',
         completedSessions: 5,
         featureAvailable: { boss: true, premium: true, social: false, study: true },
       }));
 
-      expect(result.bossIntensity).toBe('subtle');
+      expect(result.bossIntensity).toBe('hidden');
     });
   });
 

@@ -14,9 +14,7 @@ export interface CoachSessionInsight {
 export interface SessionPattern {
   isComeback: boolean;
   daysSinceLastSession: number;
-  avgDuration: number;
   successRate: number;
-  bestTimeOfDay: string;
 }
 
 export type SessionHistoryEntry = { timestamp: number; status: SessionStatus };
@@ -30,9 +28,7 @@ export function analyzeSessionPattern(history: SessionHistoryEntry[]): SessionPa
   return {
     isComeback: daysSinceLastSession >= 3,
     daysSinceLastSession,
-    avgDuration: 1500,
     successRate: history.length > 0 ? completed / history.length : 0,
-    bestTimeOfDay: "morning",
   };
 }
 

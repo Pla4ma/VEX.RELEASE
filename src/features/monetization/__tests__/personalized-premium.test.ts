@@ -12,7 +12,7 @@ function makeInput(overrides: Partial<PremiumPersonalizationInput> = {}): Premiu
     hasTriedWeeklyReport: false,
     hasTriedVisualIdentity: false,
     currentStreakDays: 0,
-    daysSinceOnboarding: 0,
+    daysSinceOnboarding: 2,
     ...overrides,
   };
 }
@@ -24,8 +24,8 @@ describe('resolvePersonalizedPremium', () => {
     expect(result.canShowPaywall).toBe(false);
   });
 
-  it('no premium before 5 sessions', () => {
-    const result = resolvePersonalizedPremium(makeInput({ completedSessions: 3 }));
+  it('no premium before 40 sessions', () => {
+    const result = resolvePersonalizedPremium(makeInput({ completedSessions: 25 }));
     expect(result.triggerMoment).toBe('none');
     expect(result.canShowPaywall).toBe(false);
   });
@@ -40,8 +40,8 @@ describe('resolvePersonalizedPremium', () => {
     expect(result.noFakeBillingChecklist).toContain('Do not render purchasable plans without RevenueCat packages.');
   });
 
-  it('premium appears after value (5+ sessions)', () => {
-    const result = resolvePersonalizedPremium(makeInput({ completedSessions: 5 }));
+  it('premium appears after value (40+ sessions)', () => {
+    const result = resolvePersonalizedPremium(makeInput({ completedSessions: 40 }));
     expect(result.triggerMoment).toBe('session_value');
     expect(result.canShowPaywall).toBe(true);
   });
@@ -51,9 +51,9 @@ describe('resolvePersonalizedPremium', () => {
     expect(result.freeFeatures).toEqual(
       expect.arrayContaining([
         expect.stringContaining('Start and complete'),
-        expect.stringContaining('streak and progress'),
+        expect.stringContaining('rhythm and progress'),
         expect.stringContaining('Coach Presence'),
-        expect.stringContaining('companion'),
+        expect.stringContaining('lane personalization'),
       ]),
     );
     expect(result.freeFeatures).not.toEqual(
@@ -67,7 +67,7 @@ describe('resolvePersonalizedPremium', () => {
     const result = resolvePersonalizedPremium(makeInput({ completedSessions: 10 }));
     expect(result.premiumHeadline).not.toMatch(/unlock now|upgrade now|limited time|cheap/i);
     expect(result.premiumBody).not.toMatch(/unlock now|upgrade now|cheap/i);
-    expect(result.noFakeBillingChecklist).toHaveLength(4);
+    expect(result.noFakeBillingChecklist).toHaveLength(5);
   });
 
   it('premium features list is comprehensive', () => {
@@ -76,8 +76,8 @@ describe('resolvePersonalizedPremium', () => {
     expect(result.premiumFeatures[0]).toContain('Deep Coach Memory');
     expect(result.premiumFeatures[1]).toContain('Study');
     expect(result.premiumFeatures[2]).toContain('Personal Progress Intelligence');
-    expect(result.premiumFeatures[3]).toContain('Visual Identity');
-    expect(result.premiumFeatures[4]).toContain('Premium Session Modes');
+    expect(result.premiumFeatures[3]).toContain('Memory Console');
+    expect(result.premiumFeatures[4]).toContain('Calendar Intelligence');
   });
 
   it('free vs pro matrix includes all 5 rows', () => {
@@ -98,6 +98,32 @@ describe('resolvePersonalizedPremium', () => {
     expect(result.triggerMoment).toBe('advanced_study');
     expect(result.canShowPaywall).toBe(true);
     expect(result.premiumHeadline).toContain('study system');
+  });
+
+  it('blocks high intent paywall on Day 0 and after repeated dismissal', () => {
+    const day0 = resolvePersonalizedPremium(makeInput({
+      completedSessions: 0,
+      daysSinceOnboarding: 0,
+      hasTriedAdvancedStudy: true,
+    }));
+    expect(day0.canShowPaywall).toBe(false);
+
+    const dismissed = resolvePersonalizedPremium(makeInput({
+      completedSessions: 10,
+      hasTriedWeeklyReport: true,
+      paywallDismissals: 2,
+    }));
+    expect(dismissed.triggerMoment).toBe('none');
+  });
+
+  it('uses lane-specific premium value copy', () => {
+    const result = resolvePersonalizedPremium(makeInput({
+      completedSessions: 12,
+      lane: 'minimal_normal',
+      hasTriedWeeklyReport: true,
+    }));
+    expect(result.premiumHeadline).toContain('quiet');
+    expect(result.premiumBody).toContain('calendar intelligence');
   });
 
   it('weekly intelligence intent triggers premium', () => {
@@ -145,7 +171,7 @@ describe('resolvePersonalizedPremium', () => {
 
   it('deep coach memory trigger for strong streaks with study', () => {
     const result = resolvePersonalizedPremium(makeInput({
-      completedSessions: 12,
+      completedSessions: 45,
       currentStreakDays: 12,
       studyUsageRatio: 0.4,
       primaryGoal: 'learning',
@@ -155,7 +181,7 @@ describe('resolvePersonalizedPremium', () => {
 
   it('deep work plan personalized trigger for heavy study users', () => {
     const result = resolvePersonalizedPremium(makeInput({
-      completedSessions: 8,
+      completedSessions: 45,
       studyUsageRatio: 0.6,
     }));
     expect(result.triggerMoment).toBe('deep_work_plan_personalized');

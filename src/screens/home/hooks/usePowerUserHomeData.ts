@@ -108,7 +108,7 @@ export function usePowerUserHomeData(controller: HomeController): PowerUserHomeD
     controller,
     showToast,
     challengesQuery,
-    claimRewardMutation: claimRewardMutation as unknown as PowerUserHomeData['claimRewardMutation'],
+    claimRewardMutation: claimRewardMutation as PowerUserHomeData['claimRewardMutation'],
     freezeStreakMutation: { mutate: () => {}, isPending: false },
     intervention,
     interventionLoading,

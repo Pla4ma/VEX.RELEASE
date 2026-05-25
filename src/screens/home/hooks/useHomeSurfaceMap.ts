@@ -69,8 +69,9 @@ export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap
       personalizationProfile: {
         motivationStyle: (
           safeStyle === 'calm' || safeStyle === 'friendly' || safeStyle === 'coach_led' ||
-          safeStyle === 'game_like' || safeStyle === 'intense' || safeStyle === 'study_focused'
-        ) ? safeStyle as 'calm' | 'friendly' | 'coach_led' | 'game_like' | 'intense' | 'study_focused' : 'friendly',
+          safeStyle === 'game_like' || safeStyle === 'intense' || safeStyle === 'study_focused' ||
+          safeStyle === 'student'
+        ) ? safeStyle as 'calm' | 'friendly' | 'coach_led' | 'game_like' | 'intense' | 'study_focused' | 'student' : 'friendly',
         primaryGoal: (
           p.primaryGoal === 'focus' || p.primaryGoal === 'study' || p.primaryGoal === 'work' ||
           p.primaryGoal === 'creative' || p.primaryGoal === 'personal' || p.primaryGoal === 'learning'

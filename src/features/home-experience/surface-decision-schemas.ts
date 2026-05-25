@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { LaneSchema } from '../lane-engine/schemas';
+
 export const HomeSurfaceKeySchema = z.enum([
   'start_session',
   'coach_presence',
@@ -15,6 +17,14 @@ export const HomeSurfaceKeySchema = z.enum([
   'unlock_strip',
   'premium_tease',
   'weekly_quest',
+  'study_os',
+  'run_board',
+  'project_thread',
+  'today_strip',
+  'rescue_cta',
+  'memory_insight',
+  'weekly_intelligence',
+  'focus_window',
 ]);
 
 export type HomeSurfaceKey = z.infer<typeof HomeSurfaceKeySchema>;
@@ -58,7 +68,7 @@ export const SurfaceDecisionInputSchema = z.object({
   }).strict(),
   personalizationProfile: z.object({
     motivationStyle: z.enum([
-      'calm', 'friendly', 'coach_led', 'game_like', 'intense', 'study_focused',
+      'calm', 'friendly', 'coach_led', 'game_like', 'intense', 'study_focused', 'student',
     ]),
     primaryGoal: z.enum(['focus', 'study', 'work', 'creative', 'personal', 'learning']),
     gamificationIntensity: z.enum(['minimal', 'medium', 'strong']),
@@ -85,4 +95,7 @@ export const SurfaceDecisionInputSchema = z.object({
   isFirstSession: z.boolean(),
   firstWeekPhase: FirstWeekPhaseSchema,
   degradedFeatures: z.array(DegradedFeatureSchema).default([]),
+  laneProfile: z.object({
+    primaryLane: LaneSchema,
+  }).strict().optional(),
 });

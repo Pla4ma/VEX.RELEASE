@@ -1,5 +1,4 @@
 export { useSessionAnimations, AnimatedCircle } from './useSessionAnimations';
-export { useSessionCompleteChest } from './useSessionCompleteChest';
 export { useSessionCompleteController } from './useSessionCompleteController';
 export { useSessionCompleteRewards } from './useSessionCompleteRewards';
 export { useSessionCompleteStudyProgress } from './useSessionCompleteStudyProgress';

@@ -437,7 +437,7 @@ describe('Group 4 — Completion', () => {
 
     const core = accessFor(10);
     assertCoreAvailable(core, 'progress_view');
-    expect(getFeatureAvailability(core.economy_basic).canRenderEntryPoint).toBe(true);
+    expect(getFeatureAvailability(core.economy_basic).canRenderEntryPoint).toBe(false); // Economy is deactivated in final release
   });
 });
 

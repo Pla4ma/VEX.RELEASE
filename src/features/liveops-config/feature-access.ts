@@ -65,6 +65,7 @@ export interface FeatureAccess {
   unlockReason: string;
   isTeased?: boolean;
   isDegraded?: boolean;
+  disableOnDegraded?: boolean;
   priority?: number;
   releaseState: FeatureReleaseState;
   acceleratingProfiles?: MotivationProfileType[];
@@ -157,6 +158,7 @@ export function buildFeatureAccess(inputs: FeatureAccessInputs): {
       isVisible: resolved.isVisible,
       isTeased: resolved.isTeased,
       isDegraded,
+      disableOnDegraded: key === 'premium_paywall',
       priority: FEATURE_PRIORITIES[key] ?? 99,
       releaseState: resolved.releaseState,
     };

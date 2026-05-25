@@ -99,7 +99,7 @@ export function useHomeData(input: UseHomeDataInput) {
     return (controller.historyQuery.history as Array<{ status: string }>).filter((entry) => entry.status === 'COMPLETED').length;
   }, [comebackData?.streakRestoreEligible, controller.historyQuery.history]);
   const companionMood = useMemo(
-    () => getHomeCompanionMood(controller.historyQuery.history as unknown as Parameters<typeof getHomeCompanionMood>[0], controller.currentStreak),
+    () => getHomeCompanionMood(    controller.historyQuery.history, controller.currentStreak),
     [controller.currentStreak, controller.historyQuery.history],
   );
   const handleClaimReward = useCallback(

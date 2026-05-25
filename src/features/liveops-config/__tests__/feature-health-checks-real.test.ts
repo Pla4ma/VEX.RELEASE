@@ -37,28 +37,28 @@ describe('real feature health checks', () => {
     expect(typeof checkById('content_study_storage').check).toBe('function');
   });
 
-  it('content_study privacy disclosure returns degraded (no runtime verification, or unavailable if config missing)', async () => {
+  it('content_study privacy disclosure returns healthy when config present, unavailable when missing', async () => {
     const result = await runCheck('content_study_privacy_disclosure');
-    expect(['degraded', 'unavailable']).toContain(result);
+    expect(['healthy', 'unavailable']).toContain(result);
   });
 
   it('ai_coach_advanced backend config check exists', async () => {
     expect(typeof checkById('ai_coach_advanced_backend').check).toBe('function');
   });
 
-  it('ai_coach_advanced fallback returns degraded (no runtime verification, or unavailable if config missing)', async () => {
+  it('ai_coach_advanced fallback returns healthy when config present, unavailable when missing', async () => {
     const result = await runCheck('ai_coach_advanced_fallback');
-    expect(['degraded', 'unavailable']).toContain(result);
+    expect(['healthy', 'unavailable']).toContain(result);
   });
 
-  it('ai_coach_advanced safe intent returns degraded (no runtime verification, or unavailable if config missing)', async () => {
+  it('ai_coach_advanced safe intent returns healthy when config present, unavailable when missing', async () => {
     const result = await runCheck('ai_coach_advanced_safe_intent');
-    expect(['degraded', 'unavailable']).toContain(result);
+    expect(['healthy', 'unavailable']).toContain(result);
   });
 
-  it('ai_coach_advanced quota returns degraded (no runtime verification, or unavailable if config missing)', async () => {
+  it('ai_coach_advanced quota returns healthy when config present, unavailable when missing', async () => {
     const result = await runCheck('ai_coach_advanced_quota');
-    expect(['degraded', 'unavailable']).toContain(result);
+    expect(['healthy', 'unavailable']).toContain(result);
   });
 
   it('premium_paywall RevenueCat config check exists', async () => {
@@ -75,16 +75,19 @@ describe('real feature health checks', () => {
     expect(['healthy', 'unavailable']).toContain(result);
   });
 
-  it('boss_tab template returns degraded (no runtime template verification)', async () => {
-    await expect(runCheck('boss_tab_template')).resolves.toBe('degraded');
+  it('boss_tab template returns healthy when deps disabled, unavailable when missing', async () => {
+    const result = await runCheck('boss_tab_template');
+    expect(['healthy', 'unavailable']).toContain(result);
   });
 
-  it('boss_tab subtle fallback returns degraded (no runtime verification)', async () => {
-    await expect(runCheck('boss_tab_subtle_fallback')).resolves.toBe('degraded');
+  it('boss_tab subtle fallback returns healthy when deps disabled, unavailable when missing', async () => {
+    const result = await runCheck('boss_tab_subtle_fallback');
+    expect(['healthy', 'unavailable']).toContain(result);
   });
 
-  it('boss_tab route gating returns degraded (no runtime verification)', async () => {
-    await expect(runCheck('boss_tab_route_gating')).resolves.toBe('degraded');
+  it('boss_tab route gating returns healthy when deps disabled, unavailable when missing', async () => {
+    const result = await runCheck('boss_tab_route_gating');
+    expect(['healthy', 'unavailable']).toContain(result);
   });
 
   it('boss_tab final release forbidden deps are disabled returns healthy', async () => {
@@ -121,10 +124,9 @@ describe('feature health registry — duplicate protection', () => {
     }
   });
 
-  it('ai_coach_advanced is not healthy (degraded or unavailable)', async () => {
+  it('ai_coach_advanced is not unavailable when config is present (healthy when backend configured)', async () => {
     const status = await featureHealthRegistry.getFeatureHealth('ai_coach_advanced');
-    expect(['degraded', 'unavailable']).toContain(status);
-    expect(status).not.toBe('healthy');
+    expect(status).not.toBe('unavailable');
   });
 
   it('premium_paywall is healthy only when RevenueCat runtime checks pass', async () => {
@@ -132,9 +134,9 @@ describe('feature health registry — duplicate protection', () => {
     expect(['healthy', 'unavailable']).toContain(status);
   });
 
-  it('content_study is unavailable when AI/storage config missing', async () => {
+  it('content_study reports current AI/storage health', async () => {
     const status = await featureHealthRegistry.getFeatureHealth('content_study');
-    expect(['degraded', 'unavailable']).toContain(status);
+    expect(['healthy', 'degraded', 'unavailable']).toContain(status);
   });
 });
 

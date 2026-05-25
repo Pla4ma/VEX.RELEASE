@@ -94,7 +94,11 @@ describe('Behavior signals privacy', () => {
         'premium_gate_seen', 'premium_gate_clicked', 'premium_gate_dismissed',
         'boss_cta_clicked', 'boss_route_opened',
         'study_surface_clicked', 'coach_surface_clicked',
-        'notification_opened', 'notification_dismissed']).toContain(type);
+        'notification_opened', 'notification_dismissed',
+        'rescue_started', 'avoidance_reported',
+        'friction_accepted', 'friction_rejected',
+        'reflection_submitted', 'import_used',
+        'unlock_regret', 'lane_mismatch_reported']).toContain(type);
     });
   });
 

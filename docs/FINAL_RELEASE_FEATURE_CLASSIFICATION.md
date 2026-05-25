@@ -1,148 +1,170 @@
 # VEX Final Release Feature Classification
 
-Generated 2026-05-23. Every feature in src/ classified by final release status.
-This is the single source of truth for what ships, what's gated, and what's dead.
+Generated 2026-05-23. Updated 2026-05-25 to match source classification in code.
+**Source of truth:** `src/features/liveops-config/final-release-classification.ts`
+This doc generated from that source. Docs match code. Code is authoritative.
+
+---
 
 ## A. FINAL_RELEASE_ACTIVE
 
 Polished, production-ready, aligned with VEX identity. User-facing. Tested. Correctly gated.
 
-| Feature | Location | FeatureKey | Notes |
-|---------|----------|------------|-------|
-| focus_session | features/session/, features/session-start/, screens/session/ | focus_session | Core session loop |
-| home_tab | screens/home/, features/home-spine/, features/home-experience/ | home_tab | Adaptive Home |
-| focus_tab | screens/focus/ (mapped via MainTabRoute) | focus_tab | Focus tab |
-| profile_tab | screens/profile/ | profile_tab | Profile tab |
-| progress_view | screens/progress/, features/progression/ (basic) | progress_view | Streak/XP/level |
-| ai_coach_basic | features/ai-coach/, features/coach-presence/ | ai_coach_basic | Coach presence + companion |
-| companion_detail | features/companion/, features/companion-promise/ | companion_detail | Visual coach |
-| content_study | features/content-study/ | content_study | Study/Deep Work entry |
-| advanced_settings | screens/settings/, features/settings/ | advanced_settings | Settings & privacy |
-| onboarding | screens/onboarding/, features/onboarding/ | — (route-gated) | Personalization onboarding |
-| personalization | features/personalization/ | — (internal) | Motivation adaptation |
-| session_completion | features/session-completion/ | — (core) | Completion ledger + story |
-| streaks | features/streaks/ | — (core) | Streak tracking |
-| notifications | features/notifications/ | — (system) | Notification system |
-| focus_identity | features/focus-identity/ | — (core) | Focus score |
-| focus_contract | features/focus-contract/ | — (core) | Session contracts |
-| personal_bests | features/personal-bests/ | — (core) | Personal best tracking |
-| session_history | features/session-history/ | — (core) | Past session viewing |
-| session_recommendation | features/session-recommendation/ | — (core) | Next session suggestions |
-| learning_execution | features/learning-execution/ | — (core) | Learning execution layer |
-| session_events | features/session-events/ | — (system) | Session event bus |
+| System ID | Folder | FeatureKey | minSessions | Notes |
+|-----------|--------|------------|-------------|-------|
+| focus_session | session | focus_session | 0 | Core session loop |
+| session_start | session-start | — | 0 | Session start flow |
+| session_completion | session-completion | — | 0 | Completion ledger + adaptive payoff. Does **NOT** include PostSessionStory (archived). |
+| home_experience | home-experience | home_tab | 0 | Adaptive Home |
+| home_spine | home-spine | home_tab | 0 | Home navigation spine |
+| ai_coach_basic | ai-coach | ai_coach_basic | 0 | Coach presence + basic companion. Advanced coach (ai_coach_advanced) is progressive. |
+| coach_presence | coach-presence | ai_coach_basic | 0 | Coach presence rendering |
+| progression | progression | progress_view | 0 | Streak/XP/level. Always active. |
+| streaks | streaks | — | 0 | Streak tracking |
+| focus_contract | focus-contract | — | 0 | Session contracts |
+| focus_identity | focus-identity | — | 0 | Focus score |
+| personal_bests | personal-bests | — | 0 | Personal best tracking |
+| session_history | session-history | — | 0 | Past session viewing |
+| session_recommendation | session-recommendation | — | 0 | Next session suggestions |
+| session_events | session-events | — | 0 | Session event bus (system-only, no UI) |
+| learning_execution | learning-execution | — | 0 | Learning execution layer |
+| notifications_system | notifications | — | 0 | Notification system |
+| onboarding | onboarding | — | 0 | One-time onboarding flow (route-gated) |
+| personalization | personalization | — | 0 | Motivation adaptation engine (internal, no direct UI) |
+| themes_visual | themes | — | 0 | Visual themes only. ThemeShopModal is archived. |
 
-## B. INTERNAL_CORE_REQUIRED
+---
+
+## B. FINAL_RELEASE_PROGRESSIVE
+
+Production-ready, revealed after N sessions. Inert before unlock.
+
+| System ID | Folder | FeatureKey | minSessions | Premium | Notes |
+|-----------|--------|------------|-------------|---------|-------|
+| companion_detail | companion | companion_detail | 3 | No | Companion visual detail |
+| challenges | challenges | challenges | 5 | No | Session challenges |
+| achievements | achievements | achievements | 6 | No | Achievement system |
+| boss | boss | boss_tab | 7 | No | Boss momentum (subtle for calm, visible for game-like) |
+| ai_coach_advanced | ai-coach | ai_coach_advanced | 8 | **Yes** | Deep Coach Memory. Premium-gated. |
+| quiz_review_mode | content-study | quiz_review_mode | 10 | **Yes** | Quiz & review. Premium-gated. |
+| content_study | content-study | content_study | 12 | No | Study / Deep Work entry |
+| advanced_settings | settings | advanced_settings | 12 | No | Settings & privacy |
+| content_study_advanced | content-study | content_study_advanced | 18 | **Yes** | Advanced Study OS. Premium-gated. |
+| premium_paywall | monetization | premium_paywall | 40 | No | Premium paywall (revenue-gated, not session-gated) |
+
+**Correction:** `content_study` was listed under active in old docs. Actual threshold is 12 → progressive. `premium_paywall` minSessions was 5 in old map; actual threshold is 40.
+
+---
+
+## C. FINAL_RELEASE_INTERNAL
 
 Required internally for progress/rewards/state. Not user-facing.
 
-| Feature | Location | Notes |
-|---------|----------|-------|
-| reward_ledger | features/reward-ledger/ | Internal reward accounting |
-| reward_service | features/rewards/ (service.ts only) | Reward delivery engine |
-| economy_internal | features/economy/ (XP ledger only) | XP/streak ledger, no user wallet |
-| monetization | features/monetization/ | RevenueCat + paywall layer |
-| event_bus | events/ | Internal event system |
-| feature_flags | feature-flags/ | Feature flag engine |
-| feature_access | features/liveops-config/ | Feature availability |
-| feature_gate | features/feature-gate/ | Feature gate runtime |
-| analytics | features/analytics/ | Telemetry + Sentry |
-| account_deletion | features/account-deletion/ | Account management |
-| integration | features/integration/ | External integration layer |
-| persistence | src/persistence/ | Storage abstraction |
-| supabase | src/supabase/ | DB client |
-| api | src/api/ | API client |
+| System ID | Folder | Notes |
+|-----------|--------|-------|
+| reward_ledger | reward-ledger | Internal reward accounting |
+| rewards_service | rewards | Reward delivery engine |
+| economy_xp_ledger | economy | XP/streak ledger. User-facing wallet/shop/gems are **archived**. |
+| monetization_layer | monetization | RevenueCat + paywall infrastructure. User-facing paywall is progressive. |
+| feature_gate | feature-gate | Feature gate runtime |
+| liveops_config | liveops-config | Feature availability + health checks |
+| analytics_telemetry | analytics | Telemetry + Sentry |
+| account_deletion | account-deletion | Account management |
+| integration | integration | External integration layer |
+| companion_promise | companion-promise | Companion promise infrastructure |
 
-## C. PROGRESSIVELY_UNLOCKED_ACTIVE
-
-Production-ready, revealed later. Inert before unlock via FeatureAvailability.
-
-| Feature | Location | FeatureKey | Min Sessions | Notes |
-|---------|----------|------------|-------------|-------|
-| boss_tab | features/boss/, screens/boss/ | boss_tab | 7 | Subtle for calm; visible for game-like |
-| challenges | features/challenges/ | challenges | 5 | Session challenges |
-| ai_coach_advanced | features/ai-coach/ | ai_coach_advanced | 8 | Deep Coach Memory (premium) |
-| content_study_advanced | features/content-study/ | content_study_advanced | 18 | Advanced Study OS (premium) |
-| quiz_review_mode | features/content-study/ | quiz_review_mode | 10 | Quiz/review (premium) |
-| achievements | features/achievements/ | achievements | 3 | Achievement system |
-| companion_detail | features/companion/ | companion_detail | 3 | Companion visual detail |
-| premium_paywall | screens/paywall/ | premium_paywall | 40 | Premium paywall (revenue gate) |
-| themes_visual | features/themes/ (visual only) | — (no key) | — | Visual themes, no shop |
+---
 
 ## D. ARCHIVED_OR_DEACTIVATED
 
 Not part of final release. Must be fully inert at runtime. Code preserved for reference.
 
-| Feature | Location | Status | Notes |
-|---------|----------|--------|-------|
-| shop | features/shop/ | final_release_deactivated | Shop UI + economy |
-| inventory | features/inventory/ | final_release_deactivated | Item inventory |
-| wallet | features/wallet/ | final_release_deactivated | Wallet UI |
-| items | features/items/ | final_release_deactivated | Items data |
-| battle_pass | features/battle-pass/ | final_release_deactivated | Battle pass system |
-| squads | features/squads/ | final_release_deactivated | Social squads |
-| rivals | (no separate folder, in feature map) | final_release_deactivated | Rivals system |
-| guild | (routed as Guild) | final_release_deactivated | Guild screen |
-| leaderboard | (no separate folder, in feature map) | final_release_deactivated | Leaderboards |
-| wagers | (no separate folder, in feature map) | final_release_deactivated | Wager system |
-| gems_prominent | (no separate folder, in feature map) | final_release_deactivated | Premium currency |
-| seasonal_features | features/seasons/ | final_release_deactivated | Seasonal systems |
-| boss_realtime | features/boss-realtime/ | final_release_deactivated | Community/squad boss realtime |
-| spectacle | features/spectacle/ | final_release_deactivated | Visual spectacle events |
-| live_ops | features/live-ops/ | final_release_deactivated | Live ops system |
-| social | features/social/ | final_release_deactivated | Social feed |
-| mastery | features/mastery/ | final_release_deactivated | Mastery system |
-| daily_mission | features/daily-mission/ | final_release_deactivated | Daily missions |
-| weekly_quests | features/weekly-quests/ | final_release_deactivated | Weekly quests |
-| retention | features/retention/ | final_release_deactivated | Retention systems |
-| emotion_retention | features/emotion-retention/ | final_release_deactivated | Emotional retention hooks |
-| monthly_report | features/monthly-report/ | final_release_deactivated | Monthly report (deferred) |
-| themes_shop | features/themes/ThemeShopModal.tsx | final_release_deactivated | Theme shop (visual themes OK) |
+| System ID | Folder | FeatureKey | Notes |
+|-----------|--------|------------|-------|
+| shop | shop | shop | Shop UI + economy |
+| inventory | inventory | inventory | Item inventory |
+| wallet | wallet | — | Wallet UI |
+| items | items | — | Items data (no inventory UI) |
+| battle_pass | battle-pass | battle_pass | Battle pass system |
+| squads | squads | squads | Social squads |
+| boss_realtime | boss-realtime | boss_bounties | Community/squad boss realtime |
+| spectacle | spectacle | — | Visual spectacle events |
+| live_ops | live-ops | — | Live ops system |
+| social | social | social_tab | Social feed |
+| mastery | mastery | — | Mastery system |
+| daily_mission | daily-mission | — | Daily missions |
+| weekly_quests | weekly-quests | — | Weekly quests |
+| retention | retention | — | Retention systems |
+| emotion_retention | emotion-retention | — | Emotional retention hooks |
+| monthly_report | monthly-report | — | Monthly report (deferred) |
+| seasons | seasons | seasonal_features | Seasonal systems |
+| session_story | session-story | — | **PostSessionStory route.** NOT session_completion narrative. |
+| themes_shop | themes | — | Theme shop (same folder as themes_visual; shop is deactivated) |
+| economy_user_facing | economy | economy_basic | User wallet/shop/rewards UI. XP ledger (internal) is active. |
 
-## E. UNRESOLVED — RESOLVED
+**Resolution:** `companion_detail` is progressive only (was incorrectly listed in both active and progressive). `session_completion` does NOT include story — `session_story` is separately archived. `economy` has 2 entries: `economy_xp_ledger` (internal, active) and `economy_user_facing` (archived).
 
-All features now classified. No NEEDS_DECISION items remain.
+---
 
-| Folder | Classification | Rationale |
-|--------|---------------|-----------|
-| learning-execution | FINAL_RELEASE_ACTIVE | Core learning execution layer |
-| session-events | FINAL_RELEASE_ACTIVE | Session event bus (system) |
-| session-history | FINAL_RELEASE_ACTIVE | Past session viewing |
-| session-recommendation | FINAL_RELEASE_ACTIVE | Next session suggestions |
-| themes | FINAL_RELEASE_ACTIVE (visual) / ARCHIVED (shop) | Visual themes active, shop hidden |
-| account-deletion | INTERNAL_CORE_REQUIRED | Account management |
-| analytics | INTERNAL_CORE_REQUIRED | Telemetry + Sentry |
-| feature-gate | INTERNAL_CORE_REQUIRED | Feature gate runtime |
-| integration | INTERNAL_CORE_REQUIRED | External integration layer |
-| boss-realtime | ARCHIVED_OR_DEACTIVATED | Community/squad boss |
-| emotion-retention | ARCHIVED_OR_DEACTIVATED | Emotional retention hooks |
-| items | ARCHIVED_OR_DEACTIVATED | Items data (no inventory UI) |
-| live-ops | ARCHIVED_OR_DEACTIVATED | Live ops system |
-| monthly-report | ARCHIVED_OR_DEACTIVATED | Monthly report (deferred) |
-| spectacle | ARCHIVED_OR_DEACTIVATED | Visual spectacle events |
-
-## E. TEST_OR_LEGACY_ONLY
+## E. TEST_OR_LEGACY
 
 Test-only or historical. Cannot affect runtime.
 
-| Feature | Location | Notes |
-|---------|----------|-------|
-| archive | archive/ | Archived code |
-| docs/archive | docs/archive/ | Historical docs |
-| __tests__ in archived features | Test files for archived features | Keep for reference |
+| System ID | Folder | Notes |
+|-----------|--------|-------|
+| features_tests | `__tests__` | Cross-feature test directory. Test-only. |
 
-> **Note:** `src_impl_archive/` was deleted 2026-05-23 after verification confirmed
-> no runtime, build, test, or config dependency. Source migration from `src_impl`
-> to `src/` is complete.
+---
+
+## Multi-Feature Folders (Unambiguous)
+
+These folders contain multiple classification entries. Each must be checked independently.
+
+| Folder | Active entries | Archived entries |
+|--------|---------------|------------------|
+| ai-coach | `ai_coach_basic` (active) | — |
+| ai-coach | `ai_coach_advanced` (progressive, premium) | — |
+| content-study | `content_study` (progressive) | — |
+| content-study | `quiz_review_mode` (progressive, premium) | — |
+| content-study | `content_study_advanced` (progressive, premium) | — |
+| economy | `economy_xp_ledger` (internal) | `economy_user_facing` (archived) |
+| monetization | `monetization_layer` (internal) | — |
+| monetization | `premium_paywall` (progressive) | — |
+| themes | `themes_visual` (active) | `themes_shop` (archived) |
+
+---
 
 ## Runtime Enforcement
 
-All ARCHIVED_OR_DEACTIVATED features have:
-- FEATURE_THRESHOLDS set to `Number.POSITIVE_INFINITY` in feature-access-config.ts
-- FEATURE_RELEASE_STATES set to `final_release_deactivated`
-- Listed in `DISABLED_FEATURES` array
-- FINAL_RELEASE_FEATURE_MAP status set to `hidden`
+All ARCHIVED_OR_DEACTIVATED features:
+- routeAllowed = false
+- homeAllowed = false
+- queryAllowed = false
+- subscriptionAllowed = false
+- notificationAllowed = false
+- completionAllowed = false
+- premiumCopyAllowed = false
+- appStoreCopyAllowed = false
 
-All PROGRESSIVELY_UNLOCKED features must pass:
-- `isFeatureAvailableForQueries()` before any query/subscription
-- `isFeatureAvailableForNavigation()` before any route entry
-- Must be inert before minimum session threshold
+All PROGRESSIVE features:
+- Inert before minSessions threshold
+- routeAllowed = true, queryAllowed = true after unlock
+- Premium-gated features additionally require RevenueCat health
+
+**Enforcement tests:** `src/features/liveops-config/__tests__/classification-enforcement.test.ts`
+
+---
+
+## Remaining Ambiguity: Resolved
+
+| Issue | Old state | Resolution |
+|-------|-----------|------------|
+| companion_detail in active + progressive | Listed in both sections | Progressive only (minSessions=3) |
+| session_completion mentions "story" | "ledger + story" | "ledger + adaptive payoff" — PostSessionStory is separately archived |
+| premium_paywall minSessions mismatch | Docs said 5, config said 40 | Config is 40. Docs corrected. |
+| content_study in active | Listed as active | Progressive (minSessions=12) |
+| economy boundaries | Unclear what's active | 2 entries: `economy_xp_ledger` (internal) + `economy_user_facing` (archived) |
+| advanced_settings in active | Listed as active in old docs | Progressive (minSessions=12) |
+| ai_coach_advanced in progressive | Listed progressive, no premium note | Progressive + premiumCopyAllowed=true |
+
+No remaining ambiguity. All systems classified. Docs match code.

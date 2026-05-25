@@ -43,8 +43,8 @@ describe('Notification budget coach and integration flows', () => {
     mockCurrentHour(14);
     await expect(getNotificationBudgetStatus('user-123')).resolves.toMatchObject({
       sent: 1,
-      maxDaily: 10,
-      remaining: 9,
+      maxDaily: 2,
+      remaining: 1,
       inQuietHours: false,
     });
 

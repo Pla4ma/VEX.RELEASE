@@ -44,7 +44,7 @@ export function HomeMissionInput({
 
   const missionInput: Partial<MissionPriorityInput> = {
     isFirstSession: controller.isFirstRun,
-    hasPendingSyncRepair: (controller.completionSync as { status: string }).status === 'failed_sync',
+    hasPendingSyncRepair: controller.completionSync.status === 'failed_sync',
     isStreakCritical: streakHoursRemaining !== null && streakHoursRemaining <= 4,
     hasComebackQuest: (controller.comebackQuery.data as Record<string, unknown> | undefined)?.streakRestoreEligible as boolean ?? false,
     hasActiveDailyChallenge: todaysChallenges.length > 0 && hasOpenDailyChallenge,

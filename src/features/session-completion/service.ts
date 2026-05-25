@@ -16,6 +16,7 @@ export {
   recoverSessionCompletionParams,
 } from './recovery-service';
 export { buildPostSessionNextAction } from './post-session-next-action';
+export { buildCompletionPersonalization } from './completion-personalization';
 export type { SessionGradingInput, SessionGradingResult } from './grading-schemas';
 
 const RecoverableSessionRouteSchema = z

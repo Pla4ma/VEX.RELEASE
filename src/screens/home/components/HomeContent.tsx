@@ -119,7 +119,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
     >
       <HomeStatusBanners
         isOnline={controller.isOnline}
-        completionSync={controller.completionSync as CompletionSyncState}
+        completionSync={controller.completionSync}
         loadError={controller.loadError}
         onRetry={controller.retryAll}
       />

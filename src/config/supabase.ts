@@ -50,17 +50,23 @@ const TEST_SUPABASE_ANON_KEY = IS_JEST ? 'test-anon-key' : '';
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || TEST_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || TEST_SUPABASE_ANON_KEY;
 
+function createMissingSupabaseConfigError(): Error {
+  return new Error(
+    'Missing Supabase configuration. Set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY before starting the app.',
+  );
+}
+
 /**
  * Create Supabase client
  */
 function createSupabaseClient(): SupabaseClient {
-  if (!SUPABASE_URL || !SUPABASE_ANON_KEY || IS_JEST) {
-    if (IS_JEST) {
-      debug.warn('[Supabase] Jest environment detected — using mock client');
-    } else {
-      debug.warn('[Supabase] Missing URL or anon key, client will not function');
-    }
+  if (IS_JEST) {
+    debug.warn('[Supabase] Jest environment detected — using mock client');
     return createMockSupabaseClient();
+  }
+
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    throw createMissingSupabaseConfigError();
   }
 
   return createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {

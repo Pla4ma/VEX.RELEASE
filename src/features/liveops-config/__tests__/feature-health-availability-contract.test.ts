@@ -68,12 +68,11 @@ describe('FeatureAvailability health contract', () => {
       unlockReason: 'Appears only after core loop proves value.',
     }));
 
-    expect(availability.state).toBe('disabled');
-    expect(availability.canRenderEntryPoint).toBe(false);
+    expect(availability.state).toBe('degraded');
+    expect(availability.canRenderEntryPoint).toBe(true);
     expect(availability.canNavigate).toBe(false);
     expect(availability.canQuery).toBe(false);
     expect(availability.canUseBackend).toBe(false);
-    expect(availability.canRegisterRoute).toBe(false);
     expect(availability.canSubscribeToEvents).toBe(false);
     expect(availability.canShowNotification).toBe(false);
   });

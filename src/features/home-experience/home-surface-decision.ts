@@ -5,7 +5,8 @@ import {
   SurfaceDecisionInputSchema,
 } from './surface-decision-schemas';
 import { enforceDay0SurfacePolicy } from './day0-surface-policy';
-import { selectSpotlight, setupDay0Surfaces } from './surface-helpers';
+import { createEmptyHomeSurfaceMap, selectSpotlight, setupDay0Surfaces } from './surface-helpers';
+import { applyLaneSurfaces } from './lane-surface-helpers';
 import type { z } from 'zod';
 
 type SurfaceDecisionInput = z.infer<typeof SurfaceDecisionInputSchema>;
@@ -33,22 +34,7 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
     return HomeSurfaceMapSchema.parse(corrected);
   }
 
-  const map: Record<HomeSurfaceKey, HomeSurfaceDecision> = {
-    start_session: 'primary',
-    coach_presence: 'hidden',
-    progress_proof: 'hidden',
-    focus_score: 'hidden',
-    progress_detail: 'hidden',
-    study_layer: 'hidden',
-    companion_thread: 'hidden',
-    boss_teaser: 'hidden',
-    boss_compact: 'hidden',
-    boss_full_cta: 'hidden',
-    challenge_teaser: 'hidden',
-    unlock_strip: 'hidden',
-    premium_tease: 'hidden',
-    weekly_quest: 'hidden',
-  };
+  const map: Record<HomeSurfaceKey, HomeSurfaceDecision> = createEmptyHomeSurfaceMap();
 
   map.coach_presence = b.coachInteractions > 0 ? 'secondary' : 'tiny_tease';
   map.progress_proof = 'secondary';
@@ -57,6 +43,7 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
     map.progress_detail = isEngaged ? 'secondary' : 'secondary';
   }
   map.unlock_strip = isNew ? 'secondary' : 'hidden';
+  applyLaneSurfaces(map, parsed, p, b, isNew, isEngaged);
 
   selectSpotlight(map, parsed, p, b, isNew, isEngaged, fwProvided, fw);
 
@@ -115,6 +102,7 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
 
   // Primary CTA
   const isStudyUser = p.motivationStyle === 'study_focused'
+    || p.motivationStyle === 'student'
     || p.primaryGoal === 'study'
     || p.primaryGoal === 'learning'
     || b.studyUsageRatio >= 0.35;
@@ -133,6 +121,8 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
   }
   if (p.motivationStyle === 'calm') {
     map.companion_thread = isEngaged ? 'tiny_tease' : 'hidden';
+    map.focus_score = 'hidden';
+    map.progress_detail = 'hidden';
   }
 
   // First-week final constraint pass

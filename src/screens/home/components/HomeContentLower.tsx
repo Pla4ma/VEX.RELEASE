@@ -97,9 +97,9 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
 
       {showContextualCards ? (
         <HomeContextualCards
-          activeStudyPlan={controller.activeStudyPlanQuery.data as unknown as ActiveStudyPlan | null | undefined}
+          activeStudyPlan={controller.activeStudyPlanQuery.data as ActiveStudyPlan | null | undefined}
           learningCopy={controller.learningExecutionLayer.copy}
-          comebackData={controller.comebackQuery.data as unknown as Record<string, unknown> | null | undefined}
+          comebackData={controller.comebackQuery.data as Record<string, unknown> | null | undefined}
           comebackSessionsCompleted={comebackSessionsCompleted}
           todaysChallenges={todaysChallenges}
           challengesQueryError={data.challengesQuery.error ?? undefined}
@@ -115,7 +115,7 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
 
       {showSecondaryRail ? (
         <HomeSecondaryRail
-          activePlan={controller.activeStudyPlanQuery.data as unknown as { completedTasks: number; progressPercent: number; remainingMinutes: number; title: string; totalTasks: number } | null}
+          activePlan={controller.activeStudyPlanQuery.data as { completedTasks: number; progressPercent: number; remainingMinutes: number; title: string; totalTasks: number } | null}
           canShowSecondarySystems={controller.shouldShowSecondarySystems}
           comebackMessage={(controller.comebackQuery.data as Record<string, unknown> | undefined)?.isComeback ? ((controller.comebackQuery.data as Record<string, unknown> | undefined)?.message as string ?? null) : null}
           features={features}
