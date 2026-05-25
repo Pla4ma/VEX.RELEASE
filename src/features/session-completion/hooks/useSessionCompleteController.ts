@@ -172,9 +172,9 @@ export function useSessionCompleteController(input: { sessionId: string; summary
     Sentry.addBreadcrumb({ category: 'session', level: 'info', message: 'Session complete screen viewed' });
   }, []);
   useEffect(() => {
-    if (rewards.revealStage === 1) { scrollRef.current?.scrollTo({ animated: true, y: 320 }); }
-    if (rewards.revealStage === 2) { scrollRef.current?.scrollTo({ animated: true, y: 720 }); }
-  }, [rewards.revealStage]);
+    if (rewards.completionStage === 1) { scrollRef.current?.scrollTo({ animated: true, y: 320 }); }
+    if (rewards.completionStage === 2) { scrollRef.current?.scrollTo({ animated: true, y: 720 }); }
+  }, [rewards.completionStage]);
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       navigation.navigate({ name: 'Main', params: {} });

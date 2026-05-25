@@ -65,12 +65,12 @@ describe('real feature health checks', () => {
     expect(typeof checkById('premium_paywall_revenuecat_config').check).toBe('function');
   });
 
-  it('premium_paywall offerings return healthy when RC keys configured (unavailable if config missing)', async () => {
+  it('premium_paywall offerings require live packages', async () => {
     const result = await runCheck('premium_paywall_offerings');
     expect(['healthy', 'unavailable']).toContain(result);
   });
 
-  it('premium_paywall entitlements return healthy when RC keys configured (unavailable if config missing)', async () => {
+  it('premium_paywall entitlements require readable RevenueCat customer info', async () => {
     const result = await runCheck('premium_paywall_entitlements');
     expect(['healthy', 'unavailable']).toContain(result);
   });
@@ -127,7 +127,7 @@ describe('feature health registry — duplicate protection', () => {
     expect(status).not.toBe('healthy');
   });
 
-  it('premium_paywall is healthy when RC keys configured (unavailable otherwise)', async () => {
+  it('premium_paywall is healthy only when RevenueCat runtime checks pass', async () => {
     const status = await featureHealthRegistry.getFeatureHealth('premium_paywall');
     expect(['healthy', 'unavailable']).toContain(status);
   });

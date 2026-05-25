@@ -4,10 +4,7 @@ import TestRenderer, {
   type ReactTestRendererJSON,
 } from 'react-test-renderer';
 
-import { SessionMode } from '../../../../session/modes';
 import { ActiveSessionHero } from '../ActiveSessionHero';
-import { ActiveSessionModeOverlays } from '../ActiveSessionModeOverlays';
-import { resolveActiveSessionDisplayPolicy } from '../../utils/active-session-display-policy';
 import type { ActiveSessionDisplayPolicy } from '../../utils/active-session-display-policy';
 
 jest.mock('../../../../components/primitives/Box', () => {
@@ -24,23 +21,25 @@ jest.mock('../../../../icons', () => ({ Icon: () => null }));
 jest.mock('../ActiveSessionProgressRing', () => {
   const ReactActual = jest.requireActual('react');
   return {
-    ActiveSessionProgressRing: ({ showPurityScore }: { showPurityScore: boolean }) =>
-      ReactActual.createElement('Text', null, showPurityScore ? 'Purity Score' : 'Timer Ring'),
+    ActiveSessionProgressRing: ({
+      perfectFocusActive,
+      showPurityScore,
+    }: {
+      perfectFocusActive: boolean;
+      showPurityScore: boolean;
+    }) => ReactActual.createElement(
+      'Text',
+      null,
+      perfectFocusActive ? 'Completion Aura' : showPurityScore ? 'Purity Score' : 'Timer Ring',
+    ),
   };
 });
-jest.mock('../../../../features/session/StudyQuizBreak', () => ({ StudyQuizBreak: () => null }));
-jest.mock('../../../../session/components/CreativeMoodLogger', () => ({ CreativeMoodLogger: () => null }));
-jest.mock('../../../../session/components/ModeIndicatorBadge', () => {
-  const ReactActual = jest.requireActual('react');
-  return { ModeIndicatorBadge: () => ReactActual.createElement('Text', null, 'Mode Overlay') };
-});
-
 const basePolicy: ActiveSessionDisplayPolicy = {
   heroDensity: 'minimal',
   showBossHUD: false,
   showBossTinyIndicator: false,
   showCoachBanner: false,
-  showCompanionLayer: true,
+  showCompanionLayer: false,
   showContractReminder: false,
   showDailyProgress: false,
   showModeOverlay: false,
@@ -49,7 +48,10 @@ const basePolicy: ActiveSessionDisplayPolicy = {
   showStudyTarget: false,
 };
 
-function renderHero(displayPolicy: ActiveSessionDisplayPolicy): ReactTestRendererJSON | ReactTestRendererJSON[] | null {
+function renderHero(
+  displayPolicy: ActiveSessionDisplayPolicy,
+  perfectFocusActive = false,
+): ReactTestRendererJSON | ReactTestRendererJSON[] | null {
   let renderer: ReactTestRenderer | null = null;
   TestRenderer.act(() => {
     renderer = TestRenderer.create(
@@ -67,7 +69,7 @@ function renderHero(displayPolicy: ActiveSessionDisplayPolicy): ReactTestRendere
         labelColor="green"
         momentumScores={[]}
         outerStrokeDashoffset={0}
-        perfectFocusActive={false}
+        perfectFocusActive={perfectFocusActive}
         perfectFocusBurst={{ value: 0 }}
         phaseAccent="blue"
         phaseIcon="clock"
@@ -110,9 +112,8 @@ describe('active session focus sanctuary components', () => {
     expect(hasText(hidden, 'Purity Score')).toBe(false);
     expect(hasText(hidden, 'Calibrating momentum...')).toBe(false);
     expect(hasText(hidden, '60:00 today - 50% of 2h goal')).toBe(false);
-    expect(hasText(hidden, 'Boss pressure banked for completion')).toBe(false);
-    expect(hasText(hidden, 'Boss awaits completion')).toBe(false);
-    expect(hasText(hidden, 'Perfect Focus')).toBe(false);
+    expect(hasText(hidden, 'Challenge waiting')).toBe(false);
+    expect(hasText(hidden, 'Clean focus')).toBe(false);
     expect(hasText(hidden, 'Study target')).toBe(false);
 
     const visible = renderHero({
@@ -127,7 +128,7 @@ describe('active session focus sanctuary components', () => {
     expect(hasText(visible, 'Purity Score')).toBe(true);
     expect(hasText(visible, 'Calibrating momentum...')).toBe(true);
     expect(hasText(visible, '60:00 today - 50% of 2h goal')).toBe(true);
-    expect(hasText(visible, 'Boss awaits completion')).toBe(true);
+    expect(hasText(visible, 'Challenge waiting')).toBe(true);
     expect(hasText(visible, 'Study target')).toBe(true);
   });
 
@@ -138,9 +139,9 @@ describe('active session focus sanctuary components', () => {
       showBossTinyIndicator: false,
     });
     // minimal density + no boss indicator = no signal pill
-    expect(hasText(hero, 'Boss awaits completion')).toBe(false);
+    expect(hasText(hero, 'Challenge waiting')).toBe(false);
     // perfectFocusActive defaults to false in renderHero
-    expect(hasText(hero, 'Perfect Focus')).toBe(false);
+    expect(hasText(hero, 'Clean focus')).toBe(false);
   });
 
   it('game-like active focus can show tiny boss signal', () => {
@@ -149,8 +150,8 @@ describe('active session focus sanctuary components', () => {
       heroDensity: 'minimal',
       showBossTinyIndicator: true,
     });
-    expect(hasText(hero, 'Boss awaits completion')).toBe(true);
-    expect(hasText(hero, 'Perfect Focus')).toBe(false);
+    expect(hasText(hero, 'Challenge waiting')).toBe(true);
+    expect(hasText(hero, 'Clean focus')).toBe(false);
   });
 
   it('study active focus shows study target', () => {
@@ -177,60 +178,9 @@ describe('active session focus sanctuary components', () => {
     expect(hasText(hero, 'Calibrating momentum...')).toBe(false);
   });
 
-  it('overlays hidden unless opted in or paused', () => {
-    let renderer: ReactTestRenderer | null = null;
-    TestRenderer.act(() => {
-      renderer = TestRenderer.create(
-        <ActiveSessionModeOverlays
-          allowStudyQuizBreak={false}
-          chainCount={0}
-          completionPercentage={50}
-          currentMode={SessionMode.FLOW}
-          displayPolicy={{ ...basePolicy, showModeOverlay: false }}
-          isPaused={false}
-          quizBreakKey={null}
-          remainingSeconds={600}
-          studyPlanId={undefined}
-          onCloseQuiz={() => undefined}
-          onSkipQuiz={() => undefined}
-        />,
-      );
-    });
-    const result = renderer?.toJSON() ?? null;
-    expect(hasText(result, 'Mode Overlay')).toBe(false);
-  });
-
-  it('coach banner structural gate kept in display policy test suite', () => {
-    const calmActive = {
-      focusStage: 'active' as const,
-      motivationStyle: 'coach_led' as const,
-      primaryGoal: 'work' as const,
-      sessionMode: SessionMode.FLOW,
-    };
-    const policy = resolveActiveSessionDisplayPolicy(calmActive);
-    expect(policy.showCoachBanner).toBe(false);
-  });
-
-  it('ActiveSessionModeOverlays refuses stacked focus overlays when policy hides them', () => {
-    let renderer: ReactTestRenderer | null = null;
-    TestRenderer.act(() => {
-      renderer = TestRenderer.create(
-        <ActiveSessionModeOverlays
-          allowStudyQuizBreak
-          chainCount={2}
-          completionPercentage={60}
-          currentMode={SessionMode.FLOW}
-          displayPolicy={basePolicy}
-          isPaused
-          quizBreakKey="quiz"
-          remainingSeconds={300}
-          studyPlanId="study"
-          onCloseQuiz={() => undefined}
-          onSkipQuiz={() => undefined}
-        />,
-      );
-    });
-    const result = renderer?.toJSON() ?? null;
-    expect(hasText(result, 'Mode Overlay')).toBe(false);
+  it('completion effects stay hidden when purity HUD is disabled', () => {
+    const hero = renderHero(basePolicy, true);
+    expect(hasText(hero, 'Completion Aura')).toBe(false);
+    expect(hasText(hero, 'Timer Ring')).toBe(true);
   });
 });

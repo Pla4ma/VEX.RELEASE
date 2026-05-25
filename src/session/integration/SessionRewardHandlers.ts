@@ -1,18 +1,14 @@
-import { addBattlePassXp } from "../../features/battle-pass/service";
-import { fetchActiveSeason } from "../../features/seasons/repository";
-import {
-  clearStreakRestoreQuest,
-  markStreakRestoreUsed,
-  recordStreakRestoreSession,
-} from "../../features/streaks/restore-quest";
-import {
-  getStreakSummary,
-  restoreStreak,
-} from "../../features/streaks/service";
+import { getStreakSummary } from "../../features/streaks/service";
 import { eventBus } from "../../events";
 import { createDebugger } from "../../utils/debug";
 import type { SessionSummary } from "../types";
 import type { RewardIntegrationConfig } from "./SessionRewardIntegration";
+import {
+  advanceRestoreQuest,
+  handleAbandonment,
+  handlePartialCompletion,
+} from "./session-reward-recovery";
+export { handleAbandonment, handlePartialCompletion } from "./session-reward-recovery";
 import {
   calculateRewards,
   grantRewards,
@@ -119,7 +115,7 @@ export async function handleSessionCompleted(
     await addSessionXpInternal(userId, rewards.totalXP);
   }
   if (config.autoUpdateStreak) {
-    await advanceRestoreQuestInternal(userId, sessionId);
+    await advanceRestoreQuest(userId, sessionId);
   }
   if (config.autoUpdateAnalytics) {
     publishAnalytics(userId, summary, rewards);
@@ -154,88 +150,12 @@ export async function handleSessionCompleted(
   }
 }
 
-export async function handlePartialCompletion(
-  config: RewardIntegrationConfig,
-  sessionId: string,
-  userId: string,
-  recoveredTime: number,
-): Promise<void> {
-  if (!config.autoHandleRecoveryRewards) {
-    debug.debug(
-      "Recovery rewards disabled — skipping partial completion for session %s",
-      sessionId,
-    );
-    return;
-  }
-  debug.info("Processing partial completion for session %s", sessionId);
-  const partialXp = Math.floor(recoveredTime / 60) * 5;
-  publishXp(userId, partialXp, "session_recovery");
-  eventBus.publish("analytics:track", {
-    event: "session_partial_complete",
-    properties: { userId, recoveredTime, xpEarned: partialXp },
-  });
-}
-
-export async function handleAbandonment(
-  config: RewardIntegrationConfig,
-  sessionId: string,
-  userId: string,
-  elapsedTime: number,
-): Promise<void> {
-  if (!config.autoHandleAbandonmentPartialCredit) {
-    debug.debug(
-      "Abandonment partial credit disabled — skipping for session %s",
-      sessionId,
-    );
-    return;
-  }
-  debug.info("Processing abandonment for session %s", sessionId);
-  const partialXp = elapsedTime >= 300 ? Math.floor(elapsedTime / 60) * 3 : 0;
-  if (partialXp > 0) {
-    publishXp(userId, partialXp, "session_partial_abandon");
-    eventBus.publish("analytics:track", {
-      event: "session_abandon_partial_credit",
-      properties: { userId, elapsedTime, xpEarned: partialXp },
-    });
-  }
-  eventBus.publish("analytics:track", {
-    event: "session_abandoned",
-    properties: { userId, elapsedTime, hadPartialCredit: partialXp > 0 },
-  });
-}
-
 async function addSessionXpInternal(
   userId: string,
   totalXp: number,
 ): Promise<void> {
   publishXp(userId, totalXp, "session_completion");
-  const activeSeason = await fetchActiveSeason();
-  const xpAmount = Math.floor(totalXp * 0.5);
-  if (!activeSeason || xpAmount <= 0) {
-    return;
-  }
-  await addBattlePassXp({
-    userId,
-    seasonId: activeSeason.id,
-    xpAmount,
-    source: "SESSION_COMPLETE",
-  });
-}
-
-async function advanceRestoreQuestInternal(
-  userId: string,
-  sessionId: string,
-): Promise<void> {
-  const progress = await recordStreakRestoreSession(userId, sessionId);
-  if (!progress.shouldRestore || !progress.streakBefore) {
-    return;
-  }
-  const restored = await restoreStreak(userId, progress.streakBefore);
-  if (!restored) {
-    return;
-  }
-  await markStreakRestoreUsed(userId);
-  await clearStreakRestoreQuest(userId);
+  await Promise.resolve();
 }
 
 async function tryRecordSquadDamage(

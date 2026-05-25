@@ -16,10 +16,10 @@
 
 ## Files And Services To Unify
 
-- `src_impl/features/coach-presence/*`: unified model, copy, repository, hook, and component.
-- `src_impl/screens/home/components/HomeCompanionSection.tsx`: Home now renders one Coach Presence surface.
-- `src_impl/features/session-completion/hooks/useSessionCompleteController.ts`: completion hero uses one Coach Presence reflection.
-- `src_impl/features/ai-coach/services/coach-screen-service.ts`: chat responses use whitelisted intents and Coach Presence fallback copy.
+- `src/features/coach-presence/*`: unified model, copy, repository, hook, and component.
+- `src/screens/home/components/HomeCompanionSection.tsx`: Home now renders one Coach Presence surface.
+- `src/features/session-completion/hooks/useSessionCompleteController.ts`: completion hero uses one Coach Presence reflection.
+- `src/features/ai-coach/services/coach-screen-service.ts`: chat responses use whitelisted intents and Coach Presence fallback copy.
 - Existing memory sources stay intact but are summarized through `coach-presence/repository.ts`.
 
 ## Memory Model Plan

@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, Pressable, Modal } from "react-native";
+import React, { useEffect, useState } from 'react';
+import { Modal, Pressable, Text, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withSequence,
   withTiming,
-} from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+} from 'react-native-reanimated';
+import { launchColors } from '@theme/tokens/launch-colors';
+import { styles } from './InterruptionWarning.styles';
+
 interface InterruptionWarningProps {
   isVisible: boolean;
-  severity: "MINOR" | "MODERATE" | "MAJOR" | "CRITICAL";
+  severity: 'MINOR' | 'MODERATE' | 'MAJOR' | 'CRITICAL';
   countdownSeconds: number;
   interruptionType: string;
   onResume: () => void;
@@ -19,23 +20,63 @@ interface InterruptionWarningProps {
   onUseStreakSave?: () => void;
   hasStreakSave?: boolean;
 }
+
+function getSeverityColor(severity: InterruptionWarningProps['severity']): string {
+  switch (severity) {
+    case 'CRITICAL':
+      return launchColors.hex_f44336;
+    case 'MAJOR':
+      return launchColors.hex_ff6b35;
+    case 'MODERATE':
+      return launchColors.hex_ffa500;
+    case 'MINOR':
+      return launchColors.hex_ffc107;
+    default:
+      return launchColors.hex_9e9e9e;
+  }
+}
+
+function getSeverityMessage(severity: InterruptionWarningProps['severity']): string {
+  switch (severity) {
+    case 'CRITICAL':
+      return 'Resume now to keep this session intact.';
+    case 'MAJOR':
+      return 'Big pause. You can still return cleanly.';
+    case 'MODERATE':
+      return 'Take a breath, then come back.';
+    case 'MINOR':
+      return 'Small pause. Keep the thread.';
+    default:
+      return 'Focus paused.';
+  }
+}
+
+function formatTime(seconds: number): string {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+}
+
 export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
-  isVisible,
-  severity,
   countdownSeconds,
-  interruptionType,
-  onResume,
-  onAbandon,
-  onUseStreakSave,
   hasStreakSave = false,
+  interruptionType,
+  isVisible,
+  onAbandon,
+  onResume,
+  onUseStreakSave,
+  severity,
 }) => {
   const [remainingSeconds, setRemainingSeconds] = useState(countdownSeconds);
   const pulseAnim = useSharedValue(1);
+  const severityColor = getSeverityColor(severity);
+
   useEffect(() => {
     if (isVisible) {
       setRemainingSeconds(countdownSeconds);
     }
   }, [isVisible, countdownSeconds]);
+
   useEffect(() => {
     if (!isVisible || remainingSeconds <= 0) {
       return;
@@ -51,13 +92,11 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
     }, 1000);
     return () => clearInterval(interval);
   }, [isVisible, remainingSeconds]);
+
   useEffect(() => {
     if (isVisible && remainingSeconds <= 10) {
       pulseAnim.value = withRepeat(
-        withSequence(
-          withTiming(1.1, { duration: 500 }),
-          withTiming(1, { duration: 500 }),
-        ),
+        withSequence(withTiming(1.1, { duration: 500 }), withTiming(1, { duration: 500 })),
         -1,
         true,
       );
@@ -65,230 +104,78 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
       pulseAnim.value = withTiming(1, { duration: 120 });
     }
   }, [isVisible, remainingSeconds, pulseAnim]);
+
   const pulseStyle = useAnimatedStyle(() => ({
     transform: [{ scale: pulseAnim.value }],
   }));
-  const getSeverityColor = (): string => {
-    switch (severity) {
-      case "CRITICAL":
-        return launchColors.hex_f44336;
-      case "MAJOR":
-        return launchColors.hex_ff6b35;
-      case "MODERATE":
-        return launchColors.hex_ffa500;
-      case "MINOR":
-        return launchColors.hex_ffc107;
-      default:
-        return launchColors.hex_9e9e9e;
-    }
-  };
-  const getSeverityMessage = (): string => {
-    switch (severity) {
-      case "CRITICAL":
-        return "Session will be lost! Resume immediately!";
-      case "MAJOR":
-        return "Significant disruption detected";
-      case "MODERATE":
-        return "Your focus is at risk";
-      case "MINOR":
-        return "Brief interruption detected";
-      default:
-        return "Session interruption";
-    }
-  };
-  const formatTime = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, "0")}`;
-  };
+
   return (
-    <Modal
-      visible={isVisible}
-      transparent
-      animationType="fade"
-      onRequestClose={() => {}}
-    >
+    <Modal visible={isVisible} transparent animationType="fade" onRequestClose={() => {}}>
       <View style={styles.overlay}>
         <Animated.View style={[styles.container, pulseStyle]}>
-          {}
-          <View
-            style={[
-              styles.iconContainer,
-              { backgroundColor: getSeverityColor() },
-            ]}
-          >
-            <Text style={styles.warningIcon}>⚠️</Text>
+          <View style={[styles.iconContainer, { backgroundColor: severityColor }]}>
+            <Text style={styles.warningIcon}>!</Text>
           </View>
-
-          {}
-          <Text style={styles.title}>Interruption Detected</Text>
-
-          {}
+          <Text style={styles.title}>Focus paused</Text>
           <Text style={styles.interruptionType}>{interruptionType}</Text>
-
-          {}
-          <Text style={[styles.message, { color: getSeverityColor() }]}>
-            {getSeverityMessage()}
+          <Text style={[styles.message, { color: severityColor }]}>
+            {getSeverityMessage(severity)}
           </Text>
-
-          {}
           <View style={styles.countdownContainer}>
-            <Text style={[styles.countdown, { color: getSeverityColor() }]}>
+            <Text style={[styles.countdown, { color: severityColor }]}>
               {formatTime(remainingSeconds)}
             </Text>
-            <Text style={styles.countdownLabel}>until session expires</Text>
+            <Text style={styles.countdownLabel}>reserved for your return</Text>
           </View>
-
-          {}
           <View style={styles.progressBarContainer}>
             <View
               style={[
                 styles.progressBar,
                 {
                   width: `${(remainingSeconds / countdownSeconds) * 100}%`,
-                  backgroundColor: getSeverityColor(),
+                  backgroundColor: severityColor,
                 },
               ]}
             />
           </View>
-
-          {}
           <View style={styles.actions}>
             <Pressable
-              style={({ pressed }) => [
-                styles.button,
-                styles.resumeButton,
-                pressed && { opacity: 0.8 },
-              ]}
+              style={({ pressed }) => [styles.button, styles.resumeButton, pressed && { opacity: 0.8 }]}
               onPress={onResume}
-              accessibilityLabel="▶ Resume Session button"
+              accessibilityLabel="Resume focus session"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Returns to the active focus timer"
             >
-              <Text style={styles.buttonText}>▶ Resume Session</Text>
+              <Text style={styles.buttonText}>Resume Focus</Text>
             </Pressable>
-
-            {hasStreakSave && onUseStreakSave && (
+            {hasStreakSave && onUseStreakSave ? (
               <Pressable
-                style={({ pressed }) => [
-                  styles.button,
-                  styles.streakSaveButton,
-                  pressed && { opacity: 0.8 },
-                ]}
+                style={({ pressed }) => [styles.button, styles.streakSaveButton, pressed && { opacity: 0.8 }]}
                 onPress={onUseStreakSave}
-                accessibilityLabel="🔥 Use Streak Save button"
+                accessibilityLabel="Use streak save"
                 accessibilityRole="button"
-                accessibilityHint="Activates this control"
+                accessibilityHint="Uses a streak save before ending this session"
               >
-                <Text style={styles.buttonText}>🔥 Use Streak Save</Text>
+                <Text style={styles.buttonText}>Use Streak Save</Text>
               </Pressable>
-            )}
-
+            ) : null}
             <Pressable
-              style={({ pressed }) => [
-                styles.button,
-                styles.abandonButton,
-                pressed && { opacity: 0.8 },
-              ]}
+              style={({ pressed }) => [styles.button, styles.abandonButton, pressed && { opacity: 0.8 }]}
               onPress={onAbandon}
-              accessibilityLabel="Abandon Session button"
+              accessibilityLabel="End focus session"
               accessibilityRole="button"
-              accessibilityHint="Activates this control"
+              accessibilityHint="Ends this session and moves to recovery"
             >
-              <Text style={styles.abandonButtonText}>Abandon Session</Text>
+              <Text style={styles.abandonButtonText}>End Session</Text>
             </Pressable>
           </View>
-
-          {}
-          {severity === "CRITICAL" && (
-            <Text style={styles.penaltyWarning}>
-              ⚠️ Abandoning will result in streak loss and score penalty
-            </Text>
-          )}
+          {severity === 'CRITICAL' ? (
+            <Text style={styles.penaltyWarning}>Ending now may affect your streak and rewards.</Text>
+          ) : null}
         </Animated.View>
       </View>
     </Modal>
   );
 };
-const styles = createSheet({
-  overlay: {
-    flex: 1,
-    backgroundColor: launchColors.rgb_0_0_0_0_85,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 24,
-  },
-  container: {
-    backgroundColor: launchColors.hex_1a1a2e,
-    borderRadius: 20,
-    padding: 32,
-    width: "100%",
-    maxWidth: 400,
-    alignItems: "center",
-  },
-  iconContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  warningIcon: { fontSize: 40 },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: launchColors.hex_fff,
-    marginBottom: 8,
-  },
-  interruptionType: {
-    fontSize: 16,
-    color: launchColors.hex_9e9e9e,
-    marginBottom: 16,
-    textTransform: "capitalize",
-  },
-  message: {
-    fontSize: 18,
-    fontWeight: "600",
-    textAlign: "center",
-    marginBottom: 24,
-  },
-  countdownContainer: { alignItems: "center", marginBottom: 16 },
-  countdown: { fontSize: 48, fontWeight: "700", fontVariant: ["tabular-nums"] },
-  countdownLabel: {
-    fontSize: 14,
-    color: launchColors.hex_9e9e9e,
-    marginTop: 4,
-  },
-  progressBarContainer: {
-    width: "100%",
-    height: 8,
-    backgroundColor: launchColors.hex_2a2a3e,
-    borderRadius: 4,
-    marginBottom: 32,
-    overflow: "hidden",
-  },
-  progressBar: { height: "100%", borderRadius: 4 },
-  actions: { width: "100%", gap: 12 },
-  button: { paddingVertical: 16, borderRadius: 12, alignItems: "center" },
-  resumeButton: { backgroundColor: launchColors.hex_4caf50 },
-  streakSaveButton: { backgroundColor: launchColors.hex_ff6b35 },
-  abandonButton: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: launchColors.hex_e94560,
-  },
-  buttonText: { color: launchColors.hex_fff, fontSize: 16, fontWeight: "600" },
-  abandonButtonText: {
-    color: launchColors.hex_e94560,
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  penaltyWarning: {
-    marginTop: 16,
-    fontSize: 12,
-    color: launchColors.hex_f44336,
-    textAlign: "center",
-  },
-});
+
 export default InterruptionWarning;

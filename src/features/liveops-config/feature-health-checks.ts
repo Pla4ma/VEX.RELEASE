@@ -2,6 +2,7 @@ import { featureHealthRegistry } from './feature-health';
 import type { FeatureHealthCheck, FeatureHealthStatus } from './feature-health';
 import { CONTENT_STUDY_CONSTANTS } from '../content-study/types';
 import { DISABLED_FEATURES } from './feature-access-config';
+import { premiumRevenueCatHealthChecks } from './premium-revenuecat-health-checks';
 const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY ?? process.env.GEMINI_API_KEY;
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
@@ -115,40 +116,7 @@ export const healthChecks: FeatureHealthCheck[] = [
       return hasBackend ? 'degraded' : 'unavailable';
     },
   },
-  {
-    id: 'premium_paywall_revenuecat_config',
-    feature: 'premium_paywall',
-    label: 'Premium Paywall — RevenueCat API key',
-    dependency: 'revenuecat',
-    cacheMs: 120_000,
-    check: () => {
-      const ios = process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY;
-      const android = process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY;
-      return ios || android ? 'healthy' : 'unavailable';
-    },
-  },
-  {
-    id: 'premium_paywall_offerings',
-    feature: 'premium_paywall',
-    label: 'Premium Paywall — RevenueCat API keys configured (offerings loadable at runtime)',
-    dependency: 'revenuecat_offerings',
-    cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      const hasRcKey = Boolean(process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY);
-      return hasRcKey ? 'healthy' : 'unavailable';
-    },
-  },
-  {
-    id: 'premium_paywall_entitlements',
-    feature: 'premium_paywall',
-    label: 'Premium Paywall — RevenueCat API keys configured (entitlements readable at runtime)',
-    dependency: 'revenuecat_entitlements',
-    cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      const hasRcKey = Boolean(process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY);
-      return hasRcKey ? 'healthy' : 'unavailable';
-    },
-  },
+  ...premiumRevenueCatHealthChecks,
   {
     id: 'boss_tab_template',
     feature: 'boss_tab',

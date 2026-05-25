@@ -1,7 +1,7 @@
 import type { NotificationAction, NotificationActionType } from '../../navigation/notification-routing-types';
 import { launchColors } from '@theme/tokens/launch-colors';
 import { isFeatureHidden } from '../../features/liveops-config/final-release-feature-map';
-import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../features/liveops-config/feature-availability';
+import { getFeatureAvailabilityFor, isFeatureAvailableForNavigation } from '../../features/liveops-config/feature-availability';
 import type { FeatureAccessMap } from '../../features/liveops-config/feature-access';
 import type { NotificationCenterItem } from '../../features/notifications/service';
 
@@ -101,12 +101,12 @@ export function isNotificationTypeFilterable(
   if (FINAL_RELEASE_HIDDEN_NOTIFICATION_TYPES.includes(type)) return false;
   if (type === 'BOSS') {
     if (isFeatureHidden('boss_tab')) return false;
-    const bossAvailability = getFeatureAvailability(features.boss_tab);
+    const bossAvailability = getFeatureAvailabilityFor('boss_tab', features.boss_tab);
     return bossAvailability.canShowNotification || isFeatureAvailableForNavigation(bossAvailability);
   }
   if (type === 'COACH') {
     if (isFeatureHidden('ai_coach_advanced')) return false;
-    const coachAvailability = getFeatureAvailability(features.ai_coach_advanced);
+    const coachAvailability = getFeatureAvailabilityFor('ai_coach_advanced', features.ai_coach_advanced);
     return coachAvailability.canShowNotification || isFeatureAvailableForNavigation(coachAvailability);
   }
   return true;

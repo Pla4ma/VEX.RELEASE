@@ -43,7 +43,7 @@ export function useSessionCompleteRewards({
     type: 'error' | 'success';
   }) => void;
 }) {
-  const [revealStage, setRevealStage] = useState(0);
+  const [completionStage, setCompletionStage] = useState(0);
 
   const syncedRewardState = useSessionRewardSync({
     applySessionMastery,
@@ -58,15 +58,15 @@ export function useSessionCompleteRewards({
     userId,
   });
   const handleRevealComplete = useCallback(async (): Promise<void> => {
-    setRevealStage(2);
+    setCompletionStage(2);
     await syncedRewardState.actions.applyCompletionRewards();
   }, [syncedRewardState.actions]);
 
   useEffect(() => {
-    const revealTimer = setTimeout(() => setRevealStage(1), 1200);
+    const completionTimer = setTimeout(() => setCompletionStage(1), 1200);
 
     return () => {
-      clearTimeout(revealTimer);
+      clearTimeout(completionTimer);
     };
   }, []);
 
@@ -78,7 +78,7 @@ export function useSessionCompleteRewards({
     levelUpCelebration: syncedRewardState.levelUpCelebration,
     rewardCreditError: syncedRewardState.rewardCreditError,
     rewardCreditStatus: syncedRewardState.rewardCreditStatus,
-    revealStage,
-    showCtas: revealStage >= 2,
+    completionStage,
+    showCtas: completionStage >= 2,
   };
 }

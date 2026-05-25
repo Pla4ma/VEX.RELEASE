@@ -172,8 +172,8 @@ export function SessionCompletionFollowThrough({
           {weeklyQuest.isError
             ? 'Progress is saved locally. VEX will retry the chain read.'
             : nextWeeklyStep
-              ? `${nextWeeklyStep.progress}/${nextWeeklyStep.target} toward the weekly legendary chest boost.`
-              : 'Your next chest has legendary pressure behind it.'}
+              ? `${nextWeeklyStep.progress}/${nextWeeklyStep.target} toward the weekly chain.`
+              : 'Your weekly chain is complete.'}
         </Text>
       </FollowThroughCard>
 

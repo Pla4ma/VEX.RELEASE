@@ -17,7 +17,7 @@ import { resolveCompletionPersonalBest } from "./personal-best-integration";
 import { createCompletionLedger, getCompletionLedgerByIdempotencyKey } from "./repository";
 import { buildPostSessionStoryViewModel, type PostSessionStoryViewModel } from "./story-view-model-service";
 import { createSessionRecord } from "../session-history/repository";
-import { isKeyProcessed, markKeyProcessed } from "./idempotency";
+import { beginKeyProcessing, markKeyProcessed, releaseKeyProcessing } from "./idempotency";
 
 const debug = createDebugger("session-completion:orchestrator");
 
@@ -53,118 +53,120 @@ export async function orchestrateSessionCompletion(
   const key = ledger.idempotencyKey;
 
   // LAYER 1b: Idempotency guard
-  if (isKeyProcessed(key)) return null;
+  if (!beginKeyProcessing(key)) return null;
 
-  const existing = await getCompletionLedgerByIdempotencyKey(key);
-  if (existing) {
-    markKeyProcessed(key);
-    setCompletionSyncState(existing.ledgerId, [], false);
-    return buildPostSessionStoryViewModel({
-      degradedWarnings: existing.degradedSystems,
-      ledger: existing,
-      summary,
-    });
-  }
+  try {
+    const existing = await getCompletionLedgerByIdempotencyKey(key);
+    if (existing) {
+      markKeyProcessed(key);
+      setCompletionSyncState(existing.ledgerId, [], false);
+      return buildPostSessionStoryViewModel({
+        degradedWarnings: existing.degradedSystems,
+        ledger: existing,
+        summary,
+      });
+    }
 
-  markKeyProcessed(key);
-
-  // LAYER 2: Persist session — Supabase primary, offline queue fallback
-  let persisted = ledger;
-  if (isOnline) {
-    try {
-      persisted = await createCompletionLedger(ledger);
-      createSessionRecord({
-        sessionId: ledger.sessionId,
-        userId: ledger.userId,
-        status: "COMPLETED",
-        duration: ledger.targetDurationSeconds,
-        effectiveDuration: ledger.effectiveFocusedSeconds,
-        qualityScore: ledger.qualityScore,
-        mode: ledger.mode,
-        difficulty: null,
-        metadata: {},
-        startedAt: new Date(ledger.startedAt).toISOString(),
-        completedAt: new Date(ledger.completedAt).toISOString(),
-        endedAt: new Date(ledger.completedAt).toISOString(),
-      }).catch((err: unknown) => {
-        Sentry.captureException(err, {
-          tags: { feature: "session-record-creation" },
+    // LAYER 2: Persist session — Supabase primary, offline queue fallback
+    let persisted = ledger;
+    if (isOnline) {
+      try {
+        persisted = await createCompletionLedger(ledger);
+        createSessionRecord({
+          sessionId: ledger.sessionId,
+          userId: ledger.userId,
+          status: "COMPLETED",
+          duration: ledger.targetDurationSeconds,
+          effectiveDuration: ledger.effectiveFocusedSeconds,
+          qualityScore: ledger.qualityScore,
+          mode: ledger.mode,
+          difficulty: null,
+          metadata: {},
+          startedAt: new Date(ledger.startedAt).toISOString(),
+          completedAt: new Date(ledger.completedAt).toISOString(),
+          endedAt: new Date(ledger.completedAt).toISOString(),
+        }).catch((err: unknown) => {
+          Sentry.captureException(err, {
+            tags: { feature: "session-record-creation" },
+          });
         });
-      });
-    } catch (error) {
-      Sentry.captureException(error, {
-        tags: { feature: "session-completion-ledger" },
-      });
+      } catch (error) {
+        Sentry.captureException(error, {
+          tags: { feature: "session-completion-ledger" },
+        });
+        enqueue({
+          feature: "sessions",
+          idempotencyKey: ledger.idempotencyKey,
+          operation: "CREATE",
+          payload: { ledger },
+        });
+        persisted = { ...ledger, offlineSyncStatus: "pending_sync" };
+      }
+    } else {
       enqueue({
         feature: "sessions",
         idempotencyKey: ledger.idempotencyKey,
         operation: "CREATE",
         payload: { ledger },
       });
-      persisted = { ...ledger, offlineSyncStatus: "pending_sync" };
     }
-  } else {
-    enqueue({
-      feature: "sessions",
-      idempotencyKey: ledger.idempotencyKey,
-      operation: "CREATE",
-      payload: { ledger },
+
+    // LAYER 3: XP / streak / progression / rewards — required for user payoff
+    const subsystemResult = await applyCompletionSubsystems({
+      ledger: persisted,
+      summary,
     });
-  }
+    const finalLedger = subsystemResult.ledger;
+    const degradedSystems = subsystemResult.degradedSystems;
+    const personalBest = await resolveCompletionPersonalBest(
+      parsed.userId,
+      finalLedger,
+      summary,
+    );
 
-  // LAYER 3: XP / streak / progression / rewards — required for user payoff
-  const subsystemResult = await applyCompletionSubsystems({
-    ledger: persisted,
-    summary,
-  });
-  const finalLedger = subsystemResult.ledger;
-  const degradedSystems = subsystemResult.degradedSystems;
-  const personalBest = await resolveCompletionPersonalBest(
-    parsed.userId,
-    finalLedger,
-    summary,
-  );
-
-  // LAYER 4: Optional companion memories
-  const companionMemories = await recordCompletionCompanionMemories({
-    isPersonalBest: personalBest.isPersonalBest,
-    ledger: finalLedger,
-    summary,
-    userId: parsed.userId,
-  });
-
-  const companionPromise = await processCompletedSessionPromise(
-    {
-      completedAt: finalLedger.completedAt,
-      durationMinutes:
-        Math.max(summary.actualDuration, summary.effectiveDuration) / 60,
-      sessionId: parsed.sessionId,
-      sessionMode: summary.sessionMode,
+    // LAYER 4: Optional companion memories
+    const companionMemories = await recordCompletionCompanionMemories({
+      isPersonalBest: personalBest.isPersonalBest,
+      ledger: finalLedger,
+      summary,
       userId: parsed.userId,
-    },
-    finalLedger.timezone,
-  );
+    });
 
-  // LAYER 5: Story view model + analytics + query invalidation
-  const storyViewModel = buildPostSessionStoryViewModel({
-    companionMemory: companionMemories[0] ?? null,
-    companionPromise:
-      companionPromise.fulfilledPromise ??
-      companionPromise.createdPromise ??
-      companionPromise.missedPromise,
-    degradedWarnings: degradedSystems,
-    ledger: finalLedger,
-    personalBest,
-    summary,
-  });
+    const companionPromise = await processCompletedSessionPromise(
+      {
+        completedAt: finalLedger.completedAt,
+        durationMinutes:
+          Math.max(summary.actualDuration, summary.effectiveDuration) / 60,
+        sessionId: parsed.sessionId,
+        sessionMode: summary.sessionMode,
+        userId: parsed.userId,
+      },
+      finalLedger.timezone,
+    );
 
-  setCompletionSyncState(finalLedger.ledgerId, degradedSystems, storyViewModel.pendingSync);
+    // LAYER 5: Story view model + analytics + query invalidation
+    const storyViewModel = buildPostSessionStoryViewModel({
+      companionMemory: companionMemories[0] ?? null,
+      companionPromise:
+        companionPromise.fulfilledPromise ??
+        companionPromise.createdPromise ??
+        companionPromise.missedPromise,
+      degradedWarnings: degradedSystems,
+      ledger: finalLedger,
+      personalBest,
+      summary,
+    });
 
-  debug.info("Session completion orchestrated for %s", parsed.sessionId);
+    setCompletionSyncState(finalLedger.ledgerId, degradedSystems, storyViewModel.pendingSync);
+    debug.info("Session completion orchestrated for %s", parsed.sessionId);
+    invalidateCompletionQueries(parsed.userId);
 
-  invalidateCompletionQueries(parsed.userId);
-
-  return storyViewModel;
+    markKeyProcessed(key);
+    return storyViewModel;
+  } catch (error) {
+    releaseKeyProcessing(key);
+    throw error;
+  }
 }
 
 export function initializeSessionCompletionOrchestrator(): void {

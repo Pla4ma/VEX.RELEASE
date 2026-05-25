@@ -1,9 +1,10 @@
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { LinearGradient } from 'expo-linear-gradient';
 import Animated, { FadeInUp } from 'react-native-reanimated';
+
 import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { Icon } from '../../../icons/components/Icon';
@@ -11,6 +12,7 @@ import type { ExtendedRootStackParams } from '../../../navigation/types';
 import { useTheme } from '../../../theme';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { launchColors } from '@theme/tokens/launch-colors';
+import { getAvailabilityFor } from '../../liveops-config';
 
 export type PremiumGateFeature =
   | 'deep_coach_memory'
@@ -27,106 +29,52 @@ export interface PremiumGateProps {
   showCloseButton?: boolean;
 }
 
-interface FeatureGateInfo {
+type FeatureGateInfo = {
   title: string;
   description: string;
   unlocks: string[];
   icon: string;
   gradient: readonly [string, string];
-}
+};
 
 const FEATURE_GATE_MAP: Record<PremiumGateFeature, FeatureGateInfo> = {
-  deep_coach_memory: {
-    title: 'Unlock Deep Coach Memory',
-    description:
-      'VEX learns your patterns, best focus windows, comeback style, and preferred push intensity — then adapts every session to you.',
-    unlocks: [
-      'Pattern-based session timing',
-      'Comeback style memory',
-      'Best focus window detection',
-      'Adaptive push intensity',
-    ],
-    icon: '\uD83E\uDDE0',
-    gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
-  },
-  progress_intelligence: {
-    title: 'Unlock Progress Intelligence',
-    description:
-      'See your rhythm, focus risk, recovery plans, and consistency forecasts — not just streaks.',
-    unlocks: [
-      'Weekly execution report',
-      'Focus risk detection',
-      'Recovery planning',
-      'Consistency forecasting',
-    ],
-    icon: '\uD83D\uDCCA',
-    gradient: [launchColors.hex_0f766e, launchColors.hex_0d9488],
-  },
-  advanced_study_os: {
-    title: 'Unlock Advanced Study / Deep Work',
-    description:
-      'Turn sessions into review loops, project breakdowns, quizzes, and smart next actions from your own content.',
-    unlocks: [
-      'Content-based session generation',
-      'Review loops and quizzes',
-      'Project breakdowns',
-      'Smart next-action engine',
-    ],
-    icon: '\uD83D\uDCD6',
-    gradient: [launchColors.hex_d97706, launchColors.hex_f59e0b],
-  },
-  premium_session_modes: {
-    title: 'Unlock Premium Session Modes',
-    description:
-      'Exam Sprint, Deep Work, Calm Reset, Comeback Mode, and Review Mode — deeper tools when the basic loop works.',
-    unlocks: [
-      'Exam Sprint mode',
-      'Calm Reset mode',
-      'Comeback Mode',
-      'Review Mode',
-    ],
-    icon: '\u26A1',
-    gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
-  },
-  visual_identity: {
-    title: 'Unlock Visual Identity',
-    description:
-      'Shape companion forms, focus worlds, session atmospheres, and premium animations without changing core progress.',
-    unlocks: [
-      'Companion form customization',
-      'Focus world themes',
-      'Session atmospheres',
-      'Premium animations',
-    ],
-    icon: '\u2728',
-    gradient: [launchColors.hex_0f766e, launchColors.hex_0d9488],
-  },
-  recovery_planning: {
-    title: 'Unlock Recovery Planning',
-    description:
-      'Build a recovery plan that helps you return without shame or backlog pressure after missed sessions.',
-    unlocks: [
-      'Personalized recovery path',
-      'Gentle return scheduling',
-      'Backlog-free restart',
-      'Progress preservation',
-    ],
-    icon: '\uD83D\uDEE1\uFE0F',
-    gradient: [launchColors.hex_059669, launchColors.hex_10b981],
-  },
+  deep_coach_memory: gate('Unlock Deep Coach Memory', 'VEX remembers patterns, comeback style, best focus windows, and preferred push intensity.', ['Pattern-based session timing', 'Comeback style memory', 'Best focus window detection', 'Adaptive push intensity'], '\uD83E\uDDE0', [launchColors.hex_4f46e5, launchColors.hex_7c3aed]),
+  progress_intelligence: gate('Unlock Progress Intelligence', 'See rhythm, focus risk, recovery plans, and consistency forecasts.', ['Weekly execution report', 'Focus risk detection', 'Recovery planning', 'Consistency forecasting'], '\uD83D\uDCCA', [launchColors.hex_0f766e, launchColors.hex_0d9488]),
+  advanced_study_os: gate('Unlock Advanced Study / Deep Work', 'Turn sessions into review loops, project breakdowns, quizzes, and smart next actions.', ['Content-based session generation', 'Review loops and quizzes', 'Project breakdowns', 'Smart next-action engine'], '\uD83D\uDCD6', [launchColors.hex_d97706, launchColors.hex_f59e0b]),
+  premium_session_modes: gate('Unlock Premium Session Modes', 'Exam Sprint, Deep Work, Calm Reset, Comeback Mode, and Review Mode.', ['Exam Sprint mode', 'Calm Reset mode', 'Comeback Mode', 'Review Mode'], '\u26A1', [launchColors.hex_4f46e5, launchColors.hex_7c3aed]),
+  visual_identity: gate('Unlock Visual Identity', 'Shape companion forms, focus worlds, session atmospheres, and premium animations.', ['Companion form customization', 'Focus world themes', 'Session atmospheres', 'Premium animations'], '\u2728', [launchColors.hex_0f766e, launchColors.hex_0d9488]),
+  recovery_planning: gate('Unlock Recovery Planning', 'Build a recovery plan that helps you return without shame or backlog pressure.', ['Personalized recovery path', 'Gentle return scheduling', 'Backlog-free restart', 'Progress preservation'], '\uD83D\uDEE1\uFE0F', [launchColors.hex_059669, launchColors.hex_10b981]),
 };
+
+function gate(
+  title: string,
+  description: string,
+  unlocks: string[],
+  icon: string,
+  gradient: readonly [string, string],
+): FeatureGateInfo {
+  return { title, description, unlocks, icon, gradient };
+}
 
 export function PremiumGate({
   feature,
   description,
   onClose,
   showCloseButton = true,
-}: PremiumGateProps) {
+}: PremiumGateProps): JSX.Element | null {
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const { theme } = useTheme();
   const featureInfo = FEATURE_GATE_MAP[feature];
+  const premiumAvailability = getAvailabilityFor('premium_paywall');
 
-  function handleUpgrade() {
+  if (!premiumAvailability.canRenderEntryPoint) {
+    return null;
+  }
+
+  function handleUpgrade(): void {
+    if (!premiumAvailability.canNavigate) {
+      return;
+    }
     navigation.navigate('Paywall', {
       source: 'feature_gate',
       gatedFeature: feature,
@@ -138,9 +86,7 @@ export function PremiumGate({
       <LinearGradient colors={[...featureInfo.gradient]} style={styles.header}>
         <Text style={styles.icon}>{featureInfo.icon}</Text>
         <Text style={styles.title}>{featureInfo.title}</Text>
-        <Text style={styles.description}>
-          {description ?? featureInfo.description}
-        </Text>
+        <Text style={styles.description}>{description ?? featureInfo.description}</Text>
       </LinearGradient>
 
       <View
@@ -155,8 +101,8 @@ export function PremiumGate({
         <Text style={[styles.unlocksTitle, { color: theme.colors.text.primary }]}>
           Premium unlocks:
         </Text>
-        {featureInfo.unlocks.map((unlock, index) => (
-          <View key={index} style={styles.unlockRow}>
+        {featureInfo.unlocks.map((unlock) => (
+          <View key={unlock} style={styles.unlockRow}>
             <Icon
               name="check-circle"
               size={16}
@@ -175,25 +121,25 @@ export function PremiumGate({
           variant="primary"
           size="lg"
           onPress={handleUpgrade}
-          accessibilityLabel="Upgrade to Premium button"
+          accessibilityLabel="See Premium"
           accessibilityRole="button"
-          accessibilityHint="Opens the premium upgrade screen"
+          accessibilityHint="Opens the premium screen only when billing is available"
         >
           See Premium
         </Button>
 
-        {showCloseButton && onClose && (
+        {showCloseButton && onClose ? (
           <Button
             variant="ghost"
             size="sm"
             onPress={onClose}
-            accessibilityLabel="Maybe later button"
+            accessibilityLabel="Maybe later"
             accessibilityRole="button"
             accessibilityHint="Dismisses the premium gate"
           >
             Maybe later
           </Button>
-        )}
+        ) : null}
       </View>
     </Animated.View>
   );

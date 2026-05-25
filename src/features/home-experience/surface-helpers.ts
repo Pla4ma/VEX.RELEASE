@@ -9,6 +9,19 @@ type FirstWeekPhase = SurfaceDecisionInput['firstWeekPhase'];
 
 type SurfaceMap = Record<HomeSurfaceKey, HomeSurfaceDecision>;
 
+function isStudyCueUser(
+  parsed: SurfaceDecisionInput,
+  p: PersonalizationProfile,
+  b: BehaviorStats,
+): boolean {
+  return p.motivationStyle === 'study_focused'
+    || p.primaryGoal === 'study'
+    || p.primaryGoal === 'learning'
+    || parsed.hasActiveStudyPlan
+    || b.studyUsageRatio >= 0.35
+    || b.learningUsageRatio >= 0.35;
+}
+
 function emptyMap(): SurfaceMap {
   return {
     start_session: 'primary',
@@ -40,16 +53,7 @@ export function setupDay0Surfaces(
   map.coach_presence = 'tiny_tease';
   map.unlock_strip = 'tiny_tease';
 
-  const isStudyUser = p.motivationStyle === 'study_focused'
-    || p.primaryGoal === 'study'
-    || p.primaryGoal === 'learning'
-    || b.studyUsageRatio >= 0.35;
-
-  const studyLayerLabel = isStudyUser
-    ? p.studyLayerName
-    : (p.primaryGoal === 'work' || p.primaryGoal === 'creative') ? 'Deep Work Plan'
-    : p.primaryGoal === 'learning' ? 'Learning OS'
-    : p.studyLayerName;
+  const isStudyUser = isStudyCueUser(parsed, p, b);
 
   // On Day 0, only study-focused users get study_layer as tiny_tease (not spotlight)
   if (isStudyUser && parsed.featureAvailability.study) {
@@ -110,10 +114,7 @@ export function selectSpotlight(
   fwProvided: boolean,
   fw: NonNullable<SurfaceDecisionInput['firstWeekPhase']>,
 ): void {
-  const isStudyUser = p.motivationStyle === 'study_focused'
-    || p.primaryGoal === 'study'
-    || p.primaryGoal === 'learning'
-    || b.studyUsageRatio >= 0.35;
+  const isStudyUser = isStudyCueUser(parsed, p, b);
 
   const isGameLikeUser = p.motivationStyle === 'game_like'
     || p.motivationStyle === 'intense'

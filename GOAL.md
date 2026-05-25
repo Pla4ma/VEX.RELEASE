@@ -1,73 +1,134 @@
-# VEX Production Rescue Goal
+# VEX Continuous Execution Goal
 
-Current objective: audit and fix session completion idempotency and reward synchronization risks.
+## Mission
 
-## Audit Snapshot
+Make the existing VEX Expo React Native app May 2026-ready, production-grade, and structurally maintainable without creating a separate app. Work continuously by choosing one high-impact objective, implementing it, verifying it, updating this file, and immediately moving to the next objective.
 
-Verification baseline:
-- `rtk tsc --noEmit`: passing.
-- `rtk lint`: timed out after 124 seconds, so lint is not a usable fast gate yet.
-- `rtk test -- npm test -- --runInBand`: timed out after 184 seconds, so full Jest is not a usable fast gate yet.
-- Working tree is already heavily dirty. Preserve existing user changes and avoid unrelated reversions.
+## Current Objective
 
-Critical findings:
-- File-size rule is systemically violated. At least 100 TypeScript files exceed 200 lines. Some files are minified single-line dumps over 10,000 characters, making review, diffs, and ownership unsafe.
-- Several modules bypass the mandated feature layout. Legacy roots such as `src/session`, `src/services`, `src/analytics`, `src/accessibility`, and `src/production` hold feature/business logic outside `features/<name>/service.ts` and repository boundaries.
-- Supabase access is scattered outside canonical repositories, including `src/services/supabaseAuth.ts`, `src/services/realtime.ts`, `src/features/session-story/NarrativeQueries.ts`, and nested repository fragments that do not follow the required feature shape.
-- Monetization contains production blockers. `src/features/monetization/purchase-trust.ts` verifies receipts by returning `verified: true`, restores purchases as an empty array, and computes a fake hash that ignores the secret. This is not App Store or RevenueCat safe.
-- Test quality is masking risk. Many tests use `as any`, private method access, giant one-line fixtures, and mocks that assert stub behavior instead of real contracts.
-- Several product systems appear duplicated or competing: old `src/session` session engine, newer `features/session-*` flows, reward services in both shared/service roots and feature roots, multiple analytics frameworks, and multiple monetization layers.
-- UI/state requirements are inconsistently enforced. Some data-driven components still rely on placeholders, ActivityIndicator-only patterns, hardcoded token aliases, and component-local decision logic.
-- Runtime observability is incomplete. Unexpected async paths sometimes log through debug helpers or return false instead of capturing unrecoverable failures to Sentry with a typed boundary.
-- Product scope is overgrown for first-week proof. Bosses, squads, battle pass, economy, inventory, achievements, AI coach, Study OS, personalization, and liveops all compete for attention instead of one clear seven-day activation loop.
+Split `src/session/components/ComboMeter.tsx`, now the largest over-limit production component, into focused modules under the 200-line cap without changing behavior.
 
-## Fix Strategy
+## Current Phase
 
-Order of operations:
-1. Stabilize revenue and trust paths: remove fake purchase verification behavior and force all purchase validation through the shared RevenueCat layer.
-2. Stabilize the session-completion spine: ensure one canonical completion path writes ledger, progression, streak, rewards, analytics, and offline fallback exactly once.
-3. Decompose minified and over-limit production files by domain, not `.part-N.ts`.
-4. Consolidate duplicated feature ownership into canonical `features/<name>/` layers.
-5. Replace tests that assert stubs with schema-backed service tests and focused integration tests.
-6. Add fast gates for line limit, banned patterns, and feature-boundary violations so regressions cannot re-enter.
-7. Rework first-week product surface around one activation promise: start session, complete session, reflect, see progress, plan next session.
+Line-limit backlog burn-down.
 
-## Completed Objectives
+## Active Checklist
 
-Fix monetization purchase trust:
-- Replaced fake client receipt verification with an explicit unverified result.
-- Routed restore through the shared RevenueCat service and throw on unavailable/failed restore.
-- Replaced fake client hash generation with an unsupported boundary.
+- Read `src/session/components/SquadSyncIndicator.tsx`.
+- Read `src/session/components/ComboMeter.tsx`.
+- Identify types, animation helpers, display components, and pure math that can move to domain-named files.
+- Avoid `.part-N.ts` files.
+- Keep every touched source file at or below 200 lines.
+- Run focused typecheck and any related tests if present.
+- Update this file with results and write the next objective.
+
+## Audit Findings
+
+- Full TypeScript currently passes, but full lint and full Jest timed out during the prior run and remain release-readiness blockers.
+- `npm run audit:line-limit` reports 108 source files over the 200-line cap, excluding generated `src/types/supabase.ts`.
+- Legacy roots such as `src/session`, `src/services`, `src/analytics`, `src/accessibility`, and `src/production` still contain feature and business logic outside the mandated feature-layer structure.
+- Supabase access is scattered outside canonical `features/<name>/repository.ts` boundaries.
+- Several tests are blacklisted in `jest.legacy-failing-tests.js`, which weakens confidence in production claims.
+- The session-completion path is the activation spine and must be idempotent before product polish matters.
+- Session completion previously used only an in-memory processed-key set, which did not clearly model in-flight versus completed work.
+
+## Critical Blockers
+
+- Full test suite is not a usable gate until timeout or failing-test debt is reduced.
+- Strict line-limit gate fails on the existing 108-file backlog.
+- Duplicate/legacy session systems create risk of double rewards, inconsistent history, and confusing UI state.
+
+## Completed Work
+
+- Replaced fake purchase verification with an explicit unverified raw-receipt boundary.
+- Routed purchase restore through the shared RevenueCat service.
+- Replaced fake client purchase hash generation with an unsupported boundary.
 - Unblacklisted and rewrote `purchase-trust.test.ts`.
-- Verified with `npm test -- purchase-trust.test.ts --runInBand` and `rtk tsc --noEmit`.
-
-Add a line-limit enforcement gate:
 - Added `scripts/check-line-limit.js`.
 - Added `npm run audit:line-limit` and `npm run check:line-limit`.
-- Excluded generated `src/types/supabase.ts`.
-- Verified audit mode: reports 108 current violations and exits 0.
-- Verified strict mode: fails on the same 108 current violations.
-- Verified TypeScript with `rtk tsc --noEmit`.
+- Split `completion-orchestrator.ts` by extracting completion sync state and query invalidation helpers.
+- Reworked session completion idempotency into begin/complete/release states.
+- Added persisted completed idempotency keys for session completion.
+- Added a concurrent duplicate completion regression test.
+- Fixed `SessionCoachIntegration` to call the enriched coach-presence copy service after user changes shifted the API.
+- Added `scripts/check-banned-patterns.js` with strict and audit modes.
+- Added `npm run check:banned-patterns` and `npm run audit:banned-patterns`.
+- Banned-pattern gate now passes with explicit canonical boundary allowlists for the API client, haptics wrapper, and accessibility role map.
+- Split `SquadSyncIndicator.tsx` into a 163-line container plus focused member, toast, state, and type modules.
 
-## Active Objective
+## Files Changed
 
-Decompose `src/features/session-completion/completion-orchestrator.ts`:
-- Extracted query invalidation to `completion-query-invalidation.ts`.
-- Extracted UI sync-state mapping to `completion-sync-state.ts`.
-- Reduced `completion-orchestrator.ts` from 223 to 186 lines.
-- Verified with `completion-orchestrator-flow.test.ts`, `completion-orchestrator-return.test.ts`, `phase1-exit-gate.test.ts`, and `rtk tsc --noEmit`.
+- `GOAL.md`
+- `jest.legacy-failing-tests.js`
+- `package.json`
+- `scripts/check-line-limit.js`
+- `src/features/monetization/purchase-trust.ts`
+- `src/features/monetization/__tests__/purchase-trust.test.ts`
+- `src/features/session-completion/completion-orchestrator.ts`
+- `src/features/session-completion/completion-query-invalidation.ts`
+- `src/features/session-completion/completion-sync-state.ts`
+- `src/features/session-completion/idempotency.ts`
+- `src/features/session-completion/__tests__/completion-orchestrator-flow.test.ts`
+- `src/session/integration/SessionCoachIntegration.ts`
+- `scripts/check-banned-patterns.js`
+- `src/session/components/SquadMemberIndicator.tsx`
+- `src/session/components/SquadSyncIndicator.types.ts`
+- `src/session/components/SquadSyncStates.tsx`
+- `src/session/components/SquadSyncToasts.tsx`
 
-## Active Objective
+## Verification Log
 
-Audit and fix session completion idempotency/reward sync:
-- Inspect `completion-subsystems.ts`, idempotency helpers, ledger writes, and offline sync.
-- Confirm rewards/progression/streaks cannot double-apply across retry, offline queue, duplicate events, or app restart.
-- Add or update focused tests before changing behavior.
-- Keep every touched file at or below 200 lines.
-- Run focused tests and TypeScript.
+- `rtk tsc --noEmit`: passing in the prior run.
+- `npm test -- purchase-trust.test.ts --runInBand`: 15 tests passed in the prior run.
+- `npm test -- completion-orchestrator-flow.test.ts completion-orchestrator-return.test.ts phase1-exit-gate.test.ts --runInBand`: 8 tests passed in the prior run.
+- `npm run audit:line-limit`: reports 108 current violations and exits 0.
+- `npm run check:line-limit`: fails as expected on the same 108 current violations.
+- `npm test -- completion-orchestrator-flow.test.ts --runInBand`: 4 tests passed.
+- `npm test -- completion-orchestrator-flow.test.ts completion-orchestrator-return.test.ts completion-orchestrator-edge.test.ts phase1-exit-gate.test.ts --runInBand`: 14 tests passed.
+- `rtk tsc --noEmit`: passing after fixing `SessionCoachIntegration`.
+- `npm run audit:line-limit`: now reports 107 current violations and exits 0.
+- `npm run audit:banned-patterns`: passes.
+- `npm run check:banned-patterns`: passes.
+- `rtk tsc --noEmit`: passing after the `SquadSyncIndicator` split.
+- `npm run audit:line-limit`: now reports 106 current violations and exits 0.
 
-## Next Objectives
+## Failed Checks
 
-- Audit and fix session completion idempotency and reward synchronization.
-- Split the largest minified production files into readable modules.
-- Build a canonical feature ownership map and delete duplicate legacy paths after coverage exists.
+- `rtk lint`: timed out after 124 seconds in the prior run.
+- `rtk test -- npm test -- --runInBand`: timed out after 184 seconds in the prior run.
+- `npm run check:line-limit`: fails until the existing line-limit backlog is decomposed.
+- No failed checks from the banned-pattern gate.
+
+## Risks Introduced
+
+- Purchase trust now fails closed for raw receipts. Any UI still expecting client-side receipt success must route through RevenueCat restore/purchase APIs.
+- Strict line-limit enforcement is intentionally failing against existing debt until the backlog is burned down.
+
+## Blockers
+
+- The working tree contains many user changes. Preserve them and avoid broad rewrites.
+- Several session-completion files have active user edits; work with them rather than reverting them.
+- Existing user edits changed coach-presence APIs; typecheck must be run after every pass.
+
+## Next Objective Queue
+
+- Fix session completion idempotency and reward synchronization.
+- Continue splitting over-200-line production files.
+- Split `ComboMeter.tsx`.
+- Add a banned-pattern gate for `any`, `@ts-ignore`, `console.log`, `StyleSheet.create`, `FlatList`, `AsyncStorage`, and raw `fetch`.
+- Build a canonical feature ownership map and identify duplicate legacy paths for deletion.
+- Rework first-week product surface around one activation loop: start, complete, reflect, progress, plan next.
+
+## Continuation Rule
+
+After every objective, write the next objective into `GOAL.md` and keep going. If there is no obvious next objective, perform another audit pass and generate one from the highest-risk remaining area.
+
+## Final Readiness Criteria
+
+- `rtk tsc --noEmit` passes.
+- Full focused feature suites pass without relying on legacy blacklists for core launch paths.
+- Full Jest and lint are usable gates and pass or have documented, isolated non-launch exceptions.
+- Strict line-limit gate passes for all non-generated source files.
+- No fake purchase, reward, analytics, or persistence implementations remain in launch paths.
+- Session completion is idempotent across duplicate events, offline replay, persistence retry, and app restart.
+- First-week user journey is coherent, accessible, observable, and backed by real services.

@@ -6,11 +6,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { sessionComplete } from '../../../utils/haptics';
 import { type CompletionSurface, resolveCompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
-import {
-  useSessionCompleteController,
-  useSessionHeadline,
-  useSessionRewardPriority,
-} from '../../../features/session-completion/hooks';
+import type { SessionCompletionConsequences } from '../../../features/session-completion/story-consequence-service';
+import { useSessionCompleteController } from '../../../features/session-completion/hooks';
 import type { SessionSummary } from '../../../session/types';
 import { useTomorrowPreviewForSession } from '../../../features/home-spine/hooks';
 import { useContractForSession, useReflectOnContract } from '../../../features/focus-contract/hooks';
@@ -25,18 +22,11 @@ import { SessionCompleteRewardsPhase } from './SessionCompleteRewardsPhase';
 import { SessionCompleteNextSteps } from './SessionCompleteNextSteps';
 import { SessionCompleteOverlays } from './SessionCompleteOverlays';
 import { SessionContractReflectionCard } from './SessionContractReflectionCard';
-import { SessionHeadlineReward } from './SessionHeadlineReward';
-import { SessionRewardPriorityRows } from './SessionRewardPriorityRows';
 
 type SessionCompleteContentProps = {
   sessionId: string;
   summary: SessionSummary;
-  consequences?: {
-    boss?: NonNullable<Parameters<typeof SessionCompleteHeroSection>[0]['consequences']>['boss'];
-    streak?: NonNullable<Parameters<typeof SessionCompleteHeroSection>[0]['consequences']>['streak'];
-    challenge?: NonNullable<Parameters<typeof SessionCompleteHeroSection>[0]['consequences']>['challenge'];
-    rival?: NonNullable<Parameters<typeof SessionCompleteHeroSection>[0]['consequences']>['rival'];
-  };
+  consequences?: SessionCompletionConsequences;
 };
 
 export function SessionCompleteContent({
@@ -54,16 +44,6 @@ export function SessionCompleteContent({
   const primaryGoal = useOnboardingStore((state) => state.goal);
   const premiumStatus = usePremiumStatus();
   const reflectContract = useReflectOnContract();
-  const headline = useSessionHeadline({
-    consequences,
-    contractStatus: contractQuery.contract?.completionStatus ?? null,
-    summary,
-  });
-  const rewardPriority = useSessionRewardPriority({
-    consequences,
-    contractStatus: contractQuery.contract?.completionStatus ?? null,
-    summary,
-  });
   const policy = resolveCompletionExperiencePolicy({
     consequences,
     featureAvailability: {
@@ -137,11 +117,6 @@ export function SessionCompleteContent({
           }}
           showsVerticalScrollIndicator={false}
         >
-            <SessionHeadlineReward headline={headline} />
-            {!isHidden('multiple_reward_rows') ? (
-              <SessionRewardPriorityRows priority={rewardPriority} />
-            ) : null}
-
             {!isHidden('contract_reflection_card') ? (
               <SessionContractReflectionCard
                 contract={contractQuery.contract}
@@ -152,9 +127,7 @@ export function SessionCompleteContent({
 
             <SessionCompleteHeroSection
               controller={controller}
-              policy={policy}
               summary={summary}
-              consequences={consequences}
             />
 
             <SessionCompleteRewardsPhase
@@ -162,6 +135,7 @@ export function SessionCompleteContent({
               summary={summary}
               sessionId={sessionId}
               policy={policy}
+              consequences={consequences}
             />
 
             <SessionCompleteNextSteps

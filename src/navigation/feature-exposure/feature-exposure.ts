@@ -1,7 +1,8 @@
 import {
-  getFeatureAvailability,
+  getFeatureAvailabilityFor,
   isFeatureAvailableForNavigation,
   type FeatureAccessMap,
+  type FeatureKey,
 } from '../../features/liveops-config';
 
 export interface ExposureInputs {
@@ -44,8 +45,8 @@ export function buildRootExposureFlags({
   features,
   isEnabled: _isEnabled,
 }: BuildRootExposureParams): RootExposureFlags {
-  const resolve = (featureKey: keyof FeatureAccessMap): boolean => {
-    const availability = getFeatureAvailability(features[featureKey]);
+  const resolve = (featureKey: FeatureKey): boolean => {
+    const availability = getFeatureAvailabilityFor(featureKey, features[featureKey]);
     return isFeatureAvailableForNavigation(availability);
   };
 

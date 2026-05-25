@@ -57,7 +57,7 @@ export const ActiveSessionHero: React.FC<ActiveSessionHeroProps> = (props) => (
         completionPercentage={props.completionPercentage}
         glowStyle={props.glowStyle}
         outerStrokeDashoffset={props.outerStrokeDashoffset}
-        perfectFocusActive={props.perfectFocusActive}
+        perfectFocusActive={props.displayPolicy.showPurityScore ? props.perfectFocusActive : false}
         perfectFocusBurst={props.perfectFocusBurst}
         phaseAccent={props.phaseAccent}
         pulseStyle={props.pulseStyle}
@@ -100,7 +100,7 @@ function SessionTargetBadge(props: ActiveSessionHeroProps): React.JSX.Element {
       >
         <Icon name={props.phaseIcon} size="sm" color={props.phaseAccent} />
         <Text variant="label" style={{ color: props.phaseAccent }}>
-          {props.phaseLabel.toUpperCase()}
+          {props.phaseLabel}
         </Text>
       </Box>
       {props.displayPolicy.showStudyTarget ? (
@@ -116,14 +116,14 @@ function FocusSignalPills(props: ActiveSessionHeroProps): React.JSX.Element | nu
   if (props.displayPolicy.showBossTinyIndicator) {
     return (
       <SignalPill color={props.themeColors.error} withAlpha={props.withAlpha}>
-        Boss awaits completion
+        Challenge waiting
       </SignalPill>
     );
   }
   if (props.perfectFocusActive && props.displayPolicy.heroDensity !== 'minimal') {
     return (
       <SignalPill color={props.themeColors.warning} withAlpha={props.withAlpha}>
-        Perfect Focus
+        Clean focus
       </SignalPill>
     );
   }
@@ -149,7 +149,7 @@ function SignalPill(props: {
 }
 
 function MomentumDots(props: ActiveSessionHeroProps): React.JSX.Element | null {
-  if (!props.displayPolicy.showMomentumScore) return null;
+  if (!props.displayPolicy.showMomentumScore) {return null;}
   return (
     <Box flexDirection="row" alignItems="center" justifyContent="center" gap="sm" mt="lg">
       {props.momentumScores.length > 0 ? props.momentumScores.map((score, index) => (
@@ -167,7 +167,7 @@ function MomentumDots(props: ActiveSessionHeroProps): React.JSX.Element | null {
 }
 
 function DailyProgress(props: ActiveSessionHeroProps): React.JSX.Element | null {
-  if (!props.displayPolicy.showDailyProgress) return null;
+  if (!props.displayPolicy.showDailyProgress) {return null;}
   return (
     <Text variant="caption" color="text.secondary" textAlign="center" mt="sm">
       {`${formatTime(props.todayFocusSeconds)} today - ${Math.round(props.dailyProgress)}% of 2h goal`}
@@ -176,7 +176,7 @@ function DailyProgress(props: ActiveSessionHeroProps): React.JSX.Element | null 
 }
 
 function SessionStats(props: ActiveSessionHeroProps): React.JSX.Element | null {
-  if (props.displayPolicy.heroDensity === 'minimal') return null;
+  if (props.displayPolicy.heroDensity === 'minimal') {return null;}
   return (
     <Box flexDirection="row" justifyContent="center" gap="xl" mt="xl">
       <Stat label="Elapsed" value={formatTime(props.elapsedSeconds)} />

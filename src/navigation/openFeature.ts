@@ -1,5 +1,5 @@
 import type { NavigationProp } from '@react-navigation/native';
-import { getFeatureAvailability } from '../features/liveops-config/feature-availability';
+import { getFeatureAvailabilityFor } from '../features/liveops-config/feature-availability';
 import type { FeatureAccess, FeatureKey } from '../features/liveops-config/feature-access';
 import { createDebugger } from '../utils/debug';
 import * as Sentry from '@sentry/react-native';
@@ -28,7 +28,7 @@ export function openFeature(
   targetParams?: Record<string, unknown>,
   options?: OpenFeatureOptions,
 ): OpenFeatureResult {
-  const availability = getFeatureAvailability(featureAccess);
+  const availability = getFeatureAvailabilityFor(feature, featureAccess);
 
   const base: Omit<OpenFeatureResult, 'navigated' | 'fallbackTaken'> = {
     success: false,
@@ -83,7 +83,7 @@ export function resolveFeatureRoute(
   feature: FeatureKey,
   featureAccess: FeatureAccess,
 ): { canNavigate: boolean; state: string; reason: string } {
-  const availability = getFeatureAvailability(featureAccess);
+  const availability = getFeatureAvailabilityFor(feature, featureAccess);
   return {
     canNavigate: availability.canNavigate && availability.canRegisterRoute,
     state: availability.state,

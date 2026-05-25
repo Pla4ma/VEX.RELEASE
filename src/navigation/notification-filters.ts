@@ -1,5 +1,5 @@
 import {
-  getFeatureAvailability,
+  getFeatureAvailabilityFor,
   isFeatureAvailableForNavigation,
 } from '../features/liveops-config';
 import type { FeatureAccessMap } from '../features/liveops-config/feature-access';
@@ -14,7 +14,7 @@ export function canUseFeature(
 ): boolean {
   if (!feature) return true;
   const access = featureAccess?.[feature];
-  return access ? isFeatureAvailableForNavigation(getFeatureAvailability(access)) : false;
+  return access ? isFeatureAvailableForNavigation(getFeatureAvailabilityFor(feature, access)) : false;
 }
 
 export function getAvailableNotificationFilters(

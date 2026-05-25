@@ -30,28 +30,10 @@ export function initializeProgressionRewardsIntegration(): () => void {
       });
     }
 
-    // Milestone reward for every 10 levels
-    if (event.newLevel % 10 === 0) {
-      createReward({
-        userId: event.userId,
-        type: 'COINS',
-        amount: event.newLevel * 10,
-        triggerType: 'LEVEL_UP',
-      }).catch((error) => debug.error('Failed to create milestone reward:', error as Error));
-    }
   });
 
   const unsubscribeXpAdded = eventBus.subscribe('progression:xp_added', (event) => {
-    // Check for perfect session bonus
-    if (event.progressPercent === 100 && event.streakBonus > 0) {
-      createReward({
-        userId: event.userId,
-        type: 'GEMS',
-        amount: 1,
-        triggerType: 'SESSION_COMPLETE',
-        expiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24h expiry
-      }).catch((error) => debug.error('Failed to create perfect session reward:', error as Error));
-    }
+    debug.debug('Progression XP observed', { userId: event.userId });
   });
 
   return () => {
@@ -67,9 +49,8 @@ function calculateLevelUpReward(level: number, rewardType: string): number {
     case 'XP_BOOST':
       return baseReward * 2;
     case 'COINS':
-      return baseReward;
     case 'GEMS':
-      return Math.floor(level / 10) + 1;
+      return baseReward;
     default:
       return baseReward;
   }

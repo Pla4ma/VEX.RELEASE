@@ -1,10 +1,10 @@
 import type { FeatureAccessMap, FeatureKey } from './feature-access';
-import { getFeatureAvailability, type FeatureAvailability } from './feature-availability';
+import { getFeatureAvailabilityFor, type FeatureAvailability } from './feature-availability';
 
 let _featureAccessMap: FeatureAccessMap | null = null;
 
 /** Centralized degraded features — written by useFeatureHealth, read by useFeatureAccess. */
-let _degradedFeatures: Set<FeatureKey> = new Set();
+let _degradedFeatures: Set<FeatureKey> = new Set(['premium_paywall']);
 const degradedFeatureListeners = new Set<() => void>();
 
 export function setFeatureAccessMap(map: FeatureAccessMap): void {
@@ -48,5 +48,5 @@ export function getAvailabilityFor(key: FeatureKey): FeatureAvailability {
       reason: `Feature key "${key}" not found in access map`,
     };
   }
-  return getFeatureAvailability(feature, key);
+  return getFeatureAvailabilityFor(key, feature);
 }

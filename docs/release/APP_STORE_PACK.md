@@ -11,7 +11,7 @@ VEX helps you start focused work quickly, finish honestly, and understand what c
 
 Before each session, VEX recommends one useful next action. You can commit to what you intend to do, start the timer, and keep working with an interface built for quiet focus. When the session ends, VEX shows your headline reward first, then the details behind your Focus Score, streak, companion growth, and next step.
 
-Over time, VEX builds a personal record of your focus patterns: best windows, completed contracts, personal bests, companion memories, and monthly insights. Premium adds deeper coaching, advanced analytics, monthly reports, companion cosmetics, cosmetic season access, and extra personal quests while the core session loop stays useful for free.
+Over time, VEX builds a personal record of your focus patterns: best windows, completed contracts, personal bests, companion memories, and monthly insights. Premium appears only when live subscriptions and entitlements are verified healthy; when enabled, it adds deeper coach memory, advanced study and deep work tools, progress intelligence, visual identity, premium session modes, and recovery planning while the core session loop stays useful for free.
 
 ## Keywords
 focus timer, productivity, pomodoro, streak, study, flow state, habit tracker
@@ -24,7 +24,7 @@ https://vex.app/privacy
 
 ## Review Notes for App Reviewers
 - Reviewer access: create a sandbox reviewer account in Supabase Auth before upload and enter those credentials in App Store Connect Review Notes.
-- Subscription: 7-day free trial, then configured RevenueCat monthly or annual price. Use a sandbox test account.
+- Subscription: show only if RevenueCat offerings and entitlement checks are healthy. Use a sandbox test account when subscriptions are enabled.
 - Offline mode: disable Wi-Fi during a session. The session completes locally and syncs when connectivity returns.
 - Notifications: requested after first-session value is shown, not on launch.
 - No user-generated social feed is enabled at launch.
@@ -57,7 +57,7 @@ Voice Control: Manual verification required before submission.
 3. Active session timer in progress.
 4. Session complete with headline reward.
 5. Companion screen with memory timeline.
-6. Paywall if subscriptions are enabled.
+6. Paywall only if RevenueCat subscriptions and entitlements are verified healthy.
 
 ## Apple Source Checks
 - App uploads from April 28, 2026 require current SDK minimums including iOS and iPadOS 26 SDK or later.

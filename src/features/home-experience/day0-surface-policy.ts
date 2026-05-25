@@ -35,11 +35,11 @@ const BLOCKED_ON_DAY0: HomeSurfaceKey[] = [
 ];
 
 const FULL_FEATURE_CARD_SURFACES: HomeSurfaceKey[] = [
+  'study_layer',
   'boss_compact',
   'boss_full_cta',
   'challenge_teaser',
   'weekly_quest',
-  'study_layer',
   'progress_detail',
 ];
 
@@ -67,6 +67,11 @@ export interface Day0PolicyResult {
   valid: boolean;
   violations: string[];
   corrected: HomeSurfaceMap;
+}
+
+function getVisibleEntries(map: Record<HomeSurfaceKey, HomeSurfaceDecision>): [HomeSurfaceKey, HomeSurfaceDecision][] {
+  return Object.entries(map)
+    .filter(([, v]) => v !== 'hidden' && v !== 'blocked') as [HomeSurfaceKey, HomeSurfaceDecision][];
 }
 
 export function enforceDay0SurfacePolicy(
@@ -98,7 +103,7 @@ export function enforceDay0SurfacePolicy(
       const val = corrected[key];
       if (val === 'secondary' || val === 'primary' || val === 'spotlight') {
         violations.push(`Full feature card "${key}" not allowed on Day 0, got "${val}"`);
-        corrected[key] = 'hidden';
+        corrected[key] = key === 'study_layer' ? 'tiny_tease' : 'hidden';
       }
     }
   }
@@ -110,21 +115,18 @@ export function enforceDay0SurfacePolicy(
     }
   }
 
-  const visibleEntries = Object.entries(corrected)
-    .filter(([, v]) => v !== 'hidden' && v !== 'blocked') as [HomeSurfaceKey, HomeSurfaceDecision][];
+  let visibleEntries = getVisibleEntries(corrected);
 
   if (visibleEntries.length > limits.maxVisibleSurfaces) {
     violations.push(
       `Day 0 has ${visibleEntries.length} visible surfaces, max ${limits.maxVisibleSurfaces}`,
     );
-    const sorted = [...visibleEntries].sort(
-      ([, a], [, b]) => surfacePriority(a) - surfacePriority(b),
-    );
+    const sorted = [...visibleEntries].sort(([, a], [, b]) => surfacePriority(a) - surfacePriority(b));
     while (sorted.length > limits.maxVisibleSurfaces) {
       const [dropKey] = sorted.shift()!;
       corrected[dropKey] = 'hidden';
-      sorted.length += 1; // Remove from sorted
     }
+    visibleEntries = getVisibleEntries(corrected);
   }
 
   const primaryCount = visibleEntries.filter(([, v]) => v === 'primary').length;
@@ -140,6 +142,7 @@ export function enforceDay0SurfacePolicy(
         }
       }
     }
+    visibleEntries = getVisibleEntries(corrected);
   }
 
   if (primaryCount === 0) {
@@ -160,19 +163,18 @@ export function enforceDay0SurfacePolicy(
         }
       }
     }
+    visibleEntries = getVisibleEntries(corrected);
   }
 
   const teaserCount = visibleEntries.filter(([, v]) => v === 'tiny_tease').length;
   if (teaserCount > limits.maxTeasers) {
     violations.push(`Day 0 has ${teaserCount} teasers, max ${limits.maxTeasers}`);
     const teasers = visibleEntries.filter(([, v]) => v === 'tiny_tease');
-    const sorted = [...teasers].sort(
-      ([a], [b]) => {
-        const idxA = DAY0_PERMITTED.indexOf(a);
-        const idxB = DAY0_PERMITTED.indexOf(b);
-        return (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB);
-      },
-    );
+    const sorted = [...teasers].sort(([a], [b]) => {
+      const idxA = DAY0_PERMITTED.indexOf(a);
+      const idxB = DAY0_PERMITTED.indexOf(b);
+      return (idxA === -1 ? 999 : idxA) - (idxB === -1 ? 999 : idxB);
+    });
     while (sorted.length > limits.maxTeasers) {
       const [dropKey] = sorted.pop()!;
       corrected[dropKey] = 'hidden';

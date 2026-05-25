@@ -4,7 +4,7 @@ Date: 2026-05-21
 
 ## Central Model
 
-Source of truth: `src_impl/features/personalization`.
+Source of truth: `src/features/personalization`.
 
 Required profile fields:
 - `primaryGoal`

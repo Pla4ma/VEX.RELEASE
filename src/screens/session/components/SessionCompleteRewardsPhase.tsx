@@ -6,12 +6,14 @@ import { CompanionGrowthSection } from './CompanionGrowthSection';
 import { SessionCompletionFollowThrough } from './SessionCompletionFollowThrough';
 import { useSessionCompleteController } from '../../../features/session-completion/hooks';
 import type { CompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
+import type { SessionCompletionConsequences } from '../../../features/session-completion/story-consequence-service';
 import type { SessionSummary } from '../../../session/types';
 
 type SessionCompleteController = ReturnType<typeof useSessionCompleteController>;
 
 interface SessionCompleteRewardsPhaseProps {
   controller: SessionCompleteController;
+  consequences?: SessionCompletionConsequences;
   summary: SessionSummary;
   sessionId: string;
   policy: CompletionExperiencePolicy;
@@ -19,6 +21,7 @@ interface SessionCompleteRewardsPhaseProps {
 
 export function SessionCompleteRewardsPhase({
   controller,
+  consequences,
   summary,
   sessionId,
   policy,
@@ -27,18 +30,18 @@ export function SessionCompleteRewardsPhase({
   const advancedRef = useRef(false);
 
   useEffect(() => {
-    if (controller.rewards.revealStage === 1 && !advancedRef.current) {
+    if (controller.rewards.completionStage === 1 && !advancedRef.current) {
       advancedRef.current = true;
       void controller.rewards.actions.handleRevealComplete();
     }
-  }, [controller.rewards.revealStage, controller.rewards.actions]);
+  }, [controller.rewards.completionStage, controller.rewards.actions]);
 
-  if (controller.rewards.revealStage < 1) {
+  if (controller.rewards.completionStage < 1) {
     return null;
   }
 
-  const showXpAnimation = controller.rewards.revealStage >= 1;
-  const showRewards = controller.rewards.revealStage >= 2;
+  const showXpAnimation = controller.rewards.completionStage >= 1;
+  const showRewards = controller.rewards.completionStage >= 2;
 
   return (
     <>
@@ -57,6 +60,9 @@ export function SessionCompleteRewardsPhase({
           <SessionCompletionRewardsSection
             levelMetric={controller.levelMetric}
             masteryState={controller.masteryState}
+            consequences={consequences}
+            nextActionLabel={controller.nextAction?.ctaLabel ?? null}
+            policy={policy}
             progressionError={controller.progressionError}
             progressionLoading={controller.progressionLoading}
             rewards={controller.rewards}

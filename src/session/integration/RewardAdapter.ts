@@ -33,14 +33,6 @@ export class RewardAdapter {
         await this.grantXP(summary.xpEarned, summary);
         rewards.xpGranted = summary.xpEarned;
       }
-      if (summary.coinsEarned > 0) {
-        await this.grantCoins(summary.coinsEarned, summary);
-        rewards.coinsGranted = summary.coinsEarned;
-      }
-      if (summary.gemsEarned > 0) {
-        await this.grantGems(summary.gemsEarned, summary);
-        rewards.gemsGranted = summary.gemsEarned;
-      }
       const bonusRewards = this.calculateBonusRewards(summary);
       for (const bonus of bonusRewards) {
         await this.grantBonus(bonus, summary);
@@ -74,30 +66,6 @@ export class RewardAdapter {
       source: "SESSION_COMPLETE",
     });
     debug.debug("XP granted: %d", amount);
-  }
-  private async grantCoins(
-    amount: number,
-    _summary: SessionSummary,
-  ): Promise<void> {
-    eventBus.publish("economy:add_currency", {
-      userId: this.userId!,
-      type: "COINS",
-      amount,
-      source: "SESSION_REWARD",
-    });
-    debug.debug("Coins granted: %d", amount);
-  }
-  private async grantGems(
-    amount: number,
-    _summary: SessionSummary,
-  ): Promise<void> {
-    eventBus.publish("economy:add_currency", {
-      userId: this.userId!,
-      type: "GEMS",
-      amount,
-      source: "SESSION_BONUS",
-    });
-    debug.debug("Gems granted: %d", amount);
   }
   private async grantBonus(
     bonus: { type: string; amount: number; description: string },

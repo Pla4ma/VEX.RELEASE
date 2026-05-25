@@ -16,18 +16,7 @@ function toRewardType(rewardType: ReturnType<typeof checkMilestone> extends infe
     ? R
     : never
   : never): RewardType | null {
-  switch (rewardType) {
-    case 'XP':
-    case 'COINS':
-    case 'GEMS':
-    case 'ITEM':
-    case 'STREAK_SHIELD':
-      return rewardType;
-    case 'BADGE':
-      return null;
-    default:
-      return null;
-  }
+  return rewardType === 'XP' ? 'XP' : null;
 }
 
 /**
@@ -58,16 +47,7 @@ export function initializeStreaksRewardsIntegration(): () => void {
   const unsubscribeBreak = eventBus.subscribe('streak:broken', (event) => {
     if (!event.userId) {return;}
 
-    // Create comeback reward for broken streak
-    createReward({
-      userId: event.userId,
-      type: 'STREAK_SHIELD',
-      amount: 1,
-      triggerType: 'COMEBACK',
-      expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
-    }).catch((error) => {
-      debug.error('Failed to create comeback reward:', error as Error);
-    });
+    debug.debug('Streak break observed without spendable reward', { userId: event.userId });
   });
 
   return () => {

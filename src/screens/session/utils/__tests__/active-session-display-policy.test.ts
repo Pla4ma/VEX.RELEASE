@@ -15,6 +15,9 @@ describe('resolveActiveSessionDisplayPolicy', () => {
 
     expect(policy.showBossHUD).toBe(false);
     expect(policy.showBossTinyIndicator).toBe(false);
+    expect(policy.showCompanionLayer).toBe(false);
+    expect(policy.showDailyProgress).toBe(false);
+    expect(policy.showPurityScore).toBe(false);
   });
 
   it('shows study target, not boss HUD, for study active focus', () => {
@@ -42,6 +45,7 @@ describe('resolveActiveSessionDisplayPolicy', () => {
     expect(policy.showBossTinyIndicator).toBe(true);
     expect(policy.showBossHUD).toBe(false);
     expect(policy.showMomentumScore).toBe(false);
+    expect(policy.showDailyProgress).toBe(false);
   });
 
   it('hides coach banner during normal active focus', () => {
@@ -96,6 +100,32 @@ describe('resolveActiveSessionDisplayPolicy', () => {
     expect(policy.showModeOverlay).toBe(false);
     expect(policy.showCoachBanner).toBe(false);
     expect(policy.showContractReminder).toBe(false);
+  });
+
+  it('allows opted-in study overlays only after focus is paused', () => {
+    const policy = resolveActiveSessionDisplayPolicy({
+      focusStage: 'paused',
+      motivationStyle: 'study_focused',
+      plannedQuizBreakOptedIn: true,
+      primaryGoal: 'study',
+      sessionMode: SessionMode.STUDY,
+    });
+
+    expect(policy.showModeOverlay).toBe(true);
+  });
+
+  it('moves game rewards to completion instead of active HUD', () => {
+    const policy = resolveActiveSessionDisplayPolicy({
+      bossIntensity: 'visible',
+      focusStage: 'completion',
+      motivationStyle: 'game_like',
+      primaryGoal: 'work',
+      sessionMode: SessionMode.CHALLENGE,
+    });
+
+    expect(policy.showBossHUD).toBe(false);
+    expect(policy.showBossTinyIndicator).toBe(false);
+    expect(COMPLETION_REWARD_EFFECTS).toContain('boss_damage_reveal');
   });
 
   it('keeps boss and reward effects on completion', () => {

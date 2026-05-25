@@ -33,6 +33,24 @@ function findAllTsFiles(root: string): string[] {
   return results;
 }
 
+function findAllMarkdownFiles(root: string): string[] {
+  const results: string[] = [];
+  try {
+    const entries = readdirSync(root, { withFileTypes: true });
+    for (const entry of entries) {
+      const fullPath = join(root, entry.name);
+      if (entry.isDirectory() && entry.name !== 'archive') {
+        results.push(...findAllMarkdownFiles(fullPath));
+      } else if (/\.md$/.test(entry.name)) {
+        results.push(fullPath);
+      }
+    }
+  } catch {
+    // directory may not exist
+  }
+  return results;
+}
+
 describe('Source Truth — src is canonical', () => {
   it('src/ directory exists', () => {
     expect(existsSync(SRC)).toBe(true);
@@ -77,8 +95,8 @@ describe('Docs — final release language', () => {
       join(docsDir, 'VEX_FINAL_RELEASE_SCOPE.md'),
       'utf8',
     );
-    expect(content).toContain('Final Release');
-    expect(content).toContain('Final Release Includes');
+    expect(content).toMatch(/final release/i);
+    expect(content).not.toMatch(/public[-\s]?v1|beta/i);
   });
 
   it('VEX_PRODUCT_CONSTITUTION.md exists', () => {
@@ -104,6 +122,25 @@ describe('Docs — final release language', () => {
     );
     expect(content).toContain('VEX_FINAL_RELEASE_SCOPE.md');
     expect(content).toContain('src/ is the canonical');
+    expect(content).not.toMatch(/public[-\s]?v1|beta/i);
+  });
+
+  it('active docs do not use beta/public-v1 or instruct edits in src_impl', () => {
+    const docs = findAllMarkdownFiles(docsDir);
+    const violations: string[] = [];
+
+    for (const doc of docs) {
+      const content = readFileSync(doc, 'utf8');
+      if (
+        /public[-\s]?v1|beta/i.test(content)
+        || /source of truth:\s*`?src_impl/i.test(content)
+        || /must target src_impl/i.test(content)
+      ) {
+        violations.push(doc.replace(PROJECT_ROOT, ''));
+      }
+    }
+
+    expect(violations).toEqual([]);
   });
 
   it('legacy V1 scope doc no longer exists', () => {

@@ -24,6 +24,9 @@ jest.mock('../repository', () => ({
 jest.mock('../completion-subsystems', () => ({
   applyCompletionSubsystems: jest.fn(),
 }));
+jest.mock('../../session-story/StoryGenerator', () => ({
+  generateStoryForCompletedSession: jest.fn(),
+}));
 jest.mock('../companion-memory-integration', () => ({
   recordCompletionCompanionMemories: jest.fn().mockResolvedValue([]),
 }));
@@ -64,12 +67,14 @@ jest.mock('../ledger-service', () => ({
 describe('orchestrateSessionCompletion flow', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    require('../idempotency').resetCompletionIdempotencyForTests();
     require('../../../lib/repository/base').getConnectionState.mockReturnValue('online');
   });
 
   it('creates ledger and updates all systems for normal completion', async () => {
     const { createCompletionLedger: persist, getCompletionLedgerByIdempotencyKey } = require('../repository');
     const { applyCompletionSubsystems } = require('../completion-subsystems');
+    const { generateStoryForCompletedSession } = require('../../session-story/StoryGenerator');
 
     getCompletionLedgerByIdempotencyKey.mockResolvedValue(null);
     persist.mockResolvedValue(createCompletionLedger());
@@ -86,6 +91,7 @@ describe('orchestrateSessionCompletion flow', () => {
 
     expect(persist).toHaveBeenCalled();
     expect(applyCompletionSubsystems).toHaveBeenCalled();
+    expect(generateStoryForCompletedSession).not.toHaveBeenCalled();
   });
 
   it('skips processing for duplicate idempotency key', async () => {
@@ -127,5 +133,35 @@ describe('orchestrateSessionCompletion flow', () => {
       feature: 'sessions',
       operation: 'CREATE',
     }));
+  });
+
+  it('does not run subsystems twice for concurrent duplicate completions', async () => {
+    const { createCompletionLedger: persist, getCompletionLedgerByIdempotencyKey } = require('../repository');
+    const { applyCompletionSubsystems } = require('../completion-subsystems');
+
+    getCompletionLedgerByIdempotencyKey.mockResolvedValue(null);
+    persist.mockResolvedValue(createCompletionLedger());
+    applyCompletionSubsystems.mockResolvedValue({
+      degradedSystems: [],
+      ledger: createCompletionLedger(),
+    });
+
+    await Promise.all([
+      orchestrateSessionCompletion({
+        timestamp: 2000000,
+        sessionId: SESSION_ID,
+        summary: createSessionSummary(),
+        userId: USER_ID,
+      }),
+      orchestrateSessionCompletion({
+        timestamp: 2000000,
+        sessionId: SESSION_ID,
+        summary: createSessionSummary(),
+        userId: USER_ID,
+      }),
+    ]);
+
+    expect(persist).toHaveBeenCalledTimes(1);
+    expect(applyCompletionSubsystems).toHaveBeenCalledTimes(1);
   });
 });

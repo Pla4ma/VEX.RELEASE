@@ -1,5 +1,5 @@
 import {
-  getFeatureAvailability,
+  getFeatureAvailabilityFor,
   isFeatureAvailableForNavigation,
   type FeatureAccessMap,
   type FeatureKey,
@@ -50,7 +50,7 @@ export function canRegisterFeatureRoute(
   if (!feature) {
     return false;
   }
-  return isFeatureAvailableForNavigation(getFeatureAvailability(features[feature]));
+  return isFeatureAvailableForNavigation(getFeatureAvailabilityFor(feature, features[feature]));
 }
 
 export function canNavigateToRegisteredRoute(
@@ -61,7 +61,7 @@ export function canNavigateToRegisteredRoute(
   if (!feature) {
     return true;
   }
-  return isFeatureAvailableForNavigation(getFeatureAvailability(features[feature]));
+  return isFeatureAvailableForNavigation(getFeatureAvailabilityFor(feature, features[feature]));
 }
 
 const ARCHIVED_ROUTE_SET: ReadonlySet<string> = new Set([

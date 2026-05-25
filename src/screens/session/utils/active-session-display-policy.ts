@@ -123,6 +123,7 @@ export function resolveActiveSessionDisplayPolicy(
 ): ActiveSessionDisplayPolicy {
   const input = ActiveSessionDisplayPolicyInputSchema.parse(rawInput);
   const isPausedOrInterrupted = input.focusStage === 'paused' || input.focusStage === 'interruption';
+  const isActiveFocus = input.focusStage === 'active';
   const isStudy = isStudyInput(input);
   const isGameLike = isGameLikeInput(input);
   const bossVisible = input.bossIntensity !== 'hidden';
@@ -131,14 +132,14 @@ export function resolveActiveSessionDisplayPolicy(
   return ActiveSessionDisplayPolicySchema.parse({
     heroDensity: isPausedOrInterrupted ? 'standard' : isGameLike ? 'standard' : 'minimal',
     showBossHUD: false,
-    showBossTinyIndicator: isGameLike && bossVisible && !isPausedOrInterrupted,
+    showBossTinyIndicator: isGameLike && bossVisible && isActiveFocus,
     showCoachBanner: isPausedOrInterrupted && input.motivationStyle === 'coach_led',
-    showCompanionLayer: !isPausedOrInterrupted && !isStudy,
+    showCompanionLayer: isPausedOrInterrupted && !isStudy,
     showContractReminder: isPausedOrInterrupted,
     showDailyProgress: isPausedOrInterrupted,
     showModeOverlay: plannedQuizBreakVisible,
     showMomentumScore: isGameLike && isPausedOrInterrupted,
     showPurityScore: false,
-    showStudyTarget: isStudy,
+    showStudyTarget: isStudy && isActiveFocus,
   });
 }

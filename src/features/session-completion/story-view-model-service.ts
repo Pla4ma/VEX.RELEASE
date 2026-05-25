@@ -65,12 +65,23 @@ export function buildPostSessionStoryViewModel(input: {
 }): PostSessionStoryViewModel {
   const ledger = CompletionLedgerSchema.parse(input.ledger);
   const degradedWarnings = Array.from(new Set(input.degradedWarnings));
+  const sessionMode = input.summary.sessionMode ?? ledger.mode;
+  const reflectionSummary = {
+    ...input.summary,
+    modeBonus: input.summary.modeBonus ?? 0,
+    pausedTime: input.summary.pausedTime ?? input.summary.pausedDuration ?? 0,
+    sessionMode,
+  };
   const reflection = buildCompletionReflection({
-    primaryGoal: input.summary.sessionMode === 'STUDY' ? 'STUDY' : null,
+    primaryGoal: sessionMode === 'STUDY' ? 'STUDY' : null,
     progressLabel: ledger.focusScoreDelta >= 0 ? `+${ledger.focusScoreDelta} Focus Score` : `${ledger.focusScoreDelta} Focus Score`,
-    sessionSummary: input.summary,
+    sessionSummary: reflectionSummary,
     streakDays: ledger.streakResult.newDays,
   });
+  const reflectionBody =
+    input.focusContract?.completionStatus === 'done'
+      ? `${input.focusContract.taskDescription} landed. ${reflection.reflection}`
+      : reflection.reflection;
   const nextAction = (() => {
     try {
       return buildPostSessionNextAction({ summary: input.summary });
@@ -93,7 +104,7 @@ export function buildPostSessionStoryViewModel(input: {
   const beats = [
     { accessibilityLabel: `Result beat. You focused for ${formatMinutes(ledger.effectiveFocusedSeconds)}.`, body: `You protected ${formatMinutes(ledger.effectiveFocusedSeconds)} in ${input.summary.sessionMode ?? ledger.mode}.`, companionLine: null, id: 'result', kind: 'result' as const, metric: { label: 'Focused', value: formatMinutes(ledger.effectiveFocusedSeconds) }, title: `You focused for ${formatMinutes(ledger.effectiveFocusedSeconds)}.` },
     { accessibilityLabel: `Grade beat. ${buildGradeBody(ledger)}`, body: buildGradeBody(ledger), companionLine: null, id: 'grade', kind: 'grade' as const, metric: { label: 'Grade', value: `${ledger.grade} · ${ledger.gradeScore}` }, title: `Grade ${ledger.grade}` },
-    { accessibilityLabel: `Meaning beat. ${reflection.reflection}`, body: reflection.reflection, companionLine: null, id: 'meaning', kind: 'meaning' as const, metric: { label: 'Focus Score', value: ledger.focusScoreDelta >= 0 ? `+${ledger.focusScoreDelta}` : `${ledger.focusScoreDelta}` }, title: 'What changed today' },
+    { accessibilityLabel: `Meaning beat. ${reflectionBody}`, body: reflectionBody, companionLine: null, id: 'meaning', kind: 'meaning' as const, metric: { label: 'Focus Score', value: ledger.focusScoreDelta >= 0 ? `+${ledger.focusScoreDelta}` : `${ledger.focusScoreDelta}` }, title: 'What changed today' },
     buildCompanionBeat(input.companionMemory, ledger.companionReactionId),
     personalBestProof ? { accessibilityLabel: `Personal best beat. Purity reached ${personalBestProof.newValue}.`, body: personalBestBody ?? 'You set a cleaner mark than your last saved best.', companionLine: null, id: 'personal-best', kind: 'personal_best' as const, metric: { label: 'Purity record', value: personalBestProof.oldValue === null ? `${personalBestProof.newValue}` : `${personalBestProof.oldValue} -> ${personalBestProof.newValue}` }, title: 'This one raised your ceiling.' } : null,
     { accessibilityLabel: `Tomorrow beat. ${reflection.nextAction}`, body: input.companionPromise ? `Tomorrow, ${input.companionPromise.targetDurationMinutes} minutes in ${input.companionPromise.targetMode.toLowerCase()} is enough to keep the thread alive.` : reflection.nextAction, companionLine: input.companionPromise?.status === 'missed' ? 'Yesterday got away. Start small and rebuild the thread.' : null, id: 'tomorrow', kind: 'tomorrow' as const, metric: input.companionPromise ? { label: 'Tomorrow', value: `${input.companionPromise.targetDurationMinutes}m` } : { label: 'Next mode', value: nextAction?.routeParams?.presetMode ?? 'HOME' }, title: 'Tomorrow already has a shape.' },

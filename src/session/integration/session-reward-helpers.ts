@@ -1,175 +1,12 @@
-import { BonusCalculator } from "../engines/scoring/BonusCalculator";
-import {
-  getSessionModeConfig,
-  getRecoveryChainMultiplier,
-  resolveSessionMode,
-  SessionMode,
-} from "../modes";
 import { eventBus } from "../../events";
-import {
-  buildDailyModifierSummary,
-  getDailyCoinMultiplier,
-} from "../../features/live-ops/daily-modifiers";
 import type { RewardCalculationResult } from "./session-reward-types";
 export type { RewardCalculationResult } from "./session-reward-types";
+export { calculateRewards } from "./session-reward-calculation";
 import type { SessionSummary } from "../../session/types";
-export function calculateRewards(
-  streakDays: number,
-  summary: SessionSummary,
-): RewardCalculationResult {
-  const durationMinutes = Math.max(
-    0,
-    Math.floor(summary.effectiveDuration / 60000),
-  );
-  const mode = resolveSessionMode(summary.sessionMode);
-  const modeConfig = getSessionModeConfig(mode);
-  const recoveryMultiplier =
-    mode === SessionMode.RECOVERY
-      ? getRecoveryChainMultiplier(
-          Math.max(1, Math.round(summary.modeBonus / 5) + 1),
-        )
-      : 1;
-  const modeMultiplier = modeConfig.xpMultiplier * recoveryMultiplier;
-  const baseXP = durationMinutes * 10;
-  const baseCoins = Math.floor(durationMinutes / 5) * 5;
-  const baseGems = summary.streakMaintained ? 1 : 0;
-  const timeBonus = BonusCalculator.calculateTimeBonus({
-    plannedDuration: summary.plannedDuration,
-    actualDuration: summary.actualDuration,
-    completionPercentage: summary.completionPercentage,
-  });
-  const streakBonus = BonusCalculator.calculateStreakBonus({
-    currentStreak: streakDays,
-    basePoints: baseXP,
-  });
-  const streakMultiplier = BonusCalculator.getStreakMultiplier(streakDays);
-  const perfectSession =
-    summary.interruptions === 0 &&
-    summary.pauses === 0 &&
-    summary.completionPercentage >= 100;
-  const focusQuality = summary.focusPurityScore ?? summary.focusQuality;
-  const adjustedQuality = Math.max(
-    0,
-    focusQuality - summary.interruptions * 5 - summary.pauses * 2,
-  );
-  const qualityXP =
-    adjustedQuality >= 95
-      ? 150
-      : adjustedQuality >= 85
-        ? 90
-        : adjustedQuality >= 75
-          ? 50
-          : 0;
-  const difficultyXP = calculateModeDifficultyBonus(mode, baseXP, summary);
-  const dailyModifier = buildDailyModifierSummary({
-    sessionMode: mode,
-    timestamp: summary.createdAt,
-  });
-  const modeXP = Math.round(baseXP * modeMultiplier);
-  const preModifierXP =
-    modeXP +
-    timeBonus +
-    streakBonus +
-    qualityXP +
-    difficultyXP +
-    (perfectSession ? 100 : 0);
-  const dailyModifierXP = Math.max(
-    0,
-    Math.round(preModifierXP * (dailyModifier.rewardMultiplier - 1)),
-  );
-  const qualityCoins = Math.floor(qualityXP / 3);
-  const difficultyCoins = Math.floor(difficultyXP / 4);
-  const preModifierCoins =
-    baseCoins +
-    Math.floor(streakBonus / 2) +
-    Math.floor(timeBonus / 3) +
-    qualityCoins +
-    difficultyCoins +
-    (perfectSession ? 50 : 0);
-  const coinMultiplier = getDailyCoinMultiplier({
-    sessionMode: mode,
-    timestamp: summary.createdAt,
-  });
-  const dailyModifierCoins = Math.max(
-    0,
-    Math.round(preModifierCoins * (coinMultiplier - 1)),
-  );
-  return {
-    baseXP: modeXP,
-    baseCoins,
-    baseGems,
-    streakBonus: { xp: streakBonus, coins: Math.floor(streakBonus / 2) },
-    qualityBonus: { xp: qualityXP, coins: qualityCoins },
-    difficultyBonus: { xp: difficultyXP, coins: difficultyCoins },
-    dailyModifierBonus: {
-      xp: dailyModifierXP,
-      coins: dailyModifierCoins,
-      modifierId: dailyModifier.isMatched ? dailyModifier.modifier.id : null,
-    },
-    timeBonus: { xp: timeBonus, coins: Math.floor(timeBonus / 3) },
-    perfectSessionBonus: perfectSession
-      ? { xp: 100, coins: 50, gems: 5 }
-      : { xp: 0, coins: 0, gems: 0 },
-    streakMultiplier,
-    finalMultiplier:
-      streakMultiplier * modeMultiplier * dailyModifier.rewardMultiplier,
-    totalXP: Math.floor((preModifierXP + dailyModifierXP) * streakMultiplier),
-    totalCoins: Math.floor(
-      (preModifierCoins + dailyModifierCoins) * streakMultiplier,
-    ),
-    totalGems: baseGems + (perfectSession ? 5 : 0),
-    streakDays,
-    streakIncreased: false,
-    achievementsUnlocked: [],
-    challengesProgressed: [],
-    milestoneReached: null,
-    socialActivityId: null,
-  };
-}
-function calculateModeDifficultyBonus(
-  mode: SessionMode,
-  baseXP: number,
-  summary: SessionSummary,
-): number {
-  if (
-    mode === SessionMode.CHALLENGE &&
-    summary.focusQuality >= 85 &&
-    summary.completionPercentage >= 100
-  ) {
-    return Math.round(baseXP * 0.2);
-  }
-  if (mode === SessionMode.CREATIVE && summary.actualDuration >= 45 * 60000) {
-    return Math.round(baseXP * 0.15);
-  }
-  if (
-    mode === SessionMode.RECOVERY &&
-    summary.pauses === 0 &&
-    summary.interruptions === 0
-  ) {
-    return Math.round(baseXP * 0.1);
-  }
-  return 0;
-}
 export function grantRewards(
   userId: string,
   rewards: RewardCalculationResult,
 ): void {
-  if (rewards.totalCoins > 0) {
-    eventBus.publish("economy:add_currency", {
-      userId,
-      type: "COINS",
-      amount: rewards.totalCoins,
-      source: "SESSION_COMPLETE",
-    });
-  }
-  if (rewards.totalGems > 0) {
-    eventBus.publish("economy:add_currency", {
-      userId,
-      type: "GEMS",
-      amount: rewards.totalGems,
-      source: "SESSION_COMPLETE",
-    });
-  }
   eventBus.publish("session:rewards:granted", {
     sessionId: "",
     userId,
@@ -263,19 +100,9 @@ export function publishSocialActivity(
   summary: SessionSummary,
   rewards: RewardCalculationResult,
 ): void {
-  const activityId = `activity_${Date.now()}_${userId}`;
-  eventBus.publish("social:activity-created", {
-    userId,
-    activityType: "SESSION_COMPLETE",
-    data: {
-      id: activityId,
-      content: `Completed a ${Math.floor(summary.actualDuration / 60000)} minute focus session and earned ${rewards.totalXP} XP!`,
-      timestamp: Date.now(),
-      totalXp: rewards.totalXP,
-      durationMinutes: Math.floor(summary.actualDuration / 60000),
-    },
-  });
-  rewards.socialActivityId = activityId;
+  void userId;
+  void summary;
+  void rewards;
 }
 export function publishChallengeProgress(
   userId: string,

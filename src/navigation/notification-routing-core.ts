@@ -1,9 +1,3 @@
-import {
-  getFeatureAvailability,
-  isFeatureAvailableForNavigation,
-  type FeatureKey,
-} from '../features/liveops-config';
-import { getFeatureForRoute } from './feature-route-registry';
 import type { SessionStackParams } from './types';
 import type {
   NotificationAction,

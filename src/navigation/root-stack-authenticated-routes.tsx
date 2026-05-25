@@ -10,19 +10,15 @@ import StreakFuneralScreen from "../screens/streaks/StreakFuneralScreen";
 import ComebackScreen from "../screens/ComebackScreen";
 import { RootStackFeatureRoutes } from "./root-stack-feature-routes";
 import {
-  getFeatureAvailability,
-  isFeatureAvailableForNavigation,
   type FeatureAccessMap,
-  type FeatureKey,
 } from "../features/liveops-config";
 import type { ExtendedRootStackParams } from "./types";
 import type { RootExposureFlags } from "./feature-exposure";
+import { canRegisterPremiumPaywallRoute } from "./premium-route-gating";
 
 type RootStack = ReturnType<
   typeof createNativeStackNavigator<ExtendedRootStackParams>
 >;
-
-const PAYWALL_FEATURE_KEY: FeatureKey = 'premium_paywall';
 
 export function RootStackAuthenticatedRoutes({
   hasCompletedOnboarding,
@@ -38,13 +34,7 @@ export function RootStackAuthenticatedRoutes({
   Stack: RootStack;
 }): React.JSX.Element {
   const showApp = hasCompletedOnboarding || canShowHomePreview;
-  const premiumFee = features[PAYWALL_FEATURE_KEY];
-  const premiumAvailability = premiumFee
-    ? getFeatureAvailability(premiumFee, PAYWALL_FEATURE_KEY)
-    : null;
-  const canRegisterPaywall =
-    premiumAvailability !== null &&
-    isFeatureAvailableForNavigation(premiumAvailability);
+  const canRegisterPaywall = canRegisterPremiumPaywallRoute(features);
 
   if (!showApp) {
     return <Stack.Screen name="Onboarding" component={OnboardingNavigator} />;

@@ -11,16 +11,22 @@ import { useAuthStore } from '../../../store';
 import { withScreenErrorBoundary } from '../../../shared/ui/components/ScreenErrorBoundary';
 import { ReportSkeleton } from './ReportSkeleton';
 import { ReportContent } from './ReportContent';
-import type { MainStackParams } from '../../../navigation/types';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { useFeatureAccess } from '../../liveops-config';
+import { resolveMonthlyReportAction } from '../../../screens/progress/progress-actions';
 
 export const MonthlyFocusReportScreen = withScreenErrorBoundary(
   function MonthlyFocusReportScreen(): JSX.Element {
     const { theme } = useTheme();
-    const navigation = useNavigation<NativeStackNavigationProp<MainStackParams>>();
+    const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
     const { user } = useAuthStore();
     const userId = user?.id ?? '';
     const { isOffline } = useNetInfo();
     const { isPremium } = usePremiumStatus();
+    const featureAccess = useFeatureAccess();
+    const monthlyReportAction = resolveMonthlyReportAction(
+      featureAccess.features.premium_paywall,
+    );
 
     const now = new Date();
     const { report, isPending, isError, error, refetch } = useMonthlyReport({
@@ -30,6 +36,10 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
     });
 
     const handleOpenPaywall = () => {
+      if (monthlyReportAction !== 'paywall') {
+        navigation.navigate('SessionStack', { screen: 'SessionSetup' });
+        return;
+      }
       navigation.navigate('Paywall', { source: 'monthly-report', gatedFeature: 'monthly-report' });
     };
 
@@ -117,6 +127,7 @@ export const MonthlyFocusReportScreen = withScreenErrorBoundary(
           <ReportContent
             report={report}
             isPremium={isPremium}
+            canOpenPaywall={monthlyReportAction === 'paywall'}
             onOpenPaywall={handleOpenPaywall}
           />
         </ScrollView>

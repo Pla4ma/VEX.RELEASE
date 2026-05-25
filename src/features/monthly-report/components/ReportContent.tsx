@@ -7,6 +7,7 @@ import type { MonthlyFocusReportSummary } from '../types';
 interface ReportContentProps {
   report: MonthlyFocusReportSummary;
   isPremium: boolean;
+  canOpenPaywall: boolean;
   onOpenPaywall: () => void;
 }
 
@@ -87,7 +88,12 @@ function PremiumLock({ onOpenPaywall }: { onOpenPaywall: () => void }) {
   );
 }
 
-export function ReportContent({ report, isPremium, onOpenPaywall }: ReportContentProps): JSX.Element {
+export function ReportContent({
+  report,
+  isPremium,
+  canOpenPaywall,
+  onOpenPaywall,
+}: ReportContentProps): JSX.Element {
   const { theme } = useTheme();
   const deltaColor = report.scoreDelta >= 0 ? theme.colors.success.DEFAULT : theme.colors.error.DEFAULT;
   const deltaPrefix = report.scoreDelta >= 0 ? '+' : '';
@@ -145,7 +151,7 @@ export function ReportContent({ report, isPremium, onOpenPaywall }: ReportConten
         </>
       ) : (
         <>
-          <PremiumLock onOpenPaywall={onOpenPaywall} />
+          {canOpenPaywall ? <PremiumLock onOpenPaywall={onOpenPaywall} /> : null}
           <Box bg="surface.card" borderRadius="lg" p="md" style={{ opacity: 0.4 }}>
             <Text variant="h5" color="textMuted">Best Focus Window</Text>
             <Text variant="body" color="textMuted">Unlock to see your optimal focus time</Text>

@@ -1,4 +1,9 @@
-import { buildFeatureAccess, getFeatureAvailability, type FeatureKey } from '../feature-access';
+import {
+  buildFeatureAccess,
+  getFeatureAvailability,
+  getFeatureAvailabilityFor,
+  type FeatureKey,
+} from '../feature-access';
 import {
   getDegradedFeatures,
   setDegradedFeatures,
@@ -59,12 +64,15 @@ describe('feature health reactive store', () => {
       totalCompletedSessions: 40,
       degradedFeatures: new Set<FeatureKey>(['premium_paywall']),
     });
-    const availability = getFeatureAvailability(access.features.premium_paywall, 'premium_paywall');
+    const availability = getFeatureAvailabilityFor('premium_paywall', access.features.premium_paywall);
 
     expect(availability.state).toBe('disabled');
     expect(availability.canRenderEntryPoint).toBe(false);
     expect(availability.canNavigate).toBe(false);
     expect(availability.canQuery).toBe(false);
+    expect(availability.canUseBackend).toBe(false);
+    expect(availability.canRegisterRoute).toBe(false);
     expect(availability.canSubscribeToEvents).toBe(false);
+    expect(availability.canShowNotification).toBe(false);
   });
 });

@@ -32,6 +32,9 @@ function buildReflection(input: CompletionReflectionInput): string {
   const minutes = durationMinutes(input);
   const target = input.studyTarget ?? input.primaryGoal?.toLowerCase() ?? 'focus';
 
+  if (input.sessionSummary.streakMaintained === false || (input.sessionSummary.focusPurityScore ?? 100) < 70) {
+    return `You still held the thread for ${minutes} minutes. Tomorrow starts from something real.`;
+  }
   if (input.sessionSummary.interruptions === 0 && input.sessionSummary.pauses === 0) {
     return `You protected ${minutes} clean minutes for ${target}. That is real momentum.`;
   }

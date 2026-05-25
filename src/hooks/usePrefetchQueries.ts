@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 import type { FeatureAccessMap, FeatureKey } from '../features/liveops-config/feature-access';
 import {
-  getFeatureAvailability,
+  getFeatureAvailabilityFor,
   isFeatureAvailableForQueries,
 } from '../features/liveops-config/feature-availability';
 import { createDebugger } from '../utils/debug';
@@ -83,7 +83,7 @@ function canPrefetchFeature(policy: PrefetchPolicy | undefined, feature: Feature
   if (policy?.totalCompletedSessions === 0) return false;
   const access = policy?.featureAccess?.[feature];
   if (!access) return false;
-  return isFeatureAvailableForQueries(getFeatureAvailability(access));
+  return isFeatureAvailableForQueries(getFeatureAvailabilityFor(feature, access));
 }
 
 function isCoreQueryKey(queryKey: readonly string[]): boolean {

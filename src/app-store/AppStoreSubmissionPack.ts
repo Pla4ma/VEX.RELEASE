@@ -26,7 +26,7 @@ Reviewer Instructions:
 5. Navigate to Settings > Account > Delete Account to test account deletion.
 
 Subscriptions:
-- Premium unlocks unlimited AI coach insights, monthly Focus Reports, and companion cosmetics.
+- Premium unlocks unlimited AI coach insights and monthly Focus Reports.
 - Manage subscriptions in iOS Settings > Apple ID > Subscriptions.
 - Restore purchases via Settings > Account > Restore Purchases.
 

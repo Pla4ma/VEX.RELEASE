@@ -33,6 +33,7 @@ export {
   getProductTier,
   getStage,
   getFeatureAvailability,
+  getFeatureAvailabilityFor,
   isFeatureAvailableForNavigation,
   isFeatureAvailableForQueries,
 } from './feature-access';

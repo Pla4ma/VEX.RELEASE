@@ -131,4 +131,27 @@ describe('SessionStory runtime policy', () => {
 
     expect(hook).not.toContain('PostSessionStory');
   });
+
+  it('archived SessionStory keeps only safety and calculator tests', () => {
+    const testRoot = path.join(root, 'src/features/session-story');
+    const testFiles = fs
+      .readdirSync(testRoot, { recursive: true, withFileTypes: true })
+      .filter((entry) => entry.isFile() && entry.name.endsWith('.test.ts'))
+      .map((entry) => entry.name);
+
+    expect(testFiles).toEqual(
+      expect.arrayContaining([
+        'archive-generation.test.ts',
+        'archive-import-engine.test.ts',
+        'StoryBeatCalculator.test.ts',
+      ]),
+    );
+    expect(testFiles).not.toEqual(
+      expect.arrayContaining([
+        'SessionStoryOverlay.test.tsx',
+        'StoryMoment.test.tsx',
+        'PostSessionStory.test.tsx',
+      ]),
+    );
+  });
 });

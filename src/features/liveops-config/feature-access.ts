@@ -57,6 +57,7 @@ export type FeatureKey =
   | 'advanced_settings';
 
 export interface FeatureAccess {
+  key?: FeatureKey;
   isUnlocked: boolean;
   isVisible: boolean;
   lockedDescription: string;
@@ -151,6 +152,7 @@ export function buildFeatureAccess(inputs: FeatureAccessInputs): {
     features[key] = {
       ...DEFAULT_COPY,
       ...FEATURE_COPY[key],
+      key,
       isUnlocked: resolved.isUnlocked,
       isVisible: resolved.isVisible,
       isTeased: resolved.isTeased,
@@ -167,5 +169,5 @@ export function buildFeatureAccess(inputs: FeatureAccessInputs): {
   return { features, productTier, stage };
 }
 
-export { getFeatureAvailability, isFeatureAvailableForNavigation, isFeatureAvailableForQueries } from './feature-availability';
+export { getFeatureAvailability, getFeatureAvailabilityFor, isFeatureAvailableForNavigation, isFeatureAvailableForQueries } from './feature-availability';
 export type { FeatureAvailability, FeatureAvailabilityState } from './feature-availability';

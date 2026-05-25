@@ -18,7 +18,6 @@ interface HomeExperienceInput {
 const DAY_ZERO_HIDDEN: HomeSection[] = [
   'session_reflection',
   'progress_signal',
-  'study_layer',
   'companion_thread',
   'adaptive_challenge',
 ];

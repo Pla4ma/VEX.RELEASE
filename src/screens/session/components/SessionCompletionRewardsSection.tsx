@@ -5,12 +5,15 @@ import { Banner } from '../../../components/Banner';
 import { Box } from '../../../components/primitives';
 import { MasteryCard } from '../../../features/mastery/components/MasteryCard';
 import type { MasteryState } from '../../../features/mastery/types';
-import type { CompletionSurface } from '../../../features/session-completion/completion-experience-policy';
+import type { CompletionExperiencePolicy, CompletionSurface } from '../../../features/session-completion/completion-experience-policy';
+import type { SessionCompletionConsequences } from '../../../features/session-completion/story-consequence-service';
 import type { SessionSummary } from '../../../session/types';
 import type { StudyProgressCardData } from '../hooks/useSessionCompleteStudyProgress';
+import { SessionAdaptivePayoffCard } from './SessionAdaptivePayoffCard';
 import { SessionProgressionCard } from './SessionProgressionCard';
 
 type SessionCompletionRewardsSectionProps = {
+  consequences?: SessionCompletionConsequences;
   hiddenSurfaces: CompletionSurface[];
   levelMetric: {
     accent: string;
@@ -33,14 +36,19 @@ type SessionCompletionRewardsSectionProps = {
   studyProgress: StudyProgressCardData | null;
   summary: SessionSummary;
   masteryState: MasteryState | null;
+  nextActionLabel: string | null;
+  policy: CompletionExperiencePolicy;
   userId: string;
   onStartNewSession: () => void;
 };
 
 export function SessionCompletionRewardsSection({
+  consequences,
   hiddenSurfaces,
   levelMetric,
   masteryState,
+  nextActionLabel,
+  policy,
   progressionError,
   progressionLoading,
   rewards,
@@ -88,9 +96,17 @@ export function SessionCompletionRewardsSection({
           rewardError={rewards.rewardCreditError}
           streakIncreased={summary.streakIncreased}
           streakLabel={`${summary.streakDays} Day Streak`}
-          studyProgress={studyProgress}
+          studyProgress={null}
           onRetryRewards={() => void rewards.actions.applyCompletionRewards()}
           onStartNewSession={onStartNewSession}
+        />
+
+        <SessionAdaptivePayoffCard
+          consequences={consequences}
+          nextActionLabel={nextActionLabel}
+          policy={policy}
+          studyProgress={studyProgress}
+          summary={summary}
         />
 
         {masteryState && !hiddenSurfaces.includes('mastery_card') ? (

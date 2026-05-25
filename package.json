@@ -22,6 +22,8 @@
     "typecheck": "tsc --noEmit",
     "check:line-limit": "node scripts/check-line-limit.js",
     "audit:line-limit": "node scripts/check-line-limit.js --audit",
+    "check:banned-patterns": "node scripts/check-banned-patterns.js",
+    "audit:banned-patterns": "node scripts/check-banned-patterns.js --audit",
     "check:no-ts-nocheck": "node scripts/check-no-ts-nocheck.js",
     "types:supabase": "node scripts/generate-supabase-types.js",
     "clean": "react-native clean",
