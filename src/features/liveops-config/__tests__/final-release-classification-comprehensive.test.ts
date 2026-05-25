@@ -32,7 +32,7 @@ import {
 } from '../../../features/session-completion/completion-experience-policy';
 import { SessionMode } from '../../../session/modes';
 import { isNotificationTypeFilterable, NOTIFICATION_CONFIG } from '../../../screens/notifications/NotificationScreenConfig';
-import { CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION, FEATURE_ROUTE_REGISTRY } from '../../../navigation/feature-route-registry';
+import { isNotArchivedRoute, FEATURE_ROUTE_REGISTRY } from '../../../navigation/feature-route-registry';
 import { createPrefetcher, QueryKeys } from '../../../hooks/usePrefetchQueries';
 
 const PROJECT_ROOT = process.cwd();
@@ -165,17 +165,17 @@ describe('Archived features — blocked on all 7 gates', () => {
 // 3. Archived features — no registered routes
 // ============================================================
 describe('Archived features — no registered routes', () => {
-  it('archived routes blocked by CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION', () => {
+  it('archived routes blocked by isNotArchivedRoute', () => {
     const archivedRoutes = ['Guild', 'Shop', 'Inventory', 'PostSessionStory'];
     for (const route of archivedRoutes) {
-      expect(CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION(route)).toBe(false);
+      expect(isNotArchivedRoute(route)).toBe(false);
     }
   });
 
-  it('active routes pass CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION', () => {
-    expect(CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION('AICoach')).toBe(true);
-    expect(CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION('Boss')).toBe(true);
-    expect(CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION('ContentStudy')).toBe(true);
+  it('active routes pass isNotArchivedRoute', () => {
+    expect(isNotArchivedRoute('AICoach')).toBe(true);
+    expect(isNotArchivedRoute('Boss')).toBe(true);
+    expect(isNotArchivedRoute('ContentStudy')).toBe(true);
   });
 
   it('no archived feature has a route in FEATURE_ROUTE_REGISTRY', () => {

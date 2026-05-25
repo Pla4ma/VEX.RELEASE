@@ -38,7 +38,6 @@ export const routeParamSchemas = {
   Analytics: z.object({ month: optionalShortText }).strict(),
   Comeback: z.object({ comebackState: z.unknown() }).strict(),
   ContentReview: z.object({ contentId: uuidish }).strict(),
-  Guild: z.object({ guildId: optionalShortText }).strict().optional(),
   Leaderboard: z.object({
     period: z.enum(['DAILY', 'WEEKLY', 'MONTHLY']).optional(),
     scope: z.enum(['GLOBAL', 'FRIENDS']).optional(),
@@ -54,13 +53,6 @@ export const routeParamSchemas = {
     contextHeadline: optionalShortText,
     gatedFeature: optionalShortText,
     source: optionalShortText,
-  }).strict(),
-  /** @archived — PostSessionStory route deactivated in final-release. */
-  PostSessionStory: z.object({
-    sessionId: uuidish,
-    focusScore: z.number().optional(),
-    purityScore: z.number().optional(),
-    summary: z.unknown().optional(),
   }).strict(),
   Profile: z.object({
     userId: optionalShortText,

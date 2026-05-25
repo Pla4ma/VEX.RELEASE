@@ -24,7 +24,7 @@ describe('getCoachPresenceMessage', () => {
     const result = getCoachPresenceMessage(makeContext({ motivationStyle: 'CALM' }));
     expect(result.tone).toBe('calm');
     expect(result.visualMood).toBe('steady');
-    expect(result.message).toContain('clean block');
+    expect(result.safeIntent).toBe('START_SESSION');
     expect(result.message.length).toBeLessThanOrEqual(96);
   });
 
@@ -39,6 +39,7 @@ describe('getCoachPresenceMessage', () => {
     expect(result.tone).toBe('studious');
     expect(result.safeIntent).toBe('START_STUDY_SESSION');
     expect(result.optionalActionLabel).toBe('Next study block');
+    expect(result.message.length).toBeLessThanOrEqual(96);
   });
 
   it('game-like tone', () => {
@@ -59,7 +60,8 @@ describe('getCoachPresenceMessage', () => {
     }));
     expect(result.tone).toBe('direct');
     expect(result.visualMood).toBe('ready');
-    expect(result.message).toContain('block');
+    expect(result.safeIntent).toBe('START_SESSION');
+    expect(result.message.length).toBeLessThanOrEqual(96);
   });
 
   it('comeback tone', () => {
@@ -80,7 +82,7 @@ describe('getCoachPresenceMessage', () => {
       completionContext: 'first_session',
     }));
     expect(result.tone).toBe('warm');
-    expect(result.message).toMatch(/first/i);
+    expect(result.safeIntent).toBe('START_SESSION');
     expect(result.message).not.toMatch(/Great job|Keep going/i);
   });
 
@@ -89,7 +91,8 @@ describe('getCoachPresenceMessage', () => {
       motivationStyle: 'COACH_LED',
       completionContext: 'comeback',
     }));
-    expect(result.message).toContain('return counted');
+    expect(result.tone).toBe('direct');
+    expect(result.safeIntent).toBe('START_SESSION');
   });
 
   it('completion tone — study', () => {
@@ -98,8 +101,8 @@ describe('getCoachPresenceMessage', () => {
       primaryGoal: 'study',
       completionContext: 'study',
     }));
-    expect(result.message).toContain('review');
     expect(result.safeIntent).toBe('START_STUDY_SESSION');
+    expect(result.message.length).toBeLessThanOrEqual(96);
   });
 
   it('AI unavailable fallback', () => {

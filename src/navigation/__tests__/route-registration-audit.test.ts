@@ -13,7 +13,7 @@
 import { describe, it, expect } from '@jest/globals';
 import { resolveNotificationAction } from '../notification-routing-core';
 import { getCoachPresenceMessage } from '../../features/coach-presence/copy-service';
-import { CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION } from '../feature-route-registry';
+import { isNotArchivedRoute } from '../feature-route-registry';
 import { getFeatureForRoute } from '../feature-route-registry';
 
 const ARCHIVED_ROUTES = ['Guild', 'Shop', 'Inventory', 'PostSessionStory'] as const;
@@ -36,17 +36,17 @@ describe('route registration audit — archived/hidden routes', () => {
       expect(getFeatureForRoute('PostSessionStory')).toBeNull();
     });
 
-    it('CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION blocks all archived routes', () => {
+    it('isNotArchivedRoute blocks all archived routes', () => {
       for (const route of ARCHIVED_ROUTES) {
-        expect(CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION(route)).toBe(false);
+        expect(isNotArchivedRoute(route)).toBe(false);
       }
     });
 
-    it('CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION allows active routes', () => {
-      expect(CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION('AICoach')).toBe(true);
-      expect(CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION('Boss')).toBe(true);
-      expect(CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION('Notifications')).toBe(true);
-      expect(CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION('Home')).toBe(true);
+    it('isNotArchivedRoute allows active routes', () => {
+      expect(isNotArchivedRoute('AICoach')).toBe(true);
+      expect(isNotArchivedRoute('Boss')).toBe(true);
+      expect(isNotArchivedRoute('Notifications')).toBe(true);
+      expect(isNotArchivedRoute('Home')).toBe(true);
     });
   });
 

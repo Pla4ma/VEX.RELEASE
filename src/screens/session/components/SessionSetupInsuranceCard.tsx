@@ -1,12 +1,8 @@
 import React from 'react';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { StreakInsurancePrompt } from '../../../features/streaks/components/StreakInsurancePrompt';
-import type { ExtendedRootStackParams } from '../../../navigation/types';
 
 type SessionSetupInsuranceCardProps = {
   coinBalance: number;
-  navigation: NativeStackNavigationProp<ExtendedRootStackParams>;
-  setShopTheme: (theme: null) => void;
   shouldShow: boolean;
   streakDays: number;
   onDismiss: () => void;
@@ -14,8 +10,6 @@ type SessionSetupInsuranceCardProps = {
 
 export function SessionSetupInsuranceCard({
   coinBalance,
-  navigation,
-  setShopTheme,
   shouldShow,
   streakDays,
   onDismiss,
@@ -29,10 +23,7 @@ export function SessionSetupInsuranceCard({
       streakDays={streakDays}
       insuranceCost={200}
       userCoins={coinBalance}
-      onPurchase={() => {
-        setShopTheme(null);
-        navigation.navigate('Shop');
-      }}
+      onPurchase={onDismiss}
       onDismiss={onDismiss}
     />
   );

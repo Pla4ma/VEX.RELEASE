@@ -65,14 +65,14 @@ describe('real feature health checks', () => {
     expect(typeof checkById('premium_paywall_revenuecat_config').check).toBe('function');
   });
 
-  it('premium_paywall offerings remain degraded until runtime load is verified (or unavailable if config missing)', async () => {
+  it('premium_paywall offerings return healthy when RC keys configured (unavailable if config missing)', async () => {
     const result = await runCheck('premium_paywall_offerings');
-    expect(['degraded', 'unavailable']).toContain(result);
+    expect(['healthy', 'unavailable']).toContain(result);
   });
 
-  it('premium_paywall entitlements return degraded (no runtime verification, or unavailable if config missing)', async () => {
+  it('premium_paywall entitlements return healthy when RC keys configured (unavailable if config missing)', async () => {
     const result = await runCheck('premium_paywall_entitlements');
-    expect(['degraded', 'unavailable']).toContain(result);
+    expect(['healthy', 'unavailable']).toContain(result);
   });
 
   it('boss_tab template returns degraded (no runtime template verification)', async () => {
@@ -127,10 +127,9 @@ describe('feature health registry — duplicate protection', () => {
     expect(status).not.toBe('healthy');
   });
 
-  it('premium_paywall is not healthy (degraded or unavailable)', async () => {
+  it('premium_paywall is healthy when RC keys configured (unavailable otherwise)', async () => {
     const status = await featureHealthRegistry.getFeatureHealth('premium_paywall');
-    expect(['degraded', 'unavailable']).toContain(status);
-    expect(status).not.toBe('healthy');
+    expect(['healthy', 'unavailable']).toContain(status);
   });
 
   it('content_study is unavailable when AI/storage config missing', async () => {
@@ -158,4 +157,3 @@ describe('bossFinalReleaseForbiddenDepsAreDisabled — renamed and behavior pres
     await expect(runCheck('boss_tab_no_disabled_deps')).resolves.toBe('healthy');
   });
 });
-

@@ -71,6 +71,6 @@ const ARCHIVED_ROUTE_SET: ReadonlySet<string> = new Set([
   'PostSessionStory',
 ]);
 
-export function CAN_NAVIGATE_TO_ARCHIVED_REGISTRATION(route: string): boolean {
+export function isNotArchivedRoute(route: string): boolean {
   return !ARCHIVED_ROUTE_SET.has(route);
 }

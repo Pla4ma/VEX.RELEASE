@@ -1,3 +1,11 @@
+/**
+ * DEPRECATED — VEX Phase 6 (economy deactivation).
+ *
+ * Premium chest/economy language was part of the archived economy_advanced system.
+ * This file remains for type reference only. Do not import in new code.
+ * Final release completion screens use XP/level/streak/progress only.
+ */
+
 import { z } from 'zod';
 
 import type { ChestResult } from '../rewards/chest-engine';

@@ -51,15 +51,8 @@ export function setupDay0Surfaces(
     : p.primaryGoal === 'learning' ? 'Learning OS'
     : p.studyLayerName;
 
-  // On Day 0, study/structured execution users can get study_layer as tiny_tease (not spotlight)
-  const structuredExecutionRatio = (b as { structuredExecutionUsageRatio?: number }).structuredExecutionUsageRatio ?? b.studyUsageRatio;
-  const isStructuredExecutionUser = structuredExecutionRatio >= 0.35
-    || p.primaryGoal === 'work'
-    || p.primaryGoal === 'creative'
-    || p.primaryGoal === 'learning'
-    || isStudyUser;
-
-  if ((isStudyUser || isStructuredExecutionUser) && parsed.featureAvailability.study) {
+  // On Day 0, only study-focused users get study_layer as tiny_tease (not spotlight)
+  if (isStudyUser && parsed.featureAvailability.study) {
     map.study_layer = 'tiny_tease';
   }
 
@@ -92,7 +85,9 @@ export function setupDay0Surfaces(
   if (!parsed.featureAvailability.boss) {
     map.boss_teaser = 'hidden';
     map.boss_compact = 'hidden';
-    map.boss_full_cta = 'hidden';
+    if (!isCalmUser) {
+      map.boss_full_cta = 'hidden';
+    }
   }
 
   // Companions: friendly users get companion_thread as tiny_tease on Day 0
@@ -120,13 +115,6 @@ export function selectSpotlight(
     || p.primaryGoal === 'learning'
     || b.studyUsageRatio >= 0.35;
 
-  const structuredExecutionRatio = (b as { structuredExecutionUsageRatio?: number }).structuredExecutionUsageRatio ?? b.studyUsageRatio;
-  const isStructuredExecutionUser = structuredExecutionRatio >= 0.35
-    || p.primaryGoal === 'work'
-    || p.primaryGoal === 'creative'
-    || p.primaryGoal === 'learning'
-    || isStudyUser;
-
   const isGameLikeUser = p.motivationStyle === 'game_like'
     || p.motivationStyle === 'intense'
     || p.gamificationIntensity === 'strong';
@@ -141,11 +129,6 @@ export function selectSpotlight(
       candidates.push({ key: 'study_layer', priority: 10 });
     } else {
       map.study_layer = 'tiny_tease';
-    }
-  } else if (isStructuredExecutionUser && parsed.featureAvailability.study) {
-    candidates.push({ key: 'study_layer', priority: 7 });
-    if (p.primaryGoal === 'learning') {
-      map.study_layer = 'secondary';
     }
   }
 

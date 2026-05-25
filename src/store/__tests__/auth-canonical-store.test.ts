@@ -11,8 +11,6 @@ import {
   signUpWithEmail,
 } from "../../services/supabaseAuth";
 import { progressionService } from "../../services/progressionService";
-import { economyService } from "../../services/economyService";
-import { rewardService } from "../../services/rewardService";
 import { streakService } from "../../services/streakService";
 import type { User } from "../../types/models";
 
@@ -51,12 +49,6 @@ jest.mock("../../persistence/MMKVStorageAdapter", () => ({
 }));
 jest.mock("../../services/progressionService", () => ({
   progressionService: { reset: jest.fn(), setUserId: jest.fn() },
-}));
-jest.mock("../../services/economyService", () => ({
-  economyService: { reset: jest.fn(), setUserId: jest.fn() },
-}));
-jest.mock("../../services/rewardService", () => ({
-  rewardService: { reset: jest.fn(), setUserId: jest.fn() },
 }));
 jest.mock("../../services/streakService", () => ({
   streakService: { reset: jest.fn(), setUserId: jest.fn() },
@@ -142,8 +134,6 @@ describe("canonical auth store", () => {
     expect(setSentryUser).toHaveBeenCalledWith(mockUser.id, mockUser.email, mockUser.username);
     expect(revenueCatService.setUserId).toHaveBeenCalledWith(mockUser.id);
     expect(progressionService.setUserId).toHaveBeenCalledWith(mockUser.id);
-    expect(economyService.setUserId).toHaveBeenCalledWith(mockUser.id);
-    expect(rewardService.setUserId).toHaveBeenCalledWith(mockUser.id);
     expect(streakService.setUserId).toHaveBeenCalledWith(mockUser.id);
   });
 
@@ -188,8 +178,6 @@ describe("canonical auth store", () => {
     expect(clearSentryUser).toHaveBeenCalledTimes(1);
     expect(revenueCatService.clearUserId).toHaveBeenCalledTimes(1);
     expect(progressionService.reset).toHaveBeenCalledTimes(1);
-    expect(economyService.reset).toHaveBeenCalledTimes(1);
-    expect(rewardService.reset).toHaveBeenCalledTimes(1);
     expect(streakService.reset).toHaveBeenCalledTimes(1);
   });
 });

@@ -49,9 +49,36 @@ const PolicyBeatSchema = z
   })
   .strict();
 
+const CompletionBeatKindSchema = z.enum([
+  'completion_confirmation',
+  'xp_streak_progress',
+  'coach_companion_reflection',
+  'study_progress',
+  'boss_damage',
+  'coach_next_action',
+  'progress_insight',
+]);
+
+const CompletionBeatSchema = z
+  .object({
+    kind: CompletionBeatKindSchema,
+    surface: z.string().min(1),
+  })
+  .strict();
+
+const PolicyBeatsSchema = z
+  .object({
+    heroBeat: PolicyBeatSchema,
+    progressBeat: PolicyBeatSchema,
+    reflectionBeat: PolicyBeatSchema,
+    adaptivePayoff: AdaptivePayoffSchema,
+  })
+  .strict();
+
 const CompletionExperiencePolicySchema = z
   .object({
     adaptivePayoff: AdaptivePayoffSchema,
+    beats: PolicyBeatsSchema,
     heroBeat: PolicyBeatSchema,
     hiddenCompletionSurfaces: z.array(CompletionSurfaceSchema),
     nextAction: z.enum(['coach_next_action', 'home_return_plan', 'start_next_focus']),
@@ -91,6 +118,8 @@ const CompletionExperiencePolicyInputSchema = z
 export type CompletionExperiencePolicy = z.infer<typeof CompletionExperiencePolicySchema>;
 export type CompletionExperiencePolicyInput = z.infer<typeof CompletionExperiencePolicyInputSchema>;
 export type CompletionSurface = z.infer<typeof CompletionSurfaceSchema>;
+export type CompletionBeatKind = z.infer<typeof CompletionBeatKindSchema>;
+export type CompletionPolicyBeats = z.infer<typeof PolicyBeatsSchema>;
 
 function hasSurface(
   hiddenCompletionSurfaces: CompletionSurface[],
@@ -159,12 +188,17 @@ export function resolveCompletionExperiencePolicy(
     pushHidden(hiddenCompletionSurfaces, 'study_progress_card');
   }
 
+  const heroBeat: z.infer<typeof PolicyBeatSchema> = { kind: 'completion_confirmation', surface: 'hero' };
+  const progressBeat: z.infer<typeof PolicyBeatSchema> = { kind: 'xp_streak_progress', surface: 'progression' };
+  const reflectionBeat: z.infer<typeof PolicyBeatSchema> = { kind: 'coach_companion_reflection', surface: 'hero_body' };
+
   return CompletionExperiencePolicySchema.parse({
     adaptivePayoff,
-    heroBeat: { kind: 'completion_confirmation', surface: 'hero' },
+    beats: { heroBeat, progressBeat, reflectionBeat, adaptivePayoff },
+    heroBeat,
     hiddenCompletionSurfaces,
     nextAction: adaptivePayoff === 'coach_next_action' ? 'coach_next_action' : 'start_next_focus',
-    progressBeat: { kind: 'xp_streak_progress', surface: 'progression' },
-    reflectionBeat: { kind: 'coach_companion_reflection', surface: 'hero_body' },
+    progressBeat,
+    reflectionBeat,
   });
 }

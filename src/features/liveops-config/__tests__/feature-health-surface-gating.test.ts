@@ -226,4 +226,46 @@ describe('FeatureHealth surface gating', () => {
       expect(getDegradedFallbackSurface('boss_tab')).toBe('boss_teaser');
     });
   });
+
+  describe('premium_paywall degraded = disabled (no entry point, no navigation)', () => {
+    it('degraded premium returns disabled state (not degraded)', () => {
+      const degradedPaywall = {
+        isUnlocked: true,
+        isVisible: true,
+        isDegraded: true,
+        lockedDescription: 'Premium stays hidden until live subscriptions are ready.',
+        unlockReason: 'Appears only after core loop proves value.',
+        releaseState: 'final_release_progressive' as const,
+      };
+
+      const availability = getFeatureAvailability(degradedPaywall, 'premium_paywall');
+
+      expect(availability.state).toBe('disabled');
+      expect(availability.canRenderEntryPoint).toBe(false);
+      expect(availability.canNavigate).toBe(false);
+      expect(availability.canQuery).toBe(false);
+      expect(availability.canUseBackend).toBe(false);
+      expect(availability.canRegisterRoute).toBe(false);
+      expect(availability.canSubscribeToEvents).toBe(false);
+      expect(availability.canShowNotification).toBe(false);
+    });
+
+    it('healthy unlocked premium allows full access', () => {
+      const healthyPaywall = {
+        isUnlocked: true,
+        isVisible: true,
+        lockedDescription: '',
+        unlockReason: 'Premium active',
+        releaseState: 'final_release_progressive' as const,
+      };
+
+      const availability = getFeatureAvailability(healthyPaywall, 'premium_paywall');
+
+      expect(availability.state).toBe('unlocked');
+      expect(isFeatureAvailableForNavigation(availability)).toBe(true);
+      expect(availability.canRenderEntryPoint).toBe(true);
+      expect(availability.canNavigate).toBe(true);
+      expect(availability.canRegisterRoute).toBe(true);
+    });
+  });
 });

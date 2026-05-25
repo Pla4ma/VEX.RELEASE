@@ -9,13 +9,20 @@ import { VipPaywallScreen } from "../shared/monetization";
 import StreakFuneralScreen from "../screens/streaks/StreakFuneralScreen";
 import ComebackScreen from "../screens/ComebackScreen";
 import { RootStackFeatureRoutes } from "./root-stack-feature-routes";
+import {
+  getFeatureAvailability,
+  isFeatureAvailableForNavigation,
+  type FeatureAccessMap,
+  type FeatureKey,
+} from "../features/liveops-config";
 import type { ExtendedRootStackParams } from "./types";
-import type { FeatureAccessMap } from "../features/liveops-config";
 import type { RootExposureFlags } from "./feature-exposure";
 
 type RootStack = ReturnType<
   typeof createNativeStackNavigator<ExtendedRootStackParams>
 >;
+
+const PAYWALL_FEATURE_KEY: FeatureKey = 'premium_paywall';
 
 export function RootStackAuthenticatedRoutes({
   hasCompletedOnboarding,
@@ -31,6 +38,13 @@ export function RootStackAuthenticatedRoutes({
   Stack: RootStack;
 }): React.JSX.Element {
   const showApp = hasCompletedOnboarding || canShowHomePreview;
+  const premiumFee = features[PAYWALL_FEATURE_KEY];
+  const premiumAvailability = premiumFee
+    ? getFeatureAvailability(premiumFee, PAYWALL_FEATURE_KEY)
+    : null;
+  const canRegisterPaywall =
+    premiumAvailability !== null &&
+    isFeatureAvailableForNavigation(premiumAvailability);
 
   if (!showApp) {
     return <Stack.Screen name="Onboarding" component={OnboardingNavigator} />;
@@ -45,16 +59,20 @@ export function RootStackAuthenticatedRoutes({
         options={{ animation: "slide_from_bottom" }}
       />
 
-      <Stack.Screen
-        name="Paywall"
-        component={PaywallScreen}
-        options={{ animation: "slide_from_bottom", presentation: "modal" }}
-      />
-      <Stack.Screen
-        name="VipPaywall"
-        component={VipPaywallScreen}
-        options={{ animation: "slide_from_bottom", presentation: "modal" }}
-      />
+      {canRegisterPaywall ? (
+        <Stack.Screen
+          name="Paywall"
+          component={PaywallScreen}
+          options={{ animation: "slide_from_bottom", presentation: "modal" }}
+        />
+      ) : null}
+      {canRegisterPaywall ? (
+        <Stack.Screen
+          name="VipPaywall"
+          component={VipPaywallScreen}
+          options={{ animation: "slide_from_bottom", presentation: "modal" }}
+        />
+      ) : null}
       <Stack.Screen
         name="StreakFuneral"
         component={StreakFuneralScreen}

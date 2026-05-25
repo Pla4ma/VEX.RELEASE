@@ -48,5 +48,5 @@ export function getAvailabilityFor(key: FeatureKey): FeatureAvailability {
       reason: `Feature key "${key}" not found in access map`,
     };
   }
-  return getFeatureAvailability(feature);
+  return getFeatureAvailability(feature, key);
 }

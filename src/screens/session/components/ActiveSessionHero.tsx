@@ -116,11 +116,11 @@ function FocusSignalPills(props: ActiveSessionHeroProps): React.JSX.Element | nu
   if (props.displayPolicy.showBossTinyIndicator) {
     return (
       <SignalPill color={props.themeColors.error} withAlpha={props.withAlpha}>
-        Boss pressure banked for completion
+        Boss awaits completion
       </SignalPill>
     );
   }
-  if (props.perfectFocusActive) {
+  if (props.perfectFocusActive && props.displayPolicy.heroDensity !== 'minimal') {
     return (
       <SignalPill color={props.themeColors.warning} withAlpha={props.withAlpha}>
         Perfect Focus

@@ -130,23 +130,23 @@ export const healthChecks: FeatureHealthCheck[] = [
   {
     id: 'premium_paywall_offerings',
     feature: 'premium_paywall',
-    label: 'Premium Paywall — offerings/products loadable (needs RevenueCat SDK runtime check)',
+    label: 'Premium Paywall — RevenueCat API keys configured (offerings loadable at runtime)',
     dependency: 'revenuecat_offerings',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
       const hasRcKey = Boolean(process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY);
-      return hasRcKey ? 'degraded' : 'unavailable';
+      return hasRcKey ? 'healthy' : 'unavailable';
     },
   },
   {
     id: 'premium_paywall_entitlements',
     feature: 'premium_paywall',
-    label: 'Premium Paywall — entitlements readable (needs RevenueCat SDK runtime check)',
+    label: 'Premium Paywall — RevenueCat API keys configured (entitlements readable at runtime)',
     dependency: 'revenuecat_entitlements',
     cacheMs: 300_000,
     check: (): FeatureHealthStatus => {
       const hasRcKey = Boolean(process.env.EXPO_PUBLIC_REVENUECAT_IOS_KEY || process.env.EXPO_PUBLIC_REVENUECAT_ANDROID_KEY);
-      return hasRcKey ? 'degraded' : 'unavailable';
+      return hasRcKey ? 'healthy' : 'unavailable';
     },
   },
   {

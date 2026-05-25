@@ -1,4 +1,4 @@
-import type { FeatureAccess } from './feature-access';
+import type { FeatureAccess, FeatureKey } from './feature-access';
 
 export type FeatureAvailabilityState =
   | 'hidden'
@@ -49,7 +49,7 @@ export interface FeatureAvailability {
   reason: string;
 }
 
-export function getFeatureAvailability(feature: FeatureAccess): FeatureAvailability {
+export function getFeatureAvailability(feature: FeatureAccess, key?: FeatureKey): FeatureAvailability {
   const disabled =
     !feature.isVisible ||
     feature.releaseState === 'final_release_deactivated' ||
@@ -71,6 +71,19 @@ export function getFeatureAvailability(feature: FeatureAccess): FeatureAvailabil
 
   if (feature.isUnlocked) {
     if (feature.isDegraded === true) {
+      if (key === 'premium_paywall') {
+        return {
+          state: 'disabled',
+          canRenderEntryPoint: false,
+          canNavigate: false,
+          canQuery: false,
+          canUseBackend: false,
+          canRegisterRoute: false,
+          canSubscribeToEvents: false,
+          canShowNotification: false,
+          reason: feature.lockedDescription,
+        };
+      }
       return {
         state: 'degraded',
         canRenderEntryPoint: true,

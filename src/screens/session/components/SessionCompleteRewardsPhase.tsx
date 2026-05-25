@@ -23,36 +23,37 @@ export function SessionCompleteRewardsPhase({
   sessionId,
   policy,
 }: SessionCompleteRewardsPhaseProps): JSX.Element | null {
-  const creditedHiddenChestRef = useRef(false);
   const hidden = policy.hiddenCompletionSurfaces;
+  const advancedRef = useRef(false);
 
   useEffect(() => {
-    if (
-      hidden.includes('chest_reward_animation') &&
-      controller.rewards.revealStage >= 1 &&
-      !creditedHiddenChestRef.current
-    ) {
-      creditedHiddenChestRef.current = true;
+    if (controller.rewards.revealStage === 1 && !advancedRef.current) {
+      advancedRef.current = true;
       void controller.rewards.actions.handleRevealComplete();
     }
-  }, [controller.rewards.actions, controller.rewards.revealStage, hidden]);
+  }, [controller.rewards.revealStage, controller.rewards.actions]);
 
   if (controller.rewards.revealStage < 1) {
     return null;
   }
 
+  const showXpAnimation = controller.rewards.revealStage >= 1;
+  const showRewards = controller.rewards.revealStage >= 2;
+
   return (
     <>
-      {controller.rewards.revealStage >= 2 ||
-      hidden.includes('chest_reward_animation') ? (
+      {showXpAnimation ? (
+        <Box px={6} pt={7}>
+          <XPEarnAnimation
+            levelProgress={controller.levelMetric?.progress ?? null}
+            summary={summary}
+            totalXp={summary.xpEarned ?? 0}
+          />
+        </Box>
+      ) : null}
+
+      {showRewards ? (
         <>
-          <Box px={6} pt={7}>
-            <XPEarnAnimation
-              levelProgress={controller.levelMetric?.progress ?? null}
-              summary={summary}
-              totalXp={summary.xpEarned ?? 0}
-            />
-          </Box>
           <SessionCompletionRewardsSection
             levelMetric={controller.levelMetric}
             masteryState={controller.masteryState}

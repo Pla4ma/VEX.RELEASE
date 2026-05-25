@@ -99,6 +99,8 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
     || b.ignoredFeatures.includes('premium_paywall');
   if (premiumIgnored) {
     map.premium_tease = 'hidden';
+  } else if (!parsed.featureAvailability.premium) {
+    map.premium_tease = 'hidden';
   } else if (b.totalCompletedSessions < 5 && b.premiumFeatureAttempts.length === 0) {
     map.premium_tease = 'hidden';
   } else if (b.premiumFeatureAttempts.length > 0 && b.totalCompletedSessions >= 5) {

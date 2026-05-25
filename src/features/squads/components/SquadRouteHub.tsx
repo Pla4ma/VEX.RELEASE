@@ -1,42 +1,32 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { useRoute, type RouteProp } from '@react-navigation/native';
 
-import type { MainStackParams } from '../../../navigation/types';
 import { useAuthStore } from '../../../store';
 import { useThemeObject } from '../../../theme';
 import { Button, Card } from '../../../components';
 import { createSheet } from '@/shared/ui/create-sheet';
 import { SquadHub } from './SquadHub';
 
-type SquadRoute = RouteProp<MainStackParams, 'Guild'>;
-
 export function SquadRouteHub(): JSX.Element {
   const theme = useThemeObject();
-  const route = useRoute<SquadRoute>();
   const userId = useAuthStore((state) => state.user?.id);
-  const squadId = route.params?.guildId;
 
-  if (!squadId || !userId) {
-    return (
-      <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
-        <Card style={styles.card}>
-          <Text style={[styles.title, { color: theme.colors.text.primary }]}>No squad selected</Text>
-          <Text style={[styles.copy, { color: theme.colors.text.secondary }]}>
-            Open a squad from the Social tab to manage members and shared focus.
-          </Text>
-          <Button variant="secondary" onPress={() => undefined}
-  accessibilityLabel="Back to Social button"
+  return (
+    <View style={[styles.container, { backgroundColor: theme.colors.background.primary }]}>
+      <Card style={styles.card}>
+        <Text style={[styles.title, { color: theme.colors.text.primary }]}>Squad detail paused</Text>
+        <Text style={[styles.copy, { color: theme.colors.text.secondary }]}>
+          Squad management is simplified for this release. Focus momentum is tracked automatically while you do sessions.
+        </Text>
+        <Button variant="secondary" onPress={() => undefined}
+  accessibilityLabel="Back button"
   accessibilityRole="button"
   accessibilityHint="Activates this control">
-            Back to Social
-          </Button>
-        </Card>
-      </View>
-    );
-  }
-
-  return <SquadHub squadId={squadId} userId={userId} />;
+          Back
+        </Button>
+      </Card>
+    </View>
+  );
 }
 
 const styles = createSheet({

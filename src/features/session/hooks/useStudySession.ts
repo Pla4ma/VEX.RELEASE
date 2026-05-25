@@ -16,7 +16,6 @@ import type { SessionConfig, SessionState } from '../../../session/types';
 import { capture } from '../../../shared/analytics/analytics-service';
 import { SessionEvents } from '../../../shared/analytics/analytics-events';
 import { progressionService } from '../../../services/progressionService';
-import { economyService } from '../../../services/economyService';
 import { streakService } from '../../../services/streakService';
 import { studySessionKeys, getSessionMode, getExpectedDuration } from './useStudySession.helpers';
 import { buildReturn } from './useStudySession.return';
@@ -165,19 +164,6 @@ async function handleSessionRewards(sessionState: SessionState): Promise<void> {
     });
   } catch (error) {
     debug.error('Failed to grant XP:', error as Error);
-  }
-
-  try {
-    const baseCoins = Math.floor((sessionState.finalScore ?? 0) / 10);
-    await economyService.addCurrency({
-      userId: sessionState.userId,
-      amount: baseCoins,
-      currency: 'COINS',
-      source: 'SESSION_COMPLETE',
-      metadata: { session_id: sessionState.id },
-    });
-  } catch (error) {
-    debug.error('Failed to grant coins:', error as Error);
   }
 
   try {

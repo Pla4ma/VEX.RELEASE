@@ -72,21 +72,11 @@ describe('AI Intent Routing', () => {
       expect(result.screen).toBe('BossTab');
     });
 
-    it('allows VIEW_SQUAD for users at level 3+', () => {
-      const result = resolveRouteFromIntent('VIEW_SQUAD', 'free', 3);
-      expect(result.screen).toBe('SquadHub');
-    });
-
-    it('blocks VIEW_SQUAD for users below level 3', () => {
-      const result = resolveRouteFromIntent('VIEW_SQUAD', 'free', 1);
-      expect(result.screen).toBe('');
-    });
-
     it('allows internal users to access everything', () => {
       const intents: AIActionIntent[] = [
         'START_SESSION', 'VIEW_PROGRESS', 'VIEW_SETTINGS',
         'START_COMEBACK', 'VIEW_BOSS', 'VIEW_CHALLENGES',
-        'VIEW_SQUAD', 'VIEW_SHOP', 'OPEN_COACH', 'OPEN_CONTENT_STUDY',
+        'OPEN_COACH', 'OPEN_CONTENT_STUDY',
       ];
       for (const intent of intents) {
         const result = resolveRouteFromIntent(intent, 'internal', 20);

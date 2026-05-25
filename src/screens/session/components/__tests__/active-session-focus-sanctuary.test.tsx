@@ -7,6 +7,7 @@ import TestRenderer, {
 import { SessionMode } from '../../../../session/modes';
 import { ActiveSessionHero } from '../ActiveSessionHero';
 import { ActiveSessionModeOverlays } from '../ActiveSessionModeOverlays';
+import { resolveActiveSessionDisplayPolicy } from '../../utils/active-session-display-policy';
 import type { ActiveSessionDisplayPolicy } from '../../utils/active-session-display-policy';
 
 jest.mock('../../../../components/primitives/Box', () => {
@@ -110,6 +111,8 @@ describe('active session focus sanctuary components', () => {
     expect(hasText(hidden, 'Calibrating momentum...')).toBe(false);
     expect(hasText(hidden, '60:00 today - 50% of 2h goal')).toBe(false);
     expect(hasText(hidden, 'Boss pressure banked for completion')).toBe(false);
+    expect(hasText(hidden, 'Boss awaits completion')).toBe(false);
+    expect(hasText(hidden, 'Perfect Focus')).toBe(false);
     expect(hasText(hidden, 'Study target')).toBe(false);
 
     const visible = renderHero({
@@ -124,8 +127,88 @@ describe('active session focus sanctuary components', () => {
     expect(hasText(visible, 'Purity Score')).toBe(true);
     expect(hasText(visible, 'Calibrating momentum...')).toBe(true);
     expect(hasText(visible, '60:00 today - 50% of 2h goal')).toBe(true);
-    expect(hasText(visible, 'Boss pressure banked for completion')).toBe(true);
+    expect(hasText(visible, 'Boss awaits completion')).toBe(true);
     expect(hasText(visible, 'Study target')).toBe(true);
+  });
+
+  it('calm active focus renders no signal pill unless necessary', () => {
+    const hero = renderHero({
+      ...basePolicy,
+      heroDensity: 'minimal',
+      showBossTinyIndicator: false,
+    });
+    // minimal density + no boss indicator = no signal pill
+    expect(hasText(hero, 'Boss awaits completion')).toBe(false);
+    // perfectFocusActive defaults to false in renderHero
+    expect(hasText(hero, 'Perfect Focus')).toBe(false);
+  });
+
+  it('game-like active focus can show tiny boss signal', () => {
+    const hero = renderHero({
+      ...basePolicy,
+      heroDensity: 'minimal',
+      showBossTinyIndicator: true,
+    });
+    expect(hasText(hero, 'Boss awaits completion')).toBe(true);
+    expect(hasText(hero, 'Perfect Focus')).toBe(false);
+  });
+
+  it('study active focus shows study target', () => {
+    const hero = renderHero({
+      ...basePolicy,
+      showStudyTarget: true,
+    });
+    expect(hasText(hero, 'Study target')).toBe(true);
+  });
+
+  it('daily progress hidden during active focus', () => {
+    const hero = renderHero({
+      ...basePolicy,
+      showDailyProgress: false,
+    });
+    expect(hasText(hero, '60:00 today - 50% of 2h goal')).toBe(false);
+  });
+
+  it('momentum dots hidden during active focus', () => {
+    const hero = renderHero({
+      ...basePolicy,
+      showMomentumScore: false,
+    });
+    expect(hasText(hero, 'Calibrating momentum...')).toBe(false);
+  });
+
+  it('overlays hidden unless opted in or paused', () => {
+    let renderer: ReactTestRenderer | null = null;
+    TestRenderer.act(() => {
+      renderer = TestRenderer.create(
+        <ActiveSessionModeOverlays
+          allowStudyQuizBreak={false}
+          chainCount={0}
+          completionPercentage={50}
+          currentMode={SessionMode.FLOW}
+          displayPolicy={{ ...basePolicy, showModeOverlay: false }}
+          isPaused={false}
+          quizBreakKey={null}
+          remainingSeconds={600}
+          studyPlanId={undefined}
+          onCloseQuiz={() => undefined}
+          onSkipQuiz={() => undefined}
+        />,
+      );
+    });
+    const result = renderer?.toJSON() ?? null;
+    expect(hasText(result, 'Mode Overlay')).toBe(false);
+  });
+
+  it('coach banner structural gate kept in display policy test suite', () => {
+    const calmActive = {
+      focusStage: 'active' as const,
+      motivationStyle: 'coach_led' as const,
+      primaryGoal: 'work' as const,
+      sessionMode: SessionMode.FLOW,
+    };
+    const policy = resolveActiveSessionDisplayPolicy(calmActive);
+    expect(policy.showCoachBanner).toBe(false);
   });
 
   it('ActiveSessionModeOverlays refuses stacked focus overlays when policy hides them', () => {

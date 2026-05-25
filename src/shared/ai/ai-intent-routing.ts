@@ -7,8 +7,6 @@ export const AIActionIntentSchema = z.enum([
   'START_COMEBACK',
   'VIEW_BOSS',
   'VIEW_CHALLENGES',
-  'VIEW_SQUAD',
-  'VIEW_SHOP',
   'OPEN_COACH',
   'OPEN_CONTENT_STUDY',
   'NONE',
@@ -53,17 +51,6 @@ export const INTENT_ROUTE_MAP: Record<AIActionIntent, SafeRoute> = {
   },
   VIEW_CHALLENGES: {
     screen: 'ChallengesTab',
-    allowed: true,
-    allowedUserTiers: ['free', 'paid', 'internal'],
-  },
-  VIEW_SQUAD: {
-    screen: 'SquadHub',
-    allowed: true,
-    allowedUserTiers: ['free', 'paid', 'internal'],
-    minLevel: 3,
-  },
-  VIEW_SHOP: {
-    screen: 'Shop',
     allowed: true,
     allowedUserTiers: ['free', 'paid', 'internal'],
   },

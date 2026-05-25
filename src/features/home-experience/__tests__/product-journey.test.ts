@@ -164,6 +164,123 @@ describe('product journey — Day 0 study user', () => {
     });
     expect(model.mustNotRun).toContain('boss_query');
   });
+
+  it('does not expose ContentStudy route on Day 0', () => {
+    const model = buildHomeExperienceModel({
+      explicitMotivationStyle: 'study_focused',
+      totalCompletedSessions: 0,
+    });
+    const hasContentStudyRoute = model.allowedRoutes.some(
+      (r) => r.toLowerCase().includes('content') || r.toLowerCase().includes('study'),
+    );
+    expect(hasContentStudyRoute).toBe(false);
+    expect(model.mustNotRun).toContain('study_plan_query');
+  });
+
+  it('does not expose upload CTA on Day 0', () => {
+    const model = buildHomeExperienceModel({
+      explicitMotivationStyle: 'study_focused',
+      totalCompletedSessions: 0,
+    });
+    expect(model.studyOsPlacement).not.toContain('upload');
+    expect(model.studyOsPlacement).not.toContain('PDF');
+    expect(model.studyOsPlacement).not.toContain('YouTube');
+    const surfaces = decideHomeSurfaces({
+      featureAvailability,
+      personalizationProfile: studyProfile,
+      behaviorStats: baseStats(0),
+      hasActiveStudyPlan: false,
+      hasActiveRecommendation: false,
+      hasActiveBoss: false,
+      isFirstSession: true,
+    });
+    expect(surfaces.study_layer).toBe('tiny_tease');
+    expect(surfaces.study_layer).not.toBe('secondary');
+    expect(surfaces.study_layer).not.toBe('primary');
+  });
+});
+
+describe('product journey — Day 0 learning user', () => {
+  const learningProfile = {
+    motivationStyle: 'study_focused' as const,
+    primaryGoal: 'learning' as const,
+    gamificationIntensity: 'medium' as const,
+    studyLayerName: 'Learning OS',
+    userStage: 'new' as const,
+  };
+
+  it('gets study_layer as Learning cue on Day 0', () => {
+    const surfaces = decideHomeSurfaces({
+      featureAvailability,
+      personalizationProfile: learningProfile,
+      behaviorStats: baseStats(0),
+      hasActiveStudyPlan: false,
+      hasActiveRecommendation: false,
+      hasActiveBoss: false,
+      isFirstSession: true,
+    });
+    expect(surfaces.study_layer).toBe('tiny_tease');
+  });
+
+  it('first session remains primary for learning user', () => {
+    const surfaces = decideHomeSurfaces({
+      featureAvailability,
+      personalizationProfile: learningProfile,
+      behaviorStats: baseStats(0),
+      hasActiveStudyPlan: false,
+      hasActiveRecommendation: false,
+      hasActiveBoss: false,
+      isFirstSession: true,
+    });
+    expect(surfaces.start_session).toBe('primary');
+  });
+});
+
+describe('product journey — Day 0 non-study user gets no study clutter', () => {
+  it('calm user has study_layer hidden on Day 0', () => {
+    const surfaces = decideHomeSurfaces({
+      featureAvailability,
+      personalizationProfile: calmProfile,
+      behaviorStats: baseStats(0),
+      hasActiveStudyPlan: false,
+      hasActiveRecommendation: false,
+      hasActiveBoss: false,
+      isFirstSession: true,
+    });
+    expect(surfaces.study_layer).toBe('hidden');
+  });
+
+  it('game-like work user has study_layer hidden on Day 0', () => {
+    const surfaces = decideHomeSurfaces({
+      featureAvailability,
+      personalizationProfile: gameLikeProfile,
+      behaviorStats: baseStats(0),
+      hasActiveStudyPlan: false,
+      hasActiveRecommendation: false,
+      hasActiveBoss: false,
+      isFirstSession: true,
+    });
+    expect(surfaces.study_layer).toBe('hidden');
+  });
+
+  it('coach-led user has study_layer hidden on Day 0', () => {
+    const surfaces = decideHomeSurfaces({
+      featureAvailability,
+      personalizationProfile: {
+        motivationStyle: 'coach_led' as const,
+        primaryGoal: 'work' as const,
+        gamificationIntensity: 'minimal' as const,
+        studyLayerName: 'Deep Work Plan',
+        userStage: 'new' as const,
+      },
+      behaviorStats: baseStats(0),
+      hasActiveStudyPlan: false,
+      hasActiveRecommendation: false,
+      hasActiveBoss: false,
+      isFirstSession: true,
+    });
+    expect(surfaces.study_layer).toBe('hidden');
+  });
 });
 
 describe('product journey — Day 0 game-like user', () => {
@@ -420,7 +537,7 @@ describe('product journey — feature degraded', () => {
     expect(surfaces.study_layer).toBe('hidden');
   });
 
-  it('premium degraded still shows tiny_tease when user has intent (code gap — should gate on featureAvailability.premium)', () => {
+  it('premium degraded hides premium_tease regardless of user intent', () => {
     const surfaces = decideHomeSurfaces({
       featureAvailability: { ...featureAvailability, premium: false },
       personalizationProfile: studyProfile,
@@ -430,7 +547,7 @@ describe('product journey — feature degraded', () => {
       hasActiveBoss: false,
       isFirstSession: false,
     });
-    expect(surfaces.premium_tease).toBe('tiny_tease');
+    expect(surfaces.premium_tease).toBe('hidden');
   });
 
   it('boss degraded shows fallback', () => {

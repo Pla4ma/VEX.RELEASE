@@ -54,16 +54,17 @@ describe('feature health reactive store', () => {
     expect(availability.canSubscribeToEvents).toBe(false);
   });
 
-  it('premium_paywall degraded cannot become an active premium surface', () => {
+  it('premium_paywall degraded becomes fully disabled — no entry point, no paywall surface', () => {
     const access = buildFeatureAccess({
       totalCompletedSessions: 40,
       degradedFeatures: new Set<FeatureKey>(['premium_paywall']),
     });
-    const availability = getFeatureAvailability(access.features.premium_paywall);
+    const availability = getFeatureAvailability(access.features.premium_paywall, 'premium_paywall');
 
-    expect(availability.state).toBe('degraded');
-    expect(availability.canRenderEntryPoint).toBe(true);
+    expect(availability.state).toBe('disabled');
+    expect(availability.canRenderEntryPoint).toBe(false);
     expect(availability.canNavigate).toBe(false);
     expect(availability.canQuery).toBe(false);
+    expect(availability.canSubscribeToEvents).toBe(false);
   });
 });

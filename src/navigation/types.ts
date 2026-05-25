@@ -19,8 +19,6 @@ export type RootStackRoute =
   | 'FocusScoreDashboard'
   | 'VipPaywall';
 
-/** ARCHIVED routes — keep in type space for migration safety but NOT registered. */
-export type ArchivedRootStackRoute = 'PostSessionStory';
 export type AuthStackRoute = 'Login' | 'Register' | 'ForgotPassword' | 'ResetPassword' | 'VerifyEmail';
 export type MainTabRoute = 'Home' | 'Focus' | 'Progress' | 'Profile';
 export type SettingsStackRoute =
@@ -32,7 +30,6 @@ export type SettingsStackRoute =
 export type SessionStackRoute = 'SessionSetup' | 'ActiveSession' | 'SessionComplete' | 'SessionHistory';
 export type SessionSetupMode = 'LIGHT_FOCUS' | 'DEEP_WORK' | 'SPRINT' | 'CREATIVE' | 'STUDY' | 'RECOVERY';
 
-/** Grouped sub-types for documentation and future refactoring. Flat params still supported. */
 export interface ComebackContext {
   comebackMessage?: string;
   comebackMultiplier?: number;
@@ -54,7 +51,6 @@ export interface WarContext {
 }
 
 export interface SessionSetupParams {
-  // Flat params (existing callers)
   comebackMessage?: string;
   comebackMultiplier?: number;
   comebackQuest?: { requiredSessions: number; streakBefore: number } | null;
@@ -76,7 +72,6 @@ export interface SessionSetupParams {
   suggestedDifficulty?: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
   suggestedDurationSeconds?: number;
   warContext?: { squadId: string; squadWarId: string } | null;
-  // Grouped access (preferred for new code)
   comeback?: ComebackContext;
   study?: StudyContext;
   war?: WarContext;
@@ -103,13 +98,6 @@ export interface RootStackParams {
   Comeback: { comebackState: ComebackState };
   StreakFuneral: { diedAt: number; previousStreak: number };
   FocusScoreDashboard: undefined;
-  /** @archived — PostSessionStory route deactivated in final-release. Kept for migration safety. */
-  PostSessionStory: {
-    focusScore?: number;
-    purityScore?: number;
-    sessionId: string;
-    summary?: import('../session/types').SessionSummary;
-  };
 }
 
 export type ExtendedRootStackParams = RootStackParams & MainStackParams;
@@ -133,21 +121,12 @@ export interface MainTabParams {
 
 export type MainStackRoute =
   | 'Boss'
-  | /** @archived — Guild route deactivated in final-release */
-  'Guild'
-  | /** @archived — Shop route deactivated in final-release */
-  'Shop'
-  | /** @archived — Inventory route deactivated in final-release */
-  'Inventory'
   | 'Notifications'
   | 'ContentStudy'
   | 'AICoach'
   | 'Challenges'
   | 'Mastery'
   | 'CompanionDetail';
-
-/** ARCHIVED — kept for migration safety, not registered. */
-export type ArchivedMainStackRoute = 'Guild' | 'Shop' | 'Inventory' | 'PostSessionStory';
 
 export interface MainStackParams {
   [key: string]: object | undefined;
@@ -158,19 +137,6 @@ export interface MainStackParams {
   Challenges: undefined;
   Mastery: undefined;
   CompanionDetail: undefined;
-  /** @archived — Guild route deactivated in final-release. Kept for migration safety. */
-  Guild: { guildId?: string } | undefined;
-  /** @archived — Shop route deactivated in final-release. Kept for migration safety. */
-  Shop: undefined;
-  /** @archived — Inventory route deactivated in final-release. Kept for migration safety. */
-  Inventory: undefined;
-  /** @archived — PostSessionStory route deactivated in final-release. Kept for migration safety. */
-  PostSessionStory: {
-    focusScore?: number;
-    purityScore?: number;
-    sessionId: string;
-    summary?: import('../session/types').SessionSummary;
-  };
 }
 
 export interface SettingsStackParams {

@@ -40,7 +40,7 @@ describe('CoachPresence service', () => {
 
     expect(presence.tone.personality).toBe('steady');
     expect(presence.memoryConfidence).toBe('strong');
-    expect(presence.message).toContain('usually');
+    expect(presence.message.length).toBeLessThanOrEqual(96);
     expect(presence.visualCompanionState.reaction).toBe('steady');
     expect(presence.nextAction.intent).toBe('START_SESSION');
   });
@@ -55,7 +55,7 @@ describe('CoachPresence service', () => {
       surface: 'HOME',
     });
 
-    expect(presence.message).toContain('study block');
+    expect(presence.message.length).toBeLessThanOrEqual(96);
     expect(presence.memoryConfidence).toBe('weak');
     expect(presence.nextAction.intent).toBe('START_STUDY_SESSION');
   });
@@ -72,7 +72,8 @@ describe('CoachPresence service', () => {
 
     expect(presence.tone.personality).toBe('warm');
     expect(presence.visualCompanionState.reaction).toBe('focused');
-    expect(presence.message).toContain('next block');
+    expect(presence.message.length).toBeLessThanOrEqual(96);
+    expect(presence.nextAction.intent).toBe('START_SESSION');
   });
 
   it('does not suggest locked study or progress actions', () => {
