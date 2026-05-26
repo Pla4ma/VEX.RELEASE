@@ -21,6 +21,8 @@ export {
 export { OnboardingPermissions } from './OnboardingPermissions';
 export { RevealStep } from './RevealStep';
 export { GoalStep } from './GoalStep';
+export { LaneConfirmationStep, LANE_LABELS, LANE_EMOJI } from './LaneConfirmationStep';
+export { LaneChoiceStep } from './LaneChoiceStep';
 export { MotivationStyleStep } from './MotivationStyleStep';
 export { StarterStep } from './StarterStep';
 export { LauncherStep } from './LauncherStep';

@@ -59,3 +59,11 @@ export function getRarityPoints(rarity: AchievementRarity): number {
 export function calculateTotalAchievementPoints(achievements: Achievement[]): number {
   return achievements.reduce((sum: number, a: Achievement) => sum + a.pointValue, 0);
 }
+
+export function getActiveAchievements(achievements: Achievement[]): Achievement[] {
+  return achievements.filter((a: Achievement) => !a.isDeprecated);
+}
+
+export function isBehaviorBasedAchievement(achievement: Achievement): boolean {
+  return !achievement.isDeprecated && achievement.category !== 'ECONOMY';
+}

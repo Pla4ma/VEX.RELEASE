@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { createDebugger } from "../../utils/debug";
 import type { ContextSnapshot } from "./context-snapshot";
+import { RecommendationEvidenceSchema } from "../focus-memory/schemas";
+import type { RecommendationEvidence } from "../focus-memory/schemas";
 const debug = createDebugger("ai-coach:recommendations");
 export const CoachRecommendationSchema = z.object({
   id: z.string(),
@@ -10,6 +12,7 @@ export const CoachRecommendationSchema = z.object({
   description: z.string(),
   reasoning: z.string(),
   confidence: z.number().min(0).max(1),
+  evidence: RecommendationEvidenceSchema.optional(),
   priority: z.enum(["critical", "high", "medium", "low"]),
   actionType: z.enum(["start_session", "adjust_duration", "join_squad", "take_break", "view_progress"]),
   suggestedDuration: z.number().optional(),
@@ -175,4 +178,20 @@ export function batchProcessRecommendations(recommendations: CoachRecommendation
     medium: recommendations.filter((r) => r.priority === "medium"),
     low: recommendations.filter((r) => r.priority === "low"),
   };
+}
+
+export function attachRecommendationEvidence(
+  recommendations: CoachRecommendation[],
+  evidence: RecommendationEvidence | null,
+  sessionCount: number,
+): CoachRecommendation[] {
+  return recommendations.map((rec) => {
+    if (evidence && sessionCount >= 3) {
+      return { ...rec, evidence };
+    }
+    return {
+      ...rec,
+      evidence: { fallbackReason: sessionCount < 3 ? 'cold_start' as const : 'insufficient_data' as const },
+    };
+  });
 }

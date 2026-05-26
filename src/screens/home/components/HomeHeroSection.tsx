@@ -138,7 +138,8 @@ export function HomeHeroSection({
       }
     }
 
-    controller.openSetup(toSessionSetupParams(params) as unknown as Record<string, unknown>);
+    // Zod guarantees object shape; home-controller-types accepts Record<string, unknown>
+    controller.openSetup(toSessionSetupParams(params) as Record<string, unknown>);
   };
 
   if (priorityQuery.isError) {

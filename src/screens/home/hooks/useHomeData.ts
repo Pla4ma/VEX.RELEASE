@@ -166,3 +166,5 @@ export function useHomeData(input: UseHomeDataInput) {
     handleFreezeStreak,
   };
 }
+
+export type HomeData = ReturnType<typeof useHomeData>;

@@ -7,6 +7,7 @@
 export type NotificationSafeIntent =
   | 'OPEN_HOME'
   | 'START_SESSION'
+  | 'START_RESCUE'
   | 'OPEN_PROGRESS'
   | 'OPEN_PROFILE'
   | 'OPEN_COACH'
@@ -16,6 +17,7 @@ export type NotificationSafeIntent =
 
 export type NotificationActionType =
   | 'start_session'
+  | 'start_rescue'
   | 'view_boss'
   | 'open_chest'
   | 'view_squad'

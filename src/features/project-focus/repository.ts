@@ -8,15 +8,23 @@ function keyFor(userId: string): string {
 }
 
 export async function listStoredProjectThreads(userId: string): Promise<ProjectThread[]> {
-  const raw = storage.getString(keyFor(userId));
-  if (!raw) return [];
-  return ProjectThreadSchema.array().parse(JSON.parse(raw));
+  try {
+    const raw = storage.getString(keyFor(userId));
+    if (!raw) return [];
+    return ProjectThreadSchema.array().parse(JSON.parse(raw));
+  } catch {
+    return [];
+  }
 }
 
 export async function upsertStoredProjectThread(thread: ProjectThread): Promise<ProjectThread> {
   const parsed = ProjectThreadSchema.parse(thread);
-  const existing = await listStoredProjectThreads(parsed.userId);
-  const next = [parsed, ...existing.filter((item) => item.id !== parsed.id)];
-  storage.set(keyFor(parsed.userId), JSON.stringify(next));
+  try {
+    const existing = await listStoredProjectThreads(parsed.userId);
+    const next = [parsed, ...existing.filter((item) => item.id !== parsed.id)];
+    storage.set(keyFor(parsed.userId), JSON.stringify(next));
+  } catch {
+    // Degraded: return parsed thread even if storage fails
+  }
   return parsed;
 }

@@ -108,6 +108,7 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
   const explicitStyle = useOnboardingStore((s) => s.explicitMotivationStyle);
   const goal = useOnboardingStore((s) => s.goal);
   const onboarded = useOnboardingStore((s) => s.isOnboarded);
+  const chosenLane = useOnboardingStore((s) => s.chosenLane);
 
   const totalCompletedSessions = controller.disclosure.inputs.totalCompletedSessions;
   const features = controller.disclosure.features;
@@ -199,10 +200,10 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
   const laneProfile: LaneProfile = useMemo(() => resolveInitialLane({
     primaryGoal: (VALID_GOALS as readonly string[]).includes(primaryGoal) ? primaryGoal as 'focus' | 'study' | 'work' | 'creative' | 'personal' | 'learning' : null,
     motivationStyle,
-    manualOverride: null,
+    manualOverride: chosenLane ?? null,
     observedAt: Date.now(),
     sessionMode: behaviorStats.preferredSessionMode ?? undefined,
-  }), [primaryGoal, motivationStyle, behaviorStats.preferredSessionMode]);
+  }), [primaryGoal, motivationStyle, behaviorStats.preferredSessionMode, chosenLane]);
 
   const firstWeekExperience = useFirstWeekExperience({
     completedSessions: totalCompletedSessions,

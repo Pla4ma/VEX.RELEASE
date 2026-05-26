@@ -37,6 +37,8 @@ export interface BossTemplate {
 
 export type BossRewardType = 'XP' | 'COINS' | 'GEMS' | 'ITEM' | 'COSMETIC' | 'STREAK_SHIELD';
 
+export type BossRewardTypeBehavioral = 'XP' | 'ITEM' | 'COSMETIC';
+
 // ============================================================================
 // Boss Encounter Types
 // ============================================================================

@@ -7,6 +7,7 @@ import {
   type OnboardingElement,
   type OnboardingState,
 } from './schemas';
+import { LaneSchema } from '../lane-engine/schemas';
 import {
   deriveMotivationProfile,
   mergeOnboardingCompletion,
@@ -22,6 +23,7 @@ const initialState: OnboardingState = {
   motivationProfile: null, explicitMotivationStyle: null,
   profileStepsCompleted: false, firstSessionStarted: false,
   firstSessionCompleted: false, homePreviewEntered: false,
+  chosenLane: null,
 };
 
 function getCurrentUserIdForBool(): string | null {
@@ -150,6 +152,7 @@ export function createStoreActions(
         explicitMotivationStyle: state.explicitMotivationStyle ?? undefined,
         personaId: state.persona ?? undefined,
         squadId: null,
+        chosenLane: state.chosenLane ?? undefined,
       };
     },
 
@@ -188,7 +191,15 @@ export function createStoreActions(
           draft.element, updates.explicitMotivationStyle ?? store.explicitMotivationStyle,
         );
       }
+      if (draft.chosenLane !== undefined) {
+        const parsed = LaneSchema.safeParse(draft.chosenLane);
+        if (parsed.success) updates.chosenLane = parsed.data;
+      }
       if (Object.keys(updates).length > 0) set(updates);
+    },
+
+    setChosenLane: (lane) => {
+      set({ chosenLane: lane });
     },
   };
 }

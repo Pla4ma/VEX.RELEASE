@@ -4,14 +4,16 @@ export const ProjectThreadSchema = z.object({
   bestSessionMode: z.enum(['CREATIVE', 'DEEP_WORK', 'LIGHT_FOCUS']),
   blocker: z.string().min(1).nullable(),
   currentObjective: z.string().min(1),
+  handoffNote: z.string().min(1).nullable(),
   id: z.string().min(1),
   lastSessionSummary: z.string().min(1).nullable(),
   lastTouched: z.number().int().min(0),
   nextMove: z.string().min(1),
   openQuestions: z.array(z.string().min(1)),
   projectTitle: z.string().min(1),
+  rescuedAt: z.number().int().min(0).nullable(),
   staleRisk: z.enum(['none', 'low', 'medium', 'high']),
-  state: z.enum(['new', 'active', 'stale', 'blocked', 'completed']),
+  state: z.enum(['new', 'active', 'stale', 'blocked', 'completed', 'rescued']),
   userId: z.string().min(1),
 }).strict();
 

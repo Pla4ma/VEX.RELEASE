@@ -26,6 +26,7 @@ import type { HomeController } from '../hooks/home-controller-types';
 import type { HomeViewModel } from '../hooks/home-view-model';
 import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
 import type { ChallengeItem, SessionListItem } from '../../../features/home-spine/components';
+import type { HomeData } from '../hooks/useHomeData';
 import type { CompletionSyncState } from '../../../store/session-state';
 import { getFeatureAvailability } from '../../../features/liveops-config';
 import type { FeatureAccessMap } from '../../../features/liveops-config/feature-access';
@@ -129,7 +130,7 @@ export function HomeScreenInner({ model, data }: HomeScreenInnerProps): JSX.Elem
   const features = controller.disclosure?.features as FeatureAccessMap | undefined ?? {} as FeatureAccessMap;
   const safeStreakHours = streakHoursRemaining ?? 0;
 
-  const { resolvedExperience, firstWeekExperience, personalizationProfile, behaviorStats } = useHomeResolvedExperience(controller);
+  const { resolvedExperience, firstWeekExperience, personalizationProfile, behaviorStats, laneProfile } = useHomeResolvedExperience(controller);
 
   const surfaceMap: HomeSurfaceMap = useHomeSurfaceMap({
     personalizationProfile,
@@ -140,6 +141,7 @@ export function HomeScreenInner({ model, data }: HomeScreenInnerProps): JSX.Elem
     isFirstSession: controller.isFirstRun,
     featureAccess: controller.disclosure,
     firstWeek: firstWeekExperience,
+    laneProfile,
   });
 
   const { canShowBanner: showIntervention, interventionType } = useInterventionVisibility({
@@ -177,7 +179,7 @@ export function HomeScreenInner({ model, data }: HomeScreenInnerProps): JSX.Elem
       )}
       <HomeContent
         controller={controller}
-        data={data as unknown as ReturnType<typeof import('../hooks/useHomeData').useHomeData>}
+        data={data as HomeData}
         comebackSessionsCompleted={comebackSessionsCompleted ?? 0}
         features={features}
         handleClaimReward={handleClaimReward}

@@ -14,6 +14,7 @@ export const BLOCKED_ON_DAY0: HomeSurfaceKey[] = [
   'project_thread',
   'focus_window',
   'weekly_intelligence',
+  'memory_insight',
 ];
 
 export const FULL_FEATURE_CARD_SURFACES: HomeSurfaceKey[] = [
@@ -39,7 +40,6 @@ export const DAY0_PERMITTED: HomeSurfaceKey[] = [
   'companion_thread',
   'rescue_cta',
   'today_strip',
-  'memory_insight',
 ];
 
 export const ALL_HOME_SURFACE_KEYS: HomeSurfaceKey[] = [

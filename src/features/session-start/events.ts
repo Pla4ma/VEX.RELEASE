@@ -161,9 +161,10 @@ export function serializeSessionStartEvent(
 export function deserializeSessionStartEvent(
   data: string,
 ): SessionStartEventType {
-  const parsed = JSON.parse(data) as SessionStartEventType;
-  return {
+  const parsed = JSON.parse(data) as Record<string, unknown>;
+  const result: SessionStartEventType = {
     ...parsed,
-    timestamp: new Date(parsed.timestamp as unknown as string),
-  };
+    timestamp: new Date(String(parsed.timestamp ?? '')),
+  } as SessionStartEventType;
+  return result;
 }

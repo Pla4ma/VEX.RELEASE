@@ -2692,6 +2692,48 @@ export type Database = {
         }
         Relationships: []
       }
+      rescue_completions: {
+        Row: {
+          completed_at: string
+          created_at: string
+          duration_seconds: number
+          id: string
+          lane: string
+          next_recommendation: string
+          outcome: string
+          plan_id: string
+          reason: string
+          user_id: string
+          worked: boolean
+        }
+        Insert: {
+          completed_at?: string
+          created_at?: string
+          duration_seconds: number
+          id: string
+          lane: string
+          next_recommendation: string
+          outcome: string
+          plan_id: string
+          reason: string
+          user_id: string
+          worked?: boolean
+        }
+        Update: {
+          completed_at?: string
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          lane?: string
+          next_recommendation?: string
+          outcome?: string
+          plan_id?: string
+          reason?: string
+          user_id?: string
+          worked?: boolean
+        }
+        Relationships: []
+      }
       reward_deliveries: {
         Row: {
           created_at: string

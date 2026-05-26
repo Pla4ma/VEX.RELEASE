@@ -36,6 +36,8 @@ export function resolveNotificationAction(
     case 'start_session':
     case 'view_streak':
       return { intent: 'START_SESSION', params: action.payload };
+    case 'start_rescue':
+      return { intent: 'START_RESCUE', params: action.payload };
     case 'view_boss': {
       if (isFeatureHidden('boss_tab')) {
         return { intent: 'OPEN_HOME', fallbackReason: 'Boss feature is not available in final release' };
@@ -121,6 +123,8 @@ function navigateFromSafeIntent(
   switch (intent) {
     case 'START_SESSION':
       return navigateToSessionSetup(navigation, params);
+    case 'START_RESCUE':
+      return navigateToRescueSession(navigation, params);
     case 'OPEN_BOSS': {
       if (!canUseFeature(featureAccess, 'boss_tab')) return blocked('Boss');
       navigation.navigate('Boss', undefined);
@@ -169,7 +173,7 @@ export function routeNotificationAction(
 export { deepLinkToNotificationAction } from './notification-deep-link';
 
 const validTypes: NotificationActionType[] = [
-  'start_session', 'view_boss', 'open_chest', 'view_squad', 'join_duel',
+  'start_session', 'start_rescue', 'view_boss', 'open_chest', 'view_squad', 'join_duel',
   'view_streak', 'open_shop', 'view_profile', 'open_coach', 'accept_invite',
   'view_progress', 'custom',
 ];
@@ -189,6 +193,20 @@ function navigateToSessionSetup(
     comebackMultiplier: toOptionalNumber(payload?.comebackMultiplier),
     presetMode: payload?.presetMode === 'STUDY' ? 'STUDY' : undefined,
     source: payload?.source === 'content-study' ? 'content-study' : undefined,
+  };
+  navigation.navigate('SessionStack', { screen: 'SessionSetup', params });
+  return { success: true, screen: 'SessionSetup' };
+}
+
+function navigateToRescueSession(
+  navigation: NotificationNavigation,
+  payload?: Record<string, unknown>,
+): NotificationRouteResult {
+  const params: SessionStackParams['SessionSetup'] = {
+    source: 'rescue',
+    rescuePlanId: toOptionalString(payload?.rescuePlanId),
+    rescueTaskDescription: toOptionalString(payload?.rescueTaskDescription),
+    suggestedDurationSeconds: toOptionalNumber(payload?.suggestedDurationSeconds),
   };
   navigation.navigate('SessionStack', { screen: 'SessionSetup', params });
   return { success: true, screen: 'SessionSetup' };

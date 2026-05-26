@@ -12,7 +12,8 @@ export type RegisteredFeatureRoute =
   | 'Challenges'
   | 'CompanionDetail'
   | 'ContentStudy'
-  | 'Mastery';
+  | 'Mastery'
+  | 'MemoryConsole';
 
 export type FeatureRouteConfig = {
   feature: FeatureKey;
@@ -26,6 +27,7 @@ export const FEATURE_ROUTE_REGISTRY = [
   { feature: 'ai_coach_advanced', route: 'AICoach' },
   { feature: 'achievements', route: 'Mastery' },
   { feature: 'content_study', route: 'ContentStudy' },
+  { feature: 'memory_console', route: 'MemoryConsole' },
 ] as const satisfies readonly FeatureRouteConfig[];
 
 export type FeatureRouteName = typeof FEATURE_ROUTE_REGISTRY[number]['route'];
@@ -36,6 +38,7 @@ export const MAIN_STACK_FEATURE_ROUTES = [
   'Challenges',
   'ContentStudy',
   'Mastery',
+  'MemoryConsole',
 ] as const satisfies readonly MainStackRoute[];
 
 export function getFeatureForRoute(route: string): FeatureKey | null {

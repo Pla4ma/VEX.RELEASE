@@ -4,6 +4,20 @@ import { MotivationStyleSchema, PrimaryGoalSchema, SessionModeSchema } from '../
 
 export const LaneSchema = z.enum(['student', 'game_like', 'deep_creative', 'minimal_normal']);
 
+export const LANE_USER_FACING_NAMES: Record<z.infer<typeof LaneSchema>, string> = {
+  student: 'Study',
+  game_like: 'Run',
+  deep_creative: 'Project',
+  minimal_normal: 'Clean',
+};
+
+export const LANE_CONFIRMATION_COPY: Record<z.infer<typeof LaneSchema>, string> = {
+  student: 'VEX thinks Study Mode fits you best. You can change this anytime.',
+  game_like: 'VEX thinks Run Mode will keep you moving. You can change this anytime.',
+  deep_creative: 'VEX thinks Project Mode fits your deep work. You can change this anytime.',
+  minimal_normal: 'VEX thinks Clean Mode fits you best. You can change this anytime.',
+};
+
 export const LaneSourceSchema = z.enum(['onboarding', 'behavior', 'manual_override', 'fallback']);
 
 export const LaneConfidenceSchema = z.enum(['low', 'medium', 'high']);
@@ -119,3 +133,21 @@ export const LaneReconsiderationInputSchema = z.object({
   completedSessions: z.number().int().min(0),
   latestProfile: LaneProfileSchema,
 }).strict();
+
+export const LaneConfirmationSchema = z.object({
+  recommendedLane: LaneSchema,
+  userFacingName: z.string().min(1),
+  reason: z.string().min(1),
+  confidence: z.number().min(0).max(1),
+  canChangeLater: z.literal(true),
+}).strict();
+
+export const CompletionEvidenceInputSchema = z.object({
+  lane: LaneSchema,
+  sessionMode: z.string().nullable().optional(),
+  completionPercentage: z.number().min(0).max(100),
+  interruptions: z.number().int().min(0),
+  grade: z.string().min(1),
+});
+
+export type CompletionEvidenceInput = z.infer<typeof CompletionEvidenceInputSchema>;

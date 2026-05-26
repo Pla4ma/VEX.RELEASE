@@ -32,7 +32,7 @@ export async function completeSessionInternal(orch: SessionOrchestrator): Promis
     orch.session, orch.focusMetrics, 0, undefined, undefined, undefined,
   );
   if (!result.success) throw new Error("Session completion failed");
-  orch.session = { ...orch.session, ...(result.summary as unknown as typeof orch.session) };
+  orch.session.status = result.summary.status;
   orch.lastSessionSummary = result.summary;
   await orch.finalizeSession(result.summary);
   orch.eventEmitter.emitSessionCompleted(result.summary);

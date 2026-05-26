@@ -10,10 +10,13 @@ import { useSessionHistory } from '../../session/hooks/useSession';
 import { useAuthStore } from '../../store';
 import { useSessionUIStore } from '../../store/session-state';
 import { triggerHaptic } from '../../utils/haptics';
+import { useOnboardingLane } from './hooks/useOnboardingLane';
 import {
   DEFAULT_COMPANION_ELEMENT,
   DEFAULT_PERSONA_ID,
   GoalStep,
+  LaneConfirmationStep,
+  LaneChoiceStep,
   LauncherStep,
   MotivationStyleStep,
   OnboardingFlowLayout,
@@ -29,10 +32,7 @@ type OnboardingRouteProp = RouteProp<ExtendedRootStackParams, 'Onboarding'>;
 const LAST_STEP_INDEX = STEP_TITLES.length - 1;
 
 function clampStep(value: number | undefined): number {
-  if (typeof value !== 'number' || Number.isNaN(value)) {
-    return 0;
-  }
-
+  if (typeof value !== 'number' || Number.isNaN(value)) return 0;
   return Math.min(Math.max(0, value), LAST_STEP_INDEX);
 }
 
@@ -63,6 +63,16 @@ export function OnboardingFlowScreen(): JSX.Element {
   const firstSessionCompletedTrackedRef = useRef(false);
   const historyQuery = useSessionHistory(userId || '', 1);
 
+  const {
+    laneConfirmation,
+    chosenLane,
+    isChoosingLane,
+    computeLaneConfirmation,
+    handleAcceptLane,
+    handleChooseAnotherLane,
+    handleSelectLane,
+  } = useOnboardingLane(goal, motivationStyle);
+
   const selectedGoal = useMemo(() => ONBOARDING_GOALS.find((item) => item.id === goal), [goal]);
   const selectedPreset = useMemo(
     () => STARTER_PRESETS.find((preset) => preset.id === starterPresetId),
@@ -70,9 +80,7 @@ export function OnboardingFlowScreen(): JSX.Element {
   );
 
   const persistDraft = useCallback((): void => {
-    if (!userId) {
-      return;
-    }
+    if (!userId) return;
     saveDraft(userId, {
       element: DEFAULT_COMPANION_ELEMENT,
       explicitMotivationStyle: motivationStyle,
@@ -80,34 +88,35 @@ export function OnboardingFlowScreen(): JSX.Element {
       personaId: DEFAULT_PERSONA_ID,
       squadId: null,
       starterPresetId,
+      chosenLane: chosenLane ?? undefined,
     });
-  }, [goal, motivationStyle, saveDraft, starterPresetId, userId]);
+  }, [goal, motivationStyle, saveDraft, starterPresetId, userId, chosenLane]);
 
   useEffect(() => {
-    if (!userId || startedTrackedRef.current) {
-      return;
-    }
+    if (!userId || startedTrackedRef.current) return;
     startedTrackedRef.current = true;
     disclosureAnalytics.trackOnboardingStarted(userId);
   }, [disclosureAnalytics, userId]);
 
+  useEffect(() => { persistDraft(); }, [persistDraft, step]);
+
   useEffect(() => {
-    persistDraft();
-  }, [persistDraft, step]);
+    if (step === 2 && motivationStyle) computeLaneConfirmation();
+  }, [step, motivationStyle, computeLaneConfirmation]);
+
+  const handleAcceptLaneAndAdvance = useCallback((lane: import('../../features/lane-engine').Lane): void => {
+    handleAcceptLane(lane);
+    setStep(3);
+  }, [handleAcceptLane]);
 
   useEffect(() => {
     navigation.setParams({ step });
   }, [navigation, step]);
 
   useEffect(() => {
-    if (!isFocused || step !== LAST_STEP_INDEX || completedRef.current) {
-      return;
-    }
-    if (historyQuery.history.length === 0) {
-      return;
-    }
+    if (!isFocused || step !== LAST_STEP_INDEX || completedRef.current) return;
+    if (historyQuery.history.length === 0) return;
     setHasSeenFirstWin(true);
-
     if (!firstSessionCompletedTrackedRef.current && userId) {
       firstSessionCompletedTrackedRef.current = true;
       disclosureAnalytics.trackOnboardingFirstSessionCompleted(userId);
@@ -115,9 +124,7 @@ export function OnboardingFlowScreen(): JSX.Element {
   }, [disclosureAnalytics, historyQuery.history.length, isFocused, step, userId]);
 
   const finishOnboarding = useCallback(async (message?: string): Promise<void> => {
-    if (!userId || !goal || !starterPresetId) {
-      return;
-    }
+    if (!userId || !goal || !starterPresetId) return;
     setIsFinishing(true);
     setFinishError(null); completedRef.current = true;
     try {
@@ -145,13 +152,13 @@ export function OnboardingFlowScreen(): JSX.Element {
   }, [disclosureAnalytics, userId]);
 
   const handleSelectMotivationStyle = useCallback((style: typeof motivationStyle): void => {
-    if (!style) { return; }
+    if (!style) return;
     setMotivationStyle(style);
     setExplicitMotivationStyle(style);
   }, [setExplicitMotivationStyle]);
 
   const handleStartFirstSession = useCallback((): void => {
-    if (!selectedPreset) { return; }
+    if (!selectedPreset) return;
     setIsLaunchingSession(true);
     triggerHaptic('impactMedium').catch(() => undefined);
     disclosureAnalytics.trackFirstSessionStarted(userId, 'onboarding');
@@ -162,22 +169,39 @@ export function OnboardingFlowScreen(): JSX.Element {
     setIsLaunchingSession(false);
   }, [disclosureAnalytics, navigation, selectedGoal?.label, selectedPreset, userId]);
 
-  if (!userId) {
-    return <SignedOutOnboardingState />;
-  }
+  if (!userId) return <SignedOutOnboardingState />;
+
+  const isContinueDisabled = (step === 0 && !goal) || (step === 1 && !motivationStyle) || step === 2 || isFinishing;
 
   return (
-    <OnboardingFlowLayout finishError={finishError}
-      isContinueDisabled={(step === 0 && !goal) || (step === 1 && !motivationStyle) || isFinishing}
-      isFinishing={isFinishing} lastStepIndex={LAST_STEP_INDEX}
-      onBack={() => setStep(step - 1)} onContinue={() => setStep(step + 1)}
-      onRetryFinish={() => { finishOnboarding().catch(() => undefined); }} step={step}>
+    <OnboardingFlowLayout
+      finishError={finishError}
+      isContinueDisabled={isContinueDisabled}
+      isFinishing={isFinishing}
+      lastStepIndex={LAST_STEP_INDEX}
+      onBack={() => setStep(step - 1)}
+      onContinue={() => setStep(step + 1)}
+      onRetryFinish={() => { finishOnboarding().catch(() => undefined); }}
+      step={step}
+    >
       {step === 0 ? <GoalStep goal={goal} onSelectGoal={handleSelectGoal} /> : null}
       {step === 1 ? (
         <MotivationStyleStep goal={goal} motivationStyle={motivationStyle} onSelectStyle={handleSelectMotivationStyle} />
       ) : null}
-      {step === 2 ? <StarterStep starterPresetId={starterPresetId} onSelectPreset={setStarterPresetId} /> : null}
-      {step === 3 ? (
+      {step === 2 ? (
+        isChoosingLane ? (
+          <LaneChoiceStep onSelect={handleSelectLane} />
+        ) : (
+          <LaneConfirmationStep
+            confirmation={laneConfirmation}
+            isChoosing={false}
+            onAccept={handleAcceptLaneAndAdvance}
+            onChooseAnother={handleChooseAnotherLane}
+          />
+        )
+      ) : null}
+      {step === 3 ? <StarterStep starterPresetId={starterPresetId} onSelectPreset={setStarterPresetId} /> : null}
+      {step === 4 ? (
         <LauncherStep
           firstSessionXp={historyQuery.history[0]?.summary?.xpEarned ?? 50}
           hasSeenFirstWin={hasSeenFirstWin}

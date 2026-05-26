@@ -104,7 +104,7 @@ export class SessionNarrator {
       id: `beat_${Date.now()}_close`,
       timestamp: Date.now(),
       type: sessionCompleted ? 'VICTORY' : 'DEFEAT',
-      data: finalStats as unknown as Record<string, unknown>,
+      data: { ...finalStats },
       narrativeText: narrative.closingLine,
       intensity: finalStats.bossDefeated ? 0.8 : 0.3,
     });

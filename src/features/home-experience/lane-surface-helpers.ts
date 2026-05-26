@@ -58,8 +58,11 @@ export function applyLaneSurfaces(
   if (isMinimal && !ignored.includes('today_strip')) {
     map.today_strip = isNew ? 'tiny_tease' : 'secondary';
   }
-  if (!ignored.includes('rescue_cta')) map.rescue_cta = isNew ? 'tiny_tease' : 'secondary';
-  if (b.coachInteractions > 0 && !ignored.includes('memory_insight')) map.memory_insight = 'tiny_tease';
+  if (!ignored.includes('rescue_cta')) {
+    const isColdDay0WithNoSignal = isNew && b.totalCompletedSessions === 0;
+    map.rescue_cta = isColdDay0WithNoSignal ? 'hidden' : isNew ? 'tiny_tease' : 'secondary';
+  }
+  if (b.totalCompletedSessions >= 3 && b.coachInteractions > 0 && !ignored.includes('memory_insight')) map.memory_insight = 'tiny_tease';
   if (b.premiumFeatureAttempts.includes('weekly_intelligence') && b.totalCompletedSessions >= 5) {
     map.weekly_intelligence = parsed.featureAvailability.premium ? 'tiny_tease' : 'hidden';
   }

@@ -166,6 +166,7 @@ export const CompletionPersonalizationInputSchema = z
     hiddenFeatureKeys: z.array(z.string().min(1)).default([]),
     isComeback: z.boolean().optional().default(false),
     lane: LaneSchema,
+    reflectionAnswer: z.string().nullable().optional().default(null),
     summary: SessionSummarySchema,
   })
   .strict();
@@ -186,3 +187,14 @@ export type CompletionMemoryCandidate = z.infer<typeof CompletionMemoryCandidate
 export type CompletionPersonalization = z.infer<typeof CompletionPersonalizationSchema>;
 export type CompletionPersonalizationInput = z.infer<typeof CompletionPersonalizationInputSchema>;
 export type CompletionUnlockDecision = z.infer<typeof CompletionUnlockDecisionSchema>;
+
+export {
+  CompletionPersonalizationResultSchema,
+  CompletionProgressProofSchema,
+  CompletionUserFacingSummarySchema,
+} from "./completion-personalization-result-schemas";
+export type {
+  CompletionPersonalizationResult,
+  CompletionProgressProof,
+  CompletionUserFacingSummary,
+} from "./completion-personalization-result-schemas";

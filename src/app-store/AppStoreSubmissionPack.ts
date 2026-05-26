@@ -1,15 +1,16 @@
 /**
- * App Store Submission Pack
+ * App Store Submission Pack — VEX Phase 14
  *
- * Metadata, review notes, and privacy answers for App Store submission.
+ * Premium = durable personalization, not game economy.
+ * No coins, no gems, no shop, no loot.
  */
 
 export const APP_STORE_METADATA = {
   appName: 'VEX — Focus Score',
-  subtitle: 'Build focus. Track growth.',
+  subtitle: 'Focus. Track growth. Go deeper.',
   description:
-    'VEX turns focus into a measurable skill. Start a session, earn a grade, watch your Focus Score grow. Your companion evolves with every completed session. Streaks protect your momentum. Comeback quests recover lost days. Premium unlocks deeper insight — never fear.',
-  keywords: ['focus', 'productivity', 'timer', 'streak', 'habit', 'study'],
+    'VEX turns focus into a measurable skill. Start a session, earn a grade, watch your Focus Score grow. Your companion evolves with every completed session. VEX Premium adds long memory, advanced focus reports, study import depth, project continuity, calendar intelligence, and private memory console controls — serious productivity tools, not game monetization. No coins, no gems, no chests, no pay-to-win.',
+  keywords: ['focus', 'productivity', 'timer', 'deep work', 'habit', 'study', 'calendar', 'memory'],
   supportUrl: 'https://vex.app/support',
   privacyPolicyUrl: 'https://vex.app/privacy',
   ageRating: '4+',
@@ -26,7 +27,9 @@ Reviewer Instructions:
 5. Navigate to Settings > Account > Delete Account to test account deletion.
 
 Subscriptions:
-- Premium unlocks unlimited AI coach insights and monthly Focus Reports.
+- Premium adds long memory, advanced focus reports, study import depth, project continuity, calendar intelligence, advanced friction modes, weekly experiments, and private memory console controls.
+- Premium appears only after the core focus loop proves useful (40+ sessions).
+- No Day 0 paywall. No coins, gems, or consumable purchases.
 - Manage subscriptions in iOS Settings > Apple ID > Subscriptions.
 - Restore purchases via Settings > Account > Restore Purchases.
 

@@ -26,6 +26,7 @@ import { SessionSetupStakesCard } from "./SessionSetupStakesCard";
 import { SessionSetupStudyPlanCard } from "./SessionSetupStudyPlanCard";
 import { useSessionSetupStakes } from "../hooks/useSessionSetupStakes";
 import { buildLearningSessionParams } from "../../../features/learning-execution";
+import { isFeatureHidden } from "../../../features/liveops-config/final-release-feature-map";
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
@@ -57,6 +58,7 @@ export function ReturningUserView({
     selectedDurationSeconds: controller.selectedDurationSeconds,
     userId: controller.userId || "",
   });
+  const showStakes = !isFeatureHidden("boss_tab") || !isFeatureHidden("challenges");
 
   const handleStudyPlanSelect = (studyPlan: ActiveStudyPlan) => {
     const target = controller.learningExecutionLayer.target;
@@ -126,7 +128,7 @@ export function ReturningUserView({
           }
         />
 
-        <SessionSetupStakesCard stakes={stakes} />
+        {showStakes ? <SessionSetupStakesCard stakes={stakes} /> : null}
 
         <SessionSetupDifficultyCard
           disabled={controller.isStarting}

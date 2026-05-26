@@ -125,3 +125,17 @@ export async function createSessionRecord(
   debug.info('Session record persisted: %s', parsed.data.id);
   return parsed.data;
 }
+
+export async function countCompletedSessions(userId: string): Promise<number> {
+  const { count, error } = await getSupabaseClient()
+    .from('sessions')
+    .select('*', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .eq('status', 'COMPLETED');
+
+  if (error) {
+    throw new SessionHistoryRepositoryError('countCompletedSessions', error);
+  }
+
+  return count ?? 0;
+}

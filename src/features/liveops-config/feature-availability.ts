@@ -57,9 +57,23 @@ export interface FeatureAvailability {
 }
 
 function resolveFeatureAvailability(
-  feature: FeatureAccess,
+  feature: FeatureAccess | undefined,
   key: FeatureKey | null,
 ): FeatureAvailability {
+  if (!feature) {
+    return {
+      state: 'disabled',
+      canRenderEntryPoint: false,
+      canNavigate: false,
+      canQuery: false,
+      canUseBackend: false,
+      canRegisterRoute: false,
+      canSubscribeToEvents: false,
+      canShowNotification: false,
+      reason: 'Feature not configured.',
+    };
+  }
+
   const disabled =
     !feature.isVisible ||
     feature.releaseState === 'final_release_deactivated' ||

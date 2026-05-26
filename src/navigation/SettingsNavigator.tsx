@@ -9,6 +9,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { SettingsScreen } from '../screens/settings/SettingsScreen';
+import LaneModeSettingsScreen from '../screens/settings/LaneModeSettingsScreen';
 import NotificationSettingsScreen from '../screens/settings/NotificationSettingsScreen';
 import AppearanceSettingsScreen from '../screens/settings/AppearanceSettingsScreen';
 import CoachSettingsScreen from '../screens/settings/CoachSettingsScreen';
@@ -30,6 +31,7 @@ export const SettingsNavigator: React.FC = () => {
       <Stack.Screen name="CoachSettings" component={CoachSettingsScreen} />
       <Stack.Screen name="PrivacySettings" component={PrivacySettingsScreen} />
       <Stack.Screen name="AccountSettings" component={AccountSettingsScreen} />
+      <Stack.Screen name="LaneMode" component={LaneModeSettingsScreen} />
     </Stack.Navigator>
   );
 };

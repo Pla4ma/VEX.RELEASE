@@ -10,6 +10,7 @@ import { decideHomeSurfaces } from '../../../features/home-experience/home-surfa
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { FeatureAccessResult } from '../../../features/liveops-config';
+import type { LaneProfile } from '../../../features/lane-engine/types';
 
 interface UseHomeSurfaceMapInput {
   personalizationProfile: {
@@ -35,6 +36,7 @@ interface UseHomeSurfaceMapInput {
   isFirstSession: boolean;
   featureAccess: FeatureAccessResult;
   firstWeek?: FirstWeekExperience;
+  laneProfile?: LaneProfile;
 }
 
 export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap {
@@ -100,6 +102,9 @@ export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap
       isFirstSession,
       firstWeekPhase: input.firstWeek,
       degradedFeatures,
+      laneProfile: input.laneProfile
+        ? { primaryLane: input.laneProfile.primaryLane }
+        : undefined,
     });
   }, [
     b.totalCompletedSessions,
@@ -118,5 +123,6 @@ export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap
     p.gamificationIntensity,
     p.studyLayerName,
     p.userStage,
+    input.laneProfile?.primaryLane,
   ]);
 }

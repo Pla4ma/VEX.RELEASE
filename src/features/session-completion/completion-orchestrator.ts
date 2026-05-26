@@ -6,18 +6,20 @@ import { getConnectionState } from "../../lib/repository/base";
 import { enqueue } from "../../lib/offline/queue";
 import { SessionSummarySchema } from "../../session/types";
 import { createDebugger } from "../../utils/debug";
-import { processCompletedSessionPromise } from "../companion-promise/service";
-import { recordCompletionCompanionMemories } from "./companion-memory-integration";
 import { setOrchestratorHandlesCompletion } from "../../session/analytics/SessionAnalytics";
 import { invalidateCompletionQueries } from "./completion-query-invalidation";
 import { setCompletionSyncState } from "./completion-sync-state";
 import { applyCompletionSubsystems } from "./completion-subsystems";
 import { buildCompletionLedger } from "./ledger-service";
 import { resolveCompletionPersonalBest } from "./personal-best-integration";
+import { applyCompletionSideEffects } from "./completion-side-effects";
+import { integrateCompletionPersonalization } from "./completion-personalization-integration";
+import type { CompletionPersonalizationResult } from "./schemas";
 import { createCompletionLedger, getCompletionLedgerByIdempotencyKey } from "./repository";
 import { buildPostSessionStoryViewModel, type PostSessionStoryViewModel } from "./story-view-model-service";
-import { createSessionRecord } from "../session-history/repository";
+import { createSessionRecord, countCompletedSessions } from "../session-history/repository";
 import { beginKeyProcessing, markKeyProcessed, releaseKeyProcessing } from "./idempotency";
+import { resolveCompletionLane } from "./completion-lane-resolver";
 
 const debug = createDebugger("session-completion:orchestrator");
 
@@ -124,40 +126,42 @@ export async function orchestrateSessionCompletion(
       summary,
     );
 
-    // LAYER 4: Optional companion memories
-    const companionMemories = await recordCompletionCompanionMemories({
+    // LAYER 3.5: Personalization — lane profile, memory candidates, unlock decisions, reflection
+    let personalizationResult: CompletionPersonalizationResult | null = null;
+    try {
+      const sessionCount = await countCompletedSessions(parsed.userId).catch(() => 0);
+      personalizationResult = await integrateCompletionPersonalization({
+        deletedMemoryIds: [],
+        hiddenFeatureKeys: [
+          "shop",
+          "inventory",
+          "battle_pass",
+          "premium_currency",
+          "wagers",
+        ],
+        isComeback: summary.sessionMode === "RECOVERY",
+        isPersonalBest: personalBest.isPersonalBest,
+        lane: resolveCompletionLane(summary),
+        laneProfile: null,
+        ledger: finalLedger,
+        sessionCount,
+        summary,
+      });
+    } catch (error) {
+      Sentry.captureException(error, {
+        tags: { feature: "completion-personalization" },
+      });
+    }
+
+    const storyViewModel = await applyCompletionSideEffects({
+      degradedSystems,
+      finalLedger,
       isPersonalBest: personalBest.isPersonalBest,
-      ledger: finalLedger,
+      sessionId: parsed.sessionId,
       summary,
       userId: parsed.userId,
     });
 
-    const companionPromise = await processCompletedSessionPromise(
-      {
-        completedAt: finalLedger.completedAt,
-        durationMinutes:
-          Math.max(summary.actualDuration, summary.effectiveDuration) / 60,
-        sessionId: parsed.sessionId,
-        sessionMode: summary.sessionMode,
-        userId: parsed.userId,
-      },
-      finalLedger.timezone,
-    );
-
-    // LAYER 5: Story view model + analytics + query invalidation
-    const storyViewModel = buildPostSessionStoryViewModel({
-      companionMemory: companionMemories[0] ?? null,
-      companionPromise:
-        companionPromise.fulfilledPromise ??
-        companionPromise.createdPromise ??
-        companionPromise.missedPromise,
-      degradedWarnings: degradedSystems,
-      ledger: finalLedger,
-      personalBest,
-      summary,
-    });
-
-    setCompletionSyncState(finalLedger.ledgerId, degradedSystems, storyViewModel.pendingSync);
     debug.info("Session completion orchestrated for %s", parsed.sessionId);
     invalidateCompletionQueries(parsed.userId);
 

@@ -19,6 +19,7 @@ export const HOME_FEATURE_COPY: Record<FeatureKey, { icon: string; title: string
   gems_prominent: { icon: 'pro', title: 'Premium Insight', why: 'Premium adds durable intelligence, not currency.' },
   home_tab: { icon: 'home', title: 'Home', why: 'Your home base for focus and progress.' },
   inventory: { icon: 'save', title: 'Saved Strategies', why: 'Reusable strategies stay tied to behavior, not items.' },
+  memory_console: { icon: 'brain', title: 'Memory Console', why: 'Inspect, edit, and delete what VEX remembers about your focus patterns.' },
   premium_paywall: { icon: 'pro', title: 'Premium', why: 'Deep memory, Progress Intelligence, and advanced planning unlock after proven value.' },
   profile_tab: { icon: 'profile', title: 'Profile', why: 'Your personal hub for stats and settings.' },
   progress_view: { icon: 'progress', title: 'Progress', why: 'Progress turns each session into visible momentum.' },

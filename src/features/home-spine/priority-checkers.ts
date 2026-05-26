@@ -114,29 +114,16 @@ export function checkChallengeNearDone(
   featureAccess?: FeatureAccessMap,
   productContext?: ProductContext,
 ): HomePrimaryPriority | null {
-  if (!snapshot.challenge.isNearDone) {
-    return null;
-  }
-  if (featureAccess) {
-    const availability = getFeatureAvailability(featureAccess.challenges);
-    if (!isFeatureAvailableForNavigation(availability)) {
-      return null;
-    }
-  }
+  if (!snapshot.challenge.isNearDone) return null;
+  if (featureAccess && !isFeatureAvailableForNavigation(getFeatureAvailability(featureAccess.challenges))) return null;
   if (productContext?.surfaceMap) {
-    const challengeBlocked =
-      (productContext.surfaceMap.challenge_teaser === 'hidden' || productContext.surfaceMap.challenge_teaser === 'blocked') &&
-      (productContext.surfaceMap.weekly_quest === 'hidden' || productContext.surfaceMap.weekly_quest === 'blocked');
-    if (challengeBlocked) {
-      return null;
-    }
+    const sm = productContext.surfaceMap;
+    if ((sm.challenge_teaser === 'hidden' || sm.challenge_teaser === 'blocked') &&
+        (sm.weekly_quest === 'hidden' || sm.weekly_quest === 'blocked')) return null;
   }
-  return {
-    cta: { action: 'OPEN_CHALLENGES', text: 'Start Target Session' },
+  return { cta: { action: 'OPEN_CHALLENGES', text: 'Start Target Session' },
     reason: `${Math.round(snapshot.challenge.progressPercent)}% done. The challenge is just the wrapper; one focused block is the move.`,
-    type: 'CHALLENGE_NEAR_DONE',
-    urgency: 60,
-  };
+    type: 'CHALLENGE_NEAR_DONE', urgency: 60 };
 }
 
 export function checkBossActive(
@@ -144,57 +131,31 @@ export function checkBossActive(
   featureAccess?: FeatureAccessMap,
   productContext?: ProductContext,
 ): HomePrimaryPriority | null {
-  if (!snapshot.boss.hasActiveEncounter) {
-    return null;
-  }
-  if (featureAccess) {
-    const availability = getFeatureAvailability(featureAccess.boss_tab);
-    if (!isFeatureAvailableForNavigation(availability)) {
-      return null;
-    }
-  }
+  if (!snapshot.boss.hasActiveEncounter) return null;
+  if (featureAccess && !isFeatureAvailableForNavigation(getFeatureAvailability(featureAccess.boss_tab))) return null;
   if (productContext) {
-    if (productContext.firstWeekExperience) {
-      if (productContext.firstWeekExperience.bossIntensity === 'hidden') {
-        return null;
-      }
-    }
-    if (productContext.totalCompletedSessions !== undefined && productContext.totalCompletedSessions === 0) {
-      return null;
-    }
+    if (productContext.firstWeekExperience?.bossIntensity === 'hidden') return null;
+    if (productContext.totalCompletedSessions === 0) return null;
     if (productContext.surfaceMap) {
-      const bossBlocked =
-        (productContext.surfaceMap.boss_compact === 'hidden' || productContext.surfaceMap.boss_compact === 'blocked') &&
-        (productContext.surfaceMap.boss_full_cta === 'hidden' || productContext.surfaceMap.boss_full_cta === 'blocked');
-      if (bossBlocked) {
-        return null;
-      }
+      const sm = productContext.surfaceMap;
+      if ((sm.boss_compact === 'hidden' || sm.boss_compact === 'blocked') &&
+          (sm.boss_full_cta === 'hidden' || sm.boss_full_cta === 'blocked')) return null;
     }
   }
-  return {
-    cta: { action: 'OPEN_BOSS', text: 'Start Focus Session' },
+  return { cta: { action: 'OPEN_BOSS', text: 'Start Focus Session' },
     reason: 'Boss damage only comes from focused minutes. One clean session moves the bar.',
-    type: 'BOSS_ACTIVE',
-    urgency: 50,
-  };
+    type: 'BOSS_ACTIVE', urgency: 50 };
 }
 
 export function checkDefaultSession(
   snapshot: HomeContextSnapshot,
 ): HomePrimaryPriority {
-  const isNewUser = !snapshot.onboarding.firstSessionCompleted;
-  return buildSessionPriority(
-    'DEFAULT_SESSION',
-    10,
-    isNewUser
-      ? 'Start one clean session. The rest of home will get smarter after that.'
+  const isNew = !snapshot.onboarding.firstSessionCompleted;
+  return buildSessionPriority('DEFAULT_SESSION', 10,
+    isNew ? 'Start one clean session. The rest of home will get smarter after that.'
       : 'Start the next focus block without overthinking the setup.',
-    isNewUser ? 'Start First Session' : 'Start Focus',
-    {
-      presetMode: isNewUser ? 'SPRINT' : 'DEEP_WORK',
-      suggestedDurationSeconds: isNewUser ? 10 * 60 : 25 * 60,
-    },
-  );
+    isNew ? 'Start First Session' : 'Start Focus',
+    { presetMode: isNew ? 'SPRINT' : 'DEEP_WORK', suggestedDurationSeconds: isNew ? 10 * 60 : 25 * 60 });
 }
 
 export function getPriorityCandidates(

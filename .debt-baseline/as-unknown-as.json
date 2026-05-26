@@ -1,0 +1,20 @@
+[
+  "src/accessibility/AccessibilityEnhancer.ts",
+  "src/accessibility/AccessibilityEnhancerCore.ts",
+  "src/accessibility/motion-hooks.tsx",
+  "src/accessibility/motion-manager.ts",
+  "src/components/primitives/theme-values.ts",
+  "src/config/supabase.ts",
+  "src/features/session-start/__tests__/adaptiveDifficulty.test.ts",
+  "src/features/session-start/components/DurationPicker.tsx",
+  "src/features/session-start/components/SessionSuggestions.tsx",
+  "src/features/streaks/repository/enhanced.ts",
+  "src/screens/home/__tests__/home-data-type-splitting.test.ts",
+  "src/screens/home/hooks/__tests__/useOptionalMissionInput.test.ts",
+  "src/screens/onboarding/components/OnboardingChoosePersona.tsx",
+  "src/screens/session/hooks/__tests__/useCompanionSession.test.ts",
+  "src/services/realtime.ts",
+  "src/session/SessionService.test.ts",
+  "src/shared/ai/edge-function-invoke.ts",
+  "src/theme/ThemeService.ts"
+]

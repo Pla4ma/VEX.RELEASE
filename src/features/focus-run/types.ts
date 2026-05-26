@@ -3,5 +3,8 @@ export type {
   FocusRunDisplay,
   FocusRunEvent,
   FocusRunEventType,
+  FocusRunGrade,
+  FocusRunStatus,
   PersonalBoss,
+  PersonalBossEvidence,
 } from './schemas';

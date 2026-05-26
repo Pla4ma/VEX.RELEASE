@@ -29,6 +29,7 @@ export const FINAL_RELEASE_FEATURE_MAP: Record<FeatureKey, FinalReleaseFeatureEn
   profile_tab: { status: 'included', label: 'Profile Tab' },
   ai_coach_basic: { status: 'included', label: 'Basic Coach Presence' },
   economy_basic: { status: 'hidden', label: 'Spendable Rewards' },
+  memory_console: { status: 'progressive', label: 'Memory Console' },
   companion_detail: { status: 'included', label: 'Companion Visual' },
   content_study: { status: 'included', label: 'Study / Deep Work Entry' },
   advanced_settings: { status: 'included', label: 'Settings & Privacy' },

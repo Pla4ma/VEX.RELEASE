@@ -51,6 +51,7 @@ export type SessionStake = z.infer<typeof SessionStakeSchema>;
 
 export const LaneSessionBriefSchema = z.object({
   lane: LaneSchema,
+  userFacingModeName: z.enum(['Study', 'Run', 'Project', 'Clean']),
   title: z.string().min(1),
   body: z.string().min(1),
   successCondition: z.string().min(1),
@@ -98,12 +99,14 @@ export const SessionSetupNavigationParamsSchema = z.object({
   focusAreas: z.array(z.string()).optional(),
   learningExecutionLabel: z.string().optional(),
   learningExecutionTaskId: z.string().optional(),
-  source: z.enum(['content-study', 'learning-execution', 'onboarding_first_session']).optional(),
+  source: z.enum(['content-study', 'learning-execution', 'onboarding_first_session', 'rescue']).optional(),
   generationId: z.string().optional(),
   contentId: z.string().optional(),
   studyPlanId: z.string().optional(),
   sessionCategory: z.string().optional(),
   sessionTags: z.array(z.string()).optional(),
+  rescuePlanId: z.string().optional(),
+  rescueTaskDescription: z.string().optional(),
 });
 
 export const SESSION_SETUP_SOURCE_ONBOARDING = 'onboarding_first_session';

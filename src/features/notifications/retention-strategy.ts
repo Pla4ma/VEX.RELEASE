@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/react-native';
 import { z } from 'zod';
 
 import { getUserTimezone, scheduleForLocalTime } from '../ai-coach/utils/timezone';
+import { decideNudge } from '../notification-policy/service';
 import {
   fetchChallengeExpiryCandidates,
   fetchRetentionUserProfile,
@@ -88,6 +89,23 @@ async function scheduleReminder(userId: string, draft: ReminderDraft): Promise<v
       extra: { userId },
     });
   }
+}
+
+function streakProtectionAllowed(lane: 'minimal_normal' | 'game_like' | 'deep_creative' | 'student'): boolean {
+  const decision = decideNudge({
+    lane,
+    completedSessions: 1,
+    daysSinceOnboarding: 1,
+    context: 'none',
+    now: Date.now(),
+    sentToday: 0,
+    recentDismissals: 0,
+    quietHoursActive: false,
+    userMuted: false,
+    manuallyScheduled: false,
+    pausedCategories: [],
+  });
+  return decision.allowed;
 }
 
 export async function scheduleOnboardingNotifications(userId: string): Promise<void> {

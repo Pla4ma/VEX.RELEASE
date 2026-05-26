@@ -1,5 +1,9 @@
 {
   "imports": {
+    "@sentry/node": "npm:@sentry/node@latest",
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@2",
+    "@trigger.dev/sdk": "npm:@trigger.dev/sdk@latest",
+    "zod": "npm:zod@3",
     "npm:@trigger.dev/sdk": "npm:@trigger.dev/sdk@latest",
     "npm:@sentry/node": "npm:@sentry/node@latest",
     "npm:zod": "npm:zod@3",

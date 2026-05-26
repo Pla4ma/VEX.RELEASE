@@ -2,11 +2,11 @@ import type { PurchasesPackageDisplayInfo } from '../../shared/monetization';
 import { launchColors } from '@theme/tokens/launch-colors';
 
 
-export const VALUE_PROPOSITION = 'Premium adds depth after the core focus loop is useful.';
+export const VALUE_PROPOSITION = 'Premium is durable personalization — not a game economy. No coins, no gems, no chests.';
 export const FREE_BOUNDARY_COPY =
-  'Core sessions, basic progress, streak building, and basic Coach Presence stay free.';
+  'Core sessions, basic progress, streak building, basic Coach Presence, and Rescue mode stay free forever.';
 export const PREMIUM_BOUNDARY_COPY =
-  'Premium adds deeper coach memory, progress intelligence, and execution tools for users who already rely on VEX.';
+  'Premium adds long memory, advanced focus reports, study import depth, project continuity, calendar intelligence, advanced friction modes, weekly experiments, and private memory console controls.';
 
 const FALLBACK_PRICING = {
   monthly: 'Live pricing unavailable',
@@ -49,39 +49,39 @@ export type PaywallFeatureHighlight = {
 };
 
 export const FEATURE_HIGHLIGHT_MAP: Record<string, PaywallFeatureHighlight> = {
-  ai_coach_full_access: {
-    title: 'Deeper Coach Memory',
-    benefit: 'Let VEX learn your rhythm deeply and turn sessions into a full execution system.',
+  deep_coach_memory: {
+    title: 'Deep Coach Memory',
+    benefit: 'VEX remembers patterns, comeback style, best focus windows, and preferred push intensity across all sessions.',
     iconName: 'brain',
     gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
   },
-  advanced_analytics: {
-    title: 'Progress Intelligence',
-    benefit: 'See your best rhythm, focus risk, recovery plan, and consistency forecast.',
+  progress_intelligence: {
+    title: 'Weekly Focus Intelligence',
+    benefit: 'See your best rhythm, focus risk, recovery plan, consistency forecast, and calendar-aware planning.',
     iconName: 'bar-chart-3',
     gradient: [launchColors.hex_0f766e, launchColors.hex_0d9488],
   },
-  content_study: {
-    title: 'Advanced Study / Deep Work',
-    benefit: 'Break projects, study loops, and review sessions into smart next actions.',
+  advanced_study_os: {
+    title: 'Advanced Study & Deep Work',
+    benefit: 'Advanced import, review intelligence, deadline risk, weak-topic plan, and smart next actions from your material.',
     iconName: 'book-open',
     gradient: [launchColors.hex_d97706, launchColors.hex_f59e0b],
   },
-  streak_freeze: {
-    title: 'Recovery Planning',
-    benefit: 'Build a recovery plan that helps you return without shame or backlog pressure.',
+  recovery_planning: {
+    title: 'Recovery & Continuity',
+    benefit: 'Build a recovery plan without shame. Long project memory and context restoration keep flow alive across sessions.',
     iconName: 'shield',
     gradient: [launchColors.hex_059669, launchColors.hex_10b981],
   },
-  xp_boost: {
-    title: 'Premium Session Modes',
-    benefit: 'Choose deeper session modes when the basic loop is already working.',
+  premium_session_modes: {
+    title: 'Advanced Friction Modes',
+    benefit: 'Custom modifiers, personal boss depth, advanced run recap — no currency, no gimmicks.',
     iconName: 'zap',
     gradient: [launchColors.hex_4f46e5, launchColors.hex_7c3aed],
   },
-  season_premium_rewards: {
-    title: 'Visual Identity',
-    benefit: 'Shape the companion, atmosphere, and focus world without changing core progress.',
+  visual_identity: {
+    title: 'Memory Console & Identity',
+    benefit: 'Editable long memory with source, confidence, and expiry. Shape companion forms and focus worlds.',
     iconName: 'award',
     gradient: [launchColors.hex_0f766e, launchColors.hex_0d9488],
   },

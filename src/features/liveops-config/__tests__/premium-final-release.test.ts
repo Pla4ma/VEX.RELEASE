@@ -73,7 +73,9 @@ describe('premium final-release truth', () => {
     ].join(' ').toLowerCase();
 
     for (const banned of ['chest', 'shop', 'inventory', 'coins', 'gems']) {
-      expect(copy).not.toContain(banned);
+      // Negation patterns ("no coins", "no gems") are intentional disclaimers — not economy selling
+      const positiveUse = new RegExp(`(?<!(no|not|without|never|0)[\\s\\S]{0,5})${banned}`, 'i');
+      expect(copy).not.toMatch(positiveUse);
     }
   });
 

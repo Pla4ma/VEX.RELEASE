@@ -44,6 +44,7 @@ export const FEATURE_RELEASE_STATES: Record<FeatureKey, FeatureReleaseState> = {
   gems_prominent: 'final_release_deactivated',
   home_tab: 'final_release_core',
   inventory: 'final_release_deactivated',
+  memory_console: 'final_release_progressive',
   premium_paywall: 'final_release_progressive',
   profile_tab: 'final_release_core',
   progress_view: 'final_release_core',
@@ -65,6 +66,7 @@ export const FEATURE_TEASER_STARTS: Partial<Record<FeatureKey, number>> = {
   ai_coach_advanced: 6,
   content_study: 8,
   quiz_review_mode: 9,
+  memory_console: 2,
 };
 
 export const FEATURE_PRIORITIES: Partial<Record<FeatureKey, number>> = {
@@ -102,6 +104,7 @@ export const FEATURE_THRESHOLDS: Record<FeatureKey, number> = {
   gems_prominent: Number.POSITIVE_INFINITY,
   home_tab: 0,
   inventory: Number.POSITIVE_INFINITY,
+  memory_console: 3,
   premium_paywall: 40,
   profile_tab: 0,
   progress_view: 0,

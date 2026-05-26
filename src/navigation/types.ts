@@ -17,7 +17,8 @@ export type RootStackRoute =
   | 'Comeback'
   | 'StreakFuneral'
   | 'FocusScoreDashboard'
-  | 'VipPaywall';
+  | 'VipPaywall'
+  | 'MemoryConsole';
 
 export type AuthStackRoute = 'Login' | 'Register' | 'ForgotPassword' | 'ResetPassword' | 'VerifyEmail';
 export type MainTabRoute = 'Home' | 'Focus' | 'Progress' | 'Profile';
@@ -67,7 +68,7 @@ export interface SessionSetupParams {
   sessionTags?: string[];
   learningExecutionLabel?: string;
   learningExecutionTaskId?: string;
-  source?: 'content-study' | 'learning-execution' | 'onboarding_first_session';
+  source?: 'content-study' | 'learning-execution' | 'onboarding_first_session' | 'rescue';
   studyPlanId?: string;
   suggestedDifficulty?: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
   suggestedDurationSeconds?: number;
@@ -75,6 +76,8 @@ export interface SessionSetupParams {
   comeback?: ComebackContext;
   study?: StudyContext;
   war?: WarContext;
+  rescuePlanId?: string;
+  rescueTaskDescription?: string;
 }
 
 export interface SessionStackParams {
@@ -99,6 +102,7 @@ export interface RootStackParams {
   Comeback: { comebackState: ComebackState };
   StreakFuneral: { diedAt: number; previousStreak: number };
   FocusScoreDashboard: undefined;
+  MemoryConsole: undefined;
 }
 
 export type ExtendedRootStackParams = RootStackParams & MainStackParams;
@@ -127,7 +131,8 @@ export type MainStackRoute =
   | 'AICoach'
   | 'Challenges'
   | 'Mastery'
-  | 'CompanionDetail';
+  | 'CompanionDetail'
+  | 'MemoryConsole';
 
 export interface MainStackParams {
   [key: string]: object | undefined;
@@ -138,6 +143,7 @@ export interface MainStackParams {
   Challenges: undefined;
   Mastery: undefined;
   CompanionDetail: undefined;
+  MemoryConsole: undefined;
 }
 
 export interface SettingsStackParams {
@@ -148,6 +154,7 @@ export interface SettingsStackParams {
   PrivacySettings: undefined;
   AppearanceSettings: undefined;
   CoachSettings: undefined;
+  LaneMode: undefined;
 }
 
 export interface ScreenOptionsFactory {

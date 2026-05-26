@@ -3,6 +3,8 @@ export { validateLaneEvent } from './events';
 export { useBehaviorLane, useInitialLane } from './hooks';
 export { getLanePresentationPolicy } from './presentation';
 export {
+  accumulateCompletionEvidence,
+  confirmInitialLane,
   getLaneMechanicPolicy,
   mergeLaneProfiles,
   resolveBehaviorLane,
@@ -10,7 +12,9 @@ export {
   shouldReconsiderLane,
 } from './service';
 export type {
+  CompletionEvidenceInput,
   Lane,
+  LaneConfirmation,
   LaneEvidence,
   LaneMechanic,
   LaneMechanicPolicy,

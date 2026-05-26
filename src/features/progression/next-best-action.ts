@@ -53,6 +53,7 @@ const featureLabels: Record<FeatureKey, string> = {
   quiz_review_mode: 'quiz mode',
   // Companion
   companion_detail: 'companion',
+  memory_console: 'memory console',
   // Seasonal
   seasonal_features: 'seasonal features',
   // Paywall

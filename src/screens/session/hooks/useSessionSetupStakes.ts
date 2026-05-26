@@ -4,6 +4,7 @@ import { useActiveBoss } from '../../../features/boss/hooks';
 import { useActiveChallenges } from '../../../features/challenges/hooks';
 import { useStreakSummary } from '../../../features/streaks/hooks';
 import type { SessionStakesBriefingProps } from '../../../features/session-start/components/SessionStakesBriefing';
+import { isFeatureHidden } from '../../../features/liveops-config/final-release-feature-map';
 
 type UseSessionSetupStakesInput = {
   currentStreakDays: number | null;
@@ -21,8 +22,10 @@ export function useSessionSetupStakes({
   selectedDurationSeconds,
   userId,
 }: UseSessionSetupStakesInput): SessionSetupStakes {
-  const { data: activeBoss } = useActiveBoss(userId);
-  const { data: activeChallenges } = useActiveChallenges(userId);
+  const economyEnabled = !isFeatureHidden('boss_tab') && !isFeatureHidden('challenges');
+
+  const { data: activeBoss } = useActiveBoss(economyEnabled ? userId : '');
+  const { data: activeChallenges } = useActiveChallenges(economyEnabled ? userId : '');
   const { data: streakSummary } = useStreakSummary(userId);
 
   const bossStake = React.useMemo<SessionSetupStakes['bossStake']>(() => {

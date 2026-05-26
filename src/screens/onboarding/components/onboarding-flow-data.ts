@@ -4,6 +4,7 @@ export const DEFAULT_PERSONA_ID = 'mentor';
 export const STEP_TITLES = [
   'Pick your first win',
   'Choose the motivation style',
+  'Confirm your focus mode',
   'Choose your first session',
   'Start now',
 ] as const;

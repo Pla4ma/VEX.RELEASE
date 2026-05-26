@@ -21,6 +21,7 @@ export type OnboardingDraft = {
   explicitMotivationStyle?: MotivationProfileType;
   personaId?: CoachPersona;
   squadId?: string | null;
+  chosenLane?: string | null;
 };
 
 function getCurrentUserId(): string | null {

@@ -1,7 +1,20 @@
 import { SessionMode } from '../../session/modes';
 import { buildLaneSessionBrief } from '../session-start/service';
 import { listStoredStudyPlans, upsertStoredStudyPlan } from './repository';
-import { StudyOsHomeSurfaceSchema, StudyPlanSchema, type ReviewItem, type StudyBlock, type StudyOsHomeSurface, type StudyPlan } from './schemas';
+import {
+  RecallQuestionSchema,
+  StudyOsHomeSurfaceSchema,
+  StudyOsPremiumGateSchema,
+  StudyOsUnlockGateSchema,
+  StudyPlanSchema,
+  type RecallQuestion,
+  type ReviewItem,
+  type StudyBlock,
+  type StudyOsHomeSurface,
+  type StudyOsPremiumGate,
+  type StudyOsUnlockGate,
+  type StudyPlan,
+} from './schemas';
 
 function firstSentence(text: string): string {
   return text.split(/[.!?\n]/).map((part) => part.trim()).find(Boolean) ?? 'Study next useful section';
@@ -137,4 +150,185 @@ export function buildStudyOsHomeSurface(input: {
     riskLabel: input.plan?.deadlineAt ? 'Deadline risk active' : null,
     title: input.plan?.title ?? 'Study OS',
   });
+}
+
+// ─── Day 0 / Unlock Gate ────────────────────────────────────────────
+
+export function computeStudyOsUnlockGate(input: {
+  completedSessions: number;
+  studyUsageRatio: number;
+  firstWeekPhase?: number;
+}): StudyOsUnlockGate {
+  const { completedSessions, studyUsageRatio, firstWeekPhase = 0 } = input;
+  const isDayZero = completedSessions === 0;
+
+  if (isDayZero) {
+    return StudyOsUnlockGateSchema.parse({
+      isUnlocked: false,
+      isDayZero: true,
+      completedSessions,
+      studyUsageRatio,
+      unlockReason: 'day_zero',
+    });
+  }
+
+  if (completedSessions >= 7 || firstWeekPhase >= 7) {
+    return StudyOsUnlockGateSchema.parse({
+      isUnlocked: true,
+      isDayZero: false,
+      completedSessions,
+      studyUsageRatio,
+      unlockReason: 'full',
+    });
+  }
+
+  if (completedSessions >= 5 || studyUsageRatio >= 0.35) {
+    return StudyOsUnlockGateSchema.parse({
+      isUnlocked: true,
+      isDayZero: false,
+      completedSessions,
+      studyUsageRatio,
+      unlockReason: completedSessions >= 5 ? 'evidence_sessions' : 'evidence_usage',
+    });
+  }
+
+  return StudyOsUnlockGateSchema.parse({
+    isUnlocked: false,
+    isDayZero: false,
+    completedSessions,
+    studyUsageRatio,
+    unlockReason: 'first_week',
+  });
+}
+
+// ─── Premium Gate ──────────────────────────────────────────────────
+
+export function computeStudyOsPremiumGate(input: {
+  hasPremiumEntitlement: boolean;
+  revenueCatHealthy: boolean;
+}): StudyOsPremiumGate {
+  return StudyOsPremiumGateSchema.parse({
+    canAccessPremiumDepth: input.hasPremiumEntitlement && input.revenueCatHealthy,
+    revenueCatHealthy: input.revenueCatHealthy,
+    basicStudyFree: true,
+    restrictionReason: input.revenueCatHealthy
+      ? input.hasPremiumEntitlement ? null : 'Premium study depth available with VEX+'
+      : 'Premium features unavailable — RevenueCat is degraded',
+  });
+}
+
+// ─── Recall Question ────────────────────────────────────────────────
+
+export function generateRecallQuestion(input: {
+  blockTitle: string;
+  blockObjective: string;
+  reflection?: string | null;
+  studyBlockId: string;
+  studyPlanId: string;
+}): RecallQuestion {
+  const kind: 'recall' | 'reflection' = input.reflection ? 'reflection' : 'recall';
+  const prompt = kind === 'reflection'
+    ? `Reflect: ${input.blockObjective}`
+    : `Recall the main concept from "${input.blockTitle}"`;
+  return RecallQuestionSchema.parse({
+    id: `${input.studyBlockId}:recall:${Date.now()}`,
+    prompt,
+    answerHint: input.reflection ? input.reflection.slice(0, 200) : null,
+    kind,
+    studyBlockId: input.studyBlockId,
+    studyPlanId: input.studyPlanId,
+  });
+}
+
+export function getEmptyRecallFallback(): RecallQuestion {
+  return RecallQuestionSchema.parse({
+    id: 'no-recall',
+    prompt: 'No study blocks completed yet — start one first.',
+    answerHint: null,
+    kind: 'reflection',
+    studyBlockId: 'none',
+    studyPlanId: 'none',
+  });
+}
+
+export function shouldGenerateRecall(plan: StudyPlan | null): boolean {
+  if (!plan) return false;
+  return plan.blocks.some((b) => b.status === 'completed');
+}
+
+export function buildMemoryContentFromBlock(block: StudyBlock, reflection?: string | null): string {
+  return reflection
+    ? `Completed: ${block.title} — ${block.objective}. Reflection: ${reflection}`
+    : `Completed: ${block.title} — ${block.objective}`;
+}
+
+// ─── Enhanced Completion ─────────────────────────────────────────────
+
+export interface StudyBlockCompletionResult {
+  plan: StudyPlan;
+  recallQuestion: RecallQuestion | null;
+  memoryContent: string | null;
+  memoryTags: string[];
+  suggestedNextBlock: { title: string; objective: string } | null;
+}
+
+export async function completeStudyBlockEnhanced(input: {
+  blockId: string;
+  reflection?: string | null;
+  studyPlanId: string;
+  userId: string;
+  now?: number;
+}): Promise<StudyBlockCompletionResult> {
+  const plan = await completeStudyBlock(input);
+  const block = plan.blocks.find((b) => b.id === input.blockId);
+  if (!block) {
+    return { plan, recallQuestion: null, memoryContent: null, memoryTags: [], suggestedNextBlock: null };
+  }
+  const recall = generateRecallQuestion({
+    blockObjective: block.objective,
+    blockTitle: block.title,
+    reflection: input.reflection,
+    studyBlockId: block.id,
+    studyPlanId: plan.id,
+  });
+  const memoryContent = buildMemoryContentFromBlock(block, input.reflection);
+  const memoryTags = [block.title.toLowerCase().replace(/\s+/g, '-'), 'study-block'];
+  const nextBlock = plan.blocks.find((b) => b.status === 'not_started');
+  const suggestedNextBlock = nextBlock
+    ? { title: nextBlock.title, objective: nextBlock.objective }
+    : null;
+
+  return { plan, recallQuestion: recall, memoryContent, memoryTags, suggestedNextBlock };
+}
+
+export function getPlannedBlocksFromPlan(plan: StudyPlan | null): StudyBlock[] {
+  if (!plan) return [];
+  return plan.blocks.filter((b) => b.status === 'not_started');
+}
+
+// ─── Day 0 Student Preview ─────────────────────────────────────────
+
+export function buildDayZeroStudyPreview(): StudyOsHomeSurface {
+  return StudyOsHomeSurfaceSchema.parse({
+    ctaLabel: 'Start first study block',
+    hidden: false,
+    offlineFallback: null,
+    riskLabel: null,
+    title: 'Study OS preview',
+  });
+}
+
+// ─── Backend Fallback Detection ─────────────────────────────────────
+
+export function isContentStudyBackendAvailable(input: {
+  featureHealth: 'healthy' | 'degraded' | 'unavailable';
+  aiConfigured: boolean;
+  storageConfigured: boolean;
+}): boolean {
+  return input.featureHealth === 'healthy' && input.aiConfigured && input.storageConfigured;
+}
+
+export function getManualStudyFallbackMessage(isOffline: boolean): string {
+  if (isOffline) return 'You are offline. Start a manual study block — sync can retry later.';
+  return 'Content tools are temporarily unavailable. Start a manual study session instead.';
 }

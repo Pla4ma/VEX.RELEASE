@@ -36,6 +36,7 @@ export const NotificationRequestSchema = z.object({
   content: z.string().max(500),
   scheduledFor: z.number().int().positive().optional(),
   metadata: z.record(z.unknown()).optional(),
+  respectDailyLimit: z.boolean().default(false),
 });
 
 export type NotificationRequest = z.infer<typeof NotificationRequestSchema>;

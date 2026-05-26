@@ -3,7 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParams } from '../../../navigation/types';
 import { useFeatureGate } from '../../../features/feature-gate/hooks';
-import { getFeatureAvailability } from '../../../features/liveops-config';
 import type { HomeController } from '../hooks/home-controller-types';
 import type { ActiveStudyPlan } from '../../../features/content-study';
 import { HomeSecondaryRail } from './HomeSecondaryRail';
@@ -13,6 +12,7 @@ import { HomeContextualCards } from './HomeContextualCards';
 import type { ChallengeItem } from '../../../features/home-spine/components';
 import type { useHomeData } from '../hooks/useHomeData';
 import type { MissionPriorityInput } from '../../../features/daily-mission/types';
+import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import { buildLearningSessionParams } from '../../../features/learning-execution';
 
 type HomeData = ReturnType<typeof useHomeData>;
@@ -26,7 +26,7 @@ interface HomeContentLowerProps {
   streakHoursRemaining: number;
   features: HomeController['features'];
   comebackSessionsCompleted: number;
-  surfaceMap?: import('../../../features/home-experience/surface-decision-schemas').HomeSurfaceMap;
+  surfaceMap: HomeSurfaceMap;
 }
 
 export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
@@ -52,28 +52,16 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   if (isDayZero) return null;
 
   const sm = surfaceMap;
-  const showSecondary = sm
-    ? sm.challenge_teaser !== 'hidden' || sm.boss_teaser !== 'hidden' || sm.study_layer !== 'hidden'
-    : controller.shouldShowSecondarySystems;
-  const showDailyMission = sm
-    ? sm.challenge_teaser !== 'hidden' && sm.challenge_teaser !== 'blocked'
-    : controller.shouldShowSecondarySystems && getFeatureAvailability(features.challenges).canRenderEntryPoint;
-  const showContextualCards = sm
-    ? sm.study_layer !== 'hidden' || sm.boss_teaser !== 'hidden'
-    : controller.shouldShowSecondarySystems;
-  const showSecondaryRail = sm
-    ? sm.study_layer !== 'hidden' && sm.study_layer !== 'blocked'
-    : controller.shouldShowSecondarySystems;
+  const showSecondary = sm.challenge_teaser !== 'hidden' || sm.boss_teaser !== 'hidden' || sm.study_layer !== 'hidden';
+  const showDailyMission = sm.challenge_teaser !== 'hidden' && sm.challenge_teaser !== 'blocked';
+  const showContextualCards = sm.study_layer !== 'hidden' || sm.boss_teaser !== 'hidden';
+  const showSecondaryRail = sm.study_layer !== 'hidden' && sm.study_layer !== 'blocked';
 
   const isNewOrActivating = stage === 'ACTIVATING' || stage === 'NEW_USER';
-  const showFocusScore = sm
-    ? (sm as Record<string, string>).focus_score !== 'hidden' && (sm as Record<string, string>).focus_score !== 'blocked'
-    : false;
-  const canOpenProgressDetail = sm
-    ? (sm as Record<string, string>).progress_detail !== 'hidden' &&
-      (sm as Record<string, string>).progress_detail !== 'blocked' &&
-      (sm as Record<string, string>).progress_detail !== 'tiny_tease'
-    : false;
+  const showFocusScore = (sm as Record<string, string>).focus_score !== 'hidden' && (sm as Record<string, string>).focus_score !== 'blocked';
+  const canOpenProgressDetail = (sm as Record<string, string>).progress_detail !== 'hidden' &&
+    (sm as Record<string, string>).progress_detail !== 'blocked' &&
+    (sm as Record<string, string>).progress_detail !== 'tiny_tease';
   const handleFocusScorePress = (): void => {
     if (isNewOrActivating || !canOpenProgressDetail) return;
     navigation.navigate('FocusScoreDashboard');

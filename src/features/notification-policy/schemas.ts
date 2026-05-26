@@ -34,8 +34,30 @@ export const NudgePolicyInputSchema = z.object({
   manuallyScheduled: z.boolean().default(false),
   now: z.number().int().min(0).default(() => Date.now()),
   context: z.enum(['none', 'avoidance', 'deadline', 'project_stale', 'run_open', 'weekly_ready']).default('none'),
+  memoryConfidence: z.number().min(0).max(1).optional(),
+  // Budget pause per category — repeated dismissal pauses the category
+  pausedCategories: z.array(z.enum(['study', 'run', 'project', 'clean'])).default([]),
+}).strict();
+
+export const NudgeSignalTypeSchema = z.enum([
+  'sent',
+  'opened',
+  'dismissed',
+  'ignored',
+  'rescue_started',
+  'session_completed',
+]);
+
+export const NudgeSignalRecordSchema = z.object({
+  userId: z.string().min(1),
+  nudgeType: NudgeTypeSchema,
+  signal: NudgeSignalTypeSchema,
+  lane: LaneSchema,
+  occurredAt: z.number().int().min(0),
 }).strict();
 
 export type NudgeType = z.infer<typeof NudgeTypeSchema>;
 export type NudgeDecision = z.infer<typeof NudgeDecisionSchema>;
 export type NudgePolicyInput = z.infer<typeof NudgePolicyInputSchema>;
+export type NudgeSignalType = z.infer<typeof NudgeSignalTypeSchema>;
+export type NudgeSignalRecord = z.infer<typeof NudgeSignalRecordSchema>;

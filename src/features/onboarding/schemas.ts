@@ -6,6 +6,7 @@
  */
 
 import { z } from "zod";
+import { LaneSchema } from "../lane-engine/schemas";
 
 /**
  * Focus goal enum
@@ -105,6 +106,7 @@ export const OnboardingStateSchema = z.object({
   firstSessionStarted: z.boolean(),
   firstSessionCompleted: z.boolean(),
   homePreviewEntered: z.boolean(),
+  chosenLane: LaneSchema.nullable(),
 });
 
 /**

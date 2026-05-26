@@ -1,12 +1,12 @@
 import { task } from '@trigger.dev/sdk';
 import * as Sentry from '@sentry/node';
-import { createHash } from 'crypto';
+import { createHash } from 'node:crypto';
 import { createClient } from '@supabase/supabase-js';
 import { z } from 'zod';
 import { ChallengeRefreshInputSchema, ChallengeRefreshOutputSchema } from '../../shared/jobs/schemas.ts';
 import { JOB_IDS, SCHEDULE_CONFIGS } from '../../shared/jobs/job-constants.ts';
 import type { ChallengeRefreshOutput } from '../../shared/jobs/schemas.ts';
-import { scheduleChallengeExpiryNotifications } from '../../src/features/notifications/retention-strategy';
+import { scheduleChallengeExpiryNotifications } from './expiry-reminders.ts';
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -219,7 +219,7 @@ export const challengeDailyRefresh = task({
 
       for (const userId of users) {
         try {
-          await scheduleChallengeExpiryNotifications(userId);
+          await scheduleChallengeExpiryNotifications(supabase, userId);
         } catch (err) {
           const message = err instanceof Error ? err.message : String(err);
           errors.push({ userId, error: `Challenge expiry scheduling failed: ${message}` });

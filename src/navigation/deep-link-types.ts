@@ -10,7 +10,8 @@ export type DeepLinkPath =
   | 'invite'
   | 'study'
   | 'coach'
-  | 'shop';
+  | 'shop'
+  | 'rescue';
 
 export interface DeepLink {
   path: DeepLinkPath;
@@ -42,6 +43,7 @@ export const VALID_DEEP_LINK_PATHS: DeepLinkPath[] = [
   'study',
   'coach',
   'shop',
+  'rescue',
 ];
 
 export interface DeepLinkHandlers {

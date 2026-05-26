@@ -1,4 +1,8 @@
 /**
+ * @deprecated BLOCKED by VEX Phase 14. Old economy event definitions.
+ * Kept for event payload type compatibility only. No new code should publish these events.
+ */
+/**
  * Inventory Events
  */
 

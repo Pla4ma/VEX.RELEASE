@@ -20,6 +20,7 @@ import type { SessionStake } from './schemas';
 import { useSessionSetupState } from '../../screens/session/hooks/useSessionSetupState';
 import { useStartSessionFlow } from '../../screens/session/hooks/useStartSessionFlow';
 import { PRESETS } from '../../screens/session/utils/session-setup';
+import { isFeatureHidden } from '../liveops-config/final-release-feature-map';
 
 type SessionSetupRouteParams = SessionStackParams['SessionSetup'];
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
@@ -140,16 +141,23 @@ export function useSessionStartController(input: {
 // Session Stake Hook (Phase 2)
 // ============================================================================
 
+/**
+ * @deprecated Session stakes (boss, challenge, streak economy) are gated
+ * behind the final-release feature map. Only available when both
+ * boss_tab and challenges are not hidden.
+ */
 export function useSessionStake(
   userId: string,
   durationSeconds: number,
   mode: string,
   selectedLoadout?: string[]
 ) {
+  const enabled = !isFeatureHidden('boss_tab') || !isFeatureHidden('challenges');
+
   return useQuery<SessionStake>({
     queryKey: ['session-stake', userId, durationSeconds, mode, selectedLoadout],
     queryFn: () => buildSessionStake(userId, durationSeconds, mode, selectedLoadout),
-    enabled: !!userId && durationSeconds > 0,
-    staleTime: 1000 * 30, // 30 seconds
+    enabled: enabled && !!userId && durationSeconds > 0,
+    staleTime: 1000 * 30,
   });
 }

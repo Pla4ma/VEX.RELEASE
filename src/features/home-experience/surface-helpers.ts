@@ -10,18 +10,44 @@ type FirstWeekPhase = SurfaceDecisionInput['firstWeekPhase'];
 
 type SurfaceMap = Record<HomeSurfaceKey, HomeSurfaceDecision>;
 
-function isStudyCueUser(
-  parsed: SurfaceDecisionInput,
-  p: PersonalizationProfile,
-  b: BehaviorStats,
-): boolean {
+function resolveLaneStudy(input: SurfaceDecisionInput, p: PersonalizationProfile, b: BehaviorStats): boolean {
+  const lane = input.laneProfile?.primaryLane;
+  if (lane === 'student') return true;
+  if (lane !== undefined) return false;
+  // Fallback — only when no lane profile present
   return p.motivationStyle === 'study_focused'
     || p.motivationStyle === 'student'
     || p.primaryGoal === 'study'
     || p.primaryGoal === 'learning'
-    || parsed.hasActiveStudyPlan
+    || input.hasActiveStudyPlan
     || b.studyUsageRatio >= 0.35
     || b.learningUsageRatio >= 0.35;
+}
+
+function resolveLaneGameLike(input: SurfaceDecisionInput, p: PersonalizationProfile): boolean {
+  const lane = input.laneProfile?.primaryLane;
+  if (lane === 'game_like') return true;
+  if (lane !== undefined) return false;
+  return p.motivationStyle === 'game_like' || p.motivationStyle === 'intense' || p.gamificationIntensity === 'strong';
+}
+
+function resolveLaneCalm(input: SurfaceDecisionInput, p: PersonalizationProfile): boolean {
+  const lane = input.laneProfile?.primaryLane;
+  if (lane === 'minimal_normal') return true;
+  if (lane !== undefined) return false;
+  return p.motivationStyle === 'calm';
+}
+
+function resolveLaneFriendly(input: SurfaceDecisionInput, p: PersonalizationProfile): boolean {
+  const lane = input.laneProfile?.primaryLane;
+  if (lane !== undefined) return false; // friendly is not a lane, it's a style
+  return p.motivationStyle === 'friendly';
+}
+
+function resolveLaneCoachLed(input: SurfaceDecisionInput, p: PersonalizationProfile): boolean {
+  const lane = input.laneProfile?.primaryLane;
+  if (lane !== undefined) return false; // coach-led is a style, not a lane
+  return p.motivationStyle === 'coach_led';
 }
 
 export function createEmptyHomeSurfaceMap(): SurfaceMap {
@@ -63,7 +89,7 @@ export function setupDay0Surfaces(
   map.coach_presence = 'tiny_tease';
   map.unlock_strip = 'tiny_tease';
 
-  const isStudyUser = isStudyCueUser(parsed, p, b);
+  const isStudyUser = resolveLaneStudy(parsed, p, b);
   applyLaneSurfaces(map, parsed, p, b, true, false);
 
   // On Day 0, only study-focused users get study_layer as tiny_tease (not spotlight)
@@ -71,9 +97,7 @@ export function setupDay0Surfaces(
     map.study_layer = 'tiny_tease';
   }
 
-  const isGameLikeUser = p.motivationStyle === 'game_like'
-    || p.motivationStyle === 'intense'
-    || p.gamificationIntensity === 'strong';
+  const isGameLikeUser = resolveLaneGameLike(parsed, p);
 
   if (isGameLikeUser && parsed.featureAvailability.boss && b.bossChallengeEngagement !== 'none') {
     map.boss_teaser = 'tiny_tease';
@@ -84,7 +108,7 @@ export function setupDay0Surfaces(
     map.boss_teaser = 'tiny_tease';
   }
 
-  const isCalmUser = p.motivationStyle === 'calm';
+  const isCalmUser = resolveLaneCalm(parsed, p);
   if (isCalmUser) {
     map.boss_teaser = 'hidden';
     map.boss_compact = 'hidden';
@@ -106,7 +130,7 @@ export function setupDay0Surfaces(
   }
 
   // Companions: friendly users get companion_thread as tiny_tease on Day 0
-  if (p.motivationStyle === 'friendly') {
+  if (resolveLaneFriendly(parsed, p)) {
     map.companion_thread = 'tiny_tease';
   }
 
@@ -126,13 +150,11 @@ export function selectSpotlight(
   fwProvided: boolean,
   fw: NonNullable<SurfaceDecisionInput['firstWeekPhase']>,
 ): void {
-  const isStudyUser = isStudyCueUser(parsed, p, b);
+  const isStudyUser = resolveLaneStudy(parsed, p, b);
 
-  const isGameLikeUser = p.motivationStyle === 'game_like'
-    || p.motivationStyle === 'intense'
-    || p.gamificationIntensity === 'strong';
+  const isGameLikeUser = resolveLaneGameLike(parsed, p);
 
-  const isCalmUser = p.motivationStyle === 'calm';
+  const isCalmUser = resolveLaneCalm(parsed, p);
   const fwSpotlight = fw.spotlightSurface ?? 'none';
 
   const candidates: { key: HomeSurfaceKey; priority: number }[] = [];
@@ -149,11 +171,11 @@ export function selectSpotlight(
     candidates.push({ key: 'boss_compact', priority: 8 });
   }
 
-  if (p.motivationStyle === 'coach_led' && parsed.hasActiveRecommendation && parsed.featureAvailability.challenges) {
+  if (resolveLaneCoachLed(parsed, p) && parsed.hasActiveRecommendation && parsed.featureAvailability.challenges) {
     candidates.push({ key: 'coach_presence', priority: 7 });
   }
 
-  if (p.motivationStyle === 'friendly' && isEngaged && parsed.featureAvailability.challenges) {
+  if (resolveLaneFriendly(parsed, p) && isEngaged && parsed.featureAvailability.challenges) {
     candidates.push({ key: 'companion_thread', priority: 6 });
   }
 

@@ -73,6 +73,21 @@ export function deepLinkToNavigationParams(
       return { screen: 'Main', params: { screen: 'AICoach' } };
     case 'shop':
       return { screen: 'Main', params: { screen: 'Shop' } };
+    case 'rescue':
+      return {
+        screen: 'SessionStack',
+        params: {
+          screen: 'SessionSetup',
+          params: {
+            source: 'rescue',
+            rescuePlanId: link.params.rescuePlanId,
+            rescueTaskDescription: link.params.rescueTaskDescription,
+            suggestedDurationSeconds: link.params.suggestedDurationSeconds
+              ? Number.parseInt(link.params.suggestedDurationSeconds, 10)
+              : undefined,
+          },
+        },
+      };
     default:
       return null;
   }

@@ -1,1 +1,110 @@
-export type AchievementCategory='SESSION'|'STREAK'|'BOSS'|'SOCIAL'|'PROGRESSION'|'ECONOMY'; export type AchievementRarity='COMMON'|'UNCOMMON'|'RARE'|'EPIC'|'LEGENDARY'; export interface Achievement{id:string;title:string;description:string;category:AchievementCategory;rarity:AchievementRarity;icon:string;isHidden:boolean;progressMax:number;currentProgress?:number;unlockCondition:AchievementCondition;pointValue:number;reward:{coins?:number;xp?:number;gems?:number;badge?:string;title?:string;cosmetic?:string;itemId?:string;};shareText:string;unlockedAt?:number;unlockRate?:number;}export interface AchievementCondition{type:string;target:number;comparator:'EQUALS'|'GREATER_THAN'|'LESS_THAN'|'CUMULATIVE';context?:Record<string,unknown>;}export interface UserAchievement{userId:string;achievementId:string;progress:number;maxProgress:number;isUnlocked:boolean;unlockedAt?:number;progressHistory:{timestamp:number;progress:number;source:string;}[];}export const DEDICATION_ACHIEVEMENTS:Achievement[] = [{id:'achievement-first-session',title:'First Steps',description:'Complete your first focus session',category:'SESSION',rarity:'COMMON',icon:'🌱',isHidden:false,progressMax:1,unlockCondition:{type:'SESSION_COMPLETE',target:1,comparator:'GREATER_THAN'},reward:{coins:50,xp:100},pointValue:10,shareText:'I just started my focus journey! 🌱',unlockRate:0.95},{id:'achievement-100-sessions',title:'Centurion',description:'Complete 100 focus sessions',category:'SESSION',rarity:'UNCOMMON',icon:'💯',isHidden:false,progressMax:100,unlockCondition:{type:'SESSION_COMPLETE',target:100,comparator:'CUMULATIVE'},reward:{coins:200,xp:500,badge:'Centurion'},pointValue:25,shareText:'100 sessions complete! Building momentum 💯',unlockRate:0.45},{id:'achievement-1000-sessions',title:'Session Master',description:'Complete 1,000 focus sessions',category:'SESSION',rarity:'RARE',icon:'🏆',isHidden:false,progressMax:1000,unlockCondition:{type:'SESSION_COMPLETE',target:1000,comparator:'CUMULATIVE'},reward:{coins:1000,xp:2000,badge:'Session Master',title:'Veteran'},pointValue:50,shareText:'1000 sessions! I am unstoppable 🏆',unlockRate:0.08},{id:'achievement-10000-minutes',title:'Time Lord',description:'Focus for 10,000 total minutes',category:'SESSION',rarity:'EPIC',icon:'⏱️',isHidden:false,progressMax:10000,unlockCondition:{type:'FOCUS_MINUTES',target:10000,comparator:'CUMULATIVE'},reward:{coins:2000,xp:5000,badge:'Time Lord',cosmetic:'golden-hourglass'},pointValue:100,shareText:'10,000 minutes of focus! Time is mine ⏱️',unlockRate:0.03}]; export const STREAK_ACHIEVEMENTS:Achievement[] = [{id:'achievement-7-day-streak',title:'Week Warrior',description:'Maintain a 7-day streak',category:'STREAK',rarity:'COMMON',icon:'🔥',isHidden:false,progressMax:7,unlockCondition:{type:'STREAK_DAYS',target:7,comparator:'GREATER_THAN'},reward:{coins:100,xp:200,badge:'Week Warrior'},pointValue:15,shareText:'7-day streak! On fire 🔥',unlockRate:0.6},{id:'achievement-30-day-streak',title:'Monthly Master',description:'Maintain a 30-day streak',category:'STREAK',rarity:'UNCOMMON',icon:'📅',isHidden:false,progressMax:30,unlockCondition:{type:'STREAK_DAYS',target:30,comparator:'GREATER_THAN'},reward:{coins:500,xp:1000,badge:'Monthly Master'},pointValue:30,shareText:'30-day streak! Monthly master 📅',unlockRate:0.2},{id:'achievement-100-day-streak',title:'Century Streak',description:'Maintain a 100-day streak',category:'STREAK',rarity:'EPIC',icon:'👑',isHidden:false,progressMax:100,unlockCondition:{type:'STREAK_DAYS',target:100,comparator:'GREATER_THAN'},reward:{coins:2000,xp:5000,badge:'Century Streak',title:'Unbreakable'},pointValue:100,shareText:'100-day streak! Unbreakable 👑',unlockRate:0.01},{id:'achievement-perfect-month',title:'Perfect Month',description:'Complete at least one session every day for 30 days without breaking streak',category:'STREAK',rarity:'RARE',icon:'✨',isHidden:false,progressMax:30,unlockCondition:{type:'PERFECT_STREAK',target:30,comparator:'EQUALS'},reward:{coins:800,xp:1500,badge:'Perfect Month'},pointValue:50,shareText:'Perfect month! Flawless streak ✨',unlockRate:0.05}]; export const COMBAT_ACHIEVEMENTS:Achievement[] = [{id:'achievement-first-boss',title:'Boss Slayer',description:'Defeat your first boss',category:'BOSS',rarity:'COMMON',icon:'⚔️',isHidden:false,progressMax:1,unlockCondition:{type:'BOSS_DEFEAT',target:1,comparator:'GREATER_THAN'},reward:{coins:150,xp:300,badge:'Boss Slayer'},pointValue:15,shareText:'First boss defeated! Boss Slayer ⚔️',unlockRate:0.7},{id:'achievement-10-bosses',title:'Boss Hunter',description:'Defeat 10 different bosses',category:'BOSS',rarity:'UNCOMMON',icon:'🏹',isHidden:false,progressMax:10,unlockCondition:{type:'BOSS_DEFEAT_UNIQUE',target:10,comparator:'GREATER_THAN'},reward:{coins:500,xp:1000,badge:'Boss Hunter'},pointValue:30,shareText:'10 bosses hunted! Boss Hunter 🏹',unlockRate:0.25},{id:'achievement-squad-war-win',title:'War Victor',description:'Win a squad war',category:'SOCIAL',rarity:'UNCOMMON',icon:'🏴',isHidden:false,progressMax:1,unlockCondition:{type:'SQUAD_WAR_WIN',target:1,comparator:'GREATER_THAN'},reward:{coins:300,xp:600,badge:'War Victor'},pointValue:30,shareText:'Squad war victory! War Victor 🏴',unlockRate:0.3},{id:'achievement-duel-win-10',title:'Duelist',description:'Win 10 duels',category:'SOCIAL',rarity:'RARE',icon:'🤺',isHidden:false,progressMax:10,unlockCondition:{type:'DUEL_WIN',target:10,comparator:'GREATER_THAN'},reward:{coins:600,xp:1200,badge:'Duelist',title:'Champion'},pointValue:50,shareText:'10 duels won! Duelist Champion 🤺',unlockRate:0.15},{id:'achievement-mvp',title:'MVP',description:'Become MVP in a squad war',category:'SOCIAL',rarity:'EPIC',icon:'🌟',isHidden:false,progressMax:1,unlockCondition:{type:'SQUAD_WAR_MVP',target:1,comparator:'GREATER_THAN'},reward:{coins:1000,xp:2000,badge:'MVP',title:'Most Valuable'},pointValue:100,shareText:'War MVP! Most Valuable Player 🌟',unlockRate:0.08}]; export const SOCIAL_ACHIEVEMENTS:Achievement[] = [{id:'achievement-join-squad',title:'Squad Member',description:'Join a squad',category:'SOCIAL',rarity:'COMMON',icon:'👥',isHidden:false,progressMax:1,unlockCondition:{type:'SQUAD_JOIN',target:1,comparator:'GREATER_THAN'},reward:{coins:100,xp:200},pointValue:10,shareText:'Joined a squad! Squad Member 👥',unlockRate:0.65},{id:'achievement-recruit-friend',title:'Recruiter',description:'Recruit a friend to the app',category:'SOCIAL',rarity:'UNCOMMON',icon:'📢',isHidden:false,progressMax:1,unlockCondition:{type:'FRIEND_RECRUIT',target:1,comparator:'GREATER_THAN'},reward:{coins:300,xp:500,badge:'Recruiter'},pointValue:25,shareText:'Friend recruited! Spread the word 📢',unlockRate:0.2},{id:'achievement-top-squad',title:'Elite Squad',description:'Reach top 10 on squad leaderboard',category:'SOCIAL',rarity:'RARE',icon:'🏛️',isHidden:false,progressMax:1,unlockCondition:{type:'LEADERBOARD_RANK',target:10,comparator:'LESS_THAN',context:{type:'squad'}},reward:{coins:800,xp:1500,badge:'Elite Squad'},pointValue:50,shareText:'Top 10 squad! Elite Squad 🏛️',unlockRate:0.05}]; export const HIDDEN_ACHIEVEMENTS:Achievement[] = [{id:'achievement-3am-session',title:'Night Owl',description:'???',category:'SESSION',rarity:'UNCOMMON',icon:'🦉',isHidden:true,progressMax:1,unlockCondition:{type:'SESSION_AT_TIME',target:1,comparator:'GREATER_THAN',context:{hour:3,minute:0}},reward:{coins:200,xp:400,badge:'Night Owl'},pointValue:25,shareText:'Night owl achievement unlocked! 🦉',unlockRate:0.1},{id:'achievement-10-sessions-day',title:'Marathon Runner',description:'???',category:'SESSION',rarity:'RARE',icon:'🏃',isHidden:true,progressMax:10,unlockCondition:{type:'SESSIONS_IN_DAY',target:10,comparator:'GREATER_THAN'},reward:{coins:500,xp:1000,badge:'Marathon Runner'},pointValue:50,shareText:'10 sessions in one day! Marathon Runner 🏃',unlockRate:0.05},{id:'achievement-perfect-s-week',title:'Flawless',description:'???',category:'SESSION',rarity:'EPIC',icon:'💎',isHidden:true,progressMax:7,unlockCondition:{type:'S_GRADE_STREAK',target:7,comparator:'GREATER_THAN'},reward:{coins:1500,xp:3000,badge:'Flawless',cosmetic:'diamond-aura'},pointValue:100,shareText:'Perfect S-grade week! Flawless 💎',unlockRate:0.005},{id:'achievement-comeback-king',title:'Phoenix Rising',description:'???',category:'STREAK',rarity:'RARE',icon:'🔥',isHidden:true,progressMax:1,unlockCondition:{type:'COMEBACK_FROM_BREAK',target:1,comparator:'GREATER_THAN',context:{days:30}},reward:{coins:400,xp:800,badge:'Phoenix Rising'},pointValue:50,shareText:'Risen from the ashes! Phoenix Rising 🔥',unlockRate:0.15},{id:'achievement-all-bosses',title:'Boss Collector',description:'???',category:'BOSS',rarity:'LEGENDARY',icon:'👹',isHidden:true,progressMax:1,unlockCondition:{type:'DEFEAT_ALL_BOSSES',target:1,comparator:'EQUALS'},reward:{coins:5000,xp:10000,badge:'Boss Collector',title:'Ultimate Hunter'},pointValue:500,shareText:'All bosses defeated! Ultimate Hunter 👹',unlockRate:0.001}]; export const ALL_ACHIEVEMENTS:Achievement[] = [...DEDICATION_ACHIEVEMENTS,...STREAK_ACHIEVEMENTS,...COMBAT_ACHIEVEMENTS,...SOCIAL_ACHIEVEMENTS,...HIDDEN_ACHIEVEMENTS]; export const ACHIEVEMENT_COUNT = ALL_ACHIEVEMENTS.length; export const HIDDEN_ACHIEVEMENT_COUNT = HIDDEN_ACHIEVEMENTS.length; export function getAchievementById(id:string){return ALL_ACHIEVEMENTS.find(a=>a.id === id);}export function getAchievementsByCategory(category:string){return ALL_ACHIEVEMENTS.filter(a=>(a as{category:string;}).category === category);}export function getVisibleAchievements(){return ALL_ACHIEVEMENTS.filter(a=>!(a as{isHidden:boolean;}).isHidden);}export function getHiddenAchievements(){return ALL_ACHIEVEMENTS.filter(a=>(a as{isHidden:boolean;}).isHidden);}export function getAchievementsByTier(tier:string){return ALL_ACHIEVEMENTS.filter(a=>(a as{tier?:string;}).tier === tier);}export function getAchievementDisplayInfo(achievement:Record<string,unknown>,isUnlocked:boolean):{name:string;description:string;icon:string;}{if(achievement.isHidden && !isUnlocked){return{name:'???',description:'This achievement is a mystery...',icon:'❓'};}return{name:(achievement as{name:string;}).name,description:(achievement as{description:string;}).description,icon:(achievement as{icon:string;}).icon};}
+export type AchievementCategory =
+  | 'SESSION'
+  | 'STREAK'
+  | 'BOSS'
+  | 'SOCIAL'
+  | 'PROGRESSION'
+  | 'ECONOMY';
+
+export type AchievementRarity =
+  | 'COMMON'
+  | 'UNCOMMON'
+  | 'RARE'
+  | 'EPIC'
+  | 'LEGENDARY';
+
+export interface AchievementCondition {
+  type: string;
+  target: number;
+  comparator: 'EQUALS' | 'GREATER_THAN' | 'LESS_THAN' | 'CUMULATIVE';
+  context?: Record<string, unknown>;
+}
+
+export interface Achievement {
+  id: string;
+  title: string;
+  description: string;
+  category: AchievementCategory;
+  rarity: AchievementRarity;
+  icon: string;
+  isHidden: boolean;
+  isDeprecated?: boolean;
+  progressMax: number;
+  currentProgress?: number;
+  unlockCondition: AchievementCondition;
+  pointValue: number;
+  reward: {
+    coins?: number;
+    xp?: number;
+    gems?: number;
+    badge?: string;
+    title?: string;
+    cosmetic?: string;
+    itemId?: string;
+  };
+  shareText: string;
+  unlockedAt?: number;
+  unlockRate?: number;
+}
+
+export interface UserAchievement {
+  userId: string;
+  achievementId: string;
+  progress: number;
+  maxProgress: number;
+  isUnlocked: boolean;
+  unlockedAt?: number;
+  progressHistory: Array<{
+    timestamp: number;
+    progress: number;
+    source: string;
+  }>;
+}
+
+export const DEDICATION_ACHIEVEMENTS: Achievement[] = [
+  {
+    id: 'achievement-first-session',
+    title: 'First Steps',
+    description: 'Complete your first focus session',
+    category: 'SESSION',
+    rarity: 'COMMON',
+    icon: '🌱',
+    isHidden: false,
+    progressMax: 1,
+    unlockCondition: { type: 'SESSION_COMPLETE', target: 1, comparator: 'GREATER_THAN' },
+    reward: { coins: 50, xp: 100 },
+    pointValue: 10,
+    shareText: 'I just started my focus journey! 🌱',
+    unlockRate: 0.95,
+  },
+  {
+    id: 'achievement-100-sessions',
+    title: 'Centurion',
+    description: 'Complete 100 focus sessions',
+    category: 'SESSION',
+    rarity: 'UNCOMMON',
+    icon: '💯',
+    isHidden: false,
+    progressMax: 100,
+    unlockCondition: { type: 'SESSION_COMPLETE', target: 100, comparator: 'CUMULATIVE' },
+    reward: { coins: 200, xp: 500, badge: 'Centurion' },
+    pointValue: 25,
+    shareText: '100 sessions complete! Building momentum 💯',
+    unlockRate: 0.45,
+  },
+  {
+    id: 'achievement-1000-sessions',
+    title: 'Session Master',
+    description: 'Complete 1,000 focus sessions',
+    category: 'SESSION',
+    rarity: 'RARE',
+    icon: '🏆',
+    isHidden: false,
+    progressMax: 1000,
+    unlockCondition: { type: 'SESSION_COMPLETE', target: 1000, comparator: 'CUMULATIVE' },
+    reward: { coins: 500, xp: 1500, badge: 'Session Master', title: 'The Focused' },
+    pointValue: 50,
+    shareText: '1000 sessions! The grind never stops 🏆',
+    unlockRate: 0.12,
+  },
+];

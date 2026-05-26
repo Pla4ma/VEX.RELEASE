@@ -1,74 +1,26 @@
-import { LaneFitSchema, UnlockDecisionSchema, UnlockExplainerInputSchema } from './schemas';
-import type { UnlockDecision, UnlockExplainerInput } from './types';
-
-const NEVER_UNLOCK: ReadonlySet<string> = new Set([
-  'shop',
-  'inventory',
-  'wagers',
-  'battle_pass',
-  'premium_currency',
-  'streak_insurance',
-  'gems_prominent',
-  'economy_advanced',
-  'economy_basic',
-]);
-
-const LANE_FEATURE_FIT: Record<string, Record<string, 'strong' | 'medium' | 'weak' | 'blocked'>> = {
-  study_os: {
-    student: 'strong',
-    deep_creative: 'medium',
-    game_like: 'weak',
-    minimal_normal: 'weak',
-  },
-  run_board: {
-    game_like: 'strong',
-    student: 'weak',
-    deep_creative: 'weak',
-    minimal_normal: 'blocked',
-  },
-  project_thread: {
-    deep_creative: 'strong',
-    student: 'medium',
-    game_like: 'weak',
-    minimal_normal: 'weak',
-  },
-  today_strip: {
-    minimal_normal: 'strong',
-    deep_creative: 'medium',
-    student: 'medium',
-    game_like: 'weak',
-  },
-  boss_tab: {
-    game_like: 'strong',
-    student: 'weak',
-    deep_creative: 'weak',
-    minimal_normal: 'blocked',
-  },
-  rescue_cta: {
-    student: 'strong',
-    deep_creative: 'strong',
-    game_like: 'medium',
-    minimal_normal: 'medium',
-  },
-};
-
-function resolveLaneFit(featureKey: string, lane?: string): 'strong' | 'medium' | 'weak' | 'blocked' {
-  const map = LANE_FEATURE_FIT[featureKey];
-  if (!map) return 'medium';
-  if (!lane) return 'weak';
-  return (map[lane] as 'strong' | 'medium' | 'weak' | 'blocked') ?? 'medium';
-}
+import { LaneFitSchema, UnlockDecisionSchema, UnlockExplainerInputSchema, buildUserFacingReason } from './schemas';
+import type { UnlockDecision, UnlockExplainerInput, UnlockReasonCode } from './types';
+import { NEVER_UNLOCK, resolveLaneFit, resolveMinSessions } from './lane-fit';
 
 export function createUnlockDecision(rawInput: UnlockExplainerInput): UnlockDecision {
   const input = UnlockExplainerInputSchema.parse(rawInput);
   const now = Date.now();
+  const laneFit = resolveLaneFit(input.featureKey, input.laneProfile);
 
   if (NEVER_UNLOCK.has(input.featureKey)) {
     return UnlockDecisionSchema.parse({
       featureKey: input.featureKey,
       decision: 'hidden',
       reasonCode: 'final_release_deactivated',
-      userFacingReason: 'This feature is not available in the current version.',
+      userFacingReason: buildUserFacingReason('never_unlock_baseline', {
+        featureKey: input.featureKey,
+        lane: input.laneProfile,
+        sessionCount: input.sessionCount,
+        minSessions: 0,
+        laneFit: 'blocked',
+        isPremium: input.isPremium,
+        hasRelatedBehavior: input.hasRelatedBehavior,
+      }),
       evidence: [],
       laneFit: LaneFitSchema.options[3],
       canHide: false,
@@ -83,20 +35,27 @@ export function createUnlockDecision(rawInput: UnlockExplainerInput): UnlockDeci
       reasonCode: 'manual_override',
       userFacingReason: 'You chose this setting.',
       evidence: [{ source: 'manual_override', detail: input.manualOverride, observedAt: now }],
-      laneFit: resolveLaneFit(input.featureKey, input.laneProfile),
+      laneFit,
       canHide: input.manualOverride !== 'hidden',
       canReconsiderAtSessionCount: null,
     });
   }
 
   if (input.sessionCount === 0) {
-    const laneFit = resolveLaneFit(input.featureKey, input.laneProfile);
     if (laneFit === 'blocked') {
       return UnlockDecisionSchema.parse({
         featureKey: input.featureKey,
         decision: 'blocked',
         reasonCode: 'lane_blocked',
-        userFacingReason: 'Not available for your current experience style.',
+        userFacingReason: buildUserFacingReason('lane_blocked', {
+          featureKey: input.featureKey,
+          lane: input.laneProfile,
+          sessionCount: input.sessionCount,
+          minSessions: 3,
+          laneFit: 'blocked',
+          isPremium: input.isPremium,
+          hasRelatedBehavior: input.hasRelatedBehavior,
+        }),
         evidence: [
           { source: 'lane_profile', detail: `lane:${input.laneProfile ?? 'unknown'}`, observedAt: now },
         ],
@@ -106,13 +65,20 @@ export function createUnlockDecision(rawInput: UnlockExplainerInput): UnlockDeci
       });
     }
     const isCoreFeature = ['focus_session', 'home_tab', 'profile_tab', 'focus_tab'].includes(input.featureKey);
+    const reasonCode: UnlockReasonCode = isCoreFeature ? 'day_zero_core' : 'day_zero_tease';
     return UnlockDecisionSchema.parse({
       featureKey: input.featureKey,
       decision: isCoreFeature ? 'unlocked' : 'teased',
-      reasonCode: isCoreFeature ? 'day_zero_core' : 'day_zero_tease',
-      userFacingReason: isCoreFeature
-        ? 'Available from your first session.'
-        : 'Available after your first session.',
+      reasonCode,
+      userFacingReason: buildUserFacingReason(reasonCode, {
+        featureKey: input.featureKey,
+        lane: input.laneProfile,
+        sessionCount: input.sessionCount,
+        minSessions: 1,
+        laneFit,
+        isPremium: input.isPremium,
+        hasRelatedBehavior: input.hasRelatedBehavior,
+      }),
       evidence: [{ source: 'cold_start', detail: `sessionCount:${input.sessionCount}`, observedAt: now }],
       laneFit,
       canHide: !isCoreFeature,
@@ -120,14 +86,20 @@ export function createUnlockDecision(rawInput: UnlockExplainerInput): UnlockDeci
     });
   }
 
-  const laneFit = resolveLaneFit(input.featureKey, input.laneProfile);
-
   if (laneFit === 'blocked') {
     return UnlockDecisionSchema.parse({
       featureKey: input.featureKey,
       decision: 'blocked',
       reasonCode: 'lane_blocked',
-      userFacingReason: `Not available for your current experience style. You can change this in settings.`,
+      userFacingReason: buildUserFacingReason('lane_blocked', {
+        featureKey: input.featureKey,
+        lane: input.laneProfile,
+        sessionCount: input.sessionCount,
+        minSessions: 3,
+        laneFit: 'blocked',
+        isPremium: input.isPremium,
+        hasRelatedBehavior: input.hasRelatedBehavior,
+      }),
       evidence: [
         { source: 'lane_profile', detail: `lane:${input.laneProfile ?? 'unknown'}`, observedAt: now },
       ],
@@ -137,18 +109,23 @@ export function createUnlockDecision(rawInput: UnlockExplainerInput): UnlockDeci
     });
   }
 
-  const minSessions = laneFit === 'strong' ? 1 : laneFit === 'medium' ? 3 : 5;
+  const minSessions = resolveMinSessions(laneFit, input.laneProfile);
   const isUnlocked = input.sessionCount >= minSessions;
+  const reasonCode: UnlockReasonCode = isUnlocked ? 'unlocked_after_sessions' : 'teased_before_sessions';
 
   return UnlockDecisionSchema.parse({
     featureKey: input.featureKey,
     decision: isUnlocked ? 'unlocked' : 'teased',
-    reasonCode: isUnlocked
-      ? `unlocked_after_${minSessions}_sessions`
-      : `teased_before_${minSessions}_sessions`,
-    userFacingReason: isUnlocked
-      ? `Unlocked because of your progress.`
-      : `Available after ${minSessions} completed sessions.`,
+    reasonCode,
+    userFacingReason: buildUserFacingReason(reasonCode, {
+      featureKey: input.featureKey,
+      lane: input.laneProfile,
+      sessionCount: input.sessionCount,
+      minSessions,
+      laneFit,
+      isPremium: input.isPremium,
+      hasRelatedBehavior: input.hasRelatedBehavior,
+    }),
     evidence: [
       { source: 'session_count', detail: `sessions:${input.sessionCount}`, observedAt: now },
       { source: 'lane_profile', detail: `lane:${input.laneProfile ?? 'unknown'}`, observedAt: now },

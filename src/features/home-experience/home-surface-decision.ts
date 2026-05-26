@@ -54,7 +54,8 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
     map.boss_full_cta = 'hidden';
   }
 
-  const isCalmUser = p.motivationStyle === 'calm';
+  const studyLane = parsed.laneProfile?.primaryLane;
+  const isCalmUser = studyLane === 'minimal_normal' || p.motivationStyle === 'calm';
   if (isCalmUser) {
     map.boss_compact = 'hidden';
     map.boss_full_cta = 'blocked';
@@ -95,17 +96,21 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
   }
 
   // Challenge/weekly quest
-  if (parsed.featureAvailability.challenges && isEngaged) {
+  const isMinimalUser = parsed.laneProfile?.primaryLane === 'minimal_normal' || p.motivationStyle === 'calm' || p.gamificationIntensity === 'minimal';
+  if (parsed.featureAvailability.challenges && isEngaged && !isMinimalUser) {
     map.challenge_teaser = map.challenge_teaser === 'hidden' ? 'tiny_tease' : map.challenge_teaser;
     map.weekly_quest = b.totalCompletedSessions >= 10 ? 'secondary' : 'hidden';
   }
 
   // Primary CTA
-  const isStudyUser = p.motivationStyle === 'study_focused'
-    || p.motivationStyle === 'student'
-    || p.primaryGoal === 'study'
-    || p.primaryGoal === 'learning'
-    || b.studyUsageRatio >= 0.35;
+  const isStudyUser = studyLane === 'student'
+    || (!studyLane && (
+      p.motivationStyle === 'study_focused'
+      || p.motivationStyle === 'student'
+      || p.primaryGoal === 'study'
+      || p.primaryGoal === 'learning'
+      || b.studyUsageRatio >= 0.35
+    ));
   map.start_session = parsed.hasActiveStudyPlan && isStudyUser ? 'secondary' : 'primary';
 
   // Coach/study spotlight conflict
@@ -119,7 +124,7 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
   if (p.motivationStyle === 'friendly' && isEngaged) {
     map.companion_thread = map.companion_thread === 'hidden' ? 'tiny_tease' : map.companion_thread;
   }
-  if (p.motivationStyle === 'calm') {
+  if (p.motivationStyle === 'calm' || studyLane === 'minimal_normal') {
     map.companion_thread = isEngaged ? 'tiny_tease' : 'hidden';
     map.focus_score = 'hidden';
     map.progress_detail = 'hidden';

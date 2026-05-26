@@ -1,3 +1,11 @@
+/**
+ * @deprecated BLOCKED by VEX Phase 14 durable personalization strategy.
+ *
+ * Streak insurance with coins/gambles/comeback-tokens = game-economy fix for
+ * a problem that should be solved by recovery planning (premium feature).
+ * This component is blocked by feature gate (streak_insurance = deactivated).
+ * Kept for archival reference only.
+ */
 import React, { useMemo } from "react"; import { View, Text, Pressable, Modal, ViewStyle } from "react-native"; import { useTheme } from "@/theme"; import type { StreakRiskAssessment } from "../../features/streaks/streak-insurance";
 interface StreakInsuranceModalProps { visible: boolean; assessment: StreakRiskAssessment | null; userCoins: number; onClose: () => void; onPurchaseInsurance: () => void; onStartGamble: (type: "CONSERVATIVE" | "MODERATE" | "AGGRESSIVE") => void; onUseComebackToken: () => void; availableTokens: number; }
 export const StreakInsuranceModal: React.FC<StreakInsuranceModalProps> = ({ visible, assessment, userCoins, onClose, onPurchaseInsurance, onStartGamble, onUseComebackToken, availableTokens }) => { const { theme } = useTheme(); const insuranceCost = assessment?.insuranceCost || 500; const canAffordInsurance = userCoins >= insuranceCost;

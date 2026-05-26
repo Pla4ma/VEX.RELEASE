@@ -11,6 +11,7 @@ import {
   type SessionStartSummary,
 } from './schemas';
 import { SessionMode } from '../../session/modes';
+import { LANE_USER_FACING_NAMES } from '../lane-engine/schemas';
 import type { Lane } from '../lane-engine/types';
 export { buildSessionStake } from './stake-service';
 
@@ -77,6 +78,13 @@ export function buildSessionStartHero(input: {
   smartSuggestionDescription: string | null;
 }): SessionStartHero {
   const { durationMinutes, params, presetName, smartSuggestionDescription } = input;
+  if (params.source === 'rescue') {
+    return SessionStartHeroSchema.parse({
+      body: params.rescueTaskDescription ?? 'No pressure — just one small action to keep moving forward.',
+      eyebrow: 'Rescue Block',
+      title: `${durationMinutes} minutes to a small win`,
+    });
+  }
   if (params.source === 'onboarding_first_session') {
     return SessionStartHeroSchema.parse({
       body: `Start with ${presetName} and get your first clean win on the board.`,
@@ -112,11 +120,11 @@ export function buildSessionStartHero(input: {
   });
 }
 
-function laneBriefCopy(lane: Lane): Pick<LaneSessionBrief, 'body' | 'ctaLabel' | 'sessionMode' | 'title'> {
-  if (lane === 'student') return { body: 'Review the next useful target before new material piles up.', ctaLabel: 'Start study block', sessionMode: SessionMode.STUDY, title: 'Study block ready' };
-  if (lane === 'game_like') return { body: 'Treat this as one clean encounter against the blocker in front of you.', ctaLabel: 'Start encounter', sessionMode: SessionMode.SPRINT, title: 'Run encounter ready' };
-  if (lane === 'deep_creative') return { body: 'Resume the thread and protect the next concrete move.', ctaLabel: 'Resume project block', sessionMode: SessionMode.CREATIVE, title: 'Project block ready' };
-  return { body: 'Name one task, run the block, stop when the timer ends.', ctaLabel: 'Start clean session', sessionMode: SessionMode.LIGHT_FOCUS, title: 'Clean session ready' };
+function laneBriefCopy(lane: Lane): Pick<LaneSessionBrief, 'body' | 'ctaLabel' | 'sessionMode' | 'title' | 'userFacingModeName'> {
+  if (lane === 'student') return { body: 'Review the next useful target before new material piles up.', ctaLabel: 'Start study block', sessionMode: SessionMode.STUDY, title: 'Study block ready', userFacingModeName: 'Study' };
+  if (lane === 'game_like') return { body: 'Treat this as one clean encounter against the blocker in front of you.', ctaLabel: 'Start encounter', sessionMode: SessionMode.SPRINT, title: 'Run encounter ready', userFacingModeName: 'Run' };
+  if (lane === 'deep_creative') return { body: 'Resume the thread and protect the next concrete move.', ctaLabel: 'Resume project block', sessionMode: SessionMode.CREATIVE, title: 'Project block ready', userFacingModeName: 'Project' };
+  return { body: 'Name one task, run the block, stop when the timer ends.', ctaLabel: 'Start clean session', sessionMode: SessionMode.LIGHT_FOCUS, title: 'Clean session ready', userFacingModeName: 'Clean' };
 }
 
 export function buildLaneSessionBrief(input: {
@@ -124,11 +132,26 @@ export function buildLaneSessionBrief(input: {
   isOffline?: boolean;
   isRescue?: boolean;
   lane: Lane;
+  subjectOrTask?: string | null;
+  deadlineSeconds?: number | null;
+  weakTopic?: string | null;
+  projectTitle?: string | null;
 }): LaneSessionBrief {
   const base = laneBriefCopy(input.lane);
   const rescueDuration = Math.max(5 * 60, Math.min(input.durationSeconds ?? 10 * 60, 12 * 60));
   const normalDuration = Math.max(15 * 60, Math.min(input.durationSeconds ?? 25 * 60, 90 * 60));
   const suggestedDurationSeconds = input.isRescue ? rescueDuration : normalDuration;
+
+  const rescueSuccessByLane: Record<Lane, string> = {
+    student: 'Complete five honest study minutes.',
+    game_like: 'Land one clean hit on the next move.',
+    deep_creative: 'Make one concrete project edit.',
+    minimal_normal: 'Stay focused for five minutes.',
+  };
+  const successCondition = input.isRescue
+    ? rescueSuccessByLane[input.lane]
+    : 'Finish the named block without adding scope.';
+
   return LaneSessionBriefSchema.parse({
     ...base,
     afterCompletion: 'VEX will use the finish signal to tune the next action.',
@@ -137,8 +160,9 @@ export function buildLaneSessionBrief(input: {
     lane: input.lane,
     offlineMessage: getOfflineSessionStartMessage(Boolean(input.isOffline)),
     risk: input.isRescue ? { label: 'Avoidance is active; start smaller.', type: 'avoidance' } : null,
-    successCondition: input.isRescue ? 'Complete five honest minutes.' : 'Finish the named block without adding scope.',
+    successCondition,
     suggestedDurationSeconds,
+    userFacingModeName: base.userFacingModeName,
   });
 }
 

@@ -92,11 +92,46 @@ describe('home lane surfaces', () => {
         gamificationIntensity: 'minimal',
         motivationStyle: 'calm',
       }),
+      laneProfile: { primaryLane: 'minimal_normal' },
     });
 
     expect(map.today_strip).toBe('secondary');
     expect(map.boss_full_cta).toBe('blocked');
     expect(map.boss_compact).toBe('hidden');
+  });
+
+  it('clean lane user can switch to game_like lane to unlock more gamification', () => {
+    const cleanMap = decideHomeSurfaces({
+      behaviorStats: baseStats({ totalCompletedSessions: 6, bossChallengeEngagement: 'high' }),
+      featureAvailability,
+      hasActiveBoss: true,
+      hasActiveRecommendation: false,
+      hasActiveStudyPlan: false,
+      isFirstSession: false,
+      personalizationProfile: profile({
+        gamificationIntensity: 'minimal',
+        motivationStyle: 'calm',
+      }),
+      laneProfile: { primaryLane: 'minimal_normal' },
+    });
+    expect(cleanMap.boss_compact).toBe('hidden');
+    expect(cleanMap.boss_full_cta).toBe('blocked');
+
+    const gameMap = decideHomeSurfaces({
+      behaviorStats: baseStats({ totalCompletedSessions: 6, bossChallengeEngagement: 'high' }),
+      featureAvailability,
+      hasActiveBoss: true,
+      hasActiveRecommendation: false,
+      hasActiveStudyPlan: false,
+      isFirstSession: false,
+      personalizationProfile: profile({
+        gamificationIntensity: 'strong',
+        motivationStyle: 'game_like',
+      }),
+      laneProfile: { primaryLane: 'game_like' },
+    });
+    expect(gameMap.run_board).not.toBe('hidden');
+    expect(gameMap.boss_compact).not.toBe('hidden');
   });
 
   it('suppresses hidden lane surfaces before query hooks can request them', () => {

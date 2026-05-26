@@ -1,4 +1,8 @@
 /**
+ * @deprecated BLOCKED by VEX Phase 14. Old economy event definitions for COINS/GEMS/SEASONAL currency.
+ * Kept for event payload type compatibility only. No new code should publish these events.
+ */
+/**
  * Economy Events
  */
 

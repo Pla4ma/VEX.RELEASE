@@ -48,8 +48,35 @@ export const StudyOsHomeSurfaceSchema = z.object({
   title: z.string().min(1),
 }).strict();
 
+export const StudyOsUnlockGateSchema = z.object({
+  isUnlocked: z.boolean(),
+  isDayZero: z.boolean(),
+  completedSessions: z.number().int().min(0),
+  studyUsageRatio: z.number().min(0).max(1),
+  unlockReason: z.enum(['day_zero', 'evidence_sessions', 'evidence_usage', 'first_week', 'full']),
+}).strict();
+
+export const StudyOsPremiumGateSchema = z.object({
+  canAccessPremiumDepth: z.boolean(),
+  revenueCatHealthy: z.boolean(),
+  basicStudyFree: z.boolean(),
+  restrictionReason: z.string().nullable(),
+}).strict();
+
+export const RecallQuestionSchema = z.object({
+  id: z.string().min(1),
+  prompt: z.string().min(1),
+  answerHint: z.string().min(1).nullable(),
+  kind: z.enum(['recall', 'reflection']),
+  studyBlockId: z.string().min(1),
+  studyPlanId: z.string().min(1),
+}).strict();
+
+export type RecallQuestion = z.infer<typeof RecallQuestionSchema>;
 export type ReviewItem = z.infer<typeof ReviewItemSchema>;
 export type StudyBlock = z.infer<typeof StudyBlockSchema>;
 export type StudyOsHomeSurface = z.infer<typeof StudyOsHomeSurfaceSchema>;
+export type StudyOsPremiumGate = z.infer<typeof StudyOsPremiumGateSchema>;
+export type StudyOsUnlockGate = z.infer<typeof StudyOsUnlockGateSchema>;
 export type StudyPlan = z.infer<typeof StudyPlanSchema>;
 export type StudySource = z.infer<typeof StudySourceSchema>;

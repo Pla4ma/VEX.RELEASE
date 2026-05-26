@@ -25,7 +25,16 @@ export function useMasteryRankUpSpectacle(): UseMasteryRankUpSpectacleReturn {
   useEffect(() => {
     const unsubscribe = spectacleService.subscribe((spectacleEvent: SpectacleEvent) => {
       if (spectacleEvent.type === SpectacleType.MASTERY_RANK_UP) {
-        const payload = spectacleEvent as unknown as MasteryRankUpPayload;
+        // SpectaclePayload has [key: string]: unknown; extract fields at runtime boundary
+        const raw = spectacleEvent as SpectacleEvent & Record<string, unknown>;
+        const payload: MasteryRankUpPayload = {
+          userId: String(raw.userId ?? ''),
+          oldRank: String(raw.oldRank ?? ''),
+          newRank: String(raw.newRank ?? ''),
+          totalPoints: Number(raw.totalPoints ?? 0),
+          unlockedFeatures: Array.isArray(raw.unlockedFeatures) ? raw.unlockedFeatures as string[] : [],
+          timestamp: Number(raw.timestamp ?? Date.now()),
+        };
         setEvent(payload);
         setIsActive(true);
       }

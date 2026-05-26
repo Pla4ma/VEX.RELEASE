@@ -52,6 +52,7 @@ export type FeatureKey =
   | 'content_study_advanced'
   | 'quiz_review_mode'
   | 'companion_detail'
+  | 'memory_console'
   | 'seasonal_features'
   | 'premium_paywall'
   | 'advanced_settings';

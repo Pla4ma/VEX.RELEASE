@@ -77,7 +77,7 @@ describe('Day 0 Surface Policy', () => {
       const map = makeDay0Map();
       const count = visibleCount(map);
       expect(count).toBeGreaterThanOrEqual(4);
-      expect(count).toBeLessThanOrEqual(7);
+      expect(count).toBeLessThanOrEqual(6);
     });
 
     it('Day 0 has exactly one primary CTA', () => {

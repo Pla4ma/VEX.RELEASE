@@ -180,7 +180,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
         />
       )}
 
-      {showLowerContent ? (
+      {showLowerContent && surfaceMap ? (
         <HomeContentLower
           controller={controller}
           data={data}

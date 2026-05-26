@@ -39,6 +39,11 @@ export async function canSendNotification(
     return { allowed: false, reason: 'User has opted out of notifications' };
   }
   if (request.priority === 'STREAK_CRITICAL' || request.priority === 'PENDING_SYNC') {
+    if (request.respectDailyLimit) {
+      if (currentBudget.sentCount >= currentBudget.maxDaily) {
+        return { allowed: false, reason: 'Daily notification limit reached' };
+      }
+    }
     return { allowed: true };
   }
   if (isInQuietHours(currentBudget)) {
@@ -146,6 +151,7 @@ export async function sendCoachNotification(
     priority,
     type: `coach_${type.toLowerCase()}`,
     content,
+    respectDailyLimit: false,
   }, budget);
 
   return result.success
