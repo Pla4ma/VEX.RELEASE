@@ -12,7 +12,7 @@ import {
 } from './schemas';
 import { SessionMode } from '../../session/modes';
 import { LANE_USER_FACING_NAMES } from '../lane-engine/schemas';
-import type { Lane } from '../lane-engine/types';
+import type { Lane, LaneProfile } from '../lane-engine/types';
 export { buildSessionStake } from './stake-service';
 
 export function parseSessionSetupParams(input: unknown): {
@@ -131,13 +131,15 @@ export function buildLaneSessionBrief(input: {
   durationSeconds?: number | null;
   isOffline?: boolean;
   isRescue?: boolean;
-  lane: Lane;
+  lane?: Lane;
+  laneProfile?: LaneProfile;
   subjectOrTask?: string | null;
   deadlineSeconds?: number | null;
   weakTopic?: string | null;
   projectTitle?: string | null;
 }): LaneSessionBrief {
-  const base = laneBriefCopy(input.lane);
+  const lane = input.laneProfile?.primaryLane ?? input.lane ?? 'minimal_normal';
+  const base = laneBriefCopy(lane);
   const rescueDuration = Math.max(5 * 60, Math.min(input.durationSeconds ?? 10 * 60, 12 * 60));
   const normalDuration = Math.max(15 * 60, Math.min(input.durationSeconds ?? 25 * 60, 90 * 60));
   const suggestedDurationSeconds = input.isRescue ? rescueDuration : normalDuration;
@@ -148,16 +150,14 @@ export function buildLaneSessionBrief(input: {
     deep_creative: 'Make one concrete project edit.',
     minimal_normal: 'Stay focused for five minutes.',
   };
-  const successCondition = input.isRescue
-    ? rescueSuccessByLane[input.lane]
-    : 'Finish the named block without adding scope.';
+  const successCondition = input.isRescue ? rescueSuccessByLane[lane] : 'Finish the named block without adding scope.';
 
   return LaneSessionBriefSchema.parse({
     ...base,
     afterCompletion: 'VEX will use the finish signal to tune the next action.',
     focusStrategyLoadout: ['Phone away', 'One tab', 'Notes open', 'Do not pause', '5-minute rescue allowed'],
     friction: input.isRescue ? { level: 'soft', reason: 'Short rescue block lowers start friction.' } : null,
-    lane: input.lane,
+    lane,
     offlineMessage: getOfflineSessionStartMessage(Boolean(input.isOffline)),
     risk: input.isRescue ? { label: 'Avoidance is active; start smaller.', type: 'avoidance' } : null,
     successCondition,

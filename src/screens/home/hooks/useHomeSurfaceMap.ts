@@ -102,9 +102,7 @@ export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap
       isFirstSession,
       firstWeekPhase: input.firstWeek,
       degradedFeatures,
-      laneProfile: input.laneProfile
-        ? { primaryLane: input.laneProfile.primaryLane }
-        : undefined,
+      laneProfile: input.laneProfile,
     });
   }, [
     b.totalCompletedSessions,

@@ -48,6 +48,13 @@ export const PostSessionStoryViewModelSchema = z.object({
     newValue: z.number().min(0).max(100),
     oldValue: z.number().min(0).max(100).nullable(),
   }).nullable(),
+  personalization: z.object({
+    laneProfileConfidence: z.number().min(0).max(1),
+    memoryCandidateCount: z.number().int().min(0),
+    reflectionQuestion: z.string(),
+    unlockKey: z.string(),
+    userFacingTitle: z.string(),
+  }).nullable(),
   rewardReveal: z.object({ rewardIds: z.array(z.string()) }).strict(),
   sessionId: z.string().uuid(),
   streakState: z.object({ action: z.string(), newDays: z.number().int().min(0), previousDays: z.number().int().min(0) }).strict(),

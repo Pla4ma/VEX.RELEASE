@@ -1,10 +1,12 @@
 import { z } from 'zod';
+import { LaneProfileSchema } from '../lane-engine/schemas';
 import { FREE_FEATURE_STRS, PREMIUM_FEATURE_STRS } from './tier-definitions';
 
 const PremiumPersonalizationInputSchema = z.object({
   billingConfigured: z.boolean(),
   completedSessions: z.number().int().min(0),
   lane: z.enum(['student', 'game_like', 'deep_creative', 'minimal_normal']).optional(),
+  laneProfile: LaneProfileSchema.optional(),
   primaryGoal: z.enum(['focus', 'study', 'work', 'creative', 'personal', 'learning']),
   motivationStyle: z.enum(['calm', 'friendly', 'coach_led', 'game_like', 'intense', 'study_focused']),
   studyUsageRatio: z.number().min(0).max(1),
@@ -47,8 +49,13 @@ const NO_FAKE_BILLING = [
   'Show unavailable or coming-soon state instead of fake premium.',
 ];
 
+function laneFor(input: z.infer<typeof PremiumPersonalizationInputSchema>) {
+  return input.laneProfile?.primaryLane ?? input.lane;
+}
+
 function buildFreeVsProMatrix(input: z.infer<typeof PremiumPersonalizationInputSchema>): Array<{ free: string; pro: string }> {
-  if (input.lane === 'student' || input.primaryGoal === 'study' || input.primaryGoal === 'learning') {
+  const lane = laneFor(input);
+  if (lane === 'student' || (!lane && (input.primaryGoal === 'study' || input.primaryGoal === 'learning'))) {
     return [
       { free: 'Basic study blocks', pro: 'Deeper imports, deadline intelligence, and weekly study plan' },
       { free: 'Basic review prompts', pro: 'Advanced review queue with weak-topic tracking' },
@@ -57,7 +64,7 @@ function buildFreeVsProMatrix(input: z.infer<typeof PremiumPersonalizationInputS
       { free: 'Rescue mode', pro: 'Smarter recovery planning around deadlines' },
     ];
   }
-  if (input.lane === 'deep_creative') {
+  if (lane === 'deep_creative') {
     return [
       { free: 'One active project thread', pro: 'More project threads and deeper continuity memory' },
       { free: 'Basic next move', pro: 'Flow reports and project recovery planning' },
@@ -66,7 +73,7 @@ function buildFreeVsProMatrix(input: z.infer<typeof PremiumPersonalizationInputS
       { free: 'Basic progress', pro: 'Weekly project rhythm intelligence' },
     ];
   }
-  if (input.lane === 'minimal_normal') {
+  if (lane === 'minimal_normal') {
     return [
       { free: 'Clean session loop', pro: 'Calendar intelligence and quiet weekly planning' },
       { free: 'Basic Today Strip', pro: 'Advanced quiet automation and memory console' },
@@ -97,11 +104,12 @@ function resolveTriggerMoment(input: z.infer<typeof PremiumPersonalizationInputS
 }
 
 function getPersonalizedHeadline(input: z.infer<typeof PremiumPersonalizationInputSchema>): string {
+  const lane = laneFor(input);
   if (!input.billingConfigured) return 'Premium is not available yet';
-  if (input.lane === 'student') return 'Build the study system around your real deadlines';
-  if (input.lane === 'game_like') return 'Turn the run into durable mastery';
-  if (input.lane === 'deep_creative') return 'Keep project context alive between sessions';
-  if (input.lane === 'minimal_normal') return 'Make the quiet system smarter';
+  if (lane === 'student') return 'Build the study system around your real deadlines';
+  if (lane === 'game_like') return 'Turn the run into durable mastery';
+  if (lane === 'deep_creative') return 'Keep project context alive between sessions';
+  if (lane === 'minimal_normal') return 'Make the quiet system smarter';
   if (input.hasTriedAdvancedStudy) return 'Your study system is ready to go deeper';
   if (input.hasTriedWeeklyReport) return 'See the full picture of your rhythm';
   if (input.motivationStyle === 'calm') return 'Let VEX learn what works for you';
@@ -111,16 +119,17 @@ function getPersonalizedHeadline(input: z.infer<typeof PremiumPersonalizationInp
 }
 
 function getPersonalizedBody(input: z.infer<typeof PremiumPersonalizationInputSchema>): string {
+  const lane = laneFor(input);
   if (!input.billingConfigured) {
     return 'Premium appears when live billing and real premium value are ready. Keep building your rhythm.';
   }
-  if (input.lane === 'game_like') {
+  if (lane === 'game_like') {
     return 'Premium expands run history, personal boss arcs, advanced modifiers, and recap archives without coins, gems, shop power, or paid recovery.';
   }
-  if (input.lane === 'deep_creative') {
+  if (lane === 'deep_creative') {
     return 'Premium keeps more project threads alive with deeper continuity memory, flow reports, and recovery planning when context goes stale.';
   }
-  if (input.lane === 'minimal_normal') {
+  if (lane === 'minimal_normal') {
     return 'Premium adds calendar intelligence, editable memory, weekly clean planning, and advanced quiet automation without adding noise.';
   }
   if (input.hasTriedAdvancedStudy) {

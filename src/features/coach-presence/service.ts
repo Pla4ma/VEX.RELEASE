@@ -1,5 +1,6 @@
 import type { FeatureAvailability } from '../liveops-config';
 import type { CompanionState } from '../companion/types';
+import type { LaneProfile } from '../lane-engine/types';
 import { ACTION_LABELS, PROGRESS_REACTIONS, STYLE_ADAPTATION } from './copy';
 import { getCoachMemoryConfidence, getCoachPresenceMessage } from './copy-service';
 import {
@@ -15,29 +16,41 @@ import {
   type CoachPresenceVisualState,
   type CompletionPresenceSummary,
 } from './schemas';
-
 interface PresenceAvailability {
   focus: FeatureAvailability;
   progress: FeatureAvailability;
   study: FeatureAvailability;
 }
-
 interface BuildPresenceInput {
   companion: Pick<CompanionState, 'currentMood' | 'element' | 'level' | 'phase'> | null;
   featureAvailability: PresenceAvailability;
+  laneProfile?: LaneProfile | null;
   memorySummary: CoachPresenceMemorySummary;
   motivationStyle: CoachPresenceMotivationStyle;
   progress: CoachPresenceProgressInput;
   surface: 'HOME' | 'SESSION_SETUP' | 'CHAT';
 }
-
 interface CompletionPresenceInput {
   featureAvailability: PresenceAvailability;
+  laneProfile?: LaneProfile | null;
   memorySummary: CoachPresenceMemorySummary;
   motivationStyle: CoachPresenceMotivationStyle;
   summary: CompletionPresenceSummary;
 }
-
+function styleForLane(profile: LaneProfile | null | undefined, fallback: CoachPresenceMotivationStyle): CoachPresenceMotivationStyle {
+  if (!profile) return fallback;
+  if (profile.primaryLane === 'student') return 'STUDY_FOCUSED';
+  if (profile.primaryLane === 'game_like') return 'GAME_LIKE';
+  if (profile.primaryLane === 'deep_creative') return 'COACH_LED';
+  return 'CALM';
+}
+function goalForLane(profile: LaneProfile | null | undefined, fallback: 'focus' | 'study'): 'focus' | 'study' | 'creative' | 'personal' {
+  if (!profile) return fallback;
+  if (profile.primaryLane === 'student') return 'study';
+  if (profile.primaryLane === 'deep_creative') return 'creative';
+  if (profile.primaryLane === 'minimal_normal') return 'personal';
+  return 'focus';
+}
 export function resolveCoachActionIntent(input: {
   requestedIntent: CoachActionIntent;
   featureAvailability: PresenceAvailability;
@@ -59,10 +72,11 @@ export function resolveCoachActionIntent(input: {
   }
   return input.featureAvailability.focus.canNavigate ? 'START_SESSION' : 'TAKE_BREAK';
 }
-
 export function buildCoachPresence(input: BuildPresenceInput): CoachPresence {
   const progress = CoachPresenceProgressInputSchema.parse(input.progress);
   const memorySummary = CoachPresenceMemorySummarySchema.parse(input.memorySummary);
+  const motivationStyle = styleForLane(input.laneProfile, input.motivationStyle);
+  const primaryGoal = goalForLane(input.laneProfile, input.motivationStyle === 'STUDY_FOCUSED' ? 'study' : 'focus');
   const memoryConfidence = getCoachMemoryConfidence(
     progress.totalSessions,
     memorySummary.syncAvailable,
@@ -75,34 +89,34 @@ export function buildCoachPresence(input: BuildPresenceInput): CoachPresence {
     firstWeekStage: progress.totalSessions === 0 ? 'day_0' : null,
     latestSession: null,
     memoryConfidence,
-    motivationStyle: input.motivationStyle,
+    motivationStyle,
     premiumMoment: progress.totalSessions >= 5 ? 'soft_tease' : 'none',
-    primaryGoal: input.motivationStyle === 'STUDY_FOCUSED' ? 'study' : 'focus',
+    primaryGoal,
     sessionMode: 'inactive',
-    studyLayerLabel: input.motivationStyle === 'STUDY_FOCUSED' ? 'Study' : null,
+    studyLayerLabel: primaryGoal === 'study' ? 'Study' : null,
   });
   const intent = resolveCoachActionIntent({
     featureAvailability: input.featureAvailability,
     requestedIntent: resolved.safeIntent,
   });
-
   return CoachPresenceSchema.parse({
     id: `coach-presence:${input.surface.toLowerCase()}`,
     memoryConfidence,
     memorySummary,
     message: resolved.message,
-    motivationStyleAdaptation: STYLE_ADAPTATION[input.motivationStyle],
-    nextAction: { intent, label: ACTION_LABELS[intent], reason: getActionReason(intent, input.motivationStyle) },
-    progressReaction: PROGRESS_REACTIONS[input.motivationStyle],
+    motivationStyleAdaptation: STYLE_ADAPTATION[motivationStyle],
+    nextAction: { intent, label: ACTION_LABELS[intent], reason: getActionReason(intent, motivationStyle) },
+    progressReaction: PROGRESS_REACTIONS[motivationStyle],
     sessionReflection: resolved.message,
-    tone: getTone(input.motivationStyle),
-    visualCompanionState: getVisualState(input.companion, input.motivationStyle),
+    tone: getTone(motivationStyle),
+    visualCompanionState: getVisualState(input.companion, motivationStyle),
   });
 }
-
 export function buildCompletionCoachPresence(input: CompletionPresenceInput): CoachPresence {
   const summary = CompletionPresenceSummarySchema.parse(input.summary);
   const memorySummary = CoachPresenceMemorySummarySchema.parse(input.memorySummary);
+  const motivationStyle = styleForLane(input.laneProfile, input.motivationStyle);
+  const primaryGoal = goalForLane(input.laneProfile, summary.sessionMode === 'STUDY' ? 'study' : 'focus');
   const memoryConfidence = getCoachMemoryConfidence(summary.isFirstSession ? 1 : 3, memorySummary.syncAvailable);
   const reflection = getCoachPresenceMessage({
     aiAvailable: memorySummary.syncAvailable,
@@ -117,17 +131,18 @@ export function buildCompletionCoachPresence(input: CompletionPresenceInput): Co
       mode: summary.sessionMode,
     },
     memoryConfidence,
-    motivationStyle: input.motivationStyle,
+    motivationStyle,
     premiumMoment: 'none',
-    primaryGoal: summary.sessionMode === 'STUDY' ? 'study' : 'focus',
+    primaryGoal,
     sessionMode: 'completed',
-    studyLayerLabel: summary.sessionMode === 'STUDY' ? 'Study' : null,
+    studyLayerLabel: primaryGoal === 'study' ? 'Study' : null,
   });
   const base = buildCoachPresence({
     companion: null,
     featureAvailability: input.featureAvailability,
+    laneProfile: input.laneProfile,
     memorySummary,
-    motivationStyle: input.motivationStyle,
+    motivationStyle,
     progress: {
       currentStreakDays: summary.streakDays,
       highFocusStreak: summary.isHighFocusStreak ? 1 : 0,
@@ -150,13 +165,11 @@ export function buildCompletionCoachPresence(input: CompletionPresenceInput): Co
     sessionReflection: reflection.message,
   });
 }
-
 function getActionReason(intent: CoachActionIntent, style: CoachPresenceMotivationStyle): string {
   if (intent === 'START_STUDY_SESSION') return 'Your study context is ready.';
   if (intent === 'REVIEW_PROGRESS') return 'Progress is the clearest next signal.';
   return STYLE_ADAPTATION[style];
 }
-
 const toneMap: Record<
   CoachPresenceMotivationStyle,
   Pick<CoachPresence['tone'], 'intensity' | 'personality'>
@@ -168,11 +181,9 @@ const toneMap: Record<
   INTENSE: { intensity: 'high', personality: 'sharp' },
   STUDY_FOCUSED: { intensity: 'medium', personality: 'studious' },
 };
-
 function getTone(style: CoachPresenceMotivationStyle): CoachPresence['tone'] {
   return { motivationStyle: style, ...toneMap[style] };
 }
-
 function getVisualState(
   companion: BuildPresenceInput['companion'],
   style: CoachPresenceMotivationStyle,

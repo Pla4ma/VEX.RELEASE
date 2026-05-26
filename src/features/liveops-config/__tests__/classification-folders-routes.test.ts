@@ -25,6 +25,7 @@ import { FEATURE_ROUTE_REGISTRY } from '../../../navigation/feature-route-regist
 
 const PROJECT_ROOT = process.cwd();
 const FEATURES_DIR = join(PROJECT_ROOT, 'src', 'features');
+const ARCHIVE_FEATURES_DIR = join(PROJECT_ROOT, 'archive', 'features');
 const SKIP_FOLDERS = new Set(['components']);
 
 function actualFeatureFolders(): string[] {
@@ -50,7 +51,7 @@ describe('Classification — every feature folder classified', () => {
   it('no classification entry references non-existent folder', () => {
     const folders = new Set(actualFeatureFolders());
     for (const entry of getAllEntries()) {
-      expect(folders.has(entry.folder)).toBe(true);
+      expect(folders.has(entry.folder) || readdirSync(ARCHIVE_FEATURES_DIR).includes(entry.folder)).toBe(true);
     }
   });
 

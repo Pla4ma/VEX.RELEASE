@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { LaneSchema } from '../lane-engine/schemas';
+import { LaneProfileSchema, LaneSchema } from '../lane-engine/schemas';
 
 export const NudgeTypeSchema = z.enum([
   'none',
@@ -25,6 +25,7 @@ export const NudgeDecisionSchema = z.object({
 
 export const NudgePolicyInputSchema = z.object({
   lane: LaneSchema,
+  laneProfile: LaneProfileSchema.optional(),
   completedSessions: z.number().int().min(0),
   daysSinceOnboarding: z.number().int().min(0),
   sentToday: z.number().int().min(0).default(0),

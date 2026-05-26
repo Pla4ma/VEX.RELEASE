@@ -152,7 +152,7 @@ export function checkDefaultSession(
 ): HomePrimaryPriority {
   const isNew = !snapshot.onboarding.firstSessionCompleted;
   return buildSessionPriority('DEFAULT_SESSION', 10,
-    isNew ? 'Start one clean session. The rest of home will get smarter after that.'
+    isNew ? 'Start one focused session and VEX will unlock the system your brain needs.'
       : 'Start the next focus block without overthinking the setup.',
     isNew ? 'Start First Session' : 'Start Focus',
     { presetMode: isNew ? 'SPRINT' : 'DEEP_WORK', suggestedDurationSeconds: isNew ? 10 * 60 : 25 * 60 });

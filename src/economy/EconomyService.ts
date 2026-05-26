@@ -1,10 +1,3 @@
-/**
- * EconomyService
- *
- * Singleton accessor for the economy service layer.
- * Used by companion and other feature modules that need a stable service reference.
- */
-
 import {
   getOrCreateWallet,
   getWalletSummary,
@@ -33,14 +26,7 @@ export function getEconomyService(): EconomyServiceInstance {
       getBalance,
       hasEnoughBalance,
       addCurrency,
-      spendCurrency: (userId: string, currency: string, amount: number, tag: string) =>
-        rawSpendCurrency({
-          userId,
-          currency: currency as 'COINS' | 'GEMS',
-          amount,
-          sink: 'UPGRADE',
-          description: tag,
-        }),
+      spendCurrency: () => Promise.resolve(false),
     };
   }
   return instance;

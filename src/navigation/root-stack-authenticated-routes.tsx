@@ -4,33 +4,35 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MainNavigator } from "./MainNavigator";
 import { OnboardingNavigator } from "./OnboardingNavigator";
 import { SettingsNavigator } from "./SettingsNavigator";
-import { PaywallScreen } from "../screens/paywall/PaywallScreen";
-import { VipPaywallScreen } from "../shared/monetization";
-import StreakFuneralScreen from "../screens/streaks/StreakFuneralScreen";
-import ComebackScreen from "../screens/ComebackScreen";
 import { RootStackFeatureRoutes } from "./root-stack-feature-routes";
 import {
   type FeatureAccessMap,
 } from "../features/liveops-config";
 import type { ExtendedRootStackParams } from "./types";
-import type { RootExposureFlags } from "./feature-exposure";
 import { canRegisterPremiumPaywallRoute } from "./premium-route-gating";
 
 type RootStack = ReturnType<
   typeof createNativeStackNavigator<ExtendedRootStackParams>
 >;
 
+const PaywallScreen = React.lazy(() => import("../screens/paywall/PaywallScreen"));
+const VipPaywallScreen = React.lazy(
+  () => import("../shared/monetization/components/VipPaywallScreen"),
+);
+const StreakFuneralScreen = React.lazy(
+  () => import("../screens/streaks/StreakFuneralScreen"),
+);
+const ComebackScreen = React.lazy(() => import("../screens/ComebackScreen"));
+
 export function RootStackAuthenticatedRoutes({
   hasCompletedOnboarding,
   canShowHomePreview,
   features,
-  show,
   Stack,
 }: {
   hasCompletedOnboarding: boolean;
   canShowHomePreview: boolean;
   features: FeatureAccessMap;
-  show: RootExposureFlags;
   Stack: RootStack;
 }): React.JSX.Element {
   const showApp = hasCompletedOnboarding || canShowHomePreview;
@@ -52,33 +54,53 @@ export function RootStackAuthenticatedRoutes({
       {canRegisterPaywall ? (
         <Stack.Screen
           name="Paywall"
-          component={PaywallScreen}
           options={{ animation: "slide_from_bottom", presentation: "modal" }}
-        />
+        >
+          {() => (
+            <React.Suspense fallback={null}>
+              <PaywallScreen />
+            </React.Suspense>
+          )}
+        </Stack.Screen>
       ) : null}
       {canRegisterPaywall ? (
         <Stack.Screen
           name="VipPaywall"
-          component={VipPaywallScreen}
           options={{ animation: "slide_from_bottom", presentation: "modal" }}
-        />
+        >
+          {() => (
+            <React.Suspense fallback={null}>
+              <VipPaywallScreen />
+            </React.Suspense>
+          )}
+        </Stack.Screen>
       ) : null}
       <Stack.Screen
         name="StreakFuneral"
-        component={StreakFuneralScreen}
         options={{
           animation: "slide_from_bottom",
           presentation: "fullScreenModal",
         }}
-      />
+      >
+        {() => (
+          <React.Suspense fallback={null}>
+            <StreakFuneralScreen />
+          </React.Suspense>
+        )}
+      </Stack.Screen>
       <Stack.Screen
         name="Comeback"
-        component={ComebackScreen}
         options={{
           animation: "slide_from_bottom",
           presentation: "fullScreenModal",
         }}
-      />
+      >
+        {() => (
+          <React.Suspense fallback={null}>
+            <ComebackScreen />
+          </React.Suspense>
+        )}
+      </Stack.Screen>
 
       <RootStackFeatureRoutes features={features} Stack={Stack} />
     </>

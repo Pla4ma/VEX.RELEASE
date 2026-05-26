@@ -6,14 +6,19 @@ Boss, or feature availability.
 
 ## Product Identity
 
-VEX is a personalized Study + Focus execution OS. The final release is a
-personal execution loop, not a social game, economy, or feature museum.
+VEX is the productivity app that changes based on how you work. It starts
+with one focused session, then unlocks Study, Run, Project, or Clean systems
+as it learns your rhythm.
+
+VEX learns how you focus and unlocks the right productivity system for you.
+The final release is a personal execution loop, not a social game, economy,
+or feature museum.
 
 Primary loop:
 
 1. Onboarding selects goal and motivation style.
 2. Home adapts around one primary action.
-3. User starts a focus, study, or deep-work session.
+3. User starts a focused Study, Run, Project, or Clean session.
 4. User completes the session.
 5. Coach Presence reflects, progress updates, and one next action appears.
 6. User has a clear reason to return tomorrow.
@@ -27,6 +32,7 @@ Primary loop:
 - Basic Coach Presence.
 - Basic companion visual as the visual coach.
 - Study OS / Deep Work / Learning / Project Focus entry.
+- User-facing modes: Study, Run, Project, Clean.
 - Subtle boss or momentum visual when relevant.
 - Basic settings, privacy, delete/export account paths.
 - Sentry-backed error capture.

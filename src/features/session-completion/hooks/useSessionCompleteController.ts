@@ -10,7 +10,6 @@ import { useFeatureAccess, getFeatureAvailability } from '../../liveops-config';
 import { useOnboardingStore } from '../../onboarding/store';
 import { useProgressionSummary } from '../../progression/hooks';
 import { useStreakMultiplier } from '../../streaks/hooks';
-import { useUserSquads } from '../../squads/hooks';
 import type { SessionStackParams } from '../../../navigation/types';
 import { getSessionService } from '../../../session/SessionService';
 import type { SessionSummary } from '../../../session/types';
@@ -25,7 +24,6 @@ import { formatDuration } from '../../../screens/session/utils';
 import { getGradeDisplay, getPurityDisplay } from '../../../screens/session/utils/session-complete-display';
 import { buildPostSessionNextAction, buildSessionCompletionHero, buildSessionCompletionReturnPlan } from '../service';
 import { useHomeReturnCompletionSync } from './useHomeReturnCompletionSync';
-import { useSessionCompletionSpectacles } from './useSessionCompletionSpectacles';
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 
@@ -53,11 +51,6 @@ export function useSessionCompleteController(input: { sessionId: string; summary
   });
   const syncHomeReturn = useHomeReturnCompletionSync({ sessionId, summary, userId });
   const progressionQuery = useProgressionSummary(userId || null);
-  const squadsAvailability = getFeatureAvailability(disclosure.features.squads);
-  const squadsQuery = useUserSquads(
-    squadsAvailability.canQuery ? (userId || undefined) : undefined,
-    { enabled: squadsAvailability.canQuery, staleTime: 1000 * 60 * 5 },
-  );
   const streakQuery = useStreakMultiplier(userId || null);
   const { masteryState, setMasteryState, applySessionMastery } = useSessionMastery(userId, showToast);
 
@@ -110,7 +103,7 @@ export function useSessionCompleteController(input: { sessionId: string; summary
     applySessionMastery,
     focusedDuration,
     focusPurityScore,
-    primarySquadId: squadsQuery.data?.[0]?.id ?? null,
+    primarySquadId: null,
     progressionSummary: progressionQuery.data ?? undefined,
     refetchProgressionSummary,
     sessionId,
@@ -182,8 +175,6 @@ export function useSessionCompleteController(input: { sessionId: string; summary
     });
     return () => backHandler.remove();
   }, [navigation]);
-
-  useSessionCompletionSpectacles({ focusPurityScore, sessionId, summary, userId });
 
   return { coachPresence, finishSession, focusPurityScore, focusedDuration, formatDuration, grade, hero, levelMetric, masteryState, navigation, nextAction, progressionError: progressionQuery.error, progressionLoading: progressionQuery.isLoading, purity, reflection, returnPlan, rewards, scrollRef, selectedMood, setMasteryState, setReflection, setSelectedMood, studyProgress: studyProgressState.studyProgress, summary, theme, userId };
 }

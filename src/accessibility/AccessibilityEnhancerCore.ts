@@ -47,8 +47,10 @@ export class AccessibilityEnhancer {
       const enhancedProps = this.applyAccessibilityEnhancements(props, enhancements);
       return React.createElement(Component, { ...enhancedProps, ref } as P);
     });
-    EnhancedComponent.displayName = `Enhanced(${Component.displayName || Component.name})`;
-    return EnhancedComponent as unknown as React.ComponentType<P>;
+      EnhancedComponent.displayName = `Enhanced(${Component.displayName || Component.name})`;
+      // ForwardRefExoticComponent<P> → ComponentType<P> requires double-cast
+      // at generic boundary — TS can't verify overlap due to PropsWithoutRef wrapper
+      return EnhancedComponent as unknown as React.ComponentType<P>;
   }
 
   enhanceProps<P extends object>(props: P, enhancements?: Partial<EnhancedAccessibilityProps>): P & EnhancedAccessibilityProps {

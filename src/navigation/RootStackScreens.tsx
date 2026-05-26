@@ -2,32 +2,27 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { AuthNavigator } from "./AuthNavigator";
-import { SessionNavigator } from "./SessionNavigator";
 
-import { useFeatureAccess } from "../features/liveops-config";
-import { useFeatureFlags } from "../hooks/useFeatureFlags";
-
-import { buildRootExposureFlags } from "./feature-exposure";
 import type { ExtendedRootStackParams } from "./types";
 import { RootStackAuthenticatedRoutes } from "./root-stack-authenticated-routes";
+import type { FeatureAccessMap } from "../features/liveops-config";
 
 interface RootStackScreensProps {
   hasCompletedOnboarding: boolean;
   canShowHomePreview: boolean;
+  features: FeatureAccessMap;
   isAuthenticated: boolean;
 }
 
 const Stack = createNativeStackNavigator<ExtendedRootStackParams>();
+const SessionNavigator = React.lazy(() => import("./SessionNavigator"));
 
 export const RootStackScreens: React.FC<RootStackScreensProps> = ({
   hasCompletedOnboarding,
   canShowHomePreview,
+  features,
   isAuthenticated,
 }) => {
-  const { features } = useFeatureAccess();
-  const { isEnabled } = useFeatureFlags();
-  const show = buildRootExposureFlags({ features, isEnabled });
-
   const showApp = isAuthenticated && (hasCompletedOnboarding || canShowHomePreview);
 
   const navigatorKey = isAuthenticated
@@ -50,18 +45,22 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
             features={features}
             hasCompletedOnboarding={hasCompletedOnboarding}
             canShowHomePreview={canShowHomePreview}
-            show={show}
             Stack={Stack}
           />
 
           <Stack.Screen
             name="SessionStack"
-            component={SessionNavigator}
             options={{
               animation: "slide_from_bottom",
               presentation: "fullScreenModal",
             }}
-          />
+          >
+            {() => (
+              <React.Suspense fallback={null}>
+                <SessionNavigator />
+              </React.Suspense>
+            )}
+          </Stack.Screen>
 
         </>
       ) : (

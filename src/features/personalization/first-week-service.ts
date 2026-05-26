@@ -9,6 +9,7 @@ import { resolveInitialLane } from '../lane-engine/service';
 import type { LaneProfile } from '../lane-engine/types';
 import type { PrimaryGoal } from './core-schemas';
 import { resolveFirstWeekExperiment, resolveLaneCopy } from './first-week-lane-copy';
+import { deriveCompanionObservation, deriveWeeklyRecommendation, deriveLanePath } from './first-week-engines';
 
 const FINAL_RELEASE_HIDDEN: FirstWeekExperience['hiddenSurfaces'] = [
   'boss_full',
@@ -134,7 +135,19 @@ export function resolveFirstWeekExperience(rawInput: FirstWeekResolverInput): Fi
     : input.completedSessions === 0
       ? 'VEX is shaped around one clean first block.'
       : 'Your rhythm is forming. Start the next clean block.';
-  const laneCopy = resolveLaneCopy(currentDayStage, laneProfile, defaultMessage);
+  const laneCopy = resolveLaneCopy(currentDayStage, laneProfile, defaultMessage, comebackState !== 'none');
+  const sp = input.sessionProfile;
+  const engineOn = sp !== undefined && comebackState === 'none';
+  let primaryMessage = laneCopy.primaryMessage;
+  let unlockExplanation = laneCopy.unlockExplanation;
+  const lane = laneProfile.primaryLane;
+
+  if (engineOn && currentDayStage === 'DAY_3_COMPANION_CONNECTION') unlockExplanation = deriveCompanionObservation(lane, sp).observation;
+  if (engineOn && currentDayStage === 'DAY_7_DEEPER_MODE') {
+    const rec = deriveWeeklyRecommendation(lane, sp, input.behaviorStats.bossEngagement, input.behaviorStats.studyUsageRatio);
+    primaryMessage = rec.headline; unlockExplanation = rec.recommendation;
+  }
+  if (engineOn && currentDayStage === 'DAY_5_PATH_FORMING') unlockExplanation = deriveLanePath(lane, sp, input.behaviorStats.studyUsageRatio).pathDescription;
   const bossIntensity = allowedHomeSurfaces.includes('tiny_boss_teaser')
     ? 'tiny_tease'
     : input.completedSessions > 0 && input.featureAvailability.boss && laneProfile.primaryLane === 'game_like'
@@ -162,7 +175,7 @@ export function resolveFirstWeekExperience(rawInput: FirstWeekResolverInput): Fi
         : 'START_SESSION',
       label: input.completedSessions === 0 ? 'Start first session' : 'Start next session',
     },
-    primaryMessage: laneCopy.primaryMessage,
+    primaryMessage,
     secondaryCTA: input.completedSessions >= 2
       ? { intent: 'OPEN_PROGRESS', label: 'Review progress' }
       : null,
@@ -178,7 +191,7 @@ export function resolveFirstWeekExperience(rawInput: FirstWeekResolverInput): Fi
     blockedSurfaceReasons: resolveBlockedReasons(laneProfile),
     firstWeekExperiment: resolveFirstWeekExperiment(laneProfile.primaryLane, currentDayStage),
     studyLayerLabel,
-    unlockExplanation: laneCopy.unlockExplanation,
+    unlockExplanation,
     unlockTease: input.completedSessions === 0
       ? 'VEX opens one layer at a time after real sessions.'
       : null,

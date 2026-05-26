@@ -26,6 +26,11 @@ export type HomeRecommendation = {
   aiCoachMessage?: string;
   visualCue?: 'none' | 'pulse' | 'glow' | 'urgent';
   expiresAt?: number;
+  evidence?: {
+    memoryIds?: string[];
+    fallbackReason?: string;
+    confidence?: number;
+  };
 };
 
 type HookStreakSummary = NonNullable<ReturnType<typeof useStreakSummary>['data']>;

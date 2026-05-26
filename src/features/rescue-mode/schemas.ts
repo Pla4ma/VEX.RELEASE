@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { LaneSchema } from '../lane-engine/schemas';
+import { LaneProfileSchema, LaneSchema } from '../lane-engine/schemas';
 import { SessionModeSchema } from '../../session/modes';
 
 // ── Reasons ────────────────────────────────────────────────────────────
@@ -26,6 +26,7 @@ export const RescueTriggerSourceSchema = z.enum([
 export const RescueEligibilityInputSchema = z.object({
   userId: z.string().min(1),
   lane: LaneSchema,
+  laneProfile: LaneProfileSchema.optional(),
   completedSessions: z.number().int().min(0),
   daysSinceOnboarding: z.number().int().min(0),
   abandonedSessionExists: z.boolean(),
@@ -34,6 +35,7 @@ export const RescueEligibilityInputSchema = z.object({
   streakAtRisk: z.boolean(),
   hoursUntilStreakBreak: z.number().min(0),
   hasActiveSession: z.boolean(),
+  userTooBig: z.boolean().default(false),
   now: z.number().int().min(0).default(() => Date.now()),
 }).strict();
 
@@ -61,6 +63,7 @@ export const RescuePlanSchema = z.object({
 export const RescuePlanInputSchema = z.object({
   userId: z.string().min(1),
   lane: LaneSchema,
+  laneProfile: LaneProfileSchema.optional(),
   reason: RescueReasonSchema,
   durationSeconds: z.number().int().min(60).max(60 * 60).optional(),
   taskDescription: z.string().min(1).max(120).optional(),

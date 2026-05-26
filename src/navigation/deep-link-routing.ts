@@ -51,7 +51,7 @@ export function deepLinkToNavigationParams(
     case 'duels':
       return { screen: 'Main', params: { screen: 'Home' } };
     case 'squad':
-      return { screen: 'Main', params: { screen: 'Guild' } };
+      return { screen: 'Main', params: { screen: 'Home' } };
     case 'profile':
       return {
         screen: 'Main',
@@ -72,7 +72,7 @@ export function deepLinkToNavigationParams(
     case 'coach':
       return { screen: 'Main', params: { screen: 'AICoach' } };
     case 'shop':
-      return { screen: 'Main', params: { screen: 'Shop' } };
+      return { screen: 'Main', params: { screen: 'Home' } };
     case 'rescue':
       return {
         screen: 'SessionStack',

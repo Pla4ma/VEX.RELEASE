@@ -4,6 +4,7 @@ import { storage } from '../../store/mmkv-storage';
 import {
   RescueCompletionRecordSchema,
   RescuePlanSchema,
+  type RescueCompletionMemory,
   type RescueCompletionRecord,
   type RescuePlan,
 } from './schemas';
@@ -67,6 +68,29 @@ export async function saveRescueCompletion(
   }
 
   return parsed;
+}
+
+export async function saveRescueMemory(
+  memory: RescueCompletionMemory,
+): Promise<void> {
+  try {
+    const db = getSupabaseClient();
+    const { error } = await db.from('rescue_memories').insert({
+      id: memory.id,
+      source: memory.source,
+      text: memory.text,
+      confidence: memory.confidence,
+      created_at: new Date().toISOString(),
+    });
+
+    if (error) {
+      debug.info('Failed to persist rescue memory, cached locally: %s', String(error));
+      const key = `rescue:memory:${memory.id}`;
+      storage.set(key, JSON.stringify(memory));
+    }
+  } catch (err) {
+    debug.info('Rescue memory save failed: %s', String(err));
+  }
 }
 
 export async function getRescueCompletions(

@@ -1,14 +1,7 @@
 import React from 'react';
 import { Pressable, Text, View } from 'react-native';
-import { spacing } from '../../../theme/tokens/spacing';
-import { borderRadius } from '../../../theme/tokens/radius';
+import { useTheme } from '../../../theme/ThemeContext';
 import type { RescueEligibilityResult } from '../schemas';
-
-const BANNER_BG = 'rgba(91, 77, 255, 0.08)';
-const BANNER_BORDER = 'rgba(91, 77, 255, 0.18)';
-const TEXT_PRIMARY = '#334155';
-const TEXT_ACCENT = '#4F46E5';
-const TEXT_MUTED = '#64748B';
 
 interface RescueBannerProps {
   eligibility: RescueEligibilityResult;
@@ -25,6 +18,9 @@ export function RescueBanner({
   accessibilityLabel = 'Rescue mode available. Tap to start a short focus block.',
   accessibilityHint = 'Opens a low-pressure 5 to 12 minute rescue session.',
 }: RescueBannerProps) {
+  const { theme } = useTheme();
+  const { colors } = theme;
+
   if (!eligibility.eligible) return null;
 
   const minutes = Math.round(eligibility.recommendedDurationSeconds / 60);
@@ -32,21 +28,21 @@ export function RescueBanner({
   return (
     <View
       style={{
-        marginHorizontal: spacing[4],
-        marginVertical: spacing[2],
-        padding: spacing[4],
-        borderRadius: borderRadius.lg,
-        backgroundColor: BANNER_BG,
+        marginHorizontal: theme.spacing[4],
+        marginVertical: theme.spacing[2],
+        padding: theme.spacing[4],
+        borderRadius: theme.borderRadius.lg,
+        backgroundColor: colors.semantic.primarySoft,
         borderWidth: 1,
-        borderColor: BANNER_BORDER,
-        gap: spacing[2],
+        borderColor: colors.semantic.primary,
+        gap: theme.spacing[2],
       }}
     >
       <Text
         style={{
           fontSize: 15,
           fontWeight: '600',
-          color: TEXT_ACCENT,
+          color: colors.semantic.primary,
         }}
         accessibilityRole="header"
       >
@@ -57,7 +53,7 @@ export function RescueBanner({
         style={{
           fontSize: 13,
           lineHeight: 18,
-          color: TEXT_PRIMARY,
+          color: colors.semantic.textPrimary,
         }}
       >
         A {minutes}-minute rescue block is available. No pressure, no judgment — just
@@ -67,8 +63,8 @@ export function RescueBanner({
       <View
         style={{
           flexDirection: 'row',
-          gap: spacing[3],
-          marginTop: spacing[1],
+          gap: theme.spacing[3],
+          marginTop: theme.spacing[1],
         }}
       >
         <Pressable
@@ -78,10 +74,10 @@ export function RescueBanner({
           accessibilityHint={accessibilityHint}
           style={({ pressed }) => ({
             flex: 1,
-            paddingVertical: spacing[3],
-            paddingHorizontal: spacing[4],
-            borderRadius: borderRadius.md,
-            backgroundColor: '#4F46E5',
+            paddingVertical: theme.spacing[3],
+            paddingHorizontal: theme.spacing[4],
+            borderRadius: theme.borderRadius.md,
+            backgroundColor: colors.semantic.primary,
             opacity: pressed ? 0.85 : 1,
             alignItems: 'center' as const,
             minHeight: 44,
@@ -92,7 +88,7 @@ export function RescueBanner({
             style={{
               fontSize: 14,
               fontWeight: '600',
-              color: '#FFFFFF',
+              color: colors.text.inverse,
             }}
           >
             Start {minutes} min
@@ -105,9 +101,9 @@ export function RescueBanner({
           accessibilityLabel="Dismiss rescue mode suggestion"
           accessibilityHint="Hides the rescue mode banner for now."
           style={({ pressed }) => ({
-            paddingVertical: spacing[3],
-            paddingHorizontal: spacing[4],
-            borderRadius: borderRadius.md,
+            paddingVertical: theme.spacing[3],
+            paddingHorizontal: theme.spacing[4],
+            borderRadius: theme.borderRadius.md,
             opacity: pressed ? 0.6 : 1,
             minHeight: 44,
             justifyContent: 'center' as const,
@@ -117,7 +113,7 @@ export function RescueBanner({
             style={{
               fontSize: 13,
               fontWeight: '500',
-              color: TEXT_MUTED,
+              color: colors.semantic.textMuted,
             }}
           >
             Not now

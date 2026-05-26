@@ -3,6 +3,8 @@ import { getOrCreateCoachState } from './persona-manager';
 import {
   getRelevantMemories,
   getMilestoneSummary,
+  canClaimStrongPattern,
+  scopeMemoryForContext,
 } from './CoachMemory';
 import type { MessageCategory } from './types';
 
@@ -113,11 +115,20 @@ export async function generateMemoryAwareMessage(
   category: MessageCategory,
   _personaId: string,
   _baseContext: Record<string, unknown>,
+  sessionCount: number = 0,
 ): Promise<string | null> {
+  if (!canClaimStrongPattern(sessionCount)) {
+    return null;
+  }
+
   const memories = await getRelevantMemories(userId, category, 2);
+  const scopedMemories = memories.filter((m) => {
+    const { usable } = scopeMemoryForContext(m, 'generic_coach');
+    return usable;
+  });
   const milestoneSummary = await getMilestoneSummary(userId);
 
-  if (memories.length === 0 && milestoneSummary.totalMemories === 0) {
+  if (scopedMemories.length === 0 && milestoneSummary.totalMemories === 0) {
     return null;
   }
 
@@ -125,7 +136,7 @@ export async function generateMemoryAwareMessage(
   const persona = await repository.fetchCoachPersona(state.personaId);
   const personaStyle = persona?.style ?? 'MENTOR';
 
-  const memory = memories[0];
+  const memory = scopedMemories[0];
   const daysSince = memory
     ? Math.floor((Date.now() - memory.occurredAt) / (1000 * 60 * 60 * 24))
     : 0;

@@ -85,7 +85,8 @@ export function resolvePremiumStrategy(input: PremiumStrategyInput): PremiumStra
   if ((input.paywallDismissals ?? 0) >= 2) {
     return hiddenStrategy('none', 'Premium waits until there is real value');
   }
-  if (input.completedSessions === 0) {
+  // No paywall before soft-tease threshold (session 5), even with highIntentAction
+  if (input.completedSessions < 5) {
     return hiddenStrategy('none', 'Premium waits until there is real value');
   }
 

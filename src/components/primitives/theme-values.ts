@@ -56,6 +56,7 @@ export function resolveColorValue(
     return value;
   }
   const parts = value.split('.');
+  // theme.colors is ColorPalette (typed), cast to ColorTree (indexable)
   let current: string | ColorTree = theme.colors as unknown as ColorTree;
   for (const part of parts) {
     if (typeof current === 'string') {

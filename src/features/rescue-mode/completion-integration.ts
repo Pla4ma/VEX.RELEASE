@@ -1,4 +1,4 @@
-import { getActiveRescuePlan, clearActiveRescuePlan, saveRescueCompletion } from './repository';
+import { getActiveRescuePlan, clearActiveRescuePlan, saveRescueCompletion, saveRescueMemory } from './repository';
 import {
   buildRescueCompletionRecord,
   buildRescueCompletionMemory,
@@ -29,7 +29,8 @@ export async function recordRescueCompletion(
   }
 
   const record = buildRescueCompletionRecord(plan, outcome, input.actualDurationSeconds);
-  buildRescueCompletionMemory(plan, outcome);
+  const memory = buildRescueCompletionMemory(plan, outcome);
   await saveRescueCompletion(record);
+  await saveRescueMemory(memory);
   await clearActiveRescuePlan(input.userId);
 }

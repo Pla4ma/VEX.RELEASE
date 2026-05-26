@@ -75,14 +75,14 @@ describe('Phase 11 premium rebuild gates', () => {
     });
   });
 
-  it('shows premium only after value or post-session high intent', () => {
+  it('shows premium only after value or post-session-5 high intent', () => {
     expect(resolvePremiumStrategy({ billingConfigured: true, completedSessions: 40 })).toMatchObject({
       canShowPaywall: true,
       triggerMoment: 'after_value',
     });
     expect(resolvePremiumStrategy({
       billingConfigured: true,
-      completedSessions: 3,
+      completedSessions: 5,
       highIntentAction: 'advanced_study',
     })).toMatchObject({ canShowPaywall: true, triggerMoment: 'advanced_study' });
     expect(personalized({

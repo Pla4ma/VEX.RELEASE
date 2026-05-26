@@ -4,12 +4,13 @@ import { processCompletedSessionPromise } from "../companion-promise/service";
 import { buildPostSessionStoryViewModel, type PostSessionStoryViewModel } from "./story-view-model-service";
 import { setCompletionSyncState } from "./completion-sync-state";
 import type { SessionSummary } from "../../session/types";
-import type { CompletionLedger } from "./schemas";
+import type { CompletionLedger, CompletionPersonalizationResult } from "./schemas";
 
 interface CompletionSideEffectInput {
   degradedSystems: string[];
   finalLedger: CompletionLedger;
   isPersonalBest: boolean;
+  personalizationResult: CompletionPersonalizationResult | null;
   sessionId: string;
   summary: SessionSummary;
   userId: string;
@@ -18,7 +19,7 @@ interface CompletionSideEffectInput {
 export async function applyCompletionSideEffects(
   input: CompletionSideEffectInput,
 ): Promise<PostSessionStoryViewModel> {
-  const { degradedSystems, finalLedger, isPersonalBest, summary, userId } = input;
+  const { degradedSystems, finalLedger, isPersonalBest, personalizationResult, summary, userId } = input;
 
   try {
     const { recordRescueCompletion } = await import("../rescue-mode/completion-integration");
@@ -60,6 +61,7 @@ export async function applyCompletionSideEffects(
     degradedWarnings: degradedSystems,
     ledger: finalLedger,
     personalBest: { isPersonalBest },
+    personalizationResult,
     summary,
   });
 

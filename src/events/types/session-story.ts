@@ -4,8 +4,6 @@
  * Events for the post-session narrative system.
  */
 
-import type { SessionStory } from '@/features/session-story/schemas';
-
 export interface SessionStoryEventDefinitions {
   // Story lifecycle events
   'session:story:ready': {
@@ -20,7 +18,7 @@ export interface SessionStoryEventDefinitions {
     storyId: string;
     userId: string;
     completionRate: number;
-    story?: SessionStory;
+    story?: unknown;
   };
 
   'session:story:beat_viewed': {

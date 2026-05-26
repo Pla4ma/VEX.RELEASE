@@ -8,13 +8,16 @@ import {
   ProductAnalyticsEvents,
 } from '../shared/analytics';
 import { initializeSessionCompletionOrchestrator } from '../features/session-completion/completion-orchestrator';
-import { initializeEmotionRetention } from '../features/emotion-retention';
 import { setupGlobalErrorHandler, setupRejectionHandler } from '../errors';
 import { IS_DEVELOPMENT } from '../constants/app';
 
 let bootstrapped = false;
 let sessionRuntimeInitialized = false;
 const debug = createDebugger('app:bootstrap');
+
+function deferBootCall(call: () => void): void {
+  setTimeout(call, 0);
+}
 
 function initializeCoreSystems(): void {
   if (!IS_DEVELOPMENT) {
@@ -49,8 +52,7 @@ export const bootstrapApp = (): void => {
   bootstrapped = true;
   initializeCoreSystems();
   initializeSessionCompletionOrchestrator();
-  initializeEmotionRetention();
-  initializeSessionRuntime();
+  deferBootCall(initializeSessionRuntime);
 };
 
 export const bootstrapDevelopment = (): void => {

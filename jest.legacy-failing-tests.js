@@ -19,7 +19,7 @@ module.exports = [
   '<rootDir>/src/performance/__tests__/PerformanceGate.test.ts',
   '<rootDir>/src/features/monetization/__tests__/PremiumTierSystem.test.ts',
   '<rootDir>/src/features/focus-identity/__tests__/repository-focus-score.test.ts',
-  '<rootDir>/src/app-store/__tests__/AppStoreSubmissionPack.test.ts',
+
   '<rootDir>/src/features/__tests__/FeatureFlagService.test.ts',
   '<rootDir>/src/session/integration/__tests__/SessionBossIntegration.test.ts',
   '<rootDir>/src/features/rewards/__tests__/service.test.ts',

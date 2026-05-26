@@ -18,14 +18,6 @@ jest.mock("../../../features/streaks/restore-quest", () => ({
     .mockResolvedValue({ shouldRestore: false, streakBefore: null }),
 }));
 
-jest.mock("../../../features/battle-pass/service", () => ({
-  addBattlePassXp: jest.fn(),
-}));
-
-jest.mock("../../../features/seasons/repository", () => ({
-  fetchActiveSeason: jest.fn().mockResolvedValue(null),
-}));
-
 jest.mock("../session-reward-helpers", () => ({
   calculateRewards: jest.fn().mockReturnValue({
     totalXP: 100,

@@ -73,7 +73,7 @@ describe('FirstWeekExperience product journey', () => {
 
       expect(result.currentDayStage).toBe('DAY_1_RETURN');
       expect(result.spotlightSurface).toBe('progress_proof');
-      expect(result.primaryMessage).toBe('Your rhythm is forming. Start the next clean block.');
+      expect(result.primaryMessage).toBe('Same clean container. No extras — just presence.');
     });
   });
 

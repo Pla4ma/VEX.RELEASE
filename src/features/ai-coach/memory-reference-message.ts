@@ -1,6 +1,6 @@
 import type { MessageCategory } from './types';
 import type { CoachMemory } from './memory-schemas';
-import { getRelevantMemories } from './CoachMemory';
+import { getRelevantMemories, canClaimStrongPattern } from './CoachMemory';
 
 type Persona = 'MENTOR' | 'CHEERLEADER' | 'DRILL_SERGEANT';
 
@@ -52,7 +52,12 @@ export async function generateMemoryReferenceMessage(
   userId: string,
   category: MessageCategory,
   persona: Persona = 'MENTOR',
+  sessionCount: number = 0,
 ): Promise<string | null> {
+  if (!canClaimStrongPattern(sessionCount)) {
+    return null;
+  }
+
   const memories = await getRelevantMemories(userId, category, 2);
   if (memories.length === 0) {
     return null;

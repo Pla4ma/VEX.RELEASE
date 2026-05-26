@@ -16,7 +16,6 @@ import { useActiveStudyPlan } from '../../../features/content-study';
 import { buildLearningSessionParams, useLearningExecutionLayer } from '../../../features/learning-execution';
 import { useActiveBoss } from '../../../features/boss/hooks';
 import { useComebackState } from '../../../features/streaks/hooks';
-import { useUserSquads } from '../../../features/squads/hooks';
 import { getNextBestAction } from '../../../features/progression';
 import { getFeatureAvailability, isFeatureAvailableForNavigation, type FeatureAccessResult } from '../../../features/liveops-config';
 import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
@@ -26,6 +25,7 @@ import type { ExtendedRootStackParams, SessionStackParams } from '../../../navig
 import { getFocusedMinutesForToday, getNextUnlockFeature, buildDisplayedReturnReason } from '../hooks/home-controller-helpers';
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
 import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
+import { createStubQuery } from '../hooks/home-controller-stubs';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -61,7 +61,6 @@ export function usePowerUserContainerModel(input: PowerUserContainerInput): Home
   const learningExecutionLayer = useLearningExecutionLayer(activeStudyPlanQuery.data ?? null);
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
   const activeBossQuery = useActiveBoss(runtime.canQueryBoss ? userId || null : null);
-  const squadsQuery = useUserSquads(userId || undefined, { enabled: runtime.canQuerySquads, staleTime: 1000 * 60 * 5 });
 
   const recommendationsQuery = useQuery({
     queryKey: ['coach', 'recommendations', userId],
@@ -143,7 +142,7 @@ export function usePowerUserContainerModel(input: PowerUserContainerInput): Home
     latestSession: historyQuery.history[0] ?? null, primaryRecommendation, homeSpine, returnReason: displayedReturnReason,
     disclosure, runtime,
     streakQuery: streakQuery as UseQueryResult, progressionQuery: progressionQuery as UseQueryResult, historyQuery,
-    squadsQuery: squadsQuery as UseQueryResult, activeStudyPlanQuery: activeStudyPlanQuery as UseQueryResult,
+    squadsQuery: createStubQuery() as UseQueryResult, activeStudyPlanQuery: activeStudyPlanQuery as UseQueryResult,
     learningExecutionLayer, comebackQuery: comebackQuery as UseQueryResult,
     activeBossQuery: activeBossQuery as UseQueryResult, recommendationsQuery: recommendationsQuery as UseQueryResult,
     shouldShowSecondarySystems: runtime.shouldShowSecondarySystems, shouldShowExpansionSystems: runtime.shouldShowExpansionSystems,

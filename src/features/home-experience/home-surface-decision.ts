@@ -55,7 +55,7 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
   }
 
   const studyLane = parsed.laneProfile?.primaryLane;
-  const isCalmUser = studyLane === 'minimal_normal' || p.motivationStyle === 'calm';
+  const isCalmUser = studyLane === 'minimal_normal' || (studyLane === undefined && p.motivationStyle === 'calm');
   if (isCalmUser) {
     map.boss_compact = 'hidden';
     map.boss_full_cta = 'blocked';
@@ -96,7 +96,8 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
   }
 
   // Challenge/weekly quest
-  const isMinimalUser = parsed.laneProfile?.primaryLane === 'minimal_normal' || p.motivationStyle === 'calm' || p.gamificationIntensity === 'minimal';
+  const isMinimalUser = studyLane === 'minimal_normal'
+    || (studyLane === undefined && (p.motivationStyle === 'calm' || p.gamificationIntensity === 'minimal'));
   if (parsed.featureAvailability.challenges && isEngaged && !isMinimalUser) {
     map.challenge_teaser = map.challenge_teaser === 'hidden' ? 'tiny_tease' : map.challenge_teaser;
     map.weekly_quest = b.totalCompletedSessions >= 10 ? 'secondary' : 'hidden';
@@ -121,10 +122,10 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
   }
 
   // Companion thread
-  if (p.motivationStyle === 'friendly' && isEngaged) {
+  if (studyLane === undefined && p.motivationStyle === 'friendly' && isEngaged) {
     map.companion_thread = map.companion_thread === 'hidden' ? 'tiny_tease' : map.companion_thread;
   }
-  if (p.motivationStyle === 'calm' || studyLane === 'minimal_normal') {
+  if (isCalmUser) {
     map.companion_thread = isEngaged ? 'tiny_tease' : 'hidden';
     map.focus_score = 'hidden';
     map.progress_detail = 'hidden';

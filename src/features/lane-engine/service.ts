@@ -22,30 +22,24 @@ import type {
   ResolveBehaviorLaneInput,
   ResolveInitialLaneInput,
 } from './types';
-
 export { getLaneMechanicPolicy };
-
 const ORDERED_LANES: Lane[] = ['student', 'game_like', 'deep_creative', 'minimal_normal'];
-
 function confidenceBand(confidence: number): LaneProfile['confidenceBand'] {
   if (confidence >= 0.7) return 'high';
   if (confidence >= 0.4) return 'medium';
   return 'low';
 }
-
 function traitsForLane(lane: Lane): LaneProfile['traits'] {
   if (lane === 'student') return { needsStructure: 0.9, wantsPlay: 0.2, needsContinuity: 0.6, wantsQuiet: 0.4 };
   if (lane === 'game_like') return { needsStructure: 0.6, wantsPlay: 0.9, needsContinuity: 0.5, wantsQuiet: 0.1 };
   if (lane === 'deep_creative') return { needsStructure: 0.5, wantsPlay: 0.2, needsContinuity: 0.9, wantsQuiet: 0.7 };
   return { needsStructure: 0.5, wantsPlay: 0.1, needsContinuity: 0.4, wantsQuiet: 0.9 };
 }
-
 function ranked(scores: LaneScores): Array<{ lane: Lane; score: number }> {
   return ORDERED_LANES
     .map((lane) => ({ lane, score: Math.max(0, scores[lane]) }))
     .sort((a, b) => b.score - a.score);
 }
-
 function buildProfile(scores: LaneScores, evidence: LaneEvidence[], observedAt: number): LaneProfile {
   const sorted = ranked(scores);
   const top = sorted[0] ?? { lane: 'minimal_normal', score: 0 };
@@ -65,7 +59,6 @@ function buildProfile(scores: LaneScores, evidence: LaneEvidence[], observedAt: 
     resolvedAt: observedAt,
   });
 }
-
 function manualProfile(lane: Lane, observedAt: number): LaneProfile {
   return LaneProfileSchema.parse({
     primaryLane: lane,
@@ -157,6 +150,26 @@ export function shouldReconsiderLane(rawInput: LaneReconsiderationInput): boolea
   if (input.completedSessions < 3) return false;
   return input.latestProfile.primaryLane !== input.currentProfile.primaryLane
     && input.latestProfile.confidence >= 0.7;
+}
+
+export function shouldSuggestLaneReconsideration(rawInput: LaneReconsiderationInput): boolean {
+  const input = LaneReconsiderationInputSchema.parse(rawInput);
+  if (input.completedSessions < 3) return false;
+  return input.latestProfile.primaryLane !== input.currentProfile.primaryLane
+    && input.latestProfile.confidence >= 0.7;
+}
+
+export type CompletionLaneSituation = 'clean' | 'partial' | 'abandoned' | 'comeback';
+
+export function resolveCompletionLaneProfile(input: { lane: Lane; situation: CompletionLaneSituation; observedAt?: number }): LaneProfile {
+  const observedAt = input.observedAt ?? Date.now();
+  const confidence = input.situation === 'clean' ? 0.6 : 0.35;
+  return LaneProfileSchema.parse({
+    ...manualProfile(input.lane, observedAt),
+    confidence, confidenceBand: confidenceBand(confidence),
+    evidence: [makeEvidence('session_mode', `completion:${input.situation}`, 0.25, observedAt)],
+    source: 'behavior',
+  });
 }
 
 export function accumulateCompletionEvidence(rawInput: CompletionEvidenceInput): LaneEvidence[] {

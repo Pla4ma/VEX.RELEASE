@@ -15,14 +15,14 @@ function maxDailyFor(lane: Lane): number {
   return lane === 'minimal_normal' ? 1 : 2;
 }
 
-function typeFor(input: NudgePolicyInput): NudgeType {
-  const paused = input.pausedCategories.includes(laneToCategory(input.lane));
+function typeFor(input: NudgePolicyInput, lane: Lane): NudgeType {
+  const paused = input.pausedCategories.includes(laneToCategory(lane));
   if (paused) return 'none';
 
   if (input.context === 'avoidance') return 'rescue';
-  if (input.context === 'deadline' && input.lane === 'student') return 'study_deadline';
-  if (input.context === 'project_stale' && input.lane === 'deep_creative') return 'project_resume';
-  if (input.context === 'run_open' && input.lane === 'game_like') return 'run_continue';
+  if (input.context === 'deadline' && lane === 'student') return 'study_deadline';
+  if (input.context === 'project_stale' && lane === 'deep_creative') return 'project_resume';
+  if (input.context === 'run_open' && lane === 'game_like') return 'run_continue';
   if (input.context === 'weekly_ready') return 'weekly_insight';
   return input.completedSessions > 0 ? 'gentle_return' : 'none';
 }
@@ -63,9 +63,10 @@ function copyFor(lane: Lane, type: NudgeType): Pick<NudgeDecision, 'body' | 'tit
 
 export function decideNudge(rawInput: NudgePolicyInput): NudgeDecision {
   const input = NudgePolicyInputSchema.parse(rawInput);
-  const maxDaily = maxDailyFor(input.lane);
+  const lane = input.laneProfile?.primaryLane ?? input.lane;
+  const maxDaily = maxDailyFor(lane);
   const budgetRemaining = Math.max(0, maxDaily - input.sentToday);
-  const nudgeType = typeFor(input);
+  const nudgeType = typeFor(input, lane);
 
   if (input.userMuted) return blocked(input, budgetRemaining, 'User mute blocks all nudges.');
   if (input.completedSessions === 0 && !input.manuallyScheduled) {
@@ -97,7 +98,7 @@ export function decideNudge(rawInput: NudgePolicyInput): NudgeDecision {
     );
   }
 
-  const copy = copyFor(input.lane, nudgeType);
+  const copy = copyFor(lane, nudgeType);
   return NudgeDecisionSchema.parse({
     allowed: nudgeType !== 'none',
     type: nudgeType,
@@ -105,13 +106,14 @@ export function decideNudge(rawInput: NudgePolicyInput): NudgeDecision {
     body: copy.body,
     scheduledFor: input.now,
     reason: 'Lane policy and budget allow this nudge.',
-    lane: input.lane,
+    lane,
     priority: nudgeType === 'study_deadline' || nudgeType === 'rescue' ? 'high' : 'medium',
     budgetRemaining,
   });
 }
 
 function blocked(input: NudgePolicyInput, budgetRemaining: number, reason: string): NudgeDecision {
+  const lane = input.laneProfile?.primaryLane ?? input.lane;
   return NudgeDecisionSchema.parse({
     allowed: false,
     type: 'none',
@@ -119,7 +121,7 @@ function blocked(input: NudgePolicyInput, budgetRemaining: number, reason: strin
     body: null,
     scheduledFor: null,
     reason,
-    lane: input.lane,
+    lane,
     priority: 'low',
     budgetRemaining,
   });

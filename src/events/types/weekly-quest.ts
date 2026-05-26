@@ -1,7 +1,5 @@
-import type { WeeklyQuestState } from '../../features/weekly-quests/schemas';
-
 export interface WeeklyQuestEventDefinitions {
-  'weekly_quest:progress': WeeklyQuestState;
+  'weekly_quest:progress': unknown;
   'weekly_quest:completed': {
     userId: string;
     weekKey: string;

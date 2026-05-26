@@ -30,7 +30,6 @@ export {
   RANK_UNLOCKS,
   type UnlockableFeature,
 } from './components/MasteryUnlockGate';
-export { MasteryRankUpOverlay } from './components/MasteryRankUpOverlay';
 
 // Service
 export { MasteryService } from './service';

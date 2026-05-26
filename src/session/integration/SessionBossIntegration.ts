@@ -3,7 +3,6 @@ import { z } from "zod";
 import { eventBus } from "../../events";
 import { applyBossDamageRules } from "../../features/boss/damage-rules";
 import { applyDamage, getActiveEncounter } from "../../features/boss/service";
-import { getDailyBossDamageMultiplier } from "../../features/live-ops/daily-modifiers";
 import { getAvailabilityFor } from "../../features/liveops-config/feature-access-store";
 import { SessionSummarySchema } from "../types";
 import {
@@ -64,12 +63,7 @@ export function calculateBossDamage(
         sprintMultiplier,
     ),
   );
-  const dailyMultiplier = getDailyBossDamageMultiplier({
-    sessionMode: mode,
-    timestamp: summary.createdAt,
-  });
-
-  return applyBossDamageRules(Math.round(baseDamage * dailyMultiplier), {
+  return applyBossDamageRules(baseDamage, {
     sessionDuration: Math.max(1, Math.round(summary.effectiveDuration / 1000)),
     sessionQuality: Math.max(
       0,

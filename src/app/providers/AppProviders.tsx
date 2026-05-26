@@ -16,7 +16,6 @@ import { ErrorBoundary } from '../../errors';
 import { getNetInfoAdapter } from '../../network';
 import { getSecureStorage } from '../../persistence';
 import { addBreadcrumb, captureException } from '../../config/sentry';
-import { initializeEmotionRetention } from '../../features/emotion-retention';
 
 interface AppProvidersProps {
   children: React.ReactNode;
@@ -25,19 +24,15 @@ interface AppProvidersProps {
 /**
  * Initialize core services
  */
-const initializeServices = async () => {
+const initializeServices = async (): Promise<() => void> => {
   try {
     const netInfo = getNetInfoAdapter();
     await netInfo.initialize();
     getSecureStorage();
 
-    // Initialize emotion retention engine — tracks emotional state for retention
-    const cleanupEmotionEngine = initializeEmotionRetention();
-
     addBreadcrumb('Core providers initialized', 'app.providers');
 
     return () => {
-      cleanupEmotionEngine?.();
     };
   } catch (error) {
     captureException(
@@ -60,7 +55,21 @@ const initializeServices = async () => {
  */
 export const AppProviders: React.FC<AppProvidersProps> = ({ children }) => {
   useEffect(() => {
-    initializeServices();
+    let cleanup: (() => void) | null = null;
+    let disposed = false;
+
+    void initializeServices().then((nextCleanup) => {
+      if (disposed) {
+        nextCleanup();
+        return;
+      }
+      cleanup = nextCleanup;
+    });
+
+    return () => {
+      disposed = true;
+      cleanup?.();
+    };
   }, []);
 
   // Web doesn't need GestureHandlerRootView

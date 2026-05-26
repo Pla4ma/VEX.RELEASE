@@ -87,7 +87,7 @@ describe('boss engagement level derivation', () => {
     expect(deriveBossEngagementLevel(inputs)).toBe('none');
   });
 
-  it('returns low with one engagement signal', () => {
+  it('returns none regardless of engagement signals (boss deactivated)', () => {
     const inputs: BossEngagementInputs = {
       bossIgnored: false,
       bossUnlocked: true,
@@ -97,10 +97,10 @@ describe('boss engagement level derivation', () => {
       bossDamageEventsCount: 0,
       recentSessionsWithBossProgress: 0,
     };
-    expect(deriveBossEngagementLevel(inputs)).toBe('low');
+    expect(deriveBossEngagementLevel(inputs)).toBe('none');
   });
 
-  it('returns medium with four total signals', () => {
+  it('stays none with many signals (boss deactivated)', () => {
     const inputs: BossEngagementInputs = {
       bossIgnored: false,
       bossUnlocked: true,
@@ -110,10 +110,10 @@ describe('boss engagement level derivation', () => {
       bossDamageEventsCount: 1,
       recentSessionsWithBossProgress: 0,
     };
-    expect(deriveBossEngagementLevel(inputs)).toBe('medium');
+    expect(deriveBossEngagementLevel(inputs)).toBe('none');
   });
 
-  it('returns high with eight or more total signals', () => {
+  it('stays none with high signal count (boss deactivated)', () => {
     const inputs: BossEngagementInputs = {
       bossIgnored: false,
       bossUnlocked: true,
@@ -123,7 +123,7 @@ describe('boss engagement level derivation', () => {
       bossDamageEventsCount: 2,
       recentSessionsWithBossProgress: 1,
     };
-    expect(deriveBossEngagementLevel(inputs)).toBe('high');
+    expect(deriveBossEngagementLevel(inputs)).toBe('none');
   });
 });
 
@@ -225,6 +225,58 @@ describe('engagement signals reset on ignored', () => {
       bossCTAClickedCount: 15,
       bossDamageEventsCount: 10,
       recentSessionsWithBossProgress: 5,
+    };
+    expect(deriveBossEngagementLevel(inputs)).toBe('none');
+  });
+
+  it('returns none when boss is not unlocked (boss system deactivated)', () => {
+    const inputs: BossEngagementInputs = {
+      bossIgnored: false,
+      bossUnlocked: false,
+      canQueryBoss: false,
+      bossRouteOpenedCount: 0,
+      bossCTAClickedCount: 0,
+      bossDamageEventsCount: 0,
+      recentSessionsWithBossProgress: 0,
+    };
+    expect(deriveBossEngagementLevel(inputs)).toBe('none');
+  });
+
+  it('returns none regardless of engagement signals (boss deactivated)', () => {
+    const inputs: BossEngagementInputs = {
+      bossIgnored: false,
+      bossUnlocked: true,
+      canQueryBoss: true,
+      bossRouteOpenedCount: 1,
+      bossCTAClickedCount: 0,
+      bossDamageEventsCount: 0,
+      recentSessionsWithBossProgress: 0,
+    };
+    expect(deriveBossEngagementLevel(inputs)).toBe('none');
+  });
+
+  it('stays none even with many signals (boss deactivated)', () => {
+    const inputs: BossEngagementInputs = {
+      bossIgnored: false,
+      bossUnlocked: true,
+      canQueryBoss: true,
+      bossRouteOpenedCount: 2,
+      bossCTAClickedCount: 2,
+      bossDamageEventsCount: 0,
+      recentSessionsWithBossProgress: 0,
+    };
+    expect(deriveBossEngagementLevel(inputs)).toBe('none');
+  });
+
+  it('stays none with high signal count (boss deactivated)', () => {
+    const inputs: BossEngagementInputs = {
+      bossIgnored: false,
+      bossUnlocked: true,
+      canQueryBoss: true,
+      bossRouteOpenedCount: 5,
+      bossCTAClickedCount: 5,
+      bossDamageEventsCount: 2,
+      recentSessionsWithBossProgress: 1,
     };
     expect(deriveBossEngagementLevel(inputs)).toBe('none');
   });

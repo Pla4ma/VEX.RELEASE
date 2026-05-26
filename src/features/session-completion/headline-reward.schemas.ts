@@ -49,15 +49,15 @@ export const HeadlineRewardConsequencesSchema = z
       })
       .optional(),
     summary: z.object({
-      coinsEarned: z.number(),
+      coinsEarned: z.number().default(0),
       focusScoreBandChanged: z.boolean().optional(),
       focusScoreDelta: z.number().int().optional(),
       focusPurityScore: z.number().optional(),
-      gemsEarned: z.number(),
+      gemsEarned: z.number().default(0),
       newLevel: z.number().int().min(1),
       previousLevel: z.number().int().min(1),
       sessionMode: z.string().min(1),
       xpEarned: z.number(),
-    }),
+    }).passthrough(),
   })
   .strict();

@@ -104,16 +104,22 @@ export const BossScreen = (): JSX.Element => {
   const degradedFeatures = getDegradedFeatures();
   const bossIgnored = degradedFeatures.has('boss_tab');
 
-  const bossEngagementSummary = useBossEngagementSummary(userId);
+  const bossEngagementQuery = useBossEngagementSummary(userId);
+  const summaryData = bossEngagementQuery.data ?? {
+    bossRouteOpenedCount: 0,
+    bossCTAClickedCount: 0,
+    bossDamageEventsCount: 0,
+    recentSessionsWithBossProgress: 0,
+  };
 
   const bossEngagementInputs: BossEngagementInputs = {
     bossIgnored,
     bossUnlocked: disclosure.features.boss_tab.isUnlocked,
     canQueryBoss: false,
-    bossRouteOpenedCount: bossEngagementSummary.bossRouteOpenedCount,
-    bossCTAClickedCount: bossEngagementSummary.bossCTAClickedCount,
-    bossDamageEventsCount: bossEngagementSummary.bossDamageEventsCount,
-    recentSessionsWithBossProgress: bossEngagementSummary.recentSessionsWithBossProgress,
+    bossRouteOpenedCount: summaryData.bossRouteOpenedCount,
+    bossCTAClickedCount: summaryData.bossCTAClickedCount,
+    bossDamageEventsCount: summaryData.bossDamageEventsCount,
+    recentSessionsWithBossProgress: summaryData.recentSessionsWithBossProgress,
   };
 
   const bossEngagement = useBossEngagementSignals(bossEngagementInputs);
@@ -121,7 +127,7 @@ export const BossScreen = (): JSX.Element => {
   const resolved = useResolvedVexExperienceRuntime({
     behaviorStats: {
       abandonedSessionDurations: [],
-      bossChallengeEngagement: bossEngagement,
+      bossChallengeEngagement: 'low',
       coachInteractions: 0,
       comebackSessions: 0,
       completedSessionDurations: [],

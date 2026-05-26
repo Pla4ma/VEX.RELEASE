@@ -45,8 +45,8 @@
     <h2>1.1 Account Information</h2>
     <p>When you create an account, we collect your email address and a password (stored securely using bcrypt). This is managed through Supabase Auth. You may optionally provide a display name.</p>
 
-    <h2>1.2 Session &amp; Focus Data</h2>
-    <p>We record your focus sessions: start time, duration, mode (Focus, Recovery, Study, Boss Prep, Habit Build), grade achieved, and the completion story generated. This data powers your streaks, personal bests, focus score, and companion memories.</p>
+      <h2>1.2 Session &amp; Focus Data</h2>
+      <p>We record your focus sessions: start time, duration, lane (Study, Run, Project, or Clean), grade achieved, and the completion summary. This data powers your streaks, Focus Score, lane recommendations, and coach memory.</p>
 
     <h2>1.3 Purchase Data</h2>
     <p>In-app purchases and subscription status are processed through RevenueCat. We do not see or store your payment card details. RevenueCat shares your purchase receipt, transaction ID, and subscription expiry dates solely for entitlement verification.</p>
@@ -60,8 +60,8 @@
     <h2>1.6 Push Notification Tokens</h2>
     <p>With your permission, we collect a push notification token (unique to your device) so we can send reminders, streak alerts, and coach messages. You can revoke this at any time in your device Settings.</p>
 
-    <h2>1.7 AI Coach Queries</h2>
-    <p>When you interact with the AI Coach, your messages are sent to Google Gemini API for processing. These are not used to train models. We store the conversation history locally and on Supabase to provide continuity.</p>
+      <h2>1.7 Coach Queries</h2>
+      <p>When you interact with the Coach, your messages are sent to Google Gemini API for processing. These are not used to train models. We store the conversation history locally and on Supabase to provide continuity.</p>
 
     <h2>1.8 Local Storage</h2>
     <p>We store certain data locally on your device using MMKV (for app preferences and offline queue) and expo-secure-store (for your auth session token). This data never leaves your device unless you explicitly sync it.</p>
@@ -71,7 +71,7 @@
     <h2>2. How We Use Your Information</h2>
     <ul>
       <li><strong>Operate the App:</strong> Create your account, record sessions, calculate streaks and focus scores, generate completion stories, and manage subscriptions.</li>
-      <li><strong>Personalize your experience:</strong> Tailor motivation style, coach personality, and recommendations based on your session history and preferences.</li>
+      <li><strong>Personalize your experience:</strong> Tailor motivation style, coach tone, and lane recommendations based on your session history and preferences.</li>
       <li><strong>Improve the App:</strong> Analyze crash reports and usage patterns to fix bugs and prioritize features.</li>
       <li><strong>Communicate with you:</strong> Send push notifications you've opted into, and respond to support inquiries.</li>
     </ul>
@@ -85,9 +85,8 @@
       <li><strong>RevenueCat</strong> — purchase verification and subscription management (US-based)</li>
       <li><strong>Sentry</strong> — crash and error reporting (US-based)</li>
       <li><strong>PostHog</strong> — product analytics (US-based, self-hosted cloud)</li>
-      <li><strong>Google Gemini API</strong> — AI coach message processing (US-based)</li>
+      <li><strong>Google Gemini API</strong> — coach message processing (US-based)</li>
     </ul>
-    <p>Each provider signatory to standard data processing agreements. We never share your data for advertising or profiling purposes.</p>
 
     <hr />
 

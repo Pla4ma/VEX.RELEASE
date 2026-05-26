@@ -4,6 +4,8 @@ import {
   buildRescueCompletionRecord,
   generateRescueReflection,
   isRescueEligible,
+  shouldSendRescuePush,
+  buildRescuePushPayload,
 } from '../service';
 import type { RescuePlan } from '../schemas';
 
@@ -125,7 +127,7 @@ describe('rescue mode', () => {
       expect(result.trigger).toBe('streak_risk');
     });
 
-    it('is visible after repeated dismissals', () => {
+    it('is visible after repeated dismissals (2 dismissals)', () => {
       const result = isRescueEligible({
         userId: 'u1',
         lane: 'minimal_normal',
@@ -133,7 +135,7 @@ describe('rescue mode', () => {
         daysSinceOnboarding: 2,
         abandonedSessionExists: false,
         missedPlannedSession: false,
-        recentDismissals: 3,
+        recentDismissals: 2,
         streakAtRisk: false,
         hoursUntilStreakBreak: 24,
         hasActiveSession: false,
@@ -141,6 +143,43 @@ describe('rescue mode', () => {
       });
       expect(result.eligible).toBe(true);
       expect(result.trigger).toBe('repeated_dismissals');
+    });
+
+    it('is visible for notification_dismissal_pattern (3+ dismissals)', () => {
+      const result = isRescueEligible({
+        userId: 'u1',
+        lane: 'minimal_normal',
+        completedSessions: 3,
+        daysSinceOnboarding: 2,
+        abandonedSessionExists: false,
+        missedPlannedSession: false,
+        recentDismissals: 5,
+        streakAtRisk: false,
+        hoursUntilStreakBreak: 24,
+        hasActiveSession: false,
+        now: 100,
+      });
+      expect(result.eligible).toBe(true);
+      expect(result.trigger).toBe('notification_dismissal_pattern');
+    });
+
+    it('is visible when user reports too_big task', () => {
+      const result = isRescueEligible({
+        userId: 'u1',
+        lane: 'deep_creative',
+        completedSessions: 3,
+        daysSinceOnboarding: 2,
+        abandonedSessionExists: false,
+        missedPlannedSession: false,
+        recentDismissals: 0,
+        streakAtRisk: false,
+        hoursUntilStreakBreak: 24,
+        hasActiveSession: false,
+        userTooBig: true,
+        now: 100,
+      });
+      expect(result.eligible).toBe(true);
+      expect(result.trigger).toBe('user_too_big');
     });
   });
 
@@ -259,6 +298,71 @@ describe('rescue mode', () => {
         now: 100,
       });
       expect(result.eligible).toBe(false);
+    });
+  });
+
+  describe('push eligibility', () => {
+    it('allows push when eligible and under budget', () => {
+      const plan = makePlan({ lane: 'student', reason: 'unclear' });
+      const eligibility = isRescueEligible({
+        userId: 'u1', lane: 'student', completedSessions: 3, daysSinceOnboarding: 2,
+        abandonedSessionExists: true, missedPlannedSession: false, recentDismissals: 0,
+        streakAtRisk: false, hoursUntilStreakBreak: 24, hasActiveSession: false, now: 100,
+      });
+      const result = shouldSendRescuePush({
+        eligibility, userMuted: false, quietHoursActive: false,
+        budgetRemaining: 1, sentToday: 0, maxDaily: 2,
+      });
+      expect(result).toBe(true);
+    });
+
+    it('blocks push when user muted', () => {
+      const plan = makePlan({ lane: 'student', reason: 'unclear' });
+      const eligibility = isRescueEligible({
+        userId: 'u1', lane: 'student', completedSessions: 3, daysSinceOnboarding: 2,
+        abandonedSessionExists: true, missedPlannedSession: false, recentDismissals: 0,
+        streakAtRisk: false, hoursUntilStreakBreak: 24, hasActiveSession: false, now: 100,
+      });
+      const result = shouldSendRescuePush({
+        eligibility, userMuted: true, quietHoursActive: false,
+        budgetRemaining: 1, sentToday: 0, maxDaily: 2,
+      });
+      expect(result).toBe(false);
+    });
+
+    it('blocks push during quiet hours', () => {
+      const plan = makePlan({ lane: 'student', reason: 'unclear' });
+      const eligibility = isRescueEligible({
+        userId: 'u1', lane: 'student', completedSessions: 3, daysSinceOnboarding: 2,
+        abandonedSessionExists: true, missedPlannedSession: false, recentDismissals: 0,
+        streakAtRisk: false, hoursUntilStreakBreak: 24, hasActiveSession: false, now: 100,
+      });
+      const result = shouldSendRescuePush({
+        eligibility, userMuted: false, quietHoursActive: true,
+        budgetRemaining: 1, sentToday: 0, maxDaily: 2,
+      });
+      expect(result).toBe(false);
+    });
+
+    it('blocks push at budget limit', () => {
+      const plan = makePlan({ lane: 'student', reason: 'unclear' });
+      const eligibility = isRescueEligible({
+        userId: 'u1', lane: 'student', completedSessions: 3, daysSinceOnboarding: 2,
+        abandonedSessionExists: true, missedPlannedSession: false, recentDismissals: 0,
+        streakAtRisk: false, hoursUntilStreakBreak: 24, hasActiveSession: false, now: 100,
+      });
+      const result = shouldSendRescuePush({
+        eligibility, userMuted: false, quietHoursActive: false,
+        budgetRemaining: 0, sentToday: 2, maxDaily: 2,
+      });
+      expect(result).toBe(false);
+    });
+
+    it('generates push payload with lane-specific copy', () => {
+      const plan = makePlan({ lane: 'game_like', reason: 'too_big' });
+      const payload = buildRescuePushPayload(plan);
+      expect(payload.title).toContain('recovery ready');
+      expect(payload.body.length).toBeGreaterThan(0);
     });
   });
 });

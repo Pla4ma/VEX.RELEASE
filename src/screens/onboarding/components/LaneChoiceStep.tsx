@@ -15,11 +15,11 @@ type LaneChoiceStepProps = {
 
 const ALL_LANES: Lane[] = ['student', 'game_like', 'deep_creative', 'minimal_normal'];
 
-const LANE_DESCRIPTIONS: Record<Lane, string> = {
-  student: 'Study OS, recall prompts, deadline tracking. Best for students and learners.',
-  game_like: 'Bosses, streaks, challenges. Turns focus into a game.',
-  deep_creative: 'Project threads, flow windows, continuity memory. For deep work and creativity.',
-  minimal_normal: 'Clean sessions, quiet progress, low notifications. Minimal and calm.',
+export const LANE_DESCRIPTIONS: Record<Lane, string> = {
+  student: 'For recall, deadlines, and learning sessions.',
+  game_like: 'For energetic goals and visible momentum.',
+  deep_creative: 'For longer work that needs continuity.',
+  minimal_normal: 'For quiet sessions and low noise.',
 };
 
 export function LaneChoiceStep({ onSelect }: LaneChoiceStepProps): JSX.Element {

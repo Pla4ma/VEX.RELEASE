@@ -52,7 +52,7 @@ const GOALS: readonly [
     id: 'beat-procrastination',
     icon: '\uD83C\uDFAE',
     title: 'Beat Procrastination',
-    description: 'Focus gaming',
+    description: 'Stay on track',
   },
 ];
 

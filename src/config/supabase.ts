@@ -38,6 +38,8 @@ function createMockSupabaseClient(): SupabaseClient {
         }),
       }),
     }),
+  // Intentionally partial mock — only runs in Jest. Doesn't implement
+  // full SupabaseClient (missing supabaseUrl, storage, realtime, etc.)
   } as unknown as SupabaseClient;
 }
 
@@ -132,9 +134,12 @@ export function handleSupabaseError(error: unknown): Error {
     return error;
   }
 
-  if (typeof error === 'object' && error !== null) {
-    const err = error as { message?: string; code?: string };
-    return new Error(err.message || `Supabase error: ${err.code || 'unknown'}`);
+  if (error !== null && typeof error === 'object') {
+    // Narrowing from unknown to read .message / .code — validated via typeof guards
+    const err = error as Record<string, unknown>;
+    const msg = typeof err.message === 'string' ? err.message : undefined;
+    const code = typeof err.code === 'string' ? err.code : undefined;
+    return new Error(msg || `Supabase error: ${code ?? 'unknown'}`);
   }
 
   return new Error('Unknown Supabase error');

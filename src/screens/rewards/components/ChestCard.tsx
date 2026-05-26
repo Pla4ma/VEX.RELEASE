@@ -5,18 +5,19 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 import { Box } from '../../../components/primitives/Box';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
-import { TIER_CONFIG } from '../tier-config';
-import type { MysteryChest } from '../VaultScreen';
 
 interface ChestCardProps {
-  chest: MysteryChest;
+  label: string;
+  icon: string;
+  glow: string;
   index: number;
+  source: string;
+  isOpened: boolean;
   onPress: () => void;
 }
 
-export function ChestCard({ chest, index, onPress }: ChestCardProps): JSX.Element {
+export function ChestCard({ label, icon, glow, index, source, isOpened, onPress }: ChestCardProps): JSX.Element {
   const { theme } = useTheme();
-  const config = TIER_CONFIG[chest.tier];
 
   return (
     <Animated.View
@@ -25,18 +26,18 @@ export function ChestCard({ chest, index, onPress }: ChestCardProps): JSX.Elemen
     >
       <Pressable
         onPress={onPress}
-        accessibilityLabel="Interactive control"
+        accessibilityLabel={isOpened ? 'Opened chest' : 'Mystery chest'}
         accessibilityRole="button"
-        accessibilityHint="Activates this control"
+        accessibilityHint="View chest details"
       >
         <Box
           p="lg"
           borderRadius="xl"
           bg={theme.colors.background.secondary}
           borderWidth={2}
-          borderColor={config.glow}
+          borderColor={glow}
           style={{
-            shadowColor: config.glow,
+            shadowColor: glow,
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 12,
@@ -47,27 +48,25 @@ export function ChestCard({ chest, index, onPress }: ChestCardProps): JSX.Elemen
             width={80}
             height={80}
             borderRadius="lg"
-            bg={`${config.glow}20`}
+            bg={`${glow}20`}
             justifyContent="center"
             alignItems="center"
             alignSelf="center"
             mb="md"
             style={{
-              backgroundColor: chest.isOpened
-                ? `${config.glow}30`
-                : theme.colors.background.tertiary,
+              backgroundColor: isOpened ? `${glow}30` : theme.colors.background.tertiary,
             }}
           >
-            <Text fontSize={40}>{chest.isOpened ? config.emoji : '❓'}</Text>
+            <Text fontSize={40}>{icon}</Text>
           </Box>
 
           <Text
             variant="bodySmall"
-            color={chest.isOpened ? 'text.secondary' : config.glow}
+            color={isOpened ? 'text.secondary' : glow}
             textAlign="center"
             fontWeight="600"
           >
-            {chest.isOpened ? config.label : 'Mystery Chest'}
+            {label}
           </Text>
 
           <Box
@@ -79,11 +78,11 @@ export function ChestCard({ chest, index, onPress }: ChestCardProps): JSX.Elemen
             alignSelf="center"
           >
             <Text variant="caption" color="text.tertiary">
-              {chest.source}
+              {source}
             </Text>
           </Box>
 
-          {chest.isOpened && (
+          {isOpened && (
             <Box
               mt="sm"
               flexDirection="row"

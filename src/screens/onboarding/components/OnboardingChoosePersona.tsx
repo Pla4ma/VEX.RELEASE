@@ -46,7 +46,7 @@ import { launchColors } from '@theme/tokens/launch-colors';
               Pick your coach
             </Text>
             <Text variant="body"color="text.secondary">
-              Your AI coach will adapt to your style and keep you motivated.
+              Your coach will adapt to your style and keep you focused.
             </Text>
           </Box>
         </Box>

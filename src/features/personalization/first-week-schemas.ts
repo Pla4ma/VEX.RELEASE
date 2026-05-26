@@ -56,6 +56,18 @@ export const FirstWeekSafeIntentSchema = z.enum([
   'OPEN_WEEKLY_INSIGHT',
 ]);
 
+export const SessionProfileSchema = z.object({
+  averageDurationMinutes: z.number().int().min(1),
+  completions: z.number().int().min(0),
+  abandonments: z.number().int().min(0),
+  preferredStartHour: z.number().int().min(0).max(23).nullable(),
+  consistencyScore: z.number().min(0).max(1),
+  savedNextMoves: z.number().int().min(0),
+  longestStreak: z.number().int().min(0),
+}).strict();
+
+export type SessionProfile = z.infer<typeof SessionProfileSchema>;
+
 export const FirstWeekInputSchema = z.object({
   behaviorStats: z.object({
     bossEngagement: z.enum(['none', 'low', 'medium', 'high']),
@@ -89,6 +101,7 @@ export const FirstWeekInputSchema = z.object({
     'learning',
   ]),
   laneProfile: LaneProfileSchema.optional(),
+  sessionProfile: SessionProfileSchema.optional(),
 }).strict();
 
 export const FirstWeekExperienceSchema = z.object({

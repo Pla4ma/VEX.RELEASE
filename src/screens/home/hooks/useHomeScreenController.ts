@@ -11,7 +11,6 @@ import { getFeatureAvailability, isFeatureAvailableForNavigation, useDisclosureA
 import { getNextBestAction } from '../../../features/progression';
 import { useProgressionSummary } from '../../../features/progression/hooks';
 import { useComebackState, useStreakSummary } from '../../../features/streaks/hooks';
-import { useUserSquads } from '../../../features/squads/hooks';
 import { useNetInfo } from '../../../network';
 import type { ExtendedRootStackParams } from '../../../navigation/types';
 import { useSessionHistory } from '../../../session/hooks/useSession';
@@ -23,6 +22,7 @@ import { buildDisplayedReturnReason, getFocusedMinutesForToday, getNextUnlockFea
 import { useHomeAnalyticsEffects } from './useHomeAnalyticsEffects';
 import { useHomeNavigationActions } from './useHomeNavigationActions';
 import { useHomeReturnReason } from './useHomeReturnReason';
+import { createStubQuery } from './home-controller-stubs';
 export function useHomeScreenController() {
   const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const { isOnline } = useNetInfo();
@@ -45,7 +45,6 @@ export function useHomeScreenController() {
   const streakQuery = useStreakSummary(canQueryProgressSignals ? userId : null);
   const progressionQuery = useProgressionSummary(canQueryProgressSignals ? userId : null);
   const historyQuery = useSessionHistory(userId, 5);
-  const squadsQuery = useUserSquads(userId || undefined, { enabled: runtime.canQuerySquads, staleTime: 1000 * 60 * 5 });
   const activeStudyPlanQuery = useActiveStudyPlan({ enabled: runtime.canQueryStudy });
   const learningExecutionLayer = useLearningExecutionLayer(activeStudyPlanQuery.data ?? null);
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
@@ -175,7 +174,7 @@ export function useHomeScreenController() {
     streakQuery,
     progressionQuery,
     historyQuery,
-    squadsQuery,
+    squadsQuery: createStubQuery(),
     activeStudyPlanQuery,
     learningExecutionLayer,
     comebackQuery,

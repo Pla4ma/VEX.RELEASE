@@ -1,16 +1,18 @@
 /**
- * App Store Submission Pack — VEX Phase 14
+ * App Store Submission Pack — VEX Phase 13
  *
+ * Identity: VEX is the productivity app that changes based on how you work.
  * Premium = durable personalization, not game economy.
- * No coins, no gems, no shop, no loot.
  */
 
 export const APP_STORE_METADATA = {
-  appName: 'VEX — Focus Score',
-  subtitle: 'Focus. Track growth. Go deeper.',
+  appName: 'VEX',
+  subtitle: 'Focus that adapts to you',
   description:
-    'VEX turns focus into a measurable skill. Start a session, earn a grade, watch your Focus Score grow. Your companion evolves with every completed session. VEX Premium adds long memory, advanced focus reports, study import depth, project continuity, calendar intelligence, and private memory console controls — serious productivity tools, not game monetization. No coins, no gems, no chests, no pay-to-win.',
-  keywords: ['focus', 'productivity', 'timer', 'deep work', 'habit', 'study', 'calendar', 'memory'],
+    'VEX learns how you work, then unlocks the right productivity system for your brain — Study, Run, Project, or Clean.\n\n' +
+    'Start with one focused session. VEX observes your rhythm, recommends your best lane, and adapts as you go. Each session builds your Focus Score and shapes what VEX suggests next.\n\n' +
+    'VEX Premium adds long memory, advanced focus reports, study import depth, project continuity, calendar intelligence, and private memory console controls — durable intelligence that stays useful, not game monetization.',
+  keywords: ['focus', 'productivity', 'study', 'deep work', 'project', 'planning', 'memory', 'flow'],
   supportUrl: 'https://vex.app/support',
   privacyPolicyUrl: 'https://vex.app/privacy',
   ageRating: '4+',
@@ -27,7 +29,7 @@ Reviewer Instructions:
 5. Navigate to Settings > Account > Delete Account to test account deletion.
 
 Subscriptions:
-- Premium adds long memory, advanced focus reports, study import depth, project continuity, calendar intelligence, advanced friction modes, weekly experiments, and private memory console controls.
+- Premium adds deep coach memory, advanced Study/Run/Project/Clean systems, progress intelligence, and private memory console controls.
 - Premium appears only after the core focus loop proves useful (40+ sessions).
 - No Day 0 paywall. No coins, gems, or consumable purchases.
 - Manage subscriptions in iOS Settings > Apple ID > Subscriptions.

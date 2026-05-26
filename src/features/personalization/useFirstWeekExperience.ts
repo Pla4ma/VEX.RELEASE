@@ -10,6 +10,7 @@ import type {
   FirstWeekResolverInput,
 } from './first-week-schemas';
 import type { MotivationProfileType } from '../liveops-config/feature-access';
+import type { LaneProfile } from '../lane-engine/types';
 
 export interface UseFirstWeekInput {
   completedSessions: number;
@@ -20,6 +21,7 @@ export interface UseFirstWeekInput {
   bossEngagement: 'none' | 'low' | 'medium' | 'high';
   studyUsageRatio: number;
   isPremium: boolean;
+  laneProfile?: LaneProfile;
   featureAvailable: {
     boss: boolean;
     premium: boolean;
@@ -41,6 +43,7 @@ export function computeFirstWeekExperience(input: UseFirstWeekInput): FirstWeekE
     bossEngagement,
     studyUsageRatio,
     isPremium,
+    laneProfile,
     featureAvailable,
   } = input;
 
@@ -65,6 +68,7 @@ export function computeFirstWeekExperience(input: UseFirstWeekInput): FirstWeekE
       social: featureAvailable.social,
       study: featureAvailable.study,
     },
+    laneProfile,
     motivationStyle: style,
     premiumState: isPremium ? 'active' : featureAvailable.premium ? 'configured' : 'unavailable',
     primaryGoal: goal,
@@ -83,6 +87,7 @@ export function useFirstWeekExperience(input: UseFirstWeekInput): FirstWeekExper
     input.bossEngagement,
     input.studyUsageRatio,
     input.isPremium,
+    input.laneProfile,
     input.featureAvailable.boss,
     input.featureAvailable.premium,
     input.featureAvailable.social,

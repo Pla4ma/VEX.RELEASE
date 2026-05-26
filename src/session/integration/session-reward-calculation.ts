@@ -1,4 +1,3 @@
-import { buildDailyModifierSummary } from "../../features/live-ops/daily-modifiers";
 import type { SessionSummary } from "../../session/types";
 import { BonusCalculator } from "../engines/scoring/BonusCalculator";
 import {
@@ -37,13 +36,8 @@ export function calculateRewards(
   const adjustedQuality = Math.max(0, focusQuality - summary.interruptions * 5 - summary.pauses * 2);
   const qualityXP = adjustedQuality >= 95 ? 150 : adjustedQuality >= 85 ? 90 : adjustedQuality >= 75 ? 50 : 0;
   const difficultyXP = calculateModeDifficultyBonus(mode, baseXP, summary);
-  const dailyModifier = buildDailyModifierSummary({
-    sessionMode: mode,
-    timestamp: summary.createdAt,
-  });
   const modeXP = Math.round(baseXP * modeConfig.xpMultiplier * recoveryMultiplier);
   const preModifierXP = modeXP + timeBonus + streakBonus + qualityXP + difficultyXP + (perfectSession ? 100 : 0);
-  const dailyModifierXP = Math.max(0, Math.round(preModifierXP * (dailyModifier.rewardMultiplier - 1)));
 
   return {
     baseXP: modeXP,
@@ -53,15 +47,15 @@ export function calculateRewards(
     qualityBonus: { xp: qualityXP, coins: 0 },
     difficultyBonus: { xp: difficultyXP, coins: 0 },
     dailyModifierBonus: {
-      xp: dailyModifierXP,
+      xp: 0,
       coins: 0,
-      modifierId: dailyModifier.isMatched ? dailyModifier.modifier.id : null,
+      modifierId: null,
     },
     timeBonus: { xp: timeBonus, coins: 0 },
     perfectSessionBonus: perfectSession ? { xp: 100, coins: 0, gems: 0 } : { xp: 0, coins: 0, gems: 0 },
     streakMultiplier,
-    finalMultiplier: streakMultiplier * modeConfig.xpMultiplier * recoveryMultiplier * dailyModifier.rewardMultiplier,
-    totalXP: Math.floor((preModifierXP + dailyModifierXP) * streakMultiplier),
+    finalMultiplier: streakMultiplier * modeConfig.xpMultiplier * recoveryMultiplier,
+    totalXP: Math.floor(preModifierXP * streakMultiplier),
     totalCoins: 0,
     totalGems: 0,
     streakDays,

@@ -25,8 +25,14 @@ export const PRIVACY_INVENTORY: DataCategory[] = [
   },
   {
     category: 'Usage Data',
-    dataTypes: ['Session duration', 'Session grade', 'Focus Score', 'Streak count'],
-    purpose: 'Core app functionality and progress tracking',
+    dataTypes: [
+      'Session duration',
+      'Session grade',
+      'Focus Score',
+      'Streak count',
+      'Lane recommendation',
+    ],
+    purpose: 'Core app functionality and adaptive lane recommendations',
     linkedToUser: true,
     usedForTracking: false,
     storage: 'both',
@@ -57,11 +63,24 @@ export const PRIVACY_INVENTORY: DataCategory[] = [
   },
   {
     category: 'User Content',
-    dataTypes: ['Display name', 'Focus goal category'],
-    purpose: 'Personalization and companion interaction',
+    dataTypes: [
+      'Display name',
+      'Focus goal category',
+      'Coach conversation history',
+      'Memory entries',
+    ],
+    purpose: 'Personalization, coach interaction, and durable memory',
     linkedToUser: true,
     usedForTracking: false,
     storage: 'both',
+  },
+  {
+    category: 'Notification Tokens',
+    dataTypes: ['Push notification token'],
+    purpose: 'Coach reminders, streak alerts, session nudges',
+    linkedToUser: true,
+    usedForTracking: false,
+    storage: 'server',
   },
 ];
 
@@ -70,7 +89,7 @@ export function getDataCategories(): DataCategory[] {
 }
 
 export function getPiiFields(): string[] {
-  return ['Email address'];
+  return ['Email address', 'Push notification token'];
 }
 
 export function getTrackingFields(): string[] {

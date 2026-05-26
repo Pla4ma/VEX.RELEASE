@@ -47,14 +47,24 @@ describe('resolvePremiumStrategy', () => {
     expect(strategy.canShowPaywall).toBe(true);
   });
 
-  it('triggers on high-intent action regardless of session count', () => {
-    const strategy = resolvePremiumStrategy({
+  it('triggers on high-intent action only after soft-tease threshold (session 5)', () => {
+    // Below session 5: hidden even with highIntentAction
+    const early = resolvePremiumStrategy({
       billingConfigured: true,
       completedSessions: 1,
       highIntentAction: 'advanced_study',
     });
-    expect(strategy.triggerMoment).toBe('advanced_study');
-    expect(strategy.canShowPaywall).toBe(true);
+    expect(early.triggerMoment).toBe('none');
+    expect(early.canShowPaywall).toBe(false);
+
+    // At session 5: highIntentAction triggers paywall
+    const at5 = resolvePremiumStrategy({
+      billingConfigured: true,
+      completedSessions: 5,
+      highIntentAction: 'advanced_study',
+    });
+    expect(at5.triggerMoment).toBe('advanced_study');
+    expect(at5.canShowPaywall).toBe(true);
   });
 
   it('blocks premium on Day 0 and after repeated dismissals', () => {

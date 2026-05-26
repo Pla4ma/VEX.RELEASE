@@ -26,7 +26,7 @@ jest.mock('../completion-subsystems', () => ({
 }));
 jest.mock('../../session-story/StoryGenerator', () => ({
   generateStoryForCompletedSession: jest.fn(),
-}));
+}), { virtual: true });
 jest.mock('../companion-memory-integration', () => ({
   recordCompletionCompanionMemories: jest.fn().mockResolvedValue([]),
 }));

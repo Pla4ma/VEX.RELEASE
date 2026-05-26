@@ -1,7 +1,7 @@
 import type { SessionSummary } from '../../session/types';
 import { buildPostSessionNextAction } from './service';
 import { selectHeadlineReward } from './headline-reward.service';
-import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
+import { CompletionLedgerSchema, type CompletionLedger, type CompletionPersonalizationResult } from './schemas';
 import type { CompanionMemory } from '../companion/memory-types';
 import { getMemories } from '../companion/memory-repository';
 import type { CompanionPromise } from '../companion-promise/types';
@@ -58,6 +58,7 @@ export function buildPostSessionStoryViewModel(input: {
   degradedWarnings: string[];
   ledger: CompletionLedger;
   personalBest?: { achievedAt?: string; durationBucket?: string; isPersonalBest: boolean; previousBest?: number | null; purityScore?: number; sessionMode?: string; };
+  personalizationResult?: CompletionPersonalizationResult | null;
   companionMemory?: CompanionMemory | null;
   companionPromise?: CompanionPromise | null;
   focusContract?: FocusContract | null;
@@ -65,6 +66,7 @@ export function buildPostSessionStoryViewModel(input: {
 }): PostSessionStoryViewModel {
   const ledger = CompletionLedgerSchema.parse(input.ledger);
   const degradedWarnings = Array.from(new Set(input.degradedWarnings));
+  const pr = input.personalizationResult ?? null;
   const sessionMode = input.summary.sessionMode ?? ledger.mode;
   const reflectionSummary = {
     ...input.summary,
@@ -78,11 +80,18 @@ export function buildPostSessionStoryViewModel(input: {
     sessionSummary: reflectionSummary,
     streakDays: ledger.streakResult.newDays,
   });
+  const reflectionQuestion = pr?.reflectionQuestion ?? null;
   const reflectionBody =
     input.focusContract?.completionStatus === 'done'
       ? `${input.focusContract.taskDescription} landed. ${reflection.reflection}`
       : reflection.reflection;
+  const meaningBody = reflectionQuestion
+    ? `${reflectionQuestion} ${reflectionBody}`
+    : reflectionBody;
   const nextAction = (() => {
+    if (pr?.nextAction) {
+      return pr.nextAction;
+    }
     try {
       return buildPostSessionNextAction({ summary: input.summary });
     } catch {
@@ -104,7 +113,7 @@ export function buildPostSessionStoryViewModel(input: {
   const beats = [
     { accessibilityLabel: `Result beat. You focused for ${formatMinutes(ledger.effectiveFocusedSeconds)}.`, body: `You protected ${formatMinutes(ledger.effectiveFocusedSeconds)} in ${input.summary.sessionMode ?? ledger.mode}.`, companionLine: null, id: 'result', kind: 'result' as const, metric: { label: 'Focused', value: formatMinutes(ledger.effectiveFocusedSeconds) }, title: `You focused for ${formatMinutes(ledger.effectiveFocusedSeconds)}.` },
     { accessibilityLabel: `Grade beat. ${buildGradeBody(ledger)}`, body: buildGradeBody(ledger), companionLine: null, id: 'grade', kind: 'grade' as const, metric: { label: 'Grade', value: `${ledger.grade} · ${ledger.gradeScore}` }, title: `Grade ${ledger.grade}` },
-    { accessibilityLabel: `Meaning beat. ${reflectionBody}`, body: reflectionBody, companionLine: null, id: 'meaning', kind: 'meaning' as const, metric: { label: 'Focus Score', value: ledger.focusScoreDelta >= 0 ? `+${ledger.focusScoreDelta}` : `${ledger.focusScoreDelta}` }, title: 'What changed today' },
+    { accessibilityLabel: `Meaning beat. ${meaningBody}`, body: meaningBody, companionLine: null, id: 'meaning', kind: 'meaning' as const, metric: { label: 'Focus Score', value: ledger.focusScoreDelta >= 0 ? `+${ledger.focusScoreDelta}` : `${ledger.focusScoreDelta}` }, title: 'What changed today' },
     buildCompanionBeat(input.companionMemory, ledger.companionReactionId),
     personalBestProof ? { accessibilityLabel: `Personal best beat. Purity reached ${personalBestProof.newValue}.`, body: personalBestBody ?? 'You set a cleaner mark than your last saved best.', companionLine: null, id: 'personal-best', kind: 'personal_best' as const, metric: { label: 'Purity record', value: personalBestProof.oldValue === null ? `${personalBestProof.newValue}` : `${personalBestProof.oldValue} -> ${personalBestProof.newValue}` }, title: 'This one raised your ceiling.' } : null,
     { accessibilityLabel: `Tomorrow beat. ${reflection.nextAction}`, body: input.companionPromise ? `Tomorrow, ${input.companionPromise.targetDurationMinutes} minutes in ${input.companionPromise.targetMode.toLowerCase()} is enough to keep the thread alive.` : reflection.nextAction, companionLine: input.companionPromise?.status === 'missed' ? 'Yesterday got away. Start small and rebuild the thread.' : null, id: 'tomorrow', kind: 'tomorrow' as const, metric: input.companionPromise ? { label: 'Tomorrow', value: `${input.companionPromise.targetDurationMinutes}m` } : { label: 'Next mode', value: nextAction?.routeParams?.presetMode ?? 'HOME' }, title: 'Tomorrow already has a shape.' },
@@ -113,7 +122,7 @@ export function buildPostSessionStoryViewModel(input: {
     streak: { currentDays: ledger.streakResult.newDays, previousDays: ledger.streakResult.previousDays, streakSaved: ledger.streakResult.action === 'saved_by_insurance' },
     personalBest: input.personalBest,
     contract: { status: input.focusContract?.completionStatus ?? null },
-    summary: { coinsEarned: input.summary.coinsEarned ?? 0, focusPurityScore: input.summary.focusPurityScore, gemsEarned: input.summary.gemsEarned ?? 0, newLevel: input.summary.userLevel, previousLevel: input.summary.userLevel, sessionMode: input.summary.sessionMode ?? ledger.mode, xpEarned: ledger.xpDelta },
+    summary: { coinsEarned: 0, gemsEarned: 0, focusPurityScore: input.summary.focusPurityScore, newLevel: input.summary.userLevel, previousLevel: input.summary.userLevel, sessionMode: input.summary.sessionMode ?? ledger.mode, xpEarned: ledger.xpDelta },
   });
 
   return PostSessionStoryViewModelSchema.parse({
@@ -129,6 +138,13 @@ export function buildPostSessionStoryViewModel(input: {
     nextActionCta: nextAction ? { label: nextAction.ctaLabel, reason: nextAction.reason, route: 'SessionSetup', routeParams: nextAction.routeParams } : { label: 'Return home', reason: 'Home will hold the next safe move for you.', route: 'Home', routeParams: null },
     pendingSync: ledger.offlineSyncStatus === 'pending_sync',
     personalBestProof,
+    personalization: pr ? {
+      laneProfileConfidence: pr.laneProfile.confidence,
+      memoryCandidateCount: pr.memoryCandidates.length,
+      reflectionQuestion: pr.reflectionQuestion,
+      unlockKey: pr.unlockDecision.key,
+      userFacingTitle: pr.userFacingSummary.displayTitle,
+    } : null,
     rewardReveal: { rewardIds: ledger.rewardIds },
     sessionId: input.summary.sessionId,
     streakState: ledger.streakResult,
@@ -158,6 +174,7 @@ export async function getPostSessionStoryViewModel(input: {
     degradedWarnings: ledger.degradedSystems,
     focusContract,
     ledger,
+    personalizationResult: null,
     summary: input.summary,
   });
 }

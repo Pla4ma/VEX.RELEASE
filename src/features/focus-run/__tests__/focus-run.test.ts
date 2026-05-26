@@ -1,8 +1,8 @@
 import {
   buildFocusRunDisplay,
   computeFocusRunGrade,
-  resolvePersonalBoss,
 } from '../service';
+import { resolvePersonalBoss } from '../boss-resolution';
 import type { FocusRun, FocusRunGrade } from '../schemas';
 
 const MOCK_RUN: FocusRun = {
@@ -97,6 +97,22 @@ it('personal boss is evidence-based after 3+ days with 2+ signals', () => {
 });
 
 // =========================================================================
+// Phase 7 — Boss evidence model: boss must cite behavior after evidence
+// =========================================================================
+it('evidence-based boss cites the detected behavior archetype', () => {
+  const boss = resolvePersonalBoss({
+    firstActiveDay: weekStartDaysAgo(7),
+    signals: ['switching contexts', 'context switching again', 'lost focus switching tabs'],
+    now: nowForDaysAgo(0),
+  });
+
+  expect(boss.isEvidenceBased).toBe(true);
+  expect(boss.archetype).toBe('switch_swarm');
+  expect(boss.name).toBe('Switch Swarm');
+  expect(boss.recoveryPrompt).toContain('protect one thread');
+});
+
+// =========================================================================
 // Phase 5 — Test 5: Cold game-like user gets tiny teaser only.
 // =========================================================================
 it('cold game-like user with no signals gets teaser boss', () => {
@@ -110,6 +126,26 @@ it('cold game-like user with no signals gets teaser boss', () => {
   expect(boss.archetype).toBe('cold_start_shadow');
   expect(boss.name).toBe('Cold Start Shadow');
   expect(boss.recoveryPrompt).toContain('Start one small encounter');
+});
+
+// =========================================================================
+// Phase 7 — Run Day 0: tiny preview only
+// =========================================================================
+it('Run Day 0 — new user sees tiny teaser preview, no full Run board', () => {
+  const display = buildFocusRunDisplay({
+    firstActiveDay: 0,
+    lane: 'game_like',
+    run: null,
+    signals: [],
+  });
+
+  expect(display.laneAllowed).toBe(true);
+  expect(display.boss.isTeaser).toBe(true);
+  expect(display.boss.isEvidenceBased).toBe(false);
+  expect(display.completedEncounters).toBe(0);
+  expect(display.finalGrade).toBeNull();
+  expect(display.weekSummary).toBe('No encounters yet this week.');
+  expect(display.title).toBe('Weekly Focus Run');
 });
 
 // =========================================================================
@@ -128,6 +164,18 @@ it('minimal_normal lane has no run board and no boss CTA', () => {
   const serialized = JSON.stringify(display);
   expect(serialized).not.toMatch(/face.*boss/i);
   expect(serialized).not.toMatch(/full cta/i);
+});
+
+// =========================================================================
+// Phase 7 — Student/Clean lanes never see Run board
+// =========================================================================
+it('student lane hides run board', () => {
+  const display = buildFocusRunDisplay({
+    lane: 'student',
+    run: MOCK_RUN,
+  });
+  expect(display.laneAllowed).toBe(false);
+  expect(display.title).toContain('hidden');
 });
 
 // =========================================================================
@@ -163,9 +211,39 @@ it('completed game-like run display shows recap without currency', () => {
 });
 
 // =========================================================================
+// Phase 7 — Run completion displays mastery (grade + stats), never currency
+// =========================================================================
+it('Run completion shows grade and stat recap, no currency or economy values', () => {
+  const completedRun: FocusRun = {
+    ...MOCK_RUN,
+    cleanStarts: 8,
+    completedEncounters: 12,
+    recoveryWins: 5,
+    reflectionUpgrades: 3,
+    status: 'completed',
+  };
+
+  const display = buildFocusRunDisplay({
+    firstActiveDay: 14,
+    lane: 'game_like',
+    run: completedRun,
+    signals: ['scroll', 'late start', 'switching'],
+  });
+
+  expect(display.finalGrade).toBe('S');
+  expect(display.weekSummary).toContain('12 encounters');
+  expect(display.weekSummary).toContain('8 clean starts');
+  expect(display.weekSummary).toContain('5 recovery wins');
+
+  const serialized = JSON.stringify(display);
+  expect(serialized).not.toMatch(/coins/i);
+  expect(serialized).not.toMatch(/gems/i);
+  expect(serialized).not.toMatch(/currency/i);
+  expect(serialized).not.toMatch(/shop/i);
+});
+
+// =========================================================================
 // Phase 5 — Test 8: Achievements are behavior-based.
-// (Focus run does not reference the achievement catalog directly,
-//  so we assert that no economy/coin/gem reward fields leak.)
 // =========================================================================
 it('focus run display has no achievement economy reward fields', () => {
   const display = buildFocusRunDisplay({
@@ -212,6 +290,24 @@ describe('computeFocusRunGrade', () => {
       expect(computeFocusRunGrade(run)).toBe(tc.expected);
     });
   }
+});
+
+// =========================================================================
+// Phase 7 — No old economy: confirm FocusRunDisplay has zero economy fields
+// =========================================================================
+it('FocusRunDisplay schema has no coin, gem, shop, or economy fields', () => {
+  const display = buildFocusRunDisplay({
+    firstActiveDay: 5,
+    lane: 'game_like',
+    run: MOCK_RUN,
+    signals: ['scrolling'],
+  });
+
+  const keys = Object.keys(display);
+  const economyKeys = keys.filter((k) =>
+    /coin|gem|shop|inventory|wallet|wager|battle|pass|currency/i.test(k),
+  );
+  expect(economyKeys).toHaveLength(0);
 });
 
 // =========================================================================

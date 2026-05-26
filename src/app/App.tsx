@@ -16,14 +16,16 @@ import { RootNavigator } from '../navigation/RootNavigator';
 
 import { ToastProvider } from '../shared/ui/components/Toast';
 import { initializeDevContrastChecker } from '../shared/accessibility/contrast-checker';
-import { SpectacleOverlay } from '../features/spectacle/components/SpectacleOverlay';
 import { ThemeProvider } from '../theme';
 import { bootstrapApp } from './bootstrap';
+import { markColdStart } from './cold-start-performance';
 
 const rootViewStyle: StyleProp<ViewStyle> = { flex: 1 };
 
 function useAppRuntimeBootstrap(): void {
   useEffect(() => {
+    markColdStart('app_mounted');
+
     try {
       initSentry();
     } catch {
@@ -68,9 +70,7 @@ export const App: React.FC = () => {
           <ThemeProvider>
             <ErrorBoundary>
               <ToastProvider position="top" maxToasts={3}>
-                <SpectacleOverlay>
-                  <RootNavigator />
-                </SpectacleOverlay>
+                <RootNavigator />
               </ToastProvider>
             </ErrorBoundary>
           </ThemeProvider>

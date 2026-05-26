@@ -23,6 +23,4 @@ export * as focusRun from './focus-run';
 export * as projectFocus from './project-focus';
 export * as sessionCompletion from './session-completion';
 export * as sessionStart from './session-start';
-export * as sessionStory from './session-story';
-export * as shop from './shop';
 export * as studyOs from './study-os';

@@ -103,7 +103,7 @@ export class MotionAccessibilityManager {
     );
 
     return createTiming(fromValue, {
-      toValue: toValue as unknown as number,
+      toValue: toValue,
       duration: adjustedConfig.duration || 300,
       delay: adjustedConfig.delay || 0,
       easing: easingOut(),

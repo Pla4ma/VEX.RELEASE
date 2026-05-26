@@ -13,7 +13,7 @@ import { useTheme } from '../../../theme';
 import { PurchaseEvents, createPaywallProperties } from '../purchase-events';
 import { usePaywall, usePremiumStatus } from '../use-revenuecat';
 
-const VIP_BENEFITS = [
+const PREMIUM_BENEFITS = [
   ['Deep Coach Memory', 'VEX remembers patterns, comeback style, best focus windows, and preferred push style.'],
   ['Monthly Focus Report', 'See rhythm, focus risk, recovery plans, and what changed this month.'],
   ['Progress Intelligence', 'Find when you focus best and which session types actually work for you.'],
@@ -38,14 +38,14 @@ export function VipPaywallScreen(): JSX.Element {
   const spacing = theme.spacing;
   const radius = theme.borderRadius;
 
-  const vipPackages = useMemo(() => ({
+  const premiumPackages = useMemo(() => ({
     annual: packages.find((item) => item.packageType.toUpperCase() === 'ANNUAL'),
     monthly: packages.find((item) => item.packageType.toUpperCase() === 'MONTHLY'),
   }), [packages]);
 
   useEffect(() => {
     capture(PurchaseEvents.PAYWALL_VIEWED, createPaywallProperties(
-      offerings?.identifier ?? 'vip-offering',
+      offerings?.identifier ?? 'premium-offering',
       source,
       packages.map((item) => ({
         identifier: item.identifier,
@@ -57,15 +57,15 @@ export function VipPaywallScreen(): JSX.Element {
   const handleClose = (): void => {
     capture(PurchaseEvents.PAYWALL_DISMISSED, {
       paywall_source: source,
-      gated_feature: 'vip_subscription',
+      gated_feature: 'premium_subscription',
     });
     navigation.goBack();
   };
 
   const handlePurchase = async (): Promise<void> => {
-    const selectedPackage = selectedPlan === 'annual' ? vipPackages.annual : vipPackages.monthly;
+    const selectedPackage = selectedPlan === 'annual' ? premiumPackages.annual : premiumPackages.monthly;
     if (!selectedPackage) {
-      setStatusMessage({ tone: 'warning', title: 'Plans loading', body: 'VIP options are still loading. Please wait a moment.' });
+      setStatusMessage({ tone: 'warning', title: 'Plans loading', body: 'Premium options are still loading. Please wait a moment.' });
       return;
     }
 
@@ -81,16 +81,16 @@ export function VipPaywallScreen(): JSX.Element {
   };
 
   const handleRestore = async (): Promise<void> => {
-    setStatusMessage({ tone: 'info', title: 'Restoring purchases', body: 'Checking for existing VIP subscription.' });
+    setStatusMessage({ tone: 'info', title: 'Restoring purchases', body: 'Checking for existing Premium subscription.' });
     const result = await restore();
     await refresh();
     setStatusMessage(result.success
-      ? { tone: 'celebration', title: 'Purchases restored', body: isPremium ? 'Your VIP status is active.' : 'No active subscriptions found.' }
+      ? { tone: 'celebration', title: 'Purchases restored', body: isPremium ? 'Your Premium status is active.' : 'No active subscriptions found.' }
       : { tone: 'warning', title: 'Restore failed', body: 'Try again with a stronger connection.' });
   };
 
   const renderPlan = (plan: 'annual' | 'monthly'): JSX.Element => {
-    const packageInfo = plan === 'annual' ? vipPackages.annual : vipPackages.monthly;
+    const packageInfo = plan === 'annual' ? premiumPackages.annual : premiumPackages.monthly;
     const isSelected = selectedPlan === plan;
     return (
       <Pressable
@@ -104,11 +104,11 @@ export function VipPaywallScreen(): JSX.Element {
           borderColor: isSelected ? theme.colors.primary[500] : theme.colors.border.DEFAULT,
           backgroundColor: theme.colors.background.secondary,
         }}
-        accessibilityLabel={`Choose ${plan} VIP plan`}
+        accessibilityLabel={`Choose ${plan} Premium plan`}
         accessibilityRole="button"
         accessibilityHint="Selects this subscription option."
       >
-        <Text variant="h4" color="text.primary">{plan === 'annual' ? 'Annual VIP' : 'Monthly VIP'}</Text>
+        <Text variant="h4" color="text.primary">{plan === 'annual' ? 'Annual Premium' : 'Monthly Premium'}</Text>
         <Text variant="bodySmall" color="text.secondary">
           {packageInfo?.product.priceString ?? 'Live pricing loading'}
         </Text>
@@ -127,7 +127,7 @@ export function VipPaywallScreen(): JSX.Element {
               {isPremium ? 'Your deeper execution tools are active.' : 'Premium adds deeper coach memory, progress intelligence, and advanced work systems. The free focus loop stays useful.'}
             </Text>
           </View>
-          <Button variant="ghost" onPress={handleClose} size="sm" accessibilityLabel="Close VIP paywall" accessibilityRole="button" accessibilityHint="Closes this screen.">Close</Button>
+          <Button variant="ghost" onPress={handleClose} size="sm" accessibilityLabel="Close Premium paywall" accessibilityRole="button" accessibilityHint="Closes this screen.">Close</Button>
         </View>
 
         {statusMessage ? <StatusBanner status={statusMessage.tone === 'warning' ? 'error' : statusMessage.tone === 'celebration' ? 'success' : 'loading'} message={statusMessage.title} description={statusMessage.body} onDismiss={() => setStatusMessage(null)} /> : null}
@@ -135,15 +135,15 @@ export function VipPaywallScreen(): JSX.Element {
         {isLoading || isLoadingPremium ? (
           <View style={{ alignItems: 'center', paddingVertical: spacing[6], gap: spacing[3] }}>
             <ActivityIndicator color={theme.colors.primary[500]} size="large" />
-            <Text variant="bodySmall" color="text.secondary">Loading VIP options...</Text>
+            <Text variant="bodySmall" color="text.secondary">Loading Premium options...</Text>
           </View>
         ) : error ? (
-          <StatusBanner status="error" message="Could not load VIP options" description="Pricing temporarily unavailable. Try again in a moment." onRetry={retry} />
+          <StatusBanner status="error" message="Could not load Premium options" description="Pricing temporarily unavailable. Try again in a moment." onRetry={retry} />
         ) : (
           <View style={{ gap: spacing[3] }}>
             {!isPremium ? [renderPlan('annual'), renderPlan('monthly')] : null}
             <View style={{ gap: spacing[3] }}>
-              {VIP_BENEFITS.map(([title, description]) => (
+              {PREMIUM_BENEFITS.map(([title, description]) => (
                 <View key={title} style={{ padding: spacing[4], borderRadius: radius.md, backgroundColor: theme.colors.background.secondary }}>
                   <Text variant="h4" color="text.primary">{title}</Text>
                   <Text variant="bodySmall" color="text.secondary">{description}</Text>
@@ -153,8 +153,8 @@ export function VipPaywallScreen(): JSX.Element {
           </View>
         )}
 
-        <Button variant="ghost" size="sm" onPress={handleRestore} accessibilityLabel="Restore purchases" accessibilityRole="button" accessibilityHint="Checks the app store for existing VEX VIP entitlements.">Restore purchases</Button>
-        {!isPremium && !isLoading && !error ? <Button onPress={handlePurchase} variant="primary" size="lg" fullWidth accessibilityLabel="Subscribe to selected VIP plan" accessibilityRole="button" accessibilityHint="Starts the store purchase flow for the selected plan.">Subscribe {selectedPlan === 'annual' ? 'Annual' : 'Monthly'}</Button> : null}
+        <Button variant="ghost" size="sm" onPress={handleRestore} accessibilityLabel="Restore purchases" accessibilityRole="button" accessibilityHint="Checks the app store for existing VEX Premium entitlements.">Restore purchases</Button>
+        {!isPremium && !isLoading && !error ? <Button onPress={handlePurchase} variant="primary" size="lg" fullWidth accessibilityLabel="Subscribe to selected Premium plan" accessibilityRole="button" accessibilityHint="Starts the store purchase flow for the selected plan.">Subscribe {selectedPlan === 'annual' ? 'Annual' : 'Monthly'}</Button> : null}
       </ScrollView>
     </View>
   );

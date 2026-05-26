@@ -94,7 +94,7 @@ export interface RootStackParams {
   Main: NavigatorScreenParams<MainTabParams>;
   Onboarding: { step?: number };
   Paywall: { gatedFeature?: string; source?: string };
-  VipPaywall: { gemCount?: number; source?: string };
+  VipPaywall: { source?: string };
   Splash: undefined;
   Settings: NavigatorScreenParams<SettingsStackParams>;
   SessionStack: NavigatorScreenParams<SessionStackParams>;

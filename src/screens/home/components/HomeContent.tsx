@@ -12,14 +12,12 @@ import { HomeContentLower } from './HomeContentLower';
 import { HomeSectionBoundary } from './HomeSectionBoundary';
 import { HomeHeroSection } from './HomeHeroSection';
 import { HomeStreakProgress } from './HomeStreakProgress';
-import { HomeWeeklyQuest } from './HomeWeeklyQuest';
 import { HomeCompanionSection } from './HomeCompanionSection';
 import { HomeExperiencePrelude, useHomeExperienceModel } from '../../../features/home-experience';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
 import type { VexExperience } from '../../../features/personalization/schemas';
 import type { useHomeData } from '../hooks/useHomeData';
-import { useOptionalMissionInput, shouldComputeMissionInput } from '../hooks/useOptionalMissionInput';
 
 type HomeData = ReturnType<typeof useHomeData>;
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -69,28 +67,11 @@ export const HomeContent: React.FC<HomeContentProps> = ({
   const showStreak = sm
     ? sm.progress_proof !== 'hidden'
     : false;
-  const showWeeklyQuest = sm
-    ? sm.weekly_quest !== 'hidden' && sm.weekly_quest !== 'blocked'
-    : false;
   const showLowerContent = isDayZero ? false : sm ? sm.boss_teaser !== 'hidden' || sm.challenge_teaser !== 'hidden' || sm.study_layer !== 'hidden' : false;
   const showAtRiskBanner = streakHoursRemaining !== null && streakHoursRemaining <= 4;
 
   const isActivating =
     controller.disclosure.stage === 'NEW_USER' || controller.disclosure.stage === 'ACTIVATING';
-
-  const useMission =
-    shouldComputeMissionInput(sm, isDayZero, isActivating);
-
-  const { missionInput } = useOptionalMissionInput({
-    controller,
-    surfaceMap: sm,
-    todaysChallenges: data.todaysChallenges,
-    streakHoursRemaining,
-    bossPercentHealthRemaining: (controller.activeBossQuery.data as { percentHealthRemaining?: number } | undefined)?.percentHealthRemaining,
-    intervention: data.intervention,
-    interventionLoading: data.interventionLoading,
-    companionMood: data.companionMood,
-  });
 
   const openChallenges = (): void => {
     const challengesAccess = controller.disclosure.features.challenges;
@@ -162,15 +143,6 @@ export const HomeContent: React.FC<HomeContentProps> = ({
         />
       ) : null}
 
-      {showWeeklyQuest ? (
-        <HomeWeeklyQuest
-          features={features}
-          onPress={openChallenges}
-          onOpenSetup={() => controller.openSetup()}
-          userId={controller.userId ?? ''}
-        />
-      ) : null}
-
       {showAtRiskBanner && (
         <AtRiskBanner
           hoursRemaining={streakHoursRemaining}
@@ -184,7 +156,7 @@ export const HomeContent: React.FC<HomeContentProps> = ({
         <HomeContentLower
           controller={controller}
           data={data}
-          missionInput={useMission ? missionInput : {}}
+          missionInput={{}}
           handleClaimReward={handleClaimReward}
           streakHoursRemaining={streakHoursRemaining}
           features={features}

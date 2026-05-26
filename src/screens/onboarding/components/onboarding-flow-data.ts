@@ -1,3 +1,11 @@
+export const ONBOARDING_PROMISE_COPY = {
+  primary: 'VEX changes based on how you work.',
+  secondary:
+    'Answer a few questions, start one focused session, and VEX unlocks the system your brain needs.',
+} as const;
+
+export const ONBOARDING_PROGRESS_PHASES = ['Understand', 'Match', 'Start'] as const;
+
 export const DEFAULT_COMPANION_ELEMENT = 'LUMINA';
 export const DEFAULT_PERSONA_ID = 'mentor';
 
@@ -39,7 +47,7 @@ export const MOTIVATION_STYLE_OPTIONS = [
   {
     id: 'calm',
     title: 'Calm',
-    description: 'Quiet guidance, fewer game surfaces, steady recovery language.',
+    description: 'Quiet guidance, softer reminders, steady recovery language.',
   },
   {
     id: 'friendly',
@@ -48,17 +56,17 @@ export const MOTIVATION_STYLE_OPTIONS = [
   },
   {
     id: 'game_like',
-    title: 'Game-like',
-    description: 'Bosses and challenges show earlier, always tied to focus time.',
+    title: 'Structured',
+    description: 'Milestones, visible progress, and clear next actions.',
   },
   {
     id: 'intense',
     title: 'Intense',
-    description: 'Direct coaching, sharper challenge timing, less emotional padding.',
+    description: 'Direct coaching, tighter prompts, less emotional padding.',
   },
   {
     id: 'student',
     title: 'Study-focused',
-    description: 'Study OS and review timing move forward as priority layers.',
+    description: 'Recall, deadlines, and review timing move forward when useful.',
   },
 ] as const;

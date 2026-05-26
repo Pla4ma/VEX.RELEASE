@@ -8,7 +8,11 @@ import { Button } from '../../../components/primitives/Button';
 import { Text } from '../../../components/primitives/Text';
 import { useTheme } from '../../../theme';
 import { styles } from '../styles';
-import { STEP_TITLES } from './onboarding-flow-data';
+import { ONBOARDING_PROMISE_COPY, STEP_TITLES } from './onboarding-flow-data';
+import {
+  getProgressPhaseIndex,
+  OnboardingProgressIndicator,
+} from './OnboardingProgressIndicator';
 
 type OnboardingFlowLayoutProps = {
   children: ReactNode;
@@ -73,6 +77,7 @@ export function OnboardingFlowLayout({
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
   const isLaunchStep = step === lastStepIndex;
+  const activePhase = getProgressPhaseIndex(step, lastStepIndex);
   const screenStyle = useMemo(
     () => [styles.screen, { backgroundColor: theme.colors.background.primary }],
     [theme.colors.background.primary],
@@ -108,12 +113,15 @@ export function OnboardingFlowLayout({
       <View style={scrollContentStyle}>
         {isLaunchStep ? null : (
           <>
-            <Text style={[styles.eyebrow, { color: theme.colors.primary[500] }]}>
-              Step {step + 1} of {STEP_TITLES.length}
+            <Text style={[styles.title, { color: theme.colors.text.primary }]}>
+              {step === 0 ? ONBOARDING_PROMISE_COPY.primary : STEP_TITLES[step]}
             </Text>
-            <Text style={[styles.title, { color: theme.colors.text.primary }]}>{STEP_TITLES[step]}</Text>
+            <Text style={[styles.stepSubtitle, { color: theme.colors.text.secondary }]}>
+              {step === 0 ? ONBOARDING_PROMISE_COPY.secondary : getCoachCue(step).body}
+            </Text>
+            <OnboardingProgressIndicator phaseIndex={activePhase} />
             <SmartCoachHint
-              body={getCoachCue(step).body}
+              body={step === 0 ? 'Pick the honest answer. VEX will adapt the first session around it.' : getCoachCue(step).body}
               mood={step === lastStepIndex - 1 ? 'celebrate' : 'active'}
               title={getCoachCue(step).title}
             />

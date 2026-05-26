@@ -25,6 +25,7 @@ export const NotificationBudgetSchema = z.object({
   quietHoursStart: z.number().int().default(22),
   quietHoursEnd: z.number().int().default(7),
   optOut: z.boolean().default(false),
+  lane: z.string().min(1).optional(),
 });
 
 export type NotificationBudget = z.infer<typeof NotificationBudgetSchema>;

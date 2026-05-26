@@ -46,20 +46,20 @@ describe('Value Ladder Service', () => {
       expect(position.discountEligible).toBe(false);
     });
 
-    it('detects medium urgency after 7 sessions and 7 days', () => {
-      const position = calculateLadderPosition('free', 7, 7, false);
+    it('detects medium urgency after 40 sessions and 14 days', () => {
+      const position = calculateLadderPosition('free', 40, 14, false);
       expect(position.upgradeUrgency).toBe('medium');
     });
 
-    it('detects high urgency after 20 sessions and 14 days', () => {
-      const position = calculateLadderPosition('free', 20, 14, false);
+    it('detects high urgency after 60 sessions and 30 days', () => {
+      const position = calculateLadderPosition('free', 60, 30, false);
       expect(position.upgradeUrgency).toBe('high');
       expect(position.discountEligible).toBe(true);
       expect(position.discountPercent).toBe(20);
     });
 
-    it('grants discount for high interest + sessions', () => {
-      const position = calculateLadderPosition('free', 6, 5, true);
+    it('grants discount for high interest + 20 sessions', () => {
+      const position = calculateLadderPosition('free', 20, 10, true);
       expect(position.discountEligible).toBe(true);
       expect(position.discountPercent).toBe(15);
     });
@@ -118,17 +118,16 @@ describe('Value Ladder Service', () => {
       expect(timing.trigger).toBe('none');
     });
 
-    it('shows after quality session', () => {
-      const timing = getPaywallTiming(5, 10, 90);
+    it('shows after quality session with value proof (40+ sessions)', () => {
+      const timing = getPaywallTiming(40, 10, 90);
       expect(timing.shouldShow).toBe(true);
       expect(timing.trigger).toBe('post_session');
       expect(timing.delayMinutes).toBe(2);
     });
 
-    it('shows at session 7', () => {
-      const timing = getPaywallTiming(7, 10, 70);
-      expect(timing.shouldShow).toBe(true);
-      expect(timing.trigger).toBe('session_7');
+    it('does not show before 40 sessions even with high quality', () => {
+      const timing = getPaywallTiming(35, 10, 95);
+      expect(timing.shouldShow).toBe(false);
     });
 
     it('does not show with low quality', () => {

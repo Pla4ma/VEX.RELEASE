@@ -35,7 +35,7 @@ export async function readCachedResponse(
   try {
     const raw = await getMMKVStorageAdapter().getItem(createCacheKey(requestType, userId));
     if (!raw) return null;
-    const parsed = validateAIResponse(JSON.parse(raw) as unknown);
+    const parsed = validateAIResponse(JSON.parse(raw));
     return { ...parsed, metadata: { ...parsed.metadata, cached: true } };
   } catch (error) {
     captureSilentFailure(error, { feature: 'shared', operation: 'network-fallback', type: 'network' });
@@ -57,13 +57,13 @@ export async function writeCachedResponse(
 }
 
 function buildEmptyAIResponse(requestType: AIRequest['requestType']): AIResponse {
-  const base = {
+  const base: Omit<AIResponse, 'requestType'> = {
     success: false,
-    requestType,
     content: '',
     metadata: { model: 'fallback', processingTimeMs: 0 },
   };
-  // Return the most permissive variant (coach message) since its structuredData is optional
+  // AIResponse is discriminated union — fallback {} doesn't satisfy any variant.
+  // Must double-cast to bypass typecheck for this empty fallback.
   return { ...base, requestType: 'GENERATE_COACH_MESSAGE', structuredData: {} } as unknown as AIResponse;
 }
 

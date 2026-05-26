@@ -80,15 +80,15 @@ export function calculateLadderPosition(
   let discountEligible = false;
   let discountPercent: number | undefined;
 
-  if (sessionsCompleted >= 7 && daysActive >= 7) {
+  if (sessionsCompleted >= 40 && daysActive >= 14) {
     urgency = 'medium';
   }
-  if (sessionsCompleted >= 20 && daysActive >= 14) {
+  if (sessionsCompleted >= 60 && daysActive >= 30) {
     urgency = 'high';
     discountEligible = true;
     discountPercent = 20;
   }
-  if (hasShownInterest && sessionsCompleted >= 5) {
+  if (hasShownInterest && sessionsCompleted >= 20) {
     discountEligible = true;
     discountPercent = 15;
   }
@@ -124,15 +124,12 @@ export function getPaywallTiming(
   sessionsCompleted: number,
   daysSinceLastPaywall: number,
   lastSessionQuality: number,
-): { shouldShow: boolean; delayMinutes: number; trigger: 'post_session' | 'session_7' | 'none' } {
+): { shouldShow: boolean; delayMinutes: number; trigger: 'post_session' | 'none' } {
   if (daysSinceLastPaywall < 7) {
     return { shouldShow: false, delayMinutes: 0, trigger: 'none' };
   }
-  if (lastSessionQuality > 85 && sessionsCompleted >= 5) {
+  if (lastSessionQuality > 85 && sessionsCompleted >= 40) {
     return { shouldShow: true, delayMinutes: 2, trigger: 'post_session' };
-  }
-  if (sessionsCompleted === 7) {
-    return { shouldShow: true, delayMinutes: 0, trigger: 'session_7' };
   }
   return { shouldShow: false, delayMinutes: 0, trigger: 'none' };
 }

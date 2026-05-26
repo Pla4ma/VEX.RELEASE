@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { PurityLabel } from './active-session';
 import type { ActiveSessionDisplayPolicy } from './active-session-display-policy';
+import type { LanePresentationPolicy } from '../../../features/lane-engine/presentation-types';
 
 const SignalPillSchema = z.object({
   type: z.enum(['boss', 'focus']),
@@ -25,6 +26,9 @@ export const ActiveSessionHeroViewModelSchema = z.object({
   purityLabel: z.enum(['Elite', 'Good', 'Okay', 'Distracted']),
   streakMultiplier: z.number(),
   heroDensity: z.enum(['minimal', 'standard', 'rich']),
+  laneAccent: z.string(),
+  secondaryInfo: z.string().nullable(),
+  isReducedMotion: z.boolean(),
 });
 
 export type ActiveSessionHeroViewModel = z.infer<typeof ActiveSessionHeroViewModelSchema>;
@@ -34,6 +38,8 @@ export type BuildHeroViewModelInput = {
   dailyProgress: number;
   displayPolicy: ActiveSessionDisplayPolicy;
   elapsedSeconds: number;
+  isReducedMotion: boolean;
+  lanePresentation: LanePresentationPolicy | null;
   momentumScores: number[];
   perfectFocusActive: boolean;
   phaseAccent: string;
@@ -63,6 +69,7 @@ function buildSignalPill(
 export function buildActiveSessionHeroViewModel(
   input: BuildHeroViewModelInput,
 ): ActiveSessionHeroViewModel {
+  const secondaryInfo = buildSecondaryInfo(input.lanePresentation);
   return {
     phaseIcon: input.phaseIcon,
     phaseLabel: input.phaseLabel,
@@ -81,5 +88,26 @@ export function buildActiveSessionHeroViewModel(
     purityLabel: input.purityLabel,
     streakMultiplier: input.streakMultiplier,
     heroDensity: input.displayPolicy.heroDensity,
+    laneAccent: input.lanePresentation?.visualFeeling ?? 'quiet_planner',
+    secondaryInfo,
+    isReducedMotion: input.isReducedMotion,
   };
+}
+
+function buildSecondaryInfo(
+  lanePresentation: LanePresentationPolicy | null,
+): string | null {
+  if (!lanePresentation) return null;
+  switch (lanePresentation.lane) {
+    case 'deep_creative':
+      return 'Next move';
+    case 'student':
+      return null;
+    case 'game_like':
+      return null;
+    case 'minimal_normal':
+      return null;
+    default:
+      return null;
+  }
 }

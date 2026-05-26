@@ -6,12 +6,10 @@ import { useFeatureGate } from '../../../features/feature-gate/hooks';
 import type { HomeController } from '../hooks/home-controller-types';
 import type { ActiveStudyPlan } from '../../../features/content-study';
 import { HomeSecondaryRail } from './HomeSecondaryRail';
-import { HomeDailyMission } from './HomeDailyMission';
 import { HomeFocusScore } from './HomeFocusScore';
 import { HomeContextualCards } from './HomeContextualCards';
 import type { ChallengeItem } from '../../../features/home-spine/components';
 import type { useHomeData } from '../hooks/useHomeData';
-import type { MissionPriorityInput } from '../../../features/daily-mission/types';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
 import { buildLearningSessionParams } from '../../../features/learning-execution';
 
@@ -21,7 +19,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParams>;
 interface HomeContentLowerProps {
   controller: HomeController;
   data: HomeData;
-  missionInput: Partial<MissionPriorityInput>;
+  missionInput: Record<string, never>;
   handleClaimReward: (rewardId: string) => void;
   streakHoursRemaining: number;
   features: HomeController['features'];
@@ -53,7 +51,6 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
 
   const sm = surfaceMap;
   const showSecondary = sm.challenge_teaser !== 'hidden' || sm.boss_teaser !== 'hidden' || sm.study_layer !== 'hidden';
-  const showDailyMission = sm.challenge_teaser !== 'hidden' && sm.challenge_teaser !== 'blocked';
   const showContextualCards = sm.study_layer !== 'hidden' || sm.boss_teaser !== 'hidden';
   const showSecondaryRail = sm.study_layer !== 'hidden' && sm.study_layer !== 'blocked';
 
@@ -77,10 +74,6 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
     <>
       {showFocusScore ? (
         <HomeFocusScore onPress={handleFocusScorePress} />
-      ) : null}
-
-      {showDailyMission ? (
-        <HomeDailyMission missionInput={missionInput} onMissionPress={openChallenges} />
       ) : null}
 
       {showContextualCards ? (

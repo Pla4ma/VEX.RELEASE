@@ -29,60 +29,29 @@ describe('trackBossRouteOpened', () => {
     jest.clearAllMocks();
   });
 
-  it('does not crash with null userId but still tracks as breadcrumb', () => {
+  it('does not crash with null userId (boss analytics stubbed in final release)', () => {
     trackBossRouteOpened(null, 'subtle', false);
-    expect(mockAddBreadcrumb).toHaveBeenCalledWith(
-      expect.objectContaining({
-        category: 'boss',
-        message: 'Boss route opened',
-        data: expect.objectContaining({ userId: null, bossIntensity: 'subtle', canQueryBoss: false }),
-      }),
-    );
+    // Stub function — tracks nothing because boss is deactivated
+    expect(mockAddBreadcrumb).not.toHaveBeenCalled();
   });
 
-  it('tracks with correct bossIntensity', () => {
+  it('does not track anything with valid inputs (boss deactivated)', () => {
     trackBossRouteOpened('user-1', 'game-like', true);
-    expect(mockAddBreadcrumb).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({ bossIntensity: 'game-like' }),
-      }),
-    );
+    expect(mockAddBreadcrumb).not.toHaveBeenCalled();
+    expect(mockPublish).not.toHaveBeenCalled();
   });
 
-  it('tracks with correct canQueryBoss', () => {
-    trackBossRouteOpened('user-1', 'subtle', true);
-    expect(mockAddBreadcrumb).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({ canQueryBoss: true }),
-      }),
-    );
-
-    jest.clearAllMocks();
-    trackBossRouteOpened('user-1', 'subtle', false);
-    expect(mockAddBreadcrumb).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({ canQueryBoss: false }),
-      }),
-    );
-  });
-
-  it('publishes analytics event with correct properties', () => {
+  it('does not publish analytics events (boss deactivated)', () => {
     trackBossRouteOpened('user-2', 'intense', true);
-    expect(mockPublish).toHaveBeenCalledWith('analytics:track', {
-      event: 'boss_route_opened',
-      properties: { userId: 'user-2', bossIntensity: 'intense', canQueryBoss: true },
-    });
+    expect(mockPublish).not.toHaveBeenCalled();
   });
 
-  it('tracks intensity for all valid intensity levels', () => {
+  it('remains a no-op across all intensity levels', () => {
     for (const intensity of ['subtle', 'game-like', 'intense']) {
       jest.clearAllMocks();
       trackBossRouteOpened('user-1', intensity, true);
-      expect(mockAddBreadcrumb).toHaveBeenCalledWith(
-        expect.objectContaining({
-          data: expect.objectContaining({ bossIntensity: intensity }),
-        }),
-      );
+      expect(mockAddBreadcrumb).not.toHaveBeenCalled();
+      expect(mockPublish).not.toHaveBeenCalled();
     }
   });
 });

@@ -1,5 +1,3 @@
-import * as inventoryService from '../inventory/service';
-import { spendCurrency } from '../economy/spending-service';
 import type { Streak } from '../streaks/schemas';
 import { getSessionThemeById, SESSION_THEMES, type SessionTheme } from './session-themes';
 
@@ -11,7 +9,8 @@ export interface PurchaseThemeResult {
 }
 
 export async function getOwnedSessionThemeIds(userId: string): Promise<string[]> {
-  return inventoryService.getOwnedSessionThemeIds(userId);
+  void userId;
+  return SESSION_THEMES.filter((theme) => theme.isFree).map((theme) => theme.id);
 }
 
 export async function getSelectableThemes(
@@ -63,29 +62,9 @@ export async function purchaseTheme(
   }
 
   if (theme.isFree) {
-    await inventoryService.addOwnedSessionTheme(userId, theme.id);
+    void userId;
     return { success: true, errorMessage: null };
   }
 
-  const spendResult = await spendCurrency({
-    userId,
-    amount: theme.coinCost,
-    currency: 'COINS',
-    sink: 'SHOP',
-    description: `Unlocked session theme: ${theme.name}`,
-    metadata: { themeId: theme.id, category: 'session_theme' },
-  });
-
-  if (!spendResult.success) {
-    return {
-      success: false,
-      errorMessage:
-        spendResult.error?.code === 'INSUFFICIENT_FUNDS'
-          ? 'Not enough coins'
-          : spendResult.error?.message ?? 'Unable to unlock theme right now.',
-    };
-  }
-
-  await inventoryService.addOwnedSessionTheme(userId, theme.id);
-  return { success: true, errorMessage: null };
+  return { success: false, errorMessage: 'Theme purchases are not available in this release.' };
 }

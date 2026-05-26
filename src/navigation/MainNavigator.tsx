@@ -11,14 +11,13 @@ import {
 } from "@react-navigation/bottom-tabs";
 
 import { HomeScreen } from "../screens/home/HomeScreen";
-import FocusScreen from "../screens/home/FocusScreen";
-import ProgressScreen from "../screens/progress/ProgressScreen";
-import ProfileScreen from "../screens/profile/ProfileScreen";
 import { VexTabBar } from "./components/VexTabBar";
 import type { MainTabParams } from "./types";
 
 const Tab = createBottomTabNavigator<MainTabParams>();
-const ProfileTabScreen = ProfileScreen as React.ComponentType<object>;
+const FocusScreen = React.lazy(() => import("../screens/home/FocusScreen"));
+const ProgressScreen = React.lazy(() => import("../screens/progress/ProgressScreen"));
+const ProfileTabRoute = React.lazy(() => import("./ProfileTabRoute"));
 
 function renderVexTabBar(props: BottomTabBarProps): React.JSX.Element {
   return <VexTabBar {...props} />;
@@ -35,20 +34,35 @@ export const MainNavigator: React.FC = () => {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen
         name="Focus"
-        component={FocusScreen}
         options={{ title: "Focus" }}
-      />
+      >
+        {() => (
+          <React.Suspense fallback={null}>
+            <FocusScreen />
+          </React.Suspense>
+        )}
+      </Tab.Screen>
       <Tab.Screen
         name="Progress"
-        component={ProgressScreen}
         options={{ title: "Progress" }}
-      />
+      >
+        {() => (
+          <React.Suspense fallback={null}>
+            <ProgressScreen />
+          </React.Suspense>
+        )}
+      </Tab.Screen>
       <Tab.Screen
         name="Profile"
-        component={ProfileTabScreen}
         options={{ title: "Profile" }}
         initialParams={{ userId: undefined, tab: "stats" }}
-      />
+      >
+        {() => (
+          <React.Suspense fallback={null}>
+            <ProfileTabRoute />
+          </React.Suspense>
+        )}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };

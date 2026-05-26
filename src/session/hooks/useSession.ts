@@ -35,7 +35,7 @@ interface UseSessionActions {
   getAntiCheatScore: () => number;
   getAntiCheatLabel: () => "Elite" | "Good" | "Okay" | "Distracted";
 }
-interface UseSessionReturn extends UseSessionState, UseSessionActions {
+export interface UseSessionReturn extends UseSessionState, UseSessionActions {
   refresh: () => void;
 }
 export function useSession(userId: string): UseSessionReturn {

@@ -55,16 +55,25 @@ export interface FeatureAccessResult {
   stage: UserExperienceStage;
 }
 
+export interface FeatureAccessOptions {
+  enabled?: boolean;
+  fallbackTotalCompletedSessions?: number;
+}
+
 /**
  * useFeatureAccess — Single source of truth for feature availability.
  *
  * Degraded features come from the central store (populated by useFeatureHealth).
- * No parameter needed — every call site sees the same health-adjusted map.
+ * Callers may opt out of hydration for cold-start-safe fallback rendering.
  */
-export function useFeatureAccess(): FeatureAccessResult {
+export function useFeatureAccess(options: FeatureAccessOptions = {}): FeatureAccessResult {
+  const enabled = options.enabled ?? true;
+  const fallbackTotal = options.fallbackTotalCompletedSessions ?? 0;
   const userId = useAuthStore((state) => state.user?.id ?? '');
-  const stats = useSessionStats(userId);
-  const completedSessions = stats.stats?.completedSessions ?? 0;
+  const stats = useSessionStats(enabled ? userId : '');
+  const completedSessions = enabled
+    ? stats.stats?.completedSessions ?? fallbackTotal
+    : fallbackTotal;
   const motivationProfile = useOnboardingStore((state) => state.motivationProfile);
   const degradedFeatures = useSyncExternalStore(
     subscribeToDegradedFeatures,
@@ -88,9 +97,9 @@ export function useFeatureAccess(): FeatureAccessResult {
     error: null,
     features: access.features,
     inputs: { totalCompletedSessions: completedSessions },
-    isLoading: stats.isLoading,
+    isLoading: enabled ? stats.isLoading : false,
     productTier: access.productTier,
-    refetchAll: stats.refresh,
+    refetchAll: enabled ? stats.refresh : async (): Promise<void> => {},
     stage: access.stage,
   };
 }

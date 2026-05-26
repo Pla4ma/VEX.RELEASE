@@ -13,6 +13,7 @@ import {
 import { DISABLED_FEATURES, FEATURE_RELEASE_STATES, FEATURE_THRESHOLDS } from '../feature-access-config';
 
 const FEATURES_DIR = join(process.cwd(), 'src', 'features');
+const ARCHIVE_FEATURES_DIR = join(process.cwd(), 'archive', 'features');
 
 const FEATURE_FOLDERS = [
   'account-deletion',
@@ -113,7 +114,7 @@ describe('Final release classification', () => {
       .filter((name) => name !== '__tests__' && name !== 'components');
 
     for (const folder of FEATURE_FOLDERS) {
-      expect(existsSync(join(FEATURES_DIR, folder))).toBe(true);
+      expect(existsSync(join(FEATURES_DIR, folder)) || existsSync(join(ARCHIVE_FEATURES_DIR, folder))).toBe(true);
     }
     for (const name of actual) {
       expect(FEATURE_FOLDERS).toContain(name);

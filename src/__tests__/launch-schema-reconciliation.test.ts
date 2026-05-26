@@ -84,6 +84,7 @@ describe('launch schema reconciliation migration', () => {
     const archivedFeatureTables = new Set([
       'daily_missions',
       'focus_memories',
+      'rescue_memories',
       'session_narratives',
       'squad_members',
       'squads',

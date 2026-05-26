@@ -35,7 +35,7 @@ export function BossScreenContent({
   userId,
 }: BossScreenContentProps): JSX.Element {
   const bossQuery = useActiveBoss(canQueryBoss ? userId : null);
-  const templatesQuery = useBossTemplates({ enabled: canQueryBoss });
+  const templatesQuery = useBossTemplates(canQueryBoss ? userId : null);
   const progressionQuery = useProgressionSummary(userId);
   const streakQuery = useStreakMultiplier(userId);
 
@@ -51,9 +51,10 @@ export function BossScreenContent({
   }
 
   const encounter = bossQuery.data;
-  const template = templatesQuery.data?.find((item: { id: string }) => item.id === encounter?.bossId);
+  const templates = templatesQuery.data ?? [];
+  const template = encounter ? templates.find((item) => item.id === encounter.bossId) : undefined;
   const level = (progressionQuery.data as { level?: number } | undefined)?.level ?? 1;
-  const levelLocked = Boolean(template && progressionQuery.data && level < (template as { minLevel: number }).minLevel);
+  const levelLocked = Boolean(template && level < template.minLevel);
   const userDamage = encounter ? Math.max(0, encounter.maxHealth - encounter.healthRemaining) : 0;
   const streakMultiplier = (streakQuery.data as { multiplier?: number } | undefined)?.multiplier ?? 1;
 
@@ -75,13 +76,7 @@ export function BossScreenContent({
         contentContainerStyle={{ padding: theme.spacing[5], gap: theme.spacing[4], paddingBottom: theme.spacing[10] }}
         showsVerticalScrollIndicator={false}
       >
-        <BossBattleHUD
-          encounter={encounter}
-          bossTemplate={template}
-          tierLabel={template?.tier !== undefined ? `Tier ${template.tier}` : 'Weekly Boss'}
-          isLocked={levelLocked}
-          lockReason={template ? `Reach Level ${template.minLevel} to attack at full power.` : undefined}
-        />
+        <BossBattleHUD />
         <BossScreenSections
           bossIntensity={bossIntensity}
           encounter={encounter}
@@ -94,7 +89,7 @@ export function BossScreenContent({
           }}
           progressionLevel={level}
           streakMultiplier={streakMultiplier}
-          template={template}
+          template={template ?? { id: encounter.bossId, name: encounter.bossName, tier: 1, minLevel: 1 }}
           userDamage={userDamage}
           userId={userId ?? ''}
         />

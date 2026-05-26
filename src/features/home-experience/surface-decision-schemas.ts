@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { LaneSchema } from '../lane-engine/schemas';
+import { LaneProfileSchema, LaneSchema } from '../lane-engine/schemas';
 
 export const HomeSurfaceKeySchema = z.enum([
   'start_session',
@@ -95,7 +95,7 @@ export const SurfaceDecisionInputSchema = z.object({
   isFirstSession: z.boolean(),
   firstWeekPhase: FirstWeekPhaseSchema,
   degradedFeatures: z.array(DegradedFeatureSchema).default([]),
-  laneProfile: z.object({
+  laneProfile: LaneProfileSchema.or(z.object({
     primaryLane: LaneSchema,
-  }).strict().optional(),
+  }).strict()).optional(),
 });

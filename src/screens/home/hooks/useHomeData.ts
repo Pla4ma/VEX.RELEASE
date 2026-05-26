@@ -3,7 +3,6 @@ import {
   useActiveChallenges,
   useClaimChallengeReward,
 } from '../../../features/challenges/hooks';
-import { useSquadMembersFocusing } from '../../../features/squads/hooks';
 import { useFreezeStreak } from '../../../features/streaks/hooks';
 import { useSavedTomorrowPreview } from '../../../features/home-spine/hooks';
 import { useActiveIntervention } from '../../../features/ai-coach/hooks';
@@ -28,9 +27,7 @@ export function useHomeData(input: UseHomeDataInput) {
   );
   const savedPreview = useSavedTomorrowPreview(controller.userId ?? '');
   const displayedInterventionIdRef = useRef<string | null>(null);
-  const squadMembersFocusing = useSquadMembersFocusing(
-    controller.runtime.canQuerySquads ? controller.userId || undefined : undefined,
-  );
+  const squadMembersFocusing: Array<Record<string, unknown>> = [];
   const { count: unreadNotificationCount } = useNotificationBadge(
     controller.runtime.canQueryNotifications ? controller.userId : undefined,
   );

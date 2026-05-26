@@ -28,14 +28,10 @@ jest.mock("../../../features/boss/BossBountySystem", () => ({
     consumedCount: 0,
     consumedBountyIds: [],
   }),
-}));
+}), { virtual: true });
 jest.mock("../../../features/boss/bounty-loot-boost", () => ({
   recordBountyLootBoost: jest.fn(),
-}));
-jest.mock("../../../features/live-ops/daily-modifiers", () => ({
-  getDailyBossDamageMultiplier: jest.fn().mockReturnValue(1),
-}));
-
+}), { virtual: true });
 describe("SessionBossIntegration - FeatureAvailability gating", () => {
   const mockedEventBus = jest.mocked(eventBus);
   const mockedGetAvailability = jest.mocked(getAvailabilityFor);

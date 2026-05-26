@@ -5,11 +5,11 @@ import {
   type CompletionPersonalizationInput,
   type CompletionPersonalizationResult,
 } from "./schemas";
-import type { Lane } from "../lane-engine/types";
+import { resolveCompletionLaneProfile } from "../lane-engine/service";
+import type { Lane, LaneProfile } from "../lane-engine/types";
 import type { SessionSummary } from "../../session/types";
 import { buildPostSessionNextAction } from "./post-session-next-action";
 import type { PostSessionNextAction } from "./schemas";
-import { buildLaneProfile } from "./completion-lane-profile";
 import {
   REFLECTIONS,
   situationFor,
@@ -42,7 +42,8 @@ export function buildCompletionPersonalizationResult(input: {
   hiddenFeatureKeys?: string[];
   isComeback?: boolean;
   isPersonalBest: boolean;
-  lane: Lane;
+  lane?: Lane;
+  laneProfile?: LaneProfile;
   streakAction: "extended" | "maintained" | "broken" | "saved_by_insurance";
   streakDays: number;
   summary: SessionSummary;
@@ -56,7 +57,8 @@ export function buildCompletionPersonalizationResult(input: {
     hiddenFeatureKeys = [],
     isComeback = false,
     isPersonalBest,
-    lane,
+    lane = "minimal_normal",
+    laneProfile,
     streakAction,
     streakDays,
     summary,
@@ -74,7 +76,10 @@ export function buildCompletionPersonalizationResult(input: {
   };
 
   const situation = situationFor(summary, isComeback);
-  const display = displayFor(lane, situation);
+  const resolvedLaneProfile = laneProfile ?? resolveCompletionLaneProfile({ lane, situation });
+  const resolvedLane = resolvedLaneProfile.primaryLane;
+  personalizationInput.lane = resolvedLane;
+  const display = displayFor(resolvedLane, situation);
 
   let nextAction: PostSessionNextAction | null = null;
   try {
@@ -84,7 +89,7 @@ export function buildCompletionPersonalizationResult(input: {
   }
 
   return {
-    laneProfile: buildLaneProfile(lane, situation, summary),
+    laneProfile: resolvedLaneProfile,
     progressProof: buildProgressProof(
       personalizationInput,
       situation,
@@ -95,13 +100,13 @@ export function buildCompletionPersonalizationResult(input: {
       focusScoreDelta,
       isPersonalBest,
     ),
-    reflectionQuestion: REFLECTIONS[lane][situation],
+    reflectionQuestion: REFLECTIONS[resolvedLane][situation],
     memoryCandidates: buildMemoryCandidates(
       { ...personalizationInput, reflectionAnswer: reflectionAnswer ?? null },
       situation,
     ),
-    unlockDecision: unlockFor(lane, hiddenFeatureKeys),
+    unlockDecision: unlockFor(resolvedLane, hiddenFeatureKeys),
     nextAction,
-    userFacingSummary: buildUserFacingSummary(lane, situation, display),
+    userFacingSummary: buildUserFacingSummary(resolvedLane, situation, display),
   };
 }

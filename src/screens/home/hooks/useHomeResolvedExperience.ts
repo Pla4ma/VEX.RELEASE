@@ -15,18 +15,17 @@ import type {
   BehaviorResolverInput,
 } from '../../../features/personalization/behavior-signal-schemas';
 import type {
-  VexExperience,
-  FeatureAvailabilitySnapshot,
   BehaviorStats,
-  MotivationStyle,
 } from '../../../features/personalization/schemas';
-import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
-import type { SessionHistoryEntry } from '../../../session/types';
 import type { HomeController } from './home-controller-types';
-import type { LaneProfile } from '../../../features/lane-engine/types';
-import { resolveInitialLane } from '../../../features/lane-engine/service';
-
-const VALID_GOALS = ['focus', 'study', 'work', 'creative', 'personal', 'learning'] as const;
+import { useHomeLaneProfile } from './useHomeLaneProfile';
+import type {
+  ActiveBossData,
+  ActiveStudyPlanData,
+  HomeFeatureAvailability,
+  HomeResolvedExperience,
+  LegacySessionData,
+} from './home-resolved-experience-types';
 import {
   normalizeMotivationStyle,
   resolvePrimaryGoal,
@@ -38,71 +37,9 @@ import {
   computeStudyUsageRatio,
   computeCoachInteractions,
   computeComebackSessions,
-  type ValidSessionMode,
 } from './home-experience-utils';
 
 export { recordBehaviorSignal };
-
-export interface HomeResolvedExperience {
-  resolvedExperience: VexExperience;
-  firstWeekExperience: FirstWeekExperience;
-  laneProfile: LaneProfile;
-  personalizationProfile: {
-    motivationStyle: MotivationStyle;
-    primaryGoal: string;
-    gamificationIntensity: 'minimal' | 'medium' | 'strong';
-    studyLayerName: string;
-    userStage: 'new' | 'activating' | 'engaged' | 'power';
-  };
-  behaviorStats: {
-    totalCompletedSessions: number;
-    studyUsageRatio: number;
-    deepWorkUsageRatio: number;
-    learningUsageRatio: number;
-    projectFocusUsageRatio: number;
-    structuredExecutionUsageRatio: number;
-    bossChallengeEngagement: 'none' | 'low' | 'medium' | 'high';
-    coachInteractions: number;
-    comebackSessions: number;
-    ignoredFeatures: string[];
-    premiumFeatureAttempts: string[];
-    completionStreak: number;
-  };
-}
-
-interface SessionEntry {
-  status?: string;
-  duration?: number;
-  effectiveDuration?: number;
-  mode?: string;
-  endedAt?: number;
-  startTime?: number;
-  focusQuality?: number;
-  config?: { sessionMode?: string; studyPlanId?: string };
-}
-
-interface ActiveBossData {
-  id?: string;
-  name?: string;
-  maxHealth?: number;
-  damageTaken?: number;
-  encounters?: number;
-  currentHealth?: number;
-}
-
-interface ActiveStudyPlanData {
-  id?: string;
-  title?: string;
-}
-
-interface ComebackQueryData {
-  isComeback?: boolean;
-  streakRestoreEligible?: boolean;
-}
-
-interface LegacySessionData {
-  endedAt?: number;
-}
 
 export function useHomeResolvedExperience(controller: HomeController): HomeResolvedExperience {
   const explicitStyle = useOnboardingStore((s) => s.explicitMotivationStyle);
@@ -134,7 +71,7 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
   const completedSessions = sessionHistory.filter((s) => s.status === 'COMPLETED');
   const abandonedSessions = sessionHistory.filter((s) => s.status === 'ABANDONED');
 
-  const featureAvailability: FeatureAvailabilitySnapshot = {
+  const featureAvailability: HomeFeatureAvailability = {
     boss: Boolean(features.boss_tab?.isUnlocked),
     challenges: Boolean(features.challenges?.isUnlocked),
     premium: Boolean(features.premium_paywall?.isUnlocked),
@@ -187,7 +124,7 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
     completionStreak: controller.currentStreak,
     ignoredFeatures: resolvedBehaviorSignals.ignoredFeatures,
     mostSuccessfulTimeOfDay: resolvedBehaviorSignals.mostSuccessfulTimeOfDay ?? computeBestTimeOfDay(completedSessions),
-    preferredSessionMode: (resolvedBehaviorSignals.preferredSessionMode as ValidSessionMode | null) ?? computePreferredMode(completedSessions),
+    preferredSessionMode: (resolvedBehaviorSignals.preferredSessionMode as BehaviorStats['preferredSessionMode'] | null) ?? computePreferredMode(completedSessions),
     premiumFeatureAttempts: resolvedBehaviorSignals.premiumFeatureAttempts,
     studyUsageRatio: resolvedBehaviorSignals.studyUsageRatio > 0
       ? resolvedBehaviorSignals.studyUsageRatio
@@ -197,13 +134,12 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
   const vexInput: VexExperienceRuntimeInput = { behaviorStats, featureAvailability };
   const resolvedExperience = useResolvedVexExperienceRuntime(vexInput);
 
-  const laneProfile: LaneProfile = useMemo(() => resolveInitialLane({
-    primaryGoal: (VALID_GOALS as readonly string[]).includes(primaryGoal) ? primaryGoal as 'focus' | 'study' | 'work' | 'creative' | 'personal' | 'learning' : null,
+  const laneProfile = useHomeLaneProfile({
+    chosenLane,
     motivationStyle,
-    manualOverride: chosenLane ?? null,
-    observedAt: Date.now(),
-    sessionMode: behaviorStats.preferredSessionMode ?? undefined,
-  }), [primaryGoal, motivationStyle, behaviorStats.preferredSessionMode, chosenLane]);
+    preferredSessionMode: behaviorStats.preferredSessionMode,
+    primaryGoal,
+  });
 
   const firstWeekExperience = useFirstWeekExperience({
     completedSessions: totalCompletedSessions,
@@ -214,6 +150,7 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
     bossEngagement: behaviorStats.bossChallengeEngagement,
     studyUsageRatio: behaviorStats.studyUsageRatio,
     isPremium: false,
+    laneProfile,
     featureAvailable: {
       boss: featureAvailability.boss,
       premium: featureAvailability.premium,

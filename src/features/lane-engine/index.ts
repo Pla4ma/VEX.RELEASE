@@ -7,9 +7,11 @@ export {
   confirmInitialLane,
   getLaneMechanicPolicy,
   mergeLaneProfiles,
+  resolveCompletionLaneProfile,
   resolveBehaviorLane,
   resolveInitialLane,
   shouldReconsiderLane,
+  shouldSuggestLaneReconsideration,
 } from './service';
 export type {
   CompletionEvidenceInput,

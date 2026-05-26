@@ -2,7 +2,6 @@ import React from "react";
 import { Box } from "../../components/primitives/Box";
 import { CompanionSessionLayer } from "../../session/components/CompanionSessionLayer";
 import { DeepWorkVignette } from "../../session/components/DeepWorkVignette";
-import { CoachSessionBanner } from "../../features/ai-coach/components/CoachSessionBanner";
 import { InterruptionWarning } from "../../session/components/InterruptionWarning";
 import { resolveSessionMode, SessionMode } from "../../session/modes";
 import { ActiveSessionBackground } from "./components/ActiveSessionBackground";
@@ -14,18 +13,11 @@ import { ActiveSessionHero } from "./components/ActiveSessionHero";
 import { ActiveSessionModeOverlays } from "./components/ActiveSessionModeOverlays";
 import { useActiveSessionController } from "./hooks/useActiveSessionController";
 import { useStudyQuizBreak } from "./hooks/useStudyQuizBreak";
-import { useCoachState } from "../../features/ai-coach/hooks";
+import { useActiveSessionDisplay } from "./hooks/useActiveSessionDisplay";
 import { useContractForSession } from "../../features/focus-contract/hooks";
-import { useOnboardingStore } from "../../features/onboarding/store";
 import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
 import { SessionContractReminder } from "./components/SessionContractReminder";
-import {
-  getActiveSessionTargetLabel,
-  normalizeActiveSessionGoal,
-  normalizeActiveSessionMotivationStyle,
-  resolveActiveSessionDisplayPolicy,
-} from "./utils/active-session-display-policy";
-import { buildActiveSessionHeroViewModel } from "./utils/active-session-hero-view-model";
+import { CoachSessionBannerLazy } from "./components/CoachSessionBannerLazy";
 
 const ENABLE_SESSION_COMPANION_LAYER = true;
 const ENABLE_SESSION_COACH_BANNER = true;
@@ -35,31 +27,12 @@ const ENABLE_SESSION_HERO = true;
 export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessionScreen(): React.JSX.Element | null {
   const controller = useActiveSessionController();
   const { actions, isDegradedSession, metrics, navigation, sessionQuery, showInterruption, showMultiplierInfo, streak, theme, themeBackgroundColor, userId } = controller;
-  const { data: coachState } = useCoachState(userId || "");
-  const motivationStyle = useOnboardingStore((state) => state.explicitMotivationStyle);
-  const primaryGoal = useOnboardingStore((state) => state.goal);
   const { contract } = useContractForSession(controller.sessionQuery.session?.id ?? null);
-  const outerRadius = metrics.RADIUS + 16;
-  const outerCircumference = 2 * Math.PI * outerRadius;
-  const outerStrokeDashoffset = outerCircumference * (1 - metrics.dailyProgress / 100);
   const currentMode = resolveSessionMode(sessionQuery.session?.config.sessionMode);
-  const plannedQuizBreakOptedIn = false;
-  const focusStage = showInterruption ? "interruption" : sessionQuery.isPaused ? "paused" : "active";
-  const displayPolicy = resolveActiveSessionDisplayPolicy({
-    bossIntensity: undefined,
-    firstWeekStage: undefined,
-    focusStage,
-    motivationStyle: normalizeActiveSessionMotivationStyle(motivationStyle),
-    plannedQuizBreakOptedIn,
-    primaryGoal: normalizeActiveSessionGoal(primaryGoal),
-    sessionMode: currentMode,
-    studyLayerLabel: getActiveSessionTargetLabel(primaryGoal, currentMode),
-  });
-  const heroViewModel = buildActiveSessionHeroViewModel({
-    completionPercentage: sessionQuery.completionPercentage,
+  const { displayPolicy, heroViewModel } = useActiveSessionDisplay({
     dailyProgress: metrics.dailyProgress,
-    displayPolicy,
     elapsedSeconds: sessionQuery.elapsedSeconds,
+    completionPercentage: sessionQuery.completionPercentage,
     momentumScores: metrics.momentumScores,
     perfectFocusActive: metrics.perfectFocusActive,
     phaseAccent: metrics.phaseAccent,
@@ -69,9 +42,14 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
     purityScore: metrics.purityScore,
     remainingSeconds: sessionQuery.remainingSeconds,
     streakMultiplier: metrics.streakMultiplier,
-    studyTargetLabel: getActiveSessionTargetLabel(primaryGoal, currentMode),
     todayFocusSeconds: metrics.todayFocusSeconds,
+    isPaused: sessionQuery.isPaused,
+    showInterruption,
+    sessionConfigSessionMode: sessionQuery.session?.config.sessionMode,
   });
+  const outerStrokeDashoffset = (2 * Math.PI * (metrics.RADIUS + 16)) * (1 - metrics.dailyProgress / 100);
+  const plannedQuizBreakOptedIn = false;
+  const focusStage = showInterruption ? "interruption" : sessionQuery.isPaused ? "paused" : "active";
 
   const studyQuizBreak = useStudyQuizBreak({ currentMode, plannedQuizBreakOptedIn, sessionQuery });
   const shouldShowGuardState = !userId || sessionQuery.isLoading || !controller.companion.isLoaded || Boolean(sessionQuery.error) || !sessionQuery.session || isDegradedSession;
@@ -117,24 +95,30 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
         />
       ) : null}
 
-      {/* Coach Session Banner - Phase 6.5 */}
-      {ENABLE_SESSION_COACH_BANNER && displayPolicy.showCoachBanner && coachState ? <CoachSessionBanner coachName="Coach" personaStyle={coachState.currentState === "OVERLOAD_PROTECTION" ? "DRILL_SERGEANT" : "MENTOR"} elapsedSeconds={sessionQuery.elapsedSeconds} isPaused={sessionQuery.isPaused} /> : null}
+      <CoachSessionBannerLazy
+        userId={userId}
+        showCoachBanner={ENABLE_SESSION_COACH_BANNER && displayPolicy.showCoachBanner}
+        elapsedSeconds={sessionQuery.elapsedSeconds}
+        isPaused={sessionQuery.isPaused}
+      />
 
       {ENABLE_SESSION_HERO && (
         <ActiveSessionHero
           viewModel={heroViewModel}
-          CIRCUMFERENCE={metrics.CIRCUMFERENCE}
-          RADIUS={metrics.RADIUS}
-          RING_SIZE={metrics.RING_SIZE}
-          STROKE_WIDTH={metrics.STROKE_WIDTH}
-          animatedCircleProps={metrics.animatedCircleProps}
-          dailyProgress={metrics.dailyProgress}
-          glowStyle={metrics.glowStyle}
-          labelColor={metrics.labelColor}
-          outerStrokeDashoffset={outerStrokeDashoffset}
-          perfectFocusBurst={metrics.perfectFocusBurst}
-          pulseStyle={metrics.pulseStyle}
-          rotatingPerfectFocusStyle={metrics.rotatingPerfectFocusStyle}
+          progressRingProps={{
+            CIRCUMFERENCE: metrics.CIRCUMFERENCE,
+            RADIUS: metrics.RADIUS,
+            RING_SIZE: metrics.RING_SIZE,
+            STROKE_WIDTH: metrics.STROKE_WIDTH,
+            animatedCircleProps: metrics.animatedCircleProps,
+            glowStyle: metrics.glowStyle,
+            outerStrokeDashoffset,
+            perfectFocusBurst: metrics.perfectFocusBurst,
+            pulseStyle: metrics.pulseStyle,
+            rotatingPerfectFocusStyle: metrics.rotatingPerfectFocusStyle,
+            labelColor: metrics.labelColor,
+            withAlpha: metrics.withAlpha,
+          }}
           themeColors={{
             error: theme.colors.error.DEFAULT,
             inverse: theme.colors.text.inverse,
@@ -142,7 +126,7 @@ export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessi
             success: theme.colors.success.DEFAULT,
             warning: theme.colors.warning.light,
           }}
-          withAlpha={metrics.withAlpha}
+          isReducedMotion={heroViewModel.isReducedMotion}
         />
       )}
 

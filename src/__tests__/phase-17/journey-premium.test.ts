@@ -8,6 +8,18 @@ import type { Lane } from '../../features/lane-engine/types';
 
 const ALL_LANES: Lane[] = ['student', 'game_like', 'deep_creative', 'minimal_normal'];
 const featureAvailability = { boss: true, challenges: true, premium: true, study: true };
+type SurfaceInput = Parameters<typeof decideHomeSurfaces>[0];
+type PersonalizationProfile = NonNullable<SurfaceInput['personalizationProfile']>;
+
+function buildPersonalizationProfile(lane: Lane): PersonalizationProfile {
+  return {
+    motivationStyle: lane === 'student' ? 'study_focused' : lane === 'game_like' ? 'game_like' : lane === 'deep_creative' ? 'coach_led' : 'calm',
+    primaryGoal: lane === 'student' ? 'study' : lane === 'game_like' ? 'work' : lane === 'deep_creative' ? 'creative' : 'personal',
+    gamificationIntensity: lane === 'minimal_normal' ? 'minimal' : lane === 'game_like' ? 'strong' : 'medium',
+    studyLayerName: 'Growth Path',
+    userStage: 'new',
+  };
+}
 
 describe('Phase 17 — Premium: No Day 0 hard sell', () => {
   it('hidden_early for 0 completed sessions', () => {
@@ -56,12 +68,7 @@ describe('Phase 17 — Premium: premium_tease blocked on Day 0', () => {
   it.each(ALL_LANES)('%s Day 0 premium_tease hidden', (lane) => {
     const map = decideHomeSurfaces({
       featureAvailability,
-      personalizationProfile: {
-        motivationStyle: (lane === 'student' ? 'study_focused' : lane === 'game_like' ? 'game_like' : lane === 'deep_creative' ? 'coach_led' : 'calm') as any,
-        primaryGoal: (lane === 'student' ? 'study' : lane === 'game_like' ? 'work' : lane === 'deep_creative' ? 'creative' : 'personal') as any,
-        gamificationIntensity: (lane === 'minimal_normal' ? 'minimal' : lane === 'game_like' ? 'strong' : 'medium') as any,
-        studyLayerName: 'Growth Path', userStage: 'new',
-      },
+      personalizationProfile: buildPersonalizationProfile(lane),
       behaviorStats: {
         totalCompletedSessions: 0, studyUsageRatio: 0, bossChallengeEngagement: 'none',
         coachInteractions: 0, comebackSessions: 0, ignoredFeatures: [],

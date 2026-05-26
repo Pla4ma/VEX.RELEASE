@@ -30,7 +30,7 @@ export function MotivationStyleStep({
         Choose how VEX should motivate you.
       </Text>
       <Text style={[styles.stepSubtitle, { color: theme.colors.text.secondary }]}>
-        This controls coach tone, boss visibility, challenge timing, and study timing.
+        This helps VEX choose the right next session and the coach tone around it.
       </Text>
       <View style={styles.choiceGrid}>
         {MOTIVATION_STYLE_OPTIONS.map((style) => {

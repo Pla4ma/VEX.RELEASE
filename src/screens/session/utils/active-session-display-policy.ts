@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { SessionMode } from '../../../session/modes';
+import { LaneProfileSchema } from '../../../features/lane-engine/schemas';
 
 const MotivationStyleSchema = z.enum([
   'calm',
@@ -28,6 +29,7 @@ export const ActiveSessionDisplayPolicyInputSchema = z.object({
   bossIntensity: BossIntensitySchema.nullish(),
   firstWeekStage: z.string().nullish(),
   focusStage: FocusStageSchema,
+  laneProfile: LaneProfileSchema.nullish(),
   motivationStyle: MotivationStyleSchema.nullish(),
   plannedQuizBreakOptedIn: z.boolean().optional(),
   primaryGoal: PrimaryGoalSchema.nullish(),
@@ -107,7 +109,23 @@ export function getActiveSessionTargetLabel(goal: string | null, currentMode: Se
   return 'Session target';
 }
 
+/**
+ * Maps VEX SessionMode enum to lane-engine's string-based session mode
+ * for lane profile resolution. Only the 6 modes lane-engine understands.
+ */
+export function toLaneSessionMode(mode: SessionMode): "FOCUS" | "STUDY" | "DEEP_WORK" | "SPRINT" | "CREATIVE" | "RECOVERY" | null {
+  switch (mode) {
+    case SessionMode.STUDY: return "STUDY";
+    case SessionMode.DEEP_WORK: return "DEEP_WORK";
+    case SessionMode.SPRINT: return "SPRINT";
+    case SessionMode.CREATIVE: return "CREATIVE";
+    case SessionMode.RECOVERY: return "RECOVERY";
+    default: return "FOCUS";
+  }
+}
+
 function isStudyInput(input: ActiveSessionDisplayPolicyInput): boolean {
+  if (input.laneProfile) return input.laneProfile.primaryLane === 'student';
   return input.sessionMode === SessionMode.STUDY ||
     input.motivationStyle === 'study_focused' ||
     input.primaryGoal === 'study' ||
@@ -115,7 +133,22 @@ function isStudyInput(input: ActiveSessionDisplayPolicyInput): boolean {
 }
 
 function isGameLikeInput(input: ActiveSessionDisplayPolicyInput): boolean {
+  if (input.laneProfile) return input.laneProfile.primaryLane === 'game_like';
   return input.motivationStyle === 'game_like' || input.motivationStyle === 'intense';
+}
+
+function isCleanInput(input: ActiveSessionDisplayPolicyInput): boolean {
+  if (input.laneProfile) return input.laneProfile.primaryLane === 'minimal_normal';
+  return input.motivationStyle === 'calm' &&
+    input.primaryGoal !== 'study' &&
+    input.primaryGoal !== 'learning';
+}
+
+function isProjectInput(input: ActiveSessionDisplayPolicyInput): boolean {
+  if (input.laneProfile) return input.laneProfile.primaryLane === 'deep_creative';
+  return input.sessionMode === SessionMode.CREATIVE &&
+    input.motivationStyle !== 'game_like' &&
+    input.motivationStyle !== 'intense';
 }
 
 export function resolveActiveSessionDisplayPolicy(
@@ -126,17 +159,19 @@ export function resolveActiveSessionDisplayPolicy(
   const isActiveFocus = input.focusStage === 'active';
   const isStudy = isStudyInput(input);
   const isGameLike = isGameLikeInput(input);
+  const isClean = isCleanInput(input);
+  const isProject = isProjectInput(input);
   const bossVisible = input.bossIntensity !== 'hidden';
   const plannedQuizBreakVisible = isStudy && input.plannedQuizBreakOptedIn === true && isPausedOrInterrupted;
 
   return ActiveSessionDisplayPolicySchema.parse({
-    heroDensity: isPausedOrInterrupted ? 'standard' : isGameLike ? 'standard' : 'minimal',
+    heroDensity: isPausedOrInterrupted ? 'standard' : isClean ? 'minimal' : isProject ? 'minimal' : isGameLike ? 'standard' : 'minimal',
     showBossHUD: false,
     showBossTinyIndicator: isGameLike && bossVisible && isActiveFocus,
-    showCoachBanner: isPausedOrInterrupted && input.motivationStyle === 'coach_led',
-    showCompanionLayer: isPausedOrInterrupted && !isStudy,
-    showContractReminder: isPausedOrInterrupted,
-    showDailyProgress: isPausedOrInterrupted,
+    showCoachBanner: isPausedOrInterrupted && (input.motivationStyle === 'coach_led' || isClean),
+    showCompanionLayer: isPausedOrInterrupted && !isStudy && !isClean,
+    showContractReminder: isPausedOrInterrupted && !isClean,
+    showDailyProgress: isPausedOrInterrupted && !isClean,
     showModeOverlay: plannedQuizBreakVisible,
     showMomentumScore: isGameLike && isPausedOrInterrupted,
     showPurityScore: false,

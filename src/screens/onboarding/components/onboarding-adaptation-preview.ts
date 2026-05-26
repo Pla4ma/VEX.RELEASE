@@ -49,8 +49,8 @@ const STYLE_PREVIEW: Partial<
     rewardPreview: 'A first-win badge plus tomorrow encouragement.',
   },
   game_like: {
-    coachTone: 'Game surfaces show earlier, tied to focus time.',
-    rewardPreview: 'XP, chest odds, and early boss progress.',
+    coachTone: 'Clearer goals, visible progress, and more energetic prompts.',
+    rewardPreview: 'Streak credit and a visible next milestone.',
   },
   intense: {
     coachTone: 'Direct coaching with sharper challenge timing.',

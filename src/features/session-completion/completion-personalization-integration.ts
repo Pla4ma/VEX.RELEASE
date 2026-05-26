@@ -4,10 +4,12 @@ import { createMemoryCandidate, hashEvidence } from "../focus-memory/service";
 import { createUnlockDecision } from "../unlock-explainer/service";
 import type { CompletionLedger } from "./schemas";
 import type { SessionSummary } from "../../session/types";
-import type { Lane, LaneProfile } from "../lane-engine/types";
+import type { LaneProfile } from "../lane-engine/types";
 import type { CompletionPersonalizationResult } from "./schemas";
 import { buildCompletionPersonalizationResult } from "./completion-personalization";
 import { createDebugger } from "../../utils/debug";
+import { enqueue } from "../../lib/offline/queue";
+import { getConnectionState } from "../../lib/repository/base";
 
 const debug = createDebugger("completion-personalization:integration");
 
@@ -16,18 +18,11 @@ export interface CompletionPersonalizationInputForIntegration {
   hiddenFeatureKeys: string[];
   isComeback: boolean;
   isPersonalBest: boolean;
-  lane: Lane;
-  laneProfile: LaneProfile | null;
+  laneProfile: LaneProfile;
   ledger: CompletionLedger;
   reflectionAnswer?: string | null;
   sessionCount: number;
   summary: SessionSummary;
-}
-
-function resolveLane(
-  input: CompletionPersonalizationInputForIntegration,
-): Lane {
-  return input.laneProfile?.primaryLane ?? input.lane;
 }
 
 function resolveHiddenFeatureKeys(
@@ -39,11 +34,15 @@ function resolveHiddenFeatureKeys(
   return input.hiddenFeatureKeys;
 }
 
+const MIN_CANDIDATE_CONFIDENCE = 0.5;
+
 async function persistMemoryCandidates(
   result: CompletionPersonalizationResult,
   userId: string,
 ): Promise<void> {
   for (const candidate of result.memoryCandidates) {
+    if (candidate.confidence < MIN_CANDIDATE_CONFIDENCE) continue;
+
     try {
       const memoryType =
         candidate.confidence >= 0.7
@@ -59,9 +58,27 @@ async function persistMemoryCandidates(
         evidenceHash: hashEvidence(`${memoryType}:${userId}:${candidate.text}`),
       });
     } catch (error) {
-      Sentry.captureException(error, {
-        tags: { feature: "completion-memory-persistence" },
-      });
+      // If offline, enqueue for retry. Otherwise report and drop.
+      if (getConnectionState() === "offline") {
+        enqueue({
+          feature: "focus-memory",
+          idempotencyKey: `memory-candidate:${candidate.id}`,
+          operation: "MEMORY_CREATE",
+          payload: {
+            userId,
+            type: candidate.confidence >= 0.7 ? "successful_session_pattern" : "lane_evidence",
+            summary: candidate.text,
+            source: "session_completion",
+            confidence: candidate.confidence,
+            evidenceHash: hashEvidence(`${candidate.confidence >= 0.7 ? "successful_session_pattern" : "lane_evidence"}:${userId}:${candidate.text}`),
+          },
+          priority: "low",
+        });
+      } else {
+        Sentry.captureException(error, {
+          tags: { feature: "completion-memory-persistence" },
+        });
+      }
     }
   }
 }
@@ -69,7 +86,7 @@ async function persistMemoryCandidates(
 function produceUnlockDecision(
   input: CompletionPersonalizationInputForIntegration,
 ): CompletionPersonalizationResult["unlockDecision"] {
-  const lane = resolveLane(input);
+  const lane = input.laneProfile.primaryLane;
   const featureKey =
     lane === "student"
       ? "study_os"
@@ -130,7 +147,6 @@ export async function integrateCompletionPersonalization(
   debug.info("Integrating completion personalization for %s", input.summary.sessionId);
 
   const hiddenFeatureKeys = resolveHiddenFeatureKeys(input);
-  const lane = resolveLane(input);
 
   const result = buildCompletionPersonalizationResult({
     deletedMemoryIds: input.deletedMemoryIds,
@@ -139,7 +155,7 @@ export async function integrateCompletionPersonalization(
     hiddenFeatureKeys,
     isComeback: input.isComeback,
     isPersonalBest: input.isPersonalBest,
-    lane,
+    laneProfile: input.laneProfile,
     streakAction: input.ledger.streakResult.action,
     streakDays: input.ledger.streakResult.newDays,
     summary: input.summary,

@@ -63,10 +63,10 @@ export function LaneConfirmationStep({
     <View style={styles.section}>
       <Animated.View entering={titleIn}>
         <Text style={[styles.stepTitle, { color: theme.colors.text.primary }]}>
-          VEX recommends your focus mode
+          VEX thinks {laneLabel} fits you best.
         </Text>
         <Text style={[styles.stepSubtitle, { color: theme.colors.text.secondary }]}>
-          This shapes your home screen, coach style, and what surfaces appear.
+          You can change this anytime.
         </Text>
       </Animated.View>
 
@@ -91,8 +91,7 @@ export function LaneConfirmationStep({
                   marginTop: theme.spacing[1],
                 }}
               >
-                {confirmation?.reason ??
-                  'VEX thinks this fits how you work. You can change this anytime.'}
+                {confirmation?.reason ?? 'VEX will start with the mode that best matches your answers.'}
               </Text>
             </View>
           </View>

@@ -25,7 +25,7 @@ function getHeroTitle(type: HomePrimaryPriority['type']): string {
     case 'BOSS_ACTIVE':
       return 'The battle is already in motion';
     case 'DEFAULT_SESSION':
-      return 'Start the next focus block fast';
+      return 'VEX changes based on how you work';
   }
 }
 
@@ -42,7 +42,7 @@ function getHeroEyebrow(type: HomePrimaryPriority['type']): string {
     case 'STREAK_CRITICAL':
       return 'Habit protection';
     default:
-      return 'Primary action';
+      return 'Right next session';
   }
 }
 

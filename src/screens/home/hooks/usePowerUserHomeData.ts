@@ -4,7 +4,6 @@ import type { ChallengeItem } from '../../../features/home-spine/components';
 import { useBaseHomeData } from './useBaseHomeData';
 import { getFeatureAvailability } from '../../../features/liveops-config';
 import { useActiveChallenges, useClaimChallengeReward } from '../../../features/challenges/hooks';
-import { useSquadMembersFocusing } from '../../../features/squads/hooks';
 import { useFreezeStreak } from '../../../features/streaks/hooks';
 import { useSavedTomorrowPreview } from '../../../features/home-spine/hooks';
 import { useActiveIntervention } from '../../../features/ai-coach/hooks';
@@ -32,9 +31,7 @@ export function usePowerUserHomeData(controller: HomeController): PowerUserHomeD
   );
   const savedPreview = useSavedTomorrowPreview(controller.userId ?? '');
   const displayedInterventionIdRef = useRef<string | null>(null);
-  const squadMembersFocusing = useSquadMembersFocusing(
-    squadAvail.canQuery ? controller.userId || undefined : undefined,
-  );
+  const squadMembersFocusing: Array<Record<string, unknown>> = [];
   const { count: unreadNotificationCount } = useNotificationBadge(
     notifAvail.canQuery ? controller.userId : undefined,
   );

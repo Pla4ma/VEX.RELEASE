@@ -1,69 +1,104 @@
-/**
- * HomeStageResolver
- *
- * Determines user stage and renders the correct stage-specific container.
- * Each container component calls ONLY its own stage model hook and data hook.
- * No other stage hooks are imported, bundled, or executed.
- */
-import React from 'react';
-import { View, ActivityIndicator } from 'react-native';
-import { useTheme } from '../../../theme';
+import React, { useEffect, useState } from 'react';
+
+import { markColdStart } from '../../../app/cold-start-performance';
+import { captureException } from '../../../config/sentry';
 import { useHomeViewModel } from '../hooks/useHomeViewModel';
-import { useNewUserContainerModel, type NewUserContainerInput } from './NewUserHomeContainer';
-import { useActivatingContainerModel } from './ActivatingHomeContainer';
-import { useEngagedContainerModel } from './EngagedHomeContainer';
-import { usePowerUserContainerModel } from './PowerUserHomeContainer';
-import { useNewUserHomeData } from '../hooks/useNewUserHomeData';
-import { useActivatingHomeData } from '../hooks/useActivatingHomeData';
-import { useEngagedHomeData } from '../hooks/useEngagedHomeData';
-import { usePowerUserHomeData } from '../hooks/usePowerUserHomeData';
-import { HomeScreenInner } from './HomeScreenInner';
+import { HomeColdStartFallback } from './HomeColdStartFallback';
 
-function NewUserContainer({ sharedInput }: { sharedInput: NewUserContainerInput }): JSX.Element {
-  const model = useNewUserContainerModel(sharedInput);
-  const data = useNewUserHomeData(model.controller);
-  return React.createElement(HomeScreenInner, { model, data });
+const NewUserStage = React.lazy(() => import('./NewUserStage'));
+const ActivatingStage = React.lazy(() => import('./ActivatingStage'));
+const EngagedStage = React.lazy(() => import('./EngagedStage'));
+const PowerUserStage = React.lazy(() => import('./PowerUserStage'));
+
+function useHydrationGate(): boolean {
+  const [canHydrate, setCanHydrate] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setCanHydrate(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return canHydrate;
 }
 
-function ActivatingContainer({ sharedInput }: { sharedInput: NewUserContainerInput }): JSX.Element {
-  const model = useActivatingContainerModel(sharedInput);
-  const data = useActivatingHomeData(model.controller);
-  return React.createElement(HomeScreenInner, { model, data });
+function useDeferredFeatureHealth(
+  enabled: boolean,
+  totalCompletedSessions: number,
+): void {
+  useEffect(() => {
+    if (!enabled) {
+      return undefined;
+    }
+
+    let cancelled = false;
+    let cleanup: (() => void) | null = null;
+
+    void import('../../../features/liveops-config/deferred-feature-health')
+      .then(({ startDeferredFeatureHealth }) => {
+        if (cancelled) {
+          return;
+        }
+        cleanup = startDeferredFeatureHealth(totalCompletedSessions);
+      })
+      .catch((error: unknown) => {
+        const captured =
+          error instanceof Error
+            ? error
+            : new Error('Deferred feature health failed to load');
+        captureException(captured, { area: 'HomeStageResolver.featureHealth' });
+      });
+
+    return () => {
+      cancelled = true;
+      cleanup?.();
+    };
+  }, [enabled, totalCompletedSessions]);
 }
 
-function EngagedContainer({ sharedInput }: { sharedInput: NewUserContainerInput }): JSX.Element {
-  const model = useEngagedContainerModel(sharedInput);
-  const data = useEngagedHomeData(model.controller);
-  return React.createElement(HomeScreenInner, { model, data });
-}
-
-function PowerUserContainer({ sharedInput }: { sharedInput: NewUserContainerInput }): JSX.Element {
-  const model = usePowerUserContainerModel(sharedInput);
-  const data = usePowerUserHomeData(model.controller);
-  return React.createElement(HomeScreenInner, { model, data });
-}
-
-export function HomeStageResolver(): JSX.Element {
-  const { theme } = useTheme();
+function HydratedHomeStageResolver(): JSX.Element {
   const vm = useHomeViewModel();
   const { sharedInput, stage, isLoading } = vm;
 
+  useEffect(() => {
+    if (!isLoading) {
+      markColdStart('lane_hydrated', {
+        totalCompletedSessions: sharedInput.disclosure.inputs.totalCompletedSessions,
+      });
+    }
+  }, [isLoading, sharedInput.disclosure.inputs.totalCompletedSessions]);
+
+  useDeferredFeatureHealth(
+    !isLoading,
+    sharedInput.disclosure.inputs.totalCompletedSessions,
+  );
+
   if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: theme.colors.background.primary }}>
-        <ActivityIndicator size="large" color={theme.colors.primary[500]} />
-      </View>
-    );
+    return <HomeColdStartFallback />;
   }
 
-  switch (stage) {
-    case 'NEW_USER':
-      return <NewUserContainer sharedInput={sharedInput} />;
-    case 'ACTIVATING':
-      return <ActivatingContainer sharedInput={sharedInput} />;
-    case 'ENGAGED':
-      return <EngagedContainer sharedInput={sharedInput} />;
-    default:
-      return <PowerUserContainer sharedInput={sharedInput} />;
+  const fallback = <HomeColdStartFallback />;
+
+  return (
+    <React.Suspense fallback={fallback}>
+      {stage === 'NEW_USER' ? (
+        <NewUserStage sharedInput={sharedInput} />
+      ) : stage === 'ACTIVATING' ? (
+        <ActivatingStage sharedInput={sharedInput} />
+      ) : stage === 'ENGAGED' ? (
+        <EngagedStage sharedInput={sharedInput} />
+      ) : (
+        <PowerUserStage sharedInput={sharedInput} />
+      )}
+    </React.Suspense>
+  );
+}
+
+export function HomeStageResolver(): JSX.Element {
+  const canHydrate = useHydrationGate();
+
+  if (!canHydrate) {
+    return <HomeColdStartFallback />;
   }
+
+  return <HydratedHomeStageResolver />;
 }

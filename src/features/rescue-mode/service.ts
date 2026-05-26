@@ -14,44 +14,8 @@ import {
   type RescueOutcome,
   type RescuePlan,
   type RescuePlanInput,
-  type RescueReason,
 } from './schemas';
-
-// ── Lane-Specific Rescue Copy ──────────────────────────────────────────
-const LANE_RESCUE_COPY: Record<Lane, Record<RescueReason, string>> = {
-  student: {
-    too_big: 'Open notes and review one weak section for 8 minutes.',
-    tired: 'Review one page of notes. No pressure beyond that.',
-    distracted: 'Put the phone away. One study block, 8 minutes.',
-    anxious: 'Open your notes. Just look. No quiz. 8 minutes.',
-    unclear: 'Open notes and review one weak section for 8 minutes.',
-    no_time: 'Review one topic. 5 minutes. That is enough.',
-  },
-  game_like: {
-    too_big: 'Recovery encounter: survive 10 clean minutes.',
-    tired: 'A short run. No boss. Just move for 10 minutes.',
-    distracted: 'One encounter. 10 minutes. Turn everything else off.',
-    anxious: 'Recovery encounter: survive 10 clean minutes.',
-    unclear: 'Recovery encounter: survive 10 clean minutes.',
-    no_time: 'Mini sprint. 5 minutes. Just one encounter.',
-  },
-  deep_creative: {
-    too_big: 'Re-enter the project for 7 minutes. Only identify the next move.',
-    tired: 'Open the project. Look at one file. 7 minutes max.',
-    distracted: 'Re-enter the project for 7 minutes. Only identify the next move.',
-    anxious: 'Re-enter the project for 7 minutes. Only identify the next move.',
-    unclear: 'Name the next concrete step. That is the session.',
-    no_time: '7 minutes. Just the next move. Nothing else.',
-  },
-  minimal_normal: {
-    too_big: 'Do 5 minutes. Stop cleanly if needed.',
-    tired: 'Do 5 minutes. Stop cleanly if needed.',
-    distracted: 'Do 5 minutes. Stop cleanly if needed.',
-    anxious: 'Do 5 minutes. Stop cleanly if needed.',
-    unclear: 'Do 5 minutes. Stop cleanly if needed.',
-    no_time: 'Do 5 minutes. Stop cleanly if needed.',
-  },
-};
+import { LANE_RESCUE_COPY } from './rescue-copy';
 
 // ── Duration Helpers ───────────────────────────────────────────────────
 function clampDuration(seconds: number | undefined, lane: Lane): number {
@@ -75,23 +39,24 @@ function modeFor(lane: Lane): SessionMode {
 }
 
 // ── Task Description ───────────────────────────────────────────────────
-function taskFor(input: RescuePlanInput): string {
+function taskFor(input: RescuePlanInput, lane: Lane): string {
   if (input.taskDescription) return input.taskDescription;
-  return LANE_RESCUE_COPY[input.lane][input.reason];
+  return LANE_RESCUE_COPY[lane][input.reason];
 }
 
 // ── Plan Creation ──────────────────────────────────────────────────────
 export function createRescuePlan(rawInput: RescuePlanInput): RescuePlan {
   const input = RescuePlanInputSchema.parse(rawInput);
+  const lane = input.laneProfile?.primaryLane ?? input.lane;
   const createdAt = input.createdAt ?? Date.now();
   return RescuePlanSchema.parse({
     id: `rescue:${input.userId}:${createdAt}`,
     userId: input.userId,
-    lane: input.lane,
+    lane,
     reason: input.reason,
-    durationSeconds: clampDuration(input.durationSeconds, input.lane),
-    sessionMode: modeFor(input.lane),
-    taskDescription: taskFor(input),
+    durationSeconds: clampDuration(input.durationSeconds, lane),
+    sessionMode: modeFor(lane),
+    taskDescription: taskFor(input, lane),
     frictionLevel:
       input.reason === 'distracted' || input.reason === 'anxious' ? 'soft' : 'none',
     createdAt,
@@ -99,17 +64,16 @@ export function createRescuePlan(rawInput: RescuePlanInput): RescuePlan {
 }
 
 // ── Eligibility ────────────────────────────────────────────────────────
-export function isRescueEligible(
-  rawInput: RescueEligibilityInput,
-): RescueEligibilityResult {
+export function isRescueEligible(rawInput: RescueEligibilityInput): RescueEligibilityResult {
   const input = RescueEligibilityInputSchema.parse(rawInput);
+  const lane = input.laneProfile?.primaryLane ?? input.lane;
 
   const notEligible = (reason: string): RescueEligibilityResult =>
     RescueEligibilityResultSchema.parse({
       eligible: false,
       trigger: null,
       reason,
-      lane: input.lane,
+      lane,
       recommendedDurationSeconds: 0,
     });
 
@@ -120,16 +84,19 @@ export function isRescueEligible(
 
   let trigger: (typeof RescueEligibilityResultSchema)['_output']['trigger'] = null;
 
+  // Priority-ordered: strongest signals first
   if (input.abandonedSessionExists) {
     trigger = 'abandoned_session';
   } else if (input.missedPlannedSession) {
     trigger = 'missed_planned';
+  } else if (input.recentDismissals >= 3) {
+    trigger = 'notification_dismissal_pattern';
   } else if (input.recentDismissals >= 2) {
     trigger = 'repeated_dismissals';
   } else if (input.streakAtRisk && input.hoursUntilStreakBreak <= 6) {
     trigger = 'streak_risk';
-  } else if (input.recentDismissals >= 3) {
-    trigger = 'notification_dismissal_pattern';
+  } else if (input.userTooBig) {
+    trigger = 'user_too_big';
   }
 
   if (!trigger) return notEligible('No rescue trigger signal detected.');
@@ -138,16 +105,13 @@ export function isRescueEligible(
     eligible: true,
     trigger,
     reason: `Rescue eligible due to ${trigger}.`,
-    lane: input.lane,
-    recommendedDurationSeconds: durationForLane(input.lane),
+    lane,
+    recommendedDurationSeconds: durationForLane(lane),
   });
 }
 
 // ── Reflection ─────────────────────────────────────────────────────────
-export function generateRescueReflection(
-  plan: RescuePlan,
-  outcome: RescueOutcome,
-): string {
+export function generateRescueReflection(plan: RescuePlan, outcome: RescueOutcome): string {
   const minutes = Math.round(plan.durationSeconds / 60);
   if (outcome === 'completed') {
     return `Completed a ${minutes}-minute rescue block. Reason: ${plan.reason}. Every small step counts.`;
@@ -217,4 +181,33 @@ export function buildRescueCompletionMemory(
     text: `User completed a ${minutes}-minute rescue block ${result} for ${plan.reason}. Lane: ${plan.lane}.`,
     confidence: outcome === 'completed' ? 0.8 : outcome === 'partial' ? 0.6 : 0.4,
   });
+}
+
+// ── Push Eligibility ──────────────────────────────────────────────────
+export interface RescuePushInput {
+  eligibility: RescueEligibilityResult;
+  userMuted: boolean;
+  quietHoursActive: boolean;
+  budgetRemaining: number;
+  sentToday: number;
+  maxDaily: number;
+}
+
+export function shouldSendRescuePush(input: RescuePushInput): boolean {
+  if (!input.eligibility.eligible) return false;
+  if (input.userMuted) return false;
+  if (input.quietHoursActive) return false;
+  if (input.budgetRemaining <= 0) return false;
+  if (input.sentToday >= input.maxDaily) return false;
+  return true;
+}
+
+export function buildRescuePushPayload(
+  plan: RescuePlan,
+): { title: string; body: string } {
+  const minutes = Math.round(plan.durationSeconds / 60);
+  return {
+    title: `${minutes}-minute recovery ready`,
+    body: `${plan.taskDescription} — tap to start.`,
+  };
 }

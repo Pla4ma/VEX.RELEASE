@@ -18,6 +18,12 @@ import {
   todayKey,
 } from './notification-budget-utils';
 
+export function maxDailyForLane(lane?: string): number {
+  // Clean lane gets 1/day; all others (or undefined) get 2/day.
+  if (lane === 'minimal_normal') return 1;
+  return 2;
+}
+
 export {
   NotificationBudgetSchema,
   NotificationPrioritySchema,
@@ -108,22 +114,36 @@ export async function getOrCreateNotificationBudget(
     quietHoursEnd?: number;
     optOut?: boolean;
     maxDaily?: number;
+    lane?: string;
   }
 ): Promise<NotificationBudget> {
   const storedBudget = getStoredNotificationBudget(userId);
-  if (storedBudget && !preferences) {
-    return storedBudget;
+  const resolvedMaxDaily = preferences?.maxDaily
+    ?? (preferences?.lane ? maxDailyForLane(preferences.lane) : undefined);
+
+  if (storedBudget) {
+    if (!preferences) return storedBudget;
+    // Merge preferences into stored budget while preserving sent count and date
+    return NotificationBudgetSchema.parse({
+      ...storedBudget,
+      maxDaily: resolvedMaxDaily ?? storedBudget.maxDaily,
+      quietHoursStart: preferences.quietHoursStart ?? storedBudget.quietHoursStart,
+      quietHoursEnd: preferences.quietHoursEnd ?? storedBudget.quietHoursEnd,
+      optOut: preferences.optOut ?? storedBudget.optOut,
+      lane: preferences.lane ?? storedBudget.lane,
+    });
   }
 
   return NotificationBudgetSchema.parse({
     userId: ensureUUID(userId),
     date: todayKey(),
     sentCount: 0,
-    maxDaily: preferences?.maxDaily || 2,
+    maxDaily: resolvedMaxDaily ?? (preferences?.maxDaily ?? 2),
     notificationsSent: [],
     quietHoursStart: preferences?.quietHoursStart || 22,
     quietHoursEnd: preferences?.quietHoursEnd || 7,
     optOut: preferences?.optOut || false,
+    lane: preferences?.lane,
   });
 }
 
@@ -139,13 +159,14 @@ export async function sendCoachNotification(
   userId: string,
   type: 'STREAK_RISK' | 'SESSION_SUGGESTION' | 'MILESTONE_HYPE' | 'COMEBACK_SUPPORT',
   content: string,
-  priority: 'STREAK_CRITICAL' | 'COACH_NEXT_ACTION' = 'COACH_NEXT_ACTION'
+  priority: 'STREAK_CRITICAL' | 'COACH_NEXT_ACTION' = 'COACH_NEXT_ACTION',
+  lane?: string
 ): Promise<{ success: boolean; reason?: string }> {
   if (isGenericLoginReminder(content)) {
     return { success: false, reason: 'Generic login reminder suppressed' };
   }
 
-  const budget = await getOrCreateNotificationBudget(userId, { maxDaily: 2 });
+  const budget = await getOrCreateNotificationBudget(userId, { lane });
   const result = await sendNotificationWithBudget({
     userId,
     priority,
@@ -160,7 +181,8 @@ export async function sendCoachNotification(
 }
 
 export async function getNotificationBudgetStatus(
-  userId: string
+  userId: string,
+  lane?: string
 ): Promise<{
   sent: number;
   maxDaily: number;
@@ -168,7 +190,7 @@ export async function getNotificationBudgetStatus(
   inQuietHours: boolean;
   nextActiveTime?: number;
 }> {
-  const budget = await getOrCreateNotificationBudget(userId);
+  const budget = await getOrCreateNotificationBudget(userId, { lane });
   const inQuietHours = isInQuietHours(budget);
 
   return {

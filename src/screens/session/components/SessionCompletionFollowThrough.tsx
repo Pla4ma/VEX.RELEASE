@@ -4,8 +4,6 @@ import Animated, { FadeInUp } from 'react-native-reanimated';
 
 import { Box, Text } from '../../../components/primitives';
 import { getPremiumCardStyle } from '../../../components/premiumStyles';
-import { buildDailyModifierSummary } from '../../../features/live-ops/daily-modifiers';
-import { useWeeklyQuestState } from '../../../features/weekly-quests/hooks';
 import type { SessionSummary } from '../../../session/types';
 import { useTheme } from '../../../theme';
 
@@ -76,16 +74,6 @@ export function SessionCompletionFollowThrough({
   const { theme } = useTheme();
   const [challengesExpanded, setChallengesExpanded] = useState(false);
   const challengeLines = useMemo(() => buildChallengeLines(summary), [summary]);
-  const dailyModifier = useMemo(
-    () =>
-      buildDailyModifierSummary({
-        sessionMode: summary.sessionMode,
-        timestamp: summary.createdAt,
-      }),
-    [summary.createdAt, summary.sessionMode],
-  );
-  const weeklyQuest = useWeeklyQuestState(summary.userId, summary.createdAt);
-  const nextWeeklyStep = weeklyQuest.data?.steps.find((step) => !step.completed);
   const bossDamage = summary.damage?.totalDamage ?? 0;
   const tomorrowFocusMinutes = Math.max(15, Math.floor(summary.effectiveDuration / 120));
 
@@ -148,34 +136,6 @@ export function SessionCompletionFollowThrough({
           </Box>
         </FollowThroughCard>
       ) : null}
-
-      <FollowThroughCard delay={260} title="TODAY'S MODIFIER">
-        <Text variant="h4" color={theme.colors.text.primary} mt={3}>
-          {dailyModifier.modifier.title}
-        </Text>
-        <Text variant="body" color={theme.colors.text.secondary} mt={2}>
-          {dailyModifier.isMatched
-            ? `Matched: ${dailyModifier.rewardMultiplier}x XP, ${dailyModifier.bossDamageMultiplier}x boss damage.`
-            : dailyModifier.modifier.body}
-        </Text>
-      </FollowThroughCard>
-
-      <FollowThroughCard delay={300} title="WEEKLY CHAIN">
-        <Text variant="h4" color={theme.colors.text.primary} mt={3}>
-          {weeklyQuest.isPending
-            ? 'Syncing this week'
-            : nextWeeklyStep
-              ? nextWeeklyStep.title
-              : 'Weekly chain complete'}
-        </Text>
-        <Text variant="body" color={theme.colors.text.secondary} mt={2}>
-          {weeklyQuest.isError
-            ? 'Progress is saved locally. VEX will retry the chain read.'
-            : nextWeeklyStep
-              ? `${nextWeeklyStep.progress}/${nextWeeklyStep.target} toward the weekly chain.`
-              : 'Your weekly chain is complete.'}
-        </Text>
-      </FollowThroughCard>
 
       <FollowThroughCard delay={320} title="TOMORROW PREVIEW">
         <Text variant="h4" color={theme.colors.text.primary} mt={3}>

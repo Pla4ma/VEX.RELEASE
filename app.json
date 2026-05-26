@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "VEX App",
+    "name": "VEX",
     "slug": "vex-app",
+    "scheme": "vex",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "dark",

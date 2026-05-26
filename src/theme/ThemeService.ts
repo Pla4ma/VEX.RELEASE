@@ -12,8 +12,17 @@ import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('theme');
 
+interface ThemeStorage {
+  set(key: string, value: string): void;
+  getString(key: string): string | undefined;
+  delete(key: string): void;
+}
 
-type MMKVType = any;
+const THEME_MODE_VALUES: readonly string[] = ['light', 'dark', 'system'];
+
+function isThemeMode(value: string | undefined): value is ThemeMode {
+  return typeof value === 'string' && THEME_MODE_VALUES.includes(value);
+}
 
 /**
  * Storage error for when MMKV fails
@@ -40,7 +49,7 @@ export interface ThemeChangeEvent {
  * Manages theme persistence and cross-system communication.
  */
 export class ThemeService {
-  private storage: MMKVType | null = null;
+  private storage: ThemeStorage | null = null;
   private eventEmitter: EventEmitter | null = null;
   private initialized = false;
 
@@ -85,9 +94,10 @@ export class ThemeService {
    */
   getStoredMode(): ThemeMode | null {
     try {
-      return this.storage?.getString(THEME_STORAGE_KEYS.mode) as ThemeMode ?? null;
+      const raw = this.storage?.getString(THEME_STORAGE_KEYS.mode);
+      return raw !== undefined && isThemeMode(raw) ? raw : null;
     } catch (error) {
-      debug.error('Failed to get stored theme mode', error as Error);
+      debug.error('Failed to get stored theme mode', error instanceof Error ? error : new Error(String(error)));
       return null;
     }
   }
@@ -113,12 +123,9 @@ export class ThemeService {
     this.eventEmitter?.emit('theme:change', event);
 
     // Also emit via global event bus
-    interface GlobalWithEventBus {
-      eventBus?: (event: string, data: unknown) => void;
-    }
-    const globalWithEventBus = global as unknown as GlobalWithEventBus;
-    if (typeof global !== 'undefined' && globalWithEventBus.eventBus) {
-      globalWithEventBus.eventBus('theme:change', event);
+    const globalBus = (globalThis as Record<string, unknown>).eventBus;
+    if (typeof globalBus === 'function') {
+      globalBus('theme:change', event);
     }
   }
 
@@ -129,7 +136,7 @@ export class ThemeService {
     try {
       this.storage?.delete(THEME_STORAGE_KEYS.mode);
     } catch (error) {
-      debug.error('Failed to clear stored theme mode:', error as Error);
+      debug.error('Failed to clear stored theme mode:', error instanceof Error ? error : new Error(String(error)));
     }
   }
 

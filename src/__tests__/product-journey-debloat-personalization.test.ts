@@ -966,7 +966,7 @@ describe('Risk 5 — Privacy inventory ↔ app manifest', () => {
       )).toBe(true);
     }
 
-    expect(getPiiFields()).toEqual(['Email address']);
+    expect(getPiiFields()).toEqual(['Email address', 'Push notification token']);
 
     expect(getTrackingFields()).toEqual([]);
 

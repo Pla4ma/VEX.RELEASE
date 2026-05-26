@@ -12,10 +12,14 @@ lint, and typecheck commands must target src/.
 
 ## Product Identity
 
-VEX is a personalized Study + Focus execution OS. The app should feel shaped
-around the user, but it must stay quiet, useful, and honest. The final release
-promise is: start focused work, complete it, see progress, get one next action,
-and return tomorrow.
+VEX is the productivity app that changes based on how you work. It starts
+with one focused session, then unlocks Study, Run, Project, or Clean systems
+as it learns your rhythm.
+
+VEX learns how you focus and unlocks the right productivity system for you.
+Internal lanes are `student`, `game_like`, `deep_creative`, and
+`minimal_normal`. The app should feel shaped around the user, but it must stay
+quiet, useful, and honest.
 
 ## Architecture Rules
 

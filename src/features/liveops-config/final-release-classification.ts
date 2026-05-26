@@ -70,7 +70,7 @@ const ACTIVE: FeatureClassificationEntry[] = [
   { systemId:'notifications_system', folder:'notifications', status:'final_release_active', minSessions:0, routeAllowed:true, homeAllowed:false, queryAllowed:true, subscriptionAllowed:true, notificationAllowed:true, completionAllowed:false, premiumCopyAllowed:false, appStoreCopyAllowed:true, notes:'Notification system.' },
   { systemId:'onboarding', folder:'onboarding', status:'final_release_active', minSessions:0, routeAllowed:true, homeAllowed:false, queryAllowed:false, subscriptionAllowed:false, notificationAllowed:false, completionAllowed:false, premiumCopyAllowed:false, appStoreCopyAllowed:false, notes:'One-time onboarding flow.' },
   { systemId:'personalization', folder:'personalization', status:'final_release_active', minSessions:0, routeAllowed:false, homeAllowed:false, queryAllowed:true, subscriptionAllowed:false, notificationAllowed:false, completionAllowed:false, premiumCopyAllowed:false, appStoreCopyAllowed:false, notes:'Motivation adaptation engine. Internal.' },
-  { systemId:'themes_visual', folder:'themes', status:'final_release_active', minSessions:0, routeAllowed:true, homeAllowed:false, queryAllowed:true, subscriptionAllowed:true, notificationAllowed:false, completionAllowed:false, premiumCopyAllowed:false, appStoreCopyAllowed:true, notes:'Visual themes only. ThemeShopModal is archived.' },
+  { systemId:'themes_visual', folder:'themes', status:'final_release_active', minSessions:0, routeAllowed:true, homeAllowed:false, queryAllowed:true, subscriptionAllowed:true, notificationAllowed:false, completionAllowed:false, premiumCopyAllowed:false, appStoreCopyAllowed:true, notes:'Visual themes only. Shop modal is archived.' },
 ];
 
 const PROGRESSIVE: FeatureClassificationEntry[] = [

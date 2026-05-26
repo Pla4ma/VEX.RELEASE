@@ -26,6 +26,8 @@ export function mapRowToMemory(row: unknown): CoachMemory {
     lastReferencedAt: parsed.last_referenced_at
       ? new Date(parsed.last_referenced_at).getTime()
       : null,
+    deletedAt: parsed.deleted_at ? new Date(parsed.deleted_at).getTime() : null,
+    evidenceHash: parsed.evidence_hash,
   });
 }
 
@@ -40,5 +42,7 @@ export function mapInputToRow(input: CreateCoachMemoryInput): NewCoachMemoryRow 
     metadata: input.metadata,
     referenced_count: 0,
     last_referenced_at: null,
+    deleted_at: null,
+    evidence_hash: input.evidenceHash,
   };
 }

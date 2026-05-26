@@ -19,7 +19,8 @@ import { createCompletionLedger, getCompletionLedgerByIdempotencyKey } from "./r
 import { buildPostSessionStoryViewModel, type PostSessionStoryViewModel } from "./story-view-model-service";
 import { createSessionRecord, countCompletedSessions } from "../session-history/repository";
 import { beginKeyProcessing, markKeyProcessed, releaseKeyProcessing } from "./idempotency";
-import { resolveCompletionLane } from "./completion-lane-resolver";
+import { getFocusProfile } from "../focus-profile/service";
+import { resolveInitialLane } from "../lane-engine/service";
 
 const debug = createDebugger("session-completion:orchestrator");
 
@@ -130,6 +131,8 @@ export async function orchestrateSessionCompletion(
     let personalizationResult: CompletionPersonalizationResult | null = null;
     try {
       const sessionCount = await countCompletedSessions(parsed.userId).catch(() => 0);
+      const focusProfile = await getFocusProfile(parsed.userId).catch(() => null);
+      const laneProfile = focusProfile?.laneProfile || resolveInitialLane({ observedAt: Date.now() });
       personalizationResult = await integrateCompletionPersonalization({
         deletedMemoryIds: [],
         hiddenFeatureKeys: [
@@ -141,8 +144,7 @@ export async function orchestrateSessionCompletion(
         ],
         isComeback: summary.sessionMode === "RECOVERY",
         isPersonalBest: personalBest.isPersonalBest,
-        lane: resolveCompletionLane(summary),
-        laneProfile: null,
+        laneProfile,
         ledger: finalLedger,
         sessionCount,
         summary,
@@ -157,6 +159,7 @@ export async function orchestrateSessionCompletion(
       degradedSystems,
       finalLedger,
       isPersonalBest: personalBest.isPersonalBest,
+      personalizationResult,
       sessionId: parsed.sessionId,
       summary,
       userId: parsed.userId,

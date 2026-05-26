@@ -5,16 +5,20 @@ constitution. It is the highest authority for what VEX is and is not.
 
 ## Core Identity
 
-VEX is a personalized Study + Focus execution OS.
+VEX is the productivity app that changes based on how you work.
+
+VEX learns how you focus and unlocks the right productivity system for you:
+Study, Run, Project, or Clean.
 
 ## VEX Final Release IS
 
 - Personalized onboarding and adaptive Home
+- Study, Run, Project, and Clean user-facing systems
 - Focus, study, and deep-work sessions
 - AI Coach presence as intelligence layer
 - Companion as visual coach
 - Progress tracking: streak, XP, level, focus score
-- Simplified Study OS / Deep Work / Learning / Project Focus
+- Adaptive Study / Run / Project / Clean execution paths
 - Subtle Boss/momentum layer for all users
 - Stronger Boss only for users whose personalization supports game-like intensity
 - Clean completion reward moment (supports focus, does not distract)

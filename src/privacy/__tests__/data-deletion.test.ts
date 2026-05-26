@@ -100,6 +100,7 @@ describe('User can delete/reset personalization data', () => {
       firstSessionStarted: false,
       firstSessionCompleted: false,
       homePreviewEntered: false,
+      chosenLane: null,
     });
 
     expect(useOnboardingStore.getState().goal).toBe('STUDY');
@@ -135,6 +136,7 @@ describe('User can delete/reset personalization data', () => {
       firstSessionStarted: false,
       firstSessionCompleted: false,
       homePreviewEntered: false,
+      chosenLane: null,
     });
 
     expect(await repo.hasOnboardingState(userId)).toBe(true);

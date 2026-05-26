@@ -144,4 +144,19 @@ describe('resolveFirstWeekExperience', () => {
     expect(result.primaryMessage).not.toMatch(/failed|behind|lost/i);
     expect(result.allowedHomeSurfaces).toContain('recovery_cta');
   });
+
+  it('hidden surfaces remain hidden at Day 7', () => {
+    const result = resolveFirstWeekExperience({
+      ...baseInput,
+      completedSessions: 7,
+      daysSinceOnboarding: 7,
+      primaryGoal: 'study',
+      motivationStyle: 'study_focused',
+    });
+
+    expect(result.hiddenSurfaces).toEqual(
+      expect.arrayContaining(['boss_full', 'shop', 'inventory', 'premium_hard_sell', 'squads', 'wagers']),
+    );
+    expect(result.bossIntensity).not.toBe('visible');
+  });
 });

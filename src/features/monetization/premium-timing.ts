@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { LaneProfile } from '../lane-engine/types';
 
 /**
  * Premium timing gate — ensures no Day 0 hard sell, no paywall before value proof,
@@ -130,6 +131,17 @@ export function resolvePremiumTiming(raw: PremiumTimingInput): PremiumTimingResu
 /** For lane-specific premium hooks — returns feature list and copy for given lane */
 export function getLanePremiumValue(lane: PremiumLane): typeof PREMIUM_VALUE_MAP[PremiumLane] {
   return PREMIUM_VALUE_MAP[lane];
+}
+
+export function mapLaneProfileToPremiumLane(profile: LaneProfile): PremiumLane {
+  if (profile.primaryLane === 'student') return 'study';
+  if (profile.primaryLane === 'game_like') return 'run';
+  if (profile.primaryLane === 'deep_creative') return 'project';
+  return 'clean';
+}
+
+export function getLaneProfilePremiumValue(profile: LaneProfile): typeof PREMIUM_VALUE_MAP[PremiumLane] {
+  return getLanePremiumValue(mapLaneProfileToPremiumLane(profile));
 }
 
 /** Map motivation profile to closest lane */

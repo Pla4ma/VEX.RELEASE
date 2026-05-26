@@ -4,7 +4,6 @@
  * Events for emotional momentum and retention systems.
  */
 
-import type { RetentionIntervention } from '@/features/emotion-retention/EmotionRetentionEngine';
 import type { CompanionPhase, CompanionMood } from '@/features/companion/types';
 
 export interface EmotionRetentionEventDefinitions {
@@ -27,7 +26,7 @@ export interface EmotionRetentionEventDefinitions {
   // Retention interventions
   'retention:intervention_ready': {
     userId: string;
-    intervention: RetentionIntervention;
+    intervention: unknown;
   };
 
   'retention:intervention_sent': {
