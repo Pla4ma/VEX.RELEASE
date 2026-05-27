@@ -118,8 +118,8 @@ function buildPatternMessage(ctx: CoachPresenceContext): string | null {
   if (ctx.memoryConfidence === 'none' || ctx.memoryConfidence === 'weak') return null;
   if (ctx.memoryConfidence === 'medium') {
     return ctx.primaryGoal === 'study'
-      ? 'I noticed your study rhythm forming. Review before adding more.'
-      : 'I noticed your start pattern forming. Repeat the clean opening.';
+      ? 'Your study sessions show a rhythm forming. Review before adding more.'
+      : 'Your session pattern is emerging. Repeat the clean opening.';
   }
   return styleMessage(ctx.motivationStyle, {
     CALM: 'You usually restart best from one quiet block.',

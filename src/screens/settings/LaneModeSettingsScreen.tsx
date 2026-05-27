@@ -17,9 +17,9 @@ type Props = NativeStackScreenProps<SettingsStackParams, 'LaneMode'>;
 const ALL_LANES: Lane[] = ['student', 'game_like', 'deep_creative', 'minimal_normal'];
 
 const LANE_DESCRIPTIONS: Record<Lane, string> = {
-  student: 'Study OS, recall prompts, deadline tracking. Best for students and learners.',
-  game_like: 'Bosses, streaks, challenges. Turns focus into a game.',
-  deep_creative: 'Project threads, flow windows, continuity memory. For deep work and creativity.',
+  student: 'Recall cards, deadline tracking, and learning sessions. Best for students and learners.',
+  game_like: 'Visible momentum, energetic goals, and quick rewards. Turns focus into progress.',
+  deep_creative: 'Continuity for deeper work, flow windows, and project memory. For long-form creativity.',
   minimal_normal: 'Clean sessions, quiet progress, low notifications. Minimal and calm.',
 };
 

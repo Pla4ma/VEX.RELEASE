@@ -14,6 +14,10 @@ import {
   type CoachQuestionResponse,
 } from './services/coach-screen-service';
 import type { CoachMessage, CoachState } from './types';
+import { fetchActiveRecommendations } from './repository';
+import type { SessionRecommendation } from './hooks/useRecommendationMutations';
+
+export { COACH_QUERY_KEYS } from './constants';
 
 export * from './hooks';
 export {
@@ -27,6 +31,26 @@ export {
 } from './hooks/useRecommendationMutations';
 
 const debug = createDebugger('coach:hooks');
+
+export function useActiveCoachRecommendations(
+  userId: string | null,
+  enabled: boolean,
+): {
+  primaryRecommendation: SessionRecommendation | null;
+  isPending: boolean;
+} {
+  const { data } = useQuery<SessionRecommendation[]>({
+    queryKey: ['coach', 'recommendations', userId],
+    queryFn: () => fetchActiveRecommendations(userId ?? ''),
+    enabled: enabled && Boolean(userId),
+    staleTime: 1000 * 60 * 5,
+  });
+  const primary = data
+    ? data.filter((item) => item.status === 'ACTIVE' && item.expiresAt > Date.now())
+        .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null
+    : null;
+  return { primaryRecommendation: primary, isPending: false };
+}
 
 export function useCoachScreenState(): {
   coachState: CoachState | undefined;

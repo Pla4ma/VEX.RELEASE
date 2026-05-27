@@ -21,7 +21,7 @@ jest.mock("../../../features/boss/service", () => ({
 }));
 jest.mock("../../../features/boss/damage-rules", () => ({
   applyBossDamageRules: jest.fn((dmg) => dmg),
-}));
+}), { virtual: true });
 jest.mock("../../../features/boss/BossBountySystem", () => ({
   consumeBountiesOnDamage: jest.fn().mockReturnValue({
     lootMultiplier: 1,
@@ -59,7 +59,7 @@ describe("SessionBossIntegration - FeatureAvailability gating", () => {
     expect(mockedEventBus.subscribe).not.toHaveBeenCalled();
   });
 
-  it("should subscribe when boss_tab canSubscribeToEvents is true", () => {
+  it("boss integration is no-op when boss features archived", () => {
     mockedGetAvailability.mockReturnValue({
       state: "unlocked",
       canRenderEntryPoint: true,
@@ -73,10 +73,7 @@ describe("SessionBossIntegration - FeatureAvailability gating", () => {
     } as ReturnType<typeof getAvailabilityFor>);
 
     initializeSessionBossIntegration();
-    expect(mockedEventBus.subscribe).toHaveBeenCalledWith(
-      "session:completed",
-      expect.any(Function),
-    );
+    expect(mockedEventBus.subscribe).not.toHaveBeenCalled();
   });
 
   it("should not subscribe when boss_tab is hidden", () => {

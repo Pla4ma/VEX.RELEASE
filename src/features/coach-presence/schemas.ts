@@ -23,6 +23,8 @@ export const CoachPresenceSurfaceSchema = z.enum([
   'SESSION_SETUP',
   'SESSION_COMPLETION',
   'CHAT',
+  'RESCUE',
+  'PREMIUM',
 ]);
 
 export const CoachPresenceToneSchema = z

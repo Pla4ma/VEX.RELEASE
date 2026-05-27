@@ -15,9 +15,9 @@ describe('APP_STORE_METADATA', () => {
 
   it('should describe adaptive productivity without game references', () => {
     const desc = APP_STORE_METADATA.description;
-    expect(desc).toContain('VEX learns how you work');
+    expect(desc).toContain('VEX changes based on how you work');
     expect(desc).toContain('Study, Run, Project, or Clean');
-    expect(desc).toContain('Focus Score');
+    expect(desc).toContain('durable intelligence');
     expect(desc).not.toContain('gamified');
     expect(desc).not.toContain('gamification');
     expect(desc).not.toContain('RPG');
@@ -65,8 +65,8 @@ describe('REVIEW_NOTES', () => {
     expect(REVIEW_NOTES).not.toContain('battle pass');
   });
 
-  it('should mention premium appears after 40+ sessions', () => {
-    expect(REVIEW_NOTES).toContain('40+ sessions');
+  it('should mention premium appears after value proof', () => {
+    expect(REVIEW_NOTES).toContain('Premium appears only after value proof');
   });
 
   it('should include account deletion instructions', () => {

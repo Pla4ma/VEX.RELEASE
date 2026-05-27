@@ -73,6 +73,7 @@
     "dist",
     "android",
     "ios",
+    "archive",
     "__tests__/**/*",
     "**/*.test.ts",
     "**/*.test.tsx"

@@ -13,7 +13,6 @@ module.exports = [
   '<rootDir>/src/features/streaks/__tests__/service-comprehensive.test.ts',
   '<rootDir>/src/features/rewards/__tests__/service-comprehensive.test.ts',
   '<rootDir>/src/features/streaks/__tests__/service.test.ts',
-  '<rootDir>/src/session/services/__tests__/SessionLifecycleService.test.ts',
   '<rootDir>/src/features/economy/__tests__/service-comprehensive.test.ts',
   '<rootDir>/src/features/streaks/__tests__/streak-system.test.ts',
   '<rootDir>/src/performance/__tests__/PerformanceGate.test.ts',
@@ -74,7 +73,7 @@ module.exports = [
   '<rootDir>/src/hooks/__tests__/useStreakNarrative.test.ts',
   '<rootDir>/src/screens/__tests__/StreakFuneralScreen.test.tsx',
   '<rootDir>/src/navigation/__tests__/RootNavigator.test.tsx',
-  '<rootDir>/src/production/__tests__/Phase9ExitGate.test.ts',
+  '<rootDir>/src/production/__tests__/ExitGate.test.ts',
   // Phase 0 triage — stale/archived-feature tests, non-blocking:
   '<rootDir>/src/features/ai-coach/__tests__/service-enhanced.test.ts',
   '<rootDir>/src/features/economy/components/__tests__/PremiumGate.test.tsx',

@@ -115,14 +115,24 @@ export async function findMemoriesForRecommendation(rawInput: MemoryRecommendati
   });
 }
 
-export function buildColdStartEvidence(reason: ColdStartReason): RecommendationEvidence {
+export function buildColdStartEvidence(
+  reason: ColdStartReason,
+  lane?: string,
+): RecommendationEvidence {
   const validated = ColdStartReasonSchema.parse(reason);
-  return RecommendationEvidenceSchema.parse({ fallbackReason: validated });
+  return RecommendationEvidenceSchema.parse({
+    fallbackReason: validated,
+    source: 'cold_start',
+    lane: lane ?? 'minimal_normal',
+  });
 }
 
-export function buildMemoryEvidence(memories: FocusMemory[]): RecommendationEvidence {
+export function buildMemoryEvidence(
+  memories: FocusMemory[],
+  lane?: string,
+): RecommendationEvidence {
   if (memories.length === 0) {
-    return buildColdStartEvidence('insufficient_data');
+    return buildColdStartEvidence('insufficient_data', lane);
   }
   const avgConfidence = memories.reduce((sum, m) => sum + m.confidence, 0) / memories.length;
   return RecommendationEvidenceSchema.parse({
@@ -130,21 +140,25 @@ export function buildMemoryEvidence(memories: FocusMemory[]): RecommendationEvid
     evidenceSummary: memories.map((m) => m.summary).join('; '),
     confidence: Math.round(avgConfidence * 100) / 100,
     fallbackReason: undefined,
+    source: 'behavior',
+    lane: lane ?? 'minimal_normal',
   });
 }
 
 export function generateRecommendationEvidence(
   memories: FocusMemory[],
   sessionCount: number,
+  lane?: string,
   fallbackReason?: ColdStartReason,
 ): RecommendationEvidence {
+  const resolvedLane = lane ?? 'minimal_normal';
   if (sessionCount < 3) {
-    return buildColdStartEvidence('cold_start');
+    return buildColdStartEvidence('cold_start', resolvedLane);
   }
   if (fallbackReason) {
-    return buildColdStartEvidence(fallbackReason);
+    return buildColdStartEvidence(fallbackReason, resolvedLane);
   }
-  return buildMemoryEvidence(memories);
+  return buildMemoryEvidence(memories, resolvedLane);
 }
 
 export function canClaimStrongPattern(sessionCount: number): boolean {

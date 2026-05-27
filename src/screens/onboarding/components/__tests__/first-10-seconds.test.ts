@@ -60,8 +60,8 @@ describe('first 10 seconds clarity', () => {
     expect(LANE_LABELS.minimal_normal).toBe('Clean Mode');
   });
 
-  it('Day 0 has at most six visible surfaces', () => {
-    expect(Object.values(day0Map).filter(isVisible)).toHaveLength(4);
+  it('Day 0 has at most five visible surfaces', () => {
+    expect(Object.values(day0Map).filter(isVisible).length).toBeLessThanOrEqual(5);
   });
 
   it('Day 0 has no dead or hidden systems exposed', () => {

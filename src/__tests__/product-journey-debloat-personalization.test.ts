@@ -997,7 +997,7 @@ describe('Risk 5 — Privacy inventory ↔ app manifest', () => {
     const { REVIEW_NOTES } = require('../app-store/AppStoreSubmissionPack');
 
     expect(REVIEW_NOTES).toContain('Premium');
-    expect(REVIEW_NOTES).toContain('Focus Score');
+    expect(REVIEW_NOTES).toContain('completion screen with progress proof');
     expect(REVIEW_NOTES).toContain('Delete Account');
     expect(REVIEW_NOTES).toContain('No coins');
     expect(REVIEW_NOTES).toContain('No Day 0 paywall');

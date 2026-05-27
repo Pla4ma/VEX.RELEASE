@@ -40,3 +40,5 @@ data/jest-results.json
 # AI/config noise
 .trae/
 .replit
+
+.omo/

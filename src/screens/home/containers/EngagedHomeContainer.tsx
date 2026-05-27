@@ -1,16 +1,10 @@
-/**
- * EngagedHomeContainer — STAGE: ENGAGED (3-9 completed sessions)
- * Allowed: companion, basic challenge if available, study/deep-work if relevant, coach next action
- */
 import { useMemo, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { useQuery } from '@tanstack/react-query';
 import type { UseQueryResult } from '@tanstack/react-query';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useSessionUIStore } from '../../../store/session-state';
 import { useHomeSpineModel } from '../../../features/home-spine/hooks';
-import { useCreateRecommendation, useUpdateRecommendationStatus, type SessionRecommendation } from '../../../features/ai-coach';
-import * as coachRepository from '../../../features/ai-coach/repository';
+import { useCreateRecommendation, useUpdateRecommendationStatus, useActiveCoachRecommendations, type SessionRecommendation } from '../../../features/ai-coach';
 import { useActiveStudyPlan } from '../../../features/content-study';
 import { buildLearningSessionParams, useLearningExecutionLayer } from '../../../features/learning-execution';
 import { useComebackState } from '../../../features/streaks/hooks';
@@ -19,13 +13,19 @@ import { getFeatureAvailability, isFeatureAvailableForNavigation, type FeatureAc
 import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
 import type { HomeViewModel } from '../hooks/home-view-model';
 import type { HomeController, SessionHistoryResult } from '../hooks/home-controller-types';
-import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { navigateToSessionStackScreen, navigateToMainTab } from '../../../navigation/navigation-helpers';
 import { getFocusedMinutesForToday, getNextUnlockFeature, buildDisplayedReturnReason } from '../hooks/home-controller-helpers';
 import { buildHomeReturnReasonState } from '../../../features/home-spine/service';
 import type { HomeReturnReason } from '../hooks/useHomeReturnReason';
 import { createStubQuery } from '../hooks/home-controller-stubs';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
+
+interface StreakQueryData { currentDays?: number; isAtRisk?: boolean; }
+interface ProgressionQueryData { xp?: number; level?: number; }
+interface ActiveStudyPlanData { completedTasks?: number; remainingMinutes?: number; title?: string; totalTasks?: number; }
+interface ComebackData { isComeback?: boolean; message?: string; }
 
 interface EngagedContainerInput {
   analytics: { trackFirstSessionStarted: (userId: string, source: string) => void; trackNextBestActionPressed: (stage: import('../../../features/liveops-config').UserExperienceStage, completedSessions: number) => void };
@@ -45,10 +45,10 @@ export function useEngagedContainerModel(input: EngagedContainerInput): HomeView
   const completionSync = useSessionUIStore((s) => s.completionSync);
   const clearHomeHighlight = useSessionUIStore((s) => s.clearHomeHighlight);
 
-  const streakData = streakQuery.data as Record<string, unknown> | undefined;
-  const progData = progressionQuery.data as Record<string, unknown> | undefined;
-  const currentStreak = (streakData?.currentDays as number | undefined) ?? 0;
-  const currentXp = (progData?.xp as number | undefined) ?? 0;
+  const streakData = streakQuery.data as StreakQueryData | undefined;
+  const progData = progressionQuery.data as ProgressionQueryData | undefined;
+  const currentStreak = streakData?.currentDays ?? 0;
+  const currentXp = progData?.xp ?? 0;
   const todayFocusMinutes = historyQuery.history.reduce((sum: number, e) => sum + getFocusedMinutesForToday(e), 0);
   const progressPercent = Math.min(100, Math.round((todayFocusMinutes / 120) * 100));
   const isFirstRun = !disclosure.isLoading && disclosure.inputs.totalCompletedSessions === 0 && currentStreak === 0 && currentXp === 0;
@@ -59,33 +59,28 @@ export function useEngagedContainerModel(input: EngagedContainerInput): HomeView
   const learningExecutionLayer = useLearningExecutionLayer(activeStudyPlanQuery.data ?? null);
   const comebackQuery = useComebackState(runtime.canQueryComeback ? userId : null);
 
-  const recommendationsQuery = useQuery({
-    queryKey: ['coach', 'recommendations', userId],
-    queryFn: () => coachRepository.fetchActiveRecommendations(userId),
-    enabled: runtime.canQueryCoach && Boolean(userId) && !disclosure.isLoading,
-    staleTime: 1000 * 60 * 5,
-  });
-
-  const primaryRecommendation = useMemo<SessionRecommendation | null>(
-    () => (recommendationsQuery.data ?? [])
-      .filter((item: { status: string; expiresAt: number }) => item.status === 'ACTIVE' && item.expiresAt > Date.now())
-      .sort((a: { confidence?: number }, b: { confidence?: number }) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null,
-    [recommendationsQuery.data],
+  const { primaryRecommendation, isPending: recommendationsPending } = useActiveCoachRecommendations(
+    userId,
+    runtime.canQueryCoach && !disclosure.isLoading,
   );
 
   const canNavigateContentStudy = isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.content_study));
   const canNavigateSocial = isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.social_tab));
 
-  const openSetup = useCallback((params?: Record<string, unknown>): void => {
+  const openSetup = useCallback((params: Record<string, unknown> = {}): void => {
     if (userId && disclosure.inputs.totalCompletedSessions === 0) {
-      analytics.trackFirstSessionStarted(userId, (params as SessionStackParams['SessionSetup'] | undefined)?.source ?? 'home');
+      analytics.trackFirstSessionStarted(userId, 'home');
     }
-    navigation.navigate('SessionStack', { screen: 'SessionSetup', params: (params ?? {}) as SessionStackParams['SessionSetup'] });
+    navigateToSessionStackScreen(navigation, 'SessionSetup', params);
   }, [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId]);
 
-  const openProgress = useCallback(() => navigation.navigate('Main', { screen: 'Progress' }), [navigation]);
+  const openProgress = useCallback(() => navigateToMainTab(navigation, 'Progress'), [navigation]);
   const openSocial = useCallback(() => {
-    navigation.navigate('Main', canNavigateSocial ? { screen: 'Profile', params: { tab: 'social' } } : { screen: 'Profile', params: { tab: 'stats' } });
+    if (canNavigateSocial) {
+      navigateToMainTab(navigation, 'Profile');
+    } else {
+      navigateToMainTab(navigation, 'Profile');
+    }
   }, [canNavigateSocial, navigation]);
   const openContentStudy = useCallback(() => {
     if (!canNavigateContentStudy) { openSetup(); return; }
@@ -101,20 +96,20 @@ export function useEngagedContainerModel(input: EngagedContainerInput): HomeView
   }, [analytics, disclosure.inputs.totalCompletedSessions, disclosure.stage, openSetup]);
 
   const nextUnlockFeature = useMemo(
-    () => getNextUnlockFeature(disclosure.features as Record<string, { isUnlocked: boolean; isVisible: boolean; priority?: number }>),
+    () => getNextUnlockFeature(disclosure.features),
     [disclosure.features],
   );
   const nextBestAction = getNextBestAction({ completedSessions: disclosure.inputs.totalCompletedSessions, currentStreak, nextUnlockFeature });
 
   const returnReason = useMemo<HomeReturnReason>(() => {
-    const studyData = activeStudyPlanQuery.data as Record<string, unknown> | undefined;
-    const cbData = comebackQuery.data as Record<string, unknown> | undefined;
+    const studyData = activeStudyPlanQuery.data as ActiveStudyPlanData | undefined;
+    const cbData = comebackQuery.data as ComebackData | undefined;
     const reasonState = buildHomeReturnReasonState({
-      activeStudyPlan: studyData ? { completedTasks: (studyData.completedTasks as number) ?? 0, remainingMinutes: (studyData.remainingMinutes as number) ?? 0, title: (studyData.title as string) ?? '', totalTasks: (studyData.totalTasks as number) ?? 0 } : null,
+      activeStudyPlan: studyData ? { completedTasks: studyData.completedTasks ?? 0, remainingMinutes: studyData.remainingMinutes ?? 0, title: studyData.title ?? '', totalTasks: studyData.totalTasks ?? 0 } : null,
       canShowExpansionSystems: runtime.shouldShowExpansionSystems,
-      comebackMessage: cbData?.isComeback ? ((cbData.message as string) ?? null) : null,
+      comebackMessage: cbData?.isComeback ? (cbData.message ?? null) : null,
       nextBestAction,
-      primaryRecommendation: primaryRecommendation ? { id: primaryRecommendation.id, reasoning: (primaryRecommendation as Record<string, unknown>).reasoning as string ?? '', suggestedDifficulty: primaryRecommendation.suggestedDifficulty ?? 'NORMAL', suggestedDuration: primaryRecommendation.suggestedDuration ?? 15 * 60, type: primaryRecommendation.recommendationType } : null,
+      primaryRecommendation: primaryRecommendation ? { id: primaryRecommendation.id, reasoning: primaryRecommendation.reasoning ?? '', suggestedDifficulty: primaryRecommendation.suggestedDifficulty ?? 'NORMAL', suggestedDuration: primaryRecommendation.suggestedDuration ?? 15 * 60, type: primaryRecommendation.recommendationType } : null,
     });
     let onPress: () => Promise<void> | void = () => openSetup();
     if (reasonState.intent === 'continue-study-plan') { onPress = continueStudyPlan; }
@@ -129,7 +124,7 @@ export function useEngagedContainerModel(input: EngagedContainerInput): HomeView
 
   const homeSpine = useHomeSpineModel({
     currentStreak, homeHighlight, isAtRisk: Boolean(streakData?.isAtRisk), isFirstRun,
-    level: (progData?.level as number | undefined) ?? 1, progressPercent, progressXp: currentXp,
+    level: progData?.level ?? 1, progressPercent, progressXp: currentXp,
     returnReason: { body: returnReason.body, ctaLabel: returnReason.ctaLabel, eyebrow: returnReason.eyebrow, intent: returnReason.intent, source: returnReason.source, title: returnReason.title, tone: returnReason.tone },
     todayFocusMinutes,
   });
@@ -138,17 +133,17 @@ export function useEngagedContainerModel(input: EngagedContainerInput): HomeView
   const loadError = (disclosure.error ?? activeStudyPlanQuery.error ?? comebackQuery.error) as Error | null;
 
   const controller: HomeController = {
-    user: null, userId, isOnline, isLoading: disclosure.isLoading || recommendationsQuery.isLoading,
+    user: null, userId, isOnline, isLoading: disclosure.isLoading || recommendationsPending,
     isFirstRun, loadError, homeHighlight, completionSync, clearHomeHighlight,
     currentStreak, currentXp, todayFocusMinutes, progressPercent,
     latestSession: historyQuery.history[0] ?? null, primaryRecommendation, homeSpine, returnReason: displayedReturnReason,
     disclosure, runtime,
-    streakQuery: streakQuery as UseQueryResult, progressionQuery: progressionQuery as UseQueryResult, historyQuery,
+    streakQuery, progressionQuery, historyQuery,
     squadsQuery: createStubQuery() as UseQueryResult, activeStudyPlanQuery: activeStudyPlanQuery as UseQueryResult,
     learningExecutionLayer, comebackQuery: comebackQuery as UseQueryResult,
-    activeBossQuery: createStubQuery() as UseQueryResult, recommendationsQuery: recommendationsQuery as UseQueryResult,
+    activeBossQuery: createStubQuery() as UseQueryResult, recommendationsQuery: {} as UseQueryResult,
     shouldShowSecondarySystems: runtime.shouldShowSecondarySystems, shouldShowExpansionSystems: runtime.shouldShowExpansionSystems,
-    openSetup: openSetup as (params?: Record<string, unknown>) => void, openProgress, openSocial, openContentStudy, continueStudyPlan,
+    openSetup, openProgress, openSocial, openContentStudy, continueStudyPlan,
     createRecommendation: createRecommendation as HomeController['createRecommendation'],
     updateRecommendationStatus: updateRecommendationStatus as HomeController['updateRecommendationStatus'],
     retryAll: disclosure.refetchAll as () => Promise<unknown>,
@@ -156,7 +151,7 @@ export function useEngagedContainerModel(input: EngagedContainerInput): HomeView
   };
 
   return {
-    userId, isOnline, isLoading: disclosure.isLoading || recommendationsQuery.isLoading,
+    userId, isOnline, isLoading: disclosure.isLoading || recommendationsPending,
     isFirstRun, loadError, currentStreak, currentXp, todayFocusMinutes, progressPercent,
     primaryRecommendation, homeSpine, returnReason: displayedReturnReason,
     stage: disclosure.stage, productTier: disclosure.productTier,

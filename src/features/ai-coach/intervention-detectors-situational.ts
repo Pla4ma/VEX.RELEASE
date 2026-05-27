@@ -28,7 +28,7 @@ export function detectDistraction(input: DistractionDetectedInput): {
   let technique: 'REFocus' | 'BREAK' | 'END_SESSION' = 'REFocus';
   if (severity === 'SEVERE') technique = 'END_SESSION';
   else if (severity === 'MODERATE') technique = 'BREAK';
-  return { detected: true, severity, intervention: { content: `I noticed your focus wandering — ${pausesInLast10Min} pauses recently. Want to try the REFocus technique, take a short break, or end the session early?`, tone: 'supportive', quickResponses: ['Try REFocus', 'Take break', 'End early', 'Push through'] }, technique };
+  return { detected: true, severity, intervention: { content: `Your session shows ${pausesInLast10Min} pauses recently — focus may be drifting. Want to try the REFocus technique, take a short break, or end the session early?`, tone: 'supportive', quickResponses: ['Try REFocus', 'Take break', 'End early', 'Push through'] }, technique };
 }
 
 export function detectOptimalBreak(input: OptimalBreakInput): {

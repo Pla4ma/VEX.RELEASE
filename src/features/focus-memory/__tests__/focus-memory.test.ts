@@ -134,9 +134,11 @@ describe('FocusMemory service', () => {
 
   // Test 3: recommendation cites memory or cold-start
   it('generates cold-start evidence when sessionCount < 3', () => {
-    const evidence = generateRecommendationEvidence([], 2);
+    const evidence = generateRecommendationEvidence([], 2, 'student');
     expect(evidence.fallbackReason).toBe('cold_start');
     expect(evidence.memoryIds).toBeUndefined();
+    expect(evidence.source).toBe('cold_start');
+    expect(evidence.lane).toBe('student');
   });
 
   it('generates memory-backed evidence when memories exist and sessionCount >= 3', async () => {
@@ -151,16 +153,18 @@ describe('FocusMemory service', () => {
     await acceptMemory(memory.id, 'user-2');
     const memories = await findMemoriesForRecommendation({ userId: 'user-2' });
 
-    const evidence = generateRecommendationEvidence(memories, 5);
+    const evidence = generateRecommendationEvidence(memories, 5, 'game_like');
     expect(evidence.fallbackReason).toBeUndefined();
     expect(evidence.memoryIds).toContain(memory.id);
     expect(evidence.confidence).toBe(0.85);
+    expect(evidence.lane).toBe('game_like');
   });
 
   it('builds cold-start evidence with explicit reason', () => {
-    const evidence = buildColdStartEvidence('insufficient_data');
+    const evidence = buildColdStartEvidence('insufficient_data', 'minimal_normal');
     expect(evidence.fallbackReason).toBe('insufficient_data');
     expect(evidence.memoryIds).toBeUndefined();
+    expect(evidence.source).toBe('cold_start');
   });
 
   // Test 4: low-confidence memory cannot trigger aggressive claims
@@ -321,9 +325,10 @@ describe('FocusMemory service', () => {
   });
 
   it('generateRecommendationEvidence with explicit fallback reason', () => {
-    const evidence = generateRecommendationEvidence([], 5, 'user_override');
+    const evidence = generateRecommendationEvidence([], 5, 'deep_creative', 'user_override');
     expect(evidence.fallbackReason).toBe('user_override');
     expect(evidence.memoryIds).toBeUndefined();
+    expect(evidence.lane).toBe('deep_creative');
   });
 
   it('buildMemoryEvidence with multiple memories computes avg confidence', async () => {

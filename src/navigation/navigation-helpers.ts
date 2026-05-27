@@ -24,11 +24,8 @@ export function navigateToRootScreen(
   params?: RootStackParams[RootStackRoute],
 ): void {
   debug.info("Navigating to root screen: %s", route);
-  // Safe: widen route to string to bypass React Navigation's overload
-  // resolution limitation with union route types. The function signature
-  // guarantees route is a valid key of RootStackParams.
-  if (params) {
-    navigation.navigate(route as string, params as object);
+  if (params !== undefined) {
+    navigation.navigate(route as string, params as Record<string, unknown>);
   } else {
     navigation.navigate(route as string);
   }
@@ -55,10 +52,8 @@ export function navigateToMainStackScreen<Route extends MainStackRoute>(
   params?: MainStackParams[Route],
 ): void {
   debug.info("Navigating to main stack screen: %s", route);
-  // Safe: widen to string/object for React Navigation's untyped overload.
-  // Generic constraint guarantees route is valid and params match.
-  if (params) {
-    navigation.navigate(route as string, params as object);
+  if (params !== undefined) {
+    navigation.navigate(route as string, params as Record<string, unknown>);
   } else {
     navigation.navigate(route as string);
   }

@@ -8,6 +8,7 @@ import type { ActiveStudyPlan } from '../../../features/content-study';
 import { HomeSecondaryRail } from './HomeSecondaryRail';
 import { HomeFocusScore } from './HomeFocusScore';
 import { HomeContextualCards } from './HomeContextualCards';
+import { HomeMemoryInsight } from './HomeMemoryInsight';
 import type { ChallengeItem } from '../../../features/home-spine/components';
 import type { useHomeData } from '../hooks/useHomeData';
 import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
@@ -72,6 +73,8 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
 
   return (
     <>
+      <HomeMemoryInsight userId={controller.userId} surfaceMap={surfaceMap} />
+
       {showFocusScore ? (
         <HomeFocusScore onPress={handleFocusScorePress} />
       ) : null}

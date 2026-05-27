@@ -38,8 +38,8 @@ describe('Phase 17 — Day 3 memory gating', () => {
     expect(map(3, 2, 'engaged').memory_insight).toBe('tiny_tease');
   });
 
-  it('memory_insight only appears when coach interactions >= 2', () => {
-    expect(map(5, 0, 'activating').memory_insight).toBe('hidden');
+  it('memory_insight appears at >= 3 sessions regardless of coach interactions', () => {
+    expect(map(5, 0, 'activating').memory_insight).toBe('secondary');
   });
 
   it('no fake memory — gated by real session count, not synthetic coach interactions', () => {

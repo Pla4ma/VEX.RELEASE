@@ -5,8 +5,8 @@ import {
   transitionState,
   checkAutoTransitions,
   StateTransitionError,
-} from '../service/coach-state-machine';
-import type { CoachSignals } from '../service/coach-state-machine';
+} from '../services/coach-state-machine';
+import type { CoachSignals } from '../services/coach-state-machine';
 import type { BehaviorProfile, CoachState } from '../schemas';
 import * as repository from '../repository';
 

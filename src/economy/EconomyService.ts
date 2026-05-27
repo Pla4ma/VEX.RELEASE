@@ -1,10 +1,17 @@
+/**
+ * Economy service wrapper — thin legacy layer over features/economy stubs.
+ *
+ * Active runtime must NOT depend on this module for wallet/shop/wagers.
+ * This file kept for migration compatibility only (category D).
+ *
+ * All economy functions return zero — real money/gems/gacha logic archived.
+ */
 import {
   getOrCreateWallet,
   getWalletSummary,
   getBalance,
   hasEnoughBalance,
   addCurrency,
-  spendCurrency as rawSpendCurrency,
 } from '../features/economy/service';
 
 export interface EconomyServiceInstance {
@@ -13,7 +20,7 @@ export interface EconomyServiceInstance {
   getBalance: typeof getBalance;
   hasEnoughBalance: typeof hasEnoughBalance;
   addCurrency: typeof addCurrency;
-  spendCurrency: (userId: string, currency: string, amount: number, tag: string) => Promise<unknown>;
+  spendCurrency: () => Promise<false>;
 }
 
 let instance: EconomyServiceInstance | null = null;

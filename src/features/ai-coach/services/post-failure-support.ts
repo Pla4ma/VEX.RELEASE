@@ -1,6 +1,6 @@
 import { getOrCreateMemory, getMemoryBasedSuggestions, type CoachMemory } from './coach-memory';
-import { generateMessage } from '../service/message-generator';
-import type { CoachStyle } from '../service/personality-templates';
+import { generateMessage } from './message-generator';
+import type { CoachStyle } from './personality-templates';
 import { capture } from '@/shared/analytics';
 import { CoachEvents } from '@/shared/analytics/analytics-events';
 import { createDebugger } from '@/utils/debug';

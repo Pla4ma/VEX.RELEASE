@@ -39,6 +39,7 @@ export function decideHomeSurfaces(input: SurfaceDecisionInput): HomeSurfaceMap 
   map.coach_presence = b.coachInteractions > 0 ? 'secondary' : 'tiny_tease';
   map.progress_proof = 'secondary';
   map.focus_score = isNew ? 'tiny_tease' : 'secondary';
+  map.memory_insight = b.totalCompletedSessions >= 3 ? 'secondary' : 'hidden';
   if (!isNew) {
     map.progress_detail = isEngaged ? 'secondary' : 'secondary';
   }

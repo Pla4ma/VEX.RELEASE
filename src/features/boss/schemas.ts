@@ -2,7 +2,11 @@ import { z } from 'zod';
 
 export const BossRewardTypeSchema = z.enum(['XP']);
 export const BossEncounterStatusSchema = z.enum(['ACTIVE']);
-export const BossTemplateSchema = z.object({ id: z.string(), name: z.string(), tier: z.number(), baseHealth: z.number(), minLevel: z.number() }).partial();
+export const BossTemplateSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  tier: z.number(),
+}).partial();
 export const BossEncounterSummarySchema = z.object({}).partial();
 
 export type BossEncounterSummary = z.infer<typeof BossEncounterSummarySchema> | null;

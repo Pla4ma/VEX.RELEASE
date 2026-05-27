@@ -28,7 +28,7 @@ interface BuildPresenceInput {
   memorySummary: CoachPresenceMemorySummary;
   motivationStyle: CoachPresenceMotivationStyle;
   progress: CoachPresenceProgressInput;
-  surface: 'HOME' | 'SESSION_SETUP' | 'CHAT';
+  surface: 'HOME' | 'SESSION_SETUP' | 'CHAT' | 'RESCUE' | 'PREMIUM';
 }
 interface CompletionPresenceInput {
   featureAvailability: PresenceAvailability;
@@ -81,18 +81,37 @@ export function buildCoachPresence(input: BuildPresenceInput): CoachPresence {
     progress.totalSessions,
     memorySummary.syncAvailable,
   );
+  const premiumMoment =
+    input.surface === 'PREMIUM'
+      ? 'session_value'
+      : input.surface === 'RESCUE'
+        ? 'none'
+        : progress.totalSessions >= 5
+          ? 'soft_tease'
+          : 'none';
+
+  const sessionMode =
+    input.surface === 'RESCUE' ? 'active_risk' : 'inactive';
+
+  const completionContext =
+    input.surface === 'RESCUE'
+      ? 'comeback'
+      : input.surface === 'PREMIUM'
+        ? null
+        : null;
+
   const resolved = getCoachPresenceMessage({
     aiAvailable: memorySummary.syncAvailable,
     bossIntensity: null,
-    comebackState: null,
-    completionContext: null,
+    comebackState: input.surface === 'RESCUE' ? 'missed_1_day' : null,
+    completionContext,
     firstWeekStage: progress.totalSessions === 0 ? 'day_0' : null,
     latestSession: null,
     memoryConfidence,
     motivationStyle,
-    premiumMoment: progress.totalSessions >= 5 ? 'soft_tease' : 'none',
+    premiumMoment,
     primaryGoal,
-    sessionMode: 'inactive',
+    sessionMode,
     studyLayerLabel: primaryGoal === 'study' ? 'Study' : null,
   });
   const intent = resolveCoachActionIntent({

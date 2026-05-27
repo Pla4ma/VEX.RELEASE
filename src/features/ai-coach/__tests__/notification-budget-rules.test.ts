@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from '@jest/globals';
 import {
   canSendNotification,
+  clearBudgetStore,
   createMockNotificationBudget,
   createMockNotificationRequest,
   sendNotificationWithBudget,
@@ -14,6 +15,7 @@ describe('Notification budget rules', () => {
 
   beforeEach(() => {
     jest.useRealTimers();
+    clearBudgetStore();
     mockBudget = createMockNotificationBudget('user-123');
     mockRequest = createMockNotificationRequest('user-123');
   });

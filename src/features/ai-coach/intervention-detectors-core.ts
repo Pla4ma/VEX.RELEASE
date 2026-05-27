@@ -23,7 +23,7 @@ export function detectPlateau(input: PlateauInput): {
   let severity: 'MILD' | 'MODERATE' | 'SEVERE' = 'MILD';
   if (dropPercent > 60) severity = 'SEVERE';
   else if (dropPercent > 45) severity = 'MODERATE';
-  const intervention: InterventionMessage = { content: `You've been in a groove, but I've noticed your XP growth slowed ${dropPercent.toFixed(0)}% over the last week. Try a longer session today — I think you're capable of more. A 60-minute deep focus could break through.`, tone: 'motivational', quickResponses: ["Let's do 60 min", 'Start with 30', "What's my pattern?", 'Not today'] };
+  const intervention: InterventionMessage = { content: `Your XP growth has slowed ${dropPercent.toFixed(0)}% over the last week based on your session data. Try a longer session today — a 60-minute deep focus could break through your current rhythm.`, tone: 'motivational', quickResponses: ["Let's do 60 min", 'Start with 30', "What's my pattern?", 'Not today'] };
   return { detected: true, severity, intervention, suggestedSessionDuration: 60 };
 }
 

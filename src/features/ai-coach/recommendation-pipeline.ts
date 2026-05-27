@@ -191,7 +191,11 @@ export function attachRecommendationEvidence(
     }
     return {
       ...rec,
-      evidence: { fallbackReason: sessionCount < 3 ? 'cold_start' as const : 'insufficient_data' as const },
+      evidence: {
+        fallbackReason: (sessionCount < 3 ? 'cold_start' : 'insufficient_data'),
+        source: 'cold_start',
+        lane: 'minimal_normal',
+      } as RecommendationEvidence,
     };
   });
 }

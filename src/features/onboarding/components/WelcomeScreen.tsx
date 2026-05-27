@@ -143,7 +143,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
               textAlign="center"
               fontWeight="800"
             >
-              One focused session.{'\n'}Rewarding enough{'\n'}to come back tomorrow.
+              VEX changes based{'\n'}on how you work.
             </Text>
           </Box>
         </Animated.View>
@@ -159,14 +159,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
               color="text.secondary"
               textAlign="center"
             >
-              Your Focus Score starts at 550.
-            </Text>
-            <Text
-              variant="body"
-              color="text.tertiary"
-              textAlign="center"
-            >
-              Every session builds proof of your consistency. Start above average and grow from there.
+              Answer a few questions, start one focused session, and VEX unlocks the system your brain needs.
             </Text>
           </Box>
         </Animated.View>

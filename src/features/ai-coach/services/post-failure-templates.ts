@@ -1,4 +1,4 @@
-import type { CoachStyle } from '../service/personality-templates';
+import type { CoachStyle } from './personality-templates';
 
 export const DAY1_EMPATHY_TEMPLATES: Record<CoachStyle, string[]> = {
   DRILL_SERGEANT: [
@@ -6,7 +6,7 @@ export const DAY1_EMPATHY_TEMPLATES: Record<CoachStyle, string[]> = {
     'SETBACKS HAPPEN. Even to the best. Your {{streakDaysBeforeBreak}}-day streak proves you have what it takes. Now we REBUILD.',
   ],
   FRIEND: [
-    'Hey, I noticed your streak ended. That really sucks — I know you were working hard on it. Want to talk about what happened? 💙',
+    'Hey, your streak ended. That really sucks — I know you were working hard on it. Want to talk about what happened? 💙',
     '{{streakDaysBeforeBreak}} days was amazing, and I know you can do it again. No judgment here — just want to help you get back on track. 🤗',
   ],
   MENTOR: [

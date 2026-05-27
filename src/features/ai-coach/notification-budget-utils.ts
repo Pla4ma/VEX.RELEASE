@@ -72,3 +72,7 @@ export function getStoredNotificationBudget(userId: string): NotificationBudget 
 export function storeNotificationBudget(budget: NotificationBudget): void {
   budgetStore.set(budget.userId, budget);
 }
+
+export function clearBudgetStore(): void {
+  budgetStore.clear();
+}

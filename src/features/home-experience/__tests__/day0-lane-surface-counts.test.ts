@@ -74,48 +74,48 @@ function day0Map(overrides: {
 describe('Phase 3 — Day 0 lane surface counts', () => {
   // ─── Tests 1-4: Each lane has <= 6 surfaces ───
   describe('Day 0 surface count per lane', () => {
-    it('Study Home Day 0 <= 6 surfaces', () => {
+    it('Study Home Day 0 <= 5 surfaces', () => {
       const map = day0Map({
         motivationStyle: 'study_focused',
         primaryGoal: 'study',
         laneProfile: { primaryLane: 'student' },
       });
-      expect(visibleCount(map)).toBeLessThanOrEqual(6);
+      expect(visibleCount(map)).toBeLessThanOrEqual(5);
       // Start session + coach + unlock + study_layer are expected
       expect(map.start_session).toBe('primary');
       expect(map.study_os).toMatch(/hidden|blocked/);
     });
 
-    it('Run Home Day 0 <= 6 surfaces', () => {
+    it('Run Home Day 0 <= 5 surfaces', () => {
       const map = day0Map({
         motivationStyle: 'game_like',
         gamificationIntensity: 'strong',
         laneProfile: { primaryLane: 'game_like' },
       });
-      expect(visibleCount(map)).toBeLessThanOrEqual(6);
+      expect(visibleCount(map)).toBeLessThanOrEqual(5);
       expect(map.start_session).toBe('primary');
       expect(map.run_board).toMatch(/hidden|blocked/);
     });
 
-    it('Project Home Day 0 <= 6 surfaces', () => {
+    it('Project Home Day 0 <= 5 surfaces', () => {
       const map = day0Map({
         motivationStyle: 'coach_led',
         primaryGoal: 'creative',
         laneProfile: { primaryLane: 'deep_creative' },
       });
-      expect(visibleCount(map)).toBeLessThanOrEqual(6);
+      expect(visibleCount(map)).toBeLessThanOrEqual(5);
       expect(map.start_session).toBe('primary');
       expect(map.project_thread).toMatch(/hidden|blocked/);
     });
 
-    it('Clean Home Day 0 <= 6 surfaces', () => {
+    it('Clean Home Day 0 <= 5 surfaces', () => {
       const map = day0Map({
         motivationStyle: 'calm',
         gamificationIntensity: 'minimal',
         laneProfile: { primaryLane: 'minimal_normal' },
       });
       const count = visibleCount(map);
-      expect(count).toBeLessThanOrEqual(6);
+      expect(count).toBeLessThanOrEqual(5);
       // Calm should still have at least start_session + coach + unlock
       expect(count).toBeGreaterThanOrEqual(3);
       expect(map.start_session).toBe('primary');

@@ -169,7 +169,7 @@ export class RewardAdapter {
     });
     if (previousStreak >= 7) {
       await this.rewardService.grantReward(
-        "CURRENCY",
+        "XP",
         "COMEBACK_BONUS",
         { baseAmount: 100, streakMultiplier: 1, levelMultiplier: 1 },
         { previousStreak, sessionId },
@@ -194,3 +194,4 @@ export function getRewardAdapter(): RewardAdapter {
   }
   return adapterInstance;
 }
+

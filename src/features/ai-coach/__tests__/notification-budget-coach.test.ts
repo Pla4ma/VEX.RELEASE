@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from '@jest/globals';
 import {
   canSendNotification,
+  clearBudgetStore,
   createMockNotificationBudget,
   createMockNotificationRequest,
   getNotificationBudgetStatus,
@@ -19,6 +20,8 @@ function mockCurrentHour(hour: number): void {
 describe('Notification budget coach and integration flows', () => {
   beforeEach(() => {
     jest.useRealTimers();
+    jest.restoreAllMocks();
+    clearBudgetStore();
   });
 
   it('sends specific coach notifications and suppresses generic login reminders', async () => {
@@ -115,6 +118,7 @@ describe('maxDailyForLane', () => {
 describe('Clean lane notification budget enforcement', () => {
   beforeEach(() => {
     jest.useRealTimers();
+    clearBudgetStore();
   });
 
   it('Clean lane sendCoachNotification respects 1/day budget', async () => {

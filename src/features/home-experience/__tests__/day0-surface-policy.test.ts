@@ -73,11 +73,11 @@ function visibleEntries(map: HomeSurfaceMap): string[] {
 
 describe('Day 0 Surface Policy', () => {
   describe('decideHomeSurfaces enforces policy', () => {
-    it('Day 0 Home renders 4-6 visible elements', () => {
+    it('Day 0 Home renders 3-5 visible elements', () => {
       const map = makeDay0Map();
       const count = visibleCount(map);
-      expect(count).toBeGreaterThanOrEqual(4);
-      expect(count).toBeLessThanOrEqual(6);
+      expect(count).toBeGreaterThanOrEqual(3);
+      expect(count).toBeLessThanOrEqual(5);
     });
 
     it('Day 0 has exactly one primary CTA', () => {

@@ -6,8 +6,8 @@ export function generateBurnoutMessage(
   persona: CoachPersona = 'MENTOR',
 ): string {
   const messages: Record<string, string> = {
-    MENTOR: `You've completed ${sessionsLast24h} sessions in 24 hours — impressive dedication. But I've noticed your quality scores averaging ${avgQuality}%. To maintain your streak long-term, consider a shorter, focused session today. Quality over quantity.`,
-    CHEERLEADER: `Whoa superstar! 🔥 ${sessionsLast24h} sessions?! You're ON FIRE! But I'm seeing your quality dip to ${avgQuality}%. Let's keep that streak strong with a quick 15-min power session. You've got this!`,
+    MENTOR: `You've completed ${sessionsLast24h} sessions in 24 hours — impressive dedication. Quality scores are averaging ${avgQuality}%. To maintain your streak long-term, consider a shorter, focused session today. Quality over quantity.`,
+    CHEERLEADER: `Whoa superstar! 🔥 ${sessionsLast24h} sessions?! You're ON FIRE! Quality trending at ${avgQuality}%. Let's keep that streak strong with a quick 15-min power session. You've got this!`,
     DRILL_SERGEANT: `Listen up. ${sessionsLast24h} sessions shows discipline, but ${avgQuality}% quality is UNACCEPTABLE. Your streak is at risk. Take a 15-minute focused session. NOW. Quality before ego.`,
   };
 
@@ -26,7 +26,7 @@ export function generatePlateauMessage(
 
   const messages: Record<string, string> = {
     MENTOR: `Your XP growth has slowed ${dropPercent.toFixed(0)}% this week. ${trendText} You've hit a plateau — this is normal. To break through, try a longer session at your peak focus time. Growth happens outside comfort zones.`,
-    CHEERLEADER: `Hey champ! 🏆 I see your XP growth dipped ${dropPercent.toFixed(0)}%. No worries — plateaus happen! ${trendText} Let's CRUSH this with a 60-min powerhouse session. You're stronger than this plateau! 💪`,
+    CHEERLEADER: `Hey champ! 🏆 XP growth dipped ${dropPercent.toFixed(0)}% this week. No worries — plateaus happen! ${trendText} Let's CRUSH this with a 60-min powerhouse session. You're stronger than this plateau! 💪`,
     DRILL_SERGEANT: `Your numbers are DROPPING. ${dropPercent.toFixed(0)}% decline. ${trendText} This is complacency. You think you're working hard? You're coasting. 60 minutes. Today. NO EXCUSES.`,
   };
 

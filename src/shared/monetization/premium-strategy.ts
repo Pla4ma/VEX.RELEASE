@@ -34,17 +34,17 @@ const FREE_FEATURES = [
 ];
 
 const PREMIUM_FEATURES = [
-  'Deep Coach Memory - remembers patterns, best focus times, comeback style',
-  'Advanced Study / Deep Work OS - content generation, review loops, smart actions',
-  'Personal Progress Intelligence - weekly execution report and rhythm insights',
-  'Memory Console - editable long memory with source, confidence, expiry',
-  'Calendar Intelligence - focus windows, quiet planning, deadline-aware scheduling',
+  'Deep Coach Memory — learns your patterns from real session evidence (not fabricated)',
+  'Advanced Study / Deep Work OS — content generation, review loops, smart actions',
+  'Personal Progress Intelligence — weekly execution insights built from your rhythm',
+  'Memory Console — view, edit, and manage memory observations with source and confidence',
+  'Calendar Intelligence — focus windows, quiet planning, deadline-aware scheduling',
 ];
 
 const FREE_VS_PRO_MATRIX: Array<{ free: string; pro: string }> = [
-  { free: 'Start and complete sessions', pro: 'Deeper personalization from real behavior' },
-  { free: 'Basic rhythm and progress', pro: 'Weekly execution report with rhythm and consistency map' },
-  { free: 'Daily Coach Presence reflection', pro: 'Deep Coach Memory remembers patterns and best times' },
+  { free: 'Start and complete sessions', pro: 'Deeper personalization from real session evidence' },
+  { free: 'Basic rhythm and progress', pro: 'Weekly execution insights with rhythm and consistency map' },
+  { free: 'Daily Coach Presence reflection', pro: 'Coach Memory learns from your patterns (evidence-backed)' },
   { free: 'Basic Study / Deep Work entry', pro: 'Imports, review loops, quizzes, and project breakdowns' },
   { free: 'Rescue mode', pro: 'Personalized recovery timing and weekly planning' },
 ];

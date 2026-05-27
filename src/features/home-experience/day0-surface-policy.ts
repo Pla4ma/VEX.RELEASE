@@ -20,7 +20,7 @@ export const Day0PolicyLimitSchema = z.object({
 export type Day0PolicyLimits = z.infer<typeof Day0PolicyLimitSchema>;
 
 export const DEFAULT_DAY0_POLICY: Day0PolicyLimits = {
-  maxVisibleSurfaces: 6,
+  maxVisibleSurfaces: 5,
   maxPrimaryCta: 1,
   maxSpotlights: 1,
   maxTeasers: 3,

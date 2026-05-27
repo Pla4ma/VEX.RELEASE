@@ -1,5 +1,13 @@
 import { create } from 'zustand';
 
+/**
+ * Client-only UI state (Zustand — not server state).
+ * TanStack Query owns server state. This store owns transient UI flags only:
+ * homeHighlight — temporary banner state after session completion
+ * completionSync — sync status for session completion ledger
+ * comebackDismissed — one-shot dismissal flag
+ */
+
 export interface HomeHighlight {
   title: string;
   message: string;

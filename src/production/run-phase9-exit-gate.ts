@@ -5,7 +5,7 @@
  * to ensure all production hardening systems are ready.
  */
 
-import { Phase9ExitGate } from './Phase9ExitGate.js';
+import { Phase9ExitGate } from './ExitGate.js';
 import { createDebugger } from '../utils/debug';
 
 const debug = createDebugger('phase9-exit-gate');

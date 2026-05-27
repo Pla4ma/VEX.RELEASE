@@ -37,7 +37,7 @@ function getCoachCue(step: number): { title: string; body: string } {
       body: 'Pick the honest answer. The app adapts the first session, study surfaces, and reminders from this setup.',
     },
     {
-      title: 'This shapes your daily command center.',
+      title: 'This shapes how VEX adapts to you.',
       body: 'VEX will highlight the next best action instead of making you hunt through menus.',
     },
     fallback,

@@ -35,6 +35,7 @@ export {
 export {
   createMockNotificationBudget,
   createMockNotificationRequest,
+  clearBudgetStore,
 } from './notification-budget-utils';
 
 export async function canSendNotification(

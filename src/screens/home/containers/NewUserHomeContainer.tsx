@@ -1,21 +1,3 @@
-/**
- * NewUserHomeContainer
- *
- * STAGE: NEW_USER (0 completed sessions)
- *
- * Allowed hooks:
- *   - useStreakSummary, useProgressionSummary, useSessionHistory
- *   - useHomeSpineModel, getNextBestAction
- *
- * NEVER imports or calls:
- *   - useActiveBoss, useBossTemplates, useUserSquads
- *   - useActiveStudyPlan, useLearningExecutionLayer
- *   - useCreateRecommendation, useUpdateRecommendationStatus
- *   - advanced coach recommendation queries
- *   - challenge hooks, weekly quest hooks, daily dungeon hooks
- *   - economy/wallet hooks, battle pass hooks, shop/inventory hooks
- */
-
 import { useMemo, useCallback } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -26,7 +8,8 @@ import type { FeatureAccessResult } from '../../../features/liveops-config';
 import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
 import type { HomeViewModel } from '../hooks/home-view-model';
 import type { HomeController } from '../hooks/home-controller-types';
-import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
+import type { ExtendedRootStackParams } from '../../../navigation/types';
+import { navigateToSessionStackScreen, navigateToMainTab } from '../../../navigation/navigation-helpers';
 import { getFocusedMinutesForToday, getNextUnlockFeature } from '../hooks/home-controller-helpers';
 import type { UseQueryResult } from '@tanstack/react-query';
 import {
@@ -38,6 +21,9 @@ import {
 } from '../hooks/home-controller-stubs';
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
+
+interface StreakQueryData { currentDays?: number; isAtRisk?: boolean; }
+interface ProgressionQueryData { xp?: number; level?: number; }
 
 export interface NewUserContainerInput {
   analytics: ReturnType<typeof import('../../../features/liveops-config').useDisclosureAnalytics>;
@@ -60,10 +46,10 @@ export function useNewUserContainerModel(input: NewUserContainerInput): HomeView
   const completionSync = useSessionUIStore((state) => state.completionSync);
   const clearHomeHighlight = useSessionUIStore((state) => state.clearHomeHighlight);
 
-  const streakData = streakQuery.data as Record<string, unknown> | undefined;
-  const progData = progressionQuery.data as Record<string, unknown> | undefined;
-  const currentStreak = (streakData?.currentDays as number | undefined) ?? 0;
-  const currentXp = (progData?.xp as number | undefined) ?? 0;
+  const streakData = streakQuery.data as StreakQueryData | undefined;
+  const progData = progressionQuery.data as ProgressionQueryData | undefined;
+  const currentStreak = streakData?.currentDays ?? 0;
+  const currentXp = progData?.xp ?? 0;
   const todayFocusMinutes = historyQuery.history.reduce(
     (sum: number, entry) => sum + getFocusedMinutesForToday(entry),
     0,
@@ -78,29 +64,23 @@ export function useNewUserContainerModel(input: NewUserContainerInput): HomeView
   const stubActions = useMemo(() => stubNavigationActions(), []);
 
   const openSetup = useCallback(
-    (params?: Record<string, unknown>): void => {
+    (params: Record<string, unknown> = {}): void => {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
-        analytics.trackFirstSessionStarted(
-          userId,
-          (params as SessionStackParams['SessionSetup'] | undefined)?.source ?? 'home',
-        );
+        analytics.trackFirstSessionStarted(userId, 'home');
       }
-      navigation.navigate('SessionStack', {
-        screen: 'SessionSetup',
-        params: (params ?? {}) as SessionStackParams['SessionSetup'],
-      });
+      navigateToSessionStackScreen(navigation, 'SessionSetup', params);
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
   const openProgress = useCallback((): void => {
-    navigation.navigate('Main', { screen: 'Progress' });
+    navigateToMainTab(navigation, 'Progress');
   }, [navigation]);
 
   const nextUnlockFeature = useMemo(
     () =>
       getNextUnlockFeature(
-        disclosure.features as Record<string, { isUnlocked: boolean; isVisible: boolean; priority?: number }>,
+        disclosure.features,
       ),
     [disclosure.features],
   );
@@ -116,7 +96,7 @@ export function useNewUserContainerModel(input: NewUserContainerInput): HomeView
     homeHighlight,
     isAtRisk: Boolean(streakData?.isAtRisk),
     isFirstRun,
-    level: (progData?.level as number | undefined) ?? 1,
+    level: progData?.level ?? 1,
     progressPercent,
     progressXp: currentXp,
     returnReason: {
@@ -134,41 +114,21 @@ export function useNewUserContainerModel(input: NewUserContainerInput): HomeView
   const isLoading = disclosure.isLoading || streakQuery.isLoading || progressionQuery.isLoading;
 
   const controller: HomeController = {
-    user: null,
-    userId,
-    isOnline,
-    isLoading,
-    isFirstRun,
+    user: null, userId, isOnline, isLoading, isFirstRun,
     loadError: disclosure.error as Error | null,
-    homeHighlight,
-    completionSync,
-    clearHomeHighlight,
-    currentStreak,
-    currentXp,
-    todayFocusMinutes,
-    progressPercent,
+    homeHighlight, completionSync, clearHomeHighlight,
+    currentStreak, currentXp, todayFocusMinutes, progressPercent,
     latestSession: historyQuery.history[0] ?? null,
-    primaryRecommendation: null,
-    homeSpine,
-    returnReason: stubHomeReturnReason,
-    disclosure,
-    runtime,
-    streakQuery: streakQuery as UseQueryResult,
-    progressionQuery: progressionQuery as UseQueryResult,
-    historyQuery,
-    squadsQuery: createStubQuery() as UseQueryResult,
-    activeStudyPlanQuery: createStubQuery() as UseQueryResult,
-    learningExecutionLayer: stubLearningExecutionLayer(),
-    comebackQuery: createStubQuery() as UseQueryResult,
-    activeBossQuery: createStubQuery() as UseQueryResult,
-    recommendationsQuery: createStubQuery() as UseQueryResult,
+    primaryRecommendation: null, homeSpine, returnReason: stubHomeReturnReason,
+    disclosure, runtime,
+    streakQuery, progressionQuery, historyQuery,
+    squadsQuery: createStubQuery() as UseQueryResult, activeStudyPlanQuery: createStubQuery() as UseQueryResult,
+    learningExecutionLayer: stubLearningExecutionLayer(), comebackQuery: createStubQuery() as UseQueryResult,
+    activeBossQuery: createStubQuery() as UseQueryResult, recommendationsQuery: createStubQuery() as UseQueryResult,
     shouldShowSecondarySystems: runtime.shouldShowSecondarySystems,
     shouldShowExpansionSystems: runtime.shouldShowExpansionSystems,
-    openSetup: openSetup as (params?: Record<string, unknown>) => void,
-    openProgress,
-    openSocial: stubActions.openSocial,
-    openContentStudy: openSetup as () => void,
-    continueStudyPlan: openSetup as () => void,
+    openSetup, openProgress,
+    openSocial: stubActions.openSocial, openContentStudy: openSetup as () => void, continueStudyPlan: openSetup as () => void,
     createRecommendation: stubCoachMutations().createRecommendation as HomeController['createRecommendation'],
     updateRecommendationStatus: stubCoachMutations().updateRecommendationStatus as HomeController['updateRecommendationStatus'],
     retryAll: disclosure.refetchAll as () => Promise<unknown>,
@@ -176,22 +136,11 @@ export function useNewUserContainerModel(input: NewUserContainerInput): HomeView
   };
 
   return {
-    userId,
-    isOnline,
-    isLoading,
-    isFirstRun,
+    userId, isOnline, isLoading, isFirstRun,
     loadError: disclosure.error as Error | null,
-    currentStreak,
-    currentXp,
-    todayFocusMinutes,
-    progressPercent,
-    primaryRecommendation: null,
-    homeSpine,
-    returnReason: null,
-    stage: disclosure.stage,
-    productTier: disclosure.productTier,
-    features: disclosure.features,
-    runtime,
-    controller,
+    currentStreak, currentXp, todayFocusMinutes, progressPercent,
+    primaryRecommendation: null, homeSpine, returnReason: null,
+    stage: disclosure.stage, productTier: disclosure.productTier,
+    features: disclosure.features, runtime, controller,
   };
 }

@@ -1,9 +1,3 @@
-/**
- * Event Types Barrel Export
- *
- * All event type definitions organized by domain.
- */
-
 import type { AccessibilityEventDefinitions } from './accessibility';
 import type { OnboardingEventDefinitions } from './onboarding';
 import type { SubscriptionEventDefinitions } from './subscription';
@@ -26,11 +20,8 @@ import type { RetentionEventDefinitions } from './retention';
 import type { ProgressionEventDefinitions } from './progression';
 import type { StreakEventDefinitions } from './streak';
 import type { EconomyEventDefinitions } from './economy';
-import type { ShopEventDefinitions } from './shop';
 import type { SocialEventDefinitions } from './social';
 import type { SquadEventDefinitions } from './squad';
-import type { GuildEventDefinitions } from './guild';
-import type { DuelEventDefinitions } from './duel';
 import type { FeedEventDefinitions } from './feed';
 import type { RankingEventDefinitions } from './ranking';
 import type { ChallengeEventDefinitions } from './challenge';
@@ -41,22 +32,13 @@ import type { AchievementEventDefinitions } from './achievement';
 import type { BoostEventDefinitions } from './boost';
 import type { CoachEventDefinitions } from './coach';
 import type { IntegrationEventDefinitions } from './integration';
-import type { SeasonEventDefinitions } from './season';
 import type { BossEventDefinitions } from './boss';
-import type { LeaderboardEventDefinitions } from './leaderboard';
-import type { CosmeticsEventDefinitions } from './cosmetics';
 import type { EventsEventDefinitions } from './events';
-import type { WeeklyQuestEventDefinitions } from './weekly-quest';
 import type { FocusIdentityEventDefinitions } from './focus-identity';
-import type { NeuroplasticityEventDefinitions } from './neuroplasticity';
 import type { SessionStoryEventDefinitions } from './session-story';
-import type { EmotionRetentionEventDefinitions } from './emotion-retention';
-import type { BattlePassEventDefinitions } from './battle-pass';
-import type { ProductivityEventDefinitions } from './productivity';
+import type { CompanionPromiseEventDefinitions } from './companion-promise';
+import type { FocusContractEventDefinitions } from './focus-contract';
 
-export * from './emotion-retention';
-export * from './battle-pass';
-export * from './productivity';
 export * from './base';
 export * from './onboarding';
 export * from './subscription';
@@ -79,11 +61,8 @@ export * from './retention';
 export * from './progression';
 export * from './streak';
 export * from './economy';
-export * from './shop';
 export * from './social';
 export * from './squad';
-export * from './guild';
-export * from './duel';
 export * from './feed';
 export * from './ranking';
 export * from './challenge';
@@ -94,20 +73,13 @@ export * from './achievement';
 export * from './boost';
 export * from './coach';
 export * from './integration';
-export * from './season';
 export * from './boss';
-export * from './leaderboard';
-export * from './cosmetics';
 export * from './events';
-export * from './weekly-quest';
 export * from './focus-identity';
-export * from './neuroplasticity';
 export * from './session-story';
-export * from './emotion-retention';
+export * from './companion-promise';
+export * from './focus-contract';
 
-/**
- * Master EventChannels interface combining all domain events
- */
 export interface EventChannels
   extends AccessibilityEventDefinitions,
     OnboardingEventDefinitions,
@@ -131,11 +103,8 @@ export interface EventChannels
     ProgressionEventDefinitions,
     StreakEventDefinitions,
     EconomyEventDefinitions,
-    ShopEventDefinitions,
     SocialEventDefinitions,
     SquadEventDefinitions,
-    GuildEventDefinitions,
-    DuelEventDefinitions,
     FeedEventDefinitions,
     RankingEventDefinitions,
     ChallengeEventDefinitions,
@@ -146,48 +115,22 @@ export interface EventChannels
     BoostEventDefinitions,
     CoachEventDefinitions,
     IntegrationEventDefinitions,
-    SeasonEventDefinitions,
     BossEventDefinitions,
-    LeaderboardEventDefinitions,
-    CosmeticsEventDefinitions,
     EventsEventDefinitions,
-    WeeklyQuestEventDefinitions,
     FocusIdentityEventDefinitions,
-    NeuroplasticityEventDefinitions,
     SessionStoryEventDefinitions,
-    EmotionRetentionEventDefinitions,
-    BattlePassEventDefinitions,
-    ProductivityEventDefinitions {
-  'accessibility:initialized': {
-    preferences: unknown;
-    timestamp: number;
-  };
-  'accessibility:preferences_updated': {
-    oldPreferences: unknown;
-    newPreferences: unknown;
-    changes: unknown;
-    timestamp: number;
-  };
+    CompanionPromiseEventDefinitions,
+    FocusContractEventDefinitions {
   [key: string]: unknown;
 }
 
-/**
- * Event channel names as union type
- */
 export type EventChannel = keyof EventChannels;
 
-/**
- * Event payload type helper
- */
 export type EventPayload<T extends EventChannel> = EventChannels[T];
 
-/**
- * Generic event with unknown data
- */
 export interface GenericEvent {
   type: string;
   data: unknown;
   timestamp: number;
   source?: string;
 }
-

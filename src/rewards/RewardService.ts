@@ -4,7 +4,6 @@ import type { RewardTrigger, RewardType } from '../features/rewards/schemas';
 type GrantOptions = {
   bonusType?: string;
   challengeId?: string;
-  currency?: 'COINS' | 'GEMS';
   exactAmount?: number;
   previousStreak?: number;
   sessionId?: string;
@@ -19,26 +18,19 @@ type GrantCalculation = {
 
 type RewardService = {
   grantReward: (
-    type: RewardType | 'CURRENCY',
-    triggerType: RewardTrigger | 'CHALLENGE_COMPLETE' | 'COMEBACK_BONUS',
+    type: RewardType,
+    triggerType: RewardTrigger | 'COMEBACK_BONUS',
     calculation: GrantCalculation,
     options?: GrantOptions
   ) => Promise<void>;
   setUserId: (nextUserId: string) => void;
 };
 
-function normalizeRewardType(type: RewardType | 'CURRENCY', options?: GrantOptions): RewardType {
-  if (type === 'CURRENCY') {
-    return options?.currency ?? 'COINS';
-  }
-  return type;
-}
-
-function normalizeTrigger(triggerType: RewardTrigger | 'CHALLENGE_COMPLETE' | 'COMEBACK_BONUS'): RewardTrigger {
+function normalizeTrigger(triggerType: RewardTrigger | 'COMEBACK_BONUS'): RewardTrigger {
   if (triggerType === 'COMEBACK_BONUS') {
     return 'COMEBACK';
   }
-  return triggerType === 'CHALLENGE_COMPLETE' ? 'ACHIEVEMENT_UNLOCK' : triggerType;
+  return triggerType;
 }
 
 export function getRewardService(userId?: string): RewardService {
@@ -47,17 +39,13 @@ export function getRewardService(userId?: string): RewardService {
     setUserId(nextUserId): void {
       activeUserId = nextUserId;
     },
-    // grantReward is receipt-only — it creates a reward ledger entry for display/analytics.
-    // Actual XP mutation is owned by ProgressionService.addXP.
-    // 'XP' reward type creates a receipt; it does NOT mutate user XP/progression.
     async grantReward(type, triggerType, calculation, options): Promise<void> {
-      if (!activeUserId) {
+      if (!activeUserId || type !== 'XP') {
         return;
       }
-
       await createReward({
         userId: activeUserId,
-        type: normalizeRewardType(type, options),
+        type,
         triggerType: normalizeTrigger(triggerType),
         triggerId: options?.sessionId ?? options?.challengeId,
         amount: options?.exactAmount ?? Math.max(0, Math.floor(calculation.baseAmount)),

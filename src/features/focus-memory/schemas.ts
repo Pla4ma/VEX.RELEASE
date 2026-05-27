@@ -34,11 +34,21 @@ export const ColdStartReasonSchema = z.enum([
   'user_override',
 ]);
 
+export const EvidenceLaneContextSchema = z.enum([
+  'student',
+  'game_like',
+  'deep_creative',
+  'minimal_normal',
+]);
+
 export const RecommendationEvidenceSchema = z.object({
   memoryIds: z.array(z.string()).optional(),
   evidenceSummary: z.string().optional(),
   confidence: z.number().min(0).max(1).optional(),
   fallbackReason: ColdStartReasonSchema.optional(),
+  source: z.enum(['session_completion', 'reflection', 'behavior', 'rescue_completion', 'cold_start']),
+  lane: EvidenceLaneContextSchema,
+  mode: z.string().min(1).optional(),
 }).strict();
 
 export const CreateMemoryCandidateInputSchema = z.object({
@@ -59,6 +69,7 @@ export const MemoryRecommendationInputSchema = z.object({
 }).strict();
 
 export type ColdStartReason = z.infer<typeof ColdStartReasonSchema>;
+export type EvidenceLaneContext = z.infer<typeof EvidenceLaneContextSchema>;
 export type RecommendationEvidence = z.infer<typeof RecommendationEvidenceSchema>;
 export type CreateMemoryCandidateInput = z.infer<typeof CreateMemoryCandidateInputSchema>;
 export type FocusMemory = z.infer<typeof FocusMemorySchema>;

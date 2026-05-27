@@ -91,7 +91,7 @@ export function LauncherStep({
         </Button>
       </View>
       <Text style={[styles.progressHint, { color: theme.colors.text.secondary }]}>
-        Home opens after the first win so your streak, rewards, and tomorrow promise start from real progress.
+        Home unlocks after one completed session so everything starts from real progress — not empty predictions.
       </Text>
     </View>
   );

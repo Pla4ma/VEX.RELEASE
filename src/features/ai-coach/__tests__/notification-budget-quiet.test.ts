@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from '@jest/globals';
 import {
   canSendNotification,
+  clearBudgetStore,
   createMockNotificationBudget,
   createMockNotificationRequest,
   resetDailyBudget,
@@ -16,6 +17,7 @@ function mockCurrentHour(hour: number): void {
 describe('Notification budget quiet hours and suppression', () => {
   beforeEach(() => {
     jest.useRealTimers();
+    clearBudgetStore();
   });
 
   it('blocks during quiet hours and allows outside quiet hours', async () => {
