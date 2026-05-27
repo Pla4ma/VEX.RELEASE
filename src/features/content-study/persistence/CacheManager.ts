@@ -1,6 +1,6 @@
-import { captureSilentFailure } from '../../../utils/silent-failure';
-import type { LocalCacheEntry, StudyContent, StudyGeneration } from '../types';
-import { getStorage, STORAGE_KEYS } from '../persistence';
+import { captureSilentFailure } from "../../../utils/silent-failure";
+import type { LocalCacheEntry, StudyContent, StudyGeneration } from "../types";
+import { getStorage, STORAGE_KEYS } from "../persistence";
 
 export class CacheManager {
   private static instance: CacheManager;
@@ -18,7 +18,9 @@ export class CacheManager {
   }
 
   async get<T>(key: string): Promise<T | null> {
-    const memoryEntry = this.memoryCache.get(key) as LocalCacheEntry<T> | undefined;
+    const memoryEntry = this.memoryCache.get(key) as
+      | LocalCacheEntry<T>
+      | undefined;
     if (memoryEntry && memoryEntry.expiresAt > Date.now()) {
       return memoryEntry.data;
     }
@@ -37,9 +39,9 @@ export class CacheManager {
       return entry.data;
     } catch (error) {
       captureSilentFailure(error, {
-        feature: 'content-study',
-        operation: 'safe-fallback',
-        type: 'data',
+        feature: "content-study",
+        operation: "safe-fallback",
+        type: "data",
       });
       return null;
     }
@@ -56,7 +58,7 @@ export class CacheManager {
       cachedAt: now,
       expiresAt: now + (options.ttlMs || 5 * 60 * 1000),
       etag: options.etag,
-      source: 'mmkv',
+      source: "mmkv",
     };
 
     this.memoryCache.set(key, entry);

@@ -1,44 +1,63 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { AppState, BackHandler } from 'react-native';
-import * as Sentry from '@sentry/react-native';
-import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native'; import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useProgressionSummary } from '../../../features/progression/hooks';
-import { getSprintChainService } from '../../../features/session/SprintChainService';
-import { useStreak } from '../../../features/streaks/hooks';
-import { getSessionThemeById } from '../../../features/themes/session-themes';
-import type { SessionStackParams } from '../../../navigation/types';
-import type { Mood } from '../../../session/components/CreativeMoodLogger';
-import { useSession, useSessionHistory } from '../../../session/hooks/useSession';
-import { resolveSessionMode, SessionMode } from '../../../session/modes';
-import { useAuthStore } from '../../../store';
-import { useTheme } from '../../../theme';
-import { buildActiveSessionControlFailure, type ActiveSessionControlFailure } from '../utils/active-session-control-failure';
-import { useActiveSessionMetrics } from './useActiveSessionMetrics';
-import { useCompanionSession } from './useCompanionSession';
-type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>; type ActiveSessionRouteProp = RouteProp<SessionStackParams, 'ActiveSession'>;
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { AppState, BackHandler } from "react-native";
+import * as Sentry from "@sentry/react-native";
+import {
+  useNavigation,
+  useRoute,
+  type RouteProp,
+} from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useProgressionSummary } from "../../../features/progression/hooks";
+import { getSprintChainService } from "../../../features/session/SprintChainService";
+import { useStreak } from "../../../features/streaks/hooks";
+import { getSessionThemeById } from "../../../features/themes/session-themes";
+import type { SessionStackParams } from "../../../navigation/types";
+import type { Mood } from "../../../session/components/CreativeMoodLogger";
+import {
+  useSession,
+  useSessionHistory,
+} from "../../../session/hooks/useSession";
+import { resolveSessionMode, SessionMode } from "../../../session/modes";
+import { useAuthStore } from "../../../store";
+import { useTheme } from "../../../theme";
+import {
+  buildActiveSessionControlFailure,
+  type ActiveSessionControlFailure,
+} from "../utils/active-session-control-failure";
+import { useActiveSessionMetrics } from "./useActiveSessionMetrics";
+import { useCompanionSession } from "./useCompanionSession";
+type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
+type ActiveSessionRouteProp = RouteProp<SessionStackParams, "ActiveSession">;
 export function useActiveSessionController() {
   const navigation = useNavigation<SessionNavigationProp>();
   const route = useRoute<ActiveSessionRouteProp>();
   const { theme } = useTheme();
   const { user } = useAuthStore();
   const { sessionId, selectedThemeId } = route.params;
-  const userId = user?.id ?? '';
+  const userId = user?.id ?? "";
   const [dismissDegradedState, setDismissDegradedState] = useState(false);
   const [showInterruption, setShowInterruption] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const [showMultiplierInfo, setShowMultiplierInfo] = useState(false);
   const [creativeMood, setCreativeMood] = useState<Mood | null>(null);
-  const [controlFailure, setControlFailure] = useState<ActiveSessionControlFailure | null>(null);
-  const sessionTheme = useMemo(() => getSessionThemeById(selectedThemeId), [selectedThemeId]);
+  const [controlFailure, setControlFailure] =
+    useState<ActiveSessionControlFailure | null>(null);
+  const sessionTheme = useMemo(
+    () => getSessionThemeById(selectedThemeId),
+    [selectedThemeId],
+  );
   const { data: progressionSummary } = useProgressionSummary(userId || null);
   const { data: streak } = useStreak(userId || null);
-  const { history } = useSessionHistory(userId || '', 100);
-  const sessionQuery = useSession(userId || '');
+  const { history } = useSessionHistory(userId || "", 100);
+  const sessionQuery = useSession(userId || "");
   const totalSeconds = Math.max(
-    sessionQuery.session?.config.duration ?? sessionQuery.elapsedSeconds + sessionQuery.remainingSeconds,
+    sessionQuery.session?.config.duration ??
+      sessionQuery.elapsedSeconds + sessionQuery.remainingSeconds,
     1,
   );
-  const currentMode = resolveSessionMode(sessionQuery.session?.config.sessionMode);
+  const currentMode = resolveSessionMode(
+    sessionQuery.session?.config.sessionMode,
+  );
   const companion = useCompanionSession({
     currentMode,
     elapsedSeconds: sessionQuery.elapsedSeconds,
@@ -49,7 +68,8 @@ export function useActiveSessionController() {
     userId,
   });
   const isDegradedSession =
-    (sessionQuery.session?.status === 'DEGRADED' || sessionQuery.session?.storageStatus === 'DEGRADED') &&
+    (sessionQuery.session?.status === "DEGRADED" ||
+      sessionQuery.session?.storageStatus === "DEGRADED") &&
     !dismissDegradedState;
   const metrics = useActiveSessionMetrics({
     completionPercentage: sessionQuery.completionPercentage,
@@ -65,25 +85,33 @@ export function useActiveSessionController() {
     streakDays: streak?.currentDays ?? 0,
   });
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (isExiting) return false;
-      setShowInterruption(true);
-      return true;
-    });
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        if (isExiting) return false;
+        setShowInterruption(true);
+        return true;
+      },
+    );
     return () => backHandler.remove();
   }, [isExiting]);
   useEffect(() => {
-    const subscription = AppState.addEventListener('change', (nextState) => {
+    const subscription = AppState.addEventListener("change", (nextState) => {
       if (!sessionQuery.session?.id || !sessionQuery.isActive) return;
       const action =
-        nextState === 'background' || nextState === 'inactive'
+        nextState === "background" || nextState === "inactive"
           ? sessionQuery.backgroundSession
-          : nextState === 'active'
+          : nextState === "active"
             ? sessionQuery.foregroundSession
             : null;
       action?.().catch((caught) => {
         Sentry.captureException(caught, {
-          tags: { feature: nextState === 'active' ? 'session-foreground' : 'session-background' },
+          tags: {
+            feature:
+              nextState === "active"
+                ? "session-foreground"
+                : "session-background",
+          },
         });
       });
     });
@@ -93,7 +121,9 @@ export function useActiveSessionController() {
     () => () => {
       if (!sessionQuery.session?.id || !sessionQuery.isActive) return;
       sessionQuery.backgroundSession().catch((caught) => {
-        Sentry.captureException(caught, { tags: { feature: 'session-background-unmount' } });
+        Sentry.captureException(caught, {
+          tags: { feature: "session-background-unmount" },
+        });
       });
     },
     [sessionQuery],
@@ -103,15 +133,23 @@ export function useActiveSessionController() {
       if (sessionQuery.isPaused) {
         await sessionQuery.resumeSession();
         setControlFailure(null);
-        Sentry.addBreadcrumb({ category: 'session', message: 'Session resumed', level: 'info' });
+        Sentry.addBreadcrumb({
+          category: "session",
+          message: "Session resumed",
+          level: "info",
+        });
         return;
       }
-      await sessionQuery.pauseSession('user');
+      await sessionQuery.pauseSession("user");
       setControlFailure(null);
-      Sentry.addBreadcrumb({ category: 'session', message: 'Session paused', level: 'info' });
+      Sentry.addBreadcrumb({
+        category: "session",
+        message: "Session paused",
+        level: "info",
+      });
     } catch (caught) {
-      setControlFailure(buildActiveSessionControlFailure('pause'));
-      Sentry.captureException(caught, { tags: { feature: 'session-control' } });
+      setControlFailure(buildActiveSessionControlFailure("pause"));
+      Sentry.captureException(caught, { tags: { feature: "session-control" } });
     }
   }, [sessionQuery]);
   const handleComplete = useCallback(async (): Promise<void> => {
@@ -120,13 +158,21 @@ export function useActiveSessionController() {
       const result = await sessionQuery.endSession();
       let sprintChainCount = sessionQuery.session?.config.sprintChainCount ?? 1;
       if (currentMode === SessionMode.SPRINT) {
-        const sprintState = await getSprintChainService().recordSprintCompleted(userId);
+        const sprintState =
+          await getSprintChainService().recordSprintCompleted(userId);
         sprintChainCount = sprintState.completedCount;
       }
-      await companion.completeCompanionSession({ ...result, focusPurityScore: finalPurityScore });
+      await companion.completeCompanionSession({
+        ...result,
+        focusPurityScore: finalPurityScore,
+      });
       setControlFailure(null);
-      Sentry.addBreadcrumb({ category: 'session', message: 'Session completed', level: 'info' });
-      navigation.navigate('SessionComplete', {
+      Sentry.addBreadcrumb({
+        category: "session",
+        message: "Session completed",
+        level: "info",
+      });
+      navigation.navigate("SessionComplete", {
         sessionId,
         summary: {
           ...result,
@@ -137,39 +183,63 @@ export function useActiveSessionController() {
         },
       });
     } catch (caught) {
-      setControlFailure(buildActiveSessionControlFailure('complete'));
-      Sentry.captureException(caught, { tags: { feature: 'session-complete' } });
+      setControlFailure(buildActiveSessionControlFailure("complete"));
+      Sentry.captureException(caught, {
+        tags: { feature: "session-complete" },
+      });
     }
-  }, [companion, creativeMood, currentMode, navigation, progressionSummary?.level, sessionId, sessionQuery, userId]);
-  const handleCreativeMoodSelected = useCallback((mood: Mood): void => setCreativeMood(mood), []);
-  const handleSkipCreativeMood = useCallback((): void => setCreativeMood(null), []);
+  }, [
+    companion,
+    creativeMood,
+    currentMode,
+    navigation,
+    progressionSummary?.level,
+    sessionId,
+    sessionQuery,
+    userId,
+  ]);
+  const handleCreativeMoodSelected = useCallback(
+    (mood: Mood): void => setCreativeMood(mood),
+    [],
+  );
+  const handleSkipCreativeMood = useCallback(
+    (): void => setCreativeMood(null),
+    [],
+  );
   const handleAbandon = useCallback(async (): Promise<void> => {
     setIsExiting(true);
     setShowInterruption(false);
     try {
-      await sessionQuery.abandonSession('user');
+      await sessionQuery.abandonSession("user");
       setControlFailure(null);
-      Sentry.addBreadcrumb({ category: 'session', message: 'Session abandoned', level: 'warning' });
+      Sentry.addBreadcrumb({
+        category: "session",
+        message: "Session abandoned",
+        level: "warning",
+      });
       navigation.goBack();
     } catch (caught) {
-      setControlFailure(buildActiveSessionControlFailure('abandon'));
-      Sentry.captureException(caught, { tags: { feature: 'session-abandon' } });
+      setControlFailure(buildActiveSessionControlFailure("abandon"));
+      Sentry.captureException(caught, { tags: { feature: "session-abandon" } });
       setIsExiting(false);
     }
   }, [navigation, sessionQuery]);
   const retryControlFailure = useCallback(async (): Promise<void> => {
     if (!controlFailure) return;
-    if (controlFailure.action === 'complete') {
+    if (controlFailure.action === "complete") {
       await handleComplete();
       return;
     }
-    if (controlFailure.action === 'abandon') {
+    if (controlFailure.action === "abandon") {
       await handleAbandon();
       return;
     }
     await handlePauseResume();
   }, [controlFailure, handleAbandon, handleComplete, handlePauseResume]);
-  const clearControlFailure = useCallback((): void => setControlFailure(null), []);
+  const clearControlFailure = useCallback(
+    (): void => setControlFailure(null),
+    [],
+  );
   return {
     actions: {
       clearControlFailure,
@@ -193,7 +263,10 @@ export function useActiveSessionController() {
     showMultiplierInfo,
     streak,
     theme,
-    themeBackgroundColor: sessionTheme.backgroundTint === 'transparent' ? theme.colors.background.primary : sessionTheme.backgroundTint,
+    themeBackgroundColor:
+      sessionTheme.backgroundTint === "transparent"
+        ? theme.colors.background.primary
+        : sessionTheme.backgroundTint,
     userId,
   };
 }

@@ -6,12 +6,17 @@
 // ============================================================================
 // SESSION LIFECYCLE ANALYTICS
 // ============================================================================
-import { capture } from '../../shared/analytics/analytics-service';
+import { capture } from "../../shared/analytics/analytics-service";
 
 export function trackSessionCompleted(
   userId: string,
   sessionId: string,
-  completionType: 'natural' | 'forced' | 'abandoned' | 'timeout' | 'achievement',
+  completionType:
+    | "natural"
+    | "forced"
+    | "abandoned"
+    | "timeout"
+    | "achievement",
   duration: number,
   objectives: {
     total: number;
@@ -35,7 +40,7 @@ export function trackSessionCompleted(
     missedCriteria: string[];
   },
 ): void {
-  capture('session_completion_completed', {
+  capture("session_completion_completed", {
     user_id: userId,
     session_id: sessionId,
     completion_type: completionType,
@@ -57,7 +62,12 @@ export function trackSessionAborted(
     totalObjectives: number;
     currentPhase: string;
   },
-  abortReason: 'user_choice' | 'technical_error' | 'timeout' | 'emergency' | 'system_intervention',
+  abortReason:
+    | "user_choice"
+    | "technical_error"
+    | "timeout"
+    | "emergency"
+    | "system_intervention",
   abortContext: {
     trigger: string;
     userState: string;
@@ -69,7 +79,7 @@ export function trackSessionAborted(
     penalty: unknown;
   },
 ): void {
-  capture('session_completion_aborted', {
+  capture("session_completion_aborted", {
     user_id: userId,
     session_id: sessionId,
     abort_time: abortTime.toISOString(),
@@ -92,7 +102,7 @@ export function trackSessionTimeout(
     objectivesCompleted: number;
     totalObjectives: number;
   },
-  timeoutType: 'soft' | 'hard' | 'grace_period',
+  timeoutType: "soft" | "hard" | "grace_period",
   consequences: {
     scorePenalty: number;
     rewardReduction: number;
@@ -105,7 +115,7 @@ export function trackSessionTimeout(
     cost?: unknown;
   },
 ): void {
-  capture('session_completion_timeout', {
+  capture("session_completion_timeout", {
     user_id: userId,
     session_id: sessionId,
     timeout_time: timeoutTime.toISOString(),
@@ -161,7 +171,7 @@ export function trackSessionPerformanceCalculated(
     insights: string[];
   },
 ): void {
-  capture('session_completion_performance_calculated', {
+  capture("session_completion_performance_calculated", {
     user_id: userId,
     session_id: sessionId,
     performance_metrics: performanceMetrics,
@@ -169,4 +179,3 @@ export function trackSessionPerformanceCalculated(
     analysis,
   });
 }
-

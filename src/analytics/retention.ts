@@ -5,18 +5,20 @@
  * Tracks and calculates user retention metrics.
  */
 
-import type { RetentionCohort } from './types';
+import type { RetentionCohort } from "./types";
 
 const retentionCohorts = new Map<string, RetentionCohort>();
 
 export function trackRetentionEvent(
   userId: string,
-  event: 'first_open' | 'session' | 'return'
+  event: "first_open" | "session" | "return",
 ): void {
-  const today = new Date().toISOString().split('T')[0] ?? new Date().toISOString().slice(0, 10);
+  const today =
+    new Date().toISOString().split("T")[0] ??
+    new Date().toISOString().slice(0, 10);
   const userFirstOpen = getUserFirstOpen(userId);
 
-  if (event === 'first_open') {
+  if (event === "first_open") {
     const existing = retentionCohorts.get(today);
     const cohort: RetentionCohort = existing ?? {
       cohortDate: today,
@@ -31,15 +33,25 @@ export function trackRetentionEvent(
     return;
   }
 
-  if (!userFirstOpen) {return;}
+  if (!userFirstOpen) {
+    return;
+  }
 
   const daysSince = daysBetween(userFirstOpen, today);
   const cohort = retentionCohorts.get(userFirstOpen);
-  if (!cohort) {return;}
+  if (!cohort) {
+    return;
+  }
 
-  if (daysSince === 1) {cohort.day1++;}
-  if (daysSince === 7) {cohort.day7++;}
-  if (daysSince === 30) {cohort.day30++;}
+  if (daysSince === 1) {
+    cohort.day1++;
+  }
+  if (daysSince === 7) {
+    cohort.day7++;
+  }
+  if (daysSince === 30) {
+    cohort.day30++;
+  }
 }
 
 function getUserFirstOpen(_userId: string): string | null {
@@ -60,18 +72,25 @@ export function calculateRetentionRates(): {
   day30: number;
 } {
   const cohorts = Array.from(retentionCohorts.values());
-  if (cohorts.length === 0) {return { day1: 0, day7: 0, day30: 0 };}
+  if (cohorts.length === 0) {
+    return { day1: 0, day7: 0, day30: 0 };
+  }
 
   const matureCohorts = cohorts.filter((c) => {
     const cohortDate = new Date(c.cohortDate);
-    const daysSince = (Date.now() - cohortDate.getTime()) / (1000 * 60 * 60 * 24);
+    const daysSince =
+      (Date.now() - cohortDate.getTime()) / (1000 * 60 * 60 * 24);
     return daysSince >= 30;
   });
 
-  if (matureCohorts.length === 0) {return { day1: 0, day7: 0, day30: 0 };}
+  if (matureCohorts.length === 0) {
+    return { day1: 0, day7: 0, day30: 0 };
+  }
 
   const totalSize = matureCohorts.reduce((sum, c) => sum + c.cohortSize, 0);
-  if (totalSize === 0) {return { day1: 0, day7: 0, day30: 0 };}
+  if (totalSize === 0) {
+    return { day1: 0, day7: 0, day30: 0 };
+  }
 
   return {
     day1: matureCohorts.reduce((sum, c) => sum + c.day1, 0) / totalSize,

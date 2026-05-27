@@ -1,11 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
-import { listActiveMemories } from './service';
+import { listActiveMemories } from "./service";
 
 export function useActiveFocusMemories(userId: string | null) {
   const query = useQuery({
-    queryKey: ['focus-memory', userId],
-    queryFn: () => listActiveMemories(userId ?? ''),
+    queryKey: ["focus-memory", userId],
+    queryFn: () => listActiveMemories(userId ?? ""),
     enabled: Boolean(userId),
   });
 

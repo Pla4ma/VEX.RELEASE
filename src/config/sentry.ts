@@ -4,17 +4,17 @@
  * Error tracking and performance monitoring setup.
  */
 
-import * as Sentry from '@sentry/react-native';
-import { ENVIRONMENT, IS_DEVELOPMENT, CURRENT_CONFIG } from '../constants/app';
-import { createDebugger } from '../utils/debug';
+import * as Sentry from "@sentry/react-native";
+import { ENVIRONMENT, IS_DEVELOPMENT, CURRENT_CONFIG } from "../constants/app";
+import { createDebugger } from "../utils/debug";
 
-const debug = createDebugger('config:sentry');
+const debug = createDebugger("config:sentry");
 
 /**
  * Sentry configuration options
  */
 export const SENTRY_CONFIG: Sentry.ReactNativeOptions = {
-  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN || '',
+  dsn: process.env.EXPO_PUBLIC_SENTRY_DSN || "",
   environment: ENVIRONMENT,
   enabled: !IS_DEVELOPMENT, // Disable in dev, enable in staging/production
 
@@ -39,19 +39,21 @@ export const SENTRY_CONFIG: Sentry.ReactNativeOptions = {
   // Release and dist
   release: `${CURRENT_CONFIG.bundleId}@${CURRENT_CONFIG.version}`,
   dist: CURRENT_CONFIG.buildNumber,
-
 };
 
-function createSentryIntegrations(): NonNullable<Sentry.ReactNativeOptions['integrations']> {
-  const integrations: NonNullable<Sentry.ReactNativeOptions['integrations']> = [];
+function createSentryIntegrations(): NonNullable<
+  Sentry.ReactNativeOptions["integrations"]
+> {
+  const integrations: NonNullable<Sentry.ReactNativeOptions["integrations"]> =
+    [];
 
-  if (typeof Sentry.reactNativeTracingIntegration === 'function') {
+  if (typeof Sentry.reactNativeTracingIntegration === "function") {
     integrations.push(Sentry.reactNativeTracingIntegration());
   }
-  if (typeof Sentry.mobileReplayIntegration === 'function') {
+  if (typeof Sentry.mobileReplayIntegration === "function") {
     integrations.push(Sentry.mobileReplayIntegration());
   }
-  if (typeof Sentry.feedbackIntegration === 'function') {
+  if (typeof Sentry.feedbackIntegration === "function") {
     integrations.push(Sentry.feedbackIntegration());
   }
 
@@ -63,7 +65,7 @@ function createSentryIntegrations(): NonNullable<Sentry.ReactNativeOptions['inte
  */
 export function initSentry(): void {
   if (!SENTRY_CONFIG.dsn) {
-    debug.warn('[Sentry] No DSN configured, skipping initialization');
+    debug.warn("[Sentry] No DSN configured, skipping initialization");
     return;
   }
 
@@ -84,14 +86,18 @@ export function initSentry(): void {
   } catch (e) {
     // Sentry may fail in Expo Go if native PlatformConstants is unavailable.
     // The app continues without crash reporting in that environment.
-    debug.warn('[Sentry] Failed to initialize (likely Expo Go):', e as Error);
+    debug.warn("[Sentry] Failed to initialize (likely Expo Go):", e as Error);
   }
 }
 
 /**
  * Set user context for Sentry
  */
-export function setSentryUser(userId: string, _email?: string, _username?: string): void {
+export function setSentryUser(
+  userId: string,
+  _email?: string,
+  _username?: string,
+): void {
   Sentry.setUser({
     id: userId,
   });
@@ -107,7 +113,10 @@ export function clearSentryUser(): void {
 /**
  * Capture exception manually
  */
-export function captureException(error: Error, context?: Record<string, unknown>): void {
+export function captureException(
+  error: Error,
+  context?: Record<string, unknown>,
+): void {
   Sentry.captureException(error, {
     extra: context,
   });
@@ -116,7 +125,10 @@ export function captureException(error: Error, context?: Record<string, unknown>
 /**
  * Capture message
  */
-export function captureMessage(message: string, level: Sentry.SeverityLevel = 'info'): void {
+export function captureMessage(
+  message: string,
+  level: Sentry.SeverityLevel = "info",
+): void {
   Sentry.captureMessage(message, level);
 }
 
@@ -126,13 +138,13 @@ export function captureMessage(message: string, level: Sentry.SeverityLevel = 'i
 export function addBreadcrumb(
   message: string,
   category?: string,
-  data?: Record<string, unknown>
+  data?: Record<string, unknown>,
 ): void {
   Sentry.addBreadcrumb({
     message,
     category,
     data,
-    level: 'info',
+    level: "info",
   });
 }
 

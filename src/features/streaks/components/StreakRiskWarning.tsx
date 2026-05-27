@@ -6,16 +6,15 @@
  * @phase 5 - Deepening: Risk warning UI
  */
 
-import React from 'react';
-import { View, Text, Pressable } from 'react-native';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import React from "react";
+import { View, Text, Pressable } from "react-native";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 interface StreakRiskWarningProps {
   streak: number;
-  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
   hoursRemaining: number;
   onStartSession: () => void;
   onDismiss?: () => void;
@@ -30,24 +29,24 @@ export function StreakRiskWarning({
 }: StreakRiskWarningProps): JSX.Element {
   const getMessage = () => {
     switch (riskLevel) {
-      case 'CRITICAL':
+      case "CRITICAL":
         return `Your ${streak}-day streak ends in ${Math.floor(hoursRemaining)} hours!`;
-      case 'HIGH':
+      case "HIGH":
         return `Save your ${streak}-day streak - ${Math.floor(hoursRemaining)} hours left`;
-      case 'MEDIUM':
-        return 'Keep your momentum going!';
+      case "MEDIUM":
+        return "Keep your momentum going!";
       default:
-        return 'Don\'t forget to focus today';
+        return "Don't forget to focus today";
     }
   };
 
   const getColor = () => {
     switch (riskLevel) {
-      case 'CRITICAL':
+      case "CRITICAL":
         return launchColors.hex_f44336;
-      case 'HIGH':
+      case "HIGH":
         return launchColors.hex_ff9800;
-      case 'MEDIUM':
+      case "MEDIUM":
         return launchColors.hex_ffc107;
       default:
         return launchColors.hex_4caf50;
@@ -62,13 +61,17 @@ export function StreakRiskWarning({
     >
       <View style={styles.content}>
         <Text style={[styles.emoji, { color: getColor() }]}>
-          {riskLevel === 'CRITICAL' ? '🔥' : riskLevel === 'HIGH' ? '⚡' : '💪'}
+          {riskLevel === "CRITICAL" ? "🔥" : riskLevel === "HIGH" ? "⚡" : "💪"}
         </Text>
         <Text style={styles.message}>{getMessage()}</Text>
       </View>
 
       <Pressable
-        style={({ pressed }) => [styles.button, { backgroundColor: getColor() }, pressed && { opacity: 0.8 }]}
+        style={({ pressed }) => [
+          styles.button,
+          { backgroundColor: getColor() },
+          pressed && { opacity: 0.8 },
+        ]}
         onPress={onStartSession}
         accessibilityLabel="Start Session button"
         accessibilityRole="button"
@@ -101,8 +104,8 @@ const styles = createSheet({
     borderLeftWidth: 4,
   },
   content: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 12,
   },
   emoji: {
@@ -113,21 +116,21 @@ const styles = createSheet({
     flex: 1,
     fontSize: 15,
     color: launchColors.hex_fff,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   button: {
     paddingVertical: 12,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
     color: launchColors.hex_fff,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   dismiss: {
     marginTop: 8,
-    alignItems: 'center',
+    alignItems: "center",
   },
   dismissText: {
     color: launchColors.hex_666,

@@ -3,35 +3,35 @@
  * Analytics tracking for cross-system operations
  */
 
-import * as Sentry from '@sentry/react-native';
+import * as Sentry from "@sentry/react-native";
 
 export function trackSystemError(
   system: string,
   operation: string,
-  error: unknown
+  error: unknown,
 ): void {
   Sentry.addBreadcrumb({
     message: `System error: ${system}.${operation}`,
-    category: 'integration.error',
+    category: "integration.error",
     data: {
       system,
       operation,
       error: error instanceof Error ? error.message : String(error),
     },
-    level: 'error',
+    level: "error",
   });
 }
 
 export function trackOrchestrationError(
   userId: string,
   sessionId: string,
-  error: unknown
+  error: unknown,
 ): void {
   Sentry.addBreadcrumb({
-    message: 'Session orchestration failed',
-    category: 'integration.orchestration',
+    message: "Session orchestration failed",
+    category: "integration.orchestration",
     data: { userId, sessionId },
-    level: 'error',
+    level: "error",
   });
 }
 
@@ -49,9 +49,9 @@ export function trackSessionComplete(data: {
   challengesProgressed: number;
 }): void {
   Sentry.addBreadcrumb({
-    message: 'Session orchestration complete',
-    category: 'integration.session',
+    message: "Session orchestration complete",
+    category: "integration.session",
     data,
-    level: 'info',
+    level: "info",
   });
 }

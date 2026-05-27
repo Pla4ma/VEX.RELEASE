@@ -1,6 +1,6 @@
-import { SessionMode } from '../../../session/modes';
-import type { SessionSummary } from '../../../session/types';
-import type { CompletionExperiencePolicyInput } from '../completion-experience-policy';
+import { SessionMode } from "../../../session/modes";
+import type { SessionSummary } from "../../../session/types";
+import type { CompletionExperiencePolicyInput } from "../completion-experience-policy";
 
 export const baseSummary: SessionSummary = {
   actualDuration: 1500,
@@ -22,15 +22,15 @@ export const baseSummary: SessionSummary = {
   pauses: 0,
   penaltiesApplied: [],
   plannedDuration: 1500,
-  sessionId: 'session-123',
+  sessionId: "session-123",
   sessionMode: SessionMode.FLOW,
-  status: 'COMPLETED',
+  status: "COMPLETED",
   streakBonus: 10,
   streakDays: 4,
   streakIncreased: true,
   streakMaintained: true,
   timeBonus: 10,
-  userId: 'user-123',
+  userId: "user-123",
   userLevel: 2,
   vsAverage: 0,
   vsBest: 0,
@@ -46,9 +46,9 @@ export const baseInput: CompletionExperiencePolicyInput = {
     progress: true,
     study: true,
   },
-  firstWeekStage: 'ACTIVATING',
-  motivationStyle: 'calm',
-  premiumState: 'free',
+  firstWeekStage: "ACTIVATING",
+  motivationStyle: "calm",
+  premiumState: "free",
   primaryGoal: null,
   sessionMode: SessionMode.FLOW,
   summary: baseSummary,

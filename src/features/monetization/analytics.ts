@@ -1,10 +1,13 @@
-import { capture } from '../../shared/analytics';
-import { PurchaseEvents } from '../../shared/monetization/purchase-events';
+import { capture } from "../../shared/analytics";
+import { PurchaseEvents } from "../../shared/monetization/purchase-events";
 
-const SOURCE = 'post_session_streak_shield';
-const GATED_FEATURE = 'streak_freeze';
+const SOURCE = "post_session_streak_shield";
+const GATED_FEATURE = "streak_freeze";
 
-export function trackStreakShieldMomentViewed(sessionId: string, streakDays: number): void {
+export function trackStreakShieldMomentViewed(
+  sessionId: string,
+  streakDays: number,
+): void {
   capture(PurchaseEvents.PAYWALL_VIEWED, {
     gated_feature: GATED_FEATURE,
     paywall_source: SOURCE,

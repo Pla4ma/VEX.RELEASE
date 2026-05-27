@@ -1,19 +1,21 @@
-
-import { useQuery } from '@tanstack/react-query';
-import { useNetInfo } from '../../network';
-import { useAuthStore } from '../../store';
-import { getCurrentFocusScore, getFocusScoreHistory } from './focus-score-service';
-import { focusScoreKeys } from './focus-score-query-keys';
+import { useQuery } from "@tanstack/react-query";
+import { useNetInfo } from "../../network";
+import { useAuthStore } from "../../store";
+import {
+  getCurrentFocusScore,
+  getFocusScoreHistory,
+} from "./focus-score-service";
+import { focusScoreKeys } from "./focus-score-query-keys";
 import type {
   FocusScoreDashboardModel,
   FocusScoreHistoryPoint,
   FocusScoreRecord,
-} from './types';
+} from "./types";
 
 type FocusScoreHookResult = {
   score: FocusScoreRecord | null;
   history: FocusScoreHistoryPoint[];
-  status: 'error' | 'pending' | 'success';
+  status: "error" | "pending" | "success";
   error: Error | null;
   refetch: () => void;
   isRefetching: boolean;
@@ -29,14 +31,14 @@ export function useFocusScore(
   const userId = requestedUserId ?? user?.id ?? null;
 
   const scoreQuery = useQuery({
-    queryKey: focusScoreKeys.current(userId ?? 'none'),
-    queryFn: () => getCurrentFocusScore(userId ?? ''),
+    queryKey: focusScoreKeys.current(userId ?? "none"),
+    queryFn: () => getCurrentFocusScore(userId ?? ""),
     enabled: Boolean(userId),
   });
 
   const historyQuery = useQuery({
-    queryKey: focusScoreKeys.history(userId ?? 'none', days),
-    queryFn: () => getFocusScoreHistory(userId ?? '', days),
+    queryKey: focusScoreKeys.history(userId ?? "none", days),
+    queryFn: () => getFocusScoreHistory(userId ?? "", days),
     enabled: Boolean(userId),
   });
 
@@ -53,9 +55,12 @@ export function useFocusScore(
   };
 }
 
-export function useFocusScoreHistory(userId: string, days: number = 90): {
+export function useFocusScoreHistory(
+  userId: string,
+  days: number = 90,
+): {
   history: FocusScoreHistoryPoint[];
-  status: 'error' | 'pending' | 'success';
+  status: "error" | "pending" | "success";
   error: Error | null;
   refetch: () => void;
 } {
@@ -76,17 +81,21 @@ export function useFocusScoreHistory(userId: string, days: number = 90): {
   };
 }
 
-export function useFocusScoreDashboardModel(userId: string | null, days: number = 30): FocusScoreDashboardModel {
+export function useFocusScoreDashboardModel(
+  userId: string | null,
+  days: number = 30,
+): FocusScoreDashboardModel {
   const { isOnline } = useNetInfo();
-  const { score, history, status, error, refetch, isRefetching } = useFocusScore(userId, days);
+  const { score, history, status, error, refetch, isRefetching } =
+    useFocusScore(userId, days);
 
   return {
     current: score ?? null,
     history: history ?? [],
     monthlyInput: null,
     isOffline: !isOnline,
-    isPending: status === 'pending',
-    isError: status === 'error',
+    isPending: status === "pending",
+    isError: status === "error",
     error: error instanceof Error ? error : null,
     isRefetching,
     isOptionalDataSyncing: false,

@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from 'react';
-import { Pressable } from 'react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import React, { useMemo, useState } from "react";
+import { Pressable } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
-import { Box, Text } from '../../../components/primitives';
-import { getPremiumCardStyle } from '../../../components/premiumStyles';
-import type { SessionSummary } from '../../../session/types';
-import { useTheme } from '../../../theme';
+import { Box, Text } from "../../../components/primitives";
+import { getPremiumCardStyle } from "../../../components/premiumStyles";
+import type { SessionSummary } from "../../../session/types";
+import { useTheme } from "../../../theme";
 
 type SessionCompletionFollowThroughProps = {
   summary: SessionSummary;
@@ -22,16 +22,20 @@ function buildChallengeLines(summary: SessionSummary): ChallengeLine[] {
 
   if (summary.tasksPlanned && summary.tasksCompleted !== undefined) {
     lines.push({
-      id: 'tasks',
-      label: 'Planned work',
+      id: "tasks",
+      label: "Planned work",
       value: `${summary.tasksCompleted}/${summary.tasksPlanned}`,
     });
   }
   if (summary.streakIncreased) {
-    lines.push({ id: 'streak', label: 'Streak challenge', value: '+1 day' });
+    lines.push({ id: "streak", label: "Streak challenge", value: "+1 day" });
   }
   if (summary.completionPercentage >= 100) {
-    lines.push({ id: 'completion', label: 'Completion challenge', value: 'Cleared' });
+    lines.push({
+      id: "completion",
+      label: "Completion challenge",
+      value: "Cleared",
+    });
   }
 
   return lines;
@@ -56,7 +60,7 @@ function FollowThroughCard({
           backgroundColor: theme.colors.background.secondary,
           borderColor: theme.colors.border.light,
           borderWidth: 1,
-          ...getPremiumCardStyle('medium'),
+          ...getPremiumCardStyle("medium"),
         }}
       >
         <Text variant="label" color={theme.colors.primary[400]}>
@@ -75,7 +79,10 @@ export function SessionCompletionFollowThrough({
   const [challengesExpanded, setChallengesExpanded] = useState(false);
   const challengeLines = useMemo(() => buildChallengeLines(summary), [summary]);
   const bossDamage = summary.damage?.totalDamage ?? 0;
-  const tomorrowFocusMinutes = Math.max(15, Math.floor(summary.effectiveDuration / 120));
+  const tomorrowFocusMinutes = Math.max(
+    15,
+    Math.floor(summary.effectiveDuration / 120),
+  );
 
   return (
     <Box px={6} pt={5} gap={4}>
@@ -86,14 +93,23 @@ export function SessionCompletionFollowThrough({
           accessibilityRole="button"
           onPress={() => setChallengesExpanded((current) => !current)}
         >
-          <Box flexDirection="row" alignItems="center" justifyContent="space-between" mt={3}>
-            <Text variant="body" color={theme.colors.text.primary} fontWeight="700">
+          <Box
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between"
+            mt={3}
+          >
+            <Text
+              variant="body"
+              color={theme.colors.text.primary}
+              fontWeight="700"
+            >
               {challengeLines.length > 0
                 ? `${challengeLines.length} updates ready`
-                : 'No challenge changes from this run'}
+                : "No challenge changes from this run"}
             </Text>
             <Text variant="caption" color={theme.colors.text.secondary}>
-              {challengesExpanded ? 'Collapse' : 'Review'}
+              {challengesExpanded ? "Collapse" : "Review"}
             </Text>
           </Box>
         </Pressable>
@@ -110,7 +126,11 @@ export function SessionCompletionFollowThrough({
                   <Text variant="bodySmall" color={theme.colors.text.secondary}>
                     {line.label}
                   </Text>
-                  <Text variant="bodySmall" color={theme.colors.text.primary} fontWeight="800">
+                  <Text
+                    variant="bodySmall"
+                    color={theme.colors.text.primary}
+                    fontWeight="800"
+                  >
                     {line.value}
                   </Text>
                 </Box>
@@ -126,7 +146,12 @@ export function SessionCompletionFollowThrough({
 
       {bossDamage > 0 ? (
         <FollowThroughCard delay={220} title="BOSS DAMAGE">
-          <Box flexDirection="row" justifyContent="space-between" alignItems="center" mt={3}>
+          <Box
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            mt={3}
+          >
             <Text variant="body" color={theme.colors.text.secondary}>
               Pressure applied
             </Text>

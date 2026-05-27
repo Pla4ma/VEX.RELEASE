@@ -1,8 +1,8 @@
-import { accessFor } from './debloat-test-helpers';
-import { getFeatureAvailability } from '../features/liveops-config/feature-access';
+import { accessFor } from "./debloat-test-helpers";
+import { getFeatureAvailability } from "../features/liveops-config/feature-access";
 
-describe('Risk 1 — Session component gating', () => {
-  it('battle pass component must check FeatureAvailability before rendering or querying', () => {
+describe("Risk 1 — Session component gating", () => {
+  it("battle pass component must check FeatureAvailability before rendering or querying", () => {
     const f0 = accessFor(0);
     const bp = getFeatureAvailability(f0.battle_pass);
     expect(bp.canRenderEntryPoint).toBe(false);
@@ -14,7 +14,7 @@ describe('Risk 1 — Session component gating', () => {
     expect(bp100.canQuery).toBe(false);
   });
 
-  it('boss combat HUD must check FeatureAvailability before rendering', () => {
+  it("boss combat HUD must check FeatureAvailability before rendering", () => {
     const f0 = accessFor(0);
     const boss = getFeatureAvailability(f0.boss_tab);
     expect(boss.canRenderEntryPoint).toBe(false);
@@ -26,7 +26,7 @@ describe('Risk 1 — Session component gating', () => {
     expect(boss5.canQuery).toBe(false);
   });
 
-  it('active session boss combat must check boss_tab before querying hooks', () => {
+  it("active session boss combat must check boss_tab before querying hooks", () => {
     const f0 = accessFor(0);
     const boss = getFeatureAvailability(f0.boss_tab);
     expect(boss.canQuery).toBe(false);
@@ -38,7 +38,7 @@ describe('Risk 1 — Session component gating', () => {
     expect(boss10.canRenderEntryPoint).toBe(true);
   });
 
-  it('inventory and shop navigation in completion must be gated', () => {
+  it("inventory and shop navigation in completion must be gated", () => {
     const f0 = accessFor(0);
     expect(getFeatureAvailability(f0.inventory).canNavigate).toBe(false);
     expect(getFeatureAvailability(f0.shop).canNavigate).toBe(false);

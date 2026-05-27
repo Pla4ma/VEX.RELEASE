@@ -1,7 +1,4 @@
-import type {
-  SessionHistoryEntry,
-  RecoveryRecord,
-} from "../types";
+import type { SessionHistoryEntry, RecoveryRecord } from "../types";
 import type { PatternMetrics } from "./session-analytics-types";
 
 export async function calculatePatternMetricsFromHistory(

@@ -1,5 +1,5 @@
-import React from 'react';
-import { StreakInsurancePrompt } from '../../../features/streaks/components/StreakInsurancePrompt';
+import React from "react";
+import { StreakInsurancePrompt } from "../../../features/streaks/components/StreakInsurancePrompt";
 
 type SessionSetupInsuranceCardProps = {
   coinBalance: number;

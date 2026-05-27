@@ -1,25 +1,37 @@
-import type { NotificationBudget, NotificationRequest } from './notification-budget-schema';
+import type {
+  NotificationBudget,
+  NotificationRequest,
+} from "./notification-budget-schema";
 
 export function checkPriorityRules(
   request: NotificationRequest,
-  budget: NotificationBudget
+  budget: NotificationBudget,
 ): { allowed: boolean; reason?: string } {
-  if (request.priority === 'STREAK_CRITICAL' || request.priority === 'PENDING_SYNC') {
+  if (
+    request.priority === "STREAK_CRITICAL" ||
+    request.priority === "PENDING_SYNC"
+  ) {
     return { allowed: true };
   }
 
   const remainingBudget = budget.maxDaily - budget.sentCount;
   if (remainingBudget <= 0) {
-    return { allowed: false, reason: 'No remaining budget for this priority level' };
+    return {
+      allowed: false,
+      reason: "No remaining budget for this priority level",
+    };
   }
-  if (request.priority === 'COACH_NEXT_ACTION' && remainingBudget === 1) {
+  if (request.priority === "COACH_NEXT_ACTION" && remainingBudget === 1) {
     return { allowed: true };
   }
-  if (request.priority === 'DAILY_MISSION' && remainingBudget === 1) {
-    return { allowed: false, reason: 'Reserving budget for higher priority notifications' };
+  if (request.priority === "DAILY_MISSION" && remainingBudget === 1) {
+    return {
+      allowed: false,
+      reason: "Reserving budget for higher priority notifications",
+    };
   }
-  if (request.priority === 'SQUAD_HELP' && remainingBudget <= 1) {
-    return { allowed: false, reason: 'Squad help is lowest priority' };
+  if (request.priority === "SQUAD_HELP" && remainingBudget <= 1) {
+    return { allowed: false, reason: "Squad help is lowest priority" };
   }
 
   return { allowed: true };
@@ -27,17 +39,19 @@ export function checkPriorityRules(
 
 export function isDuplicateNotification(
   request: NotificationRequest,
-  budget: NotificationBudget
+  budget: NotificationBudget,
 ): boolean {
   const recentNotifications = budget.notificationsSent.filter(
     (notification) => {
       const age = Date.now() - notification.sentAt;
       return age > 60 * 1000 && age < 4 * 60 * 60 * 1000;
-    }
+    },
   );
 
-  return recentNotifications.some((notification) =>
-    notification.type === request.type && notification.priority === request.priority
+  return recentNotifications.some(
+    (notification) =>
+      notification.type === request.type &&
+      notification.priority === request.priority,
   );
 }
 

@@ -3,11 +3,11 @@
  * Placeholder for offline-aware mutation hook
  */
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from "@tanstack/react-query";
 
 export function useOfflineAwareMutation<TData, TError, TVariables>(
   mutationFn: (variables: TVariables) => Promise<TData>,
-  options?: Record<string, unknown>
+  options?: Record<string, unknown>,
 ) {
   return useMutation<TData, TError, TVariables>({
     mutationFn,

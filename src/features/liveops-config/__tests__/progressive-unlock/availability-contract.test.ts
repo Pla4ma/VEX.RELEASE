@@ -143,7 +143,11 @@ describe("motivation profile effects", () => {
     const avail2calm = availabilityFor(2, "companion_detail", CALM_PROFILE);
     expect(avail2calm.state).toBe("unlocked");
 
-    const avail2student = availabilityFor(2, "companion_detail", STUDENT_PROFILE);
+    const avail2student = availabilityFor(
+      2,
+      "companion_detail",
+      STUDENT_PROFILE,
+    );
     expect(avail2student.state).toBe("unlocked");
   });
 

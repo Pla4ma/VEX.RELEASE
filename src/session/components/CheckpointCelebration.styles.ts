@@ -20,7 +20,10 @@ export const particleContainerStyle = {
   height: 1,
 };
 
-export const particleStyle = { position: "absolute" as const, borderRadius: 50 };
+export const particleStyle = {
+  position: "absolute" as const,
+  borderRadius: 50,
+};
 
 export const cardStyle = {
   padding: 32,

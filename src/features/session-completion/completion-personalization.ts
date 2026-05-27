@@ -76,7 +76,8 @@ export function buildCompletionPersonalizationResult(input: {
   };
 
   const situation = situationFor(summary, isComeback);
-  const resolvedLaneProfile = laneProfile ?? resolveCompletionLaneProfile({ lane, situation });
+  const resolvedLaneProfile =
+    laneProfile ?? resolveCompletionLaneProfile({ lane, situation });
   const resolvedLane = resolvedLaneProfile.primaryLane;
   personalizationInput.lane = resolvedLane;
   const display = displayFor(resolvedLane, situation);
@@ -84,7 +85,7 @@ export function buildCompletionPersonalizationResult(input: {
   let nextAction: PostSessionNextAction | null = null;
   try {
     nextAction = buildPostSessionNextAction({ summary });
-  } catch {
+  } catch (error: unknown) {
     // nextAction is optional — null means degraded systems hid the next move
   }
 

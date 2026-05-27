@@ -8,22 +8,19 @@
  * @phase 4
  */
 
-import React from 'react';
-import { Pressable } from 'react-native';
-import Animated, {
-  FadeIn,
-  FadeInUp,
-} from 'react-native-reanimated';
+import React from "react";
+import { Pressable } from "react-native";
+import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
-import { SuccessCelebration } from './SuccessCelebration';
-import { FirstResultSessionResults } from './FirstResultSessionResults';
-import { calculateSessionGrade } from '../../session-completion/grading-service';
-import type { SessionGradingInput } from '../../session-completion/grading-schemas';
-import { resolveSessionMode } from '../../../session/modes';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { Button } from "../../../components/primitives/Button";
+import { useTheme } from "../../../theme";
+import { SuccessCelebration } from "./SuccessCelebration";
+import { FirstResultSessionResults } from "./FirstResultSessionResults";
+import { calculateSessionGrade } from "../../session-completion/grading-service";
+import type { SessionGradingInput } from "../../session-completion/grading-schemas";
+import { resolveSessionMode } from "../../../session/modes";
 
 interface FirstResultScreenProps {
   userName: string;
@@ -51,45 +48,55 @@ export function FirstResultScreen({
   onComplete,
 }: FirstResultScreenProps): JSX.Element {
   const { theme } = useTheme();
-  const displayName = userName || 'there';
+  const displayName = userName || "there";
 
   const resolvedMode = resolveSessionMode(sessionData.mode);
   const gradingInput: SessionGradingInput = {
     ...sessionData,
     mode: resolvedMode,
-    isRecoverySession: resolvedMode === 'STARTER' || resolvedMode === 'RECOVERY',
+    isRecoverySession:
+      resolvedMode === "STARTER" || resolvedMode === "RECOVERY",
   };
 
   const gradingResult = calculateSessionGrade(gradingInput);
-  const focusScoreAfter = focusScoreBefore + (gradingResult.focusScoreImpactRecommendation || 0);
-  const sessionGrade = gradingResult.kind === 'completed' ? gradingResult.grade : 'D';
-  const sessionGradeLabel = gradingResult.kind === 'completed'
-    ? gradingResult.gradeLabel
-    : 'Recovery needed';
+  const focusScoreAfter =
+    focusScoreBefore + (gradingResult.focusScoreImpactRecommendation || 0);
+  const sessionGrade =
+    gradingResult.kind === "completed" ? gradingResult.grade : "D";
+  const sessionGradeLabel =
+    gradingResult.kind === "completed"
+      ? gradingResult.gradeLabel
+      : "Recovery needed";
 
   return (
     <Box flex={1} bg="background.primary" px="lg" py="xl">
       <Animated.View entering={FadeIn.duration(400)}>
         <Box gap="sm" mb="xl">
           <Text variant="label" color="success.DEFAULT">
-            Step 5 of 5
+            Complete
           </Text>
           <Text variant="h2" color="text.primary">
             First session complete, {displayName}!
           </Text>
           <Text variant="body" color="text.secondary">
-            You've taken the first step. Your focus journey begins now.
+            You have taken the first step. VEX is learning how you focus.
           </Text>
         </Box>
       </Animated.View>
 
-      <Animated.View entering={FadeInUp.duration(600).delay(200)} style={{ width: '100%' }}>
+      <Animated.View
+        entering={FadeInUp.duration(600).delay(200)}
+        style={{ width: "100%" }}
+      >
         <Box alignItems="center" py="lg">
           <SuccessCelebration />
         </Box>
       </Animated.View>
 
-      <Animated.View entering={FadeInUp.duration(500).delay(400)} style={{ width: '100%' }}>
+      <Animated.View
+        entering={FadeInUp.duration(500).delay(400)}
+        style={{ width: "100%" }}
+      >
         <FirstResultSessionResults
           sessionGrade={sessionGrade}
           sessionGradeLabel={sessionGradeLabel}
@@ -101,33 +108,27 @@ export function FirstResultScreen({
       </Animated.View>
 
       <Animated.View entering={FadeIn.duration(400).delay(600)}>
-        <Box gap="sm" mt="lg">
+        <Box gap="md" mt="lg">
           <Text variant="h3" color="text.primary" textAlign="center">
-            What's next?
+            VEX is learning what helps you start.
           </Text>
           <Box gap="sm">
             <Box flexDirection="row" alignItems="center" gap="sm">
-              <Text fontSize={16}>🔥</Text>
+              <Text fontSize={16}>🌱</Text>
               <Text variant="body" color="text.secondary">
-                Your streak has started (1 day)
+                Your session data was saved
               </Text>
             </Box>
             <Box flexDirection="row" alignItems="center" gap="sm">
-              <Text fontSize={16}>🎯</Text>
+              <Text fontSize={16}>✨</Text>
               <Text variant="body" color="text.secondary">
-                New daily mission: Complete another focus session
+                VEX will adapt your next session
               </Text>
             </Box>
             <Box flexDirection="row" alignItems="center" gap="sm">
-              <Text fontSize={16}>📈</Text>
+              <Text fontSize={16}>📅</Text>
               <Text variant="body" color="text.secondary">
-                Focus Score updated based on your performance
-              </Text>
-            </Box>
-            <Box flexDirection="row" alignItems="center" gap="sm">
-              <Text fontSize={16}>⭐</Text>
-              <Text variant="body" color="text.secondary">
-                Companion growth progress unlocked
+                Come back tomorrow for your next session
               </Text>
             </Box>
           </Box>
@@ -136,7 +137,10 @@ export function FirstResultScreen({
 
       <Box flex={1} minHeight={20} />
 
-      <Animated.View entering={FadeInUp.duration(400).delay(800)} style={{ width: '100%' }}>
+      <Animated.View
+        entering={FadeInUp.duration(400).delay(800)}
+        style={{ width: "100%" }}
+      >
         <Button
           variant="primary"
           size="lg"
@@ -154,4 +158,3 @@ export function FirstResultScreen({
 }
 
 export default FirstResultScreen;
-

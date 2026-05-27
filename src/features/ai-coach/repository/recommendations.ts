@@ -1,10 +1,10 @@
-import { getSupabaseClient } from '../../../config/supabase';
+import { getSupabaseClient } from "../../../config/supabase";
 import {
   SessionRecommendationSchema,
   type SessionRecommendation,
   type RecommendationType,
-} from '../schemas';
-import { RepositoryError } from './error';
+} from "../schemas";
+import { RepositoryError } from "./error";
 
 const supabase = getSupabaseClient();
 
@@ -13,12 +13,14 @@ export async function fetchRecommendations(
   limit: number = 10,
 ): Promise<SessionRecommendation[]> {
   const { data, error } = await supabase
-    .from('session_recommendations')
-    .select('*')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false })
+    .from("session_recommendations")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
     .limit(limit);
-  if (error) {throw new RepositoryError('fetchRecommendations', error);}
+  if (error) {
+    throw new RepositoryError("fetchRecommendations", error);
+  }
   return SessionRecommendationSchema.array().parse(data || []);
 }
 
@@ -27,14 +29,16 @@ export async function fetchActiveRecommendations(
   limit: number = 10,
 ): Promise<SessionRecommendation[]> {
   const { data, error } = await supabase
-    .from('session_recommendations')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('status', 'ACTIVE')
-    .order('priority', { ascending: false })
-    .order('created_at', { ascending: false })
+    .from("session_recommendations")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("status", "ACTIVE")
+    .order("priority", { ascending: false })
+    .order("created_at", { ascending: false })
     .limit(limit);
-  if (error) {throw new RepositoryError('fetchActiveRecommendations', error);}
+  if (error) {
+    throw new RepositoryError("fetchActiveRecommendations", error);
+  }
   return SessionRecommendationSchema.array().parse(data || []);
 }
 
@@ -43,12 +47,14 @@ export async function fetchRecommendationsByType(
   type: RecommendationType,
 ): Promise<SessionRecommendation[]> {
   const { data, error } = await supabase
-    .from('session_recommendations')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('recommendation_type', type)
-    .order('created_at', { ascending: false });
-  if (error) {throw new RepositoryError('fetchRecommendationsByType', error);}
+    .from("session_recommendations")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("recommendation_type", type)
+    .order("created_at", { ascending: false });
+  if (error) {
+    throw new RepositoryError("fetchRecommendationsByType", error);
+  }
   return SessionRecommendationSchema.array().parse(data || []);
 }
 
@@ -56,7 +62,7 @@ export async function createRecommendation(
   recommendation: SessionRecommendation,
 ): Promise<SessionRecommendation> {
   const { data, error } = await supabase
-    .from('session_recommendations')
+    .from("session_recommendations")
     .insert({
       id: recommendation.id,
       user_id: recommendation.userId,
@@ -74,7 +80,9 @@ export async function createRecommendation(
     })
     .select()
     .single();
-  if (error) {throw new RepositoryError('createRecommendation', error);}
+  if (error) {
+    throw new RepositoryError("createRecommendation", error);
+  }
   return SessionRecommendationSchema.parse(data);
 }
 
@@ -85,15 +93,21 @@ export async function updateRecommendationStatus(
 ): Promise<SessionRecommendation> {
   const updates: Record<string, unknown> = { status };
   if (timestamp) {
-    if (status === 'ACCEPTED') {updates.accepted_at = timestamp;}
-    if (status === 'DISMISSED') {updates.dismissed_at = timestamp;}
+    if (status === "ACCEPTED") {
+      updates.accepted_at = timestamp;
+    }
+    if (status === "DISMISSED") {
+      updates.dismissed_at = timestamp;
+    }
   }
   const { data, error } = await supabase
-    .from('session_recommendations')
+    .from("session_recommendations")
     .update(updates)
-    .eq('id', recommendationId)
+    .eq("id", recommendationId)
     .select()
     .single();
-  if (error) {throw new RepositoryError('updateRecommendationStatus', error);}
+  if (error) {
+    throw new RepositoryError("updateRecommendationStatus", error);
+  }
   return SessionRecommendationSchema.parse(data);
 }

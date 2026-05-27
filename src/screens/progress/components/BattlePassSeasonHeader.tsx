@@ -6,11 +6,10 @@
  * @phase 0A.3
  */
 
-import React from 'react';
-import { Box, Text } from '@/components/primitives';
-import { useTheme } from '@/theme';
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import React from "react";
+import { Box, Text } from "@/components/primitives";
+import { useTheme } from "@/theme";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 interface BattlePassSeasonHeaderProps {
   seasonName: string;
@@ -26,7 +25,11 @@ export function BattlePassSeasonHeader({
 
   return (
     <Box p="lg" bg={theme.colors.background.secondary}>
-      <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+      <Box
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Box>
           <Text variant="caption" color={theme.colors.text.tertiary} mb="xs">
             CURRENT SEASON
@@ -42,8 +45,13 @@ export function BattlePassSeasonHeader({
           borderRadius="lg"
           bg={isUrgent ? theme.colors.error.DEFAULT : theme.colors.primary[500]}
         >
-          <Text variant="caption" color={launchColors.hex_ffffff} fontWeight="bold">
-            {isUrgent ? '⏰ ' : ''}{daysRemaining} days left
+          <Text
+            variant="caption"
+            color={launchColors.hex_ffffff}
+            fontWeight="bold"
+          >
+            {isUrgent ? "⏰ " : ""}
+            {daysRemaining} days left
           </Text>
         </Box>
       </Box>

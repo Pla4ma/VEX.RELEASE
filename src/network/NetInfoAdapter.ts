@@ -4,11 +4,14 @@
  * Network connectivity monitoring and management.
  */
 
-import type { Nullable } from '../types/global';
-import type { NetInfoState, NetInfoSubscription } from '@react-native-community/netinfo';
-import { createDebugger } from '../utils/debug';
+import type { Nullable } from "../types/global";
+import type {
+  NetInfoState,
+  NetInfoSubscription,
+} from "@react-native-community/netinfo";
+import { createDebugger } from "../utils/debug";
 
-const debug = createDebugger('network:netinfo');
+const debug = createDebugger("network:netinfo");
 
 /**
  * Network state
@@ -35,7 +38,7 @@ export class NetInfoAdapter {
   private currentState: NetworkState = {
     isConnected: true,
     isInternetReachable: true,
-    type: 'unknown',
+    type: "unknown",
     details: null,
   };
 
@@ -44,7 +47,7 @@ export class NetInfoAdapter {
    */
   async initialize(): Promise<void> {
     try {
-      const NetInfo = require('@react-native-community/netinfo').default;
+      const NetInfo = require("@react-native-community/netinfo").default;
       this.netInfo = NetInfo;
 
       // Subscribe to network changes
@@ -53,10 +56,10 @@ export class NetInfoAdapter {
       }) as () => void;
 
       // Get initial state
-      const initialState = await NetInfo['fetch']();
+      const initialState = await NetInfo["fetch"]();
       this.handleNetworkChange(initialState);
     } catch (error) {
-      debug.error('Failed to initialize NetInfo:', error as Error);
+      debug.error("Failed to initialize NetInfo:", error as Error);
     }
   }
 
@@ -76,7 +79,7 @@ export class NetInfoAdapter {
       try {
         callback(this.currentState);
       } catch (error) {
-        debug.error('Error in network change callback:', error as Error);
+        debug.error("Error in network change callback:", error as Error);
       }
     });
   }

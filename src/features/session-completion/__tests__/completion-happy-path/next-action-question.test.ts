@@ -46,25 +46,29 @@ describe("3. Completion creates next action", () => {
 });
 
 describe("4. Completion asks exactly one question", () => {
-  it.each(LANES)("%s: clean completion produces exactly one reflection question", (lane) => {
-    const result = buildCompletionPersonalizationResult({
-      deletedMemoryIds: [],
-      focusScoreDelta: 8,
-      grade: "A",
-      isPersonalBest: false,
-      lane,
-      streakAction: "extended",
-      streakDays: 4,
-      summary: createSessionSummary({ sessionMode: SessionMode.FLOW }),
-      xpDelta: 120,
-    });
-    expect(typeof result.reflectionQuestion).toBe("string");
-    expect(result.reflectionQuestion.length).toBeGreaterThan(0);
-    expect(result.reflectionQuestion.endsWith("?")).toBe(true);
+  it.each(LANES)(
+    "%s: clean completion produces exactly one reflection question",
+    (lane) => {
+      const result = buildCompletionPersonalizationResult({
+        deletedMemoryIds: [],
+        focusScoreDelta: 8,
+        grade: "A",
+        isPersonalBest: false,
+        lane,
+        streakAction: "extended",
+        streakDays: 4,
+        summary: createSessionSummary({ sessionMode: SessionMode.FLOW }),
+        xpDelta: 120,
+      });
+      expect(typeof result.reflectionQuestion).toBe("string");
+      expect(result.reflectionQuestion.length).toBeGreaterThan(0);
+      expect(result.reflectionQuestion.endsWith("?")).toBe(true);
 
-    const questionMarkCount = (result.reflectionQuestion.match(/\?/g) ?? []).length;
-    expect(questionMarkCount).toBe(1);
-  });
+      const questionMarkCount = (result.reflectionQuestion.match(/\?/g) ?? [])
+        .length;
+      expect(questionMarkCount).toBe(1);
+    },
+  );
 
   it("partial uses a recovery question, not an interrogation", () => {
     const result = buildCompletionPersonalization({

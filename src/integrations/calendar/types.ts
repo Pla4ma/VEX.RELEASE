@@ -30,7 +30,7 @@ export interface CalendarGap {
   startTime: Date;
   endTime: Date;
   duration: number; // minutes
-  quality: 'EXCELLENT' | 'GOOD' | 'FAIR' | 'POOR';
+  quality: "EXCELLENT" | "GOOD" | "FAIR" | "POOR";
   reason: string;
 }
 

@@ -2,11 +2,8 @@
  * Content Study Zod Schemas
  */
 
-import { z } from 'zod';
-import {
-  ContentSourceTypeSchema,
-  ContentStatusSchema,
-} from './enums';
+import { z } from "zod";
+import { ContentSourceTypeSchema, ContentStatusSchema } from "./enums";
 
 export const StudyContentSchema = z.object({
   id: z.string(),
@@ -40,33 +37,39 @@ export const StudyGenerationSchema = z.object({
     targetAudience: z.array(z.string()).default([]),
     prerequisites: z.array(z.string()).default([]),
   }),
-  keyConcepts: z.array(z.object({
-    id: z.string(),
-    term: z.string(),
-    definition: z.string(),
-    importance: z.number(),
-  })),
-  tasks: z.array(z.object({
-    id: z.string(),
-    content: z.string(),
-    estimatedMinutes: z.number(),
-    priority: z.enum(['HIGH', 'MEDIUM', 'LOW']),
-    dependsOn: z.array(z.string()).optional(),
-  })),
-  quizItems: z.array(z.object({
-    id: z.string(),
-    question: z.string(),
-    answer: z.string(),
-    options: z.array(z.string()).optional(),
-    explanation: z.string().optional(),
-    difficulty: z.enum(['EASY', 'MEDIUM', 'HARD']),
-    conceptTag: z.string(),
-  })),
+  keyConcepts: z.array(
+    z.object({
+      id: z.string(),
+      term: z.string(),
+      definition: z.string(),
+      importance: z.number(),
+    }),
+  ),
+  tasks: z.array(
+    z.object({
+      id: z.string(),
+      content: z.string(),
+      estimatedMinutes: z.number(),
+      priority: z.enum(["HIGH", "MEDIUM", "LOW"]),
+      dependsOn: z.array(z.string()).optional(),
+    }),
+  ),
+  quizItems: z.array(
+    z.object({
+      id: z.string(),
+      question: z.string(),
+      answer: z.string(),
+      options: z.array(z.string()).optional(),
+      explanation: z.string().optional(),
+      difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
+      conceptTag: z.string(),
+    }),
+  ),
   sessionPlan: z.object({
     recommendedDuration: z.number(),
     recommendedSessions: z.number(),
     breakIntervalMinutes: z.number(),
-    suggestedDifficulty: z.enum(['EASY', 'NORMAL', 'CHALLENGING']),
+    suggestedDifficulty: z.enum(["EASY", "NORMAL", "CHALLENGING"]),
     focusAreas: z.array(z.string()),
   }),
   metadata: z.object({

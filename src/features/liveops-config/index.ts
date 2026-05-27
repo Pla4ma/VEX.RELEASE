@@ -1,20 +1,20 @@
-import { useMemo, useSyncExternalStore } from 'react';
+import { useMemo, useSyncExternalStore } from "react";
 
-import { useSessionStats } from '../../session/hooks/useSession';
-import { useAuthStore } from '../../store';
-import { useOnboardingStore } from '../onboarding/store';
+import { useSessionStats } from "../../session/hooks/useSession";
+import { useAuthStore } from "../../store";
+import { useOnboardingStore } from "../onboarding/store";
 import {
   buildFeatureAccess,
   type FeatureAccessMap,
   type FeatureKey,
   type ProductTier,
   type UserExperienceStage,
-} from './feature-access';
+} from "./feature-access";
 import {
   getDegradedFeatures,
   setFeatureAccessMap,
   subscribeToDegradedFeatures,
-} from './feature-access-store';
+} from "./feature-access-store";
 
 export type {
   FeatureAccess,
@@ -28,7 +28,7 @@ export type {
   ProductTier,
   UserExperienceStage,
   FeatureReleaseState,
-} from './feature-access';
+} from "./feature-access";
 export {
   buildFeatureAccess,
   getProductTier,
@@ -37,13 +37,19 @@ export {
   getFeatureAvailabilityFor,
   isFeatureAvailableForNavigation,
   isFeatureAvailableForQueries,
-} from './feature-access';
-export { FEATURE_DEPENDENCIES } from './feature-dependencies';
-export { featureHealthRegistry } from './feature-health';
-export type { FeatureHealthCheck, FeatureHealthStatus } from './feature-health';
-export { registerFeatureHealthChecks } from './feature-health-checks';
-export { useDisclosureAnalytics } from './feature-analytics';
-export { setFeatureAccessMap, getFeatureAccessMap, getAvailabilityFor, getDegradedFeatures, setDegradedFeatures } from './feature-access-store';
+} from "./feature-access";
+export { FEATURE_DEPENDENCIES } from "./feature-dependencies";
+export { featureHealthRegistry } from "./feature-health";
+export type { FeatureHealthCheck, FeatureHealthStatus } from "./feature-health";
+export { registerFeatureHealthChecks } from "./feature-health-checks";
+export { useDisclosureAnalytics } from "./feature-analytics";
+export {
+  setFeatureAccessMap,
+  getFeatureAccessMap,
+  getAvailabilityFor,
+  getDegradedFeatures,
+  setDegradedFeatures,
+} from "./feature-access-store";
 
 export interface FeatureAccessResult {
   error: Error | null;
@@ -66,15 +72,19 @@ export interface FeatureAccessOptions {
  * Degraded features come from the central store (populated by useFeatureHealth).
  * Callers may opt out of hydration for cold-start-safe fallback rendering.
  */
-export function useFeatureAccess(options: FeatureAccessOptions = {}): FeatureAccessResult {
+export function useFeatureAccess(
+  options: FeatureAccessOptions = {},
+): FeatureAccessResult {
   const enabled = options.enabled ?? true;
   const fallbackTotal = options.fallbackTotalCompletedSessions ?? 0;
-  const userId = useAuthStore((state) => state.user?.id ?? '');
-  const stats = useSessionStats(enabled ? userId : '');
+  const userId = useAuthStore((state) => state.user?.id ?? "");
+  const stats = useSessionStats(enabled ? userId : "");
   const completedSessions = enabled
-    ? stats.stats?.completedSessions ?? fallbackTotal
+    ? (stats.stats?.completedSessions ?? fallbackTotal)
     : fallbackTotal;
-  const motivationProfile = useOnboardingStore((state) => state.motivationProfile);
+  const motivationProfile = useOnboardingStore(
+    (state) => state.motivationProfile,
+  );
   const degradedFeatures = useSyncExternalStore(
     subscribeToDegradedFeatures,
     getDegradedFeatures,

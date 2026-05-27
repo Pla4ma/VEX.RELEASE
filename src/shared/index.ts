@@ -5,4 +5,4 @@
  */
 
 // AI Integration (Server-side Gemini)
-export * as ai from './ai';
+export * as ai from "./ai";

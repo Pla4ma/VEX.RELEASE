@@ -1,19 +1,19 @@
-import React from 'react';
-import { Pressable, View } from 'react-native';
+import React from "react";
+import { Pressable, View } from "react-native";
 
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { useOnboardingStore } from '../../onboarding/store';
-import type { ExplicitMotivationStyle, HomeExperienceModel } from '../schemas';
-import type { FirstWeekExperience } from '../../personalization/first-week-schemas';
-import type { HomeSurfaceMap } from '../surface-decision-schemas';
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import { useOnboardingStore } from "../../onboarding/store";
+import type { ExplicitMotivationStyle, HomeExperienceModel } from "../schemas";
+import type { FirstWeekExperience } from "../../personalization/first-week-schemas";
+import type { HomeSurfaceMap } from "../surface-decision-schemas";
 
 const OPTIONS: Array<{ label: string; value: ExplicitMotivationStyle }> = [
-  { label: 'Calm', value: 'calm' },
-  { label: 'Study-focused', value: 'study_focused' },
-  { label: 'Game-like', value: 'game_like' },
-  { label: 'Coach-led', value: 'coach_led' },
-  { label: 'Intense', value: 'intense' },
+  { label: "Calm", value: "calm" },
+  { label: "Study-focused", value: "study_focused" },
+  { label: "Game-like", value: "game_like" },
+  { label: "Coach-led", value: "coach_led" },
+  { label: "Intense", value: "intense" },
 ];
 
 interface HomeExperiencePreludeProps {
@@ -29,38 +29,54 @@ export function HomeExperiencePrelude({
 }: HomeExperiencePreludeProps): JSX.Element {
   const { theme } = useTheme();
   const selected = useOnboardingStore((state) => state.explicitMotivationStyle);
-  const setStyle = useOnboardingStore((state) => state.setExplicitMotivationStyle);
+  const setStyle = useOnboardingStore(
+    (state) => state.setExplicitMotivationStyle,
+  );
 
   const showMotivationPicker = firstWeekExperience
-    ? firstWeekExperience.allowedHomeSurfaces.includes('motivation_confirmation' as never)
-    : model.visibleSections.includes('motivation_style');
-  const showEvolutionTeaser =
-    firstWeekExperience
-      ? firstWeekExperience.unlockTease !== null && firstWeekExperience.currentDayStage !== 'POST_DAY_7'
-      : model.teasedElements.length > 0;
+    ? firstWeekExperience.allowedHomeSurfaces.includes(
+        "motivation_confirmation" as never,
+      )
+    : model.visibleSections.includes("motivation_style");
+  const showEvolutionTeaser = firstWeekExperience
+    ? firstWeekExperience.unlockTease !== null &&
+      firstWeekExperience.currentDayStage !== "POST_DAY_7"
+    : model.teasedElements.length > 0;
   const showCoachLine = firstWeekExperience
-    ? firstWeekExperience.allowedHomeSurfaces.includes('coach_presence_line' as never)
+    ? firstWeekExperience.allowedHomeSurfaces.includes(
+        "coach_presence_line" as never,
+      )
     : true;
-  const isBossVisible =
-    firstWeekExperience
-      ? firstWeekExperience.bossIntensity !== 'hidden' &&
-        surfaceMap
-        ? surfaceMap.boss_teaser !== 'hidden' && surfaceMap.boss_teaser !== 'blocked'
-        : false
-      : false;
+  const isBossVisible = firstWeekExperience
+    ? firstWeekExperience.bossIntensity !== "hidden" && surfaceMap
+      ? surfaceMap.boss_teaser !== "hidden" &&
+        surfaceMap.boss_teaser !== "blocked"
+      : false
+    : false;
 
-  const teaseCopy = firstWeekExperience?.unlockTease ?? model.teasedElements[0]?.copy;
+  const teaseCopy =
+    firstWeekExperience?.unlockTease ?? model.teasedElements[0]?.copy;
 
   return (
     <View style={{ gap: theme.spacing[3] }}>
       {showCoachLine ? (
         <View style={{ gap: theme.spacing[1] }}>
-          <Text variant="label" color="text.secondary">AI Coach</Text>
-          <Text variant="body" color="text.primary">{model.aiCoachMessageStyle}</Text>
+          <Text variant="label" color="text.secondary">
+            AI Coach
+          </Text>
+          <Text variant="body" color="text.primary">
+            {model.aiCoachMessageStyle}
+          </Text>
         </View>
       ) : null}
       {showMotivationPicker ? (
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing[2] }}>
+        <View
+          style={{
+            flexDirection: "row",
+            flexWrap: "wrap",
+            gap: theme.spacing[2],
+          }}
+        >
           {OPTIONS.map((option) => (
             <Pressable
               key={option.value}
@@ -69,9 +85,10 @@ export function HomeExperiencePrelude({
               accessibilityRole="button"
               accessibilityHint="Personalizes Home copy and keeps the first session available"
               style={{
-                backgroundColor: selected === option.value
-                  ? theme.colors.primary[500]
-                  : theme.colors.background.secondary,
+                backgroundColor:
+                  selected === option.value
+                    ? theme.colors.primary[500]
+                    : theme.colors.background.secondary,
                 borderColor: theme.colors.border.light,
                 borderRadius: theme.borderRadius.md,
                 borderWidth: 1,
@@ -82,7 +99,9 @@ export function HomeExperiencePrelude({
             >
               <Text
                 variant="bodySmall"
-                color={selected === option.value ? 'text.inverse' : 'text.primary'}
+                color={
+                  selected === option.value ? "text.inverse" : "text.primary"
+                }
               >
                 {option.label}
               </Text>
@@ -98,7 +117,9 @@ export function HomeExperiencePrelude({
             padding: theme.spacing[4],
           }}
         >
-          <Text variant="label" color="text.secondary">Next evolution</Text>
+          <Text variant="label" color="text.secondary">
+            Next evolution
+          </Text>
           <Text variant="body" color="text.primary">
             {teaseCopy}
           </Text>
@@ -114,7 +135,9 @@ export function HomeExperiencePrelude({
           accessibilityLabel="Boss teaser active"
           accessibilityRole="text"
         >
-          <Text variant="label" color="text.secondary">Challenge forming</Text>
+          <Text variant="label" color="text.secondary">
+            Challenge forming
+          </Text>
           <Text variant="body" color="text.primary">
             {model.rpgBossPlacement}
           </Text>

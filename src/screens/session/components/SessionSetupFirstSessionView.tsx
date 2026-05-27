@@ -36,7 +36,9 @@ export function FirstSessionView({
   const personalization = useFirstSessionPersonalization();
   const { user } = useAuthStore();
   const userId = user?.id ?? "";
-  const markFirstSessionStarted = useOnboardingStore((s) => s.markFirstSessionStarted);
+  const markFirstSessionStarted = useOnboardingStore(
+    (s) => s.markFirstSessionStarted,
+  );
   const [offlineMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,7 +52,9 @@ export function FirstSessionView({
       markFirstSessionStarted();
       handleFirstSessionStart(config).catch((err: unknown) => {
         const message =
-          err instanceof Error ? err.message : "Unexpected session start failure";
+          err instanceof Error
+            ? err.message
+            : "Unexpected session start failure";
         setError(message);
       });
     },
@@ -59,7 +63,13 @@ export function FirstSessionView({
 
   if (!userId) {
     return (
-      <Box flex={1} bg="background.primary" justifyContent="center" alignItems="center" p="lg">
+      <Box
+        flex={1}
+        bg="background.primary"
+        justifyContent="center"
+        alignItems="center"
+        p="lg"
+      >
         <Text variant="h4" color="error.DEFAULT" mb="md">
           Not authenticated
         </Text>

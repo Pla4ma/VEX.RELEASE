@@ -1,21 +1,21 @@
 import {
   buildSessionSummaryFromCompletionLedger,
   parseSessionCompletionParams,
-} from '../service';
-import { createCompletionLedger, SESSION_ID } from './ledger-test-utils';
+} from "../service";
+import { createCompletionLedger, SESSION_ID } from "./ledger-test-utils";
 
-describe('session completion route recovery', () => {
-  it('keeps a recoverable session id when summary params are missing', () => {
+describe("session completion route recovery", () => {
+  it("keeps a recoverable session id when summary params are missing", () => {
     const result = parseSessionCompletionParams({
       sessionId: SESSION_ID,
     });
 
     expect(result.params).toBeNull();
     expect(result.recoverySessionId).toBe(SESSION_ID);
-    expect(result.warningMessage).toContain('rebuild');
+    expect(result.warningMessage).toContain("rebuild");
   });
 
-  it('rebuilds a truthful degraded summary from the completion ledger', () => {
+  it("rebuilds a truthful degraded summary from the completion ledger", () => {
     const ledger = createCompletionLedger({
       completedDurationSeconds: 900,
       effectiveFocusedSeconds: 840,

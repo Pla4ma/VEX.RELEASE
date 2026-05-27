@@ -31,8 +31,8 @@
  * - Subscribe without cleanup in the same scope
  * - Use event order for correctness guarantees
  */
-import type { EventChannels } from './EventTypes';
-import { eventBus } from './EventBus';
+import type { EventChannels } from "./EventTypes";
+import { eventBus } from "./EventBus";
 
 const processedKeys = new Map<string, Set<string>>();
 

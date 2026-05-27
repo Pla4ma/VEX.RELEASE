@@ -11,7 +11,12 @@ export { createSessionSummary, SESSION_ID };
 export { SessionMode };
 export type { Lane };
 
-export const LANES: Lane[] = ["student", "game_like", "deep_creative", "minimal_normal"];
+export const LANES: Lane[] = [
+  "student",
+  "game_like",
+  "deep_creative",
+  "minimal_normal",
+];
 
 export const CLEAN_QUESTIONS: Record<Lane, number> = {
   student: 1,

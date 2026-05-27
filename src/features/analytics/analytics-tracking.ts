@@ -3,17 +3,17 @@
  * Sentry breadcrumbs and custom event tracking for analytics feature
  */
 
-import * as Sentry from '@sentry/react-native';
-import { eventBus } from '../../events';
+import * as Sentry from "@sentry/react-native";
+import { eventBus } from "../../events";
 
 // Analytics event tracking
 export const AnalyticsTracking = {
   // Track insight generation
   trackInsightGenerated(userId: string, type: string, severity: string) {
     Sentry.addBreadcrumb({
-      category: 'analytics',
+      category: "analytics",
       message: `Insight generated: ${type}`,
-      level: 'info',
+      level: "info",
       data: { userId, type, severity },
     });
   },
@@ -21,9 +21,9 @@ export const AnalyticsTracking = {
   // Track insight interaction
   trackInsightRead(userId: string, insightId: string) {
     Sentry.addBreadcrumb({
-      category: 'analytics',
-      message: 'Insight marked as read',
-      level: 'info',
+      category: "analytics",
+      message: "Insight marked as read",
+      level: "info",
       data: { userId, insightId },
     });
   },
@@ -31,18 +31,18 @@ export const AnalyticsTracking = {
   // Track dashboard interactions
   trackDashboardViewed(userId: string, dashboardId: string) {
     Sentry.addBreadcrumb({
-      category: 'analytics',
-      message: 'Dashboard viewed',
-      level: 'info',
+      category: "analytics",
+      message: "Dashboard viewed",
+      level: "info",
       data: { userId, dashboardId },
     });
   },
 
   trackWidgetUpdated(userId: string, widgetId: string, changes: string[]) {
     Sentry.addBreadcrumb({
-      category: 'analytics',
-      message: 'Dashboard widget updated',
-      level: 'info',
+      category: "analytics",
+      message: "Dashboard widget updated",
+      level: "info",
       data: { userId, widgetId, changes },
     });
   },
@@ -50,37 +50,41 @@ export const AnalyticsTracking = {
   // Track export operations
   trackExportRequested(userId: string, format: string, dataTypes: string[]) {
     Sentry.addBreadcrumb({
-      category: 'analytics',
-      message: 'Data export requested',
-      level: 'info',
+      category: "analytics",
+      message: "Data export requested",
+      level: "info",
       data: { userId, format, dataTypes },
     });
   },
 
   trackExportCompleted(userId: string, jobId: string, fileSize: number) {
     Sentry.addBreadcrumb({
-      category: 'analytics',
-      message: 'Data export completed',
-      level: 'info',
+      category: "analytics",
+      message: "Data export completed",
+      level: "info",
       data: { userId, jobId, fileSize },
     });
   },
 
   trackExportFailed(userId: string, jobId: string, error: string) {
     Sentry.addBreadcrumb({
-      category: 'analytics',
-      message: 'Data export failed',
-      level: 'error',
+      category: "analytics",
+      message: "Data export failed",
+      level: "error",
       data: { userId, jobId, error },
     });
   },
 
   // Track pattern detection
-  trackPatternDetected(userId: string, patternType: string, confidence: number) {
+  trackPatternDetected(
+    userId: string,
+    patternType: string,
+    confidence: number,
+  ) {
     Sentry.addBreadcrumb({
-      category: 'analytics',
+      category: "analytics",
       message: `Pattern detected: ${patternType}`,
-      level: 'info',
+      level: "info",
       data: { userId, patternType, confidence },
     });
   },
@@ -88,17 +92,21 @@ export const AnalyticsTracking = {
   // Track preference changes
   trackPreferencesChanged(userId: string, changes: Record<string, unknown>) {
     Sentry.addBreadcrumb({
-      category: 'analytics',
-      message: 'Analytics preferences updated',
-      level: 'info',
+      category: "analytics",
+      message: "Analytics preferences updated",
+      level: "info",
       data: { userId, changes },
     });
   },
 
   // Track errors
-  trackError(operation: string, error: Error, context?: Record<string, unknown>) {
+  trackError(
+    operation: string,
+    error: Error,
+    context?: Record<string, unknown>,
+  ) {
     Sentry.captureException(error, {
-      tags: { feature: 'analytics', operation },
+      tags: { feature: "analytics", operation },
       extra: context,
     });
   },
@@ -107,36 +115,32 @@ export const AnalyticsTracking = {
 // Setup event listeners for tracking
 export function setupAnalyticsTracking(): () => void {
   const unsubscribeInsightGenerated = eventBus.subscribe(
-    'analytics:insight_generated',
+    "analytics:insight_generated",
     (payload) => {
       AnalyticsTracking.trackInsightGenerated(
         payload.userId,
         payload.type,
-        'info'
+        "info",
       );
-    }
+    },
   );
 
   const unsubscribeExportCompleted = eventBus.subscribe(
-    'analytics:export_completed',
+    "analytics:export_completed",
     (payload) => {
-      AnalyticsTracking.trackExportCompleted(
-        payload.userId,
-        payload.jobId,
-        0
-      );
-    }
+      AnalyticsTracking.trackExportCompleted(payload.userId, payload.jobId, 0);
+    },
   );
 
   const unsubscribeExportFailed = eventBus.subscribe(
-    'analytics:export_failed',
+    "analytics:export_failed",
     (payload) => {
       AnalyticsTracking.trackExportFailed(
         payload.userId,
         payload.jobId,
-        payload.error
+        payload.error,
       );
-    }
+    },
   );
 
   return () => {

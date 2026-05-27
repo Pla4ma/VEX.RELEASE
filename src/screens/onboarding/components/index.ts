@@ -5,33 +5,34 @@
  * @phase 2
  */
 
-export { OnboardingWelcome } from './OnboardingWelcome';
-export { OnboardingSetName } from './OnboardingSetName';
+export { OnboardingWelcome } from "./OnboardingWelcome";
+export { OnboardingSetName } from "./OnboardingSetName";
 export {
   OnboardingChooseGoal,
   type OnboardingGoalType,
   type OnboardingGoal,
-} from './OnboardingChooseGoal';
-export { OnboardingChooseElement } from './OnboardingChooseElement';
+} from "./OnboardingChooseGoal";
+export { OnboardingChooseElement } from "./OnboardingChooseElement";
+export { OnboardingPermissions } from "./OnboardingPermissions";
+export { RevealStep } from "./RevealStep";
+export { GoalStep } from "./GoalStep";
 export {
-  OnboardingChoosePersona,
-  type CoachPersonaType,
-  type CoachPersona,
-} from './OnboardingChoosePersona';
-export { OnboardingPermissions } from './OnboardingPermissions';
-export { RevealStep } from './RevealStep';
-export { GoalStep } from './GoalStep';
-export { LaneConfirmationStep, LANE_LABELS, LANE_EMOJI } from './LaneConfirmationStep';
-export { LaneChoiceStep } from './LaneChoiceStep';
-export { MotivationStyleStep } from './MotivationStyleStep';
-export { StarterStep } from './StarterStep';
-export { LauncherStep } from './LauncherStep';
-export { OnboardingFlowLayout, SignedOutOnboardingState } from './OnboardingFlowLayout';
+  LaneConfirmationStep,
+  LANE_LABELS,
+  LANE_EMOJI,
+} from "./LaneConfirmationStep";
+export { LaneChoiceStep } from "./LaneChoiceStep";
+export { MotivationStyleStep } from "./MotivationStyleStep";
+export { StarterStep } from "./StarterStep";
+export { LauncherStep } from "./LauncherStep";
+export {
+  OnboardingFlowLayout,
+  SignedOutOnboardingState,
+} from "./OnboardingFlowLayout";
 export {
   DEFAULT_COMPANION_ELEMENT,
-  DEFAULT_PERSONA_ID,
   MOTIVATION_STYLE_OPTIONS,
   STARTER_PRESETS,
   STEP_TITLES,
   type StarterPreset,
-} from './onboarding-flow-data';
+} from "./onboarding-flow-data";

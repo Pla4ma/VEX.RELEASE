@@ -3,22 +3,22 @@
  */
 
 export interface RankingEventDefinitions {
-  'ranking:updated': {
+  "ranking:updated": {
     userId: string;
     category: string;
     newRank: number;
     oldRank: number;
   };
-  'ranking:tier_achieved': {
+  "ranking:tier_achieved": {
     userId: string;
     tierName: string;
     previousTier?: string;
   };
-  'ranking:leaderboard_updated': {
+  "ranking:leaderboard_updated": {
     leaderboardId: string;
     entriesUpdated: number;
   };
-  'ranking:season_ended': {
+  "ranking:season_ended": {
     seasonId: string;
     userId: string;
     finalRank: number;

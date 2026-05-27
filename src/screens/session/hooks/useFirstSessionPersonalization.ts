@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
-import { useOnboardingStore } from '../../../features/onboarding';
-import { SessionMode } from '../../../session/modes';
-import type { MotivationProfileType } from '../../../features/onboarding/schemas';
+import { useMemo } from "react";
+import { useOnboardingStore } from "../../../features/onboarding";
+import { SessionMode } from "../../../session/modes";
+import type { MotivationProfileType } from "../../../features/onboarding/schemas";
 
 export interface FirstSessionPersonalization {
   defaultMode: SessionMode;
@@ -9,7 +9,6 @@ export interface FirstSessionPersonalization {
   durationLabel: string;
   coachLine: string;
   companionElement: string | null;
-  showBossTease: boolean;
 }
 
 type ModeMap = Partial<Record<MotivationProfileType, SessionMode>>;
@@ -41,19 +40,22 @@ const PROFILE_TO_DURATION: Partial<Record<MotivationProfileType, number>> = {
 };
 
 const PROFILE_TO_COACH_LINE: Partial<Record<MotivationProfileType, string>> = {
-  calm: 'Start gentle. No pressure. Just show up.',
-  game_like: 'Your first boss is watching. Let them see you show up.',
-  intense: 'One block. Full intensity. Set the tone.',
-  competitive: 'Every session counts. Make this one matter.',
-  study_focused: 'Your material is ready. Lock in and absorb.',
-  student: 'Start your study rhythm now. Build the habit.',
-  worker: 'Your work deserves your full attention.',
-  friendly: 'No pressure at all. Just you and the timer.',
-  coach_led: 'Your coach believes in this first step.',
-  creator: 'Your work needs your presence. Start creating.',
+  calm: "Start gentle. No pressure. Just show up.",
+  game_like: "One session. That is all it takes to begin.",
+  intense: "One block. Full intensity. Set the tone.",
+  competitive: "Every session counts. Make this one matter.",
+  study_focused: "Start one study block. Lock in and absorb.",
+  student: "Start your study rhythm now. Build the habit.",
+  worker: "Protect one project block. Give it your full attention.",
+  friendly: "No pressure at all. Just you and the timer.",
+  coach_led: "Your coach believes in this first step.",
+  creator: "Start one clean session. Your presence is all you need.",
 };
 
-function pickProfileType(primary: MotivationProfileType, secondary: MotivationProfileType[]): MotivationProfileType {
+function pickProfileType(
+  primary: MotivationProfileType,
+  secondary: MotivationProfileType[],
+): MotivationProfileType {
   return primary;
 }
 
@@ -73,22 +75,19 @@ export function useFirstSessionPersonalization(): FirstSessionPersonalization {
     const baseDuration = PROFILE_TO_DURATION[profileType] ?? 25;
     const suggestedDurationMinutes = focusDuration ?? baseDuration;
 
-    const coachLine = PROFILE_TO_COACH_LINE[profileType] ?? 'One session. That is all it takes to begin.';
+    const coachLine =
+      PROFILE_TO_COACH_LINE[profileType] ??
+      "One session. That is all it takes to begin.";
 
-    const showBossTease = profileType === 'game_like';
-
-    const durationLabel = showBossTease
-      ? 'Short session to show the boss you are here'
-      : profileType === 'calm'
-        ? 'A gentle start to build your rhythm'
-        : 'Recommended to build momentum';
+    const durationLabel = profileType === "calm"
+      ? "A gentle start to build your rhythm"
+      : "Recommended to build momentum";
 
     return {
       companionElement: element ?? null,
       coachLine,
       defaultMode,
       durationLabel,
-      showBossTease,
       suggestedDurationMinutes,
     };
   }, [element, focusDuration, goal, motivationProfile]);
@@ -96,15 +95,15 @@ export function useFirstSessionPersonalization(): FirstSessionPersonalization {
 
 function goalToProfileType(goal: string | null): MotivationProfileType {
   switch (goal) {
-    case 'STUDY':
-      return 'study_focused';
-    case 'WORK':
-      return 'worker';
-    case 'CREATIVE':
-      return 'creator';
-    case 'PERSONAL':
-      return 'calm';
+    case "STUDY":
+      return "study_focused";
+    case "WORK":
+      return "worker";
+    case "CREATIVE":
+      return "creator";
+    case "PERSONAL":
+      return "calm";
     default:
-      return 'friendly';
+      return "friendly";
   }
 }

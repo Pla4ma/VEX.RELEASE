@@ -5,13 +5,24 @@ export interface StreakInsuranceStatus {
   restoredDays?: number;
 }
 
+export interface ConsumeInsuranceInput {
+  userId: string;
+  insuranceId: string;
+}
+
 export function getInsuranceStatus(): StreakInsuranceStatus {
   return { isInsured: false, daysRemaining: 0 };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function consumeInsurance(_input: any): Promise<StreakInsuranceStatus> {
-  return Promise.resolve({ isInsured: false, daysRemaining: 0, success: false, restoredDays: 0 });
+export async function consumeInsurance(
+  _input: ConsumeInsuranceInput,
+): Promise<StreakInsuranceStatus> {
+  return {
+    isInsured: false,
+    daysRemaining: 0,
+    success: false,
+    restoredDays: 0,
+  };
 }
 
 export type InsuranceStatus = StreakInsuranceStatus;

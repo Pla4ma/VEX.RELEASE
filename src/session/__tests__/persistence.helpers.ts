@@ -6,7 +6,13 @@ import {
   canResumeSession,
 } from "../utils/persistence";
 
-export { SessionPersistence, PersistedSessionState, SessionPersistenceError, isSessionStale, canResumeSession };
+export {
+  SessionPersistence,
+  PersistedSessionState,
+  SessionPersistenceError,
+  isSessionStale,
+  canResumeSession,
+};
 
 export const mockSession: PersistedSessionState = {
   sessionId: "550e8400-e29b-41d4-a716-446655440000",

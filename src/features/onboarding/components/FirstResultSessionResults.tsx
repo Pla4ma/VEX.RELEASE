@@ -4,12 +4,12 @@
  * Displays grade, focus score change, companion reaction, and XP earned.
  */
 
-import React from 'react';
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { FocusScoreChange } from './FocusScoreChange';
-import type { SessionGradingResult } from '../../session-completion/grading-schemas';
+import React from "react";
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import { FocusScoreChange } from "./FocusScoreChange";
+import type { SessionGradingResult } from "../../session-completion/grading-schemas";
 
 interface FirstResultSessionResultsProps {
   sessionGrade: string;
@@ -29,7 +29,9 @@ export function FirstResultSessionResults({
   gradingResult,
 }: FirstResultSessionResultsProps): JSX.Element {
   const { theme } = useTheme();
-  const xpEarned = Math.floor(sessionDuration * 2 * (gradingResult.xpQualityMultiplier || 1));
+  const xpEarned = Math.floor(
+    sessionDuration * 2 * (gradingResult.xpQualityMultiplier || 1),
+  );
 
   return (
     <Box gap="md">
@@ -75,11 +77,11 @@ export function FirstResultSessionResults({
           Your companion is excited!
         </Text>
         <Text variant="body" color="text.secondary" textAlign="center">
-          {sessionGrade === 'S' || sessionGrade === 'A'
+          {sessionGrade === "S" || sessionGrade === "A"
             ? "Amazing focus! Your companion can't wait for the next session."
-            : sessionGrade === 'B'
-            ? 'Great job! Your companion is proud of your progress.'
-            : "Good start! Your companion knows you'll do even better next time."}
+            : sessionGrade === "B"
+              ? "Great job! Your companion is proud of your progress."
+              : "Good start! Your companion knows you'll do even better next time."}
         </Text>
       </Box>
 
@@ -98,13 +100,20 @@ export function FirstResultSessionResults({
           <Text variant="h3" color="text.primary" fontWeight="700">
             +{xpEarned} XP
           </Text>
-          {gradingResult.xpQualityMultiplier && gradingResult.xpQualityMultiplier > 1 && (
-            <Box px="sm" py="xs" borderRadius="full" bg={`${theme.colors.success[500]}20`}>
-              <Text variant="caption" color="success.600" fontWeight="600">
-                +{Math.round((gradingResult.xpQualityMultiplier - 1) * 100)}% bonus
-              </Text>
-            </Box>
-          )}
+          {gradingResult.xpQualityMultiplier &&
+            gradingResult.xpQualityMultiplier > 1 && (
+              <Box
+                px="sm"
+                py="xs"
+                borderRadius="full"
+                bg={`${theme.colors.success[500]}20`}
+              >
+                <Text variant="caption" color="success.600" fontWeight="600">
+                  +{Math.round((gradingResult.xpQualityMultiplier - 1) * 100)}%
+                  bonus
+                </Text>
+              </Box>
+            )}
         </Box>
         <Text variant="body" color="text.secondary">
           Experience earned toward next level

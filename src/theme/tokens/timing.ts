@@ -4,7 +4,7 @@
  * Duration and easing values for consistent animations.
  */
 
-import type { AnimationTiming, TimingFunction } from '../types';
+import type { AnimationTiming, TimingFunction } from "../types";
 
 /**
  * Animation duration values in milliseconds
@@ -31,12 +31,12 @@ export const animationDelay = {
  * Timing functions
  */
 export const timingFunctions: Record<TimingFunction, string> = {
-  linear: 'linear',
-  ease: 'ease',
-  easeIn: 'ease-in',
-  easeOut: 'ease-out',
-  easeInOut: 'ease-in-out',
-  spring: 'spring',
+  linear: "linear",
+  ease: "ease",
+  easeIn: "ease-in",
+  easeOut: "ease-out",
+  easeInOut: "ease-in-out",
+  spring: "spring",
 };
 
 /**

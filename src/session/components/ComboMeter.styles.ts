@@ -110,7 +110,10 @@ export const milestoneCardStyle = {
 };
 
 export const milestoneEmojiStyle = { fontSize: 48, marginBottom: 12 };
-export const milestoneTextStyle = { textAlign: "center" as const, marginBottom: 8 };
+export const milestoneTextStyle = {
+  textAlign: "center" as const,
+  marginBottom: 8,
+};
 
 export const comboBrokenOverlayStyle = {
   position: "absolute" as const,
@@ -130,8 +133,14 @@ export const comboBrokenCardStyle = {
 };
 
 export const comboBrokenEmojiStyle = { fontSize: 40, marginBottom: 8 };
-export const comboBrokenTextStyle = { color: launchColors.hex_fff, marginBottom: 4 };
-export const comboBrokenSubtextStyle = { color: launchColors.hex_fff, opacity: 0.8 };
+export const comboBrokenTextStyle = {
+  color: launchColors.hex_fff,
+  marginBottom: 4,
+};
+export const comboBrokenSubtextStyle = {
+  color: launchColors.hex_fff,
+  opacity: 0.8,
+};
 
 export const warningOverlayStyle = {
   position: "absolute" as const,

@@ -4,8 +4,8 @@ import {
   getStage,
   type FeatureAccessMap,
   type ProductTier,
-} from '../../../features/liveops-config';
-import type { RootExposureFlags } from '../../../navigation/feature-exposure';
+} from "../../../features/liveops-config";
+import type { RootExposureFlags } from "../../../navigation/feature-exposure";
 
 export interface HomeFeatureRuntime {
   canQueryBattlePass: boolean;
@@ -35,19 +35,26 @@ interface HomeFeatureRuntimeInput {
 function resolveRuntimeInput(
   input: FeatureAccessMap | HomeFeatureRuntimeInput,
   productTier?: ProductTier,
-): { features: FeatureAccessMap; productTier: ProductTier; totalSessions: number } {
-  if ('features' in input) {
+): {
+  features: FeatureAccessMap;
+  productTier: ProductTier;
+  totalSessions: number;
+} {
+  if ("features" in input) {
     const totalSessions = input.totalSessions ?? 0;
     return {
       features: input.features,
-      productTier: productTier ?? input.productTier ?? getProductTier(getStage(totalSessions), totalSessions),
+      productTier:
+        productTier ??
+        input.productTier ??
+        getProductTier(getStage(totalSessions), totalSessions),
       totalSessions,
     };
   }
 
   return {
     features: input,
-    productTier: productTier ?? 'CORE_EXECUTION',
+    productTier: productTier ?? "CORE_EXECUTION",
     totalSessions: 0,
   };
 }

@@ -1,4 +1,8 @@
-import { SessionRewardIntegration, eventBus, createMockSummary } from './SessionRewardIntegration-disabled.helpers';
+import {
+  SessionRewardIntegration,
+  eventBus,
+  createMockSummary,
+} from "./SessionRewardIntegration-disabled.helpers";
 
 describe("SessionRewardIntegration - disabled (all flags false)", () => {
   const mockedEventBus = jest.mocked(eventBus);

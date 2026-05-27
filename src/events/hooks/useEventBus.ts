@@ -4,9 +4,9 @@
  * React hook for accessing the event bus.
  */
 
-import { useCallback, useRef, useEffect } from 'react';
-import { eventBus } from '../EventBus';
-import type { EventChannels } from '../EventTypes';
+import { useCallback, useRef, useEffect } from "react";
+import { eventBus } from "../EventBus";
+import type { EventChannels } from "../EventTypes";
 
 /**
  * Hook to access the event bus instance
@@ -21,7 +21,7 @@ export function useEventBus() {
 export function useEventSubscription<T extends keyof EventChannels>(
   channel: T,
   handler: (data: EventChannels[T]) => void,
-  deps: React.DependencyList = []
+  deps: React.DependencyList = [],
 ) {
   const handlerRef = useRef(handler);
 
@@ -31,9 +31,8 @@ export function useEventSubscription<T extends keyof EventChannels>(
   }, [handler]);
 
   useEffect(() => {
-    const unsubscribe = eventBus.subscribe(
-      channel,
-      (data) => handlerRef.current(data as EventChannels[T])
+    const unsubscribe = eventBus.subscribe(channel, (data) =>
+      handlerRef.current(data as EventChannels[T]),
     );
 
     return unsubscribe;
@@ -49,6 +48,6 @@ export function useEventPublisher<T extends keyof EventChannels>(channel: T) {
     (data: EventChannels[T]) => {
       eventBus.publish(channel, data);
     },
-    [channel]
+    [channel],
   );
 }

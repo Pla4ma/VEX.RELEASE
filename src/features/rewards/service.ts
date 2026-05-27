@@ -4,7 +4,7 @@ export function calculateXpReward(): number {
 }
 
 export async function createReward(_input?: unknown): Promise<{ id: string }> {
-  return Promise.resolve({ id: '' });
+  return Promise.resolve({ id: "" });
 }
 
 export async function claimReward(): Promise<void> {

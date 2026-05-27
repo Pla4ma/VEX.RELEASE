@@ -10,7 +10,12 @@ export interface AccessibilityPreferences {
   reducedMotion: boolean;
   animationsEnabled: boolean;
   highContrast: boolean;
-  colorBlindMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia' | 'achromatopsia';
+  colorBlindMode:
+    | "none"
+    | "protanopia"
+    | "deuteranopia"
+    | "tritanopia"
+    | "achromatopsia";
   textScale: number;
   boldText: boolean;
   simplifiedUI: boolean;
@@ -37,7 +42,7 @@ export interface ContrastCheck {
 export interface ScreenReaderAnnouncement {
   id: string;
   message: string;
-  priority: 'polite' | 'assertive';
+  priority: "polite" | "assertive";
   timestamp: number;
   delay?: number;
 }
@@ -49,7 +54,12 @@ export interface AnimationConfig {
   useNativeDriver?: boolean;
 }
 
-export type ColorBlindType = 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia' | 'achromatopsia';
+export type ColorBlindType =
+  | "none"
+  | "protanopia"
+  | "deuteranopia"
+  | "tritanopia"
+  | "achromatopsia";
 
 export interface FocusableElement {
   id: string;
@@ -62,8 +72,16 @@ export type AccessibilityIssue = AccessibilityIssueBase;
 
 export interface AccessibilityIssueBase {
   id: string;
-  type: 'focus' | 'label' | 'contrast' | 'motion' | 'keyboard' | 'semantic' | 'touch' | 'screen-reader';
-  severity: 'low' | 'medium' | 'high' | 'critical';
+  type:
+    | "focus"
+    | "label"
+    | "contrast"
+    | "motion"
+    | "keyboard"
+    | "semantic"
+    | "touch"
+    | "screen-reader";
+  severity: "low" | "medium" | "high" | "critical";
   description: string;
   element?: FocusableElement;
   suggestion?: string;
@@ -107,9 +125,17 @@ export interface AuditableComponent {
 
 export interface AuditAccessibilityIssue {
   id: string;
-  type: 'error' | 'warning' | 'info';
-  category: 'contrast' | 'focus' | 'keyboard' | 'screen-reader' | 'motion' | 'color' | 'semantic' | 'touch';
-  severity: 'critical' | 'major' | 'moderate' | 'minor';
+  type: "error" | "warning" | "info";
+  category:
+    | "contrast"
+    | "focus"
+    | "keyboard"
+    | "screen-reader"
+    | "motion"
+    | "color"
+    | "semantic"
+    | "touch";
+  severity: "critical" | "major" | "moderate" | "minor";
   message: string;
   recommendation: string;
   element?: string;
@@ -138,7 +164,7 @@ export interface AccessibilityRule {
   id: string;
   description: string;
   check: (element: AuditableComponent) => AuditAccessibilityIssue | null;
-  category: AuditAccessibilityIssue['category'];
-  severity: AuditAccessibilityIssue['severity'];
+  category: AuditAccessibilityIssue["category"];
+  severity: AuditAccessibilityIssue["severity"];
   wcagGuideline: string;
 }

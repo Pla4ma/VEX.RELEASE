@@ -20,7 +20,7 @@ export {
   syncPurchases,
   isRevenueCatReady,
   getRevenueCatStatus,
-} from './revenuecat-service';
+} from "./revenuecat-service";
 
 // Type exports
 export type {
@@ -38,14 +38,10 @@ export type {
   PurchaseAnalyticsProperties,
   EntitlementAnalyticsProperties,
   UseRevenueCatState,
-} from './revenuecat-types';
+} from "./revenuecat-types";
 
 // Hook exports
-export {
-  useRevenueCat,
-  usePremiumStatus,
-  usePaywall,
-} from './use-revenuecat';
+export { useRevenueCat, usePremiumStatus, usePaywall } from "./use-revenuecat";
 
 export {
   KNOWN_PREMIUM_ENTITLEMENT_IDS,
@@ -54,14 +50,14 @@ export {
   isPremiumEntitlementIdentifier,
   type EntitlementAccessState,
   type PremiumEntitlementId,
-} from './entitlements';
+} from "./entitlements";
 
 export {
   resolvePremiumStrategy,
   type PremiumHighIntentAction,
   type PremiumStrategy,
   type PremiumStrategyInput,
-} from './premium-strategy';
+} from "./premium-strategy";
 
 // Event exports
 export {
@@ -76,16 +72,16 @@ export {
   type EntitlementEventProperties,
   type OfferingEventProperties,
   type RestoreEventProperties,
-} from './purchase-events';
+} from "./purchase-events";
 
 // Component exports
-export { VipPaywallScreen } from './components/VipPaywallScreen';
+export { VipPaywallScreen } from "./components/VipPaywallScreen";
 // DailyGemClaim archived - dark pattern gambling mechanics removed
-export { PurchaseLoadingState } from './components/PurchaseLoadingState';
-export { PurchaseErrorState } from './components/PurchaseErrorState';
+export { PurchaseLoadingState } from "./components/PurchaseLoadingState";
+export { PurchaseErrorState } from "./components/PurchaseErrorState";
 
 // Repository exports
-export * from './repository';
+export * from "./repository";
 
 // Utils exports
-export * from './utils';
+export * from "./utils";

@@ -2,21 +2,21 @@ import type {
   DeepLinkHandlers,
   DeepLinkPath,
   ParsedDeepLink,
-} from './deep-link-types';
+} from "./deep-link-types";
 
-import { parseDeepLink } from './deep-links';
-import { deepLinkToNavigationParams } from './deep-link-routing';
+import { parseDeepLink } from "./deep-links";
+import { deepLinkToNavigationParams } from "./deep-link-routing";
 
 export function generateDeepLink(
   path: DeepLinkPath,
   params?: Record<string, string>,
 ): string {
-  const baseUrl = 'vex://';
+  const baseUrl = "vex://";
   const paramString = params
     ? Object.entries(params)
         .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
-        .join('&')
-    : '';
+        .join("&")
+    : "";
 
   return paramString ? `${baseUrl}${path}?${paramString}` : `${baseUrl}${path}`;
 }
@@ -45,11 +45,11 @@ export function handleDeepLinkWithFallback(
 ): void {
   const result: ParsedDeepLink = parseDeepLink(url);
   if (!result.valid) {
-    handlers.onInvalid(result.error ?? 'Unknown error');
+    handlers.onInvalid(result.error ?? "Unknown error");
     return;
   }
   if (!result.link) {
-    handlers.onInvalid('No link data');
+    handlers.onInvalid("No link data");
     return;
   }
 

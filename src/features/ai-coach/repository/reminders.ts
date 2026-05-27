@@ -1,12 +1,12 @@
-import { getSupabaseClient } from '../../../config/supabase';
+import { getSupabaseClient } from "../../../config/supabase";
 import {
   ReminderPlanSchema,
   ComebackPlanSchema,
   type ReminderPlan,
   type ComebackPlan,
   type ComebackStatus,
-} from '../schemas';
-import { RepositoryError } from './error';
+} from "../schemas";
+import { RepositoryError } from "./error";
 
 const supabase = getSupabaseClient();
 
@@ -14,7 +14,7 @@ export async function createReminderPlan(
   reminder: ReminderPlan,
 ): Promise<ReminderPlan> {
   const { data, error } = await supabase
-    .from('reminder_plans')
+    .from("reminder_plans")
     .insert({
       id: reminder.id,
       user_id: reminder.userId,
@@ -29,7 +29,9 @@ export async function createReminderPlan(
     })
     .select()
     .single();
-  if (error) {throw new RepositoryError('createReminderPlan', error);}
+  if (error) {
+    throw new RepositoryError("createReminderPlan", error);
+  }
   return ReminderPlanSchema.parse(data);
 }
 
@@ -37,13 +39,15 @@ export async function fetchPendingReminders(
   beforeTime: number,
 ): Promise<ReminderPlan[]> {
   const { data, error } = await supabase
-    .from('reminder_plans')
-    .select('*')
-    .eq('sent', false)
-    .lte('scheduled_for', beforeTime)
-    .order('priority', { ascending: false })
-    .order('scheduled_for', { ascending: true });
-  if (error) {throw new RepositoryError('fetchPendingReminders', error);}
+    .from("reminder_plans")
+    .select("*")
+    .eq("sent", false)
+    .lte("scheduled_for", beforeTime)
+    .order("priority", { ascending: false })
+    .order("scheduled_for", { ascending: true });
+  if (error) {
+    throw new RepositoryError("fetchPendingReminders", error);
+  }
   return ReminderPlanSchema.array().parse(data || []);
 }
 
@@ -52,12 +56,14 @@ export async function markReminderSent(
   sentAt: number,
 ): Promise<ReminderPlan> {
   const { data, error } = await supabase
-    .from('reminder_plans')
+    .from("reminder_plans")
     .update({ sent: true, sent_at: sentAt })
-    .eq('id', reminderId)
+    .eq("id", reminderId)
     .select()
     .single();
-  if (error) {throw new RepositoryError('markReminderSent', error);}
+  if (error) {
+    throw new RepositoryError("markReminderSent", error);
+  }
   return ReminderPlanSchema.parse(data);
 }
 
@@ -67,12 +73,14 @@ export async function updateReminderDelivery(
   opened: boolean,
 ): Promise<ReminderPlan> {
   const { data, error } = await supabase
-    .from('reminder_plans')
+    .from("reminder_plans")
     .update({ delivered, opened })
-    .eq('id', reminderId)
+    .eq("id", reminderId)
     .select()
     .single();
-  if (error) {throw new RepositoryError('updateReminderDelivery', error);}
+  if (error) {
+    throw new RepositoryError("updateReminderDelivery", error);
+  }
   return ReminderPlanSchema.parse(data);
 }
 
@@ -80,7 +88,7 @@ export async function upsertComebackPlan(
   plan: ComebackPlan,
 ): Promise<ComebackPlan> {
   const { data, error } = await supabase
-    .from('comeback_plans')
+    .from("comeback_plans")
     .upsert({
       id: plan.id,
       user_id: plan.userId,
@@ -96,7 +104,9 @@ export async function upsertComebackPlan(
     })
     .select()
     .single();
-  if (error) {throw new RepositoryError('upsertComebackPlan', error);}
+  if (error) {
+    throw new RepositoryError("upsertComebackPlan", error);
+  }
   return ComebackPlanSchema.parse(data);
 }
 
@@ -105,17 +115,19 @@ export async function fetchActiveComebackPlan(
 ): Promise<ComebackPlan | null> {
   const now = Date.now();
   const { data, error } = await supabase
-    .from('comeback_plans')
-    .select('*')
-    .eq('user_id', userId)
-    .in('status', ['OFFERED', 'ACTIVE'])
-    .gt('expires_at', now)
-    .order('started_at', { ascending: false })
+    .from("comeback_plans")
+    .select("*")
+    .eq("user_id", userId)
+    .in("status", ["OFFERED", "ACTIVE"])
+    .gt("expires_at", now)
+    .order("started_at", { ascending: false })
     .limit(1)
     .single();
   if (error) {
-    if (error.code === 'PGRST116') {return null;}
-    throw new RepositoryError('fetchActiveComebackPlan', error);
+    if (error.code === "PGRST116") {
+      return null;
+    }
+    throw new RepositoryError("fetchActiveComebackPlan", error);
   }
   return data ? ComebackPlanSchema.parse(data) : null;
 }
@@ -130,11 +142,13 @@ export async function updateComebackPlanStatus(
     updates.sessions_completed = sessionsCompleted;
   }
   const { data, error } = await supabase
-    .from('comeback_plans')
+    .from("comeback_plans")
     .update(updates)
-    .eq('id', planId)
+    .eq("id", planId)
     .select()
     .single();
-  if (error) {throw new RepositoryError('updateComebackPlanStatus', error);}
+  if (error) {
+    throw new RepositoryError("updateComebackPlanStatus", error);
+  }
   return ComebackPlanSchema.parse(data);
 }

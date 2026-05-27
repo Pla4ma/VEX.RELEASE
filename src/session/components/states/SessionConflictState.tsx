@@ -45,7 +45,14 @@ export function SessionConflictState({
     setSelectedOption(option);
     setIsResolving(true);
     try {
-      await handleResolve(option, localState, remoteState, onResolveLocal, onResolveRemote, onMerge);
+      await handleResolve(
+        option,
+        localState,
+        remoteState,
+        onResolveLocal,
+        onResolveRemote,
+        onMerge,
+      );
     } finally {
       setIsResolving(false);
     }
@@ -113,7 +120,8 @@ export function SessionConflictState({
               Difference Summary
             </Text>
             <Text variant="body" textAlign="center">
-              Time diff: {Math.floor(timeDifference / 60000)}m {Math.floor((timeDifference % 60000) / 1000)}s • Progress diff:{" "}
+              Time diff: {Math.floor(timeDifference / 60000)}m{" "}
+              {Math.floor((timeDifference % 60000) / 1000)}s • Progress diff:{" "}
               {progressDifference.toFixed(1)}%
             </Text>
           </Box>

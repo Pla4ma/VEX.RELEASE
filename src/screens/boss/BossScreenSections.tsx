@@ -1,19 +1,22 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import React, { useCallback, useMemo, useState } from "react";
+import { Pressable, View } from "react-native";
 
-import { Text } from '../../components/primitives';
-import type { BossEncounterSummary, BossTemplate } from '../../features/boss/schemas';
-import { trackBossCTAClicked } from '../../features/boss/analytics';
-import { useSessionHistory } from '../../session/hooks/useSession';
-import { useTheme } from '../../theme';
+import { Text } from "../../components/primitives";
+import type {
+  BossEncounterSummary,
+  BossTemplate,
+} from "../../features/boss/schemas";
+import { trackBossCTAClicked } from "../../features/boss/analytics";
+import { useSessionHistory } from "../../session/hooks/useSession";
+import { useTheme } from "../../theme";
 
 const ATTACK_PRESETS = [
-  { minutes: 15, label: '15m focused block' },
-  { minutes: 25, label: '25m focus block' },
-  { minutes: 60, label: '60m deep block' },
+  { minutes: 15, label: "15m focused block" },
+  { minutes: 25, label: "25m focus block" },
+  { minutes: 60, label: "60m deep block" },
 ] as const;
 
-type BossIntensity = 'subtle' | 'game-like' | 'intense';
+type BossIntensity = "subtle" | "game-like" | "intense";
 
 type BossScreenSectionsProps = {
   bossIntensity?: BossIntensity;
@@ -33,42 +36,47 @@ export function getBossScreenCopy(intensity: BossIntensity): {
   metricLabel: string;
   title: string;
 } {
-  if (intensity === 'subtle') {
+  if (intensity === "subtle") {
     return {
-      actionLabel: 'Start focus block',
-      historyTitle: 'Momentum history',
-      intro: 'Each completed session moves this marker forward. Just proof that you returned.',
-      metricLabel: 'Momentum earned',
-      title: 'Focus Momentum',
+      actionLabel: "Start focus block",
+      historyTitle: "Momentum history",
+      intro:
+        "Each completed session moves this marker forward. Just proof that you returned.",
+      metricLabel: "Momentum earned",
+      title: "Focus Momentum",
     };
   }
-  if (intensity === 'intense') {
+  if (intensity === "intense") {
     return {
-      actionLabel: 'Start focused push',
-      historyTitle: 'Recent pressure',
-      intro: 'Your completed sessions reduce boss health. Strong focus hits harder, but the work stays the center.',
-      metricLabel: 'Total damage',
-      title: 'Boss Focus',
+      actionLabel: "Start focused push",
+      historyTitle: "Recent pressure",
+      intro:
+        "Your completed sessions reduce boss health. Strong focus hits harder, but the work stays the center.",
+      metricLabel: "Total damage",
+      title: "Boss Focus",
     };
   }
   return {
-    actionLabel: 'Start boss focus',
-    historyTitle: 'Recent hits',
-    intro: 'Focus sessions chip boss health down one clean block at a time.',
-    metricLabel: 'Total damage',
-    title: 'Boss Health',
+    actionLabel: "Start boss focus",
+    historyTitle: "Recent hits",
+    intro: "Focus sessions chip boss health down one clean block at a time.",
+    metricLabel: "Total damage",
+    title: "Boss Health",
   };
 }
 
-export function estimateDamage(minutes: number, streakMultiplier: number): number {
+export function estimateDamage(
+  minutes: number,
+  streakMultiplier: number,
+): number {
   return Math.max(1, Math.round(minutes * streakMultiplier * 1.5));
 }
 
-function cardStyle(theme: ReturnType<typeof useTheme>['theme']) {
+function cardStyle(theme: ReturnType<typeof useTheme>["theme"]) {
   return {
     backgroundColor: theme.colors.background.secondary,
     borderColor: theme.colors.border.light,
-    borderRadius: theme.borderRadius['2xl'],
+    borderRadius: theme.borderRadius["2xl"],
     borderWidth: 1,
     gap: theme.spacing[3],
     padding: theme.spacing[5],
@@ -80,7 +88,7 @@ function formatDuration(seconds: number): string {
 }
 
 export function BossScreenSections({
-  bossIntensity = 'subtle',
+  bossIntensity = "subtle",
   onLaunchAttack,
   streakMultiplier,
   userDamage,
@@ -99,68 +107,134 @@ export function BossScreenSections({
     [onLaunchAttack, userId, bossIntensity],
   );
 
-  const recentSessions = useMemo(() => historyQuery.history
-    .filter((entry) => entry.endedAt && entry.startedAt)
-    .slice(0, 3)
-    .map((entry) => ({
-      duration: Math.max(0, (entry.endedAt ?? 0) - entry.startedAt),
-      endedAt: entry.endedAt ?? entry.startedAt,
-      quality: entry.summary?.focusPurityScore ?? entry.summary?.focusQuality ?? 75,
-    })), [historyQuery.history]);
+  const recentSessions = useMemo(
+    () =>
+      historyQuery.history
+        .filter((entry) => entry.endedAt && entry.startedAt)
+        .slice(0, 3)
+        .map((entry) => ({
+          duration: Math.max(0, (entry.endedAt ?? 0) - entry.startedAt),
+          endedAt: entry.endedAt ?? entry.startedAt,
+          quality:
+            entry.summary?.focusPurityScore ??
+            entry.summary?.focusQuality ??
+            75,
+        })),
+    [historyQuery.history],
+  );
 
   return (
     <>
       <View style={cardStyle(theme)}>
-        <Text variant="h4" color={theme.colors.text.primary}>{copy.title}</Text>
-        <Text variant="bodySmall" color={theme.colors.text.secondary}>{copy.intro}</Text>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text variant="h4" color={theme.colors.text.primary}>
+          {copy.title}
+        </Text>
+        <Text variant="bodySmall" color={theme.colors.text.secondary}>
+          {copy.intro}
+        </Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <View>
-            <Text variant="caption" color={theme.colors.text.secondary}>{copy.metricLabel}</Text>
-            <Text variant="h3" color={theme.colors.text.primary}>{userDamage.toLocaleString()}</Text>
+            <Text variant="caption" color={theme.colors.text.secondary}>
+              {copy.metricLabel}
+            </Text>
+            <Text variant="h3" color={theme.colors.text.primary}>
+              {userDamage.toLocaleString()}
+            </Text>
           </View>
-          <View style={{ alignItems: 'flex-end' }}>
-            <Text variant="caption" color={theme.colors.text.secondary}>Focus multiplier</Text>
-            <Text variant="h3" color={theme.colors.primary[500]}>{`x${streakMultiplier.toFixed(2)}`}</Text>
+          <View style={{ alignItems: "flex-end" }}>
+            <Text variant="caption" color={theme.colors.text.secondary}>
+              Focus multiplier
+            </Text>
+            <Text
+              variant="h3"
+              color={theme.colors.primary[500]}
+            >{`x${streakMultiplier.toFixed(2)}`}</Text>
           </View>
         </View>
       </View>
 
       <View style={cardStyle(theme)}>
-        <Text variant="h4" color={theme.colors.text.primary}>{copy.historyTitle}</Text>
-        {historyQuery.isLoading ? <Text variant="bodySmall" color={theme.colors.text.secondary}>Loading recent sessions...</Text> : null}
-        {historyQuery.error ? <Text variant="bodySmall" color={theme.colors.error.DEFAULT}>Recent session proof is unavailable right now.</Text> : null}
-        {!historyQuery.isLoading && !historyQuery.error && recentSessions.length === 0 ? (
-          <Text variant="bodySmall" color={theme.colors.text.secondary}>Complete a focus session to move this forward.</Text>
+        <Text variant="h4" color={theme.colors.text.primary}>
+          {copy.historyTitle}
+        </Text>
+        {historyQuery.isLoading ? (
+          <Text variant="bodySmall" color={theme.colors.text.secondary}>
+            Loading recent sessions...
+          </Text>
+        ) : null}
+        {historyQuery.error ? (
+          <Text variant="bodySmall" color={theme.colors.error.DEFAULT}>
+            Recent session proof is unavailable right now.
+          </Text>
+        ) : null}
+        {!historyQuery.isLoading &&
+        !historyQuery.error &&
+        recentSessions.length === 0 ? (
+          <Text variant="bodySmall" color={theme.colors.text.secondary}>
+            Complete a focus session to move this forward.
+          </Text>
         ) : null}
         {recentSessions.map((entry) => (
-          <View key={`${entry.endedAt}-${entry.duration}`} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text variant="body" color={theme.colors.text.primary}>{formatDuration(entry.duration)}</Text>
-            <Text variant="bodySmall" color={theme.colors.text.secondary}>{`Purity ${entry.quality}`}</Text>
+          <View
+            key={`${entry.endedAt}-${entry.duration}`}
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text variant="body" color={theme.colors.text.primary}>
+              {formatDuration(entry.duration)}
+            </Text>
+            <Text
+              variant="bodySmall"
+              color={theme.colors.text.secondary}
+            >{`Purity ${entry.quality}`}</Text>
           </View>
         ))}
       </View>
 
       <View style={cardStyle(theme)}>
-        <Text variant="h4" color={theme.colors.text.primary}>{copy.actionLabel}</Text>
+        <Text variant="h4" color={theme.colors.text.primary}>
+          {copy.actionLabel}
+        </Text>
         {ATTACK_PRESETS.map((preset) => {
           const selected = preset.minutes === selectedMinutes;
           return (
             <Pressable
               key={preset.minutes}
-              onPress={() => selected ? handleLaunchAttack(preset.minutes) : setSelectedMinutes(preset.minutes)}
+              onPress={() =>
+                selected
+                  ? handleLaunchAttack(preset.minutes)
+                  : setSelectedMinutes(preset.minutes)
+              }
               accessibilityLabel={preset.label}
               accessibilityRole="button"
               accessibilityHint="Starts a focus session with this duration."
               style={{
-                backgroundColor: selected ? theme.colors.primary[500] : theme.colors.background.primary,
+                backgroundColor: selected
+                  ? theme.colors.primary[500]
+                  : theme.colors.background.primary,
                 borderRadius: theme.borderRadius.xl,
                 minHeight: 44,
                 padding: theme.spacing[4],
               }}
             >
-              <Text variant="body" color={selected ? theme.colors.text.inverse : theme.colors.text.primary}>{preset.label}</Text>
-              <Text variant="bodySmall" color={selected ? theme.colors.text.inverse : theme.colors.text.secondary}>
-                {`${estimateDamage(preset.minutes, streakMultiplier)} ${bossIntensity === 'subtle' ? 'momentum' : 'damage'}`}
+              <Text
+                variant="body"
+                color={
+                  selected
+                    ? theme.colors.text.inverse
+                    : theme.colors.text.primary
+                }
+              >
+                {preset.label}
+              </Text>
+              <Text
+                variant="bodySmall"
+                color={
+                  selected
+                    ? theme.colors.text.inverse
+                    : theme.colors.text.secondary
+                }
+              >
+                {`${estimateDamage(preset.minutes, streakMultiplier)} ${bossIntensity === "subtle" ? "momentum" : "damage"}`}
               </Text>
             </Pressable>
           );

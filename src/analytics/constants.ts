@@ -4,7 +4,7 @@
  * Target metrics and configuration values
  */
 
-import { VEXTargetMetrics } from './types';
+import { VEXTargetMetrics } from "./types";
 
 // Target metrics from the 10/10 plan
 export const TARGET_METRICS: VEXTargetMetrics = {

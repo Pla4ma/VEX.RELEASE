@@ -1,9 +1,9 @@
-import React from 'react';
-import { Pressable } from 'react-native';
+import React from "react";
+import { Pressable } from "react-native";
 
-import { Box, Card, Text } from '../../../components/primitives';
-import { Icon } from '../../../icons';
-import type { ActiveSessionControlFailure } from '../utils/active-session-control-failure';
+import { Box, Card, Text } from "../../../components/primitives";
+import { Icon } from "../../../icons";
+import type { ActiveSessionControlFailure } from "../utils/active-session-control-failure";
 
 type ActiveSessionControlRecoveryProps = {
   failure: ActiveSessionControlFailure;
@@ -25,10 +25,18 @@ export function ActiveSessionControlRecovery({
             <Text variant="h4" color="text.primary">
               {failure.title}
             </Text>
-            <Text variant="caption" color="text.secondary" style={{ marginTop: 6 }}>
+            <Text
+              variant="caption"
+              color="text.secondary"
+              style={{ marginTop: 6 }}
+            >
               {failure.message}
             </Text>
-            <Text variant="caption" color="text.tertiary" style={{ marginTop: 6 }}>
+            <Text
+              variant="caption"
+              color="text.tertiary"
+              style={{ marginTop: 6 }}
+            >
               {failure.supportHint}
             </Text>
             <Box flexDirection="row" gap={10} mt={12}>

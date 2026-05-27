@@ -1,20 +1,20 @@
-import type { QueryKey } from '@tanstack/react-query';
+import type { QueryKey } from "@tanstack/react-query";
 
-import type { CompletionSyncState } from '../../store/session-state';
-import type { SessionSummary } from '../../session/types';
+import type { CompletionSyncState } from "../../store/session-state";
+import type { SessionSummary } from "../../session/types";
 
 export const completionReturnQueryKeys = {
-  activeSession: (userId: string) => ['session', 'active', userId] as const,
-  companion: (userId: string) => ['companion', userId] as const,
-  dailyMission: (userId: string) => ['challenges', 'active', userId] as const,
-  focusScore: (userId: string) => ['focus-identity', userId] as const,
-  progression: (userId: string) => ['progression', userId, 'summary'] as const,
-  rewards: (userId: string) => ['rewards', 'user', userId] as const,
-  sessionHistory: (userId: string) => ['session', 'history', userId] as const,
+  activeSession: (userId: string) => ["session", "active", userId] as const,
+  companion: (userId: string) => ["companion", userId] as const,
+  dailyMission: (userId: string) => ["challenges", "active", userId] as const,
+  focusScore: (userId: string) => ["focus-identity", userId] as const,
+  progression: (userId: string) => ["progression", userId, "summary"] as const,
+  rewards: (userId: string) => ["rewards", "user", userId] as const,
+  sessionHistory: (userId: string) => ["session", "history", userId] as const,
   sessionHistoryEntry: (userId: string, sessionId: string) =>
-    ['session-history-entry', userId, sessionId] as const,
-  streak: (userId: string) => ['streaks', 'user', userId, 'summary'] as const,
-  boss: (userId: string) => ['boss', 'user', userId, 'active'] as const,
+    ["session-history-entry", userId, sessionId] as const,
+  streak: (userId: string) => ["streaks", "user", userId, "summary"] as const,
+  boss: (userId: string) => ["boss", "user", userId, "active"] as const,
 };
 
 type Snapshot = {
@@ -43,20 +43,31 @@ export function applyHomeReturnOptimisticUpdate(input: {
     value: input.queryClient.getQueryData(key),
   }));
 
-  input.queryClient.setQueryData(completionReturnQueryKeys.activeSession(input.userId), null);
   input.queryClient.setQueryData(
-    completionReturnQueryKeys.sessionHistoryEntry(input.userId, input.sessionId),
-    (old: unknown) => old ?? { sessionId: input.sessionId, summary: input.summary },
+    completionReturnQueryKeys.activeSession(input.userId),
+    null,
+  );
+  input.queryClient.setQueryData(
+    completionReturnQueryKeys.sessionHistoryEntry(
+      input.userId,
+      input.sessionId,
+    ),
+    (old: unknown) =>
+      old ?? { sessionId: input.sessionId, summary: input.summary },
   );
   updateNumericRecord(
     input.queryClient,
     completionReturnQueryKeys.progression(input.userId),
-    'xp',
+    "xp",
     input.summary.xpEarned,
   );
-  updateRecord(input.queryClient, completionReturnQueryKeys.streak(input.userId), {
-    currentDays: input.summary.streakDays,
-  });
+  updateRecord(
+    input.queryClient,
+    completionReturnQueryKeys.streak(input.userId),
+    {
+      currentDays: input.summary.streakDays,
+    },
+  );
 
   return () => rollbackSnapshots(input.queryClient, snapshots);
 }
@@ -67,8 +78,8 @@ export async function invalidateCompletionReturnQueries(input: {
   userId: string;
 }): Promise<void> {
   await Promise.all(
-    getCompletionReturnQueryKeys(input.userId, input.sessionId).map((queryKey) =>
-      input.queryClient.invalidateQueries({ queryKey }),
+    getCompletionReturnQueryKeys(input.userId, input.sessionId).map(
+      (queryKey) => input.queryClient.invalidateQueries({ queryKey }),
     ),
   );
 }
@@ -104,9 +115,10 @@ export function getNextCompletionSyncState(input: {
   if (input.failed) {
     return {
       ledgerId: input.current.ledgerId,
-      message: 'Progress is visible. Tap repair to refresh the missing sync pieces.',
-      repairCtaLabel: 'Repair now',
-      status: 'failed_sync',
+      message:
+        "Progress is visible. Tap repair to refresh the missing sync pieces.",
+      repairCtaLabel: "Repair now",
+      status: "failed_sync",
       updatedAt: Date.now(),
     };
   }
@@ -114,12 +126,15 @@ export function getNextCompletionSyncState(input: {
     ledgerId: input.current.ledgerId,
     message: null,
     repairCtaLabel: null,
-    status: 'synced',
+    status: "synced",
     updatedAt: Date.now(),
   };
 }
 
-function getCompletionReturnQueryKeys(userId: string, sessionId: string): QueryKey[] {
+function getCompletionReturnQueryKeys(
+  userId: string,
+  sessionId: string,
+): QueryKey[] {
   return [
     completionReturnQueryKeys.activeSession(userId),
     completionReturnQueryKeys.sessionHistory(userId),
@@ -134,7 +149,10 @@ function getCompletionReturnQueryKeys(userId: string, sessionId: string): QueryK
   ];
 }
 
-function rollbackSnapshots(queryClient: QueryClientLike, snapshots: Snapshot[]): void {
+function rollbackSnapshots(
+  queryClient: QueryClientLike,
+  snapshots: Snapshot[],
+): void {
   snapshots.forEach((snapshot) => {
     queryClient.setQueryData(snapshot.key, snapshot.value);
   });
@@ -146,7 +164,7 @@ function updateRecord(
   patch: Record<string, unknown>,
 ): void {
   queryClient.setQueryData(key, (old: unknown) =>
-    old && typeof old === 'object' && !Array.isArray(old)
+    old && typeof old === "object" && !Array.isArray(old)
       ? { ...old, ...patch }
       : old,
   );
@@ -159,7 +177,7 @@ function updateNumericRecord(
   delta: number,
 ): void {
   queryClient.setQueryData(key, (old: unknown) => {
-    if (!old || typeof old !== 'object' || Array.isArray(old)) {
+    if (!old || typeof old !== "object" || Array.isArray(old)) {
       return old;
     }
     const current = Object.prototype.hasOwnProperty.call(old, field)
@@ -167,7 +185,7 @@ function updateNumericRecord(
       : 0;
     return {
       ...old,
-      [field]: typeof current === 'number' ? current + delta : delta,
+      [field]: typeof current === "number" ? current + delta : delta,
     };
   });
 }

@@ -2,15 +2,18 @@ import {
   type CoachUserState,
   type CoachState,
   type BehaviorProfile,
-} from '../schemas';
-import * as repository from '../repository';
-import { withRetry } from '../utils/retry';
-import { STATE_CONFIG } from './coach-state-config';
-import { determineOptimalState } from './coach-state-resolver';
+} from "../schemas";
+import * as repository from "../repository";
+import { withRetry } from "../utils/retry";
+import { STATE_CONFIG } from "./coach-state-config";
+import { determineOptimalState } from "./coach-state-resolver";
 
-export type { CoachSignals } from './coach-state-resolver';
-export { resolveCoachState, determineOptimalState } from './coach-state-resolver';
-export { STATE_CONFIG, type StateConfig } from './coach-state-config';
+export type { CoachSignals } from "./coach-state-resolver";
+export {
+  resolveCoachState,
+  determineOptimalState,
+} from "./coach-state-resolver";
+export { STATE_CONFIG, type StateConfig } from "./coach-state-config";
 
 export async function transitionState(
   userId: string,
@@ -34,7 +37,7 @@ export async function transitionState(
     await withRetry(
       () => currentConfig.onExit!(currentState, newState),
       { maxAttempts: 3 },
-      'state-exit-action',
+      "state-exit-action",
     );
   }
 
@@ -48,7 +51,7 @@ export async function transitionState(
   await withRetry(
     () => repository.upsertCoachState(newStateRecord),
     { maxAttempts: 3 },
-    'persist-state',
+    "persist-state",
   );
 
   const newConfig = STATE_CONFIG[newState];
@@ -56,7 +59,7 @@ export async function transitionState(
     await withRetry(
       () => newConfig.onEntry!(newStateRecord, previousStateValue),
       { maxAttempts: 3 },
-      'state-entry-action',
+      "state-entry-action",
     );
   }
 
@@ -72,8 +75,7 @@ export async function checkAutoTransitions(
 
   if (!config.maxDurationHours) return null;
 
-  const hoursInState =
-    (Date.now() - state.stateEnteredAt) / (1000 * 60 * 60);
+  const hoursInState = (Date.now() - state.stateEnteredAt) / (1000 * 60 * 60);
   if (hoursInState > config.maxDurationHours) {
     const profile = await repository.fetchBehaviorProfile(userId);
     const nextState = await determineOptimalState(userId, profile);
@@ -97,10 +99,10 @@ async function getCurrentStateSafe(userId: string): Promise<CoachState> {
 
   const defaultState: CoachState = {
     userId,
-    currentState: 'COLD_START',
+    currentState: "COLD_START",
     previousState: null,
     stateEnteredAt: Date.now(),
-    personaId: '00000000-0000-4000-a000-000000000001',
+    personaId: "00000000-0000-4000-a000-000000000001",
     behaviorProfile: null,
     lastInterventionAt: null,
     interventionsToday: 0,
@@ -127,13 +129,13 @@ export class StateTransitionError extends Error {
     public toState: CoachUserState,
   ) {
     super(message);
-    this.name = 'StateTransitionError';
+    this.name = "StateTransitionError";
   }
 }
 
 export class StateMachineError extends Error {
   constructor(message: string) {
     super(message);
-    this.name = 'StateMachineError';
+    this.name = "StateMachineError";
   }
 }

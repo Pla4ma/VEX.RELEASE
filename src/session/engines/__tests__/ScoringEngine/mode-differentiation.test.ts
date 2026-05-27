@@ -1,31 +1,42 @@
-import { ScoringEngine, SessionMode, createMockSession, createMockFocusMetrics } from './helpers';
+import {
+  ScoringEngine,
+  SessionMode,
+  createMockSession,
+  createMockFocusMetrics,
+} from "./helpers";
 
-describe('ScoringEngine', () => {
+describe("ScoringEngine", () => {
   let engine: ScoringEngine;
 
   beforeEach(() => {
     engine = new ScoringEngine();
   });
 
-  describe('Mode Differentiation', () => {
-    it('applies deep work XP and strict pause penalties', () => {
+  describe("Mode Differentiation", () => {
+    it("applies deep work XP and strict pause penalties", () => {
       const baseSession = createMockSession({ pauses: 3, pausedTime: 10000 });
       const deepSession = createMockSession({
         pauses: 3,
         pausedTime: 31000,
         config: { ...baseSession.config, sessionMode: SessionMode.DEEP_WORK },
       });
-      const metrics = createMockFocusMetrics({ consistencyScore: 95, overallScore: 95 });
+      const metrics = createMockFocusMetrics({
+        consistencyScore: 95,
+        overallScore: 95,
+      });
       const baseCalc = engine.calculateScore(baseSession, metrics);
       const deepCalc = engine.calculateScore(deepSession, metrics);
       expect(deepCalc.basePoints).toBeGreaterThan(baseCalc.basePoints);
       expect(deepCalc.pausePenalty).toBeGreaterThan(baseCalc.pausePenalty);
     });
 
-    it('halves light focus pause penalties', () => {
+    it("halves light focus pause penalties", () => {
       const baseSession = createMockSession({
         pauses: 5,
-        config: { ...createMockSession().config, sessionMode: SessionMode.STUDY },
+        config: {
+          ...createMockSession().config,
+          sessionMode: SessionMode.STUDY,
+        },
       });
       const lightSession = createMockSession({
         pauses: 5,
@@ -37,7 +48,7 @@ describe('ScoringEngine', () => {
       ).toBeLessThan(engine.calculateScore(baseSession, metrics).pausePenalty);
     });
 
-    it('adds study quiz bonus points', () => {
+    it("adds study quiz bonus points", () => {
       const session = createMockSession({
         config: {
           ...createMockSession().config,
@@ -45,11 +56,14 @@ describe('ScoringEngine', () => {
           quizBonusPoints: 10,
         },
       });
-      const calculation = engine.calculateScore(session, createMockFocusMetrics());
+      const calculation = engine.calculateScore(
+        session,
+        createMockFocusMetrics(),
+      );
       expect(calculation.intervalBonus).toBeGreaterThanOrEqual(10);
     });
 
-    it('adds creative mood bonus points', () => {
+    it("adds creative mood bonus points", () => {
       const session = createMockSession({
         config: {
           ...createMockSession().config,
@@ -62,7 +76,7 @@ describe('ScoringEngine', () => {
       ).toBeGreaterThanOrEqual(10);
     });
 
-    it('adds sprint chain bonus points', () => {
+    it("adds sprint chain bonus points", () => {
       const session = createMockSession({
         config: {
           ...createMockSession().config,

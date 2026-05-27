@@ -1,0 +1,160 @@
+import type { Lane } from "../../lane-engine/types";
+import { InsightFindingSchema } from "../schemas";
+import type { InsightFinding, WeeklyInsightInput, WeeklyIntelligence } from "../schemas";
+
+export function buildWhatHelped(input: WeeklyInsightInput): InsightFinding[] {
+  const findings: InsightFinding[] = [];
+  if (input.completedSessions >= 3) {
+    findings.push(
+      InsightFindingSchema.parse({
+        category: "helped",
+        observation: `Consistent rhythm: completed ${input.completedSessions} of ${input.totalSessions} sessions this week.`,
+        confidence: input.completedSessions >= 5 ? "medium" : "weak",
+      }),
+    );
+  }
+  if (input.avgFocusScore && input.avgFocusScore >= 70) {
+    findings.push(
+      InsightFindingSchema.parse({
+        category: "helped",
+        observation: `Strong focus: average focus quality was ${Math.round(input.avgFocusScore)}%.`,
+        confidence: input.totalSessions >= 5 ? "medium" : "weak",
+      }),
+    );
+  }
+  if (input.cleanStarts && input.cleanStarts >= 2) {
+    findings.push(
+      InsightFindingSchema.parse({
+        category: "helped",
+        observation: `Clean starts: ${input.cleanStarts} sessions started without friction.`,
+        confidence: "weak",
+      }),
+    );
+  }
+  if (input.rescueCompleted >= 1) {
+    findings.push(
+      InsightFindingSchema.parse({
+        category: "helped",
+        observation: `Return resilience: completed ${input.rescueCompleted} recovery ${input.rescueCompleted === 1 ? "session" : "sessions"}.`,
+        confidence: input.rescueCompleted >= 2 ? "medium" : "weak",
+      }),
+    );
+  }
+  if (input.bestDurationMinutes >= 25) {
+    findings.push(
+      InsightFindingSchema.parse({
+        category: "helped",
+        observation: `Best session was ${input.bestDurationMinutes} minutes — solid depth.`,
+        confidence: "weak",
+      }),
+    );
+  }
+  return findings.slice(0, 3);
+}
+
+export function buildWhatGotInWay(input: WeeklyInsightInput): InsightFinding[] {
+  const findings: InsightFinding[] = [];
+  if (input.totalSessions > input.completedSessions) {
+    const missed = input.totalSessions - input.completedSessions;
+    findings.push(
+      InsightFindingSchema.parse({
+        category: "blocked",
+        observation: `${missed} session${missed === 1 ? "" : "s"} not completed this week.`,
+        confidence: missed >= 3 ? "medium" : "weak",
+      }),
+    );
+  }
+  if (input.interruptionsAvg && input.interruptionsAvg >= 3) {
+    findings.push(
+      InsightFindingSchema.parse({
+        category: "blocked",
+        observation: `Interruptions: averaged ${Math.round(input.interruptionsAvg)} per session.`,
+        confidence: "weak",
+      }),
+    );
+  }
+  if (input.staleThreadDays && input.staleThreadDays >= 3) {
+    findings.push(
+      InsightFindingSchema.parse({
+        category: "blocked",
+        observation: `Project thread was stale for ${input.staleThreadDays} days.`,
+        confidence: "medium",
+      }),
+    );
+  }
+  if (input.nudgeDismissals && input.nudgeDismissals >= 2) {
+    findings.push(
+      InsightFindingSchema.parse({
+        category: "blocked",
+        observation: `Dismissed ${input.nudgeDismissals} nudges this week — VEX will stay quieter.`,
+        confidence: "weak",
+      }),
+    );
+  }
+  return findings.slice(0, 3);
+}
+
+export function resolveBestNextSessionType(
+  input: WeeklyInsightInput,
+): WeeklyIntelligence["bestNextSessionType"] {
+  const { lane } = input;
+  if (lane === "student") {
+    return input.avgDurationMinutes >= 20 ? "STUDY" : "REVIEW";
+  }
+  if (lane === "game_like") {
+    return input.cleanStarts && input.cleanStarts >= 3 ? "SPRINT" : "RECOVERY";
+  }
+  if (lane === "deep_creative") {
+    return input.avgDurationMinutes >= 25 ? "DEEP_WORK" : "LIGHT_FOCUS";
+  }
+  return "LIGHT_FOCUS";
+}
+
+export function buildAdjustment(input: WeeklyInsightInput): string {
+  const { lane } = input;
+  if (lane === "student") {
+    if (input.weakTopics && input.weakTopics.length > 0) {
+      return `Try reviewing "${input.weakTopics[0]}" in your next short block before tackling new material.`;
+    }
+    if (input.avgDurationMinutes < 15) {
+      return "Try one 20-minute study block this week — sessions under 15 minutes may limit depth.";
+    }
+    return "Pick one topic per session. Naming the topic first correlates with cleaner starts.";
+  }
+  if (lane === "game_like") {
+    if (input.blockerPattern) {
+      return `"${input.blockerPattern}" appears to be a pattern. Consider a deliberate recovery encounter to break it.`;
+    }
+    if (input.recoveryWins && input.recoveryWins >= 1) {
+      return "Recovery encounters work for you. Keep using them when runs feel heavy.";
+    }
+    return "A short warm-up before your main encounter may help clean starts.";
+  }
+  if (lane === "deep_creative") {
+    if (input.staleThreadDays && input.staleThreadDays >= 2) {
+      return "Name the next concrete move before you close a project session. This reduces stale-thread risk.";
+    }
+    return "Open your session by naming one concrete next move. Clarity at entry predicts follow-through.";
+  }
+  if (lane === "minimal_normal") {
+    if (input.nudgeDismissals && input.nudgeDismissals >= 2) {
+      return "VEX will stay quieter this week. One block per day, no extra nudges.";
+    }
+    return `Your best window seemed to be ${input.bestTimeWindow ?? "when you started"}. Try the same window this week.`;
+  }
+  return "Keep going. VEX needs more data to suggest adjustments.";
+}
+
+export function buildPremiumDeeperInsight(input: WeeklyInsightInput): string | undefined {
+  const map: Record<Lane, string> = {
+    student:
+      "Unlock deeper Study Intelligence: topic-level weakness analysis and adaptive review scheduling.",
+    game_like:
+      "Unlock Focus Run intelligence: encounter-level stats, blocker pattern detection, and optimal warm-up timing.",
+    deep_creative:
+      "Unlock deeper project memory: thread continuity analytics and next-move prediction across sessions.",
+    minimal_normal:
+      "Unlock quieter weekly planning: adaptive nudge scheduling and minimal-effort optimal windows.",
+  };
+  return map[input.lane];
+}

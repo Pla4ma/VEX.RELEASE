@@ -1,28 +1,31 @@
-import { useMemo, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useSelectableThemes } from '../themes/hooks';
-import { getSessionThemeById, type SessionTheme } from '../themes/session-themes';
-import { useStreak } from '../streaks/hooks';
-import { useNetInfo } from '../../network';
-import type { SessionStackParams } from '../../navigation/types';
-import { useAuthStore } from '../../store';
-import { useActiveStudyPlan } from '../content-study/hooks';
-import { useLearningExecutionLayer } from '../learning-execution';
+import { useMemo, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useSelectableThemes } from "../themes/hooks";
+import {
+  getSessionThemeById,
+  type SessionTheme,
+} from "../themes/session-themes";
+import { useStreak } from "../streaks/hooks";
+import { useNetInfo } from "../../network";
+import type { SessionStackParams } from "../../navigation/types";
+import { useAuthStore } from "../../store";
+import { useActiveStudyPlan } from "../content-study/hooks";
+import { useLearningExecutionLayer } from "../learning-execution";
 import {
   parseSessionSetupParams,
   buildSessionStartHero,
   buildSessionStartSummary,
   getOfflineSessionStartMessage,
   buildSessionStake,
-} from './service';
-import type { SessionStake } from './schemas';
-import { useSessionSetupState } from '../../screens/session/hooks/useSessionSetupState';
-import { useStartSessionFlow } from '../../screens/session/hooks/useStartSessionFlow';
-import { PRESETS } from '../../screens/session/utils/session-setup';
-import { isFeatureHidden } from '../liveops-config/final-release-feature-map';
+} from "./service";
+import type { SessionStake } from "./schemas";
+import { useSessionSetupState } from "../../screens/session/hooks/useSessionSetupState";
+import { useStartSessionFlow } from "../../screens/session/hooks/useStartSessionFlow";
+import { PRESETS } from "../../screens/session/utils/session-setup";
+import { isFeatureHidden } from "../liveops-config/final-release-feature-map";
 
-type SessionSetupRouteParams = SessionStackParams['SessionSetup'];
+type SessionSetupRouteParams = SessionStackParams["SessionSetup"];
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 
 export function useSessionStartController(input: {
@@ -35,70 +38,98 @@ export function useSessionStartController(input: {
   const { isOffline } = useNetInfo();
   const { data: streak } = useStreak(user?.id ?? null);
   const activeStudyPlan = useActiveStudyPlan();
-  const learningExecutionLayer = useLearningExecutionLayer(activeStudyPlan.data ?? null);
+  const learningExecutionLayer = useLearningExecutionLayer(
+    activeStudyPlan.data ?? null,
+  );
   const [shopTheme, setShopTheme] = useState<SessionTheme | null>(null);
-  const parsedRoute = useMemo(() => parseSessionSetupParams(routeParams), [routeParams]);
-  const userId = user?.id ?? '';
-  const setupState = useSessionSetupState(userId, parsedRoute.params, streak?.currentDays ?? 0);
-  const selectableThemesQuery = useSelectableThemes(userId || null, streak ?? null);
+  const parsedRoute = useMemo(
+    () => parseSessionSetupParams(routeParams),
+    [routeParams],
+  );
+  const userId = user?.id ?? "";
+  const setupState = useSessionSetupState(
+    userId,
+    parsedRoute.params,
+    streak?.currentDays ?? 0,
+  );
+  const selectableThemesQuery = useSelectableThemes(
+    userId || null,
+    streak ?? null,
+  );
   const userThemes = selectableThemesQuery.data ?? [];
   const selectedTheme = useMemo(
     () => getSessionThemeById(setupState.selectedThemeId),
     [setupState.selectedThemeId],
   );
-  const selectedDurationSeconds = setupState.selectedPreset.id === 'custom'
-    ? setupState.customDuration * 60
-    : setupState.selectedPreset.duration;
+  const selectedDurationSeconds =
+    setupState.selectedPreset.id === "custom"
+      ? setupState.customDuration * 60
+      : setupState.selectedPreset.duration;
   const filteredPresets = useMemo(
-    () => PRESETS.filter((preset) => preset.category === setupState.selectedCategory),
+    () =>
+      PRESETS.filter(
+        (preset) => preset.category === setupState.selectedCategory,
+      ),
     [setupState.selectedCategory],
   );
   const activeChallenges = useMemo(
     () =>
       setupState.masteryState?.activeChallenges.filter(
         (challenge) =>
-          challenge.status === 'ACTIVE' &&
-          (challenge.technique === 'durationMastery' || challenge.technique === 'purityMastery'),
+          challenge.status === "ACTIVE" &&
+          (challenge.technique === "durationMastery" ||
+            challenge.technique === "purityMastery"),
       ) ?? [],
     [setupState.masteryState],
   );
-  const selectedThemeOwned = userThemes.find((item) => item.id === setupState.selectedThemeId)?.isOwned ?? selectedTheme.isFree;
+  const selectedThemeOwned =
+    userThemes.find((item) => item.id === setupState.selectedThemeId)
+      ?.isOwned ?? selectedTheme.isFree;
   const sessionSummary = useMemo(
-    () => buildSessionStartSummary({
-      currentThemeName: selectedTheme.name,
-      durationMinutes: Math.round(selectedDurationSeconds / 60),
-      hasCustomizations: setupState.showCustomization,
-    }),
+    () =>
+      buildSessionStartSummary({
+        currentThemeName: selectedTheme.name,
+        durationMinutes: Math.round(selectedDurationSeconds / 60),
+        hasCustomizations: setupState.showCustomization,
+      }),
     [selectedDurationSeconds, selectedTheme.name, setupState.showCustomization],
   );
   const sessionHero = useMemo(
-    () => buildSessionStartHero({
-      durationMinutes: Math.round(selectedDurationSeconds / 60),
-      params: parsedRoute.params,
-      presetName: setupState.selectedPreset.name,
-      smartSuggestionDescription:
-        setupState.smartSuggestion?.confidence && setupState.smartSuggestion.confidence >= 0.75
-          ? setupState.smartSuggestion.description
-          : null,
-    }),
-    [parsedRoute.params, selectedDurationSeconds, setupState.selectedPreset.name, setupState.smartSuggestion],
+    () =>
+      buildSessionStartHero({
+        durationMinutes: Math.round(selectedDurationSeconds / 60),
+        params: parsedRoute.params,
+        presetName: setupState.selectedPreset.name,
+        smartSuggestionDescription:
+          setupState.smartSuggestion?.confidence &&
+          setupState.smartSuggestion.confidence >= 0.75
+            ? setupState.smartSuggestion.description
+            : null,
+      }),
+    [
+      parsedRoute.params,
+      selectedDurationSeconds,
+      setupState.selectedPreset.name,
+      setupState.smartSuggestion,
+    ],
   );
   const offlineMessage = useMemo(
     () => getOfflineSessionStartMessage(isOffline),
     [isOffline],
   );
-  const { clearStartError, handleStartSession, isStarting, startError } = useStartSessionFlow({
-    draftGoal: setupState.draftGoal,
-    focusContractText,
-    navigation,
-    params: parsedRoute.params,
-    selectedDurationSeconds,
-    selectedPreset: setupState.selectedPreset,
-    selectedSessionMode: setupState.selectedSessionMode,
-    selectedThemeId: setupState.selectedThemeId,
-    selectedThemeOwned,
-    userId,
-  });
+  const { clearStartError, handleStartSession, isStarting, startError } =
+    useStartSessionFlow({
+      draftGoal: setupState.draftGoal,
+      focusContractText,
+      navigation,
+      params: parsedRoute.params,
+      selectedDurationSeconds,
+      selectedPreset: setupState.selectedPreset,
+      selectedSessionMode: setupState.selectedSessionMode,
+      selectedThemeId: setupState.selectedThemeId,
+      selectedThemeOwned,
+      userId,
+    });
 
   const handleThemePress = (theme: SessionTheme) => {
     if (theme.isOwned || theme.isFree) {
@@ -150,13 +181,15 @@ export function useSessionStake(
   userId: string,
   durationSeconds: number,
   mode: string,
-  selectedLoadout?: string[]
+  selectedLoadout?: string[],
 ) {
-  const enabled = !isFeatureHidden('boss_tab') || !isFeatureHidden('challenges');
+  const enabled =
+    !isFeatureHidden("boss_tab") || !isFeatureHidden("challenges");
 
   return useQuery<SessionStake>({
-    queryKey: ['session-stake', userId, durationSeconds, mode, selectedLoadout],
-    queryFn: () => buildSessionStake(userId, durationSeconds, mode, selectedLoadout),
+    queryKey: ["session-stake", userId, durationSeconds, mode, selectedLoadout],
+    queryFn: () =>
+      buildSessionStake(userId, durationSeconds, mode, selectedLoadout),
     enabled: enabled && !!userId && durationSeconds > 0,
     staleTime: 1000 * 30,
   });

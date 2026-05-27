@@ -1,5 +1,5 @@
-import { captureSilentFailure } from '../../../utils/silent-failure';
-import { getStorage, STORAGE_KEYS } from '../persistence';
+import { captureSilentFailure } from "../../../utils/silent-failure";
+import { getStorage, STORAGE_KEYS } from "../persistence";
 
 export class OfflineManager {
   private static instance: OfflineManager;
@@ -30,9 +30,9 @@ export class OfflineManager {
       return data ? JSON.parse(data) : false;
     } catch (error) {
       captureSilentFailure(error, {
-        feature: 'content-study',
-        operation: 'safe-fallback',
-        type: 'data',
+        feature: "content-study",
+        operation: "safe-fallback",
+        type: "data",
       });
       return false;
     }
@@ -43,7 +43,7 @@ export class OfflineManager {
   }
 
   async canPerformAction(
-    _action: 'submit' | 'generate' | 'feedback',
+    _action: "submit" | "generate" | "feedback",
   ): Promise<boolean> {
     const offline = await this.isInOfflineMode();
     if (!offline) return true;

@@ -1,5 +1,5 @@
-import { CompanionService } from './service';
-import type { CompanionState } from './types';
+import { CompanionService } from "./service";
+import type { CompanionState } from "./types";
 
 let activeCompanionService: CompanionService | null = null;
 

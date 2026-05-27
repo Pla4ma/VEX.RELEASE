@@ -1,21 +1,21 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const MemoryTypeSchema = z.enum([
-  'FIRST_S_GRADE',
-  'LONGEST_SESSION',
-  'BEST_STREAK',
-  'FIRST_BOSS_DEFEATED',
-  'FIRST_RIVAL_WIN',
-  'LEVEL_UP',
-  'STREAK_MILESTONE',
-  'PERFECT_SESSION',
-  'ONBOARDING_GOAL',
-  'SESSION_COUNT_MILESTONE',
-  'STUDY_PATTERN',
-  'PREFERRED_TECHNIQUE',
-  'FAILURE_MODE',
-  'OPTIMAL_FOCUS_TIME',
-  'DOCUMENT_MILESTONE',
+  "FIRST_S_GRADE",
+  "LONGEST_SESSION",
+  "BEST_STREAK",
+  "FIRST_BOSS_DEFEATED",
+  "FIRST_RIVAL_WIN",
+  "LEVEL_UP",
+  "STREAK_MILESTONE",
+  "PERFECT_SESSION",
+  "ONBOARDING_GOAL",
+  "SESSION_COUNT_MILESTONE",
+  "STUDY_PATTERN",
+  "PREFERRED_TECHNIQUE",
+  "FAILURE_MODE",
+  "OPTIMAL_FOCUS_TIME",
+  "DOCUMENT_MILESTONE",
 ]);
 
 export const CoachMemoryRowSchema = z.object({
@@ -57,15 +57,23 @@ export const CreateCoachMemoryInputSchema = z.object({
   evidenceHash: z.string().nullable().default(null),
 });
 
-export const RecommendationEvidenceSchema = z.object({
-  memoryIds: z.array(z.string().uuid()).optional(),
-  evidenceSummary: z.string().min(1).optional(),
-  confidence: z.number().min(0).max(1).optional(),
-  fallbackReason: z.enum(['cold_start', 'insufficient_data', 'user_override']).optional(),
-}).strict();
+export const RecommendationEvidenceSchema = z
+  .object({
+    memoryIds: z.array(z.string().uuid()).optional(),
+    evidenceSummary: z.string().min(1).optional(),
+    confidence: z.number().min(0).max(1).optional(),
+    fallbackReason: z
+      .enum(["cold_start", "insufficient_data", "user_override"])
+      .optional(),
+  })
+  .strict();
 
 export type MemoryType = z.infer<typeof MemoryTypeSchema>;
 export type CoachMemoryRow = z.infer<typeof CoachMemoryRowSchema>;
 export type CoachMemory = z.infer<typeof CoachMemorySchema>;
-export type CreateCoachMemoryInput = z.infer<typeof CreateCoachMemoryInputSchema>;
-export type RecommendationEvidence = z.infer<typeof RecommendationEvidenceSchema>;
+export type CreateCoachMemoryInput = z.infer<
+  typeof CreateCoachMemoryInputSchema
+>;
+export type RecommendationEvidence = z.infer<
+  typeof RecommendationEvidenceSchema
+>;

@@ -1,12 +1,12 @@
-import React from 'react';
-import { Pressable, View } from 'react-native';
+import React from "react";
+import { Pressable, View } from "react-native";
 
-import { Button } from '../../components/primitives/Button';
-import { Text } from '../../components/primitives/Text';
-import { CardEnterAnimation } from '../../shared/ui/components/EnterAnimation';
-import type { Theme } from '../../theme';
-import type { PaywallPlanSelection } from './paywall-copy';
-import { paywallStyles as styles } from './paywall-styles';
+import { Button } from "../../components/primitives/Button";
+import { Text } from "../../components/primitives/Text";
+import { CardEnterAnimation } from "../../shared/ui/components/EnterAnimation";
+import type { Theme } from "../../theme";
+import type { PaywallPlanSelection } from "./paywall-copy";
+import { paywallStyles as styles } from "./paywall-styles";
 
 type PaywallPlanListProps = {
   plans: readonly PaywallPlanSelection[];
@@ -36,7 +36,11 @@ type PaywallPlanCardProps = {
   onPurchase: (plan: PaywallPlanSelection) => void;
 };
 
-function PaywallPlanCard({ plan, theme, onPurchase }: PaywallPlanCardProps): JSX.Element {
+function PaywallPlanCard({
+  plan,
+  theme,
+  onPurchase,
+}: PaywallPlanCardProps): JSX.Element {
   const hasTrial = Boolean(plan.packageInfo?.product.introPrice);
 
   return (
@@ -46,8 +50,11 @@ function PaywallPlanCard({ plan, theme, onPurchase }: PaywallPlanCardProps): JSX
         styles.planCard,
         {
           backgroundColor: theme.colors.background.secondary,
-          borderColor: plan.id === 'annual' ? theme.colors.primary[500] : theme.colors.border.DEFAULT,
-          borderWidth: plan.id === 'annual' ? 2 : 1,
+          borderColor:
+            plan.id === "annual"
+              ? theme.colors.primary[500]
+              : theme.colors.border.DEFAULT,
+          borderWidth: plan.id === "annual" ? 2 : 1,
         },
       ]}
       accessibilityLabel={`Choose ${plan.title} Premium plan`}
@@ -56,8 +63,17 @@ function PaywallPlanCard({ plan, theme, onPurchase }: PaywallPlanCardProps): JSX
     >
       <View style={styles.planHeader}>
         <View>
-          <Text style={[styles.planTitle, { color: theme.colors.text.primary }]}>{plan.title}</Text>
-          <Text style={[styles.planSubtitle, { color: theme.colors.text.secondary }]}>
+          <Text
+            style={[styles.planTitle, { color: theme.colors.text.primary }]}
+          >
+            {plan.title}
+          </Text>
+          <Text
+            style={[
+              styles.planSubtitle,
+              { color: theme.colors.text.secondary },
+            ]}
+          >
             {plan.subtitle}
           </Text>
         </View>
@@ -68,7 +84,7 @@ function PaywallPlanCard({ plan, theme, onPurchase }: PaywallPlanCardProps): JSX
               styles.planBadge,
               {
                 backgroundColor:
-                  plan.id === 'annual'
+                  plan.id === "annual"
                     ? theme.colors.primary[500]
                     : theme.colors.background.tertiary,
               },
@@ -79,7 +95,7 @@ function PaywallPlanCard({ plan, theme, onPurchase }: PaywallPlanCardProps): JSX
                 styles.planBadgeText,
                 {
                   color:
-                    plan.id === 'annual'
+                    plan.id === "annual"
                       ? theme.colors.text.inverse
                       : theme.colors.text.secondary,
                 },
@@ -95,9 +111,9 @@ function PaywallPlanCard({ plan, theme, onPurchase }: PaywallPlanCardProps): JSX
       </Text>
       {hasTrial && plan.packageInfo?.product.introPrice ? (
         <Text style={[styles.trialText, { color: theme.colors.success[500] }]}>
-          {plan.packageInfo.product.introPrice.periodNumberOfUnits}{' '}
-          {plan.packageInfo.product.introPrice.periodUnit?.toLowerCase()} free, then{' '}
-          {plan.displayPrice.toLowerCase()}
+          {plan.packageInfo.product.introPrice.periodNumberOfUnits}{" "}
+          {plan.packageInfo.product.introPrice.periodUnit?.toLowerCase()} free,
+          then {plan.displayPrice.toLowerCase()}
         </Text>
       ) : null}
     </Pressable>
@@ -106,8 +122,17 @@ function PaywallPlanCard({ plan, theme, onPurchase }: PaywallPlanCardProps): JSX
 
 function TrialBadge({ theme }: { theme: Theme }): JSX.Element {
   return (
-    <View style={[styles.trialBadge, { backgroundColor: theme.colors.success[500] }]}>
-      <Text style={[styles.trialBadgeText, { color: theme.colors.text.inverse }]}>Free trial</Text>
+    <View
+      style={[
+        styles.trialBadge,
+        { backgroundColor: theme.colors.success[500] },
+      ]}
+    >
+      <Text
+        style={[styles.trialBadgeText, { color: theme.colors.text.inverse }]}
+      >
+        Free trial
+      </Text>
     </View>
   );
 }
@@ -134,8 +159,8 @@ export function PaywallFooterActions({
   const annual = plans[0];
   const introPrice = annual?.packageInfo?.product.introPrice;
   const ctaLabel = introPrice
-    ? `Try Free for ${introPrice.periodNumberOfUnits} ${introPrice.periodUnit?.toLowerCase() === 'day' ? 'Days' : introPrice.periodUnit}`
-    : 'Continue with Annual';
+    ? `Try Free for ${introPrice.periodNumberOfUnits} ${introPrice.periodUnit?.toLowerCase() === "day" ? "Days" : introPrice.periodUnit}`
+    : "Continue with Annual";
   const primaryLabel = primaryCtaLabel ?? ctaLabel;
 
   return (

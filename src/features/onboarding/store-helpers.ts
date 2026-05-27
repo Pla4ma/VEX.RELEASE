@@ -1,5 +1,5 @@
-import { useAuthStore } from '../../store';
-import { captureSilentFailure } from '../../utils/silent-failure';
+import { useAuthStore } from "../../store";
+import { captureSilentFailure } from "../../utils/silent-failure";
 
 import {
   OnboardingStateSchema,
@@ -10,7 +10,7 @@ import {
   type MotivationProfile,
   type MotivationProfileType,
   type OnboardingState,
-} from './schemas';
+} from "./schemas";
 
 export type OnboardingDraft = {
   goal?: FocusGoal;
@@ -31,7 +31,7 @@ function getCurrentUserId(): string | null {
 export function mergeOnboardingCompletion(
   isOnboarded: boolean,
   completedAt: number | null,
-): Pick<OnboardingState, 'isOnboarded' | 'completedAt' | 'completedForUserId'> {
+): Pick<OnboardingState, "isOnboarded" | "completedAt" | "completedForUserId"> {
   const currentUserId = getCurrentUserId();
   return {
     isOnboarded,
@@ -41,7 +41,10 @@ export function mergeOnboardingCompletion(
 }
 
 export function isCompletionValidForUser(
-  state: Pick<OnboardingState, 'isOnboarded' | 'completedAt' | 'completedForUserId'>,
+  state: Pick<
+    OnboardingState,
+    "isOnboarded" | "completedAt" | "completedForUserId"
+  >,
   userId: string | null | undefined,
 ): boolean {
   if (!userId) {
@@ -91,47 +94,50 @@ export function deriveMotivationProfile(
   }
 
   const primaryMap: Record<string, MotivationProfileType> = {
-    STUDY: 'study_focused', WORK: 'worker', CREATIVE: 'creator', PERSONAL: 'calm',
+    STUDY: "study_focused",
+    WORK: "worker",
+    CREATIVE: "creator",
+    PERSONAL: "calm",
   };
-  const primary = goal ? (primaryMap[goal] ?? 'calm') : 'calm';
+  const primary = goal ? (primaryMap[goal] ?? "calm") : "calm";
 
   const secondary: MotivationProfileType[] = [];
 
-  const effectivePersona = persona ?? 'mentor';
+  const effectivePersona = persona ?? "mentor";
   switch (effectivePersona) {
-    case 'drill-sergeant':
-      secondary.push('intense');
+    case "drill-sergeant":
+      secondary.push("intense");
       break;
-    case 'cheerleader':
-      secondary.push('friendly');
+    case "cheerleader":
+      secondary.push("friendly");
       break;
-    case 'mentor':
+    case "mentor":
     default:
-      secondary.push('coach_led');
+      secondary.push("coach_led");
       break;
   }
 
-  const effectiveElement = element ?? 'LUMINA';
+  const effectiveElement = element ?? "LUMINA";
   switch (effectiveElement) {
-    case 'FLAME':
-      if (!secondary.includes('game_like')) secondary.push('game_like');
-      if (!secondary.includes('intense')) secondary.push('intense');
+    case "FLAME":
+      if (!secondary.includes("game_like")) secondary.push("game_like");
+      if (!secondary.includes("intense")) secondary.push("intense");
       break;
-    case 'WAVE':
-      if (!secondary.includes('calm')) secondary.push('calm');
+    case "WAVE":
+      if (!secondary.includes("calm")) secondary.push("calm");
       break;
-    case 'TERRA':
-      if (!secondary.includes('worker')) secondary.push('worker');
+    case "TERRA":
+      if (!secondary.includes("worker")) secondary.push("worker");
       break;
-    case 'ZEPHYR':
-      if (!secondary.includes('friendly')) secondary.push('friendly');
+    case "ZEPHYR":
+      if (!secondary.includes("friendly")) secondary.push("friendly");
       break;
-    case 'VOID':
-      if (!secondary.includes('intense')) secondary.push('intense');
-      if (!secondary.includes('competitive')) secondary.push('competitive');
+    case "VOID":
+      if (!secondary.includes("intense")) secondary.push("intense");
+      if (!secondary.includes("competitive")) secondary.push("competitive");
       break;
-    case 'LUMINA':
-      if (!secondary.includes('study_focused')) secondary.push('study_focused');
+    case "LUMINA":
+      if (!secondary.includes("study_focused")) secondary.push("study_focused");
       break;
   }
 
@@ -145,9 +151,17 @@ export function createRehydrationHandler(
     if (!state) return;
     try {
       OnboardingStateSchema.parse(state);
-      if (state.goal || state.persona || state.element || state.explicitMotivationStyle) {
+      if (
+        state.goal ||
+        state.persona ||
+        state.element ||
+        state.explicitMotivationStyle
+      ) {
         const profile = deriveMotivationProfile(
-          state.goal, state.persona, state.element, state.explicitMotivationStyle,
+          state.goal,
+          state.persona,
+          state.element,
+          state.explicitMotivationStyle,
         );
         if (!state.motivationProfile) {
           setState({ motivationProfile: profile });
@@ -155,9 +169,9 @@ export function createRehydrationHandler(
       }
     } catch (error) {
       captureSilentFailure(error, {
-        feature: 'onboarding',
-        operation: 'safe-fallback',
-        type: 'data',
+        feature: "onboarding",
+        operation: "safe-fallback",
+        type: "data",
       });
     }
   };

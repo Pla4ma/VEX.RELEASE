@@ -4,9 +4,9 @@
  * Handles analytics for feature gate events and visibility tracking.
  */
 
-import Sentry from '@sentry/react-native';
-import { eventBus } from '../../events';
-import type { FeatureKey } from '../liveops-config/feature-access';
+import Sentry from "@sentry/react-native";
+import { eventBus } from "../../events";
+import type { FeatureKey } from "../liveops-config/feature-access";
 
 /**
  * Tracks when a user attempts to access a disabled feature
@@ -14,20 +14,20 @@ import type { FeatureKey } from '../liveops-config/feature-access';
 export function trackFeatureAccessAttempted(
   feature: FeatureKey,
   accessMethod: string,
-  context: Record<string, unknown> = {}
+  context: Record<string, unknown> = {},
 ): void {
   Sentry.addBreadcrumb({
-    category: 'feature-gate',
+    category: "feature-gate",
     message: `Feature access attempted: ${feature}`,
     data: {
       feature,
       accessMethod,
       context,
     },
-    level: 'info',
+    level: "info",
   });
 
-  eventBus.emit('feature-gate:access_attempted', {
+  eventBus.emit("feature-gate:access_attempted", {
     feature,
     accessMethod,
     context,
@@ -41,20 +41,20 @@ export function trackFeatureAccessAttempted(
 export function trackFeatureGateBlocked(
   feature: FeatureKey,
   reason: string,
-  fallbackRoute?: string
+  fallbackRoute?: string,
 ): void {
   Sentry.addBreadcrumb({
-    category: 'feature-gate',
+    category: "feature-gate",
     message: `Feature gate blocked: ${feature}`,
     data: {
       feature,
       reason,
       fallbackRoute,
     },
-    level: 'warning',
+    level: "warning",
   });
 
-  eventBus.emit('feature-gate:blocked', {
+  eventBus.emit("feature-gate:blocked", {
     feature,
     reason,
     fallbackRoute,
@@ -67,19 +67,19 @@ export function trackFeatureGateBlocked(
  */
 export function trackFeatureGateAllowed(
   feature: FeatureKey,
-  accessMethod: string
+  accessMethod: string,
 ): void {
   Sentry.addBreadcrumb({
-    category: 'feature-gate',
+    category: "feature-gate",
     message: `Feature gate allowed: ${feature}`,
     data: {
       feature,
       accessMethod,
     },
-    level: 'info',
+    level: "info",
   });
 
-  eventBus.emit('feature-gate:allowed', {
+  eventBus.emit("feature-gate:allowed", {
     feature,
     accessMethod,
     timestamp: Date.now(),
@@ -93,10 +93,10 @@ export function trackFeatureVisibilityChanged(
   feature: FeatureKey,
   wasVisible: boolean,
   isVisible: boolean,
-  reason?: string
+  reason?: string,
 ): void {
   Sentry.addBreadcrumb({
-    category: 'feature-gate',
+    category: "feature-gate",
     message: `Feature visibility changed: ${feature}`,
     data: {
       feature,
@@ -104,10 +104,10 @@ export function trackFeatureVisibilityChanged(
       isVisible,
       reason,
     },
-    level: 'info',
+    level: "info",
   });
 
-  eventBus.emit('feature-gate:visibility_changed', {
+  eventBus.emit("feature-gate:visibility_changed", {
     feature,
     wasVisible,
     isVisible,

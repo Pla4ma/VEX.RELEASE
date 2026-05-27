@@ -66,11 +66,16 @@ async function persistMemoryCandidates(
           operation: "MEMORY_CREATE",
           payload: {
             userId,
-            type: candidate.confidence >= 0.7 ? "successful_session_pattern" : "lane_evidence",
+            type:
+              candidate.confidence >= 0.7
+                ? "successful_session_pattern"
+                : "lane_evidence",
             summary: candidate.text,
             source: "session_completion",
             confidence: candidate.confidence,
-            evidenceHash: hashEvidence(`${candidate.confidence >= 0.7 ? "successful_session_pattern" : "lane_evidence"}:${userId}:${candidate.text}`),
+            evidenceHash: hashEvidence(
+              `${candidate.confidence >= 0.7 ? "successful_session_pattern" : "lane_evidence"}:${userId}:${candidate.text}`,
+            ),
           },
           priority: "low",
         });
@@ -120,7 +125,7 @@ function produceUnlockDecision(
                 ? "blocked"
                 : "blocked",
     } as CompletionPersonalizationResult["unlockDecision"];
-  } catch {
+  } catch (error: unknown) {
     return {
       hidden: true,
       key: featureKey as CompletionPersonalizationResult["unlockDecision"]["key"],
@@ -144,7 +149,10 @@ function produceUnlockDecision(
 export async function integrateCompletionPersonalization(
   input: CompletionPersonalizationInputForIntegration,
 ): Promise<CompletionPersonalizationResult> {
-  debug.info("Integrating completion personalization for %s", input.summary.sessionId);
+  debug.info(
+    "Integrating completion personalization for %s",
+    input.summary.sessionId,
+  );
 
   const hiddenFeatureKeys = resolveHiddenFeatureKeys(input);
 
@@ -169,11 +177,11 @@ export async function integrateCompletionPersonalization(
     unlockDecision: unlock,
   };
 
-  await persistMemoryCandidates(
-    completeResult,
-    input.ledger.userId,
-  );
+  await persistMemoryCandidates(completeResult, input.ledger.userId);
 
-  debug.info("Completion personalization integrated for %s", input.summary.sessionId);
+  debug.info(
+    "Completion personalization integrated for %s",
+    input.summary.sessionId,
+  );
   return completeResult;
 }

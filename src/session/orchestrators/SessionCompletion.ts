@@ -4,7 +4,9 @@ const debug = createDebugger("session:orchestrator:completion");
 
 import type { SessionOrchestrator } from "../SessionOrchestrator";
 
-export async function completeSessionInternal(orch: SessionOrchestrator): Promise<void> {
+export async function completeSessionInternal(
+  orch: SessionOrchestrator,
+): Promise<void> {
   if (!orch.session) return;
   orch.isActive = false;
   if (orch.config.enableAntiCheat) {
@@ -29,14 +31,23 @@ export async function completeSessionInternal(orch: SessionOrchestrator): Promis
     })),
   );
   const result = orch.completionEngine.completeSession(
-    orch.session, orch.focusMetrics, 0, undefined, undefined, undefined,
+    orch.session,
+    orch.focusMetrics,
+    0,
+    undefined,
+    undefined,
+    undefined,
   );
   if (!result.success) throw new Error("Session completion failed");
   orch.session.status = result.summary.status;
   orch.lastSessionSummary = result.summary;
   await orch.finalizeSession(result.summary);
   orch.eventEmitter.emitSessionCompleted(result.summary);
-  debug.info("Session completed: %s, Score: %d", orch.session.id, result.summary.finalScore);
+  debug.info(
+    "Session completed: %s, Score: %d",
+    orch.session.id,
+    result.summary.finalScore,
+  );
 }
 
 async function failSession(
@@ -46,7 +57,11 @@ async function failSession(
 ): Promise<void> {
   if (!orch.session) return;
   orch.isActive = false;
-  const result = orch.completionEngine.failSession(orch.session, error, canRecover);
+  const result = orch.completionEngine.failSession(
+    orch.session,
+    error,
+    canRecover,
+  );
   orch.session.status = "FAILED";
   orch.session.damagePoints = result.damage.totalDamage;
   orch.eventEmitter.emitSessionFailed(error, canRecover);
@@ -56,7 +71,11 @@ async function failSession(
   } else {
     await orch.finalizeAbandonedSession();
   }
-  debug.error("Session failed: %s (error: %s)", new Error(error), orch.session.id);
+  debug.error(
+    "Session failed: %s (error: %s)",
+    new Error(error),
+    orch.session.id,
+  );
 }
 
 export async function abandonSession(
@@ -71,8 +90,15 @@ export async function abandonSession(
   orch.session.penaltyMultiplier = result.damage.finalPenalty;
   orch.eventEmitter.emitSessionAbandoned(Date.now(), reason, elapsed);
   if (result.damage.totalDamage > 0) {
-    orch.eventEmitter.emitDamageTaken(result.damage.totalDamage, reason || "Session abandoned");
+    orch.eventEmitter.emitDamageTaken(
+      result.damage.totalDamage,
+      reason || "Session abandoned",
+    );
   }
   await orch.finalizeAbandonedSession();
-  debug.warn("Session abandoned: %s (reason: %s)", orch.session.id, reason || "none");
+  debug.warn(
+    "Session abandoned: %s (reason: %s)",
+    orch.session.id,
+    reason || "none",
+  );
 }

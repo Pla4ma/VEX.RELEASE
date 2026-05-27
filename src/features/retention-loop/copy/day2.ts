@@ -1,0 +1,71 @@
+import type { JourneyDayCopy } from "../schemas";
+
+export const DAY2_COPY: JourneyDayCopy = {
+  homeMessage: {
+    student: "You already built something. Two study blocks.",
+    game_like: "Proof of movement. Two clean runs.",
+    deep_creative: "Proof of progress. Two project sessions.",
+    minimal_normal: "Proof of rhythm. Two clean blocks.",
+  },
+  primaryCta: {
+    student: "Keep the study streak going",
+    game_like: "Keep the run alive",
+    deep_creative: "Keep the project moving",
+    minimal_normal: "Keep the clean streak",
+  },
+  sessionSuggestion: {
+    student: {
+      durationMinutes: 20,
+      type: "STUDY",
+      taskPrompt: "Review your strongest topic first, then tackle one weak area.",
+    },
+    game_like: {
+      durationMinutes: 15,
+      type: "SPRINT",
+      taskPrompt: "One encounter. Maybe push a little harder. 15 minutes.",
+    },
+    deep_creative: {
+      durationMinutes: 25,
+      type: "DEEP_WORK",
+      taskPrompt: "Take the next move from yesterday and complete it. 25 minutes.",
+    },
+    minimal_normal: {
+      durationMinutes: 10,
+      type: "LIGHT_FOCUS",
+      taskPrompt: "Two days of clean blocks. Keep the rhythm. 10 minutes.",
+    },
+  },
+  completionPayoff: {
+    student: "Three study blocks. Evidence is forming.",
+    game_like: "Three runs. Pattern is emerging.",
+    deep_creative: "Three project sessions. Thread is holding.",
+    minimal_normal: "Three clean blocks. Consistency is real.",
+  },
+  nextActionCopy: {
+    student: "Tomorrow VEX will share something it learned about your study style.",
+    game_like: "Tomorrow VEX will share something it learned about your runs.",
+    deep_creative: "Tomorrow VEX will share something it learned about your project flow.",
+    minimal_normal: "Tomorrow VEX will share something it learned about your rhythm.",
+  },
+  notificationCopy: {
+    title: {
+      student: "Three study blocks so far",
+      game_like: "Three runs so far",
+      deep_creative: "Three project sessions",
+      minimal_normal: "Three clean blocks",
+    },
+    body: {
+      student: "You have built real evidence. Return to keep it going.",
+      game_like: "Pattern forming. Come back for another run.",
+      deep_creative: "Project thread is holding. Come back to continue.",
+      minimal_normal: "Consistency is real. Another block when ready.",
+    },
+  },
+  premiumTrigger: { day: 2, trigger: "none", copyKey: "none" },
+  returnReason: {
+    student: "Three blocks of evidence. VEX sees your study pattern.",
+    game_like: "Three runs of data. VEX sees your movement pattern.",
+    deep_creative: "Three sessions of context. VEX sees your project pattern.",
+    minimal_normal: "Three blocks of rhythm. VEX sees your clean pattern.",
+  },
+};

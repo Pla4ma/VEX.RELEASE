@@ -30,10 +30,18 @@ export function getStyles(theme: Theme) {
     },
     statsRow: { flexDirection: "row", marginBottom: 4 },
     statText: { fontSize: 14, color: t.text.tertiary },
-    statValueHighlight: { color: t.warning.DEFAULT, fontWeight: "700", fontSize: 16 },
+    statValueHighlight: {
+      color: t.warning.DEFAULT,
+      fontWeight: "700",
+      fontSize: 16,
+    },
     subStats: { flexDirection: "row", alignItems: "center" },
     subStat: { fontSize: 12, color: t.text.muted },
-    subStatSeparator: { fontSize: 12, color: t.text.muted, marginHorizontal: 8 },
+    subStatSeparator: {
+      fontSize: 12,
+      color: t.text.muted,
+      marginHorizontal: 8,
+    },
     weekdays: {
       flexDirection: "row",
       justifyContent: "space-around",

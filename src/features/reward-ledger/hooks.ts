@@ -1,10 +1,10 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { createReward, syncPendingRewards } from './service';
-import type { CreateRewardLedgerInput } from './types';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { createReward, syncPendingRewards } from "./service";
+import type { CreateRewardLedgerInput } from "./types";
 
 export function usePendingRewards(userId: string) {
   const query = useQuery({
-    queryKey: ['rewards', 'pending', userId],
+    queryKey: ["rewards", "pending", userId],
     queryFn: () => syncPendingRewards(userId),
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
@@ -24,7 +24,9 @@ export function useCreateReward() {
   return useMutation({
     mutationFn: createReward,
     onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ['rewards', 'pending', variables.userId] });
+      queryClient.invalidateQueries({
+        queryKey: ["rewards", "pending", variables.userId],
+      });
     },
   });
 }

@@ -1,7 +1,4 @@
-import type {
-  ValidationResult,
-  SessionValidationInput,
-} from "./validation";
+import type { ValidationResult, SessionValidationInput } from "./validation";
 import { validateSessionConfig } from "./validation";
 
 export function validateSessionStart(

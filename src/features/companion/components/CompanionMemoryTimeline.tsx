@@ -1,12 +1,15 @@
-import NetInfo from '@react-native-community/netinfo';
-import { FlashList, type ListRenderItem } from '@shopify/flash-list';
-import React, { useMemo } from 'react';
+import NetInfo from "@react-native-community/netinfo";
+import { FlashList, type ListRenderItem } from "@shopify/flash-list";
+import React, { useMemo } from "react";
 
-import { Box, Button, Card, Text } from '../../../components/primitives';
-import { ErrorState } from '../../../components/states/ErrorState';
-import type { CompanionMemory } from '../memory-types';
-import { groupCompanionMemories, type CompanionMemoryGroup } from './companion-memory-groups';
-import { CompanionMemoryItem } from './CompanionMemoryItem';
+import { Box, Button, Card, Text } from "../../../components/primitives";
+import { ErrorState } from "../../../components/states/ErrorState";
+import type { CompanionMemory } from "../memory-types";
+import {
+  groupCompanionMemories,
+  type CompanionMemoryGroup,
+} from "./companion-memory-groups";
+import { CompanionMemoryItem } from "./CompanionMemoryItem";
 
 type CompanionMemoryTimelineProps = {
   isError: boolean;
@@ -17,8 +20,8 @@ type CompanionMemoryTimelineProps = {
 };
 
 type TimelineRow =
-  | { id: string; kind: 'header'; title: CompanionMemoryGroup['title'] }
-  | { id: string; kind: 'memory'; memory: CompanionMemory };
+  | { id: string; kind: "header"; title: CompanionMemoryGroup["title"] }
+  | { id: string; kind: "memory"; memory: CompanionMemory };
 
 export function CompanionMemoryTimeline({
   isError,
@@ -30,15 +33,21 @@ export function CompanionMemoryTimeline({
   const netInfo = NetInfo.useNetInfo();
   const rows = useMemo(() => buildRows(memories), [memories]);
   const renderItem: ListRenderItem<TimelineRow> = ({ item }) => {
-    if (item.kind === 'header') {
-      return <Text variant="label" color="text.secondary">{item.title}</Text>;
+    if (item.kind === "header") {
+      return (
+        <Text variant="label" color="text.secondary">
+          {item.title}
+        </Text>
+      );
     }
     return <CompanionMemoryItem memory={item.memory} />;
   };
 
   return (
     <Box gap="md">
-      <Text variant="h3" color="text.primary">Memories</Text>
+      <Text variant="h3" color="text.primary">
+        Memories
+      </Text>
       {netInfo.isConnected === false ? <OfflineBanner /> : null}
       {isPending ? <MemorySkeleton /> : null}
       {!isPending && isError ? (
@@ -67,8 +76,16 @@ export function CompanionMemoryTimeline({
 
 function buildRows(memories: CompanionMemory[]): TimelineRow[] {
   return groupCompanionMemories(memories).flatMap((group) => [
-    { id: `header-${group.title}`, kind: 'header' as const, title: group.title },
-    ...group.data.map((memory) => ({ id: memory.id, kind: 'memory' as const, memory })),
+    {
+      id: `header-${group.title}`,
+      kind: "header" as const,
+      title: group.title,
+    },
+    ...group.data.map((memory) => ({
+      id: memory.id,
+      kind: "memory" as const,
+      memory,
+    })),
   ]);
 }
 
@@ -78,9 +95,24 @@ function MemorySkeleton(): JSX.Element {
       {[0, 1, 2].map((item) => (
         <Card key={item} size="md" state="loading">
           <Box gap="sm">
-            <Box height={12} width="30%" borderRadius="full" bg="background.tertiary" />
-            <Box height={18} width="60%" borderRadius="full" bg="background.tertiary" />
-            <Box height={14} width="100%" borderRadius="full" bg="background.tertiary" />
+            <Box
+              height={12}
+              width="30%"
+              borderRadius="full"
+              bg="background.tertiary"
+            />
+            <Box
+              height={18}
+              width="60%"
+              borderRadius="full"
+              bg="background.tertiary"
+            />
+            <Box
+              height={14}
+              width="100%"
+              borderRadius="full"
+              bg="background.tertiary"
+            />
           </Box>
         </Card>
       ))}
@@ -88,13 +120,20 @@ function MemorySkeleton(): JSX.Element {
   );
 }
 
-function EmptyTimeline({ onStartFocus }: { onStartFocus: () => void }): JSX.Element {
+function EmptyTimeline({
+  onStartFocus,
+}: {
+  onStartFocus: () => void;
+}): JSX.Element {
   return (
     <Card size="md" accessibilityLabel="No companion memories yet">
       <Box gap="sm">
-        <Text variant="h4" color="text.primary">Your story starts with proof.</Text>
+        <Text variant="h4" color="text.primary">
+          Your story starts with proof.
+        </Text>
         <Text variant="bodySmall" color="text.secondary">
-          Finish a focus session and your companion will remember the moments that matter.
+          Finish a focus session and your companion will remember the moments
+          that matter.
         </Text>
         <Button
           accessibilityHint="Opens session setup to start a focus session"
@@ -112,9 +151,14 @@ function EmptyTimeline({ onStartFocus }: { onStartFocus: () => void }): JSX.Elem
 
 function OfflineBanner(): JSX.Element {
   return (
-    <Card size="sm" variant="outlined" accessibilityLabel="Memory timeline offline">
+    <Card
+      size="sm"
+      variant="outlined"
+      accessibilityLabel="Memory timeline offline"
+    >
       <Text variant="bodySmall" color="text.secondary">
-        Offline right now. Saved memories stay here, and new ones sync when you reconnect.
+        Offline right now. Saved memories stay here, and new ones sync when you
+        reconnect.
       </Text>
     </Card>
   );

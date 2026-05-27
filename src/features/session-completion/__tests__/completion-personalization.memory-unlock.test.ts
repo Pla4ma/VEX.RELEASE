@@ -68,18 +68,15 @@ describe("Phase 5 - Completion Personalization > Deleted memory respected", () =
 describe("Phase 5 - Completion Personalization > Unlock decision produced but hidden systems stay hidden", () => {
   const SUMMARY = createSessionSummary({ sessionMode: SessionMode.FLOW });
 
-  it.each(LANES)(
-    "%s: hidden unlock when featureKey in hidden list",
-    (lane) => {
-      const result = buildCompletionPersonalization({
-        hiddenFeatureKeys: [UNLOCK_KEYS[lane]],
-        lane,
-        summary: SUMMARY,
-      });
-      expect(result.unlockDecision.hidden).toBe(true);
-      expect(result.unlockDecision.status).toBe("blocked");
-    },
-  );
+  it.each(LANES)("%s: hidden unlock when featureKey in hidden list", (lane) => {
+    const result = buildCompletionPersonalization({
+      hiddenFeatureKeys: [UNLOCK_KEYS[lane]],
+      lane,
+      summary: SUMMARY,
+    });
+    expect(result.unlockDecision.hidden).toBe(true);
+    expect(result.unlockDecision.status).toBe("blocked");
+  });
 
   it.each(LANES)(
     "%s: visible unlock when featureKey not in hidden list",

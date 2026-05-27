@@ -1,19 +1,20 @@
-import { useEffect } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import * as service from '../service';
+import { useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import * as service from "../service";
 
 export const notificationKeys = {
-  all: ['notifications'] as const,
-  unreadCount: (userId: string) => [...notificationKeys.all, 'unread-count', userId] as const,
+  all: ["notifications"] as const,
+  unreadCount: (userId: string) =>
+    [...notificationKeys.all, "unread-count", userId] as const,
 };
 
 export function useUnreadNotificationsCount(userId: string | null) {
   const queryClient = useQueryClient();
   const query = useQuery({
-    queryKey: notificationKeys.unreadCount(userId || ''),
+    queryKey: notificationKeys.unreadCount(userId || ""),
     queryFn: () => {
       if (!userId) {
-        throw new Error('User ID required');
+        throw new Error("User ID required");
       }
       return service.getUnreadNotificationsCount(userId);
     },

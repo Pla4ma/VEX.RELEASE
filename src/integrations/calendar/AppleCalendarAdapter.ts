@@ -1,11 +1,22 @@
 const Calendar = {
   requestCalendarPermissionsAsync: async () => ({ status: "denied" as const }),
-  getCalendarsAsync: async (_entityType: string) => [{ id: "default", allowsModifications: true }],
+  getCalendarsAsync: async (_entityType: string) => [
+    { id: "default", allowsModifications: true },
+  ],
   EntityTypes: { EVENT: "event" },
-  createEventAsync: async (_calendarId: string, _eventData: unknown) => "event-id",
-  updateEventAsync: async (_calendarId: string, _eventId: string, _eventData: unknown) => {},
+  createEventAsync: async (_calendarId: string, _eventData: unknown) =>
+    "event-id",
+  updateEventAsync: async (
+    _calendarId: string,
+    _eventId: string,
+    _eventData: unknown,
+  ) => {},
   deleteEventAsync: async (_calendarId: string, _eventId: string) => {},
-  getEventsAsync: async (_calendarIds: string[], _startDate: Date, _endDate: Date) => [],
+  getEventsAsync: async (
+    _calendarIds: string[],
+    _startDate: Date,
+    _endDate: Date,
+  ) => [],
 };
 
 import { Platform } from "react-native";
@@ -25,7 +36,10 @@ export class AppleCalendarAdapter {
         return false;
       }
       const calendars = await Calendar.getCalendarsAsync("event");
-      const defaultCal = calendars.find((cal: { allowsModifications: boolean; id?: string }) => cal.allowsModifications);
+      const defaultCal = calendars.find(
+        (cal: { allowsModifications: boolean; id?: string }) =>
+          cal.allowsModifications,
+      );
       this.defaultCalendarId = defaultCal?.id || null;
       return true;
     } catch (error) {
@@ -38,7 +52,11 @@ export class AppleCalendarAdapter {
     return Platform.OS === "ios" || Platform.OS === "macos";
   }
 
-  async fetchEvents(timeMin: Date, timeMax: Date, calendarId?: string): Promise<CalendarEvent[]> {
+  async fetchEvents(
+    timeMin: Date,
+    timeMax: Date,
+    calendarId?: string,
+  ): Promise<CalendarEvent[]> {
     if (!this.isAvailable()) {
       throw new Error("Apple Calendar only available on iOS/macOS");
     }
@@ -47,8 +65,14 @@ export class AppleCalendarAdapter {
       if (!targetCalendarId) {
         throw new Error("No calendar available");
       }
-      const events = await Calendar.getEventsAsync([targetCalendarId], timeMin, timeMax);
-      return events.map((event: Record<string, unknown>) => this.mapAppleEvent(event));
+      const events = await Calendar.getEventsAsync(
+        [targetCalendarId],
+        timeMin,
+        timeMax,
+      );
+      return events.map((event: Record<string, unknown>) =>
+        this.mapAppleEvent(event),
+      );
     } catch (error) {
       debug.error("Failed to fetch events:", error as Error);
       throw error;
@@ -70,7 +94,11 @@ export class AppleCalendarAdapter {
     };
   }
 
-  async createFocusEvent(startTime: Date, duration: number, title: string = "Focus Time"): Promise<CalendarEvent> {
+  async createFocusEvent(
+    startTime: Date,
+    duration: number,
+    title: string = "Focus Time",
+  ): Promise<CalendarEvent> {
     if (!this.isAvailable()) {
       throw new Error("Apple Calendar only available on iOS/macOS");
     }
@@ -137,7 +165,9 @@ export class AppleCalendarAdapter {
     }
   }
 
-  private mergeBusySlots(slots: Array<{ start: Date; end: Date }>): Array<{ start: Date; end: Date }> {
+  private mergeBusySlots(
+    slots: Array<{ start: Date; end: Date }>,
+  ): Array<{ start: Date; end: Date }> {
     if (slots.length === 0) {
       return [];
     }
@@ -147,7 +177,9 @@ export class AppleCalendarAdapter {
       const last = merged[merged.length - 1]!; // always valid: merged starts with 1 element
       const current = slots[i]!; // always valid: i is in bounds per loop condition
       if (current.start <= last.end) {
-        last.end = new Date(Math.max(last.end.getTime(), current.end.getTime()));
+        last.end = new Date(
+          Math.max(last.end.getTime(), current.end.getTime()),
+        );
       } else {
         merged.push(current);
       }
@@ -155,7 +187,11 @@ export class AppleCalendarAdapter {
     return merged;
   }
 
-  private calculateFreeSlots(busySlots: Array<{ start: Date; end: Date }>, timeMin: Date, timeMax: Date): Array<{ start: Date; end: Date; duration: number }> {
+  private calculateFreeSlots(
+    busySlots: Array<{ start: Date; end: Date }>,
+    timeMin: Date,
+    timeMax: Date,
+  ): Array<{ start: Date; end: Date; duration: number }> {
     const free: Array<{ start: Date; end: Date; duration: number }> = [];
     let currentTime = new Date(timeMin);
     for (const busy of busySlots) {
@@ -163,16 +199,22 @@ export class AppleCalendarAdapter {
         free.push({
           start: new Date(currentTime),
           end: new Date(busy.start),
-          duration: Math.floor((busy.start.getTime() - currentTime.getTime()) / 60000),
+          duration: Math.floor(
+            (busy.start.getTime() - currentTime.getTime()) / 60000,
+          ),
         });
       }
-      currentTime = new Date(Math.max(currentTime.getTime(), busy.end.getTime()));
+      currentTime = new Date(
+        Math.max(currentTime.getTime(), busy.end.getTime()),
+      );
     }
     if (currentTime < timeMax) {
       free.push({
         start: new Date(currentTime),
         end: new Date(timeMax),
-        duration: Math.floor((timeMax.getTime() - currentTime.getTime()) / 60000),
+        duration: Math.floor(
+          (timeMax.getTime() - currentTime.getTime()) / 60000,
+        ),
       });
     }
     return free.filter((slot) => slot.duration >= 15);

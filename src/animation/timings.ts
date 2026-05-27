@@ -4,7 +4,11 @@
  * Predefined timing functions and durations for animations.
  */
 
-import { Easing, type EasingFunction, type EasingFunctionFactory } from 'react-native-reanimated';
+import {
+  Easing,
+  type EasingFunction,
+  type EasingFunctionFactory,
+} from "react-native-reanimated";
 
 /**
  * Easing functions from Reanimated
@@ -69,7 +73,7 @@ export interface TimingConfig {
 
 export function createTiming(
   duration: number,
-  easing: EasingFunction | EasingFunctionFactory = easings.ease
+  easing: EasingFunction | EasingFunctionFactory = easings.ease,
 ): TimingConfig {
   return {
     duration,

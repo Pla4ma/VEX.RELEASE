@@ -13,14 +13,14 @@ export {
   FocusIdentityEngine,
   FocusIdentityService,
   FOCUS_SCORE_CONFIG,
-} from './FocusIdentityEngine';
+} from "./FocusIdentityEngine";
 
 // Types
 export type {
   ScoreBand,
   FocusScoreFactors,
   FocusIdentityProfile,
-} from './FocusIdentityEngine';
+} from "./FocusIdentityEngine";
 export type {
   FocusScoreBandLabel,
   FocusScoreFactorKey,
@@ -29,7 +29,7 @@ export type {
   FocusScoreUpdateInput,
   FocusScoreUpdateResult,
   MonthlyFocusReportSummary,
-} from './types';
+} from "./types";
 
 // Schemas
 export {
@@ -44,30 +44,30 @@ export {
   FocusScoreUpdateResultSchema,
   MonthlyFocusReportSummarySchema,
   getFocusScoreFactorsWeightTotal,
-} from './schemas';
+} from "./schemas";
 
 // Repository
-export * as repository from './repository';
-export type { MonthlyReportData } from './repository';
-export * as focusScoreRepository from './repository-focus-score';
+export * as repository from "./repository";
+export type { MonthlyReportData } from "./repository";
+export * as focusScoreRepository from "./repository-focus-score";
 export type {
   AppendFocusScoreHistoryEvent,
   MonthlyFocusReportInput,
   UpsertCurrentFocusScoreInput,
-} from './repository-focus-score.schemas';
-export { focusScoreKeys } from './focus-score-query-keys';
-export { calculateFocusScoreUpdate } from './score-algorithm';
+} from "./repository-focus-score.schemas";
+export { focusScoreKeys } from "./focus-score-query-keys";
+export { calculateFocusScoreUpdate } from "./score-algorithm";
 
 // Analytics
-export * as analytics from './analytics';
+export * as analytics from "./analytics";
 
 // Events
-export * as events from './events';
+export * as events from "./events";
 export type {
   MonthlyReportViewedEvent,
   MonthlyReportSharedEvent,
   MonthlyReportDismissedEvent,
-} from './events';
+} from "./events";
 
 // Hooks
 export {
@@ -75,14 +75,18 @@ export {
   useMonthlyReport,
   useFocusScoreColor,
   useIdentityStatement,
-} from './hooks';
-export { useFocusScore, useFocusScoreHistory, useFocusScoreDashboardModel } from './hooks-focus-score';
+} from "./hooks";
+export {
+  useFocusScore,
+  useFocusScoreHistory,
+  useFocusScoreDashboardModel,
+} from "./hooks-focus-score";
 
 // Integration
-export { initializeFocusScoreIntegration } from './integration-focus-score';
+export { initializeFocusScoreIntegration } from "./integration-focus-score";
 
 // Components
-export { FocusScoreCard } from './components/FocusScoreCard';
-export { ScoreHistoryChart } from './components/ScoreHistoryChart';
-export { FocusScoreDashboard } from './components/focus-score-dashboard';
-export { FocusScoreHomeWidget } from './components/focus-score-home-widget';
+export { FocusScoreCard } from "./components/FocusScoreCard";
+export { ScoreHistoryChart } from "./components/ScoreHistoryChart";
+export { FocusScoreDashboard } from "./components/focus-score-dashboard";
+export { FocusScoreHomeWidget } from "./components/focus-score-home-widget";

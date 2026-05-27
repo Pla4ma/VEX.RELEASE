@@ -2,7 +2,11 @@ import React, { useState, useMemo } from "react";
 import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
 import { useSessionHistory } from "../hooks/useSession";
 import { SessionHistoryCard } from "./SessionHistoryCard";
-import { filterHistory, computeStats, formatDuration } from "./session-history-helpers";
+import {
+  filterHistory,
+  computeStats,
+  formatDuration,
+} from "./session-history-helpers";
 import { styles } from "./SessionHistory.styles";
 
 interface SessionHistoryProps {
@@ -47,9 +51,7 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
           <Text style={styles.statBoxLabel}>Sessions</Text>
         </View>
         <View style={styles.statBox}>
-          <Text
-            style={[styles.statBoxValue, { color: "#4caf50" }]}
-          >
+          <Text style={[styles.statBoxValue, { color: "#4caf50" }]}>
             {stats.completed}
           </Text>
           <Text style={styles.statBoxLabel}>Completed</Text>
@@ -106,29 +108,31 @@ export const SessionHistory: React.FC<SessionHistoryProps> = ({
 
       <View style={styles.filterRow}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {(["ALL", "COMPLETED", "ABANDONED", "FAILED"] as const).map((status) => (
-            <Pressable
-              key={status}
-              style={({ pressed }) => [
-                styles.filterChip,
-                filterStatus === status && styles.filterChipActive,
-                pressed && { opacity: 0.8 },
-              ]}
-              onPress={() => setFilterStatus(status)}
-              accessibilityLabel="Interactive control"
-              accessibilityRole="button"
-              accessibilityHint="Activates this control"
-            >
-              <Text
-                style={[
-                  styles.filterChipText,
-                  filterStatus === status && styles.filterChipTextActive,
+          {(["ALL", "COMPLETED", "ABANDONED", "FAILED"] as const).map(
+            (status) => (
+              <Pressable
+                key={status}
+                style={({ pressed }) => [
+                  styles.filterChip,
+                  filterStatus === status && styles.filterChipActive,
+                  pressed && { opacity: 0.8 },
                 ]}
+                onPress={() => setFilterStatus(status)}
+                accessibilityLabel="Interactive control"
+                accessibilityRole="button"
+                accessibilityHint="Activates this control"
               >
-                {status}
-              </Text>
-            </Pressable>
-          ))}
+                <Text
+                  style={[
+                    styles.filterChipText,
+                    filterStatus === status && styles.filterChipTextActive,
+                  ]}
+                >
+                  {status}
+                </Text>
+              </Pressable>
+            ),
+          )}
         </ScrollView>
       </View>
 

@@ -6,12 +6,11 @@
  * @phase 3 - Deepening: Loading state
  */
 
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import Animated, { FadeIn } from 'react-native-reanimated';
-import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 export function ProgressionLoadingState(): JSX.Element {
   return (
@@ -45,7 +44,7 @@ const styles = createSheet({
     padding: 24,
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 32,
   },
   skeletonLevel: {
@@ -56,18 +55,18 @@ const styles = createSheet({
     marginBottom: 16,
   },
   skeletonXP: {
-    width: '60%',
+    width: "60%",
     height: 20,
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 4,
   },
   statsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 32,
   },
   skeletonStat: {
-    width: '30%',
+    width: "30%",
     height: 60,
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 8,
@@ -76,21 +75,21 @@ const styles = createSheet({
     gap: 12,
   },
   skeletonTitle: {
-    width: '40%',
+    width: "40%",
     height: 24,
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 4,
     marginBottom: 16,
   },
   skeletonReward: {
-    width: '100%',
+    width: "100%",
     height: 80,
     backgroundColor: launchColors.hex_2a2a3e,
     borderRadius: 12,
   },
   message: {
     marginTop: 32,
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 14,
     color: launchColors.hex_9e9e9e,
   },

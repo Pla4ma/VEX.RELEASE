@@ -1,5 +1,5 @@
-import { XpBreakdownSchema, type XpBreakdown } from './schemas';
-import { getProgressionServiceConfig } from './service-enhanced-config';
+import { XpBreakdownSchema, type XpBreakdown } from "./schemas";
+import { getProgressionServiceConfig } from "./service-enhanced-config";
 
 export interface BreakdownParams {
   baseAmount: number;
@@ -11,7 +11,9 @@ export interface BreakdownParams {
 }
 
 export function calculateLevelThreshold(level: number): number {
-  if (level <= 1) {return 100;}
+  if (level <= 1) {
+    return 100;
+  }
   return Math.floor(100 * Math.pow(1.25, level - 1));
 }
 
@@ -49,10 +51,15 @@ export function calculateProgressPercent(
 export function calculateXpBreakdown(params: BreakdownParams): XpBreakdown {
   const base = params.baseAmount;
   let streakMultiplier = 1;
-  if (params.streakDays >= 30) {streakMultiplier = 2;}
-  else if (params.streakDays >= 14) {streakMultiplier = 1.75;}
-  else if (params.streakDays >= 7) {streakMultiplier = 1.5;}
-  else if (params.streakDays >= 3) {streakMultiplier = 1.25;}
+  if (params.streakDays >= 30) {
+    streakMultiplier = 2;
+  } else if (params.streakDays >= 14) {
+    streakMultiplier = 1.75;
+  } else if (params.streakDays >= 7) {
+    streakMultiplier = 1.5;
+  } else if (params.streakDays >= 3) {
+    streakMultiplier = 1.25;
+  }
 
   const streakBonus = Math.floor(base * (streakMultiplier - 1));
   const squadBonus =

@@ -7,19 +7,19 @@
  * @phase 2.1
  */
 
-import React from 'react';
+import React from "react";
 import Animated, {
   useAnimatedStyle,
   withSpring,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
 
 interface OnboardingProgressBarProps {
   currentStep: number; // 0-4
-  totalSteps: number;  // 5
+  totalSteps: number; // 5
 }
 
 /**
@@ -47,11 +47,17 @@ export function OnboardingProgressBar({
       bg="background.secondary"
     >
       {/* Progress bar */}
-      <Box flex={1} height={4} borderRadius="full" bg="background.tertiary" overflow="hidden">
+      <Box
+        flex={1}
+        height={4}
+        borderRadius="full"
+        bg="background.tertiary"
+        overflow="hidden"
+      >
         <Animated.View
           style={[
             {
-              height: '100%',
+              height: "100%",
               borderRadius: 2,
               backgroundColor: theme.colors.primary[500],
             },
@@ -95,8 +101,8 @@ export function OnboardingDots({
               backgroundColor: isCompleted
                 ? theme.colors.success.DEFAULT
                 : isActive
-                ? theme.colors.primary[500]
-                : theme.colors.background.tertiary,
+                  ? theme.colors.primary[500]
+                  : theme.colors.background.tertiary,
             }}
           />
         );

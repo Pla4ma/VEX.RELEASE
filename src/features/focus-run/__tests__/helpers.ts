@@ -1,9 +1,6 @@
-import {
-  buildFocusRunDisplay,
-  computeFocusRunGrade,
-} from '../service';
-import { resolvePersonalBoss } from '../boss-resolution';
-import type { FocusRun, FocusRunGrade } from '../schemas';
+import { buildFocusRunDisplay, computeFocusRunGrade } from "../service";
+import { resolvePersonalBoss } from "../boss-resolution";
+import type { FocusRun, FocusRunGrade } from "../schemas";
 
 export const MOCK_RUN: FocusRun = {
   bossId: null,
@@ -11,12 +8,12 @@ export const MOCK_RUN: FocusRun = {
   completedEncounters: 0,
   events: [],
   finalGrade: null,
-  id: 'run-1',
-  modifiers: ['Phone away', 'One tab'],
+  id: "run-1",
+  modifiers: ["Phone away", "One tab"],
   recoveryWins: 0,
   reflectionUpgrades: 0,
-  status: 'active',
-  userId: 'user-1',
+  status: "active",
+  userId: "user-1",
   weekStartsAt: 1,
 };
 

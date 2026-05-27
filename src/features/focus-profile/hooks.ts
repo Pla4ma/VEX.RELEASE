@@ -1,11 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
-import { getFocusProfile } from './service';
+import { getFocusProfile } from "./service";
 
 export function useFocusProfile(userId: string | null) {
   const query = useQuery({
-    queryKey: ['focus-profile', userId],
-    queryFn: () => getFocusProfile(userId ?? ''),
+    queryKey: ["focus-profile", userId],
+    queryFn: () => getFocusProfile(userId ?? ""),
     enabled: Boolean(userId),
   });
 

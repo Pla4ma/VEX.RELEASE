@@ -1,5 +1,5 @@
-import { getStorage, STORAGE_KEYS } from '../persistence';
-import { CONTENT_STUDY_CONSTANTS } from '../types';
+import { getStorage, STORAGE_KEYS } from "../persistence";
+import { CONTENT_STUDY_CONSTANTS } from "../types";
 
 export async function getStorageUsage(): Promise<{
   drafts: number;
@@ -15,9 +15,7 @@ export async function getStorageUsage(): Promise<{
     STORAGE_KEYS.SYNC_QUEUE,
   ];
   const allKeys = (await storage.getAllKeys?.()) || [];
-  const cacheKeys = allKeys.filter((k) =>
-    k.startsWith(STORAGE_KEYS.CACHE),
-  );
+  const cacheKeys = allKeys.filter((k) => k.startsWith(STORAGE_KEYS.CACHE));
   const relevantKeys = [...keys, ...cacheKeys];
 
   const items = await Promise.all(

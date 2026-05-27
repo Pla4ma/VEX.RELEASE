@@ -1,60 +1,60 @@
-import type { MessageCategory } from './types';
+import type { MessageCategory } from "./types";
 
 export const DEFAULT_MESSAGE_TEMPLATES: Record<MessageCategory, string[]> = {
   STREAK_RISK: [
-    "Your streak is at risk! Your 7-day streak needs {{minutesNeeded}} more minutes today.",
-    "Don't let your {{currentStreak}}-day streak slip away! One quick focus session will save it.",
-    "Your streak needs you! A short session today keeps the momentum going.",
+    "Your {{currentStreak}}-day streak needs {{minutesNeeded}} minutes today. One short block protects it.",
+    "One quick focus session today keeps your {{currentStreak}}-day rhythm alive.",
+    "Small window still open. {{minutesNeeded}} minutes saves the chain.",
   ],
   SESSION_SUGGESTION: [
-    "Perfect time for a session! Your focus data shows you concentrate best at this time.",
-    "Ready to build momentum? A {{suggestedDuration}}-minute session would be ideal based on your patterns.",
-    "Your optimal focus window is open! Based on your history, now is the time to maximize focus.",
+    "Your session history shows now is a reliable window. Start one clean block.",
+    "Based on your rhythm, a {{suggestedDuration}}-minute session fits now.",
+    "Previous sessions started cleaner around this time. One block is enough.",
   ],
   MILESTONE_HYPE: [
-    "Incredible progress! {{milestoneDays}} days of consistency! Your data shows the effort is paying off.",
-    "Milestone reached! {{milestoneDays}} days proves your commitment to the practice.",
-    "Milestone crushed! {{milestoneDays}} days of focus data shows real growth.",
+    "{{milestoneDays}} days of showing up. The pattern is real now.",
+    "{{milestoneDays}} days is genuine consistency. That rhythm is yours.",
+    "Your practice held for {{milestoneDays}} days. Evidence is in the sessions.",
   ],
   COMEBACK_SUPPORT: [
-    "Welcome back! Your history shows you can rebuild. Let's start fresh with a {{bonusMultiplier}}x XP boost.",
-    "Missed a few days? No problem! Your comeback starts now with bonus rewards.",
-    "Your focus record shows you had discipline before. Time to prove it again.",
+    "Welcome back. Your history shows one clean start rebuilds momentum.",
+    "No penalty for the gap. A short session today counts fully.",
+    "You returned. That proves the discipline is still there.",
   ],
   POST_FAILURE: [
-    "That session didn't go as planned. Your patterns suggest adjusting the difficulty for next time.",
-    "Every expert was once a beginner. Your data shows improvement is possible with small tweaks.",
-    "Focus is a skill. Today's difficulty becomes tomorrow's strength. Analyze and adjust.",
+    "That session did not go as planned. The data suggests a smaller block next time.",
+    "One rough session does not undo the pattern. Adjust the target and try again.",
+    "The next session starts cleaner. Keep the target small.",
   ],
   PROGRESS_REMINDER: [
-    "You're {{percentToNextLevel}}% to Level {{nextLevel}}! Your session history shows you're close to a breakthrough.",
-    "Your progress data shows {{totalXp}} XP earned so far. Keep the momentum going!",
-    "Level {{currentLevel}} is solid! Ready to push for {{nextLevel}}? Your streak data suggests now is the time.",
+    "{{percentToNextLevel}}% to Level {{nextLevel}}. Steady progress from real sessions.",
+    "{{totalXp}} XP earned from completed blocks. It adds up.",
+    "Level {{currentLevel}} is solid proof. Level {{nextLevel}} is the next small step.",
   ],
   DIFFICULTY_ADJUST: [
-    "Your recent sessions show a pattern. Let's adjust the challenge to match your current performance.",
-    "Your focus sessions have been {{trend}}. Based on your data, consider {{adjustmentDirection}} the difficulty.",
-    "Smart adaptation is key to growth. Your session history suggests a difficulty tweak now.",
+    "Based on recent sessions, a {{adjustmentDirection}} difficulty change may help.",
+    "Your last few blocks suggest {{trend}} performance. A small difficulty tweak is available.",
+    "Session data points to {{adjustmentDirection}} difficulty for better flow.",
   ],
   CHALLENGE_PROMPT: [
-    "Challenge alert! {{challengeName}} expires in {{hoursLeft}} hours. Your progress shows you can complete it.",
-    "Don't leave rewards on the table! {{challengeProgress}}% complete — your data suggests finishing strong.",
-    "Your challenge data shows potential! One session could complete it.",
+    "{{challengeName}} has {{hoursLeft}} hours. {{challengeProgress}}% complete — one session could close it.",
+    "You are {{challengeProgress}}% through {{challengeName}}. One focused block finishes the goal.",
+    "{{challengeName}} is near the deadline. Progress shows you can complete it.",
   ],
   MOTIVATION_BOOST: [
-    "Your focus data shows capability for amazing results. Today's session creates tomorrow's achievement.",
-    "Small steps compound into big results. Your session history proves consistency works.",
-    "Your focus patterns show you have what it takes. Trust your data.",
+    "Your session count shows real effort. The next block builds on that.",
+    "Consistent blocks add up. Your history proves it.",
+    "The work you have logged is genuine. One more block extends the proof.",
   ],
   BREAK_SUGGESTION: [
-    "You've been pushing hard! Your session frequency suggests you need a short break for recovery.",
-    "Quality over quantity. Your recent performance data indicates a mindful break now will improve future sessions.",
-    "Your focus data shows intensity. A reset now will help maintain long-term performance.",
+    "You have put in several sessions. A short break now protects future focus.",
+    "Recovery between blocks improves the next one. Evidence supports pacing.",
+    "Quality holds better with space between sessions. Consider a reset.",
   ],
   OVERLOAD_WARNING: [
-    "High session volume detected! Your data shows you've completed many sessions today. Consider pacing for quality.",
-    "Impressive dedication! Your session count suggests you may be approaching burnout. Balance intensity with recovery.",
-    "You're pushing hard based on your activity data! Make sure to balance intensity with recovery.",
+    "Session volume is high today. Pacing now keeps tomorrow available.",
+    "Several blocks completed already. Recovery between sessions is part of the rhythm.",
+    "Consistent, not constant. A break now protects the quality of the next block.",
   ],
 };
 
@@ -72,7 +72,7 @@ export function getDefaultTemplate(
     return null;
   }
   Object.entries(context).forEach(([key, value]) => {
-    template = template!.replace(new RegExp(`{{${key}}}`, 'g'), String(value));
+    template = template!.replace(new RegExp(`{{${key}}}`, "g"), String(value));
   });
   return template!;
 }

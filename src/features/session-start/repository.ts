@@ -5,10 +5,10 @@
  * adaptive difficulty preferences.
  */
 
-import { z } from 'zod';
-import * as Sentry from '@sentry/react-native';
-import { getSupabaseClient } from '../../config/supabase';
-import type { DifficultyPreference, SessionDifficulty } from './schemas';
+import { z } from "zod";
+import * as Sentry from "@sentry/react-native";
+import { getSupabaseClient } from "../../config/supabase";
+import type { DifficultyPreference, SessionDifficulty } from "./schemas";
 
 // ============================================================================
 // ERROR HANDLING
@@ -17,10 +17,10 @@ import type { DifficultyPreference, SessionDifficulty } from './schemas';
 class RepositoryError extends Error {
   constructor(
     public operation: string,
-    public originalError: unknown
+    public originalError: unknown,
   ) {
     super(`Repository error in ${operation}: ${originalError}`);
-    this.name = 'RepositoryError';
+    this.name = "RepositoryError";
   }
 }
 
@@ -32,22 +32,22 @@ class RepositoryError extends Error {
  * Get difficulty preference for user
  */
 export async function getDifficultyPreference(
-  userId: string
+  userId: string,
 ): Promise<DifficultyPreference | null> {
   try {
     const supabase = getSupabaseClient();
 
     const { data, error } = await supabase
-      .from('difficulty_preferences')
-      .select('*')
-      .eq('user_id', userId)
+      .from("difficulty_preferences")
+      .select("*")
+      .eq("user_id", userId)
       .single();
 
     if (error) {
-      if (error.code === 'PGRST116') {
+      if (error.code === "PGRST116") {
         return null; // No preference found
       }
-      throw new RepositoryError('getDifficultyPreference', error);
+      throw new RepositoryError("getDifficultyPreference", error);
     }
 
     return {
@@ -61,7 +61,10 @@ export async function getDifficultyPreference(
     };
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: 'session-start', operation: 'get-difficulty-preference' },
+      tags: {
+        feature: "session-start",
+        operation: "get-difficulty-preference",
+      },
     });
     return null;
   }
@@ -71,12 +74,12 @@ export async function getDifficultyPreference(
  * Save difficulty preference
  */
 export async function saveDifficultyPreference(
-  preference: DifficultyPreference
+  preference: DifficultyPreference,
 ): Promise<void> {
   try {
     const supabase = getSupabaseClient();
 
-    const { error } = await supabase.from('difficulty_preferences').upsert({
+    const { error } = await supabase.from("difficulty_preferences").upsert({
       user_id: preference.userId,
       current_difficulty: preference.currentDifficulty,
       suggested_difficulty: preference.suggestedDifficulty,
@@ -88,11 +91,14 @@ export async function saveDifficultyPreference(
     });
 
     if (error) {
-      throw new RepositoryError('saveDifficultyPreference', error);
+      throw new RepositoryError("saveDifficultyPreference", error);
     }
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: 'session-start', operation: 'save-difficulty-preference' },
+      tags: {
+        feature: "session-start",
+        operation: "save-difficulty-preference",
+      },
     });
     throw error;
   }
@@ -103,25 +109,26 @@ export async function saveDifficultyPreference(
  */
 export async function updateCurrentDifficulty(
   userId: string,
-  difficulty: SessionDifficulty
+  difficulty: SessionDifficulty,
 ): Promise<void> {
   try {
     const supabase = getSupabaseClient();
 
-    const { error } = await supabase
-      .from('difficulty_preferences')
-      .upsert({
-        user_id: userId,
-        current_difficulty: difficulty,
-        updated_at: new Date().toISOString(),
-      });
+    const { error } = await supabase.from("difficulty_preferences").upsert({
+      user_id: userId,
+      current_difficulty: difficulty,
+      updated_at: new Date().toISOString(),
+    });
 
     if (error) {
-      throw new RepositoryError('updateCurrentDifficulty', error);
+      throw new RepositoryError("updateCurrentDifficulty", error);
     }
   } catch (error) {
     Sentry.captureException(error, {
-      tags: { feature: 'session-start', operation: 'update-current-difficulty' },
+      tags: {
+        feature: "session-start",
+        operation: "update-current-difficulty",
+      },
     });
     throw error;
   }
@@ -133,7 +140,7 @@ export async function updateCurrentDifficulty(
 
 async function withRetry<T>(
   operation: () => Promise<T>,
-  maxRetries = 3
+  maxRetries = 3,
 ): Promise<T> {
   let lastError: unknown;
 
@@ -146,7 +153,9 @@ async function withRetry<T>(
         throw error;
       }
       // Exponential backoff
-      await new Promise((resolve) => setTimeout(resolve, 1000 * Math.pow(2, attempt - 1)));
+      await new Promise((resolve) =>
+        setTimeout(resolve, 1000 * Math.pow(2, attempt - 1)),
+      );
     }
   }
 

@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import { Banner } from '../../components/Banner';
-import { Box } from '../../components/primitives/Box';
-import { Button } from '../../components/primitives/Button';
-import { Text } from '../../components/primitives/Text';
-import { useTheme } from '../../theme';
+import { Banner } from "../../components/Banner";
+import { Box } from "../../components/primitives/Box";
+import { Button } from "../../components/primitives/Button";
+import { Text } from "../../components/primitives/Text";
+import { useTheme } from "../../theme";
 
 type SmartSuggestion = {
   description: string;
@@ -111,13 +111,18 @@ export function SessionQuickStartCard({
           fullWidth
           accessibilityLabel={`Start ${durationMinutes} minute session with ${currentThemeName}`}
           accessibilityRole="button"
-          accessibilityHint="Starts the selected focus session now">
+          accessibilityHint="Starts the selected focus session now"
+        >
           {ctaLabel}
         </Button>
         <Button
-          variant={hasCustomizations ? 'outline' : 'ghost'}
+          variant={hasCustomizations ? "outline" : "ghost"}
           onPress={onCustomize}
-          accessibilityLabel={hasCustomizations ? 'Hide session customization' : 'Customize session'}
+          accessibilityLabel={
+            hasCustomizations
+              ? "Hide session customization"
+              : "Customize session"
+          }
           accessibilityRole="button"
           accessibilityHint="Opens duration, mode, theme, and advanced session options"
         >

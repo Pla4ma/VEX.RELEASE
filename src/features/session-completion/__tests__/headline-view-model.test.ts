@@ -1,29 +1,33 @@
-import { buildPostSessionStoryViewModel } from '../story-view-model-service';
-import { CompletionLedgerSchema } from '../schemas';
-import { ValidateSessionSummarySchema } from '../../../session/validation/schemas';
+import { buildPostSessionStoryViewModel } from "../story-view-model-service";
+import { CompletionLedgerSchema } from "../schemas";
+import { ValidateSessionSummarySchema } from "../../../session/validation/schemas";
 
-describe('headline reward view model', () => {
-  it('returns a headline reward with the post-session story view model', () => {
+describe("headline reward view model", () => {
+  it("returns a headline reward with the post-session story view model", () => {
     const ledger = CompletionLedgerSchema.parse({
-      ledgerId: '550e8400-e29b-41d4-a716-446655440101',
-      idempotencyKey: 'key-101',
-      userId: 'user-1',
-      sessionId: '550e8400-e29b-41d4-a716-446655440102',
+      ledgerId: "550e8400-e29b-41d4-a716-446655440101",
+      idempotencyKey: "key-101",
+      userId: "user-1",
+      sessionId: "550e8400-e29b-41d4-a716-446655440102",
       completedAt: Date.now(),
-      offlineSyncStatus: 'synced',
-      timezone: 'UTC',
-      grade: 'A',
+      offlineSyncStatus: "synced",
+      timezone: "UTC",
+      grade: "A",
       gradeScore: 95,
       focusScoreDelta: 10,
       xpDelta: 120,
-      streakResult: { action: 'extended', newDays: 5, previousDays: 4 },
-      rewardIds: ['reward-1'],
+      streakResult: { action: "extended", newDays: 5, previousDays: 4 },
+      rewardIds: ["reward-1"],
       companionReactionId: null,
-      dailyMissionResult: { missionId: null, progressDelta: 0, status: 'unchanged' },
+      dailyMissionResult: {
+        missionId: null,
+        progressDelta: 0,
+        status: "unchanged",
+      },
       degradedSystems: [],
       effectiveFocusedSeconds: 1800,
       qualityScore: 90,
-      mode: 'FLOW',
+      mode: "FLOW",
       targetDurationSeconds: 1800,
       completedDurationSeconds: 1800,
       pauseCount: 0,
@@ -33,10 +37,10 @@ describe('headline reward view model', () => {
       createdAt: Date.now() - 1800000,
     });
     const summary = ValidateSessionSummarySchema.parse({
-      sessionId: '550e8400-e29b-41d4-a716-446655440102',
-      userId: 'user-1',
-      status: 'COMPLETED',
-      sessionMode: 'FLOW',
+      sessionId: "550e8400-e29b-41d4-a716-446655440102",
+      userId: "user-1",
+      status: "COMPLETED",
+      sessionMode: "FLOW",
       plannedDuration: 1800,
       actualDuration: 1800,
       effectiveDuration: 1800,
@@ -66,33 +70,41 @@ describe('headline reward view model', () => {
       createdAt: Date.now() - 1800000,
     });
 
-    const viewModel = buildPostSessionStoryViewModel({ degradedWarnings: [], ledger, summary });
+    const viewModel = buildPostSessionStoryViewModel({
+      degradedWarnings: [],
+      ledger,
+      summary,
+    });
 
-    expect(viewModel.headline.type).toBe('xp_earned');
-    expect(viewModel.headline.value).toBe('+120 XP');
+    expect(viewModel.headline.type).toBe("xp_earned");
+    expect(viewModel.headline.value).toBe("+120 XP");
   });
 
-  it('surfaces a personal best as the headline reward', () => {
+  it("surfaces a personal best as the headline reward", () => {
     const ledger = CompletionLedgerSchema.parse({
-      ledgerId: '550e8400-e29b-41d4-a716-446655440201',
-      idempotencyKey: 'key-201',
-      userId: 'user-1',
-      sessionId: '550e8400-e29b-41d4-a716-446655440202',
+      ledgerId: "550e8400-e29b-41d4-a716-446655440201",
+      idempotencyKey: "key-201",
+      userId: "user-1",
+      sessionId: "550e8400-e29b-41d4-a716-446655440202",
       completedAt: Date.now(),
-      offlineSyncStatus: 'synced',
-      timezone: 'UTC',
-      grade: 'A',
+      offlineSyncStatus: "synced",
+      timezone: "UTC",
+      grade: "A",
       gradeScore: 91,
       focusScoreDelta: 8,
       xpDelta: 120,
-      streakResult: { action: 'maintained', newDays: 5, previousDays: 5 },
+      streakResult: { action: "maintained", newDays: 5, previousDays: 5 },
       rewardIds: [],
       companionReactionId: null,
-      dailyMissionResult: { missionId: null, progressDelta: 0, status: 'unchanged' },
+      dailyMissionResult: {
+        missionId: null,
+        progressDelta: 0,
+        status: "unchanged",
+      },
       degradedSystems: [],
       effectiveFocusedSeconds: 900,
       qualityScore: 91,
-      mode: 'SPRINT',
+      mode: "SPRINT",
       targetDurationSeconds: 900,
       completedDurationSeconds: 900,
       pauseCount: 0,
@@ -102,10 +114,10 @@ describe('headline reward view model', () => {
       createdAt: Date.now() - 900000,
     });
     const summary = ValidateSessionSummarySchema.parse({
-      sessionId: '550e8400-e29b-41d4-a716-446655440202',
-      userId: 'user-1',
-      status: 'COMPLETED',
-      sessionMode: 'SPRINT',
+      sessionId: "550e8400-e29b-41d4-a716-446655440202",
+      userId: "user-1",
+      status: "COMPLETED",
+      sessionMode: "SPRINT",
       plannedDuration: 900,
       actualDuration: 900,
       effectiveDuration: 900,
@@ -139,22 +151,24 @@ describe('headline reward view model', () => {
       degradedWarnings: [],
       ledger,
       personalBest: {
-        achievedAt: '2026-05-14T12:00:00.000Z',
-        durationBucket: '15',
+        achievedAt: "2026-05-14T12:00:00.000Z",
+        durationBucket: "15",
         isPersonalBest: true,
         previousBest: 82,
         purityScore: 91,
-        sessionMode: 'SPRINT',
+        sessionMode: "SPRINT",
       },
       summary,
     });
 
-    expect(viewModel.headline.type).toBe('personal_best');
-    expect(viewModel.headline.title).toBe('Personal best. 91 purity in Sprint.');
+    expect(viewModel.headline.type).toBe("personal_best");
+    expect(viewModel.headline.title).toBe(
+      "Personal best. 91 purity in Sprint.",
+    );
     expect(viewModel.personalBestProof).toEqual({
-      achievedAt: '2026-05-14T12:00:00.000Z',
-      durationBucket: '15',
-      mode: 'SPRINT',
+      achievedAt: "2026-05-14T12:00:00.000Z",
+      durationBucket: "15",
+      mode: "SPRINT",
       newValue: 91,
       oldValue: 82,
     });

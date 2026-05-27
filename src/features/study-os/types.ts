@@ -7,4 +7,4 @@ export type {
   StudyOsUnlockGate,
   StudyPlan,
   StudySource,
-} from './schemas';
+} from "./schemas";

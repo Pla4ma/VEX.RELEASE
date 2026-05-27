@@ -41,13 +41,13 @@ export function SquadMemberIndicator({
   useEffect(() => {
     pulseValue.value = member.isFocusing
       ? withRepeat(
-        withSequence(
-          withTiming(1, { duration: 1000 }),
-          withTiming(1.1, { duration: 1000 }),
-        ),
-        -1,
-        true,
-      )
+          withSequence(
+            withTiming(1, { duration: 1000 }),
+            withTiming(1.1, { duration: 1000 }),
+          ),
+          -1,
+          true,
+        )
       : withSpring(1);
   }, [member.isFocusing, pulseValue]);
 
@@ -80,18 +80,40 @@ export function SquadMemberIndicator({
         accessibilityRole="button"
         accessibilityHint="Shows an encouragement action when this member is focusing"
       >
-        <Box flexDirection="row" alignItems="center" gap="sm" px="md" py="sm" borderRadius="xl"
-          bg={`${theme.colors.background.elevated}80`} borderWidth={1}
-          borderColor={member.isFocusing ? theme.colors.success.DEFAULT : theme.colors.border.DEFAULT}
+        <Box
+          flexDirection="row"
+          alignItems="center"
+          gap="sm"
+          px="md"
+          py="sm"
+          borderRadius="xl"
+          bg={`${theme.colors.background.elevated}80`}
+          borderWidth={1}
+          borderColor={
+            member.isFocusing
+              ? theme.colors.success.DEFAULT
+              : theme.colors.border.DEFAULT
+          }
         >
-          <Box width={32} height={32} borderRadius="full"
+          <Box
+            width={32}
+            height={32}
+            borderRadius="full"
             bg={member.avatarUrl ? undefined : theme.colors.background.tertiary}
             borderWidth={2}
-            borderColor={member.isFocusing ? theme.colors.success.DEFAULT : theme.colors.border.DEFAULT}
+            borderColor={
+              member.isFocusing
+                ? theme.colors.success.DEFAULT
+                : theme.colors.border.DEFAULT
+            }
             overflow="hidden"
           >
             {member.avatarUrl ? (
-              <Image source={{ uri: member.avatarUrl }} resizeMode="cover" style={{ width: "100%", height: "100%" }} />
+              <Image
+                source={{ uri: member.avatarUrl }}
+                resizeMode="cover"
+                style={{ width: "100%", height: "100%" }}
+              />
             ) : (
               <Box flex={1} justifyContent="center" alignItems="center">
                 <Text fontSize={14}>👤</Text>
@@ -99,13 +121,29 @@ export function SquadMemberIndicator({
             )}
           </Box>
           <Box>
-            <Text variant="bodySmall" color="text.primary" fontWeight="500">{member.displayName}</Text>
-            <Text variant="caption" color={member.isFocusing ? theme.colors.success.DEFAULT : "text.tertiary"}>
-              {member.isFocusing ? `🔥 ${formatDuration(member.elapsedSeconds)}` : "✓ Completed"}
+            <Text variant="bodySmall" color="text.primary" fontWeight="500">
+              {member.displayName}
+            </Text>
+            <Text
+              variant="caption"
+              color={
+                member.isFocusing
+                  ? theme.colors.success.DEFAULT
+                  : "text.tertiary"
+              }
+            >
+              {member.isFocusing
+                ? `🔥 ${formatDuration(member.elapsedSeconds)}`
+                : "✓ Completed"}
             </Text>
           </Box>
           {hasBeenEncouraged && (
-            <Box px="xs" py="xs" borderRadius="full" bg={`${theme.colors.primary[500]}20`}>
+            <Box
+              px="xs"
+              py="xs"
+              borderRadius="full"
+              bg={`${theme.colors.primary[500]}20`}
+            >
               <Text fontSize={12}>💪</Text>
             </Box>
           )}
@@ -113,8 +151,17 @@ export function SquadMemberIndicator({
       </Pressable>
 
       {showEncourageAction && (
-        <Animated.View entering={FadeInUp.duration(200)} style={{ marginTop: 8 }}>
-          <Box flexDirection="row" alignItems="center" gap="sm" px="sm" py="xs" borderRadius="lg"
+        <Animated.View
+          entering={FadeInUp.duration(200)}
+          style={{ marginTop: 8 }}
+        >
+          <Box
+            flexDirection="row"
+            alignItems="center"
+            gap="sm"
+            px="sm"
+            py="xs"
+            borderRadius="lg"
             bg={`${theme.colors.primary[500]}15`}
           >
             <Pressable
@@ -124,7 +171,9 @@ export function SquadMemberIndicator({
               accessibilityHint="Sends this squad member encouragement"
             >
               <Box px="md" py="sm" borderRadius="md" bg="primary.500">
-                <Text variant="caption" color="text.inverse" fontWeight="600">💪 Encourage {member.displayName}</Text>
+                <Text variant="caption" color="text.inverse" fontWeight="600">
+                  💪 Encourage {member.displayName}
+                </Text>
               </Box>
             </Pressable>
             <Pressable
@@ -134,7 +183,9 @@ export function SquadMemberIndicator({
               accessibilityHint="Closes the encouragement action"
             >
               <Box px="sm" py="sm">
-                <Text variant="caption" color="text.tertiary">Cancel</Text>
+                <Text variant="caption" color="text.tertiary">
+                  Cancel
+                </Text>
               </Box>
             </Pressable>
           </Box>

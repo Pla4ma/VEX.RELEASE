@@ -1,4 +1,8 @@
-import { buildViewModel, renderHero, hasText } from "./active-session-focus-sanctuary.helpers";
+import {
+  buildViewModel,
+  renderHero,
+  hasText,
+} from "./active-session-focus-sanctuary.helpers";
 
 describe("ActiveSessionHero sanctuary > basic rendering", () => {
   it("calm active focus renders no game-like metrics", () => {

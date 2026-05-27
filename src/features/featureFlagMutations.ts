@@ -13,7 +13,12 @@ export async function fetchAndApplyRemote(
   storageKey: string,
   lastFetchAt: number,
 ): Promise<number> {
-  const result = await fetchRemoteFlags(flags, storage, storageKey, lastFetchAt);
+  const result = await fetchRemoteFlags(
+    flags,
+    storage,
+    storageKey,
+    lastFetchAt,
+  );
   if (result.hasChanges) {
     await saveFlagsToStorage(storage, flags, storageKey);
   }

@@ -1,17 +1,16 @@
-import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 export const styles = createSheet({
   screen: { flex: 1 },
   content: { paddingHorizontal: 20, gap: 16 },
-  centered: { alignItems: 'center', paddingVertical: 40 },
+  centered: { alignItems: "center", paddingVertical: 40 },
 
   // Header
   headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     gap: 16,
   },
   headerCopy: { flex: 1, gap: 8 },
@@ -19,20 +18,20 @@ export const styles = createSheet({
     width: 56,
     height: 56,
     borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 8,
   },
   crownIcon: { fontSize: 28 },
   eyebrow: {
     fontSize: 12,
-    fontWeight: '800',
-    textTransform: 'uppercase',
+    fontWeight: "800",
+    textTransform: "uppercase",
     letterSpacing: 1,
   },
   title: {
     lineHeight: 38,
-    fontWeight: '800',
+    fontWeight: "800",
   },
   subtitle: {
     fontSize: 15,
@@ -41,8 +40,8 @@ export const styles = createSheet({
 
   // Social Proof
   socialProofBanner: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
     paddingHorizontal: 16,
     paddingVertical: 10,
@@ -61,23 +60,23 @@ export const styles = createSheet({
   valueTitle: {
     color: launchColors.hex_ffffff,
     fontSize: 16,
-    fontWeight: '700',
+    fontWeight: "700",
   },
   valueGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
-  valueItem: { alignItems: 'center' },
+  valueItem: { alignItems: "center" },
   valueNumber: {
     color: launchColors.hex_ffffff,
     fontSize: 28,
-    fontWeight: '800',
+    fontWeight: "800",
   },
   valueLabel: {
     color: launchColors.rgb_255_255_255_0_8,
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: "600",
     marginTop: 2,
   },
   valueDivider: {
@@ -88,7 +87,7 @@ export const styles = createSheet({
   valueFootnote: {
     color: launchColors.rgb_255_255_255_0_9,
     fontSize: 13,
-    textAlign: 'center',
+    textAlign: "center",
   },
 
   // Plans
@@ -98,10 +97,10 @@ export const styles = createSheet({
     borderRadius: 20,
     padding: 18,
   },
-  planHeader: { flexDirection: 'row', justifyContent: 'space-between' },
+  planHeader: { flexDirection: "row", justifyContent: "space-between" },
   planTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 10,
   },
   bestValueBadge: {
@@ -112,8 +111,8 @@ export const styles = createSheet({
   bestValueText: {
     color: launchColors.hex_000000,
     fontSize: 11,
-    fontWeight: '800',
-    textTransform: 'uppercase',
+    fontWeight: "800",
+    textTransform: "uppercase",
   },
   flexibleBadge: {
     paddingHorizontal: 10,
@@ -122,12 +121,12 @@ export const styles = createSheet({
   },
   flexibleText: {
     fontSize: 11,
-    fontWeight: '700',
-    textTransform: 'uppercase',
+    fontWeight: "700",
+    textTransform: "uppercase",
   },
   trialText: {
     fontSize: 13,
-    fontWeight: '600',
+    fontWeight: "600",
     marginTop: 8,
   },
 
@@ -139,16 +138,16 @@ export const styles = createSheet({
     padding: 14,
   },
   benefitRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 12,
   },
   benefitIcon: { fontSize: 28 },
   benefitContent: { flex: 1, gap: 2 },
   benefitHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
   },
   highlightBadge: {
     paddingHorizontal: 8,
@@ -158,18 +157,18 @@ export const styles = createSheet({
   highlightBadgeText: {
     color: launchColors.hex_000000,
     fontSize: 9,
-    fontWeight: '800',
+    fontWeight: "800",
     letterSpacing: 0.5,
   },
 
   // Footer
   footerActions: {
-    flexDirection: 'column',
+    flexDirection: "column",
     gap: 12,
     marginTop: 8,
   },
   terms: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 11,
     lineHeight: 16,
   },

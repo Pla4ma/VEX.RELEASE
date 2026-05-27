@@ -4,7 +4,7 @@
  * Reduced motion support and animation configurations
  */
 
-import { AnimationConfig } from './types';
+import { AnimationConfig } from "./types";
 
 /**
  * Get animation configuration based on accessibility preferences
@@ -12,7 +12,7 @@ import { AnimationConfig } from './types';
 export function getAnimationConfig(reducedMotion: boolean): AnimationConfig {
   return {
     duration: reducedMotion ? 0 : 300,
-    easing: 'ease-in-out',
+    easing: "ease-in-out",
     reducedMotion: reducedMotion,
     useNativeDriver: true,
   };
@@ -25,22 +25,25 @@ export function getAnimationStyles(reducedMotion: boolean) {
   if (reducedMotion) {
     return {
       // No animations for reduced motion preference
-      animation: 'none',
-      transition: 'none',
+      animation: "none",
+      transition: "none",
     };
   }
 
   return {
     // Default animation styles
-    animationDuration: '300ms',
-    animationTimingFunction: 'ease-in-out',
+    animationDuration: "300ms",
+    animationTimingFunction: "ease-in-out",
   };
 }
 
 /**
  * Calculate scaled font size based on text scale preference
  */
-export function calculateScaledFontSize(baseSize: number, textScale: number): number {
+export function calculateScaledFontSize(
+  baseSize: number,
+  textScale: number,
+): number {
   const scaled = baseSize * textScale;
 
   // Clamp to reasonable bounds (0.5x to 3x)
@@ -55,19 +58,25 @@ interface TypographyEntry {
   [key: string]: unknown;
 }
 
-export function getScaledTypography(baseTypography: Record<string, unknown>, textScale: number) {
-  return Object.keys(baseTypography).reduce((scaled, key) => {
-    const original = baseTypography[key] as TypographyEntry | undefined;
+export function getScaledTypography(
+  baseTypography: Record<string, unknown>,
+  textScale: number,
+) {
+  return Object.keys(baseTypography).reduce(
+    (scaled, key) => {
+      const original = baseTypography[key] as TypographyEntry | undefined;
 
-    if (original && typeof original.fontSize === 'number') {
-      scaled[key] = {
-        ...original,
-        fontSize: calculateScaledFontSize(original.fontSize, textScale),
-      };
-    } else {
-      scaled[key] = original;
-    }
+      if (original && typeof original.fontSize === "number") {
+        scaled[key] = {
+          ...original,
+          fontSize: calculateScaledFontSize(original.fontSize, textScale),
+        };
+      } else {
+        scaled[key] = original;
+      }
 
-    return scaled;
-  }, {} as Record<string, unknown>);
+      return scaled;
+    },
+    {} as Record<string, unknown>,
+  );
 }

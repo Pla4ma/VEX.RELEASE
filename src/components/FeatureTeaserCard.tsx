@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import React, { useEffect } from "react";
+import { View } from "react-native";
 
-import { getPremiumCardStyle } from './premiumStyles';
-import { Button } from './primitives/Button';
-import { Text } from './primitives/Text';
-import { useTheme } from '../theme';
-import { useDisclosureAnalytics } from '../features/liveops-config';
-import type { FeatureKey, UserExperienceStage } from '../features/liveops-config';
-import { UnlockRequirementRow } from './UnlockRequirementRow';
+import { getPremiumCardStyle } from "./premiumStyles";
+import { Button } from "./primitives/Button";
+import { Text } from "./primitives/Text";
+import { useTheme } from "../theme";
+import { useDisclosureAnalytics } from "../features/liveops-config";
+import type {
+  FeatureKey,
+  UserExperienceStage,
+} from "../features/liveops-config";
+import { UnlockRequirementRow } from "./UnlockRequirementRow";
 
 interface FeatureTeaserCardProps {
   feature: FeatureKey;
@@ -36,10 +39,10 @@ export function FeatureTeaserCard(props: FeatureTeaserCardProps): JSX.Element {
         borderWidth: 1,
         borderColor: theme.colors.primary[100],
         backgroundColor: theme.colors.background.secondary,
-        borderRadius: theme.borderRadius['2xl'],
+        borderRadius: theme.borderRadius["2xl"],
         padding: theme.spacing[4],
         gap: theme.spacing[3],
-        ...getPremiumCardStyle('large'),
+        ...getPremiumCardStyle("large"),
       }}
     >
       <View style={{ gap: theme.spacing[1] }}>
@@ -59,13 +62,17 @@ export function FeatureTeaserCard(props: FeatureTeaserCardProps): JSX.Element {
       />
       <Button
         onPress={() => {
-          analytics.trackTeaserCtaPressed(props.feature, props.ctaLabel, props.stage);
+          analytics.trackTeaserCtaPressed(
+            props.feature,
+            props.ctaLabel,
+            props.stage,
+          );
           props.onPress();
         }}
-
-      accessibilityLabel="Action button"
-      accessibilityRole="button"
-      accessibilityHint="Activates this control">
+        accessibilityLabel="Action button"
+        accessibilityRole="button"
+        accessibilityHint="Activates this control"
+      >
         {props.ctaLabel}
       </Button>
     </View>

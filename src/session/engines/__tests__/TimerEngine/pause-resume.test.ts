@@ -1,7 +1,7 @@
-import { createEngine, mockCallbacks } from './helpers';
-import type { TimerEngine } from './helpers';
+import { createEngine, mockCallbacks } from "./helpers";
+import type { TimerEngine } from "./helpers";
 
-describe('TimerEngine', () => {
+describe("TimerEngine", () => {
   let engine: TimerEngine;
 
   beforeEach(() => {
@@ -14,8 +14,8 @@ describe('TimerEngine', () => {
     engine.stop();
   });
 
-  describe('pause', () => {
-    it('should pause running timer', () => {
+  describe("pause", () => {
+    it("should pause running timer", () => {
       engine.start();
       jest.advanceTimersByTime(5000);
       engine.pause();
@@ -23,7 +23,7 @@ describe('TimerEngine', () => {
       expect(engine.getState().pauseTime).toBeDefined();
     });
 
-    it('should stop tick events when paused', () => {
+    it("should stop tick events when paused", () => {
       engine.start();
       jest.advanceTimersByTime(5000);
       const tickCount = mockCallbacks.onTick.mock.calls.length;
@@ -32,7 +32,7 @@ describe('TimerEngine', () => {
       expect(mockCallbacks.onTick).toHaveBeenCalledTimes(tickCount);
     });
 
-    it('should return early when not running or already paused', () => {
+    it("should return early when not running or already paused", () => {
       engine.pause();
       engine.start();
       engine.pause();
@@ -41,8 +41,8 @@ describe('TimerEngine', () => {
     });
   });
 
-  describe('resume', () => {
-    it('should resume paused timer', () => {
+  describe("resume", () => {
+    it("should resume paused timer", () => {
       engine.start();
       jest.advanceTimersByTime(5000);
       engine.pause();
@@ -51,7 +51,7 @@ describe('TimerEngine', () => {
       expect(engine.getState().pauseTime).toBeUndefined();
     });
 
-    it('should continue ticking after resume', () => {
+    it("should continue ticking after resume", () => {
       engine.start();
       jest.advanceTimersByTime(5000);
       engine.pause();
@@ -61,7 +61,7 @@ describe('TimerEngine', () => {
       expect(mockCallbacks.onTick.mock.calls.length).toBeGreaterThan(tickCount);
     });
 
-    it('should track total paused time', () => {
+    it("should track total paused time", () => {
       engine.start();
       jest.advanceTimersByTime(5000);
       engine.pause();
@@ -70,7 +70,7 @@ describe('TimerEngine', () => {
       expect(engine.getState().totalPausedTime).toBeGreaterThan(0);
     });
 
-    it('should return early when not paused', () => {
+    it("should return early when not paused", () => {
       engine.start();
       engine.resume();
       expect(engine.isRunning()).toBe(true);

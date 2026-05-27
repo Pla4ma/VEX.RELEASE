@@ -17,7 +17,7 @@ export function createNotificationSentEvent(
   priority: string,
   channels: string[],
   template: string,
-  personalization: NotificationSentEvent['data']['personalization'],
+  personalization: NotificationSentEvent["data"]["personalization"],
 ): NotificationSentEvent {
   return {
     id: generateEventId(),
@@ -76,7 +76,7 @@ export function createNotificationReadEvent(
   readAt: Date,
   readTimeframe: number,
   readMethod: "click" | "mark_read" | "auto_read",
-  readContext: NotificationReadEvent['data']['readContext'],
+  readContext: NotificationReadEvent["data"]["readContext"],
 ): NotificationReadEvent {
   return {
     id: generateEventId(),
@@ -101,8 +101,8 @@ export function createNotificationClickedEvent(
   clickTimeframe: number,
   action: string,
   actionUrl?: string,
-  actionData?: NotificationClickedEvent['data']['actionData'],
-  clickContext?: NotificationClickedEvent['data']['clickContext'],
+  actionData?: NotificationClickedEvent["data"]["actionData"],
+  clickContext?: NotificationClickedEvent["data"]["clickContext"],
 ): NotificationClickedEvent {
   return {
     id: generateEventId(),
@@ -157,7 +157,7 @@ export function createNotificationFailedEvent(
 }
 export function createNotificationPreferencesUpdatedEvent(
   userId: string,
-  preferences: NotificationPreferencesUpdatedEvent['data']['preferences'],
+  preferences: NotificationPreferencesUpdatedEvent["data"]["preferences"],
   updatedFields: string[],
   updatedBy: "user" | "system" | "admin",
 ): NotificationPreferencesUpdatedEvent {

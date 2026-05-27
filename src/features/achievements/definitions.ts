@@ -27,28 +27,32 @@ export {
   getRarityColor,
   getRarityPoints,
   calculateTotalAchievementPoints,
-} from './definitions/index';
+} from "./definitions/index";
 
-import { ALL_ACHIEVEMENTS } from './definitions/index';
+import { ALL_ACHIEVEMENTS } from "./definitions/index";
 
 // Backward-compatible function wrappers
 export function getAchievementById(id: string) {
-  const { getAchievementById: fn } = require('./definitions/helpers');
+  const { getAchievementById: fn } = require("./definitions/helpers");
   return fn(ALL_ACHIEVEMENTS, id);
 }
 
-export function getAchievementsByCategory(category: import('./types').AchievementCategory) {
-  const { getAchievementsByCategory: fn } = require('./definitions/helpers');
+export function getAchievementsByCategory(
+  category: import("./types").AchievementCategory,
+) {
+  const { getAchievementsByCategory: fn } = require("./definitions/helpers");
   return fn(ALL_ACHIEVEMENTS, category);
 }
 
-export function getAchievementsByRarity(rarity: import('./types').AchievementRarity) {
-  const { getAchievementsByRarity: fn } = require('./definitions/helpers');
+export function getAchievementsByRarity(
+  rarity: import("./types").AchievementRarity,
+) {
+  const { getAchievementsByRarity: fn } = require("./definitions/helpers");
   return fn(ALL_ACHIEVEMENTS, rarity);
 }
 
 export function getVisibleAchievements() {
-  const { getVisibleAchievements: fn } = require('./definitions/helpers');
+  const { getVisibleAchievements: fn } = require("./definitions/helpers");
   return fn(ALL_ACHIEVEMENTS);
 }
 
@@ -66,5 +70,4 @@ export {
   getAchievementPreview,
   type FeatureUnlock,
   type ProgressionGuide,
-} from './AchievementEnhancement';
-
+} from "./AchievementEnhancement";

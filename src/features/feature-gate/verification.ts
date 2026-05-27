@@ -5,9 +5,9 @@
  * Used for Phase 3 exit gate verification.
  */
 
-import { useMemo } from 'react';
-import { useFeatureAccess } from '../liveops-config/hooks/useFeatureAccess';
-import type { FeatureKey } from '../liveops-config/feature-access';
+import { useMemo } from "react";
+import { useFeatureAccess } from "../liveops-config/hooks/useFeatureAccess";
+import type { FeatureKey } from "../liveops-config/feature-access";
 
 interface FeatureVerificationResult {
   feature: FeatureKey;
@@ -30,11 +30,11 @@ export function useFeatureVisibilityGates(): FeatureVerificationResult[] {
 
     // Features that should be hidden according to Phase 3 requirements
     const disabledFeatures: FeatureKey[] = [
-      'rivals',        // Duels
-      'rankings',      // Rankings
-      'squads',        // Squad wars (partial)
-      'wagers',        // Trading/gambling
-      'gems_prominent', // Emergency gem sinks
+      "rivals", // Duels
+      "rankings", // Rankings
+      "squads", // Squad wars (partial)
+      "wagers", // Trading/gambling
+      "gems_prominent", // Emergency gem sinks
     ];
 
     for (const feature of disabledFeatures) {
@@ -61,8 +61,11 @@ export function useFeatureVisibilityGates(): FeatureVerificationResult[] {
  */
 function verifyNoTabAccess(feature: FeatureKey): boolean {
   // Check if feature has tab navigation
-  const tabFeatures: FeatureKey[] = ['social_tab', 'boss_tab'];
-  return !tabFeatures.includes(feature) || !useFeatureAccess().features[feature].isVisible;
+  const tabFeatures: FeatureKey[] = ["social_tab", "boss_tab"];
+  return (
+    !tabFeatures.includes(feature) ||
+    !useFeatureAccess().features[feature].isVisible
+  );
 }
 
 /**
@@ -103,19 +106,24 @@ function verifyAnalyticsBlocked(feature: FeatureKey): boolean {
 /**
  * Gets verification summary for Phase 3 exit gate
  */
-export function getPhase3VerificationSummary(results: FeatureVerificationResult[]): {
+export function getPhase3VerificationSummary(
+  results: FeatureVerificationResult[],
+): {
   passed: boolean;
   results: FeatureVerificationResult[];
   failedFeatures: string[];
 } {
-  const failedFeatures = results.filter(result =>
-    !result.isHidden ||
-    !result.hasNoTab ||
-    !result.hasNoHomeCard ||
-    !result.hasNoSettingsEntry ||
-    !result.hasSafeFallback ||
-    !result.analyticsBlocked
-  ).map(result => result.feature);
+  const failedFeatures = results
+    .filter(
+      (result) =>
+        !result.isHidden ||
+        !result.hasNoTab ||
+        !result.hasNoHomeCard ||
+        !result.hasNoSettingsEntry ||
+        !result.hasSafeFallback ||
+        !result.analyticsBlocked,
+    )
+    .map((result) => result.feature);
 
   return {
     passed: failedFeatures.length === 0,

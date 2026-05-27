@@ -6,7 +6,7 @@
 
 export interface SessionStoryEventDefinitions {
   // Story lifecycle events
-  'session:story:ready': {
+  "session:story:ready": {
     storyId: string;
     sessionId: string;
     userId: string;
@@ -14,39 +14,39 @@ export interface SessionStoryEventDefinitions {
     beatCount: number;
   };
 
-  'session:story:viewed': {
+  "session:story:viewed": {
     storyId: string;
     userId: string;
     completionRate: number;
     story?: unknown;
   };
 
-  'session:story:beat_viewed': {
+  "session:story:beat_viewed": {
     storyId: string;
     userId: string;
     beatType: string;
     sequenceOrder: number;
   };
 
-  'session:story:completed': {
+  "session:story:completed": {
     storyId: string;
     userId: string;
     completionRate: number;
   };
 
-  'session:story:skipped': {
+  "session:story:skipped": {
     storyId: string;
     userId: string;
     reason?: string;
   };
 
-  'session:story:shared': {
+  "session:story:shared": {
     storyId: string;
     userId: string;
     sharedTo?: string;
   };
 
-  'session:story:analytics': {
+  "session:story:analytics": {
     storyId: string;
     userId: string;
     eventType: string;
@@ -55,10 +55,10 @@ export interface SessionStoryEventDefinitions {
     metadata?: Record<string, unknown>;
   };
 
-  'narrative:session_complete': {
+  "narrative:session_complete": {
     sessionId: string;
     userId: string;
-    theme: 'triumph' | 'struggle' | 'comeback' | 'mastery' | 'learning';
+    theme: "triumph" | "struggle" | "comeback" | "mastery" | "learning";
     summary: string;
   };
 }

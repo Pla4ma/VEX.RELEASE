@@ -1,1 +1,1 @@
-export type { FocusProfile, FocusProfileInput, FocusWindow } from './schemas';
+export type { FocusProfile, FocusProfileInput, FocusWindow } from "./schemas";

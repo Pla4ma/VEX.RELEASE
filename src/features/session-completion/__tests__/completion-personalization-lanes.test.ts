@@ -7,10 +7,10 @@ import {
   buildResult,
   createSessionSummary,
   SessionMode,
-} from './helpers';
+} from "./helpers";
 
-describe('Completion Personalization — full completion per lane', () => {
-  it.each(LANES)('%s: produces all 7 canonical fields', (lane) => {
+describe("Completion Personalization — full completion per lane", () => {
+  it.each(LANES)("%s: produces all 7 canonical fields", (lane) => {
     const result = buildResult(lane);
     expect(result.laneProfile).toBeDefined();
     expect(result.progressProof).toBeDefined();
@@ -21,28 +21,34 @@ describe('Completion Personalization — full completion per lane', () => {
     expect(result.userFacingSummary).toBeDefined();
   });
 
-  it.each(LANES)('%s: clean reflection question matches', (lane) => {
+  it.each(LANES)("%s: clean reflection question matches", (lane) => {
     const result = buildResult(lane);
     expect(result.reflectionQuestion).toBe(CLEAN_REFLECTIONS[lane]);
   });
 
-  it.each(LANES)('%s: unlock key matches lane surface', (lane) => {
+  it.each(LANES)("%s: unlock key matches lane surface", (lane) => {
     const result = buildResult(lane);
     expect(result.unlockDecision.key).toBe(UNLOCK_KEYS[lane]);
   });
 
-  it.each(LANES)('%s: memory candidate generated with evidence', (lane) => {
+  it.each(LANES)("%s: memory candidate generated with evidence", (lane) => {
     const result = buildResult(lane);
     expect(result.memoryCandidates.length).toBe(1);
-    expect(result.memoryCandidates[0].text).toContain("s:" + createSessionSummary().sessionId.split("-")[0]);
+    expect(result.memoryCandidates[0].text).toContain(
+      "s:" + createSessionSummary().sessionId.split("-")[0],
+    );
   });
 });
 
-describe('Completion Personalization — partial completion per lane', () => {
-  it.each(LANES)('%s: partial uses recovery question', (lane) => {
+describe("Completion Personalization — partial completion per lane", () => {
+  it.each(LANES)("%s: partial uses recovery question", (lane) => {
     const result = buildResult(lane, {
       grade: "C",
-      summary: { completionPercentage: 40, sessionMode: SessionMode.FLOW, status: "COMPLETED" },
+      summary: {
+        completionPercentage: 40,
+        sessionMode: SessionMode.FLOW,
+        status: "COMPLETED",
+      },
       xpDelta: 50,
       focusScoreDelta: 0,
     });
@@ -51,8 +57,8 @@ describe('Completion Personalization — partial completion per lane', () => {
   });
 });
 
-describe('Completion Personalization — abandoned completion per lane', () => {
-  it.each(LANES)('%s: abandoned uses recovery question, no shame', (lane) => {
+describe("Completion Personalization — abandoned completion per lane", () => {
+  it.each(LANES)("%s: abandoned uses recovery question, no shame", (lane) => {
     const result = buildResult(lane, {
       grade: "D",
       summary: {

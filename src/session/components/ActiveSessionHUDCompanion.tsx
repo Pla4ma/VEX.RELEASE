@@ -27,7 +27,9 @@ interface ActiveSessionHUDCompanionProps {
   isActive: boolean;
 }
 
-export const ActiveSessionHUDCompanion: React.FC<ActiveSessionHUDCompanionProps> = ({
+export const ActiveSessionHUDCompanion: React.FC<
+  ActiveSessionHUDCompanionProps
+> = ({
   userId,
   completionPercentage,
   purityScore,
@@ -36,7 +38,9 @@ export const ActiveSessionHUDCompanion: React.FC<ActiveSessionHUDCompanionProps>
   isPaused,
   isActive,
 }) => {
-  const [companionState, setCompanionState] = useState<CompanionState | null>(null);
+  const [companionState, setCompanionState] = useState<CompanionState | null>(
+    null,
+  );
   const companionService = getCompanionService();
 
   useEffect(() => {

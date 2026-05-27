@@ -1,4 +1,4 @@
-import type { ViewStyle, TextStyle, ImageStyle } from 'react-native';
+import type { ViewStyle, TextStyle, ImageStyle } from "react-native";
 
 type NamedStyles<T> = { [P in keyof T]: ViewStyle | TextStyle | ImageStyle };
 

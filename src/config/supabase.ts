@@ -4,29 +4,47 @@
  * Backend client and configuration for Supabase.
  */
 
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import { CURRENT_CONFIG } from '../constants/app';
-import type { Database } from '../types/supabase';
-import { createDebugger } from '../utils/debug';
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { CURRENT_CONFIG } from "../constants/app";
+import type { Database } from "../types/supabase";
+import { createDebugger } from "../utils/debug";
 
-const debug = createDebugger('config:supabase');
+const debug = createDebugger("config:supabase");
 
 /**
  * Create mock Supabase client for missing credentials
  */
 function createMockSupabaseClient(): SupabaseClient {
-  const error = new Error('Supabase not configured. Please set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY in your environment.');
+  const error = new Error(
+    "Supabase not configured. Please set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY in your environment.",
+  );
 
   return {
     auth: {
-      signUp: async () => ({ data: { user: null }, error: { message: error.message } }),
-      signInWithPassword: async () => ({ data: { user: null }, error: { message: error.message } }),
+      signUp: async () => ({
+        data: { user: null },
+        error: { message: error.message },
+      }),
+      signInWithPassword: async () => ({
+        data: { user: null },
+        error: { message: error.message },
+      }),
       signOut: async () => ({ error: { message: error.message } }),
-      getSession: async () => ({ data: { session: null }, error: { message: error.message } }),
-      getUser: async () => ({ data: { user: null }, error: { message: error.message } }),
-      resetPasswordForEmail: async () => ({ error: { message: error.message } }),
+      getSession: async () => ({
+        data: { session: null },
+        error: { message: error.message },
+      }),
+      getUser: async () => ({
+        data: { user: null },
+        error: { message: error.message },
+      }),
+      resetPasswordForEmail: async () => ({
+        error: { message: error.message },
+      }),
       updateUser: async () => ({ error: { message: error.message } }),
-      onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
+      onAuthStateChange: () => ({
+        data: { subscription: { unsubscribe: () => {} } },
+      }),
     },
     from: () => ({
       select: () => ({
@@ -38,23 +56,24 @@ function createMockSupabaseClient(): SupabaseClient {
         }),
       }),
     }),
-  // Intentionally partial mock — only runs in Jest. Doesn't implement
-  // full SupabaseClient (missing supabaseUrl, storage, realtime, etc.)
-  } as unknown as SupabaseClient;
+    // Jest-only partial mock. Does not implement full SupabaseClient surface.
+  };
+  return mockClient as SupabaseClient;
 }
 
 /**
  * Supabase configuration
  */
 const IS_JEST = Boolean(process.env.JEST_WORKER_ID);
-const TEST_SUPABASE_URL = IS_JEST ? 'https://test.supabase.co' : '';
-const TEST_SUPABASE_ANON_KEY = IS_JEST ? 'test-anon-key' : '';
+const TEST_SUPABASE_URL = IS_JEST ? "https://test.supabase.co" : "";
+const TEST_SUPABASE_ANON_KEY = IS_JEST ? "test-anon-key" : "";
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || TEST_SUPABASE_URL;
-const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || TEST_SUPABASE_ANON_KEY;
+const SUPABASE_ANON_KEY =
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY || TEST_SUPABASE_ANON_KEY;
 
 function createMissingSupabaseConfigError(): Error {
   return new Error(
-    'Missing Supabase configuration. Set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY before starting the app.',
+    "Missing Supabase configuration. Set EXPO_PUBLIC_SUPABASE_URL and EXPO_PUBLIC_SUPABASE_ANON_KEY before starting the app.",
   );
 }
 
@@ -63,7 +82,7 @@ function createMissingSupabaseConfigError(): Error {
  */
 function createSupabaseClient(): SupabaseClient {
   if (IS_JEST) {
-    debug.warn('[Supabase] Jest environment detected — using mock client');
+    debug.warn("[Supabase] Jest environment detected — using mock client");
     return createMockSupabaseClient();
   }
 
@@ -76,16 +95,19 @@ function createSupabaseClient(): SupabaseClient {
       // Storage is handled by our secure storage
       storage: {
         getItem: async (key: string) => {
-          const { getSecureStorage } = await import('../persistence/SecureStorage');
+          const { getSecureStorage } =
+            await import("../persistence/SecureStorage");
           const value = await getSecureStorage().getItem(key);
           return value ?? null;
         },
         setItem: async (key: string, value: string) => {
-          const { getSecureStorage } = await import('../persistence/SecureStorage');
+          const { getSecureStorage } =
+            await import("../persistence/SecureStorage");
           return getSecureStorage().setItem(key, value);
         },
         removeItem: async (key: string) => {
-          const { getSecureStorage } = await import('../persistence/SecureStorage');
+          const { getSecureStorage } =
+            await import("../persistence/SecureStorage");
           return getSecureStorage().removeItem(key);
         },
       },
@@ -95,8 +117,8 @@ function createSupabaseClient(): SupabaseClient {
     },
     global: {
       headers: {
-        'X-Client-Info': `vex-app/${CURRENT_CONFIG.version}`,
-        'X-Platform': 'react-native',
+        "X-Client-Info": `vex-app/${CURRENT_CONFIG.version}`,
+        "X-Platform": "react-native",
       },
     },
   });
@@ -134,15 +156,15 @@ export function handleSupabaseError(error: unknown): Error {
     return error;
   }
 
-  if (error !== null && typeof error === 'object') {
+  if (error !== null && typeof error === "object") {
     // Narrowing from unknown to read .message / .code — validated via typeof guards
     const err = error as Record<string, unknown>;
-    const msg = typeof err.message === 'string' ? err.message : undefined;
-    const code = typeof err.code === 'string' ? err.code : undefined;
-    return new Error(msg || `Supabase error: ${code ?? 'unknown'}`);
+    const msg = typeof err.message === "string" ? err.message : undefined;
+    const code = typeof err.code === "string" ? err.code : undefined;
+    return new Error(msg || `Supabase error: ${code ?? "unknown"}`);
   }
 
-  return new Error('Unknown Supabase error');
+  return new Error("Unknown Supabase error");
 }
 
 /**

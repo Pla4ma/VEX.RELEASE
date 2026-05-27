@@ -3,11 +3,10 @@
  * Single setting row with label, value, and optional toggle
  */
 
-import React from 'react';
-import { View, Text, Pressable } from 'react-native';
-import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import React from "react";
+import { View, Text, Pressable } from "react-native";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 interface SettingItemProps {
   label: string;
@@ -16,15 +15,25 @@ interface SettingItemProps {
   children?: React.ReactNode;
 }
 
-export function SettingItem({ label, value, onPress, children }: SettingItemProps): React.ReactElement {
+export function SettingItem({
+  label,
+  value,
+  onPress,
+  children,
+}: SettingItemProps): React.ReactElement {
   return (
-    <Pressable onPress={onPress} style={({ pressed }) => [styles.container, pressed && { opacity: 0.8 }]}
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [styles.container, pressed && { opacity: 0.8 }]}
       accessibilityLabel="Setting item button"
       accessibilityRole="button"
-      accessibilityHint="Activates this control">
+      accessibilityHint="Activates this control"
+    >
       <View style={styles.content}>
         <Text style={styles.label}>{label}</Text>
-        {value !== undefined && <Text style={styles.value}>{String(value)}</Text>}
+        {value !== undefined && (
+          <Text style={styles.value}>{String(value)}</Text>
+        )}
         {children}
       </View>
       <Text style={styles.arrow}>→</Text>
@@ -34,9 +43,9 @@ export function SettingItem({ label, value, onPress, children }: SettingItemProp
 
 const styles = createSheet({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingVertical: 16,
     paddingHorizontal: 16,
     backgroundColor: launchColors.hex_ffffff,

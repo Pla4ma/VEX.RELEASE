@@ -7,7 +7,12 @@ import {
 import { buildRootExposureFlags } from "../../../navigation/feature-exposure";
 import { buildHomeFeatureRuntime } from "../../../screens/home/hooks/home-feature-runtime";
 
-export { buildFeatureAccess, getFeatureAvailability, buildRootExposureFlags, buildHomeFeatureRuntime };
+export {
+  buildFeatureAccess,
+  getFeatureAvailability,
+  buildRootExposureFlags,
+  buildHomeFeatureRuntime,
+};
 export type { FeatureAvailability, MotivationProfile };
 
 export const allFlagsOn = (): boolean => true;

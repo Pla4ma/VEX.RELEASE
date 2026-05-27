@@ -7,14 +7,25 @@
  * @phase 2.3
  */
 
-import React, { useState, useEffect, useRef } from 'react';
-import { TextInput, Pressable, KeyboardAvoidingView, Platform } from 'react-native';
-import Animated, { FadeIn, FadeInUp, useAnimatedStyle, withSpring, useSharedValue } from 'react-native-reanimated';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  TextInput,
+  Pressable,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
+import Animated, {
+  FadeIn,
+  FadeInUp,
+  useAnimatedStyle,
+  withSpring,
+  useSharedValue,
+} from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Button } from "../../../components/primitives/Button";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
 
 interface OnboardingSetNameProps {
   initialName?: string;
@@ -22,21 +33,27 @@ interface OnboardingSetNameProps {
   onSkip: () => void;
 }
 
-const DEFAULT_NAME = 'Champion';
+const DEFAULT_NAME = "Champion";
 const MAX_LENGTH = 20;
 
 /**
  * Character counter component
  */
-function CharacterCounter({ current, max }: { current: number; max: number }): JSX.Element {
+function CharacterCounter({
+  current,
+  max,
+}: {
+  current: number;
+  max: number;
+}): JSX.Element {
   const { theme } = useTheme();
   const isNearLimit = current >= max - 3;
 
   return (
     <Text
       variant="caption"
-      color={isNearLimit ? 'warning.DEFAULT' : 'text.tertiary'}
-      fontWeight={isNearLimit ? '600' : '400'}
+      color={isNearLimit ? "warning.DEFAULT" : "text.tertiary"}
+      fontWeight={isNearLimit ? "600" : "400"}
     >
       {current}/{max}
     </Text>
@@ -52,7 +69,7 @@ export function OnboardingSetName({
   onSkip,
 }: OnboardingSetNameProps): JSX.Element {
   const { theme } = useTheme();
-  const [name, setName] = useState(initialName || '');
+  const [name, setName] = useState(initialName || "");
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<TextInput>(null);
   const scaleAnim = useSharedValue(1);
@@ -85,7 +102,7 @@ export function OnboardingSetName({
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
     >
       <Box flex={1} justifyContent="space-between" px="xl" py="2xl">
@@ -105,7 +122,10 @@ export function OnboardingSetName({
         </Animated.View>
 
         {/* Input Section */}
-        <Animated.View entering={FadeInUp.delay(200).duration(400)} style={animatedStyle}>
+        <Animated.View
+          entering={FadeInUp.delay(200).duration(400)}
+          style={animatedStyle}
+        >
           <Box gap="md">
             {/* Input Container */}
             <Box
@@ -113,7 +133,11 @@ export function OnboardingSetName({
               borderRadius="2xl"
               bg={theme.colors.background.secondary}
               borderWidth={isFocused ? 2 : 1}
-              borderColor={isFocused ? theme.colors.primary[500] : theme.colors.border.DEFAULT}
+              borderColor={
+                isFocused
+                  ? theme.colors.primary[500]
+                  : theme.colors.border.DEFAULT
+              }
             >
               <TextInput
                 ref={inputRef}
@@ -128,7 +152,7 @@ export function OnboardingSetName({
                 autoCorrect={false}
                 style={{
                   fontSize: 28,
-                  fontWeight: '700',
+                  fontWeight: "700",
                   color: theme.colors.text.primary,
                   padding: 0,
                 }}
@@ -136,13 +160,17 @@ export function OnboardingSetName({
             </Box>
 
             {/* Character Counter */}
-            <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+            <Box
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
               <Text variant="caption" color="text.tertiary">
                 {trimmedName.length === 0
-                  ? 'Required to continue'
+                  ? "Required to continue"
                   : isValid
-                    ? 'Looks good!'
-                    : 'Name is too long'}
+                    ? "Looks good!"
+                    : "Name is too long"}
               </Text>
               <CharacterCounter current={name.length} max={MAX_LENGTH} />
             </Box>
@@ -158,17 +186,19 @@ export function OnboardingSetName({
               fullWidth
               onPress={handleContinue}
               disabled={!isValid}
-
-            accessibilityLabel="Continue button"
-            accessibilityRole="button"
-            accessibilityHint="Activates this control">
+              accessibilityLabel="Continue button"
+              accessibilityRole="button"
+              accessibilityHint="Activates this control"
+            >
               Continue
             </Button>
 
-            <Pressable onPress={handleSkip}
-  accessibilityLabel="I&apos;ll decide later ( ) button"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+            <Pressable
+              onPress={handleSkip}
+              accessibilityLabel="I'll decide later ( ) button"
+              accessibilityRole="button"
+              accessibilityHint="Activates this control"
+            >
               <Box py="sm" alignItems="center">
                 <Text variant="body" color="text.tertiary">
                   I&apos;ll decide later ({DEFAULT_NAME})

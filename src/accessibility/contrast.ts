@@ -4,7 +4,7 @@
  * WCAG 2.1 AA compliance support for color contrast
  */
 
-import { ContrastCheck } from './types';
+import { ContrastCheck } from "./types";
 
 /**
  * Calculate contrast ratio between two colors
@@ -21,13 +21,15 @@ export function calculateContrastRatio(color1: string, color2: string): number {
 
 function calculateLuminance(color: string): number {
   // Convert hex to RGB
-  const hex = color.replace('#', '');
+  const hex = color.replace("#", "");
   const r = parseInt(hex.substring(0, 2), 16) / 255;
   const g = parseInt(hex.substring(2, 4), 16) / 255;
   const b = parseInt(hex.substring(4, 6), 16) / 255;
 
   // Calculate luminance
-  const [lr = 0, lg = 0, lb = 0] = [r, g, b].map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+  const [lr = 0, lg = 0, lb = 0] = [r, g, b].map((c) =>
+    c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4),
+  );
 
   return 0.2126 * lr + 0.7152 * lg + 0.0722 * lb;
 }
@@ -35,7 +37,10 @@ function calculateLuminance(color: string): number {
 /**
  * Check if colors meet WCAG standards
  */
-export function checkContrast(foreground: string, background: string): ContrastCheck {
+export function checkContrast(
+  foreground: string,
+  background: string,
+): ContrastCheck {
   const ratio = calculateContrastRatio(foreground, background);
 
   return {
@@ -50,7 +55,11 @@ export function checkContrast(foreground: string, background: string): ContrastC
 /**
  * Get accessible color alternatives
  */
-export function getAccessibleAlternatives(targetColor: string, backgroundColor: string, minContrast: number = 4.5): string[] {
+export function getAccessibleAlternatives(
+  targetColor: string,
+  backgroundColor: string,
+  minContrast: number = 4.5,
+): string[] {
   const alternatives: string[] = [];
 
   // Try lightening/darkening
@@ -70,7 +79,7 @@ export function getAccessibleAlternatives(targetColor: string, backgroundColor: 
 }
 
 function adjustBrightness(color: string, percent: number): string {
-  const hex = color.replace('#', '');
+  const hex = color.replace("#", "");
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
@@ -84,5 +93,5 @@ function adjustBrightness(color: string, percent: number): string {
   const ng = adjust(g);
   const nb = adjust(b);
 
-  return `#${nr.toString(16).padStart(2, '0')}${ng.toString(16).padStart(2, '0')}${nb.toString(16).padStart(2, '0')}`;
+  return `#${nr.toString(16).padStart(2, "0")}${ng.toString(16).padStart(2, "0")}${nb.toString(16).padStart(2, "0")}`;
 }

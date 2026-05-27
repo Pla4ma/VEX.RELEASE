@@ -4,14 +4,18 @@
  * Pressable button with an icon.
  */
 
-import React, { useCallback } from 'react';
-import { Pressable, type PressableProps, type ViewStyle } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import React, { useCallback } from "react";
+import { Pressable, type PressableProps, type ViewStyle } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated";
 
-import { useTheme } from '../../theme';
-import { useReducedMotion } from '../../hooks/useReducedMotion';
-import { Icon } from './Icon';
-import type { IconButtonProps } from '../types';
+import { useTheme } from "../../theme";
+import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { Icon } from "./Icon";
+import type { IconButtonProps } from "../types";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -20,9 +24,9 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
  */
 export function IconButton({
   name,
-  size = 'md',
-  color = 'primary',
-  variant = 'outline',
+  size = "md",
+  color = "primary",
+  variant = "outline",
   strokeWidth,
   onPress,
   disabled = false,
@@ -78,7 +82,7 @@ export function IconButton({
       ]}
       testID={testID}
       accessibilityLabel={accessibilityLabel || `${name} button`}
-      accessibilityHint={accessibilityHint || 'Activates this icon control'}
+      accessibilityHint={accessibilityHint || "Activates this icon control"}
       accessibilityRole="button"
       accessibilityState={{ disabled }}
     >
@@ -97,9 +101,12 @@ export function IconButton({
 /**
  * Create an icon button for a specific icon
  */
-export function createIconButton(name: string, defaultProps?: Partial<IconButtonProps>) {
+export function createIconButton(
+  name: string,
+  defaultProps?: Partial<IconButtonProps>,
+) {
   return function NamedIconButton(
-    props: Omit<IconButtonProps, 'name'>
+    props: Omit<IconButtonProps, "name">,
   ): JSX.Element {
     return <IconButton name={name} {...defaultProps} {...props} />;
   };

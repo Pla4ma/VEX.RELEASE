@@ -1,19 +1,32 @@
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
-import Animated, { cancelAnimation, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from 'react-native-reanimated';
+import React, { useEffect } from "react";
+import { View } from "react-native";
+import Animated, {
+  cancelAnimation,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from "react-native-reanimated";
 
-import { Text } from './primitives/Text';
-import { useTheme } from '../theme';
-import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+import { Text } from "./primitives/Text";
+import { useTheme } from "../theme";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
 
+type StreakBadgeProps = {
+  days: number;
+  isAtRisk: boolean;
+  variant?: "default" | "glass";
+};
 
-type StreakBadgeProps = { days: number; isAtRisk: boolean; variant?: 'default' | 'glass' };
-
-export function StreakBadge({ days, isAtRisk, variant = 'default' }: StreakBadgeProps): JSX.Element {
+export function StreakBadge({
+  days,
+  isAtRisk,
+  variant = "default",
+}: StreakBadgeProps): JSX.Element {
   const { theme } = useTheme();
   const pulse = useSharedValue(0);
-  const isGlass = variant === 'glass';
+  const isGlass = variant === "glass";
 
   useEffect(() => {
     if (isAtRisk && days > 0) {
@@ -34,8 +47,27 @@ export function StreakBadge({ days, isAtRisk, variant = 'default' }: StreakBadge
 
   if (days === 0) {
     return (
-      <View style={[styles.badge, isGlass ? styles.glassBadge : { backgroundColor: theme.colors.background.secondary, borderColor: theme.colors.border.DEFAULT }]}>
-        <Text variant="label" color={isGlass ? launchColors.rgb_255_255_255_0_92 : theme.colors.text.secondary}>Start streak</Text>
+      <View
+        style={[
+          styles.badge,
+          isGlass
+            ? styles.glassBadge
+            : {
+                backgroundColor: theme.colors.background.secondary,
+                borderColor: theme.colors.border.DEFAULT,
+              },
+        ]}
+      >
+        <Text
+          variant="label"
+          color={
+            isGlass
+              ? launchColors.rgb_255_255_255_0_92
+              : theme.colors.text.secondary
+          }
+        >
+          Start streak
+        </Text>
       </View>
     );
   }
@@ -48,20 +80,35 @@ export function StreakBadge({ days, isAtRisk, variant = 'default' }: StreakBadge
         isGlass
           ? styles.glassBadge
           : {
-              backgroundColor: isAtRisk ? theme.colors.error[50] : theme.colors.warning[50],
-              borderColor: isAtRisk ? theme.colors.error[500] : theme.colors.accent.orange,
-              shadowColor: isAtRisk ? theme.colors.error[500] : theme.colors.accent.orange,
+              backgroundColor: isAtRisk
+                ? theme.colors.error[50]
+                : theme.colors.warning[50],
+              borderColor: isAtRisk
+                ? theme.colors.error[500]
+                : theme.colors.accent.orange,
+              shadowColor: isAtRisk
+                ? theme.colors.error[500]
+                : theme.colors.accent.orange,
             },
       ]}
     >
-      <Text variant="label" color={isGlass ? launchColors.rgb_255_255_255_0_96 : isAtRisk ? theme.colors.error.dark : theme.colors.accent.orange}>{`🔥 ${days} days`}</Text>
+      <Text
+        variant="label"
+        color={
+          isGlass
+            ? launchColors.rgb_255_255_255_0_96
+            : isAtRisk
+              ? theme.colors.error.dark
+              : theme.colors.accent.orange
+        }
+      >{`🔥 ${days} days`}</Text>
     </Animated.View>
   );
 }
 
 const styles = createSheet({
   badge: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     borderRadius: 999,
     borderWidth: 1.5,
     elevation: 2,

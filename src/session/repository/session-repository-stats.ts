@@ -1,7 +1,4 @@
-import type {
-  SessionHistoryEntry,
-  SessionSummary,
-} from "../types";
+import type { SessionHistoryEntry, SessionSummary } from "../types";
 import { calculateSessionStreaks } from "./SessionStreakCalculator";
 
 export interface SessionStatsResult {

@@ -1,4 +1,4 @@
-describe('Supabase config', () => {
+describe("Supabase config", () => {
   const originalJestWorkerId = process.env.JEST_WORKER_ID;
   const originalSupabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL;
   const originalSupabaseAnonKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY;
@@ -22,15 +22,15 @@ describe('Supabase config', () => {
     }
   });
 
-  it('throws outside Jest when Supabase public credentials are missing', () => {
+  it("throws outside Jest when Supabase public credentials are missing", () => {
     delete process.env.JEST_WORKER_ID;
-    process.env.EXPO_PUBLIC_SUPABASE_URL = '';
-    process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY = '';
+    process.env.EXPO_PUBLIC_SUPABASE_URL = "";
+    process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY = "";
 
     jest.resetModules();
 
     expect(() => {
-      require('../supabase');
-    }).toThrow('Missing Supabase configuration');
+      require("../supabase");
+    }).toThrow("Missing Supabase configuration");
   });
 });

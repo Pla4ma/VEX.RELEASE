@@ -24,7 +24,8 @@ export const DEFAULT_RETRY_CONFIG: RetryConfig = {
 export const ERROR_MESSAGES: Record<string, ErrorState> = {
   session: {
     message: "Session sync failed",
-    wittyMessage: "The digital realm is experiencing turbulence. Your focus remains intact.",
+    wittyMessage:
+      "The digital realm is experiencing turbulence. Your focus remains intact.",
     icon: "\u26A1",
     severity: "medium",
   },
@@ -36,7 +37,8 @@ export const ERROR_MESSAGES: Record<string, ErrorState> = {
   },
   sync: {
     message: "Data sync incomplete",
-    wittyMessage: "Your progress is safe on this device. We'll sync when the stars align.",
+    wittyMessage:
+      "Your progress is safe on this device. We'll sync when the stars align.",
     icon: "\uD83D\uDCE1",
     severity: "low",
   },
@@ -54,7 +56,10 @@ export const ERROR_MESSAGES: Record<string, ErrorState> = {
   },
 };
 
-export const getErrorMessage = (error: Error | string, fallback: string): string => {
+export const getErrorMessage = (
+  error: Error | string,
+  fallback: string,
+): string => {
   if (typeof error === "string") return error;
   return error.message || fallback;
 };

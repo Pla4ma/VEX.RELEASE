@@ -2,7 +2,7 @@
  * Theme Events
  */
 
-import type { ThemeMode } from '../../theme/types';
+import type { ThemeMode } from "../../theme/types";
 
 export interface ThemeChangeEvent {
   mode: ThemeMode;
@@ -11,6 +11,6 @@ export interface ThemeChangeEvent {
 }
 
 export interface ThemeEventDefinitions {
-  'theme:change': ThemeChangeEvent;
-  'theme:mode:set': ThemeMode;
+  "theme:change": ThemeChangeEvent;
+  "theme:mode:set": ThemeMode;
 }

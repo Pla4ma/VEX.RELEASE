@@ -87,13 +87,19 @@ export async function resumeSession(
   orch.completeLastInterruption(pausedDuration);
   await orch.saveSessionState();
   orch.eventEmitter.emitSessionResumed(pausedDuration);
-  debug.info("Session resumed: %s (paused %dms)", orch.session.id, pausedDuration);
+  debug.info(
+    "Session resumed: %s (paused %dms)",
+    orch.session.id,
+    pausedDuration,
+  );
   const s = orch.getSession();
   if (!s) throw new Error("Failed to get session state");
   return s;
 }
 
-export async function backgroundSession(orch: SessionOrchestrator): Promise<void> {
+export async function backgroundSession(
+  orch: SessionOrchestrator,
+): Promise<void> {
   if (!orch.session || !orch.timerEngine) return;
   orch.antiCheatEngine.recordBackgroundSwitch();
   orch.session.status = "BACKGROUNDED";
@@ -111,7 +117,9 @@ export async function backgroundSession(orch: SessionOrchestrator): Promise<void
   debug.info("Session backgrounded: %s", orch.session.id);
 }
 
-export async function foregroundSession(orch: SessionOrchestrator): Promise<void> {
+export async function foregroundSession(
+  orch: SessionOrchestrator,
+): Promise<void> {
   if (!orch.session || !orch.timerEngine) return;
   const fgAt = Date.now();
   const bgDuration = orch.timerEngine.foreground();
@@ -121,5 +129,9 @@ export async function foregroundSession(orch: SessionOrchestrator): Promise<void
   if (orch.session.status === "BACKGROUNDED") orch.session.status = "ACTIVE";
   await orch.saveSessionState();
   orch.eventEmitter.emitForegrounded(fgAt, bgDuration);
-  debug.info("Session foregrounded: %s (bg: %dms)", orch.session.id, bgDuration);
+  debug.info(
+    "Session foregrounded: %s (bg: %dms)",
+    orch.session.id,
+    bgDuration,
+  );
 }

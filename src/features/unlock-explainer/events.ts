@@ -1,15 +1,15 @@
-import type { UnlockDecision } from './types';
+import type { UnlockDecision } from "./types";
 
 export interface UnlockDecisionResolvedEvent {
   decision: UnlockDecision;
   timestamp: number;
-  type: 'unlock_decision_resolved';
+  type: "unlock_decision_resolved";
 }
 
 export interface UnlockDecisionDismissedEvent {
   featureKey: string;
   timestamp: number;
-  type: 'unlock_decision_dismissed';
+  type: "unlock_decision_dismissed";
 }
 
 export type UnlockExplainerEvent =

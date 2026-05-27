@@ -1,11 +1,10 @@
-
-import React from 'react';
-import { useFocusScore } from '../hooks-focus-score';
-import { Box, Text, Stack, Skeleton } from '../../../components/primitives';
-import { TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { RootStackParams } from '../../../navigation/types';
+import React from "react";
+import { useFocusScore } from "../hooks-focus-score";
+import { Box, Text, Stack, Skeleton } from "../../../components/primitives";
+import { TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { RootStackParams } from "../../../navigation/types";
 
 const FocusScoreWidgetSkeleton = () => (
   <Box p="md" bg="surface" borderRadius="md">
@@ -19,19 +18,22 @@ const FocusScoreWidgetSkeleton = () => (
 
 export const FocusScoreWidget = () => {
   const { score, status, error } = useFocusScore();
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
   const handlePress = () => {
-    navigation.navigate('FocusScoreDashboard');
+    navigation.navigate("FocusScoreDashboard");
   };
 
-  if (status === 'pending') {
+  if (status === "pending") {
     return <FocusScoreWidgetSkeleton />;
   }
 
-  if (status === 'error') {
+  if (status === "error") {
     return (
-      <Box><Text>Error: {error?.message}</Text></Box>
+      <Box>
+        <Text>Error: {error?.message}</Text>
+      </Box>
     );
   }
 
@@ -48,13 +50,13 @@ export const FocusScoreWidget = () => {
 
   return (
     <TouchableOpacity onPress={handlePress}>
-        <Stack padding="md" gap="sm">
-            <Text>Focus Score</Text>
-            <Text>{currentScore}</Text>
-            <Text>{band}</Text>
-            <Text>{delta > 0 ? `+${delta}` : delta}</Text>
-            <Text>{lastChangeReason}</Text>
-        </Stack>
+      <Stack padding="md" gap="sm">
+        <Text>Focus Score</Text>
+        <Text>{currentScore}</Text>
+        <Text>{band}</Text>
+        <Text>{delta > 0 ? `+${delta}` : delta}</Text>
+        <Text>{lastChangeReason}</Text>
+      </Stack>
     </TouchableOpacity>
   );
 };

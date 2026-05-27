@@ -28,7 +28,9 @@ jest.mock("../../../shared/monetization/revenuecat-service", () => ({
 const mockInitializeRevenueCat = jest.mocked(initializeRevenueCat);
 const mockRestoreRevenueCatPurchases = jest.mocked(restoreRevenueCatPurchases);
 
-function createVerifiedPurchase(overrides: Partial<PurchaseVerification> = {}): PurchaseVerification {
+function createVerifiedPurchase(
+  overrides: Partial<PurchaseVerification> = {},
+): PurchaseVerification {
   return {
     verified: true,
     transactionId: "txn-123",
@@ -109,30 +111,46 @@ describe("Purchase Trust Utilities", () => {
     it("throws when RevenueCat is unavailable", async () => {
       mockInitializeRevenueCat.mockResolvedValue({ status: "missing_keys" });
 
-      await expect(restorePurchases("user-1")).rejects.toThrow(PurchaseTrustError);
+      await expect(restorePurchases("user-1")).rejects.toThrow(
+        PurchaseTrustError,
+      );
     });
   });
 
   describe("purchase status helpers", () => {
     it("rejects unverified purchases", () => {
-      expect(isPurchaseValid(createVerifiedPurchase({ verified: false }))).toBe(false);
-      expect(isSuspiciousPurchase(createVerifiedPurchase({ verified: false }), { purchases: 1, refunds: 0 }))
-        .toBe(true);
+      expect(isPurchaseValid(createVerifiedPurchase({ verified: false }))).toBe(
+        false,
+      );
+      expect(
+        isSuspiciousPurchase(createVerifiedPurchase({ verified: false }), {
+          purchases: 1,
+          refunds: 0,
+        }),
+      ).toBe(true);
     });
 
     it("accepts verified non-expiring and active subscriptions", () => {
       expect(isPurchaseValid(createVerifiedPurchase())).toBe(true);
       expect(
-        isPurchaseValid(createVerifiedPurchase({ expiryDate: Date.now() + 30 * 24 * 60 * 60 * 1000 })),
+        isPurchaseValid(
+          createVerifiedPurchase({
+            expiryDate: Date.now() + 30 * 24 * 60 * 60 * 1000,
+          }),
+        ),
       ).toBe(true);
     });
 
     it("rejects expired subscriptions", () => {
-      expect(isPurchaseValid(createVerifiedPurchase({ expiryDate: Date.now() - 1 }))).toBe(false);
+      expect(
+        isPurchaseValid(createVerifiedPurchase({ expiryDate: Date.now() - 1 })),
+      ).toBe(false);
     });
 
     it("calculates remaining days", () => {
-      const purchase = createVerifiedPurchase({ expiryDate: Date.now() + 15 * 24 * 60 * 60 * 1000 });
+      const purchase = createVerifiedPurchase({
+        expiryDate: Date.now() + 15 * 24 * 60 * 60 * 1000,
+      });
       expect(getRemainingDays(purchase)).toBe(15);
       expect(getRemainingDays(createVerifiedPurchase())).toBe(Infinity);
     });
@@ -141,7 +159,9 @@ describe("Purchase Trust Utilities", () => {
   describe("trust copy and scoring", () => {
     it("returns active trust signals", () => {
       expect(getActiveTrustSignals(false)).toHaveLength(3);
-      expect(getActiveTrustSignals(true, 5).map((signal) => signal.id)).toContain("verified_reviews");
+      expect(
+        getActiveTrustSignals(true, 5).map((signal) => signal.id),
+      ).toContain("verified_reviews");
     });
 
     it("scores pricing trust inputs", () => {
@@ -150,8 +170,12 @@ describe("Purchase Trust Utilities", () => {
     });
 
     it("explains price without fake proof claims", () => {
-      expect(getPriceExplanation("plus", 4.99, "month", true)).toContain("Start free");
-      expect(getPriceExplanation("plus", 4.99, "month", false)).toContain("$0.17/day");
+      expect(getPriceExplanation("plus", 4.99, "month", true)).toContain(
+        "Start free",
+      );
+      expect(getPriceExplanation("plus", 4.99, "month", false)).toContain(
+        "$0.17/day",
+      );
     });
   });
 
@@ -163,16 +187,27 @@ describe("Purchase Trust Utilities", () => {
 
   describe("logPurchaseAttempt", () => {
     it("logs success and failure without throwing", async () => {
-      await expect(logPurchaseAttempt("user-1", "plus", true)).resolves.not.toThrow();
-      await expect(logPurchaseAttempt("user-1", "plus", false, "Payment declined")).resolves.not.toThrow();
+      await expect(
+        logPurchaseAttempt("user-1", "plus", true),
+      ).resolves.not.toThrow();
+      await expect(
+        logPurchaseAttempt("user-1", "plus", false, "Payment declined"),
+      ).resolves.not.toThrow();
     });
   });
 
   describe("getRefundEligibility", () => {
     it("requires a verified purchase", () => {
-      expect(getRefundEligibility(createVerifiedPurchase(), 3).eligible).toBe(true);
-      expect(getRefundEligibility(createVerifiedPurchase({ verified: false }), 3).eligible).toBe(false);
-      expect(getRefundEligibility(createVerifiedPurchase(), 10).eligible).toBe(false);
+      expect(getRefundEligibility(createVerifiedPurchase(), 3).eligible).toBe(
+        true,
+      );
+      expect(
+        getRefundEligibility(createVerifiedPurchase({ verified: false }), 3)
+          .eligible,
+      ).toBe(false);
+      expect(getRefundEligibility(createVerifiedPurchase(), 10).eligible).toBe(
+        false,
+      );
     });
   });
 });

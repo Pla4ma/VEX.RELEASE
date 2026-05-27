@@ -4,33 +4,37 @@
  * Handles coach state persistence and retrieval.
  */
 
-import { getSupabaseClient } from '../../../config/supabase';
-import type { CoachState } from '../types';
-import { RepositoryError } from './error';
+import { getSupabaseClient } from "../../../config/supabase";
+import type { CoachState } from "../types";
+import { RepositoryError } from "./error";
 
 const supabase = getSupabaseClient();
 
-const TABLE_NAME = 'coach_states';
+const TABLE_NAME = "coach_states";
 
 /**
  * Fetch coach state for a user
  */
-export async function fetchCoachState(userId: string): Promise<CoachState | null> {
+export async function fetchCoachState(
+  userId: string,
+): Promise<CoachState | null> {
   const { data, error } = await supabase
     .from(TABLE_NAME)
-    .select('*')
-    .eq('user_id', userId)
+    .select("*")
+    .eq("user_id", userId)
     .single();
 
   if (error) {
-    if (error.code === 'PGRST116') {
+    if (error.code === "PGRST116") {
       // No state found
       return null;
     }
-    throw new RepositoryError('fetchCoachState', error);
+    throw new RepositoryError("fetchCoachState", error);
   }
 
-  if (!data) {return null;}
+  if (!data) {
+    return null;
+  }
 
   // Transform DB record to CoachState
   return {
@@ -67,16 +71,19 @@ export async function upsertCoachState(state: CoachState): Promise<CoachState> {
 
   const { data, error } = await supabase
     .from(TABLE_NAME)
-    .upsert(dbRecord, { onConflict: 'user_id' })
+    .upsert(dbRecord, { onConflict: "user_id" })
     .select()
     .single();
 
   if (error) {
-    throw new RepositoryError('upsertCoachState', error);
+    throw new RepositoryError("upsertCoachState", error);
   }
 
   if (!data) {
-    throw new RepositoryError('upsertCoachState', new Error('No data returned from upsert'));
+    throw new RepositoryError(
+      "upsertCoachState",
+      new Error("No data returned from upsert"),
+    );
   }
 
   // Return the state that was passed in (it already has all fields)

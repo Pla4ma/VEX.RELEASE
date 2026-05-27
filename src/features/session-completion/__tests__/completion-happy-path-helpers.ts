@@ -6,10 +6,21 @@ import {
 import { createSessionSummary, SESSION_ID } from "./ledger-test-utils";
 import type { Lane } from "../../lane-engine/types";
 
-export { SessionMode, buildCompletionPersonalization, buildCompletionPersonalizationResult, createSessionSummary, SESSION_ID };
+export {
+  SessionMode,
+  buildCompletionPersonalization,
+  buildCompletionPersonalizationResult,
+  createSessionSummary,
+  SESSION_ID,
+};
 export type { Lane };
 
-export const LANES: Lane[] = ["student", "game_like", "deep_creative", "minimal_normal"];
+export const LANES: Lane[] = [
+  "student",
+  "game_like",
+  "deep_creative",
+  "minimal_normal",
+];
 
 export const CLEAN_QUESTIONS: Record<Lane, number> = {
   student: 1,

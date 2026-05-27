@@ -97,10 +97,7 @@ export function attemptSessionRecovery(
       }
       break;
     case "PARTIAL_CREDIT":
-      session.completionPercentage = Math.max(
-        session.completionPercentage,
-        30,
-      );
+      session.completionPercentage = Math.max(session.completionPercentage, 30);
       status = "PARTIAL";
       summary = executePartialCompletion(
         scoringEngine,

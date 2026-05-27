@@ -1,30 +1,30 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createRescuePlan,
   isRescueEligible,
   buildRescueCompletionRecord,
   buildRescueCompletionMemory,
   generateRescueReflection,
-} from './service';
+} from "./service";
 import {
   getActiveRescuePlan,
   saveActiveRescuePlan,
   clearActiveRescuePlan,
   saveRescueCompletion,
   getRescueCompletions,
-} from './repository';
+} from "./repository";
 import type {
   RescueEligibilityInput,
   RescueEligibilityResult,
   RescueOutcome,
   RescuePlan,
   RescuePlanInput,
-} from './schemas';
+} from "./schemas";
 
 export function useActiveRescuePlan(userId: string | null) {
   const query = useQuery({
-    queryKey: ['rescue-mode', userId],
-    queryFn: () => getActiveRescuePlan(userId ?? ''),
+    queryKey: ["rescue-mode", userId],
+    queryFn: () => getActiveRescuePlan(userId ?? ""),
     enabled: Boolean(userId),
   });
 
@@ -47,7 +47,9 @@ export function useCreateRescuePlan() {
       return plan;
     },
     onSuccess: (_plan, variables) => {
-      void queryClient.invalidateQueries({ queryKey: ['rescue-mode', variables.userId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["rescue-mode", variables.userId],
+      });
     },
   });
 }
@@ -56,11 +58,13 @@ export function useRescueEligibility() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (input: RescueEligibilityInput): Promise<RescueEligibilityResult> => {
+    mutationFn: async (
+      input: RescueEligibilityInput,
+    ): Promise<RescueEligibilityResult> => {
       return isRescueEligible(input);
     },
     onMutate: (input) => {
-      queryClient.setQueryData(['rescue-eligibility', input.userId], null);
+      queryClient.setQueryData(["rescue-eligibility", input.userId], null);
     },
   });
 }
@@ -75,7 +79,11 @@ export function useRescueCompletion() {
       actualDurationSeconds: number;
     }) => {
       const { plan, outcome, actualDurationSeconds } = params;
-      const record = buildRescueCompletionRecord(plan, outcome, actualDurationSeconds);
+      const record = buildRescueCompletionRecord(
+        plan,
+        outcome,
+        actualDurationSeconds,
+      );
       const memory = buildRescueCompletionMemory(plan, outcome);
       const reflection = generateRescueReflection(plan, outcome);
       await saveRescueCompletion(record);
@@ -83,16 +91,20 @@ export function useRescueCompletion() {
       return { record, memory, reflection };
     },
     onSuccess: (_result, params) => {
-      void queryClient.invalidateQueries({ queryKey: ['rescue-mode', params.plan.userId] });
-      void queryClient.invalidateQueries({ queryKey: ['rescue-completions', params.plan.userId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["rescue-mode", params.plan.userId],
+      });
+      void queryClient.invalidateQueries({
+        queryKey: ["rescue-completions", params.plan.userId],
+      });
     },
   });
 }
 
 export function useRescueCompletions(userId: string | null, limit?: number) {
   return useQuery({
-    queryKey: ['rescue-completions', userId, limit],
-    queryFn: () => getRescueCompletions(userId ?? '', limit),
+    queryKey: ["rescue-completions", userId, limit],
+    queryFn: () => getRescueCompletions(userId ?? "", limit),
     enabled: Boolean(userId),
   });
 }
@@ -105,7 +117,7 @@ export function useClearRescuePlan() {
       await clearActiveRescuePlan(userId);
     },
     onSuccess: (_result, userId) => {
-      void queryClient.invalidateQueries({ queryKey: ['rescue-mode', userId] });
+      void queryClient.invalidateQueries({ queryKey: ["rescue-mode", userId] });
     },
   });
 }

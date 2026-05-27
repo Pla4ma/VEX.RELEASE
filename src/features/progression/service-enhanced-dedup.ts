@@ -1,4 +1,4 @@
-import type { AddXpOperationResult } from './service-enhanced-types';
+import type { AddXpOperationResult } from "./service-enhanced-types";
 
 const processedOperations = new Set<string>();
 const pendingOperations = new Map<string, Promise<AddXpOperationResult>>();

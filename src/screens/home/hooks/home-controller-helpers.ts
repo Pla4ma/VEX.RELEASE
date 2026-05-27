@@ -1,6 +1,6 @@
-import type { FeatureKey } from '../../../features/liveops-config';
-import type { SessionHistoryEntry } from '../../../session/types';
-import type { HomeReturnReason } from './useHomeReturnReason';
+import type { FeatureKey } from "../../../features/liveops-config";
+import type { SessionHistoryEntry } from "../../../session/types";
+import type { HomeReturnReason } from "./useHomeReturnReason";
 
 export function getFocusedMinutesForToday(entry: SessionHistoryEntry): number {
   const endedAt = entry.endedAt ?? 0;
@@ -8,14 +8,22 @@ export function getFocusedMinutesForToday(entry: SessionHistoryEntry): number {
     return 0;
   }
 
-  const duration = entry.summary?.effectiveDuration ?? entry.summary?.actualDuration ?? 0;
+  const duration =
+    entry.summary?.effectiveDuration ?? entry.summary?.actualDuration ?? 0;
   return Math.max(0, Math.round(duration / 60000));
 }
 
 export function getNextUnlockFeature(
-  features: Record<FeatureKey, { isUnlocked: boolean; isVisible: boolean; priority?: number }>,
+  features: Record<
+    FeatureKey,
+    { isUnlocked: boolean; isVisible: boolean; priority?: number }
+  >,
 ): FeatureKey | null {
-  const match = (Object.entries(features) as Array<[FeatureKey, (typeof features)[FeatureKey]]>)
+  const match = (
+    Object.entries(features) as Array<
+      [FeatureKey, (typeof features)[FeatureKey]]
+    >
+  )
     .sort((a, b) => (a[1].priority ?? 0) - (b[1].priority ?? 0))
     .find(([, value]) => !value.isUnlocked && value.isVisible);
 
@@ -26,9 +34,9 @@ export function buildDisplayedReturnReason(
   displayState: {
     body: string;
     eyebrow: string;
-    source: HomeReturnReason['source'];
+    source: HomeReturnReason["source"];
     title: string;
-    tone: HomeReturnReason['tone'];
+    tone: HomeReturnReason["tone"];
   },
   returnReason: HomeReturnReason,
 ): HomeReturnReason {
@@ -42,10 +50,9 @@ export function buildDisplayedReturnReason(
   };
 }
 
-
 export {
   buildCompletionHeadline,
   buildEmotionalReturnReason,
   buildSessionStakesReason,
   type EmotionalContext,
-} from './home-emotional-helpers';
+} from "./home-emotional-helpers";

@@ -6,7 +6,7 @@
  */
 
 export interface FocusIdentityEventDefinitions {
-  'focus-identity:score_updated': {
+  "focus-identity:score_updated": {
     userId: string;
     previousScore: number;
     newScore: number;
@@ -14,13 +14,13 @@ export interface FocusIdentityEventDefinitions {
     band: string;
     timestamp: number;
   };
-  'FOCUS_IDENTITY_CREATED': {
+  FOCUS_IDENTITY_CREATED: {
     userId: string;
     initialScore: number;
     band: string;
   };
 
-  'FOCUS_SCORE_UPDATED': {
+  FOCUS_SCORE_UPDATED: {
     userId: string;
     previousScore: number;
     newScore: number;
@@ -29,19 +29,19 @@ export interface FocusIdentityEventDefinitions {
     isInRecovery: boolean;
   };
 
-  'FOCUS_SCORE_BAND_CHANGE': {
+  FOCUS_SCORE_BAND_CHANGE: {
     userId: string;
     oldBand: string;
     newBand: string;
     newScore: number;
   };
 
-  'FOCUS_RECOVERY_COMPLETE': {
+  FOCUS_RECOVERY_COMPLETE: {
     userId: string;
     finalScore: number;
   };
 
-  'ANCHOR_PROMPT_TRIGGERED': {
+  ANCHOR_PROMPT_TRIGGERED: {
     userId: string;
     anchorId: string;
     promptId: string;
@@ -54,36 +54,36 @@ export interface FocusIdentityEventDefinitions {
     streak: number;
   };
 
-  'ANCHOR_PROMPT_RESPONDED': {
+  ANCHOR_PROMPT_RESPONDED: {
     userId: string;
     anchorId: string;
     promptId: string;
-    response: 'SNOOZED' | 'STARTED' | 'COMPLETED' | 'DISMISSED';
+    response: "SNOOZED" | "STARTED" | "COMPLETED" | "DISMISSED";
     consistency: number;
     currentStreak: number;
   };
 
-  'ANCHOR_STREAK_MILESTONE': {
+  ANCHOR_STREAK_MILESTONE: {
     userId: string;
     anchorId: string;
     streak: number;
     implementationIntention: string;
   };
 
-  'HABIT_ANCHOR_CREATED': {
+  HABIT_ANCHOR_CREATED: {
     userId: string;
     anchorId: string;
     type: string;
     implementationIntention: string;
   };
-  'FOCUS_XP_MULTIPLIER_UPDATED': {
+  FOCUS_XP_MULTIPLIER_UPDATED: {
     userId: string;
     multiplier: number;
     score?: number;
     band?: string;
   };
 
-  'MONTHLY_REPORT_VIEWED': {
+  MONTHLY_REPORT_VIEWED: {
     userId: string;
     month: string;
     grade: string;
@@ -91,7 +91,7 @@ export interface FocusIdentityEventDefinitions {
     timestamp: number;
   };
 
-  'MONTHLY_REPORT_SHARED': {
+  MONTHLY_REPORT_SHARED: {
     userId: string;
     month: string;
     grade: string;
@@ -99,7 +99,7 @@ export interface FocusIdentityEventDefinitions {
     timestamp: number;
   };
 
-  'MONTHLY_REPORT_DISMISSED': {
+  MONTHLY_REPORT_DISMISSED: {
     userId: string;
     month: string;
     timestamp: number;

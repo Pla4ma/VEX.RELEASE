@@ -5,14 +5,18 @@
  */
 
 // Core
-export { EventEmitter, globalEventEmitter, createNamespacedEmitter } from './EventEmitter';
-export type { EventHandler } from './EventEmitter';
+export {
+  EventEmitter,
+  globalEventEmitter,
+  createNamespacedEmitter,
+} from "./EventEmitter";
+export type { EventHandler } from "./EventEmitter";
 
 // Event Bus
-export { EventBus, eventBus } from './EventBus';
+export { EventBus, eventBus } from "./EventBus";
 
 // Safety
-export { subscribeIdempotent, resetIdempotency } from './event-safety';
+export { subscribeIdempotent, resetIdempotency } from "./event-safety";
 
 // Types
 export type {
@@ -23,11 +27,11 @@ export type {
   EventPriority,
   EventSubscriptionOptions,
   EventHandlerMetadata,
-} from './EventTypes';
+} from "./EventTypes";
 
 // Hooks
 export {
   useEventBus,
   useEventSubscription,
   useEventPublisher,
-} from './hooks/useEventBus';
+} from "./hooks/useEventBus";

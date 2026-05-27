@@ -1,12 +1,12 @@
-import React from 'react';
-import type { SessionStackParams } from '../../../navigation/types';
-import { useSessionStartController } from '../../../features/session-start/hooks';
-import { SessionSetupCustomization } from './SessionSetupCustomization';
+import React from "react";
+import type { SessionStackParams } from "../../../navigation/types";
+import { useSessionStartController } from "../../../features/session-start/hooks";
+import { SessionSetupCustomization } from "./SessionSetupCustomization";
 
 type Controller = ReturnType<typeof useSessionStartController>;
 type SessionSetupCustomizationSectionProps = {
   controller: Controller;
-  routeParams: SessionStackParams['SessionSetup'] | undefined;
+  routeParams: SessionStackParams["SessionSetup"] | undefined;
 };
 
 export function SessionSetupCustomizationSection({
@@ -21,7 +21,7 @@ export function SessionSetupCustomizationSection({
     <SessionSetupCustomization
       activeChallenges={controller.activeChallenges}
       filteredPresets={controller.filteredPresets}
-      hasActiveStudyPlan={routeParams?.source === 'content-study'}
+      hasActiveStudyPlan={routeParams?.source === "content-study"}
       onPressTheme={controller.handleThemePress}
       onSelectPreset={controller.setupState.setSelectedPreset}
       onSelectSessionMode={controller.setupState.setSelectedSessionMode}
@@ -29,12 +29,16 @@ export function SessionSetupCustomizationSection({
         if (!controller.setupState.smartSuggestion) {
           return;
         }
-        controller.setupState.setSelectedPreset(controller.setupState.smartSuggestion.preset);
+        controller.setupState.setSelectedPreset(
+          controller.setupState.smartSuggestion.preset,
+        );
         controller.setupState.setSelectedCategory(
-          controller.setupState.smartSuggestion.preset.category ?? 'standard',
+          controller.setupState.smartSuggestion.preset.category ?? "standard",
         );
       }}
-      onToggleAdvanced={() => controller.setupState.setShowAdvanced((current) => !current)}
+      onToggleAdvanced={() =>
+        controller.setupState.setShowAdvanced((current) => !current)
+      }
       onUpdateCategory={controller.setupState.setSelectedCategory}
       routeSuggestedDifficulty={routeParams?.suggestedDifficulty}
       selectedCategory={controller.setupState.selectedCategory}

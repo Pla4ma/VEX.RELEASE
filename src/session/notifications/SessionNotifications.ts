@@ -18,8 +18,12 @@ export class SessionNotifications {
   private scheduledNotifications: Map<string, number> = new Map();
   private enabled: boolean = true;
 
-  setUserId(userId: string): void { this.userId = userId; }
-  setEnabled(enabled: boolean): void { this.enabled = enabled; }
+  setUserId(userId: string): void {
+    this.userId = userId;
+  }
+  setEnabled(enabled: boolean): void {
+    this.enabled = enabled;
+  }
 
   async scheduleSessionStart(
     sessionId: string,
@@ -71,14 +75,22 @@ export class SessionNotifications {
     this.showNotification(buildInterruptionPayload(sessionId, severity));
   }
 
-  async sendRecoveryReminder(sessionId: string, minutesElapsed: number): Promise<void> {
+  async sendRecoveryReminder(
+    sessionId: string,
+    minutesElapsed: number,
+  ): Promise<void> {
     if (!this.enabled) return;
     this.showNotification(buildRecoveryPayload(sessionId, minutesElapsed));
   }
 
-  async sendStreakWarning(streakDays: number, hoursRemaining: number): Promise<void> {
+  async sendStreakWarning(
+    streakDays: number,
+    hoursRemaining: number,
+  ): Promise<void> {
     if (!this.enabled) return;
-    this.showNotification(buildStreakWarningPayload(streakDays, hoursRemaining));
+    this.showNotification(
+      buildStreakWarningPayload(streakDays, hoursRemaining),
+    );
   }
 
   async scheduleDailyReminder(hour: number, minute: number): Promise<void> {
@@ -87,7 +99,11 @@ export class SessionNotifications {
     const reminderTime = new Date();
     reminderTime.setHours(hour, minute, 0, 0);
     if (reminderTime <= now) reminderTime.setDate(reminderTime.getDate() + 1);
-    this.scheduleNotification("daily_reminder", buildDailyReminderPayload(), reminderTime.getTime());
+    this.scheduleNotification(
+      "daily_reminder",
+      buildDailyReminderPayload(),
+      reminderTime.getTime(),
+    );
   }
 
   async sendBreakReminder(breakDuration: number): Promise<void> {
@@ -95,7 +111,11 @@ export class SessionNotifications {
     this.showNotification(buildBreakReminderPayload(breakDuration));
   }
 
-  async sendRewardNotification(xp: number, coins: number, gems: number): Promise<void> {
+  async sendRewardNotification(
+    xp: number,
+    coins: number,
+    gems: number,
+  ): Promise<void> {
     if (!this.enabled) return;
     const payload = buildRewardPayload(xp, coins, gems);
     if (payload) this.showNotification(payload);
@@ -140,9 +160,16 @@ export class SessionNotifications {
     this.scheduledNotifications.clear();
   }
 
-  private scheduleNotification(id: string, payload: NotificationPayload, timestamp: number): void {
+  private scheduleNotification(
+    id: string,
+    payload: NotificationPayload,
+    timestamp: number,
+  ): void {
     const delay = timestamp - Date.now();
-    if (delay <= 0) { this.showNotification(payload); return; }
+    if (delay <= 0) {
+      this.showNotification(payload);
+      return;
+    }
     const timeoutId = window.setTimeout(() => {
       this.showNotification(payload);
       this.scheduledNotifications.delete(id);

@@ -1,30 +1,27 @@
-import React, { useState } from 'react';
-import { Pressable } from 'react-native';
+import React from "react";
 
-import { Box } from '../../../components/primitives/Box';
-import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { SessionMode } from '../../../session/modes';
-import type { FirstSessionPersonalization } from '../hooks/useFirstSessionPersonalization';
-import { CoachLine, CompanionVisual, StudyTarget } from './FirstSessionOptionalCards';
+import { Box } from "../../../components/primitives/Box";
+import { Button } from "../../../components/primitives/Button";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import { SessionMode } from "../../../session/modes";
+import type { FirstSessionPersonalization } from "../hooks/useFirstSessionPersonalization";
 
 type FirstSessionSetupCardProps = {
   personalization: FirstSessionPersonalization;
   isStarting: boolean;
-  onStart: (config: { mode: SessionMode; durationMinutes: number; goal?: string }) => void;
+  onStart: (config: {
+    mode: SessionMode;
+    durationMinutes: number;
+    goal?: string;
+  }) => void;
 };
 
-const FIRST_SESSION_MODES = [
-  { mode: SessionMode.STUDY, label: 'Study', description: 'With material to review' },
-  { mode: SessionMode.LIGHT_FOCUS, label: 'Focus', description: 'Standard focused work' },
-  { mode: SessionMode.DEEP_WORK, label: 'Deep Work', description: 'No interruptions, high intensity' },
-] as const;
-
-const MODE_EMOJI: Record<string, string> = {
-  [SessionMode.STUDY]: '📚',
-  [SessionMode.LIGHT_FOCUS]: '🎯',
-  [SessionMode.DEEP_WORK]: '🧠',
+const MODE_LABELS: Record<string, string> = {
+  [SessionMode.STUDY]: "Start one study block.",
+  [SessionMode.LIGHT_FOCUS]: "Start one focused session.",
+  [SessionMode.DEEP_WORK]: "Protect one project block.",
+  [SessionMode.CREATIVE]: "Start one clean session.",
 };
 
 export function FirstSessionSetupCard({
@@ -33,20 +30,19 @@ export function FirstSessionSetupCard({
   onStart,
 }: FirstSessionSetupCardProps): JSX.Element {
   const { theme } = useTheme();
-  const [selectedMode, setSelectedMode] = useState<SessionMode>(personalization.defaultMode);
-  const [studyTarget, setStudyTarget] = useState('');
-  const showStudyTarget = selectedMode === SessionMode.STUDY;
 
   const handleStart = () => {
     onStart({
-      mode: selectedMode,
+      mode: personalization.defaultMode,
       durationMinutes: personalization.suggestedDurationMinutes,
-      goal: showStudyTarget ? studyTarget || 'Study session' : undefined,
     });
   };
 
+  const laneCopy =
+    MODE_LABELS[personalization.defaultMode] ?? "Start one focused session.";
+
   return (
-    <Box px="lg" mt="lg">
+    <Box px="lg" mt="md">
       <Box
         p="lg"
         bg="background.secondary"
@@ -60,73 +56,14 @@ export function FirstSessionSetupCard({
             Your first session
           </Text>
           <Text variant="h4" color="text.primary">
-            Choose your focus mode
+            {laneCopy}
           </Text>
           <Text variant="body" color="text.secondary">
-            Pick one. You can always switch later.
+            {personalization.coachLine}
           </Text>
         </Box>
 
-        <Box gap="sm">
-          {FIRST_SESSION_MODES.map((item) => {
-            const isSelected = selectedMode === item.mode;
-            return (
-              <Pressable
-                key={item.mode}
-                onPress={() => setSelectedMode(item.mode)}
-                accessibilityLabel={`Select ${item.label} mode: ${item.description}`}
-                accessibilityRole="radio"
-                accessibilityHint={`Sets session mode to ${item.label}`}
-                accessibilityState={{ selected: isSelected }}
-                style={{
-                  padding: theme.spacing[3],
-                  borderRadius: theme.borderRadius.lg,
-                  borderWidth: 2,
-                  borderColor: isSelected
-                    ? theme.colors.primary[500]
-                    : theme.colors.border.light,
-                  backgroundColor: isSelected
-                    ? `${theme.colors.primary[500]}10`
-                    : theme.colors.background.primary,
-                }}
-              >
-                <Box flexDirection="row" alignItems="center" gap="md">
-                  <Box
-                    width={44}
-                    height={44}
-                    borderRadius="full"
-                    bg={isSelected ? `${theme.colors.primary[500]}20` : 'background.primary'}
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Text fontSize={20}>{MODE_EMOJI[item.mode] ?? '🎯'}</Text>
-                  </Box>
-                  <Box flex={1}>
-                    <Text variant="label" color="text.primary">
-                      {item.label}
-                    </Text>
-                    <Text variant="caption" color="text.secondary">
-                      {item.description}
-                    </Text>
-                  </Box>
-                  {isSelected ? (
-                    <Box
-                      width={24}
-                      height={24}
-                      borderRadius="full"
-                      bg="primary.500"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <Text fontSize={14} color="white">✓</Text>
-                    </Box>
-                  ) : null}
-                </Box>
-              </Pressable>
-            );
-          })}
-        </Box>
-
+        {/* Duration display */}
         <Box
           p="md"
           bg="background.primary"
@@ -136,7 +73,7 @@ export function FirstSessionSetupCard({
           gap="xs"
         >
           <Text variant="caption" color="text.tertiary">
-            Suggested duration
+            Recommended
           </Text>
           <Box flexDirection="row" alignItems="baseline" gap="xs">
             <Text variant="h3" color="primary.500">
@@ -151,27 +88,17 @@ export function FirstSessionSetupCard({
           </Text>
         </Box>
 
-        <CompanionVisual element={personalization.companionElement} />
-
-        <StudyTarget
-          onChangeText={setStudyTarget}
-          visible={showStudyTarget}
-          target={studyTarget}
-        />
-
-        <CoachLine text={personalization.coachLine} />
-
         <Button
           variant="primary"
           size="lg"
           fullWidth
           onPress={handleStart}
           isLoading={isStarting}
-          accessibilityLabel={`Start ${selectedMode} session for ${personalization.suggestedDurationMinutes} minutes`}
+          accessibilityLabel={`Start ${personalization.suggestedDurationMinutes}-min session`}
           accessibilityRole="button"
           accessibilityHint="Begins your first focus session"
         >
-          {`Start ${personalization.suggestedDurationMinutes}-min session`}
+          Start
         </Button>
       </Box>
     </Box>

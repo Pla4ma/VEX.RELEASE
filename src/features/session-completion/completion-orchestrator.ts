@@ -15,10 +15,23 @@ import { resolveCompletionPersonalBest } from "./personal-best-integration";
 import { applyCompletionSideEffects } from "./completion-side-effects";
 import { integrateCompletionPersonalization } from "./completion-personalization-integration";
 import type { CompletionPersonalizationResult } from "./schemas";
-import { createCompletionLedger, getCompletionLedgerByIdempotencyKey } from "./repository";
-import { buildPostSessionStoryViewModel, type PostSessionStoryViewModel } from "./story-view-model-service";
-import { createSessionRecord, countCompletedSessions } from "../session-history/repository";
-import { beginKeyProcessing, markKeyProcessed, releaseKeyProcessing } from "./idempotency";
+import {
+  createCompletionLedger,
+  getCompletionLedgerByIdempotencyKey,
+} from "./repository";
+import {
+  buildPostSessionStoryViewModel,
+  type PostSessionStoryViewModel,
+} from "./story-view-model-service";
+import {
+  createSessionRecord,
+  countCompletedSessions,
+} from "../session-history/repository";
+import {
+  beginKeyProcessing,
+  markKeyProcessed,
+  releaseKeyProcessing,
+} from "./idempotency";
 import { getFocusProfile } from "../focus-profile/service";
 import { resolveInitialLane } from "../lane-engine/service";
 
@@ -130,9 +143,15 @@ export async function orchestrateSessionCompletion(
     // LAYER 3.5: Personalization — lane profile, memory candidates, unlock decisions, reflection
     let personalizationResult: CompletionPersonalizationResult | null = null;
     try {
-      const sessionCount = await countCompletedSessions(parsed.userId).catch(() => 0);
-      const focusProfile = await getFocusProfile(parsed.userId).catch(() => null);
-      const laneProfile = focusProfile?.laneProfile || resolveInitialLane({ observedAt: Date.now() });
+      const sessionCount = await countCompletedSessions(parsed.userId).catch(
+        () => 0,
+      );
+      const focusProfile = await getFocusProfile(parsed.userId).catch(
+        () => null,
+      );
+      const laneProfile =
+        focusProfile?.laneProfile ||
+        resolveInitialLane({ observedAt: Date.now() });
       personalizationResult = await integrateCompletionPersonalization({
         deletedMemoryIds: [],
         hiddenFeatureKeys: [

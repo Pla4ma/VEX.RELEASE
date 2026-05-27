@@ -4,7 +4,7 @@
  * 4px grid-based spacing system for consistent layout throughout the app.
  */
 
-import type { SpacingScale } from '../types';
+import type { SpacingScale } from "../types";
 
 /**
  * Base spacing unit in pixels
@@ -16,18 +16,18 @@ export const SPACING_UNIT = 4;
  */
 export const spacing: SpacingScale = {
   0: 0,
-  1: SPACING_UNIT * 1,      // 4px
-  2: SPACING_UNIT * 2,      // 8px
-  3: SPACING_UNIT * 3,      // 12px
-  4: SPACING_UNIT * 4,      // 16px
-  5: SPACING_UNIT * 5,      // 20px
-  6: SPACING_UNIT * 6,      // 24px
-  8: SPACING_UNIT * 8,      // 32px
-  10: SPACING_UNIT * 10,    // 40px
-  12: SPACING_UNIT * 12,    // 48px
-  16: SPACING_UNIT * 16,    // 64px
-  20: SPACING_UNIT * 20,    // 80px
-  24: SPACING_UNIT * 24,    // 96px
+  1: SPACING_UNIT * 1, // 4px
+  2: SPACING_UNIT * 2, // 8px
+  3: SPACING_UNIT * 3, // 12px
+  4: SPACING_UNIT * 4, // 16px
+  5: SPACING_UNIT * 5, // 20px
+  6: SPACING_UNIT * 6, // 24px
+  8: SPACING_UNIT * 8, // 32px
+  10: SPACING_UNIT * 10, // 40px
+  12: SPACING_UNIT * 12, // 48px
+  16: SPACING_UNIT * 16, // 64px
+  20: SPACING_UNIT * 20, // 80px
+  24: SPACING_UNIT * 24, // 96px
 };
 
 /**
@@ -92,7 +92,7 @@ export function calculateSpacing(
   top: keyof SpacingScale,
   right?: keyof SpacingScale,
   bottom?: keyof SpacingScale,
-  left?: keyof SpacingScale
+  left?: keyof SpacingScale,
 ): { top: number; right: number; bottom: number; left: number } {
   return {
     top: getSpacing(top),

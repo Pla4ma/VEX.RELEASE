@@ -1,13 +1,13 @@
-import React from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import React from "react";
+import { View, TouchableOpacity } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { getMoodEmoji } from '../../../features/companion/components/companion-helpers';
-import { ELEMENT_THEMES } from '../../../features/companion/types';
-import type { CompanionState } from '../../../features/companion/types';
-import type { HomeCompanionStatus } from '../hooks/useHomeCompanion';
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import { getMoodEmoji } from "../../../features/companion/components/companion-helpers";
+import { ELEMENT_THEMES } from "../../../features/companion/types";
+import type { CompanionState } from "../../../features/companion/types";
+import type { HomeCompanionStatus } from "../hooks/useHomeCompanion";
 
 interface HomeCompanionWidgetProps {
   status: HomeCompanionStatus;
@@ -15,7 +15,13 @@ interface HomeCompanionWidgetProps {
   onPress?: () => void;
 }
 
-function CompanionCard({ state, onPress }: { state: CompanionState; onPress?: () => void }): JSX.Element {
+function CompanionCard({
+  state,
+  onPress,
+}: {
+  state: CompanionState;
+  onPress?: () => void;
+}): JSX.Element {
   const { theme } = useTheme();
   const elementTheme = ELEMENT_THEMES[state.element];
 
@@ -35,8 +41,8 @@ function CompanionCard({ state, onPress }: { state: CompanionState; onPress?: ()
           borderWidth: 1,
           borderColor: theme.colors.border.light,
           padding: theme.spacing[4],
-          flexDirection: 'row',
-          alignItems: 'center',
+          flexDirection: "row",
+          alignItems: "center",
           gap: theme.spacing[4],
         }}
       >
@@ -45,9 +51,9 @@ function CompanionCard({ state, onPress }: { state: CompanionState; onPress?: ()
             width: 48,
             height: 48,
             borderRadius: 24,
-            backgroundColor: elementTheme.primary + '20',
-            alignItems: 'center',
-            justifyContent: 'center',
+            backgroundColor: elementTheme.primary + "20",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <Text variant="h3" style={{ fontSize: 24 }}>
@@ -56,7 +62,11 @@ function CompanionCard({ state, onPress }: { state: CompanionState; onPress?: ()
         </View>
 
         <View style={{ flex: 1 }}>
-          <Text variant="body" color="text.primary" style={{ fontWeight: '700' }}>
+          <Text
+            variant="body"
+            color="text.primary"
+            style={{ fontWeight: "700" }}
+          >
             {state.element} {state.phase}
           </Text>
           <Text variant="caption" color="text.secondary">
@@ -87,30 +97,55 @@ function SkeletonCard(): JSX.Element {
         borderWidth: 1,
         borderColor: theme.colors.border.light,
         padding: theme.spacing[4],
-        flexDirection: 'row',
-        alignItems: 'center',
+        flexDirection: "row",
+        alignItems: "center",
         gap: theme.spacing[4],
       }}
     >
-      <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: theme.colors.background.tertiary }} />
+      <View
+        style={{
+          width: 48,
+          height: 48,
+          borderRadius: 24,
+          backgroundColor: theme.colors.background.tertiary,
+        }}
+      />
       <View style={{ flex: 1, gap: theme.spacing[2] }}>
-        <View style={{ height: 16, width: 120, borderRadius: theme.spacing[1], backgroundColor: theme.colors.background.tertiary }} />
-        <View style={{ height: 12, width: 180, borderRadius: theme.spacing[1], backgroundColor: theme.colors.background.tertiary }} />
+        <View
+          style={{
+            height: 16,
+            width: 120,
+            borderRadius: theme.spacing[1],
+            backgroundColor: theme.colors.background.tertiary,
+          }}
+        />
+        <View
+          style={{
+            height: 12,
+            width: 180,
+            borderRadius: theme.spacing[1],
+            backgroundColor: theme.colors.background.tertiary,
+          }}
+        />
       </View>
     </View>
   );
 }
 
-export function HomeCompanionWidget({ status, onRetry, onPress }: HomeCompanionWidgetProps): JSX.Element | null {
+export function HomeCompanionWidget({
+  status,
+  onRetry,
+  onPress,
+}: HomeCompanionWidgetProps): JSX.Element | null {
   const { theme } = useTheme();
 
-  if (status.kind === 'loading') {
+  if (status.kind === "loading") {
     return <SkeletonCard />;
   }
 
-  if (status.kind === 'empty') {
+  if (status.kind === "empty") {
     return (
-      <View style={{ padding: theme.spacing[4], alignItems: 'center' }}>
+      <View style={{ padding: theme.spacing[4], alignItems: "center" }}>
         <Text variant="caption" color="text.secondary">
           Your companion will appear after your first focus session.
         </Text>
@@ -118,7 +153,7 @@ export function HomeCompanionWidget({ status, onRetry, onPress }: HomeCompanionW
     );
   }
 
-  if (status.kind === 'error') {
+  if (status.kind === "error") {
     return (
       <TouchableOpacity
         onPress={onRetry}
@@ -133,13 +168,17 @@ export function HomeCompanionWidget({ status, onRetry, onPress }: HomeCompanionW
             borderWidth: 1,
             borderColor: theme.colors.error.light,
             padding: theme.spacing[4],
-            alignItems: 'center',
+            alignItems: "center",
           }}
         >
           <Text variant="body" color="error.DEFAULT">
             Companion did not load.
           </Text>
-          <Text variant="caption" color="text.secondary" style={{ marginTop: theme.spacing[1] }}>
+          <Text
+            variant="caption"
+            color="text.secondary"
+            style={{ marginTop: theme.spacing[1] }}
+          >
             Tap to retry.
           </Text>
         </View>
@@ -147,7 +186,7 @@ export function HomeCompanionWidget({ status, onRetry, onPress }: HomeCompanionW
     );
   }
 
-  if (status.kind === 'offline') {
+  if (status.kind === "offline") {
     return (
       <View
         style={{
@@ -156,7 +195,7 @@ export function HomeCompanionWidget({ status, onRetry, onPress }: HomeCompanionW
           borderWidth: 1,
           borderColor: theme.colors.border.light,
           padding: theme.spacing[4],
-          alignItems: 'center',
+          alignItems: "center",
           opacity: 0.7,
         }}
       >

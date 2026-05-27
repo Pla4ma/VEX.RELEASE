@@ -10,7 +10,11 @@ describe("CompletionEngine — handlePartialCompletion", () => {
   it("should handle partial completion", () => {
     const session = createMockSession({ completionPercentage: 70 });
     const metrics = createMockMetrics();
-    const result = completionEngine.handlePartialCompletion(session, metrics, 5);
+    const result = completionEngine.handlePartialCompletion(
+      session,
+      metrics,
+      5,
+    );
     expect(result.success).toBe(true);
     expect(result.status).toBe("PARTIAL");
   });
@@ -25,14 +29,22 @@ describe("CompletionEngine — handlePartialCompletion", () => {
   it("should grant partial rewards", () => {
     const session = createMockSession({ completionPercentage: 70 });
     const metrics = createMockMetrics();
-    const result = completionEngine.handlePartialCompletion(session, metrics, 5);
+    const result = completionEngine.handlePartialCompletion(
+      session,
+      metrics,
+      5,
+    );
     expect(result.rewardsGranted).toBe(true);
   });
 
   it("should maintain streak for partial completion above threshold", () => {
     const session = createMockSession({ completionPercentage: 70 });
     const metrics = createMockMetrics();
-    const result = completionEngine.handlePartialCompletion(session, metrics, 5);
+    const result = completionEngine.handlePartialCompletion(
+      session,
+      metrics,
+      5,
+    );
     expect(result.streakMaintained).toBe(true);
   });
 });

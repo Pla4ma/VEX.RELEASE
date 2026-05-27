@@ -31,9 +31,7 @@ export function computeCompletedDurations(sessions: SessionEntry[]): number[] {
     .filter((d) => d > 0);
 }
 
-export function computePreferredMode(
-  sessions: SessionEntry[],
-): string | null {
+export function computePreferredMode(sessions: SessionEntry[]): string | null {
   const recent = sessions.slice(-10);
   if (recent.length === 0) return null;
   const modeCounts = new Map<string, number>();
@@ -62,18 +60,14 @@ export function computeStudyUsageRatio(
   return Math.min(1, studySessions.length / totalCompleted);
 }
 
-export function computeBestTimeOfDay(
-  sessions: SessionEntry[],
-): string | null {
+export function computeBestTimeOfDay(sessions: SessionEntry[]): string | null {
   const qualitySessions = sessions.filter(
     (s) =>
       typeof s.focusQuality === "number" && typeof s.startTime === "number",
   );
   if (qualitySessions.length < 3) return null;
 
-  qualitySessions.sort(
-    (a, b) => (b.focusQuality ?? 0) - (a.focusQuality ?? 0),
-  );
+  qualitySessions.sort((a, b) => (b.focusQuality ?? 0) - (a.focusQuality ?? 0));
   const top = qualitySessions.slice(0, Math.min(3, qualitySessions.length));
   const avgHour =
     top.reduce((sum, s) => {

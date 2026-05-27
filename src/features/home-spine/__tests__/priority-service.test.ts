@@ -1,6 +1,14 @@
-import { buildProgress, buildSecondaryActions, buildStakes } from '../priority-builders';
-import { checkDefaultSession, checkStreakCritical, getPriorityCandidates } from '../priority-checkers';
-import type { HomeContextSnapshot } from '../priority-schemas';
+import {
+  buildProgress,
+  buildSecondaryActions,
+  buildStakes,
+} from "../priority-builders";
+import {
+  checkDefaultSession,
+  checkStreakCritical,
+  getPriorityCandidates,
+} from "../priority-checkers";
+import type { HomeContextSnapshot } from "../priority-schemas";
 
 function createSnapshot(
   overrides: Partial<HomeContextSnapshot> = {},
@@ -24,7 +32,7 @@ function createSnapshot(
       interventionType: undefined,
     },
     companionPromise: {
-      kind: 'hidden',
+      kind: "hidden",
       targetDurationMinutes: undefined,
       targetMode: undefined,
     },
@@ -55,13 +63,13 @@ function createSnapshot(
       itemsDue: 0,
     },
     timestamp: 1_700_000_000_000,
-    userId: '11111111-1111-4111-8111-111111111111',
+    userId: "11111111-1111-4111-8111-111111111111",
     ...overrides,
   };
 }
 
-describe('home priority builders', () => {
-  it('builds daily progress and streak stakes for a streak-critical state', () => {
+describe("home priority builders", () => {
+  it("builds daily progress and streak stakes for a streak-critical state", () => {
     const snapshot = createSnapshot({
       streak: {
         currentDays: 7,
@@ -83,13 +91,13 @@ describe('home priority builders', () => {
       todayMinutes: 15,
     });
     expect(buildStakes(primary, snapshot)).toEqual({
-      atRisk: 'Your streak resets if today ends cold.',
-      potentialGain: 'You keep the thread alive with one clean session.',
-      what: '7-day streak',
+      atRisk: "Your streak resets if today ends cold.",
+      potentialGain: "You keep the thread alive with one clean session.",
+      what: "7-day streak",
     });
   });
 
-  it('keeps secondary actions capped and in the same order as priority selection', () => {
+  it("keeps secondary actions capped and in the same order as priority selection", () => {
     const snapshot = createSnapshot({
       boss: {
         hasActiveEncounter: true,
@@ -98,19 +106,19 @@ describe('home priority builders', () => {
         maxHealth: 100,
       },
       challenge: {
-        id: 'challenge-1',
+        id: "challenge-1",
         isNearDone: true,
         progressPercent: 80,
-        title: 'Finish today',
+        title: "Finish today",
       },
       companionPromise: {
-        kind: 'pending',
+        kind: "pending",
         targetDurationMinutes: 20,
-        targetMode: 'FOCUS',
+        targetMode: "FOCUS",
       },
       recommendation: {
         hasActive: true,
-        id: 'rec-1',
+        id: "rec-1",
         suggestedDurationSeconds: 1800,
         suggestedMode: undefined,
       },
@@ -122,18 +130,18 @@ describe('home priority builders', () => {
       },
     });
 
-    expect(buildSecondaryActions(getPriorityCandidates(snapshot)).map((action) => action.type)).toEqual([
-      'promise',
-      'streak',
-      'recommendation',
-    ]);
+    expect(
+      buildSecondaryActions(getPriorityCandidates(snapshot)).map(
+        (action) => action.type,
+      ),
+    ).toEqual(["promise", "streak", "recommendation"]);
   });
 
-  it('uses the default session when no higher signal exists', () => {
+  it("uses the default session when no higher signal exists", () => {
     const priority = checkDefaultSession(createSnapshot());
 
-    expect(priority.type).toBe('DEFAULT_SESSION');
-    expect(priority.cta.text).toBe('Start Focus');
-    expect(priority.cta.action).toBe('OPEN_SESSION_SETUP');
+    expect(priority.type).toBe("DEFAULT_SESSION");
+    expect(priority.cta.text).toBe("Start Focus");
+    expect(priority.cta.action).toBe("OPEN_SESSION_SETUP");
   });
 });

@@ -4,15 +4,15 @@
  * Utility functions for working with coach state.
  */
 
-import type { CoachStore } from './types';
-import type { CoachMessage } from '../schemas';
+import type { CoachStore } from "./types";
+import type { CoachMessage } from "../schemas";
 
 /**
  * Check if a message should be shown (not muted, not dismissed)
  */
 export function shouldShowMessage(
   message: CoachMessage,
-  store: CoachStore
+  store: CoachStore,
 ): boolean {
   // Check if message is already dismissed
   if (store.dismissedMessages.includes(message.id)) {

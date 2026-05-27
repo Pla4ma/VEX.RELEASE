@@ -1,9 +1,6 @@
-import { getSupabaseClient } from '../../../config/supabase';
-import {
-  DifficultyProfileSchema,
-  type DifficultyProfile,
-} from '../schemas';
-import { RepositoryError } from './error';
+import { getSupabaseClient } from "../../../config/supabase";
+import { DifficultyProfileSchema, type DifficultyProfile } from "../schemas";
+import { RepositoryError } from "./error";
 
 const supabase = getSupabaseClient();
 
@@ -11,13 +8,15 @@ export async function fetchDifficultyProfile(
   userId: string,
 ): Promise<DifficultyProfile | null> {
   const { data, error } = await supabase
-    .from('difficulty_profiles')
-    .select('*')
-    .eq('user_id', userId)
+    .from("difficulty_profiles")
+    .select("*")
+    .eq("user_id", userId)
     .single();
   if (error) {
-    if (error.code === 'PGRST116') {return null;}
-    throw new RepositoryError('fetchDifficultyProfile', error);
+    if (error.code === "PGRST116") {
+      return null;
+    }
+    throw new RepositoryError("fetchDifficultyProfile", error);
   }
   return data ? DifficultyProfileSchema.parse(data) : null;
 }
@@ -26,7 +25,7 @@ export async function upsertDifficultyProfile(
   profile: DifficultyProfile,
 ): Promise<DifficultyProfile> {
   const { data, error } = await supabase
-    .from('difficulty_profiles')
+    .from("difficulty_profiles")
     .upsert({
       user_id: profile.userId,
       current_difficulty: profile.currentDifficulty,
@@ -39,6 +38,8 @@ export async function upsertDifficultyProfile(
     })
     .select()
     .single();
-  if (error) {throw new RepositoryError('upsertDifficultyProfile', error);}
+  if (error) {
+    throw new RepositoryError("upsertDifficultyProfile", error);
+  }
   return DifficultyProfileSchema.parse(data);
 }

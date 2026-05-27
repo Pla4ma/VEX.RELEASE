@@ -1,35 +1,51 @@
-import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
-import type { NavigatorScreenParams } from '@react-navigation/native';
-import type { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import type { ContentStudyStackParamList } from '../features/content-study/types';
-import type { ComebackState } from '../features/streaks/types';
-import type { Nullable } from '../types/global';
+import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
+import type { NavigatorScreenParams } from "@react-navigation/native";
+import type { NativeStackNavigationOptions } from "@react-navigation/native-stack";
+import type { ContentStudyStackParamList } from "../features/content-study/types";
+import type { ComebackState } from "../features/streaks/types";
+import type { Nullable } from "../types/global";
+import type { SessionSummary } from "../session/types/schemas";
 
 export type RootStackRoute =
-  | 'Main'
-  | 'Auth'
-  | 'Onboarding'
-  | 'Paywall'
-  | 'Splash'
-  | 'Settings'
-  | 'SessionStack'
-  | 'CompanionDetail'
-  | 'Comeback'
-  | 'StreakFuneral'
-  | 'FocusScoreDashboard'
-  | 'VipPaywall'
-  | 'MemoryConsole';
+  | "Main"
+  | "Auth"
+  | "Onboarding"
+  | "Paywall"
+  | "Splash"
+  | "Settings"
+  | "SessionStack"
+  | "CompanionDetail"
+  | "Comeback"
+  | "StreakFuneral"
+  | "FocusScoreDashboard"
+  | "VipPaywall"
+  | "MemoryConsole";
 
-export type AuthStackRoute = 'Login' | 'Register' | 'ForgotPassword' | 'ResetPassword' | 'VerifyEmail';
-export type MainTabRoute = 'Home' | 'Focus' | 'Progress' | 'Profile';
+export type AuthStackRoute =
+  | "Login"
+  | "Register"
+  | "ForgotPassword"
+  | "ResetPassword"
+  | "VerifyEmail";
+export type MainTabRoute = "Home" | "Focus" | "Progress" | "Profile";
 export type SettingsStackRoute =
-  | 'SettingsMain'
-  | 'AccountSettings'
-  | 'NotificationSettings'
-  | 'PrivacySettings'
-  | 'AppearanceSettings';
-export type SessionStackRoute = 'SessionSetup' | 'ActiveSession' | 'SessionComplete' | 'SessionHistory';
-export type SessionSetupMode = 'LIGHT_FOCUS' | 'DEEP_WORK' | 'SPRINT' | 'CREATIVE' | 'STUDY' | 'RECOVERY';
+  | "SettingsMain"
+  | "AccountSettings"
+  | "NotificationSettings"
+  | "PrivacySettings"
+  | "AppearanceSettings";
+export type SessionStackRoute =
+  | "SessionSetup"
+  | "ActiveSession"
+  | "SessionComplete"
+  | "SessionHistory";
+export type SessionSetupMode =
+  | "LIGHT_FOCUS"
+  | "DEEP_WORK"
+  | "SPRINT"
+  | "CREATIVE"
+  | "STUDY"
+  | "RECOVERY";
 
 export interface ComebackContext {
   comebackMessage?: string;
@@ -43,7 +59,7 @@ export interface StudyContext {
   generationId?: string;
   goal?: string;
   studyPlanId?: string;
-  suggestedDifficulty?: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
+  suggestedDifficulty?: "EASY" | "NORMAL" | "CHALLENGING" | "PUSH";
   suggestedDurationSeconds?: number;
 }
 
@@ -68,9 +84,13 @@ export interface SessionSetupParams {
   sessionTags?: string[];
   learningExecutionLabel?: string;
   learningExecutionTaskId?: string;
-  source?: 'content-study' | 'learning-execution' | 'onboarding_first_session' | 'rescue';
+  source?:
+    | "content-study"
+    | "learning-execution"
+    | "onboarding_first_session"
+    | "rescue";
   studyPlanId?: string;
-  suggestedDifficulty?: 'EASY' | 'NORMAL' | 'CHALLENGING' | 'PUSH';
+  suggestedDifficulty?: "EASY" | "NORMAL" | "CHALLENGING" | "PUSH";
   suggestedDurationSeconds?: number;
   warContext?: { squadId: string; squadWarId: string } | null;
   comeback?: ComebackContext;
@@ -84,7 +104,7 @@ export interface SessionStackParams {
   [key: string]: object | undefined;
   SessionSetup: SessionSetupParams;
   ActiveSession: { selectedThemeId?: string; sessionId: string };
-  SessionComplete: { sessionId: string; summary: unknown };
+  SessionComplete: { sessionId: string; summary: SessionSummary };
   SessionHistory: undefined;
 }
 
@@ -93,7 +113,7 @@ export interface RootStackParams {
   Auth: NavigatorScreenParams<AuthStackParams>;
   Main: NavigatorScreenParams<MainTabParams>;
   Onboarding: { step?: number };
-  Paywall: { gatedFeature?: string; source?: string };
+  Paywall: { gatedFeature?: string; source?: string; lane?: string };
   VipPaywall: { source?: string };
   Splash: undefined;
   Settings: NavigatorScreenParams<SettingsStackParams>;
@@ -121,18 +141,23 @@ export interface MainTabParams {
   Home: undefined;
   Focus: undefined;
   Progress: undefined;
-  Profile: { tab?: 'stats' | 'achievements' | 'activity' | 'social'; userId?: string };
+  Profile: {
+    tab?: "stats" | "achievements" | "activity" | "social";
+    userId?: string;
+  };
 }
 
 export type MainStackRoute =
-  | 'Boss'
-  | 'Notifications'
-  | 'ContentStudy'
-  | 'AICoach'
-  | 'Challenges'
-  | 'Mastery'
-  | 'CompanionDetail'
-  | 'MemoryConsole';
+  | "Boss"
+  | "Notifications"
+  | "ContentStudy"
+  | "AICoach"
+  | "Challenges"
+  | "Mastery"
+  | "CompanionDetail"
+  | "MemoryConsole"
+  | "Achievements"
+  | "Analytics";
 
 export interface MainStackParams {
   [key: string]: object | undefined;
@@ -144,6 +169,8 @@ export interface MainStackParams {
   Mastery: undefined;
   CompanionDetail: undefined;
   MemoryConsole: undefined;
+  Achievements: undefined;
+  Analytics: undefined;
 }
 
 export interface SettingsStackParams {
@@ -158,23 +185,28 @@ export interface SettingsStackParams {
 }
 
 export interface ScreenOptionsFactory {
-  (props: { navigation: unknown; route: { name: string } }):
-    | NativeStackNavigationOptions
-    | BottomTabNavigationOptions;
+  (props: {
+    navigation: unknown;
+    route: { name: string };
+  }): NativeStackNavigationOptions | BottomTabNavigationOptions;
 }
 
 export interface NavigationState {
   currentRoute: string;
   isNavigating: boolean;
-  params: Record<string, unknown>;
+  params: Record<string, object | undefined>;
   previousRoute: Nullable<string>;
   routeHistory: string[];
 }
 
-export type RouteParams<T extends string> =
-  T extends RootStackRoute ? RootStackParams[T]
-  : T extends AuthStackRoute ? AuthStackParams[T]
-  : T extends MainTabRoute ? MainTabParams[T]
-  : T extends MainStackRoute ? MainStackParams[T]
-  : T extends SettingsStackRoute ? SettingsStackParams[T]
-  : undefined;
+export type RouteParams<T extends string> = T extends RootStackRoute
+  ? RootStackParams[T]
+  : T extends AuthStackRoute
+    ? AuthStackParams[T]
+    : T extends MainTabRoute
+      ? MainTabParams[T]
+      : T extends MainStackRoute
+        ? MainStackParams[T]
+        : T extends SettingsStackRoute
+          ? SettingsStackParams[T]
+          : undefined;

@@ -1,12 +1,9 @@
-import type { FeatureKey } from './feature-access';
+import type { FeatureKey } from "./feature-access";
 
 /**
  * Health status for a feature dependency or backend service.
  */
-export type FeatureHealthStatus =
-  | 'healthy'
-  | 'degraded'
-  | 'unavailable';
+export type FeatureHealthStatus = "healthy" | "degraded" | "unavailable";
 
 /**
  * A health check that tests whether a feature's backend dependencies
@@ -42,7 +39,10 @@ export interface FeatureHealthCheck {
  */
 class FeatureHealthRegistry {
   private checks = new Map<string, FeatureHealthCheck>();
-  private cache = new Map<string, { status: FeatureHealthStatus; timestamp: number }>();
+  private cache = new Map<
+    string,
+    { status: FeatureHealthStatus; timestamp: number }
+  >();
 
   register(check: FeatureHealthCheck): void {
     if (this.checks.has(check.id)) {
@@ -67,17 +67,17 @@ class FeatureHealthRegistry {
     );
 
     if (relevant.length === 0) {
-      return 'healthy';
+      return "healthy";
     }
 
-    let worst: FeatureHealthStatus = 'healthy';
+    let worst: FeatureHealthStatus = "healthy";
     for (const check of relevant) {
       const status = await this.getCachedOrCheck(check);
-      if (status === 'unavailable') {
-        return 'unavailable';
+      if (status === "unavailable") {
+        return "unavailable";
       }
-      if (status === 'degraded') {
-        worst = 'degraded';
+      if (status === "degraded") {
+        worst = "degraded";
       }
     }
     return worst;
@@ -89,7 +89,7 @@ class FeatureHealthRegistry {
    */
   async shouldDegrade(feature: FeatureKey): Promise<boolean> {
     const status = await this.getFeatureHealth(feature);
-    return status !== 'healthy';
+    return status !== "healthy";
   }
 
   /**
@@ -99,7 +99,7 @@ class FeatureHealthRegistry {
     const results = new Set<FeatureKey>();
     for (const check of this.checks.values()) {
       const status = await this.getCachedOrCheck(check);
-      if (status !== 'healthy') {
+      if (status !== "healthy") {
         results.add(check.feature);
       }
     }
@@ -110,14 +110,16 @@ class FeatureHealthRegistry {
    * Returns unhealthy features, filtered by the provided set.
    * Only checks for features in the allowed set are executed.
    */
-  async getUnhealthyFeaturesFiltered(allowedFeatures: ReadonlySet<FeatureKey>): Promise<FeatureKey[]> {
+  async getUnhealthyFeaturesFiltered(
+    allowedFeatures: ReadonlySet<FeatureKey>,
+  ): Promise<FeatureKey[]> {
     const results = new Set<FeatureKey>();
     for (const check of this.checks.values()) {
       if (!allowedFeatures.has(check.feature)) {
         continue;
       }
       const status = await this.getCachedOrCheck(check);
-      if (status !== 'healthy') {
+      if (status !== "healthy") {
         results.add(check.feature);
       }
     }

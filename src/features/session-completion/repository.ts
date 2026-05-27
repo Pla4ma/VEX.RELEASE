@@ -1,15 +1,15 @@
-import { z } from 'zod';
-import { getSupabaseClient } from '../../config/supabase';
-import { createDebugger } from '../../utils/debug';
+import { z } from "zod";
+import { getSupabaseClient } from "../../config/supabase";
+import { createDebugger } from "../../utils/debug";
 import {
   CompletionLedgerSchema,
   CompletionSyncStatusSchema,
   type CompletionLedger,
   type CompletionSyncStatus,
-} from './schemas';
+} from "./schemas";
 
-const debug = createDebugger('session-completion:repository');
-const TABLE = 'session_completion_ledgers';
+const debug = createDebugger("session-completion:repository");
+const TABLE = "session_completion_ledgers";
 
 export class SessionCompletionRepositoryError extends Error {
   constructor(
@@ -21,7 +21,7 @@ export class SessionCompletionRepositoryError extends Error {
         cause instanceof Error ? cause.message : String(cause)
       }`,
     );
-    this.name = 'SessionCompletionRepositoryError';
+    this.name = "SessionCompletionRepositoryError";
   }
 }
 
@@ -40,13 +40,13 @@ const CompletionLedgerRowSchema = z
 
 type CompletionLedgerRow = z.infer<typeof CompletionLedgerRowSchema>;
 
-function parseCreatedAt(value: CompletionLedgerRow['created_at']): number {
-  if (typeof value === 'number') {
+function parseCreatedAt(value: CompletionLedgerRow["created_at"]): number {
+  if (typeof value === "number") {
     return value;
   }
   const parsed = Date.parse(value);
   if (Number.isNaN(parsed)) {
-    throw new Error('Invalid created_at timestamp');
+    throw new Error("Invalid created_at timestamp");
   }
   return parsed;
 }
@@ -77,18 +77,18 @@ function mapRowToLedger(row: CompletionLedgerRow): CompletionLedger {
 }
 
 async function fetchSingleLedgerBy(
-  column: 'idempotency_key' | 'session_id',
+  column: "idempotency_key" | "session_id",
   value: string,
 ): Promise<CompletionLedger | null> {
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
     .from(TABLE)
-    .select('*')
+    .select("*")
     .eq(column, value)
     .single();
 
   if (error) {
-    if (error.code === 'PGRST116') {
+    if (error.code === "PGRST116") {
       return null;
     }
     throw new SessionCompletionRepositoryError(`fetch:${column}`, error);
@@ -104,11 +104,11 @@ export async function createCompletionLedger(
   const { data, error } = await supabase
     .from(TABLE)
     .insert(mapLedgerToRow(validated))
-    .select('*')
+    .select("*")
     .single();
 
   if (error) {
-    if (error.code === '23505' || error.code === '409') {
+    if (error.code === "23505" || error.code === "409") {
       const existing = await getCompletionLedgerByIdempotencyKey(
         validated.idempotencyKey,
       );
@@ -116,28 +116,31 @@ export async function createCompletionLedger(
         return existing;
       }
     }
-    throw new SessionCompletionRepositoryError('create', error);
+    throw new SessionCompletionRepositoryError("create", error);
   }
 
   const row = CompletionLedgerRowSchema.safeParse(data);
   if (!row.success) {
-    throw new SessionCompletionRepositoryError('create:invalid-response', row.error);
+    throw new SessionCompletionRepositoryError(
+      "create:invalid-response",
+      row.error,
+    );
   }
   const created = mapRowToLedger(row.data);
-  debug.info('Completion ledger persisted: %s', created.ledgerId);
+  debug.info("Completion ledger persisted: %s", created.ledgerId);
   return created;
 }
 
 export async function getCompletionLedgerByIdempotencyKey(
   idempotencyKey: string,
 ): Promise<CompletionLedger | null> {
-  return fetchSingleLedgerBy('idempotency_key', idempotencyKey);
+  return fetchSingleLedgerBy("idempotency_key", idempotencyKey);
 }
 
 export async function getCompletionLedgerBySessionId(
   sessionId: string,
 ): Promise<CompletionLedger | null> {
-  return fetchSingleLedgerBy('session_id', sessionId);
+  return fetchSingleLedgerBy("session_id", sessionId);
 }
 
 export async function updateCompletionSyncStatus(
@@ -148,14 +151,16 @@ export async function updateCompletionSyncStatus(
   const { error } = await supabase
     .from(TABLE)
     .update({ offline_sync_status: status })
-    .eq('ledger_id', ledgerId);
+    .eq("ledger_id", ledgerId);
 
   if (error) {
-    throw new SessionCompletionRepositoryError('update-sync-status', error);
+    throw new SessionCompletionRepositoryError("update-sync-status", error);
   }
 }
 
-export async function hasSessionBeenCompleted(sessionId: string): Promise<boolean> {
+export async function hasSessionBeenCompleted(
+  sessionId: string,
+): Promise<boolean> {
   const existing = await getCompletionLedgerBySessionId(sessionId);
   return existing !== null;
 }

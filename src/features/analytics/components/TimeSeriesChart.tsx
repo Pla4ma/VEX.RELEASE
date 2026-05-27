@@ -4,13 +4,12 @@
  * This is a simplified stats display version
  */
 
-import React from 'react';
-import { View, Text } from 'react-native';
-import { z } from 'zod';
-import { TimeSeriesDataSchema } from '../schemas';
-import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import React from "react";
+import { View, Text } from "react-native";
+import { z } from "zod";
+import { TimeSeriesDataSchema } from "../schemas";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 type TimeSeriesData = z.infer<typeof TimeSeriesDataSchema>;
 
@@ -33,22 +32,33 @@ export function TimeSeriesChart({ data, height = 220 }: TimeSeriesChartProps) {
       <Text style={styles.title}>{formatMetricName(data.metric)}</Text>
 
       <View style={styles.stats}>
-        <StatBox label="Total" value={formatValue(data.summary.total, data.metric)} />
-        <StatBox label="Average" value={formatValue(data.summary.average, data.metric)} />
-        <StatBox label="Peak" value={formatValue(data.summary.max, data.metric)} />
+        <StatBox
+          label="Total"
+          value={formatValue(data.summary.total, data.metric)}
+        />
+        <StatBox
+          label="Average"
+          value={formatValue(data.summary.average, data.metric)}
+        />
+        <StatBox
+          label="Peak"
+          value={formatValue(data.summary.max, data.metric)}
+        />
         {data.summary.changePercent !== 0 && (
           <StatBox
             label="Change"
-            value={`${data.summary.changePercent > 0 ? '+' : ''}${data.summary.changePercent.toFixed(1)}%`}
-            highlight={data.summary.changePercent > 0 ? 'positive' : 'negative'}
+            value={`${data.summary.changePercent > 0 ? "+" : ""}${data.summary.changePercent.toFixed(1)}%`}
+            highlight={data.summary.changePercent > 0 ? "positive" : "negative"}
           />
         )}
       </View>
 
       <View style={styles.dataPreview}>
         <Text style={styles.previewText}>
-          {data.points.length} data points • Last updated{' '}
-          {new Date(data.points[data.points.length - 1]!.timestamp).toLocaleDateString()}
+          {data.points.length} data points • Last updated{" "}
+          {new Date(
+            data.points[data.points.length - 1]!.timestamp,
+          ).toLocaleDateString()}
         </Text>
       </View>
     </View>
@@ -62,15 +72,24 @@ function StatBox({
 }: {
   label: string;
   value: string;
-  highlight?: 'positive' | 'negative';
+  highlight?: "positive" | "negative";
 }) {
   const highlightColor =
-    highlight === 'positive' ? launchColors.hex_10b981 : highlight === 'negative' ? launchColors.hex_ef4444 : undefined;
+    highlight === "positive"
+      ? launchColors.hex_10b981
+      : highlight === "negative"
+        ? launchColors.hex_ef4444
+        : undefined;
 
   return (
     <View style={styles.statBox}>
       <Text style={styles.statLabel}>{label}</Text>
-      <Text style={[styles.statValue, highlightColor ? { color: highlightColor } : null]}>
+      <Text
+        style={[
+          styles.statValue,
+          highlightColor ? { color: highlightColor } : null,
+        ]}
+      >
         {value}
       </Text>
     </View>
@@ -79,13 +98,13 @@ function StatBox({
 
 function formatMetricName(metric: string): string {
   return metric
-    .split('_')
+    .split("_")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+    .join(" ");
 }
 
 function formatValue(value: number, metric: string): string {
-  if (metric.includes('time') || metric.includes('duration')) {
+  if (metric.includes("time") || metric.includes("duration")) {
     const hours = Math.floor(value / 3600);
     const minutes = Math.floor((value % 3600) / 60);
     return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
@@ -109,13 +128,13 @@ const styles = createSheet({
   },
   title: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
     color: launchColors.hex_111827,
     marginBottom: 12,
   },
   stats: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: 12,
   },
   statBox: {
@@ -131,7 +150,7 @@ const styles = createSheet({
   },
   statValue: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     color: launchColors.hex_111827,
   },
   dataPreview: {
@@ -145,7 +164,7 @@ const styles = createSheet({
     color: launchColors.hex_9ca3af,
   },
   emptyText: {
-    textAlign: 'center',
+    textAlign: "center",
     color: launchColors.hex_9ca3af,
     padding: 24,
   },

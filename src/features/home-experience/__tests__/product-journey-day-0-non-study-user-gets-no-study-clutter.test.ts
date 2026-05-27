@@ -4,10 +4,10 @@ import {
   calmProfile,
   gameLikeProfile,
   baseStats,
-} from './product-journey-helpers';
+} from "./product-journey-helpers";
 
-describe('product journey — Day 0 non-study user gets no study clutter', () => {
-  it('calm user has study_layer hidden on Day 0', () => {
+describe("product journey — Day 0 non-study user gets no study clutter", () => {
+  it("calm user has study_layer hidden on Day 0", () => {
     const surfaces = decideHomeSurfaces({
       featureAvailability,
       personalizationProfile: calmProfile,
@@ -17,10 +17,10 @@ describe('product journey — Day 0 non-study user gets no study clutter', () =>
       hasActiveBoss: false,
       isFirstSession: true,
     });
-    expect(surfaces.study_layer).toBe('hidden');
+    expect(surfaces.study_layer).toBe("hidden");
   });
 
-  it('game-like work user has study_layer hidden on Day 0', () => {
+  it("game-like work user has study_layer hidden on Day 0", () => {
     const surfaces = decideHomeSurfaces({
       featureAvailability,
       personalizationProfile: gameLikeProfile,
@@ -30,18 +30,18 @@ describe('product journey — Day 0 non-study user gets no study clutter', () =>
       hasActiveBoss: false,
       isFirstSession: true,
     });
-    expect(surfaces.study_layer).toBe('hidden');
+    expect(surfaces.study_layer).toBe("hidden");
   });
 
-  it('coach-led user has study_layer hidden on Day 0', () => {
+  it("coach-led user has study_layer hidden on Day 0", () => {
     const surfaces = decideHomeSurfaces({
       featureAvailability,
       personalizationProfile: {
-        motivationStyle: 'coach_led' as const,
-        primaryGoal: 'work' as const,
-        gamificationIntensity: 'minimal' as const,
-        studyLayerName: 'Deep Work Plan',
-        userStage: 'new' as const,
+        motivationStyle: "coach_led" as const,
+        primaryGoal: "work" as const,
+        gamificationIntensity: "minimal" as const,
+        studyLayerName: "Deep Work Plan",
+        userStage: "new" as const,
       },
       behaviorStats: baseStats(0),
       hasActiveStudyPlan: false,
@@ -49,6 +49,6 @@ describe('product journey — Day 0 non-study user gets no study clutter', () =>
       hasActiveBoss: false,
       isFirstSession: true,
     });
-    expect(surfaces.study_layer).toBe('hidden');
+    expect(surfaces.study_layer).toBe("hidden");
   });
 });

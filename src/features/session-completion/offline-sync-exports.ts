@@ -1,5 +1,5 @@
-import { sessionCompletionOfflineSync } from './offline-sync-service';
-import { getNetInfoAdapter } from '../../network/NetInfoAdapter';
+import { sessionCompletionOfflineSync } from "./offline-sync-service";
+import { getNetInfoAdapter } from "../../network/NetInfoAdapter";
 
 export const offlineSyncService = sessionCompletionOfflineSync;
 
@@ -13,9 +13,10 @@ export function useSessionCompletionOfflineSync(): {
   const state = getNetInfoAdapter().getCurrentState();
   return {
     isOnline: state.isConnected && (state.isInternetReachable ?? false),
-    queueSessionCompletion: sessionCompletionOfflineSync.queueSessionCompletion.bind(
-      sessionCompletionOfflineSync,
-    ),
+    queueSessionCompletion:
+      sessionCompletionOfflineSync.queueSessionCompletion.bind(
+        sessionCompletionOfflineSync,
+      ),
     getSyncStatus: sessionCompletionOfflineSync.getSyncStatus.bind(
       sessionCompletionOfflineSync,
     ),

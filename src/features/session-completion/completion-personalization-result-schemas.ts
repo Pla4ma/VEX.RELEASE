@@ -4,7 +4,7 @@ import { LaneProfileSchema } from "../lane-engine/schemas";
 import {
   CompletionMemoryCandidateSchema,
   CompletionUnlockDecisionSchema,
-} from "./schemas";
+} from "./completion-personalization-schemas";
 
 export const CompletionProgressProofSchema = z
   .object({

@@ -1,17 +1,20 @@
-import { PostHog, PostHogProvider } from 'posthog-react-native';
-import { createDebugger } from '../../utils/debug';
+import { PostHog, PostHogProvider } from "posthog-react-native";
+import { createDebugger } from "../../utils/debug";
 import {
   sanitizeAnalyticsProperties,
   sanitizeEventName,
   sanitizeUserTraits,
   type SafeAnalyticsProperties,
-} from './privacy';
+} from "./privacy";
 
-const debug = createDebugger('analytics');
+const debug = createDebugger("analytics");
 const POSTHOG_API_KEY = process.env.EXPO_PUBLIC_POSTHOG_KEY;
-const POSTHOG_HOST = process.env.EXPO_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com';
-const ANALYTICS_DISABLED = process.env.EXPO_PUBLIC_ANALYTICS_DISABLED === 'true';
-const FORCE_DEV_ANALYTICS = process.env.EXPO_PUBLIC_ANALYTICS_FORCE_ENABLE === 'true';
+const POSTHOG_HOST =
+  process.env.EXPO_PUBLIC_POSTHOG_HOST || "https://us.i.posthog.com";
+const ANALYTICS_DISABLED =
+  process.env.EXPO_PUBLIC_ANALYTICS_DISABLED === "true";
+const FORCE_DEV_ANALYTICS =
+  process.env.EXPO_PUBLIC_ANALYTICS_FORCE_ENABLE === "true";
 
 interface AnalyticsConfig {
   enabled: boolean;
@@ -28,7 +31,10 @@ class AnalyticsService {
 
   constructor() {
     this.config = {
-      enabled: Boolean(POSTHOG_API_KEY) && !ANALYTICS_DISABLED && (!__DEV__ || FORCE_DEV_ANALYTICS),
+      enabled:
+        Boolean(POSTHOG_API_KEY) &&
+        !ANALYTICS_DISABLED &&
+        (!__DEV__ || FORCE_DEV_ANALYTICS),
       debug: __DEV__,
     };
   }
@@ -39,7 +45,7 @@ class AnalyticsService {
     }
 
     if (!this.config.enabled || !POSTHOG_API_KEY) {
-      debug.info('[Analytics] Provider disabled or not configured');
+      debug.info("[Analytics] Provider disabled or not configured");
       return false;
     }
 
@@ -52,7 +58,7 @@ class AnalyticsService {
       this.initialized = true;
       return true;
     } catch (error) {
-      debug.error('[Analytics] Provider initialization failed', toError(error));
+      debug.error("[Analytics] Provider initialization failed", toError(error));
       this.client = null;
       return false;
     }
@@ -63,7 +69,8 @@ class AnalyticsService {
   }
 
   setEnabled(enabled: boolean): void {
-    this.config.enabled = enabled && Boolean(POSTHOG_API_KEY) && (!__DEV__ || FORCE_DEV_ANALYTICS);
+    this.config.enabled =
+      enabled && Boolean(POSTHOG_API_KEY) && (!__DEV__ || FORCE_DEV_ANALYTICS);
     if (!this.config.enabled) {
       this.client = null;
       this.initialized = false;
@@ -80,9 +87,9 @@ class AnalyticsService {
 
     try {
       this.client?.capture(safeEventName, safeProperties);
-      debug.debug('[Analytics] Event captured: %s', safeEventName);
+      debug.debug("[Analytics] Event captured: %s", safeEventName);
     } catch (error) {
-      debug.error('[Analytics] Event capture failed', toError(error));
+      debug.error("[Analytics] Event capture failed", toError(error));
     }
   }
 
@@ -97,7 +104,7 @@ class AnalyticsService {
     try {
       this.client?.identify(userId, safeTraits);
     } catch (error) {
-      debug.error('[Analytics] Identify failed', toError(error));
+      debug.error("[Analytics] Identify failed", toError(error));
     }
   }
 
@@ -106,7 +113,7 @@ class AnalyticsService {
     try {
       this.client?.reset();
     } catch (error) {
-      debug.error('[Analytics] Reset failed', toError(error));
+      debug.error("[Analytics] Reset failed", toError(error));
     }
   }
 
@@ -119,7 +126,7 @@ class AnalyticsService {
   }
 
   screen(screenName: string, properties: object = {}): void {
-    this.capture('screen_viewed', {
+    this.capture("screen_viewed", {
       screen_name: screenName,
       ...properties,
     });
@@ -133,7 +140,7 @@ class AnalyticsService {
     try {
       await this.client?.flush();
     } catch (error) {
-      debug.error('[Analytics] Flush failed', toError(error));
+      debug.error("[Analytics] Flush failed", toError(error));
     }
   }
 
@@ -160,8 +167,8 @@ class AnalyticsService {
   private buildEventProperties(properties: object): SafeAnalyticsProperties {
     return {
       ...sanitizeAnalyticsProperties(properties),
-      platform: 'mobile',
-      app_version: process.env.EXPO_PUBLIC_APP_VERSION || '1.0.0',
+      platform: "mobile",
+      app_version: process.env.EXPO_PUBLIC_APP_VERSION || "1.0.0",
     };
   }
 }
@@ -193,6 +200,7 @@ export const updateUserProperties = (traits: UserTraits): void => {
   analyticsService.updateUserProperties(traits);
 };
 
-export const isFeatureEnabled = (key: string): boolean => analyticsService.isFeatureEnabled(key);
+export const isFeatureEnabled = (key: string): boolean =>
+  analyticsService.isFeatureEnabled(key);
 export const getFeatureFlag = (key: string): boolean | string | undefined =>
   analyticsService.getFeatureFlag(key);

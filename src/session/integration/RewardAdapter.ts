@@ -11,9 +11,7 @@ export class RewardAdapter {
     this.rewardService.setUserId(userId);
     debug.info("RewardAdapter user set: %s", userId);
   }
-  async distributeSessionRewards(
-    summary: SessionSummary,
-  ): Promise<{
+  async distributeSessionRewards(summary: SessionSummary): Promise<{
     xpGranted: number;
     coinsGranted: number;
     gemsGranted: number;
@@ -194,4 +192,3 @@ export function getRewardAdapter(): RewardAdapter {
   }
   return adapterInstance;
 }
-

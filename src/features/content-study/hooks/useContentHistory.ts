@@ -3,20 +3,23 @@
  * Manages user's content history and deletion
  */
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '../../../store';
-import { fetchContentHistory } from '../ContentStudyService';
-import { contentStudyQueryKeys } from './queryKeys';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAuthStore } from "../../../store";
+import { fetchContentHistory } from "../ContentStudyService";
+import { contentStudyQueryKeys } from "./queryKeys";
 
 export function useContentHistory() {
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
 
   const historyQuery = useQuery({
-    queryKey: contentStudyQueryKeys.history(user?.id ?? ''),
+    queryKey: contentStudyQueryKeys.history(user?.id ?? ""),
     queryFn: async () => {
-      if (!user) {return [];}
-      const { fetchContentHistory: fetchHistory } = await import('../ContentStudyService');
+      if (!user) {
+        return [];
+      }
+      const { fetchContentHistory: fetchHistory } =
+        await import("../ContentStudyService");
       return fetchHistory(user.id, 20);
     },
     enabled: !!user,
@@ -25,11 +28,14 @@ export function useContentHistory() {
 
   const deleteContentMutation = useMutation({
     mutationFn: async (contentId: string) => {
-      const { deleteContent: deleteItem } = await import('../ContentStudyService');
+      const { deleteContent: deleteItem } =
+        await import("../ContentStudyService");
       await deleteItem(contentId);
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: contentStudyQueryKeys.all });
+      void queryClient.invalidateQueries({
+        queryKey: contentStudyQueryKeys.all,
+      });
     },
   });
 

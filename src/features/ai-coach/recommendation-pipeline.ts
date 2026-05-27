@@ -2,9 +2,15 @@ import { createDebugger } from "../../utils/debug";
 import type { ContextSnapshot } from "./context-snapshot";
 import type { RecommendationEvidence } from "../focus-memory/schemas";
 import type { CoachRecommendation } from "./recommendation-pipeline-types";
-export { CoachRecommendationSchema, type CoachRecommendation } from "./recommendation-pipeline-types";
+export {
+  CoachRecommendationSchema,
+  type CoachRecommendation,
+} from "./recommendation-pipeline-types";
 const debug = createDebugger("ai-coach:recommendations");
-export async function generateRecommendations(userId: string, context: ContextSnapshot): Promise<CoachRecommendation[]> {
+export async function generateRecommendations(
+  userId: string,
+  context: ContextSnapshot,
+): Promise<CoachRecommendation[]> {
   const recommendations: CoachRecommendation[] = [];
   const now = Date.now();
   if (context.streakContext.streakAtRisk) {
@@ -23,7 +29,11 @@ export async function generateRecommendations(userId: string, context: ContextSn
       expiresAt: now + 6 * 60 * 60 * 1000,
     });
   }
-  if (context.bossContext.activeBoss && context.bossContext.timeRemaining && context.bossContext.timeRemaining < 24 * 60 * 60 * 1000) {
+  if (
+    context.bossContext.activeBoss &&
+    context.bossContext.timeRemaining &&
+    context.bossContext.timeRemaining < 24 * 60 * 60 * 1000
+  ) {
     recommendations.push({
       id: `rec-boss-${now}`,
       userId,
@@ -34,19 +44,26 @@ export async function generateRecommendations(userId: string, context: ContextSn
       confidence: 0.9,
       priority: "high",
       actionType: "start_session",
-      suggestedDuration: context.bossContext.bossHealth && context.bossContext.bossHealth > 50 ? 45 : 25,
+      suggestedDuration:
+        context.bossContext.bossHealth && context.bossContext.bossHealth > 50
+          ? 45
+          : 25,
       suggestedDifficulty: "challenging",
       expiresAt: now + context.bossContext.timeRemaining,
     });
   }
   const optimalHour = getOptimalSessionHour(context);
-  if (context.temporalContext.hourOfDay === optimalHour && !context.sessionContext.activeSession) {
+  if (
+    context.temporalContext.hourOfDay === optimalHour &&
+    !context.sessionContext.activeSession
+  ) {
     recommendations.push({
       id: `rec-time-${now}`,
       userId,
       type: "time",
       title: "Perfect Time to Focus",
-      description: "This is typically your most productive hour. Take advantage of it!",
+      description:
+        "This is typically your most productive hour. Take advantage of it!",
       reasoning: "User historical pattern shows high success at this time",
       confidence: 0.85,
       priority: "medium",
@@ -72,13 +89,17 @@ export async function generateRecommendations(userId: string, context: ContextSn
       expiresAt: now + 4 * 60 * 60 * 1000,
     });
   }
-  if (context.progressContext.sessionsThisWeek > 10 && context.temporalContext.isWeekend) {
+  if (
+    context.progressContext.sessionsThisWeek > 10 &&
+    context.temporalContext.isWeekend
+  ) {
     recommendations.push({
       id: `rec-break-${now}`,
       userId,
       type: "break",
       title: "Consider a Recovery Day",
-      description: "You have been crushing it this week. A rest day might help you come back stronger.",
+      description:
+        "You have been crushing it this week. A rest day might help you come back stronger.",
       reasoning: "High weekly session count suggests need for recovery",
       confidence: 0.7,
       priority: "low",
@@ -86,8 +107,14 @@ export async function generateRecommendations(userId: string, context: ContextSn
       expiresAt: now + 24 * 60 * 60 * 1000,
     });
   }
-  debug.info("Generated %d recommendations for user %s", recommendations.length, userId);
-  return recommendations.sort((a, b) => priorityWeight(b.priority) - priorityWeight(a.priority));
+  debug.info(
+    "Generated %d recommendations for user %s",
+    recommendations.length,
+    userId,
+  );
+  return recommendations.sort(
+    (a, b) => priorityWeight(b.priority) - priorityWeight(a.priority),
+  );
 }
 function priorityWeight(priority: CoachRecommendation["priority"]): number {
   const weights = { critical: 4, high: 3, medium: 2, low: 1 };
@@ -98,22 +125,35 @@ function getOptimalSessionHour(context: ContextSnapshot): number {
   const hourMap = { morning: 9, afternoon: 14, evening: 19, night: 21 };
   return hourMap[preferred];
 }
-export function filterActiveRecommendations(recommendations: CoachRecommendation[]): CoachRecommendation[] {
+export function filterActiveRecommendations(
+  recommendations: CoachRecommendation[],
+): CoachRecommendation[] {
   const now = Date.now();
   return recommendations.filter((r) => r.expiresAt > now);
 }
-export function getTopRecommendation(recommendations: CoachRecommendation[]): CoachRecommendation | null {
+export function getTopRecommendation(
+  recommendations: CoachRecommendation[],
+): CoachRecommendation | null {
   const active = filterActiveRecommendations(recommendations);
   return active.length > 0 ? active[0]! : null;
 }
-export function isRecommendationRelevant(recommendation: CoachRecommendation, context: ContextSnapshot): boolean {
+export function isRecommendationRelevant(
+  recommendation: CoachRecommendation,
+  context: ContextSnapshot,
+): boolean {
   if (recommendation.expiresAt < Date.now()) {
     return false;
   }
-  if (recommendation.type === "session" && context.sessionContext.activeSession) {
+  if (
+    recommendation.type === "session" &&
+    context.sessionContext.activeSession
+  ) {
     return false;
   }
-  if (recommendation.type === "break" && context.progressContext.sessionsThisWeek < 5) {
+  if (
+    recommendation.type === "break" &&
+    context.progressContext.sessionsThisWeek < 5
+  ) {
     return false;
   }
   if (recommendation.type === "social" && !context.socialContext.hasSquad) {
@@ -146,10 +186,21 @@ export function formatRecommendation(recommendation: CoachRecommendation): {
     cta,
   };
 }
-export async function trackRecommendationInteraction(recommendationId: string, userId: string, action: "viewed" | "accepted" | "dismissed" | "expired"): Promise<void> {
-  debug.info("Recommendation %s %s by user %s", recommendationId, action, userId);
+export async function trackRecommendationInteraction(
+  recommendationId: string,
+  userId: string,
+  action: "viewed" | "accepted" | "dismissed" | "expired",
+): Promise<void> {
+  debug.info(
+    "Recommendation %s %s by user %s",
+    recommendationId,
+    action,
+    userId,
+  );
 }
-export function batchProcessRecommendations(recommendations: CoachRecommendation[]): {
+export function batchProcessRecommendations(
+  recommendations: CoachRecommendation[],
+): {
   critical: CoachRecommendation[];
   high: CoachRecommendation[];
   medium: CoachRecommendation[];
@@ -175,9 +226,9 @@ export function attachRecommendationEvidence(
     return {
       ...rec,
       evidence: {
-        fallbackReason: (sessionCount < 3 ? 'cold_start' : 'insufficient_data'),
-        source: 'cold_start',
-        lane: 'minimal_normal',
+        fallbackReason: sessionCount < 3 ? "cold_start" : "insufficient_data",
+        source: "cold_start",
+        lane: "minimal_normal",
       } as RecommendationEvidence,
     };
   });

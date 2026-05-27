@@ -19,16 +19,16 @@ export const mockConfig: SessionConfig = {
 };
 
 jest.mock("react-native-mmkv", () => ({
-  MMKV: jest
-    .fn()
-    .mockImplementation(() => ({
-      set: jest.fn(),
-      getString: jest.fn(),
-      delete: jest.fn(),
-    })),
+  MMKV: jest.fn().mockImplementation(() => ({
+    set: jest.fn(),
+    getString: jest.fn(),
+    delete: jest.fn(),
+  })),
 }));
 
-export function createOrchestrator(overrides?: Record<string, boolean>): SessionOrchestrator {
+export function createOrchestrator(
+  overrides?: Record<string, boolean>,
+): SessionOrchestrator {
   const orchestrator = new SessionOrchestrator({
     enableAntiCheat: false,
     enableAutoRecovery: true,

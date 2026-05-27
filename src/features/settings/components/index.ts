@@ -3,4 +3,4 @@
  * UI components for settings screens
  */
 
-export { SettingsScreen } from './SettingsScreen';
+export { SettingsScreen } from "./SettingsScreen";

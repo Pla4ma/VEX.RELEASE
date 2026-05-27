@@ -1,6 +1,6 @@
-import { captureSilentFailure } from '../../../utils/silent-failure';
-import type { PersistedStudySession } from '../types';
-import { getStorage, STORAGE_KEYS } from '../persistence';
+import { captureSilentFailure } from "../../../utils/silent-failure";
+import type { PersistedStudySession } from "../types";
+import { getStorage, STORAGE_KEYS } from "../persistence";
 
 export class StudySessionManager {
   private static instance: StudySessionManager;
@@ -37,9 +37,9 @@ export class StudySessionManager {
       return data ? JSON.parse(data) : [];
     } catch (error) {
       captureSilentFailure(error, {
-        feature: 'content-study',
-        operation: 'safe-fallback',
-        type: 'data',
+        feature: "content-study",
+        operation: "safe-fallback",
+        type: "data",
       });
       return [];
     }
@@ -49,7 +49,10 @@ export class StudySessionManager {
     generationId: string,
   ): Promise<PersistedStudySession | null> {
     const sessions = await this.getAllSessions();
-    return sessions.find((s) => s.generationId === generationId && !s.endTime) || null;
+    return (
+      sessions.find((s) => s.generationId === generationId && !s.endTime) ||
+      null
+    );
   }
 
   async getSessionsForGeneration(
@@ -103,7 +106,10 @@ export class StudySessionManager {
     const removed = sessions.length - filtered.length;
 
     if (removed > 0) {
-      await getStorage().setItem(STORAGE_KEYS.SESSIONS, JSON.stringify(filtered));
+      await getStorage().setItem(
+        STORAGE_KEYS.SESSIONS,
+        JSON.stringify(filtered),
+      );
     }
 
     return removed;

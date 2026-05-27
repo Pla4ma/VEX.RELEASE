@@ -1,10 +1,17 @@
-import { CONTENT_STUDY_CONSTANTS } from './types';
+import { CONTENT_STUDY_CONSTANTS } from "./types";
 
 export function sanitizeTextForStorage(text: string): string {
-  return text.replace(/\x00/g, '').replace(/[\x80-\x9F]/g, '').trim();
+  return text
+    .replace(/\x00/g, "")
+    .replace(/[\x80-\x9F]/g, "")
+    .trim();
 }
 
-export function truncateText(text: string, maxLength: number, suffix = '...'): string {
+export function truncateText(
+  text: string,
+  maxLength: number,
+  suffix = "...",
+): string {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength - suffix.length) + suffix;
 }
@@ -26,8 +33,14 @@ export function isValidFileType(mimeType: string): boolean {
   return supportedTypes.includes(mimeType);
 }
 
-export function formatValidationErrors(errors: import('./types').ValidationError[]): string {
-  const errorMessages = errors.filter((e) => e.severity === 'error').map((e) => e.message);
-  const warningMessages = errors.filter((e) => e.severity === 'warning').map((e) => `Warning: ${e.message}`);
-  return [...errorMessages, ...warningMessages].join('\n');
+export function formatValidationErrors(
+  errors: import("./types").ValidationError[],
+): string {
+  const errorMessages = errors
+    .filter((e) => e.severity === "error")
+    .map((e) => e.message);
+  const warningMessages = errors
+    .filter((e) => e.severity === "warning")
+    .map((e) => `Warning: ${e.message}`);
+  return [...errorMessages, ...warningMessages].join("\n");
 }

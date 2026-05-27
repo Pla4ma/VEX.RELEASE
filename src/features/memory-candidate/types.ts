@@ -1,5 +1,8 @@
 export type {
+  LearnedItem,
   MemoryCandidate,
   MemoryCandidateInput,
   MemoryCandidateList,
-} from './schemas';
+  WhatVEXLearned,
+  WhatVEXLearnedInput,
+} from "./schemas";

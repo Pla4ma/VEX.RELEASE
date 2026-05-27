@@ -2,11 +2,11 @@
  * Paywall Verification - Purchase Flow & Subscription Validator
  */
 
-import Purchases, {
-  type PurchasesPackage,
-  type PurchasesOffering,
-  type PurchasesOfferings,
-} from "react-native-purchases";
+import type {
+  PurchasesPackage,
+  PurchasesOffering,
+  PurchasesOfferings,
+} from "../shared/monetization/revenuecat-types";
 import { createDebugger } from "../utils/debug";
 import { revenueCatService } from "../shared/monetization/revenuecat-service";
 import type { PurchaseResult } from "../shared/monetization/revenuecat-types";
@@ -65,7 +65,7 @@ async function testPurchaseFlow(pkg: PurchasesPackage): Promise<string[]> {
     const purchaseResult = await revenueCatService.purchasePackage(pkg);
     const resultIssues = validatePurchaseResult(purchaseResult);
     issues.push(...resultIssues);
-  } catch {
+  } catch (error: unknown) {
     issues.push("Purchase flow test threw an unexpected error");
   }
 

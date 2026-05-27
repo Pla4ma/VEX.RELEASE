@@ -1,6 +1,6 @@
-import { Dimensions } from 'react-native';
+import { Dimensions } from "react-native";
 
-export const { width: SCREEN_WIDTH } = Dimensions.get('window');
+export const { width: SCREEN_WIDTH } = Dimensions.get("window");
 export const CARD_WIDTH = SCREEN_WIDTH * 0.7;
 
 export interface SessionConsequenceCardsProps {

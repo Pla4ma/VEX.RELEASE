@@ -1,11 +1,11 @@
-import { captureSilentFailure } from '../../../utils/silent-failure';
-import { useMemo, useState } from 'react';
+import { captureSilentFailure } from "../../../utils/silent-failure";
+import { useMemo, useState } from "react";
 
 import {
   useActiveStudyPlan,
   useCompleteStudyPlanTask,
-} from '../../../features/content-study';
-import { useLearningExecutionLayer } from '../../../features/learning-execution';
+} from "../../../features/content-study";
+import { useLearningExecutionLayer } from "../../../features/learning-execution";
 
 type ContentStudySessionMeta = {
   generationId: string | null;
@@ -38,7 +38,7 @@ function parseContentStudySessionMeta(
   tags?: string[],
 ): ContentStudySessionMeta {
   const isContentStudy = Boolean(
-    tags?.includes('content-study') || tags?.includes('learning-execution'),
+    tags?.includes("content-study") || tags?.includes("learning-execution"),
   );
 
   if (!notes) {
@@ -48,7 +48,12 @@ function parseContentStudySessionMeta(
   try {
     const parsed = JSON.parse(notes) as { generationId?: string };
     return { generationId: parsed.generationId ?? null, isContentStudy };
-  } catch (error) { captureSilentFailure(error, { feature: 'screens', operation: 'network-fallback', type: 'network' });
+  } catch (error) {
+    captureSilentFailure(error, {
+      feature: "screens",
+      operation: "network-fallback",
+      type: "network",
+    });
     return { generationId: null, isContentStudy };
   }
 }
@@ -63,7 +68,9 @@ export function useSessionCompleteStudyProgress({
   const [dismissedStudyPrompt, setDismissedStudyPrompt] = useState(false);
   const activeStudyPlanQuery = useActiveStudyPlan();
   const completeStudyTaskMutation = useCompleteStudyPlanTask();
-  const learningExecution = useLearningExecutionLayer(activeStudyPlanQuery.data ?? null);
+  const learningExecution = useLearningExecutionLayer(
+    activeStudyPlanQuery.data ?? null,
+  );
 
   const sessionStudyMeta = useMemo(
     () => parseContentStudySessionMeta(notes, tags),
@@ -115,7 +122,8 @@ export function useSessionCompleteStudyProgress({
       chaptersCompleted: activePlan.completedTasks,
       totalChapters: activePlan.totalTasks,
       quizAccuracy: null, // Would need quiz data from session - placeholder
-      totalStudyTimeMinutes: activePlan.remainingMinutes + (nextTask.estimatedMinutes ?? 0),
+      totalStudyTimeMinutes:
+        activePlan.remainingMinutes + (nextTask.estimatedMinutes ?? 0),
       nextSessionGoal: nextGoal,
     };
   }, [

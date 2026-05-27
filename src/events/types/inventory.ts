@@ -7,19 +7,19 @@
  */
 
 export interface InventoryEventDefinitions {
-  'inventory:add_item': {
+  "inventory:add_item": {
     userId: string;
     itemId: string;
     rarity: string;
     source: string;
   };
-  'inventory:remove_item': {
+  "inventory:remove_item": {
     userId: string;
     itemId: string;
     quantity: number;
     source: string;
   };
-  'collection:item_acquired': {
+  "collection:item_acquired": {
     userId: string;
     setId: string;
     itemId: string;
@@ -27,12 +27,12 @@ export interface InventoryEventDefinitions {
     rarity: string;
     isNew: boolean;
   };
-  'collection:completed': {
+  "collection:completed": {
     userId: string;
     setId: string;
     rewards: unknown;
   };
-  'collection:bonus_claimed': {
+  "collection:bonus_claimed": {
     userId: string;
     setId: string;
     bonusId: string;

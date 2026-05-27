@@ -7,8 +7,8 @@
  * - Runtime validation with Zod
  */
 
-export { QueryProvider, queryClient, QueryKeys } from './QueryProvider';
-export { ApiClient, getApiClient, resetApiClient } from './client';
+export { QueryProvider, queryClient, QueryKeys } from "./QueryProvider";
+export { ApiClient, getApiClient, resetApiClient } from "./client";
 export {
   validateSchema,
   validateAsync,
@@ -25,4 +25,4 @@ export {
   type ValidationError,
   type ZodType,
   type ZodError,
-} from './validation';
+} from "./validation";

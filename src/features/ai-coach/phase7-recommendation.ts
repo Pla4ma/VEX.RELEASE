@@ -1,15 +1,15 @@
-import { validateCoachInput, type CoachInputContract } from './input-contract';
-import { validateMessageQuality } from './message-quality-gate';
+import { validateCoachInput, type CoachInputContract } from "./input-contract";
+import { validateMessageQuality } from "./message-quality-gate";
 import {
   analyzeSessionPatterns,
   generateRecommendationMessage,
   generateUUID,
-} from './phase7-helpers';
-import { CoachSuggestionSchema, type CoachSuggestion } from './phase7-schemas';
+} from "./phase7-helpers";
+import { CoachSuggestionSchema, type CoachSuggestion } from "./phase7-schemas";
 
 export async function generateSessionRecommendation(
   userId: string,
-  inputContract: CoachInputContract
+  inputContract: CoachInputContract,
 ): Promise<CoachSuggestion | null> {
   const validatedInput = validateCoachInput({
     ...inputContract,
@@ -25,9 +25,9 @@ export async function generateSessionRecommendation(
 
   const messageContent = await generateRecommendationMessage(recommendation);
   const qualityAnalysis = validateMessageQuality(
-    'session-recommendation',
+    "session-recommendation",
     messageContent,
-    'SESSION_SUGGESTION'
+    "SESSION_SUGGESTION",
   );
   if (!qualityAnalysis.passesQualityGate) {
     return null;
@@ -35,7 +35,7 @@ export async function generateSessionRecommendation(
 
   return CoachSuggestionSchema.parse({
     id: generateUUID(),
-    type: 'SESSION_RECOMMENDATION',
+    type: "SESSION_RECOMMENDATION",
     title: `${recommendation.duration}min ${recommendation.difficulty} Session`,
     description: messageContent,
     priority: recommendation.priority,
@@ -48,7 +48,9 @@ export async function generateSessionRecommendation(
 }
 
 function normalizeUUID(value: string): string {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    value,
+  )
     ? value
     : generateUUID();
 }

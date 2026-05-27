@@ -86,7 +86,10 @@ export function createIntervalManager(
     },
     startBackgroundInterval(): void {
       if (backgroundIntervalId) clearInterval(backgroundIntervalId);
-      backgroundIntervalId = setInterval(onBackgroundTick, config.backgroundTickInterval);
+      backgroundIntervalId = setInterval(
+        onBackgroundTick,
+        config.backgroundTickInterval,
+      );
     },
     stopBackgroundInterval(): void {
       if (backgroundIntervalId) {

@@ -1,6 +1,6 @@
-import * as Sentry from '@sentry/react-native';
+import * as Sentry from "@sentry/react-native";
 
-type SilentFailureType = 'data' | 'network' | 'ui';
+type SilentFailureType = "data" | "network" | "ui";
 
 interface SilentFailureContext {
   feature: string;
@@ -8,7 +8,10 @@ interface SilentFailureContext {
   type: SilentFailureType;
 }
 
-export function captureSilentFailure(error: unknown, context: SilentFailureContext): void {
+export function captureSilentFailure(
+  error: unknown,
+  context: SilentFailureContext,
+): void {
   Sentry.captureException(error, {
     tags: {
       feature: context.feature,
@@ -16,7 +19,8 @@ export function captureSilentFailure(error: unknown, context: SilentFailureConte
       failureType: context.type,
     },
     extra: {
-      fallback: 'Existing safe fallback preserved after previously empty catch.',
+      fallback:
+        "Existing safe fallback preserved after previously empty catch.",
     },
   });
 }

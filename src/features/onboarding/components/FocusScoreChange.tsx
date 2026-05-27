@@ -7,11 +7,11 @@
  * @phase 4
  */
 
-import React from 'react';
+import React from "react";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
 
 interface FocusScoreChangeProps {
   before: number;
@@ -21,7 +21,10 @@ interface FocusScoreChangeProps {
 /**
  * Focus Score change indicator
  */
-export function FocusScoreChange({ before, after }: FocusScoreChangeProps): JSX.Element {
+export function FocusScoreChange({
+  before,
+  after,
+}: FocusScoreChangeProps): JSX.Element {
   const { theme } = useTheme();
   const change = after - before;
   const isIncrease = change > 0;
@@ -31,9 +34,13 @@ export function FocusScoreChange({ before, after }: FocusScoreChangeProps): JSX.
       px="lg"
       py="md"
       borderRadius="lg"
-      bg={isIncrease ? `${theme.colors.success[500]}15` : `${theme.colors.warning[500]}15`}
+      bg={
+        isIncrease
+          ? `${theme.colors.success[500]}15`
+          : `${theme.colors.warning[500]}15`
+      }
       borderWidth={1}
-      borderColor={isIncrease ? 'success.300' : 'warning.300'}
+      borderColor={isIncrease ? "success.300" : "warning.300"}
       alignItems="center"
       gap="sm"
     >
@@ -41,8 +48,8 @@ export function FocusScoreChange({ before, after }: FocusScoreChangeProps): JSX.
         {before} → {after}
       </Text>
       <Box flexDirection="row" alignItems="center" gap="xs">
-        <Text fontSize={16}>{isIncrease ? '📈' : '📊'}</Text>
-        <Text variant="body" color={isIncrease ? 'success.600' : 'warning.600'}>
+        <Text fontSize={16}>{isIncrease ? "📈" : "📊"}</Text>
+        <Text variant="body" color={isIncrease ? "success.600" : "warning.600"}>
           {isIncrease ? `+${change} points` : `${change} points`}
         </Text>
       </Box>

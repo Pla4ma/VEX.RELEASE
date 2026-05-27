@@ -5,12 +5,12 @@
  * Persists via MMKV
  */
 
-import { create, type StoreApi } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
+import { create, type StoreApi } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-import type { CoachStore, CoachUIState } from './types';
-import type { CoachMessage, MessageCategory } from '../schemas';
-import { mmkvStorage, storageConfig } from './storage';
+import type { CoachStore, CoachUIState } from "./types";
+import type { CoachMessage, MessageCategory } from "../schemas";
+import { mmkvStorage, storageConfig } from "./storage";
 
 const initialState: CoachUIState = {
   activeMessage: null,
@@ -26,14 +26,17 @@ const initialState: CoachUIState = {
 
 export const useCoachStore = create<CoachStore>()(
   persist(
-    (set: StoreApi<CoachStore>['setState'], get: StoreApi<CoachStore>['getState']) => ({
+    (
+      set: StoreApi<CoachStore>["setState"],
+      get: StoreApi<CoachStore>["getState"],
+    ) => ({
       ...initialState,
 
       // Message actions
       setActiveMessage: (message: CoachMessage | null) => {
         set({ activeMessage: message });
         if (message) {
-          set({ isModalVisible: true, modalType: 'message' });
+          set({ isModalVisible: true, modalType: "message" });
         }
       },
 
@@ -71,7 +74,9 @@ export const useCoachStore = create<CoachStore>()(
       },
 
       togglePersonaSelector: () => {
-        set((state: CoachStore) => ({ showPersonaSelector: !state.showPersonaSelector }));
+        set((state: CoachStore) => ({
+          showPersonaSelector: !state.showPersonaSelector,
+        }));
       },
 
       // Persona selection
@@ -94,7 +99,9 @@ export const useCoachStore = create<CoachStore>()(
       unmuteCategory: (category: MessageCategory) => {
         const { mutedCategories } = get();
         set({
-          mutedCategories: mutedCategories.filter((c: MessageCategory) => c !== category),
+          mutedCategories: mutedCategories.filter(
+            (c: MessageCategory) => c !== category,
+          ),
         });
       },
 
@@ -102,7 +109,9 @@ export const useCoachStore = create<CoachStore>()(
         const { mutedCategories } = get();
         if (mutedCategories.includes(category)) {
           set({
-            mutedCategories: mutedCategories.filter((c: MessageCategory) => c !== category),
+            mutedCategories: mutedCategories.filter(
+              (c: MessageCategory) => c !== category,
+            ),
           });
         } else {
           set({ mutedCategories: [...mutedCategories, category] });
@@ -116,19 +125,19 @@ export const useCoachStore = create<CoachStore>()(
 
       // Modal actions
       openMessageModal: () => {
-        set({ isModalVisible: true, modalType: 'message' });
+        set({ isModalVisible: true, modalType: "message" });
       },
 
       openPersonaModal: () => {
-        set({ isModalVisible: true, modalType: 'persona' });
+        set({ isModalVisible: true, modalType: "persona" });
       },
 
       openHistoryModal: () => {
-        set({ isModalVisible: true, modalType: 'history' });
+        set({ isModalVisible: true, modalType: "history" });
       },
 
       openDifficultyModal: () => {
-        set({ isModalVisible: true, modalType: 'difficulty' });
+        set({ isModalVisible: true, modalType: "difficulty" });
       },
 
       closeModal: () => {
@@ -144,8 +153,8 @@ export const useCoachStore = create<CoachStore>()(
       name: storageConfig.name,
       storage: createJSONStorage(() => mmkvStorage),
       partialize: storageConfig.partialize,
-    }
-  )
+    },
+  ),
 );
 
 /**
@@ -154,4 +163,3 @@ export const useCoachStore = create<CoachStore>()(
 export function resetCoachPreferences(): void {
   useCoachStore.getState().resetUI();
 }
-

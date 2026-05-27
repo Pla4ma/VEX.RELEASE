@@ -4,7 +4,7 @@
  * Event definitions for focus identity system.
  */
 
-import { eventBus } from '../../events/EventBus';
+import { eventBus } from "../../events/EventBus";
 
 export interface MonthlyReportViewedEvent {
   userId: string;
@@ -35,9 +35,9 @@ export function publishMonthlyReportViewed(
   userId: string,
   month: string,
   grade: string,
-  change: number
+  change: number,
 ): void {
-  eventBus.publish('MONTHLY_REPORT_VIEWED', {
+  eventBus.publish("MONTHLY_REPORT_VIEWED", {
     userId,
     month,
     grade,
@@ -53,9 +53,9 @@ export function publishMonthlyReportShared(
   userId: string,
   month: string,
   grade: string,
-  platform?: string
+  platform?: string,
 ): void {
-  eventBus.publish('MONTHLY_REPORT_SHARED', {
+  eventBus.publish("MONTHLY_REPORT_SHARED", {
     userId,
     month,
     grade,
@@ -69,9 +69,9 @@ export function publishMonthlyReportShared(
  */
 export function publishMonthlyReportDismissed(
   userId: string,
-  month: string
+  month: string,
 ): void {
-  eventBus.publish('MONTHLY_REPORT_DISMISSED', {
+  eventBus.publish("MONTHLY_REPORT_DISMISSED", {
     userId,
     month,
     timestamp: Date.now(),

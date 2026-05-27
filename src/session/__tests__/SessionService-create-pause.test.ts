@@ -1,4 +1,9 @@
-import { createService, getSessionOrchestrator, type SessionConfig, type SessionState } from "./SessionService.helpers";
+import {
+  createService,
+  getSessionOrchestrator,
+  type SessionConfig,
+  type SessionState,
+} from "./SessionService.helpers";
 
 describe("SessionService", () => {
   let service: ReturnType<typeof createService>;
@@ -43,7 +48,11 @@ describe("SessionService", () => {
         id: "session-1",
         status: "created",
         config: validConfig,
-        progress: { elapsed: 0, remaining: validConfig.duration, percentage: 0 },
+        progress: {
+          elapsed: 0,
+          remaining: validConfig.duration,
+          percentage: 0,
+        },
         createdAt: Date.now(),
       };
       mockOrchestrator.createSession.mockResolvedValue(mockSession);
@@ -53,7 +62,8 @@ describe("SessionService", () => {
     });
 
     it("should throw error when no user is set", async () => {
-      const serviceWithoutUser = new (require("./SessionService.helpers").SessionService)();
+      const serviceWithoutUser =
+        new (require("./SessionService.helpers").SessionService)();
       await expect(
         serviceWithoutUser.createCustomSession(validConfig),
       ).rejects.toThrow("SessionService: No user set");
@@ -68,12 +78,16 @@ describe("SessionService", () => {
 
     it("should throw error for invalid duration (zero)", async () => {
       const invalidConfig = { ...validConfig, duration: 0 };
-      await expect(service.createCustomSession(invalidConfig)).rejects.toThrow();
+      await expect(
+        service.createCustomSession(invalidConfig),
+      ).rejects.toThrow();
     });
 
     it("should throw error for invalid duration (negative)", async () => {
       const invalidConfig = { ...validConfig, duration: -1000 };
-      await expect(service.createCustomSession(invalidConfig)).rejects.toThrow();
+      await expect(
+        service.createCustomSession(invalidConfig),
+      ).rejects.toThrow();
     });
   });
 
@@ -82,24 +96,39 @@ describe("SessionService", () => {
       mockOrchestrator.getSessionStatus.mockReturnValue({ status: "active" });
       mockOrchestrator.pauseSession.mockResolvedValue(undefined);
       await service.pauseSession("user_request");
-      expect(mockOrchestrator.pauseSession).toHaveBeenCalledWith("user_request");
+      expect(mockOrchestrator.pauseSession).toHaveBeenCalledWith(
+        "user_request",
+      );
     });
 
     it("should throw error when pausing already paused session", async () => {
       mockOrchestrator.getSessionStatus.mockReturnValue({ status: "paused" });
-      mockOrchestrator.pauseSession.mockRejectedValue(new Error("Session already paused"));
-      await expect(service.pauseSession()).rejects.toThrow("Session already paused");
+      mockOrchestrator.pauseSession.mockRejectedValue(
+        new Error("Session already paused"),
+      );
+      await expect(service.pauseSession()).rejects.toThrow(
+        "Session already paused",
+      );
     });
 
     it("should throw error when pausing in strict mode", async () => {
-      mockOrchestrator.getSessionStatus.mockReturnValue({ status: "active", isStrictMode: true });
-      mockOrchestrator.pauseSession.mockRejectedValue(new Error("Cannot pause in strict mode"));
-      await expect(service.pauseSession()).rejects.toThrow("Cannot pause in strict mode");
+      mockOrchestrator.getSessionStatus.mockReturnValue({
+        status: "active",
+        isStrictMode: true,
+      });
+      mockOrchestrator.pauseSession.mockRejectedValue(
+        new Error("Cannot pause in strict mode"),
+      );
+      await expect(service.pauseSession()).rejects.toThrow(
+        "Cannot pause in strict mode",
+      );
     });
 
     it("should throw error when no active session", async () => {
       mockOrchestrator.getSessionStatus.mockReturnValue({ status: "idle" });
-      mockOrchestrator.pauseSession.mockRejectedValue(new Error("No active session"));
+      mockOrchestrator.pauseSession.mockRejectedValue(
+        new Error("No active session"),
+      );
       await expect(service.pauseSession()).rejects.toThrow("No active session");
     });
   });

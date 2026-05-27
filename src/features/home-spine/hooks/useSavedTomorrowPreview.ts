@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 import {
   clearTomorrowPreview,
   loadTomorrowPreview,
   type TomorrowPreviewData,
-} from '../tomorrowPreviewService';
+} from "../tomorrowPreviewService";
 
-export function useSavedTomorrowPreview(userId: string): TomorrowPreviewData | null {
+export function useSavedTomorrowPreview(
+  userId: string,
+): TomorrowPreviewData | null {
   const [preview, setPreview] = useState<TomorrowPreviewData | null>(null);
 
   useEffect(() => {

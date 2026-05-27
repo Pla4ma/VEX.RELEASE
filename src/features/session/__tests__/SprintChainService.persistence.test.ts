@@ -1,14 +1,14 @@
-import { getMMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
-import { SprintChainService } from '../SprintChainService';
+import { getMMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
+import { SprintChainService } from "../SprintChainService";
 
 const mockStores = new Map<string, Map<string, string>>();
 
-jest.mock('react-native-mmkv', () => ({
+jest.mock("react-native-mmkv", () => ({
   MMKV: class MockMMKV {
     private readonly store: Map<string, string>;
 
     constructor(options?: { id?: string }) {
-      const id = options?.id ?? 'default';
+      const id = options?.id ?? "default";
       const existing = mockStores.get(id);
       this.store = existing ?? new Map<string, string>();
       mockStores.set(id, this.store);
@@ -28,18 +28,21 @@ jest.mock('react-native-mmkv', () => ({
   },
 }));
 
-jest.mock('../../../utils/silent-failure', () => ({
+jest.mock("../../../utils/silent-failure", () => ({
   captureSilentFailure: jest.fn(),
 }));
 
-describe('SprintChainService persistence', () => {
+describe("SprintChainService persistence", () => {
   beforeEach(() => {
     mockStores.clear();
   });
 
-  it('falls back to the initial state when stored JSON is corrupted', async () => {
-    const userId = 'corrupt-user';
-    await getMMKVStorageAdapter().setItem(`session:sprint-chain:${userId}`, '{broken');
+  it("falls back to the initial state when stored JSON is corrupted", async () => {
+    const userId = "corrupt-user";
+    await getMMKVStorageAdapter().setItem(
+      `session:sprint-chain:${userId}`,
+      "{broken",
+    );
 
     await expect(new SprintChainService().getState(userId)).resolves.toEqual({
       completedCount: 0,
@@ -47,9 +50,9 @@ describe('SprintChainService persistence', () => {
     });
   });
 
-  it('prevents duplicate completed counts past the chain target', async () => {
+  it("prevents duplicate completed counts past the chain target", async () => {
     const service = new SprintChainService();
-    const userId = 'chain-user';
+    const userId = "chain-user";
     const now = Date.now();
 
     await service.recordSprintCompleted(userId, now);

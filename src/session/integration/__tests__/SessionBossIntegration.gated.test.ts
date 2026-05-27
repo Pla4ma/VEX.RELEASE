@@ -19,19 +19,31 @@ jest.mock("../../../features/boss/service", () => ({
   applyDamage: jest.fn(),
   getActiveEncounter: jest.fn(),
 }));
-jest.mock("../../../features/boss/damage-rules", () => ({
-  applyBossDamageRules: jest.fn((dmg) => dmg),
-}), { virtual: true });
-jest.mock("../../../features/boss/BossBountySystem", () => ({
-  consumeBountiesOnDamage: jest.fn().mockReturnValue({
-    lootMultiplier: 1,
-    consumedCount: 0,
-    consumedBountyIds: [],
+jest.mock(
+  "../../../features/boss/damage-rules",
+  () => ({
+    applyBossDamageRules: jest.fn((dmg) => dmg),
   }),
-}), { virtual: true });
-jest.mock("../../../features/boss/bounty-loot-boost", () => ({
-  recordBountyLootBoost: jest.fn(),
-}), { virtual: true });
+  { virtual: true },
+);
+jest.mock(
+  "../../../features/boss/BossBountySystem",
+  () => ({
+    consumeBountiesOnDamage: jest.fn().mockReturnValue({
+      lootMultiplier: 1,
+      consumedCount: 0,
+      consumedBountyIds: [],
+    }),
+  }),
+  { virtual: true },
+);
+jest.mock(
+  "../../../features/boss/bounty-loot-boost",
+  () => ({
+    recordBountyLootBoost: jest.fn(),
+  }),
+  { virtual: true },
+);
 describe("SessionBossIntegration - FeatureAvailability gating", () => {
   const mockedEventBus = jest.mocked(eventBus);
   const mockedGetAvailability = jest.mocked(getAvailabilityFor);

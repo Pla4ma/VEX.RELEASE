@@ -5,15 +5,15 @@
  * Redirects to appropriate screens when features are disabled.
  */
 
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Box } from '../../components/primitives/Box';
-import { Text } from '../../components/primitives/Text';
-import { Button } from '../../components/primitives/Button';
-import { useTheme } from '../../theme';
-import { sizing } from '../../theme/tokens/sizing';
-import type { ExtendedRootStackParams } from '../../navigation/types';
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Box } from "../../components/primitives/Box";
+import { Text } from "../../components/primitives/Text";
+import { Button } from "../../components/primitives/Button";
+import { useTheme } from "../../theme";
+import { sizing } from "../../theme/tokens/sizing";
+import type { ExtendedRootStackParams } from "../../navigation/types";
 
 interface NavigationGateProps {
   featureName: string;
@@ -25,10 +25,11 @@ interface NavigationGateProps {
 export function NavigationGate({
   featureName,
   featureReason,
-  suggestedAction = 'Return to Home',
-  suggestedRoute = 'Main',
+  suggestedAction = "Return to Home",
+  suggestedRoute = "Main",
 }: NavigationGateProps): JSX.Element {
-  const navigation = useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<ExtendedRootStackParams>>();
   const { theme } = useTheme();
 
   const handleGoBack = () => {
@@ -48,26 +49,14 @@ export function NavigationGate({
       p="lg"
       bg={theme.colors.background.primary}
     >
-      <Box
-        maxWidth={sizing.width.xl}
-        alignItems="center"
-        gap="md"
-      >
-        <Text fontSize={sizing.icon['2xl']}>🔒</Text>
+      <Box maxWidth={sizing.width.xl} alignItems="center" gap="md">
+        <Text fontSize={sizing.icon["2xl"]}>🔒</Text>
 
-        <Text
-          variant="h3"
-          color="text.primary"
-          textAlign="center"
-        >
+        <Text variant="h3" color="text.primary" textAlign="center">
           Feature Not Available
         </Text>
 
-        <Text
-          variant="body"
-          color="text.secondary"
-          textAlign="center"
-        >
+        <Text variant="body" color="text.secondary" textAlign="center">
           {featureName} is {featureReason.toLowerCase()}.
         </Text>
 

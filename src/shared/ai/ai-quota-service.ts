@@ -1,23 +1,27 @@
-import { z } from 'zod';
+import { z } from "zod";
 import type {
   AIRequestCategory,
   QuotaCheckResult,
   UserTier,
-} from './ai-quota-types';
-import { QuotaCheckResultSchema } from './ai-quota-types';
-import { DEFAULT_QUOTA_STRATEGIES, HOURLY_WINDOW_MS, DAILY_WINDOW_MS } from './ai-quota-strategies';
+} from "./ai-quota-types";
+import { QuotaCheckResultSchema } from "./ai-quota-types";
+import {
+  DEFAULT_QUOTA_STRATEGIES,
+  HOURLY_WINDOW_MS,
+  DAILY_WINDOW_MS,
+} from "./ai-quota-strategies";
 import {
   getHourlyUsage,
   getDailyUsage,
   recordUsage,
   syncQuotaToSupabase,
-} from './ai-quota-repository';
-import { captureSilentFailure } from '../../utils/silent-failure';
+} from "./ai-quota-repository";
+import { captureSilentFailure } from "../../utils/silent-failure";
 
 export async function resolveUserTier(userId: string): Promise<UserTier> {
   // Default to free; paid detection hooks into monetization layer
   // Internal users are identified by a config flag or email domain
-  return 'free';
+  return "free";
 }
 
 export async function checkQuota(
@@ -32,7 +36,7 @@ export async function checkQuota(
       allowed: true,
       category,
       tier: resolvedTier,
-      window: 'hourly',
+      window: "hourly",
       used: 0,
       limit: Number.MAX_SAFE_INTEGER,
       remaining: Number.MAX_SAFE_INTEGER,
@@ -47,7 +51,7 @@ export async function checkQuota(
       allowed: false,
       category,
       tier: resolvedTier,
-      window: 'hourly',
+      window: "hourly",
       used: hourly.count,
       limit: limits.hourly,
       remaining: 0,
@@ -64,7 +68,7 @@ export async function checkQuota(
       allowed: false,
       category,
       tier: resolvedTier,
-      window: 'daily',
+      window: "daily",
       used: daily.count,
       limit: limits.daily,
       remaining: 0,
@@ -80,7 +84,7 @@ export async function checkQuota(
       allowed: false,
       category,
       tier: resolvedTier,
-      window: 'daily',
+      window: "daily",
       used: daily.tokenCount,
       limit: limits.tokenBudget,
       remaining: 0,
@@ -93,7 +97,7 @@ export async function checkQuota(
     allowed: true,
     category,
     tier: resolvedTier,
-    window: 'hourly',
+    window: "hourly",
     used: hourly.count,
     limit: limits.hourly,
     remaining: limits.hourly - hourly.count - 1,
@@ -122,9 +126,9 @@ export async function consumeQuota(
   recordUsage(record);
   syncQuotaToSupabase(userId, category, record).catch((err) => {
     captureSilentFailure(err, {
-      feature: 'ai-quota',
-      operation: 'sync',
-      type: 'network',
+      feature: "ai-quota",
+      operation: "sync",
+      type: "network",
     });
   });
 
@@ -136,7 +140,7 @@ export function getRemainingQuota(
   category: AIRequestCategory,
   tier?: UserTier,
 ): { hourly: number; daily: number; tokenBudget: number } {
-  const resolvedTier = tier ?? 'free';
+  const resolvedTier = tier ?? "free";
   const limits = DEFAULT_QUOTA_STRATEGIES[resolvedTier].limits[category];
   if (!limits) {
     return {

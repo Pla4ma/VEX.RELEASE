@@ -35,7 +35,11 @@ export function calculateDamage(
   const streakProtection = userStreak > 7;
   const mitigation = streakProtection ? 0.5 : 0;
   const totalDamage =
-    (baseDamage + pauseDamage + interruptionDamage + abandonDamage + antiCheatDamage) *
+    (baseDamage +
+      pauseDamage +
+      interruptionDamage +
+      abandonDamage +
+      antiCheatDamage) *
     (1 - mitigation);
   const finalPenalty = Math.min(1, totalDamage / (session.baseScore || 1));
 

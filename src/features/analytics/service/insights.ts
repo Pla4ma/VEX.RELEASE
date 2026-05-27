@@ -147,10 +147,7 @@ export async function generateInsights(userId: string): Promise<Insight[]> {
   const xpMilestones = [100, 500, 1000, 5000, 10000];
   const lastXpPoint = xpData.points[xpData.points.length - 1];
   const nextMilestone = xpMilestones.find(
-    (m) =>
-      totalXp >= m &&
-      lastXpPoint &&
-      totalXp - lastXpPoint.value < m,
+    (m) => totalXp >= m && lastXpPoint && totalXp - lastXpPoint.value < m,
   );
   if (nextMilestone && xpData.points.length > 1) {
     const lastPoint = xpData.points[xpData.points.length - 1];

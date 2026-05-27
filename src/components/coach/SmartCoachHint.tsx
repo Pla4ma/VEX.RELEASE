@@ -1,9 +1,9 @@
-import React, { type ReactNode } from 'react';
-import { View } from 'react-native';
+import React, { type ReactNode } from "react";
+import { View } from "react-native";
 
-import { Card, Button, Text } from '../primitives';
-import { useTheme } from '../../theme';
-import { AnimatedCoachAvatar } from './AnimatedCoachAvatar';
+import { Card, Button, Text } from "../primitives";
+import { useTheme } from "../../theme";
+import { AnimatedCoachAvatar } from "./AnimatedCoachAvatar";
 
 interface SmartCoachHintProps {
   eyebrow?: string;
@@ -11,17 +11,17 @@ interface SmartCoachHintProps {
   body: string;
   actionLabel?: string;
   onAction?: () => void;
-  mood?: 'calm' | 'active' | 'celebrate';
+  mood?: "calm" | "active" | "celebrate";
   children?: ReactNode;
 }
 
 export function SmartCoachHint({
-  eyebrow = 'VEX coach',
+  eyebrow = "VEX coach",
   title,
   body,
   actionLabel,
   onAction,
-  mood = 'active',
+  mood = "active",
   children,
 }: SmartCoachHintProps): JSX.Element {
   const { theme } = useTheme();
@@ -35,15 +35,29 @@ export function SmartCoachHint({
         borderColor: theme.colors.semantic.primary,
       }}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing[4] }}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: theme.spacing[4],
+        }}
+      >
         <AnimatedCoachAvatar mood={mood} size={88} />
         <View style={{ flex: 1, gap: theme.spacing[1] }}>
-          <Text color="primary.300" variant="label">{eyebrow}</Text>
-          <Text color="text.primary" variant="h3">{title}</Text>
-          <Text color="text.secondary" variant="bodySmall">{body}</Text>
+          <Text color="primary.300" variant="label">
+            {eyebrow}
+          </Text>
+          <Text color="text.primary" variant="h3">
+            {title}
+          </Text>
+          <Text color="text.secondary" variant="bodySmall">
+            {body}
+          </Text>
         </View>
       </View>
-      {children ? <View style={{ marginTop: theme.spacing[4] }}>{children}</View> : null}
+      {children ? (
+        <View style={{ marginTop: theme.spacing[4] }}>{children}</View>
+      ) : null}
       {actionLabel && onAction ? (
         <Button
           accessibilityHint={`Activates ${actionLabel}`}

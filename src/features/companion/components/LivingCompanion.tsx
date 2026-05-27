@@ -1,16 +1,25 @@
-import React, { useEffect, useRef } from 'react';
-import { View } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withRepeat, withTiming, withSequence, interpolate, Easing } from 'react-native-reanimated';
-import { Svg, Circle, G } from 'react-native-svg';
+import React, { useEffect, useRef } from "react";
+import { View } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withRepeat,
+  withTiming,
+  withSequence,
+  interpolate,
+  Easing,
+} from "react-native-reanimated";
+import { Svg, Circle, G } from "react-native-svg";
 
-import { Text } from '../../../components/primitives/Text';
-import { CompanionState, ELEMENT_THEMES } from '../types';
-import { CompanionService } from '../service';
-import { getCompanionService } from '../service-instance';
-import { createSheet } from '@/shared/ui/create-sheet';
-import { CompanionBody } from './CompanionBody';
-import { CompanionParticles } from './CompanionParticles';
-import { getPhaseMultiplier, getMoodEmoji } from './companion-helpers';
+import { Text } from "../../../components/primitives/Text";
+import { CompanionState, ELEMENT_THEMES } from "../types";
+import { CompanionService } from "../service";
+import { getCompanionService } from "../service-instance";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { CompanionBody } from "./CompanionBody";
+import { CompanionParticles } from "./CompanionParticles";
+import { getPhaseMultiplier, getMoodEmoji } from "./companion-helpers";
 
 const COMPANION_SIZE = 260;
 const PARTICLE_COUNT = 12;
@@ -47,24 +56,47 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({
     serviceRef.current.startSession(totalSeconds / 60);
 
     const unsubscribe = serviceRef.current.onEvent((event) => {
-      if (event.type === 'MILESTONE' && event.data.progressDelta && onMilestone) {
+      if (
+        event.type === "MILESTONE" &&
+        event.data.progressDelta &&
+        onMilestone
+      ) {
         onMilestone(event.data.progressDelta);
       }
-      if (event.type === 'PURE_FOCUS_BURST') {
-        scale.value = withSequence(withSpring(1.3, { damping: 10 }), withSpring(1, { damping: 15 }));
-        glowIntensity.value = withSequence(withTiming(1, { duration: 200 }), withTiming(0.7, { duration: 1000 }));
+      if (event.type === "PURE_FOCUS_BURST") {
+        scale.value = withSequence(
+          withSpring(1.3, { damping: 10 }),
+          withSpring(1, { damping: 15 }),
+        );
+        glowIntensity.value = withSequence(
+          withTiming(1, { duration: 200 }),
+          withTiming(0.7, { duration: 1000 }),
+        );
       }
-      if (event.type === 'DANGER_WARN') {
-        scale.value = withRepeat(withSequence(withSpring(0.95, { damping: 5 }), withSpring(1.05, { damping: 5 })), 3);
+      if (event.type === "DANGER_WARN") {
+        scale.value = withRepeat(
+          withSequence(
+            withSpring(0.95, { damping: 5 }),
+            withSpring(1.05, { damping: 5 }),
+          ),
+          3,
+        );
       }
     });
 
-    return () => { unsubscribe(); };
+    return () => {
+      unsubscribe();
+    };
   }, [companionState, glowIntensity, onMilestone, scale, totalSeconds]);
 
   useEffect(() => {
     if (serviceRef.current && !isPaused) {
-      serviceRef.current.tick(elapsedSeconds, totalSeconds, purityScore, isPaused);
+      serviceRef.current.tick(
+        elapsedSeconds,
+        totalSeconds,
+        purityScore,
+        isPaused,
+      );
     }
   }, [elapsedSeconds, isPaused, purityScore, totalSeconds]);
 
@@ -74,8 +106,16 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({
   }, [energy, progress, purityScore, sessionProgress]);
 
   useEffect(() => {
-    pulsePhase.value = withRepeat(withTiming(1, { duration: 3000, easing: Easing.inOut(Easing.sin) }), -1, true);
-    particlePhase.value = withRepeat(withTiming(1, { duration: 10000, easing: Easing.linear }), -1, false);
+    pulsePhase.value = withRepeat(
+      withTiming(1, { duration: 3000, easing: Easing.inOut(Easing.sin) }),
+      -1,
+      true,
+    );
+    particlePhase.value = withRepeat(
+      withTiming(1, { duration: 10000, easing: Easing.linear }),
+      -1,
+      false,
+    );
   }, [particlePhase, pulsePhase]);
 
   const theme = ELEMENT_THEMES[companionState.element];
@@ -124,15 +164,29 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({
       <Animated.View style={[styles.companionContainer, companionStyle]}>
         <Svg width={COMPANION_SIZE} height={COMPANION_SIZE}>
           <G>
-            <CompanionBody phase={companionState.phase} theme={theme} size={COMPANION_SIZE} />
-            <Circle cx={COMPANION_SIZE / 2} cy={COMPANION_SIZE / 2} r={COMPANION_SIZE * 0.15 * phaseMultiplier} fill={theme.primary} opacity={0.9} />
+            <CompanionBody
+              phase={companionState.phase}
+              theme={theme}
+              size={COMPANION_SIZE}
+            />
+            <Circle
+              cx={COMPANION_SIZE / 2}
+              cy={COMPANION_SIZE / 2}
+              r={COMPANION_SIZE * 0.15 * phaseMultiplier}
+              fill={theme.primary}
+              opacity={0.9}
+            />
           </G>
         </Svg>
       </Animated.View>
 
       <View style={styles.statusContainer}>
-        <Text variant="bodySmall" style={[styles.moodText, { color: theme.primary }]}>
-          {getMoodEmoji(companionState.currentMood)} {companionState.currentMood}
+        <Text
+          variant="bodySmall"
+          style={[styles.moodText, { color: theme.primary }]}
+        >
+          {getMoodEmoji(companionState.currentMood)}{" "}
+          {companionState.currentMood}
         </Text>
         <Text variant="caption" style={styles.phaseText}>
           {companionState.phase} Level {companionState.level}
@@ -146,25 +200,25 @@ const styles = createSheet({
   container: {
     width: COMPANION_SIZE,
     height: COMPANION_SIZE + 60,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   glowContainer: {
-    position: 'absolute',
+    position: "absolute",
     opacity: 0.3,
   },
   companionContainer: {
     zIndex: 10,
   },
   statusContainer: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 0,
-    alignItems: 'center',
+    alignItems: "center",
   },
   moodText: {
-    fontWeight: '700',
+    fontWeight: "700",
     fontSize: 14,
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
     letterSpacing: 1,
   },
   phaseText: {

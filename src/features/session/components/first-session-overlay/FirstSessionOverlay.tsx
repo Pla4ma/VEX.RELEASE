@@ -4,14 +4,14 @@
  * Onboarding overlay shown during the user's first session.
  */
 
-import React, { useCallback } from 'react';
-import { useWindowDimensions } from 'react-native';
-import { Box } from '../../../../components/primitives/Box';
-import { useTheme } from '../../../../theme';
-import { TooltipCard } from './TooltipCard';
-import { HighlightRing } from './HighlightRing';
-import { TOOLTIPS } from './constants';
-import type { FirstSessionOverlayProps } from './types';
+import React, { useCallback } from "react";
+import { useWindowDimensions } from "react-native";
+import { Box } from "../../../../components/primitives/Box";
+import { useTheme } from "../../../../theme";
+import { TooltipCard } from "./TooltipCard";
+import { HighlightRing } from "./HighlightRing";
+import { TOOLTIPS } from "./constants";
+import type { FirstSessionOverlayProps } from "./types";
 
 export function FirstSessionOverlay({
   currentStep,
@@ -24,25 +24,32 @@ export function FirstSessionOverlay({
   const { theme } = useTheme();
   const { height, width } = useWindowDimensions();
 
-  const currentTooltip = TOOLTIPS[currentStep] ?? TOOLTIPS[TOOLTIPS.length - 1]!;
+  const currentTooltip =
+    TOOLTIPS[currentStep] ?? TOOLTIPS[TOOLTIPS.length - 1]!;
   const isLast = currentStep === TOOLTIPS.length - 1;
 
   // Get position for current highlight
-  const getHighlightPosition = React.useCallback(
-    (): { x: number; y: number } | undefined => {
-      switch (currentTooltip.target) {
-        case 'timer':
-          return timerPosition ?? { x: width / 2, y: height / 2 - 50 };
-        case 'quality':
-          return qualityPosition ?? { x: width / 2, y: height / 2 + 80 };
-        case 'boss':
-          return bossPosition ?? { x: width / 2, y: 120 };
-        default:
-          return undefined;
-      }
-    },
-    [currentTooltip.target, timerPosition, qualityPosition, bossPosition, width, height]
-  );
+  const getHighlightPosition = React.useCallback(():
+    | { x: number; y: number }
+    | undefined => {
+    switch (currentTooltip.target) {
+      case "timer":
+        return timerPosition ?? { x: width / 2, y: height / 2 - 50 };
+      case "quality":
+        return qualityPosition ?? { x: width / 2, y: height / 2 + 80 };
+      case "boss":
+        return bossPosition ?? { x: width / 2, y: 120 };
+      default:
+        return undefined;
+    }
+  }, [
+    currentTooltip.target,
+    timerPosition,
+    qualityPosition,
+    bossPosition,
+    width,
+    height,
+  ]);
 
   const highlightPos = getHighlightPosition();
 

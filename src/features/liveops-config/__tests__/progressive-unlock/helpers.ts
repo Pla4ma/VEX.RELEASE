@@ -47,4 +47,9 @@ export const INTENSE_PROFILE: MotivationProfile = {
   secondary: ["competitive", "game_like"],
 };
 
-export { buildFeatureAccess, getFeatureAvailability, buildRootExposureFlags, buildHomeFeatureRuntime };
+export {
+  buildFeatureAccess,
+  getFeatureAvailability,
+  buildRootExposureFlags,
+  buildHomeFeatureRuntime,
+};

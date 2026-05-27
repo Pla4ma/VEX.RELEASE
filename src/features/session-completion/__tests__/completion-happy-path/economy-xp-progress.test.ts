@@ -6,8 +6,14 @@ import {
 
 describe("5. No chest/shop/economy", () => {
   const ECONOMY_TERMS = [
-    "chest", "shop", "wallet", "coin", "gem",
-    "battle_pass", "premium_currency", "inventory",
+    "chest",
+    "shop",
+    "wallet",
+    "coin",
+    "gem",
+    "battle_pass",
+    "premium_currency",
+    "inventory",
   ];
 
   it("completion personalization output contains no economy terms", () => {
@@ -40,7 +46,9 @@ describe("5. No chest/shop/economy", () => {
       summary: createSessionSummary({ sessionMode: SessionMode.FLOW }),
       xpDelta: 90,
     });
-    expect(result.userFacingSummary.displayTitle).not.toMatch(/reward|earn|claim|open/i);
+    expect(result.userFacingSummary.displayTitle).not.toMatch(
+      /reward|earn|claim|open/i,
+    );
   });
 
   it("progressProof does not report coins or gems", () => {

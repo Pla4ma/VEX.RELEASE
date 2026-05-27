@@ -1,96 +1,120 @@
-import { resolvePremiumStrategy } from '../premium-strategy';
+import { resolvePremiumStrategy } from "../premium-strategy";
 
-describe('resolvePremiumStrategy', () => {
-  it('keeps the basic execution loop free', () => {
-    const strategy = resolvePremiumStrategy({ billingConfigured: true, completedSessions: 7 });
+describe("resolvePremiumStrategy", () => {
+  it("keeps the basic execution loop free", () => {
+    const strategy = resolvePremiumStrategy({
+      billingConfigured: true,
+      completedSessions: 7,
+    });
 
     expect(strategy.freeFeatures).toEqual(
       expect.arrayContaining([
-        expect.stringContaining('Start and complete'),
-        expect.stringContaining('rhythm and progress'),
-        expect.stringContaining('Coach Presence'),
-        expect.stringContaining('lane personalization'),
+        expect.stringContaining("Start and complete"),
+        expect.stringContaining("rhythm and progress"),
+        expect.stringContaining("Coach Presence"),
+        expect.stringContaining("lane personalization"),
       ]),
     );
   });
 
-  it('hides premium when billing is not configured', () => {
-    const strategy = resolvePremiumStrategy({ billingConfigured: false, completedSessions: 10 });
+  it("hides premium when billing is not configured", () => {
+    const strategy = resolvePremiumStrategy({
+      billingConfigured: false,
+      completedSessions: 10,
+    });
 
-    expect(strategy.triggerMoment).toBe('hidden_billing_unavailable');
+    expect(strategy.triggerMoment).toBe("hidden_billing_unavailable");
     expect(strategy.canShowPaywall).toBe(false);
-    expect(strategy.noFakeBillingChecklist).toContain('Do not render purchasable plans without RevenueCat packages.');
+    expect(strategy.noFakeBillingChecklist).toContain(
+      "Do not render purchasable plans without RevenueCat packages.",
+    );
   });
 
-  it('uses premium copy about deeper personalization', () => {
+  it("uses premium copy about deeper personalization", () => {
     const strategy = resolvePremiumStrategy({
       billingConfigured: true,
       completedSessions: 7,
-      highIntentAction: 'weekly_intelligence',
+      highIntentAction: "weekly_intelligence",
     });
 
     expect(strategy.canShowPaywall).toBe(true);
-    expect(strategy.paywallHeadline).toContain('execution system');
-    expect(strategy.paywallBody).toContain('deeper memory');
+    expect(strategy.paywallHeadline).toContain("execution system");
+    expect(strategy.paywallBody).toContain("deeper memory");
     expect(strategy.paywallBody).not.toMatch(/upgrade now|unlock now/i);
   });
 
-  it('does not show premium before 40 sessions', () => {
-    const strategy = resolvePremiumStrategy({ billingConfigured: true, completedSessions: 25 });
-    expect(strategy.triggerMoment).toBe('none');
+  it("does not show premium before 40 sessions", () => {
+    const strategy = resolvePremiumStrategy({
+      billingConfigured: true,
+      completedSessions: 25,
+    });
+    expect(strategy.triggerMoment).toBe("none");
     expect(strategy.canShowPaywall).toBe(false);
   });
 
-  it('shows premium after 40 sessions', () => {
-    const strategy = resolvePremiumStrategy({ billingConfigured: true, completedSessions: 40 });
-    expect(strategy.triggerMoment).toBe('after_value');
+  it("shows premium after 40 sessions", () => {
+    const strategy = resolvePremiumStrategy({
+      billingConfigured: true,
+      completedSessions: 40,
+    });
+    expect(strategy.triggerMoment).toBe("after_value");
     expect(strategy.canShowPaywall).toBe(true);
   });
 
-  it('triggers on high-intent action only after soft-tease threshold (session 5)', () => {
+  it("triggers on high-intent action only after soft-tease threshold (session 5)", () => {
     // Below session 5: hidden even with highIntentAction
     const early = resolvePremiumStrategy({
       billingConfigured: true,
       completedSessions: 1,
-      highIntentAction: 'advanced_study',
+      highIntentAction: "advanced_study",
     });
-    expect(early.triggerMoment).toBe('none');
+    expect(early.triggerMoment).toBe("none");
     expect(early.canShowPaywall).toBe(false);
 
     // At session 5: highIntentAction triggers paywall
     const at5 = resolvePremiumStrategy({
       billingConfigured: true,
       completedSessions: 5,
-      highIntentAction: 'advanced_study',
+      highIntentAction: "advanced_study",
     });
-    expect(at5.triggerMoment).toBe('advanced_study');
+    expect(at5.triggerMoment).toBe("advanced_study");
     expect(at5.canShowPaywall).toBe(true);
   });
 
-  it('blocks premium on Day 0 and after repeated dismissals', () => {
-    expect(resolvePremiumStrategy({
-      billingConfigured: true,
-      completedSessions: 0,
-      highIntentAction: 'advanced_study',
-    }).canShowPaywall).toBe(false);
+  it("blocks premium on Day 0 and after repeated dismissals", () => {
+    expect(
+      resolvePremiumStrategy({
+        billingConfigured: true,
+        completedSessions: 0,
+        highIntentAction: "advanced_study",
+      }).canShowPaywall,
+    ).toBe(false);
 
-    expect(resolvePremiumStrategy({
+    expect(
+      resolvePremiumStrategy({
+        billingConfigured: true,
+        completedSessions: 10,
+        highIntentAction: "weekly_intelligence",
+        paywallDismissals: 2,
+      }).triggerMoment,
+    ).toBe("none");
+  });
+
+  it("does not paywall basic sessions", () => {
+    const strategy = resolvePremiumStrategy({
       billingConfigured: true,
       completedSessions: 10,
-      highIntentAction: 'weekly_intelligence',
-      paywallDismissals: 2,
-    }).triggerMoment).toBe('none');
+    });
+    expect(strategy.freeFeatures).toEqual(
+      expect.arrayContaining([expect.stringContaining("Start and complete")]),
+    );
   });
 
-  it('does not paywall basic sessions', () => {
-    const strategy = resolvePremiumStrategy({ billingConfigured: true, completedSessions: 10 });
-    expect(strategy.freeFeatures).toEqual(expect.arrayContaining([
-      expect.stringContaining('Start and complete'),
-    ]));
-  });
-
-  it('has free vs pro matrix', () => {
-    const strategy = resolvePremiumStrategy({ billingConfigured: true, completedSessions: 10 });
+  it("has free vs pro matrix", () => {
+    const strategy = resolvePremiumStrategy({
+      billingConfigured: true,
+      completedSessions: 10,
+    });
     expect(strategy.freeVsProMatrix).toBeDefined();
     expect(strategy.freeVsProMatrix.length).toBeGreaterThanOrEqual(5);
     strategy.freeVsProMatrix.forEach((row) => {

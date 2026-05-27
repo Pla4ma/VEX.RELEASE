@@ -1,14 +1,24 @@
-import type { OnboardingStore } from './store';
-import type { OnboardingState } from './schemas';
-import { useAuthStore } from '../../store';
+import type { OnboardingStore } from "./store";
+import type { OnboardingState } from "./schemas";
+import { useAuthStore } from "../../store";
 
 export const initialState: OnboardingState = {
-  isOnboarded: false, currentStep: 0, goal: null, focusDuration: null,
-  displayName: null, startedAt: null, completedAt: null,
-  completedForUserId: null, persona: null, element: null,
-  motivationProfile: null, explicitMotivationStyle: null,
-  profileStepsCompleted: false, firstSessionStarted: false,
-  firstSessionCompleted: false, homePreviewEntered: false,
+  isOnboarded: false,
+  currentStep: 0,
+  goal: null,
+  focusDuration: null,
+  displayName: null,
+  startedAt: null,
+  completedAt: null,
+  completedForUserId: null,
+  persona: null,
+  element: null,
+  motivationProfile: null,
+  explicitMotivationStyle: null,
+  profileStepsCompleted: false,
+  firstSessionStarted: false,
+  firstSessionCompleted: false,
+  homePreviewEntered: false,
   chosenLane: null,
 };
 

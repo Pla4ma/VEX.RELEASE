@@ -1,18 +1,21 @@
-import { useMemo, useRef } from 'react';
-import { resolveSessionMode } from '../../../session/modes';
-import { getLanePresentationPolicy, useInitialLane } from '../../../features/lane-engine';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useOnboardingStore } from '../../../features/onboarding/store';
+import { useMemo, useRef } from "react";
+import { resolveSessionMode } from "../../../session/modes";
+import {
+  getLanePresentationPolicy,
+  useInitialLane,
+} from "../../../features/lane-engine";
+import { useReducedMotion } from "../../../hooks/useReducedMotion";
+import { useOnboardingStore } from "../../../features/onboarding/store";
 import {
   getActiveSessionTargetLabel,
   normalizeActiveSessionGoal,
   normalizeActiveSessionMotivationStyle,
   resolveActiveSessionDisplayPolicy,
   toLaneSessionMode,
-} from '../utils/active-session-display-policy';
-import { buildActiveSessionHeroViewModel } from '../utils/active-session-hero-view-model';
-import type { ActiveSessionDisplayPolicy } from '../utils/active-session-display-policy';
-import type { ActiveSessionHeroViewModel } from '../utils/active-session-hero-view-model';
+} from "../utils/active-session-display-policy";
+import { buildActiveSessionHeroViewModel } from "../utils/active-session-hero-view-model";
+import type { ActiveSessionDisplayPolicy } from "../utils/active-session-display-policy";
+import type { ActiveSessionHeroViewModel } from "../utils/active-session-hero-view-model";
 
 export type UseActiveSessionDisplayInput = {
   dailyProgress: number;
@@ -21,9 +24,9 @@ export type UseActiveSessionDisplayInput = {
   momentumScores: number[];
   perfectFocusActive: boolean;
   phaseAccent: string;
-  phaseIcon: 'clock' | 'target';
+  phaseIcon: "clock" | "target";
   phaseLabel: string;
-  purityLabel: 'Elite' | 'Good' | 'Okay' | 'Distracted';
+  purityLabel: "Elite" | "Good" | "Okay" | "Distracted";
   purityScore: number;
   remainingSeconds: number;
   streakMultiplier: number;
@@ -38,8 +41,12 @@ export type UseActiveSessionDisplayResult = {
   heroViewModel: ActiveSessionHeroViewModel;
 };
 
-export function useActiveSessionDisplay(input: UseActiveSessionDisplayInput): UseActiveSessionDisplayResult {
-  const motivationStyle = useOnboardingStore((state) => state.explicitMotivationStyle);
+export function useActiveSessionDisplay(
+  input: UseActiveSessionDisplayInput,
+): UseActiveSessionDisplayResult {
+  const motivationStyle = useOnboardingStore(
+    (state) => state.explicitMotivationStyle,
+  );
   const primaryGoal = useOnboardingStore((state) => state.goal);
   const chosenLane = useOnboardingStore((state) => state.chosenLane);
   const { isReducedMotion } = useReducedMotion();
@@ -55,7 +62,11 @@ export function useActiveSessionDisplay(input: UseActiveSessionDisplayInput): Us
   });
 
   return useMemo((): UseActiveSessionDisplayResult => {
-    const focusStage = input.showInterruption ? "interruption" : input.isPaused ? "paused" : "active";
+    const focusStage = input.showInterruption
+      ? "interruption"
+      : input.isPaused
+        ? "paused"
+        : "active";
     const displayPolicy = resolveActiveSessionDisplayPolicy({
       bossIntensity: undefined,
       firstWeekStage: undefined,
@@ -94,5 +105,12 @@ export function useActiveSessionDisplay(input: UseActiveSessionDisplayInput): Us
     });
 
     return { displayPolicy, heroViewModel };
-  }, [input, motivationStyle, primaryGoal, currentMode, laneProfile, isReducedMotion]);
+  }, [
+    input,
+    motivationStyle,
+    primaryGoal,
+    currentMode,
+    laneProfile,
+    isReducedMotion,
+  ]);
 }

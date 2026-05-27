@@ -13,5 +13,5 @@ export {
   MonetizationValidation,
   type ValidationResult,
   type ValidationError,
-} from './validation';
-export { MonetizationValidation as default } from './validation';
+} from "./validation";
+export { MonetizationValidation as default } from "./validation";

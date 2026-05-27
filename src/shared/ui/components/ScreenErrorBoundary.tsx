@@ -6,15 +6,15 @@
  * and offline detection.
  */
 
-import React, { Component, type ReactNode, type ErrorInfo } from 'react';
-import { ScrollView } from 'react-native';
+import React, { Component, type ReactNode, type ErrorInfo } from "react";
+import { ScrollView } from "react-native";
 
-import { useTheme } from '../../../theme';
-import { Text } from '../../../components/primitives';
-import { Button } from '../../../components';
-import { OfflineEmptyState } from './EmptyState';
-import { captureException } from '../../../config/sentry';
-import { useNetInfo } from '../../../network';
+import { useTheme } from "../../../theme";
+import { Text } from "../../../components/primitives";
+import { Button } from "../../../components";
+import { OfflineEmptyState } from "./EmptyState";
+import { captureException } from "../../../config/sentry";
+import { useNetInfo } from "../../../network";
 
 export interface ScreenErrorBoundaryProps {
   children: ReactNode;
@@ -39,43 +39,62 @@ interface ErrorFallbackProps {
   onGoBack?: () => void;
 }
 
-function ErrorFallback({ screenName, error, onRetry, onGoBack }: ErrorFallbackProps): JSX.Element {
+function ErrorFallback({
+  screenName,
+  error,
+  onRetry,
+  onGoBack,
+}: ErrorFallbackProps): JSX.Element {
   const { theme } = useTheme();
   const { isOffline } = useNetInfo();
 
-  const errorMessage = error?.message?.toLowerCase() ?? '';
+  const errorMessage = error?.message?.toLowerCase() ?? "";
   const message = isOffline
-    ? 'You are offline. Please check your connection and try again.'
-    : errorMessage.includes('network') || errorMessage.includes('fetch') || errorMessage.includes('timeout')
-    ? 'Connection lost. Please check your internet and try again.'
-    : errorMessage.includes('auth') || errorMessage.includes('unauthorized') || errorMessage.includes('token')
-    ? 'Your session expired. Please sign in again.'
-    : `We couldn't load ${screenName}. Please try again.`;
+    ? "You are offline. Please check your connection and try again."
+    : errorMessage.includes("network") ||
+        errorMessage.includes("fetch") ||
+        errorMessage.includes("timeout")
+      ? "Connection lost. Please check your internet and try again."
+      : errorMessage.includes("auth") ||
+          errorMessage.includes("unauthorized") ||
+          errorMessage.includes("token")
+        ? "Your session expired. Please sign in again."
+        : `We couldn't load ${screenName}. Please try again.`;
 
-  const offlineNotice = isOffline ? ' Retry when reconnected.' : '';
+  const offlineNotice = isOffline ? " Retry when reconnected." : "";
 
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
-      contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', padding: theme.spacing[6] }}
+      contentContainerStyle={{
+        flexGrow: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: theme.spacing[6],
+      }}
     >
       <Text
         variant="display"
-        style={{ marginBottom: theme.spacing[6], textAlign: 'center' }}
+        style={{ marginBottom: theme.spacing[6], textAlign: "center" }}
       >
-        {isOffline ? '📡' : '⚠️'}
+        {isOffline ? "📡" : "⚠️"}
       </Text>
       <Text
         variant="h3"
         color="text.primary"
-        style={{ marginBottom: theme.spacing[3], textAlign: 'center' }}
+        style={{ marginBottom: theme.spacing[3], textAlign: "center" }}
       >
-        {isOffline ? 'You are offline' : 'Something went wrong'}
+        {isOffline ? "You are offline" : "Something went wrong"}
       </Text>
       <Text
         variant="body"
         color="text.secondary"
-        style={{ marginBottom: theme.spacing[6], maxWidth: 280, lineHeight: 22, textAlign: 'center' }}
+        style={{
+          marginBottom: theme.spacing[6],
+          maxWidth: 280,
+          lineHeight: 22,
+          textAlign: "center",
+        }}
       >
         {message}
         {offlineNotice}
@@ -83,7 +102,7 @@ function ErrorFallback({ screenName, error, onRetry, onGoBack }: ErrorFallbackPr
       <Button
         variant="primary"
         onPress={onRetry}
-        style={{ width: '100%', maxWidth: 280 }}
+        style={{ width: "100%", maxWidth: 280 }}
         accessibilityLabel="Try Again button"
         accessibilityRole="button"
         accessibilityHint="Retries the screen operation"
@@ -94,7 +113,7 @@ function ErrorFallback({ screenName, error, onRetry, onGoBack }: ErrorFallbackPr
         <Button
           variant="ghost"
           onPress={onGoBack}
-          style={{ width: '100%', maxWidth: 280, marginTop: theme.spacing[3] }}
+          style={{ width: "100%", maxWidth: 280, marginTop: theme.spacing[3] }}
           accessibilityLabel="Go Back button"
           accessibilityRole="button"
           accessibilityHint="Navigates back to the previous screen"
@@ -106,7 +125,10 @@ function ErrorFallback({ screenName, error, onRetry, onGoBack }: ErrorFallbackPr
   );
 }
 
-export class ScreenErrorBoundary extends Component<ScreenErrorBoundaryProps, ScreenErrorState> {
+export class ScreenErrorBoundary extends Component<
+  ScreenErrorBoundaryProps,
+  ScreenErrorState
+> {
   constructor(props: ScreenErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false, error: null, isOffline: false };
@@ -117,15 +139,18 @@ export class ScreenErrorBoundary extends Component<ScreenErrorBoundaryProps, Scr
     return {
       hasError: true,
       error,
-      isOffline: msg.includes('network') || msg.includes('offline') || msg.includes('connection'),
+      isOffline:
+        msg.includes("network") ||
+        msg.includes("offline") ||
+        msg.includes("connection"),
     };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     const { featureTag } = this.props;
     captureException(error, {
-      tags: { feature: featureTag ?? 'screen-error-boundary' },
-      extra: { componentStack: errorInfo.componentStack ?? '' },
+      tags: { feature: featureTag ?? "screen-error-boundary" },
+      extra: { componentStack: errorInfo.componentStack ?? "" },
     });
     this.props.onError?.(error, errorInfo);
   }
@@ -143,14 +168,25 @@ export class ScreenErrorBoundary extends Component<ScreenErrorBoundaryProps, Scr
     }
 
     if (isOffline && allowOffline) {
-      return <OfflineEmptyState onAction={this.handleRetry} actionLabel="Retry Connection" />;
+      return (
+        <OfflineEmptyState
+          onAction={this.handleRetry}
+          actionLabel="Retry Connection"
+        />
+      );
     }
 
     if (fallback) {
       return fallback;
     }
 
-    return <ErrorFallback screenName={screenName} error={error} onRetry={this.handleRetry} />;
+    return (
+      <ErrorFallback
+        screenName={screenName}
+        error={error}
+        onRetry={this.handleRetry}
+      />
+    );
   }
 }
 
@@ -161,13 +197,17 @@ export function withScreenErrorBoundary<P extends object>(
   return function WithErrorBoundary(props: P): JSX.Element {
     return (
       <ScreenErrorBoundary screenName={screenName}>
-        <WrappedComponent {...(props as P & React.PropsWithChildren<unknown>)} />
+        <WrappedComponent
+          {...(props as P & React.PropsWithChildren<unknown>)}
+        />
       </ScreenErrorBoundary>
     );
   };
 }
 
-const screenErrorContext = React.createContext<((error: Error) => void) | null>(null);
+const screenErrorContext = React.createContext<((error: Error) => void) | null>(
+  null,
+);
 
 export function useScreenError(): (error: Error) => void {
   const ctx = React.useContext(screenErrorContext);

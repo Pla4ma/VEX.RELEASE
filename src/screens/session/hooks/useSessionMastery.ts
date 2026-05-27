@@ -1,8 +1,17 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { MasteryService } from '../../../features/mastery/service';
-import { calculateTechniqueXp, getMasteryRankDisplay, type MasteryState } from '../../../features/mastery/types';
+import { useCallback, useEffect, useRef, useState } from "react";
+import { MasteryService } from "../../../features/mastery/service";
+import {
+  calculateTechniqueXp,
+  getMasteryRankDisplay,
+  type MasteryState,
+} from "../../../features/mastery/types";
 
-type ToastFn = (input: { type: 'success'; title: string; message: string; duration: number }) => void;
+type ToastFn = (input: {
+  type: "success";
+  title: string;
+  message: string;
+  duration: number;
+}) => void;
 
 type ApplySessionMasteryInput = {
   focusPurityScore: number;
@@ -14,26 +23,47 @@ type ApplySessionMasteryInput = {
 
 export function useSessionMastery(userId: string, showToast: ToastFn) {
   const hasAppliedMasteryRef = useRef(false);
-  const [masteryState, setMasteryState] = useState<MasteryState | null>(() => (userId ? MasteryService.getOrCreateMasteryState(userId) : null));
+  const [masteryState, setMasteryState] = useState<MasteryState | null>(() =>
+    userId ? MasteryService.getOrCreateMasteryState(userId) : null,
+  );
 
   useEffect(() => {
-    setMasteryState(userId ? MasteryService.getOrCreateMasteryState(userId) : null);
+    setMasteryState(
+      userId ? MasteryService.getOrCreateMasteryState(userId) : null,
+    );
     hasAppliedMasteryRef.current = false;
   }, [userId]);
 
   const applySessionMastery = useCallback(
-    ({ focusPurityScore, focusedDuration, interruptions, streakDays, isMounted }: ApplySessionMasteryInput) => {
-      if (!userId || hasAppliedMasteryRef.current) {return null;}
+    ({
+      focusPurityScore,
+      focusedDuration,
+      interruptions,
+      streakDays,
+      isMounted,
+    }: ApplySessionMasteryInput) => {
+      if (!userId || hasAppliedMasteryRef.current) {
+        return null;
+      }
       const masteryResult = MasteryService.applySessionXp(
         userId,
-        calculateTechniqueXp(focusedDuration / 60, focusPurityScore, interruptions > 0, streakDays, false, 100),
+        calculateTechniqueXp(
+          focusedDuration / 60,
+          focusPurityScore,
+          interruptions > 0,
+          streakDays,
+          false,
+          100,
+        ),
       );
       hasAppliedMasteryRef.current = true;
-      if (isMounted) {setMasteryState(masteryResult.updatedState);}
+      if (isMounted) {
+        setMasteryState(masteryResult.updatedState);
+      }
       if (masteryResult.rankChanged && masteryResult.newRank) {
         showToast({
-          type: 'success',
-          title: '🎖️ Mastery Rank Up!',
+          type: "success",
+          title: "🎖️ Mastery Rank Up!",
           message: `You've reached ${getMasteryRankDisplay(masteryResult.newRank).title}`,
           duration: 4000,
         });

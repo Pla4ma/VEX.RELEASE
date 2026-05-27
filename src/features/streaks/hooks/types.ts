@@ -1,4 +1,7 @@
-import type { StreakRepairQuest, RepairQuestStatusOutput } from '../schemas-enhanced';
+import type {
+  StreakRepairQuest,
+  RepairQuestStatusOutput,
+} from "../schemas-enhanced";
 
 export interface RecordSessionResult {
   questUpdated: boolean;

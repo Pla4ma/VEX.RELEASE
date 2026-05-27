@@ -98,7 +98,10 @@ export class SessionAnalytics {
     history: SessionHistoryEntry[],
     recoveries: RecoveryRecord[],
   ): Promise<PatternMetrics> {
-    this.patterns = await calculatePatternMetricsFromHistory(history, recoveries);
+    this.patterns = await calculatePatternMetricsFromHistory(
+      history,
+      recoveries,
+    );
     return this.patterns;
   }
 

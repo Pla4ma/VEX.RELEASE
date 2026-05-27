@@ -1,11 +1,16 @@
-import { applyCompletionSubsystems } from '../completion-subsystems';
-import { createCompletionLedger, createSessionSummary } from './ledger-test-utils';
-import { resetCompletionMocks } from './completion-product-journey-helpers';
+import { applyCompletionSubsystems } from "../completion-subsystems";
+import {
+  createCompletionLedger,
+  createSessionSummary,
+} from "./ledger-test-utils";
+import { resetCompletionMocks } from "./completion-product-journey-helpers";
 
-describe('duplicate session event does not duplicate rewards', () => {
-  beforeEach(() => { resetCompletionMocks(); });
+describe("duplicate session event does not duplicate rewards", () => {
+  beforeEach(() => {
+    resetCompletionMocks();
+  });
 
-  it('completion subsystems produce idempotent reward ledger', async () => {
+  it("completion subsystems produce idempotent reward ledger", async () => {
     const ledger = createCompletionLedger();
     const summary = createSessionSummary();
 
@@ -16,7 +21,7 @@ describe('duplicate session event does not duplicate rewards', () => {
     expect(result1.ledger.xpDelta).toEqual(result2.ledger.xpDelta);
   });
 
-  it('XP reward ids are deterministic for same session', async () => {
+  it("XP reward ids are deterministic for same session", async () => {
     const ledger = createCompletionLedger();
     const summary = createSessionSummary();
 

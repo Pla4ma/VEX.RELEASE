@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
-import { getSessionHistoryViewModel } from './service';
-import type { SessionHistoryViewModel } from './schemas';
+import { getSessionHistoryViewModel } from "./service";
+import type { SessionHistoryViewModel } from "./schemas";
 
 const EMPTY_HISTORY: SessionHistoryViewModel = {
   items: [],
@@ -24,7 +24,7 @@ export function useSessionHistoryRecords(
   refetch: () => void;
 } {
   const query = useQuery({
-    queryKey: ['session-history', userId, limit],
+    queryKey: ["session-history", userId, limit],
     enabled: Boolean(userId),
     queryFn: async () => {
       if (!userId) {

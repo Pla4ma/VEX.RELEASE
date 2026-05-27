@@ -1,8 +1,8 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
 
 export function ProgressionStatCard({
   detail,
@@ -12,14 +12,14 @@ export function ProgressionStatCard({
 }: {
   detail: string;
   label: string;
-  tone: 'default' | 'success' | 'warning';
+  tone: "default" | "success" | "warning";
   value: string;
 }): JSX.Element {
   const { theme } = useTheme();
   const toneColor =
-    tone === 'success'
+    tone === "success"
       ? theme.colors.success[500]
-      : tone === 'warning'
+      : tone === "warning"
         ? theme.colors.warning[500]
         : theme.colors.text.primary;
 
@@ -30,7 +30,7 @@ export function ProgressionStatCard({
         borderColor: theme.colors.border.light,
         borderRadius: theme.borderRadius.md,
         borderWidth: 1,
-        flexBasis: '47%',
+        flexBasis: "47%",
         flexGrow: 1,
         gap: theme.spacing[1],
         padding: theme.spacing[3],

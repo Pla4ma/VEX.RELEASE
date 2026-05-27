@@ -65,12 +65,7 @@ export function ConflictDeviceCard({
           mb="sm"
         >
           <Text variant="h4">{label}</Text>
-          <View
-            style={[
-              styles.badge,
-              { backgroundColor: badgeColor },
-            ]}
-          >
+          <View style={[styles.badge, { backgroundColor: badgeColor }]}>
             <Text style={styles.badgeText}>{badgeText}</Text>
           </View>
         </Box>

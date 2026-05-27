@@ -3,7 +3,7 @@
  */
 
 export interface IntegrationEventDefinitions {
-  'integration:session_rewards': {
+  "integration:session_rewards": {
     sessionId: string;
     userId: string;
     rewards: {
@@ -17,7 +17,7 @@ export interface IntegrationEventDefinitions {
     purity: { score: number; label: string; perfectFocus: boolean };
     timestamp: number;
   };
-  'config:updated': {
+  "config:updated": {
     key: string;
     value: unknown;
     previousValue: unknown;
@@ -26,7 +26,7 @@ export interface IntegrationEventDefinitions {
     previousVersion?: string;
     breakingChanges?: boolean;
   };
-  'analytics:economy_event': {
+  "analytics:economy_event": {
     userId?: string;
     event?: string;
     type?: string;
@@ -35,7 +35,7 @@ export interface IntegrationEventDefinitions {
     source?: string;
     properties?: Record<string, unknown>;
   };
-  'crafting:item_crafted': {
+  "crafting:item_crafted": {
     userId: string;
     itemId: string;
     itemType: string;

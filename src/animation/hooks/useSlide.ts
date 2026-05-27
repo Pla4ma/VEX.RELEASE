@@ -4,7 +4,7 @@
  * React hook for slide animations.
  */
 
-import { useCallback } from 'react';
+import { useCallback } from "react";
 import {
   useSharedValue,
   useAnimatedStyle,
@@ -12,15 +12,15 @@ import {
   withSpring,
   withDelay,
   type SharedValue,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { durations } from '../timings';
-import { defaultSpring } from '../springs';
+import { durations } from "../timings";
+import { defaultSpring } from "../springs";
 
 /**
  * Slide direction
  */
-export type SlideDirection = 'up' | 'down' | 'left' | 'right';
+export type SlideDirection = "up" | "down" | "left" | "right";
 
 /**
  * Slide animation options
@@ -49,16 +49,16 @@ interface UseSlideResult {
  */
 function getInitialOffset(
   direction: SlideDirection,
-  distance: number
+  distance: number,
 ): { x: number; y: number } {
   switch (direction) {
-    case 'up':
+    case "up":
       return { x: 0, y: distance };
-    case 'down':
+    case "down":
       return { x: 0, y: -distance };
-    case 'left':
+    case "left":
       return { x: distance, y: 0 };
-    case 'right':
+    case "right":
       return { x: -distance, y: 0 };
     default:
       return { x: 0, y: 0 };
@@ -70,7 +70,7 @@ function getInitialOffset(
  */
 export function useSlide(options: UseSlideOptions = {}): UseSlideResult {
   const {
-    direction = 'up',
+    direction = "up",
     distance = 100,
     useSpring: useSpringAnimation = false,
     duration = durations.normal,
@@ -97,7 +97,7 @@ export function useSlide(options: UseSlideOptions = {}): UseSlideResult {
 
       translate.value = delay > 0 ? withDelay(delay, animation) : animation;
     },
-    [translate, useSpringAnimation, duration, delay]
+    [translate, useSpringAnimation, duration, delay],
   );
 
   const slideIn = useCallback(() => {
@@ -112,7 +112,7 @@ export function useSlide(options: UseSlideOptions = {}): UseSlideResult {
     (x: number, y: number) => {
       animateTranslate({ x, y });
     },
-    [animateTranslate]
+    [animateTranslate],
   );
 
   return {

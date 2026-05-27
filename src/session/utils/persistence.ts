@@ -24,7 +24,13 @@ const PersistedSessionStateSchema = z.object({
   sessionId: z.string().uuid(),
   userId: z.string(),
   status: z.enum(["ACTIVE", "PAUSED", "BACKGROUNDED", "INTERRUPTION_RISK"]),
-  phase: z.enum(["FOCUS", "SHORT_BREAK", "LONG_BREAK", "PREPARATION", "REVIEW"]),
+  phase: z.enum([
+    "FOCUS",
+    "SHORT_BREAK",
+    "LONG_BREAK",
+    "PREPARATION",
+    "REVIEW",
+  ]),
   startedAt: z.number(),
   lastUpdatedAt: z.number(),
   elapsedTime: z.number().min(0),
@@ -45,7 +51,11 @@ export type PersistedSessionState = z.infer<typeof PersistedSessionStateSchema>;
 export type { SessionHistoryEntry, RecoveryAttempt };
 export { isSessionStale, canResumeSession };
 export { addToSessionHistory, getSessionHistory } from "./persistence-history";
-export { recordRecoveryAttempt, getRecoveryAttempts, getRecoverySuccessRate } from "./persistence-recovery";
+export {
+  recordRecoveryAttempt,
+  getRecoveryAttempts,
+  getRecoverySuccessRate,
+} from "./persistence-recovery";
 const KEYS = {
   ACTIVE_SESSION: "session:active",
   LAST_SYNC: "session:lastSync",

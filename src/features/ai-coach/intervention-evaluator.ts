@@ -1,15 +1,15 @@
-import * as repository from './repository';
-import { getOrCreateCoachState } from './persona-manager';
+import * as repository from "./repository";
+import { getOrCreateCoachState } from "./persona-manager";
 import type {
   EvaluateInterventionsInput,
   InterventionExecution,
   InterventionRule,
   MessageCategory,
   TriggerType,
-} from './schemas';
-import { EvaluateInterventionsInputSchema } from './schemas';
-import { checkConditions } from './message-generator';
-import { generateMessage } from './message-generator';
+} from "./schemas";
+import { EvaluateInterventionsInputSchema } from "./schemas";
+import { checkConditions } from "./message-generator";
+import { generateMessage } from "./message-generator";
 
 const MAX_INTERVENTIONS_PER_DAY = 5;
 
@@ -26,7 +26,9 @@ export async function evaluateInterventions(
     return [];
   }
 
-  const rules = await repository.fetchInterventionRulesByTrigger(validated.trigger);
+  const rules = await repository.fetchInterventionRulesByTrigger(
+    validated.trigger,
+  );
   const executions: InterventionExecution[] = [];
 
   for (const rule of rules) {
@@ -41,12 +43,20 @@ export async function evaluateInterventions(
     if (recentlyTriggered) {
       continue;
     }
-    const todaysExecutions = await repository.fetchTodaysInterventionExecutions(validated.userId);
-    const ruleExecutionsToday = todaysExecutions.filter((e) => e.ruleId === rule.id).length;
+    const todaysExecutions = await repository.fetchTodaysInterventionExecutions(
+      validated.userId,
+    );
+    const ruleExecutionsToday = todaysExecutions.filter(
+      (e) => e.ruleId === rule.id,
+    ).length;
     if (ruleExecutionsToday >= rule.maxPerDay) {
       continue;
     }
-    const execution = await executeIntervention(validated.userId, rule, validated.context);
+    const execution = await executeIntervention(
+      validated.userId,
+      rule,
+      validated.context,
+    );
     executions.push(execution);
     await repository.upsertCoachState({
       ...state,
@@ -68,7 +78,7 @@ async function executeIntervention(
     userId,
     ruleId: rule.id,
     triggerType: rule.trigger.type,
-    status: 'PENDING',
+    status: "PENDING",
     triggeredAt: Date.now(),
     executedAt: null,
     messageId: null,
@@ -81,10 +91,10 @@ async function executeIntervention(
 
   try {
     switch (rule.action.type) {
-      case 'SEND_MESSAGE':
-      case 'SEND_PUSH':
-      case 'SHOW_MODAL':
-      case 'SHOW_BANNER': {
+      case "SEND_MESSAGE":
+      case "SEND_PUSH":
+      case "SHOW_MODAL":
+      case "SHOW_BANNER": {
         const category = inferCategoryFromTrigger(rule.trigger.type);
         const message = await generateMessage({
           userId,
@@ -95,7 +105,7 @@ async function executeIntervention(
         if (message) {
           const savedMessage = await repository.createCoachMessage({
             ...message,
-            status: rule.action.delayMinutes > 0 ? 'SCHEDULED' : 'SENT',
+            status: rule.action.delayMinutes > 0 ? "SCHEDULED" : "SENT",
             scheduledFor:
               rule.action.delayMinutes > 0
                 ? Date.now() + rule.action.delayMinutes * 60 * 1000
@@ -105,17 +115,17 @@ async function executeIntervention(
         }
         break;
       }
-      case 'SUGGEST_SESSION':
-      case 'ADJUST_DIFFICULTY':
-      case 'SCHEDULE_REMINDER':
-      case 'ACTIVATE_COMEBACK':
-      case 'MUTE_NOTIFICATIONS':
+      case "SUGGEST_SESSION":
+      case "ADJUST_DIFFICULTY":
+      case "SCHEDULE_REMINDER":
+      case "ACTIVATE_COMEBACK":
+      case "MUTE_NOTIFICATIONS":
         break;
     }
-    execution.status = 'EXECUTED';
+    execution.status = "EXECUTED";
     execution.executedAt = Date.now();
-  } catch {
-    execution.status = 'FAILED';
+  } catch (error: unknown) {
+    execution.status = "FAILED";
   }
 
   await repository.updateInterventionExecution(
@@ -128,20 +138,20 @@ async function executeIntervention(
 
 function inferCategoryFromTrigger(triggerType: TriggerType): MessageCategory {
   const mapping: Record<TriggerType, MessageCategory> = {
-    STREAK_AT_RISK: 'STREAK_RISK',
-    NO_SESSION_24H: 'MOTIVATION_BOOST',
-    NO_SESSION_48H: 'STREAK_RISK',
-    NO_SESSION_72H: 'COMEBACK_SUPPORT',
-    SESSION_ABANDONED: 'POST_FAILURE',
-    LOW_QUALITY_SESSION: 'POST_FAILURE',
-    MILESTONE_REACHED: 'MILESTONE_HYPE',
-    LEVEL_UP: 'MILESTONE_HYPE',
-    BOSS_TIMEOUT_WARNING: 'CHALLENGE_PROMPT',
-    CHALLENGE_EXPIRING: 'CHALLENGE_PROMPT',
-    COMEBACK_WINDOW_OPEN: 'COMEBACK_SUPPORT',
-    DIFFICULTY_MISMATCH: 'DIFFICULTY_ADJUST',
-    OVERLOAD_DETECTED: 'OVERLOAD_WARNING',
-    MUTED_USER_REMINDER: 'MOTIVATION_BOOST',
+    STREAK_AT_RISK: "STREAK_RISK",
+    NO_SESSION_24H: "MOTIVATION_BOOST",
+    NO_SESSION_48H: "STREAK_RISK",
+    NO_SESSION_72H: "COMEBACK_SUPPORT",
+    SESSION_ABANDONED: "POST_FAILURE",
+    LOW_QUALITY_SESSION: "POST_FAILURE",
+    MILESTONE_REACHED: "MILESTONE_HYPE",
+    LEVEL_UP: "MILESTONE_HYPE",
+    BOSS_TIMEOUT_WARNING: "CHALLENGE_PROMPT",
+    CHALLENGE_EXPIRING: "CHALLENGE_PROMPT",
+    COMEBACK_WINDOW_OPEN: "COMEBACK_SUPPORT",
+    DIFFICULTY_MISMATCH: "DIFFICULTY_ADJUST",
+    OVERLOAD_DETECTED: "OVERLOAD_WARNING",
+    MUTED_USER_REMINDER: "MOTIVATION_BOOST",
   };
   return mapping[triggerType];
 }

@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 
-import { useSessionCompletionRouteState } from '../../features/session-completion/route';
+import { useSessionCompletionRouteState } from "../../features/session-completion/route";
 import {
   useRecoveredSessionCompletion,
   useSessionCompletionConsequences,
-} from '../../features/session-completion/hooks';
-import { SessionCompleteContent } from './components/SessionCompleteContent';
-import { SessionSummaryUnavailable } from './components/SessionSummaryUnavailable';
-import { useAuthStore } from '../../store';
-import type { SessionCompletionNavigationParams } from '../../features/session-completion/schemas';
-import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+} from "../../features/session-completion/hooks";
+import { SessionCompleteContent } from "./components/SessionCompleteContent";
+import { SessionSummaryUnavailable } from "./components/SessionSummaryUnavailable";
+import { useAuthStore } from "../../store";
+import type { SessionCompletionNavigationParams } from "../../features/session-completion/schemas";
+import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
 
 export const SessionCompleteScreen = withScreenErrorBoundary(
   function _SessionCompleteScreen(): React.JSX.Element {
@@ -27,10 +27,10 @@ export const SessionCompleteScreen = withScreenErrorBoundary(
         <SessionSummaryUnavailable
           message={
             recoveredCompletion.isPending && parsedRoute.recoverySessionId
-              ? 'VEX is rebuilding this win from your saved completion record.'
-              : parsedRoute.warningMessage ?? undefined
+              ? "VEX is rebuilding this win from your saved completion record."
+              : (parsedRoute.warningMessage ?? undefined)
           }
-          onDone={() => navigation.navigate({ name: 'Main', params: {} })}
+          onDone={() => navigation.navigate({ name: "Main", params: {} })}
           onRetry={
             parsedRoute.recoverySessionId && recoveredCompletion.isError
               ? () => {
@@ -44,7 +44,7 @@ export const SessionCompleteScreen = withScreenErrorBoundary(
 
     return <SessionCompleteResolved params={parsedRoute.params} />;
   },
-  'Session Complete',
+  "Session Complete",
 );
 
 function SessionCompleteResolved({

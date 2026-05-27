@@ -5,33 +5,33 @@
  * session completed → XP calculated → progression updated → level up triggered
  */
 
-import { describe, it, expect, vi } from '@jest/globals';
-import { setupIntegrationTests, server, http, HttpResponse } from './setup';
-import { eventBus } from '../../events';
+import { describe, it, expect, vi } from "@jest/globals";
+import { setupIntegrationTests, server, http, HttpResponse } from "./setup";
+import { eventBus } from "../../events";
 
 // Setup MSW
 setupIntegrationTests();
 
 // Mock event bus
-jest.mock('../../events', () => ({
+jest.mock("../../events", () => ({
   eventBus: {
     publish: jest.fn(),
   },
 }));
 
-describe('Session → Progression Integration', () => {
-  it('should calculate XP and update progression after session complete', async () => {
+describe("Session → Progression Integration", () => {
+  it("should calculate XP and update progression after session complete", async () => {
     // Override handler for this test
     server.use(
-      http.patch('*/rest/v1/sessions*', () => {
+      http.patch("*/rest/v1/sessions*", () => {
         return HttpResponse.json({
-          id: 'session-1',
-          status: 'completed',
+          id: "session-1",
+          status: "completed",
           duration: 1500,
           xp_earned: 250,
           coins_earned: 10,
         });
-      })
+      }),
     );
 
     // Verify event bus would receive correct payload
@@ -44,19 +44,19 @@ describe('Session → Progression Integration', () => {
     // 4. Event bus publishes session:completed
   });
 
-  it('should trigger level up when threshold crossed', async () => {
+  it("should trigger level up when threshold crossed", async () => {
     // Override handler to simulate level up
     server.use(
-      http.patch('*/rest/v1/progression*', () => {
+      http.patch("*/rest/v1/progression*", () => {
         return HttpResponse.json({
-          id: 'prog-1',
-          user_id: 'test-user-id',
+          id: "prog-1",
+          user_id: "test-user-id",
           level: 6, // Level increased!
-          xp: 50,  // XP reset after level up
+          xp: 50, // XP reset after level up
           xp_to_next_level: 600,
           leveled_up: true,
         });
-      })
+      }),
     );
 
     // Test demonstrates expected flow:
@@ -66,7 +66,7 @@ describe('Session → Progression Integration', () => {
     // 4. Verify progression query invalidated
   });
 
-  it('should publish session:completed with correct payload', async () => {
+  it("should publish session:completed with correct payload", async () => {
     // Verify event bus publishes correct event structure
     const expectedPayload = {
       sessionId: expect.any(String),
@@ -78,6 +78,9 @@ describe('Session → Progression Integration', () => {
     };
 
     // Event bus should be called with session:completed event
-    expect(eventBus.publish).not.toHaveBeenCalledWith('session:completed', expectedPayload);
+    expect(eventBus.publish).not.toHaveBeenCalledWith(
+      "session:completed",
+      expectedPayload,
+    );
   });
 });

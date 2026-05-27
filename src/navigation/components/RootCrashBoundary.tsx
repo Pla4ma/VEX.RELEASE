@@ -1,6 +1,6 @@
-import React, { Component, type ReactNode } from 'react';
-import { Pressable, Text, View } from 'react-native';
-import * as Sentry from '@sentry/react-native';
+import React, { Component, type ReactNode } from "react";
+import { Pressable, Text, View } from "react-native";
+import * as Sentry from "@sentry/react-native";
 
 interface CrashColors {
   background: string;
@@ -22,10 +22,18 @@ interface RootCrashBoundaryState {
   resetKey: string;
 }
 
-export class RootCrashBoundary extends Component<RootCrashBoundaryProps, RootCrashBoundaryState> {
-  state: RootCrashBoundaryState = { error: null, resetKey: this.props.resetKey };
+export class RootCrashBoundary extends Component<
+  RootCrashBoundaryProps,
+  RootCrashBoundaryState
+> {
+  state: RootCrashBoundaryState = {
+    error: null,
+    resetKey: this.props.resetKey,
+  };
 
-  static getDerivedStateFromError(error: Error): Partial<RootCrashBoundaryState> {
+  static getDerivedStateFromError(
+    error: Error,
+  ): Partial<RootCrashBoundaryState> {
     return { error };
   }
 
@@ -41,7 +49,7 @@ export class RootCrashBoundary extends Component<RootCrashBoundaryProps, RootCra
 
   componentDidCatch(error: Error): void {
     Sentry.captureException(error, {
-      tags: { feature: 'navigation', operation: 'root-render' },
+      tags: { feature: "navigation", operation: "root-render" },
     });
   }
 
@@ -54,7 +62,7 @@ export class RootCrashBoundary extends Component<RootCrashBoundaryProps, RootCra
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
+          justifyContent: "center",
           padding: 24,
           backgroundColor: colors.background,
         }}
@@ -69,11 +77,24 @@ export class RootCrashBoundary extends Component<RootCrashBoundaryProps, RootCra
             backgroundColor: colors.surface,
           }}
         >
-          <Text style={{ color: colors.textPrimary, fontSize: 22, fontWeight: '800' }}>
+          <Text
+            style={{
+              color: colors.textPrimary,
+              fontSize: 22,
+              fontWeight: "800",
+            }}
+          >
             VEX hit a startup snag
           </Text>
-          <Text style={{ color: colors.textSecondary, fontSize: 15, lineHeight: 22 }}>
-            Your account is safe. Restart this screen after the app finishes syncing your new profile.
+          <Text
+            style={{
+              color: colors.textSecondary,
+              fontSize: 15,
+              lineHeight: 22,
+            }}
+          >
+            Your account is safe. Restart this screen after the app finishes
+            syncing your new profile.
           </Text>
           <Pressable
             accessibilityHint="Retries rendering the app shell"
@@ -82,13 +103,21 @@ export class RootCrashBoundary extends Component<RootCrashBoundaryProps, RootCra
             onPress={() => this.setState({ error: null })}
             style={{
               minHeight: 48,
-              alignItems: 'center',
-              justifyContent: 'center',
+              alignItems: "center",
+              justifyContent: "center",
               borderRadius: 16,
               backgroundColor: colors.primary,
             }}
           >
-            <Text style={{ color: colors.background, fontSize: 16, fontWeight: '800' }}>Retry</Text>
+            <Text
+              style={{
+                color: colors.background,
+                fontSize: 16,
+                fontWeight: "800",
+              }}
+            >
+              Retry
+            </Text>
           </Pressable>
         </View>
       </View>

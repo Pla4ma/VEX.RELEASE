@@ -4,8 +4,7 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import { launchColors } from "@theme/tokens/launch-colors";
 
 export interface TomorrowPreviewSessionProps {
   preview: {

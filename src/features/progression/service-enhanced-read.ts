@@ -1,6 +1,6 @@
-import { ProgressionSummarySchema, type Progression } from './schemas';
-import { fetchProgressionEnhanced } from './repository/enhanced';
-import { calculateProgressPercent } from './service-enhanced-math';
+import { ProgressionSummarySchema, type Progression } from "./schemas";
+import { fetchProgressionEnhanced } from "./repository/enhanced";
+import { calculateProgressPercent } from "./service-enhanced-math";
 
 export async function getProgressionEnhanced(
   userId: string,
@@ -10,7 +10,7 @@ export async function getProgressionEnhanced(
     throw new Error(result.error.message);
   }
   if (!result.data) {
-    throw new Error('Progression unavailable');
+    throw new Error("Progression unavailable");
   }
   return result.data;
 }
@@ -37,4 +37,3 @@ export async function getProgressionSummaryEnhanced(userId: string): Promise<{
     ),
   });
 }
-

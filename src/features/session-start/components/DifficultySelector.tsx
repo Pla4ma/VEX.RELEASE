@@ -9,19 +9,21 @@
  * @phase 4
  */
 
-import React from 'react';
-import { View, Pressable } from 'react-native';
-import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import React from "react";
+import { View, Pressable } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated";
 
-import { useTheme } from '../../../theme';
-import { Text } from '../../../components/primitives/Text';
-import { useHaptics } from '../../../utils/haptics';
-import { eventBus } from '../../../events';
-import * as Sentry from '@sentry/react-native';
-import { launchColors } from '@theme/tokens/launch-colors';
+import { useTheme } from "../../../theme";
+import { Text } from "../../../components/primitives/Text";
+import { useHaptics } from "../../../utils/haptics";
+import { eventBus } from "../../../events";
+import * as Sentry from "@sentry/react-native";
+import { launchColors } from "@theme/tokens/launch-colors";
 
-
-export type SessionDifficulty = 'CASUAL' | 'FOCUSED' | 'DEEP_WORK';
+export type SessionDifficulty = "CASUAL" | "FOCUSED" | "DEEP_WORK";
 
 interface DifficultyOption {
   id: SessionDifficulty;
@@ -41,35 +43,39 @@ interface DifficultySelectorProps {
 
 const DIFFICULTY_OPTIONS: DifficultyOption[] = [
   {
-    id: 'CASUAL',
-    icon: '🌿',
-    name: 'Casual',
-    pauseLimit: 'Unlimited',
-    xpMultiplier: '50%',
-    description: 'Good for maintenance',
+    id: "CASUAL",
+    icon: "🌿",
+    name: "Casual",
+    pauseLimit: "Unlimited",
+    xpMultiplier: "50%",
+    description: "Good for maintenance",
     color: launchColors.hex_22c55e, // Green
   },
   {
-    id: 'FOCUSED',
-    icon: '⚡',
-    name: 'Focused',
-    pauseLimit: '2 max',
-    xpMultiplier: '100%',
-    description: 'Standard mode',
+    id: "FOCUSED",
+    icon: "⚡",
+    name: "Focused",
+    pauseLimit: "2 max",
+    xpMultiplier: "100%",
+    description: "Standard mode",
     color: launchColors.hex_3b82f6, // Blue
   },
   {
-    id: 'DEEP_WORK',
-    icon: '🔥',
-    name: 'Deep Work',
-    pauseLimit: '0 pauses',
-    xpMultiplier: '150%',
-    description: 'Maximum impact',
+    id: "DEEP_WORK",
+    icon: "🔥",
+    name: "Deep Work",
+    pauseLimit: "0 pauses",
+    xpMultiplier: "150%",
+    description: "Maximum impact",
     color: launchColors.hex_ef4444, // Red
   },
 ];
 
-export function DifficultySelector({ selected, onChange, disabled = false }: DifficultySelectorProps): JSX.Element {
+export function DifficultySelector({
+  selected,
+  onChange,
+  disabled = false,
+}: DifficultySelectorProps): JSX.Element {
   const { theme } = useTheme();
   const haptics = useHaptics();
 
@@ -81,14 +87,18 @@ export function DifficultySelector({ selected, onChange, disabled = false }: Dif
 
     // Track analytics
     Sentry.addBreadcrumb({
-      category: 'session',
-      message: 'Difficulty selected',
-      data: { difficulty, xpMultiplier: DIFFICULTY_OPTIONS.find((d) => d.id === difficulty)?.xpMultiplier },
-      level: 'info',
+      category: "session",
+      message: "Difficulty selected",
+      data: {
+        difficulty,
+        xpMultiplier: DIFFICULTY_OPTIONS.find((d) => d.id === difficulty)
+          ?.xpMultiplier,
+      },
+      level: "info",
     });
 
     // Publish event for integration
-    eventBus.publish('session:difficulty_selected', {
+    eventBus.publish("session:difficulty_selected", {
       difficulty,
       timestamp: Date.now(),
     });
@@ -97,8 +107,8 @@ export function DifficultySelector({ selected, onChange, disabled = false }: Dif
   };
 
   const containerStyle = {
-    flexDirection: 'row' as const,
-    justifyContent: 'space-between' as const,
+    flexDirection: "row" as const,
+    justifyContent: "space-between" as const,
     gap: theme.spacing[2],
     paddingHorizontal: theme.spacing[4],
   };
@@ -108,7 +118,15 @@ export function DifficultySelector({ selected, onChange, disabled = false }: Dif
       {DIFFICULTY_OPTIONS.map((option) => {
         const isSelected = selected === option.id;
 
-        return <DifficultyCard key={option.id} option={option} isSelected={isSelected} disabled={disabled} onPress={() => handleSelect(option.id)} />;
+        return (
+          <DifficultyCard
+            key={option.id}
+            option={option}
+            isSelected={isSelected}
+            disabled={disabled}
+            onPress={() => handleSelect(option.id)}
+          />
+        );
       })}
     </View>
   );
@@ -121,7 +139,12 @@ interface DifficultyCardProps {
   onPress: () => void;
 }
 
-function DifficultyCard({ option, isSelected, disabled, onPress }: DifficultyCardProps): JSX.Element {
+function DifficultyCard({
+  option,
+  isSelected,
+  disabled,
+  onPress,
+}: DifficultyCardProps): JSX.Element {
   const { theme } = useTheme();
 
   const scale = useAnimatedStyle(() => ({
@@ -160,9 +183,15 @@ function DifficultyCard({ option, isSelected, disabled, onPress }: DifficultyCar
         accessibilityRole="button"
         accessibilityState={{ selected: isSelected }}
       >
-        <Text style={{ fontSize: 24, marginBottom: theme.spacing[2] }}>{option.icon}</Text>
+        <Text style={{ fontSize: 24, marginBottom: theme.spacing[2] }}>
+          {option.icon}
+        </Text>
 
-        <Text variant="body" color={theme.colors.text.primary} style={{ marginBottom: theme.spacing[1], fontWeight: '700' }}>
+        <Text
+          variant="body"
+          color={theme.colors.text.primary}
+          style={{ marginBottom: theme.spacing[1], fontWeight: "700" }}
+        >
           {option.name}
         </Text>
 
@@ -170,7 +199,11 @@ function DifficultyCard({ option, isSelected, disabled, onPress }: DifficultyCar
           <Text variant="caption" color={theme.colors.text.secondary}>
             {option.pauseLimit} pauses
           </Text>
-          <Text variant="caption" color={option.color} style={{ fontWeight: '600' }}>
+          <Text
+            variant="caption"
+            color={option.color}
+            style={{ fontWeight: "600" }}
+          >
             {option.xpMultiplier} XP
           </Text>
         </View>

@@ -1,10 +1,10 @@
-import React from 'react';
-import Animated, { FadeIn } from 'react-native-reanimated';
+import React from "react";
+import Animated, { FadeIn } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { Button } from "../../../components/primitives/Button";
+import { useTheme } from "../../../theme";
 
 interface EmptyVaultProps {
   onGetChest: () => void;
@@ -38,12 +38,7 @@ export function EmptyVault({ onGetChest }: EmptyVaultProps): JSX.Element {
           Your Vault is Empty
         </Text>
 
-        <Text
-          variant="body"
-          color="text.secondary"
-          textAlign="center"
-          mb="2xl"
-        >
+        <Text variant="body" color="text.secondary" textAlign="center" mb="2xl">
           Complete focus sessions to earn chests! Longer sessions and higher
           purity scores give better rewards.
         </Text>

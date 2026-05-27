@@ -4,12 +4,16 @@
  * Automated accessibility improvements and fixes.
  */
 
-import React from 'react';
-import { createDebugger } from '../utils/debug';
-import { getAutomaticEnhancements } from './enhancer-logic';
-import type { AccessibilityEnhancementConfig, EnhancedAccessibilityProps, EnhancementHistoryEntry } from './enhancer-types';
+import React from "react";
+import { createDebugger } from "../utils/debug";
+import { getAutomaticEnhancements } from "./enhancer-logic";
+import type {
+  AccessibilityEnhancementConfig,
+  EnhancedAccessibilityProps,
+  EnhancementHistoryEntry,
+} from "./enhancer-types";
 
-const debug = createDebugger('accessibility-enhancer');
+const debug = createDebugger("accessibility-enhancer");
 
 export class AccessibilityEnhancer {
   private static instance: AccessibilityEnhancer;
@@ -22,7 +26,7 @@ export class AccessibilityEnhancer {
       autoFocusManagement: true,
       motionOptimizations: true,
       screenReaderOptimizations: true,
-      colorBlindSupport: 'none',
+      colorBlindSupport: "none",
     };
   }
 
@@ -35,25 +39,34 @@ export class AccessibilityEnhancer {
 
   setConfig(config: Partial<AccessibilityEnhancementConfig>): void {
     this.config = { ...this.config, ...config };
-    debug.info('Accessibility enhancer configuration updated:', this.config);
+    debug.info("Accessibility enhancer configuration updated:", this.config);
   }
 
   getConfig(): AccessibilityEnhancementConfig {
     return { ...this.config };
   }
 
-  enhanceComponent<P extends object>(Component: React.ComponentType<P>, enhancements?: Partial<EnhancedAccessibilityProps>): React.ComponentType<P> {
+  enhanceComponent<P extends object>(
+    Component: React.ComponentType<P>,
+    enhancements?: Partial<EnhancedAccessibilityProps>,
+  ): React.ComponentType<P> {
     const EnhancedComponent = React.forwardRef<unknown, P>((props, ref) => {
-      const enhancedProps = this.applyAccessibilityEnhancements(props, enhancements);
+      const enhancedProps = this.applyAccessibilityEnhancements(
+        props,
+        enhancements,
+      );
       return React.createElement(Component, { ...enhancedProps, ref } as P);
     });
-      EnhancedComponent.displayName = `Enhanced(${Component.displayName || Component.name})`;
-      // ForwardRefExoticComponent<P> → ComponentType<P> requires double-cast
-      // at generic boundary — TS can't verify overlap due to PropsWithoutRef wrapper
-      return EnhancedComponent as unknown as React.ComponentType<P>;
+    EnhancedComponent.displayName = `Enhanced(${Component.displayName || Component.name})`;
+    // ForwardRefExoticComponent<P> satisfies ComponentType<P> at runtime;
+    // TS cannot verify due to PropsWithoutRef wrapping at generic boundary.
+    return EnhancedComponent as React.ComponentType<P>;
   }
 
-  enhanceProps<P extends object>(props: P, enhancements?: Partial<EnhancedAccessibilityProps>): P & EnhancedAccessibilityProps {
+  enhanceProps<P extends object>(
+    props: P,
+    enhancements?: Partial<EnhancedAccessibilityProps>,
+  ): P & EnhancedAccessibilityProps {
     const enhancedProps: EnhancedAccessibilityProps = {
       ...this.getAutomaticEnhancements(props),
       ...enhancements,
@@ -61,11 +74,16 @@ export class AccessibilityEnhancer {
     return { ...props, ...enhancedProps } as P & EnhancedAccessibilityProps;
   }
 
-  private getAutomaticEnhancements<P extends object>(props: P): Partial<EnhancedAccessibilityProps> {
+  private getAutomaticEnhancements<P extends object>(
+    props: P,
+  ): Partial<EnhancedAccessibilityProps> {
     return getAutomaticEnhancements(props, this.config);
   }
 
-  private applyAccessibilityEnhancements<P extends object>(props: P, manualEnhancements?: Partial<EnhancedAccessibilityProps>): P & EnhancedAccessibilityProps {
+  private applyAccessibilityEnhancements<P extends object>(
+    props: P,
+    manualEnhancements?: Partial<EnhancedAccessibilityProps>,
+  ): P & EnhancedAccessibilityProps {
     const automaticEnhancements = this.getAutomaticEnhancements(props);
     const allEnhancements = { ...automaticEnhancements, ...manualEnhancements };
 
@@ -75,7 +93,10 @@ export class AccessibilityEnhancer {
         props: Object.keys(props),
         enhancements: Object.keys(allEnhancements),
       });
-      debug.debug('Applied accessibility enhancements:', { component: props, enhancements: allEnhancements });
+      debug.debug("Applied accessibility enhancements:", {
+        component: props,
+        enhancements: allEnhancements,
+      });
     }
 
     return { ...props, ...allEnhancements } as P & EnhancedAccessibilityProps;
@@ -89,15 +110,25 @@ export class AccessibilityEnhancer {
     this.enhancementHistory = [];
   }
 
-  getEnhancementStats(): { totalEnhancements: number; enhancementTypes: Record<string, number>; mostEnhancedComponents: Record<string, number> } {
-    const stats = { totalEnhancements: this.enhancementHistory.length, enhancementTypes: {} as Record<string, number>, mostEnhancedComponents: {} as Record<string, number> };
+  getEnhancementStats(): {
+    totalEnhancements: number;
+    enhancementTypes: Record<string, number>;
+    mostEnhancedComponents: Record<string, number>;
+  } {
+    const stats = {
+      totalEnhancements: this.enhancementHistory.length,
+      enhancementTypes: {} as Record<string, number>,
+      mostEnhancedComponents: {} as Record<string, number>,
+    };
 
-    this.enhancementHistory.forEach(entry => {
-      entry.enhancements.forEach(enhancement => {
-        stats.enhancementTypes[enhancement] = (stats.enhancementTypes[enhancement] || 0) + 1;
+    this.enhancementHistory.forEach((entry) => {
+      entry.enhancements.forEach((enhancement) => {
+        stats.enhancementTypes[enhancement] =
+          (stats.enhancementTypes[enhancement] || 0) + 1;
       });
-      const componentName = entry.props[0] ?? 'Unknown';
-      stats.mostEnhancedComponents[componentName] = (stats.mostEnhancedComponents[componentName] || 0) + 1;
+      const componentName = entry.props[0] ?? "Unknown";
+      stats.mostEnhancedComponents[componentName] =
+        (stats.mostEnhancedComponents[componentName] || 0) + 1;
     });
 
     return stats;
@@ -106,25 +137,40 @@ export class AccessibilityEnhancer {
 
 export const accessibilityEnhancer = AccessibilityEnhancer.getInstance();
 
-export function enhanceComponent<P extends object>(Component: React.ComponentType<P>, enhancements?: Partial<EnhancedAccessibilityProps>): React.ComponentType<P> {
+export function enhanceComponent<P extends object>(
+  Component: React.ComponentType<P>,
+  enhancements?: Partial<EnhancedAccessibilityProps>,
+): React.ComponentType<P> {
   return accessibilityEnhancer.enhanceComponent(Component, enhancements);
 }
 
-export function enhanceProps<P extends object>(props: P, enhancements?: Partial<EnhancedAccessibilityProps>): P & EnhancedAccessibilityProps {
+export function enhanceProps<P extends object>(
+  props: P,
+  enhancements?: Partial<EnhancedAccessibilityProps>,
+): P & EnhancedAccessibilityProps {
   return accessibilityEnhancer.enhanceProps(props, enhancements);
 }
 
-export function withAccessibility<P extends object>(enhancements?: Partial<EnhancedAccessibilityProps>) {
-  return function(Component: React.ComponentType<P>): React.ComponentType<P> {
+export function withAccessibility<P extends object>(
+  enhancements?: Partial<EnhancedAccessibilityProps>,
+) {
+  return function (Component: React.ComponentType<P>): React.ComponentType<P> {
     return accessibilityEnhancer.enhanceComponent(Component, enhancements);
   };
 }
 
-export function useAccessibilityEnhancements(baseProps: Record<string, unknown>, customEnhancements?: Partial<EnhancedAccessibilityProps>): EnhancedAccessibilityProps {
-  const [enhancedProps, setEnhancedProps] = React.useState<EnhancedAccessibilityProps>({});
+export function useAccessibilityEnhancements(
+  baseProps: Record<string, unknown>,
+  customEnhancements?: Partial<EnhancedAccessibilityProps>,
+): EnhancedAccessibilityProps {
+  const [enhancedProps, setEnhancedProps] =
+    React.useState<EnhancedAccessibilityProps>({});
 
   React.useEffect(() => {
-    const enhanced = accessibilityEnhancer.enhanceProps(baseProps, customEnhancements);
+    const enhanced = accessibilityEnhancer.enhanceProps(
+      baseProps,
+      customEnhancements,
+    );
     setEnhancedProps(enhanced);
   }, [baseProps, customEnhancements]);
 
@@ -132,13 +178,45 @@ export function useAccessibilityEnhancements(baseProps: Record<string, unknown>,
 }
 
 export const ACCESSIBILITY_PRESETS = {
-  MAXIMUM: { autoContrastFixes: true, autoFocusManagement: true, motionOptimizations: true, screenReaderOptimizations: true, colorBlindSupport: 'none' as const },
-  ESSENTIAL: { autoContrastFixes: true, autoFocusManagement: true, motionOptimizations: false, screenReaderOptimizations: true, colorBlindSupport: 'none' as const },
-  VISUAL: { autoContrastFixes: true, autoFocusManagement: false, motionOptimizations: true, screenReaderOptimizations: false, colorBlindSupport: 'protanopia' as const },
-  MOTOR: { autoContrastFixes: false, autoFocusManagement: true, motionOptimizations: true, screenReaderOptimizations: false, colorBlindSupport: 'none' as const },
-  COGNITIVE: { autoContrastFixes: true, autoFocusManagement: true, motionOptimizations: true, screenReaderOptimizations: true, colorBlindSupport: 'none' as const },
+  MAXIMUM: {
+    autoContrastFixes: true,
+    autoFocusManagement: true,
+    motionOptimizations: true,
+    screenReaderOptimizations: true,
+    colorBlindSupport: "none" as const,
+  },
+  ESSENTIAL: {
+    autoContrastFixes: true,
+    autoFocusManagement: true,
+    motionOptimizations: false,
+    screenReaderOptimizations: true,
+    colorBlindSupport: "none" as const,
+  },
+  VISUAL: {
+    autoContrastFixes: true,
+    autoFocusManagement: false,
+    motionOptimizations: true,
+    screenReaderOptimizations: false,
+    colorBlindSupport: "protanopia" as const,
+  },
+  MOTOR: {
+    autoContrastFixes: false,
+    autoFocusManagement: true,
+    motionOptimizations: true,
+    screenReaderOptimizations: false,
+    colorBlindSupport: "none" as const,
+  },
+  COGNITIVE: {
+    autoContrastFixes: true,
+    autoFocusManagement: true,
+    motionOptimizations: true,
+    screenReaderOptimizations: true,
+    colorBlindSupport: "none" as const,
+  },
 } as const;
 
-export function applyAccessibilityPreset(preset: keyof typeof ACCESSIBILITY_PRESETS): void {
+export function applyAccessibilityPreset(
+  preset: keyof typeof ACCESSIBILITY_PRESETS,
+): void {
   accessibilityEnhancer.setConfig(ACCESSIBILITY_PRESETS[preset]);
 }

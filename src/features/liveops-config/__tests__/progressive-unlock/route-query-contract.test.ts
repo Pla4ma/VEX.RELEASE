@@ -98,7 +98,11 @@ describe("query gating contract", () => {
     const { features, productTier } = buildFeatureAccess({
       totalCompletedSessions: 5,
     });
-    const runtime = buildHomeFeatureRuntime({ features, productTier, totalSessions: 5 });
+    const runtime = buildHomeFeatureRuntime({
+      features,
+      productTier,
+      totalSessions: 5,
+    });
     expect(runtime.canQueryChallenges).toBe(true);
   });
 

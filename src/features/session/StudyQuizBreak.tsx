@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import * as Sentry from '@sentry/react-native';
+import React, { useEffect, useMemo, useState } from "react";
+import * as Sentry from "@sentry/react-native";
 
-import { Box } from '../../components/primitives/Box';
-import { Button } from '../../components/primitives/Button';
-import { Text } from '../../components/primitives/Text';
-import { getQuizForStudyPlan } from '../content-study/service';
-import type { QuizItem } from '../content-study/types';
+import { Box } from "../../components/primitives/Box";
+import { Button } from "../../components/primitives/Button";
+import { Text } from "../../components/primitives/Text";
+import { getQuizForStudyPlan } from "../content-study/service";
+import type { QuizItem } from "../content-study/types";
 
 type StudyQuizBreakProps = {
   isVisible: boolean;
@@ -42,9 +42,13 @@ export function StudyQuizBreak({
       })
       .catch((caught) => {
         if (!isCancelled) {
-          setError("Couldn't load the study quiz. You can keep the session moving.");
+          setError(
+            "Couldn't load the study quiz. You can keep the session moving.",
+          );
         }
-        Sentry.captureException(caught, { tags: { feature: 'study-quiz-break' } });
+        Sentry.captureException(caught, {
+          tags: { feature: "study-quiz-break" },
+        });
       })
       .finally(() => {
         if (!isCancelled) {
@@ -61,7 +65,9 @@ export function StudyQuizBreak({
     () =>
       quizItems.filter((item) => {
         const answer = answers[item.id];
-        return answer?.trim().toLowerCase() === item.answer.trim().toLowerCase();
+        return (
+          answer?.trim().toLowerCase() === item.answer.trim().toLowerCase()
+        );
       }).length,
     [answers, quizItems],
   );
@@ -71,7 +77,16 @@ export function StudyQuizBreak({
   }
 
   return (
-    <Box position="absolute" left={16} right={16} bottom={120} p="lg" bg="background.elevated" borderRadius="xl" style={{ zIndex: 30 }}>
+    <Box
+      position="absolute"
+      left={16}
+      right={16}
+      bottom={120}
+      p="lg"
+      bg="background.elevated"
+      borderRadius="xl"
+      style={{ zIndex: 30 }}
+    >
       <Text variant="h4" color="text.primary" mb="xs">
         Study check
       </Text>
@@ -100,11 +115,13 @@ export function StudyQuizBreak({
                 key={option}
                 accessibilityLabel={`Answer ${option}`}
                 accessibilityHint="Selects this quiz answer"
-                variant={answers[item.id] === option ? 'primary' : 'secondary'}
+                variant={answers[item.id] === option ? "primary" : "secondary"}
                 size="sm"
-                onPress={() => setAnswers((current) => ({ ...current, [item.id]: option }))}
-
-              accessibilityRole="button">
+                onPress={() =>
+                  setAnswers((current) => ({ ...current, [item.id]: option }))
+                }
+                accessibilityRole="button"
+              >
                 {option}
               </Button>
             ))}
@@ -113,14 +130,22 @@ export function StudyQuizBreak({
       ))}
 
       <Box flexDirection="row" gap="sm" mt="sm">
-        <Button variant="secondary" onPress={onSkip} accessibilityLabel="Skip study quiz"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+        <Button
+          variant="secondary"
+          onPress={onSkip}
+          accessibilityLabel="Skip study quiz"
+          accessibilityRole="button"
+          accessibilityHint="Activates this control"
+        >
           Skip
         </Button>
-        <Button variant="primary" onPress={() => onClose(correctAnswers)} accessibilityLabel="Submit study quiz"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+        <Button
+          variant="primary"
+          onPress={() => onClose(correctAnswers)}
+          accessibilityLabel="Submit study quiz"
+          accessibilityRole="button"
+          accessibilityHint="Activates this control"
+        >
           {`Continue +${correctAnswers * 5}`}
         </Button>
       </Box>

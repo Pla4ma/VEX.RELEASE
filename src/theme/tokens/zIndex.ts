@@ -4,13 +4,13 @@
  * Layer management for consistent stacking context.
  */
 
-import type { ZIndexScale } from '../types';
+import type { ZIndexScale } from "../types";
 
 /**
  * Z-index scale for consistent layer management
  */
 export const zIndex: ZIndexScale = {
-  auto: 'auto',
+  auto: "auto",
   base: 0,
   dropdown: 100,
   sticky: 200,
@@ -57,5 +57,5 @@ export const componentZIndex = {
  */
 export function getZIndex(key: keyof ZIndexScale): number {
   const value = zIndex[key];
-  return typeof value === 'number' ? value : 0;
+  return typeof value === "number" ? value : 0;
 }

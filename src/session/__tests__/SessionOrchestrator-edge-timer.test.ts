@@ -1,5 +1,9 @@
 import { SessionOrchestrator } from "../SessionOrchestrator";
-import { mockConfig, createOrchestrator, TEST_USER_ID } from "./SessionOrchestrator.helpers";
+import {
+  mockConfig,
+  createOrchestrator,
+  TEST_USER_ID,
+} from "./SessionOrchestrator.helpers";
 import type { SessionConfig } from "../types";
 
 describe("SessionOrchestrator", () => {

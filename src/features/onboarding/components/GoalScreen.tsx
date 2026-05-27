@@ -8,21 +8,21 @@
  * @phase 2.3
  */
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import Animated, {
   FadeIn,
   FadeInUp,
   useAnimatedStyle,
   withSpring,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { Pressable } from 'react-native';
+import { Pressable } from "react-native";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import type { FocusGoal, GoalOption } from '../schemas';
-import { GOAL_OPTIONS } from '../service';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import type { FocusGoal, GoalOption } from "../schemas";
+import { GOAL_OPTIONS } from "../service";
 
 interface GoalScreenProps {
   onSelect: (goal: FocusGoal) => void;
@@ -65,19 +65,21 @@ function GoalCard({
   return (
     <Animated.View
       entering={FadeInUp.duration(400).delay(200 + index * 100)}
-      style={{ flex: 1, minWidth: '45%' }}
+      style={{ flex: 1, minWidth: "45%" }}
     >
-      <Pressable onPress={onPress}
-  accessibilityLabel="Interactive control"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+      <Pressable
+        onPress={onPress}
+        accessibilityLabel="Interactive control"
+        accessibilityRole="button"
+        accessibilityHint="Activates this control"
+      >
         <Animated.View
           style={[
             {
               padding: theme.spacing[5],
               borderRadius: 16,
               borderWidth: 2,
-              alignItems: 'center',
+              alignItems: "center",
               gap: theme.spacing[2],
             },
             animatedStyle,
@@ -86,14 +88,14 @@ function GoalCard({
           <Text fontSize={40}>{option.emoji}</Text>
           <Text
             variant="h4"
-            color={isSelected ? 'text.inverse' : 'text.primary'}
+            color={isSelected ? "text.inverse" : "text.primary"}
             fontWeight="600"
           >
             {option.label}
           </Text>
           <Text
             variant="caption"
-            color={isSelected ? 'text.inverse' : 'text.secondary'}
+            color={isSelected ? "text.inverse" : "text.secondary"}
             textAlign="center"
           >
             {option.description}
@@ -107,12 +109,18 @@ function GoalCard({
 /**
  * Goal selection screen
  */
-export function GoalScreen({ onSelect, onSkip, onBack }: GoalScreenProps & { onBack?: () => void }): JSX.Element {
+export function GoalScreen({
+  onSelect,
+  onSkip,
+  onBack,
+}: GoalScreenProps & { onBack?: () => void }): JSX.Element {
   const [selectedGoal, setSelectedGoal] = useState<FocusGoal | null>(null);
   const [isAdvancing, setIsAdvancing] = useState(false);
 
   const handleSelect = (goal: FocusGoal) => {
-    if (isAdvancing) {return;}
+    if (isAdvancing) {
+      return;
+    }
 
     setSelectedGoal(goal);
     setIsAdvancing(true);
@@ -130,7 +138,9 @@ export function GoalScreen({ onSelect, onSkip, onBack }: GoalScreenProps & { onB
         {onBack && (
           <Pressable onPress={onBack} style={{ marginRight: 12 }}>
             <Box p="xs">
-              <Text variant="h3" color="text.secondary">‹</Text>
+              <Text variant="h3" color="text.secondary">
+                ‹
+              </Text>
             </Box>
           </Pressable>
         )}
@@ -152,12 +162,7 @@ export function GoalScreen({ onSelect, onSkip, onBack }: GoalScreenProps & { onB
       </Animated.View>
 
       {/* Goal Options Grid */}
-      <Box
-        flexDirection="row"
-        flexWrap="wrap"
-        gap="md"
-        justifyContent="center"
-      >
+      <Box flexDirection="row" flexWrap="wrap" gap="md" justifyContent="center">
         {GOAL_OPTIONS.map((option, index) => (
           <GoalCard
             key={option.key}
@@ -172,12 +177,14 @@ export function GoalScreen({ onSelect, onSkip, onBack }: GoalScreenProps & { onB
       {/* Skip Option */}
       <Animated.View
         entering={FadeIn.duration(400).delay(600)}
-        style={{ marginTop: 'auto' }}
+        style={{ marginTop: "auto" }}
       >
-        <Pressable onPress={onSkip}
-  accessibilityLabel="Skip for now › button"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+        <Pressable
+          onPress={onSkip}
+          accessibilityLabel="Skip for now › button"
+          accessibilityRole="button"
+          accessibilityHint="Activates this control"
+        >
           <Box alignItems="center" py="md">
             <Text variant="bodySmall" color="text.tertiary">
               Skip for now ›

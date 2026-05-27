@@ -5,32 +5,29 @@
  * This file exists for backward compatibility.
  */
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createDebugger } from '../../utils/debug';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { createDebugger } from "../../utils/debug";
 import {
   askCoachQuestion,
   getCoachHistory,
   getCoachState,
   type CoachQuestionResponse,
-} from './services/coach-screen-service';
-import type { CoachMessage, CoachState } from './types';
-import { fetchActiveRecommendations } from './repository';
-import type { SessionRecommendation } from './hooks/useRecommendationMutations';
+} from "./services/coach-screen-service";
+import type { CoachMessage, CoachState } from "./types";
+import { fetchActiveRecommendations } from "./repository";
+import type { SessionRecommendation } from "./hooks/useRecommendationMutations";
 
-export { COACH_QUERY_KEYS } from './constants';
+export { COACH_QUERY_KEYS } from "./constants";
 
-export * from './hooks';
-export {
-  useCoachState,
-  type UseCoachStateResult,
-} from './hooks/useCoachState';
+export * from "./hooks";
+export { useCoachState, type UseCoachStateResult } from "./hooks/useCoachState";
 export {
   useCreateRecommendation,
   useUpdateRecommendationStatus,
   type SessionRecommendation,
-} from './hooks/useRecommendationMutations';
+} from "./hooks/useRecommendationMutations";
 
-const debug = createDebugger('coach:hooks');
+const debug = createDebugger("coach:hooks");
 
 export function useActiveCoachRecommendations(
   userId: string | null,
@@ -40,14 +37,17 @@ export function useActiveCoachRecommendations(
   isPending: boolean;
 } {
   const { data } = useQuery<SessionRecommendation[]>({
-    queryKey: ['coach', 'recommendations', userId],
-    queryFn: () => fetchActiveRecommendations(userId ?? ''),
+    queryKey: ["coach", "recommendations", userId],
+    queryFn: () => fetchActiveRecommendations(userId ?? ""),
     enabled: enabled && Boolean(userId),
     staleTime: 1000 * 60 * 5,
   });
   const primary = data
-    ? data.filter((item) => item.status === 'ACTIVE' && item.expiresAt > Date.now())
-        .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null
+    ? (data
+        .filter(
+          (item) => item.status === "ACTIVE" && item.expiresAt > Date.now(),
+        )
+        .sort((a, b) => (b.confidence ?? 0) - (a.confidence ?? 0))[0] ?? null)
     : null;
   return { primaryRecommendation: primary, isPending: false };
 }
@@ -59,7 +59,7 @@ export function useCoachScreenState(): {
   historyLoading: boolean;
 } {
   const { data: coachState, isLoading: stateLoading } = useQuery<CoachState>({
-    queryKey: ['coach', 'state'],
+    queryKey: ["coach", "state"],
     queryFn: getCoachState,
     staleTime: 60000,
   });
@@ -67,7 +67,7 @@ export function useCoachScreenState(): {
   const { data: coachHistory, isLoading: historyLoading } = useQuery<{
     messages: CoachMessage[];
   }>({
-    queryKey: ['coach', 'history'],
+    queryKey: ["coach", "history"],
     queryFn: getCoachHistory,
     staleTime: 300000,
   });
@@ -92,11 +92,14 @@ export function useAskCoachQuestionMutation(callbacks: {
     onMutate: callbacks.onMutate,
     onSuccess: (response) => {
       callbacks.onSuccess(response);
-      queryClient.invalidateQueries({ queryKey: ['coach', 'history'] });
+      queryClient.invalidateQueries({ queryKey: ["coach", "history"] });
     },
     onError: (err) => {
-      callbacks.onError('Sorry, I had trouble responding. Please try again.');
-      debug.error('Coach response error', err instanceof Error ? err : new Error(String(err)));
+      callbacks.onError("Sorry, I had trouble responding. Please try again.");
+      debug.error(
+        "Coach response error",
+        err instanceof Error ? err : new Error(String(err)),
+      );
     },
   });
 }
@@ -104,7 +107,7 @@ export function useAskCoachQuestionMutation(callbacks: {
 // Stub for ActiveIntervention type and useActiveIntervention hook
 export interface ActiveIntervention {
   id: string;
-  type: 'STREAK_RISK' | 'BURNOUT' | 'PLATEAU' | 'BOSS_FINISH';
+  type: "STREAK_RISK" | "BURNOUT" | "PLATEAU" | "BOSS_FINISH";
   message: string;
   actionLabel: string;
   priority: number;

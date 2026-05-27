@@ -1,16 +1,35 @@
-import React, { useCallback, useState } from 'react';
-import { TextInput, View, type TextInputProps, type TextStyle, type ViewStyle } from 'react-native';
-import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import React, { useCallback, useState } from "react";
+import {
+  TextInput,
+  View,
+  type TextInputProps,
+  type TextStyle,
+  type ViewStyle,
+} from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 
-import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import { useTheme } from '../../../theme';
-import { FormSection, type FormSectionProps, InputGroup } from './FormFieldParts';
+import { Text } from "../../../components/primitives/Text";
+import { Icon } from "../../../icons";
+import { useTheme } from "../../../theme";
+import {
+  FormSection,
+  type FormSectionProps,
+  InputGroup,
+} from "./FormFieldParts";
 
-export type FieldSize = 'sm' | 'md' | 'lg';
-export type FieldState = 'default' | 'focused' | 'error' | 'success' | 'disabled' | 'loading';
+export type FieldSize = "sm" | "md" | "lg";
+export type FieldState =
+  | "default"
+  | "focused"
+  | "error"
+  | "success"
+  | "disabled"
+  | "loading";
 
-export interface FormFieldProps extends Omit<TextInputProps, 'style'> {
+export interface FormFieldProps extends Omit<TextInputProps, "style"> {
   label?: string;
   placeholder?: string;
   error?: string;
@@ -34,9 +53,24 @@ export interface FormFieldProps extends Omit<TextInputProps, 'style'> {
 }
 
 const sizeConfig = {
-  sm: { paddingVertical: 10, paddingHorizontal: 12, fontSize: 14, minHeight: 44 },
-  md: { paddingVertical: 13, paddingHorizontal: 16, fontSize: 16, minHeight: 52 },
-  lg: { paddingVertical: 16, paddingHorizontal: 18, fontSize: 17, minHeight: 58 },
+  sm: {
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    fontSize: 14,
+    minHeight: 44,
+  },
+  md: {
+    paddingVertical: 13,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    minHeight: 52,
+  },
+  lg: {
+    paddingVertical: 16,
+    paddingHorizontal: 18,
+    fontSize: 17,
+    minHeight: 58,
+  },
 };
 
 export const FormField: React.FC<FormFieldProps> = ({
@@ -51,7 +85,7 @@ export const FormField: React.FC<FormFieldProps> = ({
   loading = false,
   showCounter = false,
   maxLength,
-  size = 'md',
+  size = "md",
   leftIcon,
   rightIcon,
   containerStyle,
@@ -65,60 +99,87 @@ export const FormField: React.FC<FormFieldProps> = ({
   ...textInputProps
 }) => {
   const { theme } = useTheme();
-  const [internalValue, setInternalValue] = useState(defaultValue ?? '');
+  const [internalValue, setInternalValue] = useState(defaultValue ?? "");
   const [isFocused, setIsFocused] = useState(false);
   const [internalError, setInternalError] = useState<string | null>(null);
   const effectiveValue = value ?? internalValue;
-  const state: FieldState = propState ??
-    (loading ? 'loading' : disabled ? 'disabled' : error || internalError ? 'error' : successMessage ? 'success' : isFocused ? 'focused' : 'default');
+  const state: FieldState =
+    propState ??
+    (loading
+      ? "loading"
+      : disabled
+        ? "disabled"
+        : error || internalError
+          ? "error"
+          : successMessage
+            ? "success"
+            : isFocused
+              ? "focused"
+              : "default");
   const semantic = theme.colors.semantic;
   const config = sizeConfig[size];
 
-  const validate = useCallback((text: string) => {
-    if (onValidate) {
-      setInternalError(onValidate(text));
-    }
-  }, [onValidate]);
+  const validate = useCallback(
+    (text: string) => {
+      if (onValidate) {
+        setInternalError(onValidate(text));
+      }
+    },
+    [onValidate],
+  );
 
-  const handleChangeText = useCallback((text: string) => {
-    setInternalValue(text);
-    onChangeText?.(text);
-    validate(text);
-  }, [onChangeText, validate]);
+  const handleChangeText = useCallback(
+    (text: string) => {
+      setInternalValue(text);
+      onChangeText?.(text);
+      validate(text);
+    },
+    [onChangeText, validate],
+  );
 
-  const borderColor = state === 'error'
-    ? semantic.danger
-    : state === 'success'
-    ? semantic.success
-    : state === 'focused'
-    ? semantic.primary
-    : semantic.inputBorder;
+  const borderColor =
+    state === "error"
+      ? semantic.danger
+      : state === "success"
+        ? semantic.success
+        : state === "focused"
+          ? semantic.primary
+          : semantic.inputBorder;
 
   const animatedStyle = useAnimatedStyle(() => ({
     borderColor: withTiming(borderColor, { duration: 160 }),
   }));
   const message = error ?? internalError ?? successMessage ?? helperText;
-  const messageColor = error || internalError
-    ? 'error.DEFAULT'
-    : successMessage
-    ? 'success.DEFAULT'
-    : 'text.muted';
+  const messageColor =
+    error || internalError
+      ? "error.DEFAULT"
+      : successMessage
+        ? "success.DEFAULT"
+        : "text.muted";
 
   return (
     <View style={[{ marginBottom: theme.spacing[4] }, containerStyle]}>
       {label ? (
-        <Text color={state === 'error' ? 'error.DEFAULT' : 'text.secondary'} mb="sm" variant="label">
-          {label}{required ? ' *' : ''}
+        <Text
+          color={state === "error" ? "error.DEFAULT" : "text.secondary"}
+          mb="sm"
+          variant="label"
+        >
+          {label}
+          {required ? " *" : ""}
         </Text>
       ) : null}
       <Animated.View
         style={[
           {
-            alignItems: 'center',
-            backgroundColor: state === 'disabled' ? theme.colors.background.tertiary : semantic.inputBackground,
+            alignItems: "center",
+            backgroundColor:
+              state === "disabled"
+                ? theme.colors.background.tertiary
+                : semantic.inputBackground,
             borderRadius: theme.borderRadius.xl,
             borderWidth: 1,
-            flexDirection: 'row',
+            flexDirection: "row",
             minHeight: config.minHeight,
             paddingHorizontal: config.paddingHorizontal,
             paddingVertical: config.paddingVertical,
@@ -126,7 +187,15 @@ export const FormField: React.FC<FormFieldProps> = ({
           animatedStyle,
         ]}
       >
-        {leftIcon ? <Icon color={state === 'error' ? semantic.danger : theme.colors.text.muted} name={leftIcon} size="md" /> : null}
+        {leftIcon ? (
+          <Icon
+            color={
+              state === "error" ? semantic.danger : theme.colors.text.muted
+            }
+            name={leftIcon}
+            size="md"
+          />
+        ) : null}
         <TextInput
           accessibilityHint={accessibilityHint}
           accessibilityLabel={accessibilityLabel ?? label}
@@ -144,7 +213,9 @@ export const FormField: React.FC<FormFieldProps> = ({
           placeholderTextColor={theme.colors.text.placeholder}
           style={[
             {
-              color: disabled ? theme.colors.text.disabled : theme.colors.text.primary,
+              color: disabled
+                ? theme.colors.text.disabled
+                : theme.colors.text.primary,
               flex: 1,
               fontSize: config.fontSize,
               padding: 0,
@@ -157,14 +228,33 @@ export const FormField: React.FC<FormFieldProps> = ({
           {...textInputProps}
         />
         {loading ? (
-          <Text color="text.muted" variant="caption">...</Text>
+          <Text color="text.muted" variant="caption">
+            ...
+          </Text>
         ) : rightIcon ? (
           <Icon color={theme.colors.text.muted} name={rightIcon} size="md" />
         ) : null}
       </Animated.View>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: theme.spacing[1], minHeight: 20 }}>
-        {message ? <Text color={messageColor} flex={1} variant="caption">{message}</Text> : <View />}
-        {showCounter && maxLength ? <Text color="text.muted" ml="sm" variant="caption">{String(effectiveValue).length}/{maxLength}</Text> : null}
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          marginTop: theme.spacing[1],
+          minHeight: 20,
+        }}
+      >
+        {message ? (
+          <Text color={messageColor} flex={1} variant="caption">
+            {message}
+          </Text>
+        ) : (
+          <View />
+        )}
+        {showCounter && maxLength ? (
+          <Text color="text.muted" ml="sm" variant="caption">
+            {String(effectiveValue).length}/{maxLength}
+          </Text>
+        ) : null}
       </View>
     </View>
   );

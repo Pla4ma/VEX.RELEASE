@@ -63,7 +63,9 @@ export function buildDailyReminderPayload(): NotificationPayload {
   };
 }
 
-export function buildBreakReminderPayload(breakDuration: number): NotificationPayload {
+export function buildBreakReminderPayload(
+  breakDuration: number,
+): NotificationPayload {
   return {
     title: "☕ Break Time",
     body: `Take a ${breakDuration / 60} minute break. You've earned it!`,
@@ -90,7 +92,9 @@ export function buildRewardPayload(
   };
 }
 
-export function buildStreakMilestoneResult(streakDays: number): StreakMilestoneResult {
+export function buildStreakMilestoneResult(
+  streakDays: number,
+): StreakMilestoneResult {
   let title = "🔥 Streak Milestone!";
   let body = `You've maintained focus for ${streakDays} days straight!`;
   if (streakDays === 7) {
@@ -121,9 +125,13 @@ const ANTI_CHEAT_WARNINGS: Record<string, AntiCheatWarningResult> = {
   },
 };
 
-export function getAntiCheatWarning(violationType: string): AntiCheatWarningResult {
-  return ANTI_CHEAT_WARNINGS[violationType] || {
-    title: "⚠️ Session Warning",
-    body: "An issue was detected with your session.",
-  };
+export function getAntiCheatWarning(
+  violationType: string,
+): AntiCheatWarningResult {
+  return (
+    ANTI_CHEAT_WARNINGS[violationType] || {
+      title: "⚠️ Session Warning",
+      body: "An issue was detected with your session.",
+    }
+  );
 }

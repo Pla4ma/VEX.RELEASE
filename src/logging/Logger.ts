@@ -18,10 +18,10 @@ interface LogEntry {
 }
 
 export interface LoggerConfig {
-  level?: 'debug' | 'info' | 'warn' | 'error';
+  level?: "debug" | "info" | "warn" | "error";
   enableConsole?: boolean;
   enableFile?: boolean;
-  format?: 'json' | 'text';
+  format?: "json" | "text";
 }
 
 export class Logger {
@@ -31,10 +31,10 @@ export class Logger {
   constructor(serviceName: string, config: LoggerConfig = {}) {
     this.serviceName = serviceName;
     this.config = {
-      level: config.level || 'info',
+      level: config.level || "info",
       enableConsole: config.enableConsole !== false,
       enableFile: config.enableFile || false,
-      format: config.format || 'json',
+      format: config.format || "json",
     };
   }
 
@@ -42,28 +42,28 @@ export class Logger {
    * Log informational message
    */
   info(message: string, context?: LogContext): void {
-    this.log('info', message, context);
+    this.log("info", message, context);
   }
 
   /**
    * Log warning message
    */
   warn(message: string, context?: LogContext): void {
-    this.log('warn', message, context);
+    this.log("warn", message, context);
   }
 
   /**
    * Log error message
    */
   error(message: string, context?: LogContext): void {
-    this.log('error', message, context);
+    this.log("error", message, context);
   }
 
   /**
    * Log debug message
    */
   debug(message: string, context?: LogContext): void {
-    this.log('debug', message, context);
+    this.log("debug", message, context);
   }
 
   /**
@@ -98,8 +98,8 @@ export class Logger {
    * Check if the log level should be output
    */
   private shouldLog(level: string): boolean {
-    const levels = ['debug', 'info', 'warn', 'error'];
-    const currentLevelIndex = levels.indexOf(this.config.level || 'info');
+    const levels = ["debug", "info", "warn", "error"];
+    const currentLevelIndex = levels.indexOf(this.config.level || "info");
     const messageLevelIndex = levels.indexOf(level);
 
     return messageLevelIndex >= currentLevelIndex;
@@ -130,7 +130,11 @@ export class Logger {
 
     // Override the log method to add the additional context
     const originalLog = childLogger.log.bind(childLogger);
-    childLogger.log = (level: string, message: string, context?: LogContext) => {
+    childLogger.log = (
+      level: string,
+      message: string,
+      context?: LogContext,
+    ) => {
       const mergedContext = { ...additionalContext, ...context };
       originalLog(level, message, mergedContext);
     };
@@ -141,7 +145,7 @@ export class Logger {
   /**
    * Set log level dynamically
    */
-  setLevel(level: 'debug' | 'info' | 'warn' | 'error'): void {
+  setLevel(level: "debug" | "info" | "warn" | "error"): void {
     this.config.level = level;
   }
 
@@ -149,18 +153,21 @@ export class Logger {
    * Get current log level
    */
   getLevel(): string {
-    return this.config.level || 'info';
+    return this.config.level || "info";
   }
 }
 
 /**
  * Default logger instance for backward compatibility
  */
-export const defaultLogger = new Logger('default');
+export const defaultLogger = new Logger("default");
 
 /**
  * Create a new logger instance
  */
-export function createLogger(serviceName: string, config?: LoggerConfig): Logger {
+export function createLogger(
+  serviceName: string,
+  config?: LoggerConfig,
+): Logger {
   return new Logger(serviceName, config);
 }

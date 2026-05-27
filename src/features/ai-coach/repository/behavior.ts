@@ -1,11 +1,11 @@
-import { getSupabaseClient } from '../../../config/supabase';
+import { getSupabaseClient } from "../../../config/supabase";
 import {
   BehaviorSignalSchema,
   BehaviorProfileSchema,
   type BehaviorSignal,
   type BehaviorProfile,
-} from '../schemas';
-import { RepositoryError } from './error';
+} from "../schemas";
+import { RepositoryError } from "./error";
 
 const supabase = getSupabaseClient();
 
@@ -13,13 +13,15 @@ export async function fetchBehaviorProfile(
   userId: string,
 ): Promise<BehaviorProfile | null> {
   const { data, error } = await supabase
-    .from('behavior_profiles')
-    .select('*')
-    .eq('user_id', userId)
+    .from("behavior_profiles")
+    .select("*")
+    .eq("user_id", userId)
     .single();
   if (error) {
-    if (error.code === 'PGRST116') {return null;}
-    throw new RepositoryError('fetchBehaviorProfile', error);
+    if (error.code === "PGRST116") {
+      return null;
+    }
+    throw new RepositoryError("fetchBehaviorProfile", error);
   }
   return data ? BehaviorProfileSchema.parse(data) : null;
 }
@@ -28,7 +30,7 @@ export async function upsertBehaviorProfile(
   profile: BehaviorProfile,
 ): Promise<BehaviorProfile> {
   const { data, error } = await supabase
-    .from('behavior_profiles')
+    .from("behavior_profiles")
     .upsert({
       user_id: profile.userId,
       signals: profile.signals,
@@ -39,7 +41,9 @@ export async function upsertBehaviorProfile(
     })
     .select()
     .single();
-  if (error) {throw new RepositoryError('upsertBehaviorProfile', error);}
+  if (error) {
+    throw new RepositoryError("upsertBehaviorProfile", error);
+  }
   return BehaviorProfileSchema.parse(data);
 }
 
@@ -47,7 +51,7 @@ export async function addBehaviorSignal(
   signal: BehaviorSignal,
 ): Promise<BehaviorSignal> {
   const { data, error } = await supabase
-    .from('behavior_signals')
+    .from("behavior_signals")
     .insert({
       id: signal.id,
       user_id: signal.userId,
@@ -60,7 +64,9 @@ export async function addBehaviorSignal(
     })
     .select()
     .single();
-  if (error) {throw new RepositoryError('addBehaviorSignal', error);}
+  if (error) {
+    throw new RepositoryError("addBehaviorSignal", error);
+  }
   return BehaviorSignalSchema.parse(data);
 }
 
@@ -69,11 +75,13 @@ export async function fetchRecentBehaviorSignals(
   limit: number = 50,
 ): Promise<BehaviorSignal[]> {
   const { data, error } = await supabase
-    .from('behavior_signals')
-    .select('*')
-    .eq('user_id', userId)
-    .order('timestamp', { ascending: false })
+    .from("behavior_signals")
+    .select("*")
+    .eq("user_id", userId)
+    .order("timestamp", { ascending: false })
     .limit(limit);
-  if (error) {throw new RepositoryError('fetchRecentBehaviorSignals', error);}
+  if (error) {
+    throw new RepositoryError("fetchRecentBehaviorSignals", error);
+  }
   return BehaviorSignalSchema.array().parse(data || []);
 }

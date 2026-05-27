@@ -1,22 +1,24 @@
-import { getSupabaseClient } from '../../../config/supabase';
+import { getSupabaseClient } from "../../../config/supabase";
 import {
   CoachPersonaSchema,
   CoachMessageTemplateSchema,
   type CoachPersona,
   type CoachMessageTemplate,
   type MessageCategory,
-} from '../schemas';
-import { RepositoryError } from './error';
+} from "../schemas";
+import { RepositoryError } from "./error";
 
 const supabase = getSupabaseClient();
 
 export async function fetchCoachPersonas(): Promise<CoachPersona[]> {
   const { data, error } = await supabase
-    .from('coach_personas')
-    .select('*')
-    .eq('default_enabled', true)
-    .order('name');
-  if (error) {throw new RepositoryError('fetchCoachPersonas', error);}
+    .from("coach_personas")
+    .select("*")
+    .eq("default_enabled", true)
+    .order("name");
+  if (error) {
+    throw new RepositoryError("fetchCoachPersonas", error);
+  }
   return CoachPersonaSchema.array().parse(data || []);
 }
 
@@ -24,13 +26,15 @@ export async function fetchCoachPersona(
   personaId: string,
 ): Promise<CoachPersona | null> {
   const { data, error } = await supabase
-    .from('coach_personas')
-    .select('*')
-    .eq('id', personaId)
+    .from("coach_personas")
+    .select("*")
+    .eq("id", personaId)
     .single();
   if (error) {
-    if (error.code === 'PGRST116') {return null;}
-    throw new RepositoryError('fetchCoachPersona', error);
+    if (error.code === "PGRST116") {
+      return null;
+    }
+    throw new RepositoryError("fetchCoachPersona", error);
   }
   return data ? CoachPersonaSchema.parse(data) : null;
 }
@@ -40,12 +44,14 @@ export async function fetchMessageTemplates(
   category: MessageCategory,
 ): Promise<CoachMessageTemplate[]> {
   const { data, error } = await supabase
-    .from('coach_message_templates')
-    .select('*')
-    .eq('persona_id', personaId)
-    .eq('category', category)
-    .order('priority', { ascending: false });
-  if (error) {throw new RepositoryError('fetchMessageTemplates', error);}
+    .from("coach_message_templates")
+    .select("*")
+    .eq("persona_id", personaId)
+    .eq("category", category)
+    .order("priority", { ascending: false });
+  if (error) {
+    throw new RepositoryError("fetchMessageTemplates", error);
+  }
   return CoachMessageTemplateSchema.array().parse(data || []);
 }
 
@@ -53,10 +59,12 @@ export async function fetchAllMessageTemplates(
   personaId: string,
 ): Promise<CoachMessageTemplate[]> {
   const { data, error } = await supabase
-    .from('coach_message_templates')
-    .select('*')
-    .eq('persona_id', personaId)
-    .order('priority', { ascending: false });
-  if (error) {throw new RepositoryError('fetchAllMessageTemplates', error);}
+    .from("coach_message_templates")
+    .select("*")
+    .eq("persona_id", personaId)
+    .order("priority", { ascending: false });
+  if (error) {
+    throw new RepositoryError("fetchAllMessageTemplates", error);
+  }
   return CoachMessageTemplateSchema.array().parse(data || []);
 }

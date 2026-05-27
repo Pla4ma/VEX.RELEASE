@@ -1,14 +1,14 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
-import { Text } from '../../../components/primitives/Text';
+import { Text } from "../../../components/primitives/Text";
 import type {
   FocusGoal,
   MotivationProfileType,
-} from '../../../features/onboarding/schemas';
-import { useTheme } from '../../../theme';
-import { styles } from '../styles';
-import { buildOnboardingAdaptationPreview } from './onboarding-adaptation-preview';
+} from "../../../features/onboarding/schemas";
+import { useTheme } from "../../../theme";
+import { styles } from "../styles";
+import { buildOnboardingAdaptationPreview } from "./onboarding-adaptation-preview";
 
 type OnboardingAdaptationPreviewProps = {
   goal: FocusGoal | undefined;
@@ -38,10 +38,20 @@ export function OnboardingAdaptationPreview({
       <Text style={[styles.choiceTitle, { color: theme.colors.text.primary }]}>
         {`${preview.sessionTitle} | ${preview.durationLabel}`}
       </Text>
-      <Text style={[styles.choiceDescription, { color: theme.colors.text.secondary }]}>
+      <Text
+        style={[
+          styles.choiceDescription,
+          { color: theme.colors.text.secondary },
+        ]}
+      >
         {preview.coachTone}
       </Text>
-      <Text style={[styles.choiceDescription, { color: theme.colors.text.secondary }]}>
+      <Text
+        style={[
+          styles.choiceDescription,
+          { color: theme.colors.text.secondary },
+        ]}
+      >
         {preview.rewardPreview}
       </Text>
     </View>

@@ -1,7 +1,4 @@
-import type {
-  FocusQualityMetrics,
-  SessionState,
-} from "../types";
+import type { FocusQualityMetrics, SessionState } from "../types";
 import { createDebugger } from "../../utils/debug";
 import type { ScoringEngine } from "./ScoringEngine";
 import type {

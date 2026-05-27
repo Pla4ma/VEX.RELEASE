@@ -8,7 +8,9 @@ interface SessionSummaryStatsProps {
   summary: SessionSummaryType;
 }
 
-export const SessionSummaryStats: React.FC<SessionSummaryStatsProps> = ({ summary }) => {
+export const SessionSummaryStats: React.FC<SessionSummaryStatsProps> = ({
+  summary,
+}) => {
   return (
     <View style={styles.statsGrid}>
       <View style={styles.statCard}>

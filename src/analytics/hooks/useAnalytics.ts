@@ -4,8 +4,8 @@
  * React hook for analytics tracking.
  */
 
-import { useCallback, useRef, useEffect } from 'react';
-import { getAnalyticsService } from '../AnalyticsService';
+import { useCallback, useRef, useEffect } from "react";
+import { getAnalyticsService } from "../AnalyticsService";
 
 /**
  * Analytics hook return type
@@ -35,7 +35,7 @@ export function useAnalytics(): UseAnalyticsReturn {
     (eventName: string, properties?: Record<string, unknown>): void => {
       analytics.track(eventName, properties);
     },
-    [analytics]
+    [analytics],
   );
 
   /**
@@ -45,12 +45,14 @@ export function useAnalytics(): UseAnalyticsReturn {
     (screenName: string, properties?: Record<string, unknown>): void => {
       // Prevent duplicate tracking
       const key = `${screenName}-${JSON.stringify(properties)}`;
-      if (trackedScreens.current.has(key)) {return;}
+      if (trackedScreens.current.has(key)) {
+        return;
+      }
 
       trackedScreens.current.add(key);
       analytics.screen(screenName, properties);
     },
-    [analytics]
+    [analytics],
   );
 
   /**
@@ -60,7 +62,7 @@ export function useAnalytics(): UseAnalyticsReturn {
     (properties: Record<string, unknown>): void => {
       analytics.setUserProperties(properties);
     },
-    [analytics]
+    [analytics],
   );
 
   /**
@@ -69,13 +71,13 @@ export function useAnalytics(): UseAnalyticsReturn {
   const capture = useCallback(
     (error: Error, context?: Record<string, unknown>): void => {
       // Track as error event with context
-      analytics.track('exception_captured', {
+      analytics.track("exception_captured", {
         error_message: error.message,
         error_stack: error.stack,
         ...context,
       });
     },
-    [analytics]
+    [analytics],
   );
 
   // Clear tracked screens on unmount
@@ -99,7 +101,7 @@ export function useAnalytics(): UseAnalyticsReturn {
  */
 export function useScreenTracking(
   screenName: string,
-  properties?: Record<string, unknown>
+  properties?: Record<string, unknown>,
 ): void {
   const analytics = getAnalyticsService();
 

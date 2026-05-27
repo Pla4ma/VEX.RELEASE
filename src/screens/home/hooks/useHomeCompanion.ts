@@ -1,33 +1,38 @@
-import { useCallback, useEffect, useState } from 'react';
-import { loadCompanionState } from '../../../features/companion/session-storage';
-import type { CompanionState } from '../../../features/companion/types';
+import { useCallback, useEffect, useState } from "react";
+import { loadCompanionState } from "../../../features/companion/session-storage";
+import type { CompanionState } from "../../../features/companion/types";
 
 export type HomeCompanionStatus =
-  | { kind: 'loading' }
-  | { kind: 'empty' }
-  | { kind: 'error'; error: Error }
-  | { kind: 'offline' }
-  | { kind: 'success'; state: CompanionState };
+  | { kind: "loading" }
+  | { kind: "empty" }
+  | { kind: "error"; error: Error }
+  | { kind: "offline" }
+  | { kind: "success"; state: CompanionState };
 
-export function useHomeCompanion(userId: string | undefined, isOnline: boolean): HomeCompanionStatus {
-  const [status, setStatus] = useState<HomeCompanionStatus>({ kind: 'loading' });
+export function useHomeCompanion(
+  userId: string | undefined,
+  isOnline: boolean,
+): HomeCompanionStatus {
+  const [status, setStatus] = useState<HomeCompanionStatus>({
+    kind: "loading",
+  });
 
   const load = useCallback(async () => {
     if (!userId) {
-      setStatus({ kind: 'empty' });
+      setStatus({ kind: "empty" });
       return;
     }
     if (!isOnline) {
-      setStatus({ kind: 'offline' });
+      setStatus({ kind: "offline" });
       return;
     }
-    setStatus({ kind: 'loading' });
+    setStatus({ kind: "loading" });
     try {
       const state = await loadCompanionState(userId);
-      setStatus({ kind: 'success', state });
+      setStatus({ kind: "success", state });
     } catch (caught: unknown) {
       setStatus({
-        kind: 'error',
+        kind: "error",
         error: caught instanceof Error ? caught : new Error(String(caught)),
       });
     }

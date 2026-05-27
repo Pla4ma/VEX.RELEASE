@@ -18,9 +18,7 @@ export interface SessionActions {
   getAntiCheatLabel: () => "Elite" | "Good" | "Okay" | "Distracted";
 }
 
-export function createSessionActions(
-  service: SessionService,
-): SessionActions {
+export function createSessionActions(service: SessionService): SessionActions {
   return {
     createSession: async (config: SessionConfig) => {
       return service.createCustomSession(config);

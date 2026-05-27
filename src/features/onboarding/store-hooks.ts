@@ -1,4 +1,4 @@
-import { useOnboardingStore } from './store';
+import { useOnboardingStore } from "./store";
 
 export function useOnboardingProgress(): {
   stepNumber: number;

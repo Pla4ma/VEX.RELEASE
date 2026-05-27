@@ -7,13 +7,13 @@
  * @phase 2.3
  */
 
-import React from 'react';
-import { Pressable } from 'react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import React from "react";
+import { Pressable } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
 
 export interface ComebackQuestCardProps {
   /** Original streak days that can be restored */
@@ -50,20 +50,45 @@ export function ComebackQuestCard({
 
   if (isLoading) {
     return (
-      <Box mx="lg" mb="md" p="lg" borderRadius="xl" bg={theme.colors.background.tertiary}>
-        <Box height={20} width="60%" bg={theme.colors.background.secondary} borderRadius="sm" />
-        <Box height={16} width="80%" bg={theme.colors.background.secondary} borderRadius="sm" mt="sm" />
-        <Box height={8} width="100%" bg={theme.colors.background.secondary} borderRadius="full" mt="md" />
+      <Box
+        mx="lg"
+        mb="md"
+        p="lg"
+        borderRadius="xl"
+        bg={theme.colors.background.tertiary}
+      >
+        <Box
+          height={20}
+          width="60%"
+          bg={theme.colors.background.secondary}
+          borderRadius="sm"
+        />
+        <Box
+          height={16}
+          width="80%"
+          bg={theme.colors.background.secondary}
+          borderRadius="sm"
+          mt="sm"
+        />
+        <Box
+          height={8}
+          width="100%"
+          bg={theme.colors.background.secondary}
+          borderRadius="full"
+          mt="md"
+        />
       </Box>
     );
   }
 
   return (
     <Animated.View entering={FadeInUp.duration(400).delay(200)}>
-      <Pressable onPress={onPress}
-  accessibilityLabel="Interactive control"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+      <Pressable
+        onPress={onPress}
+        accessibilityLabel="Interactive control"
+        accessibilityRole="button"
+        accessibilityHint="Activates this control"
+      >
         <Box
           mx="lg"
           mb="md"
@@ -97,7 +122,8 @@ export function ComebackQuestCard({
                 Streak Restoration Quest
               </Text>
               <Text variant="caption" color={theme.colors.warning.dark}>
-                Complete {sessionsRequired} sessions to restore your {originalStreak}-day streak
+                Complete {sessionsRequired} sessions to restore your{" "}
+                {originalStreak}-day streak
               </Text>
             </Box>
           </Box>
@@ -108,11 +134,20 @@ export function ComebackQuestCard({
               <Text variant="caption" color={theme.colors.text.secondary}>
                 Progress
               </Text>
-              <Text variant="caption" color={theme.colors.text.primary} fontWeight="600">
+              <Text
+                variant="caption"
+                color={theme.colors.text.primary}
+                fontWeight="600"
+              >
                 {sessionsCompleted} / {sessionsRequired}
               </Text>
             </Box>
-            <Box height={12} borderRadius="full" bg={theme.colors.background.tertiary} overflow="hidden">
+            <Box
+              height={12}
+              borderRadius="full"
+              bg={theme.colors.background.tertiary}
+              overflow="hidden"
+            >
               <Box
                 width={`${progressPercent}%`}
                 height="100%"
@@ -160,7 +195,8 @@ export function ComebackQuestCard({
               color={theme.colors.primary[500]}
               fontWeight="700"
             >
-              {sessionsRemaining} more session{sessionsRemaining !== 1 ? 's' : ''} →
+              {sessionsRemaining} more session
+              {sessionsRemaining !== 1 ? "s" : ""} →
             </Text>
           </Box>
         </Box>

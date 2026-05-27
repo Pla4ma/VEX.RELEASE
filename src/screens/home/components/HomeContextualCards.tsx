@@ -5,20 +5,31 @@
  * Shows only ONE card at a time based on priority.
  */
 
-import React from 'react';
+import React from "react";
 import {
   ComebackQuestCard,
   TodaysChallengesWidget,
   type ChallengeItem,
-} from '../../../features/home-spine/components';
-import { StudyPlanSuggestionCard } from '../../../features/content-study/components/StudyPlanSuggestionCard';
-import type { ActiveStudyPlan } from '../../../features/content-study/hooks/helpers';
-import type { LearningExecutionCopy } from '../../../features/learning-execution';
+} from "../../../features/home-spine/components";
+import { StudyPlanSuggestionCard } from "../../../features/content-study/components/StudyPlanSuggestionCard";
+import type { ActiveStudyPlan } from "../../../features/content-study/hooks/helpers";
+import type { LearningExecutionCopy } from "../../../features/learning-execution";
 
 interface HomeContextualCardsProps {
   activeStudyPlan: ActiveStudyPlan | null | undefined;
   learningCopy: LearningExecutionCopy;
-  comebackData: { streakRestoreEligible?: boolean; streakBefore?: number; rewardMultiplier?: number; isComeback?: boolean; daysAbsent?: number; streakNow?: number; message?: string } | null | undefined;
+  comebackData:
+    | {
+        streakRestoreEligible?: boolean;
+        streakBefore?: number;
+        rewardMultiplier?: number;
+        isComeback?: boolean;
+        daysAbsent?: number;
+        streakNow?: number;
+        message?: string;
+      }
+    | null
+    | undefined;
   comebackSessionsCompleted: number;
   todaysChallenges: ChallengeItem[];
   challengesQueryError: Error | null | undefined;
@@ -47,10 +58,12 @@ export function HomeContextualCards({
   userId,
 }: HomeContextualCardsProps): JSX.Element | null {
   // Determine the ONE contextual card to show (priority order)
-  const showStudyPlanCard = activeStudyPlan && activeStudyPlan.nextTask !== null;
+  const showStudyPlanCard =
+    activeStudyPlan && activeStudyPlan.nextTask !== null;
   const showComebackCard = comebackData?.streakRestoreEligible ?? false;
-  const showChallengeCard = todaysChallenges.length > 0 &&
-    todaysChallenges.some(c => {
+  const showChallengeCard =
+    todaysChallenges.length > 0 &&
+    todaysChallenges.some((c) => {
       const percent = (c.currentProgress / c.targetProgress) * 100;
       return percent >= 70 && !c.isCompleted;
     });

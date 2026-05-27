@@ -1,14 +1,23 @@
-import React from 'react';
-import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import React from "react";
+import Animated, {
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { borderRadius, fontWeights, sizing, spacing, typography } from '../../../theme/tokens';
-import { useUnreadNotificationsCount as useUnreadCountQuery } from '../hooks';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import {
+  borderRadius,
+  fontWeights,
+  sizing,
+  spacing,
+  typography,
+} from "../../../theme/tokens";
+import { useUnreadNotificationsCount as useUnreadCountQuery } from "../hooks";
 
 interface NotificationBadgeProps {
   userId: string;
-  size?: 'sm' | 'md';
+  size?: "sm" | "md";
 }
 
 interface BadgeMetrics {
@@ -34,7 +43,7 @@ const badgeMetrics = {
     paddingHorizontal: spacing[1],
     borderWidth: spacing[1],
   },
-} satisfies Record<NonNullable<NotificationBadgeProps['size']>, BadgeMetrics>;
+} satisfies Record<NonNullable<NotificationBadgeProps["size"]>, BadgeMetrics>;
 
 function useBadgeCount(userId: string | undefined): {
   count: number;
@@ -50,12 +59,12 @@ function useBadgeCount(userId: string | undefined): {
 }
 
 function formatBadgeCount(count: number): string {
-  return count > 99 ? '99+' : String(count);
+  return count > 99 ? "99+" : String(count);
 }
 
 export function NotificationBadge({
   userId,
-  size = 'md',
+  size = "md",
 }: NotificationBadgeProps): JSX.Element | null {
   const { count, hasUnread } = useBadgeCount(userId);
   const animatedStyle = useAnimatedStyle(() => ({
@@ -93,7 +102,11 @@ export function NotificationBadge({
   );
 }
 
-export function NotificationDot({ userId }: { userId: string }): JSX.Element | null {
+export function NotificationDot({
+  userId,
+}: {
+  userId: string;
+}): JSX.Element | null {
   const { hasUnread } = useBadgeCount(userId);
 
   if (!hasUnread) {

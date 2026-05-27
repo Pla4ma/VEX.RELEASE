@@ -17,8 +17,18 @@ import type {
 } from "./types";
 const debug = createDebugger("navigation:helpers");
 
-export { isNavigationReady, safeNavigate, isCurrentRoute, getCurrentRouteName, canGoBack, safeGoBack } from "./navigation-safety";
-export { validateDeepLinkParams, navigateWithValidation } from "./navigation-deep-links";
+export {
+  isNavigationReady,
+  safeNavigate,
+  isCurrentRoute,
+  getCurrentRouteName,
+  canGoBack,
+  safeGoBack,
+} from "./navigation-safety";
+export {
+  validateDeepLinkParams,
+  navigateWithValidation,
+} from "./navigation-deep-links";
 export type { DeepLinkValidationResult } from "./navigation-deep-links";
 
 export function navigateToRootScreen(

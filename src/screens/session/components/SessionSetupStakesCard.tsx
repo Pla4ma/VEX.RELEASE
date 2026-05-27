@@ -1,19 +1,22 @@
-import React from 'react';
+import React from "react";
 import {
   useNavigation,
   type CompositeNavigationProp,
-} from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+} from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { Box } from '../../../components/primitives/Box';
-import { SessionStakesBriefing } from '../../../features/session-start/components/SessionStakesBriefing';
-import { useFeatureAccess } from '../../../features/liveops-config';
-import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../../features/liveops-config/feature-availability';
+import { Box } from "../../../components/primitives/Box";
+import { SessionStakesBriefing } from "../../../features/session-start/components/SessionStakesBriefing";
+import { useFeatureAccess } from "../../../features/liveops-config";
+import {
+  getFeatureAvailability,
+  isFeatureAvailableForNavigation,
+} from "../../../features/liveops-config/feature-availability";
 import type {
   ExtendedRootStackParams,
   SessionStackParams,
-} from '../../../navigation/types';
-import type { useSessionSetupStakes } from '../hooks/useSessionSetupStakes';
+} from "../../../navigation/types";
+import type { useSessionSetupStakes } from "../hooks/useSessionSetupStakes";
 
 type SessionNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<SessionStackParams>,
@@ -39,22 +42,26 @@ export function SessionSetupStakesCard({
         rivalStake={stakes.rivalStake}
         onStakePress={(stakeId) => {
           if (
-            stakeId === 'boss' &&
-            isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.boss_tab))
+            stakeId === "boss" &&
+            isFeatureAvailableForNavigation(
+              getFeatureAvailability(disclosure.features.boss_tab),
+            )
           ) {
-            navigation.navigate('Boss');
+            navigation.navigate("Boss");
           }
-          if (stakeId === 'streak') {
-            navigation.navigate('Main', { screen: 'Progress' });
+          if (stakeId === "streak") {
+            navigation.navigate("Main", { screen: "Progress" });
           }
           if (
-            stakeId === 'challenge' &&
-            isFeatureAvailableForNavigation(getFeatureAvailability(disclosure.features.challenges))
+            stakeId === "challenge" &&
+            isFeatureAvailableForNavigation(
+              getFeatureAvailability(disclosure.features.challenges),
+            )
           ) {
-            navigation.navigate('Challenges');
+            navigation.navigate("Challenges");
           }
-          if (stakeId === 'rival') {
-            navigation.navigate('Main', { screen: 'Home' });
+          if (stakeId === "rival") {
+            navigation.navigate("Main", { screen: "Home" });
           }
         }}
       />

@@ -48,7 +48,8 @@ export function trackPaywallEvent(
   for (const ctx of Object.keys(paywallAnalytics.byContext)) {
     const ctxData = paywallAnalytics.byContext[ctx];
     if (ctxData) {
-      ctxData.rate = ctxData.shows > 0 ? ctxData.conversions / ctxData.shows : 0;
+      ctxData.rate =
+        ctxData.shows > 0 ? ctxData.conversions / ctxData.shows : 0;
     }
   }
 }

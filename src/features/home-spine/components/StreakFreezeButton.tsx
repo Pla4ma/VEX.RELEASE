@@ -7,13 +7,19 @@
  * @phase 2.4
  */
 
-import React from 'react';
-import { Pressable } from 'react-native';
-import Animated, { FadeIn, useAnimatedStyle, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import React from "react";
+import { Pressable } from "react-native";
+import Animated, {
+  FadeIn,
+  useAnimatedStyle,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
 
 export interface StreakFreezeButtonProps {
   /** Whether freeze is available today */
@@ -44,10 +50,10 @@ export function StreakFreezeButton({
             scale: withRepeat(
               withSequence(
                 withTiming(1.05, { duration: 1000 }),
-                withTiming(1, { duration: 1000 })
+                withTiming(1, { duration: 1000 }),
               ),
               -1,
-              true
+              true,
             ),
           },
         ]
@@ -84,10 +90,13 @@ export function StreakFreezeButton({
   if (compact) {
     return (
       <Animated.View entering={FadeIn} style={pulseStyle}>
-        <Pressable onPress={onFreeze} disabled={isFreezing}
-  accessibilityLabel="🧊 button"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+        <Pressable
+          onPress={onFreeze}
+          disabled={isFreezing}
+          accessibilityLabel="🧊 button"
+          accessibilityRole="button"
+          accessibilityHint="Activates this control"
+        >
           <Box
             flexDirection="row"
             alignItems="center"
@@ -101,8 +110,12 @@ export function StreakFreezeButton({
             opacity={isFreezing ? 0.5 : 1}
           >
             <Text fontSize={12}>🧊</Text>
-            <Text variant="caption" color={theme.colors.info.dark} fontWeight="600">
-              {isFreezing ? 'Freezing...' : 'Freeze'}
+            <Text
+              variant="caption"
+              color={theme.colors.info.dark}
+              fontWeight="600"
+            >
+              {isFreezing ? "Freezing..." : "Freeze"}
             </Text>
           </Box>
         </Pressable>
@@ -112,10 +125,13 @@ export function StreakFreezeButton({
 
   return (
     <Animated.View entering={FadeIn} style={pulseStyle}>
-      <Pressable onPress={onFreeze} disabled={isFreezing}
-  accessibilityLabel="Interactive control"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+      <Pressable
+        onPress={onFreeze}
+        disabled={isFreezing}
+        accessibilityLabel="Interactive control"
+        accessibilityRole="button"
+        accessibilityHint="Activates this control"
+      >
         <Box
           mx="lg"
           mb="md"
@@ -141,21 +157,24 @@ export function StreakFreezeButton({
           </Box>
 
           <Box flex={1}>
-            <Text variant="body" color={theme.colors.text.primary} fontWeight="600">
-              {isFreezing ? 'Freezing streak...' : 'Freeze Your Streak'}
+            <Text
+              variant="body"
+              color={theme.colors.text.primary}
+              fontWeight="600"
+            >
+              {isFreezing ? "Freezing streak..." : "Freeze Your Streak"}
             </Text>
             <Text variant="caption" color={theme.colors.text.secondary}>
               Skip today without breaking your streak
             </Text>
           </Box>
 
-          <Box
-            px="md"
-            py="xs"
-            borderRadius="md"
-            bg={theme.colors.info.DEFAULT}
-          >
-            <Text variant="caption" color={theme.colors.text.inverse} fontWeight="700">
+          <Box px="md" py="xs" borderRadius="md" bg={theme.colors.info.DEFAULT}>
+            <Text
+              variant="caption"
+              color={theme.colors.text.inverse}
+              fontWeight="700"
+            >
               FREEZE
             </Text>
           </Box>

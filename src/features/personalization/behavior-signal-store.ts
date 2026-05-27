@@ -1,42 +1,54 @@
-import { z } from 'zod';
-import * as Sentry from '@sentry/react-native';
+import { z } from "zod";
+import * as Sentry from "@sentry/react-native";
 import {
   BehaviorSignalSchema,
   type BehaviorSignal,
   type BehaviorSignalType,
   type BehaviorSignalSource,
-} from './behavior-signal-schemas';
+} from "./behavior-signal-schemas";
 
-const SIGNAL_KEY_PREFIX = 'vex_behavior_signals:';
+const SIGNAL_KEY_PREFIX = "vex_behavior_signals:";
 
 interface StoredSignalWindow {
   signals: BehaviorSignal[];
   updatedAt: number;
 }
 
-const StoredSignalWindowSchema = z.object({
-  signals: z.array(BehaviorSignalSchema).max(200),
-  updatedAt: z.number().int().min(0),
-}).strict();
+const StoredSignalWindowSchema = z
+  .object({
+    signals: z.array(BehaviorSignalSchema).max(200),
+    updatedAt: z.number().int().min(0),
+  })
+  .strict();
 
 function getWindowKey(userId: string): string {
   return `${SIGNAL_KEY_PREFIX}${userId}:window`;
 }
 
-let mmkvAdapter: { getItem(key: string): string | null; setItem(key: string, value: string): void; removeItem(key: string): void } | null = null;
+let mmkvAdapter: {
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): void;
+  removeItem(key: string): void;
+} | null = null;
 
 function getStorage(): NonNullable<typeof mmkvAdapter> {
   if (mmkvAdapter) return mmkvAdapter;
   try {
-    const { getMMKVStorageAdapter } = require('../../persistence/MMKVStorageAdapter');
+    const {
+      getMMKVStorageAdapter,
+    } = require("../../persistence/MMKVStorageAdapter");
     mmkvAdapter = getMMKVStorageAdapter();
     return mmkvAdapter!;
-  } catch {
+  } catch (error: unknown) {
     const fallback: Record<string, string> = {};
     mmkvAdapter = {
       getItem: (key: string) => fallback[key] ?? null,
-      setItem: (key: string, value: string) => { fallback[key] = value; },
-      removeItem: (key: string) => { delete fallback[key]; },
+      setItem: (key: string, value: string) => {
+        fallback[key] = value;
+      },
+      removeItem: (key: string) => {
+        delete fallback[key];
+      },
     };
     return mmkvAdapter;
   }
@@ -49,9 +61,9 @@ function loadWindow(userId: string): StoredSignalWindow {
     return StoredSignalWindowSchema.parse(JSON.parse(raw));
   } catch (error) {
     Sentry.addBreadcrumb({
-      category: 'behavior-signals',
-      message: 'Failed to load signal window, resetting',
-      level: 'warning',
+      category: "behavior-signals",
+      message: "Failed to load signal window, resetting",
+      level: "warning",
     });
     getStorage().removeItem(getWindowKey(userId));
     return { signals: [], updatedAt: 0 };
@@ -63,9 +75,9 @@ function saveWindow(userId: string, window: StoredSignalWindow): void {
     getStorage().setItem(getWindowKey(userId), JSON.stringify(window));
   } catch (error) {
     Sentry.addBreadcrumb({
-      category: 'behavior-signals',
-      message: 'Failed to persist signal window',
-      level: 'warning',
+      category: "behavior-signals",
+      message: "Failed to persist signal window",
+      level: "warning",
     });
   }
 }
@@ -86,7 +98,7 @@ export function recordBehaviorSignal(
   signalType: BehaviorSignalType,
   surfaceKey: string,
   source: BehaviorSignalSource,
-  metadata?: BehaviorSignal['metadata'],
+  metadata?: BehaviorSignal["metadata"],
 ): void {
   try {
     const signal: BehaviorSignal = BehaviorSignalSchema.parse({
@@ -105,9 +117,9 @@ export function recordBehaviorSignal(
     saveWindow(userId, window);
   } catch (error) {
     Sentry.addBreadcrumb({
-      category: 'behavior-signals',
+      category: "behavior-signals",
       message: `Failed to record signal: ${signalType}`,
-      level: 'warning',
+      level: "warning",
     });
   }
 }
@@ -122,7 +134,7 @@ export function getBehaviorSignals(
     return window.signals
       .filter((s) => s.timestamp > cutoff)
       .slice(0, maxSignals);
-  } catch {
+  } catch (error: unknown) {
     return [];
   }
 }
@@ -130,7 +142,7 @@ export function getBehaviorSignals(
 export function clearBehaviorSignals(userId: string): void {
   try {
     getStorage().removeItem(getWindowKey(userId));
-  } catch {
+  } catch (error: unknown) {
     // best effort
   }
 }

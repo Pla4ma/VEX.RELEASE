@@ -5,25 +5,25 @@
  * Accepts canonical personalizationProfile and behaviorStats from
  * useHomeResolvedExperience — never derives profiles from guesses.
  */
-import { useMemo } from 'react';
-import { decideHomeSurfaces } from '../../../features/home-experience/home-surface-decision';
-import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
-import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
-import type { FeatureAccessResult } from '../../../features/liveops-config';
-import type { LaneProfile } from '../../../features/lane-engine/types';
+import { useMemo } from "react";
+import { decideHomeSurfaces } from "../../../features/home-experience/home-surface-decision";
+import type { HomeSurfaceMap } from "../../../features/home-experience/surface-decision-schemas";
+import type { FirstWeekExperience } from "../../../features/personalization/first-week-schemas";
+import type { FeatureAccessResult } from "../../../features/liveops-config";
+import type { LaneProfile } from "../../../features/lane-engine/types";
 
 interface UseHomeSurfaceMapInput {
   personalizationProfile: {
     motivationStyle: string;
     primaryGoal: string;
-    gamificationIntensity: 'minimal' | 'medium' | 'strong';
+    gamificationIntensity: "minimal" | "medium" | "strong";
     studyLayerName: string;
-    userStage: 'new' | 'activating' | 'engaged' | 'power';
+    userStage: "new" | "activating" | "engaged" | "power";
   };
   behaviorStats: {
     totalCompletedSessions: number;
     studyUsageRatio: number;
-    bossChallengeEngagement: 'none' | 'low' | 'medium' | 'high';
+    bossChallengeEngagement: "none" | "low" | "medium" | "high";
     coachInteractions: number;
     comebackSessions: number;
     ignoredFeatures: string[];
@@ -39,7 +39,9 @@ interface UseHomeSurfaceMapInput {
   laneProfile?: LaneProfile;
 }
 
-export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap {
+export function useHomeSurfaceMap(
+  input: UseHomeSurfaceMapInput,
+): HomeSurfaceMap {
   const {
     personalizationProfile: p,
     behaviorStats: b,
@@ -55,11 +57,15 @@ export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap
   return useMemo(() => {
     const fa = featureAccess.features;
 
-    const degradedFeatures: Array<'content_study' | 'ai_coach_advanced' | 'premium_paywall' | 'boss_tab'> = [];
-    if (fa.content_study?.isDegraded) degradedFeatures.push('content_study');
-    if (fa.ai_coach_advanced?.isDegraded) degradedFeatures.push('ai_coach_advanced');
-    if (fa.premium_paywall?.isDegraded) degradedFeatures.push('premium_paywall');
-    if (fa.boss_tab?.isDegraded) degradedFeatures.push('boss_tab');
+    const degradedFeatures: Array<
+      "content_study" | "ai_coach_advanced" | "premium_paywall" | "boss_tab"
+    > = [];
+    if (fa.content_study?.isDegraded) degradedFeatures.push("content_study");
+    if (fa.ai_coach_advanced?.isDegraded)
+      degradedFeatures.push("ai_coach_advanced");
+    if (fa.premium_paywall?.isDegraded)
+      degradedFeatures.push("premium_paywall");
+    if (fa.boss_tab?.isDegraded) degradedFeatures.push("boss_tab");
 
     return decideHomeSurfaces({
       featureAvailability: {
@@ -69,15 +75,38 @@ export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap
         study: Boolean(fa.content_study?.isUnlocked),
       },
       personalizationProfile: {
-        motivationStyle: (
-          safeStyle === 'calm' || safeStyle === 'friendly' || safeStyle === 'coach_led' ||
-          safeStyle === 'game_like' || safeStyle === 'intense' || safeStyle === 'study_focused' ||
-          safeStyle === 'student'
-        ) ? safeStyle as 'calm' | 'friendly' | 'coach_led' | 'game_like' | 'intense' | 'study_focused' | 'student' : 'friendly',
-        primaryGoal: (
-          p.primaryGoal === 'focus' || p.primaryGoal === 'study' || p.primaryGoal === 'work' ||
-          p.primaryGoal === 'creative' || p.primaryGoal === 'personal' || p.primaryGoal === 'learning'
-        ) ? p.primaryGoal as 'focus' | 'study' | 'work' | 'creative' | 'personal' | 'learning' : 'focus',
+        motivationStyle:
+          safeStyle === "calm" ||
+          safeStyle === "friendly" ||
+          safeStyle === "coach_led" ||
+          safeStyle === "game_like" ||
+          safeStyle === "intense" ||
+          safeStyle === "study_focused" ||
+          safeStyle === "student"
+            ? (safeStyle as
+                | "calm"
+                | "friendly"
+                | "coach_led"
+                | "game_like"
+                | "intense"
+                | "study_focused"
+                | "student")
+            : "friendly",
+        primaryGoal:
+          p.primaryGoal === "focus" ||
+          p.primaryGoal === "study" ||
+          p.primaryGoal === "work" ||
+          p.primaryGoal === "creative" ||
+          p.primaryGoal === "personal" ||
+          p.primaryGoal === "learning"
+            ? (p.primaryGoal as
+                | "focus"
+                | "study"
+                | "work"
+                | "creative"
+                | "personal"
+                | "learning")
+            : "focus",
         gamificationIntensity: p.gamificationIntensity,
         studyLayerName: input.firstWeek?.studyLayerLabel ?? p.studyLayerName,
         userStage: p.userStage,
@@ -85,10 +114,16 @@ export function useHomeSurfaceMap(input: UseHomeSurfaceMapInput): HomeSurfaceMap
       behaviorStats: {
         totalCompletedSessions: b.totalCompletedSessions,
         studyUsageRatio: b.studyUsageRatio,
-        deepWorkUsageRatio: (b as Record<string, unknown>).deepWorkUsageRatio as number ?? 0,
-        learningUsageRatio: (b as Record<string, unknown>).learningUsageRatio as number ?? 0,
-        projectFocusUsageRatio: (b as Record<string, unknown>).projectFocusUsageRatio as number ?? 0,
-        structuredExecutionUsageRatio: (b as Record<string, unknown>).structuredExecutionUsageRatio as number ?? 0,
+        deepWorkUsageRatio:
+          ((b as Record<string, unknown>).deepWorkUsageRatio as number) ?? 0,
+        learningUsageRatio:
+          ((b as Record<string, unknown>).learningUsageRatio as number) ?? 0,
+        projectFocusUsageRatio:
+          ((b as Record<string, unknown>).projectFocusUsageRatio as number) ??
+          0,
+        structuredExecutionUsageRatio:
+          ((b as Record<string, unknown>)
+            .structuredExecutionUsageRatio as number) ?? 0,
         bossChallengeEngagement: b.bossChallengeEngagement,
         coachInteractions: b.coachInteractions,
         comebackSessions: b.comebackSessions,

@@ -1,9 +1,13 @@
-import { createMemoryCandidate, listMemoryCandidates, deleteMemoryCandidate } from './repository';
-import type { MemoryCandidate, MemoryCandidateInput } from './schemas';
+import {
+  createMemoryCandidate,
+  listMemoryCandidates,
+  deleteMemoryCandidate,
+} from "./repository";
+import type { MemoryCandidate, MemoryCandidateInput } from "./schemas";
 
 export async function addMemoryCandidate(input: {
   content: string;
-  source: 'study_block' | 'recall' | 'reflection' | 'import';
+  source: "study_block" | "recall" | "reflection" | "import";
   sourceId: string;
   tags?: string[];
   userId: string;
@@ -11,11 +15,16 @@ export async function addMemoryCandidate(input: {
   return createMemoryCandidate({ ...input, tags: input.tags ?? [] });
 }
 
-export async function getMemoryCandidates(userId: string): Promise<MemoryCandidate[]> {
+export async function getMemoryCandidates(
+  userId: string,
+): Promise<MemoryCandidate[]> {
   return listMemoryCandidates(userId);
 }
 
-export async function removeMemoryCandidate(userId: string, candidateId: string): Promise<void> {
+export async function removeMemoryCandidate(
+  userId: string,
+  candidateId: string,
+): Promise<void> {
   return deleteMemoryCandidate(userId, candidateId);
 }
 
@@ -29,7 +38,7 @@ export async function addMemoryFromStudyBlock(input: {
   const content = `Study block: ${input.blockTitle} — ${input.blockObjective}`;
   return createMemoryCandidate({
     content: content.slice(0, 2000),
-    source: 'study_block',
+    source: "study_block",
     sourceId: input.studyBlockId,
     tags: input.tags ?? [],
     userId: input.userId,
@@ -48,7 +57,7 @@ export async function addMemoryFromRecall(input: {
     : `Recall: ${input.prompt}`;
   return createMemoryCandidate({
     content: content.slice(0, 2000),
-    source: 'recall',
+    source: "recall",
     sourceId: input.recallId,
     tags: input.tags ?? [],
     userId: input.userId,

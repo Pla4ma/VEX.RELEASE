@@ -38,8 +38,12 @@ export const semanticOpacity = {
 /**
  * Get opacity value
  */
-export function getOpacity(key: keyof typeof opacity | keyof typeof semanticOpacity): number {
-  return (opacity as Record<string, number>)[key] ??
-         (semanticOpacity as Record<string, number>)[key] ??
-         1;
+export function getOpacity(
+  key: keyof typeof opacity | keyof typeof semanticOpacity,
+): number {
+  return (
+    (opacity as Record<string, number>)[key] ??
+    (semanticOpacity as Record<string, number>)[key] ??
+    1
+  );
 }

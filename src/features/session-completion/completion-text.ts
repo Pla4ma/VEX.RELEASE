@@ -66,7 +66,8 @@ export function displayFor(
     };
   if (lane === "game_like")
     return {
-      displayBody: "Run progress updates from completed focus only. No currency layer.",
+      displayBody:
+        "Run progress updates from completed focus only. No currency layer.",
       displayTitle: "Encounter logged",
       nextActionLabel: "Continue run",
     };
@@ -131,7 +132,12 @@ export function buildMemoryCandidates(
     confidence: input.reflectionAnswer ? baseConfidence + 0.1 : baseConfidence,
     id: `${input.summary.sessionId}:${input.lane}:${situation}`,
     source: "session_completion" as const,
-    text: memoryText(input.lane, input.summary, situation, input.reflectionAnswer),
+    text: memoryText(
+      input.lane,
+      input.summary,
+      situation,
+      input.reflectionAnswer,
+    ),
   };
   return input.deletedMemoryIds.includes(candidate.id) ? [] : [candidate];
 }

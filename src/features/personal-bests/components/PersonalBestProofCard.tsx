@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react';
-import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
+import React, { useEffect } from "react";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from "react-native-reanimated";
 
-import { Box, Text } from '../../../components/primitives';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
+import { Box, Text } from "../../../components/primitives";
+import { useReducedMotion } from "../../../hooks/useReducedMotion";
+import { useTheme } from "../../../theme";
 
 type PersonalBestProofCardProps = {
   achievedAt: string;
@@ -26,7 +30,9 @@ export function PersonalBestProofCard({
   const achievedDate = new Date(achievedAt).toLocaleDateString();
 
   useEffect(() => {
-    scale.value = isReducedMotion ? 1 : withSpring(1, { damping: 18, stiffness: 160 });
+    scale.value = isReducedMotion
+      ? 1
+      : withSpring(1, { damping: 18, stiffness: 160 });
   }, [isReducedMotion, scale]);
 
   const animatedStyle = useAnimatedStyle(() => ({

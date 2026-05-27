@@ -95,7 +95,11 @@ describe("single source of truth", () => {
       totalCompletedSessions: 10,
       motivationProfile: GAMER_PROFILE,
     });
-    const runtime = buildHomeFeatureRuntime({ features, productTier, totalSessions: 10 });
+    const runtime = buildHomeFeatureRuntime({
+      features,
+      productTier,
+      totalSessions: 10,
+    });
 
     const bossAvail = getFeatureAvailability(features.boss_tab);
     expect(runtime.canQueryBoss).toBe(bossAvail.canQuery);

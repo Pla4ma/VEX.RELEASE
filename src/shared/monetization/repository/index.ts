@@ -10,4 +10,4 @@ export {
   purchaseRepository,
   type Purchase,
   type Subscription,
-} from './PurchaseRepository';
+} from "./PurchaseRepository";

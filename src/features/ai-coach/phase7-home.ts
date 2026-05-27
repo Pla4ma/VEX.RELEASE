@@ -1,12 +1,17 @@
-import { validateCoachInput } from './input-contract';
-import { buildInputContractForUser } from './phase7-input-builders';
-import { generateMissionSuggestion } from './phase7-mission';
-import { getPriorityEngineState, shouldCoachShowSuggestion } from './phase7-priority';
-import { generateSessionRecommendation } from './phase7-recommendation';
-import { handleStreakRiskIntegration } from './phase7-streak';
-import type { CoachSuggestion } from './phase7-schemas';
+import { validateCoachInput } from "./input-contract";
+import { buildInputContractForUser } from "./phase7-input-builders";
+import { generateMissionSuggestion } from "./phase7-mission";
+import {
+  getPriorityEngineState,
+  shouldCoachShowSuggestion,
+} from "./phase7-priority";
+import { generateSessionRecommendation } from "./phase7-recommendation";
+import { handleStreakRiskIntegration } from "./phase7-streak";
+import type { CoachSuggestion } from "./phase7-schemas";
 
-export async function getHomeCoachSuggestion(userId: string): Promise<CoachSuggestion | null> {
+export async function getHomeCoachSuggestion(
+  userId: string,
+): Promise<CoachSuggestion | null> {
   const priorityState = await getPriorityEngineState(userId);
   if (priorityState.streakCritical || priorityState.pendingSync) {
     return null;
@@ -20,12 +25,12 @@ export async function getHomeCoachSuggestion(userId: string): Promise<CoachSugge
     handleStreakRiskIntegration(userId, {
       currentStreak: validatedInput.streakState.currentStreak,
       hoursSinceLastSession: validatedInput.streakState.hoursSinceLastSession,
-      riskLevel: validatedInput.streakState.streakAtRisk ? 'high' : 'low',
+      riskLevel: validatedInput.streakState.streakAtRisk ? "high" : "low",
     }),
   ]);
 
   const validSuggestions = suggestions.filter(
-    (suggestion): suggestion is CoachSuggestion => suggestion !== null
+    (suggestion): suggestion is CoachSuggestion => suggestion !== null,
   );
   if (validSuggestions.length === 0) {
     return null;
@@ -38,7 +43,10 @@ export async function getHomeCoachSuggestion(userId: string): Promise<CoachSugge
     if (currentPriority > bestPriority) {
       return current;
     }
-    if (currentPriority === bestPriority && current.confidence > best.confidence) {
+    if (
+      currentPriority === bestPriority &&
+      current.confidence > best.confidence
+    ) {
       return current;
     }
     return best;

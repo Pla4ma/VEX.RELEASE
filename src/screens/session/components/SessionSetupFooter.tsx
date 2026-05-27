@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import { Box } from '../../../components/primitives/Box';
-import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
-import { SessionMode } from '../../../session/modes';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Button } from "../../../components/primitives/Button";
+import { Text } from "../../../components/primitives/Text";
+import { SessionMode } from "../../../session/modes";
+import { useTheme } from "../../../theme";
 
 type SessionSetupFooterProps = {
   breakDurationSeconds: number;
@@ -41,10 +41,14 @@ export function SessionSetupFooter({
     >
       <Text variant="caption" color="text.secondary" textAlign="center" mb="sm">
         {`${durationMinutes} min focus`}
-        {breakDurationSeconds > 0 ? ` - ${Math.round(breakDurationSeconds / 60)} min break` : ''}
-        {intervalCount > 1 ? ` - ${intervalCount} intervals` : ''}
-        {selectedSessionMode === SessionMode.SPRINT ? ' - Sprint chain active' : ''}
-        {selectedThemeLabel ? ` - ${selectedThemeLabel}` : ''}
+        {breakDurationSeconds > 0
+          ? ` - ${Math.round(breakDurationSeconds / 60)} min break`
+          : ""}
+        {intervalCount > 1 ? ` - ${intervalCount} intervals` : ""}
+        {selectedSessionMode === SessionMode.SPRINT
+          ? " - Sprint chain active"
+          : ""}
+        {selectedThemeLabel ? ` - ${selectedThemeLabel}` : ""}
       </Text>
 
       <Button
@@ -55,7 +59,8 @@ export function SessionSetupFooter({
         fullWidth
         accessibilityLabel={`Start ${durationMinutes} minute session`}
         accessibilityRole="button"
-        accessibilityHint="Starts this customized focus session">
+        accessibilityHint="Starts this customized focus session"
+      >
         Start Session
       </Button>
     </Box>

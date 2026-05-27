@@ -1,11 +1,11 @@
-import type { SessionSummary } from '../../session/types';
-import type { SessionConsequenceCardsProps } from '../../screens/session/components/SessionConsequenceCards';
+import type { SessionSummary } from "../../session/types";
+import type { SessionConsequenceCardsProps } from "../../screens/session/components/SessionConsequenceCards";
 
 export type SessionCompletionConsequences = {
-  boss?: SessionConsequenceCardsProps['bossConsequence'];
-  challenge?: SessionConsequenceCardsProps['challengeConsequence'];
-  rival?: SessionConsequenceCardsProps['rivalConsequence'];
-  streak?: SessionConsequenceCardsProps['streakConsequence'];
+  boss?: SessionConsequenceCardsProps["bossConsequence"];
+  challenge?: SessionConsequenceCardsProps["challengeConsequence"];
+  rival?: SessionConsequenceCardsProps["rivalConsequence"];
+  streak?: SessionConsequenceCardsProps["streakConsequence"];
 };
 
 type ActiveBossInput = {
@@ -41,18 +41,25 @@ export function buildSessionCompletionConsequences(input: {
 function buildBossConsequence(
   summary: SessionSummary,
   activeBoss: ActiveBossInput | null | undefined,
-): SessionCompletionConsequences['boss'] {
-  if (!activeBoss || activeBoss.status !== 'ACTIVE') {
+): SessionCompletionConsequences["boss"] {
+  if (!activeBoss || activeBoss.status !== "ACTIVE") {
     return null;
   }
-  const sessionMinutes = Math.floor((summary.effectiveDuration || summary.actualDuration || 0) / 60);
-  const purityMultiplier = (summary.focusPurityScore || summary.focusQuality || 100) / 100;
+  const sessionMinutes = Math.floor(
+    (summary.effectiveDuration || summary.actualDuration || 0) / 60,
+  );
+  const purityMultiplier =
+    (summary.focusPurityScore || summary.focusQuality || 100) / 100;
   const damageDealt = Math.floor(sessionMinutes * purityMultiplier);
-  const healthBefore = (activeBoss.healthRemaining / activeBoss.maxHealth) * 100;
-  const healthAfter = Math.max(0, healthBefore - (damageDealt / activeBoss.maxHealth) * 100);
+  const healthBefore =
+    (activeBoss.healthRemaining / activeBoss.maxHealth) * 100;
+  const healthAfter = Math.max(
+    0,
+    healthBefore - (damageDealt / activeBoss.maxHealth) * 100,
+  );
 
   return {
-    bossName: activeBoss.bossName || 'The Procrastinator',
+    bossName: activeBoss.bossName || "The Procrastinator",
     damageDealt,
     hadCriticalHit: purityMultiplier > 1.2,
     healthAfter,
@@ -63,13 +70,16 @@ function buildBossConsequence(
 
 function buildChallengeConsequence(
   activeChallenges: ActiveChallengeInput[] | null | undefined,
-): SessionCompletionConsequences['challenge'] {
+): SessionCompletionConsequences["challenge"] {
   const detail = activeChallenges?.[0];
   if (!detail) {
     return null;
   }
   const target = detail.challenge.targetValue || 1;
-  const progressBefore = Math.max(0, (detail.userChallenge.currentValue || 0) - 1);
+  const progressBefore = Math.max(
+    0,
+    (detail.userChallenge.currentValue || 0) - 1,
+  );
   const progressAfter = detail.userChallenge.currentValue || 0;
 
   return {
@@ -84,13 +94,14 @@ function buildChallengeConsequence(
 function buildStreakConsequence(
   summary: SessionSummary,
   streakSummary: StreakSummaryInput | null | undefined,
-): SessionCompletionConsequences['streak'] {
+): SessionCompletionConsequences["streak"] {
   if (!streakSummary) {
     return null;
   }
   const currentDays = streakSummary.currentDays;
   const previousDays = summary.streakIncreased ? currentDays - 1 : currentDays;
-  const nextMilestone = [7, 14, 30, 60, 100].find((milestone) => milestone > currentDays) || 100;
+  const nextMilestone =
+    [7, 14, 30, 60, 100].find((milestone) => milestone > currentDays) || 100;
 
   return {
     currentDays,

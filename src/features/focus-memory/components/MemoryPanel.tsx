@@ -1,7 +1,7 @@
-import React from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { useTheme } from '../../../theme/ThemeContext';
-import type { MemoryPanelItem } from '../memory-panel-types';
+import React from "react";
+import { Pressable, Text, View } from "react-native";
+import { useTheme } from "../../../theme/ThemeContext";
+import type { MemoryPanelItem } from "../memory-panel-types";
 
 interface MemoryPanelProps {
   items: MemoryPanelItem[];
@@ -32,7 +32,7 @@ export function MemoryPanel({
         backgroundColor: colors.semantic.surface,
         borderWidth: 1,
         borderColor: colors.border.light,
-        overflow: 'hidden',
+        overflow: "hidden",
       }}
     >
       <View
@@ -46,7 +46,7 @@ export function MemoryPanel({
         <Text
           style={{
             fontSize: 16,
-            fontWeight: '700',
+            fontWeight: "700",
             color: colors.text.primary,
           }}
           accessibilityRole="header"
@@ -60,7 +60,8 @@ export function MemoryPanel({
             lineHeight: 16,
           }}
         >
-          Based on your sessions. VEX may be wrong — you can hide anything that does not fit.
+          Based on your sessions. VEX may be wrong — you can hide anything that
+          does not fit.
         </Text>
       </View>
 
@@ -77,15 +78,15 @@ export function MemoryPanel({
         >
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
             <Text
               style={{
                 fontSize: 14,
-                fontWeight: '600',
+                fontWeight: "600",
                 color: colors.text.primary,
                 flex: 1,
               }}
@@ -96,15 +97,24 @@ export function MemoryPanel({
             <Text
               style={{
                 fontSize: 11,
-                fontWeight: '500',
-                color: item.confidence >= 0.7 ? colors.semantic.success : colors.semantic.warning,
+                fontWeight: "500",
+                color:
+                  item.confidence >= 0.7
+                    ? colors.semantic.success
+                    : colors.semantic.warning,
               }}
             >
               {Math.round(item.confidence * 100)}%
             </Text>
           </View>
 
-          <View style={{ flexDirection: 'row', gap: theme.spacing[1], alignItems: 'center' }}>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: theme.spacing[1],
+              alignItems: "center",
+            }}
+          >
             <Text
               style={{
                 fontSize: 11,
@@ -127,13 +137,13 @@ export function MemoryPanel({
                 color: colors.text.muted,
               }}
             >
-              {item.type.replace(/_/g, ' ')}
+              {item.type.replace(/_/g, " ")}
             </Text>
           </View>
 
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               gap: theme.spacing[3],
               marginTop: theme.spacing[1],
             }}
@@ -152,10 +162,12 @@ export function MemoryPanel({
                     borderRadius: theme.borderRadius.sm,
                     opacity: pressed ? 0.6 : 1,
                     minHeight: 44,
-                    justifyContent: 'center' as const,
+                    justifyContent: "center" as const,
                   })}
                 >
-                  <Text style={{ fontSize: 12, color: colors.semantic.textMuted }}>
+                  <Text
+                    style={{ fontSize: 12, color: colors.semantic.textMuted }}
+                  >
                     Hide
                   </Text>
                 </Pressable>
@@ -171,10 +183,12 @@ export function MemoryPanel({
                     borderRadius: theme.borderRadius.sm,
                     opacity: pressed ? 0.6 : 1,
                     minHeight: 44,
-                    justifyContent: 'center' as const,
+                    justifyContent: "center" as const,
                   })}
                 >
-                  <Text style={{ fontSize: 12, color: colors.semantic.primary }}>
+                  <Text
+                    style={{ fontSize: 12, color: colors.semantic.primary }}
+                  >
                     Accept
                   </Text>
                 </Pressable>

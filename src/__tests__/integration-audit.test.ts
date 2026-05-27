@@ -9,9 +9,9 @@
  * 5. STREAK AT RISK → TAB BAR PULSE
  */
 
-describe('INTEGRATION AUDIT - 5 Critical Integration Points', () => {
-  describe('1. SESSION COMPLETE → ECONOMY CHAIN', () => {
-    it('VERIFIED: rollChest is called BEFORE creditSessionRewards', () => {
+describe("INTEGRATION AUDIT - 5 Critical Integration Points", () => {
+  describe("1. SESSION COMPLETE → ECONOMY CHAIN", () => {
+    it("VERIFIED: rollChest is called BEFORE creditSessionRewards", () => {
       // Implementation: SessionCompleteScreen.tsx
       // - Line 88: useEffect calls prepareChest() on mount
       // - Line 64: prepareChest() calls rollChest()
@@ -21,7 +21,7 @@ describe('INTEGRATION AUDIT - 5 Critical Integration Points', () => {
       expect(true).toBe(true);
     });
 
-    it('VERIFIED: Retry wrapper attempts max 3 times with 500/1000/2000ms delays', () => {
+    it("VERIFIED: Retry wrapper attempts max 3 times with 500/1000/2000ms delays", () => {
       // Implementation: SessionCompleteScreen.tsx
       // - Line 41: RETRY_DELAYS_MS = [500, 1000, 2000]
       // - Line 71: for loop attempts 0, 1, 2 = 3 total attempts
@@ -39,7 +39,7 @@ describe('INTEGRATION AUDIT - 5 Critical Integration Points', () => {
     });
   });
 
-  describe('2. ONBOARDING → SESSION HANDOFF', () => {
+  describe("2. ONBOARDING → SESSION HANDOFF", () => {
     it('VERIFIED: Step 6 "Start your first session" navigates to SessionStack with correct params', () => {
       // Implementation: OnboardingFlowScreen.tsx
       // - Line 103: STEP_TITLES[5] = "One quick win" (Step 6)
@@ -49,16 +49,16 @@ describe('INTEGRATION AUDIT - 5 Critical Integration Points', () => {
       //   - presetId: selectedPreset.id
       //   - source: 'onboarding_first_session'
       const expectedRoute = {
-        screen: 'SessionSetup',
+        screen: "SessionSetup",
         params: {
           presetId: expect.any(String),
-          source: 'onboarding_first_session',
+          source: "onboarding_first_session",
         },
       };
-      expect(expectedRoute.params.source).toBe('onboarding_first_session');
+      expect(expectedRoute.params.source).toBe("onboarding_first_session");
     });
 
-    it('VERIFIED: useEffect listens for navigation.isFocused() to complete onboarding on return', () => {
+    it("VERIFIED: useEffect listens for navigation.isFocused() to complete onboarding on return", () => {
       // Implementation: OnboardingFlowScreen.tsx
       // - Lines 269-280: useEffect checks:
       //   - isFocused (from useIsFocused)
@@ -70,7 +70,7 @@ describe('INTEGRATION AUDIT - 5 Critical Integration Points', () => {
     });
   });
 
-  describe('3. CONTENT STUDY → SESSION LOOP', () => {
+  describe("3. CONTENT STUDY → SESSION LOOP", () => {
     it('VERIFIED: "Focus on this now" CTA passes correct params to SessionSetup', () => {
       // Implementation: StudyPlanScreen.tsx
       // - Lines 61-80: handleStartSession() navigation params:
@@ -78,16 +78,16 @@ describe('INTEGRATION AUDIT - 5 Critical Integration Points', () => {
       //   - generationId ✓
       //   - focusAreas: generation.keyConcepts.slice(0, 3) (first 3 key concepts) ✓
       const expectedParams = {
-        source: 'content-study',
+        source: "content-study",
         generationId: expect.any(String),
         focusAreas: expect.arrayContaining([expect.any(String)]),
       };
-      expect(expectedParams.source).toBe('content-study');
+      expect(expectedParams.source).toBe("content-study");
     });
   });
 
-  describe('4. SQUAD SHARE → DEEP LINK', () => {
-    it('VERIFIED: Share message includes squad name, weekly focus hours, and correct URL', () => {
+  describe("4. SQUAD SHARE → DEEP LINK", () => {
+    it("VERIFIED: Share message includes squad name, weekly focus hours, and correct URL", () => {
       // Implementation: share.ts + useSquadShare.ts
       // - Line 11-12 (share.ts): buildSquadCode(squadId) = squadId.slice(0, 8)
       // - Line 45-50 (share.ts): buildSquadShareMessage includes:
@@ -95,15 +95,15 @@ describe('INTEGRATION AUDIT - 5 Critical Integration Points', () => {
       //   - weeklyStats.focusHours
       //   - vex.app/squad/${squadCode}
       // - Line 30 (useSquadShare.ts): URL is https://vex.app/squad/${squadCode}
-      const squadId = '12345678-1234-1234-1234-123456789abc';
+      const squadId = "12345678-1234-1234-1234-123456789abc";
       const squadCode = squadId.slice(0, 8);
-      expect(squadCode).toBe('12345678');
+      expect(squadCode).toBe("12345678");
       expect(squadCode.length).toBe(8);
     });
   });
 
-  describe('5. STREAK AT RISK → TAB BAR PULSE', () => {
-    it('VERIFIED: Pulse ring shows only when all 3 conditions are met', () => {
+  describe("5. STREAK AT RISK → TAB BAR PULSE", () => {
+    it("VERIFIED: Pulse ring shows only when all 3 conditions are met", () => {
       // Implementation: VexTabBar.tsx
       // - Line 106: const hour = new Date().getHours()
       // - Line 107: pulseStart = all of:
@@ -115,7 +115,7 @@ describe('INTEGRATION AUDIT - 5 Critical Integration Points', () => {
       expect(true).toBe(true);
     });
 
-    it('VERIFIED: All 3 pulse conditions checked', () => {
+    it("VERIFIED: All 3 pulse conditions checked", () => {
       // Condition 1: isAtRisk === true
       const isAtRisk = true;
       expect(isAtRisk).toBe(true);
@@ -162,4 +162,4 @@ const INTEGRATION_AUDIT_REPORT = `
 ╚════════════════════════════════════════════════════════════════╝
 `;
 
-expect(INTEGRATION_AUDIT_REPORT).toContain('INTEGRATION AUDIT REPORT');
+expect(INTEGRATION_AUDIT_REPORT).toContain("INTEGRATION AUDIT REPORT");

@@ -4,11 +4,18 @@
  * Component-level accessibility validation functions.
  */
 
-import type { AuditableComponent, AuditAccessibilityIssue, ComponentAccessibilityConfig } from './checks-types';
-import { EXPECTED_ROLES } from './checks-types';
-import { checkContrast } from './AccessibilitySystem';
+import type {
+  AuditableComponent,
+  AuditAccessibilityIssue,
+  ComponentAccessibilityConfig,
+} from "./checks-types";
+import { EXPECTED_ROLES } from "./checks-types";
+import { checkContrast } from "./AccessibilitySystem";
 
-function checkAccessibilityLabels(component: AuditableComponent, config: ComponentAccessibilityConfig): AuditAccessibilityIssue[] {
+function checkAccessibilityLabels(
+  component: AuditableComponent,
+  config: ComponentAccessibilityConfig,
+): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
   if (!config.requiredLabels) {
     return issues;
@@ -18,13 +25,13 @@ function checkAccessibilityLabels(component: AuditableComponent, config: Compone
     if (!component.props || component.props[requiredLabel] === undefined) {
       issues.push({
         id: `missing-${requiredLabel}`,
-        type: 'error',
-        category: 'screen-reader',
-        severity: 'critical',
+        type: "error",
+        category: "screen-reader",
+        severity: "critical",
         message: `Missing required accessibility property: ${requiredLabel}`,
         recommendation: `Add ${requiredLabel} prop to provide context for screen readers`,
         element: config.componentName,
-        wcagGuideline: '1.1.1',
+        wcagGuideline: "1.1.1",
         automated: true,
       });
     }
@@ -32,19 +39,23 @@ function checkAccessibilityLabels(component: AuditableComponent, config: Compone
   return issues;
 }
 
-function checkFocusManagement(component: AuditableComponent, config: ComponentAccessibilityConfig): AuditAccessibilityIssue[] {
+function checkFocusManagement(
+  component: AuditableComponent,
+  config: ComponentAccessibilityConfig,
+): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
   if (config.interactiveElements && config.interactiveElements.length > 0) {
     if (component.props?.accessible === false) {
       issues.push({
-        id: 'focusable-not-accessible',
-        type: 'error',
-        category: 'focus',
-        severity: 'major',
-        message: 'Interactive component is marked as not accessible',
-        recommendation: 'Remove accessible={false} or make component non-interactive',
+        id: "focusable-not-accessible",
+        type: "error",
+        category: "focus",
+        severity: "major",
+        message: "Interactive component is marked as not accessible",
+        recommendation:
+          "Remove accessible={false} or make component non-interactive",
         element: config.componentName,
-        wcagGuideline: '2.1.1',
+        wcagGuideline: "2.1.1",
         automated: true,
       });
     }
@@ -52,39 +63,48 @@ function checkFocusManagement(component: AuditableComponent, config: ComponentAc
   return issues;
 }
 
-function checkKeyboardNavigation(component: AuditableComponent, config: ComponentAccessibilityConfig): AuditAccessibilityIssue[] {
+function checkKeyboardNavigation(
+  component: AuditableComponent,
+  config: ComponentAccessibilityConfig,
+): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
-  if (config.interactiveElements?.includes('button') && !component.props?.onPress) {
+  if (
+    config.interactiveElements?.includes("button") &&
+    !component.props?.onPress
+  ) {
     issues.push({
-      id: 'no-keyboard-handler',
-      type: 'warning',
-      category: 'keyboard',
-      severity: 'moderate',
-      message: 'Button may not be keyboard accessible',
-      recommendation: 'Ensure button can be activated with keyboard/Enter key',
+      id: "no-keyboard-handler",
+      type: "warning",
+      category: "keyboard",
+      severity: "moderate",
+      message: "Button may not be keyboard accessible",
+      recommendation: "Ensure button can be activated with keyboard/Enter key",
       element: config.componentName,
-      wcagGuideline: '2.1.1',
+      wcagGuideline: "2.1.1",
       automated: true,
     });
   }
   return issues;
 }
 
-function checkColorContrast(component: AuditableComponent, config: ComponentAccessibilityConfig): AuditAccessibilityIssue[] {
+function checkColorContrast(
+  component: AuditableComponent,
+  config: ComponentAccessibilityConfig,
+): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
   const style = component.props?.style;
   if (style && style.color && style.backgroundColor) {
     const contrast = checkContrast(style.color, style.backgroundColor);
     if (!contrast.passesAA) {
       issues.push({
-        id: 'poor-contrast',
-        type: 'error',
-        category: 'contrast',
-        severity: 'critical',
+        id: "poor-contrast",
+        type: "error",
+        category: "contrast",
+        severity: "critical",
         message: `Poor color contrast: ${contrast.ratio.toFixed(2)} (minimum 4.5 required)`,
-        recommendation: 'Increase color contrast to meet WCAG AA standards',
+        recommendation: "Increase color contrast to meet WCAG AA standards",
         element: config.componentName,
-        wcagGuideline: '1.4.3',
+        wcagGuideline: "1.4.3",
         automated: true,
       });
     }
@@ -92,44 +112,56 @@ function checkColorContrast(component: AuditableComponent, config: ComponentAcce
   return issues;
 }
 
-function checkMotionAccessibility(component: AuditableComponent, config: ComponentAccessibilityConfig): AuditAccessibilityIssue[] {
+function checkMotionAccessibility(
+  component: AuditableComponent,
+  config: ComponentAccessibilityConfig,
+): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
   if (component.props?.animated && !component.props?.useNativeDriver) {
     issues.push({
-      id: 'animation-accessibility',
-      type: 'warning',
-      category: 'motion',
-      severity: 'moderate',
-      message: 'Animation may not respect reduced motion preferences',
-      recommendation: 'Use useNativeDriver and check reduced motion settings',
+      id: "animation-accessibility",
+      type: "warning",
+      category: "motion",
+      severity: "moderate",
+      message: "Animation may not respect reduced motion preferences",
+      recommendation: "Use useNativeDriver and check reduced motion settings",
       element: config.componentName,
-      wcagGuideline: '2.3.3',
+      wcagGuideline: "2.3.3",
       automated: true,
     });
   }
   return issues;
 }
 
-function checkSemanticHTML(component: AuditableComponent, config: ComponentAccessibilityConfig): AuditAccessibilityIssue[] {
+function checkSemanticHTML(
+  component: AuditableComponent,
+  config: ComponentAccessibilityConfig,
+): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
   const expectedRole = EXPECTED_ROLES[config.componentName];
-  if (expectedRole && !expectedRole.includes(component.props?.accessibilityRole || '')) {
+  if (
+    expectedRole &&
+    !expectedRole.includes(component.props?.accessibilityRole || "")
+  ) {
     issues.push({
-      id: 'incorrect-accessibility-role',
-      type: 'warning',
-      category: 'semantic',
-      severity: 'moderate',
-      message: 'Component may have incorrect accessibility role',
-      recommendation: `Set accessibilityRole to one of: ${expectedRole.join(', ')}`,
+      id: "incorrect-accessibility-role",
+      type: "warning",
+      category: "semantic",
+      severity: "moderate",
+      message: "Component may have incorrect accessibility role",
+      recommendation: `Set accessibilityRole to one of: ${expectedRole.join(", ")}`,
       element: config.componentName,
-      wcagGuideline: '4.1.2',
+      wcagGuideline: "4.1.2",
       automated: true,
     });
   }
   return issues;
 }
 
-function checkTouchTargets(component: AuditableComponent, config: ComponentAccessibilityConfig): AuditAccessibilityIssue[] {
+function checkTouchTargets(
+  component: AuditableComponent,
+  config: ComponentAccessibilityConfig,
+): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
   if (component.props?.style) {
     const { width, height, minHeight, minWidth } = component.props.style;
@@ -137,14 +169,14 @@ function checkTouchTargets(component: AuditableComponent, config: ComponentAcces
     const targetHeight = height || minHeight || 0;
     if (targetWidth < 44 || targetHeight < 44) {
       issues.push({
-        id: 'small-touch-target',
-        type: 'warning',
-        category: 'touch',
-        severity: 'moderate',
+        id: "small-touch-target",
+        type: "warning",
+        category: "touch",
+        severity: "moderate",
         message: `Touch target may be too small: ${targetWidth}x${targetHeight} (minimum 44x44 recommended)`,
-        recommendation: 'Increase touch target size to at least 44x44 points',
+        recommendation: "Increase touch target size to at least 44x44 points",
         element: config.componentName,
-        wcagGuideline: '2.5.5',
+        wcagGuideline: "2.5.5",
         automated: true,
       });
     }
@@ -154,7 +186,7 @@ function checkTouchTargets(component: AuditableComponent, config: ComponentAcces
 
 export function runComponentChecks(
   component: AuditableComponent,
-  config: ComponentAccessibilityConfig
+  config: ComponentAccessibilityConfig,
 ): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
   issues.push(...checkAccessibilityLabels(component, config));

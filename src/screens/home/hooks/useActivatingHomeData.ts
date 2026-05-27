@@ -1,14 +1,16 @@
-import { useCallback } from 'react';
-import type { HomeController } from './home-controller-types';
-import type { ChallengeItem } from '../../../features/home-spine/components';
-import { useBaseHomeData } from './useBaseHomeData';
-import type { ActivatingHomeData } from './home-data-types';
-import type { ToastOptions } from '../../../shared/ui/components/Toast';
+import { useCallback } from "react";
+import type { HomeController } from "./home-controller-types";
+import type { ChallengeItem } from "../../../features/home-spine/components";
+import { useBaseHomeData } from "./useBaseHomeData";
+import type { ActivatingHomeData } from "./home-data-types";
+import type { ToastOptions } from "../../../shared/ui/components/Toast";
 
-export function useActivatingHomeData(controller: HomeController): ActivatingHomeData {
+export function useActivatingHomeData(
+  controller: HomeController,
+): ActivatingHomeData {
   const base = useBaseHomeData(controller);
 
-  const showToast = useCallback((_opts: ToastOptions): string => '', []);
+  const showToast = useCallback((_opts: ToastOptions): string => "", []);
 
   const handleClaimReward = useCallback((_id: string): void => {}, []);
   const handleFreezeStreak = useCallback((): void => {}, []);

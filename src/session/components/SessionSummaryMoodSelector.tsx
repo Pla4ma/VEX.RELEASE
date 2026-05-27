@@ -10,12 +10,9 @@ interface SessionSummaryMoodSelectorProps {
   onReflectionChange: (text: string) => void;
 }
 
-export const SessionSummaryMoodSelector: React.FC<SessionSummaryMoodSelectorProps> = ({
-  mood,
-  reflection,
-  onMoodChange,
-  onReflectionChange,
-}) => {
+export const SessionSummaryMoodSelector: React.FC<
+  SessionSummaryMoodSelectorProps
+> = ({ mood, reflection, onMoodChange, onReflectionChange }) => {
   const moods: MoodType[] = ["GREAT", "GOOD", "NEUTRAL", "BAD", "TERRIBLE"];
   return (
     <View style={styles.reflectionSection}>

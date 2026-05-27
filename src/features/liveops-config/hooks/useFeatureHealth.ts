@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import { featureHealthRegistry } from '../feature-health';
-import { registerFeatureHealthChecks } from '../feature-health-checks';
-import { setDegradedFeatures as setGlobalDegradedFeatures } from '../feature-access-store';
-import { shouldRunHealthCheck } from '../feature-health-policy';
-import type { FeatureKey } from '../feature-access';
+import { featureHealthRegistry } from "../feature-health";
+import { registerFeatureHealthChecks } from "../feature-health-checks";
+import { setDegradedFeatures as setGlobalDegradedFeatures } from "../feature-access-store";
+import { shouldRunHealthCheck } from "../feature-health-policy";
+import type { FeatureKey } from "../feature-access";
 
 let registered = false;
 const ALL_CHECKABLE_FEATURES: FeatureKey[] = [
-  'content_study',
-  'content_study_advanced',
-  'premium_paywall',
-  'boss_tab',
-  'ai_coach_advanced',
+  "content_study",
+  "content_study_advanced",
+  "premium_paywall",
+  "boss_tab",
+  "ai_coach_advanced",
 ];
 
 function ensureRegistered(): void {
@@ -39,7 +39,9 @@ export function useFeatureHealth(totalCompletedSessions: number): {
   degradedFeatures: Set<FeatureKey>;
   isPolling: boolean;
 } {
-  const [degradedFeatures, setLocalDegradedFeatures] = useState<Set<FeatureKey>>(new Set());
+  const [degradedFeatures, setLocalDegradedFeatures] = useState<
+    Set<FeatureKey>
+  >(new Set());
   const [isPolling, setIsPolling] = useState(false);
 
   useEffect(() => {
@@ -51,13 +53,14 @@ export function useFeatureHealth(totalCompletedSessions: number): {
     async function poll(): Promise<void> {
       setIsPolling(true);
       try {
-        const unhealthy = await featureHealthRegistry.getUnhealthyFeaturesFiltered(eligible);
+        const unhealthy =
+          await featureHealthRegistry.getUnhealthyFeaturesFiltered(eligible);
         const unhealthySet = new Set(unhealthy);
         if (!cancelled) {
           setLocalDegradedFeatures(unhealthySet);
           setGlobalDegradedFeatures(unhealthySet);
         }
-      } catch {
+      } catch (error: unknown) {
         if (!cancelled) {
           setLocalDegradedFeatures(eligible);
           setGlobalDegradedFeatures(eligible);

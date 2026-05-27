@@ -74,14 +74,24 @@ const mockUser: User = {
   role: "user",
   status: "active",
   preferences: {
-    accessibility: { highContrast: false, largeText: false, reduceMotion: false, screenReaderOptimized: false },
+    accessibility: {
+      highContrast: false,
+      largeText: false,
+      reduceMotion: false,
+      screenReaderOptimized: false,
+    },
     language: "en",
     notifications: {
       digestFrequency: "daily",
       email: false,
       inApp: true,
       push: true,
-      quietHours: { enabled: false, end: "07:00", start: "22:00", timezone: "UTC" },
+      quietHours: {
+        enabled: false,
+        end: "07:00",
+        start: "22:00",
+        timezone: "UTC",
+      },
       sms: false,
     },
     privacy: {
@@ -115,30 +125,48 @@ describe("canonical auth store", () => {
   });
 
   it("src/store.ts is only a compatibility re-export, not token auth", () => {
-    const source = fs.readFileSync(path.join(process.cwd(), "src", "store.ts"), "utf8");
+    const source = fs.readFileSync(
+      path.join(process.cwd(), "src", "store.ts"),
+      "utf8",
+    );
 
     expect(source.trim()).toBe('export * from "./store/index";');
-    ["sessionToken", "setSessionToken", "SecureStorageKeys.AUTH_TOKEN"].forEach((token) => {
-      expect(source).not.toContain(token);
-    });
+    ["sessionToken", "setSessionToken", "SecureStorageKeys.AUTH_TOKEN"].forEach(
+      (token) => {
+        expect(source).not.toContain(token);
+      },
+    );
   });
 
   it("loginWithCredentials uses Supabase auth and binds user services", async () => {
-    jest.mocked(signInWithEmail).mockResolvedValueOnce({ error: null, user: mockUser });
+    jest
+      .mocked(signInWithEmail)
+      .mockResolvedValueOnce({ error: null, user: mockUser });
 
     await expect(
-      canonicalStore.useAuthStore.getState().loginWithCredentials("test@example.com", "password"),
+      canonicalStore.useAuthStore
+        .getState()
+        .loginWithCredentials("test@example.com", "password"),
     ).resolves.toBe(true);
 
-    expect(signInWithEmail).toHaveBeenCalledWith("test@example.com", "password");
-    expect(setSentryUser).toHaveBeenCalledWith(mockUser.id, mockUser.email, mockUser.username);
+    expect(signInWithEmail).toHaveBeenCalledWith(
+      "test@example.com",
+      "password",
+    );
+    expect(setSentryUser).toHaveBeenCalledWith(
+      mockUser.id,
+      mockUser.email,
+      mockUser.username,
+    );
     expect(revenueCatService.setUserId).toHaveBeenCalledWith(mockUser.id);
     expect(progressionService.setUserId).toHaveBeenCalledWith(mockUser.id);
     expect(streakService.setUserId).toHaveBeenCalledWith(mockUser.id);
   });
 
   it("register uses Supabase auth", async () => {
-    jest.mocked(signUpWithEmail).mockResolvedValueOnce({ error: null, user: mockUser });
+    jest
+      .mocked(signUpWithEmail)
+      .mockResolvedValueOnce({ error: null, user: mockUser });
 
     await expect(
       canonicalStore.useAuthStore.getState().register({
@@ -151,14 +179,20 @@ describe("canonical auth store", () => {
       }),
     ).resolves.toBe(true);
 
-    expect(signUpWithEmail).toHaveBeenCalledWith("test@example.com", "Password1!", {
-      firstName: "Test",
-      lastName: "User",
-    });
+    expect(signUpWithEmail).toHaveBeenCalledWith(
+      "test@example.com",
+      "Password1!",
+      {
+        firstName: "Test",
+        lastName: "User",
+      },
+    );
   });
 
   it("checkAuth reflects Supabase current user", async () => {
-    jest.mocked(getCurrentUser).mockResolvedValueOnce({ error: null, user: mockUser });
+    jest
+      .mocked(getCurrentUser)
+      .mockResolvedValueOnce({ error: null, user: mockUser });
 
     await canonicalStore.useAuthStore.getState().checkAuth();
 
@@ -167,7 +201,10 @@ describe("canonical auth store", () => {
   });
 
   it("logout clears Supabase session and app auth bindings", async () => {
-    canonicalStore.useAuthStore.setState({ isAuthenticated: true, user: mockUser });
+    canonicalStore.useAuthStore.setState({
+      isAuthenticated: true,
+      user: mockUser,
+    });
     jest.mocked(signOut).mockResolvedValueOnce({ error: null });
 
     await canonicalStore.useAuthStore.getState().logout();

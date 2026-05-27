@@ -34,12 +34,10 @@ export function createSessionSummary(
 ): SessionSummary {
   const plannedDuration = session.config.duration * 1000;
   const actualDuration = session.endedAt! - session.startedAt!;
-  const focusPurityScore =
-    scoringEngine.calculateFocusPurityScore(session);
+  const focusPurityScore = scoringEngine.calculateFocusPurityScore(session);
   const xpEarned = Math.floor(finalScore * 0.1);
   const coinsEarned = Math.floor(
-    (((session.completionPercentage / 100) * focusMetrics.overallScore) /
-      100) *
+    (((session.completionPercentage / 100) * focusMetrics.overallScore) / 100) *
       50,
   );
   const gemsEarned =
@@ -173,9 +171,7 @@ export function computeCompletionStats(
   );
   const recommendations: string[] = [];
   if (session.interruptions > 2) {
-    recommendations.push(
-      "Try enabling Do Not Disturb to reduce interruptions",
-    );
+    recommendations.push("Try enabling Do Not Disturb to reduce interruptions");
   }
   if (session.pauses > 3) {
     recommendations.push(

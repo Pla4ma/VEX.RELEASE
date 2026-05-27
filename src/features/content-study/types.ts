@@ -5,4 +5,4 @@
  * All types have been split into domain-specific files.
  */
 
-export * from './types/index';
+export * from "./types/index";

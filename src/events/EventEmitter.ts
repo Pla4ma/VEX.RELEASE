@@ -1,1 +1,179 @@
-import{createDebugger}from'../utils/debug'; const debug = createDebugger('events'); export type EventHandler<T=unknown>=(data:T)=>void|Promise<void>|Promise<unknown>; interface EventSubscription<T=unknown>{event:string;handler:EventHandler<T>;once:boolean;priority:number;}export class EventEmitter{private subscriptions:Map<string,EventSubscription[]> = new Map(); private static instance:EventEmitter|null = null; static getInstance():EventEmitter{if(!EventEmitter.instance){EventEmitter.instance = new EventEmitter();}return EventEmitter.instance;}on<T=unknown>(event:string,handler:EventHandler<T>,options:{once?:boolean;priority?:number;} = {}):()=>void{const subscription:EventSubscription<T> = {event,handler:handler as EventHandler<unknown>,once:options.once ?? false,priority:options.priority ?? 0}; const existing = this.subscriptions.get(event) ?? []; existing.push(subscription as EventSubscription<unknown>); existing.sort((a,b)=>b.priority - a.priority); this.subscriptions.set(event,existing); return()=>this.off(event,handler);}once<T=unknown>(event:string,handler:EventHandler<T>):()=>void{return this.on(event,handler,{once:true});}off<T=unknown>(event:string,handler?:EventHandler<T>):void{const existing = this.subscriptions.get(event); if(!existing){return;}if(handler){const filtered = existing.filter(sub=>sub.handler !== handler as EventHandler<unknown>); this.subscriptions.set(event,filtered);}else{this.subscriptions.delete(event);}}emit<T=unknown>(event:string,data:T):void{const subscriptions = this.subscriptions.get(event); if(!subscriptions || subscriptions.length === 0){return;}const toCall = [...subscriptions]; const toRemove:EventSubscription[] = []; for(const subscription of toCall){try{subscription.handler(data); if(subscription.once){toRemove.push(subscription);}}catch(error){this.handleError(error,event,data);}}if(toRemove.length > 0){const remaining = subscriptions.filter(sub=>!toRemove.includes(sub)); if(remaining.length > 0){this.subscriptions.set(event,remaining);}else{this.subscriptions.delete(event);}}}async emitAsync<T=unknown>(event:string,data:T):Promise<void>{const subscriptions = this.subscriptions.get(event); if(!subscriptions || subscriptions.length === 0){return;}const toCall = [...subscriptions]; const toRemove:EventSubscription[] = []; for(const subscription of toCall){try{const result = subscription.handler(data); if(result && typeof result === 'object' && 'then' in result && typeof (result as Promise<unknown>).then === 'function'){await (result as Promise<unknown>);}if(subscription.once){toRemove.push(subscription);}}catch(error){this.handleError(error,event,data);}}if(toRemove.length > 0){const remaining = subscriptions.filter(sub=>!toRemove.includes(sub)); if(remaining.length > 0){this.subscriptions.set(event,remaining);}else{this.subscriptions.delete(event);}}}hasListeners(event:string):boolean{const subscriptions = this.subscriptions.get(event); return subscriptions !== undefined && subscriptions.length > 0;}listenerCount(event:string):number{return this.subscriptions.get(event)?.length ?? 0;}eventNames():string[]{return Array.from(this.subscriptions.keys());}removeAllListeners(event?:string):void{if(event){this.subscriptions.delete(event);}else{this.subscriptions.clear();}}private handleError(error:unknown,event:string,data:unknown):void{if(__DEV__){debug.error(`Error in event handler for "${event}":`,error as Error); debug.debug('Event data:',data);}this.emit('error:handler',{originalEvent:event,error,data,timestamp:Date.now()});}}export const globalEventEmitter = EventEmitter.getInstance(); export function createNamespacedEmitter(namespace:string):EventEmitter{const baseEmitter = EventEmitter.getInstance(); return{on:<T,>(event:string,handler:EventHandler<T>,options?:{once?:boolean;priority?:number;})=>baseEmitter.on(`${namespace}:${event}`,handler,options),once:<T,>(event:string,handler:EventHandler<T>)=>baseEmitter.once(`${namespace}:${event}`,handler),off:<T,>(event:string,handler?:EventHandler<T>)=>baseEmitter.off(`${namespace}:${event}`,handler),emit:<T,>(event:string,data:T)=>baseEmitter.emit(`${namespace}:${event}`,data),emitAsync:<T,>(event:string,data:T)=>baseEmitter.emitAsync(`${namespace}:${event}`,data),hasListeners:(event:string)=>baseEmitter.hasListeners(`${namespace}:${event}`),listenerCount:(event:string)=>baseEmitter.listenerCount(`${namespace}:${event}`),eventNames:()=>baseEmitter.eventNames().filter(name=>name.startsWith(`${namespace}:`)).map(name=>name.replace(`${namespace}:`,'')),removeAllListeners:(event?:string)=>event ? baseEmitter.removeAllListeners(`${namespace}:${event}`) : baseEmitter.eventNames().filter(name=>name.startsWith(`${namespace}:`)).forEach(name=>baseEmitter.removeAllListeners(name))}as EventEmitter;}
+import { createDebugger } from "../utils/debug";
+const debug = createDebugger("events");
+export type EventHandler<T = unknown> = (
+  data: T,
+) => void | Promise<void> | Promise<unknown>;
+interface EventSubscription<T = unknown> {
+  event: string;
+  handler: EventHandler<T>;
+  once: boolean;
+  priority: number;
+}
+export class EventEmitter {
+  private subscriptions: Map<string, EventSubscription[]> = new Map();
+  private static instance: EventEmitter | null = null;
+  static getInstance(): EventEmitter {
+    if (!EventEmitter.instance) {
+      EventEmitter.instance = new EventEmitter();
+    }
+    return EventEmitter.instance;
+  }
+  on<T = unknown>(
+    event: string,
+    handler: EventHandler<T>,
+    options: { once?: boolean; priority?: number } = {},
+  ): () => void {
+    const subscription: EventSubscription<T> = {
+      event,
+      handler: handler as EventHandler<unknown>,
+      once: options.once ?? false,
+      priority: options.priority ?? 0,
+    };
+    const existing = this.subscriptions.get(event) ?? [];
+    existing.push(subscription as EventSubscription<unknown>);
+    existing.sort((a, b) => b.priority - a.priority);
+    this.subscriptions.set(event, existing);
+    return () => this.off(event, handler);
+  }
+  once<T = unknown>(event: string, handler: EventHandler<T>): () => void {
+    return this.on(event, handler, { once: true });
+  }
+  off<T = unknown>(event: string, handler?: EventHandler<T>): void {
+    const existing = this.subscriptions.get(event);
+    if (!existing) {
+      return;
+    }
+    if (handler) {
+      const filtered = existing.filter(
+        (sub) => sub.handler !== (handler as EventHandler<unknown>),
+      );
+      this.subscriptions.set(event, filtered);
+    } else {
+      this.subscriptions.delete(event);
+    }
+  }
+  emit<T = unknown>(event: string, data: T): void {
+    const subscriptions = this.subscriptions.get(event);
+    if (!subscriptions || subscriptions.length === 0) {
+      return;
+    }
+    const toCall = [...subscriptions];
+    const toRemove: EventSubscription[] = [];
+    for (const subscription of toCall) {
+      try {
+        subscription.handler(data);
+        if (subscription.once) {
+          toRemove.push(subscription);
+        }
+      } catch (error) {
+        this.handleError(error, event, data);
+      }
+    }
+    if (toRemove.length > 0) {
+      const remaining = subscriptions.filter((sub) => !toRemove.includes(sub));
+      if (remaining.length > 0) {
+        this.subscriptions.set(event, remaining);
+      } else {
+        this.subscriptions.delete(event);
+      }
+    }
+  }
+  async emitAsync<T = unknown>(event: string, data: T): Promise<void> {
+    const subscriptions = this.subscriptions.get(event);
+    if (!subscriptions || subscriptions.length === 0) {
+      return;
+    }
+    const toCall = [...subscriptions];
+    const toRemove: EventSubscription[] = [];
+    for (const subscription of toCall) {
+      try {
+        const result = subscription.handler(data);
+        if (
+          result &&
+          typeof result === "object" &&
+          "then" in result &&
+          typeof (result as Promise<unknown>).then === "function"
+        ) {
+          await (result as Promise<unknown>);
+        }
+        if (subscription.once) {
+          toRemove.push(subscription);
+        }
+      } catch (error) {
+        this.handleError(error, event, data);
+      }
+    }
+    if (toRemove.length > 0) {
+      const remaining = subscriptions.filter((sub) => !toRemove.includes(sub));
+      if (remaining.length > 0) {
+        this.subscriptions.set(event, remaining);
+      } else {
+        this.subscriptions.delete(event);
+      }
+    }
+  }
+  hasListeners(event: string): boolean {
+    const subscriptions = this.subscriptions.get(event);
+    return subscriptions !== undefined && subscriptions.length > 0;
+  }
+  listenerCount(event: string): number {
+    return this.subscriptions.get(event)?.length ?? 0;
+  }
+  eventNames(): string[] {
+    return Array.from(this.subscriptions.keys());
+  }
+  removeAllListeners(event?: string): void {
+    if (event) {
+      this.subscriptions.delete(event);
+    } else {
+      this.subscriptions.clear();
+    }
+  }
+  private handleError(error: unknown, event: string, data: unknown): void {
+    if (__DEV__) {
+      debug.error(`Error in event handler for "${event}":`, error as Error);
+      debug.debug("Event data:", data);
+    }
+    this.emit("error:handler", {
+      originalEvent: event,
+      error,
+      data,
+      timestamp: Date.now(),
+    });
+  }
+}
+export const globalEventEmitter = EventEmitter.getInstance();
+export function createNamespacedEmitter(namespace: string): EventEmitter {
+  const baseEmitter = EventEmitter.getInstance();
+  return {
+    on: <T>(
+      event: string,
+      handler: EventHandler<T>,
+      options?: { once?: boolean; priority?: number },
+    ) => baseEmitter.on(`${namespace}:${event}`, handler, options),
+    once: <T>(event: string, handler: EventHandler<T>) =>
+      baseEmitter.once(`${namespace}:${event}`, handler),
+    off: <T>(event: string, handler?: EventHandler<T>) =>
+      baseEmitter.off(`${namespace}:${event}`, handler),
+    emit: <T>(event: string, data: T) =>
+      baseEmitter.emit(`${namespace}:${event}`, data),
+    emitAsync: <T>(event: string, data: T) =>
+      baseEmitter.emitAsync(`${namespace}:${event}`, data),
+    hasListeners: (event: string) =>
+      baseEmitter.hasListeners(`${namespace}:${event}`),
+    listenerCount: (event: string) =>
+      baseEmitter.listenerCount(`${namespace}:${event}`),
+    eventNames: () =>
+      baseEmitter
+        .eventNames()
+        .filter((name) => name.startsWith(`${namespace}:`))
+        .map((name) => name.replace(`${namespace}:`, "")),
+    removeAllListeners: (event?: string) =>
+      event
+        ? baseEmitter.removeAllListeners(`${namespace}:${event}`)
+        : baseEmitter
+            .eventNames()
+            .filter((name) => name.startsWith(`${namespace}:`))
+            .forEach((name) => baseEmitter.removeAllListeners(name)),
+  } as EventEmitter;
+}

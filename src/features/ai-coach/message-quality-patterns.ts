@@ -1,7 +1,7 @@
 import {
   MessageQualityElements,
   type MessageQualityElement,
-} from './message-quality-schema';
+} from "./message-quality-schema";
 
 export const GENERIC_PATTERNS: RegExp[] = [
   /keep going/i,

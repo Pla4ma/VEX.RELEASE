@@ -6,7 +6,7 @@
  */
 
 // Error handling
-export { RepositoryError } from './error';
+export { RepositoryError } from "./error";
 
 // Domain repositories
 export {
@@ -14,14 +14,14 @@ export {
   fetchCoachPersona,
   fetchMessageTemplates,
   fetchAllMessageTemplates,
-} from './personas';
+} from "./personas";
 
 export {
   fetchBehaviorProfile,
   upsertBehaviorProfile,
   addBehaviorSignal,
   fetchRecentBehaviorSignals,
-} from './behavior';
+} from "./behavior";
 
 export {
   fetchRecommendations,
@@ -29,7 +29,7 @@ export {
   fetchRecommendationsByType,
   createRecommendation,
   updateRecommendationStatus,
-} from './recommendations';
+} from "./recommendations";
 
 export {
   createReminderPlan,
@@ -39,12 +39,9 @@ export {
   upsertComebackPlan,
   fetchActiveComebackPlan,
   updateComebackPlanStatus,
-} from './reminders';
+} from "./reminders";
 
-export {
-  fetchDifficultyProfile,
-  upsertDifficultyProfile,
-} from './difficulty';
+export { fetchDifficultyProfile, upsertDifficultyProfile } from "./difficulty";
 
 export {
   createCoachMessage,
@@ -56,12 +53,9 @@ export {
   markMessageRead,
   dismissMessage,
   fetchCoachHistory,
-} from './messages';
+} from "./messages";
 
-export {
-  fetchCoachState,
-  upsertCoachState,
-} from './state';
+export { fetchCoachState, upsertCoachState } from "./state";
 
 export {
   fetchInterventionRules,
@@ -70,7 +64,7 @@ export {
   updateInterventionExecution,
   fetchTodaysInterventionExecutions,
   wasRuleTriggeredRecently,
-} from './intervention';
+} from "./intervention";
 
 export {
   createMemory,
@@ -81,4 +75,4 @@ export {
   getMemoriesByTypes,
   getMostRecentMemoryByType,
   hasMemoryOfType,
-} from './memories';
+} from "./memories";

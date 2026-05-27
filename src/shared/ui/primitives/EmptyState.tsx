@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, Pressable, ViewStyle } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { useTheme } from '../../../theme';
-import { useFadeIn, useSlideIn } from '../hooks/useReanimated';
-import { createSheet } from '@/shared/ui/create-sheet';
+import React from "react";
+import { View, Text, Pressable, ViewStyle } from "react-native";
+import Animated from "react-native-reanimated";
+import { useTheme } from "../../../theme";
+import { useFadeIn, useSlideIn } from "../hooks/useReanimated";
+import { createSheet } from "@/shared/ui/create-sheet";
 
 interface EmptyStateProps {
   icon: string;
@@ -30,42 +30,70 @@ export function EmptyState({
 }: EmptyStateProps) {
   const { theme } = useTheme();
   const fadeStyle = useFadeIn(500, animated ? 100 : 0);
-  const slideStyle = useSlideIn('up', 30);
+  const slideStyle = useSlideIn("up", 30);
   const containerStyle = animated ? fadeStyle : undefined;
   const contentStyle = animated ? slideStyle : undefined;
   return (
     <Animated.View style={[styles.container, containerStyle, style]}>
       <Animated.View style={[styles.content, contentStyle]}>
-        <View style={[styles.iconContainer, { backgroundColor: theme.colors.background.tertiary }]}>
+        <View
+          style={[
+            styles.iconContainer,
+            { backgroundColor: theme.colors.background.tertiary },
+          ]}
+        >
           <Text style={styles.icon}>{icon}</Text>
         </View>
 
-        <Text style={[styles.title, { color: theme.colors.text.primary }]}>{title}</Text>
-        <Text style={[styles.message, { color: theme.colors.text.tertiary }]}>{message}</Text>
+        <Text style={[styles.title, { color: theme.colors.text.primary }]}>
+          {title}
+        </Text>
+        <Text style={[styles.message, { color: theme.colors.text.tertiary }]}>
+          {message}
+        </Text>
 
         {(actionLabel || secondaryActionLabel) && (
           <View style={styles.actions}>
             {actionLabel && onAction && (
               <Pressable
-                style={({ pressed }) => [styles.primaryButton, { backgroundColor: theme.colors.primary[500] }, pressed && { opacity: 0.8 }]}
+                style={({ pressed }) => [
+                  styles.primaryButton,
+                  { backgroundColor: theme.colors.primary[500] },
+                  pressed && { opacity: 0.8 },
+                ]}
                 onPress={onAction}
                 accessibilityLabel="Interactive control"
                 accessibilityRole="button"
                 accessibilityHint="Activates this control"
               >
-                <Text style={[styles.primaryButtonText, { color: theme.colors.text.inverse }]}>{actionLabel}</Text>
+                <Text
+                  style={[
+                    styles.primaryButtonText,
+                    { color: theme.colors.text.inverse },
+                  ]}
+                >
+                  {actionLabel}
+                </Text>
               </Pressable>
             )}
 
             {secondaryActionLabel && onSecondaryAction && (
               <Pressable
-                style={({ pressed }) => [styles.secondaryButton, pressed && { opacity: 0.8 }]}
+                style={({ pressed }) => [
+                  styles.secondaryButton,
+                  pressed && { opacity: 0.8 },
+                ]}
                 onPress={onSecondaryAction}
                 accessibilityLabel="Interactive control"
                 accessibilityRole="button"
                 accessibilityHint="Activates this control"
               >
-                <Text style={[styles.secondaryButtonText, { color: theme.colors.primary[500] }]}>
+                <Text
+                  style={[
+                    styles.secondaryButtonText,
+                    { color: theme.colors.primary[500] },
+                  ]}
+                >
                   {secondaryActionLabel}
                 </Text>
               </Pressable>
@@ -77,7 +105,11 @@ export function EmptyState({
   );
 }
 
-export function EmptyAnalytics({ onStartSession }: { onStartSession?: () => void }) {
+export function EmptyAnalytics({
+  onStartSession,
+}: {
+  onStartSession?: () => void;
+}) {
   return (
     <EmptyState
       icon="📊"
@@ -89,7 +121,11 @@ export function EmptyAnalytics({ onStartSession }: { onStartSession?: () => void
   );
 }
 
-export function EmptyInsights({ onViewSessions }: { onViewSessions?: () => void }) {
+export function EmptyInsights({
+  onViewSessions,
+}: {
+  onViewSessions?: () => void;
+}) {
   return (
     <EmptyState
       icon="💡"
@@ -101,7 +137,11 @@ export function EmptyInsights({ onViewSessions }: { onViewSessions?: () => void 
   );
 }
 
-export function EmptyChallenges({ onBrowseChallenges }: { onBrowseChallenges?: () => void }) {
+export function EmptyChallenges({
+  onBrowseChallenges,
+}: {
+  onBrowseChallenges?: () => void;
+}) {
   return (
     <EmptyState
       icon="🏆"
@@ -113,7 +153,11 @@ export function EmptyChallenges({ onBrowseChallenges }: { onBrowseChallenges?: (
   );
 }
 
-export function EmptyNotifications({ onAdjustSettings }: { onAdjustSettings?: () => void }) {
+export function EmptyNotifications({
+  onAdjustSettings,
+}: {
+  onAdjustSettings?: () => void;
+}) {
   return (
     <EmptyState
       icon="🔔"
@@ -137,7 +181,13 @@ export function NetworkError({ onRetry }: { onRetry?: () => void }) {
   );
 }
 
-export function EmptyFeed({ bossName, onStartSession }: { bossName: string; onStartSession?: () => void }) {
+export function EmptyFeed({
+  bossName,
+  onStartSession,
+}: {
+  bossName: string;
+  onStartSession?: () => void;
+}) {
   return (
     <EmptyState
       icon="👹"
@@ -161,7 +211,11 @@ export function EmptyRivals({ onFindRivals }: { onFindRivals?: () => void }) {
   );
 }
 
-export function EmptyAchievements({ onStartSession }: { onStartSession?: () => void }) {
+export function EmptyAchievements({
+  onStartSession,
+}: {
+  onStartSession?: () => void;
+}) {
   return (
     <EmptyState
       icon="🏆"
@@ -174,15 +228,48 @@ export function EmptyAchievements({ onStartSession }: { onStartSession?: () => v
 }
 
 const styles = createSheet({
-  container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 32 },
-  content: { alignItems: 'center', maxWidth: 400 },
-  iconContainer: { width: 80, height: 80, borderRadius: 40, justifyContent: 'center', alignItems: 'center', marginBottom: 24 },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 32,
+  },
+  content: { alignItems: "center", maxWidth: 400 },
+  iconContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 24,
+  },
   icon: { fontSize: 40 },
-  title: { fontSize: 20, fontWeight: '700', marginBottom: 12, textAlign: 'center' },
-  message: { fontSize: 14, textAlign: 'center', marginBottom: 24, lineHeight: 20 },
-  actions: { flexDirection: 'column', gap: 12, width: '100%' },
-  primaryButton: { paddingVertical: 14, paddingHorizontal: 24, borderRadius: 12, alignItems: 'center' },
-  primaryButtonText: { fontSize: 16, fontWeight: '600' },
-  secondaryButton: { backgroundColor: 'transparent', paddingVertical: 14, paddingHorizontal: 24, borderRadius: 12, alignItems: 'center' },
-  secondaryButtonText: { fontSize: 16, fontWeight: '500' },
+  title: {
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: 12,
+    textAlign: "center",
+  },
+  message: {
+    fontSize: 14,
+    textAlign: "center",
+    marginBottom: 24,
+    lineHeight: 20,
+  },
+  actions: { flexDirection: "column", gap: 12, width: "100%" },
+  primaryButton: {
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  primaryButtonText: { fontSize: 16, fontWeight: "600" },
+  secondaryButton: {
+    backgroundColor: "transparent",
+    paddingVertical: 14,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  secondaryButtonText: { fontSize: 16, fontWeight: "500" },
 });

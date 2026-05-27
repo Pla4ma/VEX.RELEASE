@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import type { NavigationContainerRefWithCurrent } from '@react-navigation/native';
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { NavigationContainerRefWithCurrent } from "@react-navigation/native";
 
-import { eventBus } from '../../events';
-import { getStreakService } from '../../streaks/StreakService';
+import { eventBus } from "../../events";
+import { getStreakService } from "../../streaks/StreakService";
 
-import type { ExtendedRootStackParams } from '../types';
+import type { ExtendedRootStackParams } from "../types";
 
 interface StreakFuneralData {
   previousStreak: number;
@@ -27,18 +27,18 @@ interface UseStreakFuneralNavigationInput {
 
 const MIN_SESSIONS_FOR_FUNERAL = 5;
 const FUNERAL_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
-const STREAK_FUNERAL_LAST_SHOWN_KEY = 'streak_funeral_last_shown';
+const STREAK_FUNERAL_LAST_SHOWN_KEY = "streak_funeral_last_shown";
 const STREAK_MINIMUM_FOR_FUNERAL = 3;
 
 function isStreakFuneralEvent(value: unknown): value is StreakFuneralEvent {
-  if (!value || typeof value !== 'object') {
+  if (!value || typeof value !== "object") {
     return false;
   }
   const event = value as Record<string, unknown>;
   return (
-    typeof event.userId === 'string' &&
-    typeof event.previousStreak === 'number' &&
-    typeof event.diedAt === 'number'
+    typeof event.userId === "string" &&
+    typeof event.previousStreak === "number" &&
+    typeof event.diedAt === "number"
   );
 }
 
@@ -58,7 +58,8 @@ export function useStreakFuneralNavigation({
   userId,
 }: UseStreakFuneralNavigationInput): void {
   const [showStreakFuneral, setShowStreakFuneral] = useState(false);
-  const [streakFuneralData, setStreakFuneralData] = useState<StreakFuneralData | null>(null);
+  const [streakFuneralData, setStreakFuneralData] =
+    useState<StreakFuneralData | null>(null);
   const hasShownRef = useRef(false);
 
   const shouldShowFuneral = useCallback((): boolean => {
@@ -73,12 +74,16 @@ export function useStreakFuneralNavigation({
 
     if (!state.lastStreakDiedAt || state.streakFuneralShown) return false;
 
-    const hoursSinceDeath = (Date.now() - state.lastStreakDiedAt) / (1000 * 60 * 60);
+    const hoursSinceDeath =
+      (Date.now() - state.lastStreakDiedAt) / (1000 * 60 * 60);
     if (hoursSinceDeath >= 48) return false;
 
-    const previousStreak = state.currentStreak === 1
-      ? (state.longestStreak > 1 ? state.longestStreak : 0)
-      : 0;
+    const previousStreak =
+      state.currentStreak === 1
+        ? state.longestStreak > 1
+          ? state.longestStreak
+          : 0
+        : 0;
 
     return previousStreak >= STREAK_MINIMUM_FOR_FUNERAL;
   }, [userId, totalCompletedSessions]);
@@ -91,9 +96,12 @@ export function useStreakFuneralNavigation({
     const state = streakService.getState();
     if (!state.lastStreakDiedAt) return;
 
-    const previousStreak = state.currentStreak === 1
-      ? (state.longestStreak > 1 ? state.longestStreak : 0)
-      : 0;
+    const previousStreak =
+      state.currentStreak === 1
+        ? state.longestStreak > 1
+          ? state.longestStreak
+          : 0
+        : 0;
 
     hasShownRef.current = true;
     setStreakFuneralData({
@@ -110,7 +118,7 @@ export function useStreakFuneralNavigation({
   }, [checkStreakFuneral, hasCompletedOnboarding, isAuthenticated, isReady]);
 
   useEffect(() => {
-    const unsubscribe = eventBus.subscribe('streak:funeral_ready', (data) => {
+    const unsubscribe = eventBus.subscribe("streak:funeral_ready", (data) => {
       if (!isStreakFuneralEvent(data) || data.userId !== userId) return;
       if (data.previousStreak < STREAK_MINIMUM_FOR_FUNERAL) return;
       if (totalCompletedSessions < MIN_SESSIONS_FOR_FUNERAL) return;
@@ -129,7 +137,12 @@ export function useStreakFuneralNavigation({
   }, [userId, totalCompletedSessions]);
 
   useEffect(() => {
-    if (!showStreakFuneral || !streakFuneralData || !isAuthenticated || !hasCompletedOnboarding) {
+    if (
+      !showStreakFuneral ||
+      !streakFuneralData ||
+      !isAuthenticated ||
+      !hasCompletedOnboarding
+    ) {
       return;
     }
 
@@ -137,12 +150,12 @@ export function useStreakFuneralNavigation({
       return;
     }
 
-    if (navigationRef.getCurrentRoute()?.name === 'StreakFuneral') {
+    if (navigationRef.getCurrentRoute()?.name === "StreakFuneral") {
       return;
     }
 
     setLastFuneralShown();
-    navigationRef.navigate('StreakFuneral', streakFuneralData);
+    navigationRef.navigate("StreakFuneral", streakFuneralData);
     setShowStreakFuneral(false);
     setStreakFuneralData(null);
   }, [

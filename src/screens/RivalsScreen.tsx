@@ -1,14 +1,14 @@
-import { withScreenErrorBoundary } from '../shared/ui/components/ScreenErrorBoundary';
-import React from 'react';
-import { ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import { withScreenErrorBoundary } from "../shared/ui/components/ScreenErrorBoundary";
+import React from "react";
+import { ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
-import { Text } from '../components/primitives';
-import { EmptyState } from '../components/EmptyState';
-import { Skeleton } from '../components/ui/Skeleton';
-import { useTheme } from '../theme';
-import { useAuthStore } from '../store';
+import { Text } from "../components/primitives";
+import { EmptyState } from "../components/EmptyState";
+import { Skeleton } from "../components/ui/Skeleton";
+import { useTheme } from "../theme";
+import { useAuthStore } from "../store";
 // Rivals feature not implemented - stubbing imports
 // import {
 //   ActiveChallengesSection,
@@ -22,20 +22,45 @@ import { useAuthStore } from '../store';
 // } from '../features/rivals/hooks';
 
 // Stub hooks
-const useMyRivals = (_userId: string | null) => ({ data: null, isLoading: false, error: null });
-const useActiveChallenges = (_userId: string | null) => ({ data: null, isLoading: false });
-const useRivalSuggestions = (_userId: string | null, _count1: number, _count2: number, _count3: number) => ({ data: null, isLoading: false });
+const useMyRivals = (_userId: string | null) => ({
+  data: null,
+  isLoading: false,
+  error: null,
+});
+const useActiveChallenges = (_userId: string | null) => ({
+  data: null,
+  isLoading: false,
+});
+const useRivalSuggestions = (
+  _userId: string | null,
+  _count1: number,
+  _count2: number,
+  _count3: number,
+) => ({ data: null, isLoading: false });
 // Stub components
 const MyRivalsSection = (_props: { rivalsResult: unknown }) => null;
-const ActiveChallengesSection = (_props: { challengesResult: unknown; userId: string }) => null;
-const SuggestedRivalsSection = (_props: { suggestionsResult: unknown; userId: string }) => null;
+const ActiveChallengesSection = (_props: {
+  challengesResult: unknown;
+  userId: string;
+}) => null;
+const SuggestedRivalsSection = (_props: {
+  suggestionsResult: unknown;
+  userId: string;
+}) => null;
 
 function RivalsScreenSkeleton(): JSX.Element {
   const { theme } = useTheme();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background.primary }}>
-      <ScrollView contentContainerStyle={{ padding: theme.spacing[5], gap: theme.spacing[4] }}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
+    >
+      <ScrollView
+        contentContainerStyle={{
+          padding: theme.spacing[5],
+          gap: theme.spacing[4],
+        }}
+      >
         <Skeleton height={40} width={200} />
         <Skeleton height={180} variant="rounded" />
         <Skeleton height={120} variant="rounded" />
@@ -60,7 +85,9 @@ export function RivalsScreen(): JSX.Element {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background.primary }}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
+    >
       <ScrollView
         contentContainerStyle={{
           padding: theme.spacing[5],
@@ -73,7 +100,11 @@ export function RivalsScreen(): JSX.Element {
           <Text variant="h2" color={theme.colors.text.primary} fontWeight="800">
             Rivals
           </Text>
-          <Text variant="body" color={theme.colors.text.secondary} style={{ marginTop: theme.spacing[1] }}>
+          <Text
+            variant="body"
+            color={theme.colors.text.secondary}
+            style={{ marginTop: theme.spacing[1] }}
+          >
             Compete weekly with players at your level.
           </Text>
         </Animated.View>
@@ -81,15 +112,25 @@ export function RivalsScreen(): JSX.Element {
         {userId ? (
           <>
             <MyRivalsSection rivalsResult={rivalsResult} />
-            <ActiveChallengesSection challengesResult={challengesResult} userId={userId} />
-            <SuggestedRivalsSection suggestionsResult={suggestionsResult} userId={userId} />
+            <ActiveChallengesSection
+              challengesResult={challengesResult}
+              userId={userId}
+            />
+            <SuggestedRivalsSection
+              suggestionsResult={suggestionsResult}
+              userId={userId}
+            />
           </>
         ) : (
-          <EmptyState icon="!" title="Sign in to find rivals" body="Rivalries need your profile before they can start." />
+          <EmptyState
+            icon="!"
+            title="Sign in to find rivals"
+            body="Rivalries need your profile before they can start."
+          />
         )}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-export default withScreenErrorBoundary(RivalsScreen, 'Rivals');
+export default withScreenErrorBoundary(RivalsScreen, "Rivals");

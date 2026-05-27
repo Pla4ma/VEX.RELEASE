@@ -1,22 +1,25 @@
-import { captureSilentFailure } from '../../../utils/silent-failure';
-import { useCallback, useMemo, useState } from 'react';
-import * as Sentry from '@sentry/react-native';
+import { captureSilentFailure } from "../../../utils/silent-failure";
+import { useCallback, useMemo, useState } from "react";
+import * as Sentry from "@sentry/react-native";
 
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { getSprintChainService } from '../../../features/session/SprintChainService';
-import { startStreakRestoreQuest } from '../../../features/streaks/restore-quest';
-import type { SessionStackParams } from '../../../navigation/types';
-import { getMMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
-import { SessionMode } from '../../../session/modes';
-import { useSession } from '../../../session/hooks/useSession';
-import { SessionConfigSchema } from '../../../session/types';
-import { sessionStart } from '../../../utils/haptics';
-import { createContract, skipContract } from '../../../features/focus-contract/service';
-import type { PresetWithIcon } from '../utils/session-setup';
+import { getSprintChainService } from "../../../features/session/SprintChainService";
+import { startStreakRestoreQuest } from "../../../features/streaks/restore-quest";
+import type { SessionStackParams } from "../../../navigation/types";
+import { getMMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
+import { SessionMode } from "../../../session/modes";
+import { useSession } from "../../../session/hooks/useSession";
+import { SessionConfigSchema } from "../../../session/types";
+import { sessionStart } from "../../../utils/haptics";
+import {
+  createContract,
+  skipContract,
+} from "../../../features/focus-contract/service";
+import type { PresetWithIcon } from "../utils/session-setup";
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
-type SessionSetupParams = SessionStackParams['SessionSetup'];
+type SessionSetupParams = SessionStackParams["SessionSetup"];
 
 type UseStartSessionFlowParams = {
   draftGoal: string | undefined;
@@ -55,15 +58,26 @@ export function useStartSessionFlow({
     let started = false;
 
     try {
-      const sessionTags = Array.from(new Set([...(selectedPreset.tags || []), ...(params?.sessionTags ?? [])]));
+      const sessionTags = Array.from(
+        new Set([
+          ...(selectedPreset.tags || []),
+          ...(params?.sessionTags ?? []),
+        ]),
+      );
       const notesPayload: Record<string, unknown> = {};
 
-      if (params?.source === 'content-study' || params?.source === 'learning-execution') {
-        if (!sessionTags.includes('content-study')) {
-          sessionTags.push('content-study');
+      if (
+        params?.source === "content-study" ||
+        params?.source === "learning-execution"
+      ) {
+        if (!sessionTags.includes("content-study")) {
+          sessionTags.push("content-study");
         }
-        if (params.source === 'learning-execution' && !sessionTags.includes('learning-execution')) {
-          sessionTags.push('learning-execution');
+        if (
+          params.source === "learning-execution" &&
+          !sessionTags.includes("learning-execution")
+        ) {
+          sessionTags.push("learning-execution");
         }
         if (params.studyPlanId && !sessionTags.includes(params.studyPlanId)) {
           sessionTags.push(params.studyPlanId);
@@ -90,24 +104,28 @@ export function useStartSessionFlow({
       }
 
       if (params?.comebackMultiplier && params.comebackMultiplier > 1) {
-        if (!sessionTags.includes('comeback-session')) {
-          sessionTags.push('comeback-session');
+        if (!sessionTags.includes("comeback-session")) {
+          sessionTags.push("comeback-session");
         }
         notesPayload.comebackMultiplier = params.comebackMultiplier;
         notesPayload.comebackMessage = params.comebackMessage;
       }
 
       if (params?.comebackQuest) {
-        if (!sessionTags.includes('streak-restore-quest')) {
-          sessionTags.push('streak-restore-quest');
+        if (!sessionTags.includes("streak-restore-quest")) {
+          sessionTags.push("streak-restore-quest");
         }
         notesPayload.comebackQuest = params.comebackQuest;
-        await startStreakRestoreQuest(userId, params.comebackQuest.streakBefore);
+        await startStreakRestoreQuest(
+          userId,
+          params.comebackQuest.streakBefore,
+        );
       }
 
-      const sprintChainState = selectedSessionMode === SessionMode.SPRINT
-        ? await getSprintChainService().getState(userId)
-        : null;
+      const sprintChainState =
+        selectedSessionMode === SessionMode.SPRINT
+          ? await getSprintChainService().getState(userId)
+          : null;
       const sprintChainCount = sprintChainState
         ? Math.min(4, sprintChainState.completedCount + 1)
         : 1;
@@ -132,25 +150,34 @@ export function useStartSessionFlow({
         goal: draftGoal,
         comebackMultiplier: params?.comebackMultiplier,
         warContext: params?.warContext ?? null,
-        notes: Object.keys(notesPayload).length > 0 ? JSON.stringify(notesPayload) : undefined,
+        notes:
+          Object.keys(notesPayload).length > 0
+            ? JSON.stringify(notesPayload)
+            : undefined,
       });
 
       Sentry.addBreadcrumb({
-        category: 'session-start',
-        message: 'Creating session from setup flow',
-        level: 'info',
+        category: "session-start",
+        message: "Creating session from setup flow",
+        level: "info",
       });
       const session = await createSession(config);
-      const contractTask = focusContractText?.trim() ?? '';
+      const contractTask = focusContractText?.trim() ?? "";
       try {
         if (contractTask.length >= 3) {
-          await createContract({ sessionId: session.id, taskDescription: contractTask }, userId);
+          await createContract(
+            { sessionId: session.id, taskDescription: contractTask },
+            userId,
+          );
         } else {
           await skipContract(session.id, userId);
         }
       } catch (error) {
         Sentry.captureException(error, {
-          tags: { feature: 'focus-contract', operation: 'session-start-create' },
+          tags: {
+            feature: "focus-contract",
+            operation: "session-start-create",
+          },
         });
       }
       await startSession(0);
@@ -167,17 +194,20 @@ export function useStartSessionFlow({
         }, 120);
       }
 
-      navigation.navigate('ActiveSession', {
+      navigation.navigate("ActiveSession", {
         sessionId: session.id,
-        selectedThemeId: selectedThemeOwned ? selectedThemeId : 'default',
+        selectedThemeId: selectedThemeOwned ? selectedThemeId : "default",
       });
     } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Unexpected session start failure';
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Unexpected session start failure";
       setStartError(errorMessage);
       Sentry.captureException(error, {
         tags: {
-          feature: 'session-start',
-          phase: 'start-flow',
+          feature: "session-start",
+          phase: "start-flow",
         },
       });
     } finally {
@@ -185,10 +215,31 @@ export function useStartSessionFlow({
       if (started) {
         try {
           await storage.removeItem(sessionDraftKey);
-        } catch (error) { captureSilentFailure(error, { feature: 'screens', operation: 'network-fallback', type: 'network' });}
+        } catch (error) {
+          captureSilentFailure(error, {
+            feature: "screens",
+            operation: "network-fallback",
+            type: "network",
+          });
+        }
       }
     }
-  }, [createSession, draftGoal, focusContractText, navigation, params, selectedDurationSeconds, selectedPreset, selectedSessionMode, selectedThemeId, selectedThemeOwned, sessionDraftKey, startSession, storage, userId]);
+  }, [
+    createSession,
+    draftGoal,
+    focusContractText,
+    navigation,
+    params,
+    selectedDurationSeconds,
+    selectedPreset,
+    selectedSessionMode,
+    selectedThemeId,
+    selectedThemeOwned,
+    sessionDraftKey,
+    startSession,
+    storage,
+    userId,
+  ]);
 
   return {
     clearStartError: () => setStartError(null),

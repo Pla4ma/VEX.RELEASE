@@ -4,13 +4,13 @@ import {
   type ComputeTomorrowPreviewInput,
   type TomorrowPreviewData,
   type TomorrowPreviewType,
-} from './tomorrow-preview-schemas';
-import { computeTomorrowPreview } from './tomorrow-preview-compute';
+} from "./tomorrow-preview-schemas";
+import { computeTomorrowPreview } from "./tomorrow-preview-compute";
 import {
   clearTomorrowPreview,
   loadTomorrowPreview,
   saveTomorrowPreview,
-} from './tomorrow-preview-storage';
+} from "./tomorrow-preview-storage";
 
 export {
   clearTomorrowPreview,
@@ -29,12 +29,14 @@ export type {
 
 export function useTomorrowPreviewForSession(
   userId: string,
-  data: ComputeTomorrowPreviewInput
+  data: ComputeTomorrowPreviewInput,
 ): TomorrowPreviewData {
   return computeTomorrowPreview({ ...data, userId });
 }
 
-export function useSavedTomorrowPreview(userId: string): TomorrowPreviewData | null {
+export function useSavedTomorrowPreview(
+  userId: string,
+): TomorrowPreviewData | null {
   const saved = loadTomorrowPreview(userId);
   if (!saved) {
     return null;

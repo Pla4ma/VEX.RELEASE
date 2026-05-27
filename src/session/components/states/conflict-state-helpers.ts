@@ -11,8 +11,12 @@ export const computeDifferences = (
   localState: { elapsedTime: number; progress: number },
   remoteState: { elapsedTime: number; progress: number },
 ) => {
-  const timeDifference = Math.abs(localState.elapsedTime - remoteState.elapsedTime);
-  const progressDifference = Math.abs(localState.progress - remoteState.progress);
+  const timeDifference = Math.abs(
+    localState.elapsedTime - remoteState.elapsedTime,
+  );
+  const progressDifference = Math.abs(
+    localState.progress - remoteState.progress,
+  );
   return { timeDifference, progressDifference };
 };
 
@@ -24,7 +28,9 @@ export const handleResolve = async (
   onResolveRemote: () => Promise<void> | void,
   onMerge?: () => Promise<void> | void,
 ): Promise<void> => {
-  const timeDifference = Math.abs(localState.elapsedTime - remoteState.elapsedTime);
+  const timeDifference = Math.abs(
+    localState.elapsedTime - remoteState.elapsedTime,
+  );
   triggerHapticEvent(HapticEvents.BUTTON_PRESS);
   eventBus.publish("analytics:track", {
     event: "session_conflict_resolution",

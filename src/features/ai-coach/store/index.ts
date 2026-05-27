@@ -10,14 +10,10 @@
  */
 
 // Types
-export type {
-  CoachUIState,
-  CoachUIActions,
-  CoachStore,
-} from './types';
+export type { CoachUIState, CoachUIActions, CoachStore } from "./types";
 
 // Storage
-export { mmkvStorage, storageConfig } from './storage';
+export { mmkvStorage, storageConfig } from "./storage";
 
 // Selectors
 export {
@@ -33,11 +29,10 @@ export {
   selectIsMessageDismissed,
   selectModalState,
   selectIsModalVisible,
-} from './selectors';
+} from "./selectors";
 
 // Helpers
-export { shouldShowMessage, getActiveModalType } from './helpers';
+export { shouldShowMessage, getActiveModalType } from "./helpers";
 
 // Re-export store hook and reset function from the main store file
-export { useCoachStore, resetCoachPreferences } from './useCoachStore';
-
+export { useCoachStore, resetCoachPreferences } from "./useCoachStore";

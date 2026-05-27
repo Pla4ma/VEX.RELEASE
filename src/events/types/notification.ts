@@ -3,15 +3,15 @@
  */
 
 export interface NotificationEventDefinitions {
-  'notification:receive': { id: string; type: string; data: unknown };
-  'notification:tap': { id: string; type: string };
-  'notification:dismiss': { id: string };
-  'notification:in_app_banner': {
+  "notification:receive": { id: string; type: string; data: unknown };
+  "notification:tap": { id: string; type: string };
+  "notification:dismiss": { id: string };
+  "notification:in_app_banner": {
     message: string;
     type: string;
     data?: Record<string, unknown>;
   };
-  'notification:send': {
+  "notification:send": {
     userId?: string;
     type: string;
     title: string;
@@ -19,14 +19,14 @@ export interface NotificationEventDefinitions {
     priority?: string;
     data?: Record<string, unknown>;
   };
-  'notifications:send-campaign': {
+  "notifications:send-campaign": {
     campaignId: string;
     userIds: string[];
     title: string;
     body: string;
     data?: Record<string, unknown>;
   };
-  'notification:sent': {
+  "notification:sent": {
     notificationId: string;
     userId: string;
     type: string;

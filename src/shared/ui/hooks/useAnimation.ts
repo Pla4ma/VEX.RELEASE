@@ -7,7 +7,7 @@ export {
   useSlideIn,
   usePressAnimation,
   useCountUp,
-} from './useReanimated';
+} from "./useReanimated";
 
 export function useStaggeredAnimation(itemCount: number): number[] {
   return Array.from({ length: itemCount }, (_, index) => index);

@@ -1,12 +1,14 @@
-import React from 'react';
-import { Box } from '../../../components/primitives/Box';
-import { SessionCompleteFooter } from './SessionCompleteFooter';
-import { SessionReturnReasonCard } from './SessionReturnReasonCard';
-import { TomorrowPreviewSession } from '../../../features/home-spine/components/TomorrowPreview';
-import { useSessionCompleteController } from '../../../features/session-completion/hooks';
-import { TomorrowPreviewData } from '../../../features/home-spine/tomorrowPreviewService';
+import React from "react";
+import { Box } from "../../../components/primitives/Box";
+import { SessionCompleteFooter } from "./SessionCompleteFooter";
+import { SessionReturnReasonCard } from "./SessionReturnReasonCard";
+import { TomorrowPreviewSession } from "../../../features/home-spine/components/TomorrowPreview";
+import { useSessionCompleteController } from "../../../features/session-completion/hooks";
+import { TomorrowPreviewData } from "../../../features/home-spine/tomorrowPreviewService";
 
-type SessionCompleteController = ReturnType<typeof useSessionCompleteController>;
+type SessionCompleteController = ReturnType<
+  typeof useSessionCompleteController
+>;
 type TomorrowPreview = TomorrowPreviewData;
 
 interface SessionCompleteNextStepsProps {
@@ -31,7 +33,7 @@ export function SessionCompleteNextSteps({
           <TomorrowPreviewSession
             preview={tomorrowPreview}
             onPress={() => {
-              controller.navigation.navigate({ name: 'Home', params: {} });
+              controller.navigation.navigate({ name: "Home", params: {} });
             }}
           />
         </Box>
@@ -50,11 +52,14 @@ export function SessionCompleteNextSteps({
       <SessionCompleteFooter
         bottomInset={bottomInset}
         homeCtaLabel={controller.returnPlan.homeCtaLabel}
-        nextSessionLabel={controller.nextAction?.ctaLabel ?? controller.returnPlan.nextSessionLabel}
+        nextSessionLabel={
+          controller.nextAction?.ctaLabel ??
+          controller.returnPlan.nextSessionLabel
+        }
         onOpenReflection={onOpenReflection}
         onStartNextSession={() =>
           controller.navigation.navigate({
-            name: 'SessionSetup',
+            name: "SessionSetup",
             params: controller.nextAction?.routeParams ?? {},
           })
         }

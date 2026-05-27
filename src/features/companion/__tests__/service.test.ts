@@ -1,1 +1,372 @@
-import{getCompanion,feedCompanion,petCompanion,levelUpCompanion,processSessionEvent,getCompanionBonuses,canUseSpecialAbility,useSpecialAbility}from'../service'; import{getEconomyService}from'../../../economy/EconomyService'; import{getDefaultStorageAdapter}from'../../../persistence/MMKVStorageAdapter'; jest.mock('../../../economy/EconomyService'); jest.mock('../../../persistence/MMKVStorageAdapter'); const mockStorage = {getItem:jest.fn(),setItem:jest.fn(),deleteItem:jest.fn()}; (getDefaultStorageAdapter as jest.Mock).mockReturnValue(mockStorage); const TEST_USER_ID = 'test-user-123'; describe('Companion Service',()=>{beforeEach(()=>{jest.clearAllMocks(); mockStorage.getItem.mockResolvedValue(null);}); describe('getCompanion',()=>{it('should return default profile for new user',async()=>{const companion = await getCompanion(TEST_USER_ID); expect(companion).toMatchObject({id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',level:1,xp:0,mood:'happy'}); expect(companion.lastFedAt).toBeDefined(); expect(companion.equippedItems).toEqual([]); expect(companion.unlockedAbilities).toEqual([]);}); it('should load existing profile from storage',async()=>{const existingProfile = {id:`companion_${TEST_USER_ID}`,name:'Custom Name',type:'focus_wisp',mood:'happy',level:5,xp:2500,lastFedAt:Date.now(),lastPettedAt:Date.now(),specialAbilityCharge:50,equippedItems:['hat_1'],unlockedAbilities:['xp_boost_5pct']}; mockStorage.getItem.mockResolvedValue(JSON.stringify(existingProfile)); const companion = await getCompanion(TEST_USER_ID); expect(companion.name).toBe('Custom Name'); expect(companion.level).toBe(5); expect(companion.xp).toBe(2500);}); it('should calculate mood based on last fed time',async()=>{const starvingProfile = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'happy',level:1,xp:0,lastFedAt:Date.now() - 50 * 60 * 60 * 1000,lastPettedAt:null,specialAbilityCharge:0,equippedItems:[],unlockedAbilities:[]}; mockStorage.getItem.mockResolvedValue(JSON.stringify(starvingProfile)); const companion = await getCompanion(TEST_USER_ID); expect(companion.mood).toBe('starving');});}); describe('feedCompanion',()=>{it('should feed companion and deduct coins',async()=>{const mockSpendCurrency = jest.fn().mockResolvedValue(true); (getEconomyService as jest.Mock).mockReturnValue({spendCurrency:mockSpendCurrency}); const result = await feedCompanion(TEST_USER_ID,{skipSyncEnqueue:true}); expect(result.mood).toBe('happy'); expect(mockSpendCurrency).toHaveBeenCalledWith(TEST_USER_ID,'COINS',10,'companion_feed'); expect(mockStorage.setItem).toHaveBeenCalled();}); it('should add XP when feeding',async()=>{const existingProfile = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'neutral',level:1,xp:100,lastFedAt:Date.now() - 20 * 60 * 60 * 1000,lastPettedAt:null,specialAbilityCharge:0,equippedItems:[],unlockedAbilities:[]}; mockStorage.getItem.mockResolvedValue(JSON.stringify(existingProfile)); (getEconomyService as jest.Mock).mockReturnValue({spendCurrency:jest.fn().mockResolvedValue(true)}); const result = await feedCompanion(TEST_USER_ID); expect(result.xp).toBeGreaterThan(100); expect(result.mood).toBe('happy');}); it('should throw error if insufficient funds',async()=>{(getEconomyService as jest.Mock).mockReturnValue({spendCurrency:jest.fn().mockRejectedValue(new Error('Insufficient funds'))}); await expect(feedCompanion(TEST_USER_ID)).rejects.toThrow('Insufficient funds');});}); describe('petCompanion',()=>{it('should update lastPettedAt timestamp',async()=>{const existingProfile = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'happy',level:1,xp:0,lastFedAt:Date.now(),lastPettedAt:null,specialAbilityCharge:0,equippedItems:[],unlockedAbilities:[]}; mockStorage.getItem.mockResolvedValue(JSON.stringify(existingProfile)); const result = await petCompanion(TEST_USER_ID); expect(result.lastPettedAt).not.toBeNull(); expect(mockStorage.setItem).toHaveBeenCalled();}); it('should increase mood when petted',async()=>{const sadProfile = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'sad',level:1,xp:0,lastFedAt:Date.now() - 30 * 60 * 60 * 1000,lastPettedAt:null,specialAbilityCharge:0,equippedItems:[],unlockedAbilities:[]}; mockStorage.getItem.mockResolvedValue(JSON.stringify(sadProfile)); const result = await petCompanion(TEST_USER_ID); expect(result.lastPettedAt).toBeDefined();});}); describe('levelUpCompanion',()=>{it('should calculate correct level from XP',async()=>{const profileWithXP = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'happy',level:1,xp:1200,lastFedAt:Date.now(),lastPettedAt:null,specialAbilityCharge:0,equippedItems:[],unlockedAbilities:[]}; mockStorage.getItem.mockResolvedValue(JSON.stringify(profileWithXP)); const result = await levelUpCompanion(TEST_USER_ID); expect(result.level).toBe(3);}); it('should unlock abilities at milestone levels',async()=>{const highXPProfile = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'happy',level:1,xp:10000,lastFedAt:Date.now(),lastPettedAt:null,specialAbilityCharge:0,equippedItems:[],unlockedAbilities:[]}; mockStorage.getItem.mockResolvedValue(JSON.stringify(highXPProfile)); const result = await levelUpCompanion(TEST_USER_ID); expect(result.unlockedAbilities).toContain('xp_boost_5pct'); expect(result.unlockedAbilities).toContain('coin_boost_10pct'); expect(result.unlockedAbilities).toContain('streak_protection');});}); describe('processSessionEvent',()=>{it('should add XP for completed session',async()=>{const existingProfile = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'happy',level:1,xp:0,lastFedAt:Date.now(),lastPettedAt:null,specialAbilityCharge:0,equippedItems:[],unlockedAbilities:[]}; mockStorage.getItem.mockResolvedValue(JSON.stringify(existingProfile)); const event = {type:'session_complete'as const,duration:25,quality:'good'as const}; const result = await processSessionEvent(TEST_USER_ID,event); expect(result.xp).toBeGreaterThan(0);}); it('should charge special ability on streak milestone',async()=>{const profileWithCharge = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'happy',level:10,xp:5000,lastFedAt:Date.now(),lastPettedAt:null,specialAbilityCharge:50,equippedItems:[],unlockedAbilities:['xp_boost_5pct']}; mockStorage.getItem.mockResolvedValue(JSON.stringify(profileWithCharge)); const event = {type:'streak_milestone'as const,streakDays:7}; const result = await processSessionEvent(TEST_USER_ID,event); expect(result.specialAbilityCharge).toBeGreaterThan(50);});}); describe('getCompanionBonuses',()=>{it('should return XP boost for level 5+ companion',async()=>{const level5Profile = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'happy',level:5,xp:2500,lastFedAt:Date.now(),lastPettedAt:null,specialAbilityCharge:0,equippedItems:[],unlockedAbilities:['xp_boost_5pct']}; mockStorage.getItem.mockResolvedValue(JSON.stringify(level5Profile)); const bonuses = await getCompanionBonuses(TEST_USER_ID); expect(bonuses.xpBoost).toBe(0.05);}); it('should return coin boost for level 10+ companion',async()=>{const level10Profile = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'happy',level:10,xp:5000,lastFedAt:Date.now(),lastPettedAt:null,specialAbilityCharge:0,equippedItems:[],unlockedAbilities:['xp_boost_5pct','coin_boost_10pct']}; mockStorage.getItem.mockResolvedValue(JSON.stringify(level10Profile)); const bonuses = await getCompanionBonuses(TEST_USER_ID); expect(bonuses.coinBoost).toBe(0.1);});}); describe('canUseSpecialAbility',()=>{it('should return true when charge is at 100',async()=>{const chargedProfile = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'happy',level:10,xp:5000,lastFedAt:Date.now(),lastPettedAt:null,specialAbilityCharge:100,equippedItems:[],unlockedAbilities:['xp_boost_5pct']}; mockStorage.getItem.mockResolvedValue(JSON.stringify(chargedProfile)); const canUse = await canUseSpecialAbility(TEST_USER_ID); expect(canUse).toBe(true);}); it('should return false when charge is below 100',async()=>{const unchargedProfile = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'happy',level:10,xp:5000,lastFedAt:Date.now(),lastPettedAt:null,specialAbilityCharge:50,equippedItems:[],unlockedAbilities:['xp_boost_5pct']}; mockStorage.getItem.mockResolvedValue(JSON.stringify(unchargedProfile)); const canUse = await canUseSpecialAbility(TEST_USER_ID); expect(canUse).toBe(false);});}); describe('useSpecialAbility',()=>{it('should consume charge and return ability effect',async()=>{const chargedProfile = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'happy',level:10,xp:5000,lastFedAt:Date.now(),lastPettedAt:null,specialAbilityCharge:100,equippedItems:[],unlockedAbilities:['xp_boost_5pct']}; mockStorage.getItem.mockResolvedValue(JSON.stringify(chargedProfile)); const result = await useSpecialAbility(TEST_USER_ID); expect(result.success).toBe(true); expect(result.effect).toBeDefined(); expect(mockStorage.setItem).toHaveBeenCalled();}); it('should throw error when charge is insufficient',async()=>{const unchargedProfile = {id:`companion_${TEST_USER_ID}`,name:'Vexling',type:'focus_wisp',mood:'happy',level:10,xp:5000,lastFedAt:Date.now(),lastPettedAt:null,specialAbilityCharge:50,equippedItems:[],unlockedAbilities:['xp_boost_5pct']}; mockStorage.getItem.mockResolvedValue(JSON.stringify(unchargedProfile)); await expect(useSpecialAbility(TEST_USER_ID)).rejects.toThrow('Special ability not charged');});});});
+import {
+  getCompanion,
+  feedCompanion,
+  petCompanion,
+  levelUpCompanion,
+  processSessionEvent,
+  getCompanionBonuses,
+  canUseSpecialAbility,
+  useSpecialAbility,
+} from "../service";
+import { getEconomyService } from "../../../economy/EconomyService";
+import { getDefaultStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
+jest.mock("../../../economy/EconomyService");
+jest.mock("../../../persistence/MMKVStorageAdapter");
+const mockStorage = {
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  deleteItem: jest.fn(),
+};
+(getDefaultStorageAdapter as jest.Mock).mockReturnValue(mockStorage);
+const TEST_USER_ID = "test-user-123";
+describe("Companion Service", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockStorage.getItem.mockResolvedValue(null);
+  });
+  describe("getCompanion", () => {
+    it("should return default profile for new user", async () => {
+      const companion = await getCompanion(TEST_USER_ID);
+      expect(companion).toMatchObject({
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        level: 1,
+        xp: 0,
+        mood: "happy",
+      });
+      expect(companion.lastFedAt).toBeDefined();
+      expect(companion.equippedItems).toEqual([]);
+      expect(companion.unlockedAbilities).toEqual([]);
+    });
+    it("should load existing profile from storage", async () => {
+      const existingProfile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Custom Name",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 5,
+        xp: 2500,
+        lastFedAt: Date.now(),
+        lastPettedAt: Date.now(),
+        specialAbilityCharge: 50,
+        equippedItems: ["hat_1"],
+        unlockedAbilities: ["xp_boost_5pct"],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(existingProfile));
+      const companion = await getCompanion(TEST_USER_ID);
+      expect(companion.name).toBe("Custom Name");
+      expect(companion.level).toBe(5);
+      expect(companion.xp).toBe(2500);
+    });
+    it("should calculate mood based on last fed time", async () => {
+      const starvingProfile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 1,
+        xp: 0,
+        lastFedAt: Date.now() - 50 * 60 * 60 * 1000,
+        lastPettedAt: null,
+        specialAbilityCharge: 0,
+        equippedItems: [],
+        unlockedAbilities: [],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(starvingProfile));
+      const companion = await getCompanion(TEST_USER_ID);
+      expect(companion.mood).toBe("starving");
+    });
+  });
+  describe("feedCompanion", () => {
+    it("should feed companion and deduct coins", async () => {
+      const mockSpendCurrency = jest.fn().mockResolvedValue(true);
+      (getEconomyService as jest.Mock).mockReturnValue({
+        spendCurrency: mockSpendCurrency,
+      });
+      const result = await feedCompanion(TEST_USER_ID, {
+        skipSyncEnqueue: true,
+      });
+      expect(result.mood).toBe("happy");
+      expect(mockSpendCurrency).toHaveBeenCalledWith(
+        TEST_USER_ID,
+        "COINS",
+        10,
+        "companion_feed",
+      );
+      expect(mockStorage.setItem).toHaveBeenCalled();
+    });
+    it("should add XP when feeding", async () => {
+      const existingProfile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "neutral",
+        level: 1,
+        xp: 100,
+        lastFedAt: Date.now() - 20 * 60 * 60 * 1000,
+        lastPettedAt: null,
+        specialAbilityCharge: 0,
+        equippedItems: [],
+        unlockedAbilities: [],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(existingProfile));
+      (getEconomyService as jest.Mock).mockReturnValue({
+        spendCurrency: jest.fn().mockResolvedValue(true),
+      });
+      const result = await feedCompanion(TEST_USER_ID);
+      expect(result.xp).toBeGreaterThan(100);
+      expect(result.mood).toBe("happy");
+    });
+    it("should throw error if insufficient funds", async () => {
+      (getEconomyService as jest.Mock).mockReturnValue({
+        spendCurrency: jest
+          .fn()
+          .mockRejectedValue(new Error("Insufficient funds")),
+      });
+      await expect(feedCompanion(TEST_USER_ID)).rejects.toThrow(
+        "Insufficient funds",
+      );
+    });
+  });
+  describe("petCompanion", () => {
+    it("should update lastPettedAt timestamp", async () => {
+      const existingProfile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 1,
+        xp: 0,
+        lastFedAt: Date.now(),
+        lastPettedAt: null,
+        specialAbilityCharge: 0,
+        equippedItems: [],
+        unlockedAbilities: [],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(existingProfile));
+      const result = await petCompanion(TEST_USER_ID);
+      expect(result.lastPettedAt).not.toBeNull();
+      expect(mockStorage.setItem).toHaveBeenCalled();
+    });
+    it("should increase mood when petted", async () => {
+      const sadProfile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "sad",
+        level: 1,
+        xp: 0,
+        lastFedAt: Date.now() - 30 * 60 * 60 * 1000,
+        lastPettedAt: null,
+        specialAbilityCharge: 0,
+        equippedItems: [],
+        unlockedAbilities: [],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(sadProfile));
+      const result = await petCompanion(TEST_USER_ID);
+      expect(result.lastPettedAt).toBeDefined();
+    });
+  });
+  describe("levelUpCompanion", () => {
+    it("should calculate correct level from XP", async () => {
+      const profileWithXP = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 1,
+        xp: 1200,
+        lastFedAt: Date.now(),
+        lastPettedAt: null,
+        specialAbilityCharge: 0,
+        equippedItems: [],
+        unlockedAbilities: [],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(profileWithXP));
+      const result = await levelUpCompanion(TEST_USER_ID);
+      expect(result.level).toBe(3);
+    });
+    it("should unlock abilities at milestone levels", async () => {
+      const highXPProfile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 1,
+        xp: 10000,
+        lastFedAt: Date.now(),
+        lastPettedAt: null,
+        specialAbilityCharge: 0,
+        equippedItems: [],
+        unlockedAbilities: [],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(highXPProfile));
+      const result = await levelUpCompanion(TEST_USER_ID);
+      expect(result.unlockedAbilities).toContain("xp_boost_5pct");
+      expect(result.unlockedAbilities).toContain("coin_boost_10pct");
+      expect(result.unlockedAbilities).toContain("streak_protection");
+    });
+  });
+  describe("processSessionEvent", () => {
+    it("should add XP for completed session", async () => {
+      const existingProfile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 1,
+        xp: 0,
+        lastFedAt: Date.now(),
+        lastPettedAt: null,
+        specialAbilityCharge: 0,
+        equippedItems: [],
+        unlockedAbilities: [],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(existingProfile));
+      const event = {
+        type: "session_complete" as const,
+        duration: 25,
+        quality: "good" as const,
+      };
+      const result = await processSessionEvent(TEST_USER_ID, event);
+      expect(result.xp).toBeGreaterThan(0);
+    });
+    it("should charge special ability on streak milestone", async () => {
+      const profileWithCharge = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 10,
+        xp: 5000,
+        lastFedAt: Date.now(),
+        lastPettedAt: null,
+        specialAbilityCharge: 50,
+        equippedItems: [],
+        unlockedAbilities: ["xp_boost_5pct"],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(profileWithCharge));
+      const event = { type: "streak_milestone" as const, streakDays: 7 };
+      const result = await processSessionEvent(TEST_USER_ID, event);
+      expect(result.specialAbilityCharge).toBeGreaterThan(50);
+    });
+  });
+  describe("getCompanionBonuses", () => {
+    it("should return XP boost for level 5+ companion", async () => {
+      const level5Profile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 5,
+        xp: 2500,
+        lastFedAt: Date.now(),
+        lastPettedAt: null,
+        specialAbilityCharge: 0,
+        equippedItems: [],
+        unlockedAbilities: ["xp_boost_5pct"],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(level5Profile));
+      const bonuses = await getCompanionBonuses(TEST_USER_ID);
+      expect(bonuses.xpBoost).toBe(0.05);
+    });
+    it("should return coin boost for level 10+ companion", async () => {
+      const level10Profile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 10,
+        xp: 5000,
+        lastFedAt: Date.now(),
+        lastPettedAt: null,
+        specialAbilityCharge: 0,
+        equippedItems: [],
+        unlockedAbilities: ["xp_boost_5pct", "coin_boost_10pct"],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(level10Profile));
+      const bonuses = await getCompanionBonuses(TEST_USER_ID);
+      expect(bonuses.coinBoost).toBe(0.1);
+    });
+  });
+  describe("canUseSpecialAbility", () => {
+    it("should return true when charge is at 100", async () => {
+      const chargedProfile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 10,
+        xp: 5000,
+        lastFedAt: Date.now(),
+        lastPettedAt: null,
+        specialAbilityCharge: 100,
+        equippedItems: [],
+        unlockedAbilities: ["xp_boost_5pct"],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(chargedProfile));
+      const canUse = await canUseSpecialAbility(TEST_USER_ID);
+      expect(canUse).toBe(true);
+    });
+    it("should return false when charge is below 100", async () => {
+      const unchargedProfile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 10,
+        xp: 5000,
+        lastFedAt: Date.now(),
+        lastPettedAt: null,
+        specialAbilityCharge: 50,
+        equippedItems: [],
+        unlockedAbilities: ["xp_boost_5pct"],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(unchargedProfile));
+      const canUse = await canUseSpecialAbility(TEST_USER_ID);
+      expect(canUse).toBe(false);
+    });
+  });
+  describe("useSpecialAbility", () => {
+    it("should consume charge and return ability effect", async () => {
+      const chargedProfile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 10,
+        xp: 5000,
+        lastFedAt: Date.now(),
+        lastPettedAt: null,
+        specialAbilityCharge: 100,
+        equippedItems: [],
+        unlockedAbilities: ["xp_boost_5pct"],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(chargedProfile));
+      const result = await useSpecialAbility(TEST_USER_ID);
+      expect(result.success).toBe(true);
+      expect(result.effect).toBeDefined();
+      expect(mockStorage.setItem).toHaveBeenCalled();
+    });
+    it("should throw error when charge is insufficient", async () => {
+      const unchargedProfile = {
+        id: `companion_${TEST_USER_ID}`,
+        name: "Vexling",
+        type: "focus_wisp",
+        mood: "happy",
+        level: 10,
+        xp: 5000,
+        lastFedAt: Date.now(),
+        lastPettedAt: null,
+        specialAbilityCharge: 50,
+        equippedItems: [],
+        unlockedAbilities: ["xp_boost_5pct"],
+      };
+      mockStorage.getItem.mockResolvedValue(JSON.stringify(unchargedProfile));
+      await expect(useSpecialAbility(TEST_USER_ID)).rejects.toThrow(
+        "Special ability not charged",
+      );
+    });
+  });
+});

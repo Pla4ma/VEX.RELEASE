@@ -1,12 +1,12 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
-import { Button } from '../../../components/primitives/Button';
-import { spacing } from '../../../theme/tokens/spacing';
+import { Button } from "../../../components/primitives/Button";
+import { spacing } from "../../../theme/tokens/spacing";
 
-export type HistoryFilter = 'all' | 'completed' | 'unfinished';
+export type HistoryFilter = "all" | "completed" | "unfinished";
 
-const FILTERS: HistoryFilter[] = ['all', 'completed', 'unfinished'];
+const FILTERS: HistoryFilter[] = ["all", "completed", "unfinished"];
 
 export function HistoryFilterTabs({
   filter,
@@ -16,7 +16,7 @@ export function HistoryFilterTabs({
   onChange: (filter: HistoryFilter) => void;
 }): JSX.Element {
   return (
-    <View style={{ flexDirection: 'row', gap: spacing[2] }}>
+    <View style={{ flexDirection: "row", gap: spacing[2] }}>
       {FILTERS.map((item) => (
         <Button
           key={item}
@@ -25,7 +25,7 @@ export function HistoryFilterTabs({
           accessibilityRole="button"
           onPress={() => onChange(item)}
           size="sm"
-          variant={filter === item ? 'primary' : 'ghost'}
+          variant={filter === item ? "primary" : "ghost"}
         >
           {item}
         </Button>

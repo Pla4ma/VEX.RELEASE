@@ -3,7 +3,7 @@
  * Manages all animation values and effects for the Active Session screen
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 import Animated, {
   useSharedValue,
   useDerivedValue,
@@ -14,9 +14,9 @@ import Animated, {
   withTiming,
   Easing,
   type SharedValue,
-} from 'react-native-reanimated';
-import { Circle } from 'react-native-svg';
-import { useTheme } from '../../../theme';
+} from "react-native-reanimated";
+import { Circle } from "react-native-svg";
+import { useTheme } from "../../../theme";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
@@ -59,12 +59,18 @@ export function useSessionAnimations({
     distracted: theme.colors.error.DEFAULT,
   };
 
-  const targetColor = purityScore >= 90 ? purityColorMap.elite
-    : purityScore >= 70 ? purityColorMap.good
-    : purityScore >= 45 ? purityColorMap.okay
-    : purityColorMap.distracted;
+  const targetColor =
+    purityScore >= 90
+      ? purityColorMap.elite
+      : purityScore >= 70
+        ? purityColorMap.good
+        : purityScore >= 45
+          ? purityColorMap.okay
+          : purityColorMap.distracted;
 
-  const [timerAccentColor, setTimerAccentColor] = useState(purityColorMap.elite);
+  const [timerAccentColor, setTimerAccentColor] = useState(
+    purityColorMap.elite,
+  );
 
   useEffect(() => {
     const timeout = setTimeout(() => setTimerAccentColor(targetColor), 1000);
@@ -92,7 +98,7 @@ export function useSessionAnimations({
       pulseValue.value = withRepeat(
         withTiming(1.05, { duration: 1000, easing: Easing.inOut(Easing.ease) }),
         -1,
-        true
+        true,
       );
     } else {
       pulseValue.value = withSpring(1);

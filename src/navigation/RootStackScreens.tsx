@@ -23,7 +23,8 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
   features,
   isAuthenticated,
 }) => {
-  const showApp = isAuthenticated && (hasCompletedOnboarding || canShowHomePreview);
+  const showApp =
+    isAuthenticated && (hasCompletedOnboarding || canShowHomePreview);
 
   const navigatorKey = isAuthenticated
     ? showApp
@@ -61,7 +62,6 @@ export const RootStackScreens: React.FC<RootStackScreensProps> = ({
               </React.Suspense>
             )}
           </Stack.Screen>
-
         </>
       ) : (
         <Stack.Screen name="Auth" component={AuthNavigator} />

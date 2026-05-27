@@ -1,5 +1,5 @@
-import type { FeatureKey } from './feature-access';
-import { DISABLED_FEATURES } from './feature-access-config';
+import type { FeatureKey } from "./feature-access";
+import { DISABLED_FEATURES } from "./feature-access-config";
 
 /**
  * Final-release health policy.
@@ -16,14 +16,14 @@ import { DISABLED_FEATURES } from './feature-access-config';
  */
 
 const ROOT_ELIGIBLE: ReadonlySet<FeatureKey> = new Set([
-  'content_study',
-  'content_study_advanced',
+  "content_study",
+  "content_study_advanced",
 ]);
 
 const PROXIMITY_GATED: ReadonlyMap<FeatureKey, number> = new Map([
-  ['premium_paywall', 5],
-  ['boss_tab', 7],
-  ['ai_coach_advanced', 8],
+  ["premium_paywall", 5],
+  ["boss_tab", 7],
+  ["ai_coach_advanced", 8],
 ]);
 
 export function shouldRunHealthCheck(

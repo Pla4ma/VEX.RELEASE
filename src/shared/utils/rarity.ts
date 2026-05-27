@@ -1,23 +1,29 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+import { launchColors } from "@theme/tokens/launch-colors";
 /**
  * Rarity Utilities
  *
  * Helper functions for working with item rarities.
  */
 
-export type ItemRarity = 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY' | 'MYTHIC';
+export type ItemRarity =
+  | "COMMON"
+  | "UNCOMMON"
+  | "RARE"
+  | "EPIC"
+  | "LEGENDARY"
+  | "MYTHIC";
 
 /**
  * Get color for rarity level
  */
 export function getRarityColor(rarity: ItemRarity): string {
   const colors: Record<ItemRarity, string> = {
-    COMMON: launchColors.hex_9e9e9e,     // Gray
-    UNCOMMON: launchColors.hex_4caf50,   // Green
-    RARE: launchColors.hex_2196f3,       // Blue
-    EPIC: launchColors.hex_9c27b0,       // Purple
-    LEGENDARY: launchColors.hex_ff9800,  // Orange
-    MYTHIC: launchColors.hex_ffd700,     // Gold
+    COMMON: launchColors.hex_9e9e9e, // Gray
+    UNCOMMON: launchColors.hex_4caf50, // Green
+    RARE: launchColors.hex_2196f3, // Blue
+    EPIC: launchColors.hex_9c27b0, // Purple
+    LEGENDARY: launchColors.hex_ff9800, // Orange
+    MYTHIC: launchColors.hex_ffd700, // Gold
   };
 
   return colors[rarity] ?? colors.COMMON;
@@ -28,12 +34,12 @@ export function getRarityColor(rarity: ItemRarity): string {
  */
 export function getRarityLabel(rarity: ItemRarity): string {
   const labels: Record<ItemRarity, string> = {
-    COMMON: 'Common',
-    UNCOMMON: 'Uncommon',
-    RARE: 'Rare',
-    EPIC: 'Epic',
-    LEGENDARY: 'Legendary',
-    MYTHIC: 'Mythic',
+    COMMON: "Common",
+    UNCOMMON: "Uncommon",
+    RARE: "Rare",
+    EPIC: "Epic",
+    LEGENDARY: "Legendary",
+    MYTHIC: "Mythic",
   };
 
   return labels[rarity] ?? rarity;
@@ -65,13 +71,17 @@ export function compareRarity(a: ItemRarity, b: ItemRarity): number {
 /**
  * Sort items by rarity (highest first)
  */
-export function sortByRarityDesc<T extends { rarity: ItemRarity }>(items: T[]): T[] {
+export function sortByRarityDesc<T extends { rarity: ItemRarity }>(
+  items: T[],
+): T[] {
   return [...items].sort((a, b) => compareRarity(b.rarity, a.rarity));
 }
 
 /**
  * Sort items by rarity (lowest first)
  */
-export function sortByRarityAsc<T extends { rarity: ItemRarity }>(items: T[]): T[] {
+export function sortByRarityAsc<T extends { rarity: ItemRarity }>(
+  items: T[],
+): T[] {
   return [...items].sort((a, b) => compareRarity(a.rarity, b.rarity));
 }

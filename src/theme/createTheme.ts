@@ -4,14 +4,14 @@
  * Creates complete theme objects for given mode.
  */
 
-import type { Theme } from './types';
-import { getColors, typography, fontFamilies, fontWeights } from './tokens';
-import { spacing } from './tokens/spacing';
-import { borderRadius } from './tokens/radius';
-import { iosShadows } from './tokens/shadows';
-import { zIndex } from './tokens/zIndex';
-import { animationDuration } from './tokens/timing';
-import { opacity } from './tokens/opacity';
+import type { Theme } from "./types";
+import { getColors, typography, fontFamilies, fontWeights } from "./tokens";
+import { spacing } from "./tokens/spacing";
+import { borderRadius } from "./tokens/radius";
+import { iosShadows } from "./tokens/shadows";
+import { zIndex } from "./tokens/zIndex";
+import { animationDuration } from "./tokens/timing";
+import { opacity } from "./tokens/opacity";
 
 /**
  * Default breakpoints for responsive design
@@ -22,7 +22,7 @@ const breakpoints = {
   md: 375,
   lg: 414,
   xl: 768,
-  '2xl': 1024,
+  "2xl": 1024,
 };
 
 /**
@@ -33,8 +33,8 @@ const breakpoints = {
  * @returns Complete theme object
  */
 export function createTheme(
-  mode: 'light' | 'dark' = 'light',
-  highContrast = false
+  mode: "light" | "dark" = "light",
+  highContrast = false,
 ): Theme {
   return {
     name: `vex-${mode}`,
@@ -57,14 +57,14 @@ export function createTheme(
  * Create a light theme
  */
 export function createLightTheme(highContrast = false): Theme {
-  return createTheme('light', highContrast);
+  return createTheme("light", highContrast);
 }
 
 /**
  * Create a dark theme
  */
 export function createDarkTheme(highContrast = false): Theme {
-  return createTheme('dark', highContrast);
+  return createTheme("dark", highContrast);
 }
 
 /**
@@ -72,7 +72,7 @@ export function createDarkTheme(highContrast = false): Theme {
  */
 export function customizeTheme(
   baseTheme: Theme,
-  overrides: Partial<Theme>
+  overrides: Partial<Theme>,
 ): Theme {
   return {
     ...baseTheme,

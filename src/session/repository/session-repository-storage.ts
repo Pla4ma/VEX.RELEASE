@@ -26,7 +26,7 @@ export class SessionStorageHelper {
       const { MMKV } = require("react-native-mmkv");
       this.mmkv = new MMKV({ id: "session-storage" });
       this.useMMKV = true;
-    } catch {
+    } catch (error: unknown) {
       this.useMMKV = false;
     }
   }

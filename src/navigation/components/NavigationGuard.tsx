@@ -4,9 +4,9 @@
  * Wraps screens with feature flag checks to hide disabled features.
  */
 
-import React from 'react';
+import React from "react";
 
-import { useFeatureFlags } from '../../hooks/useFeatureFlags';
+import { useFeatureFlags } from "../../hooks/useFeatureFlags";
 
 interface NavigationGuardProps {
   featureFlag: string;

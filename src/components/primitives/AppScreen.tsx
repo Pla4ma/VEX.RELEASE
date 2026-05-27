@@ -1,10 +1,16 @@
-import React, { type ReactNode } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View, type ViewStyle } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { StatusBar } from 'expo-status-bar';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { type ReactNode } from "react";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+  type ViewStyle,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { StatusBar } from "expo-status-bar";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { useTheme } from '../../theme';
+import { useTheme } from "../../theme";
 
 interface AppScreenProps {
   children: ReactNode;
@@ -29,13 +35,18 @@ export function AppScreen({
   const insets = useSafeAreaInsets();
   const background = theme.colors.semantic.background;
   const content = {
-    paddingBottom: bottomInset ? insets.bottom + theme.spacing[8] : theme.spacing[8],
+    paddingBottom: bottomInset
+      ? insets.bottom + theme.spacing[8]
+      : theme.spacing[8],
     paddingHorizontal: padded ? theme.spacing[5] : 0,
     paddingTop: insets.top + theme.spacing[5],
     ...contentStyle,
   };
   const body = scroll ? (
-    <ScrollView contentContainerStyle={content} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      contentContainerStyle={content}
+      showsVerticalScrollIndicator={false}
+    >
       {children}
     </ScrollView>
   ) : (
@@ -44,7 +55,7 @@ export function AppScreen({
 
   const screen = (
     <View style={[{ backgroundColor: background, flex: 1 }, style]}>
-      <StatusBar style={isDark ? 'light' : 'dark'} />
+      <StatusBar style={isDark ? "light" : "dark"} />
       <LinearGradient
         colors={[
           theme.colors.semantic.primarySoft,
@@ -53,7 +64,7 @@ export function AppScreen({
         ]}
         locations={[0, 0.36, 1]}
         pointerEvents="none"
-        style={{ height: 280, left: 0, position: 'absolute', right: 0, top: 0 }}
+        style={{ height: 280, left: 0, position: "absolute", right: 0, top: 0 }}
       />
       {body}
     </View>
@@ -63,7 +74,10 @@ export function AppScreen({
     return screen;
   }
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
       {screen}
     </KeyboardAvoidingView>
   );

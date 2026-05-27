@@ -12,4 +12,4 @@ export type {
   VexExperience,
   VexPersonalizationProfile,
   VexSystemToDisable,
-} from './schemas';
+} from "./schemas";

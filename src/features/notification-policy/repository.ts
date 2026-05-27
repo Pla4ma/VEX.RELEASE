@@ -1,10 +1,12 @@
-import { storage } from '../../store/mmkv-storage';
-import type { NudgeSignalRecord } from './schemas';
+import { storage } from "../../store/mmkv-storage";
+import type { NudgeSignalRecord } from "./schemas";
 
-const DISMISS_PREFIX = 'notification-policy:dismissals:';
-const SIGNAL_PREFIX = 'notification-policy:signals:';
+const DISMISS_PREFIX = "notification-policy:dismissals:";
+const SIGNAL_PREFIX = "notification-policy:signals:";
 
-export async function getStoredRecentDismissals(userId: string): Promise<number> {
+export async function getStoredRecentDismissals(
+  userId: string,
+): Promise<number> {
   const raw = storage.getString(`${DISMISS_PREFIX}${userId}`);
   const count = raw ? Number.parseInt(raw, 10) : 0;
   return Number.isFinite(count) ? count : 0;
@@ -28,7 +30,7 @@ export function getSignals(userId: string): NudgeSignalRecord[] {
   if (!raw) return [];
   try {
     return JSON.parse(raw) as NudgeSignalRecord[];
-  } catch {
+  } catch (error: unknown) {
     return [];
   }
 }
@@ -39,9 +41,8 @@ export function resetSignals(userId: string): void {
 
 export function getDismissalCountForLane(userId: string, lane: string): number {
   const signals = getSignals(userId);
-  return signals.filter(
-    (s) => s.signal === 'dismissed' && s.lane === lane,
-  ).length;
+  return signals.filter((s) => s.signal === "dismissed" && s.lane === lane)
+    .length;
 }
 
 export function resetDismissals(userId: string): void {

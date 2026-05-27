@@ -1,9 +1,9 @@
-import { z } from 'zod';
-import { getSupabaseClient } from '../../config/supabase';
+import { z } from "zod";
+import { getSupabaseClient } from "../../config/supabase";
 import {
   CoachPresenceMemorySummarySchema,
   type CoachPresenceMemorySummary,
-} from './schemas';
+} from "./schemas";
 
 const CoachMemorySummaryRowSchema = z
   .object({
@@ -20,9 +20,12 @@ const CompanionMemorySummaryRowSchema = z
   .strict();
 
 export class CoachPresenceRepositoryError extends Error {
-  constructor(operation: string, public readonly cause?: unknown) {
+  constructor(
+    operation: string,
+    public readonly cause?: unknown,
+  ) {
     super(`CoachPresenceRepository ${operation} failed`);
-    this.name = 'CoachPresenceRepositoryError';
+    this.name = "CoachPresenceRepositoryError";
   }
 }
 
@@ -33,28 +36,38 @@ export async function fetchCoachPresenceMemorySummary(
     const parsedUserId = z.string().uuid().parse(userId);
     const [coachResult, companionResult] = await Promise.all([
       getSupabaseClient()
-        .from('coach_memories')
-        .select('title, description')
-        .eq('user_id', parsedUserId)
-        .order('occurred_at', { ascending: false })
+        .from("coach_memories")
+        .select("title, description")
+        .eq("user_id", parsedUserId)
+        .order("occurred_at", { ascending: false })
         .limit(3),
       getSupabaseClient()
-        .from('companion_memories')
-        .select('title, body')
-        .eq('user_id', parsedUserId)
-        .order('created_at', { ascending: false })
+        .from("companion_memories")
+        .select("title, body")
+        .eq("user_id", parsedUserId)
+        .order("created_at", { ascending: false })
         .limit(3),
     ]);
 
     if (coachResult.error) {
-      throw new CoachPresenceRepositoryError('fetchCoachMemories', coachResult.error);
+      throw new CoachPresenceRepositoryError(
+        "fetchCoachMemories",
+        coachResult.error,
+      );
     }
     if (companionResult.error) {
-      throw new CoachPresenceRepositoryError('fetchCompanionMemories', companionResult.error);
+      throw new CoachPresenceRepositoryError(
+        "fetchCompanionMemories",
+        companionResult.error,
+      );
     }
 
-    const coachRows = z.array(CoachMemorySummaryRowSchema).parse(coachResult.data ?? []);
-    const companionRows = z.array(CompanionMemorySummaryRowSchema).parse(companionResult.data ?? []);
+    const coachRows = z
+      .array(CoachMemorySummaryRowSchema)
+      .parse(coachResult.data ?? []);
+    const companionRows = z
+      .array(CompanionMemorySummaryRowSchema)
+      .parse(companionResult.data ?? []);
     const latestMemory =
       coachRows[0]?.description ??
       companionRows[0]?.body ??
@@ -71,6 +84,6 @@ export async function fetchCoachPresenceMemorySummary(
     if (error instanceof CoachPresenceRepositoryError) {
       throw error;
     }
-    throw new CoachPresenceRepositoryError('fetchMemorySummary', error);
+    throw new CoachPresenceRepositoryError("fetchMemorySummary", error);
   }
 }

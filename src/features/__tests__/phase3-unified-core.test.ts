@@ -15,16 +15,18 @@ import {
   baseStats,
   baseProfile,
   featureAvailability,
-} from './phase3-test-helpers';
-import type { Lane } from './phase3-test-helpers';
+} from "./phase3-test-helpers";
+import type { Lane } from "./phase3-test-helpers";
 
-describe('Phase 3F — Unified Architecture Proof', () => {
-  it('all modes share same core session loop (SessionMode enum covers all)', () => {
+describe("Phase 3F — Unified Architecture Proof", () => {
+  it("all modes share same core session loop (SessionMode enum covers all)", () => {
     const laneSessionModes: Record<Lane, string> = {
-      student: buildLaneSessionBrief({ lane: 'student' }).sessionMode,
-      game_like: buildLaneSessionBrief({ lane: 'game_like' }).sessionMode,
-      deep_creative: buildLaneSessionBrief({ lane: 'deep_creative' }).sessionMode,
-      minimal_normal: buildLaneSessionBrief({ lane: 'minimal_normal' }).sessionMode,
+      student: buildLaneSessionBrief({ lane: "student" }).sessionMode,
+      game_like: buildLaneSessionBrief({ lane: "game_like" }).sessionMode,
+      deep_creative: buildLaneSessionBrief({ lane: "deep_creative" })
+        .sessionMode,
+      minimal_normal: buildLaneSessionBrief({ lane: "minimal_normal" })
+        .sessionMode,
     };
 
     expect(laneSessionModes.student).toBe(SessionMode.STUDY);
@@ -34,12 +36,17 @@ describe('Phase 3F — Unified Architecture Proof', () => {
 
     for (const mode of Object.values(laneSessionModes)) {
       expect(mode).toBeDefined();
-      expect(typeof mode).toBe('string');
+      expect(typeof mode).toBe("string");
     }
   });
 
-  it('modes differ by presentation/policy, not separate session engines', () => {
-    const lanes: Lane[] = ['student', 'game_like', 'deep_creative', 'minimal_normal'];
+  it("modes differ by presentation/policy, not separate session engines", () => {
+    const lanes: Lane[] = [
+      "student",
+      "game_like",
+      "deep_creative",
+      "minimal_normal",
+    ];
 
     const presentations = lanes.map((lane) =>
       getLanePresentationPolicy({ lane, reducedMotion: false }),
@@ -63,7 +70,7 @@ describe('Phase 3F — Unified Architecture Proof', () => {
     }
   });
 
-  it('Home consumes LaneProfile to decide surfaces per lane', () => {
+  it("Home consumes LaneProfile to decide surfaces per lane", () => {
     const input = {
       behaviorStats: { ...baseStats, totalCompletedSessions: 4 },
       featureAvailability,
@@ -76,44 +83,52 @@ describe('Phase 3F — Unified Architecture Proof', () => {
 
     const studentMap = decideHomeSurfaces({
       ...input,
-      laneProfile: baseLaneProfile({ primaryLane: 'student' }),
+      laneProfile: baseLaneProfile({ primaryLane: "student" }),
     });
-    expect(studentMap.study_os).not.toBe('hidden');
+    expect(studentMap.study_os).not.toBe("hidden");
 
     const runMap = decideHomeSurfaces({
       ...input,
-      behaviorStats: { ...input.behaviorStats, bossChallengeEngagement: 'medium' },
+      behaviorStats: {
+        ...input.behaviorStats,
+        bossChallengeEngagement: "medium",
+      },
       hasActiveBoss: true,
       hasActiveStudyPlan: false,
-      personalizationProfile: { ...baseProfile, motivationStyle: 'game_like' },
-      laneProfile: baseLaneProfile({ primaryLane: 'game_like' }),
+      personalizationProfile: { ...baseProfile, motivationStyle: "game_like" },
+      laneProfile: baseLaneProfile({ primaryLane: "game_like" }),
     });
-    expect(runMap.run_board).not.toBe('hidden');
+    expect(runMap.run_board).not.toBe("hidden");
 
     const projectMap = decideHomeSurfaces({
       ...input,
       behaviorStats: { ...input.behaviorStats, projectFocusUsageRatio: 0.6 },
       hasActiveStudyPlan: false,
-      personalizationProfile: { ...baseProfile, primaryGoal: 'creative' },
-      laneProfile: baseLaneProfile({ primaryLane: 'deep_creative' }),
+      personalizationProfile: { ...baseProfile, primaryGoal: "creative" },
+      laneProfile: baseLaneProfile({ primaryLane: "deep_creative" }),
     });
-    expect(projectMap.project_thread).not.toBe('hidden');
+    expect(projectMap.project_thread).not.toBe("hidden");
 
     const cleanMap = decideHomeSurfaces({
       ...input,
       hasActiveStudyPlan: false,
       personalizationProfile: {
         ...baseProfile,
-        motivationStyle: 'calm',
-        gamificationIntensity: 'minimal',
+        motivationStyle: "calm",
+        gamificationIntensity: "minimal",
       },
-      laneProfile: baseLaneProfile({ primaryLane: 'minimal_normal' }),
+      laneProfile: baseLaneProfile({ primaryLane: "minimal_normal" }),
     });
-    expect(cleanMap.today_strip).not.toBe('hidden');
+    expect(cleanMap.today_strip).not.toBe("hidden");
   });
 
-  it('SessionStart consumes LaneProfile to produce lane-aware brief', () => {
-    const lanes: Lane[] = ['student', 'game_like', 'deep_creative', 'minimal_normal'];
+  it("SessionStart consumes LaneProfile to produce lane-aware brief", () => {
+    const lanes: Lane[] = [
+      "student",
+      "game_like",
+      "deep_creative",
+      "minimal_normal",
+    ];
     const briefs = lanes.map((lane) =>
       buildLaneSessionBrief({
         laneProfile: baseLaneProfile({ primaryLane: lane }),
@@ -126,10 +141,10 @@ describe('Phase 3F — Unified Architecture Proof', () => {
     expect(uniqueCtas.size).toBe(4);
 
     const expectedCtas = [
-      'Start study block',
-      'Start encounter',
-      'Resume project block',
-      'Start clean session',
+      "Start study block",
+      "Start encounter",
+      "Resume project block",
+      "Start clean session",
     ];
     for (const expected of expectedCtas) {
       expect(ctaLabels).toContain(expected);

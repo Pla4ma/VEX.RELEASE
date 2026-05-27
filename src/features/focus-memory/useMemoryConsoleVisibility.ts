@@ -4,7 +4,9 @@ import { countCompletedSessions } from "../session-history/repository";
 
 const MEMORY_CONSOLE_MIN_SESSIONS = 3;
 
-export function useMemoryConsoleVisibility(userId: string | null):
+export function useMemoryConsoleVisibility(
+  userId: string | null,
+):
   | { isVisible: false; isLoading: true; error: null }
   | { isVisible: false; isLoading: false; error: Error }
   | { isVisible: boolean; isLoading: false; error: null } {

@@ -16,13 +16,11 @@ export {
   trackRewardClaimed,
   trackChallengeReroll,
   trackChallengeExpired,
-} from './events';
+} from "./events";
 
 export {
   calculateChallengeMetrics,
   calculateDifficultyMetrics,
-} from './metrics';
+} from "./metrics";
 
-export {
-  checkChallengesHealth,
-} from './health';
+export { checkChallengesHealth } from "./health";

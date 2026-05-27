@@ -18,7 +18,10 @@ export function createEngine(
   return new TimerEngine(
     mockSessionId,
     duration,
-    { tickInterval: opts.tickInterval ?? 1000, warningThresholds: opts.warningThresholds },
+    {
+      tickInterval: opts.tickInterval ?? 1000,
+      warningThresholds: opts.warningThresholds,
+    },
     mockCallbacks,
   );
 }

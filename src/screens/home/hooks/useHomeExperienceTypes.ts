@@ -1,6 +1,6 @@
-export type UserStage = 'new' | 'activating' | 'engaged' | 'power';
+export type UserStage = "new" | "activating" | "engaged" | "power";
 
-export type GamificationIntensity = 'minimal' | 'medium' | 'strong';
+export type GamificationIntensity = "minimal" | "medium" | "strong";
 
 export interface CanonicalPersonalizationProfile {
   motivationStyle: string;
@@ -17,7 +17,7 @@ export interface CanonicalBehaviorStats {
   learningUsageRatio: number;
   projectFocusUsageRatio: number;
   structuredExecutionUsageRatio: number;
-  bossChallengeEngagement: 'none' | 'low' | 'medium' | 'high';
+  bossChallengeEngagement: "none" | "low" | "medium" | "high";
   coachInteractions: number;
   comebackSessions: number;
   ignoredFeatures: readonly string[];
@@ -28,14 +28,15 @@ export interface CanonicalBehaviorStats {
 export function resolveGamificationIntensity(
   motivationStyle: string,
 ): GamificationIntensity {
-  if (motivationStyle === 'game_like' || motivationStyle === 'intense') return 'strong';
-  if (motivationStyle === 'calm') return 'minimal';
-  return 'medium';
+  if (motivationStyle === "game_like" || motivationStyle === "intense")
+    return "strong";
+  if (motivationStyle === "calm") return "minimal";
+  return "medium";
 }
 
 export function resolveUserStage(totalCompletedSessions: number): UserStage {
-  if (totalCompletedSessions === 0) return 'new';
-  if (totalCompletedSessions < 3) return 'activating';
-  if (totalCompletedSessions < 10) return 'engaged';
-  return 'power';
+  if (totalCompletedSessions === 0) return "new";
+  if (totalCompletedSessions < 3) return "activating";
+  if (totalCompletedSessions < 10) return "engaged";
+  return "power";
 }

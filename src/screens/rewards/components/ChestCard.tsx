@@ -1,10 +1,10 @@
-import React from 'react';
-import { Pressable } from 'react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import React from "react";
+import { Pressable } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
 
 interface ChestCardProps {
   label: string;
@@ -16,17 +16,25 @@ interface ChestCardProps {
   onPress: () => void;
 }
 
-export function ChestCard({ label, icon, glow, index, source, isOpened, onPress }: ChestCardProps): JSX.Element {
+export function ChestCard({
+  label,
+  icon,
+  glow,
+  index,
+  source,
+  isOpened,
+  onPress,
+}: ChestCardProps): JSX.Element {
   const { theme } = useTheme();
 
   return (
     <Animated.View
       entering={FadeInUp.delay(index * 100).duration(400)}
-      style={{ flex: 1, minWidth: 140, maxWidth: '48%' }}
+      style={{ flex: 1, minWidth: 140, maxWidth: "48%" }}
     >
       <Pressable
         onPress={onPress}
-        accessibilityLabel={isOpened ? 'Opened chest' : 'Mystery chest'}
+        accessibilityLabel={isOpened ? "Opened chest" : "Mystery chest"}
         accessibilityRole="button"
         accessibilityHint="View chest details"
       >
@@ -54,7 +62,9 @@ export function ChestCard({ label, icon, glow, index, source, isOpened, onPress 
             alignSelf="center"
             mb="md"
             style={{
-              backgroundColor: isOpened ? `${glow}30` : theme.colors.background.tertiary,
+              backgroundColor: isOpened
+                ? `${glow}30`
+                : theme.colors.background.tertiary,
             }}
           >
             <Text fontSize={40}>{icon}</Text>
@@ -62,7 +72,7 @@ export function ChestCard({ label, icon, glow, index, source, isOpened, onPress 
 
           <Text
             variant="bodySmall"
-            color={isOpened ? 'text.secondary' : glow}
+            color={isOpened ? "text.secondary" : glow}
             textAlign="center"
             fontWeight="600"
           >

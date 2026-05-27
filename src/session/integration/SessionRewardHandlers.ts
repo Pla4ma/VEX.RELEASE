@@ -8,7 +8,10 @@ import {
   handleAbandonment,
   handlePartialCompletion,
 } from "./session-reward-recovery";
-export { handleAbandonment, handlePartialCompletion } from "./session-reward-recovery";
+export {
+  handleAbandonment,
+  handlePartialCompletion,
+} from "./session-reward-recovery";
 import {
   calculateRewards,
   grantRewards,

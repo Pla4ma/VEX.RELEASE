@@ -1,11 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
-import { useNetInfo } from '../../../network';
-import type { SessionSummary } from '../../../session/types';
+import { useNetInfo } from "../../../network";
+import type { SessionSummary } from "../../../session/types";
 import {
   getPostSessionStoryViewModel,
   type PostSessionStoryViewModel,
-} from '../story-view-model-service';
+} from "../story-view-model-service";
 
 export function usePostSessionStoryViewModel(input: {
   enabled?: boolean;
@@ -18,8 +18,9 @@ export function usePostSessionStoryViewModel(input: {
 
   const query = useQuery<PostSessionStoryViewModel | null, Error>({
     enabled: enabled && Boolean(sessionId),
-    queryFn: async () => getPostSessionStoryViewModel({ sessionId, summary, userId }),
-    queryKey: ['session-completion', 'story-view-model', userId, sessionId],
+    queryFn: async () =>
+      getPostSessionStoryViewModel({ sessionId, summary, userId }),
+    queryKey: ["session-completion", "story-view-model", userId, sessionId],
     staleTime: 30_000,
   });
 

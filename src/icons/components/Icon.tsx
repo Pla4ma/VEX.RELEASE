@@ -4,15 +4,15 @@
  * Main icon component that renders SVG icons from the registry.
  */
 
-import React, { useMemo } from 'react';
-import { View } from 'react-native';
-import Svg, { Path, G } from 'react-native-svg';
+import React, { useMemo } from "react";
+import { View } from "react-native";
+import Svg, { Path, G } from "react-native-svg";
 
-import { useTheme } from '../../theme';
-import { iconRegistry, getIcon } from '../IconRegistry';
-import { createDebugger } from '../../utils/debug';
+import { useTheme } from "../../theme";
+import { iconRegistry, getIcon } from "../IconRegistry";
+import { createDebugger } from "../../utils/debug";
 
-const debug = createDebugger('icons:component');
+const debug = createDebugger("icons:component");
 import {
   type IconProps,
   ICON_SIZE_VALUES,
@@ -20,17 +20,17 @@ import {
   type IconSize,
   type IconStrokeWidth,
   type IconVariant,
-} from '../types';
+} from "../types";
 
 /**
  * Icon component
  */
 export function Icon({
   name,
-  size = 'md',
-  color = 'current',
-  variant = 'outline',
-  strokeWidth = 'normal',
+  size = "md",
+  color = "current",
+  variant = "outline",
+  strokeWidth = "normal",
   animated = false,
   animation,
   style,
@@ -45,42 +45,44 @@ export function Icon({
 
   // Calculate size
   const iconSize = useMemo(() => {
-    return typeof size === 'number' ? size : ICON_SIZE_VALUES[size as IconSize];
+    return typeof size === "number" ? size : ICON_SIZE_VALUES[size as IconSize];
   }, [size]);
 
   // Calculate stroke width
   const iconStrokeWidth = useMemo(() => {
-    if (typeof strokeWidth === 'number') {return strokeWidth;}
+    if (typeof strokeWidth === "number") {
+      return strokeWidth;
+    }
     return ICON_STROKE_WIDTH_VALUES[strokeWidth as IconStrokeWidth];
   }, [strokeWidth]);
 
   // Resolve color
   const iconColor = useMemo(() => {
-    if (color === 'current') {
+    if (color === "current") {
       return theme.colors.text.primary;
     }
 
-    if (color.startsWith('#') || color.startsWith('rgb')) {
+    if (color.startsWith("#") || color.startsWith("rgb")) {
       return color;
     }
 
     // Map semantic colors
     switch (color) {
-      case 'primary':
+      case "primary":
         return theme.colors.primary[500];
-      case 'secondary':
+      case "secondary":
         return theme.colors.text.secondary;
-      case 'tertiary':
+      case "tertiary":
         return theme.colors.text.tertiary;
-      case 'success':
+      case "success":
         return theme.colors.success.DEFAULT;
-      case 'warning':
+      case "warning":
         return theme.colors.warning.DEFAULT;
-      case 'error':
+      case "error":
         return theme.colors.error.DEFAULT;
-      case 'info':
+      case "info":
         return theme.colors.info.DEFAULT;
-      case 'inverse':
+      case "inverse":
         return theme.colors.text.inverse;
       default:
         return theme.colors.text.primary;
@@ -89,14 +91,16 @@ export function Icon({
 
   // Get path data based on variant
   const pathData = useMemo(() => {
-    if (!iconData) {return null;}
+    if (!iconData) {
+      return null;
+    }
 
     switch (variant) {
-      case 'solid':
+      case "solid":
         return iconData.solid || iconData.outline;
-      case 'mini':
+      case "mini":
         return iconData.mini || iconData.outline;
-      case 'outline':
+      case "outline":
       default:
         return iconData.outline;
     }
@@ -104,7 +108,9 @@ export function Icon({
 
   // Handle animation styles
   const animatedStyle = useMemo(() => {
-    if (!animated) {return {};}
+    if (!animated) {
+      return {};
+    }
 
     // Animation would be applied via reanimated here
     // This is a placeholder for the actual animation implementation
@@ -120,24 +126,27 @@ export function Icon({
   }
 
   return (
-    <View style={[{ width: iconSize, height: iconSize }, style]} testID={testID}>
+    <View
+      style={[{ width: iconSize, height: iconSize }, style]}
+      testID={testID}
+    >
       <Svg
         width={iconSize}
         height={iconSize}
-        viewBox={iconData.viewBox || '0 0 24 24'}
-        fill={variant === 'solid' ? iconColor : 'none'}
-        stroke={variant === 'outline' ? iconColor : 'none'}
-        strokeWidth={variant === 'outline' ? iconStrokeWidth : undefined}
+        viewBox={iconData.viewBox || "0 0 24 24"}
+        fill={variant === "solid" ? iconColor : "none"}
+        stroke={variant === "outline" ? iconColor : "none"}
+        strokeWidth={variant === "outline" ? iconStrokeWidth : undefined}
         strokeLinecap="round"
         strokeLinejoin="round"
         accessibilityLabel={accessibilityLabel || `${name} icon`}
         {...svgProps}
       >
-        {variant === 'solid' ? (
+        {variant === "solid" ? (
           <Path d={pathData} />
         ) : (
           <G>
-            {pathData.split(' M').map((path, index) => {
+            {pathData.split(" M").map((path, index) => {
               const d = index === 0 ? path : `M${path}`;
               return <Path key={index} d={d} />;
             })}
@@ -152,9 +161,7 @@ export function Icon({
  * Create an icon component for a specific icon
  */
 export function createIcon(name: string, defaultProps?: Partial<IconProps>) {
-  return function NamedIcon(props: Omit<IconProps, 'name'>): JSX.Element {
+  return function NamedIcon(props: Omit<IconProps, "name">): JSX.Element {
     return <Icon name={name} {...defaultProps} {...props} />;
   };
 }
-
-

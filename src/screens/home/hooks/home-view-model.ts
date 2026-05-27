@@ -1,7 +1,11 @@
-import type { FeatureAccessMap, ProductTier, UserExperienceStage } from '../../../features/liveops-config';
-import type { HomeFeatureRuntime } from './home-feature-runtime';
-import type { HomeReturnReason } from './useHomeReturnReason';
-import type { SessionRecommendation } from '../../../features/ai-coach';
+import type {
+  FeatureAccessMap,
+  ProductTier,
+  UserExperienceStage,
+} from "../../../features/liveops-config";
+import type { HomeFeatureRuntime } from "./home-feature-runtime";
+import type { HomeReturnReason } from "./useHomeReturnReason";
+import type { SessionRecommendation } from "../../../features/ai-coach";
 
 export interface HomeViewModel {
   userId: string;

@@ -2,10 +2,10 @@
  * First Session Overlay Module
  */
 
-export { HighlightRing } from './HighlightRing';
-export { TooltipCard } from './TooltipCard';
-export { useFirstSessionOverlay } from './useFirstSessionOverlay';
-export { TOOLTIPS, HAS_SEEN_FIRST_SESSION_OVERLAY_KEY } from './constants';
+export { HighlightRing } from "./HighlightRing";
+export { TooltipCard } from "./TooltipCard";
+export { useFirstSessionOverlay } from "./useFirstSessionOverlay";
+export { TOOLTIPS, HAS_SEEN_FIRST_SESSION_OVERLAY_KEY } from "./constants";
 export type {
   TooltipStep,
   TooltipTarget,
@@ -13,7 +13,7 @@ export type {
   HighlightRingProps,
   FirstSessionOverlayProps,
   UseFirstSessionOverlayResult,
-} from './types';
+} from "./types";
 
 // Re-export main component as default
-export { FirstSessionOverlay as default } from './FirstSessionOverlay';
+export { FirstSessionOverlay as default } from "./FirstSessionOverlay";

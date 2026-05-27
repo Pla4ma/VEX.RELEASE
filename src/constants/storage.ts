@@ -9,14 +9,14 @@
  * Storage key namespaces to prevent collisions
  */
 export const STORAGE_NAMESPACES = {
-  auth: 'vex:auth',
-  user: 'vex:user',
-  settings: 'vex:settings',
-  cache: 'vex:cache',
-  analytics: 'vex:analytics',
-  featureFlags: 'vex:features',
-  network: 'vex:network',
-  app: 'vex:app',
+  auth: "vex:auth",
+  user: "vex:user",
+  settings: "vex:settings",
+  cache: "vex:cache",
+  analytics: "vex:analytics",
+  featureFlags: "vex:features",
+  network: "vex:network",
+  app: "vex:app",
 } as const;
 
 /**
@@ -75,9 +75,9 @@ export const STORAGE_KEYS = {
  * These are the keys used for encrypting sensitive data
  */
 export const ENCRYPTION_KEYS = {
-  AUTH: 'vex_auth_key',
-  WALLET: 'vex_wallet_key',
-  USER_DATA: 'vex_user_key',
+  AUTH: "vex_auth_key",
+  WALLET: "vex_wallet_key",
+  USER_DATA: "vex_user_key",
 } as const;
 
 /**
@@ -103,10 +103,10 @@ export const STORAGE_TTL = {
  * Storage types
  */
 export const STORAGE_TYPES = {
-  MMKV: 'mmkv',
-  ASYNC_STORAGE: 'asyncStorage',
-  ENCRYPTED: 'encrypted',
-  SECURE: 'secure',
+  MMKV: "mmkv",
+  ASYNC_STORAGE: "asyncStorage",
+  ENCRYPTED: "encrypted",
+  SECURE: "secure",
 } as const;
 
 /**

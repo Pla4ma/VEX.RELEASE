@@ -5,27 +5,34 @@
  * Renders BETWEEN GradeRevealAnimation settling and ChestReveal
  */
 
-import React from 'react';
-import Animated, { ZoomIn } from 'react-native-reanimated';
-import { LinearGradient } from 'expo-linear-gradient';
+import React from "react";
+import Animated, { ZoomIn } from "react-native-reanimated";
+import { LinearGradient } from "expo-linear-gradient";
 
-import { Box } from '../../../components/primitives';
-import { Text } from '../../../components/primitives';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives";
+import { Text } from "../../../components/primitives";
+import { useTheme } from "../../../theme";
 
 interface PerfectSessionBannerProps {
   isPerfect: boolean;
 }
 
-export function PerfectSessionBanner({ isPerfect }: PerfectSessionBannerProps): JSX.Element | null {
+export function PerfectSessionBanner({
+  isPerfect,
+}: PerfectSessionBannerProps): JSX.Element | null {
   const { theme } = useTheme();
 
-  if (!isPerfect) {return null;}
+  if (!isPerfect) {
+    return null;
+  }
 
   return (
     <Animated.View
       entering={ZoomIn.delay(300).duration(400).springify()}
-      style={{ marginHorizontal: theme.spacing[6], marginTop: theme.spacing[6] }}
+      style={{
+        marginHorizontal: theme.spacing[6],
+        marginTop: theme.spacing[6],
+      }}
     >
       <Box
         borderRadius="xl"
@@ -42,8 +49,8 @@ export function PerfectSessionBanner({ isPerfect }: PerfectSessionBannerProps): 
       >
         <LinearGradient
           colors={[
-            theme.colors.warning.DEFAULT + '40', // 25% opacity
-            theme.colors.warning.light + '20', // 12% opacity
+            theme.colors.warning.DEFAULT + "40", // 25% opacity
+            theme.colors.warning.light + "20", // 12% opacity
             theme.colors.background.elevated,
           ]}
           locations={[0, 0.3, 1]}
@@ -64,16 +71,16 @@ export function PerfectSessionBanner({ isPerfect }: PerfectSessionBannerProps): 
               variant="h3"
               color="warning.DEFAULT"
               weight="bold"
-              style={{ textAlign: 'center' }}
+              style={{ textAlign: "center" }}
             >
               PERFECT SESSION
             </Text>
             <Text
               variant="body"
               color="text.secondary"
-              style={{ textAlign: 'center', marginTop: theme.spacing[2] }}
+              style={{ textAlign: "center", marginTop: theme.spacing[2] }}
             >
-              No pauses. Full focus. Maximum quality.
+              Flawless block. Zero interruptions. VEX will carry this pattern forward.
             </Text>
           </Box>
         </LinearGradient>

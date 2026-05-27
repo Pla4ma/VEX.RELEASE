@@ -3,7 +3,7 @@ import {
   isFeatureAvailableForNavigation,
   type FeatureAccessMap,
   type FeatureKey,
-} from '../../features/liveops-config';
+} from "../../features/liveops-config";
 
 export interface ExposureInputs {
   isFlagEnabled?: boolean;
@@ -46,23 +46,26 @@ export function buildRootExposureFlags({
   isEnabled: _isEnabled,
 }: BuildRootExposureParams): RootExposureFlags {
   const resolve = (featureKey: FeatureKey): boolean => {
-    const availability = getFeatureAvailabilityFor(featureKey, features[featureKey]);
+    const availability = getFeatureAvailabilityFor(
+      featureKey,
+      features[featureKey],
+    );
     return isFeatureAvailableForNavigation(availability);
   };
 
   return {
     advanced: false,
     battlePass: false,
-    boss: resolve('boss_tab'),
-    challenges: resolve('challenges'),
-    coach: resolve('ai_coach_advanced'),
-    companion: resolve('companion_detail'),
+    boss: resolve("boss_tab"),
+    challenges: resolve("challenges"),
+    coach: resolve("ai_coach_advanced"),
+    companion: resolve("companion_detail"),
     guild: false,
     inventory: false,
-    mastery: resolve('achievements'),
+    mastery: resolve("achievements"),
     monthly: false,
     shop: false,
-    study: resolve('content_study'),
+    study: resolve("content_study"),
     vault: false,
   };
 }

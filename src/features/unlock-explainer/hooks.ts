@@ -1,12 +1,9 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from "react";
 
-import {
-  computeFeatureSafetyGates,
-  isPremiumGatedFeature,
-} from './safety';
-import { createUnlockDecision } from './service';
-import { useUnlockExplainerStore } from './store';
-import type { UnlockDecision, UnlockExplainerInput } from './types';
+import { computeFeatureSafetyGates, isPremiumGatedFeature } from "./safety";
+import { createUnlockDecision } from "./service";
+import { useUnlockExplainerStore } from "./store";
+import type { UnlockDecision, UnlockExplainerInput } from "./types";
 
 export function useUnlockDecision(input: UnlockExplainerInput): UnlockDecision {
   return useMemo(
@@ -51,22 +48,23 @@ export function useUnlockWithHide(input: UnlockExplainerInput): UnlockWithHide {
   const isDegradedPremium =
     isPremiumGatedFeature(input.featureKey) &&
     input.isPremium === false &&
-    decision.decision === 'degraded';
+    decision.decision === "degraded";
 
   const safety = useMemo(
-    () => computeFeatureSafetyGates(decision, isHiddenByUser, isDegradedPremium),
+    () =>
+      computeFeatureSafetyGates(decision, isHiddenByUser, isDegradedPremium),
     [decision, isHiddenByUser, isDegradedPremium],
   );
 
-  const hide = useCallback(() => hideFeature(input.featureKey), [
-    hideFeature,
-    input.featureKey,
-  ]);
+  const hide = useCallback(
+    () => hideFeature(input.featureKey),
+    [hideFeature, input.featureKey],
+  );
 
-  const reconsider = useCallback(() => reconsiderFeature(input.featureKey), [
-    reconsiderFeature,
-    input.featureKey,
-  ]);
+  const reconsider = useCallback(
+    () => reconsiderFeature(input.featureKey),
+    [reconsiderFeature, input.featureKey],
+  );
 
   return useMemo(
     () => ({

@@ -1,8 +1,8 @@
-import { z } from 'zod';
-import { SessionModeSchema } from '../../session/modes';
-import { SessionCompletionGradeSchema } from '../session-completion/schemas';
+import { z } from "zod";
+import { SessionModeSchema } from "../../session/modes";
+import { SessionCompletionGradeSchema } from "../session-completion/schemas";
 
-export const DurationBucketSchema = z.enum(['10', '15', '25', '45', '60+']);
+export const DurationBucketSchema = z.enum(["10", "15", "25", "45", "60+"]);
 
 export const PersonalBestKeySchema = z
   .object({

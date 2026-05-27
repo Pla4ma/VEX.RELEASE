@@ -1,12 +1,12 @@
-import React from 'react';
-import { View, type ViewStyle } from 'react-native';
+import React from "react";
+import { View, type ViewStyle } from "react-native";
 
-import { useTheme } from '../../theme';
-import { getPremiumCardStyle } from '../premiumStyles';
-import { Button } from '../primitives/Button';
-import { Text } from '../primitives/Text';
+import { useTheme } from "../../theme";
+import { getPremiumCardStyle } from "../premiumStyles";
+import { Button } from "../primitives/Button";
+import { Text } from "../primitives/Text";
 
-type SurfaceTone = 'default' | 'celebration' | 'info' | 'warning' | 'locked';
+type SurfaceTone = "default" | "celebration" | "info" | "warning" | "locked";
 
 interface PremiumSurfaceProps {
   children?: React.ReactNode;
@@ -28,7 +28,7 @@ export function PremiumSurface({
   body,
   eyebrow,
   icon,
-  tone = 'default',
+  tone = "default",
   actionLabel,
   onAction,
   secondaryActionLabel,
@@ -63,7 +63,7 @@ export function PremiumSurface({
   return (
     <View
       style={[
-        getPremiumCardStyle('large'),
+        getPremiumCardStyle("large"),
         {
           borderWidth: 1,
           padding: theme.spacing[4],
@@ -96,16 +96,29 @@ export function PremiumSurface({
       {children}
 
       {actionLabel && onAction ? (
-        <View style={{ flexDirection: 'row', gap: theme.spacing[3], flexWrap: 'wrap' }}>
-          <Button onPress={onAction}
-  accessibilityLabel="Action button"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">{actionLabel}</Button>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: theme.spacing[3],
+            flexWrap: "wrap",
+          }}
+        >
+          <Button
+            onPress={onAction}
+            accessibilityLabel="Action button"
+            accessibilityRole="button"
+            accessibilityHint="Activates this control"
+          >
+            {actionLabel}
+          </Button>
           {secondaryActionLabel && onSecondaryAction ? (
-            <Button variant="outline" onPress={onSecondaryAction}
-  accessibilityLabel="Action button"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+            <Button
+              variant="outline"
+              onPress={onSecondaryAction}
+              accessibilityLabel="Action button"
+              accessibilityRole="button"
+              accessibilityHint="Activates this control"
+            >
               {secondaryActionLabel}
             </Button>
           ) : null}
@@ -156,31 +169,31 @@ interface InlineStatusRowProps {
 export function InlineStatusRow({
   label,
   value,
-  tone = 'default',
+  tone = "default",
 }: InlineStatusRowProps): JSX.Element {
   const { theme } = useTheme();
   const accent =
-    tone === 'celebration'
+    tone === "celebration"
       ? theme.colors.primary[500]
-      : tone === 'warning'
+      : tone === "warning"
         ? theme.colors.warning[500]
-        : tone === 'info'
+        : tone === "info"
           ? theme.colors.info[500]
           : theme.colors.text.secondary;
 
   return (
     <View
       style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexDirection: "row",
+        justifyContent: "space-between",
         gap: theme.spacing[3],
-        alignItems: 'center',
+        alignItems: "center",
       }}
     >
       <Text variant="caption" color={theme.colors.text.secondary}>
         {label}
       </Text>
-      <Text variant="bodySmall" color={accent} style={{ fontWeight: '700' }}>
+      <Text variant="bodySmall" color={accent} style={{ fontWeight: "700" }}>
         {value}
       </Text>
     </View>

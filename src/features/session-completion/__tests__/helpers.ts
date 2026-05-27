@@ -55,7 +55,11 @@ export function buildResult(
     lane,
     streakAction: "extended",
     streakDays: (overrides.streakDays as number) ?? 4,
-    summary: (overrides.summary as Parameters<typeof createSessionSummary>[0]) ? createSessionSummary(overrides.summary as Parameters<typeof createSessionSummary>[0]) : createSessionSummary({ sessionMode: SessionMode.FLOW }),
+    summary: (overrides.summary as Parameters<typeof createSessionSummary>[0])
+      ? createSessionSummary(
+          overrides.summary as Parameters<typeof createSessionSummary>[0],
+        )
+      : createSessionSummary({ sessionMode: SessionMode.FLOW }),
     xpDelta: (overrides.xpDelta as number) ?? 120,
   });
 }

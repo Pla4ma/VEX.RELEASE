@@ -1,37 +1,44 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const CoachPresenceMotivationStyleSchema = z.enum([
-  'CALM',
-  'FRIENDLY',
-  'STUDY_FOCUSED',
-  'GAME_LIKE',
-  'COACH_LED',
-  'INTENSE',
+  "CALM",
+  "FRIENDLY",
+  "STUDY_FOCUSED",
+  "GAME_LIKE",
+  "COACH_LED",
+  "INTENSE",
 ]);
 
 export const CoachActionIntentSchema = z.enum([
-  'START_SESSION',
-  'START_STUDY_SESSION',
-  'REVIEW_PROGRESS',
-  'TAKE_BREAK',
-  'CONTINUE_PLAN',
-  'REFLECT',
+  "START_SESSION",
+  "START_STUDY_SESSION",
+  "REVIEW_PROGRESS",
+  "TAKE_BREAK",
+  "CONTINUE_PLAN",
+  "REFLECT",
 ]);
 
 export const CoachPresenceSurfaceSchema = z.enum([
-  'HOME',
-  'SESSION_SETUP',
-  'SESSION_COMPLETION',
-  'CHAT',
-  'RESCUE',
-  'PREMIUM',
+  "HOME",
+  "SESSION_SETUP",
+  "SESSION_COMPLETION",
+  "CHAT",
+  "RESCUE",
+  "PREMIUM",
 ]);
 
 export const CoachPresenceToneSchema = z
   .object({
     motivationStyle: CoachPresenceMotivationStyleSchema,
-    personality: z.enum(['steady', 'warm', 'studious', 'playful', 'directive', 'sharp']),
-    intensity: z.enum(['low', 'medium', 'high']),
+    personality: z.enum([
+      "steady",
+      "warm",
+      "studious",
+      "playful",
+      "directive",
+      "sharp",
+    ]),
+    intensity: z.enum(["low", "medium", "high"]),
   })
   .strict();
 
@@ -41,7 +48,13 @@ export const CoachPresenceVisualStateSchema = z
     level: z.number().int().min(1),
     mood: z.string().min(1),
     phase: z.string().min(1),
-    reaction: z.enum(['steady', 'focused', 'celebrating', 'recovering', 'ready']),
+    reaction: z.enum([
+      "steady",
+      "focused",
+      "celebrating",
+      "recovering",
+      "ready",
+    ]),
   })
   .strict();
 
@@ -54,7 +67,12 @@ export const CoachPresenceMemorySummarySchema = z
   })
   .strict();
 
-export const CoachMemoryConfidenceSchema = z.enum(['none', 'weak', 'medium', 'strong']);
+export const CoachMemoryConfidenceSchema = z.enum([
+  "none",
+  "weak",
+  "medium",
+  "strong",
+]);
 
 export const CoachPresenceActionSchema = z
   .object({
@@ -101,14 +119,61 @@ export const CompletionPresenceSummarySchema = z
   })
   .strict();
 
-export type CoachPresenceMotivationStyle = z.infer<typeof CoachPresenceMotivationStyleSchema>;
+// ── Coach visibility policy ────────────────────────────────────────────
+export const CoachVisibilitySurfaceSchema = z.enum([
+  "ONBOARDING",
+  "DAY_0_HOME",
+  "SESSION_SETUP",
+  "ACTIVE_SESSION",
+  "PAUSE_INTERRUPTION",
+  "COMPLETION",
+  "RESCUE",
+  "PREMIUM",
+  "RETURN_HOME",
+]);
+export type CoachVisibilitySurface = z.infer<
+  typeof CoachVisibilitySurfaceSchema
+>;
+
+export const CoachVisibilityDecisionSchema = z.enum([
+  "VISIBLE",
+  "HIDDEN",
+  "SUBTLE_ONE_LINE",
+  "AVAILABLE_ON_REQUEST",
+]);
+export type CoachVisibilityDecision = z.infer<
+  typeof CoachVisibilityDecisionSchema
+>;
+
+export const CoachVisibilityPolicySchema = z
+  .object({
+    surface: CoachVisibilitySurfaceSchema,
+    lane: z.enum(["student", "game_like", "deep_creative", "minimal_normal"]),
+    decision: CoachVisibilityDecisionSchema,
+    maxMessageLength: z.number().int().min(0).max(96).default(96),
+    reason: z.string().min(1),
+  })
+  .strict();
+export type CoachVisibilityPolicy = z.infer<typeof CoachVisibilityPolicySchema>;
+
+export type CoachPresenceMotivationStyle = z.infer<
+  typeof CoachPresenceMotivationStyleSchema
+>;
 export type CoachActionIntent = z.infer<typeof CoachActionIntentSchema>;
 export type CoachPresenceSurface = z.infer<typeof CoachPresenceSurfaceSchema>;
 export type CoachPresenceTone = z.infer<typeof CoachPresenceToneSchema>;
-export type CoachPresenceVisualState = z.infer<typeof CoachPresenceVisualStateSchema>;
-export type CoachPresenceMemorySummary = z.infer<typeof CoachPresenceMemorySummarySchema>;
+export type CoachPresenceVisualState = z.infer<
+  typeof CoachPresenceVisualStateSchema
+>;
+export type CoachPresenceMemorySummary = z.infer<
+  typeof CoachPresenceMemorySummarySchema
+>;
 export type CoachMemoryConfidence = z.infer<typeof CoachMemoryConfidenceSchema>;
 export type CoachPresenceAction = z.infer<typeof CoachPresenceActionSchema>;
 export type CoachPresence = z.infer<typeof CoachPresenceSchema>;
-export type CoachPresenceProgressInput = z.infer<typeof CoachPresenceProgressInputSchema>;
-export type CompletionPresenceSummary = z.infer<typeof CompletionPresenceSummarySchema>;
+export type CoachPresenceProgressInput = z.infer<
+  typeof CoachPresenceProgressInputSchema
+>;
+export type CompletionPresenceSummary = z.infer<
+  typeof CompletionPresenceSummarySchema
+>;

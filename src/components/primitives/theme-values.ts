@@ -1,27 +1,27 @@
-import type { Theme } from '../../theme/types';
-import type { SpacingValue } from './types';
+import type { Theme } from "../../theme/types";
+import type { SpacingValue } from "./types";
 
 const spacingTokenMap = {
-  '0': 0,
-  '1': 1,
-  '2': 2,
-  '3': 3,
-  '4': 4,
-  '5': 5,
-  '6': 6,
-  '8': 8,
-  '10': 10,
-  '12': 12,
-  '16': 16,
-  '20': 20,
-  '24': 24,
+  "0": 0,
+  "1": 1,
+  "2": 2,
+  "3": 3,
+  "4": 4,
+  "5": 5,
+  "6": 6,
+  "8": 8,
+  "10": 10,
+  "12": 12,
+  "16": 16,
+  "20": 20,
+  "24": 24,
   xs: 1,
   sm: 2,
   md: 3,
   lg: 4,
   xl: 6,
-  '2xl': 8,
-  '3xl': 12,
+  "2xl": 8,
+  "3xl": 12,
 } as const;
 
 interface ColorTree {
@@ -35,10 +35,10 @@ export function resolveSpacingValue(
   if (value === undefined) {
     return undefined;
   }
-  if (typeof value === 'number') {
+  if (typeof value === "number") {
     return value;
   }
-  if (value.endsWith('%')) {
+  if (value.endsWith("%")) {
     return value as `${number}%`;
   }
   const key = spacingTokenMap[value as keyof typeof spacingTokenMap];
@@ -52,14 +52,18 @@ export function resolveColorValue(
   if (!value) {
     return undefined;
   }
-  if (value.startsWith('#') || value.startsWith('rgb') || value === 'transparent') {
+  if (
+    value.startsWith("#") ||
+    value.startsWith("rgb") ||
+    value === "transparent"
+  ) {
     return value;
   }
-  const parts = value.split('.');
-  // theme.colors is ColorPalette (typed), cast to ColorTree (indexable)
-  let current: string | ColorTree = theme.colors as unknown as ColorTree;
+  const parts = value.split(".");
+  // theme.colors is ColorPalette — indexed by string keys at runtime
+  let current: string | ColorTree = theme.colors as ColorTree;
   for (const part of parts) {
-    if (typeof current === 'string') {
+    if (typeof current === "string") {
       return current;
     }
     const next: string | ColorTree | undefined = current[part];
@@ -68,5 +72,5 @@ export function resolveColorValue(
     }
     current = next;
   }
-  return typeof current === 'string' ? current : value;
+  return typeof current === "string" ? current : value;
 }

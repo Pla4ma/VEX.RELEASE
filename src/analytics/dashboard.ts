@@ -13,7 +13,10 @@ import {
   getStreakSurvivalMetrics,
   type StreakSurvivalMetrics,
 } from "./streaks";
-import { TARGET_METRICS, type VEXSuccessMetrics } from "./VEXAnalyticsInfrastructure.types";
+import {
+  TARGET_METRICS,
+  type VEXSuccessMetrics,
+} from "./VEXAnalyticsInfrastructure.types";
 
 export interface VEXDashboard {
   generatedAt: number;

@@ -1,12 +1,12 @@
-import * as Sentry from '@sentry/react-native';
-import { eventBus } from '../../events';
-import type { FocusTower } from './tower-constants';
+import * as Sentry from "@sentry/react-native";
+import { eventBus } from "../../events";
+import type { FocusTower } from "./tower-constants";
 
 export function calculateTowerChurnRisk(
   tower: FocusTower,
   daysInactive: number,
 ): {
-  riskLevel: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  riskLevel: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
   daysUntilDecay: number;
   decayWarning: string;
   wouldLose: string;
@@ -15,19 +15,19 @@ export function calculateTowerChurnRisk(
   const criticalDecayDays = 7;
   if (daysInactive < decayStartDays) {
     return {
-      riskLevel: 'NONE',
+      riskLevel: "NONE",
       daysUntilDecay: decayStartDays - daysInactive,
-      decayWarning: '',
-      wouldLose: '',
+      decayWarning: "",
+      wouldLose: "",
     };
   }
   if (daysInactive < criticalDecayDays) {
     const daysToCritical = criticalDecayDays - daysInactive;
     return {
-      riskLevel: daysInactive > 5 ? 'MEDIUM' : 'LOW',
+      riskLevel: daysInactive > 5 ? "MEDIUM" : "LOW",
       daysUntilDecay: daysToCritical,
       decayWarning: `Warning! Your tower weakens in ${daysToCritical} days!`,
-      wouldLose: 'Recent progress bonus',
+      wouldLose: "Recent progress bonus",
     };
   }
   const blocksLost = Math.min(
@@ -35,7 +35,7 @@ export function calculateTowerChurnRisk(
     Math.floor(tower.totalBlocks * 0.1),
   );
   return {
-    riskLevel: 'CRITICAL',
+    riskLevel: "CRITICAL",
     daysUntilDecay: 0,
     decayWarning: `CRITICAL: You've lost ${blocksLost} blocks from inactivity!`,
     wouldLose: `${blocksLost} tower blocks and their bonuses`,
@@ -48,7 +48,7 @@ export function applyTowerDecay(
 ): {
   updatedTower: FocusTower;
   blocksLost: number;
-  bonusesLost: Partial<FocusTower['totalBonuses']>;
+  bonusesLost: Partial<FocusTower["totalBonuses"]>;
   canRestore: boolean;
   restoreCost: number;
 } {
@@ -69,30 +69,41 @@ export function applyTowerDecay(
   const newTotalBlocks = Math.max(0, tower.totalBlocks - blocksLost);
   const newHeight = Math.max(0, tower.totalHeight - blocksLost * 0.8);
   const decayFactor = newTotalBlocks / tower.totalBlocks;
-  const bonusesLost: Partial<FocusTower['totalBonuses']> = {};
+  const bonusesLost: Partial<FocusTower["totalBonuses"]> = {};
   const updatedTower: FocusTower = {
     ...tower,
     totalBlocks: newTotalBlocks,
     totalHeight: newHeight,
     totalBonuses: {
-      xpBoostPercent: Math.floor(tower.totalBonuses.xpBoostPercent * decayFactor),
+      xpBoostPercent: Math.floor(
+        tower.totalBonuses.xpBoostPercent * decayFactor,
+      ),
       streakResistanceHours:
-        Math.floor(tower.totalBonuses.streakResistanceHours * decayFactor * 10) / 10,
+        Math.floor(
+          tower.totalBonuses.streakResistanceHours * decayFactor * 10,
+        ) / 10,
       energyRegenBonus:
         Math.floor(tower.totalBonuses.energyRegenBonus * decayFactor * 10) / 10,
       bossDamageBonus:
         Math.floor(tower.totalBonuses.bossDamageBonus * decayFactor * 10) / 10,
       focusDurationBonus:
-        Math.floor(tower.totalBonuses.focusDurationBonus * decayFactor * 10) / 10,
+        Math.floor(tower.totalBonuses.focusDurationBonus * decayFactor * 10) /
+        10,
     },
   };
   const restoreCost = blocksLost * 25;
-  eventBus.publish('focus_tower:decay', {
+  eventBus.publish("focus_tower:decay", {
     userId: tower.userId,
     daysInactive,
     decayAmount: blocksLost,
   });
-  return { updatedTower, blocksLost, bonusesLost, canRestore: true, restoreCost };
+  return {
+    updatedTower,
+    blocksLost,
+    bonusesLost,
+    canRestore: true,
+    restoreCost,
+  };
 }
 
 export function restoreTowerBlocks(
@@ -117,12 +128,15 @@ export function restoreTowerBlocks(
   }
   const restoredBonuses = {
     xpBoostPercent: Math.floor(
-      tower.totalBonuses.xpBoostPercent * (maxRestorable / tower.totalBlocks + 1),
+      tower.totalBonuses.xpBoostPercent *
+        (maxRestorable / tower.totalBlocks + 1),
     ),
-    streakResistanceHours: tower.totalBonuses.streakResistanceHours + maxRestorable * 0.5,
+    streakResistanceHours:
+      tower.totalBonuses.streakResistanceHours + maxRestorable * 0.5,
     energyRegenBonus: tower.totalBonuses.energyRegenBonus + maxRestorable * 1,
     bossDamageBonus: tower.totalBonuses.bossDamageBonus + maxRestorable * 3,
-    focusDurationBonus: tower.totalBonuses.focusDurationBonus + maxRestorable * 5,
+    focusDurationBonus:
+      tower.totalBonuses.focusDurationBonus + maxRestorable * 5,
   };
   const updatedTower: FocusTower = {
     ...tower,
@@ -130,7 +144,7 @@ export function restoreTowerBlocks(
     totalHeight: tower.totalHeight + maxRestorable,
     totalBonuses: restoredBonuses,
   };
-  eventBus.publish('focus_tower:restored', {
+  eventBus.publish("focus_tower:restored", {
     userId: tower.userId,
     restoredTier: tower.currentTier,
     previousTier: tower.currentTier,
@@ -140,7 +154,7 @@ export function restoreTowerBlocks(
 
 export function trackTowerProgress(tower: FocusTower, source: string): void {
   Sentry.addBreadcrumb({
-    category: 'focus_tower',
+    category: "focus_tower",
     message: `Tower progress: ${tower.totalBlocks} blocks, tier ${tower.currentTier}`,
     data: {
       userId: tower.userId,

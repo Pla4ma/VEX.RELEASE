@@ -1,10 +1,11 @@
 import { eventBus } from "../../events";
 
-type TrackFunction = (eventName: string, properties: Record<string, unknown>) => void;
+type TrackFunction = (
+  eventName: string,
+  properties: Record<string, unknown>,
+) => void;
 
-export function subscribeErrorEventListeners(
-  track: TrackFunction,
-): void {
+export function subscribeErrorEventListeners(track: TrackFunction): void {
   eventBus.subscribe("session:failed", (data) => {
     if (!data) {
       return;

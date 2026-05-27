@@ -3,11 +3,11 @@
  */
 
 export interface AccessibilityEventDefinitions {
-  'accessibility:announce': {
+  "accessibility:announce": {
     message: string;
-    priority?: 'low' | 'normal' | 'high';
+    priority?: "low" | "normal" | "high";
   };
-  'accessibility:preferences_changed': {
+  "accessibility:preferences_changed": {
     userId: string;
     preferences: Record<string, unknown>;
     changes: string[];

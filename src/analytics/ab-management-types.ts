@@ -1,4 +1,4 @@
-import type { Experiment } from './ab-types';
+import type { Experiment } from "./ab-types";
 
 export interface ExperimentStatsResult {
   totalAssignments: number;
@@ -18,22 +18,32 @@ export function hashString(str: string): number {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
     const char = str.charCodeAt(i);
-    hash = (hash * 32) - hash + char;
+    hash = hash * 32 - hash + char;
   }
   return Math.abs(hash);
 }
 
-export function isUserEligibleForExperiment(_userId: string, _experiment: Experiment): boolean {
+export function isUserEligibleForExperiment(
+  _userId: string,
+  _experiment: Experiment,
+): boolean {
   return true;
 }
 
-export function selectVariant(userId: string, experiment: Experiment): string | null {
+export function selectVariant(
+  userId: string,
+  experiment: Experiment,
+): string | null {
   const hash = hashString(userId + experiment.id);
   const bucket = hash % 100;
   let cumulativePercentage = 0;
-  for (const [variantId, percentage] of Object.entries(experiment.trafficAllocation)) {
+  for (const [variantId, percentage] of Object.entries(
+    experiment.trafficAllocation,
+  )) {
     cumulativePercentage += percentage;
-    if (bucket < cumulativePercentage) { return variantId; }
+    if (bucket < cumulativePercentage) {
+      return variantId;
+    }
   }
   return experiment.controlVariant.id;
 }

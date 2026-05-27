@@ -1,5 +1,5 @@
-import { z } from 'zod';
-import { CoachMemorySchema } from './memory-schemas';
+import { z } from "zod";
+import { CoachMemorySchema } from "./memory-schemas";
 
 export const CoachMemoryCreatedEventSchema = z.object({
   userId: z.string().uuid(),
@@ -14,7 +14,10 @@ export type CoachMemoryCreatedEvent = z.infer<
 >;
 
 export function createCoachMemoryCreatedEvent(
-  memory: Pick<z.infer<typeof CoachMemorySchema>, 'id' | 'userId' | 'type' | 'occurredAt'>,
+  memory: Pick<
+    z.infer<typeof CoachMemorySchema>,
+    "id" | "userId" | "type" | "occurredAt"
+  >,
 ): CoachMemoryCreatedEvent {
   return CoachMemoryCreatedEventSchema.parse({
     userId: memory.userId,

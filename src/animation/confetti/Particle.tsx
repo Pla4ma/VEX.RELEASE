@@ -4,13 +4,25 @@
  * Individual particle component for confetti celebration.
  */
 
-import React, { useEffect } from 'react';
-import { Dimensions } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, withDecay, withDelay, runOnJS } from 'react-native-reanimated';
-import { ParticleConfig } from './types';
-import { particleStyle, shapeStyle, triangleStyle, FRICTION } from './constants';
+import React, { useEffect } from "react";
+import { Dimensions } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withDecay,
+  withDelay,
+  runOnJS,
+} from "react-native-reanimated";
+import { ParticleConfig } from "./types";
+import {
+  particleStyle,
+  shapeStyle,
+  triangleStyle,
+  FRICTION,
+} from "./constants";
 
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 interface ParticleProps {
   config: ParticleConfig;
@@ -35,7 +47,7 @@ export function Particle({ config, onComplete }: ParticleProps) {
       withDecay({
         velocity: config.velocityX,
         deceleration: FRICTION,
-      })
+      }),
     );
 
     // Y animation with spring
@@ -47,7 +59,7 @@ export function Particle({ config, onComplete }: ParticleProps) {
         stiffness: 100,
         mass: 1,
         overshootClamping: true,
-      })
+      }),
     );
 
     // Rotation animation
@@ -56,7 +68,7 @@ export function Particle({ config, onComplete }: ParticleProps) {
       withSpring(config.rotation + 720, {
         damping: 10,
         stiffness: 100,
-      })
+      }),
     );
 
     // Fade out animation
@@ -65,7 +77,7 @@ export function Particle({ config, onComplete }: ParticleProps) {
       withSpring(0, {
         damping: 20,
         stiffness: 100,
-      })
+      }),
     );
 
     // Scale animation
@@ -74,13 +86,21 @@ export function Particle({ config, onComplete }: ParticleProps) {
       withSpring(0, {
         damping: 20,
         stiffness: 100,
-      })
+      }),
     );
 
     // Auto-cleanup
     const timeout = setTimeout(handleComplete, (config.delay + 3) * 1000);
     return () => clearTimeout(timeout);
-  }, [animatedOpacity, animatedRotation, animatedScale, animatedX, animatedY, config, onComplete]);
+  }, [
+    animatedOpacity,
+    animatedRotation,
+    animatedScale,
+    animatedX,
+    animatedY,
+    config,
+    onComplete,
+  ]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
@@ -96,11 +116,34 @@ export function Particle({ config, onComplete }: ParticleProps) {
     const size = config.size;
 
     switch (config.shape) {
-      case 'circle':
-        return <Animated.View style={[particleStyle, shapeStyle, { width: size, height: size, backgroundColor: config.color, borderRadius: size / 2 }, animatedStyle]} />;
-      case 'square':
-        return <Animated.View style={[particleStyle, shapeStyle, { width: size, height: size, backgroundColor: config.color }, animatedStyle]} />;
-      case 'triangle':
+      case "circle":
+        return (
+          <Animated.View
+            style={[
+              particleStyle,
+              shapeStyle,
+              {
+                width: size,
+                height: size,
+                backgroundColor: config.color,
+                borderRadius: size / 2,
+              },
+              animatedStyle,
+            ]}
+          />
+        );
+      case "square":
+        return (
+          <Animated.View
+            style={[
+              particleStyle,
+              shapeStyle,
+              { width: size, height: size, backgroundColor: config.color },
+              animatedStyle,
+            ]}
+          />
+        );
+      case "triangle":
         return (
           <Animated.View
             style={[
@@ -116,7 +159,21 @@ export function Particle({ config, onComplete }: ParticleProps) {
           />
         );
       default:
-        return <Animated.View style={[particleStyle, shapeStyle, { width: size, height: size, backgroundColor: config.color, borderRadius: size / 2 }, animatedStyle]} />;
+        return (
+          <Animated.View
+            style={[
+              particleStyle,
+              shapeStyle,
+              {
+                width: size,
+                height: size,
+                backgroundColor: config.color,
+                borderRadius: size / 2,
+              },
+              animatedStyle,
+            ]}
+          />
+        );
     }
   };
 

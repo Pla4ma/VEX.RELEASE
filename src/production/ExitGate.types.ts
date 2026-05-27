@@ -13,7 +13,7 @@ export interface ErrorBoundaryReport {
 }
 
 export interface AccessibilityReport {
-  wcagComplianceLevel: 'A' | 'AA' | 'AAA';
+  wcagComplianceLevel: "A" | "AA" | "AAA";
   screenReaderSupport: number;
   keyboardNavigationSupport: number;
   colorContrastIssues: number;
@@ -72,7 +72,11 @@ export interface AppStoreSubmissionResult {
       releaseNotes: string;
     };
     privacyPolicy: { generated: boolean; content: string; lastUpdated: string };
-    termsOfService: { generated: boolean; content: string; lastUpdated: string };
+    termsOfService: {
+      generated: boolean;
+      content: string;
+      lastUpdated: string;
+    };
     screenshots: { iPhone: string[]; iPad: string[]; AppleTV: string[] };
     appIcon: { generated: boolean; sizes: Record<string, string> };
     testingAccounts: {

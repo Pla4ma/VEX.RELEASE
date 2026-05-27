@@ -4,7 +4,7 @@
  * Focus navigation and management utilities
  */
 
-import { FocusableElement } from './types';
+import { FocusableElement } from "./types";
 
 const focusableElements: FocusableElement[] = [];
 
@@ -13,7 +13,9 @@ const focusableElements: FocusableElement[] = [];
  */
 export function registerFocusableElement(element: FocusableElement): void {
   // Remove existing element with same ID
-  const existingIndex = focusableElements.findIndex(el => el.id === element.id);
+  const existingIndex = focusableElements.findIndex(
+    (el) => el.id === element.id,
+  );
   if (existingIndex !== -1) {
     focusableElements.splice(existingIndex, 1);
   }
@@ -24,7 +26,9 @@ export function registerFocusableElement(element: FocusableElement): void {
 /**
  * Get next focusable element
  */
-export function getNextFocusableElement(currentId?: string): FocusableElement | null {
+export function getNextFocusableElement(
+  currentId?: string,
+): FocusableElement | null {
   if (focusableElements.length === 0) {
     return null;
   }
@@ -33,7 +37,7 @@ export function getNextFocusableElement(currentId?: string): FocusableElement | 
     return focusableElements[0] ?? null;
   }
 
-  const currentIndex = focusableElements.findIndex(el => el.id === currentId);
+  const currentIndex = focusableElements.findIndex((el) => el.id === currentId);
   if (currentIndex === -1) {
     return focusableElements[0] ?? null;
   }
@@ -45,7 +49,9 @@ export function getNextFocusableElement(currentId?: string): FocusableElement | 
 /**
  * Get previous focusable element
  */
-export function getPreviousFocusableElement(currentId?: string): FocusableElement | null {
+export function getPreviousFocusableElement(
+  currentId?: string,
+): FocusableElement | null {
   if (focusableElements.length === 0) {
     return null;
   }
@@ -54,12 +60,13 @@ export function getPreviousFocusableElement(currentId?: string): FocusableElemen
     return focusableElements[focusableElements.length - 1] ?? null;
   }
 
-  const currentIndex = focusableElements.findIndex(el => el.id === currentId);
+  const currentIndex = focusableElements.findIndex((el) => el.id === currentId);
   if (currentIndex === -1) {
     return focusableElements[focusableElements.length - 1] ?? null;
   }
 
-  const prevIndex = currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
+  const prevIndex =
+    currentIndex === 0 ? focusableElements.length - 1 : currentIndex - 1;
   return focusableElements[prevIndex] ?? null;
 }
 
@@ -67,7 +74,7 @@ export function getPreviousFocusableElement(currentId?: string): FocusableElemen
  * Unregister a focusable element
  */
 export function unregisterFocusableElement(elementId: string): void {
-  const index = focusableElements.findIndex(el => el.id === elementId);
+  const index = focusableElements.findIndex((el) => el.id === elementId);
   if (index !== -1) {
     focusableElements.splice(index, 1);
   }

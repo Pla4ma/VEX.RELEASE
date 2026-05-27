@@ -1,41 +1,45 @@
-import type { BossArchetype, PersonalBoss } from './schemas';
+import type { BossArchetype, PersonalBoss } from "./schemas";
 
 // ---------------------------------------------------------------------------
 // Boss copy
 // ---------------------------------------------------------------------------
 
-const BOSS_COPY: Record<BossArchetype, Pick<PersonalBoss, 'name' | 'recoveryPrompt'>> = {
+const BOSS_COPY: Record<
+  BossArchetype,
+  Pick<PersonalBoss, "name" | "recoveryPrompt">
+> = {
   cold_start_shadow: {
-    name: 'Cold Start Shadow',
-    recoveryPrompt: 'Start one small encounter before judging the day.',
+    name: "Cold Start Shadow",
+    recoveryPrompt: "Start one small encounter before judging the day.",
   },
   deadline_wraith: {
-    name: 'Deadline Wraith',
-    recoveryPrompt: 'Pick the nearest deadline action and make it visible.',
+    name: "Deadline Wraith",
+    recoveryPrompt: "Pick the nearest deadline action and make it visible.",
   },
   doomscroll_hydra: {
-    name: 'Doomscroll Hydra',
-    recoveryPrompt: 'Put the feed away and restart with five clean minutes.',
+    name: "Doomscroll Hydra",
+    recoveryPrompt: "Put the feed away and restart with five clean minutes.",
   },
   fog_of_unclear_work: {
-    name: 'Fog of Unclear Work',
-    recoveryPrompt: 'Rewrite the task until the first move is obvious.',
+    name: "Fog of Unclear Work",
+    recoveryPrompt: "Rewrite the task until the first move is obvious.",
   },
   late_start_shade: {
-    name: 'Late Start Shade',
-    recoveryPrompt: 'Use a short start window before the day drifts.',
+    name: "Late Start Shade",
+    recoveryPrompt: "Use a short start window before the day drifts.",
   },
   perfectionism_wall: {
-    name: 'Perfectionism Wall',
-    recoveryPrompt: 'Ship one rough move instead of polishing the plan.',
+    name: "Perfectionism Wall",
+    recoveryPrompt: "Ship one rough move instead of polishing the plan.",
   },
   switch_swarm: {
-    name: 'Switch Swarm',
-    recoveryPrompt: 'Close competing contexts and protect one thread.',
+    name: "Switch Swarm",
+    recoveryPrompt: "Close competing contexts and protect one thread.",
   },
   task_avoidance: {
-    name: 'Task Avoidance Wraith',
-    recoveryPrompt: 'Start the work for just two minutes and let momentum pull you in.',
+    name: "Task Avoidance Wraith",
+    recoveryPrompt:
+      "Start the work for just two minutes and let momentum pull you in.",
   },
 };
 
@@ -58,14 +62,20 @@ function daysSinceFirstSession(firstActiveDay: number, now: number): number {
 }
 
 function detectArchetype(joined: string): BossArchetype {
-  if (joined.includes('deadline')) return 'deadline_wraith';
-  if (joined.includes('switch') || joined.includes('context')) return 'switch_swarm';
-  if (joined.includes('late') || joined.includes('delay')) return 'late_start_shade';
-  if (joined.includes('unclear') || joined.includes('fog')) return 'fog_of_unclear_work';
-  if (joined.includes('perfect') || joined.includes('overprep')) return 'perfectionism_wall';
-  if (joined.includes('scroll') || joined.includes('distraction')) return 'doomscroll_hydra';
-  if (joined.includes('avoid') || joined.includes('procrastinat')) return 'task_avoidance';
-  return 'cold_start_shadow';
+  if (joined.includes("deadline")) return "deadline_wraith";
+  if (joined.includes("switch") || joined.includes("context"))
+    return "switch_swarm";
+  if (joined.includes("late") || joined.includes("delay"))
+    return "late_start_shade";
+  if (joined.includes("unclear") || joined.includes("fog"))
+    return "fog_of_unclear_work";
+  if (joined.includes("perfect") || joined.includes("overprep"))
+    return "perfectionism_wall";
+  if (joined.includes("scroll") || joined.includes("distraction"))
+    return "doomscroll_hydra";
+  if (joined.includes("avoid") || joined.includes("procrastinat"))
+    return "task_avoidance";
+  return "cold_start_shadow";
 }
 
 export function resolvePersonalBoss(input: {
@@ -85,7 +95,7 @@ export function resolvePersonalBoss(input: {
   if (evidenceCount === 0) {
     const fallback = BOSS_COPY.cold_start_shadow;
     return {
-      archetype: 'cold_start_shadow',
+      archetype: "cold_start_shadow",
       evidenceCount: 0,
       isEvidenceBased: false,
       isTeaser: true,
@@ -95,7 +105,7 @@ export function resolvePersonalBoss(input: {
     };
   }
 
-  const joined = signals.join(' ').toLowerCase();
+  const joined = signals.join(" ").toLowerCase();
   const archetype = detectArchetype(joined);
   const copy = BOSS_COPY[archetype];
 

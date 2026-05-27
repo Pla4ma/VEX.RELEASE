@@ -3,30 +3,30 @@
  * Props for content study UI components
  */
 
-import type { ContentSourceType, InputTab, ExtractionStage } from './enums';
-import type { StudyTask, SessionPlan } from './domain';
-import type { ValidationError, SessionPreparationData } from './state';
+import type { ContentSourceType, InputTab, ExtractionStage } from "./enums";
+import type { StudyTask, SessionPlan } from "./domain";
+import type { ValidationError, SessionPreparationData } from "./state";
 
 export enum ContentStudyErrorCode {
-  RATE_LIMIT_EXCEEDED = 'RATE_LIMIT_EXCEEDED',
-  CONTENT_NOT_FOUND = 'CONTENT_NOT_FOUND',
-  EXTRACTION_FAILED = 'EXTRACTION_FAILED',
-  GENERATION_FAILED = 'GENERATION_FAILED',
-  INVALID_INPUT = 'INVALID_INPUT',
-  STORAGE_ERROR = 'STORAGE_ERROR',
-  NETWORK_ERROR = 'NETWORK_ERROR',
-  UNKNOWN_ERROR = 'UNKNOWN_ERROR',
-  FILE_TOO_LARGE = 'FILE_TOO_LARGE',
-  UNSUPPORTED_FILE_TYPE = 'UNSUPPORTED_FILE_TYPE',
-  PDF_PARSE_ERROR = 'PDF_PARSE_ERROR',
-  YOUTUBE_TRANSCRIPT_ERROR = 'YOUTUBE_TRANSCRIPT_ERROR',
-  INVALID_YOUTUBE_URL = 'INVALID_YOUTUBE_URL',
-  CONTENT_EXPIRED = 'CONTENT_EXPIRED',
-  SESSION_INTERRUPTED = 'SESSION_INTERRUPTED',
-  OFFLINE_MODE = 'OFFLINE_MODE',
-  AI_TIMEOUT = 'AI_TIMEOUT',
-  AI_RATE_LIMIT = 'AI_RATE_LIMIT',
-  VALIDATION_ERROR = 'VALIDATION_ERROR',
+  RATE_LIMIT_EXCEEDED = "RATE_LIMIT_EXCEEDED",
+  CONTENT_NOT_FOUND = "CONTENT_NOT_FOUND",
+  EXTRACTION_FAILED = "EXTRACTION_FAILED",
+  GENERATION_FAILED = "GENERATION_FAILED",
+  INVALID_INPUT = "INVALID_INPUT",
+  STORAGE_ERROR = "STORAGE_ERROR",
+  NETWORK_ERROR = "NETWORK_ERROR",
+  UNKNOWN_ERROR = "UNKNOWN_ERROR",
+  FILE_TOO_LARGE = "FILE_TOO_LARGE",
+  UNSUPPORTED_FILE_TYPE = "UNSUPPORTED_FILE_TYPE",
+  PDF_PARSE_ERROR = "PDF_PARSE_ERROR",
+  YOUTUBE_TRANSCRIPT_ERROR = "YOUTUBE_TRANSCRIPT_ERROR",
+  INVALID_YOUTUBE_URL = "INVALID_YOUTUBE_URL",
+  CONTENT_EXPIRED = "CONTENT_EXPIRED",
+  SESSION_INTERRUPTED = "SESSION_INTERRUPTED",
+  OFFLINE_MODE = "OFFLINE_MODE",
+  AI_TIMEOUT = "AI_TIMEOUT",
+  AI_RATE_LIMIT = "AI_RATE_LIMIT",
+  VALIDATION_ERROR = "VALIDATION_ERROR",
 }
 
 export interface ContentStudyError {
@@ -67,7 +67,9 @@ export interface PdfUploaderProps {
     size: number;
     type: string;
   } | null;
-  onFileSelect: (file: { uri: string; name: string; size: number; type: string } | null) => void;
+  onFileSelect: (
+    file: { uri: string; name: string; size: number; type: string } | null,
+  ) => void;
   disabled?: boolean;
   uploadProgress?: number;
   uploadError?: string | null;
@@ -116,7 +118,10 @@ export interface StudyTaskListProps {
 
 export interface QuizPanelProps {
   items: QuizItemProps[];
-  answers: Record<string, { answer: string; isCorrect?: boolean; timestamp: number }>;
+  answers: Record<
+    string,
+    { answer: string; isCorrect?: boolean; timestamp: number }
+  >;
   activeId: string | null;
   onAnswer: (quizId: string, answer: string) => void;
   onRevealAnswer: (quizId: string) => void;
@@ -131,7 +136,7 @@ export interface QuizItemProps {
   answer: string;
   options?: string[];
   explanation?: string;
-  difficulty: 'EASY' | 'MEDIUM' | 'HARD';
+  difficulty: "EASY" | "MEDIUM" | "HARD";
   conceptTag: string;
 }
 
@@ -139,8 +144,8 @@ export interface SessionPrepPanelProps {
   sessionPlan: SessionPlan;
   onStartSession: () => void;
   onAdjustDuration: (duration: number) => void;
-  onAdjustDifficulty: (difficulty: 'EASY' | 'NORMAL' | 'CHALLENGING') => void;
+  onAdjustDifficulty: (difficulty: "EASY" | "NORMAL" | "CHALLENGING") => void;
   isStarting?: boolean;
-  preSessionQuizResults?: SessionPreparationData['preSessionQuizResults'];
+  preSessionQuizResults?: SessionPreparationData["preSessionQuizResults"];
   suggestedFocusAreas?: string[];
 }

@@ -96,10 +96,7 @@ export {
   calculatePowerUserPercentage,
 } from "./engagement";
 export type { EngagementMetrics } from "./engagement";
-export {
-  trackMonetizationEvent,
-  getMonetizationMetrics,
-} from "./monetization";
+export { trackMonetizationEvent, getMonetizationMetrics } from "./monetization";
 export type { MonetizationMetrics } from "./monetization";
 export {
   trackPaywallEvent,
@@ -107,16 +104,11 @@ export {
   getBestPaywallContext,
 } from "./paywall";
 export type { PaywallAnalytics } from "./paywall";
-export {
-  trackStreakEvent,
-  getStreakSurvivalMetrics,
-} from "./streaks";
+export { trackStreakEvent, getStreakSurvivalMetrics } from "./streaks";
 export type { StreakSurvivalMetrics } from "./streaks";
 export { generateDashboardReport } from "./dashboard";
 export type { VEXDashboard } from "./dashboard";
-export {
-  TARGET_METRICS,
-} from "./VEXAnalyticsInfrastructure.types";
+export { TARGET_METRICS } from "./VEXAnalyticsInfrastructure.types";
 export type {
   MetricWithTarget,
   VEXSuccessMetrics,

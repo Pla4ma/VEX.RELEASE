@@ -1,14 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
-import { listStoredProjectThreads } from './repository';
-import { type ProjectThread } from './schemas';
-import { useProjectFocusStore } from './store';
+import { listStoredProjectThreads } from "./repository";
+import { type ProjectThread } from "./schemas";
+import { useProjectFocusStore } from "./store";
 
 export function useProjectThreads(userId: string | null, enabled = true) {
   const query = useQuery({
     enabled: Boolean(userId) && enabled,
-    queryFn: () => listStoredProjectThreads(userId ?? ''),
-    queryKey: ['project-focus', userId],
+    queryFn: () => listStoredProjectThreads(userId ?? ""),
+    queryKey: ["project-focus", userId],
   });
 
   return {
@@ -31,14 +31,14 @@ export function useActiveProjectThread(userId: string | null): {
   const { data: threads, isPending, isError } = useProjectThreads(userId);
 
   const thread = activeThreadId
-    ? threads.find((t) => t.id === activeThreadId) ?? null
-    : threads.find((t) => t.state !== 'completed') ?? null;
+    ? (threads.find((t) => t.id === activeThreadId) ?? null)
+    : (threads.find((t) => t.state !== "completed") ?? null);
 
   return {
     thread,
     isPending,
     isError,
-    isRescued: thread?.state === 'rescued',
-    isStale: thread?.state === 'stale',
+    isRescued: thread?.state === "rescued",
+    isStale: thread?.state === "stale",
   };
 }

@@ -11,8 +11,8 @@ jest.mock("../../../events/EventBus", () => ({
 }));
 jest.mock("../../liveops-config/feature-access-store", () => ({
   getAvailabilityFor: jest.fn(() => ({
-    canSubscribeToEvents: true
-  }))
+    canSubscribeToEvents: true,
+  })),
 }));
 describe("CompanionPersonalityEngine", () => {
   beforeEach(() => {

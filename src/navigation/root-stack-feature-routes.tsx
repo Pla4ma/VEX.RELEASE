@@ -25,8 +25,12 @@ const CoachScreen = React.lazy(() =>
     default: module.CoachScreen,
   })),
 );
-const MasteryScreen = React.lazy(() => import("../screens/profile/MasteryScreen"));
-const ContentStudyNavigator = React.lazy(() => import("./ContentStudyNavigator"));
+const MasteryScreen = React.lazy(
+  () => import("../screens/profile/MasteryScreen"),
+);
+const ContentStudyNavigator = React.lazy(
+  () => import("./ContentStudyNavigator"),
+);
 
 interface RootStackFeatureRoutesProps {
   features: FeatureAccessMap;

@@ -32,7 +32,8 @@ export const SessionSetupScreen = withScreenErrorBoundary(
   function _SessionSetupScreen(): React.JSX.Element {
     const navigation = useNavigation<SessionNavigationProp>();
     const route = useRoute<SessionSetupRouteProp>();
-    const isFirstSessionSetup = route.params?.source === SESSION_SETUP_SOURCE_ONBOARDING;
+    const isFirstSessionSetup =
+      route.params?.source === SESSION_SETUP_SOURCE_ONBOARDING;
 
     const [contractText, setContractText] = useState("");
     const [selectedDifficulty, setSelectedDifficulty] =
@@ -55,7 +56,13 @@ export const SessionSetupScreen = withScreenErrorBoundary(
 
     if (!controller.userId) {
       return (
-        <Box flex={1} bg="background.primary" justifyContent="center" alignItems="center" p="lg">
+        <Box
+          flex={1}
+          bg="background.primary"
+          justifyContent="center"
+          alignItems="center"
+          p="lg"
+        >
           <Text variant="h4" color="error.DEFAULT" mb="md">
             Not authenticated
           </Text>

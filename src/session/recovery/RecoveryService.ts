@@ -16,7 +16,10 @@ import {
 } from "./recovery-analysis";
 
 export type { RecoveryConfig } from "./recovery-analysis-types";
-export { createRecoveryService, getRecoveryService } from "./recovery-service-factory";
+export {
+  createRecoveryService,
+  getRecoveryService,
+} from "./recovery-service-factory";
 
 const debug = createDebugger("session:recovery");
 
@@ -124,7 +127,9 @@ export class RecoveryService {
     return true;
   }
 
-  calculatePartialCredit(session: SessionState): ReturnType<typeof calculatePartialCredit> {
+  calculatePartialCredit(
+    session: SessionState,
+  ): ReturnType<typeof calculatePartialCredit> {
     return calculatePartialCredit(session, this.config.partialCreditThreshold);
   }
 

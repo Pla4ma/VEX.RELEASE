@@ -7,14 +7,17 @@ import {
 } from "./helpers";
 
 describe("1. Completion creates memory candidate", () => {
-  it.each(LANES)("%s: clean completion produces one memory candidate", (lane) => {
-    const result = buildCompletionPersonalization({
-      lane,
-      summary: createSessionSummary({ sessionMode: SessionMode.STUDY }),
-    });
-    expect(result.memoryCandidates).toHaveLength(1);
-    expect(result.memoryCandidates[0].source).toBe("session_completion");
-  });
+  it.each(LANES)(
+    "%s: clean completion produces one memory candidate",
+    (lane) => {
+      const result = buildCompletionPersonalization({
+        lane,
+        summary: createSessionSummary({ sessionMode: SessionMode.STUDY }),
+      });
+      expect(result.memoryCandidates).toHaveLength(1);
+      expect(result.memoryCandidates[0].source).toBe("session_completion");
+    },
+  );
 
   it("memory candidate includes session evidence in text", () => {
     const result = buildCompletionPersonalization({

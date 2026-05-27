@@ -4,11 +4,10 @@
  * Simple linear progress indicator.
  */
 
-import React from 'react';
-import { View } from 'react-native';
-import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import React from "react";
+import { View } from "react-native";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 export interface ProgressBarProps {
   /** Progress value between 0 and 1 */
@@ -63,10 +62,10 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
 const styles = createSheet({
   container: {
-    width: '100%',
-    overflow: 'hidden',
+    width: "100%",
+    overflow: "hidden",
   },
   fill: {
-    height: '100%',
+    height: "100%",
   },
 });

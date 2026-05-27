@@ -2,13 +2,14 @@ import {
   MessageQualityAnalysisSchema,
   MessageQualityElements,
   type MessageQualityAnalysis,
-} from './message-quality-schema';
+} from "./message-quality-schema";
 import {
   calculateQualityConfidence,
   detectGenericPatterns,
   detectQualityElements,
   determineSuggestedAction,
-} from './message-quality-scoring';
+} from "./message-quality-scoring";
+import { v4 } from "../../utils/uuid";
 
 export {
   MessageQualityAnalysisSchema,
@@ -16,30 +17,32 @@ export {
   MessageQualityElementValues,
   type MessageQualityAnalysis,
   type MessageQualityElement,
-} from './message-quality-schema';
+} from "./message-quality-schema";
 export {
   APPROVED_MESSAGE_EXAMPLES,
   REJECTED_MESSAGE_EXAMPLES,
-} from './message-quality-examples';
+} from "./message-quality-examples";
 
 export function validateMessageQuality(
   messageId: string,
   content: string,
-  category: string
+  category: string,
 ): MessageQualityAnalysis {
-  const normalizedContent = content.length > 1000 ? content.slice(0, 1000) : content;
+  const normalizedContent =
+    content.length > 1000 ? content.slice(0, 1000) : content;
   const genericAnalysis = detectGenericPatterns(normalizedContent);
   const qualityElements = detectQualityElements(normalizedContent);
-  const passesQualityGate = !genericAnalysis.isGeneric && qualityElements.length >= 2;
+  const passesQualityGate =
+    !genericAnalysis.isGeneric && qualityElements.length >= 2;
   const confidence = calculateQualityConfidence(
     genericAnalysis.isGeneric,
     qualityElements.length,
-    normalizedContent.length
+    normalizedContent.length,
   );
   const suggestedAction = determineSuggestedAction(
     genericAnalysis.isGeneric,
     qualityElements.length,
-    confidence
+    confidence,
   );
 
   return MessageQualityAnalysisSchema.parse({
@@ -56,12 +59,13 @@ export function validateMessageQuality(
 }
 
 export function createMockQualityAnalysis(
-  overrides: Partial<MessageQualityAnalysis> = {}
+  overrides: Partial<MessageQualityAnalysis> = {},
 ): MessageQualityAnalysis {
   return MessageQualityAnalysisSchema.parse({
     messageId: generateMockUUID(),
-    content: 'Your strongest sessions this week started after 8 PM. Try a 25-minute Recovery session tonight.',
-    category: 'STREAK_RISK',
+    content:
+      "Your strongest sessions this week started after 8 PM. Try a 25-minute Recovery session tonight.",
+    category: "STREAK_RISK",
     qualityElements: [
       MessageQualityElements.REASON,
       MessageQualityElements.CONFIDENCE_LEVEL,
@@ -71,23 +75,19 @@ export function createMockQualityAnalysis(
     genericReasons: [],
     passesQualityGate: true,
     confidence: 0.85,
-    suggestedAction: 'approve',
+    suggestedAction: "approve",
     ...overrides,
   });
 }
 
 export function batchValidateMessages(
-  messages: Array<{ id: string; content: string; category: string }>
+  messages: Array<{ id: string; content: string; category: string }>,
 ): MessageQualityAnalysis[] {
   return messages.map((message) =>
-    validateMessageQuality(message.id, message.content, message.category)
+    validateMessageQuality(message.id, message.content, message.category),
   );
 }
 
 function generateMockUUID(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-    const r = Math.floor(Math.random() * 16);
-    const v = c === 'x' ? r : 8 + (r % 4);
-    return v.toString(16);
-  });
+  return v4();
 }

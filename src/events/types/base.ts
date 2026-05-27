@@ -4,7 +4,7 @@
  * Core event infrastructure types used across all domains.
  */
 
-export type EventPriority = 'low' | 'normal' | 'high' | 'critical';
+export type EventPriority = "low" | "normal" | "high" | "critical";
 
 export interface EventSubscriptionOptions {
   priority?: EventPriority;

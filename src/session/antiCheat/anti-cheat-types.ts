@@ -36,4 +36,9 @@ export interface TickRecord {
 
 export type PurityLabel = "Elite" | "Good" | "Okay" | "Distracted";
 export type SeverityLevel = "CLEAN" | "WARNING" | "MODERATE" | "CRITICAL";
-export type EngineStatus = "CLEAN" | "WARNING" | "FLAGGED" | "FAILED" | "INVALIDATED";
+export type EngineStatus =
+  | "CLEAN"
+  | "WARNING"
+  | "FLAGGED"
+  | "FAILED"
+  | "INVALIDATED";

@@ -4,7 +4,7 @@
  * React hook for scale animations.
  */
 
-import { useCallback } from 'react';
+import { useCallback } from "react";
 import {
   useSharedValue,
   useAnimatedStyle,
@@ -13,10 +13,10 @@ import {
   type WithTimingConfig,
   type WithSpringConfig,
   type SharedValue,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { durations } from '../timings';
-import { gentleSpring } from '../springs';
+import { durations } from "../timings";
+import { gentleSpring } from "../springs";
 
 /**
  * Scale animation options
@@ -33,7 +33,10 @@ interface UseScaleOptions {
 interface UseScaleResult {
   scale: SharedValue<number>;
   animatedStyle: ReturnType<typeof useAnimatedStyle>;
-  scaleTo: (target: number, config?: WithTimingConfig | WithSpringConfig) => void;
+  scaleTo: (
+    target: number,
+    config?: WithTimingConfig | WithSpringConfig,
+  ) => void;
   scaleIn: () => void;
   scaleOut: () => void;
   pulse: () => void;
@@ -60,12 +63,18 @@ export function useScale(options: UseScaleOptions = {}): UseScaleResult {
   const scaleTo = useCallback(
     (target: number, config?: WithTimingConfig | WithSpringConfig) => {
       if (useSpringAnimation) {
-        scale.value = withSpring(target, (config as WithSpringConfig) ?? gentleSpring);
+        scale.value = withSpring(
+          target,
+          (config as WithSpringConfig) ?? gentleSpring,
+        );
       } else {
-        scale.value = withTiming(target, (config as WithTimingConfig) ?? { duration });
+        scale.value = withTiming(
+          target,
+          (config as WithTimingConfig) ?? { duration },
+        );
       }
     },
-    [scale, useSpringAnimation, duration]
+    [scale, useSpringAnimation, duration],
   );
 
   const scaleIn = useCallback(() => {

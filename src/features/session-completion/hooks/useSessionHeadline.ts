@@ -1,15 +1,24 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
-import { FEATURE_FLAG_DEFAULTS, FEATURE_FLAGS } from '../../../constants/features';
-import type { SessionSummary } from '../../../session/types';
-import { selectHeadlineReward } from '../headline-reward.service';
-import type { HeadlineReward, HeadlineRewardConsequences } from '../headline-reward.types';
-import { buildSessionRewardPriority, type RewardPrioritySummary } from '../reward-priority';
-import type { SessionCompletionConsequences } from '../story-consequence-service';
+import {
+  FEATURE_FLAG_DEFAULTS,
+  FEATURE_FLAGS,
+} from "../../../constants/features";
+import type { SessionSummary } from "../../../session/types";
+import { selectHeadlineReward } from "../headline-reward.service";
+import type {
+  HeadlineReward,
+  HeadlineRewardConsequences,
+} from "../headline-reward.types";
+import {
+  buildSessionRewardPriority,
+  type RewardPrioritySummary,
+} from "../reward-priority";
+import type { SessionCompletionConsequences } from "../story-consequence-service";
 
 function buildHeadlineConsequences(input: {
   consequences?: SessionCompletionConsequences;
-  contractStatus?: 'done' | 'partial' | 'not_done' | 'skipped' | null;
+  contractStatus?: "done" | "partial" | "not_done" | "skipped" | null;
   summary: SessionSummary;
 }): HeadlineRewardConsequences {
   const { consequences, contractStatus, summary } = input;
@@ -18,13 +27,15 @@ function buildHeadlineConsequences(input: {
     boss: consequences?.boss
       ? {
           currentHealth: consequences.boss.healthAfter,
-          isEnabled: FEATURE_FLAG_DEFAULTS[FEATURE_FLAGS.BASIC_SOLO_BOSS] ?? false,
+          isEnabled:
+            FEATURE_FLAG_DEFAULTS[FEATURE_FLAGS.BASIC_SOLO_BOSS] ?? false,
         }
       : undefined,
     challenge: consequences?.challenge
       ? {
           completedThisSession: consequences.challenge.wasCompleted,
-          isEnabled: FEATURE_FLAG_DEFAULTS[FEATURE_FLAGS.BASIC_CHALLENGES] ?? false,
+          isEnabled:
+            FEATURE_FLAG_DEFAULTS[FEATURE_FLAGS.BASIC_CHALLENGES] ?? false,
         }
       : undefined,
     contract: { status: contractStatus ?? null },
@@ -49,7 +60,7 @@ function buildHeadlineConsequences(input: {
 
 export function useSessionHeadline(input: {
   consequences?: SessionCompletionConsequences;
-  contractStatus?: 'done' | 'partial' | 'not_done' | 'skipped' | null;
+  contractStatus?: "done" | "partial" | "not_done" | "skipped" | null;
   summary: SessionSummary;
 }): HeadlineReward {
   const { consequences, contractStatus, summary } = input;
@@ -61,7 +72,7 @@ export function useSessionHeadline(input: {
 
 export function useSessionRewardPriority(input: {
   consequences?: SessionCompletionConsequences;
-  contractStatus?: 'done' | 'partial' | 'not_done' | 'skipped' | null;
+  contractStatus?: "done" | "partial" | "not_done" | "skipped" | null;
   summary: SessionSummary;
 }): RewardPrioritySummary {
   const { consequences, contractStatus, summary } = input;

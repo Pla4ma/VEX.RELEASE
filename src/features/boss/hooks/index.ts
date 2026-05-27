@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
 interface BossTemplate {
   id: string;
@@ -16,42 +16,48 @@ interface BossEngagementSummary {
 }
 
 export interface BossEncounterStub {
-  bossId: string; bossName: string; healthRemaining: number;
-  maxHealth: number; timeRemaining: number; status: string; id: string;
+  bossId: string;
+  bossName: string;
+  healthRemaining: number;
+  maxHealth: number;
+  timeRemaining: number;
+  status: string;
+  id: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useActiveBoss(..._args: any[]) {
+export function useActiveBoss(..._args: unknown[]) {
+  void _args;
   return useQuery<BossEncounterStub | null>({
     queryFn: () => Promise.resolve(null),
-    queryKey: ['boss', 'active'],
+    queryKey: ["boss", "active"],
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useBossEngagementSummary(..._args: any[]) {
+export function useBossEngagementSummary(..._args: unknown[]) {
+  void _args;
   return useQuery<BossEngagementSummary>({
-    queryFn: () => Promise.resolve({
-      bossRouteOpenedCount: 0,
-      bossCTAClickedCount: 0,
-      bossDamageEventsCount: 0,
-      recentSessionsWithBossProgress: 0,
-    }),
-    queryKey: ['boss', 'engagement'],
+    queryFn: () =>
+      Promise.resolve({
+        bossRouteOpenedCount: 0,
+        bossCTAClickedCount: 0,
+        bossDamageEventsCount: 0,
+        recentSessionsWithBossProgress: 0,
+      }),
+    queryKey: ["boss", "engagement"],
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useAvailableBosses(..._args: any[]) {
+export function useAvailableBosses(..._args: unknown[]) {
+  void _args;
   return useQuery<BossTemplate[]>({
     queryFn: () => Promise.resolve([]),
-    queryKey: ['boss', 'available'],
+    queryKey: ["boss", "available"],
   });
 }
 
 export function useBossTemplates(..._args: unknown[]) {
   return useQuery<BossTemplate[]>({
     queryFn: () => Promise.resolve([]),
-    queryKey: ['boss', 'templates'],
+    queryKey: ["boss", "templates"],
   });
 }

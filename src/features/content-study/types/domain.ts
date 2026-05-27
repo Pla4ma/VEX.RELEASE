@@ -3,7 +3,12 @@
  * Core domain models for content study feature
  */
 
-import type { ContentSourceType, TaskPriority, QuizDifficulty, SessionDifficulty } from './enums';
+import type {
+  ContentSourceType,
+  TaskPriority,
+  QuizDifficulty,
+  SessionDifficulty,
+} from "./enums";
 
 export interface StudyTask {
   id: string;
@@ -35,7 +40,7 @@ export interface KeyConcept {
   id: string;
   term: string;
   definition: string;
-  importance: 'high' | 'medium' | 'low' | number;
+  importance: "high" | "medium" | "low" | number;
 }
 
 export interface StudySummary {

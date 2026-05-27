@@ -24,8 +24,13 @@ export function SquadSyncEmptyState(): JSX.Element {
   const { theme } = useTheme();
 
   return (
-    <Box px="md" py="sm" borderRadius="xl" bg={`${theme.colors.background.elevated}80`}
-      borderWidth={1} borderColor={theme.colors.border.DEFAULT}
+    <Box
+      px="md"
+      py="sm"
+      borderRadius="xl"
+      bg={`${theme.colors.background.elevated}80`}
+      borderWidth={1}
+      borderColor={theme.colors.border.DEFAULT}
     >
       <Text variant="caption" color="text.tertiary">
         No squad members currently focusing
@@ -34,7 +39,11 @@ export function SquadSyncEmptyState(): JSX.Element {
   );
 }
 
-export function SquadSyncHeader({ focusingCount }: { focusingCount: number }): JSX.Element {
+export function SquadSyncHeader({
+  focusingCount,
+}: {
+  focusingCount: number;
+}): JSX.Element {
   const { theme } = useTheme();
 
   return (
@@ -44,8 +53,18 @@ export function SquadSyncHeader({ focusingCount }: { focusingCount: number }): J
         SQUAD SYNC
       </Text>
       {focusingCount > 0 && (
-        <Box px="sm" py="xs" borderRadius="full" bg={`${theme.colors.success[500]}20`}>
-          <Text variant="caption" color={theme.colors.success.DEFAULT} fontWeight="700" fontSize={10}>
+        <Box
+          px="sm"
+          py="xs"
+          borderRadius="full"
+          bg={`${theme.colors.success[500]}20`}
+        >
+          <Text
+            variant="caption"
+            color={theme.colors.success.DEFAULT}
+            fontWeight="700"
+            fontSize={10}
+          >
             {focusingCount} focusing
           </Text>
         </Box>

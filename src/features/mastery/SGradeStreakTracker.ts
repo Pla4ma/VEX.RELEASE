@@ -10,12 +10,12 @@
  * - 10 consecutive: title cosmetic awarded
  */
 
-import { z } from 'zod';
-import { captureSilentFailure } from '../../utils/silent-failure';
-import { getMMKVStorage } from '../../persistence/MMKVStorage';
+import { z } from "zod";
+import { captureSilentFailure } from "../../utils/silent-failure";
+import { getMMKVStorage } from "../../persistence/MMKVStorage";
 
 // Storage key for MMKV
-const SGRADE_STREAK_KEY = 'vex:mastery:s-grade-streak';
+const SGRADE_STREAK_KEY = "vex:mastery:s-grade-streak";
 
 // Schema for S-grade streak data
 const SGradeStreakDataSchema = z.object({
@@ -48,7 +48,7 @@ export async function trackSGradeSession(
   userId: string,
   gradeLetter: string,
   sessionId: string,
-  eventBus?: { emit: (event: string, payload: SGradeStreakEvent) => void }
+  eventBus?: { emit: (event: string, payload: SGradeStreakEvent) => void },
 ): Promise<{ count: number; milestone?: 3 | 5 | 10 }> {
   try {
     // Read current streak from storage
@@ -57,14 +57,18 @@ export async function trackSGradeSession(
     let newCount: number;
     let milestone: 3 | 5 | 10 | undefined;
 
-    if (gradeLetter === 'S') {
+    if (gradeLetter === "S") {
       // Increment streak for S grade
       newCount = currentData.count + 1;
 
       // Check for milestones
-      if (newCount === 3) {milestone = 3;}
-      else if (newCount === 5) {milestone = 5;}
-      else if (newCount === 10) {milestone = 10;}
+      if (newCount === 3) {
+        milestone = 3;
+      } else if (newCount === 5) {
+        milestone = 5;
+      } else if (newCount === 10) {
+        milestone = 10;
+      }
     } else {
       // Reset streak for non-S grades
       newCount = 0;
@@ -81,7 +85,7 @@ export async function trackSGradeSession(
 
     // Emit event if milestone reached or streak continued
     if (milestone && eventBus) {
-      eventBus.emit('mastery:s_grade_streak', {
+      eventBus.emit("mastery:s_grade_streak", {
         userId,
         count: newCount,
         milestone,
@@ -90,11 +94,14 @@ export async function trackSGradeSession(
 
     return { count: newCount, milestone };
   } catch (error) {
-    captureSilentFailure(error instanceof Error ? error : new Error(String(error)), {
-      feature: 'mastery',
-      operation: 'track-s-grade',
-      type: 'data',
-    });
+    captureSilentFailure(
+      error instanceof Error ? error : new Error(String(error)),
+      {
+        feature: "mastery",
+        operation: "track-s-grade",
+        type: "data",
+      },
+    );
     // Return safe default on error
     return { count: 0 };
   }
@@ -124,11 +131,14 @@ async function readSGradeStreak(): Promise<SGradeStreakData> {
     // Invalid data - reset to default
     return { count: 0 };
   } catch (error) {
-    captureSilentFailure(error instanceof Error ? error : new Error(String(error)), {
-      feature: 'mastery',
-      operation: 'read-s-grade-streak',
-      type: 'data',
-    });
+    captureSilentFailure(
+      error instanceof Error ? error : new Error(String(error)),
+      {
+        feature: "mastery",
+        operation: "read-s-grade-streak",
+        type: "data",
+      },
+    );
     return { count: 0 };
   }
 }
@@ -142,11 +152,14 @@ async function saveSGradeStreak(data: SGradeStreakData): Promise<void> {
     await storage.initialize();
     await storage.setItem(SGRADE_STREAK_KEY, JSON.stringify(data));
   } catch (error) {
-    captureSilentFailure(error instanceof Error ? error : new Error(String(error)), {
-      feature: 'mastery',
-      operation: 'save-s-grade-streak',
-      type: 'data',
-    });
+    captureSilentFailure(
+      error instanceof Error ? error : new Error(String(error)),
+      {
+        feature: "mastery",
+        operation: "save-s-grade-streak",
+        type: "data",
+      },
+    );
   }
 }
 
@@ -169,8 +182,14 @@ export async function resetSGradeStreak(): Promise<void> {
  * Check if a streak milestone was reached
  */
 export function isSGradeMilestone(count: number): 3 | 5 | 10 | null {
-  if (count === 3) {return 3;}
-  if (count === 5) {return 5;}
-  if (count === 10) {return 10;}
+  if (count === 3) {
+    return 3;
+  }
+  if (count === 5) {
+    return 5;
+  }
+  if (count === 10) {
+    return 10;
+  }
   return null;
 }

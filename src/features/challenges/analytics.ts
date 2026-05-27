@@ -15,15 +15,15 @@ export {
   trackRewardClaimed,
   trackChallengeReroll,
   trackChallengeExpired,
-} from './analytics/events';
+} from "./analytics/events";
 
 export {
   // Metrics
   calculateChallengeMetrics,
   calculateDifficultyMetrics,
-} from './analytics/metrics';
+} from "./analytics/metrics";
 
 export {
   // Health
   checkChallengesHealth,
-} from './analytics/health';
+} from "./analytics/health";

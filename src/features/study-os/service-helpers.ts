@@ -1,5 +1,5 @@
-import { SessionMode } from '../../session/modes';
-import { buildLaneSessionBrief } from '../session-start/service';
+import { SessionMode } from "../../session/modes";
+import { buildLaneSessionBrief } from "../session-start/service";
 import {
   StudyOsHomeSurfaceSchema,
   StudyOsPremiumGateSchema,
@@ -11,23 +11,32 @@ import {
   type StudyOsPremiumGate,
   type StudyOsUnlockGate,
   type StudyPlan,
-} from './schemas';
+} from "./schemas";
 
 export function firstSentence(text: string): string {
-  return text.split(/[.!?\n]/).map((part) => part.trim()).find(Boolean) ?? 'Study next useful section';
+  return (
+    text
+      .split(/[.!?\n]/)
+      .map((part) => part.trim())
+      .find(Boolean) ?? "Study next useful section"
+  );
 }
 
 export function planId(userId: string, now: number): string {
   return `${userId}:study:${now}`;
 }
 
-export function makeBlock(id: string, title: string, objective: string): StudyBlock {
+export function makeBlock(
+  id: string,
+  title: string,
+  objective: string,
+): StudyBlock {
   return {
     estimatedMinutes: 25,
     id: `${id}:block:1`,
     objective,
-    priority: 'medium',
-    status: 'not_started',
+    priority: "medium",
+    status: "not_started",
     studyPlanId: id,
     title,
   };
@@ -35,8 +44,12 @@ export function makeBlock(id: string, title: string, objective: string): StudyBl
 
 export function buildStudySessionFromBlock(block: StudyBlock) {
   return {
-    ...buildLaneSessionBrief({ durationSeconds: block.estimatedMinutes * 60, lane: 'student' }),
-    afterCompletion: 'Completion will add one review prompt and update the queue.',
+    ...buildLaneSessionBrief({
+      durationSeconds: block.estimatedMinutes * 60,
+      lane: "student",
+    }),
+    afterCompletion:
+      "Completion will add one review prompt and update the queue.",
     sessionMode: SessionMode.STUDY,
     successCondition: block.objective,
     title: block.title,
@@ -45,16 +58,18 @@ export function buildStudySessionFromBlock(block: StudyBlock) {
 
 export function buildStudyOsHomeSurface(input: {
   isOffline?: boolean;
-  lane: 'student' | 'game_like' | 'deep_creative' | 'minimal_normal';
+  lane: "student" | "game_like" | "deep_creative" | "minimal_normal";
   plan: StudyPlan | null;
 }): StudyOsHomeSurface {
-  const hidden = input.lane !== 'student' && !input.plan;
+  const hidden = input.lane !== "student" && !input.plan;
   return StudyOsHomeSurfaceSchema.parse({
-    ctaLabel: input.plan ? 'Start study block' : 'Create study block',
+    ctaLabel: input.plan ? "Start study block" : "Create study block",
     hidden,
-    offlineFallback: input.isOffline ? 'Offline: start a manual study block now; import sync can retry later.' : null,
-    riskLabel: input.plan?.deadlineAt ? 'Deadline risk active' : null,
-    title: input.plan?.title ?? 'Study OS',
+    offlineFallback: input.isOffline
+      ? "Offline: start a manual study block now; import sync can retry later."
+      : null,
+    riskLabel: input.plan?.deadlineAt ? "Deadline risk active" : null,
+    title: input.plan?.title ?? "Study OS",
   });
 }
 
@@ -72,7 +87,7 @@ export function computeStudyOsUnlockGate(input: {
       isDayZero: true,
       completedSessions,
       studyUsageRatio,
-      unlockReason: 'day_zero',
+      unlockReason: "day_zero",
     });
   }
 
@@ -82,7 +97,7 @@ export function computeStudyOsUnlockGate(input: {
       isDayZero: false,
       completedSessions,
       studyUsageRatio,
-      unlockReason: 'full',
+      unlockReason: "full",
     });
   }
 
@@ -92,7 +107,8 @@ export function computeStudyOsUnlockGate(input: {
       isDayZero: false,
       completedSessions,
       studyUsageRatio,
-      unlockReason: completedSessions >= 5 ? 'evidence_sessions' : 'evidence_usage',
+      unlockReason:
+        completedSessions >= 5 ? "evidence_sessions" : "evidence_usage",
     });
   }
 
@@ -101,7 +117,7 @@ export function computeStudyOsUnlockGate(input: {
     isDayZero: false,
     completedSessions,
     studyUsageRatio,
-    unlockReason: 'first_week',
+    unlockReason: "first_week",
   });
 }
 
@@ -110,12 +126,15 @@ export function computeStudyOsPremiumGate(input: {
   revenueCatHealthy: boolean;
 }): StudyOsPremiumGate {
   return StudyOsPremiumGateSchema.parse({
-    canAccessPremiumDepth: input.hasPremiumEntitlement && input.revenueCatHealthy,
+    canAccessPremiumDepth:
+      input.hasPremiumEntitlement && input.revenueCatHealthy,
     revenueCatHealthy: input.revenueCatHealthy,
     basicStudyFree: true,
     restrictionReason: input.revenueCatHealthy
-      ? input.hasPremiumEntitlement ? null : 'Premium study depth available with VEX+'
-      : 'Premium features unavailable — RevenueCat is degraded',
+      ? input.hasPremiumEntitlement
+        ? null
+        : "Premium study depth available with VEX+"
+      : "Premium features unavailable — RevenueCat is degraded",
   });
 }
 
@@ -126,10 +145,13 @@ export function generateRecallQuestion(input: {
   studyBlockId: string;
   studyPlanId: string;
 }): RecallQuestion {
-  const kind: 'recall' | 'reflection' = input.reflection ? 'reflection' : 'recall';
-  const prompt = kind === 'reflection'
-    ? `Reflect: ${input.blockObjective}`
-    : `Recall the main concept from "${input.blockTitle}"`;
+  const kind: "recall" | "reflection" = input.reflection
+    ? "reflection"
+    : "recall";
+  const prompt =
+    kind === "reflection"
+      ? `Reflect: ${input.blockObjective}`
+      : `Recall the main concept from "${input.blockTitle}"`;
   return RecallQuestionSchema.parse({
     id: `${input.studyBlockId}:recall:${Date.now()}`,
     prompt,
@@ -142,21 +164,24 @@ export function generateRecallQuestion(input: {
 
 export function getEmptyRecallFallback(): RecallQuestion {
   return RecallQuestionSchema.parse({
-    id: 'no-recall',
-    prompt: 'No study blocks completed yet — start one first.',
+    id: "no-recall",
+    prompt: "No study blocks completed yet — start one first.",
     answerHint: null,
-    kind: 'reflection',
-    studyBlockId: 'none',
-    studyPlanId: 'none',
+    kind: "reflection",
+    studyBlockId: "none",
+    studyPlanId: "none",
   });
 }
 
 export function shouldGenerateRecall(plan: StudyPlan | null): boolean {
   if (!plan) return false;
-  return plan.blocks.some((b) => b.status === 'completed');
+  return plan.blocks.some((b) => b.status === "completed");
 }
 
-export function buildMemoryContentFromBlock(block: StudyBlock, reflection?: string | null): string {
+export function buildMemoryContentFromBlock(
+  block: StudyBlock,
+  reflection?: string | null,
+): string {
   return reflection
     ? `Completed: ${block.title} — ${block.objective}. Reflection: ${reflection}`
     : `Completed: ${block.title} — ${block.objective}`;
@@ -164,28 +189,33 @@ export function buildMemoryContentFromBlock(block: StudyBlock, reflection?: stri
 
 export function getPlannedBlocksFromPlan(plan: StudyPlan | null): StudyBlock[] {
   if (!plan) return [];
-  return plan.blocks.filter((b) => b.status === 'not_started');
+  return plan.blocks.filter((b) => b.status === "not_started");
 }
 
 export function buildDayZeroStudyPreview(): StudyOsHomeSurface {
   return StudyOsHomeSurfaceSchema.parse({
-    ctaLabel: 'Start first study block',
+    ctaLabel: "Start first study block",
     hidden: false,
     offlineFallback: null,
     riskLabel: null,
-    title: 'Study OS preview',
+    title: "Study OS preview",
   });
 }
 
 export function isContentStudyBackendAvailable(input: {
-  featureHealth: 'healthy' | 'degraded' | 'unavailable';
+  featureHealth: "healthy" | "degraded" | "unavailable";
   aiConfigured: boolean;
   storageConfigured: boolean;
 }): boolean {
-  return input.featureHealth === 'healthy' && input.aiConfigured && input.storageConfigured;
+  return (
+    input.featureHealth === "healthy" &&
+    input.aiConfigured &&
+    input.storageConfigured
+  );
 }
 
 export function getManualStudyFallbackMessage(isOffline: boolean): string {
-  if (isOffline) return 'You are offline. Start a manual study block — sync can retry later.';
-  return 'Content tools are temporarily unavailable. Start a manual study session instead.';
+  if (isOffline)
+    return "You are offline. Start a manual study block — sync can retry later.";
+  return "Content tools are temporarily unavailable. Start a manual study session instead.";
 }

@@ -1,4 +1,4 @@
-import type { CompletionLedger, CompletionSyncStatus } from './schemas';
+import type { CompletionLedger, CompletionSyncStatus } from "./schemas";
 
 export interface SessionCompletionSyncOptions {
   forceSync?: boolean;
@@ -24,7 +24,7 @@ export class SessionCompletionOfflineSyncError extends Error {
     super(
       `Session completion offline sync failed during ${operation}: ${cause instanceof Error ? cause.message : String(cause)}`,
     );
-    this.name = 'SessionCompletionOfflineSyncError';
+    this.name = "SessionCompletionOfflineSyncError";
   }
 }
 

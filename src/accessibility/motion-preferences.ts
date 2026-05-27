@@ -22,7 +22,14 @@ export const DEFAULT_MOTION_PREFERENCES: MotionPreferences = {
   hapticFeedbackEnabled: true,
 };
 
-export type AnimationType = 'fade' | 'slide' | 'scale' | 'rotate' | 'spring' | 'parallax' | 'transition';
+export type AnimationType =
+  | "fade"
+  | "slide"
+  | "scale"
+  | "rotate"
+  | "spring"
+  | "parallax"
+  | "transition";
 
 export interface AnimationConfig {
   type: AnimationType;
@@ -30,5 +37,5 @@ export interface AnimationConfig {
   delay?: number;
   easing?: string;
   useNativeDriver?: boolean;
-  reducedMotionAlternative?: 'fade' | 'none' | 'instant';
+  reducedMotionAlternative?: "fade" | "none" | "instant";
 }

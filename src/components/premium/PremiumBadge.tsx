@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { View, type ViewStyle } from 'react-native';
+import React, { useEffect } from "react";
+import { View, type ViewStyle } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -7,23 +7,23 @@ import Animated, {
   withTiming,
   withSequence,
   withDelay,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { Text } from '../primitives/Text';
-import { useTheme } from '../../theme';
-import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
+import { Text } from "../primitives/Text";
+import { useTheme } from "../../theme";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 export interface PremiumBadgeProps {
-  size?: 'sm' | 'md' | 'lg';
-  variant?: 'default' | 'subtle' | 'animated';
+  size?: "sm" | "md" | "lg";
+  variant?: "default" | "subtle" | "animated";
   style?: ViewStyle;
   showGlow?: boolean;
 }
 
 export function PremiumBadge({
-  size = 'md',
-  variant = 'default',
+  size = "md",
+  variant = "default",
   style,
   showGlow = false,
 }: PremiumBadgeProps): JSX.Element {
@@ -32,9 +32,12 @@ export function PremiumBadge({
   const glowOpacity = useSharedValue(0);
 
   useEffect(() => {
-    if (variant === 'animated' || showGlow) {
+    if (variant === "animated" || showGlow) {
       scale.value = withRepeat(
-        withSequence(withTiming(1.05, { duration: 1000 }), withTiming(1, { duration: 1000 })),
+        withSequence(
+          withTiming(1.05, { duration: 1000 }),
+          withTiming(1, { duration: 1000 }),
+        ),
         -1,
         true,
       );
@@ -49,7 +52,9 @@ export function PremiumBadge({
     }
   }, [variant, showGlow, scale, glowOpacity]);
 
-  const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
   const glowStyle = useAnimatedStyle(() => ({ opacity: glowOpacity.value }));
 
   const sizeConfig = {
@@ -77,12 +82,12 @@ export function PremiumBadge({
     },
   };
 
-  const Wrapper = variant === 'animated' ? Animated.View : View;
-  const GlowWrapper = variant === 'animated' || showGlow ? Animated.View : View;
+  const Wrapper = variant === "animated" ? Animated.View : View;
+  const GlowWrapper = variant === "animated" || showGlow ? Animated.View : View;
 
   return (
     <View style={[styles.container, style]}>
-      {(variant === 'animated' || showGlow) && (
+      {(variant === "animated" || showGlow) && (
         <GlowWrapper
           style={[
             styles.glow,
@@ -106,7 +111,7 @@ export function PremiumBadge({
             backgroundColor: variantConfig[variant].backgroundColor,
             borderColor: variantConfig[variant].borderColor,
           },
-          variant === 'animated' && animatedStyle,
+          variant === "animated" && animatedStyle,
         ]}
       >
         <Text
@@ -123,12 +128,12 @@ export function PremiumBadge({
 }
 
 export interface SupporterBadgeProps {
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   style?: ViewStyle;
 }
 
 export function SupporterBadge({
-  size = 'md',
+  size = "md",
   style,
 }: SupporterBadgeProps): JSX.Element {
   const { theme } = useTheme();
@@ -160,14 +165,14 @@ export function SupporterBadge({
 
 const styles = createSheet({
   container: {
-    position: 'relative',
-    alignItems: 'center',
-    justifyContent: 'center',
+    position: "relative",
+    alignItems: "center",
+    justifyContent: "center",
   },
-  glow: { position: 'absolute' },
+  glow: { position: "absolute" },
   badge: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 2,
     shadowColor: launchColors.hex_000,
     shadowOffset: { width: 0, height: 2 },
@@ -175,10 +180,10 @@ const styles = createSheet({
     shadowRadius: 4,
     elevation: 3,
   },
-  text: { fontWeight: '800', letterSpacing: -0.5 },
+  text: { fontWeight: "800", letterSpacing: -0.5 },
   supporterBadge: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 2,
     shadowColor: launchColors.hex_000,
     shadowOffset: { width: 0, height: 2 },
@@ -186,7 +191,7 @@ const styles = createSheet({
     shadowRadius: 4,
     elevation: 3,
   },
-  supporterIcon: { fontWeight: '700' },
+  supporterIcon: { fontWeight: "700" },
 });
 
 export default PremiumBadge;

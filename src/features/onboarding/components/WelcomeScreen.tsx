@@ -7,20 +7,20 @@
  * @phase 2.2
  */
 
-import React from 'react';
-import { useWindowDimensions } from 'react-native';
+import React from "react";
+import { useWindowDimensions } from "react-native";
 import Animated, {
   FadeIn,
   FadeInUp,
   useAnimatedStyle,
   withRepeat,
   withTiming,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { Button } from "../../../components/primitives/Button";
+import { useTheme } from "../../../theme";
 
 interface WelcomeScreenProps {
   onStart: () => void;
@@ -36,11 +36,7 @@ function AnimatedBackground(): JSX.Element {
   const circle1Style = useAnimatedStyle(() => ({
     transform: [
       {
-        scale: withRepeat(
-          withTiming(1.2, { duration: 8000 }),
-          -1,
-          true
-        ),
+        scale: withRepeat(withTiming(1.2, { duration: 8000 }), -1, true),
       },
     ],
     opacity: 0.3,
@@ -49,11 +45,7 @@ function AnimatedBackground(): JSX.Element {
   const circle2Style = useAnimatedStyle(() => ({
     transform: [
       {
-        scale: withRepeat(
-          withTiming(1.1, { duration: 10000 }),
-          -1,
-          true
-        ),
+        scale: withRepeat(withTiming(1.1, { duration: 10000 }), -1, true),
       },
     ],
     opacity: 0.2,
@@ -65,7 +57,7 @@ function AnimatedBackground(): JSX.Element {
       <Animated.View
         style={[
           {
-            position: 'absolute',
+            position: "absolute",
             width: width * 0.8,
             height: width * 0.8,
             borderRadius: (width * 0.8) / 2,
@@ -81,7 +73,7 @@ function AnimatedBackground(): JSX.Element {
       <Animated.View
         style={[
           {
-            position: 'absolute',
+            position: "absolute",
             width: width * 0.6,
             height: width * 0.6,
             borderRadius: (width * 0.6) / 2,
@@ -134,7 +126,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
         {/* Core Identity Sentence — the one thing VEX stands for */}
         <Animated.View
           entering={FadeInUp.duration(500).delay(400)}
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
         >
           <Box alignItems="center" gap="md">
             <Text
@@ -143,7 +135,7 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
               textAlign="center"
               fontWeight="800"
             >
-              VEX changes based{'\n'}on how you work.
+              VEX changes based{"\n"}on how you work.
             </Text>
           </Box>
         </Animated.View>
@@ -151,15 +143,12 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
         {/* Value Prop */}
         <Animated.View
           entering={FadeInUp.duration(500).delay(600)}
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
         >
           <Box alignItems="center" gap="sm">
-            <Text
-              variant="bodyLarge"
-              color="text.secondary"
-              textAlign="center"
-            >
-              Answer a few questions, start one focused session, and VEX unlocks the system your brain needs.
+            <Text variant="bodyLarge" color="text.secondary" textAlign="center">
+              Answer a few questions, start one focused session, and VEX unlocks
+              the system your brain needs.
             </Text>
           </Box>
         </Animated.View>
@@ -170,17 +159,17 @@ export function WelcomeScreen({ onStart }: WelcomeScreenProps): JSX.Element {
         {/* CTA Button */}
         <Animated.View
           entering={FadeInUp.duration(500).delay(800)}
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
         >
           <Button
             variant="primary"
             size="lg"
             fullWidth
             onPress={onStart}
-
-          accessibilityLabel="Let's go → button"
-          accessibilityRole="button"
-          accessibilityHint="Activates this control">
+            accessibilityLabel="Let's go → button"
+            accessibilityRole="button"
+            accessibilityHint="Activates this control"
+          >
             Let's go →
           </Button>
         </Animated.View>

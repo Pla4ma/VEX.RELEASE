@@ -1,18 +1,18 @@
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { RootStackParams } from '../../../navigation/types';
-import { useFeatureGate } from '../../../features/feature-gate/hooks';
-import type { HomeController } from '../hooks/home-controller-types';
-import type { ActiveStudyPlan } from '../../../features/content-study';
-import { HomeSecondaryRail } from './HomeSecondaryRail';
-import { HomeFocusScore } from './HomeFocusScore';
-import { HomeContextualCards } from './HomeContextualCards';
-import { HomeMemoryInsight } from './HomeMemoryInsight';
-import type { ChallengeItem } from '../../../features/home-spine/components';
-import type { useHomeData } from '../hooks/useHomeData';
-import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
-import { buildLearningSessionParams } from '../../../features/learning-execution';
+import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { RootStackParams } from "../../../navigation/types";
+import { useFeatureGate } from "../../../features/feature-gate/hooks";
+import type { HomeController } from "../hooks/home-controller-types";
+import type { ActiveStudyPlan } from "../../../features/content-study";
+import { HomeSecondaryRail } from "./HomeSecondaryRail";
+import { HomeFocusScore } from "./HomeFocusScore";
+import { HomeContextualCards } from "./HomeContextualCards";
+import { HomeMemoryInsight } from "./HomeMemoryInsight";
+import type { ChallengeItem } from "../../../features/home-spine/components";
+import type { useHomeData } from "../hooks/useHomeData";
+import type { HomeSurfaceMap } from "../../../features/home-experience/surface-decision-schemas";
+import { buildLearningSessionParams } from "../../../features/learning-execution";
 
 type HomeData = ReturnType<typeof useHomeData>;
 type NavigationProp = NativeStackNavigationProp<RootStackParams>;
@@ -23,7 +23,7 @@ interface HomeContentLowerProps {
   missionInput: Record<string, never>;
   handleClaimReward: (rewardId: string) => void;
   streakHoursRemaining: number;
-  features: HomeController['features'];
+  features: HomeController["features"];
   comebackSessionsCompleted: number;
   surfaceMap: HomeSurfaceMap;
 }
@@ -39,10 +39,16 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   surfaceMap,
 }) => {
   const navigation = useNavigation<NavigationProp>();
-  const { isAvailable } = useFeatureGate('challenges', 'entryPoint');
-  const { isAvailable: canNavChallenges } = useFeatureGate('challenges', 'navigation');
+  const { isAvailable } = useFeatureGate("challenges", "entryPoint");
+  const { isAvailable: canNavChallenges } = useFeatureGate(
+    "challenges",
+    "navigation",
+  );
   const openChallenges = (): void => {
-    if (canNavChallenges) { navigation.navigate('Challenges'); return; }
+    if (canNavChallenges) {
+      navigation.navigate("Challenges");
+      return;
+    }
     controller.openSetup();
   };
 
@@ -51,24 +57,36 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
   if (isDayZero) return null;
 
   const sm = surfaceMap;
-  const showSecondary = sm.challenge_teaser !== 'hidden' || sm.boss_teaser !== 'hidden' || sm.study_layer !== 'hidden';
-  const showContextualCards = sm.study_layer !== 'hidden' || sm.boss_teaser !== 'hidden';
-  const showSecondaryRail = sm.study_layer !== 'hidden' && sm.study_layer !== 'blocked';
+  const showSecondary =
+    sm.challenge_teaser !== "hidden" ||
+    sm.boss_teaser !== "hidden" ||
+    sm.study_layer !== "hidden";
+  const showContextualCards =
+    sm.study_layer !== "hidden" || sm.boss_teaser !== "hidden";
+  const showSecondaryRail =
+    sm.study_layer !== "hidden" && sm.study_layer !== "blocked";
 
-  const isNewOrActivating = stage === 'ACTIVATING' || stage === 'NEW_USER';
-  const showFocusScore = (sm as Record<string, string>).focus_score !== 'hidden' && (sm as Record<string, string>).focus_score !== 'blocked';
-  const canOpenProgressDetail = (sm as Record<string, string>).progress_detail !== 'hidden' &&
-    (sm as Record<string, string>).progress_detail !== 'blocked' &&
-    (sm as Record<string, string>).progress_detail !== 'tiny_tease';
+  const isNewOrActivating = stage === "ACTIVATING" || stage === "NEW_USER";
+  const showFocusScore =
+    (sm as Record<string, string>).focus_score !== "hidden" &&
+    (sm as Record<string, string>).focus_score !== "blocked";
+  const canOpenProgressDetail =
+    (sm as Record<string, string>).progress_detail !== "hidden" &&
+    (sm as Record<string, string>).progress_detail !== "blocked" &&
+    (sm as Record<string, string>).progress_detail !== "tiny_tease";
   const handleFocusScorePress = (): void => {
     if (isNewOrActivating || !canOpenProgressDetail) return;
-    navigation.navigate('FocusScoreDashboard');
+    navigation.navigate("FocusScoreDashboard");
   };
 
-  const todaysChallenges: ChallengeItem[] = isAvailable ? data.todaysChallenges : [];
+  const todaysChallenges: ChallengeItem[] = isAvailable
+    ? data.todaysChallenges
+    : [];
   const startLearningTarget = (): void => {
     const target = controller.learningExecutionLayer.target;
-    controller.openSetup(target ? buildLearningSessionParams(target) : undefined);
+    controller.openSetup(
+      target ? buildLearningSessionParams(target) : undefined,
+    );
   };
 
   return (
@@ -81,9 +99,19 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
 
       {showContextualCards ? (
         <HomeContextualCards
-          activeStudyPlan={controller.activeStudyPlanQuery.data as ActiveStudyPlan | null | undefined}
+          activeStudyPlan={
+            controller.activeStudyPlanQuery.data as
+              | ActiveStudyPlan
+              | null
+              | undefined
+          }
           learningCopy={controller.learningExecutionLayer.copy}
-          comebackData={controller.comebackQuery.data as Record<string, unknown> | null | undefined}
+          comebackData={
+            controller.comebackQuery.data as
+              | Record<string, unknown>
+              | null
+              | undefined
+          }
           comebackSessionsCompleted={comebackSessionsCompleted}
           todaysChallenges={todaysChallenges}
           challengesQueryError={data.challengesQuery.error ?? undefined}
@@ -92,16 +120,42 @@ export const HomeContentLower: React.FC<HomeContentLowerProps> = ({
           challengesRefetch={() => data.challengesQuery.refetch()}
           openSetup={controller.openSetup}
           startLearningTarget={startLearningTarget}
-          showToast={(toastData) => void data.showToast({ type: toastData.type as 'success' | 'error' | 'warning' | 'info', title: toastData.title, message: toastData.message })}
-          userId={controller.userId ?? ''}
+          showToast={(toastData) =>
+            void data.showToast({
+              type: toastData.type as "success" | "error" | "warning" | "info",
+              title: toastData.title,
+              message: toastData.message,
+            })
+          }
+          userId={controller.userId ?? ""}
         />
       ) : null}
 
       {showSecondaryRail ? (
         <HomeSecondaryRail
-          activePlan={controller.activeStudyPlanQuery.data as { completedTasks: number; progressPercent: number; remainingMinutes: number; title: string; totalTasks: number } | null}
+          activePlan={
+            controller.activeStudyPlanQuery.data as {
+              completedTasks: number;
+              progressPercent: number;
+              remainingMinutes: number;
+              title: string;
+              totalTasks: number;
+            } | null
+          }
           canShowSecondarySystems={controller.shouldShowSecondarySystems}
-          comebackMessage={(controller.comebackQuery.data as Record<string, unknown> | undefined)?.isComeback ? ((controller.comebackQuery.data as Record<string, unknown> | undefined)?.message as string ?? null) : null}
+          comebackMessage={
+            (
+              controller.comebackQuery.data as
+                | Record<string, unknown>
+                | undefined
+            )?.isComeback
+              ? (((
+                  controller.comebackQuery.data as
+                    | Record<string, unknown>
+                    | undefined
+                )?.message as string) ?? null)
+              : null
+          }
           features={features}
           hasActiveRecommendation={Boolean(controller.primaryRecommendation)}
           hasStudyError={Boolean(controller.activeStudyPlanQuery.error)}

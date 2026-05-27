@@ -4,7 +4,7 @@
  * Abstract storage adapter interface for MMKV and MMKV.
  */
 
-import type { Nullable } from '../types/global';
+import type { Nullable } from "../types/global";
 
 /**
  * Storage adapter interface
@@ -64,4 +64,3 @@ export interface StorageOptions {
   maxSize?: number; // bytes
   ttl?: number; // milliseconds
 }
-

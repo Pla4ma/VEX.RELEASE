@@ -13,14 +13,21 @@ describe("reward-ledger service", () => {
         status: "failed" as const,
         failedReason: "inventory_full",
       };
-      (repository.updateRewardLedgerStatus as jest.Mock).mockResolvedValue(failed);
-      const result = await failReward("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", "inventory_full");
+      (repository.updateRewardLedgerStatus as jest.Mock).mockResolvedValue(
+        failed,
+      );
+      const result = await failReward(
+        "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+        "inventory_full",
+      );
       expect(result.status).toBe("failed");
       expect(result.failedReason).toBe("inventory_full");
     });
 
     it("captures Sentry on error", async () => {
-      (repository.updateRewardLedgerStatus as jest.Mock).mockRejectedValue(new Error("db down"));
+      (repository.updateRewardLedgerStatus as jest.Mock).mockRejectedValue(
+        new Error("db down"),
+      );
       await expect(
         failReward("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", "reason"),
       ).rejects.toThrow("RewardLedgerService failReward failed");
@@ -31,13 +38,17 @@ describe("reward-ledger service", () => {
   describe("expireReward", () => {
     it("marks reward as expired", async () => {
       const expired = { ...mockRecord, status: "expired" as const };
-      (repository.updateRewardLedgerStatus as jest.Mock).mockResolvedValue(expired);
+      (repository.updateRewardLedgerStatus as jest.Mock).mockResolvedValue(
+        expired,
+      );
       const result = await expireReward("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa");
       expect(result.status).toBe("expired");
     });
 
     it("captures Sentry on error", async () => {
-      (repository.updateRewardLedgerStatus as jest.Mock).mockRejectedValue(new Error("db error"));
+      (repository.updateRewardLedgerStatus as jest.Mock).mockRejectedValue(
+        new Error("db error"),
+      );
       await expect(
         expireReward("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
       ).rejects.toThrow("RewardLedgerService expireReward failed");
@@ -49,8 +60,12 @@ describe("reward-ledger service", () => {
     const userId = "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb";
 
     it("syncs all pending rewards for a user", async () => {
-      (repository.fetchPendingRewards as jest.Mock).mockResolvedValue([mockRecord]);
-      (repository.getRewardLedgerById as jest.Mock).mockResolvedValue(mockRecord);
+      (repository.fetchPendingRewards as jest.Mock).mockResolvedValue([
+        mockRecord,
+      ]);
+      (repository.getRewardLedgerById as jest.Mock).mockResolvedValue(
+        mockRecord,
+      );
       (repository.updateRewardLedgerStatus as jest.Mock).mockResolvedValue({
         ...mockRecord,
         status: "delivered" as const,
@@ -67,7 +82,10 @@ describe("reward-ledger service", () => {
         id: "cccccccc-cccc-cccc-cccc-cccccccccccc",
         idempotencyKey: "evt_002",
       };
-      (repository.fetchPendingRewards as jest.Mock).mockResolvedValue([mockRecord, secondRecord]);
+      (repository.fetchPendingRewards as jest.Mock).mockResolvedValue([
+        mockRecord,
+        secondRecord,
+      ]);
       const getByIdMock = repository.getRewardLedgerById as jest.Mock;
       getByIdMock
         .mockRejectedValueOnce(new Error("delivery failed"))
@@ -89,7 +107,9 @@ describe("reward-ledger service", () => {
     });
 
     it("captures Sentry on fetch failure", async () => {
-      (repository.fetchPendingRewards as jest.Mock).mockRejectedValue(new Error("fetch failed"));
+      (repository.fetchPendingRewards as jest.Mock).mockRejectedValue(
+        new Error("fetch failed"),
+      );
       await expect(syncPendingRewards(userId)).rejects.toThrow(
         "RewardLedgerService syncPendingRewards failed",
       );

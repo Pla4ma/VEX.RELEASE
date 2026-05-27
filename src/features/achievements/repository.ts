@@ -4,10 +4,10 @@
  * Data access layer for achievement system
  */
 
-import { getSupabaseClient } from '../../config/supabase';
+import { getSupabaseClient } from "../../config/supabase";
 
 const supabase = getSupabaseClient();
-import { type UserAchievement } from './types';
+import { type UserAchievement } from "./types";
 
 // ============================================================================
 // User Achievements
@@ -15,16 +15,18 @@ import { type UserAchievement } from './types';
 
 export async function getUserAchievement(
   userId: string,
-  achievementId: string
+  achievementId: string,
 ): Promise<UserAchievement | null> {
   const { data, error } = await supabase
-    .from('user_achievements')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('achievement_id', achievementId)
+    .from("user_achievements")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("achievement_id", achievementId)
     .single();
 
-  if (error || !data) {return null;}
+  if (error || !data) {
+    return null;
+  }
 
   return {
     userId: data.user_id,
@@ -38,14 +40,16 @@ export async function getUserAchievement(
 }
 
 export async function getAllUserAchievements(
-  userId: string
+  userId: string,
 ): Promise<UserAchievement[]> {
   const { data, error } = await supabase
-    .from('user_achievements')
-    .select('*')
-    .eq('user_id', userId);
+    .from("user_achievements")
+    .select("*")
+    .eq("user_id", userId);
 
-  if (error || !data) {return [];}
+  if (error || !data) {
+    return [];
+  }
 
   return data.map((row) => ({
     userId: row.user_id,
@@ -65,10 +69,10 @@ export async function createUserAchievement(
     progress: number;
     maxProgress: number;
     isUnlocked: boolean;
-  }
+  },
 ): Promise<UserAchievement | null> {
   const { data, error } = await supabase
-    .from('user_achievements')
+    .from("user_achievements")
     .insert({
       user_id: userId,
       achievement_id: achievementId,
@@ -80,7 +84,9 @@ export async function createUserAchievement(
     .select()
     .single();
 
-  if (error || !data) {return null;}
+  if (error || !data) {
+    return null;
+  }
 
   return {
     userId: data.user_id,
@@ -99,7 +105,7 @@ export async function updateAchievementProgress(
     progress: number;
     isUnlocked?: boolean;
     unlockedAt?: number;
-  }
+  },
 ): Promise<UserAchievement | null> {
   const updateData: Record<string, unknown> = {
     progress: updates.progress,
@@ -115,14 +121,16 @@ export async function updateAchievementProgress(
   }
 
   const { data, error } = await supabase
-    .from('user_achievements')
+    .from("user_achievements")
     .update(updateData)
-    .eq('user_id', userId)
-    .eq('achievement_id', achievementId)
+    .eq("user_id", userId)
+    .eq("achievement_id", achievementId)
     .select()
     .single();
 
-  if (error || !data) {return null;}
+  if (error || !data) {
+    return null;
+  }
 
   return {
     userId: data.user_id,
@@ -130,14 +138,13 @@ export async function updateAchievementProgress(
     progress: data.progress,
     maxProgress: data.max_progress,
     isUnlocked: data.is_unlocked,
-    unlockedAt: data.unlocked_at ? new Date(data.unlocked_at).getTime() : undefined,
+    unlockedAt: data.unlocked_at
+      ? new Date(data.unlocked_at).getTime()
+      : undefined,
     progressHistory: data.progress_history || [],
   };
 }
 
 export async function resetAllUserAchievements(userId: string): Promise<void> {
-  await supabase
-    .from('user_achievements')
-    .delete()
-    .eq('user_id', userId);
+  await supabase.from("user_achievements").delete().eq("user_id", userId);
 }

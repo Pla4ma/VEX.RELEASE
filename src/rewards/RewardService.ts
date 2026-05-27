@@ -1,5 +1,5 @@
-import { createReward } from '../features/rewards/service';
-import type { RewardTrigger, RewardType } from '../features/rewards/schemas';
+import { createReward } from "../features/rewards/service";
+import type { RewardTrigger, RewardType } from "../features/rewards/schemas";
 
 type GrantOptions = {
   bonusType?: string;
@@ -19,16 +19,18 @@ type GrantCalculation = {
 type RewardService = {
   grantReward: (
     type: RewardType,
-    triggerType: RewardTrigger | 'COMEBACK_BONUS',
+    triggerType: RewardTrigger | "COMEBACK_BONUS",
     calculation: GrantCalculation,
-    options?: GrantOptions
+    options?: GrantOptions,
   ) => Promise<void>;
   setUserId: (nextUserId: string) => void;
 };
 
-function normalizeTrigger(triggerType: RewardTrigger | 'COMEBACK_BONUS'): RewardTrigger {
-  if (triggerType === 'COMEBACK_BONUS') {
-    return 'COMEBACK';
+function normalizeTrigger(
+  triggerType: RewardTrigger | "COMEBACK_BONUS",
+): RewardTrigger {
+  if (triggerType === "COMEBACK_BONUS") {
+    return "COMEBACK";
   }
   return triggerType;
 }
@@ -40,7 +42,7 @@ export function getRewardService(userId?: string): RewardService {
       activeUserId = nextUserId;
     },
     async grantReward(type, triggerType, calculation, options): Promise<void> {
-      if (!activeUserId || type !== 'XP') {
+      if (!activeUserId || type !== "XP") {
         return;
       }
       await createReward({
@@ -48,7 +50,9 @@ export function getRewardService(userId?: string): RewardService {
         type,
         triggerType: normalizeTrigger(triggerType),
         triggerId: options?.sessionId ?? options?.challengeId,
-        amount: options?.exactAmount ?? Math.max(0, Math.floor(calculation.baseAmount)),
+        amount:
+          options?.exactAmount ??
+          Math.max(0, Math.floor(calculation.baseAmount)),
       });
     },
   };

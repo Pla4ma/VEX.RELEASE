@@ -1,8 +1,8 @@
-import { computeFocusRunGrade } from './focus-run.helpers';
-import { MOCK_RUN } from './focus-run.helpers';
-import type { FocusRun, FocusRunGrade } from '../schemas';
+import { computeFocusRunGrade } from "./focus-run.helpers";
+import { MOCK_RUN } from "./focus-run.helpers";
+import type { FocusRun, FocusRunGrade } from "../schemas";
 
-describe('computeFocusRunGrade', () => {
+describe("computeFocusRunGrade", () => {
   const gradeCases: Array<{
     encounters: number;
     clean: number;
@@ -10,11 +10,11 @@ describe('computeFocusRunGrade', () => {
     upgrades: number;
     expected: FocusRunGrade;
   }> = [
-    { encounters: 0, clean: 0, recovery: 0, upgrades: 0, expected: 'D' },
-    { encounters: 2, clean: 0, recovery: 0, upgrades: 0, expected: 'C' },
-    { encounters: 3, clean: 2, recovery: 0, upgrades: 0, expected: 'B' },
-    { encounters: 6, clean: 2, recovery: 2, upgrades: 1, expected: 'A' },
-    { encounters: 8, clean: 3, recovery: 3, upgrades: 2, expected: 'S' },
+    { encounters: 0, clean: 0, recovery: 0, upgrades: 0, expected: "D" },
+    { encounters: 2, clean: 0, recovery: 0, upgrades: 0, expected: "C" },
+    { encounters: 3, clean: 2, recovery: 0, upgrades: 0, expected: "B" },
+    { encounters: 6, clean: 2, recovery: 2, upgrades: 1, expected: "A" },
+    { encounters: 8, clean: 3, recovery: 3, upgrades: 2, expected: "S" },
   ];
 
   for (const tc of gradeCases) {
@@ -25,7 +25,7 @@ describe('computeFocusRunGrade', () => {
         completedEncounters: tc.encounters,
         recoveryWins: tc.recovery,
         reflectionUpgrades: tc.upgrades,
-        status: 'completed',
+        status: "completed",
       };
       expect(computeFocusRunGrade(run)).toBe(tc.expected);
     });

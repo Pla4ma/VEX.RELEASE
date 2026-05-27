@@ -1,10 +1,16 @@
-import type { LearningResource } from './types';
+import type { LearningResource } from "./types";
 
-export type BenchmarkType = 'personal_best' | 'peer_average' | 'global_average' | 'expert_level' | 'goal_target' | 'industry_standard';
+export type BenchmarkType =
+  | "personal_best"
+  | "peer_average"
+  | "global_average"
+  | "expert_level"
+  | "goal_target"
+  | "industry_standard";
 
 export interface BenchmarkComparison {
   difference: number;
-  significance: 'low' | 'medium' | 'high';
+  significance: "low" | "medium" | "high";
   interpretation: string;
   improvement: ImprovementPotential;
 }
@@ -12,7 +18,7 @@ export interface BenchmarkComparison {
 export interface ImprovementPotential {
   potential: number; // 0-100
   timeframe: string;
-  effort: 'low' | 'medium' | 'high';
+  effort: "low" | "medium" | "high";
   strategies: string[];
   resources: LearningResource[];
 }
@@ -45,7 +51,7 @@ export interface CompletionNotifications {
   streaks: boolean;
   summaries: boolean;
   reminders: boolean;
-  frequency: 'immediate' | 'hourly' | 'daily' | 'weekly';
+  frequency: "immediate" | "hourly" | "daily" | "weekly";
 }
 
 export interface CompletionPrivacy {
@@ -64,8 +70,8 @@ export interface CompletionAccessibility {
   reducedMotion: boolean;
   screenReader: boolean;
   subtitles: boolean;
-  fontSize: 'small' | 'medium' | 'large' | 'extra-large';
-  colorBlindMode: 'none' | 'protanopia' | 'deuteranopia' | 'tritanopia';
+  fontSize: "small" | "medium" | "large" | "extra-large";
+  colorBlindMode: "none" | "protanopia" | "deuteranopia" | "tritanopia";
   simplifiedUI: boolean;
 }
 
@@ -81,7 +87,14 @@ export interface CompletionAutomation {
 
 // Event Types
 export interface CompletionEvent {
-  type: 'session_completed' | 'achievement_unlocked' | 'reward_claimed' | 'progress_updated' | 'milestone_reached' | 'rank_up' | 'streak_extended';
+  type:
+    | "session_completed"
+    | "achievement_unlocked"
+    | "reward_claimed"
+    | "progress_updated"
+    | "milestone_reached"
+    | "rank_up"
+    | "streak_extended";
   userId: string;
   sessionId: string;
   completionId: string;

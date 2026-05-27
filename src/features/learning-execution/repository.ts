@@ -1,6 +1,6 @@
-import type { ActiveStudyPlan } from '../content-study';
-import type { LearningExecutionPersona, LearningSessionTarget } from './types';
-import { LearningSessionTargetSchema } from './schemas';
+import type { ActiveStudyPlan } from "../content-study";
+import type { LearningExecutionPersona, LearningSessionTarget } from "./types";
+import { LearningSessionTargetSchema } from "./schemas";
 
 export function mapActivePlanToLearningTarget(input: {
   plan: ActiveStudyPlan | null;

@@ -12,8 +12,8 @@ export type {
   IconColor,
   IconStrokeWidth,
   IconVariant,
-} from './types';
-export { ICON_SIZE_VALUES, ICON_STROKE_WIDTH_VALUES } from './types';
+} from "./types";
+export { ICON_SIZE_VALUES, ICON_STROKE_WIDTH_VALUES } from "./types";
 
 // Registry
 export {
@@ -23,7 +23,7 @@ export {
   getIconNames,
   registerIcon,
   registerIcons,
-} from './IconRegistry';
+} from "./IconRegistry";
 
 // Components
-export { Icon, IconButton, createIcon, createIconButton } from './components';
+export { Icon, IconButton, createIcon, createIconButton } from "./components";

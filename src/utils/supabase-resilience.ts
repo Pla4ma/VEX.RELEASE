@@ -1,6 +1,6 @@
-import type { PostgrestError } from '@supabase/supabase-js';
-import * as Sentry from '@sentry/react-native';
-import { useAuthStore } from '../store';
+import type { PostgrestError } from "@supabase/supabase-js";
+import * as Sentry from "@sentry/react-native";
+import { useAuthStore } from "../store";
 
 type ResilientQueryResult<TData, TError = PostgrestError | null> = {
   data: TData | null;
@@ -25,17 +25,21 @@ export interface ResilienceOptions {
  * PostgREST code 42501 or generic 403.
  */
 export function isRLSViolation(error: unknown): boolean {
-  if (!error) {return false;}
-  const code = typeof error === 'object' && error !== null && 'code' in error
-    ? String((error as { code?: string }).code ?? '')
-    : '';
-  const message = typeof error === 'object' && error !== null && 'message' in error
-    ? String((error as { message?: string }).message ?? '')
-    : '';
+  if (!error) {
+    return false;
+  }
+  const code =
+    typeof error === "object" && error !== null && "code" in error
+      ? String((error as { code?: string }).code ?? "")
+      : "";
+  const message =
+    typeof error === "object" && error !== null && "message" in error
+      ? String((error as { message?: string }).message ?? "")
+      : "";
   return (
-    code === '42501' ||
-    message.toLowerCase().includes('row-level security') ||
-    message.toLowerCase().includes('violates row level security')
+    code === "42501" ||
+    message.toLowerCase().includes("row-level security") ||
+    message.toLowerCase().includes("violates row level security")
   );
 }
 
@@ -45,8 +49,8 @@ export function isRLSViolation(error: unknown): boolean {
 export function isDevUser(): boolean {
   try {
     const user = useAuthStore.getState().user;
-    return user?.id === 'dev-user-1' || Boolean(user?.id?.startsWith('dev-'));
-  } catch {
+    return user?.id === "dev-user-1" || Boolean(user?.id?.startsWith("dev-"));
+  } catch (error: unknown) {
     return false;
   }
 }
@@ -57,7 +61,7 @@ export function isDevUser(): boolean {
  */
 export async function withResilience<T>(
   query: PromiseLike<ResilientQueryResult<T>>,
-  options: ResilienceOptions
+  options: ResilienceOptions,
 ): Promise<ResilientQueryResult<T>> {
   try {
     const result = await query;
@@ -65,20 +69,23 @@ export async function withResilience<T>(
     if (result.error) {
       if (isRLSViolation(result.error) && isDevUser()) {
         Sentry.addBreadcrumb({
-          category: 'repository',
-          message: 'Suppressed dev-user RLS violation',
-          level: 'info',
+          category: "repository",
+          message: "Suppressed dev-user RLS violation",
+          level: "info",
           data: { operation: options.operation },
         });
-        return { data: (options.fallbackValue as T | null | undefined) ?? result.data, error: null };
+        return {
+          data: (options.fallbackValue as T | null | undefined) ?? result.data,
+          error: null,
+        };
       }
 
       if (!options.silent) {
         Sentry.captureException(result.error, {
           tags: {
-            feature: 'repository',
+            feature: "repository",
             operation: options.operation,
-            resilience: 'failed',
+            resilience: "failed",
           },
         });
       }
@@ -89,9 +96,9 @@ export async function withResilience<T>(
     if (!options.silent) {
       Sentry.captureException(error, {
         tags: {
-          feature: 'repository',
+          feature: "repository",
           operation: options.operation,
-          resilience: 'exception',
+          resilience: "exception",
         },
       });
     }

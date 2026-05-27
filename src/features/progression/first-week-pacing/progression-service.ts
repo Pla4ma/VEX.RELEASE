@@ -4,17 +4,17 @@
  * Core logic for progressing through the first week arc.
  */
 
-import { getSupabaseClient } from '../../../config/supabase';
-import { createDebugger } from '../../../utils/debug';
+import { getSupabaseClient } from "../../../config/supabase";
+import { createDebugger } from "../../../utils/debug";
 import {
   FirstWeekProgressSchema,
   type FirstWeekProgress,
   type FirstWeekSession,
   type SessionUnlock,
-} from './schemas';
-import { FIRST_WEEK_CONFIG, getNextSession, getSessionNumber } from './config';
+} from "./schemas";
+import { FIRST_WEEK_CONFIG, getNextSession, getSessionNumber } from "./config";
 
-const debug = createDebugger('progression:first-week-impl');
+const debug = createDebugger("progression:first-week-impl");
 
 /**
  * Progress to the next session in the first week
@@ -23,25 +23,27 @@ export async function progressToNextSession(
   userId: string,
   completedSession: FirstWeekSession,
   xpEarned: number,
-  sessionData?: Record<string, unknown>
+  sessionData?: Record<string, unknown>,
 ): Promise<FirstWeekProgress> {
   try {
     const supabase = getSupabaseClient();
 
     // Get current progress
     const { data: currentProgress, error: fetchError } = await supabase
-      .from('first_week_progress')
-      .select('*')
-      .eq('user_id', userId)
+      .from("first_week_progress")
+      .select("*")
+      .eq("user_id", userId)
       .single();
 
     if (fetchError) {
-      debug.error('Failed to fetch current progress', fetchError);
-      throw new Error(`Failed to fetch current progress: ${fetchError.message}`);
+      debug.error("Failed to fetch current progress", fetchError);
+      throw new Error(
+        `Failed to fetch current progress: ${fetchError.message}`,
+      );
     }
 
     if (!currentProgress) {
-      throw new Error('No first week progress found for user');
+      throw new Error("No first week progress found for user");
     }
 
     const nextSession = getNextSession(currentProgress.current_session);
@@ -51,7 +53,8 @@ export async function progressToNextSession(
     }
 
     const sessionNumber = getSessionNumber(completedSession);
-    const sessionUnlocks = FIRST_WEEK_CONFIG.sessionUnlocks[completedSession] || [];
+    const sessionUnlocks =
+      FIRST_WEEK_CONFIG.sessionUnlocks[completedSession] || [];
     const xpReward = FIRST_WEEK_CONFIG.xpRewards[completedSession] || 0;
 
     // Calculate new progress
@@ -73,11 +76,16 @@ export async function progressToNextSession(
     }
 
     // Update state based on session
-    const companionUnlocked = currentProgress.companion_unlocked || sessionNumber >= 1;
-    const streakExplained = currentProgress.streak_explained || sessionNumber >= 2;
-    const firstRewardEarned = currentProgress.first_reward_earned || sessionNumber >= 3;
-    const aiCoachUnlocked = currentProgress.ai_coach_unlocked || sessionNumber >= 5;
-    const weeklyMilestoneEarned = currentProgress.weekly_milestone_earned || sessionNumber >= 7;
+    const companionUnlocked =
+      currentProgress.companion_unlocked || sessionNumber >= 1;
+    const streakExplained =
+      currentProgress.streak_explained || sessionNumber >= 2;
+    const firstRewardEarned =
+      currentProgress.first_reward_earned || sessionNumber >= 3;
+    const aiCoachUnlocked =
+      currentProgress.ai_coach_unlocked || sessionNumber >= 5;
+    const weeklyMilestoneEarned =
+      currentProgress.weekly_milestone_earned || sessionNumber >= 7;
 
     const updateData = {
       current_session: nextSession,
@@ -95,18 +103,18 @@ export async function progressToNextSession(
     };
 
     const { data, error } = await supabase
-      .from('first_week_progress')
+      .from("first_week_progress")
       .update(updateData)
-      .eq('user_id', userId)
+      .eq("user_id", userId)
       .select()
       .single();
 
     if (error) {
-      debug.error('Failed to progress first week', error);
+      debug.error("Failed to progress first week", error);
       throw new Error(`Failed to progress first week: ${error.message}`);
     }
 
-    debug.info('Progressed to next session', {
+    debug.info("Progressed to next session", {
       userId,
       from: currentProgress.current_session,
       to: nextSession,
@@ -115,9 +123,11 @@ export async function progressToNextSession(
     });
 
     return FirstWeekProgressSchema.parse(data);
-
   } catch (error) {
-    debug.error('Error progressing first week', error instanceof Error ? error : undefined);
+    debug.error(
+      "Error progressing first week",
+      error instanceof Error ? error : undefined,
+    );
     throw error;
   }
 }
@@ -132,10 +142,18 @@ function calculateLevelProgress(totalXp: number): number {
   // Level 3: 251-500 XP
   // Level 4: 501-1000 XP
 
-  if (totalXp <= 100) {return 1;}
-  if (totalXp <= 250) {return 2;}
-  if (totalXp <= 500) {return 3;}
-  if (totalXp <= 1000) {return 4;}
+  if (totalXp <= 100) {
+    return 1;
+  }
+  if (totalXp <= 250) {
+    return 2;
+  }
+  if (totalXp <= 500) {
+    return 3;
+  }
+  if (totalXp <= 1000) {
+    return 4;
+  }
   return Math.min(5, Math.floor(totalXp / 250) + 1);
 }
 
@@ -157,7 +175,7 @@ export function getSessionXpReward(session: FirstWeekSession): number {
  * Get companion reaction for a given session
  */
 export function getCompanionReaction(session: FirstWeekSession): string {
-  return FIRST_WEEK_CONFIG.companionReactions[session] || '';
+  return FIRST_WEEK_CONFIG.companionReactions[session] || "";
 }
 
 /**
@@ -171,7 +189,7 @@ export function getTutorialSteps(session: FirstWeekSession): string[] {
  * Check if user is in first week
  */
 export function isInFirstWeek(progress: FirstWeekProgress): boolean {
-  return progress.currentSession !== 'COMPLETED';
+  return progress.currentSession !== "COMPLETED";
 }
 
 /**

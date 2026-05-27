@@ -8,7 +8,7 @@
  * - Schemas (validation)
  */
 
-import * as repository from './repository';
+import * as repository from "./repository";
 import {
   UpdateCoachPreferencesInputSchema,
   type CoachPersona,
@@ -18,13 +18,13 @@ import {
   type BehaviorProfile,
   type BehaviorSignal,
   type SignalType,
-} from './schemas';
+} from "./schemas";
 
 // ============================================================================
 // Constants
 // ============================================================================
 
-const DEFAULT_PERSONA_ID = 'encouraging-mentor';
+const DEFAULT_PERSONA_ID = "encouraging-mentor";
 const COLD_START_THRESHOLD_DAYS = 7;
 const HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS = 20;
 
@@ -53,7 +53,9 @@ export async function getDefaultPersona(): Promise<CoachPersona | null> {
 /**
  * Get or create coach state for user
  */
-export async function getOrCreateCoachState(userId: string): Promise<CoachState> {
+export async function getOrCreateCoachState(
+  userId: string,
+): Promise<CoachState> {
   let state = await repository.fetchCoachState(userId);
 
   if (!state) {
@@ -95,10 +97,12 @@ async function buildBehaviorProfileForState(
   return profile;
 }
 
-function calculateConfidenceLevel(dataPoints: number): 'LOW' | 'MEDIUM' | 'HIGH' {
-  if (dataPoints < 10) return 'LOW';
-  if (dataPoints < HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS) return 'MEDIUM';
-  return 'HIGH';
+function calculateConfidenceLevel(
+  dataPoints: number,
+): "LOW" | "MEDIUM" | "HIGH" {
+  if (dataPoints < 10) return "LOW";
+  if (dataPoints < HIGH_CONFIDENCE_THRESHOLD_DATA_POINTS) return "MEDIUM";
+  return "HIGH";
 }
 
 function aggregateSignals(signals: BehaviorSignal[]): BehaviorSignal[] {
@@ -118,7 +122,7 @@ function aggregateSignals(signals: BehaviorSignal[]): BehaviorSignal[] {
 export async function updateCoachState(
   userId: string,
   newState: CoachUserState,
-  context?: Record<string, unknown>
+  context?: Record<string, unknown>,
 ): Promise<CoachState> {
   const currentState = await getOrCreateCoachState(userId);
 
@@ -145,7 +149,7 @@ export async function updateCoachState(
  * Update user coach preferences
  */
 export async function updateCoachPreferences(
-  input: UpdateCoachPreferencesInput
+  input: UpdateCoachPreferencesInput,
 ): Promise<CoachState> {
   const validated = UpdateCoachPreferencesInputSchema.parse(input);
   const state = await getOrCreateCoachState(validated.userId);
@@ -153,8 +157,12 @@ export async function updateCoachPreferences(
   const updatedState: CoachState = {
     ...state,
     ...(validated.personaId && { personaId: validated.personaId }),
-    ...(validated.reduceNotifications !== undefined && { reduceNotifications: validated.reduceNotifications }),
-    ...(validated.muteUntil !== undefined && { muteUntil: validated.muteUntil }),
+    ...(validated.reduceNotifications !== undefined && {
+      reduceNotifications: validated.reduceNotifications,
+    }),
+    ...(validated.muteUntil !== undefined && {
+      muteUntil: validated.muteUntil,
+    }),
   };
 
   return repository.upsertCoachState(updatedState);
@@ -166,17 +174,17 @@ export async function updateCoachPreferences(
 
 function determineUserState(
   _userId: string,
-  profile: { coldStart: boolean; confidenceLevel: string } | null
+  profile: { coldStart: boolean; confidenceLevel: string } | null,
 ): CoachUserState {
   if (!profile || profile.coldStart) {
-    return 'COLD_START';
+    return "COLD_START";
   }
 
-  if (profile.confidenceLevel === 'LOW') {
-    return 'LOW_CONFIDENCE';
+  if (profile.confidenceLevel === "LOW") {
+    return "LOW_CONFIDENCE";
   }
 
-  return 'HIGH_CONFIDENCE';
+  return "HIGH_CONFIDENCE";
 }
 
 // Export threshold for use in other modules

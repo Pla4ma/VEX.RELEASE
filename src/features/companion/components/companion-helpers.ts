@@ -1,4 +1,4 @@
-import { CompanionMood, CompanionPhase } from '../types';
+import { CompanionMood, CompanionPhase } from "../types";
 
 export function getPhaseMultiplier(phase: CompanionPhase): number {
   const multipliers: Record<CompanionPhase, number> = {
@@ -14,13 +14,13 @@ export function getPhaseMultiplier(phase: CompanionPhase): number {
 
 export function getMoodEmoji(mood: CompanionMood): string {
   const emojis: Record<CompanionMood, string> = {
-    SLEEPY: '😴',
-    CONTENT: '😊',
-    FOCUSED: '🎯',
-    DETERMINED: '🔥',
-    ECSTATIC: '✨',
-    STRUGGLING: '😰',
-    DANGER: '⚠️',
+    SLEEPY: "😴",
+    CONTENT: "😊",
+    FOCUSED: "🎯",
+    DETERMINED: "🔥",
+    ECSTATIC: "✨",
+    STRUGGLING: "😰",
+    DANGER: "⚠️",
   };
   return emojis[mood];
 }

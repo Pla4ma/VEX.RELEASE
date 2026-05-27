@@ -5,7 +5,7 @@ import {
   reset,
   screen,
   updateUserProperties,
-} from '../shared/analytics/analytics-service';
+} from "../shared/analytics/analytics-service";
 
 export interface AnalyticsEvent {
   id: string;
@@ -85,7 +85,9 @@ export class AnalyticsService {
 
 let analyticsServiceInstance: AnalyticsService | null = null;
 
-export function getAnalyticsService(config?: AnalyticsConfig): AnalyticsService {
+export function getAnalyticsService(
+  config?: AnalyticsConfig,
+): AnalyticsService {
   if (!analyticsServiceInstance) {
     analyticsServiceInstance = new AnalyticsService();
   }

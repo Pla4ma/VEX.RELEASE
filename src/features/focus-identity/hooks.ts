@@ -4,12 +4,15 @@
  * Centralized hooks for focus identity functionality
  */
 
-import { useMemo } from 'react';
-import { useFocusScore } from './hooks-focus-score';
-import { FocusIdentityEngine, type ScoreBand, type FocusIdentityProfile } from './FocusIdentityEngine';
-import { useTheme } from '../../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import { useMemo } from "react";
+import { useFocusScore } from "./hooks-focus-score";
+import {
+  FocusIdentityEngine,
+  type ScoreBand,
+  type FocusIdentityProfile,
+} from "./FocusIdentityEngine";
+import { useTheme } from "../../theme";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 /**
  * Hook for accessing focus identity data and state
@@ -21,7 +24,9 @@ export function useFocusIdentity(userId: string) {
 
   // Transform the data to match the expected interface
   const profile: FocusIdentityProfile | null = useMemo(() => {
-    if (!score) {return null;}
+    if (!score) {
+      return null;
+    }
 
     const band = engine.getScoreBand(score.currentScore);
 
@@ -33,11 +38,44 @@ export function useFocusIdentity(userId: string) {
       percentileRank: band.percentile,
       band,
       factors: {
-        consistency: { score: score.factors.consistency.score, sessionsLast30Days: 0, targetSessionsPerWeek: 4, actualConsistency: 0, missedDaysLast30Days: 0 },
-        streakStability: { score: score.factors.streakStability.score, currentStreak: 0, longestStreak: 0, averageStreakLength: 0, totalStreaksStarted: 0, streakBreakFrequency: 0 },
-        sessionQuality: { score: score.factors.sessionQuality.score, averageFocusPurity: 0, averageGrade: 'D', perfectSessionsCount: 0, averageSessionDuration: 0 },
-        diversity: { score: score.factors.intentionalDifficulty.score, uniqueSessionModes: 0, uniqueTimeSlots: 0, uniqueDaysOfWeek: 0, weekendSessions: 0, contextVariety: 0 },
-        recency: { score: score.factors.recency.score, daysSinceLastSession: 0, last7DayActivity: 0, last30DayActivity: 0, trendDirection: 'STABLE', velocity: 0 },
+        consistency: {
+          score: score.factors.consistency.score,
+          sessionsLast30Days: 0,
+          targetSessionsPerWeek: 4,
+          actualConsistency: 0,
+          missedDaysLast30Days: 0,
+        },
+        streakStability: {
+          score: score.factors.streakStability.score,
+          currentStreak: 0,
+          longestStreak: 0,
+          averageStreakLength: 0,
+          totalStreaksStarted: 0,
+          streakBreakFrequency: 0,
+        },
+        sessionQuality: {
+          score: score.factors.sessionQuality.score,
+          averageFocusPurity: 0,
+          averageGrade: "D",
+          perfectSessionsCount: 0,
+          averageSessionDuration: 0,
+        },
+        diversity: {
+          score: score.factors.intentionalDifficulty.score,
+          uniqueSessionModes: 0,
+          uniqueTimeSlots: 0,
+          uniqueDaysOfWeek: 0,
+          weekendSessions: 0,
+          contextVariety: 0,
+        },
+        recency: {
+          score: score.factors.recency.score,
+          daysSinceLastSession: 0,
+          last7DayActivity: 0,
+          last30DayActivity: 0,
+          trendDirection: "STABLE",
+          velocity: 0,
+        },
       },
       identityStatement: engine.getIdentityStatement(band.label, 0),
       streakInCurrentBand: 0,
@@ -47,8 +85,8 @@ export function useFocusIdentity(userId: string) {
       recoveryStartDate: null,
       recoveryProgress: 0,
       preLapseScore: null,
-      topStrength: 'consistency',
-      topWeakness: 'recency',
+      topStrength: "consistency",
+      topWeakness: "recency",
       recommendedActions: [],
       monthlyReport: null,
       updatedAt: Date.now(),
@@ -56,26 +94,30 @@ export function useFocusIdentity(userId: string) {
   }, [score, engine]);
 
   const currentBand: ScoreBand | null = useMemo(() => {
-    if (!profile) {return null;}
+    if (!profile) {
+      return null;
+    }
     return engine.getScoreBand(profile.currentScore);
   }, [profile, engine]);
 
   const scoreChange = useMemo(() => {
-    if (!history || history.length < 2) {return 0;}
+    if (!history || history.length < 2) {
+      return 0;
+    }
     const latest = history[history.length - 1]!;
     const previous = history[history.length - 2]!;
     return latest.score - previous.score;
   }, [history]);
 
   const loadingState = status;
-  const isRetrying = status === 'pending' && !!score;
+  const isRetrying = status === "pending" && !!score;
 
   return {
     profile,
     loadingState,
     error,
     isRetrying,
-    retry: () => void (refetch)(),
+    retry: () => void refetch(),
     currentBand,
     scoreChange,
   };
@@ -88,25 +130,27 @@ export function useFocusScoreColor(score: number | null): string {
   const { theme } = useTheme();
 
   return useMemo(() => {
-    if (!score) {return theme.colors.text.secondary;}
+    if (!score) {
+      return theme.colors.text.secondary;
+    }
 
-    const engine = new FocusIdentityEngine('temp');
+    const engine = new FocusIdentityEngine("temp");
     const band = engine.getScoreBand(score);
 
     switch (band.label) {
-      case 'Building':
+      case "Building":
         return launchColors.hex_cd7f32;
-      case 'Fair':
+      case "Fair":
         return launchColors.hex_c0c0c0;
-      case 'Good':
+      case "Good":
         return launchColors.hex_ffd700;
-      case 'Strong':
+      case "Strong":
         return launchColors.hex_e5e4e2;
-      case 'Exceptional':
+      case "Exceptional":
         return launchColors.hex_b9f2ff;
-      case 'Elite':
+      case "Elite":
         return launchColors.hex_9c27b0;
-      case 'Legendary':
+      case "Legendary":
         return launchColors.hex_ff1744;
       default:
         return theme.colors.text.secondary;
@@ -117,29 +161,37 @@ export function useFocusScoreColor(score: number | null): string {
 /**
  * Hook for generating identity statements based on score band
  */
-export function useIdentityStatement(currentBand: ScoreBand | null, streakInCurrentBand: number): string {
+export function useIdentityStatement(
+  currentBand: ScoreBand | null,
+  streakInCurrentBand: number,
+): string {
   return useMemo(() => {
-    if (!currentBand) {return 'Begin your focus journey';}
+    if (!currentBand) {
+      return "Begin your focus journey";
+    }
 
-    const streakText = streakInCurrentBand > 1 ? ` (${streakInCurrentBand} sessions in this band)` : '';
+    const streakText =
+      streakInCurrentBand > 1
+        ? ` (${streakInCurrentBand} sessions in this band)`
+        : "";
 
     switch (currentBand.label) {
-      case 'Building':
+      case "Building":
         return `Building the foundation${streakText}`;
-      case 'Fair':
+      case "Fair":
         return `Developing consistency${streakText}`;
-      case 'Good':
+      case "Good":
         return `Achieving mastery${streakText}`;
-      case 'Strong':
+      case "Strong":
         return `Excelling in focus${streakText}`;
-      case 'Exceptional':
+      case "Exceptional":
         return `Elite performer${streakText}`;
-      case 'Elite':
+      case "Elite":
         return `Focus master${streakText}`;
-      case 'Legendary':
+      case "Legendary":
         return `Legendary focus${streakText}`;
       default:
-        return 'Continue your journey';
+        return "Continue your journey";
     }
   }, [currentBand, streakInCurrentBand]);
 }
@@ -149,6 +201,8 @@ export function useIdentityStatement(currentBand: ScoreBand | null, streakInCurr
  */
 export function useMonthlyReport(userId: string, year: number, month: number) {
   // Import from the new monthly report system
-  const { useMonthlyReport: useMonthlyReportImpl } = require('./monthly-report');
+  const {
+    useMonthlyReport: useMonthlyReportImpl,
+  } = require("./monthly-report");
   return useMonthlyReportImpl(userId, year, month);
 }

@@ -7,17 +7,17 @@
  * @phase 4
  */
 
-import React from 'react';
+import React from "react";
 import Animated, {
   FadeIn,
   useAnimatedStyle,
   withRepeat,
   withTiming,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
 
 interface CompanionWaitingProps {
   progress: number; // 0-1
@@ -26,7 +26,9 @@ interface CompanionWaitingProps {
 /**
  * Animated companion with waiting state behavior
  */
-export function CompanionWaiting({ progress }: CompanionWaitingProps): JSX.Element {
+export function CompanionWaiting({
+  progress,
+}: CompanionWaitingProps): JSX.Element {
   const { theme } = useTheme();
 
   // Gentle breathing animation
@@ -54,7 +56,7 @@ export function CompanionWaiting({ progress }: CompanionWaitingProps): JSX.Eleme
       <Animated.View
         style={[
           {
-            position: 'absolute',
+            position: "absolute",
             width: 100,
             height: 100,
             borderRadius: 50,
@@ -73,8 +75,8 @@ export function CompanionWaiting({ progress }: CompanionWaitingProps): JSX.Eleme
             height: 60,
             borderRadius: 30,
             backgroundColor: theme.colors.primary[500],
-            justifyContent: 'center',
-            alignItems: 'center',
+            justifyContent: "center",
+            alignItems: "center",
             borderWidth: 2,
             borderColor: `${theme.colors.primary[600]}30`,
           },
@@ -88,7 +90,7 @@ export function CompanionWaiting({ progress }: CompanionWaitingProps): JSX.Eleme
         <Animated.View
           entering={FadeIn.duration(400)}
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 10,
             right: 15,
           }}
@@ -101,7 +103,7 @@ export function CompanionWaiting({ progress }: CompanionWaitingProps): JSX.Eleme
         <Animated.View
           entering={FadeIn.duration(400)}
           style={{
-            position: 'absolute',
+            position: "absolute",
             bottom: 15,
             left: 10,
           }}
@@ -114,7 +116,7 @@ export function CompanionWaiting({ progress }: CompanionWaitingProps): JSX.Eleme
         <Animated.View
           entering={FadeIn.duration(400)}
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 15,
             left: 15,
           }}

@@ -14,7 +14,10 @@ function sourceFiles(dir: string): string[] {
   });
 }
 
-function readRelative(filePath: string): { relativePath: string; source: string } {
+function readRelative(filePath: string): {
+  relativePath: string;
+  source: string;
+} {
   return {
     relativePath: path.relative(process.cwd(), filePath),
     source: fs.readFileSync(filePath, "utf8"),
@@ -40,8 +43,13 @@ describe("auth store import audit", () => {
     ];
     const offenders = sourceFiles(sourceRoot)
       .map(readRelative)
-      .filter(({ relativePath }) => !relativePath.includes(`${path.sep}__tests__${path.sep}`))
-      .filter(({ source }) => bannedPatterns.some((pattern) => source.includes(pattern)))
+      .filter(
+        ({ relativePath }) =>
+          !relativePath.includes(`${path.sep}__tests__${path.sep}`),
+      )
+      .filter(({ source }) =>
+        bannedPatterns.some((pattern) => source.includes(pattern)),
+      )
       .map(({ relativePath }) => relativePath);
 
     expect(offenders).toEqual([]);

@@ -19,12 +19,16 @@ export interface SessionPattern {
 
 export type SessionHistoryEntry = { timestamp: number; status: SessionStatus };
 
-export function analyzeSessionPattern(history: SessionHistoryEntry[]): SessionPattern {
+export function analyzeSessionPattern(
+  history: SessionHistoryEntry[],
+): SessionPattern {
   const lastSession = history[history.length - 1];
   const daysSinceLastSession = lastSession
     ? Math.floor((Date.now() - lastSession.timestamp) / (24 * 60 * 60 * 1000))
     : 0;
-  const completed = history.filter((entry) => entry.status === "COMPLETED").length;
+  const completed = history.filter(
+    (entry) => entry.status === "COMPLETED",
+  ).length;
   return {
     isComeback: daysSinceLastSession >= 3,
     daysSinceLastSession,
@@ -32,7 +36,9 @@ export function analyzeSessionPattern(history: SessionHistoryEntry[]): SessionPa
   };
 }
 
-export function getRecentCompletionCount(history: SessionHistoryEntry[]): number {
+export function getRecentCompletionCount(
+  history: SessionHistoryEntry[],
+): number {
   const recent = history.slice(-10);
   let count = 0;
   for (let i = recent.length - 1; i >= 0; i--) {
@@ -42,8 +48,11 @@ export function getRecentCompletionCount(history: SessionHistoryEntry[]): number
   return count;
 }
 
-export function getRecentAbandonmentCount(history: SessionHistoryEntry[]): number {
-  return history.slice(-7).filter((entry) => entry.status === "ABANDONED").length;
+export function getRecentAbandonmentCount(
+  history: SessionHistoryEntry[],
+): number {
+  return history.slice(-7).filter((entry) => entry.status === "ABANDONED")
+    .length;
 }
 
 export function buildCoachPresenceContext(input: {

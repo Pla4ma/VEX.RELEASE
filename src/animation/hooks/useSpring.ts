@@ -4,16 +4,16 @@
  * React hook for spring animations with Reanimated.
  */
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from "react";
 import {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
   type WithSpringConfig,
   type SharedValue,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { defaultSpring } from '../springs';
+import { defaultSpring } from "../springs";
 
 /**
  * Spring animation options
@@ -48,7 +48,7 @@ export function useSpring(options: UseSpringOptions = {}): UseSpringResult {
       springConfig.mass,
       springConfig.overshootClamping,
       springConfig.stiffness,
-    ]
+    ],
   );
 
   const value = useSharedValue(initialValue);
@@ -61,10 +61,12 @@ export function useSpring(options: UseSpringOptions = {}): UseSpringResult {
 
   const setValue = useCallback(
     (target: number, overrideConfig?: WithSpringConfig) => {
-      const finalConfig = overrideConfig ? { ...config, ...overrideConfig } : config;
+      const finalConfig = overrideConfig
+        ? { ...config, ...overrideConfig }
+        : config;
       value.value = withSpring(target, finalConfig as WithSpringConfig);
     },
-    [value, config]
+    [value, config],
   );
 
   const reset = useCallback(() => {
@@ -84,7 +86,7 @@ export function useSpring(options: UseSpringOptions = {}): UseSpringResult {
  */
 export function useSpringStyle(
   styleFactory: (val: SharedValue<number>) => Record<string, unknown>,
-  options: UseSpringOptions = {}
+  options: UseSpringOptions = {},
 ): UseSpringResult {
   const { initialValue = 0, ...springConfig } = options;
   const config = useMemo(
@@ -94,7 +96,7 @@ export function useSpringStyle(
       springConfig.mass,
       springConfig.overshootClamping,
       springConfig.stiffness,
-    ]
+    ],
   );
 
   const value = useSharedValue(initialValue);
@@ -102,10 +104,12 @@ export function useSpringStyle(
 
   const setValue = useCallback(
     (target: number, overrideConfig?: WithSpringConfig) => {
-      const finalConfig = overrideConfig ? { ...config, ...overrideConfig } : config;
+      const finalConfig = overrideConfig
+        ? { ...config, ...overrideConfig }
+        : config;
       value.value = withSpring(target, finalConfig as WithSpringConfig);
     },
-    [value, config]
+    [value, config],
   );
 
   const reset = useCallback(() => {

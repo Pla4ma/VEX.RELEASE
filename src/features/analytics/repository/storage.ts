@@ -1,1 +1,409 @@
-import{captureSilentFailure}from'../../../utils/silent-failure'; import{getSupabaseClient,handleSupabaseError}from'../../../config/supabase'; import{withRetry,withTimeout,CircuitBreaker}from'../../../shared/hardening'; import*as Sentry from'@sentry/react-native'; const supabase = getSupabaseClient(); const storageCircuitBreaker = new CircuitBreaker({failureThreshold:3,recoveryTimeoutMs:30000,halfOpenMaxCalls:2}); export interface StorageUploadConfig{bucket:string;path:string;contentType:string;encryption?:{enabled:boolean;algorithm:'AES-256-GCM';};metadata?:Record<string,string>;}export interface UploadResult{url:string;size:number;checksum:string;uploadedAt:number;expiresAt?:number;}export interface DownloadResult{data:Blob;url:string;contentType:string;size:number;checksum:string;}export interface StorageError extends Error{code:string;bucket?:string;path?:string;retryable:boolean;}class AnalyticsStorageError extends Error implements StorageError{constructor(message:string,public code:string,public bucket?:string,public path?:string,public retryable = false){super(message); this.name = 'AnalyticsStorageError';}}export async function uploadExportData(jobId:string,data:unknown,format:'json'|'csv',userId:string):Promise<UploadResult>{return storageCircuitBreaker.execute(async()=>{const bucket = 'analytics-exports'; const path = `${userId}/${jobId}.${format}`; const content = format === 'json' ? JSON.stringify(data,null,2) : convertToCSV(data); const blob = new Blob([content],{type:format === 'json' ? 'application/json' : 'text/csv'}); const fileSize = blob.size; const checksum = await calculateChecksum(content); if(fileSize > 5 * 1024 * 1024){return await uploadLargeFile(bucket,path,blob,checksum,jobId);}return await withRetry(async()=>{const{data:uploadData,error} = await withTimeout(supabase.storage.from(bucket).upload(path,blob,{contentType:format === 'json' ? 'application/json' : 'text/csv',upsert:false,metadata:{jobId,userId,checksum,format,uploadedAt:Date.now().toString()}}),60000,'Storage upload timeout'); if(error){throw new AnalyticsStorageError(`Upload failed: ${error.message}`,error.name,bucket,path,isRetryableStorageError(error));}const{data:urlData} = await supabase.storage.from(bucket).createSignedUrl(path,7 * 24 * 60 * 60); return{url:urlData?.signedUrl || '',size:fileSize,checksum,uploadedAt:Date.now(),expiresAt:Date.now() + 7 * 24 * 60 * 60 * 1000};},{maxAttempts:3,baseDelayMs:1000,retryableErrors:['network_error','timeout','rate_limited'],onRetry:(attempt:number,error:Error)=>{Sentry.addBreadcrumb({category:'storage',message:`Retrying upload attempt ${attempt}`,level:'warning',data:{jobId,error:error.message}});}});});}async function uploadLargeFile(bucket:string,path:string,blob:Blob,checksum:string,jobId:string,onProgress?:(percent:number)=>void):Promise<UploadResult>{const chunkSize = 5 * 1024 * 1024; const totalChunks = Math.ceil(blob.size / chunkSize); const maxAttempts = 5; let lastError:Error|null = null; for(let attempt = 1; attempt <= maxAttempts; attempt++){try{onProgress?.((attempt - 1) * 20); const{data,error} = await withTimeout(supabase.storage.from(bucket).upload(path,blob,{contentType:blob.type,upsert:true,metadata:{jobId,checksum,chunks:totalChunks.toString(),uploadedAt:Date.now().toString()},duplex:'half'}as{[key:string]:unknown;}),300000,`Large file upload timeout (attempt ${attempt})`); if(error){lastError = new AnalyticsStorageError(`Upload failed: ${error.message}`,error.name,bucket,path,isRetryableStorageError(error)); if(!isRetryableStorageError(error) || attempt === maxAttempts){throw lastError;}await new Promise(resolve=>setTimeout(resolve,1000 * Math.pow(2,attempt))); continue;}onProgress?.(100); const{data:urlData} = await supabase.storage.from(bucket).createSignedUrl(path,7 * 24 * 60 * 60); return{url:urlData?.signedUrl || '',size:blob.size,checksum,uploadedAt:Date.now(),expiresAt:Date.now() + 7 * 24 * 60 * 60 * 1000};}catch(error){if(attempt === maxAttempts){try{await supabase.storage.from(bucket).remove([path]);}catch(error){captureSilentFailure(error,{feature:'analytics',operation:'safe-fallback',type:'data'});}throw error;}}}throw lastError || new Error('Upload failed after all retries');}export async function downloadExportData(jobId:string,userId:string,format:'json'|'csv'):Promise<DownloadResult>{return storageCircuitBreaker.execute(async()=>{const bucket = 'analytics-exports'; const path = `${userId}/${jobId}.${format}`; return await withRetry(async()=>{const{data,error} = await withTimeout(supabase.storage.from(bucket).download(path),30000,'Storage download timeout'); if(error){throw new AnalyticsStorageError(`Download failed: ${error.message}`,error.name,bucket,path,isRetryableStorageError(error));}if(!data){throw new AnalyticsStorageError('No data returned from download','EMPTY_RESPONSE',bucket,path,false);}const content = await data.text(); const checksum = await calculateChecksum(content); const{data:metadata} = await supabase.storage.from(bucket).getPublicUrl(path); return{data,url:metadata?.publicUrl || '',contentType:format === 'json' ? 'application/json' : 'text/csv',size:data.size,checksum};},{maxAttempts:3,baseDelayMs:1000,retryableErrors:['network_error','timeout']});});}export async function deleteExportData(jobId:string,userId:string,format:'json'|'csv'):Promise<void>{const bucket = 'analytics-exports'; const path = `${userId}/${jobId}.${format}`; const{error} = await supabase.storage.from(bucket).remove([path]); if(error){throw new AnalyticsStorageError(`Delete failed: ${error.message}`,error.name,bucket,path,false);}}async function calculateChecksum(content:string):Promise<string>{const encoder = new TextEncoder(); const data = encoder.encode(content); const hashBuffer = await crypto.subtle.digest('SHA-256',data); const hashArray = Array.from(new Uint8Array(hashBuffer)); return hashArray.map(b=>b.toString(16).padStart(2,'0')).join('');}function convertToCSV(data:unknown):string{if(!Array.isArray(data)){throw new AnalyticsStorageError('Data must be an array for CSV export','INVALID_FORMAT',undefined,undefined,false);}if(data.length === 0){return'';}const headers = Object.keys(data[0]as object); const rows = data.map(row=>headers.map(header=>{const value = (row as Record<string,unknown>)[header]; if(typeof value === 'string' && (value.includes(',') || value.includes('"'))){return`"${value.replace(/"/g,'""')}"`;}return String(value ?? '');}).join(',')); return[headers.join(','),...rows].join('\n');}function isRetryableStorageError(error:unknown):boolean{if(typeof error !== 'object' || error === null){return false;}const errorObj = error as{name?:string;message?:string;statusCode?:number;}; const retryableCodes = ['network_error','timeout','rate_limited','internal_error','service_unavailable']; const retryableStatuses = [408,429,500,502,503,504]; const hasRetryableCode = retryableCodes.some(code=>errorObj.name?.includes(code) || errorObj.message?.toLowerCase().includes(code)); const hasRetryableStatus = errorObj.statusCode !== undefined && retryableStatuses.includes(errorObj.statusCode); return hasRetryableCode || hasRetryableStatus;}export async function getStorageMetrics(userId:string):Promise<{totalExports:number;totalSize:number;oldestExport:number|null;}>{const bucket = 'analytics-exports'; const prefix = `${userId}/`; const{data,error} = await supabase.storage.from(bucket).list(prefix); if(error || !data){return{totalExports:0,totalSize:0,oldestExport:null};}const totalSize = data.reduce((sum,item)=>sum + (item.metadata?.size || 0),0); const timestamps = data.map(item=>item.created_at ? new Date(item.created_at).getTime() : null).filter((t):t is number=>t !== null); return{totalExports:data.length,totalSize,oldestExport:timestamps.length > 0 ? Math.min(...timestamps) : null};}export async function cleanupOldExports(userId:string,maxAgeDays:number = 30):Promise<{deleted:number;freedSpace:number;}>{const bucket = 'analytics-exports'; const prefix = `${userId}/`; const cutoff = Date.now() - maxAgeDays * 24 * 60 * 60 * 1000; const{data,error} = await supabase.storage.from(bucket).list(prefix); if(error || !data){return{deleted:0,freedSpace:0};}const toDelete = data.filter(item=>{const created = item.created_at ? new Date(item.created_at).getTime() : null; return created && created < cutoff;}); if(toDelete.length === 0){return{deleted:0,freedSpace:0};}const paths = toDelete.map(item=>`${prefix}${item.name}`); const freedSpace = toDelete.reduce((sum,item)=>sum + (item.metadata?.size || 0),0); const{error:deleteError} = await supabase.storage.from(bucket).remove(paths); if(deleteError){throw new AnalyticsStorageError(`Cleanup failed: ${deleteError.message}`,deleteError.name,bucket,prefix,true);}return{deleted:toDelete.length,freedSpace};}
+import { captureSilentFailure } from "../../../utils/silent-failure";
+import {
+  getSupabaseClient,
+  handleSupabaseError,
+} from "../../../config/supabase";
+import {
+  withRetry,
+  withTimeout,
+  CircuitBreaker,
+} from "../../../shared/hardening";
+import * as Sentry from "@sentry/react-native";
+const supabase = getSupabaseClient();
+const storageCircuitBreaker = new CircuitBreaker({
+  failureThreshold: 3,
+  recoveryTimeoutMs: 30000,
+  halfOpenMaxCalls: 2,
+});
+export interface StorageUploadConfig {
+  bucket: string;
+  path: string;
+  contentType: string;
+  encryption?: { enabled: boolean; algorithm: "AES-256-GCM" };
+  metadata?: Record<string, string>;
+}
+export interface UploadResult {
+  url: string;
+  size: number;
+  checksum: string;
+  uploadedAt: number;
+  expiresAt?: number;
+}
+export interface DownloadResult {
+  data: Blob;
+  url: string;
+  contentType: string;
+  size: number;
+  checksum: string;
+}
+export interface StorageError extends Error {
+  code: string;
+  bucket?: string;
+  path?: string;
+  retryable: boolean;
+}
+class AnalyticsStorageError extends Error implements StorageError {
+  constructor(
+    message: string,
+    public code: string,
+    public bucket?: string,
+    public path?: string,
+    public retryable = false,
+  ) {
+    super(message);
+    this.name = "AnalyticsStorageError";
+  }
+}
+export async function uploadExportData(
+  jobId: string,
+  data: unknown,
+  format: "json" | "csv",
+  userId: string,
+): Promise<UploadResult> {
+  return storageCircuitBreaker.execute(async () => {
+    const bucket = "analytics-exports";
+    const path = `${userId}/${jobId}.${format}`;
+    const content =
+      format === "json" ? JSON.stringify(data, null, 2) : convertToCSV(data);
+    const blob = new Blob([content], {
+      type: format === "json" ? "application/json" : "text/csv",
+    });
+    const fileSize = blob.size;
+    const checksum = await calculateChecksum(content);
+    if (fileSize > 5 * 1024 * 1024) {
+      return await uploadLargeFile(bucket, path, blob, checksum, jobId);
+    }
+    return await withRetry(
+      async () => {
+        const { data: uploadData, error } = await withTimeout(
+          supabase.storage
+            .from(bucket)
+            .upload(path, blob, {
+              contentType: format === "json" ? "application/json" : "text/csv",
+              upsert: false,
+              metadata: {
+                jobId,
+                userId,
+                checksum,
+                format,
+                uploadedAt: Date.now().toString(),
+              },
+            }),
+          60000,
+          "Storage upload timeout",
+        );
+        if (error) {
+          throw new AnalyticsStorageError(
+            `Upload failed: ${error.message}`,
+            error.name,
+            bucket,
+            path,
+            isRetryableStorageError(error),
+          );
+        }
+        const { data: urlData } = await supabase.storage
+          .from(bucket)
+          .createSignedUrl(path, 7 * 24 * 60 * 60);
+        return {
+          url: urlData?.signedUrl || "",
+          size: fileSize,
+          checksum,
+          uploadedAt: Date.now(),
+          expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        };
+      },
+      {
+        maxAttempts: 3,
+        baseDelayMs: 1000,
+        retryableErrors: ["network_error", "timeout", "rate_limited"],
+        onRetry: (attempt: number, error: Error) => {
+          Sentry.addBreadcrumb({
+            category: "storage",
+            message: `Retrying upload attempt ${attempt}`,
+            level: "warning",
+            data: { jobId, error: error.message },
+          });
+        },
+      },
+    );
+  });
+}
+async function uploadLargeFile(
+  bucket: string,
+  path: string,
+  blob: Blob,
+  checksum: string,
+  jobId: string,
+  onProgress?: (percent: number) => void,
+): Promise<UploadResult> {
+  const chunkSize = 5 * 1024 * 1024;
+  const totalChunks = Math.ceil(blob.size / chunkSize);
+  const maxAttempts = 5;
+  let lastError: Error | null = null;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      onProgress?.((attempt - 1) * 20);
+      const { data, error } = await withTimeout(
+        supabase.storage
+          .from(bucket)
+          .upload(path, blob, {
+            contentType: blob.type,
+            upsert: true,
+            metadata: {
+              jobId,
+              checksum,
+              chunks: totalChunks.toString(),
+              uploadedAt: Date.now().toString(),
+            },
+            duplex: "half",
+          } as { [key: string]: unknown }),
+        300000,
+        `Large file upload timeout (attempt ${attempt})`,
+      );
+      if (error) {
+        lastError = new AnalyticsStorageError(
+          `Upload failed: ${error.message}`,
+          error.name,
+          bucket,
+          path,
+          isRetryableStorageError(error),
+        );
+        if (!isRetryableStorageError(error) || attempt === maxAttempts) {
+          throw lastError;
+        }
+        await new Promise((resolve) =>
+          setTimeout(resolve, 1000 * Math.pow(2, attempt)),
+        );
+        continue;
+      }
+      onProgress?.(100);
+      const { data: urlData } = await supabase.storage
+        .from(bucket)
+        .createSignedUrl(path, 7 * 24 * 60 * 60);
+      return {
+        url: urlData?.signedUrl || "",
+        size: blob.size,
+        checksum,
+        uploadedAt: Date.now(),
+        expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      };
+    } catch (error) {
+      if (attempt === maxAttempts) {
+        try {
+          await supabase.storage.from(bucket).remove([path]);
+        } catch (error) {
+          captureSilentFailure(error, {
+            feature: "analytics",
+            operation: "safe-fallback",
+            type: "data",
+          });
+        }
+        throw error;
+      }
+    }
+  }
+  throw lastError || new Error("Upload failed after all retries");
+}
+export async function downloadExportData(
+  jobId: string,
+  userId: string,
+  format: "json" | "csv",
+): Promise<DownloadResult> {
+  return storageCircuitBreaker.execute(async () => {
+    const bucket = "analytics-exports";
+    const path = `${userId}/${jobId}.${format}`;
+    return await withRetry(
+      async () => {
+        const { data, error } = await withTimeout(
+          supabase.storage.from(bucket).download(path),
+          30000,
+          "Storage download timeout",
+        );
+        if (error) {
+          throw new AnalyticsStorageError(
+            `Download failed: ${error.message}`,
+            error.name,
+            bucket,
+            path,
+            isRetryableStorageError(error),
+          );
+        }
+        if (!data) {
+          throw new AnalyticsStorageError(
+            "No data returned from download",
+            "EMPTY_RESPONSE",
+            bucket,
+            path,
+            false,
+          );
+        }
+        const content = await data.text();
+        const checksum = await calculateChecksum(content);
+        const { data: metadata } = await supabase.storage
+          .from(bucket)
+          .getPublicUrl(path);
+        return {
+          data,
+          url: metadata?.publicUrl || "",
+          contentType: format === "json" ? "application/json" : "text/csv",
+          size: data.size,
+          checksum,
+        };
+      },
+      {
+        maxAttempts: 3,
+        baseDelayMs: 1000,
+        retryableErrors: ["network_error", "timeout"],
+      },
+    );
+  });
+}
+export async function deleteExportData(
+  jobId: string,
+  userId: string,
+  format: "json" | "csv",
+): Promise<void> {
+  const bucket = "analytics-exports";
+  const path = `${userId}/${jobId}.${format}`;
+  const { error } = await supabase.storage.from(bucket).remove([path]);
+  if (error) {
+    throw new AnalyticsStorageError(
+      `Delete failed: ${error.message}`,
+      error.name,
+      bucket,
+      path,
+      false,
+    );
+  }
+}
+async function calculateChecksum(content: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(content);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+function convertToCSV(data: unknown): string {
+  if (!Array.isArray(data)) {
+    throw new AnalyticsStorageError(
+      "Data must be an array for CSV export",
+      "INVALID_FORMAT",
+      undefined,
+      undefined,
+      false,
+    );
+  }
+  if (data.length === 0) {
+    return "";
+  }
+  const headers = Object.keys(data[0] as object);
+  const rows = data.map((row) =>
+    headers
+      .map((header) => {
+        const value = (row as Record<string, unknown>)[header];
+        if (
+          typeof value === "string" &&
+          (value.includes(",") || value.includes('"'))
+        ) {
+          return `"${value.replace(/"/g, '""')}"`;
+        }
+        return String(value ?? "");
+      })
+      .join(","),
+  );
+  return [headers.join(","), ...rows].join("\n");
+}
+function isRetryableStorageError(error: unknown): boolean {
+  if (typeof error !== "object" || error === null) {
+    return false;
+  }
+  const errorObj = error as {
+    name?: string;
+    message?: string;
+    statusCode?: number;
+  };
+  const retryableCodes = [
+    "network_error",
+    "timeout",
+    "rate_limited",
+    "internal_error",
+    "service_unavailable",
+  ];
+  const retryableStatuses = [408, 429, 500, 502, 503, 504];
+  const hasRetryableCode = retryableCodes.some(
+    (code) =>
+      errorObj.name?.includes(code) ||
+      errorObj.message?.toLowerCase().includes(code),
+  );
+  const hasRetryableStatus =
+    errorObj.statusCode !== undefined &&
+    retryableStatuses.includes(errorObj.statusCode);
+  return hasRetryableCode || hasRetryableStatus;
+}
+export async function getStorageMetrics(
+  userId: string,
+): Promise<{
+  totalExports: number;
+  totalSize: number;
+  oldestExport: number | null;
+}> {
+  const bucket = "analytics-exports";
+  const prefix = `${userId}/`;
+  const { data, error } = await supabase.storage.from(bucket).list(prefix);
+  if (error || !data) {
+    return { totalExports: 0, totalSize: 0, oldestExport: null };
+  }
+  const totalSize = data.reduce(
+    (sum, item) => sum + (item.metadata?.size || 0),
+    0,
+  );
+  const timestamps = data
+    .map((item) =>
+      item.created_at ? new Date(item.created_at).getTime() : null,
+    )
+    .filter((t): t is number => t !== null);
+  return {
+    totalExports: data.length,
+    totalSize,
+    oldestExport: timestamps.length > 0 ? Math.min(...timestamps) : null,
+  };
+}
+export async function cleanupOldExports(
+  userId: string,
+  maxAgeDays: number = 30,
+): Promise<{ deleted: number; freedSpace: number }> {
+  const bucket = "analytics-exports";
+  const prefix = `${userId}/`;
+  const cutoff = Date.now() - maxAgeDays * 24 * 60 * 60 * 1000;
+  const { data, error } = await supabase.storage.from(bucket).list(prefix);
+  if (error || !data) {
+    return { deleted: 0, freedSpace: 0 };
+  }
+  const toDelete = data.filter((item) => {
+    const created = item.created_at
+      ? new Date(item.created_at).getTime()
+      : null;
+    return created && created < cutoff;
+  });
+  if (toDelete.length === 0) {
+    return { deleted: 0, freedSpace: 0 };
+  }
+  const paths = toDelete.map((item) => `${prefix}${item.name}`);
+  const freedSpace = toDelete.reduce(
+    (sum, item) => sum + (item.metadata?.size || 0),
+    0,
+  );
+  const { error: deleteError } = await supabase.storage
+    .from(bucket)
+    .remove(paths);
+  if (deleteError) {
+    throw new AnalyticsStorageError(
+      `Cleanup failed: ${deleteError.message}`,
+      deleteError.name,
+      bucket,
+      prefix,
+      true,
+    );
+  }
+  return { deleted: toDelete.length, freedSpace };
+}

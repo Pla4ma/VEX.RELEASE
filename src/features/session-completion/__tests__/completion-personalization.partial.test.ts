@@ -25,27 +25,24 @@ describe("Phase 5 - Completion Personalization > Partial completion per lane", (
 });
 
 describe("Phase 5 - Completion Personalization > Abandoned completion per lane", () => {
-  it.each(LANES)(
-    "%s: abandoned uses recovery question, no shame",
-    (lane) => {
-      const result = buildResult(lane, {
-        grade: "D",
-        summary: {
-          completionPercentage: 0,
-          sessionMode: SessionMode.FLOW,
-          status: "ABANDONED",
-          actualDuration: 300,
-          effectiveDuration: 200,
-          interruptions: 2,
-          xpEarned: 10,
-        },
-        focusScoreDelta: -8,
-        xpDelta: 20,
-      });
-      expect(result.reflectionQuestion).toBe(ABANDONED_REFLECTIONS[lane]);
-      expect(result.userFacingSummary.tone).toBe("warning");
-      expect(result.memoryCandidates.length).toBe(1);
-      expect(result.memoryCandidates[0].confidence).toBeLessThan(0.6);
-    },
-  );
+  it.each(LANES)("%s: abandoned uses recovery question, no shame", (lane) => {
+    const result = buildResult(lane, {
+      grade: "D",
+      summary: {
+        completionPercentage: 0,
+        sessionMode: SessionMode.FLOW,
+        status: "ABANDONED",
+        actualDuration: 300,
+        effectiveDuration: 200,
+        interruptions: 2,
+        xpEarned: 10,
+      },
+      focusScoreDelta: -8,
+      xpDelta: 20,
+    });
+    expect(result.reflectionQuestion).toBe(ABANDONED_REFLECTIONS[lane]);
+    expect(result.userFacingSummary.tone).toBe("warning");
+    expect(result.memoryCandidates.length).toBe(1);
+    expect(result.memoryCandidates[0].confidence).toBeLessThan(0.6);
+  });
 });

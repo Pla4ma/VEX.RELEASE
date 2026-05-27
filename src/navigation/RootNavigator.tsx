@@ -137,7 +137,7 @@ export const RootNavigator: React.FC = () => {
     <NavigationContainer
       ref={navigationRef}
       onReady={() => {
-        markColdStart('root_navigator_ready');
+        markColdStart("root_navigator_ready");
         setIsNavigationReady(true);
       }}
       theme={{

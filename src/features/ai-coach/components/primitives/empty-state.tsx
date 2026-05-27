@@ -4,12 +4,11 @@
  * Premium empty states with illustrations and actions
  */
 
-import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
-import Animated, { FadeIn, FadeInUp } from 'react-native-reanimated';
-import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import React from "react";
+import { View, Text, Pressable, StyleSheet } from "react-native";
+import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 interface EmptyStateProps {
   icon: string;
@@ -21,7 +20,15 @@ interface EmptyStateProps {
   onSecondaryAction?: () => void;
 }
 
-export function EmptyState({ icon, title, message, actionLabel, onAction, secondaryActionLabel, onSecondaryAction }: EmptyStateProps) {
+export function EmptyState({
+  icon,
+  title,
+  message,
+  actionLabel,
+  onAction,
+  secondaryActionLabel,
+  onSecondaryAction,
+}: EmptyStateProps) {
   return (
     <Animated.View entering={FadeIn.duration(400)} style={styles.container}>
       <Animated.View entering={FadeInUp.delay(100).duration(400)}>
@@ -37,16 +44,33 @@ export function EmptyState({ icon, title, message, actionLabel, onAction, second
       </Animated.View>
 
       {(actionLabel || secondaryActionLabel) && (
-        <Animated.View entering={FadeInUp.delay(400).duration(400)} style={styles.actions}>
+        <Animated.View
+          entering={FadeInUp.delay(400).duration(400)}
+          style={styles.actions}
+        >
           {actionLabel && onAction && (
-            <Pressable onPress={onAction} style={styles.primaryButton} accessibilityLabel={actionLabel} accessibilityRole="button" accessibilityHint="Activates this control">
+            <Pressable
+              onPress={onAction}
+              style={styles.primaryButton}
+              accessibilityLabel={actionLabel}
+              accessibilityRole="button"
+              accessibilityHint="Activates this control"
+            >
               <Text style={styles.primaryButtonText}>{actionLabel}</Text>
             </Pressable>
           )}
 
           {secondaryActionLabel && onSecondaryAction && (
-            <Pressable onPress={onSecondaryAction} style={styles.secondaryButton} accessibilityLabel={secondaryActionLabel} accessibilityRole="button" accessibilityHint="Activates this control">
-              <Text style={styles.secondaryButtonText}>{secondaryActionLabel}</Text>
+            <Pressable
+              onPress={onSecondaryAction}
+              style={styles.secondaryButton}
+              accessibilityLabel={secondaryActionLabel}
+              accessibilityRole="button"
+              accessibilityHint="Activates this control"
+            >
+              <Text style={styles.secondaryButtonText}>
+                {secondaryActionLabel}
+              </Text>
             </Pressable>
           )}
         </Animated.View>
@@ -56,46 +80,129 @@ export function EmptyState({ icon, title, message, actionLabel, onAction, second
 }
 
 // Pre-built empty states for common scenarios
-export function NoMessagesEmptyState({ onBrowseChallenges }: { onBrowseChallenges?: () => void }) {
-  return <EmptyState icon="✉️" title="No Messages Yet" message="Your coach will send personalized messages here based on your activity and progress." actionLabel="Start a Session" onAction={onBrowseChallenges} secondaryActionLabel="Browse Challenges" onSecondaryAction={onBrowseChallenges} />;
+export function NoMessagesEmptyState({
+  onBrowseChallenges,
+}: {
+  onBrowseChallenges?: () => void;
+}) {
+  return (
+    <EmptyState
+      icon="✉️"
+      title="No Messages Yet"
+      message="Your coach will send personalized messages here based on your activity and progress."
+      actionLabel="Start a Session"
+      onAction={onBrowseChallenges}
+      secondaryActionLabel="Browse Challenges"
+      onSecondaryAction={onBrowseChallenges}
+    />
+  );
 }
 
 export function NoHistoryEmptyState() {
-  return <EmptyState icon="📜" title="No Message History" message="Complete sessions and build streaks to see your coaching history here." actionLabel="Start First Session" />;
+  return (
+    <EmptyState
+      icon="📜"
+      title="No Message History"
+      message="Complete sessions and build streaks to see your coaching history here."
+      actionLabel="Start First Session"
+    />
+  );
 }
 
-export function NoRecommendationsEmptyState({ onViewChallenges }: { onViewChallenges?: () => void }) {
-  return <EmptyState icon="🎯" title="No Recommendations" message="We're learning your patterns. Check back soon for personalized session suggestions!" actionLabel="View Challenges" onAction={onViewChallenges} />;
+export function NoRecommendationsEmptyState({
+  onViewChallenges,
+}: {
+  onViewChallenges?: () => void;
+}) {
+  return (
+    <EmptyState
+      icon="🎯"
+      title="No Recommendations"
+      message="We're learning your patterns. Check back soon for personalized session suggestions!"
+      actionLabel="View Challenges"
+      onAction={onViewChallenges}
+    />
+  );
 }
 
 export function NoComebackEmptyState() {
-  return <EmptyState icon="💪" title="No Active Comeback" message="Your streak is healthy! Comeback mode activates if you break a streak of 3+ days." />;
+  return (
+    <EmptyState
+      icon="💪"
+      title="No Active Comeback"
+      message="Your streak is healthy! Comeback mode activates if you break a streak of 3+ days."
+    />
+  );
 }
 
 export function MutedStateEmptyState({ onUnmute }: { onUnmute?: () => void }) {
-  return <EmptyState icon="🔕" title="Notifications Muted" message="You've muted coach notifications. You can still see messages in the app." actionLabel="Unmute Notifications" onAction={onUnmute} />;
+  return (
+    <EmptyState
+      icon="🔕"
+      title="Notifications Muted"
+      message="You've muted coach notifications. You can still see messages in the app."
+      actionLabel="Unmute Notifications"
+      onAction={onUnmute}
+    />
+  );
 }
 
-export function ErrorStateEmptyState({ error, onRetry }: { error?: string; onRetry?: () => void }) {
-  return <EmptyState icon="⚠️" title="Something Went Wrong" message={error || "We couldn't load your coach data. Please try again."} actionLabel="Retry" onAction={onRetry} />;
+export function ErrorStateEmptyState({
+  error,
+  onRetry,
+}: {
+  error?: string;
+  onRetry?: () => void;
+}) {
+  return (
+    <EmptyState
+      icon="⚠️"
+      title="Something Went Wrong"
+      message={error || "We couldn't load your coach data. Please try again."}
+      actionLabel="Retry"
+      onAction={onRetry}
+    />
+  );
 }
 
 export function OfflineEmptyState({ onRetry }: { onRetry?: () => void }) {
-  return <EmptyState icon="📡" title="You're Offline" message="Coach messages will sync when you reconnect. Some features may be limited." actionLabel="Try Again" onAction={onRetry} />;
+  return (
+    <EmptyState
+      icon="📡"
+      title="You're Offline"
+      message="Coach messages will sync when you reconnect. Some features may be limited."
+      actionLabel="Try Again"
+      onAction={onRetry}
+    />
+  );
 }
 
 export function NoPersonasEmptyState() {
-  return <EmptyState icon="🎭" title="No Coach Personas" message="Loading coach personas..." />;
+  return (
+    <EmptyState
+      icon="🎭"
+      title="No Coach Personas"
+      message="Loading coach personas..."
+    />
+  );
 }
 
 export function ColdStartEmptyState({ onStart }: { onStart?: () => void }) {
-  return <EmptyState icon="🌱" title="Welcome to Your Coach" message="Your AI coach learns from your sessions. Complete a few to get personalized guidance!" actionLabel="Start First Session" onAction={onStart} />;
+  return (
+    <EmptyState
+      icon="🌱"
+      title="Welcome to Your Coach"
+      message="Your AI coach learns from your sessions. Complete a few to get personalized guidance!"
+      actionLabel="Start First Session"
+      onAction={onStart}
+    />
+  );
 }
 
 const styles = createSheet({
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 32,
     flex: 1,
   },
@@ -105,22 +212,22 @@ const styles = createSheet({
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: "700",
     color: launchColors.hex_1a1a1a,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: 8,
   },
   message: {
     fontSize: 16,
     color: launchColors.hex_666,
-    textAlign: 'center',
+    textAlign: "center",
     lineHeight: 22,
     marginBottom: 24,
     maxWidth: 280,
   },
   actions: {
     gap: 12,
-    width: '100%',
+    width: "100%",
     maxWidth: 280,
   },
   primaryButton: {
@@ -128,25 +235,25 @@ const styles = createSheet({
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: "center",
   },
   primaryButtonText: {
     color: launchColors.hex_fff,
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   secondaryButton: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
-    alignItems: 'center',
+    alignItems: "center",
     borderWidth: 1,
     borderColor: launchColors.hex_ddd,
   },
   secondaryButtonText: {
     color: launchColors.hex_666,
     fontSize: 16,
-    fontWeight: '500',
+    fontWeight: "500",
   },
 });

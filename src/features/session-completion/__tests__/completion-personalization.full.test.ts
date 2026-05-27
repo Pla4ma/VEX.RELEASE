@@ -29,28 +29,22 @@ describe("Phase 5 - Completion Personalization > Full completion per lane", () =
     expect(result.unlockDecision.key).toBe(UNLOCK_KEYS[lane]);
   });
 
-  it.each(LANES)(
-    "%s: memory candidate generated with evidence",
-    (lane) => {
-      const result = buildResult(lane);
-      expect(result.memoryCandidates.length).toBe(1);
-      expect(result.memoryCandidates[0].text).toContain(
-        "s:" + createSessionSummary().sessionId.split("-")[0],
-      );
-    },
-  );
+  it.each(LANES)("%s: memory candidate generated with evidence", (lane) => {
+    const result = buildResult(lane);
+    expect(result.memoryCandidates.length).toBe(1);
+    expect(result.memoryCandidates[0].text).toContain(
+      "s:" + createSessionSummary().sessionId.split("-")[0],
+    );
+  });
 });
 
 describe("Phase 5 - Completion Personalization > First session creates return plan", () => {
-  it.each(LANES)(
-    "%s: progressProof shows xpDelta and completion",
-    (lane) => {
-      const result = buildResult(lane, { xpDelta: 80 });
-      expect(result.progressProof.xpDelta).toBe(80);
-      expect(result.progressProof.effectiveMinutes).toBeGreaterThan(0);
-      expect(result.progressProof.completionPercentage).toBe(100);
-    },
-  );
+  it.each(LANES)("%s: progressProof shows xpDelta and completion", (lane) => {
+    const result = buildResult(lane, { xpDelta: 80 });
+    expect(result.progressProof.xpDelta).toBe(80);
+    expect(result.progressProof.effectiveMinutes).toBeGreaterThan(0);
+    expect(result.progressProof.completionPercentage).toBe(100);
+  });
 });
 
 describe("Phase 5 - Completion Personalization > User-facing summary is lane-appropriate", () => {

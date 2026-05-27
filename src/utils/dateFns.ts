@@ -109,12 +109,18 @@ export const differenceInHours = (dateLeft: Date, dateRight: Date): number => {
   return Math.floor(diffTime / (1000 * 60 * 60));
 };
 
-export const differenceInMinutes = (dateLeft: Date, dateRight: Date): number => {
+export const differenceInMinutes = (
+  dateLeft: Date,
+  dateRight: Date,
+): number => {
   const diffTime = Math.abs(dateLeft.getTime() - dateRight.getTime());
   return Math.floor(diffTime / (1000 * 60));
 };
 
-export const differenceInSeconds = (dateLeft: Date, dateRight: Date): number => {
+export const differenceInSeconds = (
+  dateLeft: Date,
+  dateRight: Date,
+): number => {
   const diffTime = Math.abs(dateLeft.getTime() - dateRight.getTime());
   return Math.floor(diffTime / 1000);
 };
@@ -124,15 +130,15 @@ export const formatDistanceToNow = (date: Date): string => {
   const diffInSeconds = differenceInSeconds(now, date);
 
   if (diffInSeconds < 60) {
-    return 'less than a minute ago';
+    return "less than a minute ago";
   } else if (diffInSeconds < 3600) {
     const minutes = Math.floor(diffInSeconds / 60);
-    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
   } else if (diffInSeconds < 86400) {
     const hours = Math.floor(diffInSeconds / 3600);
-    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    return `${hours} hour${hours > 1 ? "s" : ""} ago`;
   } else {
     const days = Math.floor(diffInSeconds / 86400);
-    return `${days} day${days > 1 ? 's' : ''} ago`;
+    return `${days} day${days > 1 ? "s" : ""} ago`;
   }
 };

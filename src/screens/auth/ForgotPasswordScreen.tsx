@@ -1,33 +1,33 @@
-import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
+import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
 /**
  * Forgot Password Screen
  *
  * Premium password recovery flow with Supabase email verification.
  */
 
-import React, { useState, useCallback } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import React, { useState, useCallback } from "react";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
-import { useTheme } from '../../theme';
-import { Box, Text } from '../../components/primitives';
-import { Button } from '../../components';
-import { Icon } from '../../icons';
-import { FormField } from '../../shared/ui/components/FormField';
-import { useToast } from '../../shared/ui/components/Toast';
-import { submitForgotPassword } from './forgot-password-helpers';
-import type { AuthStackParams } from '../../navigation';
+import { useTheme } from "../../theme";
+import { Box, Text } from "../../components/primitives";
+import { Button } from "../../components";
+import { Icon } from "../../icons";
+import { FormField } from "../../shared/ui/components/FormField";
+import { useToast } from "../../shared/ui/components/Toast";
+import { submitForgotPassword } from "./forgot-password-helpers";
+import type { AuthStackParams } from "../../navigation";
 
-type Props = NativeStackScreenProps<AuthStackParams, 'ForgotPassword'>;
+type Props = NativeStackScreenProps<AuthStackParams, "ForgotPassword">;
 
 export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { show: showToast } = useToast();
 
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -41,9 +41,9 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
     if (!result.success) {
       setError(result.error);
       showToast({
-        type: 'error',
-        title: 'Failed to send email',
-        message: result.error ?? 'Unknown error',
+        type: "error",
+        title: "Failed to send email",
+        message: result.error ?? "Unknown error",
         duration: 4000,
       });
       setIsLoading(false);
@@ -53,24 +53,27 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
     setIsLoading(false);
     setIsSuccess(true);
     showToast({
-      type: 'success',
-      title: 'Email sent',
-      message: 'Check your inbox for reset instructions.',
+      type: "success",
+      title: "Email sent",
+      message: "Check your inbox for reset instructions.",
       duration: 4000,
     });
   }, [email, showToast]);
 
   const handleBack = useCallback(() => {
-    navigation.navigate({ name: 'Login', params: {} });
+    navigation.navigate({ name: "Login", params: {} });
   }, [navigation]);
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
     >
       <ScrollView
-        contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom + 20 }}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingBottom: insets.bottom + 20,
+        }}
         keyboardShouldPersistTaps="handled"
       >
         <Box flex={1} px="xl" py="2xl">
@@ -80,12 +83,18 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
               variant="ghost"
               size="sm"
               onPress={handleBack}
-              leftIcon={<Icon name="back" size="sm" color={theme.colors.text.secondary} />}
-              style={{ alignSelf: 'flex-start', marginBottom: 24 }}
-
-            accessibilityLabel="Back to Login button"
-            accessibilityRole="button"
-            accessibilityHint="Activates this control">
+              leftIcon={
+                <Icon
+                  name="back"
+                  size="sm"
+                  color={theme.colors.text.secondary}
+                />
+              }
+              style={{ alignSelf: "flex-start", marginBottom: 24 }}
+              accessibilityLabel="Back to Login button"
+              accessibilityRole="button"
+              accessibilityHint="Activates this control"
+            >
               Back to Login
             </Button>
           </Animated.View>
@@ -98,20 +107,29 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                   width: 80,
                   height: 80,
                   borderRadius: 24,
-                  justifyContent: 'center',
-                  alignItems: 'center',
+                  justifyContent: "center",
+                  alignItems: "center",
                   backgroundColor: theme.colors.primary[50],
                 }}
               >
-                <Icon name="lock" size="2xl" color={theme.colors.primary[500]} />
+                <Icon
+                  name="lock"
+                  size="2xl"
+                  color={theme.colors.primary[500]}
+                />
               </View>
               <Text variant="h1" textAlign="center" mt="lg">
-                {isSuccess ? 'Email Sent!' : 'Reset Password'}
+                {isSuccess ? "Email Sent!" : "Reset Password"}
               </Text>
-              <Text variant="body" color="text.secondary" textAlign="center" mt="sm">
+              <Text
+                variant="body"
+                color="text.secondary"
+                textAlign="center"
+                mt="sm"
+              >
                 {isSuccess
                   ? `We've sent password reset instructions to ${email}`
-                  : 'Enter your email and we will send you instructions to reset your password'}
+                  : "Enter your email and we will send you instructions to reset your password"}
               </Text>
             </Box>
           </Animated.View>
@@ -125,17 +143,26 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                     width: 96,
                     height: 96,
                     borderRadius: 48,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: theme.colors.success.light + '30',
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: theme.colors.success.light + "30",
                   }}
                 >
-                  <Icon name="check" size="3xl" color={theme.colors.success.DEFAULT} />
+                  <Icon
+                    name="check"
+                    size="3xl"
+                    color={theme.colors.success.DEFAULT}
+                  />
                 </View>
-                <Button variant="primary" onPress={handleBack} fullWidth style={{ marginTop: 32 }}
-  accessibilityLabel="Back to Login button"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+                <Button
+                  variant="primary"
+                  onPress={handleBack}
+                  fullWidth
+                  style={{ marginTop: 32 }}
+                  accessibilityLabel="Back to Login button"
+                  accessibilityRole="button"
+                  accessibilityHint="Activates this control"
+                >
                   Back to Login
                 </Button>
               </Box>
@@ -149,7 +176,9 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                   value={email}
                   onChangeText={(value) => {
                     setEmail(value);
-                    if (error) {setError(undefined);}
+                    if (error) {
+                      setError(undefined);
+                    }
                   }}
                   placeholder="you@example.com"
                   keyboardType="email-address"
@@ -171,18 +200,23 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
                   isLoading={isLoading}
                   disabled={isLoading || !email}
                   fullWidth
-
-                accessibilityLabel="Send Reset Link button"
-                accessibilityRole="button"
-                accessibilityHint="Activates this control">
+                  accessibilityLabel="Send Reset Link button"
+                  accessibilityRole="button"
+                  accessibilityHint="Activates this control"
+                >
                   Send Reset Link
                 </Button>
               </Box>
 
               {/* Help text */}
               <Box alignItems="center" mt="xl">
-                <Text variant="caption" color="text.tertiary" textAlign="center">
-                  Did not receive the email? Check your spam folder or try again.
+                <Text
+                  variant="caption"
+                  color="text.tertiary"
+                  textAlign="center"
+                >
+                  Did not receive the email? Check your spam folder or try
+                  again.
                 </Text>
               </Box>
             </Animated.View>
@@ -193,4 +227,4 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default withScreenErrorBoundary(ForgotPasswordScreen, 'ForgotPassword');
+export default withScreenErrorBoundary(ForgotPasswordScreen, "ForgotPassword");

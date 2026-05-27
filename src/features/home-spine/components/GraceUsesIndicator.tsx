@@ -7,13 +7,13 @@
  * @phase 2.5
  */
 
-import React from 'react';
-import { Pressable } from 'react-native';
-import Animated, { FadeIn } from 'react-native-reanimated';
+import React from "react";
+import { Pressable } from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
 
 export interface GraceUsesIndicatorProps {
   /** Grace uses remaining */
@@ -40,10 +40,12 @@ export function GraceUsesIndicator({
 
   return (
     <Animated.View entering={FadeIn.duration(300)}>
-      <Pressable onPress={onPress}
-  accessibilityLabel="🛡️ / saves button"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+      <Pressable
+        onPress={onPress}
+        accessibilityLabel="🛡️ / saves button"
+        accessibilityRole="button"
+        accessibilityHint="Activates this control"
+      >
         <Box
           flexDirection="row"
           alignItems="center"
@@ -51,9 +53,15 @@ export function GraceUsesIndicator({
           px="sm"
           py="xs"
           borderRadius="full"
-          bg={isLow ? `${theme.colors.warning[50]}80` : `${theme.colors.info[50]}80`}
+          bg={
+            isLow
+              ? `${theme.colors.warning[50]}80`
+              : `${theme.colors.info[50]}80`
+          }
           borderWidth={1}
-          borderColor={isLow ? theme.colors.warning.DEFAULT : theme.colors.info.DEFAULT}
+          borderColor={
+            isLow ? theme.colors.warning.DEFAULT : theme.colors.info.DEFAULT
+          }
         >
           <Text fontSize={12}>🛡️</Text>
           <Text

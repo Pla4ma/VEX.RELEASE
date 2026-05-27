@@ -1,16 +1,19 @@
-import React from 'react';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import React from "react";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
-import { Banner } from '../../../components/Banner';
-import { Box } from '../../../components/primitives';
-import { MasteryCard } from '../../../features/mastery/components/MasteryCard';
-import type { MasteryState } from '../../../features/mastery/types';
-import type { CompletionExperiencePolicy, CompletionSurface } from '../../../features/session-completion/completion-experience-policy';
-import type { SessionCompletionConsequences } from '../../../features/session-completion/story-consequence-service';
-import type { SessionSummary } from '../../../session/types';
-import type { StudyProgressCardData } from '../hooks/useSessionCompleteStudyProgress';
-import { SessionAdaptivePayoffCard } from './SessionAdaptivePayoffCard';
-import { SessionProgressionCard } from './SessionProgressionCard';
+import { Banner } from "../../../components/Banner";
+import { Box } from "../../../components/primitives";
+import { MasteryCard } from "../../../features/mastery/components/MasteryCard";
+import type { MasteryState } from "../../../features/mastery/types";
+import type {
+  CompletionExperiencePolicy,
+  CompletionSurface,
+} from "../../../features/session-completion/completion-experience-policy";
+import type { SessionCompletionConsequences } from "../../../features/session-completion/story-consequence-service";
+import type { SessionSummary } from "../../../session/types";
+import type { StudyProgressCardData } from "../hooks/useSessionCompleteStudyProgress";
+import { SessionAdaptivePayoffCard } from "./SessionAdaptivePayoffCard";
+import { SessionProgressionCard } from "./SessionProgressionCard";
 
 type SessionCompletionRewardsSectionProps = {
   consequences?: SessionCompletionConsequences;
@@ -30,7 +33,12 @@ type SessionCompletionRewardsSectionProps = {
       applyCompletionRewards: () => Promise<void>;
     };
     rewardCreditError: string | null;
-    rewardCreditStatus: 'crediting' | 'failed' | 'idle' | 'retrying' | 'success';
+    rewardCreditStatus:
+      | "crediting"
+      | "failed"
+      | "idle"
+      | "retrying"
+      | "success";
   };
   setMasteryState: React.Dispatch<React.SetStateAction<MasteryState | null>>;
   studyProgress: StudyProgressCardData | null;
@@ -61,7 +69,7 @@ export function SessionCompletionRewardsSection({
   return (
     <Animated.View entering={FadeInUp.duration(420)}>
       <Box px={6} pt={7}>
-        {rewards.rewardCreditStatus === 'failed' ? (
+        {rewards.rewardCreditStatus === "failed" ? (
           <Box mb={4}>
             <Banner
               title="Rewards couldn't save right now - we'll retry automatically"
@@ -70,15 +78,15 @@ export function SessionCompletionRewardsSection({
               onAction={() => void rewards.actions.applyCompletionRewards()}
             />
           </Box>
-        ) : rewards.rewardCreditStatus === 'crediting' ||
-          rewards.rewardCreditStatus === 'retrying' ? (
+        ) : rewards.rewardCreditStatus === "crediting" ||
+          rewards.rewardCreditStatus === "retrying" ? (
           <Box mb={4}>
             <Banner
               title="Saving rewards"
               description={
-                rewards.rewardCreditStatus === 'retrying'
-                  ? 'We are retrying the reward sync in the background.'
-                  : 'Your XP and streak updates are being locked in.'
+                rewards.rewardCreditStatus === "retrying"
+                  ? "We are retrying the reward sync in the background."
+                  : "Your XP and streak updates are being locked in."
               }
               variant="info"
             />
@@ -87,8 +95,8 @@ export function SessionCompletionRewardsSection({
 
         <SessionProgressionCard
           isRewardSyncing={
-            rewards.rewardCreditStatus === 'crediting' ||
-            rewards.rewardCreditStatus === 'retrying' ||
+            rewards.rewardCreditStatus === "crediting" ||
+            rewards.rewardCreditStatus === "retrying" ||
             progressionLoading
           }
           levelMetric={progressionError ? null : levelMetric}
@@ -109,7 +117,7 @@ export function SessionCompletionRewardsSection({
           summary={summary}
         />
 
-        {masteryState && !hiddenSurfaces.includes('mastery_card') ? (
+        {masteryState && !hiddenSurfaces.includes("mastery_card") ? (
           <Animated.View entering={FadeInUp.delay(500).duration(420)}>
             <Box pt={5}>
               <MasteryCard

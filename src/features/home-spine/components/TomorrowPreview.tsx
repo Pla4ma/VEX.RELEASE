@@ -172,4 +172,7 @@ export function TomorrowPreview(props: TomorrowPreviewProps): JSX.Element {
   );
 }
 export { TomorrowPreviewCompact } from "./TomorrowPreviewCompact";
-export { TomorrowPreviewSession, type TomorrowPreviewSessionProps } from "./TomorrowPreviewSession";
+export {
+  TomorrowPreviewSession,
+  type TomorrowPreviewSessionProps,
+} from "./TomorrowPreviewSession";

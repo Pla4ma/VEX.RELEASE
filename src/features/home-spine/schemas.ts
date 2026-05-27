@@ -1,9 +1,9 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const HomeActionIntentSchema = z.enum([
-  'start-session',
-  'accept-coach-recommendation',
-  'continue-study-plan',
+  "start-session",
+  "accept-coach-recommendation",
+  "continue-study-plan",
 ]);
 
 export type HomeActionIntent = z.infer<typeof HomeActionIntentSchema>;
@@ -11,7 +11,7 @@ export type HomeActionIntent = z.infer<typeof HomeActionIntentSchema>;
 export const HomeHighlightSchema = z.object({
   title: z.string().min(1),
   message: z.string().min(1),
-  tone: z.enum(['celebration', 'info', 'warning']),
+  tone: z.enum(["celebration", "info", "warning"]),
 });
 
 export type HomeHighlight = z.infer<typeof HomeHighlightSchema>;
@@ -23,15 +23,17 @@ export const HomeReturnReasonStateSchema = z.object({
   ctaLabel: z.string().min(1),
   intent: HomeActionIntentSchema,
   source: z.enum([
-    'coach',
-    'comeback',
-    'study-plan',
-    'next-best-action',
-    'completion-highlight',
+    "coach",
+    "comeback",
+    "study-plan",
+    "next-best-action",
+    "completion-highlight",
   ]),
-  tone: z.enum(['default', 'celebration', 'info', 'warning']),
+  tone: z.enum(["default", "celebration", "info", "warning"]),
   recommendationId: z.string().min(1).optional(),
-  suggestedDifficulty: z.enum(['EASY', 'NORMAL', 'CHALLENGING', 'PUSH']).optional(),
+  suggestedDifficulty: z
+    .enum(["EASY", "NORMAL", "CHALLENGING", "PUSH"])
+    .optional(),
   suggestedDurationSeconds: z.number().int().positive().optional(),
 });
 

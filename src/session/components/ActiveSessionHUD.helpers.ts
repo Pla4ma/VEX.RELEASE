@@ -9,16 +9,25 @@ export const formatTime = (seconds: number): string => {
 
 export const getPhaseLabel = (phase: SessionPhase): string => {
   switch (phase) {
-    case "FOCUS": return "🔥 Focus Time";
-    case "SHORT_BREAK": return "☕ Short Break";
-    case "LONG_BREAK": return "🌴 Long Break";
-    case "PREPARATION": return "📝 Preparation";
-    case "REVIEW": return "✅ Review";
-    default: return "Session";
+    case "FOCUS":
+      return "🔥 Focus Time";
+    case "SHORT_BREAK":
+      return "☕ Short Break";
+    case "LONG_BREAK":
+      return "🌴 Long Break";
+    case "PREPARATION":
+      return "📝 Preparation";
+    case "REVIEW":
+      return "✅ Review";
+    default:
+      return "Session";
   }
 };
 
-export const getStatusColor = (isPaused: boolean, isActive: boolean): string => {
+export const getStatusColor = (
+  isPaused: boolean,
+  isActive: boolean,
+): string => {
   if (isPaused) return launchColors.hex_ffa500;
   if (isActive) return launchColors.hex_4caf50;
   return launchColors.hex_9e9e9e;

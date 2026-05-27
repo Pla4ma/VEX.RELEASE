@@ -1,12 +1,17 @@
-import { decideHomeSurfaces } from '../home-surface-decision';
+import { decideHomeSurfaces } from "../home-surface-decision";
 import {
-  featureAvailability, studyProfile, workProfile, gameLikeProfile, calmProfile,
-  baseStats, surfaceNames,
-} from './home-surface-decision.helpers';
+  featureAvailability,
+  studyProfile,
+  workProfile,
+  gameLikeProfile,
+  calmProfile,
+  baseStats,
+  surfaceNames,
+} from "./home-surface-decision.helpers";
 
-describe('HomeSurfaceDecision', () => {
-  describe('Day 0 (zero sessions)', () => {
-    it('shows exactly one primary CTA on Day 0', () => {
+describe("HomeSurfaceDecision", () => {
+  describe("Day 0 (zero sessions)", () => {
+    it("shows exactly one primary CTA on Day 0", () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: studyProfile,
@@ -17,13 +22,18 @@ describe('HomeSurfaceDecision', () => {
         isFirstSession: true,
       });
 
-      const primaries = Object.entries(map).filter(([, v]) => v === 'primary');
+      const primaries = Object.entries(map).filter(([, v]) => v === "primary");
       expect(primaries).toHaveLength(1);
-      expect(map.start_session).toBe('primary');
+      expect(map.start_session).toBe("primary");
     });
 
-    it('shows at most tiny teasers, never a spotlight on Day 0', () => {
-      for (const profile of [studyProfile, workProfile, gameLikeProfile, calmProfile]) {
+    it("shows at most tiny teasers, never a spotlight on Day 0", () => {
+      for (const profile of [
+        studyProfile,
+        workProfile,
+        gameLikeProfile,
+        calmProfile,
+      ]) {
         const map = decideHomeSurfaces({
           featureAvailability,
           personalizationProfile: profile,
@@ -34,16 +44,23 @@ describe('HomeSurfaceDecision', () => {
           isFirstSession: true,
         });
 
-        const spotlights = Object.entries(map).filter(([, v]) => v === 'spotlight');
+        const spotlights = Object.entries(map).filter(
+          ([, v]) => v === "spotlight",
+        );
         expect(spotlights).toHaveLength(0);
 
         const visible = surfaceNames(map);
-        const hasHeavy = visible.some((s) => s.includes('boss_compact') || s.includes('boss_full_cta') || s.includes('spotlight'));
+        const hasHeavy = visible.some(
+          (s) =>
+            s.includes("boss_compact") ||
+            s.includes("boss_full_cta") ||
+            s.includes("spotlight"),
+        );
         expect(hasHeavy).toBe(false);
       }
     });
 
-    it('shows unlock strip as tiny_tease on Day 0', () => {
+    it("shows unlock strip as tiny_tease on Day 0", () => {
       const map = decideHomeSurfaces({
         featureAvailability,
         personalizationProfile: studyProfile,
@@ -54,7 +71,7 @@ describe('HomeSurfaceDecision', () => {
         isFirstSession: true,
       });
 
-      expect(map.unlock_strip).toBe('tiny_tease');
+      expect(map.unlock_strip).toBe("tiny_tease");
     });
   });
 });

@@ -8,7 +8,9 @@
  * Capitalize first letter
  */
 export function capitalize(str: string): string {
-  if (!str) {return '';}
+  if (!str) {
+    return "";
+  }
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -16,26 +18,30 @@ export function capitalize(str: string): string {
  * Convert to title case
  */
 export function titleCase(str: string): string {
-  if (!str) {return '';}
+  if (!str) {
+    return "";
+  }
   return str
-    .split(' ')
+    .split(" ")
     .map((word) => capitalize(word.toLowerCase()))
-    .join(' ');
+    .join(" ");
 }
 
 /**
  * Truncate string with ellipsis
  */
 export function truncate(str: string, maxLength: number): string {
-  if (!str || str.length <= maxLength) {return str;}
-  return str.slice(0, maxLength - 3) + '...';
+  if (!str || str.length <= maxLength) {
+    return str;
+  }
+  return str.slice(0, maxLength - 3) + "...";
 }
 
 /**
  * Remove whitespace
  */
 export function removeWhitespace(str: string): string {
-  return str.replace(/\s+/g, '');
+  return str.replace(/\s+/g, "");
 }
 
 /**
@@ -44,8 +50,8 @@ export function removeWhitespace(str: string): string {
 export function slugify(str: string): string {
   return str
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 /**
@@ -53,8 +59,8 @@ export function slugify(str: string): string {
  */
 export function kebabCase(str: string): string {
   return str
-    .replace(/([a-z])([A-Z])/g, '$1-$2')
-    .replace(/[\s_]+/g, '-')
+    .replace(/([a-z])([A-Z])/g, "$1-$2")
+    .replace(/[\s_]+/g, "-")
     .toLowerCase();
 }
 
@@ -63,7 +69,7 @@ export function kebabCase(str: string): string {
  */
 export function camelCase(str: string): string {
   return str
-    .replace(/[-_\s]+(.)?/g, (_, char) => (char ? char.toUpperCase() : ''))
+    .replace(/[-_\s]+(.)?/g, (_, char) => (char ? char.toUpperCase() : ""))
     .replace(/^./, (char) => char.toLowerCase());
 }
 
@@ -71,8 +77,9 @@ export function camelCase(str: string): string {
  * Generate random string
  */
 export function randomString(length: number = 8): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
+  const chars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
   for (let i = 0; i < length; i++) {
     result += chars.charAt(Math.floor(Math.random() * chars.length));
   }
@@ -83,25 +90,29 @@ export function randomString(length: number = 8): string {
  * Format number with commas
  */
 export function formatNumber(num: number): string {
-  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 /**
  * Format file size
  */
 export function formatFileSize(bytes: number): string {
-  if (bytes === 0) {return '0 B';}
+  if (bytes === 0) {
+    return "0 B";
+  }
   const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+  const sizes = ["B", "KB", "MB", "GB", "TB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
 }
 
 /**
  * Mask string (e.g., credit card)
  */
-export function maskString(str: string, visible = 4, mask = '*'): string {
-  if (str.length <= visible) {return str;}
+export function maskString(str: string, visible = 4, mask = "*"): string {
+  if (str.length <= visible) {
+    return str;
+  }
   const maskedLength = str.length - visible;
   return mask.repeat(maskedLength) + str.slice(-visible);
 }
@@ -110,11 +121,13 @@ export function maskString(str: string, visible = 4, mask = '*'): string {
  * Extract initials from name
  */
 export function getInitials(name: string): string {
-  if (!name) {return '';}
+  if (!name) {
+    return "";
+  }
   return name
-    .split(' ')
+    .split(" ")
     .map((n) => n[0])
-    .join('')
+    .join("")
     .toUpperCase()
     .slice(0, 2);
 }

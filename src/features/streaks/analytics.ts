@@ -3,7 +3,7 @@
  * Sentry breadcrumbs and custom event tracking
  */
 
-import * as Sentry from '@sentry/react-native';
+import * as Sentry from "@sentry/react-native";
 
 // ============================================================================
 // Event Tracking Functions
@@ -12,98 +12,98 @@ import * as Sentry from '@sentry/react-native';
 export function trackStreakIncremented(
   userId: string,
   previousStreak: number,
-  newStreak: number
+  newStreak: number,
 ): void {
   Sentry.addBreadcrumb({
-    category: 'streaks',
+    category: "streaks",
     message: `Streak incremented: ${previousStreak} → ${newStreak}`,
     data: {
       userId,
       previousStreak,
       newStreak,
     },
-    level: 'info',
+    level: "info",
   });
 }
 
 export function trackStreakBroken(
   userId: string,
   previousStreak: number,
-  wasComeback: boolean
+  wasComeback: boolean,
 ): void {
   Sentry.addBreadcrumb({
-    category: 'streaks',
+    category: "streaks",
     message: `Streak broken after ${previousStreak} days`,
     data: {
       userId,
       previousStreak,
       wasComeback,
     },
-    level: 'warning',
+    level: "warning",
   });
 }
 
 export function trackMilestoneReached(
   userId: string,
   milestoneDays: number,
-  rewardType: string
+  rewardType: string,
 ): void {
   Sentry.addBreadcrumb({
-    category: 'streaks',
+    category: "streaks",
     message: `Milestone reached: ${milestoneDays} days`,
     data: {
       userId,
       milestoneDays,
       rewardType,
     },
-    level: 'info',
+    level: "info",
   });
 }
 
 export function trackShieldUsed(
   userId: string,
   reason: string,
-  remainingShields: number
+  remainingShields: number,
 ): void {
   Sentry.addBreadcrumb({
-    category: 'streaks',
+    category: "streaks",
     message: `Streak shield used: ${reason}`,
     data: {
       userId,
       reason,
       remainingShields,
     },
-    level: 'info',
+    level: "info",
   });
 }
 
 export function trackComebackDetected(
   userId: string,
-  daysInactive: number
+  daysInactive: number,
 ): void {
   Sentry.addBreadcrumb({
-    category: 'streaks',
+    category: "streaks",
     message: `Comeback detected after ${daysInactive} days`,
     data: {
       userId,
       daysInactive,
     },
-    level: 'info',
+    level: "info",
   });
 }
 
 export function trackStreakError(
   operation: string,
   error: unknown,
-  userId?: string
+  userId?: string,
 ): void {
   Sentry.addBreadcrumb({
-    category: 'streaks',
+    category: "streaks",
     message: `Streak error: ${operation}`,
     data: {
       userId,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: error instanceof Error ? error.message : "Unknown error",
     },
-    level: 'error',
+    level: "error",
   });
 }

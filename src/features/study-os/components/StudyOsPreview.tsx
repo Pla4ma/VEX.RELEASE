@@ -4,14 +4,14 @@
  * Day 0 tiny Study OS preview for student lane.
  * Shows "Start first study block" CTA — no upload/import/AI.
  */
-import React from 'react';
-import { Pressable } from 'react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import React from "react";
+import { Pressable } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import type { StudyOsHomeSurface } from '../schemas';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import type { StudyOsHomeSurface } from "../schemas";
 
 export interface StudyOsPreviewProps {
   surface: StudyOsHomeSurface;
@@ -19,7 +19,11 @@ export interface StudyOsPreviewProps {
   isLoading?: boolean;
 }
 
-export function StudyOsPreview({ surface, onStartBlock, isLoading = false }: StudyOsPreviewProps): JSX.Element {
+export function StudyOsPreview({
+  surface,
+  onStartBlock,
+  isLoading = false,
+}: StudyOsPreviewProps): JSX.Element {
   const { theme } = useTheme();
   if (surface.hidden) return <></>;
 
@@ -35,7 +39,11 @@ export function StudyOsPreview({ surface, onStartBlock, isLoading = false }: Stu
         <Box
           p={4}
           borderRadius="lg"
-          style={{ backgroundColor: theme.colors.surface.card, borderWidth: 1, borderColor: theme.colors.border.light }}
+          style={{
+            backgroundColor: theme.colors.surface.card,
+            borderWidth: 1,
+            borderColor: theme.colors.border.light,
+          }}
         >
           <Text variant="heading4" color="text.primary">
             {surface.title}

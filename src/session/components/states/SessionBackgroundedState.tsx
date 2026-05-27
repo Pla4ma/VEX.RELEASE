@@ -8,7 +8,10 @@ import { useTheme } from "../../../theme";
 import { triggerHapticEvent, HapticEvents } from "../../../constants/haptics";
 import { eventBus } from "../../../events";
 import { styles } from "./SessionBackgroundedState.styles";
-import { formatDuration, calculateProgressLoss } from "./session-backgrounded-helpers";
+import {
+  formatDuration,
+  calculateProgressLoss,
+} from "./session-backgrounded-helpers";
 
 interface SessionBackgroundedStateProps {
   backgroundDuration: number;

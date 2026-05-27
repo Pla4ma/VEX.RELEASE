@@ -8,14 +8,14 @@ export {
   SessionCompletionHeroSchema,
   SessionCompletionNavigationParamsSchema,
   SessionCompletionReturnPlanSchema,
-} from './schemas';
+} from "./schemas";
 
 export type {
   CompletionLedger,
   SessionCompletionHero,
   SessionCompletionNavigationParams,
   SessionCompletionReturnPlan,
-} from './schemas';
+} from "./schemas";
 
 // Service
 export {
@@ -23,7 +23,7 @@ export {
   buildSessionCompletionReturnPlan,
   buildCompletionPersonalization,
   parseSessionCompletionParams,
-} from './service';
+} from "./service";
 
 // Repository
 export {
@@ -32,14 +32,10 @@ export {
   getCompletionLedgerBySessionId,
   hasSessionBeenCompleted,
   updateRewardStatus,
-} from './repository';
+} from "./repository";
 
 // Hooks
-export {
-  useSessionCompleteController,
-} from './hooks';
+export { useSessionCompleteController } from "./hooks";
 
 // Route
-export {
-  useSessionCompletionRouteState,
-} from './route';
+export { useSessionCompletionRouteState } from "./route";

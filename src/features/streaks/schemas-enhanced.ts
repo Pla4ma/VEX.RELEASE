@@ -3,13 +3,19 @@
  * For 10/10 quality compliance
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 // ============================================================================
 // Streak Risk Monitor Schemas
 // ============================================================================
 
-export const RiskLevelSchema = z.enum(['NONE', 'LOW', 'MEDIUM', 'HIGH', 'CRITICAL']);
+export const RiskLevelSchema = z.enum([
+  "NONE",
+  "LOW",
+  "MEDIUM",
+  "HIGH",
+  "CRITICAL",
+]);
 
 export const StreakRiskStatusSchema = z.object({
   userId: z.string().uuid(),
@@ -33,7 +39,12 @@ export const StreakRiskCheckInputSchema = z.object({
 // Streak Repair Quest Schemas
 // ============================================================================
 
-export const RepairQuestStatusSchema = z.enum(['ACTIVE', 'COMPLETED', 'EXPIRED', 'ABANDONED']);
+export const RepairQuestStatusSchema = z.enum([
+  "ACTIVE",
+  "COMPLETED",
+  "EXPIRED",
+  "ABANDONED",
+]);
 
 export const StreakRepairQuestSchema = z.object({
   id: z.string().uuid(),
@@ -82,7 +93,7 @@ export const StreakRiskEventSchema = z.object({
 export const StreakRepairEventSchema = z.object({
   userId: z.string().uuid(),
   questId: z.string().uuid(),
-  eventType: z.enum(['STARTED', 'PROGRESS', 'COMPLETED', 'EXPIRED']),
+  eventType: z.enum(["STARTED", "PROGRESS", "COMPLETED", "EXPIRED"]),
   previousStreak: z.number().optional(),
   restoredDays: z.number().optional(),
   sessionsCompleted: z.number().optional(),
@@ -97,5 +108,9 @@ export type RiskLevel = z.infer<typeof RiskLevelSchema>;
 export type StreakRiskStatus = z.infer<typeof StreakRiskStatusSchema>;
 export type StreakRepairQuest = z.infer<typeof StreakRepairQuestSchema>;
 export type RepairQuestStatus = z.infer<typeof RepairQuestStatusSchema>;
-export type RepairQuestSessionInput = z.infer<typeof RepairQuestSessionInputSchema>;
-export type RepairQuestStatusOutput = z.infer<typeof RepairQuestStatusOutputSchema>;
+export type RepairQuestSessionInput = z.infer<
+  typeof RepairQuestSessionInputSchema
+>;
+export type RepairQuestStatusOutput = z.infer<
+  typeof RepairQuestStatusOutputSchema
+>;

@@ -4,7 +4,10 @@ import { SessionEvents } from "../../shared/analytics/analytics-events";
 import { getOrchestratorHandlesCompletion } from "./SessionAnalytics";
 import { subscribeErrorEventListeners } from "./session-analytics-listener-helpers";
 
-type TrackFunction = (eventName: string, properties: Record<string, unknown>) => void;
+type TrackFunction = (
+  eventName: string,
+  properties: Record<string, unknown>,
+) => void;
 
 export function setupAnalyticsEventListeners(
   userId: string,

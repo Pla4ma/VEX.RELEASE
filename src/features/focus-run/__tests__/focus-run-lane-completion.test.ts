@@ -1,14 +1,11 @@
-import {
-  MOCK_RUN,
-  buildFocusRunDisplay,
-} from './helpers';
-import type { FocusRun } from '../schemas';
+import { MOCK_RUN, buildFocusRunDisplay } from "./helpers";
+import type { FocusRun } from "../schemas";
 
-describe('FocusRun lane display and completion', () => {
-  it('Run Day 0 — new user sees tiny teaser preview, no full Run board', () => {
+describe("FocusRun lane display and completion", () => {
+  it("Run Day 0 — new user sees tiny teaser preview, no full Run board", () => {
     const display = buildFocusRunDisplay({
       firstActiveDay: 0,
-      lane: 'game_like',
+      lane: "game_like",
       run: null,
       signals: [],
     });
@@ -18,47 +15,47 @@ describe('FocusRun lane display and completion', () => {
     expect(display.boss.isEvidenceBased).toBe(false);
     expect(display.completedEncounters).toBe(0);
     expect(display.finalGrade).toBeNull();
-    expect(display.weekSummary).toBe('No encounters yet this week.');
-    expect(display.title).toBe('Weekly Focus Run');
+    expect(display.weekSummary).toBe("No encounters yet this week.");
+    expect(display.title).toBe("Weekly Focus Run");
   });
 
-  it('minimal_normal lane has no run board and no boss CTA', () => {
+  it("minimal_normal lane has no run board and no boss CTA", () => {
     const display = buildFocusRunDisplay({
       firstActiveDay: 10,
-      lane: 'minimal_normal',
+      lane: "minimal_normal",
       run: MOCK_RUN,
     });
 
     expect(display.laneAllowed).toBe(false);
-    expect(display.title).toContain('hidden');
+    expect(display.title).toContain("hidden");
 
     const serialized = JSON.stringify(display);
     expect(serialized).not.toMatch(/face.*boss/i);
     expect(serialized).not.toMatch(/full cta/i);
   });
 
-  it('student lane hides run board', () => {
+  it("student lane hides run board", () => {
     const display = buildFocusRunDisplay({
-      lane: 'student',
+      lane: "student",
       run: MOCK_RUN,
     });
     expect(display.laneAllowed).toBe(false);
-    expect(display.title).toContain('hidden');
+    expect(display.title).toContain("hidden");
   });
 
-  it('completed game-like run display shows recap without currency', () => {
+  it("completed game-like run display shows recap without currency", () => {
     const completedRun: FocusRun = {
       ...MOCK_RUN,
       cleanStarts: 3,
       completedEncounters: 5,
       recoveryWins: 2,
       reflectionUpgrades: 1,
-      status: 'completed',
+      status: "completed",
     };
 
     const display = buildFocusRunDisplay({
       firstActiveDay: 10,
-      lane: 'game_like',
+      lane: "game_like",
       run: completedRun,
     });
 
@@ -75,27 +72,27 @@ describe('FocusRun lane display and completion', () => {
     expect(serialized).not.toMatch(/reward/i);
   });
 
-  it('Run completion shows grade and stat recap, no currency or economy values', () => {
+  it("Run completion shows grade and stat recap, no currency or economy values", () => {
     const completedRun: FocusRun = {
       ...MOCK_RUN,
       cleanStarts: 8,
       completedEncounters: 12,
       recoveryWins: 5,
       reflectionUpgrades: 3,
-      status: 'completed',
+      status: "completed",
     };
 
     const display = buildFocusRunDisplay({
       firstActiveDay: 14,
-      lane: 'game_like',
+      lane: "game_like",
       run: completedRun,
-      signals: ['scroll', 'late start', 'switching'],
+      signals: ["scroll", "late start", "switching"],
     });
 
-    expect(display.finalGrade).toBe('S');
-    expect(display.weekSummary).toContain('12 encounters');
-    expect(display.weekSummary).toContain('8 clean starts');
-    expect(display.weekSummary).toContain('5 recovery wins');
+    expect(display.finalGrade).toBe("S");
+    expect(display.weekSummary).toContain("12 encounters");
+    expect(display.weekSummary).toContain("8 clean starts");
+    expect(display.weekSummary).toContain("5 recovery wins");
 
     const serialized = JSON.stringify(display);
     expect(serialized).not.toMatch(/coins/i);

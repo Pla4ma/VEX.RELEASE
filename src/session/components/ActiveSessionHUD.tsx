@@ -2,7 +2,11 @@ import React from "react";
 import { Pressable, View, Text } from "react-native";
 import { useSession } from "../hooks/useSession";
 import { ActiveSessionHUDCompanion } from "./ActiveSessionHUDCompanion";
-import { formatTime, getPhaseLabel, getStatusColor } from "./ActiveSessionHUD.helpers";
+import {
+  formatTime,
+  getPhaseLabel,
+  getStatusColor,
+} from "./ActiveSessionHUD.helpers";
 import styles from "./ActiveSessionHUD.styles";
 
 interface ActiveSessionHUDProps {

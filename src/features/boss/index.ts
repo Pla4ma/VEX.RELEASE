@@ -9,11 +9,35 @@
 //
 // Focus Run owns the modern game-like lane via focus-run/boss-resolution.ts
 
-export type { PersonalBossBlock, BossVisibility, PersonalBossCompletionSignal } from './types';
-export { PersonalBossBlockSchema } from './types';
-export { shouldShowBossPreview, isBossVisibleAtSurface, isCombatAllowed, getBossDisplayCopy } from './display-policy';
-export { bossRepository } from './repository';
-export { useActiveBoss, useBossEngagementSummary, useAvailableBosses } from './hooks';
-export { getBossEngagementSignals, deriveBossEngagementLevel } from './boss-engagement-signals';
-export type { BossEngagementSignal, BossEngagementLevel, BossEngagementInputs } from './boss-engagement-signals';
-export { trackBossEvent, trackBossRouteOpened, trackBossCTAClicked } from './analytics';
+export type {
+  PersonalBossBlock,
+  BossVisibility,
+  PersonalBossCompletionSignal,
+} from "./types";
+export { PersonalBossBlockSchema } from "./types";
+export {
+  shouldShowBossPreview,
+  isBossVisibleAtSurface,
+  isCombatAllowed,
+  getBossDisplayCopy,
+} from "./display-policy";
+export { bossRepository } from "./repository";
+export {
+  useActiveBoss,
+  useBossEngagementSummary,
+  useAvailableBosses,
+} from "./hooks";
+export {
+  getBossEngagementSignals,
+  deriveBossEngagementLevel,
+} from "./boss-engagement-signals";
+export type {
+  BossEngagementSignal,
+  BossEngagementLevel,
+  BossEngagementInputs,
+} from "./boss-engagement-signals";
+export {
+  trackBossEvent,
+  trackBossRouteOpened,
+  trackBossCTAClicked,
+} from "./analytics";

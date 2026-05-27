@@ -22,7 +22,11 @@ const styles = {
     marginBottom: 32,
   },
   scoreLetter: { fontSize: 48, fontWeight: "700" as const },
-  scoreNumber: { fontSize: 32, fontWeight: "700" as const, color: launchColors.hex_fff },
+  scoreNumber: {
+    fontSize: 32,
+    fontWeight: "700" as const,
+    color: launchColors.hex_fff,
+  },
   scoreLabel: { fontSize: 14, color: launchColors.hex_9e9e9e },
   rewardsSection: { marginBottom: 24 },
   sectionTitle: {
@@ -56,7 +60,11 @@ const styles = {
     marginBottom: 24,
   },
   streakEmoji: { fontSize: 24, marginRight: 8 },
-  streakText: { fontSize: 18, fontWeight: "700" as const, color: launchColors.hex_fff },
+  streakText: {
+    fontSize: 18,
+    fontWeight: "700" as const,
+    color: launchColors.hex_fff,
+  },
   streakBonus: {
     marginLeft: 8,
     paddingHorizontal: 8,
@@ -113,7 +121,11 @@ const styles = {
     fontSize: 16,
     fontWeight: "700" as const,
   },
-  closeButton: { paddingVertical: 14, borderRadius: 8, alignItems: "center" as const },
+  closeButton: {
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: "center" as const,
+  },
   closeButtonText: { color: launchColors.hex_9e9e9e, fontSize: 16 },
 };
 

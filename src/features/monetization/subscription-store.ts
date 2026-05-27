@@ -1,13 +1,13 @@
-import { mmkvStorage } from '../../store/mmkv-storage';
-import type { UserSubscription } from './PremiumTierSystem';
+import { mmkvStorage } from "../../store/mmkv-storage";
+import type { UserSubscription } from "./PremiumTierSystem";
 
-const STORE_KEY = 'vex:subscriptions';
+const STORE_KEY = "vex:subscriptions";
 
 function loadAll(): Record<string, UserSubscription> {
   try {
     const raw = mmkvStorage.getItem(STORE_KEY);
-    return raw ? JSON.parse(raw) as Record<string, UserSubscription> : {};
-  } catch {
+    return raw ? (JSON.parse(raw) as Record<string, UserSubscription>) : {};
+  } catch (error: unknown) {
     return {};
   }
 }

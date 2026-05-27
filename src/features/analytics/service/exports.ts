@@ -1,8 +1,5 @@
 import * as repository from "../repository";
-import {
-  uploadExportData,
-  deleteExportData,
-} from "../repository/storage";
+import { uploadExportData, deleteExportData } from "../repository/storage";
 import {
   withRetry,
   CircuitBreaker,
@@ -120,7 +117,10 @@ async function processExportJob(
       metricsToFetch.forEach((metric, index) => {
         const result = fetchResults[index];
         if (result) {
-          exportData[metric] = { points: result.points, summary: result.summary };
+          exportData[metric] = {
+            points: result.points,
+            summary: result.summary,
+          };
         }
       });
       await repository.updateExportJobProgress(jobId, 60);

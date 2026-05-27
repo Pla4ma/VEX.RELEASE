@@ -84,7 +84,13 @@ export function detectCheckpoint(
   progressPercent: number,
   elapsedMinutes: number,
   lastCheckpoint: number,
-): { type: "progress" | "minute"; value: number; title: string; subtitle: string; emoji: string } | null {
+): {
+  type: "progress" | "minute";
+  value: number;
+  title: string;
+  subtitle: string;
+  emoji: string;
+} | null {
   const progressCheckpoints = [25, 50, 75, 90];
   for (const checkpoint of progressCheckpoints) {
     if (progressPercent >= checkpoint && lastCheckpoint < checkpoint) {

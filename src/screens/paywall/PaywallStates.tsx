@@ -1,15 +1,15 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
-import { Button } from '../../components/primitives/Button';
-import { Text } from '../../components/primitives/Text';
-import { Skeleton, SkeletonCard } from '../../components/ui/Skeleton';
-import { StatusBanner } from '../../shared/ui/components/StatusFeedback';
-import type { Theme } from '../../theme';
-import { paywallStyles as styles } from './paywall-styles';
+import { Button } from "../../components/primitives/Button";
+import { Text } from "../../components/primitives/Text";
+import { Skeleton, SkeletonCard } from "../../components/ui/Skeleton";
+import { StatusBanner } from "../../shared/ui/components/StatusFeedback";
+import type { Theme } from "../../theme";
+import { paywallStyles as styles } from "./paywall-styles";
 
 export type PaywallStatusMessage = {
-  tone: 'info' | 'warning' | 'celebration';
+  tone: "info" | "warning" | "celebration";
   title: string;
   body: string;
 };
@@ -26,11 +26,11 @@ export function PaywallStatusMessageBanner({
   return (
     <StatusBanner
       status={
-        statusMessage.tone === 'celebration'
-          ? 'success'
-          : statusMessage.tone === 'warning'
-            ? 'error'
-            : 'loading'
+        statusMessage.tone === "celebration"
+          ? "success"
+          : statusMessage.tone === "warning"
+            ? "error"
+            : "loading"
       }
       message={statusMessage.title}
       description={statusMessage.body}
@@ -77,7 +77,11 @@ export function PaywallErrorState({
         onRetry={onRetry}
       />
       <View style={styles.supportSection}>
-        <Text variant="bodySmall" color={theme.colors.text.tertiary} style={styles.supportText}>
+        <Text
+          variant="bodySmall"
+          color={theme.colors.text.tertiary}
+          style={styles.supportText}
+        >
           Having trouble? Try again or contact support
         </Text>
         <Button

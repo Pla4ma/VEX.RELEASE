@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect } from 'react';
-import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useCallback, useEffect } from "react";
+import { View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { markColdStart } from '../../../app/cold-start-performance';
-import { AppScreen, Button, Text } from '../../../components/primitives';
-import type { ExtendedRootStackParams } from '../../../navigation/types';
-import { useTheme } from '../../../theme';
+import { markColdStart } from "../../../app/cold-start-performance";
+import { AppScreen, Button, Text } from "../../../components/primitives";
+import type { ExtendedRootStackParams } from "../../../navigation/types";
+import { useTheme } from "../../../theme";
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -21,20 +21,22 @@ export function HomeColdStartFallback({
   const { theme } = useTheme();
 
   useEffect(() => {
-    markColdStart('first_home_skeleton_rendered');
-    markColdStart('first_actionable_cta_rendered');
+    markColdStart("first_home_skeleton_rendered");
+    markColdStart("first_actionable_cta_rendered");
   }, []);
 
   const startFirstSession = useCallback((): void => {
-    navigation.navigate('SessionStack', {
-      screen: 'SessionSetup',
-      params: { source: 'onboarding_first_session' },
+    navigation.navigate("SessionStack", {
+      screen: "SessionSetup",
+      params: { source: "onboarding_first_session" },
     });
   }, [navigation]);
 
   return (
     <AppScreen scroll={false} padded>
-      <View style={{ flex: 1, justifyContent: 'center', gap: theme.spacing[6] }}>
+      <View
+        style={{ flex: 1, justifyContent: "center", gap: theme.spacing[6] }}
+      >
         <View style={{ gap: theme.spacing[3] }}>
           <Text variant="caption" color="text.secondary">
             Home
@@ -63,7 +65,7 @@ export function HomeColdStartFallback({
               backgroundColor: theme.colors.semantic.primarySoft,
               borderRadius: theme.borderRadius.md,
               height: theme.spacing[3],
-              width: '52%',
+              width: "52%",
             }}
           />
           <View

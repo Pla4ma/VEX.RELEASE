@@ -18,7 +18,10 @@ export async function handlePartialCompletion(
   recoveredTime: number,
 ): Promise<void> {
   if (!config.autoHandleRecoveryRewards) {
-    debug.debug("Recovery rewards disabled - skipping partial completion for session %s", sessionId);
+    debug.debug(
+      "Recovery rewards disabled - skipping partial completion for session %s",
+      sessionId,
+    );
     return;
   }
   const partialXp = Math.floor(recoveredTime / 60) * 5;
@@ -36,7 +39,10 @@ export async function handleAbandonment(
   elapsedTime: number,
 ): Promise<void> {
   if (!config.autoHandleAbandonmentPartialCredit) {
-    debug.debug("Abandonment partial credit disabled - skipping for session %s", sessionId);
+    debug.debug(
+      "Abandonment partial credit disabled - skipping for session %s",
+      sessionId,
+    );
     return;
   }
   const partialXp = elapsedTime >= 300 ? Math.floor(elapsedTime / 60) * 3 : 0;

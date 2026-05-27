@@ -38,7 +38,10 @@ function getIntensityColor(durationMinutes: number, theme: Theme): string {
   return `${theme.colors.error[500]}90`;
 }
 
-function getFlameGradient(durationMinutes: number, theme: Theme): [string, string] {
+function getFlameGradient(
+  durationMinutes: number,
+  theme: Theme,
+): [string, string] {
   const w = theme.colors.warning;
   const e = theme.colors.error;
   if (durationMinutes < 30) {
@@ -96,7 +99,13 @@ interface DayCellProps {
   styles: StreakCalendarStyles;
 }
 
-export function DayCell({ day, dayData, isToday, theme, styles }: DayCellProps) {
+export function DayCell({
+  day,
+  dayData,
+  isToday,
+  theme,
+  styles,
+}: DayCellProps) {
   const hasSession = dayData?.hasSession ?? false;
   const durationMinutes = dayData?.durationMinutes ?? 0;
   const isBossDefeatDay = dayData?.isBossDefeatDay ?? false;

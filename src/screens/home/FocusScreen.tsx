@@ -1,16 +1,16 @@
-import React, { useMemo } from 'react';
-import { View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import React, { useMemo } from "react";
+import { View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { AppScreen, Button, Card, Text } from '../../components/primitives';
-import { buildFocusModeCards } from '../../features/session-start/service';
-import { useStreakSummary } from '../../features/streaks/hooks';
-import type { ExtendedRootStackParams } from '../../navigation/types';
-import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
-import type { FocusModeCard } from '../../features/session-start/schemas';
+import { AppScreen, Button, Card, Text } from "../../components/primitives";
+import { buildFocusModeCards } from "../../features/session-start/service";
+import { useStreakSummary } from "../../features/streaks/hooks";
+import type { ExtendedRootStackParams } from "../../navigation/types";
+import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
+import { useAuthStore } from "../../store";
+import { useTheme } from "../../theme";
+import type { FocusModeCard } from "../../features/session-start/schemas";
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -21,7 +21,7 @@ function formatMinutes(seconds: number): string {
 export function FocusScreen(): JSX.Element {
   const navigation = useNavigation<NavigationProp>();
   const { theme } = useTheme();
-  const userId = useAuthStore((state) => state.user?.id ?? '');
+  const userId = useAuthStore((state) => state.user?.id ?? "");
   const streakQuery = useStreakSummary(userId || null);
   const streakDays = streakQuery.data?.currentDays ?? 0;
   const modeCards = useMemo(
@@ -29,16 +29,16 @@ export function FocusScreen(): JSX.Element {
     [streakDays],
   );
   const statusCopy = streakQuery.isLoading
-    ? 'Loading the best focus entry points for today.'
+    ? "Loading the best focus entry points for today."
     : streakDays > 0
-    ? `Day ${streakDays} is active. Pick the mode that matches your actual energy.`
-    : 'Start with one short mode. VEX will build the next layer from real progress.';
+      ? `Day ${streakDays} is active. Pick the mode that matches your actual energy.`
+      : "Start with one short mode. VEX will build the next layer from real progress.";
 
   const openMode = (card: FocusModeCard): void => {
     navigation.navigate({
-      name: 'SessionStack',
+      name: "SessionStack",
       params: {
-        screen: 'SessionSetup',
+        screen: "SessionSetup",
         params: {
           presetDuration: card.durationSeconds,
           presetMode: card.mode,
@@ -63,13 +63,17 @@ export function FocusScreen(): JSX.Element {
       </View>
 
       {modeCards.map((card) => (
-        <Card key={card.id} size="lg" variant={card.id === 'sprint-15' ? 'premium' : 'default'}>
+        <Card
+          key={card.id}
+          size="lg"
+          variant={card.id === "sprint-15" ? "premium" : "default"}
+        >
           <View
             style={{
-              alignItems: 'flex-start',
-              flexDirection: 'row',
+              alignItems: "flex-start",
+              flexDirection: "row",
               gap: theme.spacing[3],
-              justifyContent: 'space-between',
+              justifyContent: "space-between",
             }}
           >
             <View style={{ flex: 1, gap: theme.spacing[1] }}>
@@ -91,7 +95,7 @@ export function FocusScreen(): JSX.Element {
             mt="md"
             onPress={() => openMode(card)}
             size="md"
-            variant={card.id === 'sprint-15' ? 'primary' : 'outline'}
+            variant={card.id === "sprint-15" ? "primary" : "outline"}
           >
             {card.ctaLabel}
           </Button>
@@ -101,4 +105,4 @@ export function FocusScreen(): JSX.Element {
   );
 }
 
-export default withScreenErrorBoundary(FocusScreen, 'Focus');
+export default withScreenErrorBoundary(FocusScreen, "Focus");

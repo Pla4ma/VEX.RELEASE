@@ -5,4 +5,4 @@
  * to maintain the expected import structure for FeatureGate component.
  */
 
-export { useFeatureAccess } from '../index';
+export { useFeatureAccess } from "../index";

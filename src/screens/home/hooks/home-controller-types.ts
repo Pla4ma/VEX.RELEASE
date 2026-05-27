@@ -1,15 +1,18 @@
-import type { UseQueryResult } from '@tanstack/react-query';
+import type { UseQueryResult } from "@tanstack/react-query";
 import type {
   FeatureAccessResult,
   FeatureAccessMap,
-} from '../../../features/liveops-config';
-import type { HomeFeatureRuntime } from './home-feature-runtime';
-import type { HomeReturnReason } from './useHomeReturnReason';
-import type { SessionRecommendation } from '../../../features/ai-coach';
-import type { HomeSpineModel } from '../../../features/home-spine/schemas';
-import type { LearningExecutionLayer } from '../../../features/learning-execution';
-import type { SessionHistoryEntry } from '../../../session/types';
-import type { CompletionSyncState, HomeHighlight } from '../../../store/session-state';
+} from "../../../features/liveops-config";
+import type { HomeFeatureRuntime } from "./home-feature-runtime";
+import type { HomeReturnReason } from "./useHomeReturnReason";
+import type { SessionRecommendation } from "../../../features/ai-coach";
+import type { HomeSpineModel } from "../../../features/home-spine/schemas";
+import type { LearningExecutionLayer } from "../../../features/learning-execution";
+import type { SessionHistoryEntry } from "../../../session/types";
+import type {
+  CompletionSyncState,
+  HomeHighlight,
+} from "../../../store/session-state";
 
 export interface SessionHistoryResult {
   history: SessionHistoryEntry[];

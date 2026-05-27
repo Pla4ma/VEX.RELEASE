@@ -133,7 +133,8 @@ export function StreakCalendarEnhanced({
           <Text style={styles.statText}>
             Current streak:{" "}
             <Text style={styles.statValueHighlight}>
-              {previewCurrentStreakDays ?? calendar?.currentStreakDays ?? 0} days
+              {previewCurrentStreakDays ?? calendar?.currentStreakDays ?? 0}{" "}
+              days
             </Text>
           </Text>
         </View>

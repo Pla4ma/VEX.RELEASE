@@ -4,8 +4,8 @@
  * Memoized selectors for accessing store state.
  */
 
-import type { CoachStore, CoachUIState } from './types';
-import type { MessageCategory } from '../schemas';
+import type { CoachStore, CoachUIState } from "./types";
+import type { MessageCategory } from "../schemas";
 
 // Message selectors
 export const selectActiveMessage = (state: CoachStore) => state.activeMessage;
@@ -14,15 +14,19 @@ export const selectIsMessageActive = (state: CoachStore) =>
 
 // UI visibility selectors
 export const selectShowHistory = (state: CoachStore) => state.showHistory;
-export const selectShowPersonaSelector = (state: CoachStore) => state.showPersonaSelector;
+export const selectShowPersonaSelector = (state: CoachStore) =>
+  state.showPersonaSelector;
 
 // Persona selectors
-export const selectSelectedPersona = (state: CoachStore) => state.selectedPersona;
+export const selectSelectedPersona = (state: CoachStore) =>
+  state.selectedPersona;
 
 // Category muting selectors
-export const selectMutedCategories = (state: CoachStore) => state.mutedCategories;
-export const selectIsCategoryMuted = (category: MessageCategory) =>
-  (state: CoachStore) => state.mutedCategories.includes(category);
+export const selectMutedCategories = (state: CoachStore) =>
+  state.mutedCategories;
+export const selectIsCategoryMuted =
+  (category: MessageCategory) => (state: CoachStore) =>
+    state.mutedCategories.includes(category);
 
 // Notification selectors
 export const selectReduceNotifications = (state: CoachStore) =>
@@ -31,8 +35,9 @@ export const selectReduceNotifications = (state: CoachStore) =>
 // Dismissed messages selectors
 export const selectDismissedMessages = (state: CoachStore) =>
   state.dismissedMessages;
-export const selectIsMessageDismissed = (messageId: string) =>
-  (state: CoachStore) => state.dismissedMessages.includes(messageId);
+export const selectIsMessageDismissed =
+  (messageId: string) => (state: CoachStore) =>
+    state.dismissedMessages.includes(messageId);
 
 // Modal selectors
 export const selectModalState = (state: CoachStore) => ({

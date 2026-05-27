@@ -21,9 +21,9 @@
  *     : { damping: 15, stiffness: 300 };
  */
 
-import { useEffect, useState, useMemo } from 'react';
-import { AccessibilityInfo, Platform } from 'react-native';
-import { useReducedMotion as useReanimatedReducedMotion } from 'react-native-reanimated';
+import { useEffect, useState, useMemo } from "react";
+import { AccessibilityInfo, Platform } from "react-native";
+import { useReducedMotion as useReanimatedReducedMotion } from "react-native-reanimated";
 
 interface ReducedMotionResult {
   /** Whether user has enabled reduced motion */
@@ -55,7 +55,7 @@ export function useReducedMotion(): ReducedMotionResult {
 
   // Also listen to React Native's AccessibilityInfo for platform consistency
   const [isReducedMotion, setIsReducedMotion] = useState<boolean>(
-    reanimatedReducedMotion ?? false
+    reanimatedReducedMotion ?? false,
   );
 
   useEffect(() => {
@@ -66,10 +66,10 @@ export function useReducedMotion(): ReducedMotionResult {
 
     // Also subscribe to RN AccessibilityInfo for broader compatibility
     const subscription = AccessibilityInfo.addEventListener(
-      'reduceMotionChanged',
+      "reduceMotionChanged",
       (enabled) => {
         setIsReducedMotion(enabled);
-      }
+      },
     );
 
     // Initial check
@@ -124,7 +124,7 @@ export function useReducedMotion(): ReducedMotionResult {
  * Utility to create enter animation props based on reduced motion
  */
 export function useAnimationPreset<T extends { duration?: number }>(
-  normalConfig: T
+  normalConfig: T,
 ): T {
   const { isReducedMotion } = useReducedMotion();
 

@@ -1,26 +1,30 @@
-import { useQuery } from '@tanstack/react-query';
-import * as Sentry from '@sentry/react-native';
-import { useAuthStore } from '../../../store';
-import { getRepairQuestStatus } from '../streak-repair-quest';
-import { RepairQuestStatusOutputSchema } from '../schemas-enhanced';
-import type { RepairQuestStatusOutput } from '../schemas-enhanced';
-import type { UseStreakRepairQuestReturn } from './types';
+import { useQuery } from "@tanstack/react-query";
+import * as Sentry from "@sentry/react-native";
+import { useAuthStore } from "../../../store";
+import { getRepairQuestStatus } from "../streak-repair-quest";
+import { RepairQuestStatusOutputSchema } from "../schemas-enhanced";
+import type { RepairQuestStatusOutput } from "../schemas-enhanced";
+import type { UseStreakRepairQuestReturn } from "./types";
 
 const QUERY_KEYS = {
-  repairQuestStatus: (userId: string) => ['streaks', 'repairQuestStatus', userId],
+  repairQuestStatus: (userId: string) => [
+    "streaks",
+    "repairQuestStatus",
+    userId,
+  ],
 } as const;
 const STALE_TIME = 5 * 60 * 1000;
 const GC_TIME = 10 * 60 * 1000;
 
 export function useRepairQuestStatus(): Pick<
   UseStreakRepairQuestReturn,
-  | 'status'
-  | 'isStatusLoading'
-  | 'statusError'
-  | 'refetchStatus'
-  | 'canStartQuest'
-  | 'progressPercent'
-  | 'hoursRemaining'
+  | "status"
+  | "isStatusLoading"
+  | "statusError"
+  | "refetchStatus"
+  | "canStartQuest"
+  | "progressPercent"
+  | "hoursRemaining"
 > {
   const userId = useAuthStore((state) => state.user?.id);
   const {
@@ -29,7 +33,7 @@ export function useRepairQuestStatus(): Pick<
     error: statusError,
     refetch: refetchStatusFn,
   } = useQuery({
-    queryKey: QUERY_KEYS.repairQuestStatus(userId ?? ''),
+    queryKey: QUERY_KEYS.repairQuestStatus(userId ?? ""),
     queryFn: async (): Promise<RepairQuestStatusOutput | null> => {
       if (!userId) return null;
       try {
@@ -38,9 +42,9 @@ export function useRepairQuestStatus(): Pick<
       } catch (err) {
         Sentry.captureException(err, {
           tags: {
-            feature: 'streaks',
-            hook: 'useRepairQuestStatus',
-            operation: 'fetchStatus',
+            feature: "streaks",
+            hook: "useRepairQuestStatus",
+            operation: "fetchStatus",
           },
         });
         throw err;
@@ -56,7 +60,9 @@ export function useRepairQuestStatus(): Pick<
     status: status ?? null,
     isStatusLoading,
     statusError: statusError as Error | null,
-    refetchStatus: async () => { await refetchStatusFn(); },
+    refetchStatus: async () => {
+      await refetchStatusFn();
+    },
     canStartQuest: status?.canStartQuest ?? false,
     progressPercent: status?.progressPercent ?? 0,
     hoursRemaining: status?.hoursRemaining ?? 0,

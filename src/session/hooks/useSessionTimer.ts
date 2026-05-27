@@ -91,7 +91,14 @@ export function useSessionTimer(
       return newElapsed;
     });
     lastTickRef.current = now;
-  }, [duration, handleComplete, onProgress, setElapsedTime, setRemainingTime, tickInterval]);
+  }, [
+    duration,
+    handleComplete,
+    onProgress,
+    setElapsedTime,
+    setRemainingTime,
+    tickInterval,
+  ]);
   const start = useCallback(() => {
     if (isRunning) return;
     setIsRunning(true);
@@ -175,10 +182,23 @@ export function useSessionTimer(
     [duration, setElapsedTime, setRemainingTime],
   );
   useSessionTimerSubscriptions({
-    duration, elapsedTime, isRunning, isPaused, tick, tickInterval,
-    handleComplete, setElapsedTime, setRemainingTime,
-    backgroundTimeRef, backgroundedAtRef, intervalRef, lastTickRef,
-    onBackground, onForeground, autoStart, start,
+    duration,
+    elapsedTime,
+    isRunning,
+    isPaused,
+    tick,
+    tickInterval,
+    handleComplete,
+    setElapsedTime,
+    setRemainingTime,
+    backgroundTimeRef,
+    backgroundedAtRef,
+    intervalRef,
+    lastTickRef,
+    onBackground,
+    onForeground,
+    autoStart,
+    start,
   });
   return {
     state: {

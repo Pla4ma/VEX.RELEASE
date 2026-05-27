@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Modal, Pressable, Text, View } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Modal, Pressable, Text, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withRepeat,
   withSequence,
   withTiming,
-} from 'react-native-reanimated';
-import { launchColors } from '@theme/tokens/launch-colors';
-import { styles } from './InterruptionWarning.styles';
+} from "react-native-reanimated";
+import { launchColors } from "@theme/tokens/launch-colors";
+import { styles } from "./InterruptionWarning.styles";
 
 interface InterruptionWarningProps {
   isVisible: boolean;
-  severity: 'MINOR' | 'MODERATE' | 'MAJOR' | 'CRITICAL';
+  severity: "MINOR" | "MODERATE" | "MAJOR" | "CRITICAL";
   countdownSeconds: number;
   interruptionType: string;
   onResume: () => void;
@@ -21,40 +21,44 @@ interface InterruptionWarningProps {
   hasStreakSave?: boolean;
 }
 
-function getSeverityColor(severity: InterruptionWarningProps['severity']): string {
+function getSeverityColor(
+  severity: InterruptionWarningProps["severity"],
+): string {
   switch (severity) {
-    case 'CRITICAL':
+    case "CRITICAL":
       return launchColors.hex_f44336;
-    case 'MAJOR':
+    case "MAJOR":
       return launchColors.hex_ff6b35;
-    case 'MODERATE':
+    case "MODERATE":
       return launchColors.hex_ffa500;
-    case 'MINOR':
+    case "MINOR":
       return launchColors.hex_ffc107;
     default:
       return launchColors.hex_9e9e9e;
   }
 }
 
-function getSeverityMessage(severity: InterruptionWarningProps['severity']): string {
+function getSeverityMessage(
+  severity: InterruptionWarningProps["severity"],
+): string {
   switch (severity) {
-    case 'CRITICAL':
-      return 'Resume now to keep this session intact.';
-    case 'MAJOR':
-      return 'Big pause. You can still return cleanly.';
-    case 'MODERATE':
-      return 'Take a breath, then come back.';
-    case 'MINOR':
-      return 'Small pause. Keep the thread.';
+    case "CRITICAL":
+      return "Resume now to keep this session intact.";
+    case "MAJOR":
+      return "Big pause. You can still return cleanly.";
+    case "MODERATE":
+      return "Take a breath, then come back.";
+    case "MINOR":
+      return "Small pause. Keep the thread.";
     default:
-      return 'Focus paused.';
+      return "Focus paused.";
   }
 }
 
 function formatTime(seconds: number): string {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, '0')}`;
+  return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 
 export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
@@ -96,7 +100,10 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
   useEffect(() => {
     if (isVisible && remainingSeconds <= 10) {
       pulseAnim.value = withRepeat(
-        withSequence(withTiming(1.1, { duration: 500 }), withTiming(1, { duration: 500 })),
+        withSequence(
+          withTiming(1.1, { duration: 500 }),
+          withTiming(1, { duration: 500 }),
+        ),
         -1,
         true,
       );
@@ -110,10 +117,17 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
   }));
 
   return (
-    <Modal visible={isVisible} transparent animationType="fade" onRequestClose={() => {}}>
+    <Modal
+      visible={isVisible}
+      transparent
+      animationType="fade"
+      onRequestClose={() => {}}
+    >
       <View style={styles.overlay}>
         <Animated.View style={[styles.container, pulseStyle]}>
-          <View style={[styles.iconContainer, { backgroundColor: severityColor }]}>
+          <View
+            style={[styles.iconContainer, { backgroundColor: severityColor }]}
+          >
             <Text style={styles.warningIcon}>!</Text>
           </View>
           <Text style={styles.title}>Focus paused</Text>
@@ -140,7 +154,11 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
           </View>
           <View style={styles.actions}>
             <Pressable
-              style={({ pressed }) => [styles.button, styles.resumeButton, pressed && { opacity: 0.8 }]}
+              style={({ pressed }) => [
+                styles.button,
+                styles.resumeButton,
+                pressed && { opacity: 0.8 },
+              ]}
               onPress={onResume}
               accessibilityLabel="Resume focus session"
               accessibilityRole="button"
@@ -150,7 +168,11 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
             </Pressable>
             {hasStreakSave && onUseStreakSave ? (
               <Pressable
-                style={({ pressed }) => [styles.button, styles.streakSaveButton, pressed && { opacity: 0.8 }]}
+                style={({ pressed }) => [
+                  styles.button,
+                  styles.streakSaveButton,
+                  pressed && { opacity: 0.8 },
+                ]}
                 onPress={onUseStreakSave}
                 accessibilityLabel="Use streak save"
                 accessibilityRole="button"
@@ -160,7 +182,11 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
               </Pressable>
             ) : null}
             <Pressable
-              style={({ pressed }) => [styles.button, styles.abandonButton, pressed && { opacity: 0.8 }]}
+              style={({ pressed }) => [
+                styles.button,
+                styles.abandonButton,
+                pressed && { opacity: 0.8 },
+              ]}
               onPress={onAbandon}
               accessibilityLabel="End focus session"
               accessibilityRole="button"
@@ -169,8 +195,10 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
               <Text style={styles.abandonButtonText}>End Session</Text>
             </Pressable>
           </View>
-          {severity === 'CRITICAL' ? (
-            <Text style={styles.penaltyWarning}>Ending now may affect your streak and rewards.</Text>
+          {severity === "CRITICAL" ? (
+            <Text style={styles.penaltyWarning}>
+              Ending now may affect your streak and rewards.
+            </Text>
           ) : null}
         </Animated.View>
       </View>

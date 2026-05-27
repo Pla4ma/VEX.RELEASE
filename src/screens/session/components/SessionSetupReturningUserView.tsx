@@ -58,7 +58,8 @@ export function ReturningUserView({
     selectedDurationSeconds: controller.selectedDurationSeconds,
     userId: controller.userId || "",
   });
-  const showStakes = !isFeatureHidden("boss_tab") || !isFeatureHidden("challenges");
+  const showStakes =
+    !isFeatureHidden("boss_tab") || !isFeatureHidden("challenges");
 
   const handleStudyPlanSelect = (studyPlan: ActiveStudyPlan) => {
     const target = controller.learningExecutionLayer.target;
@@ -147,7 +148,9 @@ export function ReturningUserView({
 
       {controller.setupState.showCustomization ? (
         <SessionSetupFooter
-          breakDurationSeconds={controller.setupState.selectedPreset.breakDuration}
+          breakDurationSeconds={
+            controller.setupState.selectedPreset.breakDuration
+          }
           durationMinutes={Math.round(controller.selectedDurationSeconds / 60)}
           intervalCount={controller.setupState.selectedPreset.intervals}
           isStarting={controller.isStarting}

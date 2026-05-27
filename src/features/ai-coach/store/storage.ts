@@ -4,11 +4,11 @@
  * MMKV storage setup for Zustand persistence.
  */
 
-import { MMKV } from 'react-native-mmkv';
-import type { CoachUIState } from './types';
+import { MMKV } from "react-native-mmkv";
+import type { CoachUIState } from "./types";
 
 // Storage instance
-const storage = new MMKV({ id: 'coach-store' });
+const storage = new MMKV({ id: "coach-store" });
 
 export const mmkvStorage = {
   getItem: (name: string): string | null => {
@@ -24,7 +24,7 @@ export const mmkvStorage = {
 };
 
 export const storageConfig = {
-  name: 'coach-ui-storage',
+  name: "coach-ui-storage",
   partialize: (state: CoachUIState) => ({
     selectedPersona: state.selectedPersona,
     mutedCategories: state.mutedCategories,

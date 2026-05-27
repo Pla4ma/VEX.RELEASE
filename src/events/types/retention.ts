@@ -3,7 +3,7 @@
  */
 
 export interface RetentionEventDefinitions {
-  'near_miss:shown': {
+  "near_miss:shown": {
     userId: string;
     streakDays?: number;
     hoursRemaining?: number;
@@ -11,21 +11,21 @@ export interface RetentionEventDefinitions {
     interventionId?: string;
     urgency?: string;
   };
-  'near_miss:incentive_claimed': {
+  "near_miss:incentive_claimed": {
     userId: string;
     incentiveType?: string;
     value?: number;
     interventionId?: string;
     incentive?: unknown;
   };
-  'near_miss:resolved': {
+  "near_miss:resolved": {
     userId: string;
     streakPreserved?: boolean;
     method?: string;
     interventionId?: string;
     action?: string;
   };
-  'near_miss:analytics': {
+  "near_miss:analytics": {
     userId?: string;
     event?: string;
     data?: Record<string, unknown>;

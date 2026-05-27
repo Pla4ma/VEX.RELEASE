@@ -1,21 +1,24 @@
-import React from 'react';
-import { Pressable } from 'react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import React from "react";
+import { Pressable } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import type { SessionHistoryItem } from '../types';
-import { semanticOpacity } from '../../../theme/tokens/opacity';
-import { spacing } from '../../../theme/tokens/spacing';
-import { sizing } from '../../../theme/tokens/sizing';
-import { StandardHitSlops, getMinTouchTargetStyle } from '../../../utils/touchTarget';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import type { SessionHistoryItem } from "../types";
+import { semanticOpacity } from "../../../theme/tokens/opacity";
+import { spacing } from "../../../theme/tokens/spacing";
+import { sizing } from "../../../theme/tokens/sizing";
+import {
+  StandardHitSlops,
+  getMinTouchTargetStyle,
+} from "../../../utils/touchTarget";
 
 function formatDate(timestamp: number): string {
-  return new Date(timestamp).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  return new Date(timestamp).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
 }
 
@@ -40,12 +43,14 @@ export function HistoryItem({
   const isDisabled = entry.summary === null;
 
   return (
-    <Animated.View entering={isDisabled ? undefined : FadeInUp.delay(index * spacing[2])}>
+    <Animated.View
+      entering={isDisabled ? undefined : FadeInUp.delay(index * spacing[2])}
+    >
       <Pressable
         accessibilityHint={
           isDisabled
-            ? 'Completion story is not available for this synced record'
-            : 'Opens the saved completion story for this session'
+            ? "Completion story is not available for this synced record"
+            : "Opens the saved completion story for this session"
         }
         accessibilityLabel={`Open ${entry.title} from ${formatDate(entry.startedAtMs)}`}
         accessibilityRole="button"
@@ -54,7 +59,10 @@ export function HistoryItem({
         hitSlop={StandardHitSlops.TEXT_BUTTON}
         onPress={() => onPress(entry)}
         style={({ pressed }) => ({
-          opacity: pressed || isDisabled ? semanticOpacity.disabled : semanticOpacity.hover,
+          opacity:
+            pressed || isDisabled
+              ? semanticOpacity.disabled
+              : semanticOpacity.hover,
         })}
       >
         <Box

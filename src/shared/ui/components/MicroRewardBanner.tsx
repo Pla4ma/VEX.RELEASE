@@ -1,10 +1,20 @@
 import React, { useEffect } from "react";
 import { View, ViewStyle, Pressable } from "react-native";
-import Animated, { useSharedValue, useAnimatedStyle, withSpring, FadeInUp, FadeOutUp } from "react-native-reanimated";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  FadeInUp,
+  FadeOutUp,
+} from "react-native-reanimated";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
 import { triggerHaptic } from "../../../utils/haptics";
-import { REWARD_CONFIG, getRewardColor, type RewardType } from "./micro-reward-helpers";
+import {
+  REWARD_CONFIG,
+  getRewardColor,
+  type RewardType,
+} from "./micro-reward-helpers";
 
 export interface MicroRewardBannerProps {
   type: RewardType;
@@ -20,7 +30,18 @@ export interface MicroRewardBannerProps {
   showOnce?: boolean;
 }
 
-export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({ type, amount, label: customLabel, description, icon: customIcon, onPress, onDismiss, autoDismiss = false, autoDismissDelay = 3000, style }) => {
+export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({
+  type,
+  amount,
+  label: customLabel,
+  description,
+  icon: customIcon,
+  onPress,
+  onDismiss,
+  autoDismiss = false,
+  autoDismissDelay = 3000,
+  style,
+}) => {
   const { theme } = useTheme();
   const scale = useSharedValue(1);
   const config = REWARD_CONFIG[type];
@@ -48,10 +69,18 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({ type, amou
   const handlePressOut = () => {
     scale.value = withSpring(1, { damping: 15, stiffness: 300 });
   };
-  const amountText = amount !== undefined ? `+${amount.toLocaleString()}` : null;
+  const amountText =
+    amount !== undefined ? `+${amount.toLocaleString()}` : null;
 
   const innerContent = (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: theme.spacing[3], flex: 1 }}>
+    <View
+      style={{
+        flexDirection: "row",
+        alignItems: "center",
+        gap: theme.spacing[3],
+        flex: 1,
+      }}
+    >
       <View
         style={{
           width: 40,
@@ -72,11 +101,19 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({ type, amou
             gap: theme.spacing[2],
           }}
         >
-          <Text variant="bodySmall" color={theme.colors.text.primary} style={{ fontWeight: "700" }}>
+          <Text
+            variant="bodySmall"
+            color={theme.colors.text.primary}
+            style={{ fontWeight: "700" }}
+          >
             {displayLabel}
           </Text>
           {amountText && (
-            <Text variant="bodySmall" color={displayColor} style={{ fontWeight: "800" }}>
+            <Text
+              variant="bodySmall"
+              color={displayColor}
+              style={{ fontWeight: "800" }}
+            >
               {amountText}
             </Text>
           )}
@@ -114,14 +151,22 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({ type, amou
       ]}
     >
       <Animated.View
-        style={[{ flex: 1, flexDirection: "row", alignItems: "center" }, animatedStyle]}
+        style={[
+          { flex: 1, flexDirection: "row", alignItems: "center" },
+          animatedStyle,
+        ]}
       >
         {onPress ? (
           <Pressable
             onPress={onPress}
             onPressIn={handlePressIn}
             onPressOut={handlePressOut}
-            style={{ flexDirection: "row", alignItems: "center", gap: theme.spacing[3], flex: 1 }}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: theme.spacing[3],
+              flex: 1,
+            }}
             accessibilityLabel={displayLabel}
             accessibilityRole="button"
             accessibilityHint="View reward details"
@@ -134,7 +179,14 @@ export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({ type, amou
       </Animated.View>
 
       {onDismiss && (
-        <Pressable onPress={onDismiss} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }} style={{ padding: theme.spacing[1] }} accessibilityLabel="Dismiss reward" accessibilityRole="button" accessibilityHint="Dismisses this reward notification">
+        <Pressable
+          onPress={onDismiss}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          style={{ padding: theme.spacing[1] }}
+          accessibilityLabel="Dismiss reward"
+          accessibilityRole="button"
+          accessibilityHint="Dismisses this reward notification"
+        >
           <Text fontSize={16} color={theme.colors.text.tertiary}>
             ✕
           </Text>
@@ -148,7 +200,11 @@ export interface CompactRewardBadgeProps {
   amount: number;
   style?: ViewStyle;
 }
-export const CompactRewardBadge: React.FC<CompactRewardBadgeProps> = ({ type, amount, style }) => {
+export const CompactRewardBadge: React.FC<CompactRewardBadgeProps> = ({
+  type,
+  amount,
+  style,
+}) => {
   const { theme } = useTheme();
   const color = getRewardColor(type, theme);
   return (

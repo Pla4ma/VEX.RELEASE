@@ -11,7 +11,10 @@ import Animated, {
 } from "react-native-reanimated";
 import { useTheme } from "../../theme/ThemeContext";
 import { Text } from "../../components";
-import type { Particle, CheckpointCelebrationProps } from "./checkpoint-celebration-helpers";
+import type {
+  Particle,
+  CheckpointCelebrationProps,
+} from "./checkpoint-celebration-helpers";
 import {
   generateParticles,
   detectCheckpoint,
@@ -56,7 +59,11 @@ export function CheckpointCelebration({
     if (!isVisible) {
       return;
     }
-    const detected = detectCheckpoint(progressPercent, elapsedMinutes, lastCheckpoint);
+    const detected = detectCheckpoint(
+      progressPercent,
+      elapsedMinutes,
+      lastCheckpoint,
+    );
     if (detected) {
       setCelebrationData(detected);
       setShowCelebration(true);

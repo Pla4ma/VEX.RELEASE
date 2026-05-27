@@ -1,30 +1,34 @@
-import React, { useCallback, useState } from 'react';
-import { Alert, Pressable, ScrollView } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useCallback, useState } from "react";
+import { Alert, Pressable, ScrollView } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
   deleteMemory,
   useActiveFocusMemories,
   useMemoryConsoleVisibility,
-} from '../../features/focus-memory';
-import type { FocusMemory } from '../../features/focus-memory';
-import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
-import { Box, Card, Text } from '../../components/primitives';
-import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import { EmptyState } from '../../components/EmptyState';
-import type { ExtendedRootStackParams } from '../../navigation/types';
+} from "../../features/focus-memory";
+import type { FocusMemory } from "../../features/focus-memory";
+import { useAuthStore } from "../../store";
+import { useTheme } from "../../theme";
+import { Box, Card, Text } from "../../components/primitives";
+import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
+import { EmptyState } from "../../components/EmptyState";
+import type { ExtendedRootStackParams } from "../../navigation/types";
 
-type Props = NativeStackScreenProps<ExtendedRootStackParams, 'MemoryConsole'>;
+type Props = NativeStackScreenProps<ExtendedRootStackParams, "MemoryConsole">;
 
 function formatDate(ts: number): string {
-  return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return new Date(ts).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
 function confidenceLabel(c: number): { label: string; color: string } {
-  if (c >= 0.8) return { label: 'High', color: '#22c55e' };
-  if (c >= 0.5) return { label: 'Medium', color: '#eab308' };
-  return { label: 'Low', color: '#ef4444' };
+  if (c >= 0.8) return { label: "High", color: "#22c55e" };
+  if (c >= 0.5) return { label: "Medium", color: "#eab308" };
+  return { label: "Low", color: "#ef4444" };
 }
 
 export const MemoryConsoleScreen: React.FC<Props> = () => {
@@ -39,13 +43,13 @@ export const MemoryConsoleScreen: React.FC<Props> = () => {
   const handleDelete = useCallback(
     (memory: FocusMemory) => {
       Alert.alert(
-        'Delete Memory',
+        "Delete Memory",
         `Remove "${memory.summary}"? This cannot be undone. VEX will not regenerate this from the same evidence.`,
         [
-          { text: 'Cancel', style: 'cancel' },
+          { text: "Cancel", style: "cancel" },
           {
-            text: 'Delete',
-            style: 'destructive',
+            text: "Delete",
+            style: "destructive",
             onPress: async () => {
               if (!userId) return;
               setDeleting(memory.id);
@@ -65,7 +69,13 @@ export const MemoryConsoleScreen: React.FC<Props> = () => {
 
   if (!isVisible) {
     return (
-      <Box flex={1} style={{ backgroundColor: theme.colors.background.primary, paddingTop: insets.top }}>
+      <Box
+        flex={1}
+        style={{
+          backgroundColor: theme.colors.background.primary,
+          paddingTop: insets.top,
+        }}
+      >
         <EmptyState
           icon="⏳"
           title="Memory Console"
@@ -84,11 +94,16 @@ export const MemoryConsoleScreen: React.FC<Props> = () => {
           paddingBottom: insets.bottom + theme.spacing[4],
         }}
       >
-        <Text variant="h2" style={{ fontWeight: '800', marginBottom: 4 }}>
+        <Text variant="h2" style={{ fontWeight: "800", marginBottom: 4 }}>
           Memory Console
         </Text>
-        <Text variant="body" color="text.secondary" style={{ marginBottom: theme.spacing[4] }}>
-          {memories.length} memory {memories.length === 1 ? 'entry' : 'entries'} · inspect, edit, or delete
+        <Text
+          variant="body"
+          color="text.secondary"
+          style={{ marginBottom: theme.spacing[4] }}
+        >
+          {memories.length} memory {memories.length === 1 ? "entry" : "entries"}{" "}
+          · inspect, edit, or delete
         </Text>
 
         {memories.length === 0 ? (
@@ -111,18 +126,38 @@ export const MemoryConsoleScreen: React.FC<Props> = () => {
                   opacity: isDeleting ? 0.5 : 1,
                 }}
               >
-                <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb={2}>
-                  <Text variant="caption" color="text.tertiary" style={{ textTransform: 'uppercase' }}>
+                <Box
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mb={2}
+                >
+                  <Text
+                    variant="caption"
+                    color="text.tertiary"
+                    style={{ textTransform: "uppercase" }}
+                  >
                     {memory.type}
                   </Text>
-                  <Text variant="caption" style={{ color: conf.color, fontWeight: '700' }}>
+                  <Text
+                    variant="caption"
+                    style={{ color: conf.color, fontWeight: "700" }}
+                  >
                     {conf.label} ({memory.confidence.toFixed(2)})
                   </Text>
                 </Box>
-                <Text variant="body" style={{ fontWeight: '600', marginBottom: 4 }}>
+                <Text
+                  variant="body"
+                  style={{ fontWeight: "600", marginBottom: 4 }}
+                >
                   {memory.summary}
                 </Text>
-                <Box flexDirection="row" justifyContent="space-between" alignItems="center" mt={2}>
+                <Box
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  mt={2}
+                >
                   <Text variant="caption" color="text.tertiary">
                     {memory.source} · {formatDate(memory.createdAt)}
                   </Text>
@@ -155,4 +190,4 @@ export const MemoryConsoleScreen: React.FC<Props> = () => {
   );
 };
 
-export default withScreenErrorBoundary(MemoryConsoleScreen, 'MemoryConsole');
+export default withScreenErrorBoundary(MemoryConsoleScreen, "MemoryConsole");

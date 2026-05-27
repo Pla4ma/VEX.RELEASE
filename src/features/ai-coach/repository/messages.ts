@@ -1,10 +1,10 @@
-import { getSupabaseClient } from '../../../config/supabase';
+import { getSupabaseClient } from "../../../config/supabase";
 import {
   CoachMessageSchema,
   type CoachMessage,
   type MessageStatus,
-} from '../schemas';
-import { RepositoryError } from './error';
+} from "../schemas";
+import { RepositoryError } from "./error";
 
 const supabase = getSupabaseClient();
 
@@ -12,7 +12,7 @@ export async function createCoachMessage(
   message: CoachMessage,
 ): Promise<CoachMessage> {
   const { data, error } = await supabase
-    .from('coach_messages')
+    .from("coach_messages")
     .insert({
       id: message.id,
       user_id: message.userId,
@@ -32,7 +32,9 @@ export async function createCoachMessage(
     })
     .select()
     .single();
-  if (error) {throw new RepositoryError('createCoachMessage', error);}
+  if (error) {
+    throw new RepositoryError("createCoachMessage", error);
+  }
   return CoachMessageSchema.parse(data);
 }
 
@@ -42,13 +44,15 @@ export async function fetchRecentMessages(
   offset: number = 0,
 ): Promise<CoachMessage[]> {
   const { data, error } = await supabase
-    .from('coach_messages')
-    .select('*')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false })
+    .from("coach_messages")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
     .limit(limit)
     .range(offset, offset + limit - 1);
-  if (error) {throw new RepositoryError('fetchRecentMessages', error);}
+  if (error) {
+    throw new RepositoryError("fetchRecentMessages", error);
+  }
   return CoachMessageSchema.array().parse(data || []);
 }
 
@@ -57,14 +61,16 @@ export async function fetchUserMessages(
   limit: number = 50,
   status?: MessageStatus,
 ): Promise<CoachMessage[]> {
-  let query = supabase.from('coach_messages').select('*').eq('user_id', userId);
+  let query = supabase.from("coach_messages").select("*").eq("user_id", userId);
   if (status) {
-    query = query.eq('status', status);
+    query = query.eq("status", status);
   }
   const { data, error } = await query
-    .order('created_at', { ascending: false })
+    .order("created_at", { ascending: false })
     .limit(limit);
-  if (error) {throw new RepositoryError('fetchUserMessages', error);}
+  if (error) {
+    throw new RepositoryError("fetchUserMessages", error);
+  }
   return CoachMessageSchema.array().parse(data || []);
 }
 
@@ -72,13 +78,15 @@ export async function fetchUndeliveredMessages(
   userId: string,
 ): Promise<CoachMessage[]> {
   const { data, error } = await supabase
-    .from('coach_messages')
-    .select('*')
-    .eq('user_id', userId)
-    .in('status', ['SCHEDULED', 'SENT'])
-    .order('priority', { ascending: false })
-    .order('scheduled_for', { ascending: true });
-  if (error) {throw new RepositoryError('fetchUndeliveredMessages', error);}
+    .from("coach_messages")
+    .select("*")
+    .eq("user_id", userId)
+    .in("status", ["SCHEDULED", "SENT"])
+    .order("priority", { ascending: false })
+    .order("scheduled_for", { ascending: true });
+  if (error) {
+    throw new RepositoryError("fetchUndeliveredMessages", error);
+  }
   return CoachMessageSchema.array().parse(data || []);
 }
 
@@ -89,17 +97,25 @@ export async function updateMessageStatus(
 ): Promise<CoachMessage> {
   const updates: Record<string, unknown> = { status };
   if (timestamp) {
-    if (status === 'DELIVERED') {updates.delivered_at = timestamp;}
-    if (status === 'READ') {updates.read_at = timestamp;}
-    if (status === 'DISMISSED') {updates.dismissed_at = timestamp;}
+    if (status === "DELIVERED") {
+      updates.delivered_at = timestamp;
+    }
+    if (status === "READ") {
+      updates.read_at = timestamp;
+    }
+    if (status === "DISMISSED") {
+      updates.dismissed_at = timestamp;
+    }
   }
   const { data, error } = await supabase
-    .from('coach_messages')
+    .from("coach_messages")
     .update(updates)
-    .eq('id', messageId)
+    .eq("id", messageId)
     .select()
     .single();
-  if (error) {throw new RepositoryError('updateMessageStatus', error);}
+  if (error) {
+    throw new RepositoryError("updateMessageStatus", error);
+  }
   return CoachMessageSchema.parse(data);
 }
 
@@ -109,16 +125,18 @@ export async function markMessageAction(
   timestamp: number,
 ): Promise<CoachMessage> {
   const { data, error } = await supabase
-    .from('coach_messages')
+    .from("coach_messages")
     .update({
       action_taken: action,
       action_taken_at: timestamp,
-      status: 'DISMISSED',
+      status: "DISMISSED",
     })
-    .eq('id', messageId)
+    .eq("id", messageId)
     .select()
     .single();
-  if (error) {throw new RepositoryError('markMessageAction', error);}
+  if (error) {
+    throw new RepositoryError("markMessageAction", error);
+  }
   return CoachMessageSchema.parse(data);
 }
 
@@ -130,13 +148,13 @@ export async function markMessageRead(
   userId: string,
 ): Promise<void> {
   const { error } = await supabase
-    .from('coach_messages')
-    .update({ status: 'READ', read_at: new Date().toISOString() })
-    .eq('id', messageId)
-    .eq('user_id', userId);
+    .from("coach_messages")
+    .update({ status: "READ", read_at: new Date().toISOString() })
+    .eq("id", messageId)
+    .eq("user_id", userId);
 
   if (error) {
-    throw new RepositoryError('markMessageRead', error);
+    throw new RepositoryError("markMessageRead", error);
   }
 }
 
@@ -148,13 +166,13 @@ export async function dismissMessage(
   userId: string,
 ): Promise<void> {
   const { error } = await supabase
-    .from('coach_messages')
-    .update({ status: 'DISMISSED', dismissed_at: new Date().toISOString() })
-    .eq('id', messageId)
-    .eq('user_id', userId);
+    .from("coach_messages")
+    .update({ status: "DISMISSED", dismissed_at: new Date().toISOString() })
+    .eq("id", messageId)
+    .eq("user_id", userId);
 
   if (error) {
-    throw new RepositoryError('dismissMessage', error);
+    throw new RepositoryError("dismissMessage", error);
   }
 }
 
@@ -166,20 +184,102 @@ export async function fetchCoachHistory(
   limit: number = 100,
 ): Promise<{ messages: CoachMessage[]; mutedCategories: string[] }> {
   const { data, error } = await supabase
-    .from('coach_messages')
-    .select('*')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false })
+    .from("coach_messages")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
     .limit(limit);
-  if (error) {throw new RepositoryError('fetchCoachHistory', error);}
+  if (error) {
+    throw new RepositoryError("fetchCoachHistory", error);
+  }
 
   const messages = CoachMessageSchema.array().parse(data || []);
 
   // Extract unique categories from dismissed messages
   const mutedCategories = messages
-    .filter(m => m.status === 'DISMISSED')
-    .map(m => m.category)
+    .filter((m) => m.status === "DISMISSED")
+    .map((m) => m.category)
     .filter((v, i, a) => a.indexOf(v) === i);
 
   return { messages, mutedCategories };
+}
+
+/**
+ * Realtime subscription factory functions.
+ * These return Supabase channels for the hooks layer to subscribe/unsubscribe.
+ */
+export function subscribeToCoachMessages(
+  userId: string,
+  onInsert: (payload: unknown) => void,
+) {
+  return supabase
+    .channel(`coach-messages-${userId}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "coach_messages",
+        filter: `user_id=eq.${userId}`,
+      },
+      (payload) => onInsert(payload),
+    )
+    .subscribe();
+}
+
+export function subscribeToCoachState(
+  userId: string,
+  onUpdate: (payload: unknown) => void,
+) {
+  return supabase
+    .channel(`coach-state-${userId}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "UPDATE",
+        schema: "public",
+        table: "coach_states",
+        filter: `user_id=eq.${userId}`,
+      },
+      (payload) => onUpdate(payload),
+    )
+    .subscribe();
+}
+
+export function subscribeToComebackPlan(
+  userId: string,
+  onAny: () => void,
+) {
+  return supabase
+    .channel(`comeback-${userId}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "comeback_plans",
+        filter: `user_id=eq.${userId}`,
+      },
+      () => onAny(),
+    )
+    .subscribe();
+}
+
+export function subscribeToRecommendations(
+  userId: string,
+  onAny: () => void,
+) {
+  return supabase
+    .channel(`recommendations-${userId}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "session_recommendations",
+        filter: `user_id=eq.${userId}`,
+      },
+      () => onAny(),
+    )
+    .subscribe();
 }

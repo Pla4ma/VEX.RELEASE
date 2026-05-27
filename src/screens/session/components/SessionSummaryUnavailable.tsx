@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import { Box, Button, Text } from '../../../components/primitives';
-import { useTheme } from '../../../theme';
+import { Box, Button, Text } from "../../../components/primitives";
+import { useTheme } from "../../../theme";
 
 type SessionSummaryUnavailableProps = {
   message?: string;
@@ -27,8 +27,13 @@ export function SessionSummaryUnavailable({
       <Text variant="h3" color={theme.colors.text.primary} textAlign="center">
         Session summary unavailable
       </Text>
-      <Text variant="body" color={theme.colors.text.secondary} textAlign="center" mt={12}>
-        {message ?? 'This victory screen could not load the completed session.'}
+      <Text
+        variant="body"
+        color={theme.colors.text.secondary}
+        textAlign="center"
+        mt={12}
+      >
+        {message ?? "This victory screen could not load the completed session."}
       </Text>
       <Box width="100%" mt={24}>
         {onRetry ? (
@@ -46,10 +51,15 @@ export function SessionSummaryUnavailable({
         ) : null}
       </Box>
       <Box width="100%" mt={onRetry ? 12 : 24}>
-        <Button variant="primary" size="lg" fullWidth onPress={onDone}
-  accessibilityLabel="Return to home"
-  accessibilityRole="button"
-  accessibilityHint="Leaves this unavailable completion summary and opens the home screen">
+        <Button
+          variant="primary"
+          size="lg"
+          fullWidth
+          onPress={onDone}
+          accessibilityLabel="Return to home"
+          accessibilityRole="button"
+          accessibilityHint="Leaves this unavailable completion summary and opens the home screen"
+        >
           Done
         </Button>
       </Box>

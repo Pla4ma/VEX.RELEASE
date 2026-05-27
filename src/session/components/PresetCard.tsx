@@ -16,18 +16,29 @@ const formatDuration = (seconds: number): string => {
 
 const getCategoryEmoji = (category?: string): string => {
   switch (category) {
-    case "Study": return "📚";
-    case "Work": return "💼";
-    case "Creative": return "🎨";
-    case "Health": return "💪";
-    default: return "🎯";
+    case "Study":
+      return "📚";
+    case "Work":
+      return "💼";
+    case "Creative":
+      return "🎨";
+    case "Health":
+      return "💪";
+    default:
+      return "🎯";
   }
 };
 
-export const PresetCard: React.FC<PresetCardProps> = ({ preset, onSelect, onDelete }) => {
+export const PresetCard: React.FC<PresetCardProps> = ({
+  preset,
+  onSelect,
+  onDelete,
+}) => {
   return (
     <Pressable
-      style={({ pressed }) => pressed ? [styles.presetCard, { opacity: 0.8 }] : styles.presetCard}
+      style={({ pressed }) =>
+        pressed ? [styles.presetCard, { opacity: 0.8 }] : styles.presetCard
+      }
       onPress={() => onSelect(preset)}
       onLongPress={() => !preset.isDefault && onDelete(preset.id)}
       accessibilityLabel="Interactive control"
@@ -35,9 +46,7 @@ export const PresetCard: React.FC<PresetCardProps> = ({ preset, onSelect, onDele
       accessibilityHint="Activates this control"
     >
       <View style={styles.presetIcon}>
-        <Text style={styles.iconText}>
-          {getCategoryEmoji(preset.category)}
-        </Text>
+        <Text style={styles.iconText}>{getCategoryEmoji(preset.category)}</Text>
       </View>
       <Text style={styles.presetName} numberOfLines={1}>
         {preset.name}
@@ -46,8 +55,7 @@ export const PresetCard: React.FC<PresetCardProps> = ({ preset, onSelect, onDele
         {formatDuration(preset.duration)}
       </Text>
       <Text style={styles.presetDetails}>
-        {preset.intervals}{" "}
-        {preset.intervals > 1 ? "intervals" : "interval"}
+        {preset.intervals} {preset.intervals > 1 ? "intervals" : "interval"}
       </Text>
       {preset.strictMode && (
         <View style={styles.strictBadge}>
@@ -100,5 +108,9 @@ const styles = {
     paddingVertical: 2,
     borderRadius: 4,
   },
-  strictText: { fontSize: 10, color: launchColors.hex_fff, fontWeight: "600" as const },
+  strictText: {
+    fontSize: 10,
+    color: launchColors.hex_fff,
+    fontWeight: "600" as const,
+  },
 };

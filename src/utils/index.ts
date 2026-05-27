@@ -15,7 +15,7 @@ export {
   endOfDay,
   parseISO,
   toISO,
-} from './date';
+} from "./date";
 
 // String utilities
 export {
@@ -33,13 +33,10 @@ export {
   getInitials,
   isValidEmail,
   isValidPhone,
-} from './string';
+} from "./string";
 
 // Phase 7 — Haptics & Touch Targets
-export {
-  triggerHaptic,
-  type HapticFeedbackKind,
-} from './haptics';
+export { triggerHaptic, type HapticFeedbackKind } from "./haptics";
 export {
   MIN_TOUCH_TARGET,
   calculateHitSlop,
@@ -49,4 +46,4 @@ export {
   getMinTouchTargetStyle,
   auditTouchTarget,
   StandardHitSlops,
-} from './touchTarget';
+} from "./touchTarget";

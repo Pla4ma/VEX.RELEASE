@@ -24,160 +24,254 @@ const ENABLE_SESSION_COACH_BANNER = true;
 const ENABLE_SESSION_MODE_OVERLAYS = true;
 const ENABLE_SESSION_HERO = true;
 
-export const ActiveSessionScreen = withScreenErrorBoundary(function _ActiveSessionScreen(): React.JSX.Element | null {
-  const controller = useActiveSessionController();
-  const { actions, isDegradedSession, metrics, navigation, sessionQuery, showInterruption, showMultiplierInfo, streak, theme, themeBackgroundColor, userId } = controller;
-  const { contract } = useContractForSession(controller.sessionQuery.session?.id ?? null);
-  const currentMode = resolveSessionMode(sessionQuery.session?.config.sessionMode);
-  const { displayPolicy, heroViewModel } = useActiveSessionDisplay({
-    dailyProgress: metrics.dailyProgress,
-    elapsedSeconds: sessionQuery.elapsedSeconds,
-    completionPercentage: sessionQuery.completionPercentage,
-    momentumScores: metrics.momentumScores,
-    perfectFocusActive: metrics.perfectFocusActive,
-    phaseAccent: metrics.phaseAccent,
-    phaseIcon: metrics.phaseInfo.icon,
-    phaseLabel: metrics.phaseInfo.label,
-    purityLabel: metrics.purityLabel,
-    purityScore: metrics.purityScore,
-    remainingSeconds: sessionQuery.remainingSeconds,
-    streakMultiplier: metrics.streakMultiplier,
-    todayFocusSeconds: metrics.todayFocusSeconds,
-    isPaused: sessionQuery.isPaused,
-    showInterruption,
-    sessionConfigSessionMode: sessionQuery.session?.config.sessionMode,
-  });
-  const outerStrokeDashoffset = (2 * Math.PI * (metrics.RADIUS + 16)) * (1 - metrics.dailyProgress / 100);
-  const plannedQuizBreakOptedIn = false;
-  const focusStage = showInterruption ? "interruption" : sessionQuery.isPaused ? "paused" : "active";
+export const ActiveSessionScreen = withScreenErrorBoundary(
+  function _ActiveSessionScreen(): React.JSX.Element | null {
+    const controller = useActiveSessionController();
+    const {
+      actions,
+      isDegradedSession,
+      metrics,
+      navigation,
+      sessionQuery,
+      showInterruption,
+      showMultiplierInfo,
+      streak,
+      theme,
+      themeBackgroundColor,
+      userId,
+    } = controller;
+    const { contract } = useContractForSession(
+      controller.sessionQuery.session?.id ?? null,
+    );
+    const currentMode = resolveSessionMode(
+      sessionQuery.session?.config.sessionMode,
+    );
+    const { displayPolicy, heroViewModel } = useActiveSessionDisplay({
+      dailyProgress: metrics.dailyProgress,
+      elapsedSeconds: sessionQuery.elapsedSeconds,
+      completionPercentage: sessionQuery.completionPercentage,
+      momentumScores: metrics.momentumScores,
+      perfectFocusActive: metrics.perfectFocusActive,
+      phaseAccent: metrics.phaseAccent,
+      phaseIcon: metrics.phaseInfo.icon,
+      phaseLabel: metrics.phaseInfo.label,
+      purityLabel: metrics.purityLabel,
+      purityScore: metrics.purityScore,
+      remainingSeconds: sessionQuery.remainingSeconds,
+      streakMultiplier: metrics.streakMultiplier,
+      todayFocusSeconds: metrics.todayFocusSeconds,
+      isPaused: sessionQuery.isPaused,
+      showInterruption,
+      sessionConfigSessionMode: sessionQuery.session?.config.sessionMode,
+    });
+    const outerStrokeDashoffset =
+      2 * Math.PI * (metrics.RADIUS + 16) * (1 - metrics.dailyProgress / 100);
+    const plannedQuizBreakOptedIn = false;
+    const focusStage = showInterruption
+      ? "interruption"
+      : sessionQuery.isPaused
+        ? "paused"
+        : "active";
 
-  const studyQuizBreak = useStudyQuizBreak({ currentMode, plannedQuizBreakOptedIn, sessionQuery });
-  const shouldShowGuardState = !userId || sessionQuery.isLoading || !controller.companion.isLoaded || Boolean(sessionQuery.error) || !sessionQuery.session || isDegradedSession;
+    const studyQuizBreak = useStudyQuizBreak({
+      currentMode,
+      plannedQuizBreakOptedIn,
+      sessionQuery,
+    });
+    const shouldShowGuardState =
+      !userId ||
+      sessionQuery.isLoading ||
+      !controller.companion.isLoaded ||
+      Boolean(sessionQuery.error) ||
+      !sessionQuery.session ||
+      isDegradedSession;
 
-  if (shouldShowGuardState) {
-    return <ActiveSessionGuardStates companionLoaded={controller.companion.isLoaded} error={sessionQuery.error} isDegradedSession={isDegradedSession} isLoading={sessionQuery.isLoading} session={sessionQuery.session} userId={userId} onBrowsePresets={() => navigation.goBack()} onContinueDegraded={() => actions.setDismissDegradedState(true)} onCreateSession={() => navigation.navigate({ name: "SessionSetup", params: {} })} onEndSession={() => actions.setShowInterruption(true)} onGoBack={() => navigation.goBack()} onRetry={sessionQuery.refresh} />;
-  }
-  const activeSession = sessionQuery.session;
-  if (!activeSession) {
-    return null;
-  }
+    if (shouldShowGuardState) {
+      return (
+        <ActiveSessionGuardStates
+          companionLoaded={controller.companion.isLoaded}
+          error={sessionQuery.error}
+          isDegradedSession={isDegradedSession}
+          isLoading={sessionQuery.isLoading}
+          session={sessionQuery.session}
+          userId={userId}
+          onBrowsePresets={() => navigation.goBack()}
+          onContinueDegraded={() => actions.setDismissDegradedState(true)}
+          onCreateSession={() =>
+            navigation.navigate({ name: "SessionSetup", params: {} })
+          }
+          onEndSession={() => actions.setShowInterruption(true)}
+          onGoBack={() => navigation.goBack()}
+          onRetry={sessionQuery.refresh}
+        />
+      );
+    }
+    const activeSession = sessionQuery.session;
+    if (!activeSession) {
+      return null;
+    }
 
-  return (
-    <Box flex={1} bg="background.primary" style={{ backgroundColor: themeBackgroundColor }}>
-      <ActiveSessionBackground accentOverlay={metrics.withAlpha(metrics.phaseAccent, 0.06)} colors={[metrics.gradientState.top, metrics.gradientState.middle, metrics.gradientState.bottom]} />
+    return (
+      <Box
+        flex={1}
+        bg="background.primary"
+        style={{ backgroundColor: themeBackgroundColor }}
+      >
+        <ActiveSessionBackground
+          accentOverlay={metrics.withAlpha(metrics.phaseAccent, 0.06)}
+          colors={[
+            metrics.gradientState.top,
+            metrics.gradientState.middle,
+            metrics.gradientState.bottom,
+          ]}
+        />
 
-      {currentMode === SessionMode.DEEP_WORK && focusStage !== "active" ? <DeepWorkVignette /> : null}
+        {currentMode === SessionMode.DEEP_WORK && focusStage !== "active" ? (
+          <DeepWorkVignette />
+        ) : null}
 
-      {ENABLE_SESSION_COMPANION_LAYER && displayPolicy.showCompanionLayer && controller.companion.state && currentMode !== SessionMode.DEEP_WORK ? <CompanionSessionLayer companionState={controller.companion.state} elapsedSeconds={sessionQuery.elapsedSeconds} eventLabel={controller.companion.eventLabel} isPaused={sessionQuery.isPaused} purityScore={metrics.purityScore} sessionProgress={controller.companion.sessionProgress} totalSeconds={Math.max(activeSession.config.duration, sessionQuery.elapsedSeconds + sessionQuery.remainingSeconds, 1)} /> : null}
+        {ENABLE_SESSION_COMPANION_LAYER &&
+        displayPolicy.showCompanionLayer &&
+        controller.companion.state &&
+        currentMode !== SessionMode.DEEP_WORK ? (
+          <CompanionSessionLayer
+            companionState={controller.companion.state}
+            elapsedSeconds={sessionQuery.elapsedSeconds}
+            eventLabel={controller.companion.eventLabel}
+            isPaused={sessionQuery.isPaused}
+            purityScore={metrics.purityScore}
+            sessionProgress={controller.companion.sessionProgress}
+            totalSeconds={Math.max(
+              activeSession.config.duration,
+              sessionQuery.elapsedSeconds + sessionQuery.remainingSeconds,
+              1,
+            )}
+          />
+        ) : null}
 
-      <ActiveSessionHeader isPaused={sessionQuery.isPaused} theme={theme} onInterrupt={() => actions.setShowInterruption(true)} />
-      {displayPolicy.showContractReminder ? <SessionContractReminder contract={contract} progressPercentage={sessionQuery.completionPercentage} /> : null}
-
-      {ENABLE_SESSION_MODE_OVERLAYS && displayPolicy.showModeOverlay ? (
-        <ActiveSessionModeOverlays
-          allowStudyQuizBreak={plannedQuizBreakOptedIn}
-          chainCount={activeSession.config.sprintChainCount ?? 0}
-          completionPercentage={sessionQuery.completionPercentage}
-          currentMode={currentMode}
-          displayPolicy={displayPolicy}
+        <ActiveSessionHeader
           isPaused={sessionQuery.isPaused}
-          quizBreakKey={studyQuizBreak.quizBreakKey}
-          remainingSeconds={sessionQuery.remainingSeconds}
-          studyPlanId={activeSession.config.studyPlanId}
-          onCloseQuiz={(correctAnswers) => {
-            studyQuizBreak.finishQuizBreak(correctAnswers);
-          }}
-          onCreativeMoodSelected={actions.handleCreativeMoodSelected}
-          onSkipCreativeMood={actions.handleSkipCreativeMood}
-          onSkipQuiz={() => {
-            studyQuizBreak.finishQuizBreak();
-          }}
+          theme={theme}
+          onInterrupt={() => actions.setShowInterruption(true)}
         />
-      ) : null}
+        {displayPolicy.showContractReminder ? (
+          <SessionContractReminder
+            contract={contract}
+            progressPercentage={sessionQuery.completionPercentage}
+          />
+        ) : null}
 
-      <CoachSessionBannerLazy
-        userId={userId}
-        showCoachBanner={ENABLE_SESSION_COACH_BANNER && displayPolicy.showCoachBanner}
-        elapsedSeconds={sessionQuery.elapsedSeconds}
-        isPaused={sessionQuery.isPaused}
-      />
+        {ENABLE_SESSION_MODE_OVERLAYS && displayPolicy.showModeOverlay ? (
+          <ActiveSessionModeOverlays
+            allowStudyQuizBreak={plannedQuizBreakOptedIn}
+            chainCount={activeSession.config.sprintChainCount ?? 0}
+            completionPercentage={sessionQuery.completionPercentage}
+            currentMode={currentMode}
+            displayPolicy={displayPolicy}
+            isPaused={sessionQuery.isPaused}
+            quizBreakKey={studyQuizBreak.quizBreakKey}
+            remainingSeconds={sessionQuery.remainingSeconds}
+            studyPlanId={activeSession.config.studyPlanId}
+            onCloseQuiz={(correctAnswers) => {
+              studyQuizBreak.finishQuizBreak(correctAnswers);
+            }}
+            onCreativeMoodSelected={actions.handleCreativeMoodSelected}
+            onSkipCreativeMood={actions.handleSkipCreativeMood}
+            onSkipQuiz={() => {
+              studyQuizBreak.finishQuizBreak();
+            }}
+          />
+        ) : null}
 
-      {ENABLE_SESSION_HERO && (
-        <ActiveSessionHero
-          viewModel={heroViewModel}
-          progressRingProps={{
-            CIRCUMFERENCE: metrics.CIRCUMFERENCE,
-            RADIUS: metrics.RADIUS,
-            RING_SIZE: metrics.RING_SIZE,
-            STROKE_WIDTH: metrics.STROKE_WIDTH,
-            animatedCircleProps: metrics.animatedCircleProps,
-            glowStyle: metrics.glowStyle,
-            outerStrokeDashoffset,
-            perfectFocusBurst: metrics.perfectFocusBurst,
-            pulseStyle: metrics.pulseStyle,
-            rotatingPerfectFocusStyle: metrics.rotatingPerfectFocusStyle,
-            labelColor: metrics.labelColor,
-            withAlpha: metrics.withAlpha,
-          }}
+        <CoachSessionBannerLazy
+          userId={userId}
+          showCoachBanner={
+            ENABLE_SESSION_COACH_BANNER && displayPolicy.showCoachBanner
+          }
+          elapsedSeconds={sessionQuery.elapsedSeconds}
+          isPaused={sessionQuery.isPaused}
+        />
+
+        {ENABLE_SESSION_HERO && (
+          <ActiveSessionHero
+            viewModel={heroViewModel}
+            progressRingProps={{
+              CIRCUMFERENCE: metrics.CIRCUMFERENCE,
+              RADIUS: metrics.RADIUS,
+              RING_SIZE: metrics.RING_SIZE,
+              STROKE_WIDTH: metrics.STROKE_WIDTH,
+              animatedCircleProps: metrics.animatedCircleProps,
+              glowStyle: metrics.glowStyle,
+              outerStrokeDashoffset,
+              perfectFocusBurst: metrics.perfectFocusBurst,
+              pulseStyle: metrics.pulseStyle,
+              rotatingPerfectFocusStyle: metrics.rotatingPerfectFocusStyle,
+              labelColor: metrics.labelColor,
+              withAlpha: metrics.withAlpha,
+            }}
+            themeColors={{
+              error: theme.colors.error.DEFAULT,
+              inverse: theme.colors.text.inverse,
+              primary300: theme.colors.primary[300],
+              success: theme.colors.success.DEFAULT,
+              warning: theme.colors.warning.light,
+            }}
+            isReducedMotion={heroViewModel.isReducedMotion}
+          />
+        )}
+
+        {controller.controlFailure ? (
+          <ActiveSessionControlRecovery
+            failure={controller.controlFailure}
+            onDismiss={actions.clearControlFailure}
+            onRetry={() => {
+              actions.retryControlFailure().catch(() => undefined);
+            }}
+          />
+        ) : null}
+
+        <ActiveSessionControlDock
+          completionPercentage={sessionQuery.completionPercentage}
+          isPaused={sessionQuery.isPaused}
+          multiplierDays={streak?.currentDays ?? 0}
+          phaseAccent={metrics.phaseAccent}
+          showMultiplierInfo={showMultiplierInfo}
+          streakMultiplier={metrics.streakMultiplier}
           themeColors={{
+            backgroundElevated: theme.colors.background.elevated,
+            border: theme.colors.border.light,
             error: theme.colors.error.DEFAULT,
+            info: theme.colors.info.DEFAULT,
             inverse: theme.colors.text.inverse,
-            primary300: theme.colors.primary[300],
             success: theme.colors.success.DEFAULT,
-            warning: theme.colors.warning.light,
           }}
-          isReducedMotion={heroViewModel.isReducedMotion}
-        />
-      )}
-
-      {controller.controlFailure ? (
-        <ActiveSessionControlRecovery
-          failure={controller.controlFailure}
-          onDismiss={actions.clearControlFailure}
-          onRetry={() => {
-            actions.retryControlFailure().catch(() => undefined);
+          onComplete={() => {
+            actions.handleComplete().catch(() => undefined);
           }}
+          onEnd={() => actions.setShowInterruption(true)}
+          onPauseResume={() => {
+            actions.handlePauseResume().catch(() => undefined);
+          }}
+          onToggleMultiplierInfo={() =>
+            actions.setShowMultiplierInfo(!showMultiplierInfo)
+          }
         />
-      ) : null}
 
-      <ActiveSessionControlDock
-        completionPercentage={sessionQuery.completionPercentage}
-        isPaused={sessionQuery.isPaused}
-        multiplierDays={streak?.currentDays ?? 0}
-        phaseAccent={metrics.phaseAccent}
-        showMultiplierInfo={showMultiplierInfo}
-        streakMultiplier={metrics.streakMultiplier}
-        themeColors={{
-          backgroundElevated: theme.colors.background.elevated,
-          border: theme.colors.border.light,
-          error: theme.colors.error.DEFAULT,
-          info: theme.colors.info.DEFAULT,
-          inverse: theme.colors.text.inverse,
-          success: theme.colors.success.DEFAULT,
-        }}
-        onComplete={() => {
-          actions.handleComplete().catch(() => undefined);
-        }}
-        onEnd={() => actions.setShowInterruption(true)}
-        onPauseResume={() => {
-          actions.handlePauseResume().catch(() => undefined);
-        }}
-        onToggleMultiplierInfo={() => actions.setShowMultiplierInfo(!showMultiplierInfo)}
-      />
-
-      <InterruptionWarning
-        isVisible={showInterruption}
-        severity={sessionQuery.elapsedSeconds > 300 ? "MAJOR" : "MINOR"}
-        countdownSeconds={30}
-        interruptionType="User Initiated"
-        onResume={() => actions.setShowInterruption(false)}
-        onAbandon={() => {
-          actions.handleAbandon().catch(() => undefined);
-        }}
-        hasStreakSave={false}
-      />
-    </Box>
-  );
-}, "Active Session");
+        <InterruptionWarning
+          isVisible={showInterruption}
+          severity={sessionQuery.elapsedSeconds > 300 ? "MAJOR" : "MINOR"}
+          countdownSeconds={30}
+          interruptionType="User Initiated"
+          onResume={() => actions.setShowInterruption(false)}
+          onAbandon={() => {
+            actions.handleAbandon().catch(() => undefined);
+          }}
+          hasStreakSave={false}
+        />
+      </Box>
+    );
+  },
+  "Active Session",
+);
 
 export default ActiveSessionScreen;

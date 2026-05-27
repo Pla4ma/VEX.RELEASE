@@ -1,6 +1,6 @@
-import { useMemo } from 'react';
-import { FIRST_WEEK_DAY_DESIGN, type DayDesign } from './day-by-day-config';
-import type { FirstWeekProgress } from './schemas';
+import { useMemo } from "react";
+import { FIRST_WEEK_DAY_DESIGN, type DayDesign } from "./day-by-day-config";
+import type { FirstWeekProgress } from "./schemas";
 
 export function useCurrentDayDesign(
   progress: FirstWeekProgress | null | undefined,

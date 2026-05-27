@@ -1,7 +1,7 @@
-import { captureSilentFailure } from '../../utils/silent-failure';
-import { generateSessionSummary } from '../../shared/ai/edge-function-service';
-import { getOrCreateCoachState } from './persona-manager';
-import { getSessionRepository } from '../../session/repository/SessionRepository';
+import { captureSilentFailure } from "../../utils/silent-failure";
+import { generateSessionSummary } from "../../shared/ai/edge-function-service";
+import { getOrCreateCoachState } from "./persona-manager";
+import { getSessionRepository } from "../../session/repository/SessionRepository";
 
 interface SummaryContext {
   sessionCount: number;
@@ -14,7 +14,7 @@ interface SummaryContext {
 
 export async function generatePerformanceSummary(
   userId: string,
-  period: 'daily' | 'weekly' | 'monthly',
+  period: "daily" | "weekly" | "monthly",
 ): Promise<{
   period: string;
   sessionsCompleted: number;
@@ -30,9 +30,13 @@ export async function generatePerformanceSummary(
   const summaries = await sessionRepository.getAllSummaries();
   const averageQuality =
     summaries.length > 0
-      ? summaries.reduce((sum, summary) => sum + summary.focusQuality, 0) / summaries.length
+      ? summaries.reduce((sum, summary) => sum + summary.focusQuality, 0) /
+        summaries.length
       : 0;
-  const xpEarned = summaries.reduce((sum, item) => sum + (item.xpEarned ?? 0), 0);
+  const xpEarned = summaries.reduce(
+    (sum, item) => sum + (item.xpEarned ?? 0),
+    0,
+  );
 
   const context: SummaryContext = {
     sessionCount: stats.completedSessions,
@@ -43,7 +47,12 @@ export async function generatePerformanceSummary(
     challengesCompleted: 0,
   };
 
-  const coachMessage = await generateAISummaryMessage(userId, period, context, state.currentState);
+  const coachMessage = await generateAISummaryMessage(
+    userId,
+    period,
+    context,
+    state.currentState,
+  );
 
   return {
     period,
@@ -58,7 +67,7 @@ export async function generatePerformanceSummary(
 
 async function generateAISummaryMessage(
   userId: string,
-  period: 'daily' | 'weekly' | 'monthly',
+  period: "daily" | "weekly" | "monthly",
   context: SummaryContext,
   currentState: string,
 ): Promise<string> {
@@ -73,18 +82,26 @@ async function generateAISummaryMessage(
         xpEarned: context.xpEarned,
         challengesCompleted: context.challengesCompleted,
         preferredTimeOfDay: period,
-        consistencyScore: context.sessionCount > 0 ? Math.min(100, context.streakDays * 10) : 0,
+        consistencyScore:
+          context.sessionCount > 0 ? Math.min(100, context.streakDays * 10) : 0,
       },
     });
     if (response.success) {
-      const enouragementValue = response.structuredData?.['encouragement'];
-      if (typeof enouragementValue === 'string' && enouragementValue.length > 0) {
+      const enouragementValue = response.structuredData?.["encouragement"];
+      if (
+        typeof enouragementValue === "string" &&
+        enouragementValue.length > 0
+      ) {
         return enouragementValue;
       }
       return response.content ?? generateSummaryMessage(currentState, period);
     }
   } catch (error) {
-    captureSilentFailure(error, { feature: 'ai-coach', operation: 'ui-fallback', type: 'ui' });
+    captureSilentFailure(error, {
+      feature: "ai-coach",
+      operation: "ui-fallback",
+      type: "ui",
+    });
     return generateSummaryMessage(currentState, period);
   }
   return generateSummaryMessage(currentState, period);
@@ -98,20 +115,21 @@ function generateSummaryMessage(_state: string, period: string): string {
       "Today's focus is tomorrow's success. Well done!",
     ],
     weekly: [
-      'What a week! Your consistency is paying off.',
-      '7 days of effort, infinite progress. Keep it up!',
-      'You crushed this week! Ready for the next one?',
+      "What a week! Your consistency is paying off.",
+      "7 days of effort, infinite progress. Keep it up!",
+      "You crushed this week! Ready for the next one?",
     ],
     monthly: [
       "A month of dedication! You're becoming unstoppable.",
       "30 days of growth. Look how far you've come!",
-      'Monthly milestone achieved! Your future self thanks you.',
+      "Monthly milestone achieved! Your future self thanks you.",
     ],
   };
   const periodMessages = messages[period];
   if (!periodMessages || periodMessages.length === 0) {
     return "Great work today! Every session is a step forward.";
   }
-  const result = periodMessages[Math.floor(Math.random() * periodMessages.length)];
+  const result =
+    periodMessages[Math.floor(Math.random() * periodMessages.length)];
   return result ?? "Great work today! Every session is a step forward.";
 }

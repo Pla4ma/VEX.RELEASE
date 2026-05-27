@@ -5,22 +5,18 @@
  * Players feel themselves getting BETTER at focusing.
  */
 
-export type {
-  MasteryState,
-  MasteryRank,
-  MasteryChallenge,
-} from './types';
+export type { MasteryState, MasteryRank, MasteryChallenge } from "./types";
 export {
   MASTERY_RANK_THRESHOLDS,
   calculateTechniqueXp,
   generateMasteryChallenges,
   getMasteryRankDisplay,
-} from './types';
+} from "./types";
 
 // Components
-export { MasteryCard } from './components/MasteryCard';
-export { MasteryRankBadge } from './components/MasteryRankBadge';
-export { TechniqueBar } from './components/TechniqueBar';
+export { MasteryCard } from "./components/MasteryCard";
+export { MasteryRankBadge } from "./components/MasteryRankBadge";
+export { TechniqueBar } from "./components/TechniqueBar";
 export {
   MasteryUnlockGate,
   LockedFeaturePreview,
@@ -29,7 +25,7 @@ export {
   getPointsToUnlock,
   RANK_UNLOCKS,
   type UnlockableFeature,
-} from './components/MasteryUnlockGate';
+} from "./components/MasteryUnlockGate";
 
 // Service
-export { MasteryService } from './service';
+export { MasteryService } from "./service";

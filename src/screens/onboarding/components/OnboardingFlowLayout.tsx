@@ -1,18 +1,18 @@
-import React, { useMemo, type ReactNode } from 'react';
-import { ScrollView, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useMemo, type ReactNode } from "react";
+import { ScrollView, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { SmartCoachHint } from '../../../components/coach/SmartCoachHint';
-import { PremiumSurface } from '../../../components/premium';
-import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { styles } from '../styles';
-import { ONBOARDING_PROMISE_COPY, STEP_TITLES } from './onboarding-flow-data';
+import { SmartCoachHint } from "../../../components/coach/SmartCoachHint";
+import { PremiumSurface } from "../../../components/premium";
+import { Button } from "../../../components/primitives/Button";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import { styles } from "../styles";
+import { ONBOARDING_PROMISE_COPY, STEP_TITLES } from "./onboarding-flow-data";
 import {
   getProgressPhaseIndex,
   OnboardingProgressIndicator,
-} from './OnboardingProgressIndicator';
+} from "./OnboardingProgressIndicator";
 
 type OnboardingFlowLayoutProps = {
   children: ReactNode;
@@ -28,17 +28,17 @@ type OnboardingFlowLayoutProps = {
 
 function getCoachCue(step: number): { title: string; body: string } {
   const fallback = {
-    title: 'We will keep the experience responsive.',
-    body: 'If a signal is still syncing, you will see the usable state first and deeper insights as they arrive.',
+    title: "We will keep the experience responsive.",
+    body: "If a signal is still syncing, you will see the usable state first and deeper insights as they arrive.",
   };
   const cues = [
     {
-      title: 'I will tune VEX around how you focus.',
-      body: 'Pick the honest answer. The app adapts the first session, study surfaces, and reminders from this setup.',
+      title: "I will tune VEX around how you focus.",
+      body: "Pick the honest answer. The app adapts the first session, study surfaces, and reminders from this setup.",
     },
     {
-      title: 'This shapes how VEX adapts to you.',
-      body: 'VEX will highlight the next best action instead of making you hunt through menus.',
+      title: "This shapes how VEX adapts to you.",
+      body: "VEX will highlight the next best action instead of making you hunt through menus.",
     },
     fallback,
   ];
@@ -48,7 +48,10 @@ function getCoachCue(step: number): { title: string; body: string } {
 export function SignedOutOnboardingState(): JSX.Element {
   const { theme } = useTheme();
   const centeredScreenStyle = useMemo(
-    () => [styles.centeredScreen, { backgroundColor: theme.colors.background.primary }],
+    () => [
+      styles.centeredScreen,
+      { backgroundColor: theme.colors.background.primary },
+    ],
     [theme.colors.background.primary],
   );
   const signedOutTextStyle = useMemo(
@@ -105,7 +108,12 @@ export function OnboardingFlowLayout({
         paddingTop: theme.spacing[4],
       },
     ],
-    [insets.bottom, theme.colors.background.primary, theme.colors.border.DEFAULT, theme.spacing],
+    [
+      insets.bottom,
+      theme.colors.background.primary,
+      theme.colors.border.DEFAULT,
+      theme.spacing,
+    ],
   );
 
   const stepContent = (
@@ -116,13 +124,24 @@ export function OnboardingFlowLayout({
             <Text style={[styles.title, { color: theme.colors.text.primary }]}>
               {step === 0 ? ONBOARDING_PROMISE_COPY.primary : STEP_TITLES[step]}
             </Text>
-            <Text style={[styles.stepSubtitle, { color: theme.colors.text.secondary }]}>
-              {step === 0 ? ONBOARDING_PROMISE_COPY.secondary : getCoachCue(step).body}
+            <Text
+              style={[
+                styles.stepSubtitle,
+                { color: theme.colors.text.secondary },
+              ]}
+            >
+              {step === 0
+                ? ONBOARDING_PROMISE_COPY.secondary
+                : getCoachCue(step).body}
             </Text>
             <OnboardingProgressIndicator phaseIndex={activePhase} />
             <SmartCoachHint
-              body={step === 0 ? 'Pick the honest answer. VEX will adapt the first session around it.' : getCoachCue(step).body}
-              mood={step === lastStepIndex - 1 ? 'celebrate' : 'active'}
+              body={
+                step === 0
+                  ? "Pick the honest answer. VEX will adapt the first session around it."
+                  : getCoachCue(step).body
+              }
+              mood={step === lastStepIndex - 1 ? "celebrate" : "active"}
               title={getCoachCue(step).title}
             />
           </>
@@ -151,7 +170,9 @@ export function OnboardingFlowLayout({
             >
               Back
             </Button>
-          ) : <View />}
+          ) : (
+            <View />
+          )}
           <Button
             accessibilityHint="Moves to the next onboarding step"
             accessibilityLabel="Continue"
@@ -172,7 +193,9 @@ export function OnboardingFlowLayout({
       {isLaunchStep ? (
         <View style={styles.screen}>{stepContent}</View>
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>{stepContent}</ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {stepContent}
+        </ScrollView>
       )}
     </View>
   );

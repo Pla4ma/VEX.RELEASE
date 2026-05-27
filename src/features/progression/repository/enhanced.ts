@@ -1,11 +1,11 @@
-import * as repository from '../repository';
-import type { Progression, XpEntry } from '../schemas';
+import * as repository from "../repository";
+import type { Progression, XpEntry } from "../schemas";
 
 export type EnhancedRepositoryErrorCode =
-  | 'NETWORK_ERROR'
-  | 'NOT_FOUND'
-  | 'CONFLICT'
-  | 'UNKNOWN';
+  | "NETWORK_ERROR"
+  | "NOT_FOUND"
+  | "CONFLICT"
+  | "UNKNOWN";
 
 export interface EnhancedRepositoryError {
   code: EnhancedRepositoryErrorCode;
@@ -26,7 +26,7 @@ type ProgressionUpdate = {
   lastLevelUpAt: number | null;
 };
 
-type XpEntryInput = Omit<XpEntry, 'id' | 'userId'>;
+type XpEntryInput = Omit<XpEntry, "id" | "userId">;
 
 type LevelUpInput = {
   level: number;
@@ -35,7 +35,7 @@ type LevelUpInput = {
   metadata: Record<string, unknown> | null;
 };
 
-export type XpStatsPeriod = 'day' | 'week' | 'month';
+export type XpStatsPeriod = "day" | "week" | "month";
 
 export interface XpStats {
   total: number;
@@ -44,19 +44,19 @@ export interface XpStats {
 
 function toRepositoryError(error: unknown): EnhancedRepositoryError {
   const message =
-    error instanceof Error ? error.message : 'Unknown repository error';
+    error instanceof Error ? error.message : "Unknown repository error";
   const lowerMessage = message.toLowerCase();
   const isNetwork =
-    lowerMessage.includes('network') ||
-    lowerMessage.includes('timeout') ||
-    lowerMessage.includes('fetch');
+    lowerMessage.includes("network") ||
+    lowerMessage.includes("timeout") ||
+    lowerMessage.includes("fetch");
   const isConflict =
-    lowerMessage.includes('conflict') ||
-    lowerMessage.includes('duplicate') ||
-    lowerMessage.includes('23505');
+    lowerMessage.includes("conflict") ||
+    lowerMessage.includes("duplicate") ||
+    lowerMessage.includes("23505");
 
   return {
-    code: isNetwork ? 'NETWORK_ERROR' : isConflict ? 'CONFLICT' : 'UNKNOWN',
+    code: isNetwork ? "NETWORK_ERROR" : isConflict ? "CONFLICT" : "UNKNOWN",
     message,
     isRetryable: isNetwork || isConflict,
   };
@@ -65,12 +65,12 @@ function toRepositoryError(error: unknown): EnhancedRepositoryError {
 function getPeriodStart(period: XpStatsPeriod): number {
   const start = new Date();
 
-  if (period === 'day') {
+  if (period === "day") {
     start.setHours(0, 0, 0, 0);
     return start.getTime();
   }
 
-  if (period === 'week') {
+  if (period === "week") {
     start.setDate(start.getDate() - 7);
     return start.getTime();
   }

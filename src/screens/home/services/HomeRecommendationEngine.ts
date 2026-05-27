@@ -1,23 +1,25 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { useActiveBoss } from '../../../features/boss/hooks';
-import { useActiveStudyPlan } from '../../../features/content-study/hooks/useActiveStudyPlan';
-import { useProgressionSummary } from '../../../features/progression/hooks';
-import { useStreakSummary } from '../../../features/streaks/hooks';
-import { useSessionStats } from '../../../session/hooks/useSession';
-import { useAuthStore } from '../../../store';
-import { debug } from '../../../utils/debug';
-import { RECOMMENDATION_RULES } from './home-recommendation-rules';
+import { useActiveBoss } from "../../../features/boss/hooks";
+import { useActiveStudyPlan } from "../../../features/content-study/hooks/useActiveStudyPlan";
+import { useProgressionSummary } from "../../../features/progression/hooks";
+import { useStreakSummary } from "../../../features/streaks/hooks";
+import { useSessionStats } from "../../../session/hooks/useSession";
+import { useAuthStore } from "../../../store";
+import { debug } from "../../../utils/debug";
+import { RECOMMENDATION_RULES } from "./home-recommendation-rules";
 import type {
   HomeRecommendation,
   RecommendationContext,
   UrgencyLevel,
-} from './home-recommendation-types';
+} from "./home-recommendation-types";
 
 export type { HomeRecommendation, RecommendationContext, UrgencyLevel };
 
 function toError(error: unknown): Error {
-  return error instanceof Error ? error : new Error('Home recommendation rule failed');
+  return error instanceof Error
+    ? error
+    : new Error("Home recommendation rule failed");
 }
 
 export class HomeRecommendationEngine {
@@ -38,7 +40,10 @@ export class HomeRecommendationEngine {
           return recommendation;
         }
       } catch (error) {
-        debug.error(`[HomeRecommendationEngine] Rule ${rule.name} failed`, toError(error));
+        debug.error(
+          `[HomeRecommendationEngine] Rule ${rule.name} failed`,
+          toError(error),
+        );
       }
     }
     const fallbackRule = RECOMMENDATION_RULES[RECOMMENDATION_RULES.length - 1]!;
@@ -46,15 +51,21 @@ export class HomeRecommendationEngine {
   }
 
   getAllApplicable(): HomeRecommendation[] {
-    return RECOMMENDATION_RULES
-      .filter((rule) => rule.condition(this.context))
-      .map((rule) => rule.generate(this.context));
+    return RECOMMENDATION_RULES.filter((rule) =>
+      rule.condition(this.context),
+    ).map((rule) => rule.generate(this.context));
   }
 
-  shouldRefresh(lastRefreshTime: number, currentRec: HomeRecommendation): boolean {
+  shouldRefresh(
+    lastRefreshTime: number,
+    currentRec: HomeRecommendation,
+  ): boolean {
     const fiveMinutes = 5 * 60 * 1000;
     const timeSinceRefresh = Date.now() - lastRefreshTime;
-    return timeSinceRefresh > fiveMinutes || Boolean(currentRec.expiresAt && Date.now() > currentRec.expiresAt);
+    return (
+      timeSinceRefresh > fiveMinutes ||
+      Boolean(currentRec.expiresAt && Date.now() > currentRec.expiresAt)
+    );
   }
 }
 
@@ -64,13 +75,16 @@ export function useHomeRecommendation(): {
   refresh: () => void;
 } {
   const { user } = useAuthStore();
-  const userId = user?.id ?? '';
-  const { data: activeStudyPlan, isLoading: studyLoading } = useActiveStudyPlan();
+  const userId = user?.id ?? "";
+  const { data: activeStudyPlan, isLoading: studyLoading } =
+    useActiveStudyPlan();
   const { data: streak, isLoading: streakLoading } = useStreakSummary(userId);
-  const { data: progression, isLoading: progLoading } = useProgressionSummary(userId);
+  const { data: progression, isLoading: progLoading } =
+    useProgressionSummary(userId);
   const { data: activeBoss, isLoading: bossLoading } = useActiveBoss(userId);
   const { stats, isLoading: statsLoading } = useSessionStats(userId);
-  const [recommendation, setRecommendation] = useState<HomeRecommendation | null>(null);
+  const [recommendation, setRecommendation] =
+    useState<HomeRecommendation | null>(null);
   const lastRefreshRef = useRef<number>(0);
   const lastRecRef = useRef<HomeRecommendation | null>(null);
 
@@ -83,7 +97,9 @@ export function useHomeRecommendation(): {
       activeStudyPlan: activeStudyPlan ?? null,
       currentLevel: progression?.level ?? 1,
       currentTime: new Date(),
-      hasCompletedSessionToday: stats?.completedSessions ? stats.completedSessions > 0 : false,
+      hasCompletedSessionToday: stats?.completedSessions
+        ? stats.completedSessions > 0
+        : false,
       lastSessionTimestamp: undefined,
       progression: progression ?? null,
       streak: streak ?? null,
@@ -91,7 +107,10 @@ export function useHomeRecommendation(): {
       userId,
     };
     const engine = new HomeRecommendationEngine(context);
-    if (lastRecRef.current && !engine.shouldRefresh(lastRefreshRef.current, lastRecRef.current)) {
+    if (
+      lastRecRef.current &&
+      !engine.shouldRefresh(lastRefreshRef.current, lastRecRef.current)
+    ) {
       return;
     }
     const newRec = engine.getRecommendation();
@@ -110,7 +129,12 @@ export function useHomeRecommendation(): {
   }, [generateRecommendation]);
 
   return {
-    isLoading: studyLoading || streakLoading || progLoading || bossLoading || statsLoading,
+    isLoading:
+      studyLoading ||
+      streakLoading ||
+      progLoading ||
+      bossLoading ||
+      statsLoading,
     recommendation,
     refresh,
   };

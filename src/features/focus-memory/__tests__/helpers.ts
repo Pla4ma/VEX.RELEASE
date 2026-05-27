@@ -10,12 +10,12 @@ import {
   generateRecommendationEvidence,
   listActiveMemories,
   scopeMessageForSource,
-} from '../service';
-import { contentScopeForSource } from '../expiry';
+} from "../service";
+import { contentScopeForSource } from "../expiry";
 
 export const mockStore = new Map<string, string>();
 
-jest.mock('react-native-mmkv', () => ({
+jest.mock("react-native-mmkv", () => ({
   MMKV: class MockMMKV {
     getString(key: string): string | undefined {
       return mockStore.get(key);
@@ -39,7 +39,7 @@ jest.mock('react-native-mmkv', () => ({
   },
 }));
 
-jest.mock('../../../utils/uuid', () => {
+jest.mock("../../../utils/uuid", () => {
   let counter = 0;
   return { v4: () => `memory-id-${counter++}` };
 });

@@ -2,16 +2,16 @@
  * Navigation Guard Tests
  */
 
-import React from 'react';
-import { render, screen } from '@testing-library/react-native';
-import { NavigationGuard } from '../NavigationGuard';
-import { FEATURE_FLAGS } from '../../../constants/features';
-import { useFeatureFlags } from '../../../hooks/useFeatureFlags';
+import React from "react";
+import { render, screen } from "@testing-library/react-native";
+import { NavigationGuard } from "../NavigationGuard";
+import { FEATURE_FLAGS } from "../../../constants/features";
+import { useFeatureFlags } from "../../../hooks/useFeatureFlags";
 
 // Mock the feature flags hook
-jest.mock('../../../hooks/useFeatureFlags');
+jest.mock("../../../hooks/useFeatureFlags");
 
-describe('NavigationGuard', () => {
+describe("NavigationGuard", () => {
   const mockUseFeatureFlags = useFeatureFlags as jest.MockedFunction<
     typeof useFeatureFlags
   >;
@@ -25,7 +25,7 @@ describe('NavigationGuard', () => {
     });
   });
 
-  it('renders children when feature is enabled', () => {
+  it("renders children when feature is enabled", () => {
     const mockIsEnabled = jest.fn().mockReturnValue(true);
     mockUseFeatureFlags.mockReturnValue({
       isEnabled: mockIsEnabled,
@@ -40,11 +40,11 @@ describe('NavigationGuard', () => {
       </NavigationGuard>,
     );
 
-    expect(screen.getByTestId('protected-content')).toBeTruthy();
+    expect(screen.getByTestId("protected-content")).toBeTruthy();
     expect(mockIsEnabled).toHaveBeenCalledWith(FEATURE_FLAGS.BASIC_SOLO_BOSS);
   });
 
-  it('renders fallback when feature is disabled', () => {
+  it("renders fallback when feature is disabled", () => {
     const mockIsEnabled = jest.fn().mockReturnValue(false);
     mockUseFeatureFlags.mockReturnValue({
       isEnabled: mockIsEnabled,
@@ -59,11 +59,11 @@ describe('NavigationGuard', () => {
       </NavigationGuard>,
     );
 
-    expect(screen.queryByTestId('protected-content')).toBeFalsy();
+    expect(screen.queryByTestId("protected-content")).toBeFalsy();
     expect(mockIsEnabled).toHaveBeenCalledWith(FEATURE_FLAGS.BASIC_SOLO_BOSS);
   });
 
-  it('renders custom fallback when provided', () => {
+  it("renders custom fallback when provided", () => {
     const mockIsEnabled = jest.fn().mockReturnValue(false);
     mockUseFeatureFlags.mockReturnValue({
       isEnabled: mockIsEnabled,
@@ -81,7 +81,7 @@ describe('NavigationGuard', () => {
       </NavigationGuard>,
     );
 
-    expect(screen.queryByTestId('protected-content')).toBeFalsy();
-    expect(screen.getByTestId('custom-fallback')).toBeTruthy();
+    expect(screen.queryByTestId("protected-content")).toBeFalsy();
+    expect(screen.getByTestId("custom-fallback")).toBeTruthy();
   });
 });

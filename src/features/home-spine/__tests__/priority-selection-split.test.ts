@@ -1,7 +1,10 @@
-import { pickHomePrimaryPriority, createSnapshot } from './priority-selection.helpers';
+import {
+  pickHomePrimaryPriority,
+  createSnapshot,
+} from "./priority-selection.helpers";
 
-describe('pickHomePrimaryPriority', () => {
-  it('lets a critical streak beat every other action', () => {
+describe("pickHomePrimaryPriority", () => {
+  it("lets a critical streak beat every other action", () => {
     const priority = pickHomePrimaryPriority(
       createSnapshot({
         boss: {
@@ -11,21 +14,21 @@ describe('pickHomePrimaryPriority', () => {
           maxHealth: 100,
         },
         challenge: {
-          id: 'challenge-1',
+          id: "challenge-1",
           isNearDone: true,
           progressPercent: 80,
-          title: 'Finish today',
+          title: "Finish today",
         },
         companionPromise: {
-          kind: 'pending',
+          kind: "pending",
           targetDurationMinutes: 20,
-          targetMode: 'FOCUS',
+          targetMode: "FOCUS",
         },
         recommendation: {
           hasActive: true,
-          id: 'rec-1',
+          id: "rec-1",
           suggestedDurationSeconds: 1800,
-          suggestedMode: 'FOCUS',
+          suggestedMode: "FOCUS",
         },
         streak: {
           currentDays: 12,
@@ -36,36 +39,36 @@ describe('pickHomePrimaryPriority', () => {
       }),
     );
 
-    expect(priority.type).toBe('STREAK_CRITICAL');
+    expect(priority.type).toBe("STREAK_CRITICAL");
   });
 
-  it('lets a companion promise beat a recommended session', () => {
+  it("lets a companion promise beat a recommended session", () => {
     const priority = pickHomePrimaryPriority(
       createSnapshot({
         companionPromise: {
-          kind: 'pending',
+          kind: "pending",
           targetDurationMinutes: 25,
-          targetMode: 'FOCUS',
+          targetMode: "FOCUS",
         },
         recommendation: {
           hasActive: true,
-          id: 'rec-1',
+          id: "rec-1",
           suggestedDurationSeconds: 1500,
-          suggestedMode: 'FOCUS',
+          suggestedMode: "FOCUS",
         },
       }),
     );
 
-    expect(priority.type).toBe('COMPANION_PROMISE');
+    expect(priority.type).toBe("COMPANION_PROMISE");
   });
 
-  it('lets promise recovery beat normal streak risk', () => {
+  it("lets promise recovery beat normal streak risk", () => {
     const priority = pickHomePrimaryPriority(
       createSnapshot({
         companionPromise: {
-          kind: 'missed',
+          kind: "missed",
           targetDurationMinutes: 10,
-          targetMode: 'RECOVERY',
+          targetMode: "RECOVERY",
         },
         streak: {
           currentDays: 9,
@@ -76,17 +79,17 @@ describe('pickHomePrimaryPriority', () => {
       }),
     );
 
-    expect(priority.type).toBe('PROMISE_RECOVERY');
+    expect(priority.type).toBe("PROMISE_RECOVERY");
   });
 
-  it('lets streak risk beat a near-done challenge', () => {
+  it("lets streak risk beat a near-done challenge", () => {
     const priority = pickHomePrimaryPriority(
       createSnapshot({
         challenge: {
-          id: 'challenge-1',
+          id: "challenge-1",
           isNearDone: true,
           progressPercent: 72,
-          title: 'Finish challenge',
+          title: "Finish challenge",
         },
         streak: {
           currentDays: 7,
@@ -97,10 +100,10 @@ describe('pickHomePrimaryPriority', () => {
       }),
     );
 
-    expect(priority.type).toBe('STREAK_AT_RISK');
+    expect(priority.type).toBe("STREAK_AT_RISK");
   });
 
-  it('lets a recommendation beat an active boss', () => {
+  it("lets a recommendation beat an active boss", () => {
     const priority = pickHomePrimaryPriority(
       createSnapshot({
         boss: {
@@ -111,17 +114,17 @@ describe('pickHomePrimaryPriority', () => {
         },
         recommendation: {
           hasActive: true,
-          id: 'rec-1',
+          id: "rec-1",
           suggestedDurationSeconds: 1500,
-          suggestedMode: 'FOCUS',
+          suggestedMode: "FOCUS",
         },
       }),
     );
 
-    expect(priority.type).toBe('RECOMMENDED_SESSION');
+    expect(priority.type).toBe("RECOMMENDED_SESSION");
   });
 
-  it('lets a near-done challenge beat an active boss', () => {
+  it("lets a near-done challenge beat an active boss", () => {
     const priority = pickHomePrimaryPriority(
       createSnapshot({
         boss: {
@@ -131,21 +134,21 @@ describe('pickHomePrimaryPriority', () => {
           maxHealth: 100,
         },
         challenge: {
-          id: 'challenge-1',
+          id: "challenge-1",
           isNearDone: true,
           progressPercent: 90,
-          title: 'Finish challenge',
+          title: "Finish challenge",
         },
       }),
     );
 
-    expect(priority.type).toBe('CHALLENGE_NEAR_DONE');
+    expect(priority.type).toBe("CHALLENGE_NEAR_DONE");
   });
 
-  it('falls back to the default session when no higher signal exists', () => {
+  it("falls back to the default session when no higher signal exists", () => {
     const priority = pickHomePrimaryPriority(createSnapshot());
 
-    expect(priority.type).toBe('DEFAULT_SESSION');
-    expect(priority.cta.text).toBe('Start Focus');
+    expect(priority.type).toBe("DEFAULT_SESSION");
+    expect(priority.cta.text).toBe("Start Focus");
   });
 });

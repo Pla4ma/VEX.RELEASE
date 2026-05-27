@@ -3,11 +3,10 @@
  * Setting row with a toggle switch
  */
 
-import React from 'react';
-import { View, Text, Pressable } from 'react-native';
-import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import React from "react";
+import { View, Text, Pressable } from "react-native";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 interface ToggleSettingProps {
   label: string;
@@ -16,7 +15,12 @@ interface ToggleSettingProps {
   description?: string;
 }
 
-export function ToggleSetting({ label, value, onToggle, description }: ToggleSettingProps): React.ReactElement {
+export function ToggleSetting({
+  label,
+  value,
+  onToggle,
+  description,
+}: ToggleSettingProps): React.ReactElement {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -25,11 +29,21 @@ export function ToggleSetting({ label, value, onToggle, description }: ToggleSet
       </View>
       <Pressable
         onPress={() => onToggle(!value)}
-        style={({ pressed }) => [styles.toggle, value ? styles.toggleActive : styles.toggleInactive, pressed && { opacity: 0.8 }]}
+        style={({ pressed }) => [
+          styles.toggle,
+          value ? styles.toggleActive : styles.toggleInactive,
+          pressed && { opacity: 0.8 },
+        ]}
         accessibilityLabel="Interactive control"
         accessibilityRole="button"
-        accessibilityHint="Activates this control">
-        <View style={[styles.toggleKnob, value ? styles.knobActive : styles.knobInactive]} />
+        accessibilityHint="Activates this control"
+      >
+        <View
+          style={[
+            styles.toggleKnob,
+            value ? styles.knobActive : styles.knobInactive,
+          ]}
+        />
       </Pressable>
     </View>
   );
@@ -37,9 +51,9 @@ export function ToggleSetting({ label, value, onToggle, description }: ToggleSet
 
 const styles = createSheet({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     paddingVertical: 16,
     paddingHorizontal: 16,
     backgroundColor: launchColors.hex_ffffff,
@@ -78,7 +92,7 @@ const styles = createSheet({
     backgroundColor: launchColors.hex_ffffff,
   },
   knobActive: {
-    marginLeft: 'auto',
+    marginLeft: "auto",
   },
   knobInactive: {
     marginLeft: 0,

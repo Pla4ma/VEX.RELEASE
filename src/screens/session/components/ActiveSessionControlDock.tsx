@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 
-import { Pressable } from 'react-native';
-import Animated, { FadeIn } from 'react-native-reanimated';
+import { Pressable } from "react-native";
+import Animated, { FadeIn } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { getPremiumCardStyle } from '../../../components/premiumStyles';
-import { Icon } from '../../../icons';
-import { formatMultiplier, withAlpha } from '../utils/active-session';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { getPremiumCardStyle } from "../../../components/premiumStyles";
+import { Icon } from "../../../icons";
+import { formatMultiplier, withAlpha } from "../utils/active-session";
 
 type ActiveSessionControlDockProps = {
   completionPercentage: number;
@@ -30,7 +30,9 @@ type ActiveSessionControlDockProps = {
   onToggleMultiplierInfo: () => void;
 };
 
-export const ActiveSessionControlDock: React.FC<ActiveSessionControlDockProps> = ({
+export const ActiveSessionControlDock: React.FC<
+  ActiveSessionControlDockProps
+> = ({
   completionPercentage,
   isPaused,
   multiplierDays,
@@ -46,10 +48,16 @@ export const ActiveSessionControlDock: React.FC<ActiveSessionControlDockProps> =
   <Animated.View entering={FadeIn.delay(300)}>
     <Box px="lg" pb="xl">
       {completionPercentage >= 80 ? (
-        <Pressable onPress={onComplete}
-  accessibilityLabel={completionPercentage >= 100 ? 'Complete focus session' : 'Finish focus session early'}
-  accessibilityRole="button"
-  accessibilityHint="Ends this session and opens the completion reward screen">
+        <Pressable
+          onPress={onComplete}
+          accessibilityLabel={
+            completionPercentage >= 100
+              ? "Complete focus session"
+              : "Finish focus session early"
+          }
+          accessibilityRole="button"
+          accessibilityHint="Ends this session and opens the completion reward screen"
+        >
           <Box
             mb="md"
             px="lg"
@@ -63,17 +71,19 @@ export const ActiveSessionControlDock: React.FC<ActiveSessionControlDockProps> =
             }}
           >
             <Text variant="label" style={{ color: themeColors.success }}>
-              {completionPercentage >= 100 ? 'Complete Session' : 'Finish Early'}
+              {completionPercentage >= 100
+                ? "Complete Session"
+                : "Finish Early"}
             </Text>
           </Box>
         </Pressable>
       ) : null}
       <Box
         style={{
-          ...getPremiumCardStyle('large'),
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          ...getPremiumCardStyle("large"),
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
           borderWidth: 1,
           paddingHorizontal: 14,
           paddingVertical: 12,
@@ -81,15 +91,17 @@ export const ActiveSessionControlDock: React.FC<ActiveSessionControlDockProps> =
           borderColor: withAlpha(themeColors.border, 0.7),
         }}
       >
-        <Pressable onPress={onEnd}
-  accessibilityLabel="Quit focus session"
-  accessibilityRole="button"
-  accessibilityHint="Opens the confirmation to quit this focus session">
+        <Pressable
+          onPress={onEnd}
+          accessibilityLabel="Quit focus session"
+          accessibilityRole="button"
+          accessibilityHint="Opens the confirmation to quit this focus session"
+        >
           <Box
             style={{
               minWidth: 104,
-              alignItems: 'center',
-              justifyContent: 'center',
+              alignItems: "center",
+              justifyContent: "center",
               borderRadius: 18,
               borderWidth: 1,
               paddingHorizontal: 18,
@@ -103,29 +115,41 @@ export const ActiveSessionControlDock: React.FC<ActiveSessionControlDockProps> =
             </Text>
           </Box>
         </Pressable>
-        <Pressable onPress={onPauseResume}
-  accessibilityLabel={isPaused ? 'Resume focus timer' : 'Pause focus timer'}
-  accessibilityRole="button"
-  accessibilityHint={isPaused ? 'Restarts the active focus timer' : 'Pauses the active focus timer'}>
+        <Pressable
+          onPress={onPauseResume}
+          accessibilityLabel={
+            isPaused ? "Resume focus timer" : "Pause focus timer"
+          }
+          accessibilityRole="button"
+          accessibilityHint={
+            isPaused
+              ? "Restarts the active focus timer"
+              : "Pauses the active focus timer"
+          }
+        >
           <Box
             style={{
               width: 64,
               height: 64,
               borderRadius: 32,
-              alignItems: 'center',
-              justifyContent: 'center',
+              alignItems: "center",
+              justifyContent: "center",
               backgroundColor: phaseAccent,
             }}
           >
-            <Icon name={isPaused ? 'play' : 'minus'} size="lg" color={themeColors.inverse} />
+            <Icon
+              name={isPaused ? "play" : "minus"}
+              size="lg"
+              color={themeColors.inverse}
+            />
           </Box>
         </Pressable>
-        <Box style={{ position: 'relative' }}>
+        <Box style={{ position: "relative" }}>
           {showMultiplierInfo ? (
             <Animated.View
               entering={FadeIn.duration(180)}
               style={{
-                position: 'absolute',
+                position: "absolute",
                 right: 0,
                 bottom: 72,
                 width: 190,
@@ -142,15 +166,17 @@ export const ActiveSessionControlDock: React.FC<ActiveSessionControlDockProps> =
               </Text>
             </Animated.View>
           ) : null}
-          <Pressable onPress={onToggleMultiplierInfo}
-  accessibilityLabel="Show streak multiplier details"
-  accessibilityRole="button"
-  accessibilityHint="Explains how your current streak changes session rewards">
+          <Pressable
+            onPress={onToggleMultiplierInfo}
+            accessibilityLabel="Show streak multiplier details"
+            accessibilityRole="button"
+            accessibilityHint="Explains how your current streak changes session rewards"
+          >
             <Box
               style={{
                 minWidth: 84,
-                alignItems: 'center',
-                justifyContent: 'center',
+                alignItems: "center",
+                justifyContent: "center",
                 borderRadius: 18,
                 borderWidth: 1,
                 paddingHorizontal: 18,

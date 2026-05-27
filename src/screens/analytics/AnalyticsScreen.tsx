@@ -1,16 +1,20 @@
-import { withScreenErrorBoundary } from '../../shared/ui/components/ScreenErrorBoundary';
-import React, { useEffect, useRef } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
+import React, { useEffect, useRef } from "react";
+import { StyleSheet, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import { AnalyticsDashboard } from '../../features/analytics/components';
-import type { ExtendedRootStackParams } from '../../navigation/types';
-import { usePremiumStatus } from '../../shared/monetization';
-import { useAuthStore } from '../../store';
-import { useTheme } from '../../theme';
-import { Skeleton, SkeletonCard, SkeletonList } from '../../components/ui/Skeleton';
-import { createSheet } from '@/shared/ui/create-sheet';
+import { AnalyticsDashboard } from "../../features/analytics/components";
+import type { ExtendedRootStackParams } from "../../navigation/types";
+import { usePremiumStatus } from "../../shared/monetization";
+import { useAuthStore } from "../../store";
+import { useTheme } from "../../theme";
+import {
+  Skeleton,
+  SkeletonCard,
+  SkeletonList,
+} from "../../components/ui/Skeleton";
+import { createSheet } from "@/shared/ui/create-sheet";
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -27,9 +31,9 @@ export function AnalyticsScreen(): JSX.Element {
     }
 
     hasRedirectedRef.current = true;
-    navigation.replace('Paywall', {
-      source: 'analytics_screen',
-      gatedFeature: 'advanced_analytics',
+    navigation.replace("Paywall", {
+      source: "analytics_screen",
+      gatedFeature: "advanced_analytics",
     });
   }, [isLoading, isPremium, navigation, user]);
 
@@ -71,8 +75,8 @@ export function AnalyticsScreen(): JSX.Element {
 const styles = createSheet({
   centered: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   container: {
     flex: 1,
@@ -80,14 +84,14 @@ const styles = createSheet({
     paddingTop: 60,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 24,
   },
   statsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginBottom: 24,
   },
   chart: {
@@ -95,4 +99,4 @@ const styles = createSheet({
   },
 });
 
-export default withScreenErrorBoundary(AnalyticsScreen, 'Analytics');
+export default withScreenErrorBoundary(AnalyticsScreen, "Analytics");

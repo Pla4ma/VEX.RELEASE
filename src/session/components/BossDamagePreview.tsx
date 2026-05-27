@@ -9,10 +9,7 @@ import {
   BossIcon,
   DamageEstimate,
 } from "./BossDamagePreview.styles";
-import {
-  BossHealthBar,
-  DefeatCelebration,
-} from "./BossDamagePreview-helpers";
+import { BossHealthBar, DefeatCelebration } from "./BossDamagePreview-helpers";
 
 export interface BossDamagePreviewProps {
   bossName: string;

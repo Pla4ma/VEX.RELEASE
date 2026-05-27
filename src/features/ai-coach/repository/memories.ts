@@ -5,16 +5,16 @@
  * Replaces the in-memory Map that reset on app close.
  */
 
-import { supabase } from '../../../config/supabase';
-import { createDebugger } from '../../../utils/debug';
+import { supabase } from "../../../config/supabase";
+import { createDebugger } from "../../../utils/debug";
 import {
   CreateCoachMemoryInputSchema,
   type CoachMemory,
   type MemoryType,
-} from '../memory-schemas';
-import { mapInputToRow, mapRowToMemory } from './memory-mapper';
+} from "../memory-schemas";
+import { mapInputToRow, mapRowToMemory } from "./memory-mapper";
 
-const debug = createDebugger('ai-coach:memory-repo');
+const debug = createDebugger("ai-coach:memory-repo");
 
 function isActive(memory: CoachMemory): boolean {
   return memory.deletedAt === null;
@@ -23,18 +23,21 @@ function isActive(memory: CoachMemory): boolean {
 /**
  * Check if an evidence hash was previously deleted (conflict)
  */
-export async function hasEvidenceConflict(userId: string, evidenceHash: string): Promise<boolean> {
+export async function hasEvidenceConflict(
+  userId: string,
+  evidenceHash: string,
+): Promise<boolean> {
   if (!evidenceHash) return false;
   const { data, error } = await supabase
-    .from('coach_memories')
-    .select('id')
-    .eq('user_id', userId)
-    .eq('evidence_hash', evidenceHash)
-    .not('deleted_at', 'is', null)
+    .from("coach_memories")
+    .select("id")
+    .eq("user_id", userId)
+    .eq("evidence_hash", evidenceHash)
+    .not("deleted_at", "is", null)
     .limit(1);
 
   if (error) {
-    debug.warn('Failed to check evidence conflict:', error);
+    debug.warn("Failed to check evidence conflict:", error);
     return false;
   }
   return (data ?? []).length > 0;
@@ -43,11 +46,20 @@ export async function hasEvidenceConflict(userId: string, evidenceHash: string):
 /**
  * Create a new memory
  */
-export async function createMemory(userId: string, type: MemoryType, title: string, description: string, metadata: Record<string, unknown> = {}, evidenceHash?: string | null): Promise<CoachMemory> {
+export async function createMemory(
+  userId: string,
+  type: MemoryType,
+  title: string,
+  description: string,
+  metadata: Record<string, unknown> = {},
+  evidenceHash?: string | null,
+): Promise<CoachMemory> {
   if (evidenceHash) {
     const conflict = await hasEvidenceConflict(userId, evidenceHash);
     if (conflict) {
-      throw new Error('EvidenceConflict: memory with this evidence was previously deleted');
+      throw new Error(
+        "EvidenceConflict: memory with this evidence was previously deleted",
+      );
     }
   }
 
@@ -61,25 +73,36 @@ export async function createMemory(userId: string, type: MemoryType, title: stri
   });
   const row = mapInputToRow(input);
 
-  const { data, error } = await supabase.from('coach_memories').insert(row).select().single();
+  const { data, error } = await supabase
+    .from("coach_memories")
+    .insert(row)
+    .select()
+    .single();
 
   if (error) {
-    debug.error('Failed to create memory:', error);
+    debug.error("Failed to create memory:", error);
     throw new Error(`Failed to create memory: ${error.message}`);
   }
 
-  debug.info('Created memory: %s for user %s', type, userId);
+  debug.info("Created memory: %s for user %s", type, userId);
   return mapRowToMemory(data);
 }
 
 /**
  * Get all active (non-deleted) memories for a user
  */
-export async function getMemoriesByUser(userId: string): Promise<CoachMemory[]> {
-  const { data, error } = await supabase.from('coach_memories').select('*').eq('user_id', userId).is('deleted_at', null).order('occurred_at', { ascending: false });
+export async function getMemoriesByUser(
+  userId: string,
+): Promise<CoachMemory[]> {
+  const { data, error } = await supabase
+    .from("coach_memories")
+    .select("*")
+    .eq("user_id", userId)
+    .is("deleted_at", null)
+    .order("occurred_at", { ascending: false });
 
   if (error) {
-    debug.error('Failed to get memories:', error);
+    debug.error("Failed to get memories:", error);
     throw new Error(`Failed to get memories: ${error.message}`);
   }
 
@@ -89,11 +112,20 @@ export async function getMemoriesByUser(userId: string): Promise<CoachMemory[]> 
 /**
  * Get active memories by type for a user
  */
-export async function getMemoriesByType(userId: string, type: MemoryType): Promise<CoachMemory[]> {
-  const { data, error } = await supabase.from('coach_memories').select('*').eq('user_id', userId).eq('type', type).is('deleted_at', null).order('occurred_at', { ascending: false });
+export async function getMemoriesByType(
+  userId: string,
+  type: MemoryType,
+): Promise<CoachMemory[]> {
+  const { data, error } = await supabase
+    .from("coach_memories")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("type", type)
+    .is("deleted_at", null)
+    .order("occurred_at", { ascending: false });
 
   if (error) {
-    debug.error('Failed to get memories by type:', error);
+    debug.error("Failed to get memories by type:", error);
     throw new Error(`Failed to get memories by type: ${error.message}`);
   }
 
@@ -105,28 +137,28 @@ export async function getMemoriesByType(userId: string, type: MemoryType): Promi
  */
 export async function markMemoryReferenced(memoryId: string): Promise<void> {
   const { data: existing, error: fetchError } = await supabase
-    .from('coach_memories')
-    .select('*')
-    .eq('id', memoryId)
+    .from("coach_memories")
+    .select("*")
+    .eq("id", memoryId)
     .single();
 
   if (fetchError) {
-    debug.warn('Failed to fetch memory before reference update:', fetchError);
+    debug.warn("Failed to fetch memory before reference update:", fetchError);
     return;
   }
 
   const memory = mapRowToMemory(existing);
   const { error } = await supabase
-    .from('coach_memories')
+    .from("coach_memories")
     .update({
       referenced_count: memory.referencedCount + 1,
       last_referenced_at: new Date().toISOString(),
     })
-    .eq('id', memoryId);
+    .eq("id", memoryId);
 
   if (error) {
     // Don't throw - this is not critical
-    debug.warn('Failed to mark memory referenced:', error);
+    debug.warn("Failed to mark memory referenced:", error);
   }
 }
 
@@ -135,12 +167,15 @@ export async function markMemoryReferenced(memoryId: string): Promise<void> {
  */
 export async function deleteMemory(memoryId: string): Promise<void> {
   const { error } = await supabase
-    .from('coach_memories')
-    .update({ deleted_at: new Date().toISOString(), updated_at: new Date().toISOString() })
-    .eq('id', memoryId);
+    .from("coach_memories")
+    .update({
+      deleted_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", memoryId);
 
   if (error) {
-    debug.error('Failed to delete memory:', error);
+    debug.error("Failed to delete memory:", error);
     throw new Error(`Failed to delete memory: ${error.message}`);
   }
 }
@@ -148,11 +183,20 @@ export async function deleteMemory(memoryId: string): Promise<void> {
 /**
  * Get active memories for multiple types
  */
-export async function getMemoriesByTypes(userId: string, types: MemoryType[]): Promise<CoachMemory[]> {
-  const { data, error } = await supabase.from('coach_memories').select('*').eq('user_id', userId).in('type', types).is('deleted_at', null).order('occurred_at', { ascending: false });
+export async function getMemoriesByTypes(
+  userId: string,
+  types: MemoryType[],
+): Promise<CoachMemory[]> {
+  const { data, error } = await supabase
+    .from("coach_memories")
+    .select("*")
+    .eq("user_id", userId)
+    .in("type", types)
+    .is("deleted_at", null)
+    .order("occurred_at", { ascending: false });
 
   if (error) {
-    debug.error('Failed to get memories by types:', error);
+    debug.error("Failed to get memories by types:", error);
     throw new Error(`Failed to get memories by types: ${error.message}`);
   }
 
@@ -162,15 +206,26 @@ export async function getMemoriesByTypes(userId: string, types: MemoryType[]): P
 /**
  * Get most recent active memory of a specific type
  */
-export async function getMostRecentMemoryByType(userId: string, type: MemoryType): Promise<CoachMemory | null> {
-  const { data, error } = await supabase.from('coach_memories').select('*').eq('user_id', userId).eq('type', type).is('deleted_at', null).order('occurred_at', { ascending: false }).limit(1).single();
+export async function getMostRecentMemoryByType(
+  userId: string,
+  type: MemoryType,
+): Promise<CoachMemory | null> {
+  const { data, error } = await supabase
+    .from("coach_memories")
+    .select("*")
+    .eq("user_id", userId)
+    .eq("type", type)
+    .is("deleted_at", null)
+    .order("occurred_at", { ascending: false })
+    .limit(1)
+    .single();
 
   if (error) {
-    if (error.code === 'PGRST116') {
+    if (error.code === "PGRST116") {
       // No rows returned
       return null;
     }
-    debug.error('Failed to get most recent memory:', error);
+    debug.error("Failed to get most recent memory:", error);
     throw new Error(`Failed to get most recent memory: ${error.message}`);
   }
 
@@ -180,11 +235,19 @@ export async function getMostRecentMemoryByType(userId: string, type: MemoryType
 /**
  * Check if user has active memory of a specific type
  */
-export async function hasMemoryOfType(userId: string, type: MemoryType): Promise<boolean> {
-  const { count, error } = await supabase.from('coach_memories').select('*', { count: 'exact', head: true }).eq('user_id', userId).eq('type', type).is('deleted_at', null);
+export async function hasMemoryOfType(
+  userId: string,
+  type: MemoryType,
+): Promise<boolean> {
+  const { count, error } = await supabase
+    .from("coach_memories")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", userId)
+    .eq("type", type)
+    .is("deleted_at", null);
 
   if (error) {
-    debug.error('Failed to check memory existence:', error);
+    debug.error("Failed to check memory existence:", error);
     return false;
   }
 

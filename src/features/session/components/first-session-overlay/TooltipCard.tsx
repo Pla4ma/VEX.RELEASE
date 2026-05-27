@@ -2,14 +2,13 @@
  * Tooltip Card Component
  */
 
-import React from 'react';
-import { Pressable, View } from 'react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
-import { Text } from '../../../../components/primitives/Text';
-import { useTheme } from '../../../../theme';
-import type { TooltipCardProps } from './types';
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import React from "react";
+import { Pressable, View } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
+import { Text } from "../../../../components/primitives/Text";
+import { useTheme } from "../../../../theme";
+import type { TooltipCardProps } from "./types";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 export function TooltipCard({
   step,
@@ -36,7 +35,7 @@ export function TooltipCard({
       }}
     >
       {/* Icon */}
-      <View style={{ alignItems: 'center', marginBottom: theme.spacing[4] }}>
+      <View style={{ alignItems: "center", marginBottom: theme.spacing[4] }}>
         <Text fontSize={48}>{step.icon}</Text>
       </View>
 
@@ -70,14 +69,18 @@ export function TooltipCard({
             paddingVertical: theme.spacing[3],
             paddingHorizontal: theme.spacing[5],
             borderRadius: theme.borderRadius.lg,
-            alignItems: 'center',
+            alignItems: "center",
           }}
-
-        accessibilityLabel="Interactive control"
-        accessibilityRole="button"
-        accessibilityHint="Activates this control">
-          <Text color={theme.colors.text.inverse} fontWeight="600" fontSize={16}>
-            {isLast ? 'Got it!' : 'Next'}
+          accessibilityLabel="Interactive control"
+          accessibilityRole="button"
+          accessibilityHint="Activates this control"
+        >
+          <Text
+            color={theme.colors.text.inverse}
+            fontWeight="600"
+            fontSize={16}
+          >
+            {isLast ? "Got it!" : "Next"}
           </Text>
         </Pressable>
 
@@ -86,12 +89,12 @@ export function TooltipCard({
             onPress={onDismiss}
             style={{
               paddingVertical: theme.spacing[2],
-              alignItems: 'center',
+              alignItems: "center",
             }}
-
-          accessibilityLabel="Skip tutorial button"
-          accessibilityRole="button"
-          accessibilityHint="Activates this control">
+            accessibilityLabel="Skip tutorial button"
+            accessibilityRole="button"
+            accessibilityHint="Activates this control"
+          >
             <Text
               variant="body"
               color={theme.colors.text.secondary}

@@ -1,14 +1,16 @@
-import React from 'react';
-import { Modal } from 'react-native';
-import type BottomSheet from '@gorhom/bottom-sheet';
-import { LevelUpCelebration } from '../../../components/LevelUpCelebration';
-import { GradeRevealAnimation } from '../../../features/session-completion/components/GradeRevealAnimation';
-import { SessionReflectionSheet } from './SessionReflectionSheet';
-import { GRADE_REVEAL_COLORS } from '../../../features/session-completion/components/grade-reveal-helpers';
-import { useSessionCompleteController } from '../../../features/session-completion/hooks';
-import type { SessionSummary } from '../../../session/types';
+import React from "react";
+import { Modal } from "react-native";
+import type BottomSheet from "@gorhom/bottom-sheet";
+import { LevelUpCelebration } from "../../../components/LevelUpCelebration";
+import { GradeRevealAnimation } from "../../../features/session-completion/components/GradeRevealAnimation";
+import { SessionReflectionSheet } from "./SessionReflectionSheet";
+import { GRADE_REVEAL_COLORS } from "../../../features/session-completion/components/grade-reveal-helpers";
+import { useSessionCompleteController } from "../../../features/session-completion/hooks";
+import type { SessionSummary } from "../../../session/types";
 
-type SessionCompleteController = ReturnType<typeof useSessionCompleteController>;
+type SessionCompleteController = ReturnType<
+  typeof useSessionCompleteController
+>;
 
 interface SessionCompleteOverlaysProps {
   controller: SessionCompleteController;
@@ -31,7 +33,9 @@ export function SessionCompleteOverlays({
     <>
       {!gradeRevealed ? (
         <GradeRevealAnimation
-          gradeColor={GRADE_REVEAL_COLORS[revealedGradeLetter] ?? controller.grade.color}
+          gradeColor={
+            GRADE_REVEAL_COLORS[revealedGradeLetter] ?? controller.grade.color
+          }
           gradeLetter={revealedGradeLetter}
           onComplete={onGradeRevealComplete}
         />
@@ -42,14 +46,18 @@ export function SessionCompleteOverlays({
         animationType="fade"
         statusBarTranslucent
         visible={Boolean(controller.rewards.levelUpCelebration)}
-        onRequestClose={() => controller.rewards.actions.setLevelUpCelebration(null)}
+        onRequestClose={() =>
+          controller.rewards.actions.setLevelUpCelebration(null)
+        }
       >
         {controller.rewards.levelUpCelebration ? (
           <LevelUpCelebration
             oldLevel={controller.rewards.levelUpCelebration.oldLevel}
             newLevel={controller.rewards.levelUpCelebration.newLevel}
             rewards={controller.rewards.levelUpCelebration.rewards}
-            onDismiss={() => controller.rewards.actions.setLevelUpCelebration(null)}
+            onDismiss={() =>
+              controller.rewards.actions.setLevelUpCelebration(null)
+            }
           />
         ) : null}
       </Modal>

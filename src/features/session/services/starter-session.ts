@@ -7,8 +7,8 @@
  * @phase 4
  */
 
-import type { SessionConfig } from '../types';
-import { SessionMode } from '../../../session/modes';
+import type { SessionConfig } from "../types";
+import { SessionMode } from "../../../session/modes";
 
 export interface StarterSessionConfig {
   duration: number;
@@ -28,9 +28,10 @@ export function createStarterSessionConfig(input: {
   const { category, customDuration, isFromOnboarding = true } = input;
 
   // Default to 10 minutes, allow custom duration
-  const duration = customDuration && customDuration >= 5 && customDuration <= 30
-    ? customDuration
-    : 10;
+  const duration =
+    customDuration && customDuration >= 5 && customDuration <= 30
+      ? customDuration
+      : 10;
 
   return {
     duration: duration * 60, // Convert to seconds
@@ -43,7 +44,9 @@ export function createStarterSessionConfig(input: {
 /**
  * Converts starter session config to general session config
  */
-export function toSessionConfig(starterConfig: StarterSessionConfig): SessionConfig {
+export function toSessionConfig(
+  starterConfig: StarterSessionConfig,
+): SessionConfig {
   return {
     mode: starterConfig.mode,
     duration: starterConfig.duration,
@@ -59,8 +62,10 @@ export function toSessionConfig(starterConfig: StarterSessionConfig): SessionCon
  * Validates if a session qualifies as a starter session
  */
 export function isStarterSession(config: SessionConfig): boolean {
-  return config.mode === SessionMode.STARTER &&
-         config.metadata?.isStarterSession === true;
+  return (
+    config.mode === SessionMode.STARTER &&
+    config.metadata?.isStarterSession === true
+  );
 }
 
 /**
@@ -82,7 +87,10 @@ export function getStarterSessionSettings() {
 /**
  * Calculates starter session completion rewards
  */
-export function calculateStarterSessionRewards(config: StarterSessionConfig, completedSeconds: number) {
+export function calculateStarterSessionRewards(
+  config: StarterSessionConfig,
+  completedSeconds: number,
+) {
   const completionRate = completedSeconds / config.duration;
 
   // Generous rewards for first session
@@ -113,7 +121,7 @@ export function getStarterSessionMessage(progress: number): string {
   } else if (progress < 0.3) {
     return "You're doing amazing! Keep this rhythm going.";
   } else if (progress < 0.5) {
-    return 'Halfway there! Your focus is getting stronger.';
+    return "Halfway there! Your focus is getting stronger.";
   } else if (progress < 0.7) {
     return "Fantastic work! You're in the zone now.";
   } else if (progress < 0.9) {

@@ -1,10 +1,16 @@
 import * as Sentry from "@sentry/react-native";
 import { recordCompletionCompanionMemories } from "./companion-memory-integration";
 import { processCompletedSessionPromise } from "../companion-promise/service";
-import { buildPostSessionStoryViewModel, type PostSessionStoryViewModel } from "./story-view-model-service";
+import {
+  buildPostSessionStoryViewModel,
+  type PostSessionStoryViewModel,
+} from "./story-view-model-service";
 import { setCompletionSyncState } from "./completion-sync-state";
 import type { SessionSummary } from "../../session/types";
-import type { CompletionLedger, CompletionPersonalizationResult } from "./schemas";
+import type {
+  CompletionLedger,
+  CompletionPersonalizationResult,
+} from "./schemas";
 
 interface CompletionSideEffectInput {
   degradedSystems: string[];
@@ -19,10 +25,18 @@ interface CompletionSideEffectInput {
 export async function applyCompletionSideEffects(
   input: CompletionSideEffectInput,
 ): Promise<PostSessionStoryViewModel> {
-  const { degradedSystems, finalLedger, isPersonalBest, personalizationResult, summary, userId } = input;
+  const {
+    degradedSystems,
+    finalLedger,
+    isPersonalBest,
+    personalizationResult,
+    summary,
+    userId,
+  } = input;
 
   try {
-    const { recordRescueCompletion } = await import("../rescue-mode/completion-integration");
+    const { recordRescueCompletion } =
+      await import("../rescue-mode/completion-integration");
     await recordRescueCompletion({
       actualDurationSeconds: summary.actualDuration,
       completionPercentage: summary.completionPercentage,
@@ -30,7 +44,7 @@ export async function applyCompletionSideEffects(
       status: summary.status,
       userId,
     });
-  } catch {
+  } catch (error: unknown) {
     // rescue-mode may not exist or its dependencies unavailable — safe to skip
   }
 
@@ -44,7 +58,8 @@ export async function applyCompletionSideEffects(
   const companionPromise = await processCompletedSessionPromise(
     {
       completedAt: finalLedger.completedAt,
-      durationMinutes: Math.max(summary.actualDuration, summary.effectiveDuration) / 60,
+      durationMinutes:
+        Math.max(summary.actualDuration, summary.effectiveDuration) / 60,
       sessionId: summary.sessionId,
       sessionMode: summary.sessionMode,
       userId,
@@ -65,6 +80,10 @@ export async function applyCompletionSideEffects(
     summary,
   });
 
-  setCompletionSyncState(finalLedger.ledgerId, degradedSystems, storyViewModel.pendingSync);
+  setCompletionSyncState(
+    finalLedger.ledgerId,
+    degradedSystems,
+    storyViewModel.pendingSync,
+  );
   return storyViewModel;
 }

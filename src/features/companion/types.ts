@@ -1,4 +1,4 @@
-import { launchColors } from '@theme/tokens/launch-colors';
+import { launchColors } from "@theme/tokens/launch-colors";
 /**
  * Living Companion System - Core Types
  *
@@ -9,9 +9,28 @@ import { launchColors } from '@theme/tokens/launch-colors';
  * These map to theme tokens where possible: theme.colors.accent.*, theme.colors.semantic.*
  */
 
-export type CompanionPhase = 'EGG' | 'HATCHING' | 'YOUNG' | 'MATURE' | 'AWAKENED' | 'TRANSCENDENT';
-export type CompanionMood = 'SLEEPY' | 'CONTENT' | 'FOCUSED' | 'DETERMINED' | 'ECSTATIC' | 'STRUGGLING' | 'DANGER';
-export type CompanionElement = 'FLAME' | 'WAVE' | 'TERRA' | 'ZEPHYR' | 'VOID' | 'LUMINA';
+export type CompanionPhase =
+  | "EGG"
+  | "HATCHING"
+  | "YOUNG"
+  | "MATURE"
+  | "AWAKENED"
+  | "TRANSCENDENT";
+export type CompanionMood =
+  | "SLEEPY"
+  | "CONTENT"
+  | "FOCUSED"
+  | "DETERMINED"
+  | "ECSTATIC"
+  | "STRUGGLING"
+  | "DANGER";
+export type CompanionElement =
+  | "FLAME"
+  | "WAVE"
+  | "TERRA"
+  | "ZEPHYR"
+  | "VOID"
+  | "LUMINA";
 
 export interface CompanionState {
   id: string;
@@ -49,7 +68,12 @@ export interface CompanionState {
 }
 
 export interface CompanionSessionEvent {
-  type: 'GROWTH_PULSE' | 'MOOD_SHIFT' | 'MILESTONE' | 'PURE_FOCUS_BURST' | 'DANGER_WARN';
+  type:
+    | "GROWTH_PULSE"
+    | "MOOD_SHIFT"
+    | "MILESTONE"
+    | "PURE_FOCUS_BURST"
+    | "DANGER_WARN";
   timestamp: number;
   data: {
     progressDelta?: number;
@@ -71,10 +95,10 @@ export interface CompanionVisualConfig {
 // Evolution requirements
 export const EVOLUTION_THRESHOLDS: Record<CompanionPhase, number> = {
   EGG: 0,
-  HATCHING: 60,     // 1 hour to hatch
-  YOUNG: 300,       // 5 hours to mature
-  MATURE: 1000,     // 16 hours to awaken
-  AWAKENED: 5000,   // 83 hours to transcend
+  HATCHING: 60, // 1 hour to hatch
+  YOUNG: 300, // 5 hours to mature
+  MATURE: 1000, // 16 hours to awaken
+  AWAKENED: 5000, // 83 hours to transcend
   TRANSCENDENT: Infinity,
 };
 
@@ -90,53 +114,56 @@ export const MOOD_RULES = {
 } as const;
 
 // Element visual themes
-export const ELEMENT_THEMES: Record<CompanionElement, {
-  primary: string;
-  secondary: string;
-  glow: string;
-  particle: string;
-  ambience: string;
-}> = {
+export const ELEMENT_THEMES: Record<
+  CompanionElement,
+  {
+    primary: string;
+    secondary: string;
+    glow: string;
+    particle: string;
+    ambience: string;
+  }
+> = {
   FLAME: {
     primary: launchColors.hex_ff6b35,
     secondary: launchColors.hex_f7931e,
     glow: launchColors.hex_ff4500,
     particle: launchColors.hex_ffd700,
-    ambience: 'warm',
+    ambience: "warm",
   },
   WAVE: {
     primary: launchColors.hex_4ecdc4,
     secondary: launchColors.hex_44a08d,
     glow: launchColors.hex_00ced1,
     particle: launchColors.hex_87ceeb,
-    ambience: 'cool',
+    ambience: "cool",
   },
   TERRA: {
     primary: launchColors.hex_8b4513,
     secondary: launchColors.hex_228b22,
     glow: launchColors.hex_9acd32,
     particle: launchColors.hex_deb887,
-    ambience: 'earthy',
+    ambience: "earthy",
   },
   ZEPHYR: {
     primary: launchColors.hex_e0e0e0,
     secondary: launchColors.hex_b0c4de,
     glow: launchColors.hex_ffffff,
     particle: launchColors.hex_f0f8ff,
-    ambience: 'ethereal',
+    ambience: "ethereal",
   },
   VOID: {
     primary: launchColors.hex_2c003e,
     secondary: launchColors.hex_4b0082,
     glow: launchColors.hex_9400d3,
     particle: launchColors.hex_e6e6fa,
-    ambience: 'mysterious',
+    ambience: "mysterious",
   },
   LUMINA: {
     primary: launchColors.hex_ffd700,
     secondary: launchColors.hex_ffa500,
     glow: launchColors.hex_fffacd,
     particle: launchColors.hex_ffffff,
-    ambience: 'divine',
+    ambience: "divine",
   },
 };

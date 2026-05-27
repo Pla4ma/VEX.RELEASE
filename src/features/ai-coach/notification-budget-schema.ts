@@ -1,11 +1,11 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const NotificationPrioritySchema = z.enum([
-  'STREAK_CRITICAL',
-  'PENDING_SYNC',
-  'COACH_NEXT_ACTION',
-  'DAILY_MISSION',
-  'SQUAD_HELP',
+  "STREAK_CRITICAL",
+  "PENDING_SYNC",
+  "COACH_NEXT_ACTION",
+  "DAILY_MISSION",
+  "SQUAD_HELP",
 ]);
 
 export type NotificationPriority = z.infer<typeof NotificationPrioritySchema>;
@@ -15,13 +15,17 @@ export const NotificationBudgetSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   sentCount: z.number().int().min(0).max(2),
   maxDaily: z.number().int().min(0).max(10),
-  notificationsSent: z.array(z.object({
-    id: z.string().min(1),
-    priority: NotificationPrioritySchema,
-    sentAt: z.number().int().positive(),
-    type: z.string(),
-    content: z.string(),
-  })).max(10),
+  notificationsSent: z
+    .array(
+      z.object({
+        id: z.string().min(1),
+        priority: NotificationPrioritySchema,
+        sentAt: z.number().int().positive(),
+        type: z.string(),
+        content: z.string(),
+      }),
+    )
+    .max(10),
   quietHoursStart: z.number().int().default(22),
   quietHoursEnd: z.number().int().default(7),
   optOut: z.boolean().default(false),

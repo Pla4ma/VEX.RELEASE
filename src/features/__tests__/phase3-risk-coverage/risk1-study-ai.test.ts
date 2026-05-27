@@ -13,7 +13,10 @@ import {
 
 describe("Risk 1 — Study AI Completion Path", () => {
   it("hasActiveStudyFollowUp true when studyTarget exists", () => {
-    const ctx = extractStudyContextFromSession({ studyTarget: "Cell Biology", studyPlanId: "plan-1" });
+    const ctx = extractStudyContextFromSession({
+      studyTarget: "Cell Biology",
+      studyPlanId: "plan-1",
+    });
     expect(hasActiveStudyFollowUp(ctx)).toBe(true);
   });
 
@@ -23,15 +26,26 @@ describe("Risk 1 — Study AI Completion Path", () => {
   });
 
   it("buildPostSessionNextAction with study context returns STUDY mode review CTA", () => {
-    const summary = sess({ sessionMode: SessionMode.STUDY, sessionId: TEST_UUID, userId: TEST_UUID });
-    const result = buildPostSessionNextAction({ summary, studyContext: { studyTarget: "Cell Biology", studyPlanId: "plan-1" } });
+    const summary = sess({
+      sessionMode: SessionMode.STUDY,
+      sessionId: TEST_UUID,
+      userId: TEST_UUID,
+    });
+    const result = buildPostSessionNextAction({
+      summary,
+      studyContext: { studyTarget: "Cell Biology", studyPlanId: "plan-1" },
+    });
     expect(result.ctaLabel).toBe("Review next");
     expect(result.reason).toContain("Cell Biology");
     expect(result.routeParams.presetMode).toBe("STUDY");
   });
 
   it("buildPostSessionNextAction without study context generates recommendation", () => {
-    const summary = sess({ sessionMode: SessionMode.LIGHT_FOCUS, sessionId: TEST_UUID, userId: TEST_UUID });
+    const summary = sess({
+      sessionMode: SessionMode.LIGHT_FOCUS,
+      sessionId: TEST_UUID,
+      userId: TEST_UUID,
+    });
     const result = buildPostSessionNextAction({ summary });
     expect(result.ctaLabel).toBe("Start next focus");
     expect(result.routeParams.recommendationId).toContain(TEST_UUID);

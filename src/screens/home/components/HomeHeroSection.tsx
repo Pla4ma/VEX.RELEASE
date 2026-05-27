@@ -1,42 +1,61 @@
-import React, { useMemo } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { z } from 'zod';
+import React, { useMemo } from "react";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { z } from "zod";
 
-import { ErrorState } from '../../../components/states/ErrorState';
-import { useHomePriority } from '../../../features/home-spine/hooks';
-import type { HomePrimaryPriority, HomeStakes, ProductContext } from '../../../features/home-spine/priority-schemas';
-import { getFeatureAvailability, isFeatureAvailableForNavigation } from '../../../features/liveops-config';
-import type { HomeSurfaceMap } from '../../../features/home-experience/surface-decision-schemas';
-import type { FirstWeekExperience } from '../../../features/personalization/first-week-schemas';
-import type { ExtendedRootStackParams, SessionStackParams } from '../../../navigation/types';
-import type { HomeController } from '../hooks/home-controller-types';
-import { HomeHeroCard } from './HomeHeroCard';
+import { ErrorState } from "../../../components/states/ErrorState";
+import { useHomePriority } from "../../../features/home-spine/hooks";
+import type {
+  HomePrimaryPriority,
+  HomeStakes,
+  ProductContext,
+} from "../../../features/home-spine/priority-schemas";
+import {
+  getFeatureAvailability,
+  isFeatureAvailableForNavigation,
+} from "../../../features/liveops-config";
+import type { HomeSurfaceMap } from "../../../features/home-experience/surface-decision-schemas";
+import type { FirstWeekExperience } from "../../../features/personalization/first-week-schemas";
+import type {
+  ExtendedRootStackParams,
+  SessionStackParams,
+} from "../../../navigation/types";
+import type { HomeController } from "../hooks/home-controller-types";
+import { HomeHeroCard } from "./HomeHeroCard";
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-const SessionSetupParamsSchema = z.object({
-  presetMode: z.enum(['LIGHT_FOCUS', 'DEEP_WORK', 'SPRINT', 'STUDY']).optional(),
-  recommendationId: z.string().uuid().optional(),
-  suggestedDurationSeconds: z.number().int().positive().optional(),
-}).strict();
+const SessionSetupParamsSchema = z
+  .object({
+    presetMode: z
+      .enum(["LIGHT_FOCUS", "DEEP_WORK", "SPRINT", "STUDY"])
+      .optional(),
+    recommendationId: z.string().uuid().optional(),
+    suggestedDurationSeconds: z.number().int().positive().optional(),
+  })
+  .strict();
 
-function toSessionSetupParams(params: Record<string, unknown> | undefined): SessionStackParams['SessionSetup'] {
+function toSessionSetupParams(
+  params: Record<string, unknown> | undefined,
+): SessionStackParams["SessionSetup"] {
   return SessionSetupParamsSchema.parse(params ?? {});
 }
 
-function buildOfflineFallback(priority: HomePrimaryPriority): HomePrimaryPriority {
-  if (priority.cta.action === 'OPEN_SESSION_SETUP') {
+function buildOfflineFallback(
+  priority: HomePrimaryPriority,
+): HomePrimaryPriority {
+  if (priority.cta.action === "OPEN_SESSION_SETUP") {
     return priority;
   }
   return {
     ...priority,
     cta: {
-      action: 'OPEN_SESSION_SETUP',
-      params: { presetMode: 'DEEP_WORK', suggestedDurationSeconds: 15 * 60 },
-      text: 'Start Focus Offline',
+      action: "OPEN_SESSION_SETUP",
+      params: { presetMode: "DEEP_WORK", suggestedDurationSeconds: 15 * 60 },
+      text: "Start Focus Offline",
     },
-    reason: 'Network-only surfaces are paused right now. You can still start a clean local session.',
+    reason:
+      "Network-only surfaces are paused right now. You can still start a clean local session.",
   };
 }
 
@@ -56,7 +75,7 @@ export function HomeHeroSection({
   const productContext = useMemo<ProductContext>(() => {
     if (!surfaceMap && !firstWeekExperience) return {};
     return {
-      surfaceMap: surfaceMap as ProductContext['surfaceMap'],
+      surfaceMap: surfaceMap as ProductContext["surfaceMap"],
       firstWeekExperience: firstWeekExperience
         ? {
             bossIntensity: firstWeekExperience.bossIntensity,
@@ -65,20 +84,34 @@ export function HomeHeroSection({
             allowedHomeSurfaces: firstWeekExperience.allowedHomeSurfaces,
           }
         : undefined,
-      userStage: controller.disclosure.inputs.totalCompletedSessions === 0 ? 'new'
-        : controller.disclosure.inputs.totalCompletedSessions < 3 ? 'activating'
-        : controller.disclosure.inputs.totalCompletedSessions < 10 ? 'engaged'
-        : 'power',
-      totalCompletedSessions: controller.disclosure.inputs.totalCompletedSessions,
+      userStage:
+        controller.disclosure.inputs.totalCompletedSessions === 0
+          ? "new"
+          : controller.disclosure.inputs.totalCompletedSessions < 3
+            ? "activating"
+            : controller.disclosure.inputs.totalCompletedSessions < 10
+              ? "engaged"
+              : "power",
+      totalCompletedSessions:
+        controller.disclosure.inputs.totalCompletedSessions,
     };
-  }, [surfaceMap, firstWeekExperience, controller.disclosure.inputs.totalCompletedSessions]);
+  }, [
+    surfaceMap,
+    firstWeekExperience,
+    controller.disclosure.inputs.totalCompletedSessions,
+  ]);
 
-  const priorityQuery = useHomePriority(controller.userId, controller.disclosure.features, productContext);
+  const priorityQuery = useHomePriority(
+    controller.userId,
+    controller.disclosure.features,
+    productContext,
+  );
   const priority = priorityQuery.data?.primary ?? null;
   const stakes: HomeStakes | null = priorityQuery.data?.stakes ?? null;
-  const effectivePriority = priority && !controller.isOnline
-    ? buildOfflineFallback(priority)
-    : priority;
+  const effectivePriority =
+    priority && !controller.isOnline
+      ? buildOfflineFallback(priority)
+      : priority;
 
   const handlePrimaryPress = (): void => {
     if (!effectivePriority) {
@@ -87,51 +120,64 @@ export function HomeHeroSection({
 
     const sm = surfaceMap;
 
-    if (effectivePriority.cta.action === 'OPEN_BOSS') {
+    if (effectivePriority.cta.action === "OPEN_BOSS") {
       const bossAccess = controller.disclosure.features.boss_tab;
-      if (!isFeatureAvailableForNavigation(getFeatureAvailability(bossAccess))) {
+      if (
+        !isFeatureAvailableForNavigation(getFeatureAvailability(bossAccess))
+      ) {
         controller.openSetup();
         return;
       }
       if (sm) {
         const bossBlocked =
-          (sm.boss_compact === 'hidden' || sm.boss_compact === 'blocked') &&
-          (sm.boss_full_cta === 'hidden' || sm.boss_full_cta === 'blocked');
+          (sm.boss_compact === "hidden" || sm.boss_compact === "blocked") &&
+          (sm.boss_full_cta === "hidden" || sm.boss_full_cta === "blocked");
         if (bossBlocked) {
           controller.openSetup();
           return;
         }
       }
-      if (firstWeekExperience && firstWeekExperience.bossIntensity === 'hidden') {
+      if (
+        firstWeekExperience &&
+        firstWeekExperience.bossIntensity === "hidden"
+      ) {
         controller.openSetup();
         return;
       }
-      navigation.navigate('Boss');
+      navigation.navigate("Boss");
       return;
     }
 
-    if (effectivePriority.cta.action === 'OPEN_CHALLENGES') {
+    if (effectivePriority.cta.action === "OPEN_CHALLENGES") {
       const challengesAccess = controller.disclosure.features.challenges;
-      if (!isFeatureAvailableForNavigation(getFeatureAvailability(challengesAccess))) {
+      if (
+        !isFeatureAvailableForNavigation(
+          getFeatureAvailability(challengesAccess),
+        )
+      ) {
         controller.openSetup();
         return;
       }
       if (sm) {
         const challengesBlocked =
-          (sm.challenge_teaser === 'hidden' || sm.challenge_teaser === 'blocked') &&
-          (sm.weekly_quest === 'hidden' || sm.weekly_quest === 'blocked');
+          (sm.challenge_teaser === "hidden" ||
+            sm.challenge_teaser === "blocked") &&
+          (sm.weekly_quest === "hidden" || sm.weekly_quest === "blocked");
         if (challengesBlocked) {
           controller.openSetup();
           return;
         }
       }
-      navigation.navigate('Challenges');
+      navigation.navigate("Challenges");
       return;
     }
 
-    const params = effectivePriority.cta.params as Record<string, unknown> | undefined;
-    if (sm && params && params.presetMode === 'STUDY') {
-      const studyBlocked = sm.study_layer === 'hidden' || sm.study_layer === 'blocked';
+    const params = effectivePriority.cta.params as
+      | Record<string, unknown>
+      | undefined;
+    if (sm && params && params.presetMode === "STUDY") {
+      const studyBlocked =
+        sm.study_layer === "hidden" || sm.study_layer === "blocked";
       if (studyBlocked) {
         controller.openSetup();
         return;
@@ -139,7 +185,9 @@ export function HomeHeroSection({
     }
 
     // Zod guarantees object shape; home-controller-types accepts Record<string, unknown>
-    controller.openSetup(toSessionSetupParams(params) as Record<string, unknown>);
+    controller.openSetup(
+      toSessionSetupParams(params) as Record<string, unknown>,
+    );
   };
 
   if (priorityQuery.isError) {

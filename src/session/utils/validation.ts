@@ -1,6 +1,10 @@
 import { z } from "zod";
 import { createDebugger } from "../../utils/debug";
-import type { ValidationError, ValidationWarning, ValidationResult } from "./validation-types";
+import type {
+  ValidationError,
+  ValidationWarning,
+  ValidationResult,
+} from "./validation-types";
 import { FieldValidators } from "./field-validators";
 import {
   validateSessionStart,
@@ -8,7 +12,11 @@ import {
   validateSessionCompletion,
 } from "./session-lifecycle-validators";
 
-export type { ValidationError, ValidationWarning, ValidationResult } from "./validation-types";
+export type {
+  ValidationError,
+  ValidationWarning,
+  ValidationResult,
+} from "./validation-types";
 export { FieldValidators } from "./field-validators";
 export {
   validateSessionStart,
@@ -124,8 +132,6 @@ function performLogicalValidation(
   }
   return warnings;
 }
-
-
 
 export function formatValidationErrors(errors: ValidationError[]): string {
   return errors.map((e) => `${e.field}: ${e.message}`).join("; ");

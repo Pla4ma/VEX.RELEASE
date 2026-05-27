@@ -24,7 +24,10 @@ import {
   removeFromSyncQueue as removeFromQueue,
   getSyncQueue as getQueue,
 } from "./session-repository-sync-queue";
-import { STORAGE_KEYS, SessionStorageHelper } from "./session-repository-storage";
+import {
+  STORAGE_KEYS,
+  SessionStorageHelper,
+} from "./session-repository-storage";
 
 const debug = createDebugger("session:repository");
 
@@ -84,7 +87,9 @@ export class SessionRepository {
     if (!this.userId) return;
     try {
       await this.storage.removeString(STORAGE_KEYS.activeSession(this.userId));
-    } catch { /* ignore */ }
+    } catch (error: unknown) {
+      /* ignore */
+    }
   }
 
   async getSessionHistory(limit = 100): Promise<SessionHistoryEntry[]> {

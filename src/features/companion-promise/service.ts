@@ -1,47 +1,99 @@
-import { CompletedSessionPromiseInputSchema, CompanionPromiseHomeStateSchema, CompanionPromiseLifecycleResultSchema } from './schemas';
-import { publishPromiseCreated, publishPromiseFulfilled, publishPromiseMissed, publishPromiseRecovered } from './events';
-import { trackPromiseCreated, trackPromiseFulfilled, trackPromiseMissed, trackPromiseRecovered } from './analytics';
-import { createPromise, dismissRecoveryPromise, fulfillPromise, getPendingPromise, getRecentPromises, markPromiseMissed, replacePromise } from './repository';
-import type { CompanionPromise, CompanionPromiseHomeState, CompanionPromiseLifecycleResult, CompletedSessionPromiseInput } from './types';
+import {
+  CompletedSessionPromiseInputSchema,
+  CompanionPromiseHomeStateSchema,
+  CompanionPromiseLifecycleResultSchema,
+} from "./schemas";
+import {
+  publishPromiseCreated,
+  publishPromiseFulfilled,
+  publishPromiseMissed,
+  publishPromiseRecovered,
+} from "./events";
+import {
+  trackPromiseCreated,
+  trackPromiseFulfilled,
+  trackPromiseMissed,
+  trackPromiseRecovered,
+} from "./analytics";
+import {
+  createPromise,
+  dismissRecoveryPromise,
+  fulfillPromise,
+  getPendingPromise,
+  getRecentPromises,
+  markPromiseMissed,
+  replacePromise,
+} from "./repository";
+import type {
+  CompanionPromise,
+  CompanionPromiseHomeState,
+  CompanionPromiseLifecycleResult,
+  CompletedSessionPromiseInput,
+} from "./types";
 
 const MinimumPromiseMinutes = 5;
 
 function toDateKey(timestamp: number, timeZone: string): string {
-  const parts = new Intl.DateTimeFormat('en-CA', {
-    day: '2-digit',
-    month: '2-digit',
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    day: "2-digit",
+    month: "2-digit",
     timeZone,
-    year: 'numeric',
+    year: "numeric",
   }).formatToParts(new Date(timestamp));
   const map = Object.fromEntries(parts.map((part) => [part.type, part.value]));
   return `${map.year}-${map.month}-${map.day}`;
 }
 
-function mapSessionModeToTargetMode(sessionMode: string): CompanionPromise['targetMode'] {
-  if (sessionMode === 'RECOVERY') { return 'RECOVERY'; }
-  if (sessionMode === 'STUDY') { return 'STUDY'; }
-  if (sessionMode === 'CHALLENGE') { return 'BOSS_PREP'; }
-  if (sessionMode === 'CREATIVE') { return 'HABIT_BUILD'; }
-  return 'FOCUS';
+function mapSessionModeToTargetMode(
+  sessionMode: string,
+): CompanionPromise["targetMode"] {
+  if (sessionMode === "RECOVERY") {
+    return "RECOVERY";
+  }
+  if (sessionMode === "STUDY") {
+    return "STUDY";
+  }
+  if (sessionMode === "CHALLENGE") {
+    return "BOSS_PREP";
+  }
+  if (sessionMode === "CREATIVE") {
+    return "HABIT_BUILD";
+  }
+  return "FOCUS";
 }
 
-function buildNextPromiseInput(input: CompletedSessionPromiseInput, timeZone: string) {
-  const targetDate = toDateKey(input.completedAt + 24 * 60 * 60 * 1000, timeZone);
+function buildNextPromiseInput(
+  input: CompletedSessionPromiseInput,
+  timeZone: string,
+) {
+  const targetDate = toDateKey(
+    input.completedAt + 24 * 60 * 60 * 1000,
+    timeZone,
+  );
   return {
     createdAt: new Date(input.completedAt).toISOString(),
     sourceSessionId: input.sessionId,
     targetDate,
-    targetDurationMinutes: Math.max(MinimumPromiseMinutes, Math.round(input.durationMinutes)),
+    targetDurationMinutes: Math.max(
+      MinimumPromiseMinutes,
+      Math.round(input.durationMinutes),
+    ),
     targetMode: mapSessionModeToTargetMode(input.sessionMode),
     userId: input.userId,
   };
 }
 
-function isMatchOrBetter(input: CompletedSessionPromiseInput, promise: CompanionPromise, timeZone: string): boolean {
+function isMatchOrBetter(
+  input: CompletedSessionPromiseInput,
+  promise: CompanionPromise,
+  timeZone: string,
+): boolean {
   const completedDate = toDateKey(input.completedAt, timeZone);
-  return completedDate === promise.targetDate
-    && input.durationMinutes >= promise.targetDurationMinutes
-    && mapSessionModeToTargetMode(input.sessionMode) === promise.targetMode;
+  return (
+    completedDate === promise.targetDate &&
+    input.durationMinutes >= promise.targetDurationMinutes &&
+    mapSessionModeToTargetMode(input.sessionMode) === promise.targetMode
+  );
 }
 
 async function markExpiredPromise(
@@ -70,25 +122,45 @@ export async function processCompletedSessionPromise(
   let activePendingPromise = missedPromise ? null : pendingPromise;
   let fulfilledPromise: CompanionPromise | null = null;
 
-  if (activePendingPromise && isMatchOrBetter(parsed, activePendingPromise, timeZone)) {
-    fulfilledPromise = await fulfillPromise(activePendingPromise.id, nowIso, parsed.sessionId);
+  if (
+    activePendingPromise &&
+    isMatchOrBetter(parsed, activePendingPromise, timeZone)
+  ) {
+    fulfilledPromise = await fulfillPromise(
+      activePendingPromise.id,
+      nowIso,
+      parsed.sessionId,
+    );
     publishPromiseFulfilled(fulfilledPromise);
     trackPromiseFulfilled(fulfilledPromise);
     activePendingPromise = null;
   }
 
   if (parsed.durationMinutes < MinimumPromiseMinutes) {
-    return CompanionPromiseLifecycleResultSchema.parse({ createdPromise: null, fulfilledPromise, missedPromise });
+    return CompanionPromiseLifecycleResultSchema.parse({
+      createdPromise: null,
+      fulfilledPromise,
+      missedPromise,
+    });
   }
 
-  if (activePendingPromise && activePendingPromise.sourceSessionId !== parsed.sessionId) {
+  if (
+    activePendingPromise &&
+    activePendingPromise.sourceSessionId !== parsed.sessionId
+  ) {
     await replacePromise(activePendingPromise.id);
   }
 
-  const createdPromise = await createPromise(buildNextPromiseInput(parsed, timeZone));
+  const createdPromise = await createPromise(
+    buildNextPromiseInput(parsed, timeZone),
+  );
   publishPromiseCreated(createdPromise);
   trackPromiseCreated(createdPromise);
-  return CompanionPromiseLifecycleResultSchema.parse({ createdPromise, fulfilledPromise, missedPromise });
+  return CompanionPromiseLifecycleResultSchema.parse({
+    createdPromise,
+    fulfilledPromise,
+    missedPromise,
+  });
 }
 
 export async function getHomePromiseState(
@@ -102,31 +174,57 @@ export async function getHomePromiseState(
   const pendingPromise = await getPendingPromise(userId);
   const resolvedMiss = await markExpiredPromise(pendingPromise, today, nowIso);
   if (resolvedMiss) {
-    return CompanionPromiseHomeStateSchema.parse({ kind: 'missed', promise: resolvedMiss, showOfflineBanner: !isOnline });
+    return CompanionPromiseHomeStateSchema.parse({
+      kind: "missed",
+      promise: resolvedMiss,
+      showOfflineBanner: !isOnline,
+    });
   }
   if (pendingPromise) {
-    return CompanionPromiseHomeStateSchema.parse({ kind: 'pending', promise: pendingPromise, showOfflineBanner: !isOnline });
+    return CompanionPromiseHomeStateSchema.parse({
+      kind: "pending",
+      promise: pendingPromise,
+      showOfflineBanner: !isOnline,
+    });
   }
   const latestPromise = (await getRecentPromises(userId, 3))[0] ?? null;
   if (!latestPromise) {
-    return CompanionPromiseHomeStateSchema.parse({ kind: isOnline ? 'hidden' : 'offline', showOfflineBanner: !isOnline });
+    return CompanionPromiseHomeStateSchema.parse({
+      kind: isOnline ? "hidden" : "offline",
+      showOfflineBanner: !isOnline,
+    });
   }
-  if (latestPromise.status === 'fulfilled') {
-    return CompanionPromiseHomeStateSchema.parse({ kind: 'fulfilled', promise: latestPromise, showOfflineBanner: !isOnline });
+  if (latestPromise.status === "fulfilled") {
+    return CompanionPromiseHomeStateSchema.parse({
+      kind: "fulfilled",
+      promise: latestPromise,
+      showOfflineBanner: !isOnline,
+    });
   }
-  if (latestPromise.status === 'missed') {
-    return CompanionPromiseHomeStateSchema.parse({ kind: 'missed', promise: latestPromise, showOfflineBanner: !isOnline });
+  if (latestPromise.status === "missed") {
+    return CompanionPromiseHomeStateSchema.parse({
+      kind: "missed",
+      promise: latestPromise,
+      showOfflineBanner: !isOnline,
+    });
   }
-  return CompanionPromiseHomeStateSchema.parse({ kind: isOnline ? 'hidden' : 'offline', showOfflineBanner: !isOnline });
+  return CompanionPromiseHomeStateSchema.parse({
+    kind: isOnline ? "hidden" : "offline",
+    showOfflineBanner: !isOnline,
+  });
 }
 
-export async function keepPromise(promise: CompanionPromise): Promise<CompanionPromise> {
+export async function keepPromise(
+  promise: CompanionPromise,
+): Promise<CompanionPromise> {
   const dismissed = await dismissRecoveryPromise(promise.id);
   publishPromiseRecovered(dismissed);
   trackPromiseRecovered(dismissed);
   return dismissed;
 }
 
-export async function dismissRecovery(promiseId: string): Promise<CompanionPromise> {
+export async function dismissRecovery(
+  promiseId: string,
+): Promise<CompanionPromise> {
   return dismissRecoveryPromise(promiseId);
 }

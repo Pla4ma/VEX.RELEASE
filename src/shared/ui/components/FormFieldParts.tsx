@@ -1,8 +1,8 @@
-import React from 'react';
-import { View, type ViewStyle } from 'react-native';
+import React from "react";
+import { View, type ViewStyle } from "react-native";
 
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
 
 export interface FormSectionProps {
   title?: string;
@@ -11,15 +11,30 @@ export interface FormSectionProps {
   style?: ViewStyle;
 }
 
-export function FormSection({ title, subtitle, children, style }: FormSectionProps): JSX.Element {
+export function FormSection({
+  title,
+  subtitle,
+  children,
+  style,
+}: FormSectionProps): JSX.Element {
   const { theme } = useTheme();
   return (
     <View style={[{ marginBottom: theme.spacing[6] }, style]}>
       {title || subtitle ? (
         <View style={{ marginBottom: theme.spacing[4] }}>
-          {title ? <Text color="text.primary" mb="xs" variant="h4">{title}</Text> : null}
-          {subtitle ? <Text color="text.secondary" mb="md" variant="bodySmall">{subtitle}</Text> : null}
-          <View style={{ backgroundColor: theme.colors.semantic.border, height: 1 }} />
+          {title ? (
+            <Text color="text.primary" mb="xs" variant="h4">
+              {title}
+            </Text>
+          ) : null}
+          {subtitle ? (
+            <Text color="text.secondary" mb="md" variant="bodySmall">
+              {subtitle}
+            </Text>
+          ) : null}
+          <View
+            style={{ backgroundColor: theme.colors.semantic.border, height: 1 }}
+          />
         </View>
       ) : null}
       <View style={{ gap: theme.spacing[3] }}>{children}</View>
@@ -42,8 +57,8 @@ export function InputGroup({
     <View
       style={[
         {
-          alignItems: inline ? 'flex-start' : undefined,
-          flexDirection: inline ? 'row' : 'column',
+          alignItems: inline ? "flex-start" : undefined,
+          flexDirection: inline ? "row" : "column",
           gap,
         },
         style,

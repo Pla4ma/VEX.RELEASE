@@ -1,13 +1,13 @@
-import React from 'react';
-import { View } from 'react-native';
-import { FlashList, type ListRenderItem } from '@shopify/flash-list';
-import { Badge } from '../../../components/Badge';
-import { Box, Card, Text } from '../../../components/primitives';
-import { ErrorState } from '../../../components/states/ErrorState';
-import { Skeleton } from '../../../components/ui/Skeleton';
-import { usePersonalBests } from '../../../features/personal-bests/hooks';
-import type { PersonalBest } from '../../../features/personal-bests/types';
-import { useTheme } from '../../../theme';
+import React from "react";
+import { View } from "react-native";
+import { FlashList, type ListRenderItem } from "@shopify/flash-list";
+import { Badge } from "../../../components/Badge";
+import { Box, Card, Text } from "../../../components/primitives";
+import { ErrorState } from "../../../components/states/ErrorState";
+import { Skeleton } from "../../../components/ui/Skeleton";
+import { usePersonalBests } from "../../../features/personal-bests/hooks";
+import type { PersonalBest } from "../../../features/personal-bests/types";
+import { useTheme } from "../../../theme";
 
 const ESTIMATED_ITEM_SIZE = 88;
 
@@ -16,16 +16,19 @@ function formatMode(mode: string): string {
     .toLowerCase()
     .split(/[_\s-]+/)
     .filter(Boolean)
-    .map((part) => `${part[0]?.toUpperCase() ?? ''}${part.slice(1)}`)
-    .join(' ');
+    .map((part) => `${part[0]?.toUpperCase() ?? ""}${part.slice(1)}`)
+    .join(" ");
 }
 
-function formatDuration(bucket: PersonalBest['durationBucket']): string {
-  return bucket === '60+' ? '60+ min' : `${bucket} min`;
+function formatDuration(bucket: PersonalBest["durationBucket"]): string {
+  return bucket === "60+" ? "60+ min" : `${bucket} min`;
 }
 
 function formatDate(value: string): string {
-  return new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  return new Date(value).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
 }
 
 function PersonalBestCard({ item }: { item: PersonalBest }): JSX.Element {
@@ -35,9 +38,16 @@ function PersonalBestCard({ item }: { item: PersonalBest }): JSX.Element {
     <Card
       accessibilityLabel={label}
       size="md"
-      style={{ backgroundColor: theme.colors.background.secondary, marginBottom: theme.spacing[3] }}
+      style={{
+        backgroundColor: theme.colors.background.secondary,
+        marginBottom: theme.spacing[3],
+      }}
     >
-      <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+      <Box
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Box flex={1}>
           <Text variant="h4" color="text.primary">
             {formatMode(item.sessionMode)}
@@ -60,20 +70,39 @@ function PersonalBestCard({ item }: { item: PersonalBest }): JSX.Element {
 function PersonalBestsSkeleton(): JSX.Element {
   const { theme } = useTheme();
   return (
-    <Card size="lg" style={{ backgroundColor: theme.colors.background.secondary }}>
-      <Skeleton width="44%" height={theme.spacing[5]} borderRadius={theme.borderRadius.md} />
+    <Card
+      size="lg"
+      style={{ backgroundColor: theme.colors.background.secondary }}
+    >
+      <Skeleton
+        width="44%"
+        height={theme.spacing[5]}
+        borderRadius={theme.borderRadius.md}
+      />
       <Box mt="md" gap="sm">
-        <Skeleton height={theme.spacing[12]} borderRadius={theme.borderRadius.lg} />
-        <Skeleton height={theme.spacing[12]} borderRadius={theme.borderRadius.lg} />
+        <Skeleton
+          height={theme.spacing[12]}
+          borderRadius={theme.borderRadius.lg}
+        />
+        <Skeleton
+          height={theme.spacing[12]}
+          borderRadius={theme.borderRadius.lg}
+        />
       </Box>
     </Card>
   );
 }
 
-export function PersonalBestsGrid({ userId }: { userId: string | null }): JSX.Element {
+export function PersonalBestsGrid({
+  userId,
+}: {
+  userId: string | null;
+}): JSX.Element {
   const { theme } = useTheme();
   const query = usePersonalBests(userId);
-  const renderItem: ListRenderItem<PersonalBest> = ({ item }) => <PersonalBestCard item={item} />;
+  const renderItem: ListRenderItem<PersonalBest> = ({ item }) => (
+    <PersonalBestCard item={item} />
+  );
   if (query.isPending) {
     return <PersonalBestsSkeleton />;
   }
@@ -88,8 +117,13 @@ export function PersonalBestsGrid({ userId }: { userId: string | null }): JSX.El
   }
   if (query.data.length === 0) {
     return (
-      <Card size="lg" style={{ backgroundColor: theme.colors.background.secondary }}>
-        <Text variant="h4" color="text.primary">Personal bests</Text>
+      <Card
+        size="lg"
+        style={{ backgroundColor: theme.colors.background.secondary }}
+      >
+        <Text variant="h4" color="text.primary">
+          Personal bests
+        </Text>
         <Text variant="body" color="text.secondary" mt="sm">
           Complete a session to set your first personal best.
         </Text>
@@ -97,7 +131,14 @@ export function PersonalBestsGrid({ userId }: { userId: string | null }): JSX.El
     );
   }
   return (
-    <View style={{ height: Math.max(theme.spacing[24] * 2, query.data.length * ESTIMATED_ITEM_SIZE) }}>
+    <View
+      style={{
+        height: Math.max(
+          theme.spacing[24] * 2,
+          query.data.length * ESTIMATED_ITEM_SIZE,
+        ),
+      }}
+    >
       <FlashList
         data={query.data}
         estimatedItemSize={ESTIMATED_ITEM_SIZE}

@@ -4,8 +4,8 @@
  * Returns network connectivity status.
  */
 
-import { useMemo } from 'react';
-import { useNetInfo } from '@react-native-community/netinfo';
+import { useMemo } from "react";
+import { useNetInfo } from "@react-native-community/netinfo";
 
 export interface NetworkStatus {
   isConnected: boolean;

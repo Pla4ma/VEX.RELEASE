@@ -1,27 +1,33 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { ScrollView } from 'react-native';
-import BottomSheet from '@gorhom/bottom-sheet';
-import Animated, { FadeIn } from 'react-native-reanimated';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { ScrollView } from "react-native";
+import BottomSheet from "@gorhom/bottom-sheet";
+import Animated, { FadeIn } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { sessionComplete } from '../../../utils/haptics';
-import { type CompletionSurface, resolveCompletionExperiencePolicy } from '../../../features/session-completion/completion-experience-policy';
-import type { SessionCompletionConsequences } from '../../../features/session-completion/story-consequence-service';
-import { useSessionCompleteController } from '../../../features/session-completion/hooks';
-import type { SessionSummary } from '../../../session/types';
-import { useTomorrowPreviewForSession } from '../../../features/home-spine/hooks';
-import { useContractForSession, useReflectOnContract } from '../../../features/focus-contract/hooks';
-import type { ReflectionStatus } from '../../../features/focus-contract/types';
-import { saveTomorrowPreview } from '../../../features/home-spine/tomorrowPreviewService';
-import { useFeatureAccess } from '../../../features/liveops-config';
-import { useOnboardingStore } from '../../../features/onboarding/store';
-import { usePremiumStatus } from '../../../shared/monetization';
+import { sessionComplete } from "../../../utils/haptics";
+import {
+  type CompletionSurface,
+  resolveCompletionExperiencePolicy,
+} from "../../../features/session-completion/completion-experience-policy";
+import type { SessionCompletionConsequences } from "../../../features/session-completion/story-consequence-service";
+import { useSessionCompleteController } from "../../../features/session-completion/hooks";
+import type { SessionSummary } from "../../../session/types";
+import { useTomorrowPreviewForSession } from "../../../features/home-spine/hooks";
+import {
+  useContractForSession,
+  useReflectOnContract,
+} from "../../../features/focus-contract/hooks";
+import type { ReflectionStatus } from "../../../features/focus-contract/types";
+import { saveTomorrowPreview } from "../../../features/home-spine/tomorrowPreviewService";
+import { useFeatureAccess } from "../../../features/liveops-config";
+import { useOnboardingStore } from "../../../features/onboarding/store";
+import { usePremiumStatus } from "../../../shared/monetization";
 
-import { SessionCompleteHeroSection } from './SessionCompleteHeroSection';
-import { SessionCompleteRewardsPhase } from './SessionCompleteRewardsPhase';
-import { SessionCompleteNextSteps } from './SessionCompleteNextSteps';
-import { SessionCompleteOverlays } from './SessionCompleteOverlays';
-import { SessionContractReflectionCard } from './SessionContractReflectionCard';
+import { SessionCompleteHeroSection } from "./SessionCompleteHeroSection";
+import { SessionCompleteRewardsPhase } from "./SessionCompleteRewardsPhase";
+import { SessionCompleteNextSteps } from "./SessionCompleteNextSteps";
+import { SessionCompleteOverlays } from "./SessionCompleteOverlays";
+import { SessionContractReflectionCard } from "./SessionContractReflectionCard";
 
 type SessionCompleteContentProps = {
   sessionId: string;
@@ -40,7 +46,9 @@ export function SessionCompleteContent({
   const controller = useSessionCompleteController({ sessionId, summary });
   const contractQuery = useContractForSession(sessionId);
   const featureAccess = useFeatureAccess();
-  const motivationProfile = useOnboardingStore((state) => state.motivationProfile);
+  const motivationProfile = useOnboardingStore(
+    (state) => state.motivationProfile,
+  );
   const primaryGoal = useOnboardingStore((state) => state.goal);
   const premiumStatus = usePremiumStatus();
   const reflectContract = useReflectOnContract();
@@ -54,22 +62,24 @@ export function SessionCompleteContent({
       study: featureAccess.features.content_study.isVisible,
     },
     firstWeekStage: featureAccess.stage,
-    motivationStyle: motivationProfile?.primary ?? 'calm',
-    premiumState: premiumStatus.isPremium ? 'premium' : 'free',
+    motivationStyle: motivationProfile?.primary ?? "calm",
+    premiumState: premiumStatus.isPremium ? "premium" : "free",
     primaryGoal,
     sessionMode: summary.sessionMode,
     summary,
   });
-  const revealedGradeLetter = controller.grade.letter === 'F' ? 'D' : controller.grade.letter;
+  const revealedGradeLetter =
+    controller.grade.letter === "F" ? "D" : controller.grade.letter;
   const isHidden = useCallback(
-    (surface: CompletionSurface) => policy.hiddenCompletionSurfaces.includes(surface),
+    (surface: CompletionSurface) =>
+      policy.hiddenCompletionSurfaces.includes(surface),
     [policy.hiddenCompletionSurfaces],
   );
 
   const tomorrowPreview = useTomorrowPreviewForSession(
-    controller.userId ?? '',
+    controller.userId ?? "",
     {
-      userId: controller.userId ?? '',
+      userId: controller.userId ?? "",
       currentStreakDays: summary.streakDays ?? 0,
       streakWillContinue: summary.streakMaintained,
       bossData: consequences?.boss
@@ -79,7 +89,7 @@ export function SessionCompleteContent({
             canDefeatTomorrow: consequences.boss.healthAfter <= 25,
           }
         : null,
-    }
+    },
   );
 
   useEffect(() => {
@@ -96,55 +106,62 @@ export function SessionCompleteContent({
     setGradeRevealed(true);
   }, []);
 
-  const handleReflectContract = useCallback((status: ReflectionStatus) => {
-    if (!contractQuery.contract) {
-      return;
-    }
-    reflectContract.mutate({ contract: contractQuery.contract, status });
-  }, [contractQuery.contract, reflectContract]);
+  const handleReflectContract = useCallback(
+    (status: ReflectionStatus) => {
+      if (!contractQuery.contract) {
+        return;
+      }
+      reflectContract.mutate({ contract: contractQuery.contract, status });
+    },
+    [contractQuery.contract, reflectContract],
+  );
 
   return (
     <Animated.View
       entering={FadeIn.duration(250)}
-      style={{ backgroundColor: controller.theme.colors.background.primary, flex: 1 }}
+      style={{
+        backgroundColor: controller.theme.colors.background.primary,
+        flex: 1,
+      }}
     >
       {gradeRevealed ? (
         <ScrollView
           ref={controller.scrollRef}
           contentContainerStyle={{
-            paddingBottom: controller.theme.spacing[20] + controller.theme.spacing[12],
+            paddingBottom:
+              controller.theme.spacing[20] + controller.theme.spacing[12],
             paddingTop: insets.top + controller.theme.spacing[5],
           }}
           showsVerticalScrollIndicator={false}
         >
-            {!isHidden('contract_reflection_card') ? (
-              <SessionContractReflectionCard
-                contract={contractQuery.contract}
-                isPending={reflectContract.isPending}
-                onReflect={handleReflectContract}
-              />
-            ) : null}
-
-            <SessionCompleteHeroSection
-              controller={controller}
-              summary={summary}
+          {!isHidden("contract_reflection_card") ? (
+            <SessionContractReflectionCard
+              contract={contractQuery.contract}
+              isPending={reflectContract.isPending}
+              onReflect={handleReflectContract}
             />
+          ) : null}
 
-            <SessionCompleteRewardsPhase
-              controller={controller}
-              summary={summary}
-              sessionId={sessionId}
-              policy={policy}
-              consequences={consequences}
-            />
+          <SessionCompleteHeroSection
+            controller={controller}
+            summary={summary}
+          />
 
-            <SessionCompleteNextSteps
-              controller={controller}
-              tomorrowPreview={tomorrowPreview}
-              bottomInset={Math.max(insets.bottom, controller.theme.spacing[4])}
-              onShare={undefined}
-              onOpenReflection={() => bottomSheetRef.current?.snapToIndex(0)}
-            />
+          <SessionCompleteRewardsPhase
+            controller={controller}
+            summary={summary}
+            sessionId={sessionId}
+            policy={policy}
+            consequences={consequences}
+          />
+
+          <SessionCompleteNextSteps
+            controller={controller}
+            tomorrowPreview={tomorrowPreview}
+            bottomInset={Math.max(insets.bottom, controller.theme.spacing[4])}
+            onShare={undefined}
+            onOpenReflection={() => bottomSheetRef.current?.snapToIndex(0)}
+          />
         </ScrollView>
       ) : null}
 

@@ -3,7 +3,7 @@
  */
 
 export interface FeedEventDefinitions {
-  'feed:item_created': {
+  "feed:item_created": {
     itemId?: string;
     userId: string;
     type: string;
@@ -11,17 +11,17 @@ export interface FeedEventDefinitions {
     visibility?: string;
     metadata?: Record<string, unknown>;
   };
-  'feed:item_viewed': { itemId: string; viewerId: string };
-  'feed:reaction_added': {
+  "feed:item_viewed": { itemId: string; viewerId: string };
+  "feed:reaction_added": {
     itemId: string;
     userId: string;
     reactionType: string;
   };
-  'feed:reaction_removed': {
+  "feed:reaction_removed": {
     itemId: string;
     userId: string;
     reactionType: string;
   };
-  'feed:comment_added': { itemId: string; userId: string; commentId: string };
-  'feed:item_shared': { itemId: string; userId: string };
+  "feed:comment_added": { itemId: string; userId: string; commentId: string };
+  "feed:item_shared": { itemId: string; userId: string };
 }

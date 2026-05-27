@@ -1,11 +1,15 @@
-import React, { useState, useMemo } from 'react';
-import { Pressable } from 'react-native';
-import Animated, { FadeIn, FadeInUp, Layout } from 'react-native-reanimated';
-import { Box } from '../../../components/primitives/Box';
-import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { ChallengesWidgetSkeleton, ChallengesErrorState, ChallengesEmptyState } from './TodaysChallengesStates';
+import React, { useState, useMemo } from "react";
+import { Pressable } from "react-native";
+import Animated, { FadeIn, FadeInUp, Layout } from "react-native-reanimated";
+import { Box } from "../../../components/primitives/Box";
+import { Button } from "../../../components/primitives/Button";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import {
+  ChallengesWidgetSkeleton,
+  ChallengesErrorState,
+  ChallengesEmptyState,
+} from "./TodaysChallengesStates";
 export interface ChallengeItem {
   id: string;
   title: string;
@@ -13,7 +17,7 @@ export interface ChallengeItem {
   currentProgress: number;
   targetProgress: number;
   rewardAmount: number;
-  rewardType: 'XP' | 'COINS' | 'GEMS';
+  rewardType: "XP" | "COINS" | "GEMS";
   isCompleted: boolean;
   isClaimed: boolean;
   timeRemainingMinutes: number;
@@ -32,27 +36,49 @@ export interface TodaysChallengesWidgetProps {
   /** Retry handler for error state */
   onRetry?: () => void;
 }
-function ChallengeProgressRow({ challenge, onClaim }: { challenge: ChallengeItem; onClaim?: (id: string) => void }): JSX.Element {
+function ChallengeProgressRow({
+  challenge,
+  onClaim,
+}: {
+  challenge: ChallengeItem;
+  onClaim?: (id: string) => void;
+}): JSX.Element {
   const { theme } = useTheme();
-  const progressPercent = Math.min(100, (challenge.currentProgress / challenge.targetProgress) * 100);
+  const progressPercent = Math.min(
+    100,
+    (challenge.currentProgress / challenge.targetProgress) * 100,
+  );
   const getRewardIcon = () => {
     switch (challenge.rewardType) {
-      case 'XP':
-        return '⭐';
-      case 'GEMS':
-        return '💎';
-      case 'COINS':
-        return '🪙';
+      case "XP":
+        return "⭐";
+      case "GEMS":
+        return "💎";
+      case "COINS":
+        return "🪙";
       default:
-        return '🎁';
+        return "🎁";
     }
   };
   return (
     <Box gap="xs">
       {/* Title and reward */}
-      <Box flexDirection="row" justifyContent="space-between" alignItems="center">
-        <Text variant="bodySmall" color={challenge.isCompleted ? 'success.DEFAULT' : 'text.primary'} fontWeight={challenge.isCompleted ? '600' : '400'} style={challenge.isClaimed ? { textDecorationLine: 'line-through', opacity: 0.6 } : undefined}>
-          {challenge.isCompleted ? '✓ ' : ''}
+      <Box
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Text
+          variant="bodySmall"
+          color={challenge.isCompleted ? "success.DEFAULT" : "text.primary"}
+          fontWeight={challenge.isCompleted ? "600" : "400"}
+          style={
+            challenge.isClaimed
+              ? { textDecorationLine: "line-through", opacity: 0.6 }
+              : undefined
+          }
+        >
+          {challenge.isCompleted ? "✓ " : ""}
           {challenge.title}
         </Text>
         <Box flexDirection="row" alignItems="center" gap="xs">
@@ -63,24 +89,56 @@ function ChallengeProgressRow({ challenge, onClaim }: { challenge: ChallengeItem
         </Box>
       </Box>
       {/* Progress bar */}
-      <Box height={6} borderRadius="full" bg={theme.colors.background.tertiary} overflow="hidden">
-        <Box height="100%" width={`${progressPercent}%`} borderRadius="full" bg={challenge.isCompleted ? theme.colors.success.DEFAULT : theme.colors.primary[500]} />
+      <Box
+        height={6}
+        borderRadius="full"
+        bg={theme.colors.background.tertiary}
+        overflow="hidden"
+      >
+        <Box
+          height="100%"
+          width={`${progressPercent}%`}
+          borderRadius="full"
+          bg={
+            challenge.isCompleted
+              ? theme.colors.success.DEFAULT
+              : theme.colors.primary[500]
+          }
+        />
       </Box>
       {/* Progress text and claim button */}
-      <Box flexDirection="row" justifyContent="space-between" alignItems="center">
+      <Box
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
         <Text variant="caption" color="text.tertiary">
           {challenge.currentProgress}/{challenge.targetProgress}
           {challenge.isCompleted && !challenge.isClaimed && (
             <Text variant="caption" color="success.DEFAULT" fontWeight="600">
-              {' '}
+              {" "}
               · Ready to claim!
             </Text>
           )}
         </Text>
         {challenge.isCompleted && !challenge.isClaimed && onClaim && (
-          <Pressable onPress={() => onClaim(challenge.id)} accessibilityLabel="Claim button" accessibilityRole="button" accessibilityHint="Activates this control">
-            <Box px="sm" py="xs" borderRadius="full" bg={theme.colors.success[500]}>
-              <Text variant="caption" color={theme.colors.text.inverse} fontWeight="600">
+          <Pressable
+            onPress={() => onClaim(challenge.id)}
+            accessibilityLabel="Claim button"
+            accessibilityRole="button"
+            accessibilityHint="Activates this control"
+          >
+            <Box
+              px="sm"
+              py="xs"
+              borderRadius="full"
+              bg={theme.colors.success[500]}
+            >
+              <Text
+                variant="caption"
+                color={theme.colors.text.inverse}
+                fontWeight="600"
+              >
                 Claim
               </Text>
             </Box>
@@ -93,25 +151,60 @@ function ChallengeProgressRow({ challenge, onClaim }: { challenge: ChallengeItem
 /**
  * Main challenges widget component
  */
-export function TodaysChallengesWidget({ challenges, isLoading = false, error = null, onViewAll, onClaimReward, onRetry }: TodaysChallengesWidgetProps): JSX.Element {
+export function TodaysChallengesWidget({
+  challenges,
+  isLoading = false,
+  error = null,
+  onViewAll,
+  onClaimReward,
+  onRetry,
+}: TodaysChallengesWidgetProps): JSX.Element {
   const { theme } = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);
   const stats = useMemo(() => {
     const completed = challenges.filter((c) => c.isCompleted).length;
-    const claimable = challenges.filter((c) => c.isCompleted && !c.isClaimed).length;
+    const claimable = challenges.filter(
+      (c) => c.isCompleted && !c.isClaimed,
+    ).length;
     return { completed, total: challenges.length, claimable };
   }, [challenges]);
   if (isLoading) {
     return <ChallengesWidgetSkeleton />;
   }
   return (
-    <Animated.View entering={FadeInUp.duration(400).delay(300)} layout={Layout.springify()}>
-      <Box m="lg" p="lg" borderRadius="xl" bg={theme.colors.background.secondary} borderWidth={1} borderColor={theme.colors.border.DEFAULT}>
+    <Animated.View
+      entering={FadeInUp.duration(400).delay(300)}
+      layout={Layout.springify()}
+    >
+      <Box
+        m="lg"
+        p="lg"
+        borderRadius="xl"
+        bg={theme.colors.background.secondary}
+        borderWidth={1}
+        borderColor={theme.colors.border.DEFAULT}
+      >
         {/* Header - Always visible */}
-        <Pressable onPress={() => setIsExpanded((prev) => !prev)} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
-          <Box flexDirection="row" alignItems="center" justifyContent="space-between">
+        <Pressable
+          onPress={() => setIsExpanded((prev) => !prev)}
+          accessibilityLabel="Interactive control"
+          accessibilityRole="button"
+          accessibilityHint="Activates this control"
+        >
+          <Box
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
             <Box flexDirection="row" alignItems="center" gap="sm">
-              <Box width={40} height={40} borderRadius="lg" bg={`${theme.colors.accent.purple}20`} justifyContent="center" alignItems="center">
+              <Box
+                width={40}
+                height={40}
+                borderRadius="lg"
+                bg={`${theme.colors.accent.purple}20`}
+                justifyContent="center"
+                alignItems="center"
+              >
                 <Text fontSize={20}>🎯</Text>
               </Box>
               <Box>
@@ -122,8 +215,12 @@ export function TodaysChallengesWidget({ challenges, isLoading = false, error = 
                   <Text variant="caption" color="text.secondary">
                     {stats.completed}/{stats.total} completed
                     {stats.claimable > 0 && (
-                      <Text variant="caption" color="success.DEFAULT" fontWeight="600">
-                        {' '}
+                      <Text
+                        variant="caption"
+                        color="success.DEFAULT"
+                        fontWeight="600"
+                      >
+                        {" "}
                         · {stats.claimable} to claim!
                       </Text>
                     )}
@@ -132,7 +229,11 @@ export function TodaysChallengesWidget({ challenges, isLoading = false, error = 
               </Box>
             </Box>
             {/* Expand/Collapse indicator */}
-            <Text fontSize={20} color={theme.colors.text.tertiary} style={{ transform: [{ rotate: isExpanded ? '90deg' : '0deg' }] }}>
+            <Text
+              fontSize={20}
+              color={theme.colors.text.tertiary}
+              style={{ transform: [{ rotate: isExpanded ? "90deg" : "0deg" }] }}
+            >
               ›
             </Text>
           </Box>
@@ -149,12 +250,29 @@ export function TodaysChallengesWidget({ challenges, isLoading = false, error = 
                 <>
                   {challenges.slice(0, 3).map((challenge, index) => (
                     <Box key={challenge.id}>
-                      <ChallengeProgressRow challenge={challenge} onClaim={onClaimReward} />
-                      {index < Math.min(challenges.length, 3) - 1 && <Box height={1} bg={theme.colors.border.light} my="sm" />}
+                      <ChallengeProgressRow
+                        challenge={challenge}
+                        onClaim={onClaimReward}
+                      />
+                      {index < Math.min(challenges.length, 3) - 1 && (
+                        <Box
+                          height={1}
+                          bg={theme.colors.border.light}
+                          my="sm"
+                        />
+                      )}
                     </Box>
                   ))}
                   {/* View All button */}
-                  <Button variant="ghost" size="sm" onPress={onViewAll} style={{ alignSelf: 'center' }} accessibilityLabel="View All Challenges › button" accessibilityRole="button" accessibilityHint="Activates this control">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onPress={onViewAll}
+                    style={{ alignSelf: "center" }}
+                    accessibilityLabel="View All Challenges › button"
+                    accessibilityRole="button"
+                    accessibilityHint="Activates this control"
+                  >
                     View All Challenges ›
                   </Button>
                 </>
@@ -168,10 +286,28 @@ export function TodaysChallengesWidget({ challenges, isLoading = false, error = 
             {/* Mini progress bars */}
             <Box flexDirection="row" gap="xs">
               {challenges.slice(0, 3).map((challenge) => {
-                const percent = Math.min(100, (challenge.currentProgress / challenge.targetProgress) * 100);
+                const percent = Math.min(
+                  100,
+                  (challenge.currentProgress / challenge.targetProgress) * 100,
+                );
                 return (
-                  <Box key={challenge.id} flex={1} height={4} borderRadius="full" bg={theme.colors.background.tertiary} overflow="hidden">
-                    <Box height="100%" width={`${percent}%`} bg={challenge.isCompleted ? theme.colors.success.DEFAULT : theme.colors.primary[500]} />
+                  <Box
+                    key={challenge.id}
+                    flex={1}
+                    height={4}
+                    borderRadius="full"
+                    bg={theme.colors.background.tertiary}
+                    overflow="hidden"
+                  >
+                    <Box
+                      height="100%"
+                      width={`${percent}%`}
+                      bg={
+                        challenge.isCompleted
+                          ? theme.colors.success.DEFAULT
+                          : theme.colors.primary[500]
+                      }
+                    />
                   </Box>
                 );
               })}

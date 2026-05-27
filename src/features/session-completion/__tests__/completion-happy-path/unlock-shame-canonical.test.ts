@@ -48,36 +48,49 @@ describe("7. Hidden unlock remains inert", () => {
 
 describe("8. Partial completion no shame", () => {
   const SHAME_TERMS = [
-    "fail", "failure", "weak", "bad", "terrible",
-    "awful", "disappointing", "shameful", "loser",
+    "fail",
+    "failure",
+    "weak",
+    "bad",
+    "terrible",
+    "awful",
+    "disappointing",
+    "shameful",
+    "loser",
   ];
 
-  it.each(LANES)("%s: partial reflection contains no shame language", (lane) => {
-    const result = buildCompletionPersonalization({
-      lane,
-      summary: createSessionSummary({ completionPercentage: 30 }),
-    });
-    const question = result.reflectionQuestion.toLowerCase();
-    for (const term of SHAME_TERMS) {
-      expect(question).not.toContain(term);
-    }
-    expect(question.endsWith("?")).toBe(true);
-  });
+  it.each(LANES)(
+    "%s: partial reflection contains no shame language",
+    (lane) => {
+      const result = buildCompletionPersonalization({
+        lane,
+        summary: createSessionSummary({ completionPercentage: 30 }),
+      });
+      const question = result.reflectionQuestion.toLowerCase();
+      for (const term of SHAME_TERMS) {
+        expect(question).not.toContain(term);
+      }
+      expect(question.endsWith("?")).toBe(true);
+    },
+  );
 
-  it.each(LANES)("%s: abandoned reflection contains no shame language", (lane) => {
-    const result = buildCompletionPersonalization({
-      lane,
-      summary: createSessionSummary({
-        completionPercentage: 0,
-        sessionMode: SessionMode.FLOW,
-        status: "ABANDONED",
-      }),
-    });
-    const question = result.reflectionQuestion.toLowerCase();
-    for (const term of SHAME_TERMS) {
-      expect(question).not.toContain(term);
-    }
-  });
+  it.each(LANES)(
+    "%s: abandoned reflection contains no shame language",
+    (lane) => {
+      const result = buildCompletionPersonalization({
+        lane,
+        summary: createSessionSummary({
+          completionPercentage: 0,
+          sessionMode: SessionMode.FLOW,
+          status: "ABANDONED",
+        }),
+      });
+      const question = result.reflectionQuestion.toLowerCase();
+      for (const term of SHAME_TERMS) {
+        expect(question).not.toContain(term);
+      }
+    },
+  );
 
   it("abandoned memory candidate still has low but present confidence", () => {
     const result = buildCompletionPersonalization({

@@ -1,10 +1,10 @@
-import NetInfo from '@react-native-community/netinfo';
-import { FlashList, type ListRenderItem } from '@shopify/flash-list';
-import React, { useCallback } from 'react';
-import { Box, Card, Text } from '../../../components/primitives';
-import { ErrorState } from '../../../components/states/ErrorState';
-import type { CompanionMemory } from '../../../features/companion/memory-types';
-import { CompanionMemoryCard } from './CompanionMemoryCard';
+import NetInfo from "@react-native-community/netinfo";
+import { FlashList, type ListRenderItem } from "@shopify/flash-list";
+import React, { useCallback } from "react";
+import { Box, Card, Text } from "../../../components/primitives";
+import { ErrorState } from "../../../components/states/ErrorState";
+import type { CompanionMemory } from "../../../features/companion/memory-types";
+import { CompanionMemoryCard } from "./CompanionMemoryCard";
 
 interface CompanionMemoryTimelineProps {
   isError: boolean;
@@ -40,7 +40,9 @@ export function CompanionMemoryTimeline({
           onRetry={onRetry}
         />
       ) : null}
-      {!isPending && !isError && memories.length === 0 ? <EmptyTimeline /> : null}
+      {!isPending && !isError && memories.length === 0 ? (
+        <EmptyTimeline />
+      ) : null}
       {!isPending && !isError && memories.length > 0 ? (
         <FlashList<CompanionMemory>
           data={memories}
@@ -60,10 +62,30 @@ function MemorySkeleton(): JSX.Element {
       {[0, 1, 2].map((item) => (
         <Card key={item} size="md" state="loading">
           <Box gap="sm">
-            <Box height={12} width="30%" borderRadius="full" bg="background.tertiary" />
-            <Box height={18} width="60%" borderRadius="full" bg="background.tertiary" />
-            <Box height={14} width="100%" borderRadius="full" bg="background.tertiary" />
-            <Box height={14} width="80%" borderRadius="full" bg="background.tertiary" />
+            <Box
+              height={12}
+              width="30%"
+              borderRadius="full"
+              bg="background.tertiary"
+            />
+            <Box
+              height={18}
+              width="60%"
+              borderRadius="full"
+              bg="background.tertiary"
+            />
+            <Box
+              height={14}
+              width="100%"
+              borderRadius="full"
+              bg="background.tertiary"
+            />
+            <Box
+              height={14}
+              width="80%"
+              borderRadius="full"
+              bg="background.tertiary"
+            />
           </Box>
         </Card>
       ))}
@@ -79,7 +101,8 @@ function EmptyTimeline(): JSX.Element {
           Your companion is watching for milestones.
         </Text>
         <Text variant="bodySmall" color="text.secondary">
-          Complete your first session. Your story starts with proof, not pressure.
+          Complete your first session. Your story starts with proof, not
+          pressure.
         </Text>
       </Box>
     </Card>
@@ -88,9 +111,14 @@ function EmptyTimeline(): JSX.Element {
 
 function OfflineBanner(): JSX.Element {
   return (
-    <Card size="sm" variant="outlined" accessibilityLabel="Memory timeline offline">
+    <Card
+      size="sm"
+      variant="outlined"
+      accessibilityLabel="Memory timeline offline"
+    >
       <Text variant="bodySmall" color="text.secondary">
-        Offline right now. Saved memories stay here, and new ones sync when you reconnect.
+        Offline right now. Saved memories stay here, and new ones sync when you
+        reconnect.
       </Text>
     </Card>
   );

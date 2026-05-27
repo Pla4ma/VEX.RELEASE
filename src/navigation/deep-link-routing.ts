@@ -1,7 +1,7 @@
-import { FEATURE_FLAGS } from '../constants/features';
+import { FEATURE_FLAGS } from "../constants/features";
 
-import type { RootStackParams } from './types';
-import type { DeepLink, DeepLinkPath } from './deep-link-types';
+import type { RootStackParams } from "./types";
+import type { DeepLink, DeepLinkPath } from "./deep-link-types";
 
 const DEFAULT_FEATURE_FLAGS: Record<string, boolean> = {
   [FEATURE_FLAGS.BASIC_SOLO_BOSS]: true,
@@ -13,11 +13,11 @@ export function isDeepLinkDisabled(
   featureFlags: Record<string, boolean>,
 ): boolean {
   switch (path) {
-    case 'boss':
+    case "boss":
       return !featureFlags[FEATURE_FLAGS.BASIC_SOLO_BOSS];
-    case 'duels':
-    case 'squad':
-    case 'invite':
+    case "duels":
+    case "squad":
+    case "invite":
       return !featureFlags[FEATURE_FLAGS.SQUADS_ACCOUNTABILITY];
     default:
       return false;
@@ -29,15 +29,15 @@ export function deepLinkToNavigationParams(
   featureFlags: Record<string, boolean> = DEFAULT_FEATURE_FLAGS,
 ): { screen: keyof RootStackParams; params?: unknown } | null {
   if (isDeepLinkDisabled(link.path, featureFlags)) {
-    return { screen: 'Main', params: undefined };
+    return { screen: "Main", params: undefined };
   }
 
   switch (link.path) {
-    case 'session':
+    case "session":
       return {
-        screen: 'SessionStack',
+        screen: "SessionStack",
         params: {
-          screen: 'SessionSetup',
+          screen: "SessionSetup",
           params: {
             presetId: link.params.presetId,
             comebackMultiplier: link.params.comebackMultiplier
@@ -46,40 +46,40 @@ export function deepLinkToNavigationParams(
           },
         },
       };
-    case 'boss':
-      return { screen: 'Main', params: { screen: 'Boss' } };
-    case 'duels':
-      return { screen: 'Main', params: { screen: 'Home' } };
-    case 'squad':
-      return { screen: 'Main', params: { screen: 'Home' } };
-    case 'profile':
+    case "boss":
+      return { screen: "Main", params: { screen: "Boss" } };
+    case "duels":
+      return { screen: "Main", params: { screen: "Home" } };
+    case "squad":
+      return { screen: "Main", params: { screen: "Home" } };
+    case "profile":
       return {
-        screen: 'Main',
-        params: { screen: 'Profile', params: { userId: link.params.userId } },
+        screen: "Main",
+        params: { screen: "Profile", params: { userId: link.params.userId } },
       };
-    case 'settings':
-      return { screen: 'Settings', params: { screen: 'SettingsMain' } };
-    case 'invite':
-      return { screen: 'Main', params: { screen: 'Profile' } };
-    case 'study':
+    case "settings":
+      return { screen: "Settings", params: { screen: "SettingsMain" } };
+    case "invite":
+      return { screen: "Main", params: { screen: "Profile" } };
+    case "study":
       return {
-        screen: 'SessionStack',
+        screen: "SessionStack",
         params: {
-          screen: 'SessionSetup',
-          params: { presetMode: 'STUDY', source: 'content-study' },
+          screen: "SessionSetup",
+          params: { presetMode: "STUDY", source: "content-study" },
         },
       };
-    case 'coach':
-      return { screen: 'Main', params: { screen: 'AICoach' } };
-    case 'shop':
-      return { screen: 'Main', params: { screen: 'Home' } };
-    case 'rescue':
+    case "coach":
+      return { screen: "Main", params: { screen: "AICoach" } };
+    case "shop":
+      return { screen: "Main", params: { screen: "Home" } };
+    case "rescue":
       return {
-        screen: 'SessionStack',
+        screen: "SessionStack",
         params: {
-          screen: 'SessionSetup',
+          screen: "SessionSetup",
           params: {
-            source: 'rescue',
+            source: "rescue",
             rescuePlanId: link.params.rescuePlanId,
             rescueTaskDescription: link.params.rescueTaskDescription,
             suggestedDurationSeconds: link.params.suggestedDurationSeconds

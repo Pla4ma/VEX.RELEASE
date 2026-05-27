@@ -4,8 +4,8 @@
  * React hook for fade in/out animations.
  */
 
-import { useCallback } from 'react';
-import { Platform } from 'react-native';
+import { useCallback } from "react";
+import { Platform } from "react-native";
 import {
   useSharedValue,
   useAnimatedStyle,
@@ -14,9 +14,9 @@ import {
   Easing,
   type WithTimingConfig,
   type SharedValue,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { durations } from '../timings';
+import { durations } from "../timings";
 
 /**
  * Fade animation options
@@ -65,7 +65,7 @@ export function useFade(options: UseFadeOptions = {}): UseFadeResult {
       };
 
       // Skip animations on web platform to avoid reanimated issues
-      if (Platform.OS === 'web') {
+      if (Platform.OS === "web") {
         opacity.value = value;
         return;
       }
@@ -76,21 +76,21 @@ export function useFade(options: UseFadeOptions = {}): UseFadeResult {
         opacity.value = withTiming(value, timingConfig);
       }
     },
-    [opacity, duration, delay]
+    [opacity, duration, delay],
   );
 
   const fadeIn = useCallback(
     (config?: WithTimingConfig) => {
       setOpacity(1, config);
     },
-    [setOpacity]
+    [setOpacity],
   );
 
   const fadeOut = useCallback(
     (config?: WithTimingConfig) => {
       setOpacity(0, config);
     },
-    [setOpacity]
+    [setOpacity],
   );
 
   return {
@@ -107,7 +107,7 @@ export function useFade(options: UseFadeOptions = {}): UseFadeResult {
  */
 export function useAutoFade(
   visible: boolean,
-  options: Omit<UseFadeOptions, 'initialOpacity'> = {}
+  options: Omit<UseFadeOptions, "initialOpacity"> = {},
 ): UseFadeResult {
   const fade = useFade({
     initialOpacity: visible ? 1 : 0,

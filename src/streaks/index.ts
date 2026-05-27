@@ -1,1 +1,1 @@
-export * from './StreakService';
+export * from "./StreakService";

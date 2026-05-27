@@ -1,11 +1,15 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const CoachSuggestionSchema = z.object({
   id: z.string().uuid(),
-  type: z.enum(['DAILY_MISSION', 'SESSION_RECOMMENDATION', 'STREAK_PROTECTION']),
+  type: z.enum([
+    "DAILY_MISSION",
+    "SESSION_RECOMMENDATION",
+    "STREAK_PROTECTION",
+  ]),
   title: z.string().min(1).max(100),
   description: z.string().max(500),
-  priority: z.enum(['critical', 'high', 'medium', 'low']),
+  priority: z.enum(["critical", "high", "medium", "low"]),
   suggestedAction: z.string().max(200),
   confidence: z.number().min(0).max(1),
   expiresAt: z.number().int().positive(),
@@ -25,4 +29,4 @@ export const PriorityEngineSchema = z.object({
 
 export type PriorityEngine = z.infer<typeof PriorityEngineSchema>;
 
-export type CoachPriority = CoachSuggestion['priority'];
+export type CoachPriority = CoachSuggestion["priority"];

@@ -1,10 +1,10 @@
-import React from 'react';
-import { TextInput } from 'react-native';
-import Animated, { FadeInDown } from 'react-native-reanimated';
+import React from "react";
+import { TextInput } from "react-native";
+import Animated, { FadeInDown } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
 
 export function CoachLine({ text }: { text: string }): JSX.Element | null {
   const { theme } = useTheme();
@@ -26,21 +26,25 @@ export function CoachLine({ text }: { text: string }): JSX.Element | null {
   );
 }
 
-export function CompanionVisual({ element }: { element: string | null }): JSX.Element | null {
+export function CompanionVisual({
+  element,
+}: {
+  element: string | null;
+}): JSX.Element | null {
   if (!element) return null;
 
   const elementEmoji: Record<string, string> = {
-    FLAME: '🔥',
-    WAVE: '🌊',
-    TERRA: '🌍',
-    ZEPHYR: '💨',
-    VOID: '🌑',
-    LUMINA: '✨',
+    FLAME: "🔥",
+    WAVE: "🌊",
+    TERRA: "🌍",
+    ZEPHYR: "💨",
+    VOID: "🌑",
+    LUMINA: "✨",
   };
 
   return (
     <Box alignItems="center" py="md">
-      <Text fontSize={40}>{elementEmoji[element] ?? '💎'}</Text>
+      <Text fontSize={40}>{elementEmoji[element] ?? "💎"}</Text>
       <Text variant="caption" color="text.tertiary" mt="xs">
         Your companion is ready
       </Text>

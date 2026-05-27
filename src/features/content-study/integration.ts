@@ -3,8 +3,8 @@
  * Wire up events, analytics, and cross-feature communication
  */
 
-import { initializeContentStudyEventIntegration } from './events';
-import { contentStudyAnalytics } from './analytics';
+import { initializeContentStudyEventIntegration } from "./events";
+import { contentStudyAnalytics } from "./analytics";
 
 interface IntegrationConfig {
   userId: string;
@@ -38,9 +38,9 @@ export function initializeContentStudy(config: IntegrationConfig): void {
  */
 export function trackContentStudyScreenView(
   screenName: string,
-  params?: Record<string, unknown>
+  params?: Record<string, unknown>,
 ): void {
-  contentStudyAnalytics.track('content_study_screen_viewed', {
+  contentStudyAnalytics.track("content_study_screen_viewed", {
     screen: screenName,
     ...params,
   });
@@ -57,13 +57,13 @@ export function prepareContentStudySession(
     recommendedDurationMinutes: number;
     recommendedDifficulty: string;
     focusAreas: string[];
-  }
+  },
 ): {
   duration: number;
   difficulty: string;
   focusAreas: string[];
   goal: string;
-  category: 'study';
+  category: "study";
   tags: [string, string];
 } {
   return {
@@ -71,8 +71,8 @@ export function prepareContentStudySession(
     difficulty: studyPlan.recommendedDifficulty,
     focusAreas: studyPlan.focusAreas,
     goal: `Complete study tasks: ${studyPlan.tasks.length} items`,
-    category: 'study',
-    tags: ['content-study', generationId],
+    category: "study",
+    tags: ["content-study", generationId],
   };
 }
 

@@ -3,11 +3,11 @@
  * Wires all feature event handlers together
  */
 
-import { initializeProgressionRewardsIntegration } from './progression-rewards';
-import { initializeStreaksRewardsIntegration } from './streaks-rewards';
-import { initializeBossRewardsIntegration } from './boss-rewards';
-import { initializeSessionsFeedIntegration } from './sessions-feed';
-import { initializeFocusScoreIntegration } from '../focus-identity/integration-focus-score';
+import { initializeProgressionRewardsIntegration } from "./progression-rewards";
+import { initializeStreaksRewardsIntegration } from "./streaks-rewards";
+import { initializeBossRewardsIntegration } from "./boss-rewards";
+import { initializeSessionsFeedIntegration } from "./sessions-feed";
+import { initializeFocusScoreIntegration } from "../focus-identity/integration-focus-score";
 
 export interface IntegrationConfig {
   enableProgressionRewards: boolean;
@@ -34,7 +34,9 @@ let unsubscribers: Array<() => void> = [];
 /**
  * Initialize all feature integrations
  */
-export function initializeFeatureIntegrations(config: Partial<IntegrationConfig> = {}): () => void {
+export function initializeFeatureIntegrations(
+  config: Partial<IntegrationConfig> = {},
+): () => void {
   const fullConfig = { ...DEFAULT_CONFIG, ...config };
 
   // Clean up any existing integrations
@@ -67,6 +69,6 @@ export function initializeFeatureIntegrations(config: Partial<IntegrationConfig>
  * Clean up all integrations
  */
 export function cleanupIntegrations(): void {
-  unsubscribers.forEach(unsub => unsub());
+  unsubscribers.forEach((unsub) => unsub());
   unsubscribers = [];
 }

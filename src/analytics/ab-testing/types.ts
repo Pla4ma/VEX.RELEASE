@@ -4,14 +4,22 @@
  * Type definitions for experiment framework
  */
 
-export type ExperimentType = 'HOME_RECOMMENDATION' | 'PAYWALL_TIMING' | 'PAYWALL_COPY' | 'SESSION_DURATION' | 'COACH_FREQUENCY' | 'ONBOARDING_FLOW' | 'STREAK_UI' | 'BOSS_DIFFICULTY';
+export type ExperimentType =
+  | "HOME_RECOMMENDATION"
+  | "PAYWALL_TIMING"
+  | "PAYWALL_COPY"
+  | "SESSION_DURATION"
+  | "COACH_FREQUENCY"
+  | "ONBOARDING_FLOW"
+  | "STREAK_UI"
+  | "BOSS_DIFFICULTY";
 
 export interface Experiment {
   id: string;
   name: string;
   description: string;
   type: ExperimentType;
-  status: 'DRAFT' | 'RUNNING' | 'PAUSED' | 'COMPLETED';
+  status: "DRAFT" | "RUNNING" | "PAUSED" | "COMPLETED";
   startDate: number;
   endDate?: number;
 
@@ -27,8 +35,8 @@ export interface Experiment {
     userSegments?: string[]; // 'new', 'active', 'churned', etc.
     minSessions?: number;
     maxSessions?: number;
-    platforms?: ('ios' | 'android' | 'web')[];
-    premiumStatus?: 'free' | 'premium' | 'both';
+    platforms?: ("ios" | "android" | "web")[];
+    premiumStatus?: "free" | "premium" | "both";
   };
 
   // Success metrics
@@ -54,7 +62,7 @@ export interface ExperimentAssignment {
 
 export interface ExperimentResults {
   experimentId: string;
-  status: 'RUNNING' | 'COMPLETED' | 'INCONCLUSIVE';
+  status: "RUNNING" | "COMPLETED" | "INCONCLUSIVE";
   startDate: number;
   endDate?: number;
   totalParticipants: number;
@@ -69,7 +77,11 @@ export interface ExperimentResults {
   winner?: string; // variant ID
 
   // Recommendation
-  recommendation: 'CONTROL_WINS' | 'TREATMENT_WINS' | 'INCONCLUSIVE' | 'NEED_MORE_DATA';
+  recommendation:
+    | "CONTROL_WINS"
+    | "TREATMENT_WINS"
+    | "INCONCLUSIVE"
+    | "NEED_MORE_DATA";
   reasoning: string;
 }
 

@@ -1,14 +1,14 @@
-import React from 'react';
-import { Pressable } from 'react-native';
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import React from "react";
+import { Pressable } from "react-native";
+import Animated, { FadeInUp } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Skeleton } from '../../../components/ui/Skeleton';
-import { usePersonalBestPreview } from '../../../features/personal-bests/hooks';
-import { Text } from '../../../components/primitives/Text';
-import { Icon } from '../../../icons';
-import type { SessionMode } from '../../../session/modes';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Skeleton } from "../../../components/ui/Skeleton";
+import { usePersonalBestPreview } from "../../../features/personal-bests/hooks";
+import { Text } from "../../../components/primitives/Text";
+import { Icon } from "../../../icons";
+import type { SessionMode } from "../../../session/modes";
+import { useTheme } from "../../../theme";
 
 type SessionSetupHeaderProps = {
   durationSeconds: number;
@@ -17,16 +17,27 @@ type SessionSetupHeaderProps = {
   userId: string | null;
 };
 
-export function SessionSetupHeader({ durationSeconds, mode, onBack, userId }: SessionSetupHeaderProps) {
+export function SessionSetupHeader({
+  durationSeconds,
+  mode,
+  onBack,
+  userId,
+}: SessionSetupHeaderProps) {
   const { theme } = useTheme();
   const preview = usePersonalBestPreview(userId, mode, durationSeconds);
   const previewCopy = preview.data
     ? `Your best: ${Math.round(preview.data.bestPurityScore)} purity · ${preview.data.bestGrade}`
-    : 'First time at this length. Focus clean.';
+    : "First time at this length. Focus clean.";
 
   return (
     <>
-      <Box flexDirection="row" alignItems="center" justifyContent="space-between" p="lg" pb="xl">
+      <Box
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+        p="lg"
+        pb="xl"
+      >
         <Pressable
           onPress={onBack}
           accessibilityLabel="Go back"
@@ -34,8 +45,8 @@ export function SessionSetupHeader({ durationSeconds, mode, onBack, userId }: Se
           accessibilityHint="Returns to the previous screen without starting a session"
           hitSlop={theme.spacing[2]}
           style={{
-            alignItems: 'center',
-            justifyContent: 'center',
+            alignItems: "center",
+            justifyContent: "center",
             minHeight: 44,
             minWidth: 44,
           }}
@@ -52,11 +63,16 @@ export function SessionSetupHeader({ durationSeconds, mode, onBack, userId }: Se
             Start fast, customize only if needed
           </Text>
           <Text variant="body" color="text.secondary">
-            The default path is one tap. Open customization only when you want to tune the session.
+            The default path is one tap. Open customization only when you want
+            to tune the session.
           </Text>
           {preview.isPending ? (
             <Box mt="md">
-              <Skeleton width="56%" height={14} borderRadius={theme.borderRadius.sm} />
+              <Skeleton
+                width="56%"
+                height={14}
+                borderRadius={theme.borderRadius.sm}
+              />
             </Box>
           ) : preview.isError ? null : (
             <Text variant="caption" color="text.tertiary" mt="md">

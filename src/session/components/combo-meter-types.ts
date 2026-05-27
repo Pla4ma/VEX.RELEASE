@@ -6,7 +6,13 @@ export interface ComboMeterProps {
   onComboBroken?: (finalCombo: number) => void;
 }
 
-export type ComboTier = "NONE" | "BRONZE" | "SILVER" | "GOLD" | "PLATINUM" | "DIAMOND";
+export type ComboTier =
+  | "NONE"
+  | "BRONZE"
+  | "SILVER"
+  | "GOLD"
+  | "PLATINUM"
+  | "DIAMOND";
 
 export interface ComboTierConfig {
   minCombo: number;

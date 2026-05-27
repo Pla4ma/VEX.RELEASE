@@ -12,19 +12,22 @@
  * Displayed in horizontal scroll row, ordered by most impactful.
  */
 
-import React from 'react';
-import { ScrollView, View } from 'react-native';
-import Animated, { FadeInRight } from 'react-native-reanimated';
+import React from "react";
+import { ScrollView, View } from "react-native";
+import Animated, { FadeInRight } from "react-native-reanimated";
 
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { BossImpactCard } from './BossImpactCard';
-import { StreakConsequenceCard } from './StreakConsequenceCard';
-import { ChallengeImpactCard } from './ChallengeImpactCard';
-import { RivalImpactCard } from './RivalImpactCard';
-import { CARD_WIDTH, type SessionConsequenceCardsProps } from './session-consequence-types';
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import { BossImpactCard } from "./BossImpactCard";
+import { StreakConsequenceCard } from "./StreakConsequenceCard";
+import { ChallengeImpactCard } from "./ChallengeImpactCard";
+import { RivalImpactCard } from "./RivalImpactCard";
+import {
+  CARD_WIDTH,
+  type SessionConsequenceCardsProps,
+} from "./session-consequence-types";
 
-export { type SessionConsequenceCardsProps } from './session-consequence-types';
+export { type SessionConsequenceCardsProps } from "./session-consequence-types";
 
 export function SessionConsequenceCards({
   bossConsequence,
@@ -42,7 +45,9 @@ export function SessionConsequenceCards({
     cards.push(<StreakConsequenceCard key="streak" {...streakConsequence} />);
   }
   if (challengeConsequence) {
-    cards.push(<ChallengeImpactCard key="challenge" {...challengeConsequence} />);
+    cards.push(
+      <ChallengeImpactCard key="challenge" {...challengeConsequence} />,
+    );
   }
   if (rivalConsequence) {
     cards.push(<RivalImpactCard key="rival" {...rivalConsequence} />);
@@ -55,7 +60,15 @@ export function SessionConsequenceCards({
   return (
     <Animated.View entering={FadeInRight.duration(400).delay(600)}>
       <View style={{ marginVertical: theme.spacing[4] }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing[2], marginBottom: theme.spacing[3], paddingHorizontal: theme.spacing[6] }}>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: theme.spacing[2],
+            marginBottom: theme.spacing[3],
+            paddingHorizontal: theme.spacing[6],
+          }}
+        >
           <Text fontSize={16}>🎯</Text>
           <Text variant="label" color="text.tertiary">
             ALSO HAPPENED

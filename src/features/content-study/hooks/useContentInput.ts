@@ -3,20 +3,24 @@
  * Manages content input state and submission
  */
 
-import { useState, useCallback } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '../../../store';
-import { captureException } from '../../../config/sentry';
-import { submitContent, extractContent, uploadStudyFile } from '../ContentStudyService';
-import { ContentInputState, InputTab, SubmitContentRequest } from '../types';
-import { VALIDATION_RULES, ERROR_MESSAGES } from '../constants';
-import { contentStudyQueryKeys } from './queryKeys';
+import { useState, useCallback } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuthStore } from "../../../store";
+import { captureException } from "../../../config/sentry";
+import {
+  submitContent,
+  extractContent,
+  uploadStudyFile,
+} from "../ContentStudyService";
+import { ContentInputState, InputTab, SubmitContentRequest } from "../types";
+import { VALIDATION_RULES, ERROR_MESSAGES } from "../constants";
+import { contentStudyQueryKeys } from "./queryKeys";
 
 function createInitialContentInputState(): ContentInputState {
   return {
-    activeTab: 'paste',
-    pastedText: '',
-    youtubeUrl: '',
+    activeTab: "paste",
+    pastedText: "",
+    youtubeUrl: "",
     selectedFile: null,
     isSubmitting: false,
     error: null,
@@ -32,11 +36,14 @@ function getUserFacingSubmitError(error: unknown): string {
     return ERROR_MESSAGES.DEFAULT;
   }
   const lowerMessage = error.message.toLowerCase();
-  if (lowerMessage.includes('row level security') || lowerMessage.includes('storage upload failed')) {
-    return 'Your PDF could not upload because secure study storage is still syncing. Try again in a moment, or paste the text to keep moving.';
+  if (
+    lowerMessage.includes("row level security") ||
+    lowerMessage.includes("storage upload failed")
+  ) {
+    return "Your PDF could not upload because secure study storage is still syncing. Try again in a moment, or paste the text to keep moving.";
   }
-  if (lowerMessage.includes('validation failed')) {
-    return 'Check the highlighted input and try again.';
+  if (lowerMessage.includes("validation failed")) {
+    return "Check the highlighted input and try again.";
   }
   return error.message;
 }
@@ -44,22 +51,32 @@ function getUserFacingSubmitError(error: unknown): string {
 export function useContentInput() {
   const { user } = useAuthStore();
   const queryClient = useQueryClient();
-  const [state, setState] = useState<ContentInputState>(createInitialContentInputState);
+  const [state, setState] = useState<ContentInputState>(
+    createInitialContentInputState,
+  );
   const [uploadProgress, setUploadProgress] = useState(0);
 
   const setTab = useCallback((tab: InputTab) => {
-    setState((prev) => ({ ...prev, activeTab: tab, error: null, isDirty: true }));
+    setState((prev) => ({
+      ...prev,
+      activeTab: tab,
+      error: null,
+      isDirty: true,
+    }));
   }, []);
 
   const setPastedText = useCallback((text: string) => {
-    const validationErrors = text.trim().length >= VALIDATION_RULES.MIN_CONTENT_LENGTH
-      ? []
-      : [{
-          field: 'pastedText',
-          code: 'MIN_LENGTH',
-          message: `Please enter at least ${VALIDATION_RULES.MIN_CONTENT_LENGTH} characters of content.`,
-          severity: 'error' as const,
-        }];
+    const validationErrors =
+      text.trim().length >= VALIDATION_RULES.MIN_CONTENT_LENGTH
+        ? []
+        : [
+            {
+              field: "pastedText",
+              code: "MIN_LENGTH",
+              message: `Please enter at least ${VALIDATION_RULES.MIN_CONTENT_LENGTH} characters of content.`,
+              severity: "error" as const,
+            },
+          ];
     setState((prev) => ({
       ...prev,
       pastedText: text,
@@ -72,84 +89,123 @@ export function useContentInput() {
   }, []);
 
   const setYoutubeUrl = useCallback((url: string) => {
-    setState((prev) => ({ ...prev, youtubeUrl: url, error: null, isDirty: true }));
+    setState((prev) => ({
+      ...prev,
+      youtubeUrl: url,
+      error: null,
+      isDirty: true,
+    }));
   }, []);
 
-  const setSelectedFile = useCallback((file: { uri: string; name: string; size: number; type: string } | null) => {
-    setState((prev) => ({ ...prev, selectedFile: file, error: null, isDirty: true }));
-  }, []);
+  const setSelectedFile = useCallback(
+    (
+      file: { uri: string; name: string; size: number; type: string } | null,
+    ) => {
+      setState((prev) => ({
+        ...prev,
+        selectedFile: file,
+        error: null,
+        isDirty: true,
+      }));
+    },
+    [],
+  );
 
   const clearError = useCallback(() => {
     setState((prev) => ({ ...prev, error: null }));
   }, []);
 
   const validateInput = useCallback((): boolean => {
-    const errors: ContentInputState['validationErrors'] = [];
+    const errors: ContentInputState["validationErrors"] = [];
 
-    if (state.activeTab === 'paste' && state.pastedText.trim().length < VALIDATION_RULES.MIN_CONTENT_LENGTH) {
+    if (
+      state.activeTab === "paste" &&
+      state.pastedText.trim().length < VALIDATION_RULES.MIN_CONTENT_LENGTH
+    ) {
       errors.push({
-        field: 'pastedText',
-        code: 'MIN_LENGTH',
+        field: "pastedText",
+        code: "MIN_LENGTH",
         message: `Please enter at least ${VALIDATION_RULES.MIN_CONTENT_LENGTH} characters.`,
-        severity: 'error',
+        severity: "error",
       });
     }
 
-    if (state.activeTab === 'youtube' && !state.youtubeUrl.trim()) {
+    if (state.activeTab === "youtube" && !state.youtubeUrl.trim()) {
       errors.push({
-        field: 'youtubeUrl',
-        code: 'REQUIRED',
-        message: 'Please enter a YouTube URL.',
-        severity: 'error',
+        field: "youtubeUrl",
+        code: "REQUIRED",
+        message: "Please enter a YouTube URL.",
+        severity: "error",
       });
     }
 
-    if (state.activeTab === 'pdf' && !state.selectedFile) {
+    if (state.activeTab === "pdf" && !state.selectedFile) {
       errors.push({
-        field: 'file',
-        code: 'REQUIRED',
-        message: 'Please select a file to upload.',
-        severity: 'error',
+        field: "file",
+        code: "REQUIRED",
+        message: "Please select a file to upload.",
+        severity: "error",
       });
     }
 
-    setState((prev) => ({ ...prev, validationErrors: errors, isValid: errors.length === 0 }));
+    setState((prev) => ({
+      ...prev,
+      validationErrors: errors,
+      isValid: errors.length === 0,
+    }));
     return errors.length === 0;
   }, [state.activeTab, state.pastedText, state.youtubeUrl, state.selectedFile]);
 
   const submitMutation = useMutation({
     mutationFn: async () => {
-      if (!user) {throw new Error('User not authenticated');}
-      if (!validateInput()) {throw new Error('Validation failed');}
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
+      if (!validateInput()) {
+        throw new Error("Validation failed");
+      }
 
       let request: SubmitContentRequest;
 
-      if (state.activeTab === 'paste') {
-        request = { type: 'PASTE', content: state.pastedText };
-      } else if (state.activeTab === 'youtube') {
-        request = { type: 'YOUTUBE', url: state.youtubeUrl.trim() };
-      } else if (state.activeTab === 'pdf' && state.selectedFile) {
-        const fileId = await uploadStudyFile(state.selectedFile.uri, state.selectedFile.name, user.id);
-        request = { type: 'PDF', fileId };
+      if (state.activeTab === "paste") {
+        request = { type: "PASTE", content: state.pastedText };
+      } else if (state.activeTab === "youtube") {
+        request = { type: "YOUTUBE", url: state.youtubeUrl.trim() };
+      } else if (state.activeTab === "pdf" && state.selectedFile) {
+        const fileId = await uploadStudyFile(
+          state.selectedFile.uri,
+          state.selectedFile.name,
+          user.id,
+        );
+        request = { type: "PDF", fileId };
       } else {
-        throw new Error('Invalid input state');
+        throw new Error("Invalid input state");
       }
 
       const response = await submitContent(user.id, request);
 
-      if (request.type === 'PDF' || request.type === 'YOUTUBE') {
-        void extractContent({ contentId: response.contentId }).catch((error: unknown) => {
-          captureException(
-            error instanceof Error ? error : new Error('Failed to trigger content extraction'),
-            { area: 'content-study.submit.extract', contentId: response.contentId }
-          );
-        });
+      if (request.type === "PDF" || request.type === "YOUTUBE") {
+        void extractContent({ contentId: response.contentId }).catch(
+          (error: unknown) => {
+            captureException(
+              error instanceof Error
+                ? error
+                : new Error("Failed to trigger content extraction"),
+              {
+                area: "content-study.submit.extract",
+                contentId: response.contentId,
+              },
+            );
+          },
+        );
       }
 
       return { contentId: response.contentId, status: response.status };
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: contentStudyQueryKeys.all });
+      void queryClient.invalidateQueries({
+        queryKey: contentStudyQueryKeys.all,
+      });
     },
   });
 
@@ -162,8 +218,10 @@ export function useContentInput() {
     } catch (err) {
       const message = getUserFacingSubmitError(err);
       captureException(
-        err instanceof Error ? err : new Error('Content study submission failed'),
-        { area: 'content-study.submit' }
+        err instanceof Error
+          ? err
+          : new Error("Content study submission failed"),
+        { area: "content-study.submit" },
       );
       setState((prev) => ({ ...prev, error: message }));
       throw err;

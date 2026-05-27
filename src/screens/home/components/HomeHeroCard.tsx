@@ -1,48 +1,51 @@
-import React from 'react';
-import { View } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import React from "react";
+import { View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
-import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
-import type { HomePrimaryPriority, HomeStakes } from '../../../features/home-spine/priority-schemas';
-import { useTheme } from '../../../theme';
-import { launchColors } from '@theme/tokens/launch-colors';
+import { Button } from "../../../components/primitives/Button";
+import { Text } from "../../../components/primitives/Text";
+import type {
+  HomePrimaryPriority,
+  HomeStakes,
+} from "../../../features/home-spine/priority-schemas";
+import { useTheme } from "../../../theme";
+import { launchColors } from "@theme/tokens/launch-colors";
 
-function getHeroTitle(type: HomePrimaryPriority['type']): string {
+function getHeroTitle(type: HomePrimaryPriority["type"]): string {
   switch (type) {
-    case 'STREAK_CRITICAL':
-      return 'Your streak needs one clean save';
-    case 'COMPANION_PROMISE':
-      return 'Keep the promise alive today';
-    case 'PROMISE_RECOVERY':
-      return 'Start small and rebuild the thread';
-    case 'STREAK_AT_RISK':
-      return 'Protect the habit before it slips';
-    case 'RECOMMENDED_SESSION':
-      return 'VEX already has the next session ready';
-    case 'CHALLENGE_NEAR_DONE':
-      return 'You are close enough to finish this today';
-    case 'BOSS_ACTIVE':
-      return 'The battle is already in motion';
-    case 'DEFAULT_SESSION':
-      return 'VEX changes based on how you work';
+    case "STREAK_CRITICAL":
+      return "Your streak needs one clean save";
+    case "COMPANION_PROMISE":
+      return "Keep the promise alive today";
+    case "PROMISE_RECOVERY":
+      return "Start small and rebuild the thread";
+    case "STREAK_AT_RISK":
+      return "Protect the habit before it slips";
+    case "RECOMMENDED_SESSION":
+      return "VEX already has the next session ready";
+    case "CHALLENGE_NEAR_DONE":
+      return "You are close enough to finish this today";
+    case "BOSS_ACTIVE":
+      return "The battle is already in motion";
+    case "DEFAULT_SESSION":
+      return "VEX changes based on how you work";
   }
 }
 
-function getHeroEyebrow(type: HomePrimaryPriority['type']): string {
+function getHeroEyebrow(type: HomePrimaryPriority["type"]): string {
   switch (type) {
-    case 'COMPANION_PROMISE':
-    case 'PROMISE_RECOVERY':
-      return 'Companion thread';
-    case 'CHALLENGE_NEAR_DONE':
-      return 'Challenge';
-    case 'BOSS_ACTIVE':
-      return 'Boss run';
-    case 'STREAK_AT_RISK':
-    case 'STREAK_CRITICAL':
-      return 'Habit protection';
+    case "COMPANION_PROMISE":
+    case "PROMISE_RECOVERY":
+      return "Companion thread";
+    case "CHALLENGE_NEAR_DONE":
+      return "Challenge";
+    case "BOSS_ACTIVE":
+      return "Boss run";
+    case "STREAK_AT_RISK":
+    case "STREAK_CRITICAL":
+      return "Habit protection";
     default:
-      return 'Right next session';
+      return "Right next session";
   }
 }
 
@@ -87,11 +90,14 @@ export function HomeHeroCard({
 
   return (
     <LinearGradient
-      colors={[theme.colors.primary[600] ?? launchColors.hex_4f46e5, theme.colors.primary[500] ?? launchColors.hex_7c3aed]}
+      colors={[
+        theme.colors.primary[600] ?? launchColors.hex_4f46e5,
+        theme.colors.primary[500] ?? launchColors.hex_7c3aed,
+      ]}
       style={{
         borderRadius: theme.borderRadius.xl,
         gap: theme.spacing[3],
-        overflow: 'hidden',
+        overflow: "hidden",
         padding: theme.spacing[5],
       }}
     >

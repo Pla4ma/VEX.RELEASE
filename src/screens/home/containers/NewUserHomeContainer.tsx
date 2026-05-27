@@ -1,34 +1,52 @@
-import { useMemo, useCallback } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useSessionUIStore } from '../../../store/session-state';
-import { useHomeSpineModel } from '../../../features/home-spine/hooks';
-import { getNextBestAction } from '../../../features/progression';
-import type { FeatureAccessResult } from '../../../features/liveops-config';
-import type { HomeFeatureRuntime } from '../hooks/home-feature-runtime';
-import type { HomeViewModel } from '../hooks/home-view-model';
-import type { HomeController } from '../hooks/home-controller-types';
-import type { ExtendedRootStackParams } from '../../../navigation/types';
-import { navigateToSessionStackScreen, navigateToMainTab } from '../../../navigation/navigation-helpers';
-import { getFocusedMinutesForToday, getNextUnlockFeature } from '../hooks/home-controller-helpers';
-import type { UseQueryResult } from '@tanstack/react-query';
+import { useMemo, useCallback } from "react";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useSessionUIStore } from "../../../store/session-state";
+import { useHomeSpineModel } from "../../../features/home-spine/hooks";
+import { getNextBestAction } from "../../../features/progression";
+import type { FeatureAccessResult } from "../../../features/liveops-config";
+import type { HomeFeatureRuntime } from "../hooks/home-feature-runtime";
+import type { HomeViewModel } from "../hooks/home-view-model";
+import type { HomeController } from "../hooks/home-controller-types";
+import type { ExtendedRootStackParams } from "../../../navigation/types";
+import {
+  navigateToSessionStackScreen,
+  navigateToMainTab,
+} from "../../../navigation/navigation-helpers";
+import {
+  getFocusedMinutesForToday,
+  getNextUnlockFeature,
+} from "../hooks/home-controller-helpers";
+import type { UseQueryResult } from "@tanstack/react-query";
 import {
   createStubQuery,
   stubNavigationActions,
   stubCoachMutations,
   stubHomeReturnReason,
   stubLearningExecutionLayer,
-} from '../hooks/home-controller-stubs';
+} from "../hooks/home-controller-stubs";
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
-interface StreakQueryData { currentDays?: number; isAtRisk?: boolean; }
-interface ProgressionQueryData { xp?: number; level?: number; }
+interface StreakQueryData {
+  currentDays?: number;
+  isAtRisk?: boolean;
+}
+interface ProgressionQueryData {
+  xp?: number;
+  level?: number;
+}
 
 export interface NewUserContainerInput {
-  analytics: ReturnType<typeof import('../../../features/liveops-config').useDisclosureAnalytics>;
-  disclosure: ReturnType<typeof import('../../../features/liveops-config').useFeatureAccess>;
-  historyQuery: ReturnType<typeof import('../../../session/hooks/useSession').useSessionHistory>;
+  analytics: ReturnType<
+    typeof import("../../../features/liveops-config").useDisclosureAnalytics
+  >;
+  disclosure: ReturnType<
+    typeof import("../../../features/liveops-config").useFeatureAccess
+  >;
+  historyQuery: ReturnType<
+    typeof import("../../../session/hooks/useSession").useSessionHistory
+  >;
   isOnline: boolean;
   progressionQuery: UseQueryResult;
   runtime: HomeFeatureRuntime;
@@ -36,15 +54,28 @@ export interface NewUserContainerInput {
   userId: string;
 }
 
-export function useNewUserContainerModel(input: NewUserContainerInput): HomeViewModel & {
+export function useNewUserContainerModel(
+  input: NewUserContainerInput,
+): HomeViewModel & {
   controller: HomeController;
 } {
-  const { analytics, disclosure, historyQuery, isOnline, progressionQuery, runtime, streakQuery, userId } = input;
+  const {
+    analytics,
+    disclosure,
+    historyQuery,
+    isOnline,
+    progressionQuery,
+    runtime,
+    streakQuery,
+    userId,
+  } = input;
 
   const navigation = useNavigation<Nav>();
   const homeHighlight = useSessionUIStore((state) => state.homeHighlight);
   const completionSync = useSessionUIStore((state) => state.completionSync);
-  const clearHomeHighlight = useSessionUIStore((state) => state.clearHomeHighlight);
+  const clearHomeHighlight = useSessionUIStore(
+    (state) => state.clearHomeHighlight,
+  );
 
   const streakData = streakQuery.data as StreakQueryData | undefined;
   const progData = progressionQuery.data as ProgressionQueryData | undefined;
@@ -54,7 +85,10 @@ export function useNewUserContainerModel(input: NewUserContainerInput): HomeView
     (sum: number, entry) => sum + getFocusedMinutesForToday(entry),
     0,
   );
-  const progressPercent = Math.min(100, Math.round((todayFocusMinutes / 120) * 100));
+  const progressPercent = Math.min(
+    100,
+    Math.round((todayFocusMinutes / 120) * 100),
+  );
   const isFirstRun =
     !disclosure.isLoading &&
     disclosure.inputs.totalCompletedSessions === 0 &&
@@ -66,22 +100,19 @@ export function useNewUserContainerModel(input: NewUserContainerInput): HomeView
   const openSetup = useCallback(
     (params: Record<string, unknown> = {}): void => {
       if (userId && disclosure.inputs.totalCompletedSessions === 0) {
-        analytics.trackFirstSessionStarted(userId, 'home');
+        analytics.trackFirstSessionStarted(userId, "home");
       }
-      navigateToSessionStackScreen(navigation, 'SessionSetup', params);
+      navigateToSessionStackScreen(navigation, "SessionSetup", params);
     },
     [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
   );
 
   const openProgress = useCallback((): void => {
-    navigateToMainTab(navigation, 'Progress');
+    navigateToMainTab(navigation, "Progress");
   }, [navigation]);
 
   const nextUnlockFeature = useMemo(
-    () =>
-      getNextUnlockFeature(
-        disclosure.features,
-      ),
+    () => getNextUnlockFeature(disclosure.features),
     [disclosure.features],
   );
 
@@ -102,45 +133,79 @@ export function useNewUserContainerModel(input: NewUserContainerInput): HomeView
     returnReason: {
       body: nextBestAction.description,
       ctaLabel: nextBestAction.ctaLabel,
-      eyebrow: 'Return reason',
-      intent: 'start-session' as const,
-      source: 'next-best-action' as const,
+      eyebrow: "Return reason",
+      intent: "start-session" as const,
+      source: "next-best-action" as const,
       title: nextBestAction.title,
-      tone: 'default' as const,
+      tone: "default" as const,
     },
     todayFocusMinutes,
   });
 
-  const isLoading = disclosure.isLoading || streakQuery.isLoading || progressionQuery.isLoading;
+  const isLoading =
+    disclosure.isLoading || streakQuery.isLoading || progressionQuery.isLoading;
 
   const controller: HomeController = {
-    user: null, userId, isOnline, isLoading, isFirstRun,
+    user: null,
+    userId,
+    isOnline,
+    isLoading,
+    isFirstRun,
     loadError: disclosure.error as Error | null,
-    homeHighlight, completionSync, clearHomeHighlight,
-    currentStreak, currentXp, todayFocusMinutes, progressPercent,
+    homeHighlight,
+    completionSync,
+    clearHomeHighlight,
+    currentStreak,
+    currentXp,
+    todayFocusMinutes,
+    progressPercent,
     latestSession: historyQuery.history[0] ?? null,
-    primaryRecommendation: null, homeSpine, returnReason: stubHomeReturnReason,
-    disclosure, runtime,
-    streakQuery, progressionQuery, historyQuery,
-    squadsQuery: createStubQuery() as UseQueryResult, activeStudyPlanQuery: createStubQuery() as UseQueryResult,
-    learningExecutionLayer: stubLearningExecutionLayer(), comebackQuery: createStubQuery() as UseQueryResult,
-    activeBossQuery: createStubQuery() as UseQueryResult, recommendationsQuery: createStubQuery() as UseQueryResult,
+    primaryRecommendation: null,
+    homeSpine,
+    returnReason: stubHomeReturnReason,
+    disclosure,
+    runtime,
+    streakQuery,
+    progressionQuery,
+    historyQuery,
+    squadsQuery: createStubQuery() as UseQueryResult,
+    activeStudyPlanQuery: createStubQuery() as UseQueryResult,
+    learningExecutionLayer: stubLearningExecutionLayer(),
+    comebackQuery: createStubQuery() as UseQueryResult,
+    activeBossQuery: createStubQuery() as UseQueryResult,
+    recommendationsQuery: createStubQuery() as UseQueryResult,
     shouldShowSecondarySystems: runtime.shouldShowSecondarySystems,
     shouldShowExpansionSystems: runtime.shouldShowExpansionSystems,
-    openSetup, openProgress,
-    openSocial: stubActions.openSocial, openContentStudy: openSetup as () => void, continueStudyPlan: openSetup as () => void,
-    createRecommendation: stubCoachMutations().createRecommendation as HomeController['createRecommendation'],
-    updateRecommendationStatus: stubCoachMutations().updateRecommendationStatus as HomeController['updateRecommendationStatus'],
+    openSetup,
+    openProgress,
+    openSocial: stubActions.openSocial,
+    openContentStudy: openSetup as () => void,
+    continueStudyPlan: openSetup as () => void,
+    createRecommendation: stubCoachMutations()
+      .createRecommendation as HomeController["createRecommendation"],
+    updateRecommendationStatus: stubCoachMutations()
+      .updateRecommendationStatus as HomeController["updateRecommendationStatus"],
     retryAll: disclosure.refetchAll as () => Promise<unknown>,
     features: disclosure.features,
   };
 
   return {
-    userId, isOnline, isLoading, isFirstRun,
+    userId,
+    isOnline,
+    isLoading,
+    isFirstRun,
     loadError: disclosure.error as Error | null,
-    currentStreak, currentXp, todayFocusMinutes, progressPercent,
-    primaryRecommendation: null, homeSpine, returnReason: null,
-    stage: disclosure.stage, productTier: disclosure.productTier,
-    features: disclosure.features, runtime, controller,
+    currentStreak,
+    currentXp,
+    todayFocusMinutes,
+    progressPercent,
+    primaryRecommendation: null,
+    homeSpine,
+    returnReason: null,
+    stage: disclosure.stage,
+    productTier: disclosure.productTier,
+    features: disclosure.features,
+    runtime,
+    controller,
   };
 }

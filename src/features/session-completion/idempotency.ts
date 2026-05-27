@@ -1,15 +1,17 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-import { MMKVStorageAdapter } from '../../persistence/MMKVStorageAdapter';
+import { MMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
 
 const MAX_IDEMPOTENCY_KEYS = 1000;
-const STORAGE_KEY = 'session_completion_processed_keys_v1';
-const storage = new MMKVStorageAdapter('session-completion-idempotency');
+const STORAGE_KEY = "session_completion_processed_keys_v1";
+const storage = new MMKVStorageAdapter("session-completion-idempotency");
 
-const PersistedKeysSchema = z.object({
-  keys: z.array(z.string()),
-  updatedAt: z.number(),
-}).strict();
+const PersistedKeysSchema = z
+  .object({
+    keys: z.array(z.string()),
+    updatedAt: z.number(),
+  })
+  .strict();
 
 const processedIdempotencyKeys = new Set<string>();
 const processingIdempotencyKeys = new Set<string>();
@@ -72,7 +74,7 @@ function loadPersistedKeys(): void {
       return;
     }
     parsed.data.keys.forEach((key) => processedIdempotencyKeys.add(key));
-  } catch {
+  } catch (error: unknown) {
     storage.removeItemSync(STORAGE_KEY);
   }
 }

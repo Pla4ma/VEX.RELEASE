@@ -1,14 +1,12 @@
 export interface CurrencyGrant {
   userId: string;
   amount: number;
-  currency: 'COINS' | 'GEMS' | 'XP' | 'SEASONAL' | 'FOCUS_POINTS';
+  currency: "COINS" | "GEMS" | "XP" | "SEASONAL" | "FOCUS_POINTS";
   source: string;
   sourceId?: string | null;
   description?: string;
   skipEvents?: boolean;
   metadata?: Record<string, unknown>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
 }
 
 export async function addCurrency(_grant: CurrencyGrant): Promise<boolean> {

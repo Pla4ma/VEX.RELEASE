@@ -4,15 +4,15 @@
  * Persona selection and management hooks.
  */
 
-import { useQuery } from '@tanstack/react-query';
-import * as repository from '../repository';
-import * as service from '../service';
-import { useCoachStore } from '../store';
+import { useQuery } from "@tanstack/react-query";
+import * as repository from "../repository";
+import * as service from "../service";
+import { useCoachStore } from "../store";
 
 const coachKeys = {
-  all: ['coach'] as const,
-  personas: () => [...coachKeys.all, 'personas'] as const,
-  persona: (id: string) => [...coachKeys.all, 'persona', id] as const,
+  all: ["coach"] as const,
+  personas: () => [...coachKeys.all, "personas"] as const,
+  persona: (id: string) => [...coachKeys.all, "persona", id] as const,
 };
 
 export function useCoachPersonas() {

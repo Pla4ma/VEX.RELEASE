@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import Animated, { FadeInUp } from 'react-native-reanimated';
+import Animated, { FadeInUp } from "react-native-reanimated";
 
-import { Box, Button } from '../../../components/primitives';
-import type { Theme } from '../../../theme/types';
+import { Box, Button } from "../../../components/primitives";
+import type { Theme } from "../../../theme/types";
 
 export function SessionCompleteFooter({
   bottomInset,
@@ -47,28 +47,42 @@ export function SessionCompleteFooter({
         {/* PHASE 17.2: Share Button */}
         {onShare && (
           <Box mb={3}>
-            <Button variant="ghost" size="md" fullWidth onPress={onShare}
-  accessibilityLabel="Share Your Session button"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+            <Button
+              variant="ghost"
+              size="md"
+              fullWidth
+              onPress={onShare}
+              accessibilityLabel="Share Your Session button"
+              accessibilityRole="button"
+              accessibilityHint="Activates this control"
+            >
               Share Your Session
             </Button>
           </Box>
         )}
         <Box flexDirection="row" gap={3}>
           <Box flex={1}>
-            <Button size="lg" fullWidth onPress={onStartNextSession}
-  accessibilityLabel={nextSessionLabel}
-  accessibilityRole="button"
-  accessibilityHint="Opens setup with the recommended next focus session">
+            <Button
+              size="lg"
+              fullWidth
+              onPress={onStartNextSession}
+              accessibilityLabel={nextSessionLabel}
+              accessibilityRole="button"
+              accessibilityHint="Opens setup with the recommended next focus session"
+            >
               {nextSessionLabel}
             </Button>
           </Box>
           <Box flex={1}>
-            <Button variant="outline" size="lg" fullWidth onPress={onOpenReflection}
-  accessibilityLabel={homeCtaLabel}
-  accessibilityRole="button"
-  accessibilityHint="Opens the completion reflection and return options">
+            <Button
+              variant="outline"
+              size="lg"
+              fullWidth
+              onPress={onOpenReflection}
+              accessibilityLabel={homeCtaLabel}
+              accessibilityRole="button"
+              accessibilityHint="Opens the completion reflection and return options"
+            >
               {homeCtaLabel}
             </Button>
           </Box>

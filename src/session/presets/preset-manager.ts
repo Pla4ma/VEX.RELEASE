@@ -37,7 +37,10 @@ export class PresetService {
     }
     PresetService.systemPresets = initializeSystemPresetsData(DEFAULT_PRESETS);
     PresetService.initialized = true;
-    debug.info("Initialized %d system presets", PresetService.systemPresets.length);
+    debug.info(
+      "Initialized %d system presets",
+      PresetService.systemPresets.length,
+    );
   }
 
   async createPreset(

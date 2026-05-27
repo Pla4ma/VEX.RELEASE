@@ -7,8 +7,8 @@
  * @phase 2.7
  */
 
-import { useMemo } from 'react';
-import { useStreakSummary } from '../../../features/streaks/hooks';
+import { useMemo } from "react";
+import { useStreakSummary } from "../../../features/streaks/hooks";
 
 export interface StreakDefenseState {
   /** Whether user can freeze streak today */
@@ -31,7 +31,7 @@ export interface StreakDefenseState {
   /** Whether streak is currently at risk (< 12h remaining) */
   isAtRisk: boolean;
   /** Risk level: NONE, LOW, MEDIUM, HIGH, CRITICAL */
-  riskLevel: 'NONE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  riskLevel: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
   /** Whether weekend mode is active (streak doesn't count weekends) */
   isWeekendMode: boolean;
   /** Loading state */
@@ -43,11 +43,17 @@ export interface StreakDefenseState {
 /**
  * Calculate hours remaining until streak deadline
  */
-function calculateHoursRemaining(nextDeadline: number | null | undefined): number | null {
-  if (!nextDeadline) {return null;}
+function calculateHoursRemaining(
+  nextDeadline: number | null | undefined,
+): number | null {
+  if (!nextDeadline) {
+    return null;
+  }
   const now = Date.now();
   const diffMs = nextDeadline - now;
-  if (diffMs <= 0) {return 0;}
+  if (diffMs <= 0) {
+    return 0;
+  }
   return Math.floor(diffMs / (1000 * 60 * 60));
 }
 
@@ -56,7 +62,7 @@ function calculateHoursRemaining(nextDeadline: number | null | undefined): numbe
  */
 function calculateQualifyingWindow(
   hoursRemaining: number | null,
-  timezone: string
+  timezone: string,
 ): { hoursUntilOpen: number; timeLabel: string } | null {
   if (hoursRemaining === null || hoursRemaining > 12) {
     return null;
@@ -68,11 +74,13 @@ function calculateQualifyingWindow(
   tomorrow6am.setDate(tomorrow6am.getDate() + 1);
   tomorrow6am.setHours(6, 0, 0, 0);
 
-  const hoursUntilOpen = Math.floor((tomorrow6am.getTime() - now.getTime()) / (1000 * 60 * 60));
+  const hoursUntilOpen = Math.floor(
+    (tomorrow6am.getTime() - now.getTime()) / (1000 * 60 * 60),
+  );
 
   return {
     hoursUntilOpen,
-    timeLabel: '6:00 AM tomorrow',
+    timeLabel: "6:00 AM tomorrow",
   };
 }
 
@@ -87,7 +95,11 @@ function calculateQualifyingWindow(
  * }
  */
 export function useStreakDefense(userId: string | null): StreakDefenseState {
-  const { data: streakSummary, isLoading, error } = useStreakSummary(userId ?? '');
+  const {
+    data: streakSummary,
+    isLoading,
+    error,
+  } = useStreakSummary(userId ?? "");
 
   return useMemo(() => {
     if (!streakSummary || !userId) {
@@ -99,7 +111,7 @@ export function useStreakDefense(userId: string | null): StreakDefenseState {
         hoursLeft: null,
         nextQualifyingWindow: null,
         isAtRisk: false,
-        riskLevel: 'NONE',
+        riskLevel: "NONE",
         isWeekendMode: false,
         isLoading,
         error,
@@ -110,24 +122,31 @@ export function useStreakDefense(userId: string | null): StreakDefenseState {
     const isAtRisk = streakSummary.isAtRisk;
 
     // Determine risk level
-    let riskLevel: StreakDefenseState['riskLevel'] = streakSummary.riskLevel;
-    if (hoursLeft !== null && riskLevel === 'NONE') {
-      if (hoursLeft <= 1) {riskLevel = 'CRITICAL';}
-      else if (hoursLeft <= 4) {riskLevel = 'HIGH';}
-      else if (hoursLeft <= 8) {riskLevel = 'MEDIUM';}
-      else if (hoursLeft < 12) {riskLevel = 'LOW';}
+    let riskLevel: StreakDefenseState["riskLevel"] = streakSummary.riskLevel;
+    if (hoursLeft !== null && riskLevel === "NONE") {
+      if (hoursLeft <= 1) {
+        riskLevel = "CRITICAL";
+      } else if (hoursLeft <= 4) {
+        riskLevel = "HIGH";
+      } else if (hoursLeft <= 8) {
+        riskLevel = "MEDIUM";
+      } else if (hoursLeft < 12) {
+        riskLevel = "LOW";
+      }
     }
 
     // Can freeze if shield is available and streak > 0
-    const canFreeze = streakSummary.currentDays > 0 && streakSummary.shieldAvailable;
+    const canFreeze =
+      streakSummary.currentDays > 0 && streakSummary.shieldAvailable;
 
     return {
       canFreeze,
-      hasFrozenToday: !streakSummary.shieldAvailable && streakSummary.currentDays > 0,
+      hasFrozenToday:
+        !streakSummary.shieldAvailable && streakSummary.currentDays > 0,
       graceUsesRemaining: streakSummary.shieldAvailable ? 1 : 0,
       maxGraceUses: 1, // One shield per day
       hoursLeft,
-      nextQualifyingWindow: calculateQualifyingWindow(hoursLeft, 'UTC'),
+      nextQualifyingWindow: calculateQualifyingWindow(hoursLeft, "UTC"),
       isAtRisk,
       riskLevel,
       isWeekendMode: false,

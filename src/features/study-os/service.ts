@@ -13,7 +13,7 @@ import {
   buildDayZeroStudyPreview,
   isContentStudyBackendAvailable,
   getManualStudyFallbackMessage,
-} from './service-helpers';
+} from "./service-helpers";
 import {
   createManualStudyPlan,
   createPasteStudyPlan,
@@ -21,7 +21,7 @@ import {
   completeStudyBlock,
   completeStudyBlockEnhanced,
   type StudyBlockCompletionResult,
-} from './study-plan-service';
+} from "./study-plan-service";
 
 export {
   planId,

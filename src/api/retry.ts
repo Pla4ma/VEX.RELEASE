@@ -4,7 +4,7 @@
  * Exponential backoff retry logic for API requests.
  */
 
-import type { ApiError } from './client-types';
+import type { ApiError } from "./client-types";
 
 export function calculateBackoff(attempt: number, baseDelay: number): number {
   const exponential = Math.pow(2, attempt) * baseDelay;
@@ -13,9 +13,16 @@ export function calculateBackoff(attempt: number, baseDelay: number): number {
 }
 
 export function isRetryableError(error: ApiError): boolean {
-  return error.retryable && ['NETWORK_ERROR', 'TIMEOUT', 'RATE_LIMIT', 'SERVER_ERROR'].includes(error.code);
+  return (
+    error.retryable &&
+    ["NETWORK_ERROR", "TIMEOUT", "RATE_LIMIT", "SERVER_ERROR"].includes(
+      error.code,
+    )
+  );
 }
 
 export function isRetryableErrorCode(code: string): boolean {
-  return ['NETWORK_ERROR', 'TIMEOUT', 'RATE_LIMIT', 'SERVER_ERROR'].includes(code);
+  return ["NETWORK_ERROR", "TIMEOUT", "RATE_LIMIT", "SERVER_ERROR"].includes(
+    code,
+  );
 }

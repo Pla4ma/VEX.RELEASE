@@ -1,6 +1,6 @@
-import * as Sentry from '@sentry/react-native';
-import type { MMKV } from 'react-native-mmkv';
-import type { StorageProvider } from './PersistenceService';
+import * as Sentry from "@sentry/react-native";
+import type { MMKV } from "react-native-mmkv";
+import type { StorageProvider } from "./PersistenceService";
 
 export class MMKVProvider implements StorageProvider {
   private storage: MMKV | null;
@@ -11,10 +11,10 @@ export class MMKVProvider implements StorageProvider {
 
   private async getStorage(): Promise<MMKV> {
     if (!this.storage) {
-      const { MMKV } = await import('react-native-mmkv');
+      const { MMKV } = await import("react-native-mmkv");
       this.storage = new MMKV({
-        id: 'vex-persistence',
-        encryptionKey: 'vex-encryption-key',
+        id: "vex-persistence",
+        encryptionKey: "vex-encryption-key",
       });
     }
     return this.storage;
@@ -28,7 +28,7 @@ export class MMKVProvider implements StorageProvider {
       return JSON.parse(value) as T;
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: 'persistence', operation: 'getItem' },
+        tags: { feature: "persistence", operation: "getItem" },
       });
       return null;
     }

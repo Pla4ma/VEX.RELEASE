@@ -1,4 +1,9 @@
-import { isSessionStale, canResumeSession, baseState, type PersistedSessionState } from "./persistence.helpers";
+import {
+  isSessionStale,
+  canResumeSession,
+  baseState,
+  type PersistedSessionState,
+} from "./persistence.helpers";
 
 describe("isSessionStale", () => {
   it("should return false for recent session", () => {
@@ -58,7 +63,10 @@ describe("canResumeSession", () => {
 
 describe("SessionPersistenceError", () => {
   it("should create error with message", () => {
-    const error = new (require("./persistence.helpers").SessionPersistenceError)("Test error");
+    const error =
+      new (require("./persistence.helpers").SessionPersistenceError)(
+        "Test error",
+      );
     expect(error.message).toBe("Test error");
     expect(error.name).toBe("SessionPersistenceError");
   });

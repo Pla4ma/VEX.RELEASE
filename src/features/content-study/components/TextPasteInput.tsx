@@ -1,18 +1,18 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Pressable, TextInput, View } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Pressable, TextInput, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSequence,
   withTiming,
-} from 'react-native-reanimated';
+} from "react-native-reanimated";
 
-import { Text } from '../../../components/primitives/Text';
-import { useReducedMotion } from '../../../hooks/useReducedMotion';
-import { useTheme } from '../../../theme';
-import type { TextPasteInputProps, ValidationError } from '../types';
-import { CONTENT_STUDY_CONSTANTS } from '../types';
-import { validatePastedText } from '../validation';
+import { Text } from "../../../components/primitives/Text";
+import { useReducedMotion } from "../../../hooks/useReducedMotion";
+import { useTheme } from "../../../theme";
+import type { TextPasteInputProps, ValidationError } from "../types";
+import { CONTENT_STUDY_CONSTANTS } from "../types";
+import { validatePastedText } from "../validation";
 
 export function TextPasteInput({
   value,
@@ -44,14 +44,20 @@ export function TextPasteInput({
     const result = validatePastedText(value);
     setErrors(result.errors);
     setWarnings(result.warnings);
-    onValidationChange?.(result.isValid, [...result.errors, ...result.warnings]);
+    onValidationChange?.(result.isValid, [
+      ...result.errors,
+      ...result.warnings,
+    ]);
   }, [onValidationChange, value]);
 
   useEffect(() => {
     if (!onAutoSave || !value.trim()) {
       return undefined;
     }
-    const timer = setTimeout(() => onAutoSave(value), CONTENT_STUDY_CONSTANTS.AUTOSAVE_INTERVAL_MS);
+    const timer = setTimeout(
+      () => onAutoSave(value),
+      CONTENT_STUDY_CONSTANTS.AUTOSAVE_INTERVAL_MS,
+    );
     return () => clearTimeout(timer);
   }, [onAutoSave, value]);
 
@@ -71,30 +77,35 @@ export function TextPasteInput({
     transform: [{ translateX: shakeOffset.value }],
   }));
 
-  const handleChange = useCallback((text: string): void => {
-    if (text.length > CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH) {
-      shake();
-      return;
-    }
-    onChange(text);
-  }, [onChange, shake]);
+  const handleChange = useCallback(
+    (text: string): void => {
+      if (text.length > CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH) {
+        shake();
+        return;
+      }
+      onChange(text);
+    },
+    [onChange, shake],
+  );
 
   const clearInput = useCallback((): void => {
-    onChange('');
+    onChange("");
     inputRef.current?.focus();
   }, [onChange]);
 
   const characterCount = value.length;
   const wordCount = value.trim() ? value.trim().split(/\s+/).length : 0;
   const isOverLimit = characterCount > CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH;
-  const isUnderMin = characterCount < CONTENT_STUDY_CONSTANTS.MIN_PASTE_LENGTH && characterCount > 0;
+  const isUnderMin =
+    characterCount < CONTENT_STUDY_CONSTANTS.MIN_PASTE_LENGTH &&
+    characterCount > 0;
   const borderColor = isFocused
     ? theme.colors.semantic.primary
     : errors.length > 0
-    ? theme.colors.semantic.danger
-    : warnings.length > 0
-    ? theme.colors.semantic.warning
-    : theme.colors.semantic.inputBorder;
+      ? theme.colors.semantic.danger
+      : warnings.length > 0
+        ? theme.colors.semantic.warning
+        : theme.colors.semantic.inputBorder;
 
   return (
     <Animated.View style={animatedStyle}>
@@ -104,7 +115,7 @@ export function TextPasteInput({
           borderRadius: theme.borderRadius.xl,
           borderColor,
           backgroundColor: theme.colors.semantic.inputBackground,
-          position: 'relative',
+          position: "relative",
         }}
       >
         <TextInput
@@ -139,40 +150,70 @@ export function TextPasteInput({
             accessibilityRole="button"
             onPress={clearInput}
             style={{
-              position: 'absolute',
+              position: "absolute",
               top: theme.spacing[3],
               right: theme.spacing[3],
               width: 44,
               height: 44,
               borderRadius: theme.borderRadius.full,
-              alignItems: 'center',
-              justifyContent: 'center',
+              alignItems: "center",
+              justifyContent: "center",
               backgroundColor: theme.colors.semantic.surfaceGlass,
             }}
           >
-            <Text color="text.secondary" variant="label">x</Text>
+            <Text color="text.secondary" variant="label">
+              x
+            </Text>
           </Pressable>
         ) : null}
       </View>
 
       {showCharacterCount ? (
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: theme.spacing[2] }}>
-          <Text color={isOverLimit ? 'error.DEFAULT' : isUnderMin && showMinLengthIndicator ? 'warning.DEFAULT' : 'text.muted'} variant="caption">
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: theme.spacing[2],
+          }}
+        >
+          <Text
+            color={
+              isOverLimit
+                ? "error.DEFAULT"
+                : isUnderMin && showMinLengthIndicator
+                  ? "warning.DEFAULT"
+                  : "text.muted"
+            }
+            variant="caption"
+          >
             {`${characterCount.toLocaleString()} / max ${CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH.toLocaleString()}`}
           </Text>
           {wordCount > 0 ? (
-            <Text color="text.muted" variant="caption">{`${wordCount.toLocaleString()} words`}</Text>
+            <Text
+              color="text.muted"
+              variant="caption"
+            >{`${wordCount.toLocaleString()} words`}</Text>
           ) : null}
         </View>
       ) : null}
 
       <View style={{ marginTop: theme.spacing[2], gap: theme.spacing[1] }}>
         {errors.map((error) => (
-          <Text key={error.message} color="error.DEFAULT" variant="caption">{error.message}</Text>
+          <Text key={error.message} color="error.DEFAULT" variant="caption">
+            {error.message}
+          </Text>
         ))}
-        {errors.length === 0 ? warnings.slice(0, 2).map((warning) => (
-          <Text key={warning.message} color="warning.DEFAULT" variant="caption">{warning.message}</Text>
-        )) : null}
+        {errors.length === 0
+          ? warnings.slice(0, 2).map((warning) => (
+              <Text
+                key={warning.message}
+                color="warning.DEFAULT"
+                variant="caption"
+              >
+                {warning.message}
+              </Text>
+            ))
+          : null}
       </View>
     </Animated.View>
   );

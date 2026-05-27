@@ -1,15 +1,15 @@
-import { captureSilentFailure } from '../utils/silent-failure';
+import { captureSilentFailure } from "../utils/silent-failure";
 /**
  * MMKV Storage Implementation
  *
  * High-performance storage using MMKV.
  */
 
-import type { StorageAdapter, StorageOptions } from './StorageAdapter';
-import type { Nullable } from '../types/global';
-import { createDebugger } from '../utils/debug';
+import type { StorageAdapter, StorageOptions } from "./StorageAdapter";
+import type { Nullable } from "../types/global";
+import { createDebugger } from "../utils/debug";
 
-const debug = createDebugger('storage:mmkv');
+const debug = createDebugger("storage:mmkv");
 
 /**
  * MMKV storage adapter
@@ -27,20 +27,22 @@ export class MMKVStorage implements StorageAdapter {
    * Initialize MMKV instance
    */
   async initialize(): Promise<void> {
-    if (this.initialized) {return;}
+    if (this.initialized) {
+      return;
+    }
 
     try {
       // Dynamic import to avoid errors when module not installed
-      const MMKV = require('react-native-mmkv').MMKV;
+      const MMKV = require("react-native-mmkv").MMKV;
 
       this.mmkv = new MMKV({
-        id: 'vex-storage',
+        id: "vex-storage",
         encryptionKey: this.options.encryptionKey,
       });
 
       this.initialized = true;
     } catch (error) {
-      debug.error('Failed to initialize MMKV:', error as Error);
+      debug.error("Failed to initialize MMKV:", error as Error);
       throw error;
     }
   }
@@ -50,19 +52,24 @@ export class MMKVStorage implements StorageAdapter {
    */
   private checkInitialized(): void {
     if (!this.initialized || !this.mmkv) {
-      throw new Error('MMKV not initialized. Call initialize() first.');
+      throw new Error("MMKV not initialized. Call initialize() first.");
     }
   }
 
   async getItem(key: string): Promise<Nullable<string>> {
     this.checkInitialized();
-    const value = (this.mmkv as { getString: (key: string) => string | undefined }).getString(key);
+    const value = (
+      this.mmkv as { getString: (key: string) => string | undefined }
+    ).getString(key);
     return value ?? null;
   }
 
   async setItem(key: string, value: string): Promise<void> {
     this.checkInitialized();
-    (this.mmkv as { set: (key: string, value: string) => void }).set(key, value);
+    (this.mmkv as { set: (key: string, value: string) => void }).set(
+      key,
+      value,
+    );
   }
 
   async removeItem(key: string): Promise<void> {
@@ -103,10 +110,17 @@ export class MMKVStorage implements StorageAdapter {
    */
   async getJSON<T>(key: string): Promise<Nullable<T>> {
     const json = await this.getItem(key);
-    if (!json) {return null;}
+    if (!json) {
+      return null;
+    }
     try {
       return JSON.parse(json) as T;
-    } catch (error) { captureSilentFailure(error, { feature: 'persistence', operation: 'safe-fallback', type: 'data' });
+    } catch (error) {
+      captureSilentFailure(error, {
+        feature: "persistence",
+        operation: "safe-fallback",
+        type: "data",
+      });
       return null;
     }
   }

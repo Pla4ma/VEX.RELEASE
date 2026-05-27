@@ -4,9 +4,19 @@
 
 import type { Theme } from "../../../theme";
 
-export type RewardType = "xp" | "coins" | "gems" | "streak" | "level" | "achievement" | "milestone";
+export type RewardType =
+  | "xp"
+  | "coins"
+  | "gems"
+  | "streak"
+  | "level"
+  | "achievement"
+  | "milestone";
 
-export const REWARD_CONFIG: Record<RewardType, { icon: string; label: string }> = {
+export const REWARD_CONFIG: Record<
+  RewardType,
+  { icon: string; label: string }
+> = {
   xp: { icon: "⭐", label: "XP Gained" },
   coins: { icon: "🪙", label: "Coins" },
   gems: { icon: "💎", label: "Gems" },

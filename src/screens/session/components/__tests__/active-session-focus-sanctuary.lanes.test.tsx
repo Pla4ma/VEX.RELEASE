@@ -1,4 +1,8 @@
-import { buildViewModel, renderHero, hasText } from "./active-session-focus-sanctuary.helpers";
+import {
+  buildViewModel,
+  renderHero,
+  hasText,
+} from "./active-session-focus-sanctuary.helpers";
 
 describe("ActiveSessionHero sanctuary > lane-specific rendering", () => {
   it("clean lane active session shows timer only, no extra widgets", () => {

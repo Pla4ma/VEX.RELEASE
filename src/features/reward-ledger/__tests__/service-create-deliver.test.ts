@@ -1,5 +1,10 @@
 import { createReward, deliverReward } from "../service";
-import { repository, addCurrency, mockRecord, validInput } from "./service.helpers";
+import {
+  repository,
+  addCurrency,
+  mockRecord,
+  validInput,
+} from "./service.helpers";
 
 describe("reward-ledger service", () => {
   beforeEach(() => {
@@ -8,7 +13,9 @@ describe("reward-ledger service", () => {
 
   describe("createReward", () => {
     it("creates a reward via repository", async () => {
-      (repository.upsertRewardLedger as jest.Mock).mockResolvedValue(mockRecord);
+      (repository.upsertRewardLedger as jest.Mock).mockResolvedValue(
+        mockRecord,
+      );
       const result = await createReward(validInput);
       expect(result.status).toBe("pending");
       expect(result.idempotencyKey).toBe(validInput.idempotencyKey);
@@ -21,7 +28,9 @@ describe("reward-ledger service", () => {
         status: "delivered" as const,
         deliveredAt: "2026-01-01T00:01:00.000Z",
       };
-      (repository.upsertRewardLedger as jest.Mock).mockResolvedValue(alreadyDelivered);
+      (repository.upsertRewardLedger as jest.Mock).mockResolvedValue(
+        alreadyDelivered,
+      );
       const result = await createReward(validInput);
       expect(result.status).toBe("delivered");
       expect(repository.upsertRewardLedger).toHaveBeenCalledTimes(1);
@@ -29,7 +38,9 @@ describe("reward-ledger service", () => {
 
     it("captures Sentry on repository error", async () => {
       const { captureException } = require("./service.helpers");
-      (repository.upsertRewardLedger as jest.Mock).mockRejectedValue(new Error("DB error"));
+      (repository.upsertRewardLedger as jest.Mock).mockRejectedValue(
+        new Error("DB error"),
+      );
       await expect(createReward(validInput)).rejects.toThrow(
         "RewardLedgerService createReward failed",
       );
@@ -41,13 +52,17 @@ describe("reward-ledger service", () => {
     const ledgerId = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa";
 
     it("fetches ledger, credits economy, updates status to delivered", async () => {
-      (repository.getRewardLedgerById as jest.Mock).mockResolvedValue(mockRecord);
+      (repository.getRewardLedgerById as jest.Mock).mockResolvedValue(
+        mockRecord,
+      );
       const delivered = {
         ...mockRecord,
         status: "delivered" as const,
         deliveredAt: "2026-01-01T00:05:00.000Z",
       };
-      (repository.updateRewardLedgerStatus as jest.Mock).mockResolvedValue(delivered);
+      (repository.updateRewardLedgerStatus as jest.Mock).mockResolvedValue(
+        delivered,
+      );
       const result = await deliverReward(ledgerId);
       expect(result.status).toBe("delivered");
       expect(addCurrency).toHaveBeenCalledWith(
@@ -58,12 +73,17 @@ describe("reward-ledger service", () => {
           source: "REWARD",
         }),
       );
-      expect(repository.updateRewardLedgerStatus).toHaveBeenCalledWith(ledgerId, "delivered");
+      expect(repository.updateRewardLedgerStatus).toHaveBeenCalledWith(
+        ledgerId,
+        "delivered",
+      );
     });
 
     it("skips crediting if already not pending", async () => {
       const alreadyDelivered = { ...mockRecord, status: "delivered" as const };
-      (repository.getRewardLedgerById as jest.Mock).mockResolvedValue(alreadyDelivered);
+      (repository.getRewardLedgerById as jest.Mock).mockResolvedValue(
+        alreadyDelivered,
+      );
       const result = await deliverReward(ledgerId);
       expect(result.status).toBe("delivered");
       expect(addCurrency).not.toHaveBeenCalled();
@@ -71,7 +91,9 @@ describe("reward-ledger service", () => {
 
     it("captures Sentry on error", async () => {
       const { captureException } = require("./service.helpers");
-      (repository.getRewardLedgerById as jest.Mock).mockRejectedValue(new Error("network timeout"));
+      (repository.getRewardLedgerById as jest.Mock).mockRejectedValue(
+        new Error("network timeout"),
+      );
       await expect(deliverReward(ledgerId)).rejects.toThrow(
         "RewardLedgerService deliverReward failed",
       );

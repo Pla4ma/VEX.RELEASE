@@ -5,9 +5,7 @@ import { MainNavigator } from "./MainNavigator";
 import { OnboardingNavigator } from "./OnboardingNavigator";
 import { SettingsNavigator } from "./SettingsNavigator";
 import { RootStackFeatureRoutes } from "./root-stack-feature-routes";
-import {
-  type FeatureAccessMap,
-} from "../features/liveops-config";
+import { type FeatureAccessMap } from "../features/liveops-config";
 import type { ExtendedRootStackParams } from "./types";
 import { canRegisterPremiumPaywallRoute } from "./premium-route-gating";
 
@@ -15,7 +13,9 @@ type RootStack = ReturnType<
   typeof createNativeStackNavigator<ExtendedRootStackParams>
 >;
 
-const PaywallScreen = React.lazy(() => import("../screens/paywall/PaywallScreen"));
+const PaywallScreen = React.lazy(
+  () => import("../screens/paywall/PaywallScreen"),
+);
 const VipPaywallScreen = React.lazy(
   () => import("../shared/monetization/components/VipPaywallScreen"),
 );

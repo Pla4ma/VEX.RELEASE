@@ -7,21 +7,21 @@
  * 3. Created progression entries have correct structure
  */
 
-import { describe, it, expect, jest } from '@jest/globals';
+import { describe, it, expect, jest } from "@jest/globals";
 import {
   calculateLevelFromTotalXp,
   calculateLevelThreshold,
   calculateProgressPercent,
   calculateXpBreakdown,
-} from '../service-enhanced-math';
-import type { BreakdownParams } from '../service-enhanced-math';
+} from "../service-enhanced-math";
+import type { BreakdownParams } from "../service-enhanced-math";
 
-jest.mock('../../../config/supabase', () => ({
+jest.mock("../../../config/supabase", () => ({
   getSupabaseClient: jest.fn(() => ({
     from: jest.fn(() => ({
       select: jest.fn(() => ({
         eq: jest.fn(() => ({
-          single: jest.fn(() => ({ data: null, error: { code: 'PGRST116' } })),
+          single: jest.fn(() => ({ data: null, error: { code: "PGRST116" } })),
           order: jest.fn(() => ({
             limit: jest.fn(() => ({ data: [], error: null })),
           })),
@@ -34,11 +34,11 @@ jest.mock('../../../config/supabase', () => ({
         select: jest.fn(() => ({
           single: jest.fn(() => ({
             data: {
-              id: 'xp-entry-1',
-              user_id: 'user-1',
+              id: "xp-entry-1",
+              user_id: "user-1",
               amount: 100,
-              source: 'SESSION_COMPLETE',
-              session_id: 'session-1',
+              source: "SESSION_COMPLETE",
+              session_id: "session-1",
               metadata: null,
               created_at: Date.now(),
             },
@@ -50,22 +50,22 @@ jest.mock('../../../config/supabase', () => ({
   })),
 }));
 
-jest.mock('../../../utils/supabase-resilience', () => ({
+jest.mock("../../../utils/supabase-resilience", () => ({
   withResilience: jest.fn((promise: unknown) => promise),
 }));
 
-describe('XP / Progression persistence', () => {
-  describe('Level calculation (deterministic, survives restart)', () => {
-    it('returns level 1 for 0 XP', () => {
+describe("XP / Progression persistence", () => {
+  describe("Level calculation (deterministic, survives restart)", () => {
+    it("returns level 1 for 0 XP", () => {
       expect(calculateLevelFromTotalXp(0)).toBe(1);
     });
 
-    it('returns same level for same XP on repeated calls', () => {
+    it("returns same level for same XP on repeated calls", () => {
       const xp = 500;
       expect(calculateLevelFromTotalXp(xp)).toBe(calculateLevelFromTotalXp(xp));
     });
 
-    it('level only increases monotonically', () => {
+    it("level only increases monotonically", () => {
       let prevLevel = 0;
       for (let xp = 0; xp <= 10000; xp += 500) {
         const level = calculateLevelFromTotalXp(xp);
@@ -74,7 +74,7 @@ describe('XP / Progression persistence', () => {
       }
     });
 
-    it('progress percent is between 0 and 100 for all valid levels', () => {
+    it("progress percent is between 0 and 100 for all valid levels", () => {
       for (let currentXp = 0; currentXp <= 500; currentXp += 50) {
         const pct = calculateProgressPercent(currentXp, 1);
         expect(pct).toBeGreaterThanOrEqual(0);
@@ -83,7 +83,7 @@ describe('XP / Progression persistence', () => {
     });
   });
 
-  describe('XP breakdown from session', () => {
+  describe("XP breakdown from session", () => {
     const baseParams: BreakdownParams = {
       baseAmount: 100,
       streakDays: 3,
@@ -93,56 +93,66 @@ describe('XP / Progression persistence', () => {
       comebackActive: false,
     };
 
-    it('returns all required fields with correct types', () => {
+    it("returns all required fields with correct types", () => {
       const breakdown = calculateXpBreakdown(baseParams);
-      expect(breakdown).toHaveProperty('base');
-      expect(breakdown).toHaveProperty('streakBonus');
-      expect(breakdown).toHaveProperty('squadBonus');
-      expect(breakdown).toHaveProperty('bossBonus');
-      expect(breakdown).toHaveProperty('comebackBonus');
-      expect(breakdown).toHaveProperty('perfectBonus');
-      expect(breakdown).toHaveProperty('total');
-      expect(typeof breakdown.total).toBe('number');
+      expect(breakdown).toHaveProperty("base");
+      expect(breakdown).toHaveProperty("streakBonus");
+      expect(breakdown).toHaveProperty("squadBonus");
+      expect(breakdown).toHaveProperty("bossBonus");
+      expect(breakdown).toHaveProperty("comebackBonus");
+      expect(breakdown).toHaveProperty("perfectBonus");
+      expect(breakdown).toHaveProperty("total");
+      expect(typeof breakdown.total).toBe("number");
     });
 
-    it('total equals sum of all components', () => {
+    it("total equals sum of all components", () => {
       const breakdown = calculateXpBreakdown({
         ...baseParams,
         streakDays: 5,
         bossActive: true,
       });
       expect(breakdown.total).toBe(
-        breakdown.base + breakdown.streakBonus + breakdown.squadBonus +
-        breakdown.bossBonus + breakdown.comebackBonus + breakdown.perfectBonus,
+        breakdown.base +
+          breakdown.streakBonus +
+          breakdown.squadBonus +
+          breakdown.bossBonus +
+          breakdown.comebackBonus +
+          breakdown.perfectBonus,
       );
     });
 
-    it('handles zero streak gracefully', () => {
+    it("handles zero streak gracefully", () => {
       const breakdown = calculateXpBreakdown({ ...baseParams, streakDays: 0 });
       expect(breakdown.total).toBeGreaterThanOrEqual(breakdown.base);
       expect(breakdown.streakBonus).toBe(0);
       expect(breakdown.squadBonus).toBe(0);
     });
 
-    it('streak multiplier applies for long streaks', () => {
+    it("streak multiplier applies for long streaks", () => {
       const noBonus = calculateXpBreakdown({ ...baseParams, streakDays: 2 });
       const withBonus = calculateXpBreakdown({ ...baseParams, streakDays: 7 });
       expect(withBonus.streakBonus).toBeGreaterThan(noBonus.streakBonus);
     });
   });
 
-  describe('Level threshold exponential growth', () => {
-    it('level 1 threshold is base (100)', () => {
+  describe("Level threshold exponential growth", () => {
+    it("level 1 threshold is base (100)", () => {
       expect(calculateLevelThreshold(1)).toBe(100);
     });
 
-    it('higher levels require more XP', () => {
-      expect(calculateLevelThreshold(10)).toBeGreaterThan(calculateLevelThreshold(5));
-      expect(calculateLevelThreshold(20)).toBeGreaterThan(calculateLevelThreshold(10));
-      expect(calculateLevelThreshold(50)).toBeGreaterThan(calculateLevelThreshold(30));
+    it("higher levels require more XP", () => {
+      expect(calculateLevelThreshold(10)).toBeGreaterThan(
+        calculateLevelThreshold(5),
+      );
+      expect(calculateLevelThreshold(20)).toBeGreaterThan(
+        calculateLevelThreshold(10),
+      );
+      expect(calculateLevelThreshold(50)).toBeGreaterThan(
+        calculateLevelThreshold(30),
+      );
     });
 
-    it('max level is capped at 100', () => {
+    it("max level is capped at 100", () => {
       expect(calculateLevelFromTotalXp(Number.MAX_SAFE_INTEGER)).toBe(100);
     });
   });

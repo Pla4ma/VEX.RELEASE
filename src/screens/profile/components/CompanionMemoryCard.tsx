@@ -1,12 +1,14 @@
-import React from 'react';
-import { Box, Card, Text } from '../../../components/primitives';
-import type { CompanionMemory } from '../../../features/companion/memory-types';
+import React from "react";
+import { Box, Card, Text } from "../../../components/primitives";
+import type { CompanionMemory } from "../../../features/companion/memory-types";
 
 interface CompanionMemoryCardProps {
   memory: CompanionMemory;
 }
 
-export function CompanionMemoryCard({ memory }: CompanionMemoryCardProps): JSX.Element {
+export function CompanionMemoryCard({
+  memory,
+}: CompanionMemoryCardProps): JSX.Element {
   return (
     <Card
       accessibilityHint="Read-only companion memory"
@@ -15,7 +17,12 @@ export function CompanionMemoryCard({ memory }: CompanionMemoryCardProps): JSX.E
       size="md"
     >
       <Box gap="xs">
-        <Box flexDirection="row" justifyContent="space-between" alignItems="center" gap="sm">
+        <Box
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+          gap="sm"
+        >
           <Text variant="caption" color="text.tertiary">
             {formatMemoryDate(memory.sessionDate)}
           </Text>
@@ -39,7 +46,8 @@ export function CompanionMemoryCard({ memory }: CompanionMemoryCardProps): JSX.E
 }
 
 function formatMemoryDate(date: string): string {
-  return new Intl.DateTimeFormat('en-US', { day: 'numeric', month: 'short' }).format(
-    new Date(`${date}T00:00:00.000Z`),
-  );
+  return new Intl.DateTimeFormat("en-US", {
+    day: "numeric",
+    month: "short",
+  }).format(new Date(`${date}T00:00:00.000Z`));
 }

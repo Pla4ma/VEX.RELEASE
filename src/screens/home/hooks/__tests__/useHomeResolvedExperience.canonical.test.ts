@@ -18,10 +18,7 @@ describe("HomeSurfaceDecision inputs from canonical sources", () => {
   });
 
   it("studyUsageRatio is computed from real session data — not invented from activeStudyPlan boolean", () => {
-    const sessions: SessionEntry[] = [
-      { mode: "FOCUS" },
-      { mode: "STUDY" },
-    ];
+    const sessions: SessionEntry[] = [{ mode: "FOCUS" }, { mode: "STUDY" }];
     const ratio = computeStudyUsageRatio(sessions, 2);
     expect(ratio).toBe(0.5);
     expect(ratio).not.toBe(0);

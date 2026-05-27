@@ -1,18 +1,18 @@
-import { createDebugger } from '../../utils/debug';
+import { createDebugger } from "../../utils/debug";
 import {
   createMemory as repoCreateMemory,
   getMemoriesByUser as repoGetMemoriesByUser,
   getMemoriesByType as repoGetMemoriesByType,
   markMemoryReferenced as repoMarkMemoryReferenced,
   deleteMemory as repoDeleteMemory,
-} from './repository/memories';
+} from "./repository/memories";
 import {
   MemoryTypeSchema,
   type CoachMemory,
   type MemoryType,
-} from './memory-schemas';
+} from "./memory-schemas";
 
-const debug = createDebugger('ai-coach:memory');
+const debug = createDebugger("ai-coach:memory");
 
 export type { CoachMemory, MemoryType };
 
@@ -26,7 +26,7 @@ export {
   getPreferredTechniques,
   getFailureModes,
   getOptimalFocusTimes,
-} from './memory-patterns';
+} from "./memory-patterns";
 
 export {
   checkFirstSGrade,
@@ -34,9 +34,9 @@ export {
   checkBestStreak,
   checkFirstBossDefeated,
   checkFirstRivalWin,
-} from './memory-milestones';
+} from "./memory-milestones";
 
-export { generateMemoryReferenceMessage } from './memory-reference-message';
+export { generateMemoryReferenceMessage } from "./memory-reference-message";
 
 export {
   hashEvidence,
@@ -44,13 +44,13 @@ export {
   buildMemoryEvidence,
   generateRecommendationEvidence,
   canClaimStrongPattern,
-} from './coach-memory-evidence';
+} from "./coach-memory-evidence";
 
 export {
   getRelevantMemories,
   getOnboardingGoal,
   getMilestoneSummary,
-} from './coach-memory-queries';
+} from "./coach-memory-queries";
 
 export interface UserMilestones {
   firstSGrade: CoachMemory | null;
@@ -72,8 +72,14 @@ export async function storeMemory(
   description: string,
   metadata: Record<string, unknown> = {},
 ): Promise<CoachMemory> {
-  const memory = await repoCreateMemory(userId, type, title, description, metadata);
-  debug.info('[CoachMemory] Stored: %s for user %s', type, userId);
+  const memory = await repoCreateMemory(
+    userId,
+    type,
+    title,
+    description,
+    metadata,
+  );
+  debug.info("[CoachMemory] Stored: %s for user %s", type, userId);
   return memory;
 }
 
@@ -81,7 +87,10 @@ export async function getUserMemories(userId: string): Promise<CoachMemory[]> {
   try {
     return await repoGetMemoriesByUser(userId);
   } catch (error) {
-    debug.warn('[CoachMemory] Failed to fetch memories, returning empty:', error);
+    debug.warn(
+      "[CoachMemory] Failed to fetch memories, returning empty:",
+      error,
+    );
     return [];
   }
 }
@@ -93,7 +102,10 @@ export async function getMemoriesByType(
   try {
     return await repoGetMemoriesByType(userId, type);
   } catch (error) {
-    debug.warn('[CoachMemory] Failed to fetch memories by type, returning empty:', error);
+    debug.warn(
+      "[CoachMemory] Failed to fetch memories by type, returning empty:",
+      error,
+    );
     return [];
   }
 }
@@ -102,26 +114,38 @@ export async function markMemoryReferenced(memoryId: string): Promise<void> {
   try {
     await repoMarkMemoryReferenced(memoryId);
   } catch (error) {
-    debug.warn('[CoachMemory] Failed to mark memory referenced:', error);
+    debug.warn("[CoachMemory] Failed to mark memory referenced:", error);
   }
 }
 
-export async function storeOnboardingGoal(userId: string, goal: string): Promise<CoachMemory> {
-  return storeMemory(userId, 'ONBOARDING_GOAL', 'Your Goal', `You said you wanted to: ${goal}`, {
-    goal,
-  });
+export async function storeOnboardingGoal(
+  userId: string,
+  goal: string,
+): Promise<CoachMemory> {
+  return storeMemory(
+    userId,
+    "ONBOARDING_GOAL",
+    "Your Goal",
+    `You said you wanted to: ${goal}`,
+    {
+      goal,
+    },
+  );
 }
 
 export async function softDeleteMemory(memoryId: string): Promise<void> {
   try {
     await repoDeleteMemory(memoryId);
   } catch (error) {
-    debug.warn('[CoachMemory] Failed to soft delete memory:', error);
+    debug.warn("[CoachMemory] Failed to soft delete memory:", error);
     throw error;
   }
 }
 
-const SENSITIVE_MEMORY_TYPES: MemoryType[] = ['DOCUMENT_MILESTONE', 'STUDY_PATTERN'];
+const SENSITIVE_MEMORY_TYPES: MemoryType[] = [
+  "DOCUMENT_MILESTONE",
+  "STUDY_PATTERN",
+];
 
 export function isSensitiveMemoryType(type: MemoryType): boolean {
   return SENSITIVE_MEMORY_TYPES.includes(type);
@@ -129,12 +153,15 @@ export function isSensitiveMemoryType(type: MemoryType): boolean {
 
 export function scopeMemoryForContext(
   memory: CoachMemory,
-  context: 'generic_coach' | 'task_specific' | 'premium',
+  context: "generic_coach" | "task_specific" | "premium",
 ): { usable: boolean; scopedMessage?: string } {
-  if (context === 'task_specific') {
+  if (context === "task_specific") {
     return { usable: true };
   }
-  if (isSensitiveMemoryType(memory.type) && memory.metadata.source === 'import') {
+  if (
+    isSensitiveMemoryType(memory.type) &&
+    memory.metadata.source === "import"
+  ) {
     return { usable: false };
   }
   return { usable: true };

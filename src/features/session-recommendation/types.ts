@@ -8,8 +8,6 @@ export type {
   SessionMode,
   SessionRecommendation,
   SessionRecommendationInput,
-} from './schemas';
+} from "./schemas";
 
-export type {
-  SessionRecommendationCardProps,
-} from './components/SessionRecommendationCard';
+export type { SessionRecommendationCardProps } from "./components/SessionRecommendationCard";

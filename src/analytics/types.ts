@@ -12,7 +12,7 @@
 export interface MetricWithTarget {
   current: number;
   target: number;
-  trend: 'up' | 'down' | 'flat';
+  trend: "up" | "down" | "flat";
 }
 
 export interface VEXSuccessMetrics {
@@ -97,7 +97,7 @@ export interface MonetizationMetrics {
   totalRevenue: number;
   subscriptionRevenue: number;
   iapRevenue: number;
-  subscriptionType: 'free' | 'premium' | 'premium_plus';
+  subscriptionType: "free" | "premium" | "premium_plus";
   subscriptionStart?: string;
   subscriptionEnd?: string;
   ltv: number;

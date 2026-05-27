@@ -1,4 +1,9 @@
-import { type SharedValue, withSpring, withSequence, withTiming } from "react-native-reanimated";
+import {
+  type SharedValue,
+  withSpring,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
 import * as Sentry from "@sentry/react-native";
 import { eventBus } from "@/events";
 import { haptics } from "@/shared/feedback";
@@ -22,28 +27,58 @@ export const HAPTIC_PATTERNS = {
 
 export const ANIMATION_PATTERNS = {
   buttonPress: (scale: SharedValue<number>) => {
-    scale.value = withSequence(withSpring(0.95, { stiffness: 400, damping: 15 }), withSpring(1, { stiffness: 400, damping: 15 }));
+    scale.value = withSequence(
+      withSpring(0.95, { stiffness: 400, damping: 15 }),
+      withSpring(1, { stiffness: 400, damping: 15 }),
+    );
     return scale;
   },
-  celebration: (translateY: SharedValue<number>, opacity: SharedValue<number>) => {
-    translateY.value = withSequence(withSpring(-20, { stiffness: 300, damping: 10 }), withSpring(0, { stiffness: 300, damping: 10 }));
-    opacity.value = withSequence(withTiming(1, { duration: 100 }), withTiming(0, { duration: 500 }));
+  celebration: (
+    translateY: SharedValue<number>,
+    opacity: SharedValue<number>,
+  ) => {
+    translateY.value = withSequence(
+      withSpring(-20, { stiffness: 300, damping: 10 }),
+      withSpring(0, { stiffness: 300, damping: 10 }),
+    );
+    opacity.value = withSequence(
+      withTiming(1, { duration: 100 }),
+      withTiming(0, { duration: 500 }),
+    );
     return { translateY, opacity };
   },
   streakPulse: (scale: SharedValue<number>) => {
-    scale.value = withSequence(withSpring(1.2, { stiffness: 200, damping: 10 }), withSpring(1, { stiffness: 200, damping: 10 }), withSpring(1.1, { stiffness: 200, damping: 10 }), withSpring(1, { stiffness: 200, damping: 10 }));
+    scale.value = withSequence(
+      withSpring(1.2, { stiffness: 200, damping: 10 }),
+      withSpring(1, { stiffness: 200, damping: 10 }),
+      withSpring(1.1, { stiffness: 200, damping: 10 }),
+      withSpring(1, { stiffness: 200, damping: 10 }),
+    );
     return scale;
   },
   damageImpact: (shake: SharedValue<number>) => {
-    shake.value = withSequence(withTiming(5, { duration: 50 }), withTiming(-5, { duration: 50 }), withTiming(3, { duration: 50 }), withTiming(-3, { duration: 50 }), withTiming(0, { duration: 50 }));
+    shake.value = withSequence(
+      withTiming(5, { duration: 50 }),
+      withTiming(-5, { duration: 50 }),
+      withTiming(3, { duration: 50 }),
+      withTiming(-3, { duration: 50 }),
+      withTiming(0, { duration: 50 }),
+    );
     return shake;
   },
   countUp: (value: SharedValue<number>, target: number) => {
-    value.value = withTiming(target, { duration: 1000, easing: (x: number) => 1 - Math.pow(1 - x, 3) });
+    value.value = withTiming(target, {
+      duration: 1000,
+      easing: (x: number) => 1 - Math.pow(1 - x, 3),
+    });
     return value;
   },
   progressFill: (progress: SharedValue<number>, target: number) => {
-    progress.value = withSpring(target, { stiffness: 50, damping: 15, mass: 1 });
+    progress.value = withSpring(target, {
+      stiffness: 50,
+      damping: 15,
+      mass: 1,
+    });
     return progress;
   },
 };
@@ -64,7 +99,17 @@ export const SOUND_EFFECTS = {
 };
 
 export interface FeedbackEvent {
-  type: "STREAK_INCREMENT" | "LEVEL_UP" | "BOSS_DEFEAT" | "BOSS_DAMAGE" | "REWARD_EARNED" | "SESSION_COMPLETE" | "SESSION_INTERRUPTED" | "PHASE_CHANGE" | "STREAK_WARNING" | "STREAK_BROKEN";
+  type:
+    | "STREAK_INCREMENT"
+    | "LEVEL_UP"
+    | "BOSS_DEFEAT"
+    | "BOSS_DAMAGE"
+    | "REWARD_EARNED"
+    | "SESSION_COMPLETE"
+    | "SESSION_INTERRUPTED"
+    | "PHASE_CHANGE"
+    | "STREAK_WARNING"
+    | "STREAK_BROKEN";
   intensity: "LOW" | "MEDIUM" | "HIGH";
   metadata?: {
     rarity?: "COMMON" | "RARE" | "EPIC" | "LEGENDARY";
@@ -118,7 +163,11 @@ function triggerHaptic(event: FeedbackEvent): void {
 function triggerSound(event: FeedbackEvent): void {
   const sound = getSoundEffect(event.type);
   if (sound) {
-    Sentry.addBreadcrumb({ category: "sound", message: "[Sound Effect] " + sound, level: "debug" });
+    Sentry.addBreadcrumb({
+      category: "sound",
+      message: "[Sound Effect] " + sound,
+      level: "debug",
+    });
   }
 }
 
@@ -166,17 +215,41 @@ export interface LoadingState {
   estimatedTime?: number;
 }
 
-export function getLoadingState(context: "INITIALIZING" | "SYNCING" | "MATCHMAKING"): LoadingState {
+export function getLoadingState(
+  context: "INITIALIZING" | "SYNCING" | "MATCHMAKING",
+): LoadingState {
   const messages: Record<typeof context, string[]> = {
-    INITIALIZING: ["Calibrating focus sensors...", "Loading your mastery data...", "Preparing today's challenges...", "Syncing with the void..."],
-    SYNCING: ["Syncing your progress...", "Updating leaderboards...", "Fetching squad status...", "Loading daily dungeon..."],
-    MATCHMAKING: ["Finding worthy opponents...", "Scanning for active squads...", "Preparing the arena...", "Summoning raid participants..."],
+    INITIALIZING: [
+      "Calibrating focus sensors...",
+      "Loading your mastery data...",
+      "Preparing today's challenges...",
+      "Syncing with the void...",
+    ],
+    SYNCING: [
+      "Syncing your progress...",
+      "Updating leaderboards...",
+      "Fetching squad status...",
+      "Loading daily dungeon...",
+    ],
+    MATCHMAKING: [
+      "Finding worthy opponents...",
+      "Scanning for active squads...",
+      "Preparing the arena...",
+      "Summoning raid participants...",
+    ],
   };
-  const tips = ["Tip: Deep work sessions are 3x more effective in the morning", "Tip: Taking breaks every 90 minutes improves retention", "Tip: Your streak is a commitment to your future self", "Tip: 25 minutes of focus beats 2 hours of distraction"];
+  const tips = [
+    "Tip: Deep work sessions are 3x more effective in the morning",
+    "Tip: Taking breaks every 90 minutes improves retention",
+    "Tip: Your streak is a commitment to your future self",
+    "Tip: 25 minutes of focus beats 2 hours of distraction",
+  ];
 
   const contextMessages = messages[context] ?? messages.INITIALIZING;
   return {
-    message: contextMessages[Math.floor(Math.random() * contextMessages.length)] ?? contextMessages[0]!,
+    message:
+      contextMessages[Math.floor(Math.random() * contextMessages.length)] ??
+      contextMessages[0]!,
     tip: tips[Math.floor(Math.random() * tips.length)] ?? tips[0]!,
   };
 }
@@ -188,11 +261,36 @@ export interface ErrorRecovery {
   encouragement: string;
 }
 
-export function getErrorRecovery(_error: Error, context: string): ErrorRecovery {
+export function getErrorRecovery(
+  _error: Error,
+  context: string,
+): ErrorRecovery {
   const recoveries: Record<string, ErrorRecovery> = {
-    NETWORK_ERROR: { friendlyMessage: "Connection lost - your progress is safe", actionText: "Retry", actionType: "RETRY", encouragement: "Even Focus Masters face interference. Try again!" },
-    SESSION_INTERRUPTED: { friendlyMessage: "Session ended early", actionText: "Start Fresh Session", actionType: "CONTINUE", encouragement: "One setback doesn't define your journey. Keep going!" },
-    STREAK_BROKEN: { friendlyMessage: "Your streak has ended", actionText: "Begin Comeback", actionType: "CONTINUE", encouragement: "Comebacks are stronger than streaks. Prove it!" },
+    NETWORK_ERROR: {
+      friendlyMessage: "Connection lost - your progress is safe",
+      actionText: "Retry",
+      actionType: "RETRY",
+      encouragement: "Even Focus Masters face interference. Try again!",
+    },
+    SESSION_INTERRUPTED: {
+      friendlyMessage: "Session ended early",
+      actionText: "Start Fresh Session",
+      actionType: "CONTINUE",
+      encouragement: "One setback doesn't define your journey. Keep going!",
+    },
+    STREAK_BROKEN: {
+      friendlyMessage: "Your streak has ended",
+      actionText: "Begin Comeback",
+      actionType: "CONTINUE",
+      encouragement: "Comebacks are stronger than streaks. Prove it!",
+    },
   };
-  return recoveries[context] ?? { friendlyMessage: "Something went wrong", actionText: "Try Again", actionType: "RETRY", encouragement: "Every expert was once a beginner. Keep trying!" };
+  return (
+    recoveries[context] ?? {
+      friendlyMessage: "Something went wrong",
+      actionText: "Try Again",
+      actionType: "RETRY",
+      encouragement: "Every expert was once a beginner. Keep trying!",
+    }
+  );
 }

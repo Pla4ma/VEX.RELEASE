@@ -8,12 +8,18 @@
  * @phase 3C.3
  */
 
-import React from 'react';
-import Animated, { useAnimatedStyle, withSpring, withTiming, withRepeat, withSequence } from 'react-native-reanimated';
+import React from "react";
+import Animated, {
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  withRepeat,
+  withSequence,
+} from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
 
 export interface StreakRecoveryBannerProps {
   /** Original streak that was lost */
@@ -31,7 +37,13 @@ export interface StreakRecoveryBannerProps {
 /**
  * Progress bar for recovery
  */
-function RecoveryProgress({ completed, total }: { completed: number; total: number }): JSX.Element {
+function RecoveryProgress({
+  completed,
+  total,
+}: {
+  completed: number;
+  total: number;
+}): JSX.Element {
   const { theme } = useTheme();
   const progress = completed / total;
 
@@ -41,11 +53,16 @@ function RecoveryProgress({ completed, total }: { completed: number; total: numb
 
   return (
     <Box gap="sm">
-      <Box height={8} borderRadius="full" bg="background.tertiary" overflow="hidden">
+      <Box
+        height={8}
+        borderRadius="full"
+        bg="background.tertiary"
+        overflow="hidden"
+      >
         <Animated.View
           style={[
             {
-              height: '100%',
+              height: "100%",
               borderRadius: 4,
               backgroundColor: theme.colors.accent.orange,
             },
@@ -74,7 +91,14 @@ function ComebackKingBadge(): JSX.Element {
   const bounceStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        scale: withRepeat(withSequence(withSpring(1.1, { damping: 3, stiffness: 200 }), withSpring(1, { damping: 3, stiffness: 200 })), -1, true),
+        scale: withRepeat(
+          withSequence(
+            withSpring(1.1, { damping: 3, stiffness: 200 }),
+            withSpring(1, { damping: 3, stiffness: 200 }),
+          ),
+          -1,
+          true,
+        ),
       },
     ],
   }));
@@ -104,13 +128,28 @@ function ComebackKingBadge(): JSX.Element {
 /**
  * Streak recovery banner
  */
-export function StreakRecoveryBanner({ originalStreak, sessionsCompleted, sessionsNeeded, hoursRemaining, isComplete }: StreakRecoveryBannerProps): JSX.Element {
+export function StreakRecoveryBanner({
+  originalStreak,
+  sessionsCompleted,
+  sessionsNeeded,
+  hoursRemaining,
+  isComplete,
+}: StreakRecoveryBannerProps): JSX.Element {
   const { theme } = useTheme();
 
   // Don't show if recovery complete
   if (isComplete) {
     return (
-      <Box m="lg" p="lg" borderRadius="xl" bg={`${theme.colors.accent.purple}15`} borderWidth={2} borderColor="accent.purple" alignItems="center" gap="md">
+      <Box
+        m="lg"
+        p="lg"
+        borderRadius="xl"
+        bg={`${theme.colors.accent.purple}15`}
+        borderWidth={2}
+        borderColor="accent.purple"
+        alignItems="center"
+        gap="md"
+      >
         <ComebackKingBadge />
         <Text variant="h4" color="text.primary" textAlign="center">
           Streak Restored!
@@ -128,7 +167,15 @@ export function StreakRecoveryBanner({ originalStreak, sessionsCompleted, sessio
   }
 
   return (
-    <Box m="lg" p="lg" borderRadius="xl" bg={`${theme.colors.accent.orange}15`} borderWidth={2} borderColor="accent.orange" gap="md">
+    <Box
+      m="lg"
+      p="lg"
+      borderRadius="xl"
+      bg={`${theme.colors.accent.orange}15`}
+      borderWidth={2}
+      borderColor="accent.orange"
+      gap="md"
+    >
       {/* Header */}
       <Box flexDirection="row" alignItems="center" gap="sm">
         <Text fontSize={24}>⚡</Text>
@@ -144,11 +191,11 @@ export function StreakRecoveryBanner({ originalStreak, sessionsCompleted, sessio
 
       {/* Goal */}
       <Text variant="body" color="text.secondary">
-        Complete{' '}
+        Complete{" "}
         <Text color="accent.orange" fontWeight="700">
           {sessionsNeeded} sessions
-        </Text>{' '}
-        to restore your{' '}
+        </Text>{" "}
+        to restore your{" "}
         <Text color="text.primary" fontWeight="700">
           {originalStreak}-day streak
         </Text>
@@ -161,7 +208,9 @@ export function StreakRecoveryBanner({ originalStreak, sessionsCompleted, sessio
       {sessionsCompleted > 0 && (
         <Box p="sm" borderRadius="lg" bg={`${theme.colors.accent.orange}20`}>
           <Text variant="caption" color="accent.orange" textAlign="center">
-            {sessionsCompleted === sessionsNeeded - 1 ? '🔥 One more session to restore your streak!' : '💪 Keep going! Each session brings you closer.'}
+            {sessionsCompleted === sessionsNeeded - 1
+              ? "🔥 One more session to restore your streak!"
+              : "💪 Keep going! Each session brings you closer."}
           </Text>
         </Box>
       )}

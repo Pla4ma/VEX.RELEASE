@@ -1,7 +1,7 @@
-import type { User as SupabaseUser } from '@supabase/supabase-js';
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
-import { getSupabaseClient } from '../config/supabase';
-import type { User } from '../types/models';
+import { getSupabaseClient } from "../config/supabase";
+import type { User } from "../types/models";
 
 type UserRow = {
   onboarding_completed_at: string | null;
@@ -17,17 +17,17 @@ export function mapSupabaseUser(
   const now = new Date().toISOString();
   const metadata = sbUser.user_metadata || {};
 
-  const firstName = overrideMetadata?.firstName || metadata.first_name || '';
-  const lastName = overrideMetadata?.lastName || metadata.last_name || '';
+  const firstName = overrideMetadata?.firstName || metadata.first_name || "";
+  const lastName = overrideMetadata?.lastName || metadata.last_name || "";
   const displayName =
     firstName && lastName
       ? `${firstName} ${lastName}`
-      : sbUser.email?.split('@')[0] || '';
+      : sbUser.email?.split("@")[0] || "";
 
   return {
     id: sbUser.id,
-    email: sbUser.email || '',
-    username: metadata.username || sbUser.email?.split('@')[0] || '',
+    email: sbUser.email || "",
+    username: metadata.username || sbUser.email?.split("@")[0] || "",
     firstName,
     lastName,
     displayName,
@@ -35,26 +35,26 @@ export function mapSupabaseUser(
     avatar: metadata.avatar_url || undefined,
     bio: metadata.bio || undefined,
     verified: Boolean(metadata.verified),
-    role: metadata.role || 'user',
-    status: 'active',
+    role: metadata.role || "user",
+    status: "active",
     preferences: {
-      theme: metadata.theme || 'system',
-      language: metadata.language || 'en',
+      theme: metadata.theme || "system",
+      language: metadata.language || "en",
       notifications: {
         push: true,
         email: true,
         sms: false,
         inApp: true,
-        digestFrequency: 'daily',
+        digestFrequency: "daily",
         quietHours: {
           enabled: false,
-          start: '22:00',
-          end: '08:00',
-          timezone: 'UTC',
+          start: "22:00",
+          end: "08:00",
+          timezone: "UTC",
         },
       },
       privacy: {
-        profileVisibility: 'public',
+        profileVisibility: "public",
         activityStatus: true,
         readReceipts: true,
         allowTagging: true,
@@ -82,9 +82,9 @@ export function mapSupabaseUser(
 export async function attachOnboardingCompletion(user: User): Promise<User> {
   const supabase = getSupabaseClient();
   const { data, error } = await supabase
-    .from('users')
-    .select('onboarding_completed_at')
-    .eq('id', user.id)
+    .from("users")
+    .select("onboarding_completed_at")
+    .eq("id", user.id)
     .maybeSingle<UserRow>();
 
   if (error) {

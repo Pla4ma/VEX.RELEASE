@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import { Box, Text } from '../../../components/primitives';
-import type { Theme } from '../../../theme/types';
+import { Box, Text } from "../../../components/primitives";
+import type { Theme } from "../../../theme/types";
 
 type SessionReturnReasonCardProps = {
   body: string;

@@ -6,17 +6,24 @@
  * difficulty recommendations.
  */
 
-import { useEffect, useState, useCallback, useMemo } from 'react';
-import * as Sentry from '@sentry/react-native';
-import { getAdaptiveDifficultySuggestion, shouldShowSuggestion } from '../service/adaptiveDifficulty';
-import { getDifficultyPreference, saveDifficultyPreference, updateCurrentDifficulty } from '../repository';
+import { useEffect, useState, useCallback, useMemo } from "react";
+import * as Sentry from "@sentry/react-native";
+import {
+  getAdaptiveDifficultySuggestion,
+  shouldShowSuggestion,
+} from "../service/adaptiveDifficulty";
+import {
+  getDifficultyPreference,
+  saveDifficultyPreference,
+  updateCurrentDifficulty,
+} from "../repository";
 import {
   trackDifficultySuggestionShown,
   trackDifficultySuggestionAccepted,
   trackDifficultySuggestionDismissed,
-} from '../analytics';
-import type { DifficultySuggestion, SessionDifficulty } from '../schemas';
-import { MMKVStorageAdapter } from '../../../persistence/MMKVStorageAdapter';
+} from "../analytics";
+import type { DifficultySuggestion, SessionDifficulty } from "../schemas";
+import { MMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
 
 // Local type definition for session data
 interface SessionData {
@@ -35,13 +42,13 @@ interface UseAdaptiveDifficultyReturn {
   isLoading: boolean;
 }
 
-const STORAGE_KEY_PREFIX = 'adaptive_difficulty_dismissed_';
-const dismissStorage = new MMKVStorageAdapter('adaptive-difficulty');
+const STORAGE_KEY_PREFIX = "adaptive_difficulty_dismissed_";
+const dismissStorage = new MMKVStorageAdapter("adaptive-difficulty");
 
 export function useAdaptiveDifficulty(
   userId: string | null,
   currentDifficulty: SessionDifficulty,
-  recentSessions: SessionData[]
+  recentSessions: SessionData[],
 ): UseAdaptiveDifficultyReturn {
   const [dismissedAt, setDismissedAt] = useState<number | null>(null);
   const [hasAccepted, setHasAccepted] = useState(false);
@@ -88,7 +95,7 @@ export function useAdaptiveDifficulty(
         userId,
         currentDifficulty,
         suggestion.suggestion,
-        suggestion.confidence
+        suggestion.confidence,
       );
     }
   }, [showSuggestion, suggestion, userId, currentDifficulty]);
@@ -118,7 +125,10 @@ export function useAdaptiveDifficulty(
       dismissStorage.setItemSync(STORAGE_KEY_PREFIX + userId, now.toString());
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: 'session-start', operation: 'persist-difficulty-dismissal' },
+        tags: {
+          feature: "session-start",
+          operation: "persist-difficulty-dismissal",
+        },
       });
     }
   }, [userId, suggestion]);
@@ -138,7 +148,7 @@ export function useAdaptiveDifficulty(
         userId,
         currentDifficulty,
         suggestion.suggestion,
-        suggestion.stats
+        suggestion.stats,
       );
 
       // Persist the change
@@ -155,7 +165,10 @@ export function useAdaptiveDifficulty(
       }
     } catch (error) {
       Sentry.captureException(error, {
-        tags: { feature: 'session-start', operation: 'accept-difficulty-suggestion' },
+        tags: {
+          feature: "session-start",
+          operation: "accept-difficulty-suggestion",
+        },
       });
     } finally {
       setIsLoading(false);

@@ -2,10 +2,14 @@ import {
   FEATURE_RELEASE_STATES,
   FEATURE_TEASER_STARTS,
   FEATURE_THRESHOLDS,
-} from './feature-access-config';
-import { FEATURE_MOTIVATION_PROFILES } from './feature-motivation-config';
-import { FEATURE_DEPENDENCIES } from './feature-dependencies';
-import type { FeatureKey, FeatureReleaseState, MotivationProfile } from './feature-access';
+} from "./feature-access-config";
+import { FEATURE_MOTIVATION_PROFILES } from "./feature-motivation-config";
+import { FEATURE_DEPENDENCIES } from "./feature-dependencies";
+import type {
+  FeatureKey,
+  FeatureReleaseState,
+  MotivationProfile,
+} from "./feature-access";
 
 export interface FeatureAccessInput {
   feature: FeatureKey;
@@ -39,7 +43,11 @@ export function resolveEffectiveThreshold(
     profile.secondary.includes(p),
   );
 
-  if (secondaryRestricted && accel.restrictVisibility && !accel.restrictVisibilityMin) {
+  if (
+    secondaryRestricted &&
+    accel.restrictVisibility &&
+    !accel.restrictVisibilityMin
+  ) {
     return baseThreshold + accel.restrictOffset;
   }
   if (secondaryAccelerated) {
@@ -89,9 +97,9 @@ export function computeFeatureAccess(input: FeatureAccessInput): {
   const { feature, sessions, profile, unlockedFeatures } = input;
   const releaseState = FEATURE_RELEASE_STATES[feature];
   const disabled =
-    releaseState === 'final_release_deactivated' ||
-    releaseState === 'archived' ||
-    releaseState === 'final_release_internal';
+    releaseState === "final_release_deactivated" ||
+    releaseState === "archived" ||
+    releaseState === "final_release_internal";
 
   const baseThreshold = FEATURE_THRESHOLDS[feature];
   const threshold = resolveEffectiveThreshold(feature, baseThreshold, profile);
@@ -105,9 +113,14 @@ export function computeFeatureAccess(input: FeatureAccessInput): {
   const isTeased =
     !disabled &&
     !isUnlocked &&
-    typeof teaserStart === 'number' &&
+    typeof teaserStart === "number" &&
     sessions >= teaserStart;
-  const isVisible = resolveFeatureVisibility(feature, !disabled, profile, sessions);
+  const isVisible = resolveFeatureVisibility(
+    feature,
+    !disabled,
+    profile,
+    sessions,
+  );
 
   return { isUnlocked, isVisible, isTeased, releaseState };
 }

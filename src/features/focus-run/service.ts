@@ -6,10 +6,10 @@ import {
   type FocusRunDisplay,
   type FocusRunEventType,
   type FocusRunGrade,
-} from './schemas';
-import { getStoredFocusRun, upsertStoredFocusRun } from './repository';
-import { resolvePersonalBoss } from './boss-resolution';
-import type { Lane } from '../lane-engine/types';
+} from "./schemas";
+import { getStoredFocusRun, upsertStoredFocusRun } from "./repository";
+import { resolvePersonalBoss } from "./boss-resolution";
+import type { Lane } from "../lane-engine/types";
 
 // ---------------------------------------------------------------------------
 // Helper
@@ -33,7 +33,7 @@ export async function startFocusRun(
   const existing = await getStoredFocusRun(userId);
   if (
     existing &&
-    existing.status === 'active' &&
+    existing.status === "active" &&
     existing.weekStartsAt === weekStart(now)
   ) {
     return existing;
@@ -49,15 +49,15 @@ export async function startFocusRun(
           id: `${userId}:${now}:start`,
           occurredAt: now,
           signal: null,
-          type: 'run_started',
+          type: "run_started",
         },
       ],
       finalGrade: null,
       id: `${userId}:${ws}`,
-      modifiers: ['Phone away', 'One tab', 'Reflection upgrade'],
+      modifiers: ["Phone away", "One tab", "Reflection upgrade"],
       recoveryWins: 0,
       reflectionUpgrades: 0,
-      status: 'active',
+      status: "active",
       userId,
       weekStartsAt: ws,
     }),
@@ -85,25 +85,23 @@ export async function recordFocusRunEvent(input: {
 
   const updates: Partial<FocusRun> = { events: updatedEvents };
 
-  if (input.eventType === 'encounter_completed') {
+  if (input.eventType === "encounter_completed") {
     updates.completedEncounters = (run.completedEncounters ?? 0) + 1;
   }
-  if (input.eventType === 'clean_start') {
+  if (input.eventType === "clean_start") {
     updates.cleanStarts = (run.cleanStarts ?? 0) + 1;
   }
-  if (input.eventType === 'rescue_win') {
+  if (input.eventType === "rescue_win") {
     updates.recoveryWins = (run.recoveryWins ?? 0) + 1;
   }
-  if (input.eventType === 'reflection_upgrade') {
+  if (input.eventType === "reflection_upgrade") {
     updates.reflectionUpgrades = (run.reflectionUpgrades ?? 0) + 1;
   }
-  if (input.eventType === 'run_completed') {
-    updates.status = 'completed';
+  if (input.eventType === "run_completed") {
+    updates.status = "completed";
   }
 
-  return upsertStoredFocusRun(
-    FocusRunSchema.parse({ ...run, ...updates }),
-  );
+  return upsertStoredFocusRun(FocusRunSchema.parse({ ...run, ...updates }));
 }
 
 // ---------------------------------------------------------------------------
@@ -116,19 +114,16 @@ export function computeFocusRunGrade(run: FocusRun): FocusRunGrade {
   const recoveryWins = run.recoveryWins ?? 0;
   const upgrades = run.reflectionUpgrades ?? 0;
 
-  if (encounters === 0) return 'D';
+  if (encounters === 0) return "D";
 
   const score =
-    encounters * 2 +
-    cleanStarts * 1.5 +
-    recoveryWins * 1 +
-    upgrades * 0.5;
+    encounters * 2 + cleanStarts * 1.5 + recoveryWins * 1 + upgrades * 0.5;
 
-  if (score >= 20) return 'S';
-  if (score >= 14) return 'A';
-  if (score >= 8) return 'B';
-  if (score >= 4) return 'C';
-  return 'D';
+  if (score >= 20) return "S";
+  if (score >= 14) return "A";
+  if (score >= 8) return "B";
+  if (score >= 4) return "C";
+  return "D";
 }
 
 // ---------------------------------------------------------------------------
@@ -141,13 +136,12 @@ export function buildFocusRunDisplay(input: {
   signals?: string[];
   firstActiveDay?: number;
 }): FocusRunDisplay {
-  const laneAllowed = input.lane === 'game_like';
+  const laneAllowed = input.lane === "game_like";
   const run = input.run;
   const events = run?.events ?? [];
 
-  const allSignals = input.signals ?? events
-    .map((event) => event.signal ?? '')
-    .filter(Boolean);
+  const allSignals =
+    input.signals ?? events.map((event) => event.signal ?? "").filter(Boolean);
 
   const boss = resolvePersonalBoss({
     firstActiveDay: input.firstActiveDay ?? 0,
@@ -160,40 +154,50 @@ export function buildFocusRunDisplay(input: {
   const reflectionUpgrades = run?.reflectionUpgrades ?? 0;
   const finalGrade = run?.finalGrade
     ? FocusRunGradeSchema.parse(run.finalGrade)
-    : run?.status === 'completed'
+    : run?.status === "completed"
       ? computeFocusRunGrade(run)
       : null;
 
   const summaryParts: string[] = [];
   if (completedEncounters > 0) {
-    summaryParts.push(`${completedEncounters} encounter${completedEncounters === 1 ? '' : 's'}`);
+    summaryParts.push(
+      `${completedEncounters} encounter${completedEncounters === 1 ? "" : "s"}`,
+    );
   }
   if (cleanStarts > 0) {
-    summaryParts.push(`${cleanStarts} clean start${cleanStarts === 1 ? '' : 's'}`);
+    summaryParts.push(
+      `${cleanStarts} clean start${cleanStarts === 1 ? "" : "s"}`,
+    );
   }
   if (recoveryWins > 0) {
-    summaryParts.push(`${recoveryWins} recovery win${recoveryWins === 1 ? '' : 's'}`);
+    summaryParts.push(
+      `${recoveryWins} recovery win${recoveryWins === 1 ? "" : "s"}`,
+    );
   }
   const weekSummary =
     summaryParts.length > 0
-      ? summaryParts.join(' · ')
-      : 'No encounters yet this week.';
+      ? summaryParts.join(" · ")
+      : "No encounters yet this week.";
 
   return FocusRunDisplaySchema.parse({
     body:
       events.length === 0
-        ? 'Begin with one honest encounter. Nothing is bought, saved, or boosted.'
+        ? "Begin with one honest encounter. Nothing is bought, saved, or boosted."
         : `${events.length} run signals logged from real sessions.`,
     boss,
     cleanStarts,
     completedEncounters,
     finalGrade,
     laneAllowed,
-    modifiers: run?.modifiers ?? ['Phone away', 'One tab', 'Reflection upgrade'],
-    nextAction: boss.isTeaser ? 'Start first encounter' : `Face ${boss.name}`,
+    modifiers: run?.modifiers ?? [
+      "Phone away",
+      "One tab",
+      "Reflection upgrade",
+    ],
+    nextAction: boss.isTeaser ? "Start first encounter" : `Face ${boss.name}`,
     recoveryWins,
     reflectionUpgrades,
-    title: laneAllowed ? 'Weekly Focus Run' : 'Run board hidden for this lane',
+    title: laneAllowed ? "Weekly Focus Run" : "Run board hidden for this lane",
     weekSummary,
   });
 }

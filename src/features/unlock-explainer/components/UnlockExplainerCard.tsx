@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from 'react';
-import { Pressable, View } from 'react-native';
+import React, { useCallback, useState } from "react";
+import { Pressable, View } from "react-native";
 
-import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import type { UnlockDecision } from '../types';
+import { Button } from "../../../components/primitives/Button";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import type { UnlockDecision } from "../types";
 
 interface UnlockExplainerCardProps {
   decision: UnlockDecision;
@@ -30,7 +30,7 @@ export function UnlockExplainerCard({
     setShowEvidence((prev) => !prev);
   }, []);
 
-  if (decision.decision === 'hidden') {
+  if (decision.decision === "hidden") {
     return <View />;
   }
 
@@ -40,18 +40,18 @@ export function UnlockExplainerCard({
         borderWidth: 1,
         borderColor: theme.colors.primary[100],
         backgroundColor: theme.colors.background.secondary,
-        borderRadius: theme.borderRadius['2xl'],
+        borderRadius: theme.borderRadius["2xl"],
         padding: theme.spacing[4],
         gap: theme.spacing[3],
       }}
     >
       {/* Title */}
       <Text variant="label" color={theme.colors.primary[500]}>
-        {decision.decision === 'unlocked'
-          ? `${decision.featureKey.replace(/_/g, ' ')} is now available`
-          : decision.decision === 'teased'
-            ? 'Something new is forming'
-            : decision.featureKey.replace(/_/g, ' ')}
+        {decision.decision === "unlocked"
+          ? `${decision.featureKey.replace(/_/g, " ")} is now available`
+          : decision.decision === "teased"
+            ? "Something new is forming"
+            : decision.featureKey.replace(/_/g, " ")}
       </Text>
 
       {/* Evidence-based reason */}
@@ -68,7 +68,7 @@ export function UnlockExplainerCard({
           accessibilityHint="Shows supporting evidence for this recommendation"
         >
           <Text variant="label" color={theme.colors.primary[500]}>
-            {showEvidence ? 'Hide details' : 'Why am I seeing this?'}
+            {showEvidence ? "Hide details" : "Why am I seeing this?"}
           </Text>
         </Pressable>
       )}
@@ -96,8 +96,8 @@ export function UnlockExplainerCard({
       {/* Actions */}
       <View
         style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
+          flexDirection: "row",
+          flexWrap: "wrap",
           gap: theme.spacing[2],
         }}
       >

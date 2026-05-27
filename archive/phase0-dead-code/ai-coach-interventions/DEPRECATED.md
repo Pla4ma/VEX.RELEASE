@@ -1,1 +1,0 @@
-Archived during Phase 0 cleanup because these intervention files were not exported or mounted in the app flow and were failing the strict TypeScript gate. Core AI Coach recommendation hooks remain active.

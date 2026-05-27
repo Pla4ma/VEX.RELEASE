@@ -1,29 +1,29 @@
-import * as Sentry from '@sentry/react-native';
-import { eventBus } from '../../events/EventBus';
-import type { AddXpInput } from './schemas';
+import * as Sentry from "@sentry/react-native";
+import { eventBus } from "../../events/EventBus";
+import type { AddXpInput } from "./schemas";
 import {
   fetchProgressionEnhanced,
   recordLevelUpEnhanced,
   recordXpEntryEnhanced,
   updateProgressionEnhanced,
-} from './repository/enhanced';
-import { createProgressionError } from './service-enhanced-errors';
-import { handleFetchFailure } from './service-enhanced-failures';
+} from "./repository/enhanced";
+import { createProgressionError } from "./service-enhanced-errors";
+import { handleFetchFailure } from "./service-enhanced-failures";
 import {
   calculateLevelFromTotalXp,
   calculateLevelThreshold,
   calculateProgressPercent,
   calculateTotalXpToLevel,
-} from './service-enhanced-math';
-import { getLevelUpRewards } from './service-enhanced-rewards';
-import type { AddXpOperationResult } from './service-enhanced-types';
+} from "./service-enhanced-math";
+import { getLevelUpRewards } from "./service-enhanced-rewards";
+import type { AddXpOperationResult } from "./service-enhanced-types";
 
 type RetryOnConflict = () => Promise<AddXpOperationResult>;
 
 export async function runAddXpOperation(
   userId: string,
   input: AddXpInput,
-  breakdown: AddXpOperationResult['breakdown'],
+  breakdown: AddXpOperationResult["breakdown"],
   startTime: number,
   skipEvents: boolean | undefined,
   retryOnConflict: RetryOnConflict,
@@ -50,7 +50,7 @@ export async function runAddXpOperation(
   });
 
   if (updateResult.error) {
-    if (updateResult.error.code === 'CONFLICT') {
+    if (updateResult.error.code === "CONFLICT") {
       return retryOnConflict();
     }
     return {
@@ -63,7 +63,7 @@ export async function runAddXpOperation(
       breakdown,
       rewards: [],
       error: createProgressionError(
-        'CONFLICT',
+        "CONFLICT",
         updateResult.error.message,
         updateResult.error.isRetryable,
       ),
@@ -109,8 +109,8 @@ export async function runAddXpOperation(
   );
 
   Sentry.addBreadcrumb({
-    category: 'progression',
-    message: 'XP added successfully',
+    category: "progression",
+    message: "XP added successfully",
     data: {
       userId,
       amount: breakdown.total,
@@ -137,7 +137,7 @@ function publishProgressionEvents(
   skipEvents: boolean | undefined,
   userId: string,
   input: AddXpInput,
-  breakdown: AddXpOperationResult['breakdown'],
+  breakdown: AddXpOperationResult["breakdown"],
   newTotalXp: number,
   newLevel: number,
   newXpInLevel: number,
@@ -146,8 +146,10 @@ function publishProgressionEvents(
   levelUpOccurred: boolean,
   rewards: string[],
 ): void {
-  if (skipEvents) {return;}
-  eventBus.publish('progression:xp_added', {
+  if (skipEvents) {
+    return;
+  }
+  eventBus.publish("progression:xp_added", {
     userId,
     amount: breakdown.total,
     source: input.source,
@@ -158,7 +160,7 @@ function publishProgressionEvents(
     boostBonus: breakdown.comebackBonus,
   });
   if (levelUpOccurred) {
-    eventBus.publish('progression:level_up', {
+    eventBus.publish("progression:level_up", {
       userId,
       newLevel,
       previousLevel,
@@ -170,4 +172,3 @@ function publishProgressionEvents(
     });
   }
 }
-

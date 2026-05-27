@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react';
-import { Pressable } from 'react-native';
+import React, { useEffect } from "react";
+import { Pressable } from "react-native";
 import Animated, {
   FadeIn,
   FadeInUp,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
-} from 'react-native-reanimated';
-import { Box, Text } from './primitives';
-import { useTheme } from '../theme';
+} from "react-native-reanimated";
+import { Box, Text } from "./primitives";
+import { useTheme } from "../theme";
 
 type LevelUpCelebrationProps = {
   oldLevel: number;
@@ -32,16 +32,23 @@ export const LevelUpCelebration: React.FC<LevelUpCelebrationProps> = ({
     return () => clearTimeout(timeoutId);
   }, [levelScale, onDismiss]);
 
-  const levelStyle = useAnimatedStyle(() => ({ transform: [{ scale: levelScale.value }] }));
+  const levelStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: levelScale.value }],
+  }));
 
   // Guard: don't render if no actual level up occurred
-  if (newLevel <= oldLevel) {return null;}
+  if (newLevel <= oldLevel) {
+    return null;
+  }
 
   return (
-    <Pressable onPress={onDismiss} style={{ flex: 1 }}
-  accessibilityLabel="Interactive control"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+    <Pressable
+      onPress={onDismiss}
+      style={{ flex: 1 }}
+      accessibilityLabel="Interactive control"
+      accessibilityRole="button"
+      accessibilityHint="Activates this control"
+    >
       <Animated.View entering={FadeIn.duration(220)} style={{ flex: 1 }}>
         <Box
           flex={1}
@@ -73,7 +80,11 @@ export const LevelUpCelebration: React.FC<LevelUpCelebrationProps> = ({
                 {newLevel}
               </Text>
             </Animated.View>
-            <Text variant="body" color={theme.colors.text.secondary} style={{ marginTop: 4 }}>
+            <Text
+              variant="body"
+              color={theme.colors.text.secondary}
+              style={{ marginTop: 4 }}
+            >
               Level {oldLevel} to Level {newLevel}
             </Text>
             <Box width="100%" mt={20} gap={10}>
@@ -94,7 +105,11 @@ export const LevelUpCelebration: React.FC<LevelUpCelebrationProps> = ({
                 </Animated.View>
               ))}
             </Box>
-            <Text variant="caption" color={theme.colors.text.tertiary} style={{ marginTop: 18 }}>
+            <Text
+              variant="caption"
+              color={theme.colors.text.tertiary}
+              style={{ marginTop: 18 }}
+            >
               Tap anywhere to continue
             </Text>
           </Box>

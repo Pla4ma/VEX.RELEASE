@@ -1,6 +1,10 @@
-import { createTestContext, mockSessionConfig, type TestContext } from './helpers';
-import { eventBus } from '../../events';
-import { SESSION_CONSTANTS } from '../index';
+import {
+  createTestContext,
+  mockSessionConfig,
+  type TestContext,
+} from "./helpers";
+import { eventBus } from "../../events";
+import { SESSION_CONSTANTS } from "../index";
 
 let ctx: TestContext;
 
@@ -9,8 +13,8 @@ beforeEach(() => {
   ctx = createTestContext();
 });
 
-describe('completeSession', () => {
-  it('should complete session and calculate rewards', async () => {
+describe("completeSession", () => {
+  it("should complete session and calculate rewards", async () => {
     const session = await ctx.service.createSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     jest.advanceTimersByTime(1000);
@@ -18,27 +22,37 @@ describe('completeSession', () => {
       completionPercentage: 100,
       focusQuality: 85,
     });
-    expect(completedSession.status).toBe('COMPLETED');
+    expect(completedSession.status).toBe("COMPLETED");
     expect(completedSession.completedAt).toBeDefined();
     expect(completedSession.summary).toBeDefined();
     expect(completedSession.summary?.xpEarned).toBeGreaterThan(0);
   });
 
-  it('should emit session:completed event', async () => {
+  it("should emit session:completed event", async () => {
     const session = await ctx.service.createSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
-    await ctx.service.completeSession(session.id, { completionPercentage: 100 });
-    expect(eventBus.publish).toHaveBeenCalledWith('session:completed', expect.any(Object));
+    await ctx.service.completeSession(session.id, {
+      completionPercentage: 100,
+    });
+    expect(eventBus.publish).toHaveBeenCalledWith(
+      "session:completed",
+      expect.any(Object),
+    );
   });
 
-  it('should emit session:rewards:granted event', async () => {
+  it("should emit session:rewards:granted event", async () => {
     const session = await ctx.service.createSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
-    await ctx.service.completeSession(session.id, { completionPercentage: 100 });
-    expect(eventBus.publish).toHaveBeenCalledWith('session:rewards:granted', expect.any(Object));
+    await ctx.service.completeSession(session.id, {
+      completionPercentage: 100,
+    });
+    expect(eventBus.publish).toHaveBeenCalledWith(
+      "session:rewards:granted",
+      expect.any(Object),
+    );
   });
 
-  it('should handle partial completion', async () => {
+  it("should handle partial completion", async () => {
     const session = await ctx.service.createSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
     const completedSession = await ctx.service.completeSession(session.id, {
@@ -52,32 +66,35 @@ describe('completeSession', () => {
   });
 });
 
-describe('abandonSession', () => {
-  it('should mark session as abandoned', async () => {
+describe("abandonSession", () => {
+  it("should mark session as abandoned", async () => {
     const session = await ctx.service.createSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
-    const abandonedSession = await ctx.service.abandonSession(session.id, 'USER_CANCELLED');
-    expect(abandonedSession.status).toBe('ABANDONED');
+    const abandonedSession = await ctx.service.abandonSession(
+      session.id,
+      "USER_CANCELLED",
+    );
+    expect(abandonedSession.status).toBe("ABANDONED");
     expect(abandonedSession.abandonedAt).toBeDefined();
-    expect(abandonedSession.abandonReason).toBe('USER_CANCELLED');
+    expect(abandonedSession.abandonReason).toBe("USER_CANCELLED");
   });
 
-  it('should emit session:abandoned event', async () => {
+  it("should emit session:abandoned event", async () => {
     const session = await ctx.service.createSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
-    await ctx.service.abandonSession(session.id, 'USER_CANCELLED');
+    await ctx.service.abandonSession(session.id, "USER_CANCELLED");
     expect(eventBus.publish).toHaveBeenCalledWith(
-      'session:abandoned',
-      expect.objectContaining({ reason: 'USER_CANCELLED' }),
+      "session:abandoned",
+      expect.objectContaining({ reason: "USER_CANCELLED" }),
     );
   });
 
-  it('should not grant rewards for abandoned session', async () => {
+  it("should not grant rewards for abandoned session", async () => {
     const session = await ctx.service.createSession(mockSessionConfig);
     await ctx.service.startSession(session.id);
-    await ctx.service.abandonSession(session.id, 'USER_CANCELLED');
+    await ctx.service.abandonSession(session.id, "USER_CANCELLED");
     const rewardsCall = (eventBus.publish as jest.Mock).mock.calls.find(
-      (call) => call[0] === 'session:rewards:granted',
+      (call) => call[0] === "session:rewards:granted",
     );
     expect(rewardsCall).toBeUndefined();
   });

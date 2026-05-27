@@ -13,6 +13,6 @@ export {
   deleteContent,
   buildContentStudyTimeoutFallback,
   pollContentStatus,
-} from './service';
+} from "./service";
 
-export type { ContentStudyTimeoutFallback } from './service';
+export type { ContentStudyTimeoutFallback } from "./service";

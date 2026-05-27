@@ -4,34 +4,34 @@
  * Zod schemas for companion state and mood — source of truth for companion types.
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 export const CompanionPhaseSchema = z.enum([
-  'EGG',
-  'HATCHING',
-  'YOUNG',
-  'MATURE',
-  'AWAKENED',
-  'TRANSCENDENT',
+  "EGG",
+  "HATCHING",
+  "YOUNG",
+  "MATURE",
+  "AWAKENED",
+  "TRANSCENDENT",
 ]);
 
 export const CompanionMoodSchema = z.enum([
-  'SLEEPY',
-  'CONTENT',
-  'FOCUSED',
-  'DETERMINED',
-  'ECSTATIC',
-  'STRUGGLING',
-  'DANGER',
+  "SLEEPY",
+  "CONTENT",
+  "FOCUSED",
+  "DETERMINED",
+  "ECSTATIC",
+  "STRUGGLING",
+  "DANGER",
 ]);
 
 export const CompanionElementSchema = z.enum([
-  'FLAME',
-  'WAVE',
-  'TERRA',
-  'ZEPHYR',
-  'VOID',
-  'LUMINA',
+  "FLAME",
+  "WAVE",
+  "TERRA",
+  "ZEPHYR",
+  "VOID",
+  "LUMINA",
 ]);
 
 export const CompanionStateSchema = z.object({

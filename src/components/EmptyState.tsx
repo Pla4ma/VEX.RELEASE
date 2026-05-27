@@ -1,9 +1,9 @@
-import React from 'react';
-import { View } from 'react-native';
+import React from "react";
+import { View } from "react-native";
 
-import { useTheme } from '../theme';
-import { Button } from './primitives/Button';
-import { Text } from './primitives/Text';
+import { useTheme } from "../theme";
+import { Button } from "./primitives/Button";
+import { Text } from "./primitives/Text";
 
 interface EmptyStateProps {
   icon: string;
@@ -25,8 +25,8 @@ export function EmptyState({
   return (
     <View
       style={{
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: "center",
+        justifyContent: "center",
         paddingHorizontal: theme.spacing[5],
         paddingVertical: theme.spacing[8],
         gap: theme.spacing[3],
@@ -37,8 +37,8 @@ export function EmptyState({
           width: 72,
           height: 72,
           borderRadius: 36,
-          alignItems: 'center',
-          justifyContent: 'center',
+          alignItems: "center",
+          justifyContent: "center",
           backgroundColor: theme.colors.semantic.primarySoft,
           borderColor: theme.colors.semantic.border,
           borderWidth: 1,
@@ -48,7 +48,7 @@ export function EmptyState({
           {icon}
         </Text>
       </View>
-      <View style={{ alignItems: 'center', gap: theme.spacing[2] }}>
+      <View style={{ alignItems: "center", gap: theme.spacing[2] }}>
         <Text
           variant="h4"
           fontSize={20}

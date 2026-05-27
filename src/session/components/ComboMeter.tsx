@@ -4,7 +4,12 @@ import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 import { useTheme } from "../../theme/ThemeContext";
 import { Text } from "../../components";
 import type { ComboMeterProps } from "./combo-meter-types";
-import { COMBO_TIERS, getCurrentTier, getTierProgress, formatCombo } from "./combo-meter-helpers";
+import {
+  COMBO_TIERS,
+  getCurrentTier,
+  getTierProgress,
+  formatCombo,
+} from "./combo-meter-helpers";
 import { useComboAnimations } from "./useComboAnimations";
 import {
   containerStyle,

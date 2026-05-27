@@ -1,1 +1,0 @@
-Archived during Phase 0 cleanup because these Phase 5 retention and event surfaces were not mounted in the production app flow and were blocking strict TypeScript. Core home, streak, boss, STUDY, and AI Coach systems remain active.

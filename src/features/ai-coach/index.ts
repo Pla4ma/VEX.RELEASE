@@ -5,32 +5,32 @@
  */
 
 // Types - from schemas.ts (which includes types inferred from Zod schemas)
-export * from './schemas';
-export * from './events';
-export * from './memory-schemas';
-export * from './memory-events';
+export * from "./schemas";
+export * from "./events";
+export * from "./memory-schemas";
+export * from "./memory-events";
 
 // Service layer
-export * as coachService from './service';
+export * as coachService from "./service";
 
 // Repository layer
-export * as coachRepository from './repository';
+export * as coachRepository from "./repository";
 
 // Hooks
-export * from './hooks';
+export * from "./hooks";
 
 // Phase 2 - Coach Recommendation Hook
 export {
   useCoachRecommendation,
   useCoachHomeRecommendation,
   type UseCoachRecommendationReturn,
-} from './hooks/useCoachRecommendation';
+} from "./hooks/useCoachRecommendation";
 
 // Store
-export { useCoachStore, type CoachStore } from './store';
+export { useCoachStore, type CoachStore } from "./store";
 
 // Analytics
-export * as coachAnalytics from './analytics';
+export * as coachAnalytics from "./analytics";
 
 // Phase 11 - AI Coach Enhancement
 
@@ -43,7 +43,7 @@ export {
   getContextHash,
   shouldCoachIntervene,
   type ContextSnapshot,
-} from './context-snapshot';
+} from "./context-snapshot";
 
 // Recommendation Pipeline
 export {
@@ -56,7 +56,7 @@ export {
   isRecommendationRelevant,
   trackRecommendationInteraction,
   type CoachRecommendation,
-} from './recommendation-pipeline';
+} from "./recommendation-pipeline";
 
 // Study Loop
 export {
@@ -75,10 +75,10 @@ export {
   StudyPlanSchema,
   type StudyPlan,
   type StudySessionResult,
-} from './study-loop';
+} from "./study-loop";
 
 export {
   SessionSuggestionCard,
   type SessionSuggestionCardProps,
-} from './components/session-suggestion-card';
-export { MemoryList } from './components/MemoryList';
+} from "./components/session-suggestion-card";
+export { MemoryList } from "./components/MemoryList";

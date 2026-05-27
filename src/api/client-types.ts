@@ -4,7 +4,7 @@
  * Production-grade HTTP client types and interfaces.
  */
 
-import type { ZodType } from 'zod';
+import type { ZodType } from "zod";
 
 export interface ApiConfig {
   baseURL: string;
@@ -22,7 +22,7 @@ export interface AuthProvider {
 }
 
 export interface ApiRequestConfig {
-  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
   headers?: Record<string, string>;
   params?: Record<string, string | number | boolean>;
   data?: unknown;
@@ -48,7 +48,7 @@ export interface ApiError {
 }
 
 export enum CircuitState {
-  CLOSED = 'CLOSED',
-  OPEN = 'OPEN',
-  HALF_OPEN = 'HALF_OPEN',
+  CLOSED = "CLOSED",
+  OPEN = "OPEN",
+  HALF_OPEN = "HALF_OPEN",
 }

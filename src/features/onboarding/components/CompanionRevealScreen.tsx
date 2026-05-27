@@ -8,18 +8,15 @@
  * @phase 4
  */
 
-import React from 'react';
-import { Pressable } from 'react-native';
-import Animated, {
-  FadeIn,
-  FadeInUp,
-} from 'react-native-reanimated';
+import React from "react";
+import { Pressable } from "react-native";
+import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
-import { CompanionCreature } from './CompanionCreature';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { Button } from "../../../components/primitives/Button";
+import { useTheme } from "../../../theme";
+import { CompanionCreature } from "./CompanionCreature";
 
 interface CompanionRevealScreenProps {
   userName: string;
@@ -30,9 +27,13 @@ interface CompanionRevealScreenProps {
 /**
  * Companion reveal screen
  */
-export function CompanionRevealScreen({ userName, onContinue, onBack }: CompanionRevealScreenProps): JSX.Element {
+export function CompanionRevealScreen({
+  userName,
+  onContinue,
+  onBack,
+}: CompanionRevealScreenProps): JSX.Element {
   const { theme } = useTheme();
-  const displayName = userName || 'there';
+  const displayName = userName || "there";
 
   return (
     <Box flex={1} bg="background.primary" px="lg" py="xl">
@@ -41,7 +42,9 @@ export function CompanionRevealScreen({ userName, onContinue, onBack }: Companio
         {onBack && (
           <Pressable onPress={onBack} style={{ marginRight: 12 }}>
             <Box p="xs">
-              <Text variant="h3" color="text.secondary">‹</Text>
+              <Text variant="h3" color="text.secondary">
+                ‹
+              </Text>
             </Box>
           </Pressable>
         )}
@@ -63,7 +66,10 @@ export function CompanionRevealScreen({ userName, onContinue, onBack }: Companio
       </Animated.View>
 
       {/* Companion Reveal */}
-      <Animated.View entering={FadeInUp.duration(600).delay(200)} style={{ width: '100%' }}>
+      <Animated.View
+        entering={FadeInUp.duration(600).delay(200)}
+        style={{ width: "100%" }}
+      >
         <Box alignItems="center" py="xl">
           <CompanionCreature />
         </Box>
@@ -97,7 +103,10 @@ export function CompanionRevealScreen({ userName, onContinue, onBack }: Companio
       <Box flex={1} minHeight={40} />
 
       {/* CTA Button */}
-      <Animated.View entering={FadeInUp.duration(400).delay(800)} style={{ width: '100%' }}>
+      <Animated.View
+        entering={FadeInUp.duration(400).delay(800)}
+        style={{ width: "100%" }}
+      >
         <Button
           variant="primary"
           size="lg"
@@ -112,11 +121,16 @@ export function CompanionRevealScreen({ userName, onContinue, onBack }: Companio
       </Animated.View>
 
       {/* Back Option */}
-      <Animated.View entering={FadeIn.duration(400).delay(900)} style={{ marginTop: 'auto' }}>
-        <Pressable onPress={onBack}
+      <Animated.View
+        entering={FadeIn.duration(400).delay(900)}
+        style={{ marginTop: "auto" }}
+      >
+        <Pressable
+          onPress={onBack}
           accessibilityLabel="← Go back button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control">
+          accessibilityHint="Activates this control"
+        >
           <Box alignItems="center" py="md">
             <Text variant="bodySmall" color="text.tertiary">
               ← Go back

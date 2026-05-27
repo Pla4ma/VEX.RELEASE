@@ -29,7 +29,7 @@ export async function recordSquadWarDamageIfNeeded(
 export function updateStreak(
   userId: string,
   summary: SessionSummary,
-  rewards: Pick<RewardCalculationResult, 'streakDays'>,
+  rewards: Pick<RewardCalculationResult, "streakDays">,
 ): { streakIncreased: boolean } {
   if (!summary.streakMaintained) {
     eventBus.publish("streak:broken", {
@@ -107,7 +107,7 @@ export function publishSocialActivity(
 export function publishChallengeProgress(
   userId: string,
   summary: SessionSummary,
-  rewards: Pick<RewardCalculationResult, 'streakDays' | 'streakIncreased'>,
+  rewards: Pick<RewardCalculationResult, "streakDays" | "streakIncreased">,
 ): { challengesProgressed: Array<{ challengeId: string; progress: number }> } {
   const progressed: Array<{ challengeId: string; progress: number }> = [];
   eventBus.publish("challenge:progress", {
@@ -117,7 +117,10 @@ export function publishChallengeProgress(
     target: 3600000,
     percent: (summary.effectiveDuration / 3600000) * 100,
   });
-  progressed.push({ challengeId: "daily_focus_time", progress: summary.effectiveDuration });
+  progressed.push({
+    challengeId: "daily_focus_time",
+    progress: summary.effectiveDuration,
+  });
   if (rewards.streakIncreased) {
     eventBus.publish("challenge:progress", {
       userId,
@@ -141,7 +144,7 @@ export function publishChallengeProgress(
 export function publishAchievements(
   userId: string,
   summary: SessionSummary,
-  rewards: Pick<RewardCalculationResult, 'streakDays'>,
+  rewards: Pick<RewardCalculationResult, "streakDays">,
 ): { achievementsUnlocked: string[] } {
   const unlocked: string[] = [];
   if (summary.completionPercentage >= 100) {

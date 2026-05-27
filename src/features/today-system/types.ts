@@ -1,10 +1,10 @@
-import type { z } from 'zod';
+import type { z } from "zod";
 import {
   TodayActionSchema,
   TodaySectionSchema,
   TodaySystemInputSchema,
   TodaySystemSchema,
-} from './schemas';
+} from "./schemas";
 
 export type TodayAction = z.infer<typeof TodayActionSchema>;
 export type TodaySystemInput = z.infer<typeof TodaySystemInputSchema>;

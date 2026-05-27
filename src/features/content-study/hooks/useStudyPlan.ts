@@ -3,15 +3,15 @@
  * Manages study plan sessions and task completion
  */
 
-import { useState, useCallback } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useAuthStore } from '../../../store';
-import { fetchGenerationById, fetchContentById } from '../ContentStudyService';
-import { studySessionManager } from '../persistence';
-import { prepareContentStudySession } from '../integration';
-import { emitTaskCompleted } from '../events';
-import { contentStudyQueryKeys } from './queryKeys';
-import { getStudyPlanTitle } from './helpers';
+import { useState, useCallback } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAuthStore } from "../../../store";
+import { fetchGenerationById, fetchContentById } from "../ContentStudyService";
+import { studySessionManager } from "../persistence";
+import { prepareContentStudySession } from "../integration";
+import { emitTaskCompleted } from "../events";
+import { contentStudyQueryKeys } from "./queryKeys";
+import { getStudyPlanTitle } from "./helpers";
 
 export function useStudyPlan(generationId: string) {
   const queryClient = useQueryClient();
@@ -26,9 +26,15 @@ export function useStudyPlan(generationId: string) {
   });
 
   const contentQuery = useQuery({
-    queryKey: [...contentStudyQueryKeys.all, 'generation-content', generationId],
+    queryKey: [
+      ...contentStudyQueryKeys.all,
+      "generation-content",
+      generationId,
+    ],
     queryFn: async () => {
-      if (!generationQuery.data?.contentId) {return null;}
+      if (!generationQuery.data?.contentId) {
+        return null;
+      }
       return fetchContentById(generationQuery.data.contentId);
     },
     enabled: !!generationQuery.data?.contentId,
@@ -36,18 +42,23 @@ export function useStudyPlan(generationId: string) {
   });
 
   const startSession = useCallback(async () => {
-    if (!generationQuery.data) {return null;}
+    if (!generationQuery.data) {
+      return null;
+    }
 
     setIsStartingSession(true);
 
     try {
       const sessionConfig = prepareContentStudySession(generationId, {
         tasks: generationQuery.data.tasks,
-        recommendedDurationMinutes: generationQuery.data.sessionPlan.recommendedDuration,
-        recommendedDifficulty: generationQuery.data.sessionPlan.suggestedDifficulty,
+        recommendedDurationMinutes:
+          generationQuery.data.sessionPlan.recommendedDuration,
+        recommendedDifficulty:
+          generationQuery.data.sessionPlan.suggestedDifficulty,
         focusAreas: generationQuery.data.sessionPlan.focusAreas,
       });
-      const existingSession = await studySessionManager.getActiveSession(generationId);
+      const existingSession =
+        await studySessionManager.getActiveSession(generationId);
 
       await studySessionManager.saveSession({
         generationId,
@@ -68,21 +79,28 @@ export function useStudyPlan(generationId: string) {
 
   const completeTaskMutation = useMutation({
     mutationFn: async ({ taskId }: { taskId: string }) => {
-      const sessions = await studySessionManager.getSessionsForGeneration(generationId);
-      const latestSession = [...sessions].sort((a, b) => b.startTime - a.startTime)[0];
+      const sessions =
+        await studySessionManager.getSessionsForGeneration(generationId);
+      const latestSession = [...sessions].sort(
+        (a, b) => b.startTime - a.startTime,
+      )[0];
 
       if (!latestSession) {
-        throw new Error('Study plan progress could not be found.');
+        throw new Error("Study plan progress could not be found.");
       }
 
-      const completedTasks = Array.from(new Set([...latestSession.completedTasks, taskId]));
+      const completedTasks = Array.from(
+        new Set([...latestSession.completedTasks, taskId]),
+      );
       const generation = await fetchGenerationById(generationId);
       if (!generation) {
-        throw new Error('Study plan could not be loaded.');
+        throw new Error("Study plan could not be loaded.");
       }
 
       if (completedTasks.length >= generation.tasks.length) {
-        await studySessionManager.completeSession(generationId, { completedTasks });
+        await studySessionManager.completeSession(generationId, {
+          completedTasks,
+        });
       } else {
         await studySessionManager.saveSession({
           ...latestSession,
@@ -95,9 +113,11 @@ export function useStudyPlan(generationId: string) {
       return { generationId, completedTasks };
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: contentStudyQueryKeys.all });
       await queryClient.invalidateQueries({
-        queryKey: contentStudyQueryKeys.activePlan(user?.id ?? ''),
+        queryKey: contentStudyQueryKeys.all,
+      });
+      await queryClient.invalidateQueries({
+        queryKey: contentStudyQueryKeys.activePlan(user?.id ?? ""),
       });
     },
   });
@@ -111,14 +131,15 @@ export function useStudyPlan(generationId: string) {
     content,
     title,
     isLoading: generationQuery.isLoading || contentQuery.isLoading,
-    error: generationQuery.error?.message || contentQuery.error?.message || null,
+    error:
+      generationQuery.error?.message || contentQuery.error?.message || null,
     startSession,
     isStartingSession,
     completeTask: completeTaskMutation.mutate,
     isCompletingTask: completeTaskMutation.isPending,
     refetch: () => {
-      void (generationQuery.refetch)();
-      void (contentQuery.refetch)();
+      void generationQuery.refetch();
+      void contentQuery.refetch();
     },
   };
 }

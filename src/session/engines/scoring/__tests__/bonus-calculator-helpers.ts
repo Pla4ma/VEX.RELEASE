@@ -7,8 +7,8 @@ import {
   calculateIntervalBonus,
   calculateSpecialBonuses,
   BONUS_CONSTANTS,
-} from '../BonusCalculator';
-import type { FocusQualityMetrics } from '../../../types';
+} from "../BonusCalculator";
+import type { FocusQualityMetrics } from "../../../types";
 
 export {
   BonusCalculator,

@@ -5,8 +5,7 @@ export type { SessionLifecycleEvents } from "./session-lifecycle-events";
 export type { SessionRuntimeEvents } from "./session-runtime-events";
 
 export interface SessionEventChannels
-  extends SessionLifecycleEvents,
-    SessionRuntimeEvents {}
+  extends SessionLifecycleEvents, SessionRuntimeEvents {}
 
 export type SessionEventChannel = keyof SessionEventChannels;
 export type SessionEventPayload<T extends SessionEventChannel> =

@@ -1,8 +1,11 @@
-import React from 'react';
-import type { HomeController } from './home-controller-types';
-import type { ChallengeItem, SessionListItem } from '../../../features/home-spine/components';
-import type { ActiveIntervention } from '../../../features/ai-coach/hooks';
-import type { ToastOptions } from '../../../shared/ui/components/Toast';
+import React from "react";
+import type { HomeController } from "./home-controller-types";
+import type {
+  ChallengeItem,
+  SessionListItem,
+} from "../../../features/home-spine/components";
+import type { ActiveIntervention } from "../../../features/ai-coach/hooks";
+import type { ToastOptions } from "../../../shared/ui/components/Toast";
 
 export interface BaseHomeData {
   controller: HomeController;
@@ -66,7 +69,10 @@ export interface EngagedHomeData extends BaseHomeData {
     error: Error | null;
     refetch: () => Promise<unknown>;
   };
-  claimRewardMutation: { mutate: (input: unknown, opts?: unknown) => unknown; isPending: boolean };
+  claimRewardMutation: {
+    mutate: (input: unknown, opts?: unknown) => unknown;
+    isPending: boolean;
+  };
   freezeStreakMutation: { mutate: () => void; isPending: boolean };
   handleClaimReward: (id: string) => void;
   handleFreezeStreak: () => void;
@@ -84,7 +90,10 @@ export interface PowerUserHomeData extends BaseHomeData {
     error: Error | null;
     refetch: () => Promise<unknown>;
   };
-  claimRewardMutation: { mutate: (input: unknown, opts?: unknown) => unknown; isPending: boolean };
+  claimRewardMutation: {
+    mutate: (input: unknown, opts?: unknown) => unknown;
+    isPending: boolean;
+  };
   freezeStreakMutation: { mutate: () => void; isPending: boolean };
   handleClaimReward: (id: string) => void;
   handleFreezeStreak: () => void;

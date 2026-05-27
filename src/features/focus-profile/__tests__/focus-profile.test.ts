@@ -1,8 +1,8 @@
-import { createFocusProfile, getFocusProfile } from '../service';
+import { createFocusProfile, getFocusProfile } from "../service";
 
 const mockStore = new Map<string, string>();
 
-jest.mock('react-native-mmkv', () => ({
+jest.mock("react-native-mmkv", () => ({
   MMKV: class MockMMKV {
     getString(key: string): string | undefined {
       return mockStore.get(key);
@@ -26,33 +26,33 @@ jest.mock('react-native-mmkv', () => ({
   },
 }));
 
-describe('FocusProfile service', () => {
+describe("FocusProfile service", () => {
   beforeEach(() => {
     mockStore.clear();
   });
 
-  it('creates profile from onboarding-style inputs', async () => {
+  it("creates profile from onboarding-style inputs", async () => {
     const profile = await createFocusProfile({
-      userId: 'local-user',
-      primaryGoal: 'study',
+      userId: "local-user",
+      primaryGoal: "study",
       preferredSessionDurationMinutes: 15,
-      preferredSessionMode: 'STUDY',
+      preferredSessionMode: "STUDY",
       updatedAt: 1_764_000_000_000,
     });
 
-    expect(profile.laneProfile.primaryLane).toBe('student');
+    expect(profile.laneProfile.primaryLane).toBe("student");
     expect(profile.preferredSessionDurationMinutes).toBe(15);
-    await expect(getFocusProfile('local-user')).resolves.toEqual(profile);
+    await expect(getFocusProfile("local-user")).resolves.toEqual(profile);
   });
 
-  it('falls back safely when onboarding is missing', async () => {
+  it("falls back safely when onboarding is missing", async () => {
     const profile = await createFocusProfile({
-      userId: 'anonymous-user',
+      userId: "anonymous-user",
       updatedAt: 1_764_000_000_000,
     });
 
-    expect(profile.primaryGoal).toBe('focus');
-    expect(profile.laneProfile.primaryLane).toBe('minimal_normal');
+    expect(profile.primaryGoal).toBe("focus");
+    expect(profile.laneProfile.primaryLane).toBe("minimal_normal");
     expect(profile.notificationPreference.maxPerDay).toBe(1);
   });
 });

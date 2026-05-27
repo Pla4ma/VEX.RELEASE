@@ -66,7 +66,10 @@ describe("CompletionEngine — completeSession", () => {
     const metrics = createMockMetrics();
     const reflection = "Great focus session today!";
     const result = completionEngine.completeSession(
-      session, metrics, 5, reflection,
+      session,
+      metrics,
+      5,
+      reflection,
     );
     expect(result.summary.reflection).toBe(reflection);
   });
@@ -75,7 +78,11 @@ describe("CompletionEngine — completeSession", () => {
     const session = createMockSession();
     const metrics = createMockMetrics();
     const result = completionEngine.completeSession(
-      session, metrics, 5, undefined, "GREAT",
+      session,
+      metrics,
+      5,
+      undefined,
+      "GREAT",
     );
     expect(result.summary.mood).toBe("GREAT");
   });
@@ -84,7 +91,12 @@ describe("CompletionEngine — completeSession", () => {
     const session = createMockSession();
     const metrics = createMockMetrics();
     const result = completionEngine.completeSession(
-      session, metrics, 5, undefined, undefined, 3,
+      session,
+      metrics,
+      5,
+      undefined,
+      undefined,
+      3,
     );
     expect(result.summary.tasksCompleted).toBe(3);
   });

@@ -1,17 +1,23 @@
-import { z } from 'zod';
-import { getSupabaseClient } from '../../config/supabase';
-import { CompanionMemoryCreateSchema, CompanionMemoryRowSchema } from './memory-schemas';
+import { z } from "zod";
+import { getSupabaseClient } from "../../config/supabase";
+import {
+  CompanionMemoryCreateSchema,
+  CompanionMemoryRowSchema,
+} from "./memory-schemas";
 import type {
   CompanionMemory,
   CompanionMemoryCreate,
   CompanionMemoryTableInsert,
   CompanionMemoryType,
-} from './memory-types';
+} from "./memory-types";
 
 export class CompanionMemoryRepositoryError extends Error {
-  constructor(operation: string, public readonly cause?: unknown) {
+  constructor(
+    operation: string,
+    public readonly cause?: unknown,
+  ) {
     super(`CompanionMemoryRepository ${operation} failed`);
-    this.name = 'CompanionMemoryRepositoryError';
+    this.name = "CompanionMemoryRepositoryError";
   }
 }
 
@@ -32,42 +38,45 @@ export async function createMemory(
       user_id: parsed.userId,
     };
     const { data, error } = await getSupabaseClient()
-      .from('companion_memories')
+      .from("companion_memories")
       .insert(row)
-      .select('*')
+      .select("*")
       .single();
     if (error) {
       if (isDuplicateError(error)) {
         return null;
       }
-      throw new CompanionMemoryRepositoryError('createMemory', error);
+      throw new CompanionMemoryRepositoryError("createMemory", error);
     }
     return mapRow(data);
   } catch (error) {
     if (error instanceof CompanionMemoryRepositoryError) {
       throw error;
     }
-    throw new CompanionMemoryRepositoryError('createMemory', error);
+    throw new CompanionMemoryRepositoryError("createMemory", error);
   }
 }
 
 export async function getMemories(userId: string): Promise<CompanionMemory[]> {
   try {
     const { data, error } = await getSupabaseClient()
-      .from('companion_memories')
-      .select('*')
-      .eq('user_id', z.string().uuid().parse(userId))
-      .order('created_at', { ascending: false })
+      .from("companion_memories")
+      .select("*")
+      .eq("user_id", z.string().uuid().parse(userId))
+      .order("created_at", { ascending: false })
       .limit(50);
     if (error) {
-      throw new CompanionMemoryRepositoryError('getMemories', error);
+      throw new CompanionMemoryRepositoryError("getMemories", error);
     }
-    return z.array(CompanionMemoryRowSchema).parse(data ?? []).map(mapRow);
+    return z
+      .array(CompanionMemoryRowSchema)
+      .parse(data ?? [])
+      .map(mapRow);
   } catch (error) {
     if (error instanceof CompanionMemoryRepositoryError) {
       throw error;
     }
-    throw new CompanionMemoryRepositoryError('getMemories', error);
+    throw new CompanionMemoryRepositoryError("getMemories", error);
   }
 }
 
@@ -77,20 +86,20 @@ export async function hasMemory(
 ): Promise<boolean> {
   try {
     const { data, error } = await getSupabaseClient()
-      .from('companion_memories')
-      .select('id')
-      .eq('user_id', z.string().uuid().parse(userId))
-      .eq('type', type)
+      .from("companion_memories")
+      .select("id")
+      .eq("user_id", z.string().uuid().parse(userId))
+      .eq("type", type)
       .maybeSingle();
     if (error) {
-      throw new CompanionMemoryRepositoryError('hasMemory', error);
+      throw new CompanionMemoryRepositoryError("hasMemory", error);
     }
     return Boolean(data);
   } catch (error) {
     if (error instanceof CompanionMemoryRepositoryError) {
       throw error;
     }
-    throw new CompanionMemoryRepositoryError('hasMemory', error);
+    throw new CompanionMemoryRepositoryError("hasMemory", error);
   }
 }
 
@@ -113,9 +122,9 @@ function mapRow(row: unknown): CompanionMemory {
 
 function isDuplicateError(error: unknown): boolean {
   return (
-    typeof error === 'object' &&
+    typeof error === "object" &&
     error !== null &&
-    'code' in error &&
-    error.code === '23505'
+    "code" in error &&
+    error.code === "23505"
   );
 }

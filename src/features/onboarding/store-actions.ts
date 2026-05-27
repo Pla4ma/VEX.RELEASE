@@ -1,4 +1,4 @@
-import type { OnboardingStore } from './store';
+import type { OnboardingStore } from "./store";
 import {
   type CoachPersona,
   type FocusDuration,
@@ -6,19 +6,19 @@ import {
   type MotivationProfileType,
   type OnboardingElement,
   type OnboardingState,
-} from './schemas';
-import { LaneSchema } from '../lane-engine/schemas';
+} from "./schemas";
+import { LaneSchema } from "../lane-engine/schemas";
 import {
   deriveMotivationProfile,
   mergeOnboardingCompletion,
   isCompletionValidForUser,
   type OnboardingDraft,
-} from './store-helpers';
+} from "./store-helpers";
 import {
   initialState,
   getCurrentUserIdForBool,
   advanceStepWithCompletionCheck,
-} from './store-action-types';
+} from "./store-action-types";
 
 export function createStoreActions(
   set: (partial: Partial<OnboardingStore>) => void,
@@ -35,17 +35,30 @@ export function createStoreActions(
 
     setGoal: (goal: FocusGoal) => {
       const store = get();
-      const profile = deriveMotivationProfile(goal, store.persona, store.element, store.explicitMotivationStyle);
+      const profile = deriveMotivationProfile(
+        goal,
+        store.persona,
+        store.element,
+        store.explicitMotivationStyle,
+      );
       set({ goal, motivationProfile: profile });
       setTimeout(() => {
-        advanceStepWithCompletionCheck(set, get, Math.min(5, get().currentStep + 1));
+        advanceStepWithCompletionCheck(
+          set,
+          get,
+          Math.min(5, get().currentStep + 1),
+        );
       }, 300);
     },
 
     setFocusDuration: (focusDuration: FocusDuration) => {
       set({ focusDuration });
       setTimeout(() => {
-        advanceStepWithCompletionCheck(set, get, Math.min(5, get().currentStep + 1));
+        advanceStepWithCompletionCheck(
+          set,
+          get,
+          Math.min(5, get().currentStep + 1),
+        );
       }, 300);
     },
 
@@ -56,25 +69,47 @@ export function createStoreActions(
 
     setPersona: (persona: CoachPersona) => {
       const store = get();
-      const profile = deriveMotivationProfile(store.goal, persona, store.element, store.explicitMotivationStyle);
+      const profile = deriveMotivationProfile(
+        store.goal,
+        persona,
+        store.element,
+        store.explicitMotivationStyle,
+      );
       set({ persona, motivationProfile: profile });
     },
 
     setElement: (element: OnboardingElement) => {
       const store = get();
-      const profile = deriveMotivationProfile(store.goal, store.persona, element, store.explicitMotivationStyle);
+      const profile = deriveMotivationProfile(
+        store.goal,
+        store.persona,
+        element,
+        store.explicitMotivationStyle,
+      );
       set({ element, motivationProfile: profile });
     },
 
     setExplicitMotivationStyle: (style: MotivationProfileType) => {
       const store = get();
-      const profile = deriveMotivationProfile(store.goal, store.persona, store.element, style);
+      const profile = deriveMotivationProfile(
+        store.goal,
+        store.persona,
+        store.element,
+        style,
+      );
       set({ explicitMotivationStyle: style, motivationProfile: profile });
     },
 
     recomputeMotivationProfile: () => {
       const { goal, persona, element, explicitMotivationStyle } = get();
-      set({ motivationProfile: deriveMotivationProfile(goal, persona, element, explicitMotivationStyle) });
+      set({
+        motivationProfile: deriveMotivationProfile(
+          goal,
+          persona,
+          element,
+          explicitMotivationStyle,
+        ),
+      });
     },
 
     nextStep: () => {
@@ -89,15 +124,24 @@ export function createStoreActions(
       if (currentStep > 0) set({ currentStep: currentStep - 1 });
     },
 
-    skipOnboarding: () => set({ ...mergeOnboardingCompletion(true, Date.now()), profileStepsCompleted: true }),
+    skipOnboarding: () =>
+      set({
+        ...mergeOnboardingCompletion(true, Date.now()),
+        profileStepsCompleted: true,
+      }),
 
-    completeOnboarding: () => set({ ...mergeOnboardingCompletion(true, Date.now()), profileStepsCompleted: true }),
+    completeOnboarding: () =>
+      set({
+        ...mergeOnboardingCompletion(true, Date.now()),
+        profileStepsCompleted: true,
+      }),
 
     resetOnboarding: () => set(initialState),
 
     canSkipCurrentStep: () => get().currentStep >= 1,
 
-    canCompleteForUser: (userId: string | null | undefined) => isCompletionValidForUser(get(), userId),
+    canCompleteForUser: (userId: string | null | undefined) =>
+      isCompletionValidForUser(get(), userId),
 
     /** Home Preview: allowed when profile steps are done, even without first session. */
     canPreviewHome: (userId: string | null | undefined) => {
@@ -110,7 +154,13 @@ export function createStoreActions(
 
     markFirstSessionStarted: () => set({ firstSessionStarted: true }),
 
-    markFirstSessionCompleted: () => set({ firstSessionCompleted: true, isOnboarded: true, completedAt: Date.now(), completedForUserId: getCurrentUserIdForBool() }),
+    markFirstSessionCompleted: () =>
+      set({
+        firstSessionCompleted: true,
+        isOnboarded: true,
+        completedAt: Date.now(),
+        completedForUserId: getCurrentUserIdForBool(),
+      }),
 
     markHomePreviewEntered: () => set({ homePreviewEntered: true }),
 
@@ -139,8 +189,10 @@ export function createStoreActions(
       if (draft.goal) {
         updates.goal = draft.goal;
         updates.motivationProfile = deriveMotivationProfile(
-          draft.goal, draft.personaId ?? store.persona,
-          draft.element ?? store.element, store.explicitMotivationStyle,
+          draft.goal,
+          draft.personaId ?? store.persona,
+          draft.element ?? store.element,
+          store.explicitMotivationStyle,
         );
       }
       if (draft.focusDuration) updates.focusDuration = draft.focusDuration;
@@ -157,15 +209,19 @@ export function createStoreActions(
       if (draft.personaId) {
         updates.persona = draft.personaId;
         updates.motivationProfile = deriveMotivationProfile(
-          updates.goal ?? store.goal, draft.personaId,
-          draft.element ?? store.element, updates.explicitMotivationStyle ?? store.explicitMotivationStyle,
+          updates.goal ?? store.goal,
+          draft.personaId,
+          draft.element ?? store.element,
+          updates.explicitMotivationStyle ?? store.explicitMotivationStyle,
         );
       }
       if (draft.element) {
         updates.element = draft.element;
         updates.motivationProfile = deriveMotivationProfile(
-          updates.goal ?? store.goal, updates.persona ?? store.persona,
-          draft.element, updates.explicitMotivationStyle ?? store.explicitMotivationStyle,
+          updates.goal ?? store.goal,
+          updates.persona ?? store.persona,
+          draft.element,
+          updates.explicitMotivationStyle ?? store.explicitMotivationStyle,
         );
       }
       if (draft.chosenLane !== undefined) {

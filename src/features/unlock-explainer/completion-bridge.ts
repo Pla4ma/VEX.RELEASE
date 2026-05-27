@@ -1,6 +1,6 @@
-import type { CompletionUnlockDecision } from '../session-completion/schemas';
-import { createUnlockDecision } from './service';
-import type { UnlockDecision } from './types';
+import type { CompletionUnlockDecision } from "../session-completion/schemas";
+import { createUnlockDecision } from "./service";
+import type { UnlockDecision } from "./types";
 
 /**
  * Completion Integration Bridge — connects the session-completion
@@ -10,10 +10,10 @@ import type { UnlockDecision } from './types';
  */
 
 const COMPLETION_KEY_MAP: Record<string, string> = {
-  project_thread: 'project_thread',
-  run_board: 'run_board',
-  study_os: 'study_os',
-  today_strip: 'today_strip',
+  project_thread: "project_thread",
+  run_board: "run_board",
+  study_os: "study_os",
+  today_strip: "today_strip",
 };
 
 /**
@@ -31,7 +31,12 @@ export function buildCompletionUnlock(
 
   const decision = createUnlockDecision({
     featureKey: mappedKey,
-    laneProfile: lane as 'student' | 'game_like' | 'deep_creative' | 'minimal_normal' | undefined,
+    laneProfile: lane as
+      | "student"
+      | "game_like"
+      | "deep_creative"
+      | "minimal_normal"
+      | undefined,
     sessionCount,
     isPremium: false,
     hasRelatedBehavior: false,
@@ -40,21 +45,22 @@ export function buildCompletionUnlock(
   if (hidden) {
     return {
       hidden: true,
-      key: mappedKey as CompletionUnlockDecision['key'],
+      key: mappedKey as CompletionUnlockDecision["key"],
       reason: decision.userFacingReason,
-      status: 'blocked',
+      status: "blocked",
     };
   }
 
   return {
     hidden: false,
-    key: mappedKey as CompletionUnlockDecision['key'],
+    key: mappedKey as CompletionUnlockDecision["key"],
     reason: decision.userFacingReason,
-    status: decision.decision === 'unlocked'
-      ? 'available'
-      : decision.decision === 'teased'
-        ? 'teased'
-        : 'blocked',
+    status:
+      decision.decision === "unlocked"
+        ? "available"
+        : decision.decision === "teased"
+          ? "teased"
+          : "blocked",
   };
 }
 
@@ -65,14 +71,14 @@ export function unlockDecisionToCompletion(
   decision: UnlockDecision,
   isHidden: boolean,
 ): CompletionUnlockDecision {
-  const key = decision.featureKey as CompletionUnlockDecision['key'];
+  const key = decision.featureKey as CompletionUnlockDecision["key"];
 
   if (isHidden) {
     return {
       hidden: true,
       key,
       reason: decision.userFacingReason,
-      status: 'blocked',
+      status: "blocked",
     };
   }
 
@@ -80,10 +86,11 @@ export function unlockDecisionToCompletion(
     hidden: false,
     key,
     reason: decision.userFacingReason,
-    status: decision.decision === 'unlocked'
-      ? 'available'
-      : decision.decision === 'teased'
-        ? 'teased'
-        : 'blocked',
+    status:
+      decision.decision === "unlocked"
+        ? "available"
+        : decision.decision === "teased"
+          ? "teased"
+          : "blocked",
   };
 }

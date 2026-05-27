@@ -1,7 +1,11 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
-import { resolveBehaviorLane, resolveInitialLane } from './service';
-import type { LaneProfile, ResolveBehaviorLaneInput, ResolveInitialLaneInput } from './types';
+import { resolveBehaviorLane, resolveInitialLane } from "./service";
+import type {
+  LaneProfile,
+  ResolveBehaviorLaneInput,
+  ResolveInitialLaneInput,
+} from "./types";
 
 export function useInitialLane(input: ResolveInitialLaneInput): LaneProfile {
   return useMemo(() => resolveInitialLane(input), [input]);

@@ -8,45 +8,52 @@
  * @phase 4
  */
 
-import React, { useState } from 'react';
-import { Pressable } from 'react-native';
-import Animated, {
-  FadeIn,
-  FadeInUp,
-} from 'react-native-reanimated';
+import React, { useState } from "react";
+import { Pressable } from "react-native";
+import Animated, { FadeIn, FadeInUp } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { Button } from '../../../components/primitives/Button';
-import { useTheme } from '../../../theme';
-import type { FocusDuration, FocusGoal } from '../schemas';
-import { DURATION_OPTIONS } from '../service';
-import { DurationCard } from './DurationCard';
-import { SessionPreview } from './SessionPreview';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { Button } from "../../../components/primitives/Button";
+import { useTheme } from "../../../theme";
+import type { FocusDuration, FocusGoal } from "../schemas";
+import { DURATION_OPTIONS } from "../service";
+import { DurationCard } from "./DurationCard";
+import { SessionPreview } from "./SessionPreview";
 
 interface FirstSessionSetupProps {
   userName: string;
   goal: FocusGoal | null;
-  onStartSession: (config: { duration: number; category: FocusGoal | null }) => void;
+  onStartSession: (config: {
+    duration: number;
+    category: FocusGoal | null;
+  }) => void;
   onBack?: () => void;
 }
 
 /**
  * First session setup screen
  */
-export function FirstSessionSetup({ userName, goal, onStartSession, onBack }: FirstSessionSetupProps): JSX.Element {
+export function FirstSessionSetup({
+  userName,
+  goal,
+  onStartSession,
+  onBack,
+}: FirstSessionSetupProps): JSX.Element {
   const { theme } = useTheme();
   const [selectedDuration, setSelectedDuration] = useState<FocusDuration>(10); // Default to 10 minutes
   const [isAdvancing, setIsAdvancing] = useState(false);
 
-  const displayName = userName || 'there';
+  const displayName = userName || "there";
 
   const handleDurationSelect = (duration: FocusDuration) => {
     setSelectedDuration(duration);
   };
 
   const handleStartSession = () => {
-    if (isAdvancing) {return;}
+    if (isAdvancing) {
+      return;
+    }
 
     setIsAdvancing(true);
     onStartSession({
@@ -62,7 +69,9 @@ export function FirstSessionSetup({ userName, goal, onStartSession, onBack }: Fi
         {onBack && (
           <Pressable onPress={onBack} style={{ marginRight: 12 }}>
             <Box p="xs">
-              <Text variant="h3" color="text.secondary">‹</Text>
+              <Text variant="h3" color="text.secondary">
+                ‹
+              </Text>
             </Box>
           </Pressable>
         )}
@@ -84,7 +93,10 @@ export function FirstSessionSetup({ userName, goal, onStartSession, onBack }: Fi
       </Animated.View>
 
       {/* Duration Options */}
-      <Animated.View entering={FadeInUp.duration(500).delay(200)} style={{ width: '100%' }}>
+      <Animated.View
+        entering={FadeInUp.duration(500).delay(200)}
+        style={{ width: "100%" }}
+      >
         <Box
           flexDirection="row"
           flexWrap="wrap"
@@ -106,29 +118,32 @@ export function FirstSessionSetup({ userName, goal, onStartSession, onBack }: Fi
       </Animated.View>
 
       {/* Session Preview */}
-      <Animated.View entering={FadeInUp.duration(400).delay(400)} style={{ width: '100%' }}>
-        <SessionPreview duration={selectedDuration} goal={goal ?? ''} />
+      <Animated.View
+        entering={FadeInUp.duration(400).delay(400)}
+        style={{ width: "100%" }}
+      >
+        <SessionPreview duration={selectedDuration} goal={goal ?? ""} />
       </Animated.View>
 
       {/* Benefits list */}
       <Animated.View entering={FadeIn.duration(400).delay(600)}>
         <Box gap="sm" mt="lg">
           <Box flexDirection="row" alignItems="center" gap="sm">
-            <Text fontSize={16}>🔥</Text>
+            <Text fontSize={16}>✅</Text>
             <Text variant="body" color="text.secondary">
-              Start your streak today
+              One completed session unlocks Home
             </Text>
           </Box>
           <Box flexDirection="row" alignItems="center" gap="sm">
-            <Text fontSize={16}>⚡</Text>
+            <Text fontSize={16}>🌱</Text>
             <Text variant="body" color="text.secondary">
-              Earn XP and level up
+              VEX learns how you focus
             </Text>
           </Box>
           <Box flexDirection="row" alignItems="center" gap="sm">
-            <Text fontSize={16}>📈</Text>
+            <Text fontSize={16}>✨</Text>
             <Text variant="body" color="text.secondary">
-              See your Focus Score change
+              Your system adapts from real progress
             </Text>
           </Box>
         </Box>
@@ -138,7 +153,10 @@ export function FirstSessionSetup({ userName, goal, onStartSession, onBack }: Fi
       <Box flex={1} minHeight={20} />
 
       {/* CTA Button */}
-      <Animated.View entering={FadeInUp.duration(400).delay(800)} style={{ width: '100%' }}>
+      <Animated.View
+        entering={FadeInUp.duration(400).delay(800)}
+        style={{ width: "100%" }}
+      >
         <Button
           variant="primary"
           size="lg"
@@ -149,16 +167,23 @@ export function FirstSessionSetup({ userName, goal, onStartSession, onBack }: Fi
           accessibilityRole="button"
           accessibilityHint="Activates this control"
         >
-          {isAdvancing ? 'Starting...' : `Start ${selectedDuration}-minute focus session →`}
+          {isAdvancing
+            ? "Starting..."
+            : `Start ${selectedDuration}-minute focus session →`}
         </Button>
       </Animated.View>
 
       {/* Back Option */}
-      <Animated.View entering={FadeIn.duration(400).delay(900)} style={{ marginTop: 'auto' }}>
-        <Pressable onPress={onBack}
+      <Animated.View
+        entering={FadeIn.duration(400).delay(900)}
+        style={{ marginTop: "auto" }}
+      >
+        <Pressable
+          onPress={onBack}
           accessibilityLabel="← Go back button"
           accessibilityRole="button"
-          accessibilityHint="Activates this control">
+          accessibilityHint="Activates this control"
+        >
           <Box alignItems="center" py="md">
             <Text variant="bodySmall" color="text.tertiary">
               ← Go back

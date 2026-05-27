@@ -2,10 +2,10 @@ import {
   applyHomeReturnOptimisticUpdate,
   completionReturnQueryKeys,
   getNextCompletionSyncState,
-} from '../home-return-sync';
-import { SessionMode } from '../../../session/modes';
-import type { SessionSummary } from '../../../session/types';
-import type { CompletionSyncState } from '../../../store/session-state';
+} from "../home-return-sync";
+import { SessionMode } from "../../../session/modes";
+import type { SessionSummary } from "../../../session/types";
+import type { CompletionSyncState } from "../../../store/session-state";
 
 const summary: SessionSummary = {
   actualDuration: 1200,
@@ -26,14 +26,14 @@ const summary: SessionSummary = {
   pauses: 0,
   penaltiesApplied: [],
   plannedDuration: 1200,
-  sessionId: 'session-1',
+  sessionId: "session-1",
   sessionMode: SessionMode.FLOW,
-  status: 'COMPLETED',
+  status: "COMPLETED",
   streakDays: 2,
   streakIncreased: true,
   streakMaintained: true,
   timeBonus: 8,
-  userId: 'user-1',
+  userId: "user-1",
   userLevel: 1,
   vsAverage: 4,
   vsBest: -5,
@@ -41,50 +41,63 @@ const summary: SessionSummary = {
 };
 
 const pendingState: CompletionSyncState = {
-  ledgerId: 'ledger-1',
-  message: 'One session is saved offline.',
+  ledgerId: "ledger-1",
+  message: "One session is saved offline.",
   repairCtaLabel: null,
-  status: 'pending_sync',
+  status: "pending_sync",
   updatedAt: 1,
 };
 
-describe('home return sync', () => {
-  it('optimistically updates visible Home completion data and can rollback', () => {
+describe("home return sync", () => {
+  it("optimistically updates visible Home completion data and can rollback", () => {
     const queryClient = createQueryClient();
-    queryClient.setQueryData(completionReturnQueryKeys.activeSession('user-1'), {
-      id: 'active-session',
-    });
-    queryClient.setQueryData(completionReturnQueryKeys.progression('user-1'), {
+    queryClient.setQueryData(
+      completionReturnQueryKeys.activeSession("user-1"),
+      {
+        id: "active-session",
+      },
+    );
+    queryClient.setQueryData(completionReturnQueryKeys.progression("user-1"), {
       level: 1,
       xp: 10,
     });
 
     const rollback = applyHomeReturnOptimisticUpdate({
       queryClient,
-      sessionId: 'session-1',
+      sessionId: "session-1",
       summary,
-      userId: 'user-1',
+      userId: "user-1",
     });
 
-    expect(queryClient.getQueryData(completionReturnQueryKeys.activeSession('user-1'))).toBeNull();
-    expect(queryClient.getQueryData(completionReturnQueryKeys.progression('user-1'))).toMatchObject({
+    expect(
+      queryClient.getQueryData(
+        completionReturnQueryKeys.activeSession("user-1"),
+      ),
+    ).toBeNull();
+    expect(
+      queryClient.getQueryData(completionReturnQueryKeys.progression("user-1")),
+    ).toMatchObject({
       xp: 50,
     });
 
     rollback();
-    expect(queryClient.getQueryData(completionReturnQueryKeys.activeSession('user-1'))).toMatchObject({
-      id: 'active-session',
+    expect(
+      queryClient.getQueryData(
+        completionReturnQueryKeys.activeSession("user-1"),
+      ),
+    ).toMatchObject({
+      id: "active-session",
     });
   });
 
-  it('keeps pending sync visible offline and clears it after successful sync', () => {
+  it("keeps pending sync visible offline and clears it after successful sync", () => {
     expect(
       getNextCompletionSyncState({
         current: pendingState,
         failed: false,
         pendingSync: true,
       }).status,
-    ).toBe('pending_sync');
+    ).toBe("pending_sync");
 
     expect(
       getNextCompletionSyncState({
@@ -92,18 +105,18 @@ describe('home return sync', () => {
         failed: false,
         pendingSync: false,
       }).status,
-    ).toBe('synced');
+    ).toBe("synced");
   });
 
-  it('keeps progress visible with repair CTA after sync failure', () => {
+  it("keeps progress visible with repair CTA after sync failure", () => {
     const failed = getNextCompletionSyncState({
       current: pendingState,
       failed: true,
       pendingSync: false,
     });
 
-    expect(failed.status).toBe('failed_sync');
-    expect(failed.repairCtaLabel).toBe('Repair now');
+    expect(failed.status).toBe("failed_sync");
+    expect(failed.repairCtaLabel).toBe("Repair now");
   });
 });
 
@@ -117,7 +130,8 @@ function createQueryClient() {
       value: unknown | ((old: unknown) => unknown),
     ): void => {
       const cacheKey = JSON.stringify(key);
-      const next = typeof value === 'function' ? value(cache.get(cacheKey)) : value;
+      const next =
+        typeof value === "function" ? value(cache.get(cacheKey)) : value;
       cache.set(cacheKey, next);
     },
   };

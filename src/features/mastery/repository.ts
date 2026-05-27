@@ -1,14 +1,14 @@
-import { getDefaultStorageAdapter } from '../../persistence/MMKVStorageAdapter';
-import { supabase } from '../../config/supabase';
-import { captureSilentFailure } from '../../utils/silent-failure';
-import { z } from 'zod';
-import { masteryStateSchema } from './schemas';
-import { rankSchema } from './schemas';
-import type { MasteryRank, MasteryState } from './types';
+import { getDefaultStorageAdapter } from "../../persistence/MMKVStorageAdapter";
+import { supabase } from "../../config/supabase";
+import { captureSilentFailure } from "../../utils/silent-failure";
+import { z } from "zod";
+import { masteryStateSchema } from "./schemas";
+import { rankSchema } from "./schemas";
+import type { MasteryRank, MasteryState } from "./types";
 
 const STORAGE_KEY = (userId: string) => `mastery_state_${userId}`;
 const storage = getDefaultStorageAdapter();
-const TABLE = 'mastery_tracks';
+const TABLE = "mastery_tracks";
 
 const masteryTrackRowSchema = z.object({
   duration_total_xp: z.number().min(0),
@@ -25,11 +25,19 @@ function clampTechnique(value: number): number {
 }
 
 function resolveRank(points: number): MasteryRank {
-  if (points >= 100) {return 'GRANDMASTER';}
-  if (points >= 50) {return 'MASTER';}
-  if (points >= 25) {return 'EXPERT';}
-  if (points >= 10) {return 'ADEPT';}
-  return 'APPRENTICE';
+  if (points >= 100) {
+    return "GRANDMASTER";
+  }
+  if (points >= 50) {
+    return "MASTER";
+  }
+  if (points >= 25) {
+    return "EXPERT";
+  }
+  if (points >= 10) {
+    return "ADEPT";
+  }
+  return "APPRENTICE";
 }
 
 function cloudRowToState(row: unknown, userId: string): MasteryState | null {
@@ -63,15 +71,21 @@ function cloudRowToState(row: unknown, userId: string): MasteryState | null {
 }
 
 export function loadStoredMasteryState(userId: string): MasteryState | null {
-  const parsed = masteryStateSchema.safeParse(storage.getJSONSync<unknown>(STORAGE_KEY(userId)));
+  const parsed = masteryStateSchema.safeParse(
+    storage.getJSONSync<unknown>(STORAGE_KEY(userId)),
+  );
   return parsed.success ? parsed.data : null;
 }
 
-async function loadCloudMasteryState(userId: string): Promise<MasteryState | null> {
+async function loadCloudMasteryState(
+  userId: string,
+): Promise<MasteryState | null> {
   const { data, error } = await supabase
     .from(TABLE)
-    .select('duration_total_xp,purity_total_xp,consistency_total_xp,comeback_total_xp,boss_total_xp,overall_rank,updated_at')
-    .eq('user_id', userId)
+    .select(
+      "duration_total_xp,purity_total_xp,consistency_total_xp,comeback_total_xp,boss_total_xp,overall_rank,updated_at",
+    )
+    .eq("user_id", userId)
     .maybeSingle();
 
   if (error) {
@@ -82,9 +96,8 @@ async function loadCloudMasteryState(userId: string): Promise<MasteryState | nul
 }
 
 async function persistCloudMasteryState(state: MasteryState): Promise<void> {
-  const { error } = await supabase
-    .from(TABLE)
-    .upsert({
+  const { error } = await supabase.from(TABLE).upsert(
+    {
       user_id: state.userId,
       duration_total_xp: state.techniques.durationMastery,
       purity_total_xp: state.techniques.purityMastery,
@@ -93,14 +106,18 @@ async function persistCloudMasteryState(state: MasteryState): Promise<void> {
       boss_total_xp: state.techniques.bossMastery,
       overall_rank: state.rank,
       overall_level: Math.max(1, Math.floor(state.totalMasteryPoints / 5)),
-    }, { onConflict: 'user_id' });
+    },
+    { onConflict: "user_id" },
+  );
 
   if (error) {
     throw error;
   }
 }
 
-export async function loadMasteryState(userId: string): Promise<MasteryState | null> {
+export async function loadMasteryState(
+  userId: string,
+): Promise<MasteryState | null> {
   const localState = loadStoredMasteryState(userId);
 
   try {
@@ -120,7 +137,11 @@ export async function loadMasteryState(userId: string): Promise<MasteryState | n
     storage.setJSONSync(STORAGE_KEY(userId), cloudState);
     return cloudState;
   } catch (error) {
-    captureSilentFailure(error, { feature: 'mastery', operation: 'cloud-sync', type: 'network' });
+    captureSilentFailure(error, {
+      feature: "mastery",
+      operation: "cloud-sync",
+      type: "network",
+    });
     return localState;
   }
 }
@@ -129,7 +150,11 @@ export function persistMasteryState(state: MasteryState): MasteryState {
   const nextState = { ...state, updatedAt: Date.now() };
   storage.setJSONSync(STORAGE_KEY(state.userId), nextState);
   void persistCloudMasteryState(nextState).catch((error: unknown) => {
-    captureSilentFailure(error, { feature: 'mastery', operation: 'cloud-sync', type: 'network' });
+    captureSilentFailure(error, {
+      feature: "mastery",
+      operation: "cloud-sync",
+      type: "network",
+    });
   });
   return nextState;
 }

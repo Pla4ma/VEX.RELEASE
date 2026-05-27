@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import React, { useEffect } from "react";
+import { View } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
 
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { CARD_WIDTH } from './session-consequence-types';
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import { CARD_WIDTH } from "./session-consequence-types";
 
 interface ChallengeImpactCardProps {
   challengeName: string;
@@ -42,14 +46,28 @@ export function ChallengeImpactCard({
           : theme.colors.background.secondary,
         borderRadius: theme.borderRadius.xl,
         borderWidth: 2,
-        borderColor: wasCompleted ? theme.colors.success[500] : theme.colors.border.DEFAULT,
+        borderColor: wasCompleted
+          ? theme.colors.success[500]
+          : theme.colors.border.DEFAULT,
         marginRight: theme.spacing[3],
       }}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing[2], marginBottom: theme.spacing[2] }}>
-        <Text fontSize={24}>{wasCompleted ? '📋✅' : '📋'}</Text>
-        <Text variant="body" fontWeight="700" color="text.primary" numberOfLines={1}>
-          {wasCompleted ? 'Challenge Complete!' : challengeName}
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: theme.spacing[2],
+          marginBottom: theme.spacing[2],
+        }}
+      >
+        <Text fontSize={24}>{wasCompleted ? "📋✅" : "📋"}</Text>
+        <Text
+          variant="body"
+          fontWeight="700"
+          color="text.primary"
+          numberOfLines={1}
+        >
+          {wasCompleted ? "Challenge Complete!" : challengeName}
         </Text>
       </View>
 
@@ -58,15 +76,17 @@ export function ChallengeImpactCard({
           height: 8,
           backgroundColor: theme.colors.background.primary,
           borderRadius: theme.borderRadius.full,
-          overflow: 'hidden',
+          overflow: "hidden",
           marginBottom: theme.spacing[2],
         }}
       >
         <Animated.View
           style={[
             {
-              height: '100%',
-              backgroundColor: wasCompleted ? theme.colors.success[500] : theme.colors.primary[500],
+              height: "100%",
+              backgroundColor: wasCompleted
+                ? theme.colors.success[500]
+                : theme.colors.primary[500],
               borderRadius: theme.borderRadius.full,
             },
             progressBarStyle,

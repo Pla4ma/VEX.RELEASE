@@ -6,62 +6,62 @@
  */
 
 export const APP_STORE_METADATA = {
-  appName: 'VEX',
-  subtitle: 'Focus that adapts to you',
+  appName: "VEX",
+  subtitle: "Focus that adapts to you",
   description:
-    'VEX changes based on how you work. Start one focused session, then unlock Study, Run, Project, or Clean systems as VEX learns your rhythm.\n\n' +
-    'VEX Premium adds deeper intelligence: imports, review plans, personal bosses, project memory, weekly reports, and private memory controls — durable intelligence that stays useful.',
+    "VEX changes based on how you work. Start one focused session, then unlock Study, Run, Project, or Clean systems as VEX learns your rhythm.\n\n" +
+    "VEX Premium adds deeper intelligence: imports, review plans, personal bosses, project memory, weekly reports, and private memory controls — durable intelligence that stays useful.",
   keywords: [
-    'focus',
-    'productivity',
-    'adaptive',
-    'study',
-    'deep work',
-    'project',
-    'planning',
-    'memory',
-    'flow',
-    'clean',
-    'run',
+    "focus",
+    "productivity",
+    "adaptive",
+    "study",
+    "deep work",
+    "project",
+    "planning",
+    "memory",
+    "flow",
+    "clean",
+    "run",
   ],
-  supportUrl: 'https://vex.app/support',
-  privacyPolicyUrl: 'https://vex.app/privacy',
-  ageRating: '4+',
-  primaryCategory: 'Productivity',
-  secondaryCategory: 'Health & Fitness',
+  supportUrl: "https://vex.app/support",
+  privacyPolicyUrl: "https://vex.app/privacy",
+  ageRating: "4+",
+  primaryCategory: "Productivity",
+  secondaryCategory: "Health & Fitness",
 };
 
 export const SCREENSHOT_STORY = [
   {
     index: 1,
-    title: 'VEX adapts to how you work.',
-    description: 'One adaptive system — not four separate apps.',
+    title: "VEX adapts to how you work.",
+    description: "One adaptive system — not four separate apps.",
   },
   {
     index: 2,
-    title: 'Get matched to Study, Run, Project, or Clean.',
-    description: 'Answer a few questions. VEX finds your lane.',
+    title: "Get matched to Study, Run, Project, or Clean.",
+    description: "Answer a few questions. VEX finds your lane.",
   },
   {
     index: 3,
-    title: 'Start the right session fast.',
-    description: 'No dashboard clutter. Just the next move.',
+    title: "Start the right session fast.",
+    description: "No dashboard clutter. Just the next move.",
   },
   {
     index: 4,
-    title: 'Finish and VEX learns what helps.',
-    description: 'Completion trains your personalization.',
+    title: "Finish and VEX learns what helps.",
+    description: "Completion trains your personalization.",
   },
   {
     index: 5,
-    title: 'Return tomorrow with a better next action.',
-    description: 'VEX remembers your rhythm and suggests smarter.',
+    title: "Return tomorrow with a better next action.",
+    description: "VEX remembers your rhythm and suggests smarter.",
   },
   {
     index: 6,
-    title: 'Unlock deeper intelligence with Premium.',
+    title: "Unlock deeper intelligence with Premium.",
     description:
-      'Study intelligence, run intelligence, project memory, and focus reports.',
+      "Study intelligence, run intelligence, project memory, and focus reports.",
   },
 ];
 
@@ -76,9 +76,10 @@ Reviewer Instructions:
 7. Navigate to Settings > Account > Delete Account to test account deletion.
 
 Subscriptions:
-- Premium adds durable Study/Run/Project/Clean Intelligence.
-- Premium appears only after value proof or premium action attempt.
-- No Day 0 paywall. No coins, gems, or consumable purchases.
+- Premium adds durable Study/Run/Project/Clean Intelligence — lane-matched depth.
+- Paywall appears only on premium action tap (study import, run modifier, project memory, clean report).
+- No paywall before session 5. Paywall eligible at 40+ sessions.
+- No coins, gems, chests, battle pass, or consumable purchases.
 - Manage subscriptions in iOS Settings > Apple ID > Subscriptions.
 - Restore purchases via Settings > Account > Restore Purchases.
 
@@ -96,13 +97,13 @@ Demo Account:
 
 export const PRIVACY_NUTRITION_LABEL = {
   dataLinkedToUser: [
-    'Contact Info (Email)',
-    'User Content (Display name, goal)',
-    'Identifiers (User ID)',
-    'Usage Data (Sessions, Focus Score, streaks)',
-    'Purchases (Subscription status)',
+    "Contact Info (Email)",
+    "User Content (Display name, goal)",
+    "Identifiers (User ID)",
+    "Usage Data (Sessions, Focus Score, streaks)",
+    "Purchases (Subscription status)",
   ],
-  dataNotLinkedToUser: ['Diagnostics (Crash logs, performance)'],
+  dataNotLinkedToUser: ["Diagnostics (Crash logs, performance)"],
   dataUsedForTracking: [],
-  accountDeletion: 'Available in Settings > Account > Delete Account',
+  accountDeletion: "Available in Settings > Account > Delete Account",
 };

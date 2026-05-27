@@ -12,7 +12,7 @@ import {
   getBalance,
   hasEnoughBalance,
   addCurrency,
-} from '../features/economy/service';
+} from "../features/economy/service";
 
 export interface EconomyServiceInstance {
   getOrCreateWallet: typeof getOrCreateWallet;

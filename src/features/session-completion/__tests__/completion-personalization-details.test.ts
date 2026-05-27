@@ -6,10 +6,10 @@ import {
   buildCompletionPersonalizationResult,
   createSessionSummary,
   SessionMode,
-} from './helpers';
+} from "./helpers";
 
-describe('First session creates return plan', () => {
-  it.each(LANES)('%s: progressProof shows xpDelta and completion', (lane) => {
+describe("First session creates return plan", () => {
+  it.each(LANES)("%s: progressProof shows xpDelta and completion", (lane) => {
     const result = buildResult(lane, { xpDelta: 80 });
     expect(result.progressProof.xpDelta).toBe(80);
     expect(result.progressProof.effectiveMinutes).toBeGreaterThan(0);
@@ -17,14 +17,14 @@ describe('First session creates return plan', () => {
   });
 });
 
-describe('Memory candidate with evidence', () => {
-  it('includes session ID in evidence text', () => {
+describe("Memory candidate with evidence", () => {
+  it("includes session ID in evidence text", () => {
     const result = buildResult("student");
     expect(result.memoryCandidates[0].text).toContain("s:");
     expect(result.memoryCandidates[0].source).toBe("session_completion");
   });
 
-  it('reflects reflection answer when provided', () => {
+  it("reflects reflection answer when provided", () => {
     const result = buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
       focusScoreDelta: 8,
@@ -43,8 +43,8 @@ describe('Memory candidate with evidence', () => {
   });
 });
 
-describe('Deleted memory respected', () => {
-  it('does not create memory candidate when in deleted list', () => {
+describe("Deleted memory respected", () => {
+  it("does not create memory candidate when in deleted list", () => {
     const summary = createSessionSummary({ sessionMode: SessionMode.FLOW });
     const result = buildCompletionPersonalization({
       deletedMemoryIds: [`${summary.sessionId}:minimal_normal:clean`],
@@ -54,7 +54,7 @@ describe('Deleted memory respected', () => {
     expect(result.memoryCandidates).toEqual([]);
   });
 
-  it('still produces other fields when memory deleted', () => {
+  it("still produces other fields when memory deleted", () => {
     const summary = createSessionSummary({ sessionMode: SessionMode.FLOW });
     const result = buildCompletionPersonalization({
       deletedMemoryIds: [`${summary.sessionId}:minimal_normal:clean`],
@@ -68,24 +68,28 @@ describe('Deleted memory respected', () => {
   });
 });
 
-describe('Lane confidence updates with enough evidence', () => {
-  it('clean completion has medium confidence', () => {
+describe("Lane confidence updates with enough evidence", () => {
+  it("clean completion has medium confidence", () => {
     const result = buildResult("student");
     expect(result.laneProfile.confidenceBand).toBe("medium");
     expect(result.laneProfile.confidence).toBeGreaterThanOrEqual(0.5);
   });
 
-  it('partial completion has low confidence', () => {
+  it("partial completion has low confidence", () => {
     const result = buildResult("game_like", {
       grade: "C",
-      summary: { completionPercentage: 40, sessionMode: SessionMode.FLOW, status: "COMPLETED" },
+      summary: {
+        completionPercentage: 40,
+        sessionMode: SessionMode.FLOW,
+        status: "COMPLETED",
+      },
       focusScoreDelta: 0,
       xpDelta: 50,
     });
     expect(result.laneProfile.confidenceBand).toBe("low");
   });
 
-  it('abandoned has low confidence', () => {
+  it("abandoned has low confidence", () => {
     const result = buildResult("deep_creative", {
       grade: "D",
       summary: {
@@ -100,10 +104,10 @@ describe('Lane confidence updates with enough evidence', () => {
   });
 });
 
-describe('Unlock decision produced but hidden systems stay hidden', () => {
+describe("Unlock decision produced but hidden systems stay hidden", () => {
   const SUMMARY = createSessionSummary({ sessionMode: SessionMode.FLOW });
 
-  it.each(LANES)('%s: hidden unlock when featureKey in hidden list', (lane) => {
+  it.each(LANES)("%s: hidden unlock when featureKey in hidden list", (lane) => {
     const result = buildCompletionPersonalization({
       hiddenFeatureKeys: [UNLOCK_KEYS[lane]],
       lane,
@@ -113,19 +117,22 @@ describe('Unlock decision produced but hidden systems stay hidden', () => {
     expect(result.unlockDecision.status).toBe("blocked");
   });
 
-  it.each(LANES)('%s: visible unlock when featureKey not in hidden list', (lane) => {
-    const result = buildCompletionPersonalization({
-      hiddenFeatureKeys: [],
-      lane,
-      summary: SUMMARY,
-    });
-    expect(result.unlockDecision.hidden).toBe(false);
-    expect(result.unlockDecision.status).toBe("teased");
-  });
+  it.each(LANES)(
+    "%s: visible unlock when featureKey not in hidden list",
+    (lane) => {
+      const result = buildCompletionPersonalization({
+        hiddenFeatureKeys: [],
+        lane,
+        summary: SUMMARY,
+      });
+      expect(result.unlockDecision.hidden).toBe(false);
+      expect(result.unlockDecision.status).toBe("teased");
+    },
+  );
 });
 
-describe('Next action safe if feature degraded', () => {
-  it('produces result without crashing when nextAction is null', () => {
+describe("Next action safe if feature degraded", () => {
+  it("produces result without crashing when nextAction is null", () => {
     const result = buildCompletionPersonalizationResult({
       deletedMemoryIds: [],
       focusScoreDelta: 8,
@@ -143,29 +150,29 @@ describe('Next action safe if feature degraded', () => {
   });
 });
 
-describe('XP / streak / progress still update', () => {
-  it('progressProof carries xpDelta', () => {
+describe("XP / streak / progress still update", () => {
+  it("progressProof carries xpDelta", () => {
     const result = buildResult("student", { xpDelta: 200 });
     expect(result.progressProof.xpDelta).toBe(200);
   });
 
-  it('progressProof carries streak info', () => {
+  it("progressProof carries streak info", () => {
     const result = buildResult("game_like", { streakDays: 7 });
     expect(result.progressProof.streakDays).toBe(7);
     expect(result.progressProof.streakAction).toBe("extended");
   });
 
-  it('progressProof carries focus score delta', () => {
+  it("progressProof carries focus score delta", () => {
     const result = buildResult("deep_creative", { focusScoreDelta: 12 });
     expect(result.progressProof.focusScoreDelta).toBe(12);
   });
 
-  it('progressProof carries grade', () => {
+  it("progressProof carries grade", () => {
     const result = buildResult("minimal_normal", { grade: "A" });
     expect(result.progressProof.grade).toBe("A");
   });
 
-  it('progressProof reflects personal best', () => {
+  it("progressProof reflects personal best", () => {
     const pb = buildResult("student", { isPersonalBest: true });
     expect(pb.progressProof.isPersonalBest).toBe(true);
     const noPb = buildResult("student", { isPersonalBest: false });
@@ -173,11 +180,16 @@ describe('XP / streak / progress still update', () => {
   });
 });
 
-describe('User-facing summary is lane-appropriate', () => {
-  it.each(LANES)('%s: has displayTitle, displayBody, nextActionLabel', (lane) => {
-    const result = buildResult(lane);
-    expect(result.userFacingSummary.displayTitle.length).toBeGreaterThan(0);
-    expect(result.userFacingSummary.displayBody.length).toBeGreaterThan(0);
-    expect(result.userFacingSummary.nextActionLabel.length).toBeGreaterThan(0);
-  });
+describe("User-facing summary is lane-appropriate", () => {
+  it.each(LANES)(
+    "%s: has displayTitle, displayBody, nextActionLabel",
+    (lane) => {
+      const result = buildResult(lane);
+      expect(result.userFacingSummary.displayTitle.length).toBeGreaterThan(0);
+      expect(result.userFacingSummary.displayBody.length).toBeGreaterThan(0);
+      expect(result.userFacingSummary.nextActionLabel.length).toBeGreaterThan(
+        0,
+      );
+    },
+  );
 });

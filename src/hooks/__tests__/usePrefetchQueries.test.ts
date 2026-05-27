@@ -1,5 +1,5 @@
-import { buildFeatureAccess } from '../../features/liveops-config/feature-access';
-import { createPrefetcher, QueryKeys } from '../usePrefetchQueries';
+import { buildFeatureAccess } from "../../features/liveops-config/feature-access";
+import { createPrefetcher, QueryKeys } from "../usePrefetchQueries";
 
 type PrefetchOptions = {
   queryKey: readonly string[];
@@ -26,8 +26,8 @@ function queryKeys(calls: PrefetchOptions[]): readonly string[][] {
   return calls.map((call) => [...call.queryKey]);
 }
 
-describe('createPrefetcher feature availability policy', () => {
-  it('prefetchSession does not prefetch squads', () => {
+describe("createPrefetcher feature availability policy", () => {
+  it("prefetchSession does not prefetch squads", () => {
     const { calls, queryClient } = createQueryClient();
     const prefetcher = createPrefetcher(queryClient);
 
@@ -37,7 +37,7 @@ describe('createPrefetcher feature availability policy', () => {
     expect(queryKeys(calls)).toContainEqual(QueryKeys.SESSION.CONFIG);
   });
 
-  it('prefetchProfile does not prefetch wallet or inventory when economy is inactive', () => {
+  it("prefetchProfile does not prefetch wallet or inventory when economy is inactive", () => {
     const { calls, queryClient } = createQueryClient();
     const policy = buildFeatureAccess({ totalCompletedSessions: 0 });
     const prefetcher = createPrefetcher(queryClient, {
@@ -52,10 +52,11 @@ describe('createPrefetcher feature availability policy', () => {
     expect(queryKeys(calls)).not.toContainEqual(QueryKeys.USER.INVENTORY);
   });
 
-  it('prefetchShop is no-op when shop is deactivated', () => {
+  it("prefetchShop is no-op when shop is deactivated", () => {
     const { calls, queryClient } = createQueryClient();
     const prefetcher = createPrefetcher(queryClient, {
-      featureAccess: buildFeatureAccess({ totalCompletedSessions: 999 }).features,
+      featureAccess: buildFeatureAccess({ totalCompletedSessions: 999 })
+        .features,
     });
 
     prefetcher.shop();
@@ -63,10 +64,11 @@ describe('createPrefetcher feature availability policy', () => {
     expect(calls).toHaveLength(0);
   });
 
-  it('prefetchBattlePass is no-op when battle pass is deactivated', () => {
+  it("prefetchBattlePass is no-op when battle pass is deactivated", () => {
     const { calls, queryClient } = createQueryClient();
     const prefetcher = createPrefetcher(queryClient, {
-      featureAccess: buildFeatureAccess({ totalCompletedSessions: 999 }).features,
+      featureAccess: buildFeatureAccess({ totalCompletedSessions: 999 })
+        .features,
     });
 
     prefetcher.battlePass();
@@ -74,7 +76,7 @@ describe('createPrefetcher feature availability policy', () => {
     expect(calls).toHaveLength(0);
   });
 
-  it('hidden features do not prefetch on Day 0', () => {
+  it("hidden features do not prefetch on Day 0", () => {
     const { calls, queryClient } = createQueryClient();
     const policy = buildFeatureAccess({ totalCompletedSessions: 0 });
     const prefetcher = createPrefetcher(queryClient, {
@@ -89,7 +91,7 @@ describe('createPrefetcher feature availability policy', () => {
     expect(calls).toHaveLength(0);
   });
 
-  it('active core session prefetch still works', () => {
+  it("active core session prefetch still works", () => {
     const { calls, queryClient } = createQueryClient();
     const prefetcher = createPrefetcher(queryClient);
 
@@ -100,7 +102,7 @@ describe('createPrefetcher feature availability policy', () => {
       [...QueryKeys.SESSION.ACTIVE],
     ]);
   });
-  it('prefetchByFeature blocks hidden feature keys', () => {
+  it("prefetchByFeature blocks hidden feature keys", () => {
     const { calls, queryClient } = createQueryClient();
     const policy = buildFeatureAccess({ totalCompletedSessions: 0 });
     const prefetcher = createPrefetcher(queryClient, {
@@ -108,7 +110,7 @@ describe('createPrefetcher feature availability policy', () => {
       totalCompletedSessions: 0,
     });
 
-    prefetcher.byFeature('shop', QueryKeys.SHOP.OFFERS);
+    prefetcher.byFeature("shop", QueryKeys.SHOP.OFFERS);
 
     expect(calls).toHaveLength(0);
   });

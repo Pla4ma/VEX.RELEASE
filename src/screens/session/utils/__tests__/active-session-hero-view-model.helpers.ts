@@ -1,10 +1,10 @@
-import { buildActiveSessionHeroViewModel } from '../active-session-hero-view-model';
-import type { ActiveSessionDisplayPolicy } from '../active-session-display-policy';
+import { buildActiveSessionHeroViewModel } from "../active-session-hero-view-model";
+import type { ActiveSessionDisplayPolicy } from "../active-session-display-policy";
 
 export { buildActiveSessionHeroViewModel };
 
 export const basePolicy: ActiveSessionDisplayPolicy = {
-  heroDensity: 'minimal',
+  heroDensity: "minimal",
   showBossHUD: false,
   showBossTinyIndicator: false,
   showCoachBanner: false,
@@ -26,13 +26,13 @@ export const baseInput = {
   lanePresentation: null,
   momentumScores: [75, 80, 85],
   perfectFocusActive: true,
-  phaseAccent: 'blue',
-  phaseIcon: 'clock' as const,
-  phaseLabel: 'Focus',
-  purityLabel: 'Elite' as const,
+  phaseAccent: "blue",
+  phaseIcon: "clock" as const,
+  phaseLabel: "Focus",
+  purityLabel: "Elite" as const,
   purityScore: 95,
   remainingSeconds: 600,
   streakMultiplier: 2.5,
-  studyTargetLabel: 'Study target',
+  studyTargetLabel: "Study target",
   todayFocusSeconds: 3600,
 };

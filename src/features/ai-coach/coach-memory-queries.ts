@@ -1,19 +1,26 @@
-import type { MessageCategory } from './types';
-import { createDebugger } from '../../utils/debug';
+import type { MessageCategory } from "./types";
+import { createDebugger } from "../../utils/debug";
 import {
   getMemoriesByUser as repoGetMemoriesByUser,
   getMemoriesByType as repoGetMemoriesByType,
   markMemoryReferenced as repoMarkMemoryReferenced,
-} from './repository/memories';
-import { MemoryTypeSchema, type CoachMemory, type MemoryType } from './memory-schemas';
+} from "./repository/memories";
+import {
+  MemoryTypeSchema,
+  type CoachMemory,
+  type MemoryType,
+} from "./memory-schemas";
 
-const debug = createDebugger('ai-coach:memory');
+const debug = createDebugger("ai-coach:memory");
 
 async function getUserMemoriesInternal(userId: string): Promise<CoachMemory[]> {
   try {
     return await repoGetMemoriesByUser(userId);
   } catch (error) {
-    debug.warn('[CoachMemory] Failed to fetch memories, returning empty:', error);
+    debug.warn(
+      "[CoachMemory] Failed to fetch memories, returning empty:",
+      error,
+    );
     return [];
   }
 }
@@ -25,7 +32,10 @@ async function getMemoriesByTypeInternal(
   try {
     return await repoGetMemoriesByType(userId, type);
   } catch (error) {
-    debug.warn('[CoachMemory] Failed to fetch memories by type, returning empty:', error);
+    debug.warn(
+      "[CoachMemory] Failed to fetch memories by type, returning empty:",
+      error,
+    );
     return [];
   }
 }
@@ -34,7 +44,7 @@ async function markMemoryReferencedInternal(memoryId: string): Promise<void> {
   try {
     await repoMarkMemoryReferenced(memoryId);
   } catch (error) {
-    debug.warn('[CoachMemory] Failed to mark memory referenced:', error);
+    debug.warn("[CoachMemory] Failed to mark memory referenced:", error);
   }
 }
 
@@ -49,20 +59,21 @@ export async function getRelevantMemories(
     const daysSince = (Date.now() - memory.occurredAt) / (1000 * 60 * 60 * 24);
     score += Math.max(0, 10 - daysSince);
     switch (category) {
-      case 'STREAK_RISK':
-        if (memory.type === 'BEST_STREAK') score += 10;
-        if (memory.type === 'FIRST_S_GRADE') score += 5;
+      case "STREAK_RISK":
+        if (memory.type === "BEST_STREAK") score += 10;
+        if (memory.type === "FIRST_S_GRADE") score += 5;
         break;
-      case 'SESSION_SUGGESTION':
-        if (memory.type === 'LONGEST_SESSION') score += 10;
-        if (memory.type === 'FIRST_S_GRADE') score += 5;
+      case "SESSION_SUGGESTION":
+        if (memory.type === "LONGEST_SESSION") score += 10;
+        if (memory.type === "FIRST_S_GRADE") score += 5;
         break;
-      case 'MILESTONE_HYPE':
-        if (memory.type.includes('MILESTONE') || memory.type.includes('FIRST')) score += 10;
+      case "MILESTONE_HYPE":
+        if (memory.type.includes("MILESTONE") || memory.type.includes("FIRST"))
+          score += 10;
         break;
-      case 'COMEBACK_SUPPORT':
-        if (memory.type === 'BEST_STREAK') score += 8;
-        if (memory.type === 'FIRST_S_GRADE') score += 5;
+      case "COMEBACK_SUPPORT":
+        if (memory.type === "BEST_STREAK") score += 8;
+        if (memory.type === "FIRST_S_GRADE") score += 5;
         break;
       default:
         break;
@@ -78,14 +89,16 @@ export async function getRelevantMemories(
   return selected;
 }
 
-export async function getOnboardingGoal(userId: string): Promise<string | null> {
-  const memories = await getMemoriesByTypeInternal(userId, 'ONBOARDING_GOAL');
+export async function getOnboardingGoal(
+  userId: string,
+): Promise<string | null> {
+  const memories = await getMemoriesByTypeInternal(userId, "ONBOARDING_GOAL");
   if (memories.length === 0) return null;
   const sorted = memories.sort((a, b) => b.occurredAt - a.occurredAt);
   const latest = sorted[0];
   if (!latest) return null;
   const goal = latest.metadata.goal;
-  return typeof goal === 'string' ? goal : null;
+  return typeof goal === "string" ? goal : null;
 }
 
 export async function getMilestoneSummary(userId: string): Promise<{
@@ -96,7 +109,12 @@ export async function getMilestoneSummary(userId: string): Promise<{
 }> {
   const memories = await getUserMemoriesInternal(userId);
   if (memories.length === 0) {
-    return { totalMemories: 0, mostRecent: null, favoriteType: null, streakOfSGrades: 0 };
+    return {
+      totalMemories: 0,
+      mostRecent: null,
+      favoriteType: null,
+      streakOfSGrades: 0,
+    };
   }
   const sorted = memories.sort((a, b) => b.occurredAt - a.occurredAt);
   const mostRecent = sorted[0] ?? null;
@@ -111,7 +129,12 @@ export async function getMilestoneSummary(userId: string): Promise<{
     if (parsed.success) favoriteType = parsed.data;
   }
   const sGradeCount = memories.filter(
-    (m) => m.type === 'FIRST_S_GRADE' || m.metadata.grade === 'S',
+    (m) => m.type === "FIRST_S_GRADE" || m.metadata.grade === "S",
   ).length;
-  return { totalMemories: memories.length, mostRecent, favoriteType, streakOfSGrades: sGradeCount };
+  return {
+    totalMemories: memories.length,
+    mostRecent,
+    favoriteType,
+    streakOfSGrades: sGradeCount,
+  };
 }

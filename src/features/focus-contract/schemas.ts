@@ -1,7 +1,12 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-export const CompletionStatusSchema = z.enum(['done', 'partial', 'not_done', 'skipped']);
-export const ReflectionStatusSchema = z.enum(['done', 'partial', 'not_done']);
+export const CompletionStatusSchema = z.enum([
+  "done",
+  "partial",
+  "not_done",
+  "skipped",
+]);
+export const ReflectionStatusSchema = z.enum(["done", "partial", "not_done"]);
 
 const trimmedTask = z.string().trim().min(3).max(80);
 
@@ -24,10 +29,11 @@ export const FocusContractInputSchema = z
   })
   .strict();
 
-export const CreateFocusContractRepositoryInputSchema = FocusContractInputSchema.extend({
-  userId: z.string().uuid(),
-  taskDescription: trimmedTask,
-}).strict();
+export const CreateFocusContractRepositoryInputSchema =
+  FocusContractInputSchema.extend({
+    userId: z.string().uuid(),
+    taskDescription: trimmedTask,
+  }).strict();
 
 export const FocusContractReflectionInputSchema = z
   .object({

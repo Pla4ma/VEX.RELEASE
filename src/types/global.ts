@@ -1,1 +1,148 @@
-import{type ReactNode}from'react'; export type Nullable<T>=T|null|undefined; export type Maybe<T>=T|null; export type DeepPartial<T>={[P in keyof T]?:T[P]extends object?DeepPartial<T[P]>:T[P]}; export type DeepReadonly<T>={readonly[P in keyof T]:T[P]extends object?DeepReadonly<T[P]>:T[P]}; export type KeyOf<T>=keyof T; export type ValueOf<T>=T[keyof T]; export type Entries<T>=[keyof T,T[keyof T]][]; export type StrictRecord<K extends keyof any,T>=Record<K,T>; export type AsyncResult<T,E=Error>={success:true;data:T;error:null;}|{success:false;data:null;error:E;}; export type LoadingState='idle'|'loading'|'success'|'error'; export type RequestState<T>={status:'idle';data:null;error:null;}|{status:'loading';data:null;error:null;}|{status:'success';data:T;error:null;}|{status:'error';data:T|null;error:Error;}; export interface PaginationData<T>{data:T[];page:number;limit:number;total:number;hasMore:boolean;}export type SortDirection='asc'|'desc'; export interface SortConfig<T>{key:keyof T;direction:SortDirection;}export type FilterOperator='eq'|'neq'|'gt'|'gte'|'lt'|'lte'|'contains'|'startsWith'|'endsWith'|'in'|'between'; export interface FilterConfig<T>{key:keyof T;operator:FilterOperator;value:unknown;}export type TimeoutId=ReturnType<typeof setTimeout>; export type IntervalId=ReturnType<typeof setInterval>; export type VoidFunction=()=>void; export type EventHandler<E=unknown>=(event:E)=>void; export type AsyncEventHandler<E=unknown>=(event:E)=>Promise<void>; export type Callback<T=void>=T extends void?()=>void:(value:T)=>void; export interface WithChildren{children:ReactNode;}export interface WithOptionalChildren{children?:ReactNode;}export interface WithStyle{style?:unknown;}export interface WithTestID{testID?:string;}export interface WithAccessibilityLabel{accessibilityLabel?:string;}export interface BaseComponentProps extends WithOptionalChildren,WithTestID,WithAccessibilityLabel{style?:unknown;}export interface AppError extends Error{code:string;details?:Record<string,unknown>;recoverable?:boolean;}export interface ValidationError{field:string;message:string;code?:string;}export interface DeviceInfo{platform:'ios'|'android'|'windows'|'macos'|'web';version:string;model:string;brand:string;isTablet:boolean;isEmulator:boolean;}export type AppEnvironment='development'|'staging'|'production'; export interface AppConfig{environment:AppEnvironment;apiUrl:string;apiTimeout:number;version:string;buildNumber:string;bundleId:string;}export interface Dimensions{width:number;height:number;}export interface Position{x:number;y:number;}export interface EdgeInsets{top:number;right:number;bottom:number;left:number;}export interface DateRange{start:Date;end:Date;}export interface Duration{milliseconds:number;seconds:number;minutes:number;hours:number;days:number;}export interface FileMetadata{name:string;type:string;size:number;uri:string;lastModified:Date;}export interface Coordinates{latitude:number;longitude:number;accuracy?:number;}export type StringLiteral<T extends string>=T&{__brand:'StringLiteral';}; export type TypeGuard<T>=(value:unknown)=>value is T; export type Awaited<T>=T extends Promise<infer R>?R:T; export type DeepNonNullable<T>={[P in keyof T]-?:NonNullable<DeepNonNullable<T[P]>>};
+import { type ReactNode } from "react";
+export type Nullable<T> = T | null | undefined;
+export type Maybe<T> = T | null;
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+export type DeepReadonly<T> = {
+  readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P];
+};
+export type KeyOf<T> = keyof T;
+export type ValueOf<T> = T[keyof T];
+export type Entries<T> = [keyof T, T[keyof T]][];
+export type StrictRecord<K extends keyof any, T> = Record<K, T>;
+export type AsyncResult<T, E = Error> =
+  | { success: true; data: T; error: null }
+  | { success: false; data: null; error: E };
+export type LoadingState = "idle" | "loading" | "success" | "error";
+export type RequestState<T> =
+  | { status: "idle"; data: null; error: null }
+  | { status: "loading"; data: null; error: null }
+  | { status: "success"; data: T; error: null }
+  | { status: "error"; data: T | null; error: Error };
+export interface PaginationData<T> {
+  data: T[];
+  page: number;
+  limit: number;
+  total: number;
+  hasMore: boolean;
+}
+export type SortDirection = "asc" | "desc";
+export interface SortConfig<T> {
+  key: keyof T;
+  direction: SortDirection;
+}
+export type FilterOperator =
+  | "eq"
+  | "neq"
+  | "gt"
+  | "gte"
+  | "lt"
+  | "lte"
+  | "contains"
+  | "startsWith"
+  | "endsWith"
+  | "in"
+  | "between";
+export interface FilterConfig<T> {
+  key: keyof T;
+  operator: FilterOperator;
+  value: unknown;
+}
+export type TimeoutId = ReturnType<typeof setTimeout>;
+export type IntervalId = ReturnType<typeof setInterval>;
+export type VoidFunction = () => void;
+export type EventHandler<E = unknown> = (event: E) => void;
+export type AsyncEventHandler<E = unknown> = (event: E) => Promise<void>;
+export type Callback<T = void> = T extends void
+  ? () => void
+  : (value: T) => void;
+export interface WithChildren {
+  children: ReactNode;
+}
+export interface WithOptionalChildren {
+  children?: ReactNode;
+}
+export interface WithStyle {
+  style?: unknown;
+}
+export interface WithTestID {
+  testID?: string;
+}
+export interface WithAccessibilityLabel {
+  accessibilityLabel?: string;
+}
+export interface BaseComponentProps
+  extends WithOptionalChildren, WithTestID, WithAccessibilityLabel {
+  style?: unknown;
+}
+export interface AppError extends Error {
+  code: string;
+  details?: Record<string, unknown>;
+  recoverable?: boolean;
+}
+export interface ValidationError {
+  field: string;
+  message: string;
+  code?: string;
+}
+export interface DeviceInfo {
+  platform: "ios" | "android" | "windows" | "macos" | "web";
+  version: string;
+  model: string;
+  brand: string;
+  isTablet: boolean;
+  isEmulator: boolean;
+}
+export type AppEnvironment = "development" | "staging" | "production";
+export interface AppConfig {
+  environment: AppEnvironment;
+  apiUrl: string;
+  apiTimeout: number;
+  version: string;
+  buildNumber: string;
+  bundleId: string;
+}
+export interface Dimensions {
+  width: number;
+  height: number;
+}
+export interface Position {
+  x: number;
+  y: number;
+}
+export interface EdgeInsets {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+export interface DateRange {
+  start: Date;
+  end: Date;
+}
+export interface Duration {
+  milliseconds: number;
+  seconds: number;
+  minutes: number;
+  hours: number;
+  days: number;
+}
+export interface FileMetadata {
+  name: string;
+  type: string;
+  size: number;
+  uri: string;
+  lastModified: Date;
+}
+export interface Coordinates {
+  latitude: number;
+  longitude: number;
+  accuracy?: number;
+}
+export type StringLiteral<T extends string> = T & { __brand: "StringLiteral" };
+export type TypeGuard<T> = (value: unknown) => value is T;
+export type Awaited<T> = T extends Promise<infer R> ? R : T;
+export type DeepNonNullable<T> = {
+  [P in keyof T]-?: NonNullable<DeepNonNullable<T[P]>>;
+};

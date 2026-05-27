@@ -20,7 +20,10 @@ export async function buildImportPresets(
     updates: Partial<Omit<SessionPreset, "id" | "createdAt" | "userId">>,
   ) => Promise<SessionPreset>,
   createPreset: (
-    presetData: Omit<SessionPreset, "id" | "createdAt" | "updatedAt" | "userId">,
+    presetData: Omit<
+      SessionPreset,
+      "id" | "createdAt" | "updatedAt" | "userId"
+    >,
   ) => Promise<SessionPreset>,
 ): Promise<number> {
   if (!userId) {

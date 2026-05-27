@@ -1,14 +1,18 @@
-import { ScoringEngine, createMockSession, createMockFocusMetrics } from './helpers';
+import {
+  ScoringEngine,
+  createMockSession,
+  createMockFocusMetrics,
+} from "./helpers";
 
-describe('ScoringEngine', () => {
+describe("ScoringEngine", () => {
   let engine: ScoringEngine;
 
   beforeEach(() => {
     engine = new ScoringEngine();
   });
 
-  describe('Streak Multipliers', () => {
-    it('should apply streak multiplier', () => {
+  describe("Streak Multipliers", () => {
+    it("should apply streak multiplier", () => {
       engine.setUserStats(7, 1);
       const session = createMockSession();
       const metrics = createMockFocusMetrics();
@@ -16,7 +20,7 @@ describe('ScoringEngine', () => {
       expect(calculation.streakMultiplier).toBe(1.25);
     });
 
-    it('should calculate streak bonus', () => {
+    it("should calculate streak bonus", () => {
       engine.setUserStats(7, 1);
       const session = createMockSession();
       const metrics = createMockFocusMetrics();
@@ -25,14 +29,16 @@ describe('ScoringEngine', () => {
     });
   });
 
-  describe('Quality Multipliers', () => {
-    it('should apply quality multiplier from focus metrics', () => {
+  describe("Quality Multipliers", () => {
+    it("should apply quality multiplier from focus metrics", () => {
       const highQuality = createMockFocusMetrics({ overallScore: 95 });
       const lowQuality = createMockFocusMetrics({ overallScore: 40 });
       const session = createMockSession();
       const highCalc = engine.calculateScore(session, highQuality);
       const lowCalc = engine.calculateScore(session, lowQuality);
-      expect(highCalc.qualityMultiplier).toBeGreaterThan(lowCalc.qualityMultiplier);
+      expect(highCalc.qualityMultiplier).toBeGreaterThan(
+        lowCalc.qualityMultiplier,
+      );
     });
   });
 });

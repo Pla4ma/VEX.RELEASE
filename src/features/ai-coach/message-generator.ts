@@ -1,4 +1,4 @@
-import * as repository from './repository';
+import * as repository from "./repository";
 import {
   GenerateMessageInputSchema,
   MarkMessageActionInputSchema,
@@ -6,18 +6,18 @@ import {
   type CoachMessageTemplate,
   type GenerateMessageInput,
   type MarkMessageActionInput,
-} from './schemas';
-import { getOrCreateCoachState } from './persona-manager';
-import { validateMessageQuality } from '../../../src/features/ai-coach/message-quality-gate';
+} from "./schemas";
+import { getOrCreateCoachState } from "./persona-manager";
+import { validateMessageQuality } from "./message-quality-gate";
 import {
   generateAIBackedMessage,
   generateQualityFallback,
-} from './message-ai-backend';
-import { getDefaultTemplate } from './default-message-templates';
-export { generateMemoryAwareMessage } from './memory-message-templates';
+} from "./message-ai-backend";
+import { getDefaultTemplate } from "./default-message-templates";
+export { generateMemoryAwareMessage } from "./memory-message-templates";
 
-export { evaluateInterventions } from './intervention-evaluator';
-export { generatePerformanceSummary } from './performance-summary';
+export { evaluateInterventions } from "./intervention-evaluator";
+export { generatePerformanceSummary } from "./performance-summary";
 
 export async function generateMessage(
   input: GenerateMessageInput,
@@ -35,7 +35,11 @@ export async function generateMessage(
   const aiContent = await generateAIBackedMessage(validated);
 
   if (aiContent) {
-    const qualityAnalysis = validateMessageQuality('ai-msg', aiContent, validated.category);
+    const qualityAnalysis = validateMessageQuality(
+      "ai-msg",
+      aiContent,
+      validated.category,
+    );
     if (qualityAnalysis.passesQualityGate) {
       return createMessageFromTemplate(validated, state.personaId, aiContent);
     }
@@ -43,7 +47,10 @@ export async function generateMessage(
     return createMessageFromTemplate(validated, state.personaId, fallback);
   }
 
-  const templates = await repository.fetchMessageTemplates(state.personaId, validated.category);
+  const templates = await repository.fetchMessageTemplates(
+    state.personaId,
+    validated.category,
+  );
   const matchingTemplates = templates.filter((template) =>
     checkConditions(template.conditions, validated.context),
   );
@@ -52,23 +59,34 @@ export async function generateMessage(
   if (bestTemplate) {
     const content = selectVariation(bestTemplate);
     const templateQualityAnalysis = validateMessageQuality(
-      'template-msg',
+      "template-msg",
       content,
       validated.category,
     );
     if (!templateQualityAnalysis.passesQualityGate) {
-      const fallback = generateQualityFallback(validated, templateQualityAnalysis);
+      const fallback = generateQualityFallback(
+        validated,
+        templateQualityAnalysis,
+      );
       return createMessageFromTemplate(validated, state.personaId, fallback);
     }
-    return createMessageFromTemplate(validated, state.personaId, content, bestTemplate.priority);
+    return createMessageFromTemplate(
+      validated,
+      state.personaId,
+      content,
+      bestTemplate.priority,
+    );
   }
 
-  const defaultContent = getDefaultTemplate(validated.category, validated.context);
+  const defaultContent = getDefaultTemplate(
+    validated.category,
+    validated.context,
+  );
   if (!defaultContent) {
     return null;
   }
   const defaultQualityAnalysis = validateMessageQuality(
-    'default-msg',
+    "default-msg",
     defaultContent,
     validated.category,
   );
@@ -87,7 +105,12 @@ function isCategoryMuted(
 }
 
 export function checkConditions(
-  conditions: Array<{ type?: string; operator: string; value?: unknown; field?: string }>,
+  conditions: Array<{
+    type?: string;
+    operator: string;
+    value?: unknown;
+    field?: string;
+  }>,
   context: Record<string, unknown>,
 ): boolean {
   return conditions.every((condition) => {
@@ -100,18 +123,21 @@ export function checkConditions(
       return false;
     }
     switch (condition.operator) {
-      case 'eq':
+      case "eq":
         return contextValue === condition.value;
-      case 'gt':
+      case "gt":
         return Number(contextValue) > Number(condition.value);
-      case 'lt':
+      case "lt":
         return Number(contextValue) < Number(condition.value);
-      case 'gte':
+      case "gte":
         return Number(contextValue) >= Number(condition.value);
-      case 'lte':
+      case "lte":
         return Number(contextValue) <= Number(condition.value);
-      case 'in':
-        return Array.isArray(condition.value) && condition.value.includes(contextValue);
+      case "in":
+        return (
+          Array.isArray(condition.value) &&
+          condition.value.includes(contextValue)
+        );
       default:
         return false;
     }
@@ -120,7 +146,8 @@ export function checkConditions(
 
 function selectVariation(template: CoachMessageTemplate): string {
   const allVariations = [template.content, ...template.variations];
-  const result = allVariations[Math.floor(Math.random() * allVariations.length)];
+  const result =
+    allVariations[Math.floor(Math.random() * allVariations.length)];
   return result ?? template.content;
 }
 
@@ -138,7 +165,7 @@ function createMessageFromTemplate(
     content,
     deliveryMethod: input.preferredDelivery,
     priority,
-    status: 'DRAFT',
+    status: "DRAFT",
     createdAt: Date.now(),
     scheduledFor: null,
     deliveredAt: null,
@@ -169,4 +196,3 @@ async function trackEffectiveness(
 ): Promise<void> {
   void message;
 }
-

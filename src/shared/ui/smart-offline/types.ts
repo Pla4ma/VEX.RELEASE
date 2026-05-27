@@ -1,7 +1,7 @@
 export interface PendingAction {
   id: string;
-  type: 'session' | 'purchase' | 'sync' | 'upload';
-  priority: 'high' | 'medium' | 'low';
+  type: "session" | "purchase" | "sync" | "upload";
+  priority: "high" | "medium" | "low";
   description: string;
   timestamp: number;
   retryCount: number;

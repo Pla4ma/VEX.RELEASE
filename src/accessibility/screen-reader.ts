@@ -4,14 +4,17 @@
  * Screen reader announcements and utilities
  */
 
-import { ScreenReaderAnnouncement } from './types';
+import { ScreenReaderAnnouncement } from "./types";
 
 const announcements: ScreenReaderAnnouncement[] = [];
 
 /**
  * Announce message to screen readers
  */
-export function announce(message: string, priority: 'polite' | 'assertive' = 'polite'): void {
+export function announce(
+  message: string,
+  priority: "polite" | "assertive" = "polite",
+): void {
   const announcement: ScreenReaderAnnouncement = {
     id: generateId(),
     message,
@@ -27,7 +30,7 @@ export function announce(message: string, priority: 'polite' | 'assertive' = 'po
   }
 
   // Send to React Native
-  if (priority === 'assertive') {
+  if (priority === "assertive") {
     // Use assertive region - would integrate with React Native AccessibilityInfo
     // AccessibilityInfo.announceForAccessibility(message);
   } else {
@@ -39,7 +42,9 @@ export function announce(message: string, priority: 'polite' | 'assertive' = 'po
 /**
  * Get recent announcements
  */
-export function getRecentAnnouncements(limit: number = 10): ScreenReaderAnnouncement[] {
+export function getRecentAnnouncements(
+  limit: number = 10,
+): ScreenReaderAnnouncement[] {
   return announcements
     .sort((a, b) => b.timestamp - a.timestamp)
     .slice(0, limit);
@@ -52,7 +57,7 @@ export function generateAccessibleLabel(
   text: string,
   role?: string,
   state?: string,
-  description?: string
+  description?: string,
 ): string {
   const parts = [text];
 
@@ -68,13 +73,14 @@ export function generateAccessibleLabel(
     parts.push(description);
   }
 
-  return parts.join(', ');
+  return parts.join(", ");
 }
 
 /**
  * Clear old announcements
  */
-export function clearOldAnnouncements(maxAge: number = 300000): void { // 5 minutes default
+export function clearOldAnnouncements(maxAge: number = 300000): void {
+  // 5 minutes default
   const now = Date.now();
   const cutoff = now - maxAge;
 

@@ -4,17 +4,17 @@
  * Schemas for the first 7-session progression arc.
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 export const FirstWeekSessionSchema = z.enum([
-  'SESSION_1',
-  'SESSION_2',
-  'SESSION_3',
-  'SESSION_4',
-  'SESSION_5',
-  'SESSION_6',
-  'SESSION_7',
-  'COMPLETED',
+  "SESSION_1",
+  "SESSION_2",
+  "SESSION_3",
+  "SESSION_4",
+  "SESSION_5",
+  "SESSION_6",
+  "SESSION_7",
+  "COMPLETED",
 ]);
 
 export type FirstWeekSession = z.infer<typeof FirstWeekSessionSchema>;
@@ -40,7 +40,7 @@ export type FirstWeekProgress = z.infer<typeof FirstWeekProgressSchema>;
 
 export const SessionUnlockSchema = z.object({
   session: FirstWeekSessionSchema,
-  unlockType: z.enum(['FEATURE', 'TUTORIAL', 'REWARD', 'INSIGHT']),
+  unlockType: z.enum(["FEATURE", "TUTORIAL", "REWARD", "INSIGHT"]),
   title: z.string(),
   description: z.string(),
   actionRequired: z.boolean(),
@@ -52,7 +52,10 @@ export const SessionUnlockSchema = z.object({
 export type SessionUnlock = z.infer<typeof SessionUnlockSchema>;
 
 export const FirstWeekConfigSchema = z.object({
-  sessionUnlocks: z.record(FirstWeekSessionSchema, z.array(SessionUnlockSchema)),
+  sessionUnlocks: z.record(
+    FirstWeekSessionSchema,
+    z.array(SessionUnlockSchema),
+  ),
   xpRewards: z.record(FirstWeekSessionSchema, z.number()),
   companionReactions: z.record(FirstWeekSessionSchema, z.string()),
   tutorialSteps: z.record(FirstWeekSessionSchema, z.array(z.string())),

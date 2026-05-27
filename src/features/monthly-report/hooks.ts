@@ -1,10 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
-import { generateMonthlyReport } from './service';
-import type { MonthlyFocusReportInput } from './types';
+import { useQuery } from "@tanstack/react-query";
+import { generateMonthlyReport } from "./service";
+import type { MonthlyFocusReportInput } from "./types";
 
 export function useMonthlyReport(input: MonthlyFocusReportInput) {
   const query = useQuery({
-    queryKey: ['monthly-report', input.userId, input.month, input.year],
+    queryKey: ["monthly-report", input.userId, input.month, input.year],
     queryFn: () => generateMonthlyReport(input),
     staleTime: 1000 * 60 * 60, // 1 hour
   });

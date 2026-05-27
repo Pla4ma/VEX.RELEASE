@@ -76,7 +76,18 @@
     "archive",
     "__tests__/**/*",
     "**/*.test.ts",
-    "**/*.test.tsx"
+    "**/*.test.tsx",
+    "src/features/__tests__/helpers/**/*",
+    "src/features/home-experience/__tests__/helpers/**/*",
+    "src/session/__tests__/helpers.ts",
+    "src/session/__tests__/persistence.helpers.ts",
+    "src/session/__tests__/persistence/helpers.ts",
+    "src/session/__tests__/SessionOrchestrator.helpers.ts",
+    "src/session/engines/__tests__/helpers.ts",
+    "src/session/engines/__tests__/TimerEngine.helpers.ts",
+    "src/session/engines/__tests__/TimerEngine/helpers.ts",
+    "src/session/integration/__tests__/helpers/**/*",
+    "src/session/integration/__tests__/helpers.ts"
   ],
   "extends": "expo/tsconfig.base.json"
 }

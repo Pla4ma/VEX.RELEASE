@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react';
-import { View } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import React, { useEffect } from "react";
+import { View } from "react-native";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+} from "react-native-reanimated";
 
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import { CARD_WIDTH } from './session-consequence-types';
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import { CARD_WIDTH } from "./session-consequence-types";
 
 interface BossImpactCardProps {
   bossName: string;
@@ -44,14 +48,23 @@ export function BossImpactCard({
           : theme.colors.background.secondary,
         borderRadius: theme.borderRadius.xl,
         borderWidth: 2,
-        borderColor: wasDefeated ? theme.colors.success[500] : theme.colors.border.DEFAULT,
+        borderColor: wasDefeated
+          ? theme.colors.success[500]
+          : theme.colors.border.DEFAULT,
         marginRight: theme.spacing[3],
       }}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: theme.spacing[2], marginBottom: theme.spacing[2] }}>
-        <Text fontSize={24}>{wasDefeated ? '\u{1F3C6}' : '\u{1F432}'}</Text>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: theme.spacing[2],
+          marginBottom: theme.spacing[2],
+        }}
+      >
+        <Text fontSize={24}>{wasDefeated ? "\u{1F3C6}" : "\u{1F432}"}</Text>
         <Text variant="body" fontWeight="700" color="text.primary">
-          {wasDefeated ? 'BOSS DEFEATED!' : bossName}
+          {wasDefeated ? "BOSS DEFEATED!" : bossName}
         </Text>
       </View>
 
@@ -60,14 +73,14 @@ export function BossImpactCard({
           height: 12,
           backgroundColor: theme.colors.background.primary,
           borderRadius: theme.borderRadius.full,
-          overflow: 'hidden',
+          overflow: "hidden",
           marginBottom: theme.spacing[2],
         }}
       >
         <Animated.View
           style={[
             {
-              height: '100%',
+              height: "100%",
               backgroundColor: wasDefeated
                 ? theme.colors.success[500]
                 : healthAfter <= 15
@@ -89,8 +102,8 @@ export function BossImpactCard({
       {hadCriticalHit && (
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: "row",
+            alignItems: "center",
             gap: theme.spacing[1],
             marginTop: theme.spacing[2],
             padding: theme.spacing[2],
@@ -98,7 +111,7 @@ export function BossImpactCard({
             borderRadius: theme.borderRadius.md,
           }}
         >
-          <Text fontSize={16}>{'\u26A1'}</Text>
+          <Text fontSize={16}>{"\u26A1"}</Text>
           <Text variant="caption" color="warning.DEFAULT" fontWeight="600">
             Critical Hit!
           </Text>

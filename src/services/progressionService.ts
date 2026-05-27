@@ -5,16 +5,21 @@
  * Direct service implementation replacing archived system.
  */
 
-import { createDebugger } from '../utils/debug';
-import { capture } from '../shared/analytics/analytics-service';
-import { ProgressionEvents } from '../shared/analytics/analytics-events';
-import { rewardService } from './rewardService';
+import { createDebugger } from "../utils/debug";
+import { capture } from "../shared/analytics/analytics-service";
+import { ProgressionEvents } from "../shared/analytics/analytics-events";
+import { rewardService } from "./rewardService";
 
-const debug = createDebugger('progression-service');
+const debug = createDebugger("progression-service");
 
 export interface XPGrant {
   amount: number;
-  source: 'session_complete' | 'challenge_complete' | 'achievement_unlock' | 'streak_milestone' | 'daily_login';
+  source:
+    | "session_complete"
+    | "challenge_complete"
+    | "achievement_unlock"
+    | "streak_milestone"
+    | "daily_login";
   metadata?: Record<string, unknown>;
 }
 
@@ -27,7 +32,7 @@ export interface LevelInfo {
 }
 
 class ProgressionService {
-  private userId: string = '';
+  private userId: string = "";
   private currentXP: number = 0;
   private currentLevel: number = 1;
 
@@ -36,7 +41,7 @@ class ProgressionService {
    */
   setUserId(userId: string): void {
     this.userId = userId;
-    debug.info('Progression service initialized for user:', userId);
+    debug.info("Progression service initialized for user:", userId);
   }
 
   /**
@@ -60,7 +65,7 @@ class ProgressionService {
    */
   async grantXP(xpGrant: XPGrant): Promise<boolean> {
     if (!this.userId) {
-      debug.error('No user ID set for progression service');
+      debug.error("No user ID set for progression service");
       return false;
     }
 
@@ -84,7 +89,7 @@ class ProgressionService {
         old_level: oldLevel,
       });
 
-      debug.info('XP granted successfully', {
+      debug.info("XP granted successfully", {
         amount: xpGrant.amount,
         source: xpGrant.source,
         newTotal: this.currentXP,
@@ -93,7 +98,7 @@ class ProgressionService {
 
       return true;
     } catch (error) {
-      debug.error('Failed to grant XP:', error);
+      debug.error("Failed to grant XP:", error);
       return false;
     }
   }
@@ -119,7 +124,9 @@ class ProgressionService {
    * Calculate XP needed for next level
    */
   private calculateXPToNext(level: number): number {
-    if (level >= 100) {return 0;} // Max level
+    if (level >= 100) {
+      return 0;
+    } // Max level
     const nextLevel = level + 1;
     const totalXPForNext = 50 * nextLevel * (nextLevel + 1);
     const totalXPForCurrent = 50 * level * (level + 1);
@@ -136,8 +143,11 @@ class ProgressionService {
   /**
    * Handle level up event
    */
-  private async handleLevelUp(oldLevel: number, newLevel: number): Promise<void> {
-    debug.info('Level up!', { from: oldLevel, to: newLevel });
+  private async handleLevelUp(
+    oldLevel: number,
+    newLevel: number,
+  ): Promise<void> {
+    debug.info("Level up!", { from: oldLevel, to: newLevel });
 
     // Track level up analytics
     capture(ProgressionEvents.LEVEL_UP, {
@@ -154,10 +164,10 @@ class ProgressionService {
    * Reset user data (for logout)
    */
   reset(): void {
-    this.userId = '';
+    this.userId = "";
     this.currentXP = 0;
     this.currentLevel = 1;
-    debug.info('Progression service reset');
+    debug.info("Progression service reset");
   }
 }
 

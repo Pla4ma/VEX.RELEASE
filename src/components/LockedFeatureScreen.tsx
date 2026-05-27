@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react';
-import { ScrollView, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect } from "react";
+import { ScrollView, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-import { getPremiumCardStyle } from './premiumStyles';
-import { Button } from './primitives/Button';
-import { Text } from './primitives/Text';
-import { useTheme } from '../theme';
-import { UnlockRequirementRow } from './UnlockRequirementRow';
-import { useDisclosureAnalytics } from '../features/liveops-config';
-import type { FeatureKey, UserExperienceStage } from '../features/liveops-config';
+import { getPremiumCardStyle } from "./premiumStyles";
+import { Button } from "./primitives/Button";
+import { Text } from "./primitives/Text";
+import { useTheme } from "../theme";
+import { UnlockRequirementRow } from "./UnlockRequirementRow";
+import { useDisclosureAnalytics } from "../features/liveops-config";
+import type {
+  FeatureKey,
+  UserExperienceStage,
+} from "../features/liveops-config";
 
 interface LockedFeatureScreenProps {
   feature: FeatureKey;
@@ -23,7 +26,9 @@ interface LockedFeatureScreenProps {
   onPress: () => void;
 }
 
-export function LockedFeatureScreen(props: LockedFeatureScreenProps): JSX.Element {
+export function LockedFeatureScreen(
+  props: LockedFeatureScreenProps,
+): JSX.Element {
   const { theme } = useTheme();
   const analytics = useDisclosureAnalytics();
 
@@ -32,12 +37,14 @@ export function LockedFeatureScreen(props: LockedFeatureScreenProps): JSX.Elemen
   }, [analytics, props.feature, props.stage]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background.primary }}>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
+    >
       <ScrollView
         contentContainerStyle={{
           padding: theme.spacing[5],
           gap: theme.spacing[4],
-          justifyContent: 'center',
+          justifyContent: "center",
           flexGrow: 1,
         }}
         showsVerticalScrollIndicator={false}
@@ -47,10 +54,10 @@ export function LockedFeatureScreen(props: LockedFeatureScreenProps): JSX.Elemen
             borderWidth: 1,
             borderColor: theme.colors.primary[100],
             backgroundColor: theme.colors.background.secondary,
-            borderRadius: theme.borderRadius['3xl'],
+            borderRadius: theme.borderRadius["3xl"],
             padding: theme.spacing[5],
             gap: theme.spacing[4],
-            ...getPremiumCardStyle('large'),
+            ...getPremiumCardStyle("large"),
           }}
         >
           <View style={{ gap: theme.spacing[2] }}>
@@ -70,13 +77,17 @@ export function LockedFeatureScreen(props: LockedFeatureScreenProps): JSX.Elemen
           />
           <Button
             onPress={() => {
-              analytics.trackTeaserCtaPressed(props.feature, props.ctaLabel, props.stage);
+              analytics.trackTeaserCtaPressed(
+                props.feature,
+                props.ctaLabel,
+                props.stage,
+              );
               props.onPress();
             }}
-
-          accessibilityLabel="Action button"
-          accessibilityRole="button"
-          accessibilityHint="Activates this control">
+            accessibilityLabel="Action button"
+            accessibilityRole="button"
+            accessibilityHint="Activates this control"
+          >
             {props.ctaLabel}
           </Button>
         </View>

@@ -5,17 +5,17 @@
  * Integrates: Expo SDK 54, TanStack Query, React Navigation, Reanimated, NetInfo, Secure Store, MMKV
  */
 
-import React, { useEffect } from 'react';
-import { Platform, View } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import React, { useEffect } from "react";
+import { Platform, View } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-import { QueryProvider } from '../../api';
-import { ThemeProvider } from '../../theme';
-import { ErrorBoundary } from '../../errors';
-import { getNetInfoAdapter } from '../../network';
-import { getSecureStorage } from '../../persistence';
-import { addBreadcrumb, captureException } from '../../config/sentry';
+import { QueryProvider } from "../../api";
+import { ThemeProvider } from "../../theme";
+import { ErrorBoundary } from "../../errors";
+import { getNetInfoAdapter } from "../../network";
+import { getSecureStorage } from "../../persistence";
+import { addBreadcrumb, captureException } from "../../config/sentry";
 
 interface AppProvidersProps {
   children: React.ReactNode;
@@ -30,14 +30,15 @@ const initializeServices = async (): Promise<() => void> => {
     await netInfo.initialize();
     getSecureStorage();
 
-    addBreadcrumb('Core providers initialized', 'app.providers');
+    addBreadcrumb("Core providers initialized", "app.providers");
 
-    return () => {
-    };
+    return () => {};
   } catch (error) {
     captureException(
-      error instanceof Error ? error : new Error('Failed to initialize app providers'),
-      { area: 'AppProviders.initializeServices' }
+      error instanceof Error
+        ? error
+        : new Error("Failed to initialize app providers"),
+      { area: "AppProviders.initializeServices" },
     );
     return () => {}; // Return empty cleanup function on error
   }
@@ -73,17 +74,15 @@ export const AppProviders: React.FC<AppProvidersProps> = ({ children }) => {
   }, []);
 
   // Web doesn't need GestureHandlerRootView
-  const Container = Platform.OS === 'web' ? View : GestureHandlerRootView;
-  const containerProps = Platform.OS === 'web' ? {} : { style: { flex: 1 } };
+  const Container = Platform.OS === "web" ? View : GestureHandlerRootView;
+  const containerProps = Platform.OS === "web" ? {} : { style: { flex: 1 } };
 
   return (
     <Container {...containerProps}>
       <SafeAreaProvider>
         <QueryProvider>
           <ThemeProvider>
-            <ErrorBoundary>
-              {children}
-            </ErrorBoundary>
+            <ErrorBoundary>{children}</ErrorBoundary>
           </ThemeProvider>
         </QueryProvider>
       </SafeAreaProvider>

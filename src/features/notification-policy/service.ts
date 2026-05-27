@@ -6,59 +6,118 @@ import {
   type NudgePolicyInput,
   type NudgeSignalRecord,
   type NudgeType,
-} from './schemas';
-import type { Lane } from '../lane-engine/types';
+} from "./schemas";
+import type { Lane } from "../lane-engine/types";
 
 const RESCUE_IGNORE_TIMEOUT_MS = 30 * 60 * 1000;
 
 function maxDailyFor(lane: Lane): number {
-  return lane === 'minimal_normal' ? 1 : 2;
+  return lane === "minimal_normal" ? 1 : 2;
 }
 
 function typeFor(input: NudgePolicyInput, lane: Lane): NudgeType {
   const paused = input.pausedCategories.includes(laneToCategory(lane));
-  if (paused) return 'none';
+  if (paused) return "none";
 
-  if (input.context === 'avoidance') return 'rescue';
-  if (input.context === 'deadline' && lane === 'student') return 'study_deadline';
-  if (input.context === 'project_stale' && lane === 'deep_creative') return 'project_resume';
-  if (input.context === 'run_open' && lane === 'game_like') return 'run_continue';
-  if (input.context === 'weekly_ready') return 'weekly_insight';
-  return input.completedSessions > 0 ? 'gentle_return' : 'none';
+  if (input.context === "avoidance") return "rescue";
+  if (input.context === "deadline" && lane === "student")
+    return "study_deadline";
+  if (input.context === "project_stale" && lane === "deep_creative")
+    return "project_resume";
+  if (input.context === "run_open" && lane === "game_like")
+    return "run_continue";
+  if (input.context === "weekly_ready") return "weekly_insight";
+
+  // First-week nudge schedule
+  const day = input.daysSinceOnboarding;
+  if (day === 0) return "none";
+  if (day === 1) return "gentle_return";
+  if (day === 2 && input.completedSessions > 0) return "gentle_return";
+  if (day === 3 && input.memoryConfidence !== undefined && input.memoryConfidence > 0.3)
+    return "gentle_return";
+  if (day === 4 && input.context === "avoidance") return "rescue";
+  if (day === 7) return "weekly_insight";
+
+  return input.completedSessions > 0 ? "gentle_return" : "none";
 }
 
-function laneToCategory(lane: Lane): 'study' | 'run' | 'project' | 'clean' {
-  const map: Record<Lane, 'study' | 'run' | 'project' | 'clean'> = {
-    student: 'study',
-    game_like: 'run',
-    deep_creative: 'project',
-    minimal_normal: 'clean',
+function laneToCategory(lane: Lane): "study" | "run" | "project" | "clean" {
+  const map: Record<Lane, "study" | "run" | "project" | "clean"> = {
+    student: "study",
+    game_like: "run",
+    deep_creative: "project",
+    minimal_normal: "clean",
   };
   return map[lane];
 }
 
 // ── Lane-specific notification copy ────────────────────────────────────
-function copyFor(lane: Lane, type: NudgeType): Pick<NudgeDecision, 'body' | 'title'> {
-  if (type === 'none') return { title: null, body: null };
-  if (type === 'rescue') {
-    return { title: 'Cooldown ready', body: 'Recovery encounter ready: 10 clean minutes.' };
+function copyFor(
+  lane: Lane,
+  type: NudgeType,
+): Pick<NudgeDecision, "body" | "title"> {
+  if (type === "none") return { title: null, body: null };
+  if (type === "rescue") {
+    const rescueCopy: Record<Lane, { title: string; body: string }> = {
+      student: {
+        title: "Need a tiny start?",
+        body: "Review one weak section. 8 minutes. No pressure.",
+      },
+      game_like: {
+        title: "Need a recovery encounter?",
+        body: "Recovery encounter: 10 clean minutes. Just move.",
+      },
+      deep_creative: {
+        title: "Need a re-entry path?",
+        body: "Re-enter the project. 7 minutes to find the next move.",
+      },
+      minimal_normal: {
+        title: "Need a tiny start?",
+        body: "Do 5 minutes. Stop cleanly. That is enough.",
+      },
+    };
+    return rescueCopy[lane];
   }
-  if (type === 'study_deadline') {
-    return { title: 'Small window', body: 'Your next study block fits: 15 minutes on one topic.' };
+  if (type === "study_deadline") {
+    return {
+      title: "Small window",
+      body: "Your next study block fits: 15 minutes on one topic.",
+    };
   }
-  if (type === 'project_resume') {
-    return { title: 'Next move', body: 'Your project thread is waiting at the next move.' };
+  if (type === "project_resume") {
+    return {
+      title: "Next move",
+      body: "Your project thread is waiting at the next move.",
+    };
   }
-  if (type === 'run_continue') {
-    return { title: 'One encounter', body: 'One clean block is enough today.' };
+  if (type === "run_continue") {
+    return { title: "One encounter", body: "One clean block is enough today." };
   }
-  if (type === 'weekly_insight') {
-    return { title: 'Pattern ready', body: 'Review the numbers before planning next week.' };
+  if (type === "weekly_insight") {
+    return {
+      title: "Your first weekly intelligence is ready",
+      body: "See what helped, what got in the way, and what is next.",
+    };
   }
-  if (lane === 'minimal_normal') {
-    return { title: 'One block', body: 'One clean block is enough today.' };
-  }
-  return { title: 'Next block', body: 'VEX has one useful next action ready.' };
+  const gentleReturnCopy: Record<Lane, { title: string; body: string }> = {
+    student: {
+      title: "Study block waiting",
+      body: "Pick up with one focused study block. 15 minutes.",
+    },
+    game_like: {
+      title: "Your next run is ready",
+      body: "One clean encounter waiting. 15 minutes.",
+    },
+    deep_creative: {
+      title: "Project thread waiting",
+      body: "Your project is waiting at the next move.",
+    },
+    minimal_normal: {
+      title: "One clean block",
+      body: "One clean block is enough today.",
+    },
+  };
+  return gentleReturnCopy[lane];
 }
 
 export function decideNudge(rawInput: NudgePolicyInput): NudgeDecision {
@@ -68,22 +127,41 @@ export function decideNudge(rawInput: NudgePolicyInput): NudgeDecision {
   const budgetRemaining = Math.max(0, maxDaily - input.sentToday);
   const nudgeType = typeFor(input, lane);
 
-  if (input.userMuted) return blocked(input, budgetRemaining, 'User mute blocks all nudges.');
+  if (input.userMuted)
+    return blocked(input, budgetRemaining, "User mute blocks all nudges.");
   if (input.completedSessions === 0 && !input.manuallyScheduled) {
-    return blocked(input, budgetRemaining, 'Day 0 has no unsolicited notification.');
+    return blocked(
+      input,
+      budgetRemaining,
+      "Day 0 has no unsolicited notification.",
+    );
   }
   if (input.quietHoursActive && !input.manuallyScheduled) {
-    return blocked(input, budgetRemaining, 'Quiet hours block this nudge.');
+    return blocked(input, budgetRemaining, "Quiet hours block this nudge.");
   }
-  if (budgetRemaining <= 0) return blocked(input, budgetRemaining, 'Daily nudge budget reached.');
+  if (budgetRemaining <= 0)
+    return blocked(input, budgetRemaining, "Daily nudge budget reached.");
   if (input.recentDismissals >= 3) {
-    return blocked(input, budgetRemaining, 'Repeated dismissals — category paused.');
+    return blocked(
+      input,
+      budgetRemaining,
+      "Repeated dismissals — category paused.",
+    );
   }
-  if (input.recentDismissals >= 2 && nudgeType !== 'rescue') {
-    return blocked(input, budgetRemaining, 'Recent dismissals suppress low-trust nudges.');
+  if (input.recentDismissals >= 2 && nudgeType !== "rescue") {
+    return blocked(
+      input,
+      budgetRemaining,
+      "Recent dismissals suppress low-trust nudges.",
+    );
   }
 
-  const aggressiveTypes: NudgeType[] = ['rescue', 'study_deadline', 'project_resume', 'run_continue'];
+  const aggressiveTypes: NudgeType[] = [
+    "rescue",
+    "study_deadline",
+    "project_resume",
+    "run_continue",
+  ];
   const blockedByLowConfidence =
     aggressiveTypes.includes(nudgeType) &&
     !input.manuallyScheduled &&
@@ -100,29 +178,36 @@ export function decideNudge(rawInput: NudgePolicyInput): NudgeDecision {
 
   const copy = copyFor(lane, nudgeType);
   return NudgeDecisionSchema.parse({
-    allowed: nudgeType !== 'none',
+    allowed: nudgeType !== "none",
     type: nudgeType,
     title: copy.title,
     body: copy.body,
     scheduledFor: input.now,
-    reason: 'Lane policy and budget allow this nudge.',
+    reason: "Lane policy and budget allow this nudge.",
     lane,
-    priority: nudgeType === 'study_deadline' || nudgeType === 'rescue' ? 'high' : 'medium',
+    priority:
+      nudgeType === "study_deadline" || nudgeType === "rescue"
+        ? "high"
+        : "medium",
     budgetRemaining,
   });
 }
 
-function blocked(input: NudgePolicyInput, budgetRemaining: number, reason: string): NudgeDecision {
+function blocked(
+  input: NudgePolicyInput,
+  budgetRemaining: number,
+  reason: string,
+): NudgeDecision {
   const lane = input.laneProfile?.primaryLane ?? input.lane;
   return NudgeDecisionSchema.parse({
     allowed: false,
-    type: 'none',
+    type: "none",
     title: null,
     body: null,
     scheduledFor: null,
     reason,
     lane,
-    priority: 'low',
+    priority: "low",
     budgetRemaining,
   });
 }
@@ -131,26 +216,26 @@ export function buildRescueDeepLink(
   rescuePlanId: string,
   taskDescription: string,
   suggestedDurationSeconds: number,
-): { type: 'start_rescue'; payload: Record<string, unknown> } {
+): { type: "start_rescue"; payload: Record<string, unknown> } {
   return {
-    type: 'start_rescue',
+    type: "start_rescue",
     payload: {
       rescuePlanId,
       rescueTaskDescription: taskDescription,
       suggestedDurationSeconds,
-      source: 'rescue',
+      source: "rescue",
     },
   };
 }
 
 export function isRescueDeepLinkValid(deepLink: unknown): boolean {
-  if (!deepLink || typeof deepLink !== 'object') return false;
+  if (!deepLink || typeof deepLink !== "object") return false;
   const link = deepLink as Record<string, unknown>;
   return (
-    link.type === 'start_rescue' &&
-    typeof link.payload === 'object' &&
+    link.type === "start_rescue" &&
+    typeof link.payload === "object" &&
     link.payload !== null &&
-    typeof (link.payload as Record<string, unknown>).rescuePlanId === 'string'
+    typeof (link.payload as Record<string, unknown>).rescuePlanId === "string"
   );
 }
 
@@ -160,32 +245,35 @@ export function markExpiredAsIgnored(
   sentAtOrRecords: number | NudgeSignalRecord[],
 ): NudgeSignalRecord[] {
   const now = Date.now();
-  const cutoff = typeof sentAtOrRecords === 'number'
-    ? sentAtOrRecords
-    : 0;
+  const cutoff = typeof sentAtOrRecords === "number" ? sentAtOrRecords : 0;
 
-  const records: NudgeSignalRecord[] = typeof sentAtOrRecords === 'number'
-    ? []
-    : sentAtOrRecords.filter(
-        (r) => r.signal === 'sent' && now - r.occurredAt > RESCUE_IGNORE_TIMEOUT_MS,
-      );
+  const records: NudgeSignalRecord[] =
+    typeof sentAtOrRecords === "number"
+      ? []
+      : sentAtOrRecords.filter(
+          (r) =>
+            r.signal === "sent" &&
+            now - r.occurredAt > RESCUE_IGNORE_TIMEOUT_MS,
+        );
 
-  if (typeof sentAtOrRecords === 'number') {
+  if (typeof sentAtOrRecords === "number") {
     if (now - sentAtOrRecords > RESCUE_IGNORE_TIMEOUT_MS) {
-      return [{
-        userId,
-        nudgeType: 'gentle_return',
-        signal: 'ignored',
-        lane,
-        occurredAt: now,
-      }];
+      return [
+        {
+          userId,
+          nudgeType: "gentle_return",
+          signal: "ignored",
+          lane,
+          occurredAt: now,
+        },
+      ];
     }
     return [];
   }
 
   return records.map((r) => ({
     ...r,
-    signal: 'ignored' as const,
+    signal: "ignored" as const,
     occurredAt: now,
   }));
 }

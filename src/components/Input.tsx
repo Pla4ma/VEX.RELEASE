@@ -4,18 +4,18 @@
  * Text input with label, error handling, and icons.
  */
 
-import React, { useState, useCallback, forwardRef } from 'react';
+import React, { useState, useCallback, forwardRef } from "react";
 import {
   TextInput,
   View,
   type TextInputProps,
   type ViewStyle,
-} from 'react-native';
+} from "react-native";
 
-import { useTheme } from '../theme';
-import { Text } from './primitives';
-import { Icon } from '../icons';
-import { createSheet } from '@/shared/ui/create-sheet';
+import { useTheme } from "../theme";
+import { Text } from "./primitives";
+import { Icon } from "../icons";
+import { createSheet } from "@/shared/ui/create-sheet";
 
 // Icon name type from registry
 type IconName = string;
@@ -23,7 +23,7 @@ type IconName = string;
 /**
  * Input props
  */
-export interface InputProps extends Omit<TextInputProps, 'style'> {
+export interface InputProps extends Omit<TextInputProps, "style"> {
   /** Input label */
   label?: string;
   /** Error message */
@@ -57,32 +57,36 @@ export const Input = forwardRef<TextInput, InputProps>(
       onBlur,
       ...textInputProps
     },
-    ref
+    ref,
   ) => {
     const { theme } = useTheme();
     const [isFocused, setIsFocused] = useState(false);
 
     // Handle focus
     const handleFocus = useCallback(
-      (e: Parameters<NonNullable<TextInputProps['onFocus']>>[0]) => {
+      (e: Parameters<NonNullable<TextInputProps["onFocus"]>>[0]) => {
         setIsFocused(true);
         onFocus?.(e);
       },
-      [onFocus]
+      [onFocus],
     );
 
     // Handle blur
     const handleBlur = useCallback(
-      (e: Parameters<NonNullable<TextInputProps['onBlur']>>[0]) => {
+      (e: Parameters<NonNullable<TextInputProps["onBlur"]>>[0]) => {
         setIsFocused(false);
         onBlur?.(e);
       },
-      [onBlur]
+      [onBlur],
     );
 
     const getBorderColor = (): string => {
-      if (error) {return theme.colors.error.DEFAULT;}
-      if (isFocused) {return theme.colors.semantic.primary;}
+      if (error) {
+        return theme.colors.error.DEFAULT;
+      }
+      if (isFocused) {
+        return theme.colors.semantic.primary;
+      }
       return theme.colors.semantic.inputBorder;
     };
 
@@ -90,7 +94,7 @@ export const Input = forwardRef<TextInput, InputProps>(
       <View style={containerStyle}>
         {/* Label */}
         {label && (
-          <Text variant="body" fontWeight={'500' as const} mb="xs">
+          <Text variant="body" fontWeight={"500" as const} mb="xs">
             {label}
           </Text>
         )}
@@ -113,7 +117,11 @@ export const Input = forwardRef<TextInput, InputProps>(
               <Icon
                 name={leftIcon}
                 size="sm"
-                color={isFocused ? theme.colors.primary[500] : theme.colors.text.tertiary}
+                color={
+                  isFocused
+                    ? theme.colors.primary[500]
+                    : theme.colors.text.tertiary
+                }
               />
             </View>
           )}
@@ -153,7 +161,11 @@ export const Input = forwardRef<TextInput, InputProps>(
         {(error || helper) && (
           <Text
             variant="caption"
-            style={{ color: error ? theme.colors.error.DEFAULT : theme.colors.text.tertiary }}
+            style={{
+              color: error
+                ? theme.colors.error.DEFAULT
+                : theme.colors.text.tertiary,
+            }}
             mt="xs"
           >
             {error || helper}
@@ -161,20 +173,20 @@ export const Input = forwardRef<TextInput, InputProps>(
         )}
       </View>
     );
-  }
+  },
 );
 
 const styles = createSheet({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     minHeight: 52,
   },
   input: {
     flex: 1,
     paddingVertical: 14,
-    fontFamily: 'System',
+    fontFamily: "System",
   },
   leftIcon: {
     paddingLeft: 12,

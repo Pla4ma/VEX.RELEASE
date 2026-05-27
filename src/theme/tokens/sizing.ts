@@ -20,8 +20,8 @@ export const sizing = {
     md: 160,
     lg: 240,
     xl: 320,
-    '2xl': 400,
-    full: '100%',
+    "2xl": 400,
+    full: "100%",
   },
 
   // Heights
@@ -31,7 +31,7 @@ export const sizing = {
     md: 40,
     lg: 48,
     xl: 56,
-    '2xl': 64,
+    "2xl": 64,
   },
 
   // Icon sizes
@@ -41,8 +41,8 @@ export const sizing = {
     md: 20,
     lg: 24,
     xl: 32,
-    '2xl': 48,
-    '3xl': 64,
+    "2xl": 48,
+    "3xl": 64,
   },
 
   // Avatar sizes
@@ -52,7 +52,7 @@ export const sizing = {
     md: 40,
     lg: 48,
     xl: 64,
-    '2xl': 96,
+    "2xl": 96,
   },
 
   // Touch target sizes (minimum)

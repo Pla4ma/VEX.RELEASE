@@ -1,65 +1,381 @@
-import { captureSilentFailure } from "../../../utils/silent-failure"; import { withRetry, RepositoryError, RepositoryErrorCode } from "../../../lib/repository/base";
-import { enqueue, type OfflineQueueEntryInput } from "../../../lib/offline/queue"; import { getSupabaseClient } from "../../../config/supabase";
-import { StreakSchema, type Streak } from "../schemas"; import { v4 } from "../../../utils/uuid"; const supabase = getSupabaseClient();
-export class StreaksRepositoryError extends RepositoryError { public override readonly name = "StreaksRepositoryError";
-constructor(operation: string, error: unknown, code?: RepositoryErrorCode) { super(operation, error, code); } } interface RepositoryResult<T> { data: T | null;
-error: StreaksRepositoryError | null; fromCache: boolean; }
-async function executeWithFallback<T>(operation: string, onlineFn: () => Promise<T>, offlineFn?: () => Promise<T | null>): Promise<RepositoryResult<T>> { try {
-const data = await withRetry(operation, onlineFn); return { data, error: null, fromCache: false }; } catch (error) {
-const repoError = error instanceof RepositoryError ? new StreaksRepositoryError(operation, error.originalError, error.code) : new StreaksRepositoryError(operation, error instanceof Error ? error : new Error(String(error)));
-if (offlineFn) { try { const cached = await offlineFn(); if (cached) { return { data: cached, error: repoError, fromCache: true }; } } catch (error) { captureSilentFailure(error, {
-feature: "streaks", operation: "network-fallback", type: "network", }); } } return { data: null, error: repoError, fromCache: false }; } }
-export async function fetchStreakEnhanced(userId: string): Promise<RepositoryResult<Streak>> { return executeWithFallback("fetchStreak", async () => {
-const { data, error } = await supabase.from("streaks").select("*").eq("user_id", userId).single(); if (error) { throw error; } if (!data) { throw new Error("No data returned"); }
-return StreakSchema.parse(data); }); } export async function createStreakEnhanced(streak: Streak): Promise<RepositoryResult<Streak>> {
-return executeWithFallback("createStreak", async () => { const { data, error } = await supabase .from("streaks") .insert({ id: streak.id, user_id: streak.userId,
-current_days: streak.currentDays, longest_days: streak.longestDays, last_qualifying_session_at: streak.lastQualifyingSessionAt,
-current_day_completed_at: streak.currentDayCompletedAt, shields_available: streak.shieldsAvailable, grace_period_used: streak.gracePeriodUsed, timezone: streak.timezone,
-created_at: streak.createdAt, updated_at: streak.updatedAt, }) .select() .single(); if (error) { throw error; } return StreakSchema.parse(data); }); }
-export async function updateStreakEnhanced(userId: string, updates: Partial<Streak>): Promise<RepositoryResult<Streak>> { const queueEntry: OfflineQueueEntryInput = {
-operation: "UPDATE", feature: "streaks", payload: { userId, updates } as Record<string, unknown>, idempotencyKey: `streak:update:${userId}:${Date.now()}`, maxRetries: 5,
-priority: "high", }; enqueue(queueEntry); return executeWithFallback("updateStreak", async () => { const { data, error } = await supabase .from("streaks")
-.update({ ...updates, updated_at: Date.now() }) .eq("user_id", userId) .select() .single(); if (error) { throw error; } return StreakSchema.parse(data); }); }
-export async function recordShieldUsageEnhanced(userId: string, shieldData: { usedAt: number; reason: string }): Promise<RepositoryResult<{ id: string }>> {
-const shieldQueueEntry: OfflineQueueEntryInput = { operation: "UPDATE", feature: "streaks", payload: { userId, shieldData } as Record<string, unknown>,
-idempotencyKey: `shield:use:${userId}:${shieldData.usedAt}`, maxRetries: 5, priority: "high", }; enqueue(shieldQueueEntry);
-return executeWithFallback("recordShieldUsage", async () => { const { data, error } = await supabase .from("streak_shields") .insert({ id: v4(), user_id: userId,
-used_at: shieldData.usedAt, reason: shieldData.reason, created_at: Date.now(), }) .select("id") .single(); if (error) { throw error; } return data as { id: string }; }); }
-export async function batchUpdateStreaks(updates: Array<{ userId: string; streak: Partial<Streak> }>): Promise<{ successful: Streak[];
-failed: Array<{ userId: string; error: StreaksRepositoryError }>; }> { const results = { successful: [] as Streak[],
-failed: [] as Array<{ userId: string; error: StreaksRepositoryError }>, }; for (const update of updates) { const result = await updateStreakEnhanced(update.userId, update.streak);
-if (result.error) { results.failed.push({ userId: update.userId, error: result.error }); } else if (result.data) { results.successful.push(result.data); } } return results; }
-import { StreakRepairQuestSchema, type StreakRepairQuest } from "../schemas-enhanced";
-export async function fetchActiveRepairQuestEnhanced(userId: string): Promise<RepositoryResult<StreakRepairQuest>> {
-return executeWithFallback("fetchActiveRepairQuest", async () => {
-const { data, error } = await supabase.from("streak_repair_quests").select("*").eq("user_id", userId).eq("status", "ACTIVE").single(); if (error) { if (error.code === "PGRST116") {
-return null as unknown as StreakRepairQuest; } throw error; } return StreakRepairQuestSchema.parse(data); }); }
-export async function saveRepairQuestEnhanced(quest: StreakRepairQuest): Promise<RepositoryResult<StreakRepairQuest>> { enqueue({ operation: "CREATE", feature: "streaks",
-payload: { quest }, idempotencyKey: `quest:save:${quest.id}`, maxRetries: 5, priority: "high", }); return executeWithFallback("saveRepairQuest", async () => {
-const { data, error } = await supabase .from("streak_repair_quests") .insert({ id: quest.id, user_id: quest.userId, previous_streak: quest.previousStreak,
-target_restore_days: quest.targetRestoreDays, sessions_completed: quest.sessionsCompleted, sessions_required: quest.sessionsRequired, started_at: quest.startedAt,
-expires_at: quest.expiresAt, status: quest.status, session_ids: quest.sessionIds, completed_at: quest.completedAt, }) .select() .single(); if (error) { throw error; }
-return StreakRepairQuestSchema.parse(data); }); }
-export async function updateRepairQuestEnhanced(questId: string, updates: Partial<StreakRepairQuest>): Promise<RepositoryResult<StreakRepairQuest>> { enqueue({ operation: "UPDATE",
-feature: "streaks", payload: { questId, updates }, idempotencyKey: `repair-quest:update:${questId}:${Date.now()}`, maxRetries: 5, priority: "high", });
-return executeWithFallback("updateRepairQuest", async () => { const { data, error } = await supabase .from("streak_repair_quests") .update({
-sessions_completed: updates.sessionsCompleted, session_ids: updates.sessionIds, status: updates.status, completed_at: updates.completedAt, updated_at: Date.now(), })
-.eq("id", questId) .select() .single(); if (error) { throw error; } return StreakRepairQuestSchema.parse(data); }); }
-export async function fetchExpiredRepairQuestsEnhanced(): Promise< RepositoryResult< Array<{ id: string; userId: string; previousStreak: number; status: string; expiresAt: number;
-}> > > { return executeWithFallback("fetchExpiredRepairQuests", async () => {
-const { data, error } = await supabase.from("streak_repair_quests").select("id, user_id, previous_streak, status, expires_at").eq("status", "ACTIVE").lt("expires_at", Date.now());
-if (error) { throw error; } return (data || []).map((row: Record<string, unknown>) => ({ id: row.id as string, userId: row.user_id as string,
-previousStreak: row.previous_streak as number, status: row.status as string, expiresAt: row.expires_at as number, })); }); }
-import { StreakRiskStatusSchema, type StreakRiskStatus } from "../schemas-enhanced";
-export async function saveRiskStatusEnhanced(status: StreakRiskStatus): Promise<RepositoryResult<StreakRiskStatus>> { return executeWithFallback("saveRiskStatus", async () => {
-const { data, error } = await supabase .from("streak_risk_status") .upsert( { user_id: status.userId, current_days: status.currentDays, hours_remaining: status.hoursRemaining,
-minutes_remaining: status.minutesRemaining, risk_level: status.riskLevel, flame_health_percent: status.flameHealthPercent, is_at_risk: status.isAtRisk,
-is_critical: status.isCritical, notifications_sent: status.notificationsSent, last_updated: status.lastUpdated, }, { onConflict: "user_id" }, ) .select() .single(); if (error) {
-throw error; } return StreakRiskStatusSchema.parse(data); }); } export async function fetchRiskStatusEnhanced(userId: string): Promise<RepositoryResult<StreakRiskStatus | null>> {
-return executeWithFallback("fetchRiskStatus", async () => { const { data, error } = await supabase.from("streak_risk_status").select("*").eq("user_id", userId).single();
-if (error) { if (error.code === "PGRST116") { return null; } throw error; } if (!data) { return null; } return StreakRiskStatusSchema.parse({ userId: data.user_id,
-currentDays: data.current_days, hoursRemaining: data.hours_remaining, minutesRemaining: data.minutes_remaining, riskLevel: data.risk_level,
-flameHealthPercent: data.flame_health_percent, isAtRisk: data.is_at_risk, isCritical: data.is_critical, notificationsSent: data.notifications_sent, lastUpdated: data.last_updated,
-}); }); } export async function fetchUsersWithActiveStreaksEnhanced(): Promise<RepositoryResult<string[]>> { return executeWithFallback("fetchUsersWithActiveStreaks", async () => {
-const { data, error } = await supabase.from("streaks").select("user_id").gt("current_days", 0); if (error) { throw error; }
-return (data || []).map((row: { user_id: string }) => row.user_id); }); }
+import { captureSilentFailure } from "../../../utils/silent-failure";
+import {
+  withRetry,
+  RepositoryError,
+  RepositoryErrorCode,
+} from "../../../lib/repository/base";
+import {
+  enqueue,
+  type OfflineQueueEntryInput,
+} from "../../../lib/offline/queue";
+import { getSupabaseClient } from "../../../config/supabase";
+import { StreakSchema, type Streak } from "../schemas";
+import { v4 } from "../../../utils/uuid";
+const supabase = getSupabaseClient();
+export class StreaksRepositoryError extends RepositoryError {
+  public override readonly name = "StreaksRepositoryError";
+  constructor(operation: string, error: unknown, code?: RepositoryErrorCode) {
+    super(operation, error, code);
+  }
+}
+interface RepositoryResult<T> {
+  data: T | null;
+  error: StreaksRepositoryError | null;
+  fromCache: boolean;
+}
+async function executeWithFallback<T>(
+  operation: string,
+  onlineFn: () => Promise<T>,
+  offlineFn?: () => Promise<T | null>,
+): Promise<RepositoryResult<T>> {
+  try {
+    const data = await withRetry(operation, onlineFn);
+    return { data, error: null, fromCache: false };
+  } catch (error) {
+    const repoError =
+      error instanceof RepositoryError
+        ? new StreaksRepositoryError(operation, error.originalError, error.code)
+        : new StreaksRepositoryError(
+            operation,
+            error instanceof Error ? error : new Error(String(error)),
+          );
+    if (offlineFn) {
+      try {
+        const cached = await offlineFn();
+        if (cached) {
+          return { data: cached, error: repoError, fromCache: true };
+        }
+      } catch (error) {
+        captureSilentFailure(error, {
+          feature: "streaks",
+          operation: "network-fallback",
+          type: "network",
+        });
+      }
+    }
+    return { data: null, error: repoError, fromCache: false };
+  }
+}
+export async function fetchStreakEnhanced(
+  userId: string,
+): Promise<RepositoryResult<Streak>> {
+  return executeWithFallback("fetchStreak", async () => {
+    const { data, error } = await supabase
+      .from("streaks")
+      .select("*")
+      .eq("user_id", userId)
+      .single();
+    if (error) {
+      throw error;
+    }
+    if (!data) {
+      throw new Error("No data returned");
+    }
+    return StreakSchema.parse(data);
+  });
+}
+export async function createStreakEnhanced(
+  streak: Streak,
+): Promise<RepositoryResult<Streak>> {
+  return executeWithFallback("createStreak", async () => {
+    const { data, error } = await supabase
+      .from("streaks")
+      .insert({
+        id: streak.id,
+        user_id: streak.userId,
+        current_days: streak.currentDays,
+        longest_days: streak.longestDays,
+        last_qualifying_session_at: streak.lastQualifyingSessionAt,
+        current_day_completed_at: streak.currentDayCompletedAt,
+        shields_available: streak.shieldsAvailable,
+        grace_period_used: streak.gracePeriodUsed,
+        timezone: streak.timezone,
+        created_at: streak.createdAt,
+        updated_at: streak.updatedAt,
+      })
+      .select()
+      .single();
+    if (error) {
+      throw error;
+    }
+    return StreakSchema.parse(data);
+  });
+}
+export async function updateStreakEnhanced(
+  userId: string,
+  updates: Partial<Streak>,
+): Promise<RepositoryResult<Streak>> {
+  const queueEntry: OfflineQueueEntryInput = {
+    operation: "UPDATE",
+    feature: "streaks",
+    payload: { userId, updates } as Record<string, unknown>,
+    idempotencyKey: `streak:update:${userId}:${Date.now()}`,
+    maxRetries: 5,
+    priority: "high",
+  };
+  enqueue(queueEntry);
+  return executeWithFallback("updateStreak", async () => {
+    const { data, error } = await supabase
+      .from("streaks")
+      .update({ ...updates, updated_at: Date.now() })
+      .eq("user_id", userId)
+      .select()
+      .single();
+    if (error) {
+      throw error;
+    }
+    return StreakSchema.parse(data);
+  });
+}
+export async function recordShieldUsageEnhanced(
+  userId: string,
+  shieldData: { usedAt: number; reason: string },
+): Promise<RepositoryResult<{ id: string }>> {
+  const shieldQueueEntry: OfflineQueueEntryInput = {
+    operation: "UPDATE",
+    feature: "streaks",
+    payload: { userId, shieldData } as Record<string, unknown>,
+    idempotencyKey: `shield:use:${userId}:${shieldData.usedAt}`,
+    maxRetries: 5,
+    priority: "high",
+  };
+  enqueue(shieldQueueEntry);
+  return executeWithFallback("recordShieldUsage", async () => {
+    const { data, error } = await supabase
+      .from("streak_shields")
+      .insert({
+        id: v4(),
+        user_id: userId,
+        used_at: shieldData.usedAt,
+        reason: shieldData.reason,
+        created_at: Date.now(),
+      })
+      .select("id")
+      .single();
+    if (error) {
+      throw error;
+    }
+    return data as { id: string };
+  });
+}
+export async function batchUpdateStreaks(
+  updates: Array<{ userId: string; streak: Partial<Streak> }>,
+): Promise<{
+  successful: Streak[];
+  failed: Array<{ userId: string; error: StreaksRepositoryError }>;
+}> {
+  const results = {
+    successful: [] as Streak[],
+    failed: [] as Array<{ userId: string; error: StreaksRepositoryError }>,
+  };
+  for (const update of updates) {
+    const result = await updateStreakEnhanced(update.userId, update.streak);
+    if (result.error) {
+      results.failed.push({ userId: update.userId, error: result.error });
+    } else if (result.data) {
+      results.successful.push(result.data);
+    }
+  }
+  return results;
+}
+import {
+  StreakRepairQuestSchema,
+  type StreakRepairQuest,
+} from "../schemas-enhanced";
+export async function fetchActiveRepairQuestEnhanced(
+  userId: string,
+): Promise<RepositoryResult<StreakRepairQuest>> {
+  return executeWithFallback("fetchActiveRepairQuest", async () => {
+    const { data, error } = await supabase
+      .from("streak_repair_quests")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("status", "ACTIVE")
+      .single();
+    if (error) {
+      if (error.code === "PGRST116") {
+        throw new StreaksRepositoryError(
+          "fetchActiveRepairQuest",
+          new Error("No active repair quest found"),
+          RepositoryErrorCode.NOT_FOUND,
+        );
+      }
+      throw error;
+    }
+    return StreakRepairQuestSchema.parse(data);
+  });
+}
+export async function saveRepairQuestEnhanced(
+  quest: StreakRepairQuest,
+): Promise<RepositoryResult<StreakRepairQuest>> {
+  enqueue({
+    operation: "CREATE",
+    feature: "streaks",
+    payload: { quest },
+    idempotencyKey: `quest:save:${quest.id}`,
+    maxRetries: 5,
+    priority: "high",
+  });
+  return executeWithFallback("saveRepairQuest", async () => {
+    const { data, error } = await supabase
+      .from("streak_repair_quests")
+      .insert({
+        id: quest.id,
+        user_id: quest.userId,
+        previous_streak: quest.previousStreak,
+        target_restore_days: quest.targetRestoreDays,
+        sessions_completed: quest.sessionsCompleted,
+        sessions_required: quest.sessionsRequired,
+        started_at: quest.startedAt,
+        expires_at: quest.expiresAt,
+        status: quest.status,
+        session_ids: quest.sessionIds,
+        completed_at: quest.completedAt,
+      })
+      .select()
+      .single();
+    if (error) {
+      throw error;
+    }
+    return StreakRepairQuestSchema.parse(data);
+  });
+}
+export async function updateRepairQuestEnhanced(
+  questId: string,
+  updates: Partial<StreakRepairQuest>,
+): Promise<RepositoryResult<StreakRepairQuest>> {
+  enqueue({
+    operation: "UPDATE",
+    feature: "streaks",
+    payload: { questId, updates },
+    idempotencyKey: `repair-quest:update:${questId}:${Date.now()}`,
+    maxRetries: 5,
+    priority: "high",
+  });
+  return executeWithFallback("updateRepairQuest", async () => {
+    const { data, error } = await supabase
+      .from("streak_repair_quests")
+      .update({
+        sessions_completed: updates.sessionsCompleted,
+        session_ids: updates.sessionIds,
+        status: updates.status,
+        completed_at: updates.completedAt,
+        updated_at: Date.now(),
+      })
+      .eq("id", questId)
+      .select()
+      .single();
+    if (error) {
+      throw error;
+    }
+    return StreakRepairQuestSchema.parse(data);
+  });
+}
+export async function fetchExpiredRepairQuestsEnhanced(): Promise<
+  RepositoryResult<
+    Array<{
+      id: string;
+      userId: string;
+      previousStreak: number;
+      status: string;
+      expiresAt: number;
+    }>
+  >
+> {
+  return executeWithFallback("fetchExpiredRepairQuests", async () => {
+    const { data, error } = await supabase
+      .from("streak_repair_quests")
+      .select("id, user_id, previous_streak, status, expires_at")
+      .eq("status", "ACTIVE")
+      .lt("expires_at", Date.now());
+    if (error) {
+      throw error;
+    }
+    return (data || []).map((row: Record<string, unknown>) => ({
+      id: row.id as string,
+      userId: row.user_id as string,
+      previousStreak: row.previous_streak as number,
+      status: row.status as string,
+      expiresAt: row.expires_at as number,
+    }));
+  });
+}
+import {
+  StreakRiskStatusSchema,
+  type StreakRiskStatus,
+} from "../schemas-enhanced";
+export async function saveRiskStatusEnhanced(
+  status: StreakRiskStatus,
+): Promise<RepositoryResult<StreakRiskStatus>> {
+  return executeWithFallback("saveRiskStatus", async () => {
+    const { data, error } = await supabase
+      .from("streak_risk_status")
+      .upsert(
+        {
+          user_id: status.userId,
+          current_days: status.currentDays,
+          hours_remaining: status.hoursRemaining,
+          minutes_remaining: status.minutesRemaining,
+          risk_level: status.riskLevel,
+          flame_health_percent: status.flameHealthPercent,
+          is_at_risk: status.isAtRisk,
+          is_critical: status.isCritical,
+          notifications_sent: status.notificationsSent,
+          last_updated: status.lastUpdated,
+        },
+        { onConflict: "user_id" },
+      )
+      .select()
+      .single();
+    if (error) {
+      throw error;
+    }
+    return StreakRiskStatusSchema.parse(data);
+  });
+}
+export async function fetchRiskStatusEnhanced(
+  userId: string,
+): Promise<RepositoryResult<StreakRiskStatus | null>> {
+  return executeWithFallback("fetchRiskStatus", async () => {
+    const { data, error } = await supabase
+      .from("streak_risk_status")
+      .select("*")
+      .eq("user_id", userId)
+      .single();
+    if (error) {
+      if (error.code === "PGRST116") {
+        return null;
+      }
+      throw error;
+    }
+    if (!data) {
+      return null;
+    }
+    return StreakRiskStatusSchema.parse({
+      userId: data.user_id,
+      currentDays: data.current_days,
+      hoursRemaining: data.hours_remaining,
+      minutesRemaining: data.minutes_remaining,
+      riskLevel: data.risk_level,
+      flameHealthPercent: data.flame_health_percent,
+      isAtRisk: data.is_at_risk,
+      isCritical: data.is_critical,
+      notificationsSent: data.notifications_sent,
+      lastUpdated: data.last_updated,
+    });
+  });
+}
+export async function fetchUsersWithActiveStreaksEnhanced(): Promise<
+  RepositoryResult<string[]>
+> {
+  return executeWithFallback("fetchUsersWithActiveStreaks", async () => {
+    const { data, error } = await supabase
+      .from("streaks")
+      .select("user_id")
+      .gt("current_days", 0);
+    if (error) {
+      throw error;
+    }
+    return (data || []).map((row: { user_id: string }) => row.user_id);
+  });
+}

@@ -1,12 +1,19 @@
-import { useMemo } from 'react';
-import { useNavigation, useRoute, type RouteProp } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useMemo } from "react";
+import {
+  useNavigation,
+  useRoute,
+  type RouteProp,
+} from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-import type { SessionStackParams } from '../../navigation/types';
-import { parseSessionCompletionParams } from './service';
+import type { SessionStackParams } from "../../navigation/types";
+import { parseSessionCompletionParams } from "./service";
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
-type SessionCompleteRouteProp = RouteProp<SessionStackParams, 'SessionComplete'>;
+type SessionCompleteRouteProp = RouteProp<
+  SessionStackParams,
+  "SessionComplete"
+>;
 
 export function useSessionCompletionRouteState() {
   const navigation = useNavigation<SessionNavigationProp>();

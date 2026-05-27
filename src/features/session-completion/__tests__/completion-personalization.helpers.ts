@@ -55,9 +55,7 @@ export function buildResult(
     lane,
     streakAction: "extended",
     streakDays: (overrides.streakDays as number) ?? 4,
-    summary: (
-      overrides.summary as Parameters<typeof createSessionSummary>[0]
-    )
+    summary: (overrides.summary as Parameters<typeof createSessionSummary>[0])
       ? createSessionSummary(
           overrides.summary as Parameters<typeof createSessionSummary>[0],
         )

@@ -1,13 +1,16 @@
-import React from 'react';
-import Animated, { ZoomIn } from 'react-native-reanimated';
+import React from "react";
+import Animated, { ZoomIn } from "react-native-reanimated";
 
-import { Box } from '../../../components/primitives/Box';
-import { Text } from '../../../components/primitives/Text';
-import { StudyQuizBreak } from '../../../features/session/StudyQuizBreak';
-import { CreativeMoodLogger, type Mood } from '../../../session/components/CreativeMoodLogger';
-import { ModeIndicatorBadge } from '../../../session/components/ModeIndicatorBadge';
-import { SessionMode } from '../../../session/modes';
-import type { ActiveSessionDisplayPolicy } from '../utils/active-session-display-policy';
+import { Box } from "../../../components/primitives/Box";
+import { Text } from "../../../components/primitives/Text";
+import { StudyQuizBreak } from "../../../features/session/StudyQuizBreak";
+import {
+  CreativeMoodLogger,
+  type Mood,
+} from "../../../session/components/CreativeMoodLogger";
+import { ModeIndicatorBadge } from "../../../session/components/ModeIndicatorBadge";
+import { SessionMode } from "../../../session/modes";
+import type { ActiveSessionDisplayPolicy } from "../utils/active-session-display-policy";
 
 type ActiveSessionModeOverlaysProps = {
   allowStudyQuizBreak: boolean;
@@ -25,7 +28,9 @@ type ActiveSessionModeOverlaysProps = {
   studyPlanId: string | undefined;
 };
 
-export function ActiveSessionModeOverlays(props: ActiveSessionModeOverlaysProps): JSX.Element {
+export function ActiveSessionModeOverlays(
+  props: ActiveSessionModeOverlaysProps,
+): JSX.Element {
   if (!props.displayPolicy.showModeOverlay) {
     return <></>;
   }
@@ -34,7 +39,11 @@ export function ActiveSessionModeOverlays(props: ActiveSessionModeOverlaysProps)
     <>
       <ModeOverlay {...props} />
       <StudyQuizBreak
-        isVisible={props.allowStudyQuizBreak && props.quizBreakKey !== null && props.isPaused}
+        isVisible={
+          props.allowStudyQuizBreak &&
+          props.quizBreakKey !== null &&
+          props.isPaused
+        }
         studyPlanId={props.studyPlanId}
         onSkip={props.onSkipQuiz}
         onClose={props.onCloseQuiz}
@@ -59,12 +68,30 @@ function ModeOverlay(props: ActiveSessionModeOverlaysProps): React.JSX.Element {
       />
     );
   }
-  return <ModeIndicatorBadge mode={props.currentMode} chainCount={props.chainCount} />;
+  return (
+    <ModeIndicatorBadge
+      mode={props.currentMode}
+      chainCount={props.chainCount}
+    />
+  );
 }
 
-function SprintOverlay({ chainCount }: { chainCount: number }): React.JSX.Element {
+function SprintOverlay({
+  chainCount,
+}: {
+  chainCount: number;
+}): React.JSX.Element {
   return (
-    <Box position="absolute" top={104} left={16} right={16} flexDirection="row" alignItems="center" gap="xs" style={{ zIndex: 20 }}>
+    <Box
+      position="absolute"
+      top={104}
+      left={16}
+      right={16}
+      flexDirection="row"
+      alignItems="center"
+      gap="xs"
+      style={{ zIndex: 20 }}
+    >
       <Box flexDirection="row" gap="xs">
         {[1, 2, 3, 4].map((item) => (
           <Box
@@ -72,12 +99,15 @@ function SprintOverlay({ chainCount }: { chainCount: number }): React.JSX.Elemen
             width={10}
             height={10}
             borderRadius="full"
-            bg={item <= chainCount ? 'primary.500' : 'background.tertiary'}
+            bg={item <= chainCount ? "primary.500" : "background.tertiary"}
           />
         ))}
       </Box>
       {chainCount > 1 ? (
-        <Animated.View entering={ZoomIn.duration(200)} style={{ marginLeft: 8 }}>
+        <Animated.View
+          entering={ZoomIn.duration(200)}
+          style={{ marginLeft: 8 }}
+        >
           <Text variant="caption" weight="semibold" color="primary.500">
             {`${(1 + (chainCount - 1) * 0.05).toFixed(2)}x chain bonus`}
           </Text>
@@ -87,11 +117,23 @@ function SprintOverlay({ chainCount }: { chainCount: number }): React.JSX.Elemen
   );
 }
 
-function StudyOverlay({ completionPercentage }: { completionPercentage: number }): React.JSX.Element {
+function StudyOverlay({
+  completionPercentage,
+}: {
+  completionPercentage: number;
+}): React.JSX.Element {
   return (
-    <Box position="absolute" top={104} left={16} right={16} style={{ zIndex: 20 }}>
+    <Box
+      position="absolute"
+      top={104}
+      left={16}
+      right={16}
+      style={{ zIndex: 20 }}
+    >
       <Text variant="caption" color="text.secondary">
-        {completionPercentage < 50 ? 'Planned quiz break at 50%' : 'Final planned quiz check at 90%'}
+        {completionPercentage < 50
+          ? "Planned quiz break at 50%"
+          : "Final planned quiz check at 90%"}
       </Text>
     </Box>
   );

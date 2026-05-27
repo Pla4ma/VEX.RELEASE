@@ -1,10 +1,10 @@
-import React from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { FlashList, type ListRenderItem } from '@shopify/flash-list';
-import { useTheme } from '../../../theme';
-import { ErrorState } from '../../../components/states/ErrorState';
-import { useCoachMemories } from '../hooks/useMemories';
-import type { CoachMemory, MemoryType } from '../memory-schemas';
+import React from "react";
+import { Pressable, Text, View } from "react-native";
+import { FlashList, type ListRenderItem } from "@shopify/flash-list";
+import { useTheme } from "../../../theme";
+import { ErrorState } from "../../../components/states/ErrorState";
+import { useCoachMemories } from "../hooks/useMemories";
+import type { CoachMemory, MemoryType } from "../memory-schemas";
 
 interface MemoryListProps {
   userId: string;
@@ -29,7 +29,9 @@ export function MemoryList({
     return (
       <ErrorState
         title="Coach memory paused"
-        description={error?.message ?? 'Your coach could not load its memory yet.'}
+        description={
+          error?.message ?? "Your coach could not load its memory yet."
+        }
         onRetry={() => {
           void refetch.call(undefined);
         }}
@@ -39,10 +41,7 @@ export function MemoryList({
 
   if (data.length === 0) {
     return (
-      <EmptyMemoryState
-        isOffline={isOffline}
-        onStartSession={onStartSession}
-      />
+      <EmptyMemoryState isOffline={isOffline} onStartSession={onStartSession} />
     );
   }
 
@@ -81,7 +80,7 @@ function MemoryRow({ memory }: { memory: CoachMemory }): JSX.Element {
         borderBottomColor: theme.colors.border.DEFAULT,
       }}
     >
-      <Text style={{ color: theme.colors.text.primary, fontWeight: '600' }}>
+      <Text style={{ color: theme.colors.text.primary, fontWeight: "600" }}>
         {memory.title}
       </Text>
       <Text style={{ color: theme.colors.text.secondary }}>
@@ -120,13 +119,13 @@ function EmptyMemoryState({
   const { theme } = useTheme();
   return (
     <View>
-      <Text style={{ color: theme.colors.text.primary, fontWeight: '700' }}>
-        {isOffline ? 'Coach memory is offline' : 'No coach memory yet'}
+      <Text style={{ color: theme.colors.text.primary, fontWeight: "700" }}>
+        {isOffline ? "Coach memory is offline" : "No coach memory yet"}
       </Text>
       <Text style={{ color: theme.colors.text.secondary }}>
         {isOffline
-          ? 'Reconnect to refresh saved patterns.'
-          : 'Finish a focus session and your coach will remember useful patterns.'}
+          ? "Reconnect to refresh saved patterns."
+          : "Finish a focus session and your coach will remember useful patterns."}
       </Text>
       {onStartSession && (
         <Pressable
@@ -134,9 +133,9 @@ function EmptyMemoryState({
           accessibilityLabel="Start a focus session"
           accessibilityRole="button"
           accessibilityHint="Starts a session so coach memory can learn from real progress"
-          style={{ minHeight: theme.spacing[12], justifyContent: 'center' }}
+          style={{ minHeight: theme.spacing[12], justifyContent: "center" }}
         >
-          <Text style={{ color: theme.colors.primary[500], fontWeight: '600' }}>
+          <Text style={{ color: theme.colors.primary[500], fontWeight: "600" }}>
             Start a session
           </Text>
         </Pressable>

@@ -8,7 +8,7 @@
  * - Error reporting integration
  */
 
-import { IS_DEVELOPMENT } from '../constants/app';
+import { IS_DEVELOPMENT } from "../constants/app";
 
 // Log levels
 export enum LogLevel {
@@ -23,7 +23,7 @@ export enum LogLevel {
 let currentLogLevel = IS_DEVELOPMENT ? LogLevel.DEBUG : LogLevel.WARN;
 
 // Enabled namespaces for debugging
-let enabledNamespaces: string[] = IS_DEVELOPMENT ? ['*'] : [];
+let enabledNamespaces: string[] = IS_DEVELOPMENT ? ["*"] : [];
 
 /**
  * Set global log level
@@ -43,9 +43,11 @@ export function enableDebug(namespaces: string[]): void {
  * Check if namespace is enabled
  */
 function isNamespaceEnabled(namespace: string): boolean {
-  if (enabledNamespaces.includes('*')) {return true;}
-  return enabledNamespaces.some(ns =>
-    namespace.startsWith(ns.replace('*', ''))
+  if (enabledNamespaces.includes("*")) {
+    return true;
+  }
+  return enabledNamespaces.some((ns) =>
+    namespace.startsWith(ns.replace("*", "")),
   );
 }
 
@@ -60,7 +62,11 @@ function formatMessage(namespace: string, message: string): string {
 /**
  * Send to error reporting service (e.g., Sentry)
  */
-function reportToErrorTracking(level: LogLevel, _message: string, _error?: Error): void {
+function reportToErrorTracking(
+  level: LogLevel,
+  _message: string,
+  _error?: Error,
+): void {
   // In production, send to error tracking service
   if (!IS_DEVELOPMENT && level >= LogLevel.ERROR) {
     // Example: Sentry.captureException(error);
@@ -110,7 +116,8 @@ export function createDebugger(namespace: string): Debugger {
       if (currentLogLevel <= LogLevel.ERROR) {
         void formatMessage(namespace, message);
         void args;
-        const errorInstance = error instanceof Error ? error : new Error(String(error));
+        const errorInstance =
+          error instanceof Error ? error : new Error(String(error));
         reportToErrorTracking(LogLevel.ERROR, message, errorInstance);
       }
     },
@@ -132,14 +139,20 @@ export function createDebugger(namespace: string): Debugger {
 /**
  * Global debug instance
  */
-export const debug = createDebugger('app');
+export const debug = createDebugger("app");
 
 /**
  * Performance tracking decorator
  */
-export function measurePerformance(target: unknown, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+export function measurePerformance(
+  target: unknown,
+  propertyKey: string,
+  descriptor: PropertyDescriptor,
+): PropertyDescriptor {
   const originalMethod = descriptor.value;
-  const methodDebugger = createDebugger(`perf:${target?.constructor?.name || 'unknown'}`);
+  const methodDebugger = createDebugger(
+    `perf:${target?.constructor?.name || "unknown"}`,
+  );
 
   descriptor.value = async function (...args: unknown[]) {
     const start = performance.now();
@@ -148,11 +161,16 @@ export function measurePerformance(target: unknown, propertyKey: string, descrip
     try {
       const result = await originalMethod.apply(this, args);
       const duration = performance.now() - start;
-      methodDebugger.debug(`${propertyKey} completed in ${duration.toFixed(2)}ms`);
+      methodDebugger.debug(
+        `${propertyKey} completed in ${duration.toFixed(2)}ms`,
+      );
       return result;
     } catch (error) {
       const duration = performance.now() - start;
-      methodDebugger.error(`${propertyKey} failed after ${duration.toFixed(2)}ms`, error as Error);
+      methodDebugger.error(
+        `${propertyKey} failed after ${duration.toFixed(2)}ms`,
+        error as Error,
+      );
       throw error;
     }
   };

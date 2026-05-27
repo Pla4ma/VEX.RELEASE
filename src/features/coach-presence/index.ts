@@ -1,28 +1,28 @@
-export { CoachPresenceCard } from './components/CoachPresenceCard';
-export { useCoachPresence, type UseCoachPresenceInput } from './hooks';
-export { fetchCoachPresenceMemorySummary } from './repository';
+export { CoachPresenceCard } from "./components/CoachPresenceCard";
+export { useCoachPresence, type UseCoachPresenceInput } from "./hooks";
+export { fetchCoachPresenceMemorySummary } from "./repository";
 export {
   BANNED_COACH_PHRASES,
   ACTION_LABELS,
   FALLBACK_HOME_MESSAGES,
   PROGRESS_REACTIONS,
   STYLE_ADAPTATION,
-} from './copy';
+} from "./copy";
 export {
   COACH_PRESENCE_MESSAGE_CONTEXTS,
   COACH_PRESENCE_MESSAGE_STYLES,
   getCoachPresenceMessage,
-} from './message-library';
+} from "./message-library";
 export {
   getCoachPresenceMessage as getCoachPresenceMessageEnriched,
   type CoachPresenceContext,
   type CoachPresenceMessageOutput,
-} from './copy-service';
+} from "./copy-service";
 export {
   buildCoachPresence,
   buildCompletionCoachPresence,
   resolveCoachActionIntent,
-} from './service';
+} from "./service";
 export type {
   CoachActionIntent,
   CoachPresence,
@@ -31,5 +31,16 @@ export type {
   CoachPresenceProgressInput,
   CoachPresenceSurface,
   CoachPresenceVisualState,
+  CoachVisibilityDecision,
+  CoachVisibilityPolicy,
+  CoachVisibilitySurface,
   CompletionPresenceSummary,
-} from './schemas';
+} from "./schemas";
+export { decideCoachVisibility } from "./visibility-policy";
+export {
+  getRetentionMoment,
+  shouldShowRetentionMoment,
+  type RetentionInput,
+  type RetentionMessage,
+  type RetentionMoment,
+} from "./day-retention";

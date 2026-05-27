@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import { Box } from '../../../components/primitives/Box';
-import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
-import { sizing } from '../../../theme/tokens/sizing';
+import { Box } from "../../../components/primitives/Box";
+import { Button } from "../../../components/primitives/Button";
+import { Text } from "../../../components/primitives/Text";
+import { sizing } from "../../../theme/tokens/sizing";
 
 export function HistorySkeleton(): JSX.Element {
   return (
@@ -13,7 +13,7 @@ export function HistorySkeleton(): JSX.Element {
           key={key}
           bg="background.secondary"
           borderRadius="lg"
-          height={sizing.height['2xl']}
+          height={sizing.height["2xl"]}
           mb="sm"
         />
       ))}

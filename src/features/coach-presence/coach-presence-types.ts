@@ -1,12 +1,12 @@
-import type { FeatureAvailability } from '../liveops-config';
-import type { CompanionState } from '../companion/types';
-import type { LaneProfile } from '../lane-engine/types';
+import type { FeatureAvailability } from "../liveops-config";
+import type { CompanionState } from "../companion/types";
+import type { LaneProfile } from "../lane-engine/types";
 import type {
   CoachPresenceMemorySummary,
   CoachPresenceMotivationStyle,
   CoachPresenceProgressInput,
   CompletionPresenceSummary,
-} from './schemas';
+} from "./schemas";
 
 export interface PresenceAvailability {
   focus: FeatureAvailability;
@@ -15,13 +15,16 @@ export interface PresenceAvailability {
 }
 
 export interface BuildPresenceInput {
-  companion: Pick<CompanionState, 'currentMood' | 'element' | 'level' | 'phase'> | null;
+  companion: Pick<
+    CompanionState,
+    "currentMood" | "element" | "level" | "phase"
+  > | null;
   featureAvailability: PresenceAvailability;
   laneProfile?: LaneProfile | null;
   memorySummary: CoachPresenceMemorySummary;
   motivationStyle: CoachPresenceMotivationStyle;
   progress: CoachPresenceProgressInput;
-  surface: 'HOME' | 'SESSION_SETUP' | 'CHAT' | 'RESCUE' | 'PREMIUM';
+  surface: "HOME" | "SESSION_SETUP" | "CHAT" | "RESCUE" | "PREMIUM";
 }
 
 export interface CompletionPresenceInput {

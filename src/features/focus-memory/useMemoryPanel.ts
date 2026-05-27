@@ -1,10 +1,16 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { listActiveMemories, deleteMemory, acceptMemory } from './service';
-import { MemoryPanelItemSchema, WHAT_VEX_LEARNED_MIN_SESSIONS } from './memory-panel-types';
-import { useMemoryConsoleVisibility } from './useMemoryConsoleVisibility';
-import type { FocusMemory } from './schemas';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { listActiveMemories, deleteMemory, acceptMemory } from "./service";
+import {
+  MemoryPanelItemSchema,
+  WHAT_VEX_LEARNED_MIN_SESSIONS,
+} from "./memory-panel-types";
+import { useMemoryConsoleVisibility } from "./useMemoryConsoleVisibility";
+import type { FocusMemory } from "./schemas";
 
-function toPanelItem(memory: FocusMemory, isHidden: boolean): ReturnType<typeof MemoryPanelItemSchema.parse> {
+function toPanelItem(
+  memory: FocusMemory,
+  isHidden: boolean,
+): ReturnType<typeof MemoryPanelItemSchema.parse> {
   return MemoryPanelItemSchema.parse({
     id: memory.id,
     observation: memory.summary,
@@ -19,10 +25,11 @@ function toPanelItem(memory: FocusMemory, isHidden: boolean): ReturnType<typeof 
 
 export function useMemoryPanel(userId: string | null) {
   const queryClient = useQueryClient();
-  const { isVisible, isLoading: isVisibilityLoading } = useMemoryConsoleVisibility(userId);
+  const { isVisible, isLoading: isVisibilityLoading } =
+    useMemoryConsoleVisibility(userId);
 
   const memoriesQuery = useQuery({
-    queryKey: ['memory-panel', userId],
+    queryKey: ["memory-panel", userId],
     queryFn: async () => {
       if (!userId) return { items: [], hasEnoughSessions: false };
       const memories = await listActiveMemories(userId);
@@ -36,23 +43,31 @@ export function useMemoryPanel(userId: string | null) {
 
   const hideMutation = useMutation({
     mutationFn: async (memoryId: string) => {
-      if (!userId) throw new Error('No user');
+      if (!userId) throw new Error("No user");
       await deleteMemory(memoryId, userId);
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['memory-panel', userId] });
-      void queryClient.invalidateQueries({ queryKey: ['focus-memory', userId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["memory-panel", userId],
+      });
+      void queryClient.invalidateQueries({
+        queryKey: ["focus-memory", userId],
+      });
     },
   });
 
   const acceptMutation = useMutation({
     mutationFn: async (memoryId: string) => {
-      if (!userId) throw new Error('No user');
+      if (!userId) throw new Error("No user");
       await acceptMemory(memoryId, userId);
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['memory-panel', userId] });
-      void queryClient.invalidateQueries({ queryKey: ['focus-memory', userId] });
+      void queryClient.invalidateQueries({
+        queryKey: ["memory-panel", userId],
+      });
+      void queryClient.invalidateQueries({
+        queryKey: ["focus-memory", userId],
+      });
     },
   });
 

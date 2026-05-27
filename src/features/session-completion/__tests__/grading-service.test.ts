@@ -1,6 +1,6 @@
-import { SessionMode } from '../../../session/modes';
-import { calculateSessionGrade } from '../grading-service';
-import type { SessionGradingInput } from '../grading-schemas';
+import { SessionMode } from "../../../session/modes";
+import { calculateSessionGrade } from "../grading-service";
+import type { SessionGradingInput } from "../grading-schemas";
 
 const baseInput: SessionGradingInput = {
   backgroundTimeSeconds: 0,
@@ -17,18 +17,18 @@ const baseInput: SessionGradingInput = {
 
 function completedGrade(input: SessionGradingInput): string {
   const result = calculateSessionGrade(input);
-  if (result.kind !== 'completed') {
-    throw new Error('Expected completed grading result');
+  if (result.kind !== "completed") {
+    throw new Error("Expected completed grading result");
   }
   return result.grade;
 }
 
-describe('calculateSessionGrade', () => {
-  it('scores an S grade for peak focus execution', () => {
-    expect(completedGrade({ ...baseInput, strictMode: true })).toBe('S');
+describe("calculateSessionGrade", () => {
+  it("scores an S grade for peak focus execution", () => {
+    expect(completedGrade({ ...baseInput, strictMode: true })).toBe("S");
   });
 
-  it('scores an A grade for strong completion with small drags', () => {
+  it("scores an A grade for strong completion with small drags", () => {
     expect(
       completedGrade({
         ...baseInput,
@@ -37,10 +37,10 @@ describe('calculateSessionGrade', () => {
         interruptionCount: 1,
         pauseCount: 2,
       }),
-    ).toBe('A');
+    ).toBe("A");
   });
 
-  it('scores a B grade for completed but uneven focus', () => {
+  it("scores a B grade for completed but uneven focus", () => {
     expect(
       completedGrade({
         ...baseInput,
@@ -50,10 +50,10 @@ describe('calculateSessionGrade', () => {
         interruptionCount: 2,
         pauseCount: 3,
       }),
-    ).toBe('B');
+    ).toBe("B");
   });
 
-  it('scores a C grade for partial usable progress', () => {
+  it("scores a C grade for partial usable progress", () => {
     expect(
       completedGrade({
         ...baseInput,
@@ -63,10 +63,10 @@ describe('calculateSessionGrade', () => {
         interruptionCount: 3,
         pauseCount: 4,
       }),
-    ).toBe('C');
+    ).toBe("C");
   });
 
-  it('scores a D grade for a completed session that needs recovery', () => {
+  it("scores a D grade for a completed session that needs recovery", () => {
     expect(
       completedGrade({
         ...baseInput,
@@ -76,10 +76,10 @@ describe('calculateSessionGrade', () => {
         interruptionCount: 5,
         pauseCount: 8,
       }),
-    ).toBe('D');
+    ).toBe("D");
   });
 
-  it('judges recovery sessions against the recovery goal', () => {
+  it("judges recovery sessions against the recovery goal", () => {
     const result = calculateSessionGrade({
       ...baseInput,
       completedDurationSeconds: 420,
@@ -89,24 +89,30 @@ describe('calculateSessionGrade', () => {
       targetDurationSeconds: 600,
     });
 
-    expect(result.kind).toBe('completed');
-    if (result.kind === 'completed') {
+    expect(result.kind).toBe("completed");
+    if (result.kind === "completed") {
       expect(result.gradeScore).toBeGreaterThanOrEqual(84);
       expect(
         result.factorBreakdown.some((factor) =>
-          factor.reason.includes('Recovery session judged against recovery goals.'),
+          factor.reason.includes(
+            "Recovery session judged against recovery goals.",
+          ),
         ),
       ).toBe(true);
     }
   });
 
-  it('applies strict mode to Focus Score impact without changing the factor contract', () => {
+  it("applies strict mode to Focus Score impact without changing the factor contract", () => {
     const standard = calculateSessionGrade({ ...baseInput, pauseCount: 2 });
-    const strict = calculateSessionGrade({ ...baseInput, pauseCount: 2, strictMode: true });
+    const strict = calculateSessionGrade({
+      ...baseInput,
+      pauseCount: 2,
+      strictMode: true,
+    });
 
-    expect(standard.kind).toBe('completed');
-    expect(strict.kind).toBe('completed');
-    if (standard.kind === 'completed' && strict.kind === 'completed') {
+    expect(standard.kind).toBe("completed");
+    expect(strict.kind).toBe("completed");
+    if (standard.kind === "completed" && strict.kind === "completed") {
       expect(strict.focusScoreImpactRecommendation).toBeGreaterThan(
         standard.focusScoreImpactRecommendation,
       );
@@ -116,24 +122,26 @@ describe('calculateSessionGrade', () => {
     }
   });
 
-  it('returns a separate abandoned result instead of faking a completed grade', () => {
+  it("returns a separate abandoned result instead of faking a completed grade", () => {
     const result = calculateSessionGrade({ ...baseInput, isAbandoned: true });
 
-    expect(result.kind).toBe('abandoned');
+    expect(result.kind).toBe("abandoned");
     expect(result.xpQualityMultiplier).toBeLessThan(1);
   });
 
-  it('keeps pause-heavy completed sessions as completed with a pause penalty', () => {
+  it("keeps pause-heavy completed sessions as completed with a pause penalty", () => {
     const result = calculateSessionGrade({ ...baseInput, pauseCount: 7 });
 
-    expect(result.kind).toBe('completed');
-    if (result.kind === 'completed') {
-      const pauseFactor = result.factorBreakdown.find((factor) => factor.id === 'pauseCount');
+    expect(result.kind).toBe("completed");
+    if (result.kind === "completed") {
+      const pauseFactor = result.factorBreakdown.find(
+        (factor) => factor.id === "pauseCount",
+      );
       expect(pauseFactor?.score).toBeLessThan(60);
     }
   });
 
-  it('protects short intentional sessions from being under-scored', () => {
+  it("protects short intentional sessions from being under-scored", () => {
     const result = calculateSessionGrade({
       ...baseInput,
       completedDurationSeconds: 540,
@@ -143,8 +151,8 @@ describe('calculateSessionGrade', () => {
       targetDurationSeconds: 600,
     });
 
-    expect(result.kind).toBe('completed');
-    if (result.kind === 'completed') {
+    expect(result.kind).toBe("completed");
+    if (result.kind === "completed") {
       expect(result.gradeScore).toBeGreaterThanOrEqual(82);
     }
   });

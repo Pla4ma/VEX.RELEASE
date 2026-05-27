@@ -1,25 +1,25 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export const MIN_FOCUS_SCORE = 300;
 export const MAX_FOCUS_SCORE = 850;
 
 export const FocusScoreBandLabelSchema = z.enum([
-  'Legendary',
-  'Elite',
-  'Exceptional',
-  'Strong',
-  'Good',
-  'Fair',
-  'Building',
+  "Legendary",
+  "Elite",
+  "Exceptional",
+  "Strong",
+  "Good",
+  "Fair",
+  "Building",
 ]);
 
 export const FocusScoreFactorKeySchema = z.enum([
-  'consistency',
-  'streakStability',
-  'sessionQuality',
-  'intentionalDifficulty',
-  'contractCompletion',
-  'recency',
+  "consistency",
+  "streakStability",
+  "sessionQuality",
+  "intentionalDifficulty",
+  "contractCompletion",
+  "recency",
 ]);
 
 const FocusScoreFactorSchema = (weightPercent: 35 | 25 | 20 | 8 | 7 | 5) =>
@@ -42,7 +42,8 @@ export const FocusScoreFactorsSchema = z
       weightPercent: 8,
       score: 50,
       delta: 0,
-      explanation: 'Contract completion is neutral until enough focus contracts exist.',
+      explanation:
+        "Contract completion is neutral until enough focus contracts exist.",
     }),
     recency: FocusScoreFactorSchema(5),
   })
@@ -86,9 +87,17 @@ export const FocusScoreUpdateInputSchema = z
   .object({
     userId: z.string().uuid(),
     previousScore: z.number().min(MIN_FOCUS_SCORE).max(MAX_FOCUS_SCORE),
-    eventType: z.enum(['session:completed', 'session:abandoned', 'streak:updated', 'comeback:completed', 'recovery:session']),
-    grade: z.enum(['S', 'A', 'B', 'C', 'D']).optional(),
-    sessionMode: z.enum(['deep_work', 'recovery', 'starter', 'standard']).optional(),
+    eventType: z.enum([
+      "session:completed",
+      "session:abandoned",
+      "streak:updated",
+      "comeback:completed",
+      "recovery:session",
+    ]),
+    grade: z.enum(["S", "A", "B", "C", "D"]).optional(),
+    sessionMode: z
+      .enum(["deep_work", "recovery", "starter", "standard"])
+      .optional(),
     contractCompletionRate: z.number().min(0).max(1).optional(),
     completedContractCount: z.number().int().nonnegative().optional(),
     occurredAt: z.string().datetime(),
@@ -134,7 +143,7 @@ export const MonthlyFocusReportSummarySchema = z
     weakestPattern: z.string().min(1),
     sessionsCompleted: z.number().int().nonnegative(),
     totalFocusedMinutes: z.number().int().nonnegative(),
-    bestGrade: z.enum(['S', 'A', 'B', 'C', 'D']),
+    bestGrade: z.enum(["S", "A", "B", "C", "D"]),
     nextTargetScore: z.number().min(MIN_FOCUS_SCORE).max(MAX_FOCUS_SCORE),
     factorAverages: z
       .object({
@@ -149,7 +158,9 @@ export const MonthlyFocusReportSummarySchema = z
   })
   .strict();
 
-export function getFocusScoreFactorsWeightTotal(factors: z.infer<typeof FocusScoreFactorsSchema>): number {
+export function getFocusScoreFactorsWeightTotal(
+  factors: z.infer<typeof FocusScoreFactorsSchema>,
+): number {
   return (
     factors.consistency.weightPercent +
     factors.streakStability.weightPercent +

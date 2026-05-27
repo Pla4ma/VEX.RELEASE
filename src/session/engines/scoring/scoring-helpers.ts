@@ -1,5 +1,10 @@
 import type { SessionState, FocusQualityMetrics } from "../../types";
-import { getSessionModeConfig, getSprintChainMultiplier, resolveSessionMode, SessionMode } from "../../modes";
+import {
+  getSessionModeConfig,
+  getSprintChainMultiplier,
+  resolveSessionMode,
+  SessionMode,
+} from "../../modes";
 import { BonusCalculator } from "../scoring/BonusCalculator";
 
 export const QUALITY_THRESHOLDS = {
@@ -48,11 +53,16 @@ export function calculateModeBonus(
     );
   }
   if (mode === SessionMode.STUDY) {
-    return (session.config.quizBonusPoints ?? 0) + getCompletedQuizBonus(session);
+    return (
+      (session.config.quizBonusPoints ?? 0) + getCompletedQuizBonus(session)
+    );
   }
-  if (mode === SessionMode.CREATIVE) return session.config.creativeMoodBonus ?? 0;
+  if (mode === SessionMode.CREATIVE)
+    return session.config.creativeMoodBonus ?? 0;
   if (mode === SessionMode.SPRINT) {
-    const chainMultiplier = getSprintChainMultiplier(session.config.sprintChainCount ?? 1);
+    const chainMultiplier = getSprintChainMultiplier(
+      session.config.sprintChainCount ?? 1,
+    );
     return Math.round(basePoints * (chainMultiplier - 1));
   }
   return 0;
@@ -74,11 +84,19 @@ export function calculateComebackBonus(
 ): number {
   if (comebackMultiplier <= 1) return 0;
   const subtotal =
-    basePoints * timeMultiplier * streakMultiplier * qualityMultiplier * penaltyMultiplier + baseBonusPoints;
+    basePoints *
+      timeMultiplier *
+      streakMultiplier *
+      qualityMultiplier *
+      penaltyMultiplier +
+    baseBonusPoints;
   return Math.max(0, Math.round(subtotal * (comebackMultiplier - 1)));
 }
 
-export function calculatePausePenalty(pauses: number, duration: number): number {
+export function calculatePausePenalty(
+  pauses: number,
+  duration: number,
+): number {
   const freePauses = 2;
   const penalizedPauses = Math.max(0, pauses - freePauses);
   const durationFactor = Math.min(1, duration / 3600);
@@ -88,14 +106,18 @@ export function calculatePausePenalty(pauses: number, duration: number): number 
 export function calculateModePausePenalty(session: SessionState): number {
   const mode = resolveSessionMode(session.config.sessionMode);
   if (mode !== SessionMode.CHALLENGE) return 0;
-  return session.pausedTime > 30000 ? Math.max(30, (session.baseScore ?? 0) * 0.25) : 0;
+  return session.pausedTime > 30000
+    ? Math.max(30, (session.baseScore ?? 0) * 0.25)
+    : 0;
 }
 
 export function calculateInterruptionPenalty(interruptions: number): number {
   return interruptions * 15;
 }
 
-export function calculateQualityPenalty(focusMetrics: FocusQualityMetrics): number {
+export function calculateQualityPenalty(
+  focusMetrics: FocusQualityMetrics,
+): number {
   if (focusMetrics.overallScore < QUALITY_THRESHOLDS.BAD) return 30;
   if (focusMetrics.overallScore < QUALITY_THRESHOLDS.POOR) return 15;
   return 0;
@@ -103,10 +125,14 @@ export function calculateQualityPenalty(focusMetrics: FocusQualityMetrics): numb
 
 export function calculateAntiCheatPenalty(session: SessionState): number {
   switch (session.antiCheatStatus) {
-    case "FAILED": return session.baseScore * 0.5;
-    case "FLAGGED": return session.baseScore * 0.2;
-    case "WARNING": return session.baseScore * 0.05;
-    default: return 0;
+    case "FAILED":
+      return session.baseScore * 0.5;
+    case "FLAGGED":
+      return session.baseScore * 0.2;
+    case "WARNING":
+      return session.baseScore * 0.05;
+    default:
+      return 0;
   }
 }
 
@@ -116,7 +142,10 @@ export function calculateConsistencyScore(
 ): number {
   if (interruptions.length === 0) return 100;
   const interruptionPenalty = interruptions.length * 10;
-  const totalInterruptionTime = interruptions.reduce((sum, i) => sum + i.duration, 0);
+  const totalInterruptionTime = interruptions.reduce(
+    (sum, i) => sum + i.duration,
+    0,
+  );
   const timePenalty = (totalInterruptionTime / totalDuration) * 50;
   return Math.max(0, Math.round(100 - interruptionPenalty - timePenalty));
 }

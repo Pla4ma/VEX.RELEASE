@@ -1,15 +1,15 @@
-import React from 'react';
-import { Pressable } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
+import React from "react";
+import { Pressable } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 
-import { FocusRing } from '../../../components/FocusRing';
-import { Box } from '../../../components/primitives/Box';
-import { Button } from '../../../components/primitives/Button';
-import { Text } from '../../../components/primitives/Text';
-import { useTheme } from '../../../theme';
-import type { SessionTheme } from '../../../features/themes/session-themes';
-import { getSessionThemeById } from '../../../features/themes/session-themes';
-import { buildPreviewGradient } from '../utils/session-setup';
+import { FocusRing } from "../../../components/FocusRing";
+import { Box } from "../../../components/primitives/Box";
+import { Button } from "../../../components/primitives/Button";
+import { Text } from "../../../components/primitives/Text";
+import { useTheme } from "../../../theme";
+import type { SessionTheme } from "../../../features/themes/session-themes";
+import { getSessionThemeById } from "../../../features/themes/session-themes";
+import { buildPreviewGradient } from "../utils/session-setup";
 
 type SessionThemeSelectorProps = {
   onPressTheme: (theme: SessionTheme) => void;
@@ -44,20 +44,33 @@ export function SessionThemeSelector({
       </Text>
 
       {themeQueryLoading ? (
-        <Box p="md" bg="background.secondary" borderRadius="lg" style={{ borderWidth: 1, borderColor: theme.colors.border.light }}>
+        <Box
+          p="md"
+          bg="background.secondary"
+          borderRadius="lg"
+          style={{ borderWidth: 1, borderColor: theme.colors.border.light }}
+        >
           <Text variant="body" color="text.secondary">
             Loading your themes...
           </Text>
         </Box>
       ) : themeQueryError ? (
-        <Box p="md" bg="background.secondary" borderRadius="lg" style={{ borderWidth: 1, borderColor: theme.colors.error.DEFAULT }}>
+        <Box
+          p="md"
+          bg="background.secondary"
+          borderRadius="lg"
+          style={{ borderWidth: 1, borderColor: theme.colors.error.DEFAULT }}
+        >
           <Text variant="body" color="text.secondary" mb="sm">
             We could not load your themes right now.
           </Text>
-          <Button variant="outline" onPress={themeQueryRetry}
-  accessibilityLabel="Retry button"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+          <Button
+            variant="outline"
+            onPress={themeQueryRetry}
+            accessibilityLabel="Retry button"
+            accessibilityRole="button"
+            accessibilityHint="Activates this control"
+          >
             Retry
           </Button>
         </Box>
@@ -75,10 +88,12 @@ export function SessionThemeSelector({
               const isOwned = item.isOwned || item.isFree;
 
               return (
-                <Pressable onPress={() => onPressTheme(item)}
-  accessibilityLabel="Interactive control"
-  accessibilityRole="button"
-  accessibilityHint="Activates this control">
+                <Pressable
+                  onPress={() => onPressTheme(item)}
+                  accessibilityLabel="Interactive control"
+                  accessibilityRole="button"
+                  accessibilityHint="Activates this control"
+                >
                   <Box
                     width={132}
                     mr="md"
@@ -87,15 +102,22 @@ export function SessionThemeSelector({
                     style={{
                       backgroundColor: theme.colors.background.secondary,
                       borderWidth: 1,
-                      borderColor: isSelected ? item.previewColor : theme.colors.border.light,
+                      borderColor: isSelected
+                        ? item.previewColor
+                        : theme.colors.border.light,
                     }}
                   >
                     <Box alignItems="center" mb="sm">
-                      <Box width={56} height={56} borderRadius={999} style={{ backgroundColor: item.previewColor }} />
+                      <Box
+                        width={56}
+                        height={56}
+                        borderRadius={999}
+                        style={{ backgroundColor: item.previewColor }}
+                      />
                     </Box>
                     <Text variant="label">{item.name}</Text>
                     <Text variant="caption" color="text.secondary" mt="xs">
-                      {isOwned ? 'Owned' : `${item.coinCost} coins`}
+                      {isOwned ? "Owned" : `${item.coinCost} coins`}
                     </Text>
                   </Box>
                 </Pressable>
@@ -110,7 +132,10 @@ export function SessionThemeSelector({
         p="md"
         borderRadius="lg"
         style={{
-          backgroundColor: selectedTheme.backgroundTint === 'transparent' ? theme.colors.background.secondary : selectedTheme.backgroundTint,
+          backgroundColor:
+            selectedTheme.backgroundTint === "transparent"
+              ? theme.colors.background.secondary
+              : selectedTheme.backgroundTint,
           borderWidth: 1,
           borderColor: theme.colors.border.light,
         }}
@@ -125,12 +150,23 @@ export function SessionThemeSelector({
         <Text variant="caption" color="text.tertiary" mb="sm">
           Preview
         </Text>
-        <Box p="md" borderRadius="lg" alignItems="center" style={{ backgroundColor: theme.colors.background.secondary, borderWidth: 1, borderColor: theme.colors.border.light }}>
+        <Box
+          p="md"
+          borderRadius="lg"
+          alignItems="center"
+          style={{
+            backgroundColor: theme.colors.background.secondary,
+            borderWidth: 1,
+            borderColor: theme.colors.border.light,
+          }}
+        >
           <FocusRing
             size={120}
             progressPercent={72}
             focusMinutes={Math.round(selectedDurationSeconds / 60)}
-            gradientColors={buildPreviewGradient(getSessionThemeById(selectedThemeId).previewColor)}
+            gradientColors={buildPreviewGradient(
+              getSessionThemeById(selectedThemeId).previewColor,
+            )}
           />
         </Box>
       </Box>

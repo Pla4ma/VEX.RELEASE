@@ -8,5 +8,8 @@ export type {
   CoachPresenceSurface,
   CoachPresenceTone,
   CoachPresenceVisualState,
+  CoachVisibilityDecision,
+  CoachVisibilityPolicy,
+  CoachVisibilitySurface,
   CompletionPresenceSummary,
-} from './schemas';
+} from "./schemas";

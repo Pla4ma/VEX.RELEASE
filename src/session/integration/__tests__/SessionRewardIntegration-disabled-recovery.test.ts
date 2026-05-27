@@ -1,4 +1,7 @@
-import { SessionRewardIntegration, eventBus } from './SessionRewardIntegration-disabled.helpers';
+import {
+  SessionRewardIntegration,
+  eventBus,
+} from "./SessionRewardIntegration-disabled.helpers";
 
 describe("SessionRewardIntegration recovery/abandonment gating", () => {
   const mockedEventBus = jest.mocked(eventBus);

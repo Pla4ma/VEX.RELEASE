@@ -1,38 +1,52 @@
 import {
-  type CompleteReflectionInput, CompleteReflectionInputSchema,
-  type CreateFocusSessionInput, CreateFocusSessionInputSchema,
-  type StartRescueInput, StartRescueInputSchema,
-  type StartSessionInput, StartSessionInputSchema,
-  type UpdateLaneOverrideInput, UpdateLaneOverrideInputSchema,
+  type CompleteReflectionInput,
+  CompleteReflectionInputSchema,
+  type CreateFocusSessionInput,
+  CreateFocusSessionInputSchema,
+  type StartRescueInput,
+  StartRescueInputSchema,
+  type StartSessionInput,
+  StartSessionInputSchema,
+  type UpdateLaneOverrideInput,
+  UpdateLaneOverrideInputSchema,
   type VexActionResult,
-} from './schemas';
+} from "./schemas";
 import {
   type ActionGate,
   checkFeatureGate,
   repoError,
   success,
   validationError,
-} from './action-utils';
+} from "./action-utils";
 
-import { createStarterSessionConfig, buildLaneSessionBrief } from '../session-start/service';
-import { buildCompletionPersonalization } from '../session-completion/completion-personalization';
-import { createRescuePlan } from '../rescue-mode/service';
-import { resolveInitialLane } from '../lane-engine/service';
-import type { LaneProfile } from '../lane-engine/types';
-import type { SessionSummary } from '../../session/types';
-import { z } from 'zod';
+import {
+  createStarterSessionConfig,
+  buildLaneSessionBrief,
+} from "../session-start/service";
+import { buildCompletionPersonalization } from "../session-completion/completion-personalization";
+import { createRescuePlan } from "../rescue-mode/service";
+import { resolveInitialLane } from "../lane-engine/service";
+import type { LaneProfile } from "../lane-engine/types";
+import type { SessionSummary } from "../../session/types";
+import { z } from "zod";
 
-export { vexScheduleFocusWindow, vexCreateStudyBlock, vexUpdateProjectThread, vexReadMemorySummary } from './service-async';
+export {
+  vexScheduleFocusWindow,
+  vexCreateStudyBlock,
+  vexUpdateProjectThread,
+  vexReadMemorySummary,
+} from "./service-async";
 
 export function vexCreateFocusSession(
   rawInput: CreateFocusSessionInput,
   gate?: ActionGate,
 ): VexActionResult {
-  const gateResult = checkFeatureGate('create_focus_session', gate ?? null);
+  const gateResult = checkFeatureGate("create_focus_session", gate ?? null);
   if (gateResult) return gateResult;
 
   const parsed = CreateFocusSessionInputSchema.safeParse(rawInput);
-  if (!parsed.success) return validationError('create_focus_session', parsed.error.message);
+  if (!parsed.success)
+    return validationError("create_focus_session", parsed.error.message);
 
   const config = createStarterSessionConfig({
     category: parsed.data.category ?? null,
@@ -45,11 +59,12 @@ export function vexStartSession(
   rawInput: StartSessionInput,
   gate?: ActionGate,
 ): VexActionResult {
-  const gateResult = checkFeatureGate('start_session', gate ?? null);
+  const gateResult = checkFeatureGate("start_session", gate ?? null);
   if (gateResult) return gateResult;
 
   const parsed = StartSessionInputSchema.safeParse(rawInput);
-  if (!parsed.success) return validationError('start_session', parsed.error.message);
+  if (!parsed.success)
+    return validationError("start_session", parsed.error.message);
 
   const brief = buildLaneSessionBrief({
     deadlineSeconds: parsed.data.deadlineSeconds,
@@ -68,13 +83,20 @@ export function vexCompleteReflection(
   rawInput: CompleteReflectionInput,
   gate?: ActionGate,
 ): VexActionResult {
-  const gateResult = checkFeatureGate('complete_reflection', gate ?? null);
+  const gateResult = checkFeatureGate("complete_reflection", gate ?? null);
   if (gateResult) return gateResult;
 
   const parsed = CompleteReflectionInputSchema.safeParse(rawInput);
-  if (!parsed.success) return validationError('complete_reflection', parsed.error.message);
+  if (!parsed.success)
+    return validationError("complete_reflection", parsed.error.message);
 
-  const { summary: inputSummary, lane, reflectionAnswer, isComeback, userId } = parsed.data;
+  const {
+    summary: inputSummary,
+    lane,
+    reflectionAnswer,
+    isComeback,
+    userId,
+  } = parsed.data;
   const now = Date.now();
 
   try {
@@ -98,8 +120,9 @@ export function vexCompleteReflection(
       penaltiesApplied: [],
       plannedDuration: inputSummary.effectiveDuration,
       sessionId: inputSummary.sessionId,
-      sessionMode: (inputSummary.sessionMode ?? 'FLOW') as SessionSummary['sessionMode'],
-      status: inputSummary.status as SessionSummary['status'],
+      sessionMode: (inputSummary.sessionMode ??
+        "FLOW") as SessionSummary["sessionMode"],
+      status: inputSummary.status as SessionSummary["status"],
       streakDays: 0,
       streakIncreased: false,
       streakMaintained: true,
@@ -122,10 +145,10 @@ export function vexCompleteReflection(
     return success(result);
   } catch (err: unknown) {
     if (err instanceof z.ZodError) {
-      return validationError('complete_reflection', err.message);
+      return validationError("complete_reflection", err.message);
     }
-    const message = err instanceof Error ? err.message : 'Unknown error';
-    return repoError('complete_reflection', message);
+    const message = err instanceof Error ? err.message : "Unknown error";
+    return repoError("complete_reflection", message);
   }
 }
 
@@ -133,11 +156,12 @@ export function vexStartRescue(
   rawInput: StartRescueInput,
   gate?: ActionGate,
 ): VexActionResult {
-  const gateResult = checkFeatureGate('start_rescue', gate ?? null);
+  const gateResult = checkFeatureGate("start_rescue", gate ?? null);
   if (gateResult) return gateResult;
 
   const parsed = StartRescueInputSchema.safeParse(rawInput);
-  if (!parsed.success) return validationError('start_rescue', parsed.error.message);
+  if (!parsed.success)
+    return validationError("start_rescue", parsed.error.message);
 
   const plan = createRescuePlan({
     durationSeconds: parsed.data.durationSeconds,
@@ -156,7 +180,8 @@ export function vexUpdateLaneOverride(
   void gate;
 
   const parsed = UpdateLaneOverrideInputSchema.safeParse(rawInput);
-  if (!parsed.success) return validationError('update_lane_override', parsed.error.message);
+  if (!parsed.success)
+    return validationError("update_lane_override", parsed.error.message);
 
   const profile = resolveInitialLane({
     manualOverride: parsed.data.manualOverride,

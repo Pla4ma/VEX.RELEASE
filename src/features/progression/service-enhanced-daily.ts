@@ -1,6 +1,6 @@
-import { z } from 'zod';
-import { fetchXpHistory } from './repository';
-import { fetchXpStats } from './repository/enhanced';
+import { z } from "zod";
+import { fetchXpHistory } from "./repository";
+import { fetchXpStats } from "./repository/enhanced";
 
 const DailyProgressSchema = z.object({
   date: z.number(),
@@ -33,7 +33,9 @@ export async function getDailyProgress(userId: string): Promise<DailyProgress> {
     const xpEarned = history.reduce((sum, entry) => sum + entry.amount, 0);
     const sessionsCompleted = new Set(
       history
-        .filter((entry) => entry.source === 'SESSION_COMPLETE' && entry.sessionId)
+        .filter(
+          (entry) => entry.source === "SESSION_COMPLETE" && entry.sessionId,
+        )
         .map((entry) => entry.sessionId),
     ).size;
     const dailyGoal = 100;
@@ -51,7 +53,7 @@ export async function getDailyProgress(userId: string): Promise<DailyProgress> {
       goalProgressPercent,
     });
   } catch (_error) {
-    const statsResult = await fetchXpStats(userId, 'day').catch(() => null);
+    const statsResult = await fetchXpStats(userId, "day").catch(() => null);
 
     if (statsResult?.error || !statsResult?.data) {
       return emptyDailyProgress(startOfDay);
@@ -75,4 +77,3 @@ export async function getDailyProgress(userId: string): Promise<DailyProgress> {
     });
   }
 }
-

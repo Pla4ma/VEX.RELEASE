@@ -1,7 +1,7 @@
-import React from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { useTheme } from '../../../theme/ThemeContext';
-import type { RescueEligibilityResult } from '../schemas';
+import React from "react";
+import { Pressable, Text, View } from "react-native";
+import { useTheme } from "../../../theme/ThemeContext";
+import type { RescueEligibilityResult } from "../schemas";
 
 interface RescueBannerProps {
   eligibility: RescueEligibilityResult;
@@ -15,8 +15,8 @@ export function RescueBanner({
   eligibility,
   onStartRescue,
   onDismiss,
-  accessibilityLabel = 'Rescue mode available. Tap to start a short focus block.',
-  accessibilityHint = 'Opens a low-pressure 5 to 12 minute rescue session.',
+  accessibilityLabel = "Rescue mode available. Tap to start a short focus block.",
+  accessibilityHint = "Opens a low-pressure 5 to 12 minute rescue session.",
 }: RescueBannerProps) {
   const { theme } = useTheme();
   const { colors } = theme;
@@ -41,7 +41,7 @@ export function RescueBanner({
       <Text
         style={{
           fontSize: 15,
-          fontWeight: '600',
+          fontWeight: "600",
           color: colors.semantic.primary,
         }}
         accessibilityRole="header"
@@ -56,13 +56,13 @@ export function RescueBanner({
           color: colors.semantic.textPrimary,
         }}
       >
-        A {minutes}-minute rescue block is available. No pressure, no judgment — just
-        one small action to keep moving forward.
+        A {minutes}-minute rescue block is available. No pressure, no judgment —
+        just one small action to keep moving forward.
       </Text>
 
       <View
         style={{
-          flexDirection: 'row',
+          flexDirection: "row",
           gap: theme.spacing[3],
           marginTop: theme.spacing[1],
         }}
@@ -79,15 +79,15 @@ export function RescueBanner({
             borderRadius: theme.borderRadius.md,
             backgroundColor: colors.semantic.primary,
             opacity: pressed ? 0.85 : 1,
-            alignItems: 'center' as const,
+            alignItems: "center" as const,
             minHeight: 44,
-            justifyContent: 'center' as const,
+            justifyContent: "center" as const,
           })}
         >
           <Text
             style={{
               fontSize: 14,
-              fontWeight: '600',
+              fontWeight: "600",
               color: colors.text.inverse,
             }}
           >
@@ -106,13 +106,13 @@ export function RescueBanner({
             borderRadius: theme.borderRadius.md,
             opacity: pressed ? 0.6 : 1,
             minHeight: 44,
-            justifyContent: 'center' as const,
+            justifyContent: "center" as const,
           })}
         >
           <Text
             style={{
               fontSize: 13,
-              fontWeight: '500',
+              fontWeight: "500",
               color: colors.semantic.textMuted,
             }}
           >

@@ -1,6 +1,13 @@
 import React, { useState, useCallback } from "react";
 import { Pressable, Dimensions } from "react-native";
-import Animated, { FadeIn, FadeOut, useAnimatedStyle, withSpring, withSequence, withTiming } from "react-native-reanimated";
+import Animated, {
+  FadeIn,
+  FadeOut,
+  useAnimatedStyle,
+  withSpring,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
@@ -25,13 +32,24 @@ interface Tooltip {
   arrowDirection: "up" | "down" | "left" | "right";
 }
 
-function TooltipBubble({ tooltip, isActive, onDismiss }: { tooltip: Tooltip; isActive: boolean; onDismiss: () => void }): JSX.Element | null {
+function TooltipBubble({
+  tooltip,
+  isActive,
+  onDismiss,
+}: {
+  tooltip: Tooltip;
+  isActive: boolean;
+  onDismiss: () => void;
+}): JSX.Element | null {
   const { theme } = useTheme();
 
   const bounceStyle = useAnimatedStyle(() => ({
     transform: [
       {
-        scale: withSequence(withTiming(0.8, { duration: 100 }), withSpring(1, { damping: 12, stiffness: 200 })),
+        scale: withSequence(
+          withTiming(0.8, { duration: 100 }),
+          withSpring(1, { damping: 12, stiffness: 200 }),
+        ),
       },
     ],
   }));
@@ -55,7 +73,12 @@ function TooltipBubble({ tooltip, isActive, onDismiss }: { tooltip: Tooltip; isA
         bounceStyle,
       ]}
     >
-      <Pressable onPress={onDismiss} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control">
+      <Pressable
+        onPress={onDismiss}
+        accessibilityLabel="Interactive control"
+        accessibilityRole="button"
+        accessibilityHint="Activates this control"
+      >
         <Box
           p="lg"
           borderRadius="xl"
@@ -70,7 +93,12 @@ function TooltipBubble({ tooltip, isActive, onDismiss }: { tooltip: Tooltip; isA
             elevation: 8,
           }}
         >
-          <Box flexDirection="row" justifyContent="space-between" alignItems="center" mb="sm">
+          <Box
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            mb="sm"
+          >
             <Text variant="caption" color="primary.500" fontWeight="700">
               Tip {tooltip.id} of 3
             </Text>
@@ -104,8 +132,14 @@ function TooltipBubble({ tooltip, isActive, onDismiss }: { tooltip: Tooltip; isA
             borderBottomWidth: tooltip.arrowDirection === "up" ? 10 : 0,
             borderLeftColor: "transparent",
             borderRightColor: "transparent",
-            borderTopColor: tooltip.arrowDirection === "up" ? theme.colors.primary[500] : "transparent",
-            borderBottomColor: tooltip.arrowDirection === "up" ? "transparent" : theme.colors.primary[500],
+            borderTopColor:
+              tooltip.arrowDirection === "up"
+                ? theme.colors.primary[500]
+                : "transparent",
+            borderBottomColor:
+              tooltip.arrowDirection === "up"
+                ? "transparent"
+                : theme.colors.primary[500],
           }}
         />
       </Pressable>
@@ -113,7 +147,13 @@ function TooltipBubble({ tooltip, isActive, onDismiss }: { tooltip: Tooltip; isA
   );
 }
 
-function TooltipOverlay({ isVisible, onPress }: { isVisible: boolean; onPress: () => void }): JSX.Element {
+function TooltipOverlay({
+  isVisible,
+  onPress,
+}: {
+  isVisible: boolean;
+  onPress: () => void;
+}): JSX.Element {
   const { theme } = useTheme();
 
   if (!isVisible) {
@@ -134,19 +174,30 @@ function TooltipOverlay({ isVisible, onPress }: { isVisible: boolean; onPress: (
         zIndex: 1000,
       }}
     >
-      <Pressable onPress={onPress} style={{ flex: 1 }} accessibilityLabel="Interactive control" accessibilityRole="button" accessibilityHint="Activates this control" />
+      <Pressable
+        onPress={onPress}
+        style={{ flex: 1 }}
+        accessibilityLabel="Interactive control"
+        accessibilityRole="button"
+        accessibilityHint="Activates this control"
+      />
     </Animated.View>
   );
 }
 
-export function TooltipSequence({ hasStreak: _hasStreak, hasBoss, onComplete }: TooltipSequenceProps): JSX.Element {
+export function TooltipSequence({
+  hasStreak: _hasStreak,
+  hasBoss,
+  onComplete,
+}: TooltipSequenceProps): JSX.Element {
   const [currentTooltipIndex, setCurrentTooltipIndex] = useState(0);
 
   const tooltips: Tooltip[] = [
     {
       id: 1,
       title: "Build Your Streak",
-      message: "Complete one session per day to build your streak. The longer your streak, the bigger your XP multiplier!",
+      message:
+        "Complete one session per day to build your streak. The longer your streak, the bigger your XP multiplier!",
       target: "streak",
       position: { x: SCREEN_WIDTH / 2 - 130, y: 180 },
       arrowDirection: "up",
@@ -156,7 +207,8 @@ export function TooltipSequence({ hasStreak: _hasStreak, hasBoss, onComplete }: 
           {
             id: 2,
             title: "Defeat Bosses",
-            message: "Bosses give bonus XP. Each session deals damage. Defeat them before they escape!",
+            message:
+              "Bosses give bonus XP. Each session deals damage. Defeat them before they escape!",
             target: "boss" as const,
             position: { x: SCREEN_WIDTH / 2 - 130, y: 320 },
             arrowDirection: "down" as const,
@@ -166,7 +218,8 @@ export function TooltipSequence({ hasStreak: _hasStreak, hasBoss, onComplete }: 
     {
       id: hasBoss ? 3 : 2,
       title: "Complete Challenges",
-      message: "Daily and weekly challenges give bonus rewards. Check back often for new quests!",
+      message:
+        "Daily and weekly challenges give bonus rewards. Check back often for new quests!",
       target: "challenges" as const,
       position: { x: SCREEN_WIDTH / 2 - 130, y: 450 },
       arrowDirection: "down" as const,
@@ -190,7 +243,11 @@ export function TooltipSequence({ hasStreak: _hasStreak, hasBoss, onComplete }: 
   return (
     <>
       <TooltipOverlay isVisible={true} onPress={handleDismiss} />
-      <TooltipBubble tooltip={currentTooltip} isActive={true} onDismiss={handleDismiss} />
+      <TooltipBubble
+        tooltip={currentTooltip}
+        isActive={true}
+        onDismiss={handleDismiss}
+      />
     </>
   );
 }

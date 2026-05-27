@@ -1,17 +1,17 @@
-import { captureSilentFailure } from '../utils/silent-failure';
+import { captureSilentFailure } from "../utils/silent-failure";
 /**
  * Storage Manager
  *
  * Unified storage interface with automatic fallback.
  */
 
-import { MMKVStorage, getMMKVStorage } from './MMKVStorage';
-import { getDefaultStorageAdapter } from './MMKVStorageAdapter';
-import type { StorageAdapter, StorageOptions } from './StorageAdapter';
-import type { Nullable } from '../types/global';
-import { createDebugger } from '../utils/debug';
+import { MMKVStorage, getMMKVStorage } from "./MMKVStorage";
+import { getDefaultStorageAdapter } from "./MMKVStorageAdapter";
+import type { StorageAdapter, StorageOptions } from "./StorageAdapter";
+import type { Nullable } from "../types/global";
+import { createDebugger } from "../utils/debug";
 
-const debug = createDebugger('storage');
+const debug = createDebugger("storage");
 
 /**
  * Storage manager configuration
@@ -53,7 +53,10 @@ export class StorageManager implements StorageAdapter {
         this.active = mmkv;
         return;
       } catch (error) {
-        debug.warn('MMKV initialization failed, falling back to MMKV:', error as Error);
+        debug.warn(
+          "MMKV initialization failed, falling back to MMKV:",
+          error as Error,
+        );
       }
     }
 
@@ -64,7 +67,7 @@ export class StorageManager implements StorageAdapter {
       this.active = mmkvAdapter;
       this.useFallback = true;
     } catch (error) {
-      debug.error('All storage adapters failed:', error as Error);
+      debug.error("All storage adapters failed:", error as Error);
       throw error;
     }
   }
@@ -74,7 +77,9 @@ export class StorageManager implements StorageAdapter {
    */
   private checkInitialized(): void {
     if (!this.active) {
-      throw new Error('StorageManager not initialized. Call initialize() first.');
+      throw new Error(
+        "StorageManager not initialized. Call initialize() first.",
+      );
     }
   }
 
@@ -126,10 +131,17 @@ export class StorageManager implements StorageAdapter {
    */
   async getJSON<T>(key: string): Promise<Nullable<T>> {
     const json = await this.getItem(key);
-    if (!json) {return null;}
+    if (!json) {
+      return null;
+    }
     try {
       return JSON.parse(json) as T;
-    } catch (error) { captureSilentFailure(error, { feature: 'persistence', operation: 'safe-fallback', type: 'data' });
+    } catch (error) {
+      captureSilentFailure(error, {
+        feature: "persistence",
+        operation: "safe-fallback",
+        type: "data",
+      });
       return null;
     }
   }
@@ -152,7 +164,7 @@ export class StorageManager implements StorageAdapter {
     const keys = await this.getAllKeys();
     const size = await this.getSize();
     return {
-      adapter: this.useFallback ? 'MMKVStorageAdapter' : 'MMKV',
+      adapter: this.useFallback ? "MMKVStorageAdapter" : "MMKV",
       keys: keys.length,
       size,
     };
@@ -164,10 +176,11 @@ export class StorageManager implements StorageAdapter {
  */
 let storageManagerInstance: StorageManager | null = null;
 
-export function getStorageManager(config?: StorageManagerConfig): StorageManager {
+export function getStorageManager(
+  config?: StorageManagerConfig,
+): StorageManager {
   if (!storageManagerInstance) {
     storageManagerInstance = new StorageManager(config);
   }
   return storageManagerInstance;
 }
-

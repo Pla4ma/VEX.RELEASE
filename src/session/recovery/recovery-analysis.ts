@@ -26,9 +26,7 @@ export function evaluateRecovery(
     case "USER_RESUME":
       return totalPenalty < maxAcceptablePenalty;
     case "STREAK_SAVE":
-      return (
-        session.completionPercentage >= partialCreditThreshold * 100
-      );
+      return session.completionPercentage >= partialCreditThreshold * 100;
     case "PARTIAL_CREDIT":
       return session.effectiveTime > session.config.duration * 1000 * 0.15;
     case "FULL_RESET":
@@ -116,8 +114,7 @@ export function canProtectStreak(
   if (session.completionPercentage >= 50) {
     return { canProtect: true, protectionType: "STREAK_FREEZE" };
   }
-  const minTime =
-    session.config.duration * 1000 * partialCreditThreshold;
+  const minTime = session.config.duration * 1000 * partialCreditThreshold;
   if (session.effectiveTime >= minTime) {
     return { canProtect: true, protectionType: "GRACE_PERIOD" };
   }

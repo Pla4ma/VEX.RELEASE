@@ -4,24 +4,19 @@
  * Button with icon-only display for compact actions.
  */
 
-import React from 'react';
-import {
-  Pressable,
-  type ViewStyle,
-  type PressableProps,
-} from 'react-native';
-import { Text } from './primitives';
-import { createSheet } from '@/shared/ui/create-sheet';
-import { launchColors } from '@theme/tokens/launch-colors';
-
+import React from "react";
+import { Pressable, type ViewStyle, type PressableProps } from "react-native";
+import { Text } from "./primitives";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
 
 export interface IconButtonProps extends PressableProps {
   /** Icon to display (emoji or text character) */
   icon: string;
   /** Button size variant */
-  size?: 'sm' | 'md' | 'lg';
+  size?: "sm" | "md" | "lg";
   /** Button variant */
-  variant?: 'default' | 'primary' | 'ghost';
+  variant?: "default" | "primary" | "ghost";
   /** Custom styles */
   style?: ViewStyle;
 }
@@ -40,8 +35,8 @@ const ICON_SIZE_MAP = {
 
 export const IconButton: React.FC<IconButtonProps> = ({
   icon,
-  size = 'md',
-  variant = 'default',
+  size = "md",
+  variant = "default",
   style,
   ...props
 }) => {
@@ -51,16 +46,19 @@ export const IconButton: React.FC<IconButtonProps> = ({
   const buttonStyle = [
     styles.button,
     { width: buttonSize, height: buttonSize },
-    variant === 'primary' && styles.primary,
-    variant === 'ghost' && styles.ghost,
+    variant === "primary" && styles.primary,
+    variant === "ghost" && styles.ghost,
     style,
   ];
 
   return (
-    <Pressable style={({ pressed }) => [...buttonStyle, pressed && { opacity: 0.7 }]} {...props}
+    <Pressable
+      style={({ pressed }) => [...buttonStyle, pressed && { opacity: 0.7 }]}
+      {...props}
       accessibilityLabel="Interactive control"
       accessibilityRole="button"
-      accessibilityHint="Activates this control">
+      accessibilityHint="Activates this control"
+    >
       <Text style={[styles.icon, { fontSize: iconSize }]}>{icon}</Text>
     </Pressable>
   );
@@ -70,17 +68,17 @@ const styles = createSheet({
   button: {
     borderRadius: 8,
     backgroundColor: launchColors.hex_f1f5f9,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   primary: {
     backgroundColor: launchColors.hex_6366f1,
   },
   ghost: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   icon: {
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 

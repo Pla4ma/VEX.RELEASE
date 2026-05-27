@@ -1,19 +1,22 @@
-import { z } from 'zod';
-import { getSupabaseClient } from '../../config/supabase';
-import { PersonalBestCandidateSchema, PersonalBestRowSchema } from './schemas';
+import { z } from "zod";
+import { getSupabaseClient } from "../../config/supabase";
+import { PersonalBestCandidateSchema, PersonalBestRowSchema } from "./schemas";
 import type {
   DurationBucket,
   PersonalBest,
   PersonalBestCandidate,
   PersonalBestTableInsert,
   PersonalBestTableUpdate,
-} from './types';
-import type { SessionMode } from '../../session/modes';
+} from "./types";
+import type { SessionMode } from "../../session/modes";
 
 export class PersonalBestsRepositoryError extends Error {
-  constructor(operation: string, public readonly cause?: unknown) {
+  constructor(
+    operation: string,
+    public readonly cause?: unknown,
+  ) {
     super(`PersonalBestsRepository ${operation} failed`);
-    this.name = 'PersonalBestsRepositoryError';
+    this.name = "PersonalBestsRepositoryError";
   }
 }
 
@@ -39,28 +42,34 @@ export async function getPersonalBest(
 ): Promise<PersonalBest | null> {
   try {
     const { data, error } = await getSupabaseClient()
-      .from('personal_bests')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('session_mode', sessionMode)
-      .eq('duration_bucket', durationBucket)
+      .from("personal_bests")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("session_mode", sessionMode)
+      .eq("duration_bucket", durationBucket)
       .maybeSingle();
     if (error) {
-      throw new PersonalBestsRepositoryError('getPersonalBest', error);
+      throw new PersonalBestsRepositoryError("getPersonalBest", error);
     }
     return data ? mapRow(data) : null;
   } catch (error) {
     if (error instanceof PersonalBestsRepositoryError) {
       throw error;
     }
-    throw new PersonalBestsRepositoryError('getPersonalBest', error);
+    throw new PersonalBestsRepositoryError("getPersonalBest", error);
   }
 }
 
-export async function upsertPersonalBest(candidate: PersonalBestCandidate): Promise<PersonalBest> {
+export async function upsertPersonalBest(
+  candidate: PersonalBestCandidate,
+): Promise<PersonalBest> {
   try {
     const parsed = PersonalBestCandidateSchema.parse(candidate);
-    const current = await getPersonalBest(parsed.userId, parsed.sessionMode, parsed.durationBucket);
+    const current = await getPersonalBest(
+      parsed.userId,
+      parsed.sessionMode,
+      parsed.durationBucket,
+    );
     if (current && parsed.bestPurityScore <= current.bestPurityScore) {
       return current;
     }
@@ -68,12 +77,12 @@ export async function upsertPersonalBest(candidate: PersonalBestCandidate): Prom
     if (!current) {
       const row: PersonalBestTableInsert = toInsert(parsed, now);
       const { data, error } = await getSupabaseClient()
-        .from('personal_bests')
+        .from("personal_bests")
         .insert(row)
-        .select('*')
+        .select("*")
         .single();
       if (error) {
-        throw new PersonalBestsRepositoryError('upsertPersonalBest', error);
+        throw new PersonalBestsRepositoryError("upsertPersonalBest", error);
       }
       return mapRow(data);
     }
@@ -85,43 +94,51 @@ export async function upsertPersonalBest(candidate: PersonalBestCandidate): Prom
       updated_at: now,
     };
     const { data, error } = await getSupabaseClient()
-      .from('personal_bests')
+      .from("personal_bests")
       .update(patch)
-      .eq('id', current.id)
-      .select('*')
+      .eq("id", current.id)
+      .select("*")
       .single();
     if (error) {
-      throw new PersonalBestsRepositoryError('upsertPersonalBest', error);
+      throw new PersonalBestsRepositoryError("upsertPersonalBest", error);
     }
     return mapRow(data);
   } catch (error) {
     if (error instanceof PersonalBestsRepositoryError) {
       throw error;
     }
-    throw new PersonalBestsRepositoryError('upsertPersonalBest', error);
+    throw new PersonalBestsRepositoryError("upsertPersonalBest", error);
   }
 }
 
-export async function getUserPersonalBests(userId: string): Promise<PersonalBest[]> {
+export async function getUserPersonalBests(
+  userId: string,
+): Promise<PersonalBest[]> {
   try {
     const { data, error } = await getSupabaseClient()
-      .from('personal_bests')
-      .select('*')
-      .eq('user_id', userId)
-      .order('updated_at', { ascending: false });
+      .from("personal_bests")
+      .select("*")
+      .eq("user_id", userId)
+      .order("updated_at", { ascending: false });
     if (error) {
-      throw new PersonalBestsRepositoryError('getUserPersonalBests', error);
+      throw new PersonalBestsRepositoryError("getUserPersonalBests", error);
     }
-    return z.array(PersonalBestRowSchema).parse(data ?? []).map(mapRow);
+    return z
+      .array(PersonalBestRowSchema)
+      .parse(data ?? [])
+      .map(mapRow);
   } catch (error) {
     if (error instanceof PersonalBestsRepositoryError) {
       throw error;
     }
-    throw new PersonalBestsRepositoryError('getUserPersonalBests', error);
+    throw new PersonalBestsRepositoryError("getUserPersonalBests", error);
   }
 }
 
-function toInsert(candidate: PersonalBestCandidate, now: string): PersonalBestTableInsert {
+function toInsert(
+  candidate: PersonalBestCandidate,
+  now: string,
+): PersonalBestTableInsert {
   return {
     achieved_at: now,
     best_grade: candidate.bestGrade,

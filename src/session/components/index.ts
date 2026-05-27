@@ -12,9 +12,7 @@ export {
 } from "./BossDamagePreview";
 export { InterruptionWarning } from "./InterruptionWarning";
 export { PurityHUD } from "./PurityHUD";
-export {
-  QualityIndicator,
-} from "./QualityIndicator";
+export { QualityIndicator } from "./QualityIndicator";
 export {
   type QualityIndicatorProps,
   type QualityGrade,

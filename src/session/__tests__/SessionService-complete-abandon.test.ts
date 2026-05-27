@@ -1,4 +1,8 @@
-import { createService, getSessionOrchestrator, type SessionConfig } from "./SessionService.helpers";
+import {
+  createService,
+  getSessionOrchestrator,
+  type SessionConfig,
+} from "./SessionService.helpers";
 
 describe("SessionService", () => {
   let service: ReturnType<typeof createService>;
@@ -73,7 +77,9 @@ describe("SessionService", () => {
       mockOrchestrator.getSessionStatus.mockReturnValue({ status: "active" });
       mockOrchestrator.abandonSession.mockResolvedValue(undefined);
       await service.abandonSession("user_cancelled");
-      expect(mockOrchestrator.abandonSession).toHaveBeenCalledWith("user_cancelled");
+      expect(mockOrchestrator.abandonSession).toHaveBeenCalledWith(
+        "user_cancelled",
+      );
     });
 
     it("should not award streak credit when abandoned", async () => {
@@ -83,7 +89,9 @@ describe("SessionService", () => {
     });
 
     it("should throw error when abandoning completed session", async () => {
-      mockOrchestrator.getSessionStatus.mockReturnValue({ status: "completed" });
+      mockOrchestrator.getSessionStatus.mockReturnValue({
+        status: "completed",
+      });
       mockOrchestrator.abandonSession.mockRejectedValue(
         new Error("Cannot abandon completed session"),
       );
@@ -110,8 +118,12 @@ describe("SessionService", () => {
         category: "focus",
         tags: ["work"],
       };
-      mockOrchestrator.createSession.mockRejectedValue(new Error("Network error"));
-      await expect(service.createCustomSession(validConfig)).rejects.toThrow("Network error");
+      mockOrchestrator.createSession.mockRejectedValue(
+        new Error("Network error"),
+      );
+      await expect(service.createCustomSession(validConfig)).rejects.toThrow(
+        "Network error",
+      );
     });
 
     it("should retry queued sessions when connection restored", async () => {

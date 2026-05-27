@@ -1,18 +1,34 @@
 import { PENALTY_CONSTANTS, severityRankings } from "./penalty-constants";
 import type {
-  PausePenaltyInput, InterruptionSeverity, InterruptionPenaltyInput,
-  QualityPenaltyInput, AntiCheatViolationType, AntiCheatPenaltyInput,
-  AbandonPenaltyInput, AbandonPenaltyResult, TotalPenaltyInput,
-  PenaltyAction, InterruptionPenaltyResult, AntiCheatPenaltyResult,
+  PausePenaltyInput,
+  InterruptionSeverity,
+  InterruptionPenaltyInput,
+  QualityPenaltyInput,
+  AntiCheatViolationType,
+  AntiCheatPenaltyInput,
+  AbandonPenaltyInput,
+  AbandonPenaltyResult,
+  TotalPenaltyInput,
+  PenaltyAction,
+  InterruptionPenaltyResult,
+  AntiCheatPenaltyResult,
   TotalPenaltyResult,
 } from "./penalty-types";
 
 export { PENALTY_CONSTANTS, severityRankings };
 export type {
-  PausePenaltyInput, InterruptionSeverity, InterruptionPenaltyInput,
-  QualityPenaltyInput, AntiCheatViolationType, AntiCheatPenaltyInput,
-  AbandonPenaltyInput, AbandonPenaltyResult, TotalPenaltyInput,
-  PenaltyAction, InterruptionPenaltyResult, AntiCheatPenaltyResult,
+  PausePenaltyInput,
+  InterruptionSeverity,
+  InterruptionPenaltyInput,
+  QualityPenaltyInput,
+  AntiCheatViolationType,
+  AntiCheatPenaltyInput,
+  AbandonPenaltyInput,
+  AbandonPenaltyResult,
+  TotalPenaltyInput,
+  PenaltyAction,
+  InterruptionPenaltyResult,
+  AntiCheatPenaltyResult,
   TotalPenaltyResult,
 };
 
@@ -64,7 +80,9 @@ export function calculateInterruptionPenalty(
   };
 }
 
-export function getSeverityFromTimeLost(timeLostSeconds: number): InterruptionSeverity {
+export function getSeverityFromTimeLost(
+  timeLostSeconds: number,
+): InterruptionSeverity {
   if (timeLostSeconds > 300) return "CRITICAL";
   if (timeLostSeconds > 120) return "MAJOR";
   if (timeLostSeconds > 30) return "MODERATE";
@@ -90,7 +108,9 @@ export function calculateQualityPenalty(input: QualityPenaltyInput): number {
   return penalty;
 }
 
-export function calculateAntiCheatPenalty(input: AntiCheatPenaltyInput): AntiCheatPenaltyResult {
+export function calculateAntiCheatPenalty(
+  input: AntiCheatPenaltyInput,
+): AntiCheatPenaltyResult {
   const basePenalties: Record<AntiCheatViolationType, number> = {
     TIME_MANIPULATION: PENALTY_CONSTANTS.TIME_MANIPULATION_PENALTY,
     DEVICE_CHANGE: PENALTY_CONSTANTS.DEVICE_CHANGE_PENALTY,
@@ -159,7 +179,9 @@ export function calculateAbandonPenalty(
   };
 }
 
-export function calculateTotalPenalty(input: TotalPenaltyInput): TotalPenaltyResult {
+export function calculateTotalPenalty(
+  input: TotalPenaltyInput,
+): TotalPenaltyResult {
   const {
     pausePenalty,
     interruptionPenalty,

@@ -1,4 +1,4 @@
-import type { Progression, XpBreakdown } from './schemas';
+import type { Progression, XpBreakdown } from "./schemas";
 
 export interface AddXpOperationResult {
   success: boolean;
@@ -14,7 +14,7 @@ export interface AddXpOperationResult {
 }
 
 export interface ProgressionError {
-  code: 'VALIDATION' | 'NETWORK' | 'CONFLICT' | 'UNKNOWN' | 'RATE_LIMIT';
+  code: "VALIDATION" | "NETWORK" | "CONFLICT" | "UNKNOWN" | "RATE_LIMIT";
   message: string;
   retryable: boolean;
   context?: Record<string, unknown>;

@@ -1,5 +1,9 @@
 import { launchColors } from "@theme/tokens/launch-colors";
-import type { FeatureUnlockGate, OnboardingStep, StepContent } from "./onboarding-types";
+import type {
+  FeatureUnlockGate,
+  OnboardingStep,
+  StepContent,
+} from "./onboarding-types";
 
 export const STEP_ORDER: OnboardingStep[] = [
   "WELCOME",
@@ -123,7 +127,8 @@ export const STEP_CONTENT: Record<OnboardingStep, StepContent> = {
     primaryAction: "Try It Out",
     secondaryAction: "Later",
     showSkip: true,
-    content: "New systems unlock as VEX learns your rhythm. Keep going to discover more.",
+    content:
+      "New systems unlock as VEX learns your rhythm. Keep going to discover more.",
   },
   COMPLETE: {
     step: "COMPLETE",

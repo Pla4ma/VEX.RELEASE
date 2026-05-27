@@ -4,28 +4,43 @@
  * Utility functions for working with achievements.
  */
 
-import type { Achievement, AchievementCategory, AchievementRarity } from '../types';
-import { RARITY_CONFIG } from './rarity-config';
+import type {
+  Achievement,
+  AchievementCategory,
+  AchievementRarity,
+} from "../types";
+import { RARITY_CONFIG } from "./rarity-config";
 
-export function getAchievementById(achievements: Achievement[], id: string): Achievement | undefined {
+export function getAchievementById(
+  achievements: Achievement[],
+  id: string,
+): Achievement | undefined {
   return achievements.find((a: Achievement) => a.id === id);
 }
 
-export function getAchievementsByCategory(achievements: Achievement[], category: AchievementCategory): Achievement[] {
+export function getAchievementsByCategory(
+  achievements: Achievement[],
+  category: AchievementCategory,
+): Achievement[] {
   return achievements.filter((a: Achievement) => a.category === category);
 }
 
-export function getAchievementsByRarity(achievements: Achievement[], rarity: AchievementRarity): Achievement[] {
+export function getAchievementsByRarity(
+  achievements: Achievement[],
+  rarity: AchievementRarity,
+): Achievement[] {
   return achievements.filter((a: Achievement) => a.rarity === rarity);
 }
 
-export function getVisibleAchievements(achievements: Achievement[]): Achievement[] {
+export function getVisibleAchievements(
+  achievements: Achievement[],
+): Achievement[] {
   return achievements.filter((a: Achievement) => !a.isHidden);
 }
 
 export function getAchievementDisplayInfo(
   achievement: Achievement,
-  isUnlocked: boolean
+  isUnlocked: boolean,
 ): {
   title: string;
   description: string;
@@ -33,11 +48,12 @@ export function getAchievementDisplayInfo(
 } {
   if (achievement.isHidden && !isUnlocked) {
     return {
-      title: '???',
-      description: achievement.rarity === 'LEGENDARY'
-        ? 'This achievement is rumored to exist...'
-        : 'This achievement is a mystery...',
-      icon: '❓',
+      title: "???",
+      description:
+        achievement.rarity === "LEGENDARY"
+          ? "This achievement is rumored to exist..."
+          : "This achievement is a mystery...",
+      icon: "❓",
     };
   }
 
@@ -56,14 +72,21 @@ export function getRarityPoints(rarity: AchievementRarity): number {
   return RARITY_CONFIG[rarity].points;
 }
 
-export function calculateTotalAchievementPoints(achievements: Achievement[]): number {
-  return achievements.reduce((sum: number, a: Achievement) => sum + a.pointValue, 0);
+export function calculateTotalAchievementPoints(
+  achievements: Achievement[],
+): number {
+  return achievements.reduce(
+    (sum: number, a: Achievement) => sum + a.pointValue,
+    0,
+  );
 }
 
-export function getActiveAchievements(achievements: Achievement[]): Achievement[] {
+export function getActiveAchievements(
+  achievements: Achievement[],
+): Achievement[] {
   return achievements.filter((a: Achievement) => !a.isDeprecated);
 }
 
 export function isBehaviorBasedAchievement(achievement: Achievement): boolean {
-  return !achievement.isDeprecated && achievement.category !== 'ECONOMY';
+  return !achievement.isDeprecated && achievement.category !== "ECONOMY";
 }

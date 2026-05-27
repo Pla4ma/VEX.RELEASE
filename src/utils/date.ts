@@ -26,7 +26,7 @@ export function formatDistanceToNow(date: Date | string | number): string {
   const diffDays = Math.floor(diffHours / 24);
 
   if (diffSecs < 60) {
-    return 'just now';
+    return "just now";
   } else if (diffMins < 60) {
     return `${diffMins}m ago`;
   } else if (diffHours < 24) {
@@ -36,7 +36,7 @@ export function formatDistanceToNow(date: Date | string | number): string {
   } else if (diffDays < 30) {
     return `${Math.floor(diffDays / 7)}w ago`;
   } else {
-    return formatDate(targetDate, 'medium');
+    return formatDate(targetDate, "medium");
   }
 }
 
@@ -45,31 +45,31 @@ export function formatDistanceToNow(date: Date | string | number): string {
  */
 export function formatDate(
   date: Date | string | number,
-  format: 'short' | 'medium' | 'long' | 'full' = 'medium'
+  format: "short" | "medium" | "long" | "full" = "medium",
 ): string {
   const d = new Date(date);
 
   switch (format) {
-    case 'short':
-      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-    case 'medium':
-      return d.toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
+    case "short":
+      return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    case "medium":
+      return d.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
       });
-    case 'long':
-      return d.toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
+    case "long":
+      return d.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
       });
-    case 'full':
-      return d.toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
+    case "full":
+      return d.toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
       });
     default:
       return d.toLocaleDateString();
@@ -81,18 +81,21 @@ export function formatDate(
  */
 export function formatTime(
   date: Date | string | number,
-  format: 'short' | 'medium' = 'short'
+  format: "short" | "medium" = "short",
 ): string {
   const d = new Date(date);
 
-  if (format === 'short') {
-    return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+  if (format === "short") {
+    return d.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+    });
   }
 
-  return d.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    second: '2-digit',
+  return d.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    second: "2-digit",
   });
 }
 
@@ -101,7 +104,7 @@ export function formatTime(
  */
 export function formatDateTime(
   date: Date | string | number,
-  format: 'short' | 'medium' = 'medium'
+  format: "short" | "medium" = "medium",
 ): string {
   const d = new Date(date);
   const dateStr = formatDate(d, format);

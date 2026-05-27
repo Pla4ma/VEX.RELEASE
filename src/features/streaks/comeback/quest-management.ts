@@ -4,17 +4,19 @@
  * Functions to create, update, and manage comeback quests.
  */
 
-import { getSupabaseClient } from '../../../config/supabase';
-import { createDebugger } from '../../../utils/debug';
-import { checkComebackEligibility } from './eligibility';
-import { ComebackQuestSchema, type ComebackQuest } from './schemas';
+import { getSupabaseClient } from "../../../config/supabase";
+import { createDebugger } from "../../../utils/debug";
+import { checkComebackEligibility } from "./eligibility";
+import { ComebackQuestSchema, type ComebackQuest } from "./schemas";
 
-const debug = createDebugger('streaks:comeback-quest');
+const debug = createDebugger("streaks:comeback-quest");
 
 /**
  * Create comeback quest for user
  */
-export async function createComebackQuest(userId: string): Promise<ComebackQuest | null> {
+export async function createComebackQuest(
+  userId: string,
+): Promise<ComebackQuest | null> {
   try {
     const eligibility = await checkComebackEligibility(userId);
 
@@ -24,16 +26,16 @@ export async function createComebackQuest(userId: string): Promise<ComebackQuest
 
     // Check if active quest already exists
     const { data: existingQuest, error: checkError } = await getSupabaseClient()
-      .from('comeback_quests')
-      .select('*')
-      .eq('user_id', userId)
-      .eq('all_quests_completed', false)
-      .order('created_at', { ascending: false })
+      .from("comeback_quests")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("all_quests_completed", false)
+      .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
 
     if (checkError) {
-      debug.warn('Error checking existing quest', checkError);
+      debug.warn("Error checking existing quest", checkError);
     }
 
     if (existingQuest) {
@@ -57,10 +59,10 @@ export async function createComebackQuest(userId: string): Promise<ComebackQuest
 
     // Create new quest
     const { data: newQuest, error: insertError } = await getSupabaseClient()
-      .from('comeback_quests')
+      .from("comeback_quests")
       .insert({
         user_id: userId,
-        stage: 'QUEST_1',
+        stage: "QUEST_1",
         days_absent: eligibility.daysAbsent,
         streak_before_break: eligibility.streakBeforeBreak,
         quest1_completed: false,
@@ -76,11 +78,14 @@ export async function createComebackQuest(userId: string): Promise<ComebackQuest
       .single();
 
     if (insertError || !newQuest) {
-      debug.error('Failed to create comeback quest', insertError ?? undefined);
+      debug.error("Failed to create comeback quest", insertError ?? undefined);
       return null;
     }
 
-    debug.info('Created comeback quest', { userId, daysAbsent: eligibility.daysAbsent });
+    debug.info("Created comeback quest", {
+      userId,
+      daysAbsent: eligibility.daysAbsent,
+    });
 
     return ComebackQuestSchema.parse({
       id: newQuest.id,
@@ -98,7 +103,10 @@ export async function createComebackQuest(userId: string): Promise<ComebackQuest
       updatedAt: new Date(newQuest.updated_at).getTime(),
     });
   } catch (error) {
-    debug.error('Error creating comeback quest', error instanceof Error ? error : undefined);
+    debug.error(
+      "Error creating comeback quest",
+      error instanceof Error ? error : undefined,
+    );
     return null;
   }
 }

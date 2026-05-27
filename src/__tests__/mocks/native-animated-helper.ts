@@ -17,7 +17,10 @@ const API: Record<string, (...args: unknown[]) => unknown> = {
   removeAnimatedEventFromView: () => {},
   restoreDefaultValues: () => {},
   disableQueue: () => {},
-  startListeningToAnimatedNodeValue: () => ({ addListener: () => ({ remove: () => {} }), remove: () => {} }),
+  startListeningToAnimatedNodeValue: () => ({
+    addListener: () => ({ remove: () => {} }),
+    remove: () => {},
+  }),
   stopListeningToAnimatedNodeValue: () => {},
 };
 
@@ -53,6 +56,13 @@ const NativeAnimatedHelper = {
   transformDataType,
 };
 
-export { API, shouldUseNativeDriver, shouldSignalBatch, assertNativeAnimatedModule, transformDataType, generateNewAnimationId, generateNewNodeTag };
+export {
+  API,
+  shouldUseNativeDriver,
+  shouldSignalBatch,
+  assertNativeAnimatedModule,
+  transformDataType,
+  generateNewAnimationId,
+  generateNewNodeTag,
+};
 export default NativeAnimatedHelper;
-

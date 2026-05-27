@@ -149,7 +149,10 @@ export function BossCombatHUDView({
         </View>
       )}
       <Animated.View
-        style={[{ flexDirection: "row", alignItems: "center", gap: theme.spacing[2] }, cooldownStyle]}
+        style={[
+          { flexDirection: "row", alignItems: "center", gap: theme.spacing[2] },
+          cooldownStyle,
+        ]}
       >
         <Button
           variant="primary"
@@ -161,7 +164,9 @@ export function BossCombatHUDView({
           accessibilityRole="button"
           accessibilityHint="Uses the selected combat ability against the active boss"
         >
-          {isOnCooldown ? `${cooldownRemaining}s` : `${abilityIcon} ${abilityLabel}`}
+          {isOnCooldown
+            ? `${cooldownRemaining}s`
+            : `${abilityIcon} ${abilityLabel}`}
         </Button>
       </Animated.View>
     </View>

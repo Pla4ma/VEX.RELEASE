@@ -1,7 +1,7 @@
-import { z } from 'zod';
-import { createDebugger } from '../utils/debug';
+import { z } from "zod";
+import { createDebugger } from "../utils/debug";
 
-const debug = createDebugger('integration:streak-insurance-archived');
+const debug = createDebugger("integration:streak-insurance-archived");
 
 const StreakBrokenEventSchema = z.object({
   userId: z.string(),
@@ -19,7 +19,7 @@ export function initializeStreakInsuranceIntegration(): () => void {
     return cleanupSubscription;
   }
   cleanupSubscription = () => {};
-  debug.info('Streak insurance no-op — economy systems archived');
+  debug.info("Streak insurance no-op — economy systems archived");
   return () => {
     cleanupSubscription?.();
     cleanupSubscription = null;

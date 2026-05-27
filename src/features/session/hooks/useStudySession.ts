@@ -7,27 +7,33 @@
  * @phase 4
  */
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
-import { createDebugger } from '../../../utils/debug';
-import { getSessionOrchestrator } from '../../../session/orchestrator-factory';
-import { getCoachService } from '../../ai-coach/service';
-import type { SessionConfig, SessionState } from '../../../session/types';
-import { capture } from '../../../shared/analytics/analytics-service';
-import { SessionEvents } from '../../../shared/analytics/analytics-events';
-import { progressionService } from '../../../services/progressionService';
-import { streakService } from '../../../services/streakService';
-import { studySessionKeys, getSessionMode, getExpectedDuration } from './useStudySession.helpers';
-import { buildReturn } from './useStudySession.return';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { createDebugger } from "../../../utils/debug";
+import { getSessionOrchestrator } from "../../../session/orchestrator-factory";
+import { getCoachService } from "../../ai-coach/service";
+import type { SessionConfig, SessionState } from "../../../session/types";
+import { capture } from "../../../shared/analytics/analytics-service";
+import { SessionEvents } from "../../../shared/analytics/analytics-events";
+import { progressionService } from "../../../services/progressionService";
+import { streakService } from "../../../services/streakService";
+import {
+  studySessionKeys,
+  getSessionMode,
+  getExpectedDuration,
+} from "./useStudySession.helpers";
+import { buildReturn } from "./useStudySession.return";
 
-const debug = createDebugger('session:useStudySession');
+const debug = createDebugger("session:useStudySession");
 
 export function useStudySession() {
   const queryClient = useQueryClient();
   const orchestrator = getSessionOrchestrator();
   const coachService = getCoachService();
 
-  const [sessionConfig, setSessionConfig] = useState<SessionConfig | null>(null);
+  const [sessionConfig, setSessionConfig] = useState<SessionConfig | null>(
+    null,
+  );
 
   const currentSessionQuery = useQuery({
     queryKey: studySessionKeys.current(),
@@ -59,7 +65,7 @@ export function useStudySession() {
       return orchestrator.startSession();
     },
     onSuccess: (sessionState) => {
-      debug.info('Study session started', { sessionId: sessionState.id });
+      debug.info("Study session started", { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
 
@@ -75,7 +81,7 @@ export function useStudySession() {
   const pauseSessionMutation = useMutation({
     mutationFn: () => orchestrator.pauseSession(),
     onSuccess: (sessionState) => {
-      debug.info('Study session paused', { sessionId: sessionState.id });
+      debug.info("Study session paused", { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
 
@@ -91,7 +97,7 @@ export function useStudySession() {
   const resumeSessionMutation = useMutation({
     mutationFn: () => orchestrator.resumeSession(),
     onSuccess: (sessionState) => {
-      debug.info('Study session resumed', { sessionId: sessionState.id });
+      debug.info("Study session resumed", { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
 
@@ -107,13 +113,13 @@ export function useStudySession() {
   const endSessionMutation = useMutation({
     mutationFn: (reason?: string) => orchestrator.endSession(reason),
     onSuccess: async (sessionState) => {
-      debug.info('Study session ended', { sessionId: sessionState.id });
+      debug.info("Study session ended", { sessionId: sessionState.id });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.current() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.active() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.history() });
       queryClient.invalidateQueries({ queryKey: studySessionKeys.stats() });
 
-      if (sessionState.status === 'COMPLETED') {
+      if (sessionState.status === "COMPLETED") {
         await handleSessionRewards(sessionState);
         capture(SessionEvents.SESSION_COMPLETED, {
           session_id: sessionState.id,
@@ -128,7 +134,7 @@ export function useStudySession() {
           mode: getSessionMode(sessionState),
           duration_seconds: sessionState.elapsedTime,
           progress_percentage: sessionState.completionPercentage,
-          reason: 'user_abandoned',
+          reason: "user_abandoned",
         });
       }
     },
@@ -155,7 +161,7 @@ async function handleSessionRewards(sessionState: SessionState): Promise<void> {
   try {
     await progressionService.grantXP({
       amount: sessionState.finalScore ?? 0,
-      source: 'session_complete',
+      source: "session_complete",
       metadata: {
         session_id: sessionState.id,
         mode: getSessionMode(sessionState),
@@ -163,12 +169,12 @@ async function handleSessionRewards(sessionState: SessionState): Promise<void> {
       },
     });
   } catch (error) {
-    debug.error('Failed to grant XP:', error as Error);
+    debug.error("Failed to grant XP:", error as Error);
   }
 
   try {
     await streakService.updateStreak();
   } catch (error) {
-    debug.error('Failed to update streak:', error as Error);
+    debug.error("Failed to update streak:", error as Error);
   }
 }

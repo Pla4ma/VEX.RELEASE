@@ -13,14 +13,14 @@ import React, {
   useMemo,
   useState,
   type ReactNode,
-} from 'react';
-import { useColorScheme } from 'react-native';
+} from "react";
+import { useColorScheme } from "react-native";
 
-import type { Theme, ThemeContextValue, ThemeMode, ThemeConfig } from './types';
-import { createTheme } from './createTheme';
-import { ThemeService } from './ThemeService';
-import { defaultThemeConfig } from './config';
-import { captureException } from '../config/sentry';
+import type { Theme, ThemeContextValue, ThemeMode, ThemeConfig } from "./types";
+import { createTheme } from "./createTheme";
+import { ThemeService } from "./ThemeService";
+import { defaultThemeConfig } from "./config";
+import { captureException } from "../config/sentry";
 
 /**
  * Theme context
@@ -49,7 +49,7 @@ export function ThemeProvider({
   // Merge with default config
   const config = useMemo(
     () => ({ ...defaultThemeConfig, ...userConfig }),
-    [userConfig]
+    [userConfig],
   );
 
   // Get system color scheme
@@ -61,28 +61,29 @@ export function ThemeProvider({
   // State for theme mode
   const [mode, setModeState] = useState<ThemeMode>(() => {
     // Try to restore from storage or use initialMode/default
-    if (initialMode) {return initialMode;}
+    if (initialMode) {
+      return initialMode;
+    }
 
     // Try to get from service/storage
     const storedMode = themeService.getStoredMode();
-    if (storedMode) {return storedMode;}
+    if (storedMode) {
+      return storedMode;
+    }
 
     return config.defaultMode;
   });
 
   // Determine effective mode (handle 'system' option)
-  const effectiveMode = useMemo((): 'light' | 'dark' => {
-    if (mode === 'system') {
-      return (systemColorScheme as 'light' | 'dark') ?? 'light';
+  const effectiveMode = useMemo((): "light" | "dark" => {
+    if (mode === "system") {
+      return (systemColorScheme as "light" | "dark") ?? "light";
     }
-    return mode === 'dark' ? 'dark' : 'light';
+    return mode === "dark" ? "dark" : "light";
   }, [mode, systemColorScheme]);
 
   // Create theme object
-  const theme = useMemo(
-    () => createTheme(effectiveMode),
-    [effectiveMode]
-  );
+  const theme = useMemo(() => createTheme(effectiveMode), [effectiveMode]);
 
   // Set mode handler with persistence
   const setMode = useCallback(
@@ -96,21 +97,22 @@ export function ThemeProvider({
       // Emit theme change event
       themeService.emitThemeChange(newMode, effectiveMode);
     },
-    [config.persistThemePreference, themeService, effectiveMode]
+    [config.persistThemePreference, themeService, effectiveMode],
   );
 
   // Toggle between light and dark
   const toggleMode = useCallback(() => {
-    const newMode: ThemeMode = mode === 'dark' || (mode === 'system' && systemColorScheme === 'dark')
-      ? 'light'
-      : 'dark';
+    const newMode: ThemeMode =
+      mode === "dark" || (mode === "system" && systemColorScheme === "dark")
+        ? "light"
+        : "dark";
     setMode(newMode);
   }, [mode, systemColorScheme, setMode]);
 
   // Sync with system preference if enabled
   useEffect(() => {
-    if (config.respectSystemPreference && mode === 'system') {
-      themeService.emitThemeChange('system', effectiveMode);
+    if (config.respectSystemPreference && mode === "system") {
+      themeService.emitThemeChange("system", effectiveMode);
     }
   }, [effectiveMode, mode, config.respectSystemPreference, themeService]);
 
@@ -120,8 +122,10 @@ export function ThemeProvider({
       themeService.initialize();
     } catch (error) {
       captureException(
-        error instanceof Error ? error : new Error('Theme service initialization failed'),
-        { area: 'ThemeProvider.initialize' }
+        error instanceof Error
+          ? error
+          : new Error("Theme service initialization failed"),
+        { area: "ThemeProvider.initialize" },
       );
     }
   }, [themeService]);
@@ -133,16 +137,14 @@ export function ThemeProvider({
       mode,
       setMode,
       toggleMode,
-      isDark: effectiveMode === 'dark',
-      isSystem: mode === 'system',
+      isDark: effectiveMode === "dark",
+      isSystem: mode === "system",
     }),
-    [theme, mode, setMode, toggleMode, effectiveMode]
+    [theme, mode, setMode, toggleMode, effectiveMode],
   );
 
   return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 }
 
@@ -155,10 +157,10 @@ export function useTheme(): ThemeContextValue {
   const context = useContext(ThemeContext);
 
   if (context === undefined) {
-    const defaultTheme = createTheme('light');
+    const defaultTheme = createTheme("light");
     return {
       theme: defaultTheme,
-      mode: 'light',
+      mode: "light",
       setMode: () => undefined,
       toggleMode: () => undefined,
       isDark: false,

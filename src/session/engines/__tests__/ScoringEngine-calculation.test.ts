@@ -1,4 +1,9 @@
-import { ScoringEngine, SessionMode, createMockSession, createMockFocusMetrics } from "./ScoringEngine.helpers";
+import {
+  ScoringEngine,
+  SessionMode,
+  createMockSession,
+  createMockFocusMetrics,
+} from "./ScoringEngine.helpers";
 
 describe("ScoringEngine", () => {
   let engine: ScoringEngine;
@@ -22,7 +27,9 @@ describe("ScoringEngine", () => {
       const metrics = createMockFocusMetrics();
       const fullCalc = engine.calculateScore(fullSession, metrics);
       const partialCalc = engine.calculateScore(partialSession, metrics);
-      expect(fullCalc.timeMultiplier).toBeGreaterThan(partialCalc.timeMultiplier);
+      expect(fullCalc.timeMultiplier).toBeGreaterThan(
+        partialCalc.timeMultiplier,
+      );
     });
 
     it("should calculate pause penalties", () => {
@@ -31,7 +38,9 @@ describe("ScoringEngine", () => {
       const metrics = createMockFocusMetrics();
       const noPauseCalc = engine.calculateScore(noPause, metrics);
       const withPausesCalc = engine.calculateScore(withPauses, metrics);
-      expect(withPausesCalc.pausePenalty).toBeGreaterThan(noPauseCalc.pausePenalty);
+      expect(withPausesCalc.pausePenalty).toBeGreaterThan(
+        noPauseCalc.pausePenalty,
+      );
     });
 
     it("should calculate interruption penalties", () => {
@@ -40,7 +49,9 @@ describe("ScoringEngine", () => {
       const metrics = createMockFocusMetrics();
       const noInterruptCalc = engine.calculateScore(noInterrupt, metrics);
       const withInterruptsCalc = engine.calculateScore(withInterrupts, metrics);
-      expect(withInterruptsCalc.interruptionPenalty).toBeGreaterThan(noInterruptCalc.interruptionPenalty);
+      expect(withInterruptsCalc.interruptionPenalty).toBeGreaterThan(
+        noInterruptCalc.interruptionPenalty,
+      );
     });
 
     it("should calculate final score", () => {
@@ -87,7 +98,9 @@ describe("ScoringEngine", () => {
       const session = createMockSession();
       const highCalc = engine.calculateScore(session, highQuality);
       const lowCalc = engine.calculateScore(session, lowQuality);
-      expect(highCalc.qualityMultiplier).toBeGreaterThan(lowCalc.qualityMultiplier);
+      expect(highCalc.qualityMultiplier).toBeGreaterThan(
+        lowCalc.qualityMultiplier,
+      );
     });
   });
 });
