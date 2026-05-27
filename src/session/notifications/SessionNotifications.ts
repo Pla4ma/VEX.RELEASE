@@ -1,31 +1,33 @@
 import { eventBus } from "../../events";
 import type { SessionConfig } from "../types";
-interface NotificationPayload {
-  title: string;
-  body: string;
-  data?: Record<string, unknown>;
-  sound?: string;
-  priority?: "high" | "normal" | "low";
-}
+import type { NotificationPayload } from "./session-notification-types";
+export type { NotificationPayload } from "./session-notification-types";
+import {
+  buildInterruptionPayload,
+  buildRecoveryPayload,
+  buildStreakWarningPayload,
+  buildDailyReminderPayload,
+  buildBreakReminderPayload,
+  buildRewardPayload,
+  buildStreakMilestoneResult,
+  getAntiCheatWarning,
+} from "./session-notification-templates";
+
 export class SessionNotifications {
   private userId: string | null = null;
   private scheduledNotifications: Map<string, number> = new Map();
   private enabled: boolean = true;
-  setUserId(userId: string): void {
-    this.userId = userId;
-  }
-  setEnabled(enabled: boolean): void {
-    this.enabled = enabled;
-  }
+
+  setUserId(userId: string): void { this.userId = userId; }
+  setEnabled(enabled: boolean): void { this.enabled = enabled; }
+
   async scheduleSessionStart(
     sessionId: string,
     config: SessionConfig,
     startTime: number,
     countdownSeconds?: number,
   ): Promise<void> {
-    if (!this.enabled) {
-      return;
-    }
+    if (!this.enabled) return;
     const countdown = countdownSeconds || 0;
     if (countdown > 0) {
       this.scheduleNotification(
@@ -40,14 +42,13 @@ export class SessionNotifications {
       );
     }
   }
+
   async scheduleSessionEnd(
     sessionId: string,
     endTime: number,
     sessionName?: string,
   ): Promise<void> {
-    if (!this.enabled) {
-      return;
-    }
+    if (!this.enabled) return;
     this.scheduleNotification(
       `session_end_${sessionId}`,
       {
@@ -60,137 +61,49 @@ export class SessionNotifications {
       endTime,
     );
   }
+
   async sendInterruptionWarning(
     sessionId: string,
     severity: string,
     _timeRemaining: number,
   ): Promise<void> {
-    if (!this.enabled) {
-      return;
-    }
-    const titles: Record<string, string> = {
-      CRITICAL: "⚠️ Session at Risk!",
-      MAJOR: "⚡ Interruption Detected",
-      MODERATE: "⏸️ Session Paused",
-      MINOR: "Session Paused",
-    };
-    const bodies: Record<string, string> = {
-      CRITICAL: "Resume immediately or lose your session progress!",
-      MAJOR: "Your session is at risk. Tap to resume.",
-      MODERATE: "Your focus session has been paused.",
-      MINOR: "Brief pause detected. Ready when you are.",
-    };
-    this.showNotification({
-      title: titles[severity] || "Session Update",
-      body: bodies[severity] || "Your session status has changed.",
-      data: { sessionId, type: "interruption", severity },
-      priority: severity === "CRITICAL" ? "high" : "normal",
-    });
+    if (!this.enabled) return;
+    this.showNotification(buildInterruptionPayload(sessionId, severity));
   }
-  async sendRecoveryReminder(
-    sessionId: string,
-    minutesElapsed: number,
-  ): Promise<void> {
-    if (!this.enabled) {
-      return;
-    }
-    this.showNotification({
-      title: "🔄 Recovery Available",
-      body: `You can still recover your session. ${minutesElapsed} minutes have passed.`,
-      data: { sessionId, type: "recovery_reminder" },
-      priority: "normal",
-    });
+
+  async sendRecoveryReminder(sessionId: string, minutesElapsed: number): Promise<void> {
+    if (!this.enabled) return;
+    this.showNotification(buildRecoveryPayload(sessionId, minutesElapsed));
   }
-  async sendStreakWarning(
-    streakDays: number,
-    hoursRemaining: number,
-  ): Promise<void> {
-    if (!this.enabled) {
-      return;
-    }
-    this.showNotification({
-      title: "🔥 Streak at Risk!",
-      body: `Your ${streakDays}-day streak ends in ${hoursRemaining} hours. Start a session now!`,
-      data: { type: "streak_warning", streakDays, hoursRemaining },
-      priority: "high",
-    });
+
+  async sendStreakWarning(streakDays: number, hoursRemaining: number): Promise<void> {
+    if (!this.enabled) return;
+    this.showNotification(buildStreakWarningPayload(streakDays, hoursRemaining));
   }
+
   async scheduleDailyReminder(hour: number, minute: number): Promise<void> {
-    if (!this.enabled) {
-      return;
-    }
+    if (!this.enabled) return;
     const now = new Date();
     const reminderTime = new Date();
     reminderTime.setHours(hour, minute, 0, 0);
-    if (reminderTime <= now) {
-      reminderTime.setDate(reminderTime.getDate() + 1);
-    }
-    this.scheduleNotification(
-      "daily_reminder",
-      {
-        title: "📅 Daily Focus Reminder",
-        body: "Time to start your daily focus session and keep your streak going!",
-        data: { type: "daily_reminder" },
-        priority: "normal",
-      },
-      reminderTime.getTime(),
-    );
+    if (reminderTime <= now) reminderTime.setDate(reminderTime.getDate() + 1);
+    this.scheduleNotification("daily_reminder", buildDailyReminderPayload(), reminderTime.getTime());
   }
+
   async sendBreakReminder(breakDuration: number): Promise<void> {
-    if (!this.enabled) {
-      return;
-    }
-    this.showNotification({
-      title: "☕ Break Time",
-      body: `Take a ${breakDuration / 60} minute break. You've earned it!`,
-      data: { type: "break_reminder", breakDuration },
-      priority: "normal",
-    });
+    if (!this.enabled) return;
+    this.showNotification(buildBreakReminderPayload(breakDuration));
   }
-  async sendRewardNotification(
-    xp: number,
-    coins: number,
-    gems: number,
-  ): Promise<void> {
-    if (!this.enabled) {
-      return;
-    }
-    const parts: string[] = [];
-    if (xp > 0) {
-      parts.push(`${xp} XP`);
-    }
-    if (coins > 0) {
-      parts.push(`${coins} coins`);
-    }
-    if (gems > 0) {
-      parts.push(`${gems} gems`);
-    }
-    if (parts.length === 0) {
-      return;
-    }
-    this.showNotification({
-      title: "🎉 Rewards Earned!",
-      body: `You earned: ${parts.join(", ")}`,
-      data: { type: "rewards", xp, coins, gems },
-      priority: "normal",
-    });
+
+  async sendRewardNotification(xp: number, coins: number, gems: number): Promise<void> {
+    if (!this.enabled) return;
+    const payload = buildRewardPayload(xp, coins, gems);
+    if (payload) this.showNotification(payload);
   }
+
   async sendStreakMilestone(streakDays: number): Promise<void> {
-    if (!this.enabled) {
-      return;
-    }
-    let title = "🔥 Streak Milestone!";
-    let body = `You've maintained focus for ${streakDays} days straight!`;
-    if (streakDays === 7) {
-      title = "🏆 One Week Streak!";
-      body = "Amazing dedication! You've focused for 7 days straight!";
-    } else if (streakDays === 30) {
-      title = "🌟 Month-Long Streak!";
-      body = "Incredible! A full month of daily focus sessions!";
-    } else if (streakDays === 100) {
-      title = "💯 Century Streak!";
-      body = "Legendary! 100 days of unwavering focus!";
-    }
+    if (!this.enabled) return;
+    const { title, body } = buildStreakMilestoneResult(streakDays);
     this.showNotification({
       title,
       body,
@@ -199,34 +112,17 @@ export class SessionNotifications {
       priority: "high",
     });
   }
+
   async sendAntiCheatWarning(violationType: string): Promise<void> {
-    if (!this.enabled) {
-      return;
-    }
-    const warnings: Record<string, { title: string; body: string }> = {
-      TIME_MANIPULATION: {
-        title: "⚠️ Time Anomaly Detected",
-        body: "System time changes were detected. Please keep system time accurate.",
-      },
-      DEVICE_CHANGE: {
-        title: "⚠️ Device Change",
-        body: "Session continued on different device. Monitoring for consistency.",
-      },
-      RAPID_COMPLETION: {
-        title: "⚠️ Suspicious Activity",
-        body: "Unusually rapid session completion detected.",
-      },
-    };
-    const warning = warnings[violationType] || {
-      title: "⚠️ Session Warning",
-      body: "An issue was detected with your session.",
-    };
+    if (!this.enabled) return;
+    const warning = getAntiCheatWarning(violationType);
     this.showNotification({
       ...warning,
       data: { type: "anti_cheat_warning", violationType },
       priority: "high",
     });
   }
+
   async cancelSessionNotifications(sessionId: string): Promise<void> {
     const prefixes = [`session_start_${sessionId}`, `session_end_${sessionId}`];
     for (const [key, timeoutId] of this.scheduledNotifications) {
@@ -236,36 +132,28 @@ export class SessionNotifications {
       }
     }
   }
+
   async clearAllNotifications(): Promise<void> {
     for (const [_key, timeoutId] of this.scheduledNotifications) {
       clearTimeout(timeoutId);
     }
     this.scheduledNotifications.clear();
   }
-  private scheduleNotification(
-    id: string,
-    payload: NotificationPayload,
-    timestamp: number,
-  ): void {
+
+  private scheduleNotification(id: string, payload: NotificationPayload, timestamp: number): void {
     const delay = timestamp - Date.now();
-    if (delay <= 0) {
-      this.showNotification(payload);
-      return;
-    }
+    if (delay <= 0) { this.showNotification(payload); return; }
     const timeoutId = window.setTimeout(() => {
       this.showNotification(payload);
       this.scheduledNotifications.delete(id);
     }, delay);
     const existing = this.scheduledNotifications.get(id);
-    if (existing) {
-      clearTimeout(existing);
-    }
+    if (existing) clearTimeout(existing);
     this.scheduledNotifications.set(id, timeoutId);
   }
+
   private showNotification(payload: NotificationPayload): void {
-    if (!this.enabled) {
-      return;
-    }
+    if (!this.enabled) return;
     eventBus.publish("notification:send", {
       type: (payload.data?.type as string) || "session",
       title: payload.title,
@@ -284,11 +172,10 @@ export class SessionNotifications {
     }
   }
 }
+
 let sessionNotifications: SessionNotifications | null = null;
 export function getSessionNotifications(): SessionNotifications {
-  if (!sessionNotifications) {
-    sessionNotifications = new SessionNotifications();
-  }
+  if (!sessionNotifications) sessionNotifications = new SessionNotifications();
   return sessionNotifications;
 }
 export default SessionNotifications;

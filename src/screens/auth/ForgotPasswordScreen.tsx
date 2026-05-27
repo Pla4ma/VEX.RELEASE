@@ -17,9 +17,7 @@ import { Button } from '../../components';
 import { Icon } from '../../icons';
 import { FormField } from '../../shared/ui/components/FormField';
 import { useToast } from '../../shared/ui/components/Toast';
-import { forgotPasswordSchema } from '../../validation';
-import { resetPassword } from '../../services/supabaseAuth';
-import { captureException } from '../../config/sentry';
+import { submitForgotPassword } from './forgot-password-helpers';
 import type { AuthStackParams } from '../../navigation';
 
 type Props = NativeStackScreenProps<AuthStackParams, 'ForgotPassword'>;
@@ -36,52 +34,31 @@ export const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleSubmit = useCallback(async () => {
     setError(undefined);
+    setIsLoading(true);
 
-    const result = forgotPasswordSchema.safeParse({ email });
+    const result = await submitForgotPassword(email);
+
     if (!result.success) {
-      setError('Please enter a valid email address');
+      setError(result.error);
+      showToast({
+        type: 'error',
+        title: 'Failed to send email',
+        message: result.error ?? 'Unknown error',
+        duration: 4000,
+      });
+      setIsLoading(false);
       return;
     }
 
-    setIsLoading(true);
-
-    try {
-      const { error: resetError } = await resetPassword(email.trim());
-
-      if (resetError) {
-        setError(resetError.message);
-        showToast({
-          type: 'error',
-          title: 'Failed to send email',
-          message: resetError.message,
-          duration: 4000,
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      setIsLoading(false);
-      setIsSuccess(true);
-      showToast({
-        type: 'success',
-        title: 'Email sent',
-        message: 'Check your inbox for reset instructions.',
-        duration: 4000,
-      });
-    } catch (err) {
-      captureException(err instanceof Error ? err : new Error(String(err)), {
-        tags: { feature: 'forgot-password' },
-      });
-      setError('Something went wrong. Please try again.');
-      showToast({
-        type: 'error',
-        title: 'Error',
-        message: 'Something went wrong. Please try again.',
-        duration: 4000,
-      });
-      setIsLoading(false);
-    }
-  }, [email, showToast, navigation]);
+    setIsLoading(false);
+    setIsSuccess(true);
+    showToast({
+      type: 'success',
+      title: 'Email sent',
+      message: 'Check your inbox for reset instructions.',
+      duration: 4000,
+    });
+  }, [email, showToast]);
 
   const handleBack = useCallback(() => {
     navigation.navigate({ name: 'Login', params: {} });

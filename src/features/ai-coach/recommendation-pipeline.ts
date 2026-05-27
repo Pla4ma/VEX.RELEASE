@@ -1,26 +1,9 @@
-import { z } from "zod";
 import { createDebugger } from "../../utils/debug";
 import type { ContextSnapshot } from "./context-snapshot";
-import { RecommendationEvidenceSchema } from "../focus-memory/schemas";
 import type { RecommendationEvidence } from "../focus-memory/schemas";
+import type { CoachRecommendation } from "./recommendation-pipeline-types";
+export { CoachRecommendationSchema, type CoachRecommendation } from "./recommendation-pipeline-types";
 const debug = createDebugger("ai-coach:recommendations");
-export const CoachRecommendationSchema = z.object({
-  id: z.string(),
-  userId: z.string(),
-  type: z.enum(["session", "duration", "difficulty", "time", "social", "break"]),
-  title: z.string(),
-  description: z.string(),
-  reasoning: z.string(),
-  confidence: z.number().min(0).max(1),
-  evidence: RecommendationEvidenceSchema.optional(),
-  priority: z.enum(["critical", "high", "medium", "low"]),
-  actionType: z.enum(["start_session", "adjust_duration", "join_squad", "take_break", "view_progress"]),
-  suggestedDuration: z.number().optional(),
-  suggestedDifficulty: z.enum(["easy", "normal", "challenging", "push"]).optional(),
-  suggestedTime: z.number().optional(),
-  expiresAt: z.number(),
-});
-export type CoachRecommendation = z.infer<typeof CoachRecommendationSchema>;
 export async function generateRecommendations(userId: string, context: ContextSnapshot): Promise<CoachRecommendation[]> {
   const recommendations: CoachRecommendation[] = [];
   const now = Date.now();

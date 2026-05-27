@@ -80,7 +80,7 @@ export {
 export type {
   CompletionResult,
   AbandonResult,
-} from "./engines/CompletionEngine";
+} from "./engines/completion-types";
 export {
   AntiCheatEngine,
   createAntiCheatEngine,

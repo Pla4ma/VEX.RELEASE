@@ -1,0 +1,55 @@
+import { SessionMode } from '../../../session/modes';
+import type { SessionSummary } from '../../../session/types';
+import type { CompletionExperiencePolicyInput } from '../completion-experience-policy';
+
+export const baseSummary: SessionSummary = {
+  actualDuration: 1500,
+  baseScore: 100,
+  bonuses: [],
+  coinsEarned: 0,
+  completionPercentage: 100,
+  createdAt: 500000,
+  damageTaken: 0,
+  effectiveDuration: 1400,
+  finalScore: 92,
+  focusPurityScore: 95,
+  focusQuality: 95,
+  gemsEarned: 0,
+  interruptions: 0,
+  modeBonus: 0,
+  pausedDuration: 0,
+  pausedTime: 0,
+  pauses: 0,
+  penaltiesApplied: [],
+  plannedDuration: 1500,
+  sessionId: 'session-123',
+  sessionMode: SessionMode.FLOW,
+  status: 'COMPLETED',
+  streakBonus: 10,
+  streakDays: 4,
+  streakIncreased: true,
+  streakMaintained: true,
+  timeBonus: 10,
+  userId: 'user-123',
+  userLevel: 2,
+  vsAverage: 0,
+  vsBest: 0,
+  xpEarned: 120,
+};
+
+export const baseInput: CompletionExperiencePolicyInput = {
+  consequences: {},
+  featureAvailability: {
+    boss: true,
+    challenges: true,
+    contractUsed: false,
+    progress: true,
+    study: true,
+  },
+  firstWeekStage: 'ACTIVATING',
+  motivationStyle: 'calm',
+  premiumState: 'free',
+  primaryGoal: null,
+  sessionMode: SessionMode.FLOW,
+  summary: baseSummary,
+};

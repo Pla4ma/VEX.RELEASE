@@ -1,13 +1,15 @@
-import type { AntiCheatFlag } from "../types";
 import { createDebugger } from "../../utils/debug";
 import { THRESHOLDS, PURITY_SCORING, FLAG_CRITICAL_THRESHOLD } from "./AntiCheatConfig";
+import type { AntiCheatFlag } from "../types";
+import type { SessionValidationInput, TickValidationResult, DeviceChangeResult, ActionResult, TickRecord, PurityLabel, SeverityLevel, EngineStatus } from "./anti-cheat-types";
+export type { SessionValidationInput, TickValidationResult, DeviceChangeResult, ActionResult, TickRecord, PurityLabel, SeverityLevel, EngineStatus } from "./anti-cheat-types";
 
 const debug = createDebugger("session:anticheat");
 
 export class AntiCheatEngine {
   private flags: AntiCheatFlag[] = [];
   private sessionId: string | null = null;
-  private tickHistory: Array<{ timestamp: number; elapsed: number }> = [];
+  private tickHistory: TickRecord[] = [];
   private lastTickTime = 0;
   private deviceFingerprint: string | null = null;
   private backgroundSwitches = 0;
@@ -17,23 +19,16 @@ export class AntiCheatEngine {
   private uninterruptedFocusStartedAt: number | null = null;
 
   initialize(sessionId: string, deviceFingerprint: string): void {
-    this.sessionId = sessionId;
-    this.deviceFingerprint = deviceFingerprint;
-    this.flags = [];
-    this.tickHistory = [];
-    this.lastTickTime = 0;
-    this.backgroundSwitches = 0;
-    this.manualPauses = 0;
-    this.suspendedCount = 0;
-    this.uninterruptedFocusAccumulatedMs = 0;
-    this.uninterruptedFocusStartedAt = null;
+    this.sessionId = sessionId; this.deviceFingerprint = deviceFingerprint;
+    this.flags = []; this.tickHistory = []; this.lastTickTime = 0;
+    this.backgroundSwitches = 0; this.manualPauses = 0; this.suspendedCount = 0;
+    this.uninterruptedFocusAccumulatedMs = 0; this.uninterruptedFocusStartedAt = null;
     debug.info("AntiCheatEngine initialized for session %s", sessionId);
   }
 
-  validateTick(elapsed: number, timestamp: number): { valid: boolean; warning?: string } {
+  validateTick(elapsed: number, timestamp: number): TickValidationResult {
     if (!this.sessionId) return { valid: false, warning: "Engine not initialized" };
     if (!this.uninterruptedFocusStartedAt) this.uninterruptedFocusStartedAt = timestamp;
-
     if (this.lastTickTime > 0) {
       const timeSinceLastTick = timestamp - this.lastTickTime;
       if (timeSinceLastTick < 0) {
@@ -48,7 +43,6 @@ export class AntiCheatEngine {
         this.flagViolation("TIME_MANIPULATION", "MODERATE", { reason: "Large time gap between ticks", gap: timeSinceLastTick });
       }
     }
-
     if (this.tickHistory.length > 0) {
       const lastElapsed = this.tickHistory[this.tickHistory.length - 1]!.elapsed;
       const elapsedDelta = elapsed - lastElapsed;
@@ -60,20 +54,14 @@ export class AntiCheatEngine {
         this.flagViolation("TIME_MANIPULATION", "MODERATE", { reason: "Elapsed time jumped too far", delta: elapsedDelta });
       }
     }
-
-    this.tickHistory.push({ timestamp, elapsed });
-    this.lastTickTime = timestamp;
-    if (this.tickHistory.length > THRESHOLDS.MAX_TICK_HISTORY) {
-      this.tickHistory = this.tickHistory.slice(-THRESHOLDS.MAX_TICK_HISTORY_TRIM);
-    }
+    this.tickHistory.push({ timestamp, elapsed }); this.lastTickTime = timestamp;
+    if (this.tickHistory.length > THRESHOLDS.MAX_TICK_HISTORY) this.tickHistory = this.tickHistory.slice(-THRESHOLDS.MAX_TICK_HISTORY_TRIM);
     return { valid: true };
   }
 
   recordManualPause(): void { this.manualPauses++; this.endCurrentFocusSegment(Date.now()); }
   recordBackgroundSwitch(): void { this.backgroundSwitches++; this.endCurrentFocusSegment(Date.now()); }
-  recordSuspension(durationMs: number): void {
-    if (durationMs > THRESHOLDS.MAX_SUSPENSION_MS) { this.suspendedCount = 1; this.endCurrentFocusSegment(Date.now()); }
-  }
+  recordSuspension(durationMs: number): void { if (durationMs > THRESHOLDS.MAX_SUSPENSION_MS) { this.suspendedCount = 1; this.endCurrentFocusSegment(Date.now()); } }
 
   getCurrentPurityScore(): number {
     const uninterruptedFocusMs = this.uninterruptedFocusAccumulatedMs + (this.uninterruptedFocusStartedAt ? Math.max(0, Date.now() - this.uninterruptedFocusStartedAt) : 0);
@@ -82,7 +70,7 @@ export class AntiCheatEngine {
     return Math.max(PURITY_SCORING.MIN_SCORE, Math.min(PURITY_SCORING.MAX_SCORE, score));
   }
 
-  getPurityLabel(): "Elite" | "Good" | "Okay" | "Distracted" {
+  getPurityLabel(): PurityLabel {
     const score = this.getCurrentPurityScore();
     if (score >= PURITY_SCORING.ELITE_THRESHOLD) return "Elite";
     if (score >= PURITY_SCORING.GOOD_THRESHOLD) return "Good";
@@ -90,16 +78,15 @@ export class AntiCheatEngine {
     return "Distracted";
   }
 
-  validateSession(session: { endedAt?: number; startedAt?: number; completionPercentage: number; config: { duration: number }; elapsedTime: number; remainingTime: number; effectiveTime: number; pausedTime: number; intervalsCompleted: number; pauses: number }): { valid: boolean; flags: AntiCheatFlag[] } {
+  validateSession(session: SessionValidationInput): { valid: boolean; flags: AntiCheatFlag[] } {
     if (!this.sessionId) return { valid: false, flags: [] };
     if (session.endedAt && session.startedAt) {
       const realDuration = session.endedAt - session.startedAt;
       if (realDuration > THRESHOLDS.MAX_SESSION_DURATION) this.flagViolation("IMPOSSIBLE_DURATION", "CRITICAL", { duration: realDuration, maxAllowed: THRESHOLDS.MAX_SESSION_DURATION });
       if (realDuration < THRESHOLDS.MIN_SESSION_DURATION && session.completionPercentage > 50) this.flagViolation("RAPID_COMPLETION", "CRITICAL", { duration: realDuration, completion: session.completionPercentage });
-      const expectedDuration = session.config.duration * 1000;
       if (session.completionPercentage >= 100) {
-        const speedRatio = expectedDuration / session.effectiveTime;
-        if (speedRatio > THRESHOLDS.MAX_COMPLETION_SPEED) this.flagViolation("RAPID_COMPLETION", "MODERATE", { speedRatio, expectedDuration, actualEffectiveTime: session.effectiveTime });
+        const speedRatio = (session.config.duration * 1000) / session.effectiveTime;
+        if (speedRatio > THRESHOLDS.MAX_COMPLETION_SPEED) this.flagViolation("RAPID_COMPLETION", "MODERATE", { speedRatio, expectedDuration: session.config.duration * 1000, actualEffectiveTime: session.effectiveTime });
       }
     }
     const totalTime = (session.endedAt || Date.now()) - (session.startedAt || Date.now());
@@ -107,12 +94,11 @@ export class AntiCheatEngine {
     if (pauseRatio > THRESHOLDS.MAX_PAUSE_RATIO && session.completionPercentage >= 90) {
       this.flagViolation("SUSPICIOUS_PATTERN", "WARNING", { reason: "High pause ratio with high completion", pauseRatio, completion: session.completionPercentage });
     }
-    this.validateDataConsistency(session);
-    this.validateTickPatterns();
+    this.validateDataConsistency(session); this.validateTickPatterns();
     return { valid: this.getSeverity() !== "CRITICAL", flags: this.flags };
   }
 
-  private validateDataConsistency(session: { config: { duration: number }; elapsedTime: number; remainingTime: number; effectiveTime: number; intervalsCompleted: number; pausedTime: number; pauses: number }): void {
+  private validateDataConsistency(session: SessionValidationInput): void {
     const expectedTotal = session.elapsedTime + session.remainingTime;
     const actualTotal = session.config.duration * 1000;
     if (Math.abs(expectedTotal - actualTotal) > THRESHOLDS.TIME_ACCOUNTING_TOLERANCE_MS) {
@@ -132,18 +118,16 @@ export class AntiCheatEngine {
   private validateTickPatterns(): void {
     if (this.tickHistory.length < THRESHOLDS.MIN_TICK_PATTERN_SAMPLE) return;
     const intervals: number[] = [];
-    for (let i = 1; i < this.tickHistory.length; i++) {
-      intervals.push(this.tickHistory[i]!.timestamp - this.tickHistory[i - 1]!.timestamp);
-    }
+    for (let i = 1; i < this.tickHistory.length; i++) intervals.push(this.tickHistory[i]!.timestamp - this.tickHistory[i - 1]!.timestamp);
     const mean = intervals.reduce((a, b) => a + b, 0) / intervals.length;
     const variance = intervals.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / intervals.length;
-    const coefficientOfVariation = variance / mean;
-    if (coefficientOfVariation < THRESHOLDS.MIN_FOCUS_VARIANCE && intervals.length > THRESHOLDS.VARIANCE_SAMPLE_THRESHOLD) {
-      this.flagViolation("AUTOMATION_DETECTED", "CRITICAL", { reason: "Tick intervals too consistent", coefficientOfVariation, sampleSize: intervals.length });
+    const cv = variance / mean;
+    if (cv < THRESHOLDS.MIN_FOCUS_VARIANCE && intervals.length > THRESHOLDS.VARIANCE_SAMPLE_THRESHOLD) {
+      this.flagViolation("AUTOMATION_DETECTED", "CRITICAL", { reason: "Tick intervals too consistent", coefficientOfVariation: cv, sampleSize: intervals.length });
     }
   }
 
-  validateDeviceChange(newFingerprint: string): { valid: boolean; changed: boolean } {
+  validateDeviceChange(newFingerprint: string): DeviceChangeResult {
     if (!this.deviceFingerprint) return { valid: true, changed: false };
     if (newFingerprint !== this.deviceFingerprint) {
       this.flagViolation("DEVICE_CHANGE", "WARNING", { previousDevice: this.deviceFingerprint, newDevice: newFingerprint });
@@ -159,24 +143,20 @@ export class AntiCheatEngine {
   }
 
   getFlags(): AntiCheatFlag[] { return [...this.flags]; }
-
-  getSeverity(): "CLEAN" | "WARNING" | "MODERATE" | "CRITICAL" {
+  getSeverity(): SeverityLevel {
     if (this.flags.length === 0) return "CLEAN";
     if (this.flags.some((f) => f.severity === "CRITICAL")) return "CRITICAL";
     if (this.flags.some((f) => f.severity === "MODERATE")) return "MODERATE";
     if (this.flags.some((f) => f.severity === "WARNING")) return "WARNING";
     return "CLEAN";
   }
-
-  getStatus(): "CLEAN" | "WARNING" | "FLAGGED" | "FAILED" | "INVALIDATED" {
+  getStatus(): EngineStatus {
     const severity = this.getSeverity();
-    if (severity === "CLEAN") return "CLEAN";
-    if (severity === "WARNING") return "WARNING";
+    if (severity === "CLEAN") return "CLEAN"; if (severity === "WARNING") return "WARNING";
     if (severity === "MODERATE") return "FLAGGED";
     return this.flags.length > FLAG_CRITICAL_THRESHOLD ? "INVALIDATED" : "FAILED";
   }
-
-  takeAction(): { action: AntiCheatFlag["actionTaken"]; scoreReduction: number; shouldInvalidate: boolean } {
+  takeAction(): ActionResult {
     switch (this.getStatus()) {
       case "FAILED": return { action: "SESSION_INVALIDATED", scoreReduction: 1, shouldInvalidate: true };
       case "FLAGGED": return { action: "SCORE_REDUCED", scoreReduction: 0.3, shouldInvalidate: false };
@@ -189,18 +169,12 @@ export class AntiCheatEngine {
     if (!this.sessionId) return;
     this.flagViolation("DEVICE_CHANGE", "WARNING", { reason: "Device fingerprint changed during session", oldHash, newHash });
   }
-
-  applyActions(): void {
-    const action = this.takeAction();
-    this.flags = this.flags.map((flag) => ({ ...flag, actionTaken: action.action }));
-  }
-
+  applyActions(): void { const action = this.takeAction(); this.flags = this.flags.map((flag) => ({ ...flag, actionTaken: action.action })); }
   reset(): void {
     this.flags = []; this.tickHistory = []; this.lastTickTime = 0;
     this.backgroundSwitches = 0; this.manualPauses = 0; this.suspendedCount = 0;
     this.uninterruptedFocusAccumulatedMs = 0; this.uninterruptedFocusStartedAt = null;
   }
-
   destroy(): void { this.reset(); this.sessionId = null; this.deviceFingerprint = null; }
 
   private endCurrentFocusSegment(timestamp: number): void {

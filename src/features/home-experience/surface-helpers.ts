@@ -1,14 +1,14 @@
-import type { HomeSurfaceDecision, HomeSurfaceKey } from './surface-decision-schemas';
-import type { SurfaceDecisionInputSchema } from './surface-decision-schemas';
 import { applyLaneSurfaces } from './lane-surface-helpers';
-import type { z } from 'zod';
+import {
+  type SurfaceDecisionInput,
+  type PersonalizationProfile,
+  type BehaviorStats,
+  type SurfaceMap,
+  createEmptyHomeSurfaceMap,
+} from './surface-helper-types';
 
-type SurfaceDecisionInput = z.infer<typeof SurfaceDecisionInputSchema>;
-type PersonalizationProfile = SurfaceDecisionInput['personalizationProfile'];
-type BehaviorStats = SurfaceDecisionInput['behaviorStats'];
-type FirstWeekPhase = SurfaceDecisionInput['firstWeekPhase'];
-
-type SurfaceMap = Record<HomeSurfaceKey, HomeSurfaceDecision>;
+export { createEmptyHomeSurfaceMap } from './surface-helper-types';
+export type { SurfaceDecisionInput, PersonalizationProfile, BehaviorStats, SurfaceMap } from './surface-helper-types';
 
 function resolveLaneStudy(input: SurfaceDecisionInput, p: PersonalizationProfile, b: BehaviorStats): boolean {
   const lane = input.laneProfile?.primaryLane;
@@ -48,33 +48,6 @@ function resolveLaneCoachLed(input: SurfaceDecisionInput, p: PersonalizationProf
   const lane = input.laneProfile?.primaryLane;
   if (lane !== undefined) return false; // coach-led is a style, not a lane
   return p.motivationStyle === 'coach_led';
-}
-
-export function createEmptyHomeSurfaceMap(): SurfaceMap {
-  return {
-    start_session: 'primary',
-    coach_presence: 'hidden',
-    progress_proof: 'hidden',
-    focus_score: 'hidden',
-    progress_detail: 'hidden',
-    study_layer: 'hidden',
-    companion_thread: 'hidden',
-    boss_teaser: 'hidden',
-    boss_compact: 'hidden',
-    boss_full_cta: 'hidden',
-    challenge_teaser: 'hidden',
-    unlock_strip: 'hidden',
-    premium_tease: 'hidden',
-    weekly_quest: 'hidden',
-    study_os: 'hidden',
-    run_board: 'hidden',
-    project_thread: 'hidden',
-    today_strip: 'hidden',
-    rescue_cta: 'hidden',
-    memory_insight: 'hidden',
-    weekly_intelligence: 'hidden',
-    focus_window: 'hidden',
-  };
 }
 
 export function setupDay0Surfaces(
@@ -157,7 +130,7 @@ export function selectSpotlight(
   const isCalmUser = resolveLaneCalm(parsed, p);
   const fwSpotlight = fw.spotlightSurface ?? 'none';
 
-  const candidates: { key: HomeSurfaceKey; priority: number }[] = [];
+  const candidates: { key: keyof SurfaceMap; priority: number }[] = [];
 
   if (isStudyUser && parsed.featureAvailability.study) {
     if (!b.ignoredFeatures.includes('study_layer')) {

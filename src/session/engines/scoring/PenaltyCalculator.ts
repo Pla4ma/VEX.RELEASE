@@ -1,15 +1,20 @@
-import type { FocusQualityMetrics } from "../../types";
 import { PENALTY_CONSTANTS, severityRankings } from "./penalty-constants";
 import type {
   PausePenaltyInput, InterruptionSeverity, InterruptionPenaltyInput,
   QualityPenaltyInput, AntiCheatViolationType, AntiCheatPenaltyInput,
   AbandonPenaltyInput, AbandonPenaltyResult, TotalPenaltyInput,
+  PenaltyAction, InterruptionPenaltyResult, AntiCheatPenaltyResult,
+  TotalPenaltyResult,
 } from "./penalty-types";
 
 export { PENALTY_CONSTANTS, severityRankings };
-export type { PausePenaltyInput, InterruptionSeverity, InterruptionPenaltyInput,
+export type {
+  PausePenaltyInput, InterruptionSeverity, InterruptionPenaltyInput,
   QualityPenaltyInput, AntiCheatViolationType, AntiCheatPenaltyInput,
-  AbandonPenaltyInput, AbandonPenaltyResult, TotalPenaltyInput };
+  AbandonPenaltyInput, AbandonPenaltyResult, TotalPenaltyInput,
+  PenaltyAction, InterruptionPenaltyResult, AntiCheatPenaltyResult,
+  TotalPenaltyResult,
+};
 
 export function calculatePausePenalty(input: PausePenaltyInput): number {
   const { pauseCount, totalPauseDurationSeconds } = input;
@@ -22,10 +27,9 @@ export function calculatePausePenalty(input: PausePenaltyInput): number {
   return Math.min(total, PENALTY_CONSTANTS.PAUSE_PENALTY_MAX);
 }
 
-export function calculateInterruptionPenalty(input: InterruptionPenaltyInput): {
-  total: number;
-  breakdown: Record<InterruptionSeverity, number>;
-} {
+export function calculateInterruptionPenalty(
+  input: InterruptionPenaltyInput,
+): InterruptionPenaltyResult {
   const { interruptions } = input;
   if (interruptions.length === 0) {
     return {
@@ -86,11 +90,7 @@ export function calculateQualityPenalty(input: QualityPenaltyInput): number {
   return penalty;
 }
 
-export function calculateAntiCheatPenalty(input: AntiCheatPenaltyInput): {
-  total: number;
-  violations: Array<{ type: AntiCheatViolationType; penalty: number }>;
-  actionRequired: "WARNING" | "PENALTY" | "DISQUALIFY" | "BAN";
-} {
+export function calculateAntiCheatPenalty(input: AntiCheatPenaltyInput): AntiCheatPenaltyResult {
   const basePenalties: Record<AntiCheatViolationType, number> = {
     TIME_MANIPULATION: PENALTY_CONSTANTS.TIME_MANIPULATION_PENALTY,
     DEVICE_CHANGE: PENALTY_CONSTANTS.DEVICE_CHANGE_PENALTY,
@@ -125,10 +125,7 @@ export function calculateAntiCheatPenalty(input: AntiCheatPenaltyInput): {
       maxSeverity = violation.severity;
     }
   }
-  const actionMap: Record<
-    string,
-    "WARNING" | "PENALTY" | "DISQUALIFY" | "BAN"
-  > = {
+  const actionMap: Record<string, PenaltyAction> = {
     LOW: "WARNING",
     MEDIUM: "PENALTY",
     HIGH: "DISQUALIFY",
@@ -162,12 +159,7 @@ export function calculateAbandonPenalty(
   };
 }
 
-export function calculateTotalPenalty(input: TotalPenaltyInput): {
-  total: number;
-  capped: boolean;
-  percentage: number;
-  breakdown: Record<string, number>;
-} {
+export function calculateTotalPenalty(input: TotalPenaltyInput): TotalPenaltyResult {
   const {
     pausePenalty,
     interruptionPenalty,
@@ -204,5 +196,4 @@ export const PenaltyCalculator = {
   calculateTotalPenalty,
   constants: PENALTY_CONSTANTS,
 };
-
 export default PenaltyCalculator;

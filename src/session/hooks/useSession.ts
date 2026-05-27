@@ -1,14 +1,14 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { getSessionService } from "../SessionService";
 import { eventBus } from "../../events";
-import { createDebugger } from "../../utils/debug";
-import type {
-  SessionState,
-  SessionConfig,
-  SessionSummary,
-  SessionHistoryEntry,
-} from "../types";
-const debug = createDebugger("session");
+import type { SessionConfig, SessionState, SessionSummary } from "../types";
+import type { SessionActions } from "./useSessionActions";
+import { createSessionActions } from "./useSessionActions";
+
+export { useSessionHistory } from "./useSessionHistory";
+export { useSessionPresets } from "./useSessionPresets";
+export { useSessionStats } from "./useSessionStats";
+
 interface UseSessionState {
   session: SessionState | null;
   isActive: boolean;
@@ -19,31 +19,21 @@ interface UseSessionState {
   isLoading: boolean;
   error: Error | null;
 }
-interface UseSessionActions {
-  createSession: (config: SessionConfig) => Promise<SessionState>;
-  startSession: (countdownSeconds?: number) => Promise<void>;
-  pauseSession: (reason?: string) => Promise<void>;
-  resumeSession: () => Promise<void>;
-  endSession: () => Promise<SessionSummary>;
-  abandonSession: (reason?: string) => Promise<void>;
-  backgroundSession: () => Promise<void>;
-  foregroundSession: () => Promise<void>;
-  attemptRecovery: (
-    type: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT",
-  ) => Promise<boolean>;
-  applyStudyQuizBonus: (correctAnswers: number) => void;
-  getAntiCheatScore: () => number;
-  getAntiCheatLabel: () => "Elite" | "Good" | "Okay" | "Distracted";
-}
-export interface UseSessionReturn extends UseSessionState, UseSessionActions {
+
+export interface UseSessionReturn extends UseSessionState, SessionActions {
   refresh: () => void;
 }
+
 export function useSession(userId: string): UseSessionReturn {
   const serviceRef = useRef(getSessionService());
   const service = serviceRef.current;
+  const actionsRef = useRef<SessionActions>(createSessionActions(service));
+  const actions = actionsRef.current;
+
   useEffect(() => {
     service.setUserId(userId);
   }, [service, userId]);
+
   const [state, setState] = useState<UseSessionState>({
     session: null,
     isActive: false,
@@ -54,6 +44,7 @@ export function useSession(userId: string): UseSessionReturn {
     isLoading: true,
     error: null,
   });
+
   const refresh = useCallback(() => {
     try {
       const session = service.getCurrentSession();
@@ -81,9 +72,11 @@ export function useSession(userId: string): UseSessionReturn {
       }));
     }
   }, [service]);
+
   useEffect(() => {
     refresh();
   }, [refresh]);
+
   useEffect(() => {
     const unsubscribers: Array<() => void> = [];
     unsubscribers.push(
@@ -137,11 +130,35 @@ export function useSession(userId: string): UseSessionReturn {
       unsubscribers.forEach((unsub) => unsub());
     };
   }, [state.session?.id]);
+
+  const wrapAction = useCallback(
+    <Args extends unknown[], R>(
+      action: (...args: Args) => Promise<R>,
+    ): ((...args: Args) => Promise<R>) => {
+      return async (...args: Args): Promise<R> => {
+        setState((prev) => ({ ...prev, isLoading: true }));
+        try {
+          const result = await action(...args);
+          refresh();
+          return result;
+        } catch (err) {
+          setState((prev) => ({
+            ...prev,
+            isLoading: false,
+            error: err instanceof Error ? err : new Error(String(err)),
+          }));
+          throw err;
+        }
+      };
+    },
+    [refresh],
+  );
+
   const createSession = useCallback(
     async (config: SessionConfig): Promise<SessionState> => {
       setState((prev) => ({ ...prev, isLoading: true }));
       try {
-        const session = await service.createCustomSession(config);
+        const session = await actions.createSession(config);
         refresh();
         return session;
       } catch (err) {
@@ -153,243 +170,23 @@ export function useSession(userId: string): UseSessionReturn {
         throw err;
       }
     },
-    [service, refresh],
+    [actions, refresh],
   );
-  const startSession = useCallback(
-    async (countdownSeconds: number = 0): Promise<void> => {
-      setState((prev) => ({ ...prev, isLoading: true }));
-      try {
-        await service.startSession(countdownSeconds);
-        refresh();
-      } catch (err) {
-        setState((prev) => ({
-          ...prev,
-          isLoading: false,
-          error: err instanceof Error ? err : new Error(String(err)),
-        }));
-        throw err;
-      }
-    },
-    [service, refresh],
-  );
-  const pauseSession = useCallback(
-    async (reason?: string): Promise<void> => {
-      try {
-        await service.pauseSession(reason);
-        refresh();
-      } catch (err) {
-        setState((prev) => ({
-          ...prev,
-          error: err instanceof Error ? err : new Error(String(err)),
-        }));
-        throw err;
-      }
-    },
-    [service, refresh],
-  );
-  const resumeSession = useCallback(async (): Promise<void> => {
-    try {
-      await service.resumeSession();
-      refresh();
-    } catch (err) {
-      setState((prev) => ({
-        ...prev,
-        error: err instanceof Error ? err : new Error(String(err)),
-      }));
-      throw err;
-    }
-  }, [service, refresh]);
-  const endSession = useCallback(async (): Promise<SessionSummary> => {
-    try {
-      const summary = await service.completeSession();
-      refresh();
-      return summary;
-    } catch (err) {
-      setState((prev) => ({
-        ...prev,
-        error: err instanceof Error ? err : new Error(String(err)),
-      }));
-      throw err;
-    }
-  }, [service, refresh]);
-  const abandonSession = useCallback(
-    async (reason?: string): Promise<void> => {
-      try {
-        await service.abandonSession(reason);
-        refresh();
-      } catch (err) {
-        setState((prev) => ({
-          ...prev,
-          error: err instanceof Error ? err : new Error(String(err)),
-        }));
-        throw err;
-      }
-    },
-    [service, refresh],
-  );
-  const backgroundSession = useCallback(async (): Promise<void> => {
-    try {
-      await service.backgroundSession();
-      refresh();
-    } catch (err) {
-      setState((prev) => ({
-        ...prev,
-        error: err instanceof Error ? err : new Error(String(err)),
-      }));
-      throw err;
-    }
-  }, [service, refresh]);
-  const foregroundSession = useCallback(async (): Promise<void> => {
-    try {
-      await service.foregroundSession();
-      refresh();
-    } catch (err) {
-      setState((prev) => ({
-        ...prev,
-        error: err instanceof Error ? err : new Error(String(err)),
-      }));
-      throw err;
-    }
-  }, [service, refresh]);
-  const attemptRecovery = useCallback(
-    async (
-      type: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT",
-    ): Promise<boolean> => {
-      try {
-        const result = await service.attemptRecovery(type);
-        refresh();
-        return result;
-      } catch (err) {
-        setState((prev) => ({
-          ...prev,
-          error: err instanceof Error ? err : new Error(String(err)),
-        }));
-        throw err;
-      }
-    },
-    [service, refresh],
-  );
-  const applyStudyQuizBonus = useCallback(
-    (correctAnswers: number): void => {
-      service.applyStudyQuizBonus(correctAnswers);
-      refresh();
-    },
-    [service, refresh],
-  );
-  const getAntiCheatScore = useCallback((): number => {
-    return service.getCurrentPurityScore();
-  }, [service]);
-  const getAntiCheatLabel = useCallback(():
-    | "Elite"
-    | "Good"
-    | "Okay"
-    | "Distracted" => {
-    return service.getPurityLabel();
-  }, [service]);
+
   return {
     ...state,
     createSession,
-    startSession,
-    pauseSession,
-    resumeSession,
-    endSession,
-    abandonSession,
-    backgroundSession,
-    foregroundSession,
-    attemptRecovery,
-    applyStudyQuizBonus,
-    getAntiCheatScore,
-    getAntiCheatLabel,
+    startSession: wrapAction(actions.startSession),
+    pauseSession: wrapAction(actions.pauseSession),
+    resumeSession: wrapAction(actions.resumeSession),
+    endSession: wrapAction(actions.endSession),
+    abandonSession: wrapAction(actions.abandonSession),
+    backgroundSession: wrapAction(actions.backgroundSession),
+    foregroundSession: wrapAction(actions.foregroundSession),
+    attemptRecovery: wrapAction(actions.attemptRecovery),
+    applyStudyQuizBonus: actions.applyStudyQuizBonus,
+    getAntiCheatScore: actions.getAntiCheatScore,
+    getAntiCheatLabel: actions.getAntiCheatLabel,
     refresh,
   };
-}
-export function useSessionHistory(userId: string, limit: number = 50) {
-  const serviceRef = useRef(getSessionService());
-  const service = serviceRef.current;
-  const [history, setHistory] = useState<SessionHistoryEntry[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  const loadHistory = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      service.setUserId(userId);
-      const entries = await service.getSessionHistory(limit);
-      setHistory(entries);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error(String(err)));
-    } finally {
-      setIsLoading(false);
-    }
-  }, [service, userId, limit]);
-  useEffect(() => {
-    loadHistory();
-  }, [loadHistory]);
-  useEffect(() => {
-    const unsubscribe = eventBus.subscribe("session:completed", () => {
-      loadHistory();
-    });
-    return () => unsubscribe();
-  }, [loadHistory]);
-  return { history, isLoading, error, refresh: loadHistory };
-}
-export function useSessionPresets() {
-  const serviceRef = useRef(getSessionService());
-  const service = serviceRef.current;
-  const [presets, setPresets] = useState(service.getAllPresets());
-  const refresh = useCallback(() => {
-    setPresets(service.getAllPresets());
-  }, [service]);
-  const createPreset = useCallback(
-    async (config: Parameters<typeof service.createCustomPreset>[0]) => {
-      const preset = await service.createCustomPreset(config);
-      refresh();
-      return preset;
-    },
-    [service, refresh],
-  );
-  const deletePreset = useCallback(
-    async (presetId: string) => {
-      await service.deletePreset(presetId);
-      refresh();
-    },
-    [service, refresh],
-  );
-  return { presets, createPreset, deletePreset, refresh };
-}
-export function useSessionStats(userId: string) {
-  const serviceRef = useRef(getSessionService());
-  const service = serviceRef.current;
-  const [stats, setStats] = useState<{
-    totalSessions: number;
-    completedSessions: number;
-    abandonedSessions: number;
-    totalFocusTime: number;
-    averageSessionDuration: number;
-    currentStreak: number;
-    longestStreak: number;
-  } | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const loadStats = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      service.setUserId(userId);
-      const sessionStats = await service.getSessionStats();
-      setStats(sessionStats);
-    } catch (err) {
-      debug.error("Failed to load session stats:", err as Error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [service, userId]);
-  useEffect(() => {
-    loadStats();
-  }, [loadStats]);
-  useEffect(() => {
-    const unsubscribe = eventBus.subscribe("session:completed", () => {
-      loadStats();
-    });
-    return () => unsubscribe();
-  }, [loadStats]);
-  return { stats, isLoading, refresh: loadStats };
 }

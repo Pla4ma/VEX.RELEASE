@@ -1,5 +1,3 @@
-import type { FeatureAvailability } from '../liveops-config';
-import type { CompanionState } from '../companion/types';
 import type { LaneProfile } from '../lane-engine/types';
 import { ACTION_LABELS, PROGRESS_REACTIONS, STYLE_ADAPTATION } from './copy';
 import { getCoachMemoryConfidence, getCoachPresenceMessage } from './copy-service';
@@ -10,33 +8,10 @@ import {
   CompletionPresenceSummarySchema,
   type CoachActionIntent,
   type CoachPresence,
-  type CoachPresenceMemorySummary,
   type CoachPresenceMotivationStyle,
-  type CoachPresenceProgressInput,
   type CoachPresenceVisualState,
-  type CompletionPresenceSummary,
 } from './schemas';
-interface PresenceAvailability {
-  focus: FeatureAvailability;
-  progress: FeatureAvailability;
-  study: FeatureAvailability;
-}
-interface BuildPresenceInput {
-  companion: Pick<CompanionState, 'currentMood' | 'element' | 'level' | 'phase'> | null;
-  featureAvailability: PresenceAvailability;
-  laneProfile?: LaneProfile | null;
-  memorySummary: CoachPresenceMemorySummary;
-  motivationStyle: CoachPresenceMotivationStyle;
-  progress: CoachPresenceProgressInput;
-  surface: 'HOME' | 'SESSION_SETUP' | 'CHAT' | 'RESCUE' | 'PREMIUM';
-}
-interface CompletionPresenceInput {
-  featureAvailability: PresenceAvailability;
-  laneProfile?: LaneProfile | null;
-  memorySummary: CoachPresenceMemorySummary;
-  motivationStyle: CoachPresenceMotivationStyle;
-  summary: CompletionPresenceSummary;
-}
+import type { BuildPresenceInput, CompletionPresenceInput, PresenceAvailability } from './coach-presence-types';
 function styleForLane(profile: LaneProfile | null | undefined, fallback: CoachPresenceMotivationStyle): CoachPresenceMotivationStyle {
   if (!profile) return fallback;
   if (profile.primaryLane === 'student') return 'STUDY_FOCUSED';

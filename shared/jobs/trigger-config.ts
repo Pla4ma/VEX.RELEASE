@@ -7,6 +7,11 @@
 
 import type { TriggerDevConfig, RetryConfig } from './job-types';
 import { RETRY_CONFIGS, ERROR_CODES } from './job-constants';
+import type { LogConfig, SupabaseConfig, QueueConfig } from './trigger-config-types';
+import { QUEUE_CONFIGS } from './trigger-config-types';
+
+export type { LogConfig, SupabaseConfig, QueueConfig };
+export { QUEUE_CONFIGS };
 
 // ============================================================================
 // Environment Validation
@@ -26,18 +31,11 @@ function getEnvVar(name: string, required: boolean = true): string {
 
 export function createTriggerConfig(): TriggerDevConfig {
   return {
-    // Project identification
     projectId: getEnvVar('TRIGGER_PROJECT_ID'),
     apiKey: getEnvVar('TRIGGER_API_KEY'),
     apiUrl: getEnvVar('TRIGGER_API_URL', false) || 'https://api.trigger.dev',
-    
-    // Environment
     environment: (getEnvVar('NODE_ENV', false) as TriggerDevConfig['environment']) || 'development',
-    
-    // Default retry settings
     defaultRetryConfig: RETRY_CONFIGS.DEFAULT,
-    
-    // Observability
     sentryDsn: getEnvVar('SENTRY_DSN', false),
     postHogKey: getEnvVar('POSTHOG_KEY', false),
   };
@@ -56,21 +54,9 @@ export function isRetryableError(error: unknown): boolean {
     const message = error.message.toLowerCase();
     const code = (error as { code?: string }).code;
     
-    // Network-related errors
-    const networkErrors = [
-      'network',
-      'timeout',
-      'econnreset',
-      'econnrefused',
-      'ENOTFOUND',
-      'ETIMEDOUT',
-    ];
-    
-    // HTTP status codes
+    const networkErrors = ['network', 'timeout', 'econnreset', 'econnrefused', 'ENOTFOUND', 'ETIMEDOUT'];
     const retryableStatusCodes = ['429', '500', '502', '503', '504'];
-    
-    // Database errors
-    const dbErrors = ['23505', '40P01', '40001', '40P02']; // Lock/serialization errors
+    const dbErrors = ['23505', '40P01', '40001', '40P02'];
     
     const isNetworkError = networkErrors.some(e => message.includes(e));
     const isStatusCode = typeof code === 'string' && retryableStatusCodes.some(c => code.includes(c));
@@ -99,12 +85,6 @@ export function getNonRetryableErrors(): string[] {
 // Job Logging Configuration
 // ============================================================================
 
-export interface LogConfig {
-  level: 'DEBUG' | 'INFO' | 'WARN' | 'ERROR';
-  maxEntries: number;
-  redactFields: string[];
-}
-
 export function getLogConfig(): LogConfig {
   const level = (getEnvVar('JOB_LOG_LEVEL', false) as LogConfig['level']) || 'INFO';
   
@@ -112,15 +92,8 @@ export function getLogConfig(): LogConfig {
     level,
     maxEntries: 1000,
     redactFields: [
-      'password',
-      'token',
-      'secret',
-      'key',
-      'apiKey',
-      'authorization',
-      'auth',
-      'credential',
-      'private',
+      'password', 'token', 'secret', 'key', 'apiKey',
+      'authorization', 'auth', 'credential', 'private',
     ],
   };
 }
@@ -150,12 +123,6 @@ export function shouldReportToSentry(error: unknown): boolean {
 // Supabase Integration
 // ============================================================================
 
-export interface SupabaseConfig {
-  url: string;
-  serviceKey: string;
-  anonKey: string;
-}
-
 export function getSupabaseConfig(): SupabaseConfig {
   return {
     url: getEnvVar('SUPABASE_URL'),
@@ -163,36 +130,6 @@ export function getSupabaseConfig(): SupabaseConfig {
     anonKey: getEnvVar('SUPABASE_ANON_KEY'),
   };
 }
-
-// ============================================================================
-// Job Queue Configuration
-// ============================================================================
-
-export interface QueueConfig {
-  concurrency: number;
-  rateLimitPerSecond?: number;
-}
-
-export const QUEUE_CONFIGS: Record<string, QueueConfig> = {
-  DEFAULT: {
-    concurrency: 10,
-  },
-  HIGH_THROUGHPUT: {
-    concurrency: 50,
-    rateLimitPerSecond: 100,
-  },
-  NOTIFICATIONS: {
-    concurrency: 20,
-    rateLimitPerSecond: 50,
-  },
-  AI_WORKFLOWS: {
-    concurrency: 5,
-    rateLimitPerSecond: 10,
-  },
-  SEQUENTIAL: {
-    concurrency: 1,
-  },
-} as const;
 
 // ============================================================================
 // Environment Guards

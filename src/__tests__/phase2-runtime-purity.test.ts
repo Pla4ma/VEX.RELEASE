@@ -11,7 +11,7 @@
  */
 
 import { resolveNotificationAction } from '../navigation/notification-routing-core';
-import type { NotificationAction } from '../navigation/notification-routing-types';
+import type { NotificationAction, NotificationActionType } from '../navigation/notification-routing-types';
 
 describe('Phase 2F — Import blocking', () => {
   describe('1. Active src cannot import archive/features', () => {
@@ -46,7 +46,7 @@ describe('Phase 2F — Import blocking', () => {
     it('notification action types include no live-ops/purchase routes', () => {
       const archivedTypes = ['open_liveops', 'purchase_gems', 'open_marketplace', 'view_battlepass'];
       for (const archived of archivedTypes) {
-        const result = resolveNotificationAction({ type: archived } as unknown as NotificationAction);
+        const result = resolveNotificationAction({ type: archived as NotificationActionType });
         expect(result.intent).toBe('OPEN_HOME');
       }
     });

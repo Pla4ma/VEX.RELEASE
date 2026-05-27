@@ -1,13 +1,5 @@
 /**
- * API Client
- *
- * Production-grade HTTP client with:
- * - Request/response interceptors
- * - Exponential backoff retry
- * - Circuit breaker pattern
- * - Request deduplication
- * - Timeout handling
- * - Auth token refresh
+ * API Client — HTTP client with retry, circuit breaker, and deduplication.
  */
 
 import { Platform } from 'react-native';
@@ -17,6 +9,9 @@ import { CircuitBreaker, CircuitState } from './circuit-breaker';
 import { RequestDeduplicator } from './deduplicator';
 import { calculateBackoff, isRetryableError, isRetryableErrorCode } from './retry';
 import type { ApiConfig, AuthProvider, ApiRequestConfig, ApiResponse, ApiError } from './client-types';
+import type { RequestInterceptor, ResponseInterceptor } from './api-client-types';
+
+export type { RequestInterceptor, ResponseInterceptor };
 
 const debug = createDebugger('api');
 
@@ -24,8 +19,8 @@ export class ApiClient {
   private config: ApiConfig;
   private circuitBreaker: CircuitBreaker;
   private deduplicator = new RequestDeduplicator();
-  private requestInterceptors: Array<(config: ApiRequestConfig) => ApiRequestConfig | Promise<ApiRequestConfig>> = [];
-  private responseInterceptors: Array<(response: Response) => Response | Promise<Response>> = [];
+  private requestInterceptors: Array<RequestInterceptor> = [];
+  private responseInterceptors: Array<ResponseInterceptor> = [];
   private authProvider: AuthProvider | null = null;
 
   constructor(config: Partial<ApiConfig> = {}) {
@@ -44,30 +39,25 @@ export class ApiClient {
   setAuthProvider(provider: AuthProvider): void {
     this.authProvider = provider;
     this.addRequestInterceptor(async (config) => {
-      if (config.skipAuth || !this.authProvider) {return config;}
+      if (config.skipAuth || !this.authProvider) { return config; }
       const token = await this.authProvider.getAccessToken();
-      if (token) {config.headers = { ...config.headers, Authorization: `Bearer ${token}` };}
+      if (token) { config.headers = { ...config.headers, Authorization: `Bearer ${token}` }; }
       return config;
     });
   }
 
-  addRequestInterceptor(interceptor: (config: ApiRequestConfig) => ApiRequestConfig | Promise<ApiRequestConfig>): void {
-    this.requestInterceptors.push(interceptor);
-  }
-
-  addResponseInterceptor(interceptor: (response: Response) => Response | Promise<Response>): void {
-    this.responseInterceptors.push(interceptor);
-  }
+  addRequestInterceptor(interceptor: RequestInterceptor): void { this.requestInterceptors.push(interceptor); }
+  addResponseInterceptor(interceptor: ResponseInterceptor): void { this.responseInterceptors.push(interceptor); }
 
   private async runRequestInterceptors(config: ApiRequestConfig): Promise<ApiRequestConfig> {
     let result = config;
-    for (const interceptor of this.requestInterceptors) {result = await interceptor(result);}
+    for (const interceptor of this.requestInterceptors) { result = await interceptor(result); }
     return result;
   }
 
   private async runResponseInterceptors(response: Response): Promise<Response> {
     let result = response;
-    for (const interceptor of this.responseInterceptors) {result = await interceptor(result);}
+    for (const interceptor of this.responseInterceptors) { result = await interceptor(result); }
     return result;
   }
 
@@ -75,7 +65,7 @@ export class ApiClient {
     const url = new URL(endpoint, this.config.baseURL);
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {url.searchParams.append(key, String(value));}
+        if (value !== undefined && value !== null) { url.searchParams.append(key, String(value)); }
       });
     }
     return url.toString();
@@ -85,15 +75,10 @@ export class ApiClient {
     return { code, message, status, details, retryable: isRetryableErrorCode(code) };
   }
 
-  private isApiError(error: unknown): error is ApiError {
-    return typeof error === 'object' && error !== null && 'code' in error;
-  }
+  private isApiError(error: unknown): error is ApiError { return typeof error === 'object' && error !== null && 'code' in error; }
 
   private async parseErrorResponse(response: Response): Promise<Partial<ApiError>> {
-    try {
-      const text = await response.text();
-      return JSON.parse(text);
-    } catch { return {}; }
+    try { return JSON.parse(await response.text()); } catch { return {}; }
   }
 
   private parseHeaders(headers: Headers): Record<string, string> {
@@ -103,7 +88,7 @@ export class ApiClient {
   }
 
   private async executeRequest<T>(endpoint: string, config: ApiRequestConfig): Promise<ApiResponse<T>> {
-    if (!this.circuitBreaker.canExecute()) {throw this.createError('CIRCUIT_OPEN', 'Service temporarily unavailable', 503);}
+    if (!this.circuitBreaker.canExecute()) { throw this.createError('CIRCUIT_OPEN', 'Service temporarily unavailable', 503); }
 
     const url = this.buildURL(endpoint, config.params);
     const controller = new AbortController();
@@ -118,7 +103,7 @@ export class ApiClient {
       };
 
       const fetchConfig: RequestInit = { method: config.method ?? 'GET', headers, signal: controller.signal };
-      if (config.data && config.method !== 'GET') {fetchConfig.body = JSON.stringify(config.data);}
+      if (config.data && config.method !== 'GET') { fetchConfig.body = JSON.stringify(config.data); }
 
       debug.debug('API Request: %s %s', fetchConfig.method, url);
       let response = await fetch(url, fetchConfig);
@@ -142,7 +127,7 @@ export class ApiClient {
       return result;
     } catch (error) {
       this.circuitBreaker.recordFailure();
-      if (error instanceof Error && error.name === 'AbortError') {throw this.createError('TIMEOUT', 'Request timeout', 408);}
+      if (error instanceof Error && error.name === 'AbortError') { throw this.createError('TIMEOUT', 'Request timeout', 408); }
       throw error;
     } finally { clearTimeout(timeoutId); }
   }
@@ -155,9 +140,9 @@ export class ApiClient {
       try { return await this.executeRequest<T>(endpoint, config); }
       catch (error) {
         lastError = error as Error;
-        if (attempt === maxRetries) {break;}
+        if (attempt === maxRetries) { break; }
         const apiError = this.isApiError(lastError) ? lastError : this.createError('UNKNOWN', lastError.message, 0);
-        if (!isRetryableError(apiError)) {break;}
+        if (!isRetryableError(apiError)) { break; }
         const delay = calculateBackoff(attempt, this.config.retryDelay);
         debug.debug('Retrying request in %dms (attempt %d/%d)', delay, attempt + 1, maxRetries + 1);
         await new Promise(resolve => setTimeout(resolve, delay));
@@ -167,7 +152,7 @@ export class ApiClient {
   }
 
   private async executeWithDeduplication<T>(endpoint: string, config: ApiRequestConfig): Promise<ApiResponse<T>> {
-    if (!config.deduplicate) {return this.executeWithRetry<T>(endpoint, config);}
+    if (!config.deduplicate) { return this.executeWithRetry<T>(endpoint, config); }
     const key = `${config.method ?? 'GET'}:${endpoint}:${JSON.stringify(config.params ?? {})}:${JSON.stringify(config.data ?? {})}`;
     return this.deduplicator.deduplicate(key, () => this.executeWithRetry<T>(endpoint, config));
   }
@@ -198,16 +183,13 @@ export class ApiClient {
   }
 
   getCircuitBreakerState(): CircuitState { return this.circuitBreaker.getState(); }
-
-  resetCircuitBreaker(): void {
-    this.circuitBreaker = new CircuitBreaker(this.config.circuitBreakerThreshold, this.config.circuitBreakerResetTime);
-  }
+  resetCircuitBreaker(): void { this.circuitBreaker = new CircuitBreaker(this.config.circuitBreakerThreshold, this.config.circuitBreakerResetTime); }
 }
 
 let apiClientInstance: ApiClient | null = null;
 
 export function getApiClient(): ApiClient {
-  if (!apiClientInstance) {apiClientInstance = new ApiClient();}
+  if (!apiClientInstance) { apiClientInstance = new ApiClient(); }
   return apiClientInstance;
 }
 

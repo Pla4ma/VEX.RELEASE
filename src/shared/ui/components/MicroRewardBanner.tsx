@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { View, ViewStyle, Pressable } from "react-native";
 import Animated, { useSharedValue, useAnimatedStyle, withSpring, FadeInUp, FadeOutUp } from "react-native-reanimated";
 import { Text } from "../../../components/primitives/Text";
-import { useTheme, type Theme } from "../../../theme";
+import { useTheme } from "../../../theme";
 import { triggerHaptic } from "../../../utils/haptics";
-export type RewardType = "xp" | "coins" | "gems" | "streak" | "level" | "achievement" | "milestone";
+import { REWARD_CONFIG, getRewardColor, type RewardType } from "./micro-reward-helpers";
+
 export interface MicroRewardBannerProps {
   type: RewardType;
   amount?: number;
@@ -18,35 +19,7 @@ export interface MicroRewardBannerProps {
   style?: ViewStyle;
   showOnce?: boolean;
 }
-const REWARD_CONFIG: Record<RewardType, { icon: string; label: string }> = {
-  xp: { icon: "⭐", label: "XP Gained" },
-  coins: { icon: "🪙", label: "Coins" },
-  gems: { icon: "💎", label: "Gems" },
-  streak: { icon: "🔥", label: "Streak" },
-  level: { icon: "📈", label: "Level Up" },
-  achievement: { icon: "🏆", label: "Achievement" },
-  milestone: { icon: "🎯", label: "Milestone" },
-};
-const getRewardColor = (type: RewardType, theme: Theme): string => {
-  switch (type) {
-    case "xp":
-      return theme.colors.primary[500];
-    case "coins":
-      return theme.colors.warning.dark;
-    case "gems":
-      return theme.colors.accent.blue;
-    case "streak":
-      return theme.colors.accent.orange;
-    case "level":
-      return theme.colors.success.dark;
-    case "achievement":
-      return theme.colors.accent.purple;
-    case "milestone":
-      return theme.colors.accent.pink;
-    default:
-      return theme.colors.primary[500];
-  }
-};
+
 export const MicroRewardBanner: React.FC<MicroRewardBannerProps> = ({ type, amount, label: customLabel, description, icon: customIcon, onPress, onDismiss, autoDismiss = false, autoDismissDelay = 3000, style }) => {
   const { theme } = useTheme();
   const scale = useSharedValue(1);

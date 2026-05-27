@@ -12,8 +12,6 @@ import { useSessionUIStore } from '../../store/session-state';
 import { triggerHaptic } from '../../utils/haptics';
 import { useOnboardingLane } from './hooks/useOnboardingLane';
 import {
-  DEFAULT_COMPANION_ELEMENT,
-  DEFAULT_PERSONA_ID,
   GoalStep,
   LaneConfirmationStep,
   LaneChoiceStep,
@@ -22,19 +20,12 @@ import {
   OnboardingFlowLayout,
   SignedOutOnboardingState,
   STARTER_PRESETS,
-  STEP_TITLES,
   StarterStep,
 } from './components';
+import { LAST_STEP_INDEX, clampStep, buildDraftPayload, getStepValidation } from './onboarding-flow-steps';
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
 type OnboardingRouteProp = RouteProp<ExtendedRootStackParams, 'Onboarding'>;
-
-const LAST_STEP_INDEX = STEP_TITLES.length - 1;
-
-function clampStep(value: number | undefined): number {
-  if (typeof value !== 'number' || Number.isNaN(value)) return 0;
-  return Math.min(Math.max(0, value), LAST_STEP_INDEX);
-}
 
 export function OnboardingFlowScreen(): JSX.Element {
   const navigation = useNavigation<NavigationProp>();
@@ -81,15 +72,7 @@ export function OnboardingFlowScreen(): JSX.Element {
 
   const persistDraft = useCallback((): void => {
     if (!userId) return;
-    saveDraft(userId, {
-      element: DEFAULT_COMPANION_ELEMENT,
-      explicitMotivationStyle: motivationStyle,
-      goal,
-      personaId: DEFAULT_PERSONA_ID,
-      squadId: null,
-      starterPresetId,
-      chosenLane: chosenLane ?? undefined,
-    });
+    saveDraft(userId, buildDraftPayload({ goal, motivationStyle, starterPresetId, chosenLane: chosenLane ?? undefined }));
   }, [goal, motivationStyle, saveDraft, starterPresetId, userId, chosenLane]);
 
   useEffect(() => {
@@ -109,9 +92,7 @@ export function OnboardingFlowScreen(): JSX.Element {
     setStep(3);
   }, [handleAcceptLane]);
 
-  useEffect(() => {
-    navigation.setParams({ step });
-  }, [navigation, step]);
+  useEffect(() => { navigation.setParams({ step }); }, [navigation, step]);
 
   useEffect(() => {
     if (!isFocused || step !== LAST_STEP_INDEX || completedRef.current) return;
@@ -171,7 +152,7 @@ export function OnboardingFlowScreen(): JSX.Element {
 
   if (!userId) return <SignedOutOnboardingState />;
 
-  const isContinueDisabled = (step === 0 && !goal) || (step === 1 && !motivationStyle) || step === 2 || isFinishing;
+  const { isContinueDisabled } = getStepValidation(step, goal, motivationStyle, isFinishing);
 
   return (
     <OnboardingFlowLayout

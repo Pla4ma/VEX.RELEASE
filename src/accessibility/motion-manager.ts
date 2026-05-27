@@ -21,6 +21,11 @@ import {
   type AnimatedValue,
   type CompositeAnimation,
 } from './motion-animation-stubs';
+import {
+  type HapticType,
+  type MotionPerformanceStats,
+  createDefaultPerformanceStats,
+} from './motion-config';
 
 const debug = createDebugger('motion-accessibility');
 
@@ -111,9 +116,7 @@ export class MotionAccessibilityManager {
     });
   }
 
-  triggerHapticFeedback(
-    type: 'light' | 'medium' | 'heavy' | 'success' | 'warning' | 'error',
-  ): void {
+  triggerHapticFeedback(type: HapticType): void {
     if (!this.preferences.hapticFeedbackEnabled) {
       return;
     }
@@ -149,18 +152,11 @@ export class MotionAccessibilityManager {
     }
   }
 
-  getPerformanceStats(): {
-    totalAnimations: number;
-    activeAnimations: number;
-    averageDuration: number;
-    reducedMotionUsage: number;
-  } {
-    return {
-      totalAnimations: this.animationRegistry.size,
-      activeAnimations: 0,
-      averageDuration: 300,
-      reducedMotionUsage: this.preferences.reducedMotion ? 1 : 0,
-    };
+  getPerformanceStats(): MotionPerformanceStats {
+    return createDefaultPerformanceStats(
+      this.animationRegistry.size,
+      this.preferences.reducedMotion,
+    );
   }
 
   addListener(listener: () => void): () => void {
@@ -199,6 +195,5 @@ export class MotionAccessibilityManager {
     this.listeners.forEach((listener) => listener());
   }
 }
-
 export const motionAccessibilityManager =
   MotionAccessibilityManager.getInstance();

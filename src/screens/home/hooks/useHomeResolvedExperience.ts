@@ -38,6 +38,10 @@ import {
   computeCoachInteractions,
   computeComebackSessions,
 } from './home-experience-utils';
+import {
+  resolveGamificationIntensity,
+  resolveUserStage,
+} from './useHomeExperienceTypes';
 
 export { recordBehaviorSignal };
 
@@ -159,19 +163,12 @@ export function useHomeResolvedExperience(controller: HomeController): HomeResol
     },
   });
 
-  const userStage: 'new' | 'activating' | 'engaged' | 'power' = (
-    totalCompletedSessions === 0 ? 'new'
-    : totalCompletedSessions < 3 ? 'activating'
-    : totalCompletedSessions < 10 ? 'engaged' : 'power'
-  );
+  const userStage = resolveUserStage(totalCompletedSessions);
 
   const canonicalProfile = useMemo(() => ({
     motivationStyle,
     primaryGoal,
-    gamificationIntensity: (
-      motivationStyle === 'game_like' || motivationStyle === 'intense' ? 'strong'
-      : motivationStyle === 'calm' ? 'minimal' : 'medium'
-    ) as 'minimal' | 'medium' | 'strong',
+    gamificationIntensity: resolveGamificationIntensity(motivationStyle),
     studyLayerName: firstWeekExperience.studyLayerLabel,
     userStage,
   }), [motivationStyle, primaryGoal, firstWeekExperience.studyLayerLabel, userStage]);

@@ -14,9 +14,11 @@ export { InterruptionWarning } from "./InterruptionWarning";
 export { PurityHUD } from "./PurityHUD";
 export {
   QualityIndicator,
+} from "./QualityIndicator";
+export {
   type QualityIndicatorProps,
   type QualityGrade,
-} from "./QualityIndicator";
+} from "./QualityIndicator-helpers";
 export { RecoveryPrompt } from "./RecoveryPrompt";
 export { SessionControls } from "./SessionControls";
 export { SessionHistory } from "./SessionHistory";

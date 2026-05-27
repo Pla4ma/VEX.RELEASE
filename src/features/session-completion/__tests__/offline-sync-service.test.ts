@@ -188,7 +188,6 @@ describe('SessionCompletionOfflineSyncService', () => {
     });
 
     const service = new SessionCompletionOfflineSyncService();
-
     expect(service.getDiagnostics().fallbackEntriesCount).toBe(0);
     expect(captureSilentFailureMock).toHaveBeenCalledWith(expect.any(Error), {
       feature: 'session-completion',

@@ -1,4 +1,4 @@
-import type { BenchmarkComparison, BenchmarkType } from './types';
+import type { BenchmarkComparison, BenchmarkType } from './completion-benchmark-set';
 
 export interface ShareableTemplate {
   id: string;

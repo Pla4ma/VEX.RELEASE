@@ -11,21 +11,13 @@ import { CompletionLedgerSchema, type CompletionLedger } from './schemas';
 import { SUBSYSTEM_META, type SubsystemMeta, type SubsystemKind } from './subsystem-meta';
 import { enqueue } from '../../lib/offline/queue';
 import { createDebugger } from '../../utils/debug';
+import type { CompletionSubsystemInput, CompletionSubsystemResult } from './completion-subsystem-types';
 
-const debug = createDebugger('session-completion:subsystems');
-
-type CompletionSubsystemInput = {
-  ledger: CompletionLedger;
-  summary: SessionSummary;
-};
-
-type CompletionSubsystemResult = {
-  degradedSystems: string[];
-  ledger: CompletionLedger;
-};
-
+export type { CompletionSubsystemInput, CompletionSubsystemResult };
 export { SUBSYSTEM_META };
 export type { SubsystemKind, SubsystemMeta };
+
+const debug = createDebugger('session-completion:subsystems');
 
 function subsystemShouldRun(meta: SubsystemMeta): boolean {
   if (meta.kind === 'CORE_REQUIRED' || meta.kind === 'REQUIRED' || meta.kind === 'ANALYTICS_ONLY') {

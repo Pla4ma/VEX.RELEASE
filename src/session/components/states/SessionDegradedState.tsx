@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Pressable } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { styles } from "./SessionDegradedState.styles";
+
 interface DegradedFeature {
   name: string;
   available: boolean;
@@ -122,104 +122,4 @@ export const SessionDegradedState: React.FC<SessionDegradedStateProps> = ({
     </View>
   );
 };
-const styles = createSheet({
-  container: { flex: 1, backgroundColor: launchColors.hex_1a1a2e, padding: 24 },
-  warningBanner: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: launchColors.hex_ffa500,
-    paddingVertical: 12,
-    borderRadius: 8,
-    marginBottom: 24,
-  },
-  warningIcon: { fontSize: 20, marginRight: 8 },
-  warningText: { color: launchColors.hex_000, fontSize: 16, fontWeight: "700" },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: launchColors.hex_fff,
-    textAlign: "center",
-    marginBottom: 8,
-  },
-  reason: {
-    fontSize: 14,
-    color: launchColors.hex_9e9e9e,
-    textAlign: "center",
-    marginBottom: 24,
-  },
-  featuresContainer: {
-    backgroundColor: launchColors.hex_2a2a3e,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
-  },
-  featuresTitle: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: launchColors.hex_9e9e9e,
-    marginBottom: 12,
-    textTransform: "uppercase",
-  },
-  featureRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: launchColors.hex_3a3a4e,
-  },
-  featureIcon: { fontSize: 16, marginRight: 12, marginTop: 2 },
-  featureInfo: { flex: 1 },
-  featureName: { fontSize: 15, color: launchColors.hex_fff },
-  featureUnavailable: {
-    color: launchColors.hex_9e9e9e,
-    textDecorationLine: "line-through",
-  },
-  featureReason: { fontSize: 12, color: launchColors.hex_ffa500, marginTop: 2 },
-  actions: { gap: 12, marginBottom: 24 },
-  primaryButton: {
-    backgroundColor: launchColors.hex_e94560,
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-  primaryButtonText: {
-    color: launchColors.hex_fff,
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  secondaryButton: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: launchColors.hex_9e9e9e,
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: "center",
-  },
-  secondaryButtonText: {
-    color: launchColors.hex_9e9e9e,
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  endButton: { paddingVertical: 12, alignItems: "center" },
-  endButtonText: { color: launchColors.hex_e94560, fontSize: 14 },
-  explanation: {
-    backgroundColor: launchColors.rgb_255_165_0_0_1,
-    borderRadius: 12,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: launchColors.rgb_255_165_0_0_3,
-  },
-  explanationTitle: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: launchColors.hex_ffa500,
-    marginBottom: 8,
-  },
-  explanationText: {
-    fontSize: 13,
-    color: launchColors.hex_9e9e9e,
-    lineHeight: 18,
-  },
-});
 export default SessionDegradedState;

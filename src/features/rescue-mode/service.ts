@@ -1,4 +1,3 @@
-import { SessionMode } from '../../session/modes';
 import type { Lane } from '../lane-engine/types';
 import {
   RescueCompletionMemorySchema,
@@ -15,36 +14,13 @@ import {
   type RescuePlan,
   type RescuePlanInput,
 } from './schemas';
-import { LANE_RESCUE_COPY } from './rescue-copy';
+import {
+  clampDuration,
+  durationForLane,
+  modeFor,
+  taskFor,
+} from './rescue-mode-helpers';
 
-// ── Duration Helpers ───────────────────────────────────────────────────
-function clampDuration(seconds: number | undefined, lane: Lane): number {
-  const defaultDuration = durationForLane(lane);
-  return Math.max(5 * 60, Math.min(seconds ?? defaultDuration, 12 * 60));
-}
-
-function durationForLane(lane: Lane): number {
-  if (lane === 'student') return 8 * 60;
-  if (lane === 'game_like') return 10 * 60;
-  if (lane === 'deep_creative') return 7 * 60;
-  return 5 * 60;
-}
-
-// ── Mode ───────────────────────────────────────────────────────────────
-function modeFor(lane: Lane): SessionMode {
-  if (lane === 'student') return SessionMode.STUDY;
-  if (lane === 'deep_creative') return SessionMode.CREATIVE;
-  if (lane === 'game_like') return SessionMode.SPRINT;
-  return SessionMode.RECOVERY;
-}
-
-// ── Task Description ───────────────────────────────────────────────────
-function taskFor(input: RescuePlanInput, lane: Lane): string {
-  if (input.taskDescription) return input.taskDescription;
-  return LANE_RESCUE_COPY[lane][input.reason];
-}
-
-// ── Plan Creation ──────────────────────────────────────────────────────
 export function createRescuePlan(rawInput: RescuePlanInput): RescuePlan {
   const input = RescuePlanInputSchema.parse(rawInput);
   const lane = input.laneProfile?.primaryLane ?? input.lane;
@@ -63,7 +39,6 @@ export function createRescuePlan(rawInput: RescuePlanInput): RescuePlan {
   });
 }
 
-// ── Eligibility ────────────────────────────────────────────────────────
 export function isRescueEligible(rawInput: RescueEligibilityInput): RescueEligibilityResult {
   const input = RescueEligibilityInputSchema.parse(rawInput);
   const lane = input.laneProfile?.primaryLane ?? input.lane;
@@ -84,7 +59,6 @@ export function isRescueEligible(rawInput: RescueEligibilityInput): RescueEligib
 
   let trigger: (typeof RescueEligibilityResultSchema)['_output']['trigger'] = null;
 
-  // Priority-ordered: strongest signals first
   if (input.abandonedSessionExists) {
     trigger = 'abandoned_session';
   } else if (input.missedPlannedSession) {
@@ -110,7 +84,6 @@ export function isRescueEligible(rawInput: RescueEligibilityInput): RescueEligib
   });
 }
 
-// ── Reflection ─────────────────────────────────────────────────────────
 export function generateRescueReflection(plan: RescuePlan, outcome: RescueOutcome): string {
   const minutes = Math.round(plan.durationSeconds / 60);
   if (outcome === 'completed') {
@@ -122,7 +95,6 @@ export function generateRescueReflection(plan: RescuePlan, outcome: RescueOutcom
   return `Started a rescue block but stepped away. Reason: ${plan.reason}. That is okay. Try again later.`;
 }
 
-// ── Completion Record ──────────────────────────────────────────────────
 export function buildRescueCompletionRecord(
   plan: RescuePlan,
   outcome: RescueOutcome,
@@ -167,7 +139,6 @@ export function buildRescueSessionParams(plan: RescuePlan): {
   };
 }
 
-// ── Memory Candidate ───────────────────────────────────────────────────
 export function buildRescueCompletionMemory(
   plan: RescuePlan,
   outcome?: RescueOutcome,
@@ -183,7 +154,6 @@ export function buildRescueCompletionMemory(
   });
 }
 
-// ── Push Eligibility ──────────────────────────────────────────────────
 export interface RescuePushInput {
   eligibility: RescueEligibilityResult;
   userMuted: boolean;

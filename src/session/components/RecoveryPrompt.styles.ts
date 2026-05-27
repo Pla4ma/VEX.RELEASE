@@ -1,0 +1,85 @@
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
+
+export const styles = createSheet({
+  overlay: {
+    flex: 1,
+    backgroundColor: launchColors.rgb_0_0_0_0_8,
+    justifyContent: "center",
+    padding: 24,
+  },
+  container: {
+    backgroundColor: launchColors.hex_1a1a2e,
+    borderRadius: 20,
+    padding: 24,
+  },
+  header: { alignItems: "center", marginBottom: 24 },
+  icon: { fontSize: 48, marginBottom: 12 },
+  title: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: launchColors.hex_fff,
+    marginBottom: 8,
+  },
+  subtitle: { fontSize: 16, color: launchColors.hex_9e9e9e },
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: launchColors.hex_9e9e9e,
+    marginBottom: 12,
+    textTransform: "uppercase",
+  },
+  options: { gap: 12 },
+  optionCard: {
+    backgroundColor: launchColors.hex_2a2a3e,
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: launchColors.hex_3a3a4e,
+  },
+  optionHeader: { flexDirection: "row", alignItems: "center", marginBottom: 8 },
+  optionIcon: { fontSize: 24, marginRight: 12 },
+  optionInfo: { flex: 1 },
+  optionLabel: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: launchColors.hex_fff,
+    marginBottom: 2,
+  },
+  optionDescription: { fontSize: 13, color: launchColors.hex_9e9e9e },
+  penaltyBadge: {
+    backgroundColor: launchColors.rgb_244_67_54_0_2,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    alignSelf: "flex-start",
+  },
+  penaltyText: { fontSize: 12, color: launchColors.hex_f44336 },
+  abandonSection: { marginTop: 24, alignItems: "center" },
+  orText: { color: launchColors.hex_666, marginBottom: 12 },
+  abandonButton: {
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderWidth: 1,
+    borderColor: launchColors.hex_e94560,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  abandonText: {
+    color: launchColors.hex_e94560,
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  abandonPenalty: {
+    fontSize: 12,
+    color: launchColors.hex_e9456080,
+    marginTop: 4,
+  },
+  helpText: {
+    marginTop: 20,
+    fontSize: 13,
+    color: launchColors.hex_666,
+    textAlign: "center",
+    lineHeight: 18,
+  },
+});

@@ -188,7 +188,6 @@ export class ThemeService {
  * Singleton instance for app-wide use
  */
 let themeServiceInstance: ThemeService | null = null;
-
 /**
  * Get theme service singleton
  */

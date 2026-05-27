@@ -1,73 +1,46 @@
-import { getMMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
 import type {
   SessionState,
   SessionHistoryEntry,
   SessionSummary,
 } from "../types";
 import { createDebugger } from "../../utils/debug";
-import { calculateSessionStreaks } from "./SessionStreakCalculator";
+import { parseSessionStateJson } from "./SessionRepositoryParsers";
 import {
-  parseSessionHistoryJson,
-  parseSessionStateJson,
-  parseSessionSummaryMapJson,
-  parseSyncQueueJson,
-} from "./SessionRepositoryParsers";
+  calculateSessionStats,
+  type SessionStatsResult,
+} from "./session-repository-stats";
+import {
+  getSessionHistoryFromStorage,
+  getSessionByIdFromStorage,
+  addToHistoryInStorage,
+} from "./session-repository-history";
+import {
+  getSessionSummary as getSummary,
+  saveSessionSummary as saveSummary,
+  getAllSummaries as getAllSum,
+} from "./session-repository-summaries";
+import {
+  addToSyncQueue as addToQueue,
+  removeFromSyncQueue as removeFromQueue,
+  getSyncQueue as getQueue,
+} from "./session-repository-sync-queue";
+import { STORAGE_KEYS, SessionStorageHelper } from "./session-repository-storage";
+
 const debug = createDebugger("session:repository");
 
-interface MMKVInstance {
-  getString(key: string): string | undefined;
-  set(key: string, value: string): void;
-  delete(key: string): void;
-}
-
-const STORAGE_KEYS = {
-  activeSession: (userId: string) => `session:active:${userId}`,
-  sessionHistory: (userId: string) => `session:history:${userId}`,
-  sessionSummaries: (userId: string) => `session:summaries:${userId}`,
-  syncQueue: (userId: string) => `session:sync:queue:${userId}`,
-};
+export type { SessionStatsResult };
 
 export class SessionRepository {
   private userId: string | null = null;
-  private mmkv: MMKVInstance | null = null;
-  private useMMKV = false;
+  private storage = new SessionStorageHelper();
 
   constructor(userId?: string) {
     this.userId = userId ?? null;
-    this.initStorage();
   }
+
   setUserId(userId: string): void {
     this.userId = userId;
     debug.info("SessionRepository user set: %s", userId);
-  }
-
-  private initStorage(): void {
-    try {
-      const { MMKV } = require("react-native-mmkv");
-      this.mmkv = new MMKV({ id: "session-storage" });
-      this.useMMKV = true;
-    } catch (error) {
-      debug.warn(
-        "MMKV init failed",
-        error instanceof Error ? error : new Error(String(error)),
-      );
-      this.useMMKV = false;
-    }
-  }
-
-  private async getString(key: string): Promise<string | null> {
-    if (this.useMMKV && this.mmkv) return this.mmkv.getString(key) ?? null;
-    return getMMKVStorageAdapter().getItem(key);
-  }
-
-  private async setString(key: string, value: string): Promise<void> {
-    if (this.useMMKV && this.mmkv) this.mmkv.set(key, value);
-    else await getMMKVStorageAdapter().setItem(key, value);
-  }
-
-  private async removeString(key: string): Promise<void> {
-    if (this.useMMKV && this.mmkv) this.mmkv.delete(key);
-    else await getMMKVStorageAdapter().removeItem(key);
   }
 
   private requireUserId(): string {
@@ -78,12 +51,10 @@ export class SessionRepository {
   async getActiveSession(): Promise<SessionState | null> {
     if (!this.userId) return null;
     try {
-      const data = await this.getString(
+      const data = await this.storage.getString(
         STORAGE_KEYS.activeSession(this.userId),
       );
-      if (data) {
-        return parseSessionStateJson(data);
-      }
+      if (data) return parseSessionStateJson(data);
     } catch (error) {
       debug.error(
         "Failed to load active session",
@@ -96,7 +67,7 @@ export class SessionRepository {
   async saveActiveSession(session: SessionState): Promise<void> {
     const uid = this.requireUserId();
     try {
-      await this.setString(
+      await this.storage.setString(
         STORAGE_KEYS.activeSession(uid),
         JSON.stringify(session),
       );
@@ -112,187 +83,99 @@ export class SessionRepository {
   async clearActiveSession(): Promise<void> {
     if (!this.userId) return;
     try {
-      await this.removeString(STORAGE_KEYS.activeSession(this.userId));
-    } catch {
-      /* ignore */
-    }
+      await this.storage.removeString(STORAGE_KEYS.activeSession(this.userId));
+    } catch { /* ignore */ }
   }
 
   async getSessionHistory(limit = 100): Promise<SessionHistoryEntry[]> {
     if (!this.userId) return [];
-    try {
-      const data = await this.getString(
-        STORAGE_KEYS.sessionHistory(this.userId),
-      );
-      if (data) return parseSessionHistoryJson(data, limit);
-    } catch (error) {
-      debug.error(
-        "Failed to load history",
-        error instanceof Error ? error : new Error(String(error)),
-      );
-    }
-    return [];
+    return getSessionHistoryFromStorage(
+      (key) => this.storage.getString(key),
+      STORAGE_KEYS.sessionHistory(this.userId),
+      limit,
+    );
   }
 
   async getSessionById(sessionId: string): Promise<SessionHistoryEntry | null> {
-    const history = await this.getSessionHistory(1000);
-    return history.find((e) => e.sessionId === sessionId) ?? null;
+    if (!this.userId) return null;
+    return getSessionByIdFromStorage(
+      (key) => this.storage.getString(key),
+      STORAGE_KEYS.sessionHistory(this.userId),
+      sessionId,
+    );
   }
 
   async addToHistory(entry: SessionHistoryEntry): Promise<void> {
     const uid = this.requireUserId();
-    try {
-      let history = await this.getSessionHistory(1000);
-      history.unshift(entry);
-      if (history.length > 1000) history = history.slice(0, 1000);
-      await this.setString(
-        STORAGE_KEYS.sessionHistory(uid),
-        JSON.stringify(history),
-      );
-    } catch (error) {
-      debug.error(
-        "Failed to add to history",
-        error instanceof Error ? error : new Error(String(error)),
-      );
-      throw error;
-    }
+    return addToHistoryInStorage(
+      entry,
+      (key) => this.storage.getString(key),
+      (key, val) => this.storage.setString(key, val),
+      STORAGE_KEYS.sessionHistory(uid),
+    );
   }
 
   async getSessionSummary(sessionId: string): Promise<SessionSummary | null> {
     if (!this.userId) return null;
-    try {
-      const data = await this.getString(
-        STORAGE_KEYS.sessionSummaries(this.userId),
-      );
-      if (data) {
-        const summaries = parseSessionSummaryMapJson(data);
-        return summaries[sessionId] || null;
-      }
-    } catch (error) {
-      debug.error(
-        "Failed to load summary",
-        error instanceof Error ? error : new Error(String(error)),
-      );
-    }
-    return null;
+    return getSummary(
+      sessionId,
+      this.userId,
+      (key) => this.storage.getString(key),
+      STORAGE_KEYS.sessionSummaries(this.userId),
+    );
   }
 
   async saveSessionSummary(summary: SessionSummary): Promise<void> {
     const uid = this.requireUserId();
-    try {
-      const data = await this.getString(STORAGE_KEYS.sessionSummaries(uid));
-      const summaries: Record<string, SessionSummary> = data
-        ? parseSessionSummaryMapJson(data)
-        : {};
-      summaries[summary.sessionId] = summary;
-      await this.setString(
-        STORAGE_KEYS.sessionSummaries(uid),
-        JSON.stringify(summaries),
-      );
-    } catch (error) {
-      debug.error(
-        "Failed to save summary",
-        error instanceof Error ? error : new Error(String(error)),
-      );
-      throw error;
-    }
+    return saveSummary(
+      summary,
+      (key) => this.storage.getString(key),
+      (key, val) => this.storage.setString(key, val),
+      STORAGE_KEYS.sessionSummaries(uid),
+    );
   }
 
   async getAllSummaries(): Promise<SessionSummary[]> {
     if (!this.userId) return [];
-    try {
-      const data = await this.getString(
-        STORAGE_KEYS.sessionSummaries(this.userId),
-      );
-      if (data) return Object.values(parseSessionSummaryMapJson(data));
-    } catch (error) {
-      debug.error(
-        "Failed to load summaries",
-        error instanceof Error ? error : new Error(String(error)),
-      );
-    }
-    return [];
+    return getAllSum(
+      (key) => this.storage.getString(key),
+      STORAGE_KEYS.sessionSummaries(this.userId),
+    );
   }
 
   async addToSyncQueue(sessionId: string): Promise<void> {
     if (!this.userId) return;
-    try {
-      const data = await this.getString(STORAGE_KEYS.syncQueue(this.userId));
-      const queue: string[] = data ? parseSyncQueueJson(data) : [];
-      if (!queue.includes(sessionId)) {
-        queue.push(sessionId);
-        await this.setString(
-          STORAGE_KEYS.syncQueue(this.userId),
-          JSON.stringify(queue),
-        );
-      }
-    } catch (error) {
-      debug.error(
-        "Failed to add to sync queue",
-        error instanceof Error ? error : new Error(String(error)),
-      );
-    }
+    return addToQueue(
+      sessionId,
+      (key) => this.storage.getString(key),
+      (key, val) => this.storage.setString(key, val),
+      STORAGE_KEYS.syncQueue(this.userId),
+    );
   }
 
   async removeFromSyncQueue(sessionId: string): Promise<void> {
     if (!this.userId) return;
-    try {
-      const queue = await this.getSyncQueue();
-      await this.setString(
-        STORAGE_KEYS.syncQueue(this.userId),
-        JSON.stringify(queue.filter((id) => id !== sessionId)),
-      );
-    } catch (error) {
-      debug.error(
-        "Failed to remove from sync queue",
-        error instanceof Error ? error : new Error(String(error)),
-      );
-    }
+    const queue = await this.getSyncQueue();
+    return removeFromQueue(
+      sessionId,
+      queue,
+      (key, val) => this.storage.setString(key, val),
+      STORAGE_KEYS.syncQueue(this.userId),
+    );
   }
 
   async getSyncQueue(): Promise<string[]> {
     if (!this.userId) return [];
-    try {
-      const data = await this.getString(STORAGE_KEYS.syncQueue(this.userId));
-      return data ? parseSyncQueueJson(data) : [];
-    } catch (error) {
-      debug.error(
-        "Failed to get sync queue",
-        error instanceof Error ? error : new Error(String(error)),
-      );
-      return [];
-    }
+    return getQueue(
+      (key) => this.storage.getString(key),
+      STORAGE_KEYS.syncQueue(this.userId),
+    );
   }
 
-  async getSessionStats(): Promise<{
-    totalSessions: number;
-    completedSessions: number;
-    abandonedSessions: number;
-    totalFocusTime: number;
-    averageSessionDuration: number;
-    currentStreak: number;
-    longestStreak: number;
-  }> {
+  async getSessionStats(): Promise<SessionStatsResult> {
     const history = await this.getSessionHistory(1000);
     const summaries = await this.getAllSummaries();
-    const completed = history.filter(
-      (h) => h.status === "COMPLETED" || h.status === "PARTIAL",
-    );
-    const abandoned = history.filter(
-      (h) => h.status === "ABANDONED" || h.status === "FAILED",
-    );
-    const totalFocus = summaries.reduce((s, v) => s + v.effectiveDuration, 0);
-    const avg = completed.length > 0 ? totalFocus / completed.length : 0;
-    const { currentStreak, longestStreak } = calculateSessionStreaks(history);
-    return {
-      totalSessions: history.length,
-      completedSessions: completed.length,
-      abandonedSessions: abandoned.length,
-      totalFocusTime: totalFocus,
-      averageSessionDuration: avg,
-      currentStreak,
-      longestStreak,
-    };
+    return calculateSessionStats(history, summaries);
   }
 }
 

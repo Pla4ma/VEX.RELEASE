@@ -1,26 +1,25 @@
-import type { SessionStackParams } from './types';
-import type {
-  NotificationAction,
-  NotificationActionType,
-  NotificationRouteResult,
-  NotificationSafeIntent,
+import {
+  type NotificationAction,
+  type NotificationActionType,
+  type NotificationRouteResult,
+  type NotificationSafeIntent,
+  type NotificationNavigation,
+  type SafeNotificationResolution,
+  ALLOWED_MAIN_TAB_SCREENS,
+  ALLOWED_ROOT_SCREENS,
+  validTypes,
+  blocked,
+  navigateToSessionSetup,
+  navigateToRescueSession,
+  toOptionalString,
 } from './notification-routing-types';
-import type { SafeNotificationResolution } from './notification-routing-types';
 import { isFeatureHidden } from '../features/liveops-config/final-release-feature-map';
 import { canUseFeature, type FeatureAccessCheck } from './notification-filters';
 
 export type { FeatureAccessCheck } from './notification-filters';
 
-interface NotificationNavigation {
-  navigate(screen: string, params?: object | undefined): void;
-}
-
-const ALLOWED_MAIN_TAB_SCREENS = new Set(['Home', 'Progress', 'Profile']);
-const ALLOWED_ROOT_SCREENS = new Set(['ContentStudy', 'AICoach', 'Mastery']);
-
-function blocked(screen: string): NotificationRouteResult {
-  return { success: false, error: `${screen} is not available yet`, screen: 'Home' };
-}
+export { getAvailableNotificationFilters } from './notification-filters';
+export { deepLinkToNotificationAction } from './notification-deep-link';
 
 /**
  * Resolves a notification action to a safe intent.
@@ -108,12 +107,6 @@ export function resolveNotificationAction(
   }
 }
 
-/**
- * Returns the list of notification filter types that should be shown
- * given the current feature availability.
- */
-export { getAvailableNotificationFilters } from './notification-filters';
-
 function navigateFromSafeIntent(
   navigation: NotificationNavigation,
   intent: NotificationSafeIntent,
@@ -170,52 +163,8 @@ export function routeNotificationAction(
   return navigateFromSafeIntent(navigation, resolved.intent, resolved.params ?? action.payload, featureAccess);
 }
 
-export { deepLinkToNotificationAction } from './notification-deep-link';
-
-const validTypes: NotificationActionType[] = [
-  'start_session', 'start_rescue', 'view_boss', 'open_chest', 'view_squad', 'join_duel',
-  'view_streak', 'open_shop', 'view_profile', 'open_coach', 'accept_invite',
-  'view_progress', 'custom',
-];
-
 export function isValidNotificationAction(action: unknown): action is NotificationAction {
   if (!action || typeof action !== 'object' || !('type' in action)) return false;
   const type = Reflect.get(action, 'type');
   return validTypes.some((validType) => validType === type);
-}
-
-function navigateToSessionSetup(
-  navigation: NotificationNavigation,
-  payload?: Record<string, unknown>,
-): NotificationRouteResult {
-  const params: SessionStackParams['SessionSetup'] = {
-    presetId: toOptionalString(payload?.presetId),
-    comebackMultiplier: toOptionalNumber(payload?.comebackMultiplier),
-    presetMode: payload?.presetMode === 'STUDY' ? 'STUDY' : undefined,
-    source: payload?.source === 'content-study' ? 'content-study' : undefined,
-  };
-  navigation.navigate('SessionStack', { screen: 'SessionSetup', params });
-  return { success: true, screen: 'SessionSetup' };
-}
-
-function navigateToRescueSession(
-  navigation: NotificationNavigation,
-  payload?: Record<string, unknown>,
-): NotificationRouteResult {
-  const params: SessionStackParams['SessionSetup'] = {
-    source: 'rescue',
-    rescuePlanId: toOptionalString(payload?.rescuePlanId),
-    rescueTaskDescription: toOptionalString(payload?.rescueTaskDescription),
-    suggestedDurationSeconds: toOptionalNumber(payload?.suggestedDurationSeconds),
-  };
-  navigation.navigate('SessionStack', { screen: 'SessionSetup', params });
-  return { success: true, screen: 'SessionSetup' };
-}
-
-function toOptionalString(value: unknown): string | undefined {
-  return typeof value === 'string' ? value : undefined;
-}
-
-function toOptionalNumber(value: unknown): number | undefined {
-  return typeof value === 'number' ? value : undefined;
 }

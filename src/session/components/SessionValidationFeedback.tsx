@@ -16,8 +16,7 @@ import { Box } from "../../components/primitives/Box";
 import { Button } from "../../components/primitives/Button";
 import { useTheme } from "../../theme";
 import type { ValidationError, ValidationWarning } from "../utils/validation";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { formatFieldName, styles } from "./session-validation-feedback-helpers";
 
 interface SessionValidationFeedbackProps {
   errors: ValidationError[];
@@ -174,35 +173,5 @@ export function SessionValidationFeedback({
     </Animated.View>
   );
 }
-
-function formatFieldName(field: string): string {
-  return field
-    .split(".")
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-}
-
-const styles = createSheet({
-  container: {
-    width: "100%",
-  },
-  sectionIcon: {
-    fontSize: 20,
-    marginRight: 8,
-  },
-  compactIcon: {
-    fontSize: 14,
-  },
-  errorGroup: {
-    marginTop: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: launchColors.rgb_0_0_0_0_1,
-  },
-  bullet: {
-    marginRight: 8,
-    color: "inherit",
-  },
-});
 
 export default SessionValidationFeedback;

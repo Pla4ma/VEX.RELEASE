@@ -63,7 +63,8 @@ export {
   MicroRewardBanner,
   CompactRewardBadge,
 } from './MicroRewardBanner';
-export type { MicroRewardBannerProps, CompactRewardBadgeProps, RewardType } from './MicroRewardBanner';
+export type { MicroRewardBannerProps, CompactRewardBadgeProps } from './MicroRewardBanner';
+export type { RewardType } from './micro-reward-helpers';
 
 export {
   EnhancedSkeleton,

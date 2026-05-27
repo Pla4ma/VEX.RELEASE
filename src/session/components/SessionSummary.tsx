@@ -1,19 +1,23 @@
 import React, { useState } from "react";
-import { View, Text, Pressable, ScrollView, TextInput } from "react-native";
+import { View, Text, Pressable, ScrollView } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withSpring,
 } from "react-native-reanimated";
 import type { SessionSummary as SessionSummaryType } from "../types";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { getGrade, type MoodType } from "./SessionSummary.helpers";
+import { SessionSummaryMoodSelector } from "./SessionSummaryMoodSelector";
+import { SessionSummaryStats } from "./SessionSummaryStats";
+import styles from "./SessionSummary.styles";
+
 interface SessionSummaryProps {
   summary: SessionSummaryType;
   onClose: () => void;
   onShare?: () => void;
   onStartNew?: () => void;
 }
+
 export const SessionSummary: React.FC<SessionSummaryProps> = ({
   summary,
   onClose,
@@ -21,9 +25,7 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
   onStartNew,
 }) => {
   const [reflection, setReflection] = useState("");
-  const [mood, setMood] = useState<
-    "GREAT" | "GOOD" | "NEUTRAL" | "BAD" | "TERRIBLE" | null
-  >(null);
+  const [mood, setMood] = useState<MoodType>(null);
   const scaleAnim = useSharedValue(0);
   React.useEffect(() => {
     scaleAnim.value = withSpring(1, { damping: 12, stiffness: 120 });
@@ -31,53 +33,10 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
   const scaleStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scaleAnim.value }],
   }));
-  const formatDuration = (seconds: number): string => {
-    const hours = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    if (hours > 0) {
-      return `${hours}h ${mins}m`;
-    }
-    return `${mins}m`;
-  };
-  const getMoodEmoji = (m: typeof mood) => {
-    switch (m) {
-      case "GREAT":
-        return "🤩";
-      case "GOOD":
-        return "😊";
-      case "NEUTRAL":
-        return "😐";
-      case "BAD":
-        return "😕";
-      case "TERRIBLE":
-        return "😫";
-      default:
-        return "🤔";
-    }
-  };
-  const getGrade = (score: number): { letter: string; color: string } => {
-    if (score >= 900) {
-      return { letter: "S", color: launchColors.hex_ffd700 };
-    }
-    if (score >= 800) {
-      return { letter: "A", color: launchColors.hex_4caf50 };
-    }
-    if (score >= 700) {
-      return { letter: "B", color: launchColors.hex_8bc34a };
-    }
-    if (score >= 600) {
-      return { letter: "C", color: launchColors.hex_ffc107 };
-    }
-    if (score >= 500) {
-      return { letter: "D", color: launchColors.hex_ff9800 };
-    }
-    return { letter: "F", color: launchColors.hex_f44336 };
-  };
   const grade = getGrade(summary.finalScore);
   return (
     <ScrollView style={styles.container}>
       <Animated.View style={[styles.content, scaleStyle]}>
-        {}
         <View style={styles.header}>
           <Text style={styles.title}>Session Complete! 🎉</Text>
           <Text style={styles.subtitle}>
@@ -87,7 +46,6 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
           </Text>
         </View>
 
-        {}
         <View style={[styles.scoreCircle, { borderColor: grade.color }]}>
           <Text style={[styles.scoreLetter, { color: grade.color }]}>
             {grade.letter}
@@ -96,33 +54,8 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
           <Text style={styles.scoreLabel}>points</Text>
         </View>
 
-        {}
-        <View style={styles.statsGrid}>
-          <View style={styles.statCard}>
-            <Text style={styles.statValue}>
-              {formatDuration(summary.effectiveDuration)}
-            </Text>
-            <Text style={styles.statLabel}>Focused Time</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statValue}>{summary.interruptions}</Text>
-            <Text style={styles.statLabel}>Interruptions</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statValue}>
-              {Math.round(summary.focusQuality)}%
-            </Text>
-            <Text style={styles.statLabel}>Focus Quality</Text>
-          </View>
-          <View style={styles.statCard}>
-            <Text style={styles.statValue}>
-              {Math.round(summary.completionPercentage)}%
-            </Text>
-            <Text style={styles.statLabel}>Completed</Text>
-          </View>
-        </View>
+        <SessionSummaryStats summary={summary} />
 
-        {}
         {(summary.xpEarned > 0 ||
           summary.coinsEarned > 0 ||
           summary.gemsEarned > 0) && (
@@ -154,7 +87,6 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
           </View>
         )}
 
-        {}
         {summary.streakMaintained && (
           <View style={styles.streakBanner}>
             <Text style={styles.streakEmoji}>🔥</Text>
@@ -167,7 +99,6 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
           </View>
         )}
 
-        {}
         {summary.bonuses && summary.bonuses.length > 0 && (
           <View style={styles.bonusesSection}>
             <Text style={styles.sectionTitle}>Bonus Awards</Text>
@@ -186,41 +117,13 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
           </View>
         )}
 
-        {}
-        <View style={styles.reflectionSection}>
-          <Text style={styles.sectionTitle}>How was your session?</Text>
-          <View style={styles.moodSelector}>
-            {(["GREAT", "GOOD", "NEUTRAL", "BAD", "TERRIBLE"] as const).map(
-              (m) => (
-                <Pressable
-                  key={m}
-                  style={({ pressed }) => [
-                    styles.moodButton,
-                    mood === m && styles.moodButtonActive,
-                    pressed && { opacity: 0.8 },
-                  ]}
-                  onPress={() => setMood(m)}
-                  accessibilityLabel={`Mood ${getMoodEmoji(m)} button`}
-                  accessibilityRole="button"
-                  accessibilityHint="Activates this control"
-                >
-                  <Text style={styles.moodEmoji}>{getMoodEmoji(m)}</Text>
-                </Pressable>
-              ),
-            )}
-          </View>
-          <TextInput
-            style={styles.reflectionInput}
-            multiline
-            numberOfLines={3}
-            placeholder="What did you accomplish? Any distractions?"
-            placeholderTextColor={launchColors.hex_666}
-            value={reflection}
-            onChangeText={setReflection}
-          />
-        </View>
+        <SessionSummaryMoodSelector
+          mood={mood}
+          reflection={reflection}
+          onMoodChange={setMood}
+          onReflectionChange={setReflection}
+        />
 
-        {}
         <View style={styles.actions}>
           <Pressable
             style={({ pressed }) => [
@@ -263,162 +166,5 @@ export const SessionSummary: React.FC<SessionSummaryProps> = ({
     </ScrollView>
   );
 };
-const styles = createSheet({
-  container: { flex: 1, backgroundColor: launchColors.hex_1a1a2e },
-  content: { padding: 24 },
-  header: { alignItems: "center", marginBottom: 24 },
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: launchColors.hex_fff,
-    marginBottom: 8,
-  },
-  subtitle: { fontSize: 16, color: launchColors.hex_9e9e9e },
-  scoreCircle: {
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    borderWidth: 8,
-    alignSelf: "center",
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 32,
-  },
-  scoreLetter: { fontSize: 48, fontWeight: "700" },
-  scoreNumber: { fontSize: 32, fontWeight: "700", color: launchColors.hex_fff },
-  scoreLabel: { fontSize: 14, color: launchColors.hex_9e9e9e },
-  statsGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 12,
-    marginBottom: 24,
-  },
-  statCard: {
-    width: "48%",
-    backgroundColor: launchColors.hex_2a2a3e,
-    borderRadius: 12,
-    padding: 16,
-    alignItems: "center",
-  },
-  statValue: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: launchColors.hex_e94560,
-    marginBottom: 4,
-  },
-  statLabel: { fontSize: 12, color: launchColors.hex_9e9e9e },
-  rewardsSection: { marginBottom: 24 },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: launchColors.hex_fff,
-    marginBottom: 12,
-  },
-  rewardsRow: { flexDirection: "row", gap: 12 },
-  rewardBadge: {
-    flex: 1,
-    backgroundColor: launchColors.hex_2a2a3e,
-    borderRadius: 12,
-    padding: 16,
-    alignItems: "center",
-  },
-  rewardIcon: { fontSize: 24, marginBottom: 4 },
-  rewardValue: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: launchColors.hex_ffd700,
-  },
-  rewardLabel: { fontSize: 12, color: launchColors.hex_9e9e9e },
-  streakBanner: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: launchColors.hex_ff6b35,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 24,
-  },
-  streakEmoji: { fontSize: 24, marginRight: 8 },
-  streakText: { fontSize: 18, fontWeight: "700", color: launchColors.hex_fff },
-  streakBonus: {
-    marginLeft: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    backgroundColor: launchColors.rgb_255_255_255_0_3,
-    borderRadius: 4,
-    color: launchColors.hex_fff,
-    fontSize: 12,
-    fontWeight: "600",
-  },
-  bonusesSection: { marginBottom: 24 },
-  bonusItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: launchColors.hex_2a2a3e,
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 8,
-  },
-  bonusIcon: { fontSize: 20, marginRight: 12 },
-  bonusInfo: { flex: 1 },
-  bonusType: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: launchColors.hex_fff,
-    textTransform: "capitalize",
-  },
-  bonusDescription: { fontSize: 12, color: launchColors.hex_9e9e9e },
-  bonusAmount: {
-    fontSize: 16,
-    fontWeight: "700",
-    color: launchColors.hex_4caf50,
-  },
-  reflectionSection: { marginBottom: 24 },
-  moodSelector: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 12,
-  },
-  moodButton: {
-    padding: 12,
-    backgroundColor: launchColors.hex_2a2a3e,
-    borderRadius: 8,
-  },
-  moodButtonActive: { backgroundColor: launchColors.hex_e94560 },
-  moodEmoji: { fontSize: 24 },
-  reflectionInput: {
-    backgroundColor: launchColors.hex_2a2a3e,
-    borderRadius: 12,
-    padding: 16,
-    color: launchColors.hex_fff,
-    fontSize: 16,
-    minHeight: 100,
-    textAlignVertical: "top",
-  },
-  actions: { gap: 12 },
-  shareButton: {
-    paddingVertical: 14,
-    borderRadius: 8,
-    backgroundColor: launchColors.hex_2a2a3e,
-    alignItems: "center",
-  },
-  shareButtonText: {
-    color: launchColors.hex_fff,
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  newSessionButton: {
-    paddingVertical: 16,
-    borderRadius: 8,
-    backgroundColor: launchColors.hex_4caf50,
-    alignItems: "center",
-  },
-  newSessionButtonText: {
-    color: launchColors.hex_fff,
-    fontSize: 16,
-    fontWeight: "700",
-  },
-  closeButton: { paddingVertical: 14, borderRadius: 8, alignItems: "center" },
-  closeButtonText: { color: launchColors.hex_9e9e9e, fontSize: 16 },
-});
+
 export default SessionSummary;

@@ -7,8 +7,9 @@ import { Box } from "../../../components/primitives/Box";
 import { useTheme } from "../../../theme";
 import { triggerHapticEvent, HapticEvents } from "../../../constants/haptics";
 import { eventBus } from "../../../events";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { styles } from "./SessionBackgroundedState.styles";
+import { formatDuration, calculateProgressLoss } from "./session-backgrounded-helpers";
+
 interface SessionBackgroundedStateProps {
   backgroundDuration: number;
   sessionProgress: number;
@@ -188,52 +189,4 @@ export function SessionBackgroundedState({
     </Box>
   );
 }
-function formatDuration(ms: number): string {
-  const seconds = Math.floor(ms / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  if (hours > 0) {
-    return `${hours}h ${minutes % 60}m`;
-  }
-  if (minutes > 0) {
-    return `${minutes}m ${seconds % 60}s`;
-  }
-  return `${seconds}s`;
-}
-function calculateProgressLoss(
-  backgroundMs: number,
-  currentProgress: number,
-): number {
-  const minutes = backgroundMs / 60000;
-  const loss = Math.min(minutes * 1, 20);
-  return Math.min(loss, currentProgress);
-}
-const styles = createSheet({
-  container: { alignItems: "center" },
-  iconContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 24,
-  },
-  icon: { fontSize: 40 },
-  impactCard: { width: "100%" },
-  progressBar: {
-    height: 8,
-    backgroundColor: launchColors.rgb_0_0_0_0_1,
-    borderRadius: 4,
-    overflow: "hidden",
-  },
-  progressFill: { height: "100%", borderRadius: 4 },
-  warningBox: {
-    backgroundColor: launchColors.rgb_245_158_11_0_1,
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: launchColors.rgb_245_158_11_0_3,
-  },
-});
 export default SessionBackgroundedState;

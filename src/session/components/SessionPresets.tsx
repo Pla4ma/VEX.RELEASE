@@ -1,21 +1,18 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  Modal,
-  TextInput,
-} from "react-native";
+import { View, Text, Pressable, ScrollView } from "react-native";
 import { useSessionPresets } from "../hooks/useSession";
 import type { SessionPreset } from "../types";
 import { createSheet } from "@/shared/ui/create-sheet";
 import { launchColors } from "@theme/tokens/launch-colors";
+import { PresetCard } from "./PresetCard";
+import { CreatePresetForm } from "./CreatePresetForm";
+
 interface SessionPresetsProps {
   userId: string;
   onSelectPreset: (preset: SessionPreset) => void;
   onCreateCustom?: () => void;
 }
+
 export const SessionPresets: React.FC<SessionPresetsProps> = ({
   userId: _userId,
   onSelectPreset,
@@ -24,8 +21,6 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
   const { presets, createPreset, deletePreset } = useSessionPresets();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const [newPresetName, setNewPresetName] = useState("");
-  const [newPresetDuration, setNewPresetDuration] = useState("25");
   const categories = ["All", "Focus", "Study", "Work", "Creative", "Health"];
   const filteredPresets =
     selectedCategory && selectedCategory !== "All"
@@ -35,22 +30,16 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
             (selectedCategory === "Focus" && !p.category),
         )
       : presets;
-  const handleCreatePreset = () => {
-    if (newPresetName.trim()) {
-      createPreset({
-        name: newPresetName,
-        duration: parseInt(newPresetDuration) * 60,
-        category: "custom",
-      });
-      setShowCreateModal(false);
-      setNewPresetName("");
-      setNewPresetDuration("25");
-    }
+
+  const handleCreatePreset = (name: string, durationSeconds: number) => {
+    createPreset({
+      name,
+      duration: durationSeconds,
+      category: "custom",
+    });
+    setShowCreateModal(false);
   };
-  const formatDuration = (seconds: number): string => {
-    const mins = Math.floor(seconds / 60);
-    return `${mins} min`;
-  };
+
   return (
     <View style={styles.container}>
       {}
@@ -90,47 +79,12 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
       <ScrollView style={styles.presetsContainer}>
         <View style={styles.grid}>
           {filteredPresets.map((preset) => (
-            <Pressable
+            <PresetCard
               key={preset.id}
-              style={({ pressed }) => [
-                styles.presetCard,
-                pressed && { opacity: 0.8 },
-              ]}
-              onPress={() => onSelectPreset(preset)}
-              onLongPress={() => !preset.isDefault && deletePreset(preset.id)}
-              accessibilityLabel="Interactive control"
-              accessibilityRole="button"
-              accessibilityHint="Activates this control"
-            >
-              <View style={styles.presetIcon}>
-                <Text style={styles.iconText}>
-                  {preset.category === "Study"
-                    ? "📚"
-                    : preset.category === "Work"
-                      ? "💼"
-                      : preset.category === "Creative"
-                        ? "🎨"
-                        : preset.category === "Health"
-                          ? "💪"
-                          : "🎯"}
-                </Text>
-              </View>
-              <Text style={styles.presetName} numberOfLines={1}>
-                {preset.name}
-              </Text>
-              <Text style={styles.presetDuration}>
-                {formatDuration(preset.duration)}
-              </Text>
-              <Text style={styles.presetDetails}>
-                {preset.intervals}{" "}
-                {preset.intervals > 1 ? "intervals" : "interval"}
-              </Text>
-              {preset.strictMode && (
-                <View style={styles.strictBadge}>
-                  <Text style={styles.strictText}>Strict</Text>
-                </View>
-              )}
-            </Pressable>
+              preset={preset}
+              onSelect={onSelectPreset}
+              onDelete={deletePreset}
+            />
           ))}
         </View>
 
@@ -150,69 +104,15 @@ export const SessionPresets: React.FC<SessionPresetsProps> = ({
       </ScrollView>
 
       {}
-      <Modal
+      <CreatePresetForm
         visible={showCreateModal}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setShowCreateModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Create Custom Preset</Text>
-
-            <Text style={styles.inputLabel}>Preset Name</Text>
-            <TextInput
-              style={styles.input}
-              value={newPresetName}
-              onChangeText={setNewPresetName}
-              placeholder="e.g., Deep Work"
-              placeholderTextColor={launchColors.hex_666}
-            />
-
-            <Text style={styles.inputLabel}>Duration (minutes)</Text>
-            <TextInput
-              style={styles.input}
-              value={newPresetDuration}
-              onChangeText={setNewPresetDuration}
-              keyboardType="numeric"
-              placeholder="25"
-              placeholderTextColor={launchColors.hex_666}
-            />
-
-            <View style={styles.modalButtons}>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.modalButton,
-                  styles.cancelButton,
-                  pressed && { opacity: 0.8 },
-                ]}
-                onPress={() => setShowCreateModal(false)}
-                accessibilityLabel="Cancel button"
-                accessibilityRole="button"
-                accessibilityHint="Activates this control"
-              >
-                <Text style={styles.cancelButtonText}>Cancel</Text>
-              </Pressable>
-              <Pressable
-                style={({ pressed }) => [
-                  styles.modalButton,
-                  styles.createConfirmButton,
-                  pressed && { opacity: 0.8 },
-                ]}
-                onPress={handleCreatePreset}
-                accessibilityLabel="Create button"
-                accessibilityRole="button"
-                accessibilityHint="Activates this control"
-              >
-                <Text style={styles.createButtonTextConfirm}>Create</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        onClose={() => setShowCreateModal(false)}
+        onCreate={handleCreatePreset}
+      />
     </View>
   );
 };
+
 const styles = createSheet({
   container: { flex: 1 },
   categoryScroll: { maxHeight: 50, marginBottom: 16 },
@@ -232,48 +132,6 @@ const styles = createSheet({
   categoryChipTextActive: { color: launchColors.hex_fff },
   presetsContainer: { flex: 1 },
   grid: { flexDirection: "row", flexWrap: "wrap", gap: 12, padding: 4 },
-  presetCard: {
-    width: "48%",
-    backgroundColor: launchColors.hex_2a2a3e,
-    borderRadius: 12,
-    padding: 16,
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: launchColors.hex_3a3a4e,
-  },
-  presetIcon: {
-    width: 48,
-    height: 48,
-    backgroundColor: launchColors.hex_e9456020,
-    borderRadius: 24,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 12,
-  },
-  iconText: { fontSize: 24 },
-  presetName: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: launchColors.hex_fff,
-    marginBottom: 4,
-  },
-  presetDuration: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: launchColors.hex_e94560,
-    marginBottom: 4,
-  },
-  presetDetails: { fontSize: 12, color: launchColors.hex_9e9e9e },
-  strictBadge: {
-    position: "absolute",
-    top: 8,
-    right: 8,
-    backgroundColor: launchColors.hex_ffa500,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  strictText: { fontSize: 10, color: launchColors.hex_fff, fontWeight: "600" },
   createButton: {
     margin: 16,
     padding: 16,
@@ -289,56 +147,6 @@ const styles = createSheet({
     fontSize: 16,
     fontWeight: "600",
   },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: launchColors.rgb_0_0_0_0_7,
-    justifyContent: "center",
-    padding: 24,
-  },
-  modalContent: {
-    backgroundColor: launchColors.hex_1a1a2e,
-    borderRadius: 16,
-    padding: 24,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: launchColors.hex_fff,
-    marginBottom: 20,
-  },
-  inputLabel: { fontSize: 14, color: launchColors.hex_9e9e9e, marginBottom: 8 },
-  input: {
-    backgroundColor: launchColors.hex_2a2a3e,
-    borderRadius: 8,
-    padding: 12,
-    color: launchColors.hex_fff,
-    fontSize: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: launchColors.hex_3a3a4e,
-  },
-  modalButtons: { flexDirection: "row", gap: 12 },
-  modalButton: {
-    flex: 1,
-    paddingVertical: 14,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  cancelButton: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: launchColors.hex_9e9e9e,
-  },
-  cancelButtonText: {
-    color: launchColors.hex_9e9e9e,
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  createConfirmButton: { backgroundColor: launchColors.hex_e94560 },
-  createButtonTextConfirm: {
-    color: launchColors.hex_fff,
-    fontSize: 16,
-    fontWeight: "600",
-  },
 });
+
 export default SessionPresets;

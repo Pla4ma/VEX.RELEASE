@@ -9,44 +9,25 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync } from 'child_process';
+import {
+  MAX_LINES,
+  PATTERNS,
+  ALLOWED_COLOR_FILES,
+  type CheckResult,
+  type CheckSummary,
+  checkFileSize,
+  checkHardcodedColors,
+  checkConsoleLog,
+  checkStyleSheetCreate,
+  checkPartNFiles,
+  checkAnyTypes,
+} from './preflight-checks';
 
 // ============================================================================
 // Configuration
 // ============================================================================
 
-const MAX_LINES = 200;
 const SRC_DIR = path.join(__dirname, '../src');
-
-// Patterns to check
-const PATTERNS = {
-  hardcodedColors: /#[0-9A-Fa-f]{3,8}/g,
-  consoleLog: /console\.(log|warn|info|debug)\(/g,
-  styleSheetCreate: /StyleSheet\.create\(/g,
-  anyType: /:\s*any\b/g,
-};
-
-// Allowed hardcoded colors (theme definitions)
-const ALLOWED_COLOR_FILES = [
-  'theme/tokens/colors.ts',
-  'theme/createTheme.ts',
-];
-
-// ============================================================================
-// Types
-// ============================================================================
-
-interface CheckResult {
-  file: string;
-  issues: string[];
-}
-
-interface CheckSummary {
-  totalFiles: number;
-  filesWithIssues: number;
-  totalIssues: number;
-  results: CheckResult[];
-}
 
 // ============================================================================
 // File Scanner
@@ -75,65 +56,6 @@ function getAllTsFiles(dir: string): string[] {
 }
 
 // ============================================================================
-// Check Functions
-// ============================================================================
-
-function checkFileSize(content: string, filePath: string): string | null {
-  const lines = content.split('\n').length;
-  if (lines > MAX_LINES) {
-    return `File has ${lines} lines (max ${MAX_LINES})`;
-  }
-  return null;
-}
-
-function checkHardcodedColors(
-  content: string,
-  filePath: string
-): string | null {
-  // Skip theme definition files
-  if (ALLOWED_COLOR_FILES.some((f) => filePath.includes(f))) {
-    return null;
-  }
-
-  const matches = content.match(PATTERNS.hardcodedColors);
-  if (matches && matches.length > 0) {
-    const uniqueColors = [...new Set(matches)].slice(0, 5); // Show first 5
-    return `Hardcoded colors found: ${uniqueColors.join(', ')}${matches.length > 5 ? '...' : ''}`;
-  }
-  return null;
-}
-
-function checkConsoleLog(content: string): string | null {
-  const matches = content.match(PATTERNS.consoleLog);
-  if (matches && matches.length > 0) {
-    return `Found ${matches.length} console.* statements (use createDebugger instead)`;
-  }
-  return null;
-}
-
-function checkStyleSheetCreate(content: string): string | null {
-  if (PATTERNS.styleSheetCreate.test(content)) {
-    return 'Uses StyleSheet.create (use inline styles with theme tokens)';
-  }
-  return null;
-}
-
-function checkPartNFiles(filePath: string): string | null {
-  if (/\.part-\d+\.tsx?$/.test(filePath)) {
-    return 'Uses .part-N.ts pattern — decompose by domain instead';
-  }
-  return null;
-}
-
-function checkAnyTypes(content: string): string | null {
-  const matches = content.match(PATTERNS.anyType);
-  if (matches && matches.length > 0) {
-    return `Found ${matches.length} 'any' type(s) (must be typed)`;
-  }
-  return null;
-}
-
-// ============================================================================
 // Main Check
 // ============================================================================
 
@@ -142,7 +64,6 @@ function checkFile(filePath: string): CheckResult {
   const relativePath = path.relative(SRC_DIR, filePath);
   const issues: string[] = [];
 
-  // Run all checks
   const sizeIssue = checkFileSize(content, filePath);
   if (sizeIssue) issues.push(sizeIssue);
 
@@ -218,5 +139,4 @@ function printResults(summary: CheckSummary): void {
 const summary = runChecks();
 printResults(summary);
 
-// Exit with error code if issues found
 process.exit(summary.totalIssues > 0 ? 1 : 0);

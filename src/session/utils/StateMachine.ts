@@ -1,40 +1,17 @@
 import { createDebugger } from "../../utils/debug";
+import type {
+  State,
+  Event,
+  GuardFunction,
+  ActionFunction,
+  Transition,
+  StateConfig,
+  StateMachineConfig,
+  TransitionRecord,
+} from "./state-machine-types";
+
 const debug = createDebugger("session:stateMachine");
-export type State = string;
-export type Event = string;
-export type GuardFunction<TContext> = (
-  context: TContext,
-  payload?: unknown,
-) => boolean | Promise<boolean>;
-export type ActionFunction<TContext> = (
-  context: TContext,
-  payload?: unknown,
-) => void | Promise<void>;
-export interface Transition<TContext> {
-  target: State;
-  guard?: GuardFunction<TContext>;
-  actions?: ActionFunction<TContext>[];
-}
-export interface StateConfig<TContext> {
-  entry?: ActionFunction<TContext>[];
-  exit?: ActionFunction<TContext>[];
-  on?: Record<Event, Transition<TContext> | Transition<TContext>[]>;
-}
-export interface StateMachineConfig<TContext> {
-  id: string;
-  initial: State;
-  context: TContext;
-  states: Record<State, StateConfig<TContext>>;
-  on?: Record<Event, Transition<TContext>>;
-}
-export interface TransitionRecord {
-  from: State;
-  to: State;
-  event: Event;
-  timestamp: number;
-  duration: number;
-  payload?: unknown;
-}
+
 export class StateMachine<TContext> {
   private config: StateMachineConfig<TContext>;
   private currentState: State;
@@ -42,6 +19,7 @@ export class StateMachine<TContext> {
   private history: TransitionRecord[] = [];
   private isTransitioning = false;
   private abortController: AbortController | null = null;
+
   constructor(config: StateMachineConfig<TContext>) {
     this.config = config;
     this.currentState = config.initial;
@@ -52,6 +30,7 @@ export class StateMachine<TContext> {
       config.initial,
     );
   }
+
   async send(event: Event, payload?: unknown): Promise<boolean> {
     if (this.isTransitioning) {
       debug.warn("State machine busy, queuing event: %s", event);
@@ -98,6 +77,7 @@ export class StateMachine<TContext> {
       this.abortController = null;
     }
   }
+
   private findTransition(
     stateConfig: StateConfig<TContext> | undefined,
     event: Event,
@@ -107,6 +87,7 @@ export class StateMachine<TContext> {
     }
     return stateConfig.on[event];
   }
+
   private async executeTransition(
     transition: Transition<TContext>,
     payload: unknown,
@@ -137,6 +118,7 @@ export class StateMachine<TContext> {
     });
     debug.info("Transition: %s -> %s (%dms)", fromState, toState, duration);
   }
+
   private async evaluateGuard(
     guard: GuardFunction<TContext>,
     payload: unknown,
@@ -155,6 +137,7 @@ export class StateMachine<TContext> {
       return false;
     }
   }
+
   private async executeActions(
     actions: ActionFunction<TContext>[] | undefined,
     payload?: unknown,
@@ -177,6 +160,7 @@ export class StateMachine<TContext> {
       }
     }
   }
+
   private isValidTransition(from: State, to: State): boolean {
     if (!this.config.states[to]) {
       debug.error("Target state does not exist", new Error(`State: ${to}`));
@@ -184,252 +168,4 @@ export class StateMachine<TContext> {
     }
     return true;
   }
-}
-export interface SessionMachineContext {
-  sessionId: string | null;
-  userId: string | null;
-  startTime: number | null;
-  pausedDuration: number;
-  interruptions: number;
-  errorCount: number;
-  lastError: Error | null;
-  canRecover: boolean;
-  recoveryAttempts: number;
-  syncAttempts: number;
-  storageStatus: "HEALTHY" | "DEGRADED" | "UNAVAILABLE";
-  networkStatus: "ONLINE" | "OFFLINE" | "UNSTABLE";
-}
-export function createSessionStateMachine(
-  sessionId: string,
-  userId: string,
-): StateMachine<SessionMachineContext> {
-  const initialContext: SessionMachineContext = {
-    sessionId,
-    userId,
-    startTime: null,
-    pausedDuration: 0,
-    interruptions: 0,
-    errorCount: 0,
-    lastError: null,
-    canRecover: true,
-    recoveryAttempts: 0,
-    syncAttempts: 0,
-    storageStatus: "HEALTHY",
-    networkStatus: "ONLINE",
-  };
-  return new StateMachine({
-    id: `session-${sessionId}`,
-    initial: "IDLE",
-    context: initialContext,
-    states: {
-      IDLE: {
-        on: {
-          CREATE: {
-            target: "CREATING",
-            actions: [() => debug.debug("Creating session...")],
-          },
-        },
-      },
-      CREATING: {
-        entry: [
-          (ctx) => {
-            ctx.sessionId = sessionId;
-            ctx.userId = userId;
-          },
-        ],
-        on: {
-          CREATE_SUCCESS: { target: "PREPARING" },
-          CREATE_FAILURE: {
-            target: "ERROR",
-            actions: [
-              (ctx, payload) => {
-                ctx.lastError = payload as Error;
-                ctx.errorCount++;
-              },
-            ],
-          },
-          RETRY: { target: "CREATING", guard: (ctx) => ctx.errorCount < 3 },
-        },
-      },
-      PREPARING: {
-        entry: [() => debug.info("Session preparing - waiting for start")],
-        on: {
-          START: { target: "STARTING" },
-          ABORT: { target: "ABANDONED" },
-          TIMEOUT: { target: "ERROR" },
-        },
-      },
-      STARTING: {
-        entry: [
-          (ctx) => {
-            ctx.startTime = Date.now();
-            return undefined;
-          },
-          () => debug.info("Session starting..."),
-        ],
-        on: {
-          COUNTDOWN_COMPLETE: { target: "ACTIVE" },
-          CANCEL: { target: "ABANDONED" },
-          ERROR: { target: "ERROR" },
-        },
-      },
-      ACTIVE: {
-        entry: [() => debug.info("Session now active")],
-        on: {
-          PAUSE: { target: "PAUSED" },
-          BACKGROUND: { target: "BACKGROUNDED" },
-          INTERRUPTION: {
-            target: "INTERRUPTION_RISK",
-            actions: [
-              (ctx) => {
-                ctx.interruptions++;
-                return undefined;
-              },
-            ],
-          },
-          DEGRADED_MODE: { target: "DEGRADED" },
-          COMPLETE: { target: "COMPLETING" },
-          FAIL: { target: "FAILED" },
-          ABORT: { target: "ABANDONED" },
-        },
-      },
-      PAUSED: {
-        entry: [() => debug.info("Session paused")],
-        on: {
-          RESUME: { target: "ACTIVE" },
-          ABORT: { target: "ABANDONED" },
-          TIMEOUT: { target: "FAILED" },
-        },
-      },
-      BACKGROUNDED: {
-        entry: [() => debug.info("Session backgrounded")],
-        on: {
-          FOREGROUND: { target: "ACTIVE" },
-          AUTO_PAUSE: { target: "PAUSED" },
-          ABORT: { target: "ABANDONED" },
-          TIMEOUT: { target: "FAILED" },
-        },
-      },
-      INTERRUPTION_RISK: {
-        entry: [() => debug.warn("Interruption risk detected")],
-        on: {
-          RESUME: { target: "ACTIVE" },
-          CONFIRM_PAUSE: { target: "PAUSED" },
-          CONFIRM_ABANDON: { target: "ABANDONED" },
-          AUTO_RECOVER: { target: "RECOVERING" },
-        },
-      },
-      DEGRADED: {
-        entry: [
-          (ctx) => {
-            ctx.storageStatus = "DEGRADED";
-          },
-          () => debug.warn("Session in degraded mode"),
-        ],
-        on: {
-          RESTORE: { target: "ACTIVE" },
-          CONTINUE_DEGRADED: { target: "DEGRADED" },
-          FAIL: { target: "FAILED" },
-        },
-      },
-      COMPLETING: {
-        entry: [() => debug.info("Completing session...")],
-        on: {
-          VALIDATION_PASS: { target: "SYNCING" },
-          VALIDATION_FAIL: { target: "FAILED" },
-          TIMEOUT: { target: "FAILED" },
-        },
-      },
-      SYNCING: {
-        entry: [
-          (ctx) => {
-            ctx.syncAttempts++;
-            return undefined;
-          },
-          () => debug.info("Syncing session data..."),
-        ],
-        on: {
-          SYNC_SUCCESS: { target: "COMPLETED" },
-          SYNC_FAIL: [
-            {
-              target: "SYNCING",
-              guard: (ctx) => ctx.syncAttempts < 3,
-              actions: [() => debug.warn("Sync failed, retrying...")],
-            },
-            { target: "FAILED" },
-          ],
-          OFFLINE: { target: "PENDING_SYNC" },
-        },
-      },
-      PENDING_SYNC: {
-        entry: [() => debug.info("Session complete, pending sync")],
-        on: {
-          ONLINE: { target: "SYNCING" },
-          FORCE_COMPLETE: { target: "COMPLETED" },
-        },
-      },
-      COMPLETED: {
-        entry: [() => debug.info("Session completed successfully")],
-        on: { CLOSE: { target: "CLOSED" } },
-      },
-      RECOVERING: {
-        entry: [
-          (ctx) => {
-            ctx.recoveryAttempts++;
-            return undefined;
-          },
-          () => debug.info("Attempting recovery..."),
-        ],
-        on: {
-          RECOVERY_SUCCESS: [
-            { target: "ACTIVE", guard: (ctx) => ctx.recoveryAttempts <= 3 },
-            { target: "PARTIAL_COMPLETE" },
-          ],
-          RECOVERY_FAIL: [
-            { target: "RECOVERING", guard: (ctx) => ctx.recoveryAttempts < 3 },
-            { target: "FAILED" },
-          ],
-          ABORT: { target: "ABANDONED" },
-        },
-      },
-      PARTIAL_COMPLETE: {
-        entry: [() => debug.info("Session partially completed")],
-        on: {
-          GRANT_PARTIAL: { target: "COMPLETED" },
-          DENY_PARTIAL: { target: "FAILED" },
-        },
-      },
-      ABANDONED: {
-        entry: [() => debug.warn("Session abandoned")],
-        on: { CLOSE: { target: "CLOSED" } },
-      },
-      FAILED: {
-        entry: [
-          (ctx, payload) => {
-            ctx.lastError = payload as Error;
-            ctx.canRecover = false;
-          },
-          () => debug.error("Session failed"),
-        ],
-        on: {
-          RETRY: [
-            {
-              target: "RECOVERING",
-              guard: (ctx) => ctx.canRecover && ctx.recoveryAttempts < 3,
-            },
-            { target: "ERROR" },
-          ],
-          CLOSE: { target: "CLOSED" },
-        },
-      },
-      ERROR: {
-        entry: [() => debug.error("Session in error state")],
-        on: { RESET: { target: "IDLE" }, FORCE_CLOSE: { target: "CLOSED" } },
-      },
-      CLOSED: {
-        entry: [() => debug.info("Session closed")],
-        on: { RESTART: { target: "CREATING" } },
-      },
-    },
-  });
 }

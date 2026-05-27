@@ -1,29 +1,17 @@
-import {
-  SessionOrchestrator,
-  getSessionOrchestrator,
-} from "./SessionOrchestrator";
+import { SessionOrchestrator, getSessionOrchestrator } from "./SessionOrchestrator";
 import { getSessionRepository } from "./repository/SessionRepository";
 import { getSessionEventEmitter } from "./SessionEventEmitter";
 import { getRewardAdapter } from "./integration/RewardAdapter";
 import { getPresetService } from "./presets";
 import { SessionMode } from "./modes";
-import type {
-  SessionState,
-  SessionConfig,
-  SessionPreset,
-  SessionSummary,
-  SessionHistoryEntry,
-  TimerConfig,
-} from "./types";
+import type { SessionState, SessionConfig, SessionPreset, SessionSummary, SessionHistoryEntry } from "./types";
+import type { SessionServiceOptions, SessionStatsResult, CreateCustomPresetInput } from "./session-service-types";
 import { createDebugger } from "../utils/debug";
+
 const debug = createDebugger("session:service");
-export interface SessionServiceOptions {
-  autoSave?: boolean;
-  enableNotifications?: boolean;
-  enableAnalytics?: boolean;
-  enableAntiCheat?: boolean;
-  timerConfig?: Partial<TimerConfig>;
-}
+
+export type { SessionServiceOptions, SessionStatsResult, CreateCustomPresetInput };
+
 export class SessionService {
   private userId: string | null = null;
   private orchestrator: SessionOrchestrator;
@@ -32,6 +20,7 @@ export class SessionService {
   private rewardAdapter = getRewardAdapter();
   private presetService = getPresetService();
   private options: SessionServiceOptions;
+
   constructor(options: SessionServiceOptions = {}) {
     this.options = {
       autoSave: true,
@@ -46,6 +35,7 @@ export class SessionService {
     });
     debug.info("SessionService initialized");
   }
+
   setUserId(userId: string): void {
     this.userId = userId;
     this.orchestrator.setUserId(userId);
@@ -55,6 +45,7 @@ export class SessionService {
     this.eventEmitter.attach("", userId);
     debug.info("SessionService user set: %s", userId);
   }
+
   async createSessionFromPreset(
     presetId: string,
     customizations?: Partial<SessionConfig>,
@@ -86,6 +77,7 @@ export class SessionService {
     };
     return this.createCustomSession(config);
   }
+
   async createCustomSession(config: SessionConfig): Promise<SessionState> {
     if (!this.userId) {
       throw new Error("SessionService: No user set");
@@ -106,150 +98,73 @@ export class SessionService {
     }
     return session;
   }
+
   async startSession(countdownSeconds: number = 0): Promise<void> {
     await this.orchestrator.startSession(countdownSeconds);
     if (this.options.enableAnalytics) {
       this.trackAnalytics("session_started", {});
     }
   }
+
   async pauseSession(reason?: string): Promise<void> {
     await this.orchestrator.pauseSession(reason);
     if (this.options.enableNotifications) {
-      this.eventEmitter.emitNotification(
-        "SESSION_PAUSED",
-        "Session Paused",
-        reason || "Your session has been paused",
-        "normal",
-      );
+      this.eventEmitter.emitNotification("SESSION_PAUSED", "Session Paused", reason || "Your session has been paused", "normal");
     }
   }
+
   async resumeSession(): Promise<void> {
     await this.orchestrator.resumeSession();
     if (this.options.enableNotifications) {
-      this.eventEmitter.emitNotification(
-        "SESSION_RESUMED",
-        "Session Resumed",
-        "Your session is now active",
-        "normal",
-      );
+      this.eventEmitter.emitNotification("SESSION_RESUMED", "Session Resumed", "Your session is now active", "normal");
     }
   }
-  async abandonSession(reason?: string): Promise<void> {
-    await this.orchestrator.abandonSession(reason);
-  }
-  async backgroundSession(): Promise<void> {
-    await this.orchestrator.backgroundSession();
-  }
-  async foregroundSession(): Promise<void> {
-    await this.orchestrator.foregroundSession();
-  }
-  applyStudyQuizBonus(correctAnswers: number): void {
-    this.orchestrator.applyStudyQuizBonus(correctAnswers);
-  }
-  async completeSession(): Promise<SessionSummary> {
-    return this.orchestrator.completeSession();
-  }
-  async attemptRecovery(
-    recoveryType: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT",
-  ): Promise<boolean> {
-    return this.orchestrator.attemptRecovery(recoveryType);
-  }
-  getCurrentSession(): SessionState | null {
-    return this.orchestrator.getSession();
-  }
-  async getActiveSession(): Promise<SessionState | null> {
-    return this.repository.getActiveSession();
-  }
-  isSessionActive(): boolean {
-    return this.orchestrator.isSessionActive();
-  }
-  isSessionPaused(): boolean {
-    return this.orchestrator.isPaused();
-  }
-  getRemainingSeconds(): number {
-    return this.orchestrator.getRemainingSeconds();
-  }
-  getElapsedSeconds(): number {
-    return this.orchestrator.getElapsedSeconds();
-  }
-  getCompletionPercentage(): number {
-    return this.orchestrator.getPercentageComplete();
-  }
-  getCurrentPurityScore(): number {
-    return this.orchestrator.getCurrentPurityScore();
-  }
-  getPurityLabel(): "Elite" | "Good" | "Okay" | "Distracted" {
-    return this.orchestrator.getPurityLabel();
-  }
-  async getSessionHistory(limit: number = 100): Promise<SessionHistoryEntry[]> {
-    return this.repository.getSessionHistory(limit);
-  }
-  async getSessionById(sessionId: string): Promise<SessionHistoryEntry | null> {
-    return this.repository.getSessionById(sessionId);
-  }
-  async getSessionSummary(sessionId: string): Promise<SessionSummary | null> {
-    return this.repository.getSessionSummary(sessionId);
-  }
-  async getAllSummaries(): Promise<SessionSummary[]> {
-    return this.repository.getAllSummaries();
-  }
-  async getSessionStats(): Promise<{
-    totalSessions: number;
-    completedSessions: number;
-    abandonedSessions: number;
-    totalFocusTime: number;
-    averageSessionDuration: number;
-    currentStreak: number;
-    longestStreak: number;
-  }> {
-    return this.repository.getSessionStats();
-  }
-  getAllPresets(): SessionPreset[] {
-    return this.presetService.getAllPresets();
-  }
-  getPresetById(presetId: string): SessionPreset | undefined {
-    return this.presetService.getPresetById(presetId);
-  }
-  async createCustomPreset(config: {
-    name: string;
-    duration: number;
-    breakDuration?: number;
-    intervals?: number;
-    category?: string;
-    strictMode?: boolean;
-    dndEnabled?: boolean;
-    description?: string;
-  }): Promise<SessionPreset> {
+
+  abandonSession(reason?: string): Promise<void> { return this.orchestrator.abandonSession(reason); }
+  backgroundSession(): Promise<void> { return this.orchestrator.backgroundSession(); }
+  foregroundSession(): Promise<void> { return this.orchestrator.foregroundSession(); }
+  applyStudyQuizBonus(correctAnswers: number): void { this.orchestrator.applyStudyQuizBonus(correctAnswers); }
+  completeSession(): Promise<SessionSummary> { return this.orchestrator.completeSession(); }
+  attemptRecovery(recoveryType: "USER_RESUME" | "STREAK_SAVE" | "PARTIAL_CREDIT"): Promise<boolean> { return this.orchestrator.attemptRecovery(recoveryType); }
+  getCurrentSession(): SessionState | null { return this.orchestrator.getSession(); }
+  getActiveSession(): Promise<SessionState | null> { return this.repository.getActiveSession(); }
+  isSessionActive(): boolean { return this.orchestrator.isSessionActive(); }
+  isSessionPaused(): boolean { return this.orchestrator.isPaused(); }
+  getRemainingSeconds(): number { return this.orchestrator.getRemainingSeconds(); }
+  getElapsedSeconds(): number { return this.orchestrator.getElapsedSeconds(); }
+  getCompletionPercentage(): number { return this.orchestrator.getPercentageComplete(); }
+  getCurrentPurityScore(): number { return this.orchestrator.getCurrentPurityScore(); }
+  getPurityLabel(): "Elite" | "Good" | "Okay" | "Distracted" { return this.orchestrator.getPurityLabel(); }
+  getSessionHistory(limit: number = 100): Promise<SessionHistoryEntry[]> { return this.repository.getSessionHistory(limit); }
+  getSessionById(sessionId: string): Promise<SessionHistoryEntry | null> { return this.repository.getSessionById(sessionId); }
+  getSessionSummary(sessionId: string): Promise<SessionSummary | null> { return this.repository.getSessionSummary(sessionId); }
+  getAllSummaries(): Promise<SessionSummary[]> { return this.repository.getAllSummaries(); }
+  getSessionStats(): Promise<SessionStatsResult> { return this.repository.getSessionStats(); }
+  getAllPresets(): SessionPreset[] { return this.presetService.getAllPresets(); }
+  getPresetById(presetId: string): SessionPreset | undefined { return this.presetService.getPresetById(presetId); }
+
+  async createCustomPreset(config: CreateCustomPresetInput): Promise<SessionPreset> {
     return this.presetService.createCustomPreset(config);
   }
+
   async deletePreset(presetId: string): Promise<void> {
     return this.presetService.deletePreset(presetId);
   }
-  private trackAnalytics(
-    event: string,
-    properties: Record<string, unknown>,
-  ): void {
-    if (!this.options.enableAnalytics || !this.userId) {
-      return;
-    }
+
+  private trackAnalytics(event: string, properties: Record<string, unknown>): void {
+    if (!this.options.enableAnalytics || !this.userId) { return; }
     debug.debug("Analytics: %s %o", event, properties);
   }
-  destroy(): void {
-    this.orchestrator.destroy();
-    debug.info("SessionService destroyed");
-  }
+
+  destroy(): void { this.orchestrator.destroy(); debug.info("SessionService destroyed"); }
 }
-export function createSessionService(
-  options?: SessionServiceOptions,
-): SessionService {
+
+export function createSessionService(options?: SessionServiceOptions): SessionService {
   return new SessionService(options);
 }
+
 let serviceInstance: SessionService | null = null;
-export function getSessionService(
-  options?: SessionServiceOptions,
-): SessionService {
-  if (!serviceInstance) {
-    serviceInstance = new SessionService(options);
-  }
+export function getSessionService(options?: SessionServiceOptions): SessionService {
+  if (!serviceInstance) { serviceInstance = new SessionService(options); }
   return serviceInstance;
 }

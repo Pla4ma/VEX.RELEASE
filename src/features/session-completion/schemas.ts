@@ -187,7 +187,6 @@ export type CompletionMemoryCandidate = z.infer<typeof CompletionMemoryCandidate
 export type CompletionPersonalization = z.infer<typeof CompletionPersonalizationSchema>;
 export type CompletionPersonalizationInput = z.infer<typeof CompletionPersonalizationInputSchema>;
 export type CompletionUnlockDecision = z.infer<typeof CompletionUnlockDecisionSchema>;
-
 export {
   CompletionPersonalizationResultSchema,
   CompletionProgressProofSchema,

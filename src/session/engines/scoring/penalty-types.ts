@@ -58,3 +58,28 @@ export interface TotalPenaltyInput {
   antiCheatPenalty: number;
   baseScore: number;
 }
+
+export type PenaltyAction = "WARNING" | "PENALTY" | "DISQUALIFY" | "BAN";
+
+export interface InterruptionPenaltyResult {
+  total: number;
+  breakdown: Record<InterruptionSeverity, number>;
+}
+
+export interface AntiCheatViolationResult {
+  type: AntiCheatViolationType;
+  penalty: number;
+}
+
+export interface AntiCheatPenaltyResult {
+  total: number;
+  violations: Array<AntiCheatViolationResult>;
+  actionRequired: PenaltyAction;
+}
+
+export interface TotalPenaltyResult {
+  total: number;
+  capped: boolean;
+  percentage: number;
+  breakdown: Record<string, number>;
+}

@@ -1,48 +1,15 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { AppState, type AppStateStatus } from "react-native";
+import { useCallback, useRef, useState } from "react";
 import { useMMKVNumber } from "react-native-mmkv";
 import { createDebugger } from "../../utils/debug";
 import { eventBus } from "../../events";
 import { triggerHapticEvent, HapticEvents } from "../../constants/haptics";
+import {
+  useSessionTimerSubscriptions,
+  type UseSessionTimerOptions,
+  type UseSessionTimerReturn,
+} from "./useSessionTimerSubscriptions";
 const debug = createDebugger("session:timer");
-interface SessionTimerState {
-  elapsedTime: number;
-  remainingTime: number;
-  progress: number;
-  isRunning: boolean;
-  isPaused: boolean;
-}
-interface SessionTimerActions {
-  start: () => void;
-  pause: () => void;
-  resume: () => void;
-  stop: () => void;
-  addTime: (ms: number) => void;
-  subtractTime: (ms: number) => void;
-}
-interface SessionTimerMeta {
-  backgroundTime: number;
-  lastTickAt: number | null;
-  systemTimeOffset: number;
-  estimatedCompletionAt: number | null;
-}
-interface UseSessionTimerOptions {
-  duration: number;
-  onComplete?: () => void;
-  onProgress?: (progress: number) => void;
-  onBackground?: (duration: number) => void;
-  onForeground?: (duration: number) => void;
-  hapticEnabled?: boolean;
-  tickInterval?: number;
-  autoStart?: boolean;
-}
-interface UseSessionTimerReturn {
-  state: SessionTimerState;
-  actions: SessionTimerActions;
-  meta: SessionTimerMeta;
-}
 const DEFAULT_TICK_INTERVAL = 1000;
-const MAX_BACKGROUND_DRIFT = 5000;
 const SYSTEM_TIME_CHANGE_THRESHOLD = 30000;
 export function useSessionTimer(
   options: UseSessionTimerOptions,
@@ -124,26 +91,15 @@ export function useSessionTimer(
       return newElapsed;
     });
     lastTickRef.current = now;
-  }, [
-    duration,
-    handleComplete,
-    onProgress,
-    setElapsedTime,
-    setRemainingTime,
-    tickInterval,
-  ]);
+  }, [duration, handleComplete, onProgress, setElapsedTime, setRemainingTime, tickInterval]);
   const start = useCallback(() => {
-    if (isRunning) {
-      return;
-    }
+    if (isRunning) return;
     setIsRunning(true);
     setIsPaused(false);
     lastTickRef.current = Date.now();
     estimatedCompletionRef.current = Date.now() + remainingTime;
     intervalRef.current = setInterval(tick, tickInterval);
-    if (hapticEnabled) {
-      triggerHapticEvent(HapticEvents.SESSION_START);
-    }
+    if (hapticEnabled) triggerHapticEvent(HapticEvents.SESSION_START);
     debug.info("Session timer started", { duration, remaining: remainingTime });
     eventBus.publish("analytics:track", {
       event: "session_timer_started",
@@ -151,17 +107,13 @@ export function useSessionTimer(
     });
   }, [duration, hapticEnabled, isRunning, remainingTime, tick, tickInterval]);
   const pause = useCallback(() => {
-    if (!isRunning || isPaused) {
-      return;
-    }
+    if (!isRunning || isPaused) return;
     setIsPaused(true);
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-    if (hapticEnabled) {
-      triggerHapticEvent(HapticEvents.SESSION_PAUSE);
-    }
+    if (hapticEnabled) triggerHapticEvent(HapticEvents.SESSION_PAUSE);
     debug.info("Session timer paused", { elapsed: elapsedTime });
     eventBus.publish("analytics:track", {
       event: "session_timer_paused",
@@ -169,16 +121,12 @@ export function useSessionTimer(
     });
   }, [elapsedTime, hapticEnabled, isPaused, isRunning]);
   const resume = useCallback(() => {
-    if (!isPaused) {
-      return;
-    }
+    if (!isPaused) return;
     setIsPaused(false);
     lastTickRef.current = Date.now();
     estimatedCompletionRef.current = Date.now() + remainingTime;
     intervalRef.current = setInterval(tick, tickInterval);
-    if (hapticEnabled) {
-      triggerHapticEvent(HapticEvents.SESSION_RESUME);
-    }
+    if (hapticEnabled) triggerHapticEvent(HapticEvents.SESSION_RESUME);
     debug.info("Session timer resumed", { elapsed: elapsedTime });
     eventBus.publish("analytics:track", {
       event: "session_timer_resumed",
@@ -226,88 +174,12 @@ export function useSessionTimer(
     },
     [duration, setElapsedTime, setRemainingTime],
   );
-  useEffect(() => {
-    const handleAppStateChange = (nextAppState: AppStateStatus) => {
-      if (nextAppState === "background" && isRunning && !isPaused) {
-        backgroundedAtRef.current = Date.now();
-        if (intervalRef.current) {
-          clearInterval(intervalRef.current);
-          intervalRef.current = null;
-        }
-        debug.info("Timer paused due to background");
-        eventBus.publish("analytics:track", {
-          event: "session_timer_backgrounded",
-          properties: { elapsed: elapsedTime },
-        });
-        if (onBackground) {
-          onBackground(0);
-        }
-      }
-      if (nextAppState === "active" && isRunning && backgroundedAtRef.current) {
-        const backgroundDuration = Date.now() - backgroundedAtRef.current;
-        backgroundTimeRef.current += backgroundDuration;
-        backgroundedAtRef.current = null;
-        if (backgroundDuration > MAX_BACKGROUND_DRIFT) {
-          debug.warn("Extended background time detected", {
-            duration: backgroundDuration,
-          });
-          const adjustedElapsed = elapsedTime + backgroundDuration;
-          const adjustedRemaining = Math.max(duration - adjustedElapsed, 0);
-          setElapsedTime(adjustedElapsed);
-          setRemainingTime(adjustedRemaining);
-          if (adjustedRemaining <= 0) {
-            handleComplete();
-            return;
-          }
-        }
-        lastTickRef.current = Date.now();
-        intervalRef.current = setInterval(tick, tickInterval);
-        debug.info("Timer resumed after foreground", { backgroundDuration });
-        eventBus.publish("analytics:track", {
-          event: "session_timer_foregrounded",
-          properties: {
-            elapsed: elapsedTime,
-            backgroundDuration,
-            backgroundTotal: backgroundTimeRef.current,
-          },
-        });
-        if (onForeground) {
-          onForeground(backgroundDuration);
-        }
-      }
-    };
-    const subscription = AppState.addEventListener(
-      "change",
-      handleAppStateChange,
-    );
-    return () => {
-      subscription.remove();
-    };
-  }, [
-    duration,
-    elapsedTime,
-    handleComplete,
-    isPaused,
-    isRunning,
-    onBackground,
-    onForeground,
-    setElapsedTime,
-    setRemainingTime,
-    tick,
-    tickInterval,
-  ]);
-  useEffect(() => {
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
-    };
-  }, []);
-  useEffect(() => {
-    if (autoStart && !isRunning) {
-      start();
-    }
-  }, [autoStart, isRunning, start]);
+  useSessionTimerSubscriptions({
+    duration, elapsedTime, isRunning, isPaused, tick, tickInterval,
+    handleComplete, setElapsedTime, setRemainingTime,
+    backgroundTimeRef, backgroundedAtRef, intervalRef, lastTickRef,
+    onBackground, onForeground, autoStart, start,
+  });
   return {
     state: {
       elapsedTime: elapsedTime ?? 0,

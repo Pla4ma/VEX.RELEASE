@@ -7,33 +7,16 @@
 
 import { eventBus } from '../events';
 import type { Experiment, ExperimentAssignment, Variant, ExperimentResults, VariantResult } from './ab-types';
+import {
+  type ExperimentStatsResult,
+  type ExperimentOverviewResult,
+  hashString,
+  isUserEligibleForExperiment,
+  selectVariant,
+} from './ab-management-types';
 
 const experiments = new Map<string, Experiment>();
 const userAssignments = new Map<string, ExperimentAssignment[]>();
-
-function hashString(str: string): number {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    const char = str.charCodeAt(i);
-    hash = (hash * 32) - hash + char;
-  }
-  return Math.abs(hash);
-}
-
-function isUserEligibleForExperiment(_userId: string, _experiment: Experiment): boolean {
-  return true;
-}
-
-function selectVariant(userId: string, experiment: Experiment): string | null {
-  const hash = hashString(userId + experiment.id);
-  const bucket = hash % 100;
-  let cumulativePercentage = 0;
-  for (const [variantId, percentage] of Object.entries(experiment.trafficAllocation)) {
-    cumulativePercentage += percentage;
-    if (bucket < cumulativePercentage) { return variantId; }
-  }
-  return experiment.controlVariant.id;
-}
 
 export function createExperiment(experimentData: Omit<Experiment, 'id' | 'startDate'>): Experiment {
   const id = `exp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -158,11 +141,7 @@ export function clearUserAssignments(userId: string): void {
   eventBus.publish('experiment:assignments_cleared', { userId });
 }
 
-export function getExperimentStats(experimentId: string): {
-  totalAssignments: number;
-  variantAssignments: Record<string, number>;
-  dailyAssignments: Array<{ date: string; count: number }>;
-} | null {
+export function getExperimentStats(experimentId: string): ExperimentStatsResult | null {
   const experiment = experiments.get(experimentId);
   if (!experiment) { return null; }
 
@@ -189,13 +168,7 @@ export function getExperimentStats(experimentId: string): {
   };
 }
 
-export function getExperimentOverview(): {
-  totalExperiments: number;
-  runningExperiments: number;
-  completedExperiments: number;
-  totalAssignments: number;
-  experimentsByType: Record<string, number>;
-} {
+export function getExperimentOverview(): ExperimentOverviewResult {
   const allExperiments = Array.from(experiments.values());
   const allAssignments = Array.from(userAssignments.values()).flat();
 

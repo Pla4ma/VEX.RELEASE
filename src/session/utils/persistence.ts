@@ -3,6 +3,18 @@ import { MMKV } from "react-native-mmkv";
 import { z } from "zod";
 import { createDebugger } from "../../utils/debug";
 import { eventBus } from "../../events";
+import {
+  addToSessionHistory,
+  getSessionHistory,
+  type SessionHistoryEntry,
+} from "./persistence-history";
+import {
+  recordRecoveryAttempt,
+  getRecoveryAttempts,
+  getRecoverySuccessRate,
+  type RecoveryAttempt,
+} from "./persistence-recovery";
+import { isSessionStale, canResumeSession } from "./persistence-resume";
 const debug = createDebugger("session:persistence");
 const storage = new MMKV({
   id: "session-persistence",
@@ -12,13 +24,7 @@ const PersistedSessionStateSchema = z.object({
   sessionId: z.string().uuid(),
   userId: z.string(),
   status: z.enum(["ACTIVE", "PAUSED", "BACKGROUNDED", "INTERRUPTION_RISK"]),
-  phase: z.enum([
-    "FOCUS",
-    "SHORT_BREAK",
-    "LONG_BREAK",
-    "PREPARATION",
-    "REVIEW",
-  ]),
+  phase: z.enum(["FOCUS", "SHORT_BREAK", "LONG_BREAK", "PREPARATION", "REVIEW"]),
   startedAt: z.number(),
   lastUpdatedAt: z.number(),
   elapsedTime: z.number().min(0),
@@ -36,9 +42,12 @@ const PersistedSessionStateSchema = z.object({
   version: z.number().default(1),
 });
 export type PersistedSessionState = z.infer<typeof PersistedSessionStateSchema>;
+export type { SessionHistoryEntry, RecoveryAttempt };
+export { isSessionStale, canResumeSession };
+export { addToSessionHistory, getSessionHistory } from "./persistence-history";
+export { recordRecoveryAttempt, getRecoveryAttempts, getRecoverySuccessRate } from "./persistence-recovery";
 const KEYS = {
   ACTIVE_SESSION: "session:active",
-  SESSION_HISTORY: "session:history",
   LAST_SYNC: "session:lastSync",
   RECOVERY_ATTEMPTS: "session:recoveryAttempts",
   BACKUP_PREFIX: "session:backup:",
@@ -100,9 +109,7 @@ export function hasPersistedSession(): boolean {
 }
 export function getTimeSinceLastPersist(): number {
   const lastSync = storage.getNumber(KEYS.LAST_SYNC);
-  if (!lastSync) {
-    return Infinity;
-  }
+  if (!lastSync) return Infinity;
   return Date.now() - lastSync;
 }
 function cleanupOldBackups(): void {
@@ -111,8 +118,7 @@ function cleanupOldBackups(): void {
     .filter((key) => key.startsWith(KEYS.BACKUP_PREFIX))
     .sort()
     .reverse();
-  const keysToDelete = backupKeys.slice(10);
-  keysToDelete.forEach((key) => storage.delete(key));
+  backupKeys.slice(10).forEach((key) => storage.delete(key));
 }
 function recoverFromBackup(): PersistedSessionState | null {
   const allKeys = storage.getAllKeys();
@@ -124,8 +130,7 @@ function recoverFromBackup(): PersistedSessionState | null {
     try {
       const data = storage.getString(key);
       if (data) {
-        const parsed = JSON.parse(data);
-        const validated = PersistedSessionStateSchema.parse(parsed);
+        const validated = PersistedSessionStateSchema.parse(JSON.parse(data));
         debug.info("Session recovered from backup", {
           sessionId: validated.sessionId,
         });
@@ -149,69 +154,6 @@ function recoverFromBackup(): PersistedSessionState | null {
   }
   return null;
 }
-interface SessionHistoryEntry {
-  sessionId: string;
-  startedAt: number;
-  endedAt: number;
-  status: "COMPLETED" | "ABANDONED" | "FAILED" | "RECOVERED";
-  progress: number;
-}
-export function addToSessionHistory(entry: SessionHistoryEntry): void {
-  const history = getSessionHistory();
-  history.unshift(entry);
-  const trimmed = history.slice(0, 100);
-  storage.set(KEYS.SESSION_HISTORY, JSON.stringify(trimmed));
-}
-export function getSessionHistory(): SessionHistoryEntry[] {
-  try {
-    const data = storage.getString(KEYS.SESSION_HISTORY);
-    if (!data) {
-      return [];
-    }
-    return JSON.parse(data);
-  } catch (error) {
-    captureSilentFailure(error, {
-      feature: "session",
-      operation: "safe-fallback",
-      type: "data",
-    });
-    return [];
-  }
-}
-interface RecoveryAttempt {
-  timestamp: number;
-  reason: string;
-  success: boolean;
-}
-export function recordRecoveryAttempt(attempt: RecoveryAttempt): void {
-  const attempts = getRecoveryAttempts();
-  attempts.push(attempt);
-  storage.set(KEYS.RECOVERY_ATTEMPTS, JSON.stringify(attempts.slice(-50)));
-}
-export function getRecoveryAttempts(): RecoveryAttempt[] {
-  try {
-    const data = storage.getString(KEYS.RECOVERY_ATTEMPTS);
-    if (!data) {
-      return [];
-    }
-    return JSON.parse(data);
-  } catch (error) {
-    captureSilentFailure(error, {
-      feature: "session",
-      operation: "safe-fallback",
-      type: "data",
-    });
-    return [];
-  }
-}
-export function getRecoverySuccessRate(): number {
-  const attempts = getRecoveryAttempts();
-  if (attempts.length === 0) {
-    return 0;
-  }
-  const successful = attempts.filter((a) => a.success).length;
-  return successful / attempts.length;
-}
 export class SessionPersistenceError extends Error {
   constructor(
     message: string,
@@ -220,48 +162,6 @@ export class SessionPersistenceError extends Error {
     super(message);
     this.name = "SessionPersistenceError";
   }
-}
-export function isSessionStale(
-  persistedAt: number,
-  maxAgeMs: number = 24 * 60 * 60 * 1000,
-): boolean {
-  return Date.now() - persistedAt > maxAgeMs;
-}
-export function canResumeSession(state: PersistedSessionState): {
-  canResume: boolean;
-  reason?: string;
-  risk: "NONE" | "LOW" | "MEDIUM" | "HIGH";
-} {
-  const age = Date.now() - state.lastUpdatedAt;
-  if (age > 24 * 60 * 60 * 1000) {
-    return {
-      canResume: false,
-      reason: "Session is too old (over 24 hours)",
-      risk: "HIGH",
-    };
-  }
-  if (!["ACTIVE", "PAUSED", "BACKGROUNDED"].includes(state.status)) {
-    return {
-      canResume: false,
-      reason: `Session is in ${state.status} state`,
-      risk: "NONE",
-    };
-  }
-  if (state.interruptions > 10) {
-    return {
-      canResume: true,
-      reason: `Session has ${state.interruptions} interruptions - quality may be affected`,
-      risk: "MEDIUM",
-    };
-  }
-  if (state.backgroundTime > 30 * 60 * 1000) {
-    return {
-      canResume: true,
-      reason: "Session was backgrounded for extended period",
-      risk: "MEDIUM",
-    };
-  }
-  return { canResume: true, risk: "NONE" };
 }
 export const SessionPersistence = {
   persist: persistSessionState,
