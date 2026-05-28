@@ -1,5 +1,16 @@
 import { getCoachService } from "../service";
-import type { InterventionContext } from "../types";
+export interface InterventionContext {
+  sessionId: string;
+  userId: string;
+  currentPhase: string;
+  sessionDuration: number;
+  focusQuality: number;
+  interruptions: unknown[];
+  lastActivity: number;
+  documentsStudied: string[];
+  currentStreak: number;
+  completedSessions: number;
+}
 
 export function createCoachTestSetup() {
   const coachService = getCoachService();

@@ -109,3 +109,11 @@ export interface AccessibilityIssue {
   message: string;
   suggestion: string;
 }
+
+// Backward-compat aliases (renamed during refactoring)
+export type AuditableComponent = AccessibilityAudit;
+export type AuditAccessibilityIssue = AccessibilityIssue;
+export type ComponentAccessibilityConfig = {
+  component: string;
+  checks: string[];
+};

@@ -3,7 +3,7 @@ import {
   getOfferings,
   initializeRevenueCat,
   isRevenueCatReady,
-} from "../../shared/monetization/revenuecat-service";
+} from "../../shared/monetization/revenuecat-facade";
 import type { FeatureHealthCheck, FeatureHealthStatus } from "./feature-health";
 
 function hasRevenueCatKey(): boolean {

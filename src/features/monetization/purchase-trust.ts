@@ -3,7 +3,7 @@ import type { CustomerInfo } from "../../shared/monetization/revenuecat-types";
 import {
   initializeRevenueCat,
   restorePurchases as restoreRevenueCatPurchases,
-} from "../../shared/monetization/revenuecat-service";
+} from "../../shared/monetization/revenuecat-facade";
 import { createDebugger } from "../../utils/debug";
 import {
   PurchaseTrustError,

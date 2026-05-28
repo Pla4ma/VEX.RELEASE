@@ -122,3 +122,17 @@ export const CoachPreferencesUpdatedEventSchema = z.object({
   reduceNotifications: z.boolean().optional(),
   updatedAt: z.number(),
 });
+
+// Inferred types for consumers
+export type CoachMessageGeneratedEvent = z.infer<typeof CoachMessageGeneratedEventSchema>;
+export type CoachMessageDeliveredEvent = z.infer<typeof CoachMessageDeliveredEventSchema>;
+export type CoachMessageActionTakenEvent = z.infer<typeof CoachMessageActionTakenEventSchema>;
+export type CoachStateChangedEvent = z.infer<typeof CoachStateChangedEventSchema>;
+export type InterventionTriggeredEvent = z.infer<typeof InterventionTriggeredEventSchema>;
+export type BehaviorSignalDetectedEvent = z.infer<typeof BehaviorSignalDetectedEventSchema>;
+export type StreakRiskDetectedEvent = z.infer<typeof StreakRiskDetectedEventSchema>;
+export type ComebackActivatedEvent = z.infer<typeof ComebackActivatedEventSchema>;
+export type ComebackCompletedEvent = z.infer<typeof ComebackCompletedEventSchema>;
+export type RecommendationGeneratedEvent = z.infer<typeof RecommendationGeneratedEventSchema>;
+export type DifficultyAdjustedEvent = z.infer<typeof DifficultyAdjustedEventSchema>;
+export type CoachPreferencesUpdatedEvent = z.infer<typeof CoachPreferencesUpdatedEventSchema>;

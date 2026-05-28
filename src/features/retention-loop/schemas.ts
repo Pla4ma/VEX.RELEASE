@@ -33,3 +33,6 @@ export {
   type LaneCopyMap,
   type RetentionJourneyCopy,
 } from "./journey-composite-schemas";
+
+// Inferred type for consumers
+export type JourneyDayCopy = z.infer<typeof JourneyDayCopySchema>;
