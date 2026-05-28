@@ -9,53 +9,13 @@ import Animated, {
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
-export type StreakRiskLevel = "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
-export interface StreakRiskBannerProps {
-  riskLevel: StreakRiskLevel;
-  hoursRemaining: number;
-  streakDays: number;
-  suggestedDuration: number;
-  onStartSession: (duration: number) => void;
-}
-function getRiskConfig(
-  riskLevel: StreakRiskLevel,
-  theme: ReturnType<typeof useTheme>["theme"],
-) {
-  switch (riskLevel) {
-    case "CRITICAL":
-      return {
-        bg: `${theme.colors.error.DEFAULT}30`,
-        border: theme.colors.error.DEFAULT,
-        text: theme.colors.error.DEFAULT,
-        emoji: "🚨",
-        label: "CRITICAL",
-        message: "LAST CHANCE — Start now!",
-        pulse: true,
-      };
-    case "HIGH":
-      return {
-        bg: `${theme.colors.error.DEFAULT}20`,
-        border: theme.colors.error.light,
-        text: theme.colors.error.DEFAULT,
-        emoji: "🔥",
-        label: "HIGH RISK",
-        message: "Streak at risk — act now",
-        pulse: true,
-      };
-    case "MEDIUM":
-      return {
-        bg: `${theme.colors.warning.DEFAULT}20`,
-        border: theme.colors.warning.DEFAULT,
-        text: theme.colors.warning.dark,
-        emoji: "⏰",
-        label: "AT RISK",
-        message: "Start a session soon",
-        pulse: false,
-      };
-    default:
-      return null;
-  }
-}
+import {
+  getRiskConfig,
+  type StreakRiskBannerProps,
+} from "./streak-risk-config";
+
+export type { StreakRiskLevel, StreakRiskBannerProps } from "./streak-risk-config";
+
 export function StreakRiskBanner({
   riskLevel,
   hoursRemaining,
@@ -117,9 +77,7 @@ export function StreakRiskBanner({
         ]}
       >
         <Box bg={config.bg} p="md">
-          {}
           <Box flexDirection="row" alignItems="center" gap="md">
-            {}
             <Box
               width={44}
               height={44}
@@ -132,7 +90,6 @@ export function StreakRiskBanner({
             </Box>
 
             <Box flex={1}>
-              {}
               <Box flexDirection="row" alignItems="center" gap="sm" mb="xs">
                 <Text variant="caption" color={config.text} fontWeight="700">
                   {config.label}
@@ -142,18 +99,15 @@ export function StreakRiskBanner({
                 </Text>
               </Box>
 
-              {}
               <Text variant="body" color="text.primary" fontWeight="600">
                 🔥 {streakDays}-day streak at risk
               </Text>
 
-              {}
               <Text variant="bodySmall" color={config.text}>
                 {config.message}
               </Text>
             </Box>
 
-            {}
             <Text fontSize={20} color={config.text}>
               →
             </Text>
@@ -163,6 +117,7 @@ export function StreakRiskBanner({
     </Pressable>
   );
 }
+
 export function StreakCriticalAlert({
   hoursRemaining,
   streakDays,
@@ -236,4 +191,5 @@ export function StreakCriticalAlert({
     </Pressable>
   );
 }
+
 export default StreakRiskBanner;

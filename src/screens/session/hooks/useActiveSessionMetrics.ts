@@ -1,21 +1,17 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Easing,
-  cancelAnimation,
   runOnJS,
   useAnimatedReaction,
-  useAnimatedStyle,
   useSharedValue,
-  withRepeat,
-  withSequence,
   withTiming,
 } from "react-native-reanimated";
-import { eventBus } from "../../../events";
 import { getStreakMultiplier } from "../../../features/streaks/service";
 import type { SessionTheme } from "../../../features/themes/session-themes";
 import type { SessionHistoryEntry } from "../../../session/types";
 import { useTheme } from "../../../theme";
 import { useSessionAnimations } from "./useSessionAnimations";
+import { useSessionPurity } from "./useSessionPurity";
 import {
   clamp,
   DAILY_GOAL_SECONDS,
@@ -55,25 +51,24 @@ export function useActiveSessionMetrics({
   heroDensity,
 }: UseActiveSessionMetricsParams) {
   const { theme } = useTheme();
-  const [purityScore, setPurityScore] = useState(100);
-  const [purityLabel, setPurityLabel] = useState<PurityLabel>("Elite");
-  const [perfectFocusEligible, setPerfectFocusEligible] = useState(true);
-  const [momentumScores, setMomentumScores] = useState<number[]>([]);
-  const [gradientState, setGradientState] = useState<GradientState>({
-    top: theme.colors.background.primary,
-    middle: theme.colors.background.secondary,
-    bottom: theme.colors.background.primary,
-  });
-  const previousPurityLabelRef = useRef<PurityLabel>("Elite");
-  const perfectFocusTrackedRef = useRef(false);
-  const perfectFocusBurstRef = useRef(false);
-  const momentumScoresRef = useRef<number[]>([]);
-  const visualState = useSharedValue(2);
-  const perfectFocusRotation = useSharedValue(0);
-  const perfectFocusBurst = useSharedValue(0);
   const streakMultiplier = getStreakMultiplier(streakDays);
-  const perfectFocusActive =
-    completionPercentage >= 100 && perfectFocusEligible;
+
+  const {
+    momentumScores,
+    perfectFocusActive,
+    perfectFocusBurst,
+    purityLabel,
+    purityScore,
+    rotatingPerfectFocusStyle,
+  } = useSessionPurity({
+    completionPercentage,
+    getAntiCheatLabel,
+    getAntiCheatScore,
+    heroDensity,
+    sessionId,
+    streakMultiplier,
+  });
+
   const phaseAccent =
     phase === "SHORT_BREAK" || phase === "LONG_BREAK"
       ? theme.colors.success.DEFAULT
@@ -117,46 +112,26 @@ export function useActiveSessionMetrics({
     isActive,
     isPaused,
   });
-  useEffect(() => {
-    setPerfectFocusEligible(true);
-    setPurityScore(100);
-    setPurityLabel("Elite");
-    setMomentumScores([]);
-    momentumScoresRef.current = [];
-    previousPurityLabelRef.current = "Elite";
-    perfectFocusTrackedRef.current = false;
-    perfectFocusBurstRef.current = false;
-  }, [sessionId]);
-  useEffect(() => {
-    if (heroDensity === "minimal") return;
-    const syncPurity = () => {
-      const nextScore = getAntiCheatScore();
-      const nextLabel = getAntiCheatLabel();
-      setPurityScore(nextScore);
-      setPurityLabel(nextLabel);
-      momentumScoresRef.current = [
-        ...momentumScoresRef.current,
-        nextScore,
-      ].slice(-10);
-      setMomentumScores(momentumScoresRef.current);
-      if (nextScore < 90) {
-        setPerfectFocusEligible(false);
-      }
-    };
-    syncPurity();
-    const intervalId = setInterval(syncPurity, 5000);
-    return () => clearInterval(intervalId);
-  }, [getAntiCheatLabel, getAntiCheatScore]);
+
+  const [gradientState, setGradientState] = useState<GradientState>({
+    top: theme.colors.background.primary,
+    middle: theme.colors.background.secondary,
+    bottom: theme.colors.background.primary,
+  });
+  const visualState = useSharedValue(2);
+
   useEffect(() => {
     if (heroDensity === "minimal") return;
     visualState.value = withTiming(getVisualStateIndex(phase, purityLabel), {
       duration: 450,
       easing: Easing.out(Easing.cubic),
     });
-  }, [phase, purityLabel, visualState]);
+  }, [phase, purityLabel, visualState, heroDensity]);
+
   const updateGradientState = useCallback((value: number) => {
     setGradientState(getGradientPalette(value));
   }, []);
+
   useAnimatedReaction(
     () => visualState.value,
     (value, previousValue) => {
@@ -166,56 +141,7 @@ export function useActiveSessionMetrics({
       runOnJS(updateGradientState)(value);
     },
   );
-  useEffect(() => {
-    if (!sessionId || previousPurityLabelRef.current === purityLabel) {
-      return;
-    }
-    eventBus.publish("analytics:track", {
-      event: "session_purity_changed",
-      properties: {
-        sessionId,
-        purityScore,
-        purityLabel,
-        previousPurityLabel: previousPurityLabelRef.current,
-        streakMultiplier,
-      },
-    });
-    previousPurityLabelRef.current = purityLabel;
-  }, [purityLabel, purityScore, sessionId, streakMultiplier]);
-  useEffect(() => {
-    if (!sessionId || !perfectFocusActive || perfectFocusTrackedRef.current) {
-      return;
-    }
-    perfectFocusTrackedRef.current = true;
-    eventBus.publish("analytics:track", {
-      event: "session_perfect_focus_earned",
-      properties: { sessionId, purityScore, streakMultiplier },
-    });
-  }, [perfectFocusActive, purityScore, sessionId, streakMultiplier]);
-  useEffect(() => {
-    if (!perfectFocusActive) {
-      perfectFocusBurstRef.current = false;
-      cancelAnimation(perfectFocusRotation);
-      perfectFocusRotation.value = 0;
-      return;
-    }
-    perfectFocusRotation.value = 0;
-    perfectFocusRotation.value = withRepeat(
-      withTiming(1, { duration: 5000, easing: Easing.linear }),
-      -1,
-      false,
-    );
-    if (!perfectFocusBurstRef.current) {
-      perfectFocusBurstRef.current = true;
-      perfectFocusBurst.value = withSequence(
-        withTiming(1, { duration: 500, easing: Easing.out(Easing.quad) }),
-        withTiming(0, { duration: 350, easing: Easing.in(Easing.quad) }),
-      );
-    }
-  }, [perfectFocusActive, perfectFocusBurst, perfectFocusRotation]);
-  const rotatingPerfectFocusStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${perfectFocusRotation.value * 360}deg` }],
-  }));
+
   return {
     dailyProgress: clamp(
       ((todayFocusSeconds || 0) / (DAILY_GOAL_SECONDS || 7200)) * 100,
