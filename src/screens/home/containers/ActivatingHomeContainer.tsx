@@ -1,62 +1,18 @@
 import { useMemo, useCallback } from "react";
 import { useNavigation } from "@react-navigation/native";
 import type { UseQueryResult } from "@tanstack/react-query";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSessionUIStore } from "../../../store/session-state";
 import { useHomeSpineModel } from "../../../features/home-spine/hooks";
 import { getNextBestAction } from "../../../features/progression";
-import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { HomeFeatureRuntime } from "../hooks/home-feature-runtime";
-import type { HomeViewModel } from "../hooks/home-view-model";
-import type {
-  HomeController,
-  SessionHistoryResult,
-} from "../hooks/home-controller-types";
-import type { ExtendedRootStackParams } from "../../../navigation/types";
-import {
-  navigateToSessionStackScreen,
-  navigateToMainTab,
-} from "../../../navigation/navigation-helpers";
-import {
-  getFocusedMinutesForToday,
-  getNextUnlockFeature,
-} from "../hooks/home-controller-helpers";
+import { navigateToSessionStackScreen, navigateToMainTab } from "../../../navigation/navigation-helpers";
+import { getNextUnlockFeature } from "../hooks/home-controller-helpers";
 import { buildHomeReturnReasonState } from "../../../features/home-spine/service";
 import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
-import {
-  createStubQuery,
-  stubLearningExecutionLayer,
-  stubNavigationActions,
-  stubCoachMutations,
-} from "../hooks/home-controller-stubs";
-
-type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
-
-interface StreakQueryData {
-  currentDays?: number;
-  isAtRisk?: boolean;
-}
-interface ProgressionQueryData {
-  xp?: number;
-  level?: number;
-}
-
-interface ActivatingContainerInput {
-  analytics: {
-    trackFirstSessionStarted: (userId: string, source: string) => void;
-    trackNextBestActionPressed: (
-      stage: import("../../../features/liveops-config").UserExperienceStage,
-      completedSessions: number,
-    ) => void;
-  };
-  disclosure: FeatureAccessResult;
-  historyQuery: SessionHistoryResult;
-  isOnline: boolean;
-  progressionQuery: UseQueryResult;
-  runtime: HomeFeatureRuntime;
-  streakQuery: UseQueryResult;
-  userId: string;
-}
+import { createStubQuery, stubLearningExecutionLayer, stubNavigationActions, stubCoachMutations } from "../hooks/home-controller-stubs";
+import type { HomeController } from "../hooks/home-controller-types";
+import type { HomeViewModel } from "../hooks/home-view-model";
+import { computeActivatingState } from "./ActivatingHomeContainer.state";
+import type { Nav, ActivatingContainerInput } from "./ActivatingHomeContainer.types";
 
 export function useActivatingContainerModel(
   input: ActivatingContainerInput,
@@ -76,23 +32,15 @@ export function useActivatingContainerModel(
   const completionSync = useSessionUIStore((s) => s.completionSync);
   const clearHomeHighlight = useSessionUIStore((s) => s.clearHomeHighlight);
 
-  const streakData = streakQuery.data as StreakQueryData | undefined;
-  const progData = progressionQuery.data as ProgressionQueryData | undefined;
-  const currentStreak = streakData?.currentDays ?? 0;
-  const currentXp = progData?.xp ?? 0;
-  const todayFocusMinutes = historyQuery.history.reduce(
-    (sum: number, e) => sum + getFocusedMinutesForToday(e),
-    0,
-  );
-  const progressPercent = Math.min(
-    100,
-    Math.round((todayFocusMinutes / 120) * 100),
-  );
-  const isFirstRun =
-    !disclosure.isLoading &&
-    disclosure.inputs.totalCompletedSessions === 0 &&
-    currentStreak === 0 &&
-    currentXp === 0;
+  const {
+    streakData,
+    progData,
+    currentStreak,
+    currentXp,
+    todayFocusMinutes,
+    progressPercent,
+    isFirstRun,
+  } = computeActivatingState(disclosure, streakQuery, progressionQuery, historyQuery);
 
   const stubActions = useMemo(() => stubNavigationActions(), []);
 
@@ -182,7 +130,6 @@ export function useActivatingContainerModel(
   });
 
   const isLoading = disclosure.isLoading;
-
   const controller: HomeController = {
     user: null,
     userId,

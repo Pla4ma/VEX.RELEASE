@@ -1,6 +1,4 @@
 import * as Sentry from "@sentry/react-native";
-import { getSupabaseClient } from "../../config/supabase";
-import { eventBus } from "../../events/EventBus";
 import type { AddXpInput } from "./schemas";
 import {
   fetchProgressionEnhanced,
@@ -13,24 +11,14 @@ import { handleFetchFailure } from "./service-failures";
 import {
   calculateLevelFromTotalXp,
   calculateLevelThreshold,
-  calculateProgressPercent,
   calculateTotalXpToLevel,
 } from "./service-xp-calculations";
 import { getLevelUpRewards } from "./service-level-rewards";
 import type { AddXpOperationResult } from "./service-enhanced-types";
+import { tryAtomicAddXp } from "./operation-atomic";
+import { publishProgressionEvents } from "./operation-events";
 
 type RetryOnConflict = () => Promise<AddXpOperationResult>;
-
-interface AtomicXpRpcResult {
-  success: boolean;
-  duplicate: boolean;
-  xp_added: number;
-  new_total_xp: number;
-  new_level: number;
-  previous_level: number;
-  level_up: boolean;
-  rewards: string[];
-}
 
 export async function runAddXpOperation(
   userId: string,
@@ -178,77 +166,4 @@ export async function runAddXpOperation(
     error: null,
     offlineQueued: false,
   };
-}
-
-async function tryAtomicAddXp(
-  userId: string,
-  amount: number,
-  input: AddXpInput,
-  idempotencyKey: string | undefined,
-): Promise<AtomicXpRpcResult | null> {
-  try {
-    const supabase = getSupabaseClient();
-    const { data, error } = await supabase.rpc("atomic_add_xp", {
-      p_user_id: userId,
-      p_amount: amount,
-      p_source: input.source,
-      p_session_id: input.sessionId ?? null,
-      p_idempotency_key: idempotencyKey ?? null,
-      p_metadata: input.metadata ? JSON.parse(JSON.stringify(input.metadata)) : null,
-    });
-
-    if (error) {
-      Sentry.captureException(error, {
-        tags: { operation: "atomic_add_xp_rpc" },
-      });
-      return null;
-    }
-
-    return data as unknown as AtomicXpRpcResult;
-  } catch (error) {
-    Sentry.captureException(error, {
-      tags: { operation: "tryAtomicAddXp" },
-    });
-    return null;
-  }
-}
-
-function publishProgressionEvents(
-  skipEvents: boolean | undefined,
-  userId: string,
-  input: AddXpInput,
-  breakdown: AddXpOperationResult["breakdown"],
-  newTotalXp: number,
-  newLevel: number,
-  newXpInLevel: number,
-  previousLevel: number,
-  newThreshold: number,
-  levelUpOccurred: boolean,
-  rewards: string[],
-): void {
-  if (skipEvents) {
-    return;
-  }
-  eventBus.publish("progression:xp_added", {
-    userId,
-    amount: breakdown.total,
-    source: input.source,
-    totalXP: newTotalXp,
-    currentLevel: newLevel,
-    progressPercent: calculateProgressPercent(newXpInLevel, newLevel),
-    streakBonus: breakdown.streakBonus,
-    boostBonus: breakdown.comebackBonus,
-  });
-  if (levelUpOccurred) {
-    eventBus.publish("progression:level_up", {
-      userId,
-      newLevel,
-      previousLevel,
-      totalXP: newTotalXp,
-      xpToNextLevel: newThreshold,
-      prestige: 0,
-      source: input.source,
-      rewards,
-    });
-  }
 }

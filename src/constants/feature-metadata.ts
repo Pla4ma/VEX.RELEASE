@@ -1,0 +1,100 @@
+import { FEATURE_FLAGS } from "./feature-flags";
+
+export const FEATURE_DESCRIPTIONS: Record<string, string> = {
+  [FEATURE_FLAGS.SESSIONS]: "Core focus sessions and timer functionality",
+  [FEATURE_FLAGS.SESSION_GRADING]: "Session performance grading and feedback",
+  [FEATURE_FLAGS.FOCUS_SCORE]: "Personal focus scoring and tracking",
+  [FEATURE_FLAGS.DAILY_MISSION]: "Daily recommended focus missions",
+  [FEATURE_FLAGS.COMPANION]: "Companion creature that grows with progress",
+  [FEATURE_FLAGS.STREAKS]: "Daily streak tracking and maintenance",
+  [FEATURE_FLAGS.COMEBACK_QUEST]: "Recovery quests after streak breaks",
+  [FEATURE_FLAGS.BASIC_REWARDS]: "Basic reward system for achievements",
+  [FEATURE_FLAGS.XP_PROGRESSION]: "Experience points and leveling system",
+  [FEATURE_FLAGS.AI_COACH_BASICS]: "Basic AI coach recommendations",
+  [FEATURE_FLAGS.PAYWALL]: "Premium features and subscriptions",
+  [FEATURE_FLAGS.SETTINGS]: "App settings and preferences",
+  [FEATURE_FLAGS.BASIC_SOLO_BOSS]: "Solo boss battles for motivation",
+  [FEATURE_FLAGS.BASIC_CHALLENGES]: "Daily and weekly challenges",
+  [FEATURE_FLAGS.SQUADS_ACCOUNTABILITY]: "Private squad accountability groups",
+  [FEATURE_FLAGS.MONTHLY_REPORT]: "Monthly progress reports",
+  [FEATURE_FLAGS.SOCIAL_FEED]: "Social activity feed (disabled)",
+  [FEATURE_FLAGS.DUELS]: "Player vs player duels (disabled)",
+  [FEATURE_FLAGS.RANKINGS]: "Global leaderboards (disabled)",
+  [FEATURE_FLAGS.SQUAD_WARS]: "Squad vs squad competitions (disabled)",
+  [FEATURE_FLAGS.RIVALS]: "Rival system and comparisons (disabled)",
+  [FEATURE_FLAGS.TRADING]: "Item trading system (disabled)",
+  [FEATURE_FLAGS.EMERGENCY_GEM_SINKS]: "Emergency gem purchases (disabled)",
+  [FEATURE_FLAGS.COMPLEX_CRAFTING]: "Advanced crafting system (disabled)",
+  [FEATURE_FLAGS.AR_EXPERIMENTAL]: "AR and experimental features (disabled)",
+  [FEATURE_FLAGS.DARK_MODE]: "Enable dark mode for the app interface",
+  [FEATURE_FLAGS.BIOMETRIC_LOGIN]:
+    "Use fingerprint or face recognition to login",
+  [FEATURE_FLAGS.SQUAD_VOICE_CHAT]: "Voice chat within squads (coming soon)",
+  [FEATURE_FLAGS.MARKETPLACE]:
+    "Buy and sell items with other users (coming soon)",
+  [FEATURE_FLAGS.AI_ASSISTANT]:
+    "AI-powered assistant for help and recommendations",
+  [FEATURE_FLAGS.PREVIEW_FEATURES]:
+    "Enable experimental features (may be unstable)",
+};
+
+export const FEATURE_GROUPS = {
+  core: [
+    FEATURE_FLAGS.SESSIONS,
+    FEATURE_FLAGS.SESSION_GRADING,
+    FEATURE_FLAGS.FOCUS_SCORE,
+    FEATURE_FLAGS.DAILY_MISSION,
+    FEATURE_FLAGS.COMPANION,
+    FEATURE_FLAGS.STREAKS,
+    FEATURE_FLAGS.COMEBACK_QUEST,
+    FEATURE_FLAGS.BASIC_REWARDS,
+    FEATURE_FLAGS.XP_PROGRESSION,
+    FEATURE_FLAGS.AI_COACH_BASICS,
+    FEATURE_FLAGS.PAYWALL,
+    FEATURE_FLAGS.SETTINGS,
+  ],
+  optional: [
+    FEATURE_FLAGS.BASIC_SOLO_BOSS,
+    FEATURE_FLAGS.BASIC_CHALLENGES,
+    FEATURE_FLAGS.SQUADS_ACCOUNTABILITY,
+    FEATURE_FLAGS.MONTHLY_REPORT,
+  ],
+  disabled: [
+    FEATURE_FLAGS.SOCIAL_FEED,
+    FEATURE_FLAGS.DUELS,
+    FEATURE_FLAGS.RANKINGS,
+    FEATURE_FLAGS.SQUAD_WARS,
+    FEATURE_FLAGS.RIVALS,
+    FEATURE_FLAGS.TRADING,
+    FEATURE_FLAGS.EMERGENCY_GEM_SINKS,
+    FEATURE_FLAGS.COMPLEX_CRAFTING,
+    FEATURE_FLAGS.AR_EXPERIMENTAL,
+  ],
+  ui: [
+    FEATURE_FLAGS.DARK_MODE,
+    FEATURE_FLAGS.DARK_MODE_TOGGLE,
+    FEATURE_FLAGS.CUSTOM_THEMES,
+    FEATURE_FLAGS.REDUCED_MOTION,
+  ],
+  auth: [
+    FEATURE_FLAGS.BIOMETRIC_LOGIN,
+    FEATURE_FLAGS.SOCIAL_LOGIN,
+    FEATURE_FLAGS.TWO_FACTOR_AUTH,
+  ],
+  social: [
+    FEATURE_FLAGS.FRIENDS,
+    FEATURE_FLAGS.DIRECT_MESSAGES,
+    FEATURE_FLAGS.GROUP_MESSAGES,
+  ],
+  economy: [
+    FEATURE_FLAGS.WALLET,
+    FEATURE_FLAGS.TRANSFERS,
+    FEATURE_FLAGS.REWARDS,
+    FEATURE_FLAGS.MARKETPLACE,
+  ],
+  experimental: [
+    FEATURE_FLAGS.PREVIEW_FEATURES,
+    FEATURE_FLAGS.EXPERIMENTAL_UI,
+    FEATURE_FLAGS.EARLY_ACCESS,
+  ],
+} as const;

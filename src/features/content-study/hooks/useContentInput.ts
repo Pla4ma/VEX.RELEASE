@@ -13,40 +13,13 @@ import {
   uploadStudyFile,
 } from "../ContentStudyService";
 import { ContentInputState, InputTab, SubmitContentRequest } from "../types";
-import { VALIDATION_RULES, ERROR_MESSAGES } from "../constants";
+import { VALIDATION_RULES } from "../constants";
 import { contentStudyQueryKeys } from "./queryKeys";
-
-function createInitialContentInputState(): ContentInputState {
-  return {
-    activeTab: "paste",
-    pastedText: "",
-    youtubeUrl: "",
-    selectedFile: null,
-    isSubmitting: false,
-    error: null,
-    validationErrors: [],
-    isDirty: false,
-    isValid: false,
-    characterCount: 0,
-  };
-}
-
-function getUserFacingSubmitError(error: unknown): string {
-  if (!(error instanceof Error)) {
-    return ERROR_MESSAGES.DEFAULT;
-  }
-  const lowerMessage = error.message.toLowerCase();
-  if (
-    lowerMessage.includes("row level security") ||
-    lowerMessage.includes("storage upload failed")
-  ) {
-    return "Your PDF could not upload because secure study storage is still syncing. Try again in a moment, or paste the text to keep moving.";
-  }
-  if (lowerMessage.includes("validation failed")) {
-    return "Check the highlighted input and try again.";
-  }
-  return error.message;
-}
+import {
+  createInitialContentInputState,
+  getUserFacingSubmitError,
+} from "./contentInputHelpers";
+import { computeValidationErrors } from "./contentInputValidation";
 
 export function useContentInput() {
   const { user } = useAuthStore();
@@ -116,38 +89,7 @@ export function useContentInput() {
   }, []);
 
   const validateInput = useCallback((): boolean => {
-    const errors: ContentInputState["validationErrors"] = [];
-
-    if (
-      state.activeTab === "paste" &&
-      state.pastedText.trim().length < VALIDATION_RULES.MIN_CONTENT_LENGTH
-    ) {
-      errors.push({
-        field: "pastedText",
-        code: "MIN_LENGTH",
-        message: `Please enter at least ${VALIDATION_RULES.MIN_CONTENT_LENGTH} characters.`,
-        severity: "error",
-      });
-    }
-
-    if (state.activeTab === "youtube" && !state.youtubeUrl.trim()) {
-      errors.push({
-        field: "youtubeUrl",
-        code: "REQUIRED",
-        message: "Please enter a YouTube URL.",
-        severity: "error",
-      });
-    }
-
-    if (state.activeTab === "pdf" && !state.selectedFile) {
-      errors.push({
-        field: "file",
-        code: "REQUIRED",
-        message: "Please select a file to upload.",
-        severity: "error",
-      });
-    }
-
+    const errors = computeValidationErrors(state);
     setState((prev) => ({
       ...prev,
       validationErrors: errors,

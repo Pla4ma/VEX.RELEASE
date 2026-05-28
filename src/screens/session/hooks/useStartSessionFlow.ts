@@ -1,12 +1,8 @@
 import { captureSilentFailure } from "../../../utils/silent-failure";
 import { useCallback, useMemo, useState } from "react";
 import * as Sentry from "@sentry/react-native";
-
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-
 import { getSprintChainService } from "../../../features/session/SprintChainService";
 import { startStreakRestoreQuest } from "../../../features/streaks/restore-quest";
-import type { SessionStackParams } from "../../../navigation/types";
 import { getMMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
 import { SessionMode } from "../../../session/modes";
 import { useSession } from "../../../session/hooks/useSession";
@@ -16,23 +12,10 @@ import {
   createContract,
   skipContract,
 } from "../../../features/focus-contract/service";
-import type { PresetWithIcon } from "../utils/session-setup";
-
-type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
-type SessionSetupParams = SessionStackParams["SessionSetup"];
-
-type UseStartSessionFlowParams = {
-  draftGoal: string | undefined;
-  focusContractText: string | null;
-  navigation: SessionNavigationProp;
-  params: SessionSetupParams | undefined;
-  selectedDurationSeconds: number;
-  selectedPreset: PresetWithIcon;
-  selectedSessionMode: SessionMode;
-  selectedThemeId: string;
-  selectedThemeOwned: boolean;
-  userId: string;
-};
+import type {
+  UseStartSessionFlowParams,
+} from "./sessionFlowTypes";
+import { buildSessionContext } from "./buildSessionContext";
 
 export function useStartSessionFlow({
   draftGoal,
@@ -58,64 +41,16 @@ export function useStartSessionFlow({
     let started = false;
 
     try {
-      const sessionTags = Array.from(
-        new Set([
-          ...(selectedPreset.tags || []),
-          ...(params?.sessionTags ?? []),
-        ]),
+      const { sessionTags, notesPayload } = buildSessionContext(
+        params,
+        selectedPreset,
+        selectedSessionMode,
+        draftGoal,
+        selectedThemeId,
+        selectedThemeOwned,
       );
-      const notesPayload: Record<string, unknown> = {};
-
-      if (
-        params?.source === "content-study" ||
-        params?.source === "learning-execution"
-      ) {
-        if (!sessionTags.includes("content-study")) {
-          sessionTags.push("content-study");
-        }
-        if (
-          params.source === "learning-execution" &&
-          !sessionTags.includes("learning-execution")
-        ) {
-          sessionTags.push("learning-execution");
-        }
-        if (params.studyPlanId && !sessionTags.includes(params.studyPlanId)) {
-          sessionTags.push(params.studyPlanId);
-        }
-        if (params.focusAreas && params.focusAreas.length > 0) {
-          sessionTags.push(...params.focusAreas.slice(0, 3));
-        }
-
-        notesPayload.source = params.source;
-        notesPayload.generationId = params.generationId;
-        notesPayload.contentId = params.contentId;
-        notesPayload.studyPlanId = params.studyPlanId ?? params.generationId;
-        notesPayload.focusAreas = params.focusAreas;
-        notesPayload.learningExecutionLabel = params.learningExecutionLabel;
-        notesPayload.learningExecutionTaskId = params.learningExecutionTaskId;
-      }
-
-      if (selectedThemeId && selectedThemeOwned) {
-        notesPayload.selectedThemeId = selectedThemeId;
-      }
-
-      if (selectedSessionMode === SessionMode.STUDY && draftGoal?.trim()) {
-        notesPayload.studyTarget = draftGoal.trim();
-      }
-
-      if (params?.comebackMultiplier && params.comebackMultiplier > 1) {
-        if (!sessionTags.includes("comeback-session")) {
-          sessionTags.push("comeback-session");
-        }
-        notesPayload.comebackMultiplier = params.comebackMultiplier;
-        notesPayload.comebackMessage = params.comebackMessage;
-      }
 
       if (params?.comebackQuest) {
-        if (!sessionTags.includes("streak-restore-quest")) {
-          sessionTags.push("streak-restore-quest");
-        }
-        notesPayload.comebackQuest = params.comebackQuest;
         await startStreakRestoreQuest(
           userId,
           params.comebackQuest.streakBefore,
@@ -184,10 +119,8 @@ export function useStartSessionFlow({
 
       started = true;
 
-      // Trigger haptic for session start success
       await sessionStart();
 
-      // Double haptic for DEEP_WORK mode - signals "serious mode"
       if (selectedSessionMode === SessionMode.DEEP_WORK) {
         setTimeout(() => {
           void sessionStart();

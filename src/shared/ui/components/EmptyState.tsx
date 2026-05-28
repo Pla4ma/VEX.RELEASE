@@ -1,76 +1,15 @@
 import React from "react";
-import { View, ViewStyle } from "react-native";
+import { View } from "react-native";
 import { useReducedMotion } from "react-native-reanimated";
 import { useTheme } from "../../../theme";
 import { Text } from "../../../components/primitives";
 import { Button } from "../../../components";
 import { EnterAnimation } from "./EnterAnimation";
 import { createSheet } from "@/shared/ui/create-sheet";
-export interface EmptyStateProps {
-  icon?: React.ReactNode | string;
-  title: string;
-  description?: string;
-  actionLabel?: string;
-  onAction?: () => void;
-  secondaryLabel?: string;
-  onSecondary?: () => void;
-  style?: ViewStyle;
-  testID?: string;
-  variant?: "default" | "first-use" | "error" | "offline";
-  featureName?: string;
-}
-const PRESETS = {
-  inventory: {
-    icon: "📦",
-    title: "Your inventory is empty",
-    description: "Complete sessions to earn rewards and items.",
-    actionLabel: "Start a Session",
-  },
-  feed: {
-    icon: "📰",
-    title: "No activity yet",
-    description: "Your squad's activity will appear here.",
-    actionLabel: "Invite Friends",
-  },
-  leaderboards: {
-    icon: "🏆",
-    title: "Leaderboard empty",
-    description: "Complete this week's challenge to appear here.",
-    actionLabel: "View Challenge",
-  },
-  challenges: {
-    icon: "🎯",
-    title: "No active challenges",
-    description: "Daily and weekly challenges reset soon.",
-    actionLabel: "Browse All",
-  },
-  shop: {
-    icon: "🛍️",
-    title: "Shop empty",
-    description: "New items arrive weekly. Check back soon!",
-    actionLabel: "View Featured",
-  },
-  squadWars: {
-    icon: "⚔️",
-    title: "No active wars",
-    description: "Join a squad to participate in weekly wars.",
-    actionLabel: "Find a Squad",
-  },
-  offline: {
-    icon: "📡",
-    title: "You're offline",
-    description:
-      "Some features are unavailable. We'll sync when you reconnect.",
-    variant: "offline" as const,
-  },
-  error: {
-    icon: "⚠️",
-    title: "Something went wrong",
-    description: "We couldn't load this content. Try again in a moment.",
-    variant: "error" as const,
-    actionLabel: "Try Again",
-  },
-};
+import { PRESETS, type EmptyStateProps } from "./EmptyState.presets";
+
+export type { EmptyStateProps } from "./EmptyState.presets";
+
 export const EmptyState: React.FC<EmptyStateProps> = ({
   icon,
   title,
@@ -197,6 +136,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
     </EnterAnimation>
   );
 };
+
 export const InventoryEmptyState: React.FC<
   Omit<EmptyStateProps, "icon" | "title" | "description">
 > = (props) => <EmptyState {...PRESETS.inventory} {...props} />;
@@ -221,6 +161,7 @@ export const OfflineEmptyState: React.FC<
 export const ErrorEmptyState: React.FC<
   Omit<EmptyStateProps, "icon" | "title" | "description" | "variant">
 > = (props) => <EmptyState {...PRESETS.error} {...props} />;
+
 const styles = createSheet({
   container: {
     flex: 1,
