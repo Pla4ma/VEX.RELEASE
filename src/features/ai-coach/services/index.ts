@@ -8,13 +8,14 @@ export {
   type CoachSignals,
 } from "./coach-state-machine";
 
+export { evaluateInterventions } from "./intervention-engine";
+
 export {
-  evaluateInterventions,
   InterventionError,
   DailyLimitExceededError,
   InterventionSuppressedError,
   ExecutionSlotUnavailableError,
-} from "./intervention-engine";
+} from "./intervention-engine-types";
 
 export { generateMessage } from "./message-generator";
 
