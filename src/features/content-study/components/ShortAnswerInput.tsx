@@ -1,0 +1,50 @@
+import React from "react";
+import { View, TextInput } from "react-native";
+import { Button } from "../../../components/primitives/Button";
+import { useTheme } from "../../../theme";
+import { quizPanelStyles } from "./QuizPanelStyles";
+
+interface ShortAnswerInputProps {
+  value: string;
+  onChangeText: (text: string) => void;
+  onSubmit: () => void;
+}
+
+export const ShortAnswerInput: React.FC<ShortAnswerInputProps> = ({
+  value,
+  onChangeText,
+  onSubmit,
+}) => {
+  const { theme } = useTheme();
+
+  return (
+    <View style={quizPanelStyles.shortAnswerContainer}>
+      <TextInput
+        style={[
+          quizPanelStyles.shortAnswerInput,
+          {
+            color: theme.colors.text.primary,
+            borderColor: theme.colors.border.DEFAULT,
+            backgroundColor: theme.colors.background.primary,
+          },
+        ]}
+        placeholder="Type your answer..."
+        placeholderTextColor={theme.colors.text.muted}
+        value={value}
+        onChangeText={onChangeText}
+        multiline
+        maxLength={500}
+      />
+      <Button
+        size="sm"
+        onPress={onSubmit}
+        disabled={!value.trim()}
+        accessibilityLabel="Submit button"
+        accessibilityRole="button"
+        accessibilityHint="Activates this control"
+      >
+        Submit
+      </Button>
+    </View>
+  );
+};
