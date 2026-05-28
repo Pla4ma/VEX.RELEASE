@@ -1,23 +1,16 @@
 import { Platform } from "react-native";
 import { createDebugger } from "../../utils/debug";
-import {
-  GoogleCalendarAdapter,
-  type GoogleCalendarConfig,
-} from "./GoogleCalendarAdapter";
+import { GoogleCalendarAdapter } from "./GoogleCalendarAdapter";
 import { AppleCalendarAdapter } from "./AppleCalendarAdapter";
 import { SmartScheduler } from "./SmartScheduler";
-import type {
-  CalendarEvent,
-  CalendarGap,
-  FreeBusyInfo,
-  StudyScheduleSuggestion,
-} from "./types";
+import type { CalendarEvent, CalendarGap, FreeBusyInfo, StudyScheduleSuggestion } from "./types";
+import type { CalendarProvider, CalendarConfig, DeadlineAnalysis } from "./calendar-sync-helpers";
+import { mergeBusySlots, calculateFreeSlots, getSmartSessionSuggestionFromGaps } from "./calendar-sync-helpers";
+
+export type { CalendarProvider, CalendarConfig };
+
 const debug = createDebugger("calendar:sync");
-type CalendarProvider = "GOOGLE" | "APPLE";
-interface CalendarConfig {
-  google?: GoogleCalendarConfig;
-  apple?: boolean;
-}
+
 export class CalendarSyncService {
   private googleAdapter?: GoogleCalendarAdapter;
   private appleAdapter?: AppleCalendarAdapter;
@@ -66,8 +59,7 @@ export class CalendarSyncService {
     timeMin: Date,
     timeMax: Date,
   ): Promise<{ provider: CalendarProvider; events: CalendarEvent[] }[]> {
-    const results: { provider: CalendarProvider; events: CalendarEvent[] }[] =
-      [];
+    const results: { provider: CalendarProvider; events: CalendarEvent[] }[] = [];
     if (this.googleAdapter && this.connectedProviders.has("GOOGLE")) {
       try {
         const events = await this.googleAdapter.fetchEvents(timeMin, timeMax);
@@ -107,8 +99,8 @@ export class CalendarSyncService {
         debug.error("Failed to get Apple free/busy:", error);
       }
     }
-    const merged = this.mergeBusySlots(allBusy);
-    const freeSlots = this.calculateFreeSlots(merged, timeMin, timeMax);
+    const merged = mergeBusySlots(allBusy);
+    const freeSlots = calculateFreeSlots(merged, timeMin, timeMax);
     return { busySlots: merged, freeSlots };
   }
   async createFocusEvent(
@@ -118,22 +110,14 @@ export class CalendarSyncService {
   ): Promise<CalendarEvent | null> {
     if (this.googleAdapter && this.connectedProviders.has("GOOGLE")) {
       try {
-        return await this.googleAdapter.createFocusEvent(
-          startTime,
-          duration,
-          title,
-        );
+        return await this.googleAdapter.createFocusEvent(startTime, duration, title);
       } catch (error) {
         debug.error("Failed to create Google event:", error);
       }
     }
     if (this.appleAdapter && this.connectedProviders.has("APPLE")) {
       try {
-        return await this.appleAdapter.createFocusEvent(
-          startTime,
-          duration,
-          title,
-        );
+        return await this.appleAdapter.createFocusEvent(startTime, duration, title);
       } catch (error) {
         debug.error("Failed to create Apple event:", error);
       }
@@ -162,129 +146,20 @@ export class CalendarSyncService {
       now.getTime() + Math.max(daysUntilDeadline, 7) * 24 * 60 * 60 * 1000,
     );
     const freeBusy = await this.getCombinedFreeBusy(now, future);
-    return this.scheduler.generateStudySchedule(
-      freeBusy,
-      totalMinutesNeeded,
-      deadline,
-      userLevel,
-    );
+    return this.scheduler.generateStudySchedule(freeBusy, totalMinutesNeeded, deadline, userLevel);
   }
-  async analyzeUpcomingDeadlines(
-    daysAhead: number = 14,
-  ): Promise<
-    Array<{
-      title: string;
-      deadline: Date;
-      suggestedStudyTimes: number;
-      urgency: "HIGH" | "MEDIUM" | "LOW";
-    }>
-  > {
+  async analyzeUpcomingDeadlines(daysAhead: number = 14): Promise<DeadlineAnalysis> {
     const now = new Date();
     const future = new Date(now.getTime() + daysAhead * 24 * 60 * 60 * 1000);
-    const allEvents: Array<{
-      title: string;
-      startTime: Date;
-      description?: string;
-    }> = [];
+    const allEvents: Array<{ title: string; startTime: Date; description?: string }> = [];
     const results = await this.fetchAllEvents(now, future);
     for (const { events } of results) {
-      allEvents.push(
-        ...events.map((e) => ({
-          title: e.title,
-          startTime: e.startTime,
-          description: e.description,
-        })),
-      );
+      allEvents.push(...events.map((e) => ({ title: e.title, startTime: e.startTime, description: e.description })));
     }
     return this.scheduler.analyzeDeadlines(allEvents);
   }
-  async getSmartSessionSuggestion(): Promise<{
-    suggested: boolean;
-    startTime?: Date;
-    duration?: number;
-    reason?: string;
-    action: "START_NOW" | "SCHEDULE" | "NO_SUITABLE_TIME";
-  }> {
+  async getSmartSessionSuggestion() {
     const gaps = await this.findFocusTimeGaps(1, 25);
-    if (gaps.length === 0) {
-      return { suggested: false, action: "NO_SUITABLE_TIME" };
-    }
-    // gaps[0] is safe after the length check above
-    const bestGap = gaps[0]!;
-    const now = new Date();
-    const gapStart = new Date(bestGap.startTime);
-    const minutesUntil = Math.floor(
-      (gapStart.getTime() - now.getTime()) / 60000,
-    );
-    if (minutesUntil <= 30 && minutesUntil >= -5) {
-      return {
-        suggested: true,
-        startTime: gapStart,
-        duration: Math.min(bestGap.duration, 60),
-        reason: bestGap.reason,
-        action: "START_NOW",
-      };
-    }
-    return {
-      suggested: true,
-      startTime: gapStart,
-      duration: Math.min(bestGap.duration, 60),
-      reason: bestGap.reason,
-      action: "SCHEDULE",
-    };
-  }
-  private mergeBusySlots(
-    slots: Array<{ start: Date; end: Date }>,
-  ): Array<{ start: Date; end: Date }> {
-    if (slots.length === 0) {
-      return [];
-    }
-    slots.sort((a, b) => a.start.getTime() - b.start.getTime());
-    // slots[0] is safe after the length check above
-    const merged: Array<{ start: Date; end: Date }> = [slots[0]!];
-    for (let i = 1; i < slots.length; i++) {
-      const last = merged[merged.length - 1]!; // always valid: merged starts with 1 element
-      const current = slots[i]!; // always valid: i is in bounds per loop condition
-      if (current.start <= last.end) {
-        last.end = new Date(
-          Math.max(last.end.getTime(), current.end.getTime()),
-        );
-      } else {
-        merged.push(current);
-      }
-    }
-    return merged;
-  }
-  private calculateFreeSlots(
-    busySlots: Array<{ start: Date; end: Date }>,
-    timeMin: Date,
-    timeMax: Date,
-  ): Array<{ start: Date; end: Date; duration: number }> {
-    const free: Array<{ start: Date; end: Date; duration: number }> = [];
-    let currentTime = new Date(timeMin);
-    for (const busy of busySlots) {
-      if (currentTime < busy.start) {
-        free.push({
-          start: new Date(currentTime),
-          end: new Date(busy.start),
-          duration: Math.floor(
-            (busy.start.getTime() - currentTime.getTime()) / 60000,
-          ),
-        });
-      }
-      currentTime = new Date(
-        Math.max(currentTime.getTime(), busy.end.getTime()),
-      );
-    }
-    if (currentTime < timeMax) {
-      free.push({
-        start: new Date(currentTime),
-        end: new Date(timeMax),
-        duration: Math.floor(
-          (timeMax.getTime() - currentTime.getTime()) / 60000,
-        ),
-      });
-    }
-    return free.filter((slot) => slot.duration >= 15);
+    return getSmartSessionSuggestionFromGaps(gaps);
   }
 }

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { View, Text, Pressable, ActivityIndicator } from "react-native";
+import React from "react";
+import { View, Text } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -9,14 +9,16 @@ import Animated, {
 } from "react-native-reanimated";
 import { useTheme } from "@/theme";
 import * as Sentry from "@sentry/react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
 import { styles } from "./PremiumErrorRecovery.styles";
 import {
-  type RetryConfig,
   type PremiumErrorRecoveryProps,
   DEFAULT_RETRY_CONFIG,
   ERROR_MESSAGES,
 } from "./PremiumErrorRecovery-helpers";
+import { ResolvedSuccessCard } from "./ResolvedSuccessCard";
+import { ErrorActionButtons } from "./ErrorActionButtons";
+
+const SEVERITY_KEYS = ["high", "medium", "low"] as const;
 
 export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
   error,
@@ -29,24 +31,25 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
   autoRetry = false,
 }) => {
   const { theme } = useTheme();
-  const [isRetrying, setIsRetrying] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
-  const [nextRetryIn, setNextRetryIn] = useState<number | null>(null);
-  const [isResolved, setIsResolved] = useState(false);
-  const retryConfig = useMemo(
+  const [isRetrying, setIsRetrying] = React.useState(false);
+  const [retryCount, setRetryCount] = React.useState(0);
+  const [nextRetryIn, setNextRetryIn] = React.useState<number | null>(null);
+  const [isResolved, setIsResolved] = React.useState(false);
+  const retryConfig = React.useMemo(
     () => ({ ...DEFAULT_RETRY_CONFIG, ...customRetryConfig }),
     [customRetryConfig],
   );
   const errorState = ERROR_MESSAGES[context] ?? ERROR_MESSAGES.general!;
+  const errorMessage =
+    typeof error === "string" ? error : error.message || errorState.message;
 
   const shakeAnim = useSharedValue(0);
   const scaleAnim = useSharedValue(1);
-
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: shakeAnim.value }, { scale: scaleAnim.value }],
   }));
 
-  const triggerShake = useCallback(() => {
+  const triggerShake = React.useCallback(() => {
     shakeAnim.value = withSequence(
       withTiming(-8, { duration: 50 }),
       withTiming(8, { duration: 50 }),
@@ -56,23 +59,16 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
     );
   }, [shakeAnim]);
 
-  const getErrorMessage = (): string => {
-    if (typeof error === "string") return error;
-    return error.message || errorState.message;
-  };
+  const severityColor = React.useMemo(() => {
+    const map: Record<string, string> = {
+      high: theme.colors.error.DEFAULT,
+      medium: theme.colors.warning.DEFAULT,
+      low: theme.colors.primary[500],
+    };
+    return map[errorState.severity] ?? theme.colors.primary[500];
+  }, [errorState.severity, theme]);
 
-  const getSeverityColor = (): string => {
-    switch (errorState.severity) {
-      case "high":
-        return theme.colors.error.DEFAULT;
-      case "medium":
-        return theme.colors.warning.DEFAULT;
-      case "low":
-        return theme.colors.primary[500];
-    }
-  };
-
-  const handleRetry = useCallback(async () => {
+  const handleRetry = React.useCallback(async () => {
     if (isRetrying || !onRetry) return;
     setIsRetrying(true);
     try {
@@ -113,25 +109,11 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
       setIsRetrying(false);
     }
   }, [
-    isRetrying,
-    onRetry,
-    retryCount,
-    retryConfig,
-    triggerShake,
-    scaleAnim,
-    autoRetry,
-    context,
+    isRetrying, onRetry, retryCount, retryConfig,
+    triggerShake, scaleAnim, autoRetry, context,
   ]);
 
-  const handleFallback = useCallback(() => {
-    onFallback?.();
-  }, [onFallback]);
-
-  const handleDismiss = useCallback(() => {
-    onDismiss?.();
-  }, [onDismiss]);
-
-  useEffect(() => {
+  React.useEffect(() => {
     if (autoRetry && onRetry && retryCount === 0) {
       handleRetry();
     }
@@ -139,36 +121,15 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
 
   if (isResolved) {
     return (
-      <Animated.View style={animatedStyle}>
-        <View
-          style={[
-            styles.successCard,
-            { backgroundColor: theme.colors.success[50] },
-          ]}
-        >
-          <Text
-            style={[
-              styles.successIcon,
-              { color: theme.colors.success.DEFAULT },
-            ]}
-          >
-            {"\u2713"}
-          </Text>
-          <Text
-            style={[
-              styles.successText,
-              { color: theme.colors.success.DEFAULT },
-            ]}
-          >
-            Problem solved! Back to your journey.
-          </Text>
-        </View>
-      </Animated.View>
+      <ResolvedSuccessCard
+        animatedStyle={animatedStyle}
+        successBg={theme.colors.success[50]}
+        successColor={theme.colors.success.DEFAULT}
+      />
     );
   }
 
   const hasMoreRetries = retryCount < retryConfig.maxAttempts;
-  const severityColor = getSeverityColor();
 
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
@@ -193,7 +154,7 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
           <Text
             style={[styles.errorDetail, { color: theme.colors.text.secondary }]}
           >
-            {getErrorMessage()}
+            {errorMessage}
           </Text>
           {retryCount > 0 && (
             <Text
@@ -211,72 +172,22 @@ export const PremiumErrorRecovery: React.FC<PremiumErrorRecoveryProps> = ({
           )}
         </View>
 
-        <View style={styles.actions}>
-          {hasMoreRetries && onRetry && (
-            <Pressable
-              style={({ pressed }) => [
-                styles.retryButton,
-                { backgroundColor: severityColor },
-                pressed && { opacity: 0.8 },
-              ]}
-              onPress={handleRetry}
-              disabled={isRetrying}
-              accessibilityLabel="Try Again"
-              accessibilityRole="button"
-              accessibilityHint="Retries the failed operation"
-            >
-              {isRetrying ? (
-                <ActivityIndicator size="small" color={launchColors.hex_fff} />
-              ) : (
-                <Text style={styles.retryButtonText}>
-                  {retryCount > 0 ? "Try Again" : "Retry Now"}
-                </Text>
-              )}
-            </Pressable>
-          )}
-
-          {canFallback && onFallback && (
-            <Pressable
-              style={({ pressed }) => [
-                styles.fallbackButton,
-                { borderColor: theme.colors.border.DEFAULT },
-                pressed && { opacity: 0.8 },
-              ]}
-              onPress={handleFallback}
-              accessibilityLabel="Work Offline"
-              accessibilityRole="button"
-              accessibilityHint="Continues working in offline mode"
-            >
-              <Text
-                style={[
-                  styles.fallbackText,
-                  { color: theme.colors.text.secondary },
-                ]}
-              >
-                Work Offline
-              </Text>
-            </Pressable>
-          )}
-
-          {onDismiss && (
-            <Pressable
-              onPress={handleDismiss}
-              style={({ pressed }) => [
-                styles.dismissButton,
-                pressed && { opacity: 0.8 },
-              ]}
-              accessibilityLabel="Dismiss"
-              accessibilityRole="button"
-              accessibilityHint="Dismisses this error message"
-            >
-              <Text
-                style={[styles.dismissText, { color: theme.colors.text.muted }]}
-              >
-                Dismiss
-              </Text>
-            </Pressable>
-          )}
-        </View>
+        <ErrorActionButtons
+          hasMoreRetries={hasMoreRetries}
+          onRetry={onRetry}
+          isRetrying={isRetrying}
+          retryCount={retryCount}
+          handleRetry={handleRetry}
+          severityColor={severityColor}
+          canFallback={canFallback}
+          onFallback={onFallback}
+          handleFallback={() => onFallback?.()}
+          onDismiss={onDismiss}
+          handleDismiss={() => onDismiss?.()}
+          borderColor={theme.colors.border.DEFAULT}
+          mutedColor={theme.colors.text.muted}
+          secondaryColor={theme.colors.text.secondary}
+        />
       </View>
     </Animated.View>
   );

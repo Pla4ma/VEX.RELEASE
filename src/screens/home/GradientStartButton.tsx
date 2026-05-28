@@ -1,0 +1,125 @@
+import React, { useEffect } from "react";
+import { View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import Animated, {
+  cancelAnimation,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
+import { Button } from "../../components/primitives/Button";
+import { Text } from "../../components/primitives/Text";
+import { useTheme } from "../../theme";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
+
+const WHITE_MUTED = launchColors.rgb_255_255_255_0_72;
+
+export function GradientStartButton({
+  body,
+  buttonLabel,
+  eyebrow,
+  onPress,
+  pulse,
+  title,
+}: {
+  body: string;
+  buttonLabel: string;
+  eyebrow: string;
+  onPress: () => void;
+  pulse: boolean;
+  title: string;
+}): JSX.Element {
+  const { theme } = useTheme();
+  const scale = useSharedValue(1);
+  useEffect(() => {
+    if (pulse) {
+      scale.value = withRepeat(
+        withSequence(
+          withTiming(1.02, { duration: 1500 }),
+          withTiming(1, { duration: 1500 }),
+        ),
+        -1,
+        false,
+      );
+    } else {
+      cancelAnimation(scale);
+      scale.value = 1;
+    }
+    return () => cancelAnimation(scale);
+  }, [pulse, scale]);
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+  return (
+    <Animated.View style={animatedStyle}>
+      <LinearGradient
+        colors={[
+          theme.colors.primary[600] ?? launchColors.hex_7c3aed,
+          theme.colors.primary[500] ?? launchColors.hex_4f46e5,
+        ]}
+        style={[
+          styles.ctaGradient,
+          {
+            borderRadius: theme.borderRadius["2xl"],
+            gap: theme.spacing[3],
+            padding: theme.spacing[4],
+          },
+        ]}
+      >
+        <Text variant="label" color={WHITE_MUTED}>
+          {eyebrow}
+        </Text>
+        <View style={{ gap: theme.spacing[2] }}>
+          <Text variant="h4" color={theme.colors.text.inverse}>
+            {title}
+          </Text>
+          <Text variant="bodySmall" color={WHITE_MUTED}>
+            {body}
+          </Text>
+        </View>
+        <Button
+          fullWidth
+          size="lg"
+          variant="primary"
+          style={{
+            backgroundColor: "transparent",
+            borderRadius: theme.borderRadius["2xl"],
+            minHeight: 58,
+          }}
+          onPress={onPress}
+          accessibilityLabel={buttonLabel}
+          accessibilityRole="button"
+          accessibilityHint="Starts or resumes the recommended focus action"
+        >
+          {buttonLabel}
+        </Button>
+      </LinearGradient>
+    </Animated.View>
+  );
+}
+
+export function SectionHeader({ title }: { title: string }): JSX.Element {
+  const { theme } = useTheme();
+  return (
+    <View style={styles.sectionHeader}>
+      <View
+        style={[
+          styles.sectionAccent,
+          { backgroundColor: theme.colors.primary[500] },
+        ]}
+      />
+      <Text variant="h4" color={theme.colors.text.primary}>
+        {title}
+      </Text>
+    </View>
+  );
+}
+
+const styles = createSheet({
+  ctaGradient: { overflow: "hidden" },
+  sectionAccent: { borderRadius: 2, height: 18, marginRight: 8, width: 3 },
+  sectionHeader: { alignItems: "center", flexDirection: "row" },
+});

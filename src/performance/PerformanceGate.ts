@@ -42,6 +42,10 @@ export class PerformanceGate {
     return { ...this.targets };
   }
 
+  restartMetricsCollection(): void {
+    this.initializeMetricsCollection();
+  }
+
   private initializeMetricsCollection(): void {
     this.performanceMonitor.start();
     this.performanceMonitor.onJank((metrics) => {

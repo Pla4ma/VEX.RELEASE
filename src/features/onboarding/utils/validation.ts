@@ -1,69 +1,25 @@
-import { z } from "zod";
 import { createDebugger } from "../../../utils/debug";
 import type { FocusGoal, FocusDuration } from "../types";
 import type { ValidationResult } from "./goal-validators";
-
-const debug = createDebugger("onboarding:validation");
-
-const ValidGoals = ["WORK", "STUDY", "CREATIVE", "PERSONAL"] as const;
-const ValidDurations = [15, 25, 45, 60] as const;
-
-export const OnboardingGoalSchema = z.enum(ValidGoals, {
-  errorMap: () => ({ message: "Please select a valid focus goal" }),
-});
-
-export const OnboardingDurationSchema = z
-  .number()
-  .refine(
-    (val): val is FocusDuration =>
-      ValidDurations.includes(val as FocusDuration),
-    {
-      message:
-        "Please select a valid focus duration (15, 25, 45, or 60 minutes)",
-    },
-  );
-
-export const OnboardingNameSchema = z
-  .string()
-  .min(2, "Name must be at least 2 characters")
-  .max(30, "Name must be 30 characters or less")
-  .regex(
-    /^[a-zA-Z0-9\s_-]+$/,
-    "Name can only contain letters, numbers, spaces, hyphens, and underscores",
-  )
-  .transform((val) => val.trim());
-
-export const OnboardingStepSchema = z.enum([
-  "WELCOME",
-  "GOAL_SETTING",
-  "FOCUS_TIME",
-  "NAME_SETUP",
-  "FIRST_SESSION_CTA",
-]);
-
-export const OnboardingStateSchema = z.object({
-  isOnboarded: z.boolean(),
-  currentStep: z.number().min(0).max(4),
-  goal: OnboardingGoalSchema.nullable(),
-  focusDuration: OnboardingDurationSchema.nullable(),
-  displayName: OnboardingNameSchema.nullable(),
-  startedAt: z.number().nullable(),
-  completedAt: z.number().nullable(),
-});
-
-export type {
-  ValidationResult,
-  ValidationError,
-  ValidationWarning,
-} from "./goal-validators";
-
-export { GoalValidators } from "./goal-validators";
-export { DurationValidators } from "./duration-validators";
-export { NameValidators } from "./name-validators";
-
 import { GoalValidators } from "./goal-validators";
 import { DurationValidators } from "./duration-validators";
 import { NameValidators } from "./name-validators";
+import { getNextRecommendedStep, canSkipStep } from "./step-navigation";
+
+const debug = createDebugger("onboarding:validation");
+
+export type { ValidationResult, ValidationError, ValidationWarning } from "./goal-validators";
+export { GoalValidators } from "./goal-validators";
+export { DurationValidators } from "./duration-validators";
+export { NameValidators } from "./name-validators";
+export { getNextRecommendedStep, canSkipStep } from "./step-navigation";
+export {
+  OnboardingGoalSchema,
+  OnboardingDurationSchema,
+  OnboardingNameSchema,
+  OnboardingStepSchema,
+  OnboardingStateSchema,
+} from "./schemas";
 
 export function validateOnboardingStep(
   step: string,
@@ -199,82 +155,6 @@ export function validateCompleteOnboarding(
     warnings: result.warnings.length,
   });
   return result;
-}
-
-export function getNextRecommendedStep(
-  currentStep: string,
-  state: Record<string, unknown>,
-): { step: string; reason: string } | null {
-  switch (currentStep) {
-    case "WELCOME":
-      return {
-        step: "GOAL_SETTING",
-        reason: "First, let us understand your focus goals",
-      };
-    case "GOAL_SETTING":
-      return !state.goal
-        ? null
-        : {
-            step: "FOCUS_TIME",
-            reason: "Now let us set your preferred focus duration",
-          };
-    case "FOCUS_TIME":
-      return !state.focusDuration
-        ? null
-        : state.skipName
-          ? {
-              step: "FIRST_SESSION_CTA",
-              reason: "Ready to start your first session!",
-            }
-          : {
-              step: "NAME_SETUP",
-              reason: "Personalize your experience with a display name",
-            };
-    case "NAME_SETUP":
-      return {
-        step: "FIRST_SESSION_CTA",
-        reason: "You are all set! Start your first focus session",
-      };
-    case "FIRST_SESSION_CTA":
-      return null;
-    default:
-      return null;
-  }
-}
-
-export function canSkipStep(
-  step: string,
-  _state: Record<string, unknown>,
-): { canSkip: boolean; reason: string } {
-  switch (step) {
-    case "WELCOME":
-      return {
-        canSkip: true,
-        reason: "You can skip the welcome, but we recommend viewing it",
-      };
-    case "GOAL_SETTING":
-      return {
-        canSkip: false,
-        reason: "A focus goal is required to personalize your experience",
-      };
-    case "FOCUS_TIME":
-      return {
-        canSkip: false,
-        reason: "Focus duration is required for session setup",
-      };
-    case "NAME_SETUP":
-      return {
-        canSkip: true,
-        reason: "You can skip this and we will use a default name",
-      };
-    case "FIRST_SESSION_CTA":
-      return {
-        canSkip: true,
-        reason: "You can skip and explore the app first",
-      };
-    default:
-      return { canSkip: false, reason: "Unknown step" };
-  }
 }
 
 export const OnboardingValidation = {

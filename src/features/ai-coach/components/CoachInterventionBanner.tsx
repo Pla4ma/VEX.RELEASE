@@ -5,33 +5,16 @@ import Animated, { FadeInDown, FadeOutUp } from "react-native-reanimated";
 import { useTheme } from "../../../theme/ThemeContext";
 import { Text } from "../../../components";
 import { MMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
-export type InterventionType =
-  | "BURNOUT"
-  | "PLATEAU"
-  | "STREAK_RISK"
-  | "BOSS_FINISH"
-  | "STUDY_BEHIND"
-  | "BOSS_OPPORTUNITY"
-  | "MOMENTUM_BUILDING"
-  | "COMEBACK_READY"
-  | "STUDY_PLAN_COMPLETE";
-interface Intervention {
-  id: string;
-  type: InterventionType;
-  message: string;
-  actionLabel: string;
-  hoursRemaining?: number;
-  metadata?: Record<string, unknown>;
-}
-interface CoachInterventionBannerProps {
-  intervention: Intervention | null;
-  coachName: string;
-  coachAvatar?: string;
-  onAction?: (intervention: Intervention) => void;
-  onDismiss?: (intervention: Intervention) => void;
-}
-const DISMISSAL_STORAGE_KEY = "dismissed_interventions";
-const DISMISSAL_TTL_HOURS = 24;
+import type { Intervention, CoachInterventionBannerProps } from "./intervention-types";
+import { DISMISSAL_STORAGE_KEY, DISMISSAL_TTL_HOURS } from "./intervention-types";
+import {
+  getBannerColors,
+  getIcon,
+  isNonDismissable,
+} from "./intervention-helpers";
+
+export type { InterventionType, Intervention, CoachInterventionBannerProps } from "./intervention-types";
+
 export function CoachInterventionBanner({
   intervention,
   coachName,
@@ -44,12 +27,7 @@ export function CoachInterventionBanner({
   const [storage] = useState(
     () => new MMKVStorageAdapter("coach-interventions"),
   );
-  const isNonDismissable = useCallback(
-    (type: InterventionType, hours?: number): boolean => {
-      return type === "STREAK_RISK" && hours !== undefined && hours < 4;
-    },
-    [],
-  );
+
   useEffect(() => {
     if (!intervention) {
       setIsDismissed(false);
@@ -87,7 +65,8 @@ export function CoachInterventionBanner({
       }
     };
     checkDismissal();
-  }, [intervention, storage, isNonDismissable]);
+  }, [intervention, storage]);
+
   const handleDismiss = useCallback((): void => {
     if (!intervention) {
       return;
@@ -101,106 +80,24 @@ export function CoachInterventionBanner({
     storage.setItemSync(DISMISSAL_STORAGE_KEY, JSON.stringify(dismissed));
     setIsDismissed(true);
     onDismiss?.(intervention);
-  }, [intervention, storage, onDismiss, isNonDismissable]);
+  }, [intervention, storage, onDismiss]);
+
   const handleAction = useCallback((): void => {
     if (!intervention) {
       return;
     }
     onAction?.(intervention);
   }, [intervention, onAction]);
-  const getBannerColors = (
-    type: InterventionType,
-  ): { bg: string; border: string; accent: string } => {
-    switch (type) {
-      case "BURNOUT":
-        return {
-          bg: theme.colors.warning[500] + "15",
-          border: theme.colors.warning[500],
-          accent: theme.colors.warning[500],
-        };
-      case "PLATEAU":
-        return {
-          bg: theme.colors.info[500] + "15",
-          border: theme.colors.info[500],
-          accent: theme.colors.info[500],
-        };
-      case "STREAK_RISK":
-        return {
-          bg: theme.colors.error[500] + "15",
-          border: theme.colors.error[500],
-          accent: theme.colors.error[500],
-        };
-      case "BOSS_FINISH":
-      case "BOSS_OPPORTUNITY":
-        return {
-          bg: theme.colors.success[500] + "15",
-          border: theme.colors.success[500],
-          accent: theme.colors.success[500],
-        };
-      case "STUDY_BEHIND":
-        return {
-          bg: theme.colors.warning[500] + "15",
-          border: theme.colors.warning[500],
-          accent: theme.colors.warning[500],
-        };
-      case "MOMENTUM_BUILDING":
-        return {
-          bg: theme.colors.primary[500] + "15",
-          border: theme.colors.primary[500],
-          accent: theme.colors.primary[500],
-        };
-      case "COMEBACK_READY":
-        return {
-          bg: theme.colors.primary[500] + "15",
-          border: theme.colors.primary[500],
-          accent: theme.colors.primary[500],
-        };
-      case "STUDY_PLAN_COMPLETE":
-        return {
-          bg: theme.colors.success[500] + "15",
-          border: theme.colors.success[500],
-          accent: theme.colors.success[500],
-        };
-      default:
-        return {
-          bg: theme.colors.primary[500] + "15",
-          border: theme.colors.primary[500],
-          accent: theme.colors.primary[500],
-        };
-    }
-  };
-  const getIcon = (type: InterventionType): string => {
-    switch (type) {
-      case "BURNOUT":
-        return "🔥";
-      case "PLATEAU":
-        return "📊";
-      case "STREAK_RISK":
-        return "⏰";
-      case "BOSS_FINISH":
-        return "⚔️";
-      case "BOSS_OPPORTUNITY":
-        return "🎯";
-      case "STUDY_BEHIND":
-        return "📚";
-      case "MOMENTUM_BUILDING":
-        return "📈";
-      case "COMEBACK_READY":
-        return "🔄";
-      case "STUDY_PLAN_COMPLETE":
-        return "🏆";
-      default:
-        return "💡";
-    }
-  };
+
   if (!intervention || isDismissed) {
     return null;
   }
-  const colors = getBannerColors(intervention.type);
+  const colors = getBannerColors(intervention.type, theme);
   const canDismiss = !isNonDismissable(
     intervention.type,
     intervention.hoursRemaining,
   );
+
   return (
     <Animated.View
       entering={FadeInDown.duration(400)}
@@ -217,7 +114,6 @@ export function CoachInterventionBanner({
       }}
     >
       <View style={{ padding: theme.spacing[4] }}>
-        {}
         <View
           style={{
             flexDirection: "row",
@@ -247,7 +143,6 @@ export function CoachInterventionBanner({
           )}
         </View>
 
-        {}
         <Text
           variant="body"
           style={{ marginBottom: theme.spacing[3], lineHeight: 20 }}
@@ -255,7 +150,6 @@ export function CoachInterventionBanner({
           {intervention.message}
         </Text>
 
-        {}
         <Pressable
           onPress={handleAction}
           style={{
