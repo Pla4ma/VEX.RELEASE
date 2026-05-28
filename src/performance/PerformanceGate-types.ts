@@ -32,3 +32,20 @@ export interface PerformanceIssue {
   target?: number;
   recommendation: string;
 }
+
+export const PRODUCTION_TARGETS: PerformanceTargets = {
+  minFps: 30,
+  targetFps: 60,
+  maxMemoryMb: 150,
+  maxLongTasksPerSecond: 2,
+  maxBundleSizeKb: 1024,
+  maxAnimationDurationMs: 16.67,
+  maxNetworkRequestMs: 3000,
+};
+
+export const DEVELOPMENT_TARGETS: PerformanceTargets = {
+  ...PRODUCTION_TARGETS,
+  maxMemoryMb: 200,
+  maxLongTasksPerSecond: 5,
+  maxBundleSizeKb: 2048,
+};
