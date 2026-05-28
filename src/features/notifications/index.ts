@@ -6,7 +6,7 @@
 
 // Types & Schemas
 export * from "./schemas";
-export type { NotificationContext } from "./service";
+export type { NotificationContext } from "./service-types";
 
 // Service
 export { dispatchUrgencyNotification } from "./service";

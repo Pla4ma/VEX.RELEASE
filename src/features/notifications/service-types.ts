@@ -44,3 +44,14 @@ export interface NotificationContext {
   };
   seasonEnding?: { hoursRemaining: number; unclaimedTiers: number };
 }
+
+export interface NotificationMessage {
+  title: string;
+  body: string;
+}
+
+export interface NotificationRuleResult {
+  shouldSend: boolean;
+  priority: number;
+  message: NotificationMessage;
+}
