@@ -6,26 +6,26 @@ import { ALL_ACHIEVEMENTS, getAchievementById } from "./definitions";
 import type { Achievement, AchievementCategory } from "./types";
 import * as achievementRepository from "./repository";
 import { getAvailabilityFor } from "../liveops-config/feature-access-store";
+import type { EventHandler } from "./event-handler-types";
+import {
+  handleSessionCompleted,
+  handleStreakUpdated,
+  handleStreakMilestone,
+  handleStreakBroken,
+  handleStreakComeback,
+  handleBossDefeated,
+  handleLevelUp,
+  handlePrestige,
+  handleAchievementCheck,
+} from "./event-handlers";
+
 const FEATURE_KEY = "achievements" as const;
 const debug = createDebugger("achievements:event-handler");
-type EventHandler<T extends keyof EventChannels> = (
-  data: EventChannels[T],
-) => void;
-interface AchievementCheckContext {
-  userId: string;
-  eventType: string;
-  data: Record<string, unknown>;
-  timestamp: number;
-}
-interface AchievementUnlockResult {
-  achievementId: string;
-  userId: string;
-  unlockedAt: number;
-  wasAlreadyUnlocked: boolean;
-}
+
 export class AchievementEventHandler {
   private unsubscribeFns: Array<() => void> = [];
   private isInitialized = false;
+
   initialize(): void {
     const availability = getAvailabilityFor(FEATURE_KEY);
     if (!availability.canSubscribeToEvents) {
@@ -36,18 +36,15 @@ export class AchievementEventHandler {
       debug.warn("AchievementEventHandler already initialized");
       return;
     }
-    this.subscribe("session:completed", this.handleSessionCompleted.bind(this));
-    this.subscribe("streak:updated", this.handleStreakUpdated.bind(this));
-    this.subscribe("streak:milestone", this.handleStreakMilestone.bind(this));
-    this.subscribe("streak:broken", this.handleStreakBroken.bind(this));
-    this.subscribe("streak:comeback", this.handleStreakComeback.bind(this));
-    this.subscribe("boss:defeated", this.handleBossDefeated.bind(this));
-    this.subscribe("progression:level_up", this.handleLevelUp.bind(this));
-    this.subscribe("progression:prestige", this.handlePrestige.bind(this));
-    this.subscribe(
-      "achievements:check",
-      this.handleAchievementCheck.bind(this),
-    );
+    this.subscribe("session:completed", handleSessionCompleted);
+    this.subscribe("streak:updated", handleStreakUpdated);
+    this.subscribe("streak:milestone", handleStreakMilestone);
+    this.subscribe("streak:broken", handleStreakBroken);
+    this.subscribe("streak:comeback", handleStreakComeback);
+    this.subscribe("boss:defeated", handleBossDefeated);
+    this.subscribe("progression:level_up", handleLevelUp);
+    this.subscribe("progression:prestige", handlePrestige);
+    this.subscribe("achievements:check", handleAchievementCheck);
     this.isInitialized = true;
     Sentry.addBreadcrumb({
       category: "achievements",
@@ -55,11 +52,13 @@ export class AchievementEventHandler {
       level: "info",
     });
   }
+
   destroy(): void {
     this.unsubscribeFns.forEach((fn) => fn());
     this.unsubscribeFns = [];
     this.isInitialized = false;
   }
+
   private subscribe<T extends keyof EventChannels>(
     channel: T,
     handler: EventHandler<T>,
@@ -67,240 +66,18 @@ export class AchievementEventHandler {
     const unsubscribe = eventBus.subscribe(channel, handler);
     this.unsubscribeFns.push(unsubscribe);
   }
-  private async handleSessionCompleted(
-    data:
-      | EventChannels["session:completed"]
-      | EventChannels["sessions:completed"],
-  ): Promise<void> {
-    const timestamp = "timestamp" in data ? data.timestamp : Date.now();
-    const context: AchievementCheckContext = {
-      userId: data.userId,
-      eventType: "SESSION_COMPLETE",
-      data: {
-        duration: data.duration,
-        quality:
-          "quality" in data
-            ? data.quality
-            : "qualityScore" in data
-              ? data.qualityScore
-              : undefined,
-        timestamp,
-      },
-      timestamp: Date.now(),
-    };
-    await this.checkCumulativeAchievements(context.userId, "SESSION_COMPLETE", [
-      "session-first",
-      "session-10",
-      "session-50",
-      "session-100",
-      "session-500",
-    ]);
-    if (data.duration >= 60 * 60) {
-      await this.checkAchievement(context.userId, "session-60-min");
-    }
-    if ("quality" in data && data.quality && data.quality >= 95) {
-      await this.checkCumulativeAchievements(
-        context.userId,
-        "PERFECT_SESSION",
-        ["session-first-s-grade", "session-10-perfect"],
-      );
-    }
-    const ts = "timestamp" in data ? data.timestamp : Date.now();
-    const hour = new Date(ts).getHours();
-    if (hour === 0) {
-      await this.checkAchievement(context.userId, "session-midnight");
-    }
-    if (hour === 5) {
-      await this.checkAchievement(context.userId, "session-early-bird");
-    }
-  }
-  private async handleStreakUpdated(
-    data: EventChannels["streak:updated"],
-  ): Promise<void> {
-    const streakDays = data.state.currentStreak;
-    const streakAchievements = [
-      { id: "streak-3", minDays: 3 },
-      { id: "streak-7", minDays: 7 },
-      { id: "streak-14", minDays: 14 },
-      { id: "streak-30", minDays: 30 },
-      { id: "streak-60", minDays: 60 },
-      { id: "streak-100", minDays: 100 },
-      { id: "streak-180", minDays: 180 },
-      { id: "streak-365", minDays: 365 },
-    ];
-    for (const { id, minDays } of streakAchievements) {
-      if (streakDays >= minDays) {
-        await this.checkAchievement(data.userId, id);
-      }
-    }
-  }
-  private async handleStreakMilestone(
-    data: EventChannels["streak:milestone"],
-  ): Promise<void> {
-    Sentry.addBreadcrumb({
-      category: "achievements",
-      message: `Streak milestone reached: ${data.milestone}`,
-      level: "info",
-      data: { userId: data.userId, milestone: data.milestone },
-    });
-  }
-  private async handleStreakBroken(
-    _data: EventChannels["streak:broken"],
-  ): Promise<void> {}
-  private async handleStreakComeback(
-    data: EventChannels["streak:comeback"],
-  ): Promise<void> {
-    await this.checkAchievement(data.userId, "streak-phoenix");
-  }
-  private async handleBossDefeated(
-    data: EventChannels["boss:defeated"],
-  ): Promise<void> {
-    await this.checkCumulativeAchievements(data.userId, "BOSS_DEFEAT", [
-      "boss-first",
-      "boss-all-6",
-    ]);
-    if (!data.participants || data.participants.length === 0) {
-      await this.checkAchievement(data.userId, "boss-solo");
-    }
-    if (data.participants && data.participants.length > 0) {
-      await this.checkAchievement(data.userId, "boss-squad");
-    }
-    if (data.damageDealt > 100) {
-      await this.checkAchievement(data.userId, "boss-critical");
-    }
-  }
-  private async handleLevelUp(
-    data: EventChannels["progression:level_up"],
-  ): Promise<void> {
-    const level = data.newLevel;
-    const levelAchievements = [
-      { id: "prog-level-5", minLevel: 5 },
-      { id: "prog-level-10", minLevel: 10 },
-      { id: "prog-level-20", minLevel: 20 },
-      { id: "prog-level-50", minLevel: 50 },
-    ];
-    for (const { id, minLevel } of levelAchievements) {
-      if (level >= minLevel) {
-        await this.checkAchievement(data.userId, id);
-      }
-    }
-  }
-  private async handlePrestige(
-    data: EventChannels["progression:prestige"],
-  ): Promise<void> {
-    await this.checkAchievement(data.userId, "prog-first-prestige");
-  }
-  private async handleAchievementCheck(
-    data: EventChannels["achievements:check"],
-  ): Promise<void> {
-    Sentry.addBreadcrumb({
-      category: "achievements",
-      message: `Manual achievement check: ${data.type}`,
-      level: "debug",
-      data: { userId: data.userId, type: data.type },
-    });
-  }
-  private async checkAchievement(
-    userId: string,
-    achievementId: string,
-  ): Promise<AchievementUnlockResult | null> {
-    const achievement = getAchievementById(achievementId);
-    if (!achievement) {
-      debug.warn(
-        `Achievement ${achievementId} not found`,
-        new Error("Not found"),
-      );
-      return null;
-    }
-    const existing = await achievementRepository.getUserAchievement(
-      userId,
-      achievementId,
-    );
-    if (existing?.isUnlocked) {
-      return null;
-    }
-    const result: AchievementUnlockResult = {
-      achievementId,
-      userId,
-      unlockedAt: Date.now(),
-      wasAlreadyUnlocked: false,
-    };
-    await this.unlockAchievement(userId, achievement);
-    return result;
-  }
-  private async checkCumulativeAchievements(
-    userId: string,
-    counterType: string,
-    achievementIds: string[],
-  ): Promise<void> {
-    void counterType;
-    const achievements =
-      await achievementRepository.getAllUserAchievements(userId);
-    for (const id of achievementIds) {
-      const achievement = getAchievementById(id);
-      if (!achievement) {
-        continue;
-      }
-      const progress =
-        achievements.find((item) => item.achievementId === id)?.progress ?? 0;
-      if (progress >= achievement.progressMax) {
-        await this.checkAchievement(userId, id);
-      }
-    }
-  }
-  private async unlockAchievement(
-    userId: string,
-    achievement: Achievement,
-  ): Promise<void> {
-    const existing = await achievementRepository.getUserAchievement(
-      userId,
-      achievement.id,
-    );
-    if (existing) {
-      await achievementRepository.updateAchievementProgress(
-        userId,
-        achievement.id,
-        {
-          progress: achievement.progressMax,
-          isUnlocked: true,
-          unlockedAt: Date.now(),
-        },
-      );
-    } else {
-      await achievementRepository.createUserAchievement(
-        userId,
-        achievement.id,
-        {
-          progress: achievement.progressMax,
-          maxProgress: achievement.progressMax,
-          isUnlocked: true,
-        },
-      );
-    }
-    Sentry.addBreadcrumb({
-      category: "achievements",
-      message: `Achievement unlocked: ${achievement.title}`,
-      level: "info",
-      data: {
-        userId,
-        achievementId: achievement.id,
-        rarity: achievement.rarity,
-      },
-    });
-    eventBus.publish("achievement:unlocked", {
-      userId,
-      achievementId: achievement.id,
-      unlockedAt: Date.now(),
-    });
-  }
 }
+
 export const achievementEventHandler = new AchievementEventHandler();
+
 export function initializeAchievementEventHandler(): void {
   achievementEventHandler.initialize();
 }
+
 export function destroyAchievementEventHandler(): void {
   achievementEventHandler.destroy();
 }
+
 export async function checkAchievementManually(
   userId: string,
   achievementId: string,
@@ -319,6 +96,7 @@ export async function checkAchievementManually(
   );
   return !existing?.isUnlocked;
 }
+
 export function getAchievementsByCategoryForUser(
   userId: string,
   category: AchievementCategory,

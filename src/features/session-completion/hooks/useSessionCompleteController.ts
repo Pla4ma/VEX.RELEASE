@@ -2,14 +2,11 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import * as Sentry from "@sentry/react-native";
 import { useQuery } from "@tanstack/react-query";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BackHandler, ScrollView } from "react-native";
-import {
-  buildCompletionCoachPresence,
-  type CoachPresenceMotivationStyle,
-} from "../../coach-presence";
+
 import { fetchCoachPresenceMemorySummary } from "../../coach-presence/repository";
-import { useFeatureAccess, getFeatureAvailability } from "../../liveops-config";
+import { useFeatureAccess } from "../../liveops-config";
 import { useOnboardingStore } from "../../onboarding/store";
 import { useProgressionSummary } from "../../progression/hooks";
 import { useStreakMultiplier } from "../../streaks/hooks";
@@ -24,16 +21,10 @@ import { useSessionCompleteRewards } from "../../../screens/session/hooks/useSes
 import { useSessionCompleteStudyProgress } from "../../../screens/session/hooks/useSessionCompleteStudyProgress";
 import { useSessionMastery } from "../../../screens/session/hooks/useSessionMastery";
 import { formatDuration } from "../../../screens/session/utils";
-import {
-  getGradeDisplay,
-  getPurityDisplay,
-} from "../../../screens/session/utils/session-complete-display";
-import {
-  buildPostSessionNextAction,
-  buildSessionCompletionHero,
-  buildSessionCompletionReturnPlan,
-} from "../service";
 import { useHomeReturnCompletionSync } from "./useHomeReturnCompletionSync";
+import { useSessionCompleteCoachPresence } from "./useSessionCompleteCoachPresence";
+import { useSessionCompleteDerivedData } from "./useSessionCompleteDerivedData";
+import { useSessionCompleteActions } from "./useSessionCompleteActions";
 
 type SessionNavigationProp = NativeStackNavigationProp<SessionStackParams>;
 
@@ -97,46 +88,14 @@ export function useSessionCompleteController(input: {
     tags: sessionEntryQuery.data?.config.tags,
   });
 
-  const coachPresence = useMemo(
-    () =>
-      buildCompletionCoachPresence({
-        featureAvailability: {
-          focus: getFeatureAvailability(disclosure.features.focus_session),
-          progress: getFeatureAvailability(disclosure.features.progress_view),
-          study: getFeatureAvailability(disclosure.features.content_study),
-        },
-        memorySummary: coachMemoryQuery.data ?? {
-          coachMemoryCount: 0,
-          companionMemoryCount: 0,
-          latestMemory: null,
-          syncAvailable: false,
-        },
-        motivationStyle: mapCompletionMotivationStyle(
-          motivationProfile?.primary,
-        ),
-        summary: {
-          durationMinutes: Math.round(focusedDuration / 60),
-          focusPurityScore,
-          isComeback: summary.streakDays === 1 && !summary.streakIncreased,
-          isFirstSession: summary.streakDays <= 1 && summary.userLevel <= 1,
-          isHighFocusStreak: focusPurityScore >= 90,
-          isLowEnergyDay:
-            summary.mood === "STRUGGLING" || summary.mood === "DIFFICULT",
-          isStreakRecovery:
-            !summary.streakMaintained && summary.streakIncreased,
-          sessionMode: summary.sessionMode,
-          streakDays: summary.streakDays ?? 0,
-        },
-      }),
-    [
-      coachMemoryQuery.data,
-      disclosure.features,
-      focusPurityScore,
-      focusedDuration,
-      motivationProfile?.primary,
-      summary,
-    ],
-  );
+  const coachPresence = useSessionCompleteCoachPresence({
+    coachMemoryData: coachMemoryQuery.data,
+    features: disclosure.features,
+    focusPurityScore,
+    focusedDuration,
+    motivationProfile: motivationProfile?.primary,
+    summary,
+  });
 
   const refetchProgressionSummary = useCallback(
     async () => (await progressionQuery.refetch()).data ?? undefined,
@@ -155,89 +114,26 @@ export function useSessionCompleteController(input: {
     summary,
     userId,
   });
-  const hero = useMemo(
-    () =>
-      buildSessionCompletionHero({
-        focusedDurationLabel: coachPresence.sessionReflection,
-        interruptions: summary.interruptions,
-        streakIncreased: summary.streakIncreased ?? false,
-      }),
-    [
-      coachPresence.sessionReflection,
-      summary.interruptions,
-      summary.streakIncreased,
-    ],
-  );
-  const returnPlan = useMemo(
-    () =>
-      buildSessionCompletionReturnPlan({
-        completionPercentage: summary.completionPercentage,
-        hasStudyFollowUp: Boolean(studyProgressState.studyProgress),
-        streakDays: summary.streakDays ?? 0,
-        streakIncreased: summary.streakIncreased ?? false,
-      }),
-    [
-      studyProgressState.studyProgress,
-      summary.completionPercentage,
-      summary.streakDays,
-      summary.streakIncreased,
-    ],
-  );
-  const nextAction = useMemo(() => {
-    try {
-      return buildPostSessionNextAction({ summary });
-    } catch (error) {
-      Sentry.captureException(error, {
-        tags: { feature: "session-completion", operation: "next-action" },
-      });
-      return null;
-    }
-  }, [summary]);
-  const finishSession = useCallback(
-    (skipped: boolean) => {
-      Sentry.addBreadcrumb({
-        category: "session",
-        data: skipped
-          ? undefined
-          : {
-              mood: selectedMood ?? "SKIPPED",
-              reflectionLength: reflection.trim().length,
-            },
-        level: "info",
-        message: skipped
-          ? "Session completion notes skipped"
-          : "Session completion notes submitted",
-      });
-      syncHomeReturn().catch(() => undefined);
-      showHomeHighlight({
-        message: returnPlan.highlightMessage,
-        title: returnPlan.highlightTitle,
-        tone: returnPlan.highlightTone,
-      });
-      navigation.navigate({ name: "Main", params: {} });
-    },
-    [
-      navigation,
-      reflection,
-      returnPlan,
-      selectedMood,
-      showHomeHighlight,
-      syncHomeReturn,
-    ],
-  );
-  const grade = getGradeDisplay(summary.finalScore ?? 0, theme);
-  const purity = getPurityDisplay(focusPurityScore, theme);
-  const levelMetric =
-    !progressionQuery.error && progressionQuery.data
-      ? {
-          accent: theme.colors.primary[500],
-          id: "level",
-          label: "Level XP",
-          progress: progressionQuery.data.progressPercent / 100,
-          reward: `+${summary.xpEarned ?? 0} XP`,
-          value: `Level ${progressionQuery.data.level} ${progressionQuery.data.xp}/${progressionQuery.data.nextLevelThreshold} XP`,
-        }
-      : null;
+
+  const { grade, hero, levelMetric, nextAction, purity, returnPlan } =
+    useSessionCompleteDerivedData({
+      coachPresenceSessionReflection: coachPresence.sessionReflection,
+      focusPurityScore,
+      progressionData: progressionQuery.data ?? undefined,
+      progressionError: progressionQuery.error,
+      studyProgress: studyProgressState.studyProgress,
+      summary,
+      theme,
+    });
+
+  const { finishSession } = useSessionCompleteActions({
+    navigation,
+    reflection,
+    returnPlan,
+    selectedMood,
+    showHomeHighlight,
+    syncHomeReturn,
+  });
 
   useEffect(() => {
     Sentry.addBreadcrumb({
@@ -293,25 +189,4 @@ export function useSessionCompleteController(input: {
     theme,
     userId,
   };
-}
-
-function mapCompletionMotivationStyle(
-  input: string | undefined,
-): CoachPresenceMotivationStyle {
-  if (input === "student") {
-    return "STUDY_FOCUSED";
-  }
-  if (input === "friendly") {
-    return "FRIENDLY";
-  }
-  if (input === "game_like" || input === "competitive") {
-    return "GAME_LIKE";
-  }
-  if (input === "coach_led") {
-    return "COACH_LED";
-  }
-  if (input === "intense") {
-    return "INTENSE";
-  }
-  return "CALM";
 }

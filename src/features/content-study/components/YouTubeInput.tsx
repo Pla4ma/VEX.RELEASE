@@ -1,19 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  View,
-  TextInput,
-  Pressable,
-  Image,
-  ActivityIndicator,
-} from "react-native";
+import { View, TextInput, Pressable } from "react-native";
+
 import { Text } from "../../../components/primitives/Text";
-import { Button } from "../../../components/primitives/Button";
 import { useTheme } from "../../../theme";
 import { Icon } from "../../../icons";
 import type { YouTubeInputProps } from "../types";
-import { validateYouTubeUrl, extractYouTubeVideoId } from "../validation";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { launchColors } from "@theme/tokens/launch-colors";
+import { validateYouTubeUrl } from "../validation";
+import { styles } from "./YouTubeInputStyles";
+import { YouTubeVideoPreview } from "./YouTubeVideoPreview";
+
 export const YouTubeInput: React.FC<YouTubeInputProps> = ({
   value,
   onChange,
@@ -51,20 +46,8 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
     onChange("");
   }, [onChange]);
   const handlePaste = useCallback(async () => {}, []);
-  const formatDuration = (seconds?: number): string => {
-    if (!seconds) {
-      return "";
-    }
-    const mins = Math.floor(seconds / 60);
-    const hrs = Math.floor(mins / 60);
-    if (hrs > 0) {
-      return `${hrs}:${String(mins % 60).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
-    }
-    return `${mins}:${String(seconds % 60).padStart(2, "0")}`;
-  };
   return (
     <View style={styles.container}>
-      {}
       <View
         style={[
           styles.inputContainer,
@@ -114,8 +97,6 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
           </Pressable>
         )}
       </View>
-
-      {}
       {validationState.errors.length > 0 && (
         <View style={styles.messageContainer}>
           {validationState.errors.map((error, index) => (
@@ -134,7 +115,6 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
           ))}
         </View>
       )}
-
       {validationState.errors.length === 0 &&
         validationState.warnings.length > 0 && (
           <View style={styles.messageContainer}>
@@ -157,113 +137,14 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
             ))}
           </View>
         )}
-
-      {}
       {(videoInfo || isExtracting) && validationState.isValid && (
-        <View
-          style={[
-            styles.previewCard,
-            {
-              backgroundColor: theme.colors.background.secondary,
-              borderColor: theme.colors.border.DEFAULT,
-            },
-          ]}
-        >
-          {isExtracting ? (
-            <View style={styles.extractingContainer}>
-              <ActivityIndicator color={theme.colors.primary[500]} />
-              <Text
-                style={[
-                  styles.extractingText,
-                  { color: theme.colors.text.secondary },
-                ]}
-              >
-                Extracting video transcript...
-              </Text>
-            </View>
-          ) : videoInfo ? (
-            <>
-              {videoInfo.thumbnail && (
-                <Image
-                  source={{ uri: videoInfo.thumbnail }}
-                  style={styles.thumbnail}
-                  resizeMode="cover"
-                />
-              )}
-              <View style={styles.previewInfo}>
-                <Text
-                  style={[
-                    styles.videoTitle,
-                    { color: theme.colors.text.primary },
-                  ]}
-                  numberOfLines={2}
-                >
-                  {videoInfo.title || "Video title unavailable"}
-                </Text>
-                {videoInfo.channelName && (
-                  <Text
-                    style={[
-                      styles.channelName,
-                      { color: theme.colors.text.secondary },
-                    ]}
-                  >
-                    {videoInfo.channelName}
-                  </Text>
-                )}
-                {videoInfo.duration && (
-                  <View style={styles.durationBadge}>
-                    <Icon
-                      name="clock"
-                      size="xs"
-                      color={theme.colors.text.muted}
-                    />
-                    <Text
-                      style={[
-                        styles.durationText,
-                        { color: theme.colors.text.muted },
-                      ]}
-                    >
-                      {formatDuration(videoInfo.duration)}
-                    </Text>
-                  </View>
-                )}
-              </View>
-            </>
-          ) : null}
-
-          {extractionError && (
-            <View style={styles.extractionErrorContainer}>
-              <Icon
-                name="alert-circle"
-                size="md"
-                color={theme.colors.error[500]}
-              />
-              <Text
-                style={[
-                  styles.extractionErrorText,
-                  { color: theme.colors.error[500] },
-                ]}
-              >
-                {extractionError}
-              </Text>
-              {onExtract && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onPress={onExtract}
-                  accessibilityLabel="Retry button"
-                  accessibilityRole="button"
-                  accessibilityHint="Activates this control"
-                >
-                  Retry
-                </Button>
-              )}
-            </View>
-          )}
-        </View>
+        <YouTubeVideoPreview
+          videoInfo={videoInfo}
+          isExtracting={isExtracting}
+          extractionError={extractionError}
+          onExtract={onExtract}
+        />
       )}
-
-      {}
       {!videoInfo && !isExtracting && validationState.isValid && (
         <Text style={[styles.helpText, { color: theme.colors.text.muted }]}>
           We'll extract the video's transcript and create study materials from
@@ -273,46 +154,3 @@ export const YouTubeInput: React.FC<YouTubeInputProps> = ({
     </View>
   );
 };
-const styles = createSheet({
-  container: { gap: 12 },
-  inputContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderWidth: 1,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    height: 48,
-  },
-  inputIcon: { marginRight: 8 },
-  input: { flex: 1, fontSize: 15, height: "100%" },
-  clearButton: { padding: 4 },
-  messageContainer: { gap: 4 },
-  messageRow: { flexDirection: "row", alignItems: "center", gap: 6 },
-  messageText: { fontSize: 13, flex: 1 },
-  previewCard: {
-    borderWidth: 1,
-    borderRadius: 12,
-    overflow: "hidden",
-    marginTop: 8,
-  },
-  thumbnail: {
-    width: "100%",
-    height: 160,
-    backgroundColor: launchColors.hex_000,
-  },
-  previewInfo: { padding: 12, gap: 4 },
-  videoTitle: { fontSize: 15, fontWeight: "600", lineHeight: 20 },
-  channelName: { fontSize: 13 },
-  durationBadge: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-    marginTop: 4,
-  },
-  durationText: { fontSize: 12 },
-  extractingContainer: { padding: 24, alignItems: "center", gap: 12 },
-  extractingText: { fontSize: 14 },
-  extractionErrorContainer: { padding: 16, alignItems: "center", gap: 8 },
-  extractionErrorText: { fontSize: 14, textAlign: "center" },
-  helpText: { fontSize: 13, lineHeight: 18 },
-});

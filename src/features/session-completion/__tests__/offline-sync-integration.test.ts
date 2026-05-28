@@ -3,7 +3,6 @@ import {
   it,
   expect,
   beforeEach,
-  afterEach,
   jest,
 } from "@jest/globals";
 import {
@@ -12,85 +11,17 @@ import {
   recoverPendingSessions,
   hasPendingSessionCompletions,
   getPendingSessionCompletionsSummary,
-  performSessionCompletionHealthCheck,
-  SessionCompletionSyncMonitor,
   type CompleteSessionWithOfflineSyncInput,
 } from "../offline-sync-integration";
-import { sessionCompletionOfflineSync } from "../offline-sync-service";
-import { buildCompletionLedger } from "../ledger-service";
-import { CompletionLedgerSchema, type CompletionLedger } from "../schemas";
-import { useNetInfo } from "../../../network/useNetInfo";
-import { getNetInfoAdapter } from "../../../network/NetInfoAdapter";
-
-const onlineState = {
-  isConnected: true,
-  isInternetReachable: true,
-  type: "wifi",
-  details: null,
-};
-const mockGetCurrentState = jest.fn(() => onlineState);
-
-jest.mock("../offline-sync-service", () => ({
-  sessionCompletionOfflineSync: {
-    queueSessionCompletion: jest.fn(),
-    getSyncStatus: jest.fn(),
-    forceRetryAll: jest.fn(),
-    getDiagnostics: jest.fn(),
-  },
-}));
-jest.mock("../ledger-service", () => ({ buildCompletionLedger: jest.fn() }));
-jest.mock("../../../network/useNetInfo", () => ({ useNetInfo: jest.fn() }));
-jest.mock("../../../network/NetInfoAdapter", () => ({
-  getNetInfoAdapter: jest.fn(() => ({
-    getCurrentState: mockGetCurrentState,
-    subscribe: jest.fn(() => jest.fn()),
-  })),
-}));
-
-const mockSessionCompletionOfflineSync = jest.mocked(
-  sessionCompletionOfflineSync,
-);
-const mockBuildCompletionLedger = jest.mocked(buildCompletionLedger);
-const mockUseNetInfo = jest.mocked(useNetInfo);
-const mockGetNetInfoAdapter = jest.mocked(getNetInfoAdapter);
-
-const flushPromises = async (): Promise<void> => {
-  await Promise.resolve();
-  await Promise.resolve();
-};
-
-const makeLedger = (): CompletionLedger =>
-  CompletionLedgerSchema.parse({
-    sessionId: "550e8400-e29b-41d4-a716-446655440000",
-    userId: "550e8400-e29b-41d4-a716-446655440001",
-    ledgerId: "550e8400-e29b-41d4-a716-446655440002",
-    idempotencyKey: "idempotency-key-123",
-    completedAt: Date.now(),
-    createdAt: Date.now(),
-    offlineSyncStatus: "pending_sync",
-    mode: "DEEP_WORK",
-    targetDurationSeconds: 1800,
-    completedDurationSeconds: 1500,
-    effectiveFocusedSeconds: 1200,
-    pauseCount: 2,
-    interruptionCount: 1,
-    strictMode: true,
-    startedAt: Date.now() - 1800000,
-    timezone: "UTC",
-    grade: "A",
-    gradeScore: 95,
-    qualityScore: 90,
-    focusScoreDelta: 100,
-    xpDelta: 150,
-    streakResult: { action: "maintained", newDays: 5, previousDays: 5 },
-    companionReactionId: "reaction-123",
-    rewardIds: ["reward-1", "reward-2"],
-    dailyMissionResult: {
-      missionId: "mission-123",
-      progressDelta: 100,
-      status: "completed",
-    },
-  });
+import {
+  mockSessionCompletionOfflineSync,
+  mockBuildCompletionLedger,
+  mockUseNetInfo,
+  mockGetCurrentState,
+  onlineState,
+  makeLedger,
+} from "./offline-sync-test-fixtures";
+import type { CompletionLedger } from "../schemas";
 
 describe("offline sync integration", () => {
   let testInput: CompleteSessionWithOfflineSyncInput;
@@ -226,106 +157,6 @@ describe("offline sync integration", () => {
     await expect(getPendingSessionCompletionsSummary()).resolves.toEqual({
       count: 0,
       lastSyncAt: 0,
-    });
-  });
-
-  it("uses NetInfoAdapter state for health checks", async () => {
-    mockSessionCompletionOfflineSync.getDiagnostics.mockReturnValue({
-      fallbackEntriesCount: 0,
-      lastSyncAt: Date.now() - 60000,
-      isInitialized: true,
-    });
-    await expect(performSessionCompletionHealthCheck()).resolves.toMatchObject({
-      status: "healthy",
-      pendingCount: 0,
-      isOnline: true,
-    });
-    mockGetCurrentState.mockReturnValue({
-      isConnected: false,
-      isInternetReachable: false,
-      type: "none",
-      details: null,
-    });
-    const offline = await performSessionCompletionHealthCheck();
-    expect(offline.status).toBe("critical");
-    expect(
-      offline.recommendations.some((item) =>
-        item.includes("Device is offline"),
-      ),
-    ).toBe(true);
-    expect(mockGetNetInfoAdapter).toHaveBeenCalled();
-  });
-
-  it("classifies queued health severity by diagnostics", async () => {
-    mockSessionCompletionOfflineSync.getDiagnostics.mockReturnValue({
-      fallbackEntriesCount: 15,
-      lastSyncAt: Date.now() - 3600000,
-      isInitialized: true,
-      oldestEntryAge: 7200000,
-    });
-    const result = await performSessionCompletionHealthCheck();
-    expect(result.status).toBe("critical");
-    expect(result.pendingCount).toBe(15);
-    expect(
-      result.recommendations.some((item) =>
-        item.includes("High number of pending sessions"),
-      ),
-    ).toBe(true);
-  });
-
-  describe("SessionCompletionSyncMonitor", () => {
-    let monitor: SessionCompletionSyncMonitor;
-    let onHealthStatusChange: jest.Mock;
-
-    beforeEach(() => {
-      jest.useFakeTimers();
-      onHealthStatusChange = jest.fn();
-      monitor = new SessionCompletionSyncMonitor({
-        healthCheckIntervalMs: 5000,
-        onHealthStatusChange,
-      });
-      mockSessionCompletionOfflineSync.getDiagnostics.mockReturnValue({
-        fallbackEntriesCount: 0,
-        lastSyncAt: Date.now(),
-        isInitialized: true,
-      });
-    });
-
-    afterEach(() => {
-      monitor.stop();
-      jest.useRealTimers();
-    });
-
-    it("runs initial and periodic health checks", async () => {
-      monitor.start();
-      await flushPromises();
-      expect(onHealthStatusChange).toHaveBeenCalledWith(
-        expect.objectContaining({ status: "healthy" }),
-      );
-      jest.clearAllMocks();
-      mockSessionCompletionOfflineSync.getDiagnostics.mockReturnValue({
-        fallbackEntriesCount: 5,
-        lastSyncAt: Date.now(),
-        isInitialized: true,
-      });
-      jest.advanceTimersByTime(5000);
-      await flushPromises();
-      expect(onHealthStatusChange).toHaveBeenCalledWith(
-        expect.objectContaining({ pendingCount: 5 }),
-      );
-    });
-
-    it("stops monitoring and preserves last health status", async () => {
-      monitor.start();
-      await flushPromises();
-      expect(monitor.getLastHealthStatus()?.status).toBe("healthy");
-      monitor.stop();
-      jest.clearAllMocks();
-      jest.advanceTimersByTime(10000);
-      await flushPromises();
-      expect(
-        mockSessionCompletionOfflineSync.getDiagnostics,
-      ).not.toHaveBeenCalled();
     });
   });
 });

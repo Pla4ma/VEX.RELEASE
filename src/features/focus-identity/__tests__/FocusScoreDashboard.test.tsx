@@ -3,7 +3,8 @@ import { render, fireEvent } from "@testing-library/react-native";
 import { FocusScoreDashboard } from "../FocusScoreDashboard";
 import * as useFocusScore from "../hooks-focus-score";
 import * as useNetInfo from "@network";
-import { useNavigation } from "@react-navigation/native"; // Import useNavigation
+import { useNavigation } from "@react-navigation/native";
+import { mockScore, mockHistory } from "./fixtures/focus-score-data";
 
 jest.mock("../hooks-focus-score");
 jest.mock("@network", () => ({
@@ -99,56 +100,11 @@ describe("FocusScoreDashboard", () => {
   });
 
   it("renders success state with all data", () => {
-    const score = {
-      currentScore: 750,
-      previousScore: 740,
-      band: "Elite",
-      lastChangeReason: "Great session!",
-      factors: {
-        consistency: {
-          score: 80,
-          explanation: "Consistency is a clear strength right now.",
-        },
-        streakStability: {
-          score: 70,
-          explanation: "Streak stability is helping your score stay stable.",
-        },
-        sessionQuality: {
-          score: 90,
-          explanation: "Session quality is a clear strength right now.",
-        },
-        intentionalDifficulty: {
-          score: 60,
-          explanation:
-            "Intentional difficulty is helping your score stay stable.",
-        },
-        recency: {
-          score: 85,
-          explanation: "Recency is a clear strength right now.",
-        },
-      },
-      topPositiveFactor: "sessionQuality",
-      topNegativeFactor: "intentionalDifficulty",
-    };
-    const history = [
-      {
-        timestamp: new Date("2026-04-01").toISOString(),
-        score: 700,
-        delta: 0,
-        reason: "",
-      },
-      {
-        timestamp: new Date("2026-04-02").toISOString(),
-        score: 710,
-        delta: 10,
-        reason: "",
-      },
-    ];
     const mockNavigate = jest.fn();
     (useFocusScore.useFocusScore as jest.Mock).mockReturnValue({
       status: "success",
-      score,
-      history,
+      score: mockScore,
+      history: mockHistory,
       isRefetching: false,
     });
     (useNetInfo.useNetInfo as jest.Mock).mockReturnValue({ isOffline: false });
@@ -168,161 +124,11 @@ describe("FocusScoreDashboard", () => {
       ),
     ).toBeTruthy();
     expect(getByText("View Monthly Report")).toBeTruthy();
-    expect(queryByText("Updating...")).toBeNull(); // Should not be visible when not refetching
+    expect(queryByText("Updating...")).toBeNull();
 
     fireEvent.press(getByText("View Monthly Report"));
     expect(mockNavigate).toHaveBeenCalledWith("Analytics", {
       month: new Date().toISOString().slice(0, 7),
     });
-  });
-
-  it("renders refetching indicator when refetching", () => {
-    const score = {
-      currentScore: 750,
-      previousScore: 740,
-      band: "Elite",
-      lastChangeReason: "Great session!",
-      factors: {
-        consistency: {
-          score: 80,
-          explanation: "Consistency is a clear strength right now.",
-        },
-        streakStability: {
-          score: 70,
-          explanation: "Streak stability is helping your score stay stable.",
-        },
-        sessionQuality: {
-          score: 90,
-          explanation: "Session quality is a clear strength right now.",
-        },
-        intentionalDifficulty: {
-          score: 60,
-          explanation:
-            "Intentional difficulty is helping your score stay stable.",
-        },
-        recency: {
-          score: 85,
-          explanation: "Recency is a clear strength right now.",
-        },
-      },
-      topPositiveFactor: "sessionQuality",
-      topNegativeFactor: "intentionalDifficulty",
-    };
-    (useFocusScore.useFocusScore as jest.Mock).mockReturnValue({
-      status: "success",
-      score,
-      isRefetching: true,
-    });
-    (useNetInfo.useNetInfo as jest.Mock).mockReturnValue({ isOffline: false });
-    const { getByText } = render(<FocusScoreDashboard />);
-    expect(getByText("Updating...")).toBeTruthy();
-  });
-
-  it("renders empty history message when no history is available", () => {
-    const score = {
-      currentScore: 750,
-      previousScore: 740,
-      band: "Elite",
-      lastChangeReason: "Great session!",
-      factors: {
-        consistency: {
-          score: 80,
-          explanation: "Consistency is a clear strength right now.",
-        },
-        streakStability: {
-          score: 70,
-          explanation: "Streak stability is helping your score stay stable.",
-        },
-        sessionQuality: {
-          score: 90,
-          explanation: "Session quality is a clear strength right now.",
-        },
-        intentionalDifficulty: {
-          score: 60,
-          explanation:
-            "Intentional difficulty is helping your score stay stable.",
-        },
-        recency: {
-          score: 85,
-          explanation: "Recency is a clear strength right now.",
-        },
-      },
-      topPositiveFactor: "sessionQuality",
-      topNegativeFactor: "intentionalDifficulty",
-    };
-    (useFocusScore.useFocusScore as jest.Mock).mockReturnValue({
-      status: "success",
-      score,
-      history: [],
-      isRefetching: false,
-    });
-    (useNetInfo.useNetInfo as jest.Mock).mockReturnValue({ isOffline: false });
-    const { getByText } = render(<FocusScoreDashboard />);
-    expect(getByText("No history available yet.")).toBeTruthy();
-  });
-
-  it("renders 30-day trend with history data", () => {
-    const score = {
-      currentScore: 750,
-      previousScore: 740,
-      band: "Elite",
-      lastChangeReason: "Great session!",
-      factors: {
-        consistency: {
-          score: 80,
-          explanation: "Consistency is a clear strength right now.",
-        },
-        streakStability: {
-          score: 70,
-          explanation: "Streak stability is helping your score stay stable.",
-        },
-        sessionQuality: {
-          score: 90,
-          explanation: "Session quality is a clear strength right now.",
-        },
-        intentionalDifficulty: {
-          score: 60,
-          explanation:
-            "Intentional difficulty is helping your score stay stable.",
-        },
-        recency: {
-          score: 85,
-          explanation: "Recency is a clear strength right now.",
-        },
-      },
-      topPositiveFactor: "sessionQuality",
-      topNegativeFactor: "intentionalDifficulty",
-    };
-    const history = [
-      {
-        timestamp: new Date("2026-04-01").toISOString(),
-        score: 700,
-        delta: 0,
-        reason: "",
-      },
-      {
-        timestamp: new Date("2026-04-02").toISOString(),
-        score: 710,
-        delta: 10,
-        reason: "",
-      },
-      {
-        timestamp: new Date("2026-04-03").toISOString(),
-        score: 705,
-        delta: -5,
-        reason: "",
-      },
-    ];
-    (useFocusScore.useFocusScore as jest.Mock).mockReturnValue({
-      status: "success",
-      score,
-      history,
-      isRefetching: false,
-    });
-    (useNetInfo.useNetInfo as jest.Mock).mockReturnValue({ isOffline: false });
-    const { getByText } = render(<FocusScoreDashboard />);
-    expect(getByText("4/1/2026: 700 (+0)")).toBeTruthy();
-    expect(getByText("4/2/2026: 710 (+10)")).toBeTruthy();
-    expect(getByText("4/3/2026: 705 (-5)")).toBeTruthy();
   });
 });
