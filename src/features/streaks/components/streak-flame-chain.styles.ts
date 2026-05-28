@@ -1,0 +1,120 @@
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
+
+const DAY_SIZE = 44;
+const SPACING = 8;
+
+export const styles = createSheet({
+  container: {
+    backgroundColor: launchColors.hex_1a1a2e,
+    borderRadius: 20,
+    padding: 20,
+    margin: 16,
+  },
+  header: { flexDirection: "row", alignItems: "center", marginBottom: 16 },
+  streakBadge: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: launchColors.rgb_255_107_53_0_2,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: launchColors.hex_ff6b35,
+  },
+  streakEmoji: { fontSize: 24, marginRight: 8 },
+  streakCount: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: launchColors.hex_ff6b35,
+  },
+  streakInfo: { marginLeft: 16, flex: 1 },
+  streakLabel: { fontSize: 16, fontWeight: "600", color: launchColors.hex_fff },
+  longestText: {
+    fontSize: 12,
+    color: launchColors.rgb_255_255_255_0_5,
+    marginTop: 2,
+  },
+  riskBadge: { alignItems: "center", padding: 8 },
+  riskEmoji: { fontSize: 20 },
+  riskText: { fontSize: 10, fontWeight: "bold", marginTop: 4 },
+  progressContainer: { marginBottom: 20 },
+  progressTrack: {
+    height: 8,
+    backgroundColor: launchColors.hex_2a2a4a,
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+  progressFill: { height: "100%", borderRadius: 4 },
+  progressText: {
+    fontSize: 11,
+    color: launchColors.rgb_255_255_255_0_5,
+    marginTop: 6,
+    textAlign: "right",
+  },
+  chainContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: SPACING,
+    marginBottom: 16,
+  },
+  dayNode: { position: "relative" },
+  dayCircle: {
+    width: DAY_SIZE,
+    height: DAY_SIZE,
+    borderRadius: DAY_SIZE / 2,
+    backgroundColor: launchColors.hex_2a2a4a,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  inactiveCircle: {
+    backgroundColor: launchColors.hex_2a2a4a,
+    borderWidth: 2,
+    borderColor: launchColors.hex_3a3a5a,
+  },
+  todayCircle: { borderWidth: 3, borderColor: launchColors.hex_4caf50 },
+  dayNumber: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: launchColors.rgb_255_255_255_0_3,
+  },
+  activeDayNumber: { color: launchColors.hex_fff },
+  flameIcon: { position: "absolute", top: -4, right: -4 },
+  flameEmoji: { fontSize: 16 },
+  milestoneBadge: {
+    position: "absolute",
+    bottom: -4,
+    left: "50%",
+    marginLeft: -8,
+  },
+  milestoneEmoji: { fontSize: 16 },
+  connector: {
+    position: "absolute",
+    right: -SPACING,
+    top: "50%",
+    width: SPACING,
+    height: 4,
+    marginTop: -2,
+  },
+  milestoneCard: {
+    backgroundColor: launchColors.rgb_255_215_0_0_1,
+    borderRadius: 12,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: launchColors.rgb_255_215_0_0_3,
+    alignItems: "center",
+  },
+  milestoneEmojiSmall: { fontSize: 20, marginBottom: 4 },
+  milestoneText: {
+    fontSize: 13,
+    color: launchColors.hex_fff,
+    textAlign: "center",
+    fontWeight: "600",
+  },
+  milestoneReward: {
+    fontSize: 11,
+    color: launchColors.hex_ffd700,
+    marginTop: 4,
+  },
+});

@@ -10,152 +10,19 @@ import {
   type ComebackQuestProgress,
   COMEBACK_QUEST_CONFIG,
 } from "../ComebackQuestSystem";
-interface ComebackQuestCardProps {
+import {
+  QuestStep,
+  PhoenixBadgePreview,
+  QuestProgressBar,
+} from "./ComebackQuestSubcomponents";
+
+export interface ComebackQuestCardProps {
   quest: ComebackQuest;
   progress: ComebackQuestProgress;
   onStartSession: () => void;
   onViewDetails?: () => void;
 }
-function QuestStep({
-  step,
-  title,
-  description,
-  isCompleted,
-  isActive,
-  requirements,
-}: {
-  step: number;
-  title: string;
-  description: string;
-  isCompleted: boolean;
-  isActive: boolean;
-  requirements: { duration: number; grade?: string };
-}): JSX.Element {
-  const { theme } = useTheme();
-  return (
-    <Box
-      flexDirection="row"
-      gap="md"
-      p="md"
-      borderRadius="lg"
-      bg={isActive ? "background.tertiary" : "background.secondary"}
-      style={{
-        opacity: isCompleted ? 0.7 : 1,
-        borderLeftWidth: 4,
-        borderLeftColor: isCompleted
-          ? theme.colors.success.DEFAULT
-          : isActive
-            ? theme.colors.primary[500]
-            : theme.colors.border.light,
-      }}
-    >
-      {}
-      <Box
-        width={32}
-        height={32}
-        borderRadius="full"
-        justifyContent="center"
-        alignItems="center"
-        style={{
-          backgroundColor: isCompleted
-            ? theme.colors.success.DEFAULT
-            : isActive
-              ? theme.colors.primary[500]
-              : theme.colors.background.tertiary,
-        }}
-      >
-        {isCompleted ? (
-          <Text fontSize={16}>✓</Text>
-        ) : (
-          <Text
-            variant="caption"
-            color={isActive ? "white" : "text.tertiary"}
-            fontWeight="700"
-          >
-            {step}
-          </Text>
-        )}
-      </Box>
 
-      {}
-      <Box flex={1}>
-        <Text
-          variant="body"
-          color={isActive ? "text.primary" : "text.secondary"}
-          fontWeight={isActive ? "600" : "400"}
-        >
-          {title}
-        </Text>
-        <Text variant="caption" color="text.tertiary" mb="xs">
-          {description}
-        </Text>
-        <Box flexDirection="row" alignItems="center" gap="sm">
-          <Text fontSize={12} color="text.tertiary">
-            ⏱️ {requirements.duration}m
-          </Text>
-          {requirements.grade && (
-            <Text fontSize={12} color="text.tertiary">
-              • Grade {requirements.grade}+
-            </Text>
-          )}
-        </Box>
-      </Box>
-    </Box>
-  );
-}
-function PhoenixBadgePreview(): JSX.Element {
-  const { theme } = useTheme();
-  return (
-    <Box
-      alignItems="center"
-      p="lg"
-      borderRadius="xl"
-      style={{
-        backgroundColor: `${theme.colors.warning.DEFAULT}15`,
-        borderWidth: 2,
-        borderColor: `${theme.colors.warning.DEFAULT}40`,
-      }}
-    >
-      <Text fontSize={48} mb="sm">
-        🔥
-      </Text>
-      <Text
-        variant="body"
-        color="text.primary"
-        fontWeight="700"
-        textAlign="center"
-      >
-        Phoenix Rising Badge
-      </Text>
-      <Text variant="caption" color="text.secondary" textAlign="center">
-        Complete all 3 quests to earn this exclusive badge + 250 coins
-      </Text>
-    </Box>
-  );
-}
-function QuestProgressBar({ progress }: { progress: number }): JSX.Element {
-  return (
-    <Box gap="sm">
-      <Box flexDirection="row" justifyContent="space-between">
-        <Text variant="caption" color="text.secondary">
-          Comeback Progress
-        </Text>
-        <Text variant="caption" color="primary.500" fontWeight="700">
-          {Math.round(progress)}%
-        </Text>
-      </Box>
-
-      <Box height={8} borderRadius="full" bg="background.tertiary">
-        <Box
-          height={8}
-          borderRadius="full"
-          bg="primary.500"
-          style={{ width: `${progress}%` }}
-        />
-      </Box>
-    </Box>
-  );
-}
 export function ComebackQuestCard({
   quest,
   progress,
@@ -298,55 +165,6 @@ export function ComebackQuestCard({
     </Animated.View>
   );
 }
-export function ComebackQuestCompact({
-  progress,
-  onPress,
-}: {
-  progress: ComebackQuestProgress;
-  onPress: () => void;
-}): JSX.Element {
-  const { theme } = useTheme();
-  const completedCount =
-    (progress.quest1.completed ? 1 : 0) +
-    (progress.quest2.completed ? 1 : 0) +
-    (progress.quest3.completed ? 1 : 0);
-  return (
-    <Pressable
-      onPress={onPress}
-      accessibilityLabel="Interactive control"
-      accessibilityRole="button"
-      accessibilityHint="Activates this control"
-    >
-      <Box
-        flexDirection="row"
-        alignItems="center"
-        gap="md"
-        p="md"
-        borderRadius="lg"
-        style={{
-          backgroundColor: `${theme.colors.warning.DEFAULT}15`,
-          borderLeftWidth: 4,
-          borderLeftColor: theme.colors.warning.DEFAULT,
-        }}
-      >
-        <Text fontSize={24}>🔥</Text>
-        <Box flex={1}>
-          <Text variant="body" color="text.primary" fontWeight="600">
-            Comeback Quest: {completedCount}/3 Complete
-          </Text>
-          <Text variant="caption" color="text.secondary">
-            {progress.currentStage === "QUEST_1" &&
-              "First step: 15 min session"}
-            {progress.currentStage === "QUEST_2" && "Step 2: 30 min, Grade A+"}
-            {progress.currentStage === "QUEST_3" &&
-              "Final step: 45 min, Grade A+"}
-            {progress.currentStage === "COMPLETE" &&
-              "All complete! Claim rewards"}
-          </Text>
-        </Box>
-        <Text fontSize={20}>→</Text>
-      </Box>
-    </Pressable>
-  );
-}
+
+export { ComebackQuestCompact } from "./ComebackQuestCompact";
 export default ComebackQuestCard;

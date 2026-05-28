@@ -1,68 +1,19 @@
 import type { SessionSummary } from "../../session/types";
-import { buildPostSessionNextAction } from "./service";
-import { selectHeadlineReward } from "./headline-reward.service";
-import {
-  CompletionLedgerSchema,
-  type CompletionLedger,
-  type CompletionPersonalizationResult,
-} from "./schemas";
 import type { CompanionMemory } from "../companion/memory-types";
 import { getMemories } from "../companion/memory-repository";
 import type { CompanionPromise } from "../companion-promise/types";
 import { getRecentPromises } from "../companion-promise/repository";
-import { getContractForSession } from "../focus-contract/service";
 import type { FocusContract } from "../focus-contract/types";
+import { getContractForSession } from "../focus-contract/service";
 import { buildCompletionReflection } from "./completion-reflection-service";
+import { CompletionLedgerSchema, type CompletionLedger, type CompletionPersonalizationResult } from "./schemas";
 import { getCompletionLedgerBySessionId } from "./repository";
-import {
-  PostSessionStoryViewModelSchema,
-  type PostSessionStoryViewModel,
-} from "./story-view-model-schema";
+import { buildPostSessionNextAction } from "./service";
+import { selectHeadlineReward } from "./headline-reward.service";
+import { PostSessionStoryViewModelSchema, type PostSessionStoryViewModel } from "./story-view-model-schema";
+import { computePersonalBestProof, buildStoryBeats } from "./story-beat-builders";
 
 export { PostSessionStoryViewModelSchema, type PostSessionStoryViewModel };
-
-function formatMinutes(seconds: number): string {
-  return `${Math.max(1, Math.round(seconds / 60))} minutes`;
-}
-
-function buildGradeBody(ledger: CompletionLedger): string {
-  if (ledger.interruptionCount === 0 && ledger.pauseCount === 0) {
-    return `Your grade is ${ledger.grade} because you stayed clean through the close.`;
-  }
-  if (ledger.interruptionCount > 0) {
-    return `Your grade is ${ledger.grade} because ${ledger.interruptionCount} interruption${ledger.interruptionCount === 1 ? "" : "s"} pulled on the session.`;
-  }
-  return `Your grade is ${ledger.grade} because ${ledger.pauseCount} pause${ledger.pauseCount === 1 ? "" : "s"} softened the pace.`;
-}
-
-function buildCompanionBeat(
-  memory: CompanionMemory | null | undefined,
-  reactionId: string | null,
-) {
-  if (memory) {
-    return {
-      accessibilityLabel: `Companion memory. ${memory.title}`,
-      body: memory.body,
-      companionLine: memory.title,
-      id: "companion",
-      kind: "companion" as const,
-      metric: null,
-      title: "Your companion remembered this one.",
-    };
-  }
-  return {
-    accessibilityLabel:
-      "Companion reaction. Session recorded without a memory card.",
-    body: "The session still landed, even though the memory layer stayed quiet this time.",
-    companionLine: reactionId
-      ? `Reaction saved: ${reactionId.replace(/-/g, " ")}.`
-      : "The session still left a mark.",
-    id: "companion",
-    kind: "companion" as const,
-    metric: null,
-    title: "The session still reached your companion.",
-  };
-}
 
 export function buildPostSessionStoryViewModel(input: {
   degradedWarnings: string[];
@@ -118,110 +69,23 @@ export function buildPostSessionStoryViewModel(input: {
       return null;
     }
   })();
-  const personalBestProof =
-    input.personalBest?.isPersonalBest &&
-    input.personalBest.purityScore !== undefined
-      ? {
-          achievedAt:
-            input.personalBest.achievedAt ??
-            new Date(ledger.completedAt).toISOString(),
-          durationBucket: input.personalBest.durationBucket ?? "focus block",
-          mode:
-            input.personalBest.sessionMode ??
-            input.summary.sessionMode ??
-            ledger.mode,
-          newValue: input.personalBest.purityScore,
-          oldValue: input.personalBest.previousBest ?? null,
-        }
-      : null;
-  const personalBestBody = personalBestProof
-    ? personalBestProof.oldValue === null
-      ? `${personalBestProof.mode} ${personalBestProof.durationBucket} opened at ${personalBestProof.newValue} purity.`
-      : `${personalBestProof.mode} ${personalBestProof.durationBucket} moved from ${personalBestProof.oldValue} to ${personalBestProof.newValue} purity.`
-    : null;
-  const beats = [
-    {
-      accessibilityLabel: `Result beat. You focused for ${formatMinutes(ledger.effectiveFocusedSeconds)}.`,
-      body: `You protected ${formatMinutes(ledger.effectiveFocusedSeconds)} in ${input.summary.sessionMode ?? ledger.mode}.`,
-      companionLine: null,
-      id: "result",
-      kind: "result" as const,
-      metric: {
-        label: "Focused",
-        value: formatMinutes(ledger.effectiveFocusedSeconds),
-      },
-      title: `You focused for ${formatMinutes(ledger.effectiveFocusedSeconds)}.`,
-    },
-    {
-      accessibilityLabel: `Grade beat. ${buildGradeBody(ledger)}`,
-      body: buildGradeBody(ledger),
-      companionLine: null,
-      id: "grade",
-      kind: "grade" as const,
-      metric: {
-        label: "Grade",
-        value: `${ledger.grade} · ${ledger.gradeScore}`,
-      },
-      title: `Grade ${ledger.grade}`,
-    },
-    {
-      accessibilityLabel: `Meaning beat. ${meaningBody}`,
-      body: meaningBody,
-      companionLine: null,
-      id: "meaning",
-      kind: "meaning" as const,
-      metric: {
-        label: "Focus Score",
-        value:
-          ledger.focusScoreDelta >= 0
-            ? `+${ledger.focusScoreDelta}`
-            : `${ledger.focusScoreDelta}`,
-      },
-      title: "What changed today",
-    },
-    buildCompanionBeat(input.companionMemory, ledger.companionReactionId),
-    personalBestProof
-      ? {
-          accessibilityLabel: `Personal best beat. Purity reached ${personalBestProof.newValue}.`,
-          body:
-            personalBestBody ??
-            "You set a cleaner mark than your last saved best.",
-          companionLine: null,
-          id: "personal-best",
-          kind: "personal_best" as const,
-          metric: {
-            label: "Purity record",
-            value:
-              personalBestProof.oldValue === null
-                ? `${personalBestProof.newValue}`
-                : `${personalBestProof.oldValue} -> ${personalBestProof.newValue}`,
-          },
-          title: "This one raised your ceiling.",
-        }
-      : null,
-    {
-      accessibilityLabel: `Tomorrow beat. ${reflection.nextAction}`,
-      body: input.companionPromise
-        ? `Tomorrow, ${input.companionPromise.targetDurationMinutes} minutes in ${input.companionPromise.targetMode.toLowerCase()} is enough to keep the thread alive.`
-        : reflection.nextAction,
-      companionLine:
-        input.companionPromise?.status === "missed"
-          ? "Yesterday got away. Start small and rebuild the thread."
-          : null,
-      id: "tomorrow",
-      kind: "tomorrow" as const,
-      metric: input.companionPromise
-        ? {
-            label: "Tomorrow",
-            value: `${input.companionPromise.targetDurationMinutes}m`,
-          }
-        : {
-            label: "Next mode",
-            value: nextAction?.routeParams?.presetMode ?? "HOME",
-          },
-      title: "Tomorrow already has a shape.",
-    },
-  ].filter(Boolean);
+  const { proof: personalBestProof, body: personalBestBody } =
+    computePersonalBestProof({
+      personalBest: input.personalBest,
+      completedAt: ledger.completedAt,
+      mode: sessionMode,
+    });
+  const beats = buildStoryBeats({
+    ledger,
+    sessionMode,
+    meaningBody,
+    reflectionNextAction: reflection.nextAction,
+    companionMemory: input.companionMemory,
+    companionPromise: input.companionPromise,
+    personalBestProof,
+    personalBestBody,
+    nextActionPresetMode: nextAction?.routeParams?.presetMode ?? null,
+  });
   const headline = selectHeadlineReward({
     streak: {
       currentDays: ledger.streakResult.newDays,
@@ -240,7 +104,6 @@ export function buildPostSessionStoryViewModel(input: {
       xpEarned: ledger.xpDelta,
     },
   });
-
   return PostSessionStoryViewModelSchema.parse({
     beats,
     companionReaction: { reactionId: ledger.companionReactionId },

@@ -1,4 +1,3 @@
-import { YouTubeUrlSchema } from "./validation-schemas";
 import { ContentSourceType, ContentStudyErrorCode } from "./types";
 import type {
   ValidationError,
@@ -6,6 +5,15 @@ import type {
   ErrorRecoveryAction,
 } from "./types";
 import { CONTENT_STUDY_CONSTANTS } from "./types";
+import type { ValidationResult } from "./validators";
+import {
+  validateYouTubeUrl,
+  validatePastedText,
+} from "./validators";
+import {
+  validateFileUpload,
+  validateTitle,
+} from "./validators-file";
 
 export {
   YouTubeUrlSchema,
@@ -20,218 +28,9 @@ export {
   isValidFileType,
   formatValidationErrors,
 } from "./validation-utils";
-
-export interface ValidationResult {
-  isValid: boolean;
-  errors: ValidationError[];
-  warnings: ValidationError[];
-  metadata?: {
-    characterCount?: number;
-    wordCount?: number;
-    estimatedReadTime?: number;
-    youtubeVideoId?: string;
-    fileType?: string;
-  };
-}
-
-export function validateYouTubeUrl(url: string): ValidationResult {
-  const errors: ValidationError[] = [];
-  const warnings: ValidationError[] = [];
-  let videoId: string | undefined;
-  if (!url.trim()) {
-    errors.push({
-      field: "youtubeUrl",
-      code: "REQUIRED",
-      message: "YouTube URL is required",
-      severity: "error",
-    });
-    return { isValid: false, errors, warnings };
-  }
-  if (url.length > CONTENT_STUDY_CONSTANTS.MAX_YOUTUBE_URL_LENGTH) {
-    errors.push({
-      field: "youtubeUrl",
-      code: "TOO_LONG",
-      message: `URL must be less than ${CONTENT_STUDY_CONSTANTS.MAX_YOUTUBE_URL_LENGTH} characters`,
-      severity: "error",
-    });
-  }
-  const result = YouTubeUrlSchema.safeParse(url);
-  if (!result.success) {
-    errors.push({
-      field: "youtubeUrl",
-      code: "INVALID_FORMAT",
-      message:
-        "Please enter a valid YouTube URL (youtube.com/watch?v=... or youtu.be/...)",
-      severity: "error",
-    });
-  } else {
-    const match = url.match(/(?:v=|\/|shorts\/|embed\/)([\w-]{11})/);
-    videoId = match?.[1];
-    if (url.includes("list="))
-      warnings.push({
-        field: "youtubeUrl",
-        code: "PLAYLIST_URL",
-        message:
-          "Playlists are not supported. Only the first video will be processed.",
-        severity: "warning",
-      });
-    if (url.includes("t="))
-      warnings.push({
-        field: "youtubeUrl",
-        code: "TIMESTAMP_URL",
-        message:
-          "Timestamp will be ignored. Full video transcript will be extracted.",
-        severity: "warning",
-      });
-  }
-  return {
-    isValid: errors.length === 0,
-    errors,
-    warnings,
-    metadata: videoId ? { youtubeVideoId: videoId } : undefined,
-  };
-}
-
-export function validatePastedText(text: string): ValidationResult {
-  const errors: ValidationError[] = [];
-  const warnings: ValidationError[] = [];
-  if (!text.trim()) {
-    errors.push({
-      field: "pastedText",
-      code: "REQUIRED",
-      message: "Content is required",
-      severity: "error",
-    });
-    return { isValid: false, errors, warnings };
-  }
-  const len = text.trim().length;
-  if (len < CONTENT_STUDY_CONSTANTS.MIN_PASTE_LENGTH)
-    errors.push({
-      field: "pastedText",
-      code: "TOO_SHORT",
-      message: `Content must be at least ${CONTENT_STUDY_CONSTANTS.MIN_PASTE_LENGTH} characters (currently ${len})`,
-      severity: "error",
-    });
-  if (len > CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH)
-    errors.push({
-      field: "pastedText",
-      code: "TOO_LONG",
-      message: `Content must be less than ${CONTENT_STUDY_CONSTANTS.MAX_PASTE_LENGTH} characters (currently ${len})`,
-      severity: "error",
-    });
-  if (len < 200)
-    warnings.push({
-      field: "pastedText",
-      code: "SHORT_CONTENT",
-      message: "Short content may produce less effective study materials",
-      severity: "warning",
-    });
-  if (len > 30000)
-    warnings.push({
-      field: "pastedText",
-      code: "LONG_CONTENT",
-      message: "Very long content may take longer to process",
-      severity: "warning",
-    });
-  if ((text.match(/\n{5,}/g) || []).length > 5)
-    warnings.push({
-      field: "pastedText",
-      code: "POOR_FORMATTING",
-      message:
-        "Content has excessive line breaks. Consider cleaning up the text.",
-      severity: "warning",
-    });
-  const wordCount = text.trim().split(/\s+/).length;
-  return {
-    isValid: errors.length === 0,
-    errors,
-    warnings,
-    metadata: {
-      characterCount: len,
-      wordCount,
-      estimatedReadTime: Math.ceil(wordCount / 200),
-    },
-  };
-}
-
-export function validateFileUpload(
-  file: { uri: string; name: string; size: number; type: string } | null,
-): ValidationResult {
-  const errors: ValidationError[] = [];
-  const warnings: ValidationError[] = [];
-  if (!file) {
-    errors.push({
-      field: "file",
-      code: "REQUIRED",
-      message: "Please select a file",
-      severity: "error",
-    });
-    return { isValid: false, errors, warnings };
-  }
-  if (file.size > CONTENT_STUDY_CONSTANTS.MAX_PDF_SIZE) {
-    const maxMB = CONTENT_STUDY_CONSTANTS.MAX_PDF_SIZE / (1024 * 1024);
-    errors.push({
-      field: "file",
-      code: "FILE_TOO_LARGE",
-      message: `File size (${(file.size / (1024 * 1024)).toFixed(2)}MB) exceeds maximum allowed (${maxMB}MB)`,
-      severity: "error",
-    });
-  }
-  const supported: readonly string[] = [
-    ...CONTENT_STUDY_CONSTANTS.SUPPORTED_PDF_TYPES,
-    ...CONTENT_STUDY_CONSTANTS.SUPPORTED_TEXT_TYPES,
-  ];
-  if (!supported.includes(file.type as string))
-    errors.push({
-      field: "file",
-      code: "UNSUPPORTED_TYPE",
-      message: `File type "${file.type}" is not supported. Please use PDF, TXT, or MD files.`,
-      severity: "error",
-    });
-  if (!file.name || file.name.trim().length === 0)
-    errors.push({
-      field: "file",
-      code: "INVALID_NAME",
-      message: "File name is invalid",
-      severity: "error",
-    });
-  if (file.size / (1024 * 1024) > 5 && file.size / (1024 * 1024) <= 10)
-    warnings.push({
-      field: "file",
-      code: "LARGE_FILE",
-      message: "Large files may take longer to upload and process",
-      severity: "warning",
-    });
-  return {
-    isValid: errors.length === 0,
-    errors,
-    warnings,
-    metadata: { fileType: file.type },
-  };
-}
-
-export function validateTitle(title: string | undefined): ValidationResult {
-  if (!title || title.trim().length === 0)
-    return { isValid: true, errors: [], warnings: [] };
-  const errors: ValidationError[] = [];
-  const warnings: ValidationError[] = [];
-  if (title.length > CONTENT_STUDY_CONSTANTS.MAX_TITLE_LENGTH)
-    errors.push({
-      field: "title",
-      code: "TOO_LONG",
-      message: `Title must be less than ${CONTENT_STUDY_CONSTANTS.MAX_TITLE_LENGTH} characters`,
-      severity: "error",
-    });
-  if (/[<>{}[\]]/.test(title))
-    warnings.push({
-      field: "title",
-      code: "SPECIAL_CHARS",
-      message:
-        "Title contains special characters that may cause display issues",
-      severity: "warning",
-    });
-  return { isValid: errors.length === 0, errors, warnings };
-}
+export type { ValidationResult } from "./validators";
+export { validateYouTubeUrl, validatePastedText } from "./validators";
+export { validateFileUpload, validateTitle } from "./validators-file";
 
 export function validateContentSubmission(
   type: ContentSourceType,

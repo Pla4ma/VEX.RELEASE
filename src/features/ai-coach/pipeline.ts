@@ -1,6 +1,4 @@
-import { z } from "zod";
 import { getSupabaseClient } from "../../config/supabase";
-import { eventBus } from "../../events";
 import { getProgressionService } from "../../progression/ProgressionService";
 import { getSessionRepository } from "../../session/repository/SessionRepository";
 import { getCoachPersonas, getOrCreateCoachState } from "./persona-manager";
@@ -9,45 +7,28 @@ import * as repository from "./repository";
 import { processBehaviorSignal as processBehaviorSignalBase } from "./session-analyzer";
 import {
   CoachMessageSchema,
-  ComebackPlanSchema,
-  GenerateMessageInputSchema,
-  ActivateComebackInputSchema,
   type CoachMessage,
   type EvaluateInterventionsInput,
   type GenerateMessageInput,
   type InterventionExecution,
   type TriggerType,
 } from "./schemas";
-const AIMessagePayloadSchema = z
-  .object({
-    message: z.string().min(1).max(1000),
-    tone: z.string().min(1).max(50),
-    urgency: z.enum(["low", "medium", "high", "critical"]),
-    actionLabel: z.string().min(1).max(60).optional(),
-    action: z
-      .enum([
-        "START_SESSION",
-        "VIEW_PROGRESS",
-        "VIEW_SETTINGS",
-        "START_COMEBACK",
-        "VIEW_BOSS",
-        "VIEW_CHALLENGES",
-        "VIEW_SQUAD",
-        "VIEW_SHOP",
-        "OPEN_COACH",
-        "OPEN_CONTENT_STUDY",
-        "NONE",
-      ])
-      .optional(),
-  })
-  .strict();
-type GenerateMessageArgs = GenerateMessageInput | string;
-type EvaluateArgs = EvaluateInterventionsInput | string;
-type NormalizedInterventionInput = {
-  userId: string;
-  trigger: TriggerType | "SESSION_COMPLETE";
-  context: Record<string, unknown>;
-};
+import { AIMessagePayloadSchema } from "./pipeline-schemas";
+import type { GenerateMessageArgs, EvaluateArgs } from "./pipeline-schemas";
+import {
+  normalizeGenerateMessageArgs,
+  normalizeEvaluateArgs,
+  createFallbackMessage,
+  extractStructuredMessage,
+  mapUrgencyToPriority,
+  createExecution,
+  readNumber,
+  readBoolean,
+} from "./pipeline-helpers";
+import { activateComeback } from "./pipeline-comeback";
+
+export { activateComeback } from "./pipeline-comeback";
+
 export async function generateMessage(
   input: GenerateMessageInput,
 ): Promise<CoachMessage | null>;
@@ -127,6 +108,7 @@ export async function generateMessage(
   }
   return repository.createCoachMessage(message);
 }
+
 export async function evaluateInterventions(
   input: EvaluateInterventionsInput,
 ): Promise<InterventionExecution[]>;
@@ -185,46 +167,7 @@ export async function evaluateInterventions(
   }
   return executions;
 }
-export async function activateComeback(
-  input:
-    | string
-    | { userId: string; previousStreak?: number; daysInactive?: number },
-) {
-  const normalized =
-    typeof input === "string"
-      ? { userId: input, previousStreak: 0, daysInactive: 4 }
-      : ActivateComebackInputSchema.partial({
-          previousStreak: true,
-          daysInactive: true,
-        }).parse({ previousStreak: 0, daysInactive: 4, ...input });
-  const existing = await repository.fetchActiveComebackPlan(normalized.userId);
-  if (existing && existing.status === "ACTIVE") {
-    return existing;
-  }
-  const now = Date.now();
-  const plan = ComebackPlanSchema.parse({
-    id: crypto.randomUUID(),
-    userId: normalized.userId,
-    previousStreak: normalized.previousStreak,
-    daysInactive: normalized.daysInactive,
-    status: "ACTIVE",
-    startedAt: now,
-    expiresAt: now + 48 * 60 * 60 * 1000,
-    sessionsCompleted: 0,
-    targetSessions: 3,
-    bonusMultiplier: 2,
-    messages: [],
-  });
-  const savedPlan = await repository.upsertComebackPlan(plan);
-  eventBus.publish("coach:comeback_activated", {
-    userId: normalized.userId,
-    planId: savedPlan.id,
-    targetSessions: savedPlan.targetSessions,
-    bonusMultiplier: savedPlan.bonusMultiplier,
-    expiresAt: savedPlan.expiresAt,
-  });
-  return savedPlan;
-}
+
 export async function detectStreakRisk(
   _userId: string,
   hoursSinceLastSession: number,
@@ -232,114 +175,5 @@ export async function detectStreakRisk(
 ): Promise<boolean> {
   return hoursSinceLastSession > 20 && currentStreak > 0;
 }
+
 export const processBehaviorSignal = processBehaviorSignalBase;
-function normalizeGenerateMessageArgs(
-  inputOrUserId: GenerateMessageArgs,
-  trigger?: TriggerType | "COMEBACK" | "SESSION_COMPLETE",
-  context: Record<string, unknown> = {},
-): GenerateMessageInput {
-  if (typeof inputOrUserId !== "string") {
-    return GenerateMessageInputSchema.parse(inputOrUserId);
-  }
-  const userId = inputOrUserId;
-  const normalizedTrigger =
-    trigger === "COMEBACK" ? "COMEBACK_WINDOW_OPEN" : trigger;
-  return GenerateMessageInputSchema.parse({
-    userId,
-    category:
-      normalizedTrigger === "STREAK_AT_RISK"
-        ? "STREAK_RISK"
-        : normalizedTrigger === "COMEBACK_WINDOW_OPEN"
-          ? "COMEBACK_SUPPORT"
-          : normalizedTrigger === "SESSION_COMPLETE"
-            ? "MILESTONE_HYPE"
-            : "MOTIVATION_BOOST",
-    context: { ...context, trigger: normalizedTrigger },
-    preferredDelivery: normalizedTrigger === "STREAK_AT_RISK" ? "PUSH" : "BOTH",
-  });
-}
-function normalizeEvaluateArgs(
-  inputOrUserId: EvaluateArgs,
-  trigger?: TriggerType | "COMEBACK" | "SESSION_COMPLETE",
-  context: Record<string, unknown> = {},
-): NormalizedInterventionInput {
-  if (typeof inputOrUserId !== "string") {
-    return {
-      userId: inputOrUserId.userId,
-      trigger: inputOrUserId.trigger,
-      context: inputOrUserId.context,
-    };
-  }
-  const userId = inputOrUserId;
-  const normalizedTrigger =
-    trigger === "COMEBACK"
-      ? "COMEBACK_WINDOW_OPEN"
-      : (trigger ?? "NO_SESSION_24H");
-  return { userId, trigger: normalizedTrigger, context };
-}
-function createFallbackMessage(
-  input: GenerateMessageInput,
-  personaId: string,
-): CoachMessage {
-  return CoachMessageSchema.parse({
-    id: crypto.randomUUID(),
-    userId: input.userId,
-    personaId,
-    category: input.category,
-    content:
-      "You are closer than you think. One focused session keeps your momentum alive.",
-    deliveryMethod: input.preferredDelivery,
-    priority: 5,
-    status: "SENT",
-    createdAt: Date.now(),
-    scheduledFor: null,
-    deliveredAt: Date.now(),
-    readAt: null,
-    dismissedAt: null,
-    actionTaken: null,
-    actionTakenAt: null,
-  });
-}
-function extractStructuredMessage(data: unknown): unknown {
-  if (
-    typeof data !== "object" ||
-    data === null ||
-    !("structuredData" in data)
-  ) {
-    return null;
-  }
-  return data.structuredData;
-}
-function mapUrgencyToPriority(
-  urgency: z.infer<typeof AIMessagePayloadSchema>["urgency"],
-): number {
-  return { low: 3, medium: 5, high: 8, critical: 10 }[urgency];
-}
-function createExecution(
-  userId: string,
-  trigger: TriggerType | "SESSION_COMPLETE",
-  messageId: string | null,
-): InterventionExecution {
-  const triggerType =
-    trigger === "SESSION_COMPLETE" ? "MILESTONE_REACHED" : trigger;
-  return {
-    id: crypto.randomUUID(),
-    userId,
-    ruleId: `${trigger.toLowerCase()}-pipeline`,
-    triggerType,
-    status: "EXECUTED",
-    triggeredAt: Date.now(),
-    executedAt: Date.now(),
-    messageId,
-    userResponse: null,
-    effectiveness: null,
-  };
-}
-function readNumber(value: unknown): number | undefined {
-  return typeof value === "number" && Number.isFinite(value)
-    ? value
-    : undefined;
-}
-function readBoolean(value: unknown): boolean | undefined {
-  return typeof value === "boolean" ? value : undefined;
-}
