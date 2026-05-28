@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useTheme } from "../../../theme";
-import type { StartSessionButtonProps } from "./StartSessionButton";
+import type { StartSessionButtonProps } from "./start-session-button-types";
 
 export function useStartSessionButtonColors(
   streakRiskLevel: StartSessionButtonProps["streakRiskLevel"],

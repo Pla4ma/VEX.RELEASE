@@ -8,8 +8,9 @@
 import { eventBus } from "../../events";
 import {
   useBasicChallengesStatus,
-  useUpdateBasicChallengeProgress,
+  challengesKeys,
 } from "../challenges/hooks/basic-challenges-hooks";
+import { useUpdateBasicChallengeProgress } from "../challenges/hooks/basic-challenges-mutations";
 import type { BasicChallengeProgressResult } from "../challenges/basic-challenges-service";
 import { useEffect } from "react";
 import { createDebugger } from "../../utils/debug";
@@ -23,7 +24,7 @@ const FEATURE_KEY = "challenges" as const;
 // ============================================================================
 
 export function useSessionChallengesIntegration() {
-  const progressMutation = useUpdateBasicChallengeProgress();
+  const progressMutation = useUpdateBasicChallengeProgress(challengesKeys);
 
   useEffect(() => {
     // Listen for session completion events

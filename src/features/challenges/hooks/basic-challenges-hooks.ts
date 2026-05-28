@@ -4,16 +4,13 @@
  * React hooks for the simplified challenges system.
  */
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "../../../store";
 import * as service from "../basic-challenges-service";
-import type {
-  BasicChallengeProgressResult,
-  BasicChallengeClaimResult,
-} from "../basic-challenges-service";
-import { createDebugger } from "../../../utils/debug";
-
-const debug = createDebugger("challenges:hooks");
+import {
+  useUpdateBasicChallengeProgress,
+  useClaimBasicChallengeReward,
+} from "./basic-challenges-mutations";
 
 // ============================================================================
 // Query Keys
@@ -90,102 +87,6 @@ export function useBasicWeeklyChallenge() {
 }
 
 // ============================================================================
-// Challenge Progress Hook
-// ============================================================================
-
-export function useUpdateBasicChallengeProgress() {
-  const queryClient = useQueryClient();
-  const userId = useAuthStore((state) => state.user?.id ?? null);
-
-  return useMutation<
-    BasicChallengeProgressResult,
-    Error,
-    { sessionId: string; sessionDuration: number }
-  >({
-    mutationFn: ({ sessionId, sessionDuration }) => {
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
-      return service.updateBasicChallengeProgressFromSession(
-        userId,
-        sessionId,
-        sessionDuration,
-      );
-    },
-    onSuccess: (result) => {
-      // Invalidate challenge queries
-      if (userId) {
-        queryClient.invalidateQueries({
-          queryKey: challengesKeys.status(userId),
-        });
-        queryClient.invalidateQueries({
-          queryKey: challengesKeys.daily(userId),
-        });
-        queryClient.invalidateQueries({
-          queryKey: challengesKeys.weekly(userId),
-        });
-      }
-
-      // Invalidate rewards and progression if challenges were completed
-      if (result.dailyCompleted || result.weeklyCompleted) {
-        queryClient.invalidateQueries({ queryKey: ["progression", userId] });
-        queryClient.invalidateQueries({ queryKey: ["rewards", userId] });
-      }
-    },
-    onError: (error) => {
-      debug.error(
-        "Failed to update challenge progress",
-        error instanceof Error ? error : new Error(String(error)),
-      );
-    },
-  });
-}
-
-// ============================================================================
-// Challenge Reward Claim Hook
-// ============================================================================
-
-export function useClaimBasicChallengeReward() {
-  const queryClient = useQueryClient();
-  const userId = useAuthStore((state) => state.user?.id ?? null);
-
-  return useMutation<BasicChallengeClaimResult, Error, "DAILY" | "WEEKLY">({
-    mutationFn: (challengeType) => {
-      if (!userId) {
-        throw new Error("User not authenticated");
-      }
-      return service.claimBasicChallengeReward(userId, challengeType);
-    },
-    onSuccess: (result) => {
-      // Invalidate challenge queries
-      if (userId) {
-        queryClient.invalidateQueries({
-          queryKey: challengesKeys.status(userId),
-        });
-        queryClient.invalidateQueries({
-          queryKey: challengesKeys.daily(userId),
-        });
-        queryClient.invalidateQueries({
-          queryKey: challengesKeys.weekly(userId),
-        });
-      }
-
-      // Invalidate rewards if claim was successful
-      if (result.success) {
-        queryClient.invalidateQueries({ queryKey: ["rewards", userId] });
-        queryClient.invalidateQueries({ queryKey: ["progression", userId] });
-      }
-    },
-    onError: (error) => {
-      debug.error(
-        "Failed to claim challenge reward",
-        error instanceof Error ? error : new Error(String(error)),
-      );
-    },
-  });
-}
-
-// ============================================================================
 // Combined Challenges Hook for Home Screen
 // ============================================================================
 
@@ -193,8 +94,8 @@ export function useBasicChallenges() {
   const statusQuery = useBasicChallengesStatus();
   const dailyQuery = useBasicDailyChallenge();
   const weeklyQuery = useBasicWeeklyChallenge();
-  const progressMutation = useUpdateBasicChallengeProgress();
-  const claimMutation = useClaimBasicChallengeReward();
+  const progressMutation = useUpdateBasicChallengeProgress(challengesKeys);
+  const claimMutation = useClaimBasicChallengeReward(challengesKeys);
 
   const isLoading =
     statusQuery.isLoading || dailyQuery.isLoading || weeklyQuery.isLoading;

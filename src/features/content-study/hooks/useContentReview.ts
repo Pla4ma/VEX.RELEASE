@@ -6,17 +6,15 @@
 import { useState, useCallback, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "../../../store";
-import { captureException } from "../../../config/sentry";
 import {
-  buildContentStudyTimeoutFallback,
   fetchContentById,
   updateContentText,
   generateStudyPlan,
-  pollContentStatus,
 } from "../ContentStudyService";
-import { ContentReviewState } from "../types";
+import type { ContentReviewState } from "../types";
 import { ERROR_MESSAGES } from "../constants";
 import { contentStudyQueryKeys } from "./queryKeys";
+import { useContentExtractionPolling } from "./content-review-polling";
 
 function createInitialContentReviewState(): ContentReviewState {
   return {
@@ -74,57 +72,20 @@ export function useContentReview(contentId: string) {
     }
   }, [contentQuery.data]);
 
-  useEffect(() => {
-    if (!contentId || !state.content) {
-      return;
-    }
+  const handleExtractingChange = useCallback((isExtracting: boolean) => {
+    setState((prev) => ({ ...prev, isExtracting }));
+  }, []);
 
-    const needsPolling = ["PENDING", "EXTRACTING", "PROCESSING"].includes(
-      state.content.status,
-    );
+  const handlePollError = useCallback((message: string) => {
+    setState((prev) => ({ ...prev, error: message, isExtracting: false }));
+  }, []);
 
-    if (!needsPolling) {
-      return;
-    }
-
-    const pollInterval = setInterval(async () => {
-      try {
-        const status = await pollContentStatus(contentId);
-        if (
-          status.status === "EXTRACTED" ||
-          status.status === "READY" ||
-          status.status === "FAILED"
-        ) {
-          clearInterval(pollInterval);
-          void queryClient.invalidateQueries({
-            queryKey: contentStudyQueryKeys.content(contentId),
-          });
-        }
-        setState((prev) => ({
-          ...prev,
-          isExtracting: ["PENDING", "EXTRACTING", "PROCESSING"].includes(
-            status.status,
-          ),
-        }));
-      } catch (error) {
-        captureException(
-          error instanceof Error ? error : new Error("Poll failed"),
-          {
-            area: "content-study.review.poll",
-            contentId,
-          },
-        );
-        const fallback = buildContentStudyTimeoutFallback();
-        setState((prev) => ({
-          ...prev,
-          error: fallback.body,
-          isExtracting: false,
-        }));
-      }
-    }, 2000);
-
-    return () => clearInterval(pollInterval);
-  }, [contentId, state.content, queryClient]);
+  useContentExtractionPolling(
+    contentId,
+    state.content,
+    handleExtractingChange,
+    handlePollError,
+  );
 
   const startEditing = useCallback(() => {
     setState((prev) => ({ ...prev, isEditing: true }));

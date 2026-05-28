@@ -6,6 +6,13 @@ import {
   type SurfaceMap,
   createEmptyHomeSurfaceMap,
 } from "./surface-helper-types";
+import {
+  resolveLaneStudy,
+  resolveLaneGameLike,
+  resolveLaneCalm,
+  resolveLaneFriendly,
+  resolveLaneCoachLed,
+} from "./lane-resolvers";
 
 export { createEmptyHomeSurfaceMap } from "./surface-helper-types";
 export type {
@@ -15,67 +22,13 @@ export type {
   SurfaceMap,
 } from "./surface-helper-types";
 
-function resolveLaneStudy(
-  input: SurfaceDecisionInput,
-  p: PersonalizationProfile,
-  b: BehaviorStats,
-): boolean {
-  const lane = input.laneProfile?.primaryLane;
-  if (lane === "student") return true;
-  if (lane !== undefined) return false;
-  // Fallback — only when no lane profile present
-  return (
-    p.motivationStyle === "study_focused" ||
-    p.motivationStyle === "student" ||
-    p.primaryGoal === "study" ||
-    p.primaryGoal === "learning" ||
-    input.hasActiveStudyPlan ||
-    b.studyUsageRatio >= 0.35 ||
-    b.learningUsageRatio >= 0.35
-  );
-}
-
-function resolveLaneGameLike(
-  input: SurfaceDecisionInput,
-  p: PersonalizationProfile,
-): boolean {
-  const lane = input.laneProfile?.primaryLane;
-  if (lane === "game_like") return true;
-  if (lane !== undefined) return false;
-  return (
-    p.motivationStyle === "game_like" ||
-    p.motivationStyle === "intense" ||
-    p.gamificationIntensity === "strong"
-  );
-}
-
-function resolveLaneCalm(
-  input: SurfaceDecisionInput,
-  p: PersonalizationProfile,
-): boolean {
-  const lane = input.laneProfile?.primaryLane;
-  if (lane === "minimal_normal") return true;
-  if (lane !== undefined) return false;
-  return p.motivationStyle === "calm";
-}
-
-function resolveLaneFriendly(
-  input: SurfaceDecisionInput,
-  p: PersonalizationProfile,
-): boolean {
-  const lane = input.laneProfile?.primaryLane;
-  if (lane !== undefined) return false; // friendly is not a lane, it's a style
-  return p.motivationStyle === "friendly";
-}
-
-function resolveLaneCoachLed(
-  input: SurfaceDecisionInput,
-  p: PersonalizationProfile,
-): boolean {
-  const lane = input.laneProfile?.primaryLane;
-  if (lane !== undefined) return false; // coach-led is a style, not a lane
-  return p.motivationStyle === "coach_led";
-}
+export {
+  resolveLaneStudy,
+  resolveLaneGameLike,
+  resolveLaneCalm,
+  resolveLaneFriendly,
+  resolveLaneCoachLed,
+} from "./lane-resolvers";
 
 export function setupDay0Surfaces(
   parsed: SurfaceDecisionInput,

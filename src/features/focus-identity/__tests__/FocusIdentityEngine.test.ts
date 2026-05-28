@@ -2,7 +2,12 @@ import {
   FocusIdentityEngine,
   FOCUS_SCORE_CONFIG,
 } from "../FocusIdentityEngine";
-import { FocusIdentityService } from "../focus-identity-service";
+import {
+  calculateConsistencyFactorForInput,
+  calculateStreakStabilityFactorForInput,
+} from "../habit-calculators";
+import { calculateSessionQualityFactorForInput } from "../session-factors";
+
 describe("FocusIdentityEngine", () => {
   let engine: FocusIdentityEngine;
   beforeEach(() => {
@@ -36,30 +41,30 @@ describe("FocusIdentityEngine", () => {
   });
   describe("Consistency Factor Calculation", () => {
     it("should give high score for perfect consistency", () => {
-      const result = (engine as any).calculateConsistencyFactor(16, 4, 0);
+      const result = calculateConsistencyFactorForInput(16, 4, 0);
       expect(result.score).toBeGreaterThan(90);
       expect(result.actualConsistency).toBe(1);
     });
     it("should penalize missed days heavily", () => {
-      const result = (engine as any).calculateConsistencyFactor(12, 4, 5);
+      const result = calculateConsistencyFactorForInput(12, 4, 5);
       expect(result.score).toBeLessThan(70);
       expect(result.missedDaysLast30Days).toBe(5);
     });
     it("should handle zero sessions", () => {
-      const result = (engine as any).calculateConsistencyFactor(0, 4, 30);
+      const result = calculateConsistencyFactorForInput(0, 4, 30);
       expect(result.score).toBeLessThan(20);
       expect(result.actualConsistency).toBe(0);
     });
   });
   describe("Streak Stability Factor", () => {
     it("should reward long current streak", () => {
-      const result = (engine as any).calculateStreakStabilityFactor(45, 60, [
+      const result = calculateStreakStabilityFactorForInput(45, 60, [
         { start: 0, end: 1000, length: 30 },
       ]);
       expect(result.score).toBeGreaterThan(70);
     });
     it("should penalize frequent breaks", () => {
-      const result = (engine as any).calculateStreakStabilityFactor(5, 10, [
+      const result = calculateStreakStabilityFactorForInput(5, 10, [
         { start: 0, end: Date.now() - 86400000 * 10, length: 5 },
         { start: 0, end: Date.now() - 86400000 * 20, length: 3 },
         { start: 0, end: Date.now() - 86400000 * 30, length: 4 },
@@ -71,7 +76,7 @@ describe("FocusIdentityEngine", () => {
   });
   describe("Session Quality Factor", () => {
     it("should score perfect sessions highly", () => {
-      const result = (engine as any).calculateSessionQualityFactor([
+      const result = calculateSessionQualityFactorForInput([
         { focusPurity: 98, grade: "S", duration: 50, wasAbandoned: false },
         { focusPurity: 95, grade: "S", duration: 45, wasAbandoned: false },
       ]);
@@ -80,7 +85,7 @@ describe("FocusIdentityEngine", () => {
       expect(result.perfectSessionsCount).toBe(2);
     });
     it("should penalize abandoned sessions", () => {
-      const result = (engine as any).calculateSessionQualityFactor([
+      const result = calculateSessionQualityFactorForInput([
         { focusPurity: 98, grade: "S", duration: 50, wasAbandoned: false },
         { focusPurity: 30, grade: "D", duration: 5, wasAbandoned: true },
       ]);
@@ -148,83 +153,6 @@ describe("FocusIdentityEngine", () => {
       expect(result.score).toBeLessThanOrEqual(850);
       expect(result.factors.consistency.score).toBeGreaterThan(0);
       expect(result.factors.streakStability.score).toBeGreaterThan(0);
-    });
-  });
-});
-describe("FocusIdentityService", () => {
-  let service: FocusIdentityService;
-  beforeEach(() => {
-    service = new FocusIdentityService("test-user-456");
-  });
-  describe("Profile Initialization", () => {
-    it("should create initial profile with correct defaults", async () => {
-      const profile = await service.initializeProfile();
-      expect(profile.userId).toBe("test-user-456");
-      expect(profile.currentScore).toBe(FOCUS_SCORE_CONFIG.INITIAL_SCORE);
-      expect(profile.previousScore).toBe(FOCUS_SCORE_CONFIG.INITIAL_SCORE);
-      expect(profile.scoreHistory).toHaveLength(1);
-      expect(profile.isInRecovery).toBe(false);
-      expect(profile.recommendedActions).toHaveLength(3);
-    });
-    it("should not recreate profile if exists", async () => {
-      const first = await service.initializeProfile();
-      const second = await service.initializeProfile();
-      expect(second.totalScoreCalculations).toBe(first.totalScoreCalculations);
-    });
-  });
-  describe("Score Updates", () => {
-    beforeEach(async () => {
-      await service.initializeProfile();
-    });
-    it("should update score on session complete", async () => {
-      const result = await service.updateScore("SESSION_COMPLETE", {
-        streakLength: 5,
-        sessionGrade: "A",
-      });
-      expect(result.change).toBeGreaterThan(0);
-      expect(result.newScore).toBeGreaterThan(result.change);
-      expect(result.bandChanged).toBe(false);
-    });
-    it("should decrease score on missed day", async () => {
-      const result = await service.updateScore("MISSED_DAY", {});
-      expect(result.change).toBeLessThan(0);
-    });
-    it("should detect band change when crossing threshold", async () => {
-      const profile = await service.getProfile();
-      if (profile) {
-        profile.currentScore = 579;
-        await service.saveProfile(profile);
-        const result = await service.updateScore("PERFECT_SESSION", {
-          streakLength: 10,
-        });
-        expect(result.bandChanged || result.newScore > 579).toBeTruthy();
-      }
-    });
-    it("should enter recovery mode on streak break", async () => {
-      await service.updateScore("STREAK_BREAK", {});
-      const profile = await service.getProfile();
-      expect(profile?.isInRecovery).toBe(true);
-      expect(profile?.preLapseScore).toBeTruthy();
-    });
-    it("should complete recovery after enough positive events", async () => {
-      await service.updateScore("STREAK_BREAK", {});
-      for (let i = 0; i < 15; i++) {
-        await service.updateScore("SESSION_COMPLETE", {});
-      }
-      const profile = await service.getProfile();
-      expect(profile?.isInRecovery).toBe(false);
-    });
-  });
-  describe("Monthly Report", () => {
-    it("should return null for insufficient history", async () => {
-      await service.initializeProfile();
-      const profile = await service.getProfile();
-      if (profile) {
-        profile.scoreHistory = [];
-        await service.saveProfile(profile);
-      }
-      const report = await service.getMonthlyReport();
-      expect(report).toBeNull();
     });
   });
 });

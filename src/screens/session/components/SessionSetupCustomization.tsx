@@ -5,48 +5,15 @@ import { Banner } from "../../../components/Banner";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { Icon } from "../../../icons";
-import type { SessionTheme } from "../../../features/themes/session-themes";
 import { TabBar } from "../../../shared/ui/components/TabBar";
 import { InteractiveCard } from "../../../shared/ui/components/InteractiveCard";
 import { ModeSelector } from "../../../features/session-start/components/ModeSelector";
-import type { SessionMode } from "../../../session/modes";
 import { useTheme } from "../../../theme";
-import {
-  PRESET_CATEGORIES,
-  type PresetWithIcon,
-  type SmartSuggestion,
-} from "../utils/session-setup";
+import { PRESET_CATEGORIES } from "../utils/session-setup";
 import { SessionAdvancedOptions } from "./SessionAdvancedOptions";
 import { SessionThemeSelector } from "./SessionThemeSelector";
-
-type Challenge = NonNullable<
-  import("../../../features/mastery/types").MasteryState["activeChallenges"]
->[number];
-
-type SessionSetupCustomizationProps = {
-  activeChallenges: Challenge[];
-  filteredPresets: PresetWithIcon[];
-  hasActiveStudyPlan: boolean;
-  onPressTheme: (theme: SessionTheme) => void;
-  onSelectPreset: (preset: PresetWithIcon) => void;
-  onSelectSessionMode: (mode: SessionMode) => void;
-  onSelectSmartSuggestion: () => void;
-  onToggleAdvanced: () => void;
-  onUpdateCategory: (category: string) => void;
-  routeSuggestedDifficulty?: "EASY" | "NORMAL" | "CHALLENGING" | "PUSH";
-  selectedCategory: string;
-  selectedDurationSeconds: number;
-  selectedPreset: PresetWithIcon;
-  selectedSessionMode: SessionMode;
-  selectedTheme: SessionTheme;
-  selectedThemeId: string;
-  showAdvanced: boolean;
-  smartSuggestion: SmartSuggestion | null;
-  themeQueryError: boolean;
-  themeQueryLoading: boolean;
-  themeQueryRetry: () => void;
-  themes: SessionTheme[];
-};
+import { ActiveChallenges } from "./ActiveChallenges";
+import type { SessionSetupCustomizationProps } from "./session-setup-customization-types";
 
 export function SessionSetupCustomization({
   activeChallenges,
@@ -174,37 +141,7 @@ export function SessionSetupCustomization({
         ))}
       </Box>
 
-      {activeChallenges.length > 0 ? (
-        <Box px="lg" mt="lg">
-          <Text variant="label" mb="sm">
-            Active Challenges
-          </Text>
-          <Box gap="sm">
-            {activeChallenges.map((challenge) => (
-              <Box
-                key={challenge.id}
-                p="md"
-                bg="background.secondary"
-                borderRadius="lg"
-                style={{
-                  borderWidth: 1,
-                  borderColor: theme.colors.border.light,
-                }}
-              >
-                <Text variant="body" color="text.primary">
-                  {challenge.title}
-                </Text>
-                <Text variant="caption" color="text.secondary" mt="xs">
-                  Complete this session to progress
-                </Text>
-                <Text variant="label" color="primary.500" mt="sm">
-                  {`+${challenge.masteryPoints} XP`}
-                </Text>
-              </Box>
-            ))}
-          </Box>
-        </Box>
-      ) : null}
+      <ActiveChallenges challenges={activeChallenges} />
 
       <SessionThemeSelector
         onPressTheme={onPressTheme}

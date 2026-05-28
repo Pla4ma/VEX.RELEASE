@@ -19,6 +19,11 @@ import { buttonTap, triggerHaptic } from "../../utils/haptics";
 import { Text } from "./Text";
 import type { SpacingValue } from "./types";
 import { resolveSpacingValue } from "./theme-values";
+import {
+  getButtonSizes,
+  getButtonVariantStyle,
+  getButtonTextColor,
+} from "./button-styles";
 
 export interface ButtonProps extends Omit<
   PressableProps,
@@ -64,84 +69,8 @@ export function Button({
   const scale = useSharedValue(1);
   const isUnavailable = isDisabled || disabled || isLoading;
   const label = typeof children === "string" ? children : "Action";
-  const sizes = {
-    sm: {
-      py: theme.spacing[2],
-      px: theme.spacing[3],
-      minHeight: 44,
-      fontSize: 14,
-    },
-    small: {
-      py: theme.spacing[2],
-      px: theme.spacing[3],
-      minHeight: 44,
-      fontSize: 14,
-    },
-    md: {
-      py: theme.spacing[3],
-      px: theme.spacing[4],
-      minHeight: 48,
-      fontSize: 16,
-    },
-    lg: {
-      py: theme.spacing[4],
-      px: theme.spacing[6],
-      minHeight: 56,
-      fontSize: 17,
-    },
-  }[size];
-
-  const variantStyle = (pressed: boolean): ViewStyle => {
-    const semantic = theme.colors.semantic;
-    const base: ViewStyle = {
-      alignItems: "center",
-      borderRadius: theme.borderRadius.xl,
-      flexDirection: "row",
-      justifyContent: "center",
-      minHeight: sizes.minHeight,
-      paddingHorizontal: sizes.px,
-      paddingVertical: sizes.py,
-      width: fullWidth ? "100%" : undefined,
-    };
-    if (variant === "primary") {
-      return {
-        ...base,
-        backgroundColor: pressed ? semantic.primaryPressed : semantic.primary,
-      };
-    }
-    if (variant === "danger") {
-      return { ...base, backgroundColor: semantic.danger };
-    }
-    if (variant === "outline") {
-      return {
-        ...base,
-        backgroundColor: pressed ? semantic.primarySoft : semantic.surfaceGlass,
-        borderColor: semantic.borderStrong,
-        borderWidth: 1,
-      };
-    }
-    if (variant === "ghost") {
-      return {
-        ...base,
-        backgroundColor: pressed ? semantic.surfaceGlass : "transparent",
-      };
-    }
-    return {
-      ...base,
-      backgroundColor: pressed
-        ? theme.colors.surface.pressed
-        : theme.colors.surface.button,
-      borderColor: semantic.border,
-      borderWidth: 1,
-    };
-  };
-
-  const textColor =
-    variant === "primary" || variant === "danger"
-      ? theme.colors.text.inverse
-      : variant === "outline"
-        ? theme.colors.primary[300]
-        : theme.colors.text.primary;
+  const sizes = getButtonSizes(size, theme);
+  const textColor = getButtonTextColor(variant, theme);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: scale.value }],
@@ -199,7 +128,7 @@ export function Button({
         onPressIn={onPressIn}
         onPressOut={onPressOut}
         style={({ pressed }) => [
-          variantStyle(pressed),
+          getButtonVariantStyle(variant, sizes, pressed, fullWidth, theme),
           { opacity: isUnavailable ? 0.62 : pressed ? 0.9 : 1 },
           {
             marginTop: resolveSpacingValue(mt, theme),
