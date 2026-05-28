@@ -1,6 +1,7 @@
 import React from "react";
 import { render, waitFor, fireEvent } from "@testing-library/react-native";
-import { ErrorBoundary, ErrorCategory } from "../ErrorBoundary";
+import { ErrorBoundary } from "../ErrorBoundary";
+import type { ErrorCategory } from "../ErrorBoundary.types";
 import { getAnalyticsService } from "../../analytics/AnalyticsService";
 jest.mock("../../analytics/AnalyticsService");
 jest.mock("../../utils/debug", () => ({

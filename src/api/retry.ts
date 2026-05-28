@@ -1,7 +1,8 @@
 /**
  * Retry Logic
  *
- * Exponential backoff retry logic for API requests.
+ * Exponential backoff, error classification, and error factory
+ * for API requests.
  */
 
 import type { ApiError } from "./client-types";
@@ -25,4 +26,23 @@ export function isRetryableErrorCode(code: string): boolean {
   return ["NETWORK_ERROR", "TIMEOUT", "RATE_LIMIT", "SERVER_ERROR"].includes(
     code,
   );
+}
+
+export function isApiError(error: unknown): error is ApiError {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    "retryable" in error
+  );
+}
+
+export function createApiError(
+  code: string,
+  message: string,
+  status: number,
+  details?: unknown,
+  retryable = false,
+): ApiError {
+  return { code, message, status, details, retryable };
 }

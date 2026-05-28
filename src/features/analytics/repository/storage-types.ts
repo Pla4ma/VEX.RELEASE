@@ -28,3 +28,16 @@ export interface StorageError extends Error {
   path?: string;
   retryable: boolean;
 }
+
+export class AnalyticsStorageError extends Error implements StorageError {
+  constructor(
+    message: string,
+    public code: string,
+    public bucket?: string,
+    public path?: string,
+    public retryable = false,
+  ) {
+    super(message);
+    this.name = "AnalyticsStorageError";
+  }
+}
