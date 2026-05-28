@@ -9,12 +9,14 @@ import {
   createAuditResult,
   createPassingResult,
   getComponentDisplayName,
+} from "./AccessibilityAuditor-helpers";
+import {
   checkScreenStructure,
   checkNavigationOrder,
   checkScreenReaderAnnouncements,
   checkMotionPreferences,
   checkColorBlindSupport,
-} from "./AccessibilityAuditor-helpers";
+} from "./AccessibilityAuditor-utils";
 import {
   checkAccessibilityLabels,
   checkFocusManagement,
