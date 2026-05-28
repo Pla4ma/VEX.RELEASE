@@ -10,6 +10,14 @@ export type PredictionType =
   | "PRIME_TIME_MISSED"
   | "CREATURE_EVOLUTION_STALL";
 
+export interface SessionRecord {
+  date: string;
+  completed: boolean;
+  duration: number;
+  hour: number;
+  dayOfWeek: number;
+}
+
 export interface BehavioralPattern {
   userId: string;
   patternType: "consistent" | "inconsistent" | "declining" | "improving";
@@ -44,4 +52,18 @@ export interface InterventionResult {
   message: string;
   userResponded: boolean;
   outcome: "prevented" | "ignored" | "unknown";
+}
+
+export interface RiskAssessment {
+  confidence: number;
+  severity: RiskPrediction["severity"];
+  evidence: string[];
+  action: string;
+}
+
+export interface OptimalTimeResult {
+  confidence: number;
+  nextWindow: number;
+  evidence: string[];
+  action: string;
 }

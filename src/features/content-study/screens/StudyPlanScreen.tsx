@@ -1,38 +1,21 @@
 import React, { useState, useCallback } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, Pressable, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
-import { ContentStudyStackParamList, SessionPlan } from "../types";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { useStudyPlan } from "../hooks";
-import {
-  UI_TEXT,
-  TASK_PRIORITY_CONFIG,
-  QUIZ_DIFFICULTY_CONFIG,
-} from "../constants";
-import { createSheet } from "@/shared/ui/create-sheet";
-import { useTheme } from "@/theme";
+import { UI_TEXT } from "../constants";
 import { launchColors } from "@theme/tokens/launch-colors";
-type RouteProps = RouteProp<ContentStudyStackParamList, "StudyPlan">;
-type NavigationProp = {
-  navigate: (screen: string, params?: unknown) => void;
-  goBack: () => void;
-};
-const Icon = ({ name: _name, color }: { name: string; color?: string }) => {
-  const { theme } = useTheme();
-  return (
-    <Text
-      style={[styles.icon, { color: color ?? theme.colors.text.secondary }]}
-    >
-      ◊
-    </Text>
-  );
-};
+import { styles } from "./StudyPlanScreen.styles";
+import {
+  type RouteProps,
+  type NavigationProp,
+  SummarySection,
+  TasksSection,
+  QuizSection,
+  SessionPlanSection,
+  RatingSection,
+} from "./study-plan-helpers";
+
 export function StudyPlanScreen() {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute<RouteProps>();
@@ -45,10 +28,9 @@ export function StudyPlanScreen() {
     error,
     startSession,
   } = useStudyPlan(generationId);
-  const [revealedAnswers, setRevealedAnswers] = useState<Set<string>>(
-    new Set(),
-  );
+  const [revealedAnswers, setRevealedAnswers] = useState<Set<string>>(new Set());
   const [userRating, setUserRating] = useState<number | null>(null);
+
   const toggleAnswer = useCallback((quizId: string) => {
     setRevealedAnswers((prev) => {
       const next = new Set(prev);
@@ -60,6 +42,7 @@ export function StudyPlanScreen() {
       return next;
     });
   }, []);
+
   const handleStartSession = useCallback(async () => {
     const sessionConfig = await startSession();
     if (sessionConfig && generation) {
@@ -80,247 +63,7 @@ export function StudyPlanScreen() {
       });
     }
   }, [contentId, generation, generationId, navigation, startSession]);
-  const formatDuration = (seconds: number): string => {
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) {
-      return `${minutes} min`;
-    }
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-    return remainingMinutes > 0
-      ? `${hours}h ${remainingMinutes}m`
-      : `${hours}h`;
-  };
-  const renderSummary = () => {
-    if (!generation) {
-      return null;
-    }
-    return (
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{UI_TEXT.SUMMARY_SECTION}</Text>
-        <View style={styles.summaryCard}>
-          <Text style={styles.summaryText}>{generation.summary.overview}</Text>
-          <View style={styles.keyConcepts}>
-            {generation.keyConcepts.map((concept, index) => (
-              <View key={concept.id} style={styles.conceptTag}>
-                <Text style={styles.conceptText}>{concept.term}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-      </View>
-    );
-  };
-  const renderTasks = () => {
-    if (!generation) {
-      return null;
-    }
-    return (
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{UI_TEXT.TASKS_SECTION}</Text>
-        {generation.tasks.map((task, index) => {
-          const priority = TASK_PRIORITY_CONFIG[task.priority];
-          return (
-            <View key={task.id} style={styles.taskCard}>
-              <View style={styles.taskHeader}>
-                <Text style={styles.taskNumber}>{index + 1}</Text>
-                <View
-                  style={[
-                    styles.priorityBadge,
-                    { backgroundColor: `${priority.color}20` },
-                  ]}
-                >
-                  <Text
-                    style={[styles.priorityText, { color: priority.color }]}
-                  >
-                    {task.priority}
-                  </Text>
-                </View>
-              </View>
-              <Text style={styles.taskContent}>{task.content}</Text>
-              <Text style={styles.taskEstimate}>
-                {task.estimatedMinutes} {UI_TEXT.TASK_ESTIMATED}
-              </Text>
-            </View>
-          );
-        })}
-      </View>
-    );
-  };
-  const renderQuiz = () => {
-    if (!generation) {
-      return null;
-    }
-    return (
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{UI_TEXT.QUIZ_SECTION}</Text>
-        {generation.quizItems.map((item, index) => {
-          const isRevealed = revealedAnswers.has(item.id);
-          const difficulty = QUIZ_DIFFICULTY_CONFIG[item.difficulty];
-          return (
-            <View key={item.id} style={styles.quizCard}>
-              <View style={styles.quizHeader}>
-                <Text style={styles.quizNumber}>Q{index + 1}</Text>
-                <View
-                  style={[
-                    styles.difficultyBadge,
-                    { backgroundColor: `${difficulty.color}20` },
-                  ]}
-                >
-                  <Text
-                    style={[styles.difficultyText, { color: difficulty.color }]}
-                  >
-                    {item.difficulty}
-                  </Text>
-                </View>
-              </View>
 
-              <Text style={styles.quizQuestion}>{item.question}</Text>
-
-              {}
-              {item.options && item.options.length > 0 && (
-                <View style={styles.optionsList}>
-                  {item.options.map((option, optIndex) => (
-                    <View key={optIndex} style={styles.optionItem}>
-                      <Text style={styles.optionLabel}>
-                        {String.fromCharCode(65 + optIndex)}.
-                      </Text>
-                      <Text style={styles.optionText}>{option}</Text>
-                    </View>
-                  ))}
-                </View>
-              )}
-
-              {}
-              <Pressable
-                style={({ pressed }) => [
-                  styles.answerToggle,
-                  pressed && { opacity: 0.8 },
-                ]}
-                onPress={() => toggleAnswer(item.id)}
-                accessibilityLabel="Toggle answer button"
-                accessibilityRole="button"
-                accessibilityHint="Activates this control"
-              >
-                <Text style={styles.answerToggleText}>
-                  {isRevealed
-                    ? UI_TEXT.QUIZ_HIDE_ANSWER
-                    : UI_TEXT.QUIZ_SHOW_ANSWER}
-                </Text>
-              </Pressable>
-
-              {isRevealed && (
-                <View style={styles.answerContainer}>
-                  <Text style={styles.answerLabel}>Answer:</Text>
-                  <Text style={styles.answerText}>{item.answer}</Text>
-                  {item.explanation && (
-                    <>
-                      <Text style={styles.explanationLabel}>
-                        {UI_TEXT.QUIZ_EXPLANATION}:
-                      </Text>
-                      <Text style={styles.explanationText}>
-                        {item.explanation}
-                      </Text>
-                    </>
-                  )}
-                </View>
-              )}
-            </View>
-          );
-        })}
-      </View>
-    );
-  };
-  const renderSessionPlan = () => {
-    if (!generation) {
-      return null;
-    }
-    const plan = generation.sessionPlan;
-    return (
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>{UI_TEXT.SESSION_SECTION}</Text>
-        <View style={styles.sessionCard}>
-          <View style={styles.sessionRow}>
-            <Icon name="clock" color={launchColors.hex_3b82f6} />
-            <View style={styles.sessionInfo}>
-              <Text style={styles.sessionLabel}>
-                {UI_TEXT.SESSION_DURATION}
-              </Text>
-              <Text style={styles.sessionValue}>
-                {formatDuration(plan.recommendedDuration)}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.sessionRow}>
-            <Icon name="trending-up" color={launchColors.hex_10b981} />
-            <View style={styles.sessionInfo}>
-              <Text style={styles.sessionLabel}>
-                {UI_TEXT.SESSION_DIFFICULTY}
-              </Text>
-              <Text style={styles.sessionValue}>
-                {plan.suggestedDifficulty}
-              </Text>
-            </View>
-          </View>
-
-          <View style={styles.sessionRow}>
-            <Icon name="target" color={launchColors.hex_f59e0b} />
-            <View style={styles.sessionInfo}>
-              <Text style={styles.sessionLabel}>
-                {UI_TEXT.SESSION_FOCUS_AREAS}
-              </Text>
-              <View style={styles.focusAreas}>
-                {plan.focusAreas.map((area, index) => (
-                  <View key={index} style={styles.focusAreaTag}>
-                    <Text style={styles.focusAreaText}>{area}</Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-    );
-  };
-  const renderRating = () => {
-    if (userRating !== null) {
-      return (
-        <View style={styles.ratingContainer}>
-          <Text style={styles.ratingThanks}>{UI_TEXT.FEEDBACK_THANKS}</Text>
-        </View>
-      );
-    }
-    return (
-      <View style={styles.ratingContainer}>
-        <Text style={styles.ratingTitle}>{UI_TEXT.RATE_PLAN_TITLE}</Text>
-        <View style={styles.ratingStars}>
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Pressable
-              key={star}
-              style={({ pressed }) => [
-                styles.starButton,
-                pressed && { opacity: 0.8 },
-              ]}
-              onPress={() => setUserRating(star)}
-              accessibilityLabel={`Rate ${star} stars`}
-              accessibilityRole="button"
-              accessibilityHint="Activates this control"
-            >
-              <Text
-                style={[
-                  styles.star,
-                  userRating && star <= userRating && styles.starFilled,
-                ]}
-              >
-                ★
-              </Text>
-            </Pressable>
-          ))}
-        </View>
-      </View>
-    );
-  };
   if (isLoading) {
     return (
       <SafeAreaView style={styles.container}>
@@ -331,16 +74,14 @@ export function StudyPlanScreen() {
       </SafeAreaView>
     );
   }
+
   if (error) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>
           <Pressable
-            style={({ pressed }) => [
-              styles.retryButton,
-              pressed && { opacity: 0.8 },
-            ]}
+            style={({ pressed }) => [styles.retryButton, pressed && { opacity: 0.8 }]}
             onPress={() => navigation.goBack()}
             accessibilityLabel="Go Back button"
             accessibilityRole="button"
@@ -352,37 +93,27 @@ export function StudyPlanScreen() {
       </SafeAreaView>
     );
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
-        {}
         <View style={styles.header}>
           <Text style={styles.title}>{UI_TEXT.PLAN_TITLE}</Text>
-          {content?.title && (
-            <Text style={styles.subtitle}>{content.title}</Text>
-          )}
+          {content?.title && <Text style={styles.subtitle}>{content.title}</Text>}
         </View>
-
-        {}
-        {renderSummary()}
-
-        {}
-        {renderSessionPlan()}
-
-        {}
-        {renderTasks()}
-
-        {}
-        {renderQuiz()}
-
-        {}
-        {renderRating()}
-
-        {}
+        {generation && <SummarySection generation={generation} />}
+        {generation && <SessionPlanSection sessionPlan={generation.sessionPlan} />}
+        {generation && <TasksSection generation={generation} />}
+        {generation && (
+          <QuizSection
+            quizItems={generation.quizItems}
+            revealedAnswers={revealedAnswers}
+            toggleAnswer={toggleAnswer}
+          />
+        )}
+        <RatingSection userRating={userRating} setUserRating={setUserRating} />
         <View style={styles.bottomSpacer} />
       </ScrollView>
-
-      {}
       <View style={styles.fabContainer}>
         <Pressable
           style={({ pressed }) => [
@@ -409,237 +140,3 @@ export function StudyPlanScreen() {
     </SafeAreaView>
   );
 }
-const styles = createSheet({
-  container: { flex: 1, backgroundColor: launchColors.hex_0f0f0f },
-  scrollView: { flex: 1 },
-  header: { padding: 20, paddingBottom: 16 },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: launchColors.hex_ffffff,
-    marginBottom: 8,
-  },
-  subtitle: { fontSize: 16, color: launchColors.hex_9ca3af },
-  loadingContainer: { flex: 1, justifyContent: "center", alignItems: "center" },
-  loadingText: { marginTop: 16, fontSize: 16, color: launchColors.hex_9ca3af },
-  errorContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  errorText: {
-    fontSize: 16,
-    color: launchColors.hex_ef4444,
-    textAlign: "center",
-    marginBottom: 16,
-  },
-  retryButton: {
-    backgroundColor: launchColors.hex_3b82f6,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
-  retryButtonText: { color: launchColors.hex_ffffff, fontWeight: "600" },
-  section: { paddingHorizontal: 20, marginBottom: 24 },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: launchColors.hex_ffffff,
-    marginBottom: 12,
-  },
-  summaryCard: {
-    backgroundColor: launchColors.hex_1a1a1a,
-    borderRadius: 16,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: launchColors.hex_2a2a2a,
-  },
-  summaryText: {
-    fontSize: 15,
-    lineHeight: 24,
-    color: launchColors.hex_d1d5db,
-    marginBottom: 16,
-  },
-  keyConcepts: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
-  conceptTag: {
-    backgroundColor: launchColors.hex_2a2a2a,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  conceptText: { fontSize: 13, color: launchColors.hex_9ca3af },
-  taskCard: {
-    backgroundColor: launchColors.hex_1a1a1a,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: launchColors.hex_2a2a2a,
-  },
-  taskHeader: { flexDirection: "row", alignItems: "center", marginBottom: 12 },
-  taskNumber: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: launchColors.hex_3b82f6,
-    color: launchColors.hex_ffffff,
-    fontSize: 14,
-    fontWeight: "600",
-    textAlign: "center",
-    lineHeight: 28,
-    marginRight: 12,
-  },
-  priorityBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 6 },
-  priorityText: { fontSize: 12, fontWeight: "600", textTransform: "uppercase" },
-  taskContent: {
-    fontSize: 15,
-    color: launchColors.hex_ffffff,
-    lineHeight: 22,
-    marginBottom: 8,
-  },
-  taskEstimate: { fontSize: 13, color: launchColors.hex_6b7280 },
-  quizCard: {
-    backgroundColor: launchColors.hex_1a1a1a,
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    borderWidth: 1,
-    borderColor: launchColors.hex_2a2a2a,
-  },
-  quizHeader: { flexDirection: "row", alignItems: "center", marginBottom: 12 },
-  quizNumber: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: launchColors.hex_3b82f6,
-    marginRight: 12,
-  },
-  difficultyBadge: {
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  difficultyText: {
-    fontSize: 12,
-    fontWeight: "600",
-    textTransform: "uppercase",
-  },
-  quizQuestion: {
-    fontSize: 15,
-    color: launchColors.hex_ffffff,
-    lineHeight: 22,
-    marginBottom: 12,
-  },
-  optionsList: { marginBottom: 12 },
-  optionItem: { flexDirection: "row", marginBottom: 8 },
-  optionLabel: { fontSize: 14, color: launchColors.hex_9ca3af, width: 24 },
-  optionText: { fontSize: 14, color: launchColors.hex_d1d5db, flex: 1 },
-  answerToggle: {
-    alignSelf: "flex-start",
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    backgroundColor: launchColors.hex_2a2a2a,
-    borderRadius: 8,
-  },
-  answerToggleText: {
-    fontSize: 14,
-    color: launchColors.hex_3b82f6,
-    fontWeight: "500",
-  },
-  answerContainer: {
-    marginTop: 12,
-    paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: launchColors.hex_2a2a2a,
-  },
-  answerLabel: {
-    fontSize: 13,
-    color: launchColors.hex_6b7280,
-    marginBottom: 4,
-  },
-  answerText: {
-    fontSize: 15,
-    color: launchColors.hex_10b981,
-    fontWeight: "500",
-    marginBottom: 12,
-  },
-  explanationLabel: {
-    fontSize: 13,
-    color: launchColors.hex_6b7280,
-    marginBottom: 4,
-  },
-  explanationText: {
-    fontSize: 14,
-    color: launchColors.hex_9ca3af,
-    lineHeight: 20,
-  },
-  sessionCard: {
-    backgroundColor: launchColors.hex_1a1a1a,
-    borderRadius: 16,
-    padding: 16,
-    borderWidth: 1,
-    borderColor: launchColors.hex_2a2a2a,
-  },
-  sessionRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    marginBottom: 16,
-  },
-  sessionInfo: { flex: 1, marginLeft: 12 },
-  sessionLabel: {
-    fontSize: 13,
-    color: launchColors.hex_6b7280,
-    marginBottom: 4,
-  },
-  sessionValue: {
-    fontSize: 16,
-    fontWeight: "500",
-    color: launchColors.hex_ffffff,
-  },
-  focusAreas: { flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 8 },
-  focusAreaTag: {
-    backgroundColor: launchColors.hex_f59e0b20,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 6,
-  },
-  focusAreaText: { fontSize: 12, color: launchColors.hex_f59e0b },
-  ratingContainer: {
-    paddingHorizontal: 20,
-    marginBottom: 24,
-    alignItems: "center",
-  },
-  ratingTitle: {
-    fontSize: 16,
-    color: launchColors.hex_9ca3af,
-    marginBottom: 12,
-  },
-  ratingStars: { flexDirection: "row", gap: 8 },
-  starButton: { padding: 4 },
-  star: { fontSize: 32, color: launchColors.hex_3a3a3a },
-  starFilled: { color: launchColors.hex_f59e0b },
-  ratingThanks: { fontSize: 16, color: launchColors.hex_10b981 },
-  bottomSpacer: { height: 100 },
-  fabContainer: { position: "absolute", bottom: 20, left: 20, right: 20 },
-  fab: {
-    backgroundColor: launchColors.hex_3b82f6,
-    borderRadius: 16,
-    paddingVertical: 18,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: launchColors.hex_3b82f6,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
-  },
-  fabDisabled: { opacity: 0.7 },
-  fabText: {
-    fontSize: 17,
-    fontWeight: "600",
-    color: launchColors.hex_ffffff,
-    marginLeft: 8,
-  },
-  icon: { fontSize: 20 },
-});
