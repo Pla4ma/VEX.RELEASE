@@ -1,208 +1,24 @@
-import React, { useState, useEffect, useCallback } from "react";
+/**
+ * Live Focusing Widget — shows real-time focus session count,
+ * friend/squad activity, and trend data.
+ *
+ * @phase 10.6
+ */
+import React from "react";
 import { Pressable } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  withRepeat,
-  withSequence,
-  withTiming,
-  withDelay,
-  FadeIn,
-} from "react-native-reanimated";
+import Animated, { FadeIn } from "react-native-reanimated";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
-import { Avatar } from "../../../components/Avatar";
-import { useTheme } from "../../../theme";
 import { launchColors } from "@theme/tokens/launch-colors";
-export interface LiveFocusingData {
-  totalCount: number;
-  friendsCount: number;
-  squadCount: number;
-  sampleAvatars?: Array<{ url?: string; initials: string }>;
-  trend?: "up" | "down" | "stable";
-  trendPercent?: number;
-}
-interface LiveFocusingWidgetProps {
-  data: LiveFocusingData;
-  onPress?: () => void;
-  compact?: boolean;
-  isLoading?: boolean;
-}
-function PulsingLiveDot(): JSX.Element {
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        scale: withRepeat(
-          withSequence(
-            withTiming(1, { duration: 1000 }),
-            withTiming(1.5, { duration: 1000 }),
-          ),
-          -1,
-          true,
-        ),
-      },
-    ],
-    opacity: withRepeat(
-      withSequence(
-        withTiming(1, { duration: 1000 }),
-        withTiming(0.5, { duration: 1000 }),
-      ),
-      -1,
-      true,
-    ),
-  }));
-  return (
-    <Animated.View
-      style={[
-        {
-          width: 8,
-          height: 8,
-          borderRadius: 4,
-          backgroundColor: launchColors.hex_22c55e,
-        },
-        animatedStyle,
-      ]}
-    />
-  );
-}
-function AvatarStack({
-  avatars,
-  maxDisplay = 4,
-}: {
-  avatars?: Array<{ url?: string; initials: string }>;
-  maxDisplay?: number;
-}): JSX.Element {
-  const { theme } = useTheme();
-  if (!avatars || avatars.length === 0) {
-    return (
-      <Box flexDirection="row" alignItems="center">
-        <Box
-          width={32}
-          height={32}
-          borderRadius="full"
-          justifyContent="center"
-          alignItems="center"
-          style={{ backgroundColor: theme.colors.background.tertiary }}
-        >
-          <Text fontSize={14}>👤</Text>
-        </Box>
-      </Box>
-    );
-  }
-  const displayAvatars = avatars.slice(0, maxDisplay);
-  const remaining = avatars.length - maxDisplay;
-  return (
-    <Box flexDirection="row" alignItems="center">
-      {displayAvatars.map((avatar, index) => {
-        return (
-          <Box
-            key={index}
-            style={{
-              marginLeft: index === 0 ? 0 : -8,
-              zIndex: displayAvatars.length - index,
-            }}
-          >
-            <Box
-              width={32}
-              height={32}
-              borderRadius="full"
-              borderWidth={2}
-              borderColor="background.primary"
-              style={{ overflow: "hidden" }}
-            >
-              <Avatar
-                size="sm"
-                source={avatar.url ? { uri: avatar.url } : undefined}
-                name={avatar.initials}
-              />
-            </Box>
-          </Box>
-        );
-      })}
+import type { LiveFocusingWidgetProps } from "./live-focusing/types";
+import { useCountUp, formatNumber } from "./live-focusing/helpers";
+import { PulsingLiveDot } from "./live-focusing/PulsingLiveDot";
+import { AvatarStack } from "./live-focusing/AvatarStack";
+import { TrendIndicator } from "./live-focusing/TrendIndicator";
 
-      {remaining > 0 && (
-        <Box
-          width={32}
-          height={32}
-          borderRadius="full"
-          justifyContent="center"
-          alignItems="center"
-          style={{
-            marginLeft: -8,
-            backgroundColor: theme.colors.background.tertiary,
-            borderWidth: 2,
-            borderColor: theme.colors.background.primary,
-          }}
-        >
-          <Text variant="caption" color="text.primary" fontWeight="600">
-            +{remaining}
-          </Text>
-        </Box>
-      )}
-    </Box>
-  );
-}
-function useCountUp(target: number, duration: number = 1000): number {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    const startTime = Date.now();
-    const startValue = count;
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      const current = Math.floor(startValue + (target - startValue) * easeOut);
-      setCount(current);
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-    requestAnimationFrame(animate);
-  }, [count, target, duration]);
-  return count;
-}
-function formatNumber(num: number): string {
-  if (num >= 1000000) {
-    return (num / 1000000).toFixed(1) + "M";
-  }
-  if (num >= 1000) {
-    return (num / 1000).toFixed(1) + "K";
-  }
-  return num.toLocaleString();
-}
-function TrendIndicator({
-  trend,
-  percent,
-}: {
-  trend: "up" | "down" | "stable";
-  percent?: number;
-}): JSX.Element {
-  const icons = { up: "📈", down: "📉", stable: "➡️" };
-  const colors = {
-    up: launchColors.hex_22c55e,
-    down: launchColors.hex_ef4444,
-    stable: launchColors.hex_94a3b8,
-  };
-  return (
-    <Box flexDirection="row" alignItems="center" gap="xs">
-      <Text fontSize={12}>{icons[trend]}</Text>
-      {percent !== undefined && percent > 0 && (
-        <Text
-          fontSize={12}
-          color={
-            trend === "up"
-              ? "success.DEFAULT"
-              : trend === "down"
-                ? "error.DEFAULT"
-                : "text.tertiary"
-          }
-        >
-          {trend === "up" ? "+" : ""}
-          {percent}%
-        </Text>
-      )}
-    </Box>
-  );
-}
+export { LiveFocusingSkeleton } from "./live-focusing/LiveFocusingSkeleton";
+export type { LiveFocusingData } from "./live-focusing/types";
+
 export function LiveFocusingWidget({
   data,
   onPress,
@@ -210,6 +26,7 @@ export function LiveFocusingWidget({
   isLoading: _isLoading = false,
 }: LiveFocusingWidgetProps): JSX.Element {
   const animatedCount = useCountUp(data.totalCount);
+
   if (compact) {
     return (
       <Pressable
@@ -242,6 +59,7 @@ export function LiveFocusingWidget({
       </Pressable>
     );
   }
+
   return (
     <Animated.View entering={FadeIn.duration(400)}>
       <Pressable
@@ -265,7 +83,7 @@ export function LiveFocusingWidget({
             elevation: 2,
           }}
         >
-          {}
+          {/* Header: live dot + trend */}
           <Box
             flexDirection="row"
             alignItems="center"
@@ -282,7 +100,7 @@ export function LiveFocusingWidget({
             )}
           </Box>
 
-          {}
+          {/* Main count */}
           <Box alignItems="center" gap="sm">
             <Box flexDirection="row" alignItems="center" gap="sm">
               <AvatarStack avatars={data.sampleAvatars} maxDisplay={4} />
@@ -306,7 +124,7 @@ export function LiveFocusingWidget({
             </Text>
           </Box>
 
-          {}
+          {/* Stats row */}
           <Box
             flexDirection="row"
             justifyContent="space-between"
@@ -348,7 +166,7 @@ export function LiveFocusingWidget({
             </Box>
           </Box>
 
-          {}
+          {/* CTA */}
           <Box alignItems="center">
             <Text variant="caption" color="primary.500" fontWeight="600">
               Tap to see who's focusing →
@@ -359,137 +177,5 @@ export function LiveFocusingWidget({
     </Animated.View>
   );
 }
-export function LiveFocusingSkeleton({
-  compact = false,
-}: {
-  compact?: boolean;
-}): JSX.Element {
-  if (compact) {
-    return (
-      <Box
-        flexDirection="row"
-        alignItems="center"
-        gap="md"
-        p="md"
-        borderRadius="lg"
-        bg="background.secondary"
-      >
-        <Box
-          width={8}
-          height={8}
-          borderRadius="full"
-          bg="background.tertiary"
-        />
-        <Box flex={1} gap="xs">
-          <Box
-            width={150}
-            height={16}
-            borderRadius="sm"
-            bg="background.tertiary"
-          />
-          <Box
-            width={100}
-            height={12}
-            borderRadius="sm"
-            bg="background.tertiary"
-          />
-        </Box>
-        <Box flexDirection="row">
-          {[1, 2, 3].map((i) => (
-            <Box
-              key={i}
-              width={32}
-              height={32}
-              borderRadius="full"
-              bg="background.tertiary"
-              style={{ marginLeft: i === 1 ? 0 : -8 }}
-            />
-          ))}
-        </Box>
-      </Box>
-    );
-  }
-  return (
-    <Box
-      p="xl"
-      borderRadius="xl"
-      bg="background.secondary"
-      borderWidth={1}
-      borderColor="border.light"
-      gap="lg"
-    >
-      <Box flexDirection="row" justifyContent="space-between">
-        <Box
-          width={80}
-          height={16}
-          borderRadius="sm"
-          bg="background.tertiary"
-        />
-        <Box
-          width={60}
-          height={16}
-          borderRadius="sm"
-          bg="background.tertiary"
-        />
-      </Box>
 
-      <Box alignItems="center" gap="sm">
-        <Box flexDirection="row" gap="sm">
-          {[1, 2, 3, 4].map((i) => (
-            <Box
-              key={i}
-              width={40}
-              height={40}
-              borderRadius="full"
-              bg="background.tertiary"
-            />
-          ))}
-        </Box>
-        <Box
-          width={120}
-          height={48}
-          borderRadius="sm"
-          bg="background.tertiary"
-        />
-        <Box
-          width={200}
-          height={24}
-          borderRadius="sm"
-          bg="background.tertiary"
-        />
-        <Box
-          width={180}
-          height={16}
-          borderRadius="sm"
-          bg="background.tertiary"
-        />
-      </Box>
-
-      <Box
-        flexDirection="row"
-        justifyContent="space-between"
-        p="md"
-        borderRadius="lg"
-        bg="background.tertiary"
-      >
-        {[1, 2, 3].map((i) => (
-          <Box key={i} alignItems="center" gap="xs">
-            <Box
-              width={30}
-              height={24}
-              borderRadius="sm"
-              bg="background.secondary"
-            />
-            <Box
-              width={50}
-              height={12}
-              borderRadius="sm"
-              bg="background.secondary"
-            />
-          </Box>
-        ))}
-      </Box>
-    </Box>
-  );
-}
 export default LiveFocusingWidget;

@@ -1,125 +1,84 @@
 /**
- * Accessibility Audit
- *
- * Automated accessibility checking and reporting
+ * Accessibility screen auditing.
  */
 
-import {
-  AccessibilityAudit,
-  AccessibilityIssue,
-  FocusableElement,
-} from "./types";
-import { checkContrast } from "./contrast";
-import { getFocusableElements } from "./focus";
+import type { AccessibilityAudit, AccessibilityIssue } from "./types";
+import { calculateContrastRatio } from "./contrastUtils";
+import { getAccessibleAlternatives } from "./contrastUtils";
 
-/**
- * Audit current screen for accessibility issues
- */
-export function auditScreen(): AccessibilityAudit {
+export function auditScreen(
+  screenId: string,
+  elements: Array<{
+    id: string;
+    type: string;
+    label?: string;
+    color?: string;
+    backgroundColor?: string;
+    touchSize?: { width: number; height: number };
+  }>,
+): AccessibilityAudit {
   const issues: AccessibilityIssue[] = [];
-  const focusableElements = getFocusableElements();
 
-  // Check focus management
-  focusableElements.forEach((element) => {
-    if (!element.accessible || !element.focusable) {
+  for (const element of elements) {
+    if (element.color && element.backgroundColor) {
+      const contrast = calculateContrastRatio(
+        element.color,
+        element.backgroundColor,
+      );
+      if (contrast < 4.5) {
+        const alternatives = getAccessibleAlternatives(
+          element.color,
+          element.backgroundColor,
+          4.5,
+        );
+        issues.push({
+          id: `contrast-${element.id}`,
+          type: "contrast",
+          severity: "error",
+          element: element.id,
+          message: `Contrast ratio ${contrast.toFixed(2)} is below WCAG AA (4.5)`,
+          suggestion: alternatives[0]
+            ? `Try color: ${alternatives[0]}`
+            : "Use a darker foreground or lighter background",
+        });
+      }
+    }
+
+    if (element.touchSize) {
+      const minSize = 44;
+      if (
+        element.touchSize.width < minSize ||
+        element.touchSize.height < minSize
+      ) {
+        issues.push({
+          id: `touch-${element.id}`,
+          type: "touch_target",
+          severity: "warning",
+          element: element.id,
+          message: `Touch target ${element.touchSize.width}x${element.touchSize.height} is below recommended ${minSize}x${minSize}`,
+          suggestion: "Increase touch target to at least 44x44 points",
+        });
+      }
+    }
+
+    if (!element.label && ["button", "link", "input"].includes(element.type)) {
       issues.push({
-        id: generateIssueId(),
-        type: "focus",
-        severity: "medium",
-        description: `Element ${element.id} is not properly focusable`,
-        element,
-        suggestion: "Add accessible and focusable props",
+        id: `label-${element.id}`,
+        type: "label",
+        severity: "error",
+        element: element.id,
+        message: "Interactive element missing accessible label",
+        suggestion: "Add an accessibleLabel or aria-label attribute",
       });
     }
-  });
-
-  // Check for missing labels (simplified - in real implementation would traverse DOM)
-  // This is a placeholder for actual DOM traversal logic
-  const unlabeledElements = findUnlabeledElements();
-  unlabeledElements.forEach((element) => {
-    issues.push({
-      id: generateIssueId(),
-      type: "label",
-      severity: "high",
-      description: `Element ${element.id} missing accessibility label`,
-      element,
-      suggestion: "Add accessibilityLabel prop",
-    });
-  });
-
-  // Calculate accessibility score (0-100)
-  const score = calculateAccessibilityScore(issues, focusableElements.length);
-
-  return {
-    timestamp: Date.now(),
-    issues,
-    score,
-  };
-}
-
-/**
- * Find elements missing accessibility labels
- */
-function findUnlabeledElements(): FocusableElement[] {
-  // This is a simplified implementation
-  // In a real app, this would traverse the component tree
-  return getFocusableElements().filter((element) => {
-    // Check if element has proper labeling (simplified check)
-    return element.id.includes("button") || element.id.includes("input");
-  });
-}
-
-/**
- * Calculate accessibility score based on issues
- */
-function calculateAccessibilityScore(
-  issues: AccessibilityIssue[],
-  elementCount: number,
-): number {
-  if (elementCount === 0) {
-    return 100;
   }
-
-  const criticalIssues = issues.filter((i) => i.severity === "critical").length;
-  const highIssues = issues.filter((i) => i.severity === "high").length;
-  const mediumIssues = issues.filter((i) => i.severity === "medium").length;
-  const lowIssues = issues.filter((i) => i.severity === "low").length;
-
-  // Weight issues by severity
-  const weightedIssues =
-    criticalIssues * 10 + highIssues * 5 + mediumIssues * 2 + lowIssues * 1;
-  const maxPossibleScore = elementCount * 10;
 
   const score = Math.max(
     0,
-    Math.min(100, 100 - (weightedIssues / maxPossibleScore) * 100),
+    100 -
+      issues.filter((i) => i.severity === "error").length * 10 -
+      issues.filter((i) => i.severity === "warning").length * 5,
   );
-  return Math.round(score);
-}
 
-/**
- * Check color contrast for text elements
- */
-export function auditColorContrast(
-  foreground: string,
-  background: string,
-): AccessibilityIssue | null {
-  const contrast = checkContrast(foreground, background);
-
-  if (!contrast.passesAA) {
-    return {
-      id: generateIssueId(),
-      type: "contrast",
-      severity: "high",
-      description: `Insufficient contrast ratio: ${contrast.ratio.toFixed(2)} (minimum 4.5)`,
-      element: { id: "text", reactTag: 0, accessible: true, focusable: false },
-      suggestion: "Increase color contrast to meet WCAG AA standards",
-    };
-  }
-
-  return null;
-}
-
-function generateIssueId(): string {
-  return Math.random().toString(36).substr(2, 9);
+  return { screenId, timestamp: Date.now(), issues, score };
 }

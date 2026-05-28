@@ -1,230 +1,21 @@
 import React, { useEffect } from "react";
-import { View, Text, ActivityIndicator, type ViewStyle } from "react-native";
-import { createSheet } from "@/shared/ui/create-sheet";
+import { View, Text, ActivityIndicator } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  withTiming,
   withSpring,
-  withRepeat,
-  withSequence,
-  Easing,
 } from "react-native-reanimated";
 import { launchColors } from "@theme/tokens/launch-colors";
-interface ProgressBarProps {
-  progress: number;
-  height?: number;
-  backgroundColor?: string;
-  fillColor?: string;
-  animated?: boolean;
-  style?: ViewStyle;
-  showPercentage?: boolean;
-}
-export function ProgressBar({
-  progress,
-  height = 8,
-  backgroundColor = launchColors.hex_e1e4e8,
-  fillColor = launchColors.hex_4ecdc4,
-  animated = true,
-  style,
-  showPercentage = false,
-}: ProgressBarProps) {
-  const progressAnim = useSharedValue(0);
-  useEffect(() => {
-    progressAnim.value = animated
-      ? withTiming(Math.max(0, Math.min(100, progress)) / 100, {
-          duration: 500,
-          easing: Easing.out(Easing.ease),
-        })
-      : Math.max(0, Math.min(100, progress)) / 100;
-  }, [progress, animated, progressAnim]);
-  const fillStyle = useAnimatedStyle(() => ({
-    width: `${progressAnim.value * 100}%`,
-  }));
-  return (
-    <View style={style}>
-      <View
-        style={[
-          styles.progressContainer,
-          { height, backgroundColor, borderRadius: height / 2 },
-        ]}
-      >
-        <Animated.View
-          style={[
-            styles.progressFill,
-            { backgroundColor: fillColor, borderRadius: height / 2 },
-            fillStyle,
-          ]}
-        />
-      </View>
-      {showPercentage && (
-        <Text style={styles.progressText}>{Math.round(progress)}%</Text>
-      )}
-    </View>
-  );
-}
-interface SegmentedProgressProps {
-  segments: number;
-  completed: number;
-  height?: number;
-  gap?: number;
-}
-export function SegmentedProgress({
-  segments,
-  completed,
-  height = 8,
-  gap = 4,
-}: SegmentedProgressProps) {
-  return (
-    <View style={[styles.segmentedContainer, { gap }]}>
-      {Array.from({ length: segments }).map((_, i) => (
-        <View
-          key={i}
-          style={[
-            styles.segment,
-            {
-              height,
-              borderRadius: height / 2,
-              backgroundColor:
-                i < completed
-                  ? launchColors.hex_4ecdc4
-                  : launchColors.hex_e1e4e8,
-              flex: 1,
-            },
-          ]}
-        />
-      ))}
-    </View>
-  );
-}
-interface CircularProgressProps {
-  progress: number;
-  size?: number;
-  strokeWidth?: number;
-  color?: string;
-  backgroundColor?: string;
-  showText?: boolean;
-}
-export function CircularProgress({
-  progress,
-  size = 64,
-  strokeWidth = 6,
-  color = launchColors.hex_4ecdc4,
-  backgroundColor = launchColors.hex_e1e4e8,
-  showText = true,
-}: CircularProgressProps) {
-  const progressAnim = useSharedValue(0);
-  useEffect(() => {
-    progressAnim.value = withSpring(
-      Math.max(0, Math.min(100, progress)) / 100,
-      { damping: 15, stiffness: 100 },
-    );
-  }, [progress, progressAnim]);
-  return (
-    <View style={[styles.circularContainer, { width: size, height: size }]}>
-      <View style={styles.circularSvg}>
-        {}
-        <View
-          style={[
-            styles.circularBackground,
-            {
-              width: size,
-              height: size,
-              borderRadius: size / 2,
-              borderWidth: strokeWidth,
-              borderColor: backgroundColor,
-            },
-          ]}
-        />
-        {}
-        <Animated.View
-          style={[
-            styles.circularProgress,
-            {
-              width: size,
-              height: size,
-              borderRadius: size / 2,
-              borderWidth: strokeWidth,
-              borderColor: color,
-              borderTopColor: color,
-              borderRightColor: progress > 25 ? color : backgroundColor,
-              borderBottomColor: progress > 50 ? color : backgroundColor,
-              borderLeftColor: progress > 75 ? color : backgroundColor,
-            },
-            useAnimatedStyle(() => ({
-              transform: [{ rotate: `${progressAnim.value * 360}deg` }],
-            })),
-          ]}
-        />
-      </View>
-      {showText && (
-        <Text style={[styles.circularText, { fontSize: size * 0.25 }]}>
-          {Math.round(progress)}%
-        </Text>
-      )}
-    </View>
-  );
-}
-interface LoadingStateProps {
-  message?: string;
-  submessage?: string;
-  progress?: number;
-  showProgress?: boolean;
-}
-export function LoadingState({
-  message = "Loading...",
-  submessage,
-  progress,
-  showProgress = false,
-}: LoadingStateProps) {
-  return (
-    <View style={styles.loadingContainer}>
-      <ActivityIndicator size="large" color={launchColors.hex_4ecdc4} />
-      <Text style={styles.loadingMessage}>{message}</Text>
-      {submessage && <Text style={styles.loadingSubmessage}>{submessage}</Text>}
-      {showProgress && progress !== undefined && (
-        <ProgressBar
-          progress={progress}
-          style={styles.loadingProgress}
-          showPercentage
-        />
-      )}
-    </View>
-  );
-}
-function LoadingDot({ index }: { index: number }) {
-  const scale = useSharedValue(1);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      scale.value = withRepeat(
-        withSequence(
-          withTiming(1.5, { duration: 400, easing: Easing.inOut(Easing.ease) }),
-          withTiming(1, { duration: 400, easing: Easing.inOut(Easing.ease) }),
-        ),
-        -1,
-        true,
-      );
-    }, index * 150);
-    return () => clearTimeout(timer);
-  }, [index, scale]);
-  const dotStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-  }));
-  return <Animated.View style={[styles.dot, dotStyle]} />;
-}
-export function LoadingDots({ count = 3 }: { count?: number }) {
-  return (
-    <View style={styles.dotsContainer}>
-      {Array.from({ length: count }).map((_, i) => (
-        <LoadingDot key={i} index={i} />
-      ))}
-    </View>
-  );
-}
+import { styles } from "./progress-state.styles";
+
+export { ProgressBar, SegmentedProgress, CircularProgress } from "./progress-indicators";
+export { LoadingState, LoadingDots } from "./loading-states";
+
 interface StepProgressProps {
   steps: string[];
   currentStep: number;
 }
+
 export function StepProgress({ steps, currentStep }: StepProgressProps) {
   return (
     <View style={styles.stepsContainer}>
@@ -276,6 +67,7 @@ export function StepProgress({ steps, currentStep }: StepProgressProps) {
     </View>
   );
 }
+
 interface SuccessStateProps {
   title?: string;
   message: string;
@@ -283,6 +75,7 @@ interface SuccessStateProps {
   autoDismiss?: boolean;
   dismissDelay?: number;
 }
+
 export function SuccessState({
   title = "Success!",
   message,
@@ -312,12 +105,14 @@ export function SuccessState({
     </Animated.View>
   );
 }
+
 interface ProcessingStateProps {
   steps: {
     label: string;
     status: "pending" | "processing" | "completed" | "error";
   }[];
 }
+
 export function ProcessingState({ steps }: ProcessingStateProps) {
   return (
     <View style={styles.processingContainer}>
@@ -355,141 +150,3 @@ export function ProcessingState({ steps }: ProcessingStateProps) {
     </View>
   );
 }
-const styles = createSheet({
-  progressContainer: { overflow: "hidden", width: "100%" },
-  progressFill: { height: "100%" },
-  progressText: {
-    fontSize: 12,
-    color: launchColors.hex_666,
-    marginTop: 4,
-    textAlign: "right",
-  },
-  segmentedContainer: { flexDirection: "row", width: "100%" },
-  segment: { flex: 1 },
-  circularContainer: { justifyContent: "center", alignItems: "center" },
-  circularSvg: { position: "relative" },
-  circularBackground: { position: "absolute" },
-  circularProgress: { position: "absolute", transform: [{ rotate: "0deg" }] },
-  circularText: {
-    position: "absolute",
-    fontWeight: "700",
-    color: launchColors.hex_333,
-  },
-  loadingContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 24,
-  },
-  loadingMessage: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: launchColors.hex_333,
-    marginTop: 16,
-  },
-  loadingSubmessage: {
-    fontSize: 14,
-    color: launchColors.hex_666,
-    marginTop: 8,
-    textAlign: "center",
-  },
-  loadingProgress: { width: "100%", maxWidth: 200, marginTop: 16 },
-  dotsContainer: { flexDirection: "row", gap: 8, alignItems: "center" },
-  dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: launchColors.hex_4ecdc4,
-  },
-  stepsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-  },
-  stepItem: { alignItems: "center", flex: 1 },
-  stepCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: launchColors.hex_e1e4e8,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  stepCircleCompleted: { backgroundColor: launchColors.hex_4ecdc4 },
-  stepCircleCurrent: { backgroundColor: launchColors.hex_ffd93d },
-  stepNumber: { fontSize: 14, fontWeight: "600", color: launchColors.hex_666 },
-  stepNumberActive: { color: launchColors.hex_fff },
-  stepCheck: { fontSize: 16, color: launchColors.hex_fff, fontWeight: "700" },
-  stepLabel: { fontSize: 12, color: launchColors.hex_999, textAlign: "center" },
-  stepLabelCompleted: { color: launchColors.hex_4ecdc4 },
-  stepLabelCurrent: { color: launchColors.hex_333, fontWeight: "600" },
-  stepLine: {
-    position: "absolute",
-    top: 15,
-    left: "50%",
-    width: "100%",
-    height: 2,
-    backgroundColor: launchColors.hex_e1e4e8,
-    zIndex: -1,
-  },
-  stepLineCompleted: { backgroundColor: launchColors.hex_4ecdc4 },
-  successContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 32,
-  },
-  successIcon: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: launchColors.hex_4ecdc4,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  successIconText: {
-    fontSize: 40,
-    color: launchColors.hex_fff,
-    fontWeight: "700",
-  },
-  successTitle: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: launchColors.hex_333,
-    marginBottom: 8,
-  },
-  successMessage: {
-    fontSize: 16,
-    color: launchColors.hex_666,
-    textAlign: "center",
-  },
-  processingContainer: { gap: 16, padding: 16 },
-  processingItem: { flexDirection: "row", alignItems: "center", gap: 12 },
-  processingDot: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: launchColors.hex_e1e4e8,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  processingDotCompleted: { backgroundColor: launchColors.hex_4ecdc4 },
-  processingDotError: { backgroundColor: launchColors.hex_ff6b6b },
-  processingDotProcessing: { backgroundColor: launchColors.hex_ffd93d },
-  processingCheck: {
-    fontSize: 12,
-    color: launchColors.hex_fff,
-    fontWeight: "700",
-  },
-  processingError: {
-    fontSize: 12,
-    color: launchColors.hex_fff,
-    fontWeight: "700",
-  },
-  processingLabel: { fontSize: 14, color: launchColors.hex_999 },
-  processingLabelCompleted: {
-    color: launchColors.hex_4ecdc4,
-    textDecorationLine: "line-through",
-  },
-  processingLabelError: { color: launchColors.hex_ff6b6b },
-});

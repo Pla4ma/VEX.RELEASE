@@ -1,7 +1,5 @@
 /**
- * Accessibility Types
- *
- * Core accessibility interfaces and types for the VEX app.
+ * Accessibility system type definitions.
  */
 
 export interface AccessibilityPreferences {
@@ -24,12 +22,20 @@ export interface AccessibilityPreferences {
   voiceControl: boolean;
 }
 
-export interface ColorBlindPalette {
-  name: string;
-  description: string;
-  colors: Record<string, string>;
-  patterns: Record<string, string>;
-}
+export const DEFAULT_ACCESSIBILITY: AccessibilityPreferences = {
+  screenReaderOptimized: false,
+  announcementsEnabled: true,
+  reducedMotion: false,
+  animationsEnabled: true,
+  highContrast: false,
+  colorBlindMode: "none",
+  textScale: 1.0,
+  boldText: false,
+  simplifiedUI: false,
+  extendedTimeouts: false,
+  switchControl: false,
+  voiceControl: false,
+};
 
 export interface ContrastCheck {
   foreground: string;
@@ -39,21 +45,6 @@ export interface ContrastCheck {
   passesAAA: boolean;
 }
 
-export interface ScreenReaderAnnouncement {
-  id: string;
-  message: string;
-  priority: "polite" | "assertive";
-  timestamp: number;
-  delay?: number;
-}
-
-export interface AnimationConfig {
-  duration: number;
-  easing: string;
-  reducedMotion: boolean;
-  useNativeDriver?: boolean;
-}
-
 export type ColorBlindType =
   | "none"
   | "protanopia"
@@ -61,110 +52,60 @@ export type ColorBlindType =
   | "tritanopia"
   | "achromatopsia";
 
-export interface FocusableElement {
-  id: string;
-  reactTag: number;
-  accessible: boolean;
-  focusable: boolean;
+export interface ColorBlindPalette {
+  type: ColorBlindType;
+  name: string;
+  description: string;
+  colors: {
+    primary: string;
+    secondary: string;
+    success: string;
+    warning: string;
+    error: string;
+    info: string;
+  };
+  patterns: { success: string; warning: string; error: string };
 }
 
-export type AccessibilityIssue = AccessibilityIssueBase;
+export interface ScreenReaderAnnouncement {
+  id: string;
+  message: string;
+  priority: "polite" | "assertive";
+  timestamp: number;
+}
 
-export interface AccessibilityIssueBase {
+export interface AnimationConfig {
+  duration: number;
+  easing: string;
+  useReducedMotion: boolean;
+}
+
+export interface FocusableElement {
   id: string;
   type:
-    | "focus"
-    | "label"
-    | "contrast"
-    | "motion"
-    | "keyboard"
-    | "semantic"
-    | "touch"
-    | "screen-reader";
-  severity: "low" | "medium" | "high" | "critical";
-  description: string;
-  element?: FocusableElement;
-  suggestion?: string;
+    | "button"
+    | "link"
+    | "input"
+    | "checkbox"
+    | "radio"
+    | "select"
+    | "heading";
+  label: string;
+  order: number;
 }
 
 export interface AccessibilityAudit {
+  screenId: string;
   timestamp: number;
-  issues: AccessibilityIssueBase[];
+  issues: AccessibilityIssue[];
   score: number;
 }
 
-export interface AuditableComponentStyle {
-  color?: string;
-  backgroundColor?: string;
-  width?: number;
-  height?: number;
-  minWidth?: number;
-  minHeight?: number;
-  [key: string]: unknown;
-}
-
-export interface AuditableComponentProps {
-  accessible?: boolean;
-  accessibilityLabel?: string;
-  accessibilityRole?: string;
-  accessibilityHint?: string;
-  onPress?: unknown;
-  onLongPress?: unknown;
-  animated?: boolean;
-  useNativeDriver?: boolean;
-  style?: AuditableComponentStyle;
-  children?: unknown;
-  title?: string;
-  [key: string]: unknown;
-}
-
-export interface AuditableComponent {
-  type?: { displayName?: string } | string;
-  props?: AuditableComponentProps;
-}
-
-export interface AuditAccessibilityIssue {
+export interface AccessibilityIssue {
   id: string;
-  type: "error" | "warning" | "info";
-  category:
-    | "contrast"
-    | "focus"
-    | "keyboard"
-    | "screen-reader"
-    | "motion"
-    | "color"
-    | "semantic"
-    | "touch";
-  severity: "critical" | "major" | "moderate" | "minor";
+  type: "contrast" | "label" | "touch_target" | "heading" | "focus";
+  severity: "error" | "warning";
+  element: string;
   message: string;
-  recommendation: string;
-  element?: string;
-  wcagGuideline: string;
-  automated: boolean;
-}
-
-export interface AccessibilityAuditResult {
-  score: number;
-  issues: AuditAccessibilityIssue[];
-  passedChecks: string[];
-  failedChecks: string[];
-  summary: { critical: number; major: number; moderate: number; minor: number };
-  timestamp: number;
-}
-
-export interface ComponentAccessibilityConfig {
-  componentName: string;
-  requiresTesting: boolean;
-  customRules?: AccessibilityRule[];
-  interactiveElements?: string[];
-  requiredLabels?: string[];
-}
-
-export interface AccessibilityRule {
-  id: string;
-  description: string;
-  check: (element: AuditableComponent) => AuditAccessibilityIssue | null;
-  category: AuditAccessibilityIssue["category"];
-  severity: AuditAccessibilityIssue["severity"];
-  wcagGuideline: string;
+  suggestion: string;
 }

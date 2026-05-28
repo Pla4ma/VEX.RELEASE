@@ -13,3 +13,16 @@ export interface ValidationResult {
   warnings: ValidationError[];
   sanitized?: unknown;
 }
+
+export class AnalyticsValidationError extends Error {
+  constructor(
+    message: string,
+    public field: string,
+    public code: string,
+    public recoveryHint?: string,
+    public value?: unknown,
+  ) {
+    super(message);
+    this.name = "AnalyticsValidationError";
+  }
+}

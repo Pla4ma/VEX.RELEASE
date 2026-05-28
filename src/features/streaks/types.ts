@@ -1,141 +1,80 @@
-export interface Streak {
-  id: string;
-  userId: string;
-  currentDays: number;
-  longestDays: number;
-  lastQualifyingSessionAt: number | null;
-  currentDayCompletedAt: number | null;
-  shieldsAvailable: number;
-  gracePeriodUsed: boolean;
-  timezone: string;
-  createdAt: number;
-  updatedAt: number;
+export type StreakState =
+  | "ACTIVE"
+  | "AT_RISK"
+  | "CRITICAL"
+  | "BROKEN"
+  | "RECOVERING"
+  | "PROTECTED";
+
+export interface StreakStateInfo {
+  state: StreakState;
+  label: string;
+  description: string;
+  color: string;
+  icon: string;
+  animation: string;
+  urgency: "none" | "low" | "medium" | "high" | "critical";
+  coachMessage: string;
+  entryThreshold?: number;
+  exitThreshold?: number;
 }
-export interface StreakSummary {
-  id: string;
-  userId: string;
-  currentDays: number;
-  longestDays: number;
-  isAtRisk: boolean;
-  riskLevel: RiskLevel;
-  nextDeadline: number | null;
-  shieldAvailable: boolean;
-}
-export type RiskLevel = "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+
 export interface StreakMilestone {
-  id: string;
   days: number;
+  title: string;
   name: string;
   description: string;
-  rewardType: MilestoneRewardType;
-  rewardAmount: number;
-  rewardItemId: string | null;
-  badgeId: string | null;
+  badgeIcon: string;
+  rewardType: "COSMETIC" | "SHIELD" | "XP" | "FEATURE";
+  rewardId: string;
+  visualEffect: string;
   achieved: boolean;
   achievedAt: number | null;
+  rewards: Array<{ type: string; value: number }>;
 }
-export type MilestoneRewardType =
-  | "XP"
-  | "COINS"
-  | "GEMS"
-  | "ITEM"
-  | "BADGE"
-  | "STREAK_SHIELD";
-export interface StreakShield {
+
+export interface StreakInsurance {
   id: string;
   userId: string;
-  source: ShieldSource;
-  used: boolean;
-  usedAt: number | null;
-  expiresAt: number | null;
-  createdAt: number;
+  source: string;
+  count: number;
+  earnedAt: number;
 }
-export type ShieldSource =
+
+export type InsuranceSource =
+  | "MILESTONE_7"
+  | "MILESTONE_14"
   | "MILESTONE_30"
+  | "MILESTONE_100"
+  | "ACHIEVEMENT_COMPLETE"
   | "BOSS_DEFEAT"
-  | "SHOP_PURCHASE"
-  | "PROMOTIONAL";
-export interface StreakProtection {
+  | "PURCHASED"
+  | "SPECIAL_EVENT"
+  | "monthly_premium";
+
+export interface StreakRecoveryPlan {
   userId: string;
-  shieldsAvailable: number;
-  frozenUntil: number | null;
-  graceUsed: boolean;
-}
-export interface StreakRecovery {
-  userId: string;
+  daysLost: number;
+  sessionsRequired: number;
+  currentProgress: number;
+  completed: boolean;
+  reward: { type: string; value: number };
+  expiresAt: number;
   previousStreak: number;
-  restoredTo: number;
-  restoredAt: number;
-  source: RecoverySource;
+  isRecovering: boolean;
 }
-export type RecoverySource = "SHIELD" | "PURCHASE" | "SPECIAL_EVENT" | "MANUAL";
-export interface ComebackState {
-  isComeback: boolean;
-  daysAbsent: number;
-  streakBefore: number;
-  streakNow: number;
-  rewardMultiplier: number;
-  streakRestoreEligible: boolean;
+
+export interface StreakProtectionResult {
+  protected: boolean;
+  method: "INSURANCE" | "SHIELD" | "NONE";
+  insuranceId: string | null;
+  newState: StreakState;
   message: string;
 }
-export interface StreakCalendarDay {
-  date: string;
-  hasSession: boolean;
-  sessionCount: number;
-  totalDuration: number;
-  qualifiesForStreak: boolean;
-}
-export interface StreakCalendar {
-  month: number;
-  year: number;
-  days: StreakCalendarDay[];
-  currentStreakDays: number;
-  longestStreakInMonth: number;
-}
-export interface QualifyingSession {
-  sessionId: string;
-  completedAt: number;
-  duration: number;
-  qualityScore: number;
-}
-export interface StreakEngineResult {
-  action: StreakAction;
-  previousStreak: number;
-  newStreak: number;
-  milestoneReached: StreakMilestone | null;
-  shieldUsed: boolean;
-}
-export type StreakAction =
-  | "INCREMENTED"
-  | "MAINTAINED"
-  | "BROKEN"
-  | "SHIELD_PROTECTED"
-  | "FROZEN"
-  | "COME_BACK"
-  | "ALREADY_TODAY";
-export interface StreakMultiplier {
-  days: number;
-  multiplier: number;
-  xpBonus: number;
-  label: string;
-}
-export interface RecordSessionInput {
-  userId: string;
-  sessionId: string;
-  completedAt: number;
-  duration: number;
-  qualityScore: number;
-}
-export interface UseShieldInput {
-  userId: string;
-  reason: "MANUAL" | "AUTO";
-}
-export interface FreezeStreakInput {
-  userId: string;
-  durationHours: number;
-}
-export interface RestoreStreakInput {
-  userId: string;
-  targetDays: number;
-  source: RecoverySource;
+
+export interface InsuranceItem {
+  id: string;
+  source: string;
+  status: "active" | "used";
+  earnedAt: number;
 }
