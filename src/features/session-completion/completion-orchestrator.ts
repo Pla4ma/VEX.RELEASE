@@ -1,12 +1,10 @@
 import * as Sentry from "@sentry/react-native";
 import { z } from "zod";
 
-import { eventBus } from "../../events";
 import { getConnectionState } from "../../lib/repository/base";
 import { enqueue } from "../../lib/offline/queue";
 import { SessionSummarySchema } from "../../session/types";
 import { createDebugger } from "../../utils/debug";
-import { setOrchestratorHandlesCompletion } from "../../session/analytics/SessionAnalytics";
 import { invalidateCompletionQueries } from "./completion-query-invalidation";
 import { setCompletionSyncState } from "./completion-sync-state";
 import { applyCompletionSubsystems } from "./completion-subsystems";
@@ -19,10 +17,8 @@ import {
   createCompletionLedger,
   getCompletionLedgerByIdempotencyKey,
 } from "./repository";
-import {
-  buildPostSessionStoryViewModel,
-  type PostSessionStoryViewModel,
-} from "./story-view-model-service";
+import { buildPostSessionStoryViewModel } from "./story-view-model-service";
+import type { PostSessionStoryViewModel } from "./story-view-model-service";
 import {
   createSessionRecord,
   countCompletedSessions,
@@ -34,6 +30,8 @@ import {
 } from "./idempotency";
 import { getFocusProfile } from "../focus-profile/service";
 import { resolveInitialLane } from "../lane-engine/service";
+
+export { initializeSessionCompletionOrchestrator } from "./completion-orchestrator-init";
 
 const debug = createDebugger("session-completion:orchestrator");
 
@@ -47,8 +45,6 @@ const SessionCompletedEventSchema = z
   .strict();
 
 type SessionCompletedEvent = z.infer<typeof SessionCompletedEventSchema>;
-
-let initialized = false;
 
 export async function orchestrateSessionCompletion(
   event: SessionCompletedEvent,
@@ -140,7 +136,7 @@ export async function orchestrateSessionCompletion(
       summary,
     );
 
-    // LAYER 3.5: Personalization — lane profile, memory candidates, unlock decisions, reflection
+    // LAYER 3.5: Personalization
     let personalizationResult: CompletionPersonalizationResult | null = null;
     try {
       const sessionCount = await countCompletedSessions(parsed.userId).catch(
@@ -193,22 +189,4 @@ export async function orchestrateSessionCompletion(
     releaseKeyProcessing(key);
     throw error;
   }
-}
-
-export function initializeSessionCompletionOrchestrator(): void {
-  if (initialized) return;
-
-  initialized = true;
-  setOrchestratorHandlesCompletion(true);
-
-  eventBus.subscribe("session:completed", (rawEvent) => {
-    const parsed = SessionCompletedEventSchema.safeParse(rawEvent);
-    if (!parsed.success) return;
-
-    orchestrateSessionCompletion(parsed.data).catch((error: unknown) => {
-      Sentry.captureException(error, {
-        tags: { feature: "session-completion-orchestrator" },
-      });
-    });
-  });
 }

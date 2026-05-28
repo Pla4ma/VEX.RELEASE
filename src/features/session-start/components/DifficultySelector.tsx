@@ -21,55 +21,14 @@ import { Text } from "../../../components/primitives/Text";
 import { useHaptics } from "../../../utils/haptics";
 import { eventBus } from "../../../events";
 import * as Sentry from "@sentry/react-native";
-import { launchColors } from "@theme/tokens/launch-colors";
+import {
+  DIFFICULTY_OPTIONS,
+  type DifficultyOption,
+  type DifficultySelectorProps,
+  type SessionDifficulty,
+} from "./DifficultySelector.types";
 
-export type SessionDifficulty = "CASUAL" | "FOCUSED" | "DEEP_WORK";
-
-interface DifficultyOption {
-  id: SessionDifficulty;
-  icon: string;
-  name: string;
-  pauseLimit: string;
-  xpMultiplier: string;
-  description: string;
-  color: string;
-}
-
-interface DifficultySelectorProps {
-  selected: SessionDifficulty;
-  onChange: (difficulty: SessionDifficulty) => void;
-  disabled?: boolean;
-}
-
-const DIFFICULTY_OPTIONS: DifficultyOption[] = [
-  {
-    id: "CASUAL",
-    icon: "🌿",
-    name: "Casual",
-    pauseLimit: "Unlimited",
-    xpMultiplier: "50%",
-    description: "Good for maintenance",
-    color: launchColors.hex_22c55e, // Green
-  },
-  {
-    id: "FOCUSED",
-    icon: "⚡",
-    name: "Focused",
-    pauseLimit: "2 max",
-    xpMultiplier: "100%",
-    description: "Standard mode",
-    color: launchColors.hex_3b82f6, // Blue
-  },
-  {
-    id: "DEEP_WORK",
-    icon: "🔥",
-    name: "Deep Work",
-    pauseLimit: "0 pauses",
-    xpMultiplier: "150%",
-    description: "Maximum impact",
-    color: launchColors.hex_ef4444, // Red
-  },
-];
+export type { SessionDifficulty };
 
 export function DifficultySelector({
   selected,
@@ -85,7 +44,6 @@ export function DifficultySelector({
     }
     haptics.light();
 
-    // Track analytics
     Sentry.addBreadcrumb({
       category: "session",
       message: "Difficulty selected",
@@ -97,7 +55,6 @@ export function DifficultySelector({
       level: "info",
     });
 
-    // Publish event for integration
     eventBus.publish("session:difficulty_selected", {
       difficulty,
       timestamp: Date.now(),
@@ -160,7 +117,7 @@ function DifficultyCard({
 
   const borderColor = isSelected ? option.color : theme.colors.border.light;
   const backgroundColor = isSelected
-    ? `${option.color}10` // 10% opacity
+    ? `${option.color}10`
     : theme.colors.background.secondary;
 
   return (

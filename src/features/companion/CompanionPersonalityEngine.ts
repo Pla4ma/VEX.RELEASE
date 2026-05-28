@@ -8,6 +8,15 @@ import type {
   CompanionPersonalityState,
 } from "./personality-responses";
 import { RESPONSES } from "./personality-responses";
+import {
+  handleBossDefeated,
+  handleSessionCompleted,
+  handleStreakMilestone,
+  handleStreakBroken,
+  handleUserReturned,
+  handleLevelUp,
+  type TriggerFn,
+} from "./companion-event-handlers";
 
 const debug = createDebugger("companion-personality");
 const FEATURE_KEY = "companion_detail" as const;
@@ -34,27 +43,27 @@ class CompanionPersonalityEngine {
     this.unsubscribeFunctions = [
       eventBus.subscribe(
         "boss:defeated",
-        this.wrapHandler(this.handleBossDefeated.bind(this)),
+        this.wrapHandler((e) => handleBossDefeated(this.trigger, e)),
       ),
       eventBus.subscribe(
         "session:completed",
-        this.wrapHandler(this.handleSessionCompleted.bind(this)),
+        this.wrapHandler((e) => handleSessionCompleted(this.trigger, e)),
       ),
       eventBus.subscribe(
         "streak:milestone",
-        this.wrapHandler(this.handleStreakMilestone.bind(this)),
+        this.wrapHandler((e) => handleStreakMilestone(this.trigger, e)),
       ),
       eventBus.subscribe(
         "streak:broken",
-        this.wrapHandler(this.handleStreakBroken.bind(this)),
+        this.wrapHandler((e) => handleStreakBroken(this.trigger, e)),
       ),
       eventBus.subscribe(
         "coach:comeback_detected",
-        this.wrapHandler(this.handleUserReturned.bind(this)),
+        this.wrapHandler((e) => handleUserReturned(this.trigger, e)),
       ),
       eventBus.subscribe(
         "progression:level_up",
-        this.wrapHandler(this.handleLevelUp.bind(this)),
+        this.wrapHandler((e) => handleLevelUp(this.trigger, e)),
       ),
     ];
   }
@@ -89,11 +98,7 @@ class CompanionPersonalityEngine {
     };
   }
 
-  private triggerResponse(
-    type: PersonalityEventType,
-    userId: string,
-    customDialogue?: string[],
-  ): void {
+  private trigger: TriggerFn = (type, userId, customDialogue) => {
     const responses = RESPONSES[type];
     if (!responses || responses.length === 0) return;
     const response = responses[Math.floor(Math.random() * responses.length)];
@@ -124,72 +129,7 @@ class CompanionPersonalityEngine {
       this.state = { ...this.state, currentResponse: null, isAnimating: false };
       this.notifyListeners();
     }, response.duration);
-  }
-
-  private handleBossDefeated(event: unknown): void {
-    const payload = event as { bossName?: string; userId: string };
-    const customDialogue = payload.bossName
-      ? [`${payload.bossName} is down!`, "Your focus was unstoppable!"]
-      : undefined;
-    this.triggerResponse("BOSS_DEFEATED", payload.userId, customDialogue);
-  }
-
-  private handleSessionCompleted(event: unknown): void {
-    const payload = event as {
-      grade?: string;
-      purity?: number;
-      userId: string;
-    };
-    if (payload.grade === "S") {
-      this.triggerResponse("S_GRADE_SESSION", payload.userId);
-    } else if (payload.purity !== undefined && payload.purity >= 95) {
-      this.triggerResponse("PERFECT_SESSION", payload.userId);
-    }
-  }
-
-  private handleStreakMilestone(event: unknown): void {
-    const payload = event as { days: number; userId: string };
-    if (payload.days === 7 || payload.days === 14 || payload.days === 30) {
-      const customDialogue =
-        payload.days === 7
-          ? ["One week! We are just getting started."]
-          : payload.days === 14
-            ? ["14 days. That is not luck. That is discipline."]
-            : ["30-day streak!", "You have built something real."];
-      this.triggerResponse("STREAK_MILESTONE", payload.userId, customDialogue);
-    }
-  }
-
-  private handleStreakBroken(event: unknown): void {
-    const payload = event as { previousStreak: number; userId: string };
-    const customDialogue =
-      payload.previousStreak >= 7
-        ? [
-            `${payload.previousStreak}-day streak ends.`,
-            "But your skills do not. Reset with me.",
-          ]
-        : undefined;
-    this.triggerResponse("STREAK_BROKEN", payload.userId, customDialogue);
-  }
-
-  private handleUserReturned(event: unknown): void {
-    const payload = event as { daysAbsent: number; userId: string };
-    if (payload.daysAbsent >= 3) {
-      const customDialogue =
-        payload.daysAbsent >= 7
-          ? ["Been a while.", "But you are here now. That is enough."]
-          : ["You came back!", "That is what matters."];
-      this.triggerResponse("COMEBACK", payload.userId, customDialogue);
-    }
-  }
-
-  private handleLevelUp(event: unknown): void {
-    const payload = event as { newLevel: number; userId: string };
-    this.triggerResponse("LEVEL_UP", payload.userId, [
-      `Level ${payload.newLevel}!`,
-      "Growing stronger together.",
-    ]);
-  }
+  };
 
   getState(): CompanionPersonalityState {
     return { ...this.state };

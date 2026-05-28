@@ -1,38 +1,35 @@
 import React from "react";
-import {
-  View,
-  Image,
-  StyleSheet,
-  Pressable,
-  StyleProp,
-  ViewStyle,
-} from "react-native";
+import { View, Image, Pressable } from "react-native";
 import { useTheme } from "../theme";
 import { Text } from "./primitives";
-import { createSheet } from "@/shared/ui/create-sheet";
 import { launchColors } from "@theme/tokens/launch-colors";
-export interface AvatarProps {
-  source?: string | { uri: string };
-  name?: string;
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
-  status?: "online" | "away" | "offline" | "busy" | "none";
-  badge?: number;
-  borderColor?: string;
-  borderWidth?: number;
-  onPress?: () => void;
-  style?: StyleProp<ViewStyle>;
-  backgroundColor?: string;
-  shape?: "circle" | "rounded" | "square";
+import { SIZE_MAP, FONT_SIZE_MAP, STATUS_COLOR_MAP } from "./Avatar.types";
+import { avatarStyles } from "./Avatar.styles";
+import type { AvatarProps, AvatarShape } from "./Avatar.types";
+
+function getInitials(name: string): string {
+  const parts = name.trim().split(" ");
+  if (parts.length === 1) {
+    return parts[0]!.charAt(0).toUpperCase();
+  }
+  return (
+    parts[0]!.charAt(0) + parts[parts.length - 1]!.charAt(0)
+  ).toUpperCase();
 }
-const sizeMap = { xs: 24, sm: 32, md: 40, lg: 56, xl: 72, "2xl": 96 };
-const fontSizeMap = { xs: 10, sm: 12, md: 14, lg: 18, xl: 24, "2xl": 32 };
-const statusColorMap = {
-  online: launchColors.hex_22c55e,
-  away: launchColors.hex_eab308,
-  offline: launchColors.hex_94a3b8,
-  busy: launchColors.hex_ef4444,
-  none: "transparent",
-};
+
+function getBorderRadius(shape: AvatarShape, sizeValue: number): number {
+  switch (shape) {
+    case "circle":
+      return sizeValue / 2;
+    case "rounded":
+      return sizeValue / 4;
+    case "square":
+      return 4;
+    default:
+      return sizeValue / 2;
+  }
+}
+
 export const Avatar: React.FC<AvatarProps> = ({
   source,
   name = "?",
@@ -47,29 +44,9 @@ export const Avatar: React.FC<AvatarProps> = ({
   shape = "circle",
 }) => {
   const { theme } = useTheme();
-  const sizeValue = sizeMap[size];
-  const fontSize = fontSizeMap[size];
-  const getInitials = () => {
-    const parts = name.trim().split(" ");
-    if (parts.length === 1) {
-      return parts[0]!.charAt(0).toUpperCase();
-    }
-    return (
-      parts[0]!.charAt(0) + parts[parts.length - 1]!.charAt(0)
-    ).toUpperCase();
-  };
-  const getBorderRadius = () => {
-    switch (shape) {
-      case "circle":
-        return sizeValue / 2;
-      case "rounded":
-        return sizeValue / 4;
-      case "square":
-        return 4;
-      default:
-        return sizeValue / 2;
-    }
-  };
+  const sizeValue = SIZE_MAP[size];
+  const fontSize = FONT_SIZE_MAP[size];
+
   const renderContent = () => {
     if (source) {
       const imageSource = typeof source === "string" ? { uri: source } : source;
@@ -78,11 +55,11 @@ export const Avatar: React.FC<AvatarProps> = ({
           source={imageSource}
           resizeMode="cover"
           style={[
-            styles.image,
+            avatarStyles.image,
             {
               width: sizeValue,
               height: sizeValue,
-              borderRadius: getBorderRadius(),
+              borderRadius: getBorderRadius(shape, sizeValue),
               borderWidth,
               borderColor: borderColor || theme.colors.border.DEFAULT,
             },
@@ -94,11 +71,11 @@ export const Avatar: React.FC<AvatarProps> = ({
     return (
       <View
         style={[
-          styles.initialsContainer,
+          avatarStyles.initialsContainer,
           {
             width: sizeValue,
             height: sizeValue,
-            borderRadius: getBorderRadius(),
+            borderRadius: getBorderRadius(shape, sizeValue),
             backgroundColor: bgColor,
             borderWidth,
             borderColor: borderColor || theme.colors.border.DEFAULT,
@@ -107,25 +84,26 @@ export const Avatar: React.FC<AvatarProps> = ({
       >
         <Text
           style={[
-            styles.initials,
+            avatarStyles.initials,
             { fontSize, color: launchColors.hex_ffffff, fontWeight: "600" },
           ]}
         >
-          {getInitials()}
+          {getInitials(name)}
         </Text>
       </View>
     );
   };
+
   const renderStatus = () => {
     if (status === "none") {
       return null;
     }
     const statusSize = Math.max(8, sizeValue / 5);
-    const statusColor = statusColorMap[status];
+    const statusColor = STATUS_COLOR_MAP[status];
     return (
       <View
         style={[
-          styles.status,
+          avatarStyles.status,
           {
             width: statusSize,
             height: statusSize,
@@ -140,6 +118,7 @@ export const Avatar: React.FC<AvatarProps> = ({
       />
     );
   };
+
   const renderBadge = () => {
     if (!badge || badge <= 0) {
       return null;
@@ -149,7 +128,7 @@ export const Avatar: React.FC<AvatarProps> = ({
     return (
       <View
         style={[
-          styles.badge,
+          avatarStyles.badge,
           {
             minWidth: badgeSize,
             height: badgeSize,
@@ -162,27 +141,29 @@ export const Avatar: React.FC<AvatarProps> = ({
           },
         ]}
       >
-        <Text style={[styles.badgeText, { fontSize: badgeSize / 2.5 }]}>
+        <Text style={[avatarStyles.badgeText, { fontSize: badgeSize / 2.5 }]}>
           {displayBadge}
         </Text>
       </View>
     );
   };
+
   const AvatarContent = (
     <View
-      style={[styles.container, { width: sizeValue, height: sizeValue }, style]}
+      style={[avatarStyles.container, { width: sizeValue, height: sizeValue }, style]}
     >
       {renderContent()}
       {renderStatus()}
       {renderBadge()}
     </View>
   );
+
   if (onPress) {
     return (
       <Pressable
         onPress={onPress}
         style={({ pressed }) => [
-          styles.container,
+          avatarStyles.container,
           { width: sizeValue, height: sizeValue },
           style,
           pressed && { opacity: 0.8 },
@@ -197,22 +178,5 @@ export const Avatar: React.FC<AvatarProps> = ({
   }
   return AvatarContent;
 };
-const styles = createSheet({
-  container: { position: "relative" },
-  image: { resizeMode: "cover" },
-  initialsContainer: { justifyContent: "center", alignItems: "center" },
-  initials: { textAlign: "center" },
-  status: { position: "absolute" },
-  badge: {
-    position: "absolute",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 4,
-  },
-  badgeText: {
-    color: launchColors.hex_ffffff,
-    fontWeight: "700",
-    textAlign: "center",
-  },
-});
+
 export default Avatar;

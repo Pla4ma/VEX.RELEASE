@@ -10,21 +10,11 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { AppScreen, Button, Card } from "../../../components/primitives";
 import { Text } from "../../../components/primitives/Text";
-import {
-  ExtractionProgress,
-  InputTypeSelector,
-  PdfUploader,
-  TextPasteInput,
-  YouTubeInput,
-} from "../components";
+import { ContentInputActiveTab, InputTypeSelector } from "../components";
 import { UI_TEXT } from "../constants";
 import { useContentInput } from "../hooks";
 import { useTheme } from "../../../theme";
-import type {
-  ContentSourceType,
-  ContentStudyStackParamList,
-  InputTab,
-} from "../types";
+import type { ContentStudyStackParamList } from "../types";
 
 type ContentInputRouteProp = RouteProp<
   ContentStudyStackParamList,
@@ -34,12 +24,6 @@ type ContentInputNavigationProp = NativeStackNavigationProp<
   ContentStudyStackParamList,
   "ContentInput"
 >;
-
-const TAB_TO_CONTENT_TYPE: Record<InputTab, ContentSourceType> = {
-  paste: "PASTE",
-  pdf: "PDF",
-  youtube: "YOUTUBE",
-};
 
 export function ContentInputScreen(): JSX.Element {
   const navigation = useNavigation<ContentInputNavigationProp>();
@@ -102,8 +86,8 @@ export function ContentInputScreen(): JSX.Element {
     try {
       const result = await submit();
       navigation.navigate("ContentReview", { contentId: result.contentId });
-    } catch (error) {
-      captureSilentFailure(error, {
+    } catch (submitError) {
+      captureSilentFailure(submitError, {
         feature: "content-study",
         operation: "ui-fallback",
         type: "ui",
@@ -111,52 +95,6 @@ export function ContentInputScreen(): JSX.Element {
       setShowExtractionProgress(false);
     }
   }, [navigation, state.activeTab, submit]);
-
-  const renderActiveInput = (): JSX.Element => {
-    if (showExtractionProgress) {
-      return (
-        <ExtractionProgress
-          stage={state.activeTab === "pdf" ? "uploading" : "processing"}
-          progress={
-            state.activeTab === "pdf" ? Math.max(uploadProgress, 15) : 30
-          }
-          contentType={TAB_TO_CONTENT_TYPE[state.activeTab]}
-        />
-      );
-    }
-
-    if (state.activeTab === "pdf") {
-      return (
-        <PdfUploader
-          selectedFile={state.selectedFile}
-          onFileSelect={setSelectedFile}
-          disabled={isSubmitting}
-          uploadProgress={uploadProgress}
-          uploadError={error}
-        />
-      );
-    }
-
-    if (state.activeTab === "youtube") {
-      return (
-        <YouTubeInput
-          value={state.youtubeUrl}
-          onChange={setYoutubeUrl}
-          disabled={isSubmitting}
-          isExtracting={isSubmitting}
-        />
-      );
-    }
-
-    return (
-      <TextPasteInput
-        value={state.pastedText}
-        onChange={setPastedText}
-        disabled={isSubmitting}
-        autoFocus
-      />
-    );
-  };
 
   return (
     <AppScreen keyboardAvoiding contentStyle={{ gap: theme.spacing[5] }}>
@@ -186,7 +124,19 @@ export function ContentInputScreen(): JSX.Element {
         variant="elevated"
         style={{ minHeight: theme.spacing[8] * 4 }}
       >
-        {renderActiveInput()}
+        <ContentInputActiveTab
+          activeTab={state.activeTab}
+          showExtractionProgress={showExtractionProgress}
+          uploadProgress={uploadProgress}
+          pastedText={state.pastedText}
+          youtubeUrl={state.youtubeUrl}
+          selectedFile={state.selectedFile}
+          isSubmitting={isSubmitting}
+          error={error}
+          setPastedText={setPastedText}
+          setYoutubeUrl={setYoutubeUrl}
+          setSelectedFile={setSelectedFile}
+        />
       </Card>
 
       {error && !showExtractionProgress ? (

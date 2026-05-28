@@ -1,25 +1,13 @@
 import { createDebugger } from "../utils/debug";
 import { capture } from "../shared/analytics/analytics-service";
 import { StreakEvents } from "../shared/analytics/analytics-events";
+import type { StreakData, StreakUpdate } from "./streak-types";
+import { calculateStreakUpdate } from "./streak-calculations";
+
+export type { StreakData, StreakUpdate };
+
 const debug = createDebugger("streak-service");
-export interface StreakData {
-  currentStreak: number;
-  longestStreak: number;
-  lastSessionDate: string | null;
-  streakHistory: {
-    date: string;
-    sessionsCompleted: number;
-    maintained: boolean;
-  }[];
-  isAtRisk: boolean;
-  hoursRemaining: number;
-}
-export interface StreakUpdate {
-  newStreak: number;
-  streakMaintained: boolean;
-  streakBroken: boolean;
-  newLongestStreak: boolean;
-}
+
 class StreakService {
   private userId: string = "";
   private streakData: StreakData = {
@@ -30,13 +18,16 @@ class StreakService {
     isAtRisk: false,
     hoursRemaining: 24,
   };
+
   setUserId(userId: string): void {
     this.userId = userId;
     debug.info("Streak service initialized for user:", userId);
   }
+
   getStreakData(): StreakData {
     return { ...this.streakData };
   }
+
   async updateStreak(sessionDate?: string): Promise<StreakUpdate> {
     if (!this.userId) {
       debug.error("No user ID set for streak service");
@@ -47,11 +38,10 @@ class StreakService {
         newLongestStreak: false,
       };
     }
-    const today = new Date();
-    const sessionDateTime = sessionDate ? new Date(sessionDate) : today;
+    const sessionDateTime = sessionDate ? new Date(sessionDate) : new Date();
     const previousStreak = this.streakData.currentStreak;
     try {
-      const update = this.calculateStreakUpdate(sessionDateTime);
+      const update = calculateStreakUpdate(this.streakData, sessionDateTime);
       this.streakData.currentStreak = update.newStreak;
       this.streakData.lastSessionDate = sessionDateTime.toISOString();
       if (update.newLongestStreak) {
@@ -84,58 +74,7 @@ class StreakService {
       };
     }
   }
-  private calculateStreakUpdate(sessionDate: Date): StreakUpdate {
-    const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const sessionDay = new Date(
-      sessionDate.getFullYear(),
-      sessionDate.getMonth(),
-      sessionDate.getDate(),
-    );
-    const lastSessionDay = this.streakData.lastSessionDate
-      ? new Date(
-          new Date(this.streakData.lastSessionDate).getFullYear(),
-          new Date(this.streakData.lastSessionDate).getMonth(),
-          new Date(this.streakData.lastSessionDate).getDate(),
-        )
-      : null;
-    let newStreak = this.streakData.currentStreak;
-    let streakMaintained = false;
-    let streakBroken = false;
-    let newLongestStreak = false;
-    if (!lastSessionDay) {
-      newStreak = 1;
-      streakMaintained = true;
-    } else if (sessionDay.getTime() === today.getTime()) {
-      newStreak = this.streakData.currentStreak;
-      streakMaintained = true;
-    } else if (sessionDay.getTime() === today.getTime() - 24 * 60 * 60 * 1000) {
-      newStreak = this.streakData.currentStreak + 1;
-      streakMaintained = true;
-    } else if (sessionDay.getTime() < today.getTime() - 24 * 60 * 60 * 1000) {
-      const daysSinceLastSession = Math.floor(
-        (today.getTime() - lastSessionDay.getTime()) / (24 * 60 * 60 * 1000),
-      );
-      if (daysSinceLastSession > 1) {
-        newStreak = 1;
-        streakBroken = true;
-        streakMaintained = false;
-      } else {
-        newStreak = this.streakData.currentStreak + 1;
-        streakMaintained = true;
-      }
-    } else if (sessionDay.getTime() > today.getTime()) {
-      debug.warn("Session date is in the future, ignoring");
-      return {
-        newStreak: this.streakData.currentStreak,
-        streakMaintained: false,
-        streakBroken: false,
-        newLongestStreak: false,
-      };
-    }
-    newLongestStreak = newStreak > this.streakData.longestStreak;
-    return { newStreak, streakMaintained, streakBroken, newLongestStreak };
-  }
+
   private addToStreakHistory(sessionDate: Date, maintained: boolean): void {
     const dateStr = sessionDate.toISOString().split("T")[0]!;
     this.streakData.streakHistory = this.streakData.streakHistory.filter(
@@ -147,12 +86,10 @@ class StreakService {
       maintained,
     });
     if (this.streakData.streakHistory.length > 30) {
-      this.streakData.streakHistory = this.streakData.streakHistory.slice(
-        0,
-        30,
-      );
+      this.streakData.streakHistory = this.streakData.streakHistory.slice(0, 30);
     }
   }
+
   private updateRiskStatus(): void {
     if (!this.streakData.lastSessionDate) {
       this.streakData.isAtRisk = false;
@@ -167,6 +104,7 @@ class StreakService {
       hoursSinceLastSession > 20 && this.streakData.currentStreak > 0;
     this.streakData.hoursRemaining = Math.max(0, 24 - hoursSinceLastSession);
   }
+
   getStreakSummary() {
     return {
       currentStreak: this.streakData.currentStreak,
@@ -177,9 +115,11 @@ class StreakService {
       streakHistory: this.streakData.streakHistory.slice(0, 7),
     };
   }
+
   canClaimStreakFreeze(): boolean {
     return this.streakData.isAtRisk && this.streakData.currentStreak >= 3;
   }
+
   async applyStreakFreeze(): Promise<boolean> {
     if (!this.canClaimStreakFreeze()) {
       debug.warn("Cannot apply streak freeze - conditions not met");
@@ -203,6 +143,7 @@ class StreakService {
       return false;
     }
   }
+
   reset(): void {
     this.userId = "";
     this.streakData = {
@@ -216,4 +157,5 @@ class StreakService {
     debug.info("Streak service reset");
   }
 }
+
 export const streakService = new StreakService();

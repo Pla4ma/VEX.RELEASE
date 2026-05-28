@@ -1,59 +1,26 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { Pressable } from "react-native";
 import { useTheme } from "../../theme";
 import { Box, Text, Card } from "../../components/primitives";
 import { Icon } from "../../icons";
-import { useUIStore } from "../../store/index";
 import { launchColors } from "@theme/tokens/launch-colors";
 import { PasswordField } from "./PasswordField";
+import { usePasswordChange } from "./usePasswordChange";
 
 export const PasswordChangeSection: React.FC = () => {
   const { theme } = useTheme();
-  const { showToast } = useUIStore();
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPasswordFields, setShowPasswordFields] = useState(false);
-  const [isChangingPassword, setIsChangingPassword] = useState(false);
-
-  const handleChangePassword = useCallback(async () => {
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      showToast({
-        message: "Please fill in all password fields",
-        type: "error",
-        duration: 3000,
-      });
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      showToast({
-        message: "New passwords do not match",
-        type: "error",
-        duration: 3000,
-      });
-      return;
-    }
-    if (newPassword.length < 8) {
-      showToast({
-        message: "Password must be at least 8 characters",
-        type: "error",
-        duration: 3000,
-      });
-      return;
-    }
-    setIsChangingPassword(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    setIsChangingPassword(false);
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    setShowPasswordFields(false);
-    showToast({
-      message: "Password changed successfully",
-      type: "success",
-      duration: 3000,
-    });
-  }, [currentPassword, newPassword, confirmPassword, showToast]);
+  const {
+    currentPassword,
+    setCurrentPassword,
+    newPassword,
+    setNewPassword,
+    confirmPassword,
+    setConfirmPassword,
+    showPasswordFields,
+    setShowPasswordFields,
+    isChangingPassword,
+    handleChangePassword,
+  } = usePasswordChange();
 
   return (
     <Box px={16} mb={24}>

@@ -26,6 +26,7 @@ import { Box } from "../../../components/primitives/Box";
 import { Button } from "../../../components/primitives/Button";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
+import { CharacterCounter } from "./CharacterCounter";
 
 interface OnboardingSetNameProps {
   initialName?: string;
@@ -35,30 +36,6 @@ interface OnboardingSetNameProps {
 
 const DEFAULT_NAME = "Champion";
 const MAX_LENGTH = 20;
-
-/**
- * Character counter component
- */
-function CharacterCounter({
-  current,
-  max,
-}: {
-  current: number;
-  max: number;
-}): JSX.Element {
-  const { theme } = useTheme();
-  const isNearLimit = current >= max - 3;
-
-  return (
-    <Text
-      variant="caption"
-      color={isNearLimit ? "warning.DEFAULT" : "text.tertiary"}
-      fontWeight={isNearLimit ? "600" : "400"}
-    >
-      {current}/{max}
-    </Text>
-  );
-}
 
 /**
  * Main name setup component

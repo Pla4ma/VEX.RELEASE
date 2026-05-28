@@ -10,35 +10,10 @@ import { useDeleteAccount } from "../../features/account-deletion/hooks";
 import { useAuthStore, useUIStore } from "../../store/index";
 import { usePaywall } from "../../shared/monetization";
 import { PrivacyToggleRow } from "./PrivacyToggleRow";
+import { TOGGLE_ROWS } from "./privacy-toggle-data";
+import type { ToggleKey } from "./privacy-toggle-data";
 
 type Props = NativeStackScreenProps<SettingsStackParams, "PrivacySettings">;
-type ToggleKey = "activitySharing" | "squadFeed" | "analytics";
-
-const TOGGLE_ROWS: {
-  key: ToggleKey;
-  title: string;
-  description: string;
-  icon: string;
-}[] = [
-  {
-    key: "activitySharing",
-    title: "Activity Sharing",
-    description: "Show completed sessions to approved social surfaces.",
-    icon: "users",
-  },
-  {
-    key: "squadFeed",
-    title: "Squad Feed Visibility",
-    description: "Allow eligible squad members to see your focus activity.",
-    icon: "message-circle",
-  },
-  {
-    key: "analytics",
-    title: "Privacy-Safe Analytics",
-    description: "Share usage patterns after private fields are stripped.",
-    icon: "bar-chart-2",
-  },
-];
 
 export const PrivacySettingsScreen: React.FC<Props> = () => {
   const { theme } = useTheme();

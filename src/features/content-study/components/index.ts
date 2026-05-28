@@ -3,6 +3,7 @@
  * Reusable UI components for the content study feature
  */
 
+export { ContentInputActiveTab } from "./ContentInputActiveTab";
 export { InputTypeSelector } from "./InputTypeSelector";
 export { TextPasteInput } from "./TextPasteInput";
 export { PdfUploader } from "./PdfUploader";

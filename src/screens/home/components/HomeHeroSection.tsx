@@ -1,7 +1,6 @@
 import React, { useMemo } from "react";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { z } from "zod";
 
 import { ErrorState } from "../../../components/states/ErrorState";
 import { useHomePriority } from "../../../features/home-spine/hooks";
@@ -16,48 +15,15 @@ import {
 } from "../../../features/liveops-config";
 import type { HomeSurfaceMap } from "../../../features/home-experience/surface-decision-schemas";
 import type { FirstWeekExperience } from "../../../features/personalization/first-week-schemas";
-import type {
-  ExtendedRootStackParams,
-  SessionStackParams,
-} from "../../../navigation/types";
+import type { ExtendedRootStackParams } from "../../../navigation/types";
 import type { HomeController } from "../hooks/home-controller-types";
 import { HomeHeroCard } from "./HomeHeroCard";
+import {
+  buildOfflineFallback,
+  toSessionSetupParams,
+} from "./HomeHeroSection.utils";
 
 type NavigationProp = NativeStackNavigationProp<ExtendedRootStackParams>;
-
-const SessionSetupParamsSchema = z
-  .object({
-    presetMode: z
-      .enum(["LIGHT_FOCUS", "DEEP_WORK", "SPRINT", "STUDY"])
-      .optional(),
-    recommendationId: z.string().uuid().optional(),
-    suggestedDurationSeconds: z.number().int().positive().optional(),
-  })
-  .strict();
-
-function toSessionSetupParams(
-  params: Record<string, unknown> | undefined,
-): SessionStackParams["SessionSetup"] {
-  return SessionSetupParamsSchema.parse(params ?? {});
-}
-
-function buildOfflineFallback(
-  priority: HomePrimaryPriority,
-): HomePrimaryPriority {
-  if (priority.cta.action === "OPEN_SESSION_SETUP") {
-    return priority;
-  }
-  return {
-    ...priority,
-    cta: {
-      action: "OPEN_SESSION_SETUP",
-      params: { presetMode: "DEEP_WORK", suggestedDurationSeconds: 15 * 60 },
-      text: "Start Focus Offline",
-    },
-    reason:
-      "Network-only surfaces are paused right now. You can still start a clean local session.",
-  };
-}
 
 interface HomeHeroSectionProps {
   controller: HomeController;
