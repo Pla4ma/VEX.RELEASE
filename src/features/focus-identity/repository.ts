@@ -1,76 +1,17 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
-import { z } from "zod";
 import { getSupabaseClient } from "../../config/supabase";
-import * as Sentry from "@sentry/react-native";
-import type {
-  FocusIdentityProfile,
-  FocusScoreFactors,
-} from "./FocusIdentityEngine";
-import { launchColors } from "@theme/tokens/launch-colors";
-class RepositoryError extends Error {
-  constructor(
-    public operation: string,
-    public originalError: unknown,
-  ) {
-    super(`Repository error in ${operation}: ${originalError}`);
-    this.name = "RepositoryError";
-  }
-}
-async function withRetry<T>(
-  operation: () => Promise<T>,
-  operationName: string,
-  maxRetries = 3,
-  delayMs = 1000,
-): Promise<T> {
-  let lastError: unknown;
-  for (let attempt = 1; attempt <= maxRetries; attempt++) {
-    try {
-      return await operation();
-    } catch (error) {
-      lastError = error;
-      if (attempt === maxRetries) {
-        Sentry.captureException(error, {
-          tags: { repository: "focus-identity", operation: operationName },
-          extra: { attempt, maxRetries },
-        });
-        throw new RepositoryError(operationName, error);
-      }
-      await new Promise((resolve) => setTimeout(resolve, delayMs * attempt));
-    }
-  }
-  throw new RepositoryError(operationName, lastError);
-}
-const FocusProfileRowSchema = z.object({
-  id: z.string().uuid(),
-  user_id: z.string().uuid(),
-  current_score: z.number().min(300).max(850),
-  previous_score: z.number(),
-  percentile_rank: z.number().min(0).max(100),
-  band_label: z.string(),
-  band_title: z.string(),
-  identity_statement: z.string(),
-  streak_in_current_band: z.number(),
-  total_calculations: z.number(),
-  first_score_date: z.string(),
-  is_in_recovery: z.boolean(),
-  recovery_start_date: z.string().nullable(),
-  recovery_progress: z.number(),
-  pre_lapse_score: z.number().nullable(),
-  top_strength: z.string(),
-  top_weakness: z.string(),
-  recommended_actions: z.array(z.string()),
-  created_at: z.string(),
-  updated_at: z.string(),
-});
-const ScoreHistoryRowSchema = z.object({
-  id: z.string().uuid(),
-  user_id: z.string().uuid(),
-  profile_id: z.string().uuid(),
-  date: z.string(),
-  score: z.number(),
-  reason: z.string(),
-  created_at: z.string(),
-});
+import type { FocusIdentityProfile } from "./FocusIdentityEngine";
+import { withRetry, FocusProfileRowSchema } from "./repository-helpers";
+import { transformRowToProfile } from "./repository-transforms";
+import {
+  insertScoreHistory,
+  insertScoreHistoryBatch,
+} from "./repository-score-history";
+
+// Re-export split modules for backward compatibility
+export { insertScoreHistory, insertScoreHistoryBatch, getScoreHistory } from "./repository-score-history";
+export { getMonthlyReportData, saveMonthlyReportData, isRepositoryHealthy } from "./repository-monthly-report";
+export type { MonthlyReportData } from "./repository-monthly-report";
+
 export async function getFocusProfile(
   userId: string,
 ): Promise<FocusIdentityProfile | null> {
@@ -97,6 +38,7 @@ export async function getFocusProfile(
     return transformRowToProfile(parsed.data);
   }, "getFocusProfile");
 }
+
 export async function createFocusProfile(
   userId: string,
   profile: Omit<FocusIdentityProfile, "userId">,
@@ -134,6 +76,7 @@ export async function createFocusProfile(
     return transformRowToProfile(data);
   }, "createFocusProfile");
 }
+
 export async function updateFocusProfile(
   userId: string,
   updates: Partial<FocusIdentityProfile>,
@@ -202,67 +145,7 @@ export async function updateFocusProfile(
     return transformRowToProfile(data);
   }, "updateFocusProfile");
 }
-export async function insertScoreHistory(
-  userId: string,
-  profileId: string,
-  entry: { date: string; score: number; reason: string },
-): Promise<void> {
-  return withRetry(async () => {
-    const supabase = getSupabaseClient();
-    const { error } = await supabase
-      .from("focus_score_history")
-      .insert({
-        user_id: userId,
-        profile_id: profileId,
-        date: entry.date,
-        score: entry.score,
-        reason: entry.reason,
-      });
-    if (error) {
-      throw error;
-    }
-  }, "insertScoreHistory");
-}
-export async function insertScoreHistoryBatch(
-  userId: string,
-  profileId: string,
-  entries: Array<{ date: string; score: number; reason: string }>,
-): Promise<void> {
-  return withRetry(async () => {
-    const supabase = getSupabaseClient();
-    const rows = entries.map((entry) => ({
-      user_id: userId,
-      profile_id: profileId,
-      date: entry.date,
-      score: entry.score,
-      reason: entry.reason,
-    }));
-    const { error } = await supabase.from("focus_score_history").insert(rows);
-    if (error) {
-      throw error;
-    }
-  }, "insertScoreHistoryBatch");
-}
-export async function getScoreHistory(
-  userId: string,
-  days: number = 90,
-): Promise<Array<{ date: string; score: number; reason: string }>> {
-  return withRetry(async () => {
-    const supabase = getSupabaseClient();
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - days);
-    const { data, error } = await supabase
-      .from("focus_score_history")
-      .select("date, score, reason")
-      .eq("user_id", userId)
-      .gte("date", cutoffDate.toISOString().split("T")[0])
-      .order("date", { ascending: true });
-    if (error) {
-      throw error;
-    }
-    return data || [];
-  }, "getScoreHistory");
-}
+
 export async function getFocusProfileForMigration(
   userId: string,
 ): Promise<{
@@ -277,6 +160,7 @@ export async function getFocusProfileForMigration(
     return { localProfile, remoteProfile };
   }, "getFocusProfileForMigration");
 }
+
 export async function deleteFocusProfile(userId: string): Promise<void> {
   return withRetry(async () => {
     const supabase = getSupabaseClient();
@@ -289,180 +173,4 @@ export async function deleteFocusProfile(userId: string): Promise<void> {
       throw error;
     }
   }, "deleteFocusProfile");
-}
-function transformRowToProfile(
-  row: z.infer<typeof FocusProfileRowSchema>,
-): FocusIdentityProfile {
-  return {
-    userId: row.user_id,
-    currentScore: row.current_score,
-    previousScore: row.previous_score,
-    scoreHistory: [],
-    percentileRank: row.percentile_rank,
-    band: {
-      min:
-        row.current_score >= 800
-          ? 800
-          : row.current_score >= 740
-            ? 740
-            : row.current_score >= 670
-              ? 670
-              : row.current_score >= 580
-                ? 580
-                : row.current_score >= 500
-                  ? 500
-                  : row.current_score >= 420
-                    ? 420
-                    : 300,
-      max:
-        row.current_score >= 800
-          ? 850
-          : row.current_score >= 740
-            ? 799
-            : row.current_score >= 670
-              ? 739
-              : row.current_score >= 580
-                ? 669
-                : row.current_score >= 500
-                  ? 579
-                  : row.current_score >= 420
-                    ? 499
-                    : 419,
-      label: row.band_label,
-      title: row.band_title,
-      color: launchColors.hex_4caf50,
-      percentile: row.percentile_rank,
-    },
-    factors: {
-      consistency: {
-        score: 50,
-        sessionsLast30Days: 0,
-        targetSessionsPerWeek: 4,
-        actualConsistency: 0,
-        missedDaysLast30Days: 0,
-      },
-      streakStability: {
-        score: 50,
-        currentStreak: 0,
-        longestStreak: 0,
-        averageStreakLength: 0,
-        totalStreaksStarted: 0,
-        streakBreakFrequency: 0,
-      },
-      sessionQuality: {
-        score: 50,
-        averageFocusPurity: 0,
-        averageGrade: "D",
-        perfectSessionsCount: 0,
-        averageSessionDuration: 0,
-      },
-      diversity: {
-        score: 0,
-        uniqueSessionModes: 0,
-        uniqueTimeSlots: 0,
-        uniqueDaysOfWeek: 0,
-        weekendSessions: 0,
-        contextVariety: 0,
-      },
-      recency: {
-        score: 50,
-        daysSinceLastSession: 999,
-        last7DayActivity: 0,
-        last30DayActivity: 0,
-        trendDirection: "STABLE",
-        velocity: 0,
-      },
-    },
-    identityStatement: row.identity_statement,
-    streakInCurrentBand: row.streak_in_current_band,
-    totalScoreCalculations: row.total_calculations,
-    firstScoreDate: row.first_score_date,
-    isInRecovery: row.is_in_recovery,
-    recoveryStartDate: row.recovery_start_date,
-    recoveryProgress: row.recovery_progress,
-    preLapseScore: row.pre_lapse_score,
-    topStrength: row.top_strength as keyof FocusScoreFactors,
-    topWeakness: row.top_weakness as keyof FocusScoreFactors,
-    recommendedActions: row.recommended_actions,
-    monthlyReport: null,
-    updatedAt: new Date(row.updated_at).getTime(),
-  };
-}
-export interface MonthlyReportData {
-  month: string;
-  startingScore: number;
-  endingScore: number;
-  change: number;
-  sessionsCompleted: number;
-  grade: "A+" | "A" | "B+" | "B" | "C" | "D";
-  highlight: string;
-}
-export async function getMonthlyReportData(
-  userId: string,
-  yearMonth: string,
-): Promise<MonthlyReportData | null> {
-  return withRetry(async () => {
-    const supabase = getSupabaseClient();
-    const { data, error } = await supabase
-      .from("focus_monthly_reports")
-      .select("*")
-      .eq("user_id", userId)
-      .eq("month", yearMonth)
-      .single();
-    if (error) {
-      if (error.code === "PGRST116") {
-        return null;
-      }
-      throw new RepositoryError("getMonthlyReportData", error);
-    }
-    return {
-      month: data.month,
-      startingScore: data.starting_score,
-      endingScore: data.ending_score,
-      change: data.score_change,
-      sessionsCompleted: data.sessions_completed,
-      grade: data.grade,
-      highlight: data.highlight,
-    };
-  }, "getMonthlyReportData");
-}
-export async function saveMonthlyReportData(
-  userId: string,
-  report: MonthlyReportData,
-): Promise<void> {
-  return withRetry(async () => {
-    const supabase = getSupabaseClient();
-    const { error } = await supabase
-      .from("focus_monthly_reports")
-      .upsert({
-        user_id: userId,
-        month: report.month,
-        starting_score: report.startingScore,
-        ending_score: report.endingScore,
-        score_change: report.change,
-        sessions_completed: report.sessionsCompleted,
-        grade: report.grade,
-        highlight: report.highlight,
-        updated_at: new Date().toISOString(),
-      });
-    if (error) {
-      throw new RepositoryError("saveMonthlyReportData", error);
-    }
-  }, "saveMonthlyReportData");
-}
-export async function isRepositoryHealthy(): Promise<boolean> {
-  try {
-    const supabase = getSupabaseClient();
-    const { error } = await supabase
-      .from("focus_identity_profiles")
-      .select("count", { count: "exact", head: true });
-    return !error;
-  } catch (error) {
-    captureSilentFailure(error, {
-      feature: "focus-identity",
-      operation: "network-fallback",
-      type: "network",
-    });
-    return false;
-  }
 }

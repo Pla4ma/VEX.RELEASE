@@ -4,164 +4,24 @@ import { getRewardService } from "../../rewards/RewardService";
 import * as repository from "./repository";
 import {
   AssignChallengeInputSchema,
-  ClaimChallengeRewardInputSchema,
   ChallengeProgressCheckResultSchema,
-  ChallengeRewardSchema,
+  ClaimChallengeRewardInputSchema,
   DailyChallengeContextSchema,
-  RerollChallengeInputSchema,
+  UpdateChallengeProgressInputSchema,
   type AssignChallengeInput,
-  type Challenge,
   type ChallengeCompletionResult,
   type ChallengeDetail,
   type ChallengeProgressCheckResult,
   type ChallengeReward,
   type DailyChallengeContext,
   type DailyChallengeTriggerType,
-  type RerollEligibility,
-  type RerollResult,
   type UpdateChallengeProgressInput,
-  UpdateChallengeProgressInputSchema,
   type UserChallenge,
-  type UserChallengeSummary,
 } from "./schemas";
-const CONFIG = {
-  FREE_REROLLS_PER_DAY: 1,
-  PAID_REROLL_COST: 10,
-  MAX_REROLLS_PER_DAY: 10,
-  DAILY_CHALLENGE_EXPIRY_HOURS: 24,
-} as const;
-export class ChallengeError extends Error {
-  constructor(
-    message: string,
-    public code: string,
-    public context?: Record<string, unknown>,
-  ) {
-    super(message);
-    this.name = "ChallengeError";
-  }
-}
-export class ChallengeNotFoundError extends ChallengeError {
-  constructor(challengeId: string) {
-    super(`Challenge not found: ${challengeId}`, "CHALLENGE_NOT_FOUND", {
-      challengeId,
-    });
-  }
-}
-export class ChallengeNotActiveError extends ChallengeError {
-  constructor(challengeId: string, status: string) {
-    super(`Challenge is not active: ${challengeId}`, "CHALLENGE_NOT_ACTIVE", {
-      challengeId,
-      status,
-    });
-  }
-}
-export class RerollNotAllowedError extends ChallengeError {}
-export class RerollLimitExceededError extends ChallengeError {}
-export class InsufficientGemsForRerollError extends ChallengeError {}
-const rewardBundleFor = (challenge: Challenge) => ({
-  xpReward: challenge.rewardAmount,
-  coinReward:
-    challenge.rewardAmount >= 500
-      ? 250
-      : challenge.rewardAmount >= 250
-        ? 100
-        : 50,
-});
-const inferTriggerDelta = (
-  challenge: Challenge,
-  triggerType: DailyChallengeTriggerType,
-  context: DailyChallengeContext,
-): number => {
-  if (challenge.category === "MINUTES" && triggerType === "SESSION_COMPLETED") {
-    return context.minutesCompleted ?? 0;
-  }
-  if (
-    challenge.category === "SESSIONS" &&
-    triggerType === "SESSION_COMPLETED"
-  ) {
-    return context.sessionCount ?? 1;
-  }
-  if (challenge.category === "SOCIAL" && triggerType === "MOOD_LOGGED") {
-    return context.moodLogged ? 1 : 0;
-  }
-  if (challenge.category === "STREAK" && triggerType === "STREAK_CHECKED") {
-    return context.streakChecked ? 1 : 0;
-  }
-  if (
-    challenge.category === "BOSS_DAMAGE" &&
-    triggerType === "PURITY_RECORDED"
-  ) {
-    return typeof context.purity === "number" && context.purity >= 80 ? 1 : 0;
-  }
-  if (
-    challenge.category === "ACHIEVEMENT" &&
-    triggerType === "STREAK_UPDATED"
-  ) {
-    return typeof context.streakDays === "number" &&
-      context.streakDays >= challenge.targetValue
-      ? challenge.targetValue
-      : 0;
-  }
-  return 0;
-};
-const toCompletionResult = async (
-  detail: ChallengeDetail,
-  updatedChallenge: UserChallenge,
-): Promise<ChallengeCompletionResult> => {
-  const now = Date.now();
-  const rewards: ChallengeReward[] = [];
-  if (detail.xpReward > 0) {
-    rewards.push(
-      ChallengeRewardSchema.parse({
-        type: "XP",
-        amount: detail.xpReward,
-        itemId: null,
-        delivered: false,
-        deliveredAt: null,
-      }),
-    );
-  }
-  if (detail.coinReward > 0) {
-    rewards.push(
-      ChallengeRewardSchema.parse({
-        type: "COINS",
-        amount: detail.coinReward,
-        itemId: null,
-        delivered: false,
-        deliveredAt: null,
-      }),
-    );
-  }
-  await repository.updateUserChallenge(
-    updatedChallenge.userId,
-    updatedChallenge.challengeId,
-    {
-      status: "COMPLETED",
-      completedAt: now,
-      currentValue: Math.min(
-        updatedChallenge.currentValue,
-        detail.requiredCount,
-      ),
-    },
-  );
-  eventBus.publish("challenge:completed", {
-    userId: updatedChallenge.userId,
-    challengeId: updatedChallenge.challengeId,
-    completedAt: now,
-  });
-  return {
-    success: true,
-    challengeId: updatedChallenge.challengeId,
-    userId: updatedChallenge.userId,
-    completedAt: now,
-    rewards,
-    xpEarned: detail.xpReward,
-    seasonProgressAdvanced: false,
-    newTierUnlocked: false,
-    timeToComplete: Math.max(0, now - updatedChallenge.assignedAt),
-    wasRerolled: updatedChallenge.rerollCount > 0,
-  };
-};
+import { ChallengeError, ChallengeNotFoundError, ChallengeNotActiveError } from "./errors";
+import { CONFIG, inferTriggerDelta, rewardBundleFor, toCompletionResult } from "./helpers";
+import { getActiveChallenges, getCompletedChallenges } from "./queries";
+
 export async function assignChallenge(
   input: AssignChallengeInput,
 ): Promise<UserChallenge> {
@@ -179,6 +39,7 @@ export async function assignChallenge(
     Date.now() + CONFIG.DAILY_CHALLENGE_EXPIRY_HOURS * 60 * 60 * 1000,
   );
 }
+
 export async function updateChallengeProgress(
   input: UpdateChallengeProgressInput,
 ): Promise<ChallengeCompletionResult | null> {
@@ -336,136 +197,4 @@ export async function claimChallengeReward(input: {
           : "Unknown challenge reward error",
     };
   }
-}
-export async function getActiveChallenges(
-  userId: string,
-): Promise<ChallengeDetail[]> {
-  return repository.fetchActiveChallengeDetails(userId);
-}
-export async function getCompletedChallenges(
-  userId: string,
-  limit = 10,
-): Promise<ChallengeDetail[]> {
-  return repository.fetchCompletedChallengeDetails(userId, limit);
-}
-export async function getUserChallengeSummaries(
-  userId: string,
-): Promise<UserChallengeSummary[]> {
-  const details = await getActiveChallenges(userId);
-  return details.map((detail) => ({
-    challengeId: detail.challenge.id,
-    title: detail.challenge.title,
-    description: detail.challenge.description,
-    category: detail.challenge.category,
-    type: detail.challenge.type,
-    difficulty: detail.challenge.difficulty,
-    currentValue: detail.userChallenge.currentValue,
-    targetValue: detail.requiredCount,
-    progressPercent: Math.min(
-      100,
-      Math.round(
-        (detail.userChallenge.currentValue / detail.requiredCount) * 100,
-      ),
-    ),
-    status: detail.userChallenge.status,
-    isClaimable: detail.userChallenge.status === "COMPLETED",
-    isExpired:
-      detail.userChallenge.expiresAt !== null &&
-      detail.userChallenge.expiresAt <= Date.now(),
-    expiresInMs: detail.userChallenge.expiresAt
-      ? Math.max(0, detail.userChallenge.expiresAt - Date.now())
-      : null,
-    rewardType: detail.coinReward > 0 ? "COINS" : "XP",
-    rewardAmount: detail.coinReward > 0 ? detail.coinReward : detail.xpReward,
-    canReroll: detail.userChallenge.status === "ACTIVE",
-    rerollCost: CONFIG.PAID_REROLL_COST,
-    freeRerollAvailable:
-      detail.userChallenge.rerollCount < CONFIG.FREE_REROLLS_PER_DAY,
-    rerollCount: detail.userChallenge.rerollCount,
-  }));
-}
-export async function checkRerollEligibility(
-  userId: string,
-  challengeId: string,
-): Promise<RerollEligibility> {
-  const [userChallenge, rerollCountToday, freeRerollCountToday] =
-    await Promise.all([
-      repository.fetchUserChallenge(userId, challengeId),
-      repository.getRerollCountToday(userId),
-      repository.getFreeRerollCountToday(userId),
-    ]);
-  if (!userChallenge) {
-    return {
-      canReroll: false,
-      reason: "Challenge not found",
-      freeRerollAvailable: false,
-      gemsRequired: CONFIG.PAID_REROLL_COST,
-      currentGems: 0,
-      rerollCountToday,
-      maxRerollsPerDay: CONFIG.MAX_REROLLS_PER_DAY,
-    };
-  }
-  if (rerollCountToday >= CONFIG.MAX_REROLLS_PER_DAY) {
-    return {
-      canReroll: false,
-      reason: "Daily reroll limit reached",
-      freeRerollAvailable: false,
-      gemsRequired: CONFIG.PAID_REROLL_COST,
-      currentGems: 0,
-      rerollCountToday,
-      maxRerollsPerDay: CONFIG.MAX_REROLLS_PER_DAY,
-    };
-  }
-  return {
-    canReroll: userChallenge.status === "ACTIVE",
-    reason:
-      userChallenge.status === "ACTIVE"
-        ? null
-        : `Challenge is ${userChallenge.status.toLowerCase()}`,
-    freeRerollAvailable: freeRerollCountToday < CONFIG.FREE_REROLLS_PER_DAY,
-    gemsRequired:
-      freeRerollCountToday < CONFIG.FREE_REROLLS_PER_DAY
-        ? 0
-        : CONFIG.PAID_REROLL_COST,
-    currentGems: 0,
-    rerollCountToday,
-    maxRerollsPerDay: CONFIG.MAX_REROLLS_PER_DAY,
-  };
-}
-export async function rerollChallenge(input: {
-  userId: string;
-  challengeId: string;
-  usePaidReroll: boolean;
-  idempotencyKey?: string;
-}): Promise<RerollResult> {
-  const validated = RerollChallengeInputSchema.parse(input);
-  const eligibility = await checkRerollEligibility(
-    validated.userId,
-    validated.challengeId,
-  );
-  if (!eligibility.canReroll) {
-    return {
-      success: false,
-      oldChallengeId: validated.challengeId,
-      newChallengeId: "",
-      newChallenge: null,
-      gemsSpent: 0,
-      freeRerollUsed: false,
-      error: eligibility.reason ?? "Reroll not allowed",
-      remainingGems: eligibility.currentGems,
-      remainingFreeRerollsToday: eligibility.freeRerollAvailable ? 1 : 0,
-    };
-  }
-  return {
-    success: false,
-    oldChallengeId: validated.challengeId,
-    newChallengeId: "",
-    newChallenge: null,
-    gemsSpent: 0,
-    freeRerollUsed: false,
-    error:
-      "Reroll generation is not supported for the refreshed daily challenge pool yet",
-    remainingGems: eligibility.currentGems,
-    remainingFreeRerollsToday: eligibility.freeRerollAvailable ? 1 : 0,
-  };
 }

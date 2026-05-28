@@ -66,16 +66,22 @@ export {
   RerollNotAllowedError,
   RerollLimitExceededError,
   InsufficientGemsForRerollError,
+} from "./errors";
+
+export {
   assignChallenge,
   updateChallengeProgress,
-  checkRerollEligibility,
-  rerollChallenge,
   claimChallengeReward,
   checkChallengeProgress,
+} from "./service";
+
+export {
+  checkRerollEligibility,
+  rerollChallenge,
   getActiveChallenges,
   getCompletedChallenges,
   getUserChallengeSummaries,
-} from "./service";
+} from "./queries";
 
 // Hooks
 export {

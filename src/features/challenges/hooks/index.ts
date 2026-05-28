@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect } from "react";
 import { eventBus } from "../../../events";
 import * as service from "../service";
+import * as queries from "../queries";
 import * as repository from "../repository";
 import { economyKeys } from "../../economy/hooks";
 import type { UpdateChallengeProgressInput } from "../schemas";
@@ -50,7 +51,7 @@ export function useActiveChallenges(
 ) {
   return useQuery({
     queryKey: challengeKeys.active(userId),
-    queryFn: () => service.getActiveChallenges(userId),
+    queryFn: () => queries.getActiveChallenges(userId),
     enabled: Boolean(userId) && options.enabled !== false,
     staleTime: 1000 * 60 * 5,
   });
@@ -58,7 +59,7 @@ export function useActiveChallenges(
 export function useChallengeSummaries(userId: string) {
   return useQuery({
     queryKey: [...challengeKeys.all, "summaries", userId],
-    queryFn: () => service.getUserChallengeSummaries(userId),
+    queryFn: () => queries.getUserChallengeSummaries(userId),
     enabled: Boolean(userId),
     staleTime: 1000 * 30,
   });
@@ -125,7 +126,7 @@ export function useRerollChallenge() {
       challengeId: string;
       usePaidReroll: boolean;
       idempotencyKey?: string;
-    }) => service.rerollChallenge(input),
+    }) => queries.rerollChallenge(input),
     onSuccess: (_data, input) => {
       queryClient.invalidateQueries({
         queryKey: challengeKeys.byUser(input.userId),
@@ -161,7 +162,7 @@ export function useChallengeEvents(userId: string, canSubscribe?: boolean) {
 export function useRerollEligibility(userId: string, challengeId: string) {
   return useQuery({
     queryKey: [...challengeKeys.all, "reroll-eligibility", userId, challengeId],
-    queryFn: () => service.checkRerollEligibility(userId, challengeId),
+    queryFn: () => queries.checkRerollEligibility(userId, challengeId),
     enabled: Boolean(userId) && Boolean(challengeId),
     staleTime: 1000 * 30,
   });
