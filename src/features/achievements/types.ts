@@ -3,6 +3,7 @@ export type AchievementCategory =
   | "STREAK"
   | "BOSS"
   | "SOCIAL"
+  | "STUDY"
   | "PROGRESSION"
   | "ECONOMY";
 
