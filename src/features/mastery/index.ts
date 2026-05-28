@@ -8,10 +8,10 @@
 export type { MasteryState, MasteryRank, MasteryChallenge } from "./types";
 export {
   MASTERY_RANK_THRESHOLDS,
-  calculateTechniqueXp,
-  generateMasteryChallenges,
   getMasteryRankDisplay,
 } from "./types";
+export { calculateTechniqueXp } from "./xp-calculator";
+export { generateMasteryChallenges } from "./challenge-generator";
 
 // Components
 export { MasteryCard } from "./components/MasteryCard";

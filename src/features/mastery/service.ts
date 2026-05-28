@@ -1,10 +1,10 @@
 import {
   MASTERY_RANK_THRESHOLDS,
-  calculateTechniqueXp,
-  generateMasteryChallenges,
   type MasteryRank,
   type MasteryState,
 } from "./types";
+import { calculateTechniqueXp } from "./xp-calculator";
+import { generateMasteryChallenges } from "./challenge-generator";
 import {
   loadMasteryState,
   loadStoredMasteryState,

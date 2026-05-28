@@ -1,309 +1,74 @@
-import { useMemo, useCallback } from "react";
+import { useMemo } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { useQuery } from "@tanstack/react-query";
 import type { UseQueryResult } from "@tanstack/react-query";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSessionUIStore } from "../../../store/session-state";
 import { useHomeSpineModel } from "../../../features/home-spine/hooks";
-import {
-  useCreateRecommendation,
-  useUpdateRecommendationStatus,
-  type SessionRecommendation,
-} from "../../../features/ai-coach";
-import * as coachRepository from "../../../features/ai-coach/repository";
-import { getNextBestAction } from "../../../features/progression";
-import { useActiveStudyPlan } from "../../../features/content-study";
-import {
-  buildLearningSessionParams,
-  useLearningExecutionLayer,
-} from "../../../features/learning-execution";
-import { useComebackState } from "../../../features/streaks/hooks";
-import {
-  getFeatureAvailability,
-  isFeatureAvailableForNavigation,
-  type FeatureAccessResult,
-} from "../../../features/liveops-config";
-import type { HomeFeatureRuntime } from "./home-feature-runtime";
-import type { HomeViewModel } from "./home-view-model";
-import type {
-  HomeController,
-  SessionHistoryResult,
-} from "./home-controller-types";
-import type {
-  ExtendedRootStackParams,
-  SessionStackParams,
-} from "../../../navigation/types";
-import {
-  getFocusedMinutesForToday,
-  getNextUnlockFeature,
-  buildDisplayedReturnReason,
-} from "./home-controller-helpers";
-import { buildHomeReturnReasonState } from "../../../features/home-spine/service";
+import type { HomeController } from "./home-controller-types";
+import { buildDisplayedReturnReason } from "./home-controller-helpers";
 import type { HomeReturnReason } from "./useHomeReturnReason";
-import { createStubQuery } from "./home-controller-stubs";
+import type { HomeViewModel } from "./home-view-model";
+import type { Nav, EngagedModelInput } from "./engaged-home-types";
+import { useEngagedQueries } from "./useEngagedQueries";
+import { useEngagedNavigation } from "./useEngagedNavigation";
+import { buildEngagedReturnReason } from "./engaged-return-reason";
+import { buildEngagedController } from "./engaged-controller-builder";
 
-type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
-
-interface EngagedModelInput {
-  analytics: {
-    trackFirstSessionStarted: (userId: string, source: string) => void;
-    trackNextBestActionPressed: (
-      stage: import("../../../features/liveops-config").UserExperienceStage,
-      completedSessions: number,
-    ) => void;
-  };
-  disclosure: FeatureAccessResult;
-  historyQuery: SessionHistoryResult;
-  isOnline: boolean;
-  progressionQuery: UseQueryResult;
-  runtime: HomeFeatureRuntime;
-  streakQuery: UseQueryResult;
-  userId: string;
-}
-
-export function useEngagedHomeModel(input: EngagedModelInput): HomeViewModel & {
-  controller: HomeController;
-} {
-  const {
-    analytics,
-    disclosure,
-    historyQuery,
-    isOnline,
-    progressionQuery,
-    runtime,
-    streakQuery,
-    userId,
-  } = input;
+export function useEngagedHomeModel(
+  input: EngagedModelInput,
+): HomeViewModel & { controller: HomeController } {
+  const { disclosure, historyQuery, isOnline, runtime, userId } = input;
 
   const navigation = useNavigation<Nav>();
-  const homeHighlight = useSessionUIStore((state) => state.homeHighlight);
-  const completionSync = useSessionUIStore((state) => state.completionSync);
-  const clearHomeHighlight = useSessionUIStore(
-    (state) => state.clearHomeHighlight,
-  );
+  const homeHighlight = useSessionUIStore((s) => s.homeHighlight);
+  const completionSync = useSessionUIStore((s) => s.completionSync);
+  const clearHomeHighlight = useSessionUIStore((s) => s.clearHomeHighlight);
 
-  const streakData = streakQuery.data as Record<string, unknown> | undefined;
-  const progData = progressionQuery.data as Record<string, unknown> | undefined;
-  const currentStreak = (streakData?.currentDays as number | undefined) ?? 0;
-  const currentXp = (progData?.xp as number | undefined) ?? 0;
-  const todayFocusMinutes = historyQuery.history.reduce(
-    (sum: number, entry) => sum + getFocusedMinutesForToday(entry),
-    0,
-  );
-  const progressPercent = Math.min(
-    100,
-    Math.round((todayFocusMinutes / 120) * 100),
-  );
-  const isFirstRun =
-    !disclosure.isLoading &&
-    disclosure.inputs.totalCompletedSessions === 0 &&
-    currentStreak === 0 &&
-    currentXp === 0;
+  const q = useEngagedQueries(input);
 
-  const createRecommendation = useCreateRecommendation();
-  const updateRecommendationStatus = useUpdateRecommendationStatus();
-  const activeStudyPlanQuery = useActiveStudyPlan({
-    enabled: runtime.canQueryStudy,
-  });
-  const learningExecutionLayer = useLearningExecutionLayer(
-    activeStudyPlanQuery.data ?? null,
-  );
-  const comebackQuery = useComebackState(
-    runtime.canQueryComeback ? userId : null,
-  );
-
-  const recommendationsQuery = useQuery({
-    queryKey: ["coach", "recommendations", userId],
-    queryFn: () => coachRepository.fetchActiveRecommendations(userId),
-    enabled: runtime.canQueryCoach && Boolean(userId) && !disclosure.isLoading,
-    staleTime: 1000 * 60 * 5,
-  });
-
-  const primaryRecommendation = useMemo<SessionRecommendation | null>(
-    () =>
-      (recommendationsQuery.data ?? [])
-        .filter(
-          (item: { status: string; expiresAt: number }) =>
-            item.status === "ACTIVE" && item.expiresAt > Date.now(),
-        )
-        .sort(
-          (a: { confidence?: number }, b: { confidence?: number }) =>
-            (b.confidence ?? 0) - (a.confidence ?? 0),
-        )[0] ?? null,
-    [recommendationsQuery.data],
-  );
-
-  const canNavigateContentStudy = isFeatureAvailableForNavigation(
-    getFeatureAvailability(disclosure.features.content_study),
-  );
-  const canNavigateSocial = isFeatureAvailableForNavigation(
-    getFeatureAvailability(disclosure.features.social_tab),
-  );
-
-  const openSetup = useCallback(
-    (params?: Record<string, unknown>): void => {
-      if (userId && disclosure.inputs.totalCompletedSessions === 0) {
-        analytics.trackFirstSessionStarted(
-          userId,
-          (params as SessionStackParams["SessionSetup"] | undefined)?.source ??
-            "home",
-        );
-      }
-      navigation.navigate("SessionStack", {
-        screen: "SessionSetup",
-        params: (params ?? {}) as SessionStackParams["SessionSetup"],
-      });
-    },
-    [analytics, disclosure.inputs.totalCompletedSessions, navigation, userId],
-  );
-
-  const openProgress = useCallback(
-    () => navigation.navigate("Main", { screen: "Progress" }),
-    [navigation],
-  );
-  const openSocial = useCallback(() => {
-    navigation.navigate(
-      "Main",
-      canNavigateSocial
-        ? { screen: "Profile", params: { tab: "social" } }
-        : { screen: "Profile", params: { tab: "stats" } },
-    );
-  }, [canNavigateSocial, navigation]);
-  const openContentStudy = useCallback(() => {
-    if (!canNavigateContentStudy) {
-      openSetup();
-      return;
-    }
-    navigation.navigate("ContentStudy");
-  }, [canNavigateContentStudy, navigation, openSetup]);
-  const continueStudyPlan = useCallback(() => {
-    if (!learningExecutionLayer.target) {
-      openContentStudy();
-      return;
-    }
-    openSetup(buildLearningSessionParams(learningExecutionLayer.target));
-  }, [learningExecutionLayer.target, openContentStudy, openSetup]);
-  const openNextAction = useCallback(() => {
-    analytics.trackNextBestActionPressed(
-      disclosure.stage,
-      disclosure.inputs.totalCompletedSessions,
-    );
-    openSetup();
-  }, [
-    analytics,
-    disclosure.inputs.totalCompletedSessions,
-    disclosure.stage,
-    openSetup,
-  ]);
-
-  const nextUnlockFeature = useMemo(
-    () =>
-      getNextUnlockFeature(
-        disclosure.features as Record<
-          string,
-          { isUnlocked: boolean; isVisible: boolean; priority?: number }
-        >,
-      ),
-    [disclosure.features],
-  );
-  const nextBestAction = getNextBestAction({
-    completedSessions: disclosure.inputs.totalCompletedSessions,
-    currentStreak,
-    nextUnlockFeature,
-  });
-
-  const returnReason = useMemo<HomeReturnReason>(() => {
-    const studyData = activeStudyPlanQuery.data as
-      | Record<string, unknown>
-      | undefined;
-    const cbData = comebackQuery.data as Record<string, unknown> | undefined;
-
-    const reasonState = buildHomeReturnReasonState({
-      activeStudyPlan: studyData
-        ? {
-            completedTasks: (studyData.completedTasks as number) ?? 0,
-            remainingMinutes: (studyData.remainingMinutes as number) ?? 0,
-            title: (studyData.title as string) ?? "",
-            totalTasks: (studyData.totalTasks as number) ?? 0,
-          }
-        : null,
-      canShowExpansionSystems: runtime.shouldShowExpansionSystems,
-      comebackMessage: cbData?.isComeback
-        ? ((cbData.message as string) ?? null)
-        : null,
-      nextBestAction,
-      primaryRecommendation: primaryRecommendation
-        ? {
-            id: primaryRecommendation.id,
-            reasoning:
-              ((primaryRecommendation as Record<string, unknown>)
-                .reasoning as string) ??
-              ((primaryRecommendation as Record<string, unknown>)
-                .reason as string) ??
-              "",
-            suggestedDifficulty:
-              primaryRecommendation.suggestedDifficulty ?? "NORMAL",
-            suggestedDuration:
-              primaryRecommendation.suggestedDuration ?? 15 * 60,
-            type: primaryRecommendation.recommendationType,
-          }
-        : null,
-    });
-
-    let onPress: () => Promise<void> | void = () => openSetup();
-    if (reasonState.intent === "continue-study-plan") {
-      onPress = continueStudyPlan;
-    } else if (
-      reasonState.intent === "accept-coach-recommendation" &&
-      reasonState.recommendationId
-    ) {
-      onPress = async () => {
-        await updateRecommendationStatus.mutateAsync({
-          recommendationId: reasonState.recommendationId!,
-          status: "ACCEPTED",
-          userId,
-        });
-        openSetup({
-          recommendationId: reasonState.recommendationId,
-          suggestedDifficulty: reasonState.suggestedDifficulty,
-          suggestedDurationSeconds: reasonState.suggestedDurationSeconds,
-        });
-      };
-    } else if (reasonState.source === "next-best-action") {
-      onPress = openNextAction;
-    }
-
-    return {
-      body: reasonState.body,
-      ctaLabel: reasonState.ctaLabel,
-      eyebrow: reasonState.eyebrow,
-      intent: reasonState.intent,
-      onPress,
-      source: reasonState.source,
-      title: reasonState.title,
-      tone: reasonState.tone,
-    };
-  }, [
-    activeStudyPlanQuery.data,
-    comebackQuery.data,
-    continueStudyPlan,
-    nextBestAction,
-    openNextAction,
-    openSetup,
-    primaryRecommendation,
-    runtime.shouldShowExpansionSystems,
-    updateRecommendationStatus,
+  const {
+    openSetup, openProgress, openSocial,
+    openContentStudy, continueStudyPlan, openNextAction,
+  } = useEngagedNavigation({
+    analytics: input.analytics,
+    disclosure,
+    navigation,
     userId,
-  ]);
+    canNavigateSocial: q.canNavigateSocial,
+    canNavigateContentStudy: q.canNavigateContentStudy,
+    learningTarget: q.learningExecutionLayer.target,
+  });
+
+  const returnReason = useMemo<HomeReturnReason>(
+    () =>
+      buildEngagedReturnReason({
+        activeStudyPlanData: q.activeStudyPlanQuery.data as Record<string, unknown> | undefined,
+        comebackData: q.comebackQuery.data as Record<string, unknown> | undefined,
+        shouldShowExpansionSystems: runtime.shouldShowExpansionSystems,
+        nextBestAction: q.nextBestAction,
+        primaryRecommendation: q.primaryRecommendation,
+        continueStudyPlan,
+        updateRecommendationStatus: q.updateRecommendationStatus,
+        openNextAction,
+        openSetup,
+        userId,
+      }),
+    [
+      q.activeStudyPlanQuery.data, q.comebackQuery.data,
+      continueStudyPlan, q.nextBestAction, openNextAction,
+      openSetup, q.primaryRecommendation,
+      runtime.shouldShowExpansionSystems,
+      q.updateRecommendationStatus, userId,
+    ],
+  );
 
   const homeSpine = useHomeSpineModel({
-    currentStreak,
+    currentStreak: q.currentStreak,
     homeHighlight,
-    isAtRisk: Boolean(streakData?.isAtRisk),
-    isFirstRun,
-    level: (progData?.level as number | undefined) ?? 1,
-    progressPercent,
-    progressXp: currentXp,
+    isAtRisk: Boolean(q.streakData?.isAtRisk),
+    isFirstRun: q.isFirstRun,
+    level: (q.progData?.level as number | undefined) ?? 1,
+    progressPercent: q.progressPercent,
+    progressXp: q.currentXp,
     returnReason: {
       body: returnReason.body,
       ctaLabel: returnReason.ctaLabel,
@@ -313,7 +78,7 @@ export function useEngagedHomeModel(input: EngagedModelInput): HomeViewModel & {
       title: returnReason.title,
       tone: returnReason.tone,
     },
-    todayFocusMinutes,
+    todayFocusMinutes: q.todayFocusMinutes,
   });
 
   const displayedReturnReason = useMemo(
@@ -322,64 +87,57 @@ export function useEngagedHomeModel(input: EngagedModelInput): HomeViewModel & {
   );
 
   const loadError = (disclosure.error ??
-    activeStudyPlanQuery.error ??
-    comebackQuery.error) as Error | null;
+    q.activeStudyPlanQuery.error ??
+    q.comebackQuery.error) as Error | null;
 
-  const controller: HomeController = {
-    user: null,
+  const isLoading = disclosure.isLoading || q.recommendationsQuery.isLoading;
+
+  const controller = buildEngagedController({
     userId,
     isOnline,
-    isLoading: disclosure.isLoading || recommendationsQuery.isLoading,
-    isFirstRun,
+    isLoading,
+    isFirstRun: q.isFirstRun,
     loadError,
     homeHighlight,
     completionSync,
     clearHomeHighlight,
-    currentStreak,
-    currentXp,
-    todayFocusMinutes,
-    progressPercent,
+    currentStreak: q.currentStreak,
+    currentXp: q.currentXp,
+    todayFocusMinutes: q.todayFocusMinutes,
+    progressPercent: q.progressPercent,
     latestSession: historyQuery.history[0] ?? null,
-    primaryRecommendation,
+    primaryRecommendation: q.primaryRecommendation,
     homeSpine,
-    returnReason: displayedReturnReason,
+    displayedReturnReason,
     disclosure,
     runtime,
-    streakQuery: streakQuery as UseQueryResult,
-    progressionQuery: progressionQuery as UseQueryResult,
-    historyQuery: historyQuery as SessionHistoryResult,
-    squadsQuery: createStubQuery() as UseQueryResult,
-    activeStudyPlanQuery: activeStudyPlanQuery as UseQueryResult,
-    learningExecutionLayer,
-    comebackQuery: comebackQuery as UseQueryResult,
-    activeBossQuery: createStubQuery() as UseQueryResult,
-    recommendationsQuery: recommendationsQuery as UseQueryResult,
-    shouldShowSecondarySystems: runtime.shouldShowSecondarySystems,
-    shouldShowExpansionSystems: runtime.shouldShowExpansionSystems,
-    openSetup: openSetup as (params?: Record<string, unknown>) => void,
+    streakQuery: input.streakQuery,
+    progressionQuery: input.progressionQuery,
+    historyQuery,
+    activeStudyPlanQuery: q.activeStudyPlanQuery,
+    learningExecutionLayer: q.learningExecutionLayer,
+    comebackQuery: q.comebackQuery,
+    recommendationsQuery: q.recommendationsQuery,
+    openSetup,
     openProgress,
     openSocial,
     openContentStudy,
     continueStudyPlan,
-    createRecommendation:
-      createRecommendation as HomeController["createRecommendation"],
-    updateRecommendationStatus:
-      updateRecommendationStatus as HomeController["updateRecommendationStatus"],
-    retryAll: disclosure.refetchAll as () => Promise<unknown>,
-    features: disclosure.features,
-  };
+    createRecommendation: q.createRecommendation as HomeController["createRecommendation"],
+    updateRecommendationStatus: q.updateRecommendationStatus as HomeController["updateRecommendationStatus"],
+  });
 
   return {
     userId,
     isOnline,
-    isLoading: disclosure.isLoading || recommendationsQuery.isLoading,
-    isFirstRun,
+    isLoading,
+    isFirstRun: q.isFirstRun,
     loadError,
-    currentStreak,
-    currentXp,
-    todayFocusMinutes,
-    progressPercent,
-    primaryRecommendation,
+    currentStreak: q.currentStreak,
+    currentXp: q.currentXp,
+    todayFocusMinutes: q.todayFocusMinutes,
+    progressPercent: q.progressPercent,
+    primaryRecommendation: q.primaryRecommendation,
     homeSpine,
     returnReason: displayedReturnReason,
     stage: disclosure.stage,
