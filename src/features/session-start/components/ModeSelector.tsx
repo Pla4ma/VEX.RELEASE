@@ -8,7 +8,7 @@ import { useTheme } from "../../../theme";
 import {
   isFeatureUnlocked,
   type UnlockableFeature,
-} from "../../mastery/components/MasteryUnlockGate";
+} from "../../mastery/components/mastery-unlock-gate-data";
 import type { MasteryRank } from "../../mastery/types";
 
 export type { SessionMode };

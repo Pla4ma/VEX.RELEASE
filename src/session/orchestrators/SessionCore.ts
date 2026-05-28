@@ -10,7 +10,7 @@ import { createDebugger } from "../../utils/debug";
 
 const debug = createDebugger("session:orchestrator:core");
 
-import type { SessionOrchestrator } from "../SessionOrchestrator";
+import type { SessionOrchestratorBase as SessionOrchestrator } from "../SessionOrchestratorBase";
 import { TimerEngine } from "../engines/TimerEngine";
 
 export async function createSession(

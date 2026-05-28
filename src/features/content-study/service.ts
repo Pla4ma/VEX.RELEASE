@@ -1,14 +1,3 @@
-import { z } from "zod";
-import {
-  fetchContentHistoryRecords,
-  fetchContentRecord,
-  fetchGenerationRecord,
-  deleteContentRecord,
-  deleteStudyFileRecord,
-  invokeContentStudy,
-  updateContentTextRecord,
-  uploadStudyFileRecord,
-} from "./repository";
 import { buildError } from "./validation";
 import { CONTENT_STUDY_API, ERROR_MESSAGES } from "./constants";
 import {
@@ -19,114 +8,30 @@ import {
   type SubmitContentRequest,
   type SubmitFeedbackRequest,
 } from "./types";
-import type { QuizItem } from "./types";
+import {
+  submitContentResponseSchema,
+  extractContentResponseSchema,
+  generationResponseSchema,
+  statusResponseSchema,
+  feedbackResponseSchema,
+  ContentStudyTimeoutFallbackSchema,
+  type ContentStudyTimeoutFallback,
+  normalizeError,
+  invokeAndParse,
+} from "./api-schemas";
 
-const submitContentResponseSchema = z.object({
-  success: z.boolean(),
-  contentId: z.string(),
-  status: z.enum([
-    "PENDING",
-    "EXTRACTING",
-    "EXTRACTED",
-    "PROCESSING",
-    "READY",
-    "FAILED",
-  ]),
-  message: z.string(),
-  error: z.string().optional(),
-});
-
-const extractContentResponseSchema = z.object({
-  success: z.boolean(),
-  contentId: z.string(),
-  extractedLength: z.number().default(0),
-  status: z.enum([
-    "PENDING",
-    "EXTRACTING",
-    "EXTRACTED",
-    "PROCESSING",
-    "READY",
-    "FAILED",
-  ]),
-  error: z.string().optional(),
-});
-
-const generationResponseSchema = z.object({
-  success: z.boolean(),
-  generationId: z.string(),
-  contentId: z.string(),
-  summary: z.string(),
-  keyConcepts: z.array(z.string()),
-  tasks: z.array(z.unknown()),
-  quizItems: z.array(z.unknown()),
-  sessionPlan: z.unknown(),
-  remaining: z.number(),
-  error: z.string().optional(),
-});
-
-const statusResponseSchema = z.object({
-  success: z.boolean(),
-  contentId: z.string(),
-  status: z.enum([
-    "PENDING",
-    "EXTRACTING",
-    "EXTRACTED",
-    "PROCESSING",
-    "READY",
-    "FAILED",
-  ]),
-  extractedLength: z.number().default(0),
-  errorMessage: z.string().optional(),
-  generation: z.unknown().optional(),
-  error: z.string().optional(),
-});
-
-const feedbackResponseSchema = z.object({ success: z.boolean() });
-
-export const ContentStudyTimeoutFallbackSchema = z
-  .object({
-    body: z.string().min(1),
-    ctaLabel: z.string().min(1),
-    title: z.string().min(1),
-  })
-  .strict();
-
-export type ContentStudyTimeoutFallback = z.infer<
-  typeof ContentStudyTimeoutFallbackSchema
->;
-
-function normalizeError(
-  error: unknown,
-  code: ContentStudyErrorCode,
-  message: string,
-) {
-  if (error instanceof Error) {
-    return buildError(
-      code,
-      error.message || message,
-      { cause: error.name },
-      true,
-    );
-  }
-  return buildError(code, message, undefined, true);
-}
-
-async function invokeAndParse<T>(
-  path: string,
-  schema: z.ZodSchema<T>,
-  body?: unknown,
-  method?: "GET" | "POST",
-): Promise<T> {
-  const { data, error } = await invokeContentStudy(path, body, method);
-  if (error) {
-    throw normalizeError(
-      error,
-      ContentStudyErrorCode.NETWORK_ERROR,
-      ERROR_MESSAGES.NETWORK_ERROR,
-    );
-  }
-  return schema.parse(data);
-}
+export { ContentStudyTimeoutFallbackSchema } from "./api-schemas";
+export type { ContentStudyTimeoutFallback } from "./api-schemas";
+export {
+  uploadStudyFile,
+  deleteStudyFile,
+  fetchContentHistory,
+  fetchContentById,
+  fetchGenerationById,
+  getQuizForStudyPlan,
+  updateContentText,
+  deleteContent,
+} from "./service-crud";
 
 export async function submitContent(
   userId: string,
@@ -136,10 +41,7 @@ export async function submitContent(
     const response = await invokeAndParse(
       CONTENT_STUDY_API.ENDPOINTS.SUBMIT,
       submitContentResponseSchema,
-      {
-        ...request,
-        userId,
-      },
+      { ...request, userId },
     );
     if (!response.success) {
       throw buildError(
@@ -220,48 +122,6 @@ export async function submitFeedback(request: SubmitFeedbackRequest) {
     feedbackResponseSchema,
     request,
   );
-}
-
-export async function uploadStudyFile(
-  fileUri: string,
-  filename: string,
-  userId: string,
-) {
-  return uploadStudyFileRecord(fileUri, filename, userId);
-}
-
-export async function deleteStudyFile(filePath: string) {
-  await deleteStudyFileRecord(filePath);
-}
-
-export async function fetchContentHistory(userId: string, limit = 20) {
-  return fetchContentHistoryRecords(userId, limit);
-}
-
-export async function fetchContentById(contentId: string) {
-  return fetchContentRecord(contentId);
-}
-
-export async function fetchGenerationById(generationId: string) {
-  return fetchGenerationRecord(generationId);
-}
-
-export async function getQuizForStudyPlan(
-  studyPlanId: string,
-): Promise<QuizItem[]> {
-  const generation = await fetchGenerationRecord(studyPlanId);
-  if (!generation) {
-    return [];
-  }
-  return generation.quizItems.slice(0, 3);
-}
-
-export async function updateContentText(contentId: string, editedText: string) {
-  await updateContentTextRecord(contentId, editedText);
-}
-
-export async function deleteContent(contentId: string) {
-  await deleteContentRecord(contentId);
 }
 
 export function buildContentStudyTimeoutFallback(): ContentStudyTimeoutFallback {

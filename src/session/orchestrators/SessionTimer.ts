@@ -4,7 +4,7 @@ import { pauseSession } from "./SessionLifecycle";
 
 const debug = createDebugger("session:orchestrator:timer");
 
-import type { SessionOrchestrator } from "../SessionOrchestrator";
+import type { SessionOrchestratorBase as SessionOrchestrator } from "../SessionOrchestratorBase";
 
 export function handleTimerTick(
   orch: SessionOrchestrator,

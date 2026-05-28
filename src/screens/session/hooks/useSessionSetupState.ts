@@ -1,4 +1,3 @@
-import { captureSilentFailure } from "../../../utils/silent-failure";
 import { useEffect, useMemo, useState } from "react";
 import {
   shouldAutoApplySmartSuggestion,
@@ -7,19 +6,19 @@ import {
 import type { MasteryState } from "../../../features/mastery/types";
 import type { SessionStackParams } from "../../../navigation/types";
 import { getMMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
-import { SessionMode } from "../../../session/modes";
-import { resolveSessionMode } from "../../../session/modes";
+import { SessionMode, resolveSessionMode } from "../../../session/modes";
 import {
-  hydrateMasteryState,
-  MasteryStateSchema,
   PRESETS,
-  resolveSmartSuggestion,
-  SESSION_DRAFT_MAX_AGE_MS,
-  SessionDraftSchema,
   type PresetWithIcon,
   type SmartSuggestion,
 } from "../utils/session-setup";
+import {
+  restoreSessionDraft,
+  saveSessionDraft,
+} from "./session-setup-hydration";
+
 type SessionSetupParams = SessionStackParams["SessionSetup"];
+
 export function useSessionSetupState(
   userId: string,
   params: SessionSetupParams | undefined,
@@ -69,6 +68,7 @@ export function useSessionSetupState(
   const [masteryState, setMasteryState] = useState<MasteryState | null>(null);
   const [smartSuggestion, setSmartSuggestion] =
     useState<SmartSuggestion | null>(null);
+
   useEffect(() => {
     if (params?.presetId) {
       const matchedPreset = PRESETS.find(
@@ -95,112 +95,37 @@ export function useSessionSetupState(
     if (params?.presetMode) {
       setSelectedSessionMode(resolveSessionMode(params.presetMode));
     }
-  }, [
-    params?.goal,
-    params?.presetDuration,
-    params?.presetId,
-    params?.presetMode,
-    params?.selectedThemeId,
-    params?.suggestedDurationSeconds,
-  ]);
+  }, [params?.goal, params?.presetDuration, params?.presetId, params?.presetMode, params?.selectedThemeId, params?.suggestedDurationSeconds]);
+
   useEffect(() => {
     let isCancelled = false;
-    const restoreDraft = async () => {
-      if (!userId) {
-        if (!isCancelled) {
-          setHasHydratedDraft(true);
-        }
-        return;
-      }
-      try {
-        const rawDraft = await storage.getItem(sessionDraftKey);
-        const rawMastery = await storage.getItem(masteryStateKey);
-        const parsedMastery = rawMastery
-          ? MasteryStateSchema.safeParse(JSON.parse(rawMastery) as unknown)
-          : null;
-        if (!isCancelled) {
-          setMasteryState(
-            parsedMastery?.success
-              ? hydrateMasteryState(parsedMastery.data, userId)
-              : null,
-          );
-          setSmartSuggestion(
-            resolveSmartSuggestion(
-              parsedMastery?.success ? parsedMastery.data : null,
-              currentStreak,
-            ),
-          );
-        }
-        if (!rawDraft || isCancelled) {
-          if (!isCancelled) {
-            setHasSavedDraft(false);
-            setHasHydratedDraft(true);
-          }
-          return;
-        }
-        const parsedDraft = SessionDraftSchema.safeParse(
-          JSON.parse(rawDraft) as unknown,
-        );
-        if (!parsedDraft.success) {
-          await storage.removeItem(sessionDraftKey);
-          return;
-        }
-        if (Date.now() - parsedDraft.data.savedAt > SESSION_DRAFT_MAX_AGE_MS) {
-          await storage.removeItem(sessionDraftKey);
-          return;
-        }
-        if (!isCancelled) {
-          setHasSavedDraft(true);
-        }
-        const matchedPreset = PRESETS.find(
-          (preset) => preset.id === parsedDraft.data.presetId,
-        );
-        const hasRoutedDuration = Boolean(
-          params?.presetDuration ?? params?.suggestedDurationSeconds,
-        );
-        if (matchedPreset && !params?.presetId && !hasRoutedDuration) {
-          setSelectedPreset(matchedPreset);
-        }
-        if (!params?.presetId && !hasRoutedDuration) {
-          setSelectedCategory(parsedDraft.data.selectedCategory);
-          setCustomDuration(parsedDraft.data.customDuration);
-        }
-        if (!params?.selectedThemeId) {
-          setSelectedThemeId(parsedDraft.data.selectedThemeId);
-        }
-        if (!params?.goal) {
-          setDraftGoal(parsedDraft.data.goal);
-        }
-        setShowAdvanced(parsedDraft.data.showAdvanced);
-        if (
-          parsedDraft.data.presetId !== PRESETS[1]!.id ||
-          parsedDraft.data.selectedThemeId !== "default" ||
-          parsedDraft.data.showAdvanced
-        ) {
-          setShowCustomization(true);
-        }
-      } catch (error) {
-        captureSilentFailure(error, {
-          feature: "screens",
-          operation: "network-fallback",
-          type: "network",
-        });
-        try {
-          await storage.removeItem(sessionDraftKey);
-        } catch (error) {
-          captureSilentFailure(error, {
-            feature: "screens",
-            operation: "network-fallback",
-            type: "network",
-          });
-        }
-      } finally {
-        if (!isCancelled) {
-          setHasHydratedDraft(true);
-        }
-      }
+    const run = async () => {
+      const result = await restoreSessionDraft(
+        storage,
+        sessionDraftKey,
+        masteryStateKey,
+        userId,
+        currentStreak,
+        params,
+      );
+      if (isCancelled) return;
+      setMasteryState(result.masteryState);
+      setSmartSuggestion(result.smartSuggestion);
+      setHasSavedDraft(result.hasSavedDraft);
+      if (result.presetOverride) setSelectedPreset(result.presetOverride);
+      if (result.categoryOverride) setSelectedCategory(result.categoryOverride);
+      if (result.customDurationOverride !== null)
+        setCustomDuration(result.customDurationOverride);
+      if (result.themeIdOverride) setSelectedThemeId(result.themeIdOverride);
+      if (result.goalOverride !== null) setDraftGoal(result.goalOverride);
+      if (result.showAdvancedOverride !== null)
+        setShowAdvanced(result.showAdvancedOverride);
+      if (result.showCustomizationOverride !== null)
+        setShowCustomization(result.showCustomizationOverride);
     };
-    void restoreDraft();
+    void run().finally(() => {
+      if (!isCancelled) setHasHydratedDraft(true);
+    });
     return () => {
       isCancelled = true;
     };
@@ -216,22 +141,17 @@ export function useSessionSetupState(
     storage,
     userId,
   ]);
+
   useEffect(() => {
-    if (!hasHydratedDraft || hasAutoAppliedSuggestion) {
-      return;
-    }
+    if (!hasHydratedDraft || hasAutoAppliedSuggestion) return;
     if (
       !shouldAutoApplySmartSuggestion({
         hasSavedDraft,
         params: params ?? {},
         smartSuggestionPresetId: smartSuggestion?.preset.id ?? null,
       })
-    ) {
-      return;
-    }
-    if (!smartSuggestion) {
-      return;
-    }
+    ) return;
+    if (!smartSuggestion) return;
     setSelectedPreset(smartSuggestion.preset);
     setSelectedCategory(smartSuggestion.preset.category ?? "standard");
     setHasAutoAppliedSuggestion(true);
@@ -242,31 +162,17 @@ export function useSessionSetupState(
     params,
     smartSuggestion,
   ]);
+
   useEffect(() => {
-    if (!userId || !hasHydratedDraft) {
-      return;
-    }
-    const saveDraft = async () => {
-      try {
-        const draftPayload = SessionDraftSchema.parse({
-          savedAt: Date.now(),
-          presetId: selectedPreset.id,
-          selectedCategory,
-          customDuration,
-          selectedThemeId,
-          showAdvanced,
-          goal: draftGoal,
-        });
-        await storage.setItem(sessionDraftKey, JSON.stringify(draftPayload));
-      } catch (error) {
-        captureSilentFailure(error, {
-          feature: "screens",
-          operation: "network-fallback",
-          type: "network",
-        });
-      }
-    };
-    void saveDraft();
+    if (!userId || !hasHydratedDraft) return;
+    void saveSessionDraft(storage, sessionDraftKey, {
+      presetId: selectedPreset.id,
+      selectedCategory,
+      customDuration,
+      selectedThemeId,
+      showAdvanced,
+      goal: draftGoal,
+    });
   }, [
     customDuration,
     draftGoal,
@@ -279,26 +185,14 @@ export function useSessionSetupState(
     storage,
     userId,
   ]);
+
   return {
-    customDuration,
-    draftGoal,
-    masteryState,
-    selectedCategory,
-    selectedPreset,
-    selectedSessionMode,
-    selectedThemeId,
-    setCustomDuration,
-    setDraftGoal,
-    setSelectedCategory,
-    setSelectedPreset,
-    setSelectedSessionMode,
-    setSelectedThemeId,
-    setShowAdvanced,
-    setShowCustomization,
-    showAdvanced,
-    showCustomization,
-    smartSuggestion,
-    sessionDraftKey,
-    storage,
+    customDuration, draftGoal, masteryState, selectedCategory,
+    selectedPreset, selectedSessionMode, selectedThemeId,
+    showAdvanced, showCustomization, smartSuggestion,
+    sessionDraftKey, storage,
+    setCustomDuration, setDraftGoal, setSelectedCategory,
+    setSelectedPreset, setSelectedSessionMode, setSelectedThemeId,
+    setShowAdvanced, setShowCustomization,
   };
 }

@@ -1,216 +1,17 @@
 import React, { useEffect, useCallback } from "react";
-import { View, ViewStyle } from "react-native";
+import { View } from "react-native";
 import { createSheet } from "@/shared/ui/create-sheet";
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
-  withTiming,
-  withSpring,
-  interpolate,
-  Extrapolation,
   FadeIn,
   FadeOut,
-  Easing,
-  runOnJS,
-  type SharedValue,
 } from "react-native-reanimated";
-export type TransitionPreset =
-  | "fade"
-  | "slideRight"
-  | "slideLeft"
-  | "slideUp"
-  | "slideDown"
-  | "zoom"
-  | "flip"
-  | "scale"
-  | "none";
-export type TransitionEasing =
-  | "linear"
-  | "ease"
-  | "easeIn"
-  | "easeOut"
-  | "easeInOut"
-  | "spring"
-  | "bounce";
-export interface TransitionConfig {
-  preset: TransitionPreset;
-  duration?: number;
-  delay?: number;
-  easing?: TransitionEasing;
-  springConfig?: {
-    damping?: number;
-    stiffness?: number;
-    mass?: number;
-    overshootClamping?: boolean;
-  };
-}
-export interface TransitionWrapperProps {
-  children: React.ReactNode;
-  visible: boolean;
-  enterConfig?: TransitionConfig;
-  exitConfig?: TransitionConfig;
-  onEnterComplete?: () => void;
-  onExitComplete?: () => void;
-  style?: ViewStyle;
-  maintainLayout?: boolean;
-  staggerChildren?: number;
-  childDelay?: number;
-}
-type ReanimatedEasingFunction = (value: number) => number;
-const EASING_MAP: Record<
-  TransitionEasing,
-  ReanimatedEasingFunction | undefined
-> = {
-  linear: Easing.linear,
-  ease: Easing.ease,
-  easeIn: Easing.in(Easing.ease),
-  easeOut: Easing.out(Easing.ease),
-  easeInOut: Easing.inOut(Easing.ease),
-  spring: undefined,
-  bounce: Easing.bounce,
-};
-const DEFAULT_SPRING_CONFIG = {
-  damping: 15,
-  stiffness: 150,
-  mass: 1,
-  overshootClamping: false,
-};
-function useTransitionAnimation(
-  visible: boolean,
-  config: TransitionConfig,
-  onComplete?: () => void,
-) {
-  const progress = useSharedValue(visible ? 1 : 0);
-  const isAnimating = useSharedValue(false);
-  const { duration = 300, easing = "ease", springConfig } = config;
-  useEffect(() => {
-    isAnimating.value = true;
-    const targetValue = visible ? 1 : 0;
-    const easingFn = EASING_MAP[easing];
-    const callback = (finished?: boolean) => {
-      "worklet";
-      if (finished && onComplete) {
-        runOnJS(onComplete)();
-      }
-      isAnimating.value = false;
-    };
-    if (easing === "spring") {
-      progress.value = withSpring(
-        targetValue,
-        { ...DEFAULT_SPRING_CONFIG, ...springConfig },
-        callback,
-      );
-    } else {
-      progress.value = withTiming(
-        targetValue,
-        { duration, easing: easingFn ?? Easing.ease },
-        callback,
-      );
-    }
-  }, [
-    visible,
-    progress,
-    duration,
-    easing,
-    springConfig,
-    onComplete,
-    isAnimating,
-  ]);
-  return { progress, isAnimating };
-}
-function createAnimatedStyles(
-  preset: TransitionPreset,
-  progress: SharedValue<number>,
-) {
-  "worklet";
-  switch (preset) {
-    case "fade":
-      return { opacity: progress.value };
-    case "slideRight":
-      return {
-        opacity: progress.value,
-        transform: [
-          {
-            translateX: interpolate(
-              progress.value,
-              [0, 1],
-              [100, 0],
-              Extrapolation.CLAMP,
-            ),
-          },
-        ],
-      };
-    case "slideLeft":
-      return {
-        opacity: progress.value,
-        transform: [
-          {
-            translateX: interpolate(
-              progress.value,
-              [0, 1],
-              [-100, 0],
-              Extrapolation.CLAMP,
-            ),
-          },
-        ],
-      };
-    case "slideUp":
-      return {
-        opacity: progress.value,
-        transform: [
-          {
-            translateY: interpolate(
-              progress.value,
-              [0, 1],
-              [50, 0],
-              Extrapolation.CLAMP,
-            ),
-          },
-        ],
-      };
-    case "slideDown":
-      return {
-        opacity: progress.value,
-        transform: [
-          {
-            translateY: interpolate(
-              progress.value,
-              [0, 1],
-              [-50, 0],
-              Extrapolation.CLAMP,
-            ),
-          },
-        ],
-      };
-    case "zoom":
-    case "scale":
-      return {
-        opacity: progress.value,
-        transform: [
-          {
-            scale: interpolate(
-              progress.value,
-              [0, 1],
-              [0.8, 1],
-              Extrapolation.CLAMP,
-            ),
-          },
-        ],
-      };
-    case "flip":
-      return {
-        opacity: progress.value,
-        transform: [
-          {
-            rotateY: `${interpolate(progress.value, [0, 1], [-90, 0], Extrapolation.CLAMP)}deg`,
-          },
-        ],
-      };
-    case "none":
-    default:
-      return {};
-  }
-}
+import {
+  useTransitionAnimation,
+  createAnimatedStyles,
+  type TransitionWrapperProps,
+} from "./transition-config";
+
 interface StaggerContainerProps {
   children: React.ReactNode;
   staggerDelay: number;
@@ -296,7 +97,7 @@ export const TransitionWrapper: React.FC<TransitionWrapperProps> = ({
 interface LayoutTransitionProps {
   children: React.ReactNode;
   layoutId: string;
-  style?: ViewStyle;
+  style?: import("react-native").ViewStyle;
 }
 export const LayoutTransition: React.FC<LayoutTransitionProps> = ({
   children,

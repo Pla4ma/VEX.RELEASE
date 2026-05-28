@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { View, TextStyle, ViewStyle } from "react-native";
+import { View } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -12,84 +12,17 @@ import Animated, {
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
 import { createSheet } from "@/shared/ui/create-sheet";
-export type CounterSize = "xs" | "sm" | "md" | "lg" | "xl" | "hero";
-export type CounterVariant = "default" | "currency" | "percentage" | "compact";
-export interface AnimatedCounterProps {
-  value: number;
-  previousValue?: number;
-  variant?: CounterVariant;
-  currency?: "coins" | "gems" | "xp" | string;
-  prefix?: string;
-  suffix?: string;
-  decimals?: number;
-  size?: CounterSize;
-  color?: string;
-  increaseColor?: string;
-  decreaseColor?: string;
-  style?: ViewStyle;
-  textStyle?: TextStyle;
-  duration?: number;
-  useSpring?: boolean;
-  springConfig?: { damping?: number; stiffness?: number };
-  animateOnMount?: boolean;
-  showTrendIndicator?: boolean;
-  compactThreshold?: number;
-  locale?: string;
-}
-function formatNumber(
-  value: number,
-  variant: CounterVariant,
-  decimals: number,
-  compactThreshold: number,
-  locale: string,
-): string {
-  "worklet";
-  if (
-    variant === "compact" ||
-    (variant === "currency" && Math.abs(value) >= compactThreshold)
-  ) {
-    return Intl.NumberFormat(locale, {
-      notation: "compact",
-      maximumFractionDigits: 1,
-    }).format(value);
-  }
-  if (variant === "percentage") {
-    return `${value.toFixed(decimals)}%`;
-  }
-  return value.toLocaleString(locale, {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
-  });
-}
-function getCurrencySymbol(currency: string): string {
-  const symbols: Record<string, string> = {
-    coins: "🪙",
-    gems: "💎",
-    xp: "⭐",
-    usd: "$",
-    eur: "€",
-    gbp: "£",
-  };
-  return symbols[currency] || currency;
-}
-function getSizeConfig(size: CounterSize): {
-  fontSize: number;
-  fontWeight: TextStyle["fontWeight"];
-  trendSize: number;
-} {
-  const configs: Record<
-    CounterSize,
-    { fontSize: number; fontWeight: TextStyle["fontWeight"]; trendSize: number }
-  > = {
-    xs: { fontSize: 12, fontWeight: "500", trendSize: 8 },
-    sm: { fontSize: 14, fontWeight: "600", trendSize: 10 },
-    md: { fontSize: 18, fontWeight: "700", trendSize: 12 },
-    lg: { fontSize: 24, fontWeight: "700", trendSize: 14 },
-    xl: { fontSize: 32, fontWeight: "800", trendSize: 16 },
-    hero: { fontSize: 48, fontWeight: "900", trendSize: 20 },
-  };
-  return configs[size];
-}
+import {
+  type CounterSize,
+  type CounterVariant,
+  type AnimatedCounterProps,
+  formatNumber,
+  getCurrencySymbol,
+  getSizeConfig,
+} from "./AnimatedCounter.helpers";
+
+export type { CounterSize, CounterVariant, AnimatedCounterProps };
+
 const TrendIndicator: React.FC<{
   direction: "up" | "down" | "neutral";
   size: number;
@@ -111,6 +44,7 @@ const TrendIndicator: React.FC<{
     </View>
   );
 };
+
 export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   value,
   previousValue,
@@ -205,23 +139,12 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   const currencySymbol = currency ? getCurrencySymbol(currency) : null;
   const getDisplayString = () => {
     const parts: string[] = [];
-    if (prefix) {
-      parts.push(prefix);
-    }
-    if (currencySymbol) {
-      parts.push(currencySymbol);
-    }
-    const formatted = formatNumber(
-      displayValue,
-      variant,
-      decimals,
-      compactThreshold,
-      locale,
+    if (prefix) parts.push(prefix);
+    if (currencySymbol) parts.push(currencySymbol);
+    parts.push(
+      formatNumber(displayValue, variant, decimals, compactThreshold, locale),
     );
-    parts.push(formatted);
-    if (suffix) {
-      parts.push(suffix);
-    }
+    if (suffix) parts.push(suffix);
     return parts.join("");
   };
   return (
@@ -235,7 +158,6 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
           }
         />
       )}
-
       <Animated.Text
         style={[
           styles.counter,
@@ -249,68 +171,14 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     </View>
   );
 };
-export function useCountUp(
-  end: number,
-  duration: number = 1000,
-  start: number = 0,
-): number {
-  const [value, setValue] = useState(start);
-  const startTimeRef = useRef<number | null>(null);
-  useEffect(() => {
-    startTimeRef.current = null;
-    const animate = (timestamp: number) => {
-      if (!startTimeRef.current) {
-        startTimeRef.current = timestamp;
-      }
-      const elapsed = timestamp - startTimeRef.current;
-      const progress = Math.min(elapsed / duration, 1);
-      const easeProgress = 1 - Math.pow(1 - progress, 3);
-      const current = start + (end - start) * easeProgress;
-      setValue(current);
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-    requestAnimationFrame(animate);
-  }, [end, duration, start]);
-  return value;
-}
-export function useCounterAnimation(
-  target: number,
-  options: { duration?: number; delay?: number; onComplete?: () => void } = {},
-): number {
-  const { duration = 800, delay = 0, onComplete } = options;
-  const [value, setValue] = useState(0);
-  const targetRef = useRef(target);
-  useEffect(() => {
-    targetRef.current = target;
-    const startTimeout = setTimeout(() => {
-      const startTime = Date.now();
-      const startValue = value;
-      const animate = () => {
-        const elapsed = Date.now() - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const easeProgress = 1 - Math.pow(1 - progress, 3);
-        const current = Math.round(
-          startValue + (targetRef.current - startValue) * easeProgress,
-        );
-        setValue(current);
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        } else {
-          onComplete?.();
-        }
-      };
-      requestAnimationFrame(animate);
-    }, delay);
-    return () => clearTimeout(startTimeout);
-  }, [target, duration, delay, onComplete, value]);
-  return value;
-}
+
 const styles = createSheet({
   container: { flexDirection: "row", alignItems: "center", gap: 4 },
   counter: { fontVariant: ["tabular-nums"] },
   trendIndicator: { justifyContent: "center", alignItems: "center" },
   trendArrow: { lineHeight: undefined },
 });
+
 export default AnimatedCounter;
+
+export { useCountUp, useCounterAnimation } from "./AnimatedCounter.hooks";

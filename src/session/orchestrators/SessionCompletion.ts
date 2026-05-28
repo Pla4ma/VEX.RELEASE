@@ -2,7 +2,7 @@ import { createDebugger } from "../../utils/debug";
 
 const debug = createDebugger("session:orchestrator:completion");
 
-import type { SessionOrchestrator } from "../SessionOrchestrator";
+import type { SessionOrchestratorBase as SessionOrchestrator } from "../SessionOrchestratorBase";
 
 export async function completeSessionInternal(
   orch: SessionOrchestrator,

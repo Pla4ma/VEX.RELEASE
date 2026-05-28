@@ -9,7 +9,7 @@ export type {
   TransitionConfig,
   TransitionPreset,
   TransitionEasing,
-} from "./TransitionWrapper";
+} from "./transition-config";
 export {
   EnterAnimation,
   StaggeredEnter,

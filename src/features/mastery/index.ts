@@ -18,14 +18,14 @@ export { MasteryCard } from "./components/MasteryCard";
 export { MasteryRankBadge } from "./components/MasteryRankBadge";
 export { TechniqueBar } from "./components/TechniqueBar";
 export {
-  MasteryUnlockGate,
-  LockedFeaturePreview,
   isFeatureUnlocked,
   getRequiredRank,
   getPointsToUnlock,
   RANK_UNLOCKS,
   type UnlockableFeature,
-} from "./components/MasteryUnlockGate";
+} from "./components/mastery-unlock-gate-data";
+export { MasteryUnlockGate } from "./components/MasteryUnlockGate";
+export { LockedFeaturePreview } from "./components/LockedFeaturePreview";
 
 // Service
 export { MasteryService } from "./service";

@@ -4,7 +4,7 @@ import { createDebugger } from "../../utils/debug";
 
 const debug = createDebugger("session:orchestrator:lifecycle");
 
-import type { SessionOrchestrator } from "../SessionOrchestrator";
+import type { SessionOrchestratorBase as SessionOrchestrator } from "../SessionOrchestratorBase";
 
 export async function startSession(
   orch: SessionOrchestrator,

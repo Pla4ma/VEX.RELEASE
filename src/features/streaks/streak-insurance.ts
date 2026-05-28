@@ -1,4 +1,5 @@
 import { z } from "zod";
+
 export const StreakInsuranceSchema = z.object({
   id: z.string(),
   userId: z.string(),
@@ -9,6 +10,7 @@ export const StreakInsuranceSchema = z.object({
   used: z.boolean(),
   usedAt: z.number().optional(),
 });
+
 export const StreakGambleSchema = z.object({
   id: z.string(),
   userId: z.string(),
@@ -21,6 +23,7 @@ export const StreakGambleSchema = z.object({
   bonusXpIfWon: z.number(),
   settledAt: z.number().optional(),
 });
+
 export const ComebackTokenSchema = z.object({
   id: z.string(),
   userId: z.string(),
@@ -29,21 +32,25 @@ export const ComebackTokenSchema = z.object({
   used: z.boolean(),
   restoreValue: z.number(),
 });
+
 export type StreakInsurance = z.infer<typeof StreakInsuranceSchema>;
 export type StreakGamble = z.infer<typeof StreakGambleSchema>;
 export type ComebackToken = z.infer<typeof ComebackTokenSchema>;
+
 export interface InsurancePricing {
   baseCost: number;
   perDayMultiplier: number;
   maxDays: number;
   minDays: number;
 }
+
 export const INSURANCE_PRICING: InsurancePricing = {
   baseCost: 500,
   perDayMultiplier: 50,
   maxDays: 30,
   minDays: 3,
 };
+
 export function calculateInsuranceCost(streakDays: number): number {
   const clampedDays = Math.max(
     INSURANCE_PRICING.minDays,
@@ -54,6 +61,7 @@ export function calculateInsuranceCost(streakDays: number): number {
     clampedDays * INSURANCE_PRICING.perDayMultiplier
   );
 }
+
 export function calculateInsurancePayout(
   streakDays: number,
   userLevel: number,
@@ -63,12 +71,14 @@ export function calculateInsurancePayout(
   const xpBonus = restoredDays * 10;
   return { restoredDays, xpBonus };
 }
+
 export interface GambleConfig {
   requiredGrade: "S" | "A" | "B";
   timeWindowHours: number;
   bonusXpMultiplier: number;
   riskLevel: "LOW" | "MEDIUM" | "HIGH";
 }
+
 export const GAMBLE_CONFIGS: Record<string, GambleConfig> = {
   conservative: {
     requiredGrade: "B",
@@ -89,6 +99,7 @@ export const GAMBLE_CONFIGS: Record<string, GambleConfig> = {
     riskLevel: "HIGH",
   },
 };
+
 export function getGambleOptions(
   streakDays: number,
   hoursRemaining: number,
@@ -114,20 +125,24 @@ export function getGambleOptions(
   });
   return { available: options.some((o) => o.available), options };
 }
+
 export function calculateComebackTokensEarned(
   brokenStreakDays: number,
 ): number {
   return Math.max(1, Math.ceil(brokenStreakDays / 10));
 }
+
 export function calculateTokenRestoreValue(tokenCount: number): number {
   return tokenCount * 5;
 }
+
 export interface PurchaseInsuranceResult {
   success: boolean;
   insurance: StreakInsurance | null;
   error: string | null;
   remainingBalance: number;
 }
+
 export function canPurchaseInsurance(
   userId: string,
   streakDays: number,
@@ -150,6 +165,7 @@ export function canPurchaseInsurance(
   }
   return { allowed: true, reason: null, cost };
 }
+
 export function createInsurance(
   userId: string,
   streakDays: number,
@@ -165,143 +181,12 @@ export function createInsurance(
     used: false,
   };
 }
-export interface SettleGambleResult {
-  success: boolean;
-  won: boolean;
-  streakSaved: boolean;
-  newStreakDays: number;
-  xpAwarded: number;
-  message: string;
-}
-export function settleGamble(
-  gamble: StreakGamble,
-  sessionGrade: string,
-  sessionQuality: number,
-): SettleGambleResult {
-  const gradeRank: Record<string, number> = {
-    S: 3,
-    A: 2,
-    B: 1,
-    C: 0,
-    D: 0,
-    F: 0,
-  };
-  const requiredRank = gradeRank[gamble.requiredGrade]!;
-  const actualRank = gradeRank[sessionGrade] || 0;
-  const won = actualRank >= requiredRank;
-  if (won) {
-    return {
-      success: true,
-      won: true,
-      streakSaved: true,
-      newStreakDays: gamble.streakDaysAtRisk,
-      xpAwarded: Math.floor(gamble.bonusXpIfWon * (sessionQuality / 100)),
-      message: `GAMBLE WON! Your ${gamble.requiredGrade} grade session saved your ${gamble.streakDaysAtRisk} day streak!`,
-    };
-  } else {
-    return {
-      success: true,
-      won: false,
-      streakSaved: false,
-      newStreakDays: 1,
-      xpAwarded: 0,
-      message: `Gamble lost. Needed ${gamble.requiredGrade}, got ${sessionGrade}. Streak reset to 1.`,
-    };
-  }
-}
-export interface StreakRiskAssessment {
-  riskLevel: "NONE" | "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
-  hoursRemaining: number;
-  insuranceAvailable: boolean;
-  insuranceCost: number;
-  gambleAvailable: boolean;
-  gambleOptions: ReturnType<typeof getGambleOptions>;
-  comebackTokensAvailable: number;
-  recommendedAction: "NONE" | "INSURANCE" | "GAMBLE" | "SESSION_NOW";
-}
-export function assessStreakRisk(
-  streakDays: number,
-  lastSessionAt: number | null,
-  timezone: string,
-  userBalance: number,
-  hasActiveInsurance: boolean,
-  comebackTokens: number,
-): StreakRiskAssessment {
-  const now = Date.now();
-  const lastDay = lastSessionAt ? new Date(lastSessionAt).getDate() : null;
-  const currentDay = new Date(now).getDate();
-  const midnight = new Date(now);
-  midnight.setHours(24, 0, 0, 0);
-  const hoursRemaining = Math.max(
-    0,
-    (midnight.getTime() - now) / (1000 * 60 * 60),
-  );
-  let riskLevel: StreakRiskAssessment["riskLevel"] = "NONE";
-  if (!lastSessionAt || lastDay !== currentDay) {
-    if (hoursRemaining > 12) {
-      riskLevel = "LOW";
-    } else if (hoursRemaining > 6) {
-      riskLevel = "MEDIUM";
-    } else if (hoursRemaining > 3) {
-      riskLevel = "HIGH";
-    } else {
-      riskLevel = "CRITICAL";
-    }
-  }
-  const insuranceCost = calculateInsuranceCost(streakDays);
-  const canAffordInsurance =
-    userBalance >= insuranceCost && !hasActiveInsurance;
-  const gambleOpts = getGambleOptions(streakDays, hoursRemaining);
-  let recommendedAction: StreakRiskAssessment["recommendedAction"] = "NONE";
-  if (riskLevel === "CRITICAL") {
-    recommendedAction = comebackTokens > 0 ? "SESSION_NOW" : "INSURANCE";
-  } else if (riskLevel === "HIGH") {
-    recommendedAction = gambleOpts.available ? "GAMBLE" : "INSURANCE";
-  } else if (riskLevel === "MEDIUM") {
-    recommendedAction = "SESSION_NOW";
-  }
-  return {
-    riskLevel,
-    hoursRemaining,
-    insuranceAvailable: canAffordInsurance,
-    insuranceCost,
-    gambleAvailable: gambleOpts.available,
-    gambleOptions: gambleOpts,
-    comebackTokensAvailable: comebackTokens,
-    recommendedAction,
-  };
-}
-export function convertShieldsToInsurance(
-  shieldCount: number,
-  streakDays: number,
-): { insurance: StreakInsurance[]; tokens: ComebackToken[]; message: string } {
-  const insurance: StreakInsurance[] = [];
-  const tokens: ComebackToken[] = [];
-  if (shieldCount > 0) {
-    insurance.push(createInsurance("migrated_user", streakDays, 0));
-  }
-  for (let i = 1; i < shieldCount; i++) {
-    tokens.push({
-      id: `token_${Date.now()}_${i}`,
-      userId: "migrated_user",
-      sourceStreak: streakDays,
-      earnedAt: Date.now(),
-      used: false,
-      restoreValue: 5,
-    });
-  }
-  return {
-    insurance,
-    tokens,
-    message: `Converted ${shieldCount} shields to ${insurance.length} insurance policy and ${tokens.length} comeback tokens`,
-  };
-}
-export const StreakInsuranceEvents = {
-  INSURANCE_PURCHASED: "streak:insurance_purchased",
-  INSURANCE_USED: "streak:insurance_used",
-  GAMBLE_STARTED: "streak:gamble_started",
-  GAMBLE_WON: "streak:gamble_won",
-  GAMBLE_LOST: "streak:gamble_lost",
-  TOKEN_EARNED: "streak:token_earned",
-  TOKEN_USED: "streak:token_used",
-} as const;
+
+export {
+  type SettleGambleResult,
+  type StreakRiskAssessment,
+  settleGamble,
+  assessStreakRisk,
+  convertShieldsToInsurance,
+  StreakInsuranceEvents,
+} from "./streak-risk-assessment";
