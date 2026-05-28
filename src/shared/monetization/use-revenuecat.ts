@@ -1,15 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type {
-  CustomerInfo,
-  PurchasesOffering,
-  PurchasesPackage,
-} from "react-native-purchases";
-import {
-  getCustomerInfo,
-  getOfferings,
-  restorePurchases as restoreRevenueCatPurchases,
-  revenueCatService,
-} from "./revenuecat-service";
+import type { CustomerInfo, PurchasesOffering } from "react-native-purchases";
+import { revenueCatService } from "./revenuecat-service";
 import type {
   EntitlementInfo,
   PurchaseResult,
@@ -18,22 +9,13 @@ import type {
   RevenueCatError,
   UseRevenueCatState,
 } from "./revenuecat-types";
+import { refreshOfferings, refreshCustomer } from "./revenuecat-query-ops";
 import {
-  PurchaseEvents,
-  createOfferingProperties,
-  createPurchaseProperties,
-} from "./purchase-events";
-import { hasPremiumEntitlement } from "./entitlements";
-import { capture, type PurchaseEvent } from "../analytics";
-function buildError(
-  code: RevenueCatError["code"],
-  message: string,
-): RevenueCatError {
-  const error = new Error(message) as RevenueCatError;
-  error.name = "RevenueCatError";
-  error.code = code;
-  return error;
-}
+  executePurchase,
+  executeRestore,
+  executeRetry,
+} from "./revenuecat-mutation-ops";
+
 export function useRevenueCat(): UseRevenueCatState {
   const [status, setStatus] =
     useState<UseRevenueCatState["status"]>("uninitialized");
@@ -64,103 +46,31 @@ export function useRevenueCat(): UseRevenueCatState {
   );
   const rawOfferingRef = useRef<PurchasesOffering | null>(null);
   const hasOfferings = availablePackages.length > 0;
-  const refreshOfferings = useCallback(async (): Promise<void> => {
-    if (!revenueCatService.isReady()) {
-      const error = buildError(
-        "CONFIGURATION_ERROR",
-        "RevenueCat is not ready",
-      );
-      setOfferings(null);
-      setAvailablePackages([]);
-      setOfferingsError(error);
-      return;
-    }
-    setIsLoadingOfferings(true);
-    setOfferingsError(null);
-    try {
-      const result = await getOfferings();
-      if (!result.success || !result.currentOffering) {
-        rawOfferingRef.current = null;
-        setOfferings(null);
-        setAvailablePackages([]);
-        const error = result.error
-          ? buildError("OFFERINGS_NOT_LOADED", result.error.message)
-          : buildError("EMPTY_OFFERINGS", "No active offerings found");
-        setOfferingsError(error);
-        capture(PurchaseEvents.OFFERING_EMPTY as PurchaseEvent, {
-          error_code: error.code,
-        });
-        return;
-      }
-      rawOfferingRef.current = result.currentOffering;
-      const displayOffering = mapOfferingToDisplayInfo(result.currentOffering);
-      setOfferings(displayOffering);
-      setAvailablePackages(displayOffering.packages);
-      capture(
-        PurchaseEvents.OFFERING_LOADED as PurchaseEvent,
-        createOfferingProperties(
-          displayOffering.identifier,
-          displayOffering.packages.map((item) => ({
-            packageType: item.packageType,
-          })),
-        ),
-      );
-    } catch (error) {
-      const rcError = buildError(
-        "OFFERINGS_NOT_LOADED",
-        error instanceof Error ? error.message : "Failed to load offerings",
-      );
-      setOfferings(null);
-      setAvailablePackages([]);
-      setOfferingsError(rcError);
-      capture(PurchaseEvents.OFFERING_LOAD_FAILED as PurchaseEvent, {
-        error_code: rcError.code,
-        error_message: rcError.message,
-      });
-    } finally {
-      setIsLoadingOfferings(false);
-    }
-  }, []);
-  const refreshCustomer = useCallback(async (): Promise<void> => {
-    if (!revenueCatService.isReady()) {
-      const error = buildError(
-        "CONFIGURATION_ERROR",
-        "RevenueCat is not ready",
-      );
-      setCustomerError(error);
-      return;
-    }
-    setIsLoadingCustomer(true);
-    setCustomerError(null);
-    try {
-      const result = await getCustomerInfo();
-      if (!result.success) {
-        const error = buildError(
-          "CONFIGURATION_ERROR",
-          result.error?.message ?? "Failed to load customer info",
-        );
-        setCustomerInfo(null);
-        setActiveEntitlements([]);
-        setIsPremium(false);
-        setCustomerError(error);
-        return;
-      }
-      setCustomerInfo(result.customerInfo ?? null);
-      setActiveEntitlements(result.entitlements);
-      setIsPremium(hasPremiumEntitlement(result.entitlements));
-    } catch (error) {
-      const rcError = buildError(
-        "CONFIGURATION_ERROR",
-        error instanceof Error ? error.message : "Failed to load customer info",
-      );
-      setCustomerInfo(null);
-      setActiveEntitlements([]);
-      setIsPremium(false);
-      setCustomerError(rcError);
-    } finally {
-      setIsLoadingCustomer(false);
-    }
-  }, []);
+
+  const doRefreshOfferings = useCallback(
+    (): Promise<void> =>
+      refreshOfferings({
+        setIsLoading: setIsLoadingOfferings,
+        setOfferings,
+        setPackages: setAvailablePackages,
+        setError: setOfferingsError,
+        rawOfferingRef,
+      }),
+    [],
+  );
+
+  const doRefreshCustomer = useCallback(
+    (): Promise<void> =>
+      refreshCustomer({
+        setIsLoading: setIsLoadingCustomer,
+        setCustomerInfo,
+        setEntitlements: setActiveEntitlements,
+        setIsPremium,
+        setError: setCustomerError,
+      }),
+    [],
+  );
+
   useEffect(() => {
     let isMounted = true;
     const initialize = async () => {
@@ -174,173 +84,57 @@ export function useRevenueCat(): UseRevenueCatState {
       const ready = result.status === "ready" && revenueCatService.isReady();
       setIsReady(ready);
       if (ready) {
-        await Promise.all([refreshOfferings(), refreshCustomer()]);
+        await Promise.all([doRefreshOfferings(), doRefreshCustomer()]);
       }
     };
     void initialize();
     return () => {
       isMounted = false;
     };
-  }, [refreshCustomer, refreshOfferings]);
+  }, [doRefreshCustomer, doRefreshOfferings]);
+
   const purchasePackage = useCallback(
-    async (
-      packageInfo: PurchasesPackageDisplayInfo,
-    ): Promise<PurchaseResult> => {
-      if (!revenueCatService.isReady()) {
-        const error = buildError(
-          "CONFIGURATION_ERROR",
-          "RevenueCat is not ready",
-        );
-        setPurchaseError(error);
-        return { success: false, error, errorCode: error.code };
-      }
-      const rawPackage = rawOfferingRef.current?.availablePackages.find(
-        (item) => item.identifier === packageInfo.identifier,
-      );
-      if (!rawPackage) {
-        const error = buildError(
-          "PRODUCT_NOT_AVAILABLE",
-          "Package not found in active offering",
-        );
-        setPurchaseError(error);
-        return { success: false, error, errorCode: error.code };
-      }
-      setIsPurchasing(true);
-      setPurchaseError(null);
-      capture(
-        PurchaseEvents.PURCHASE_STARTED as PurchaseEvent,
-        createPurchaseProperties({
-          packageId: packageInfo.identifier,
-          offeringId: offerings?.identifier ?? "unknown",
-          productId: packageInfo.product.identifier,
-          price: packageInfo.product.price,
-          currency: packageInfo.product.currencyCode,
-          isRestore: false,
-          introPrice: packageInfo.product.introPrice?.price,
-          success: false,
-        }),
-      );
-      try {
-        const result = await revenueCatService.purchasePackage(rawPackage);
-        if (result.success) {
-          await refreshCustomer();
-          capture(
-            PurchaseEvents.PURCHASE_COMPLETED as PurchaseEvent,
-            createPurchaseProperties({
-              packageId: packageInfo.identifier,
-              offeringId: offerings?.identifier ?? "unknown",
-              productId: packageInfo.product.identifier,
-              price: packageInfo.product.price,
-              currency: packageInfo.product.currencyCode,
-              isRestore: false,
-              introPrice: packageInfo.product.introPrice?.price,
-              success: true,
-            }),
-          );
-          return result;
-        }
-        const error = buildError(
-          (result.errorCode as RevenueCatError["code"]) ?? "UNKNOWN",
-          result.error?.message ?? "Purchase failed",
-        );
-        setPurchaseError(error);
-        capture(
-          result.errorCode === "PURCHASE_CANCELLED"
-            ? (PurchaseEvents.PURCHASE_CANCELLED as PurchaseEvent)
-            : (PurchaseEvents.PURCHASE_FAILED as PurchaseEvent),
-          createPurchaseProperties({
-            packageId: packageInfo.identifier,
-            offeringId: offerings?.identifier ?? "unknown",
-            productId: packageInfo.product.identifier,
-            price: packageInfo.product.price,
-            currency: packageInfo.product.currencyCode,
-            isRestore: false,
-            introPrice: packageInfo.product.introPrice?.price,
-            success: false,
-            errorCode: error.code,
-            errorMessage: error.message,
-          }),
-        );
-        return { success: false, error, errorCode: error.code };
-      } catch (error) {
-        const rcError = buildError(
-          "UNKNOWN",
-          error instanceof Error ? error.message : "Purchase failed",
-        );
-        setPurchaseError(rcError);
-        capture(PurchaseEvents.PURCHASE_FAILED as PurchaseEvent, {
-          package_id: packageInfo.identifier,
-          error_code: rcError.code,
-          error_message: rcError.message,
-        });
-        return { success: false, error: rcError, errorCode: rcError.code };
-      } finally {
-        setIsPurchasing(false);
-      }
-    },
-    [offerings?.identifier, refreshCustomer],
+    (packageInfo: PurchasesPackageDisplayInfo): Promise<PurchaseResult> =>
+      executePurchase(
+        {
+          setIsPurchasing,
+          setPurchaseError,
+          rawOfferingRef,
+          offerings,
+          refreshCustomer: doRefreshCustomer,
+        },
+        packageInfo,
+      ),
+    [offerings?.identifier, doRefreshCustomer],
   );
-  const restorePurchases = useCallback(async (): Promise<PurchaseResult> => {
-    if (!revenueCatService.isReady()) {
-      const error = buildError(
-        "CONFIGURATION_ERROR",
-        "RevenueCat is not ready",
-      );
-      setPurchaseError(error);
-      return { success: false, error, errorCode: error.code };
-    }
-    setIsRestoring(true);
-    setPurchaseError(null);
-    capture(PurchaseEvents.RESTORE_STARTED as PurchaseEvent, {});
-    try {
-      const result = await restoreRevenueCatPurchases();
-      if (result.success) {
-        await refreshCustomer();
-        capture(PurchaseEvents.RESTORE_COMPLETED as PurchaseEvent, {
-          found_entitlements: activeEntitlements.length > 0,
-          entitlement_count: activeEntitlements.length,
-          success: true,
-        });
-        return result;
-      }
-      const error = buildError(
-        (result.errorCode as RevenueCatError["code"]) ?? "UNKNOWN",
-        result.error?.message ?? "Restore failed",
-      );
-      setPurchaseError(error);
-      capture(PurchaseEvents.RESTORE_FAILED as PurchaseEvent, {
-        success: false,
-        error_code: error.code,
-        error_message: error.message,
-      });
-      return { success: false, error, errorCode: error.code };
-    } catch (error) {
-      const rcError = buildError(
-        "UNKNOWN",
-        error instanceof Error ? error.message : "Restore failed",
-      );
-      setPurchaseError(rcError);
-      capture(PurchaseEvents.RESTORE_FAILED as PurchaseEvent, {
-        success: false,
-        error_code: rcError.code,
-        error_message: rcError.message,
-      });
-      return { success: false, error: rcError, errorCode: rcError.code };
-    } finally {
-      setIsRestoring(false);
-    }
-  }, [activeEntitlements.length, refreshCustomer]);
-  const retry = useCallback(async (): Promise<void> => {
-    setOfferingsError(null);
-    setCustomerError(null);
-    setPurchaseError(null);
-    if (!revenueCatService.isReady()) {
-      const initResult = await revenueCatService.initialize();
-      setStatus(initResult.status);
-      setIsReady(initResult.status === "ready" && revenueCatService.isReady());
-    }
-    await Promise.all([refreshOfferings(), refreshCustomer()]);
-  }, [refreshCustomer, refreshOfferings]);
+
+  const restorePurchases = useCallback(
+    (): Promise<PurchaseResult> =>
+      executeRestore({
+        setIsRestoring,
+        setPurchaseError,
+        entitlementCount: activeEntitlements.length,
+        refreshCustomer: doRefreshCustomer,
+      }),
+    [activeEntitlements.length, doRefreshCustomer],
+  );
+
+  const retry = useCallback(
+    (): Promise<void> =>
+      executeRetry({
+        clearErrors: () => {
+          setOfferingsError(null);
+          setCustomerError(null);
+          setPurchaseError(null);
+        },
+        setStatus,
+        setIsReady,
+        refreshOfferings: doRefreshOfferings,
+        refreshCustomer: doRefreshCustomer,
+      }),
+    [doRefreshCustomer, doRefreshOfferings],
+  );
+
   return {
     isInitialized,
     isReady,
@@ -358,8 +152,8 @@ export function useRevenueCat(): UseRevenueCatState {
     offeringsError,
     customerError,
     purchaseError,
-    refreshOfferings,
-    refreshCustomer,
+    refreshOfferings: doRefreshOfferings,
+    refreshCustomer: doRefreshCustomer,
     purchasePackage,
     restorePurchases,
     identifyUser: revenueCatService.identifyUser.bind(revenueCatService),
@@ -367,109 +161,11 @@ export function useRevenueCat(): UseRevenueCatState {
     retry,
   };
 }
-export function usePremiumStatus(): {
-  isPremium: boolean;
-  isLoading: boolean;
-  entitlements: EntitlementInfo[];
-  refresh: () => Promise<void>;
-} {
-  const { isPremium, activeEntitlements, isLoadingCustomer, refreshCustomer } =
-    useRevenueCat();
-  return {
-    isPremium,
-    isLoading: isLoadingCustomer,
-    entitlements: activeEntitlements,
-    refresh: refreshCustomer,
-  };
-}
-export function usePaywall(): {
-  offerings: PurchasesOfferingDisplayInfo | null;
-  packages: PurchasesPackageDisplayInfo[];
-  isLoading: boolean;
-  error: RevenueCatError | null;
-  purchase: (pkg: PurchasesPackageDisplayInfo) => Promise<PurchaseResult>;
-  restore: () => Promise<PurchaseResult>;
-  retry: () => Promise<void>;
-} {
-  const {
-    offerings,
-    availablePackages,
-    isLoadingOfferings,
-    offeringsError,
-    isPurchasing,
-    isRestoring,
-    purchasePackage,
-    restorePurchases,
-    retry,
-  } = useRevenueCat();
-  return {
-    offerings,
-    packages: availablePackages,
-    isLoading: isLoadingOfferings || isPurchasing || isRestoring,
-    error: offeringsError,
-    purchase: purchasePackage,
-    restore: restorePurchases,
-    retry,
-  };
-}
-function mapOfferingToDisplayInfo(
-  offering: PurchasesOffering,
-): PurchasesOfferingDisplayInfo {
-  const mapPackage = (
-    pkg: PurchasesPackage | null,
-  ): PurchasesPackageDisplayInfo | null => {
-    if (!pkg) {
-      return null;
-    }
-    return {
-      identifier: pkg.identifier,
-      packageType: pkg.packageType,
-      product: {
-        identifier: pkg.product.identifier,
-        description: pkg.product.description,
-        title: pkg.product.title,
-        price: pkg.product.price,
-        priceString: pkg.product.priceString,
-        currencyCode: pkg.product.currencyCode,
-        introPrice: pkg.product.introPrice
-          ? {
-              price: pkg.product.introPrice.price,
-              priceString: pkg.product.introPrice.priceString,
-              period: pkg.product.introPrice.period,
-              cycles: pkg.product.introPrice.cycles,
-              periodUnit: pkg.product.introPrice.periodUnit,
-              periodNumberOfUnits: pkg.product.introPrice.periodNumberOfUnits,
-            }
-          : null,
-        discounts: pkg.product.discounts?.map((discount) => ({
-          identifier: discount.identifier,
-          price: discount.price,
-          priceString: discount.priceString,
-          cycles: discount.cycles,
-          period: discount.period,
-          periodUnit: discount.periodUnit,
-          periodNumberOfUnits: discount.periodNumberOfUnits,
-        })),
-      },
-    };
-  };
-  const packages = offering.availablePackages
-    .map((item) => mapPackage(item))
-    .filter((item): item is PurchasesPackageDisplayInfo => Boolean(item));
-  return {
-    identifier: offering.identifier,
-    serverDescription: offering.serverDescription,
-    metadata: offering.metadata,
-    packages,
-    lifetime: mapPackage(offering.lifetime),
-    annual: mapPackage(offering.annual),
-    sixMonth: mapPackage(offering.sixMonth),
-    threeMonth: mapPackage(offering.threeMonth),
-    twoMonth: mapPackage(offering.twoMonth),
-    monthly: mapPackage(offering.monthly),
-    weekly: mapPackage(offering.weekly),
-  };
-}
+
+// Re-export derived hooks for backward compatibility
+export { usePremiumStatus, usePaywall } from "./use-revenuecat-derived";
+
+// Re-export types for backward compatibility
 export type {
   PurchasesOfferingDisplayInfo,
   PurchasesPackageDisplayInfo,
