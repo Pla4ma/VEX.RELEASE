@@ -12,10 +12,12 @@ import {
   buildStreakMilestoneResult,
   getAntiCheatWarning,
 } from "./session-notification-templates";
+import { NotificationScheduler } from "./NotificationScheduler";
+export { NotificationScheduler } from "./NotificationScheduler";
 
 export class SessionNotifications {
   private userId: string | null = null;
-  private scheduledNotifications: Map<string, number> = new Map();
+  private readonly scheduler = new NotificationScheduler();
   private enabled: boolean = true;
 
   setUserId(userId: string): void {
@@ -34,7 +36,7 @@ export class SessionNotifications {
     if (!this.enabled) return;
     const countdown = countdownSeconds || 0;
     if (countdown > 0) {
-      this.scheduleNotification(
+      this.scheduler.schedule(
         `session_start_${sessionId}`,
         {
           title: "Session Starting Soon",
@@ -43,6 +45,7 @@ export class SessionNotifications {
           priority: "normal",
         },
         startTime - countdown * 1000,
+        (p) => this.showNotification(p),
       );
     }
   }
@@ -53,7 +56,7 @@ export class SessionNotifications {
     sessionName?: string,
   ): Promise<void> {
     if (!this.enabled) return;
-    this.scheduleNotification(
+    this.scheduler.schedule(
       `session_end_${sessionId}`,
       {
         title: "🎉 Session Complete!",
@@ -63,6 +66,7 @@ export class SessionNotifications {
         priority: "high",
       },
       endTime,
+      (p) => this.showNotification(p),
     );
   }
 
@@ -99,10 +103,11 @@ export class SessionNotifications {
     const reminderTime = new Date();
     reminderTime.setHours(hour, minute, 0, 0);
     if (reminderTime <= now) reminderTime.setDate(reminderTime.getDate() + 1);
-    this.scheduleNotification(
+    this.scheduler.schedule(
       "daily_reminder",
       buildDailyReminderPayload(),
       reminderTime.getTime(),
+      (p) => this.showNotification(p),
     );
   }
 
@@ -145,38 +150,11 @@ export class SessionNotifications {
 
   async cancelSessionNotifications(sessionId: string): Promise<void> {
     const prefixes = [`session_start_${sessionId}`, `session_end_${sessionId}`];
-    for (const [key, timeoutId] of this.scheduledNotifications) {
-      if (prefixes.some((p) => key.startsWith(p))) {
-        clearTimeout(timeoutId);
-        this.scheduledNotifications.delete(key);
-      }
-    }
+    this.scheduler.cancelByPrefixes(prefixes);
   }
 
   async clearAllNotifications(): Promise<void> {
-    for (const [_key, timeoutId] of this.scheduledNotifications) {
-      clearTimeout(timeoutId);
-    }
-    this.scheduledNotifications.clear();
-  }
-
-  private scheduleNotification(
-    id: string,
-    payload: NotificationPayload,
-    timestamp: number,
-  ): void {
-    const delay = timestamp - Date.now();
-    if (delay <= 0) {
-      this.showNotification(payload);
-      return;
-    }
-    const timeoutId = window.setTimeout(() => {
-      this.showNotification(payload);
-      this.scheduledNotifications.delete(id);
-    }, delay);
-    const existing = this.scheduledNotifications.get(id);
-    if (existing) clearTimeout(existing);
-    this.scheduledNotifications.set(id, timeoutId);
+    this.scheduler.clearAll();
   }
 
   private showNotification(payload: NotificationPayload): void {

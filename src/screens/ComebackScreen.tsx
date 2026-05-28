@@ -10,13 +10,12 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Box } from "../components/primitives/Box";
-import { Button } from "../components/primitives/Button";
-import { Text } from "../components/primitives/Text";
 import type { ExtendedRootStackParams } from "../navigation/types";
 import { useSessionUIStore } from "../store/session-state";
 import { useTheme } from "../theme";
 import { Particle } from "./ComebackParticles";
 import { capture, RetentionEvents } from "../shared/analytics";
+import { ComebackCard } from "./ComebackCard";
 
 type ComebackNavigationProp = NativeStackNavigationProp<
   ExtendedRootStackParams,
@@ -106,101 +105,11 @@ export function ComebackScreen(): JSX.Element {
           paddingBottom: insets.bottom + theme.spacing[6],
         }}
       >
-        <Box
-          p="xl"
-          style={{
-            backgroundColor: theme.colors.background.secondary,
-            borderRadius: theme.borderRadius["3xl"],
-            borderWidth: 1,
-            borderColor: theme.colors.border.light,
-            gap: theme.spacing[4],
-          }}
-        >
-          <Text
-            variant="label"
-            color={theme.colors.primary[500]}
-            textTransform="uppercase"
-          >
-            Comeback Mode
-          </Text>
-          <Text variant="h2" color={theme.colors.text.primary}>
-            {comebackState.message}
-          </Text>
-          <Text variant="body" color={theme.colors.text.secondary}>
-            You were away {comebackState.daysAbsent} days
-          </Text>
-
-          <Box
-            p="md"
-            style={{
-              backgroundColor: theme.colors.surface.selected,
-              borderRadius: theme.borderRadius.xl,
-              borderWidth: 1,
-              borderColor: theme.colors.primary[200],
-            }}
-          >
-            <Text variant="body" color={theme.colors.text.primary}>
-              {`⚡ ${comebackState.rewardMultiplier}x XP on your first session back`}
-            </Text>
-          </Box>
-
-          {comebackState.streakRestoreEligible ? (
-            <Box
-              p="md"
-              style={{
-                backgroundColor: theme.colors.warning[50],
-                borderRadius: theme.borderRadius.xl,
-                borderWidth: 1,
-                borderColor: theme.colors.warning[500],
-                gap: theme.spacing[2],
-              }}
-            >
-              <Text variant="body" color={theme.colors.text.primary}>
-                {`🔥 Your ${comebackState.streakBefore}-day streak can be restored! Complete 3 sessions this week.`}
-              </Text>
-              <Box flexDirection="row" gap="sm">
-                {[0, 1, 2].map((step) => (
-                  <Box
-                    key={step}
-                    flex={1}
-                    height={10}
-                    style={{
-                      backgroundColor:
-                        step === 0
-                          ? theme.colors.warning[500]
-                          : theme.colors.background.tertiary,
-                      borderRadius: theme.borderRadius.full,
-                      opacity: step === 0 ? 0.35 : 1,
-                    }}
-                  />
-                ))}
-              </Box>
-              <Text variant="caption" color={theme.colors.text.secondary}>
-                0 / 3 sessions completed
-              </Text>
-            </Box>
-          ) : null}
-
-          <Button
-            size="lg"
-            onPress={startComeback}
-            accessibilityLabel="Start My Comeback Session button"
-            accessibilityRole="button"
-            accessibilityHint="Activates this control"
-          >
-            Start My Comeback Session
-          </Button>
-          <Button
-            variant="ghost"
-            size="lg"
-            onPress={closePrompt}
-            accessibilityLabel="Remind Me Later button"
-            accessibilityRole="button"
-            accessibilityHint="Activates this control"
-          >
-            Remind Me Later
-          </Button>
-        </Box>
+        <ComebackCard
+          comebackState={comebackState}
+          onStart={startComeback}
+          onClose={closePrompt}
+        />
       </Box>
     </Box>
   );

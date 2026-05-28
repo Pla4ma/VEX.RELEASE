@@ -19,12 +19,9 @@ import {
 } from "../hooks/home-controller-helpers";
 import type { UseQueryResult } from "@tanstack/react-query";
 import {
-  createStubQuery,
   stubNavigationActions,
-  stubCoachMutations,
-  stubHomeReturnReason,
-  stubLearningExecutionLayer,
 } from "../hooks/home-controller-stubs";
+import { buildContainerController } from "./new-user-container-controller-builder";
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -145,8 +142,7 @@ export function useNewUserContainerModel(
   const isLoading =
     disclosure.isLoading || streakQuery.isLoading || progressionQuery.isLoading;
 
-  const controller: HomeController = {
-    user: null,
+  const controller = buildContainerController({
     userId,
     isOnline,
     isLoading,
@@ -160,34 +156,16 @@ export function useNewUserContainerModel(
     todayFocusMinutes,
     progressPercent,
     latestSession: historyQuery.history[0] ?? null,
-    primaryRecommendation: null,
     homeSpine,
-    returnReason: stubHomeReturnReason,
     disclosure,
     runtime,
     streakQuery,
     progressionQuery,
     historyQuery,
-    squadsQuery: createStubQuery() as UseQueryResult,
-    activeStudyPlanQuery: createStubQuery() as UseQueryResult,
-    learningExecutionLayer: stubLearningExecutionLayer(),
-    comebackQuery: createStubQuery() as UseQueryResult,
-    activeBossQuery: createStubQuery() as UseQueryResult,
-    recommendationsQuery: createStubQuery() as UseQueryResult,
-    shouldShowSecondarySystems: runtime.shouldShowSecondarySystems,
-    shouldShowExpansionSystems: runtime.shouldShowExpansionSystems,
     openSetup,
     openProgress,
     openSocial: stubActions.openSocial,
-    openContentStudy: openSetup as () => void,
-    continueStudyPlan: openSetup as () => void,
-    createRecommendation: stubCoachMutations()
-      .createRecommendation as HomeController["createRecommendation"],
-    updateRecommendationStatus: stubCoachMutations()
-      .updateRecommendationStatus as HomeController["updateRecommendationStatus"],
-    retryAll: disclosure.refetchAll as () => Promise<unknown>,
-    features: disclosure.features,
-  };
+  });
 
   return {
     userId,

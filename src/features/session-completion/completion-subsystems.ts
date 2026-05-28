@@ -1,17 +1,15 @@
-import * as Sentry from "@sentry/react-native";
 import { getProgressionService } from "../../progression/ProgressionService";
 import { getRewardService } from "../../rewards/RewardService";
 import type { SessionSummary } from "../../session/types";
 import { getStreakService } from "../../streaks/StreakService";
 import { getCompanionService } from "../companion/service";
 import { updateFocusScoreFromSessionCompletion } from "../focus-identity/update-focus-score.helper";
-import { getAvailabilityFor } from "../liveops-config/feature-access-store";
 import { trackCompletionAnalytics } from "./completion-analytics";
-import { CompletionLedgerSchema, type CompletionLedger } from "./schemas";
+import { CompletionLedgerSchema } from "./schemas";
 import {
   SUBSYSTEM_META,
-  type SubsystemMeta,
   type SubsystemKind,
+  type SubsystemMeta,
 } from "./subsystem-meta";
 import { enqueue } from "../../lib/offline/queue";
 import { createDebugger } from "../../utils/debug";
@@ -19,57 +17,18 @@ import type {
   CompletionSubsystemInput,
   CompletionSubsystemResult,
 } from "./completion-subsystem-types";
+import {
+  subsystemShouldRun,
+  rewardAmountFor,
+  runSubsystem,
+  withDegradedSystems,
+} from "./completion-subsystem-helpers";
 
 export type { CompletionSubsystemInput, CompletionSubsystemResult };
 export { SUBSYSTEM_META };
 export type { SubsystemKind, SubsystemMeta };
 
 const debug = createDebugger("session-completion:subsystems");
-
-function subsystemShouldRun(meta: SubsystemMeta): boolean {
-  if (
-    meta.kind === "CORE_REQUIRED" ||
-    meta.kind === "REQUIRED" ||
-    meta.kind === "ANALYTICS_ONLY"
-  ) {
-    return true;
-  }
-  if (meta.kind === "FEATURE_DEPENDENT" && meta.featureKey) {
-    return getAvailabilityFor(meta.featureKey).canSubscribeToEvents;
-  }
-  return false;
-}
-
-function rewardAmountFor(ledger: CompletionLedger): number {
-  return Math.max(1, Math.floor(ledger.xpDelta / 10));
-}
-
-async function runSubsystem(
-  degradedSystems: string[],
-  label: string,
-  fn: () => Promise<void>,
-): Promise<void> {
-  try {
-    await fn();
-  } catch (error) {
-    degradedSystems.push(label);
-    Sentry.captureException(error, {
-      tags: { feature: "session-completion", subsystem: label },
-    });
-  }
-}
-
-function withDegradedSystems(
-  ledger: CompletionLedger,
-  degradedSystems: string[],
-): CompletionLedger {
-  return CompletionLedgerSchema.parse({
-    ...ledger,
-    degradedSystems: Array.from(
-      new Set([...ledger.degradedSystems, ...degradedSystems]),
-    ),
-  });
-}
 
 export async function applyCompletionSubsystems(
   input: CompletionSubsystemInput,

@@ -15,6 +15,7 @@ import { Box } from "../../../components/primitives/Box";
 import { useTheme } from "../../../theme";
 import { DifficultySuggestion } from "../service/adaptiveDifficulty";
 import { launchColors } from "@theme/tokens/launch-colors";
+import { ConfidenceIndicator } from "./ConfidenceIndicator";
 
 type SessionDifficulty = "CASUAL" | "FOCUSED" | "INTENSE";
 
@@ -160,49 +161,7 @@ export function AdaptiveDifficultyBanner({
         </View>
 
         {/* Confidence indicator */}
-        <View
-          style={{
-            marginTop: theme.spacing[2],
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <Text
-            variant="caption"
-            style={{ color: theme.colors.text.secondary }}
-          >
-            Confidence:{" "}
-            {confidence.charAt(0).toUpperCase() + confidence.slice(1)}
-          </Text>
-          <View
-            style={{
-              marginLeft: theme.spacing[2],
-              width: 60,
-              height: 4,
-              backgroundColor: launchColors.rgb_255_255_255_0_2,
-              borderRadius: 2,
-              overflow: "hidden",
-            }}
-          >
-            <View
-              style={{
-                width:
-                  confidence === "high"
-                    ? "100%"
-                    : confidence === "medium"
-                      ? "60%"
-                      : "30%",
-                height: "100%",
-                backgroundColor:
-                  confidence === "high"
-                    ? theme.colors.success.DEFAULT
-                    : confidence === "medium"
-                      ? theme.colors.warning.DEFAULT
-                      : theme.colors.text.secondary,
-              }}
-            />
-          </View>
-        </View>
+        <ConfidenceIndicator confidence={confidence} />
       </Box>
     </Animated.View>
   );

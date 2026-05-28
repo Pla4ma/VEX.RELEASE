@@ -7,59 +7,13 @@ import Animated, {
   withSequence,
   withTiming,
 } from "react-native-reanimated";
-import { launchColors } from "@theme/tokens/launch-colors";
 import { styles } from "./InterruptionWarning.styles";
-
-interface InterruptionWarningProps {
-  isVisible: boolean;
-  severity: "MINOR" | "MODERATE" | "MAJOR" | "CRITICAL";
-  countdownSeconds: number;
-  interruptionType: string;
-  onResume: () => void;
-  onAbandon: () => void;
-  onUseStreakSave?: () => void;
-  hasStreakSave?: boolean;
-}
-
-function getSeverityColor(
-  severity: InterruptionWarningProps["severity"],
-): string {
-  switch (severity) {
-    case "CRITICAL":
-      return launchColors.hex_f44336;
-    case "MAJOR":
-      return launchColors.hex_ff6b35;
-    case "MODERATE":
-      return launchColors.hex_ffa500;
-    case "MINOR":
-      return launchColors.hex_ffc107;
-    default:
-      return launchColors.hex_9e9e9e;
-  }
-}
-
-function getSeverityMessage(
-  severity: InterruptionWarningProps["severity"],
-): string {
-  switch (severity) {
-    case "CRITICAL":
-      return "Resume now to keep this session intact.";
-    case "MAJOR":
-      return "Big pause. You can still return cleanly.";
-    case "MODERATE":
-      return "Take a breath, then come back.";
-    case "MINOR":
-      return "Small pause. Keep the thread.";
-    default:
-      return "Focus paused.";
-  }
-}
-
-function formatTime(seconds: number): string {
-  const mins = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return `${mins}:${secs.toString().padStart(2, "0")}`;
-}
+import {
+  type InterruptionWarningProps,
+  getSeverityColor,
+  getSeverityMessage,
+  formatTime,
+} from "./InterruptionWarning.helpers";
 
 export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
   countdownSeconds,
@@ -206,4 +160,5 @@ export const InterruptionWarning: React.FC<InterruptionWarningProps> = ({
   );
 };
 
+export { type InterruptionWarningProps } from "./InterruptionWarning.helpers";
 export default InterruptionWarning;

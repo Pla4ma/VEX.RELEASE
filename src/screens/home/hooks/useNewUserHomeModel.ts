@@ -21,13 +21,9 @@ import {
   getNextUnlockFeature,
 } from "./home-controller-helpers";
 import {
-  createStubQuery,
   stubNavigationActions,
-  stubCoachMutations,
-  stubHomeReturnReason,
-  stubLearningExecutionLayer,
-  stubPrimaryRecommendation,
 } from "./home-controller-stubs";
+import { buildNewUserController } from "./new-user-home-controller-builder";
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
 
@@ -145,8 +141,7 @@ export function useNewUserHomeModel(input: NewUserModelInput): HomeViewModel & {
   const isLoading =
     disclosure.isLoading || streakQuery.isLoading || progressionQuery.isLoading;
 
-  const controller: HomeController = {
-    user: null,
+  const controller = buildNewUserController({
     userId,
     isOnline,
     isLoading,
@@ -160,34 +155,16 @@ export function useNewUserHomeModel(input: NewUserModelInput): HomeViewModel & {
     todayFocusMinutes,
     progressPercent,
     latestSession: historyQuery.history[0] ?? null,
-    primaryRecommendation: stubPrimaryRecommendation(),
     homeSpine,
-    returnReason: stubHomeReturnReason,
     disclosure,
     runtime,
-    streakQuery: streakQuery as UseQueryResult,
-    progressionQuery: progressionQuery as UseQueryResult,
-    historyQuery: historyQuery as SessionHistoryResult,
-    squadsQuery: createStubQuery() as UseQueryResult,
-    activeStudyPlanQuery: createStubQuery() as UseQueryResult,
-    learningExecutionLayer: stubLearningExecutionLayer(),
-    comebackQuery: createStubQuery() as UseQueryResult,
-    activeBossQuery: createStubQuery() as UseQueryResult,
-    recommendationsQuery: createStubQuery() as UseQueryResult,
-    shouldShowSecondarySystems: runtime.shouldShowSecondarySystems,
-    shouldShowExpansionSystems: runtime.shouldShowExpansionSystems,
-    openSetup: openSetup as (params?: Record<string, unknown>) => void,
+    streakQuery,
+    progressionQuery,
+    historyQuery,
+    openSetup,
     openProgress,
     openSocial: stubActions.openSocial,
-    openContentStudy: openSetup as () => void,
-    continueStudyPlan: openSetup as () => void,
-    createRecommendation: stubCoachMutations()
-      .createRecommendation as HomeController["createRecommendation"],
-    updateRecommendationStatus: stubCoachMutations()
-      .updateRecommendationStatus as HomeController["updateRecommendationStatus"],
-    retryAll: disclosure.refetchAll as () => Promise<unknown>,
-    features: disclosure.features,
-  };
+  });
 
   return {
     userId,

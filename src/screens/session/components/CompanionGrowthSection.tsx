@@ -8,11 +8,12 @@ import type { SessionSummary } from "../../../session/types";
 import type { Theme } from "../../../theme/types";
 import {
   type CompanionGrowth,
-  getEvolutionProgress,
-  getMoodForSessionSummary,
   loadCompanionGrowth,
-  loadCompanionState,
 } from "../../../features/companion/session-storage";
+import {
+  type LoadState,
+  buildFallbackGrowth,
+} from "./CompanionGrowthSection.helpers";
 
 type CompanionGrowthSectionProps = {
   sessionId: string;
@@ -20,31 +21,6 @@ type CompanionGrowthSectionProps = {
   theme: Theme;
   userId: string;
 };
-
-type LoadState =
-  | { status: "loading" }
-  | { status: "error"; error: Error }
-  | { status: "empty" }
-  | { status: "success"; growth: CompanionGrowth };
-
-async function buildFallbackGrowth(
-  sessionId: string,
-  summary: SessionSummary,
-  userId: string,
-): Promise<CompanionGrowth> {
-  const state = await loadCompanionState(userId);
-  return {
-    sessionId,
-    mood: getMoodForSessionSummary(summary),
-    level: state.level,
-    phase: state.phase,
-    progressToEvolution: getEvolutionProgress(state),
-    totalFocusMinutes: state.totalFocusMinutes,
-    leveledUp: false,
-    evolved: false,
-    updatedAt: Date.now(),
-  };
-}
 
 export function CompanionGrowthSection({
   sessionId,
@@ -208,3 +184,5 @@ export function CompanionGrowthSection({
     </Animated.View>
   );
 }
+
+export { type LoadState, type CompanionGrowth } from "./CompanionGrowthSection.helpers";

@@ -14,6 +14,9 @@ import Animated, { FadeInUp } from "react-native-reanimated";
 import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { useTheme } from "../../../theme";
+import { ComebackQuestCardSkeleton } from "./ComebackQuestCardSkeleton";
+
+export type { ComebackQuestCardSkeleton } from "./ComebackQuestCardSkeleton";
 
 export interface ComebackQuestCardProps {
   /** Original streak days that can be restored */
@@ -49,36 +52,7 @@ export function ComebackQuestCard({
   const sessionsRemaining = sessionsRequired - sessionsCompleted;
 
   if (isLoading) {
-    return (
-      <Box
-        mx="lg"
-        mb="md"
-        p="lg"
-        borderRadius="xl"
-        bg={theme.colors.background.tertiary}
-      >
-        <Box
-          height={20}
-          width="60%"
-          bg={theme.colors.background.secondary}
-          borderRadius="sm"
-        />
-        <Box
-          height={16}
-          width="80%"
-          bg={theme.colors.background.secondary}
-          borderRadius="sm"
-          mt="sm"
-        />
-        <Box
-          height={8}
-          width="100%"
-          bg={theme.colors.background.secondary}
-          borderRadius="full"
-          mt="md"
-        />
-      </Box>
-    );
+    return <ComebackQuestCardSkeleton />;
   }
 
   return (
