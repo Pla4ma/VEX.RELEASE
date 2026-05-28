@@ -1,41 +1,14 @@
-import { captureSilentFailure } from "../../utils/silent-failure";
 import { z } from "zod";
 import * as Sentry from "@sentry/react-native";
-import {
-  SettingCategorySchema,
-  NotificationChannelSchema,
-  NotificationPrioritySchema,
-  CoachPersonalitySchema,
-  CoachFrequencySchema,
-  ThemeModeSchema,
-  DataRetentionPolicySchema,
-  ExportFormatSchema,
-  SettingValueSchema,
-} from "./schemas";
-export interface ValidationResult {
-  valid: boolean;
-  errors: ValidationError[];
-  warnings: ValidationError[];
-  sanitized?: unknown;
-}
-export interface ValidationError {
-  field: string;
-  code: string;
-  message: string;
-  severity: "error" | "warning";
-  recoveryHint?: string;
-}
-export class SettingsValidationError extends Error {
-  constructor(
-    message: string,
-    public field: string,
-    public code: string,
-    public recoveryHint?: string,
-  ) {
-    super(message);
-    this.name = "SettingsValidationError";
-  }
-}
+import { SettingCategorySchema } from "./schemas";
+import type { ValidationResult, ValidationError } from "./validation-types";
+import { validateNotificationSetting, validateAppearanceSetting } from "./validation-notification";
+import { validateCoachSetting, validatePrivacySetting, validateGeneralSetting, validateDataSetting } from "./validation-preference";
+
+// Re-export types and class for backward compatibility
+export type { ValidationResult, ValidationError } from "./validation-types";
+export { SettingsValidationError } from "./validation-types";
+
 export function validateSettingValue(
   key: string,
   value: unknown,
@@ -89,243 +62,7 @@ export function validateSettingValue(
     sanitized: errors.length === 0 ? value : undefined,
   };
 }
-function validateNotificationSetting(
-  key: string,
-  value: unknown,
-  errors: ValidationError[],
-  warnings: ValidationError[],
-): void {
-  if (key.includes("digestFrequency") && typeof value === "string") {
-    const validFrequencies = ["immediate", "daily", "weekly", "never"];
-    if (!validFrequencies.includes(value)) {
-      errors.push({
-        field: key,
-        code: "INVALID_FREQUENCY",
-        message: `Invalid digest frequency: ${value}`,
-        severity: "error",
-        recoveryHint: `Valid frequencies: ${validFrequencies.join(", ")}`,
-      });
-    }
-  }
-  if (key.includes("quietHours") && value !== null && value !== undefined) {
-    const hour = Number(value);
-    if (Number.isNaN(hour) || hour < 0 || hour > 23) {
-      errors.push({
-        field: key,
-        code: "INVALID_HOUR",
-        message: "Quiet hours must be between 0 and 23",
-        severity: "error",
-        recoveryHint: "Use 24-hour format (0-23)",
-      });
-    }
-  }
-  if (key.includes("deviceTokens") && Array.isArray(value)) {
-    if (value.length > 10) {
-      warnings.push({
-        field: key,
-        code: "TOO_MANY_DEVICE_TOKENS",
-        message: "More than 10 device tokens registered",
-        severity: "warning",
-        recoveryHint: "Remove old or unused device tokens",
-      });
-    }
-  }
-  if (key.includes("timezone") && typeof value === "string") {
-    try {
-      Intl.DateTimeFormat(undefined, { timeZone: value });
-    } catch (error) {
-      captureSilentFailure(error, {
-        feature: "settings",
-        operation: "safe-fallback",
-        type: "data",
-      });
-      warnings.push({
-        field: key,
-        code: "INVALID_TIMEZONE",
-        message: `Timezone "${value}" may not be valid`,
-        severity: "warning",
-        recoveryHint: 'Use IANA timezone format (e.g., "America/New_York")',
-      });
-    }
-  }
-}
-function validateAppearanceSetting(
-  key: string,
-  value: unknown,
-  errors: ValidationError[],
-  warnings: ValidationError[],
-): void {
-  if (key.includes("fontScale") && typeof value === "number") {
-    if (value < 0.5 || value > 2) {
-      errors.push({
-        field: key,
-        code: "INVALID_FONT_SCALE",
-        message: `Font scale ${value} is outside valid range`,
-        severity: "error",
-        recoveryHint: "Use value between 0.5 and 2.0",
-      });
-    }
-    if (value > 1.5) {
-      warnings.push({
-        field: key,
-        code: "LARGE_FONT_SCALE",
-        message: "Large font scale may affect layout",
-        severity: "warning",
-      });
-    }
-  }
-  if (key.includes("theme") && typeof value === "string") {
-    const validThemes = ["light", "dark", "system"];
-    if (!validThemes.includes(value)) {
-      errors.push({
-        field: key,
-        code: "INVALID_THEME",
-        message: `Theme "${value}" is not valid`,
-        severity: "error",
-        recoveryHint: `Valid themes: ${validThemes.join(", ")}`,
-      });
-    }
-  }
-  if (key.includes("accentColor") && typeof value === "string") {
-    const hexRegex = /^#[0-9A-Fa-f]{6}$/;
-    if (!hexRegex.test(value)) {
-      errors.push({
-        field: key,
-        code: "INVALID_COLOR",
-        message: "Accent color must be a valid hex code",
-        severity: "error",
-        recoveryHint:
-          "Use six hex digits with a leading hash, for example 6366f1",
-      });
-    }
-  }
-}
-function validateCoachSetting(
-  key: string,
-  value: unknown,
-  errors: ValidationError[],
-  warnings: ValidationError[],
-): void {
-  if (key.includes("personality") && typeof value === "string") {
-    const validPersonalities = ["supportive", "tough", "neutral", "funny"];
-    if (!validPersonalities.includes(value)) {
-      errors.push({
-        field: key,
-        code: "INVALID_PERSONALITY",
-        message: `Coach personality "${value}" is not valid`,
-        severity: "error",
-        recoveryHint: `Valid personalities: ${validPersonalities.join(", ")}`,
-      });
-    }
-  }
-  if (key.includes("frequency") && typeof value === "string") {
-    const validFrequencies = ["minimal", "moderate", "frequent", "constant"];
-    if (!validFrequencies.includes(value)) {
-      errors.push({
-        field: key,
-        code: "INVALID_FREQUENCY",
-        message: `Coach frequency "${value}" is not valid`,
-        severity: "error",
-        recoveryHint: `Valid frequencies: ${validFrequencies.join(", ")}`,
-      });
-    }
-  }
-  if (
-    (key.includes("quietHours") && key.includes("start")) ||
-    key.includes("end")
-  ) {
-    if (typeof value === "string") {
-      const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
-      if (!timeRegex.test(value)) {
-        errors.push({
-          field: key,
-          code: "INVALID_TIME_FORMAT",
-          message: "Time must be in HH:MM format",
-          severity: "error",
-          recoveryHint: 'Use 24-hour format (e.g., "22:00")',
-        });
-      }
-    }
-  }
-}
-function validatePrivacySetting(
-  key: string,
-  value: unknown,
-  errors: ValidationError[],
-  warnings: ValidationError[],
-): void {
-  if (key.includes("profileVisibility") && typeof value === "string") {
-    const validVisibilities = ["public", "friends", "private"];
-    if (!validVisibilities.includes(value)) {
-      errors.push({
-        field: key,
-        code: "INVALID_VISIBILITY",
-        message: `Profile visibility "${value}" is not valid`,
-        severity: "error",
-        recoveryHint: `Valid options: ${validVisibilities.join(", ")}`,
-      });
-    }
-  }
-  if (key.includes("analyticsOptOut") && value === true) {
-    warnings.push({
-      field: key,
-      code: "ANALYTICS_DISABLED",
-      message: "Analytics disabled - app improvements may be affected",
-      severity: "warning",
-      recoveryHint: "Consider enabling analytics to help improve the app",
-    });
-  }
-}
-function validateGeneralSetting(
-  key: string,
-  value: unknown,
-  errors: ValidationError[],
-  warnings: ValidationError[],
-): void {
-  if (key.includes("language") && typeof value === "string") {
-    const validLanguages = ["en", "es", "fr", "de", "ja", "zh"];
-    if (!validLanguages.includes(value)) {
-      warnings.push({
-        field: key,
-        code: "UNSUPPORTED_LANGUAGE",
-        message: `Language "${value}" may not be fully supported`,
-        severity: "warning",
-        recoveryHint: `Supported languages: ${validLanguages.join(", ")}`,
-      });
-    }
-  }
-}
-function validateDataSetting(
-  key: string,
-  value: unknown,
-  errors: ValidationError[],
-  warnings: ValidationError[],
-): void {
-  if (key.includes("retentionPolicy") && typeof value === "string") {
-    const validPolicies = ["minimal", "standard", "comprehensive", "forever"];
-    if (!validPolicies.includes(value)) {
-      errors.push({
-        field: key,
-        code: "INVALID_RETENTION_POLICY",
-        message: `Retention policy "${value}" is not valid`,
-        severity: "error",
-        recoveryHint: `Valid policies: ${validPolicies.join(", ")}`,
-      });
-    }
-  }
-  if (key.includes("autoExport.frequency") && typeof value === "string") {
-    const validFrequencies = ["weekly", "monthly", "never"];
-    if (!validFrequencies.includes(value)) {
-      errors.push({
-        field: key,
-        code: "INVALID_EXPORT_FREQUENCY",
-        message: `Export frequency "${value}" is not valid`,
-        severity: "error",
-        recoveryHint: `Valid frequencies: ${validFrequencies.join(", ")}`,
-      });
-    }
-  }
-}
+
 export function validateSettingsExport(
   exportData: Record<string, unknown>,
 ): ValidationResult {
@@ -379,6 +116,7 @@ export function validateSettingsExport(
     sanitized: errors.length === 0 ? exportData : undefined,
   };
 }
+
 export async function batchValidateSettings(
   settings: Array<{
     key: string;
@@ -434,6 +172,7 @@ export async function batchValidateSettings(
     },
   };
 }
+
 export function formatValidationErrors(errors: ValidationError[]): string {
   return errors
     .map((e) => {

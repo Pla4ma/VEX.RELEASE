@@ -12,3 +12,15 @@ export interface ValidationError {
   severity: "error" | "warning";
   recoveryHint?: string;
 }
+
+export class SettingsValidationError extends Error {
+  constructor(
+    message: string,
+    public field: string,
+    public code: string,
+    public recoveryHint?: string,
+  ) {
+    super(message);
+    this.name = "SettingsValidationError";
+  }
+}

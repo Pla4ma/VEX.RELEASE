@@ -1,10 +1,4 @@
-/**
- * Predefined A/B Testing Experiments
- *
- * Core experiments from the Phase 6 plan
- */
-
-import { Experiment } from "./types";
+import type { Experiment } from "./types";
 
 export const PREDEFINED_EXPERIMENTS: Omit<Experiment, "id" | "startDate">[] = [
   {
@@ -144,8 +138,40 @@ export const PREDEFINED_EXPERIMENTS: Omit<Experiment, "id" | "startDate">[] = [
     trafficAllocation: { control: 34, short: 33, long: 33 },
     targeting: { userSegments: ["new"], premiumStatus: "both" },
     primaryMetric: "session_completion_rate",
-    secondaryMetrics: ["daily_session_count", "user_retention"],
-    minSampleSize: 800,
-    minDurationDays: 10,
+    secondaryMetrics: ["session_count_week1", "d7_retention"],
+    minSampleSize: 500,
+    minDurationDays: 14,
+  },
+  {
+    name: "Coach Intervention Frequency",
+    description: "Test how often coach should intervene",
+    type: "COACH_FREQUENCY",
+    status: "DRAFT",
+    controlVariant: {
+      id: "control",
+      name: "Current Frequency",
+      description: "Show when relevant",
+      config: { maxInterventionsPerDay: 3, cooldownHours: 4 },
+    },
+    treatmentVariants: [
+      {
+        id: "more_frequent",
+        name: "More Frequent",
+        description: "Up to 5 interventions per day",
+        config: { maxInterventionsPerDay: 5, cooldownHours: 2 },
+      },
+      {
+        id: "less_frequent",
+        name: "Less Frequent",
+        description: "Max 2 interventions per day",
+        config: { maxInterventionsPerDay: 2, cooldownHours: 6 },
+      },
+    ],
+    trafficAllocation: { control: 34, more_frequent: 33, less_frequent: 33 },
+    targeting: { premiumStatus: "both", minSessions: 3 },
+    primaryMetric: "intervention_engagement_rate",
+    secondaryMetrics: ["session_start_rate", "coach_persona_satisfaction"],
+    minSampleSize: 1000,
+    minDurationDays: 21,
   },
 ];
