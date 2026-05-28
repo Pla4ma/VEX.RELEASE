@@ -185,4 +185,5 @@ export function CompanionGrowthSection({
   );
 }
 
-export { type LoadState, type CompanionGrowth } from "./CompanionGrowthSection.helpers";
+export { type LoadState } from "./CompanionGrowthSection.helpers";
+export type { CompanionGrowth } from "../../../features/companion/session-storage";

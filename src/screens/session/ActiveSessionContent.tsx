@@ -59,6 +59,10 @@ export function ActiveSessionContent({
   } = controller;
   const activeSession = sessionQuery.session;
 
+  if (!activeSession) {
+    return <Box flex={1} bg="background.primary" />;
+  }
+
   return (
     <Box
       flex={1}

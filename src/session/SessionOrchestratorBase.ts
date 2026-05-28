@@ -1,3 +1,4 @@
+import type { SessionOrchestrator } from "./types";
 import { TimerEngine } from "./engines/TimerEngine";
 import { ScoringEngine } from "./engines/ScoringEngine";
 import { CompletionEngine } from "./engines/CompletionEngine";
@@ -63,7 +64,7 @@ export class SessionOrchestratorBase {
     this.antiCheatEngine = new AntiCheatEngine();
     this.eventEmitter = new SessionEventEmitter();
     this.focusMetrics = createEmptyFocusMetrics();
-    loadActiveSession(this);
+    loadActiveSession(this as unknown as SessionOrchestrator);
     debug.info("SessionOrchestrator initialized");
   }
 
@@ -79,10 +80,10 @@ export class SessionOrchestratorBase {
       await persistence.saveSessionState(this.session, this.repository);
   }
   finalizeSession(summary: SessionSummary): void {
-    doFinalizeSession(this, summary);
+    doFinalizeSession(this as unknown as SessionOrchestrator, summary);
   }
   finalizeAbandonedSession(): void {
-    doFinalizeAbandonedSession(this);
+    doFinalizeAbandonedSession(this as unknown as SessionOrchestrator);
   }
 
   setUserId(id: string): void {
@@ -92,7 +93,7 @@ export class SessionOrchestratorBase {
     debug.info("SessionOrchestrator user set: %s", id);
   }
   createSession(config: SessionConfig): Promise<SessionState> {
-    return createSession(this, config);
+    return createSession(this as unknown as SessionOrchestrator, config);
   }
   cancelStart(): void {
     if (this.countdownActive) {
@@ -102,18 +103,18 @@ export class SessionOrchestratorBase {
   }
 
   startSession(countdown = 0): Promise<SessionState> {
-    return startSession(this, countdown);
+    return startSession(this as unknown as SessionOrchestrator, countdown);
   }
   pauseSession(reason?: string): Promise<SessionState> {
-    return pauseSession(this, reason);
+    return pauseSession(this as unknown as SessionOrchestrator, reason);
   }
   resumeSession(): Promise<SessionState> {
-    return resumeSession(this);
+    return resumeSession(this as unknown as SessionOrchestrator);
   }
   backgroundSession(): Promise<void> {
-    return backgroundSession(this);
+    return backgroundSession(this as unknown as SessionOrchestrator);
   }
   foregroundSession(): Promise<void> {
-    return foregroundSession(this);
+    return foregroundSession(this as unknown as SessionOrchestrator);
   }
 }

@@ -1,10 +1,7 @@
 import type { MutableRefObject } from "react";
 import type { CustomerInfo, PurchasesOffering } from "react-native-purchases";
-import {
-  getCustomerInfo,
-  getOfferings,
-  revenueCatService,
-} from "./revenuecat-service";
+import { revenueCatService } from "./revenuecat-service";
+import { getCustomerInfo, getOfferings } from "./revenuecat-exports";
 import type {
   EntitlementInfo,
   PurchasesOfferingDisplayInfo,

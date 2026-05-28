@@ -12,7 +12,7 @@ function confidenceColor(
 ): string {
   switch (confidence) {
     case "strong":
-      return theme.colors.semantic.info;
+      return theme.colors.primary[500];
     case "medium":
       return theme.colors.text.secondary;
     case "weak":
@@ -49,10 +49,10 @@ export function LearnedItemRow({
 
   return React.createElement(View, {
     style: {
-      backgroundColor: theme.colors.background.surface,
+      backgroundColor: theme.colors.semantic.surface,
       borderRadius: theme.borderRadius.md,
-      marginBottom: theme.spacing.sm,
-      padding: theme.spacing.md,
+      marginBottom: theme.spacing[2],
+      padding: theme.spacing[4],
       borderLeftWidth: 3,
       borderLeftColor: confidenceColor(item.confidence, theme),
     },
@@ -66,26 +66,26 @@ export function LearnedItemRow({
           key: "observation",
           style: {
             color: theme.colors.text.primary,
-            fontSize: theme.typography.sizes.md,
-            fontWeight: theme.typography.weights.semibold,
+            fontSize: theme.typography.body.medium.fontSize ?? 16,
+            fontWeight: theme.fontWeights.semibold,
             lineHeight: 20,
-            marginBottom: theme.spacing.xs,
+            marginBottom: theme.spacing[1],
           },
         }, item.observation),
         React.createElement(Text, {
           key: "confidence",
           style: {
             color: confidenceColor(item.confidence, theme),
-            fontSize: theme.typography.sizes.xs,
-            fontWeight: theme.typography.weights.medium,
-            marginBottom: theme.spacing.sm,
+            fontSize: theme.typography.ui.caption.fontSize ?? 12,
+            fontWeight: theme.fontWeights.medium,
+            marginBottom: theme.spacing[2],
           },
         }, confidenceLabel(item.confidence)),
         React.createElement(Text, {
           key: "evidence",
           style: {
             color: theme.colors.text.secondary,
-            fontSize: theme.typography.sizes.sm,
+            fontSize: theme.typography.body.small.fontSize ?? 14,
             lineHeight: 18,
           },
         }, item.evidence),
@@ -95,8 +95,8 @@ export function LearnedItemRow({
       key: "actions",
       style: {
         flexDirection: "row",
-        marginTop: theme.spacing.sm,
-        gap: theme.spacing.sm,
+        marginTop: theme.spacing[2],
+        gap: theme.spacing[2],
       },
     }, [
       onEditItem &&
@@ -111,9 +111,9 @@ export function LearnedItemRow({
           ],
         }, React.createElement(Text, {
           style: {
-            color: theme.colors.semantic.info,
-            fontSize: theme.typography.sizes.sm,
-            fontWeight: theme.typography.weights.medium,
+            color: theme.colors.primary[500],
+            fontSize: theme.typography.body.small.fontSize ?? 14,
+            fontWeight: theme.fontWeights.medium,
           },
         }, "Edit")),
       onHideItem &&
@@ -130,7 +130,7 @@ export function LearnedItemRow({
         }, React.createElement(Text, {
           style: {
             color: theme.colors.text.tertiary,
-            fontSize: theme.typography.sizes.sm,
+            fontSize: theme.typography.body.small.fontSize ?? 14,
           },
         }, "Hide")),
       onDeleteItem &&
@@ -146,8 +146,8 @@ export function LearnedItemRow({
           ],
         }, React.createElement(Text, {
           style: {
-            color: theme.colors.semantic.error,
-            fontSize: theme.typography.sizes.sm,
+            color: theme.colors.error.DEFAULT,
+            fontSize: theme.typography.body.small.fontSize ?? 14,
           },
         }, "Delete")),
     ]),

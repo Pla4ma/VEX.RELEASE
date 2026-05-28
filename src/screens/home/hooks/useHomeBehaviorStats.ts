@@ -11,6 +11,8 @@ import type { BehaviorStats } from "../../../features/personalization/schemas";
 import type {
   LegacySessionData,
 } from "./home-resolved-experience-types";
+import type { HomeController } from "./home-controller-types";
+import type { SessionHistoryEntry } from "../../../session/types";
 import {
   computeCompletedDurations,
   computeAbandonedDurations,
@@ -24,15 +26,11 @@ import {
 interface UseHomeBehaviorStatsInput {
   userId: string;
   totalCompletedSessions: number;
-  completedSessions: LegacySessionData[];
-  abandonedSessions: LegacySessionData[];
-  sessionHistory: LegacySessionData[];
+  completedSessions: SessionHistoryEntry[];
+  abandonedSessions: SessionHistoryEntry[];
+  sessionHistory: SessionHistoryEntry[];
   currentStreak: number;
-  controller: {
-    currentStreak: number;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-object-type
-    [key: string]: unknown;
-  };
+  controller: HomeController;
 }
 
 export function useHomeBehaviorStats(
@@ -104,7 +102,7 @@ export function useHomeBehaviorStats(
     ),
     comebackSessions: computeComebackSessions(controller),
     completedSessionDurations: computeCompletedDurations(completedSessions),
-    completionStreak: controller.currentStreak as number,
+    completionStreak: controller.currentStreak,
     ignoredFeatures: resolvedBehaviorSignals.ignoredFeatures,
     mostSuccessfulTimeOfDay:
       resolvedBehaviorSignals.mostSuccessfulTimeOfDay ??

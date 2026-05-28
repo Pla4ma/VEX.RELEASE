@@ -94,10 +94,36 @@ export interface FocusableElement {
   order: number;
 }
 
+export interface AuditableComponent {
+  type: string;
+  props?: Record<string, unknown>;
+  children?: AuditableComponent[];
+}
+
+export interface AuditAccessibilityIssue {
+  id: string;
+  type: "error" | "warning" | "info";
+  category: string;
+  severity: "critical" | "major" | "moderate" | "minor";
+  message: string;
+  recommendation: string;
+  element: string;
+  wcagGuideline: string;
+  automated: boolean;
+}
+
+export type ComponentAccessibilityConfig = {
+  component: string;
+  checks: string[];
+  componentName: string;
+  requiredLabels?: string[];
+  interactiveElements?: string[];
+};
+
 export interface AccessibilityAudit {
   screenId: string;
   timestamp: number;
-  issues: AccessibilityIssue[];
+  issues: AuditAccessibilityIssue[];
   score: number;
 }
 
@@ -109,11 +135,3 @@ export interface AccessibilityIssue {
   message: string;
   suggestion: string;
 }
-
-// Backward-compat aliases (renamed during refactoring)
-export type AuditableComponent = AccessibilityAudit;
-export type AuditAccessibilityIssue = AccessibilityIssue;
-export type ComponentAccessibilityConfig = {
-  component: string;
-  checks: string[];
-};

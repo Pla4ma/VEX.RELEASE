@@ -72,7 +72,7 @@ export function buildPostSessionStoryViewModel(input: {
   const { proof: personalBestProof, body: personalBestBody } =
     computePersonalBestProof({
       personalBest: input.personalBest,
-      completedAt: ledger.completedAt,
+      completedAt: new Date(ledger.completedAt).toISOString(),
       mode: sessionMode,
     });
   const beats = buildStoryBeats({

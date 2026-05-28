@@ -1,3 +1,9 @@
+import { z } from "zod";
+import { XPTransactionSchema } from "./validation/types";
+import { validateXPTransaction } from "./validation/xp-validation";
+import { validateLevelUp, validatePrestige } from "./validation/level-validation";
+import { validateXPBatch } from "./validation/batch-validation";
+
 export type XPTransaction = z.infer<typeof XPTransactionSchema>;
 
 export interface ValidationResult<T> {

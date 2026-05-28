@@ -14,7 +14,7 @@ import {
   type CoachHandlerState,
 } from "./coach-handlers";
 
-export { CoachIntegrationConfig } from "./coach-config";
+export type { CoachIntegrationConfig } from "./coach-config";
 
 export class SessionCoachIntegration {
   private readonly config: CoachIntegrationConfig;

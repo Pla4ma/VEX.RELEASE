@@ -69,7 +69,7 @@ export function withMotionAccessibility<P extends object>(
   })`;
   // ForwardRefExoticComponent<P> satisfies ComponentType<P> at runtime;
   // TS cannot verify due to PropsWithoutRef wrapping at generic boundary.
-  return MotionAccessibleComponent as React.ComponentType<P>;
+  return MotionAccessibleComponent as unknown as React.ComponentType<P>;
 }
 
 export const ACCESSIBLE_ANIMATION_PRESETS = {

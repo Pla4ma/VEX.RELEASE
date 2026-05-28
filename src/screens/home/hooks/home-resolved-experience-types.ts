@@ -61,6 +61,9 @@ export interface ActiveStudyPlanData {
 
 export interface LegacySessionData {
   endedAt?: number;
+  status?: string;
+  mode?: string;
+  config?: { sessionMode?: string; studyPlanId?: string };
 }
 
 export type HomeFeatureAvailability = FeatureAvailabilitySnapshot;

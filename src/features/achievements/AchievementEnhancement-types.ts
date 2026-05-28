@@ -1,3 +1,5 @@
+import type { Achievement, AchievementCategory } from "./types";
+
 export interface FeatureUnlock {
   achievementId: string;
   featureType: "COSMETIC" | "BOSS" | "STUDY" | "SOCIAL" | "PREMIUM";

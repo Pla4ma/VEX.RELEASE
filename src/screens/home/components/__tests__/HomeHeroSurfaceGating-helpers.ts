@@ -33,9 +33,20 @@ export const studyProfile = {
   userStage: "new" as const,
 };
 
+export interface BaseStatsShape {
+  totalCompletedSessions: number;
+  studyUsageRatio: number;
+  bossChallengeEngagement: "none" | "low" | "medium" | "high";
+  coachInteractions: number;
+  comebackSessions: number;
+  ignoredFeatures: string[];
+  premiumFeatureAttempts: string[];
+  completionStreak: number;
+}
+
 export function baseStats(
-  overrides: Partial<ReturnType<typeof baseStats>> = {},
-) {
+  overrides: Partial<BaseStatsShape> = {},
+): BaseStatsShape {
   return {
     totalCompletedSessions: 0,
     studyUsageRatio: 0,

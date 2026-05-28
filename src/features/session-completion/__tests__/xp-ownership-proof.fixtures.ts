@@ -1,6 +1,6 @@
-import type { CompletionLedger } from "../../schemas";
-import type { SessionSummary } from "../../../../session/types";
-import { SessionMode } from "../../../../session/modes";
+import type { CompletionLedger } from "../schemas";
+import type { SessionSummary } from "../../../session/types";
+import { SessionMode } from "../../../session/modes";
 
 export const baseLedger: CompletionLedger = {
   companionReactionId: null,

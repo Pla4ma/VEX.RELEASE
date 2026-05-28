@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import type { SessionPreset } from "../types";
 import { launchColors } from "@theme/tokens/launch-colors";
 
@@ -66,7 +66,7 @@ export const PresetCard: React.FC<PresetCardProps> = ({
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   presetCard: {
     width: "48%",
     backgroundColor: launchColors.hex_2a2a3e,
@@ -113,4 +113,4 @@ const styles = {
     color: launchColors.hex_fff,
     fontWeight: "600" as const,
   },
-};
+});

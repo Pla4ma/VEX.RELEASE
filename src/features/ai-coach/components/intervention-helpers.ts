@@ -7,15 +7,15 @@ interface BannerColors {
 }
 
 const SEVERITY_COLOR_MAP: Record<InterventionType, (theme: Record<string, Record<string, string>>) => string> = {
-  BURNOUT: (t) => t.colors.warning[500],
-  PLATEAU: (t) => t.colors.info[500],
-  STREAK_RISK: (t) => t.colors.error[500],
-  BOSS_FINISH: (t) => t.colors.success[500],
-  BOSS_OPPORTUNITY: (t) => t.colors.success[500],
-  STUDY_BEHIND: (t) => t.colors.warning[500],
-  MOMENTUM_BUILDING: (t) => t.colors.primary[500],
-  COMEBACK_READY: (t) => t.colors.primary[500],
-  STUDY_PLAN_COMPLETE: (t) => t.colors.success[500],
+  BURNOUT: (t) => t.colors!.warning![500]!,
+  PLATEAU: (t) => t.colors!.info![500]!,
+  STREAK_RISK: (t) => t.colors!.error![500]!,
+  BOSS_FINISH: (t) => t.colors!.success![500]!,
+  BOSS_OPPORTUNITY: (t) => t.colors!.success![500]!,
+  STUDY_BEHIND: (t) => t.colors!.warning![500]!,
+  MOMENTUM_BUILDING: (t) => t.colors!.primary![500]!,
+  COMEBACK_READY: (t) => t.colors!.primary![500]!,
+  STUDY_PLAN_COMPLETE: (t) => t.colors!.success![500]!,
 };
 
 export function getBannerColors(

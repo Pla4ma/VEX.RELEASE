@@ -155,6 +155,8 @@ export function model(
     isError: false,
     error: null,
     isRefetching: false,
+    isOptionalDataSyncing: false,
+    optionalDataError: null,
     refetch: jest.fn(),
     ...overrides,
   };

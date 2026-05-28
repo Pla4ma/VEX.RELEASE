@@ -93,8 +93,9 @@ function checkColorContrast(
 ): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
   const style = component.props?.style;
-  if (style && style.color && style.backgroundColor) {
-    const contrast = checkContrast(style.color, style.backgroundColor);
+  if (style && (style as Record<string, unknown>).color && (style as Record<string, unknown>).backgroundColor) {
+    const s = style as Record<string, unknown>;
+    const contrast = checkContrast(String(s.color), String(s.backgroundColor));
     if (!contrast.passesAA) {
       issues.push({
         id: "poor-contrast",
@@ -141,7 +142,7 @@ function checkSemanticHTML(
   const expectedRole = EXPECTED_ROLES[config.componentName];
   if (
     expectedRole &&
-    !expectedRole.includes(component.props?.accessibilityRole || "")
+    !expectedRole.includes(String(component.props?.accessibilityRole ?? ""))
   ) {
     issues.push({
       id: "incorrect-accessibility-role",
@@ -164,7 +165,11 @@ function checkTouchTargets(
 ): AuditAccessibilityIssue[] {
   const issues: AuditAccessibilityIssue[] = [];
   if (component.props?.style) {
-    const { width, height, minHeight, minWidth } = component.props.style;
+    const style = component.props.style as Record<string, unknown>;
+    const width = style.width as number | undefined;
+    const height = style.height as number | undefined;
+    const minHeight = style.minHeight as number | undefined;
+    const minWidth = style.minWidth as number | undefined;
     const targetWidth = width || minWidth || 0;
     const targetHeight = height || minHeight || 0;
     if (targetWidth < 44 || targetHeight < 44) {

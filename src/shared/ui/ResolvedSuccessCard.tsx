@@ -4,7 +4,7 @@ import Animated from "react-native-reanimated";
 import { styles } from "./PremiumErrorRecovery.styles";
 
 interface ResolvedSuccessCardProps {
-  animatedStyle: { transform: Array<Record<string, number>> };
+  animatedStyle: { transform?: Array<Record<string, number>>; [key: string]: unknown };
   successBg: string;
   successColor: string;
 }

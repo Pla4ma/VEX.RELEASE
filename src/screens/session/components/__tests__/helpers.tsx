@@ -106,7 +106,7 @@ export const baseProgressRingProps = {
   pulseStyle: {},
   rotatingPerfectFocusStyle: {},
   labelColor: "green",
-  withAlpha: (color: string) => color as string,
+  withAlpha: (color: string, _alpha?: number) => color,
 };
 
 export function renderHero(
@@ -129,7 +129,7 @@ export function renderHero(
       />,
     );
   });
-  return renderer?.toJSON() ?? null;
+  return (renderer as unknown as ReactTestRenderer | null)?.toJSON() ?? null;
 }
 
 export function hasText(

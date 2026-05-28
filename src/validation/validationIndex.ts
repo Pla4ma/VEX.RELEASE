@@ -78,15 +78,21 @@ export {
 export {
   validateXSS,
   validateSQLInjection,
+} from "./securityValidation-threats";
+export {
   validateCSRF,
   sanitizeInput,
-  validateFileUpload,
+} from "./securityValidation-input";
+export { validateFileUpload } from "./securityValidation-file";
+export {
   validateRateLimit as validateSecurityRateLimit,
   validateIPAddressSecurity,
-  validateSecurity,
+} from "./securityValidation-network";
+export { validateSecurity } from "./securityValidation-aggregate";
+export {
   type SecurityValidationResult,
   type SecurityConfig,
-} from "./securityValidation";
+} from "./securityValidation-types";
 export {
   validateECommerceOrder,
   validateFinancialTransaction,

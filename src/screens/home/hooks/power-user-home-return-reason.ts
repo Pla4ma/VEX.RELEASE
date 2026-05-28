@@ -9,7 +9,7 @@ interface ReturnReasonParams {
   runtime: HomeFeatureRuntime;
   nextBestAction: { action: string; label: string } | null;
   primaryRecommendation: SessionRecommendation | null;
-  openSetup: () => void;
+  openSetup: (params?: Record<string, unknown>) => void;
   continueStudyPlan: () => void;
   openNextAction: () => void;
   updateRecommendationStatus: {

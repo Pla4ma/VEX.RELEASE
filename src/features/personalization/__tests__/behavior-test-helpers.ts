@@ -21,6 +21,9 @@ export function makeSessions(
   return {
     completedSessions: 5,
     studySessions: 2,
+    deepWorkSessions: 0,
+    learningSessions: 0,
+    creativeSessions: 0,
     totalSessions: 8,
     preferredMode: "FOCUS",
     bestTimeOfDay: "morning",

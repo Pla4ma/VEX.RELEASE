@@ -1,9 +1,7 @@
 import type { MutableRefObject } from "react";
 import type { PurchasesOffering } from "react-native-purchases";
-import {
-  restorePurchases as restoreRevenueCatPurchases,
-  revenueCatService,
-} from "./revenuecat-service";
+import { revenueCatService } from "./revenuecat-service";
+import { restorePurchases as restoreRevenueCatPurchases } from "./revenuecat-exports";
 import type {
   PurchaseResult,
   PurchasesOfferingDisplayInfo,

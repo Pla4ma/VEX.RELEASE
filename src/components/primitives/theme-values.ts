@@ -61,7 +61,7 @@ export function resolveColorValue(
   }
   const parts = value.split(".");
   // theme.colors is ColorPalette — indexed by string keys at runtime
-  let current: string | ColorTree = theme.colors as ColorTree;
+  let current: string | ColorTree = theme.colors as unknown as ColorTree;
   for (const part of parts) {
     if (typeof current === "string") {
       return current;

@@ -130,6 +130,8 @@ export function sessionSummary(overrides: {
     xpEarned: 100,
     coinsEarned: 0,
     gemsEarned: 0,
+    userLevel: 1,
+    bonuses: [],
     damageTaken: 0,
     vsAverage: 10,
     vsBest: -5,
@@ -177,6 +179,14 @@ export function auditLane(lane: Lane): string {
     lane,
     completedSessions: 0,
     daysSinceOnboarding: 0,
+    sentToday: 0,
+    recentDismissals: 0,
+    quietHoursActive: false,
+    userMuted: false,
+    manuallyScheduled: false,
+    now: Date.now(),
+    context: "none",
+    pausedCategories: [],
   });
   const input = completionInput({
     lane,

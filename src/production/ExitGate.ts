@@ -22,7 +22,7 @@ import { DEFAULT_GATE_CONFIG } from "./ExitGate.config";
 
 const debug = createDebugger("phase9-exit-gate");
 
-export { Phase9ExitGateResult, Phase9BlockingIssue, Phase9GateConfig } from "./ExitGate.config";
+export type { Phase9ExitGateResult, Phase9BlockingIssue, Phase9GateConfig } from "./ExitGate.config";
 
 export class Phase9ExitGate {
   private static instance: Phase9ExitGate;

@@ -55,6 +55,6 @@ export function available(): FeatureAvailability {
     canSubscribeToEvents: true,
     canUseBackend: true,
     reason: "test",
-    state: "enabled",
+    state: "unlocked",
   };
 }

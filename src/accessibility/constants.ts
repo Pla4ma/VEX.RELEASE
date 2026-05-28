@@ -24,6 +24,7 @@ export const DEFAULT_ACCESSIBILITY: AccessibilityPreferences = {
 
 export const COLOR_BLIND_PALETTES: Record<string, ColorBlindPalette> = {
   none: {
+    type: "none",
     name: "Default",
     description: "Default VEX palette",
     colors: accessibilityPalette.neutral,
@@ -34,6 +35,7 @@ export const COLOR_BLIND_PALETTES: Record<string, ColorBlindPalette> = {
     },
   },
   protanopia: {
+    type: "protanopia",
     name: "Protanopia",
     description: "Red-blind friendly palette",
     colors: accessibilityPalette.neutral,
@@ -44,6 +46,7 @@ export const COLOR_BLIND_PALETTES: Record<string, ColorBlindPalette> = {
     },
   },
   deuteranopia: {
+    type: "deuteranopia",
     name: "Deuteranopia",
     description: "Green-blind friendly palette",
     colors: accessibilityPalette.deuteranopia,
@@ -54,6 +57,7 @@ export const COLOR_BLIND_PALETTES: Record<string, ColorBlindPalette> = {
     },
   },
   tritanopia: {
+    type: "tritanopia",
     name: "Tritanopia",
     description: "Blue-blind friendly palette",
     colors: accessibilityPalette.tritanopia,
@@ -64,6 +68,7 @@ export const COLOR_BLIND_PALETTES: Record<string, ColorBlindPalette> = {
     },
   },
   achromatopsia: {
+    type: "achromatopsia",
     name: "Achromatopsia",
     description: "Complete color blindness palette",
     colors: accessibilityPalette.achromatopsia,

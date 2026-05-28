@@ -48,24 +48,25 @@ export type {
 
 export const TEST_UUID = "550e8400-e29b-41d4-a716-446655440000";
 
-export const baseLaneProfile = (
-  overrides: Partial<LaneProfile>,
-): LaneProfile => ({
-  primaryLane: "minimal_normal",
-  secondaryLane: null,
-  confidence: 0.8,
-  confidenceBand: "high",
-  source: "onboarding",
-  evidence: [],
-  traits: {
-    needsStructure: 0.5,
-    wantsPlay: 0.1,
-    needsContinuity: 0.4,
-    wantsQuiet: 0.9,
-  },
-  resolvedAt: Date.now(),
-  ...overrides,
-});
+export function baseLaneProfile(
+  overrides: Partial<LaneProfile> = {},
+): LaneProfile {
+  return {
+    primaryLane: overrides.primaryLane ?? "minimal_normal",
+    secondaryLane: overrides.secondaryLane ?? null,
+    confidence: overrides.confidence ?? 0.8,
+    confidenceBand: overrides.confidenceBand ?? "high",
+    source: overrides.source ?? "onboarding",
+    evidence: overrides.evidence ?? [],
+    traits: overrides.traits ?? {
+      needsStructure: 0.5,
+      wantsPlay: 0.1,
+      needsContinuity: 0.4,
+      wantsQuiet: 0.9,
+    },
+    resolvedAt: overrides.resolvedAt ?? Date.now(),
+  };
+}
 
 type SessionModeString = (typeof SessionMode)[keyof typeof SessionMode];
 
@@ -107,6 +108,8 @@ export function sess(overrides: {
     vsAverage: 10,
     vsBest: -5,
     penaltiesApplied: [],
+    userLevel: 1,
+    bonuses: [],
   };
 }
 
@@ -120,7 +123,8 @@ export function makeStudyPlan(overrides: Partial<StudyPlan> = {}): StudyPlan {
         objective: "Understand mitochondrial function",
         estimatedMinutes: 30,
         status: "completed" as const,
-        order: 1,
+        priority: "medium" as const,
+        studyPlanId: overrides.id ?? "plan-1",
       },
     ],
     createdAt: now,
@@ -136,7 +140,14 @@ export function makeStudyPlan(overrides: Partial<StudyPlan> = {}): StudyPlan {
         dueAt: now + 86400000,
       },
     ],
-    source: "manual" as const,
+    source: {
+      createdAt: now,
+      extractedTextStatus: "none" as const,
+      id: "source-1",
+      title: overrides.title ?? "Biology Review",
+      type: "manual" as const,
+      userId: overrides.userId ?? TEST_UUID,
+    },
     status: "active" as const,
     title: overrides.title ?? "Biology Review",
     userId: overrides.userId ?? TEST_UUID,

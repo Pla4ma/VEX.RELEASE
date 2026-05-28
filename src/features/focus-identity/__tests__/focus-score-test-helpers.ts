@@ -32,13 +32,19 @@ export const factors = {
     explanation: "High-quality sessions.",
   },
   intentionalDifficulty: {
-    weightPercent: 10,
+    weightPercent: 7,
     score: 60,
     delta: 1,
     explanation: "Moderate challenge.",
   },
+  contractCompletion: {
+    weightPercent: 8,
+    score: 50,
+    delta: 0,
+    explanation: "Contract completion is neutral.",
+  },
   recency: {
-    weightPercent: 10,
+    weightPercent: 5,
     score: 75,
     delta: 3,
     explanation: "Recent activity.",

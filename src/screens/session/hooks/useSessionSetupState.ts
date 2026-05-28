@@ -5,7 +5,7 @@ import {
 } from "../../../features/session-start/service";
 import type { MasteryState } from "../../../features/mastery/types";
 import type { SessionStackParams } from "../../../navigation/types";
-import { getMMKVStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
+import { getDefaultStorageAdapter } from "../../../persistence/MMKVStorageAdapter";
 import { SessionMode, resolveSessionMode } from "../../../session/modes";
 import {
   PRESETS,
@@ -24,7 +24,7 @@ export function useSessionSetupState(
   params: SessionSetupParams | undefined,
   currentStreak: number,
 ) {
-  const storage = useMemo(() => getMMKVStorageAdapter(), []);
+  const storage = useMemo(() => getDefaultStorageAdapter(), []);
   const sessionDraftKey = useMemo(() => `session_draft_${userId}`, [userId]);
   const masteryStateKey = useMemo(() => `mastery_state_${userId}`, [userId]);
   const initialPreset = useMemo(() => {

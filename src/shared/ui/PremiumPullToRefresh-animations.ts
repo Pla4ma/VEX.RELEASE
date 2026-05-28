@@ -8,13 +8,13 @@ import {
   withSpring,
   withTiming,
 } from "react-native-reanimated";
-import type Animated from "react-native-reanimated";
+import type { SharedValue } from "react-native-reanimated";
 
 export function useRefreshAnimations(
-  pullY: Animated.SharedValue<number>,
-  indicatorRotation: Animated.SharedValue<number>,
-  indicatorScale: Animated.SharedValue<number>,
-  indicatorOpacity: Animated.SharedValue<number>,
+  pullY: SharedValue<number>,
+  indicatorRotation: SharedValue<number>,
+  indicatorScale: SharedValue<number>,
+  indicatorOpacity: SharedValue<number>,
   pullDistance: number,
   resetHapticTriggered: () => void,
 ) {

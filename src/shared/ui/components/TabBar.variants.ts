@@ -3,7 +3,7 @@ import type { TabBarProps } from "./TabBar.types";
 import { launchColors } from "@theme/tokens/launch-colors";
 
 interface ThemeColors {
-  primary: Record<string, string>;
+  primary: { [key: string]: string | undefined; 500: string };
   text: { secondary: string };
   background: { secondary: string; tertiary: string };
   border: { DEFAULT: string };

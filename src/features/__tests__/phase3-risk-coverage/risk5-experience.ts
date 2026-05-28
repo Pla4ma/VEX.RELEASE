@@ -71,6 +71,13 @@ describe("Risk 5 — Experience Resolution", () => {
       completedSessions: 3,
       daysSinceOnboarding: 3,
       sentToday: 1,
+      recentDismissals: 0,
+      quietHoursActive: false,
+      userMuted: false,
+      manuallyScheduled: false,
+      now: Date.now(),
+      context: "none",
+      pausedCategories: [],
     });
     expect(nudge.allowed).toBe(false);
   });

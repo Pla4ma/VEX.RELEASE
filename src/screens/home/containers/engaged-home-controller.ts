@@ -3,7 +3,7 @@ import type { HomeFeatureRuntime } from "../hooks/home-feature-runtime";
 import type { HomeController, SessionHistoryResult } from "../hooks/home-controller-types";
 import type { SessionRecommendation } from "../../../features/ai-coach";
 import type { FeatureAccessResult } from "../../../features/liveops-config";
-import type { HomeSpineModel } from "../../../features/home-spine/hooks";
+import type { HomeSpineModel } from "../../../features/home-spine/schemas";
 import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
 import type { LearningExecutionLayer } from "../../../features/learning-execution";
 import type { StreakQueryData, ProgressionQueryData } from "./engaged-home-types";

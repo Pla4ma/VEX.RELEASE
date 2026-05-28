@@ -10,7 +10,7 @@ import {
   navigateToSessionStackScreen,
   navigateToMainTab,
 } from "../../../navigation/navigation-helpers";
-import type { LearningExecutionTarget } from "../../../features/learning-execution";
+import type { LearningExecutionLayer } from "../../../features/learning-execution";
 import { buildLearningSessionParams } from "../../../features/learning-execution";
 
 type Nav = NativeStackNavigationProp<ExtendedRootStackParams>;
@@ -26,7 +26,7 @@ export function usePowerUserNavigation(params: {
       completedSessions: number,
     ) => void;
   };
-  learningExecutionTarget: LearningExecutionTarget | null;
+  learningExecutionTarget: LearningExecutionLayer["target"];
 }) {
   const {
     navigation,

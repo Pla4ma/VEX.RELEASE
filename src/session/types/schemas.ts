@@ -165,6 +165,7 @@ export const SessionSummarySchema = z.object({
   reflection: z.string().optional(),
   mood: z.enum(["GREAT", "GOOD", "OKAY", "STRUGGLING", "DIFFICULT"]).optional(),
   isPerfect: z.boolean().optional(),
+  completedAt: z.number().optional(),
 });
 export type SessionSummary = z.infer<typeof SessionSummarySchema>;
 

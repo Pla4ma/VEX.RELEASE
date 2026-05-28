@@ -142,7 +142,7 @@ export function useEngagedContainerModel(
     isLoading: disclosure.isLoading || recommendationsPending,
     isFirstRun, loadError, currentStreak, currentXp,
     todayFocusMinutes, progressPercent,
-    primaryRecommendation, homeSpine,
+    primaryRecommendation: primaryRecommendation ?? null, homeSpine,
     returnReason: displayedReturnReason,
     stage: disclosure.stage, productTier: disclosure.productTier,
     features: disclosure.features, runtime, controller,

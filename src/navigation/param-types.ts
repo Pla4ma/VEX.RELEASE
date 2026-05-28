@@ -2,7 +2,7 @@ import type { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import type { NavigatorScreenParams } from "@react-navigation/native";
 import type { NativeStackNavigationOptions } from "@react-navigation/native-stack";
 import type { ContentStudyStackParamList } from "../features/content-study/types";
-import type { ComebackState } from "../features/streaks/types";
+import type { ComebackState } from "../features/streaks/schemas";
 import type { SessionSummary } from "../session/types/schemas";
 import type {
   AuthStackRoute,

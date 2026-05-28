@@ -36,7 +36,7 @@ export function resetFeatureMocks(): void {
 
 export function renderGuardedFeature(feature: string): void {
   const TestComponent = () => (
-    <NavigationGuard feature={feature}>
+    <NavigationGuard featureFlag={feature}>
       <View testID="protected-content">
         <Text>{feature} Content</Text>
       </View>

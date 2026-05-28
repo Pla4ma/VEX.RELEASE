@@ -1,10 +1,10 @@
 import { eventBus } from "../../../events";
-import { consumeBountiesOnDamage } from "../../features/boss/service";
-import { recordBountyLootBoost } from "../../features/boss/service";
 import {
+  consumeBountiesOnDamage,
+  recordBountyLootBoost,
   applyDamage,
   getActiveEncounter,
-} from "../../features/boss/service";
+} from "../../../features/boss/service";
 
 jest.mock("../../../events", () => ({
   eventBus: { publish: jest.fn(), subscribe: jest.fn() },
@@ -18,6 +18,8 @@ jest.mock("../../../features/boss/bounty-loot-boost", () => ({
 jest.mock("../../../features/boss/service", () => ({
   applyDamage: jest.fn(),
   getActiveEncounter: jest.fn(),
+  consumeBountiesOnDamage: jest.fn(),
+  recordBountyLootBoost: jest.fn(),
 }));
 
 export const mockedEventBus = jest.mocked(eventBus);
@@ -81,9 +83,5 @@ export function buildSessionSummary(
 export function setupMocks(): void {
   jest.clearAllMocks();
   mockedEventBus.subscribe.mockReturnValue(jest.fn());
-  mockedConsumeBountiesOnDamage.mockReturnValue({
-    lootMultiplier: 1,
-    consumedCount: 0,
-    consumedBountyIds: [],
-  });
+  mockedConsumeBountiesOnDamage.mockReturnValue(undefined);
 }

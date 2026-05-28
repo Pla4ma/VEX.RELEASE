@@ -1,6 +1,9 @@
 // Barrel re-export — base schemas live in journey-element-schemas.ts,
 // composite schemas and derived types live in journey-composite-schemas.ts
 
+import { z } from "zod";
+import { JourneyDayCopySchema } from "./journey-composite-schemas";
+
 export {
   JourneyDaySchema,
   JourneyPhaseSchema,

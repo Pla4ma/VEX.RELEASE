@@ -99,9 +99,9 @@ export async function restoreSessionDraft(
         : null;
     const themeIdOverride = params?.selectedThemeId
       ? null
-      : parsedDraft.data.selectedThemeId;
-    const goalOverride = params?.goal ? null : parsedDraft.data.goal;
-    const showAdvancedOverride = parsedDraft.data.showAdvanced;
+      : parsedDraft.data.selectedThemeId ?? null;
+    const goalOverride = params?.goal ? null : parsedDraft.data.goal ?? null;
+    const showAdvancedOverride = parsedDraft.data.showAdvanced ?? null;
     const showCustomizationOverride =
       parsedDraft.data.presetId !== PRESETS[1]!.id ||
       parsedDraft.data.selectedThemeId !== "default" ||

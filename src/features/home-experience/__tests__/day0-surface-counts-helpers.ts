@@ -19,8 +19,8 @@ export function baseStats(overrides: Record<string, unknown> = {}) {
     bossChallengeEngagement: "none" as const,
     coachInteractions: 0,
     comebackSessions: 0,
-    ignoredFeatures: [],
-    premiumFeatureAttempts: [],
+    ignoredFeatures: [] as string[],
+    premiumFeatureAttempts: [] as string[],
     completionStreak: 0,
     ...overrides,
   };
@@ -39,8 +39,8 @@ export function visibleEntries(map: HomeSurfaceMap): string[] {
 }
 
 export function day0Map(overrides: {
-  motivationStyle?: string;
-  primaryGoal?: string;
+  motivationStyle?: "calm" | "friendly" | "coach_led" | "game_like" | "intense" | "study_focused" | "student";
+  primaryGoal?: "focus" | "study" | "work" | "creative" | "personal" | "learning";
   gamificationIntensity?: "minimal" | "medium" | "strong";
   laneProfile?: { primaryLane: string };
 }) {
@@ -58,6 +58,7 @@ export function day0Map(overrides: {
     hasActiveRecommendation: false,
     hasActiveBoss: false,
     isFirstSession: true,
+    degradedFeatures: [],
     laneProfile: overrides.laneProfile
       ? {
           primaryLane: overrides.laneProfile.primaryLane as

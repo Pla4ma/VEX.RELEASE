@@ -50,6 +50,10 @@ export function baseStats() {
   return {
     totalCompletedSessions: 0,
     studyUsageRatio: 0,
+    deepWorkUsageRatio: 0,
+    learningUsageRatio: 0,
+    projectFocusUsageRatio: 0,
+    structuredExecutionUsageRatio: 0,
     bossChallengeEngagement: "none" as const,
     coachInteractions: 0,
     comebackSessions: 0,
@@ -68,6 +72,7 @@ export function makeDay0Map(): HomeSurfaceMap {
     hasActiveRecommendation: false,
     hasActiveBoss: false,
     isFirstSession: true,
+    degradedFeatures: [],
   });
 }
 

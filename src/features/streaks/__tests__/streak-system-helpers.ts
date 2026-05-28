@@ -2,17 +2,17 @@ import { jest } from "@jest/globals";
 import type { Streak } from "../schemas";
 
 export const mockRepository = {
-  fetchStreak: jest.fn(),
-  createStreak: jest.fn(),
-  updateStreak: jest.fn(),
-  recordShieldEarned: jest.fn(),
-  recordShieldUsed: jest.fn(),
-  getAvailableShield: jest.fn(),
-  fetchActiveRepairQuest: jest.fn(),
-  saveRepairQuest: jest.fn(),
-  updateRepairQuest: jest.fn(),
-  fetchExpiredRepairQuests: jest.fn(),
-  fetchUsersWithActiveStreaks: jest.fn(),
+  fetchStreak: jest.fn<() => Promise<Streak | null>>(),
+  createStreak: jest.fn<() => Promise<Streak>>(),
+  updateStreak: jest.fn<() => Promise<Streak>>(),
+  recordShieldEarned: jest.fn<() => Promise<void>>(),
+  recordShieldUsed: jest.fn<() => Promise<void>>(),
+  getAvailableShield: jest.fn<() => Promise<Streak | null>>(),
+  fetchActiveRepairQuest: jest.fn<() => Promise<unknown>>(),
+  saveRepairQuest: jest.fn<() => Promise<void>>(),
+  updateRepairQuest: jest.fn<() => Promise<void>>(),
+  fetchExpiredRepairQuests: jest.fn<() => Promise<unknown[]>>(),
+  fetchUsersWithActiveStreaks: jest.fn<() => Promise<unknown[]>>(),
 };
 
 jest.mock("../repository", () => mockRepository);

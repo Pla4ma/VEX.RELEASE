@@ -6,6 +6,7 @@
 import type { CompletionLedger } from "../schemas";
 import type { OfflineQueueEntry } from "../../../lib/offline/queue";
 import type { NetworkState } from "../../../network/NetInfoAdapter";
+import { SessionMode } from "../../../session/modes";
 
 export const mockStorage: Record<string, string> = {};
 export const storageKey = "vex_session_completion_fallback";
@@ -25,7 +26,7 @@ export function ledger(
     idempotencyKey: "session-complete-1",
     sessionId: "550e8400-e29b-41d4-a716-446655440000",
     userId: "550e8400-e29b-41d4-a716-446655440001",
-    mode: "DEEP_WORK",
+    mode: SessionMode.DEEP_WORK,
     targetDurationSeconds: 1800,
     completedDurationSeconds: 1700,
     effectiveFocusedSeconds: 1600,

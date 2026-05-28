@@ -63,7 +63,7 @@ export class AccessibilityEnhancer {
     EnhancedComponent.displayName = `Enhanced(${componentRef.displayName || componentRef.name || "Component"})`;
     // ForwardRefExoticComponent<P> satisfies ComponentType<P> at runtime;
     // TS cannot verify due to PropsWithoutRef wrapping at generic boundary.
-    return EnhancedComponent as React.ComponentType<P>;
+    return EnhancedComponent as unknown as React.ComponentType<P>;
   }
 
   enhanceProps<P extends object>(

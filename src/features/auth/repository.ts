@@ -27,7 +27,7 @@ export async function signUpWithEmail(
 
   if (data.user) {
     const mapped = mapSupabaseUser(data.user, metadata);
-    const user = await attachOnboardingCompletion(mapped);
+    const user = await attachOnboardingCompletion(mapped, null);
     return { user, error: null };
   }
 
@@ -45,14 +45,14 @@ export async function signInWithEmail(
   }
 
   const user = data.user ? mapSupabaseUser(data.user) : null;
-  const finalUser = user ? await attachOnboardingCompletion(user) : null;
+  const finalUser = user ? await attachOnboardingCompletion(user, null) : null;
   return { user: finalUser, error: null };
 }
 
 export async function signOut(): Promise<void> {
   const { error } = await supabase.auth.signOut();
   if (error) {
-    throw handleSupabaseError(error, "signOut");
+    throw handleSupabaseError(error);
   }
 }
 
@@ -62,26 +62,26 @@ export async function getSessionUser(): Promise<User | null> {
     return null;
   }
   const mapped = mapSupabaseUser(data.session.user);
-  return attachOnboardingCompletion(mapped);
+  return attachOnboardingCompletion(mapped, null);
 }
 
 export async function sendPasswordResetEmail(email: string): Promise<void> {
   const { error } = await supabase.auth.resetPasswordForEmail(email);
   if (error) {
-    throw handleSupabaseError(error, "sendPasswordResetEmail");
+    throw handleSupabaseError(error);
   }
 }
 
 export async function updateUserPassword(newPassword: string): Promise<void> {
   const { error } = await supabase.auth.updateUser({ password: newPassword });
   if (error) {
-    throw handleSupabaseError(error, "updateUserPassword");
+    throw handleSupabaseError(error);
   }
 }
 
 export async function resendVerificationEmail(email: string): Promise<void> {
   const { error } = await supabase.auth.resend({ type: "signup", email });
   if (error) {
-    throw handleSupabaseError(error, "resendVerificationEmail");
+    throw handleSupabaseError(error);
   }
 }

@@ -4,26 +4,64 @@ import {
   type HomeContextSnapshot,
   type ProductContext,
 } from "../priority-schemas";
-import type { FeatureAccessMap } from "../../liveops-config";
+import type { FeatureAccessMap, FeatureAccess } from "../../liveops-config";
 
 export { getPriorityCandidates, HomeContextSnapshotSchema };
 export type { HomeContextSnapshot, ProductContext, FeatureAccessMap };
 
+function makeAccess(
+  overrides: Partial<FeatureAccess>,
+): FeatureAccess {
+  return {
+    key: "focus_session",
+    isUnlocked: true,
+    isVisible: true,
+    lockedDescription: "",
+    recommendedUnlockMoment: "",
+    unlockReason: "",
+    releaseState: "final_release_core" as const,
+    isDegraded: false,
+    ...overrides,
+  };
+}
+
 export const mockFeatureAccess: FeatureAccessMap = {
-  boss_tab: { isUnlocked: true, isDegraded: false, state: "unlocked" },
-  challenges: { isUnlocked: true, isDegraded: false, state: "unlocked" },
-  content_study: { isUnlocked: true, isDegraded: false, state: "unlocked" },
-  premium_paywall: { isUnlocked: true, isDegraded: false, state: "unlocked" },
-  ai_coach_advanced: { isUnlocked: true, isDegraded: false, state: "unlocked" },
-  battle_pass: { isUnlocked: false, isDegraded: false, state: "hidden" },
-  companion_detail: { isUnlocked: true, isDegraded: false, state: "unlocked" },
-  notifications: { isUnlocked: true, isDegraded: false, state: "unlocked" },
-  streaks_advanced: { isUnlocked: true, isDegraded: false, state: "unlocked" },
-  squads: { isUnlocked: false, isDegraded: false, state: "hidden" },
-  economy: { isUnlocked: false, isDegraded: false, state: "hidden" },
-  coach_memory: { isUnlocked: true, isDegraded: false, state: "unlocked" },
-  products: { isUnlocked: true, isDegraded: false, state: "unlocked" },
-  session_advanced: { isUnlocked: true, isDegraded: false, state: "unlocked" },
+  boss_tab: makeAccess({ key: "boss_tab", isUnlocked: true }),
+  challenges: makeAccess({ key: "challenges", isUnlocked: true }),
+  content_study: makeAccess({ key: "content_study", isUnlocked: true }),
+  premium_paywall: makeAccess({ key: "premium_paywall", isUnlocked: true }),
+  ai_coach_advanced: makeAccess({ key: "ai_coach_advanced", isUnlocked: true }),
+  battle_pass: makeAccess({ key: "battle_pass", isUnlocked: false, isVisible: false }),
+  companion_detail: makeAccess({ key: "companion_detail", isUnlocked: true }),
+  streaks_advanced: makeAccess({ key: "streaks_advanced", isUnlocked: true }),
+  squads: makeAccess({ key: "squads", isUnlocked: false, isVisible: false }),
+  economy: makeAccess({ key: "economy_basic", isUnlocked: false, isVisible: false }),
+  coach_memory: makeAccess({ key: "memory_console", isUnlocked: true }),
+  products: makeAccess({ key: "achievements", isUnlocked: true }),
+  session_advanced: makeAccess({ key: "seasonal_features", isUnlocked: true }),
+  focus_session: makeAccess({ key: "focus_session" }),
+  progress_view: makeAccess({ key: "progress_view" }),
+  ai_coach_basic: makeAccess({ key: "ai_coach_basic" }),
+  economy_basic: makeAccess({ key: "economy_basic", isUnlocked: false, isVisible: false }),
+  economy_advanced: makeAccess({ key: "economy_advanced", isUnlocked: false, isVisible: false }),
+  home_tab: makeAccess({ key: "home_tab" }),
+  focus_tab: makeAccess({ key: "focus_tab" }),
+  social_tab: makeAccess({ key: "social_tab" }),
+  profile_tab: makeAccess({ key: "profile_tab" }),
+  boss_bounties: makeAccess({ key: "boss_bounties", isUnlocked: false, isVisible: false }),
+  rivals: makeAccess({ key: "rivals", isUnlocked: false, isVisible: false }),
+  rankings: makeAccess({ key: "rankings", isUnlocked: false, isVisible: false }),
+  shop: makeAccess({ key: "shop", isUnlocked: false, isVisible: false }),
+  inventory: makeAccess({ key: "inventory", isUnlocked: false, isVisible: false }),
+  wagers: makeAccess({ key: "wagers", isUnlocked: false, isVisible: false }),
+  streak_insurance: makeAccess({ key: "streak_insurance", isUnlocked: false, isVisible: false }),
+  gems_prominent: makeAccess({ key: "gems_prominent", isUnlocked: false, isVisible: false }),
+  achievements: makeAccess({ key: "achievements" }),
+  content_study_advanced: makeAccess({ key: "content_study_advanced", isUnlocked: false }),
+  quiz_review_mode: makeAccess({ key: "quiz_review_mode", isUnlocked: false }),
+  memory_console: makeAccess({ key: "memory_console" }),
+  seasonal_features: makeAccess({ key: "seasonal_features" }),
+  advanced_settings: makeAccess({ key: "advanced_settings", isUnlocked: false }),
 };
 
 export function makeSnapshot(

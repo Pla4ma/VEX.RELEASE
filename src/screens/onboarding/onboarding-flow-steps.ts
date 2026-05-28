@@ -1,9 +1,9 @@
 import {
   DEFAULT_COMPANION_ELEMENT,
-  DEFAULT_PERSONA_ID,
   STARTER_PRESETS,
   STEP_TITLES,
 } from "./components";
+import { DEFAULT_PERSONA_ID } from "./components/onboarding-flow-data";
 import type {
   OnboardingGoal,
   MotivationProfileType,

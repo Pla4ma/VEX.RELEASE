@@ -51,7 +51,7 @@ export function makeFeatures(
       priority: 5,
       threshold: 8,
       ...((overrides.ai_coach_advanced as Record<string, unknown>) ?? {}),
-    } as FeatureAccessMap["ai_coach_advanced"],
+    } as unknown as FeatureAccessMap["ai_coach_advanced"],
     ai_coach_basic: {
       isUnlocked: true,
       isVisible: true,
@@ -63,7 +63,7 @@ export function makeFeatures(
       priority: 1,
       threshold: 0,
       ...((overrides.ai_coach_basic as Record<string, unknown>) ?? {}),
-    } as FeatureAccessMap["ai_coach_basic"],
+    } as unknown as FeatureAccessMap["ai_coach_basic"],
     challenges: {
       isUnlocked: true,
       isVisible: true,
@@ -71,8 +71,8 @@ export function makeFeatures(
       unlockReason: "",
       releaseState: "final_release_progressive",
       ...((overrides.challenges as Record<string, unknown>) ?? {}),
-    } as FeatureAccessMap["challenges"],
-  } as FeatureAccessMap;
+    } as unknown as FeatureAccessMap["challenges"],
+  } as unknown as FeatureAccessMap;
 }
 
 export function makeFWE(stage: string): FirstWeekExperience {

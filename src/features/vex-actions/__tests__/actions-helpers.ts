@@ -4,7 +4,7 @@ import type { ActionGate } from "../action-utils";
 // ─── Mocks ─────────────────────────────────────────────────────────────────
 
 jest.mock("../../focus-run/service", () => ({
-  recordFocusRunEvent: jest.fn().mockResolvedValue({
+  recordFocusRunEvent: jest.fn().mockImplementation(() => Promise.resolve({
     id: "run-1",
     userId: "u1",
     weekStartsAt: 0,
@@ -17,7 +17,7 @@ jest.mock("../../focus-run/service", () => ({
     reflectionUpgrades: 0,
     finalGrade: null,
     events: [],
-  }),
+  })),
   buildFocusRunDisplay: jest.fn().mockReturnValue({
     laneAllowed: true,
     title: "test",
@@ -43,7 +43,7 @@ jest.mock("../../focus-run/service", () => ({
 }));
 
 jest.mock("../../study-os/service", () => ({
-  createManualStudyPlan: jest.fn().mockResolvedValue({
+  createManualStudyPlan: jest.fn().mockImplementation(() => Promise.resolve({
     id: "plan-1",
     userId: "u1",
     title: "Test Plan",
@@ -60,11 +60,11 @@ jest.mock("../../study-os/service", () => ({
     status: "active",
     createdAt: 0,
     deadlineAt: null,
-  }),
+  })),
 }));
 
 jest.mock("../../project-focus/service", () => ({
-  completeProjectSession: jest.fn().mockResolvedValue({
+  completeProjectSession: jest.fn().mockImplementation(() => Promise.resolve({
     id: "thread-1",
     userId: "u1",
     projectTitle: "Test",
@@ -79,11 +79,11 @@ jest.mock("../../project-focus/service", () => ({
     bestSessionMode: "CREATIVE",
     lastTouched: 0,
     rescuedAt: null,
-  }),
+  })),
 }));
 
 jest.mock("../../focus-memory/service", () => ({
-  findMemoriesForRecommendation: jest.fn().mockResolvedValue([]),
+  findMemoriesForRecommendation: jest.fn().mockImplementation(() => Promise.resolve([])),
 }));
 
 // ─── Test helper ────────────────────────────────────────────────────────────

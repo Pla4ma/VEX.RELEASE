@@ -3,6 +3,7 @@ import { useMemo } from "react";
 import {
   buildCompletionCoachPresence,
 } from "../../coach-presence";
+import type { CoachPresenceMemorySummary } from "../../coach-presence/schemas";
 import {
   getFeatureAvailability,
   type FeatureAccessMap,
@@ -10,16 +11,9 @@ import {
 import type { SessionSummary } from "../../../session/types";
 import { mapCompletionMotivationStyle } from "./mapCompletionMotivationStyle";
 
-interface CoachMemorySummary {
-  coachMemoryCount: number;
-  companionMemoryCount: number;
-  latestMemory: unknown;
-  syncAvailable: boolean;
-}
-
 interface CoachPresenceInput {
   features: FeatureAccessMap;
-  coachMemoryData: CoachMemorySummary | undefined;
+  coachMemoryData: CoachPresenceMemorySummary | undefined;
   motivationProfile: string | undefined;
   focusedDuration: number;
   focusPurityScore: number;

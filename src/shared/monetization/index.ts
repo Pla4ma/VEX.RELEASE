@@ -8,8 +8,8 @@
  */
 
 // Service exports
+export { revenueCatService } from "./revenuecat-service";
 export {
-  revenueCatService,
   initializeRevenueCat,
   getCustomerInfo,
   getOfferings,
@@ -20,7 +20,7 @@ export {
   syncPurchases,
   isRevenueCatReady,
   getRevenueCatStatus,
-} from "./revenuecat-service";
+} from "./revenuecat-exports";
 
 // Type exports
 export type {

@@ -13,7 +13,7 @@ import type {
   ComebackActivatedEvent,
   BehaviorSignalDetectedEvent,
   InterventionTriggeredEvent,
-} from "./schemas";
+} from "./event-schemas";
 
 export function createCoachMessageGeneratedEvent(
   userId: string,

@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { MasteryTrackSchema } from "./mastery-types";
+
 export type MasteryTrack = z.infer<typeof MasteryTrackSchema>;
 
 export interface MasteryTrackState {

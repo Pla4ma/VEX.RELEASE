@@ -25,9 +25,10 @@ export function revenueCatError(
   code: RevenueCatError["code"],
   message: string,
 ): RevenueCatError {
-  const error = new Error(message);
+  const error = new Error(message) as RevenueCatError;
   error.name = "RevenueCatError";
-  return Object.assign(error, { code });
+  error.code = code;
+  return error;
 }
 
 export function packageInfo(

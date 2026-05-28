@@ -1,6 +1,6 @@
 import type { UseQueryResult } from "@tanstack/react-query";
 import type { SessionRecommendation } from "../../../features/ai-coach";
-import type { LearningExecutionTarget } from "../../../features/learning-execution";
+import type { LearningExecutionLayer } from "../../../features/learning-execution";
 import type { FeatureAccessResult } from "../../../features/liveops-config";
 import type { HomeController } from "../hooks/home-controller-types";
 import type { HomeReturnReason } from "../hooks/useHomeReturnReason";
@@ -31,7 +31,7 @@ export function buildController(params: {
   streakQuery: UseQueryResult;
   progressionQuery: UseQueryResult;
   activeStudyPlanQuery: UseQueryResult;
-  learningExecutionLayer: { target: LearningExecutionTarget | null };
+  learningExecutionLayer: { target: LearningExecutionLayer["target"] };
   comebackQuery: UseQueryResult;
   activeBossQuery: UseQueryResult | null;
   createRecommendation: unknown;

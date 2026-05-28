@@ -36,7 +36,7 @@ export type {
 } from "./social-events";
 
 // Event property interfaces
-export {
+export type {
   BaseEventProperties,
   AuthEventProperties,
   SessionEventProperties,
