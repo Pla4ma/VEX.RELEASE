@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, type ViewStyle } from "react-native";
+import { View } from "react-native";
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -19,24 +19,13 @@ import Svg, {
 
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 import { useTheme } from "../../theme";
+import {
+  type CoachMood,
+  type AnimatedCoachAvatarProps,
+  getMoodScale,
+} from "./coach-avatar-types";
 
-type CoachMood = "calm" | "active" | "celebrate";
-
-interface AnimatedCoachAvatarProps {
-  size?: number;
-  mood?: CoachMood;
-  style?: ViewStyle;
-}
-
-function getMoodScale(mood: CoachMood): number {
-  if (mood === "celebrate") {
-    return 1.08;
-  }
-  if (mood === "active") {
-    return 1.04;
-  }
-  return 1.02;
-}
+export { type CoachMood, type AnimatedCoachAvatarProps } from "./coach-avatar-types";
 
 export function AnimatedCoachAvatar({
   size = 112,

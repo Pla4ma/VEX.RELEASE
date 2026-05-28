@@ -1,5 +1,7 @@
-import type { ActiveSessionConfig, ModeSpecificUI } from "./types";
+import type { ActiveSessionConfig } from "./types";
 import { SessionMode } from "../../session/modes";
+export { MODE_SPECIFIC_UI, getModeSpecificUI } from "./active-session-ui";
+
 export const ACTIVE_SESSION_CONFIG: Partial<
   Record<SessionMode, ActiveSessionConfig>
 > = {
@@ -121,53 +123,7 @@ export const ACTIVE_SESSION_CONFIG: Partial<
     coachCooldownSeconds: 0,
   },
 };
-export const MODE_SPECIFIC_UI: Partial<Record<SessionMode, ModeSpecificUI>> = {
-  [SessionMode.CHALLENGE]: {
-    theme: "dark",
-    companionPosition: "bottom",
-    showProgressBar: true,
-    showPurityIndicator: true,
-    showStreakFlame: true,
-    allowMoodLogging: false,
-    allowNotes: false,
-  },
-  [SessionMode.FLOW]: {
-    theme: "light",
-    companionPosition: "bottom",
-    showProgressBar: true,
-    showPurityIndicator: true,
-    showStreakFlame: true,
-    allowMoodLogging: true,
-    allowNotes: true,
-  },
-  [SessionMode.RECOVERY]: {
-    theme: "light",
-    companionPosition: "bottom",
-    showProgressBar: true,
-    showPurityIndicator: false,
-    showStreakFlame: false,
-    allowMoodLogging: true,
-    allowNotes: true,
-  },
-  [SessionMode.STARTER]: {
-    theme: "light",
-    companionPosition: "bottom",
-    showProgressBar: true,
-    showPurityIndicator: false,
-    showStreakFlame: false,
-    allowMoodLogging: false,
-    allowNotes: false,
-  },
-  [SessionMode.CREATIVE]: {
-    theme: "creative",
-    companionPosition: "hidden",
-    showProgressBar: false,
-    showPurityIndicator: false,
-    showStreakFlame: false,
-    allowMoodLogging: true,
-    allowNotes: true,
-  },
-};
+
 export function getActiveSessionConfig(
   mode: (typeof SessionMode)[keyof typeof SessionMode],
 ): ActiveSessionConfig {
@@ -175,11 +131,7 @@ export function getActiveSessionConfig(
     ACTIVE_SESSION_CONFIG[mode] ?? ACTIVE_SESSION_CONFIG[SessionMode.FLOW]!
   );
 }
-export function getModeSpecificUI(
-  mode: (typeof SessionMode)[keyof typeof SessionMode],
-): ModeSpecificUI {
-  return MODE_SPECIFIC_UI[mode] ?? MODE_SPECIFIC_UI[SessionMode.FLOW]!;
-}
+
 export function canPause(
   mode: (typeof SessionMode)[keyof typeof SessionMode],
   elapsedSeconds: number,
@@ -194,6 +146,7 @@ export function canPause(
   }
   return elapsedSeconds >= config.minFocusSecondsBeforePause;
 }
+
 export function canBackground(
   mode: (typeof SessionMode)[keyof typeof SessionMode],
   backgroundSeconds: number,

@@ -4,67 +4,15 @@ import {
   type BehaviorResolverInput,
   type BehaviorSignalSummary,
 } from "./behavior-signal-schemas";
+import {
+  countByType,
+  countDistinctSurfaces,
+  hasSurfacesDismissedMultipleTimes,
+  hasSurfacesClickedMultipleTimes,
+} from "./behavior-resolver-helpers";
 
-const DISMISS_THRESHOLD = 3;
-const CLICK_TO_REINFORCE_THRESHOLD = 2;
 const PREMIUM_SESSION_MINIMUM = 5;
 const SIGNIFICANT_CLICK_WINDOW = 2;
-
-function countByType(
-  signals: BehaviorResolverInput["recentSignals"],
-  type: string,
-): number {
-  return signals.filter((s) => s.signalType === type).length;
-}
-
-function countDistinctSurfaces(
-  signals: BehaviorResolverInput["recentSignals"],
-  type: string,
-): Set<string> {
-  const surfaces = new Set<string>();
-  for (const s of signals) {
-    if (s.signalType === type) surfaces.add(s.surfaceKey);
-  }
-  return surfaces;
-}
-
-function hasMinimumSignals(
-  signals: BehaviorResolverInput["recentSignals"],
-  type: string,
-  threshold: number,
-): boolean {
-  return countByType(signals, type) >= threshold;
-}
-
-function hasSurfacesDismissedMultipleTimes(
-  signals: BehaviorResolverInput["recentSignals"],
-): string[] {
-  const dismissCounts = new Map<string, number>();
-  for (const s of signals) {
-    if (s.signalType === "surface_dismissed") {
-      const key = s.surfaceKey;
-      dismissCounts.set(key, (dismissCounts.get(key) ?? 0) + 1);
-    }
-  }
-  return Array.from(dismissCounts.entries())
-    .filter(([, count]) => count >= DISMISS_THRESHOLD)
-    .map(([key]) => key);
-}
-
-function hasSurfacesClickedMultipleTimes(
-  signals: BehaviorResolverInput["recentSignals"],
-): string[] {
-  const clickCounts = new Map<string, number>();
-  for (const s of signals) {
-    if (s.signalType === "surface_clicked") {
-      const key = s.surfaceKey;
-      clickCounts.set(key, (clickCounts.get(key) ?? 0) + 1);
-    }
-  }
-  return Array.from(clickCounts.entries())
-    .filter(([, count]) => count >= CLICK_TO_REINFORCE_THRESHOLD)
-    .map(([key]) => key);
-}
 
 export function resolveUserBehaviorSignals(
   input: BehaviorResolverInput,

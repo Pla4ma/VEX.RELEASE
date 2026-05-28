@@ -10,6 +10,7 @@ import { Box } from "../../../components/primitives/Box";
 import { Text } from "../../../components/primitives/Text";
 import { Button } from "../../../components/primitives/Button";
 import { useTheme } from "../../../theme";
+import { NameAvatarPreview } from "./NameAvatarPreview";
 interface NameScreenProps {
   onContinue: (name: string) => void;
   onSkip: () => void;
@@ -132,34 +133,7 @@ export function NameScreen({
       </Animated.View>
 
       {}
-      {isValid && (
-        <Animated.View
-          entering={FadeInUp.duration(400)}
-          style={{ marginTop: theme.spacing[8] }}
-        >
-          <Box alignItems="center" gap="md">
-            <Box
-              width={80}
-              height={80}
-              borderRadius="full"
-              bg={theme.colors.primary[500]}
-              justifyContent="center"
-              alignItems="center"
-            >
-              <Text
-                fontSize={32}
-                color={theme.colors.text.inverse}
-                fontWeight="700"
-              >
-                {name.charAt(0).toUpperCase()}
-              </Text>
-            </Box>
-            <Text variant="body" color="text.secondary">
-              Nice to meet you, {name.trim()}!
-            </Text>
-          </Box>
-        </Animated.View>
-      )}
+      {isValid && <NameAvatarPreview name={name} />}
 
       {}
       <Box flex={1} minHeight={40} />

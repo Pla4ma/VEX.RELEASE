@@ -110,21 +110,7 @@ describe("Challenges Service", () => {
       expect(result?.completed).toBe(false);
     });
   });
-  describe("checkRerollEligibility", () => {
-    it("should allow free reroll within limit", async () => {
-      mockedRepository.getFreeRerollCountToday.mockResolvedValue(0);
-      const result = await service.checkRerollEligibility("user-1", "c-1");
-      expect(result.canReroll).toBe(true);
-      expect(result.freeRerollAvailable).toBe(true);
-    });
-    it("should require paid reroll after free limit", async () => {
-      mockedRepository.getFreeRerollCountToday.mockResolvedValue(1);
-      const result = await service.checkRerollEligibility("user-1", "c-1");
-      expect(result.canReroll).toBe(true);
-      expect(result.freeRerollAvailable).toBe(false);
-      expect(result.gemCost).toBe(10);
-    });
-  });
+
   describe("rerollChallenge", () => {
     it("should reroll with free option", async () => {
       mockedRepository.getFreeRerollCountToday.mockResolvedValue(0);

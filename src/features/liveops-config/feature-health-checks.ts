@@ -1,8 +1,9 @@
 import { featureHealthRegistry } from "./feature-health";
 import type { FeatureHealthCheck, FeatureHealthStatus } from "./feature-health";
 import { CONTENT_STUDY_CONSTANTS } from "../content-study/types";
-import { DISABLED_FEATURES } from "./feature-access-config";
 import { premiumRevenueCatHealthChecks } from "./premium-revenuecat-health-checks";
+import { bossHealthChecks } from "./boss-health-checks";
+
 const GEMINI_API_KEY =
   process.env.EXPO_PUBLIC_GEMINI_API_KEY ?? process.env.GEMINI_API_KEY;
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL;
@@ -11,18 +12,22 @@ const CONTENT_STUDY_FUNCTION =
   process.env.EXPO_PUBLIC_CONTENT_STUDY_FUNCTION ?? "generate-study-plan";
 const AI_COACH_FUNCTION =
   process.env.EXPO_PUBLIC_AI_COACH_FUNCTION ?? "ai-router";
+
 function hasSupabaseConfig(): boolean {
   return Boolean(SUPABASE_URL) && Boolean(SUPABASE_ANON_KEY);
 }
+
 function hasGeminiKey(): boolean {
   return (
     hasFunctionName(CONTENT_STUDY_FUNCTION) ||
     hasFunctionName(AI_COACH_FUNCTION)
   );
 }
+
 function hasFunctionName(value: string | undefined): boolean {
   return typeof value === "string" && value.trim().length > 0;
 }
+
 function hasContentStudyConstraints(): boolean {
   return (
     CONTENT_STUDY_CONSTANTS.MAX_PDF_SIZE > 0 &&
@@ -31,14 +36,7 @@ function hasContentStudyConstraints(): boolean {
     CONTENT_STUDY_CONSTANTS.MAX_YOUTUBE_URL_LENGTH > 0
   );
 }
-function bossFinalReleaseForbiddenDepsAreDisabled(): boolean {
-  const disabled = new Set(DISABLED_FEATURES);
-  return (
-    disabled.has("squads") &&
-    disabled.has("shop") &&
-    disabled.has("economy_advanced")
-  );
-}
+
 export const healthChecks: FeatureHealthCheck[] = [
   {
     id: "content_study_gemini",
@@ -143,59 +141,9 @@ export const healthChecks: FeatureHealthCheck[] = [
     },
   },
   ...premiumRevenueCatHealthChecks,
-  {
-    id: "boss_tab_template",
-    feature: "boss_tab",
-    label:
-      "Boss Tab — template loading (infrastructure verified, runtime template verification pending)",
-    dependency: "boss_template",
-    cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      return bossFinalReleaseForbiddenDepsAreDisabled()
-        ? "healthy"
-        : "unavailable";
-    },
-  },
-  {
-    id: "boss_tab_no_disabled_deps",
-    feature: "boss_tab",
-    label:
-      "Boss Tab — final-release forbidden deps (squads/shop/economy) are disabled",
-    dependency: "boss_dependencies",
-    cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      return bossFinalReleaseForbiddenDepsAreDisabled()
-        ? "healthy"
-        : "degraded";
-    },
-  },
-  {
-    id: "boss_tab_subtle_fallback",
-    feature: "boss_tab",
-    label:
-      "Boss Tab — subtle mode fallback (infrastructure verified, runtime integration pending)",
-    dependency: "boss_subtle",
-    cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      return bossFinalReleaseForbiddenDepsAreDisabled()
-        ? "healthy"
-        : "unavailable";
-    },
-  },
-  {
-    id: "boss_tab_route_gating",
-    feature: "boss_tab",
-    label:
-      "Boss Tab — route/query/event subscription gating (infrastructure verified, runtime integration pending)",
-    dependency: "boss_route_gating",
-    cacheMs: 300_000,
-    check: (): FeatureHealthStatus => {
-      return bossFinalReleaseForbiddenDepsAreDisabled()
-        ? "healthy"
-        : "unavailable";
-    },
-  },
+  ...bossHealthChecks,
 ];
+
 export function registerFeatureHealthChecks(): void {
   for (const check of healthChecks) featureHealthRegistry.register(check);
 }

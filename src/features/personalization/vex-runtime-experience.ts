@@ -1,6 +1,3 @@
-import { useMemo } from "react";
-import { useOnboardingStore } from "../onboarding/store";
-import { useResolvedVexExperienceRuntime } from "./hooks";
 import { computeFirstWeekExperience } from "./useFirstWeekExperience";
 import type {
   VexRuntimeInput,
@@ -16,6 +13,7 @@ export type {
   VexRuntimeExperience,
   VexRuntimeInput,
 } from "./runtime-experience-types";
+export { useVexRuntimeExperience } from "./use-vex-runtime-experience";
 
 export function computeVexRuntimeExperience(
   input: VexRuntimeInput,
@@ -138,69 +136,4 @@ export function computeVexRuntimeExperience(
     studyLayerLabel: firstWeek.studyLayerLabel,
     bossIntensity: firstWeek.bossIntensity,
   };
-}
-
-export function useVexRuntimeExperience(
-  input: VexRuntimeInput,
-): VexRuntimeExperience {
-  const duration = useOnboardingStore((s) => s.focusDuration);
-  const goal = useOnboardingStore((s) => s.goal);
-  const style = useOnboardingStore((s) => s.explicitMotivationStyle);
-
-  const normalizedStyle =
-    typeof style === "string" &&
-    [
-      "calm",
-      "friendly",
-      "coach_led",
-      "game_like",
-      "intense",
-      "study_focused",
-    ].includes(style)
-      ? (style as
-          | "calm"
-          | "friendly"
-          | "coach_led"
-          | "game_like"
-          | "intense"
-          | "study_focused")
-      : undefined;
-
-  const resolvedGoal: string | undefined = (() => {
-    const g = goal;
-    if (g === "STUDY") return "study";
-    if (g === "WORK") return "work";
-    if (g === "CREATIVE") return "creative";
-    if (g === "PERSONAL") return "personal";
-    return undefined;
-  })();
-
-  const effectiveInput: VexRuntimeInput = {
-    ...input,
-    motivationStyle: input.motivationStyle ?? normalizedStyle,
-    primaryGoal: input.primaryGoal ?? resolvedGoal,
-  };
-
-  return useMemo(
-    () => computeVexRuntimeExperience(effectiveInput),
-    [
-      effectiveInput.completedSessions,
-      effectiveInput.daysSinceOnboarding,
-      effectiveInput.daysSinceLastSession,
-      effectiveInput.motivationStyle,
-      effectiveInput.primaryGoal,
-      effectiveInput.bossEngagement,
-      effectiveInput.studyUsageRatio,
-      effectiveInput.coachInteractions,
-      effectiveInput.completionStreak,
-      effectiveInput.isPremium,
-      effectiveInput.featureAvailable.boss,
-      effectiveInput.featureAvailable.premium,
-      effectiveInput.featureAvailable.social,
-      effectiveInput.featureAvailable.study,
-      duration,
-      goal,
-      style,
-    ],
-  );
 }

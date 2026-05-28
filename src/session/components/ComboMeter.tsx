@@ -1,6 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
+import Animated from "react-native-reanimated";
+
 import { useTheme } from "../../theme/ThemeContext";
 import { Text } from "../../components";
 import type { ComboMeterProps } from "./combo-meter-types";
@@ -28,18 +29,8 @@ import {
   progressBarStyle,
   nextTierTextStyle,
   maxTierTextStyle,
-  milestoneOverlayStyle,
-  milestoneCardStyle,
-  milestoneEmojiStyle,
-  milestoneTextStyle,
-  comboBrokenOverlayStyle,
-  comboBrokenCardStyle,
-  comboBrokenEmojiStyle,
-  comboBrokenTextStyle,
-  comboBrokenSubtextStyle,
-  warningOverlayStyle,
-  warningTextStyle,
 } from "./ComboMeter.styles";
+import { ComboMeterOverlays } from "./ComboMeterOverlays";
 
 export type { ComboMeterProps } from "./combo-meter-types";
 export function ComboMeter({
@@ -140,65 +131,20 @@ export function ComboMeter({
         )}
       </View>
 
-      {showMilestone && (
-        <Animated.View
-          entering={FadeIn.duration(300)}
-          exiting={FadeOut.duration(300)}
-          style={milestoneOverlayStyle}
-        >
-          <View
-            style={[
-              milestoneCardStyle,
-              { backgroundColor: theme.colors.background.elevated },
-            ]}
-          >
-            <Text style={milestoneEmojiStyle}>🎉</Text>
-            <Text variant="h3" style={milestoneTextStyle}>
-              {milestoneMessage}
-            </Text>
-            <Text variant="caption" color="secondary">
-              {tier.multiplier}x XP Multiplier Active!
-            </Text>
-          </View>
-        </Animated.View>
-      )}
-
-      {showComboBroken && (
-        <Animated.View
-          entering={FadeIn.duration(200)}
-          exiting={FadeOut.duration(200)}
-          style={comboBrokenOverlayStyle}
-        >
-          <View
-            style={[
-              comboBrokenCardStyle,
-              { backgroundColor: theme.colors.error.DEFAULT },
-            ]}
-          >
-            <Text style={comboBrokenEmojiStyle}>💔</Text>
-            <Text variant="h4" style={comboBrokenTextStyle}>
-              Combo Broken!
-            </Text>
-            <Text variant="caption" style={comboBrokenSubtextStyle}>
-              You had a {previousComboRef.current} minute streak
-            </Text>
-          </View>
-        </Animated.View>
-      )}
-      {(isPaused || isIdle) && comboMinutes > 0 && (
-        <View
-          style={[
-            warningOverlayStyle,
-            { backgroundColor: theme.colors.warning.DEFAULT + "20" },
-          ]}
-        >
-          <Text variant="caption" color="warning" style={warningTextStyle}>
-            {isPaused
-              ? "⏸️ PAUSED - Combo at risk!"
-              : "⚠️ IDLE - Move to keep combo!"}
-          </Text>
-        </View>
-      )}
+      <ComboMeterOverlays
+        showMilestone={showMilestone}
+        milestoneMessage={milestoneMessage}
+        multiplier={tier.multiplier}
+        tierColor={tier.color}
+        elevatedBg={theme.colors.background.elevated}
+        showComboBroken={showComboBroken}
+        previousCombo={previousComboRef.current}
+        errorBg={theme.colors.error.DEFAULT}
+        isPaused={isPaused}
+        isIdle={isIdle}
+        comboMinutes={comboMinutes}
+        warningBg={theme.colors.warning.DEFAULT + "20"}
+      />
     </Animated.View>
   );
 }

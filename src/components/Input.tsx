@@ -9,36 +9,15 @@ import {
   TextInput,
   View,
   type TextInputProps,
-  type ViewStyle,
 } from "react-native";
 
 import { useTheme } from "../theme";
 import { Text } from "./primitives";
 import { Icon } from "../icons";
 import { createSheet } from "@/shared/ui/create-sheet";
+import { type InputProps } from "./input-types";
 
-// Icon name type from registry
-type IconName = string;
-
-/**
- * Input props
- */
-export interface InputProps extends Omit<TextInputProps, "style"> {
-  /** Input label */
-  label?: string;
-  /** Error message */
-  error?: string;
-  /** Helper text */
-  helper?: string;
-  /** Left icon name */
-  leftIcon?: IconName;
-  /** Right icon name */
-  rightIcon?: IconName;
-  /** Container style */
-  containerStyle?: ViewStyle;
-  /** Input style */
-  inputStyle?: ViewStyle;
-}
+export type { InputProps } from "./input-types";
 
 /**
  * Input component

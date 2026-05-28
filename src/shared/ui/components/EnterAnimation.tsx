@@ -1,17 +1,15 @@
 import React, { useMemo } from "react";
 import { View, ViewStyle } from "react-native";
-import Animated, {
-  FadeIn,
-  FadeInUp,
-  FadeInDown,
-  FadeInLeft,
-  FadeInRight,
-  useReducedMotion,
-  Easing,
-} from "react-native-reanimated";
+import Animated, { useReducedMotion } from "react-native-reanimated";
 import { createSheet } from "@/shared/ui/create-sheet";
-export type EnterDirection = "up" | "down" | "left" | "right" | "fade";
-export type EnterSpeed = "instant" | "fast" | "normal" | "slow";
+import {
+  type EnterDirection,
+  type EnterSpeed,
+  getEnterAnimation,
+} from "./enter-animation-core";
+
+export type { EnterDirection, EnterSpeed };
+
 export interface EnterAnimationProps {
   children: React.ReactNode;
   direction?: EnterDirection;
@@ -21,6 +19,7 @@ export interface EnterAnimationProps {
   style?: ViewStyle;
   enabled?: boolean;
 }
+
 export interface StaggeredEnterProps {
   children: React.ReactNode[];
   direction?: EnterDirection;
@@ -30,51 +29,7 @@ export interface StaggeredEnterProps {
   distance?: number;
   containerStyle?: ViewStyle;
 }
-const SPEED_CONFIGS: Record<
-  EnterSpeed,
-  { duration: number; easing: typeof Easing.ease }
-> = {
-  instant: { duration: 0, easing: Easing.ease },
-  fast: { duration: 200, easing: Easing.out(Easing.quad) },
-  normal: { duration: 350, easing: Easing.out(Easing.cubic) },
-  slow: { duration: 500, easing: Easing.out(Easing.cubic) },
-};
-const getEnterAnimation = (
-  direction: EnterDirection,
-  speed: EnterSpeed,
-  delay: number,
-  distance: number,
-  reducedMotion: boolean,
-) => {
-  const config = SPEED_CONFIGS[speed];
-  if (reducedMotion || speed === "instant") {
-    return FadeIn.duration(0).delay(0);
-  }
-  const baseDelay = delay;
-  switch (direction) {
-    case "up":
-      return FadeInUp.duration(config.duration)
-        .delay(baseDelay)
-        .easing(config.easing);
-    case "down":
-      return FadeInDown.duration(config.duration)
-        .delay(baseDelay)
-        .easing(config.easing);
-    case "left":
-      return FadeInLeft.duration(config.duration)
-        .delay(baseDelay)
-        .easing(config.easing);
-    case "right":
-      return FadeInRight.duration(config.duration)
-        .delay(baseDelay)
-        .easing(config.easing);
-    case "fade":
-    default:
-      return FadeIn.duration(config.duration)
-        .delay(baseDelay)
-        .easing(config.easing);
-  }
-};
+
 export const EnterAnimation: React.FC<EnterAnimationProps> = ({
   children,
   direction = "up",
@@ -102,6 +57,7 @@ export const EnterAnimation: React.FC<EnterAnimationProps> = ({
     </Animated.View>
   );
 };
+
 export const StaggeredEnter: React.FC<StaggeredEnterProps> = ({
   children,
   direction = "up",
@@ -141,12 +97,14 @@ export const StaggeredEnter: React.FC<StaggeredEnterProps> = ({
     </View>
   );
 };
+
 export interface CardEnterAnimationProps {
   children: React.ReactNode;
   index?: number;
   total?: number;
   style?: ViewStyle;
 }
+
 export const CardEnterAnimation: React.FC<CardEnterAnimationProps> = ({
   children,
   index = 0,
@@ -164,6 +122,7 @@ export const CardEnterAnimation: React.FC<CardEnterAnimationProps> = ({
     </Animated.View>
   );
 };
+
 export const ScreenEnterAnimation: React.FC<{
   children: React.ReactNode;
   style?: ViewStyle;
@@ -178,6 +137,7 @@ export const ScreenEnterAnimation: React.FC<{
     </Animated.View>
   );
 };
+
 export const HeroEnterAnimation: React.FC<{
   children: React.ReactNode;
   delay?: number;
@@ -193,9 +153,11 @@ export const HeroEnterAnimation: React.FC<{
     </Animated.View>
   );
 };
+
 const styles = createSheet({
   staggerContainer: { gap: 0 },
   staggerItem: {},
   screenContainer: { flex: 1 },
 });
+
 export default EnterAnimation;

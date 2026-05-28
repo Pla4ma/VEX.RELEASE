@@ -3,7 +3,6 @@ import * as Sentry from "@sentry/react-native";
 import { getUserTimezone } from "../ai-coach/utils/timezone";
 import { decideNudge } from "../notification-policy/service";
 import {
-  fetchChallengeExpiryCandidates,
   fetchRetentionUserProfile,
   hasScheduledReminderWithin,
   upsertReminderPlan,
@@ -19,6 +18,7 @@ import {
   daysLaterAt,
   type ReminderDraft,
 } from "./retention-strategy-config";
+export { scheduleChallengeExpiryNotifications } from "./retention-challenge-expiry";
 
 async function scheduleReminder(
   userId: string,
@@ -175,30 +175,4 @@ export async function scheduleReEngagementNotification(
       timezone,
     },
   });
-}
-
-export async function scheduleChallengeExpiryNotifications(
-  userId: string,
-): Promise<void> {
-  const validatedUserId = UserIdSchema.parse(userId);
-  const timezone = getUserTimezone(validatedUserId);
-  const candidates = await fetchChallengeExpiryCandidates(validatedUserId);
-  await Promise.all(
-    candidates.map((challenge) =>
-      scheduleReminder(validatedUserId, {
-        type: "RETENTION_CHALLENGE_EXPIRY",
-        scheduledFor: respectQuietHours(
-          Math.max(Date.now() + HOUR_MS, challenge.expiresAt - 3 * HOUR_MS),
-          timezone,
-        ),
-        message: `${challenge.title} expires soon. Finish it before it resets.`,
-        metadata: {
-          challengeId: challenge.challengeId,
-          progress: challenge.currentValue / challenge.targetValue,
-          expiresAt: challenge.expiresAt,
-          timezone,
-        },
-      }),
-    ),
-  );
 }

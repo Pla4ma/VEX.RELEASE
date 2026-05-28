@@ -5,6 +5,9 @@ import type {
   CoachPresenceMessageContext,
   CoachPresenceMessageStyle,
 } from "./message-library";
+import { getCoachComebackMessage } from "./comeback-message";
+
+export { getCoachComebackMessage } from "./comeback-message";
 
 export interface CoachInterruptionContext {
   motivationStyle: CoachPresenceContext["motivationStyle"];
@@ -186,23 +189,4 @@ export function getCoachStreakMessage(params: {
           : style === "intense"
             ? `${params.streak}-day streak. One block before it cools.`
             : `${params.streak}-day streak. One review block protects it.`;
-}
-
-export function getCoachComebackMessage(params: {
-  motivationStyle: string;
-  daysSinceLastSession: number;
-}): string {
-  const style = resolveStyle(params.motivationStyle);
-
-  return style === "calm"
-    ? `Welcome back after ${params.daysSinceLastSession} days. One clean block, no pressure.`
-    : style === "friendly"
-      ? `You are back after ${params.daysSinceLastSession} days. One small step is enough.`
-      : style === "coach_led"
-        ? `Back after ${params.daysSinceLastSession} days. Reset with one clean block.`
-        : style === "game_like"
-          ? `Welcome back. ${params.daysSinceLastSession} days off. One run restarts the engine.`
-          : style === "intense"
-            ? `Back after ${params.daysSinceLastSession}. No speech. Prove it with one block.`
-            : `Back after ${params.daysSinceLastSession} days. Review first, then add new material.`;
 }

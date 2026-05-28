@@ -16,3 +16,11 @@ export const MemoryPanelItemSchema = z
 export type MemoryPanelItem = z.infer<typeof MemoryPanelItemSchema>;
 
 export const WHAT_VEX_LEARNED_MIN_SESSIONS = 3;
+
+export interface MemoryPanelProps {
+  items: MemoryPanelItem[];
+  onHide: (id: string) => void;
+  onAccept: (id: string) => void;
+  isAccepting?: boolean;
+  isHiding?: boolean;
+}

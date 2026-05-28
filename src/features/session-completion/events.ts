@@ -1,12 +1,11 @@
 import {
   SessionCompletedEvent,
   SessionPerformanceCalculatedEvent,
-  SessionMilestoneReachedEvent,
   SessionRewardsCalculatedEvent,
   SessionAchievementUnlockedEvent,
-  EventMetadata,
-  DeviceInfo,
 } from "./types";
+import { generateEventId, createEventMetadata } from "./event-helpers";
+export { createSessionMilestoneReachedEvent } from "./events-milestone";
 
 export function createSessionCompletedEvent(
   userId: string,
@@ -141,65 +140,4 @@ export function createSessionAchievementUnlockedEvent(
     },
     metadata: createEventMetadata("session-completion"),
   };
-}
-export function createSessionMilestoneReachedEvent(
-  userId: string,
-  sessionId: string,
-  milestoneId: string,
-  milestoneType:
-    | "score"
-    | "streak"
-    | "accuracy"
-    | "speed"
-    | "completion"
-    | "special",
-  milestoneName: string,
-  value: number,
-  target: number,
-  previousRecord: number,
-  significance: "personal" | "session" | "daily" | "weekly" | "all_time",
-): SessionMilestoneReachedEvent {
-  return {
-    id: generateEventId(),
-    type: "session_milestone_reached",
-    userId,
-    sessionId,
-    timestamp: new Date(),
-    data: {
-      milestoneId,
-      milestoneType,
-      milestoneName,
-      achievedAt: new Date(),
-      value,
-      target,
-      previousRecord,
-      improvement: value - previousRecord,
-      significance,
-      recognition: {
-        badge: `${milestoneId}_badge`,
-        title: `${milestoneName} Achiever`,
-        celebration: true,
-        shareable: true,
-      },
-      rewards: {
-        experience: Math.floor((value / target) * 100),
-        currency: Math.floor((value / target) * 50),
-        items: [],
-        unlocks: [],
-      },
-    },
-    metadata: createEventMetadata("session-completion"),
-  };
-}
-function generateEventId(): string {
-  return `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-}
-function createEventMetadata(source: string): EventMetadata {
-  return { source, version: "1.0.0", platform: getPlatform() };
-}
-function getPlatform(): string {
-  if (typeof window !== "undefined") {
-    return "web";
-  }
-  return "unknown";
 }

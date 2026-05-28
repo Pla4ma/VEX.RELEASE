@@ -4,19 +4,17 @@ import { ScrollView, Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTheme, type ThemeMode } from "../../theme";
-import { Box, Text, Card } from "../../components/primitives";
+import { Box, Text } from "../../components/primitives";
 import { Icon } from "../../icons";
 import type { SettingsStackParams } from "../../navigation";
-import { launchColors } from "@theme/tokens/launch-colors";
 import { ThemePicker } from "./ThemePicker";
 import { FontSizeControl, type FontSize } from "./FontSizeControl";
 import {
   ColorSchemeToggle,
   type AccentColor,
   type TimerFormat,
-  ACCENT_COLORS,
-  TIMER_FORMAT_OPTIONS,
 } from "./ColorSchemeToggle";
+import { AppearancePreviewCard } from "./AppearancePreviewCard";
 
 type Props = NativeStackScreenProps<SettingsStackParams, "AppearanceSettings">;
 
@@ -85,63 +83,12 @@ export const AppearanceSettingsScreen: React.FC<Props> = ({ navigation }) => {
           <Text variant="h2">Appearance</Text>
         </Box>
 
-        <Box px={16} mb={24}>
-          <Text
-            variant="caption"
-            color="text.secondary"
-            style={{
-              marginLeft: 12,
-              marginBottom: 8,
-              fontWeight: "600",
-              letterSpacing: 0.5,
-            }}
-          >
-            PREVIEW
-          </Text>
-          <Card
-            size="md"
-            style={{
-              backgroundColor: theme.colors.background.secondary,
-              alignItems: "center",
-              justifyContent: "center",
-              paddingVertical: 32,
-            }}
-          >
-            <Box
-              width={60}
-              height={60}
-              borderRadius={30}
-              justifyContent="center"
-              alignItems="center"
-              mb={16}
-              style={{
-                backgroundColor:
-                  ACCENT_COLORS.find((c) => c.id === accentColor)?.hex ||
-                  theme.colors.primary[500],
-              }}
-            >
-              <Icon name="timer" size={28} color={launchColors.hex_fff} />
-            </Box>
-            <Text
-              variant="h3"
-              style={{
-                fontSize: 36 * getFontSizeMultiplier(),
-                fontWeight: "700",
-                color: theme.colors.text.primary,
-              }}
-            >
-              {TIMER_FORMAT_OPTIONS.find((f) => f.id === timerFormat)
-                ?.preview || "24:59"}
-            </Text>
-            <Text
-              variant="body"
-              color="text.secondary"
-              style={{ marginTop: 8, fontSize: 16 * getFontSizeMultiplier() }}
-            >
-              Focus Session
-            </Text>
-          </Card>
-        </Box>
+        <AppearancePreviewCard
+          theme={theme}
+          accentColor={accentColor}
+          timerFormat={timerFormat}
+          fontSizeMultiplier={getFontSizeMultiplier()}
+        />
 
         <ThemePicker
           selectedTheme={selectedTheme}

@@ -1,15 +1,7 @@
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { useTheme } from "../../../theme/ThemeContext";
-import type { MemoryPanelItem } from "../memory-panel-types";
-
-interface MemoryPanelProps {
-  items: MemoryPanelItem[];
-  onHide: (id: string) => void;
-  onAccept: (id: string) => void;
-  isAccepting?: boolean;
-  isHiding?: boolean;
-}
+import type { MemoryPanelProps } from "../memory-panel-types";
 
 export function MemoryPanel({
   items,

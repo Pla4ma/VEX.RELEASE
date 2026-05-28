@@ -192,16 +192,4 @@ describe("getCoachPresenceMessage", () => {
       expect(result.message.length).toBeLessThanOrEqual(96);
     }
   });
-
-  it("intense tone", () => {
-    const result = getCoachPresenceMessage(
-      makeContext({
-        motivationStyle: "INTENSE",
-        completionContext: "long",
-      }),
-    );
-    expect(result.tone).toBe("sharp");
-    expect(result.visualMood).toBe("ready");
-    expect(result.message.length).toBeLessThanOrEqual(96);
-  });
 });

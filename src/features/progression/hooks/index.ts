@@ -4,7 +4,6 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useCallback } from "react";
 import * as service from "../service";
 import * as repository from "../repository";
 import {
@@ -19,9 +18,9 @@ import {
 } from "../schemas";
 import {
   getProgressionService,
-  type LevelState,
 } from "../../../progression/ProgressionService";
 import type { AddXpOperationResult } from "../service-xp-core";
+export { useOptimisticXp } from "./use-optimistic-xp";
 
 // ============================================================================
 // Query Keys
@@ -147,60 +146,4 @@ export function usePrestige() {
       });
     },
   });
-}
-
-// ============================================================================
-// Optimistic XP Hook
-// ============================================================================
-
-export function useOptimisticXp() {
-  const queryClient = useQueryClient();
-  const addXpMutation = useAddXp();
-
-  const addXpOptimistic = useCallback(
-    async (input: AddXpInput) => {
-      const validated = AddXpInputSchema.parse(input);
-
-      // Cancel outgoing refetches
-      await queryClient.cancelQueries({
-        queryKey: progressionKeys.byUser(validated.userId),
-      });
-
-      // Snapshot previous value
-      const previousProgression = queryClient.getQueryData<
-        Awaited<ReturnType<typeof getProgressionEnhanced>>
-      >(progressionKeys.byUser(validated.userId));
-
-      // Optimistically update
-      if (previousProgression) {
-        queryClient.setQueryData(progressionKeys.byUser(validated.userId), {
-          ...previousProgression,
-          xp: previousProgression.xp + validated.amount,
-          totalXp: previousProgression.totalXp + validated.amount,
-        });
-      }
-
-      // Execute mutation
-      try {
-        const result = await addXpMutation.mutateAsync(validated);
-        return result;
-      } catch (error) {
-        // Rollback on error
-        if (previousProgression) {
-          queryClient.setQueryData(
-            progressionKeys.byUser(validated.userId),
-            previousProgression,
-          );
-        }
-        throw error;
-      }
-    },
-    [queryClient, addXpMutation],
-  );
-
-  return {
-    addXp: addXpOptimistic,
-    isPending: addXpMutation.isPending,
-    error: addXpMutation.error,
-  };
 }

@@ -19,6 +19,7 @@ import { useTheme } from "../../theme";
 import type { ExtendedRootStackParams } from "../../navigation/types";
 import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
 import { resolveMonthlyReportAction } from "./progress-actions";
+import { StudyOSCard } from "./StudyOSCard";
 
 const formatHours = (totalMilliseconds: number): string =>
   `${(totalMilliseconds / 3600000).toFixed(totalMilliseconds >= 36000000 ? 0 : 1)}h`;
@@ -111,42 +112,11 @@ export function ProgressScreen(): JSX.Element {
         <ProgressionDashboard userId={userId} onStartSession={openSession} />
       ) : null}
 
-      <View
-        style={{
-          borderWidth: 1,
-          borderColor: theme.colors.border.light,
-          backgroundColor: theme.colors.background.secondary,
-          padding: theme.spacing[4],
-          gap: theme.spacing[3],
-          ...getPremiumCardStyle("medium"),
-        }}
-      >
-        <Text variant="label" color={theme.colors.text.secondary}>
-          Study OS
-        </Text>
-        <Text variant="h4" color={theme.colors.text.primary}>
-          {canOpenStudy
-            ? "Turn material into focus sessions"
-            : "Study tools unlock through sessions"}
-        </Text>
-        <Text variant="body" color={theme.colors.text.secondary}>
-          Plans, review, and quizzes stay tied to the same start and complete
-          loop.
-        </Text>
-        <Button
-          variant="outline"
-          onPress={openStudy}
-          accessibilityLabel={
-            canOpenStudy
-              ? "Open study tools"
-              : "Start session to unlock study tools"
-          }
-          accessibilityRole="button"
-          accessibilityHint="Moves you to the next study or focus action"
-        >
-          {canOpenStudy ? "Open study tools" : "Start session"}
-        </Button>
-      </View>
+      <StudyOSCard
+        theme={theme}
+        canOpenStudy={canOpenStudy}
+        onOpenStudy={openStudy}
+      />
 
       <View style={{ gap: theme.spacing[3] }}>
         <Text variant="h4" color={theme.colors.text.primary}>
