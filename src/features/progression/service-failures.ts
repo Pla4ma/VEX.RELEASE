@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/react-native";
-import { getProgressionServiceConfig } from "./service-enhanced-config";
-import { createProgressionError } from "./service-enhanced-errors";
+import { getProgressionServiceConfig } from "./service-config";
+import { createProgressionError } from "./service-errors";
 import type { EnhancedRepositoryError } from "./repository/enhanced";
 import type { AddXpOperationResult } from "./service-enhanced-types";
 

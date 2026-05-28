@@ -10,7 +10,7 @@ import * as repository from "../repository";
 import {
   getProgressionEnhanced,
   getProgressionSummaryEnhanced,
-} from "../service-enhanced-read";
+} from "../service-read";
 import {
   AddXpInputSchema,
   PrestigeInputSchema,
@@ -21,7 +21,7 @@ import {
   getProgressionService,
   type LevelState,
 } from "../../../progression/ProgressionService";
-import type { AddXpOperationResult } from "../service-enhanced";
+import type { AddXpOperationResult } from "../service-xp-core";
 
 // ============================================================================
 // Query Keys

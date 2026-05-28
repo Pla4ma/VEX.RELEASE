@@ -7,7 +7,7 @@ import { eventBus } from "../../events/EventBus";
 import {
   addXpEnhanced,
   calculateXpBreakdown,
-} from "../progression/service-enhanced";
+} from "../progression/service-xp-core";
 import { createDebugger } from "../../utils/debug";
 
 const debug = createDebugger("integration:streaks-progression");

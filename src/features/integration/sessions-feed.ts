@@ -4,7 +4,7 @@
  */
 
 import { eventBus } from "../../events/EventBus";
-import { addXpEnhanced } from "../progression/service-enhanced";
+import { addXpEnhanced } from "../progression/service-xp-core";
 import { createReward } from "../rewards/service";
 import { recordSession } from "../streaks/service";
 import * as Sentry from "@sentry/react-native";

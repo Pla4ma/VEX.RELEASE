@@ -4,7 +4,6 @@
  * Functions to track quest progress and completion.
  */
 
-import { getSupabaseClient } from "../../../config/supabase";
 import { createDebugger } from "../../../utils/debug";
 import { COMEBACK_QUEST_CONFIG } from "./config";
 import {
@@ -14,6 +13,7 @@ import {
   type ComebackQuestProgress,
   type ComebackQuestStage,
 } from "./schemas";
+import { updateComebackQuestProgress } from "../repository/comeback";
 
 const debug = createDebugger("streaks:comeback-quest");
 
@@ -148,39 +148,13 @@ export async function updateQuestProgress(
         updateData.quest3_completed = true;
         updateData.stage = "COMPLETE";
         updateData.all_quests_completed = true;
-        updateData.rewards_claimed = false; // Needs to be claimed manually
+        updateData.rewards_claimed = false;
         updateData.phoenix_badge_earned = true;
         break;
       }
     }
 
-    const { data: updatedQuest, error } = await getSupabaseClient()
-      .from("comeback_quests")
-      .update(updateData)
-      .eq("id", questId)
-      .select()
-      .single();
-
-    if (error || !updatedQuest) {
-      debug.error("Failed to update quest progress", error);
-      return null;
-    }
-
-    return ComebackQuestSchema.parse({
-      id: updatedQuest.id,
-      userId: updatedQuest.user_id,
-      stage: updatedQuest.stage,
-      daysAbsent: updatedQuest.days_absent,
-      streakBeforeBreak: updatedQuest.streak_before_break,
-      quest1Completed: updatedQuest.quest1_completed,
-      quest2Completed: updatedQuest.quest2_completed,
-      quest3Completed: updatedQuest.quest3_completed,
-      allQuestsCompleted: updatedQuest.all_quests_completed,
-      rewardsClaimed: updatedQuest.rewards_claimed,
-      phoenixBadgeEarned: updatedQuest.phoenix_badge_earned,
-      createdAt: new Date(updatedQuest.created_at).getTime(),
-      updatedAt: new Date(updatedQuest.updated_at).getTime(),
-    });
+    return await updateComebackQuestProgress(questId, updateData);
   } catch (error) {
     debug.error(
       "Error updating quest progress",

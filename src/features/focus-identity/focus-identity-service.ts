@@ -1,11 +1,13 @@
 import { MMKVStorageAdapter } from "../../persistence/MMKVStorageAdapter";
 import { eventBus } from "../../events";
-import { FOCUS_SCORE_CONFIG, IDENTITY_STATEMENTS } from "./focus-score-config";
+import { FOCUS_SCORE_CONFIG } from "./focus-score-config";
 import type { FocusIdentityProfile } from "./FocusIdentityEngine";
 import {
   FocusIdentityProfileSchema,
   FocusIdentityEngine,
 } from "./FocusIdentityEngine";
+import { createMonthlyFocusReport } from "./focus-identity-monthly-report";
+import { createInitialFocusIdentityProfile } from "./focus-identity-profile-factory";
 
 const identityStorage = new MMKVStorageAdapter("focus-identity");
 
@@ -27,78 +29,10 @@ export class FocusIdentityService {
   public async initializeProfile(): Promise<FocusIdentityProfile> {
     const existing = await this.getProfile();
     if (existing) return existing;
-    const now = new Date();
-    const profile: FocusIdentityProfile = {
-      userId: this.userId,
-      currentScore: FOCUS_SCORE_CONFIG.INITIAL_SCORE,
-      previousScore: FOCUS_SCORE_CONFIG.INITIAL_SCORE,
-      scoreHistory: [
-        {
-          date: now.toISOString().split("T")[0]!,
-          score: FOCUS_SCORE_CONFIG.INITIAL_SCORE,
-          reason: "Initial score",
-        },
-      ],
-      percentileRank: 50,
-      band: this.engine.getScoreBand(FOCUS_SCORE_CONFIG.INITIAL_SCORE),
-      factors: {
-        consistency: {
-          score: 55,
-          sessionsLast30Days: 0,
-          targetSessionsPerWeek: 4,
-          actualConsistency: 0,
-          missedDaysLast30Days: 0,
-        },
-        streakStability: {
-          score: 50,
-          currentStreak: 0,
-          longestStreak: 0,
-          averageStreakLength: 0,
-          totalStreaksStarted: 0,
-          streakBreakFrequency: 0,
-        },
-        sessionQuality: {
-          score: 50,
-          averageFocusPurity: 0,
-          averageGrade: "D",
-          perfectSessionsCount: 0,
-          averageSessionDuration: 0,
-        },
-        diversity: {
-          score: 0,
-          uniqueSessionModes: 0,
-          uniqueTimeSlots: 0,
-          uniqueDaysOfWeek: 0,
-          weekendSessions: 0,
-          contextVariety: 0,
-        },
-        recency: {
-          score: 50,
-          daysSinceLastSession: 999,
-          last7DayActivity: 0,
-          last30DayActivity: 0,
-          trendDirection: "STABLE",
-          velocity: 0,
-        },
-      },
-      identityStatement: IDENTITY_STATEMENTS.Building[0]!,
-      streakInCurrentBand: 0,
-      totalScoreCalculations: 1,
-      firstScoreDate: now.toISOString().split("T")[0]!,
-      isInRecovery: false,
-      recoveryStartDate: null,
-      recoveryProgress: 0,
-      preLapseScore: null,
-      topStrength: "consistency",
-      topWeakness: "recency",
-      recommendedActions: [
-        "Complete your first session to activate your Focus Score",
-        "Set a weekly goal of 3-4 sessions to build consistency",
-        "Try different session modes to improve diversity",
-      ],
-      monthlyReport: null,
-      updatedAt: Date.now(),
-    };
+    const profile = createInitialFocusIdentityProfile(
+      this.userId,
+      this.engine.getScoreBand(FOCUS_SCORE_CONFIG.INITIAL_SCORE),
+    );
     identityStorage.setItemSync(
       "focus-identity:" + this.userId,
       JSON.stringify(profile),
@@ -212,46 +146,6 @@ export class FocusIdentityService {
   > {
     const profile = await this.getProfile();
     if (!profile) return null;
-    const now = new Date();
-    const monthKey =
-      now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
-    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    const monthHistory = profile.scoreHistory.filter(
-      (h) => new Date(h.date) >= monthStart,
-    );
-    if (monthHistory.length < 2) return null;
-    const startingScore = monthHistory[0]!.score;
-    const endingScore = monthHistory[monthHistory.length - 1]!.score;
-    const change = endingScore - startingScore;
-    const sessionsCompleted = profile.scoreHistory.filter(
-      (h) =>
-        h.reason.includes("SESSION_COMPLETE") && new Date(h.date) >= monthStart,
-    ).length;
-    let grade: "A+" | "A" | "B+" | "B" | "C" | "D" = "D";
-    if (change >= 50) grade = "A+";
-    else if (change >= 30) grade = "A";
-    else if (change >= 15) grade = "B+";
-    else if (change >= 5) grade = "B";
-    else if (change >= -5) grade = "C";
-    const highlights = [
-      change > 30 ? "Incredible +" + change + " point improvement!" : null,
-      sessionsCompleted >= 20
-        ? sessionsCompleted + " sessions completed this month"
-        : null,
-      profile.band.label === "Legendary"
-        ? "Maintaining Legendary status"
-        : null,
-      profile.isInRecovery ? "Strong recovery from setback" : null,
-    ].filter(Boolean);
-    return {
-      month: monthKey,
-      startingScore,
-      endingScore,
-      change,
-      sessionsCompleted,
-      grade,
-      highlight:
-        highlights[0] || "Score change: " + (change > 0 ? "+" : "") + change,
-    };
+    return createMonthlyFocusReport(profile);
   }
 }

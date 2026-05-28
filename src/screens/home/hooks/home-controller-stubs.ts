@@ -3,9 +3,9 @@ import type { HomeReturnReason } from "./useHomeReturnReason";
 import type { SessionRecommendation } from "../../../features/ai-coach";
 import type { LearningExecutionLayer } from "../../../features/learning-execution";
 
-export function createStubQuery(): UseQueryResult {
-  const stub = {
-    data: undefined as unknown,
+export function createStubQuery<TData = unknown>(): UseQueryResult<TData> {
+  return {
+    data: undefined as unknown as TData,
     dataUpdatedAt: 0,
     error: null,
     errorUpdatedAt: 0,
@@ -27,11 +27,10 @@ export function createStubQuery(): UseQueryResult {
     isRefetching: false,
     isStale: false,
     isSuccess: false as const,
-    promise: Promise.resolve(undefined as unknown),
-    refetch: (() => Promise.resolve(stub)) as () => Promise<UseQueryResult>,
+    promise: Promise.resolve(undefined as unknown as TData),
+    refetch: () => Promise.resolve(createStubQuery<TData>() as UseQueryResult<TData>),
     status: "pending" as const,
-  };
-  return stub as UseQueryResult;
+  } as unknown as UseQueryResult<TData>;
 }
 
 export function stubNavigationActions() {

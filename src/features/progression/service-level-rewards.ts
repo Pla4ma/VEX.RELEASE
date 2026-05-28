@@ -1,4 +1,4 @@
-import { getProgressionServiceConfig } from "./service-enhanced-config";
+import { getProgressionServiceConfig } from "./service-config";
 
 export function getLevelUpRewards(newLevel: number): string[] {
   const rewards: string[] = [];

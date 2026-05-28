@@ -1,4 +1,5 @@
-// Canonical progression service — delegates to service-enhanced for all operations
+// Progression service — public API surface
+// Sub-modules: xp-core, xp-calculations, level-rewards, config, daily-progress, dedup, errors, failures, operation, read
 export {
   addXpEnhanced as addXp,
   calculateXpBreakdown,
@@ -8,14 +9,11 @@ export {
   getDailyProgress,
   batchAddXp,
   configureProgressionService,
-} from "./service-enhanced";
-export { getLevelUpCelebrationRewards } from "./service-enhanced-rewards";
-export { getProgressionServiceConfig } from "./service-enhanced-config";
+} from "./service-xp-core";
+export { getLevelUpCelebrationRewards } from "./service-level-rewards";
+export { getProgressionServiceConfig } from "./service-config";
 
-// Service getter for compatibility with hooks expecting service pattern
-// Note: The progression service now uses a functional pattern, not a class-based pattern
-// The configureProgressionService function configures global settings
-import { configureProgressionService as configureSvc } from "./service-enhanced";
+import { configureProgressionService as configureSvc } from "./service-xp-core";
 
 export function initializeProgressionService() {
   configureSvc({});

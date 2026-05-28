@@ -1,11 +1,6 @@
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 
-import { getSupabaseClient } from "../config/supabase";
 import type { User } from "../types/models";
-
-type UserRow = {
-  onboarding_completed_at: string | null;
-};
 
 export function mapSupabaseUser(
   sbUser: SupabaseUser,
@@ -79,20 +74,12 @@ export function mapSupabaseUser(
   };
 }
 
-export async function attachOnboardingCompletion(user: User): Promise<User> {
-  const supabase = getSupabaseClient();
-  const { data, error } = await supabase
-    .from("users")
-    .select("onboarding_completed_at")
-    .eq("id", user.id)
-    .maybeSingle<UserRow>();
-
-  if (error) {
-    return user;
-  }
-
+export function attachOnboardingCompletion(
+  user: User,
+  onboardingCompletedAt: string | null,
+): User {
   return {
     ...user,
-    onboardingCompletedAt: data?.onboarding_completed_at ?? null,
+    onboardingCompletedAt,
   };
 }

@@ -8,6 +8,21 @@ import {
   mapSupabaseUser,
 } from "./supabase-user-mapper";
 
+async function fetchUserOnboardingStatus(userId: string): Promise<string | null> {
+  const { data, error } = await getSupabaseClient()
+    .from("users")
+    .select("onboarding_completed_at")
+    .eq("id", userId)
+    .maybeSingle<{ onboarding_completed_at: string | null }>();
+  if (error) return null;
+  return data?.onboarding_completed_at ?? null;
+}
+
+async function buildUserWithOnboarding(user: User): Promise<User> {
+  const onboardingCompletedAt = await fetchUserOnboardingStatus(user.id);
+  return attachOnboardingCompletion(user, onboardingCompletedAt);
+}
+
 export async function signUpWithEmail(
   email: string,
   password: string,
@@ -38,7 +53,7 @@ export async function signUpWithEmail(
 
     if (data.user) {
       const mapped = mapSupabaseUser(data.user, metadata);
-      const user = await attachOnboardingCompletion(mapped);
+      const user = await buildUserWithOnboarding(mapped);
       capture(AuthEvents.USER_SIGNED_UP, {
         user_id: user.id,
         method: "email",
@@ -72,7 +87,7 @@ export async function signInWithEmail(
     }
 
     if (data.user) {
-      const user = await attachOnboardingCompletion(mapSupabaseUser(data.user));
+      const user = await buildUserWithOnboarding(mapSupabaseUser(data.user));
       return { user, error: null };
     }
 
@@ -131,7 +146,7 @@ export async function getCurrentUser(): Promise<{
     }
 
     if (data.user) {
-      const user = await attachOnboardingCompletion(mapSupabaseUser(data.user));
+      const user = await buildUserWithOnboarding(mapSupabaseUser(data.user));
       return { user, error: null };
     }
 
@@ -184,7 +199,7 @@ export function onAuthStateChange(callback: (user: User | null) => void): {
   const { data } = supabase.auth.onAuthStateChange((_, session) => {
     if (session?.user) {
       const mapped = mapSupabaseUser(session.user);
-      void attachOnboardingCompletion(mapped)
+      void buildUserWithOnboarding(mapped)
         .then((resolvedUser) => callback(resolvedUser))
         .catch(() => callback(mapped));
     } else {

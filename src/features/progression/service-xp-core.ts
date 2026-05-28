@@ -5,25 +5,25 @@ import {
   generateIdempotencyKey,
   isDuplicateOperation,
   markOperationProcessed,
-} from "./service-enhanced-dedup";
-import { createProgressionError } from "./service-enhanced-errors";
-import { calculateXpBreakdown } from "./service-enhanced-math";
-import { runAddXpOperation } from "./service-enhanced-operation";
+} from "./service-dedup";
+import { createProgressionError } from "./service-errors";
+import { calculateXpBreakdown } from "./service-xp-calculations";
+import { runAddXpOperation } from "./service-operation";
 import type { AddXpOperationResult } from "./service-enhanced-types";
 
 export type {
   AddXpOperationResult,
   ProgressionError,
 } from "./service-enhanced-types";
-export { configureProgressionService } from "./service-enhanced-config";
-export { getDailyProgress } from "./service-enhanced-daily";
+export { configureProgressionService } from "./service-config";
+export { getDailyProgress } from "./service-daily-progress";
 export {
   calculateLevelFromTotalXp,
   calculateLevelThreshold,
   calculateProgressPercent,
   calculateTotalXpToLevel,
   calculateXpBreakdown,
-} from "./service-enhanced-math";
+} from "./service-xp-calculations";
 
 const ZERO_BREAKDOWN = {
   base: 0,
