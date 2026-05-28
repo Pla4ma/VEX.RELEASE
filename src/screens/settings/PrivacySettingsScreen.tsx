@@ -1,27 +1,25 @@
 import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
 import React, { useCallback, useState } from "react";
-import { Alert, Pressable, ScrollView, Switch } from "react-native";
+import { Alert, Pressable, ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTheme } from "../../theme";
 import { Box, Card, Text } from "../../components/primitives";
-import { Icon } from "../../icons";
 import type { SettingsStackParams } from "../../navigation";
 import { useDeleteAccount } from "../../features/account-deletion/hooks";
 import { useAuthStore, useUIStore } from "../../store/index";
 import { usePaywall } from "../../shared/monetization";
+import { PrivacyToggleRow } from "./PrivacyToggleRow";
 
 type Props = NativeStackScreenProps<SettingsStackParams, "PrivacySettings">;
 type ToggleKey = "activitySharing" | "squadFeed" | "analytics";
 
-interface ToggleRow {
+const TOGGLE_ROWS: {
   key: ToggleKey;
   title: string;
   description: string;
   icon: string;
-}
-
-const TOGGLE_ROWS: ToggleRow[] = [
+}[] = [
   {
     key: "activitySharing",
     title: "Activity Sharing",
@@ -136,44 +134,12 @@ export const PrivacySettingsScreen: React.FC<Props> = () => {
           style={{ marginBottom: theme.spacing[4] }}
         >
           {TOGGLE_ROWS.map((row) => (
-            <Pressable
+            <PrivacyToggleRow
               key={row.key}
-              accessibilityHint={`Toggles ${row.title.toLowerCase()}.`}
-              accessibilityLabel={row.title}
-              accessibilityRole="switch"
-              accessibilityState={{ checked: toggles[row.key] }}
-              onPress={() => toggleValue(row.key)}
-              style={{
-                alignItems: "center",
-                flexDirection: "row",
-                minHeight: 56,
-                paddingVertical: theme.spacing[2],
-              }}
-            >
-              <Icon
-                name={row.icon}
-                size={20}
-                color={theme.colors.primary[500]}
-              />
-              <Box
-                flex={1}
-                style={{
-                  marginLeft: theme.spacing[3],
-                  marginRight: theme.spacing[3],
-                }}
-              >
-                <Text variant="body" color="text.primary">
-                  {row.title}
-                </Text>
-                <Text variant="caption" color="text.secondary">
-                  {row.description}
-                </Text>
-              </Box>
-              <Switch
-                value={toggles[row.key]}
-                onValueChange={() => toggleValue(row.key)}
-              />
-            </Pressable>
+              row={row}
+              value={toggles[row.key]}
+              onToggle={toggleValue}
+            />
           ))}
         </Card>
 

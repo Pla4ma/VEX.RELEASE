@@ -1,6 +1,6 @@
 import { withScreenErrorBoundary } from "../../shared/ui/components/ScreenErrorBoundary";
-import React, { useState, useCallback } from "react";
-import { ScrollView, Pressable, Switch, Alert } from "react-native";
+import React, { useCallback, useState } from "react";
+import { ScrollView, Pressable, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useTheme } from "../../theme";
@@ -9,23 +9,89 @@ import { Icon } from "../../icons";
 import { useUIStore } from "../../store/index";
 import type { SettingsStackParams } from "../../navigation";
 import { launchColors } from "@theme/tokens/launch-colors";
+import { NotificationCategoryToggle } from "./NotificationCategoryToggle";
+import { NotificationScheduleSection } from "./NotificationScheduleSection";
+
 type Props = NativeStackScreenProps<
   SettingsStackParams,
   "NotificationSettings"
 >;
-interface NotificationToggle {
-  id: string;
-  icon: string;
-  title: string;
-  description: string;
-  enabled: boolean;
-}
-interface QuietHours {
-  enabled: boolean;
-  start: string;
-  end: string;
-}
-export const NotificationSettingsScreen: React.FC<Props> = ({ navigation }) => {
+
+const notificationGroups = [
+  {
+    title: "Streaks & Progress",
+    items: [
+      {
+        id: "streakReminders",
+        icon: "flame",
+        title: "Streak Reminders",
+        description: "Get reminded before your streak resets",
+      },
+      {
+        id: "weeklyReport",
+        icon: "bar-chart",
+        title: "Weekly Report",
+        description: "Summary of your focus stats every Sunday",
+      },
+      {
+        id: "achievementUnlocks",
+        icon: "trophy",
+        title: "Achievement Unlocks",
+        description: "When you earn a new achievement",
+      },
+    ],
+  },
+  {
+    title: "Battles & Social",
+    items: [
+      {
+        id: "bossAlerts",
+        icon: "sword",
+        title: "Boss Alerts",
+        description: "When a new boss appears or is about to escape",
+      },
+      {
+        id: "squadNotifications",
+        icon: "users",
+        title: "Squad Updates",
+        description: "Squad challenges, messages, and invites",
+      },
+      {
+        id: "rivalNotifications",
+        icon: "crosshair",
+        title: "Rival Activity",
+        description: "When rivals complete a session or pass you",
+      },
+    ],
+  },
+  {
+    title: "Sessions & Coach",
+    items: [
+      {
+        id: "sessionReminders",
+        icon: "clock",
+        title: "Session Reminders",
+        description: "Reminders to complete your daily session",
+      },
+      {
+        id: "coachMessages",
+        icon: "message-circle",
+        title: "Coach Messages",
+        description: "Tips and encouragement from your AI Coach",
+      },
+      {
+        id: "dailyChallenge",
+        icon: "target",
+        title: "Daily Challenge",
+        description: "New challenges available each day",
+      },
+    ],
+  },
+];
+
+export const NotificationSettingsScreen: React.FC<Props> = ({
+  navigation,
+}) => {
   const { theme } = useTheme();
   const insets = useSafeAreaInsets();
   const { showToast } = useUIStore();
@@ -40,33 +106,11 @@ export const NotificationSettingsScreen: React.FC<Props> = ({ navigation }) => {
     sessionReminders: true,
     dailyChallenge: true,
   });
-  const [quietHours, setQuietHours] = useState<QuietHours>({
-    enabled: false,
-    start: "22:00",
-    end: "08:00",
-  });
+
   const handleToggle = useCallback((id: string) => {
     setToggles((prev) => ({ ...prev, [id]: !prev[id] }));
   }, []);
-  const handleQuietHoursToggle = useCallback(() => {
-    setQuietHours((prev) => ({ ...prev, enabled: !prev.enabled }));
-  }, []);
-  const handleSetQuietHours = useCallback((type: "start" | "end") => {
-    Alert.alert(
-      `Set ${type === "start" ? "Start" : "End"} Time`,
-      "Choose a time",
-      [
-        { text: "20:00", onPress: () => updateQuietTime(type, "20:00") },
-        { text: "21:00", onPress: () => updateQuietTime(type, "21:00") },
-        { text: "22:00", onPress: () => updateQuietTime(type, "22:00") },
-        { text: "23:00", onPress: () => updateQuietTime(type, "23:00") },
-        { text: "Cancel", style: "cancel" },
-      ],
-    );
-  }, []);
-  const updateQuietTime = (type: "start" | "end", time: string) => {
-    setQuietHours((prev) => ({ ...prev, [type]: time }));
-  };
+
   const handleSendTestNotification = useCallback(() => {
     Alert.alert(
       "Test Notification",
@@ -74,151 +118,10 @@ export const NotificationSettingsScreen: React.FC<Props> = ({ navigation }) => {
       [{ text: "OK" }],
     );
   }, []);
-  const notificationGroups = [
-    {
-      title: "Streaks & Progress",
-      items: [
-        {
-          id: "streakReminders",
-          icon: "flame",
-          title: "Streak Reminders",
-          description: "Get reminded before your streak resets",
-        },
-        {
-          id: "weeklyReport",
-          icon: "bar-chart",
-          title: "Weekly Report",
-          description: "Summary of your focus stats every Sunday",
-        },
-        {
-          id: "achievementUnlocks",
-          icon: "trophy",
-          title: "Achievement Unlocks",
-          description: "When you earn a new achievement",
-        },
-      ],
-    },
-    {
-      title: "Battles & Social",
-      items: [
-        {
-          id: "bossAlerts",
-          icon: "sword",
-          title: "Boss Alerts",
-          description: "When a new boss appears or is about to escape",
-        },
-        {
-          id: "squadNotifications",
-          icon: "users",
-          title: "Squad Updates",
-          description: "Squad challenges, messages, and invites",
-        },
-        {
-          id: "rivalNotifications",
-          icon: "crosshair",
-          title: "Rival Activity",
-          description: "When rivals complete a session or pass you",
-        },
-      ],
-    },
-    {
-      title: "Sessions & Coach",
-      items: [
-        {
-          id: "sessionReminders",
-          icon: "clock",
-          title: "Session Reminders",
-          description: "Reminders to complete your daily session",
-        },
-        {
-          id: "coachMessages",
-          icon: "message-circle",
-          title: "Coach Messages",
-          description: "Tips and encouragement from your AI Coach",
-        },
-        {
-          id: "dailyChallenge",
-          icon: "target",
-          title: "Daily Challenge",
-          description: "New challenges available each day",
-        },
-      ],
-    },
-  ];
-  const renderToggleItem = (item: {
-    id: string;
-    icon: string;
-    title: string;
-    description: string;
-  }) => {
-    const value = toggles[item.id] ?? false;
-    const iconColor = value
-      ? theme.colors.primary[500]
-      : theme.colors.text.tertiary;
-    return (
-      <Pressable
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          paddingVertical: 16,
-          paddingHorizontal: 16,
-        }}
-        onPress={() => handleToggle(item.id)}
-        accessibilityLabel="Interactive control"
-        accessibilityRole="button"
-        accessibilityHint="Activates this control"
-      >
-        {" "}
-        <Box
-          width={40}
-          height={40}
-          borderRadius={10}
-          justifyContent="center"
-          alignItems="center"
-          style={{
-            backgroundColor: value
-              ? theme.colors.primary[50]
-              : theme.colors.background.secondary,
-          }}
-        >
-          {" "}
-          <Icon name={item.icon} size={20} color={iconColor} />{" "}
-        </Box>
-        <Box flex={1} ml={12}>
-          {" "}
-          <Text
-            variant="body"
-            style={{ fontWeight: "500", color: theme.colors.text.primary }}
-          >
-            {" "}
-            {item.title}{" "}
-          </Text>{" "}
-          <Text
-            variant="caption"
-            color="text.secondary"
-            style={{ marginTop: 2 }}
-          >
-            {" "}
-            {item.description}{" "}
-          </Text>{" "}
-        </Box>
-        <Switch
-          value={value}
-          onValueChange={() => handleToggle(item.id)}
-          trackColor={{
-            false: theme.colors.background.tertiary,
-            true: theme.colors.primary[500] + "80",
-          }}
-          thumbColor={value ? theme.colors.primary[500] : launchColors.hex_fff}
-        />{" "}
-      </Pressable>
-    );
-  };
+
   return (
     <Box flex={1} style={{ backgroundColor: theme.colors.background.primary }}>
-      {" "}
       <ScrollView showsVerticalScrollIndicator={false}>
-        {" "}
         <Box
           px={20}
           pb={16}
@@ -226,7 +129,6 @@ export const NotificationSettingsScreen: React.FC<Props> = ({ navigation }) => {
           flexDirection="row"
           alignItems="center"
         >
-          {" "}
           <Pressable
             onPress={() => navigation.goBack()}
             style={{ marginRight: 12 }}
@@ -234,190 +136,19 @@ export const NotificationSettingsScreen: React.FC<Props> = ({ navigation }) => {
             accessibilityRole="button"
             accessibilityHint="Activates this control"
           >
-            {" "}
             <Icon
               name="arrow-left"
               size={24}
               color={theme.colors.text.primary}
-            />{" "}
-          </Pressable>{" "}
-          <Text variant="h2">Notifications</Text>{" "}
+            />
+          </Pressable>
+          <Text variant="h2">Notifications</Text>
         </Box>
-        <Box px={16} mb={24}>
-          {" "}
-          <Text
-            variant="caption"
-            color="text.secondary"
-            style={{
-              marginLeft: 12,
-              marginBottom: 8,
-              fontWeight: "600",
-              letterSpacing: 0.5,
-            }}
-          >
-            {" "}
-            QUIET HOURS{" "}
-          </Text>{" "}
-          <Card size="sm" style={{ overflow: "hidden" }}>
-            {" "}
-            <Pressable
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                paddingVertical: 16,
-                paddingHorizontal: 16,
-              }}
-              onPress={handleQuietHoursToggle}
-              accessibilityLabel="Interactive control"
-              accessibilityRole="button"
-              accessibilityHint="Activates this control"
-            >
-              {" "}
-              <Box
-                width={40}
-                height={40}
-                borderRadius={10}
-                justifyContent="center"
-                alignItems="center"
-                style={{
-                  backgroundColor: quietHours.enabled
-                    ? theme.colors.primary[50]
-                    : theme.colors.background.secondary,
-                }}
-              >
-                {" "}
-                <Icon
-                  name="moon"
-                  size={20}
-                  color={
-                    quietHours.enabled
-                      ? theme.colors.primary[500]
-                      : theme.colors.text.tertiary
-                  }
-                />{" "}
-              </Box>
-              <Box flex={1} ml={12}>
-                {" "}
-                <Text
-                  variant="body"
-                  style={{
-                    fontWeight: "500",
-                    color: theme.colors.text.primary,
-                  }}
-                >
-                  {" "}
-                  Quiet Hours{" "}
-                </Text>{" "}
-                <Text
-                  variant="caption"
-                  color="text.secondary"
-                  style={{ marginTop: 2 }}
-                >
-                  {" "}
-                  No notifications during this time{" "}
-                </Text>{" "}
-              </Box>
-              <Switch
-                value={quietHours.enabled}
-                onValueChange={handleQuietHoursToggle}
-                trackColor={{
-                  false: theme.colors.background.tertiary,
-                  true: theme.colors.primary[500] + "80",
-                }}
-                thumbColor={
-                  quietHours.enabled
-                    ? theme.colors.primary[500]
-                    : launchColors.hex_fff
-                }
-              />{" "}
-            </Pressable>
-            {quietHours.enabled && (
-              <>
-                {" "}
-                <Box
-                  height={1}
-                  style={{ backgroundColor: theme.colors.border.light }}
-                />{" "}
-                <Box flexDirection="row" px={16} py={12}>
-                  {" "}
-                  <Pressable
-                    style={{ flex: 1, marginRight: 8 }}
-                    onPress={() => handleSetQuietHours("start")}
-                    accessibilityLabel="Start button"
-                    accessibilityRole="button"
-                    accessibilityHint="Activates this control"
-                  >
-                    {" "}
-                    <Box
-                      p={12}
-                      borderRadius={8}
-                      style={{
-                        backgroundColor: theme.colors.background.secondary,
-                        borderWidth: 1,
-                        borderColor: theme.colors.border.light,
-                      }}
-                    >
-                      {" "}
-                      <Text variant="caption" color="text.secondary">
-                        {" "}
-                        Start{" "}
-                      </Text>{" "}
-                      <Text
-                        variant="body"
-                        style={{ fontWeight: "600", marginTop: 4 }}
-                      >
-                        {" "}
-                        {quietHours.start}{" "}
-                      </Text>{" "}
-                    </Box>{" "}
-                  </Pressable>{" "}
-                  <Box justifyContent="center">
-                    {" "}
-                    <Icon
-                      name="arrow-right"
-                      size={16}
-                      color={theme.colors.text.tertiary}
-                    />{" "}
-                  </Box>{" "}
-                  <Pressable
-                    style={{ flex: 1, marginLeft: 8 }}
-                    onPress={() => handleSetQuietHours("end")}
-                    accessibilityLabel="End button"
-                    accessibilityRole="button"
-                    accessibilityHint="Activates this control"
-                  >
-                    {" "}
-                    <Box
-                      p={12}
-                      borderRadius={8}
-                      style={{
-                        backgroundColor: theme.colors.background.secondary,
-                        borderWidth: 1,
-                        borderColor: theme.colors.border.light,
-                      }}
-                    >
-                      {" "}
-                      <Text variant="caption" color="text.secondary">
-                        {" "}
-                        End{" "}
-                      </Text>{" "}
-                      <Text
-                        variant="body"
-                        style={{ fontWeight: "600", marginTop: 4 }}
-                      >
-                        {" "}
-                        {quietHours.end}{" "}
-                      </Text>{" "}
-                    </Box>{" "}
-                  </Pressable>{" "}
-                </Box>{" "}
-              </>
-            )}{" "}
-          </Card>{" "}
-        </Box>
+
+        <NotificationScheduleSection />
+
         {notificationGroups.map((group) => (
           <Box key={group.title} px={16} mb={24}>
-            {" "}
             <Text
               variant="caption"
               color="text.secondary"
@@ -428,29 +159,30 @@ export const NotificationSettingsScreen: React.FC<Props> = ({ navigation }) => {
                 letterSpacing: 0.5,
               }}
             >
-              {" "}
-              {group.title.toUpperCase()}{" "}
-            </Text>{" "}
+              {group.title.toUpperCase()}
+            </Text>
             <Card size="sm" style={{ overflow: "hidden" }}>
-              {" "}
               {group.items.map((item, index) => (
                 <React.Fragment key={item.id}>
-                  {" "}
-                  {renderToggleItem(item)}{" "}
+                  <NotificationCategoryToggle
+                    item={item}
+                    value={toggles[item.id] ?? false}
+                    onToggle={handleToggle}
+                  />
                   {index < group.items.length - 1 && (
                     <Box
                       height={1}
                       ml={68}
                       style={{ backgroundColor: theme.colors.border.light }}
                     />
-                  )}{" "}
+                  )}
                 </React.Fragment>
-              ))}{" "}
-            </Card>{" "}
+              ))}
+            </Card>
           </Box>
         ))}
+
         <Box px={16} mb={24}>
-          {" "}
           <Pressable
             onPress={handleSendTestNotification}
             style={{
@@ -463,10 +195,8 @@ export const NotificationSettingsScreen: React.FC<Props> = ({ navigation }) => {
             accessibilityRole="button"
             accessibilityHint="Activates this control"
           >
-            {" "}
             <Box flexDirection="row" alignItems="center">
-              {" "}
-              <Icon name="bell" size={18} color={launchColors.hex_fff} />{" "}
+              <Icon name="bell" size={18} color={launchColors.hex_fff} />
               <Text
                 style={{
                   color: launchColors.hex_fff,
@@ -475,17 +205,18 @@ export const NotificationSettingsScreen: React.FC<Props> = ({ navigation }) => {
                   marginLeft: 8,
                 }}
               >
-                {" "}
-                Send Test Notification{" "}
-              </Text>{" "}
-            </Box>{" "}
-          </Pressable>{" "}
+                Send Test Notification
+              </Text>
+            </Box>
+          </Pressable>
         </Box>
-        <Box height={insets.bottom + 20} />{" "}
-      </ScrollView>{" "}
+
+        <Box height={insets.bottom + 20} />
+      </ScrollView>
     </Box>
   );
 };
+
 export default withScreenErrorBoundary(
   NotificationSettingsScreen,
   "NotificationSettings",
