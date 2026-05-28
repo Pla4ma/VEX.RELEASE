@@ -1,0 +1,140 @@
+import { Dimensions } from "react-native";
+import { createSheet } from "@/shared/ui/create-sheet";
+import { launchColors } from "@theme/tokens/launch-colors";
+
+const { width: screenWidth } = Dimensions.get("window");
+
+export const styles = createSheet({
+  container: { flex: 1, backgroundColor: launchColors.hex_f9fafb },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    backgroundColor: launchColors.hex_ffffff,
+    borderBottomWidth: 1,
+    borderBottomColor: launchColors.hex_e5e7eb,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: "700",
+    color: launchColors.hex_111827,
+  },
+  headerActions: { flexDirection: "row", gap: 8 },
+  iconButton: {
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: launchColors.hex_f3f4f6,
+  },
+  iconButtonText: { fontSize: 12, fontWeight: "700" },
+  filtersContainer: {
+    backgroundColor: launchColors.hex_ffffff,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: launchColors.hex_e5e7eb,
+  },
+  scrollView: { flex: 1 },
+  scrollContent: { padding: 16, paddingBottom: 32 },
+  summaryContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 12,
+    marginBottom: 16,
+  },
+  summaryCard: {
+    flex: 1,
+    minWidth: (screenWidth - 56) / 2,
+    backgroundColor: launchColors.hex_ffffff,
+    borderRadius: 12,
+    padding: 16,
+    shadowColor: launchColors.hex_000,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  summaryValue: {
+    fontSize: 24,
+    fontWeight: "700",
+    color: launchColors.hex_111827,
+  },
+  summaryLabel: {
+    fontSize: 12,
+    color: launchColors.hex_6b7280,
+    marginTop: 4,
+    textTransform: "capitalize",
+  },
+  changeBadge: {
+    alignSelf: "flex-start",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginTop: 8,
+  },
+  changePositive: { backgroundColor: launchColors.hex_d1fae5 },
+  changeNegative: { backgroundColor: launchColors.hex_fee2e2 },
+  changeText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: launchColors.hex_374151,
+  },
+  chartsContainer: { marginBottom: 16 },
+  insightsSection: { marginTop: 8 },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: launchColors.hex_111827,
+  },
+  seeAllText: {
+    fontSize: 14,
+    color: launchColors.hex_6366f1,
+    fontWeight: "500",
+  },
+  partialWarning: {
+    backgroundColor: launchColors.hex_fef3c7,
+    borderRadius: 8,
+    padding: 12,
+    marginTop: 16,
+  },
+  partialText: {
+    fontSize: 12,
+    color: launchColors.hex_92400e,
+    textAlign: "center",
+  },
+  skeletonContainer: { padding: 16, gap: 16 },
+  skeletonTitle: { marginBottom: 8 },
+  skeletonFilters: { flexDirection: "row", gap: 12, marginBottom: 8 },
+  heatmapSkeleton: {
+    backgroundColor: launchColors.hex_ffffff,
+    borderRadius: 16,
+    padding: 16,
+    marginHorizontal: 12,
+    marginVertical: 8,
+    gap: 12,
+  },
+  infoCard: {
+    backgroundColor: launchColors.hex_ffffff,
+    borderRadius: 16,
+    padding: 20,
+    marginHorizontal: 12,
+    marginVertical: 8,
+  },
+  infoTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: launchColors.hex_111827,
+    marginBottom: 6,
+  },
+  infoSubtitle: {
+    fontSize: 14,
+    color: launchColors.hex_6b7280,
+    lineHeight: 20,
+  },
+});
