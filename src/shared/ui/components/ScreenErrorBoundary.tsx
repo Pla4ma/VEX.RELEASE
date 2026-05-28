@@ -7,14 +7,14 @@
  */
 
 import React, { Component, type ReactNode, type ErrorInfo } from "react";
-import { ScrollView } from "react-native";
 
-import { useTheme } from "../../../theme";
-import { Text } from "../../../components/primitives";
-import { Button } from "../../../components";
 import { OfflineEmptyState } from "./EmptyState";
 import { captureException } from "../../../config/sentry";
-import { useNetInfo } from "../../../network";
+import { ErrorFallback } from "./ErrorFallback";
+import type { ErrorFallbackProps } from "./ErrorFallback";
+
+export { ErrorFallback } from "./ErrorFallback";
+export type { ErrorFallbackProps } from "./ErrorFallback";
 
 export interface ScreenErrorBoundaryProps {
   children: ReactNode;
@@ -30,99 +30,6 @@ interface ScreenErrorState {
   hasError: boolean;
   error: Error | null;
   isOffline: boolean;
-}
-
-interface ErrorFallbackProps {
-  screenName: string;
-  error: Error | null;
-  onRetry: () => void;
-  onGoBack?: () => void;
-}
-
-function ErrorFallback({
-  screenName,
-  error,
-  onRetry,
-  onGoBack,
-}: ErrorFallbackProps): JSX.Element {
-  const { theme } = useTheme();
-  const { isOffline } = useNetInfo();
-
-  const errorMessage = error?.message?.toLowerCase() ?? "";
-  const message = isOffline
-    ? "You are offline. Please check your connection and try again."
-    : errorMessage.includes("network") ||
-        errorMessage.includes("fetch") ||
-        errorMessage.includes("timeout")
-      ? "Connection lost. Please check your internet and try again."
-      : errorMessage.includes("auth") ||
-          errorMessage.includes("unauthorized") ||
-          errorMessage.includes("token")
-        ? "Your session expired. Please sign in again."
-        : `We couldn't load ${screenName}. Please try again.`;
-
-  const offlineNotice = isOffline ? " Retry when reconnected." : "";
-
-  return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
-      contentContainerStyle={{
-        flexGrow: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        padding: theme.spacing[6],
-      }}
-    >
-      <Text
-        variant="display"
-        style={{ marginBottom: theme.spacing[6], textAlign: "center" }}
-      >
-        {isOffline ? "📡" : "⚠️"}
-      </Text>
-      <Text
-        variant="h3"
-        color="text.primary"
-        style={{ marginBottom: theme.spacing[3], textAlign: "center" }}
-      >
-        {isOffline ? "You are offline" : "Something went wrong"}
-      </Text>
-      <Text
-        variant="body"
-        color="text.secondary"
-        style={{
-          marginBottom: theme.spacing[6],
-          maxWidth: 280,
-          lineHeight: 22,
-          textAlign: "center",
-        }}
-      >
-        {message}
-        {offlineNotice}
-      </Text>
-      <Button
-        variant="primary"
-        onPress={onRetry}
-        style={{ width: "100%", maxWidth: 280 }}
-        accessibilityLabel="Try Again button"
-        accessibilityRole="button"
-        accessibilityHint="Retries the screen operation"
-      >
-        Try Again
-      </Button>
-      {onGoBack && (
-        <Button
-          variant="ghost"
-          onPress={onGoBack}
-          style={{ width: "100%", maxWidth: 280, marginTop: theme.spacing[3] }}
-          accessibilityLabel="Go Back button"
-          accessibilityRole="button"
-          accessibilityHint="Navigates back to the previous screen"
-        >
-          Go Back
-        </Button>
-      )}
-    </ScrollView>
-  );
 }
 
 export class ScreenErrorBoundary extends Component<

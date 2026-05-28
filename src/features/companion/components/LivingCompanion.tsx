@@ -16,13 +16,10 @@ import { Text } from "../../../components/primitives/Text";
 import { CompanionState, ELEMENT_THEMES } from "../types";
 import { CompanionService } from "../service";
 import { getCompanionService } from "../service-instance";
-import { createSheet } from "@/shared/ui/create-sheet";
 import { CompanionBody } from "./CompanionBody";
 import { CompanionParticles } from "./CompanionParticles";
 import { getPhaseMultiplier, getMoodEmoji } from "./companion-helpers";
-
-const COMPANION_SIZE = 260;
-const PARTICLE_COUNT = 12;
+import { COMPANION_SIZE, PARTICLE_COUNT, companionStyles as styles } from "./LivingCompanion.styles";
 
 interface LivingCompanionProps {
   companionState: CompanionState;
@@ -196,33 +193,4 @@ export const LivingCompanion: React.FC<LivingCompanionProps> = ({
   );
 };
 
-const styles = createSheet({
-  container: {
-    width: COMPANION_SIZE,
-    height: COMPANION_SIZE + 60,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  glowContainer: {
-    position: "absolute",
-    opacity: 0.3,
-  },
-  companionContainer: {
-    zIndex: 10,
-  },
-  statusContainer: {
-    position: "absolute",
-    bottom: 0,
-    alignItems: "center",
-  },
-  moodText: {
-    fontWeight: "700",
-    fontSize: 14,
-    textTransform: "uppercase",
-    letterSpacing: 1,
-  },
-  phaseText: {
-    opacity: 0.6,
-    marginTop: 4,
-  },
-});
+export { COMPANION_SIZE, PARTICLE_COUNT, companionStyles } from "./LivingCompanion.styles";

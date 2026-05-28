@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import Svg, { Circle, Defs, LinearGradient, Stop } from "react-native-svg";
 import Animated, {
   Easing,
@@ -17,26 +17,13 @@ import {
   withAlpha,
 } from "../../../components/premiumStyles";
 import { useTheme } from "../../../theme";
-import { triggerHaptic } from "../../../utils/haptics";
-import { createSheet } from "@/shared/ui/create-sheet";
-
-const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-
-type SessionGradeCardProps = {
-  durationLabel: string;
-  gradeColor: string;
-  gradeLabel: string;
-  gradeLetter: string;
-  purityColor: string;
-  purityLabel: string;
-  purityScore: number;
-  width: number;
-  xpEarned: number;
-};
-
-async function pulseCompleteHaptic(): Promise<void> {
-  await triggerHaptic("impactMedium");
-}
+import {
+  AnimatedCircle,
+  pulseCompleteHaptic,
+  styles,
+  type SessionGradeCardProps,
+} from "./SessionGradeCard.types";
+export type { SessionGradeCardProps };
 
 export function SessionGradeCard({
   durationLabel,
@@ -71,12 +58,10 @@ export function SessionGradeCard({
     const timeoutId = setTimeout(() => void pulseCompleteHaptic(), 1000);
     return () => clearTimeout(timeoutId);
   }, [clampedPurity, ringProgress]);
-
   const animatedProps = useAnimatedProps(() => ({
     strokeDashoffset:
       circumference - (circumference * ringProgress.value) / 100,
   }));
-
   return (
     <Box
       width="100%"
@@ -88,7 +73,7 @@ export function SessionGradeCard({
     >
       <Animated.View
         entering={FadeIn.duration(220)}
-        style={StyleSheet.absoluteFill}
+        style={{ ...{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 } }}
       >
         <View
           style={{ flex: 1, backgroundColor: theme.colors.background.primary }}
@@ -212,11 +197,3 @@ export function SessionGradeCard({
     </Box>
   );
 }
-
-const styles = createSheet({
-  center: {
-    ...StyleSheet.absoluteFill,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

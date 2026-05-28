@@ -1,53 +1,23 @@
-import { captureSilentFailure } from "../utils/silent-failure";
 /**
  * Theme Service
  *
  * Handles theme persistence, system integration, and event emission.
  */
 
-import { type EventEmitter } from "../events/EventEmitter";
+import { captureSilentFailure } from "../utils/silent-failure";
+import type { EventEmitter } from "../events/EventEmitter";
 import { THEME_STORAGE_KEYS } from "./config";
 import type { ThemeMode } from "./types";
-import { createDebugger } from "../utils/debug";
+import {
+  type ThemeStorage,
+  type ThemeChangeEvent,
+  isThemeMode,
+  StorageError,
+  debug,
+} from "./ThemeServiceTypes";
 
-const debug = createDebugger("theme");
+export type { ThemeChangeEvent } from "./ThemeServiceTypes";
 
-interface ThemeStorage {
-  set(key: string, value: string): void;
-  getString(key: string): string | undefined;
-  delete(key: string): void;
-}
-
-const THEME_MODE_VALUES: readonly string[] = ["light", "dark", "system"];
-
-function isThemeMode(value: string | undefined): value is ThemeMode {
-  return typeof value === "string" && THEME_MODE_VALUES.includes(value);
-}
-
-/**
- * Storage error for when MMKV fails
- */
-class StorageError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "StorageError";
-  }
-}
-
-/**
- * Theme change event data
- */
-export interface ThemeChangeEvent {
-  mode: ThemeMode;
-  effectiveMode: "light" | "dark";
-  timestamp: number;
-}
-
-/**
- * Theme Service class
- *
- * Manages theme persistence and cross-system communication.
- */
 export class ThemeService {
   private storage: ThemeStorage | null = null;
   private eventEmitter: EventEmitter | null = null;

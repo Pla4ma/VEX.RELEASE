@@ -1,18 +1,10 @@
-/**
- * DailyQuestCard
- *
- * Displays the user's personalized daily quest from PersonalQuestGenerator.
- * Pinned at top of AICoachScreen message list.
- *
- * @phase 6
- */
-
 import React from "react";
 import { View, Pressable } from "react-native";
 import Animated, { FadeInUp } from "react-native-reanimated";
 import { useTheme } from "../../../theme/ThemeContext";
 import { Text, ProgressBar } from "../../../components";
 import type { PersonalQuest } from "../PersonalQuestGenerator";
+import { getQuestIcon, formatTimeRemaining } from "./questCardHelpers";
 
 interface DailyQuestCardProps {
   quest: PersonalQuest | null;
@@ -26,31 +18,6 @@ export function DailyQuestCard({
   onPress,
 }: DailyQuestCardProps): JSX.Element {
   const { theme } = useTheme();
-
-  const formatTimeRemaining = (): string => {
-    const now = Date.now();
-    const expiresAt = quest?.expiresAt || now;
-    const hoursRemaining = Math.max(
-      0,
-      Math.ceil((expiresAt - now) / (1000 * 60 * 60)),
-    );
-    return hoursRemaining > 1 ? `${hoursRemaining} hours` : "Less than 1 hour";
-  };
-
-  const getQuestIcon = (type: string): string => {
-    const icons: Record<string, string> = {
-      PEAK_TIME_FOCUS: "🎯",
-      BEAT_PERSONAL_BEST: "🏆",
-      NO_PAUSE_CHALLENGE: "🧘",
-      STREAK_PROTECTION: "🛡️",
-      QUALITY_GRADE_TARGET: "⭐",
-      DURATION_MILESTONE: "⏱️",
-      BOSS_DAMAGE_DEALT: "⚔️",
-      RIVAL_OUTFOCUS: "🏁",
-      SQUAD_SUPPORT: "🛡️",
-    };
-    return icons[type] || "📋";
-  };
 
   const progressPercent = quest
     ? Math.min(100, Math.round((quest.current / quest.target) * 100))
@@ -103,7 +70,7 @@ export function DailyQuestCard({
                 {isCompleted ? "Quest Complete!" : "Today's Quest"}
               </Text>
               <Text variant="caption" color="secondary">
-                {quest ? `From ${coachName}` : `From ${coachName}`}
+                {`From ${coachName}`}
               </Text>
             </View>
             {isCompleted && (
@@ -193,7 +160,7 @@ export function DailyQuestCard({
                   </Text>
                 </View>
                 <Text variant="caption" color="secondary">
-                  ⏰ {formatTimeRemaining()} remaining
+                  ⏰ {formatTimeRemaining(quest.expiresAt)} remaining
                 </Text>
               </View>
             </>

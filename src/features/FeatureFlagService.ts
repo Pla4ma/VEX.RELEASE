@@ -20,25 +20,11 @@ import {
   registerFlagInStore,
   hashString,
 } from "./featureFlagMutations";
+import type { FeatureFlagValue, FeatureFlag, FeatureFlagConfig } from "./featureFlagTypes";
 
+export type { FeatureFlagValue, FeatureFlag, FeatureFlagConfig };
+export { getFeatureFlagService } from "./featureFlagInstance";
 const debug = createDebugger("features");
-
-export type FeatureFlagValue = boolean | number | string | string[];
-export interface FeatureFlag {
-  key: string;
-  value: FeatureFlagValue;
-  description: string;
-  enabled: boolean;
-  rolloutPercentage: number;
-  requiresAuth: boolean;
-  createdAt: number;
-  updatedAt: number;
-}
-export interface FeatureFlagConfig {
-  storageKey?: string;
-  remoteFetchInterval?: number;
-  enableOverrides?: boolean;
-}
 
 export class FeatureFlagService {
   private flags: Map<string, FeatureFlag> = new Map();
@@ -177,7 +163,6 @@ export class FeatureFlagService {
   getAll(): Record<string, FeatureFlag> {
     return Object.fromEntries(this.flags.entries());
   }
-
   getEnabled(): string[] {
     return Array.from(this.flags.keys()).filter((key) => this.isEnabled(key));
   }
@@ -207,21 +192,9 @@ export class FeatureFlagService {
   setUserId(userId: string): void {
     this.userId = userId;
   }
-
   cleanup(): void {
     this.stopRemoteFetch();
     this.flags.clear();
     this.overrides.clear();
   }
-}
-
-let featureFlagServiceInstance: FeatureFlagService | null = null;
-
-export function getFeatureFlagService(
-  config?: FeatureFlagConfig,
-): FeatureFlagService {
-  if (!featureFlagServiceInstance) {
-    featureFlagServiceInstance = new FeatureFlagService(config);
-  }
-  return featureFlagServiceInstance;
 }

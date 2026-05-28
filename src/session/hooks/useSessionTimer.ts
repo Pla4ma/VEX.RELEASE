@@ -8,9 +8,12 @@ import {
   type UseSessionTimerOptions,
   type UseSessionTimerReturn,
 } from "./useSessionTimerSubscriptions";
+import { useTimerActions } from "./useTimerActions";
+
 const debug = createDebugger("session:timer");
 const DEFAULT_TICK_INTERVAL = 1000;
 const SYSTEM_TIME_CHANGE_THRESHOLD = 30000;
+
 export function useSessionTimer(
   options: UseSessionTimerOptions,
 ): UseSessionTimerReturn {
@@ -24,23 +27,28 @@ export function useSessionTimer(
     tickInterval = DEFAULT_TICK_INTERVAL,
     autoStart = false,
   } = options;
+
   const [elapsedTimeStored, setElapsedTime] = useMMKVNumber(
     "session:timer:elapsed",
   );
   const [remainingTimeStored, setRemainingTime] = useMMKVNumber(
     "session:timer:remaining",
   );
+
   const elapsedTime = elapsedTimeStored ?? 0;
   const remainingTime = remainingTimeStored ?? duration;
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+
   const backgroundTimeRef = useRef(0);
   const lastTickRef = useRef<number | null>(null);
   const systemTimeOffsetRef = useRef(0);
   const estimatedCompletionRef = useRef<number | null>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const backgroundedAtRef = useRef<number | null>(null);
+
   const progress = Math.min((elapsedTime / duration) * 100, 100);
+
   const handleComplete = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -63,6 +71,7 @@ export function useSessionTimer(
       onComplete();
     }
   }, [elapsedTime, hapticEnabled, onComplete]);
+
   const tick = useCallback(() => {
     const now = Date.now();
     if (lastTickRef.current) {
@@ -99,88 +108,49 @@ export function useSessionTimer(
     setRemainingTime,
     tickInterval,
   ]);
+
+  const actions = useTimerActions({
+    isRunning,
+    isPaused,
+    elapsedTime,
+    remainingTime,
+    duration,
+    tick,
+    tickInterval,
+    hapticEnabled,
+    intervalRef,
+    lastTickRef,
+    estimatedCompletionRef,
+    setElapsedTime,
+    setRemainingTime,
+  });
+
+  // Wrap start/pause/resume/stop to also update local state
   const start = useCallback(() => {
     if (isRunning) return;
     setIsRunning(true);
     setIsPaused(false);
-    lastTickRef.current = Date.now();
-    estimatedCompletionRef.current = Date.now() + remainingTime;
-    intervalRef.current = setInterval(tick, tickInterval);
-    if (hapticEnabled) triggerHapticEvent(HapticEvents.SESSION_START);
-    debug.info("Session timer started", { duration, remaining: remainingTime });
-    eventBus.publish("analytics:track", {
-      event: "session_timer_started",
-      properties: { duration, remaining: remainingTime },
-    });
-  }, [duration, hapticEnabled, isRunning, remainingTime, tick, tickInterval]);
+    actions.start();
+  }, [actions, isRunning]);
+
   const pause = useCallback(() => {
     if (!isRunning || isPaused) return;
     setIsPaused(true);
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-    if (hapticEnabled) triggerHapticEvent(HapticEvents.SESSION_PAUSE);
-    debug.info("Session timer paused", { elapsed: elapsedTime });
-    eventBus.publish("analytics:track", {
-      event: "session_timer_paused",
-      properties: { elapsed: elapsedTime },
-    });
-  }, [elapsedTime, hapticEnabled, isPaused, isRunning]);
+    actions.pause();
+  }, [actions, isPaused, isRunning]);
+
   const resume = useCallback(() => {
     if (!isPaused) return;
     setIsPaused(false);
-    lastTickRef.current = Date.now();
-    estimatedCompletionRef.current = Date.now() + remainingTime;
-    intervalRef.current = setInterval(tick, tickInterval);
-    if (hapticEnabled) triggerHapticEvent(HapticEvents.SESSION_RESUME);
-    debug.info("Session timer resumed", { elapsed: elapsedTime });
-    eventBus.publish("analytics:track", {
-      event: "session_timer_resumed",
-      properties: { elapsed: elapsedTime },
-    });
-  }, [elapsedTime, hapticEnabled, isPaused, remainingTime, tick, tickInterval]);
+    actions.resume();
+  }, [actions, isPaused]);
+
   const stop = useCallback(() => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
     setIsRunning(false);
     setIsPaused(false);
-    debug.info("Session timer stopped", { elapsed: elapsedTime });
-    eventBus.publish("analytics:track", {
-      event: "session_timer_stopped",
-      properties: { elapsed: elapsedTime },
-    });
-  }, [elapsedTime]);
-  const addTime = useCallback(
-    (ms: number) => {
-      setRemainingTime((prev: number | undefined) => (prev ?? duration) + ms);
-      setElapsedTime((prev: number | undefined) =>
-        Math.max((prev ?? 0) - ms, 0),
-      );
-      debug.info("Time added to session", { ms });
-      eventBus.publish("analytics:track", {
-        event: "session_timer_time_added",
-        properties: { added: ms },
-      });
-    },
-    [duration, setElapsedTime, setRemainingTime],
-  );
-  const subtractTime = useCallback(
-    (ms: number) => {
-      setRemainingTime((prev: number | undefined) =>
-        Math.max((prev ?? duration) - ms, 0),
-      );
-      setElapsedTime((prev: number | undefined) => (prev ?? 0) + ms);
-      debug.info("Time subtracted from session", { ms });
-      eventBus.publish("analytics:track", {
-        event: "session_timer_time_subtracted",
-        properties: { subtracted: ms },
-      });
-    },
-    [duration, setElapsedTime, setRemainingTime],
-  );
+    actions.stop();
+  }, [actions]);
+
   useSessionTimerSubscriptions({
     duration,
     elapsedTime,
@@ -200,6 +170,7 @@ export function useSessionTimer(
     autoStart,
     start,
   });
+
   return {
     state: {
       elapsedTime: elapsedTime ?? 0,
@@ -208,7 +179,7 @@ export function useSessionTimer(
       isRunning,
       isPaused,
     },
-    actions: { start, pause, resume, stop, addTime, subtractTime },
+    actions: { start, pause, resume, stop, addTime: actions.addTime, subtractTime: actions.subtractTime },
     meta: {
       backgroundTime: backgroundTimeRef.current,
       lastTickAt: lastTickRef.current,
@@ -217,4 +188,5 @@ export function useSessionTimer(
     },
   };
 }
+
 export default useSessionTimer;
