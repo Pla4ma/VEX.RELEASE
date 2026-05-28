@@ -1,15 +1,10 @@
 import { captureSilentFailure } from "../../../../utils/silent-failure";
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Pressable,
-  StyleSheet,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import Animated, { Keyframe, FadeIn } from "react-native-reanimated";
-import { createSheet } from "@/shared/ui/create-sheet";
 import { launchColors } from "@theme/tokens/launch-colors";
+import { errorStateStyles as styles } from "./error-state-styles";
+
 const Shake = new Keyframe({
   0: { transform: [{ translateX: 0 }] },
   10: { transform: [{ translateX: -10 }] },
@@ -23,6 +18,7 @@ const Shake = new Keyframe({
   90: { transform: [{ translateX: -5 }] },
   100: { transform: [{ translateX: 0 }] },
 });
+
 interface ErrorStateProps {
   title?: string;
   message: string;
@@ -32,6 +28,7 @@ interface ErrorStateProps {
   retryAttempts?: number;
   maxRetries?: number;
 }
+
 export function ErrorState({
   title = "Oops! Something went wrong",
   message,
@@ -136,107 +133,7 @@ export function ErrorState({
     </Animated.View>
   );
 }
-export function NetworkErrorState({
-  onRetry,
-}: {
-  onRetry?: () => Promise<void>;
-}) {
-  return (
-    <ErrorState
-      title="Connection Lost"
-      message="Unable to connect to the server. Please check your internet connection and try again."
-      errorCode="NETWORK_ERROR"
-      onRetry={onRetry}
-    />
-  );
-}
-export function TimeoutErrorState({
-  onRetry,
-}: {
-  onRetry?: () => Promise<void>;
-}) {
-  return (
-    <ErrorState
-      title="Request Timed Out"
-      message="The server is taking too long to respond. This might be due to high traffic or a slow connection."
-      errorCode="TIMEOUT"
-      onRetry={onRetry}
-    />
-  );
-}
-export function ServerErrorState({
-  onRetry,
-}: {
-  onRetry?: () => Promise<void>;
-}) {
-  return (
-    <ErrorState
-      title="Server Error"
-      message="We're experiencing technical difficulties. Our team has been notified and is working on a fix."
-      errorCode="SERVER_ERROR"
-      onRetry={onRetry}
-    />
-  );
-}
-export function ValidationErrorState({
-  field,
-  onDismiss,
-}: {
-  field?: string;
-  onDismiss?: () => void;
-}) {
-  return (
-    <ErrorState
-      title="Invalid Input"
-      message={
-        field
-          ? `Please check the ${field} field and try again.`
-          : "Some of the information provided doesn't look right. Please review and try again."
-      }
-      errorCode="VALIDATION_ERROR"
-      onDismiss={onDismiss}
-    />
-  );
-}
-export function NotFoundErrorState({
-  resource = "item",
-  onDismiss,
-}: {
-  resource?: string;
-  onDismiss?: () => void;
-}) {
-  return (
-    <ErrorState
-      title="Not Found"
-      message={`The ${resource} you're looking for doesn't exist or has been removed.`}
-      errorCode="NOT_FOUND"
-      onDismiss={onDismiss}
-    />
-  );
-}
-export function PermissionErrorState({
-  onDismiss,
-}: {
-  onDismiss?: () => void;
-}) {
-  return (
-    <ErrorState
-      title="Access Denied"
-      message="You don't have permission to access this feature. Please check your account settings."
-      errorCode="FORBIDDEN"
-      onDismiss={onDismiss}
-    />
-  );
-}
-export function RateLimitErrorState({ retryAfter }: { retryAfter?: number }) {
-  return (
-    <ErrorState
-      title="Too Many Requests"
-      message={`You've made too many requests. Please wait ${retryAfter ? `${retryAfter} seconds` : "a moment"} before trying again.`}
-      errorCode="RATE_LIMIT"
-    />
-  );
-}
+
 export function InlineError({ message }: { message: string }) {
   return (
     <Animated.View
@@ -248,6 +145,7 @@ export function InlineError({ message }: { message: string }) {
     </Animated.View>
   );
 }
+
 export function ErrorBoundaryFallback({
   error,
   resetError,
@@ -266,100 +164,3 @@ export function ErrorBoundaryFallback({
     />
   );
 }
-const styles = createSheet({
-  container: {
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 24,
-    backgroundColor: launchColors.hex_fff,
-    borderRadius: 12,
-    margin: 16,
-  },
-  degradedContainer: {
-    backgroundColor: launchColors.hex_fff8e1,
-    borderWidth: 1,
-    borderColor: launchColors.hex_ffd54f,
-  },
-  icon: { fontSize: 48, marginBottom: 12 },
-  title: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: launchColors.hex_1a1a1a,
-    textAlign: "center",
-    marginBottom: 8,
-  },
-  message: {
-    fontSize: 14,
-    color: launchColors.hex_666,
-    textAlign: "center",
-    lineHeight: 20,
-    marginBottom: 16,
-  },
-  errorCodeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    marginBottom: 16,
-  },
-  errorCodeLabel: { fontSize: 12, color: launchColors.hex_999 },
-  errorCode: {
-    fontSize: 12,
-    color: launchColors.hex_999,
-    fontFamily: "monospace",
-    backgroundColor: launchColors.hex_f5f5f5,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-  },
-  attemptsText: { fontSize: 12, color: launchColors.hex_999, marginBottom: 12 },
-  actions: { gap: 8, width: "100%" },
-  retryButton: {
-    backgroundColor: launchColors.hex_ff6b6b,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    alignItems: "center",
-    minWidth: 120,
-  },
-  retryButtonText: {
-    color: launchColors.hex_fff,
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  buttonDisabled: { opacity: 0.6 },
-  dismissButton: { paddingVertical: 12, alignItems: "center" },
-  dismissButtonText: {
-    color: launchColors.hex_666,
-    fontSize: 14,
-    fontWeight: "500",
-  },
-  maxRetriesText: {
-    fontSize: 12,
-    color: launchColors.hex_999,
-    textAlign: "center",
-    marginTop: 8,
-  },
-  degradedBadge: {
-    backgroundColor: launchColors.hex_ffd54f,
-    paddingHorizontal: 12,
-    paddingVertical: 4,
-    borderRadius: 12,
-    marginTop: 12,
-  },
-  degradedBadgeText: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: launchColors.hex_333,
-  },
-  inlineContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    padding: 8,
-    backgroundColor: launchColors.hex_ffebee,
-    borderRadius: 6,
-    marginTop: 4,
-  },
-  inlineIcon: { fontSize: 14 },
-  inlineText: { fontSize: 12, color: launchColors.hex_c62828, flex: 1 },
-});

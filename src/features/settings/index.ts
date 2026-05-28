@@ -82,7 +82,7 @@ export {
   SettingsValidationError,
 } from "./service";
 
-// Repository
+// Repository – CRUD
 export {
   fetchSetting,
   fetchAllSettings,
@@ -91,6 +91,10 @@ export {
   batchUpsertSettings,
   deleteSetting as deleteSettingFromRepo,
   resetSettings as resetSettingsInRepo,
+} from "./repository";
+
+// Repository – Sync
+export {
   fetchSyncState,
   updateSyncState,
   fetchPendingChanges,
@@ -98,7 +102,7 @@ export {
   fetchRemoteChanges,
   applyRemoteChanges,
   resolveConflict,
-} from "./repository";
+} from "./repository-sync";
 
 // Hooks
 export {

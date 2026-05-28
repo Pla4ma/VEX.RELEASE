@@ -1,4 +1,4 @@
-import * as repository from "./repository";
+import * as syncRepo from "./repository-sync";
 import { withRetry, CircuitBreaker, classifyError } from "../../shared/hardening";
 import { eventBus } from "../../events";
 import * as Sentry from "@sentry/react-native";
@@ -24,7 +24,7 @@ export async function syncSettings(
   const { force = false, direction = "both" } = options;
   try {
     return await syncCircuitBreaker.execute(async () => {
-      const syncState = await repository.fetchSyncState(userId);
+      const syncState = await syncRepo.fetchSyncState(userId);
       if (!force && syncState?.pendingChanges === 0 && direction !== "down") {
         return {
           userId,
@@ -37,10 +37,10 @@ export async function syncSettings(
       }
       let conflicts: SyncConflict[] = [];
       if (direction === "up" || direction === "both") {
-        const localChanges = await repository.fetchPendingChanges(userId);
+        const localChanges = await syncRepo.fetchPendingChanges(userId);
         if (localChanges.length > 0) {
           const result = (await withRetry(
-            () => repository.pushChanges(userId, localChanges),
+            () => syncRepo.pushChanges(userId, localChanges),
             SYNC_RETRY_CONFIG,
           )) as { success: boolean; conflicts: SyncConflict[] };
           conflicts.push(...result.conflicts);
@@ -48,18 +48,18 @@ export async function syncSettings(
       }
       if (direction === "down" || direction === "both") {
         const remoteChanges = (await withRetry(
-          () => repository.fetchRemoteChanges(userId, syncState?.lastSuccessfulSync),
+          () => syncRepo.fetchRemoteChanges(userId, syncState?.lastSuccessfulSync),
           SYNC_RETRY_CONFIG,
         )) as Array<{
           key: string; value: unknown; category: SettingCategory; timestamp: number;
         }>;
         if (remoteChanges.length > 0) {
-          await repository.applyRemoteChanges(userId, remoteChanges);
+          await syncRepo.applyRemoteChanges(userId, remoteChanges);
         }
       }
       if (conflicts.length > 0) {
         for (const conflict of conflicts) {
-          await repository.resolveConflict(userId, conflict.id, resolveConflict(conflict));
+          await syncRepo.resolveConflict(userId, conflict.id, resolveConflict(conflict));
         }
       }
       const updated: SyncState = {
@@ -70,7 +70,7 @@ export async function syncSettings(
         pendingChanges: 0,
         conflicts,
       };
-      await repository.updateSyncState(userId, updated);
+      await syncRepo.updateSyncState(userId, updated);
       eventBus.publish("network:sync:complete", { synced: 1, failed: conflicts.length });
       return updated;
     });

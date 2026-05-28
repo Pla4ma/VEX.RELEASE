@@ -7,5 +7,6 @@
 export * from "./skeleton";
 export * from "./empty-state";
 export * from "./error-state";
+export * from "./error-state-variants";
 export * from "./progress-state";
 export * from "./button";

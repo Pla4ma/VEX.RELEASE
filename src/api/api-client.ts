@@ -2,31 +2,26 @@
  * API Client — HTTP client with retry, circuit breaker, and deduplication.
  */
 
-import { Platform } from "react-native";
 import { CURRENT_CONFIG } from "../constants/app";
-import { createDebugger } from "../utils/debug";
 import { CircuitBreaker, CircuitState } from "./circuit-breaker";
 import { RequestDeduplicator } from "./deduplicator";
-import {
-  calculateBackoff,
-  isRetryableError,
-  isRetryableErrorCode,
-} from "./retry";
 import type {
   ApiConfig,
   AuthProvider,
   ApiRequestConfig,
   ApiResponse,
-  ApiError,
 } from "./client-types";
 import type {
   RequestInterceptor,
   ResponseInterceptor,
 } from "./api-client-types";
+import {
+  type RequestExecutorDeps,
+  executeWithRetry,
+  executeWithDeduplication,
+} from "./api-request-handler";
 
 export type { RequestInterceptor, ResponseInterceptor };
-
-const debug = createDebugger("api");
 
 export class ApiClient {
   private config: ApiConfig;
@@ -94,187 +89,13 @@ export class ApiClient {
     return result;
   }
 
-  private buildURL(
-    endpoint: string,
-    params?: Record<string, string | number | boolean>,
-  ): string {
-    const url = new URL(endpoint, this.config.baseURL);
-    if (params) {
-      Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          url.searchParams.append(key, String(value));
-        }
-      });
-    }
-    return url.toString();
-  }
-
-  private createError(
-    code: string,
-    message: string,
-    status: number,
-    details?: unknown,
-  ): ApiError {
+  private getDeps(): RequestExecutorDeps {
     return {
-      code,
-      message,
-      status,
-      details,
-      retryable: isRetryableErrorCode(code),
+      config: this.config,
+      circuitBreaker: this.circuitBreaker,
+      deduplicator: this.deduplicator,
+      runResponseInterceptors: (r) => this.runResponseInterceptors(r),
     };
-  }
-
-  private isApiError(error: unknown): error is ApiError {
-    return typeof error === "object" && error !== null && "code" in error;
-  }
-
-  private async parseErrorResponse(
-    response: Response,
-  ): Promise<Partial<ApiError>> {
-    try {
-      return JSON.parse(await response.text());
-    } catch (error: unknown) {
-      return {};
-    }
-  }
-
-  private parseHeaders(headers: Headers): Record<string, string> {
-    const result: Record<string, string> = {};
-    headers.forEach((value, key) => {
-      result[key] = value;
-    });
-    return result;
-  }
-
-  private async executeRequest<T>(
-    endpoint: string,
-    config: ApiRequestConfig,
-  ): Promise<ApiResponse<T>> {
-    if (!this.circuitBreaker.canExecute()) {
-      throw this.createError(
-        "CIRCUIT_OPEN",
-        "Service temporarily unavailable",
-        503,
-      );
-    }
-
-    const url = this.buildURL(endpoint, config.params);
-    const controller = new AbortController();
-    const timeoutId = setTimeout(
-      () => controller.abort(),
-      config.timeout ?? this.config.timeout,
-    );
-
-    try {
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-        "X-Platform": Platform.OS,
-        "X-App-Version": CURRENT_CONFIG.version,
-        ...config.headers,
-      };
-
-      const fetchConfig: RequestInit = {
-        method: config.method ?? "GET",
-        headers,
-        signal: controller.signal,
-      };
-      if (config.data && config.method !== "GET") {
-        fetchConfig.body = JSON.stringify(config.data);
-      }
-
-      debug.debug("API Request: %s %s", fetchConfig.method, url);
-      let response = await fetch(url, fetchConfig);
-      response = await this.runResponseInterceptors(response);
-
-      if (!response.ok) {
-        const errorData = await this.parseErrorResponse(response);
-        throw this.createError(
-          errorData.code ?? "HTTP_ERROR",
-          errorData.message ?? response.statusText,
-          response.status,
-          errorData.details,
-        );
-      }
-
-      const data = await response.json();
-
-      if (config.schema) {
-        try {
-          config.schema.parse(data);
-        } catch (error) {
-          throw this.createError(
-            "VALIDATION_ERROR",
-            "Response validation failed",
-            response.status,
-            { validationError: error },
-          );
-        }
-      }
-
-      this.circuitBreaker.recordSuccess();
-      const result: ApiResponse<T> = {
-        data,
-        status: response.status,
-        headers: this.parseHeaders(response.headers),
-      };
-      debug.debug("API Response: %s %d", url, response.status);
-      return result;
-    } catch (error) {
-      this.circuitBreaker.recordFailure();
-      if (error instanceof Error && error.name === "AbortError") {
-        throw this.createError("TIMEOUT", "Request timeout", 408);
-      }
-      throw error;
-    } finally {
-      clearTimeout(timeoutId);
-    }
-  }
-
-  private async executeWithRetry<T>(
-    endpoint: string,
-    config: ApiRequestConfig,
-  ): Promise<ApiResponse<T>> {
-    const maxRetries = config.retries ?? this.config.retries;
-    let lastError: Error = new Error("Unknown error");
-
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
-      try {
-        return await this.executeRequest<T>(endpoint, config);
-      } catch (error) {
-        lastError = error as Error;
-        if (attempt === maxRetries) {
-          break;
-        }
-        const apiError = this.isApiError(lastError)
-          ? lastError
-          : this.createError("UNKNOWN", lastError.message, 0);
-        if (!isRetryableError(apiError)) {
-          break;
-        }
-        const delay = calculateBackoff(attempt, this.config.retryDelay);
-        debug.debug(
-          "Retrying request in %dms (attempt %d/%d)",
-          delay,
-          attempt + 1,
-          maxRetries + 1,
-        );
-        await new Promise((resolve) => setTimeout(resolve, delay));
-      }
-    }
-    throw lastError;
-  }
-
-  private async executeWithDeduplication<T>(
-    endpoint: string,
-    config: ApiRequestConfig,
-  ): Promise<ApiResponse<T>> {
-    if (!config.deduplicate) {
-      return this.executeWithRetry<T>(endpoint, config);
-    }
-    const key = `${config.method ?? "GET"}:${endpoint}:${JSON.stringify(config.params ?? {})}:${JSON.stringify(config.data ?? {})}`;
-    return this.deduplicator.deduplicate(key, () =>
-      this.executeWithRetry<T>(endpoint, config),
-    );
   }
 
   async get<T>(
@@ -285,7 +106,7 @@ export class ApiClient {
       ...config,
       method: "GET",
     });
-    return this.executeWithDeduplication<T>(endpoint, finalConfig);
+    return executeWithDeduplication<T>(this.getDeps(), endpoint, finalConfig);
   }
 
   async post<T>(
@@ -296,7 +117,7 @@ export class ApiClient {
       ...config,
       method: "POST",
     });
-    return this.executeWithRetry<T>(endpoint, finalConfig);
+    return executeWithRetry<T>(this.getDeps(), endpoint, finalConfig);
   }
 
   async put<T>(
@@ -307,7 +128,7 @@ export class ApiClient {
       ...config,
       method: "PUT",
     });
-    return this.executeWithRetry<T>(endpoint, finalConfig);
+    return executeWithRetry<T>(this.getDeps(), endpoint, finalConfig);
   }
 
   async patch<T>(
@@ -318,7 +139,7 @@ export class ApiClient {
       ...config,
       method: "PATCH",
     });
-    return this.executeWithRetry<T>(endpoint, finalConfig);
+    return executeWithRetry<T>(this.getDeps(), endpoint, finalConfig);
   }
 
   async delete<T>(
@@ -329,7 +150,7 @@ export class ApiClient {
       ...config,
       method: "DELETE",
     });
-    return this.executeWithRetry<T>(endpoint, finalConfig);
+    return executeWithRetry<T>(this.getDeps(), endpoint, finalConfig);
   }
 
   getCircuitBreakerState(): CircuitState {
