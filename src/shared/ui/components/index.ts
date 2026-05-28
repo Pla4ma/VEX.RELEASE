@@ -36,8 +36,8 @@ export { DataList, SelectionToolbar } from "./DataList";
 export type { DataListProps, DataListItem, DataListSection } from "./DataList";
 
 // FlashList optimized version (Phase 7A.1)
-// Usage: import { DataListFlashList } from './DataListFlashList';
-// Requires: npm install @shopify/flash-list
+export { DataListFlashList, SelectionToolbar as DataListFlashListSelectionToolbar } from "./DataListFlashList";
+export type { DataListFlashListProps, DataListItem as DataListFlashListItem, DataListSection as DataListFlashListSection } from "./DataListFlashList";
 
 // Progress & Feedback
 export { ProgressSteps } from "./ProgressSteps";
